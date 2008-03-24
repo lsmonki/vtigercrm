@@ -40,7 +40,7 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 	{
 		$name=$datax[$i];
 		$pos = substr_count($name," ");
-		$alts[]=$name."=%d";
+		$alts[]=htmlentities($name)."=%d";
 //If the daatx value of a string is greater, adding '\n' to it so that it'll cme inh 2nd line
 		 if(strlen($name)>=14)
                         $name=substr($name, 0, 44);
@@ -106,6 +106,9 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 
 	// Now create a bar plot
 	$max=0;
+	// To create unique lables we need to keep track of lable name and its count
+	$uniquex = array();
+	
 	$xlabels = array();
 	$dataset = & Image_Graph::factory('dataset');
 	$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL_MIRRORED, 'blue', 'white'));
@@ -121,10 +124,21 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 			            'alt' => $alts[$i]
 			        )
 	    );
-	    // build the xaxis label array to allow intermediate ticks
-	    $xlabels[$x] = $datax[$i];
-	    $xlabels[$x+1] = '';
+		// build the xaxis label array to allow intermediate ticks
+
+		$xlabels[$x] = $datax[$i];
+		$xlabels[$x+1] = '';
+
+		// To have unique names even in case of duplicates let us add the id
+		$datax_appearance = $uniquex[$datax[$i]];
+		if($datax_appearance == null) {
+			$uniquex[$datax[$i]] = 1;			
+		} else {
+			$xlabels[$x] = $datax[$i] .' ['. $datax_appearance.']';
+			$uniquex[$datax[$i]] = $datax_appearance + 1;			
+		}
 	}
+	//print_r($uniquex);
 
 
 	$bplot = & $plotarea->addNew('bar', $dataset);
@@ -142,7 +156,8 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 	//$bplot->value->SetFormat('%d');
 
 	//$graph->SetBackgroundGradient('#E5E5E5','white',GRAD_VER,BGRAD_PLOT);
-	$bplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL, 'white', '#E5E5E5')));
+	$bplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL, '#7a8fee', '#E5E5E5')));
+	//$bplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL, 'white', '#E5E5E5')));
 	//$bplot->SetFillGradient("navy","lightsteelblue",GRAD_MIDVER);
 
 	//$graph->SetFrame(false);
@@ -169,7 +184,7 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 	$gridY =& $plotarea->addNew('line_grid', IMAGE_GRAPH_AXIS_Y);
 	$gridY->setLineColor('#E5E5E5@0.5');
 	$gridY2 =& $plotarea->addNew('bar_grid', null, IMAGE_GRAPH_AXIS_Y); 
-	$gridY2->setFillColor('#66CDAA@0.2'); 
+	$gridY2->setFillColor('#dadada@0.2');
 
 
 	// Add some grace to y-axis so the bars doesn't go

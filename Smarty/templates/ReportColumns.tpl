@@ -35,7 +35,7 @@ var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
 	</td>
 	<input type="hidden" name="selectedColumnsString"/>
 	<td style="padding-left: 5px;" align="left" width="40%">
-	<select id="selectedColumns" size="16" name="selectedColumns" multiple class="txtBox">
+	<select id="selectedColumns" size="16" name="selectedColumns" onchange="selectedColumnClick(this);" multiple class="txtBox">
 	{$BLOCK2}
 	</select>
 	</td>

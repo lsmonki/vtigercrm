@@ -13,7 +13,7 @@ require_once('include/database/PearDatabase.php');
 global $adb;
 
 $sql2 = "select * from vtiger_def_org_share where editstatus=0";
-$result2 = $adb->query($sql2);
+$result2 = $adb->pquery($sql2, array());
 $num_rows = $adb->num_rows($result2);
 
 for($i=0; $i<$num_rows; $i++)
@@ -22,23 +22,23 @@ for($i=0; $i<$num_rows; $i++)
 	$tabid=$adb->query_result($result2,$i,'tabid');
 		$reqval = $tabid.'_per';	
 		$permission=$_REQUEST[$reqval];
-		$sql7="update vtiger_def_org_share set permission=".$permission." where tabid=".$tabid." and ruleid=".$ruleid;
-		$adb->query($sql7);
+		$sql7="update vtiger_def_org_share set permission=? where tabid=? and ruleid=?";
+		$adb->pquery($sql7, array($permission, $tabid, $ruleid));
 
 		if($tabid == 6)
 		{
-			$sql8="update vtiger_def_org_share set permission=".$permission." where tabid=4";
-			$adb->query($sql8);
+			$sql8="update vtiger_def_org_share set permission=? where tabid=4";
+			$adb->pquery($sql8, array($permission));
 			
 		}
 
 		if($tabid == 9)
 		{
-			$sql8="update vtiger_def_org_share set permission=".$permission." where tabid=16";
-			$adb->query($sql8);
+			$sql8="update vtiger_def_org_share set permission=? where tabid=16";
+			$adb->pquery($sql8, array($permission));
 			
 		}
 }
-$loc = "Location: index.php?action=OrgSharingDetailView&module=Users&parenttab=Settings";
+$loc = "Location: index.php?action=OrgSharingDetailView&module=Settings&parenttab=Settings";
 header($loc);
 ?>

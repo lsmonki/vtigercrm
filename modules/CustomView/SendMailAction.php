@@ -38,8 +38,8 @@ if(trim($subject) != "")
 			if($id == '') continue;
 			if($camodule == "Contacts")
 			{
-				$sql="select * from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted =0 and vtiger_contactdetails.contactid='" .$id ."'";
-				$result = $adb->query($sql);
+				$sql="select * from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted =0 and vtiger_contactdetails.contactid=?";
+				$result = $adb->pquery($sql, array($id));
 				$camodulerow = $adb->fetch_array($result);
 				if(isset($camodulerow))
 				{
@@ -65,8 +65,8 @@ if(trim($subject) != "")
 
 			}elseif($camodule == "Leads")
 			{
-				$sql="select * from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_leaddetails.leadid where vtiger_crmentity.deleted =0 and vtiger_leaddetails.leadid='" .$id ."'";
-				$result = $adb->query($sql);
+				$sql="select * from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_leaddetails.leadid where vtiger_crmentity.deleted =0 and vtiger_leaddetails.leadid=?";
+				$result = $adb->pquery($sql, array($id));
 				$camodulerow = $adb->fetch_array($result);
 				if(isset($camodulerow))
 				{
@@ -88,8 +88,8 @@ if(trim($subject) != "")
 				}
 			}elseif($camodule == "Accounts")
 			{
-				$sql="select * from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_account.accountid where vtiger_crmentity.deleted =0 and vtiger_account.accountid='" .$id ."'";
-				$result = $adb->query($sql);
+				$sql="select * from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_account.accountid where vtiger_crmentity.deleted =0 and vtiger_account.accountid=?";
+				$result = $adb->pquery($sql, array($id));
 				$camodulerow = $adb->fetch_array($result);
 				if(isset($camodulerow))
 				{
@@ -128,15 +128,13 @@ function SendMailtoCustomView($module,$id,$to,$current_user_id,$subject,$content
 	if($current_user_id != '')
 	{
 		global $adb;
-		$sql = "select * from vtiger_users where id= ".$current_user_id;
-		$result = $adb->query($sql);
+		$sql = "select * from vtiger_users where id= ?";
+		$result = $adb->pquery($sql, array($current_user_id));
 		$from = $adb->query_result($result,0,'email1');
 		$initialfrom = $adb->query_result($result,0,'user_name');
 	}
-	if($mail_server=='')
-	{
 		global $adb;
-		$mailserverresult=$adb->query("select * from vtiger_systems where server_type='email'");
+		$mailserverresult=$adb->pquery("select * from vtiger_systems where server_type=?", array('email'));
 		$mail_server = $adb->query_result($mailserverresult,0,'server');
 		$mail_server_username = $adb->query_result($mailserverresult,0,'server_username');
 		$mail_server_password = $adb->query_result($mailserverresult,0,'server_password');
@@ -144,7 +142,7 @@ function SendMailtoCustomView($module,$id,$to,$current_user_id,$subject,$content
 
 		$adb->println("Mail Server Details : '".$mail_server."','".$mail_server_username."','".$mail_server_password."'");
 		$_REQUEST['server']=$mail_server;
-	}
+
 	$mail->Host = $mail_server;
 	$mail->SMTPAuth = $smtp_auth;
 	$mail->Username = $mail_server_username;

@@ -32,9 +32,14 @@
 {foreach item=entity key=entity_id from=$LIST_ENTRIES}
 	<tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'"  >
 	{foreach item=data from=$entity}	
-		<td>{$data}</td>
+		{if $data neq "0000-00-00 00:00:00"}
+			<td>{$data}</td>
+		{else}
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---</td>
+		{/if} 
 	{/foreach}
-	{foreachelse}
+
+{foreachelse}
 	<tr bgcolor=white>
 	<td colspan="5" height="100px" align="center"><b><font size="6px">{$MOD.LBL_NO_DATA}</font></b>
 	</td>

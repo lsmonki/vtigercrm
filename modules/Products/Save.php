@@ -21,14 +21,17 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Products/Product.php');
+require_once('modules/Products/Products.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
-global $log,$current_user;
+global $log,$current_user,$mod_strings;
 $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);
 $rate = $rate_symbol['rate'];
-$focus = new Product();
+$focus = new Products();
+//added to fix 4600
+$search=$_REQUEST['search_url'];
+
 if(isset($_REQUEST['record']))
 {
 	$focus->id = $_REQUEST['record'];
@@ -45,7 +48,10 @@ foreach($focus->column_fields as $fieldname => $val)
 {
 	if(isset($_REQUEST[$fieldname]))
 	{
-		$value = $_REQUEST[$fieldname];
+		if(is_array($_REQUEST[$fieldname]))
+			$value = $_REQUEST[$fieldname];
+		else
+			$value = trim($_REQUEST[$fieldname]);
 		$focus->column_fields[$fieldname] = $value;
 	}
 	if(isset($_REQUEST['unit_price']))
@@ -111,8 +117,7 @@ if($image_error=="true") //If there is any error in the file upload then moving 
 	{
 		$return_id=$_REQUEST['record'];
 	}
-	header("location: index.php?action=$error_action&module=$error_module&record=$return_id&return_id=$return_id&return_action=$return_action&return_module=$return_module&activity_mode=$activity_mode&return_viewname=$return_viewname&saveimage=$saveimage&error_msg=$errormessage&image_error=$image_error&encode_val=$encode_field_values");
-
+	header("location: index.php?action=$error_action&module=$error_module&record=$return_id&return_id=$return_id&return_action=$return_action&return_module=$return_module&activity_mode=$activity_mode&return_viewname=$return_viewname&saveimage=$saveimage&error_msg=$errormessage&image_error=$image_error&encode_val=$encode_field_values.$search");
 }
 if($saveimage=="true")
 {
@@ -139,14 +144,14 @@ if($image_error=="false")
 			$handler_name = getUserName($handler);
 			$sender_name = getUserName($current_user->id);
 			$to_address= getUserEmail($handler);
-			$subject =  $productname.' Stock Level is Low';
-			$body = 'Dear '.$handler_name.',
+			$subject =  $productname.' '.$mod_strings['MSG_STOCK_LEVEL'];
+			$body = $mod_strings['MSG_DEAR'].' '.$handler_name.',<br><br>'.
 
-					The current stock of '.$productname.' in our warehouse is '.$qty_stk.'. Kindly procure required number of units as the stock level is below reorder level '.$reord.'.
+					$mod_strings['MSG_CURRENT_STOCK'].' '.$productname.' '.$mod_strings['MSG_IN_OUR_WAREHOUSE'].' '.$qty_stk.'. '.$mod_strings['MSG_PROCURE_REQUIRED_NUMBER'].' '.$reord.'.<br> '.
 
-					Severity: Major 
-				Thanks,
-				'.$sender_name; 
+					$mod_strings['MSG_SEVERITY'].'<br><br> '.
+				$mod_strings['MSG_THANKS'].'<br> '.
+				$sender_name;
 
 			include("modules/Emails/mail.php");
 			$mail_status = send_mail("Products",$to_address,$current_user->user_name,$current_user->email1,$subject,$body);
@@ -161,7 +166,7 @@ if($image_error=="false")
 	if(isset($_REQUEST['activity_mode'])) $return_action .= '&activity_mode='.$_REQUEST['activity_mode'];
 
 	if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
-	header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname");
+	header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname&start=".$_REQUEST['pagenumber'].$search);
 }
 
 

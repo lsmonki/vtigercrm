@@ -22,12 +22,14 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Users/User.php');
+require_once('modules/Users/Users.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/CommonUtils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/GetUserGroups.php');
+//to check audittrail if enable or not
+require_once('user_privileges/audit_trail.php');
 
 global $current_user;
 global $theme;
@@ -37,9 +39,10 @@ global $currentModule;
 global $app_strings;
 global $mod_strings;
 
-$focus = new User();
+$focus = new Users();
 
-if(!empty($_REQUEST['record'])) {
+if(!empty($_REQUEST['record'])) 
+{
 	$focus->retrieve_entity_info($_REQUEST['record'],'Users');
 	$focus->id = $_REQUEST['record'];	
 }
@@ -55,22 +58,28 @@ else
 
 if( $focus->user_name == "" )
 {  
-   
+
+	if(is_admin($current_user))
+	{
     echo "
             <table>
                 <tr>
                     <td>
                         <b>User does not exist.</b>
                     </td>
-                </tr>
+		    </tr>";
+	
+    echo "
                 <tr>
                     <td>
                         <a href='index.php?module=Users&action=ListView'>List Users</a>
                     </td>
                 </tr>
             </table>
-        ";
-    exit;  
+	    ";
+    exit;
+	}
+  
 }
 
 
@@ -81,7 +90,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 //the user might belong to multiple groups
 $log->info("User detail view");
@@ -99,7 +107,8 @@ $smarty->assign("APP", $app_strings);
 
 $oGetUserGroups = new GetUserGroups();
 $oGetUserGroups->getAllUserGroups($focus->id);
-
+if(useInternalMailer() == 1)
+        $smarty->assign("INT_MAILER","true");
 
 $smarty->assign("GROUP_COUNT",count($oGetUserGroups->user_groups));
 $smarty->assign("THEME", $theme);
@@ -110,7 +119,7 @@ if(isset($focus->imagename) && $focus->imagename!='')
 {
 	$imagestring="<div id='track1' style='margin: 4px 0pt 0pt 10px; width: 200px; background-image: url(themes/images/scaler_slider_track.gif); background-repeat: repeat-x; background-position: left center; height: 18px;'>
 	<div class='selected' id='handle1' style='width: 18px; height: 18px; position: relative; left: 145px;cursor:pointer;'><img src='themes/images/scaler_slider.gif'></div>
-	</div><script language='JavaScript' type='text/javascript' src='include/js/prototype.js'></script>
+	</div>
 <script language='JavaScript' type='text/javascript' src='include/js/slider.js'></script>
 
 	<div class='scale-image' style='padding: 10px; float: left; width: 83.415px;'><img src='test/user/".$focus->imagename."' width='100%'</div>
@@ -134,11 +143,11 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id)
 		&& $default_user_name == $focus->user_name
 		&& isset($lock_default_user_name)
 		&& $lock_default_user_name == true	) {
-	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='crmButton small edit' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'; this.form.parenttab.value='$parenttab'\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
+	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='crmButton small edit' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView';\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
 	$smarty->assign('EDIT_BUTTON',$buttons);
 }
 elseif (is_admin($current_user) || $_REQUEST['record'] == $current_user->id) {
-	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='crmButton small edit' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'; this.form.parenttab.value='$parenttab'\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
+	$buttons = "<input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='crmButton small edit' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView';\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '>";
 	$smarty->assign('EDIT_BUTTON',$buttons);
 	
 		$buttons = "<input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='crmButton password small' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=DetailView\",\"test\",\"width=320,height=200,resizable=no,scrollbars=0, toolbar=no, titlebar=no, left=200, top=226, screenX=100, screenY=126\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'>";
@@ -176,16 +185,54 @@ $tabid = getTabid("Users");
 $validationData = getDBValidationData($lead_tables,$tabid);
 $data = split_validationdataArray($validationData);
 
+if($current_user->id == $_REQUEST['record'] || is_admin($current_user) == true)
+{
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 $smarty->assign("MODULE", 'Users');
 $smarty->assign("CURRENT_USERID", $current_user->id);
 $smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
+//Added to provide User based Tagcloud
+$smarty->assign("TAGCLOUDVIEW",getTagCloudView($focus->id));
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("USERNAME",$focus->last_name.' '.$focus->first_name);
+$smarty->assign("HOUR_FORMAT",$focus->hour_format);
+$smarty->assign("START_HOUR",$focus->start_hour);
+
+//for check audittrail if it is enable or not
+$smarty->assign("AUDITTRAIL",$audit_trail);
 
 $smarty->display("UserDetailView.tpl");
+}
+else
+{
+	$output = '<table border="0" cellpadding="5" cellspacing="0" height="450" width="100%">
+		<tr><td align = "center">
+		<div style="border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;">
+			<table border="0" cellpadding="5" cellspacing="0" width="98%">
+			<tr>
+				<td rowspan="2" width="11%">
+				  	<img src="themes/bluelagoon/images/denied.gif">
+				</td>
+				<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="70%">
+					<span class="genHeaderSmall">'.$app_strings["LBL_PERMISSION"].'
+					</span>
+				</td>
+			</tr>
+			<tr>
+				<td class="small" align="right" nowrap="nowrap">
+					<a href="javascript:window.history.back();">'.$app_strings["LBL_GO_BACK"].'</a>
+					<br>
+				</td>
+			</tr>
+			</table>
+		</div>
+		</td></tr>
+	</table>';
+	echo $output;
+}
+
 
 
 ?>

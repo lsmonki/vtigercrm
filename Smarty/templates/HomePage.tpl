@@ -9,16 +9,27 @@
   *
  ********************************************************************************/
 -->*}
-<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/scriptaculous.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/effects.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/builder.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/dragdrop.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/controls.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/slider.js"></script>
-<script language="javascript" type="text/javascript" src="include/scriptaculous/dom-drag.js"></script>
-<script type="text/javascript" language="JavaScript" src="include/js/general.js"></script>
+<script language="javascript">
+function getHomeActivities(mode,view)
 
+{ldelim}
+        new Ajax.Request(
+                'index.php',
+                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                        method: 'post',
+                        postBody: 'module=Calendar&action=ActivityAjax&file=OpenListView&activity_view='+view+'&mode='+mode+'&parenttab=My Home Page&ajax=true',
+                        onComplete: function(response) {ldelim}
+                                if(mode == 0)
+                                        $("upcomingActivities").innerHTML=response.responseText;
+                                else
+                                        $("pendingActivities").innerHTML=response.responseText;
+                        {rdelim}
+                {rdelim}
+        );
+{rdelim}
+
+</script>
 
 {*<!--Home Page Entries  -->*}
 
@@ -52,14 +63,22 @@
 					<td class="small">
 							<table border=0 cellspacing=0 cellpadding=5>
 								<tr>
-									{if $CHECK.Calendar eq 'yes'}
-									<td style="padding-right:5px;padding-left:5px;"><a href="javascript:;" onClick='fnvshobj(this,"miniCal");getMiniCal();'><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$APP.LBL_CALENDAR_ALT}" title="{$APP.LBL_CALENDAR_TITLE}" border=0></a></a></td>
-									{else}
-									<td style="padding-right:5px;padding-left:5px;"><img src="{$IMAGE_PATH}btnL3Calendar-Faded.gif" border=0></td>
+									{if $CALENDAR_DISPLAY eq 'true'} 
+ 		                                                                              {if $CHECK.Calendar eq 'yes'} 
+ 		                                                                                        <td style="padding-right:5px;padding-left:5px;"><a href="javascript:;" onClick='fnvshobj(this,"miniCal");getMiniCal();'><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$APP.LBL_CALENDAR_ALT}" title="{$APP.LBL_CALENDAR_TITLE}" border=0></a></a></td> 
+ 		                                                                              {else} 
+ 		                                                                                        <td style="padding-right:5px;padding-left:5px;"><img src="{$IMAGE_PATH}btnL3Calendar-Faded.gif" border=0></td> 
+ 		                                                                              {/if} 
 									{/if}
-									<td style="padding-right:5px"><a href="javascript:;"><img src="{$IMAGE_PATH}btnL3Clock.gif" alt="{$APP.LBL_CLOCK_ALT}" title="{$APP.LBL_CLOCK_TITLE}" border=0 onClick="fnvshobj(this,'wclock');"></a></a></td>
-									<td style="padding-right:5px"><a href="#"><img src="{$IMAGE_PATH}btnL3Calc.gif" alt="{$APP.LBL_CALCULATOR_ALT}" title="{$APP.LBL_CALCULATOR_TITLE}" border=0 onClick="fnvshobj(this,'calculator_cont');fetch_calc();"></a></td>
-									<td style="padding-right:5px"><a href="javascript:;" onClick='return window.open("index.php?module=Contacts&action=vtchat","Chat","width=600,height=450,resizable=1,scrollbars=1");'><img src="{$IMAGE_PATH}tbarChat.gif" alt="{$APP.LBL_CHAT_ALT}" title="{$APP.LBL_CHAT_TITLE}" border=0></a></td>	
+									 {if $WORLD_CLOCK_DISPLAY eq 'true'} 
+ 		                                                                                <td style="padding-right:5px"><a href="javascript:;"><img src="{$IMAGE_PATH}btnL3Clock.gif" alt="{$APP.LBL_CLOCK_ALT}" title="{$APP.LBL_CLOCK_TITLE}" border=0 onClick="fnvshobj(this,'wclock');"></a></a></td> 
+ 		                                                         {/if} 
+ 		                                                                        {if $CALCULATOR_DISPLAY eq 'true'} 
+ 		                                                                                <td style="padding-right:5px"><a href="#"><img src="{$IMAGE_PATH}btnL3Calc.gif" alt="{$APP.LBL_CALCULATOR_ALT}" title="{$APP.LBL_CALCULATOR_TITLE}" border=0 onClick="fnvshobj(this,'calculator_cont');fetch_calc();"></a></td> 
+ 		                                                                        {/if} 
+ 		                                                                        {if $CHAT_DISPLAY eq 'true'} 
+ 		                                                                                <td style="padding-right:5px"><a href="javascript:;" onClick='return window.open("index.php?module=Home&action=vtchat","Chat","width=600,height=450,resizable=1,scrollbars=1");'><img src="{$IMAGE_PATH}tbarChat.gif" alt="{$APP.LBL_CHAT_ALT}" title="{$APP.LBL_CHAT_TITLE}" border=0></a></td>     
+ 		                                                                        {/if} 
 									<td style="padding-right:5px"><img src="{$IMAGE_PATH}btnL3Tracker.gif" alt="{$APP.LBL_LAST_VIEWED}" title="{$APP.LBL_LAST_VIEWED}" border=0 onClick="fnvshobj(this,'tracker');"></td>
 								</tr>
 							</table>
@@ -101,18 +120,22 @@
 							{if $tabledetail neq ''}
 								<div class="MatrixLayer" style="float:left;" id="{$tabledetail.Title.2}">
 										<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
-								<tr style="cursor:move;height:20px;">
+								<tr class="headerrow">
 									<td align="left" class="homePageMatrixHdr" ><b>{$tabledetail.Title.1}</b></td>
 									<td align="right" class="homePageMatrixHdr" ><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
 								</tr>
-								<tr align="left">
+								<tr align="left" class="winmarkModulesdef">
 									<td valign=top  colspan=2>
-											<div style="overflow-y:auto;overflow-x:hidden;height:250px;width:99%"> 
+											<div style="overflow-y:auto;overflow-x:hidden;height:200px;width:99%"> 
 											<table border=0 cellspacing=0 cellpadding=5 width=100%>
 												{foreach item=elements from=$tabledetail.Entries}
 													<tr>
 														{if $tabledetail.Title.2 neq 'home_mytopinv' && $tabledetail.Title.2 neq 'home_mytopso' && $tabledetail.Title.2 neq 'home_mytopquote' && $tabledetail.Title.2 neq 'home_metrics' &&  $tabledetail.Title.2 neq 'home_mytoppo' &&  $tabledetail.Title.2 neq 'home_myfaq'  }
-															<td colspan="2"><img src="{$IMAGE_PATH}bookMark.gif" align="absmiddle" /> {$elements.0}</td>
+															<td colspan="2"><img src="{$IMAGE_PATH}bookMark.gif" align="absmiddle" />{$elements.0} 
+															 	{if $modulename eq 'Leads'}
+																 - {$elements.1}	
+																{/if}
+															</td>
 														{elseif $tabledetail.Title.2 eq 'home_metrics'}
 															<td><img src="{$IMAGE_PATH}bookMark.gif" align="absmiddle" /> {$elements.0}</td>
 															<td align="absmiddle" /> {$elements.1}</td>
@@ -122,31 +145,29 @@
 													</tr>
 												{/foreach}
 											</table>	
-											</div>
-											<table border=0 cellspacing=0 cellpadding=5 width=100%>
-													<tr>
-														<td colspan="2" align="right" valign="bottom">
-															{if $modulename neq 'CustomView' && $modulename neq 'GroupAllocation'}
-																<a href="index.php?module={$modulename}&action=index">{$APP.LBL_MORE}..</a>
-															{else}
-																&nbsp;	
-															{/if}
-														</td>
-													</tr>
-											</table>										
+											</div>									
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2" align="right" valign="bottom">
+									{if $modulename neq 'CustomView' && $modulename neq 'GroupAllocation'}
+									 <a href="index.php?module={$modulename}&action=index&search_field=assigned_user_id&searchtype=BasicSearch&search_text={$CURRENTUSER}&query=true&viewname=all">{$APP.LBL_MORE}..</a>
+									{else}
+										&nbsp;	
+									{/if}
 									</td>
 								</tr>
 							</table>
 								</div>
 							{/if}	
 							{else}
-								<div class="MatrixLayer" style="float:left;width:61%;" id="homepagedb">
-									<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
-										<tr style="cursor:move;">
+								<div class="MatrixLayer" style="float:left;width:93%;" id="homepagedb">
+									<table width="100%" border="0" cellpadding="8" cellspacing="0" class="small">
+										<tr class="headerrow">
 											<td align="left" class="homePageMatrixHdr"><b>{$APP.LBL_HOMEPAGE_DASHBOARD}</b></td>
 											<td align="right" class="homePageMatrixHdr"><img src="{$IMAGE_PATH}uparrow.gif" align="absmiddle" /></td>
 										</tr>
-										<tr>	
+										<tr align="left" class="winmarkModulesdef">	
 											<td colspan="2">
 											<div style="overflow:hidden;height:255px;width:99%"> 
 												<table border=0 cellspacing=0 cellpadding=5 width=100%>
@@ -169,75 +190,13 @@
 			</div>
 		</td>
 		<td width="25%" valign="top" style="padding:5px;">
-			{if $ACTIVITIES.0.Entries.noofactivities > 0}	
-				<table width="100%" border="0" cellpadding="0" cellspacing="0">
-					<tr>
-						<td><img src="{$IMAGE_PATH}upcoming_left.gif" align="top"  /></td>
-						<td width="100%" background="{$IMAGE_PATH}upcomingEvents.gif" style="background-repeat:repeat-x; "></td>
-						<td><img src="{$IMAGE_PATH}upcoming_right.gif" align="top"  /></td>
-					</tr>		
-					<tr>
-						<td colspan="3" bgcolor="#FFFFCF" style="border-left:2px solid #A6A4A5;border-right:2px solid #A6A4A5;padding-left:10px;"><b class="fontBold">{$MOD.LBL_UPCOMING_EVENTS}</b><br />
-						<!-- Check for Single/Multiple Event(s) -->
-						{if $ACTIVITIES.0.Entries.noofactivities eq 1}
-						{$ACTIVITIES.0.Entries.noofactivities} {$APP.Event} {$APP.LBL_FOR} {$MOD[$ACTIVITIES.0.Title.0]}
-						{else}	
-							{$ACTIVITIES.0.Entries.noofactivities} {$APP.Events} {$APP.LBL_FOR} {$MOD[$ACTIVITIES.0.Title.0]}
-						{/if}
-						</td>
-					</tr>
-					<tr>
-						<td colspan="3" bgcolor="#FFFFCF" style="border-left:2px solid #A6A4A5;border-right:2px solid #A6A4A5;border-bottom:2px solid #A6A4A5;">
-							<table width="100%" border="0" cellpadding="5" cellspacing="0" style="border-bottom:1px dashed #aaaaaa;">
-								
-						
-						{foreach item=entries from=$ACTIVITIES.0.Entries}
-						<tr bgcolor="#FFFFCF">
-						<td style="border-bottom:1px dotted #dddddd;" align="right" width="20" valign=top>{$entries.IMAGE}</td>
-						<td style="border-bottom:1px dotted #dddddd;" align="left" valign="middle" colspan="2" width="85%"><b>{$entries.0}</b><br />{$entries.ACCOUNT_NAME}</td>
-					</tr>
-						{/foreach}
-						</table>
-						</td>
-					</tr>
-				</table>
-				<br>
-			{/if}
-		
-
-{if $ACTIVITIES.1.Entries.noofactivities > 0}	
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
-	<tr>
-		<td><img src="{$IMAGE_PATH}pending_left.gif"></td>
-		<td width="100%" background="{$IMAGE_PATH}pendingEvents.gif" valign="bottom" style="background-repeat:repeat-x;">
-			<b class="fontBold">{$MOD.LBL_PENDING_EVENTS}</b><br />
-				<!-- Check for Single/Multiple Event(s) --> 
-	 	                {if $ACTIVITIES.1.Entries.noofactivities eq 1}   
-	 	                        {$ACTIVITIES.1.Entries.noofactivities} {$MOD.LBL_SINGLE_PENDING_EVENT} 
-	 	                {else} 
-	 	                        {$ACTIVITIES.1.Entries.noofactivities} {$MOD.LBL_MULTIPLE_PENDING_EVENTS} 
-	 	                {/if}    
-	 	        </td> 
-		
-		<td><img src="{$IMAGE_PATH}pending_right.gif"></td>
-	</tr>		
-	<tr>
-		<td colspan="3" bgcolor="#FEF7C1" style="border-left:2px solid #A6A4A5;border-right:2px solid #A6A4A5;border-bottom:2px solid #A6A4A5;">
-			<table width="100%" border="0" cellpadding="5" cellspacing="0">
-				{foreach item=entries from=$ACTIVITIES.1.Entries}
-				<tr>	
-					<td  style="border-bottom:1px dotted #dddddd;"  align="right" width="20">{$entries.IMAGE}</td>
-					<td  style="border-bottom:1px dotted #dddddd;" align="left" valign="middle" colspan="2" width="85%"><b class="style_Gray">{$entries.0}</b><br />{$entries.ACCOUNT_NAME}</td>
-				</tr>
-				{/foreach}
-			</table>
-		</td>
-</tr>
-</table>
-
-<br>
-{/if}
-
+			<div id="upcomingActivities">
+                                {include file="upcomingActivities.tpl"}
+                        </div><br>
+                        <div id="pendingActivities">
+                                {include file="pendingActivities.tpl"}
+                        </div><br>
+{if $TAG_CLOUD_DISPLAY eq 'true'}
 <table border=0 cellspacing=0 cellpadding=0 width=100% class="tagCloud">
 <tr>
 <td class="tagCloudTopBg"><img src="{$IMAGE_PATH}tagCloudName.gif" border=0></td>
@@ -246,6 +205,7 @@
 <td class="tagCloudDisplay" valign=top> <span id="tagfields">{$ALL_TAG}</span></td>
 </tr>
 </table>
+{/if}
 
 
 
@@ -259,7 +219,7 @@
 {literal}
 <script  language="javascript">
 Sortable.create("MainMatrix",
-{constraint:false,tag:'div',overlap:'horizontal',
+{constraint:false,tag:'div',overlap:'horizontal',handle:'headerrow',
 onUpdate:function(){
 //	alert(Sortable.serialize('MainMatrix')); 
 }

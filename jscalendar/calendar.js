@@ -1293,7 +1293,7 @@ Calendar.prototype.showAt = function (x, y) {
 Calendar.prototype.showAtElement = function (el, opts) {
 	var self = this;
 	var p = Calendar.getAbsolutePos(el);
-	if (!opts || typeof opts != "string") {
+	if (!opts || opts == "Br" || typeof opts != "string") {
 		this.showAt(p.x, p.y + el.offsetHeight);
 		return true;
 	}
@@ -1703,7 +1703,9 @@ Date.prototype.print = function (str) {
 	return str;
 };
 
+if ( Date.prototype.__msh_oldSetFullYear == null ) {
 Date.prototype.__msh_oldSetFullYear = Date.prototype.setFullYear;
+}
 Date.prototype.setFullYear = function(y) {
 	var d = new Date(this);
 	d.__msh_oldSetFullYear(y);

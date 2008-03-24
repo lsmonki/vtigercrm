@@ -25,7 +25,7 @@ $current_user_id = $_REQUEST["current_user_id"];
 $idlist=split(';',$_REQUEST['idlist']);
 
 $query='select * from vtiger_troubletickets';
-$rs=$adb->query($query);
+$rs=$adb->pquery($query, array());
 for($i=0;$i<count($idlist);$i++)
 {
 	$id=$idlist[$i];
@@ -36,12 +36,12 @@ for($i=0;$i<count($idlist);$i++)
 	}
 	if(isset($_REQUEST['change_owner']))
 	{
-		$resultset=$adb->query('select * from vtiger_users where user_name="'.$_REQUEST['assigned_user_id'].'"');
+		$resultset=$adb->pquery('select * from vtiger_users where user_name=?', array($_REQUEST['assigned_user_id']));
 		$changevalue=$adb->query_result($resultset,0,"id");
 		$changekey='assigned_user_id';
 	}
-	$sql="update vtiger_troubletickets set ".$changekey." = '".$changevalue."' where id = '".$id."'";
-	$adb->query($sql);
+	$sql="update vtiger_troubletickets set $changekey = ? where id = ?";
+	$adb->pquery($sql, array($changevalue, $id));
 }
 header("Location: index.php?action=index&module=HelpDesk");
 

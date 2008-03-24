@@ -32,8 +32,9 @@ $target_val=explode("K",$target_val);
 
 
 
-
-$color_array=array("#FF8B8B","#8BFF8B","#A8A8FF","#FFFF6E","#C5FFFF","#FFA8FF","#FFE28B","lightpink","burlywood2","cadetblue");
+$color_array=array("#FFD0C7","#C9F7C9","#C2C3EF","#F7F7C1","#28D6D7","#E7BCE7","#DFD8C3","lightpink","burlywood2","cadetblu
+e");
+#$color_array=array("#FF8B8B","#8BFF8B","#A8A8FF","#FFFF6E","#C5FFFF","#FFA8FF","#FFE28B","lightpink","burlywood2","cadetblue");
 
 // Create the graph. These two calls are always required
 $graph = new Graph($width,$height,"auto");    

@@ -134,8 +134,8 @@ $mod_strings = Array(
 'Billing State'=>'Billing State',
 'Billing Code'=>'Billing Postal Code',
 'Billing Country'=>'Billing Country',
-'Billing Po Box'=>'Billing Po Box',
-'Shipping Po Box'=>'Shipping Po Box',
+'Billing Po Box'=>'Billing PO Box',
+'Shipping Po Box'=>'Shipping PO Box',
 'Shipping City'=>'Shipping City',
 'Shipping State'=>'Shipping State',
 'Shipping Code'=>'Shipping Postal Code',
@@ -167,7 +167,7 @@ $mod_strings = Array(
 'LBL_PO_SEARCH_TITLE'=>'Purchase Order Search',
 'LBL_SO_SEARCH_TITLE'=>'Sales Order Search',
 'LBL_QUOTE_NAME_TITLE'=>'Quote Name',
-'Order Id'=>'Order Id',
+'Order No'=>'Order No',
 'Status'=>'Status',
 'PurchaseOrder'=>'Purchase Order',
 'LBL_MY_TOP_PO'=>'My Top Open Purchase Orders',
@@ -185,6 +185,16 @@ $mod_strings = Array(
 'Delivered'=>'Delivered',
 'Cancelled'=>'Cancelled',
 'Received Shipment'=>'Received Shipment',
+
+//Added for Reports (5.0.4)
+'Tax Type'=>'Tax Type',
+'Discount Percent'=>'Discount Percent',
+'Discount Amount'=>'Discount Amount',
+'Terms & Conditions'=>'Terms & Conditions',
+'Adjustment'=>'Adjustment',
+'Sub Total'=>'Sub Total',
+'S&H Amount'=>'S&H Amount',
+
 );
 
 ?>

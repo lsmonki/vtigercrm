@@ -136,6 +136,9 @@
 </select>
 </form>
 </div>
+<script type="text/javascript">
+        var theme = "{$THEME}";
+</script>
 <script type="text/javascript" src="include/js/clock.js"></script>
 
 <div id="theFace0" class="facestyle" style="color: rgb(0, 0, 0); top: 81px; left: 96px;">3</div>

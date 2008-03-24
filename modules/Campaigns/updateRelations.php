@@ -14,17 +14,14 @@ require_once('user_privileges/default_module_view.php');
 global $adb, $singlepane_view;
 $idlist = $_REQUEST['idlist'];
 $update_mod = $_REQUEST['destination_module'];
+$parenttab = $_REQUEST['parenttab'];
 if($update_mod == 'Leads')
 {
 	$rel_table = 'vtiger_campaignleadrel';
-	$mod_table = 'vtiger_leaddetails';
-	$mod_field = 'leadid';
 }
 elseif($update_mod == 'Contacts')
 {
 	$rel_table = 'vtiger_campaigncontrel';
-	$mod_table = 'vtiger_contactdetails';
-	$mod_field = 'contactid';
 }
 if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 {
@@ -34,28 +31,24 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 	{
 		if($id != '')
 		{
-		    $sql = "insert into  ".$rel_table." values(".$_REQUEST["parentid"]." , ".$id.")";
-	            $adb->query($sql);
-		    $sql = "update ".$mod_table." set campaignid = ".$_REQUEST["parentid"]." where ".$mod_field." = ".$id;
-                    $adb->query($sql);
+			$sql = "insert into  $rel_table values(?,?)";
+	        $adb->pquery($sql, array($_REQUEST["parentid"], $id));
 		}
 	}
 	if($singlepane_view == 'true')
-		header("Location: index.php?action=DetailView&module=Campaigns&record=".$_REQUEST["parentid"]);
+		header("Location: index.php?action=DetailView&module=Campaigns&record=".$_REQUEST["parentid"]."&parenttab=".$parenttab);
 	else
- 		header("Location: index.php?action=CallRelatedList&module=Campaigns&record=".$_REQUEST["parentid"]);
+ 		header("Location: index.php?action=CallRelatedList&module=Campaigns&record=".$_REQUEST["parentid"]."&parenttab=".$parenttab);
 }
 elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 {	
-		$sql = "insert into ".$rel_table." values(".$_REQUEST["parid"].",".$_REQUEST["entityid"].")";
-		$adb->query($sql);
-		$sql = "update ".$mod_table." set campaignid = ".$_REQUEST["parid"]." where ".$mod_field." = ".$_REQUEST["entityid"];
-                $adb->query($sql);
+		$sql = "insert into $rel_table values(?,?)";
+		$adb->pquery($sql, array($_REQUEST["parid"], $_REQUEST["entityid"]));
 		
 		if($singlepane_view == 'true')
-			header("Location: index.php?action=DetailView&module=Campaigns&record=".$_REQUEST["parid"]);
+			header("Location: index.php?action=DetailView&module=Campaigns&record=".$_REQUEST["parid"]."&parenttab=".$parenttab);
 		else
- 			header("Location: index.php?action=CallRelatedList&module=Campaigns&record=".$_REQUEST["parid"]);
+ 			header("Location: index.php?action=CallRelatedList&module=Campaigns&record=".$_REQUEST["parid"]."&parenttab=".$parenttab);
 }
 
 ?>

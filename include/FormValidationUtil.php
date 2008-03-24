@@ -26,11 +26,12 @@ function getDBValidationData($tablearray,$tabid='')
   global $log;
   $log->debug("Entering getDBValidationData(".$tablearray.",".$tabid.") method ...");
   $sql = '';
+  $params = array();
   $tab_con = "";
   $numValues = count($tablearray);
   global $adb,$mod_strings;
 
-  if($tabid!='') $tab_con = ' and tabid='.$tabid;
+  if($tabid!='') $tab_con = ' and tabid='. mysql_real_escape_string($tabid);
 	
   for($i=0;$i<$numValues;$i++)
   {
@@ -38,27 +39,31 @@ function getDBValidationData($tablearray,$tabid='')
   	if(in_array("emails",$tablearray))
   	{
 		if($numValues > 1 && $i != $numValues-1)
-    		{
-			$sql .= "select fieldlabel,fieldname,typeofdata from vtiger_field where tablename='".$tablearray[$i] ."'and tabid=10 and displaytype <> 2 union ";
-     		}
+    	{
+			$sql .= "select fieldlabel,fieldname,typeofdata from vtiger_field where tablename=? and tabid=10 and displaytype <> 2 union ";
+			array_push($params, $tablearray[$i]);	
+     	}
    		else
-    		{
-   			$sql  .= "select fieldlabel,fieldname,typeofdata from vtiger_field where tablename='".$tablearray[$i] ."' and tabid=10 and displaytype <> 2 ";
-    		}
+    	{
+   			$sql  .= "select fieldlabel,fieldname,typeofdata from vtiger_field where tablename=? and tabid=10 and displaytype <> 2 ";
+    		array_push($params, $tablearray[$i]);	
+		}
   	}
   	else
   	{
     		if($numValues > 1 && $i != $numValues-1)
     		{
-      			$sql .= "select fieldlabel,fieldname,typeofdata from vtiger_field where tablename='".$tablearray[$i] ."'".$tab_con." and displaytype in (1,3) union ";
-    		}
+      			$sql .= "select fieldlabel,fieldname,typeofdata from vtiger_field where tablename=? $tab_con and displaytype in (1,3) union ";
+    			array_push($params, $tablearray[$i]);	
+			}
     		else
     		{
-      			$sql  .= "select fieldlabel,fieldname,typeofdata from vtiger_field where tablename='".$tablearray[$i] ."'".$tab_con." and displaytype in (1,3)";
-    		}
+      			$sql  .= "select fieldlabel,fieldname,typeofdata from vtiger_field where tablename=? $tab_con and displaytype in (1,3)";
+    			array_push($params, $tablearray[$i]);	
+			}
   	}
   }
-  $result = $adb->query($sql);
+  $result = $adb->pquery($sql, $params);
   $noofrows = $adb->num_rows($result);
   $fieldName_array = Array();
   for($i=0;$i<$noofrows;$i++)

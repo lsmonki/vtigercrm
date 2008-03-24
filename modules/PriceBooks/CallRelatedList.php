@@ -10,7 +10,7 @@
  ********************************************************************************/
 
 require_once('Smarty_setup.php');
-require_once('modules/PriceBooks/PriceBook.php');
+require_once('modules/PriceBooks/PriceBooks.php');
 //Redirecting Header for single page layout
 require_once('user_privileges/default_module_view.php');
 global $singlepane_view;
@@ -22,7 +22,7 @@ else
 {
 global $currentModule;
 
-$focus = new PriceBook();
+$focus = new PriceBooks();
 
 $currentmodule = $_REQUEST['module'];
 $RECORD = $_REQUEST['record'];
@@ -47,7 +47,6 @@ global $app_strings;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 
@@ -58,6 +57,8 @@ $smarty->assign("CATEGORY",$category);
 if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
 	$smarty->assign("OP_MODE",$_REQUEST['mode']);
 }
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $smarty->assign("ID",$focus->id);
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("RELATEDLISTS", $related_array);

@@ -9,38 +9,52 @@
   *
  ********************************************************************************/
 
-global $root_directory;
-$filename = $root_directory.'user_privileges/enable_backup.php';
-
-$readhandle = @fopen($filename, "r+");
-
-if($readhandle)
+if(isset($_REQUEST['enable_backup']) && $_REQUEST['enable_backup'] != '')
 {
-	$buffer = '';
-	$new_buffer = '';
-	while(!feof($readhandle))
+	global $root_directory;
+	$filename = $root_directory.'user_privileges/enable_backup.php';
+
+	$readhandle = @fopen($filename, "r+");
+
+	if($readhandle)
 	{
-		$buffer = fgets($readhandle, 5200);
-		list($starter, $tmp) = explode(" = ", $buffer);
+		$buffer = '';
+		$new_buffer = '';
+		while(!feof($readhandle))
+		{
+			$buffer = fgets($readhandle, 5200);
+			list($starter, $tmp) = explode(" = ", $buffer);
 
-		if($starter == '$enable_backup' && stristr($tmp,'false'))
-		{
-			$new_buffer .= "\$enable_backup = 'true';\n";
+			if($starter == '$enable_backup' && stristr($tmp,'false'))
+			{
+				$new_buffer .= "\$enable_backup = 'true';\n";
+			}
+			elseif($starter == '$enable_backup' && stristr($tmp,'true'))
+			{
+				$new_buffer .= "\$enable_backup = 'false';\n";
+			}
+			else
+				$new_buffer .= $buffer;
 		}
-		elseif($starter == '$enable_backup' && stristr($tmp,'true'))
-		{
-			$new_buffer .= "\$enable_backup = 'false';\n";
-		}
-		else
-			$new_buffer .= $buffer;
+		fclose($readhandle);
 	}
-	fclose($readhandle);
+
+	$handle = fopen($filename, "w");
+	fputs($handle, $new_buffer);
+	fclose($handle);
 }
+elseif(isset($_REQUEST['GetBackupDetail']) && $_REQUEST['GetBackupDetail'] != '')
+{
+	require_once("include/database/PearDatabase.php");
+	global $mod_strings,$adb;
 
-$handle = fopen($filename, "w");
-fputs($handle, $new_buffer);
-fclose($handle);
+	$GetBackup = $adb->pquery("select * from vtiger_systems where server_type = ?", array('backup'));
+	$BackRowsCheck = $adb->num_rows($GetBackup);
 
+	if($BackRowsCheck > 0)
+		echo "SUCESS";
+	else
+		echo "FAILURE";
+
+}
 ?>
-
-

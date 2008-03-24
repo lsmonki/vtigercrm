@@ -51,33 +51,33 @@ $reportmodules = Array(Array('primarymodule'=>'Contacts','secondarymodule'=>'Acc
 $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Name:firstname:V',
                              'vtiger_contactdetails:lastname:Contacts_Last_Name:lastname:V',
                              'vtiger_contactsubdetails:leadsource:Contacts_Lead_Source:leadsource:V',
-                             'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:I',
+                             'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:V',
 			     'vtiger_account:industry:Accounts_industry:industry:V',
-			     'vtiger_contactdetails:email:Contacts_Email:email:V'),
+			     'vtiger_contactdetails:email:Contacts_Email:email:E'),
 
 		       Array('vtiger_contactdetails:firstname:Contacts_First_Name:firstname:V',
                              'vtiger_contactdetails:lastname:Contacts_Last_Name:lastname:V',
                              'vtiger_contactsubdetails:leadsource:Contacts_Lead_Source:leadsource:V',
-                             'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:I',
+                             'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:V',
                              'vtiger_account:industry:Accounts_industry:industry:V',
-                             'vtiger_contactdetails:email:Contacts_Email:email:V'),
+                             'vtiger_contactdetails:email:Contacts_Email:email:E'),
 
 		       Array('vtiger_contactdetails:firstname:Contacts_First_Name:firstname:V',
                              'vtiger_contactdetails:lastname:Contacts_Last_Name:lastname:V',
-                             'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:I',
-                             'vtiger_contactdetails:email:Contacts_Email:email:V',
+                             'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:V',
+                             'vtiger_contactdetails:email:Contacts_Email:email:E',
                              'vtiger_potential:potentialname:Potentials_Potential_Name:potentialname:V',
                              'vtiger_potential:sales_stage:Potentials_Sales_Stage:sales_stage:V'),
 
 		       Array('vtiger_leaddetails:firstname:Leads_First_Name:firstname:V',
 			     'vtiger_leaddetails:lastname:Leads_Last_Name:lastname:V',
 			     'vtiger_leaddetails:company:Leads_Company:company:V',
-			     'vtiger_leaddetails:email:Leads_Email:email:V'),
+			     'vtiger_leaddetails:email:Leads_Email:email:E'),
 
 		       Array('vtiger_leaddetails:firstname:Leads_First_Name:firstname:V',
                              'vtiger_leaddetails:lastname:Leads_Last_Name:lastname:V',
                              'vtiger_leaddetails:company:Leads_Company:company:V',
-                             'vtiger_leaddetails:email:Leads_Email:email:V',
+                             'vtiger_leaddetails:email:Leads_Email:email:E',
 			     'vtiger_leaddetails:leadsource:Leads_Lead_Source:leadsource:V'),
 
 		       Array('vtiger_potential:potentialname:Potentials_Potential_Name:potentialname:V',
@@ -109,8 +109,7 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
                              'vtiger_products:productname:Products_Product_Name:productname:V',
                              'vtiger_products:discontinued:Products_Product_Active:discontinued:V',
                              'vtiger_products:productcategory:Products_Product_Category:productcategory:V',
-			     'vtiger_products:manufacturer:Products_Manufacturer:manufacturer:V',
-			     'vtiger_contactdetailsProducts:lastname:Products_Contact_Name:contact_id:I'),
+			     'vtiger_products:manufacturer:Products_Manufacturer:manufacturer:V'),
 
  		       Array('vtiger_troubletickets:title:HelpDesk_Title:ticket_title:V',
                              'vtiger_troubletickets:priority:HelpDesk_Priority:ticketpriorities:V',
@@ -130,7 +129,6 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
                              'vtiger_products:productcode:Products_Product_Code:productcode:V',
                              'vtiger_products:discontinued:Products_Product_Active:discontinued:V',
                              'vtiger_products:productcategory:Products_Product_Category:productcategory:V',
-                             'vtiger_contactdetailsProducts:lastname:Products_Contact_Name:contact_id:I',
                              'vtiger_products:website:Products_Website:website:V',
 			     'vtiger_vendorRel:vendorname:Products_Vendor_Name:vendor_id:I',
 			     'vtiger_products:mfr_part_no:Products_Mfr_PartNo:mfr_part_no:V'),
@@ -164,7 +162,7 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
 			     'vtiger_contactdetails:firstname:Contacts_First_Name:firstname:V',
 			     'vtiger_contactdetails:lastname:Contacts_Last_Name:lastname:V',
 			     'vtiger_contactsubdetails:leadsource:Contacts_Lead_Source:leadsource:V',
-			     'vtiger_contactdetails:email:Contacts_Email:email:V'),
+			     'vtiger_contactdetails:email:Contacts_Email:email:E'),
 
 		       Array('vtiger_purchaseorder:subject:PurchaseOrder_Subject:subject:V',
 			     'vtiger_vendorRel:vendorname:PurchaseOrder_Vendor_Name:vendor_id:I',
@@ -179,8 +177,6 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
 		       Array('vtiger_invoice:subject:Invoice_Subject:subject:V',
 			     'vtiger_invoice:salesorderid:Invoice_Sales_Order:salesorder_id:I',
 			     'vtiger_invoice:customerno:Invoice_Customer_No:customerno:V',
-                             'vtiger_invoice:notes:Invoice_Notes:notes:V',
-			     'vtiger_invoice:invoiceterms:Invoice_Invoice_Terms:invoiceterms:V',
 			     'vtiger_invoice:exciseduty:Invoice_Excise_Duty:exciseduty:N',
 			     'vtiger_invoice:salescommission:Invoice_Sales_Commission:salescommission:N',
 			     'vtiger_accountInvoice:accountname:Invoice_Account_Name:account_id:I'),
@@ -358,12 +354,12 @@ $sortorder = Array(
                         )
                   );
 
-$stdfilters = Array(Array('columnname'=>'vtiger_crmentityCalendar:modifiedtime:Calendar_Modified_Time',
+$stdfilters = Array(Array('columnname'=>'vtiger_crmentity:modifiedtime:modifiedtime:Calendar_Modified_Time',
 			  'datefilter'=>'lastmonth',
 			  'startdate'=>'2005-05-01',
 			  'enddate'=>'2005-05-31'),
 
-		    Array('columnname'=>'vtiger_crmentityCalendar:modifiedtime:Calendar_Modified_Time',
+		    Array('columnname'=>'vtiger_crmentity:modifiedtime:modifiedtime:Calendar_Modified_Time',
                           'datefilter'=>'thismonth',
                           'startdate'=>'2005-06-01',
                           'enddate'=>'2005-06-30')
@@ -371,13 +367,13 @@ $stdfilters = Array(Array('columnname'=>'vtiger_crmentityCalendar:modifiedtime:C
 
 $advfilters = Array(
                       Array(
-                            Array('columnname'=>'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:I',
+                            Array('columnname'=>'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:V',
                                   'comparator'=>'n',
                                   'value'=>''
                                  )
                            ),
 		      Array(
-                            Array('columnname'=>'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:I',
+                            Array('columnname'=>'vtiger_accountContacts:accountname:Contacts_Account_Name:account_id:V',
                                   'comparator'=>'e',
                                   'value'=>''
                                  )
@@ -453,10 +449,9 @@ foreach($reports as $key=>$report)
 function PopulateReportFolder($fldrname,$fldrdescription)
 {
 	global $adb;
-	$sql = "INSERT INTO vtiger_reportfolder ";
-	$sql .= "(FOLDERNAME,DESCRIPTION,STATE) ";
-	$sql .= "VALUES ('".$fldrname."','".$fldrdescription."','SAVED')";
-	$result = $adb->query($sql);
+	$sql = "INSERT INTO vtiger_reportfolder (FOLDERNAME,DESCRIPTION,STATE) VALUES(?,?,?)";
+	$params = array($fldrname, $fldrdescription, 'SAVED');
+	$result = $adb->pquery($sql, $params);
 }
 
 /** Function to add an entry in selestquery vtiger_table 
@@ -469,8 +464,8 @@ function insertSelectQuery()
 	$genQueryId = $adb->getUniqueID("vtiger_selectquery");
         if($genQueryId != "")
         {
-		$iquerysql = "insert into vtiger_selectquery (QUERYID,STARTINDEX,NUMOFOBJECTS) values (".$genQueryId.",0,0)";
-		$iquerysqlresult = $adb->query($iquerysql);
+		$iquerysql = "insert into vtiger_selectquery (QUERYID,STARTINDEX,NUMOFOBJECTS) values (?,?,?)";
+		$iquerysqlresult = $adb->pquery($iquerysql, array($genQueryId,0,0));
 	}
 
 	return $genQueryId;
@@ -488,8 +483,8 @@ function insertSelectColumns($queryid,$columnname)
 	{
 		for($i=0;$i < count($columnname);$i++)
 		{
-			$icolumnsql = "insert into vtiger_selectcolumn (QUERYID,COLUMNINDEX,COLUMNNAME) values (".$queryid.",".$i.",'".$columnname[$i]."')";
-			$icolumnsqlresult = $adb->query($icolumnsql);	
+			$icolumnsql = "insert into vtiger_selectcolumn (QUERYID,COLUMNINDEX,COLUMNNAME) values (?,?,?)";
+			$icolumnsqlresult = $adb->pquery($icolumnsql, array($queryid, $i, $columnname[$i]));	
 		}
 	}
 }
@@ -505,9 +500,9 @@ function insertReports($queryid,$folderid,$reportname,$description,$reporttype)
 	global $adb;
 	if($queryid != "")
 	{
-		$ireportsql = "insert into vtiger_report (REPORTID,FOLDERID,REPORTNAME,DESCRIPTION,REPORTTYPE,QUERYID,STATE)";
-                $ireportsql .= " values (".$queryid.",".$folderid.",'".$reportname."','".$description."','".$reporttype."',".$queryid.",'SAVED')";
-		$ireportresult = $adb->query($ireportsql);
+		$ireportsql = "insert into vtiger_report (REPORTID,FOLDERID,REPORTNAME,DESCRIPTION,REPORTTYPE,QUERYID,STATE) values (?,?,?,?,?,?,?)";
+        $ireportparams = array($queryid, $folderid, $reportname, $description, $reporttype, $queryid, 'SAVED');
+		$ireportresult = $adb->pquery($ireportsql, $ireportparams);
 	}
 }
 
@@ -522,8 +517,8 @@ function insertReportModules($queryid,$primarymodule,$secondarymodule)
 	global $adb;
 	if($queryid != "")
 	{
-		$ireportmodulesql = "insert into vtiger_reportmodules (REPORTMODULESID,PRIMARYMODULE,SECONDARYMODULES) values (".$queryid.",'".$primarymodule."','".$secondarymodule."')";
-		$ireportmoduleresult = $adb->query($ireportmodulesql);
+		$ireportmodulesql = "insert into vtiger_reportmodules (REPORTMODULESID,PRIMARYMODULE,SECONDARYMODULES) values (?,?,?)";
+		$ireportmoduleresult = $adb->pquery($ireportmodulesql, array($queryid, $primarymodule, $secondarymodule));
 	}
 }
 
@@ -542,9 +537,8 @@ function insertSortColumns($queryid,$sortlists)
 	{
 		foreach($sortlists as $i=>$sort)
                 {
-			$sort_bysql = "insert into vtiger_reportsortcol (SORTCOLID,REPORTID,COLUMNNAME,SORTORDER) 
-					values (".($i+1).",".$queryid.",'".$sort['columnname']."','".$sort['sortorder']."')";
-			$sort_byresult = $adb->query($sort_bysql);
+			$sort_bysql = "insert into vtiger_reportsortcol (SORTCOLID,REPORTID,COLUMNNAME,SORTORDER) values (?,?,?,?)";
+			$sort_byresult = $adb->pquery($sort_bysql, array(($i+1), $queryid, $sort['columnname'], $sort['sortorder']));
 		}
 	}
 
@@ -562,8 +556,8 @@ function insertStdFilter($queryid,$filtercolumn,$datefilter,$startdate,$enddate)
 	global $adb;
 	if($queryid != "")
 	{
-		$ireportmodulesql = "insert into vtiger_reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$queryid.",'".$filtercolumn."','".$datefilter."','".$startdate."','".$enddate."')";
-		$ireportmoduleresult = $adb->query($ireportmodulesql);
+		$ireportmodulesql = "insert into vtiger_reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (?,?,?,?,?)";
+		$ireportmoduleresult = $adb->pquery($ireportmodulesql, array($queryid, $filtercolumn, $datefilter, $startdate, $enddate));
 	}
 
 }
@@ -581,9 +575,8 @@ function insertAdvFilter($queryid,$filters)
 	{
 		foreach($filters as $i=>$filter)
 		{
-		      $irelcriteriasql = "insert into vtiger_relcriteria(QUERYID,COLUMNINDEX,COLUMNNAME,COMPARATOR,VALUE) 
-		      values (".$queryid.",".$i.",'".$filter['columnname']."','".$filter['comparator']."','".$filter['value']."')";
-		      $irelcriteriaresult = $adb->query($irelcriteriasql);
+		      $irelcriteriasql = "insert into vtiger_relcriteria(QUERYID,COLUMNINDEX,COLUMNNAME,COMPARATOR,VALUE) values (?,?,?,?,?)";
+		      $irelcriteriaresult = $adb->pquery($irelcriteriasql, array($queryid,$i,$filter['columnname'],$filter['comparator'],$filter['value']));
 		}
 	}
 }

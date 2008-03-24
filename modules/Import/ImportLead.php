@@ -26,16 +26,16 @@ include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
-require_once('modules/Contacts/Contact.php');
-require_once('modules/Potentials/Opportunity.php');
-require_once('modules/Notes/Note.php');
-require_once('modules/Emails/Email.php');
-require_once('modules/Accounts/Account.php');
+require_once('modules/Contacts/Contacts.php');
+require_once('modules/Potentials/Potentials.php');
+require_once('modules/Notes/Notes.php');
+require_once('modules/Emails/Emails.php');
+require_once('modules/Accounts/Accounts.php');
 require_once('include/ComboUtil.php');
-require_once('modules/Leads/Lead.php');
+require_once('modules/Leads/Leads.php');
 
 
-class ImportLead extends Lead {
+class ImportLead extends Leads {
 	 var $db;
 
 	// This is the list of the functions to run when importing
@@ -56,7 +56,7 @@ class ImportLead extends Lead {
 			$this->db->println("searching and assigning ".$ass_user);
 
 			//$result = $this->db->query("select id from vtiger_users where user_name = '".$ass_user."'");
-			$result = $this->db->query("select id from vtiger_users where id = '".$ass_user."'");
+			$result = $this->db->pquery("select id from vtiger_users where id = ?", array($ass_user));
 			if($this->db->num_rows($result)!=1)
 			{
 				$this->db->println("not exact records setting current userid");
@@ -87,9 +87,7 @@ class ImportLead extends Lead {
 		$this->log = LoggerManager::getLogger('import_lead');
 		$this->db = new PearDatabase();
 		$this->db->println("IMP ImportLead");
-		$colf = getColumnFields("Leads");
-		foreach($colf as $key=>$value)
-			$this->importable_fields[$key]=1;
+		$this->initImportableFields("Leads");
 		
 		$this->db->println($this->importable_fields);
 	}

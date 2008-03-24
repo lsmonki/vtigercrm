@@ -16,7 +16,7 @@
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/5createTables.php,v 1.58 2005/04/19 16:57:08 ray Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
-set_time_limit(600);
+set_time_limit(2000);
 
 if (isset($_REQUEST['db_name'])) $db_name  				= $_REQUEST['db_name'];
 if (isset($_REQUEST['db_drop_tables'])) $db_drop_tables 	= $_REQUEST['db_drop_tables'];
@@ -24,6 +24,8 @@ if (isset($_REQUEST['db_create'])) $db_create 			= $_REQUEST['db_create'];
 if (isset($_REQUEST['db_populate'])) $db_populate		= $_REQUEST['db_populate'];
 if (isset($_REQUEST['admin_email'])) $admin_email		= $_REQUEST['admin_email'];
 if (isset($_REQUEST['admin_password'])) $admin_password	= $_REQUEST['admin_password'];
+if (isset($_REQUEST['standarduser_email'])) $standarduser_email  = $_REQUEST['standarduser_email'];
+if (isset($_REQUEST['standarduser_password'])) $standarduser_password = $_REQUEST['standarduser_password'];
 if (isset($_REQUEST['currency_name'])) $currency_name	= $_REQUEST['currency_name'];
 if (isset($_REQUEST['currency_code'])) $currency_code	= $_REQUEST['currency_code'];
 if (isset($_REQUEST['currency_symbol'])) $currency_symbol	= $_REQUEST['currency_symbol'];
@@ -33,9 +35,20 @@ if (isset($_REQUEST['currency_symbol'])) $currency_symbol	= $_REQUEST['currency_
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>vtiger CRM 5 - Configuration Wizard - Finish</title>
 
+<script type="text/javascript">
+function showhidediv()
+{
+	var div_style = document.getElementById("htaccess_div").style.display;
+	if(div_style == "inline")
+		document.getElementById("htaccess_div").style.display = "none";
+	else
+		document.getElementById("htaccess_div").style.display = "inline";
+		
+}
+</script>
 
 <link href="include/install/install.css" rel="stylesheet" type="text/css">
 </head>
@@ -100,36 +113,67 @@ if (isset($_REQUEST['currency_symbol'])) $currency_symbol	= $_REQUEST['currency_
 $renamefile = uniqid(rand(), true);
 
 //@rename("install.php", $renamefile."install.php.txt");
-if(!rename("install.php", $renamefile."install.php.txt"))
+if(!@rename("install.php", $renamefile."install.php.txt"))
 {
-	if (copy ("install.php", $renamefile."install.php.txt"))
+	if (@copy ("install.php", $renamefile."install.php.txt"))
        	{
         	 unlink($renamefile."install.php.txt");
      	}
+	else
+	{
+		echo "<b><font color='red'>We strongly suggest you to rename the install.php file.</font></b>";
+	}
 }
 
 //@rename("install/", $renamefile."install/");
-if(!rename("install/", $renamefile."install/"))
+if(!@rename("install/", $renamefile."install/"))
 {
-	if (copy ("install/", $renamefile."install/"))
+	if (@copy ("install/", $renamefile."install/"))
        	{
         	 unlink($renamefile."install/");
      	}
+	else
+	{
+		echo "<br><b><font color='red'>We strongly suggest you to rename the install directory.</font></b><br>";
+	}
+
 }
 //populate Calendar data
 
 
 ?>
-		<table borde=0 cellspacing=0 cellpadding=5 align="center" width=75% style="background-color:#E1E1FD;border:1px dashed #111111;">
+		<table border=0 cellspacing=0 cellpadding=5 align="center" width="80%" style="background-color:#E1E1FD;border:1px dashed #111111;">
 		<tr>
 			<td align=center class=small>
-			<b>vtigercrm-5.0.0 is all set to go!</b>
+			<b>vtigercrm-5.0.4 is all set to go!</b>
 			<hr noshade size=1>
 			<div style="width:100%;padding:10px; "align=left>
 			<ul>
-			<li>Your install.php file has been renamed to <?echo $renamefile;?>install.php.txt.
-			<li>Your install folder too has been renamed to <?echo $renamefile;?>install/.  
+			<li>Your install.php file has been renamed to <?php echo $renamefile;?>install.php.txt.
+			<li>Your install folder too has been renamed to <?php echo $renamefile;?>install/.  
 			<li>Please log in using the "admin" user name and the password you entered in step 2.
+			<li>Do not forget to set the outgoing emailserver, setup accessible from Settings-&gt;Outgoing Server
+			</ul>
+			<ul>
+			<li>Rename htaccess.txt file to .htaccess to control public file access. &nbsp;
+			   <a href="javascript:;" onclick="showhidediv();">More Information</a>
+			   <div id='htaccess_div' style="display:none">
+				<br><br>This .htaccess file will work if "<b>AllowOverride All</b>" is set on Apache server configuration file (httpd.conf) for the DocumentRoot or for the current vtiger path.
+			       	<br>If this AllowOverride is set as None ie., "<b>AllowOverride None</b>" then .htaccess file will not take into effect. 
+				<br><br>If AllowOverride is None then add the following configuration in the apache server configuration file (httpd.conf) 
+				<br><b>&lt;Directory "C:/Program Files/vtigercrm/apache/htdocs/vtigerCRM"&gt;<br>Options -Indexes<br>&lt;/Directory&gt;</b>
+				<br>So that without .htaccess file we can restrict the directory listing
+			   </div>
+			</ul>
+			<ul>
+			<li><b><font color='#0000FF'>You are very important to us!</font></b>
+<li><b> We take pride in being associated with you</li></b>
+			<p>
+			<b>Talk to us at <a href='http://forums.vtiger.com' target="_blank">forums</a></b>
+			<p>
+			<b>Discuss with us at <a href='http://blogs.vtiger.com' target="_blank">blogs</a></b>
+			<p>
+			<b>We aim to be - simply the best. Come on over, there is space for you too!</b>
 			</ul>
 			</div>
 
@@ -172,7 +216,7 @@ if(!rename("install/", $renamefile."install/"))
     <table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 
       <tr>
-        <td class=small align=center> <a href="#">www.vtiger.com</a></td>
+        <td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td>
       </tr>
     </table>
 </body>

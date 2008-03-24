@@ -22,8 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
-require_once('modules/Contacts/Contact.php');
-require_once('themes/'.$theme.'/layout_utils.php');
+require_once('modules/Contacts/Contacts.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/ComboUtil.php');
@@ -39,7 +38,7 @@ $log = LoggerManager::getLogger('contact_list');
 
 global $currentModule,$theme;
 
-$focus = new Contact();
+$focus = new Contacts();
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 
@@ -97,7 +96,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		elseif($uitype[$i] == 15)//Added to handle the picklist customfield - after 4.2 patch2 
 			$str = " vtiger_contactscf.".$column[$i]." = '".$customfield[$i]."'";
 		else
-	        	$str = " vtiger_contactscf.".$column[$i]." like '$customfield[$i]%'";
+	        	$str = " vtiger_contactscf.".$column[$i]." like '". formatForSqlLike($customfield[$i], 2) ."'";
                 array_push($where_clauses, $str);
 		$url_string .="&".$column[$i]."=".$customfield[$i];
         }
@@ -114,6 +113,7 @@ $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 $smarty->assign("CHANGE_OWNER",getUserslist());
+$smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
 // Buttons and View options
 if($viewid != 0)
 {
@@ -154,7 +154,11 @@ if($viewid != "0")
 if(isset($where) && $where != '')
 {
 	$list_query .= " AND ".$where;
+     $_SESSION['export_where'] = $where;
 }
+else
+   unset($_SESSION['export_where']);
+
 
 if(isset($order_by) && $order_by != '')
 {
@@ -177,7 +181,6 @@ if(isset($order_by) && $order_by != '')
 
 //Constructing the list view
 
-$custom = get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
@@ -194,6 +197,11 @@ if($_SESSION['lvs'][$currentModule])
 {
 	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
 }
+//added for 4600
+                                                                                                                             
+if($noofrows <= $list_max_entries_per_page)
+        $_SESSION['lvs'][$currentModule]['start'] = 1;
+//ends
 
 $start = $_SESSION['lvs'][$currentModule]['start'];
 
@@ -210,6 +218,8 @@ $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val']; 
 //By Raju Ends
+$_SESSION['nav_start']=$start_rec;
+$_SESSION['nav_end']=$end_rec;
 
 //limiting the query
 if ($start_rec ==0) 
@@ -218,9 +228,9 @@ else
 	$limit_start_rec = $start_rec -1;
 	
 if( $adb->dbType == "pgsql")
-     $list_result = $adb->query($list_query. " OFFSET ".$limit_start_rec." LIMIT ".$list_max_entries_per_page);
+     $list_result = $adb->pquery($list_query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
 else
-    $list_result = $adb->query($list_query. " LIMIT ".$limit_start_rec.",".$list_max_entries_per_page);
+    $list_result = $adb->pquery($list_query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
 //mass merge for word templates -- *Raj*17/11
 while($row = $adb->fetch_array($list_result))
@@ -233,7 +243,6 @@ if(isset($ids))
 }
 if(isPermitted("Contacts","Merge") == 'yes') 
 {
-	$smarty->assign("MERGEBUTTON","<td><input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"crmbutton small create\" onclick=\"return massMerge('Contacts')\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
 	$wordTemplateResult = fetchWordTemplateList("Contacts");
 	$tempCount = $adb->num_rows($wordTemplateResult);
 	$tempVal = $adb->fetch_array($wordTemplateResult);
@@ -242,7 +251,21 @@ if(isPermitted("Contacts","Merge") == 'yes')
 		$optionString .="<option value=\"".$tempVal["templateid"]."\">" .$tempVal["filename"] ."</option>";
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
-	$smarty->assign("WORDTEMPLATEOPTIONS","<td>".$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."</td><td style=\"padding-left:5px;padding-right:5px\"><select class=\"small\" name=\"mergefile\">".$optionString."</select></td>");
+	if($tempCount > 0)
+	{
+		$smarty->assign("WORDTEMPLATEOPTIONS","<td>".$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."</td><td style=\"padding-left:5px;padding-right:5px\"><select class=\"small\" name=\"mergefile\">".$optionString."</select></td>");
+	
+		$smarty->assign("MERGEBUTTON","<td><input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"crmbutton small create\" onclick=\"return massMerge('Contacts')\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+	}
+	else
+	{ 
+		global $current_user;
+                require("user_privileges/user_privileges_".$current_user->id.".php");
+		if($is_admin == true)
+		{
+			$smarty->assign("MERGEBUTTON","<td><a href=index.php?module=Settings&action=upload&tempModule=".$currentModule."&parenttab=Settings>". $app_strings['LBL_CREATE_MERGE_TEMPLATE']."</td>");
+		}
+	}
 }
 //mass merge for word templates
 
@@ -262,6 +285,11 @@ $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 $listview_entries = getListViewEntries($focus,"Contacts",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
+
+//Added to select Multiple records in multiple pages
+$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
+$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Contacts","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','lastname','true','basic',"","","","",$viewid);

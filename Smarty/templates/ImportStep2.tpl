@@ -11,13 +11,19 @@
 -->*}
 
 
-<script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <script type="text/javascript" src="include/js/general.js"></script>
 <script>
 
 function getImportSavedMap(impoptions)
 {ldelim}
 	var mapping = impoptions.options[impoptions.options.selectedIndex].value;
+
+	//added to show the delete link
+	if(mapping != -1)
+		document.getElementById("delete_mapping").style.visibility = "visible";
+	else
+		document.getElementById("delete_mapping").style.visibility = "hidden";
+
 	new Ajax.Request(
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -29,7 +35,63 @@ function getImportSavedMap(impoptions)
 			{rdelim}
 		);
 {rdelim}
+function deleteMapping()
+{ldelim}
+	var options_collection = document.getElementById("saved_source").options;
+	var mapid = options_collection[options_collection.selectedIndex].value;
 
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+			method: 'post',
+			postBody: 'module=Import&mapping='+mapid+'&action=ImportAjax&delete_map='+mapid,
+			onComplete: function(response) {ldelim}
+					$("importmapform").innerHTML = response.responseText;
+				{rdelim}
+			{rdelim}
+		);
+
+	//we have emptied the map name from the select list
+	document.getElementById("saved_source").options[options_collection.selectedIndex] = null;
+	document.getElementById("delete_mapping").style.visibility = "hidden";
+	alert("{$APP.MAP_DELETED_INFO}");
+{rdelim}
+{literal}
+function check_submit()
+{
+	if(validate_import_map())
+	{	
+		if(document.getElementById("save_map").checked)
+	        {
+	                var name=document.getElementById("save_map_as").value
+	                $("status").style.display="block";
+	                new Ajax.Request(
+	                'index.php',
+	                {queue: {position: 'end', scope: 'command'},
+	                method: 'post',
+                        postBody: 'module=Import&name='+name+'&ajax_action=check_dup_map_name&action=ImportAjax',
+                        onComplete: function(response) {
+
+			if(response.responseText == 'true')
+        	                document.Import.submit();
+{/literal}              else
+				if(confirm("{$APP.MAP_NAME_EXISTS}"))
+{literal}					document.Import.submit();
+	                	$("status").style.display="none";
+
+                			                }
+                        }
+			                );
+
+
+		}
+		else
+			document.Import.submit();
+	}
+}
+
+
+{/literal}
 </script>
 <!-- header - level 2 tabs -->
 {include file='Buttons_List1.tpl'}	
@@ -59,7 +121,7 @@ function getImportSavedMap(impoptions)
 				<br />
 				<table align="center" cellpadding="5" cellspacing="0" width="95%" class="mailClient importLeadUI small">
 				   <tr>
-					<td class="mailClientBg genHeaderSmall" height="50" valign="middle" align="left" >{$MOD.LBL_MODULE_NAME} {$MODULE}</td>
+					<td class="mailClientBg genHeaderSmall" height="50" valign="middle" align="left" >{$MOD.LBL_MODULE_NAME} {$APP.$MODULE}</td>
 				   </tr>
 				   <tr>
 					<td>&nbsp;</td>
@@ -67,13 +129,13 @@ function getImportSavedMap(impoptions)
 				   <tr>
 					<td align="left"  style="padding-left:40px;">
 						<span class="genHeaderGray">{$MOD.LBL_STEP_2_3} </span>&nbsp; 
-						<span class="genHeaderSmall">{$MODULE} {$MOD.LBL_LIST_MAPPING} </span>
+						<span class="genHeaderSmall">{$APP.$MODULE} {$MOD.LBL_LIST_MAPPING} </span>
 					</td>
 				   </tr>
 				   <tr>
 					<td align="left" style="padding-left:40px;"> 
-					   {$MOD.LBL_STEP_2_MSG} {$MODULE} {$MOD.LBL_STEP_2_MSG1} 
-					   {$MOD.LBL_STEP_2_TXT} {$MODULE}. 
+					   {$MOD.LBL_STEP_2_MSG} {$APP.$MODULE} {$MOD.LBL_STEP_2_MSG1} 
+					   {$MOD.LBL_STEP_2_TXT} {$APP.$MODULE}. 
 					</td>
 				   </tr>
 				   <tr>
@@ -145,7 +207,7 @@ function getImportSavedMap(impoptions)
 					<td align="right" style="padding-right:40px;" class="reportCreateBottom" >
 						<input type="submit" name="button"  value=" &nbsp;&lsaquo; {$MOD.LBL_BACK} &nbsp; " class="crmbutton small cancel" onclick="this.form.action.value='Import';this.form.step.value='1'; return true;" />
 						&nbsp;&nbsp;
-						<input type="submit" name="button"  value=" &nbsp; {$MOD.LBL_IMPORT_NOW} &rsaquo; &nbsp; " class="crmbutton small save" onclick="this.form.action.value='Import';this.form.step.value='3'; return validate_import_map();" />
+						<input type="button" name="button"  value=" &nbsp; {$MOD.LBL_IMPORT_NOW} &rsaquo; &nbsp; " class="crmbutton small save" onclick="this.form.action.value='Import';this.form.step.value='3'; check_submit();" />
 					</td>
 				   </tr>
 				  </table>

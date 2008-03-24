@@ -11,7 +11,7 @@
 require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-require_once('modules/Products/Product.php');
+require_once('modules/Products/Products.php');
 require_once('include/FormValidationUtil.php');
 
 global $app_strings;
@@ -28,8 +28,13 @@ $decode_val=base64_decode($encode_val);
 
 
 
-$focus = new Product();
+$focus = new Products();
 $smarty = new vtigerCRM_Smarty();
+
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
 
 if($_REQUEST['record']!="") 
 {
@@ -75,7 +80,6 @@ if (isset($_REQUEST['vendorid']) && is_null($focus->vendorid)) {
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')
@@ -95,7 +99,7 @@ else
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Product']);
+$smarty->assign("SINGLE_MOD",'Product');
 
 
 $smarty->assign("MOD", $mod_strings);
@@ -123,7 +127,17 @@ if($focus->mode == 'edit')
 
 //Tax handling (get the available taxes only) - starts
 if($focus->mode == 'edit')
-	$tax_details = getTaxDetailsForProduct($focus->id,'available_associated');
+{
+	$retrieve_taxes = true;
+	$productid = $focus->id;
+	$tax_details = getTaxDetailsForProduct($productid,'available_associated');
+}
+elseif($_REQUEST['isDuplicate'] == 'true')
+{
+	$retrieve_taxes = true;
+	$productid = $_REQUEST['record'];
+	$tax_details = getTaxDetailsForProduct($productid,'available_associated');
+}
 else
 	$tax_details = getAllTaxes('available');
 
@@ -133,11 +147,12 @@ for($i=0;$i<count($tax_details);$i++)
 	$tax_details[$i]['check_value'] = 0;
 }
 
-if($focus->mode == 'edit')
+//For Edit and Duplicate we have to retrieve the product associated taxes and show them
+if($retrieve_taxes)
 {
 	for($i=0;$i<count($tax_details);$i++)
 	{
-		$tax_value = getProductTaxPercentage($tax_details[$i]['taxname'],$focus->id);
+		$tax_value = getProductTaxPercentage($tax_details[$i]['taxname'],$productid);
 		$tax_details[$i]['percentage'] = $tax_value;
 		$tax_details[$i]['check_value'] = 1;
 		//if the tax is not associated with the product then we should get the default value and unchecked
@@ -201,9 +216,14 @@ $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
+// Added to set product active when creating a new product
+$mode=$focus->mode;
+if($mode != "edit" && $_REQUEST['isDuplicate'] != "true")
+$smarty->assign("PROD_MODE", "create");
+
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
-
+$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 if($focus->mode == 'edit')
 	$smarty->display('Inventory/InventoryEditView.tpl');
 else

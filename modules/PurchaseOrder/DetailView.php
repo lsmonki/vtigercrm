@@ -29,7 +29,7 @@ require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 global $mod_strings,$app_strings,$theme,$currentModule,$singlepane_view;
 
-$focus = new Order();
+$focus = new PurchaseOrder();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],"PurchaseOrder");
@@ -43,7 +43,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Order detail view");
 
@@ -91,6 +90,10 @@ $smarty->assign("ASSOCIATED_PRODUCTS",getDetailAssociatedProducts('PurchaseOrder
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
+
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
 if($singlepane_view == 'true')
 {

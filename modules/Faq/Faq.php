@@ -28,12 +28,13 @@ require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 
+	global $empty_string;
 // Faq is used to store vtiger_faq information.
 class Faq extends CRMEntity {
 	var $log;
 	var $db;
-
-	var $tab_name = Array('vtiger_crmentity','vtiger_faq','vtiger_faqcomments');
+	var $table_name = "vtiger_faq";
+	var $tab_name = Array('vtiger_crmentity','vtiger_faq');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_faq'=>'id','vtiger_faqcomments'=>'faqid');
 				
 	var $entity_table = "vtiger_crmentity";
@@ -86,26 +87,60 @@ class Faq extends CRMEntity {
 		$this->log->debug("Exiting Faq method ...");
 	}
 
+	function save_module($module)
+	{
+		//Inserting into Faq comment table
+		$this->insertIntoFAQCommentTable('vtiger_faqcomments', $module);
+		
+	}
+
+
+	/** Function to insert values in vtiger_faqcomments table for the specified module,
+  	  * @param $table_name -- table name:: Type varchar
+  	  * @param $module -- module:: Type varchar
+ 	 */	
+	function insertIntoFAQCommentTable($table_name, $module)
+	{
+		global $log;
+		$log->info("in insertIntoFAQCommentTable  ".$table_name."    module is  ".$module);
+        	global $adb;
+
+        	$current_time = $adb->formatDate(date('YmdHis'), true);
+
+		if($this->column_fields['comments'] != '')
+			$comment = $this->column_fields['comments'];
+		else
+			$comment = $_REQUEST['comments'];
+
+		if($comment != '')
+		{
+			$params = array('', $this->id, from_html($comment), $current_time);
+			$sql = "insert into vtiger_faqcomments values(?, ?, ?, ?)";	
+			$adb->pquery($sql, $params);
+		}
+	}	
+	
+
 	/**     Function to get the list of comments for the given FAQ id
          *      @param  int  $faqid - FAQ id
 	 *      @return list $list - return the list of comments and comment informations as a html output where as these comments and comments informations will be formed in div tag.
         **/	
 	function getFAQComments($faqid)
 	{
-		global $log;
+		global $log, $default_charset;
 		$log->debug("Entering getFAQComments(".$faqid.") method ...");
 		global $mod_strings;
-		$sql = "select * from vtiger_faqcomments where faqid=".$faqid;
-		$result = $this->db->query($sql);
+		$sql = "select * from vtiger_faqcomments where faqid=?";
+		$result = $this->db->pquery($sql, array($faqid));
 		$noofrows = $this->db->num_rows($result);
 
-		if($noofrows == 0)
+		//In ajax save we should not add this div
+		if($_REQUEST['action'] != 'FaqAjax')
 		{
-			$log->debug("Exiting getFAQComments method ...");
-			return '';
+			$list .= '<div id="comments_div" style="overflow: auto;height:200px;width:100%;">';
+			$enddiv = '</div>';
 		}
 
-		$list .= '<div style="overflow: auto;height:200px;width:100%;">';
 		for($i=0;$i<$noofrows;$i++)
 		{
 			$comment = $this->db->query_result($result,$i,'comments');
@@ -113,6 +148,9 @@ class Faq extends CRMEntity {
 			if($comment != '')
 			{
 				//this div is to display the comment
+				if($_REQUEST['action'] == 'FaqAjax') {
+					$comment = htmlentities($comment, ENT_QUOTES, $default_charset);
+				}
 				$list .= '<div valign="top" style="width:99%;padding-top:10px;" class="dataField">'.make_clickable(nl2br($comment)).'</div>';
 				
 				//this div is to display the created time
@@ -120,11 +158,12 @@ class Faq extends CRMEntity {
 				$list .= ' : '.$createdtime.'</font></div>';
 			}
 		}
-		$list .= '</div>';
+
+		$list .= $enddiv;
+		
 		$log->debug("Exiting getFAQComments method ...");
 		return $list;
 	}
-	
 
 }
 ?>

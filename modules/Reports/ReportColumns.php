@@ -10,7 +10,6 @@
  ********************************************************************************/
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Reports/Reports.php');
@@ -64,6 +63,7 @@ function getPrimaryColumnsHTML($module)
 {
 	global $ogReport;
 	global $app_list_strings;
+	global $app_strings;
 	global $current_language;
 
 	$mod_strings = return_module_language($current_language,$module);
@@ -71,7 +71,8 @@ function getPrimaryColumnsHTML($module)
 	{
 		if(isset($ogReport->pri_module_columnslist[$module][$key]))
 		{
-			$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".$key."\" class=\"select\" style=\"border:none\">";
+			
+			$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".$app_strings[$key]."\" class=\"select\" style=\"border:none\">";
 			foreach($ogReport->pri_module_columnslist[$module][$key] as $field=>$fieldlabel)
 			{
 				if(isset($mod_strings[$fieldlabel]))
@@ -97,7 +98,7 @@ function getPrimaryColumnsHTML($module)
 function getSecondaryColumnsHTML($module)
 {
 	global $ogReport;
-	global $app_list_strings;
+	global $app_list_strings,$app_strings;
 	global $current_language;
 
 	if($module != "")
@@ -110,10 +111,10 @@ function getSecondaryColumnsHTML($module)
 			{
 				if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
 				{
-					$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".$key."\" class=\"select\" style=\"border:none\">";
+					$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".$app_strings[$key]."\" class=\"select\" style=\"border:none\">";
 					foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
 					{
-						if(isset($mod_strings[$fieldlable]))
+						if(isset($mod_strings[$fieldlabel]))
 						{
 							$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
 						}else

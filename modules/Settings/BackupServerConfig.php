@@ -19,12 +19,11 @@ global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 if(isset($_REQUEST['opmode']) && $_REQUEST['opmode'] != '')
 {
-	$sql_del = "delete from vtiger_systems where server_type='backup'";
-	$adb->query($sql_del);
+	$sql_del = "delete from vtiger_systems where server_type=?";
+	$adb->pquery($sql_del, array('backup'));
 }
 
 $smarty = new vtigerCRM_Smarty;
@@ -32,8 +31,8 @@ if($_REQUEST['error'] != '')
 {
 		$smarty->assign("ERROR_MSG",'<b><font color="red">'.$_REQUEST["error"].'</font></b>');
 }
-$sql="select * from vtiger_systems where server_type = 'backup'";
-$result = $adb->query($sql);
+$sql="select * from vtiger_systems where server_type = ?";
+$result = $adb->pquery($sql, array('backup'));
 $server = $adb->query_result($result,0,'server');
 $server_username = $adb->query_result($result,0,'server_username');
 $server_password = $adb->query_result($result,0,'server_password');
@@ -42,12 +41,17 @@ if(isset($_REQUEST['bkp_server_mode']) && $_REQUEST['bkp_server_mode'] != '')
 	$smarty->assign("BKP_SERVER_MODE",$_REQUEST['bkp_server_mode']);
 else
 	$smarty->assign("BKP_SERVER_MODE",'view');
-
-if (isset($server))
+if(isset($_REQUEST['server']))
+	$smarty->assign("FTPSERVER",$_REQUEST['server']);
+else if (isset($server))
 	$smarty->assign("FTPSERVER",$server);
-if (isset($server_username))
+if (isset($_REQUEST['server_user']))
+	$smarty->assign("FTPUSER",$_REQUEST['server_user']);
+else if (isset($server_username))
 	$smarty->assign("FTPUSER",$server_username);
-if (isset($server_password))
+if (isset($_REQUEST['password']))
+	$smarty->assign("FTPPASSWORD",$_REQUEST['password']);
+else if (isset($server_password))
 	$smarty->assign("FTPPASSWORD",$server_password);
 
 

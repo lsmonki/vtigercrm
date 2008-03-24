@@ -91,6 +91,6 @@ $addpaths = array();
 // display error messages at the top of the page
 // $showerrors = true;          // show the errors
 // $showerrors = false;         // don't show the errors
-$showerrors = true;
+$showerrors = false;  //Pinaki: Fix for ticket #4462
 
 ?>

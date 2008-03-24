@@ -11,8 +11,29 @@
 -->*}
 
 
-<script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script type="text/javascript" language="Javascript">
+function validateFile(form) 
+	{ldelim}
 
+	if(!emptyCheck("userfile","File Location","any"))
+		{ldelim}
+                
+			form.userfile.focus();
+		        return false;
+		{rdelim}
+
+
+    	if(! upload_filter("userfile", "csv") )
+		{ldelim}
+        
+                	form.userfile.focus();
+	                return false;
+	
+		{rdelim}
+	
+		return true;
+	{rdelim}
+</script>
 <!-- header - level 2 tabs -->
 {include file='Buttons_List1.tpl'}	
 
@@ -40,7 +61,7 @@
 				<br />
 				<table align="center" cellpadding="5" cellspacing="0" width="80%" class="mailClient importLeadUI small" border="0">
 				   <tr>
-					<td colspan="2" height="50" valign="middle" align="left" class="mailClientBg  genHeaderSmall">{$MOD.LBL_MODULE_NAME} {$MODULE}</td>
+					<td colspan="2" height="50" valign="middle" align="left" class="mailClientBg  genHeaderSmall">{$MOD.LBL_MODULE_NAME} {$APP.$MODULE}</td>
 				   </tr>
 				   <tr >
 					<td colspan="2" align="left" valign="top" style="padding-left:40px;">
@@ -58,7 +79,8 @@
 				   <tr >
 					<td align="right" valign="top" width="25%" class=small><b>{$MOD.LBL_FILE_LOCATION} </b></td>
 					<td align="left" valign="top" width="75%">
-						<input type="file" name="userfile"  size="40"   class=small/>&nbsp;
+						<input type="file" name="userfile"  size="40"   class=small onchange="validateFilename(this);" />&nbsp;
+						<input type="hidden" name="userfile_hidden" value=""/>
                 		<input type="checkbox" name="has_header"{$HAS_HEADER_CHECKED} />&nbsp; {$MOD.LBL_HAS_HEADER}
 					</td>
 				   </tr>
@@ -86,7 +108,10 @@
 				   <tr ><td colspan="2" height="50">&nbsp;</td></tr>
 				    <tr >
 						<td colspan="2" align="right" style="padding-right:40px;" class="reportCreateBottom">
-							<input title="{$MOD.LBL_NEXT}" accessKey="" class="crmButton small save" type="submit" name="button" value="  {$MOD.LBL_NEXT} &rsaquo; "  onclick="this.form.action.value='Import';this.form.step.value='2'; return verify_data(this.form);">
+							<input title="{$MOD.LBL_NEXT}" accessKey="" class="crmButton small save" type="submit" name="button" value="  {$MOD.LBL_NEXT} &rsaquo; "  onclick="this.form.action.value='Import';this.form.step.value='2'; return validateFile(this.form);">
+						&nbsp;
+ <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="" class="crmButton small cancel" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" onclick="gotourl('index.php?action=ListView&module={$MODULE}&parenttab={$CATEGORY}')">
+
 						</td>
 				   </tr>				</form>
 				 </table>

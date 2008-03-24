@@ -15,8 +15,7 @@
 
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
-require_once('modules/Quotes/Quote.php');
-require_once('themes/'.$theme.'/layout_utils.php');
+require_once('modules/Quotes/Quotes.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
@@ -33,7 +32,7 @@ if (!isset($where)) $where = "";
 
 $url_string = '';
 
-$focus = new Quote();
+$focus = new Quotes();
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 
@@ -79,6 +78,7 @@ $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 $smarty->assign("CHANGE_OWNER",getUserslist());
+$smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
 
 if(isPermitted('Quotes','Delete','') == 'yes')
 {
@@ -127,7 +127,7 @@ if(isset($order_by) && $order_by != '')
 {
 	if($order_by == 'smownerid')
         {
-                $query .= ' ORDER BY user_name '.$sorder;
+		$query .= " ORDER BY case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end ".$sorder;
         }
         else
         {
@@ -147,7 +147,11 @@ if($_SESSION['lvs'][$currentModule])
 {
 	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
 }
-
+//added for 4600
+                                                                                                                             
+if($noofrows <= $list_max_entries_per_page)
+        $_SESSION['lvs'][$currentModule]['start'] = 1;
+//ends
 $start = $_SESSION['lvs'][$currentModule]['start'];
 
 //Retreive the Navigation array
@@ -166,7 +170,7 @@ if ($start_rec ==0)
 else
 	$limit_start_rec = $start_rec -1;
 	
-$list_result = $adb->query($query. " limit ".$limit_start_rec.",".$list_max_entries_per_page);
+$list_result = $adb->pquery($query. " limit $limit_start_rec, $list_max_entries_per_page", array());
 
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
@@ -183,6 +187,11 @@ $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 $listview_entries = getListViewEntries($focus,"Quotes",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
+
+//Added to select Multiple records in multiple pages
+$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
+$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Quotes","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','subject','true','basic',"","","","",$viewid);

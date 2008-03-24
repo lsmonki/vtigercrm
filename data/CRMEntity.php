@@ -39,6 +39,8 @@ class CRMEntity
    * Contributor(s): ______________________________________..
    */
 
+  var $ownedby;
+   
 	
   function saveentity($module)
   {
@@ -48,152 +50,13 @@ class CRMEntity
 	$this->db->println("TRANS saveentity starts $module");
 	$this->db->startTransaction();
 	
-	// Code included by Jaguar - starts    
-	if(isset($this->column_fields['recurringtype']) && $this->column_fields['recurringtype']!='')
-		$recur_type = trim($this->column_fields['recurringtype']);
-	else
-    		$recur_type='';	
-	// Code included by Jaguar - Ends
-
-	//Code included by Minnie - Starts
-	if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
-	{
-		$selected_users_string =  $_REQUEST['inviteesid'];
-		$invitees_array = explode(';',$selected_users_string);
-
-	}
-	else
-		$invitees_array='';
-	//Code included by Minnie - Ends	
 
 	foreach($this->tab_name as $table_name)
 	{
+			
 		if($table_name == "vtiger_crmentity")
 		{
 			$this->insertIntoCrmEntity($module);
-		}
-		elseif($table_name == "vtiger_salesmanactivityrel")
-		{
-			$this->insertIntoSmActivityRel($module);
-		}
-		//added by raju
-		elseif($table_name=="vtiger_seactivityrel" )
-		{
-		  //modified by Richie as raju's implementation broke the feature for addition of webmail to vtiger_crmentity.need to be more careful in future while integrating code
-			if($module=="Emails" && $_REQUEST['smodule']!='webmails' && (!$this->plugin_save))
-		  {
-				if($_REQUEST['currentid']!='')
-				{
-					$actid=$_REQUEST['currentid'];
-				}
-				else 
-				{
-					$actid=$_REQUEST['record'];
-				}
-				$parentid=$_REQUEST['parent_id'];
-				if($_REQUEST['module'] != 'Emails' && $_REQUEST['module'] != 'Webmails')
-				{
-					if(!$parentid) {
-						$parentid = $adb->getUniqueID('vtiger_seactivityrel');
-					}
-					$mysql='insert into vtiger_seactivityrel values('.$parentid.','.$actid.')';
-					$adb->query($mysql);
-				}
-				else
-				{	  
-					$myids=explode("|",$parentid);  //2@71|
-					for ($i=0;$i<(count($myids)-1);$i++)
-					{
-						$realid=explode("@",$myids[$i]);
-						$mycrmid=$realid[0];
-						//added to handle the relationship of emails with vtiger_users
-						if($realid[1] == -1)
-							$mysql='insert into vtiger_salesmanactivityrel values('.$mycrmid.','.$actid.')';
-						else	
-							$mysql='insert into vtiger_seactivityrel values('.$mycrmid.','.$actid.')';
-						$adb->query($mysql);
-					}
-				}
-			}
-			else
-			{
-				if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
-				{
-					$this->insertIntoEntityTable($table_name, $module);
-				}
-				elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
-				{
-					$this->deleteRelation($table_name);
-				}
-			}			
-		}
-		elseif($table_name == "vtiger_seticketsrel" || $table_name ==  "vtiger_seproductsrel" || $table_name ==  "vtiger_senotesrel")
-		{
-			if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')//raju - mass mailing ends
-			{
-				$this->insertIntoEntityTable($table_name, $module);
-			}
-			elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
-			{
-				$this->deleteRelation($table_name);
-			}
-		}
-		elseif($table_name ==  "vtiger_cntactivityrel")
-		{
-			if(isset($this->column_fields['contact_id']) && $this->column_fields['contact_id'] != '')
-			{
-				$this->insertIntoEntityTable($table_name, $module);
-			}
-			elseif($this->column_fields['contact_id'] =='' && $insertion_mode=="edit")
-			{
-				$this->deleteRelation($table_name);
-			}
-
-		}
-		elseif($table_name ==  "vtiger_ticketcomments")
-		{
-                	$this->insertIntoTicketCommentTable($table_name, $module);
-		}
-		elseif($table_name ==  "vtiger_faqcomments")
-		{
-                	$this->insertIntoFAQCommentTable($table_name, $module);
-		}
-		elseif($table_name == "vtiger_activity_reminder")
-		{
-			if($recur_type == "--None--")
-			{
-				$this->insertIntoReminderTable($table_name,$module,"");
-			}
-		}
-		elseif($table_name == "vtiger_recurringevents") // Code included by Jaguar -  starts
-		{
-			$recur_type = trim($this->column_fields['recurringtype']);
-			if($recur_type != "--None--"  && $recur_type != '')
-		      	{		   
-				//Modified by Minnie
-				$recur_data = getrecurringObjValue();
-				if(is_object($recur_data))
-	      				$this->insertIntoRecurringTable($recur_data);
-			}		
-		}// Code included by Jaguar - Ends
-		// Code included by Minnie  -  starts	
-		elseif($table_name == "vtiger_invitees") 
-		{
-			if($invitees_array != '')
-			{
-				$this->insertIntoInviteeTable($table_name,$module,$invitees_array);
-			}
-		}
-		// Code included by Minnie  -  Ends
-		elseif($table_name == 'vtiger_producttaxrel')
-		{
-			//avoid call this function when we use ajax edit -> save
-			if($_REQUEST['ajxaction'] != 'DETAILVIEW')
-				$this->insertTaxInformation($table_name, $module);
-		}
-		elseif($table_name == 'vtiger_attachments')
-		{
-			$this->insertIntoAttachment($this->id,$module);
 		}
 		else
 		{
@@ -201,11 +64,25 @@ class CRMEntity
 		}
 	}
 
+	//Inserting into the group Table
+	if($this->ownedby == 0)
+	{
+		$this->insertIntoGroupTable($module);
+	}	
+	
+	//Calling the Module specific save code
+	$this->save_module($module);
+
+	$assigntype=$_REQUEST['assigntype'];
+	if($module != "Calendar")
+          $this->whomToSendMail($module,$this ->mode,$assigntype);
+	
 	$this->db->completeTransaction();
         $this->db->println("TRANS saveentity ends");
   }
 
 
+	
 	function insertIntoAttachment1($id,$module,$filedata,$filename,$filesize,$filetype,$user_id)
 	{
 		$date_var = date('YmdHis');
@@ -233,70 +110,26 @@ class CRMEntity
 			$idname='notesid';      $tablename='notes';     $descname='notecontent';
 		}
 
-		$sql="update ".$tablename." set filename='".$filename."' where ".$idname."=".$id;
-		$adb->query($sql);
+		$sql="update $tablename set filename=? where $idname=?";
+		$params = array($filename, $id);
+		$adb->pquery($sql, $params);
 
-		$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','"."',".$adb->formatString("vtiger_crmentity","createdtime",$date_var).",".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var).")";
-		$adb->query($sql1);
+		$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?, ?, ?, ?, ?, ?, ?)";
+		$params1 = array($current_id, $current_user->id, $ownerid, $module." Attachment", '', $adb->formatDate($date_var, true), $adb->formatDate($date_var, true));
+		$adb->pquery($sql1, $params1);
 
-		$sql2="insert into vtiger_attachments(attachmentsid, name, description, type) values(".$current_id.",'".$filename."','"."','".$filetype."')";
-		$result=$adb->query($sql2);
+		$sql2="insert into vtiger_attachments(attachmentsid, name, description, type) values(?, ?, ?, ?)";
+		$params2 = array($current_id, $filename, '', $filetype);
+		$result=$adb->pquery($sql2, $params2);
 
 		//TODO -- instead of put contents in db now we should store the file in harddisk
 
-		$sql3='insert into vtiger_seattachmentsrel values('.$id.','.$current_id.')';
-		$adb->query($sql3);
+		$sql3='insert into vtiger_seattachmentsrel values(?, ?)';
+		$params3 = array($id, $current_id);
+		$adb->pquery($sql3, $params3);
 	}
+	
 
-
-	/**
-	 *      This function is used to add the vtiger_attachments. This will call the function uploadAndSaveFile which will upload the attachment into the server and save that attachment information in the database.
-	 *      @param int $id  - entity id to which the vtiger_files to be uploaded
-	 *      @param string $module  - the current module name
-	*/
-	function insertIntoAttachment($id,$module)
-	{
-		global $log, $adb;
-		$log->debug("Entering into insertIntoAttachment($id,$module) method.");
-		
-		$file_saved = false;
-
-		//This is to added to store the existing attachment id of the contact where we should delete this when we give new image
-		if($module == 'Contacts')
-			$old_attachmentid = $adb->query_result($adb->query("select * from vtiger_seattachmentsrel where crmid=$id"),0,'attachmentsid');
-
-		foreach($_FILES as $fileindex => $files)
-		{
-			if($files['name'] != '' && $files['size'] > 0)
-			{
-				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
-			}
-		}
-
-		//This is to handle the delete image for contacts
-		if($module == 'Contacts' && $file_saved)
-		{
-			$del_res1 = $adb->query("delete from vtiger_attachments where attachmentsid=$old_attachmentid");
-			$del_res2 = $adb->query("delete from vtiger_seattachmentsrel where attachmentsid=$old_attachmentid");
-		}
-
-
-		//Remove the deleted vtiger_attachments from db - Products
-		if($module == 'Products' && $_REQUEST['del_file_list'] != '')
-		{
-			$del_file_list = explode("###",trim($_REQUEST['del_file_list'],"###"));
-			foreach($del_file_list as $del_file_name)
-			{
-				$attach_res = $adb->query("select vtiger_attachments.attachmentsid from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where crmid=$id and name=\"$del_file_name\"");
-				$attachments_id = $adb->query_result($attach_res,0,'attachmentsid');
-				
-				$del_res1 = $adb->query("delete from vtiger_attachments where attachmentsid=$attachments_id");
-				$del_res2 = $adb->query("delete from vtiger_seattachmentsrel where attachmentsid=$attachments_id");
-			}
-		}
-
-		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
-	}
 
 	/**
 	 *      This function is used to upload the attachment in the server and save that attachment information in db.
@@ -320,9 +153,14 @@ class CRMEntity
 		if(!isset($ownerid) || $ownerid=='')
 			$ownerid = $current_user->id;
 
-	
+		if(isset($file_details['original_name']) && $file_details['original_name'] != null) {
+			$file_name = $file_details['original_name'];
+		} else {
+			$file_name = $file_details['name'];
+		}
+
 		// Arbitrary File Upload Vulnerability fix - Philip
-		$binFile = $file_details['name'];
+		$binFile = preg_replace('/\s+/', '_', $file_name);//replace space with _ in filename
 		$ext_pos = strrpos($binFile, ".");
 
 		$ext = substr($binFile, $ext_pos + 1);
@@ -335,7 +173,7 @@ class CRMEntity
 
 		$current_id = $adb->getUniqueID("vtiger_crmentity");
 
-		$filename = basename($binFile);
+		$filename = ltrim(basename(" ".$binFile)); //allowed filename like UTF-8 characters 
 		$filetype= $file_details['type'];
 		$filesize = $file_details['size'];
 		$filetmp_name = $file_details['tmp_name'];
@@ -350,7 +188,7 @@ class CRMEntity
 		//only images are allowed for these modules
 		if($module == 'Contacts' || $module == 'Products')
 		{
-			$save_file = validateImageFile(&$file_details);
+			$save_file = validateImageFile($file_details);
 		}
 
 		if($save_file == 'true' && $upload_status == 'true')
@@ -358,31 +196,66 @@ class CRMEntity
 			//This is only to update the attached filename in the vtiger_notes vtiger_table for the Notes module
 			if($module=='Notes')
 			{
-				$sql="update vtiger_notes set filename='".$filename."' where notesid = ".$id;
-				$adb->query($sql);
+				$sql="update vtiger_notes set filename=? where notesid = ?";
+				$params = array($filename, $id); 
+				$adb->pquery($sql, $params);
 			}
+			if($module == 'Contacts' || $module == 'Products')
+			{
+				$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?, ?, ?, ?, ?, ?, ?)";
+				$params1 = array($current_id, $current_user->id, $ownerid, $module." Image", $this->column_fields['description'], $adb->formatDate($date_var, true), $adb->formatDate($date_var, true));		
+			}
+			else
+			{
+				$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?, ?, ?, ?, ?, ?, ?)";
+				$params1 = array($current_id, $current_user->id, $ownerid, $module." Attachment", $this->column_fields['description'], $adb->formatDate($date_var, true), $adb->formatDate($date_var, true));		
+			}
+			$adb->pquery($sql1, $params1);
 
-			$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$this->column_fields['description']."',".$adb->formatString("vtiger_crmentity","createdtime",$date_var).",".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var).")";
-			$adb->query($sql1);
-
-			$sql2="insert into vtiger_attachments(attachmentsid, name, description, type, path) values(".$current_id.",'".$filename."','".$this->column_fields['description']."','".$filetype."','".$upload_file_path."')";
-			$result=$adb->query($sql2);
+			$sql2="insert into vtiger_attachments(attachmentsid, name, description, type, path) values(?, ?, ?, ?, ?)";
+			$params2 = array($current_id, $filename, $this->column_fields['description'], $filetype, $upload_file_path);
+			$result=$adb->pquery($sql2, $params2);
 
 			if($_REQUEST['mode'] == 'edit')
 			{
 				if($id != '' && $_REQUEST['fileid'] != '')
 				{
-					$delquery = 'delete from vtiger_seattachmentsrel where crmid = '.$id.' and attachmentsid = '.$_REQUEST['fileid'];
-					$adb->query($delquery);
+					$delquery = 'delete from vtiger_seattachmentsrel where crmid = ? and attachmentsid = ?';
+					$delparams = array($id, $_REQUEST['fileid']);
+					$adb->pquery($delquery, $delparams);
 				}
 			}
 			if($module == 'Notes')
 			{
-				$query = "delete from vtiger_seattachmentsrel where crmid = ".$id;
-				$adb->query($query);
+				$query = "delete from vtiger_seattachmentsrel where crmid = ?";
+				$qparams = array($id);
+				$adb->pquery($query, $qparams);
 			}
-			$sql3='insert into vtiger_seattachmentsrel values('.$id.','.$current_id.')';
-			$adb->query($sql3);
+			if($module == 'Contacts')
+			{
+				$att_sql="select vtiger_seattachmentsrel.attachmentsid  from vtiger_seattachmentsrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_seattachmentsrel.attachmentsid where vtiger_crmentity.setype='Contacts Image' and vtiger_seattachmentsrel.crmid=?";
+				$res=$adb->pquery($att_sql, array($id));
+				$attachmentsid= $adb->query_result($res,0,'attachmentsid');
+				if($attachmentsid !='' )
+				{
+					$delquery='delete from vtiger_seattachmentsrel where crmid=? && attachmentsid=?';
+					$adb->pquery($delquery, array($id, $attachmentsid));
+					$crm_delquery="delete from vtiger_crmentity where crmid=?";
+					$adb->pquery($crm_delquery, array($attachmentsid));
+					$sql5='insert into vtiger_seattachmentsrel values(?,?)';
+					$adb->pquery($sql5, array($id, $current_id));
+				}
+				else
+				{
+					$sql3='insert into vtiger_seattachmentsrel values(?,?)';
+					$adb->pquery($sql3, array($id, $current_id));
+				}
+			}
+			else
+			{
+				$sql3='insert into vtiger_seattachmentsrel values(?,?)';
+				$adb->pquery($sql3, array($id, $current_id));
+			}
 
 			return true;
 		}
@@ -412,31 +285,38 @@ class CRMEntity
 	{
 		$ownerid = $this->column_fields['assigned_user_id'];
 	}
-                
-	if($module == 'Products' || $module == 'Notes' || $module =='Faq' || $module == 'Vendors' || $module == 'PriceBooks')
+        
+	$sql="select ownedby from vtiger_tab where name=?";
+	$res=$adb->pquery($sql, array($module));
+	$this->ownedby = $adb->query_result($res,0,'ownedby');
+	
+	if($this->ownedby == 1)
 	{
 		$log->info("module is =".$module);
 		$ownerid = $current_user->id;
-	}
+	}	
+	
+	
 	if($module == 'Events')
 	{
 		$module = 'Calendar';
 	}
 	if($this->mode == 'edit')
 	{
-		$description_val = from_html($adb->formatString("vtiger_crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
+		$description_val = from_html($this->column_fields['description'],($insertion_mode == 'edit')?true:false);
 
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		$tabid = getTabid($module);
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 		{
-			$sql = "update vtiger_crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description=".$description_val.", modifiedtime=".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
+			$sql = "update vtiger_crmentity set smownerid=?,modifiedby=?,description=?, modifiedtime=? where crmid=?";
+			$params = array($ownerid, $current_user->id, $description_val, $adb->formatDate($date_var, true), $this->id);	
 		}
 		else
 		{
 			$profileList = getCurrentUserProfileList();
-			$perm_qry = "SELECT columnname FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid = vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid = vtiger_field.fieldid WHERE vtiger_field.tabid = ".$tabid." AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.profileid IN ".$profileList." AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename='vtiger_crmentity' and vtiger_field.displaytype in (1,3);";
-			$perm_result = $adb->query($perm_qry);
+			$perm_qry = "SELECT columnname FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid = vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid = vtiger_field.fieldid WHERE vtiger_field.tabid = ? AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) . ") AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename='vtiger_crmentity' and vtiger_field.displaytype in (1,3);";
+			$perm_result = $adb->pquery($perm_qry, array($tabid, $profileList));
 			$perm_rows = $adb->num_rows($perm_result);
 			for($i=0; $i<$perm_rows; $i++)
 			{
@@ -444,56 +324,43 @@ class CRMEntity
 			}
 			if(is_array($columname) && in_array("description",$columname))
 			{
-				$sql = "update vtiger_crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description=".$description_val.", modifiedtime=".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
+				$sql = "update vtiger_crmentity set smownerid=?,modifiedby=?,description=?, modifiedtime=? where crmid=?";
+				$params = array($ownerid, $current_user->id, $description_val, $adb->formatDate($date_var, true), $this->id);
 			}
 			else
 			{
-				$sql = "update vtiger_crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.", modifiedtime=".$adb->formatString("vtiger_crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
+				$sql = "update vtiger_crmentity set smownerid=?,modifiedby=?, modifiedtime=? where crmid=?";
+				$params = array($ownerid, $current_user->id, $adb->formatDate($date_var, true), $this->id);		
 			}
 		}
-		$adb->query($sql);
-		$sql1 ="delete from vtiger_ownernotify where crmid=".$this->id;
-		$adb->query($sql1);
+		$adb->pquery($sql, $params);
+		$sql1 ="delete from vtiger_ownernotify where crmid=?";
+		$params1 = array($this->id);
+		$adb->pquery($sql1, $params1);
 		if($ownerid != $current_user->id)
 		{
-			$sql1 = "insert into vtiger_ownernotify values(".$this->id.",".$ownerid.",null)";
-			$adb->query($sql1);
-		}
+			$sql1 = "insert into vtiger_ownernotify values(?,?,?)";
+			$params1 = array($this->id, $ownerid, null);
+			$adb->pquery($sql1, $params1);
+		}		
 	}
 	else
 	{
 		//if this is the create mode and the group allocation is chosen, then do the following
 		$current_id = $adb->getUniqueID("vtiger_crmentity");
 		$_REQUEST['currentid']=$current_id;
+		if($current_user->id == '')
+			$current_user->id = 0;
 
-		$description_val = from_html($adb->formatString("vtiger_crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
-		$sql = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."',".$description_val.",".$adb->formatDate($date_var).",".$adb->formatDate($date_var).")";
-		$adb->query($sql);
+		$description_val = from_html($this->column_fields['description'],($insertion_mode == 'edit')?true:false);
+		$sql = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?)";
+		$params = array($current_id, $current_user->id, $ownerid, $module, $description_val, $adb->formatDate($date_var, true), $adb->formatDate($date_var, true));
+		$adb->pquery($sql, $params);
 		$this->id = $current_id;
 	}
 
-    }
+   }
 
-
-	/** Function to insert values in vtiger_salesmanactivityrel table for the specified module
-  	  * @param $module -- module:: Type varchar
- 	 */
-
-  function insertIntoSmActivityRel($module)
-  {
-    global $adb;
-    global $current_user;
-    if($this->mode == 'edit')
-    {
-
-      $sql = "delete from vtiger_salesmanactivityrel where activityid=".$this->id." and smid = ".$this->column_fields['assigned_user_id']."";
-      $adb->query($sql);
-
-    }
-	$sql_qry = "insert into vtiger_salesmanactivityrel (smid,activityid) values(".$this->column_fields['assigned_user_id'].",".$this->id.")";
-    $adb->query($sql_qry);
-
-  }
 
 	/** Function to insert values in the specifed table for the specified module
   	  * @param $table_name -- table name:: Type varchar
@@ -502,7 +369,7 @@ class CRMEntity
   function insertIntoEntityTable($table_name, $module)
   {
 	  global $log;
-  	  global $current_user;	  
+  	  global $current_user,$app_strings;
 	   $log->info("function insertIntoEntityTable ".$module.' vtiger_table name ' .$table_name);
 	  global $adb;
 	  $insertion_mode = $this->mode;
@@ -510,8 +377,8 @@ class CRMEntity
 	  //Checkin whether an entry is already is present in the vtiger_table to update
 	  if($insertion_mode == 'edit')
 	  {
-		  $check_query = "select * from ".$table_name." where ".$this->tab_name_index[$table_name]."=".$this->id;
-		  $check_result=$adb->query($check_query);
+		  $check_query = "select * from $table_name where ". $this->tab_name_index[$table_name] ."=?";
+		  $check_result=$adb->pquery($check_query, array($this->id));
 
 		  $num_rows = $adb->num_rows($check_result);
 
@@ -524,26 +391,47 @@ class CRMEntity
 	  if($insertion_mode == 'edit')
 	  {
 		  $update = '';
-		  $tabid= getTabid($module);	
+		  $update_params = array();
+		  $tabid= getTabid($module);
+	  	  if($tabid == 9)
+	          	$tabid = array(9,16);	  
 		  require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		  if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 		  {
 
-			  $sql = "select * from vtiger_field where tabid=".$tabid." and tablename='".$table_name."' and displaytype in (1,3)"; 
+			 	$sql = "select * from vtiger_field where tabid in (". generateQuestionMarks($tabid) .") and tablename=? and displaytype in (1,3) group by columnname"; 
+				$params = array($tabid, $table_name);	
 		  }
 		  else
 		  {
 			  $profileList = getCurrentUserProfileList();
-			  $sql = "SELECT *
-			  FROM vtiger_field
-			  INNER JOIN vtiger_profile2field
-			  ON vtiger_profile2field.fieldid = vtiger_field.fieldid
-			  INNER JOIN vtiger_def_org_field
-			  ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
-			  WHERE vtiger_field.tabid = ".$tabid."
-			  AND vtiger_profile2field.visible = 0 
-			  AND vtiger_profile2field.profileid IN ".$profileList."
-			  AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename='".$table_name."' and vtiger_field.displaytype in (1,3)";
+			  
+			  if (count($profileList) > 0) {
+			  	$sql = "SELECT *
+			  			FROM vtiger_field
+			  			INNER JOIN vtiger_profile2field
+			  			ON vtiger_profile2field.fieldid = vtiger_field.fieldid
+			  			INNER JOIN vtiger_def_org_field
+			  			ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
+			  			WHERE vtiger_field.tabid in (". generateQuestionMarks($tabid) .")
+			  			AND vtiger_profile2field.visible = 0 
+			  			AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .")
+			  			AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename=? and vtiger_field.displaytype in (1,3) group by columnname";
+			  			  
+			  	$params = array($tabid, $profileList, $table_name);
+			  } else {
+			  	$sql = "SELECT *
+			  			FROM vtiger_field
+			  			INNER JOIN vtiger_profile2field
+			  			ON vtiger_profile2field.fieldid = vtiger_field.fieldid
+			  			INNER JOIN vtiger_def_org_field
+			  			ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
+			  			WHERE vtiger_field.tabid in (". generateQuestionMarks($tabid) .")
+			  			AND vtiger_profile2field.visible = 0 
+			  			AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename=? and vtiger_field.displaytype in (1,3) group by columnname";
+			  	
+				$params = array($tabid, $table_name);
+			  }
 		  }	   
 
 	  }
@@ -555,31 +443,50 @@ class CRMEntity
 		 	$currentuser_id = $adb->getUniqueID("vtiger_users");
 			$this->id = $currentuser_id;
 		  }
-		  $value = $this->id;
+		  $value = array($this->id);
 	  	  $tabid= getTabid($module);	
-		  $sql = "select * from vtiger_field where tabid=".$tabid." and tablename='".$table_name."' and displaytype in (1,3,4)"; 
+		  $sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3,4)"; 
+		  $params = array($tabid, $table_name);
 	  }
 
-	  $result = $adb->query($sql);
+	  $result = $adb->pquery($sql, $params);
 	  $noofrows = $adb->num_rows($result);
 	  for($i=0; $i<$noofrows; $i++)
 	  {
 		  $fieldname=$adb->query_result($result,$i,"fieldname");
 		  $columname=$adb->query_result($result,$i,"columnname");
 		  $uitype=$adb->query_result($result,$i,"uitype");
+
 		  if(isset($this->column_fields[$fieldname]))
 		  {
 			  if($uitype == 56)
 			  {
 				  if($this->column_fields[$fieldname] == 'on' || $this->column_fields[$fieldname] == 1)
 				  {
-					  $fldvalue = 1;
+					  $fldvalue = '1';
 				  }
 				  else
 				  {
-					  $fldvalue = 0;
+					  $fldvalue = '0';
 				  }
 
+			  }
+			  elseif($uitype == 15 || $uitype == 16 || $uitype == 111)
+			  {
+
+				  if($this->column_fields[$fieldname] == $app_strings['LBL_NOT_ACCESSIBLE'])
+				  {
+					 
+					//If the value in the request is Not Accessible for a picklist, the existing value will be replaced instead of Not Accessible value.
+					 $sql="select $columname from  $table_name where ".$this->tab_name_index[$table_name]."=?";
+					 $res = $adb->pquery($sql,array($this->id));
+					 $pick_val = $adb->query_result($res,0,$columname);
+					 $fldvalue = $pick_val;
+				  }
+				  else
+				  {
+					  $fldvalue = $this->column_fields[$fieldname];
+				   }
 			  }
 			  elseif($uitype == 33)
 			  {
@@ -600,7 +507,8 @@ class CRMEntity
 				  }
 				  else
 				  {
-					  $fldvalue = getDBInsertDateValue($this->column_fields[$fieldname]);
+					  //Added to avoid function call getDBInsertDateValue in ajax save
+					  $fldvalue = (($_REQUEST['ajxaction'] == 'DETAILVIEW')?$this->column_fields[$fieldname]:getDBInsertDateValue($this->column_fields[$fieldname]));
 				  }
 			  }
 			  elseif($uitype == 7)
@@ -612,9 +520,9 @@ class CRMEntity
 			  else
 			  {
 				  $fldvalue = $this->column_fields[$fieldname]; 
-				  $fldvalue = stripslashes($fldvalue);
 			  }
-			  $fldvalue = from_html($adb->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
+			  if($uitype != 33)
+				  $fldvalue = from_html($fldvalue,($insertion_mode == 'edit')?true:false);
 
 
 
@@ -623,34 +531,35 @@ class CRMEntity
 		  {
 			  $fldvalue = '';
 		  }
-		  if($fldvalue=='') $fldvalue ="NULL";
+		  if($fldvalue=='') {
+		  	$fldvalue = $this->get_column_value($columname, $fldvalue, $fieldname, $uitype);
+			//$fldvalue =null;
+		  }
+		  /*else
+			$fldvalue = htmlentities($fldvalue);*/	
 		  if($insertion_mode == 'edit')
 		  {
 			  if($table_name == 'vtiger_notes' && $columname == 'filename' && $_FILES['filename']['name'] == '')
 			  {
 				  $fldvalue = $this->getOldFileName($this->id);
 			  }
-			  if($table_name == 'vtiger_products' && $columname == 'imagename')
-			  {
-					  
-
-			  }
 			  if($table_name != 'vtiger_ticketcomments')
 			  {
 				  if($i == 0)
 				  {
-					  $update = $columname."=".$fldvalue."";
+					  $update = $columname."=?";
 				  }
 				  else
 				  {
-					  $update .= ', '.$columname."=".$fldvalue."";
+					  $update .= ', '.$columname."=?";
 				  }
+				  array_push($update_params, $fldvalue);
 			  }
 		  }
 		  else
 		  {
 			  $column .= ", ".$columname;
-			  $value .= ", ".$fldvalue."";
+			  array_push($value, $fldvalue);
 		  }
 
 	  }
@@ -663,14 +572,15 @@ class CRMEntity
 	  {
 		  if($_REQUEST['module'] == 'Potentials')
 		  {
-			  $dbquery = 'select sales_stage from vtiger_potential where potentialid = '.$this->id;
-			  $sales_stage = $adb->query_result($adb->query($dbquery),0,'sales_stage');
+			  $dbquery = 'select sales_stage from vtiger_potential where potentialid = ?';
+			  $sales_stage = $adb->query_result($adb->pquery($dbquery, array($this->id)),0,'sales_stage');
 			  if($sales_stage != $_REQUEST['sales_stage'] && $_REQUEST['sales_stage'] != '')
 			  {
 				  $date_var = date('YmdHis');
-				  $closingdate = getDBInsertDateValue($this->column_fields['closingdate']);
-				  $sql = "insert into vtiger_potstagehistory values('',".$this->id.",'".$this->column_fields['amount']."','".$sales_stage."','".$this->column_fields['probability']."',0,".$adb->formatString("vtiger_potstagehistory","closedate",$closingdate).",".$adb->formatString("vtiger_potstagehistory","lastmodified",$date_var).")";
-				  $adb->query($sql);
+				  $closingdate = ($_REQUEST['ajxaction'] == 'DETAILVIEW')? $this->column_fields['closingdate'] : getDBInsertDateValue($this->column_fields['closingdate']);
+				  $sql = "insert into vtiger_potstagehistory values(?,?,?,?,?,?,?,?)";
+				  $params = array('', $this->id, $this->column_fields['amount'], decode_html($sales_stage), $this->column_fields['probability'], 0, $adb->formatDate($closingdate, true), $adb->formatDate($date_var, true));
+				  $adb->pquery($sql, $params);
 			  }
 		  }
 		  elseif($_REQUEST['module'] == 'PurchaseOrder' || $_REQUEST['module'] == 'SalesOrder' || $_REQUEST['module'] == 'Quotes' || $_REQUEST['module'] == 'Invoice')
@@ -704,186 +614,70 @@ class CRMEntity
 				$total = $_REQUEST['total'];
 			  }
 
+				if($this->column_fields["$history_field_array[$inventory_module]"] == $app_strings['LBL_NOT_ACCESSIBLE'])
+				  {
+					 
+					  //If the value in the request is Not Accessible for a picklist, the existing value will be replaced instead of Not Accessible value.
+					  $his_col = $history_field_array[$inventory_module];
+					  $his_sql="select $his_col from  $this->table_name where ".$this->module_id."=?";
+					 $his_res = $adb->pquery($his_sql,array($this->id));
+					  $status_value = $adb->query_result($his_res,0,$his_col);
+					 $stat_value = $status_value;
+				  }
+				  else
+				  {
+					  $stat_value  = $this->column_fields["$history_field_array[$inventory_module]"];
+				  }
 			  $oldvalue = getSingleFieldValue($this->table_name,$history_field_array[$inventory_module],$this->module_id,$this->id);
-			  if($oldvalue != $this->column_fields["$history_field_array[$inventory_module]"])
+			  if($this->column_fields["$history_field_array[$inventory_module]"]!= '' &&  $oldvalue != $stat_value )
 			  {
-				  addInventoryHistory($inventory_module, $this->id,$relatedname,$total,$this->column_fields["$history_field_array[$inventory_module]"]);
+				  addInventoryHistory($inventory_module, $this->id,$relatedname,$total,$stat_value);
 			  }
 		  }
-
 		  //Check done by Don. If update is empty the the query fails
 		  if(trim($update) != '')
         	  {
-		  	$sql1 = "update ".$table_name." set ".$update." where ".$this->tab_name_index[$table_name]."=".$this->id;
-
-		  	$adb->query($sql1); 
+		  	$sql1 = "update $table_name set $update where ". $this->tab_name_index[$table_name] ."=?";
+			array_push($update_params, $this->id);
+		  	$adb->pquery($sql1, $update_params); 
 		  }
-		  //to disable the update of groupentity relation in ajax edit for the fields except assigned_user_id field
-		  if($_REQUEST['ajxaction'] != 'DETAILVIEW' || ($_REQUEST['ajxaction'] == 'DETAILVIEW' && $_REQUEST['fldName'] == 'assigned_user_id'))
-		  {	  
-			  if($_REQUEST['assigntype'] == 'T')
-			  {
-				  $groupname = $_REQUEST['assigned_group_name'];
-				  //echo 'about to update lead group relation';
-				  if($module == 'Leads' && $table_name == 'vtiger_leaddetails')
-				  {
-					  updateLeadGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'Accounts' && $table_name == 'vtiger_account')
-				  {
-					  updateAccountGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'Contacts' && $table_name == 'vtiger_contactdetails')
-				  {
-					  updateContactGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'Potentials' && $table_name == 'vtiger_potential')
-				  {
-					  updatePotentialGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'Quotes' && $table_name == 'vtiger_quotes')
-				  {
-					  updateQuoteGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'SalesOrder' && $table_name == 'vtiger_salesorder')
-				  {
-					  updateSoGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'Invoice' && $table_name == 'vtiger_invoice')
-				  {
-					  updateInvoiceGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'PurchaseOrder' && $table_name == 'vtiger_purchaseorder')
-				  {
-					  updatePoGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'HelpDesk' && $table_name == 'vtiger_troubletickets')
-				  {
-					  updateTicketGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module == 'Campaigns' && $table_name == 'vtiger_campaign')
-				  {
-					  updateCampaignGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module =='Calendar' || $module =='Events' || $module == 'Emails')
-				  {
-					  if($table_name == 'vtiger_activity')
-					  {
-						  updateActivityGroupRelation($this->id,$groupname);
-					  }
-				  }
-
-
-			  }
-			  else
-			  {
-				  //echo 'about to update lead group relation again!';
-				  if($module == 'Leads' && $table_name == 'vtiger_leaddetails')
-				  {
-					  updateLeadGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'Accounts' && $table_name == 'vtiger_account')
-				  {
-					  updateAccountGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'Contacts' && $table_name == 'vtiger_contactdetails')
-				  {
-					  updateContactGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'Potentials' && $table_name == 'vtiger_potential')
-				  {
-					  updatePotentialGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'Quotes' && $table_name == 'vtiger_quotes')
-				  {
-					  updateQuoteGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'SalesOrder' && $table_name == 'vtiger_salesorder')
-				  {
-					  updateSoGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'Invoice' && $table_name == 'vtiger_invoice')
-				  {
-					  updateInvoiceGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'PurchaseOrder' && $table_name == 'vtiger_purchaseorder')
-				  {
-					  updatePoGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'HelpDesk' && $table_name == 'vtiger_troubletickets')
-				  {
-					  updateTicketGroupRelation($this->id,'');
-				  }
-				  elseif($module == 'Campaigns' && $table_name == 'vtiger_campaign')
-				  {
-					  updateCampaignGroupRelation($this->id,$groupname);
-				  }
-				  elseif($module =='Calendar' || $module =='Events' || $module == 'Emails')
-				  {
-					  if($table_name == 'vtiger_activity')
-					  {
-						  updateActivityGroupRelation($this->id,$groupname);
-					  }
-				  }
-
-
-			  }
-		  }
-
+		  
 	  }
 	  else
-	  {	
-		  $sql1 = "insert into ".$table_name." (".$column.") values(".$value.")";
-		  $adb->query($sql1); 
-		  $groupname = $_REQUEST['assigned_group_name'];
-		  if($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_leaddetails')
-		  {
-			  insert2LeadGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_account')
-		  {
-			  insert2AccountGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_contactdetails')
-		  {
-			  insert2ContactGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_potential')
-		  {
-			  insert2PotentialGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_quotes')
-		  {
-			  insert2QuoteGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_salesorder')
-		  {
-			  insert2SoGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_invoice')
-		  {
-			  insert2InvoiceGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_purchaseorder')
-		  {
-			  insert2PoGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_activity') 
-		  {
-			  insert2ActivityGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_troubletickets') 
-		  {
-			  insert2TicketGroupRelation($this->id,$groupname);
-		  }
-		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'vtiger_campaign')
-		  {
-			  insert2CampaignGroupRelation($this->id,$groupname);
-		  }
-
+	  {
+	  	  $sql1 = "insert into $table_name($column) values(". generateQuestionMarks($value) .")";
+		  $adb->pquery($sql1, $value); 
 	  }
 
   }
+
+function whomToSendMail($module,$insertion_mode,$assigntype)
+{
+ global $adb;
+       if($insertion_mode!="edit")
+       {
+               if($assigntype=='U')
+               {
+                       if($module == 'Events' || $module == 'Calendar')
+                       {
+                               $moduleObj=new Activity();
+                       }else
+                       {
+                               $moduleObj=new $module();
+                       }
+                       sendNotificationToOwner($module,$moduleObj);
+               }
+               elseif($assigntype=='T')
+               {
+                       $groupname=$_REQUEST['assigned_group_name'];
+                       $resultqry=$adb->pquery("select groupid from vtiger_groups where groupname=?", array($groupname));
+                       $groupid=$adb->query_result($resultqry,0,"groupid");
+                       sendNotificationToGroups($groupid,$this->id,$module);
+               }
+       }
+}
+
+
 	/** Function to delete a record in the specifed table 
   	  * @param $table_name -- table name:: Type varchar
 	  * The function will delete a record .The id is obtained from the class variable $this->id and the columnname got from $this->tab_name_index[$table_name]
@@ -891,14 +685,14 @@ class CRMEntity
 function deleteRelation($table_name)
 {
          global $adb;
-         $check_query = "select * from ".$table_name." where ".$this->tab_name_index[$table_name]."=".$this->id;
-         $check_result=$adb->query($check_query);
+         $check_query = "select * from $table_name where ". $this->tab_name_index[$table_name] ."=?";
+         $check_result=$adb->pquery($check_query, array($this->id));
          $num_rows = $adb->num_rows($check_result);
 
          if($num_rows == 1)
          {
-                $del_query = "DELETE from ".$table_name." where ".$this->tab_name_index[$table_name]."=".$this->id;
-                $adb->query($del_query);
+                $del_query = "DELETE from $table_name where ". $this->tab_name_index[$table_name] ."=?";
+                $adb->pquery($del_query, array($this->id));
          }
 
 }
@@ -912,242 +706,25 @@ function getOldFileName($notesid)
 	   global $log;
 $log->info("in getOldFileName  ".$notesid);
 	global $adb;
-	$query1 = "select * from vtiger_seattachmentsrel where crmid=".$notesid;
-	$result = $adb->query($query1);
+	$query1 = "select * from vtiger_seattachmentsrel where crmid=?";
+	$result = $adb->pquery($query1, array($notesid));
 	$noofrows = $adb->num_rows($result);
 	if($noofrows != 0)
 		$attachmentid = $adb->query_result($result,0,'attachmentsid');
 	if($attachmentid != '')
 	{
-		$query2 = "select * from vtiger_attachments where attachmentsid=".$attachmentid;
-		$filename = $adb->query_result($adb->query($query2),0,'name');
+		$query2 = "select * from vtiger_attachments where attachmentsid=?";
+		$filename = $adb->query_result($adb->pquery($query2, array($attachmentid)),0,'name');
 	}
-	return "'".$filename."'";
+	return $filename;
 }
-	/** Function to insert values in vtiger_ticketcomments  for the specified tablename and  module
-  	  * @param $table_name -- table name:: Type varchar
-  	  * @param $module -- module:: Type varchar
- 	 */	
-function insertIntoTicketCommentTable($table_name, $module)
-{
-	global $log;
-	$log->info("in insertIntoTicketCommentTable  ".$table_name."    module is  ".$module);
-        global $adb;
-	global $current_user;
+	
+	
+	
 
-        $current_time = $adb->formatDate(date('YmdHis'));
-	if($this->column_fields['assigned_user_id'] != '')
-		$ownertype = 'user';
-	else
-		$ownertype = 'customer';
 
-	if($this->column_fields['comments'] != '')
-		$comment = $this->column_fields['comments'];
-	else
-		$comment = $_REQUEST['comments'];
 
-	if($comment != '')
-	{
-		$comment = addslashes($comment);
-		$sql = "insert into vtiger_ticketcomments values('',".$this->id.",'".$comment."','".$current_user->id."','".$ownertype."',".$current_time.")";	
-	        $adb->query($sql);
-	}
-}
-	/** Function to insert values in vtiger_faqcomments table for the specified module,
-  	  * @param $table_name -- table name:: Type varchar
-  	  * @param $module -- module:: Type varchar
- 	 */	
-function insertIntoFAQCommentTable($table_name, $module)
-{
-	global $log;
-	$log->info("in insertIntoFAQCommentTable  ".$table_name."    module is  ".$module);
-        global $adb;
 
-        $current_time = $adb->formatDate(date('YmdHis'));
-
-	if($this->column_fields['comments'] != '')
-		$comment = $this->column_fields['comments'];
-	else
-		$comment = $_REQUEST['comments'];
-
-	if($comment != '')
-	{
-		$comment = addslashes($comment);
-		$sql = "insert into vtiger_faqcomments values('',".$this->id.",'".$comment."',".$current_time.")";	
-		$adb->query($sql);
-	}
-}
-	/** Function to insert values in vtiger_faqcomments table for the specified module,
-  	  * @param $table_name -- table name:: Type varchar
-  	  * @param $module -- module:: Type varchar
- 	 */
-function insertIntoReminderTable($table_name,$module,$recurid)
-{
-	 global $log;
-$log->info("in insertIntoReminderTable  ".$table_name."    module is  ".$module);
-	if($_REQUEST['set_reminder'] == 'Yes')
-	{
-$log->debug("set reminder is set");
-		$rem_days = $_REQUEST['remdays'];
-$log->debug("rem_days is ".$rem_days);
-		$rem_hrs = $_REQUEST['remhrs'];
-$log->debug("rem_hrs is ".$rem_hrs);
-		$rem_min = $_REQUEST['remmin'];
-$log->debug("rem_minutes is ".$rem_min);
-		$reminder_time = $rem_days * 24 * 60 + $rem_hrs * 60 + $rem_min;
-$log->debug("reminder_time is ".$reminder_time);
-		if ($recurid == "")
-		{
-			if($_REQUEST['mode'] == 'edit')
-			{
-				$this->activity_reminder($this->id,$reminder_time,0,$recurid,'edit');
-			}
-			else
-			{
-				$this->activity_reminder($this->id,$reminder_time,0,$recurid,'');
-			}
-		}
-		else
-		{
-			$this->activity_reminder($this->id,$reminder_time,0,$recurid,'');
-		}
-	}
-	elseif($_REQUEST['set_reminder'] == 'No')
-	{
-		$this->activity_reminder($this->id,'0',0,$recurid,'delete');
-	}
-}
-
-// Code included by Minnie - starts
-	/** Function to insert values in vtiger_invitees table for the specified module,tablename ,invitees_array
-  	  * @param $table_name -- table name:: Type varchar
-  	  * @param $module -- module:: Type varchar
-	  * @param $invitees_array Array
- 	 */
-function insertIntoInviteeTable($table_name,$module,$invitees_array)
-{
-	global $log,$adb;
-	$log->debug("Entering insertIntoInviteeTable(".$table_name.",".$module.",".$invitees_array.") method ...");
-	foreach($invitees_array as $inviteeid)
-	{
-		if($inviteeid != '')
-		{
-			$query="insert into vtiger_invitees values(".$this->id.",".$inviteeid.")";
-			$adb->query($query);
-		}
-	}
-	$log->debug("Exiting insertIntoInviteeTable method ...");
-
-}
-// Code included by Minnie - Ends
-
-// Code included by Jaguar - starts
-	/** Function to insert values in vtiger_recurringevents table for the specified tablename,module
-  	  * @param $recurObj -- Recurring Object:: Type varchar
- 	 */	
-function insertIntoRecurringTable(& $recurObj)
-{
-	global $log,$adb;
-	$log->info("in insertIntoRecurringTable  ");
-	$st_date = $recurObj->startdate->get_formatted_date();
-	$log->debug("st_date ".$st_date);
-	$end_date = $recurObj->enddate->get_formatted_date();
-	$log->debug("end_date is set ".$end_date);
-	$type = $recurObj->recur_type;
-	$log->debug("type is ".$type);
-        $flag="true";
-
-	if($_REQUEST['mode'] == 'edit')
-	{
-		$activity_id=$this->id;
-
-		$sql='select min(recurringdate) AS min_date,max(recurringdate) AS max_date, recurringtype, activityid from vtiger_recurringevents where activityid='. $activity_id.' group by activityid, recurringtype';
-		
-		$result = $adb->query($sql);
-		$noofrows = $adb->num_rows($result);
-		for($i=0; $i<$noofrows; $i++)
-		{
-			$recur_type_b4_edit = $adb->query_result($result,$i,"recurringtype");
-			$date_start_b4edit = $adb->query_result($result,$i,"min_date");
-			$end_date_b4edit = $adb->query_result($result,$i,"max_date");
-		}
-		if(($st_date == $date_start_b4edit) && ($end_date==$end_date_b4edit) && ($type == $recur_type_b4_edit))
-		{
-			if($_REQUEST['set_reminder'] == 'Yes')
-			{
-				$sql = 'delete from vtiger_activity_reminder where activity_id='.$activity_id;
-				$adb->query($sql);
-				$sql = 'delete  from vtiger_recurringevents where activityid='.$activity_id;
-				$adb->query($sql);
-				$flag="true";
-			}
-			elseif($_REQUEST['set_reminder'] == 'No')
-			{
-				$sql = 'delete  from vtiger_activity_reminder where activity_id='.$activity_id;
-				$adb->query($sql);
-				$flag="false";
-			}
-			else
-				$flag="false";
-		}
-		else
-		{
-			$sql = 'delete from vtiger_activity_reminder where activity_id='.$activity_id;
-			$adb->query($sql);
-			$sql = 'delete  from vtiger_recurringevents where activityid='.$activity_id;
-			$adb->query($sql);
-		}
-	}
-	$date_array = $recurObj->recurringdates;
-	if(isset($recurObj->recur_freq) && $recurObj->recur_freq != null)
-		$recur_freq = $recurObj->recur_freq;
-	else
-		$recur_freq = 1;
-	if($recurObj->recur_type == 'Daily' || $recurObj->recur_type == 'Yearly')
-		$recurringinfo = $recurObj->recur_type;
-	elseif($recurObj->recur_type == 'Weekly')
-	{
-		$recurringinfo = $recurObj->recur_type;
-		if($recurObj->dayofweek_to_rpt != null)
-			$recurringinfo = $recurringinfo.'::'.implode('::',$recurObj->dayofweek_to_rpt);
-	}
-	elseif($recurObj->recur_type == 'Monthly')
-	{
-		$recurringinfo =  $recurObj->recur_type.'::'.$recurObj->repeat_monthby;
-		if($recurObj->repeat_monthby == 'date')
-			$recurringinfo = $recurringinfo.'::'.$recurObj->rptmonth_datevalue;
-		else
-			$recurringinfo = $recurringinfo.'::'.$recurObj->rptmonth_daytype.'::'.$recurObj->dayofweek_to_rpt[0];
-	}
-	else
-	{
-		$recurringinfo = '';
-	}
-	if($flag=="true")
-	{
-		for($k=0; $k< count($date_array); $k++)
-		{
-			$tdate=$date_array[$k];
-			if($tdate <= $end_date)
-			{
-				$max_recurid_qry = 'select max(recurringid) AS recurid from vtiger_recurringevents;';
-				$result = $adb->query($max_recurid_qry);
-				$noofrows = $adb->num_rows($result);
-				for($i=0; $i<$noofrows; $i++)
-				{
-					$recur_id = $adb->query_result($result,$i,"recurid");
-				}
-				$current_id =$recur_id+1;
-				$recurring_insert = "insert into vtiger_recurringevents values ('".$current_id."','".$this->id."','".$tdate."','".$type."','".$recur_freq."','".$recurringinfo."')";
-				$adb->query($recurring_insert);
-				if($_REQUEST['set_reminder'] == 'Yes')
-				{
-					$this->insertIntoReminderTable("activity_reminder",$module,$current_id,'');
-				}
-			}
-		}
-	}
-}
 
 // Code included by Jaguar - Ends 
 
@@ -1162,13 +739,21 @@ function insertIntoRecurringTable(& $recurObj)
     $result = Array();
     foreach($this->tab_name_index as $table_name=>$index)
     {
-	    $result[$table_name] = $adb->query("select * from ".$table_name." where ".$index."=".$record);
+	    $result[$table_name] = $adb->pquery("select * from $table_name where $index=?", array($record));
 	    if($adb->query_result($result["vtiger_crmentity"],0,"deleted") == 1)
 	    die("<br><br><center>".$app_strings['LBL_RECORD_DELETE']." <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
     }
+
+    /* Prasad: Fix for ticket #4595 */
+	if (isset($this->table_name)) {
+    	$mod_index_col = $this->tab_name_index[$this->table_name];
+    	if($adb->query_result($result[$this->table_name],0,$mod_index_col) == '')
+    		die("<br><br><center>".$app_strings['LBL_RECORD_NOT_FOUND'].
+				". <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
+	}
     $tabid = getTabid($module);
-    $sql1 =  "select * from vtiger_field where tabid=".$tabid;
-    $result1 = $adb->query($sql1);
+    $sql1 =  "select * from vtiger_field where tabid=?";
+    $result1 = $adb->pquery($sql1, array($tabid));
     $noofrows = $adb->num_rows($result1);
     for($i=0; $i<$noofrows; $i++)
     {
@@ -1176,8 +761,19 @@ function insertIntoRecurringTable(& $recurObj)
       $tablename = $adb->query_result($result1,$i,"tablename");
       $fieldname = $adb->query_result($result1,$i,"fieldname");
 
-      $fld_value = $adb->query_result($result[$tablename],0,$fieldcolname);
+      //when we don't have entry in the $tablename then we have to avoid retrieve, otherwise adodb error will occur(ex. when we don't have attachment for troubletickets, $result[vtiger_attachments] will not be set so here we should not retrieve)
+      if(isset($result[$tablename]))
+      {
+	      $fld_value = $adb->query_result($result[$tablename],0,$fieldcolname);
+      }
+      else
+      {
+	      $adb->println("There is no entry for this entity $record ($module) in the table $tablename");
+	      $fld_value = "";
+      }
+
       $this->column_fields[$fieldname] = $fld_value;
+      
 				
     }
 	if($module == 'Users')
@@ -1276,7 +872,7 @@ function insertIntoRecurringTable(& $recurObj)
 	{
 		$this->log->debug("CRMEntity:process_full_list_query");
 		$result =& $this->db->query($query, false);
-		$this->log->debug("CRMEntity:process_full_list_query: result is ".$result);
+		//$this->log->debug("CRMEntity:process_full_list_query: result is ".$result);
 
 
 		if($this->db->getRowCount($result) > 0){
@@ -1314,8 +910,8 @@ function insertIntoRecurringTable(& $recurObj)
 	*/
 	function mark_deleted($id)
 	{
-		$query = "UPDATE vtiger_crmentity set deleted=1 where crmid='$id'";
-		$this->db->query($query, true,"Error marking record deleted: ");
+		$query = "UPDATE vtiger_crmentity set deleted=1 where crmid=?";
+		$this->db->pquery($query, array($id), true,"Error marking record deleted: ");
 
 
 	}
@@ -1368,8 +964,8 @@ function insertIntoRecurringTable(& $recurObj)
          */
         function checkIfCustomTableExists($tablename)
         {
-                $query = "select * from ".$tablename;
-                $result = $this->db->query($query);
+                $query = "select * from ". mysql_real_escape_string($tablename);
+                $result = $this->db->pquery($query, array());
                 $testrow = $this->db->num_fields($result);
                 if($testrow > 1)
                 {
@@ -1390,22 +986,22 @@ function insertIntoRecurringTable(& $recurObj)
         {
                 global $adb;
 		$tabid=getTabid($module);		
-                $sql1 = "select columnname,fieldlabel from vtiger_field where generatedtype=2 and tabid=".$tabid;
-                $result = $adb->query($sql1);
+                $sql1 = "select columnname,fieldlabel from vtiger_field where generatedtype=2 and tabid=?";
+                $result = $adb->pquery($sql1, array($tabid));
                 $numRows = $adb->num_rows($result);
                 $sql3 = "select ";
                 for($i=0; $i < $numRows;$i++)
                 {
                         $columnName = $adb->query_result($result,$i,"columnname");
-                        $fieldlable = $adb->query_result($result,$i,"fieldlabel");
+                        $fieldlabel = $adb->query_result($result,$i,"fieldlabel");
                         //construct query as below
                         if($i == 0)
                         {
-                                $sql3 .= $tablename.".".$columnName. " '" .$fieldlable."'";
+                                $sql3 .= $tablename.".".$columnName. " '" .$fieldlabel."'";
                         }
                         else
                         {
-                                $sql3 .= ", ".$tablename.".".$columnName. " '" .$fieldlable."'";
+                                $sql3 .= ", ".$tablename.".".$columnName. " '" .$fieldlabel."'";
                         }
 
                 }
@@ -1417,53 +1013,6 @@ function insertIntoRecurringTable(& $recurObj)
 
         }
 
-
-	/**	function to save the product tax information in producttarel vtiger_table
-	 *	@param string $tablename - vtiger_tablename to save the product tax relationship (producttaxrel)
-	 *	@param string $module	 - current module name
-	 *	$return void
-	*/
-	function insertTaxInformation($tablename, $module)
-	{
-		global $adb, $log;
-		$log->debug("Entering into insertTaxInformation($tablename, $module) method ...");
-		$tax_details = getAllTaxes();
-
-		$tax_per = '';
-		//Save the Product - tax relationship if corresponding tax check box is enabled
-		//Delete the existing tax if any
-		if($this->mode == 'edit')
-		{
-			for($i=0;$i<count($tax_details);$i++)
-			{
-				$taxid = getTaxId($tax_details[$i]['taxname']);
-				$sql = "delete from vtiger_producttaxrel where productid=$this->id and taxid=$taxid";
-				$adb->query($sql);
-			}
-		}
-		for($i=0;$i<count($tax_details);$i++)
-		{
-			$tax_name = $tax_details[$i]['taxname'];
-			$tax_checkname = $tax_details[$i]['taxname']."_check";
-			if($_REQUEST[$tax_checkname] == 'on' || $_REQUEST[$tax_checkname] == 1)
-			{
-				$taxid = getTaxId($tax_name);
-				$tax_per = $_REQUEST[$tax_name];
-				if($tax_per == '')
-				{
-					$log->debug("Tax selected but value not given so default value will be saved.");
-					$tax_per = getTaxPercentage($tax_name);
-				}
-				
-				$log->debug("Going to save the Product - $tax_name tax relationship");
-
-				$query = "insert into vtiger_producttaxrel values($this->id,$taxid,$tax_per)";
-				$adb->query($query);
-			}
-		}
-
-		$log->debug("Exiting from insertTaxInformation($tablename, $module) method ...");
-	}	
 
 	/**
 	 * This function returns a full (ie non-paged) list of the current object type.  
@@ -1492,5 +1041,113 @@ function insertIntoRecurringTable(& $recurObj)
 		$tracker->track_view($user_id, $current_module, $id, '');
 	}
 
+	function insertIntoGroupTable($module)
+	{
+		global $log;
+
+		if($module == 'Events')
+		{
+			$module = 'Calendar';
+		}
+		if($this->mode=='edit')
+		{
+						
+		  	//to disable the update of groupentity relation in ajax edit for the fields except assigned_user_id field
+			if($_REQUEST['ajxaction'] != 'DETAILVIEW' || ($_REQUEST['ajxaction'] == 'DETAILVIEW' && $_REQUEST['fldName'] == 'assigned_user_id'))
+		  	{	  
+			  	if($_REQUEST['assigntype'] == 'T')
+			  	{
+					$groupname = $_REQUEST['assigned_group_name'];
+
+					updateModuleGroupRelation($module,$this->id,$groupname);
+
+			  	}
+				else
+				{
+					updateModuleGroupRelation($module,$this->id,'');
+
+				}
+
+		  	}
+      		}
+		else
+		{
+			$groupname = $_REQUEST['assigned_group_name'];
+		 	if($_REQUEST['assigntype'] == 'T')
+		  	{
+			  	insertIntoGroupRelation($module,$this->id,$groupname);
+		  	}
+		  
+		}			
+
+	}
+	
+	/**
+	* Function to get the column value of a field 
+	* @param $columnname -- Column name for the field
+	* @param $fldvalue -- Input value for the field taken from the User
+	* @param $fieldname -- Name of the Field
+	* @param $uitype -- UI type of the field
+	* @return Column value of the field.
+	*/
+	function get_column_value($columname, $fldvalue, $fieldname, $uitype) {
+		if (is_uitype($uitype, "_date_") && $fldvalue == '') {
+			return null;
+		}
+		return $fldvalue;
+	}
+	
+	/**
+	* Function to make change to column fields, depending on the current user's accessibility for the fields
+	*//*
+	function apply_field_security() {
+		global $current_user, $currentModule;
+		
+		require_once('include/utils/UserInfoUtil.php');
+		foreach($this->column_fields as $fieldname=>$fieldvalue) {
+			if (getFieldVisibilityPermission($currentModule, $current_user->id, $fieldname) != '0') {
+				$this->column_fields[$fieldname] = "";
+			}
+		}
+	}*/
+	
+	/**
+	* Function to make change to column fields, depending on the current user's accessibility for the fields
+	*/
+	function apply_field_security() {
+		global $current_user, $currentModule;
+		
+		require_once('include/utils/UserInfoUtil.php');
+		foreach($this->column_fields as $fieldname=>$fieldvalue) {
+		$reset_value = false;
+			if (getFieldVisibilityPermission($currentModule, $current_user->id, $fieldname) != '0') 
+				$reset_value = true;
+			
+			if ($fieldname == "record_id" || $fieldname == "record_module") 
+				$reset_value = false;
+
+			/*
+				if (isset($this->additional_column_fields) && in_array($fieldname, $this->additional_column_fields) == true)
+					$reset_value = false;
+			 */
+			
+			if ($reset_value == true)
+				$this->column_fields[$fieldname] = "";
+		}
+	}
+	
+	/**
+	* Function to initialize the importable fields array, based on the User's accessibility to the fields
+	*/
+	function initImportableFields($module) {		
+		global $current_user;
+		require_once('include/utils/UserInfoUtil.php');
+		
+		$colf = getColumnFields($module);
+		foreach($colf as $key=>$value) {
+			if (getFieldVisibilityPermission($module, $current_user->id, $key) == '0')
+				$this->importable_fields[$key]=1;
+		}
+	}
 }
 ?>

@@ -29,21 +29,11 @@ include("modules/Emails/mail.php");
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new SalesOrder();
-setObjectValuesFromRequest(&$focus);
+//added to fix 4600
+$search=$_REQUEST['search_url'];
+setObjectValuesFromRequest($focus);
 
 $focus->save("SalesOrder");
-
-//Checking if quote_id is present and updating the quote status
-if($focus->column_fields["quote_id"] != '')
-{
-        $qt_id = $focus->column_fields["quote_id"];
-        $query1 = "update vtiger_quotes set quotestage='Accepted' where quoteid=".$qt_id;
-        $adb->query($query1);
-}
-
-//Based on the total Number of rows we will save the product relationship with this entity
-saveInventoryProductDetails(&$focus, 'SalesOrder');
-
 
 $return_id = $focus->id;
 
@@ -60,6 +50,5 @@ $local_log->debug("Saved record with id of ".$return_id);
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 
-header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname&smodule=SO");
-
+header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname&smodule=SO&start=".$_REQUEST['pagenumber'].$search);
 ?>

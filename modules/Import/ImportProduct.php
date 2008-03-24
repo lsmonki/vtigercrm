@@ -26,21 +26,24 @@ include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
-require_once('modules/Contacts/Contact.php');
-require_once('modules/Potentials/Opportunity.php');
-require_once('modules/Notes/Note.php');
-require_once('modules/Emails/Email.php');
-require_once('modules/Accounts/Account.php');
-require_once('modules/Products/Product.php');
+require_once('modules/Contacts/Contacts.php');
+require_once('modules/Potentials/Potentials.php');
+require_once('modules/Notes/Notes.php');
+require_once('modules/Emails/Emails.php');
+require_once('modules/Accounts/Accounts.php');
+require_once('modules/Products/Products.php');
 require_once('include/ComboUtil.php');
-require_once('modules/Leads/Lead.php');
+require_once('modules/Leads/Leads.php');
 
 
-class ImportProduct extends Product {
+class ImportProduct extends Products {
 	 var $db;
 
 	// This is the list of the functions to run when importing
-	var $special_functions =  array("assign_user");
+	var $special_functions =  array(
+					"assign_user",
+					"map_vendor_name",
+				       );
 
 	var $importable_fields = Array();
 
@@ -57,7 +60,7 @@ class ImportProduct extends Product {
 			$this->db->println("searching and assigning ".$ass_user);
 
 			//$result = $this->db->query("select id from vtiger_users where user_name = '".$ass_user."'");
-			$result = $this->db->query("select id from vtiger_users where id = '".$ass_user."'");
+			$result = $this->db->pquery("select id from vtiger_users where id = ?", array($ass_user));
 			if($this->db->num_rows($result)!=1)
 			{
 				$this->db->println("not exact records setting current userid");
@@ -88,12 +91,40 @@ class ImportProduct extends Product {
 		$this->log = LoggerManager::getLogger('import_product');
 		$this->db = new PearDatabase();
 		$this->db->println("IMP ImportProduct");
-		$colf = getColumnFields("Products");
-		foreach($colf as $key=>$value)
-			$this->importable_fields[$key]=1;
+		$this->initImportableFields("Products");
 		
 		$this->db->println($this->importable_fields);
 	}
+
+	/**     function used to map with existing Vendor if the product is map with an vendor during import
+         */
+	function map_vendor_name()
+	{
+		global $adb;
+
+		$vendor_name = $this->column_fields['vendor_id'];
+		$adb->println("Entering map_vendor_name vendor_id=".$vendor_name);
+
+		if ((! isset($vendor_name) || $vendor_name == '') )
+		{
+			$adb->println("Exit map_vendor_name. Vendor Name not set for this entity.");
+			return; 
+		}
+
+		$vendor_name = trim($vendor_name);
+
+		//Query to get the available Vendor which is not deleted
+		$query = "select vendorid from vtiger_vendor inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_vendor.vendorid WHERE vtiger_vendor.vendorname=? and vtiger_crmentity.deleted=0";
+		$vendor_id = $adb->query_result($adb->pquery($query, array($vendor_name)),0,'vendorid');
+
+		if($vendor_id == '' || !isset($vendor_id))
+			$vendor_id = 0;
+
+		$this->column_fields['vendor_id'] = $vendor_id;
+
+		$adb->println("Exit map_vendor_name. Fetched Vendor for '".$vendor_name."' and the vendorid = $vendor_id");
+        }
+
 
 }
 ?>

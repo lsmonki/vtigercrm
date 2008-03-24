@@ -127,13 +127,33 @@ return true
 function verify_chart_data(form) {
 	var isError = false;
 	var errorMessage = "";
-	if (form.date_start.value != '' && isDate(form.date_start.value)==false) {
+	if (form.date_start.value == '' && isDate(form.date_start.value)==false) {
 		return false;
 	}
-	if (form.date_end.value != '' && isDate(form.date_end.value)==false) {
+	else if (form.date_end.value == '' && isDate(form.date_end.value)==false) {
 		return false;
 	}
-	return true;
+	else
+		return true;
+}
+
+function chk_form(form)//function added by sandeep
+{
+	var a=form.date_start.value.split('-')
+	var sdate=new Date(a[0],a[1],a[2])
+	var a=form.date_end.value.split('-')
+	var edate=new Date(a[0],a[1],a[2])
+
+	if(sdate>edate)
+	{
+		alert("Start Date should be less than End Date")
+		return false;
+	}
+	else
+	{
+		return verify_chart_data(form);
+	}
+
 }
 // end hiding contents from old browsers  -->
 </script>

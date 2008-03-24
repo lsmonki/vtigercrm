@@ -11,7 +11,7 @@
 
 
 require_once('Smarty_setup.php');
-require_once('modules/Quotes/Quote.php');
+require_once('modules/Quotes/Quotes.php');
 //Redirecting Header for single page layout
 require_once('user_privileges/default_module_view.php');
 global $singlepane_view;
@@ -21,7 +21,7 @@ if($singlepane_view == 'true' && $_REQUEST['action'] == 'CallRelatedList' )
 }
 else
 {
-$focus = new Quote();
+$focus = new Quotes();
 $currentmodule = $_REQUEST['module'];
 $RECORD = $_REQUEST['record'];
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
@@ -37,7 +37,6 @@ global $app_strings;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 
@@ -57,7 +56,8 @@ $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
-
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 $smarty->display("RelatedLists.tpl");

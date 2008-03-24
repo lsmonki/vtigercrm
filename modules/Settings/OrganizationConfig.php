@@ -19,24 +19,11 @@ global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
-
-global $mod_strings;
-global $app_strings;
-global $app_list_strings;
-
-
-global $adb;
-global $theme;
-$theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
-
 
 $smarty = new vtigerCRM_Smarty;
 
 $sql="select * from vtiger_organizationdetails";
-$result = $adb->query($sql);
+$result = $adb->pquery($sql, array());
 $organization_name = $adb->query_result($result,0,'organizationname');
 $organization_address= $adb->query_result($result,0,'address');
 $organization_city = $adb->query_result($result,0,'city');
@@ -46,8 +33,9 @@ $organization_country = $adb->query_result($result,0,'country');
 $organization_phone = $adb->query_result($result,0,'phone');
 $organization_fax = $adb->query_result($result,0,'fax');
 $organization_website = $adb->query_result($result,0,'website');
-$organization_logo = $adb->query_result($result,0,'logo');
-$organization_logoname = $adb->query_result($result,0,'logoname');
+//Handle for allowed organation logo/logoname likes UTF-8 Character
+$organization_logo = decode_html($adb->query_result($result,0,'logo'));
+$organization_logoname = decode_html($adb->query_result($result,0,'logoname'));
 
 if (isset($organization_name))
 	$smarty->assign("ORGANIZATIONNAME",$organization_name);

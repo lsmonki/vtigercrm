@@ -18,8 +18,10 @@ $imageBlock=array("10","3","0","0");
 $pdf->addImage( $logo_name, $imageBlock);
 
 // x,y,width
-$companyBlockPositions=array( "10","23","60" );
-$companyText=$org_address."\n".$org_city.", ".$org_state." ".$org_code." ".$org_country;
+if($org_phone != '')
+  $phone ="\n".$app_strings["Phone"].":".$org_phone;
+$companyBlockPositions=array( "10","23","62" );
+$companyText=$org_address."\n".$org_city.", ".$org_state." ".$org_code." ".$org_country." ".$phone."\n".$org_website;
 $pdf->addTextBlock( $org_name, $companyText ,$companyBlockPositions );
 
 // ************** End company information *******************
@@ -29,47 +31,70 @@ $pdf->addTextBlock( $org_name, $companyText ,$companyBlockPositions );
 // ************* Begin Top-Right Header ***************
 // title
 $titleBlock=array("147","7");
-$pdf->title( "Purchase Order","", $titleBlock );
+$pdf->title( $app_strings["PurchaseOrder"],"", $titleBlock );
 
 $soBubble=array("168","17","12");
-$pdf->addBubbleBlock($reqno, "Req. No.", $soBubble);
+$pdf->addBubbleBlock($reqno, $app_strings["Req. No."], $soBubble);
 
 $poBubble=array("114","17","12");
-$pdf->addBubbleBlock($trno, "Tracking No.", $poBubble);
+$pdf->addBubbleBlock($trno, $app_strings["Tracking No."], $poBubble);
 
 // page number
 $pageBubble=array("147","17",0);
-$pdf->addBubbleBlock($page_num, "Page", $pageBubble);
+$pdf->addBubbleBlock($page_num, $app_strings["Page"], $pageBubble);
 // ************** End Top-Right Header *****************
 
 
 
 // ************** Begin Addresses **************
 // shipping Address
-$shipLocation = array("10","43","60");
-$shipText=$ship_street."\n".$ship_city.", ".$ship_state." ".$ship_code."\n".$ship_country;
-$pdf->addTextBlock( "Shipping Address:", $shipText, $shipLocation );
+$shipLocation = array("147","40","61");
+if(trim($ship_street)!='')
+	$shipText = $ship_street."\n";
+if(trim($ship_city) !='')
+	$shipText .= $ship_city.", ";
+if(trim($ship_state)!='' || trim($ship_code)!= '')
+	$shipText .= $ship_state." ".$ship_code."\n";
+
+	$shipText .=$ship_country;
+$pdf->addTextBlock( $app_strings["Shipping Address"].":", $shipText, $shipLocation );
 
 // billing Address
-$billPositions = array("147","43","60");
-$billText=$bill_street."\n".$bill_city.", ".$bill_state." ".$bill_code."\n".$bill_country;
-$pdf->addTextBlock("Billing Address:",$billText, $billPositions);
+$billPositions = array("10","51","61");
+if(trim($bill_street)!='')
+	$billText = $bill_street."\n";
+if(trim($bill_city) !='')
+	$billText .= $bill_city.", ";
+if(trim($bill_state)!='' || trim($bill_code)!= '')
+	$billText .= $bill_state." ".$bill_code."\n";
+
+	$billText .=$bill_country;
+$pdf->addTextBlock($app_strings["Billing Address"].":",$billText, $billPositions);
 // ********** End Addresses ******************
 
 
 
 /*  ******** Begin Invoice Data ************************ */ 
-// terms block
-$termBlock=array("10","65");
-$pdf->addRecBlock($vendor_name, "Vendor Name", $termBlock);
+// issue date block
+$issueBlock=array("80","37");
+$pdf->addRecBlock(getDisplayDate(date("Y-m-d")), $app_strings["Issue Date"],$issueBlock);
 
 // due date block
-$dueBlock=array("80","65");
-$pdf->addRecBlock($valid_till, "Due Date",$dueBlock);
+$dueBlock=array("81","52");
+$pdf->addRecBlock($valid_till, $app_strings["Due Date"],$dueBlock);
+
+// terms block
+$termBlock=array("10","67");
+$pdf->addRecBlock($vendor_name, $app_strings["Vendor Name"], $termBlock);
+
+// Contact Name block
+$conBlock=array("79","67");
+$pdf->addRecBlock($contact_name, $app_strings["Contact Name"],$conBlock);
+
 
 // vtiger_invoice number block
 $invBlock=array("145","65");
-$pdf->addRecBlock($id, "Order Number",$invBlock);
+$pdf->addRecBlock($id, $app_strings["Order Number"],$invBlock);
 
 /* ************ End Invoice Data ************************ */
 

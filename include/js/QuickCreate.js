@@ -16,7 +16,7 @@ function qcemptyCheck(fldName,fldLabel, fldType) {
 	if (fldType=="text") {
 		if (currObj.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) {
 
-       			alert(fldLabel+" cannot be empty")
+       			alert(fldLabel+alert_arr.CANNOT_BE_EMPTY)
 
 			currObj.focus()
 
@@ -28,9 +28,9 @@ function qcemptyCheck(fldName,fldLabel, fldType) {
             	
 		return true
 	} else {
-		if (currObj.value == "" ) {
+		if (trim(currObj.value) == "" ) {
 
-	                alert(fldLabel+" cannot be none")
+	                alert(fldLabel+alert_arr.CANNOT_BE_NONE)
 
         	        return false
 
@@ -43,7 +43,12 @@ function qcemptyCheck(fldName,fldLabel, fldType) {
 function qcpatternValidate(fldName,fldLabel,type) {
 	var currObj=window.document.QcEditView[fldName];
 	if (type.toUpperCase()=="EMAIL") //Email ID validation
-		var re=new RegExp(/^.+@.+\..+$/)
+	{
+		/*changes made to fix -- ticket#3278 & ticket#3461
+		  var re=new RegExp(/^.+@.+\..+$/)*/
+		//Changes made to fix tickets #4633, #5111 to accomodate all possible email formats
+		var re=new RegExp(/^[a-zA-Z0-9]+([\_\-\.]*[a-zA-Z0-9]+[\_\-]?)*@[a-zA-Z0-9]+([\_\-]?[a-zA-Z0-9]+)*\.+([\_\-]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/)
+	}
 	
 	if (type.toUpperCase()=="DATE") {//DATE validation 
 		//YMD
@@ -72,8 +77,10 @@ function qcpatternValidate(fldName,fldLabel,type) {
 		var re = /^\d{1,2}\:\d{1,2}$/
 	}
 	
+	//Asha: Remove spaces on either side of a Email id before validating
+	if (type.toUpperCase()=="EMAIL") currObj.value = trim(currObj.value);
 	if (!re.test(currObj.value)) {
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		currObj.focus()
 		return false
 	}
@@ -91,19 +98,19 @@ function qcdateValidate(fldName,fldLabel,type) {
 	yyyy=dateelements[2]
 	
 	if (dd<1 || dd>31 || mm<1 || mm>12 || yyyy<1 || yyyy<1000) {
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		window.document.QcEditView[fldName].focus()
 		return false
 	}
 	
 	if ((mm==2) && (dd>29)) {//checking of no. of days in february month
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		window.document.QcEditView[fldName].focus()
 		return false
 	}
 	
 	if ((mm==2) && (dd>28) && ((yyyy%4)!=0)) {//leap year checking
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		window.document.QcEditView[fldName].focus()
 		return false
 	}
@@ -114,7 +121,7 @@ function qcdateValidate(fldName,fldLabel,type) {
 		case 6 : 
 		case 9 : 
 		case 11 :	if (dd>30) {
-						alert("Please enter a valid "+fldLabel)
+						alert(alert_arr.ENTER_VALID+fldLabel)
 						window.document.QcEditView[fldName].focus()
 						return false
 					}	
@@ -173,16 +180,20 @@ function qcintValidate(fldName,fldLabel) {
 	var val=window.document.QcEditView[fldName].value.replace(/^\s+/g, '').replace(/\s+$/g, '')
 	if (isNaN(val) || (val.indexOf(".")!=-1 && fldName != 'potential_amount')) 
 	{
-		alert("Invalid "+fldLabel)
+		alert(alert_arr.INVALID+fldLabel)
 		window.document.QcEditView[fldName].focus()
 		return false
-	} 
-        else if( val < -2147483648 || val > 2147483647)
-        {
-                alert(fldLabel +" is out of range");
-                return false;
-        }
-
+	}
+	else if( (fldName != 'employees' || fldName != 'noofemployees') && (val < -2147483648 || val > 2147483647))
+	{
+		alert(fldLabel +alert_arr.OUT_OF_RANGE);
+		return false;
+	}
+	else if((fldName == 'employees' || fldName == 'noofemployees') && (val < 0 || val > 2147483647))
+	{
+		alert(fldLabel +alert_arr.OUT_OF_RANGE);
+		return false;
+	}
 	else
 	{
 		return true
@@ -196,32 +207,32 @@ function qcnumConstComp(fldName,fldLabel,type,constval) {
 	var ret=true
 	switch (type) {
 		case "L"  : if (val>=constval) {
-						alert(fldLabel+" should be less than "+constval)
+						alert(fldLabel+alert_arr.SHOULDBE_LESS+constval)
 						ret=false
 					}
 					break;
 		case "LE" :	if (val>constval) {
-					alert(fldLabel+" should be less than or equal to "+constval)
+					alert(fldLabel+alert_arr.SHOULDBE_LESS_EQUAL+constval)
 			        ret=false
 					}
 					break;
 		case "E"  :	if (val!=constval) {
-                                        alert(fldLabel+" should be equal to "+constval)
+                                        alert(fldLabel+alert_arr.SHOULDBE_EQUAL+constval)
                                         ret=false
                                 }
                                 break;
 		case "NE" : if (val==constval) {
-						 alert(fldLabel+" should not be equal to "+constval)
+						 alert(fldLabel+alert_arr.SHOULDNOTBE_EQUAL+constval)
 							ret=false
 					}
 					break;
 		case "G"  :	if (val<=constval) {
-							alert(fldLabel+" should be greater than "+constval)
+							alert(fldLabel+alert_arr.SHOULDBE_GREATER+constval)
 							ret=false
 					}
 					break;
 		case "GE" : if (val<constval) {
-							alert(fldLabel+" should be greater than or equal to "+constval)
+							alert(fldLabel+alert_arr.SHOULDBE_GREATER_EQUAL+constval)
 							ret=false
 					}
 					break;
@@ -243,19 +254,19 @@ function qcdateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 	yyyy=dateelements[2];
 	
 	if (dd<1 || dd>31 || mm<1 || mm>12 || yyyy<1 || yyyy<1000) {
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		window.document.QcEditView[dateFldName].focus()
 		return false
 	}
 	
 	if ((mm==2) && (dd>29)) {//checking of no. of days in february month
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		window.document.QcEditView[dateFldName].focus()
 		return false
 	}
 	
 	if ((mm==2) && (dd>28) && ((yyyy%4)!=0)) {//leap year checking
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		window.document.QcEditView[dateFldName].focus()
 		return false
 	}
@@ -266,7 +277,7 @@ function qcdateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 		case 6 : 
 		case 9 : 
 		case 11 :	if (dd>30) {
-						alert("Please enter a valid "+fldLabel)
+						alert(alert_arr.ENTER_VALID+fldLabel)
 						window.document.QcEditView[dateFldName].focus()
 						return false
 					}	
@@ -281,7 +292,7 @@ function qcdateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 	var currObj=window.document.QcEditView[timeFldName]
 	
 	if (hourval>23 || minval>59) {
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		currObj.focus()
 		return false
 	}

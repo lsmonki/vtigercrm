@@ -10,14 +10,14 @@
  ********************************************************************************/
 //query the specific vtiger_table and then get the data and write the data here 
 require_once('include/database/PearDatabase.php');
-include_once('modules/Contacts/Contact.php');
-include_once('modules/Leads/Lead.php');
-include_once('modules/Users/User.php');
+include_once('modules/Contacts/Contacts.php');
+include_once('modules/Leads/Leads.php');
+include_once('modules/Users/Users.php');
 global $log;
 
 //download the template file and store it in some specific location
-$sql = "select templatename,body from vtiger_emailtemplates where templateid='".$_REQUEST["templateid"] ."'";
-$tempresult = $adb->query($sql);
+$sql = "select templatename,body from vtiger_emailtemplates where templateid=?";
+$tempresult = $adb->pquery($sql, array($_REQUEST["templateid"]));
 $tempArray = $adb->fetch_array($tempresult);
 $fileContent = $tempArray["body"];
 	$log->debug("the filecontent is ".$fileContent);
@@ -60,11 +60,11 @@ $recordid = $_REQUEST['entityid'];
 //get the module
 if($module == 'leads')
 {
-  $focus = new Lead();
+  $focus = new Leads();
 }
 else
 {
-  $focus = new Contact();
+  $focus = new Contacts();
 }
 
 $focus->retrieve_entity_info($recordid,$module);
@@ -86,8 +86,8 @@ foreach ($focus->column_fields as $columnName=>$value)
 
 global $current_user;
 global $adb;
-$query = 'select * from vtiger_users where id= '.$current_user->id;
-$result = $adb->query($query);
+$query = 'select * from vtiger_users where id= ?';
+$result = $adb->pquery($query, array($current_user->id));
 $res_row = $adb->fetchByAssoc($result);
 foreach ($res_row as $columnName=>$value)
 {

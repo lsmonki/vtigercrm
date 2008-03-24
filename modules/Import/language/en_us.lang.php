@@ -125,7 +125,6 @@ $mod_strings = Array(
 'LBL_LEADS_NOTE_2'=>'Company Name must be mapped.',
 'LBL_IMPORT_NOW'=>'Import Now',
 'LBL_'=>'',
-'LBL_'=>'',
 'LBL_CANNOT_OPEN'=>'Cannot open the imported file for reading',
 'LBL_NOT_SAME_NUMBER'=>'There were not the same number of fields per line in your file',
 'LBL_NO_LINES'=>'There were no lines in your import file',
@@ -163,11 +162,20 @@ $mod_strings = Array(
 'LBL_STEP_3_3'=>'Step 3 of 3 : ',
 'LBL_MAPPING_RESULTS'=>'Mapping Results ',
 'LBL_LAST_IMPORTED'=>'Last Imported',
+//Added for sript alerts
+'PLEASE_CHECK_MAPPING' => "' is mapped more than once. Please check the mapping.",
+'MAP_MANDATORY_FIELD' => 'Please map the mandatory field "',
+'ENTER_SAVEMAP_NAME' => 'Please Enter Save Map Name',
+
+//Added for 5.0.3
+'to'=>'to',
+'of'=>'of',
+'are_imported_succesfully'=>'are imported successfully',
+
 
 );
 
 /*$mod_list_strings = Array(
-'contacts_import_fields' => Array(
 	"id"=>"Contact ID"
 	,"first_name"=>"First Name"
 	,"last_name"=>"Last Name"
@@ -242,13 +250,13 @@ $mod_list_strings = Array(
 	,"assistant"=>"Assistant"
 	,"assistantphone"=>"Assistant Phone"
 	,"mailingstreet"=>"Mailing Address Street"
-	,"mailingpobox"=>"Mailing Address Po Box"
+	,"mailingpobox"=>"Mailing Address PO Box"
 	,"mailingcity"=>"Mailing Address City"
 	,"mailingstate"=>"Mailing Address State"
 	,"mailingzip"=>"Mailing Address Postalcode"
 	,"mailingcountry"=>"Mailing Address Country"
 	,"otherstreet"=>"Other Address Street"
-	,"otherpobox"=>"Other Address Po Box"
+	,"otherpobox"=>"Other Address PO Box"
 	,"othercity"=>"Other Address City"
 	,"otherstate"=>"Other Address State"
 	,"otherzip"=>"Other Address Postalcode"
@@ -279,7 +287,7 @@ $mod_list_strings = Array(
 	//"billing_address_street_2"=>"Billing Address Street 2",
 	//"billing_address_street_3"=>"Billing Address Street 3",
 	//"billing_address_street_4"=>"Billing Address Street 4",
-	"bill_pobox"=>"Billing Address Po Box",
+	"bill_pobox"=>"Billing Address PO Box",
 	"bill_city"=>"Billing Address City",
 	"bill_state"=>"Billing Address State",
 	"bill_code"=>"Billing Address Postalcode",
@@ -288,7 +296,7 @@ $mod_list_strings = Array(
 	//"shipping_address_street_2"=>"Shipping Address Street 2",
 	//"shipping_address_street_3"=>"Shipping Address Street 3",
 	//"shipping_address_street_4"=>"Shipping Address Street 4",
-	"ship_pobox"=>"Shipping Address Po Box",
+	"ship_pobox"=>"Shipping Address PO Box",
 	"ship_city"=>"Shipping Address City",
 	"ship_state"=>"Shipping Address State",
 	"ship_code"=>"Shipping Address Postalcode",
@@ -334,7 +342,7 @@ $mod_list_strings = Array(
 		"assigned_user_id"=>"Assigned To",
 		"yahooid"=>"Yahoo Id",		
 		"lane"=>"Street",
-		"pobox"=>"Po Box",
+		"pobox"=>"PO Box",
 		"code"=>"Postal Code",
 		"city"=>"City",
 		"country"=>"Country",
@@ -374,8 +382,35 @@ $mod_list_strings = Array(
 	'qtyindemand'=>'Quantity in Demand',
 	'glacct'=>'GL Account',
 	'assigned_user_id'=>'Assigned To'
-	 )
+	 ),
+//Pavani...adding list of import fields for helpdesk and vendors
+'helpdesk_import_fields' => Array(
+        "ticketid"=>"Ticket Id",
+        "priority"=>"Priority",
+        "severity"=>"Severity",
+        "status"=>"Status",
+        "category"=>"Category",
+        "title"=>"Title",
+        "description"=>"Description",
+        "solution"=>"Solution"
+        ),
 
+'vendors_import_fields' => Array(
+        "vendorid"=>"Vender Id",
+        "vendorname"=>"Vendor Name",
+        "phone"=>"Phone",
+        "email"=>"Email",
+        "website"=>"Website",
+        "category"=>"Category",
+        "street"=>"Street",
+        "city"=>"City",
+        "state"=>"State",
+        "pobox"=>"Post Box",
+        "postalcode"=>"Postal Code",
+        "country"=>"Country",
+        "description"=>"Description"
+        )
+//Pavani...end list
 );
 
 ?>

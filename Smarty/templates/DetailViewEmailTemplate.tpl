@@ -24,14 +24,14 @@
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 		    		<form method="post" action="index.php" name="etemplatedetailview">  
 				<input type="hidden" name="action" value="editemailtemplate">
-				<input type="hidden" name="module" value="Users">
+				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="templatename" value="{$TEMPLATENAME}">
 				<input type="hidden" name="templateid" value="{$TEMPLATEID}">
 				<input type="hidden" name="foldername" value="{$FOLDERNAME}">
 				<input type="hidden" name="parenttab" value="{$PARENTTAB}">
 				<tr>
 					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ViewTemplate.gif" width="45" height="60" border=0 ></td>
-					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings">{$UMOD.LBL_EMAIL_TEMPLATES}</a> &gt; {$MOD.LBL_VIEWING} &quot;{$TEMPLATENAME}&quot; </b></td>
+					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=listemailtemplates&parenttab=Settings">{$UMOD.LBL_EMAIL_TEMPLATES}</a> &gt; {$MOD.LBL_VIEWING} &quot;{$TEMPLATENAME}&quot; </b></td>
 				</tr>
 				<tr>
 					<td valign=top class="small">{$UMOD.LBL_EMAIL_TEMPLATE_DESC}</td>
@@ -59,7 +59,7 @@
 					  </tr>
 					<tr>
 						<td valign=top class="small cellLabel"><strong>{$UMOD.LBL_DESCRIPTION}</strong></td>
-						<td class="cellText small" valign=top>{$DESCRIPTION}</td>
+						<td class="cellText small" valign=top>&nbsp;{$DESCRIPTION}</td>
 					  </tr>
 					<tr>
 						<td valign=top class="small cellLabel"><strong>{$UMOD.LBL_FOLDER}</strong></td>

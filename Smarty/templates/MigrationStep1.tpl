@@ -12,7 +12,6 @@
 
 
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 
 <form name="Migration" method="POST" action="index.php" enctype="multipart/form-data">
 <input type="hidden" name="module" value="Migration">
@@ -131,7 +130,8 @@
 								<td width="10%">&nbsp;</td>
 								<td width="90%">
 									{$MOD.LBL_DUMP_FILE_LOCATION}
-									<input type="file" name="old_dump_filename" class="txtBox" />
+									<input type="file" name="old_dump_filename" class="txtBox"  onchange="validateFilename(this);" />
+									<input type="hidden" name="old_dump_filename_hidden" value="" />
 								</td>
 							   </tr>
 							   <tr><td colspan="2" height="10"></td></tr>
@@ -291,22 +291,22 @@
 			//check whether the user entered the valid Source MySQL database details when db details selected
 			if(trim(formname.old_host_name.value) == '')
 			{ldelim}
-				error_msg = "Please enter the Source Host Name";
+				error_msg = "{$MOD.ENTER_SOURCE_HOST}";
 				error = true;
 			{rdelim}
 			else if(trim(formname.old_port_no.value) == '')
 			{ldelim}
-				error_msg = "Please enter the Source MySql Port Number";
+				error_msg = "{$MOD.ENTER_SOURCE_MYSQL_PORT}";
 				error = true;
 			{rdelim}
 			else if(trim(formname.old_mysql_username.value) == '')
 			{ldelim}
-				error_msg = "Please enter the Source MySql User Name";
+				error_msg = "{$MOD.ENTER_SOURCE_MYSQL_USER}";
 				error = true;
 			{rdelim}
 			else if(trim(formname.old_dbname.value) == '')
 			{ldelim}
-				error_msg = "Please enter the Source Database Name";
+				error_msg = "{$MOD.ENTER_SOURCE_DATABASE}";
 				error = true;
 			{rdelim}
 		{rdelim}
@@ -316,7 +316,7 @@
 			//check whether the user entered the MySQL File when dump file details selected
 			if(trim(formname.old_dump_filename.value) == '')
 			{ldelim}
-				error_msg = "Please enter the Valid MySQL Dump File";
+				error_msg = "{$MOD.ENTER_SOURCE_MYSQL_DUMP}";
 				error = true;
 			{rdelim}
 		{rdelim}
@@ -326,29 +326,29 @@
 			//check whether the user entered the valid Source MySQL database details when db details selected
 			if(trim(formname.alter_old_host_name.value) == '')
 			{ldelim}
-				error_msg = "Please enter the Host Name";
+				error_msg = "{$MOD.ENTER_HOST}";
 				error = true;
 			{rdelim}
 			else if(trim(formname.alter_old_port_no.value) == '')
 			{ldelim}
-				error_msg = "Please enter the MySql Port Number";
+				error_msg = "{$MOD.ENTER_MYSQL_PORT}";
 				error = true;
 			{rdelim}
 			else if(trim(formname.alter_old_mysql_username.value) == '')
 			{ldelim}
-				error_msg = "Please enter the MySql User Name";
+				error_msg = "{$MOD.ENTER_MYSQL_USER}";
 				error = true;
 			{rdelim}
 			else if(trim(formname.alter_old_dbname.value) == '')
 			{ldelim}
-				error_msg = "Please enter the Database Name";
+				error_msg = "{$MOD.ENTER_DATABASE}";
 				error = true;
 			{rdelim}
 		{rdelim}
 		else
 		{ldelim}
 			formname.migration_option.value = '';
-			error_msg = "Please select any one option";
+			error_msg = "{$MOD.SELECT_ANYONE_OPTION}";
 			error = true;
 		{rdelim}
 
@@ -358,7 +358,7 @@
 			if(document.getElementById("getmysqlpath").value == 1 && trim(formname.server_mysql_path.value) == '' && document.getElementById("alter_db_details").checked != true)
 			{ldelim}
 				//alert(document.getElementById("getmysqlpath").value+" Enter the mysql path");
-				error_msg = "Please enter the Correct MySQL Path";
+				error_msg = "{$MOD.ENTER_CORRECT_MYSQL_PATH}";
 				error = true;
 			{rdelim}
 			else

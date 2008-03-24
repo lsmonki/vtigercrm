@@ -23,6 +23,12 @@
 <tr>
 	<td class=small align=right><input title="{$CMOD.LBL_NEW_USER_BUTTON_TITLE}" accessyKey="{$CMOD.LBL_NEW_USER_BUTTON_KEY}" type="submit" name="button" value="{$CMOD.LBL_NEW_USER_BUTTON_LABEL}" class="crmButton create small"></td>
 </tr>
+
+{if $ERROR_MSG neq ''}
+<tr>
+	{$ERROR_MSG}
+</tr>
+{/if}
 </table>
 						
 <table border=0 cellspacing=0 cellpadding=5 width=100% class="listTable">
@@ -40,7 +46,7 @@
 	<td class="listTableRow small" valign=top>{$smarty.foreach.userlist.iteration}</td>
 	<td class="listTableRow small" nowrap valign=top><a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record={$userid}"><img src="{$IMAGE_PATH}settingsActBtnEdit.gif" alt="{$APP.LBL_EDIT_BUTTON}" title="{$APP.LBL_EDIT_BUTTON}" border="0"></a>
 	{if $userid neq 1 && $userid neq 2 && $userid neq $CURRENT_USERID}	
-	<img src="{$IMAGE_PATH}settingsActBtnDelete.gif" onclick="deleteUser(this,'{$userid}')" border="0"  alt="{$APP.LBL_DELETE_BUTTON}" title="{$APP.LBL_DELETE_BUTTON}" style="cursor:pointer;"/></a>
+	<img src="{$IMAGE_PATH}settingsActBtnDelete.gif" onclick="deleteUser(this,'{$userid}')" border="0"  alt="{$APP.LBL_DELETE_BUTTON}" title="{$APP.LBL_DELETE_BUTTON}" style="cursor:pointer;"/>
 	{/if}
 	<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record={$userid}&isDuplicate=true"><img src="{$IMAGE_PATH}settingsActBtnDuplicate.gif" alt="{$APP.LBL_DUPLICATE_BUTTON}" title="{$APP.LBL_DUPLICATE_BUTTON}" border="0"></a>
 </td>

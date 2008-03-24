@@ -21,14 +21,15 @@
                         <hr noshade="noshade" size="1"><br>
 
   		<form action="index.php" method="post" name="EditView" id="form">
-			<input type="hidden" name="module" value="Settings">
+			<input type="hidden" name="module" value="Users">
 		  	<input type="hidden" name="action">
   			<input type="hidden" name="server_type" value="email">
 			<input type="hidden" name="record" value="{$ID}">
 		        <input type="hidden" name="edit" value="{$EDIT}">
 			<input type="hidden" name="return_module" value="Settings">
 			<input type="hidden" name="return_action" value="index">
-	</tr>	
+			<input type="hidden" name="changepassword" value="">
+</tr>	
 		
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
                   <tr>
@@ -70,7 +71,7 @@
        </tr>
        <tr><td colspan="3" >&nbsp;</td></tr>
        <tr>
-          <td colspan="3"  class="detailedViewHeader"><b>{$MOD.LBL_MAIL_SERVER_SETTINGS}</b></td>
+          <td colspan="3"  class="detailedViewHeader"><b>{$MOD.LBL_INCOME_SERVER_SETTINGS}</b></td>
        </tr>
        <tr>
           <td class="dvtCellLabel" align="right"><FONT class="required" color="red">{$APP.LBL_REQUIRED_SYMBOL}</FONT>{$MOD.LBL_MAIL_SERVER_NAME}</td>
@@ -84,7 +85,7 @@
        </tr>
        <tr>
            <td class="dvtCellLabel" align="right"><FONT class="required" color="red">{$APP.LBL_REQUIRED_SYMBOL}</FONT>{$MOD.LBL_LIST_PASSWORD}</td>
-           <td class="dvtCellInfo"><input type="password" name="server_password" value="{$SERVERPASSWORD}"  class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'"/></td>
+           <td class="dvtCellInfo"> {$CHANGE_PW_BUTTON}</td>
            <td class="dvtCellInfo">&nbsp;</td>
        </tr>
        <tr>
@@ -104,7 +105,8 @@
            <td class="dvtCellLabel" align="right">{$MOD.LBL_SSL_OPTIONS}</td>
            <td class="dvtCellInfo">
 		<input type="radio" name="ssltype" value="notls" {$NOTLS} />&nbsp;{$MOD.LBL_NO_TLS}
-		<input type="radio" name="ssltype" value="tls" {$TLS} />&nbsp; {$MOD.LBL_TLS} </td>
+		<input type="radio" name="ssltype" value="tls" {$TLS} />&nbsp; {$MOD.LBL_TLS}
+		<input type="radio" name="ssltype" value="ssl" {$SSL} />&nbsp; {$MOD.LBL_SSL} </td>
            <td class="dvtCellInfo">&nbsp;</td>
        </tr>
        <tr>
@@ -115,23 +117,23 @@
 	   </td>	
            <td class="dvtCellInfo">&nbsp;</td>
        </tr>
-       <tr>
+       <!--<tr>
            <td class="dvtCellLabel" align="right">{$MOD.LBL_INT_MAILER}</td>
            <td class="dvtCellInfo">
 		<input type="radio" name="int_mailer" value="1" {$INT_MAILER_USE} />&nbsp;{$MOD.LBL_INT_MAILER_USE}
 		<input type="radio" name="int_mailer" value="0" {$INT_MAILER_NOUSE} />&nbsp;{$MOD.LBL_INT_MAILER_NOUSE}
 	   </td>	
            <td class="dvtCellInfo">&nbsp;</td>
-       </tr>
+       </tr>-->
        <tr>
            <td class="dvtCellLabel" align="right">{$MOD.LBL_REFRESH_TIMEOUT}</td>
            <td class="dvtCellInfo">
 		<select value="{$BOX_REFRESH}" name="box_refresh">
-			<option value="60000">{$MOD.LBL_1_MIN}</option>
-			<option value="120000">{$MOD.LBL_2_MIN}</option>
-			<option value="240000">{$MOD.LBL_3_MIN}</option>
-			<option value="360000">{$MOD.LBL_4_MIN}</option>
-			<option value="480000">{$MOD.LBL_5_MIN}</option>
+			<option value="60000" {$BOX_OPT1}>{$MOD.LBL_1_MIN}</option>
+			<option value="120000" {$BOX_OPT2}>{$MOD.LBL_2_MIN}</option>
+			<option value="180000" {$BOX_OPT3}>{$MOD.LBL_3_MIN}</option>
+			<option value="240000" {$BOX_OPT4}>{$MOD.LBL_4_MIN}</option>
+			<option value="300000" {$BOX_OPT5}>{$MOD.LBL_5_MIN}</option>
 		</select>
 	   </td>
            <td class="dvtCellInfo">&nbsp;</td>

@@ -75,7 +75,20 @@ Then you can give this Database name in config.inc.php file to use this Database
 'LBL_MYSQL_SERVER_PATH'=>'MySQL Server Path : ',
 'LBL_MIGRATE_BUTTON'=>'Migrate',
 'LBL_CANCEL_BUTTON'=>'Cancel',
-
+'LBL_UPGRADE_FROM_VTIGER_5X'=>'Upgrade database from vtiger CRM 5.x to next version',
+'LBL_PATCH_OR_MIGRATION'=>'you must specify the source database version (Patch update or Migration)',
+//Added for java script alerts
+'ENTER_SOURCE_HOST' => 'Please enter the Source Host Name',
+'ENTER_SOURCE_MYSQL_PORT' => 'Please enter the Source MySql Port Number',
+'ENTER_SOURCE_MYSQL_USER' => 'Please enter the Source MySql User Name',
+'ENTER_SOURCE_DATABASE' => 'Please enter the Source Database Name',
+'ENTER_SOURCE_MYSQL_DUMP' => 'Please enter the Valid MySQL Dump File',
+'ENTER_HOST' => 'Please enter the Host Name',
+'ENTER_MYSQL_PORT' => 'Please enter the MySql Port Number',
+'ENTER_MYSQL_USER' => 'Please enter the MySql User Name',
+'ENTER_DATABASE' => 'Please enter the Database Name',
+'SELECT_ANYONE_OPTION' => 'Please select any one option',
+'ENTER_CORRECT_MYSQL_PATH' => 'Please enter the Correct MySQL Path',
 
 );
 

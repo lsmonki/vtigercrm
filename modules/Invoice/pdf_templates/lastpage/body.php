@@ -13,24 +13,24 @@
 // Fun with watermarks :)
 $waterMarkPositions=array("60","110");
 $waterMarkRotate=array("0","0","0");
-$pdf->watermark( "Thank You", $waterMarkPositions, $waterMarkRotate );
+$pdf->watermark( $app_strings["Thank You"], $waterMarkPositions, $waterMarkRotate );
 $waterMarkPositions=array("30","130");
-$pdf->watermark( "For Your Business", $waterMarkPositions, $waterMarkRotate );
+$pdf->watermark( $app_strings["For Your Business"], $waterMarkPositions, $waterMarkRotate );
 
 // blowing bubbles
 $Bubble=array("10","80","170","4");
-$pdf->addBubble("", "Because we love you :)", $Bubble);
+$pdf->addBubble("", "", $Bubble);
 
 $Bubble=array("168","131","12");
-$pdf->addBubbleBlock("Neat Look", "For A", $Bubble);
+//$pdf->addBubbleBlock("Neat Look", "For A", $Bubble);
 $Bubble=array("10","131","12");
-$pdf->addBubbleBlock("The Corners", "Line Up", $Bubble);
+//$pdf->addBubbleBlock("The Corners", "Line Up", $Bubble);
 
 
 /* ************* Begin Totals ************************** */
 $totalBlock=array("59","135");
-$names=array("Subtotal","Tax","Adjustment","Total");
-$totals=array($price_subtotal,$price_tax,$price_adjustment,$price_total);
+$names=array($app_strings["Subtotal"],$app_strings["Tax"],$app_strings["Adjustment"],$app_strings["Total"]);
+$totals=array($price_subtotal,$price_salestax,$price_adjustment,$price_total);
 $pdf->addTotalsRec($names,$totals,$totalBlock);
 /* ************* End Totals *************************** */
 
@@ -50,11 +50,11 @@ else
 
 /* **************** Begin Description ****************** */
 $descBlock=array("10","160","53", $num);
-$pdf->addDescBlock($description, "Description", $descBlock);
+$pdf->addDescBlock($description, $app_strings["Description"], $descBlock);
 
 
 $termBlock=array("107","160","53", $num);
-$pdf->addDescBlock($conditions, "Terms & Conditions", $termBlock);
+$pdf->addDescBlock($conditions, $app_strings["Terms & Conditions"], $termBlock);
 
 /* ************** End Terms *********************** */
 

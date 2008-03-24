@@ -22,13 +22,13 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Quotes/Quote.php');
+require_once('modules/Quotes/Quotes.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 global $mod_strings,$app_strings,$currentModule,$theme,$singlepane_view;
-$focus = new Quote();
+$focus = new Quotes();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],"Quotes");
@@ -43,7 +43,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Quote detail view");
 
@@ -101,6 +100,8 @@ $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
 
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
+
 if($singlepane_view == 'true')
 {
 	$related_array = getRelatedLists($currentModule,$focus);
@@ -108,6 +109,8 @@ if($singlepane_view == 'true')
 }
 
 $smarty->assign("SinglePane_View", $singlepane_view);
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 
 $smarty->display("Inventory/InventoryDetailView.tpl");
 

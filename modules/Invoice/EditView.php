@@ -23,18 +23,25 @@
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Invoice/Invoice.php');
-require_once('modules/Quotes/Quote.php');
+require_once('modules/Quotes/Quotes.php');
 require_once('modules/SalesOrder/SalesOrder.php');
-require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Potentials/Potentials.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
+//Addded for Custom Invoice Number
+require_once('user_privileges/CustomInvoiceNo.php');
 
 global $app_strings,$mod_strings,$currentModule,$log,$current_user;
 
 $focus = new Invoice();
 $smarty = new vtigerCRM_Smarty();
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
+
 $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);
 $rate = $rate_symbol['rate'];
@@ -43,7 +50,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
     if(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'quotetoinvoice')
     {
 	$quoteid = $_REQUEST['record'];
-	$quote_focus = new Quote();
+	$quote_focus = new Quotes();
 	$quote_focus->id = $quoteid;
 	$quote_focus->retrieve_entity_info($quoteid,"Quotes");
 	$focus = getConvertQuoteToInvoice($focus,$quote_focus,$quoteid);
@@ -53,6 +60,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 	$txtTax = (($quote_focus->column_fields['txtTax'] != '')?$quote_focus->column_fields['txtTax']:'0.000');
 	$txtAdj = (($quote_focus->column_fields['txtAdjustment'] != '')?$quote_focus->column_fields['txtAdjustment']:'0.000');
 
+	$smarty->assign("CONVERT_MODE", $_REQUEST['convertmode']);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $quote_focus->mode);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -74,6 +82,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 	$txtTax = (($so_focus->column_fields['txtTax'] != '')?$so_focus->column_fields['txtTax']:'0.000');
 	$txtAdj = (($so_focus->column_fields['txtAdjustment'] != '')?$so_focus->column_fields['txtAdjustment']:'0.000');
 
+	$smarty->assign("CONVERT_MODE", $_REQUEST['convertmode']);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $so_focus->mode);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -173,13 +182,14 @@ else
 	}
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
+	$smarty->assign("DUPLICATE_FROM", $focus->id);
 	$INVOICE_associated_prod = getAssociatedProducts("Invoice",$focus);
 	$focus->id = "";
     	$focus->mode = ''; 	
 }
 if(isset($_REQUEST['opportunity_id']) && $_REQUEST['opportunity_id'] !='')
 {
-	$potfocus = new Potential();
+	$potfocus = new Potentials();
         $potfocus->column_fields['potential_id'] = $_REQUEST['opportunity_id'];
         $associated_prod = getAssociatedProducts("Potentials",$potfocus,$potfocus->column_fields['potential_id']);
 	
@@ -193,9 +203,9 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') {
 } 
  
  
-if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && ($_REQUEST['record']=='' || $_REQUEST['convertmode'] == "potentoinvoice")){
-	require_once('modules/Accounts/Account.php');
-	$acct_focus = new Account();
+if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && ($_REQUEST['record']=='' || $_REQUEST['convertmode'] == "potentoinvoice") && ($_REQUEST['convertmode'] != 'update_so_val') ){
+	require_once('modules/Accounts/Accounts.php');
+	$acct_focus = new Accounts();
 	$acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
 	$focus->column_fields['bill_city']=$acct_focus->column_fields['bill_city'];
 	$focus->column_fields['ship_city']=$acct_focus->column_fields['ship_city'];
@@ -246,8 +256,6 @@ $smarty->assign("SINGLE_MOD",'Invoice');
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 
-require_once($theme_path.'layout_utils.php');
-
 $log->info("Invoice view");
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
@@ -257,7 +265,7 @@ else $smarty->assign("NAME", "");
 if(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'quotetoinvoice')
 {
 	$smarty->assign("MODE", $quote_focus->mode);
-	$se_array=getProductDetailsBlockInfo($quote_focus->mode,"Quote",$quote_focus);
+	$se_array=getProductDetailsBlockInfo($quote_focus->mode,"Quotes",$quote_focus);
 }
 elseif(isset($_REQUEST['convertmode']) &&  ($_REQUEST['convertmode'] == 'sotoinvoice' || $_REQUEST['convertmode'] == 'update_so_val'))
 {
@@ -325,17 +333,20 @@ $smarty->assign("ID", $focus->id);
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
-
 //in create new Invoice, get all available product taxes and shipping & Handling taxes
+
 if($focus->mode != 'edit')
 {
 	$tax_details = getAllTaxes('available');
 	$sh_tax_details = getAllTaxes('available','sh');
-
-	$smarty->assign("GROUP_TAXES",$tax_details);
-	$smarty->assign("SH_TAXES",$sh_tax_details);
 }
-
+else
+{
+	$tax_details = getAllTaxes('available','',$focus->mode,$focus->id);
+	$sh_tax_details = getAllTaxes('available','sh','edit',$focus->id);
+}
+$smarty->assign("GROUP_TAXES",$tax_details);
+$smarty->assign("SH_TAXES",$sh_tax_details);
 
 
 
@@ -349,9 +360,21 @@ $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
+//Added for Custom Invoice Number
+//we have check the Invoice Number for duplicate only in create view
+if($focus->mode != 'edit')
+{
+        $invoiceno=$inv_str.$inv_no;
+        if(CheckDuplicateInvoiceNumber($invoiceno))
+                echo '<br><font color="#FF0000"><b>Duplicate Invoice Number - Click <a href="index.php?module=Settings&action=CustomInvoiceNo&parenttab=Settings">here</a> to  Configure the Invoice Number</b></font>'.$num_rows;
+        else
+                $smarty->assign("inv_no",($inv_str.$inv_no));
+}
+
+
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
-
+$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 if($focus->mode == 'edit')
 	$smarty->display("Inventory/InventoryEditView.tpl");
 else

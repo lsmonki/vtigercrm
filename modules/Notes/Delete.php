@@ -17,12 +17,15 @@
  * Description:  TODO: To be written.
  ********************************************************************************/
 
-require_once('modules/Notes/Note.php');
+require_once('modules/Notes/Notes.php');
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('note_delete');
 
-$focus = new Note();
+$focus = new Notes();
+
+//Added to fix 4600
+$url = getBasic_Advance_SearchURL();
 
 if(!isset($_REQUEST['record']))
 	die("A record number must be specified to delete the note.");
@@ -31,5 +34,5 @@ DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['re
 
 if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
 
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']."&parenttab=$parenttab"."&relmodule=".$_REQUEST['module']);
+header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']."&parenttab=$parenttab"."&relmodule=".$_REQUEST['module'].$url);
 ?>

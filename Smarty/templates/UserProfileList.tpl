@@ -54,7 +54,7 @@
 				
 					<table border=0 cellspacing=0 cellpadding=5 width=100% class="listTableTopButtons">
 					<tr>
-						<td class=small align=right><input type="submit" value="{$CMOD.LBL_NEW_PROFILE}" class="crmButton create small"></td>
+						<td class=small align=right><input type="submit" value="{$CMOD.LBL_NEW_PROFILE}" title="{$CMOD.LBL_NEW_PROFILE}" class="crmButton create small"></td>
 					</tr>
 					</table>
 						
@@ -69,15 +69,15 @@
 					<tr>
 						<td class="listTableRow small" valign=top>{$smarty.foreach.profilelist.iteration}</td>
 						<td class="listTableRow small" valign=top nowrap>
-							<a href="index.php?module=Users&action=profilePrivileges&return_action=ListProfiles&parenttab=Settings&mode=edit&profileid={$listvalues.profileid}"><img src="{$IMAGE_PATH}editfield.gif" alt="Edit" title="Edit" border="0" align="absmiddle"></a>
+							<a href="index.php?module=Settings&action=profilePrivileges&return_action=ListProfiles&parenttab=Settings&mode=edit&profileid={$listvalues.profileid}"><img src="{$IMAGE_PATH}editfield.gif" alt="{$APP.LBL_EDIT}" title="{$APP.LBL_EDIT}" border="0" align="absmiddle"></a>
 	                                                {if $listvalues.del_permission eq 'yes'}
         	                                                &nbsp;|&nbsp;
-                	                                <a href="#"><img src="{$IMAGE_PATH}delete.gif" border="0" height="15" width="15" onclick="DeleteProfile(this,'{$listvalues.profileid}')" align="absmiddle"></a>
+                	                                <a href="javascript:;"><img src="{$IMAGE_PATH}delete.gif" border="0" height="15" width="15" onclick="DeleteProfile(this,'{$listvalues.profileid}')" align="absmiddle"></a>
                                                 	{else}
                                                 	{/if}
 
 						</td>
-						<td class="listTableRow small" valign=top><a href="index.php?module=Users&action=profilePrivileges&mode=view&parenttab=Settings&profileid={$listvalues.profileid}"><b>{$listvalues.profilename}</b></a></td>
+						<td class="listTableRow small" valign=top><a href="index.php?module=Settings&action=profilePrivileges&mode=view&parenttab=Settings&profileid={$listvalues.profileid}"><b>{$listvalues.profilename}</b></a></td>
 						<td class="listTableRow small" valign=top>{$listvalues.description}</td>
 					  </tr>
 					{/foreach}		

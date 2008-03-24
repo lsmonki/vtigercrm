@@ -113,7 +113,7 @@ EOQ;
  */
 function get_mini_calendar(& $cal)
 {
-	global $current_user,$adb,$cal_log;
+	global $current_user,$adb,$cal_log,$mod_strings;
 	$category = getParentTab();
 	$cal_log->debug('Entering get_mini_calendar() method...');
 	$count = 0;
@@ -133,7 +133,7 @@ function get_mini_calendar(& $cal)
 	                     </td></tr>";
 	$minical .= "<tr class='hdrNameBg'>";
 	//To display days in week 
-	$minical .= '<th width="12%">Week</th>';
+	$minical .= '<th width="12%">'.$mod_strings['LBL_WEEK'].'</th>';
 	for ($i = 0; $i < 7; $i ++)
         {
                 $weekdays_row = $cal['calendar']->month_array[$cal['calendar']->slices[$i]];
@@ -245,7 +245,7 @@ function get_cal_header_tab(& $header,$viewBox,$subtab)
 		</td>";
 		$tabhtml .= "<td width='2%'><img onClick='fnvshobj(this,\"miniCal\"); getMiniCal(\"view=".$header['calendar']->view."".$header['calendar']->date_time->get_date_str()."&viewOption=".$viewBox."&subtab=".$subtab."&parenttab=".$category."\");' src='".$header['IMAGE_PATH']."btnL3Calendar.gif' alt='".$mod_strings['LBL_OPENCAL']."...' title='".$mod_strings['LBL_OPENCAL']."...' align='absmiddle' border='0'></td>";
 		$tabhtml .= "<td width=20% ><img onClick='fnvshobj(this,\"calSettings\"); getCalSettings(\"view=".$header['calendar']->view."".$header['calendar']->date_time->get_date_str()."&viewOption=".$viewBox."&subtab=".$subtab."&parenttab=".$category."\");' src='".$header['IMAGE_PATH']."tbarSettings.gif' alt='".$mod_strings['LBL_SETTINGS']."' title='".$mod_strings['LBL_SETTINGS']."' align='absmiddle' border='0'></td>";
-	$tabhtml .= "<td class='calHdr calTopRight componentName'>".$app_strings[Calendar]."</td>";	
+	$tabhtml .= "<td class='calHdr calTopRight componentName'>".$app_strings['Calendar']."</td>";	
 	$tabhtml .= "</tr>";
 	echo $tabhtml;
 	$cal_log->debug("Exiting get_cal_header_tab() method...");
@@ -263,8 +263,8 @@ function get_cal_header_data(& $cal_arr,$viewBox,$subtab)
 	global $current_user,$app_strings;
         $date_format = $current_user->date_format;
 	$format = $cal_arr['calendar']->hour_format;
-	$hour_startat = convertTime2UserSelectedFmt($format,$cal_arr['calendar']->day_start_hour,false); 
-	$hour_endat = convertTime2UserSelectedFmt($format,($cal_arr['calendar']->day_start_hour+1),false);
+	$hour_startat = timeString(array('hour'=>date('H:i',(time()+(5*60))),'minute'=>0),'24');
+        $hour_endat = timeString(array('hour'=>date('H:i',(time() + (60 * 60))),'minute'=>0),'24');	
 	$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
 	$temp_ts = $cal_arr['calendar']->date_time->ts;
 	//To get date in user selected format
@@ -288,15 +288,15 @@ function get_cal_header_data(& $cal_arr,$viewBox,$subtab)
 			{
 				$headerdata .="<tr><td>&nbsp;</td>";
 			}
-			$headerdata .="<td align='center' width='53%'>";
-	$headerdata .= getEventTodoInfo($cal_arr,'listcnt'); 
-	$headerdata .= "	</td>
+			$headerdata .="<td align='center' width='53%'><span id='total_activities'>";
+	$headerdata .= getEventInfo($cal_arr,'listcnt'); 
+	$headerdata .= "</span></td>
 				<td align='center' width='30%'><table border=0 cellspacing=0 cellpadding=2><tr><td class=small><b>".$mod_strings['LBL_VIEW']." : </b></td><td>";
 	$view_options = getEventViewOption($cal_arr,$viewBox);
-	$headerdata .=$view_options."</td></tr></form></table>
+	$headerdata .=$view_options."</td></tr></table>
 				</td>
 			</tr>
-		</table>";
+		</table></form>";
 	echo $headerdata;	
 	$cal_log->debug("Exiting get_cal_header_data() method...");
 }
@@ -357,8 +357,7 @@ function getEventViewOption(& $cal,$viewBox)
 	}
 	else
 		die("view is not defined");
-	$view .="</select>
-		</form>";
+	$view .="</select>";
 	$cal_log->debug("Exiting getEventViewOption() method...");
 	return $view;
 }
@@ -561,15 +560,21 @@ function getEventListView(& $cal,$mode='')
 		die("view:".$cal['calendar']->view." is not defined");
         }
 	//if $mode value is empty means get Events list in array format else get the count of total events and pending events in array format.
-	$activity_list = getEventList($cal, $start_date, $end_date,$mode);
 	if($mode != '')
 	{
+		$activity_list = getEventList($cal, $start_date, $end_date,$mode);
 		$cal_log->debug("Exiting getEventListView() method...");
 		return $activity_list;
 	}
+	else
+	{
+		$ret_arr = getEventList($cal, $start_date, $end_date,$mode);
+	        $activity_list = $ret_arr[0];
+	        $navigation_array = $ret_arr[1];
+	}
 	//To get Events listView
 	$list_view .="<br><div id='listView'>";
-	$list_view .=constructEventListView($cal,$activity_list);
+	$list_view .=constructEventListView($cal,$activity_list,$navigation_array);
 	$list_view .="<br></div>
 		</div>";
 	$list_view .="<br></td></tr></table></td></tr></table>
@@ -626,16 +631,22 @@ function getTodosListView($cal, $check='',$subtab='')
                 die("view:".$cal['calendar']->view." is not defined");
         }
 	//if $check value is empty means get Todos list in array format else get the count of total todos and pending todos in array format.
-	$todo_list = getTodoList($cal, $start_date, $end_date,$check);
 	if($check != '')
 	{
+		$todo_list = getTodoList($cal, $start_date, $end_date,$check);
 		$cal_log->debug("Exiting getTodosListView() method...");
 		return $todo_list;
+	}
+	else
+	{
+		$ret_arr = getTodoList($cal, $start_date, $end_date,$check);
+		$todo_list = $ret_arr[0];
+		$navigation_arr = $ret_arr[1];
 	}
 	$cal_log->debug("Exiting getTodosListView() method...");
 	$list_view .="<div id='mnuTab2' style='background-color: rgb(255, 255, 215); display:block;'>";
 	//To get Todos listView
-	$list_view .= constructTodoListView($todo_list,$cal,$subtab);
+	$list_view .= constructTodoListView($todo_list,$cal,$subtab,$navigation_arr);
 	$list_view .="</div></div></td></tr></table></td></tr></table>
 		</td></tr></table>
 		</td></tr></table>
@@ -657,14 +668,9 @@ function getTodosListView($cal, $check='',$subtab='')
  */
 function getDayViewLayout(& $cal)
 {
-	//echo '<pre>';print_r($cal);echo '</pre>';
 	global $current_user,$app_strings,$cal_log,$adb;
 	$no_of_rows = 1;
 	$cal_log->debug("Entering getDayViewLayout() method...");
-	$shared_ids = getSharedCalendarId($current_user->id);
-	$user_details = getAllUserName();
-	$usersid = $current_user->id.','.$shared_ids;
-	$userid_arr = explode(",",$usersid);
         $date_format = $current_user->date_format;
 	$day_start_hour = $cal['calendar']->day_start_hour;
 	$day_end_hour = $cal['calendar']->day_end_hour;
@@ -686,39 +692,11 @@ function getDayViewLayout(& $cal)
 	}
 	for($i=$day_start_hour;$i<=$day_end_hour;$i++)
 	{
-		
-		if($cal['calendar']->hour_format == 'am/pm')
-		{
-			if($i == 12)
-			{
-				$hour = $i;
-				$sub_str = 'pm';
-			}
-			elseif($i>12)
-			{
-				$hour = $i - 12;
-				$sub_str = 'pm';
-			}
-			else
-			{
-				if($i == 0)
-					$hour = 12;
-				else
-					$hour = $i;
-				$sub_str = 'am';
-			}
-			
-		}
-		else
-		{
-			$hour = $i;
-			if($hour <= 9 && strlen(trim($hour)) < 2)
-				$hour = "0".$hour;
-			$sub_str = ':00';
-		}
+		$time = array('hour'=>$i,'minute'=>0);
+		$sub_str = timeString($time,$format);
 		$y = $i+1;
-		$hour_startat = convertTime2UserSelectedFmt($format,$i,false);
-		$hour_endat = convertTime2UserSelectedFmt($format,$y,false);
+		$hour_startat = timeString(array('hour'=>$i,'minute'=>0),'24');
+		$hour_endat = timeString(array('hour'=>$y,'minute'=>0),'24');
 		$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
 		$temp_ts = $cal['calendar']->date_time->ts;
 		$sttemp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$temp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$temp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $temp_ts)):(''))));
@@ -736,7 +714,7 @@ function getDayViewLayout(& $cal)
 		if(isPermitted("Calendar","EditView") == "yes")
 		              $js_string = 'onClick="fnvshobj(this,\'addEvent\'); gshow(\'addEvent\',\'call\',\''.$sttemp_date.'\',\''.$endtemp_date.'\',\''.$time_arr['starthour'].'\',\''.$time_arr['startmin'].'\',\''.$time_arr['startfmt'].'\',\''.$time_arr['endhour'].'\',\''.$time_arr['endmin'].'\',\''.$time_arr['endfmt'].'\',\'hourview\',\'event\')"';
 		$dayview_layout .= '<tr>
-					<td style="cursor:pointer;" class="lvtCol" valign=top height="75"  width="10%" '.$js_string.'>'.$hour.''.$sub_str.'</td>';
+					<td style="cursor:pointer;" class="lvtCol" valign=top height="75"  width="10%" '.$js_string.'>'.$sub_str.'</td>';
 		//To display events in Dayview
 		$dayview_layout .= getdayEventLayer($cal,$cal['calendar']->slices[$i],$no_of_rows);
 		$dayview_layout .= '</tr>';
@@ -789,44 +767,17 @@ function getWeekViewLayout(& $cal)
 	for($i=$day_start_hour;$i<=$day_end_hour;$i++)
 	{
 		$count = $i;
-		$hour_startat = convertTime2UserSelectedFmt($format,$i,false);
-	        $hour_endat = convertTime2UserSelectedFmt($format,($i+1),false);
+		$hour_startat = timeString(array('hour'=>$i,'minute'=>0),'24');
+		$hour_endat = timeString(array('hour'=>($i+1),'minute'=>0),'24');
 		$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
 		$weekview_layout .= '<tr>';
 		for ($column=1;$column<=1;$column++)
         	{
-        	       	if($cal['calendar']->hour_format == 'am/pm')
-                	{
-                       		if($i == 12)
-                       		{
-                               		$hour = $i;
-	                               	$sub_str = 'pm';
-	                        }
-        	       	        elseif($i>12)
-                        	{
-                       	        	$hour = $i - 12;
-	                       	        $sub_str = 'pm';
-	                        }
-        	       	        else
-                        	{
-					if($i == 0)
-						$hour = 12;
-					else
-                       	        		$hour = $i;
-	                       	        $sub_str = 'am';
-        	                }
-
-       	        	}
-       			else
-           		{
-                       		$hour = $i;
-				if($hour <= 9 && strlen(trim($hour)) < 2)
-		                        $hour = "0".$hour;
-                        	$sub_str = ':00';
-       	        	}
-
+			$time = array('hour'=>$i,'minute'=>0);
+			$sub_str = timeString($time,$format);
+			
 			$weekview_layout .= '<td style="border-top: 1px solid rgb(239, 239, 239); background-color: rgb(234, 234, 234); height: 40px;" valign="top" width="12%">';
-			$weekview_layout .=$hour.''.$sub_str;
+			$weekview_layout .=$sub_str;
 	                $weekview_layout .= '</td>';
 		}
 		for ($column=0;$column<=6;$column++)
@@ -879,8 +830,8 @@ function getMonthViewLayout(& $cal)
                 $rows = 6;
         }
 	$format = $cal['calendar']->hour_format;
-        $hour_startat = convertTime2UserSelectedFmt($format,$cal['calendar']->day_start_hour,false);
-        $hour_endat = convertTime2UserSelectedFmt($format,($cal['calendar']->day_start_hour+1),false);
+	$hour_startat = timeString(array('hour'=>date('H:i'),'minute'=>0),'24');
+        $hour_endat = timeString(array('hour'=>date('H:i',(time() + (60 * 60))),'minute'=>0),'24');
 	$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
 	$monthview_layout = '';
 	$monthview_layout .= '<table class="calDayHour" style="background-color: rgb(218, 218, 218);" border="0" cellpadding="5" cellspacing="1" width="98%"><tr>';
@@ -1064,7 +1015,7 @@ function getYearViewLayout(& $cal)
  */
 function getdayEventLayer(& $cal,$slice,$rows)
 {
-	global $mod_strings,$cal_log;
+	global $mod_strings,$cal_log,$listview_max_textlength;
 	$category = getParentTab();
 	$cal_log->debug("Entering getdayEventLayer() method...");
 	$eventlayer = '';
@@ -1073,7 +1024,6 @@ function getdayEventLayer(& $cal,$slice,$rows)
 	$last_colwidth = 100 / $rows;
 	$width = 100 / $rows ;
 	$act = $cal['calendar']->day_slice[$slice]->activities;
-	//echo '<pre>';print_r($act);echo '</pre>';
 	if(!empty($act))
 	{
 		for($i=0;$i<count($act);$i++)
@@ -1082,10 +1032,8 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			$arrow_img_name = 'event'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i;
 			$subject = $act[$i]->subject;
 			$id = $act[$i]->record;
-			if(strlen($subject)>25)
-				$subject = substr($subject,0,25)."...";
-			$start_time = $act[$i]->start_time->hour.':'.$act[$i]->start_time->minute;
-			$end_time = $act[$i]->end_time->hour.':'.$act[$i]->end_time->minute;
+			if(strlen($subject)>$listview_max_textlength)
+				$subject = substr($subject,0,$listview_max_textlength)."...";
 			$format = $cal['calendar']->hour_format;
 			$duration_hour = $act[$i]->duration_hour;
 			$duration_min =$act[$i]->duration_minute;
@@ -1098,46 +1046,48 @@ function getdayEventLayer(& $cal,$slice,$rows)
 				$rowspan = $duration_hour;
 			}
 			$row_cnt = $rowspan;
-			//$st_end_time = convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hour,$duration_min);
-			//$start_hour = $st_end_time['starttime'];
-			//$end_hour = $st_end_time['endtime'];
-			$value = getaddEventPopupTime($start_time,$end_time,$format);
-			$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
-			$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
+			$start_hour = timeString($act[$i]->start_time,$format);
+			$end_hour = timeString($act[$i]->end_time,$format);
 			$account_name = $act[$i]->accountname;
 			$eventstatus = $act[$i]->eventstatus;
-			$shared = $act[$i]->shared;
 			$color = $act[$i]->color;
 			$image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
+			if($act[$i]->recurring)
+				$recurring = '<img src="'.$cal['IMAGE_PATH'].''.$act[$i]->recurring.'" align="middle" border="0"></img>';
+			else
+				$recurring = '&nbsp;';
 			$height = $rowspan * 75;
 			$javacript_str = '';
+			$idShared = "normal"; if($act[$i]->shared) $idShared = "shared";	
 			/*if($eventstatus != 'Held')
 			{*/
-				if(isPermitted("Calendar","EditView") == "yes")
+			if($idShared == "normal")
+			{
+				if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
 					$javacript_str = 'onMouseOver="cal_show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');"';
-				$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" align="middle" border="0">';
-			/*}
+				$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->get_formatted_date().'\',\'event\');" align="middle" border="0">';
+			}
 			else
 			{
 				$javacript_str = '';
 				$eventlayer .= '&nbsp;';
-			}*/
+			}
 			$eventlayer .= '<td class="dvtCellInfo" rowspan="'.$rowspan.'" colspan="1" width="'.$width.'%" >';
 			$eventlayer .= '<div id="event_'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i.'" class="event" style="height:'.$height.'px;" '.$javacript_str.'>
 			<table border="0" cellpadding="1" cellspacing="0" width="100%">
 				<tr>
-					<td><img src="'.$image.'" align="middle" border="0"></td>
-					<td width="100%"><b>'.$start_hour.' - '.$end_hour.'</b></td>
-				</tr>';
-			$eventlayer .= '<tr><td>';
-			if($shared)
-				$eventlayer .= '<img src="'.$cal['IMAGE_PATH'].'cal12x12Shared.gif" align="middle" border="0">';
-			else
-				$eventlayer .= '&nbsp;';
+					<td width="10%" align="center"><img src="'.$image.'" align="middle" border="0"></td>
+					<td width="90%"><b>'.$start_hour.' - '.$end_hour.'</b></td></tr>';
+			$eventlayer .= '<tr><td align="center">'.$recurring;
 			$eventlayer .= '</td>
 				<td><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&viewtype=calendar&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
 				</tr>
-				<tr><td>'.$action_str.'</td><td>('.$user.' | '.$eventstatus.' | '.$priority.')</td>
+				<tr><td align="center">';
+			if($act[$i]->shared)
+				$eventlayer .= '<img src="'.$cal['IMAGE_PATH'].'cal12x12Shared.gif" align="middle" border="0">';
+			else
+				$eventlayer .= '&nbsp;';
+			$eventlayer .= '</td><td>('.$user.' | '.getTranslatedString($eventstatus).' | '.getTranslatedString($priority).')</td></tr><tr><td align="center">'.$action_str.'</td><td>&nbsp;</td></tr>
 			</table>
 			
 			</div>';
@@ -1162,7 +1112,7 @@ function getdayEventLayer(& $cal,$slice,$rows)
  */
 function getweekEventLayer(& $cal,$slice)
 {
-	global $mod_strings,$cal_log;
+	global $mod_strings,$cal_log,$listview_max_textlength;
 	$category = getParentTab();
 	$cal_log->debug("Entering getweekEventLayer() method...");
         $eventlayer = '';
@@ -1172,52 +1122,61 @@ function getweekEventLayer(& $cal,$slice)
         {
 		for($i=0;$i<count($act);$i++)
                 {
-			$arrow_img_name = 'weekevent'.$cal['calendar']->week_slice[$slice]->start_time->get_formatted_date().'_'.$i;
+			/* fix given by dartagnanlaf START --integrated by Minnie */
+			$arrow_img_name = 'weekevent'.$cal['calendar']->week_slice[$slice]->start_time->get_formatted_date().'_'.$act[$i]->start_time->hour.'_'.$i;
+			/* fix given by dartagnanlaf END --integrated by Minnie */
 			$id = $act[$i]->record;
                         $subject = $act[$i]->subject;
-			if(strlen($subject)>25)
-				$subject = substr($subject,0,25)."...";
+			if(strlen($subject)>$listview_max_textlength)
+				$subject = substr($subject,0,$listview_max_textlength)."...";
 			$format = $cal['calendar']->hour_format;
-                        $duration_hour = $act[$i]->duration_hour;
-                        $duration_min = $act[$i]->duration_minute;
-			$start_time = $act[$i]->start_time->hour.':'.$act[$i]->start_time->minute;
-			$end_time = $act[$i]->end_time->hour.':'.$act[$i]->end_time->minute;
-                        //$st_end_time = convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hour,$duration_min);
-			//$start_hour = $st_end_time['starttime'];
-                        //$end_hour = $st_end_time['endtime'];
-			$value = getaddEventPopupTime($start_time,$end_time,$format);
-			$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
-			$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
+			$start_hour = timeString($act[$i]->start_time,$format);
+                        $end_hour = timeString($act[$i]->end_time,$format);
                         $account_name = $act[$i]->accountname;
 			$eventstatus = $act[$i]->eventstatus;
-			$shared = $act[$i]->shared;
 			$user = $act[$i]->owner;
 			$priority = $act[$i]->priority;
                         $image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
+			$idShared = "normal"; if($act[$i]->shared) $idShared = "shared";
+			if($act[$i]->recurring)
+				$recurring = '<img src="'.$cal['IMAGE_PATH'].''.$act[$i]->recurring.'" align="middle" border="0"></img>';
+			else
+				$recurring = '&nbsp;';
                         $color = $act[$i]->color;
-			if(isPermitted("Calendar","EditView") == "yes")
-				$javacript_str = 'onMouseOver="cal_show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');"';
-			$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->day.'\',\''.$cal['calendar']->date_time->month.'\',\''.$cal['calendar']->date_time->year.'\',\'event\');" align="middle" border="0">';
+			if($idShared == "normal")
+			{
+				if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
+					$javacript_str = 'onMouseOver="cal_show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');"';
+				$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->get_formatted_date().'\',\'event\');" align="middle" border="0">';
+			}
+			else
+			{
+				$javacript_str = '';
+				$eventlayer .= '&nbsp;';
+			}
 												 
 			$eventlayer .='<div class ="event" '.$javacript_str.' id="event_'.$cal['calendar']->week_slice[$slice]->start_time->get_formatted_date().'_'.$i.'">
 			<table border="0" cellpadding="1" cellspacing="0" width="100%">
 				<tr>
-					<td><img src="'.$image.'" align="middle" border="0"></td>
-					<td width="100%"><b>'.$start_hour.' - '.$end_hour.'</b></td>
+					<td width="10%" align="center"><img src="'.$image.'" align="middle" border="0"></td>
+					<td width="90%"><b>'.$start_hour.' - '.$end_hour.'</b></td>
 				</tr>
 				<tr>
-					<td>';
-			if($shared)
+					<td align="center">'.$recurring;
+
+			$eventlayer .= '</td>
+					<td><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&viewtype=calendar&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
+				</tr>
+				<tr><td align="center">';
+			if($act[$i]->shared)
 				$eventlayer .= '<img src="'.$cal['IMAGE_PATH'].'cal12x12Shared.gif" align="middle" border="0">';
 			else
 				$eventlayer .= '&nbsp;';
-			$eventlayer .= '	
-				</td>
-					<td><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&viewtype=calendar&parenttab='.$category.'"><span class="orgTab">'.$subject.'</span></a></td>
-				</tr>
-				<tr><td>'.$action_str.'</td><td>('.$user.' | '.$eventstatus.' | '.$priority.')</td>
+			$eventlayer .= '</td><td>('.$user.' | '.getTranslatedString($eventstatus).' | '.getTranslatedString($priority).')</td></tr>
+			<tr><td align="center">'.$action_str.'</td><td>&nbsp;</td></tr>
+
 			</table>
-		        </div><br>';
+			</div><br>';
                 }
 		$cal_log->debug("Exiting getweekEventLayer() method...");
 		return $eventlayer;
@@ -1259,27 +1218,14 @@ function getmonthEventLayer(& $cal,$slice)
                         $subject = $act[$i]->subject;
                         if(strlen($subject)>10)
                                 $subject = substr($subject,0,10)."...";
-			$start_time = $act[$i]->start_time->hour.':'.$act[$i]->start_time->minute;
-			$end_time = $act[$i]->end_time->hour.':'.$act[$i]->end_time->minute;
 			$format = $cal['calendar']->hour_format;
-                        $duration_hour = $act[$i]->duration_hour;
-                        $duration_min = $act[$i]->duration_minute;
-                        //$st_end_time = convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hour,$duration_min);
-                        //$start_hour = $st_end_time['starttime'];
-                        //$end_hour = $st_end_time['endtime'];
-			$value = getaddEventPopupTime($start_time,$end_time,$format);
-			$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
-			$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
+			$start_hour = timeString($act[$i]->start_time,$format);
+                        $end_hour = timeString($act[$i]->end_time,$format);
                         $account_name = $act[$i]->accountname;
                         $image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
 			$color = $act[$i]->color;
 			$eventlayer .='<div class ="event" id="event_'.$cal['calendar']->month_array[$slice]->start_time->hour.'_'.$i.'">
-					<table border="0" cellpadding="1" cellspacing="0" width="100%">
-						<tr>
-							<td><img src="'.$image.'" align="middle" border="0"></td>
-							<td width="100%"><a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&viewtype=calendar&parenttab='.$category.'"><span class="orgTab"><small>'.$start_hour.' - '.$end_hour.'</small></span></td>
-						</tr>
-					</table>
+			<nobr><img src="'.$image.'" border="0"></img>&nbsp;<a href="index.php?action=DetailView&module=Calendar&record='.$id.'&activity_mode=Events&viewtype=calendar&parenttab='.$category.'"><span class="orgTab">'.$start_hour.' - '.$end_hour.'</span></a></nobr>
                                 </div><br>';
                 }
 		if($remin_list != null)
@@ -1307,12 +1253,33 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	global $log;
 	$Entries = Array();
 	$category = getParentTab();
-	global $adb,$current_user,$mod_strings,$cal_log;
+	global $adb,$current_user,$mod_strings,$app_strings,$cal_log,$listview_max_textlength,$list_max_entries_per_page;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
         require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	$cal_log->debug("Entering getEventList() method...");
-	$shared_ids = getSharedCalendarId($current_user->id);
-	$query = "SELECT vtiger_groups.groupname, vtiger_users.user_name,
+
+	//modified query to fix the ticket #5014 & #5180
+	$and = "AND ((((vtiger_activity.date_start between ? AND ?)
+		OR (vtiger_activity.date_start < ? AND vtiger_activity.due_date > ?)
+		OR (vtiger_activity.due_date between ? AND ?))
+		AND (vtiger_recurringevents.activityid is NULL))
+		OR (vtiger_recurringevents.recurringdate BETWEEN ? AND ?))";
+
+	$count_qry = "SELECT count(*) as count FROM vtiger_activity
+		INNER JOIN vtiger_crmentity
+		ON vtiger_crmentity.crmid = vtiger_activity.activityid
+		LEFT JOIN vtiger_activitygrouprelation
+		ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
+		LEFT JOIN vtiger_groups
+		ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+		LEFT JOIN vtiger_users
+		ON vtiger_users.id = vtiger_crmentity.smownerid
+		LEFT OUTER JOIN vtiger_recurringevents
+		ON vtiger_recurringevents.activityid = vtiger_activity.activityid
+		WHERE vtiger_crmentity.deleted = 0
+		AND (vtiger_activity.activitytype = 'Meeting' OR vtiger_activity.activitytype = 'Call') $and ";
+		
+	$query = "SELECT vtiger_groups.groupname, vtiger_users.user_name,vtiger_crmentity.smownerid,
        		vtiger_activity.* FROM vtiger_activity
 		INNER JOIN vtiger_crmentity
 			ON vtiger_crmentity.crmid = vtiger_activity.activityid
@@ -1325,18 +1292,34 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		LEFT OUTER JOIN vtiger_recurringevents
 			ON vtiger_recurringevents.activityid = vtiger_activity.activityid
 		WHERE vtiger_crmentity.deleted = 0
-			AND (vtiger_activity.activitytype = 'Meeting' OR vtiger_activity.activitytype = 'Call')
-			AND (vtiger_activity.date_start BETWEEN '".$start_date."' AND '".$end_date."'
-				OR vtiger_recurringevents.recurringdate BETWEEN '".$start_date."' AND '".$end_date."') ";
+			AND (vtiger_activity.activitytype = 'Meeting' OR vtiger_activity.activitytype = 'Call') $and ";
+			
+	$params = $info_params = array($start_date, $end_date, $start_date, $end_date, $start_date, $end_date, $start_date, $end_date);
 	if($info != '')
 	{
-		$com_q = " AND vtiger_crmentity.smownerid = ".$current_user->id."
-			GROUP BY vtiger_activity.activityid";
+		$groupids = explode(",", fetchUserGroupids($current_user->id)); // Explode can be removed, once implode is removed from fetchUserGroupids
+		if (count($groupids) > 0) {
+
+			$com_q = " AND (vtiger_crmentity.smownerid = ?
+					OR vtiger_groups.groupid in (". generateQuestionMarks($groupids) ."))
+					GROUP BY vtiger_activity.activityid";
+		} else {			
+			$com_q = " AND vtiger_crmentity.smownerid = ?
+				GROUP BY vtiger_activity.activityid";
+		}
+			
 		$pending_query = $query." AND (vtiger_activity.eventstatus = 'Planned')".$com_q;
 		$total_q =  $query."".$com_q;
-		$total_res = $adb->query($total_q);
+		array_push($info_params, $current_user->id);
+		
+		if (count($groupids) > 0) {
+			array_push($info_params, $groupids);
+		}
+		
+		$total_res = $adb->pquery($total_q, $info_params);
 		$total = $adb->num_rows($total_res);
-		$res = $adb->query($pending_query);
+
+		$res = $adb->pquery($pending_query, $info_params);
 		$pending_rows = $adb->num_rows($res);
 		$cal_log->debug("Exiting getEventList() method...");
 		return Array('totalevent'=>$total,'pendingevent'=>$pending_rows);
@@ -1345,49 +1328,75 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	{
 		$sec_parameter=getListViewSecurityParameter('Calendar');
 		$query .= $sec_parameter;
+		$count_qry .= $sec_parameter;
 	}
-	/*if(!is_admin($current_user))
-		$query .= " AND vtiger_crmentity.smownerid in (".$shared_ids.") ";*/
-		
-	$query .= "GROUP BY vtiger_activity.activityid ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
+	if(isset($_REQUEST['type']) && $_REQUEST['type'] == 'search')
+	{
+		$search_where = calendar_search_where($_REQUEST['field_name'],$_REQUEST['search_option'],$_REQUEST['search_text']);
+		$group_cond .= $search_where; 
+		$count_qry .= $search_where;
+	}		
+	$group_cond .= " GROUP BY vtiger_activity.activityid ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
+	$count_qry .= ' GROUP BY vtiger_activity.activityid ';
+	$count_res = $adb->pquery($count_qry, $params);
+	$total_rec_count = $adb->num_rows($count_res);
+	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
+		$start = $_REQUEST['start'];
+	else
+		$start = 1;
+	$navigation_array = getNavigationValues($start, $total_rec_count, $list_max_entries_per_page);
+	$start_rec = $navigation_array['start'];
+	$end_rec = $navigation_array['end_val'];
+	if($start_rec <= 1)
+		$start_rec = 0;
+	else
+		$start_rec = $start_rec-1;
+	$query .= $group_cond." limit $start_rec,$list_max_entries_per_page";
+
  	if( $adb->dbType == "pgsql")
  	    $query = fixPostgresQuery( $query, $log, 0);
-	$result = $adb->query($query);
+		
+	$result = $adb->pquery($query, $params);
 	$rows = $adb->num_rows($result);
+	$c = 0;
+	if($start > 1)
+		$c = ($start-1) * $list_max_entries_per_page;
 	for($i=0;$i<$rows;$i++)
 	{
 		$element = Array();
-		$element['no'] = $i+1;
+		$element['no'] = $c+1;
 		$image_tag = "";
 		$contact_data = "";
 		$more_link = "";
-		$duration_hour = $adb->query_result($result,$i,"duration_hours");
-                $duration_min = $adb->query_result($result,$i,"duration_minutes");
 		$start_time = $adb->query_result($result,$i,"time_start");
 		$end_time = $adb->query_result($result,$i,"time_end");
 		$format = $calendar['calendar']->hour_format;
-		//$st_end_time = convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hour,$duration_min);
 		$value = getaddEventPopupTime($start_time,$end_time,$format);
 		$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
 		$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
-		if($calendar['view'] == 'day')
-		{
-			$element['starttime'] = $start_hour;
-                	$element['endtime'] = $end_hour;
-		}
-		else
-		{
-			$date_start = $adb->query_result($result,$i,"date_start");
-			$due_date = $adb->query_result($result,$i,"due_date");
-			$element['starttime'] = getDisplayDate($date_start);
-			$element['endtime'] = getDisplayDate($due_date);
-		}
+		$date_start = $adb->query_result($result,$i,"date_start");
+		$due_date = $adb->query_result($result,$i,"due_date");
+		$element['starttime'] = getDisplayDate($date_start).' '.$start_hour;
+		$element['endtime'] = getDisplayDate($due_date).' '.$end_hour;
 		$contact_id = $adb->query_result($result,$i,"contactid");
 		$id = $adb->query_result($result,$i,"activityid");
 		$subject = $adb->query_result($result,$i,"subject");
-		$eventstatus = $adb->query_result($result,$i,"eventstatus");
-                if(strlen($subject)>25)
-	                $subject = substr($subject,0,25)."...";
+		$eventstatus = getTranslatedString($adb->query_result($result,$i,"eventstatus"));
+		$assignedto = $adb->query_result($result,$i,"user_name");
+		$userid = $adb->query_result($result,$i,"smownerid");
+		$idShared = "normal";
+		if(!empty($assignedto) && $userid != $current_user->id && $adb->query_result($result,$i,"visibility") == "Public")
+		{
+			$que = "select * from vtiger_sharedcalendar where sharedid=? and userid=?";
+			$row = $adb->pquery($que, array($current_user->id, $userid));
+			$no = $adb->getRowCount($row);
+			if($no > 0) $idShared = "shared";
+			else  $idShared = "normal";
+				
+
+		}
+                if(strlen($subject)>$listview_max_textlength)
+	                $subject = substr($subject,0,$listview_max_textlength)."...";
 		if($contact_id != '')
 		{
 			$contactname = getContactName($contact_id);
@@ -1396,25 +1405,66 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$more_link = "<a href='index.php?action=DetailView&module=Calendar&record=".$id."&activity_mode=Events&viewtype=calendar&parenttab=".$category."' class='webMnu'>[".$mod_strings['LBL_MORE']."...]</a>";
 		$type = $adb->query_result($result,$i,"activitytype");
 		if($type == 'Call')
-			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Calls.gif' align='middle'>&nbsp;".$type;
+			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Calls.gif' align='middle'>&nbsp;".$app_strings['Call'];
 		if($type == 'Meeting')
-			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Meetings.gif' align='middle'>&nbsp;".$type;
+			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Meetings.gif' align='middle'>&nbsp;".$app_strings['Meeting'];
         	$element['eventtype'] = $image_tag;
 		$element['eventdetail'] = $contact_data." ".$subject."&nbsp;".$more_link;
-		if(isPermitted("Calendar","EditView") == "yes")
-			$element['action'] ="<img onClick='getcalAction(this,\"eventcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\",\"event\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+		/*if(getFieldVisibilityPermission('Events',$current_user->id,'parent_id') == '0')
+		{
+			$element['relatedto']= getRelatedTo('Calendar',$result,$i);
+		}*/
+		if($idShared == "normal")
+		{
+			if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete")=="yes")
+				$element['action'] ="<img onClick='getcalAction(this,\"eventcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"event\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+		}
 		else
-			$element['action'] ="&nbsp;";
-        	$element['status'] = $adb->query_result($result,$i,"eventstatus");
-		$assignedto = $adb->query_result($result,$i,"user_name");
+		{
+			if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete")=="yes")
+				$element['action']="<img onClick=\"alert('".$mod_strings["SHARED_EVENT_DEL_MSG"]."')\"; src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+		}
+		if(getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0')
+		{
+			if(!$is_admin && $eventstatus != '')
+			{
+				$roleid=$current_user->roleid;
+				$roleids = Array();
+				$subrole = getRoleSubordinates($roleid);
+				if(count($subrole)> 0)
+				$roleids = $subrole;
+				array_push($roleids, $roleid);
+
+				//here we are checking wheather the table contains the sortorder column .If  sortorder is present in the main picklist table, then the role2picklist will be applicable for this table...
+
+				$sql="select * from vtiger_eventstatus where eventstatus=?";
+				$res = $adb->pquery($sql,array(decode_html($eventstatus)));
+				$picklistvalueid = $adb->query_result($res,0,'picklist_valueid');
+				if ($picklistvalueid != null) {
+					$pick_query="select * from vtiger_role2picklist where picklistvalueid=$picklistvalueid and roleid in (". generateQuestionMarks($roleids) .")";
+					$res_val=$adb->pquery($pick_query,array($roleids));
+					$num_val = $adb->num_rows($res_val);
+				}
+				if($num_val > 0)
+				$element['status'] = $eventstatus;
+				else
+				$element['status'] = "<font color='red'>".$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
+
+
+			}else
+			$element['status'] = decode_html($eventstatus);
+		}
 		if(!empty($assignedto))
 			$element['assignedto'] = $assignedto;
 		else
 			$element['assignedto'] = $adb->query_result($result,$i,"groupname");
-	$Entries[] = $element;
+		$c++;
+		$Entries[] = $element;
 	}
+	$ret_arr[0] = $Entries;
+        $ret_arr[1] = $navigation_array;
 	$cal_log->debug("Exiting getEventList() method...");
-	return $Entries;
+	return $ret_arr;
 }
 
 /**
@@ -1427,14 +1477,27 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
  */
 function getTodoList(& $calendar,$start_date,$end_date,$info='')
 {
-	global $log;
+	global $log,$app_strings;
         $Entries = Array();
 	$category = getParentTab();
-	global $adb,$current_user,$mod_strings,$cal_log;
+	global $adb,$current_user,$mod_strings,$cal_log,$list_max_entries_per_page;
 	$cal_log->debug("Entering getTodoList() method...");
-	$shared_ids = getSharedCalendarId($current_user->id);
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	$count_qry = "SELECT count(*) as count FROM vtiger_activity
+		INNER JOIN vtiger_crmentity
+		ON vtiger_crmentity.crmid = vtiger_activity.activityid
+		LEFT JOIN vtiger_cntactivityrel
+		ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
+		LEFT JOIN vtiger_activitygrouprelation
+		ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
+		LEFT JOIN vtiger_groups
+		ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+		LEFT JOIN vtiger_users
+		ON vtiger_users.id = vtiger_crmentity.smownerid
+		WHERE vtiger_crmentity.deleted = 0
+		AND vtiger_activity.activitytype = 'Task'
+		AND (vtiger_activity.date_start BETWEEN ? AND ?)";
         $query = "SELECT vtiger_groups.groupname, vtiger_users.user_name, vtiger_cntactivityrel.contactid, 
 		vtiger_activity.* FROM vtiger_activity
                 INNER JOIN vtiger_crmentity
@@ -1449,47 +1512,85 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 			ON vtiger_users.id = vtiger_crmentity.smownerid
                 WHERE vtiger_crmentity.deleted = 0
                         AND vtiger_activity.activitytype = 'Task'
-                        AND (vtiger_activity.date_start BETWEEN '".$start_date."' AND '".$end_date."')";
+                        AND (vtiger_activity.date_start BETWEEN ? AND ?)";
+		
+		$params = $info_params = array($start_date, $end_date);
         if($info != '')
-        {
-		$com_q = " AND vtiger_crmentity.smownerid = ".$current_user->id;
-                $pending_query = $query." AND (vtiger_activity.status != 'Completed')".$com_q;
-		$total_q =  $query."".$com_q;
-		if( $adb->dbType == "pgsql")
-		{
- 		    $pending_query = fixPostgresQuery( $pending_query, $log, 0);
-		    $total_q = fixPostgresQuery( $total_q, $log, 0);
-		}
-		$total_res = $adb->query($total_q);
-		$total = $adb->num_rows($total_res);
-                $res = $adb->query($pending_query);
-                $pending_rows = $adb->num_rows($res);
-		$cal_log->debug("Exiting getTodoList() method...");
-		return Array('totaltodo'=>$total,'pendingtodo'=>$pending_rows);
+	{
+			//added to fix #4816
+			$groupids = explode(",", fetchUserGroupids($current_user->id));
+			if (count($groupids) > 0) {
+				$com_q = " AND (vtiger_crmentity.smownerid = ?
+					OR vtiger_groups.groupid in (". generateQuestionMarks($groupids) ."))";
+			} else {			
+				$com_q = " AND vtiger_crmentity.smownerid = ?";
+			}
+			//end
+
+			$pending_query = $query." AND (vtiger_activity.status != 'Completed')".$com_q;
+			$total_q =  $query."".$com_q;
+			array_push($info_params, $current_user->id);
+
+			if (count($groupids) > 0) {
+				array_push($info_params, $groupids);
+			}	
+
+			if( $adb->dbType == "pgsql")
+			{
+ 		    	$pending_query = fixPostgresQuery( $pending_query, $log, 0);
+		    	$total_q = fixPostgresQuery( $total_q, $log, 0);
+			}
+			$total_res = $adb->pquery($total_q, $info_params);
+			$total = $adb->num_rows($total_res);
+                
+			$res = $adb->pquery($pending_query, $info_params);
+		        $pending_rows = $adb->num_rows($res);
+		
+			$cal_log->debug("Exiting getTodoList() method...");
+			return Array('totaltodo'=>$total,'pendingtodo'=>$pending_rows);
         }
 	
 	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[9] == 3)
 	{
 		$sec_parameter=getListViewSecurityParameter('Calendar');
 		$query .= $sec_parameter;
+		$count_qry .= $sec_parameter;
 	}
-								
-	/*if(!is_admin($current_user))
-                $query .= " AND vtiger_crmentity.smownerid in (".$shared_ids.")";*/
-        $query .= " ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
+	$group_cond = '';
+	$count_res = $adb->pquery($count_qry, $params);
+        $total_rec_count = $adb->query_result($count_res,0,'count');
+	$group_cond .= " ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
+	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')     
+		$start = $_REQUEST['start'];
+	else 
+		$start = 1;
+	$navigation_array = getNavigationValues($start, $total_rec_count, $list_max_entries_per_page);
+	
+	$start_rec = $navigation_array['start']; 
+	$end_rec = $navigation_array['end_val'];
+	if($start_rec <= 1)
+		$start_rec = 0;
+	else
+		$start_rec = $start_rec-1;
+	$query .= $group_cond." limit $start_rec,$list_max_entries_per_page";
+		
 	if( $adb->dbType == "pgsql")
  	    $query = fixPostgresQuery( $query, $log, 0);
 
-        $result = $adb->query($query);
-        $rows = $adb->num_rows($result);
+    $result = $adb->pquery($query, $params);
+    $rows = $adb->num_rows($result);
+	$c=0;
+	if($start > 1)
+		$c = ($start-1) * $list_max_entries_per_page;
 	for($i=0;$i<$rows;$i++)
         {
+		
                 $element = Array();
-                $element['no'] = $i+1;
+		$contact_name = '';
+                $element['no'] = $c+1;
                 $more_link = "";
                 $start_time = $adb->query_result($result,$i,"time_start");
                 $format = $calendar['calendar']->hour_format;
-                //$st_end_time = convertStEdTime2UserSelectedFmt($format,$start_time);
 		$value = getaddEventPopupTime($start_time,$start_time,$format);
                 $element['starttime'] = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
 		$date_start = $adb->query_result($result,$i,"date_start");
@@ -1500,23 +1601,71 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 
                 $id = $adb->query_result($result,$i,"activityid");
                 $subject = $adb->query_result($result,$i,"subject");
-		$status = $adb->query_result($result,$i,"status");
+		//CHANGE : TO IMPROVE PERFORMANCE
+		/*$contact_id = $adb->query_result($result,$i,"contactid");
+		if($contact_id!='')
+		{
+			$contact_name = getContactName($contact_id);
+		}*/
+		
 		$more_link = "<a href='index.php?action=DetailView&module=Calendar&record=".$id."&activity_mode=Task&viewtype=calendar&parenttab=".$category."' class='webMnu'>".$subject."</a>";
 		$element['tododetail'] = $more_link;
-		$element['status'] = $adb->query_result($result,$i,"status");
-		if(isPermitted("Calendar","EditView") == "yes")
-			$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->day."\",\"".$calendar['calendar']->date_time->month."\",\"".$calendar['calendar']->date_time->year."\",\"todo\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
-		else
-			$element['action'] ="&nbsp;";
+		/*if(getFieldVisibilityPermission('Calendar',$current_user->id,'parent_id') == '0')
+		{
+			$element['task_relatedto'] = getRelatedTo('Calendar',$result,$i);
+		}
+		if(getFieldVisibilityPermission('Calendar',$current_user->id,'contact_id') == '0')
+		{
+			$element['task_contact'] = "<a href=\"index.php?module=Contacts&action=DetailView&record=".$contact_id."\">".$contact_name."</a>";
+		}*/
+		if(getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0')
+		{
+			$taskstatus = getTranslatedString(decode_html($adb->query_result($result,$i,"status")));
+
+			if(!$is_admin && $taskstatus != '')
+			{
+				$roleid=$current_user->roleid;
+				$roleids = Array();
+				$subrole = getRoleSubordinates($roleid);
+				if(count($subrole)> 0)
+				$roleids = $subrole;
+				array_push($roleids, $roleid);
+
+				//here we are checking wheather the table contains the sortorder column .If  sortorder is present in the main picklist table, then the role2picklist will be applicable for this table...
+
+				$sql="select * from vtiger_taskstatus where taskstatus=?";
+				$res = $adb->pquery($sql,array(decode_html($taskstatus)));
+				$picklistvalueid = $adb->query_result($res,0,'picklist_valueid');
+				if ($picklistvalueid != null) {
+					$pick_query="select * from vtiger_role2picklist where picklistvalueid=$picklistvalueid and roleid in (". generateQuestionMarks($roleids) .")";
+					$res_val=$adb->pquery($pick_query,array($roleids));
+					$num_val = $adb->num_rows($res_val);
+				}
+				if($num_val > 0)
+				$element['status'] = $taskstatus;
+				else
+				$element['status'] = "<font color='red'>".$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
+
+
+			}else
+			$element['status'] = decode_html($taskstatus);
+			
+			
+		}
+		if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
+			$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"todo\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
 		$assignedto = $adb->query_result($result,$i,"user_name");
 		if(!empty($assignedto))
 			$element['assignedto'] = $assignedto;
 		else
 			$element['assignedto'] = $adb->query_result($result,$i,"groupname");
+		$c++;
 		$Entries[] = $element;
 	}
+	$ret_arr[0] = $Entries;
+        $ret_arr[1] = $navigation_array;
 	$cal_log->debug("Exiting getTodoList() method...");
-	return $Entries;
+	return $ret_arr;
 }
 
 /**
@@ -1525,39 +1674,50 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
  * @param string   $mode             - string 'listcnt' or may be empty. if empty means get Events/Todos ListView else get total events/todos and no. of pending events/todos Info.
  * return array    $event_todo_info  - collection of events/todos info.
  */
-function getEventTodoInfo(& $cal, $mode)
+function getEventInfo(& $cal, $mode)
 {
 	global $mod_strings,$cal_log;
-	$cal_log->debug("Entering getEventTodoInfo() method...");
-	$event_todo = Array();
-	$event_todo['event']=getEventListView($cal, $mode);
-	$event_todo['todo'] = getTodosListView($cal, $mode);
-	$event_todo_info = "";
-	$event_todo_info .= $mod_strings['LBL_TOTALEVENTS']."&nbsp;".$event_todo['event']['totalevent'];
-	if($event_todo['event']['pendingevent'] != null)
-		 $event_todo_info .= ", ".$event_todo['event']['pendingevent']."&nbsp;".$mod_strings['LBL_PENDING'];
-	$event_todo_info .=" / ";
-	$event_todo_info .=$mod_strings['LBL_TOTALTODOS']."&nbsp;".$event_todo['todo']['totaltodo'];
-	if($event_todo['todo']['pendingtodo'] != null)
-		$event_todo_info .= ", ".$event_todo['todo']['pendingtodo']."&nbsp;".$mod_strings['LBL_PENDING'];
-	$cal_log->debug("Exiting getEventTodoInfo() method...");
+	$cal_log->debug("Entering getEventInfo() method...");
+	$event = Array();
+	$event['event']=getEventListView($cal, $mode);
+	$event_info = "";
+	$event_info .= $mod_strings['LBL_TOTALEVENTS']."&nbsp;".$event['event']['totalevent'];
+	if($event['event']['pendingevent'] != null)
+		 $event_info .= ", ".$event['event']['pendingevent']."&nbsp;".$mod_strings['LBL_PENDING'];
+	$cal_log->debug("Exiting getEventInfo() method...");
 	
-	return $event_todo_info;
+	return $event_info;
 }
+
+function getTodoInfo(& $cal, $mode)
+{
+        global $mod_strings,$cal_log;
+        $cal_log->debug("Entering getTodoInfo() method...");
+        $todo = Array();
+        $todo['todo'] = getTodosListView($cal, $mode);
+        $todo_info = "";
+        $todo_info .=$mod_strings['LBL_TOTALTODOS']."&nbsp;".$todo['todo']['totaltodo'];
+        if($todo['todo']['pendingtodo'] != null)
+                $todo_info .= ", ".$todo['todo']['pendingtodo']."&nbsp;".$mod_strings['LBL_PENDING'];
+        $cal_log->debug("Exiting getTodoInfo() method...");
+
+        return $todo_info;
+}
+
 
 /**
  * Function creates HTML to display Events ListView
  * @param array  $entry_list    - collection of strings(Event Information)
  * return string $list_view     - html tags in string format
  */
-function constructEventListView(& $cal,$entry_list)
+function constructEventListView(& $cal,$entry_list,$navigation_array='')
 {
 	global $mod_strings,$app_strings,$cal_log,$current_user;
 	$cal_log->debug("Entering constructEventListView() method...");
 	$format = $cal['calendar']->hour_format;
 	$date_format = $current_user->date_format;
-	$hour_startat = convertTime2UserSelectedFmt($format,$cal['calendar']->day_start_hour,false);
-	$hour_endat = convertTime2UserSelectedFmt($format,($cal['calendar']->day_start_hour+1),false);
+	$hour_startat = timeString(array('hour'=>date('H:i'),'minute'=>0),'24');
+        $hour_endat = timeString(array('hour'=>date('H:i',(time() + (60 * 60))),'minute'=>0),'24');
 	$time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
 	$temp_ts = $cal['calendar']->date_time->ts;
 	//to get date in user selected date format
@@ -1570,39 +1730,49 @@ function constructEventListView(& $cal,$entry_list)
 		$endtemp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$endtemp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$endtemp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $endtemp_ts)):(''))));
 	}
 	$list_view = "";
-	if($cal['view'] == 'day')
-	{
-		$start_datetime = $mod_strings['LBL_APP_START_TIME'];
-		$end_datetime = $mod_strings['LBL_APP_END_TIME'];
-	}
-	else
-	{
-		 $start_datetime = $mod_strings['LBL_APP_START_DATE'];
-		 $end_datetime = $mod_strings['LBL_APP_END_DATE'];
-				 
-	}
+	$start_datetime = $app_strings['LBL_START_DATE_TIME'];
+	$end_datetime = $app_strings['LBL_END_DATE_TIME'];
 	//Events listview header labels
 	$header = Array('0'=>'#',
                         '1'=>$start_datetime,
                         '2'=>$end_datetime,
                         '3'=>$mod_strings['LBL_EVENTTYPE'],
-                        '4'=>$mod_strings['LBL_EVTDTL'],
-                        '5'=>$mod_strings['LBL_ACTION'],
-                        '6'=>$mod_strings['LBL_STATUS'],
-			'7'=>$mod_strings['LBL_ASSINGEDTO'],
-                        );
-        $header_width = Array('0'=>'5%',
-                              '1'=>'10%',
-                              '2'=>'10%',
-                              '3'=>'10%',
-                              '4'=>'28%',
-                              '5'=>'10%',
-                              '6'=>'10%',
-			      '7'=>'15%'
-                             );
+                        '4'=>$mod_strings['LBL_EVENTDETAILS']
+			);
+	$header_width = Array('0'=>'5%',
+			      '1'=>'15%',
+			      '2'=>'15%',
+			      '3'=>'10%',
+			      '4'=>'33%'
+		             );
+	/*if(getFieldVisibilityPermission('Events',$current_user->id,'parent_id') == '0')
+	{
+		array_push($header,$mod_strings['LBL_RELATEDTO']);
+		array_push($header_width,'15%');
+	}*/
+	if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
+	{
+		array_push($header,$mod_strings['LBL_ACTION']);
+		 array_push($header_width,'10%');
+	}
+	if(getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0')
+	{
+		array_push($header,$mod_strings['LBL_STATUS']);
+		array_push($header_width,'$10%');
+	}
+	array_push($header,$mod_strings['LBL_ASSINGEDTO']);
+	array_push($header_width,'15%');
+	
         $list_view .="<table style='background-color: rgb(204, 204, 204);' class='small' align='center' border='0' cellpadding='5' cellspacing='1' width='98%'>
                         <tr>";
 	$header_rows = count($header);
+	$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Calendar","index");
+	if($navigationOutput != '')
+	{
+		$list_view .= "<tr width=100% bgcolor=white><td align=center colspan=$header_rows>";
+		$list_view .= "<table align=center width='98%'><tr>".$navigationOutput."</tr></table></td></tr>";
+	}
+	$list_view .= "<tr>";
         for($i=0;$i<$header_rows;$i++)
         {
                 $list_view .="<td nowrap='nowrap' class='lvtCol' width='".$header_width[$i]."'>".$header[$i]."</td>";
@@ -1623,7 +1793,7 @@ function constructEventListView(& $cal,$entry_list)
 	}
 	else
 	{
-		$list_view .="<tr><td style='background-color:#efefef;height:340px' align='center' colspan='8'>
+		$list_view .="<tr><td style='background-color:#efefef;height:340px' align='center' colspan='9'>
 				";
 			$list_view .="<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 45%; position: relative; z-index: 5000;'>
 					<table border='0' cellpadding='5' cellspacing='0' width='98%'>
@@ -1661,15 +1831,15 @@ function constructEventListView(& $cal,$entry_list)
  * @param array  $cal           - collection of objects and strings 
  * return string $list_view     - html tags in string format
  */
-function constructTodoListView($todo_list,$cal,$subtab)
+function constructTodoListView($todo_list,$cal,$subtab,$navigation_array='')
 {
 	global $mod_strings,$cal_log;
 	$cal_log->debug("Entering constructTodoListView() method...");
         global $current_user,$app_strings;
         $date_format = $current_user->date_format;
         $format = $cal['calendar']->hour_format;
-        $hour_startat = convertTime2UserSelectedFmt($format,$cal['calendar']->day_start_hour,false);
-        $hour_endat = convertTime2UserSelectedFmt($format,($cal['calendar']->day_start_hour+1),false);
+	$hour_startat = timeString(array('hour'=>date('H:i'),'minute'=>0),'24');
+        $hour_endat = timeString(array('hour'=>date('H:i',(time() + (60 * 60))),'minute'=>0),'24');
         $time_arr = getaddEventPopupTime($hour_startat,$hour_endat,$format);
         $temp_ts = $cal['calendar']->date_time->ts;
 	//to get date in user selected date format
@@ -1685,32 +1855,71 @@ function constructTodoListView($todo_list,$cal,$subtab)
 	//labels of listview header
 	if($cal['view'] == 'day')
 	{
-		$colspan = 7;
+		$colspan = 9;
 		$header = Array('0'=>'#','1'=>$mod_strings['LBL_TIME'],'2'=>$mod_strings['LBL_LIST_DUE_DATE'],
-				'3'=>$mod_strings['LBL_TODO'],'4'=>$mod_strings['LBL_STATUS'],'5'=>$mod_strings['LBL_ACTION'],'6'=>$mod_strings['LBL_ASSINGEDTO'],);
-		$header_width = Array('0'=>'5%','1'=>'10%','2'=>'10%','3'=>'38%','4'=>'10%','5'=>'10%', '6'=>'15%', );
+				'3'=>$mod_strings['LBL_TODO']);
+		$header_width = Array('0'=>'5%','1'=>'10%','2'=>'10%','3'=>'38%',);		
+		/*if(getFieldVisibilityPermission('Calendar',$current_user->id,'parent_id') == '0')
+		{
+			array_push($header,$mod_strings['LBL_RELATEDTO']);
+			array_push($header_width,'15%');
+		}
+		if(getFieldVisibilityPermission('Calendar',$current_user->id,'contact_id') == '0')
+		{
+			array_push($header,$mod_strings['LBL_CONTACT_NAME']);
+			array_push($header_width,'15%');
+		}*/
+		if(getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0')
+		{
+			array_push($header,$mod_strings['LBL_STATUS']);
+			array_push($header_width,'10%');
+		}
+
+		if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
+		{
+			array_push($header,$mod_strings['LBL_ACTION']);
+			array_push($header_width,'10%');
+		}
+		array_push($header,$mod_strings['LBL_ASSINGEDTO']);
+		array_push($header_width,'15%');
 	}
 	else
 	{
-		$colspan = 8;
+		$colspan = 10;
 	        $header = Array('0'=>'#',
                         '1'=>$mod_strings['LBL_TIME'],
-			'2'=>$mod_strings['LBL_APP_START_DATE'],
-			'3'=>$mod_strings['LBL_LIST_DUE_DATE'],
-                        '4'=>$mod_strings['LBL_TODO'],
-                        '5'=>$mod_strings['LBL_STATUS'],
-                        '6'=>$mod_strings['LBL_ACTION'],
-			'7'=>$mod_strings['LBL_ASSINGEDTO'],
-                       );
-        	$header_width = Array('0'=>'5%',
-                              '1'=>'10%',
-                              '2'=>'10%',
-                              '3'=>'10%',
-                              '4'=>'28%',
-			      '5'=>'10%',
-			      '6'=>'10%',
-			      '7'=>'15%',
-                             );
+			'2'=>$mod_strings['LBL_START_DATE'],
+			'3'=>$mod_strings['LBL_DUE_DATE'],
+                        '4'=>$mod_strings['LBL_TODO']
+			);
+		$header_width = Array('0'=>'5%',
+			'1'=>'10%',
+			'2'=>'10%',
+			'3'=>'10%',
+			'4'=>'28%'
+			);
+		/*if(getFieldVisibilityPermission('Calendar',$current_user->id,'parent_id') == '0')
+		{
+			array_push($header,$mod_strings['LBL_RELATEDTO']);
+			array_push($header_width,'15%');
+		}
+		if(getFieldVisibilityPermission('Calendar',$current_user->id,'contact_id') == '0')
+		{
+			array_push($header,$mod_strings['LBL_CONTACT_NAME']);
+			array_push($header_width,'15%');
+		}*/
+		if(getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0')
+		{
+			array_push($header,$mod_strings['LBL_STATUS']);
+			array_push($header_width,'10%');
+		}
+		if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
+		{
+			array_push($header,$mod_strings['LBL_ACTION']);
+		}
+		array_push($header,$mod_strings['LBL_ASSINGEDTO']);
+		array_push($header_width,'15%');
+		
 	}
 	$list_view .="<table align='center' border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tr><td colspan='3'>&nbsp;</td></tr>";
@@ -1726,14 +1935,21 @@ function constructTodoListView($todo_list,$cal,$subtab)
 			{
 				$list_view .="<tr><td>&nbsp;</td>";
 			}
-			$list_view .="<td align='center' width='60%'>&nbsp;</td>
+			$list_view .="<td align='center' width='60%'><span id='total_activities'>".getTodoInfo($cal,'listcnt')."</span>&nbsp;</td>
 				<td align='right' width='28%'>&nbsp;</td>
 			</tr>
 		</table>
 
 			<br><table style='background-color: rgb(204, 204, 204);' class='small' align='center' border='0' cellpadding='5' cellspacing='1' width='98%'>
-                        <tr>";
-        $header_rows = count($header);
+                        ";
+	$header_rows = count($header);
+	$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Calendar","index");
+	if($navigationOutput != '')
+	{
+		$list_view .= "<tr width=100% bgcolor=white><td align=center colspan=$header_rows>";
+		$list_view .= "<table align=center width='98%'><tr>".$navigationOutput."</tr></table></td></tr>";
+	}
+	$list_view .= "<tr>";
         for($i=0;$i<$header_rows;$i++)
         {
                 $list_view .="<td class='lvtCol' width='".$header_width[$i]."' nowrap='nowrap'>".$header[$i]."</td>";
@@ -1785,175 +2001,4 @@ function constructTodoListView($todo_list,$cal,$subtab)
         return $list_view;
 }
 
-/**
- * Function to convert time to user selected format
- * @param  string    $format                      - hour format. either 'am/pm' or '24'
- * @param  string    $time                        - time
- * @param  boolean   $format_check                - true/false
- * return  string    $hour                        - time string
- */
-function convertTime2UserSelectedFmt($format,$time,$format_check)
-{
-	global $cal_log;
-	$cal_log->debug("Entering convertTime2UserSelectedFmt() method...");
-	if($format == 'am/pm' && $format_check)
-        {
-		if($time>='12')
-                {
-			if($time == '12')
-				$hour = $time;
-			else
-				$hour = $time - 12;
-			$hour = $hour.":00pm";
-		}
-		else
-                {
-                        $hour = $time;
-			$hour = $hour.":00am";
-		}
-		$cal_log->debug("Exiting convertTime2UserSelectedFmt() method...");
-		return $hour;
-	}
-	else
-        {
-                $hour = $time;
-		if($hour <= 9 && strlen(trim($hour)) < 2)
-                                $hour = "0".$hour;
-		$hour = $hour.":00";
-		$cal_log->debug("Exiting convertTime2UserSelectedFmt() method...");
-		return $hour;
-	}
-}
-
-/**
- * Function to convert events/todos start and endtime to user selected format
- * @param  string    $format                      - hour format. either 'am/pm' or '24'
- * @param  string    $start_time                  - time
- * @param  string    $duration_hr                 - duration in hours or empty string
- * @param  string    $duration_min                - duration in minutes or empty string
- * return  array     $return_data                 - start and end time in array format
- */
-function convertStEdTime2UserSelectedFmt($format,$start_time,$duration_hr='',$duration_min='')
-{
-	global $cal_log;
-	$cal_log->debug("Entering convertStEdTime2UserSelectedFmt() method...");
-	list($hour,$min) = explode(":",$start_time);
-	if($format == 'am/pm')
-        {
-                if($hour>'12')
-		{
-			$hour = $hour - 12;
-                        $start_hour = $hour;
-			$start_time = $start_hour.":".$min."pm";
-                        $end_min = $min+$duration_min;
-                        $end_hour = $hour+$duration_hr;
-                        if($end_min>=60)
-                        {
-	                        $end_min = $end_min%60;
-                                $end_hour++;
-                        }
-                        if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-                                $end_hour = "0".$end_hour;
-                        if($end_min <= 9 && strlen(trim($end_min)) < 2)
-                                $end_min = "0".$end_min;
-                        $end_time = $end_hour.":".$end_min."pm";
-		}
-		elseif($hour == '12')
-		{
-			$start_hour = $hour;
-			$start_time = $start_hour.":".$min."pm";
-			$end_min = $min+$duration_min;
-			$end_hour = $hour+$duration_hr;
-			if($end_min>=60)
-			{
-				$end_min = $end_min%60;
-				$end_hour++;
-			}
-			if($end_hour>'12')
-			{
-				$end_hour = $end_hour - 12;
-				if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-					$end_hour = "0".$end_hour;
-				if($end_min <= 9 && strlen(trim($end_min)) < 2)
-					$end_min = "0".$end_min;
-				$end_time = $end_hour.":".$end_min."pm";
-			}
-			else
-			{
-				if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-					$end_hour = "0".$end_hour;
-				if($end_min <= 9 && strlen(trim($end_min)) < 2)
-					$end_min = "0".$end_min;
-				$end_time  = $end_hour.":".$end_min."am";
-			}
-		}
-		else
-		{
-			$start_hour = $hour;
-			$start_time = $start_hour.":".$min."am";
-			$end_min = $min+$duration_min;
-			$end_hour = $hour+$duration_hr;
-			if($end_min>=60)
-			{
-				$end_min = $end_min%60;
-				$end_hour++;
-			}
-			if($end_hour>='12')
-			{
-				if($end_hour == '12' && $end_hour > '00')
-					$end_hour = $end_hour;
-				else
-					$end_hour = $end_hour - 12;
-				if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-					$end_hour = "0".$end_hour;
-				if($end_min <= 9 && strlen(trim($end_min)) < 2)
-					$end_min = "0".$end_min;
-				$end_time = $end_hour.":".$end_min."pm";
-			}
-			else
-			{
-				if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-					$end_hour = "0".$end_hour;
-				if($end_min <= 9 && strlen(trim($end_min)) < 2)
-					$end_min = "0".$end_min;
-				$end_time  = $end_hour.":".$end_min."am";
-			}
-
-		}
-		$return_data = Array(
-					'starttime'=>$start_time,
-					'endtime'  =>$end_time
-				    );
-	}
-	else
-	{
-		$hour = $hour;
-		$min = $min;
-		$end_min = $min+$duration_min;
-		$end_hour = $hour+$duration_hr;
-		if($end_min>=60)
-		{
-			$end_min = $end_min%60;
-			$end_hour++;
-		}
-		if($end_hour <= 9 && strlen(trim($end_hour)) < 2)
-			$end_hour = "0".$end_hour;
-		if($end_min <= 9 && strlen(trim($end_min)) < 2)
-			$end_min = "0".$end_min;
-		$end_time  = $end_hour.":".$end_min;
-		if($hour <= 9 && strlen(trim($hour)) < 2)
-                                $hour = "0".$hour;
-                $start_time = $hour.":".$min;
-		$return_data = Array(
-                                        'starttime'=>$start_time,
-                                        'endtime'  =>$end_time
-                                    );
-	}
-	$cal_log->debug("Exiting convertStEdTime2UserSelectedFmt() method...");
-	return $return_data;
-
-
-}
-
-		
 ?>

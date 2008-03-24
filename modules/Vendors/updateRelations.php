@@ -15,40 +15,63 @@ global $adb, $singlepane_view;
 
 $idlist = $_REQUEST['idlist'];
 
-if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
+if($singlepane_view == 'true')
+	$action = "DetailView";
+else
+	$action = "CallRelatedList";
+
+$dest_mod = $_REQUEST['destination_module'];
+
+//This will be true, when we select product from vendor related list
+if($_REQUEST['destination_module']=='Products')
 {
-	//split the string and store in an array
-	$storearray = explode (";",$idlist);
-	foreach($storearray as $id)
+	if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 	{
-		if($id != '')
+		$record = $_REQUEST["parentid"];
+		$storearray = explode (";",$idlist);
+		foreach($storearray as $id)
 		{
-			$sql = "insert into vtiger_vendorcontactrel values (".$_REQUEST["parentid"].",".$id.")";
-			$adb->query($sql);
-			$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parentid"] .",".$id.")";
-			$adb->query($sql);
+			if($id != '')
+				$adb->pquery("update vtiger_products set vendor_id=? where productid=?", array($record ,$id));
 		}
 	}
-	if($singlepane_view == 'true')
-		header("Location: index.php?action=DetailView&module=Vendors&record=".$_REQUEST["parentid"]);
-	else
- 		header("Location: index.php?action=CallRelatedList&module=Vendors&record=".$_REQUEST["parentid"]);
+	elseif($_REQUEST['parid'] != '' && $_REQUEST['entityid'] != '')
+	{
+		$sql = "update vtiger_products set vendor_id=? where productid=?";
+		$adb->pquery($sql, array($_REQUEST['parid'], $_REQUEST['entityid']));
+		$record = $_REQUEST['parid'];
+	}
 }
 
-elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
+//select contact from vendor relatedlist
+if($_REQUEST['destination_module']=='Contacts')
 {
+	if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
+	{
+		$record = $_REQUEST["parentid"];
 
-		$sql = "insert into vtiger_vendorcontactrel values (".$_REQUEST['parid'].",".$_REQUEST['entityid'].")";
-		$adb->query($sql);
-		$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .")";
-		$adb->query($sql);
-		if($singlepane_view == 'true')
-			header("Location: index.php?action=DetailView&module=Vendors&record=".$_REQUEST["parid"]);
-		else
- 			header("Location:index.php?action=CallRelatedList&module=Vendors&record=".$_REQUEST["parid"]);
+		//split the string and store in an array
+		$storearray = explode (";",$idlist);
+		foreach($storearray as $id)
+		{
+			if($id != '')
+			{
+				$sql = "insert into vtiger_vendorcontactrel values (?,?)";
+				$adb->pquery($sql, array($record, $id));
+			}
+		}
+	}
+	elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
+	{
+		$record = $_REQUEST["parid"];
+
+		$sql = "insert into vtiger_vendorcontactrel values (?,?)";
+		$adb->pquery($sql, array($record, $_REQUEST['entityid']));
+	}
 }
 
 
+header("Location:index.php?action=$action&module=Vendors&record=".$record);
 
 
 

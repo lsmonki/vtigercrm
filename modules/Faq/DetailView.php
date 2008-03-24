@@ -46,7 +46,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Faq detail view");
 $smarty = new vtigerCRM_Smarty;
@@ -55,7 +54,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 if(isset($focus->column_fields[question]))
-	$smarty->assign("FAQ_TITLE", $focus->column_fields[question]);
+	$smarty->assign("NAME", $focus->column_fields[question]);
 
 $category = getParenttab();
 $smarty->assign("CATEGORY",$category);
@@ -76,6 +75,8 @@ if(isPermitted("Faq","Delete",$_REQUEST['record']) == 'yes')
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
+
 $tabid = getTabid("Faq");
 $validationData = getDBValidationData($focus->tab_name,$tabid);
 $data = split_validationdataArray($validationData);

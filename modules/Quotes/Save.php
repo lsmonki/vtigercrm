@@ -21,30 +21,20 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Quotes/Quote.php');
+require_once('modules/Quotes/Quotes.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 include("modules/Emails/mail.php");
 
 $local_log =& LoggerManager::getLogger('index');
 
-global $log,$current_user;
-$currencyid=fetchCurrency($current_user->id);
-$rate_symbol = getCurrencySymbolandCRate($currencyid);
-$rate = $rate_symbol['rate'];
-$log->debug("Inside Quote Save");
+$focus = new Quotes();
+//added to fix 4600
+$search=$_REQUEST['search_url'];
 
-$focus = new Quote();
+setObjectValuesFromRequest($focus);
 
-setObjectValuesFromRequest(&$focus);
-
-$log->debug("The Field Value Array -----> ".$focus->column_fields);
 $focus->save("Quotes");
-
-
-//Based on the total Number of rows we will save the product relationship with this entity
-saveInventoryProductDetails(&$focus, 'Quotes');
-
 
 $return_id = $focus->id;
 
@@ -61,6 +51,5 @@ $local_log->debug("Saved record with id of ".$return_id);
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 
-header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname");
-
+header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname&start=".$_REQUEST['pagenumber'].$search);
 ?>

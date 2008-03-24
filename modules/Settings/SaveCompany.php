@@ -22,21 +22,21 @@ $organization_phone=$_REQUEST['organization_phone'];
 $organization_fax=$_REQUEST['organization_fax'];
 $organization_website=$_REQUEST['organization_website'];
 
-$sql="select * from vtiger_organizationdetails where organizationname = '".$org_name."'";
-$result = $adb->query($sql);
+$sql="select * from vtiger_organizationdetails where organizationname = ?";
+$result = $adb->pquery($sql, array($org_name));
 $org_name = $adb->query_result($result,0,'organizationname');
 
 if($org_name=='')
 {
-	$sql="insert into vtiger_organizationdetails values( '".$organization_name ."','".$organization_address."','". $organization_city."','".$organization_state."','".$organization_code."','".$organization_country."','".$organization_phone."','".$organization_fax."','".$organization_website."')";
+	$sql="insert into vtiger_organizationdetails values(?,?,?,?,?,?,?,?,?)";
+	$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, $organization_country, $organization_phone, $organization_fax, $organization_website);
 }
 else
 {
-	$sql="update vtiger_organizationdetails set organizationname = '".$organization_name."', address = '".$organization_address."', city = '".$organization_city."', state = '".$organization_state."',  code = '".$organization_code."', country = '".$organization_country."' ,  phone = '".$organization_phone."' ,  fax = '".$organization_fax."',  website = '".$organization_website."' where organizationname = '".$org_name."'";
+	$sql="update vtiger_organizationdetails set organizationname = ?, address = ?, city = ?, state = ?,  code = ?, country = ?,  phone = ?,  fax = ?,  website = ? where organizationname = ?";
+	$params = array($organization_name, $organization_address, $organization_city, $organization_state, $organization_code, $organization_country, $organization_phone, $organization_fax, $organization_website, $org_name);
 }	
-
-
-$adb->query($sql);
+$adb->pquery($sql, $params);
 
 header("Location: index.php?module=Settings&action=OrganizationConfig");
 ?>

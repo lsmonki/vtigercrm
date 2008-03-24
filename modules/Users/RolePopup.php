@@ -29,7 +29,7 @@ $image_path=$theme_path."images/";
 
 //Retreiving the hierarchy
 $hquery = "select * from vtiger_role order by parentrole asc";
-$hr_res = $adb->query($hquery);
+$hr_res = $adb->pquery($hquery, array());
 $num_rows = $adb->num_rows($hr_res);
 $hrarray= Array();
 
@@ -80,7 +80,7 @@ for($l=0; $l<$num_rows; $l++)
 //Constructing the Roledetails array
 $role_det = getAllRoleDetails();
 $query = "select * from vtiger_role";
-$result = $adb->query($query);
+$result = $adb->pquery($query, array());
 $num_rows=$adb->num_rows($result);
 $mask_roleid=Array();
 $del_roleid=$_REQUEST['maskid'];
@@ -101,7 +101,7 @@ $roleout .= indent($hrarray,$roleout,$role_det,$mask_roleid);
  */
 function indent($hrarray,$roleout,$role_det,$mask_roleid='')
 {
-	global $theme;
+	global $theme,$app_strings,$default_charset;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	foreach($hrarray as $roleid => $value)
@@ -110,20 +110,20 @@ function indent($hrarray,$roleout,$role_det,$mask_roleid='')
 		//retreiving the vtiger_role details
 		$role_det_arr=$role_det[$roleid];
 		$roleid_arr=$role_det_arr[2];
-		$rolename = $role_det_arr[0];
+		$rolename = htmlentities($role_det_arr[0],ENT_QUOTES,$default_charset);
 		$roledepth = $role_det_arr[1]; 
 		$roleout .= '<ul class="uil" id="'.$roleid.'" style="display:block;list-style-type:none;">';
 		$roleout .=  '<li >';
 		if(sizeof($value) >0 && $roledepth != 0)
 		{	
-			$roleout .= '<img src="'.$image_path.'/minus.gif" id="img_'.$roleid.'" border="0"  alt="Expand/Collapse" title="Expand/Collapse" align="absmiddle" onClick="showhide(\''.$roleid_arr.'\',\'img_'.$roleid.'\')" style="cursor:pointer;">';
+			$roleout .= '<img src="'.$image_path.'/minus.gif" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" title="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" align="absmiddle" onClick="showhide(\''.$roleid_arr.'\',\'img_'.$roleid.'\')" style="cursor:pointer;">';
 		}
 		else if($roledepth != 0){
-			$roleout .= '<img src="'.$image_path.'/vtigerDevDocs.gif" id="img_'.$roleid.'" border="0"  alt="Expand/Collapse" title="Expand/Collapse" align="absmiddle">';	
+			$roleout .= '<img src="'.$image_path.'/vtigerDevDocs.gif" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" title="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" align="absmiddle">';	
 		}
 		else
 		{
-			$roleout .= '<img src="'.$image_path.'/menu_root.gif" id="img_'.$roleid.'" border="0"  alt="Root" title="Root" align="absmiddle">';
+			$roleout .= '<img src="'.$image_path.'/menu_root.gif" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_ROOT'].'" title="'.$app_strings['LBL_ROOT'].'" align="absmiddle">';
 		}
 		if($roledepth == 0 || in_array($roleid,$mask_roleid))
 		{
@@ -131,7 +131,19 @@ function indent($hrarray,$roleout,$role_det,$mask_roleid='')
 		}
 		else
 		{
-			$roleout .= '&nbsp;<a href="javascript:loadValue(\'user_'.$roleid.'\',\''.$roleid.'\');" class="x" id="user_'.$roleid.'">'.$rolename.'</a>';
+			$type =$_REQUEST['type'];
+			if($type == '')
+			{
+				$roleout .= '&nbsp;<a href="javascript:loadValue(\'user_'.$roleid.'\',\''.$roleid.'\');" class="x" id="user_'.$roleid.'">'.$rolename.'</a>';
+			}
+			else
+			{
+				$picklist_module = $_REQUEST['picklistmodule'];
+				$picklist_fieldname = $_REQUEST['pick_fieldname'];
+				$picklist_uitype = $_REQUEST['pick_uitype'];
+
+				$roleout .= '&nbsp;<a href="index.php?action=SettingsAjax&module=Settings&mode=edit&file=EditComboField&fld_module='.$picklist_module.'&fieldname='.$picklist_fieldname.'&parentroleid='.$roleid.'&uitype='.$picklist_uitype.'"  class="x" id="user_'.$roleid.'">'.$rolename.'</a>';
+			}
 		}
  		$roleout .=  '</li>';
 		if(sizeof($value) > 0 )

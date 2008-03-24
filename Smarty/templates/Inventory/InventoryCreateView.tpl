@@ -18,7 +18,6 @@
 <script type="text/javascript" src="jscalendar/calendar.js"></script>
 <script type="text/javascript" src="jscalendar/lang/calendar-{$CALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-<script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <script type="text/javascript" src="include/js/Inventory.js"></script>
 
 <script type="text/javascript">
@@ -65,7 +64,11 @@ function sensex_info()
 			{$UPDATEINFO}	 
 		 {/if}
 		 {if $OP_MODE eq 'create_view'}
+			{if $DUPLICATE neq 'true'}
 			<span class="lvtHeaderText">{$APP.LBL_CREATING} {$APP.LBL_NEW} {$MOD[$SINGLE_MOD]}</span> <br>
+			{else}
+			<span class="lvtHeaderText">{$APP.LBL_DUPLICATING} "{$NAME}" </span> <br>
+			{/if}
 		 {/if}
 
 		 <hr noshade size=1>
@@ -125,7 +128,7 @@ function sensex_info()
 
 								   {foreach key=header item=data from=$blockInfo}
 								   <tr>
-									{if $header== 'Address Information' && ($MODULE == 'Accounts' || $MODULE == 'Contacts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')}
+									{if $header== $MOD.LBL_ADDRESS_INFORMATION && ($MODULE == 'Accounts' || $MODULE == 'Contacts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')}
                                                                         <td colspan=2 class="detailedViewHeader">
                                                                         <b>{$header}</b></td>
                                                                         <td class="detailedViewHeader">
@@ -164,6 +167,8 @@ function sensex_info()
 									   <div align="center">
 										<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save'; return validateInventory('{$MODULE}')" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
 										<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
+										<input type="hidden" name="convert_from" value="{$CONVERT_MODE}">
+                                                                                <input type="hidden" name="duplicate_from" value="{$DUPLICATE_FROM}">
 									   </div>
 									</td>
 								   </tr>
@@ -201,5 +206,12 @@ function sensex_info()
 
         var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE})
 
+	var product_labelarr = {ldelim}CLEAR_COMMENT:'{$APP.LBL_CLEAR_COMMENT}',
+                                DISCOUNT:'{$APP.LBL_DISCOUNT}',
+                                TOTAL_AFTER_DISCOUNT:'{$APP.LBL_TOTAL_AFTER_DISCOUNT}',
+                                TAX:'{$APP.LBL_TAX}',
+                                ZERO_DISCOUNT:'{$APP.LBL_ZERO_DISCOUNT}',
+                                PERCENT_OF_PRICE:'{$APP.LBL_OF_PRICE}',
+                                DIRECT_PRICE_REDUCTION:'{$APP.LBL_DIRECT_PRICE_REDUCTION}'{rdelim};
 
 </script>

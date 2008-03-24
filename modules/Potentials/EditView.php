@@ -22,7 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Potentials/Potentials.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
@@ -30,8 +30,12 @@ require_once('include/FormValidationUtil.php');
 global $app_strings;
 global $mod_strings;
 global $currentModule;
-$focus = new Potential();
+$focus = new Potentials();
 $smarty = new vtigerCRM_Smarty();
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
 
 if(isset($_REQUEST['record']) && $_REQUEST['record'] != '') 
 {
@@ -80,7 +84,6 @@ $comboFieldNames = Array('leadsource'=>'leadsource_dom'
                       ,'opportunity_type'=>'opportunity_type_dom'
                       ,'sales_stage'=>'sales_stage_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Potential detail view");
 $smarty->assign("MOD", $mod_strings);
@@ -119,7 +122,7 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $focus->id);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Potential']);
+$smarty->assign("SINGLE_MOD",'Potential');
 
 
  $tabid = getTabid("Potentials");
@@ -129,6 +132,9 @@ $smarty->assign("SINGLE_MOD",$app_strings['Potential']);
  $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
  $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
  $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+
+//fix for potential duplicate header
+$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);

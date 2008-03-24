@@ -22,7 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Accounts/Account.php');
+require_once('modules/Accounts/Accounts.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
@@ -32,7 +32,7 @@ global $app_strings;
 global $app_list_strings;
 global $log, $currentModule, $singlepane_view;
 
-$focus = new Account();
+$focus = new Accounts();
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],"Accounts");
     $focus->id = $_REQUEST['record'];	
@@ -48,7 +48,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Account detail view");
 $smarty = new vtigerCRM_Smarty;
@@ -80,9 +79,17 @@ if(isPermitted("Accounts","EditView",$_REQUEST['record']) == 'yes')
 if(isPermitted("Accounts","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
+if(isPermitted("Emails","EditView",'') == 'yes') 
+{ 
+	$smarty->assign("SENDMAILBUTTON","permitted"); 
+	$smarty->assign("EMAIL1", $focus->column_fields['email1']); 
+	$smarty->assign("EMAIL2", $focus->column_fields['email2']); 
+} 
+
 if(isPermitted("Accounts","Merge",'') == 'yes')
 {
-	$smarty->assign("MERGEBUTTON","permitted");
+	global $current_user;
+	require("user_privileges/user_privileges_".$current_user->id.".php");	
 	require_once('include/utils/UserInfoUtil.php');
 	$wordTemplateResult = fetchWordTemplateList("Accounts");
 	$tempCount = $adb->num_rows($wordTemplateResult);
@@ -92,6 +99,11 @@ if(isPermitted("Accounts","Merge",'') == 'yes')
 		$optionString[$tempVal["templateid"]]=$tempVal["filename"];
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
+	 if($is_admin)
+                $smarty->assign("MERGEBUTTON","permitted");
+	elseif($tempCount >0)
+		$smarty->assign("MERGEBUTTON","permitted");
+	$smarty->assign("TEMPLATECOUNT",$tempCount);
 	$smarty->assign("WORDTEMPLATEOPTIONS",$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']);
         $smarty->assign("TOPTIONS",$optionString);
 }
@@ -110,12 +122,16 @@ $smarty->assign("CHECK", $check_button);
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
 if($singlepane_view == 'true')
 {
 	$related_array = getRelatedLists($currentModule,$focus);
 	$smarty->assign("RELATEDLISTS", $related_array);
 }
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
+
 $smarty->assign("SinglePane_View", $singlepane_view);
 
 $smarty->display("DetailView.tpl");

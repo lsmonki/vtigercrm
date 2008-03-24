@@ -22,7 +22,7 @@ if($ajaxaction == "DETAILVIEW")
 	$crmid = $_REQUEST["recordid"];
 	$tablename = $_REQUEST["tableName"];
 	$fieldname = $_REQUEST["fldName"];
-	$fieldvalue = $_REQUEST["fieldValue"];
+	$fieldvalue = utf8RawUrlDecode($_REQUEST["fieldValue"]); 
 
 	if($crmid != "")
 	{

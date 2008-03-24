@@ -9,17 +9,23 @@
 *
  ********************************************************************************/
 require_once("modules/Dashboard/Entity_charts.php");
-/**
- * Function to get Dashboard in homepage
- * return the graph - $sHTML
- */
-	global $current_user,$user_id,$date_start,$end_date,$tmp_dir,$mod_strings;
+require('user_privileges/user_privileges_'.$current_user->id.'.php');
+
+	global $current_user,$user_id,$date_start,$end_date,$tmp_dir,$mod_strings,$app_strings;
 	$type='recordsforuser';
-	//require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	//if($is_admin)
-	//	$homepagedb_query = "select vtiger_crmentity.* from vtiger_crmentity where vtiger_crmentity.setype in ('Accounts','Contacts','Leads','Potentials','Quotes','Invoice','PurchaseOrder','SalesOrder','Activities','HelpDesk','Campaigns') and vtiger_crmentity.deleted=0";
-	//else	
-	$homepagedb_query = "select * from vtiger_crmentity se left join vtiger_leaddetails le on le.leadid=se.crmid left join vtiger_activity act on act.activityid=se.crmid where se.deleted=0 and (le.converted=0 or le.converted is null) and ((act.status!='Completed' and act.status!='Deferred') or act.status is null) and ((act.eventstatus!='Held' and act.eventstatus!='Not Held') or act.eventstatus is null) and setype in ('Accounts','Contacts','Leads','Potentials','Quotes','Invoice','PurchaseOrder', 'SalesOrder','Calendar','HelpDesk','Campaigns') and se.deleted=0 and se.smownerid=".$current_user->id;
+	$module_arr = Array ('Accounts','Contacts','Leads','Potentials','Quotes','Invoice','PurchaseOrder', 'SalesOrder','Calendar','HelpDesk','Campaigns');
+	foreach ($module_arr as $key => $mod_name)
+	{
+		if(isPermitted("$mod_name","index",'') == 'yes')
+		{
+
+			$permitted_mod_list[$key] = $mod_name; 
+		}
+	}
+	if(is_array($permitted_mod_list))
+		$moduleList = implode("','",$permitted_mod_list);
+
+	$homepagedb_query = "select * from vtiger_crmentity se left join vtiger_leaddetails le on le.leadid=se.crmid left join vtiger_troubletickets tt on tt.ticketid=se.crmid left join vtiger_activity act on act.activityid=se.crmid left join vtiger_potential pot on pot.potentialid=se.crmid where se.deleted=0 and (le.converted=0 or le.converted is null) and (pot.sales_stage not in('".$app_strings['LBL_CLOSE_WON']."','".$app_strings['LBL_CLOSE_LOST']."') or pot.sales_stage is null) and (tt.status!='Closed' or tt.status is null) and ((act.status!='Completed' and act.status!='Deferred') or act.status is null) and ((act.eventstatus!='Held' and act.eventstatus!='Not Held') or act.eventstatus is null) and setype in ('".$moduleList."') and se.deleted=0 and se.smownerid=".$current_user->id;
 	$graph_by="setype";
 	$graph_title=$mod_strings['recordsforuser'].' '.$current_user->user_name;
 	$module="Home";
@@ -31,7 +37,8 @@ require_once("modules/Dashboard/Entity_charts.php");
         $html_imagename=$graph_by; //Html image name for the graph
 	$graph_details=module_Chart($current_user->id,$date_start,$end_date,$query,$graph_by,$graph_title,$where,$module,$type);
 	if($graph_details!=0)
-        {
+	{
+
                 $name_val=$graph_details[0];
                 $cnt_val=$graph_details[1];
                 $graph_title=$graph_details[2];
@@ -41,7 +48,7 @@ require_once("modules/Dashboard/Entity_charts.php");
                 $cnt_table=$graph_details[6];
 	       	$test_target_val=$graph_details[7];
 
-                $width=425;
+                $width=560;
                 $height=225;
                 $top=30;
                 $left=140;
@@ -53,7 +60,7 @@ require_once("modules/Dashboard/Entity_charts.php");
         }
 	else
 	{
-		echo $mod_strings[LBL_NO_DATA];	
+		echo $mod_strings['LBL_NO_DATA'];	
 	}
 
 

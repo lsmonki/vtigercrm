@@ -21,57 +21,35 @@
  ********************************************************************************/
 
 require_once('include/logging.php');
-require_once('modules/Contacts/Contact.php');
-require_once('modules/Accounts/Account.php');
-require_once('modules/Potentials/Opportunity.php');
-require_once('modules/Leads/Lead.php');
-require_once('modules/Faq/Faq.php');
-require_once('modules/Vendors/Vendor.php');
-require_once('modules/PriceBooks/PriceBook.php');
-require_once('modules/Quotes/Quote.php');
-require_once('modules/PurchaseOrder/PurchaseOrder.php');
-require_once('modules/SalesOrder/SalesOrder.php');
-require_once('modules/Invoice/Invoice.php');
-require_once('modules/Campaigns/Campaign.php');
-require_once('modules/Home/language/en_us.lang.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/CustomView/CustomView.php');
 
 require_once('Smarty_setup.php');
-global $mod_strings;
+global $mod_strings, $current_language;
+
+require_once('modules/Home/language/'.$current_language.'.lang.php');
 
 $total_record_count = 0;
-//echo get_module_title("", "Search Results", true); 
-if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_string'])) {
+
+$query_string = trim($_REQUEST['query_string']);
+
+if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST['query_string'])) 
+{
 
 	//module => object
-	$object_array = Array(
-				'Potentials'=>'Potential',
-				'Accounts'=>'Account',
-				'Contacts'=>'Contact',
-				'Leads'=>'Lead',
-				'Notes'=>'Note',
-				'Calendar'=>'Activity',
-				'Emails'=>'Email',
-				'HelpDesk'=>'HelpDesk',
-				'Products'=>'Product',
-				'Faq'=>'Faq',
-				//'Events'=>'',
-				'Vendors'=>'Vendor',
-				'PriceBooks'=>'PriceBook',
-				'Quotes'=>'Quote',
-				'PurchaseOrder'=>'Order',
-				'SalesOrder'=>'SalesOrder',
-				'Invoice'=>'Invoice',
-				'Campaigns'=>'Campaign'
-			     );
+	$object_array = getSearchModules();
+	foreach($object_array as $curr_module=>$curr_object)
+	{
+		require_once("modules/$curr_module/$curr_object.php");
+	}
+
 	global $adb;
 	global $current_user;
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
-	$search_val = $_REQUEST['query_string'];
+	$search_val = $query_string;
 	$search_module = $_REQUEST['search_module'];
 
 	getSearchModulesComboList($search_module);
@@ -80,90 +58,97 @@ if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_str
 	{
 		if(isPermitted($module,"index") == "yes")
 		{
-		$focus = new $object_name();
+			$focus = new $object_name();
 
-		$smarty = new vtigerCRM_Smarty;
+			$smarty = new vtigerCRM_Smarty;
 
-		require_once("modules/$module/language/en_us.lang.php");
-		global $mod_strings;
-		global $app_strings;
+			require_once("modules/$module/language/".$current_language.".lang.php");
+			global $mod_strings;
+			global $app_strings;
 
-		$smarty->assign("MOD", $mod_strings);
-		$smarty->assign("APP", $app_strings);
-		$smarty->assign("IMAGE_PATH",$image_path);
-		$smarty->assign("MODULE",$module);
-		$smarty->assign("SEARCH_MODULE",$_REQUEST['search_module']);
-		$smarty->assign("SINGLE_MOD",$module);
+			$smarty->assign("MOD", $mod_strings);
+			$smarty->assign("APP", $app_strings);
+			$smarty->assign("IMAGE_PATH",$image_path);
+			$smarty->assign("MODULE",$module);
+			$smarty->assign("SEARCH_MODULE",$_REQUEST['search_module']);
+			$smarty->assign("SINGLE_MOD",$module);
 
 	
-		$listquery = getListQuery($module);
-		//Avoided the modules Faq and PriceBooks. we should remove this if when change the customview function
-		$oCustomView = '';
-		if($module != 'Faq' && $module != 'PriceBooks')
-		{
-			//Added to get the default 'All' customview query
+			$listquery = getListQuery($module);
+			$oCustomView = '';
+
 			$oCustomView = new CustomView($module);
-			$viewid = $oCustomView->getViewId($module);
-
+			//Instead of getting current customview id, use cvid of All so that all entities will be found
+			//$viewid = $oCustomView->getViewId($module);
+			$cv_res = $adb->pquery("select cvid from vtiger_customview where viewname='All' and entitytype=?", array($module));
+			$viewid = $adb->query_result($cv_res,0,'cvid');
+			
 			$listquery = $oCustomView->getModifiedCvListQuery($viewid,$listquery,$module);
-		}
+                        if ($module == "Calendar"){
+                                if (!isset($oCustomView->list_fields['Close'])) $oCustomView->list_fields['Close']=array ( 'activity' => 'status' );
+                                if (!isset($oCustomView->list_fields_name['Close'])) $oCustomView->list_fields_name['Close']='status';
+                        }
+
+			if($search_module != '')//This is for Tag search
+			{
 		
-		if($search_module != '')//This is for Tag search
-		{
+				$where = getTagWhere($search_val,$current_user->id);
+				$search_msg =  $app_strings['LBL_TAG_SEARCH'];
+				$search_msg .=	"<b>".to_html($search_val)."</b>";
+			}
+			else			//This is for Global search
+			{
+				$where = getUnifiedWhere($listquery,$module,$search_val);
+				$search_msg = $app_strings['LBL_SEARCH_RESULTS_FOR'];
+				$search_msg .=	"<b>".to_html($search_val)."</b>";
+			}
+
+			if($where != '')
+				$listquery .= ' and ('.$where.')';
+			
+			if($module == "Calendar")
+				$listquery .= ' group by vtiger_activity.activityid having vtiger_activity.activitytype != "Emails"';
+				
+			$list_result = $adb->query($listquery);
+			$noofrows = $adb->num_rows($list_result);
+
+			if($noofrows >= 1)
+				$list_max_entries_per_page = $noofrows;
+			//Here we can change the max list entries per page per module
+			$navigation_array = getNavigationValues(1, $noofrows, $list_max_entries_per_page);
+
+			$listview_header = getListViewHeader($focus,$module,"","","","global",$oCustomView);
+			$listview_entries = getListViewEntries($focus,$module,$list_result,$navigation_array,"","","","",$oCustomView);
+
+			//Do not display the Header if there are no entires in listview_entries
+			if(count($listview_entries) > 0)
+			{
+				$display_header = 1;
+			}
+			else
+			{
+				$display_header = 0;
+			}
 		
-			$where = getTagWhere($search_val,$current_user->id);
-			$search_msg =  $app_strings['LBL_TAG_SEARCH'];				       	$search_msg .=	"<b>".$search_val."</b>";
-		}
-		else			//This is for Global search
-		{
-			$where = getUnifiedWhere($listquery,$module,$search_val);
-			$search_msg = $app_strings['LBL_SEARCH_RESULTS_FOR'];
-			$search_msg .=	"<b>".$search_val."</b>";
-		}
+			$smarty->assign("LISTHEADER", $listview_header);
+			$smarty->assign("LISTENTITY", $listview_entries);
+			$smarty->assign("DISPLAYHEADER", $display_header);
+			$smarty->assign("HEADERCOUNT", count($listview_header));
 
-		if($where != '')
-			$listquery .= ' and ('.$where.')';
-		
-		$list_result = $adb->query($listquery);
-		$noofrows = $adb->num_rows($list_result);
+			$total_record_count = $total_record_count + $noofrows;
 
-		if($noofrows >= 1)
-			$list_max_entries_per_page = $noofrows;
-		//Here we can change the max list entries per page per module
-		$navigation_array = getNavigationValues(1, $noofrows, $list_max_entries_per_page);
+			$smarty->assign("SEARCH_CRITERIA","( $noofrows )".$search_msg);
+			$smarty->assign("MODULES_LIST", $object_array);
 
-		$listview_header = getListViewHeader($focus,$module,"","","","global",$oCustomView);
-		$listview_entries = getListViewEntries($focus,$module,$list_result,$navigation_array,"","","","",$oCustomView);
-
-		//Do not display the Header if there are no entires in listview_entries
-		if(count($listview_entries) > 0)
-		{
-			$display_header = 1;
-		}
-		else
-		{
-			$display_header = 0;
-		}
-		
-		$smarty->assign("LISTHEADER", $listview_header);
-		$smarty->assign("LISTENTITY", $listview_entries);
-		$smarty->assign("DISPLAYHEADER", $display_header);
-		$smarty->assign("HEADERCOUNT", count($listview_header));
-
-		$total_record_count = $total_record_count + $noofrows;
-
-		$smarty->assign("SEARCH_CRITERIA","( $noofrows )".$search_msg);
-		$smarty->assign("MODULES_LIST", $object_array);
-
-		$smarty->display("GlobalListView.tpl");
-		unset($_SESSION['lvs'][$module]);
+			$smarty->display("GlobalListView.tpl");
+			unset($_SESSION['lvs'][$module]);
 		}
 	}
 
 	//Added to display the Total record count
 ?>
 	<script>
-document.getElementById("global_search_total_count").innerHTML = " <? echo $app_strings['LBL_TOTAL_RECORDS_FOUND'] ?><b><?php echo $total_record_count; ?></b>";
+document.getElementById("global_search_total_count").innerHTML = " <?php echo $app_strings['LBL_TOTAL_RECORDS_FOUND'] ?><b><?php echo $total_record_count; ?></b>";
 	</script>
 <?php
 
@@ -180,10 +165,22 @@ else {
   */
 function getUnifiedWhere($listquery,$module,$search_val)
 {
-	global $adb;
-
-	$query = "SELECT * FROM vtiger_field WHERE tabid = ".getTabid($module);
-	$result = $adb->query($query);
+	global $adb, $current_user;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		
+	$search_val = mysql_real_escape_string($search_val);
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
+	{
+		$query = "SELECT columnname, tablename FROM vtiger_field WHERE tabid = ?";
+		$qparams = array(getTabid($module));
+	}
+	else
+	{
+		$profileList = getCurrentUserProfileList();
+		$query = "SELECT columnname, tablename FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid = vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid = vtiger_field.fieldid WHERE vtiger_field.tabid = ? AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) . ") AND vtiger_def_org_field.visible = 0 GROUP BY vtiger_field.fieldid";
+		$qparams = array(getTabid($module), $profileList);
+	}
+	$result = $adb->pquery($query, $qparams);
 	$noofrows = $adb->num_rows($result);
 
 	$where = '';
@@ -197,7 +194,7 @@ function getUnifiedWhere($listquery,$module,$search_val)
 		{
 			if($where != '')
 				$where .= " OR ";
-				$where .= $tablename.".".$columnname." LIKE ".$adb->quote("%$search_val%");
+			$where .= $tablename.".".$columnname." LIKE '". formatForSqlLike($search_val) ."'";
 		}
 	}
 
@@ -242,20 +239,22 @@ function getSearchModulesComboList($search_module)
 	global $mod_strings;
 	
 	?>
-		<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 		<script>
 		function displayModuleList(selectmodule_view)
 		{
 			<?php
 			foreach($object_array as $module => $object_name)
 			{
-				?>
-				mod = "global_list_"+"<?php echo $module; ?>";
-				if(selectmodule_view.options[selectmodule_view.options.selectedIndex].value == "All")
-					show(mod);
-				else
-					hide(mod);
+				if(isPermitted($module,"index") == "yes")
+				{
+			?>
+				   mod = "global_list_"+"<?php echo $module; ?>";
+				   if(selectmodule_view.options[selectmodule_view.options.selectedIndex].value == "All")
+				   show(mod);
+				   else
+				   hide(mod);
 				<?php
+				}
 			}
 			?>
 			
@@ -269,9 +268,9 @@ function getSearchModulesComboList($search_module)
 		 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 		     <tr>
 		        <td colspan="3" id="global_search_total_count" style="padding-left:30px">&nbsp;</td>
-		<td nowrap align="right"><? echo $app_strings['LBL_SHOW_RESULTS'] ?>&nbsp;
+		<td nowrap align="right"><?php echo $app_strings['LBL_SHOW_RESULTS'] ?>&nbsp;
 		                <select id="global_search_module" name="global_search_module" onChange="displayModuleList(this);">
-			<option value="All"><? echo $app_strings['COMBO_ALL'] ?></option>
+			<option value="All"><?php echo $app_strings['COMBO_ALL'] ?></option>
 						<?php
 						foreach($object_array as $module => $object_name)
 						{
@@ -281,9 +280,13 @@ function getSearchModulesComboList($search_module)
 							if($search_module == '' && $module == 'All')
 								$selected = 'selected';
 							?>
+							<?php if(isPermitted($module,"index") == "yes")
+							{
+							?> 
 							<option value="<?php echo $module; ?>" <?php echo $selected; ?> ><?php echo $app_strings[$module]; ?></option>
 							<?php
-						}
+							}
+						}	
 						?>
 		     		</select>
 		        </td>
@@ -291,4 +294,28 @@ function getSearchModulesComboList($search_module)
 		</table>
 	<?php
 }
+
+/*To get the modules allowed for global search this function returns all the 
+ * modules which supports global search as an array in the following structure 
+ * array($module_name1=>$object_name1,$module_name2=>$object_name2,$module_name3=>$object_name3,$module_name4=>$object_name4,-----);
+ */
+ function getSearchModules()
+ {
+	 global $adb;
+	 $sql = 'select distinct vtiger_field.tabid,name from vtiger_field inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.tabid not in (16,29)';
+	$result = $adb->pquery($sql, array());
+	while($module_result = $adb->fetch_array($result))
+	{
+		$modulename = $module_result['name'];
+		if($modulename != 'Calendar')
+		{
+			$return_arr[$modulename] = $modulename;
+		}else
+		{
+			$return_arr[$modulename] = 'Activity';
+		}
+	}
+	return $return_arr;
+ }
+
 ?>

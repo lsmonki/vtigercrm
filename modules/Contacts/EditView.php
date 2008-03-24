@@ -22,13 +22,13 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Contacts/Contact.php');
+require_once('modules/Contacts/Contacts.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
-global $log,$mod_strings,$app_strings,$theme,$currentModule;
+global $log,$mod_strings,$app_strings,$theme,$currentModule,$current_user;
 
 //added for contact image
 $encode_val=$_REQUEST['encode_val'];
@@ -39,10 +39,15 @@ $decode_val=base64_decode($encode_val);
  $image_error=isset($_REQUEST['image_error'])?$_REQUEST['image_error']:"false";
 //end
 
-$focus = new Contact();
+$focus = new Contacts();
 $smarty = new vtigerCRM_Smarty;
 
-if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) 
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
+
+if(isset($_REQUEST['record']) && $_REQUEST['record'] != '') 
 {
     $focus->id = $_REQUEST['record'];
     $focus->mode = 'edit';
@@ -68,9 +73,9 @@ if($image_error=="true")
 
 if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['record']=='')
 {
-        require_once('modules/Accounts/Account.php');
+        require_once('modules/Accounts/Accounts.php');
         $focus->column_fields['account_id'] = $_REQUEST['account_id'];
-        $acct_focus = new Account();
+        $acct_focus = new Accounts();
         $acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
         $focus->column_fields['fax']=$acct_focus->column_fields['fax'];
         $focus->column_fields['otherphone']=$acct_focus->column_fields['phone'];
@@ -84,6 +89,9 @@ if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['r
         $focus->column_fields['otherzip']=$acct_focus->column_fields['ship_code'];
         $focus->column_fields['mailingcountry']=$acct_focus->column_fields['bill_country'];
         $focus->column_fields['othercountry']=$acct_focus->column_fields['ship_country'];
+	$focus->column_fields['mailingpobox']=$acct_focus->column_fields['bill_pobox'];
+	$focus->column_fields['otherpobox']=$acct_focus->column_fields['ship_pobox'];
+
         $log->debug("Accountid Id from the request is ".$_REQUEST['account_id']);
 
 }
@@ -101,7 +109,6 @@ else
 	$smarty->assign("BASBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS'));
 	$smarty->assign("ADVBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'ADV'));
 }
-
 $smarty->assign("OP_MODE",$disp_view);
 
 //needed when creating a new contact with a default vtiger_account value passed in
@@ -121,20 +128,22 @@ $comboFieldNames = Array('leadsource'=>'lead_source_dom'
                       ,'salutationtype'=>'salutation_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
 
-require_once($theme_path.'layout_utils.php');
-
 $log->info("Contact detail view");
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
-$smarty->assign("NAME",$focus->lastname." ".$focus->firstname);
+$contact_name = $focus->lastname;
+if (getFieldVisibilityPermission($currentModule, $current_user->id,'firstname') == '0') {
+	$contact_name .= ' '.$focus->firstname;
+}
+$smarty->assign("NAME",$contact_name);
 if(isset($cust_fld))
 {
         $smarty->assign("CUSTOMFIELD", $cust_fld);
 }
 $smarty->assign("ID", $focus->id);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Contact']);
+$smarty->assign("SINGLE_MOD",'Contact');
 
 if($focus->mode == 'edit')
 {
@@ -205,6 +214,7 @@ if($errormessage!="")
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 
 if($focus->mode == 'edit')
 $smarty->display("salesEditView.tpl");

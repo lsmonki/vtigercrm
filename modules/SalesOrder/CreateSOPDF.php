@@ -10,24 +10,25 @@
  ********************************************************************************/
 
 
-require('include/fpdf/pdf.php');
+require('include/tcpdf/pdf.php');
+require_once('include/tcpdf/pdfconfig.php');
 require_once('modules/SalesOrder/SalesOrder.php');
 require_once('include/database/PearDatabase.php');
 
-global $adb,$app_strings,$products_per_page;
+global $adb,$app_strings,$current_user;
 
-$sql="select currency_symbol from vtiger_currency_info";
-$result = $adb->query($sql);
+$sql="select vtiger_currency_info.currency_symbol from vtiger_currency_info inner join vtiger_users on vtiger_users.currency_id =vtiger_currency_info.id where vtiger_users.id=?";
+$result = $adb->pquery($sql, array($current_user->id));
 $currency_symbol = $adb->query_result($result,0,'currency_symbol');
 
 // would you like and end page?  1 for yes 0 for no
 $endpage="1";
-$products_per_page="6";
 
 $id = $_REQUEST['record'];
 //retreiving the vtiger_invoice info
 $focus = new SalesOrder();
 $focus->retrieve_entity_info($_REQUEST['record'],"SalesOrder");
+$focus->apply_field_security();
 $account_name = getAccountName($focus->column_fields[account_id]);
 
 // **************** BEGIN POPULATE DATA ********************
@@ -46,6 +47,7 @@ $bill_city = $focus->column_fields["bill_city"];
 $bill_state = $focus->column_fields["bill_state"];
 $bill_code = $focus->column_fields["bill_code"];
 $bill_country = $focus->column_fields["bill_country"];
+$contact_name =getContactName($focus->column_fields["contact_id"]);
 
 $ship_street = $focus->column_fields["ship_street"];
 $ship_city = $focus->column_fields["ship_city"];
@@ -53,28 +55,28 @@ $ship_state = $focus->column_fields["ship_state"];
 $ship_code = $focus->column_fields["ship_code"];
 $ship_country = $focus->column_fields["ship_country"];
 
-$conditions = $focus->column_fields["terms_conditions"];
-$description = $focus->column_fields["description"];
+$conditions = from_html($focus->column_fields["terms_conditions"]);
+$description = from_html($focus->column_fields["description"]);
 $status = $focus->column_fields["sostatus"];
 
 // Company information
 $add_query = "select * from vtiger_organizationdetails";
-$result = $adb->query($add_query);
+$result = $adb->pquery($add_query, array());
 $num_rows = $adb->num_rows($result);
 
-if($num_rows == 1)
+if($num_rows > 0)
 {
-		$org_name = $adb->query_result($result,0,"organizationname");
-		$org_address = $adb->query_result($result,0,"address");
-		$org_city = $adb->query_result($result,0,"city");
-		$org_state = $adb->query_result($result,0,"state");
-		$org_country = $adb->query_result($result,0,"country");
-		$org_code = $adb->query_result($result,0,"code");
-		$org_phone = $adb->query_result($result,0,"phone");
-		$org_fax = $adb->query_result($result,0,"fax");
-		$org_website = $adb->query_result($result,0,"website");
+	$org_name = $adb->query_result($result,0,"organizationname");
+	$org_address = $adb->query_result($result,0,"address");
+	$org_city = $adb->query_result($result,0,"city");
+	$org_state = $adb->query_result($result,0,"state");
+	$org_country = $adb->query_result($result,0,"country");
+	$org_code = $adb->query_result($result,0,"code");
+	$org_phone = $adb->query_result($result,0,"phone");
+	$org_fax = $adb->query_result($result,0,"fax");
+	$org_website = $adb->query_result($result,0,"website");
 
-		$logo_name = $adb->query_result($result,0,"logoname");
+	$logo_name = $adb->query_result($result,0,"logoname");
 }
 
 //Population of Product Details - Starts
@@ -84,26 +86,6 @@ if($num_rows == 1)
 
 //we can also get the NetTotal, Final Discount Amount/Percent, Adjustment and GrandTotal from the array $associated_products[1]['final_details']
 
-//getting the Net Total
-$price_subtotal = number_format($focus->column_fields["hdnSubTotal"],2,'.',',');
-
-//Final discount amount/percentage
-$discount_amount = $focus->column_fields["hdnDiscountAmount"];
-$discount_percent = $focus->column_fields["hdnDiscountPercent"];
-
-if($discount_amount != "")
-	$price_discount = number_format($discount_amount,2,'.',',');
-else if($discount_percent != "")
-	$price_discount = $discount_percent."%";
-else
-	$price_discount = "0.00";
-
-//Adjustment
-$price_adjustment = number_format($focus->column_fields["txtAdjustment"],2,'.',',');
-//Grand Total
-$price_total = number_format($focus->column_fields["hdnGrandTotal"],2,'.',',');
-
-
 //get the Associated Products for this Invoice
 $focus->id = $focus->column_fields["record_id"];
 $associated_products = getAssociatedProducts("SalesOrder",$focus);
@@ -111,6 +93,31 @@ $num_products = count($associated_products);
 
 //This $final_details array will contain the final total, discount, Group Tax, S&H charge, S&H taxes and adjustment
 $final_details = $associated_products[1]['final_details'];
+
+//getting the Net Total
+$price_subtotal = number_format($final_details["hdnSubTotal"],2,'.',',');
+
+//Final discount amount/percentage
+$discount_amount =$final_details["discount_amount_final"];
+$discount_percent =$final_details["discount_percentage_final"];
+
+if($discount_amount != "")
+	$price_discount = number_format($discount_amount,2,'.',',');
+else if($discount_percent != "")
+{
+	//This will be displayed near Discount label - used in include/fpdf/templates/body.php
+	$final_price_discount_percent = "(".number_format($discount_percent,2,'.',',')." %)";
+	$price_discount = number_format((($discount_percent*$final_details["hdnSubTotal"])/100),2,'.',',');
+}
+else
+	$price_discount = "0.00";
+
+//Adjustment
+$price_adjustment = number_format($final_details["adjustment"],2,'.',',');
+//Grand Total
+$price_total = number_format($final_details["grandTotal"],2,'.',',');
+
+
 
 //To calculate the group tax amount
 if($final_details['taxtype'] == 'group')
@@ -152,6 +159,8 @@ for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 	$list_price[$i] = number_format($associated_products[$i]['listPrice'.$i],2,'.',',');
 	$list_pricet[$i] = $associated_products[$i]['listPrice'.$i];
 	$discount_total[$i] = $associated_products[$i]['discountTotal'.$i];
+        //aded for 5.0.3 pdf changes
+        $product_code[$i] = $associated_products[$i]['hdnProductcode'.$i];
 	
 	$taxable_total = $qty[$i]*$list_pricet[$i]-$discount_total[$i];
 
@@ -173,8 +182,8 @@ for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 	}
 	$prod_total[$i] = number_format($producttotal,2,'.',',');
 
-	$product_line[$j]["Product Name"] = $product_name[$i];
-	$product_line[$j]["Description"] = $prod_description[$i];
+        $product_line[$j]["Product Code"] = $product_code[$i];
+	$product_line[$j]["Product Name"] = decode_html($product_name[$i]);
 	$product_line[$j]["Qty"] = $qty[$i];
 	$product_line[$j]["Price"] = $list_price[$i];
 	$product_line[$j]["Discount"] = $discount_total[$i];
@@ -210,18 +219,25 @@ for($l=0;$l<$num_pages;$l++)
 	}
 
 	$pdf->AddPage();
-	include("pdf_templates/header.php");
-	include("include/fpdf/templates/body.php");
-	include("pdf_templates/footer.php");
+	include("modules/SalesOrder/pdf_templates/header.php");
+	include("include/tcpdf/templates/body.php");
+
+	//if bottom > 145 then we skip the Description and T&C in every page and display only in lastpage
+	//if you want to display the description and T&C in each page then set the display_desc_tc='true' and bottom <= 145 in pdfconfig.php
+	if($display_desc_tc == 'true')
+	if($bottom <= 145)
+	{
+		include("modules/SalesOrder/pdf_templates/footer.php");
+	}
 
 	$page_num++;
 
 	if (($endpage) && ($lastpage))
 	{
 		$pdf->AddPage();
-		include("pdf_templates/header.php");
-		include("pdf_templates/lastpage/body.php");
-		include("pdf_templates/lastpage/footer.php");
+		include("modules/SalesOrder/pdf_templates/header.php");
+		include("modules/SalesOrder/pdf_templates/lastpage/body.php");
+		include("modules/SalesOrder/pdf_templates/lastpage/footer.php");
 	}
 }
 

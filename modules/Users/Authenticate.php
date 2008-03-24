@@ -20,14 +20,14 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Users/User.php');
+require_once('modules/Users/Users.php');
 require_once('modules/Users/CreateUserPrivilegeFile.php');
 require_once('include/logging.php');
 require_once('user_privileges/audit_trail.php');
 
 global $mod_strings;
 
-$focus = new User();
+$focus = new Users();
 
 // Add in defensive code here.
 $focus->column_fields["user_name"] = to_html($_REQUEST['user_name']);
@@ -47,10 +47,10 @@ if($focus->is_authenticated())
 		else
 			$auditrecord = $record;	
 
-		$date_var = $adb->formatDate(date('YmdHis'));
- 	    $query = "insert into vtiger_audit_trial values(".$adb->getUniqueID('vtiger_audit_trial').",".$focus->id.",'Users','Authenticate','',$date_var)";	
-			
-		$adb->query($query);
+		$date_var = $adb->formatDate(date('YmdHis'), true);
+ 	    $query = "insert into vtiger_audit_trial values(?,?,?,?,?,?)";
+		$params = array($adb->getUniqueID('vtiger_audit_trial'), $focus->id, 'Users','Authenticate','',$date_var);				
+		$adb->pquery($query, $params);
 	}
 
 	
@@ -67,7 +67,6 @@ if($focus->is_authenticated())
 	createUserPrivilegesfile($focus->id);
 	
 	//Security related entries end
-	header("Location: index.php?action=index&module=Home");
 	session_unregister('login_password');
 	session_unregister('login_error');
 	session_unregister('login_user_name');
@@ -107,7 +106,7 @@ if($focus->is_authenticated())
 		$authenticated_user_language = $default_language;	
 	}
 
-	$_SESSION['authenticated_user_theme'] = $authenticated_user_theme;
+	$_SESSION['vtiger_authenticated_user_theme'] = $authenticated_user_theme;
 	$_SESSION['authenticated_user_language'] = $authenticated_user_language;
 	
 	$log->debug("authenticated_user_theme is $authenticated_user_theme");
@@ -126,6 +125,11 @@ if($focus->is_authenticated())
 	{
 		unlink($tmp_file_name);
 	}
+	$arr = $_SESSION['lastpage'];
+	if(isset($_SESSION['lastpage']))
+		header("Location: index.php?".$arr[0]);
+	else
+		header("Location: index.php");
 }
 else
 {

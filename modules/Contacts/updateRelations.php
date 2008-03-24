@@ -8,13 +8,17 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-
 require_once('include/database/PearDatabase.php');
 require_once('user_privileges/default_module_view.php');
 global $adb, $singlepane_view;
 $idlist = $_REQUEST['idlist'];
-$update_mod = $_REQUEST['destination_module'];
-$rel_table = 'vtiger_campaigncontrel';
+$dest_mod = $_REQUEST['destination_module'];
+$record = $_REQUEST['record'];
+$parenttab = $_REQUEST['parenttab'];
+
+if($singlepane_view == 'true') $action = "DetailView";
+else $action = "CallRelatedList";
+
 if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 {
 	//split the string and store in an array
@@ -23,23 +27,28 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 	{
 		if($id != '')
 		{
-		    $sql = "insert into  ".$rel_table." values(".$id.",".$_REQUEST["parentid"].")";
-	            $adb->query($sql);
+			if($dest_mod == 'Products')
+				$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($_REQUEST["parentid"], $id, 'Contacts'));	
+			elseif($dest_mod == 'Campaigns')
+				$adb->pquery("insert into vtiger_campaigncontrel values(?,?)", array($id, $_REQUEST["parentid"]));
 		}
 	}
-	if($singlepane_view == 'true')
-		header("Location: index.php?action=DetailView&module=Contacts&record=".$_REQUEST["parentid"]);
-	else
- 		header("Location: index.php?action=CallRelatedList&module=Contacts&record=".$_REQUEST["parentid"]);
+	$record = $_REQUEST["parentid"];
 }
 elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
-{	
-		$sql = "insert into ".$rel_table." values(".$_REQUEST["entityid"].",".$_REQUEST["parid"].")";
-		$adb->query($sql);
-		if($singlepane_view == 'true')
-			header("Location: index.php?action=DetailView&module=Contacts&record=".$_REQUEST["parid"]);
-		else
- 			header("Location: index.php?action=CallRelatedList&module=Contacts&record=".$_REQUEST["parid"]);
+{
+	if($dest_mod == 'Products')
+		$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($_REQUEST["parid"], $_REQUEST["entityid"], 'Contacts'));
+	elseif($dest_mod == 'Campaigns')
+		$adb->pquery("insert into vtiger_campaigncontrel values(?,?)", array($_REQUEST["entityid"], $_REQUEST["parid"]));
+	$record = $_REQUEST["parid"];
 }
+elseif(isset($_REQUEST['pot_id']) && $_REQUEST['pot_id'] != '')
+{	
+	$sql = "insert into vtiger_contpotentialrel values(?,?)";
+	$adb->pquery($sql, array($record, $_REQUEST["pot_id"]));
+}
+
+header("Location: index.php?action=$action&module=Contacts&record=$record&parenttab=$parenttab");
 
 ?>

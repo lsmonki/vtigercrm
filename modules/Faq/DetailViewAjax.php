@@ -22,7 +22,7 @@ if($ajaxaction == "DETAILVIEW")
 	$crmid = $_REQUEST["recordid"];
 	$tablename = $_REQUEST["tableName"];
 	$fieldname = $_REQUEST["fldName"];
-	$fieldvalue = $_REQUEST["fieldValue"];
+	$fieldvalue = utf8RawUrlDecode($_REQUEST["fieldValue"]); 
 	if($crmid != "")
 	{
 		$modObj = new Faq();
@@ -38,7 +38,13 @@ if($ajaxaction == "DETAILVIEW")
 		$modObj->save("Faq");
 		if($modObj->id != "")
 		{
-			echo ":#:SUCCESS";
+			if($fieldname == "comments")
+			{
+				$comments = $modObj->getFAQComments($modObj->id);
+				echo ":#:SUCCESS".$comments;
+			}
+			else
+				echo ":#:SUCCESS";
 		}else
 		{
 			echo ":#:FAILURE";

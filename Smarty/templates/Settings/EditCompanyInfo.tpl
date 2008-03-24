@@ -72,7 +72,8 @@
                              {$MOD.LBL_SELECT_LOGO} 
 				<INPUT TYPE="HIDDEN" NAME="MAX_FILE_SIZE" VALUE="800000">
 		                <INPUT TYPE="HIDDEN" NAME="PREV_FILE" VALUE="{$ORGANIZATIONLOGONAME}">	 
-                                <input type="file" name="binFile" class="small" value="{$ORGANIZATIONLOGONAME}">[{$ORGANIZATIONLOGONAME}]
+                                <input type="file" name="binFile" class="small" value="{$ORGANIZATIONLOGONAME}" onclick="validateFilename(this);">[{$ORGANIZATIONLOGONAME}]
+                                <input type="hidden" name="binFile_hidden" value="{$ORGANIZATIONLOGONAME}" />
 			      </td>
                           </tr>
                           <tr>
@@ -143,17 +144,25 @@ function verify_data(form,company_name)
 {
 	if (form.organization_name.value == "" )
 	{
-		alert(company_name +" cannot be none");
-		form.organization_name.focus();
-		return false;
-
+		{/literal}
+                alert(company_name +"{$APP.CANNOT_BE_NONE}");
+                form.organization_name.focus();
+                return false;
+                {literal}
 	}
 	else if (form.organization_name.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{
-		alert(company_name +" cannot be empty");
-		form.organization_name.focus();
-		return false;
+	{/literal}
+                alert(company_name +"{$APP.CANNOT_BE_EMPTY}");
+                form.organization_name.focus();
+                return false;
+                {literal}
 	}
+	else if (! upload_filter("binFile","jpg|jpeg|JPG|JPEG"))
+        {
+                form.binFile.focus();
+                return false;
+        }
 	else
 	{
 		return true;

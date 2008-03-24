@@ -10,7 +10,6 @@
  ********************************************************************************/
 require_once("data/Tracker.php");
 require_once('Smarty_setup.php');
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Reports/Reports.php');
@@ -40,6 +39,7 @@ if(isset($_REQUEST["record"]))
         $oReport = new Reports($recordid);
         $BLOCK1 = $oReport->sgetColumntoTotalSelected($oReport->primodule,$oReport->secmodule,$recordid);
 		$report_column_tot->assign("BLOCK1",$BLOCK1);
+		$report_column_tot->assign("RECORDID",$recordid);
 }else
 {
         $primarymodule = $_REQUEST["primarymodule"];
@@ -48,5 +48,11 @@ if(isset($_REQUEST["record"]))
         $BLOCK1 = $oReport->sgetColumntoTotal($primarymodule,$secondarymodule);
 		$report_column_tot->assign("BLOCK1",$BLOCK1);
 }
+//added to avoid displaying "No data avaiable to total" when using related modules in report.
+if(count($BLOCK1[0]) == 0 &&  count($BLOCK1[1])==0)
+	$report_column_tot->assign("ROWS_COUNT",0);
+else
+	$report_column_tot->assign("ROWS_COUNT","-1");
+
 $report_column_tot->display('ReportColumnsTotal.tpl');
 ?>

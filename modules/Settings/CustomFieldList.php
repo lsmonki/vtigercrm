@@ -12,30 +12,15 @@ require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 
-global $mod_strings;
-global $app_strings;
+global $mod_strings,$app_strings,$theme;
 $smarty=new vtigerCRM_Smarty;
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 $smarty->assign("IMAGE_PATH", $image_path);
-$module_array=Array('Leads'=>'Leads',
-                        'Accounts'=>'Accounts',
-                        'Contacts'=>'Contacts',
-                        'Potentials'=>'Potentials',
-                        'HelpDesk'=>'HelpDesk',
-                        'Products'=>'Products',
-                        'Vendors'=>'Vendors',
-                        'PriceBooks'=>'PriceBooks',
-                        'PurchaseOrder'=>'PurchaseOrder',
-                        'SalesOrder'=>'SalesOrder',
-                        'Quotes'=>'Quotes',
-                        'Invoice'=>'Invoice',
-						'Campaigns'=>'Campaigns'
-                        );
+$module_array=getCustomFieldSupportedModules();
+
 $cfimagecombo = Array($image_path."text.gif",
 $image_path."number.gif",
 $image_path."percent.gif",
@@ -75,7 +60,7 @@ $smarty->assign("MODULE",$fld_module);
 $smarty->assign("CFENTRIES",getCFListEntries($fld_module));
 if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 {
-	$error='Custom Field in the Name '.$_REQUEST["fldlabel"].' already exists. Please specify a different Label';
+	$error=$mod_strings['ERR_CUSTOM_FIELD_WITH_NAME']. $_REQUEST["fldlabel"] .$mod_strings['ERR_ALREADY_EXISTS'] . ' ' .$mod_strings['ERR_SPECIFY_DIFFERENT_LABEL'];
 	$smarty->assign("DUPLICATE_ERROR", $error);
 }
 
@@ -96,12 +81,11 @@ else
 function getCFListEntries($module)
 {
 	$tabid = getTabid($module);
-	global $adb;
-	global $theme;
+	global $adb,$app_strings,$theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	$dbQuery = "select fieldid,columnname,fieldlabel,uitype,displaytype,vtiger_convertleadmapping.cfmid from vtiger_field left join vtiger_convertleadmapping on  vtiger_convertleadmapping.leadfid = vtiger_field.fieldid where tabid=".$tabid." and generatedtype=2 order by sequence";
-	$result = $adb->query($dbQuery);
+	$dbQuery = "select fieldid,columnname,fieldlabel,uitype,displaytype,vtiger_convertleadmapping.cfmid from vtiger_field left join vtiger_convertleadmapping on  vtiger_convertleadmapping.leadfid = vtiger_field.fieldid where tabid=? and generatedtype=2 order by sequence";
+	$result = $adb->pquery($dbQuery, array($tabid));
 	$row = $adb->fetch_array($result);
 	$count=1;
 	$cflist=Array();
@@ -121,7 +105,7 @@ function getCFListEntries($module)
 				$cf_element[]= $mapping_details['contactlabel'];
 				$cf_element[]= $mapping_details['potentiallabel'];
 			}
-			$cf_element['tool']='<img src="'.$image_path.'editfield.gif" border="0" style="cursor:pointer;" onClick="fnvshobj(this,\'createcf\');getCreateCustomFieldForm(\''.$module.'\',\''.$row["fieldid"].'\',\''.$tabid.'\',\''.$row["uitype"].'\')" alt="Edit" title="Edit"/>&nbsp;|&nbsp;<img style="cursor:pointer;" onClick="deleteCustomField('.$row["fieldid"].',\''.$module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')" src="'.$image_path.'delete.gif" border="0"  alt="Delete" title="Delete"/></a>';
+			$cf_element['tool']='<img src="'.$image_path.'editfield.gif" border="0" style="cursor:pointer;" onClick="fnvshobj(this,\'createcf\');getCreateCustomFieldForm(\''.$module.'\',\''.$row["fieldid"].'\',\''.$tabid.'\',\''.$row["uitype"].'\')" alt="'.$app_strings['LBL_EDIT_BUTTON_LABEL'].'" title="'.$app_strings['LBL_EDIT_BUTTON_LABEL'].'"/>&nbsp;|&nbsp;<img style="cursor:pointer;" onClick="deleteCustomField('.$row["fieldid"].',\''.$module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')" src="'.$image_path.'delete.gif" border="0"  alt="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'" title="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'"/></a>';
 
 			$cflist[] = $cf_element;
 			$count++;
@@ -138,8 +122,8 @@ function getCFListEntries($module)
 function getListLeadMapping($cfid)
 {
 	global $adb;
-	$sql="select * from vtiger_convertleadmapping where cfmid =".$cfid;
-	$result = $adb->query($sql);
+	$sql="select * from vtiger_convertleadmapping where cfmid =?";
+	$result = $adb->pquery($sql, array($cfid));
 	$noofrows = $adb->num_rows($result);
 	for($i =0;$i <$noofrows;$i++)
 	{
@@ -149,21 +133,35 @@ function getListLeadMapping($cfid)
 		$potentialid = $adb->query_result($result,$i,'potentialfid');
 		$cfmid = $adb->query_result($result,$i,'cfmid');
 
-		$sql2="select fieldlabel from vtiger_field where fieldid ='".$accountid."'";
-		$result2 = $adb->query($sql2);
+		$sql2="select fieldlabel from vtiger_field where fieldid =?";
+		$result2 = $adb->pquery($sql2, array($accountid));
 		$accountfield = $adb->query_result($result2,0,'fieldlabel');
 		$label['accountlabel'] = $accountfield;
 		
-		$sql3="select fieldlabel from vtiger_field where fieldid ='".$contactid."'";
-		$result3 = $adb->query($sql3);
+		$sql3="select fieldlabel from vtiger_field where fieldid =?";
+		$result3 = $adb->pquery($sql3, array($contactid));
 		$contactfield = $adb->query_result($result3,0,'fieldlabel');
 		$label['contactlabel'] = $contactfield;
-		$sql4="select fieldlabel from vtiger_field where fieldid ='".$potentialid."'";
-		$result4 = $adb->query($sql4);
+		$sql4="select fieldlabel from vtiger_field where fieldid =?";
+		$result4 = $adb->pquery($sql4, array($potentialid));
 		$potentialfield = $adb->query_result($result4,0,'fieldlabel');
 		$label['potentiallabel'] = $potentialfield;
 	}
 	return $label;
 }
 
+/* function to get the modules supports Custom Fields
+*/
+
+function getCustomFieldSupportedModules()
+{
+	global $adb;
+	$sql="select distinct vtiger_field.tabid,name from vtiger_field inner join vtiger_tab on vtiger_field.tabid=vtiger_tab.tabid where vtiger_field.tabid not in(9,10,16,15,8,29)";
+	$result = $adb->pquery($sql, array());
+	while($moduleinfo=$adb->fetch_array($result))
+	{
+		$modulelist[$moduleinfo['name']] = $moduleinfo['name'];
+	}
+	return $modulelist;
+}
 ?>

@@ -9,7 +9,7 @@
  ********************************************************************************/
 -->
 <script language="javascript">
-
+var parenttab = "{$CATEGORY}";
 function updateAllListPrice()
 {ldelim}
         var unitprice_array = new Array({$UNIT_PRICE_ARRAY});
@@ -17,16 +17,24 @@ function updateAllListPrice()
 
 	var n=unitprice_array.length;	
 	var unitprice,fieldname;
+	var id;
+	var fieldinfo;
+	var checkid;
+
 	for(j=0; j<unitprice_array.length; j++)
 	{ldelim}
+		fieldinfo = fieldname_array[j].split("_");
+		id = fieldinfo[0];
+		checkid = "check_"+id;
+
 		unitprice=unitprice_array[j];
 		fieldname=fieldname_array[j];	
-		updateListPrice(unitprice,fieldname);
+		updateListPrice(unitprice,fieldname,document.getElementById(checkid));
 	{rdelim}
 {rdelim}
 
 </script>
-<script language="javascript" src="modules/PriceBooks/PriceBook.js"></script>
+<script language="javascript" src="modules/PriceBooks/PriceBooks.js"></script>
 <BR>
 <BR>
 {$PRODUCTLISTHEADER}

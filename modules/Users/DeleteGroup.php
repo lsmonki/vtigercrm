@@ -33,5 +33,5 @@ elseif($transferType == 'U')
 deleteGroup($del_id,$transferId,$transferType);
 
 
-header("Location: index.php?action=listgroups&module=Users&parenttab=Settings");
+header("Location: index.php?action=listgroups&module=Settings&parenttab=Settings");
 ?>

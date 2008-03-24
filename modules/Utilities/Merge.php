@@ -11,33 +11,36 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-//echo 'id is ....... ' .$_REQUEST['record'];
+global $default_charset;
 
-//echo 'merge file name is ...' .$_REQUEST['mergefile'];
+// Fix For: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/2107
+$randomfilename = "vt_" . str_replace(array("."," "), "", microtime());
 
 $mergeFileName = $_REQUEST['mergefile'];
 //get the particular file from db and store it in the local hard disk.
 //store the path to the location where the file is stored and pass it  as parameter to the method 
-$sql = "select filename,data,filesize from vtiger_wordtemplatestorage where filename='".$mergeFileName."'";
-
-$result = $adb->query($sql);
+$sql = "select filename,data,filesize from vtiger_wordtemplatestorage where filename=?";
+$result = $adb->pquery($sql, array($mergeFileName));
 $temparray = $adb->fetch_array($result);
 
 $fileContent = $temparray['data'];
-$filename=$temparray['filename'];
+$filename=html_entity_decode($temparray['filename'], ENT_QUOTES, $default_charset);
+// Fix For: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/2107
+$filename= $randomfilename . "_word.doc";
+
 $filesize=$temparray['filesize'];
 $wordtemplatedownloadpath =$_SERVER['DOCUMENT_ROOT'] ."/test/wordtemplatedownload/";
 
 //echo '<br> file name and size is ..'.$filename .'...'.$filesize;
-$handle = fopen($wordtemplatedownloadpath .$temparray['filename'],"wb") ;
+$handle = fopen($wordtemplatedownloadpath .$filename,"wb") ;
 //chmod("/home/mickie/test/".$fileContent,0755);
 fwrite($handle,base64_decode($fileContent),$filesize);
 fclose($handle);
 
 
-$query = "SELECT * FROM " .$_REQUEST["module"] ." where id = '".$_REQUEST['record'] ."'";
+$query = "SELECT * FROM " .$_REQUEST["module"] ." where id = ?";
 //echo $query;
-$result = $adb->query($query);
+$result = $adb->pquery($query, array($_REQUEST['record']));
 
 $y=$adb->num_fields($result);
 

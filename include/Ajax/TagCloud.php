@@ -10,6 +10,8 @@
   ********************************************************************************/
 $ajaxaction = $_REQUEST['ajxaction'];
 global $current_user;
+global $default_charset;
+
 $crmid = $_REQUEST["recordid"];
 $module = $_REQUEST["module"];
 $userid = $current_user->id;
@@ -17,15 +19,22 @@ if($ajaxaction == "SAVETAG")
 {
 	
 	require_once('include/freetag/freetag.class.php');
-	$tagfields = $_REQUEST["tagfields"];
-    	$freetag = new freetag();
-	if (isset($_REQUEST["tagfields"]) && trim($_REQUEST["tagfields"]) != "")
+	$tagfields=function_exists(iconv) ? @iconv("UTF-8",$default_charset,$_REQUEST['tagfields']) : $_REQUEST['tagfields'];
+	$tagfields =str_replace(array("'",'"'),'',$tagfields);
+	if($tagfields != "")
 	{
-	      	$freetag->tag_object($userid,$crmid,$tagfields,$module);
-	  	$tagcloud = $freetag->get_tag_cloud_html($module,$userid,$crmid);
-	  	echo $tagcloud;
+    		$freetag = new freetag();
+		if (isset($_REQUEST["tagfields"]) && trim($_REQUEST["tagfields"]) != "")
+		{
+			$freetag->tag_object($userid,$crmid,$tagfields,$module);
+			$tagcloud = $freetag->get_tag_cloud_html($module,$userid,$crmid);
+			echo $tagcloud;
+		}
 	}
-
+	else
+	{
+		echo ":#:FAILURE";
+	}
 }
 elseif($ajaxaction == 'GETTAGCLOUD')
 {
@@ -46,10 +55,10 @@ elseif($ajaxaction == 'GETTAGCLOUD')
 	{
 		$tagid = $_REQUEST['tagid']; 
 		global $adb;
-		$query="delete from vtiger_freetagged_objects where tag_id=".$tagid;
-		$result=$adb->query($query);
-		$query="delete from vtiger_freetags where id=".$tagid;
-		$result=$adb->query($query);
+		$query="delete from vtiger_freetagged_objects where tag_id=? and object_id=?";
+		$result=$adb->pquery($query, array($tagid, $crmid));
+		/*$query="delete from vtiger_freetags where id=?";
+		$result=$adb->pquery($query, array($tagid));*/
 		echo 'SUCESS';
 	}else
 	{

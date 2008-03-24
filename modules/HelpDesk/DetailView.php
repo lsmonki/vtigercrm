@@ -31,8 +31,11 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 //Added code for Error display in sending mail to assigned to user when ticket is created or updated.
 if($_REQUEST['mail_error'] != '')
 {
-        require_once("modules/Emails/mail.php");
-        echo parseEmailErrorString($_REQUEST['mail_error']);
+    require_once("modules/Emails/mail.php");
+	$ticket_owner = getUserName($focus->column_fields['assigned_user_id']);
+    $error_msg = strip_tags(parseEmailErrorString($_REQUEST['mail_error']));
+	$error_msg = $app_strings['LBL_MAIL_NOT_SENT_TO_USER']. ' ' . $ticket_owner. '. ' .$app_strings['LBL_PLS_CHECK_EMAIL_N_SERVER'];
+	echo $mod_strings['LBL_MAIL_SEND_STATUS'].' <b><font class="warning">'.$error_msg.'</font></b>';
 }
 
 global $app_strings;
@@ -42,7 +45,6 @@ global $currentModule, $singlepane_view;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
@@ -75,7 +77,8 @@ $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_st
 $smarty->assign("ID", $_REQUEST['record']);
 if(isPermitted("HelpDesk","Merge",'') == 'yes')
 {
-	$smarty->assign("MERGEBUTTON","permitted");
+	global $current_user;
+        require("user_privileges/user_privileges_".$current_user->id.".php");
         require_once('include/utils/UserInfoUtil.php');
         $wordTemplateResult = fetchWordTemplateList("HelpDesk");
         $tempCount = $adb->num_rows($wordTemplateResult);
@@ -85,6 +88,11 @@ if(isPermitted("HelpDesk","Merge",'') == 'yes')
                 $optionString[$tempVal["templateid"]]=$tempVal["filename"];
                 $tempVal = $adb->fetch_array($wordTemplateResult);
         }
+	 if($is_admin)
+                $smarty->assign("MERGEBUTTON","permitted");
+	elseif($tempCount >0)
+		$smarty->assign("MERGEBUTTON","permitted");
+	 $smarty->assign("TEMPLATECOUNT",$tempCount);
 	$smarty->assign("WORDTEMPLATEOPTIONS",$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']);
         $smarty->assign("TOPTIONS",$optionString);
 }
@@ -104,7 +112,9 @@ $smarty->assign("COMMENT_BLOCK",$focus->getCommentInformation($_REQUEST['record'
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
-
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 if($singlepane_view == 'true')
 {
 	$related_array = getRelatedLists($currentModule,$focus);

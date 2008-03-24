@@ -37,7 +37,6 @@ $mod_strings = Array(
 'LBL_NEW_REP0_HDR4'=>'Report Module and related module once selected cannot be modified later',
 'LBL_CONTINUE_BUTTON'=>'Continue',
 'LBL_NEW_REP1_HDR1'=>'Provide the following report information',
-'LBL_REPORT_TYPE'=>'Report Type',
 'LBL_SELECT_COLUMNS'=>'Select Columns',
 'LBL_SPECIFY_GROUPING'=>'Specify Grouping',
 'LBL_COLUMNS_TO_TOTAL'=>'Choose Columns To Total',
@@ -96,8 +95,7 @@ $mod_strings = Array(
 'LBL_CLICK_HERE'=>'Click Here',
 'LBL_TO_ADD_NEW_GROUP'=>'to add new folder',
 'LBL_CREATE_NEW'=>'Create New',
-'LBL_REPORT_DETAILS'=>'Report Details',
-'LBL_RELATIVE_MODULE'=>'Relative Module',
+'LBL_RELATIVE_MODULE'=>'Related Module',
 'LBL_REPORT_TYPE'=>'Report Type',
 'LBL_REPORT_DETAILS'=>'Report Details',
 'LBL_TYPE_THE_NAME'=>'Type the Name',
@@ -108,7 +106,7 @@ $mod_strings = Array(
 'LBL_AND'=>'and',
 'LBL_ADD_NEW_GROUP'=>'Add New Folder',
 'LBL_REPORT_MODULE'=>'Report Module',
-'LBL_SELECT_RELATIVE_MODULE_FOR_REPORT'=>'Select Relative Module for Report',
+'LBL_SELECT_RELATIVE_MODULE_FOR_REPORT'=>'Select Related Module for Report',
 'LBL_SELECT_REPORT_TYPE_BELOW'=>'Select Report type Below',
 'LBL_TABULAR_FORMAT'=>'Tabular Format',
 'LBL_TABULAR_REPORTS_ARE_SIMPLEST'=>'Tabular Reports are the simplest and fastest way of getting your data',
@@ -193,14 +191,23 @@ $mod_strings = Array(
 'Next 60 Days'=>'Next 60 Days',
 'Next 90 Days'=>'Next 90 Days',
 'Next 120 Days'=>'Next 120 Days',
+'TITLE_VTIGERCRM_CREATE_REPORT' => 'vtiger CRM - Create Report',
+'TITLE_VTIGERCRM_PRINT_REPORT' => 'vtiger -  Print Report',
+'NO_FILTER_SELECTED' => 'No filter Selected',
 
 'LBL_GENERATE_NOW'=>'Generate Now',
-'Totals'=>'Totals',
+'Totals'=>'Field Names',
 'SUM'=>'SUM',
 'AVG'=>'AVG',
 'MAX'=>'MAX',
 'MIN'=>'MIN',
 'LBL_CUSTOM_REPORTS'=>'Custom Reports',
+
+'ticketid'=>'Ticket Id',
+'NO_COLUMN'=>'No Columns available to Total',
+
+// Added/Updated for vtiger CRM 5.0.4
+'LBL_REPORT_DELETED' => 'The report you are trying to view has been deleted.',
 )
 
 ?>

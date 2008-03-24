@@ -21,10 +21,13 @@ $image_path=$theme_path."images/";
 $smarty = new vtigerCRM_Smarty;
 if($_REQUEST['error'] != '')
 {
-		$smarty->assign("ERROR_MSG",'<b><font color="purple">'.$_REQUEST["error"].'</font></b>');
+	if($_REQUEST["error"] == 'LBL_PROXY_AUTHENTICATION_REQUIRED')
+		$smarty->assign("ERROR_MSG",'<b><font color="red">'.$mod_strings[$_REQUEST["error"]].'</font></b>');
+	else
+		$smarty->assign("ERROR_MSG",'<b><font color="red">'.$_REQUEST["error"].'</font></b>');
 }
-$sql="select * from vtiger_systems where server_type = 'proxy'";
-$result = $adb->query($sql);
+$sql="select * from vtiger_systems where server_type = ?";
+$result = $adb->pquery($sql, array('proxy'));
 $server = $adb->query_result($result,0,'server');
 $server_port = $adb->query_result($result,0,'server_port');
 $server_username = $adb->query_result($result,0,'server_username');
@@ -34,13 +37,18 @@ if(isset($_REQUEST['proxy_server_mode']) && $_REQUEST['proxy_server_mode'] != ''
 	$smarty->assign("PROXY_SERVER_MODE",$_REQUEST['proxy_server_mode']);
 else
 	$smarty->assign("PROXY_SERVER_MODE",'view');
-
-if (isset($server))
+if(isset($_REQUEST['server']))
+	$smarty->assign("PROXYSERVER",$_REQUEST['server']);
+elseif (isset($server))
 	$smarty->assign("PROXYSERVER",$server);
-if (isset($server_port))
+if (isset($_REQUEST['port']))
+        $smarty->assign("PROXYPORT",$_REQUEST['port']);
+elseif (isset($server_port))
         $smarty->assign("PROXYPORT",$server_port);
-if (isset($server_username))
-	$smarty->assign("PROXYUSER",$server_username);
+if (isset($_REQUEST['server_user']))
+	$smarty->assign("PROXYUSER",$_REQUEST['server_user']);
+elseif (isset($server_username))
+        $smarty->assign("PROXYUSER",$server_username);
 if (isset($server_password))
 	$smarty->assign("PROXYPASSWORD",$server_password);
 

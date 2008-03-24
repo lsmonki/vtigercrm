@@ -31,7 +31,11 @@
 		{foreach item=modules from=$BLOCK1}
 		{foreach item=row from=$modules}
 		<tr class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
-		<td><b>{$row.0}</b></td>
+		{if $RECORDID neq ''}
+                        <td><b>{$row.label.0}</b></td>
+                {else}
+                        <td><b>{$row.0}</b></td>
+                {/if}
 		<td>{$row.1}</td>
 		<td>{$row.2}</td>
 		<td>{$row.3}</td>
@@ -39,6 +43,11 @@
 		</tr>
 		{/foreach}
 		{/foreach}
+
+	{if $ROWS_COUNT eq 0}
+		<tr class="lvtColData" bgcolor="white"><td colspan="5"><b>{$MOD.NO_COLUMN}</b></td></tr>
+	{/if}
+
 		</tbody>
 	</table>
 	</div>

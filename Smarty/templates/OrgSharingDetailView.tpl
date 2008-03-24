@@ -45,7 +45,7 @@ DIV.fixedLay {
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}shareaccess.gif" alt="Users" width="48" height="48" border=0 title="Users"></td>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}shareaccess.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_SHARING_ACCESS} </b></td>
 					<td rowspan=2 class="small" align=right>&nbsp;</td>
 				</tr>
@@ -194,22 +194,22 @@ DIV.fixedLay {
 <div id="tempdiv" style="display:block;position:absolute;width:400px;"></div>
 
 <!-- For Disabling Window -->
-<div id="confId"  class='veil_new' style="display:none;">
-<table class="options" border="0" cellpadding="18" cellspacing="0">
+<div id="confId"  class='veil_new small' style="display:none;">
+<table class="options small" border="0" cellpadding="18" cellspacing="0">
 <tr>
-	<td class="big" align="center">
-		<h2>{$CMOD.LBL_RECALC_MSG}</h2>
+	<td align="center" nowrap style="color:#FFFFFF;font-size:15px;">
+		<b>{$CMOD.LBL_RECALC_MSG}</b>
 	</td>
 	<br>
 	<tr>
-		<td align="center"><input type="button" value="{$CMOD.LBL_YES}" onclick="return disableStyle('confId');">&nbsp;&nbsp;<input type="button" value="&nbsp;{$CMOD.LBL_NO}&nbsp;" onclick="$('freeze').style.display='none';$('confId').style.display='none'; "></td>
+		<td align="center"><input type="button" value="{$CMOD.LBL_YES}" onclick="return disableStyle('confId');">&nbsp;&nbsp;<input type="button" value="&nbsp;{$CMOD.LBL_NO}&nbsp;" onclick="showSelect();$('confId').style.display='none';document.body.removeChild($('freeze'));"></td>
 	</tr>
 </tr>
 </table>
 </div>
 
-<div id="divId" class="veil_new" style="display:none;top:0px;left:0px;">
-<table class="optioncontainer" border="0" cellpadding="18" cellspacing="0">
+<div id="divId" class="veil_new" style="position:absolute;width:100%;display:none;top:0px;left:0px;">
+<table border="5" cellpadding="0" cellspacing="0" align="center" style="vertical-align:middle;width:100%;height:100%;">
 <tbody><tr>
 		<td class="big" align="center">
 		    <img src="{$IMAGE_PATH}plsWaitAnimated.gif">
@@ -228,7 +228,7 @@ function callEditDiv(obj,modulename,mode,id)
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
                         method: 'post',
-                        postBody: 'module=Users&action=UsersAjax&orgajax=true&mode='+mode+'&sharing_module='+modulename+'&shareid='+id,
+                        postBody: 'module=Settings&action=SettingsAjax&orgajax=true&mode='+mode+'&sharing_module='+modulename+'&shareid='+id,
                         onComplete: function(response) {ldelim}
                                 $("status").style.display="none";
                                 $("tempdiv").innerHTML=response.responseText;
@@ -280,7 +280,7 @@ function fnwriteRules(module,related)
 
 		function confirmdelete(url)
 		{ldelim}
-			if(confirm("Are you sure?"))
+			if(confirm("{$APP.ARE_YOU_SURE}"))
 			{ldelim}
 				document.location.href=url;
 			{rdelim}
@@ -291,14 +291,24 @@ function fnwriteRules(module,related)
 			$('orgSharingform').action.value = 'RecalculateSharingRules';
 			$('orgSharingform').submit();
  			$(id).style.display = 'none';
-			$('divId').style.display = 'block';
+
+			if(browser_ie && (gBrowserAgent.indexOf("msie 7.")!=-1))//for IE 7
+                        {ldelim}
+                                document.body.removeChild($('freeze'));
+                        {rdelim}else if(browser_ie)
+                        {ldelim}
+                             var oDivfreeze = $('divId');
+                             oDivfreeze.style.height = document.documentElement['clientHeight'] + 'px';
+
+                        {rdelim}
+                        $('divId').style.display = 'block';
 	{rdelim}
 
 	function freezeBackground()
 	{ldelim}
 	    var oFreezeLayer = document.createElement("DIV");
 	    oFreezeLayer.id = "freeze";
-	    oFreezeLayer.className = "veil";
+	    oFreezeLayer.className = "small veil";
 
 	     if (browser_ie) oFreezeLayer.style.height = (document.body.offsetHeight + (document.body.scrollHeight - document.body.offsetHeight)) + "px";
 	     else if (browser_nn4 || browser_nn6) oFreezeLayer.style.height = document.body.offsetHeight + "px";
@@ -306,6 +316,7 @@ function fnwriteRules(module,related)
 	    oFreezeLayer.style.width = "100%";
 	    document.body.appendChild(oFreezeLayer);
 	    document.getElementById('confId').style.display = 'block';
+	    hideSelect();
 	{rdelim}
 
 </script>

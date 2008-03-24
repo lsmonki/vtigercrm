@@ -27,7 +27,7 @@
 			<input type="hidden" name="action" value="index">
 			<input type="hidden" name="record" value="{$ID}">
 			<tr>
-				<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}currency.gif" alt="Users" width="48" height="48" border=0 title="Users"></td>
+				<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}currency.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
 				<td class="heading2" valign="bottom" ><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=CurrencyListView&parenttab=Settings">{$MOD.LBL_CURRENCY_SETTINGS}</a> > 
 				{if $ID neq ''}
 					{$MOD.LBL_EDIT} &quot;{$CURRENCY_NAME}&quot; 
@@ -55,7 +55,7 @@
 						{/if}
 						<td class="small" align=right>
 							<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmButton small save" onclick="this.form.action.value='SaveCurrencyInfo'; return validate()" type="submit" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" >&nbsp;&nbsp;
-							<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
+							<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
 						</td>
 					</tr>
 					</table>
@@ -131,8 +131,10 @@
 						if(isNaN(getObj("conversion_rate").value) || eval(getObj("conversion_rate")
 .value) == 0)
                                                 {
-                                                        alert("Enter valid Conversion Rate")
+							{/literal}
+                                                        alert("{$APP.ENTER_VALID_CONVERSION_RATE}")
                                                         return false
+                                                        {literal}
                                                 }
                                                 return true;
 

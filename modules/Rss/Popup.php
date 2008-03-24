@@ -9,20 +9,20 @@
 *
  ********************************************************************************/
 require_once("data/Tracker.php");
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Rss/Rss.php');
 
+global $mod_strings;
 $log = LoggerManager::getLogger('rss_save');
 
 if(isset($_REQUEST["record"]))
 {
 	global $adb;
 	$query = 'update vtiger_rss set starred=0';
-	$adb->query($query);
-	$query = 'update vtiger_rss set starred=1 where rssid ='.$_REQUEST["record"]; 
-	$adb->query($query);
+	$adb->pquery($query, array());
+	$query = 'update vtiger_rss set starred=1 where rssid =?'; 
+	$adb->pquery($query, array($_REQUEST["record"]));
 	echo $_REQUEST["record"];
 }
 elseif(isset($_REQUEST["rssurl"]))
@@ -35,14 +35,14 @@ elseif(isset($_REQUEST["rssurl"]))
 			$result = $oRss->saveRSSUrl($newRssUrl,$setstarred);
         	if($result == false)
         	{
-				echo "Unable to save the RSS Feed URL" ;
+				echo $mod_strings['UNABLE_TO_SAVE'] ;
         	}else
         	{
 				echo $result;
         	}
 	}else
 	{
-		echo "Not a valid RSS Feed URL" ;
+		echo $mod_strings['NOT_A_VALID'];
 
 	}
 }

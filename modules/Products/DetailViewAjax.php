@@ -10,7 +10,7 @@
   ********************************************************************************/
 
 require_once('include/logging.php');
-require_once('modules/Products/Product.php');
+require_once('modules/Products/Products.php');
 require_once('include/database/PearDatabase.php');
 global $adb,$current_user;
 
@@ -22,10 +22,10 @@ if($ajaxaction == "DETAILVIEW")
 	$crmid = $_REQUEST["recordid"];
 	$tablename = $_REQUEST["tableName"];
 	$fieldname = $_REQUEST["fldName"];
-	$fieldvalue = $_REQUEST["fieldValue"];
+	$fieldvalue = utf8RawUrlDecode($_REQUEST["fieldValue"]); 
 	if($crmid != "")
 	{
-		$modObj = new Product();
+		$modObj = new Products();
 		$modObj->retrieve_entity_info($crmid,"Products");
 		$modObj->column_fields[$fieldname] = $fieldvalue;
 		if($fieldname == 'unit_price')//unit price converted to dollar value while saving

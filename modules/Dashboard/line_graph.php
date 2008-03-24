@@ -89,8 +89,10 @@ if($max>=5)
 $graph->legend->Pos(0,0.4,"right","center");
 
 // Set some other color then the boring default
-$graph->SetColor("#CCDFCC");
-$graph->SetMarginColor("#98C098");
+$graph->SetColor("#6F96FF");
+//$graph->SetColor("#CCDFCC");
+$graph->SetMarginColor("#2447A7");
+//$graph->SetMarginColor("#98C098");
 $graph->xaxis->SetTickLabels($datax);
 $graph->xaxis->SetLabelAngle(90);
 

@@ -11,56 +11,35 @@
 //to merge a list of acounts with a template
 function massMerge(module)
 {
-        x = document.massdelete.selected_id.length;
-	var viewid = document.massdelete.viewname.value;
-        idstring = "";
+       var select_options  =  document.getElementsByName('selected_id');
+	var x = select_options.length;
+	var viewid =getviewId();		
+	idstring = "";
 
-        if ( x == undefined)
-        {
-
-                if (document.massdelete.selected_id.checked)
-                {
-                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
-                }
-                else
-                {
-                			
-                        alert("Please select at least one entity");
-                        return false;
-                }
-        }
-        else
-        {
-                xx = 0;
-                for(i = 0; i < x ; i++)
-                {
-                        if(document.massdelete.selected_id[i].checked)
-                        {
-                                idstring = document.massdelete.selected_id[i].value +";"+idstring
-                        xx++
-                        }
-                }
-                if (xx != 0)
-                {
-                        document.massdelete.idlist.value=idstring;
-                }
-               else
-                {
-                			
-                        alert("Please select at least one entity");
-                        return false;
-                }
-        }
-        
-        if(getObj('selectall').checked == true)
-	{
-		getObj('idlist').value = getObj('allids').value
-	}
-	
 	if(getObj('mergefile').value == '')
 	{
-	         alert("Please select a template to merge");
+	         alert(alert_arr.SELECT_TEMPLATE_TO_MERGE);
            	 return false;   
         }
-        document.massdelete.action="index.php?module="+module+"&action=Merge&return_module="+module+"&return_action=index";
+	xx = 0;
+	for(i = 0; i < x ; i++)
+	{
+		if(select_options[i].checked)
+		{
+			idstring = select_options[i].value +";"+idstring
+				xx++
+		}
+	}
+	if (xx != 0)
+	{
+		document.getElementById('idlist').value=idstring;
+	}
+	else
+	{
+		alert(alert_arr.SELECT);
+		return false;
+	}
+        
+	document.massdelete.action.value = 'Merge';
+	document.getElementById('massdelete').action="index.php?module="+module+"&action=Merge&return_module="+module+"&return_action=index";
 }

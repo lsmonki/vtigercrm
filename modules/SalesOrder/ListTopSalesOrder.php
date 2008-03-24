@@ -56,9 +56,9 @@ function getTopSalesOrder()
 	//<<<<<<<<<customview>>>>>>>>>
 	$date_var = date('Y-m-d');
 
-	$where = ' and vtiger_crmentity.smownerid='.$current_user->id.' and  vtiger_salesorder.duedate >= \''.$date_var.'\' ORDER BY total DESC';
+	$where = ' and vtiger_crmentity.smownerid='.$current_user->id.' and  vtiger_salesorder.duedate >= \''.$date_var.'\'';
 	$query = getListQuery("SalesOrder",$where);
-
+	$query .=" ORDER BY total DESC";
 	//<<<<<<<<customview>>>>>>>>>
 
 	$list_result = $adb->limitQuery($query,0,5);

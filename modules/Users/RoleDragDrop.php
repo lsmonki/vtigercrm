@@ -14,9 +14,9 @@ $toid=$_REQUEST['parentId'];
 $fromid=$_REQUEST['childId'];
 
 
-global $adb;
-$query = "select * from vtiger_role where roleid='".$toid."'";
-$result=$adb->query($query);
+global $adb,$mod_strings;
+$query = "select * from vtiger_role where roleid=?";
+$result=$adb->pquery($query, array($toid));
 $parentRoleList=$adb->query_result($result,0,'parentrole');
 $replace_with=$parentRoleList;
 $orgDepth=$adb->query_result($result,0,'depth');
@@ -27,7 +27,7 @@ $parentRoles=explode('::',$parentRoleList);
 
 if(in_array($fromid,$parentRoles))
 {
-	echo 'You cannot move a Parent Node under a Child Node';
+	echo $mod_strings['ROLE_DRAG_ERR_MSG'];
         die;
 }
 
@@ -46,17 +46,17 @@ $stdDepth=$fromRoleInfo['2'];
 //Constructing the query
 foreach($roleInfo as $mvRoleId=>$mvRoleInfo)
 {
-	$subPar=explode($replaceToString,$mvRoleInfo[1]);
+	$subPar=explode($replaceToString,$mvRoleInfo[1],2);//we have to spilit as two elements only
 	$mvParString=$replace_with.$subPar[1];
 	$subDepth=$mvRoleInfo[2];
 	$mvDepth=$orgDepth+(($subDepth-$stdDepth)+1);
-	$query="update vtiger_role set parentrole='".$mvParString."',depth=".$mvDepth." where roleid='".$mvRoleId."'";
+	$query="update vtiger_role set parentrole=?,depth=? where roleid=?";
 	//echo $query;
-	$adb->query($query);
+	$adb->pquery($query, array($mvParString, $mvDepth, $mvRoleId));
 		
 }
 
 
 
-header("Location: index.php?action=UsersAjax&module=Users&file=listroles&ajax=true");
+header("Location: index.php?action=SettingsAjax&module=Settings&file=listroles&ajax=true");
 ?>

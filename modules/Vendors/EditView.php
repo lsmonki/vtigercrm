@@ -11,13 +11,17 @@
 require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-require_once('modules/Vendors/Vendor.php');
+require_once('modules/Vendors/Vendors.php');
 require_once('include/FormValidationUtil.php');
 
 global $app_strings,$mod_strings,$theme,$currentModule;
 
-$focus = new Vendor();
+$focus = new Vendors();
 $smarty = new vtigerCRM_Smarty();
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
 
 if(isset($_REQUEST['record']) && $_REQUEST['record'] != '') 
 {
@@ -34,7 +38,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')
@@ -54,7 +57,7 @@ else
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Vendor']);
+$smarty->assign("SINGLE_MOD",'Vendor');
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
@@ -95,6 +98,7 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 
 if($focus->mode == 'edit')
 	$smarty->display('Inventory/InventoryEditView.tpl');

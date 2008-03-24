@@ -16,23 +16,23 @@
 include('vtigerversion.php');
 
 // more than 8MB memory needed for graphics
-// memory limit default value = 16M
-ini_set('memory_limit','16M');
+// memory limit default value = 64M
+ini_set('memory_limit','64M');
 
-// show or hide world clock, calculator and FCKEditor
-// world_clock_display default value = true
-// calculator_display default value = true
-// fckeditor_display default value = true
+// show or hide calendar, world clock, calculator, chat and FCKEditor 
+// Do NOT remove the quotes if you set these to false! 
+$CALENDAR_DISPLAY = 'true';
 $WORLD_CLOCK_DISPLAY = 'true';
 $CALCULATOR_DISPLAY = 'true';
+$CHAT_DISPLAY = 'true'; 
 $FCKEDITOR_DISPLAY = 'true';
 
 // url for customer portal (Example: http://vtiger.com/portal)
-$PORTAL_URL = 'http://your-domain.com/customerportal';
+$PORTAL_URL = 'http://vtiger.com/customerportal';
 
 // helpdesk support email id and support name (Example: 'support@vtiger.com' and 'vtiger support')
-$HELPDESK_SUPPORT_EMAIL_ID = 'support@your-domain.com';
-$HELPDESK_SUPPORT_NAME = 'your-domain name';
+$HELPDESK_SUPPORT_EMAIL_ID = '_USER_SUPPORT_EMAIL_';
+$HELPDESK_SUPPORT_NAME = 'your-support name';
 
 /* database configuration
       db_server
@@ -95,11 +95,6 @@ $import_dir = 'cache/import/';
 // upload_dir default value prepended by cache_dir = upload/
 $upload_dir = '_VT_UPLOADDIR_';
 
-// mail server parameters
-$mail_server = '_MAIL_SERVER_';
-$mail_server_username = '_MAIL_USERNAME_';
-$mail_server_password = '_MAIL_PASSWORD_';
-
 // maximum file size for uploaded files in bytes also used when uploading import files
 // upload_maxsize default value = 3000000
 $upload_maxsize = 3000000;
@@ -143,7 +138,7 @@ $default_action = 'index';
 
 // set default theme
 // default_theme default value = blue
-$default_theme = 'bluelagoon';
+$default_theme = 'softed';
 
 // show or hide time to compose each page
 // calculate_response_time default value = true
@@ -175,8 +170,8 @@ $languages = Array('en_us'=>'US English',);
 $currency_name = '_MASTER_CURRENCY_';
 
 // default charset
-// default charset default value = ISO-8859-1
-$default_charset = 'ISO-8859-1';
+// default charset default value = 'UTF-8' or 'ISO-8859-1'
+$default_charset = '_VT_CHARSET_';
 
 // default language
 // default_language default value = en_us
@@ -194,4 +189,8 @@ $display_empty_home_blocks = false;
 
 // Generating Unique Application Key
 $application_unique_key = '_VT_APP_UNIQKEY_';
+
+// trim descriptions, titles in listviews to this value
+$listview_max_textlength = 40;
+
 ?>

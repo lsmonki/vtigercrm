@@ -100,6 +100,7 @@ $mod_strings = Array(
 'Account Name'=>'Account Name',
 'Currency'=>'Currency',
 'Expected Close Date'=>'Expected Close Date',
+'Opportunity Type'=>'Opportunity Type',
 'Type'=>'Type',
 'Next Step'=>'Next Step',
 'Lead Source'=>'Lead Source',

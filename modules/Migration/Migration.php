@@ -157,7 +157,7 @@ class Migration
 	function dropDatabase($conn,$dbname)
 	{
 		global $migrationlog;
-		$migrationlog->debug("Inside the function dropDatabase($conn,$dbname). Going to drop the database - $dbname");
+		$migrationlog->debug("Inside the function dropDatabase(".get_class($conn).",".$dbname."). Going to drop the database - $dbname");
 		$sql = "drop database ".$dbname;
 		$conn->query($sql);
 
@@ -173,7 +173,7 @@ class Migration
 	function createDatabase($conn,$dbname)
 	{
 		global $migrationlog;
-		$migrationlog->debug("Inside the function createDatabase($conn, $dbname). Going to create the database - $dbname");
+		$migrationlog->debug("Inside the function createDatabase(".get_class($conn).",".$dbname."). Going to create the database - $dbname");
 		
 		$sql = "create database ".$dbname;
 		$conn->query($sql);
@@ -285,7 +285,7 @@ class Migration
 	function modifyDatabase($conn)
 	{
 		global $migrationlog;
-		$migrationlog->debug("Inside the function modifyDatabase($conn)");
+		$migrationlog->debug("Inside the function modifyDatabase(".get_class($conn).")");
 		$migrationlog->debug("\n\n\nMickie ---- Starts");
 
 		$_SESSION['migration_log'] .= "<br>The current database is going to be modified by executing the following queries...<br>";
@@ -299,8 +299,8 @@ class Migration
 
 		//To handle the file includes for each and every version
 		//Here we have to decide which files should be included, where the files will be added newly for every public release
-		//Handle Here -- Mickie
-		include("modules/Migration/ModifyDatabase/MigrationInfo.php");
+		//In this included file we have included modules/Migration/DBChanges/42P2_to_50.php which will apply the db changes upto 5.0.
+		include("modules/Migration/MigrationInfo.php");
 
 		$migrationlog->debug("Mickie ---- Ends\n\n\n");
 	}

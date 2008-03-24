@@ -29,6 +29,9 @@ require_once('modules/Import/ImportProduct.php');
 require_once('modules/Import/Forms.php');
 require_once('modules/Import/parse_utils.php');
 require_once('modules/Import/ImportMap.php');
+//Pavani: Import this file to Support Imports for Trouble tickets and vendors
+require_once('modules/Import/ImportTicket.php');
+require_once('modules/Import/ImportVendors.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/utils/CommonUtils.php');
@@ -65,7 +68,6 @@ if ( isset($_REQUEST['has_header']))
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 if (!is_uploaded_file($_FILES['userfile']['tmp_name']) )
 {
@@ -116,7 +118,6 @@ else if ( $ret_value == -3 )
 	exit;
 }
 
-
 $rows = $ret_value['rows'];
 $ret_field_count = $ret_value['field_count'];
 
@@ -143,7 +144,9 @@ $import_object_array = Array(
 				"Accounts"=>"ImportAccount",
 				"Contacts"=>"ImportContact",
 				"Potentials"=>"ImportOpportunity",
-				"Products"=>"ImportProduct"
+				"Products"=>"ImportProduct",
+				"HelpDesk"=>"ImportTicket",
+                                "Vendors"=>"ImportVendors"
 			    );
 
 if(isset($_REQUEST['module']) && $_REQUEST['module'] != '')
@@ -168,7 +171,34 @@ if($total_num_rows >2)
 	$thirdrow = $rows[2];
 }
 
-	
+//If the cell value is very large then UI mapping will be collpased. So we will display partial text
+foreach($firstrow as $ind => $val)
+{
+	if(strlen($val) > 30)
+		$firstrow[$ind] = substr(to_html($val),0,30)." ..........";
+	else
+		$firstrow[$ind] = to_html($val);
+}
+if (isset($secondrow)) { //Asha: Fix for ticket #4432
+	foreach($secondrow as $ind => $val)
+	{
+		if(strlen($val) > 30)
+			$secondrow[$ind] = substr(to_html($val),0,30)." ..........";
+		else
+			$secondrow[$ind] = to_html($val);
+
+	}
+	if (isset($thirdrow)) { //Asha: Fix for ticket #4432
+		foreach($thirdrow as $ind => $val)
+		{
+			if(strlen($val) > 30)
+				$thirdrow[$ind] = substr(to_html($val),0,30)." ..........";
+			else
+                        	$thirdrow[$ind] = to_html($val);
+		}
+	}
+}
+
 $field_map = $outlook_contacts_field_map;
 
 $mapping_file = new ImportMap();
@@ -183,6 +213,8 @@ if(is_array($saved_map_lists))
 	}
 }
 $map_list_combo .= '</select>';
+//This link is Delete link for the selected mapping
+$map_list_combo .= "&nbsp;&nbsp;&nbsp;<span id='delete_mapping' style='visibility:hidden;'><a href='javascript:; deleteMapping();'>Del</a></span>";
 $smarty->assign("SAVED_MAP_LISTS",$map_list_combo);
 
 
@@ -224,10 +256,11 @@ for($row_count = $start_at; $row_count < count($rows); $row_count++ )
 $list_string_key = strtolower($_REQUEST['module']);
 $list_string_key .= "_import_fields";
 
-$translated_column_fields = $mod_list_strings[$list_string_key];
+//Now we are getting the import fields from DB instead of hard coded array $mod_list_strings
+$translated_column_fields = getImportFieldsList($_REQUEST['module']);//$mod_list_strings[$list_string_key];
 
 // adding custom vtiger_fields translations
-getCustomFieldTrans($_REQUEST['module'],&$translated_column_fields);
+//getCustomFieldTrans($_REQUEST['module'],&$translated_column_fields);
 
 $cnt=1;
 for($field_count = 0; $field_count < $ret_field_count; $field_count++)
@@ -250,30 +283,40 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 	if($_REQUEST['module']=='Accounts')
 	{
 		$tablename='account';
-		$focus1=new Account();
+		$focus1=new Accounts();
 	}
 	if($_REQUEST['module']=='Contacts')
 	{
 		$tablename='contactdetails';
-		$focus1=new Contact();
+		$focus1=new Contacts();
  	}
 	if($_REQUEST['module']=='Leads')
  	{
 		$tablename='leaddetails';
-		$focus1=new Lead();
+		$focus1=new Leads();
 	}
 	if($_REQUEST['module']=='Potentials')
  	{
 		$tablename='potential';
-		$focus1=new Potential();
+		$focus1=new Potentials();
 	}
 	if($_REQUEST['module']=='Products')
  	{
  		$tablename='products';
- 		$focus1=new Product();
+ 		$focus1=new Products();
  	}
-
-	
+	//Pavani: checking for HelpDesk and Vendors
+        if($_REQUEST['module']=='HelpDesk')
+        {
+                $tablename='troubletickets';
+                $focus1=new HelpDesk();
+        }
+	if($_REQUEST['module']=='Vendors')
+	{
+		$tablename='Vendors';
+		$focus1=new Vendors();
+	}
+	//end checking
 	$smarty->assign("FIRSTROW",$firstrow);
 	$smarty->assign("SECONDROW",$secondrow);
 	$smarty->assign("THIRDROW",$thirdrow);
@@ -383,7 +426,7 @@ function validate_import_map()
 			else
 			{
 				//if a vtiger_field mapped more than once, alert the user and return
-				alert("'"+tagName.options[tagName.selectedIndex].text+"' is mapped more than once. Please check the mapping.");
+				alert("'"+tagName.options[tagName.selectedIndex].text+"<?php echo $mod_strings['PLEASE_CHECK_MAPPING']?>");
 				return false;
 			}
 		}
@@ -395,7 +438,7 @@ function validate_import_map()
 	{
 		if(seq_string.indexOf(required_fields[inner_loop]) == -1)
 		{
-			alert('Please map the mandatory field "'+required_fields_name[inner_loop]+'"');
+			alert('<?php echo $mod_strings['MAP_MANDATORY_FIELD']?>'+required_fields_name[inner_loop]+'"');
 			return false;
 		}
 	}
@@ -405,7 +448,7 @@ function validate_import_map()
 	{
 		if(trim(document.getElementById("save_map_as").value) == '')
 		{
-			alert("Please Enter Save Map Name");
+			alert("<?php echo $mod_strings['ENTER_SAVEMAP_NAME'] ?>");
 			return false;
 		}
 	}

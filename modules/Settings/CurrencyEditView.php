@@ -13,16 +13,15 @@ global $mod_strings,$app_strings,$adb,$theme;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 $smarty=new vtigerCRM_Smarty;
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
         $tempid = $_REQUEST['record'];
-        $sql = "select * from vtiger_currency_info where id=".$tempid;
-        $result = $adb->query($sql);
+        $sql = "select * from vtiger_currency_info where id=?";
+        $result = $adb->pquery($sql, array($tempid));
         $currencyResult = $adb->fetch_array($result);
-	$sql1 = "select * from vtiger_users where currency_id=".$tempid;
-	$result1 = $adb->query($sql1);
+	$sql1 = "select * from vtiger_users where currency_id=?";
+	$result1 = $adb->pquery($sql1, array($tempid));
 	$noofrows = $adb->num_rows($result1);
 	if($noofrows != 0)
 	{

@@ -50,14 +50,14 @@ class SalesOrder extends CRMEntity {
 
 	var $column_fields = Array();
 
-	var $sortby_fields = Array('subject','smownerid');		
+	var $sortby_fields = Array('subject','smownerid','accountname','lastname');		
 
 	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'smownerid', 'opportunity_id', 'case_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id', 'parent_name', 'member_id' );
 
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
-				'Order Id'=>Array('crmentity'=>'crmid'),
+				'Order No'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('salesorder'=>'subject'),
 				'Account Name'=>Array('account'=>'accountid'), 
 				'Quote Name'=>Array('quotes'=>'quoteid'), 
@@ -66,7 +66,7 @@ class SalesOrder extends CRMEntity {
 				);
 	
 	var $list_fields_name = Array(
-				        'Order Id'=>'',
+				        'Order No'=>'',
 				        'Subject'=>'subject',
 				        'Account Name'=>'account_id',
 				        'Quote Name'=>'quote_id',
@@ -76,14 +76,14 @@ class SalesOrder extends CRMEntity {
 	var $list_link_field= 'subject';
 
 	var $search_fields = Array(
-				'Order Id'=>Array('crmentity'=>'crmid'),
+				'Order No'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('salesorder'=>'subject'),
 				'Account Name'=>Array('account'=>'accountid'),
 				'Quote Name'=>Array('salesorder'=>'quoteid') 
 				);
 	
 	var $search_fields_name = Array(
-					'Order Id'=>'',
+					'Order No'=>'',
 				        'Subject'=>'subject',
 				        'Account Name'=>'account_id',
 				        'Quote Name'=>'quote_id'
@@ -95,6 +95,7 @@ class SalesOrder extends CRMEntity {
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'subject';
 	var $default_sort_order = 'ASC';
+	var $groupTable = Array('vtiger_sogrouprelation','salesorderid');
 
 
 	/** Constructor Function for SalesOrder class
@@ -106,6 +107,25 @@ class SalesOrder extends CRMEntity {
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('SalesOrder');
 	}
+
+	function save_module($module)
+	{
+	
+		//Checking if quote_id is present and updating the quote status
+		if($this->column_fields["quote_id"] != '')
+		{
+        		$qt_id = $this->column_fields["quote_id"];
+        		$query1 = "update vtiger_quotes set quotestage='Accepted' where quoteid=?";
+        		$this->db->pquery($query1, array($qt_id));
+		}
+
+		//in ajax save we should not call this function, because this will delete all the existing product values
+		if($_REQUEST['action'] != 'SalesOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW')
+		{
+			//Based on the total Number of rows we will save the product relationship with this entity
+			saveInventoryProductDetails(&$this, 'SalesOrder');	
+		}
+	}	
 	
 	/**	Function used to get the sort order for Sales Order listview
 	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['SALESORDER_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
@@ -156,7 +176,7 @@ class SalesOrder extends CRMEntity {
 		else
 			$returnset = '&return_module=SalesOrder&return_action=CallRelatedList&return_id='.$id;
 
-		$query = "SELECT vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid, vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and activitytype='Task' and vtiger_crmentity.deleted=0 and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL && vtiger_activity.status !='Deferred')";
+		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid, vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and activitytype='Task' and vtiger_crmentity.deleted=0 and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL && vtiger_activity.status !='Deferred')";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('SalesOrder','Calendar',$focus,$query,$button,$returnset);
 	}
@@ -169,20 +189,19 @@ class SalesOrder extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering get_history(".$id.") method ...");
-		$query = "SELECT vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid,
-			vtiger_activity.*, vtiger_seactivityrel.*, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime,
-			vtiger_crmentity.createdtime, vtiger_crmentity.description, vtiger_users.user_name
+		$query = "SELECT vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid,vtiger_activity.*, vtiger_seactivityrel.*, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime,	vtiger_crmentity.createdtime, vtiger_crmentity.description, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
 			from vtiger_activity
 				inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid
 				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid
 				left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid
-				inner join vtiger_users on vtiger_crmentity.smcreatorid=vtiger_users.id
 				left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid
                                 left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname
+				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 			where activitytype='Task'
 				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred')
-				and vtiger_seactivityrel.crmid=".$id;
+				and vtiger_seactivityrel.crmid=".$id."
+                                and vtiger_crmentity.deleted = 0";
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
 		$log->debug("Exiting get_history method ...");
@@ -201,7 +220,7 @@ class SalesOrder extends CRMEntity {
 		$query = "select vtiger_notes.title,'Notes      ' as ActivityType, vtiger_notes.filename,
  		vtiger_attachments.type as FileType,crm2.modifiedtime as lastmodified,
  		vtiger_seattachmentsrel.attachmentsid as attachmentsid, vtiger_notes.notesid as crmid,
- 		vtiger_crmentity.createdtime, vtiger_notes.notecontent as description, vtiger_users.user_name
+ 		vtiger_notes.notecontent as description, vtiger_users.user_name
 		from vtiger_notes
 			inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
 			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
@@ -213,17 +232,16 @@ class SalesOrder extends CRMEntity {
 
 		$query .= ' union all ';
 
-		$query .= "select vtiger_attachments.description as title ,'Attachments' as ActivityType,
+		$query .= "select vtiger_attachments.subject as title ,'Attachments' as ActivityType,
  		vtiger_attachments.name as filename, vtiger_attachments.type as FileType, crm2.modifiedtime as lastmodified,
  		vtiger_attachments.attachmentsid as attachmentsid, vtiger_seattachmentsrel.attachmentsid as crmid,
-		vtiger_crmentity.createdtime, vtiger_attachments.description, vtiger_users.user_name
+		vtiger_attachments.description, vtiger_users.user_name
 		from vtiger_attachments
 			inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
 			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_seattachmentsrel.crmid
 			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_attachments.attachmentsid
 			inner join vtiger_users on vtiger_crmentity.smcreatorid= vtiger_users.id
-		where vtiger_crmentity.crmid=".$id."
-		order by createdtime desc";
+		where vtiger_crmentity.crmid=".$id;
 
 		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('SalesOrder',$query,$id,$sid='salesorderid');
@@ -247,8 +265,16 @@ class SalesOrder extends CRMEntity {
 		else
 			$returnset = '&return_module=SalesOrder&return_action=CallRelatedList&return_id='.$id;
 
+			$query = "select vtiger_crmentity.*, vtiger_invoice.*, vtiger_account.accountname, vtiger_salesorder.subject as salessubject, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
+				from vtiger_invoice 
+				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_invoice.invoiceid 
+				left outer join vtiger_account on vtiger_account.accountid=vtiger_invoice.accountid 
+				inner join vtiger_salesorder on vtiger_salesorder.salesorderid=vtiger_invoice.salesorderid 
+				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
+				left join vtiger_invoicegrouprelation on vtiger_invoice.invoiceid=vtiger_invoicegrouprelation.invoiceid 
+				left join vtiger_groups on vtiger_groups.groupname=vtiger_invoicegrouprelation.groupname 
+				where vtiger_crmentity.deleted=0 and vtiger_salesorder.salesorderid=".$id;
 
-		$query = "select vtiger_crmentity.*, vtiger_invoice.*, vtiger_account.accountname, vtiger_salesorder.subject as salessubject from vtiger_invoice inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_invoice.invoiceid left outer join vtiger_account on vtiger_account.accountid=vtiger_invoice.accountid inner join vtiger_salesorder on vtiger_salesorder.salesorderid=vtiger_invoice.salesorderid left join vtiger_invoicegrouprelation on vtiger_invoice.invoiceid=vtiger_invoicegrouprelation.invoiceid left join vtiger_groups on vtiger_groups.groupname=vtiger_invoicegrouprelation.groupname where vtiger_crmentity.deleted=0 and vtiger_salesorder.salesorderid=".$id;
 		$log->debug("Exiting get_invoices method ...");
 		return GetRelatedList('SalesOrder','Invoice',$focus,$query,$button,$returnset);
 	
@@ -267,15 +293,28 @@ class SalesOrder extends CRMEntity {
 		global $mod_strings;
 		global $app_strings;
 
-		$query = 'select vtiger_sostatushistory.*, vtiger_salesorder.subject from vtiger_sostatushistory inner join vtiger_salesorder on vtiger_salesorder.salesorderid = vtiger_sostatushistory.salesorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_salesorder.salesorderid where vtiger_crmentity.deleted = 0 and vtiger_salesorder.salesorderid = '.$id;
-		$result=$adb->query($query);
+		$query = 'select vtiger_sostatushistory.*, vtiger_salesorder.subject from vtiger_sostatushistory inner join vtiger_salesorder on vtiger_salesorder.salesorderid = vtiger_sostatushistory.salesorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_salesorder.salesorderid where vtiger_crmentity.deleted = 0 and vtiger_salesorder.salesorderid = ?';
+		$result=$adb->pquery($query, array($id));
 		$noofrows = $adb->num_rows($result);
 
-		$header[] = $app_strings['Order Id'];
+		$header[] = $app_strings['Order No'];
 		$header[] = $app_strings['LBL_ACCOUNT_NAME'];
 		$header[] = $app_strings['LBL_AMOUNT'];
 		$header[] = $app_strings['LBL_SO_STATUS'];
 		$header[] = $app_strings['LBL_LAST_MODIFIED'];
+
+		//Getting the field permission for the current user. 1 - Not Accessible, 0 - Accessible
+		//Account Name , Total are mandatory fields. So no need to do security check to these fields.
+		global $current_user;
+
+		//If field is accessible then getFieldVisibilityPermission function will return 0 else return 1
+		$sostatus_access = (getFieldVisibilityPermission('SalesOrder', $current_user->id, 'sostatus') != '0')? 1 : 0;
+		$picklistarray = getAccessPickListValues('SalesOrder');
+
+		$sostatus_array = ($sostatus_access != 1)? $picklistarray['sostatus']: array();
+		//- ==> picklist field is not permitted in profile
+		//Not Accessible - picklist is permitted in profile but picklist value is not permitted
+		$error_msg = ($sostatus_access != 1)? 'Not Accessible': '-';
 
 		while($row = $adb->fetch_array($result))
 		{
@@ -284,7 +323,7 @@ class SalesOrder extends CRMEntity {
 			$entries[] = $row['salesorderid'];
 			$entries[] = $row['accountname'];
 			$entries[] = $row['total'];
-			$entries[] = $row['sostatus'];
+			$entries[] = (in_array($row['sostatus'], $sostatus_array))? $row['sostatus']: $error_msg;
 			$entries[] = getDisplayDate($row['lastmodified']);
 
 			$entries_list[] = $entries;

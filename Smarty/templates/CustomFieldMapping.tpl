@@ -21,7 +21,7 @@
 			<!-- DISPLAY -->
 				<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tr>
-					<td rowspan="2" valign="top" width="50"><img src="{$IMAGE_PATH}custom.gif" alt="Users" title="Users" border="0" height="48" width="48"></td>
+					<td rowspan="2" valign="top" width="50"><img src="{$IMAGE_PATH}custom.gif" alt="{$MOD.LBL_USERS}" title="{$MOD.LBL_USERS}" border="0" height="48" width="48"></td>
 					<td class="heading2" valign="bottom"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> &gt; {$MOD.LBL_CUSTOM_FIELD_SETTINGS}</b></td>
 				</tr>
 

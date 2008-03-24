@@ -31,8 +31,13 @@ require_once('include/FormValidationUtil.php');
 global $app_strings,$mod_strings,$log,$theme,$currentModule;
 
 
-$focus = new Order();
+$focus = new PurchaseOrder();
 $smarty = new vtigerCRM_Smarty();
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
+
 global $current_user;
 $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);
@@ -45,6 +50,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
     $focus->name=$focus->column_fields['subject']; 
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
+	$smarty->assign("DUPLICATE_FROM", $focus->id);
 	$PO_associated_prod = getAssociatedProducts("PurchaseOrder",$focus);
 	$focus->id = "";
     	$focus->mode = ''; 	
@@ -60,8 +66,8 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
 
 // Get vtiger_vendor address if vtiger_vendorid is given
 if(isset($_REQUEST['vendor_id']) && $_REQUEST['vendor_id']!='' && $_REQUEST['record']==''){
-	require_once('modules/Vendors/Vendor.php');
-	$vend_focus = new Vendor();
+	require_once('modules/Vendors/Vendors.php');
+	$vend_focus = new Vendors();
 
 	$vend_focus->retrieve_entity_info($_REQUEST['vendor_id'],"Vendors");
 	$focus->column_fields['bill_city']=$vend_focus->column_fields['city'];
@@ -110,9 +116,6 @@ $smarty->assign("CATEGORY",$category);
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
-
-
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Order view");
 
@@ -175,17 +178,19 @@ $smarty->assign("ID", $focus->id);
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
-
 //if create PO, get all available product taxes and shipping & Handling taxes
 if($focus->mode != 'edit')
 {
 	$tax_details = getAllTaxes('available');
 	$sh_tax_details = getAllTaxes('available','sh');
-
-	$smarty->assign("GROUP_TAXES",$tax_details);
-	$smarty->assign("SH_TAXES",$sh_tax_details);
 }
-
+else
+{
+	$tax_details = getAllTaxes('available','',$focus->mode,$focus->id);
+        $sh_tax_details = getAllTaxes('available','sh','edit',$focus->id);
+}		
+$smarty->assign("GROUP_TAXES",$tax_details);
+$smarty->assign("SH_TAXES",$sh_tax_details);
 
 
 
@@ -199,6 +204,7 @@ if($focus->mode != 'edit')
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 if($focus->mode == 'edit')
 	$smarty->display('Inventory/InventoryEditView.tpl');
 else

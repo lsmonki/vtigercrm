@@ -42,36 +42,42 @@ function validate() {
 	var mode = document.getElementById('cfedit_mode').value;
         if(fieldtype == "" && mode != 'edit')
 	{
-		alert("Field Type is not selected");
+		alert(alert_arr.FIELD_TYPE_NOT_SELECTED);
 		return false;
 	}
 	lengthLayer=getObj("lengthdetails")
         decimalLayer=getObj("decimaldetails")
         pickListLayer=getObj("picklist")
         var str = getObj("fldLabel").value;
-        if (!emptyCheck("fldLabel","Label"))
+        if (!emptyCheck("fldLabel","Label","text"))
                 return false
 
-        var re1=/^[a-z\d\_ ]+$/i
-        if (!re1.test(str))
+        //var re1=/^[a-z\d\_ ]+$/i
+        /*if (!re1.test(str))
         {
-                alert("Special characters are not allowed in Label field")
+                alert(alert_arr.SPECIAL_CHARACTERS_NOT_ALLOWED)
+                return false;
+        }*/
+	//tested for special characters <,>,&,'," and :
+        var re2=/[&\<\>\:\'\"\,\_]/
+        if (re2.test(str))
+        {
+                alert(alert_arr.SPECIAL_CHARACTERS+" & < > ' \" : , _ "+alert_arr.NOT_ALLOWED)
                 return false;
         }
-
-        if (lengthLayer.style.visibility=="visible") {
+        if (lengthLayer != null && lengthLayer.style.visibility=="visible") {
                 if (!emptyCheck("fldLength","Length"))
                         return false
 
                 if (!intValidate("fldLength","Length"))
                         return false
 
-                if (!numConstComp("fldLength","Length","GT",0))
+                if (!numConstComp("fldLength","Length","G",0))
                         return false
 
         }
 
-        if (decimalLayer.style.visibility=="visible") {
+        if (decimalLayer != null && decimalLayer.style.visibility=="visible") {
                 if (getObj("fldDecimal").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
                         if (!intValidate("fldDecimal","Decimal"))
                                 return false
@@ -81,17 +87,19 @@ function validate() {
                 if (!numConstComp("fldDecimal","Decimal","LE",30))
                         return false
         }
-	var decimallength = document.addtodb.fldDecimal.value;
-        if(fieldtype == 'Percent' || fieldtype == 'Currency' || fieldtype == 'Number')
+	var decimallength = '';
+	if (typeof(document.addtodb) != 'undefined' && typeof(document.addtodb.fldDecimal) != 'undefined')
+	      decimallength = document.addtodb.fldDecimal.value;
+        if(fieldValueArr[fieldtype] == 'Percent' || fieldValueArr[fieldtype] == 'Currency' || fieldValueArr[fieldtype] == 'Number')
         {
                 if(decimallength == '')
                         decimallength = 0;
                 nummaxlength = 65 - (eval(decimallength) + 1);
         }
-        if (!numConstComp("fldLength","Length","LE",nummaxlength))
+        if (getObj("lengthdetails") != null && getObj("lengthdetails").style.visibility == "visible" && !numConstComp("fldLength","Length","LE",nummaxlength))
                 return false
 var picklistObj=getObj("fldPickList")
-        if (pickListLayer.style.visibility=="visible") {
+        if (pickListLayer != null && pickListLayer.style.visibility=="visible") {
                 if (emptyCheck("fldPickList","Picklist values"))        {
                         var pickListAry=new Array()
                         pickListAry=splitValues()
@@ -99,7 +107,7 @@ var picklistObj=getObj("fldPickList")
                         //Empty Check validation
                         for (i=0;i<pickListAry.length;i++) {
                                 if (pickListAry[i]=="") {
-                                        alert("Picklist value cannot be empty")
+                                        alert(alert_arr.PICKLIST_CANNOT_BE_EMPTY)
                                         picklistObj.focus()
                                         return false
                                 }
@@ -108,8 +116,8 @@ var picklistObj=getObj("fldPickList")
                         //Duplicate Values' Validation
                         for (i=0;i<pickListAry.length;i++) {
                                 for (j=i+1;j<pickListAry.length;j++) {
-                                        if (pickListAry[i]==pickListAry[j]) {
-                                                alert("Duplicate Values found")
+                                        if (pickListAry[i].toUpperCase()==pickListAry[j].toUpperCase()) {
+                                                alert(alert_arr.DUPLICATE_VALUES_FOUND)
                                                 picklistObj.focus()
                                                 return false
                                         }
@@ -120,8 +128,8 @@ var picklistObj=getObj("fldPickList")
                 } else return false
         }
 }
-var fieldValueArr=new Array('Text','Number','Percent','Currency','Date','Email','Phone','Picklist','URL','Checkbox','TextArea','MultiSelectCombo');
-var fieldTypeArr=new Array('text','number','percent','currency','date','email','phone','picklist','url','checkbox','textarea','multiselectcombo');
+var fieldValueArr=new Array('Text','Number','Percent','Currency','Date','Email','Phone','Picklist','URL','Checkbox','TextArea','MultiSelectCombo','Skype');
+var fieldTypeArr=new Array('text','number','percent','currency','date','email','phone','picklist','url','checkbox','textarea','multiselectcombo','skype');
 var currFieldIdx=0,totFieldType;
 var focusFieldType;
 
@@ -175,11 +183,11 @@ function selFieldType(id,scrollLayer,bool) {
                 lengthLayer.style.visibility="visible"
                 decimalLayer.style.visibility="hidden"
                 pickListLayer.style.visibility="hidden"
-        } else if (type=='date' || type=='email' || type=='phone' || type=='url' || type=='checkbox' || type=='textarea') {
+        } else if (type=='date' || type=='percent' || type=='email' || type=='phone' || type=='url' || type=='checkbox' || type=='textarea' || type=='skype') {
                 getObj("lengthdetails").style.visibility="hidden"
                 decimalLayer.style.visibility="hidden"
                 pickListLayer.style.visibility="hidden"
-        } else if (type=='number' || type=='percent' || type=='currency') {
+        } else if (type=='number' || type=='currency') {
                 lengthLayer.style.visibility="visible"
                 decimalLayer.style.visibility="visible"
                 pickListLayer.style.visibility="hidden"
@@ -285,7 +293,7 @@ function validateCustomFieldAccounts()
                         {
                                 if( account[i] == account[j] && account[i]!="None" && account[j] !="None")
                                 {
-                                        alert("Duplicate mapping for accounts!!");
+                                        alert(alert_arr.DUPLICATE_MAPPING_ACCOUNTS);
                                         return false;
                                 }
                         }
@@ -296,7 +304,7 @@ for( i = 0; i < contact.length; i++)
                         {
                                 if( contact[i] == contact[k] && contact[i]!="None" && contact[k]!="None")
                                 {
-                                        alert("Duplicate mapping for Contacts!!");
+                                        alert(alert_arr.DUPLICATE_MAPPING_CONTACTS);
                                         return false;
                                 }
                         }
@@ -307,7 +315,7 @@ for( i = 0; i < contact.length; i++)
                         {
                                 if( potential[i] == potential[l] && potential[i]!="None" && potential[l]!="None")
                                 {
-                                        alert("Duplicate mapping for Potential!!");
+                                        alert(alert_arr.DUPLICATE_MAPPING_POTENTIAL);
                                         return false;
                                 }
                         }

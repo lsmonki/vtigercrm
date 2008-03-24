@@ -10,7 +10,7 @@
   ********************************************************************************/
 
 require_once('include/logging.php');
-require_once('modules/Emails/Email.php');
+require_once('modules/Emails/Emails.php');
 require_once('include/database/PearDatabase.php');
 global $adb;
 
@@ -25,7 +25,7 @@ if($ajaxaction == "DETAILVIEW")
 	$fieldvalue = $_REQUEST["fieldValue"];
 	if($crmid != "")
 	{
-		$modObj = new Email();
+		$modObj = new Emails();
 		$modObj->retrieve_entity_info($crmid,"Emails");
 		$modObj->column_fields[$fieldname] = $fieldvalue;
 		$modObj->id = $crmid;

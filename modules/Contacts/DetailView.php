@@ -22,7 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Contacts/Contact.php');
+require_once('modules/Contacts/Contacts.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
@@ -33,9 +33,15 @@ global $mod_strings;
 global $app_strings;
 global $currentModule, $singlepane_view;
 
-$focus = new Contact();
+$focus = new Contacts();
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
+        //Display the error message
+        if($_SESSION['image_type_error'] != '')
+        {
+                echo '<font color="red">'.$_SESSION['image_type_error'].'</font>';
+                session_unregister('image_type_error');
+        }
 
         $focus->id=$_REQUEST['record'];
         $focus->retrieve_entity_info($_REQUEST['record'],'Contacts');
@@ -47,10 +53,9 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 }
 
-global $theme;
+global $theme, $current_user;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Contact detail view");
 
@@ -66,13 +71,16 @@ $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 if(useInternalMailer() == 1) 
 	$smarty->assign("INT_MAILER","true");
 
-$smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
+$contact_name = $focus->lastname;
+if (getFieldVisibilityPermission($currentModule, $current_user->id,'firstname') == '0') {
+	$contact_name .= ' '.$focus->firstname;
+}
+$smarty->assign("NAME",$contact_name);
 
 $log->info("Detail Block Informations successfully retrieved.");
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("SINGLE_MOD", 'Contact');
-$smarty->assign("REDIR_MOD","contacts");
 
 $smarty->assign("ID", $_REQUEST['record']);
 if(isPermitted("Contacts","EditView",$_REQUEST['record']) == 'yes')
@@ -86,11 +94,16 @@ if(isPermitted("Emails","EditView",'') == 'yes')
 	$parent_email = getEmailParentsList('Contacts',$_REQUEST['record']);
 	$smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
 	$smarty->assign("SENDMAILBUTTON","permitted");
+	$smarty->assign("EMAIL1",$focus->column_fields['email']);
+	$smarty->assign("EMAIL2",$focus->column_fields['yahooid']);
+
 }
 
 if(isPermitted("Contacts","Merge",'') == 'yes')
 {
-	$smarty->assign("MERGEBUTTON","permitted");
+	global $current_user;
+        require("user_privileges/user_privileges_".$current_user->id.".php");
+
 	require_once('include/utils/UserInfoUtil.php');
 	$wordTemplateResult = fetchWordTemplateList("Contacts");
 	$tempCount = $adb->num_rows($wordTemplateResult);
@@ -100,6 +113,11 @@ if(isPermitted("Contacts","Merge",'') == 'yes')
 		$optionString[$tempVal["templateid"]]=$tempVal["filename"];
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
+        if($is_admin)
+                $smarty->assign("MERGEBUTTON","permitted");
+	elseif($tempCount >0)
+		$smarty->assign("MERGEBUTTON","permitted");
+	 $smarty->assign("TEMPLATECOUNT",$tempCount);
 	$smarty->assign("WORDTEMPLATEOPTIONS",$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']);
         $smarty->assign("TOPTIONS",$optionString);
 }
@@ -121,13 +139,20 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
+$sql = $adb->pquery('select accountid from vtiger_contactdetails where contactid=?', array($focus->id));
+$accountid = $adb->query_result($sql,0,'accountid');
+if($accountid == 0) $accountid='';
+$smarty->assign("accountid",$accountid);
 if($singlepane_view == 'true')
 {
 	$related_array = getRelatedLists($currentModule,$focus);
 	$smarty->assign("RELATEDLISTS", $related_array);
 }
-
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("CONTACT_PERMISSION",CheckFieldPermission('contact_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $smarty->assign("SinglePane_View", $singlepane_view);
 
 $smarty->display("DetailView.tpl");

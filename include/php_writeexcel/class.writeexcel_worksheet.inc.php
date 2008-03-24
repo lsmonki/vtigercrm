@@ -100,6 +100,8 @@ class writeexcel_worksheet extends writeexcel_biffwriter {
     var $_zoom;
     var $_print_scale;
 
+    //added to get the tmp file name
+    var $_tmp_file_name;
     /*
      * Constructor. Creates a new Worksheet object from a BIFFwriter object
      */
@@ -110,7 +112,7 @@ class writeexcel_worksheet extends writeexcel_biffwriter {
 
         $rowmax                   = 65536; // 16384 in Excel 5
         $colmax                   = 256;
-        $strmax                   = 255;
+        $strmax                   = 20000;
 
         $this->_name              = $name;
         $this->_index             = $index;
@@ -198,7 +200,8 @@ class writeexcel_worksheet extends writeexcel_biffwriter {
 function _initialize() {
 
     # Open tmp file for storing Worksheet data.
-    $fh=fopen(tempnam($this->_tempdir, "php_writeexcel"), "w+b");
+    $this->_tmp_file_name = tempnam($this->_tempdir, "php_writeexcel");
+    $fh=fopen($this->_tmp_file_name, "w+b");
 
     if ($fh) {
         # Store filehandle

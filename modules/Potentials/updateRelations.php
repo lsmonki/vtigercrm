@@ -13,7 +13,13 @@ require_once('include/database/PearDatabase.php');
 require_once('user_privileges/default_module_view.php');
 global $adb, $singlepane_view;
 $idlist = $_REQUEST['idlist'];
-$returnmodule = $_REQUEST['return_module'];
+$dest_mod = $_REQUEST['destination_module'];
+
+if($singlepane_view == 'true')
+	$action = "DetailView";
+else
+	$action = "CallRelatedList";
+
 if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 {
 	//split the string and store in an array
@@ -22,27 +28,39 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 	{
 		if($id != '')
 		{
-		$sql = "insert into vtiger_contpotentialrel values (".$id.",".$_REQUEST["parentid"] .")";
-		$adb->query($sql);
-		$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parentid"] .",".$id.")";
-		$adb->query($sql);
+			//When we select contact from potential related list
+			if($_REQUEST['destination_module'] == 'Contacts')
+			{
+				$sql = "insert into vtiger_contpotentialrel values (?,?)";
+				$adb->pquery($sql, array($id, $_REQUEST["parentid"]));
+			}
+			//when we select product from potential related list
+			if($_REQUEST['destination_module'] == 'Products')
+			{
+				$sql = "insert into vtiger_seproductsrel values (?,?,?)";
+				$adb->pquery($sql, array($_REQUEST["parentid"], $id,'Potentials'));
+			}
 		}
 	}
-	if($singlepane_view == 'true')
-		header("Location: index.php?action=DetailView&module=Potentials&record=".$_REQUEST["parentid"]);
-	else
- 		header("Location: index.php?action=CallRelatedList&module=Potentials&record=".$_REQUEST["parentid"]);
+
+	header("Location: index.php?action=$action&module=Potentials&record=".$_REQUEST["parentid"]);
 }
 elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 {
-		$sql = "insert into vtiger_contpotentialrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
-		$adb->query($sql);
-		$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .")";
-		$adb->query($sql);
-		if($singlepane_view == 'true')
-			header("Location: index.php?action=DetailView&module=Potentials&record=".$_REQUEST["parid"]);
-		else
- 			header("Location: index.php?action=CallRelatedList&module=Potentials&record=".$_REQUEST["parid"]);
+	//When we select contact from potential related list
+	if($_REQUEST['destination_module'] == 'Contacts')
+	{
+		$sql = "insert into vtiger_contpotentialrel values (?,?)";
+		$adb->pquery($sql, array($_REQUEST["entityid"], $_REQUEST["parid"]));
+	}
+	//when we select product from potential related list
+	if($_REQUEST['destination_module'] == 'Products')
+	{
+		$sql = "insert into vtiger_seproductsrel values (?,?,?)";
+		$adb->pquery($sql, array($_REQUEST["parid"], $_REQUEST["entityid"], 'Potentials'));
+	}
+
+	header("Location: index.php?action=$action&module=Potentials&record=".$_REQUEST["parid"]);
 }
 
 ?>

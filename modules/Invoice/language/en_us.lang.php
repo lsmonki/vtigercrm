@@ -138,8 +138,8 @@ $mod_strings = Array(
 'Billing State'=>'Billing State',
 'Billing Code'=>'Billing Postal Code',
 'Billing Country'=>'Billing Country',
-'Billing Po Box'=>'Billing Po Box',
-'Shipping Po Box'=>'Shipping Po Box',
+'Billing Po Box'=>'Billing PO Box',
+'Shipping Po Box'=>'Shipping PO Box',
 'Shipping City'=>'Shipping City',
 'Shipping State'=>'Shipping State',
 'Shipping Code'=>'Shipping Postal Code',
@@ -182,7 +182,17 @@ $mod_strings = Array(
 'Sent'=>'Sent',
 'Credit Invoice'=>'Credit Invoice',
 'Paid'=>'Paid',
+//Added to Custom Invoice Number
+'Invoice No'=>'Invoice No',
+'Adjustment'=>'Adjustment',
 
+//Added for Reports (5.0.4)
+'Tax Type'=>'Tax Type',
+'Discount Percent'=>'Discount Percent',
+'Discount Amount'=>'Discount Amount',
+'Terms & Conditions'=>'Terms & Conditions',
+'No'=>'No',
+'Date'=>'Date',
 );
 
 ?>

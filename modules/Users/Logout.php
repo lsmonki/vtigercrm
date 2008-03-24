@@ -20,22 +20,22 @@
 require_once('include/logging.php');
 require_once('database/DatabaseConnection.php');
 require_once('modules/Users/LoginHistory.php');
-require_once('modules/Users/User.php');
+require_once('modules/Users/Users.php');
 require_once('config.php');
 require_once('include/db_backup/backup.php');
 require_once('include/db_backup/ftp.php');
 require_once('include/database/PearDatabase.php');
 require_once('user_privileges/enable_backup.php');
 
-global $adb, $enable_backup;
+global $adb, $enable_backup,$current_user;
 
-if($enable_backup == 'true')
+if($enable_backup == 'true' && is_admin($current_user) == true)
 {
 	$ftpserver = '';
 	$ftpuser = '';
 	$ftppassword = '';
-	$query = "select * from vtiger_systems where server_type='backup'";
-	$result = $adb->query($query);
+	$query = "select * from vtiger_systems where server_type=?";
+	$result = $adb->pquery($query, array('backup'));
 	$num_rows = $adb->num_rows($result);
 	if($num_rows > 0)
 	{

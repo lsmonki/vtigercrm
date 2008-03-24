@@ -11,27 +11,22 @@
 
 function eMail(module,oButton)
 {
-	var select_options  =  document.getElementsByName('selected_id');
-	var x = select_options.length;
-	var viewid =getviewId();		
-	var idstring= new Array();
+	var select_options  =  document.getElementById('allselectedboxes').value;
+        //Added to remove the semi colen ';' at the end of the string.done to avoid error.
+        var x = select_options.split(";");
+        var count=x.length
+        var viewid =getviewId();
+        var idstring = "";
+        select_options=select_options.slice(0,(select_options.length-1));
 
-	xx = 0;
-	for(i = 0; i < x ; i++)
-	{
-		if(select_options[i].checked)
-		{
-			idstring[xx] = select_options[i].value;
-				xx++
-		}
-	}
-	if (xx != 0)
-	{
-                document.getElementById('idlist').value=idstring.join(':');
-	}
+        if (count > 1)
+        {
+                idstring=select_options.replace(/;/g,':')
+                document.getElementById('idlist').value=idstring;
+        }
 	else
 	{
-		alert("Please select at least one entity");
+		alert(alert_arr.SELECT);
 		return false;
 	}
 	allids = document.getElementById('idlist').value;	
@@ -63,23 +58,38 @@ function massMail(module)
 	}
 	else
 	{
-		alert("Please select at least one entity");
+		alert(alert_arr.SELECT);
 		return false;
 	}
 	document.massdelete.action="index.php?module=CustomView&action=SendMailAction&return_module="+module+"&return_action=index&viewname="+viewid;
 }
 
 //added by rdhital for better emails
-function set_return_emails(entity_id,email_id,parentname,emailadd){
+function set_return_emails(entity_id,email_id,parentname,emailadd,emailadd2,perm){
+	if(perm == 0 || perm == 3)
+	{
+		if(emailadd2 == '')
+		{			
+			alert(alert_arr.LBL_DONT_HAVE_EMAIL_PERMISSION);
+			return false;
+		}
+		else
+			emailadd = emailadd2;
+	}
+	else
+	{
+		if(emailadd == '')
+			emailadd = emailadd2;
+	}	
 	if(emailadd != '')
 	{
 		window.opener.document.EditView.parent_id.value = window.opener.document.EditView.parent_id.value+entity_id+'@'+email_id+'|';
-		window.opener.document.EditView.parent_name.value = window.opener.document.EditView.parent_name.value+parentname+'<'+emailadd+'>; ';
+		window.opener.document.EditView.parent_name.value = window.opener.document.EditView.parent_name.value+parentname+'<'+emailadd+'>,';
 		window.opener.document.EditView.hidden_toid.value = emailadd+','+window.opener.document.EditView.hidden_toid.value;
 		window.close();
 	}else
 	{
-		alert('The Record '+parentname+' does\'t have email id' );
+		alert('"'+parentname+alert_arr.DOESNOT_HAVE_AN_MAILID);
 		return false;
 	}
 }	
@@ -111,7 +121,7 @@ function validate_sendmail(idlist,module)
 	}
 	else
 	{
-		alert('Please Select a mailid');
+		alert(alert_arr.SELECT_MAILID);
 	}
 }
 function sendmail(module,idstrings)
@@ -122,10 +132,42 @@ function sendmail(module,idstrings)
                         method: 'post',
                         postBody: "module=Emails&return_module="+module+"&action=EmailsAjax&file=mailSelect&idlist="+idstrings,
                         onComplete: function(response) {
-                                        getObj('sendmail_cont').innerHTML=response.responseText;
+					if(response.responseText == "Mail Ids not permitted" || response.responseText == "No Mail Ids")
+					{
+						var url= 'index.php?module=Emails&action=EmailsAjax&pmodule='+module+'&file=EditView&sendmail=true';
+				                openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+					}	
+					else
+						getObj('sendmail_cont').innerHTML=response.responseText;
                         }
                 }
         );
 }
 
-	
+function rel_eMail(module,oButton,relmod)
+{
+	var select_options='';
+	var allids='';
+	var cookie_val=get_cookie(relmod+"_all");
+	if(cookie_val != null)
+		select_options=cookie_val;
+	//Added to remove the semi colen ';' at the end of the string.done to avoid error.
+	var x = select_options.split(";");
+	var viewid ='';
+	var count=x.length
+		var idstring = "";
+	select_options=select_options.slice(0,(select_options.length-1));
+
+	if (count > 1)
+	{
+		idstring=select_options.replace(/;/g,':')
+			allids=idstring;
+	}
+	else
+	{
+		alert(alert_arr.SELECT);
+		return false;
+	}
+	fnvshobj(oButton,'sendmail_cont');
+	sendmail(relmod,allids);
+}

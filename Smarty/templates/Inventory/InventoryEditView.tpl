@@ -18,7 +18,6 @@
 <script type="text/javascript" src="jscalendar/calendar.js"></script>
 <script type="text/javascript" src="jscalendar/lang/calendar-{$CALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-<script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <script type="text/javascript" src="include/js/Inventory.js"></script>
 <script type="text/javascript">
 
@@ -88,7 +87,7 @@ function sensex_info()
 					<table border=0 cellspacing=0 cellpadding=3 width=100% class="dvtContentSpace">
 					   <tr>
 
-						<td align=left style="padding:10px;border-right:1px dashed #CCCCCC;" width=80%>
+						<td align=left style="padding:10px;border-right:1px #CCCCCC;" width=80%>
 							{*<!-- content cache -->*}
 					
 							<table border=0 cellspacing=0 cellpadding=0 width=100%>
@@ -111,7 +110,7 @@ function sensex_info()
 									   <!-- included to handle the edit fields based on ui types -->
 									   {foreach key=header item=data from=$BLOCKS}
 									      <tr>
-										{if $header== 'Address Information' && ($MODULE == 'Accounts' || $MODULE == 'Contacts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')}
+										{if $header== $MOD.LBL_ADDRESS_INFORMATION && ($MODULE == 'Accounts' || $MODULE == 'Contacts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')}
                                                                         	<td colspan=2 class="detailedViewHeader">
 	                                                                        <b>{$header}</b></td>
         	                                                                <td class="detailedViewHeader">
@@ -156,10 +155,6 @@ function sensex_info()
 							</table>
 						</td>
 						<!-- Inventory Actions - ends -->
-						<td width=20% valign=top style="padding:10px;">
-							<!-- right side InventoryActions -->
-							{include file="Inventory/InventoryActions.tpl"}
-						</td>
 					   </tr>
 					</table>
 				</td>
@@ -169,6 +164,7 @@ function sensex_info()
 	</td>
    </tr>
 </table>
+<input name='search_url' id="search_url" type='hidden' value='{$SEARCH}'>
 </form>
 
 <!-- This div is added to get the left and top values to show the tax details-->
@@ -180,6 +176,14 @@ function sensex_info()
         var fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL})
 
         var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE})
+
+	var product_labelarr = {ldelim}CLEAR_COMMENT:'{$APP.LBL_CLEAR_COMMENT}',
+				DISCOUNT:'{$APP.LBL_DISCOUNT}',
+				TOTAL_AFTER_DISCOUNT:'{$APP.LBL_TOTAL_AFTER_DISCOUNT}',
+				TAX:'{$APP.LBL_TAX}',
+				ZERO_DISCOUNT:'{$APP.LBL_ZERO_DISCOUNT}',
+				PERCENT_OF_PRICE:'{$APP.LBL_OF_PRICE}',
+				DIRECT_PRICE_REDUCTION:'{$APP.LBL_DIRECT_PRICE_REDUCTION}'{rdelim};
 
 	var ProductImages=new Array();
 	var count=0;

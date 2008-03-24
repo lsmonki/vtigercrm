@@ -43,7 +43,7 @@ $mod_strings = Array(
 'Description'=>'Description',
 'Product'=>'Product',
 'Target Audience'=>'Target Audience',
-'TargetSize'=>'TargetSize',
+'TargetSize'=>'Target Size',
 'Sponsor'=>'Sponsor',
 
 'Expected Sales Count'=>'Expected Sales Count',

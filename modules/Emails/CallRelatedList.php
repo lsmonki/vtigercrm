@@ -11,10 +11,10 @@
 
 
 require_once('Smarty_setup.php');
-require_once('modules/Emails/Email.php');
+require_once('modules/Emails/Emails.php');
 require_once('include/utils/utils.php');
 
-$focus = new Email();
+$focus = new Emails();
 $currentmodule = $_REQUEST['module'];
 $RECORD = $_REQUEST['record'];
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
@@ -34,7 +34,6 @@ global $currentModule;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 

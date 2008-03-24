@@ -22,13 +22,18 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Notes/Note.php');
+require_once('modules/Notes/Notes.php');
 require_once('include/utils/utils.php');
 
 global $app_strings,$app_list_strings,$mod_strings,$theme,$currentModule;
 
-$focus = new Note();
+$focus = new Notes();
 $smarty = new vtigerCRM_Smarty();
+
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
 
 if($_REQUEST['upload_error'] == true)
 {
@@ -42,6 +47,18 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
 	$focus->retrieve_entity_info($_REQUEST['record'],"Notes");
         $focus->name=$focus->column_fields['notes_title'];
 }
+
+if($focus->mode != 'edit')
+{
+	if(isset($_REQUEST['contact_id']) || isset($_REQUEST['parent_id']))
+	{
+		$cont_id = $_REQUEST['contact_id'];
+		$par_id = $_REQUEST['parent_id'];
+		if($cont_id == $par_id)
+			$_REQUEST['parent_id'] = '';
+	}
+}
+
 if(isset($_REQUEST['parent_id']))
 {
         $focus->column_fields['parent_id'] = $_REQUEST['parent_id'];
@@ -91,7 +108,6 @@ if (isset($_REQUEST['filename']) && $_REQUEST['isDuplicate'] != 'true') {
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')
@@ -110,10 +126,12 @@ $log->info("Note detail view");
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$app_strings['Note']);
-//Display the FCKEditor or not? -- configure $FCKEDITOR_DISPLAY in config.php 
+$smarty->assign("SINGLE_MOD",'Note');
+//Display the FCKEditor or not? -- configure $FCKEDITOR_DISPLAY in config.php
+if(getFieldVisibilityPermission('Notes',$current_user->id,'notecontent') != '0')
+        $FCKEDITOR_DISPLAY = false;
 $smarty->assign("FCKEDITOR_DISPLAY",$FCKEDITOR_DISPLAY);
-
+	
 if (isset($focus->name))
 $smarty->assign("NAME", $focus->name);
 else
@@ -175,6 +193,8 @@ if ($focus->parent_type == "Account") $smarty->assign("DEFAULT_SEARCH", "&query=
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
+
 $tabid = getTabid("Notes");
  $validationData = getDBValidationData($focus->tab_name,$tabid);
  $data = split_validationdataArray($validationData);
@@ -182,7 +202,7 @@ $tabid = getTabid("Notes");
  $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
  $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
  $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
-
+ $smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 if($focus->mode == 'edit')
 	$smarty->display("salesEditView.tpl");
 else

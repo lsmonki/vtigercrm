@@ -18,13 +18,17 @@ function Announcement()
 {
 	$("an_busy").style.display="inline";
 	var announcement=$("announcement").value;
+
+	//Replace & with ##$## and do vice versa in modules/Settings/SettingsAjax.php. if we pass as it is, request of announcement will be skipped after &
+	announcement = announcement.replace(/&/g,"##$##");//replace('&','##$##');
+
 	new Ajax.Request(
 	'index.php',
         {queue: {position: 'end', scope: 'command'},
        		method: 'post',
-	        postBody: 'module=Users&action=UsersAjax&announcement='+announcement+'&announce_save=yes',
+	        postBody: 'module=Settings&action=SettingsAjax&announcement='+announcement+'&announce_save=yes',
 	        onComplete: function(response) {
-					$("announcement").innerHTML=response.responseText;
+					$("announcement").value=response.responseText;
 					$("an_busy").style.display="none";
                         	}
 	        }
@@ -73,9 +77,9 @@ function Announcement()
 						<td class="listTableRow small" valign=top><textarea class=small width=90% height=100px id="announcement" name="announcement">{$ANNOUNCE}</textarea></td>
 					  </tr>
 					</table>
-					<table border=0 cellspacing=0 cellpadding=5 width=100% >
+					<!--table border=0 cellspacing=0 cellpadding=5 width=100% >
 					<tr><td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td></tr>
-					</table>
+					</table-->
 				</td>
 				</tr>
 				</table>

@@ -45,7 +45,7 @@ for($i=0,$j=$i+1;$i<count($tax_details);$i++,$j++)
 	$tax_div .= '
 		   <tr>
 			<td align="left" class="lineOnTop">
-				<input type="text" class="small" size="5" name="'.$tax_name_percentage.'" id="'.$tax_name_percentage.'" value="'.$tax_percentage.'" onBlur="calcCurrentTax(\''.$tax_name_percentage.'\','.$rowid.','.$i.')">&nbsp;%
+				<input type="text" class="small" size="5" name="'.$tax_name_percentage.'" id="'.$tax_name_percentage.'" value="'.$tax_percentage.'" onBlur="calcCurrentTax(\''.$tax_name_percentage.'\','.$rowid.','.$i.');calcTotal();">&nbsp;%
 				<input type="hidden" id="'.$tax_id_name.'" value="'.$tax_name_percentage.'">
 			</td>
 			<td align="center" class="lineOnTop">'.$tax_label.'</td>

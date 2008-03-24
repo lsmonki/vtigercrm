@@ -18,8 +18,6 @@ global $mod_strings,$app_strings,$app_list_strings,$theme,$adb;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-require_once($theme_path.'layout_utils.php');
-
 $tabid=$_REQUEST['tabid'];
 $fieldid=$_REQUEST['fieldid'];
 if(isset($_REQUEST['uitype']) && $_REQUEST['uitype'] != '')
@@ -39,7 +37,8 @@ $cfimagecombo = Array($image_path."text.gif",
                         $image_path."url.gif",
                         $image_path."checkbox.gif",
                         $image_path."text.gif",
-                        $image_path."cfpicklist.gif");
+                        $image_path."cfpicklist.gif",
+			$image_path."skype.gif");
 
 $cftextcombo = Array($mod_strings['Text'],
                         $mod_strings['Number'],
@@ -52,7 +51,8 @@ $cftextcombo = Array($mod_strings['Text'],
                         $mod_strings['LBL_URL'],
                         $mod_strings['LBL_CHECK_BOX'],
                         $mod_strings['LBL_TEXT_AREA'],
-                        $mod_strings['LBL_MULTISELECT_COMBO']
+                        $mod_strings['LBL_MULTISELECT_COMBO'],
+			$mod_strings['Skype']
 				);	
 $typeVal = Array(
 	'0'=>'Text',
@@ -64,7 +64,9 @@ $typeVal = Array(
 	'6'=>'Phone',
 	'7'=>'Picklist',
 	'8'=>'URL',
-	'11'=>'MultiSelectCombo');
+	'9'=>'Checkbox',
+	'11'=>'MultiSelectCombo',
+	'12'=>'Skype');
 if(isset($fieldid) && $fieldid!='')
 {
 	$mode='edit';
@@ -77,8 +79,8 @@ if(isset($fieldid) && $fieldid!='')
 	$readonly = "readonly";
 	if($fieldtype == '7' || $fieldtype == '11')
 	{
-		$query = "select * from vtiger_".$customfield_columnname;
-		$result = $adb->query($query);
+		$query = "select * from vtiger_". mysql_real_escape_string($customfield_columnname);
+		$result = $adb->pquery($query, array());
 		$fldVal='';
 		while($row = $adb->fetch_array($result))
 		{
@@ -94,7 +96,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("FLD_MODULE", $_REQUEST['fld_module']);
 if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 {
-	$error='Custom Field in the Name '.$_REQUEST["fldlabel"].' already exists. Please specify a different Label';
+	$error=$mod_strings['ERR_CUSTOM_FIELD_WITH_NAME']. $_REQUEST["fldlabel"] .$mod_strings['ERR_ALREADY_EXISTS'] . ' ' .$mod_strings['ERR_SPECIFY_DIFFERENT_LABEL'];
 	$smarty->assign("DUPLICATE_ERROR", $error);
 	$customfield_fieldlabel=$_REQUEST["fldlabel"];
 	$fieldlength=$_REQUEST["fldlength"];
@@ -139,7 +141,7 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 		<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 			<tr>';
 			if($mode == 'edit')
-				$output .= '<td width="60%" align="left" class="layerPopupHeading">'.$mod_strings['LBL_EDIT_FIELD_TYPE'].' - '.$mod_strings[$customfield_typename].'</td>';
+				$output .= '<td width="60%" align="left" class="layerPopupHeading">'.$mod_strings['LBL_EDIT_FIELD_TYPE'].' - '.$customfield_typename.'</td>';
 			else
 				$output .= '<td width="60%" align="left" class="layerPopupHeading">'.$mod_strings['LBL_ADD_FIELD'].'</td>';
 				
@@ -176,7 +178,6 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 								</tr>';
 								break;
 							case 71:
-							case 9:
 							case 7:
 								$output .= '<tr id="lengthdetails">
 									<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_LENGTH'].'</b></td>
@@ -191,7 +192,7 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 							case 15:
 								$output .= '<tr id="picklist">
 									<td class="dataLabel" nowrap="nowrap" align="right" valign="top"><b>'.$mod_strings['LBL_PICK_LIST_VALUES'].'</b></td>
-									<td align="left" valign="top"><textarea name="fldPickList" rows="10" class="txtBox" >'.$fldVal.'</textarea></td>
+									<td align="left" valign="top"><textarea name="fldPickList" rows="10" class="txtBox" '.$readonly.'>'.$fldVal.'</textarea></td>
 									<!--td style="padding-left:10px"><img src="themes/Aqua/images/picklist_hint.gif"/></td-->
 								</tr>';
 								break;

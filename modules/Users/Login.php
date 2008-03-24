@@ -21,7 +21,6 @@
  ********************************************************************************/
 $theme_path="themes/".$theme."/";
 $image_path="include/images/";
-require_once($theme_path.'layout_utils.php');
 
 global $app_language;
 //we don't want the parent module's string file, but rather the string file specifc to this subpanel
@@ -73,6 +72,8 @@ if(isset($_SESSION["login_error"]))
 }
 
 ?>
+<!--Added to display the footer in the login page by Dina--!>
+<style type="text/css">@import url("themes/<?php echo $theme; ?>/style.css");</style>
 <script type="text/javascript" language="JavaScript">
 <!-- Begin
 function set_focus() {
@@ -86,95 +87,77 @@ function set_focus() {
 </script>
 
 
-
-<table border="0" cellspacing="0" cellpadding="0" width=100%>
-<tr>
-	<td align=center><br><br><br><br>
-	
-		<!-- Login Starts -->
-		<table border="0" cellspacing="0" cellpadding="0" width=700 style="border:2px solid rgb(119,119,119)">
+<br><br>
+<div align="center">	
+	<table border="0" cellpadding="0" cellspacing="0" width="700">
 		<tr>
-			<td align=left>
-			
-			
-			<table border="0" cellspacing="0" cellpadding='0' width='100%' background="themes/images/loginTopHeaderBg.gif">
-			<tr>
-				<td align=left><img src="themes/images/loginTopHeaderName.gif"></td>
-				<td align=right><!--img src="themes/images/loginTopVersion.gif"--></td>
-			</tr>
-			</table>
-			<table border="0" cellspacing="0" cellpadding='10' width='100%'>
-			<tr>
-				<td align=left valign=top width=50% class=small style="padding:10px">
-					<!-- Promo Text and Image -->
-					<table border=0> 
+			<td align="right"><img src="themes/images/honestCRMTop.gif"></td>
+		</tr>
+	</table>
+	<!-- key to check session_out in Ajax key=s18i14i22a19 -->
+	<!-- Login Starts -->
+	<table border="0" cellspacing="0" cellpadding="0" width=700>
+		<tr>
+			<td class="bg" width="50%"><img src="themes/images/vtigerName.gif" alt="vtiger CRM" title="vtiger CRM"></td>
+			<td class="bg" align="right" width="50%"><img src="themes/images/honestCRM.gif" alt="The honest Open Source CRM" title="The honest Open Source CRM"></td>
+		</tr>
+		<tr>
+			<td class="small z1" align="center">
+
+				<img src="themes/images/bullets.gif">
+			</td>
+	       		<td class="small z2" align="center">
+			<?php
+				if (isset($_REQUEST['ck_login_language_vtiger'])) {
+					$display_language = $_REQUEST['ck_login_language_vtiger'];
+				}
+				else {
+					$display_language = $default_language;
+				}
+
+				if (isset($_REQUEST['ck_login_theme_vtiger'])) {
+					$display_theme = $_REQUEST['ck_login_theme_vtiger'];
+				}
+				else {
+					$display_theme = $default_theme;
+				}
+			?>
+			<!-- Sign in form -->
+				<br>
+				<form action="index.php" method="post" name="DetailView" id="form">
+				<input type="hidden" name="module" value="Users">
+				<input type="hidden" name="action" value="Authenticate">
+				<input type="hidden" name="return_module" value="Users">
+				<input type="hidden" name="return_action" value="Login">
+					<table border="0" cellpadding="0" cellspacing="0" width="80%">
 					<tr>
-					<td>
-					<img src="themes/images/loginPromoText.gif" alt="vtiger CRM 5 - 100% Open Source CRM" title="vtiger CRM 5 - 100% Open Source CRM">
-					</td>
+						<td class="signinHdr"><img src="themes/images/signin.gif" alt="<?php echo $app_strings['LBL_SIGN_IN']?>" title="<?php echo $app_strings['LBL_SIGN_IN']?>"></td>
 					</tr>
 					<tr>
-					<td class=small style="padding-left:10px; color:#737373">
-- AJAX-based user interface<br>
-- Complete customer life cycle management<br>
-- Collaboration through e-mail, portal, and live chat<br>
-- Customization &  fine-grained security management<br>
-- Ready to use reports & dashboards<br>
-					</td>
-					</tr>
-					</table>
-					
-				</td>
-				<td align=center valign=top width=50%>
-					<?php
-						if (isset($_REQUEST['ck_login_language_vtiger'])) {
-							$display_language = $_REQUEST['ck_login_language_vtiger'];
-						}
-						else {
-							$display_language = $default_language;
-						}
-							
-						if (isset($_REQUEST['ck_login_theme_vtiger'])) {
-							$display_theme = $_REQUEST['ck_login_theme_vtiger'];
-						}
-						else {
-							$display_theme = $default_theme;
-						}
-					?>	
-					<!-- Sign in box -->
-					<form action="index.php" method="post" name="DetailView" id="form">
-					<input type="hidden" name="module" value="Users">
-					<input type="hidden" name="action" value="Authenticate">
-					<input type="hidden" name="return_module" value="Users">
-					<input type="hidden" name="return_action" value="Login">
-					<table border="0" cellspacing="0" cellpadding="0" width=100%>
-					<tr><td align=left><img src="themes/images/loginSignIn.gif" alt="Sign In" title="Sign In" border="0"></td></tr>
-					<tr>
-						<td background="themes/images/loginSignInShade.gif" style="background-repeat: repeat-x;" align=center valign=top class=small>
-						<br>
-							<table border=0 cellspacing=0 cellpadding=5 width=80% class="small">
-							<tr><td width=30% class=small align=right><?php echo $current_module_strings['LBL_USER_NAME'] ?></td><td width=70% class=small><input class="small" style="width:100%" type="text"  name="user_name"   value="<?php echo $login_user_name ?>" tabindex="1"></td></tr>
-							<tr><td class=small align=right><?php echo $current_module_strings['LBL_PASSWORD'] ?></td><td class=small><input class="small" style="width:100%" type="password" size='20' name="user_password"  value="<?php echo $login_password ?>" tabindex="2"></td></tr>
+						<td class="small">
+						<!-- form elements -->
+							<br>
+							<table border="0" cellpadding="5" cellspacing="0" width="100%">
 							<tr>
-								<td colspan=2 style="padding:0px">
-									<table border=0 cellspacing=0 cellpadding=5 width=100%>
-									<tr>
-									<td width=30% style="background-color:#efefef;" class=small align=right>	<?php echo $current_module_strings['LBL_THEME'] ?></td>
-									<td width=70% style="background-color:#efefef;"  class=small>
-									<select class='small' name='login_theme' style="width:100%" tabindex="3">	
-										<?php echo get_select_options_with_id(get_themes(), $display_theme) ?>										     </select>
-									</tr>		
-									<tr>
-									<td style="background-color:#efefef;" class=small align=right><?php echo $current_module_strings['LBL_LANGUAGE'] ?></td>
-									<td style="background-color:#efefef;"  class=small>
-									<select class='small' name='login_language' style="width:100%" vtiger_tabindex="4">
-																													<?php echo get_select_options_with_id(get_languages(), $display_language) ?>
-								        </select>
-									</tr>
-									</table>
-								</td>
+								<td class="small" align="right" width="30%"><?php echo $current_module_strings['LBL_USER_NAME'] ?></td>
+								<td class="small" align="left" width="70%"><input class="small" type="text" name="user_name" value="<?php echo $login_user_name ?>" tabindex="1"></td>
 							</tr>
-							<tr><td colspan=2>&nbsp;</td></tr>
+							<tr>
+								<td class="small" align="right" width="30%"><?php echo $current_module_strings['LBL_PASSWORD'] ?></td>
+								<td class="small" align="left" width="70%"><input class="small" type="password" size='20' name="user_password" value="<?php echo $login_password ?>" tabindex="2"></td>
+							</tr>
+							<tr bgcolor="#f5f5f5">
+								<td class="small" align="right" width="30%"><?php echo $current_module_strings['LBL_THEME'] ?></td>
+								<td class="small" align="left" width="70%"><select class="small" name='login_theme' style="width:70%" tabindex="3">
+									<?php echo get_select_options_with_id(get_themes(), $display_theme) ?>
+								</select></td>
+							</tr>
+							<tr bgcolor="#f5f5f5">
+								<td class="small" align="right" width="30%"><?php echo $current_module_strings['LBL_LANGUAGE'] ?></td>
+								<td class="small" align="left" width="70%"><select class="small" name='login_language' style="width:70%" tabindex="4">
+									<?php echo get_select_options_with_id(get_languages(), $display_language) ?>
+								</select></td>		
+							</tr>
 							<?php
 							if( isset($_SESSION['validation'])){
 							?>
@@ -188,44 +171,23 @@ function set_focus() {
 							?>
 							<tr>
 								<td colspan="2"><b class="small"><font color="Brown">
-								<?php echo $login_error ?>
-								</font>
-								</b>
-								</td>
+							<?php echo $login_error ?>
+								</font></b></td>
 							</tr>
 							<?php
 							}
 							?>
 							<tr>
-								<td colspan=2 style="padding:0px" align=center>
-								<input class=small title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accesskey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>"  type="image" src="themes/images/loginBtnSignIn.gif" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  "  tabindex="5">	
-								</td>
+								<td class="small">&nbsp;</td>
+								<td class="small"><input title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" alt="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accesskey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" src="themes/images/btnSignInNEW.gif" type="image" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  "  tabindex="5"></td>
 							</tr>
 							</table>
-						<br>
+							<br><br>
 						</td>
 					</tr>
 					</table>
-					
-				</td>
-			</tr>
-			</table>
-			
+				</form>
 			</td>
 		</tr>
-		</table>
-	
-			<!-- Shadow -->
-			<table border=0 cellspacing=0 cellpadding=0 width=700>
-			<tr>
-				<td><img src="themes/images/loginBottomShadowLeft.gif"></td>
-				<td width=100% background="themes/images/loginBottomShadowBg.gif"><img src="themes/images/loginBottomShadowBg.gif"></td>
-				<td><img src="themes/images/loginBottomShadowRight.gif"></td>
-			</tr>
-			</table>
-	
-	
-	
-	</td>
-</tr>
-</table>
+	</table>
+</div>

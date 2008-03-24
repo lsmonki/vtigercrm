@@ -153,7 +153,7 @@ if (isset($_REQUEST['mypbss_edit']) && $_REQUEST['mypbss_edit'] == 'true') {
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_SALES_STAGES'];?></td>
 <td valign='top' ><select name="mypbss_sales_stages[]" multiple size='5'><?php echo get_select_options_with_id($comboFieldArray['sales_stage_dom'],$_SESSION['mypbss_sales_stages']); ?></select></td>
 </tr><tr>
-<td align="right"><br /> <input class="button" onclick="return verify_chart_data(my_pipeline);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
+<td align="right"><br /> <input class="button" onclick="return chk_form(my_pipeline);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
 </tr></table>
 </form>
 <script type="text/javascript">

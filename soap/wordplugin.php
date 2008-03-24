@@ -17,7 +17,7 @@ require_once('include/database/PearDatabase.php');
 $log = &LoggerManager::getLogger('wordplugin');
 
 error_reporting(0);
-$NAMESPACE = 'http://www.vtiger.com/vtigercrm/';
+$NAMESPACE = 'http://www.vtiger.com/products/crm';
 $server = new soap_server;
 $accessDenied = "You are not permitted to perform this action";
 $server->configureWSDL('vtigersoap');
@@ -171,38 +171,38 @@ $server->wsdl->addComplexType(
 
 $server->register(
     'get_contacts_columns',
-    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+    array('user_name'=>'xsd:string','session'=>'xsd:string'),
     array('return'=>'tns:contact_column_detail'),
     $NAMESPACE);
 
 $server->register(
     'get_accounts_columns',
-    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+    array('user_name'=>'xsd:string','session'=>'xsd:string'),
     array('return'=>'tns:account_column_detail'),
     $NAMESPACE);
 
 $server->register(
     'get_leads_columns',
-    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+    array('user_name'=>'xsd:string','session'=>'xsd:string'),
     array('return'=>'tns:lead_column_detail'),
     $NAMESPACE);
 
 $server->register(
     'get_user_columns',
-    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+    array('user_name'=>'xsd:string','session'=>'xsd:string'),
     array('return'=>'tns:user_column_detail'),
     $NAMESPACE);
 
 $server->register(
     'get_tickets_columns',
-    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+    array('user_name'=>'xsd:string','session'=>'xsd:string'),
     array('return'=>'tns:tickets_list_array'),
     $NAMESPACE);
 
 $server->register(
     'create_session',
-    array('user_name'=>'xsd:string','password'=>'xsd:string'),
-    array('return'=>'xsd:string'),
+    array('user_name'=>'xsd:string','password'=>'xsd:string','version'=>'xsd:string'),
+        array('return'=>'xsd:string','session'=>'xsd:string'),
     $NAMESPACE);
 
 $server->register(
@@ -210,13 +210,14 @@ $server->register(
     array('user_name'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
-
 	        
-function get_tickets_columns($user_name, $password)
+function get_tickets_columns($user_name, $session)
 {
+	if(!validateSession($user_name,$session))
+	return null;
 	global $current_user,$log;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($user_name);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
@@ -234,18 +235,20 @@ function get_tickets_columns($user_name, $password)
 	}
 }
 
-function get_contacts_columns($user_name, $password)
+function get_contacts_columns($user_name, $session)
 {
+	if(!validateSession($user_name,$session))
+	return null;
 	global $current_user,$log;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 	if(isPermitted("Contacts","index") == "yes")
 	{
-		require_once('modules/Contacts/Contact.php');
-		$contact = new Contact();
+		require_once('modules/Contacts/Contacts.php');
+		$contact = new Contacts();
 		$log->debug($contact->getColumnNames());
 		return $contact->getColumnNames();	   
 	}
@@ -258,18 +261,20 @@ function get_contacts_columns($user_name, $password)
 }
 
 
-function get_accounts_columns($user_name, $password)
+function get_accounts_columns($user_name, $session)
 {
+	if(!validateSession($user_name,$session))
+	return null;
 	global $current_user,$log;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($user_name);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 	if(isPermitted("Accounts","index") == "yes")
 	{
-		require_once('modules/Accounts/Account.php');
-		$account = new Account();
+		require_once('modules/Accounts/Accounts.php');
+		$account = new Accounts();
 		$log->debug($account->getColumnNames_Acnt());
 		return $account->getColumnNames_Acnt();
 	}
@@ -282,19 +287,21 @@ function get_accounts_columns($user_name, $password)
 }
 
 
-function get_leads_columns($user_name, $password)
+function get_leads_columns($user_name, $session)
 {	
+	if(!validateSession($user_name,$session))
+	return null;
 	global $current_user,$log;
-	require_once("modules/Users/User.php");
-	$seed_user=new User();
+	require_once("modules/Users/Users.php");
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($user_name);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 
 	if(isPermitted("Leads","index") == "yes")
 	{
-		require_once('modules/Leads/Lead.php');
-		$lead = new Lead();
+		require_once('modules/Leads/Leads.php');
+		$lead = new Leads();
 		$log->debug($lead->getColumnNames_Lead());
 		return $lead->getColumnNames_Lead();
 	}
@@ -306,47 +313,58 @@ function get_leads_columns($user_name, $password)
 	
 }
 
-function get_user_columns($user_name, $password)
+function get_user_columns($user_name, $session)
 {
+	if(!validateSession($user_name,$session))
+	return null;
 	global $current_user;
-	require_once('modules/Users/User.php');
-	$seed_user=new User();
+	require_once('modules/Users/Users.php');
+	$seed_user=new Users();
 	$user_id=$seed_user->retrieve_user_id($user_name);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
-	$user = new User();
+	$user = new Users();
 	return $user->getColumnNames_User();
 	
 }
 
 
-function create_session($user_name, $password)
-{ 
-  	global $adb,$log;
-	require_once('modules/Users/User.php');
-	$objuser = new User();
-	if($password != "" && $user_name != '')
+function create_session($user_name, $password,$version)
+{
+       	global $log,$adb;
+	require_once('modules/Users/Users.php');
+	include('vtigerversion.php');
+	if($version != $vtiger_current_version)
+	{
+		return array("VERSION",'00');
+	}
+	$return_access = array("FALSES",'00');
+	
+	$objuser = new Users();
+	
+	if($password != "")
 	{
 		$objuser->column_fields['user_name'] = $user_name;
-		$encrypted_password = $objuser->encrypt_password($password);
-		$query = "select id from vtiger_users where user_name='$user_name' and user_password='$encrypted_password'";
-		$result = $adb->query($query);
-		if($adb->num_rows($result) > 0)
+		$objuser->load_user($password);
+		if($objuser->is_authenticated())
 		{
-			$return_access = "TempSessionID";
-			$log->debug("Logged in sucessfully from wordplugin");
+			$userid =  $objuser->retrieve_user_id($user_name);
+			$sessionid = makeRandomPassword();
+			unsetServerSessionId($userid);
+			$sql="insert into vtiger_soapservice values(?,?,?)";
+			$result = $adb->pquery($sql, array($userid,'Office',$sessionid));
+			$return_access = array("TRUE",$sessionid);
 		}else
 		{
-			$return_access = "false";
-			$log->debug("Logged in failure from wordplugin");
+			$return_access = array("FALSE",'00');
 		}
 	}else
 	{
-		$return_access = "false";
-		$log->debug("Logged in failure from wordplugin");
-     }
-   return $return_access;
-		
+			//$server->setError("Invalid username and/or password");
+			$return_access = array("LOGIN",'00');
+	}
+	$objuser = $objuser;
+	return $return_access;	
 }
 
 function end_session($user_name)
@@ -354,9 +372,55 @@ function end_session($user_name)
 	return "Success";	
 }
  
+function unsetServerSessionId($id)
+{
+	global $adb;
+	$adb->println("Inside the function unsetServerSessionId");
+
+	$id = (int) $id;
+
+	$adb->query("delete from vtiger_soapservice where type='Office' and id=$id");
+
+	return;
+}
+function validateSession($username, $sessionid)
+{
+	global $adb,$current_user;
+	$adb->println("Inside function validateSession($username, $sessionid)");
+	require_once("modules/Users/Users.php");
+	$seed_user = new Users();
+	$id = $seed_user->retrieve_user_id($username);
+
+	$server_sessionid = getServerSessionId($id);
+
+	$adb->println("Checking Server session id and customer input session id ==> $server_sessionid == $sessionid");
+
+	if($server_sessionid == $sessionid)
+	{
+		$adb->println("Session id match. Authenticated to do the current operation.");
+		return true;
+	}
+	else
+	{
+		$adb->println("Session id does not match. Not authenticated to do the current operation.");
+		return false;
+	}
+}
+function getServerSessionId($id)
+{
+	global $adb;
+	$adb->println("Inside the function getServerSessionId($id)");
+
+	//To avoid SQL injection we are type casting as well as bound the id variable. In each and every function we will call this function
+	$id = (int) $id;
+
+	$query = "select * from vtiger_soapservice where type='Office' and id={$id}";
+	$sessionid = $adb->query_result($adb->query($query),0,'sessionid');
+
+	return $sessionid;
+}
 
 
-
-$server->service(utf8_encode($HTTP_RAW_POST_DATA)); 
+$server->service($HTTP_RAW_POST_DATA);
 exit(); 
 ?>

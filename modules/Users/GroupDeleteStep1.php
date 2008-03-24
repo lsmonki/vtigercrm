@@ -16,7 +16,7 @@ require_once('include/utils/utils.php');
 
 global $app_strings;
 global $mod_strings;
-global $theme;
+global $theme,$default_charset;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $delete_group_id = $_REQUEST['groupid'];
@@ -24,7 +24,7 @@ $delete_group_name = fetchGroupName($delete_group_id);
 
 
 $output='';
-$output ='<div id="DeleteLay" class="layerPopup">
+$output ='<div id="DeleteLay" class="layerPopup" style="width:400px;">
 <form name="deleteGroupForm" action="index.php">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="DeleteGroup">
@@ -41,18 +41,18 @@ $output ='<div id="DeleteLay" class="layerPopup">
 	<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
 	<tr>
 		<td width="50%" class="cellLabel small"><b>'.$mod_strings['LBL_DELETE_GROUPNAME'].'</b></td>
-		<td width="50%" class="cellText small"><b>'.$delete_group_name.'</b></td>
+		<td width="50%" class="cellText small"><b>'.htmlentities($delete_group_name,ENT_QUOTES,$default_charset).'</b></td>
 	</tr>
 	<tr>
 		<td align="left" class="cellLabel small" nowrap><b>'.$mod_strings['LBL_TRANSFER_GROUP'].'</b></td>
 		<td align="left" class="cellText small">';
 		global $adb;	
 		$sql = "select groupid,groupname from vtiger_groups";
-		$result = $adb->query($sql);
+		$result = $adb->pquery($sql, array());
 		$num_groups = $adb->num_rows($result);
 	
 		$sql1 = "select id,user_name from vtiger_users where deleted=0";
-		$result1= $adb->query($sql1);
+		$result1= $adb->pquery($sql1, array());
 		$num_users = $adb->num_rows($result1);
 	
 
@@ -71,7 +71,12 @@ $output ='<div id="DeleteLay" class="layerPopup">
 		{
 			$user_name=$adb->query_result($result1,$i,"user_name");
 			$user_id=$adb->query_result($result1,$i,"id");
-		
+			
+			if(strlen($user_name)>20)
+			{
+				$user_name=substr($user_name,0,20)."...";
+			}
+								
 	    		$output.='<option value="'.$user_id.'">'.$user_name.'</option>';
 		}	
 	
@@ -87,10 +92,14 @@ $output ='<div id="DeleteLay" class="layerPopup">
 			$temprow = $adb->fetch_array($result);
 			do
 			{
-				$group_name=$temprow["groupname"];
+				$group_name= htmlentities($temprow["groupname"],ENT_QUOTES,$default_charset);
 				$group_id=$temprow["groupid"];
 				if($delete_group_id 	!= $group_id)
 				{
+					if(strlen($group_name)>20)
+					{
+						$group_name=substr($group_name,0,20)."...";
+					}
     					$output.='<option value="'.$group_id.'">'.$group_name.'</option>';
 	    			}	
 			}while($temprow = $adb->fetch_array($result));

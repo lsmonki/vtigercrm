@@ -17,12 +17,12 @@
  * Description:  TODO: To be written.
  ********************************************************************************/
 
-require_once('modules/Emails/Email.php');
+require_once('modules/Emails/Emails.php');
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('email_delete');
 
-$focus = new Email();
+$focus = new Emails();
 
 if(!isset($_REQUEST['record']))
 	die("A record number must be specified to delete the email.");
@@ -33,5 +33,5 @@ DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['re
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']."&viewname=".$return_viewname."&relmodule=".$_REQUEST['module']);
+header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']."&viewname=".$return_viewname."&relmodule=".$_REQUEST['module']."&parenttab=".$_REQUEST['parenttab']);
 ?>

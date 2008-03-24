@@ -11,7 +11,7 @@
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once ($theme_path."layout_utils.php");
+require_once('modules/CustomView/CustomView.php');
 require_once("config.php");
 require_once('modules/Reports/Reports.php');
 require_once('include/logging.php');
@@ -20,81 +20,96 @@ require_once("modules/Reports/ReportRun.php");
 require_once('include/utils/utils.php');
 require_once('Smarty_setup.php');
 
-global $adb;
-global $mod_strings;
+global $adb,$mod_strings,$app_strings;
 
 $reportid = $_REQUEST["record"];
 $folderid = $_REQUEST["folderid"];
 $filtercolumn = $_REQUEST["stdDateFilterField"];
 $filter = $_REQUEST["stdDateFilter"];
-$startdate = $_REQUEST["startdate"];
-$enddate = $_REQUEST["enddate"];
+// Added to fix the issue
 
-global $primarymodule;
-global $secondarymodule;
-global $orderbylistsql;
-global $orderbylistcolumns;
-global $ogReport;
-
-$ogReport = new Reports($reportid);
-$primarymodule = $ogReport->primodule;
-$secondarymodule = $ogReport->secmodule;
-$oReportRun = new ReportRun($reportid);
-$filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
-$sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
-$totalhtml = $oReportRun->GenerateReport("TOTALHTML",$filterlist);
-if(isPermitted($primarymodule,'index') == "yes" && (isPermitted($secondarymodule,'index')== "yes"))
+$sql = "select * from vtiger_report where reportid=?";
+$res = $adb->pquery($sql, array($reportid));
+$Report_ID = $adb->query_result($res,0,'reportid');
+$numOfRows = $adb->num_rows($res);
+if($numOfRows > 0)
 {
+	$startdate = getDBInsertDateValue($_REQUEST["startdate"]);//Convert the user date format to DB date format 
+	$enddate = getDBInsertDateValue($_REQUEST["enddate"]);//Convert the user date format to DB date format
 
-	$list_report_form = new vtigerCRM_Smarty;
-	$ogReport->getSelectedStandardCriteria($reportid);
-	//commented to omit dashboards for vtiger_reports
-	//require_once('modules/Dashboard/ReportsCharts.php');
-	//$image = get_graph_by_type('Report','Report',$primarymodule,'',$sshtml[2]);
-	//$list_report_form->assign("GRAPH", $image);
+	global $primarymodule,$secondarymodule,$orderbylistsql,$orderbylistcolumns,$ogReport;
+	//added to fix the ticket #5117
+	global $current_user;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
-	$BLOCK1 = getPrimaryStdFilterHTML($ogReport->primodule,$ogReport->stdselectedcolumn);
-	$BLOCK1 .= getSecondaryStdFilterHTML($ogReport->secmodule,$ogReport->stdselectedcolumn);
-	$list_report_form->assign("BLOCK1",$BLOCK1);
-	$BLOCKJS = $ogReport->getCriteriaJS();
-	$list_report_form->assign("BLOCKJS",$BLOCKJS);
-
-	$BLOCKCRITERIA = $ogReport->getSelectedStdFilterCriteria($ogReport->stdselectedfilter);
-	$list_report_form->assign("BLOCKCRITERIA",$BLOCKCRITERIA);
-
-	$startdate = $ogReport->startdate;
-	$list_report_form->assign("STARTDATE",$startdate);	
-
-	$enddate = $ogReport->enddate;
-	$list_report_form->assign("ENDDATE",$enddate);
-
-	$list_report_form->assign("MOD", $mod_strings);
-	$list_report_form->assign("APP", $app_strings);
-	$list_report_form->assign("IMAGE_PATH", $image_path);
-	$list_report_form->assign("REPORTID", $reportid);
-	$list_report_form->assign("REPORTNAME", $ogReport->reportname);
-	$list_report_form->assign("REPORTHTML", $sshtml);
-	$list_report_form->assign("REPORTTOTHTML", $totalhtml);
-	$list_report_form->assign("FOLDERID", $folderid);
-	if($_REQUEST['mode'] != 'ajax')
+	$ogReport = new Reports($reportid);
+	$primarymodule = $ogReport->primodule;
+	$secondarymodule = $ogReport->secmodule;
+	$oReportRun = new ReportRun($reportid);
+	$filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
+	$sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
+	$totalhtml = $oReportRun->GenerateReport("TOTALHTML",$filterlist);
+	if(isPermitted($primarymodule,'index') == "yes" && (isPermitted($secondarymodule,'index')== "yes"))
 	{
-		$list_report_form->assign("REPINFOLDER", getReportsinFolder($folderid));
-		include('themes/'.$theme.'/header.php');
-		$list_report_form->display('ReportRun.tpl');
+		$list_report_form = new vtigerCRM_Smarty;
+		$ogReport->getSelectedStandardCriteria($reportid);
+		//commented to omit dashboards for vtiger_reports
+		//require_once('modules/Dashboard/ReportsCharts.php');
+		//$image = get_graph_by_type('Report','Report',$primarymodule,'',$sshtml[2]);
+		//$list_report_form->assign("GRAPH", $image);
+
+		$BLOCK1 = getPrimaryStdFilterHTML($ogReport->primodule,$ogReport->stdselectedcolumn);
+		$BLOCK1 .= getSecondaryStdFilterHTML($ogReport->secmodule,$ogReport->stdselectedcolumn);
+		// Check if selectedcolumn is found in the filters (Fix for ticket #4866)
+		$selectedcolumnvalue = '"'. $ogReport->stdselectedcolumn . '"';
+		if (!$is_admin && isset($ogReport->stdselectedcolumn) && strpos($BLOCK1, $selectedcolumnvalue) === false) {
+			$BLOCK1 .= "<option selected value='Not Accessible'>".$app_strings['LBL_NOT_ACCESSIBLE']."</option>";
+		}
+		$list_report_form->assign("BLOCK1",$BLOCK1);
+		$BLOCKJS = $ogReport->getCriteriaJS();
+		$list_report_form->assign("BLOCKJS",$BLOCKJS);
+
+		$BLOCKCRITERIA = $ogReport->getSelectedStdFilterCriteria($ogReport->stdselectedfilter);
+		$list_report_form->assign("BLOCKCRITERIA",$BLOCKCRITERIA);
+		if(isset($ogReport->startdate) && isset($ogReport->enddate))
+		{
+			$list_report_form->assign("STARTDATE",getDisplayDate($ogReport->startdate));
+			$list_report_form->assign("ENDDATE",getDisplayDate($ogReport->enddate));
+		}else
+		{
+			$list_report_form->assign("STARTDATE",$ogReport->startdate);
+			$list_report_form->assign("ENDDATE",$ogReport->enddate);	
+		}	
+		$list_report_form->assign("MOD", $mod_strings);
+		$list_report_form->assign("APP", $app_strings);
+		$list_report_form->assign("IMAGE_PATH", $image_path);
+		$list_report_form->assign("REPORTID", $reportid);
+		$list_report_form->assign("REPORTNAME", $ogReport->reportname);
+		$list_report_form->assign("REPORTHTML", $sshtml);
+		$list_report_form->assign("REPORTTOTHTML", $totalhtml);
+		$list_report_form->assign("FOLDERID", $folderid);
+		$list_report_form->assign("DATEFORMAT",$current_user->date_format);
+		$list_report_form->assign("JS_DATEFORMAT",parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+
+		if($_REQUEST['mode'] != 'ajax')
+		{
+			$list_report_form->assign("REPINFOLDER", getReportsinFolder($folderid));
+			include('themes/'.$theme.'/header.php');
+			$list_report_form->display('ReportRun.tpl');
+		}
+		else
+		{
+			$list_report_form->display('ReportRunContents.tpl');
+		}
 	}
 	else
 	{
-		$list_report_form->display('ReportRunContents.tpl');
-	}
-}
-else
-{
-	if($_REQUEST['mode'] != 'ajax')
-	{
-		include('themes/'.$theme.'/header.php');
-	}	
-	echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
-	echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 80%; position: relative; z-index: 10000000;'>
+		if($_REQUEST['mode'] != 'ajax')
+		{
+			include('themes/'.$theme.'/header.php');
+		}	
+		echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
+		echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 80%; position: relative; z-index: 10000000;'>
 
 		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 		<tbody><tr>
@@ -107,9 +122,28 @@ else
 		</tr>
 		</tbody></table> 
 		</div>";
-	echo "</td></tr></table>";
+		echo "</td></tr></table>";
+	}
 }
+else
+{
+		echo "<link rel='stylesheet' type='text/css' href='themes/$theme/style.css'>";	
+		echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
+		echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 80%; position: relative; z-index: 10000000;'>
 
+		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+		<tbody><tr>
+		<td rowspan='2' width='11%'><img src='themes/$theme/images/denied.gif' ></td>
+		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>".$mod_strings['LBL_REPORT_DELETED']."</span></td>
+		</tr>
+		<tr>
+		<td class='small' align='right' nowrap='nowrap'>
+		<a href='javascript:window.history.back();'>$app_strings[LBL_GO_BACK]</a><br>                                                                                </td>
+		</tr>
+		</tbody></table>
+		</div>";
+		echo "</td></tr></table>";
+}
 	/** Function to get the StdfilterHTML strings for the given  primary module 
 	 *  @ param $module : Type String
 	 *  @ param $selected : Type String(optional)	
@@ -118,14 +152,13 @@ else
 	 */
 function getPrimaryStdFilterHTML($module,$selected="")
 {
+
 	global $app_list_strings;
 	global $ogReport;
 	global $current_language;
-
-        $mod_strings = return_module_language($current_language,$module);
-
-	$result = $ogReport->getStdCriteriaByModule($module);
-	
+	$ogReport->oCustomView=new CustomView();
+	$result = $ogReport->oCustomView->getStdCriteriaByModule($module);
+	$mod_strings = return_module_language($current_language,$module);
 	if(isset($result))
 	{
 		foreach($result as $key=>$value)
@@ -151,7 +184,7 @@ function getPrimaryStdFilterHTML($module,$selected="")
 			}
 		}
 	}
-	
+
 	return $shtml;
 }
 
@@ -166,13 +199,14 @@ function getSecondaryStdFilterHTML($module,$selected="")
 	global $app_list_strings;
 	global $ogReport;
 	global $current_language;
+	$ogReport->oCustomView=new CustomView();
 
 	if($module != "")
         {
         	$secmodule = explode(":",$module);
         	for($i=0;$i < count($secmodule) ;$i++)
         	{
-			$result = $ogReport->getStdCriteriaByModule($secmodule[$i]);
+			$result =  $ogReport->oCustomView->getStdCriteriaByModule($secmodule[$i]);
 			$mod_strings = return_module_language($current_language,$secmodule[$i]);
         		if(isset($result))
         		{
@@ -212,8 +246,8 @@ function getSecondaryStdFilterHTML($module,$selected="")
 function getReportsinFolder($folderid)
 {
 	global $adb;
-	$query = 'select reportid,reportname from vtiger_report where folderid='.$folderid;
-	$result = $adb->query($query);
+	$query = 'select reportid,reportname from vtiger_report where folderid=?';
+	$result = $adb->pquery($query, array($folderid));
 	$reports_array = Array();
 	for($i=0;$i < $adb->num_rows($result);$i++)	
 	{

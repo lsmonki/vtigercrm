@@ -23,9 +23,9 @@ else
 	$return_action = 'ListProfiles';
 
 //Retreiving the vtiger_tabs permission array
-$tab_perr_result = $adb->query("select * from vtiger_profile2tab where profileid=".$profileid);
-$act_perr_result = $adb->query("select * from vtiger_profile2standardpermissions where profileid=".$profileid);
-$act_utility_result = $adb->query("select * from vtiger_profile2utility where profileid=".$profileid);
+$tab_perr_result = $adb->pquery("select * from vtiger_profile2tab where profileid=?", array($profileid));
+$act_perr_result = $adb->pquery("select * from vtiger_profile2standardpermissions where profileid=?", array($profileid));
+$act_utility_result = $adb->pquery("select * from vtiger_profile2utility where profileid=?", array($profileid));
 $num_tab_per = $adb->num_rows($tab_perr_result);
 $num_act_per = $adb->num_rows($act_perr_result);
 $num_act_util_per = $adb->num_rows($act_utility_result);
@@ -37,10 +37,10 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 	$edit_all_req=$_REQUEST['edit_all'];
 	$edit_all = getPermissionValue($edit_all_req);
 
-	$update_query = "update  vtiger_profile2globalpermissions set globalactionpermission=".$view_all." where globalactionid=1 and profileid=".$profileid;
-	$adb->query($update_query);
-	$update_query = "update  vtiger_profile2globalpermissions set globalactionpermission=".$edit_all." where globalactionid=2 and profileid=".$profileid;
-	$adb->query($update_query);
+	$update_query = "update  vtiger_profile2globalpermissions set globalactionpermission=? where globalactionid=1 and profileid=?";
+	$adb->pquery($update_query, array($view_all, $profileid));
+	$update_query = "update  vtiger_profile2globalpermissions set globalactionpermission=? where globalactionid=2 and profileid=?";
+	$adb->pquery($update_query, array($edit_all, $profileid));
 
 	
 	//profile2tab permissions
@@ -59,12 +59,12 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 			{
 				$permission_value = 1;
 			}
-			$update_query = "update vtiger_profile2tab set permissions=".$permission_value." where tabid=".$tab_id." and profileid=".$profileid;
-			$adb->query($update_query);
+			$update_query = "update vtiger_profile2tab set permissions=? where tabid=? and profileid=?";
+			$adb->pquery($update_query, array($permission_value, $tab_id, $profileid));
 			if($tab_id ==9)
 			{
-				$update_query = "update vtiger_profile2tab set permissions=".$permission_value." where tabid=16 and profileid=".$profileid;
-				$adb->query($update_query);
+				$update_query = "update vtiger_profile2tab set permissions=? where tabid=16 and profileid=?";
+				$adb->pquery($update_query, array($permission_value, $profileid));
 			}
 		}
 	}
@@ -99,12 +99,12 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 			{
 				$permission_value = 1;
 			}
-			$update_query = "update vtiger_profile2standardpermissions set permissions=".$permission_value." where tabid=".$tab_id." and Operation=".$action_id." and profileid=".$profileid;
-			$adb->query($update_query);
+			$update_query = "update vtiger_profile2standardpermissions set permissions=? where tabid=? and Operation=? and profileid=?";
+			$adb->pquery($update_query, array($permission_value, $tab_id, $action_id, $profileid));
 			if($tab_id ==9)
 			{
-				$update_query = "update vtiger_profile2standardpermissions set permissions=".$permission_value." where tabid=16 and Operation=".$action_id." and profileid=".$profileid;
-				$adb->query($update_query);
+				$update_query = "update vtiger_profile2standardpermissions set permissions=? where tabid=16 and Operation=? and profileid=?";
+				$adb->pquery($update_query, array($permission_value, $action_id, $profileid));
 			}
 
 
@@ -132,9 +132,8 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 			$permission_value = 1;
 		}
 
-		$update_query = "update vtiger_profile2utility set permission=".$permission_value." where tabid=".$tab_id." and activityid=".$action_id." and profileid=".$profileid;
-
-		$adb->query($update_query);
+		$update_query = "update vtiger_profile2utility set permission=? where tabid=? and activityid=? and profileid=?";
+		$adb->pquery($update_query, array($permission_value, $tab_id, $action_id, $profileid));
 
 
 	}
@@ -162,17 +161,26 @@ foreach($modArr as $fld_module => $fld_label)
 		}
 		//Updating the Mandatory vtiger_fields
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
-		if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
+		$displaytype =  $adb->query_result($fieldListResult,$i,"displaytype");
+		$fieldname =  $adb->query_result($fieldListResult,$i,"fieldname");
+		if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || $uitype == 20 || ($displaytype != 3 && $fieldname == "activitytype" && $uitype == 15) || ($uitype == 111 && $fieldname == 'eventstatus'))
 		{
 			$visible_value = 0;
 		}
 		//Updating the database
-		$update_query = "update vtiger_profile2field set visible=".$visible_value." where fieldid='".$fieldid."' and profileid=".$profileid." and tabid=".$tab_id;
-		$adb->query($update_query);
+		$update_query = "update vtiger_profile2field set visible=? where fieldid=? and profileid=? and tabid=?";
+		$adb->pquery($update_query, array($visible_value, $fieldid, $profileid, $tab_id));
 
 	}
 }
-	$loc = "Location: index.php?action=".$return_action."&module=Users&mode=view&parenttab=Settings&profileid=".$profileid."&selected_tab=".$def_tab."&selected_module=".$def_module;
+	if($return_action == 'profilePrivileges' || $return_action == 'ListProfiles')
+	{
+		$loc = "Location: index.php?action=".$return_action."&module=Settings&mode=view&parenttab=Settings&profileid=".$profileid."&selected_tab=".$def_tab."&selected_module=".$def_module;
+	}
+	else
+	{
+		$loc = "Location: index.php?action=".$return_action."&module=Users&mode=view&parenttab=Settings&profileid=".$profileid."&selected_tab=".$def_tab."&selected_module=".$def_module;
+	}
 	header($loc);
 
  /** returns value 0 if request permission is on else returns value 1

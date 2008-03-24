@@ -11,26 +11,43 @@
 
 require_once('include/database/PearDatabase.php');
 global $adb;
+$dest_mod = $_REQUEST['destination_module'];
 
-if($_REQUEST['destination_module']=='Products')
+//if select Lead, Account, Contact, Potential from Product RelatedList we have to insert in vtiger_seproductsrel
+if($dest_mod =='Leads' || $dest_mod =='Accounts' ||$dest_mod =='Contacts' ||$dest_mod =='Potentials')
 {
-	if($_REQUEST['smodule']=='VENDOR')
+	//For Bulk updates
+	if($_REQUEST['idlist'] != '')
 	{
-		$sql = "update vtiger_products set vtiger_vendor_id=".$_REQUEST['parid']." where productid=".$_REQUEST['entityid'];
-		$adb->query($sql);
+		$entityids = explode(';',trim($_REQUEST['idlist'],';'));
+		$productid = $_REQUEST['parentid'];
 	}
-}
-if($_REQUEST['destination_module']=='Contacts')
-{
-	if($_REQUEST['smodule']=='VENDOR')
+	else
 	{
-		$sql = "insert into vtiger_vendorcontactrel values (".$_REQUEST['parid'].",".$_REQUEST['entityid'].")";
-		$adb->query($sql);
+		$entityids[] = $_REQUEST['entityid'];
+		$productid = $_REQUEST['parid'];
 	}
+	
+	foreach($entityids as $ind => $crmid)
+	{
+		if($crmid != '' && $productid != '')
+		{
+			$sql = "insert into vtiger_seproductsrel values (?,?,?)";
+			$adb->pquery($sql, array($crmid,$productid,$dest_mod));
+		}
+	}
+	
+	$return_module = 'Products';
 }
 
+if($singlepane_view == 'true')
+	$return_action = "DetailView";
+else
+	$return_action = "CallRelatedList";
+if($_REQUEST['parenttab'] != '') $parent_tab =$_REQUEST['parenttab'];
 
- header("Location:index.php?action=DetailView&module=Vendors&record=".$_REQUEST["parid"]);
+if($_REQUEST['return_module'] != '') $return_module = $_REQUEST['return_module'];
+header("Location:index.php?action=$return_action&module=$return_module&record=".$productid."&parenttab=".$parent_tab);
 
 
 

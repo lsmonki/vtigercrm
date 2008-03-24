@@ -13,7 +13,7 @@
 -->*}
 
 {*<!-- module header -->*}
-<script language="JavaScript" type="text/javascript" src="modules/Reports/Report.js"></script>
+<script language="JavaScript" type="text/javascript" src="modules/Reports/Reports.js"></script>
 
 <!-- Toolbar -->
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
@@ -28,13 +28,13 @@
 	<td>
 		<table border=0 cellspacing=0 cellpadding=0>
 			<tr>
-				<td style="padding-right:5px"><a href="javascript:;" onclick="gcurrepfolderid=0;fnvshobj(this,'reportLay');"><img src="{$IMAGE_PATH}reportsCreate.gif" alt="Create {$MODULE}..." title="Create {$MODULE}..." border=0></a></td>
+				<td style="padding-right:5px"><a href="javascript:;" onclick="gcurrepfolderid=0;fnvshobj(this,'reportLay');"><img src="{$IMAGE_PATH}reportsCreate.gif" alt="{$MOD.LBL_CREATE_REPORT}..." title="{$MOD.LBL_CREATE_REPORT}..." border=0></a></td>
                         <td>&nbsp;</td>
-            <td style="padding-right:5px"><a href="javascript:;" onclick="createrepFolder(this,'orgLay');"><img src="{$IMAGE_PATH}reportsFolderCreate.gif" alt="Create New Folder..." title="Create New Folder..." border=0></a></td>
+            <td style="padding-right:5px"><a href="javascript:;" onclick="createrepFolder(this,'orgLay');"><img src="{$IMAGE_PATH}reportsFolderCreate.gif" alt="{$MOD.Create_New_Folder}..." title="{$MOD.Create_New_Folder}..." border=0></a></td>
                         <td>&nbsp;</td>
-            <td style="padding-right:5px"><a href="javascript:;" onclick="fnvshobj(this,'folderLay');"><img src="{$IMAGE_PATH}reportsMove.gif" alt="Move Reports..." title="Move Reports..." border=0></a></td>
+            <td style="padding-right:5px"><a href="javascript:;" onclick="fnvshobj(this,'folderLay');"><img src="{$IMAGE_PATH}reportsMove.gif" alt="{$MOD.Move_Reports}..." title="{$MOD.Move_Reports}..." border=0></a></td>
                         <td>&nbsp;</td>
-            <td style="padding-right:5px"><a href="javascript:;" onClick="massDeleteReport();"><img src="{$IMAGE_PATH}reportsDelete.gif" alt="Delete Report..." title="Delete Report..." border=0></a></td>
+            <td style="padding-right:5px"><a href="javascript:;" onClick="massDeleteReport();"><img src="{$IMAGE_PATH}reportsDelete.gif" alt="{$MOD.LBL_DELETE_FOLDER}..." title="{$MOD.Delete_Report}..." border=0></a></td>
 			</tr>
 		</table>
 	</td>
@@ -82,15 +82,15 @@
 			<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
 			<tr>
 				<td align="right" nowrap class="cellLabel small"><b>{$MOD.LBL_REP_FOLDER_NAME} </b></td>
-				<td align="left" class="cellText small">
+				<td align="left">
 				<input id="folder_id" name="folderId" type="hidden" value=''>
 				<input id="fldrsave_mode" name="folderId" type="hidden" value='save'>
-				<input id="folder_name" name="folderName" class="txtBox" type="text">
+				<input id="folder_name" name="folderName"  type="text" width="100%" solid="#666666" font-family="Arial, Helvetica,sans-serif" font-size="11px">
 				</td>
 			</tr>
 			<tr>
 				<td class="cellLabel small" align="right" nowrap><b>{$MOD.LBL_REP_FOLDER_DESC} </b></td>
-				<td class="cellText small" align="left"><input id="folder_desc" name="folderDesc" class="txtBox" type="text"></td>
+				<td class="cellText small" align="left"><input id="folder_desc" name="folderDesc"  type="text" width="100%" solid="#666666" font-family="Arial, Helvetica,sans-serif" font-size="11px"></td>
 			</tr>
 			</table>
 		</td>
@@ -135,7 +135,9 @@ function DeleteFolder(id)
 {
 	var title = 'folder'+id;
 	var fldr_name = getObj(title).innerHTML;
-	if(confirm("Are you sure you want to delete the folder  '"+fldr_name +"' ?"))
+	{/literal}
+        if(confirm("{$APP.DELETE_FOLDER_CONFIRMATION}"+fldr_name +"' ?"))
+        {literal}
 	{
 		new Ajax.Request(
 			'index.php',
@@ -159,42 +161,102 @@ function AddFolder()
 {
 	if(getObj('folder_name').value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{
-		alert('The Folder name cannot be empty');
-		return false;
+		{/literal}
+                alert('{$APP.FOLDERNAME_CANNOT_BE_EMPTY}');
+                return false;
+                {literal}
 	}
+	else if(getObj('folder_name').value.replace(/^\s+/g, '').replace(/\s+$/g, '').length > 20 )
+	{
+		{/literal}
+                alert('{$APP.FOLDER_NAME_ALLOW_20CHARS}');
+                return false;
+                {literal}
+	}
+	else if((getObj('folder_name').value).match(/['"\+]/) || (getObj('folder_desc').value).match(/['"\+]/))
+        {
+                alert(alert_arr.NO_QUOTES+alert_arr.NAME_DESC);
+                return false;
+        }	
+	/*else if((!CharValidation(getObj('folder_name').value,'namespace')) || (!CharValidation(getObj('folder_desc').value,'namespace')))
+	{
+			alert(alert_arr.NO_SPECIAL+alert_arr.NAME_DESC);
+			return false;
+	}*/
 	else
 	{
-		fninvsh('orgLay');
-		var foldername = getObj('folder_name').value;
-		var folderdesc = getObj('folder_desc').value;
-		getObj('folder_name').value = '';
-		getObj('folder_desc').value = '';
-		foldername = foldername.replace(/&/gi,'*amp*')
-			folderdesc = folderdesc.replace(/&/gi,'*amp*')
-			var mode = getObj('fldrsave_mode').value;
-		if(mode == 'save')
-		{
-			url ='&savemode=Save&foldername='+foldername+'&folderdesc='+folderdesc;
-		}
-		else
-		{
-			var folderid = getObj('folder_id').value;
-			url ='&savemode=Edit&foldername='+foldername+'&folderdesc='+folderdesc+'&record='+folderid;
-		}
-		getObj('fldrsave_mode').value = 'save';
+		var foldername = encodeURIComponent(getObj('folder_name').value);
 		new Ajax.Request(
                         'index.php',
                         {queue: {position: 'end', scope: 'command'},
                                 method: 'post',
-                                postBody: 'action=ReportsAjax&mode=ajax&file=SaveReportFolder&module=Reports'+url,
+                                postBody: 'action=ReportsAjax&mode=ajax&file=CheckReport&module=Reports&check=folderCheck&folderName='+foldername,
                                 onComplete: function(response) {
-                                        var item = response.responseText;
-                                        getObj('customizedrep').innerHTML = item;
-                                }
-                        }
-                );
+				var folderid = getObj('folder_id').value;
+				var resresult =response.responseText.split("::");
+				var mode = getObj('fldrsave_mode').value;
+				if(resresult[0] != 0 &&  mode =='save' && resresult[0] != 999)
+				{
+					{/literal}
+					alert("{$APP.FOLDER_NAME_ALREADY_EXISTS}");
+					return false;
+					{literal}
+				}
+				else if(((resresult[0] != 1 && resresult[0] != 0) || (resresult[0] == 1 && resresult[0] != 0 && resresult[1] != folderid )) &&  mode =='Edit' && resresult[0] != 999)
+					{
+						{/literal}
+                                                alert("{$APP.FOLDER_NAME_ALREADY_EXISTS}");
+                                                return false;
+                                                {literal}
+					}
+				else if(response.responseText == 999) // 999 check for special chars
+					{
+                                                {/literal}
+                                                alert("{$APP.SPECIAL_CHARS_NOT_ALLOWED}");
+                                                return false;
+                                                {literal}
+					}
+				else
+					{
+						fninvsh('orgLay');
+						var folderdesc = encodeURIComponent(getObj('folder_desc').value);
+						getObj('folder_name').value = '';
+						getObj('folder_desc').value = '';
+						foldername = foldername.replace(/^\s+/g, '').replace(/\s+$/g, '');
+                                                foldername = foldername.replace(/&/gi,'*amp*');
+                                                folderdesc = folderdesc.replace(/^\s+/g, '').replace(/\s+$/g, '');
+                                                folderdesc = folderdesc.replace(/&/gi,'*amp*');
+						if(mode == 'save')
+						{
+							url ='&savemode=Save&foldername='+foldername+'&folderdesc='+folderdesc;
+						}
+						else
+						{
+							var folderid = getObj('folder_id').value;
+							url ='&savemode=Edit&foldername='+foldername+'&folderdesc='+folderdesc+'&record='+folderid;
+						}
+						getObj('fldrsave_mode').value = 'save';
+						new Ajax.Request(
+				                        'index.php',
+				                        {queue: {position: 'end', scope: 'command'},
+			                                method: 'post',
+			                                postBody: 'action=ReportsAjax&mode=ajax&file=SaveReportFolder&module=Reports'+url,
+			                                onComplete: function(response) {
+			                                        var item = response.responseText;
+                        			                getObj('customizedrep').innerHTML = item;
+			                                }
+						}
+			                      
+				                );
+					}
+				}
+			}
+			);
+		
 	}
 }
+
+
 function EditFolder(id,name,desc)
 {
 {/literal}
@@ -241,8 +303,9 @@ function massDeleteReport()
 		}
 	}
 	if(idstring != '')
-	{
-		if(confirm("Are you sure you want to delete the selected "+count+" reports ?"))
+	{	{/literal}
+                if(confirm("{$APP.DELETE_CONFIRMATION}"+count+"{$APP.RECORDS}"))
+                {literal}
        		{
 			new Ajax.Request(
                         'index.php',
@@ -262,13 +325,17 @@ function massDeleteReport()
 			
 	}else
 	{
-		alert('Please select at least one Report');
-		return false;
+		{/literal}
+                alert('{$APP.SELECT_ATLEAST_ONE_REPORT}');
+                return false;
+                {literal}
 	}
 }
 function DeleteReport(id)
 {
-	if(confirm("Are you sure you want to delete this report ?"))
+	{/literal}
+        if(confirm("{$APP.DELETE_REPORT_CONFIRMATION}"))
+        {literal}
 	{
 		new Ajax.Request(
                         'index.php',
@@ -323,7 +390,9 @@ function MoveReport(id,foldername)
 	}
 	if(idstring != '')
 	{
-		if(confirm("Are you sure you want to move this report to "+foldername+" folder ?"))
+		{/literal}
+                if(confirm("{$APP.MOVE_REPORT_CONFIRMATION}"+foldername+"{$APP.FOLDER}"))
+                {literal}
         	{
 			new Ajax.Request(
                         'index.php',
@@ -342,8 +411,10 @@ function MoveReport(id,foldername)
 			
 	}else
 	{
-		alert('Please select at least one Report');
-		return false;
+		{/literal}
+                alert('{$APP.SELECT_ATLEAST_ONE_REPORT}');
+                return false;
+                {literal}
 	}
 }
 </script>

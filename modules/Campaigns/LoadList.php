@@ -14,38 +14,26 @@ require_once('modules/CustomView/CustomView.php');
 require_once('user_privileges/default_module_view.php');
 
 global $singlepane_view;
-$cvObj = new CustomView($_REQUEST["return_type"]);
+$cvObj = new CustomView($_REQUEST["list_type"]);
 
 $listquery = getListQuery($_REQUEST["list_type"]);
 $rs = $adb->query($cvObj->getModifiedCvListQuery($_REQUEST["cvid"],$listquery,$_REQUEST["list_type"]));
 
-if($_REQUEST["list_type"] == "Leads")
+if($_REQUEST["list_type"] == "Leads"){
 		$reltable = "vtiger_campaignleadrel";
-elseif($_REQUEST["list_type"] == "Contacts")
+		$relid = "leadid";
+}
+elseif($_REQUEST["list_type"] == "Contacts"){
 		$reltable = "vtiger_campaigncontrel";
+		$relid = "contactid";
+}
 
 while($row=$adb->fetch_array($rs)) {
-	$adb->query("INSERT INTO ".$reltable." VALUES('".$_REQUEST["return_id"]."','".$row["crmid"]."')");
+	$sql = "delete from $reltable where $relid = ?";
+	$adb->pquery($sql, array($row["crmid"]));
+	$adb->pquery("INSERT INTO ".$reltable." VALUES(?,?)", array($_REQUEST["return_id"], $row["crmid"]));
 }
 
-if ($singlepane_view == 'true')
-{
-?>
-<script>
-addOnloadEvent(function() {
-	window.location.href = "index.php?action=DetailView&module=Campaigns&record=<? echo $_REQUEST['return_id'];?>";
-});
-</script>
-<?php
-}
-else
-{
-?>
-<script>
-addOnloadEvent(function() {
-	window.location.href = "index.php?action=CallRelatedList&module=Campaigns&record=<? echo $_REQUEST['return_id'];?>";
-});
-</script>
-<?php
-}
+header("Location: index.php?module=Campaigns&action=CampaignsAjax&file=CallRelatedList&ajax=true&record=".$_REQUEST['return_id']);
+
 ?>

@@ -27,31 +27,31 @@ require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
 
-$focus = new Order();
+$focus = new PurchaseOrder();
+//added to fix 4600
+$search=$_REQUEST['search_url'];
+
 global $current_user;
-$currencyid=fetchCurrency($current_user->id);
-$rate_symbol = getCurrencySymbolandCRate($currencyid);
-$rate = $rate_symbol['rate'];
-setObjectValuesFromRequest(&$focus);
+setObjectValuesFromRequest($focus);
 
 //Added code for auto product stock updation on receiving goods
-$update_prod_stock='';
-if($focus->column_fields['postatus'] == 'Received Shipment' && $focus->mode == 'edit')
+$focus->update_prod_stock='';
+if($focus->column_fields['postatus'] == 'Received Shipment')
 {
-        $prev_postatus=getPoStatus($focus->id);
-        if($focus->column_fields['postatus'] != $prev_postatus)
-        {
-                $update_prod_stock='true';
-        }
+	if($focus->mode != 'edit')
+		$focus->update_prod_stock='true';
+	else
+	{
+        	$prev_postatus=getPoStatus($focus->id);
+        	if($focus->column_fields['postatus'] != $prev_postatus)
+        	{
+        	        $focus->update_prod_stock='true';
+        	}
+	}
 
 }
 
 $focus->save("PurchaseOrder");
-
-
-//Based on the total Number of rows we will save the product relationship with this entity
-saveInventoryProductDetails(&$focus, 'PurchaseOrder', $update_prod_stock);
-
 
 $return_id = $focus->id;
 
@@ -60,6 +60,7 @@ else $return_module = "PurchaseOrder";
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
 else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
+if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
 
 $local_log->debug("Saved record with id of ".$return_id);
 
@@ -67,5 +68,5 @@ $local_log->debug("Saved record with id of ".$return_id);
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname");
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab&viewname=$return_viewname&start=".$_REQUEST['pagenumber'].$search);
 ?>

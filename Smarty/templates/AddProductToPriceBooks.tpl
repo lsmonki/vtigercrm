@@ -31,12 +31,12 @@ function addtopricebook()
 				{
 					if (elem[i].value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) 
 					{
-						alert("List Price cannot be empty");
+						alert(alert_arr.LISTPRICE_CANNOT_BE_EMPTY);
 			               		return false;	
 					}	
 					else if(isNaN(elem[i].value))
                                         {
-                                                alert("Invalid List Price");
+                                                alert(alert_arr.INVALID_LIST_PRICE);
                                                 return false;
                                         }
 
@@ -46,7 +46,7 @@ function addtopricebook()
 		}
 		else 
 		{
-			alert("Please select at least one entity");
+			alert(alert_arr.SELECT);
 			return false;
 		}
 	}
@@ -79,12 +79,12 @@ function addtopricebook()
                                         {
 						if (elem[i].value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) 
 						{
-							alert("List Price cannot be empty");
+							alert(alert_arr.LISTPRICE_CANNOT_BE_EMPTY);
 			                		return false;	
 						}
-						else if(isNaN(elem[i].value))
+						else if(isNaN(elem[i].value)|| elem[i].value <= 0)
                 	                        {
-        	                                        alert("Invalid List Price");
+        	                                        alert(alert_arr.INVALID_LIST_PRICE);
                                                 	return false;
                                         	}
 	
@@ -95,12 +95,12 @@ function addtopricebook()
 		}
 		else
 		{
-			alert("Please select at least one entity");
+			alert(alert_arr.SELECT);
 			return false;
 		}
 	}
 {/literal}
-document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&return_module=Products&return_action=DetailView&return_id={$RETURN_ID}"
+document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&return_module=Products&return_action=DetailView&return_id={$RETURN_ID}&parenttab={$CATEGORY}"
 {rdelim}
 
 
@@ -108,16 +108,23 @@ function updateAllListPrice(unitprice)
 {ldelim}
         var fieldname_array = new Array({$FIELD_NAME_ARRAY});
         var unitprice,fieldname;
+	var id;
+	var fieldinfo;
+	var checkid;
 
         for(j=0; j<fieldname_array.length; j++)
         {ldelim}
+		fieldinfo = fieldname_array[j].split("_");
+		id = fieldinfo[0];
+		checkid = "check_"+id;
+
                 fieldname=fieldname_array[j];
-                updateListPrice(unitprice,fieldname);
+                updateListPrice(unitprice,fieldname,document.getElementById(checkid));
         {rdelim}
 {rdelim}
 
 </script>
-<script language="javascript" src="modules/Products/Product.js"></script>
+<script language="javascript" src="modules/Products/Products.js"></script>
 <table width="95%" border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="3">&nbsp;</td></tr>
 <tr>

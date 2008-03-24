@@ -22,14 +22,14 @@
 
 require_once('data/Tracker.php');
 require_once('Smarty_setup.php');
-require_once('modules/Notes/Note.php');
+require_once('modules/Notes/Notes.php');
 require_once('include/upload_file.php');
 require_once('include/utils/utils.php');
 global $app_strings;
 global $mod_strings;
 global $currentModule;
 
-$focus = new Note();
+$focus = new Notes();
 
 if(isset($_REQUEST['record'])) {
    $focus->retrieve_entity_info($_REQUEST['record'],"Notes");
@@ -63,7 +63,6 @@ if (isset($_REQUEST['account_id']) && is_null($focus->parent_id)) {
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Note detail view");
 
@@ -104,6 +103,9 @@ if(isPermitted("Notes","Delete",$_REQUEST['record']) == 'yes')
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
+
 $tabid = getTabid("Notes");
  $validationData = getDBValidationData($focus->tab_name,$tabid);
  $data = split_validationdataArray($validationData);

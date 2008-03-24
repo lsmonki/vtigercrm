@@ -11,17 +11,19 @@
 -->*}
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-	<title>vtiger CRM - Create Report</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={$APP.LBL_CHARSET}">
+	<title>{$MOD.TITLE_VTIGERCRM_CREATE_REPORT}</title>
 	<link href="{$THEME_PATH}style.css" rel="stylesheet" type="text/css">
 	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
-	<script language="JavaScript" type="text/javascript" src="modules/Reports/Report.js"></script>
+	<script language="JavaScript" type="text/javascript" src="include/js/{php} echo $_SESSION['authenticated_user_language'];{/php}.lang.js?{php} echo $_SESSION['vtiger_version'];{/php}"></script>
+	<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
+	<script language="JavaScript" type="text/javascript" src="modules/Reports/Reports.js"></script>
 </head>
 <body topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 <table width="100%"  border="0" cellspacing="0" cellpadding="0" class="mailClient mailClientBg">
 <tr>
 	<td>
-		<form name="NewRep" method="POST" ENCTYPE="multipart/form-data" action="index.php" style="margin:0px">
+		<form name="NewRep" method="POST" ENCTYPE="multipart/form-data" action="index.php" style="margin:0px" onSubmit="return changeSteps();">
 		<input type="hidden" name="module" value="Reports">
 		<input type="hidden" name="primarymodule" value="{$REP_MODULE}">
 		<input type="hidden" name="file" value="NewReport1">

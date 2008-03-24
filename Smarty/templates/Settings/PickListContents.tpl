@@ -12,6 +12,24 @@
 
 -->*}
 
+	<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
+	<tr>
+			<td class="small cellLabel" width=13%><strong>{$MOD.LBL_PICKLIST_GLOBAL_DELETE}</strong></td>
+            <td class="cellText"  width=20%>
+				<select name="avail_module_list" id="allpick" class="small detailedViewTextBox" style="font-weight: normal;">
+					{foreach key=fld_nam item=fld_lbl from=$ALL_LISTS}
+						{if $SEL_MODULE eq $module}
+						<option value="{$fld_nam}" selected>{$fld_lbl}</option>
+						{else}
+						<option value="{$fld_nam}">{$fld_lbl}</option>
+						{/if}
+					{/foreach}
+				</select>
+			</td>
+			<td align="left" ><input type="button" value="{$APP.LBL_DELETE_BUTTON}" name="del" class="crmButton small delete" onclick="pickListDelete('{$MODULE}');posLay(this,'deletediv');"></td>
+		 </tr>
+	</table>
+	<br>
 	<table  class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%"><tr><td><strong>2. {$MOD.LBL_PICKLIST_AVAIL} {$APP.$MODULE} </strong></td>
 		<td class="small" align=right>&nbsp;</td>
 		</tr>

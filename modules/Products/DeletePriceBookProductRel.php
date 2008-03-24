@@ -20,14 +20,14 @@ $return_action = $_REQUEST['return_action'];
 if($return_action !='' && $return_module == "PriceBooks" && $return_action == "CallRelatedList")
 {
 	$log->info("Products :: Deleting Price Book - Delete from PriceBook RelatedList");
-	$query = "delete from vtiger_pricebookproductrel where pricebookid=".$return_id." and productid=".$record;
-	$adb->query($query); 
+	$query = "delete from vtiger_pricebookproductrel where pricebookid=? and productid=?";
+	$adb->pquery($query, array($return_id, $record)); 
 }
 else
 {
 	$log->info("Products :: Deleting Price Book");
-	$query = "delete from vtiger_pricebookproductrel where pricebookid=".$record." and productid=".$return_id;
-	$adb->query($query); 
+	$query = "delete from vtiger_pricebookproductrel where pricebookid=? and productid=?";
+	$adb->pquery($query, array($record, $return_id)); 
 }
 
 header("Location: index.php?module=".$return_module."&action=".$return_module."Ajax&file=$return_action&ajax=delpbprorel&record=".$return_id);

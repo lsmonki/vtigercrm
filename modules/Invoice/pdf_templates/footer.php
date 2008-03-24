@@ -13,15 +13,13 @@
 define('USD',"$");
 define('EURO', chr(128) );
 
-$top="215";
-
 $desc=explode("\n",$description);
 $cond=explode("\n",$conditions);
 $num=230;
 
 /* **************** Begin Description ****************** */
 $descBlock=array("10",$top,"53", $num);
-$pdf->addDescBlock($description, "Description", $descBlock);
+$pdf->addDescBlock($description, $app_strings["Description"], $descBlock);
 
 /* ************** End Description *********************** */
 
@@ -29,7 +27,7 @@ $pdf->addDescBlock($description, "Description", $descBlock);
 
 /* **************** Begin Terms ****************** */
 $termBlock=array("107",$top,"53", $num);
-$pdf->addDescBlock($conditions, "Terms & Conditions", $termBlock);
+$pdf->addDescBlock($conditions, $app_strings["Terms & Conditions"], $termBlock);
 
 /* ************** End Terms *********************** */
 

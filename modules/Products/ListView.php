@@ -1,4 +1,4 @@
-<?
+<?php
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
@@ -10,7 +10,7 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('modules/Products/Product.php');
+require_once('modules/Products/Products.php');
 require_once('include/ListView/ListView.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
@@ -24,7 +24,6 @@ global $currentModule;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 
 $smarty = new vtigerCRM_Smarty;
@@ -56,7 +55,7 @@ if($_REQUEST['errormsg'] != '')
 }
 $url_string = '&smodule=PRODUCTS'; // assigning http url string
 
-$focus = new Product();
+$focus = new Products();
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 $sorder = $focus->getSortOrder();
@@ -84,6 +83,7 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
 $smarty->assign("CHANGE_OWNER",getUserslist());
+$smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
 if($viewnamedesc['viewname'] == 'All')
 {
 	$smarty->assign("ALL", 'All');
@@ -110,7 +110,11 @@ if($viewid != "0")
 if(isset($where) && $where != '')
 {
         $list_query .= ' and '.$where;
+
+ $_SESSION['export_where'] = $where;
 }
+else
+   unset($_SESSION['export_where']);
 
 
 if(isset($order_by) && $order_by != '')
@@ -120,7 +124,6 @@ if(isset($order_by) && $order_by != '')
 
         $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
-
 //Retreiving the no of rows
 $count_result = $adb->query("select count(*) count ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query)));
 $noofrows = $adb->query_result($count_result,0,"count");
@@ -130,6 +133,11 @@ if($_SESSION['lvs'][$currentModule])
 {
 	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
 }
+//added for 4600
+                                                                                                                             
+if($noofrows <= $list_max_entries_per_page)
+        $_SESSION['lvs'][$currentModule]['start'] = 1;
+//ends
 
 $start = $_SESSION['lvs'][$currentModule]['start'];
 
@@ -140,6 +148,8 @@ $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val']; 
 //By Raju Ends
+$_SESSION['nav_start']=$start_rec;
+$_SESSION['nav_end']=$end_rec;
 
 //limiting the query
 if ($start_rec ==0) 
@@ -147,7 +157,7 @@ if ($start_rec ==0)
 else
 	$limit_start_rec = $start_rec -1;
 	
-$list_result = $adb->query($list_query. " limit ".$limit_start_rec.",".$list_max_entries_per_page);
+$list_result = $adb->pquery($list_query. " limit $limit_start_rec, $list_max_entries_per_page", array());
 
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
@@ -164,6 +174,11 @@ $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 $listview_entries = getListViewEntries($focus,"Products",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
+
+//Added to select Multiple records in multiple pages
+$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
+$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Products","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','productname','true','basic',"","","","",$viewid);

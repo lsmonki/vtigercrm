@@ -99,9 +99,17 @@ class ImportMap extends SugarBean
 		$this->content = "".$this->db->getEmptyBlob()."";
                 $this->has_header = $has_header;
                 $this->deleted = 0;
+
+		//check whether this map name is already exist, if yes then overwrite the existing one, else create new
+	        $res = $this->db->pquery("select id from vtiger_import_maps where name=?", array(trim($name)));
+		if($this->db->num_rows($res) > 0)
+		{
+			$this->id = $this->db->query_result($res,0,'id');
+		}
+
                 $returnid = $this->save();
 
-		$this->db->updateBlob($this->table_name,"content","name='".$name."' and module='".$module."'",$content);
+		$this->db->updateBlob($this->table_name,"content","name='". mysql_real_escape_string($name)."' and module='".$module."'",$content);
 
                 return $result;
         }
@@ -140,8 +148,9 @@ class ImportMap extends SugarBean
 			return -1;	
 		}
 
-                $query = "UPDATE $this->table_name set is_published='$flag', assigned_user_id='$user_id' where id='".$this->id."'";
-                $this->db->query($query,true,"Error marking import map published: ");
+                $query = "UPDATE $this->table_name set is_published=?, assigned_user_id=? where id=?";
+				$params = array($flag, $user_id, $this->id);
+                $this->db->pquery($query,$params,true,"Error marking import map published: ");
 		return 1;
         }
 
@@ -180,8 +189,8 @@ class ImportMap extends SugarBean
 	 */
 	function getSavedMappingsList($module)
 	{
-		$query = "SELECT * FROM $this->table_name where module='".$module."'";
-		$result = $this->db->query($query,true," Error: ");
+		$query = "SELECT * FROM $this->table_name where module=? and deleted=0";
+		$result = $this->db->pquery($query,array($module),true," Error: ");
 		$map_lists = array();
 
 		while ($row = $this->db->fetchByAssoc($result,-1,FALSE) )
@@ -197,8 +206,8 @@ class ImportMap extends SugarBean
 	 */
 	function getSavedMappingContent($mapid)
 	{
-		$query = "SELECT * FROM $this->table_name where id='".$mapid."'";
-		$result = $this->db->query($query,true," Error: ");
+		$query = "SELECT * FROM $this->table_name where id=? and deleted=0";
+		$result = $this->db->pquery($query,array($mapid),true," Error: ");
 		$mapping_arr = array();
 
 		$pairs = split("&",$this->db->query_result($result,0,'content'));

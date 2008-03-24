@@ -25,33 +25,33 @@ if($ajax_val == 1)
 
 	//array should be id || vtiger_fieldname => vtiger_tablename
 	$modules_array = Array(
-				"accountid||annualrevenue"	=>	"account",
+				"accountid||annualrevenue"	=>	"vtiger_account",
 				
-				"leadid||annualrevenue"		=>	"leaddetails",
+				"leadid||annualrevenue"		=>	"vtiger_leaddetails",
 
-				"potentialid||amount"		=>	"potential",
+				"potentialid||amount"		=>	"vtiger_potential",
 
-				"productid||unit_price"		=>	"products",
+				"productid||unit_price"		=>	"vtiger_products",
 
-				"salesorderid||salestax"	=>	"salesorder",
-				"salesorderid||adjustment"	=>	"salesorder",
-				"salesorderid||total"		=>	"salesorder",
-				"salesorderid||subtotal"	=>	"salesorder",
+				"salesorderid||salestax"	=>	"vtiger_salesorder",
+				"salesorderid||adjustment"	=>	"vtiger_salesorder",
+				"salesorderid||total"		=>	"vtiger_salesorder",
+				"salesorderid||subtotal"	=>	"vtiger_salesorder",
 
-				"purchaseorderid||salestax"	=>	"purchaseorder",
-				"purchaseorderid||adjustment"	=>	"purchaseorder",
-				"purchaseorderid||total"	=>	"purchaseorder",
-				"purchaseorderid||subtotal"	=>	"purchaseorder",
+				"purchaseorderid||salestax"	=>	"vtiger_purchaseorder",
+				"purchaseorderid||adjustment"	=>	"vtiger_purchaseorder",
+				"purchaseorderid||total"	=>	"vtiger_purchaseorder",
+				"purchaseorderid||subtotal"	=>	"vtiger_purchaseorder",
 
-				"quoteid||tax"			=>	"quotes",
-				"quoteid||adjustment"		=>	"quotes",
-				"quoteid||total"		=>	"quotes",
-				"quoteid||subtotal"		=>	"quotes",
+				"quoteid||tax"			=>	"vtiger_quotes",
+				"quoteid||adjustment"		=>	"vtiger_quotes",
+				"quoteid||total"		=>	"vtiger_quotes",
+				"quoteid||subtotal"		=>	"vtiger_quotes",
 
-				"invoiceid||salestax"		=>	"invoice",
-				"invoiceid||adjustment"		=>	"invoice",
-				"invoiceid||total"		=>	"invoice",
-				"invoiceid||subtotal"		=>	"invoice",
+				"invoiceid||salestax"		=>	"vtiger_invoice",
+				"invoiceid||adjustment"		=>	"vtiger_invoice",
+				"invoiceid||total"		=>	"vtiger_invoice",
+				"invoiceid||subtotal"		=>	"vtiger_invoice",
 			      );
 
 	foreach($modules_array as $fielddetails => $table)

@@ -15,8 +15,7 @@
 
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
-require_once('modules/Potentials/Opportunity.php');
-require_once('themes/'.$theme.'/layout_utils.php');
+require_once('modules/Potentials/Potentials.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/ComboUtil.php');
@@ -26,7 +25,7 @@ require_once('include/database/Postgres8.php');
 require_once('include/DatabaseUtil.php');
 
 
-global $app_strings,$list_max_entries_per_page;
+global $app_strings,$list_max_entries_per_page,$mod_strings;
 
 $log = LoggerManager::getLogger('potential_list');
 
@@ -38,7 +37,7 @@ if (!isset($where)) $where = "";
 
 $url_string = ''; // assigning http url string
 
-$focus = new Potential();
+$focus = new Potentials();
 $smarty = new vtigerCRM_Smarty();
 $other_text = Array();
 
@@ -92,7 +91,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 			elseif($uitype[$i] == 15)//Added to handle the picklist customfield - after 4.2 patch2
 				$str = " vtiger_potentialscf.".$column[$i]." = '".$customfield[$i]."'";
 			else
-				$str = " vtiger_potentialscf.".$column[$i]." like '$customfield[$i]%'";
+				$str = " vtiger_potentialscf.".$column[$i]." like '". formatForSqlLike($customfield[$i], 2) ."'";
 			array_push($where_clauses, $str);
 			$url_string .="&".$column[$i]."=".$customfield[$i];
 		}
@@ -108,7 +107,7 @@ $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 $smarty->assign("CHANGE_OWNER",getUserslist());
-
+$smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
 if(isPermitted('Potentials','Delete','') == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
@@ -128,20 +127,26 @@ if($viewnamedesc['viewname'] == 'All')
 if($viewid != "0")
 {
 	$listquery = getListQuery("Potentials");
-	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Accounts");
+	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Potentials");
 }else
 {
 	$list_query = getListQuery("Potentials");
 }
 //<<<<<<<<customview>>>>>>>>>
-
 if(isset($where) && $where != '')
 {
 	if(isset($_REQUEST['from_dashboard']) && $_REQUEST['from_dashboard'] == 'true')
-		$list_query .= " AND vtiger_potential.sales_stage = 'Closed Won' AND ".$where;
+		$list_query .= " AND vtiger_potential.sales_stage = '".$mod_strings['Closed Won']."' AND ".$where;
+	elseif(isset($_REQUEST['from_homepagedb']) && $_REQUEST['from_homepagedb'] == 'true')
+		$list_query .= " AND vtiger_potential.sales_stage not in( '".$mod_strings['Closed Won']."' , '".$mod_strings['Closed Lost']."' )AND ".$where;
 	else
 		$list_query .= " AND ".$where;
+
+	$_SESSION['export_where'] = $where;
 }
+else
+   unset($_SESSION['export_where']);
+
 
 if(isset($order_by) && $order_by != '')
 {
@@ -163,7 +168,6 @@ if(isset($order_by) && $order_by != '')
         }
 
 }
-
 //Constructing the list view
 
 $smarty->assign("MOD", $mod_strings);
@@ -186,6 +190,11 @@ if($_SESSION['lvs'][$currentModule])
 {
 	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
 }
+//added for 4600
+                                                                                                                             
+if($noofrows <= $list_max_entries_per_page)
+        $_SESSION['lvs'][$currentModule]['start'] = 1;
+//ends
 
 $start = $_SESSION['lvs'][$currentModule]['start'];
 
@@ -201,6 +210,8 @@ if( $adb->dbType == "pgsql")
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val']; 
 //By Raju Ends
+$_SESSION['nav_start']=$start_rec;
+$_SESSION['nav_end']=$end_rec;
 
 //limiting the query
 if ($start_rec ==0) 
@@ -209,9 +220,9 @@ else
 	$limit_start_rec = $start_rec -1;
 	
 if( $adb->dbType == "pgsql")
-     $list_result = $adb->query($list_query. " OFFSET ".$limit_start_rec." LIMIT ".$list_max_entries_per_page);
+     $list_result = $adb->pquery($list_query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
  else
-     $list_result = $adb->query($list_query. " LIMIT ".$limit_start_rec.",".$list_max_entries_per_page);
+     $list_result = $adb->pquery($list_query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
@@ -230,6 +241,10 @@ $listview_entries = getListViewEntries($focus,"Potentials",$list_result,$navigat
 $smarty->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTENTITY", $listview_entries);
 
+//Added to select Multiple records in multiple pages
+$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
+$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Potentials","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','potentialname','true','basic',"","","","",$viewid);

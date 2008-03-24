@@ -36,7 +36,6 @@ $mod_strings = Array(
 'Accounts'=>'Account',
 'Contacts'=>'Contact',
 'Opportunities'=>'Opportunity',
-'LBL_TICKET_INFORMATION'=>'Ticket Information',
 'LBL_CUSTOM_INFORMATION'=>'Custom Information',
 'LBL_DESCRIPTION_INFORMATION'=>'Description Information',
 
@@ -57,7 +56,6 @@ $mod_strings = Array(
 'LBL_PRIORITY'=>'Priority',
 'LBL_CATEGORY'=>'Category',
 
-'LBL_QUESTION'=>'Question',
 'LBL_ANSWER'=>'Answer',
 'LBL_COMMENTS'=>'Comments',
 
@@ -83,14 +81,6 @@ $mod_strings = Array(
 'LBL_SELECT_TICKET'=>'Select Ticket',
 'LBL_CHANGE_OWNER'=>'Change Owner',
 'LBL_CHANGE_STATUS'=>'Change Status',
-
-
-
-
-
-
-
-
 'LBL_TICKET_TITLE'=>'Title',
 'LBL_TICKET_DESCRIPTION'=>'Description',
 'LBL_TICKET_CATEGORY'=>'Category',
@@ -180,6 +170,46 @@ $mod_strings = Array(
 'In Progress'=>'In Progress',
 'Wait For Response'=>'Wait For Response',
 'Closed'=>'Closed',
+
+//added to support i18n in ticket mails
+'Hi' => 'Hi',
+'Dear'=> 'Dear',
+'LBL_PORTAL_BODY_MAILINFO'=> 'The Ticket is',
+'LBL_DETAIL' => 'the details are :',
+'LBL_REGARDS'=> 'Regards',
+'LBL_TEAM'=> 'HelpDesk Team',
+'LBL_TICKET_DETAILS' => 'Ticket Details',
+'LBL_SUBJECT' => 'Subject : ',
+'created' => 'created',
+'replied' => 'replied',
+'reply'=>'There is a reply to',
+'customer_portal' => 'in the "Customer Portal" at VTiger.',
+'link' => 'You can use the following link to view the replies made:',
+'Thanks' => 'Thanks',
+'Support_team' => 'Vtiger Support Team',
+
+// Added/Updated for vtiger CRM 5.0.4
+
+//this label for customerportal.
+'LBL_STATUS_CLOSED' =>'Closed',//Do not convert this label. This is used to check the status. If the status 'Closed' is changed in vtigerCRM server side then you have to change in customerportal language file also.
+'LBL_STATUS_UPDATE' => 'Ticket status is updated as',
+'LBL_COULDNOT_CLOSED' => 'Ticket could not be',
+'LBL_CUSTOMER_COMMENTS' => 'Customer has provided the following additional information to your reply:',
+'LBL_RESPOND'=> 'Kindly respond to above ticket at the earliest.',
+'LBL_REGARDS' =>'Regards',
+'LBL_SUPPORT_ADMIN' => 'Support Administrator',
+'LBL_RESPONDTO_TICKETID' =>'Respond to Ticket ID',
+'LBL_CUSTOMER_PORTAL' => 'in Customer Portal - URGENT',
+'LBL_LOGIN_DETAILS' => 'Following are your Customer Portal login details :',
+'LBL_MAIL_COULDNOT_SENT' =>'Mail could not be sent',
+'LBL_USERNAME' => 'User Name :',
+'LBL_PASSWORD' => 'Password :',
+'LBL_SUBJECT_PORTAL_LOGIN_DETAILS' => 'Regarding your Customer Portal login details',
+'LBL_GIVE_MAILID' => 'Please give your email id',
+'LBL_CHECK_MAILID' => 'Please check your email id for Customer Portal',
+'LBL_LOGIN_REVOKED' => 'Your login is revoked. Please contact your admin.',
+'LBL_MAIL_SENT' => 'Mail has been sent to your mail id with the customer portal login details',
+'LBL_ALTBODY' => 'This is the body in plain text for non-HTML mail clients',
 
 );
 

@@ -10,11 +10,11 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('modules/Products/Product.php');
+require_once('modules/Products/Products.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
-$focus = new Product();
+$focus = new Products();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
 	//Display the error message
@@ -39,7 +39,6 @@ global $mod_strings;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
@@ -90,6 +89,8 @@ $smarty->assign("CHECK", $check_button);
 //Security check for related list
 $smarty->assign("MODULE", $currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
 if($singlepane_view == 'true')
 {

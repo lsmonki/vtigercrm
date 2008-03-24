@@ -144,8 +144,8 @@ $mod_strings = Array(
 'Created Time'=>'Created Time',
 'Modified Time'=>'Modified Time',
 'Description'=>'Description',
-'Shipping Po Box'=>'Shipping Po Box',
-'Billing Po Box'=>'Billing Po Box',
+'Shipping Po Box'=>'Shipping PO Box',
+'Billing Po Box'=>'Billing PO Box',
 
 //Added after 4.2 patch 2
 'Email Opt Out'=>'Email Opt Out',
@@ -205,6 +205,28 @@ $mod_strings = Array(
 'Press'=>'Press',
 'Prospect'=>'Prospect',
 'Reseller'=>'Reseller',
+'LBL_START_DATE' => 'Start Date',
+'LBL_END_DATE' => 'End Date',
+
+// Added/Updated for vtiger CRM 5.0.4
+
+//added to fix the issue #4081
+'LBL_ACCOUNT_EXIST' => 'Account Name Already Exists!',
+
+// mailer export
+'LBL_MAILER_EXPORT' => 'Mailer Export',
+'LBL_MAILER_EXPORT_CONTACTS_TYPE'=>'Select Contacts:',
+'LBL_MAILER_EXPORT_CONTACTS_DESCR'=>'Contacts can also be selected via "Custom Fields" and some standard fields.',
+'LBL_MAILER_EXPORT_RESULTS_TYPE'=>'Select export type:',
+'LBL_MAILER_EXPORT_RESULTS_DESCR'=>'The data will gathered from the Accounts and their Contacts, that were returned
+ from the previous search.',
+'LBL_EXPORT_RESULTS_EMAIL' => 'Export E-Mailer data',
+'LBL_EXPORT_RESULTS_EMAIL_CORP'=>'Export E-Mail data, using "Company Email" from the Account if the Contacts "Email" is empty',
+'LBL_EXPORT_RESULTS_FULL'=>'Export data with the Contacts, E-Mail, Account name, Address, Telephone, etc.',
+'LBL_EXPORT_RESULTS_GO'=>'Export',
+'LBL_MAILER_EXPORT_IGNORE' => '--ignore--',
+'LBL_MAILER_EXPORT_CHECKED' =>'Checked',
+'LBL_MAILER_EXPORT_NOTCHECKED' => 'Not Checked',
 
 
 

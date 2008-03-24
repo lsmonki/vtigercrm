@@ -9,6 +9,7 @@
 *
  ********************************************************************************/
 
+
 require_once('Smarty_setup.php');
 global $mod_strings;
 global $app_strings;
@@ -19,28 +20,34 @@ $smarty = new vtigerCRM_Smarty;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $tax_details = getAllTaxes();
 $sh_tax_details = getAllTaxes('all','sh');
+
 
 //To save the edited value
 if($_REQUEST['save_tax'] == 'true')
 {
 	for($i=0;$i<count($tax_details);$i++)
 	{
+     		$new_labels[$tax_details[$i]['taxid']] = $_REQUEST[$tax_details[$i]['taxlabel']];
 		$new_percentages[$tax_details[$i]['taxid']] = $_REQUEST[$tax_details[$i]['taxname']];
 	}
 	updateTaxPercentages($new_percentages);
+	updateTaxLabels($new_labels);
 	$getlist = true;
 }
 elseif($_REQUEST['sh_save_tax'] == 'true')
 {
+ 
 	for($i=0;$i<count($sh_tax_details);$i++)
 	{
+	  $new_labels[$sh_tax_details[$i]['taxid']] = $_REQUEST[$sh_tax_details[$i]['taxlabel']];
 		$new_percentages[$sh_tax_details[$i]['taxid']] = $_REQUEST[$sh_tax_details[$i]['taxname']];
 	}
+	
 	updateTaxPercentages($new_percentages,'sh');
+	updateTaxLabels($new_labels,'sh');
 	$getlist = true;
 }
 
@@ -99,8 +106,9 @@ if(count($tax_details) == 0)
 	$smarty->assign("TAX_COUNT", 0);
 if(count($sh_tax_details) == 0)
 	$smarty->assign("SH_TAX_COUNT", 0);
-	
+
 $smarty->assign("TAX_VALUES", $tax_details);
+
 $smarty->assign("SH_TAX_VALUES", $sh_tax_details);
 
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
@@ -120,23 +128,45 @@ function updateTaxPercentages($new_percentages, $sh='')
 	global $adb, $log;
 	$log->debug("Entering into the function updateTaxPercentages");
 
-	$tax_percentage = Array();
-
 	foreach($new_percentages as $taxid => $new_val)
 	{
 		if($new_val != '')
 		{
 			if($sh != '' && $sh == 'sh')
-				$query = "update vtiger_shippingtaxinfo set percentage = \"$new_val\" where taxid=\"$taxid\"";
+				$query = "update vtiger_shippingtaxinfo set percentage=? where taxid=?";
 			else
-				$query = "update vtiger_inventorytaxinfo set percentage = \"$new_val\" where taxid=\"$taxid\"";
-			$adb->query($query);
+				$query = "update vtiger_inventorytaxinfo set percentage =? where taxid=?";
+			$adb->pquery($query, array($new_val, $taxid));
 		}
 	}
 
 	$log->debug("Exiting from the function updateTaxPercentages");
 }
 
+/**	Function to update the list of Tax Labels for the taxes
+ *	@param array $new_labels - array of tax types and the values like [taxid]=new label ie., [1]=aa, [2]=bb
+ *      @param string $sh - sh or empty, if sh passed then update will be done in shipping and handling related table
+ *      @return void
+ */
+function updateTaxLabels($new_labels, $sh='')
+{
+	global $adb, $log;
+	$log->debug("Entering into the function updateTaxPercentages");
+
+	foreach($new_labels as $taxid => $new_val)
+	{
+		if($new_val != '')
+		{
+			if($sh != '' && $sh == 'sh')
+				$query = "update vtiger_shippingtaxinfo set taxlabel= ? where taxid=?";
+			else
+				$query = "update vtiger_inventorytaxinfo set taxlabel = ? where taxid=?";
+			$adb->pquery($query, array($new_val, $taxid));
+		}
+	}
+
+	$log->debug("Exiting from the function updateTaxPercentages");
+}
 /**	Function used to add the tax type which will do database alterations
  *	@param string $taxlabel - tax label name to be added
  *	@param string $taxvalue - tax value to be added
@@ -150,10 +180,10 @@ function addTaxType($taxlabel, $taxvalue, $sh='')
 
 	//First we will check whether the tax is already available or not
 	if($sh != '' && $sh == 'sh')
-		$check_query = "select taxlabel from vtiger_shippingtaxinfo where taxlabel='".addslashes($taxlabel)."'";
+		$check_query = "select taxlabel from vtiger_shippingtaxinfo where taxlabel=?";
 	else
-		$check_query = "select taxlabel from vtiger_inventorytaxinfo where taxlabel='".addslashes($taxlabel)."'";
-	$check_res = $adb->query($check_query);
+		$check_query = "select taxlabel from vtiger_inventorytaxinfo where taxlabel=?";
+	$check_res = $adb->pquery($check_query, array($taxlabel));
 
 	if($adb->num_rows($check_res) > 0)
 		return "<font color='red'>This tax is already available</font>";
@@ -164,7 +194,6 @@ function addTaxType($taxlabel, $taxvalue, $sh='')
 	{
 		$taxid = $adb->getUniqueID("vtiger_shippingtaxinfo");
 		$taxname = "shtax".$taxid;
-		
 		$query = "alter table vtiger_inventoryshippingrel add column $taxname decimal(7,3) default NULL";
 	}
 	else
@@ -173,17 +202,18 @@ function addTaxType($taxlabel, $taxvalue, $sh='')
 		$taxname = "tax".$taxid;
 		$query = "alter table vtiger_inventoryproductrel add column $taxname decimal(7,3) default NULL";
 	}
-	$res = $adb->query($query);
+	$res = $adb->pquery($query, array());
 
 	//if the tax is added as a column then we should add this tax in the list of taxes
 	if($res)
 	{
-		if($sh != '' && $sh == 'sh')
-			$query1 = "insert into vtiger_shippingtaxinfo values($taxid,'".$taxname."','".$taxlabel."','".$taxvalue."',0)";
+		if($sh != '' && $sh == 'sh') 
+			$query1 = "insert into vtiger_shippingtaxinfo values(?,?,?,?,?)";
 		else
-			$query1 = "insert into vtiger_inventorytaxinfo values($taxid,'".$taxname."','".$taxlabel."','".$taxvalue."',0)";
+			$query1 = "insert into vtiger_inventorytaxinfo values(?,?,?,?,?)";
 
-		$res1 = $adb->query($query1);
+		$params1 = array($taxid, $taxname, $taxlabel, $taxvalue, 0);
+		$res1 = $adb->pquery($query1, $params1);
 	}
 
 	$log->debug("Exit from function addTaxType($taxlabel, $taxvalue)");
@@ -205,9 +235,9 @@ function changeDeleted($taxname, $deleted, $sh='')
 	$log->debug("Entering into function changeDeleted($taxname, $deleted, $sh)");
 
 	if($sh == 'sh')
-		$adb->query("update vtiger_shippingtaxinfo set deleted=$deleted where taxname=\"$taxname\"");
+		$adb->pquery("update vtiger_shippingtaxinfo set deleted=? where taxname=?", array($deleted, $taxname));
 	else
-		$adb->query("update vtiger_inventorytaxinfo set deleted=$deleted where taxname=\"$taxname\"");
+		$adb->pquery("update vtiger_inventorytaxinfo set deleted=? where taxname=?", array($deleted, $taxname));
 	$log->debug("Exit from function changeDeleted($taxname, $deleted, $sh)");
 }
 

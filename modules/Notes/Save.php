@@ -21,21 +21,26 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Notes/Note.php');
+require_once('modules/Notes/Notes.php');
 require_once('include/logging.php');
 require_once('include/upload_file.php');
 
 $local_log =& LoggerManager::getLogger('index');
 
-$focus = new Note();
+$focus = new Notes();
+//added to fix 4600
+$search=$_REQUEST['search_url'];
 
-setObjectValuesFromRequest(&$focus);
+if(isset($_REQUEST['notecontent']) && $_REQUEST['notecontent'] != "")
+	$_REQUEST['notecontent'] = fck_from_html($_REQUEST['notecontent']);
+	
+setObjectValuesFromRequest($focus);
 
 //Check if the file is exist or not.
 if($_FILES["filename"]["size"] == 0 && $_FILES["filename"]["name"] != '')
 {
 	$file_upload_error = true;
-	$_FILES = '';
+	//$_FILES = '';
 }
 
 if (!isset($_REQUEST['date_due_flag'])) $focus->date_due_flag = 'off';
@@ -46,17 +51,17 @@ $focus->save("Notes");
 //Added to retrieve the existing attachment of the notes and save it for the new duplicated note
 if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST['old_id'] != '')
 {
-        $sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid=vtiger_attachments.attachmentsid where vtiger_seattachmentsrel.crmid= ".$_REQUEST['old_id'];
-        $result = $adb->query($sql);
+        $sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid=vtiger_attachments.attachmentsid where vtiger_seattachmentsrel.crmid= ?";
+        $result = $adb->pquery($sql, array($_REQUEST['old_id']));
         if($adb->num_rows($result) != 0)
 	{
                 $attachmentid = $adb->query_result($result,0,'attachmentsid');
-		$filename = $adb->query_result($result,0,'name');
+		$filename = decode_html($adb->query_result($result,0,'name'));
 		$filetype = $adb->query_result($result,0,'type');
 		$filepath = $adb->query_result($result,0,'path');
 
 		$new_attachmentid = $adb->getUniqueID("vtiger_crmentity");
-		$date_var = $adb->formatDate(date('YmdHis'));	
+		$date_var = $adb->formatDate(date('YmdHis'), true);	
 
 		$upload_filepath = decideFilePath();
 
@@ -65,12 +70,12 @@ if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST
 		fputs($handle, file_get_contents($filepath.$attachmentid."_".$filename));
 		fclose($handle);	
 
-		$adb->query("update vtiger_notes set filename=\"$filename\" where notesid=$focus->id");	
-		$adb->query("insert into vtiger_crmentity (crmid,setype,createdtime) values('".$new_attachmentid."','Notes Attachment','".$date_var."')");
+		$adb->pquery("update vtiger_notes set filename=? where notesid=?", array($filename,$focus->id));	
+		$adb->pquery("insert into vtiger_crmentity (crmid,setype,createdtime) values(?,?,?)", array($new_attachmentid,'Notes Attachment',$date_var));
 
-		$adb->query("insert into vtiger_attachments values(".$new_attachmentid.",'".$filename."','','".$filetype."','".$upload_filepath."')");
+		$adb->pquery("insert into vtiger_attachments(attachmentsid, name, type, path) values(?,?,?,?)", array($new_attachmentid, $filename, $filetype, $upload_filepath));
 
-		$adb->query("insert into vtiger_seattachmentsrel values('".$focus->id."','".$new_attachmentid."')");
+		$adb->pquery("insert into vtiger_seattachmentsrel values(?,?)", array($focus->id, $new_attachmentid));
 	}
 }
 
@@ -93,8 +98,8 @@ if($_REQUEST['mode'] != 'edit' && (($_REQUEST['return_module']=='Emails') ||($_R
 		$crmid = $_REQUEST['ticket_id'];
 	if($crmid != $_REQUEST['parent_id'])
 	{
-		$sql = "insert into vtiger_senotesrel (notesid, crmid) values('".$focus->id."','".$crmid."')";
-		$adb->query($sql);
+		$sql = "insert into vtiger_senotesrel (notesid, crmid) values(?,?)";
+		$adb->pquery($sql, array($focus->id,$crmid));
 	}
 }
 
@@ -111,5 +116,5 @@ if($file_upload_error)
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
-header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname");
+header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname&start=".$_REQUEST['pagenumber'].$search);
 ?>

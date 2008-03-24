@@ -89,12 +89,55 @@ class Note extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering create_export_query(".$order_by.",". $where.") method ...");
-             $query = "SELECT
-                                        vtiger_notes.*,
-                                        vtiger_contactdetails.firstname,
-                                        vtiger_contactdetails.lastname
-                                        FROM vtiger_notes
-                                        LEFT JOIN vtiger_contactdetails ON vtiger_notes.contact_id=vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_notes.notesid and vtiger_crmentity.deleted=0 ";
+
+		include("include/utils/ExportUtils.php");
+
+		//To get the Permitted fields query and the permitted fields list
+		$sql = getPermittedFieldsQuery("Notes", "detail_view");
+		$fields_list = getFieldsListFromQuery($sql);
+
+		$query = "SELECT $fields_list FROM vtiger_notes
+				inner join vtiger_crmentity 
+					on vtiger_crmentity.crmid=vtiger_notes.notesid 
+				LEFT JOIN vtiger_senotesrel
+					ON vtiger_senotesrel.notesid = vtiger_notes.notesid
+				LEFT JOIN vtiger_contactdetails 
+					ON vtiger_notes.contact_id=vtiger_contactdetails.contactid 
+
+				LEFT JOIN vtiger_crmentity vtiger_crmentityRelatedTo
+					ON vtiger_crmentityRelatedTo.crmid = vtiger_senotesrel.crmid
+				
+				LEFT JOIN vtiger_leaddetails vtiger_NoteRelatedToLead
+					ON vtiger_NoteRelatedToLead.leadid = vtiger_senotesrel.crmid
+				LEFT JOIN vtiger_account vtiger_NoteRelatedToAccount
+					ON vtiger_NoteRelatedToAccount.accountid = vtiger_senotesrel.crmid
+				LEFT JOIN vtiger_potential vtiger_NoteRelatedToPotential
+					ON vtiger_NoteRelatedToPotential.potentialid = vtiger_senotesrel.crmid
+				LEFT JOIN vtiger_products vtiger_NoteRelatedToProduct
+					ON vtiger_NoteRelatedToProduct.productid = vtiger_senotesrel.crmid
+				LEFT JOIN vtiger_invoice vtiger_NoteRelatedToInvoice
+					ON vtiger_NoteRelatedToInvoice.invoiceid = vtiger_senotesrel.crmid
+				LEFT JOIN vtiger_purchaseorder vtiger_NoteRelatedToPO
+					ON vtiger_NoteRelatedToPO.purchaseorderid = vtiger_senotesrel.crmid
+				LEFT JOIN vtiger_salesorder vtiger_NoteRelatedToSO
+					ON vtiger_NoteRelatedToSO.salesorderid = vtiger_senotesrel.crmid
+
+				WHERE vtiger_crmentity.deleted=0 
+
+				AND ((vtiger_senotesrel.crmid IS NULL
+					AND (vtiger_notes.contact_id = 0
+					OR vtiger_notes.contact_id IS NULL))
+					OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Leads').")
+					OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Accounts').")
+					OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Potentials').")
+					OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Products').")
+					OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Invoice').")
+					OR vtiger_senotesrel.crmid IN (".getReadEntityIds('PurchaseOrder').")
+					OR vtiger_senotesrel.crmid IN (".getReadEntityIds('SalesOrder').")
+					OR vtiger_notes.contact_id IN (".getReadEntityIds('Contacts').")) 
+
+					";
+
 		$log->debug("Exiting create_export_query method ...");
                 return $query;
         }

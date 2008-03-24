@@ -21,16 +21,18 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Campaigns/Campaign.php');
+require_once('modules/Campaigns/Campaigns.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 
-$focus = new Campaign();
+$focus = new Campaigns();
  global $current_user;
  $currencyid=fetchCurrency($current_user->id);
  $rate_symbol = getCurrencySymbolandCRate($currencyid);
  $rate = $rate_symbol['rate'];
-setObjectValuesFromRequest(&$focus);
+//added to fix 4600
+$search=$_REQUEST['search_url'];
+setObjectValuesFromRequest($focus);
 
 if(isset($_REQUEST['expectedrevenue']))
 {
@@ -62,11 +64,12 @@ if(isset($_REQUEST['expectedroi']))
 $focus->save("Campaigns");
 $return_id = $focus->id;
 
+if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 else $return_module = "Campaigns";
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
 else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab&start=".$_REQUEST['pagenumber'].$search);
 ?>

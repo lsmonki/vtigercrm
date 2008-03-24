@@ -156,13 +156,13 @@ class Potential extends CRMEntity {
 		else
 		{
 			$query = 'SELECT potentialid, potentialname, smcreatorid, closingdate FROM vtiger_potential inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid ';
-			$where_auto = 'AND vtiger_crmentity.deleted=0';
+			$where_auto = ' AND vtiger_crmentity.deleted=0';
 		}
 
 		if($where != "")
-			$query .= "where $where ".$where_auto;
+			$query .= " where $where ".$where_auto;
 		else
-			$query .= "where ".$where_auto;
+			$query .= " where ".$where_auto;
 
 		if($order_by != "")
 			$query .= " ORDER BY vtiger_potential.$order_by";
@@ -183,34 +183,37 @@ class Potential extends CRMEntity {
 	function create_export_query($order_by, $where)
 	{
 		global $log;
+		global $current_user;
 		$log->debug("Entering create_export_query(".$order_by.",". $where.") method ...");
 
-		if($this->checkIfCustomTableExists('vtiger_potentialscf'))
-		{
-			$query = $this->constructCustomQueryAddendum('vtiger_potentialscf','Potentials') ."
-			vtiger_potential.*,
-			vtiger_account.accountname account_name,
-			vtiger_users.user_name assigned_user_name
-				FROM vtiger_potential
-				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_potential.potentialid
-				LEFT JOIN vtiger_account on vtiger_potential.accountid=vtiger_account.accountid
-				left join vtiger_potentialscf on vtiger_potentialscf.potentialid=vtiger_potential.potentialid
-				left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id 
-			where vtiger_crmentity.deleted=0 ";
-		}
-		else
-		{
-			$query = "SELECT
-			vtiger_potential.*,
-			vtiger_account.accountname account_name,
-			vtiger_users.user_name assigned_user_name
-				FROM vtiger_potential 
+		include("include/utils/ExportUtils.php");
+
+		//To get the Permitted fields query and the permitted fields list
+		$sql = getPermittedFieldsQuery("Potentials", "detail_view");
+		$fields_list = getFieldsListFromQuery($sql);
+
+		$query = "SELECT $fields_list FROM vtiger_potential 
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid 
 				LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
 				LEFT JOIN vtiger_account on vtiger_potential.accountid=vtiger_account.accountid  
 				LEFT JOIN vtiger_potentialscf on vtiger_potentialscf.potentialid=vtiger_potential.potentialid 
+				LEFT JOIN vtiger_potentialgrouprelation
+                	                ON vtiger_potentialscf.potentialid = vtiger_potentialgrouprelation.potentialid
+	                        LEFT JOIN vtiger_groups
+                        	        ON vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
+				LEFT JOIN vtiger_campaign
+					ON vtiger_campaign.campaignid = vtiger_potential.campaignid
+
 			where vtiger_crmentity.deleted=0 ";
-		}	
+
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+		//we should add security check when the user has Private Access
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[2] == 3)
+		{
+			//Added security check to get the permitted records only
+			$query = $query." ".getListViewSecurityParameter("Potentials");
+		}
 
 		$log->debug("Exiting create_export_query method ...");
 		return $query;
@@ -331,8 +334,8 @@ class Potential extends CRMEntity {
 		global $mod_strings;
 		global $app_strings;
 
-		$query = 'select vtiger_potstagehistory.*, vtiger_potential.potentialname from vtiger_potstagehistory inner join vtiger_potential on vtiger_potential.potentialid = vtiger_potstagehistory.potentialid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_potential.potentialid where vtiger_crmentity.deleted = 0 and vtiger_potential.potentialid = '.$id;
-		$result=$adb->query($query);
+		$query = 'select vtiger_potstagehistory.*, vtiger_potential.potentialname from vtiger_potstagehistory inner join vtiger_potential on vtiger_potential.potentialid = vtiger_potstagehistory.potentialid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_potential.potentialid where vtiger_crmentity.deleted = 0 and vtiger_potential.potentialid = ?';
+		$result=$adb->pquery($query, array($id));
 		$noofrows = $adb->num_rows($result);
 
 		$header[] = $app_strings['LBL_AMOUNT'];
@@ -381,7 +384,8 @@ class Potential extends CRMEntity {
 				inner join vtiger_users on vtiger_crmentity.smcreatorid= vtiger_users.id
 				where (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task')
 				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred' or (vtiger_activity.eventstatus = 'Held' and vtiger_activity.eventstatus != ''))
-				and vtiger_seactivityrel.crmid=".$id;
+				and vtiger_seactivityrel.crmid=".$id."
+                                and vtiger_crmentity.deleted = 0";
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
 		$log->debug("Exiting get_history method ...");

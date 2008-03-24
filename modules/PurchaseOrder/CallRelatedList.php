@@ -21,7 +21,7 @@ if($singlepane_view == 'true' && $_REQUEST['action'] == 'CallRelatedList' )
 }
 else
 {
-$focus = new Order();
+$focus = new PurchaseOrder();
 $currentmodule = $_REQUEST['module'];
 $RECORD = $_REQUEST['record'];
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
@@ -37,7 +37,6 @@ global $app_strings;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 
@@ -49,9 +48,11 @@ $smarty->assign("CATEGORY",$category);
 if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
 	$smarty->assign("OP_MODE",$_REQUEST['mode']);
 }
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $smarty->assign("ID",$focus->id);
 $smarty->assign("MODULE",$currentmodule);
-$smarty->assign("SINGLE_MOD",$app_strings['PurchaseOrder']);
+$smarty->assign("SINGLE_MOD",$mod_strings['PurchaseOrder']);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);

@@ -22,7 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Emails/Email.php');
+require_once('modules/Emails/Emails.php');
 require_once('include/upload_file.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
@@ -32,7 +32,7 @@ global $app_strings;
 global $mod_strings;
 global $currentModule;
 
-$focus = new Email();
+$focus = new Emails();
 
 $smarty = new vtigerCRM_Smarty;
 if(isset($_REQUEST['record'])) 
@@ -41,8 +41,8 @@ if(isset($_REQUEST['record']))
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
 	$log->info("Entity info successfully retrieved for DetailView.");
 	$focus->id = $_REQUEST['record'];
-	$query = 'select email_flag,from_email,to_email,cc_email,bcc_email from vtiger_emaildetails where emailid ='.$focus->id;
-	$result = $adb->query($query);
+	$query = 'select email_flag,from_email,to_email,cc_email,bcc_email from vtiger_emaildetails where emailid = ?';
+	$result = $adb->pquery($query, array($focus->id));
     	$smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
 	$to_email = ereg_replace('###',', ',$adb->query_result($result,0,'to_email'));
 	$smarty->assign('TO_MAIL',to_html($to_email));	
@@ -108,7 +108,6 @@ elseif (is_null($focus->parent_type))
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Email detail view");
 
@@ -131,8 +130,9 @@ if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 	else $smarty->assign("NAME", "");
 
 $entries = getBlocks($currentModule,"detail_view",'',$focus->column_fields);
-$entries['Email Information']['4']['Description']['value'] = from_html($entries['Email Information']['4']['Description']['value']);
-$smarty->assign("BLOCKS", $entries['Email Information']);
+$entries[$mod_strings['LBL_EMAIL_INFORMATION']]['5'][$mod_strings['Description']]['value'] = from_html($entries[$mod_strings['LBL_EMAIL_INFORMATION']]['5'][$mod_strings['Description']]['value']);
+//changed this to view description in all langauge - bharath
+$smarty->assign("BLOCKS",$entries[$mod_strings['LBL_EMAIL_INFORMATION']]); 
 $smarty->assign("SINGLE_MOD", 'Email');
 
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);

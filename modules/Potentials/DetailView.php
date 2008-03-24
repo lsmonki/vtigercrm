@@ -22,7 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Potentials/Potentials.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
@@ -31,7 +31,7 @@ global $mod_strings;
 global $app_strings;
 global $currentModule, $singlepane_view;
 
-$focus = new Potential();
+$focus = new Potentials();
 $smarty = new vtigerCRM_Smarty;
 
 if(isset($_REQUEST['record'])  && $_REQUEST['record']!='') {
@@ -46,7 +46,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Potential detail view");
 
@@ -100,7 +99,11 @@ if($singlepane_view == 'true')
 	$smarty->assign("RELATEDLISTS", $related_array);
 }
 
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
+
 $smarty->assign("SinglePane_View", $singlepane_view);
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 
 $smarty->display("DetailView.tpl");
 ?>

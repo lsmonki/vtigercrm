@@ -115,8 +115,8 @@ class Snoopy
 	function Snoopy()
 	{
 		global $adb;
-		$query = "select * from vtiger_systems where server_type='proxy'";
-		$result = $adb->query($query);
+		$query = "select * from vtiger_systems where server_type=?";
+		$result = $adb->pquery($query, array('proxy'));
 		$noofrows = $adb->num_rows($result);
 		if($noofrows != 0)
 		{
@@ -799,7 +799,7 @@ class Snoopy
 
 		$this->status = 0;
 		
-		if($fp = fsockopen(
+		if($fp = @fsockopen(
 					$host,
 					$port,
 					$errno,

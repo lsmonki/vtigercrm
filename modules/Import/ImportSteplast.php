@@ -23,10 +23,13 @@ require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportAccount.php');
 require_once('modules/Import/ImportOpportunity.php');
 require_once('modules/Import/ImportLead.php');
+//Pavani: Import this file to Support Imports for Trouble tickets and vendors
+require_once('modules/Import/ImportTicket.php');
+require_once('modules/Import/ImportVendors.php');
 require_once('modules/Import/UsersLastImport.php');
 require_once('modules/Import/parse_utils.php');
 require_once('include/ListView/ListView.php');
-require_once('modules/Contacts/Contact.php');
+require_once('modules/Contacts/Contacts.php');
 require_once('include/utils/utils.php');
 
 global $mod_strings;
@@ -56,7 +59,6 @@ if (! isset( $_REQUEST['return_action']))
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Import Step last");
 
@@ -145,11 +147,13 @@ global $list_max_entries_per_page;
 $implict_account = false;
 
 $import_modules_array = Array(
-				"Leads"=>"Lead",
-				"Accounts"=>"Account",
-				"Contacts"=>"Contact",
-				"Potentials"=>"Potential",
-				"Products"=>"Product" 
+				"Leads"=>"Leads",
+				"Accounts"=>"Accounts",
+				"Contacts"=>"Contacts",
+				"Potentials"=>"Potentials",
+				"Products"=>"Products" ,
+				 "HelpDesk"=>"ImportTicket",
+                                "Vendors"=>"ImportVendors"
 			     );
 
 foreach($import_modules_array as $module_name => $object_name)
@@ -220,8 +224,8 @@ foreach($import_modules_array as $module_name => $object_name)
 		//Retreive the List View Header and Entries
 		$listview_header = getListViewHeader($object,$module_name);
 		$listview_entries = getListViewEntries($object,$module_name,$list_result,$navigation_array,"","","EditView","Delete","");
-
-		$smarty->assign("NAVIGATION", $navigationOutput);
+		//commented to remove navigation buttons from import list view
+		//$smarty->assign("NAVIGATION", $navigationOutput);
 		$smarty->assign("HIDE_CUSTOM_LINKS", 1);//Added to hide the CustomView links in imported records ListView
 		$smarty->assign("LISTHEADER", $listview_header);
 		$smarty->assign("LISTENTITY", $listview_entries);

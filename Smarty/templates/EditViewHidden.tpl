@@ -43,13 +43,12 @@
 	<input type="hidden" name="product_id" value="{$PRODUCTID}">
 
 {elseif $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice' || $MODULE eq 'Quotes'}
-	<form name="EditView" method="POST" action="index.php">
+	<form name="EditView" method="POST" action="index.php" onSubmit="settotalnoofrows();calcTotal();">
 	{if $MODULE eq 'Invoice' || $MODULE eq 'PurchaseOrder' ||  $MODULE eq 'SalesOrder'}
        		 <input type="hidden" name="convertmode">
 	{/if}
 
 {elseif $MODULE eq 'HelpDesk'}
-	<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 	<form name="EditView" method="POST" action="index.php" ENCTYPE="multipart/form-data">
 	<input type="hidden" name="old_smownerid" value="{$OLDSMOWNERID}">
         <input type="hidden" name="old_id" value="{$OLD_ID}">
@@ -76,8 +75,12 @@
 	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
 	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
 	<INPUT TYPE="HIDDEN" NAME="MAX_FILE_SIZE" VALUE="800000">
+{else}
+	{$ERROR_MESSAGE}
+	<form name="EditView" method="POST" action="index.php">
 {/if}
 
+<input type="hidden" name="pagenumber" value="{$smarty.request.start}">
 <input type="hidden" name="module" value="{$MODULE}">
 <input type="hidden" name="record" value="{$ID}">
 <input type="hidden" name="mode" value="{$MODE}">

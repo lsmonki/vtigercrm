@@ -20,7 +20,6 @@ require_once("data/Tracker.php");
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/ComboUtil.php');
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('include/database/Postgres8.php');
@@ -82,6 +81,7 @@ $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 $smarty->assign("CHANGE_OWNER",getUserslist());
+$smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
 if($viewid != 0)
 {
         $CActionDtls = $oCustomView->getCustomActionDetails($viewid);
@@ -122,8 +122,14 @@ else
 
 if(isset($where) && $where != '')
 {
+	if(isset($_REQUEST['from_homepagedb']) && $_REQUEST['from_homepagedb'] == 'true')
+                $list_query .= ' and (vtiger_troubletickets.status!="Closed" or vtiger_troubletickets.status is null) and '.$where;
 	$list_query .= ' and '.$where;
+ $_SESSION['export_where'] = $where;
 }
+else
+   unset($_SESSION['export_where']);
+
 
 //sort by "assignedto" and default sort by "ticketid"(DESC)
 if(isset($order_by) && $order_by != '')
@@ -132,7 +138,7 @@ if(isset($order_by) && $order_by != '')
 	{
 		if( $adb->dbType == "pgsql")
  		    $list_query .= ' GROUP BY vtiger_users.user_name';
-		$list_query .= ' ORDER BY vtiger_users.user_name '.$sorder;
+		$list_query .= " ORDER BY case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end ".$sorder;
 	}
 	else
 	{
@@ -163,6 +169,11 @@ if($_SESSION['lvs'][$currentModule])
 	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
 }
 
+//added for 4600
+                                                                                                                             
+if($noofrows <= $list_max_entries_per_page)
+        $_SESSION['lvs'][$currentModule]['start'] = 1;
+//ends
 $start = $_SESSION['lvs'][$currentModule]['start'];
 
 //Retreive the Navigation array
@@ -179,6 +190,9 @@ $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val']; 
 //By Raju Ends
 
+//By Pavani
+$_SESSION['nav_start']=$start_rec;
+$_SESSION['nav_end']=$end_rec;
 //limiting the query
 if ($start_rec ==0) 
 	$limit_start_rec = 0;
@@ -186,9 +200,9 @@ else
 	$limit_start_rec = $start_rec -1;
 	
 if( $adb->dbType == "pgsql")
-     $list_result = $adb->query($list_query. " OFFSET ".$limit_start_rec." LIMIT ".$list_max_entries_per_page);
+     $list_result = $adb->query($list_query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
 else
-     $list_result = $adb->query($list_query. " LIMIT ".$limit_start_rec.",".$list_max_entries_per_page);
+     $list_result = $adb->query($list_query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
 //mass merge for word templates -- *Raj*17/11
 while($row = $adb->fetch_array($list_result))
@@ -201,7 +215,6 @@ if(isset($ids))
 }
 if(isPermitted("HelpDesk","Merge") == 'yes') 
 {
-	$smarty->assign("MERGEBUTTON","<td><input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"crmbutton small create\" onclick=\"return massMerge('HelpDesk')\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
 	$wordTemplateResult = fetchWordTemplateList("HelpDesk");
 	$tempCount = $adb->num_rows($wordTemplateResult);
 	$tempVal = $adb->fetch_array($wordTemplateResult);
@@ -210,7 +223,22 @@ if(isPermitted("HelpDesk","Merge") == 'yes')
 		$optionString .="<option value=\"".$tempVal["templateid"]."\">" .$tempVal["filename"] ."</option>";
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
-	$smarty->assign("WORDTEMPLATEOPTIONS","<td>".$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."</td><td style=\"padding-left:5px;padding-right:5px\"><select class=\"small\" name=\"mergefile\">".$optionString."</select></td>");
+	if($tempCount > 0)
+	{
+		$smarty->assign("WORDTEMPLATEOPTIONS","<td>".$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."</td><td style=\"padding-left:5px;padding-right:5px\"><select class=\"small\" name=\"mergefile\">".$optionString."</select></td>");
+
+		$smarty->assign("MERGEBUTTON","<td><input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"crmbutton small create\" onclick=\"return massMerge('HelpDesk')\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+	}
+	else
+        {
+		global $current_user;
+                require("user_privileges/user_privileges_".$current_user->id.".php");
+                if($is_admin == true)
+                {
+			$smarty->assign("MERGEBUTTON",'<td><a href=index.php?module=Settings&action=upload&tempModule='.$currentModule.'&parenttab=Settings>'. $app_strings["LBL_CREATE_MERGE_TEMPLATE"].'</td>');
+                }
+        }
+
 }
 //mass merge for word templates
 
@@ -229,6 +257,11 @@ $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 $listview_entries = getListViewEntries($focus,"HelpDesk",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
+//Added to select Multiple records in multiple pages
+$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
+$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
+
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"HelpDesk","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','ticket_title','true','basic',"","","","",$viewid);
 $fieldnames = getAdvSearchfields($module);
