@@ -11,7 +11,6 @@
  ********************************************************************************/
 
 -->*}
-<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
 <script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
 <div id="convertleaddiv" style="display:block;position:absolute;left:225px;top:150px;"></div>
@@ -21,7 +20,7 @@
 <script>
 function tagvalidate()
 {ldelim}
-	if(document.getElementById('txtbox_tagfields').value != '')
+	if(trim(document.getElementById('txtbox_tagfields').value) != '')
 		SaveTag('txtbox_tagfields','{$ID}','{$MODULE}');	
 	else
 	{ldelim}
@@ -180,6 +179,7 @@ function DeleteTag(id,recordid)
 			{assign var=keyval value=$data.value}
 			{assign var=keytblname value=$data.tablename}
 			{assign var=keyfldname value=$data.fldname}
+			{assign var=keyfldid value=$data.fldid}
 			{assign var=keyoptions value=$data.options}
 			{assign var=keysecid value=$data.secid}
 			{assign var=keyseclink value=$data.link}

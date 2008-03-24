@@ -31,6 +31,11 @@ $decode_val=base64_decode($encode_val);
 $focus = new Products();
 $smarty = new vtigerCRM_Smarty();
 
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
+
 if($_REQUEST['record']!="") 
 {
     $focus->id = $_REQUEST['record'];
@@ -75,7 +80,6 @@ if (isset($_REQUEST['vendorid']) && is_null($focus->vendorid)) {
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')

@@ -21,12 +21,14 @@ require_once('user_privileges/default_module_view.php');
 class Vendors extends CRMEntity {
 	var $log;
 	var $db;
-
+	var $table_name = "vtiger_vendor";
 	var $tab_name = Array('vtiger_crmentity','vtiger_vendor','vtiger_vendorcf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_vendor'=>'vendorid','vtiger_vendorcf'=>'vendorid');
 	var $column_fields = Array();
 
-	var $sortby_fields = Array('vendorname','category');		  
+        //Pavani: Assign value to entity_table
+        var $entity_table = "vtiger_crmentity";
+        var $sortby_fields = Array('vendorname','category');
 
         // This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
@@ -51,7 +53,8 @@ class Vendors extends CRMEntity {
                                         'Vendor Name'=>'vendorname',
                                         'Phone'=>'phone'
                                      );
-
+	//By Pavani..Specifying required fields for vendors
+        var $required_fields =  array('vendorname'=>1);
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'vendorname';
 	var $default_sort_order = 'ASC';
@@ -124,6 +127,45 @@ class Vendors extends CRMEntity {
 		$log->debug("Exiting get_purchase_orders method ...");
 		return GetRelatedList('Vendors','PurchaseOrder',$focus,$query,$button,$returnset);
 	}
+	//Pavani: Function to create, export query for vendors module
+        /** Function to export the vendors in CSV Format
+        * @param reference variable - where condition is passed when the query is executed
+        * Returns Export Vendors Query.
+        */
+        function create_export_query($where)
+        {
+                global $log;
+                global $current_user;
+                $log->debug("Entering create_export_query(".$where.") method ...");
+
+                include("include/utils/ExportUtils.php");
+
+                //To get the Permitted fields query and the permitted fields list
+                $sql = getPermittedFieldsQuery("Vendors", "detail_view");
+                $fields_list = getFieldsListFromQuery($sql);
+
+                $query = "SELECT $fields_list FROM ".$this->entity_table."
+                                INNER JOIN vtiger_vendor
+                                        ON vtiger_crmentity.crmid = vtiger_vendor.vendorid
+                                LEFT JOIN vtiger_vendorcf
+                                        ON vtiger_vendorcf.vendorid=vtiger_vendor.vendorid
+                                LEFT JOIN vtiger_seattachmentsrel
+                                        ON vtiger_vendor.vendorid=vtiger_seattachmentsrel.crmid
+                                LEFT JOIN vtiger_attachments
+                                ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
+                                LEFT JOIN vtiger_users
+                                        ON vtiger_crmentity.smownerid = vtiger_users.id and vtiger_users.status='Active'
+                                ";
+                $where_auto = " vtiger_crmentity.deleted = 0 ";
+
+                 if($where != "")
+                   $query .= "  WHERE ($where) AND ".$where_auto;
+                else
+                   $query .= "  WHERE ".$where_auto;
+
+                $log->debug("Exiting create_export_query method ...");
+                return $query;
+        }
 
 	/**	function used to get the list of contacts which are related to the vendor
 	 *	@param int $id - vendor id
@@ -148,5 +190,30 @@ class Vendors extends CRMEntity {
 		return GetRelatedList('Vendors','Contacts',$focus,$query,$button,$returnset);
 
 	}
+	
+	function getSortOrder()
+        {
+                global $log;
+                $log->debug("Entering getSortOrder() method ...");
+                if(isset($_REQUEST['sorder']))
+                        $sorder = $_REQUEST['sorder'];
+                else
+                        $sorder = (($_SESSION['VENDORS_SORT_ORDER'] != '')?($_SESSION['VENDORS_SORT_ORDER']):($this->default_sort_order));
+                $log->debug("Exiting getSortOrder() method ...");
+                return $sorder;
+        }
+
+	function getOrderBy()
+	{
+		global $log;
+		$log->debug("Entering getOrderBy() method ...");
+		if (isset($_REQUEST['order_by']))
+			$order_by = $_REQUEST['order_by'];
+		else
+			$order_by = (($_SESSION['VENDORS_ORDER_BY'] != '')?($_SESSION['VENDORS_ORDER_BY']):($this->default_order_by));
+		$log->debug("Exiting getOrderBy method ...");
+		return $order_by;
+	}
+
 }
 ?>

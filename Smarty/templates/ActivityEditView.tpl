@@ -24,7 +24,7 @@ var gVTModule = '{$smarty.request.module}';
 </script>
 
 {*<!-- Contents -->*}
-<form name="EditView" method="POST" action="index.php">
+<form name="EditView" method="POST" action="index.php" {if $ACTIVITY_MODE neq 'Task'} onsubmit="return check_form();" {else} onsubmit="maintask_check_form();return formValidate();" {/if} >
 <input type="hidden" name="time_start" id="time_start">
 <input type="hidden" name="view" value="{$view}">
 <input type="hidden" name="hour" value="{$hour}">
@@ -80,7 +80,7 @@ var gVTModule = '{$smarty.request.module}';
 						     <tr>
 							<td  colspan=4 style="padding:5px">
 								<div align="center">
-								<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" {if $ACTIVITY_MODE neq 'Task'} onclick="this.form.action.value='Save';  displaydeleted();return maincheck_form();"{else} onclick="this.form.action.value='Save';  displaydeleted(); maintask_check_form();return formValidate();" {/if} type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+								<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';"  type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
 								<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
 								</div>
 							</td>
@@ -98,6 +98,7 @@ var gVTModule = '{$smarty.request.module}';
 						     {/foreach}
 						     {if $ACTIVITY_MODE neq 'Task'}
 							<input type="hidden" name="time_end" id="time_end">
+							<input type="hidden" name="followup_due_date" id="followup_due_date">
 							<input type="hidden" name="followup_time_start" id="followup_time_start">
                                                         <input type="hidden" name="followup_time_end" id="followup_time_end">
 							<input type=hidden name="inviteesid" id="inviteesid" value="">
@@ -112,18 +113,16 @@ var gVTModule = '{$smarty.request.module}';
 									<table>
 										<tr>
 										{foreach key=tyeparrkey item=typearr from=$ACTIVITYDATA.activitytype}
-                                                                                {foreach key=sel_value item=value from=$typearr}
-                                                                                {if $value eq 'selected' && $sel_value eq 'Call'}
+                                                                                {if $typearr[2] eq 'selected' && $typearr[1] eq 'Call'}
                                                                                         {assign var='meetcheck' value=''}
                                                                                         {assign var='callcheck' value='checked'}
-                                                                                {elseif $value eq 'selected' && $sel_value eq 'Meeting'}
+                                                                                {elseif $typearr[2] eq 'selected' && $typearr[1] eq 'Meeting'}
                                                                                         {assign var='meetcheck' value='checked'}
                                                                                         {assign var='callcheck' value=''}
                                                                                 {else}
 											{assign var='meetcheck' value=''}
                                                                                         {assign var='callcheck' value='checked'}
                                                                                 {/if}
-                                                                                {/foreach}
                                                                                 {/foreach}
 											<td><input type="radio" name='activitytype' value='Call' style='vertical-align: middle;' {$callcheck} onClick="calDuedatetime('call');" ></td><td>{$APP.Call}</td>
 											<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;' {$meetcheck} onClick="calDuedatetime('meeting');" ></td><td>{$APP.Meeting}</td>
@@ -134,16 +133,14 @@ var gVTModule = '{$smarty.request.module}';
 							{/if}
 							<tr>
 								<td class="cellLabel" nowrap align="right"><b><font color="red">*</font>{$MOD.LBL_EVENTNAME}</b></td>
-								<td class="cellInfo" align="left"><input name="subject" type="text" class="textbox" value="{$ACTIVITYDATA.subject|escape}" style="width:50%">&nbsp;&nbsp;&nbsp;
+								<td class="cellInfo" align="left"><input name="subject" type="text" class="textbox" value="{$ACTIVITYDATA.subject}" style="width:50%">&nbsp;&nbsp;&nbsp;
 								{if $LABEL.visibility neq ''}
 								{foreach key=key_one item=arr from=$ACTIVITYDATA.visibility}
-                                                                        {foreach key=sel_value item=value from=$arr}
-                                                                        {if $value eq 'selected' && $sel_value eq 'Public'}
+                                                                        {if $arr[1] eq 'Public' && $arr[2] eq 'selected'}
                                                                                 {assign var="visiblecheck" value="checked"}
                                                                         {else}
                                                                                 {assign var="visiblecheck" value=""}
                                                                         {/if}
-                                                                        {/foreach}
                                                                         {/foreach}
                                                                         <input name="visibility" value="Public" type="checkbox" {$visiblecheck}>{$MOD.LBL_PUBLIC}
 								{/if}
@@ -152,13 +149,13 @@ var gVTModule = '{$smarty.request.module}';
 							{if $LABEL.description neq ''}
 							<tr>
                         					<td class="cellLabel" valign="top" nowrap align="right"><b>{$LABEL.description}</b></td>
-								<td class="cellInfo" align="left"><textarea style="width:100%; height : 60px;" name="description">{$ACTIVITYDATA.description|escape}</textarea></td>
+								<td class="cellInfo" align="left"><textarea style="width:100%; height : 60px;" name="description">{$ACTIVITYDATA.description}</textarea></td>
                 					</tr>
 							{/if}
 							{if $LABEL.location neq ''}
 							<tr>
 			                                        <td class="cellLabel" align="right" valign="top"><b>{$MOD.LBL_APP_LOCATION}</b></td>
-								<td class="cellInfo" align="left"><input name="location" type="text" class="textbox" value="{$ACTIVITYDATA.location|escape}" style="width:50%">
+								<td class="cellInfo" align="left"><input name="location" type="text" class="textbox" value="{$ACTIVITYDATA.location}" style="width:50%">
 							</tr>
 							{/if}
 
@@ -166,7 +163,7 @@ var gVTModule = '{$smarty.request.module}';
 								<td colspan=2 width=80% align="center">
 								<table border=0 cellspacing=0 cellpadding=3 width=80%>
 									<tr>
-										<td >{if $LABEL.eventstatus neq ''}<b>{$LABEL.eventstatus}</b>{/if}</td>
+										<td >{if $LABEL.eventstatus neq ''}<b><font color="red">*</font>{$LABEL.eventstatus}</b>{/if}</td>
                                                                                 <td >{if $LABEL.assigned_user_id != ''}<b>
 											{$LABEL.assigned_user_id}</b>
 											{/if}</td>
@@ -176,16 +173,14 @@ var gVTModule = '{$smarty.request.module}';
 										{if $LABEL.eventstatus neq ''}
                                                                                 <select name="eventstatus" id="eventstatus" class=small onChange = "getSelectedStatus();" >
                                                                                         {foreach item=arr from=$ACTIVITYDATA.eventstatus}
-                                                                                        {foreach key=sel_value item=value from=$arr}
-                                                                                        <option value="{$sel_value}" {$value}>
-                                                                                                {if $MOD.$sel_value neq ''}
-                                                                                                {$MOD.$sel_value}
-                                                                                                {else}
-                                                                                                        {$sel_value}
-                                                                                                {/if}
-                                                                                        </option>
-                                                                                        {/foreach}
-                                                                                        {/foreach}
+											 {if $arr[0] eq $APP.LBL_NOT_ACCESSIBLE}
+                                                                                       		 <option value="{$arr[0]}" {$arr[2]}>{$arr[0]}</option>
+                                                                                        {else}
+                                                                                                <option value="{$arr[1]}" {$arr[2]}>
+                                                                                                        {$arr[0]}
+                                                                                                </option>
+                                                                                        {/if}
+                                                                                        {/foreach} 
                                                                                 </select>
 										{/if}
                                                                         	</td>
@@ -255,15 +250,13 @@ var gVTModule = '{$smarty.request.module}';
 										<br>
 										<select name="taskpriority" id="taskpriority">
                                                                                         {foreach item=arr from=$ACTIVITYDATA.taskpriority}
-                                                                                        {foreach key=sel_value item=value from=$arr}
-                                                                                        <option value="{$sel_value}" {$value}>
-                                                                                                {if $MOD.$sel_value neq ''}
-                                                                                                {$MOD.$sel_value}
-                                                                                                {else}
-                                                                                                        {$sel_value}
-                                                                                                {/if}
-                                                                                        </option>
-                                                                                        {/foreach}
+											 {if $arr[0] eq $APP.LBL_NOT_ACCESSIBLE}
+                                                                                        <option value="{$arr[0]}" {$arr[2]}>{$arr[0]}</option>
+                                                                                        {else}
+                                                                                                <option value="{$arr[1]}" {$arr[2]}>
+                                                                                                        {$arr[0]}
+                                                                                                </option>
+                                                                                        {/if}
                                                                                         {/foreach}
                                                                                 </select>
 										</td> 
@@ -354,9 +347,13 @@ var gVTModule = '{$smarty.request.module}';
 										<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
 										<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');gshow('addEventInviteUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_INVITE}</a></td>
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
+										{if $LABEL.reminder_time neq ''}
 										<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');gshow('addEventAlarmUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventInviteUI');ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');">{$MOD.LBL_REMINDER}</a></td>
+										{/if}
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
+										{if $LABEL.recurringtype neq ''}
 										<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRepeatUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRelatedtoUI');">{$MOD.LBL_REPEAT}</a></td>
+										{/if}
 										<td class="dvtTabCache" style="width:10px">&nbsp;</td>
 										<td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRelatedtoUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRepeatUI');">{$MOD.LBL_RELATEDTO}</a></td>
 										<td class="dvtTabCache" style="width:100%">&nbsp;</td>
@@ -463,6 +460,9 @@ var gVTModule = '{$smarty.request.module}';
 													</table>
 												</td>
 											</tr>
+											<!--This is now required as of now, as we aree not allowing to change the email id
+                                        and it is showing logged in User's email id, instead of Assigned to user's email id
+														
 											<tr>
 												<td nowrap align=right>
 													{$MOD.LBL_SDRMD}
@@ -470,7 +470,7 @@ var gVTModule = '{$smarty.request.module}';
 												<td >
 													<input type=text name="toemail" readonly="readonly" class=textbox style="width:90%" value="{$USEREMAILID}">
 												</td>
-											</tr>
+											</tr> -->
 										</table>
 									{/if}
 									</DIV>
@@ -605,9 +605,10 @@ var gVTModule = '{$smarty.request.module}';
 						<table width="100%" cellpadding="5" cellspacing="0" border="0">
 							{if $LABEL.parent_id neq ''}	
 							<tr>
-								<td><b>{$MOD.LBL_RELATEDTO}</b></td>
+								<td width="10%"><b>{$MOD.LBL_RELATEDTO}</b></td>
 								<td>
 									<input name="parent_id" type="hidden" value="{$secondvalue.parent_id}">
+									<input name="del_actparent_rel" type="hidden" >
 									<select name="parent_type" class="small" id="parent_type" onChange="document.EditView.parent_name.value='';document.EditView.parent_id.value=''">
 									{section name=combo loop=$LABEL.parent_id}
 										<option value="{$fldlabel_combo.parent_id[combo]}" {$fldlabel_sel.parent_id[combo]}>{$LABEL.parent_id[combo]}</option>
@@ -617,7 +618,8 @@ var gVTModule = '{$smarty.request.module}';
 								<td>
 									<div id="eventrelatedto" align="left">
 										<input name="parent_name" readonly type="text" class="calTxt small" value="{$ACTIVITYDATA.parent_id}">
-										<input type="button" name="selectparent" class="crmButton small edit" value="Select" onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
+										<input type="button" name="selectparent" class="crmButton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL}" onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
+										<input type='button' value='del' class="crmButton small edit" onclick="document.EditView.del_actparent_rel.value=document.EditView.parent_id.value;document.EditView.parent_id.value='';document.EditView.parent_name.value='';">
 									</div>
 								</td>
 							</tr>
@@ -626,8 +628,14 @@ var gVTModule = '{$smarty.request.module}';
 								<td><b>{$APP.Contacts}</b></td>
 								<td colspan="2">
 									<input name="contactidlist" id="contactidlist" value="{$CONTACTSID}" type="hidden">
-									<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt" id='parentid'>{$CONTACTSNAME}</textarea>&nbsp;
-									<input type="button" onclick="selectContact('true','general',document.EditView);" class="crmButton small edit" name="selectcnt" value="Select Contacts">
+									<input name="deletecntlist" id="deletecntlist" type="hidden">
+									<select name="contactlist" size=5  style="height: 100px;width: 300px"  id="parentid" class="small" multiple>
+									{$CONTACTSNAME}	
+									</select>  	 
+	
+									<input type="button" onclick="selectContact('true','general',document.EditView);" class="crmButton small edit" name="selectcnt" value="{$APP.LBL_SELECT_CONTACT_BUTTON_LABEL}">
+									<input type='button' value='del' class="crmButton small edit" onclick='removeActContacts();'>
+							
 								</td>
 							</tr>
 						</table>
@@ -640,13 +648,13 @@ var gVTModule = '{$smarty.request.module}';
 		<table border="0" cellpadding="5" cellspacing="0" width="100%">
 			<tr>
                         	<td class="cellLabel" width="20%" align="right"><b><font color="red">*</font>{$MOD.LBL_TODO}</b></td>
-                        	<td class="cellInfo" width="80%" align="left"><input name="subject" value="{$ACTIVITYDATA.subject|escape}" class="textbox" style="width: 70%;" type="text"></td>
+                        	<td class="cellInfo" width="80%" align="left"><input name="subject" value="{$ACTIVITYDATA.subject}" class="textbox" style="width: 70%;" type="text"></td>
            		</tr>
 			
 			<tr>
 				{if $LABEL.description != ''}
 				<td class="cellLabel" align="right"><b>{$LABEL.description}</b></td>
-				<td class="cellInfo" align="left"><textarea style="width: 90%; height: 60px;" name="description">{$ACTIVITYDATA.description|escape}</textarea>
+				<td class="cellInfo" align="left"><textarea style="width: 90%; height: 60px;" name="description">{$ACTIVITYDATA.description}</textarea>
 				{/if}
 				
 			</tr>
@@ -669,15 +677,13 @@ var gVTModule = '{$smarty.request.module}';
 							<td align="left" valign="top">
 								<select name="taskstatus" id="taskstatus" class=small>
                                         			{foreach item=arr from=$ACTIVITYDATA.taskstatus}
-                                        			{foreach key=sel_value item=value from=$arr}
-                                                			<option value="{$sel_value}" {$value}>
-                                                        		{if $MOD.$sel_value neq ''}
-                                                                		{$MOD.$sel_value}
-                                                        		{else}
-                                                                		{$sel_value}
-                                                        		{/if}
-                                                			</option>
-                                        			{/foreach}
+									 {if $arr[0] eq $APP.LBL_NOT_ACCESSIBLE}
+                                                                                        <option value="{$arr[0]}" {$arr[2]}>{$arr[0]}</option>
+                                                                         {else}
+                                                                                        <option value="{$arr[1]}" {$arr[2]}>
+                                                                                                        {$arr[0]}
+                                                                                         </option>
+                                                                         {/if}
                                         			{/foreach}
                                 				</select>
 							</td>
@@ -686,15 +692,13 @@ var gVTModule = '{$smarty.request.module}';
 							<td align="left" valign="top">
 								<select name="taskpriority" id="taskpriority" class=small>
         			                                {foreach item=arr from=$ACTIVITYDATA.taskpriority}
-                                			        {foreach key=sel_value item=value from=$arr}
-			                                                <option value="{$sel_value}" {$value}>
-                        		                                {if $MOD.$sel_value neq ''}
-                                        		                        {$MOD.$sel_value}
-                                                       			{else}
-                                                                		{$sel_value}
-                                                        		{/if}
-                                                			</option>
-                                        			{/foreach}
+								 {if $arr[0] eq $APP.LBL_NOT_ACCESSIBLE}
+                                                                                        <option value="{$arr[0]}" {$arr[2]}>{$arr[0]}</option>
+                                                                                        {else}
+                                                                                                <option value="{$arr[1]}" {$arr[2]}>
+                                                                                                        {$arr[0]}
+                                                                                                </option>
+                                                                                        {/if}
                                         			{/foreach}
                                 				</select>
 							</td>
@@ -796,15 +800,23 @@ var gVTModule = '{$smarty.request.module}';
 					</tr>
 				</table>
 				<br><br>
+		{if $LABEL.sendnotification neq '' || ($LABEL.parent_id neq '') || ($LABEL.contact_id neq '') }
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%" bgcolor="#FFFFFF">
 			<tr>
 				<td>
 					<table border="0" cellpadding="3" cellspacing="0" width="100%">
 						<tr>
 							<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
-							<td id="cellTabInvite" class="dvtSelectedCell" align="center" nowrap="nowrap"><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabRelatedto','off');Taskshow('addTaskAlarmUI','todo',document.EditView.date_start.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value);ghide('addTaskRelatedtoUI');">{$MOD.LBL_NOTIFICATION}</a></td>
+							{if $LABEL.sendnotification neq ''}
+                                                                {assign var='class_val' value='dvtUnSelectedCell'}
+								<td id="cellTabInvite" class="dvtSelectedCell" align="center" nowrap="nowrap"><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabRelatedto','off');Taskshow('addTaskAlarmUI','todo',document.EditView.date_start.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value);ghide('addTaskRelatedtoUI');">{$MOD.LBL_NOTIFICATION}</a></td>
+							{else}
+                                                                {assign var='class_val' value='dvtSelectedCell'}
+                                                        {/if}
 							<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
-                                                        <td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabRelatedto','on');Taskshow('addTaskRelatedtoUI','todo',document.EditView.date_start.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value);ghide('addTaskAlarmUI');">{$MOD.LBL_RELATEDTO}</a></td>
+							{if ($LABEL.parent_id neq '') || ($LABEL.contact_id neq '') }
+                                                        <td id="cellTabRelatedto" class={$class_val} align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabRelatedto','on');Taskshow('addTaskRelatedtoUI','todo',document.EditView.date_start.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value);ghide('addTaskAlarmUI');">{$MOD.LBL_RELATEDTO}</a></td>
+							{/if}
                                                         <td class="dvtTabCache" style="width:100%">&nbsp;</td>
 						</tr>
 
@@ -816,6 +828,7 @@ var gVTModule = '{$smarty.request.module}';
 			<!-- Reminder UI -->
 			<div id="addTaskAlarmUI" style="display: block; width: 100%;">
 			{if $LABEL.sendnotification != ''}
+				{assign var='vision' value='none'}
                 	<table>
 				<tr><td>{$LABEL.sendnotification}</td>
 					{if $ACTIVITYDATA.sendnotification eq 1}
@@ -829,15 +842,18 @@ var gVTModule = '{$smarty.request.module}';
                                 	{/if}
 				</tr>
 			</table>
-			{/if}
+			{else}
+                                {assign var='vision' value='block'}
+                        {/if}
 			</div>
-			<div id="addTaskRelatedtoUI" style="display:none;width:100%">
+			<div id="addTaskRelatedtoUI" style="display:{$vision};width:100%">
            		     <table width="100%" cellpadding="5" cellspacing="0" border="0">
 			     {if $LABEL.parent_id neq ''}
                 	     <tr>
                         	     <td><b>{$MOD.LBL_RELATEDTO}</b></td>
                                      <td>
 					<input name="parent_id" type="hidden" value="{$secondvalue.parent_id}">
+					<input name="del_actparent_rel" type="hidden" >
                                              <select name="parent_type" class="small" id="parent_type" onChange="document.EditView.parent_name.value='';document.EditView.parent_id.value=''">
 							{section name=combo loop=$LABEL.parent_id}
 								<option value="{$fldlabel_combo.parent_id[combo]}" {$fldlabel_sel.parent_id[combo]}>{$LABEL.parent_id[combo]}</option>
@@ -847,7 +863,8 @@ var gVTModule = '{$smarty.request.module}';
                                      <td>
                               	        <div id="taskrelatedto" align="left">
 						<input name="parent_name" readonly type="text" class="calTxt small" value="{$ACTIVITYDATA.parent_id}">
-						<input type="button" name="selectparent" class="crmButton small edit" value="Select" onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
+						<input type="button" name="selectparent" class="crmButton small edit" value="{$APP.LBL_SELECT}" onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
+						<input type='button' value='del' class="crmButton small edit" onclick="document.EditView.del_actparent_rel.value=document.EditView.parent_id.value;document.EditView.parent_id.value='';document.EditView.parent_name.value='';">
 					 </div>
                                      </td>
 			     </tr>
@@ -857,11 +874,14 @@ var gVTModule = '{$smarty.request.module}';
                                      <td><b>{$LABEL.contact_id}</b></td>
 				     <td colspan="2">
 						<input name="contact_name" id = "contact_name" readonly type="text" class="calTxt" value="{$ACTIVITYDATA.contact_id}"><input name="contact_id"  type="hidden" value="{$secondvalue.contact_id}">&nbsp;
-						<input type="button" onclick="selectContact('false','task',document.EditView);" class="crmButton small edit" name="selectcnt" value="Select Contact">
+						<input name="deletecntlist"  id="deletecntlist" type="hidden">
+						<input type="button" onclick="selectContact('false','task',document.EditView);" class="crmButton small edit" name="selectcnt" value="{$APP.LBL_SELECT}&nbsp;{$APP.SINGLE_Contacts}">
+						<input type='button' value='del' class="crmButton small edit" onclick='document.EditView.deletecntlist.value =document.EditView.contact_id.value;document.EditView.contact_name.value = "";document.EditView.contact_id.value="";'>
 				     </td>
                              </tr>
 			     {/if}
 		</table>
+		{/if}
               	</div>
                 </td></tr></table>
 
@@ -870,7 +890,7 @@ var gVTModule = '{$smarty.request.module}';
 			<tr>
 				<td  colspan=4 style="padding:5px">
 					<div align="center">
-                        	        	<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" {if $ACTIVITY_MODE neq 'Task'} onclick="this.form.action.value='Save';  displaydeleted();return maincheck_form();"{else} onclick="this.form.action.value='Save';  displaydeleted(); maintask_check_form();return formValidate();" {/if} type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+                        	        	<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save'; " type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
 						<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
 					</div>
 				</td>
@@ -881,6 +901,7 @@ var gVTModule = '{$smarty.request.module}';
 		</td></tr></table>
 		</td></tr></table>
 </td></tr>
+<input name='search_url' id="search_url" type='hidden' value='{$SEARCH}'>
 </form></table>
 </td></tr></table>
 </td></tr></table>

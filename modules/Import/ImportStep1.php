@@ -16,6 +16,9 @@ require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportOpportunity.php');
 require_once('modules/Import/ImportProduct.php');
 require_once('modules/Import/ImportMap.php');
+//Pavani: Import this file to Support Imports for Trouble tickets and vendors
+require_once('modules/Import/ImportTicket.php');
+require_once('modules/Import/ImportVendors.php');
 require_once('include/utils/CommonUtils.php');
 
 global $mod_strings;
@@ -30,7 +33,6 @@ $focus = 0;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info($mod_strings['LBL_MODULE_NAME'] . " Upload Step 1");
 
@@ -47,7 +49,9 @@ $import_object_array = Array(
 				"Accounts"=>"ImportAccount",
 				"Contacts"=>"ImportContact",
 				"Potentials"=>"ImportOpportunity",
-				"Products"=>"ImportProduct"
+				"Products"=>"ImportProduct",
+				"HelpDesk"=>"ImportTicket",
+                                "Vendors"=>"ImportVendors"
 			    );
 
 if(isset($_REQUEST['module']) && $_REQUEST['module'] != '')

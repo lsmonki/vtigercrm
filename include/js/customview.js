@@ -52,14 +52,20 @@ function validate() {
         if (!emptyCheck("fldLabel","Label","text"))
                 return false
 
-        var re1=/^[a-z\d\_ ]+$/i
-        if (!re1.test(str))
+        //var re1=/^[a-z\d\_ ]+$/i
+        /*if (!re1.test(str))
         {
                 alert(alert_arr.SPECIAL_CHARACTERS_NOT_ALLOWED)
                 return false;
+        }*/
+	//tested for special characters <,>,&,'," and :
+        var re2=/[&\<\>\:\'\"\,\_]/
+        if (re2.test(str))
+        {
+                alert(alert_arr.SPECIAL_CHARACTERS+" & < > ' \" : , _ "+alert_arr.NOT_ALLOWED)
+                return false;
         }
-
-        if (lengthLayer.style.visibility=="visible") {
+        if (lengthLayer != null && lengthLayer.style.visibility=="visible") {
                 if (!emptyCheck("fldLength","Length"))
                         return false
 
@@ -71,7 +77,7 @@ function validate() {
 
         }
 
-        if (decimalLayer.style.visibility=="visible") {
+        if (decimalLayer != null && decimalLayer.style.visibility=="visible") {
                 if (getObj("fldDecimal").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
                         if (!intValidate("fldDecimal","Decimal"))
                                 return false
@@ -81,17 +87,19 @@ function validate() {
                 if (!numConstComp("fldDecimal","Decimal","LE",30))
                         return false
         }
-	var decimallength = document.addtodb.fldDecimal.value;
+	var decimallength = '';
+	if (typeof(document.addtodb) != 'undefined' && typeof(document.addtodb.fldDecimal) != 'undefined')
+	      decimallength = document.addtodb.fldDecimal.value;
         if(fieldValueArr[fieldtype] == 'Percent' || fieldValueArr[fieldtype] == 'Currency' || fieldValueArr[fieldtype] == 'Number')
         {
                 if(decimallength == '')
                         decimallength = 0;
                 nummaxlength = 65 - (eval(decimallength) + 1);
         }
-        if (!numConstComp("fldLength","Length","LE",nummaxlength))
+        if (getObj("lengthdetails") != null && getObj("lengthdetails").style.visibility == "visible" && !numConstComp("fldLength","Length","LE",nummaxlength))
                 return false
 var picklistObj=getObj("fldPickList")
-        if (pickListLayer.style.visibility=="visible") {
+        if (pickListLayer != null && pickListLayer.style.visibility=="visible") {
                 if (emptyCheck("fldPickList","Picklist values"))        {
                         var pickListAry=new Array()
                         pickListAry=splitValues()
@@ -108,7 +116,7 @@ var picklistObj=getObj("fldPickList")
                         //Duplicate Values' Validation
                         for (i=0;i<pickListAry.length;i++) {
                                 for (j=i+1;j<pickListAry.length;j++) {
-                                        if (pickListAry[i]==pickListAry[j]) {
+                                        if (pickListAry[i].toUpperCase()==pickListAry[j].toUpperCase()) {
                                                 alert(alert_arr.DUPLICATE_VALUES_FOUND)
                                                 picklistObj.focus()
                                                 return false

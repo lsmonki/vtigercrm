@@ -90,7 +90,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 //the user might belong to multiple groups
 $log->info("User detail view");
@@ -120,7 +119,7 @@ if(isset($focus->imagename) && $focus->imagename!='')
 {
 	$imagestring="<div id='track1' style='margin: 4px 0pt 0pt 10px; width: 200px; background-image: url(themes/images/scaler_slider_track.gif); background-repeat: repeat-x; background-position: left center; height: 18px;'>
 	<div class='selected' id='handle1' style='width: 18px; height: 18px; position: relative; left: 145px;cursor:pointer;'><img src='themes/images/scaler_slider.gif'></div>
-	</div><script language='JavaScript' type='text/javascript' src='include/scriptaculous/prototype.js'></script>
+	</div>
 <script language='JavaScript' type='text/javascript' src='include/js/slider.js'></script>
 
 	<div class='scale-image' style='padding: 10px; float: left; width: 83.415px;'><img src='test/user/".$focus->imagename."' width='100%'</div>
@@ -194,13 +193,12 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 $smarty->assign("MODULE", 'Users');
 $smarty->assign("CURRENT_USERID", $current_user->id);
 $smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
+//Added to provide User based Tagcloud
+$smarty->assign("TAGCLOUDVIEW",getTagCloudView($focus->id));
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("USERNAME",$focus->last_name.' '.$focus->first_name);
-//added for email link in detailv view
-$querystr="SELECT fieldid FROM vtiger_field WHERE tabid=".getTabid($currentModule)." and uitype=104;";
-$queryres = $adb->query($querystr);
-$fieldid = $adb->query_result($queryres,0,'fieldid');
-$smarty->assign("FIELD_ID",$fieldid);
+$smarty->assign("HOUR_FORMAT",$focus->hour_format);
+$smarty->assign("START_HOUR",$focus->start_hour);
 
 //for check audittrail if it is enable or not
 $smarty->assign("AUDITTRAIL",$audit_trail);

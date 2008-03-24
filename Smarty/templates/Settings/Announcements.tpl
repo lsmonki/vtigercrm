@@ -28,7 +28,7 @@ function Announcement()
        		method: 'post',
 	        postBody: 'module=Settings&action=SettingsAjax&announcement='+announcement+'&announce_save=yes',
 	        onComplete: function(response) {
-					$("announcement").innerHTML=response.responseText;
+					$("announcement").value=response.responseText;
 					$("an_busy").style.display="none";
                         	}
 	        }

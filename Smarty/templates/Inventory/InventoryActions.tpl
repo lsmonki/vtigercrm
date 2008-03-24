@@ -59,33 +59,6 @@
 			<a href="javascript: document.DetailView.module.value='PurchaseOrder'; document.DetailView.action.value='EditView'; document.DetailView.return_module.value='Products'; document.DetailView.return_action.value='DetailView'; document.DetailView.return_id.value='{$ID}'; document.DetailView.parent_id.value='{$ID}'; document.DetailView.product_id.value='{$ID}'; document.DetailView.record.value=''; document.DetailView.submit();" class="webMnu">{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.PurchaseOrder}</a> 
 		</td>
 	   </tr>
-	   <!--
-	   <tr>
-		<td align="left" style="padding-left:10px;">
-			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="#" class="webMnu">List Pending Old Quotes</a> 
-		</td>
-	   </tr>
-	   <tr>
-		<td align="left" style="padding-left:10px;">
-			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="#" class="webMnu">List Pending Old Invoices</a> 
-		</td>
-	   </tr>
-	   <tr>
-		<td align="left" style="padding-left:10px;">
-			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="#" class="webMnu">List Pending Old SalesOrders</a> 
-		</td>
-	   </tr>
-	   <tr>
-		<td align="left" style="padding-left:10px;">
-			<img src="{$IMAGE_PATH}pointer.gif" hspace="5" align="absmiddle"/>
-			<a href="#" class="webMnu">List Pending Old PurchaseOrders</a> 
-		</td>
-	   </tr>
-	   -->
-	   <!-- Product Actions ends -->
 
 	{elseif $MODULE eq 'Vendors'}
 	   <!-- Vendors Actions starts -->
@@ -200,12 +173,20 @@
 
    <tr>
 	<td align="left" style="padding-left:10px;">
-		<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='{$MODULE}'; document.DetailView.action.value='{$export_pdf_action}'; document.DetailView.record.value='{$ID}'; document.DetailView.return_id.value='{$ID}'; document.DetailView.submit();" class="
-webMnu"><img src="{$IMAGE_PATH}actionGeneratePDF.gif" hspace="5" align="absmiddle" border="0"/></a>
-		<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='{$MODULE}'; document.DetailView.action.value='{$export_pdf_action}'; document.DetailView.record.value='{$ID}'; document.DetailView.return_id.value='{$ID}'; document.DetailView.submit();" class="webMnu">{$APP.LBL_EXPORT_TO_PDF}</a> 
+		<a href="index.php?module={$MODULE}&action={$export_pdf_action}&return_module={$MODULE}&return_action=DetailView&record={$ID}&return_id={$ID}" class="webMnu"><img src="{$IMAGE_PATH}actionGeneratePDF.gif" hspace="5" align="absmiddle" border="0"/></a>
+                <a href="index.php?module={$MODULE}&action={$export_pdf_action}&return_module={$MODULE}&return_action=DetailView&record={$ID}&return_id={$ID}" class="webMnu">{$APP.LBL_EXPORT_TO_PDF}</a>
 	</td>
    </tr>
 
+{if $MODULE eq 'Invoice'}
+<!-- Added to give link to  send Invoice PDF through mail -->
+ <tr>
+	<td align="left" style="padding-left:10px;">
+		<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='{$MODULE}'; document.DetailView.action.value='SendPDFMail'; document.DetailView.record.value='{$ID}'; document.DetailView.return_id.value='{$ID}'; sendpdf_submit();" class="webMnu"><img src="{$IMAGE_PATH}PDFMail.gif" hspace="5" align="absmiddle" border="0"/></a>
+		<a href="javascript: document.DetailView.return_module.value='{$MODULE}'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='{$MODULE}'; document.DetailView.action.value='SendPDFMail'; document.DetailView.record.value='{$ID}'; document.DetailView.return_id.value='{$ID}'; sendpdf_submit();" class="webMnu">{$APP.LBL_SEND_EMAIL_PDF}</a> 
+	</td>
+   </tr>
+{/if}
 {/if}
 <!-- To display the Export To PDF link for PO, SO, Quotes and Invoice - ends -->
 
@@ -233,6 +214,14 @@ webMnu"><img src="{$IMAGE_PATH}actionGeneratePDF.gif" hspace="5" align="absmiddl
 
 
 </table>
-
+{literal}
+<script>
+function sendpdf_submit()
+{
+	document.DetailView.submit();
+	OpenCompose('','Invoice');
+}
+</script>
+{/literal}
 
 {/if}

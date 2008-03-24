@@ -20,7 +20,7 @@ require_once('user_privileges/default_module_view.php');
 class PriceBooks extends CRMEntity {
 	var $log;
 	var $db;
-
+	var $table_name = "vtiger_pricebook";
 	var $tab_name = Array('vtiger_crmentity','vtiger_pricebook','vtiger_pricebookcf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_pricebook'=>'pricebookid','vtiger_pricebookcf'=>'pricebookid');
 	var $column_fields = Array();
@@ -127,12 +127,12 @@ class PriceBooks extends CRMEntity {
 		$log->debug("Entering get_pricebook_noproduct(".$id.") method ...");
 		 
 		$query = "select vtiger_crmentity.crmid, vtiger_pricebook.* from vtiger_pricebook inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_pricebook.pricebookid where vtiger_crmentity.deleted=0";
-		$result = $this->db->query($query);
+		$result = $this->db->pquery($query, array());
 		$no_count = $this->db->num_rows($result);
 		if($no_count !=0)
 		{
-       	 		$pb_query = 'select vtiger_crmentity.crmid, vtiger_pricebook.pricebookid,vtiger_pricebookproductrel.productid from vtiger_pricebook inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_pricebook.pricebookid inner join vtiger_pricebookproductrel on vtiger_pricebookproductrel.pricebookid=vtiger_pricebook.pricebookid where vtiger_crmentity.deleted=0 and vtiger_pricebookproductrel.productid='.$id;
-			$result_pb = $this->db->query($pb_query);
+       	 	$pb_query = 'select vtiger_crmentity.crmid, vtiger_pricebook.pricebookid,vtiger_pricebookproductrel.productid from vtiger_pricebook inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_pricebook.pricebookid inner join vtiger_pricebookproductrel on vtiger_pricebookproductrel.pricebookid=vtiger_pricebook.pricebookid where vtiger_crmentity.deleted=0 and vtiger_pricebookproductrel.productid=?';
+			$result_pb = $this->db->pquery($pb_query, array($id));
 			if($no_count == $this->db->num_rows($result_pb))
 			{
 				$log->debug("Exiting get_pricebook_noproduct method ...");

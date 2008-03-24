@@ -36,6 +36,11 @@ $log->debug("Inside Sales Order EditView");
 
 $focus = new SalesOrder();
 $smarty = new vtigerCRM_Smarty();
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
+
 $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);
 $rate = $rate_symbol['rate'];
@@ -52,6 +57,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 
 	//Added to display the Quotes's associated vtiger_products -- when we create SO from Quotes DetailView 
 	$associated_prod = getAssociatedProducts("Quotes",$quote_focus);
+	$smarty->assign("CONVERT_MODE", $_REQUEST['convertmode']);
 	$smarty->assign("QUOTE_ID", $quoteid);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("MODE", $quote_focus->mode);
@@ -137,6 +143,7 @@ else
 }
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
+	$smarty->assign("DUPLICATE_FROM", $focus->id);
 	$SO_associated_prod = getAssociatedProducts("SalesOrder",$focus);
 	$focus->id = "";
     	$focus->mode = ''; 	
@@ -160,12 +167,15 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
 }
 
 // Get Account address if vtiger_account is given
-if(isset($_REQUEST['account_id']) && $_REQUEST['record']=='' && $_REQUEST['account_id'] != ''){
+if((isset($_REQUEST['account_id'])) && ($_REQUEST['record']=='') && ($_REQUEST['account_id'] != '') && ($_REQUEST['convertmode'] != 'update_quote_val')){
 	require_once('modules/Accounts/Accounts.php');
 	$acct_focus = new Accounts();
 	$acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
 	$focus->column_fields['bill_city']=$acct_focus->column_fields['bill_city'];
 	$focus->column_fields['ship_city']=$acct_focus->column_fields['ship_city'];
+	//added to fix the issue 4526
+	$focus->column_fields['bill_pobox']=$acct_focus->column_fields['bill_pobox'];
+	$focus->column_fields['ship_pobox']=$acct_focus->column_fields['ship_pobox'];
 	$focus->column_fields['bill_street']=$acct_focus->column_fields['bill_street'];
 	$focus->column_fields['ship_street']=$acct_focus->column_fields['ship_street'];
 	$focus->column_fields['bill_state']=$acct_focus->column_fields['bill_state'];
@@ -211,8 +221,6 @@ $smarty->assign("APP", $app_strings);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Order view");
 
@@ -285,16 +293,21 @@ $smarty->assign("ID", $focus->id);
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
+
 //if create SO, get all available product taxes and shipping & Handling taxes
+
 if($focus->mode != 'edit')
 {
 	$tax_details = getAllTaxes('available');
 	$sh_tax_details = getAllTaxes('available','sh');
-
-	$smarty->assign("GROUP_TAXES",$tax_details);
-	$smarty->assign("SH_TAXES",$sh_tax_details);
 }
-
+else
+{
+	$tax_details = getAllTaxes('available','',$focus->mode,$focus->id);
+	$sh_tax_details = getAllTaxes('available','sh','edit',$focus->id);
+}
+$smarty->assign("GROUP_TAXES",$tax_details);
+$smarty->assign("SH_TAXES",$sh_tax_details);
 
 
  $tabid = getTabid("SalesOrder");

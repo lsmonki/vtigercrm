@@ -41,8 +41,8 @@ if(isset($_REQUEST['record']))
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
 	$log->info("Entity info successfully retrieved for DetailView.");
 	$focus->id = $_REQUEST['record'];
-	$query = 'select email_flag,from_email,to_email,cc_email,bcc_email from vtiger_emaildetails where emailid ='.$focus->id;
-	$result = $adb->query($query);
+	$query = 'select email_flag,from_email,to_email,cc_email,bcc_email from vtiger_emaildetails where emailid = ?';
+	$result = $adb->pquery($query, array($focus->id));
     	$smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
 	$to_email = ereg_replace('###',', ',$adb->query_result($result,0,'to_email'));
 	$smarty->assign('TO_MAIL',to_html($to_email));	
@@ -108,7 +108,6 @@ elseif (is_null($focus->parent_type))
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Email detail view");
 

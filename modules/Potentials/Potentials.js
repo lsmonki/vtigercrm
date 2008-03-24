@@ -26,22 +26,39 @@ function add_data_to_relatedlist(entity_id,recordid)
 	opener.document.location.href="index.php?module=Emails&action=updateRelations&destination_module=Contacts&entityid="+entity_id+"&parid="+recordid;
 }
 function set_return_address(potential_id, potential_name, account_id, account_name, bill_street, ship_street, bill_city, ship_city, bill_state, ship_state, bill_code, ship_code, bill_country, ship_country,bill_pobox,ship_pobox) {
-        window.opener.document.EditView.potential_name.value = potential_name;
-        window.opener.document.EditView.potential_id.value = potential_id;
-        window.opener.document.EditView.account_name.value = account_name;
-        window.opener.document.EditView.account_id.value = account_id;
-        window.opener.document.EditView.bill_street.value = bill_street;
-        window.opener.document.EditView.ship_street.value = ship_street;
-        window.opener.document.EditView.bill_city.value = bill_city;
-        window.opener.document.EditView.ship_city.value = ship_city;
-        window.opener.document.EditView.bill_state.value = bill_state;
-        window.opener.document.EditView.ship_state.value = ship_state;
-        window.opener.document.EditView.bill_code.value = bill_code;
-        window.opener.document.EditView.ship_code.value = ship_code;
-        window.opener.document.EditView.bill_country.value = bill_country;
-        window.opener.document.EditView.ship_country.value = ship_country;
-        window.opener.document.EditView.bill_pobox.value = bill_pobox;
-        window.opener.document.EditView.ship_pobox.value = ship_pobox;
+
+	if(typeof(window.opener.document.EditView.potential_name) != 'undefined')
+                window.opener.document.EditView.potential_name.value = potential_name;
+        if(typeof(window.opener.document.EditView.potential_id) != 'undefined')
+                window.opener.document.EditView.potential_id.value = potential_id;
+	if(typeof(window.opener.document.EditView.account_name) != 'undefined')
+                window.opener.document.EditView.account_name.value = account_name;
+        if(typeof(window.opener.document.EditView.account_id) != 'undefined')
+                window.opener.document.EditView.account_id.value = account_id;
+        if(typeof(window.opener.document.EditView.bill_street) != 'undefined')
+                window.opener.document.EditView.bill_street.value = bill_street;
+        if(typeof(window.opener.document.EditView.ship_street) != 'undefined')
+                window.opener.document.EditView.ship_street.value = ship_street;
+        if(typeof(window.opener.document.EditView.bill_city) != 'undefined')
+                window.opener.document.EditView.bill_city.value = bill_city;
+        if(typeof(window.opener.document.EditView.ship_city) != 'undefined')
+                window.opener.document.EditView.ship_city.value = ship_city;
+        if(typeof(window.opener.document.EditView.bill_state) != 'undefined')
+                window.opener.document.EditView.bill_state.value = bill_state;
+        if(typeof(window.opener.document.EditView.ship_state) != 'undefined')
+                window.opener.document.EditView.ship_state.value = ship_state;
+        if(typeof(window.opener.document.EditView.bill_code) != 'undefined')
+                window.opener.document.EditView.bill_code.value = bill_code;
+        if(typeof(window.opener.document.EditView.ship_code) != 'undefined')
+                window.opener.document.EditView.ship_code.value = ship_code;
+        if(typeof(window.opener.document.EditView.bill_country) != 'undefined')
+                window.opener.document.EditView.bill_country.value = bill_country;
+        if(typeof(window.opener.document.EditView.ship_country) != 'undefined')
+                window.opener.document.EditView.ship_country.value = ship_country;
+        if(typeof(window.opener.document.EditView.bill_pobox) != 'undefined')
+                window.opener.document.EditView.bill_pobox.value = bill_pobox;
+        if(typeof(window.opener.document.EditView.ship_pobox) != 'undefined')
+                window.opener.document.EditView.ship_pobox.value = ship_pobox;
 }
 
 function set_return_todo(product_id, product_name) {

@@ -12,21 +12,23 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 $inv_type='Inventory';
-$inv_tandc=addslashes($_REQUEST['inventory_tandc']);
+$inv_tandc=from_html($_REQUEST['inventory_tandc']);
 
-$sql="select * from vtiger_inventory_tandc where type='".$inv_type."'";
-$result = $adb->query($sql);
+$sql="select * from vtiger_inventory_tandc where type=?";
+$result = $adb->pquery($sql, array($inv_type));
 $inv_id = $adb->query_result($result,0,'id');
 if($inv_id == '')
 {
-        $inv_id=$adb->getUniqueID('vtiger_inventory_tandc');
-        $sql="insert into vtiger_inventory_tandc values( '".$inv_id ."','".$inv_type."','". $inv_tandc."')";
+	$inv_id=$adb->getUniqueID('vtiger_inventory_tandc');
+    $sql="insert into vtiger_inventory_tandc values(?,?,?)";
+	$params = array($inv_id, $inv_type, $inv_tandc);
 }
 else
 {
-	$sql="update vtiger_inventory_tandc set type = '".$inv_type."', tandc = '".$inv_tandc."' where id = ".$inv_id;
+	$sql="update vtiger_inventory_tandc set type = ?, tandc = ? where id = ?";
+	$params = array($inv_type, $inv_tandc, $inv_id);
 }
-$adb->query($sql);
+$adb->pquery($sql, $params);
 
 header("Location: index.php?module=Settings&action=OrganizationTermsandConditions&parenttab=Settings");
 ?>

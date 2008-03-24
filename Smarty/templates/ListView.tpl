@@ -13,7 +13,6 @@
 -->*}
 
 {*<!-- module header -->*}
-<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/search.js"></script>
 <script language="javascript" type="text/javascript">
@@ -28,16 +27,16 @@ typeofdata['C'] = ['is','isn'];
 typeofdata['DT'] = ['is','isn','lst','grt','lsteq','grteq'];
 typeofdata['D'] = ['is','isn','lst','grt','lsteq','grteq'];
 var fLabels = new Array();
-fLabels['is'] = '{$APP.is}';
-fLabels['isn'] = '{$APP.is_not}';
-fLabels['bwt'] = '{$APP.begins_with}';
-fLabels['ewt'] = '{$APP.ends_with}';
-fLabels['cts'] = '{$APP.contains}';
-fLabels['dcts'] = '{$APP.does_not_contains}';
-fLabels['lst'] = '{$APP.less_than}';
-fLabels['grt'] = '{$APP.greater_than}';
-fLabels['lsteq'] = '{$APP.less_or_equal}';
-fLabels['grteq'] = '{$APP.greater_or_equal}';
+fLabels['is'] = "{$APP.is}";
+fLabels['isn'] = "{$APP.is_not}";
+fLabels['bwt'] = "{$APP.begins_with}";
+fLabels['ewt'] = "{$APP.ends_with}";
+fLabels['cts'] = "{$APP.contains}";
+fLabels['dcts'] = "{$APP.does_not_contains}";
+fLabels['lst'] = "{$APP.less_than}";
+fLabels['grt'] = "{$APP.greater_than}";
+fLabels['lsteq'] = "{$APP.less_or_equal}";
+fLabels['grteq'] = "{$APP.greater_or_equal}";
 var noneLabel;
 {literal}
 function trimfValues(value)
@@ -118,9 +117,6 @@ function updatefOptions(sel, opSelName) {
 }
 {/literal}
 </script>
-{if $MODULE eq 'Contacts'}
-<div id="dynloadarea" style="z-index:100000001;float:left;position:absolute;left:350px;top:150px;"></div>
-{/if}
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script language="javascript">
 function checkgroup()
@@ -146,11 +142,13 @@ function callSearch(searchtype)
     	{rdelim}
     	gPopupAlphaSearchUrl = '';
 	search_fld_val= $('bas_searchfield').options[$('bas_searchfield').selectedIndex].value;
-        search_txt_val=document.basicSearch.search_text.value;
+	search_txt_val= encodeURIComponent(document.basicSearch.search_text.value);
         var urlstring = '';
         if(searchtype == 'Basic')
         {ldelim}
+        		var p_tab = document.getElementsByName("parenttab");
                 urlstring = 'search_field='+search_fld_val+'&searchtype=BasicSearch&search_text='+search_txt_val+'&';
+                urlstring = urlstring + 'parenttab='+p_tab[0].value+ '&';
         {rdelim}
         else if(searchtype == 'Advanced')
         {ldelim}
@@ -160,9 +158,11 @@ function callSearch(searchtype)
                         var sfld_name = getObj("Fields"+jj);
                         var scndn_name= getObj("Condition"+jj);
                         var srchvalue_name = getObj("Srch_value"+jj);
+                        var p_tab = document.getElementsByName("parenttab");
                         urlstring = urlstring+'Fields'+jj+'='+sfld_name[sfld_name.selectedIndex].value+'&';
                         urlstring = urlstring+'Condition'+jj+'='+scndn_name[scndn_name.selectedIndex].value+'&';
-                        urlstring = urlstring+'Srch_value'+jj+'='+srchvalue_name.value+'&';
+			urlstring = urlstring+'Srch_value'+jj+'='+encodeURIComponent(srchvalue_name.value)+'&';
+                        urlstring = urlstring + 'parenttab='+p_tab[0].value+ '&';
                 {rdelim}
                 for (i=0;i<getObj("matchtype").length;i++){ldelim}
                         if (getObj("matchtype")[i].checked==true)
@@ -175,7 +175,7 @@ function callSearch(searchtype)
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
 			method: 'post',
-			postBody:urlstring +'query=true&file=index&module={$MODULE}&action={$MODULE}Ajax&ajax=true',
+			postBody:urlstring +'query=true&file=index&module={$MODULE}&action={$MODULE}Ajax&ajax=true&search=true',
 			onComplete: function(response) {ldelim}
 				$("status").style.display="none";
                                 result = response.responseText.split('&#&#&#');
@@ -202,7 +202,7 @@ function alphabetic(module,url,dataid)
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
 			method: 'post',
-			postBody: 'module='+module+'&action='+module+'Ajax&file=index&ajax=true&'+url,
+			postBody: 'module='+module+'&action='+module+'Ajax&file=index&ajax=true&search=true&'+url,
 			onComplete: function(response) {ldelim}
 				$("status").style.display="none";
 				result = response.responseText.split('&#&#&#');
@@ -441,6 +441,7 @@ function ajaxChangeStatus(statusname)
 	$("status").style.display="inline";
 	var viewid = document.getElementById('viewname').options[document.getElementById('viewname').options.selectedIndex].value;
 	var idstring = document.getElementById('idlist').value;
+	var searchurl= document.getElementById('search_url').value;
 	var tplstart='&';
 	if(gstart!='')
 	{
@@ -450,7 +451,7 @@ function ajaxChangeStatus(statusname)
 	{
 		fninvsh('changestatus');
 		var url='&leadval='+document.getElementById('lead_status').options[document.getElementById('lead_status').options.selectedIndex].value;
-		var urlstring ="module=Users&action=updateLeadDBStatus&return_module=Leads"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring;
+		var urlstring ="module=Users&action=updateLeadDBStatus&return_module=Leads"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring+searchurl;
 	}
 	else if(statusname == 'owner')
 	{
@@ -459,7 +460,7 @@ function ajaxChangeStatus(statusname)
 		    fninvsh('changeowner');
 		    var url='&user_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
 		    {/literal}
-		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring;
+		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring+searchurl;
 		    {literal}
      }
     else
@@ -467,7 +468,7 @@ function ajaxChangeStatus(statusname)
         fninvsh('changeowner');
 		    var url='&group_id='+document.getElementById('lead_group_owner').options[document.getElementById('lead_group_owner').options.selectedIndex].value;
 	       {/literal}
-		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring;
+		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring+searchurl;
         {literal}
     }
 	}
@@ -494,11 +495,56 @@ function ajaxChangeStatus(statusname)
 {if $MODULE eq 'Contacts'}
 {literal}
 <script>
-function modifyimage(divid,imagename)
+function modifyimage(imagename)
 {
-    document.getElementById('dynloadarea').innerHTML = '<img width="260" height="200" src="'+imagename+'" class="thumbnail">';
-    show(divid);
+	imgArea = getObj('dynloadarea');
+        if(!imgArea)
+        {
+                imgArea = document.createElement("div");
+                imgArea.id = 'dynloadarea';
+                imgArea.setAttribute("style","z-index:100000001;");
+                imgArea.style.position = 'absolute';
+                imgArea.innerHTML = '<img width="260" height="200" src="'+imagename+'" class="thumbnail">';
+		document.body.appendChild(imgArea);
+        }
+	PositionDialogToCenter(imgArea.id);
 }
+
+function PositionDialogToCenter(ID)
+{
+       var vpx,vpy;
+       if (self.innerHeight) // Mozilla, FF, Safari and Opera
+       {
+               vpx = self.innerWidth;
+               vpy = self.innerHeight;
+       }
+       else if (document.documentElement && document.documentElement.clientHeight) //IE
+
+       {
+               vpx = document.documentElement.clientWidth;
+               vpy = document.documentElement.clientHeight;
+       }
+       else if (document.body) // IE
+       {
+               vpx = document.body.clientWidth;
+               vpy = document.body.clientHeight;
+       }
+
+       //Calculate the length from top, left
+       dialogTop = (vpy/2 - 280/2) + document.documentElement.scrollTop;
+       dialogLeft = (vpx/2 - 280/2);
+
+       //Position the Dialog to center
+       $(ID).style.top = dialogTop+"px";
+       $(ID).style.left = dialogLeft+"px";
+       $(ID).style.display="block";
+}
+
+function removeDiv(ID){
+        var node2Rmv = getObj(ID);
+        if(node2Rmv){node2Rmv.parentNode.removeChild(node2Rmv);}
+}
+
 </script>
 {/literal}
 {/if}

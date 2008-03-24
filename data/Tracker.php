@@ -67,28 +67,31 @@ class Tracker {
       $this->delete_history($user_id, $item_id);
       global $log;
 $log->info("in  track view method ".$current_module);
-        // Add a new item to the user's list
-
-        $esc_item_id = addslashes($item_id);
         
 //No genius required. Just add an if case and change the query so that it puts the tracker entry whenever you touch on the DetailView of the required entity
          //get the first name and last name from the respective modules
 	 if($current_module != '')
 	 {
-		 $query = "select fieldname,tablename,entityidfield from vtiger_entityname where modulename = '$current_module'";
-		 $result = $adb->query($query);
+		 $query = "select fieldname,tablename,entityidfield from vtiger_entityname where modulename = ?";
+		 $result = $adb->pquery($query, array($current_module));
 		 $fieldsname = $adb->query_result($result,0,'fieldname');
 		 $tablename = $adb->query_result($result,0,'tablename'); 
 		 $entityidfield = $adb->query_result($result,0,'entityidfield'); 
 		 if(!(strpos($fieldsname,',') === false))
 		 {
+			 // concatenate multiple fields with an whitespace between them
 			 $fieldlists = explode(',',$fieldsname);
-			 $fieldsname = "concat(";
-			 $fieldsname = $fieldsname.implode(",' ',",$fieldlists);
-			 $fieldsname = $fieldsname.")";
+			 $fl = array();
+			 foreach($fieldlists as $w => $c)
+			 {
+				 if (count($fl))
+				 	$fl[] = "' '";
+				 $fl[] = $c;
+			 }
+			 $fieldsname = $adb->sql_concat($fl);
 		 }	
-		 $query1 = "select $fieldsname as entityname from $tablename where $entityidfield =" .$item_id; 
-		 $result = $adb->query($query1);
+		 $query1 = "select $fieldsname as entityname from $tablename where $entityidfield = ?"; 
+		 $result = $adb->pquery($query1, array($item_id));
 		 $item_summary = $adb->query_result($result,0,'entityname');
 		 if(strlen($item_summary) > 30)
 	     {
@@ -97,11 +100,12 @@ $log->info("in  track view method ".$current_module);
 	 }
 	 
 	 #if condition added to skip vtiger_faq in last viewed history
-          $query = "INSERT into $this->table_name (user_id, module_name, item_id, item_summary) values ('$user_id', '$current_module', '$esc_item_id', ".$this->db->formatString($this->table_name,'item_summary',$item_summary).")";
+	      $query = "INSERT into $this->table_name (user_id, module_name, item_id, item_summary) values (?,?,?,?)";
+		  $qparams = array($user_id, $current_module, $item_id, $item_summary);
           
           $this->log->info("Track Item View: ".$query);
           
-          $this->db->query($query, true);
+          $this->db->pquery($query, $qparams, true);
           
           
           $this->prune_history($user_id);
@@ -122,9 +126,9 @@ $log->info("in  track view method ".$current_module);
     	}
 
 //        $query = "SELECT * from $this->table_name WHERE user_id='$user_id' ORDER BY id DESC";
-	$query = "SELECT * from $this->table_name inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_tracker.item_id WHERE user_id='$user_id' and vtiger_crmentity.deleted=0 ORDER BY id DESC";
+	$query = "SELECT * from $this->table_name inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_tracker.item_id WHERE user_id=? and vtiger_crmentity.deleted=0 ORDER BY id DESC";
         $this->log->debug("About to retrieve list: $query");
-        $result = $this->db->query($query, true);
+        $result = $this->db->pquery($query, array($user_id), true);
         $list = Array();
         while($row = $this->db->fetchByAssoc($result, -1, false))
         {
@@ -176,8 +180,8 @@ $log->info("in  track view method ".$current_module);
      */
     function delete_history( $user_id, $item_id)
     {
-        $query = "DELETE from $this->table_name WHERE user_id='$user_id' and item_id='$item_id'";
-       $this->db->query($query, true);
+        $query = "DELETE from $this->table_name WHERE user_id=? and item_id=?";
+       	$this->db->pquery($query, array($user_id, $item_id), true);
     }
 
     /**
@@ -188,8 +192,8 @@ $log->info("in  track view method ".$current_module);
      */
     function delete_item_history($item_id)
     {
-        $query = "DELETE from $this->table_name WHERE item_id='$item_id'";
-       $this->db->query($query, true);
+        $query = "DELETE from $this->table_name WHERE item_id=?";
+       $this->db->pquery($query, array($item_id), true);
 
     }
 
@@ -221,10 +225,10 @@ $log->info("in  track view method ".$current_module);
             $result =  $this->db->limitQuery($query,0,1);
 
             $oldest_item = $this->db->fetchByAssoc($result, -1, false);
-            $query = "DELETE from $this->table_name WHERE id='{$oldest_item['id']}'";
+            $query = "DELETE from $this->table_name WHERE id=?";
             $this->log->debug("About to delete oldest item: ");
 
-            $result = $this->db->query($query, true);
+            $result = $this->db->pquery($query, array($oldest_item['id']), true);
 
 
             $count--;

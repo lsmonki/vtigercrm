@@ -248,7 +248,8 @@ function patternValidate(fldName,fldLabel,type) {
 	{
 		/*changes made to fix -- ticket#3278 & ticket#3461
 		  var re=new RegExp(/^.+@.+\..+$/)*/
-		var re=new RegExp(/^[a-z0-9]([a-z0-9_\-\.]*)@([a-z0-9_\-\.]*)(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/)
+		//Changes made to fix tickets #4633, #5111  to accomodate all possible email formats
+		var re=new RegExp(/^[a-zA-Z0-9]+([\_\-\.]*[a-zA-Z0-9]+[\_\-]?)*@[a-zA-Z0-9]+([\_\-]?[a-zA-Z0-9]+)*\.+([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/)
 	}
 
 	if (type.toUpperCase()=="DATE") {//DATE validation 
@@ -277,7 +278,8 @@ function patternValidate(fldName,fldLabel,type) {
 	if (type.toUpperCase()=="TIME") {//TIME validation
 		var re = /^\d{1,2}\:\d{1,2}$/
 	}
-	
+	//Asha: Remove spaces on either side of a Email id before validating
+	if (type.toUpperCase()=="EMAIL") currObj.value = trim(currObj.value);	
 	if (!re.test(currObj.value)) {
 		alert(alert_arr.ENTER_VALID + fldLabel)
 		currObj.focus()
@@ -598,13 +600,39 @@ function timeComparison(fldName1,fldLabel1,fldName2,fldLabel2,type) {
 
 	var time1=new Date()
 	var time2=new Date()		
-	
+
+	//added to fix the ticket #5028
+	if(fldName1 == "time_end" && (getObj("due_date") && getObj("date_start")))
+	{
+		var due_date=getObj("due_date").value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+		var start_date=getObj("date_start").value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+		dateval1 = splitDateVal(due_date);
+		dateval2 = splitDateVal(start_date);
+		
+		dd1 = dateval1[0];
+		mm1 = dateval1[1];
+		yyyy1 = dateval1[2];
+
+		dd2 = dateval2[0];
+		mm2 = dateval2[1];
+		yyyy2 = dateval2[2];
+		
+		time1.setYear(yyyy1)
+		time1.setMonth(mm1-1)
+		time1.setDate(dd1)
+		
+		time2.setYear(yyyy2)
+		time2.setMonth(mm2-1)
+		time2.setDate(dd2)
+		
+	}
+	//end
+
 	time1.setHours(hh1)
 	time1.setMinutes(min1)
 	
 	time2.setHours(hh2)
 	time2.setMinutes(min2)
-
 	if (type!="OTH") {	
 		if (!compareDates(time1,fldLabel1,time2,fldLabel2,type)) {
 			getObj(fldName1).focus()
@@ -651,6 +679,15 @@ function numValidate(fldName,fldLabel,format,neg) {
 	   var splitval=val.split(".")
 	   var arr_len = splitval.length;
            var len = 0;
+	   //added to fix the issue4242 
+	   /*if(fldName == 'unit_price') 
+	   { 
+	   	if(splitval[0] == '' && arr_len > 1)
+                 {
+                         splitval[0] = '0';
+                         val = splitval[0]+val;
+                }
+	   }*/	
 	   if(fldName == "probability" || fldName == "commissionrate")
            {
                    if(arr_len > 1)
@@ -661,7 +698,7 @@ function numValidate(fldName,fldLabel,format,neg) {
                         getObj(fldName).focus()
                         return false
                    }
-                   else if(splitval[0] > 100 || len > 3)
+                   else if(splitval[0] > 100 || len > 3 || (splitval[0] >= 100 && splitval[1] > 0))
                    {
                         alert( fldLabel + alert_arr.EXCEEDS_MAX);
                         return false;
@@ -675,9 +712,9 @@ function numValidate(fldName,fldLabel,format,neg) {
 
 
        if (neg==true)
-           var re=/^(-|)\d+(\.\d\d*)*$/
+           var re=/^(-|)(\d)*(\.)?\d+(\.\d\d*)*$/
        else
-           var re=/^\d+(\.\d\d*)*$/
+	   var re=/^(\d)*(\.)?\d+(\.\d\d*)*$/
    }
 
 	//for precision check. ie.number must contains only one "."	
@@ -771,34 +808,61 @@ function numConstComp(fldName,fldLabel,type,constval) {
 	} else return true;
 }
 
+/* To get only filename from a given complete file path */
+function getFileNameOnly(filename) {
+  var onlyfilename = filename;
+  // Normalize the path (to make sure we use the same path separator)
+  var filename_normalized = filename.replace(/\\/g, '/');
+  if(filename_normalized.lastIndexOf("/") != -1) {
+    onlyfilename = filename_normalized.substring(filename_normalized.lastIndexOf("/") + 1);
+  }
+  return onlyfilename;
+}
+
+/* Function to validate the filename */
+function validateFilename(form_ele) {
+        if (form_ele.value == '') return true;
+        var value = getFileNameOnly(form_ele.value);
+
+        // Color highlighting logic
+        var err_bg_color = "#FFAA22";
+
+        if (typeof(form_ele.bgcolor) == "undefined") {
+                form_ele.bgcolor = form_ele.style.backgroundColor;
+        }
+
+        // Validation starts here
+        var valid = true;
+
+        /* Filename length is constrained to 255 at database level */
+        if (value.length > 255) {
+                alert(alert_arr.LBL_FILENAME_LENGTH_EXCEED_ERR);
+                valid = false;
+        }
+
+        if (!valid) {
+                form_ele.style.backgroundColor = err_bg_color;
+                return false;
+        }
+        form_ele.style.backgroundColor = form_ele.bgcolor;
+        form_ele.form[form_ele.name + '_hidden'].value = value;
+        return true;
+}
+
 function formValidate() {
 
 //Validation for Portal User
 if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 {
-	if(getObj('portal').checked && trim(getObj('email').value) == '')   {
+	//if existing portal value = 0, portal checkbox = checked, ( email field is not available OR  email is empty ) then we should not allow -- OR --
+	//if existing portal value = 1, portal checkbox = checked, ( email field is available     AND email is empty ) then we should not allow
+	if((getObj('existing_portal').value == 0 && getObj('portal').checked && (getObj('email') == null || trim(getObj('email').value) == '')) ||
+	    getObj('existing_portal').value == 1 && getObj('portal').checked && getObj('email') != null && trim(getObj('email').value) == '')
+	{
 		alert(alert_arr.PORTAL_PROVIDE_EMAILID);
 		return false;
 	}
 }
-if(gVTModule == 'Contacts')
-{
-	if(getObj('imagename').value != '' )
-	{
-		var image_arr = new Array();
-		image_arr = (getObj('imagename').value).split(".");
-		if((image_arr[1] ==  "jpeg") || (image_arr[1] ==  "png") || (image_arr[1] ==  "jpg") || (image_arr[1] ==  "pjpeg") || (image_arr[1] ==  "x-png") || (image_arr[1] ==  "gif") )
-		{
-			return true;
-		}
-		else
-		{
-			alert(alert_arr.LBL_WRONG_IMAGE_TYPE);
-			return false;
-		}
-	}
-}
-
 
 	for (var i=0; i<fieldname.length; i++) {
 		if(getObj(fieldname[i]) != null)
@@ -882,15 +946,13 @@ if(gVTModule == 'Contacts')
 						{
 							if (typeof(type[2])=="undefined") var numformat="any"
 							else var numformat=type[2]
-
-								if (type[0]=="NN") {
-
-									if (!numValidate(fieldname[i],fieldlabel[i],numformat,true))
-										return false
-								} else {
-									if (!numValidate(fieldname[i],fieldlabel[i],numformat))
-										return false
-								}
+							if(type[0]=="NN")
+							{
+								if (!numValidate(fieldname[i],fieldlabel[i],numformat,true))
+								return false
+							}
+							else if (!numValidate(fieldname[i],fieldlabel[i],numformat))
+								return false
 							if (type[3]) {
 								if (!numConstComp(fieldname[i],fieldlabel[i],type[3],type[4]))
 									return false
@@ -948,6 +1010,28 @@ if(gVTModule == 'Contacts')
 		}
 		
 	}
+	if(gVTModule == 'Contacts')
+        {
+                if(getObj('imagename'))
+                {
+                        if(getObj('imagename').value != '')
+                        {
+                                var image_arr = new Array();
+                                image_arr = (getObj('imagename').value).split(".");
+                                var image_ext = image_arr[1].toLowerCase();
+                                if(image_ext ==  "jpeg" || image_ext ==  "png" || image_ext ==  "jpg" || image_ext ==  "pjpeg" || image_ext ==  "x-png" || image_ext ==  "gif")
+                                {
+                                        return true;
+                                }
+                                else
+                                {
+                                        alert(alert_arr.LBL_WRONG_IMAGE_TYPE);
+                                        return false;
+                                }
+                        }
+                }
+        }
+
        //added to check Start Date & Time,if Activity Status is Planned.//start
         for (var j=0; j<fieldname.length; j++)
 	{
@@ -984,30 +1068,13 @@ if(gVTModule == 'Contacts')
                mm=dateelements[1]
                yyyy=dateelements[2]
 
-               var currdate=new Date()
                var chkdate=new Date()
                chkdate.setYear(yyyy)
                chkdate.setMonth(mm-1)
                chkdate.setDate(dd)
-
-               chktime = new Date()
-
-               chktime.setMinutes(minval)
-               chktime.setHours(hourval)
-               chktime.setYear(yyyy)
-               chktime.setMonth(mm-1)
-               chktime.setDate(dd)
-                if (!compareDates(chkdate,datelabel,currdate,alert_arr.DATE_SHOULDNOT_PAST,"GE")) {
-                        getObj(datefield).focus()
-                        return false
-                }
-                else if(!compareDates(chktime,timelabel,currdate,alert_arr.TIME_SHOULDNOT_PAST,"GE"))
-                {
-                        getObj(datefield).focus()
-                        return false
-                }
-                else return true
-
+               chkdate.setMinutes(minval)
+               chkdate.setHours(hourval)
+		if(!comparestartdate(chkdate)) return false;
 	 }//end
 
 	return true
@@ -1019,6 +1086,32 @@ function clearId(fldName) {
 
 	currObj.value=""
 
+}
+
+function comparestartdate(chkdate)
+{
+	var datObj = [];
+        var ajxdate = "test";
+        var url = "module=Calendar&action=CalendarAjax&file=CalendarCommon&fieldval="+ajxdate
+        var currdate = new Date();
+        new Ajax.Request(
+            'index.php',
+             {
+                     queue: {position: 'end', scope: 'command'},
+                     method: 'post',
+                     postBody:url,
+                     onComplete: function(response)
+                     {
+                          datObj = eval(response.responseText);
+              	          currdate.setFullYear(datObj[0].YEAR)
+             	 	  currdate.setMonth(datObj[0].MONTH-1)
+             	 	  currdate.setDate(datObj[0].DAY)
+             	 	  currdate.setHours(datObj[0].HOUR)
+             	 	  currdate.setMinutes(datObj[0].MINUTE)
+                     }
+             }
+                        );
+                return compareDates(chkdate,alert_arr.START_DATE_TIME,currdate,alert_arr.DATE_SHOULDNOT_PAST,"GE");
 }
 
 function showCalc(fldName) {
@@ -1503,10 +1596,27 @@ function fnvshobj(obj,Lay){
     var topSide = findPosY(obj);
     var maxW = tagName.style.width;
     var widthM = maxW.substring(0,maxW.length-2);
-    if(Lay == 'editdiv') {
+    if(Lay == 'editdiv') 
+    {
         leftSide = leftSide - 225;
         topSide = topSide - 125;
+    }else if(Lay == 'transferdiv')
+	{
+		leftSide = leftSide - 10;
+	        topSide = topSide;
+	}
+    var IE = document.all?true:false;
+    if(IE)
+   {
+    if($("repposition1"))
+    {
+	if(topSide > 1200)
+	{
+		topSide = topSide-250;
+	}
     }
+   }
+	
     var getVal = eval(leftSide) + eval(widthM);
     if(getVal  > document.body.clientWidth ){
         leftSide = eval(leftSide) - eval(widthM);
@@ -1552,15 +1662,10 @@ function cancelForm(frm)
 	    window.history.back();
 }
 
-function trim(s)
+function trim(str)
 {
-	while (s.substring(0,1) == " " || s.substring(0,1) == "\n")
-	{
-		s = s.substring(1, s.length);
-	}
-	while (s.substring(s.length-1, s.length) == " " || s.substring(s.length-1,s.length) == "\n") {
-		s = s.substring(0,s.length-1);
-	}
+	var s = str.replace(/\s+$/,'');
+	s = s.replace(/^\s+/,'');
 	return s;
 }
 
@@ -1647,14 +1752,14 @@ function addOnloadEvent(fnc){
       window.onload = fnc;
   }
 }
-function InternalMailer(record_id,field_id,par_module,type) {
+function InternalMailer(record_id,field_id,field_name,par_module,type) {
         var url;
         switch(type) {
                 case 'record_id':
-                        url = 'index.php?module=Emails&action=EmailsAjax&internal_mailer=true&type='+type+'&record=&field_id='+field_id+'&rec_id='+record_id+'&file=EditView&par_module='+par_module;//query string field_id added for listview-compose email issue
+                        url = 'index.php?module=Emails&action=EmailsAjax&internal_mailer=true&type='+type+'&field_id='+field_id+'&rec_id='+record_id+'&fieldname='+field_name+'&file=EditView&par_module='+par_module;//query string field_id added for listview-compose email issue
                 break;
                 case 'email_addy':
-                        url = 'index.php?module=Emails&action=EmailsAjax&internal_mailer=true&type='+type+'&record=&email_addy='+record_id+'&file=EditView';
+                        url = 'index.php?module=Emails&action=EmailsAjax&internal_mailer=true&type='+type+'&email_addy='+record_id+'&file=EditView';
                 break;
 
         }
@@ -1685,6 +1790,9 @@ function OpenCompose(id,mode)
 		case 'forward':
 			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id+'&forward=true';
 			break;
+		case 'Invoice':
+                        url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+mode+'.pdf';
+			break;
 	}
 	openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
 }
@@ -1692,13 +1800,15 @@ function OpenCompose(id,mode)
 //Function added for Mass select in Popup - Philip
 function SelectAll(mod,parmod)
 {
-
+    if(document.selectall.selected_id != undefined)
+    {
         x = document.selectall.selected_id.length;
 	var y=0;
 	if(parmod != 'Calendar')
         {
                 var module = window.opener.document.getElementById('RLreturn_module').value
                 var entity_id = window.opener.document.getElementById('RLparent_id').value
+		 var parenttab = window.opener.document.getElementById('parenttab').value
         }
         idstring = "";
 	namestr = "";
@@ -1749,12 +1859,56 @@ function SelectAll(mod,parmod)
         {
 		if(parmod == 'Calendar')
                 {
-                        window.opener.document.EditView.contactidlist.value = idstring;
-                        window.opener.document.EditView.contactlist.value = namestr;
+			//this blcok has been modified to provide delete option for contact in Calendar
+			idval = window.opener.document.EditView.contactidlist.value;
+			if(idval != '')
+			{
+				var avalIds = new Array();
+				avalIds = idstring.split(';');
+
+				var selectedIds = new Array();	
+				selectedIds = idval.split(';');
+
+				for(i=0; i < (avalIds.length-1); i++)
+				{
+					var rowFound=false;
+					for(k=0; k < selectedIds.length; k++)
+					{
+						if (selectedIds[k]==avalIds[i])
+						{
+							rowFound=true;
+							break;
+						}
+
+					}
+					if(rowFound != true)
+					{
+						idval = idval+';'+avalIds[i];
+						window.opener.document.EditView.contactidlist.value = idval;
+                                        	var str=document.getElementById('calendarCont'+avalIds[i]).innerHTML;
+						window.opener.addOption(avalIds[i],str);
+					}
+				}
+			}
+			else
+			{
+				window.opener.document.EditView.contactidlist.value = idstring;
+				var temp = new Array();
+				temp = namestr.split('\n');
+
+				var tempids = new Array();
+				tempids = idstring.split(';');
+
+				for(k=0; k < temp.length; k++)
+				{
+					window.opener.addOption(tempids[k],temp[k]);
+				}
+			}
+			//end
                 }
                 else
                 {
-			opener.document.location.href="index.php?module="+module+"&parentid="+entity_id+"&action=updateRelations&destination_module="+mod+"&idlist="+idstring;
+			opener.document.location.href="index.php?module="+module+"&parentid="+entity_id+"&action=updateRelations&destination_module="+mod+"&idlist="+idstring+"&parenttab="+parenttab;
 		}
                 self.close();
         }
@@ -1762,6 +1916,7 @@ function SelectAll(mod,parmod)
         {
                 return false;
         }
+    }
 }
 function ShowEmail(id)
 {
@@ -1860,7 +2015,7 @@ function getCalendarPopup(imageid,fieldid,dateformat)
 
 function AjaxDuplicateValidate(module,fieldname,oform)
 {
-      var fieldvalue = getObj(fieldname).value;
+      var fieldvalue = encodeURIComponent(getObj(fieldname).value);
 	if(fieldvalue == '')
 	{
 		alert(alert_arr.ACCOUNTNAME_CANNOT_EMPTY);
@@ -1942,19 +2097,26 @@ function selectContact(check,type,frmName)
 	else if(($("contact_name")) && type == 'task')
 	{
 		var formName = frmName.name;
+		var task_recordid = '';
 		if(formName == 'EditView')
 		{
-			task_parent_module = frmName.parent_type.value;
-			task_recordid = frmName.parent_id.value;
-			task_module = task_parent_module.split("&");
-			popuptype="&popuptype=specific";
+			if($("parent_type"))
+                        {
+				task_parent_module = frmName.parent_type.value;
+				task_recordid = frmName.parent_id.value;
+				task_module = task_parent_module.split("&");
+				popuptype="&popuptype=specific";
+			}
 		}
 		else
 		{
-			task_parent_module = frmName.task_parent_type.value;
-			task_recordid = frmName.task_parent_id.value;
-			task_module = task_parent_module.split("&");
-			popuptype="&popuptype=toDospecific";
+			if($("task_parent_type"))
+                        {
+				task_parent_module = frmName.task_parent_type.value;
+				task_recordid = frmName.task_parent_id.value;
+				task_module = task_parent_module.split("&");
+				popuptype="&popuptype=toDospecific";
+			}
 		}
 		if(task_recordid != '' && task_module[0] == "Leads" )
 		{
@@ -1965,7 +2127,7 @@ function selectContact(check,type,frmName)
 			if(task_recordid != '')
 				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker"+popuptype+"&form=EditView&task_relmod_id="+task_recordid+"&task_parent_module="+task_module[0],"test","width=640,height=602,resizable=0,scrollbars=0");
 			else	
-				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker"+popuptype+"&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
 		}
 
 	}
@@ -2089,18 +2251,19 @@ if(confirm(alert_arr.ARE_YOU_SURE))
        }
 }
 
-
+//function modified to apply the patch ref : Ticket #4065
 function valid(c,type)
 {
 	if(type == 'name')
 	{
-		return (((c >= 'a') && (c <= 'z')) ||((c >= 'A') && (c <= 'Z')) ||((c >= '0') && (c <= '9')) || (c == '.') || (c == '_') || (c == '-') );
+		return (((c >= 'a') && (c <= 'z')) ||((c >= 'A') && (c <= 'Z')) ||((c >= '0') && (c <= '9')) || (c == '.') || (c == '_') || (c == '-') || (c == '@') );
 	}
 	else if(type == 'namespace')
 	{
 		return (((c >= 'a') && (c <= 'z')) ||((c >= 'A') && (c <= 'Z')) ||((c >= '0') && (c <= '9')) || (c == '.')||(c==' ') || (c == '_') || (c == '-') );
 	}
 }
+//end
 
 function CharValidation(s,type)
 {
@@ -2172,4 +2335,280 @@ function LTrim( value )
         var re = /\s*((\S+\s*)*)/;
         return value.replace(re, "$1");
 
+}
+
+function selectedRecords(module,category)
+{
+    var allselectedboxes = document.getElementById("allselectedboxes");
+	var idstring  =  (allselectedboxes == null)? '' : allselectedboxes.value;
+        if(idstring != '')
+                window.location.href="index.php?module="+module+"&action=ExportRecords&parenttab="+category+"&idstring="+idstring;
+        else
+                window.location.href="index.php?module="+module+"&action=ExportRecords&parenttab="+category;
+	return false;
+}
+
+function record_export(module,category,exform,idstring)
+{
+	var searchType = document.getElementsByName('search_type');
+	var exportData = document.getElementsByName('export_data');
+	for(i=0;i<2;i++){
+		if(searchType[i].checked == true)
+			var sel_type = searchType[i].value;
+	}
+	for(i=0;i<3;i++){
+		if(exportData[i].checked == true)
+			var exp_type = exportData[i].value;
+	}
+        new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: "module="+module+"&action=ExportAjax&export_record=true&search_type="+sel_type+"&export_data="+exp_type+"&idstring="+idstring,
+                        onComplete: function(response) {
+                                if(response.responseText == 'NOT_SEARCH_WITHSEARCH_ALL')
+				{
+                                        $('not_search').style.display = 'block';
+					$('not_search').innerHTML="<font color='red'><b>"+alert_arr.LBL_NOTSEARCH_WITHSEARCH_ALL+" "+module+"</b></font>";
+					setTimeout(hideErrorMsg1,6000);
+	
+					exform.submit();
+				}
+				else if(response.responseText == 'NOT_SEARCH_WITHSEARCH_CURRENTPAGE')
+                                {
+                                        $('not_search').style.display = 'block';
+                                        $('not_search').innerHTML="<font color='red'><b>"+alert_arr.LBL_NOTSEARCH_WITHSEARCH_CURRENTPAGE+" "+module+"</b></font>";
+                                        setTimeout(hideErrorMsg1,7000);
+
+                                        exform.submit();
+                                }
+				else if(response.responseText == 'NO_DATA_SELECTED')
+				{	
+					$('not_search').style.display = 'block';	
+					$('not_search').innerHTML="<font color='red'><b>"+alert_arr.LBL_NO_DATA_SELECTED+"</b></font>";
+					setTimeout(hideErrorMsg1,3000);
+				}
+				else if(response.responseText == 'SEARCH_WITHOUTSEARCH_ALL')
+                                {
+					if(confirm(alert_arr.LBL_SEARCH_WITHOUTSEARCH_ALL))
+					{
+						exform.submit();
+					}					
+                                }
+				else if(response.responseText == 'SEARCH_WITHOUTSEARCH_CURRENTPAGE')
+                                {
+                                        if(confirm(alert_arr.LBL_SEARCH_WITHOUTSEARCH_CURRENTPAGE))
+                                        {
+                                                exform.submit();
+                                        }
+                                }
+	                        else
+				{
+                                       exform.submit(); 
+				}
+                        }
+                }
+        );
+
+}
+
+
+function hideErrorMsg1()
+{
+        $('not_search').style.display = 'none';
+}
+
+// Replace the % sign with %25 to make sure the AJAX url is going wel.
+function escapeAll(tagValue)
+{
+        //return escape(tagValue.replace(/%/g, '%25'));
+	if(default_charset.toLowerCase() == 'utf-8')
+        	return encodeURIComponent(tagValue.replace(/%/g, '%25'));
+	else
+		return escape(tagValue.replace(/%/g, '%25'));
+}
+
+function removeHTMLFormatting(str) {
+        str = str.replace(/<([^<>]*)>/g, " ");
+        str = str.replace(/&nbsp;/g, " ");
+        return str;
+}
+function get_converted_html(str)
+{
+        var temp = str.toLowerCase();
+        if(temp.indexOf('<') != '-1' || temp.indexOf('>') != '-1')
+        {
+                str = str.replace(/</g,'&lt;');
+                str = str.replace(/>/g,'&gt;');
+        }
+	if( temp.match(/(script).*(\/script)/))
+        {
+                str = str.replace(/&/g,'&amp;');
+        }
+        else if(temp.indexOf('&') != '-1')
+        {
+                str = str.replace(/&/g,'&amp;');
+	}
+	return str;
+}
+//To select the select all check box(if all the items are selected) when the form loads.
+function default_togglestate()
+{
+	var all_state=true;
+	if (typeof(getObj("selected_id").length)=="undefined") 
+	{
+		var state=getObj("selected_id").checked;
+		if (state == false)
+		{
+			all_state=false;
+		}
+
+
+	} 
+	else
+	{
+		for (var i=0;i<(getObj("selected_id").length);i++)
+		{
+			var state=getObj("selected_id")[i].checked;
+			if (state == false)
+			{
+				all_state=false;
+				break;
+			}
+		}
+	}
+	getObj("selectall").checked=all_state;
+
+}
+
+//for select  multiple check box in multiple pages for Campaigns related list:
+
+function rel_check_object(sel_id,module)
+{
+        var selected;
+        var select_global=new Array();
+        var cookie_val=get_cookie(module+"_all");
+        if(cookie_val == null)
+                selected=sel_id.value+";";
+        else
+                selected=trim(cookie_val);
+        select_global=selected.split(";");
+        var box_value=sel_id.checked;
+        var id= sel_id.value;
+        var duplicate=select_global.indexOf(id);
+        var size=select_global.length-1;
+        var result="";
+        if(box_value == true)
+        {
+                if(duplicate == "-1")
+                {
+                        select_global[size]=id;
+                }
+
+                size=select_global.length-1;
+                var i=0;
+                for(i=0;i<=size;i++)
+                {
+                        if(trim(select_global[i])!='')
+                                result=select_global[i]+";"+result;
+                }
+                rel_default_togglestate(module);
+
+        }
+        else
+        {
+                if(duplicate != "-1")
+		 
+			select_global.splice(duplicate,1)
+
+                size=select_global.length-1;
+                var i=0;
+                for(i=size;i>=0;i--)
+                {
+                        if(trim(select_global[i])!='')
+                                result=select_global[i]+";"+result;
+                }
+                        getObj(module+"_selectall").checked=false;
+
+        }
+        set_cookie(module+"_all",result);
+}
+
+//Function to select all the items in the current page for Campaigns related list:.
+function rel_toggleSelect(state,relCheckName,module) {
+        if (getObj(relCheckName)) {
+                if (typeof(getObj(relCheckName).length)=="undefined") {
+                        getObj(relCheckName).checked=state
+                } else
+                {
+                        for (var i=0;i<getObj(relCheckName).length;i++)
+                        {
+                                getObj(relCheckName)[i].checked=state
+                                        rel_check_object(getObj(relCheckName)[i],module)
+                        }
+                }
+        }
+}
+//To select the select all check box(if all the items are selected) when the form loads for Campaigns related list:.
+function rel_default_togglestate(module)
+{
+	var all_state=true;
+	if(getObj(module+"_selected_id"))
+	{
+		if (typeof(getObj(module+"_selected_id").length)=="undefined")
+		{		     
+			var state=getObj(module+"_selected_id").checked;
+			if (state == false)
+				all_state=false;
+
+		}
+		else{
+
+			for (var i=0;i<(getObj(module+"_selected_id").length);i++)
+			{
+				var state=getObj(module+"_selected_id")[i].checked;
+				if (state == false)
+					all_state=false;
+			}
+		}
+		getObj(module+"_selectall").checked=all_state;
+	}
+}
+//To clear all the checked items in all the pages for Campaigns related list:
+function clear_checked_all(module)
+{
+	var cookie_val=get_cookie(module+"_all");
+	if(cookie_val != null)
+		delete_cookie(module+"_all");
+	//Uncheck all the boxes in current page..
+	if (typeof(getObj(module+"_selected_id").length)=="undefined")
+		getObj(module+"_selected_id").checked=false;
+	else{
+
+		for (var i=0;i<getObj(module+"_selected_id").length;i++)
+		{
+			getObj(module+"_selected_id")[i].checked=false;
+		}
+	}
+	getObj(module+"_selectall").checked=false;
+
+}
+
+function toggleSelect_ListView(state,relCheckName) {
+        if (getObj(relCheckName)) {
+                if (typeof(getObj(relCheckName).length)=="undefined") {
+                        getObj(relCheckName).checked=state;
+                        check_object(getObj(relCheckName))
+                } else {
+                        for (var i=0;i<getObj(relCheckName).length;i++)
+                        {
+                                getObj(relCheckName)[i].checked=state
+                                check_object(getObj(relCheckName)[i])
+                        }
+                }
+        }
+}
+function gotourl(url)
+{
+                document.location.href=url;
 }

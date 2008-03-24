@@ -46,7 +46,8 @@ function qcpatternValidate(fldName,fldLabel,type) {
 	{
 		/*changes made to fix -- ticket#3278 & ticket#3461
 		  var re=new RegExp(/^.+@.+\..+$/)*/
-		var re=new RegExp(/^[a-z0-9]([a-z0-9_\-\.]*)@([a-z0-9_\-\.]*)(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/)
+		//Changes made to fix tickets #4633, #5111 to accomodate all possible email formats
+		var re=new RegExp(/^[a-zA-Z0-9]+([\_\-\.]*[a-zA-Z0-9]+[\_\-]?)*@[a-zA-Z0-9]+([\_\-]?[a-zA-Z0-9]+)*\.+([\_\-]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/)
 	}
 	
 	if (type.toUpperCase()=="DATE") {//DATE validation 
@@ -76,6 +77,8 @@ function qcpatternValidate(fldName,fldLabel,type) {
 		var re = /^\d{1,2}\:\d{1,2}$/
 	}
 	
+	//Asha: Remove spaces on either side of a Email id before validating
+	if (type.toUpperCase()=="EMAIL") currObj.value = trim(currObj.value);
 	if (!re.test(currObj.value)) {
 		alert(alert_arr.ENTER_VALID+fldLabel)
 		currObj.focus()

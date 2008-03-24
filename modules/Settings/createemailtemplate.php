@@ -23,7 +23,6 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $smod_strings = return_module_language($current_language,'Settings');
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_smarty;
 

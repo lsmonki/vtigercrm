@@ -20,7 +20,7 @@
 	<tr>
 	<td style="padding-left: 5px;" align="left" width="65%">
 	{$MOD.LBL_GROUPING_SUMMARIZE}	
-	<select name="Group1" onchange='updateXAxisFields( this.options[ this.selectedIndex ].value, this.options[ this.selectedIndex ].label )' class="txtBox">
+	<select name="Group1" class="txtBox">
 	<option value="none">{$MOD.LBL_NONE}</option>
 	{$BLOCK1}
 	</select>
@@ -37,7 +37,7 @@
 	<tr>
 	<td style="padding-left: 35px;" align="left">
 	{$MOD.LBL_GROUPING_THEN_BY}<br>
-	<select name="Group2" onchange='updateXAxisFields( this.options[ this.selectedIndex ].value, this.options[ this.selectedIndex ].label )' class="txtBox">
+	<select name="Group2" class="txtBox">
 	<option value="none">{$MOD.LBL_NONE}</option>
 	        {$BLOCK2}
 	</select>
@@ -53,7 +53,7 @@
 	<tr>
 	<td style="padding-left: 65px;" align="left">
 	{$MOD.LBL_GROUPING_FINALLY_BY}<br>
-	<select name="Group3" class="txtBox" onchange='updateXAxisFields( this.options[ this.selectedIndex ].value, this.options[ this.selectedIndex ].label )'>
+	<select name="Group3" class="txtBox">
 	<option value="none">{$MOD.LBL_NONE}</option>
 	            {$BLOCK3}
 	</select>

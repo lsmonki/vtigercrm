@@ -55,16 +55,18 @@ if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != '')
 
 
 if(isset($_REQUEST['profile_name']) && $_REQUEST['profile_name'] != '' && $_REQUEST['mode'] == 'create')
-{	
+{
 	$profileName=$_REQUEST['profile_name'];
+	$smarty->assign("PROFILE_NAME", to_html($profileName));
 }
 else
 {
 	$profileName=getProfileName($profileId);
+	$smarty->assign("PROFILE_NAME", $profileName);
 
 }
 
-$smarty->assign("PROFILE_NAME", $profileName);
+//$smarty->assign("PROFILE_NAME", to_html($profileName));
 
 if(isset($_REQUEST['profile_description']) && $_REQUEST['profile_description'] != '' && $_REQUEST['mode'] == 'create')
 	
@@ -413,7 +415,7 @@ $smarty->assign("MODE",$mode);
 
 $disable_field_array = Array();
 $sql_disablefield = "select * from vtiger_def_org_field";
-$result = $adb->query($sql_disablefield);
+$result = $adb->pquery($sql_disablefield, array());
 $noofrows=$adb->num_rows($result);
 for($i=0; $i<$noofrows; $i++)
 {
@@ -471,11 +473,13 @@ elseif($mode=='edit')
 			$fldLabel= $fieldListResult[$module_name][$j][0];
 			$uitype = $fieldListResult[$module_name][$j][2];
 			$displaytype = $fieldListResult[$module_name][$j][5];
+			$typeofdata = $fieldListResult[$module_name][$j][6];
+			$fieldtype = explode("~",$typeofdata);
 			$mandatory = '';
 			$readonly = '';
 			$field=array();
 			
-			if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15))
+			if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15) || ($uitype == 111 && $fieldtype[1] == "M"))
 			{
 				$mandatory = '<font color="red">*</font>';
 				$readonly = 'disabled';
@@ -523,12 +527,14 @@ elseif($mode=='create')
 				$fldLabel= $fieldListResult[$module_name][$j][0];
 				$uitype = $fieldListResult[$module_name][$j][2];
 				$displaytype = $fieldListResult[$module_name][$j][5];
+				$typeofdata = $fieldListResult[$module_name][$j][6];
+				$fieldtype = explode("~",$typeofdata);
 				$mandatory = '';
 				$readonly = '';
 				$field=array();
 
 				
-				if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15))
+				if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15) || ($uitype == 111 && $fieldtype[1] == "M"))
 				{
 					$mandatory = '<font color="red">*</font>';
 					$readonly = 'disabled';
@@ -573,12 +579,14 @@ elseif($mode=='create')
 				$fldLabel= $fieldListResult[$module_name][$j][0];
 				$uitype = $fieldListResult[$module_name][$j][2];
 				$displaytype = $fieldListResult[$module_name][$j][5];
+				$typeofdata = $fieldListResult[$module_name][$j][6];
+				$fieldtype = explode("~",$typeofdata);
 				$mandatory = '';
 				$readonly = '';
 				$field=array();
 
 				
-				if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15))
+				if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15) || ($uitype == 111 && $fieldtype[1] == "M"))
 				{
 					$mandatory = '<font color="red">*</font>';
 					$readonly = 'disabled';

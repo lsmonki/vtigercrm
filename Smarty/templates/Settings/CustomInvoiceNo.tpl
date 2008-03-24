@@ -61,7 +61,7 @@
                             <td width="80%" class="small cellText">
 
 
-<input type="text" id="invoicestring" name="invoicestring" class="small" style="width:30%" value="{$inv_str}" onkeyup="preview();"/>
+<input type="text" id="invoicestring" name="invoicestring" class="small" style="width:30%" value="{$inv_str}" onkeyup="preview();" onchange="preview();" />
 			</td>
                         </tr>
 
@@ -71,7 +71,7 @@
 		<td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_CUSTOMINVOICE_NUMBER}</strong>
 		</td>
                 <td width="80%" class="small cellText">
-<input type="text" id="invoicenumber" name="invoicenumber" class="small" style="width:30%" value="{$inv_no}"  onkeyup="preview();"/>
+<input type="text" id="invoicenumber" name="invoicenumber" class="small" style="width:30%" value="{$inv_no}"  onkeyup="preview();" onchange="preview();" />
 </td>
 			</tr>
 
@@ -99,11 +99,11 @@
 
 
                         </table>	
-				<table border=0 cellspacing=0 cellpadding=5 width=100% >
+				<!--table border=0 cellspacing=0 cellpadding=5 width=100% >
 				<tr>
 					  <td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td>
 				</tr>
-				</table>
+				</table-->
 	
 				</td>
 				</tr>
@@ -164,6 +164,7 @@ document.getElementById("invoicepreview").innerHTML=(document.getElementById("in
 
 function validatefn1()
 {
+preview();
 var invnumber=document.getElementById("invoicenumber").value;
 var invstring=document.getElementById("invoicestring").value;
 

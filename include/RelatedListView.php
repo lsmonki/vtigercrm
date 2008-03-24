@@ -61,16 +61,6 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	$button = '<table cellspacing=0 cellpadding=2><tr><td>'.$button.'</td></tr></table>';
 
 	// Added to have Purchase Order as form Title
-	if($relatedmodule == 'Orders') 
-	{
-		$smarty->assign('ADDBUTTON',get_form_header($app_strings['PurchaseOrder'],$button, false));
-	}
-	else
-	{
-		$smarty->assign('ADDBUTTON',get_form_header($app_strings[$relatedmodule],$button, false));
-	}
-
-	require_once('themes/'.$theme.'/layout_utils.php');
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$smarty->assign("MOD", $mod_strings);
@@ -157,13 +147,23 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	}
 	
 	//Retreiving the no of rows
-	$count_query = "select count(*) as count ".substr($query, stripos($query,'from'),strlen($query));
-	$count_result = $adb->query(substr($count_query, stripos($count_query,'select'),stripos($count_query,'ORDER BY')));
-	if($relatedmodule == "Calendar" && $module != "Contacts" && $adb->query_result($count_result,0,"count") != 0)
-		$noofrows = $adb->num_rows($count_result);	
+	if($relatedmodule == "Calendar")//for calendar related list, count will increase when we have multiple contacts relationship for single activity
+	{
+		$count_query = "select count(*) as count, vtiger_activity.activitytype ".substr($query, stripos($query,'from'),strlen($query));
+		$count_result = $adb->query($count_query);
+		$noofrows = $adb->num_rows($count_result); 
+	}
 	else
-		$noofrows = $adb->query_result($count_result,0,"count");
-	
+	{
+		$count_query = "select count(*) as count ".substr($query, stripos($query,'from'),strlen($query));
+		$count_result = $adb->query(substr($count_query, stripos($count_query,'select'),stripos($count_query,'ORDER BY')));
+
+		if($adb->num_rows($count_result) > 1)
+			$noofrows = $adb->num_rows($count_result);
+		else
+			$noofrows =$adb->query_result($count_result,0,"count");
+	}
+
 	//Setting Listview session object while sorting/pagination
 	if(isset($_REQUEST['relmodule']) && $_REQUEST['relmodule']!='' && $_REQUEST['relmodule'] == $relatedmodule)
 	{
@@ -186,9 +186,9 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		$limit_start_rec = $start_rec -1;
 
 	if( $adb->dbType == "pgsql")
- 	    $list_result = $adb->query($query. " OFFSET ".$limit_start_rec." LIMIT ".$list_max_entries_per_page);
+ 	    $list_result = $adb->pquery($query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
  	else
- 	    $list_result = $adb->query($query. " LIMIT ".$limit_start_rec.",".$list_max_entries_per_page);	
+ 	    $list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());	
 
 	//Retreive the List View Table Header
 	if($noofrows == 0)
@@ -259,83 +259,110 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	require_once ($theme_path."layout_utils.php");
 
-	global $adb;
+	global $adb,$current_user;
 	global $mod_strings;
-	global $app_strings;
-
+	global $app_strings, $listview_max_textlength;
+	
 	$result=$adb->query($query);
 	$noofrows = $adb->num_rows($result);
 
 	$header[] = $app_strings['LBL_CREATED'];
-	$header[] = $app_strings['LBL_SUBJECT'];
+	$header[] = $app_strings['LBL_TITLE'];
 	$header[] = $app_strings['LBL_DESCRIPTION'];
 	$header[] = $app_strings['LBL_ATTACHMENTS'];
 	$header[] = $app_strings['LBL_TYPE'];		
 	$header[] = $app_strings['LBL_ACTION'];	
-
+	
 	while($row = $adb->fetch_array($result))
 	{
-		$entries = Array();
-		if(trim($row['activitytype']) == 'Notes')
-		{
-			$module = 'Notes';
-			$editaction = 'EditView';
-			$deleteaction = 'Delete';
-		}
-		elseif($row['activitytype'] == 'Attachments')
-		{
-			$module = 'uploads';
-			$editaction = 'upload';
-			$deleteaction = 'deleteattachments';
-		}
-		if($row['createdtime'] != '0000-00-00 00:00:00')
-		{
-			$created_arr = explode(" ",getDisplayDate($row['createdtime']));
-			$created_date = $created_arr[0];
-			$created_time = substr($created_arr[1],0,5);
-		}
-		else
-		{
-			$created_date = '';
-			$created_time = '';
+		if($row['activitytype'] == 'Attachments') {
+			$query1="select setype,createdtime from vtiger_crmentity where crmid=?";
+			$params1 = array($row['attachmentsid']);
+		} else {
+			$query1="select setype,createdtime from vtiger_crmentity where crmid=?";
+			$params1 = array($row['crmid']);
 		}
 
-		$entries[] = $created_date;
-		if($module == 'Notes')
+		$query1 .=" order by createdtime desc";
+		$res=$adb->pquery($query1, $params1);
+		$num_rows = $adb->num_rows($res);
+		for($i=0; $i<$num_rows; $i++)
 		{
-			$entries[] = '<a href="index.php?module='.$module.'&action=DetailView&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'">'.$row['title'].'</a>';
+			$setype = $adb->query_result($res,$i,'setype');
+			$createdtime = $adb->query_result($res,$i,'createdtime');
 		}
-		elseif($module == 'uploads')
+
+		if(($setype != "Products Image") && ($setype != "Contacts Image")) 
 		{
-			$entries[] = "";
+			$entries = Array();
+			if(trim($row['activitytype']) == 'Notes')
+			{
+				$module = 'Notes';
+				$editaction = 'EditView';
+				$deleteaction = 'Delete';
+			}
+			elseif($row['activitytype'] == 'Attachments')
+			{
+				$module = 'uploads';
+				$editaction = 'upload';
+				$deleteaction = 'deleteattachments';
+			}
+			if($row['createdtime'] != '0000-00-00 00:00:00')
+			{
+				$created_arr = explode(" ",getDisplayDate($createdtime));
+				$created_date = $created_arr[0];
+				$created_time = substr($created_arr[1],0,5);
+			}
+			else
+			{
+				$created_date = '';
+				$created_time = '';
+			}
+
+			$entries[] = $created_date;
+			if($module == 'Notes')
+			{
+				$entries[] = '<a href="index.php?module='.$module.'&action=DetailView&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'&parenttab='.$_REQUEST["parenttab"].'">'.textlength_check($row['title']).'</a>';
+			}
+			elseif($module == 'uploads')
+			{
+				$entries[] = $row['title'];
+			}
+			if((getFieldVisibilityPermission('Notes', $current_user->id, 'notecontent') == '0') || $row['activitytype'] == 'Attachments')
+			{
+				$row['description'] = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$row['description']);
+				if(strlen($row['description']) > $listview_max_textlength)
+				{
+					$row['description'] = substr($row['description'],0,$listview_max_textlength).'...';
+				}
+				$entries[] = nl2br($row['description']); 
+			}
+			else
+				$entries[]=" <font color ='red' >" .$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
+
+			$attachmentname = $row['filename'];//explode('_',$row['filename'],2);
+
+			if((getFieldVisibilityPermission('Notes', $current_user->id, 'filename') == '0') || $row['activitytype'] == 'Attachments')
+				$entries[] = '<a href="index.php?module=uploads&action=downloadfile&entityid='.$id.'&fileid='.$row['attachmentsid'].'">'.textlength_check($attachmentname).'</a>';
+			else
+				$entries[]='';
+
+			$entries[] = $row['activitytype'];	
+			$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&return_id='.$_REQUEST["record"].'&parenttab='.$_REQUEST["parenttab"];
+
+			if($module == 'Notes')
+			{
+				$edit_param = 'index.php?module='.$module.'&action='.$editaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'&parenttab='.$_REQUEST["parenttab"];
+
+				$entries[] .= '<a href="'.$edit_param.'">'.$app_strings['LNK_EDIT'].'</a> | <a href=\'javascript:confirmdelete("'.$del_param.'")\'>'.$app_strings['LNK_DELETE'].'</a>';
+			}
+			else
+			{
+				$entries[] = '<a href=\'javascript:confirmdelete("'.$del_param.'")\'>'.$app_strings['LNK_DELETE'].'</a>';
+			}
+			$entries_list[] = $entries;
 		}
-		$row['description'] = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$row['description']);
-		if(strlen($row['description']) > 40)
-		{
-			$row['description'] = substr($row['description'],0,40).'...';
-		}
-		$entries[] = nl2br($row['description']); 
-		$attachmentname = $row['filename'];//explode('_',$row['filename'],2);
-
-		$entries[] = '<a href="index.php?module=uploads&action=downloadfile&entityid='.$id.'&fileid='.$row['attachmentsid'].'">'.$attachmentname.'</a>';
-
-		$entries[] = $row['activitytype'];	
-
-		$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&return_id='.$_REQUEST["record"];
-
-		if($module == 'Notes')
-		{
-			$edit_param = 'index.php?module='.$module.'&action='.$editaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"];
-
-			$entries[] .= '<a href="'.$edit_param.'">'.$app_strings['LNK_EDIT'].'</a> | <a href=\'javascript:confirmdelete("'.$del_param.'")\'>'.$app_strings['LNK_DELETE'].'</a>';
-		}
-		else
-		{
-			$entries[] = '<a href=\'javascript:confirmdelete("'.$del_param.'")\'>'.$app_strings['LNK_DELETE'].'</a>';
-		}
-		$entries_list[] = $entries;
 	}
 
 	if($entries_list !='')
@@ -361,7 +388,6 @@ function getHistory($parentmodule,$query,$id)
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	require_once ($theme_path."layout_utils.php");
 
 	global $adb;
 	global $mod_strings;
@@ -397,7 +423,7 @@ function getHistory($parentmodule,$query,$id)
 		$header[] = $app_strings['LBL_START_DATE']." & ".$app_strings['LBL_TIME'];
 		$header[] = $app_strings['LBL_END_DATE']." & ".$app_strings['LBL_TIME'];
 		//$header[] = $app_strings['LBL_DESCRIPTION'];
-		$header[] = $app_strings['LBL_ACTION'];
+		$header[] = $app_strings['LBL_STATUS'];
 		$header[] = $app_strings['LBL_ASSIGNED_TO'];
 
 		$i=1;
@@ -409,32 +435,30 @@ function getHistory($parentmodule,$query,$id)
 				$activitymode = 'Task';
 				$icon = 'Tasks.gif';
 				$status = $row['status'];
+				$status = $app_strings[$status];
 			}
 			elseif($row['activitytype'] == 'Call' || $row['activitytype'] == 'Meeting')
 			{
 				$activitymode = 'Events';
 				$icon = 'Activities.gif';
 				$status = $row['eventstatus'];
+				$status = $app_strings[$status]; 
 			}
+	
+	            	$typeofactivity = $row['activitytype'];
+ 	            	$typeofactivity = $app_strings[$typeofactivity];
+			$entries[] = $typeofactivity;
 
-			$entries[] = $row['activitytype'];
-
-			$activity = '<a href="index.php?module=Calendar&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.$_REQUEST['record'].'" title="'.$row['description'].'">'.$row['subject'].'</a></td>';
+			$activity = '<a href="index.php?module=Calendar&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.$_REQUEST['record'].'&parenttab='.$_REQUEST['parenttab'].'">'.$row['subject'].'</a></td>';
 			$entries[] = $activity;
 	
 			$parentname = getRelatedTo('Calendar',$result,$i-1);
 			$entries[] = $parentname;
+			
+		       $entries[] = getDisplayDate($row['date_start'])."   ".$row['time_start'];
+ 	               $entries[] = getDisplayDate($row['due_date'])."   ".$row['time_end'];         
 		
-			$entries[] = $row['date_start']."   ".$row['time_start'];
-			$entries[] = $row['due_date']."   ".$row['time_end'];
-			
 			//$entries[] = nl2br($row['description']);
-
-			if(isPermitted("Calendar",1,$row["activityid"]) == 'yes')
-			{
-				$list .= '<a href="index.php?module=Calendar&action=EditView&return_module='.$parentmodule.'&return_action='.$parentaction.'&activity_mode='.$activitymode.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_EDIT'].'</a>';
-			
-			}
 
 			$entries[] = $status;
 
@@ -448,11 +472,6 @@ function getHistory($parentmodule,$query,$id)
 				
 			}
 			
-			if(isPermitted("Calendar",2,$row["activityid"]) == 'yes')
-			{
-				$list .= '<a href="index.php?module=Calendar&action=Delete&return_module='.$parentmodule.'&return_action='.$parentaction.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_DELETE'].'</a>';
-			}
-
 			$i++;
 			$entries_list[] = $entries;
 		}
@@ -477,7 +496,7 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 	global $adb;
 	global $app_strings;
 	global $mod_strings;
-	global $current_language;
+	global $current_language,$current_user;
 	$current_module_strings = return_module_language($current_language, 'PriceBook');
 
 	global $list_max_entries_per_page;
@@ -487,7 +506,6 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 	$pricebook_id = $_REQUEST['record'];
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	require_once($theme_path.'layout_utils.php');
 
 	//Retreive the list from Database
 	$list_result = $adb->query($query);
@@ -495,8 +513,10 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 
 	$header=array();
 	$header[]=$mod_strings['LBL_LIST_PRODUCT_NAME'];
-	$header[]=$mod_strings['LBL_PRODUCT_CODE'];
-	$header[]=$mod_strings['LBL_PRODUCT_UNIT_PRICE'];
+	if(getFieldVisibilityPermission('Products', $current_user->id, 'productcode') == '0')
+		$header[]=$mod_strings['LBL_PRODUCT_CODE'];
+	if(getFieldVisibilityPermission('Products', $current_user->id, 'unit_price') == '0')
+		$header[]=$mod_strings['LBL_PRODUCT_UNIT_PRICE'];
 	$header[]=$mod_strings['LBL_PB_LIST_PRICE'];
 	if(isPermitted("PriceBooks","EditView","") == 'yes' || isPermitted("PriceBooks","Delete","") == 'yes')
 		$header[]=$mod_strings['LBL_ACTION'];
@@ -505,15 +525,17 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 	for($i=0; $i<$num_rows; $i++)
 	{
 		$entity_id = $adb->query_result($list_result,$i,"crmid");
-
 		$unit_price = 	$adb->query_result($list_result,$i,"unit_price");
 		$listprice = $adb->query_result($list_result,$i,"listprice");
 		$field_name=$entity_id."_listprice";
 		
 		$entries = Array();
-		$entries[] = $adb->query_result($list_result,$i,"productname");
-		$entries[] = $adb->query_result($list_result,$i,"productcode");
-		$entries[] = $unit_price;
+		$entries[] = textlength_check($adb->query_result($list_result,$i,"productname"));
+		if(getFieldVisibilityPermission('Products', $current_user->id, 'productcode') == '0')
+			$entries[] = $adb->query_result($list_result,$i,"productcode");
+		if(getFieldVisibilityPermission('Products', $current_user->id, 'unit_price') == '0')
+			$entries[] = $unit_price;
+
 		$entries[] = $listprice;
 		$action = "";
 		if(isPermitted("PriceBooks","EditView","") == 'yes')
@@ -536,5 +558,34 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 		return $return_data; 
 	}
 }
+function CheckFieldPermission($fieldname,$module)
+{
+	global $current_user,$adb;
 
+ require('user_privileges/user_privileges_'.$current_user->id.'.php');
+ if($fieldname == '' || $module == '')
+	 return "false";
+
+	$tab_id = getTabid($module);
+	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 )
+	{
+	 $profileList = getCurrentUserProfileList();
+	 $sql1= "SELECT fieldname FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND fieldname=? AND vtiger_field.displaytype IN (1,2,3,4) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+	$result1= $adb->pquery($sql1, array(getTabid($module), $fieldname, $profileList));
+	$permission = ($adb->num_rows($result1) > 0) ? "true" : "false";
+ }else
+ {
+	$permission = "true";
+ }
+ return $permission;
+}
+
+function CheckColumnPermission($tablename, $columnname, $module)
+{
+	global $adb;
+	
+	$res = $adb->pquery("select fieldname from vtiger_field where tablename=? and columnname=?", array($tablename, $columnname));
+	$fieldname = $adb->query_result($res, 0, 'fieldname');
+	return CheckFieldPermission($fieldname, $module);
+}	
 ?>

@@ -15,16 +15,16 @@ global $adb;
 $cvid = $_REQUEST["cvid"];
 $cvmodule = $_REQUEST["cvmodule"];
 $mode = $_REQUEST["mode"];
-$subject = addslashes($_REQUEST["subject"]);
-$body = addslashes($_REQUEST["body"]);
+$subject = $_REQUEST["subject"];
+$body = $_REQUEST["body"];
 
 if($cvid != "")
 {
 	if($mode == "new")
 	{
-		$customactionsql = "insert into vtiger_customaction(cvid,subject,module,content)";
-		$customactionsql .= " values(".$cvid.",'".$subject."','".$cvmodule."','".$body."')";
-		$customactionresult = $adb->query($customactionsql);
+		$customactionsql = "insert into vtiger_customaction(cvid,subject,module,content) values (?,?,?,?)";
+		$customactionparams = array($cvid, $subject, $cvmodule, $body);
+		$customactionresult = $adb->pquery($customactionsql, $customactionparams);
 		if($customactionresult == false)
 		{
 			include('themes/'.$theme.'/header.php');
@@ -37,8 +37,8 @@ if($cvid != "")
 
 	}elseif($mode == "edit")
 	{
-		$updatecasql = "update vtiger_customaction set subject='".$subject."',content='".$body."' where cvid=".$cvid;
-		$updatecaresult = $adb->query($updatecasql);
+		$updatecasql = "update vtiger_customaction set subject=?, content=? where cvid=?";
+		$updatecaresult = $adb->pquery($updatecasql, array($subject, $body, $cvid));
 		if($updatecaresult == false)
 		{
 			include('themes/'.$theme.'/header.php');

@@ -12,7 +12,6 @@
 
 
 require_once('include/database/PearDatabase.php');
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 
@@ -24,7 +23,6 @@ global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 
 $field_module=getFieldModuleAccessArray();
@@ -57,9 +55,11 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
 		$displaytype = $adb->query_result($fieldListResult,$i,"displaytype");
 		$fieldlabel = $adb->query_result($fieldListResult,$i,"fieldlabel");
+		$typeofdata = $adb->query_result($fieldListResult,$i,"typeofdata");
+		$fieldtype = explode("~",$typeofdata);
                 $mandatory = '';
 		$readonly = '';
-                if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 20 || $uitype == 53 || $displaytype == 3 || ($displaytype != 3 && $fieldlabel == "Activity Type" && $uitype == 15))
+                if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 20 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || ($displaytype != 3 && $fieldlabel == "Activity Type" && $uitype == 15) || ($uitype == 111 && $fieldtype[1] == "M"))
                 {
                         $mandatory = '<font color="red">*</font>';
 						$readonly = 'disabled';

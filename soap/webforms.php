@@ -79,13 +79,13 @@ function create_lead_from_webform($lastname, $email, $phone, $company, $country,
 	if($assigned_user_id == '')
 	{
 		//if the user id is empty then assign it to the admin user
-		$assigned_user_id = $adb->query_result($adb->query("select id from vtiger_users where user_name='admin'"),0,'id');
+		$assigned_user_id = $adb->query_result($adb->pquery("select id from vtiger_users where user_name=?", array('admin')),0,'id');
 	}
 
 	require_once("modules/Leads/Leads.php");
 	$focus = new Leads();
 	$focus->column_fields['lastname'] = $lastname;
-	$focus->column_fields['email'] = $email;
+	$focus->column_fields['email'] = trim($email);
 	$focus->column_fields['phone'] = $phone;
 	$focus->column_fields['company'] = $company;
 	$focus->column_fields['country'] = $country;
@@ -123,7 +123,7 @@ function create_contact_from_webform($first_name, $last_name, $email_address, $h
 	if($assigned_user_id == '')
 	{
 		//if the user id is empty then assign it to the admin user
-		$assigned_user_id = $adb->query_result($adb->query("select id from vtiger_users where user_name='admin'"),0,'id');
+		$assigned_user_id = $adb->query_result($adb->pquery("select id from vtiger_users where user_name=?", array('admin')),0,'id');
 	}
 
 	require_once('modules/Contacts/Contacts.php');
@@ -131,7 +131,7 @@ function create_contact_from_webform($first_name, $last_name, $email_address, $h
 
 	$focus->column_fields['firstname'] = $first_name;
 	$focus->column_fields['lastname'] = $last_name;
-	$focus->column_fields['email'] = $email_address;
+	$focus->column_fields['email'] = trim($email_address);
 	$focus->column_fields['homephone'] = $home_phone;
 	$focus->column_fields['department'] = $department;
 	$focus->column_fields['description'] = $description;
@@ -158,8 +158,10 @@ function unsubscribe_email($emailid)
 {
 	global $adb;
 	$adb->println("Enter into the function unsubscribe_email($emailid)");
+
+	$emailid = trim($emailid);
 	
-	$contact_res = $adb->query("select emailoptout from vtiger_contactdetails where email=\"$emailid\"");
+	$contact_res = $adb->pquery("select emailoptout from vtiger_contactdetails where email=?", array($emailid));
 	$contact_noofrows = $adb->num_rows($contact_res);
 	$emailoptout = $adb->query_result($contact_res,0,'emailoptout');
 
@@ -167,7 +169,7 @@ function unsubscribe_email($emailid)
 	{
 		if($emailoptout != 1)
 		{
-			$adb->query("update vtiger_contactdetails set emailoptout=1 where email=\"$emailid\"");
+			$adb->pquery("update vtiger_contactdetails set emailoptout=1 where email=?", array($emailid));
 			$msg = "You have been unsubscribed.";
 		}
 		else

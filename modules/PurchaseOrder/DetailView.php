@@ -43,7 +43,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Order detail view");
 
@@ -91,6 +90,8 @@ $smarty->assign("ASSOCIATED_PRODUCTS",getDetailAssociatedProducts('PurchaseOrder
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 

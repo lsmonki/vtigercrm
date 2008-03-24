@@ -25,13 +25,14 @@ require_once('user_privileges/default_module_view.php');
 class Campaigns extends CRMEntity {
 	var $log;
 	var $db;
+	var $table_name = "vtiger_campaign";
 
 
 	var $tab_name = Array('vtiger_crmentity','vtiger_campaign','vtiger_campaignscf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_campaign'=>'campaignid','vtiger_campaignscf'=>'campaignid');
 	var $column_fields = Array();
 
-	var $sortby_fields = Array('campaignname','smownerid','campaigntype','product_id','expectedrevenue','closingdate','campaignstatus','expectedresponse','targetaudience','expectedcost');
+	var $sortby_fields = Array('campaignname','smownerid','campaigntype','productname','expectedrevenue','closingdate','campaignstatus','expectedresponse','targetaudience','expectedcost');
 
 	var $list_fields = Array(
 					'Campaign Name'=>Array('campaign'=>'campaignname'),
@@ -243,6 +244,7 @@ class Campaigns extends CRMEntity {
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
 			WHERE vtiger_seactivityrel.crmid=".$id."
+			AND vtiger_crmentity.deleted = 0
 			AND (activitytype = 'Task'
 				OR activitytype = 'Call'
 				OR activitytype = 'Meeting')";

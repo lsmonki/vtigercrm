@@ -43,7 +43,7 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 		else
 			$name=$datax[$i];
 		$pos = substr_count($name," ");
-		$alts[]=$name."=%d";
+		$alts[]=htmlentities($name)."=%d";
 //If the datax value of a string is greater, adding '\n' to it so that it'll cme inh 2nd line
 		 if(strlen($name)>=15)
                         $name=substr($name, 0, 15);

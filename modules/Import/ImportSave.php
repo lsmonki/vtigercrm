@@ -78,7 +78,15 @@ foreach ($rows1 as $row)
 			// TODO: add check for user input
 			// addslashes, striptags, etc..
 			$field = $col_pos_to_field[$field_count];
-			if (substr(trim($field), 0, 3) == "CF_") 
+
+			//picklist function is added to avoid duplicate picklist entries
+			$pick_orginal_val = getPicklist($field,$row[$field_count]);
+
+			if($pick_orginal_val != null)
+			{
+				$focus->column_fields[$field]=$pick_orginal_val;
+			}
+			elseif (substr(trim($field), 0, 3) == "CF_") 
         		{
 				p("setting custfld".$field."=".$row[$field_count]);
 				$resCustFldArray[$field] = $row[$field_count]; 
@@ -101,7 +109,30 @@ foreach ($rows1 as $row)
 		}
 
 	}
-
+	if($focus->column_fields['notify_owner'] == '')
+	{
+		$focus->column_fields['notify_owner'] = '0';
+	}	
+	if($focus->column_fields['reference'] == '')
+	{
+		$focus->column_fields['reference'] = '0';
+	}
+	if($focus->column_fields['emailoptout'] == '')
+	{
+		$focus->column_fields['emailoptout'] = '0';
+	}
+	if($focus->column_fields['donotcall'] == '')
+	{
+		$focus->column_fields['donotcall'] = '0';
+	}
+	if($focus->column_fields['discontinued'] == '')
+	{
+		$focus->column_fields['discontinued'] = '0';
+	}
+	if($focus->column_fields['active'] == '')
+	{
+		$focus->column_fields['active'] = '0';
+	}
 	p("setting done");
 	
 	p("do save before req vtiger_fields=".$do_save);
@@ -110,7 +141,7 @@ foreach ($rows1 as $row)
 
 	foreach ($focus->required_fields as $field=>$notused) 
 	{ 
-		$fv = $focus->column_fields[$field];
+		$fv = trim($focus->column_fields[$field]);
 		if (! isset($fv) || $fv == '') 
 		{
 		       p("fv ".$field." not set");	
@@ -148,8 +179,8 @@ foreach ($rows1 as $row)
 			{
 				$_REQUEST['module']='contactdetails';
 			}
-			$dbquery="select * from vtiger_field where vtiger_tablename='".$_REQUEST['module']."'";
-			$custresult = $adb->query($dbquery);
+			$dbquery="select * from vtiger_field where vtiger_tablename=?";
+			$custresult = $adb->pquery($dbquery, array($_REQUEST['module']));
 			if($adb->num_rows($custresult) != 0)
 			{
 				if (! isset( $_REQUEST['module'] ) || $_REQUEST['module'] == 'Contacts')
@@ -174,7 +205,8 @@ foreach ($rows1 as $row)
 					$custTabName = 'productscf';
 				}
 				$noofrows = $adb->num_rows($custresult);
-				$values='"'.$focus->id.'"';
+				$params = array($focus->id);
+				
 				for($j=0; $j<$noofrows; $j++)
 				{
 					$colName=$adb->query_result($custresult,$j,"columnname");
@@ -183,12 +215,12 @@ foreach ($rows1 as $row)
 						$value_colName = $resCustFldArray[$colName];
 
 						$columns .= ', '.$colName;
-						$values .= ', "'.$value_colName.'"';
+						array_push($params, $value_colName);
 					}
 				}
 				
-				$insert_custfld_query = 'insert into '.$custTabName.' ('.$columns.') values('.$values.')';
-				$adb->query($insert_custfld_query);
+				$insert_custfld_query = 'insert into '.$custTabName.' ('.$columns.') values('. generateQuestionMarks($params) .')';
+				$adb->pquery($insert_custfld_query, $params);
 
 			}
 		}	

@@ -9,7 +9,7 @@
 *
  ********************************************************************************/
 require_once("include/database/PearDatabase.php");
-
+require_once("modules/Users/Users.php");
 global $current_user;
 $displayname=$_REQUEST['displayname'];
 $userid = $current_user->id;
@@ -30,18 +30,27 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 }
 #$sql="select * from vtiger_systems where server_type = '".$server_type."'";
 #$id=$adb->query_result($adb->query($sql),0,"id");
-
+$focus = new Users();
+$encrypted_password=$focus->changepassword($_REQUEST['server_password']);
 if(isset($_REQUEST['edit']) && $_REQUEST['edit'] && $_REQUEST['record']!='')
 {
-	$sql="update vtiger_mail_accounts set display_name = '".$displayname."', mail_id = '".$email."', account_name = '".$account_name."', mail_protocol = '".$mailprotocol."', mail_username = '".$server_username."', mail_password='".$server_password."', mail_servername='".$mail_servername."',  box_refresh='".$box_refresh."',  mails_per_page='".$mails_per_page."', ssltype='".$ssltype."' , sslmeth='".$sslmeth."', int_mailer='".$_REQUEST["int_mailer"]."' where user_id = '".$id."'";
+	$sql="update vtiger_mail_accounts set display_name = ?, mail_id = ?, account_name = ?, mail_protocol = ?, mail_username = ?";
+	$params = array($displayname, $email, $account_name, $mailprotocol, $server_username);
+	if($server_password != '*****') {
+		$sql.=", mail_password=?";
+		array_push($params, $encrypted_password);
+	}
+	$sql.=", mail_servername=?,  box_refresh=?,  mails_per_page=?, ssltype=? , sslmeth=?, int_mailer=? where user_id = ?";
+	array_push($params, $mail_servername, $box_refresh, $mails_per_page, $ssltype, $sslmeth, $_REQUEST["int_mailer"], $id);
 }
 else
 {
 	$account_id = $adb->getUniqueID("vtiger_mail_accounts");
-	$sql="insert into vtiger_mail_accounts(account_id, user_id, display_name, mail_id, account_name, mail_protocol, mail_username, mail_password, mail_servername, box_refresh, mails_per_page, ssltype, sslmeth, int_mailer, status, set_default) values(" .$account_id .",'".$current_user->id."','".$displayname."','".$email."','".$account_name."','".$mailprotocol."','".$server_username."','".$server_password."','".$mail_servername."','".$box_refresh."','".$mails_per_page."', '".$ssltype."', '".$sslmeth."', '".$_REQUEST["int_mailer"]."','1','0')";
+	$sql="insert into vtiger_mail_accounts(account_id, user_id, display_name, mail_id, account_name, mail_protocol, mail_username, mail_password, mail_servername, box_refresh, mails_per_page, ssltype, sslmeth, int_mailer, status, set_default) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	$params = array($account_id, $current_user->id, $displayname, $email, $account_name, $mailprotocol, $server_username, $encrypted_password, $mail_servername, $box_refresh, $mails_per_page, $ssltype, $sslmeth, $_REQUEST["int_mailer"],'1','0');
 }
 
-$adb->query($sql);
+$adb->pquery($sql, $params);
 
 header("Location:index.php?module=Webmails&action=index&mailbox=INBOX&parenttab=My Home Page");
 ?>

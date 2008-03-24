@@ -188,6 +188,29 @@ $mod_strings = Array(
 'Thanks' => 'Thanks',
 'Support_team' => 'Vtiger Support Team',
 
+// Added/Updated for vtiger CRM 5.0.4
+
+//this label for customerportal.
+'LBL_STATUS_CLOSED' =>'Closed',//Do not convert this label. This is used to check the status. If the status 'Closed' is changed in vtigerCRM server side then you have to change in customerportal language file also.
+'LBL_STATUS_UPDATE' => 'Ticket status is updated as',
+'LBL_COULDNOT_CLOSED' => 'Ticket could not be',
+'LBL_CUSTOMER_COMMENTS' => 'Customer has provided the following additional information to your reply:',
+'LBL_RESPOND'=> 'Kindly respond to above ticket at the earliest.',
+'LBL_REGARDS' =>'Regards',
+'LBL_SUPPORT_ADMIN' => 'Support Administrator',
+'LBL_RESPONDTO_TICKETID' =>'Respond to Ticket ID',
+'LBL_CUSTOMER_PORTAL' => 'in Customer Portal - URGENT',
+'LBL_LOGIN_DETAILS' => 'Following are your Customer Portal login details :',
+'LBL_MAIL_COULDNOT_SENT' =>'Mail could not be sent',
+'LBL_USERNAME' => 'User Name :',
+'LBL_PASSWORD' => 'Password :',
+'LBL_SUBJECT_PORTAL_LOGIN_DETAILS' => 'Regarding your Customer Portal login details',
+'LBL_GIVE_MAILID' => 'Please give your email id',
+'LBL_CHECK_MAILID' => 'Please check your email id for Customer Portal',
+'LBL_LOGIN_REVOKED' => 'Your login is revoked. Please contact your admin.',
+'LBL_MAIL_SENT' => 'Mail has been sent to your mail id with the customer portal login details',
+'LBL_ALTBODY' => 'This is the body in plain text for non-HTML mail clients',
+
 );
 
 ?>

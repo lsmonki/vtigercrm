@@ -29,6 +29,8 @@ $local_log =& LoggerManager::getLogger('index');
 
 global $log,$adb;
 $focus = new Contacts();
+//added to fix 4600
+$search=$_REQUEST['search_url'];
 
 setObjectValuesFromRequest($focus);
 
@@ -84,8 +86,7 @@ if($image_error=="true") //If there is any error in the file upload then moving 
         {
                 $return_id=$_REQUEST['record'];
         }
-        header("location: index.php?action=$error_action&module=$error_module&record=$return_id&return_id=$return_id&return_action=$return_action&return_module=$return_module&activity_mode=$activity_mode&return_viewname=$return_viewname&saveimage=$saveimage&error_msg=$errormessage&image_error=$image_error&encode_val=$encode_field_values");
-
+        header("location: index.php?action=$error_action&module=$error_module&record=$return_id&return_id=$return_id&return_action=$return_action&return_module=$return_module&activity_mode=$activity_mode&return_viewname=$return_viewname".$search."&saveimage=$saveimage&error_msg=$errormessage&image_error=$image_error&encode_val=$encode_field_values");
 }
 if($saveimage=="true")
 {
@@ -96,14 +97,17 @@ if($saveimage=="true")
 //if image added then we have to set that $_FILES['name'] in imagename field then only the image will be displayed
 if($_FILES['imagename']['name'] != '')
 {
-	$focus->column_fields['imagename'] = $_FILES['imagename']['name'];
+	if(isset($_REQUEST['imagename_hidden'])) {
+		$focus->column_fields['imagename'] = $_REQUEST['imagename_hidden'];
+	} else {
+		$focus->column_fields['imagename'] = $_FILES['imagename']['name'];
+	}
 }
 elseif($focus->id != '')
 {
-	$result = $adb->query("select imagename from vtiger_contactdetails where contactid = ".$focus->id);
+	$result = $adb->pquery("select imagename from vtiger_contactdetails where contactid = ?", array($focus->id));
 	$focus->column_fields['imagename'] = $adb->query_result($result,0,'imagename');
 }
-	
 //Saving the contact
 if($image_error=="false")
 {
@@ -124,16 +128,18 @@ if($image_error=="false")
 	{
 		if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "")
 		{
-			$sql = "insert into vtiger_campaigncontrel values (".$_REQUEST['return_id'].",".$focus->id.")";
-			$adb->query($sql);
+			$sql = "delete from vtiger_campaigncontrel where contactid = ?";
+			$adb->pquery($sql, array($focus->id));
+			$sql = "insert into vtiger_campaigncontrel values (?,?)";
+			$adb->pquery($sql, array($_REQUEST['return_id'], $focus->id));
 		}
 	}
 
 	//BEGIN -- Code for Create Customer Portal Users password and Send Mail 
 	if($_REQUEST['portal'] == '' && $_REQUEST['mode'] == 'edit')
 	{
-		$sql = "update vtiger_portalinfo set user_name='".$_REQUEST['email']."',isactive=0 where id=".$_REQUEST['record'];
-		$adb->query($sql);
+		$sql = "update vtiger_portalinfo set user_name=?,isactive=0 where id=?";
+		$adb->pquery($sql, array($_REQUEST['email'], $_REQUEST['record']));
 	}
 	elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mode'] != 'edit')
 	{
@@ -144,7 +150,7 @@ if($image_error=="false")
 			$insert = 'true';
 
 		$sql = "select id,user_name,user_password,isactive from vtiger_portalinfo";
-		$result = $adb->query($sql);
+		$result = $adb->pquery($sql, array());
 
 		for($i=0;$i<$adb->num_rows($result);$i++)
 		{
@@ -157,8 +163,8 @@ if($image_error=="false")
 					$flag = 'true';
 				else
 				{
-					$sql = "update vtiger_portalinfo set user_name='".$username."', isactive=1 where id=".$id;
-					$adb->query($sql);
+					$sql = "update vtiger_portalinfo set user_name=?, isactive=1 where id=?";
+					$adb->pquery($sql, array($username, $id));
 					$update = 'true';
 					$flag = 'true';
 					$password = $adb->query_result($result,$i,'user_password');
@@ -173,8 +179,9 @@ if($image_error=="false")
 		if($insert == 'true')
 		{
 			$password = makeRandomPassword();
-			$sql = "insert into vtiger_portalinfo (id,user_name,user_password,type,isactive) values(".$focus->id.",'".$username."','".$password."','C',1)";
-			$adb->query($sql);
+			$sql = "insert into vtiger_portalinfo values(?,?,?,?,?,?,?,?)";
+			$params = array($focus->id, $username, $password, 'C', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1);
+			$adb->pquery($sql, $params);
 		}
 
 		//changes made to send mail to portal user when we use ajax edit
@@ -182,13 +189,15 @@ if($image_error=="false")
 		$data_array['first_name'] = $_REQUEST['firstname'];
 		$data_array['last_name'] = $_REQUEST['lastname'];
 		$data_array['email'] = $_REQUEST['email'];
-		$data_array['portal_url'] = "<a href=".$PORTAL_URL."/login.php>".$mod_strings['Please Login Here']."</a>";
-		$contents = getmail_contents_portalUser($data_array,$password);
+		$data_array['portal_url'] = '<a href="'.$PORTAL_URL.'" style="font-family:Arial, Helvetica, sans-serif;font-size:12px; font-weight:bolder;text-decoration:none;color: #4242FD;">'.$mod_strings['Please Login Here'].'</a>';
+	
+		$value = getmail_contents_portalUser($data_array,$password,"LoginDetails");
+		$contents=$value["body"];                                                                                      $subject=$value["subject"];
 
 		$log->info("Customer Portal Information Updated in database and details are going to send => '".$_REQUEST['email']."'");
 		if($insert == 'true' || $update == 'true')
 		{
-			$mail_status = send_mail('Contacts',$_REQUEST['email'],$current_user->user_name,'',$mod_strings['Customer Portal Login Details'],$contents);
+			$mail_status = send_mail('Support',$_REQUEST['email'],$current_user->user_name,'',$subject,$contents);
 		}
 		$log->info("After return from the SendMailToCustomer function. Now control will go to the header.");
 	}
@@ -206,8 +215,7 @@ if($image_error=="false")
 	if($focus->column_fields['notify_owner'] == 1 || $focus->column_fields['notify_owner'] == 'on')
 		$status = sendNotificationToOwner('Contacts',$focus);
 
-	header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&activity_mode=$activitymode&viewname=$return_viewname");
-
+	header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&activity_mode=$activitymode&viewname=$return_viewname&start=".$_REQUEST['pagenumber']);
 }
 
 

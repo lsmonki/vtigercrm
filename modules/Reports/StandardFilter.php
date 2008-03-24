@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-
+require_once('modules/CustomView/CustomView.php');
 if(isset($_REQUEST["record"]) == false)
 {
         $oReport = new Reports();
@@ -17,7 +17,6 @@ if(isset($_REQUEST["record"]) == false)
 
 	$BLOCK1 = getPrimaryStdFilterHTML($primarymodule);
 	$BLOCK1 .= getSecondaryStdFilterHTML($secondarymodule);
-
 		$report_std_filter->assign("BLOCK1_STD",$BLOCK1);
         $BLOCKJS = $oReport->getCriteriaJS();
 		$report_std_filter->assign("BLOCKJS_STD",$BLOCKJS);
@@ -26,12 +25,21 @@ if(isset($_REQUEST["record"]) == false)
 
 }elseif(isset($_REQUEST["record"]) == true)
 {
+	//added to fix the ticket #5117
+	global $current_user;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+
         $reportid = $_REQUEST["record"];
         $oReport = new Reports($reportid);
         $oReport->getSelectedStandardCriteria($reportid);
 	
-		$BLOCK1 = getPrimaryStdFilterHTML($oReport->primodule,$oReport->stdselectedcolumn);
-        $BLOCK1 .= getSecondaryStdFilterHTML($oReport->secmodule,$oReport->stdselectedcolumn);
+	$BLOCK1 = getPrimaryStdFilterHTML($oReport->primodule,$oReport->stdselectedcolumn);
+	$BLOCK1 .= getSecondaryStdFilterHTML($oReport->secmodule,$oReport->stdselectedcolumn);
+	//added to fix the ticket #5117
+	$selectedcolumnvalue = '"'. $oReport->stdselectedcolumn . '"';
+	if (!$is_admin && isset($oReport->stdselectedcolumn) && strpos($BLOCK1, $selectedcolumnvalue) === false)
+		$BLOCK1 .= "<option selected value='Not Accessible'>".$app_strings['LBL_NOT_ACCESSIBLE']."</option>";
+
 		$report_std_filter->assign("BLOCK1_STD",$BLOCK1);
 
         $BLOCKJS = $oReport->getCriteriaJS();
@@ -61,11 +69,10 @@ function getPrimaryStdFilterHTML($module,$selected="")
 	global $app_list_strings;
 	global $ogReport;
 	global $current_language;
-
+	$ogReport->oCustomView=new CustomView();
+        $result = $ogReport->oCustomView->getStdCriteriaByModule($module);
         $mod_strings = return_module_language($current_language,$module);
 
-	$result = $ogReport->getStdCriteriaByModule($module);
-	
 	if(isset($result))
 	{
 		foreach($result as $key=>$value)
@@ -105,12 +112,13 @@ function getSecondaryStdFilterHTML($module,$selected="")
 	global $app_list_strings;
 	global $ogReport;
 	global $current_language;
+	$ogReport->oCustomView=new CustomView();
 	if($module != "")
         {
         	$secmodule = explode(":",$module);
         	for($i=0;$i < count($secmodule) ;$i++)
         	{
-			$result = $ogReport->getStdCriteriaByModule($secmodule[$i]);
+			$result = $ogReport->oCustomView->getStdCriteriaByModule($secmodule[$i]);
 			$mod_strings = return_module_language($current_language,$secmodule[$i]);
         		if(isset($result))
         		{
@@ -143,4 +151,3 @@ function getSecondaryStdFilterHTML($module,$selected="")
 	return $shtml;
 }
 ?>
-

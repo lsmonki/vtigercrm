@@ -161,5 +161,10 @@ $mod_strings = Array(
 //Added for 5.0.3
 'LBL_LOADING_IMAGE' => 'Loading Image',
 'LBL_ENABLE_IMAP_SUPPORT' => 'Please enable the IMAP support in php to run this module',
+
+// Added/Updated for vtiger CRM 5.0.4
+'LBL_CONFIGURE_MAIL_SETTINGS'=>'Please configure your mail settings',
+'LBL_PLEASE'=>'Please',
+'LBL_HERE'=>'Here',
 );
 ?>

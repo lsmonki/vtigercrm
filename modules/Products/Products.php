@@ -112,8 +112,8 @@ class Products extends CRMEntity {
 			for($i=0;$i<count($tax_details);$i++)
 			{
 				$taxid = getTaxId($tax_details[$i]['taxname']);
-				$sql = "delete from vtiger_producttaxrel where productid=$this->id and taxid=$taxid";
-				$adb->query($sql);
+				$sql = "delete from vtiger_producttaxrel where productid=? and taxid=?";
+				$adb->pquery($sql, array($this->id,$taxid));
 			}
 		}
 		for($i=0;$i<count($tax_details);$i++)
@@ -132,8 +132,8 @@ class Products extends CRMEntity {
 				
 				$log->debug("Going to save the Product - $tax_name tax relationship");
 
-				$query = "insert into vtiger_producttaxrel values($this->id,$taxid,$tax_per)";
-				$adb->query($query);
+				$query = "insert into vtiger_producttaxrel values(?,?,?)";
+				$adb->pquery($query, array($this->id,$taxid,$tax_per));
 			}
 		}
 
@@ -151,7 +151,12 @@ class Products extends CRMEntity {
 		foreach($_FILES as $fileindex => $files)
 		{
 			if($files['name'] != '' && $files['size'] > 0)
-			{
+			{       
+			      if($_REQUEST[$fileindex.'_hidden'] != '')	
+				      $files['original_name'] = $_REQUEST[$fileindex.'_hidden'];
+			      else
+				      $files['original_name'] = stripslashes($files['name']);
+			      $files['original_name'] = str_replace('"','',$files['original_name']);
 				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
 			}
 		}
@@ -162,11 +167,11 @@ class Products extends CRMEntity {
 			$del_file_list = explode("###",trim($_REQUEST['del_file_list'],"###"));
 			foreach($del_file_list as $del_file_name)
 			{
-				$attach_res = $adb->query("select vtiger_attachments.attachmentsid from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where crmid=$id and name=\"$del_file_name\"");
+				$attach_res = $adb->pquery("select vtiger_attachments.attachmentsid from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where crmid=? and name=?", array($id,$del_file_name));
 				$attachments_id = $adb->query_result($attach_res,0,'attachmentsid');
 				
-				$del_res1 = $adb->query("delete from vtiger_attachments where attachmentsid=$attachments_id");
-				$del_res2 = $adb->query("delete from vtiger_seattachmentsrel where attachmentsid=$attachments_id");
+				$del_res1 = $adb->pquery("delete from vtiger_attachments where attachmentsid=?", array($attachments_id));
+				$del_res2 = $adb->pquery("delete from vtiger_seattachmentsrel where attachmentsid=?", array($attachments_id));
 			}
 		}
 
@@ -218,7 +223,7 @@ class Products extends CRMEntity {
 			vtiger_notes.filename, vtiger_attachments.type  AS FileType,
 				crm2.modifiedtime AS lastmodified,
 			vtiger_seattachmentsrel.attachmentsid AS attachmentsid,
-			vtiger_notes.notesid AS crmid, vtiger_crmentity.createdtime,
+			vtiger_notes.notesid AS crmid, 
 			vtiger_notes.notecontent AS description,
 			vtiger_users.user_name
 			FROM vtiger_notes
@@ -237,14 +242,13 @@ class Products extends CRMEntity {
 				ON vtiger_crmentity.smcreatorid = vtiger_users.id
 			WHERE vtiger_crmentity.crmid = ".$id."
 		UNION ALL
-			SELECT vtiger_attachments.description AS title,
+			SELECT vtiger_attachments.subject AS title,
 				'Attachments' AS ActivityType,
 			vtiger_attachments.name AS filename,
 			vtiger_attachments.type AS FileType,
 				crm2.modifiedtime AS lastmodified,
 			vtiger_attachments.attachmentsid AS attachmentsid,
 			vtiger_seattachmentsrel.attachmentsid AS crmid,
-			vtiger_crmentity.createdtime,
 			vtiger_attachments.description, vtiger_users.user_name
 			FROM vtiger_attachments
 			INNER JOIN vtiger_seattachmentsrel
@@ -748,20 +752,19 @@ class Products extends CRMEntity {
 				ON vtiger_crmentity.crmid = vtiger_products.productid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_products.vendor_id is NULL";
-		$result=$this->db->query($query);
+		$result=$this->db->pquery($query, array());
 		$log->debug("Exiting product_novendor method ...");
 		return $this->db->num_rows($result);
 	}
 	
 	/**	function used to get the export query for product
-	 *	@param reference &$order_by - reference of the order by variable which will be added with the query
-	 *	@param reference &$where - reference of the where variable which will be added with the query
+	 *	@param reference $where - reference of the where variable which will be added with the query
 	 *	@return string $query - return the query which will give the list of products to export
 	 */	
-	function create_export_query(&$order_by, &$where)
+	function create_export_query($where)
 	{
 		global $log;
-		$log->debug("Entering create_export_query(".$order_by.",".$where.") method ...");
+		$log->debug("Entering create_export_query(".$where.") method ...");
 
 		include("include/utils/ExportUtils.php");
 
@@ -774,46 +777,16 @@ class Products extends CRMEntity {
 				ON vtiger_crmentity.crmid = vtiger_products.productid 
 			LEFT JOIN vtiger_productcf
 				ON vtiger_products.productid = vtiger_productcf.productid
-			LEFT JOIN vtiger_seproductsrel
-				ON vtiger_seproductsrel.productid = vtiger_products.productid
-			LEFT JOIN vtiger_producttaxrel
-				ON vtiger_producttaxrel.productid = vtiger_products.productid
 			INNER JOIN vtiger_users
 				ON vtiger_users.id=vtiger_crmentity.smownerid 
 
-			LEFT JOIN vtiger_crmentity vtiger_crmentityRelatedTo
-				ON vtiger_crmentityRelatedTo.crmid = vtiger_seproductsrel.crmid
-				
-			LEFT JOIN vtiger_leaddetails vtiger_ProductRelatedToLead
-				ON vtiger_ProductRelatedToLead.leadid = vtiger_seproductsrel.crmid
-			LEFT JOIN vtiger_account vtiger_ProductRelatedToAccount
-				ON vtiger_ProductRelatedToAccount.accountid = vtiger_seproductsrel.crmid
-			LEFT JOIN vtiger_potential vtiger_ProductRelatedToPotential
-				ON vtiger_ProductRelatedToPotential.potentialid = vtiger_seproductsrel.crmid
-	
-			LEFT JOIN vtiger_contactdetails vtiger_ProductRelatedToContact 
-				ON vtiger_ProductRelatedToContact.contactid = vtiger_seproductsrel.crmid
-
 			LEFT JOIN vtiger_vendor
 				ON vtiger_vendor.vendorid = vtiger_products.vendor_id
-			
-			WHERE vtiger_crmentity.deleted = 0 AND vtiger_users.status = 'Active'
-				AND (
-					(vtiger_seproductsrel.crmid IS NULL)
-					OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Leads').")
-					OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Accounts').")
-					OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Potentials').")
-					OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Contacts').")) 
-			group by vtiger_products.productid
-			";
-			//ProductRelatedToLead, Account and Potential tables are added to get the Related to field
+			WHERE vtiger_crmentity.deleted = 0 and vtiger_users.status = 'Active'";
 	
 
 		if($where != "")
                         $query .= " AND ($where) ";
-
-                if(!empty($order_by))
-                        $query .= " ORDER BY $order_by";
 
 		$log->debug("Exiting create_export_query method ...");
                 return $query;

@@ -43,7 +43,6 @@ global $current_user;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 
@@ -64,7 +63,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
 	$userid = $current_user->id;
 	$sql = "select fieldname from vtiger_field where uitype = 13 and tabid = 7";
-	$result = $adb->query($sql);
+	$result = $adb->pquery($sql, array());
 	$num_fieldnames = $adb->num_rows($result);
 	for($i = 0; $i < $num_fieldnames; $i++)
 	{
@@ -74,6 +73,8 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 }
 
 $category = getParentTab();
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $smarty->assign("CATEGORY",$category);
 $parent_email = getEmailParentsList('Leads',$focus->id);
         $smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);

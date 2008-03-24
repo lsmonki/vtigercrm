@@ -40,7 +40,6 @@ global $app_strings;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 
@@ -55,7 +54,10 @@ if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
        unset($_SESSION['rlvs']);
  }
 
-$category = getParentTab();
+ $category = getParentTab();
+
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
@@ -68,8 +70,8 @@ $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
-
 $check_button = Button_Check($module);
+
 $smarty->assign("CHECK", $check_button);
 
 $smarty->display("RelatedLists.tpl");

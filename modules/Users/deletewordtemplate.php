@@ -14,8 +14,8 @@
  for($i=0; $i < count($id_array)-1; $i++)
  {
 
-	         $sql = "delete from vtiger_wordtemplates where templateid=".$id_array[$i];
-	         $adb->query($sql);
+	         $sql = "delete from vtiger_wordtemplates where templateid=?";
+	         $adb->pquery($sql, array($id_array[$i]));
 
  }
  header("Location:index.php?module=Users&action=listwordtemplates&parenttab=Settings");

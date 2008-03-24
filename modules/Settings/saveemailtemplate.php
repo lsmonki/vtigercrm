@@ -15,26 +15,22 @@ global $log;
 $db = new PearDatabase();
 	$log->debug("the foldername is ".$folderName);
 $folderName = $_REQUEST["foldername"];
-$templateName = addslashes($_REQUEST["templatename"]);
+$templateName = from_html($_REQUEST["templatename"]);
 	  $log->debug("the templatename is ".$templateName);
 $templateid = $_REQUEST["templateid"];
 	  $log->debug("the templateid is ".$templateid);
-$description = addslashes($_REQUEST["description"]);
+$description = from_html($_REQUEST["description"]);
 	  $log->debug("the description is ".$description);
-$subject = addslashes($_REQUEST["subject"]);
+$subject = from_html($_REQUEST["subject"]);
 	  $log->debug("the subject is ".$subject);  
-$body = $_REQUEST["body"];
+$body = fck_from_html($_REQUEST["body"]);
 	  $log->debug("the body is ".$body);  
-if ($body !='')
-{
-	$body = to_html($body);
-	  $log->info("the body value is set ");  
-}
 if(isset($templateid) && $templateid !='')
 {
 	$log->info("the templateid is set");  
-	$sql = "update vtiger_emailtemplates set foldername = '".$folderName."', templatename ='".$templateName."', subject ='".$subject."', description ='".$description."', body ='".$body."' where templateid =".$templateid;
-	$adb->query($sql);
+	$sql = "update vtiger_emailtemplates set foldername =?, templatename =?, subject =?, description =?, body =? where templateid =?";
+	$params = array($folderName, $templateName, $subject, $description, $body, $templateid);
+	$adb->pquery($sql, $params);
  
 	$log->info("about to invoke the detailviewemailtemplate file");  
 	header("Location:index.php?module=Settings&action=detailviewemailtemplate&parenttab=Settings&templateid=".$templateid);
@@ -42,8 +38,9 @@ if(isset($templateid) && $templateid !='')
 else
 {
 	$templateid = $db->getUniqueID('vtiger_emailtemplates');
-	$sql = "insert into vtiger_emailtemplates values ('". $folderName. "','".$templateName."','".$subject."','".$description."','".$body."',0,".$templateid.")";
-	$adb->query($sql);
+	$sql = "insert into vtiger_emailtemplates values (?,?,?,?,?,?,?)";
+	$params = array($folderName, $templateName, $subject, $description, $body, 0, $templateid);
+	$adb->pquery($sql, $params);
 
 	 $log->info("added to the db the emailtemplate");
 	header("Location:index.php?module=Settings&action=detailviewemailtemplate&parenttab=Settings&templateid=".$templateid);

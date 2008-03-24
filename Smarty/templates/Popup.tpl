@@ -11,7 +11,38 @@
  ********************************************************************************/
 
 -->*}
+<script>
+function showAllRecords()
+{ldelim}
+        modname = document.getElementById("relmod").name;
+        idname= document.getElementById("relrecord_id").name;
+        var locate = location.href;
+        url_arr = locate.split("?");
+        emp_url = url_arr[1].split("&");
+        for(i=0;i< emp_url.length;i++)
+        {ldelim}
+                if(emp_url[i] != '')
+                {ldelim}
+                        split_value = emp_url[i].split("=");
+                        if(split_value[0] == modname || split_value[0] == idname )
+                                emp_url[i]='';
+                        else if(split_value[0] == "fromPotential" || split_value[0] == "acc_id")
+                                emp_url[i]='';
 
+                {rdelim}
+        {rdelim}
+        correctUrl =emp_url.join("&");
+        Url = "index.php?"+correctUrl;
+        return Url;
+{rdelim}
+
+//function added to get all the records when parent record doesn't relate with the selection module records while opening/loading popup.
+function redirectWhenNoRelatedRecordsFound()
+{ldelim}
+        var loadUrl = showAllRecords();
+        window.location.href = loadUrl;
+{rdelim}
+</script>
 <link rel="stylesheet" type="text/css" href="{$THEME_PATH}style.css">
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/{php} echo $_SESSION['authenticated_user_language'];{/php}.lang.js?{php} echo $_SESSION['vtiger_version'];{/php}"></script>
@@ -19,7 +50,7 @@
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script type="text/javascript">
 function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
-        opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_module="+mod+"&entityid="+entity_id+"&parid="+recordid+"&return_module={$RETURN_MODULE}&return_action={$RETURN_ACTION}";
+        opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_module="+mod+"&entityid="+entity_id+"&parid="+recordid+"&return_module={$RETURN_MODULE}&return_action={$RETURN_ACTION}&parenttab={$CATEGORY}";
 {rdelim}
 
 </script>
@@ -30,7 +61,11 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 		<td>
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td class="moduleName" width="80%" style="padding-left:10px;">{$APP[$MODULE]}</td>
+					{if $recid_var_value neq ''}
+                                                <td class="moduleName" width="80%" style="padding-left:10px;">{$APP[$MODULE]}&nbsp;{$APP.RELATED_PARENT}</td>
+                                        {else}
+                                                <td class="moduleName" width="80%" style="padding-left:10px;">{$APP[$MODULE]}</td>
+                                        {/if}
 					<td  width=30% nowrap class="componentName" align=right>{$APP.VTIGER}</td>
 				</tr>
 			</table>
@@ -58,7 +93,9 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 								<input name="recordid" id="recordid" type="hidden" value="{$RECORDID}">
 								<input name="return_module" id="return_module" type="hidden" value="{$RETURN_MODULE}">
 								<input name="from_link" id="from_link" type="hidden" value="{$smarty.request.fromlink.value}">
-			
+								<input name="maintab" id="maintab" type="hidden" value="{$MAINTAB}">
+								<input type="hidden" id="relmod" name="{$mod_var_name}" value="{$mod_var_value}">
+                                                                <input type="hidden" id="relrecord_id" name="{$recid_var_name}" value="{$recid_var_value}">
 							</td>
 							<td width="20%" class="dvtCellLabel">
 								<input type="button" name="search" value=" &nbsp;{$APP.LBL_SEARCH_NOW_BUTTON}&nbsp; " onClick="callSearch('Basic');" class="crmbutton small create">
@@ -77,6 +114,11 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 						</form>
 					</td>
 				</tr>
+				{if $recid_var_value neq ''}
+                                <tr>
+                                        <td align="right"><input id="all_contacts" alt="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.$MODULE}" title="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.$MODULE}" accessKey="" class="crmbutton small edit" value="{$APP.SHOW_ALL}&nbsp;{$MODULE}" LANGUAGE=javascript onclick="window.location.href=showAllRecords();" type="button"  name="button"></td>
+                                </tr>
+                                {/if}
 			</table>
 
 			<div id="ListViewContents">
@@ -89,8 +131,11 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 </body>
 <script>
 var gPopupAlphaSearchUrl = '';
+var gsorder ='';
+var gstart ='';
 function callSearch(searchtype)
 {ldelim}
+    gstart='';
     for(i=1;i<=26;i++)
     {ldelim}
         var data_td_id = 'alpha_'+ eval(i);
@@ -98,15 +143,17 @@ function callSearch(searchtype)
     {rdelim}
     gPopupAlphaSearchUrl = '';
     search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
-    search_txt_val=document.basicSearch.search_text.value;
+    search_txt_val= encodeURIComponent(document.basicSearch.search_text.value.replace(/\'/,"\\'"));
     var urlstring = '';
     if(searchtype == 'Basic')
     {ldelim}
 	urlstring = 'search_field='+search_fld_val+'&searchtype=BasicSearch&search_text='+search_txt_val;
     {rdelim}
 	popuptype = $('popup_type').value;
+	act_tab = $('maintab').value;
 	urlstring += '&popuptype='+popuptype;
-	urlstring = urlstring +'&query=true&file=Popup&module={$MODULE}&action={$MODULE}Ajax&ajax=true';
+	urlstring += '&maintab='+act_tab;
+	urlstring = urlstring +'&query=true&file=Popup&module={$MODULE}&action={$MODULE}Ajax&ajax=true&search=true';
 	urlstring +=gethiddenelements();
 	new Ajax.Request(
 		'index.php',
@@ -121,6 +168,7 @@ function callSearch(searchtype)
 {rdelim}	
 function alphabetic(module,url,dataid)
 {ldelim}
+    gstart='';
     document.basicSearch.search_text.value = '';	
     for(i=1;i<=26;i++)
     {ldelim}
@@ -129,7 +177,7 @@ function alphabetic(module,url,dataid)
     {rdelim}
     getObj(dataid).className = 'searchAlphselected';
     gPopupAlphaSearchUrl = '&'+url;	
-    var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true&"+url;
+    var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true&search=true&"+url;
     urlstring +=gethiddenelements();
     new Ajax.Request(
                 'index.php',
@@ -144,6 +192,7 @@ function alphabetic(module,url,dataid)
 {rdelim}
 function gethiddenelements()
 {ldelim}
+	gstart='';
 	var urlstring=''	
 	if(getObj('select_enable').value != '')
 		urlstring +='&select=enable';	
@@ -154,7 +203,12 @@ function gethiddenelements()
 	if(getObj('productid_pb').value != '')
 		urlstring +='&productid='+getObj('productid_pb').value;	
 	if(getObj('recordid').value != '')
-		urlstring +='&recordid='+getObj('recordid').value;	
+		urlstring +='&recordid='+getObj('recordid').value;
+	if(getObj('relmod').value != '')
+                urlstring +='&'+getObj('relmod').name+'='+getObj('relmod').value;
+        if(getObj('relrecord_id').value != '')
+                urlstring +='&'+getObj('relrecord_id').name+'='+getObj('relrecord_id').value;
+	
 	var return_module = document.getElementById('return_module').value;
 	if(return_module != '')
 		urlstring += '&return_module='+return_module;
@@ -163,6 +217,7 @@ function gethiddenelements()
 																									
 function getListViewEntries_js(module,url)
 {ldelim}
+	gstart="&"+url;
 	popuptype = document.getElementById('popup_type').value;
         var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true&"+url;
     	urlstring +=gethiddenelements();
@@ -174,6 +229,8 @@ function getListViewEntries_js(module,url)
 		urlstring += gPopupAlphaSearchUrl;	
 	else
 		urlstring += '&popuptype='+popuptype;	
+
+	urlstring += (gsorder !='') ? gsorder : '';
 	new Ajax.Request(
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -188,7 +245,9 @@ function getListViewEntries_js(module,url)
 
 function getListViewSorted_js(module,url)
 {ldelim}
+	gsorder=url;
         var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true"+url;
+	urlstring += (gstart !='') ? gstart : '';
 	new Ajax.Request(
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -200,4 +259,5 @@ function getListViewSorted_js(module,url)
 			{rdelim}
 		);
 {rdelim}
+
 </script>

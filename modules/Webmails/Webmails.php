@@ -92,16 +92,9 @@ class Webmails extends CRMEntity {
 	function loadMail($attach_tab) {
 		
 		$this->email = $this->load_mail($attach_tab);
-		/* commented out by richie
-		$this->inline = $this->email["inline"];
-		$this->attachments = $this->email["attachments"];
-		$this->body = $this->email["content"]["body"];
-		$this->relationship = $this->find_relationships();
-		 */
 		$this->body = $this->email["body"];
 		$this->attachtab = $this->email["attachtab"];
 		$this->att= $this->email["att"];
-		//echo ' body is ssssssssssssssss '.$this->email["body"];
 	}
 
 	function replyBody() {
@@ -211,22 +204,22 @@ class Webmails extends CRMEntity {
 
     function find_relationships() {
 	// leads search
-	$sql = "SELECT * from vtiger_leaddetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid where vtiger_leaddetails.email = '".trim($this->from)."' AND vtiger_crmentity.deleted='0'";
-	$res = $this->db->query($sql,true,"Error: "."<BR>$query");
+	$sql = "SELECT * from vtiger_leaddetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid where vtiger_leaddetails.email = ? AND vtiger_crmentity.deleted='0'";
+	$res = $this->db->pquery($sql,array(trim($this->from)),true,"Error: "."<BR>$query");
 	$numRows = $this->db->num_rows($res);
 	if($numRows > 0)
 		return array('type'=>"Leads",'id'=>$this->db->query_result($res,0,"leadid"),'name'=>$this->db->query_result($res,0,"firstname")." ".$this->db->query_result($res,0,"lastname"));
 
 	// contacts search
-	$sql = "SELECT * from vtiger_contactdetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid where vtiger_contactdetails.email = '".trim($this->from)."'  AND vtiger_crmentity.deleted='0'";
-	$res = $this->db->query($sql,true,"Error: "."<BR>$query");
+	$sql = "SELECT * from vtiger_contactdetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid where vtiger_contactdetails.email = ?  AND vtiger_crmentity.deleted='0'";
+	$res = $this->db->pquery($sql,array(trim($this->from)),true,"Error: "."<BR>$query");
 	$numRows = $this->db->num_rows($res);
 	if($numRows > 0)
 		return array('type'=>"Contacts",'id'=>$this->db->query_result($res,0,"contactid"),'name'=>$this->db->query_result($res,0,"firstname")." ".$this->db->query_result($res,0,"lastname"));
 
 	// vtiger_accounts search
-	$sql = "SELECT * from vtiger_account left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_account.email1 = '".trim($this->from)."' OR vtiger_account.email1='".trim($this->from)."'  AND vtiger_crmentity.deleted='0'";
-	$res = $this->db->query($sql,true,"Error: "."<BR>$query");
+	$sql = "SELECT * from vtiger_account left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_account.email1 = ? OR vtiger_account.email1=?  AND vtiger_crmentity.deleted='0'";
+	$res = $this->db->pquery($sql, array(trim($this->from), trim($this->from)), true,"Error: "."<BR>$query");
 	$numRows = $this->db->num_rows($res);
 	if($numRows > 0)
 		return array('type'=>"Accounts",'id'=>$this->db->query_result($res,0,"accountid"),'name'=>$this->db->query_result($res,0,"accountname"));
@@ -625,13 +618,14 @@ function mime_header_decode(&$header)
 	$source = imap_mime_header_decode($header);
 	$result[] = new result;
 	$result[0]->text='';
-	$result[0]->charset='ISO-8859-1';
+	$result[0]->charset='UTF-8';
 	for ($j = 0; $j < count($source); $j++ )
        	{
 	$element_charset =  ($source[$j]->charset == "default") ? $this->detect_charset($source[$j]->text) : $source[$j]->charset;
 		if ($element_charset == 'x-unknown')
-			$element_charset = 'ISO-8859-1';
+			$element_charset = 'UTF-8';
 
+		if(empty($output_charset)) $output_charset = $default_charset;	
 		$element_converted = function_exists(iconv) ? @iconv( $element_charset, $output_charset, $source[$j]->text): $source[$j]->text ;
 		$result[$j]->text = $element_converted;
 		$result[$j]->charset = $output_charset;
@@ -665,6 +659,11 @@ function link_att(&$mail, $attach_tab, &$display_part_no,$ev)
 			if(!preg_match("/unknown/",$att_name)){	
 				$link .= ($ct+1).'. <a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">' . $att_name . '</a>&nbsp;&nbsp;' . $tmp['mime'] . '&nbsp;&nbsp;' . $tmp['size'] . '<br/>';
 				$this->anchor_arr[$ct] = ($ct+1).'. <a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">';
+				$this->att_details[$ct]['name'] = $att_name;
+				$this->att_details[$ct]['size'] = $tmp['size'];
+				$this->att_details[$ct]['type'] = $tmp['mime'];
+				$this->att_details[$ct]['part'] = $tmp['number'];
+				$this->att_details[$ct]['transfer'] = $tmp['transfer'];
 				$ct++;
 			}
 		}
@@ -710,7 +709,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 	function load_mail($attach_tab)
 	{
 		// parse the message
-		$ref_contenu_message =  imap_headerinfo($this->mbox, $this->mailid);
+		$ref_contenu_message =  @imap_headerinfo($this->mbox, $this->mailid);
 		$struct_msg = @imap_fetchstructure($this->mbox, $this->mailid);
 		$mail = $this->mbox;
 		$ev = $this->mailid;
@@ -721,8 +720,8 @@ function convertMailData2Html($maildata, $cutafter = 0)
 		}
 		else
 		{
-			$pop_fetchheader_mail_ev = imap_fetchheader($mail, $ev);
-			$pop_body_mail_ev = imap_body($mail, $ev);
+			$pop_fetchheader_mail_ev = @imap_fetchheader($mail, $ev);
+			$pop_body_mail_ev = @imap_body($mail, $ev);
 			GetSinglePart($attach_tab, $struct_msg, $pop_fetchheader_mail_ev, $pop_body_mail_ev);
 		}
 		$conf->use_verbose = true;
@@ -738,7 +737,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 		}
 		else
 		{
-			$body = imap_fetchbody($mail,$ev,$tmpvar['number']);
+			$body = @imap_fetchbody($mail,$ev,$tmpvar['number']);
 
 		}
 
@@ -755,14 +754,14 @@ function convertMailData2Html($maildata, $cutafter = 0)
 
 
 			if (strtolower($body_charset) == "us-ascii") {
-				$body_charset = "ISO-8859-1";
+				$body_charset = "UTF-8";
 			}
 
 			if ($body_charset == "" || $body_charset == null) {
 				if (isset($conf->default_charset) && $conf->default_charset != "") {
 					$body_charset = $conf->default_charset;
 				} else {
-					$body_charset = "ISO-8859-1";
+					$body_charset = "UTF-8";
 				}
 			}
 
@@ -770,6 +769,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 				$body_charset = $_REQUEST['user_charset'];
 			}
 			$this->charsets = $body_charset;
+			if(empty($GLOBALS['charset'])) $GLOBALS['charset'] = $default_charset;
 			$body_converted = function_exists(iconv) ? @iconv( $body_charset, $GLOBALS['charset'], $body) : $body;
 			$body = ($body_converted===FALSE) ? $body : $body_converted;
 			$tmpvar['charset'] = ($body_converted===FALSE) ? $body_charset : $GLOBALS['charset'];
@@ -813,7 +813,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 			}
 		}
 		if ($msg_charset == '') {
-			$msg_charset = 'ISO-8859-1';
+			$msg_charset = 'UTF-8';
 		}
 
 
@@ -826,8 +826,15 @@ function convertMailData2Html($maildata, $cutafter = 0)
 		$from_array = $this->mime_header_decode($from_header);
 		for ($j = 0; $j < count($from_array); $j++)
 			$from .= $from_array[$j]->text;
-
-		$to_header = str_replace('x-unknown', $msg_charset, $ref_contenu_message->toaddress);
+		//fixed the issue #3235
+		$toheader = @imap_fetchheader($this->mbox, $this->mailid);
+	        $to_arr = explode("To:",$toheader);
+	        if(!stripos($to_arr[1],'mime')){
+	                $to_add = stripos($to_arr[1],"CC:")?explode("CC:",$to_arr[1]):explode("Subject:",$to_arr[1]);
+	                $to_header = trim($to_add[0]);
+		}
+		else
+			$to_header = str_replace('x-unknown', $msg_charset, $ref_contenu_message->toaddress);
 		$to_array = $this->mime_header_decode($to_header);
 		for ($j = 0; $j < count($to_array); $j++)
 			$to .= $to_array[$j]->text;
@@ -1001,5 +1008,13 @@ function convertMailData2Html($maildata, $cutafter = 0)
 
 
     
+}
+function decode_header($string)
+{
+        $elements = imap_mime_header_decode($string);
+        for ($i=0; $i<count($elements); $i++) {
+                $result .= $elements[$i]->text;
+        }
+        return $result;
 }
 ?>

@@ -13,11 +13,15 @@ require_once('include/utils/utils.php');
 require_once('Smarty_setup.php');
 global $app_strings;
 global $list_max_entries_per_page;
+global $currentModule, $current_user;
+if($current_user->is_admin != 'on')
+{
+        die("<br><br><center>".$app_strings['LBL_PERMISSION']." <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
+}
 
 $log = LoggerManager::getLogger('user_list');
 
 global $mod_strings;
-global $currentModule, $current_user;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -25,8 +29,18 @@ global $current_language;
 $mod_strings = return_module_language($current_language,'Users');
 $category = getParentTab();
 $focus = new Users();
-$smarty = new vtigerCRM_Smarty;
 $no_of_users=UserCount();
+
+//Display the mail send status
+$smarty = new vtigerCRM_Smarty;
+if($_REQUEST['mail_error'] != '')
+{
+    require_once("modules/Emails/mail.php");
+    $error_msg = strip_tags(parseEmailErrorString($_REQUEST['mail_error']));
+	$error_msg = $app_strings['LBL_MAIL_NOT_SENT_TO_USER']. ' ' . $_REQUEST['user']. '. ' .$app_strings['LBL_PLS_CHECK_EMAIL_N_SERVER'];
+	$smarty->assign("ERROR_MSG",$mod_strings['LBL_MAIL_SEND_STATUS'].' <b><font class="warning">'.$error_msg.'</font></b>');
+}
+
 //Retreiving the start value from request
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {

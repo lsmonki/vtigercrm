@@ -94,7 +94,7 @@ function ShowFolders(folderid)
 										<table cellpadding="5" cellspacing="0" border="0">
 											<tr>
 												<td nowrap style="padding-left:20px;padding-right:20px" class=small>
-												<img src="themes/images/compose.gif" align="absmiddle" />
+												<img src="themes/{$theme}/images/compose.gif" align="absmiddle" />
 							&nbsp;<a href="javascript:;" onClick="OpenCompose('','create');" >{$MOD.LBL_COMPOSE}</a>
 												</td>
 												<td nowrap style="padding-left:20px;padding-right:20px" class=small>
@@ -127,30 +127,30 @@ function ShowFolders(folderid)
 								<td rowspan="6" class="MatrixLayer1" valign="top" bgcolor="#FFFFFF" style="padding:5px; " align="left" >
 								<!-- Mailbox Tree -->
 								<!-- Inbox -->
-								<img src="themes/images/folder_.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_INBOX}</b>
+								<img src="themes/{$theme}/images/folder_.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_INBOX}</b>
 								<ul style="list-style-type:none;margin-left:10px;margin-top:5px;padding:2px">
-									<li><img src="themes/images/folder.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="themes/{$theme}/images/folder.gif" align="absmiddle" />&nbsp;&nbsp;
 										<a href="javascript:;" onClick="ShowFolders(6)" class="webMnu">{$MOD.LBL_QUAL_CONTACT}</a>&nbsp;<b></b>
 									</li>
-									<li><img src="themes/images/mymail.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="themes/{$theme}/images/mymail.gif" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="gotoWebmail();" class="webMnu">{$MOD.LBL_MY_MAILS}</a>&nbsp;<b></b>
 									</li>
 								</ul>
 								<!-- Sent mail -->
-								<img src="themes/images/sentmail.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
+								<img src="themes/{$theme}/images/sentmail.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
 								<ul style="list-style-type:none;margin-left:10px;margin-top:5px;padding:2px">
-									<li><img src="themes/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="themes/{$theme}/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(1)" class="webMnu">{$MOD.LBL_ALLMAILS}</a>&nbsp;<b></b>
-									<li><img src="themes/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="themes/{$theme}/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(2)" class="webMnu">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;<b></b>
 									</li>
-									<li><img src="themes/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="themes/{$theme}/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(3)" class="webMnu">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;<b></b>
 									</li>
-									<li><img src="themes/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="themes/{$theme}/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(4)" class="webMnu">{$MOD.LBL_TO_LEADS}</a>&nbsp;
 									</li>
-									<li><img src="themes/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="themes/{$theme}/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(5)" class="webMnu">{$MOD.LBL_TO_USERS}</a>&nbsp;
 									</li>
 								</ul>

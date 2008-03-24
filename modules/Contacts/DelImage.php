@@ -12,25 +12,28 @@
 
 
 function DelImage($id)
-{
-		
+{		
 	global $adb;
-	$query="delete from vtiger_attachments where attachmentsid=(select attachmentsid from vtiger_seattachmentsrel where crmid=".$id.")";
-	$adb->query($query);
-
-	$query="delete from vtiger_seattachmentsrel where crmid=".$id;
-	$adb->query($query);
+	$query= "select vtiger_seattachmentsrel.attachmentsid from vtiger_seattachmentsrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_seattachmentsrel.attachmentsid where vtiger_crmentity.setype='Contacts Image' and vtiger_seattachmentsrel.crmid=?";
+	$result = $adb->pquery($query, array($id));
+	$attachmentsid = $adb->query_result($result,$i,"attachmentsid");
+	
+	$rel_delquery='delete from vtiger_seattachmentsrel where crmid=?  and attachmentsid=?';
+	$adb->pquery($rel_delquery, array($id, $attachmentsid));
+	
+	$crm_delquery="delete from vtiger_crmentity where crmid=?";
+	$adb->pquery($crm_delquery, array($attachmentsid));
 }
 
 function DelAttachment($id)
 {
 	global $adb;
-	$selresult = $adb->query("select name,path from vtiger_attachments where attachmentsid=$id");
+	$selresult = $adb->pquery("select name,path from vtiger_attachments where attachmentsid=?", array($id));
 	unlink($adb->query_result($selresult,0,'path').$id."_".$adb->query_result($selresult,0,'name'));
-	$query="delete from vtiger_seattachmentsrel where attachmentsid=".$id;
-	$adb->query($query);
-	$query="delete from vtiger_attachments where attachmentsid=".$id.")";
-	$adb->query($query);
+	$query="delete from vtiger_seattachmentsrel where attachmentsid=?";
+	$adb->pquery($query, array($id));
+	$query="delete from vtiger_attachments where attachmentsid=?";
+	$adb->pquery($query, array($id));
 
 }
 $id = $_REQUEST["recordid"];

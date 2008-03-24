@@ -23,6 +23,12 @@
 <tr>
 	<td class=small align=right><input title="{$CMOD.LBL_NEW_USER_BUTTON_TITLE}" accessyKey="{$CMOD.LBL_NEW_USER_BUTTON_KEY}" type="submit" name="button" value="{$CMOD.LBL_NEW_USER_BUTTON_LABEL}" class="crmButton create small"></td>
 </tr>
+
+{if $ERROR_MSG neq ''}
+<tr>
+	{$ERROR_MSG}
+</tr>
+{/if}
 </table>
 						
 <table border=0 cellspacing=0 cellpadding=5 width=100% class="listTable">

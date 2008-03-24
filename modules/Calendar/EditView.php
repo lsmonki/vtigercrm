@@ -36,6 +36,11 @@ global $mod_strings,$current_user;
 // Unimplemented until jscalendar language vtiger_files are fixed
 $focus = new Activity();
 $smarty =  new vtigerCRM_Smarty();
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
+
 $activity_mode = $_REQUEST['activity_mode'];
 if($activity_mode == 'Task')
 {
@@ -55,8 +60,8 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $focus->mode = 'edit';
     $focus->retrieve_entity_info($_REQUEST['record'],$tab_type);		
     $focus->name=$focus->column_fields['subject'];
-    $sql = 'select vtiger_users.user_name,vtiger_invitees.* from vtiger_invitees left join vtiger_users on vtiger_invitees.inviteeid=vtiger_users.id where activityid='.$focus->id;
-    $result = $adb->query($sql);
+    $sql = 'select vtiger_users.user_name,vtiger_invitees.* from vtiger_invitees left join vtiger_users on vtiger_invitees.inviteeid=vtiger_users.id where activityid=?';
+    $result = $adb->pquery($sql, array($focus->id));
     $num_rows=$adb->num_rows($result);
     $invited_users=Array();
     for($i=0;$i<$num_rows;$i++)
@@ -69,6 +74,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $smarty->assign("UPDATEINFO",updateInfo($focus->id));
     $related_array = getRelatedLists("Calendar", $focus);
     $cntlist = $related_array['Contacts']['entries'];
+	$is_fname_permitted = getFieldVisibilityPermission("Contacts", $current_user->id, 'firstname');
     $cnt_idlist = '';
     $cnt_namelist = '';
     if($cntlist != '')
@@ -82,14 +88,16 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 			    $cnt_namelist .= "\n";
 		    }
 		    $cnt_idlist .= $key;
-		    $cnt_namelist .= eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $cntvalue[0]).' '.eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $cntvalue[1]);
+		    $contName = eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $cntvalue[0]);
+			if ($is_fname_permitted == '0') $contName .= ' '.eregi_replace("(<a[^>]*>)(.*)(</a>)", "\\2", $cntvalue[1]);
+		    $cnt_namelist .= '<option value="'.$key.'">'.$contName.'</option>';
 		    $i++;
 	    }
     }
     $smarty->assign("CONTACTSID",$cnt_idlist);
     $smarty->assign("CONTACTSNAME",$cnt_namelist);
-    $query = 'select vtiger_recurringevents.recurringfreq,vtiger_recurringevents.recurringinfo from vtiger_recurringevents where vtiger_recurringevents.activityid = '.$focus->id;
-    $res = $adb->query($query);
+    $query = 'select vtiger_recurringevents.recurringfreq,vtiger_recurringevents.recurringinfo from vtiger_recurringevents where vtiger_recurringevents.activityid = ?';
+    $res = $adb->pquery($query, array($focus->id));
     $rows = $adb->num_rows($res);
     if($rows != 0)
     {
@@ -128,7 +136,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 {
 	if(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id']!=''){
 		$smarty->assign("CONTACTSID",$_REQUEST['contact_id']);
-		$contact_name = getContactName($_REQUEST['contact_id']);
+		$contact_name = "<option value=".$_REQUEST['contact_id'].">".getContactName($_REQUEST['contact_id'])."</option>";
 		$smarty->assign("CONTACTSNAME",$contact_name);
 		$account_id = $_REQUEST['account_id'];
                 $account_name = getAccountName($account_id);
@@ -208,7 +216,6 @@ $smarty->assign("DATEFORMAT",parse_calendardate($app_strings['NTC_DATE_FORMAT'])
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Activity detail view");
 

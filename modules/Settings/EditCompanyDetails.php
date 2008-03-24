@@ -42,10 +42,9 @@ global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $sql="select * from vtiger_organizationdetails";
-$result = $adb->query($sql);
+$result = $adb->pquery($sql, array());
 $organization_name = str_replace('"','&quot;',$adb->query_result($result,0,'organizationname'));
 $organization_address= $adb->query_result($result,0,'address');
 $organization_city = $adb->query_result($result,0,'city');

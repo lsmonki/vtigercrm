@@ -16,8 +16,8 @@ include_once('modules/Users/Users.php');
 global $log;
 
 //download the template file and store it in some specific location
-$sql = "select templatename,body from vtiger_emailtemplates where templateid='".$_REQUEST["templateid"] ."'";
-$tempresult = $adb->query($sql);
+$sql = "select templatename,body from vtiger_emailtemplates where templateid=?";
+$tempresult = $adb->pquery($sql, array($_REQUEST["templateid"]));
 $tempArray = $adb->fetch_array($tempresult);
 $fileContent = $tempArray["body"];
 	$log->debug("the filecontent is ".$fileContent);
@@ -86,8 +86,8 @@ foreach ($focus->column_fields as $columnName=>$value)
 
 global $current_user;
 global $adb;
-$query = 'select * from vtiger_users where id= '.$current_user->id;
-$result = $adb->query($query);
+$query = 'select * from vtiger_users where id= ?';
+$result = $adb->pquery($query, array($current_user->id));
 $res_row = $adb->fetchByAssoc($result);
 foreach ($res_row as $columnName=>$value)
 {

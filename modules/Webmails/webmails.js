@@ -452,7 +452,7 @@ function move_messages()
 			);
 	}else
 	{
-		alert("Please select a mail and then move..");
+		alert(alert_arr.SELECT_MAIL_MOVE);
 	}
 }
 

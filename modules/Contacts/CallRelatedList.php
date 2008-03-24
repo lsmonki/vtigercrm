@@ -38,7 +38,7 @@ $log->debug("name is ".$focus->name);
 }
 
 global $adb;
-$sql = $adb->query('select accountid from vtiger_contactdetails where contactid='.$focus->id);
+$sql = $adb->pquery('select accountid from vtiger_contactdetails where contactid=?', array($focus->id));
 $accountid = $adb->query_result($sql,0,'accountid');
 if($accountid == 0) $accountid='';
 
@@ -49,7 +49,6 @@ global $currentModule;
 global $current_user;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("accountid",$accountid);
@@ -68,7 +67,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
 	$userid = $current_user->id;
 	$sql = "select fieldname from vtiger_field where uitype = 13 and tabid = 4";
-	$result = $adb->query($sql);
+	$result = $adb->pquery($sql, array());
 	$num_fieldnames = $adb->num_rows($result);
 	for($i = 0; $i < $num_fieldnames; $i++)
 	{
@@ -76,8 +75,10 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 		$permit= getFieldVisibilityPermission("Contacts",$userid,$fieldname);
 	}
 }
-
-$category = getparenttab();
+$category = getParentTab();
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("CONTACT_PERMISSION",CheckFieldPermission('contact_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("ID",$focus->id);
 $smarty->assign("NAME",$focus->name);

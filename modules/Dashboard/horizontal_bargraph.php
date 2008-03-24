@@ -40,7 +40,7 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 	{
 		$name=$datax[$i];
 		$pos = substr_count($name," ");
-		$alts[]=$name."=%d";
+		$alts[]=htmlentities($name)."=%d";
 //If the daatx value of a string is greater, adding '\n' to it so that it'll cme inh 2nd line
 		 if(strlen($name)>=14)
                         $name=substr($name, 0, 44);
@@ -106,6 +106,9 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 
 	// Now create a bar plot
 	$max=0;
+	// To create unique lables we need to keep track of lable name and its count
+	$uniquex = array();
+	
 	$xlabels = array();
 	$dataset = & Image_Graph::factory('dataset');
 	$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL_MIRRORED, 'blue', 'white'));
@@ -121,10 +124,21 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 			            'alt' => $alts[$i]
 			        )
 	    );
-	    // build the xaxis label array to allow intermediate ticks
-	    $xlabels[$x] = $datax[$i];
-	    $xlabels[$x+1] = '';
+		// build the xaxis label array to allow intermediate ticks
+
+		$xlabels[$x] = $datax[$i];
+		$xlabels[$x+1] = '';
+
+		// To have unique names even in case of duplicates let us add the id
+		$datax_appearance = $uniquex[$datax[$i]];
+		if($datax_appearance == null) {
+			$uniquex[$datax[$i]] = 1;			
+		} else {
+			$xlabels[$x] = $datax[$i] .' ['. $datax_appearance.']';
+			$uniquex[$datax[$i]] = $datax_appearance + 1;			
+		}
 	}
+	//print_r($uniquex);
 
 
 	$bplot = & $plotarea->addNew('bar', $dataset);

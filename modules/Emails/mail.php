@@ -24,7 +24,7 @@ require("modules/Emails/class.phpmailer.php");
   *   $attachment	-- whether we want to attach the currently selected file or all vtiger_files.[values = current,all] - optional
   *   $emailid		-- id of the email object which will be used to get the vtiger_attachments
   */
-function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$cc='',$bcc='',$attachment='',$emailid='')
+function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$cc='',$bcc='',$attachment='',$emailid='',$logo='')
 {
 
 	global $adb, $log;
@@ -46,7 +46,7 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 
 	$mail = new PHPMailer();
 
-	setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment,$emailid);
+	setMailerProperties($mail,$subject,$contents,$from_email,$from_name,trim($to_email,","),$attachment,$emailid,$module,$logo);
 	setCCAddress($mail,'cc',$cc);
 	setCCAddress($mail,'bcc',$bcc);
 
@@ -76,8 +76,8 @@ function getUserEmailId($name,$val)
 	{
 		//$sql = "select email1, email2, yahoo_id from vtiger_users where ".$name." = '".$val."'";
 		//done to resolve the PHP5 specific behaviour
-		$sql = "select email1, email2, yahoo_id from vtiger_users where ".$name." = ".$adb->quote($val);
-		$res = $adb->query($sql);
+		$sql = "select email1, email2, yahoo_id from vtiger_users where $name = ?";
+		$res = $adb->pquery($sql, array($val));
 		$email = $adb->query_result($res,0,'email1');
 		if($email == '')
 		{
@@ -106,7 +106,7 @@ function addSignature($contents, $fromname)
 	global $adb;
 	$adb->println("Inside the function addSignature");
 
-	$sign = nl2br($adb->query_result($adb->query("select signature from vtiger_users where user_name=".$adb->quote($fromname)),0,"signature"));
+	$sign = nl2br($adb->query_result($adb->pquery("select signature from vtiger_users where user_name=?", array($fromname)),0,"signature"));
 	if($sign != '')
 	{
 		$contents .= '<br><br>'.$sign;
@@ -131,10 +131,12 @@ function addSignature($contents, $fromname)
   				[values = current,all] - optional
   *	$emailid	-- id of the email object which will be used to get the vtiger_attachments - optional
   */
-function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment='',$emailid='')
+function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment='',$emailid='',$module='',$logo='')
 {
 	global $adb;
 	$adb->println("Inside the function setMailerProperties");
+	if($module == "Support" || $logo ==1)
+		$mail->AddEmbeddedImage('themes/images/logo_mail.jpg', 'logo', 'logo.jpg',"base64","image/jpg");
 
 	$mail->Subject = $subject;
 	$mail->Body = $contents;
@@ -148,11 +150,11 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 
 	//Handle the from name and email for HelpDesk
 	$mail->From = $from_email;
-	$rs = $adb->query("select first_name,last_name from vtiger_users where user_name='".$from_name."'");
+	$rs = $adb->pquery("select first_name,last_name from vtiger_users where user_name=?", array($from_name));
 	if($adb->num_rows($rs) > 0)
 		$from_name = $adb->query_result($rs,0,"first_name")." ".$adb->query_result($rs,0,"last_name");
 
-	$mail->FromName = $from_name;
+	$mail->FromName = decode_html($from_name);
 
 	if($to_email != '')
 	{
@@ -174,7 +176,12 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	//If we want to add the currently selected file only then we will use the following function
 	if($attachment == 'current' && $emailid != '')
 	{
-		addAttachment($mail,$_FILES['filename']['name'],$emailid);
+		if (isset($_REQUEST['filename_hidden'])) {
+			$file_name = $_REQUEST['filename_hidden'];
+		} else {
+			$file_name = $_FILES['filename']['name'];
+		}
+		addAttachment($mail,$file_name,$emailid);
 	}
 
 	//This will add all the vtiger_files which are related to this record or email
@@ -196,7 +203,7 @@ function setMailServerProperties($mail)
 	global $adb;
 	$adb->println("Inside the function setMailServerProperties");
 
-	$res = $adb->query("select * from vtiger_systems where server_type='email'");
+	$res = $adb->pquery("select * from vtiger_systems where server_type=?", array('email'));
 	if(isset($_REQUEST['server']))
 		$server = $_REQUEST['server'];
 	else
@@ -209,7 +216,20 @@ function setMailServerProperties($mail)
 		$password = $_REQUEST['server_password'];
 	else
         	$password = $adb->query_result($res,0,'server_password');
-	$smtp_auth = $adb->query_result($res,0,'smtp_auth');
+	// Prasad: First time read smtp_auth from the request	
+	if(isset($_REQUEST['smtp_auth']))
+	{
+		$smtp_auth = $_REQUEST['smtp_auth'];
+		if($smtp_auth == 'on')	
+			$smtp_auth = 'true';
+	}
+	else if (isset($_REQUEST['module']) && $_REQUEST['module'] == 'Settings' && (!isset($_REQUEST['smtp_auth'])))
+	{
+		//added to avoid issue while editing the values in the outgoing mail server.
+		$smtp_auth = 'false';
+	}
+	else
+		$smtp_auth = $adb->query_result($res,0,'smtp_auth');
 
 	$adb->println("Mail server name,username & password => '".$server."','".$username."','".$password."'");
 	if($smtp_auth == "true"){
@@ -250,14 +270,14 @@ function addAllAttachments($mail,$record)
         $adb->println("Inside the function addAllAttachments");
 
 	//Retrieve the vtiger_files from database where avoid the file which has been currently selected
-	$sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_attachments.attachmentsid = vtiger_seattachmentsrel.attachmentsid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_attachments.attachmentsid where vtiger_crmentity.deleted=0 and vtiger_seattachmentsrel.crmid=".$record;
-	$res = $adb->query($sql);
+	$sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_attachments.attachmentsid = vtiger_seattachmentsrel.attachmentsid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_attachments.attachmentsid where vtiger_crmentity.deleted=0 and vtiger_seattachmentsrel.crmid=?";
+	$res = $adb->pquery($sql, array($record));
 	$count = $adb->num_rows($res);
 
 	for($i=0;$i<$count;$i++)
 	{
 		$fileid = $adb->query_result($res,$i,'attachmentsid');
-		$filename = $adb->query_result($res,$i,'name');
+		$filename = decode_html($adb->query_result($res,$i,'name'));
 		$filepath = $adb->query_result($res,$i,'path');
 		$filewithpath = $root_directory.$filepath.$fileid."_".$filename;
 
@@ -286,11 +306,18 @@ function setCCAddress($mail,$cc_mod,$cc_val)
 		$method = 'AddBCC';
 	if($cc_val != '')
 	{
-		$ccmail = explode(",",$cc_val);
+		$ccmail = explode(",",trim($cc_val,","));
 		for($i=0;$i<count($ccmail);$i++)
 		{
+			$addr = $ccmail[$i];
+			$cc_name = preg_replace('/([^@]+)@(.*)/', '$1', $addr); // First Part Of Email
+			if(stripos($addr, '<')) {
+				$name_addr_pair = explode("<",$ccmail[$i]);
+				$cc_name = $name_addr_pair[0];
+				$addr = trim($name_addr_pair[1],">");
+			}
 			if($ccmail[$i] != '')
-				$mail->$method($ccmail[$i]);
+				$mail->$method($addr,$cc_name);
 		}
 	}
 }
@@ -339,10 +366,11 @@ function getParentMailId($parentmodule,$parentid)
         }
 	if($parentid != '')
 	{
-	        //$query = 'select * from '.$tablename.' where '.$idname.' = '.$parentid;
-	        $query = 'select * from '.$tablename.' where '. $idname.' = '.$adb->quote($parentid);
-	        $mailid = $adb->query_result($adb->query($query),0,$first_email);
-		$mailid2 = $adb->query_result($adb->query($query),0,$second_email);
+	   	//$query = 'select * from '.$tablename.' where '.$idname.' = '.$parentid;
+	   	$query = 'select * from '.$tablename.' where '. $idname.' = ?';
+		$res = $adb->pquery($query, array($parentid));
+	    $mailid = $adb->query_result($res,0,$first_email);
+		$mailid2 = $adb->query_result($res,0,$second_email);
 	}
         if($mailid == '' && $mailid2 != '')
         	$mailid = $mailid2;
@@ -367,8 +395,7 @@ function getMailError($mail,$mail_status,$to)
 	global $adb;
 	$adb->println("Inside the function getMailError");
 
-	$error_info = explode(":",$mail_status);
-	$msg = trim($error_info[1]);
+	$msg = array_search($mail_status,$mail->language);
 	$adb->println("Error message ==> ".$msg);
 
 	if($msg == 'connect_host')

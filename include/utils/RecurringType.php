@@ -10,6 +10,7 @@
  ********************************************************************************/
 require_once('include/utils/utils.php');
 require_once('modules/Calendar/Date.php');
+global $app_strings;
 class RecurringType
 {
 	var $recur_type;
@@ -79,7 +80,6 @@ class RecurringType
 			$this->rptmonth_datevalue = $repeat_arr['repeatmonth_date'];
 		$this->rptmonth_daytype = $repeat_arr['repeatmonth_daytype'];
 		$this->recurringdates = $this->getRecurringDates();
-		//echo '<pre>';print_r($this->recurringdates);echo '</pre>';die;	
 	}
 
 	/**
@@ -243,7 +243,7 @@ class RecurringType
 					$index = $st_date[0] + 1;
 				if ($index > 2037 || $index < 1970)
 				{
-					print("<font color='red'>Sorry, Year must be between 1970 and 2037</font>");
+					print("<font color='red'>".$app_strings['LBL_CAL_LIMIT_MSG']."</font>");
 				        exit;
 				}
 				$date_arr = Array(

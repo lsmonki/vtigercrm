@@ -449,7 +449,7 @@ class soapclient2 extends nusoap_base  {
 			}
 		} else {
 			// should be US-ASCII for HTTP 1.0 or ISO-8859-1 for HTTP 1.1
-			$this->xml_encoding = 'ISO-8859-1';
+			$this->xml_encoding = 'UTF-8';
 		}
 		$this->debug('Use encoding: ' . $this->xml_encoding . ' when creating soap_parser');
 		$parser = new soap_parser($data,$this->xml_encoding,$this->operation,$this->decode_utf8);

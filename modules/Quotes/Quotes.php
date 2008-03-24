@@ -200,7 +200,7 @@ class Quotes extends CRMEntity {
 		else
 			$returnset = '&return_module=Quotes&return_action=CallRelatedList&return_id='.$id;
 
-		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_contactdetails.contactid, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime,vtiger_recurringevents.recurringtype from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and activitytype='Task' and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Deferred')";
+		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_contactdetails.contactid, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime,vtiger_recurringevents.recurringtype from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and vtiger_crmentity.deleted=0 and activitytype='Task' and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Deferred')";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Quotes','Calendar',$focus,$query,$button,$returnset);
 	}
@@ -229,7 +229,8 @@ class Quotes extends CRMEntity {
 				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 				where vtiger_activity.activitytype='Task'
   				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred')
-	 	        	and vtiger_seactivityrel.crmid=".$id;
+	 	        	and vtiger_seactivityrel.crmid=".$id."
+                                and vtiger_crmentity.deleted = 0";
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
 		$log->debug("Exiting get_history method ...");
@@ -248,7 +249,7 @@ class Quotes extends CRMEntity {
 		 $query = "select vtiger_notes.title,'Notes ' as ActivityType, vtiger_notes.filename,
 		 vtiger_attachments.type as FileType,crm2.modifiedtime as lastmodified,
 		 vtiger_seattachmentsrel.attachmentsid as attachmentsid, vtiger_notes.notesid as crmid,
-		 crm2.createdtime, vtiger_notes.notecontent as description, vtiger_users.user_name
+		 vtiger_notes.notecontent as description, vtiger_users.user_name
 		 from vtiger_notes
 		 inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
 		 inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
@@ -260,10 +261,10 @@ class Quotes extends CRMEntity {
 
 		 $query .= ' union all ';
 
-		 $query .= "select vtiger_attachments.description as title ,'Attachments' as ActivityType,
+		 $query .= "select vtiger_attachments.subject AS title ,'Attachments' as ActivityType,
 		 vtiger_attachments.name as filename, vtiger_attachments.type as FileType, crm2.modifiedtime as lastmodified,
 		 vtiger_attachments.attachmentsid as attachmentsid, vtiger_seattachmentsrel.attachmentsid as crmid,
-		 crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
+		 vtiger_attachments.description, vtiger_users.user_name
 		 from vtiger_attachments
 		 inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
 		 inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_seattachmentsrel.crmid
@@ -290,8 +291,8 @@ class Quotes extends CRMEntity {
 		global $mod_strings;
 		global $app_strings;
 
-		$query = 'select vtiger_quotestagehistory.*, vtiger_quotes.subject from vtiger_quotestagehistory inner join vtiger_quotes on vtiger_quotes.quoteid = vtiger_quotestagehistory.quoteid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_quotes.quoteid where vtiger_crmentity.deleted = 0 and vtiger_quotes.quoteid = '.$id;
-		$result=$adb->query($query);
+		$query = 'select vtiger_quotestagehistory.*, vtiger_quotes.subject from vtiger_quotestagehistory inner join vtiger_quotes on vtiger_quotes.quoteid = vtiger_quotestagehistory.quoteid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_quotes.quoteid where vtiger_crmentity.deleted = 0 and vtiger_quotes.quoteid = ?';
+		$result=$adb->pquery($query, array($id));
 		$noofrows = $adb->num_rows($result);
 
 		$header[] = $app_strings['Quote No'];
@@ -299,6 +300,19 @@ class Quotes extends CRMEntity {
 		$header[] = $app_strings['LBL_AMOUNT'];
 		$header[] = $app_strings['Quote Stage'];
 		$header[] = $app_strings['LBL_LAST_MODIFIED'];
+		
+		//Getting the field permission for the current user. 1 - Not Accessible, 0 - Accessible
+		//Account Name , Total are mandatory fields. So no need to do security check to these fields.
+		global $current_user;
+
+		//If field is accessible then getFieldVisibilityPermission function will return 0 else return 1
+		$quotestage_access = (getFieldVisibilityPermission('Quotes', $current_user->id, 'quotestage') != '0')? 1 : 0;
+		$picklistarray = getAccessPickListValues('Quotes');
+
+		$quotestage_array = ($quotestage_access != 1)? $picklistarray['quotestage']: array();
+		//- ==> picklist field is not permitted in profile
+		//Not Accessible - picklist is permitted in profile but picklist value is not permitted
+		$error_msg = ($quotestage_access != 1)? 'Not Accessible': '-';
 
 		while($row = $adb->fetch_array($result))
 		{
@@ -307,7 +321,7 @@ class Quotes extends CRMEntity {
 			$entries[] = $row['quoteid'];
 			$entries[] = $row['accountname'];
 			$entries[] = $row['total'];
-			$entries[] = $row['quotestage'];
+			$entries[] = (in_array($row['quotestage'], $quotestage_array))? $row['quotestage']: $error_msg;
 			$entries[] = getDisplayDate($row['lastmodified']);
 
 			$entries_list[] = $entries;
@@ -320,6 +334,13 @@ class Quotes extends CRMEntity {
 		return $return_data;
 	}
 
+	// Function to get column name - Overriding function of base class
+	function get_column_value($columname, $fldvalue, $fieldname, $uitype) {
+		if ($columname == 'potentialid' || $columname == 'contactid') {
+			if ($fldvalue == '') return null;
+		}
+		return parent::get_column_value($columname, $fldvalue, $fieldname, $uitype);
+	}
 }
 
 ?>

@@ -15,7 +15,7 @@ require_once('include/utils/utils.php');
 
 	
 	$sql="select fieldid from vtiger_field, vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Leads';";	
-	$result = $adb->query($sql);
+	$result = $adb->pquery($sql, array());
 	$noofrows = $adb->num_rows($result);
 	
 	for($i=0;$i<$noofrows;$i++)
@@ -41,9 +41,9 @@ require_once('include/utils/utils.php');
 		{
 			$potential_id_val="";
 		}
-		$update_sql="update vtiger_convertleadmapping set accountfid='".$account_id_val."',contactfid='".$contact_id_val."',potentialfid='".$potential_id_val."' where leadfid=".$lead_id;
-
-		$adb->query($update_sql);
+		$update_sql="update vtiger_convertleadmapping set accountfid=?, contactfid=?, potentialfid=? where leadfid=?";
+		$update_params = array($account_id_val, $contact_id_val, $potential_id_val, $lead_id);
+		$adb->pquery($update_sql, $update_params);
 	}
 	 header("Location: index.php?action=CustomFieldList&module=Settings&parenttab=Settings");
 	

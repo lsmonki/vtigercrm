@@ -21,8 +21,9 @@ if($notifysubject != '' && $notifybody != '')
 {
 	if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 	{	
-		$query="UPDATE vtiger_notificationscheduler set notificationsubject='".$notifysubject."', notificationbody='".$notifybody."', active =".$_REQUEST['active']." where schedulednotificationid=".$_REQUEST['record'];
-		$adb->query($query);	
+		$query="UPDATE vtiger_notificationscheduler set notificationsubject=?, notificationbody=?, active =? where schedulednotificationid=?";
+		$params = array($notifysubject, $notifybody, $_REQUEST['active'], $_REQUEST['record']);
+		$adb->pquery($query, $params);	
 	}
 	$loc = "Location: index.php?action=SettingsAjax&file=listnotificationschedulers&module=Settings&directmode=ajax";
 	header($loc);

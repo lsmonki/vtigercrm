@@ -16,7 +16,6 @@ $image_path=$theme_path."images/";
 
 require_once('data/CRMEntity.php');
 require_once('include/database/PearDatabase.php');
-//require_once($theme_path."layout_utils.php");
 // Require the xmlParser class
 //require_once('include/feedParser/xmlParser.php');
 
@@ -76,7 +75,7 @@ class vtigerRSS extends CRMEntity
 			foreach($this->rss_object as $key=>$item)
 			{
 				$stringConvert = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$item[title]) : $item[title];
-				$rss_title= addslashes(ltrim(rtrim($stringConvert)));
+				$rss_title= ltrim(rtrim($stringConvert));
 				
 				$i = $i + 1;	   
 				$shtml .= "<tr class='prvPrfHoverOff' onmouseover=\"this.className='prvPrfHoverOn'\" onmouseout=\"this.className='prvPrfHoverOff'\"><td><a href=\"javascript:display('".$item[link]."','feedlist_".$i."')\"; id='feedlist_".$i."' class=\"rssNews\">".$rss_title."</a></td><td>".$this->rss_title."</td></tr>";
@@ -111,9 +110,9 @@ class vtigerRSS extends CRMEntity
 				$rsstitle = $url;
 			}
 			$genRssId = $adb->getUniqueID("vtiger_rss");
-			$sSQL = "insert into vtiger_rss (RSSID,RSSURL,RSSTITLE,RSSTYPE,STARRED) values (".$genRssId.",'".addslashes($url);
-			$sSQL .= "','".addslashes($rsstitle)."',0,".$makestarred.")";
-			$result = $adb->query($sSQL);
+			$sSQL = "insert into vtiger_rss (RSSID,RSSURL,RSSTITLE,RSSTYPE,STARRED) values (?,?,?,?,?)";
+			$sparams = array($genRssId, $url, $rsstitle, 0, $makestarred);
+			$result = $adb->pquery($sSQL, $sparams);
 			if($result)
 			{
 				return $genRssId;
@@ -129,7 +128,7 @@ class vtigerRSS extends CRMEntity
 		global $image_path;
 
 		$sSQL = "select * from vtiger_rss where rsstype=1";
-		$result = $adb->query($sSQL);
+		$result = $adb->pquery($sSQL, array());
 		while($allrssrow = $adb->fetch_array($result))
 		{
 			$shtml .= "<tr>";
@@ -157,7 +156,7 @@ class vtigerRSS extends CRMEntity
 		global $image_path;
 
 		$sSQL = "select * from vtiger_rss where rsstype <> 1";
-		$result = $adb->query($sSQL);
+		$result = $adb->pquery($sSQL, array());
 		while($allrssrow = $adb->fetch_array($result))	
 		{
 			$shtml .= "<tr>";
@@ -187,8 +186,8 @@ class vtigerRSS extends CRMEntity
 
 		if($rssid != "")
 		{
-			$sSQL = "select * from vtiger_rss where rssid=".$rssid;
-			$result = $adb->query($sSQL);
+			$sSQL = "select * from vtiger_rss where rssid=?";
+			$result = $adb->pquery($sSQL, array($rssid));
 			$rssrow = $adb->fetch_array($result);
 
 			if(count($rssrow) > 0)
@@ -206,8 +205,8 @@ class vtigerRSS extends CRMEntity
 
 		if($rssid != "")
 		{
-			$sSQL = "select * from vtiger_rss where rssid=".$rssid;
-			$result = $adb->query($sSQL);
+			$sSQL = "select * from vtiger_rss where rssid=?";
+			$result = $adb->pquery($sSQL, array($rssid));
 			$rssrow = $adb->fetch_array($result);
 
 			if(count($rssrow) > 0)
@@ -242,7 +241,7 @@ class vtigerRSS extends CRMEntity
 		global $image_path;
 
 		$sSQL = "select * from vtiger_rss where starred=1";
-		$result = $adb->query($sSQL);
+		$result = $adb->pquery($sSQL, array());
 		$shtml .= "<img src=\"".$image_path."rss.gif\" border=\"0\" align=\"absmiddle\" hspace=\"2\"><a href=\"#\" onclick='window.open(\"index.php?module=Rss&action=Popup\",\"new\",\"width=500,height=300,resizable=1,scrollbars=1\");'>Add New Rss</a>";
 
 		while($allrssrow = $adb->fetch_array($result))
@@ -263,7 +262,7 @@ class vtigerRSS extends CRMEntity
 		global $image_path,$mod_strings;
 
 		$sSQL = "select * from vtiger_rss where starred=1";
-		$result = $adb->query($sSQL);
+		$result = $adb->pquery($sSQL, array());
 		while($allrssrow = $adb->fetch_array($result))
 		{
 			if($this->setRSSUrl($allrssrow["rssurl"]))
@@ -309,8 +308,8 @@ class vtigerRSS extends CRMEntity
 		global $adb;
 		global $image_path, $mod_strings;
 
-		$sSQL = "select * from vtiger_rss where rssid=".$rssid;
-		$result = $adb->query($sSQL);
+		$sSQL = "select * from vtiger_rss where rssid=?";
+		$result = $adb->pquery($sSQL, array($rssid));
 		while($allrssrow = $adb->fetch_array($result))
 		{
 			if($this->setRSSUrl($allrssrow["rssurl"]))
@@ -376,7 +375,7 @@ class vtigerRSS extends CRMEntity
 		global $image_path;
 
 		$sSQL = "select * from vtiger_rss";
-		$result = $adb->query($sSQL);
+		$result = $adb->pquery($sSQL, array());
 		while($allrssrow = $adb->fetch_array($result))
 		{
 			$shtml .= "<tr id='feed_".$allrssrow[rssid]."'>";
@@ -405,11 +404,14 @@ class vtigerRSS extends CRMEntity
 function gerRssTitle($id='')
 {
 	global $adb;
-	if($id == '')
-		$query = 'select * from vtiger_rss where starred=1';	 
-	else		
-		$query = 'select * from vtiger_rss where rssid ='.$id;	 
-	$result = $adb->query($query);	
+	if($id == '') {
+		$query = 'select * from vtiger_rss where starred=1';
+		$params = array();	 
+	} else {		
+		$query = 'select * from vtiger_rss where rssid =?';	 
+		$params = array($id);
+	}
+	$result = $adb->pquery($query, $params);	
 	$title = $adb->query_result($result,0,'rsstitle');
 	return $title;
 	

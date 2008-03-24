@@ -9,6 +9,7 @@
 *
  ********************************************************************************/
 
+set_time_limit(-1);
 RecalculateSharingRules();
 
 header("Location: index.php?action=OrgSharingDetailView&parenttab=Settings&module=Settings");

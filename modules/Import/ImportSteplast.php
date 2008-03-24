@@ -23,6 +23,9 @@ require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportAccount.php');
 require_once('modules/Import/ImportOpportunity.php');
 require_once('modules/Import/ImportLead.php');
+//Pavani: Import this file to Support Imports for Trouble tickets and vendors
+require_once('modules/Import/ImportTicket.php');
+require_once('modules/Import/ImportVendors.php');
 require_once('modules/Import/UsersLastImport.php');
 require_once('modules/Import/parse_utils.php');
 require_once('include/ListView/ListView.php');
@@ -56,7 +59,6 @@ if (! isset( $_REQUEST['return_action']))
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Import Step last");
 
@@ -149,7 +151,9 @@ $import_modules_array = Array(
 				"Accounts"=>"Accounts",
 				"Contacts"=>"Contacts",
 				"Potentials"=>"Potentials",
-				"Products"=>"Products" 
+				"Products"=>"Products" ,
+				 "HelpDesk"=>"ImportTicket",
+                                "Vendors"=>"ImportVendors"
 			     );
 
 foreach($import_modules_array as $module_name => $object_name)

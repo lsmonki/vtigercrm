@@ -185,6 +185,16 @@ $mod_strings = Array(
 'Delivered'=>'Delivered',
 'Cancelled'=>'Cancelled',
 'Received Shipment'=>'Received Shipment',
+
+//Added for Reports (5.0.4)
+'Tax Type'=>'Tax Type',
+'Discount Percent'=>'Discount Percent',
+'Discount Amount'=>'Discount Amount',
+'Terms & Conditions'=>'Terms & Conditions',
+'Adjustment'=>'Adjustment',
+'Sub Total'=>'Sub Total',
+'S&H Amount'=>'S&H Amount',
+
 );
 
 ?>

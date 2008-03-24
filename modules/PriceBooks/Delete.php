@@ -26,6 +26,9 @@ $log = LoggerManager::getLogger('product_delete');
 
 $focus = new PriceBooks();
 
+	//Added to fix 4600
+	$url = getBasic_Advance_SearchURL();
+
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);
 
@@ -34,7 +37,7 @@ if($_REQUEST['record'] != '' && $_REQUEST['return_id'] != '' && $_REQUEST['modul
 {
 	$pricebookid = $_REQUEST['record'];
 	$productid = $_REQUEST['return_id'];
-	$adb->query("delete from vtiger_pricebookproductrel where pricebookid=$pricebookid and productid=$productid");
+	$adb->pquery("delete from vtiger_pricebookproductrel where pricebookid=? and productid=?", array($pricebookid, $productid));
 }
 
 if($_REQUEST['module'] == $_REQUEST['return_module'])
@@ -42,6 +45,6 @@ if($_REQUEST['module'] == $_REQUEST['return_module'])
 
 if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
 
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']."&parenttab=".$parenttab);
+header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']."&parenttab=".$parenttab.$url);
 
 ?>

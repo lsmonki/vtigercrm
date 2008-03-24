@@ -24,23 +24,24 @@ function getMyTickets()
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
-	$search_query="select vtiger_troubletickets.ticketid, parent_id, priority, vtiger_troubletickets.status, category, vtiger_troubletickets.title, vtiger_troubletickets.description, update_log, version_id,
-vtiger_crmentity.createdtime, vtiger_crmentity.modifiedtime, 
-vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, 
-vtiger_account.accountid, vtiger_account.accountname, 
-vtiger_users.user_name from 
+	$search_query="select vtiger_troubletickets.ticketid, parent_id, priority, vtiger_troubletickets.status, category, vtiger_troubletickets.title, vtiger_crmentity.description, update_log, version_id,
+	vtiger_crmentity.createdtime, vtiger_crmentity.modifiedtime, 
+	vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, 
+	vtiger_account.accountid, vtiger_account.accountname, 
+	vtiger_users.user_name from 
 	vtiger_troubletickets 
 	inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_troubletickets.ticketid 
 	inner join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid 
 	left join vtiger_contactdetails on vtiger_troubletickets.parent_id = vtiger_contactdetails.contactid 
 	left join vtiger_account on vtiger_account.accountid = vtiger_troubletickets.parent_id 
 	left join vtiger_seticketsrel on vtiger_seticketsrel.ticketid = vtiger_troubletickets.ticketid 
-	where vtiger_crmentity.smownerid = ".$current_user->id." and vtiger_crmentity.deleted = 0 and vtiger_troubletickets.status <> 'Closed'  ORDER BY createdtime DESC";
+	where vtiger_crmentity.smownerid = ? and vtiger_crmentity.deleted = 0 and vtiger_troubletickets.status <> 'Closed'  ORDER BY createdtime DESC";
 
-	$resultcount = $adb->num_rows($adb->query($search_query));
+	$resultcount = $adb->num_rows($adb->pquery($search_query, array($current_user->id)));
 	if($resultcount > 0)
 	{
-		$tktresult = $adb->limitquery($search_query,0,5);
+		$limit_query = $search_query . " limit 0,5";
+		$tktresult = $adb->pquery($limit_query, array($current_user->id));
 		$title=array();
 		$title[]='myTickets.gif';
 		$title[]=$current_module_strings['LBL_MY_TICKETS'];
@@ -59,7 +60,9 @@ vtiger_users.user_name from
 		{
 			$value=array();
 			$ticketid = $adb->query_result($tktresult,$i,"ticketid");
-			$value[]= '<a href="index.php?action=DetailView&module=HelpDesk&record='.$adb->query_result($tktresult,$i,"ticketid").'">'.substr($adb->query_result($tktresult,$i,"title"),0,20).'...'.'</a>';
+			$tickettitle = $adb->query_result($tktresult,$i,"title");
+			$Top_Tickets = (strlen($tickettitle) > 20) ? (substr($tickettitle,0,20).'...') : $tickettitle;
+			$value[]= '<a href="index.php?action=DetailView&module=HelpDesk&record='.$ticketid.'">'.$Top_Tickets.'</a>';
 			$value[]=$ticketid;
 
 			$parent_id = $adb->query_result($tktresult,$i,"parent_id");
@@ -96,20 +99,21 @@ function getParentLink($parent_id)
 	$log->debug("Entering getParentLink(".$parent_id.") method ...");
 	global $adb;
 
-	$sql = "select setype from vtiger_crmentity where crmid=".$parent_id;
-	$parent_module = $adb->query_result($adb->query($sql),0,'setype');
+	$sql = "select setype from vtiger_crmentity where crmid=?";
+	$parent_module = $adb->query_result($adb->pquery($sql, array($parent_id)),0,'setype');
 
 	if($parent_module == 'Contacts')
 	{
-		$sql = "select firstname,lastname from vtiger_contactdetails where contactid=".$parent_id;
-		$parentname = $adb->query_result($adb->query($sql),0,'firstname');
-		$parentname .= ' '.$adb->query_result($adb->query($sql),0,'lastname');
+		$sql = "select firstname,lastname from vtiger_contactdetails where contactid=?";
+		$res = $adb->pquery($sql, array($parent_id));
+		$parentname = $adb->query_result($res,0,'firstname');
+		$parentname .= ' '.$adb->query_result($res,0,'lastname');
 	        $parent_name = '<a href="index.php?action=DetailView&module='.$parent_module.'&record='.$parent_id.'">'.$parentname.'</a>';
 	}
 	if($parent_module == 'Accounts')
 	{
-		$sql = "select accountname from vtiger_account where accountid=".$parent_id;
-		$parentname = $adb->query_result($adb->query($sql),0,'accountname');
+		$sql = "select accountname from vtiger_account where accountid=?";
+		$parentname = $adb->query_result($adb->pquery($sql, array($parent_id)),0,'accountname');
 	        $parent_name = '<a href="index.php?action=DetailView&module='.$parent_module.'&record='.$parent_id.'">'.$parentname.'</a>';
 	}
 

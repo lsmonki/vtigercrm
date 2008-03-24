@@ -26,8 +26,8 @@ if($_REQUEST['error'] != '')
 	else
 		$smarty->assign("ERROR_MSG",'<b><font color="red">'.$_REQUEST["error"].'</font></b>');
 }
-$sql="select * from vtiger_systems where server_type = 'proxy'";
-$result = $adb->query($sql);
+$sql="select * from vtiger_systems where server_type = ?";
+$result = $adb->pquery($sql, array('proxy'));
 $server = $adb->query_result($result,0,'server');
 $server_port = $adb->query_result($result,0,'server_port');
 $server_username = $adb->query_result($result,0,'server_username');

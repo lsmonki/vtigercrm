@@ -1239,26 +1239,26 @@ foreach($update_query_array2 as $query)
 }
 
 $delete_query1 = "delete from vtiger_actionmapping where actionname in ('SavePriceBook','SaveVendor','PriceBookEditView','VendorEditView','DeletePriceBook','DeleteVendor','PriceBookDetailView','VendorDetailView')";
-Execute($query);
+Execute($delete_query1);
 
 $insert_query_array6 = Array(
-			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Leads')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Accounts')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Contacts')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Potentials')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'HelpDesk')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Quotes')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Activities')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Emails')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Invoice')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Notes')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'PriceBooks')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Products')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'PurchaseOrder')",
+			"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Leads')",
+			"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Accounts')",
+			"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Contacts')",
+			"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Potentials')",
+			"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'HelpDesk')",
+			"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Quotes')",
+			"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Activities')",
+			"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Emails')",
+			"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Invoice')",
+			"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Notes')",
+			"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'PriceBooks')",
+			"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Products')",
+			"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'PurchaseOrder')",
 				
-			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'SalesOrder')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Vendors')",
-			"insert into vtiger_customview values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Faq')"
+			"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'SalesOrder')",
+			"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Vendors')",
+			"insert into vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) values(".$conn->getUniqueID('vtiger_customview').",'All',1,0,'Faq')"
 			    );
 foreach($insert_query_array6 as $query)
 {
@@ -3984,9 +3984,13 @@ Execute("alter table vtiger_users drop column tagcloud");
 //we have missed to add the Received Shipment in postatus table
 $sortorderid = $conn->query_result($conn->query("select max(sortorderid) as id from vtiger_postatus"),0,'id')+1;
 Execute("insert into vtiger_postatus values('','Received Shipment',$sortorderid,1)");
-
+Execute("alter table vtiger_attachments add index attachments_description_name_type_attachmentsid_idx (`description`,`type`,`attachmentsid`)");
 
 //Added after 5.0 GA release
+
+//In 4.2.3 we have assigned to group option only for Leads, HelpDesk and Activies and default None can be assigned. Now we will assign the unassigned entities to current user
+Execute("update vtiger_crmentity set smownerid=1 where smownerid=0 and setype not in ('Leads','HelpDesk','Calendar')");
+
 //CALCULATE Activity End Time (time_end)
 //we have to calculate activity end time (time_end) based on start time (time_start) and duration (duration_hours, duration_minutes)
 $sql = "select * from vtiger_activity";

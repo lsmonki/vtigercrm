@@ -91,13 +91,23 @@ function add_data_to_relatedlist_incal(id,name)
                 else
                 {
                         window.opener.document.EditView.contactidlist.value = idval+';'+id;
-                        window.opener.document.EditView.contactlist.value = nameval+'\n'+name;
+			if(name != '')
+                	{
+				// this has been modified to provide delete option for Contacts in Calendar
+				//this function is defined in script.js ------- Jeri
+				window.opener.addOption(id,name);
+                	}
+
                 }
 	}
 	else
 	{
 		window.opener.document.EditView.contactidlist.value = id;
-		window.opener.document.EditView.contactlist.value = name;
+		if(name != '')
+		{
+			window.opener.addOption(id,name);
+		}
+		//end
 	}
 }
 function set_return_specific(product_id, product_name) {
@@ -126,30 +136,69 @@ function searchMapLocation(addressType)
         if (addressType == 'Main')
         {
 		if(fieldname.indexOf('mailingstreet') > -1)
-			mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingstreet')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingstreet')]))	
+				mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingstreet')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('mailingpobox') > -1)
-			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingpobox')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingpobox')]))
+				mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingpobox')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('mailingcity') > -1)
-			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingcity')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingcity')]))
+				mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingcity')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('mailingstate') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingstate')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingstate')]))
+	                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingstate')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('mailingcountry') > -1)
-			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingcountry')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingcountry')]))
+				mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingcountry')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('mailingzip') > -1)
-			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingzip')]).innerHTML;
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingzip')]))
+				mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('mailingzip')]).innerHTML;
+		}
         }
         else if (addressType == 'Other')
         {
 		if(fieldname.indexOf('otherstreet') > -1)
-			mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherstreet')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherstreet')]))
+				mapParameter = document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherstreet')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('otherpobox') > -1)
-			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherpobox')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherpobox')]))
+				mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherpobox')]).innerHTML+' ';
+		}
+		if(fieldname.indexOf('othercity') > -1)
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('othercity')]))
+				mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('othercity')]).innerHTML+' ';
+		}
 		if(fieldname.indexOf('otherstate') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherstate')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherstate')]))
+	                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherstate')]).innerHTML+' ';
+		}
                 if(fieldname.indexOf('othercountry') > -1)
-			mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('othercountry')]).innerHTML+' ';
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('othercountry')]))
+				mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('othercountry')]).innerHTML+' ';
+		}
                 if(fieldname.indexOf('otherzip') > -1)
-                        mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherzip')]).innerHTML;
+		{
+			if(document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherzip')]))
+                        	mapParameter = mapParameter + document.getElementById("dtlview_"+fieldlabel[fieldname.indexOf('otherzip')]).innerHTML;
+		}
         }
-         window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
+	mapParameter = removeHTMLFormatting(mapParameter);
+	window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
 }

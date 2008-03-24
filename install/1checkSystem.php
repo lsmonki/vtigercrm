@@ -151,7 +151,7 @@ $array = Array(
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>vtiger CRM 5 - Configuration Wizard - Installation Check</title>
 	<link href="include/install/install.css" rel="stylesheet" type="text/css">
 </head>
@@ -338,7 +338,7 @@ $array = Array(
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>allow_call_time_pass_reference = On</strong></tr>
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>log_errors = Off</strong></tr>
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>short_open_tag= On</strong></tr>
-				<tr bgcolor="#ffffff">  <td valign=top ><a href="http://www.vtiger.com/products/crm/help/vtiger_CRM_Linux_Dependencies.pdf" target="_blank">Linux installation pre-requisites</a></tr>
+				<tr bgcolor="#ffffff">  <td valign=top ><a href="http://www.vtiger.com/products/crm/help/5.0.4/vtiger_CRM_Linux_Dependencies.pdf" target="_blank">Linux installation pre-requisites</a></tr>
 				</table>
 			</td>
 			</tr>

@@ -43,11 +43,10 @@ function getNewLeads()
 
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	require_once($theme_path.'layout_utils.php');
 	if($_REQUEST['lead_view']=='')
 	{	
-		$query = "select lead_view from vtiger_users where id ='$current_user->id'";
-		$result=$adb->query($query);
+		$query = "select lead_view from vtiger_users where id =?";
+		$result=$adb->pquery($query, array($current_user->id));
 		$lead_view=$adb->query_result($result,0,'lead_view');
 	}
 	else
@@ -68,9 +67,8 @@ function getNewLeads()
 		$start_date = date("Y-m-d", strtotime("-1 week"));
 	}	
 
-	$list_query = 'select vtiger_leaddetails.*,vtiger_crmentity.createdtime,vtiger_crmentity.description from vtiger_leaddetails inner join vtiger_crmentity on vtiger_leaddetails.leadid = vtiger_crmentity.crmid where vtiger_crmentity.deleted =0 AND vtiger_leaddetails.converted =0 AND vtiger_leaddetails.leadstatus not in ("Lost Lead", "Junk Lead","'.$current_module_strings['Lost Lead'].'","'.$current_module_strings['Junk Lead'].'") AND vtiger_crmentity.createdtime >='.$start_date.' AND vtiger_crmentity.smownerid = '.$current_user->id; 
-	
-	$list_result = $adb->query($list_query);
+	$list_query = 'select vtiger_leaddetails.*,vtiger_crmentity.createdtime,vtiger_crmentity.description from vtiger_leaddetails inner join vtiger_crmentity on vtiger_leaddetails.leadid = vtiger_crmentity.crmid where vtiger_crmentity.deleted =0 AND vtiger_leaddetails.converted =0 AND vtiger_leaddetails.leadstatus not in ("Lost Lead", "Junk Lead","'.$current_module_strings['Lost Lead'].'","'.$current_module_strings['Junk Lead'].'") AND vtiger_crmentity.createdtime >=? AND vtiger_crmentity.smownerid = ?'; 
+	$list_result = $adb->pquery($list_query, array($start_date, $current_user->id));
 	$noofrows = $adb->num_rows($list_result);
 	$open_lead_list =array();
 	if ($noofrows > 0)
@@ -114,7 +112,8 @@ function getNewLeads()
 				'LEAD_ID' => $lead['id'],
 				);
 
-		$value[]= '<a href="index.php?action=DetailView&module=Leads&record='.$lead_fields['LEAD_ID'].'">'.substr($lead_fields['LEAD_NAME'],0,20).'...'.'</a>';
+		$Top_Leads = (strlen($lead['leadname']) > 20) ? (substr($lead['leadname'],0,20).'...') : $lead['leadname'];
+		$value[]= '<a href="index.php?action=DetailView&module=Leads&record='.$lead_fields['LEAD_ID'].'">'.$Top_Leads.'</a>';
 		$value[]=$lead_fields['COMPANY'];
 		$value[]=$lead_fields['ANNUAL_REVENUE'];
 		$value[]=$lead_fields['LEAD_STATUS'];

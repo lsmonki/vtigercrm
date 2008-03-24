@@ -32,6 +32,11 @@ else if(document.all)
 require_once('include/database/PearDatabase.php');
 require_once('config.php');
 
+global $default_charset;
+
+// Fix For: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/2107
+$randomfilename = "vt_" . str_replace(array("."," "), "", microtime());
+
 $templateid = $_REQUEST['mergefile'];
 
 if($templateid == "")
@@ -40,23 +45,25 @@ if($templateid == "")
 }
 //get the particular file from db and store it in the local hard disk.
 //store the path to the location where the file is stored and pass it  as parameter to the method 
-$sql = "select filename,data,filesize from vtiger_wordtemplates where templateid=".$templateid;
+$sql = "select filename,data,filesize from vtiger_wordtemplates where templateid=?";
 
-$result = $adb->query($sql);
+$result = $adb->pquery($sql, array($templateid));
 $temparray = $adb->fetch_array($result);
 
 $fileContent = $temparray['data'];
-$filename=$temparray['filename'];
+$filename=html_entity_decode($temparray['filename'], ENT_QUOTES, $default_charset);
+// Fix For: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/2107
+$filename= $randomfilename . "_word.doc";
+
 $filesize=$temparray['filesize'];
 $wordtemplatedownloadpath =$root_directory ."/test/wordtemplatedownload/";
 
-
-$handle = fopen($wordtemplatedownloadpath.$temparray['filename'],"wb");
+$handle = fopen($wordtemplatedownloadpath.$filename,"wb");
 fwrite($handle,base64_decode($fileContent),$filesize);
 fclose($handle);
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<for mass merge>>>>>>>>>>>>>>>>>>>>>>>>>>>
-$mass_merge = $_REQUEST['idlist'];
+$mass_merge = $_REQUEST['allselectedboxes'];
 $single_record = $_REQUEST['record'];
 
 if($mass_merge != "")
@@ -65,7 +72,7 @@ if($mass_merge != "")
 	$temp_mass_merge = $mass_merge;
 	if(array_pop($temp_mass_merge)=="")
 		array_pop($mass_merge);
-	$mass_merge = implode(",",$mass_merge);
+	//$mass_merge = implode(",",$mass_merge);
 }else if($single_record != "")
 {
 	$mass_merge = $single_record;	
@@ -78,7 +85,7 @@ if($mass_merge != "")
 //die;
 //for setting vtiger_accountid=0 for the contacts which are deleted
 $ct_query = "select crmid from vtiger_crmentity where setype='Contacts' and deleted=1";
-$result = $adb->query($ct_query);
+$result = $adb->pquery($ct_query, array());
 
 while($row = $adb->fetch_array($result))
 {
@@ -87,9 +94,8 @@ while($row = $adb->fetch_array($result))
 
 if(count($deleted_id) > 0)
 {
-	$deleted_id = implode(",",$deleted_id);
-	$update_query = "update vtiger_contactdetails set accountid = 0 where contactid in (".$deleted_id.")";
-	$result = $adb->query($update_query);
+	$update_query = "update vtiger_contactdetails set accountid = 0 where contactid in (". generateQuestionMarks($deleted_id) .")";
+	$result = $adb->pquery($update_query, array($deleted_id));
 }
 //End setting vtiger_accountid=0 for the contacts which are deleted
 
@@ -99,17 +105,19 @@ require('user_privileges/user_privileges_'.$current_user->id.'.php');
 if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == "Users" || $module == "Emails")
 {
 	$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid where vtiger_field.tabid in (4,6) and vtiger_field.block <> 75 order by vtiger_field.tablename";
+	$params1 = array();
 }
 else
 {
 	$profileList = getCurrentUserProfileList();
-	$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid in (4,6) and vtiger_field.block <> 75 AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN ".$profileList." GROUP BY vtiger_field.fieldid order by vtiger_field.tablename";
+	$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid in (4,6) and vtiger_field.block <> 75 AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") GROUP BY vtiger_field.fieldid order by vtiger_field.tablename";
+	$params1 = array($profileList);
 	//Postgres 8 fixes
 	if( $adb->dbType == "pgsql")
-	$sql = fixPostgresQuery( $sql, $log, 0);
+		$query1 = fixPostgresQuery( $query1, $log, 0);
 }
 
-$result = $adb->query($query1);
+$result = $adb->pquery($query1, $params1);
 $y=$adb->num_rows($result);
 	
 for ($x=0; $x<$y; $x++)
@@ -173,7 +181,7 @@ if(count($querycolumns) > 0)
 {
 	$selectcolumns = implode($querycolumns,",");
 
-$query = "select  ".$selectcolumns." from vtiger_account 
+	$query = "select  $selectcolumns from vtiger_account 
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid 
 				inner join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid 
 				inner join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid 
@@ -197,22 +205,31 @@ $query = "select  ".$selectcolumns." from vtiger_account
 					ON vtiger_contactscf.contactid = vtiger_contactgrouprelation.contactid
 				LEFT JOIN vtiger_groups as groupsContacts
 					ON groupsContacts.groupname = vtiger_contactgrouprelation.groupname
-				where vtiger_crmentity.deleted=0 and (vtiger_crmentityContacts.deleted=0 || vtiger_crmentityContacts.deleted is null) and vtiger_account.accountid in(".$mass_merge.")";
-//echo $query;
-//die;	
-$result = $adb->query($query);
-	
+				where vtiger_crmentity.deleted=0 and (vtiger_crmentityContacts.deleted=0 || vtiger_crmentityContacts.deleted is null) and vtiger_account.accountid in(". generateQuestionMarks($mass_merge) .")";
+	//echo $query;
+	//die;	
+	$result = $adb->pquery($query, array($mass_merge));
+$avail_pick_arr = getAccessPickListValues('Accounts');	
 while($columnValues = $adb->fetch_array($result))
 {
-	$y=$adb->num_fields($result);
+  $y=$adb->num_fields($result);
   for($x=0; $x<$y; $x++)
   {
-  	$value = $columnValues[$x];
+	  $value = $columnValues[$x];
+  	  foreach($columnValues as $key=>$val)
+	  {
+		if($val == $value && $value != '')
+		{
+		  if(array_key_exists($key,$avail_pick_arr))
+		  {
+ 			if(!in_array($val,$avail_pick_arr[$key]))
+			{
+	 			$value = "Not Accessible";
+	 		}
+	 	  }
+	  	}
+ 	  }
   	//<<<<<<<<<<<<<<<for modifing default values>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	if($value == "0")
-  	{
-  		$value = "";
-  	}
   	if(trim($value) == "--None--" || trim($value) == "--none--")
   	{
   		$value = "";
@@ -225,7 +242,7 @@ while($columnValues = $adb->fetch_array($result))
 		{
 			$actual_values[$x] = '"'.$actual_values[$x].'"';
 		}
-		$actual_values[$x] = str_replace(","," ",$actual_values[$x]);
+		$actual_values[$x] = decode_html(str_replace(","," ",$actual_values[$x]));
   }
 	$mergevalue[] = implode($actual_values,",");  	
 }
@@ -235,7 +252,10 @@ $csvdata = implode($mergevalue,"###");
 	die("No fields to do Merge");
 }
 
-$handle = fopen($wordtemplatedownloadpath."datasrc.csv","wb");
+// Fix for: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/2107
+$datafilename = $randomfilename . "_data.csv";
+
+$handle = fopen($wordtemplatedownloadpath.$datafilename,"wb");
 fwrite($handle,$csvheader."\r\n");
 fwrite($handle,str_replace("###","\r\n",$csvdata));
 fclose($handle);
@@ -257,7 +277,7 @@ if (window.ActiveXObject){
         				if(objMMPage.Init())
         				{
         					objMMPage.vLTemplateDoc();
-        					objMMPage.bBulkHDSrc("<?php echo $site_URL;?>/test/wordtemplatedownload/datasrc.csv");
+							objMMPage.bBulkHDSrc("<?php echo $site_URL;?>/test/wordtemplatedownload/<?php echo $datafilename ?>");
         					objMMPage.vBulkOpenDoc();
         					objMMPage.UnInit()
         					window.history.back();

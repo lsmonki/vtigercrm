@@ -21,14 +21,12 @@ function getAttachmentsList()
 	global $mod_strings;
 
 	$dbQuery = "SELECT templateid, filename,filesize,filetype,description,module ";
-
 	$dbQuery .= "FROM vtiger_wordtemplates" ;
-
 	$dbQuery .= " ORDER BY filename ASC";
 
 	//echo $dbQuery;
 
-	$result = $adb->query($dbQuery) or die("Couldn't get file list");
+	$result = $adb->pquery($dbQuery, array()) or die("Couldn't get file list");
 
 $list = '<table border="0" cellpadding="5" cellspacing="1" class="FormBorder" width="90%">';
 

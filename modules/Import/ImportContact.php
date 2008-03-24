@@ -177,14 +177,13 @@ class ImportContact extends Contacts {
 		// if user is defining the vtiger_account id to be associated with this contact..
 
 		//Modified to remove the spaces at first and last in vtiger_account name -- after 4.2 patch 2
-		$acc_name = trim(addslashes($acc_name));
+		$acc_name = trim($acc_name);
 
 		//Modified the query to get the available account only ie., which is not deleted
-		$query = "select vtiger_crmentity.deleted, vtiger_account.* from vtiger_account, vtiger_crmentity WHERE accountname='{$acc_name}' and vtiger_crmentity.crmid =vtiger_account.accountid and vtiger_crmentity.deleted=0";
+		$query = "select vtiger_crmentity.deleted, vtiger_account.* from vtiger_account, vtiger_crmentity WHERE accountname=? and vtiger_crmentity.crmid =vtiger_account.accountid and vtiger_crmentity.deleted=0";
+		$result = $adb->pquery($query, array($acc_name));
 
-                $result = $adb->query($query);
-
-                $row = $this->db->fetchByAssoc($result, -1, false);
+        $row = $this->db->fetchByAssoc($result, -1, false);
 
 		$adb->println("fetched account");
 		$adb->println($row);
@@ -246,12 +245,11 @@ class ImportContact extends Contacts {
 			return; 
 		}
 
-		$contact_name = trim(addslashes($contact_name));
+		$contact_name = trim($contact_name);
 
 		//Query to get the available Contact (Reports To) which is not deleted
-		$query = "select contactid from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid WHERE concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname) = '{$contact_name}' and vtiger_crmentity.deleted=0";
-
-		$contact_id = $adb->query_result($adb->query($query),0,'contactid');
+		$query = "select contactid from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid WHERE concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname) = ? and vtiger_crmentity.deleted=0";
+		$contact_id = $adb->query_result($adb->pquery($query, array($contact_name)),0,'contactid');
 
 		if($contact_id == '' || !isset($contact_id))
 			$contact_id = 0;
@@ -292,9 +290,7 @@ class ImportContact extends Contacts {
 		$this->log = LoggerManager::getLogger('import_contact');
 		$this->db = new PearDatabase();
 		$this->db->println("IMP ImportContact");
-		$colf = getColumnFields("Contacts");
-		foreach($colf as $key=>$value)
-			$this->importable_fields[$key]=1;
+		$this->initImportableFields("Contacts");
 		//unset($this->importable_fields['account_id']);
 		//$this->importable_fields['account_name']=1;
 		

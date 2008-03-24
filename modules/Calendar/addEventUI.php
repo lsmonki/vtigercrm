@@ -18,7 +18,6 @@ require_once("modules/Emails/mail.php");
  global $theme,$mod_strings,$app_strings,$current_user;
  $theme_path="themes/".$theme."/";
  $image_path=$theme_path."images/";
- require_once ($theme_path."layout_utils.php");
  $category = getParentTab();
  $userDetails=getOtherUserName($current_user->id,true);
  $to_email = getUserEmailId('id',$current_user->id);
@@ -28,9 +27,16 @@ require_once("modules/Emails/mail.php");
 $mysel= $_REQUEST['view'];
 $calendar_arr = Array();
 $calendar_arr['IMAGE_PATH'] = $image_path;
-if(empty($mysel))
-{
-        $mysel = 'day';
+if(empty($mysel)){
+	if($current_user->activity_view == "This Year"){
+		$mysel = 'year';
+	}else if($current_user->activity_view == "This Month"){
+		$mysel = 'month';
+	}else if($current_user->activity_view == "This Week"){
+		$mysel = 'week';
+	}else{
+		$mysel = 'day';
+	}
 }
 $date_data = array();
 if ( isset($_REQUEST['day']))
@@ -53,7 +59,7 @@ if ( isset($_REQUEST['year']))
 {
         if ($_REQUEST['year'] > 2037 || $_REQUEST['year'] < 1970)
         {
-                print("<font color='red'>Sorry, Year must be between 1970 and 2037</font>");
+		print("<font color='red'>".$app_strings['LBL_CAL_LIMIT_MSG']."</font>");
                 exit;
         }
         $date_data['year'] = $_REQUEST['year'];
@@ -173,7 +179,6 @@ function getAssignedToHTML($assignedto,$toggletype)
 ?>
        
 	<!-- Add Event DIV starts-->
-	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
 	<script type="text/javascript" src="jscalendar/calendar.js"></script>
 	<script type="text/javascript" src="jscalendar/lang/calendar-<?php echo $app_strings['LBL_JSCALENDAR_LANG'] ?>.js"></script>
@@ -194,6 +199,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 	<input type="hidden" name="mode" value="">
 	<input type="hidden" name="time_start" id="time_start">
 	<input type="hidden" name="time_end" id="time_end">
+	<input type="hidden" name="followup_due_date" id="followup_due_date">
 	<input type="hidden" name="followup_time_start" id="followup_time_start">
 	<input type="hidden" name="followup_time_end" id="followup_time_end">
 	<input type="hidden" name="duration_hours" value="0">                                                                      <input type="hidden" name="duration_minutes" value="0">
@@ -250,7 +256,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 					<table border=0 cellspacing=0 cellpadding=3 width=80%>
 					<tr>
 						<?php if(getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0')	{ ?>
-						<td ><b><?php echo $mod_strings['Status'] ; ?></b></td>
+						<td ><b><font color="red">*</font><?php echo $mod_strings['Status'] ; ?></b></td>
 						<?php } ?>
 						<?php if(getFieldVisibilityPermission('Events',$current_user->id,'assigned_user_id') == '0') { ?>
 						<td ><b><?php echo $mod_strings['Assigned To']; ?></b></td>
@@ -351,9 +357,12 @@ function getAssignedToHTML($assignedto,$toggletype)
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
 					<td id="cellTabInvite" class="dvtSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','on');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');gshow('addEventInviteUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');"><?php echo $mod_strings['LBL_INVITE']?></a></td>
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
+					<?php if(getFieldVisibilityPermission('Events',$current_user->id,'reminder_time') == '0') { ?>
 					<td id="cellTabAlarm" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','on');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','off');gshow('addEventAlarmUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventInviteUI');ghide('addEventRepeatUI');ghide('addEventRelatedtoUI');"><?php echo $mod_strings['LBL_REMINDER']?></a></td>
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
+					<?php } if(getFieldVisibilityPermission('Events',$current_user->id,'recurringtype') == '0') {  ?>
 					<td id="cellTabRepeat" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','on');switchClass('cellTabRelatedto','off');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRepeatUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRelatedtoUI');"><?php echo $mod_strings['LBL_REPEAT']?></a></td>
+					<?php } ?>
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
 					<td id="cellTabRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabInvite','off');switchClass('cellTabAlarm','off');switchClass('cellTabRepeat','off');switchClass('cellTabRelatedto','on');ghide('addEventAlarmUI');ghide('addEventInviteUI');gshow('addEventRelatedtoUI','',document.EditView.date_start.value,document.EditView.due_date.value,document.EditView.starthr.value,document.EditView.startmin.value,document.EditView.startfmt.value,document.EditView.endhr.value,document.EditView.endmin.value,document.EditView.endfmt.value);ghide('addEventRepeatUI');"><?php echo $mod_strings['LBL_RELATEDTO']?></a></td>
 					<td class="dvtTabCache" style="width:100%">&nbsp;</td>
@@ -472,14 +481,16 @@ function getAssignedToHTML($assignedto,$toggletype)
 						</table>
 					</td>
 				</tr>
-				<tr>
+				<!-- This is now required as of now, as we aree not allowing to change the email id
+                                        and it is showing logged in User's email id, instead of Assigned to user's email id -->
+				<!--<tr>
 					<td nowrap align=right>
 					<?php echo $mod_strings['LBL_SDRMD'] ?> :
 					</td>
 					<td >
 					<input type=text name="toemail" readonly="readonly" class=textbox style="width:90%" value="<?php echo $to_email ?>">
 					</td>
-				</tr>
+				</tr>-->
 				</table>
 				<?php } ?>
 				</DIV>
@@ -591,9 +602,10 @@ function getAssignedToHTML($assignedto,$toggletype)
 					<table width="100%" cellpadding="5" cellspacing="0" border="0" bgcolor="#FFFFFF">
 				<?php if(getFieldVisibilityPermission('Events',$current_user->id,'parent_id') == '0') {  ?>
 						<tr>
-							<td><b><?php echo $mod_strings['LBL_RELATEDTO']?></b></td>
+							<td width="15%"><b><?php echo $mod_strings['LBL_RELATEDTO']?></b></td>
 							<td>
 								<input name="parent_id" value="" type="hidden">
+								<input name="del_actparent_rel" type="hidden" >
 								<select name="parent_type" class="small" id="parent_type" onChange="document.EditView.parent_name.value='';document.EditView.parent_id.value=''">
 									<option value="Leads"><?php echo $app_strings['Leads']?></option>
 									<option value="Accounts"><?php echo $app_strings['Accounts']?></option>
@@ -605,6 +617,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 								<div id="eventrelatedto" align="left">
 								<input type="text" readonly="readonly" class="calTxt small" value="" name="parent_name">&nbsp;
 							<input type="button" name="selectparent" class="crmButton small edit" value="<?php echo $mod_strings['LBL_SELECT']; ?>" onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
+							<input type='button' value='del' class="crmButton small edit" onclick="document.EditView.del_actparent_rel.value=document.EditView.parent_id.value;document.EditView.parent_id.value='';document.EditView.parent_name.value='';">
 								</div>
 							</td>
 						</tr>
@@ -613,8 +626,12 @@ function getAssignedToHTML($assignedto,$toggletype)
 						<td><b><?php echo $app_strings['Contacts'] ?></b></td>
 							<td colspan="2">
 								<input name="contactidlist" id="contactidlist" value="" type="hidden">
-								<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt" id='parentid'></textarea>&nbsp;
+								<input name="deletecntlist" id="deletecntlist" type="hidden">
+								<select name="contactlist" size="5" style="height: 85px;width:150px;"  id="parentid" class="small" multiple>
+								</select>
 								<input type="button" onclick="selectContact('true','general',document.EditView);" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT_CONTACT'] ; ?>">
+								<input type='button' value='del' class="crmButton small edit" onclick='removeActContacts();'>
+								
 							</td>
 						</tr>
 					</table>
@@ -793,15 +810,20 @@ function getAssignedToHTML($assignedto,$toggletype)
 		</td></tr>
 		<tr><td>&nbsp;</td></tr>
 	</table>
+	<?php if((getFieldVisibilityPermission('Calendar',$current_user->id,'sendnotification') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'parent_id') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'contact_id') == '0')) { ?>
 	<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%" bgcolor="#FFFFFF">
 		<tr>
 			<td>
 				<table border=0 cellspacing=0 cellpadding=3 width=100%>
 					<tr>
 						<td class="dvtTabCache" style="width:10px" nowrap="nowrap">&nbsp;</td>
+						<?php if(getFieldVisibilityPermission('Calendar',$current_user->id,'sendnotification') == '0') { $classval = "dvtUnSelectedCell";  ?>
 						<td id="cellTabNotification" class="dvtSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabNotification','on');switchClass('cellTabtodoRelatedto','off');gshow('addTaskAlarmUI','todo',document.createTodo.task_date_start.value,document.createTodo.task_due_date.value,document.createTodo.starthr.value,document.createTodo.startmin.value,document.createTodo.startfmt.value,'','','',document.createTodo.viewOption.value,document.createTodo.subtab.value);ghide('addTaskRelatedtoUI');"><?php echo $mod_strings['LBL_NOTIFICATION']?></a></td>
+						<?php } else { $classval = "dvtSelectedCell"; } ?>
 						<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
-						<td id="cellTabtodoRelatedto" class="dvtUnSelectedCell" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabtodoRelatedto','on'); switchClass('cellTabNotification','off');gshow('addTaskRelatedtoUI','todo',document.createTodo.task_date_start.value,document.createTodo.task_due_date.value,document.createTodo.starthr.value,document.createTodo.startmin.value,document.createTodo.startfmt.value,'','','',document.createTodo.viewOption.value,document.createTodo.subtab.value);ghide('addTaskAlarmUI');"><?php echo $mod_strings['LBL_RELATEDTO']?></a></td>					
+						<?php if((getFieldVisibilityPermission('Calendar',$current_user->id,'parent_id') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'contact_id') == '0')) { ?>
+						<td id="cellTabtodoRelatedto" class="<?php echo $classval ; ?>" align=center nowrap><a href="javascript:doNothing()" onClick="switchClass('cellTabtodoRelatedto','on'); switchClass('cellTabNotification','off');gshow('addTaskRelatedtoUI','todo',document.createTodo.task_date_start.value,document.createTodo.task_due_date.value,document.createTodo.starthr.value,document.createTodo.startmin.value,document.createTodo.startfmt.value,'','','',document.createTodo.viewOption.value,document.createTodo.subtab.value);ghide('addTaskAlarmUI');"><?php echo $mod_strings['LBL_RELATEDTO']?></a></td>					
+						<?php } ?>	
 						<td class="dvtTabCache" style="width: 100%;">&nbsp;</td>
 					</tr>
 				</table>
@@ -817,15 +839,16 @@ function getAssignedToHTML($assignedto,$toggletype)
 				<input name="task_sendnotification" type="checkbox">
 			</td></tr>
                 </table>
-		<?php } ?>
+		<?php $vision = "none" ; } else {$vision = "block" ;} ?>
 		</DIV>
-		<div id="addTaskRelatedtoUI" style="display:none;width:100%">
+		<div id="addTaskRelatedtoUI" style="display:<?php echo $vision; ?>;width:100%">
 			<table width="100%" cellpadding="5" cellspacing="0" border="0">
 			<?php if(getFieldVisibilityPermission('Calendar',$current_user->id,'parent_id') == '0') { ?>
 			<tr>
 				<td><b><?php echo $mod_strings['LBL_RELATEDTO']?></b></td>
 				<td>
 					<input name="task_parent_id" type="hidden" value="">
+					<input name="del_actparent_rel" type="hidden" >
 						<select name="task_parent_type" class="small" id="task_parent_type" onChange="document.createTodo.task_parent_name.value='';document.createTodo.task_parent_id.value=''">
 						<option value="Leads"><?php echo $app_strings['Leads']?></option>
 						<option value="Accounts"><?php echo $app_strings['Accounts']?></option>
@@ -842,6 +865,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 					<div id="taskrelatedto" align="left">
 					<input name="task_parent_name" readonly type="text" class="calTxt small" value="">
 					<input type="button" name="selectparent" class="crmButton small edit" value="<?php echo $mod_strings['LBL_SELECT']; ?>" onclick="return window.open('index.php?module='+document.createTodo.task_parent_type.value+'&action=Popup&maintab=Calendar','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
+					<input type='button' value='del' class="crmButton small edit" onclick="document.createTodo.del_actparent_rel.value=document.createTodo.task_parent_id.value;document.createTodo.task_parent_id.value='';document.createTodo.task_parent_name.value='';">
 					</div>
 				</td>
 			</tr>
@@ -851,7 +875,9 @@ function getAssignedToHTML($assignedto,$toggletype)
 			<td><b><?php echo $mod_strings['LBL_CONTACT_NAME'] ?></b></td>
 			<td colspan="2">
 				<input name="task_contact_name" id="contact_name" readonly type="text" class="calTxt" value=""><input name="task_contact_id" id="contact_id" type="hidden" value="">&nbsp;
+				<input name="deletecntlist"  id="deletecntlist" type="hidden">
 				<input type="button" onclick="selectContact('false','task',document.createTodo);" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT']." ". $mod_strings['LBL_LIST_CONTACT'] ; ?>">
+				<input type='button' value='del' class="crmButton small edit" onclick='document.createTodo.deletecntlist.value=document.createTodo.task_contact_name.value;document.createTodo.task_contact_name.value="";document.createTodo.task_contact_id.value="";'>
 			</td>
 			  </tr>
 			<?php } ?>
@@ -860,6 +886,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 		</td></tr>
                 <!-- Repeat UI -->
 	</table>
+	<?php } ?>
 	<br>
 
                 <table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
@@ -873,7 +900,7 @@ function getAssignedToHTML($assignedto,$toggletype)
   <script>
   	var fieldname = new Array('task_subject','task_date_start','task_time_start','task_due_date','taskstatus');
 	var fieldlabel = new Array('<?php echo $mod_strings['LBL_LIST_SUBJECT']?>','<?php echo $mod_strings['LBL_START_DATE']?>','<?php echo $mod_strings['LBL_TIME']?>','<?php echo $mod_strings['LBL_DUE_DATE']?>','<?php echo $mod_strings['LBL_STATUS']?>');
-	var fielddatatype = new Array('V~M','D~M~time_start','T~O','D~M~OTH~GE~date_start~Start Date & Time','V~O');
+	var fielddatatype = new Array('V~M','D~M~time_start','T~O','D~M~OTH~GE~task_date_start~Start Date & Time','V~O');
   </script>
   </div>
 
@@ -901,14 +928,21 @@ function getAssignedToHTML($assignedto,$toggletype)
 	<td width="50%"><b><?php echo $app_strings['LBL_TRANSFER_OWNERSHIP']; ?></b></td>
 	        <td width="2%"><b>:</b></td>
         	<td width="48%">
-                	<input type = "radio" name = "user_lead_owner"  onclick=checkgroup();  checked><?php echo $app_strings['LBL_USER'];?>&nbsp;
-                        <input type = "radio" name = "user_lead_owner" onclick=checkgroup(); ><?php echo $app_strings['LBL_GROUP'];?><br>
-                        <select name="lead_owner" id="lead_owner" class="detailedViewTextBox" style="display:block">
+		<?php
+		$usersList = getUserslist();
+		$groupList = getGroupslist();
+		?>
+
+            <input type = "radio" id= "user_checkbox" name = "user_lead_owner"  <?php if($groupList != '') { ?> onclick=checkgroup();  <?php } ?> checked><?php echo $app_strings['LBL_USER'];?>&nbsp;
+			<?php if( $groupList != '') {?>
+				<input type = "radio" id = "group_checkbox" name = "user_lead_owner" onclick=checkgroup(); ><?php echo $app_strings['LBL_GROUP'];?><br>
+				<select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">    
+					<?php echo getGroupslist();?>  
+				</select>
+			<?php } ?>
+            <select name="lead_owner" id="lead_owner" class="detailedViewTextBox" style="display:block">
 				<?php echo getUserslist(); ?>
-                        </select>
-                        <select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">
-				<?php echo getGroupslist();?>
-                         </select>
+            </select>
         	</td>
 	</tr>
 	<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>

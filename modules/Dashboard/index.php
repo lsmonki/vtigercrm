@@ -28,7 +28,6 @@ global $currentModule;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 require_once('include/logging.php');
 
 $graph_array = Array(
@@ -117,7 +116,7 @@ if($CALCULATOR_DISPLAY == 'true') {
 } 
 if($CHAT_DISPLAY == 'true') { 
 ?> 		
-			<td style="padding-right:10px"><a href="javascript:;" onClick='return window.open("index.php?module=Contacts&action=vtchat","Chat","width=600,height=450,resizable=1,scrollbars=1");'><img src="<?php echo $image_path;?>tbarChat.gif" alt="<?php echo $app_strings['LBL_CHAT_ALT']; ?>" title="<?php echo $app_strings['LBL_CHAT_TITLE']; ?>" border=0></a>
+			<td style="padding-right:10px"><a href="javascript:;" onClick='return window.open("index.php?module=Home&action=vtchat","Chat","width=600,height=450,resizable=1,scrollbars=1");'><img src="<?php echo $image_path;?>tbarChat.gif" alt="<?php echo $app_strings['LBL_CHAT_ALT']; ?>" title="<?php echo $app_strings['LBL_CHAT_TITLE']; ?>" border=0></a>
 <?php 
 } 
 ?> 
@@ -332,7 +331,6 @@ if($CHAT_DISPLAY == 'true') {
 </html>
 
 
-<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/scriptaculous.js"></script>
 <script>
 function loadDashBoard(oSelect)

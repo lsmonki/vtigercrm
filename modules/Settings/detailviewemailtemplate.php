@@ -20,7 +20,6 @@ global $current_language;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Inside Email Template Detail View");
 
@@ -38,8 +37,8 @@ if(isset($_REQUEST['templateid']) && $_REQUEST['templateid']!='')
 {
 	$log->info("The templateid is set");
 	$tempid = $_REQUEST['templateid'];
-	$sql = "select * from vtiger_emailtemplates where templateid=".$tempid;
-	$result = $adb->query($sql);
+	$sql = "select * from vtiger_emailtemplates where templateid=?";
+	$result = $adb->pquery($sql, array($tempid));
 	$emailtemplateResult = $adb->fetch_array($result);
 }
 $smarty->assign("FOLDERNAME", $emailtemplateResult["foldername"]);
@@ -49,7 +48,7 @@ $smarty->assign("DESCRIPTION", $emailtemplateResult["description"]);
 $smarty->assign("TEMPLATEID", $emailtemplateResult["templateid"]);
 
 $smarty->assign("SUBJECT", $emailtemplateResult["subject"]);
-$smarty->assign("BODY", nl2br($emailtemplateResult["body"]));
+$smarty->assign("BODY", decode_html($emailtemplateResult["body"]));
 
 $smarty->display("DetailViewEmailTemplate.tpl");
 

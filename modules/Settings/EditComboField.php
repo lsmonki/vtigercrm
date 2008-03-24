@@ -18,11 +18,19 @@ $tableName=$_REQUEST["fieldname"];
 $moduleName=$_REQUEST["fld_module"];
 $uitype=$_REQUEST["uitype"];
 
+if(isset($_REQUEST['parentroleid']) && $_REQUEST['parentroleid']  != '')
+{
+	$roleid = $_REQUEST['parentroleid'];
+}
+else
+{
+	$roleid=$_REQUEST["roleid"];
+}
+
 
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 
@@ -32,37 +40,73 @@ if($moduleName == 'Events')
 else
 	$temp_module_strings = return_module_language($current_language, $moduleName);
 
-//Get the Editable Picklist Values 
-$query = "select * from vtiger_".$tableName." where presence=1";
-$result = $adb->query($query);
-$fldVal='';
-
-while($row = $adb->fetch_array($result))
+//To get the Editable Picklist Values 
+if($uitype != 111)
 {
-	if($temp_module_strings[$row[$tableName]] != '')
-		$fldVal .= $temp_module_strings[$row[$tableName]];
-	else
-		$fldVal .= $row[$tableName];
-	$fldVal .= "\n";	
+	$query = "select * from vtiger_$tableName inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_$tableName.picklist_valueid where roleid=? and  presence=1 order by sortid";
+	$result = $adb->pquery($query, array($roleid));
+	$fldVal='';
+
+	while($row = $adb->fetch_array($result))
+	{
+		if($temp_module_strings[$row[$tableName]] != '')
+			$fldVal .= $temp_module_strings[$row[$tableName]];
+		else
+			$fldVal .= $row[$tableName];
+		$fldVal .= "\n";	
+	}
+}
+else
+{
+	$query = "select * from vtiger_".$tableName." inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_$tableName.picklist_valueid where roleid=? and  presence=1 order by sortid"; 
+	$result = $adb->pquery($query, array($roleid));
+	$fldVal='';
+
+	while($row = $adb->fetch_array($result))
+	{
+		if($temp_module_strings[$row[$tableName]] != '')
+			$fldVal .= $temp_module_strings[$row[$tableName]];
+		else
+			$fldVal .= $row[$tableName];
+		$fldVal .= "\n";	
+	}
 }
 
-//Get the Non - Editable Picklist Values 
-$qry = "select * from vtiger_".$tableName." where presence=0"; 
-$res = $adb->query($qry);
-$nonedit_fldVal='';
 
-while($row = $adb->fetch_array($res))
+if(isset($_REQUEST['parentroleid']) && $_REQUEST['parentroleid']!= '')
 {
-	if($temp_module_strings[$row[$tableName]] != '')
-		$nonedit_fldVal .= $temp_module_strings[$row[$tableName]];
-	else
-		$nonedit_fldVal .= $row[$tableName];
-	$nonedit_fldVal .= "<br>";	
+	echo '<textarea id="picklist" style="display:none;">'.$fldVal.'</textarea>';
+	echo '<script>window.opener.document.getElementById("picklist_values").value = document.getElementById("picklist").value;</script>';
+
+	echo '<script>window.close();</script>';
+	$roleid = $_REQUEST['parentroleid'];
+	die;
 }
 
-
-$query = 'select fieldlabel from vtiger_tab inner join vtiger_field on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.name="'.$moduleName.'" and fieldname="'.$tableName.'"';
-$fieldlabel = $adb->query_result($adb->query($query),0,'fieldlabel'); 
+//To get the Non Editable Picklist Entries
+if($uitype == 111 || $uitype == 16) 
+{
+	$qry = "select * from vtiger_".$tableName." inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_$tableName.picklist_valueid where roleid=? and presence=0 order by sortid"; 
+	$res = $adb->pquery($qry, array($roleid));
+	if($adb->num_rows($res) > 0)
+	{
+		$nonedit_fldVal='<div id="nonedit_pl">';
+		$c = 0;
+		while($row = $adb->fetch_array($res))
+		{
+			if($c != 0)	
+				$nonedit_fldVal .= "<br>";
+			if($temp_module_strings[$row[$tableName]] != '')
+				$nonedit_fldVal .= $temp_module_strings[$row[$tableName]];
+			else
+				$nonedit_fldVal .= $row[$tableName];
+			$c++;
+		}
+		$nonedit_fldVal .= "</div>";
+	}	
+}
+$query = 'select fieldlabel from vtiger_tab inner join vtiger_field on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.name=? and fieldname=?';
+$fieldlabel = $adb->query_result($adb->pquery($query, array($moduleName, $tableName)),0,'fieldlabel'); 
 
 if($nonedit_fldVal == '')
 	$smarty->assign("EDITABLE_MODE","edit");

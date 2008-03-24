@@ -6,7 +6,7 @@
 			<key />
 			<autoincrement />
 		</field>
-		<field name="user_name" type="C" size="20" />
+		<field name="user_name" type="C" size="255" />
 		<field name="user_password" type="C" size="30" />
 		<field name="user_hash" type="C" size="32" />
 		<field name="cal_color" type="C" size="25">
@@ -55,7 +55,7 @@
 		<field name="namedays" type="C" size="60" />
 		<field name="workdays" type="C" size="30" />
 		<field name="weekstart" type="I" size="11" />
-		<field name="date_format" type="C" size="30" />
+		<field name="date_format" type="C" size="200" />
 		<field name="hour_format" type="C" size="30">
 			<default value="am/pm" />
 		</field>
@@ -68,10 +68,10 @@
 		<field name="homeorder" type="C" size="255">
 			<default value="HDB,ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI,MNL,OLTPO,LTFAQ" />
 		</field>
-		<field name="activity_view" type="C" size="25">
+		<field name="activity_view" type="C" size="200">
 			<default value="Today" />
 		</field>
-		<field name="lead_view" type="C" size="25">
+		<field name="lead_view" type="C" size="200">
 			<default value="Today" />
 		</field>
 		<field name="imagename" type="C" size="250" />
@@ -81,6 +81,19 @@
 		</field>
 		<field name="defhomeview" type="C" size="100" />
 		<field name="confirm_password" type="C" size="30" />
+
+		<field name="tagcloud_view" type="I" size="1">
+			<default value="1" />
+		</field>
+		<field name="internal_mailer" type="C" size="3">
+			<notnull />
+			<default value="1" />
+		</field>
+
+		<field name="crypt_type" type="C" size="20">
+			<notnull />
+			<default value="MD5" />
+		</field>
 
 		<index name="user_user_name_idx">
 			<col>user_name</col>
@@ -159,6 +172,7 @@
 		<field name="sharedid" type="I" size="19">
 			<key />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_tab">
@@ -228,6 +242,7 @@
 		<index name="block_tabid_idx">
 			<col>tabid</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_blocks" alter="true">
@@ -322,12 +337,12 @@
 		<field name="parentid" type="I" size="19">
 			<default value="0" />
 		</field>
-		<field name="account_type" type="C" size="50" />
-		<field name="industry" type="C" size="50" />
+		<field name="account_type" type="C" size="200" />
+		<field name="industry" type="C" size="200" />
 		<field name="annualrevenue" type="I" size="19">
 			<default value="0" />
 		</field>
-		<field name="rating" type="C" size="50" />
+		<field name="rating" type="C" size="200" />
 		<field name="ownership" type="C" size="50" />
 		<field name="siccode" type="C" size="50" />
 		<field name="tickersymbol" type="C" size="30" />
@@ -426,7 +441,7 @@
 			<default value="0" />
 		</field>
 		<field name="accountid" type="I" size="19" />
-		<field name="salutation" type="C" size="50">
+		<field name="salutation" type="C" size="200">
 		</field>
 		<field name="firstname" type="C" size="40" />
 		<field name="lastname" type="C" size="80">
@@ -483,7 +498,7 @@
 		<field name="laststayintouchsavedate" type="I" size="19">
 			<default value="0" />
 		</field>
-		<field name="leadsource" type="C" size="50" />
+		<field name="leadsource" type="C" size="200" />
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
@@ -556,6 +571,7 @@
 			<notnull />
 		</field>
 		<field name="isactive" type="I" size="1" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 <table name="vtiger_portalinfo" alter="true">
@@ -572,6 +588,7 @@
 		<field name="portal" type="C" size="3" />
 		<field name="support_start_date" type="D" />
 		<field name="support_end_date" type="D" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 <table name="vtiger_customerdetails" alter="true">
@@ -588,7 +605,7 @@
 		<field name="email" type="C" size="100" />
 		<field name="interest" type="C" size="50" />
 		<field name="firstname" type="C" size="40" />
-		<field name="salutation" type="C" size="10" />
+		<field name="salutation" type="C" size="200" />
 		<field name="lastname" type="C" size="80">
 			<notnull />
 		</field>
@@ -598,11 +615,11 @@
 		<field name="annualrevenue" type="I" size="19">
 			<default value="0" />
 		</field>
-		<field name="industry" type="C" size="50" />
+		<field name="industry" type="C" size="200" />
 		<field name="campaign" type="C" size="30" />
-		<field name="rating" type="C" size="50" />
+		<field name="rating" type="C" size="200" />
 		<field name="leadstatus" type="C" size="50" />
-		<field name="leadsource" type="C" size="50" />
+		<field name="leadsource" type="C" size="200" />
 		<field name="converted" type="I" size="1">
 			<default value="0" />
 		</field>
@@ -756,7 +773,7 @@
 		<field name="potentialname" type="C" size="120">
 			<notnull />
 		</field>
-		<field name="amount" type="N" size="10.2">
+		<field name="amount" type="N" size="14.2">
 			<default value="0" />
 		</field>
 		<field name="currency" type="C" size="20" />
@@ -770,9 +787,9 @@
 			<default value="0" />
 		</field>
 		<field name="campaignid" type="I" size="19" />
-		<field name="sales_stage" type="C" size="50" />
-		<field name="potentialtype" type="C" size="50" />
-		<field name="leadsource" type="C" size="50" />
+		<field name="sales_stage" type="C" size="200" />
+		<field name="potentialtype" type="C" size="200" />
+		<field name="leadsource" type="C" size="200" />
 		<field name="productid" type="I" size="50" />
 		<field name="productversion" type="C" size="50" />
 		<field name="quotationref" type="C" size="50" />
@@ -863,7 +880,7 @@
 			<notnull />
 		</field>
 		<field name="semodule" type="C" size="20" />
-		<field name="activitytype" type="C" size="50">
+		<field name="activitytype" type="C" size="200">
 			<notnull />
 		</field>
 
@@ -878,10 +895,10 @@
 			<default value="0"/>
 		</field>
 		<field name="duration_hours" type="C" size="2" />
-		<field name="duration_minutes" type="C" size="2" />
-		<field name="status" type="C" size="100" />
-		<field name="eventstatus" type="C" size="100" />
-		<field name="priority" type="C" size="150" />
+		<field name="duration_minutes" type="C" size="200" />
+		<field name="status" type="C" size="200" />
+		<field name="eventstatus" type="C" size="200" />
+		<field name="priority" type="C" size="200" />
 		<field name="location" type="C" size="150" />
 		<field name="notime" type="C" size="3">
 			<notnull />
@@ -891,6 +908,7 @@
 			<notnull />
 			<default value="all" />
 		</field>
+		<field name="recurringtype" type="C" size="200" />
 
 		<index name="activity_activityid_subject_idx">
 			<col>activityid</col>
@@ -911,9 +929,8 @@
 		<index name="activity_eventstatus_idx">
 			<col>eventstatus</col>
 		</index>
-		<index name="activity_status_eventstatus_idx">
+		<index name="activity_status_idx">
 			<col>status</col>
-			<col>eventstatus</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
@@ -929,18 +946,18 @@
 		<field name="attachmentsid" type="I" size="19">
 			<key />
 		</field>
-		<field name="name" type="C" size="100">
+		<field name="name" type="C" size="255">
 			<notnull />
 		</field>
 		<field name="description" type="C" size="100" />
 		<field name="type" type="C" size="100" />
-		<field name="path" type="C" size="255" />
+		<field name="path" type="X" />
+		<field name="subject" type="C" size="255" />
 		<index name="attachments_attachmentsid_idx">
 			<col>attachmentsid</col>
 		</index>
-		<index name="attachments_description_name_type_attachmentsid_idx">
+		<index name="attachments_description_type_attachmentsid_idx">
 			<col>description</col>
-			<col>name</col>
 			<col>type</col>
 			<col>attachmentsid</col>
 		</index>
@@ -1052,7 +1069,7 @@
 		<field name="phone" type="C" size="100" />
 		<field name="email" type="C" size="100" />
 		<field name="website" type="C" size="100" />
-		<field name="glacct" type="C" size="50" />
+		<field name="glacct" type="C" size="200" />
 		<field name="category" type="C" size="50" />
 		<field name="street" type="X" />
 		<field name="city" type="C" size="30" />
@@ -1080,8 +1097,8 @@
 			<notnull />
 		</field>
 		<field name="productcode" type="C" size="40" />
-		<field name="productcategory" type="C" size="40" />
-		<field name="manufacturer" type="C" size="40" />
+		<field name="productcategory" type="C" size="200" />
+		<field name="manufacturer" type="C" size="200" />
 		<field name="product_description" type="X" />
 		<field name="qty_per_unit" type="N" size="11.2">
 			<default value="0" />
@@ -1109,7 +1126,7 @@
 		<field name="mfr_part_no" type="C" size="200" />
 		<field name="vendor_part_no" type="C" size="200" />
 		<field name="serialno" type="C" size="200" />
-		<field name="qtyinstock" type="I" size="11" />
+		<field name="qtyinstock" type="N" size="25.3" />
 		<field name="productsheet" type="C" size="200" />
 		<field name="qtyindemand" type="I" size="11" />
 		<field name="glacct" type="C" size="200" />
@@ -1182,15 +1199,14 @@
 		<field name="manufacturer" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="manufacturer_manufacturer_idx">
 			<unique />
 			<col>manufacturer</col>
@@ -1291,6 +1307,7 @@
 			<col>groupid</col>
 			<col>userid</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 <table name="vtiger_users2group" alter="true">
@@ -1327,6 +1344,7 @@
 		<field name="roleid" type="C" size="255">
 			<key />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 <table name="vtiger_group2role" alter="true">
@@ -1344,6 +1362,7 @@
 		<field name="roleandsubid" type="C" size="255">
 			<key />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 <table name="vtiger_group2rs" alter="true">
@@ -1381,12 +1400,12 @@
 
 	<table name="vtiger_campaign">
 		<field name="campaignname" type="C" size="255" />
-		<field name="campaigntype" type="C" size="255" />
-		<field name="campaignstatus" type="C" size="255" />
+		<field name="campaigntype" type="C" size="200" />
+		<field name="campaignstatus" type="C" size="200" />
 		<field name="expectedrevenue" type="N" size="25.3" />
 		<field name="budgetcost" type="N" size="25.3" />
 		<field name="actualcost" type="N" size="25.3" />
-		<field name="expectedresponse" type="C" size="255" />
+		<field name="expectedresponse" type="C" size="200" />
 		<field name="numsent" type="N" size="11.0" />
 		<field name="product_id" type="I" size="19" />
 		<field name="sponsor" type="C" size="255" />
@@ -1614,6 +1633,9 @@
 		<index name="cntactivityrel_contactid_idx">
 			<col>contactid</col>
 		</index>
+		<index name="cntactivityrel_activityid_idx">
+			<col>activityid</col>
+		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
@@ -1692,15 +1714,14 @@
 		<field name="groupname" type="C" size="100" />
 		<field name="parent_id" type="C" size="100" />
 		<field name="product_id" type="C" size="100" />
-		<field name="priority" type="C" size="150" />
-		<field name="severity" type="C" size="150" />
-		<field name="status" type="C" size="150" />
-		<field name="category" type="C" size="150" />
+		<field name="priority" type="C" size="200" />
+		<field name="severity" type="C" size="200" />
+		<field name="status" type="C" size="200" />
+		<field name="category" type="C" size="200" />
 		<field name="title" type="C" size="255">
 			<notnull />
 		</field>
 		<field name="filename" type="C" size="50" />
-		<field name="description" type="X" />
 		<field name="solution" type="X" />
 		<field name="update_log" type="X" />
 		<field name="version_id" type="I" size="11" />
@@ -1922,6 +1943,7 @@
 		<field name="headernames" type="C" size="30">
 			<notnull />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_import_maps">
@@ -1963,6 +1985,7 @@
 			<col>name</col>
 			<col>deleted</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_leadgrouprelation">
@@ -2160,12 +2183,13 @@
 		<field name="id" type="I" size="19">
 			<key />
 		</field>
-		<field name="server" type="C" size="30" />
+		<field name="server" type="C" size="100" />
 		<field name="server_port" type="I" size="19" />
-		<field name="server_username" type="C" size="30" />
-		<field name="server_password" type="C" size="30" />
+		<field name="server_username" type="C" size="100" />
+		<field name="server_password" type="C" size="100" />
 		<field name="server_type" type="C" size="20" />
 		<field name="smtp_auth" type="C" size="5" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_currency_info">
@@ -2183,6 +2207,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_defaultcv">
@@ -2193,6 +2218,7 @@
 			<notnull />
 		</field>
 		<field name="query" type="X" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 <table name="vtiger_defaultcv" alter="true">
@@ -2222,6 +2248,7 @@
 			<col>templatename</col>
 			<col>subject</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_faq">
@@ -2234,10 +2261,10 @@
 			<notnull />
 		</field>
 		<field name="answer" type="X" />
-		<field name="category" type="C" size="100">
+		<field name="category" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="status" type="C" size="100">
+		<field name="status" type="C" size="200">
 			<notnull />
 		</field>
 
@@ -2300,6 +2327,7 @@
 			<col>name</col>
 			<col>deleted</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_loginhistory">
@@ -2320,6 +2348,7 @@
 			<deftimestamp />
 		</field>
 		<field name="status" type="C" size="25" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_senotesrel">
@@ -2370,6 +2399,7 @@
 		<index name="ticketstracktime_ticket_id_idx">
 			<col>ticket_id</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_ticketcf">
@@ -2420,6 +2450,7 @@
 		<index name="idx_user_id">
 			<col>assigned_user_id</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_wordtemplates">
@@ -2453,6 +2484,7 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_accountdepstatus">
@@ -2559,15 +2591,14 @@
 		<field name="accounttype" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="accounttype_accounttype_idx">
 			<col>accounttype</col>
 			<unique />
@@ -2607,15 +2638,14 @@
 		<field name="leadsource" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="leadsource_source_idx">
 			<col>source</col>
 			<unique />
@@ -2631,15 +2661,14 @@
 		<field name="opportunity_type" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="opportunity_type_opportunity_type_idx">
 			<col>opportunity_type</col>
 			<unique />
@@ -2679,15 +2708,14 @@
 		<field name="leadstatus" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="leadstatus_status_idx">
 			<col>status</col>
 			<unique />
@@ -2703,15 +2731,14 @@
 		<field name="eventstatus" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="eventstatus_status_idx">
 			<col>status</col>
 			<unique />
@@ -2850,15 +2877,14 @@
 		<field name="industry" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="industry_industry_idx">
 			<col>industry</col>
 			<unique />
@@ -2898,14 +2924,15 @@
 		<field name="salutationtype" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_taskpriority">
@@ -2913,15 +2940,16 @@
 			<key />
 			<autoincrement />
 		</field>
-		<field name="taskpriority" type="C" size="100" />
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
+		<field name="taskpriority" type="C" size="200" />
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_taskstatus">
@@ -2929,15 +2957,16 @@
 			<key />
 			<autoincrement />
 		</field>
-		<field name="taskstatus" type="C" size="100" />
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
+		<field name="taskstatus" type="C" size="200" />
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_activitytype">
@@ -2995,14 +3024,15 @@
 		</field>
 		<field name="sales_stage" type="C" size="200">
 		</field>
-		<field name="SORTORDERID" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="PRESENCE" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_faqcategories">
@@ -3010,15 +3040,16 @@
 			<key />
 			<autoincrement />
 		</field>
-		<field name="faqcategories" type="C" size="60" />
-		<field name="SORTORDERID" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
+		<field name="faqcategories" type="C" size="200" />
 		<field name="PRESENCE" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_faqstatus">
@@ -3026,15 +3057,16 @@
 			<key />
 			<autoincrement />
 		</field>
-		<field name="faqstatus" type="C" size="60" />
-		<field name="SORTORDERID" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
+		<field name="faqstatus" type="C" size="200" />
 		<field name="PRESENCE" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_rating">
@@ -3043,14 +3075,15 @@
 			<autoincrement />
 		</field>
 		<field name="rating" type="C" size="200" />
-		<field name="SORTORDERID" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="PRESENCE" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_ticketcategories">
@@ -3058,15 +3091,16 @@
 			<key />
 			<autoincrement />
 		</field>
-		<field name="ticketcategories" type="C" size="100" />
-		<field name="SORTORDERID" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
+		<field name="ticketcategories" type="C" size="200" />
 		<field name="PRESENCE" type="I" size="1">
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_ticketpriorities">
@@ -3074,15 +3108,16 @@
 			<key />
 			<autoincrement />
 		</field>
-		<field name="ticketpriorities" type="C" size="100" />
-		<field name="SORTORDERID" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
+		<field name="ticketpriorities" type="C" size="200" />
 		<field name="PRESENCE" type="I" size="1">
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_ticketseverities">
@@ -3090,15 +3125,16 @@
 			<key />
 			<autoincrement />
 		</field>
-		<field name="ticketseverities" type="C" size="100" />
-		<field name="SORTORDERID" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
+		<field name="ticketseverities" type="C" size="200" />
 		<field name="PRESENCE" type="I" size="1">
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_ticketstatus">
@@ -3106,15 +3142,16 @@
 			<key />
 			<autoincrement />
 		</field>
-		<field name="ticketstatus" type="C" size="60" />
-		<field name="SORTORDERID" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
+		<field name="ticketstatus" type="C" size="200" />
 		<field name="PRESENCE" type="I" size="1">
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_activsubtype">
@@ -3131,6 +3168,7 @@
 			<notnull />
 			<default value="1" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_downloadpurpose">
@@ -3171,6 +3209,7 @@
 			<notnull />
 			<default value="1" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_durationmins">
@@ -3187,6 +3226,7 @@
 			<notnull />
 			<default value="1" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_evaluationstatus">
@@ -3261,6 +3301,7 @@
 			<col>profileid</col>
 			<col>tabid</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_profile2standardpermissions">
@@ -3280,6 +3321,7 @@
 			<col>tabid</col>
 			<col>Operation</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_profile2field">
@@ -3306,6 +3348,7 @@
 			<col>visible</col>
 			<col>profileid</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_role2profile">
@@ -3319,6 +3362,7 @@
 			<col>roleid</col>
 			<col>profileid</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_org_share_action_mapping">
@@ -3341,6 +3385,7 @@
 		<field name="permission" type="I" size="19">
 		</field>
 		<field name="editstatus" type="I" size="19" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 <table name="vtiger_def_org_share" alter="true">
@@ -3369,6 +3414,7 @@
 			<col>visible</col>
 			<col>fieldid</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_profile2utility">
@@ -3388,6 +3434,7 @@
 			<col>tabid</col>
 			<col>activityid</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_productcategory">
@@ -3398,15 +3445,14 @@
 		<field name="productcategory" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="productcategory_productcategory_idx">
 			<col>productcategory</col>
 			<unique />
@@ -3430,7 +3476,7 @@
 		<field name="vendorid" type="I" size="19">
 		</field>
 		<field name="duedate" type="D" />
-		<field name="carrier" type="C" size='100' />
+		<field name="carrier" type="C" size='200' />
 		<field name="pending" type="C" size='200' />
 		<field name="type" type="C" size="100" />
 		<field name="adjustment" type="N" size="25.3" />
@@ -3562,7 +3608,7 @@
 		<field name="notificationsubject" type="C" size="200" />
 		<field name="notificationbody" type="X" />
 		<field name="label" type="C" size="50" />
-
+		<field name="type" type="C" size="10" />
 		<index name="notificationscheduler_schedulednotificationname_idx">
 			<col>schedulednotificationname</col>
 			<unique />
@@ -3614,6 +3660,7 @@
 		<index name="relatedlists_relation_id_idx">
 			<col>relation_id</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_rss">
@@ -3631,6 +3678,7 @@
 		<field name="starred" type="I" size="1">
 			<default value="0" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_vendorcf">
@@ -3725,7 +3773,7 @@
 		<field name="mail_username" type="C" size="50">
 			<notnull />
 		</field>
-		<field name="mail_password" type="C" size="20">
+		<field name="mail_password" type="C" size="250">
 			<notnull />
 		</field>
 		<field name="mail_servername" type="C" size="50" />
@@ -3738,6 +3786,7 @@
 		</field>
 		<field name="status" type="C" size="10" />
 		<field name="set_default" type="I" size="2" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_quotes">
@@ -3751,12 +3800,11 @@
 		</field>
 		<field name="quotestage" type="C" size="200" />
 		<field name="validtill" type="D" />
-		<field name="team" type="C" size="200" />
 		<field name="contactid" type="I" size="19">
 		</field>
 		<field name="currency" type="C" size="100" />
 		<field name="subtotal" type="N" size="25.3" />
-		<field name="carrier" type="C" size='100' />
+		<field name="carrier" type="C" size='200' />
 		<field name="shipping" type="C" size="100" />
 		<field name="inventorymanager" type="I" size="19" />
 		<field name="type" type="C" size="100" />
@@ -3892,7 +3940,7 @@
 		<field name="contactid" type="I" size="19">
 		</field>
 		<field name="duedate" type="D" />
-		<field name="carrier" type="C" size='100' />
+		<field name="carrier" type="C" size='200' />
 		<field name="type" type="C" size="100" />
 		<field name="adjustment" type="N" size="25.3" />
 		<field name="salescommission" type="N" size="25.3" />
@@ -4168,6 +4216,7 @@
 			<key />
 			<notnull />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_customview">
@@ -4566,15 +4615,14 @@
 		<field name="usageunit" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="usageunit_usageunit_idx">
 			<col>usageunit</col>
 			<unique />
@@ -4590,15 +4638,14 @@
 		<field name="glacct" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="glacct_glacct_idx">
 			<col>glacct</col>
 			<unique />
@@ -4614,15 +4661,14 @@
 		<field name="quotestage" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="quotestage_quotestage_idx">
 			<col>quotestage</col>
 			<unique />
@@ -4638,15 +4684,14 @@
 		<field name="invoicestatus" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="invoicestatus_invoiestatus_idx">
 			<col>invoicestatus</col>
 			<unique />
@@ -4662,15 +4707,14 @@
 		<field name="postatus" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="postatus_postatus_idx">
 			<col>postatus</col>
 			<unique />
@@ -4686,15 +4730,14 @@
 		<field name="sostatus" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="sostatus_sostatus_idx">
 			<col>sostatus</col>
 			<unique />
@@ -4711,15 +4754,14 @@
 		<field name="carrier" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="carrier_carrier_idx">
 			<col>carrier</col>
 			<unique />
@@ -4809,6 +4851,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+	<table name="vtiger_recurringevents" alter="true">
+               <constraint>ADD CONSTRAINT fk_1_vtiger_recurringevents FOREIGN KEY (activityid) REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+	        </data>
+	</table>
+
 	<table name="vtiger_inventorynotification">
 		<field name="notificationid" type="I" size="19">
 			<key />
@@ -4830,6 +4879,7 @@
 			<notnull />
 		</field>
 		<field name="tandc" type="X" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_convertleadmapping">
@@ -5527,15 +5577,14 @@
 		<field name="campaigntype" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="campaigntype_campaigntype_idx">
 			<col>campaigntype</col>
 			<unique />
@@ -5551,15 +5600,14 @@
 		<field name="campaignstatus" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="campaignstatus_campaignstatus_idx">
 			<col>campaignstatus</col>
 		</index>
@@ -5574,22 +5622,68 @@
 		<field name="expectedresponse" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="CampaignExpRes_UK01">
 			<col>expectedresponse</col>
 			<unique />
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+	<table name="vtiger_picklist">
+		<field name="picklistid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="name" type="C" size="200">
+			<notnull />
+		</field>
+		<index name="picklist_name_idx">
+			<col>name</col>
+			<unique />
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	<table name="vtiger_role2picklist">
+		<field name="roleid" type="C" size="255">
+			<key />
+		</field>
+		<field name="picklistvalueid" type="I" size="11">
+			<key />
+		</field>
+		<field name="picklistid" type="I" size="11">
+			<key />
+		</field>
+		<field name="sortid" type="I" size="11" />
 
+		<index name="role2picklist_roleid_picklistid_idx">
+			<col>roleid</col>
+			<col>picklistid</col>
+			<col>picklistvalueid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	<table name="vtiger_picklistvalues_seq">
+		<field name="id" type="I" size="11" />
+	</table>
+	<table name="vtiger_role2picklist" alter="true">
+		<constraint>ADD CONSTRAINT `fk_1_vtiger_role2picklist` FOREIGN KEY (`roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+	<table name="vtiger_role2picklist" alter="true">
+		<constraint>ADD CONSTRAINT `fk_2_vtiger_role2picklist` FOREIGN KEY (`picklistid`) REFERENCES `vtiger_picklist` (`picklistid`) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
 	<table name="vtiger_portal">
 		<field name="portalid" type="I" size="19">
 			<key />
@@ -5603,10 +5697,26 @@
 		<field name="sequence" type="I" size="3">
 			<notnull />
 		</field>
-
+		<field name="setdefault" type="I" size="3">
+			<notnull />
+			<default value="0" />	
+		</field>
 		<index name="portal_portalname_idx">
 			<col>portalname</col>
 		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_soapservice">
+		<field name="id" type="I" size="19">
+			<default value="NULL" />
+		</field>
+		<field name="type" type="C" size="25">
+			<default value="NULL" />
+		</field>
+		<field name="sessionid" type="C" size="100">
+			<default value="NULL" />
+		</field>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
@@ -5758,6 +5868,7 @@
 			<notnull />
 			<default value="" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_freetagged_objects">
@@ -5823,6 +5934,7 @@
 			<notnull />
 			<default value="" />
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_invitees">
@@ -5832,6 +5944,7 @@
 		<field name="inviteeid" type="I" size="19">
 			<KEY/>
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_inventorytaxinfo">
@@ -5889,15 +6002,14 @@
 		<field name="status" type="C" size="200">
 			<notnull />
 		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="picklist_valueid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 		<index name="vtiger_status_status_idx">
 			<col>source</col>
 			<unique />
@@ -6097,7 +6209,7 @@
 		<field name="id" type="I" size="19" />
 		<field name="productid" type="I" size="19" />
 		<field name="sequence_no" type="I" size="4" />
-		<field name="quantity" type="I" size="19" />
+		<field name="quantity" type="N" size="25.3" />
 		<field name="listprice" type="N" size="25.3" />
 		<field name="discount_percent" type="N" size="7.3" />
 		<field name="discount_amount" type="N" size="7.3" />
@@ -6208,6 +6320,7 @@
 		</field>
 		<field name="old_version" type="C" size="30" />
 		<field name="current_version" type="C" size="30" />
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 

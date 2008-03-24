@@ -20,7 +20,7 @@ function getTotalNoofTickets()
 	$log->debug("Entering getTotalNoofTickets() method ...");
 	global $adb;
 	$query = "select count(*) as totalticketcount from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid where vtiger_crmentity.deleted=0";
-	$result = $adb->query($query);
+	$result = $adb->pquery($query, array());
 	$totTickets = $adb->query_result($result,0,"totalticketcount");
 	$log->debug("Exiting getTotalNoofTickets method ...");
 	return $totTickets;
@@ -35,7 +35,7 @@ function getTotalNoofOpenTickets()
 	$log->debug("Entering getTotalNoofOpenTickets() method ...");
 	global $adb;
 	$query = "select count(*) as totalopenticketcount from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid where vtiger_crmentity.deleted=0 and vtiger_troubletickets.status !='Closed'";
-	$result = $adb->query($query);
+	$result = $adb->pquery($query, array());
 	$totOpenTickets = $adb->query_result($result,0,"totalopenticketcount");
 	$log->debug("Exiting getTotalNoofOpenTickets method ...");
 	return $totOpenTickets;
@@ -50,7 +50,7 @@ function getTotalNoofClosedTickets()
 	$log->debug("Entering getTotalNoofClosedTickets() method ...");
 	global $adb;
 	$query = "select count(*) as totalclosedticketcount from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid where vtiger_crmentity.deleted=0 and vtiger_troubletickets.status ='Closed'";
-	$result = $adb->query($query);
+	$result = $adb->pquery($query, array());
 	$totClosedTickets = $adb->query_result($result,0,"totalclosedticketcount");
 	$log->debug("Exiting getTotalNoofClosedTickets method ...");
 	return $totClosedTickets;
@@ -227,8 +227,8 @@ function getFromDB($tableName)
 	global $log;
 	$log->debug("Entering getFromDB(".$tableName.") method ...");
 	global $adb;
-	$query = "select * from ".$tableName;
-	$result = $adb->query($query);
+	$query = "select * from ". mysql_real_escape_string($tableName);
+	$result = $adb->pquery($query, array());
 	$log->debug("Exiting getFromDB method ...");
 	return $result;
 }
@@ -254,18 +254,18 @@ function getTicketCount($mode, $priority_val, $critColName)
 	global $adb;
 	if($mode == 'Open')
 	{
-		$query = "select count(*) as count from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid where vtiger_crmentity.deleted=0  and ".$table_name.".".$critColName."='".$priority_val."' and vtiger_troubletickets.status !='Closed'";
+		$query = "select count(*) as count from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid where vtiger_crmentity.deleted=0  and ".$table_name.".".$critColName."=? and vtiger_troubletickets.status !='Closed'";
 		
 	}
 	elseif($mode == 'Closed')
 	{
-		$query = "select count(*) as count from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid where vtiger_crmentity.deleted=0 and ".$table_name.".".$critColName."='".$priority_val."' and vtiger_troubletickets.status ='Closed'";
+		$query = "select count(*) as count from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid where vtiger_crmentity.deleted=0 and ".$table_name.".".$critColName."=? and vtiger_troubletickets.status ='Closed'";
 	}
 	elseif($mode == 'Total')
 	{
-		$query = "select count(*) as count from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid where vtiger_crmentity.deleted=0 and ".$table_name.".".$critColName."='".$priority_val."' and deleted='0'";
+		$query = "select count(*) as count from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid where vtiger_crmentity.deleted=0 and ".$table_name.".".$critColName."=? and deleted='0'";
 	}
-	$result = $adb->query($query);
+	$result = $adb->pquery($query, array($priority_val));
 	$nooftickets = $adb->query_result($result,0,"count");
 	$log->debug("Exiting getTicketCount method ...");
 	return $nooftickets;

@@ -382,8 +382,35 @@ $mod_list_strings = Array(
 	'qtyindemand'=>'Quantity in Demand',
 	'glacct'=>'GL Account',
 	'assigned_user_id'=>'Assigned To'
-	 )
+	 ),
+//Pavani...adding list of import fields for helpdesk and vendors
+'helpdesk_import_fields' => Array(
+        "ticketid"=>"Ticket Id",
+        "priority"=>"Priority",
+        "severity"=>"Severity",
+        "status"=>"Status",
+        "category"=>"Category",
+        "title"=>"Title",
+        "description"=>"Description",
+        "solution"=>"Solution"
+        ),
 
+'vendors_import_fields' => Array(
+        "vendorid"=>"Vender Id",
+        "vendorname"=>"Vendor Name",
+        "phone"=>"Phone",
+        "email"=>"Email",
+        "website"=>"Website",
+        "category"=>"Category",
+        "street"=>"Street",
+        "city"=>"City",
+        "state"=>"State",
+        "pobox"=>"Post Box",
+        "postalcode"=>"Postal Code",
+        "country"=>"Country",
+        "description"=>"Description"
+        )
+//Pavani...end list
 );
 
 ?>

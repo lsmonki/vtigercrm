@@ -63,25 +63,27 @@ class Appointment
 		global $current_user,$adb;
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		$shared_ids = getSharedCalendarId($current_user->id);
-		$and = "AND ((vtiger_activity.date_start between '". $from_datetime->get_formatted_date() ."' AND '". $to_datetime->get_formatted_date()."') OR (vtiger_activity.date_start between '". $from_datetime->get_formatted_date() ."' AND '". $to_datetime->get_formatted_date()."') OR (vtiger_activity.date_start < '". $to_datetime->get_formatted_date() ."' AND vtiger_activity.date_start < '". $from_datetime->get_formatted_date()."') OR (vtiger_activity.date_start > '". $to_datetime->get_formatted_date() ."' AND vtiger_activity.date_start < '". $from_datetime->get_formatted_date()."'))";
+		$and = "AND ((vtiger_activity.date_start between ? AND ?)
+			OR (vtiger_activity.date_start < ? AND vtiger_activity.due_date > ?)
+			OR (vtiger_activity.due_date between ? AND ?))";
 		
-                $q= "select vtiger_activity.*, vtiger_crmentity.*, vtiger_activitygrouprelation.groupname FROM vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid left join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid left join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname WHERE vtiger_crmentity.deleted = 0 and vtiger_activity.activitytype in ('Call','Meeting') $and ";
+        	$q= "select vtiger_activity.*, vtiger_crmentity.*, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name FROM vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid left join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid left join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid WHERE vtiger_crmentity.deleted = 0 and vtiger_activity.activitytype in ('Call','Meeting') $and ";
+		$params = array($from_datetime->get_formatted_date(), $to_datetime->get_formatted_date(), $from_datetime->get_formatted_date(), $from_datetime->get_formatted_date(), $from_datetime->get_formatted_date(), $to_datetime->get_formatted_date());
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[16] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter('Calendar');
 			$q .= $sec_parameter;
 		}
 									
-                $q .= " AND vtiger_recurringevents.activityid is NULL ";
-                $q .= " group by vtiger_activity.activityid ORDER by vtiger_activity.date_start,vtiger_activity.time_start";
-		$r = $adb->query($q);
-                $n = $adb->getRowCount($r);
-                $a = 0;
+        $q .= " AND vtiger_recurringevents.activityid is NULL ";
+        $q .= " group by vtiger_activity.activityid ORDER by vtiger_activity.date_start,vtiger_activity.time_start";
+		$r = $adb->pquery($q, $params);
+        $n = $adb->getRowCount($r);
+        $a = 0;
 		$list = Array();
 		
-                while ( $a < $n )
-                {
+        while ( $a < $n )
+        {
 			
 			$result = $adb->fetchByAssoc($r);
 			$start_timestamp = strtotime($result["date_start"]);
@@ -116,11 +118,11 @@ class Appointment
 			}
 			$a++;
 			
-                }
+        }
 		//Get Recurring events
-		$q = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.activitytype, vtiger_crmentity.description, vtiger_activity.time_start,vtiger_activity.time_end, vtiger_activity.duration_hours, vtiger_activity.duration_minutes,vtiger_activity.due_date, vtiger_activity.priority, vtiger_activity.location,vtiger_activity.eventstatus, vtiger_crmentity.*, vtiger_recurringevents.recurringid, vtiger_recurringevents.recurringdate as date_start ,vtiger_recurringevents.recurringtype,vtiger_activitygrouprelation.groupname from vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid inner join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid left join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname ";
-
-                $q.=" where vtiger_crmentity.deleted = 0 and vtiger_activity.activitytype in ('Call','Meeting') AND (recurringdate between '".$from_datetime->get_formatted_date()."' and '".$to_datetime->get_formatted_date(). "') ";
+		$q = "SELECT vtiger_activity.*, vtiger_crmentity.*, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name , vtiger_recurringevents.recurringid, vtiger_recurringevents.recurringdate as date_start ,vtiger_recurringevents.recurringtype,vtiger_activitygrouprelation.groupname from vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid inner join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid left join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid ";
+        $q.=" where vtiger_crmentity.deleted = 0 and vtiger_activity.activitytype in ('Call','Meeting') AND (recurringdate between ? and ?) ";
+		$params = array($from_datetime->get_formatted_date(), $to_datetime->get_formatted_date());
 
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[16] == 3)
 		{
@@ -128,11 +130,10 @@ class Appointment
 			$q .= $sec_parameter;
 		}
 													
-                $q .= " ORDER by vtiger_recurringevents.recurringid";
-		//echo $q;
-                $r = $adb->query($q);
-                $n = $adb->getRowCount($r);
-                $a = 0;
+        $q .= " ORDER by vtiger_recurringevents.recurringid";
+		$r = $adb->pquery($q, $params);
+        $n = $adb->getRowCount($r);
+        $a = 0;
 		while ( $a < $n )
                 {
 			$obj = &new Appointment();
@@ -156,46 +157,30 @@ class Appointment
          */
 	function readResult($act_array, $view)
 	{
-		global $adb,$current_user;
+		global $adb,$current_user,$app_strings;
 		$format_sthour='';
                 $format_stmin='';
 		$this->description       = $act_array["description"];
-		$this->eventstatus       = $act_array["eventstatus"];
-		$this->priority		 = $act_array["priority"];
+		$this->eventstatus       = getRoleBasesdPickList('eventstatus',$act_array["eventstatus"]);
+		$this->priority		 = getRoleBasesdPickList('taskpriority',$act_array["priority"]);
 		$this->subject           = $act_array["subject"];
 		$this->activity_type     = $act_array["activitytype"];
 		$this->duration_hour     = $act_array["duration_hours"];
 		$this->duration_minute   = $act_array["duration_minutes"];
 		$this->creatorid         = $act_array["smcreatorid"];
-		$this->creator           = getUserName($act_array["smcreatorid"]);
-		if($act_array["smownerid"]==0)
+		//$this->creator           = getUserName($act_array["smcreatorid"]);
+		$this->assignedto = $act_array["user_name"];
+                $this->owner   = $act_array["user_name"];
+		if(!is_admin($current_user))
 		{
-			$this->assignedto ="group";
-			$this->owner = $act_array["groupname"];
-		}
-		else
-		{
-			$this->assignedto ="user";
-			$this->ownerid = $act_array["smownerid"];
-			if(!is_admin($current_user))
-			{
-				if($act_array["smownerid"] != $current_user->id && $act_array["visibility"] == "Public"){
-					$que = "select * from vtiger_sharedcalendar where sharedid=".$current_user->id." and userid=".$act_array["smownerid"];
-					$row = $adb->query($que);
-					$no = $adb->getRowCount($row);
-					if($no > 0)
-						$this->shared = true;
-				}	
+			if($act_array["smownerid"]!=0 && $act_array["smownerid"] != $current_user->id && $act_array["visibility"] == "Public"){
+				$que = "select * from vtiger_sharedcalendar where sharedid=? and userid=?";
+				$row = $adb->pquery($que, array($current_user->id, $act_array["smownerid"]));
+				$no = $adb->getRowCount($row);
+				if($no > 0)
+					$this->shared = true;
 			}
-			$this->owner   = getUserName($act_array["smownerid"]);
-			$query="SELECT cal_color FROM vtiger_users where id = ".$this->ownerid;
-			$result=$adb->query($query);
-			if($adb->getRowCount($result)!=0)
-			{
-				$res = $adb->fetchByAssoc($result, -1, false);
-				$this->color = $res['cal_color'];
-			}
-		}
+		}	
 		$this->image_name = $act_array["activitytype"].".gif";
 		if(!empty($act_array["recurringid"]) && !empty($act_array["recurringtype"]))
 			$this->recurring="Recurring.gif";
@@ -260,5 +245,41 @@ function compare($a,$b)
 		return 0;
    	}
 	return ($a->start_time->ts < $b->start_time->ts) ? -1 : 1;
+}
+function getRoleBasesdPickList($fldname,$exist_val)
+{
+	global $adb,$app_strings,$current_user;
+	$is_Admin = $current_user->is_admin;
+		if($is_Admin == 'off' && $fldname != '')
+			{
+				$roleid=$current_user->roleid;
+				$roleids = Array();
+				$subrole = getRoleSubordinates($roleid);
+				if(count($subrole)> 0)
+				$roleids = $subrole;
+				array_push($roleids, $roleid);
+
+				//here we are checking wheather the table contains the sortorder column .If  sortorder is present in the main picklist table, then the role2picklist will be applicable for this table...
+
+				$sql="select * from vtiger_$fldname where $fldname=?";
+				$res = $adb->pquery($sql,array(decode_html($exist_val)));
+				$picklistvalueid = $adb->query_result($res,0,'picklist_valueid');
+				if ($picklistvalueid != null) {
+					$pick_query="select * from vtiger_role2picklist where picklistvalueid=$picklistvalueid and roleid in (". generateQuestionMarks($roleids) .")";
+
+					$res_val=$adb->pquery($pick_query,array($roleids));
+					$num_val = $adb->num_rows($res_val);
+				}
+				if($num_val > 0)
+				$pick_val = $exist_val;
+				else
+				$pick_val = $app_strings['LBL_NOT_ACCESSIBLE'];
+
+
+			}else
+			$pick_val = $exist_val;
+
+			return $pick_val;
+			
 }
 ?>

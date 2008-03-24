@@ -29,7 +29,7 @@ $image_path=$theme_path."images/";
 
 //Retreiving the hierarchy
 $hquery = "select * from vtiger_role order by parentrole asc";
-$hr_res = $adb->query($hquery);
+$hr_res = $adb->pquery($hquery, array());
 $num_rows = $adb->num_rows($hr_res);
 $hrarray= Array();
 
@@ -80,7 +80,7 @@ for($l=0; $l<$num_rows; $l++)
 //Constructing the Roledetails array
 $role_det = getAllRoleDetails();
 $query = "select * from vtiger_role";
-$result = $adb->query($query);
+$result = $adb->pquery($query, array());
 $num_rows=$adb->num_rows($result);
 
 $roleout ='';

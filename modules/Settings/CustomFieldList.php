@@ -18,7 +18,6 @@ $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 $smarty->assign("IMAGE_PATH", $image_path);
 $module_array=getCustomFieldSupportedModules();
 
@@ -61,7 +60,7 @@ $smarty->assign("MODULE",$fld_module);
 $smarty->assign("CFENTRIES",getCFListEntries($fld_module));
 if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 {
-	$error='Custom Field in the Name '.$_REQUEST["fldlabel"].' already exists. Please specify a different Label';
+	$error=$mod_strings['ERR_CUSTOM_FIELD_WITH_NAME']. $_REQUEST["fldlabel"] .$mod_strings['ERR_ALREADY_EXISTS'] . ' ' .$mod_strings['ERR_SPECIFY_DIFFERENT_LABEL'];
 	$smarty->assign("DUPLICATE_ERROR", $error);
 }
 
@@ -85,8 +84,8 @@ function getCFListEntries($module)
 	global $adb,$app_strings,$theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	$dbQuery = "select fieldid,columnname,fieldlabel,uitype,displaytype,vtiger_convertleadmapping.cfmid from vtiger_field left join vtiger_convertleadmapping on  vtiger_convertleadmapping.leadfid = vtiger_field.fieldid where tabid=".$tabid." and generatedtype=2 order by sequence";
-	$result = $adb->query($dbQuery);
+	$dbQuery = "select fieldid,columnname,fieldlabel,uitype,displaytype,vtiger_convertleadmapping.cfmid from vtiger_field left join vtiger_convertleadmapping on  vtiger_convertleadmapping.leadfid = vtiger_field.fieldid where tabid=? and generatedtype=2 order by sequence";
+	$result = $adb->pquery($dbQuery, array($tabid));
 	$row = $adb->fetch_array($result);
 	$count=1;
 	$cflist=Array();
@@ -123,8 +122,8 @@ function getCFListEntries($module)
 function getListLeadMapping($cfid)
 {
 	global $adb;
-	$sql="select * from vtiger_convertleadmapping where cfmid =".$cfid;
-	$result = $adb->query($sql);
+	$sql="select * from vtiger_convertleadmapping where cfmid =?";
+	$result = $adb->pquery($sql, array($cfid));
 	$noofrows = $adb->num_rows($result);
 	for($i =0;$i <$noofrows;$i++)
 	{
@@ -134,17 +133,17 @@ function getListLeadMapping($cfid)
 		$potentialid = $adb->query_result($result,$i,'potentialfid');
 		$cfmid = $adb->query_result($result,$i,'cfmid');
 
-		$sql2="select fieldlabel from vtiger_field where fieldid ='".$accountid."'";
-		$result2 = $adb->query($sql2);
+		$sql2="select fieldlabel from vtiger_field where fieldid =?";
+		$result2 = $adb->pquery($sql2, array($accountid));
 		$accountfield = $adb->query_result($result2,0,'fieldlabel');
 		$label['accountlabel'] = $accountfield;
 		
-		$sql3="select fieldlabel from vtiger_field where fieldid ='".$contactid."'";
-		$result3 = $adb->query($sql3);
+		$sql3="select fieldlabel from vtiger_field where fieldid =?";
+		$result3 = $adb->pquery($sql3, array($contactid));
 		$contactfield = $adb->query_result($result3,0,'fieldlabel');
 		$label['contactlabel'] = $contactfield;
-		$sql4="select fieldlabel from vtiger_field where fieldid ='".$potentialid."'";
-		$result4 = $adb->query($sql4);
+		$sql4="select fieldlabel from vtiger_field where fieldid =?";
+		$result4 = $adb->pquery($sql4, array($potentialid));
 		$potentialfield = $adb->query_result($result4,0,'fieldlabel');
 		$label['potentiallabel'] = $potentialfield;
 	}
@@ -158,7 +157,7 @@ function getCustomFieldSupportedModules()
 {
 	global $adb;
 	$sql="select distinct vtiger_field.tabid,name from vtiger_field inner join vtiger_tab on vtiger_field.tabid=vtiger_tab.tabid where vtiger_field.tabid not in(9,10,16,15,8,29)";
-	$result = $adb->query($sql);
+	$result = $adb->pquery($sql, array());
 	while($moduleinfo=$adb->fetch_array($result))
 	{
 		$modulelist[$moduleinfo['name']] = $moduleinfo['name'];

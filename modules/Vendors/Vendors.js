@@ -38,19 +38,33 @@ function set_return_specific(vendor_id, vendor_name)
 
 function set_return_address(vendor_id, vendor_name, street, city, state, code, country,pobox ) 
 {
-        window.opener.document.EditView.vendor_name.value = vendor_name;
-        window.opener.document.EditView.vendor_id.value = vendor_id;
-        window.opener.document.EditView.bill_street.value = street;
-        window.opener.document.EditView.ship_street.value = street;
-        window.opener.document.EditView.bill_city.value = city;
-        window.opener.document.EditView.ship_city.value = city;
-        window.opener.document.EditView.bill_state.value = state;
-        window.opener.document.EditView.ship_state.value = state;
-        window.opener.document.EditView.bill_code.value = code;
-        window.opener.document.EditView.ship_code.value = code;
-        window.opener.document.EditView.bill_country.value = country;
-        window.opener.document.EditView.ship_country.value = country;
-        window.opener.document.EditView.bill_pobox.value = pobox;
-        window.opener.document.EditView.ship_pobox.value = pobox;
+	if(typeof(window.opener.document.EditView.vendor_name) != 'undefined')
+                window.opener.document.EditView.vendor_name.value = vendor_name;
+        if(typeof(window.opener.document.EditView.vendor_id) != 'undefined')
+                window.opener.document.EditView.vendor_id.value = vendor_id;
+        if(typeof(window.opener.document.EditView.bill_street) != 'undefined')
+                window.opener.document.EditView.bill_street.value = street;
+        if(typeof(window.opener.document.EditView.ship_street) != 'undefined')
+                window.opener.document.EditView.ship_street.value = street;
+        if(typeof(window.opener.document.EditView.bill_city) != 'undefined')
+                window.opener.document.EditView.bill_city.value = city;
+        if(typeof(window.opener.document.EditView.ship_city) != 'undefined')
+                window.opener.document.EditView.ship_city.value = city;
+        if(typeof(window.opener.document.EditView.bill_state) != 'undefined')
+                window.opener.document.EditView.bill_state.value = state;
+        if(typeof(window.opener.document.EditView.ship_state) != 'undefined')
+                window.opener.document.EditView.ship_state.value = state;
+        if(typeof(window.opener.document.EditView.bill_code) != 'undefined')
+                window.opener.document.EditView.bill_code.value = code;
+        if(typeof(window.opener.document.EditView.ship_code) != 'undefined')
+                window.opener.document.EditView.ship_code.value = code;
+        if(typeof(window.opener.document.EditView.bill_country) != 'undefined')
+                window.opener.document.EditView.bill_country.value = country;
+        if(typeof(window.opener.document.EditView.ship_country) != 'undefined')
+                window.opener.document.EditView.ship_country.value = country;
+        if(typeof(window.opener.document.EditView.bill_pobox) != 'undefined')
+                window.opener.document.EditView.bill_pobox.value = pobox;
+        if(typeof(window.opener.document.EditView.ship_pobox) != 'undefined')
+                window.opener.document.EditView.ship_pobox.value = pobox;
 }
 

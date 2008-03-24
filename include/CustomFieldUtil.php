@@ -93,8 +93,8 @@ function getCustomFieldArray($module)
 	global $log;
 	$log->debug("Entering getCustomFieldArray(".$module.") method ...");
 	global $adb;
-	$custquery = "select * from vtiger_field where tablename='".$module."'";
-	$custresult = $adb->query($custquery);
+	$custquery = "select * from vtiger_field where tablename=?";
+	$custresult = $adb->pquery($custquery, array($module));
 	$custFldArray = Array();
 	$noofrows = $adb->num_rows($custresult);
 	for($i=0; $i<$noofrows; $i++)
@@ -119,8 +119,8 @@ function getCustomFieldTrans($module, $trans_array)
 	$log->debug("Entering getCustomFieldTrans(".$module.",". $trans_array.") method ...");
 	global $adb;
 	$tab_id = getTabid($module);	
-	$custquery = "select columnname,fieldlabel from vtiger_field where generatedtype=2 and tabid=".$tab_id;
-	$custresult = $adb->query($custquery);
+	$custquery = "select columnname,fieldlabel from vtiger_field where generatedtype=2 and tabid=?";
+	$custresult = $adb->pquery($custquery, array($tab_id));
 	$custFldArray = Array();
 	$noofrows = $adb->num_rows($custresult);
 	for($i=0; $i<$noofrows; $i++)
@@ -145,8 +145,8 @@ function getCustomFieldData($tab,$id,$datatype)
 	global $log;
 	$log->debug("Entering getCustomFieldData(".$tab.",".$id.",".$datatype.") method ...");
 	global $adb;
-	$query = "select * from vtiger_field where tabid=".$tab." and fieldid=".$id;
-	$result = $adb->query($query);
+	$query = "select * from vtiger_field where tabid=? and fieldid=?";
+	$result = $adb->pquery($query, array($tab, $id));
 	$return_data=$adb->fetch_array($result);
 	$log->debug("Exiting getCustomFieldData method ...");
 	return $return_data[$datatype];
@@ -163,66 +163,67 @@ function getCustomFieldData($tab,$id,$datatype)
 function getFldTypeandLengthValue($label,$typeofdata)
 {
 	global $log;
+	global $mod_strings,$app_strings;
 	$log->debug("Entering getFldTypeandLengthValue(".$label.",".$typeofdata.") method ...");
-	if($label == 'Text')
+	if($label == $mod_strings['Text'])
 	{
 		$types = explode("~",$typeofdata);
 		$data_array=array('0',$types[3]);
 		$fieldtype = implode(";",$data_array);
 	}
-	elseif($label == 'Number')
+	elseif($label == $mod_strings['Number'])
 	{
 		$types = explode("~",$typeofdata);
 		$data_decimal = explode(",",$types[2]);
 		$data_array=array('1',$data_decimal[0],$data_decimal[1]);
 		$fieldtype = implode(";",$data_array);
 	}
-	elseif($label == 'Percent')
+	elseif($label == $mod_strings['Percent'])
 	{
 		$types = explode("~",$typeofdata);
 		$data_array=array('2','5',$types[3]);
 		$fieldtype = implode(";",$data_array);
 	}
-	elseif($label == 'Currency')
+	elseif($label == $mod_strings['Currency'])
 	{
 		$types = explode("~",$typeofdata);
 		$data_decimal = explode(",",$types[2]);
 		$data_array=array('3',$data_decimal[0],$data_decimal[1]);
 		$fieldtype = implode(";",$data_array);
 	}
-	elseif($label == 'Date')
+	elseif($label == $mod_strings['Date'])
 	{
 		$fieldtype = '4';
 	}
-	elseif($label == 'Email')
+	elseif($label == $mod_strings['Email'])
 	{
 		$fieldtype = '5';
 	}
-	elseif($label == 'Phone')
+	elseif($label == $mod_strings['Phone'])
 	{
 		$fieldtype = '6';
 	}
-	elseif($label == 'Pick List')
+	elseif($label == $mod_strings['PickList'])
 	{
 		$fieldtype = '7';
 	}
-	elseif($label == 'Url')
+	elseif($label == $mod_strings['LBL_URL'])
 	{
 		$fieldtype = '8';
 	}
-	elseif($label == 'Checkbox')
+	elseif($label == $mod_strings['LBL_CHECK_BOX'])
 	{
 		$fieldtype = '9';
 	}
-	elseif($label == 'Text Area')
+	elseif($label == $mod_strings['LBL_TEXT_AREA'])
 	{
 		$fieldtype = '10';
 	}
-	elseif($label == 'Multi-Select Combo Box')
+	elseif($label == $mod_strings['LBL_MULTISELECT_COMBO'])
         {
                 $fieldtype = '11';
         }
-	elseif($label == 'Skype')
+	elseif($label == $mod_strings['Skype'])
 	{
 		$fieldtype = '12';
 	}

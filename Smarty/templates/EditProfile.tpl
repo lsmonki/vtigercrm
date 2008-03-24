@@ -84,18 +84,18 @@
                                                     </tr>
                                                 </tbody></table></td>
                                               <td align="right" valign="bottom">&nbsp;											 	{if $ACTION eq 'SaveProfile'}
-                                                <input type="submit" value=" {$CMOD.LBL_FINISH_BUTTON} " name="save" class="crmButton create small"/>&nbsp;&nbsp;
+                                                <input type="submit" value=" {$CMOD.LBL_FINISH_BUTTON} " name="save" class="crmButton create small" title="{$CMOD.LBL_FINISH_BUTTON}"/>&nbsp;&nbsp;
                                                 {else}
-                                                        <input type="submit" value=" {$APP.LBL_SAVE_BUTTON_LABEL} " name="save" class="crmButton small save"/>&nbsp;&nbsp;
+                                                        <input type="submit" value=" {$APP.LBL_SAVE_BUTTON_LABEL} " name="save" class="crmButton small save" title="{$APP.LBL_SAVE_BUTTON_LABEL}"/>&nbsp;&nbsp;
                                                 {/if}
-                                                <input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " name="Cancel" class="crmButton cancel small"onClick="window.history.back();" /> 
+                                                <input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " name="Cancel" class="crmButton cancel small" title="{$APP.LBL_CANCEL_BUTTON_LABEL}" onClick="window.history.back();" /> 
 						</td>
                                             </tr>
                                           </tbody></table>
                                             <!-- privilege lists -->
                                             <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                               <tbody><tr>
-                                                <td style="height: 10px;" align="center"><img src="{$IMAGE_PATH}prvPrfLine.gif" style="width: 100%; height: 1px;"></td>
+                                                <td style="height: 10px;" align="center"></td>
                                               </tr>
                                             </tbody></table>
                                             <table border="0" cellpadding="10" cellspacing="0" width="100%">
@@ -193,9 +193,9 @@
 						{if $FIELD_PRIVILEGES[$tabid] neq ''}
 						<tr>
 							{if $modulename eq 'Calendar'}
-				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT} ({$APP.Tasks})</td>
+				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_TO_BE_SHOWN} ({$APP.Tasks})</td>
 							{else}
-				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT}</td>
+				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_TO_BE_SHOWN}</td>
 							{/if}
 					        </tr>
 						{/if}
@@ -209,7 +209,7 @@
 						{/foreach}
 						{if $modulename eq 'Calendar'}
 						<tr>
-				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_SELECT_DESELECT} ({$APP.Events})</td>
+				                	<td class="small colHeader" colspan="6" valign="top">{$CMOD.LBL_FIELDS_TO_BE_SHOWN} ({$APP.Events})</td>
 					        </tr>
 						{foreach item=row_values from=$FIELD_PRIVILEGES[16]}
 				            	<tr>
@@ -261,12 +261,12 @@
 		<tbody>
 			<tr><td>
 				{if $ACTION eq 'SaveProfile'}
-					<input type="submit" value=" {$CMOD.LBL_FINISH_BUTTON} " name="save" class="crmButton create small"/>&nbsp;&nbsp;
+					<input type="submit" value=" {$CMOD.LBL_FINISH_BUTTON} " name="save" class="crmButton create small" title="{$CMOD.LBL_FINISH_BUTTON}"/>&nbsp;&nbsp;
 				{else}
-					<input type="submit" value=" {$APP.LBL_SAVE_BUTTON_LABEL} " name="save" class="crmButton small save"/>&nbsp;&nbsp;
+					<input type="submit" value=" {$APP.LBL_SAVE_BUTTON_LABEL} " name="save" class="crmButton small save" title="{$APP.LBL_SAVE_BUTTON_LABEL}" />&nbsp;&nbsp;
 				{/if}
 				</td><td>
-					<input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " name="Cancel" class="crmButton cancel small"onClick="window.history.back();" /></td>
+					<input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " name="Cancel" class="crmButton cancel small"onClick="window.history.back();" title="{$APP.LBL_CANCEL_BUTTON_LABEL}" /></td>
 
 				<td>&nbsp;</td>
 			</tr>
@@ -380,12 +380,14 @@ function unSelectView(id)
 {
 	var createid = 'tab_chk_1_'+id;	
 	var deleteid = 'tab_chk_2_'+id;
+	var tab_id = 'tab_chk_com_'+id;
 	if($('tab_chk_4_'+id).checked == false)
 	{
 		unselect_view_all();
 		unselect_edit_all();
 		$(createid).checked = false;
 		$(deleteid).checked = false;
+		$(tab_id).checked = false;
 	}else
 	{
 		var imageid = 'img_'+id;

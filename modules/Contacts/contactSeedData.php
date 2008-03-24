@@ -21143,7 +21143,9 @@ $company_name_array = Array(
 "X-CEED INC 99",
 "demovtiger",
 "usable-vtiger",
-"gooduivtiger"
+"gooduivtiger",
+"vtigeruser",
+"samplevtiger"
 );
 
 $street_address_array = Array(
@@ -21171,8 +21173,8 @@ $campaign_type_array = Array(
 );
 
 $campaign_status_array = Array(
-"Planned",
-"Planned",
+"Planning",
+"Planning",
 "Completed",
 );
  

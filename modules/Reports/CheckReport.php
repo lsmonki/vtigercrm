@@ -17,9 +17,9 @@ $id='';
 if($_REQUEST['check']== 'reportCheck')
 {
 	$reportName = $_REQUEST['reportName'];
-	$sSQL="select * from vtiger_report where reportname='".$reportName."'";
+	$sSQL="select * from vtiger_report where reportname=?";
 	
-	$sqlresult = $adb->query($sSQL);
+	$sqlresult = $adb->pquery($sSQL, array($reportName));
 	echo $adb->num_rows($sqlresult);
 
 }
@@ -32,8 +32,8 @@ else if($_REQUEST['check']== 'folderCheck')
 		echo "999";
 	}else
 	{
-		$SQL="select * from vtiger_reportfolder where foldername='".trim($folderName)."'";
-		$sqlresult = $adb->query($SQL);
+		$SQL="select * from vtiger_reportfolder where foldername=?";
+		$sqlresult = $adb->pquery($SQL, array(trim($folderName)));
 		$id = $adb->query_result($sqlresult,0,"folderid");
 		echo trim($adb->num_rows($sqlresult)."::".$id);
 	}

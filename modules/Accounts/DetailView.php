@@ -48,7 +48,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Account detail view");
 $smarty = new vtigerCRM_Smarty;
@@ -89,7 +88,8 @@ if(isPermitted("Emails","EditView",'') == 'yes')
 
 if(isPermitted("Accounts","Merge",'') == 'yes')
 {
-	$smarty->assign("MERGEBUTTON","permitted");
+	global $current_user;
+	require("user_privileges/user_privileges_".$current_user->id.".php");	
 	require_once('include/utils/UserInfoUtil.php');
 	$wordTemplateResult = fetchWordTemplateList("Accounts");
 	$tempCount = $adb->num_rows($wordTemplateResult);
@@ -99,6 +99,10 @@ if(isPermitted("Accounts","Merge",'') == 'yes')
 		$optionString[$tempVal["templateid"]]=$tempVal["filename"];
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
+	 if($is_admin)
+                $smarty->assign("MERGEBUTTON","permitted");
+	elseif($tempCount >0)
+		$smarty->assign("MERGEBUTTON","permitted");
 	$smarty->assign("TEMPLATECOUNT",$tempCount);
 	$smarty->assign("WORDTEMPLATEOPTIONS",$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']);
         $smarty->assign("TOPTIONS",$optionString);
@@ -125,11 +129,8 @@ if($singlepane_view == 'true')
 	$related_array = getRelatedLists($currentModule,$focus);
 	$smarty->assign("RELATEDLISTS", $related_array);
 }
-//added for email link in detailv view
-$querystr="SELECT fieldid FROM vtiger_field WHERE tabid=".getTabid($currentModule)." and uitype=13;";
-$queryres = $adb->query($querystr);
-$fieldid = $adb->query_result($queryres,0,'fieldid');
-$smarty->assign("FIELD_ID",$fieldid);
+$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
+$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 
 $smarty->assign("SinglePane_View", $singlepane_view);
 

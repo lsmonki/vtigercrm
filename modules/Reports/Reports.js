@@ -8,17 +8,20 @@
  *
  ********************************************************************************/
 var typeofdata = new Array();
-typeofdata['V'] = ['e','n','s','c','k'];
+typeofdata['V'] = ['e','n','s','ew','c','k'];
 typeofdata['N'] = ['e','n','l','g','m','h'];
 typeofdata['T'] = ['e','n','l','g','m','h'];
 typeofdata['I'] = ['e','n','l','g','m','h'];
 typeofdata['C'] = ['e','n'];
 typeofdata['D'] = ['e','n','l','g','m','h'];
+typeofdata['NN'] = ['e','n','l','g','m','h'];
+typeofdata['E'] = ['e','n','s','ew','c','k'];
 
 var fLabels = new Array();
 fLabels['e'] = alert_arr.EQUALS;
 fLabels['n'] = alert_arr.NOT_EQUALS_TO;
 fLabels['s'] = alert_arr.STARTS_WITH;
+fLabels['ew'] = alert_arr.ENDS_WITH;
 fLabels['c'] = alert_arr.CONTAINS;
 fLabels['k'] = alert_arr.DOES_NOT_CONTAINS;
 fLabels['l'] = alert_arr.LESS_THAN;
@@ -181,6 +184,7 @@ function addColumnStep1()
 {
 	//the below line is added for report not woking properly in browser IE7 --bharath
 	document.getElementById("selectedColumns").style.width="164px";
+	
 	if (availListObj.options.selectedIndex > -1)
 	{
 		for (i=0;i<availListObj.length;i++) 
@@ -220,11 +224,25 @@ function addColumnStep1()
 //this function is done for checking,whether the user has access to edit the field :Bharath
 function selectedColumnClick(oSel)
 {
-	if (oSel.selectedIndex == -1 || oSel.options[oSel.selectedIndex].disabled == true)
+	var error_msg = '';
+	var error_str = false;
+	if(oSel.selectedIndex > -1) {
+                for(var i = 0; i < oSel.options.length; ++i) {
+                        if(oSel.options[i].selected == true && oSel.options[i].disabled == true) {
+                                error_msg = error_msg + oSel.options[i].text+',';
+				error_str = true;
+                                oSel.options[i].selected = false;
+                        }
+                }
+        }
+	if(error_str)
 	{
-		alert(alert_arr.NOT_ALLOWED_TO_EDIT);
-		oSel.options[oSel.selectedIndex].selected = false;	
+		error_msg = error_msg.substr(0,error_msg.length-1);
+		alert(alert_arr.NOT_ALLOWED_TO_EDIT_FIELDS+"\n"+error_msg);
+		return false;
 	}
+	else
+		return true;
 }
 function delColumn() 
 {
@@ -391,8 +409,88 @@ function changeSteps1()
 {
 	if(getObj('step5').style.display != 'none')
 	{
+		var escapedOptions = new Array('account_id','contactid','contact_id','product_id','parent_id','campaignid','potential_id','assigned_user_id1','quote_id','accountname','salesorder_id','vendor_id','time_start','time_end','lastname');
+		
+		for(var i=1;i < 6 ; i++)
+		{
+			var option_name="fcol"+i;
+			var option_value=getObj(option_name).value;
+			var option_object=getObj(option_name);
+			var comp_name="fop"+i;
+			var comp_value=getObj(comp_name).value;
+			var data_name="fval"+i;
+			var data_value=trim(getObj(data_name).value);
+			var collabel='';
+			count=option_object.selectedIndex;	
+                        collabel=option_object.options[count].text
+			if(trim(option_value) != '')
+			{
+				if (!emptyCheck(comp_name,collabel+" Option","text"))
+					return false
+			}
+			else if(trim(data_value) != '')
+			{
+				if (!emptyCheck(option_name," Column ","text"))
+					return false
+				if (!emptyCheck(comp_name,collabel+" Option","text"))
+					return false
+			}
+
+			if(trim(data_value) != '' && option_value != '' && comp_value != '')
+			{
+				var col=option_value.split(":");
+				if(escapedOptions.indexOf(col[3]) == -1)
+				{
+					if(col[4] == 'T')
+					{        
+						var datime = data_value.split(" ");
+						if(!re_dateValidate(datime[0],collabel+" (Current User Date Time Format)","OTH"))
+							return false
+						if(datime.length > 1)	
+						if(!re_patternValidate(datime[1],collabel+" (Time)","TIMESECONDS"))
+							return false
+					}	
+					else if(col[4] == 'D')
+					{        
+						if(!dateValidate(data_name,collabel+" (Current User Date Format)","OTH"))
+							return false
+					}else if(col[4] == 'I')
+					{
+						if(!intValidate(data_name,collabel+" (Integer Criteria)"+i))           
+							return false
+					}else if(col[4] == 'N')
+					{  
+						if (!numValidate(data_name,collabel+" (Number) ","any",true))
+							return false
+					}else if(col[4] == 'E')
+					{
+						if (!patternValidate(data_name,collabel+" (Email Id)","EMAIL"))
+							return false
+					}
+				}
+			}
+		}	
 		var date1=getObj("startdate")
 		var date2=getObj("enddate")
+
+		//Added to handle yes or no for checkbox fields in reports advance filters. 
+		for(var i=1;i<=5;i++)
+	        {
+	                value=trim(getObj("fval"+i).value);
+        	        option=getObj("fcol"+i).value;
+                	if(option !="" && value !="")
+			{
+				arr=option.split(":");
+                        	if(arr[4] == "C")
+                        	{
+					if(value == "1")
+						getObj("fval"+i).value='yes';
+					else if(value =="0")
+						getObj("fval"+i).value='no';
+				}
+			}
+		}
+
 
 		//# validation added for date field validation in final step of report creation
 		if ((date1.value != '') || (date2.value != ''))
@@ -403,8 +501,8 @@ function changeSteps1()
 	
 		if(!dateValidate("enddate","End Date","D"))
         	        return false
-	
-		if(! compareDates(date1.value,'Start Date',date2.value,'End Date','LE'))
+
+		if(! dateComparison("startdate",'Start Date',"enddate",'End Date','LE'))	
 			return false;
 		}	
 		saveAndRunReport();
@@ -481,7 +579,7 @@ function changeSteps()
                         'index.php',
                         {queue: {position: 'end', scope: 'command'},
                                 method: 'post',
-                                postBody: 'action=ReportsAjax&mode=ajax&file=CheckReport&module=Reports&check=reportCheck&reportName='+document.NewRep.reportname.value,
+                                postBody: 'action=ReportsAjax&mode=ajax&file=CheckReport&module=Reports&check=reportCheck&reportName='+encodeURIComponent(document.NewRep.reportname.value),
                                 onComplete: function(response) {
 					if(response.responseText!=0)
 					{
@@ -529,4 +627,99 @@ function CreateReport(module)
 }
 function fnPopupWin(winName){
 	window.open(winName, "ReportWindow","width=740px,height=625px,scrollbars=yes");
+}
+function re_dateValidate(fldval,fldLabel,type) {
+	if(re_patternValidate(fldval,fldLabel,"DATE")==false)
+		return false;
+	dateval=fldval.replace(/^\s+/g, '').replace(/\s+$/g, '') 
+
+	var dateelements=splitDateVal(dateval)
+	
+	dd=dateelements[0]
+	mm=dateelements[1]
+	yyyy=dateelements[2]
+	
+	if (dd<1 || dd>31 || mm<1 || mm>12 || yyyy<1 || yyyy<1000) {
+		alert(alert_arr.ENTER_VALID+fldLabel)
+		return false
+	}
+	
+	if ((mm==2) && (dd>29)) {//checking of no. of days in february month
+		alert(alert_arr.ENTER_VALID+fldLabel)
+		return false
+	}
+	
+	if ((mm==2) && (dd>28) && ((yyyy%4)!=0)) {//leap year checking
+		alert(alert_arr.ENTER_VALID+fldLabel)
+		return false
+	}
+
+	switch (parseInt(mm)) {
+		case 2 : 
+		case 4 : 
+		case 6 : 
+		case 9 : 
+		case 11 :	if (dd>30) {
+						alert(alert_arr.ENTER_VALID+fldLabel)
+						return false
+					}	
+	}
+	
+	var currdate=new Date()
+	var chkdate=new Date()
+	
+	chkdate.setYear(yyyy)
+	chkdate.setMonth(mm-1)
+	chkdate.setDate(dd)
+	
+	if (type!="OTH") {
+		if (!compareDates(chkdate,fldLabel,currdate,"current date",type)) {
+			return false
+		} else return true;
+	} else return true;
+}
+
+//Copied from general.js and altered some lines. becos we cant send vales to function present in general.js. it accept only field names.
+function re_patternValidate(fldval,fldLabel,type) {
+	if (type.toUpperCase()=="DATE") {//DATE validation 
+
+		switch (userDateFormat) {
+			case "yyyy-mm-dd" : 
+								var re = /^\d{4}(-)\d{1,2}\1\d{1,2}$/
+								break;
+			case "mm-dd-yyyy" : 
+			case "dd-mm-yyyy" : 
+								var re = /^\d{1,2}(-)\d{1,2}\1\d{4}$/								
+		}
+	}
+	
+
+	if (type.toUpperCase()=="TIMESECONDS") {//TIME validation
+		var re = new RegExp("^([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9])$");
+	}
+	if (!re.test(fldval)) {
+		alert(alert_arr.ENTER_VALID + fldLabel)
+		return false
+	}
+	else return true
+}
+
+//added to fix the ticket #5117
+function standardFilterDisplay()
+{
+	if(document.NewReport.stdDateFilterField.options.length <= 0 || (document.NewReport.stdDateFilterField.selectedIndex > -1 && document.NewReport.stdDateFilterField.options[document.NewReport.stdDateFilterField.selectedIndex].value == "Not Accessible")) 
+	{
+		getObj('stdDateFilter').disabled = true;
+		getObj('startdate').disabled = true;                                                                                         getObj('enddate').disabled = true;
+		getObj('jscal_trigger_date_start').style.visibility="hidden";
+		getObj('jscal_trigger_date_end').style.visibility="hidden";
+	}
+	else
+	{
+		getObj('stdDateFilter').disabled = false;
+		getObj('startdate').disabled = false;
+		getObj('enddate').disabled = false;
+		getObj('jscal_trigger_date_start').style.visibility="visible";
+		getObj('jscal_trigger_date_end').style.visibility="visible";
+	}
 }

@@ -19,6 +19,7 @@ $idlist = $_POST['idlist'];
 $returnmodule=$_REQUEST['return_module'];
 $pricebook_id=$_REQUEST['pricebook_id'];
 $productid=$_REQUEST['product_id'];
+$parenttab = $_REQUEST['parenttab'];
 if(isset($_REQUEST['pricebook_id']) && $_REQUEST['pricebook_id']!='')
 {
 	//split the string and store in an array
@@ -30,14 +31,14 @@ if(isset($_REQUEST['pricebook_id']) && $_REQUEST['pricebook_id']!='')
 			$list_price = $_REQUEST[$lp_name];
 			//Updating the vtiger_pricebook product rel vtiger_table
 			 $log->info("Products :: Inserting vtiger_products to price book");
-			$query= "insert into vtiger_pricebookproductrel (pricebookid,productid,listprice) values(".$pricebook_id.",".$id.",".$list_price.")";
-			$adb->query($query);
+			$query= "insert into vtiger_pricebookproductrel (pricebookid,productid,listprice) values(?,?,?)";
+			$adb->pquery($query, array($pricebook_id,$id,$list_price));
 		}
 	}
 	if($singlepane_view == 'true')
-		header("Location: index.php?module=PriceBooks&action=DetailView&record=".$pricebook_id);
+		header("Location: index.php?module=PriceBooks&action=DetailView&record=$pricebook_id&parenttab=$parenttab");
 	else
-		header("Location: index.php?module=PriceBooks&action=CallRelatedList&record=".$pricebook_id);
+		header("Location: index.php?module=PriceBooks&action=CallRelatedList&record=$pricebook_id&parenttab=$parenttab");
 }
 elseif(isset($_REQUEST['product_id']) && $_REQUEST['product_id']!='')
 {
@@ -50,14 +51,14 @@ elseif(isset($_REQUEST['product_id']) && $_REQUEST['product_id']!='')
 			$list_price = $_REQUEST[$lp_name];
 			//Updating the vtiger_pricebook product rel vtiger_table
 			 $log->info("Products :: Inserting PriceBooks to Product");
-			$query= "insert into vtiger_pricebookproductrel (pricebookid,productid,listprice) values(".$id.",".$productid.",".$list_price.")";
-			$adb->query($query);
+			$query= "insert into vtiger_pricebookproductrel (pricebookid,productid,listprice) values(?,?,?)";
+			$adb->pquery($query, array($id,$productid,$list_price));
 		}
 	}
 	if($singlepane_view == 'true')
-		header("Location: index.php?module=Products&action=DetailView&record=".$productid);
+		header("Location: index.php?module=Products&action=DetailView&record=$productid&parenttab=$parenttab");
 	else
-		header("Location: index.php?module=Products&action=CallRelatedList&record=".$productid);
+		header("Location: index.php?module=Products&action=CallRelatedList&record=$productid&parenttab=$parenttab");
 }
 
 ?>

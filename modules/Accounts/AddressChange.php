@@ -18,9 +18,9 @@ global $adb;
 global $log;
 //When changing the Account Address Information  it should also change the related contact address --Dinakaran
 $record = $_REQUEST['record'];
-$sql ="select vtiger_account.accountid,vtiger_accountbillads.bill_street as billingstreet, vtiger_accountbillads.bill_city as billingcity,vtiger_accountbillads.bill_code as billingcode,vtiger_accountbillads.bill_country as billingcountry,vtiger_accountbillads.bill_state as billingstate,vtiger_accountbillads.bill_pobox as billingpobox ,vtiger_accountshipads.* from vtiger_account inner join vtiger_accountbillads on vtiger_accountbillads.accountaddressid=vtiger_account.accountid inner join vtiger_accountshipads on vtiger_accountshipads.accountaddressid = vtiger_account.accountid where accountid=".$record;
+$sql ="select vtiger_account.accountid,vtiger_accountbillads.bill_street as billingstreet, vtiger_accountbillads.bill_city as billingcity,vtiger_accountbillads.bill_code as billingcode,vtiger_accountbillads.bill_country as billingcountry,vtiger_accountbillads.bill_state as billingstate,vtiger_accountbillads.bill_pobox as billingpobox ,vtiger_accountshipads.* from vtiger_account inner join vtiger_accountbillads on vtiger_accountbillads.accountaddressid=vtiger_account.accountid inner join vtiger_accountshipads on vtiger_accountshipads.accountaddressid = vtiger_account.accountid where accountid=?";
 //$sql ="select vtiger_account.accountid,vtiger_accountbillads.* ,vtiger_accountshipads.* from vtiger_accountbillads,vtiger_accountshipads,vtiger_account where accountid =".$record;
-$result = $adb->query($sql);
+$result = $adb->pquery($sql, array($record));
 $value = $adb->fetch_row($result);
 
 if(($_REQUEST['bill_city'] != $value['billingcity'] && isset($_REQUEST['bill_city']))  ||
@@ -36,8 +36,8 @@ if(($_REQUEST['bill_city'] != $value['billingcity'] && isset($_REQUEST['bill_cit
  ($_REQUEST['ship_street']!=$value['ship_street'] && isset($_REQUEST['ship_street']))|| 
  ($_REQUEST['ship_pobox']!=$value['ship_pobox'] && isset($_REQUEST['ship_pobox'])))
 {
-	$sql1="select contactid from vtiger_contactdetails where accountid=".$record;
-	$result1 = $adb->query($sql1);
+	$sql1="select contactid from vtiger_contactdetails where accountid=?";
+	$result1 = $adb->pquery($sql1, array($record));
         if($adb->num_rows($result1) > 0)
 	{
 		echo 'address_change';

@@ -21,7 +21,6 @@ global $app_strings,$mod_strings,$list_max_entries_per_page,$currentModule,$them
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
@@ -123,6 +122,11 @@ if($_SESSION['lvs'][$currentModule])
 {
 	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
 }
+//added for 4600
+                                                                                                                             
+if($noofrows <= $list_max_entries_per_page)
+        $_SESSION['lvs'][$currentModule]['start'] = 1;
+//ends
 
 $start = $_SESSION['lvs'][$currentModule]['start'];
 
@@ -147,9 +151,9 @@ else
 	$limit_start_rec = $start_rec -1;
 	
 if( $adb->dbType == "pgsql")
-     $list_result = $adb->query($list_query. " OFFSET ".$limit_start_rec." LIMIT ".$list_max_entries_per_page);
+     $list_result = $adb->pquery($list_query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
 else
-     $list_result = $adb->query($list_query. " LIMIT ".$limit_start_rec.",".$list_max_entries_per_page);
+     $list_result = $adb->pquery($list_query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
@@ -163,6 +167,11 @@ $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"PriceBooks",$list_result,$navigation_array,'','&return_module=PriceBooks&return_action=index','EditView','Delete',$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
+//Added to select Multiple records in multiple pages
+$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
+$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
+
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"PriceBooks","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','bookname','true','basic',"","","","",$viewid);
 $fieldnames = getAdvSearchfields($module);

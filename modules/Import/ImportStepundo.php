@@ -53,7 +53,6 @@ $parenttab = getParenttab();
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Import Undo");
 $last_import = new UsersLastImport();
@@ -102,7 +101,7 @@ $ret_value = $last_import->undo($current_user->id);
 					<input type="hidden" name="module" value="<?php echo $_REQUEST['module']; ?>">
 					<input type="hidden" name="action" value="Import">
 					<input type="hidden" name="step" value="1">
-					<input type="hidden" name="return_module" value="<?php echo $_REQUEST['RETURN_MODULE'] ?>">
+					<input type="hidden" name="return_module" value="<?php echo $_REQUEST['module'] ?>">
 					<input type="hidden" name="return_id" value="<?php echo $_REQUEST['RETURN_ID'] ?>">
 					<input type="hidden" name="return_action" value="<?php echo $_REQUEST['RETURN_ACTION'] ?>">	
 					<input type="hidden" name="parenttab" value="<?php echo $parenttab ?>">

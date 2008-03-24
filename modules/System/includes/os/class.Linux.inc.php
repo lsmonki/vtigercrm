@@ -269,31 +269,37 @@ class sysinfo {
     $results = array();
 
     if( !$results = $this->parser->parse_lspci() ) {
-      $bufr = rfts( '/proc/pci' );
-      foreach( $bufr as $buf ) {
-        if (preg_match('/Bus/', $buf)) {
-          $device = true;
-          continue;
-        } 
-
-        if ($device) {
-          list($key, $value) = split(': ', $buf, 2);
-
-          if (!preg_match('/bridge/i', $key) && !preg_match('/USB/i', $key)) {
-            $results[] = preg_replace('/\([^\)]+\)\.$/', '', trim($value));
-          } 
-          $device = false;
-        } 
-      } 
-    } 
-    asort($results);
+		$bufr = rfts( '/proc/pci' );
+	
+	    //Pinaki : Fix for ticket #4462 and #5147
+		if(!is_null($bufr) && is_array($bufr)) {
+	
+			foreach( $bufr as $buf ) {
+	        	if (preg_match('/Bus/', $buf)) {
+	          		$device = true;
+	          		continue;
+	        	} 
+	
+	        	if ($device) {
+	          		list($key, $value) = split(': ', $buf, 2);
+	
+	          		if (!preg_match('/bridge/i', $key) && !preg_match('/USB/i', $key)) {
+	            		$results[] = preg_replace('/\([^\)]+\)\.$/', '', trim($value));
+	          		} 
+	          		$device = false;
+	        	} 
+			}  
+	    	asort($results);
+    	}
+	}
     return $results;
   } 
 
   function ide () {
     $results = array();
-    $bufd = gdc( '/proc/ide' );
-
+    $bufd = gdc( '/proc/ide' );	
+	//Pinaki: Fix for ticket #4462
+	if(!is_null($bufd)){
     foreach( $bufd as $file ) {
       if (preg_match('/^hd/', $file)) {
         $results[$file] = array(); 
@@ -333,6 +339,7 @@ class sysinfo {
     } 
 
     asort($results);
+	}
     return $results;
   } 
 
@@ -419,8 +426,9 @@ class sysinfo {
   function network () {
     $results = array();
 
-    $bufr = rfts( '/proc/net/dev' );
-    if ( $bufr != "ERROR" ) {
+    $bufr = rfts( '/proc/net/dev' );	
+	//Pinaki: Fix for ticket #4462
+    if ( !is_null($bufr) && $bufr != "ERROR") {
       $bufe = explode("\n", $bufr);
       foreach( $bufe as $buf ) {
         if (preg_match('/:/', $buf)) {
@@ -484,7 +492,8 @@ class sysinfo {
       }
 
       $bufr = rfts( '/proc/swaps' );
-      if ( $bufr != "ERROR" ) {
+	  //Pinaki: Fix for ticket #4462
+      if ( !is_null($bufr) && $bufr != "ERROR") {
         $swaps = explode("\n", $bufr);
         for ($i = 1; $i < (sizeof($swaps)); $i++) {
 	  if( trim( $swaps[$i] ) != "" ) {

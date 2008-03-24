@@ -19,7 +19,7 @@ $listprice = $_REQUEST['list_price'];
 $return_action = $_REQUEST['return_action'];
 $return_module = $_REQUEST['return_module'];
 
-$query = "update vtiger_pricebookproductrel set listprice=".$listprice." where pricebookid=".$pricebook_id." and productid=".$product_id;
-$adb->query($query); 
+$query = "update vtiger_pricebookproductrel set listprice=? where pricebookid=? and productid=?";
+$adb->pquery($query, array($listprice, $pricebook_id, $product_id)); 
 header("Location: index.php?module=$return_module&action=".$return_module."Ajax&file=$return_action&ajax=updatelistprice&record=$record");
 ?>

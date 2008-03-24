@@ -12,7 +12,6 @@
 
 
 require_once('include/database/PearDatabase.php');
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 
@@ -29,7 +28,6 @@ global $theme_path;
 global $image_path;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 //$field_module = Array('Leads','Accounts','Contacts','Potentials','HelpDesk','Products','Notes','Calendar','Events','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Campaigns','Faq');
 $field_module=getFieldModuleAccessArray();
@@ -63,13 +61,15 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 	{
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
 		$fieldlabel = $adb->query_result($fieldListResult,$i,"fieldlabel");
+		$typeofdata = $adb->query_result($fieldListResult,$i,"typeofdata");
+		$fieldtype = explode("~",$typeofdata);
 		if($lang_strings[$fieldlabel] !='')
 			$standCustFld []= $lang_strings[$fieldlabel];
 		else
 			$standCustFld []= $fieldlabel;
 			
 		
-		if($adb->query_result($fieldListResult,$i,"visible") == 0)
+		if($adb->query_result($fieldListResult,$i,"visible") == 0 || ($uitype == 111 && $fieldtype[1] == "M"))
 		{
 			$visible = "<img src=".$image_path."/prvPrfSelectedTick.gif>";
 		}

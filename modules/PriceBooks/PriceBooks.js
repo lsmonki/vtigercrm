@@ -83,7 +83,7 @@ function addtopricebook()
 							alert(alert_arr.LISTPRICE_CANNOT_BE_EMPTY);
 			                		return false;	
 						}
-						else if(isNaN(elem[i].value))
+						else if(isNaN(elem[i].value) || elem[i].value < 0)
 						{
 							alert(alert_arr.INVALID_LIST_PRICE);
 			                		return false;	
@@ -100,7 +100,7 @@ function addtopricebook()
 			return false;
 		}
 	}
-document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&return_module=Products&return_action=AddProductsToPriceBook"
+document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&return_module=Products&return_action=AddProductsToPriceBook&parenttab="+parenttab;
 }
 
 function updateListPrice(unitprice,fieldname,oSelect)
@@ -167,7 +167,7 @@ function deletePriceBookProductRel(id,pbid)
 function verify_data(form)
 {
 	var returnValue = true;
-        if(form.list_price.value != '')
+        if(form.list_price.value != '' && form.list_price.value != 0)
         {
                  intval= intValidate('list_price','EditListPrice');
 
@@ -179,9 +179,11 @@ function verify_data(form)
         }
         else
         {
-
-                alert(alert_arr.LISTPRICE_CANNOT_BE_EMPTY);
-                returnValue = false;
+		if(form.list_price.value == '')
+		{
+			alert(alert_arr.LISTPRICE_CANNOT_BE_EMPTY);
+			returnValue = false;
+		}
         }
 	return returnValue;
 

@@ -36,7 +36,7 @@ $subject = $email->subject;
 $date = $email->date;
 $array_tab = Array();
 $email->loadMail($array_tab);
-$msgData = $email->body;
+$msgData = str_replace('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">',"",$email->body);
 $content['attachtab'] = $email->attachtab;
 while ($tmp = array_pop($content['attachtab'])){
 	if ((!eregi('ATTACHMENT', $tmp['disposition'])) && $conf->display_text_attach && (eregi('text/plain', $tmp['mime'])))
@@ -57,7 +57,7 @@ $focus->column_fields["description"]=$msgData;
 
 
 //to save the email details in vtiger_emaildetails vtiger_tables
-$fieldid = $adb->query_result($adb->query('select fieldid from vtiger_field where tablename="vtiger_contactdetails" and fieldname="email" and columnname="email"'),0,'fieldid');
+$fieldid = $adb->query_result($adb->pquery('select fieldid from vtiger_field where tablename="vtiger_contactdetails" and fieldname="email" and columnname="email"', array()),0,'fieldid');
 
 if(count($email->relationship) != 0) {
 	$focus->column_fields['parent_id']=$email->relationship["id"].'@'.$fieldid.'|';
@@ -89,23 +89,23 @@ function add_attachment_to_contact($cid,$email) {
 	    for($i=0,$num_files=count($attachments);$i<$num_files;$i++)
 	    {
 		$current_id = $adb->getUniqueID("vtiger_crmentity");
-		$date_var = $adb->formatDate(date('YmdHis'));	
+		$date_var = $adb->formatDate(date('YmdHis'), true);	
 
 		$filename = ereg_replace("[ ()-]+", "_",$attachments[$i]["filename"]);
         	$filetype= substr($filename,strstr($filename,"."),strlen($filename));
 		$filesize = $attachments[$i]["filesize"];
 
-                $query = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values('";
-                $query .= $current_id."','".$current_user->id."','".$current_user->id."','Contacts Attachment','Uploaded from webmail during qualification',".$date_var.")";
-                $result = $adb->query($query);
+                $query = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values(?,?,?,?,?,?)";
+                $qparams = array($current_id, $current_user->id, $current_user->id, 'Contacts Attachment', 'Uploaded from webmail during qualification', $date_var);
+                $result = $adb->pquery($query, $qparams);
 
-                $sql = "insert into vtiger_attachments values(";
-                $sql .= $current_id.",'".$filename."','Uploaded ".$filename." from webmail','".$filetype."','".$upload_filepath."')";
-                $result = $adb->query($sql);
+                $sql = "insert into vtiger_attachments values(?,?,?,?,?)";
+                $params = array($current_id, $filename, 'Uploaded '.$filename.' from webmail', $filetype, $upload_filepath);
+                $result = $adb->pquery($sql, $params);
 
-                $sql1 = "insert into vtiger_seattachmentsrel values('";
-                $sql1 .= $cid."','".$current_id."')";
-                $result = $adb->query($sql1);
+                $sql1 = "insert into vtiger_seattachmentsrel values(?,?)";
+                $params1 = array($cid, $current_id);
+                $result = $adb->pquery($sql1, $params1);
 
 		//we have to add attachmentsid_ as prefix for the filename
 		$move_filename = $upload_filepath.'/'.$current_id.'_'.$filename;
@@ -137,9 +137,10 @@ $all_to_ids = $email->from;
 //added to save < as $lt; and > as &gt; in the database so as to retrive the emailID
 $all_to_ids = str_replace('<','&lt;',$all_to_ids);
 $all_to_ids = str_replace('>','&gt;',$all_to_ids);
-$query = 'insert into vtiger_emaildetails values ('.$focus->id.',"","'.$all_to_ids.'","","","","'.$id_lists.'","WEBMAIL")';
-$adb->query($query);
-
+$query = 'insert into vtiger_emaildetails values (?,?,?,?,?,?,?,?)';
+$adb->pquery($query, array($focus->id, "", $all_to_ids, "", "", "", $id_lists,"WEBMAIL"));
+$query = 'insert into vtiger_seactivityrel values (?,?)';
+$adb->pquery($query, array($contact_focus->id, $focus->id));
 $return_id = $_REQUEST["mailid"];
 $return_module='Webmails';
 $return_action='ListView';

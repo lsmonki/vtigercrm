@@ -22,17 +22,16 @@ if($_REQUEST['mail_error'] != '')
 	//if(strstr($error_msg,"Please check the assigned to user email id"))
 	//if(strstr($error_msg,$mod_strings['LBL_CHECK_ASSIGNEDTO_MAILID']))
 	$error_msg = $mod_strings['LBL_MAILSENDERROR'];
-	$smarty->assign("ERROR_MSG",$mod_strings['LBL_TESTMAILSTATUS'].' <b><font color=red>'.$error_msg.'</font></b>');
+	$smarty->assign("ERROR_MSG",$mod_strings['LBL_TESTMAILSTATUS'].' <b><font class="warning">'.$error_msg.'</font></b>');
 }
 
 global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
-$sql="select * from vtiger_systems where server_type = 'email'";
-$result = $adb->query($sql);
+$sql="select * from vtiger_systems where server_type = ?";
+$result = $adb->pquery($sql, array('email'));
 $mail_server = $adb->query_result($result,0,'server');
 $mail_server_username = $adb->query_result($result,0,'server_username');
 $mail_server_password = $adb->query_result($result,0,'server_password');

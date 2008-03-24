@@ -18,8 +18,8 @@ $profilename=$_REQUEST['profile_name'];
 
 if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='')
 {
-        $query = 'select profilename from vtiger_profile where profilename="'.$profilename.'"';
-        $result = $adb->query($query);
+        $query = 'select profilename from vtiger_profile where profilename=?';
+        $result = $adb->pquery($query, array($profilename));
 
         if($adb->num_rows($result) > 0)
         {
@@ -56,7 +56,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
 
 $sql = "select * from vtiger_profile";
-$result = $adb->query($sql);
+$result = $adb->pquery($sql, array());
 $profilelist = array();
 $temprow = $adb->fetch_array($result);
 do

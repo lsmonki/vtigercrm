@@ -17,7 +17,6 @@ require_once('include/utils/UserInfoUtil.php');
 require_once('data/Tracker.php');
 require_once('include/upload_file.php');
 require_once('include/database/PearDatabase.php');
-require_once('include/utils/utils.php');
 require_once('modules/Webmails/Webmails.php');
 require_once('modules/Webmails/MailParse.php');
 
@@ -52,22 +51,22 @@ $reply_to=$email->replyTo;
 $block["Leads"]= "";
 global $adb;
 if($email->relationship != 0 && $email->relationship["type"] == "Leads") {
-	$q = "SELECT vtiger_leaddetails.firstname, vtiger_leaddetails.lastname, vtiger_leaddetails.email, vtiger_leaddetails.company, vtiger_crmentity.smownerid from vtiger_leaddetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid WHERE vtiger_leaddetails.leadid='".$email->relationship["id"]."'";
-	$rs = $adb->query($q);
+	$q = "SELECT vtiger_leaddetails.firstname, vtiger_leaddetails.lastname, vtiger_leaddetails.email, vtiger_leaddetails.company, vtiger_crmentity.smownerid from vtiger_leaddetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid WHERE vtiger_leaddetails.leadid=?";
+	$rs = $adb->pquery($q, array($email->relationship["id"]));
 	$block["Leads"]["header"]= array("0"=>"First Name","1"=>"Last Name","2"=>"Company Name","3"=>"Email Address","4"=>"Assigned To");
 	$block["Leads"]["entries"]= array("0"=>array($adb->query_result($rs,0,'firstname'),"1"=>$adb->query_result($rs,0,'lastname'),2=>$adb->query_result($rs,0,'company'),3=>$adb->query_result($rs,0,'email'),4=>$adb->query_result($rs,0,'smownerid')));
 }
 $block["Contacts"]= "";
 if($email->relationship != 0 && $email->relationship["type"] == "Contacts") {
-	$q = "SELECT vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, vtiger_contactdetails.email, vtiger_contactdetails.title, vtiger_crmentity.smownerid from vtiger_contactdetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid WHERE vtiger_contactdetails.contactid='".$email->relationship["id"]."'";
-	$rs = $adb->query($q);
+	$q = "SELECT vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, vtiger_contactdetails.email, vtiger_contactdetails.title, vtiger_crmentity.smownerid from vtiger_contactdetails left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid WHERE vtiger_contactdetails.contactid=?";
+	$rs = $adb->pquery($q, array($email->relationship["id"]));
 	$block["Contacts"]["header"]= array("0"=>"First Name","1"=>"Last Name","2"=>"Title","3"=>"Email Address","4"=>"Assigned To");
 	$block["Contacts"]["entries"]= array("0"=>array($adb->query_result($rs,0,'firstname'),"1"=>$adb->query_result($rs,0,'lastname'),2=>$adb->query_result($rs,0,'title'),3=>$adb->query_result($rs,0,'email'),4=>$adb->query_result($rs,0,'smownerid')));
 }
 $block["Accounts"]= "";
 if($email->relationship != 0 && $email->relationship["type"] == "Accounts") {
-	$q = "SELECT acccount.accountname, vtiger_account.email1, vtiger_account.website, vtiger_account.industry, vtiger_crmentity.smownerid from vtiger_account left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid WHERE vtiger_account.accountid='".$email->relationship["id"]."'";
-	$rs = $adb->query($q);
+	$q = "SELECT acccount.accountname, vtiger_account.email1, vtiger_account.website, vtiger_account.industry, vtiger_crmentity.smownerid from vtiger_account left join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid WHERE vtiger_account.accountid=?";
+	$rs = $adb->pquery($q, array($email->relationship["id"]));
 	$block["Accounts"]["header"]= array("0"=>"Account Name","1"=>"Email","2"=>"Web Site","3"=>"Industry","4"=>"Assigned To");
 	$block["Accounts"]["entries"]= array("0"=>array($adb->query_result($rs,0,'accountname'),"1"=>$adb->query_result($rs,0,'email'),2=>$adb->query_result($rs,0,'website'),3=>$adb->query_result($rs,0,'industry'),4=>$adb->query_result($rs,0,'smownerid')));
 }
@@ -77,7 +76,6 @@ global $app_strings;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("CATEGORY","My Home Page");

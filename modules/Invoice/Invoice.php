@@ -106,8 +106,8 @@ class Invoice extends CRMEntity {
 		if($this->column_fields["salesorder_id"] != '')
 		{
         		$so_id = $this->column_fields["salesorder_id"];
-        		$query1 = "update vtiger_salesorder set sostatus='Approved' where salesorderid=".$so_id;
-        		$this->db->query($query1);
+        		$query1 = "update vtiger_salesorder set sostatus='Approved' where salesorderid=?";
+        		$this->db->pquery($query1, array($so_id));
 		}
 
 		//in ajax save we should not call this function, because this will delete all the existing product values
@@ -210,9 +210,10 @@ class Invoice extends CRMEntity {
 				left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid
                                 left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname
 				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid	
-			where vtiger_activity.activitytype='Task'
+			        where vtiger_activity.activitytype='Task'
 				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred')
-				and vtiger_seactivityrel.crmid=".$id;
+				and vtiger_seactivityrel.crmid=".$id."
+                                and vtiger_crmentity.deleted = 0";
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
 		$log->debug("Exiting get_history method ...");
@@ -232,7 +233,7 @@ class Invoice extends CRMEntity {
 		$query = "select vtiger_notes.title,'Notes      ' as ActivityType, vtiger_notes.filename,
  		vtiger_attachments.type as FileType,crm2.modifiedtime as lastmodified,
  		vtiger_seattachmentsrel.attachmentsid as attachmentsid, vtiger_notes.notesid as crmid,
- 			crm2.createdtime, vtiger_notes.notecontent as description, vtiger_users.user_name	
+ 		vtiger_notes.notecontent as description, vtiger_users.user_name	
 		from vtiger_notes
 			inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
 			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
@@ -244,10 +245,10 @@ class Invoice extends CRMEntity {
 		
 		$query .= ' union all ';
 
-		$query .= "select vtiger_attachments.description as title ,'Attachments' as ActivityType,
+		$query .= "select vtiger_attachments.subject as title ,'Attachments' as ActivityType,
  		vtiger_attachments.name as filename, vtiger_attachments.type as FileType, crm2.modifiedtime as lastmodified,
  		vtiger_attachments.attachmentsid as attachmentsid, vtiger_seattachmentsrel.attachmentsid as crmid,	
-			crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
+		vtiger_attachments.description, vtiger_users.user_name
 		from vtiger_attachments
 			inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
 			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_seattachmentsrel.crmid
@@ -272,8 +273,8 @@ class Invoice extends CRMEntity {
 		global $mod_strings;
 		global $app_strings;
 
-		$query = 'select vtiger_invoicestatushistory.*, vtiger_invoice.subject from vtiger_invoicestatushistory inner join vtiger_invoice on vtiger_invoice.invoiceid = vtiger_invoicestatushistory.invoiceid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_invoice.invoiceid where vtiger_crmentity.deleted = 0 and vtiger_invoice.invoiceid = '.$id;
-		$result=$adb->query($query);
+		$query = 'select vtiger_invoicestatushistory.*, vtiger_invoice.subject from vtiger_invoicestatushistory inner join vtiger_invoice on vtiger_invoice.invoiceid = vtiger_invoicestatushistory.invoiceid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_invoice.invoiceid where vtiger_crmentity.deleted = 0 and vtiger_invoice.invoiceid = ?';
+		$result=$adb->pquery($query, array($id));
 		$noofrows = $adb->num_rows($result);
 
 		$header[] = $app_strings['Invoice No'];
@@ -281,6 +282,19 @@ class Invoice extends CRMEntity {
 		$header[] = $app_strings['LBL_AMOUNT'];
 		$header[] = $app_strings['LBL_INVOICE_STATUS'];
 		$header[] = $app_strings['LBL_LAST_MODIFIED'];
+		
+		//Getting the field permission for the current user. 1 - Not Accessible, 0 - Accessible
+		//Account Name , Amount are mandatory fields. So no need to do security check to these fields.
+		global $current_user;
+
+		//If field is accessible then getFieldVisibilityPermission function will return 0 else return 1
+		$invoicestatus_access = (getFieldVisibilityPermission('Invoice', $current_user->id, 'invoicestatus') != '0')? 1 : 0;
+		$picklistarray = getAccessPickListValues('Invoice');
+
+		$invoicestatus_array = ($invoicestatus_access != 1)? $picklistarray['invoicestatus']: array();
+		//- ==> picklist field is not permitted in profile
+		//Not Accessible - picklist is permitted in profile but picklist value is not permitted
+		$error_msg = ($invoicestatus_access != 1)? 'Not Accessible': '-';
 
 		while($row = $adb->fetch_array($result))
 		{
@@ -289,7 +303,7 @@ class Invoice extends CRMEntity {
 			$entries[] = $row['invoiceid'];
 			$entries[] = $row['accountname'];
 			$entries[] = $row['total'];
-			$entries[] = $row['invoicestatus'];
+			$entries[] = (in_array($row['invoicestatus'], $invoicestatus_array))? $row['invoicestatus']: $error_msg;
 			$entries[] = getDisplayDate($row['lastmodified']);
 
 			$entries_list[] = $entries;
@@ -302,6 +316,13 @@ class Invoice extends CRMEntity {
 		return $return_data;
 	}
 
+	// Function to get column name - Overriding function of base class
+	function get_column_value($columname, $fldvalue, $fieldname, $uitype) {
+		if ($columname == 'salesorderid') {
+			if ($fldvalue == '') return null;
+		}
+		return parent::get_column_value($columname, $fldvalue, $fieldname, $uitype);
+	}
 
 }
 

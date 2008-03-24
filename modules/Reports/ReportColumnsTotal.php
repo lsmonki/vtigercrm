@@ -10,7 +10,6 @@
  ********************************************************************************/
 require_once("data/Tracker.php");
 require_once('Smarty_setup.php');
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Reports/Reports.php');
@@ -40,6 +39,7 @@ if(isset($_REQUEST["record"]))
         $oReport = new Reports($recordid);
         $BLOCK1 = $oReport->sgetColumntoTotalSelected($oReport->primodule,$oReport->secmodule,$recordid);
 		$report_column_tot->assign("BLOCK1",$BLOCK1);
+		$report_column_tot->assign("RECORDID",$recordid);
 }else
 {
         $primarymodule = $_REQUEST["primarymodule"];

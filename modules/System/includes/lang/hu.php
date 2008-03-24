@@ -19,7 +19,7 @@
 // Translated by Zsozso - zsozso@internews.hu
 // $Id: hu.php,v 1.15 2005/12/31 17:25:02 bigmichi1 Exp $
 
-$charset                = 'iso-8859-2';
+$charset                = 'UTF-8';
 
 $text['title']          = 'Rendszer Információ';
 

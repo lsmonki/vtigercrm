@@ -84,6 +84,7 @@ class Users {
 	'date_format' =>'',
 	'signature' =>'',
 	'description' =>'',
+	'internal_mailer'=>'',
 	'address_street' =>'',
 	'address_city' =>'',
 	'address_state' =>'',
@@ -149,6 +150,8 @@ class Users {
 
 	var $record_id;
 	var $new_schema = true;
+
+	var $DEFAULT_PASSWORD_CRYPT_TYPE = 'MD5';
 
 	/** constructor function for the main user class
             instantiates the Logger class and PearDatabase Class	
@@ -227,8 +230,8 @@ class Users {
 	
 	function savePreferecesToDB(){
 		$data = base64_encode(serialize($this->user_preferences));
-		$query = "UPDATE $this->table_name SET user_preferences='$data' where id='$this->id'";
-		$result =& $this->db->query($query);
+		$query = "UPDATE $this->table_name SET user_preferences=? where id=?";
+		$result =& $this->db->pquery($query, array($data, $this->id));
 		$this->log->debug("SAVING: PREFERENCES SIZE ". strlen($data)."ROWS AFFECTED WHILE UPDATING USER PREFERENCES:".$this->db->getAffectedRowCount($result));
 		$_SESSION["USER_PREFERENCES"] = $this->user_preferences;
 	}
@@ -260,10 +263,24 @@ class Users {
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
-	function encrypt_password($user_password)
+	function encrypt_password($user_password, $crypt_type='')
 	{
 		// encrypt the password.
 		$salt = substr($this->column_fields["user_name"], 0, 2);
+
+		// Fix for: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/4923
+		if($crypt_type == '') {
+			// Try to get the crypt_type which is in database for the user
+			$crypt_type = $this->get_user_crypt_type();
+		}
+
+		// For more details on salt format look at: http://in.php.net/crypt
+		if($crypt_type == 'MD5') {
+			$salt = '$1$' . $salt . '$';
+		} else if($crypt_type == 'BLOWFISH') {
+			$salt = '$2$' . $salt . '$';
+		}
+
 		$encrypted_password = crypt($user_password, $salt);	
 
 		return $encrypted_password;
@@ -358,8 +375,8 @@ class Users {
 			default:
 				$this->log->debug("Using integrated/SQL authentication");
 				$encrypted_password = $this->encrypt_password($user_password);
-				$query = "SELECT * from $this->table_name where user_name='$usr_name' AND user_password='$encrypted_password'";
-				$result = $this->db->requireSingleResult($query, false);
+				$query = "SELECT * from $this->table_name where user_name=? AND user_password=?";
+				$result = $this->db->requirePsSingleResult($query, array($usr_name, $encrypted_password), false);
 				if (empty($result)) {
 					return false;
 				} else {
@@ -396,10 +413,8 @@ class Users {
 			return null;
 
 		if($this->validation_check('aW5jbHVkZS9pbWFnZXMvc3VnYXJzYWxlc19tZC5naWY=','1a44d4ab8f2d6e15e0ff6ac1c2c87e6f', '866bba5ae0a15180e8613d33b0acc6bd') == -1)$validation = -1;
-		//if($this->validation_check('aW5jbHVkZS9pbWFnZXMvc3VnYXJzYWxlc19tZC5naWY=','1a44d4ab8f2d6e15e0ff6ac1c2c87e6f') == -1)$validation = -1;
 		if($this->validation_check('aW5jbHVkZS9pbWFnZXMvcG93ZXJlZF9ieV9zdWdhcmNybS5naWY=' , '3d49c9768de467925daabf242fe93cce') == -1)$validation = -1;
 		if($this->authorization_check('aW5kZXgucGhw' , 'PEEgaHJlZj0naHR0cDovL3d3dy5zdWdhcmNybS5jb20nIHRhcmdldD0nX2JsYW5rJz48aW1nIGJvcmRlcj0nMCcgc3JjPSdpbmNsdWRlL2ltYWdlcy9wb3dlcmVkX2J5X3N1Z2FyY3JtLmdpZicgYWx0PSdQb3dlcmVkIEJ5IFN1Z2FyQ1JNJz48L2E+', 1) == -1)$validation = -1;
-		$encrypted_password = $this->encrypt_password($user_password);
 
 		$authCheck = false;
 		$authCheck = $this->doLogin($user_password);
@@ -410,10 +425,10 @@ class Users {
 			return null;
 		}
 
+		// Get the fields for the user
 		$query = "SELECT * from $this->table_name where user_name='$usr_name'";
 		$result = $this->db->requireSingleResult($query, false);
 
-		// Get the fields for the user
 		$row = $this->db->fetchByAssoc($result);
 		$this->id = $row['id'];	
 
@@ -423,8 +438,8 @@ class Users {
 		// If there is no user_hash is not present or is out of date, then create a new one.
 		if(!isset($row['user_hash']) || $row['user_hash'] != $user_hash)
 		{
-			$query = "UPDATE $this->table_name SET user_hash='$user_hash' where id='{$row['id']}'";
-			$this->db->query($query, true, "Error setting new hash for {$row['user_name']}: ");	
+			$query = "UPDATE $this->table_name SET user_hash=? where id=?";
+			$this->db->pquery($query, array($user_hash, $row['id']), true, "Error setting new hash for {$row['user_name']}: ");	
 		}
 		$this->loadPreferencesFromDB($row['user_preferences']);
 
@@ -433,8 +448,41 @@ class Users {
 
 		unset($_SESSION['loginattempts']);
 		return $this;
-	}		
+	}
 
+	/**
+	 * Get crypt type to use for password for the user.
+	 * Fix for: http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/4923
+	 */
+	function get_user_crypt_type() {
+		
+		$crypt_res = null;
+		$crypt_type = '';
+
+		// For backward compatability, we need to make sure to handle this case.
+		global $adb;
+		$table_cols = $adb->getColumnNames("vtiger_users");
+		if(!in_array("crypt_type", $table_cols)) {
+			return $crypt_type;
+		}
+
+		if(isset($this->id)) {
+			// Get the type of crypt used on password before actual comparision
+			$qcrypt_sql = "SELECT crypt_type from $this->table_name where id=?";
+			$crypt_res = $this->db->pquery($qcrypt_sql, array($this->id), true);		
+		} else if(isset($this->column_fields["user_name"])) {
+			$qcrypt_sql = "SELECT crypt_type from $this->table_name where user_name=?";
+			$crypt_res = $this->db->pquery($qcrypt_sql, array($this->column_fields["user_name"]));
+		} else {
+			$crypt_type = $this->DEFAULT_PASSWORD_CRYPT_TYPE;
+		}
+
+		if($crypt_res) {
+			$crypt_row = $this->db->fetchByAssoc($crypt_res);
+			$crypt_type = $crypt_row['crypt_type'];
+		}
+		return $crypt_type;
+	}
 
 	/**
 	 * @param string $user name - Must be non null and at least 1 character.
@@ -460,12 +508,11 @@ class Users {
 		}
 
 		$encrypted_password = $this->encrypt_password($user_password);
-		$encrypted_new_password = $this->encrypt_password($new_password);
 
 		if (!is_admin($current_user)) {
 			//check old password first
-			$query = "SELECT user_name,user_password FROM $this->table_name WHERE id='$this->id'";
-			$result =$this->db->query($query, true);	
+			$query = "SELECT user_name,user_password FROM $this->table_name WHERE id=?";
+			$result =$this->db->pquery($query, array($this->id), true);	
 			$row = $this->db->fetchByAssoc($result);
 			$this->log->debug("select old password query: $query");
 			$this->log->debug("return result of $row");
@@ -482,10 +529,36 @@ class Users {
 		$user_hash = strtolower(md5($new_password));
 
 		//set new password
-		$query = "UPDATE $this->table_name SET user_password='$encrypted_new_password', user_hash='$user_hash' where id='$this->id'";
-		$this->db->query($query, true, "Error setting new password for $usr_name: ");	
+		$crypt_type = $this->DEFAULT_PASSWORD_CRYPT_TYPE;
+		$encrypted_new_password = $this->encrypt_password($new_password, $crypt_type);
+
+		$query = "UPDATE $this->table_name SET user_password=?, user_hash=?, crypt_type=? where id=?";
+		$this->db->pquery($query, array($encrypted_new_password, $user_hash, $crypt_type, $this->id), true, "Error setting new password for $usr_name: ");	
 		return true;
 	}
+	 
+	function de_cryption($data)
+	{
+		require_once('include/utils/encryption.php');
+		$de_crypt = new Encryption();
+		if(isset($data))
+		{	
+			$decrypted_password = $de_crypt->decrypt($data);
+		}
+		return $decrypted_password;
+	}	
+	function changepassword($newpassword)
+	{
+		require_once('include/utils/encryption.php');
+		$en_crypt = new Encryption();		
+		if( isset($newpassword)) 
+		{
+			$encrypted_password = $en_crypt->encrypt($newpassword);
+		}
+
+		return $encrypted_password;
+	}
+
 
 	function is_authenticated()
 	{
@@ -501,8 +574,8 @@ class Users {
 	function retrieve_user_id($user_name)
 	{
 		global $adb;
-		$query = "SELECT id from vtiger_users where user_name='$user_name' AND deleted=0";
-		$result  =$adb->query($query);
+		$query = "SELECT id from vtiger_users where user_name=? AND deleted=0";
+		$result  =$adb->pquery($query, array($user_name));
 		$userid = $adb->query_result($result,0,'id');
 		return $userid;
 	}
@@ -518,12 +591,12 @@ class Users {
 		$usr_name = $this->column_fields["user_name"];
 		global $mod_strings;
 
-		$query = "SELECT user_name from vtiger_users where user_name='$usr_name' AND id<>'$this->id' AND deleted=0";
-		$result =$this->db->query($query, true, "Error selecting possible duplicate users: ");
+		$query = "SELECT user_name from vtiger_users where user_name=? AND id<>? AND deleted=0";
+		$result =$this->db->pquery($query, array($usr_name, $this->id), true, "Error selecting possible duplicate users: ");
 		$dup_users = $this->db->fetchByAssoc($result);
 
 		$query = "SELECT user_name from vtiger_users where is_admin = 'on' AND deleted=0";
-		$result =$this->db->query($query, true, "Error selecting possible duplicate vtiger_users: ");
+		$result =$this->db->pquery($query, array(), true, "Error selecting possible duplicate vtiger_users: ");
 		$last_admin = $this->db->fetchByAssoc($result);
 
 		$this->log->debug("last admin length: ".count($last_admin));
@@ -569,9 +642,8 @@ class Users {
 
 	function fill_in_additional_detail_fields()
 	{
-		//$query = "SELECT u1.first_name, u1.last_name from vtiger_users as u1, vtiger_users as u2 where u1.id = u2.reports_to_id AND u2.id = '$this->id' and u1.deleted=0";
-		$query = "SELECT u1.first_name, u1.last_name from vtiger_users u1, vtiger_users u2 where u1.id = u2.reports_to_id AND u2.id = '$this->id' and u1.deleted=0";
-		$result =$this->db->query($query, true, "Error filling in additional detail vtiger_fields") ;
+		$query = "SELECT u1.first_name, u1.last_name from vtiger_users u1, vtiger_users u2 where u1.id = u2.reports_to_id AND u2.id = ? and u1.deleted=0";
+		$result =$this->db->pquery($query, array($this->id), true, "Error filling in additional detail vtiger_fields") ;
 
 		$row = $this->db->fetchByAssoc($result);
 		$this->log->debug("additional detail query results: $row");
@@ -606,10 +678,7 @@ class Users {
 		}
 		$this->id = $userid;
 		return $this;
-
 	}
-
-
 
 	/** Function to save the user information into the database
   	  * @param $module -- module name:: Type varchar
@@ -649,26 +718,31 @@ class Users {
 		$log->info("function insertIntoEntityTable ".$module.' vtiger_table name ' .$table_name);
 		global $adb;
 		$insertion_mode = $this->mode;
-
+		
 		//Checkin whether an entry is already is present in the vtiger_table to update
 		if($insertion_mode == 'edit')
 		{
-			$check_query = "select * from ".$table_name." where ".$this->tab_name_index[$table_name]."=".$this->id;
-			$check_result=$this->db->query($check_query);
+			$check_query = "select * from ".$table_name." where ".$this->tab_name_index[$table_name]."=?";
+			$check_result=$this->db->pquery($check_query, array($this->id));
 
 			$num_rows = $this->db->num_rows($check_result);
 
 			if($num_rows <= 0)
 			{
 				$insertion_mode = '';
-			}	 
+			}
 		}
+
+		// We will set the crypt_type based on the insertion_mode
+		$crypt_type = '';
 
 		if($insertion_mode == 'edit')
 		{
 			$update = '';
+			$update_params = array();
 			$tabid= getTabid($module);	
-			$sql = "select * from vtiger_field where tabid=".$tabid." and tablename='".$table_name."' and displaytype in (1,3)"; 
+			$sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3)"; 
+			$params = array($tabid, $table_name);
 		}
 		else
 		{
@@ -678,12 +752,15 @@ class Users {
 				$currentuser_id = $this->db->getUniqueID("vtiger_users");
 				$this->id = $currentuser_id;
 			}
-			$value = $this->id;
+			$qparams = array($this->id);
 			$tabid= getTabid($module);	
-			$sql = "select * from vtiger_field where tabid=".$tabid." and tablename='".$table_name."' and displaytype in (1,3,4)"; 
+			$sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3,4)"; 
+			$params = array($tabid, $table_name);
+
+			$crypt_type = $this->DEFAULT_PASSWORD_CRYPT_TYPE;
 		}
 
-		$result = $this->db->query($sql);
+		$result = $this->db->pquery($sql, $params);
 		$noofrows = $this->db->num_rows($result);
 		for($i=0; $i<$noofrows; $i++)
 		{
@@ -694,7 +771,7 @@ class Users {
 			{
 				if($uitype == 56)
 				{
-					if($this->column_fields[$fieldname] == 'on' || $this->column_fields[$fieldname] == 1)
+					if($this->column_fields[$fieldname] === 'on' || $this->column_fields[$fieldname] == 1)
 					{
 						$fldvalue = 1;
 					}
@@ -724,14 +801,14 @@ class Users {
 				}
 				elseif($uitype == 99)
 				{
-					$fldvalue = $this->encrypt_password($this->column_fields[$fieldname]);
+					$fldvalue = $this->encrypt_password($this->column_fields[$fieldname], $crypt_type);
 				}
 				else
 				{
 					$fldvalue = $this->column_fields[$fieldname]; 
 					$fldvalue = stripslashes($fldvalue);
 				}
-				$fldvalue = from_html($this->db->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
+				$fldvalue = from_html($fldvalue,($insertion_mode == 'edit')?true:false);
 
 
 
@@ -740,45 +817,45 @@ class Users {
 			{
 				$fldvalue = '';
 			}
-			if($fldvalue=='') $fldvalue ="NULL";
+			if($fldvalue=='') {
+				$fldvalue = $this->get_column_value($columname, $fldvalue, $fieldname, $uitype);
+				//$fldvalue =null;
+			}
 			if($insertion_mode == 'edit')
 			{
 				if($i == 0)
 				{
-					$update = $columname."=".$fldvalue."";
+					$update = $columname."=?";
 				}
 				else
 				{
-					$update .= ', '.$columname."=".$fldvalue."";
+					$update .= ', '.$columname."=?";
 				}
+				array_push($update_params, $fldvalue);
 			}
 			else
 			{
 				$column .= ", ".$columname;
-				$value .= ", ".$fldvalue."";
+				array_push($qparams, $fldvalue);
 			}
 
 		}
-
-
-
-
 
 		if($insertion_mode == 'edit')
 		{
 			//Check done by Don. If update is empty the the query fails
 			if(trim($update) != '')
 			{
-				$sql1 = "update ".$table_name." set ".$update." where ".$this->tab_name_index[$table_name]."=".$this->id;
-
-				$this->db->query($sql1); 
+				$sql1 = "update $table_name set $update where ".$this->tab_name_index[$table_name]."=?";
+				array_push($update_params, $this->id);
+				$this->db->pquery($sql1, $update_params); 
 			}
 
 		}
 		else
 		{	
-			$sql1 = "insert into ".$table_name." (".$column.") values(".$value.")";
-			$this->db->query($sql1); 
+			$sql1 = "insert into $table_name ($column) values(". generateQuestionMarks($qparams) .")";
+			$this->db->pquery($sql1, $qparams); 
 		}
 
 	}
@@ -798,6 +875,7 @@ class Users {
 		{
 			if($files['name'] != '' && $files['size'] > 0)
 			{
+				$files['original_name'] = $_REQUEST[$fileindex.'_hidden'];
 				$this->uploadAndSaveFile($id,$module,$files);
 			}
 		}
@@ -823,11 +901,11 @@ class Users {
 		$result = Array();
 		foreach($this->tab_name_index as $table_name=>$index)
 		{
-			$result[$table_name] = $adb->query("select * from ".$table_name." where ".$index."=".$record);
+			$result[$table_name] = $adb->pquery("select * from ".$table_name." where ".$index."=?", array($record));
 		}
 		$tabid = getTabid($module);
-		$sql1 =  "select * from vtiger_field where tabid=".$tabid;
-		$result1 = $adb->query($sql1);
+		$sql1 =  "select * from vtiger_field where tabid=?";
+		$result1 = $adb->pquery($sql1, array($tabid));
 		$noofrows = $adb->num_rows($result1);
 		for($i=0; $i<$noofrows; $i++)
 		{
@@ -843,12 +921,12 @@ class Users {
 		$this->column_fields["record_id"] = $record;
 		$this->column_fields["record_module"] = $module;
 
-		$currency_query = "select * from vtiger_currency_info where id=".$this->column_fields["currency_id"]." and currency_status='Active'";
-		$currency_result = $adb->query($currency_query);
+		$currency_query = "select * from vtiger_currency_info where id=? and currency_status='Active'";
+		$currency_result = $adb->pquery($currency_query, array($this->column_fields["currency_id"]));
 		if($adb->num_rows($currency_result) == 0)
 		{
 			$currency_query = "select * from vtiger_currency_info where id =1";
-			$currency_result = $adb->query($currency_query);
+			$currency_result = $adb->pquery($currency_query, array());
 		}
 		$currency_array = array("$"=>"&#36;","&euro;"=>"&#8364;","&pound;"=>"&#163;","&yen;"=>"&#165;");
 			$ui_curr = $currency_array[$adb->query_result($currency_result,0,"currency_symbol")];
@@ -888,7 +966,8 @@ class Users {
 
 	
 		// Arbitrary File Upload Vulnerability fix - Philip
-		$binFile = $file_details['name'];
+		$file = $file_details['name'];
+		$binFile = preg_replace('/\s+/', '_', $file);
 		$ext_pos = strrpos($binFile, ".");
 
 		$ext = substr($binFile, $ext_pos + 1);
@@ -899,7 +978,7 @@ class Users {
 		}
 		// Vulnerability fix ends
 
-		$filename = basename($binFile);
+		$filename = ltrim(basename(" ".$binFile)); //allowed filename like UTF-8 characters 
 		$filetype= $file_details['type'];
 		$filesize = $file_details['size'];
 		$filetmp_name = $file_details['tmp_name'];
@@ -920,23 +999,25 @@ class Users {
 		if($save_file == 'true')
 		{
 
-			$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module." Attachment','".$this->column_fields['description']."',".$this->db->formatString("vtiger_crmentity","createdtime",$date_var).",".$this->db->formatString("vtiger_crmentity","modifiedtime",$date_var).")";
- 			$this->db->query($sql1);
+			$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?)";
+ 			$params1 = array($current_id, $current_user->id, $ownerid, $module." Attachment", $this->column_fields['description'], $this->db->formatString("vtiger_crmentity","createdtime",$date_var), $this->db->formatDate($date_var, true));
+			$this->db->pquery($sql1, $params1);
 
-			$sql2="insert into vtiger_attachments(attachmentsid, name, description, type, path) values(".$current_id.",'".$filename."','".$this->column_fields['description']."','".$filetype."','".$upload_file_path."')";
-			$result=$this->db->query($sql2);
+			$sql2="insert into vtiger_attachments(attachmentsid, name, description, type, path) values(?,?,?,?,?)";
+			$params2 = array($current_id, $filename, $this->column_fields['description'], $filetype, $upload_file_path);
+			$result=$this->db->pquery($sql2, $params2);
 
 			if($id != '')
 			{
-				$delquery = 'delete from vtiger_salesmanattachmentsrel where smid = '.$id;
-				$this->db->query($delquery);
+				$delquery = 'delete from vtiger_salesmanattachmentsrel where smid = ?';
+				$this->db->pquery($delquery, array($id));
 			}
 
-			$sql3='insert into vtiger_salesmanattachmentsrel values('.$id.','.$current_id.')';
-			$this->db->query($sql3);
+			$sql3='insert into vtiger_salesmanattachmentsrel values(?,?)';
+			$this->db->pquery($sql3, array($id, $current_id));
 
 			//we should update the imagename in the users table
-			$this->db->query("update vtiger_users set imagename=\"$filename\" where id=$id");
+			$this->db->pquery("update vtiger_users set imagename=? where id=?", array($filename, $id));
 		}
 		else
 		{
@@ -978,8 +1059,8 @@ class Users {
 			}
 		}else
 		{
-			$query = "select homeorder from vtiger_users where id=$id";
-			$homeorder = $adb->query_result($adb->query($query),0,'homeorder');
+			$query = "select homeorder from vtiger_users where id=?";
+			$homeorder = $adb->query_result($adb->pquery($query, array($id)),0,'homeorder');
 			for($i = 0;$i < count($this->homeorder_array);$i++)
 			{
 				if(!stristr($homeorder,$this->homeorder_array[$i]))
@@ -1015,8 +1096,8 @@ class Users {
 		}
 		if(count($save_array))
 			$homeorder = implode(',',$save_array);	
-		$query = "update vtiger_users set homeorder ='$homeorder' where id=$id";
-		$adb->query($query);
+		$query = "update vtiger_users set homeorder =? where id=?";
+		$adb->pquery($query, array($homeorder, $id));
                 $log->debug("Exiting from function saveHomeOrder($id)");
 	}
 
@@ -1034,6 +1115,19 @@ class Users {
 		$tracker = new Tracker();
 		$tracker->track_view($user_id, $current_module, $id, '');
 	}	
+	
+	/**
+	* Function to get the column value of a field 
+	* @param $column_name -- Column name
+	* @param $input_value -- Input value for the column taken from the User
+	* @return Column value of the field.
+	*/
+	function get_column_value($columname, $fldvalue, $fieldname, $uitype) {
+		if (is_uitype($uitype, "_date_") && $fldvalue == '') {
+			return null;
+		}
+		return $fldvalue;
+	}
 
 }
 ?>

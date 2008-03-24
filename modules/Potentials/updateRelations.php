@@ -28,10 +28,18 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 	{
 		if($id != '')
 		{
-			$sql = "insert into vtiger_contpotentialrel values (".$id.",".$_REQUEST["parentid"] .")";
-			$adb->query($sql);
-			$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parentid"] .",".$id.",'Potentials')";
-			$adb->query($sql);
+			//When we select contact from potential related list
+			if($_REQUEST['destination_module'] == 'Contacts')
+			{
+				$sql = "insert into vtiger_contpotentialrel values (?,?)";
+				$adb->pquery($sql, array($id, $_REQUEST["parentid"]));
+			}
+			//when we select product from potential related list
+			if($_REQUEST['destination_module'] == 'Products')
+			{
+				$sql = "insert into vtiger_seproductsrel values (?,?,?)";
+				$adb->pquery($sql, array($_REQUEST["parentid"], $id,'Potentials'));
+			}
 		}
 	}
 
@@ -39,10 +47,18 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 }
 elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 {
-	$sql = "insert into vtiger_contpotentialrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
-	$adb->query($sql);
-	$sql = "insert into vtiger_seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .",'Potentials')";
-	$adb->query($sql);
+	//When we select contact from potential related list
+	if($_REQUEST['destination_module'] == 'Contacts')
+	{
+		$sql = "insert into vtiger_contpotentialrel values (?,?)";
+		$adb->pquery($sql, array($_REQUEST["entityid"], $_REQUEST["parid"]));
+	}
+	//when we select product from potential related list
+	if($_REQUEST['destination_module'] == 'Products')
+	{
+		$sql = "insert into vtiger_seproductsrel values (?,?,?)";
+		$adb->pquery($sql, array($_REQUEST["parid"], $_REQUEST["entityid"], 'Potentials'));
+	}
 
 	header("Location: index.php?action=$action&module=Potentials&record=".$_REQUEST["parid"]);
 }

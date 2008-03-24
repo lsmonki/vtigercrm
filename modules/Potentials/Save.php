@@ -27,6 +27,9 @@ require_once('include/database/PearDatabase.php');
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Potentials();
+//added to fix 4600
+$search=$_REQUEST['search_url'];
+
 global $current_user;
 $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);
@@ -60,6 +63,5 @@ if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewnam
 //Added to send mail to the vtiger_potential-owner about the Potential
 $status = sendNotificationToOwner('Potentials',$focus);
 
-header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&pot_id=$pot_id&viewname=$return_viewname");
-
+header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&pot_id=$pot_id&viewname=$return_viewname&start=".$_REQUEST['pagenumber'].$search);
 ?>

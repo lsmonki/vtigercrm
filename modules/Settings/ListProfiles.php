@@ -10,7 +10,6 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/utils/UserInfoUtil.php');
 
 global $mod_strings;
@@ -21,11 +20,10 @@ global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 $sql = "select * from vtiger_profile";
-$profileListResult = $adb->query($sql);
+$profileListResult = $adb->pquery($sql, array());
 $noofrows = $adb->num_rows($profileListResult);
 $list_entries = array($mod_strings['LBL_LIST_NO'],$mod_strings['LBL_LIST_TOOLS'],$mod_strings['LBL_NEW_PROFILE_NAME'],$mod_strings['LBL_DESCRIPTION']);
 

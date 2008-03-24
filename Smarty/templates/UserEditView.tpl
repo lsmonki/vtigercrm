@@ -43,7 +43,7 @@ function check_duplicate()
                         onComplete: function(response) {ldelim}
 				if(response.responseText == 'SUCCESS')
 				{ldelim}
-					$('user_status').disabled = false;
+				//	$('user_status').disabled = false;
 			                document.EditView.submit();
 				{rdelim}
        				else
@@ -85,6 +85,8 @@ function check_duplicate()
 		<input type="hidden" name="workdays" value="0,1,2,3,4,5,6,">			
 		<input type="hidden" name="namedays" value="">			
 		<input type="hidden" name="weekstart" value="1">
+		<input type="hidden" name="hour_format" value="{$HOUR_FORMAT}">
+		<input type="hidden" name="start_hour" value="{$START_HOUR}">
 
 	<table width="100%"  border="0" cellspacing="0" cellpadding="0" class="settingsSelUITopLine">
 	<tr><td align="left">
@@ -186,7 +188,33 @@ function check_duplicate()
 					    {/if}	
 					</tr>			
 				{/foreach}
-			    	</table>	
+			    	</table>
+				<!-- Added for User Based TagCloud -->
+                                <table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
+                                <tr>
+                                     <td class="big">
+                                        <strong>6. {$UMOD.LBL_TAGCLOUD_DISPLAY}</strong>
+                                     </td>
+                                     <td class="small" align="right">&nbsp;</td>
+                                </tr>
+                                </table>
+				<!-- End of Header -->
+				<table border="0" cellpadding="5" cellspacing="0" width="100%">
+                                        <tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.LBL_TAG_CLOUD}</td>
+                                            {if $TAGCLOUDVIEW eq 'true'}
+                                                <td class="dvtCellInfo" align="center" width="5%">
+                                                <input name="tagcloudview" value="true" checked type="radio"></td><td class="dvtCellInfo" align="left" >{$UMOD.LBL_SHOW}</td>
+                                                <td class="dvtCellInfo" align="center" width="5%">
+                                                <input name="tagcloudview" value="false" type="radio"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_HIDE}</td>
+					    {else}
+						<td class="dvtCellInfo" align="center" width="5%">
+                                                <input name="tagcloudview" value="true" type="radio"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_SHOW}</td>
+						<td class="dvtCellInfo" align="center" width="5%">
+						<input name="tagcloudview" value="false" checked type="radio"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_HIDE}</td>
+                                            {/if}
+					</tr>
+				</table>
+				<!--end of Added for User Based TagCloud -->
 				<br>
 				<tr><td colspan=4>&nbsp;</td></tr>
 							

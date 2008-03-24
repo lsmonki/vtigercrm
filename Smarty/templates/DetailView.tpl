@@ -11,9 +11,7 @@
  ********************************************************************************/
 
 -->*}
-<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script type="text/javascript" src="include/js/reflection.js"></script>
-<script src="include/scriptaculous/prototype.js" type="text/javascript"></script>
 <script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
 <span id="crmspanid" style="display:none;position:absolute;"  onmouseover="show('crmspanid');">
@@ -268,11 +266,13 @@ function DeleteTag(id,recordid)
 							   {assign var=keyval value=$data.value}
 							   {assign var=keytblname value=$data.tablename}
 							   {assign var=keyfldname value=$data.fldname}
+							   {assign var=keyfldid value=$data.fldid}
 							   {assign var=keyoptions value=$data.options}
 							   {assign var=keysecid value=$data.secid}
 							   {assign var=keyseclink value=$data.link}
 							   {assign var=keycursymb value=$data.cursymb}
 							   {assign var=keysalut value=$data.salut}
+							   {assign var=keyaccess value=$data.notaccess}
 							   {assign var=keycntimage value=$data.cntimage}
 							   {assign var=keyadmin value=$data.isadmin}
 							   
@@ -388,39 +388,54 @@ function DeleteTag(id,recordid)
                 {if $MODULE eq 'Contacts' || $MODULE eq 'Accounts' || $MODULE eq 'Leads'}
                         <table width="100%" border="0" cellpadding="5" cellspacing="0">
                                 <tr><td>&nbsp;</td></tr>
-                                <tr><td align="left" class="genHeaderSmall">{$APP.LBL_ACTIONS}</td></tr>
-                                <tr><td align="left" style="padding-left:10px;">
-				{if $MODULE eq 'Contacts'}
+{if $TODO_PERMISSION eq 'true' || $EVENT_PERMISSION eq 'true' || $CONTACT_PERMISSION eq 'true'|| $MODULE eq 'Contacts'}                              
+<tr><td align="left" class="genHeaderSmall">{$APP.LBL_ACTIONS}</td></tr>
+{/if}
+                                {if $MODULE eq 'Contacts'}
 					{assign var=subst value="contact_id"}
 					{assign var=acc value="&account_id=$accountid"}
 				{else}
 					{assign var=subst value="parent_id"}
 					{assign var=acc value=""}
-                                {/if} 
+                                {/if}
+			{if $MODULE eq 'Contacts' || $EVENT_PERMISSION eq 'true'}	
+				<tr><td align="left" style="padding-left:10px;"> 
 			        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Events&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu"><img src="{$IMAGE_PATH}AddEvent.gif" hspace="5" align="absmiddle"  border="0"/></a>
                                 <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Events&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Event}</a>
                                 </td></tr>
+			{/if}
+	{if $TODO_PERMISSION eq 'true' && ($MODULE eq 'Accounts' || $MODULE eq 'Leads')}
                                 <tr><td align="left" style="padding-left:10px;">
 			        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu"><img src="{$IMAGE_PATH}AddToDo.gif" hspace="5" align="absmiddle" border="0"/></a>
-                                <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Todo}</a></td></tr>
-                        </table>
+                                <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Todo}</a>
+</td></tr>
+	{/if}
+	{if $MODULE eq 'Contacts' && $CONTACT_PERMISSION eq 'true'}
+                                <tr><td align="left" style="padding-left:10px;">
+			        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu"><img src="{$IMAGE_PATH}AddToDo.gif" hspace="5" align="absmiddle" border="0"/></a>
+                                <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Todo}</a>
+</td></tr>
+	{/if}
+                  </table>
                 <br>
                 {/if}
                 <!-- Action links for Event & Todo END-by Minnie -->
 
+		{if $TAG_CLOUD_DISPLAY eq 'true'}
 		<!-- Tag cloud display -->
 		<table border=0 cellspacing=0 cellpadding=0 width=100% class="tagCloud">
 		<tr>
 			<td class="tagCloudTopBg"><img src="{$IMAGE_PATH}tagCloudName.gif" border=0></td>
 		</tr>
 		<tr>
-                      	<td><div id="tagdiv" style="display:visible;"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value="" style="width:100px;margin-left:5px;"></input>&nbsp;&nbsp;<input name="button_tagfileds" type="button" class="crmbutton small save" value="{$APP.LBL_TAG_IT}" onclick="return tagvalidate()"/></div></td>
+              		<td><div id="tagdiv" style="display:visible;"><form method="POST" action="javascript:void(0);" onsubmit="return tagvalidate();"><input class="textbox"  type="text" id="txtbox_tagfields" name="textbox_First Name" value="" style="width:100px;margin-left:5px;"></input>&nbsp;&nbsp;<input name="button_tagfileds" type="submit" class="crmbutton small save" value="{$APP.LBL_TAG_IT}" /></form></div></td>
                 </tr>
 		<tr>
 			<td class="tagCloudDisplay" valign=top> <span id="tagfields">{$ALL_TAG}</span></td>
 		</tr>
 		</table>
 		<!-- End Tag cloud display -->
+		{/if}
 			<!-- Mail Merge-->
 				<br>
 				{if $MERGEBUTTON eq 'permitted'}
@@ -439,7 +454,7 @@ function DeleteTag(id,recordid)
 						<select name="mergefile">{foreach key=templid item=tempflname from=$TOPTIONS}<option value="{$templid}">{$tempflname}</option>{/foreach}</select>
                                                    <input class="crmbutton small create" value="{$APP.LBL_MERGE_BUTTON_LABEL}" onclick="this.form.action.value='Merge';" type="submit"></input> 
 						{else}
-						<a href=index.php?module=Settings&action=upload&tempModule={$MODULE}>{$APP.LBL_CREATE_MERGE_TEMPLATE}</a>
+						<a href=index.php?module=Settings&action=upload&tempModule={$MODULE}&parenttab=Settings>{$APP.LBL_CREATE_MERGE_TEMPLATE}</a>
 						{/if}
 					</td>
       				</tr>
@@ -492,6 +507,7 @@ getTagCloud();
 
 	<td align=right valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
 </tr></table>
-{if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts'}
-<form name="SendMail"><div id="sendmail_cont" style="z-index:100001;position:absolute;"></div></form>
+
+{if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts' or $MODULE eq 'Campaigns'}
+	<form name="SendMail"><div id="sendmail_cont" style="z-index:100001;position:absolute;"></div></form>
 {/if}

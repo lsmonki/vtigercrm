@@ -38,6 +38,19 @@ $refresh = true;
 $date_start = array();
 $datax = array();
 //get the dates to display
+//added to fix the issue4307
+if(isset($_REQUEST['obm_date_start']) && $_REQUEST['obm_date_start'] == '')
+{
+	$_SESSION['obm_date_start'] = ""; 
+}
+elseif(isset($_REQUEST['obm_date_start']) && $_REQUEST['obm_date_start'] != '')
+	$_SESSION['obm_date_start'] = $_REQUEST['obm_date_start'];
+if(isset($_REQUEST['obm_date_end']) && $_REQUEST['obm_date_end'] == '')
+{
+	$_SESSION['obm_date_end'] = ""; 
+}
+elseif(isset($_REQUEST['obm_date_end']) && $_REQUEST['obm_date_end'] != '')
+	$_SESSION['obm_date_end'] = $_REQUEST['obm_date_end'];
 if (isset($_SESSION['obm_date_start']) && $_SESSION['obm_date_start'] != '' && !isset($_REQUEST['obm_date_start'])) {
 	$date_start = $_SESSION['obm_date_start'];
 	$log->debug("_SESSION['obm_date_start'] is:");
@@ -147,7 +160,7 @@ if (isset($_REQUEST['obm_edit']) && $_REQUEST['obm_edit'] == 'true') {
 	<td valign='top' ><select name="obm_ids[]" multiple size='3'><?php echo get_select_options_with_id(get_user_array(FALSE, "Active",$current_user->id),$_SESSION['obm_ids']); ?></select></td>
 <?php } ?>
 </tr><tr>
-<td align="right"><br /> <input class="button" onclick="return verify_chart_data(outcome_by_month);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
+<td align="right"><br /> <input class="button" onclick="return chk_form(outcome_by_month);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
 </tr></table>
 </form>
 <script type="text/javascript">

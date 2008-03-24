@@ -95,11 +95,11 @@ class AuditTrail{
 		global $adb, $current_user;
 		
 		if($sorder != '' && $order_by != '')
-			$list_query = "Select * from vtiger_audit_trial where userid =".$userid." order by ".$order_by." ".$sorder; 
+			$list_query = "Select * from vtiger_audit_trial where userid =? order by ".$order_by." ".$sorder; 
 		else
-			$list_query = "Select * from vtiger_audit_trial where userid =".$userid." order by ".$this->default_order_by." ".$this->default_sort_order;
+			$list_query = "Select * from vtiger_audit_trial where userid =? order by ".$this->default_order_by." ".$this->default_sort_order;
 	
-		$result = $adb->query($list_query);
+		$result = $adb->pquery($list_query, array($userid));
 		$entries_list = array();
 
 	if($navigation_array['end_val'] != 0)
@@ -109,10 +109,10 @@ class AuditTrail{
 			$entries = array();
 			$userid = $adb->query_result($result, $i-1, 'userid');
 		
-			$entries[] = $adb->query_result($result, $i-1, 'module');
+			$entries[] = getTranslatedString($adb->query_result($result, $i-1, 'module'));
 			$entries[] = $adb->query_result($result, $i-1, 'action');
 			$entries[] = $adb->query_result($result, $i-1, 'recordid');
-			$entries[] = $adb->query_result($result, $i-1, 'actiondate');
+			$entries[] = getDisplayDate($adb->query_result($result, $i-1, 'actiondate'));
 			
 			$entries_list[] = $entries;
 		}

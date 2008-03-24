@@ -16,6 +16,7 @@
 	<link href="{$THEME_PATH}style.css" rel="stylesheet" type="text/css">
 	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 	<script language="JavaScript" type="text/javascript" src="include/js/{php} echo $_SESSION['authenticated_user_language'];{/php}.lang.js?{php} echo $_SESSION['vtiger_version'];{/php}"></script>
+	<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 	<script language="JavaScript" type="text/javascript" src="modules/Reports/Reports.js"></script>
 {$DATE_FORMAT}
 </head>
@@ -125,7 +126,7 @@
 						<td>&nbsp;</td>
 						<td align="right" style="padding:10px;" >
 						<input type="button" id="back_rep" name="back_rep" value=" &nbsp;&lt;&nbsp;{$APP.LBL_BACK}&nbsp; " class="crmbutton small cancel" onClick="changeStepsback1();">&nbsp;
-						<input type="button" id="next" name="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " class="crmbutton small save" onClick="changeSteps1()";>
+						<input type="button" id="next" name="next" value=" &nbsp;{$APP.LNK_LIST_NEXT}&nbsp;&rsaquo;&nbsp; " class="crmbutton small save" onClick="changeSteps1();">
 						&nbsp;<input type="button" name="cancel" value=" &nbsp;{$APP.LBL_CANCEL_BUTTON_LABEL}&nbsp; " class="crmbutton small cancel" onClick="self.close();">
 						</td>
 					</tr>

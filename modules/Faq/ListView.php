@@ -20,8 +20,6 @@ require_once('Smarty_setup.php');
 require_once('include/utils/utils.php');
 require_once('include/ListView/ListView.php');
 require_once('modules/Faq/Faq.php');
-require_once('themes/'.$theme.'/layout_utils.php');
-require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('include/database/Postgres8.php');
 require_once('include/DatabaseUtil.php');
@@ -166,6 +164,11 @@ if($_SESSION['lvs'][$currentModule])
 {
 	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
 }
+//added for 4600
+                                                                                                                             
+if($noofrows <= $list_max_entries_per_page)
+        $_SESSION['lvs'][$currentModule]['start'] = 1;
+//ends
 
 $start = $_SESSION['lvs'][$currentModule]['start'];
 
@@ -190,9 +193,9 @@ else
 	$limit_start_rec = $start_rec -1;
 	
 if( $adb->dbType == "pgsql")
-     $list_result = $adb->query($list_query. " OFFSET ".$limit_start_rec." LIMIT ".$list_max_entries_per_page);
+     $list_result = $adb->pquery($list_query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
 else
-     $list_result = $adb->query($list_query. " LIMIT ".$limit_start_rec.",".$list_max_entries_per_page);
+     $list_result = $adb->pquery($list_query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
@@ -210,6 +213,11 @@ $listview_entries = getListViewEntries($focus,"Faq",$list_result,$navigation_arr
 $smarty->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
+//Added to select Multiple records in multiple pages
+$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
+$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
+
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Faq","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','question','true','basic',"","","","",$viewid);
 $fieldnames = getAdvSearchfields($module);

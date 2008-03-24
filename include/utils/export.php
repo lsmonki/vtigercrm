@@ -30,7 +30,14 @@ require_once('modules/Notes/Notes.php');
 require_once('modules/Potentials/Potentials.php');
 require_once('modules/Users/Users.php');
 require_once('modules/Products/Products.php');
+//Pavani...adding HelpDesk and Vendors modules
+require_once('modules/HelpDesk/HelpDesk.php');
+require_once('modules/Vendors/Vendors.php');
 require_once('include/utils/UserInfoUtil.php');
+require_once('modules/CustomView/CustomView.php');
+
+// Set the current language and the language strings, if not already set.
+setCurrentLanguage();
 
 global $allow_exports,$app_strings;
 
@@ -40,7 +47,7 @@ $current_user = new Users();
 
 if(isset($_SESSION['authenticated_user_id']))
 {
-        $result = $current_user->retrieve_entity_info($_SESSION['authenticated_user_id'],"users");
+        $result = $current_user->retrieve_entity_info($_SESSION['authenticated_user_id'],"Users");
         if($result == null)
         {
 		session_destroy();
@@ -83,40 +90,112 @@ function br2nl_vt($str)
  * Param $type - module name
  * Return type text
 */
-function export_all($type)
+function export($type)
 {
-	global $log;
-	$log->debug("Entering export_all(".$type.") method ...");
-	global $adb;
+        global $log,$list_max_entries_per_page;
+        $log->debug("Entering export(".$type.") method ...");
+        global $adb;
 
-	$focus = 0;
-	$content = '';
+        $focus = 0;
+        $content = '';
 
-	if ($type != "")
+        if ($type != "")
+        {
+                $focus = new $type;
+        }
+        $log = LoggerManager::getLogger('export_'.$type);
+        $db = new PearDatabase();
+
+	$oCustomView = new CustomView("$type");
+	$viewid = $oCustomView->getViewId("$type");
+	$sorder = $focus->getSortOrder();
+	$order_by = $focus->getOrderBy();
+
+        $search_type = $_REQUEST['search_type'];
+        $export_data = $_REQUEST['export_data'];
+	
+	if(isset($_SESSION['export_where']) && $_SESSION['export_where']!='' && $search_type == 'includesearch')
+                $where =$_SESSION['export_where'];
+
+	$query = $focus->create_export_query($where);
+	$stdfiltersql = $oCustomView->getCVStdFilterSQL($viewid);
+	$advfiltersql = $oCustomView->getCVAdvFilterSQL($viewid);
+	if(isset($stdfiltersql) && $stdfiltersql != '')
 	{
-		$focus = new $type;
+		$query .= ' and '.$stdfiltersql;
+	}
+	if(isset($advfiltersql) && $advfiltersql != '')
+	{
+		$query .= ' and '.$advfiltersql;
+	}
+	$params = array();
+
+	if(($search_type == 'withoutsearch' || $search_type == 'includesearch') && $export_data == 'selecteddata')
+	{
+		$idstring = explode(";", $_REQUEST['idstring']);
+		if($type == 'Accounts' && count($idstring) > 0) {
+			$query .= ' and vtiger_account.accountid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		} elseif($type == 'Contacts' && count($idstring) > 0) {
+			$query .= ' and vtiger_contactdetails.contactid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		} elseif($type == 'Potentials' && count($idstring) > 0) {
+			$query .= ' and vtiger_potential.potentialid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		} elseif($type == 'Leads' && count($idstring) > 0) {
+			$query .= ' and vtiger_leaddetails.leadid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		} elseif($type == 'Products' && count($idstring) > 0) {
+			$query .= ' and vtiger_products.productid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		} elseif($type == 'Notes' && count($idstring) > 0) {
+			$query .= ' and vtiger_notes.notesid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		}
+		//Pavani..adding HelpDesk and Vendors modules
+		elseif($type == 'HelpDesk' && count($idstring) > 0) {
+			$query .= ' and vtiger_troubletickets.ticketid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		} elseif($type == 'Vendors' && count($idstring) > 0) {
+			$query .= ' and vtiger_vendor.vendorid in ('. generateQuestionMarks($idstring) .')';
+			array_push($params, $idstring);
+		}
+	}
+	
+	if(isset($order_by) && $order_by != '')
+	{
+		if($order_by == 'smownerid')
+		{
+			$query .= ' ORDER BY user_name '.$sorder;
+		}
+		elseif($order_by == 'lastname' && $type == 'Notes')
+		{
+			$query .= ' ORDER BY vtiger_contactdetails.lastname  '. $sorder;
+		}
+		elseif($order_by == 'crmid' && $type == 'HelpDesk')
+		{
+			$query .= ' ORDER BY vtiger_troubletickets.ticketid  '. $sorder;
+		}
+		else
+		{
+			$tablename = getTableNameForField($type,$order_by);
+			$tablename = (($tablename != '')?($tablename."."):'');
+			if( $adb->dbType == "pgsql")
+				$query .= ' GROUP BY '.$tablename.$order_by;
+			$query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
+		}
+	}
+	
+	if(isset($_SESSION['nav_start']) && $_SESSION['nav_start']!='' && $export_data == 'currentpage')
+	{
+		$start_rec = $_SESSION['nav_start'];
+		$limit_start_rec = ($start_rec == 0) ? 0 : ($start_rec - 1);
+		$query .= ' LIMIT '.$limit_start_rec.','.$list_max_entries_per_page;
 	}
 
-	$log = LoggerManager::getLogger('export_'.$type);
-	$db = new PearDatabase();
-
-	if ( isset($_REQUEST['all']) )
-	{
-		$where = '';
-	}
-	else
-	{
-		$where = $_SESSION['export_where'];
-	}
-
-	$order_by = "";
-
-	$query = $focus->create_export_query($order_by,$where);
-
-	$result = $adb->query($query,true,"Error exporting $type: "."<BR>$query");
-
-	$fields_array = $adb->getFieldsArray($result);
-
+        $result = $adb->pquery($query, $params, true, "Error exporting $type: "."<BR>$query");
+        $fields_array = $adb->getFieldsArray($result);
+	$fields_array = array_diff($fields_array,array("user_name"));
 	$header = implode("\",\"",array_values($fields_array));
 	$header = "\"" .$header;
 	$header .= "\"\r\n";
@@ -130,24 +209,23 @@ function export_all($type)
 
 		foreach ($val as $key => $value)
 		{
-			if($key=="description" || $key=="note")
+			if($key != "user_name")
 			{
-				$value=br2nl_vt($value);
-			}
-			$value = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",html_entity_decode($value, ENT_QUOTES, "ISO-8859-1"));
-			array_push($new_arr, preg_replace("/\"/","\"\"",$value));
+				// No conversions are required here. We need to send the data to csv file as it comes from database.
+				array_push($new_arr, preg_replace("/\"/","\"\"",$value));
+			}	
 		}
 		$line = implode("\",\"",$new_arr);
 		$line = "\"" .$line;
 		$line .= "\"\r\n";
 		$content .= $line;
 	}
-	$log->debug("Exiting export_all method ...");
+	$log->debug("Exiting export method ...");
 	return $content;
 	
 }
 
-$content = export_all($_REQUEST['module']);
+$content = export($_REQUEST['module']);
 
 header("Content-Disposition: attachment; filename={$_REQUEST['module']}.csv");
 header("Content-Type: text/csv; charset=UTF-8");

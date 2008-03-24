@@ -9,7 +9,6 @@
 *
  ********************************************************************************/
 require_once("data/Tracker.php");
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Reports/Reports.php');
@@ -19,7 +18,7 @@ global $app_strings;
 global $app_list_strings;
 global $mod_strings;
 $current_module_strings = return_module_language($current_language, 'Reports');
-global $list_max_entries_per_page;
+global $list_max_entries_per_page, $default_charset;
 global $urlPrefix;
 $log = LoggerManager::getLogger('report_list');
 global $currentModule;
@@ -31,7 +30,6 @@ global $focus_list;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 $list_report_form = new vtigerCRM_Smarty;
 $list_report_form->assign("MOD", $mod_strings);
 $list_report_form->assign("APP", $app_strings);
@@ -67,10 +65,34 @@ $list_report_form->assign('DATE_FORMAT',$date_format);
 
 $list_report_form->assign('PRI_MODULE',$primarymodule);
 $list_report_form->assign('SEC_MODULE',$secondarymodule);
+$reportname = htmlspecialchars($reportname, ENT_COMPAT, $default_charset);
 $list_report_form->assign('REPORT_NAME',$reportname);
+$reportdescription = htmlspecialchars($reportdescription, ENT_COMPAT, $default_charset);
 $list_report_form->assign('REPORT_DESC',$reportdescription);
 $list_report_form->assign('FOLDERID',$folderid);
 $list_report_form->assign("IMAGE_PATH", $image_path);
 $list_report_form->assign("THEME_PATH", $theme_path);
-$list_report_form->display("ReportsStep1.tpl");
+if(isPermitted($primarymodule,'index') == "yes" && (isPermitted($secondarymodule,'index')== "yes"))
+{
+	$list_report_form->display("ReportsStep1.tpl");
+}
+else
+{
+	echo "<link rel='stylesheet' type='text/css' href='themes/$theme/style.css'>";
+	echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
+	echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 80%; position: relative; z-index: 10000000;'>
+
+		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+		<tbody><tr>
+		<td rowspan='2' width='11%'><img src='themes/$theme/images/denied.gif' ></td>
+		<td style='border-bottom: 1px solid rgb(204, 204, 204);'  width='70%'><span class='genHeaderSmall'>".$mod_strings['LBL_NO_PERMISSION']." ".$primarymodule." ".$secondarymodule."</span></td>
+		</tr>
+		<tr>
+		<td class='small' align='right' nowrap='nowrap'>
+		<a href='javascript:window.history.back();'>$app_strings[LBL_GO_BACK]</a><br>                                                                                </td>
+		</tr>
+		</tbody></table>
+		</div>";
+	echo "</td></tr></table>";
+}
 ?>

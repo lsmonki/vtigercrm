@@ -65,8 +65,6 @@ $smarty = new vtigerCRM_Smarty();
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
-
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
@@ -136,9 +134,9 @@ if($_REQUEST['migration_option'] != '')
 }
 
 //For 5.0.2 we have added this table. After 5.0.2 we have to remove this and provide the migration in some other way
-$res = $adb->query("show create table vtiger_entityname");
+/*$res = $adb->query("show create table vtiger_entityname");
 if(!$res)
-	$smarty->assign("502_PATCH","apply");
+	$smarty->assign("502_PATCH","apply");*/
 
 $smarty->display("MigrationStep1.tpl");
 

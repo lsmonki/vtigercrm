@@ -170,9 +170,7 @@ class ImportAccount extends Accounts {
 		$this->log = LoggerManager::getLogger('import_account');
 		$this->db = new PearDatabase();
 		$this->db->println("IMP ImportAccount");
-		$colf = getColumnFields("Accounts");
-		foreach($colf as $key=>$value)
-			$this->importable_fields[$key]=1;
+		$this->initImportableFields("Accounts");
 		
 		$this->db->println($this->importable_fields);
 	}
@@ -192,12 +190,11 @@ class ImportAccount extends Accounts {
 			return; 
 		}
 
-		$account_name = trim(addslashes($account_name));
+		$account_name = trim($account_name);
 
 		//Query to get the available Account which is not deleted
-		$query = "select accountid from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid WHERE vtiger_account.accountname='{$account_name}' and vtiger_crmentity.deleted=0";
-
-		$account_id = $adb->query_result($adb->query($query),0,'accountid');
+		$query = "select accountid from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid WHERE vtiger_account.accountname=? and vtiger_crmentity.deleted=0";
+		$account_id = $adb->query_result($adb->pquery($query, array($account_name)),0,'accountid');
 
 		if($account_id == '' || !isset($account_id))
 			$account_id = 0;

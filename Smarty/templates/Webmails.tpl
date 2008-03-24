@@ -29,15 +29,15 @@
 						<table width="100%" cellpadding="0" cellspacing="0" border="0">
 						   <tr>
 							<td width="10%">
-								<img src="themes/images/check_mail.gif" align="absmiddle" />
+								<img src="themes/{$THEME}/images/check_mail.gif" align="absmiddle" />
 								&nbsp;<a href="javascript:;" class="webMnu" onclick="check_for_new_mail('{$MAILBOX}');" >{$MOD.LBL_CHK_MAIL}</a>
 							</td>
 							<td width="10%">
-								<img src="themes/images/compose.gif" align="absmiddle" />
+								<img src="themes/{$THEME}/images/compose.gif" align="absmiddle" />
 								&nbsp;<a href="javascript:;" onclick="OpenComposer('','create');" class="webMnu">{$MOD.LBL_COMPOSE}</a>
 							</td>
 							<td width="20%" nowrap>
-								<img src="themes/images/webmail_settings.gif" align="absmiddle" />
+								<img src="themes/{$THEME}/images/webmail_settings.gif" align="absmiddle" />
 								&nbsp;<a href="index.php?module=Users&action=AddMailAccount&record={$USERID}&return_module=Webmails&return_action=index" class="webMnu">{$MOD.LBL_SETTINGS}</a>
 							</td>
 							<td width="30%">
@@ -60,7 +60,7 @@
 							</tr>
 							<tr>
 							<td>
-								<img src="themes/images/mymail.gif" align="absmiddle" />&nbsp;<span style="cursor:pointer;"><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">{$MOD.ADD_FOLDER}</span></span>
+								<img src="themes/{$THEME}/images/mymail.gif" align="absmiddle" />&nbsp;<span ><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">{$MOD.ADD_FOLDER}</span></span>
 								<div id="box_list">
 								<ul style="list-style-type:none;">
 
@@ -71,26 +71,26 @@
 							{/foreach}
 							</ul></div> <br />
 
-						<img src="themes/images/sentmail.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
+						<img src="themes/{$THEME}/images/sentmail.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
 						<ul style="list-style-type:none;">
 							<li >
-								<img src="themes/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="themes/{$THEME}/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView&parenttab=My Home Page&folderid=1&parenttab=My Home Page" class="small">{$MOD.LBL_ALLMAILS}</a>&nbsp;<b></b>
 							</li>
 							<li >
-								<img src="themes/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="themes/{$THEME}/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView&folderid=2&parenttab=My Home Page" class="small">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;<b></b>
 							</li>
 							<li >
-								<img src="themes/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="themes/{$THEME}/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView&folderid=3&parenttab=My Home Page" class="small">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;
 							</li>	
 							<li >
-								<img src="themes/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="themes/{$THEME}/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView&folderid=4&parenttab=My Home Page" class="small">{$MOD.LBL_TO_LEADS}</a>&nbsp;
 							</li>
 							<li >
-								<img src="themes/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="themes/{$THEME}/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView&folderid=5&parenttab=My Home Page" class="small">{$MOD.LBL_TO_USERS}</a>&nbsp;
 							</li>
 						</ul><br />
@@ -107,7 +107,7 @@
 						</table>
 						</td>	
 						<td width="1%">&nbsp;</td>
-					        <td rowspan=3>
+					        <td rowspan=3 valign="top">
 						 <table border=0 width="100%" cellspacing=0 cellspacing=0 class="MatrixLayer1">
 					 	 <tr>
 							<td width="79%" class="big mailSubHeader"><div id="nav"><span style="float:left">{$ACCOUNT} &gt; {$MAILBOX} {if $NUM_EMAILS neq 0}

@@ -28,6 +28,9 @@ require_once('include/database/PearDatabase.php');
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new PurchaseOrder();
+//added to fix 4600
+$search=$_REQUEST['search_url'];
+
 global $current_user;
 setObjectValuesFromRequest($focus);
 
@@ -57,6 +60,7 @@ else $return_module = "PurchaseOrder";
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
 else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
+if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
 
 $local_log->debug("Saved record with id of ".$return_id);
 
@@ -64,5 +68,5 @@ $local_log->debug("Saved record with id of ".$return_id);
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname");
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab&viewname=$return_viewname&start=".$_REQUEST['pagenumber'].$search);
 ?>

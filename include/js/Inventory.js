@@ -83,7 +83,8 @@ function productPickList(currObj,module, row_no) {
 function priceBookPickList(currObj, row_no) {
 	var trObj=currObj.parentNode.parentNode
 	var rowId=row_no;//parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
-	window.open("index.php?module=PriceBooks&action=Popup&html=Popup_picker&form=EditView&popuptype=inventory_pb&fldname=listPrice"+rowId+"&productid="+getObj("hdnProductId"+rowId).value,"priceBookWin","width=640,height=565,resizable=0,scrollbars=0,top=150,left=200");
+	var productId=getObj("hdnProductId"+rowId).value || -1;
+	window.open("index.php?module=PriceBooks&action=Popup&html=Popup_picker&form=EditView&popuptype=inventory_pb&fldname=listPrice"+rowId+"&productid="+productId,"priceBookWin","width=640,height=565,resizable=0,scrollbars=0,top=150,left=200");
 }
 
 
@@ -259,7 +260,7 @@ function validateInventory(module)
 		if (!emptyCheck("productName"+i,"Product","text")) return false
 		if (!emptyCheck("qty"+i,"Qty","text")) return false
 		if (!numValidate("qty"+i,"Qty","any")) return false
-		if (!numConstComp("qty"+i,"Qty","GE","1")) return false
+		if (!numConstComp("qty"+i,"Qty","G","0")) return false
 		if (!emptyCheck("listPrice"+i,"List Price","text")) return false
 		if (!numValidate("listPrice"+i,"List Price","any")) return false           
 	}
@@ -558,9 +559,15 @@ function fnAddProductRow(module,image_path){
 	}
 	
 	//Quantity
+	var temp='';
 	colfour.className = "crmTableRow small"
-	colfour.innerHTML='<input id="qty'+count+'" name="qty'+count+'" type="text" class="small " style="width:50px" onfocus="this.className=\'detailedViewTextBoxOn\'" onBlur="settotalnoofrows(); calcTotal(); loadTaxes_Ajax('+count+');" onChange="setDiscount(this,'+count+')" value=""/>';
-	
+	temp='<input id="qty'+count+'" name="qty'+count+'" type="text" class="small " style="width:50px" onfocus="this.className=\'detailedViewTextBoxOn\'" onBlur="settotalnoofrows(); calcTotal(); loadTaxes_Ajax('+count+');';
+	if(module == "Invoice")
+        {
+		temp+='stock_alert('+count+');';
+	}
+        temp+='" onChange="setDiscount(this,'+count+')" value=""/><br><span id="stock_alert'+count+'"></span>';
+	colfour.innerHTML=temp;
 	//List Price with Discount, Total after Discount and Tax labels
 	colfive.className = "crmTableRow small"
 	colfive.innerHTML='<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="right"><input id="listPrice'+count+'" name="listPrice'+count+'" value="0.00" type="text" class="small " style="width:70px" onBlur="calcTotal();setDiscount(this,'+count+');callTaxCalc('+count+'); calcTotal();"/>&nbsp;<img src="'+image_path+'pricebook.gif" onclick="priceBookPickList(this,'+count+')"></td></tr><tr><td align="right" style="padding:5px;" nowrap>		(-)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(this,\'discount_div'+count+'\',\'discount\','+count+')" >'+product_labelarr.DISCOUNT+'</a> : </b><div class=\"discountUI\" id=\"discount_div'+count+'"><input type="hidden" id="discount_type'+count+'" name="discount_type'+count+'" value=""><table width="100%" border="0" cellpadding="5" cellspacing="0" class="small"><tr><td id="discount_div_title'+count+'" nowrap align="left" ></td><td align="right"><img src="'+image_path+'close.gif" border="0" onClick="fnHidePopDiv(\'discount_div'+count+'\')" style="cursor:pointer;"></td></tr><tr><td align="left" class="lineOnTop"><input type="radio" name="discount'+count+'" checked onclick="setDiscount(this,'+count+'); callTaxCalc('+count+');calcTotal();">&nbsp; '+product_labelarr.ZERO_DISCOUNT+'</td><td class="lineOnTop">&nbsp;</td></tr><tr><td align="left"><input type="radio" name="discount'+count+'" onclick="setDiscount(this,'+count+'); callTaxCalc('+count+');calcTotal();">&nbsp; % '+product_labelarr.PERCENT_OF_PRICE+' </td><td align="right"><input type="text" class="small" size="2" id="discount_percentage'+count+'" name="discount_percentage'+count+'" value="0" style="visibility:hidden" onBlur="setDiscount(this,'+count+'); callTaxCalc('+count+');calcTotal();">&nbsp;%</td></tr><tr><td align="left" nowrap><input type="radio" name="discount'+count+'" onclick="setDiscount(this,'+count+'); callTaxCalc('+count+');calcTotal();">&nbsp; '+product_labelarr.DIRECT_PRICE_REDUCTION+'</td><td align="right"><input type="text" id="discount_amount'+count+'" name="discount_amount'+count+'" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,'+count+'); callTaxCalc('+count+');calcTotal();"></td></tr></table></div></td></tr><tr> <td align="right" style="padding:5px;" nowrap><b>'+product_labelarr.TOTAL_AFTER_DISCOUNT+' :</b></td></tr><tr id="individual_tax_row'+count+'" class="TaxShow"><td align="right" style="padding:5px;" nowrap>(+)&nbsp;<b><a href="javascript:doNothing();" onClick="displayCoords(this,\'tax_div'+count+'\',\'tax\','+count+')" >'+product_labelarr.TAX+' </a> : </b><div class="discountUI" id="tax_div'+count+'"></div></td></tr></table> ';
@@ -784,3 +791,17 @@ function validateProductDiscounts()
 	return true;
 }
 
+function stock_alert(curr_row)
+{
+        var stock=getObj("qtyInStock"+curr_row).innerHTML;
+        var qty=getObj("qty"+curr_row).value;
+        if (!isNaN(qty))
+        {
+                if(eval(qty) > eval(stock))
+                getObj("stock_alert"+curr_row).innerHTML='<font color="red" size="1">'+alert_arr.STOCK_IS_NOT_ENOUGH+'</font>';
+                else
+                        getObj("stock_alert"+curr_row).innerHTML='';
+        }
+        else
+     getObj("stock_alert"+curr_row).innerHTML='<font color="red" size="1">'+alert_arr.INVALID_QTY+'</font>';
+}

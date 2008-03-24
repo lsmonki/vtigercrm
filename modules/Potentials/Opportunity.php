@@ -156,13 +156,13 @@ class Potential extends CRMEntity {
 		else
 		{
 			$query = 'SELECT potentialid, potentialname, smcreatorid, closingdate FROM vtiger_potential inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid ';
-			$where_auto = 'AND vtiger_crmentity.deleted=0';
+			$where_auto = ' AND vtiger_crmentity.deleted=0';
 		}
 
 		if($where != "")
-			$query .= "where $where ".$where_auto;
+			$query .= " where $where ".$where_auto;
 		else
-			$query .= "where ".$where_auto;
+			$query .= " where ".$where_auto;
 
 		if($order_by != "")
 			$query .= " ORDER BY vtiger_potential.$order_by";
@@ -334,8 +334,8 @@ class Potential extends CRMEntity {
 		global $mod_strings;
 		global $app_strings;
 
-		$query = 'select vtiger_potstagehistory.*, vtiger_potential.potentialname from vtiger_potstagehistory inner join vtiger_potential on vtiger_potential.potentialid = vtiger_potstagehistory.potentialid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_potential.potentialid where vtiger_crmentity.deleted = 0 and vtiger_potential.potentialid = '.$id;
-		$result=$adb->query($query);
+		$query = 'select vtiger_potstagehistory.*, vtiger_potential.potentialname from vtiger_potstagehistory inner join vtiger_potential on vtiger_potential.potentialid = vtiger_potstagehistory.potentialid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_potential.potentialid where vtiger_crmentity.deleted = 0 and vtiger_potential.potentialid = ?';
+		$result=$adb->pquery($query, array($id));
 		$noofrows = $adb->num_rows($result);
 
 		$header[] = $app_strings['LBL_AMOUNT'];
@@ -384,7 +384,8 @@ class Potential extends CRMEntity {
 				inner join vtiger_users on vtiger_crmentity.smcreatorid= vtiger_users.id
 				where (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task')
 				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred' or (vtiger_activity.eventstatus = 'Held' and vtiger_activity.eventstatus != ''))
-				and vtiger_seactivityrel.crmid=".$id;
+				and vtiger_seactivityrel.crmid=".$id."
+                                and vtiger_crmentity.deleted = 0";
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
 		$log->debug("Exiting get_history method ...");

@@ -32,13 +32,13 @@ if($_REQUEST['destination_module']=='Products')
 		foreach($storearray as $id)
 		{
 			if($id != '')
-				$adb->query("update vtiger_products set vendor_id=".$record." where productid=".$id);
+				$adb->pquery("update vtiger_products set vendor_id=? where productid=?", array($record ,$id));
 		}
 	}
 	elseif($_REQUEST['parid'] != '' && $_REQUEST['entityid'] != '')
 	{
-		$sql = "update vtiger_products set vendor_id=".$_REQUEST['parid']." where productid=".$_REQUEST['entityid'];
-		$adb->query($sql);
+		$sql = "update vtiger_products set vendor_id=? where productid=?";
+		$adb->pquery($sql, array($_REQUEST['parid'], $_REQUEST['entityid']));
 		$record = $_REQUEST['parid'];
 	}
 }
@@ -56,8 +56,8 @@ if($_REQUEST['destination_module']=='Contacts')
 		{
 			if($id != '')
 			{
-				$sql = "insert into vtiger_vendorcontactrel values (".$record.",".$id.")";
-				$adb->query($sql);
+				$sql = "insert into vtiger_vendorcontactrel values (?,?)";
+				$adb->pquery($sql, array($record, $id));
 			}
 		}
 	}
@@ -65,8 +65,8 @@ if($_REQUEST['destination_module']=='Contacts')
 	{
 		$record = $_REQUEST["parid"];
 
-		$sql = "insert into vtiger_vendorcontactrel values (".$record.",".$_REQUEST['entityid'].")";
-		$adb->query($sql);
+		$sql = "insert into vtiger_vendorcontactrel values (?,?)";
+		$adb->pquery($sql, array($record, $_REQUEST['entityid']));
 	}
 }
 

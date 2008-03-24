@@ -16,6 +16,8 @@
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/3confirmConfig.php,v 1.14 2005/04/25 09:41:26 samk Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
+require_once('include/logging.php');
+$log =& LoggerManager::getLogger('PLATFORM');
 
 if (isset($_REQUEST['db_hostname'])) $db_hostname= $_REQUEST['db_hostname'];
 if (isset($_REQUEST['db_username'])) $db_username= $_REQUEST['db_username'];
@@ -25,6 +27,8 @@ if (isset($_REQUEST['db_drop_tables'])) $db_drop_tables = $_REQUEST['db_drop_tab
 if (isset($_REQUEST['site_URL'])) $site_URL= $_REQUEST['site_URL'];
 if (isset($_REQUEST['admin_email'])) $admin_email= $_REQUEST['admin_email'];
 if (isset($_REQUEST['admin_password'])) $admin_password = $_REQUEST['admin_password'];
+if (isset($_REQUEST['standarduser_email'])) $standarduser_email= $_REQUEST['standarduser_email'];
+if (isset($_REQUEST['standarduser_password'])) $standarduser_password = $_REQUEST['standarduser_password'];
 if (isset($_REQUEST['currency_name'])) $currency_name = $_REQUEST['currency_name'];
 if (isset($_REQUEST['currency_symbol'])) $currency_symbol = $_REQUEST['currency_symbol'];
 if (isset($_REQUEST['currency_code'])) $currency_code = $_REQUEST['currency_code'];
@@ -40,17 +44,20 @@ if (isset($_REQUEST['db_type'])) $db_type = $_REQUEST['db_type'];
 if (isset($_REQUEST['check_createdb'])) $check_createdb = $_REQUEST['check_createdb'];
 if (isset($_REQUEST['root_user'])) $root_user = $_REQUEST['root_user'];
 if (isset($_REQUEST['root_password'])) $root_password = $_REQUEST['root_password'];
+if (isset($_REQUEST['create_utf8_db'])) $create_utf8_db = 'true';
 
 $db_type_status = false; // is there a db type?
 $db_server_status = false; // does the db server connection exist?
 $db_creation_failed = false; // did we try to create a database and fail?
 $db_exist_status = false; // does the database exist?
+$db_utf8_support = false; // does the database support utf8?
+$vt_charset = ''; // set it based on the database charset support
 $next = false; // allow installation to continue
 
 //Checking for database connection parameters
 if($db_type)
 {
-	include('adodb/adodb.inc.php');
+	include_once('adodb/adodb.inc.php');
 	$conn = &NewADOConnection($db_type);
 	$db_type_status = true;
 	if(@$conn->Connect($db_hostname,$db_username,$db_password))
@@ -82,6 +89,11 @@ if($db_type)
 			$createdb_conn = &NewADOConnection($db_type);
 			if(@$createdb_conn->Connect($db_hostname, $root_user, $root_password)) {
 				$query = "create database ".$db_name;
+				// TODO: MySQL version less than 4.1.2 does not suppot UTF-8, a check here is required for it.
+				if($create_utf8_db == 'true') { 
+					$query .= " default character set utf8 default collate utf8_general_ci"; 
+					$db_utf8_support = true;
+				}
 				if($createdb_conn->Execute($query)) {
 					$db_creation_failed = false;
 				}
@@ -93,9 +105,35 @@ if($db_type)
 		if(@$conn->Connect($db_hostname, $db_username, $db_password, $db_name))
 		{
 			$db_exist_status = true;
+			if(!$db_utf8_support) {
+				// Check if the database that we are going to use supports UTF-8
+				$db_utf8_support = check_db_utf8_support($conn);
+			}
 		}
 		$conn->Close();
 	}
+}
+
+// Update vtiger charset to use
+$vt_charset = ($db_utf8_support)? "UTF-8" : "ISO-8859-1";
+
+// Check if the database suggested to be used has UTF-8 support
+// Prasad, 05 Dec 2007
+function check_db_utf8_support($conn) {
+	$dbvarRS = &$conn->Execute("show variables like '%_database' ");
+	$db_character_set = null;
+   	$db_collation_type = null;
+	while(!$dbvarRS->EOF) {
+		$arr = $dbvarRS->FetchRow();
+		$arr = array_change_key_case($arr);
+		switch($arr['variable_name']) {
+			case 'character_set_database' : $db_character_set = $arr['value']; break;
+			case 'collation_database'     : $db_collation_type = $arr['value']; break;
+		}
+		// If we have all the required information break the loop.
+		if($db_character_set != null && $db_collation_type != null) break;
+	}
+	return (stristr($db_character_set, 'utf8') && stristr($db_collation_type, 'utf8'));
 }
 
 $error_msg = '';
@@ -105,7 +143,7 @@ if(!$db_type_status || !$db_server_status)
 {
 	$error_msg = 'Unable to connect to database Server. Invalid mySQL Connection Parameters specified';
 	$error_msg_info = 'This may be due to the following reasons:<br>
-			-  specified database user, password, hostname, database type, or port is invalid.<BR>
+			-  specified database user, password, hostname, database type, or port is invalid. <a href="http://www.vtiger.com/products/crm/help/5.0.4/vtiger_CRM_Database_Hostname.pdf" target="_blank">More Information</a><BR>
 			-  specified database user does not have access to connect to the database server from the host';
 }
 elseif($db_type == 'mysql' && $mysql_server_version < '4.1')
@@ -126,12 +164,40 @@ else
 	$next = true;
 }
 
+// Write the necessary information to platform.log
+
+require_once('include/logging.php');
+$log =& LoggerManager::getLogger('PLATFORM');
+
+$info_style_start = '<div class="center"><table border="0" cellpadding="3" width="600"><tr class="h"><td><h1 class="p">';
+$info_style_end = '</h1></td></tr></table></div>';
+require_once('vtigerversion.php');
+
+// Log Vtiger Version
+if($patch_version !='')
+{
+	$log->info($info_style_start . "Vtiger Version: " . $vtiger_current_version . " Patch " . $patch_version . $info_style_end);
+}
+else
+{
+	$log->info($info_style_start . "Vtiger Version: " . $vtiger_current_version . $info_style_end);
+}
+// Log Mysql Server Version
+$log->info($info_style_start . "Mysql Server Version: " . $mysql_server_version . $info_style_end);
+
+ob_start();
+phpinfo();
+$php_info = ob_get_contents();
+ob_end_clean();
+// Log php_info
+$log->info($php_info);
+
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>vtiger CRM 5 - Configuration Wizard - Confirm Settings</title>
 	<link href="include/install/install.css" rel="stylesheet" type="text/css">
 </head>
@@ -211,6 +277,10 @@ else
 						<td noWrap bgcolor="#F5F5F5" width="40%">Database Name</td>
 						<td align="left" nowrap> <font class="dataInput"><?php if (isset($db_name)) echo "$db_name"; ?></font></td>
 					</tr>
+					<tr bgcolor="White">
+						<td noWrap bgcolor="#F5F5F5" width="40%">Database UTF-8 Support</td>
+						<td align="left" nowrap> <font class="dataInput"><?php echo ($db_utf8_support)? "Enabled" : "<strong style='color:#DF0000';>Not Enabled</strong>" ?></font>&nbsp;<a href="http://www.vtiger.com/products/crm/help/5.0.4/vtiger_CRM_Database_UTF8Config.pdf" target="_blank">More Information</a></td>
+					</tr>
 					</table>
 					<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
 					<tr>
@@ -227,6 +297,10 @@ else
 					<tr bgcolor="White">
 						<td bgcolor="#F5F5F5" width="40%">Cache Path</td>
 						<td align="left"> <font class="dataInput"><?php if (isset($cache_dir)) echo $root_directory.''.$cache_dir; ?></font></td>
+					</tr>
+					<tr bgcolor="White">
+						<td bgcolor="#F5F5F5" width="40%">Default Charset</td>
+						<td align="left"> <font class="dataInput"><?php if (isset($vt_charset)) echo $vt_charset; ?></font></td>
 					</tr>
 					</table>	
 					<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
@@ -246,6 +320,24 @@ else
 						<td align="left"> <font class="dataInput"><?php if (isset($admin_email)) echo $admin_email; ?></font></td>
 					</tr>
 					</table>
+					<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
+					<tr>
+						<td colspan=2 ><strong>Standarduser Configuration</strong></td>
+					</tr>
+					<tr bgcolor="White">
+						<td bgcolor="#F5F5F5" width="40%">Username</td>
+						<td align="left"> <font class="dataInput">standarduser</font></td>
+					</tr>
+					<tr bgcolor="White">
+						<td bgcolor="#F5F5F5" width="40%">Password</td>
+						<td align="left"> <font class="dataInput"><?php if (isset($standarduser_password)) echo ereg_replace('.', '*', $standarduser_password); ?></font></td>
+					</tr>
+					<tr bgcolor="White">
+						<td bgcolor="#F5F5F5" width="40%">Email</td>
+						<td align="left"> <font class="dataInput"><?php if (isset($standarduser_email)) echo $standarduser_email; ?></font></td>
+					</tr>
+					</table>
+
 					<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
 					<tr>
 						<td colspan=2 ><strong>Currency Configuration</strong></td>
@@ -281,6 +373,8 @@ else
 						<input type="hidden" class="dataInput" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" />
 						<input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
 						<input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
+						<input type="hidden" class="dataInput" name="standarduser_email" value="<?php if (isset($standarduser_email)) echo "$standarduser_email"; ?>" />
+                        <input type="hidden" class="dataInput" name="standarduser_password" value="<?php if (isset($standarduser_password)) echo "$standarduser_password"; ?>" />
 						<input type="hidden" class="dataInput" name="currency_name" value="<?php if (isset($currency_name)) echo "$currency_name"; ?>" />
 						<input type="hidden" class="dataInput" name="currency_symbol" value="<?php if (isset($currency_symbol)) echo "$currency_symbol"; ?>" />
 						<input type="hidden" class="dataInput" name="currency_code" value="<?php if (isset($currency_code)) echo "$currency_code"; ?>" />
@@ -294,6 +388,8 @@ else
 						<input type="hidden" class="dataInput" name="check_createdb" value="<?php if (isset($check_createdb)) echo "$check_createdb"; ?>" />
 						<input type="hidden" class="dataInput" name="root_user" value="<?php if (isset($root_user)) echo "$root_user"; ?>" />
 						<input type="hidden" class="dataInput" name="root_password" value="<?php if (isset($root_password)) echo "$root_password"; ?>" />
+						<input type="hidden" class="dataInput" name="create_utf8_db" value="<?php if (isset($create_utf8_db)) echo "$create_utf8_db"; ?>" />
+						<input type="hidden" class="dataInput" name="vt_charset" value="<?php if (isset($vt_charset)) echo "$vt_charset"; ?>" />
 						<input type="image" name="Change" value="Change" title="Change" src="include/install/images/cwBtnChange.gif"/>
 					</form>
 					</td>
@@ -318,6 +414,8 @@ else
 						<input type="hidden" class="dataInput" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" />
 						<input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
 						<input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
+						<input type="hidden" class="dataInput" name="standarduser_email" value="<?php if (isset($standarduser_email)) echo "$standarduser_email"; ?>" />
+                        <input type="hidden" class="dataInput" name="standarduser_password" value="<?php if (isset($standarduser_password)) echo "$standarduser_password"; ?>" />
 						<input type="hidden" class="dataInput" name="currency_name" value="<?php if (isset($currency_name)) echo "$currency_name"; ?>" />
 						<input type="hidden" class="dataInput" name="currency_code" value="<?php if (isset($currency_code)) echo "$currency_code"; ?>" />
 						<input type="hidden" class="dataInput" name="currency_symbol" value="<?php if (isset($currency_symbol)) echo "$currency_symbol"; ?>" />
@@ -331,6 +429,8 @@ else
 						<input type="hidden" class="dataInput" name="check_createdb" value="<?php if (isset($check_createdb)) echo "$check_createdb"; ?>" />
 						<input type="hidden" class="dataInput" name="root_user" value="<?php if (isset($root_user)) echo "$root_user"; ?>" />
 						<input type="hidden" class="dataInput" name="root_password" value="<?php if (isset($root_password)) echo "$root_password"; ?>" />
+						<input type="hidden" class="dataInput" name="create_utf8_db" value="<?php if (isset($create_utf8_db)) echo "$create_utf8_db"; ?>" />
+						<input type="hidden" class="dataInput" name="vt_charset" value="<?php if (isset($vt_charset)) echo "$vt_charset"; ?>" />
 						<input type="image" src="include/install/images/cwBtnNext.gif" name="next" title="Next" value="Create" onClick="window.location=('install.php')"/>
 					</form>
 					</td>

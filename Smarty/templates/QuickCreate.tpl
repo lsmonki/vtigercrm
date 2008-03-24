@@ -36,7 +36,7 @@
                 {assign var="fldname" value="$maindata[2][0]"}
                 {assign var="fldvalue" value="$maindata[3][0]"}
                 {assign var="secondvalue" value="$maindata[3][1]"}
-				{if $uitype eq 2}
+				{if $uitype eq 2 }
 				<td width=20% class="cellLabel" align=right><font color="red">*</font>{$fldlabel}</td>
 				<td width=30% align=left class="cellText"><input type="text" name="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
 				{elseif $uitype eq 11 || $uitype eq 1 || $uitype eq 13 || $uitype eq 7 || $uitype eq 9}
@@ -73,13 +73,7 @@
                                         {/if}
 					<select name="{$fldname}" {$typejsfn}>
 					{foreach item=arr from=$fldvalue}
-						{foreach key=sel_value item=value from=$arr}
-							{if $MOD.$sel_value neq ''}
-							<option value="{$sel_value}" {$value}>{$MOD.$sel_value}</option>
-							{else}
-							<option value="{$sel_value}" {$value}>{$sel_value}</option>
-							{/if}
-						{/foreach}
+						<option value="{$arr[1]}" {$arr[2]}>{$arr[0]}</option>
 					{/foreach}
 					</select>
 				</td>
@@ -322,8 +316,12 @@
 				<input name="product_name" readonly type="text" value="{$fldvalue}">&nbsp;<img tabindex="{$vt_tab}" src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=specific&fromlink=qcreate","test","width=640,height=565,resizable=0,scrollbars=0,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.product_id.value=''; this.form.product_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
 			</td>
 		
-							{elseif $uitype eq 55} 
+							{elseif $uitype eq 55 || $uitype eq 255} 
+								{if $uitype eq 55}	
                                                           <td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
+								{elseif $uitype eq 255}	
+                                                          <td width="20%" class="cellLabel" align=right><font color ="red">*</font>{$fldlabel}</td>
+								{/if}
 							  <td width="30%" align=left class="cellText">
 							<input type="text" name="{$fldname}"  class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" value= "{$secondvalue}">
                                                  </td>
@@ -340,7 +338,8 @@
 						{if $MODULE eq 'Products'}
 							<input name="imagelist" type="hidden" value="">
 						    <div id="files_list" style="border: 1px solid grey; width: 500px; padding: 5px; background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: x-small">{$APP.Files_Maximum_6}
-						    <input id="my_file_element" type="file" name="file_1" >
+						    <input id="my_file_element" type="file" name="file_1"  onchange="validateFilename(this);" />
+						    <input type="hidden" name="file_1_hidden" value="" />
                             </div>
                             <script>
                             {*<!-- Create an instance of the multiSelector class, pass it the output target and the max number of files -->*}
@@ -350,12 +349,17 @@
                             </script>
 	                     </td>
                          {else}
-                         <input name="{$fldname}"  type="file" value="{$secondvalue}"/><input type="hidden" name="id" value=""/>{$fldvalue}</td>
+                         <input name="{$fldname}"  type="file" value="{$secondvalue}" onchange="validateFilename(this);"/>
+			 <input type="hidden" name="{$fldname}_hidden" value="{$secondvalue}" />
+			 <input type="hidden" name="id" value=""/>{$fldvalue}</td>
                          {/if}
 				
                          {elseif $uitype eq 61}
                          <td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
-						 <td colspan="3" width="30%" align=left class="cellText"><input name="{$fldname}"  type="file" value="{$secondvalue}"/><input type="hidden" name="id" value=""/>{$fldvalue}</td>
+						 <td colspan="3" width="30%" align=left class="cellText">
+						 <input name="{$fldname}"  type="file" value="{$secondvalue}" onchange="validateFilename(this);"/>
+						 <input name="{$fldname}_hidden"  type="hidden" value="{$secondvalue}"/>
+						 <input type="hidden" name="id" value=""/>{$fldvalue}</td>
 						{elseif $uitype eq 30}
                                                 <td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
                                                 <td colspan="3" width="30%" align=left class="cellText">
@@ -415,9 +419,9 @@
 </table>
 {if $QCMODULE eq 'Event'}
 <SCRIPT id="qcvalidate">
-        var qcfieldname = new Array('subject','date_start','time_start','eventstatus','activitytype','due_date','time_end');
-        var qcfieldlabel = new Array('Subject','Start Date & Time','Start Date & Time','Activity Type','End Date & Time','End Date & Time');
-        var qcfielddatatype = new Array('V~M','DT~M~time_start','T~O','V~O','V~O','D~M~OTH~GE~date_start~Start Date & Time','T~M');
+        var qcfieldname = new Array('subject','date_start','time_start','eventstatus','activitytype','due_date','time_end','due_date','time_end');
+        var qcfieldlabel = new Array('Subject','Start Date & Time','Start Date & Time','Status','Activity Type','End Date & Time','End Date & Time','End Date & Time','End Date & Time');
+        var qcfielddatatype = new Array('V~M','DT~M~time_start','T~O','V~O','V~O','D~M~OTH~GE~date_start~Start Date & Time','T~M','DT~M~time_end','T~O~OTH~GE~time_start~Start Date & Time');
 </SCRIPT>
 {elseif $QCMODULE eq 'Todo'}
 <SCRIPT id="qcvalidate">

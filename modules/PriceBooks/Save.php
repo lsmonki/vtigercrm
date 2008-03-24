@@ -27,6 +27,9 @@ require_once('include/database/PearDatabase.php');
 
 $focus = new PriceBooks();
 
+//added to fix 4600
+$search=$_REQUEST['search_url'];
+
 setObjectValuesFromRequest($focus);
 
 $focus->save("PriceBooks");
@@ -39,6 +42,5 @@ if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $retur
 else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
 
-header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id");
-
+header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&start=".$_REQUEST['pagenumber'].$search);
 ?>

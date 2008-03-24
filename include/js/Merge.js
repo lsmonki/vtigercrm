@@ -40,6 +40,6 @@ function massMerge(module)
 		return false;
 	}
         
-	
+	document.massdelete.action.value = 'Merge';
 	document.getElementById('massdelete').action="index.php?module="+module+"&action=Merge&return_module="+module+"&return_action=index";
 }
