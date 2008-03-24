@@ -26,6 +26,26 @@ require_once('include/logging.php');
 //require_once('database/DatabaseConnection.php');
 require_once('include/database/PearDatabase.php');
 
+if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
+{
+	//started
+	$value = $_REQUEST['accountname'];
+	$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname ='".$value."' and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
+	$result = $adb->query($query);
+        if($adb->num_rows($result) > 0)
+	{
+		echo 'Account Name Already Exists!';
+	}
+	else
+	{
+		echo 'SUCCESS';
+	}
+	die;
+}
+//Ended
+
+
+
 $local_log =& LoggerManager::getLogger('index');
 global $log;
 $focus = new Accounts();
@@ -51,9 +71,7 @@ foreach($focus->column_fields as $fieldname => $val)
 	if(isset($_REQUEST[$fieldname]))
 	{
 		$value = $_REQUEST[$fieldname];
-		//echo '<BR>';
-		//echo $fieldname."         ".$value;
-		//echo '<BR>';
+		$log->DEBUG($fieldname."=Field Name &first& Value =".$value);
 		$focus->column_fields[$fieldname] = $value;
 	}
 	if(isset($_REQUEST['annual_revenue']))
@@ -76,6 +94,14 @@ foreach($focus->column_fields as $fieldname => $val)
 		
 	}
 }*/
+
+//When changing the Account Address Information  it should also change the related contact address - dina
+if($focus->mode == 'edit' && $_REQUEST['address_change'] == 'yes')
+{
+                $query = "update vtiger_contactaddress set mailingcity='".$focus->column_fields['bill_city']."',mailingstreet='".$focus->column_fields['bill_street']."',mailingcountry='".$focus->column_fields['bill_country']."',mailingzip='".$focus->column_fields['bill_code']."',mailingpobox='".$focus->column_fields['bill_pobox']."',mailingstate='".$focus->column_fields['bill_state']."',othercountry='".$focus->column_fields['ship_country']."',othercity='".$focus->column_fields['ship_city']."',otherstate='".$focus->column_fields['ship_state']."',otherzip='".$focus->column_fields['ship_code']."',otherstreet='".$focus->column_fields['ship_street']."',otherpobox='".$focus->column_fields['ship_pobox']."'  where contactaddressid in (select contactid from vtiger_contactdetails where accountid=".$focus->id.")" ;
+                $adb->query($query);
+}
+//Changing account address - Ends
 
 //$focus->saveentity("Accounts");
 $focus->save("Accounts");
@@ -100,7 +126,7 @@ if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewnam
 
 //Send notification mail to the assigned to owner about the vtiger_account creation
 if($focus->column_fields['notify_owner'] == 1 || $focus->column_fields['notify_owner'] == 'on')
-	$status = sendNotificationToOwner('Accounts',&$focus);
+	$status = sendNotificationToOwner('Accounts',$focus);
 
 header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname");
 

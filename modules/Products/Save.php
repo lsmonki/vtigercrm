@@ -24,7 +24,7 @@
 require_once('modules/Products/Products.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
-global $log,$current_user;
+global $log,$current_user,$mod_strings;
 $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);
 $rate = $rate_symbol['rate'];
@@ -139,14 +139,14 @@ if($image_error=="false")
 			$handler_name = getUserName($handler);
 			$sender_name = getUserName($current_user->id);
 			$to_address= getUserEmail($handler);
-			$subject =  $productname.' Stock Level is Low';
-			$body = 'Dear '.$handler_name.',
+			$subject =  $productname.' '.$mod_strings['MSG_STOCK_LEVEL'];
+			$body = $mod_strings['MSG_DEAR'].' '.$handler_name.',<br><br>'.
 
-					The current stock of '.$productname.' in our warehouse is '.$qty_stk.'. Kindly procure required number of units as the stock level is below reorder level '.$reord.'.
+					$mod_strings['MSG_CURRENT_STOCK'].' '.$productname.' '.$mod_strings['MSG_IN_OUR_WAREHOUSE'].' '.$qty_stk.'. '.$mod_strings['MSG_PROCURE_REQUIRED_NUMBER'].' '.$reord.'.<br> '.
 
-					Severity: Major 
-				Thanks,
-				'.$sender_name; 
+					$mod_strings['MSG_SEVERITY'].'<br><br> '.
+				$mod_strings['MSG_THANKS'].'<br> '.
+				$sender_name;
 
 			include("modules/Emails/mail.php");
 			$mail_status = send_mail("Products",$to_address,$current_user->user_name,$current_user->email1,$subject,$body);

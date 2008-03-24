@@ -22,16 +22,16 @@ if(isset($_REQUEST['flag']) && $_REQUEST['flag'] != '')
 	switch($flag)
 	{
 		case 1:
-			$smarty->assign("ERRORFLAG","<font color='red'><B> Logo has to be an Image of type jpeg/png</B></font>");
+			$smarty->assign("ERRORFLAG","<font color='red'><B>".$mod_strings['LOGO_ERROR']."</B></font>");;
 			break;
 		case 2:
-			$smarty->assign("ERRORFLAG","<font color='red'><B>Error Message<ul><li><font color='red'>Invalid file OR</font><li><font color='red'>File has no data</font></ul></B></font>");
+			$smarty->assign("ERRORFLAG","<font color='red'><B>".$mod_strings['Error_Message']."<ul><li><font color='red'>".$mod_strings['Invalid_file']."</font><li><font color='red'>".$mod_strings['File_has_no_data']."</font></ul></B></font>");
 			break;
 		case 3:
-			$smarty->assign("ERRORFLAG","<B><font color='red'>Sorry, the uploaded file exceeds the maximum vtiger_filesize limit. Please try a file smaller than 800000 bytes</font></B>");
+			$smarty->assign("ERRORFLAG","<B><font color='red'>".$mod_strings['Sorry'].",".$mod_strings['uploaded_file_exceeds_maximum_limit'].".".$mod_strings['try_file_smaller']."</font></B>");
 			break;
 		case 4:
-			$smarty->assign("ERRORFLAG","<b>Problems in file upload. Please try again! </b><br>");
+			$smarty->assign("ERRORFLAG","<b>".$mod_strings['Problems_in_upload'].". ".$mod_strings['Please_try_again']." </b><br>");
 			break;
 		default:
 			$smarty->assign("ERRORFLAG","");
@@ -46,7 +46,7 @@ require_once($theme_path.'layout_utils.php');
 
 $sql="select * from vtiger_organizationdetails";
 $result = $adb->query($sql);
-$organization_name = $adb->query_result($result,0,'organizationname');
+$organization_name = str_replace('"','&quot;',$adb->query_result($result,0,'organizationname'));
 $organization_address= $adb->query_result($result,0,'address');
 $organization_city = $adb->query_result($result,0,'city');
 $organization_state = $adb->query_result($result,0,'state');

@@ -21,12 +21,11 @@ require_once("modules/Emails/mail.php");
  require_once ($theme_path."layout_utils.php");
  $category = getParentTab();
  $userDetails=getOtherUserName($current_user->id,true);
- //echo '<pre>';print_r($userDetails);echo '</pre>';
  $to_email = getUserEmailId('id',$current_user->id);
  $date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
  $taskassignedto = getAssignedTo(9);
  $eventassignedto = getAssignedTo(16);
-$mysel= $_GET['view'];
+$mysel= $_REQUEST['view'];
 $calendar_arr = Array();
 $calendar_arr['IMAGE_PATH'] = $image_path;
 if(empty($mysel))
@@ -195,15 +194,18 @@ function getAssignedToHTML($assignedto,$toggletype)
 	<input type="hidden" name="mode" value="">
 	<input type="hidden" name="time_start" id="time_start">
 	<input type="hidden" name="time_end" id="time_end">
+	<input type="hidden" name="followup_time_start" id="followup_time_start">
+	<input type="hidden" name="followup_time_end" id="followup_time_end">
 	<input type="hidden" name="duration_hours" value="0">                                                                      <input type="hidden" name="duration_minutes" value="0">
 	<input type=hidden name="inviteesid" id="inviteesid" value="">
 	<input type="hidden" name="parenttab" value="<?php echo $category ?>">
 	<input type="hidden" name="viewOption" value="">
 	<input type="hidden" name="subtab" value="">
 	<input type="hidden" name="maintab" value="Calendar">
+	<input type="hidden" name="dateformat" value="<?php echo $date_format ?>">
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
 		<tr style="cursor:move;">
-			<td class="layerPopupHeading" id="moveEvent"><?php echo $mod_strings['LBL_ADD_EVENT']?></b></td>
+			<td class="layerPopupHeading" align = "left" id="moveEvent"><?php echo $mod_strings['LBL_ADD_EVENT']?></b></td>
 				<td align=right><a href="javascript:ghide('addEvent');"><img src="<?php echo $image_path ?>close.gif" border="0"  align="absmiddle" /></a></td>
 		</tr>
 		</table>
@@ -217,14 +219,14 @@ function getAssignedToHTML($assignedto,$toggletype)
 			<td width=80% align="left">
 				<table>
 					<tr>
-					<td><input type="radio" name='activitytype' value='Call' style='vertical-align: middle;' checked></td><td><?php echo $mod_strings['LBL_CALL']?></td><td style="width:10px">
-					<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;'></td><td><?php echo $mod_strings['LBL_MEET']?></td><td style="width:20px">
+					<td><input type="radio" name='activitytype' value='Call' style='vertical-align: middle;' checked onClick="calDuedatetime('call');"></td><td><?php echo $mod_strings['LBL_CALL']?></td>
+					<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;' onClick="calDuedatetime('meeting');"></td><td><?php echo $mod_strings['LBL_MEET']?></td>
 					</tr>
 				</table>
 			</td>
 			</tr>
 			<tr>
-				<td nowrap align="right"><b><?php echo $mod_strings['LBL_EVENTNAME']?></b></td>
+				<td nowrap align="right"><b><font color="red">*</font><?php echo $mod_strings['LBL_EVENTNAME']?></b></td>
 				<td align="left"><input name="subject" type="text" class="textbox" value="" style="width:50%">&nbsp;&nbsp;&nbsp; 
 			<?php if(getFieldVisibilityPermission('Events',$current_user->id,'visibility') == '0') { ?>	
 			<input name="visibility" value="Public" type="checkbox"><?php echo $mod_strings['LBL_PUBLIC']; ?>
@@ -281,19 +283,19 @@ function getAssignedToHTML($assignedto,$toggletype)
 			</tr>		
 			</table>
 			<hr noshade size=1>
-			<table border=0 cellspacing=0 cellpadding=5 width=90% align=center bgcolor="#FFFFFF" align=center>
+			<table id="date_table" border=0 cellspacing=0 cellpadding=5 width=100% align=center bgcolor="#FFFFFF" align=center>
 			<tr>
 			<td >
 				<table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
 				<tr>
-				<td width=50% valign=top style="border-right:1px solid #dddddd">
-					<table border=0 cellspacing=0 cellpadding=2 width=90% align=center>
+				<td width=50% id="date_table_firsttd" valign=top style="border-right:1px solid #dddddd">
+					<table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
 					<tr><td colspan=3 align="left"><b><?php echo $mod_strings['LBL_EVENTSTAT']?></b></td></tr>
 				        <tr><td colspan=3 align="left">
 						<?php echo  getTimeCombo($calendar_arr['calendar']->hour_format,'start');?>
 					</td></tr>
                                         <tr><td align="left">
-					<input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=50% align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
+					<input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px" onChange="dochange('jscal_field_date_start','jscal_field_due_date');" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=100% align="left"><img border=0 src="<?php echo $image_path?>btnL3Calendar.gif" alt="<?php echo $mod_strings['LBL_SET_DATE']?>" title="<?php echo $mod_strings['LBL_SET_DATE']?>" id="jscal_trigger_date_start">
 						<script type="text/javascript">
                 					Calendar.setup ({
 								inputField : "jscal_field_date_start", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
@@ -302,14 +304,14 @@ function getAssignedToHTML($assignedto,$toggletype)
 					</td></tr>
 					</table>
 				</td>
-				<td width=50% valign=top >
-					<table border=0 cellspacing=0 cellpadding=2 width=90% align=center>
+				<td width=50% valign=top id="date_table_secondtd">
+					<table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
 					<tr><td colspan=3 align="left"><b><?php echo $mod_strings['LBL_EVENTEDAT']?></b></td></tr>
 				        <tr><td colspan=3 align="left">
                                                 <?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'end');?>
 					</td></tr>
 				        <tr><td align="left">
-					<input type="text" name="due_date" id="jscal_field_due_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=100% align="left"><img border=0 src="<?php echo $image_path?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date">
+					<input type="text" name="due_date" id="jscal_field_due_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=100% align="left"><img border=0 src="<?php echo $image_path?>btnL3Calendar.gif" alt="<?php echo $mod_strings['LBL_SET_DATE']?>" title="<?php echo $mod_strings['LBL_SET_DATE']?>" id="jscal_trigger_due_date">
 					<script type="text/javascript">
                                                         Calendar.setup ({
                                                                 inputField : "jscal_field_due_date", ifFormat : "<?php echo $date_format; ?>", showsTime : false, button : "jscal_trigger_due_date", singleClick : true, step : 1
@@ -318,11 +320,26 @@ function getAssignedToHTML($assignedto,$toggletype)
 					</td></tr>
 					</table>
 				</td>
+				<td width=34% valign=top style="display:none;border-left:1px solid #dddddd" id="date_table_thirdtd">
+					<table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
+					<tr><td colspan=3 align="left"><b><input type="checkbox" name="followup"><?php echo $mod_strings['LBL_HOLDFOLLOWUP']?></b></td></tr>
+					<tr><td colspan=3 align="left">
+					<?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'followup_start');?>
+					</td></tr>
+					<tr><td align="left">
+						<input type="text" name="followup_date" id="jscal_field_followup_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>"></td><td width=100% align="left"><img border=0 src="<?php echo $image_path?>btnL3Calendar.gif" alt="<?php echo $mod_strings['LBL_SET_DATE']?>" title="<?php echo $mod_strings['LBL_SET_DATE']?>" id="jscal_trigger_followup_date">
+						<script type="text/javascript">
+						Calendar.setup ({
+							inputField : "jscal_field_followup_date", ifFormat : "<?php echo $date_format; ?>", showsTime : false, button : "jscal_trigger_followup_date", singleClick : true, step : 1
+						})
+						</script>
+					</td></tr>
+					</table>
+				</td>
 				</tr>
 				</table></td>
 			</tr>
 			</table>
-
 
 			<!-- Alarm, Repeat, Invite starts-->
 			<br>
@@ -380,8 +397,8 @@ function getAssignedToHTML($assignedto,$toggletype)
 								
 							</td>
 							<td width=20% align=center valign=top>
-								<input type=button value="<?php echo $mod_strings['LBL_ADD_BUTTON'] ?> >>" class="crm button small save" style="width:100%" onClick="addColumn()"><br>
-								<input type=button value="<< <?php echo $mod_strings['LBL_RMV_BUTTON'] ?> " class="crm button small cancel" style="width:100%" onClick="delColumn()">
+								<input type=button value="<?php echo $mod_strings['LBL_ADD_BUTTON'] ?> >>" class="crm button small save" style="width:100%" onClick="incUser('availableusers','selectedusers')"><br>
+								<input type=button value="<< <?php echo $mod_strings['LBL_RMV_BUTTON'] ?> " class="crm button small cancel" style="width:100%" onClick="rmvUser('selectedusers')">
 							</td>
 							<td width=40% align=center valign=top>
 								<select name="selectedusers" id="selectedusers" class=small size=5 multiple style="height:70px;width:100%">
@@ -489,13 +506,17 @@ function getAssignedToHTML($assignedto,$toggletype)
 								<td>
 									<?php echo $mod_strings['LBL_REPEATEVENT']; ?>
 								</td>
-								<td><input type="text" name="repeat_frequency" class="textbox" style="width:20px" value="" ></td>
+								<td><select name="repeat_frequency">
+								<?php for($i=1;$i<=14;$i++) { ?>
+									<option value="<?php echo $i ?>"><?php echo $i ?></option>	
+								<?php } ?>	
+								</select></td>
 								<td>
-									<select name="recurringtype">
-										<option value="Daily" onClick="ghide('repeatWeekUI'); ghide('repeatMonthUI');"><?php echo $mod_strings['LBL_DAYS']; ?></option>
-										<option value="Weekly" onClick="gshow('repeatWeekUI'); ghide('repeatMonthUI');"><?php echo $mod_strings['LBL_WEEKS']; ?></option>
-										<option value="Monthly" onClick="ghide('repeatWeekUI'); gshow('repeatMonthUI');"><?php echo $mod_strings['LBL_MONTHS']; ?></option>
-										<option value="Yearly" onClick="ghide('repeatWeekUI'); ghide('repeatMonthUI');";><?php echo $mod_strings['LBL_YEAR']; ?></option>
+									<select name="recurringtype" onChange="rptoptDisp(this)">
+										<option value="Daily"><?php echo $mod_strings['LBL_DAYS']; ?></option>
+										<option value="Weekly"><?php echo $mod_strings['LBL_WEEKS']; ?></option>
+										<option value="Monthly"><?php echo $mod_strings['LBL_MONTHS']; ?></option>
+										<option value="Yearly"><?php echo $mod_strings['LBL_YEAR']; ?></option>
 									</select>
 								</td>
 								</tr>
@@ -573,7 +594,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 							<td><b><?php echo $mod_strings['LBL_RELATEDTO']?></b></td>
 							<td>
 								<input name="parent_id" value="" type="hidden">
-								<select name="parent_type" class="small" id="parent_type" onChange="document.EditView.parent_name.value='';">
+								<select name="parent_type" class="small" id="parent_type" onChange="document.EditView.parent_name.value='';document.EditView.parent_id.value=''">
 									<option value="Leads"><?php echo $app_strings['Leads']?></option>
 									<option value="Accounts"><?php echo $app_strings['Accounts']?></option>
 									<option value="Potentials"><?php echo $app_strings['Potentials']?></option>
@@ -592,8 +613,8 @@ function getAssignedToHTML($assignedto,$toggletype)
 						<td><b><?php echo $app_strings['Contacts'] ?></b></td>
 							<td colspan="2">
 								<input name="contactidlist" id="contactidlist" value="" type="hidden">
-								<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt"></textarea>&nbsp;
-								<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&return_module=Calendar&popuptype=detailview&select=enable&form=EditView&form_submit=false','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT_CONTACT'] ; ?>">
+								<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt" id='parentid'></textarea>&nbsp;
+								<input type="button" onclick="selectContact('true','general',document.EditView);" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT_CONTACT'] ; ?>">
 							</td>
 						</tr>
 					</table>
@@ -612,30 +633,40 @@ function getAssignedToHTML($assignedto,$toggletype)
 		<tr>
 			<td valign=top></td>
 			<td  align=center>
-				<input title='Save [Alt+S]' accessKey='S' type="submit" name="eventsave" class="crm button small save" style="width:90px" value="<?php echo $mod_strings['LBL_SAVE']?>">
-	<input type="button" class="crm button small cancel" style="width:90px" name="eventcancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="ghide('addEvent')">
+				<input alt="<?php echo $app_strings['LBL_SAVE_BUTTON_TITLE']; ?>" title="<?php echo $app_strings['LBL_SAVE_BUTTON_TITLE']; ?>" accessKey='S' type="submit" name="eventsave" class="crm button small save" style="width:90px" value="<?php echo $mod_strings['LBL_SAVE']?>">
+	<input alt="<?php echo $app_strings['LBL_CANCEL_BUTTON_TITLE']; ?>" title="<?php echo $app_strings['LBL_CANCEL_BUTTON_TITLE']; ?>" type="button" class="crm button small cancel" style="width:90px" name="eventcancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="ghide('addEvent')">
 	  </td>
 	  </tr>
 	</table>
   </form>
   </div>
 							 
-	<script language="JavaScript" type="text/JavaScript">
-setObjects();
-	</script>
-
 	<!-- Add Activity DIV stops-->
 
 <div id="eventcalAction" class="calAction" style="width:125px;" onMouseout="fninvsh('eventcalAction')" onMouseover="fnvshNrm('eventcalAction')">
 	<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF">
 		<tr>
 			<td>
-				<a href="" id="complete" onClick="fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_HELD']?></a>
-				<a href="" id="pending" onClick="fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_NOTHELD']?></a>
+				<?php
+				if(isPermitted("Calendar","EditView") == "yes")
+				{
+				?>
+					<?php if(getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0') { ?>
+						<a href="javascript:;" id="complete" onClick="fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_HELD']?></a>
+						<a href="javascript:;" id="pending" onClick="fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_NOTHELD']?></a>
+					<?php }?>		
 				<span style="border-top:1px dashed #CCCCCC;width:99%;display:block;"></span>
-				<a href="" id="postpone" onClick="fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_POSTPONE']?></a>
-				<a href="" id="changeowner" onClick="fnvshobj(this,'act_changeowner');fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
+				<a href="javascript:;" id="postpone" onClick="fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_POSTPONE']?></a>
+				<a href="javascript:;" id="changeowner" onClick="cal_fnvshobj(this,'act_changeowner');fninvsh('eventcalAction')" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
+				<?php
+				}
+				if(isPermitted("Calendar","Delete") == "yes")	
+				{
+				?>
 				<a href="" id="actdelete" onclick ="fninvsh('eventcalAction');return confirm('Are you sure?');" class="calMnu">- <?php echo $mod_strings['LBL_DEL']?></a>
+				<?php
+				}
+				?>
 			</td>
 		</tr>
 	</table>
@@ -670,13 +701,13 @@ setObjects();
   <input type="hidden" name="maintab" value="Calendar">
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
 		<tr style="cursor:move;">
-                	<td class="lvtHeaderText" id="moveTodo"><?php echo $mod_strings['LBL_ADD_TODO'] ?></b></td>
+                	<td class="lvtHeaderText" id="moveTodo" align="left"><?php echo $mod_strings['LBL_ADD_TODO'] ?></b></td>
 			<td align=right><a href="javascript:ghide('createTodo');"><img src="<?php echo $image_path ?>close.gif" border="0"  align="absmiddle" /></a></td>
 		</tr>
         </table>
 	<table border=0 cellspacing=0 cellpadding=5 width=95% bgcolor="#FFFFFF" >
 		<tr>
-                        <td width="20%" align="right"><b><?php echo $mod_strings['LBL_TODONAME'] ?></b></td>
+			<td width="20%" align="right"><b><font color="red">*</font><?php echo $mod_strings['LBL_TODONAME'] ?></b></td>
                         <td width="80%" align="left"><input name="task_subject" type="text" value="" class="textbox" style="width:70%"></td>
                 </tr>
 		<?php if(getFieldVisibilityPermission('Calendar',$current_user->id,'description') == '0') { ?>
@@ -735,9 +766,9 @@ setObjects();
 				<tr><td width=50% valign=top style="border-right:1px solid #dddddd">
 					<table border=0 cellspacing=0 cellpadding=2 width=95% align=center>
 						<tr><td colspan=3 align="left"><b><?php echo $mod_strings['LBL_TODODATETIME'] ?></b></td></tr>
-						<tr><td colspan=3 align="left"><?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'start'); ?></td></tr>
+						<tr><td colspan=3 align="left"><?php echo getTimeCombo($calendar_arr['calendar']->hour_format,'start','','','',true); ?></td></tr>
 						<tr><td align="left">
-							<input type="text" name="task_date_start" id="task_date_start" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td width=100% align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_task_date_start">
+							<input type="text" name="task_date_start" id="task_date_start" class="textbox" style="width:90px" onChange="dochange('task_date_start','task_due_date');" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td width=100% align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="<?php echo $mod_strings['LBL_SET_DATE']?>" title="<?php echo $mod_strings['LBL_SET_DATE']?>" id="jscal_trigger_task_date_start">
 						<script type="text/javascript">
 						Calendar.setup ({
 							inputField : "task_date_start", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_task_date_start", singleClick : true, step : 1
@@ -749,7 +780,7 @@ setObjects();
 						<table border="0" cellpadding="2" cellspacing="0" width="95%" align=center>
 							<tr><td colspan=3 align="left"><b><?php echo $mod_strings['Due Date'] ?></b></td></tr>
 							<tr><td align="left">
-								<input type="text" name="task_due_date" id="task_due_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td width=100% align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_task_due_date">
+								<input type="text" name="task_due_date" id="task_due_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td width=100% align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="<?php echo $mod_strings['LBL_SET_DATE']?>" title="<?php echo $mod_strings['LBL_SET_DATE']?>" id="jscal_trigger_task_due_date">
 						<script type="text/javascript">
 						Calendar.setup ({
 							inputField : "task_due_date", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_task_due_date", singleClick : true, step : 1
@@ -820,7 +851,7 @@ setObjects();
 			<td><b><?php echo $mod_strings['LBL_CONTACT_NAME'] ?></b></td>
 			<td colspan="2">
 				<input name="task_contact_name" id="contact_name" readonly type="text" class="calTxt" value=""><input name="task_contact_id" id="contact_id" type="hidden" value="">&nbsp;
-				<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT_CONTACT'] ; ?>">
+				<input type="button" onclick="selectContact('false','task',document.createTodo);" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT']." ". $mod_strings['LBL_LIST_CONTACT'] ; ?>">
 			</td>
 			  </tr>
 			<?php } ?>
@@ -835,14 +866,14 @@ setObjects();
                 <tr>
                         <td valign=top></td>
                         <td  align=center>
-                                <input title='Save [Alt+S]' accessKey='S' type="submit" name="todosave" class="crm button small save" style="width:90px" value="<?php echo $mod_strings['LBL_SAVE'] ?>">
-		<input type="button" class="crm button small cancel" style="width:90px" name="todocancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="ghide('createTodo')">
+				<input alt="<?php echo $app_strings['LBL_SAVE_BUTTON_TITLE']; ?>" title="<?php echo $app_strings['LBL_SAVE_BUTTON_TITLE']; ?>" accessKey='S' type="submit" name="todosave" class="crm button small save" style="width:90px" value="<?php echo $mod_strings['LBL_SAVE'] ?>">
+		<input alt="<?php echo $app_strings['LBL_CANCEL_BUTTON_TITLE']; ?>" title="<?php echo $app_strings['LBL_CANCEL_BUTTON_TITLE']; ?>" type="button" class="crm button small cancel" style="width:90px" name="todocancel" value="<?php echo $mod_strings['LBL_RESET']?>" onClick="ghide('createTodo')">
 	</td></tr></table>
   </form>
   <script>
-  	var fieldname = new Array('task_subject','task_date_start','task_time_start','taskstatus');
-	var fieldlabel = new Array('Subject','Date','Time','Status');
-	var fielddatatype = new Array('V~M','D~M~time_start','T~O','V~O');
+  	var fieldname = new Array('task_subject','task_date_start','task_time_start','task_due_date','taskstatus');
+	var fieldlabel = new Array('<?php echo $mod_strings['LBL_LIST_SUBJECT']?>','<?php echo $mod_strings['LBL_START_DATE']?>','<?php echo $mod_strings['LBL_TIME']?>','<?php echo $mod_strings['LBL_DUE_DATE']?>','<?php echo $mod_strings['LBL_STATUS']?>');
+	var fielddatatype = new Array('V~M','D~M~time_start','T~O','D~M~OTH~GE~date_start~Start Date & Time','V~O');
   </script>
   </div>
 
@@ -870,9 +901,14 @@ setObjects();
 	<td width="50%"><b><?php echo $app_strings['LBL_TRANSFER_OWNERSHIP']; ?></b></td>
 	        <td width="2%"><b>:</b></td>
         	<td width="48%">
-	        	<select name="activity_owner" id="activity_owner" class="detailedViewTextBox">
+                	<input type = "radio" name = "user_lead_owner"  onclick=checkgroup();  checked><?php echo $app_strings['LBL_USER'];?>&nbsp;
+                        <input type = "radio" name = "user_lead_owner" onclick=checkgroup(); ><?php echo $app_strings['LBL_GROUP'];?><br>
+                        <select name="lead_owner" id="lead_owner" class="detailedViewTextBox" style="display:block">
 				<?php echo getUserslist(); ?>
-		        </select>
+                        </select>
+                        <select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">
+				<?php echo getGroupslist();?>
+                         </select>
         	</td>
 	</tr>
 	<tr><td colspan="3" style="border-bottom:1px dashed #CCCCCC;">&nbsp;</td></tr>
@@ -892,12 +928,28 @@ setObjects();
         <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF">
                 <tr>
                         <td>
-                                <a href="" id="taskcomplete" onClick="fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_COMPLETED']?></a>
-                                <a href="" id="taskpending" onClick="fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_DEFERRED']?></a>
+				<?php
+                                if(isPermitted("Calendar","EditView") == "yes")
+                                {
+                                ?>
+					<?php if(getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0') { ?>
+	                                	<a href="" id="taskcomplete" onClick="fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_COMPLETED']?></a>
+        	                        	<a href="" id="taskpending" onClick="fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_DEFERRED']?></a>
+					<?php } ?>		
+						
                                 <span style="border-top:1px dashed #CCCCCC;width:99%;display:block;"></span>
                                 <a href="" id="taskpostpone" onClick="fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_POSTPONE']?></a>
-                                <a href="" id="taskchangeowner" onClick="fnvshobj(this,'act_changeowner'); fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
+                                <a href="" id="taskchangeowner" onClick="cal_fnvshobj(this,'act_changeowner'); fninvsh('taskcalAction');" class="calMnu">- <?php echo $mod_strings['LBL_CHANGEOWNER']?></a>
+                                <?php
+                                }
+                                if(isPermitted("Calendar","Delete") == "yes")
+                                {
+                                ?>
                                 <a href="" id="taskactdelete" onClick ="fninvsh('taskcalAction');return confirm('Are you sure?');" class="calMnu">- <?php echo $mod_strings['LBL_DEL']?></a>
+                                <?php
+                                }
+                                ?>
+
                         </td>
                 </tr>
         </table>

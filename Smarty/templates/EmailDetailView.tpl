@@ -13,23 +13,23 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<title>vtigerCRM Mail</title>
+<meta http-equiv="Content-Type" content="text/html; charset={$APP.LBL_CHARSET}">
+<title>{$MOD.TITLE_VTIGERCRM_MAIL}</title>
 <link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">	
 <style type="text/css">@import url("themes/{$THEME}/style.css");</style>
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
-<script language="javascript" type="text/javascript" src="include/js/prototype.js"></script>
+<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <body marginheight="0" marginwidth="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
 <table class="small" border="0" cellpadding="0" cellspacing="0" width="100%">
 <tbody>
    <tr>
 	<td colspan="3">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-		   <tr>
-			<td background="{$IMAGE_PATH}mailHdr.jpg" style="background-repeat:repeat-x;" width="100%">&nbsp;</td>
-			<td width="86"><img src="{$IMAGE_PATH}mailTitle.jpg"></td>
-		   </tr>
-		</table>	
+		<table border=0 cellspacing=0 cellpadding=0 width=100% class="mailClientWriteEmailHeader">
+		<tr>
+		<td >{$MOD.LBL_DETAILVIEW_EMAIL}</td>
+		</tr>
+		</table>
+
 	</td>
    </tr> 
    {foreach item=row from=$BLOCKS}

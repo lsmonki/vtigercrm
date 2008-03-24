@@ -14,15 +14,17 @@
 
 <link rel="stylesheet" type="text/css" href="{$THEME_PATH}style.css">
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
-<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/{php} echo $_SESSION['authenticated_user_language'];{/php}.lang.js?{php} echo $_SESSION['vtiger_version'];{/php}"></script>
+<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script type="text/javascript">
 function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
-        opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_module="+mod+"&entityid="+entity_id+"&parid="+recordid+"&return_action={$RETURN_ACTION}";
+        opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_module="+mod+"&entityid="+entity_id+"&parid="+recordid+"&return_module={$RETURN_MODULE}&return_action={$RETURN_ACTION}";
 {rdelim}
 
 </script>
-<body class="small" marginwidth=0 marginheight=0 leftmargin=0 topmargin=0 bottommargin=0 rigthmargin=0>
+
+<body class="small" marginwidth=0 marginheight=0 leftmargin=0 topmargin=0 bottommargin=0 rightmargin=0>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="mailClient mailClientBg">
 	<tr>
 		<td>

@@ -234,7 +234,7 @@ function clean($string, $maxLength)
 function safe_map($request_var, & $focus, $always_copy = false)
 {
 	global $log;
-	$log->debug("Entering safe_map(".$request_var.",".$focus.",".$always_copy.") method ...");
+	$log->debug("Entering safe_map(".$request_var.",".get_class($focus).",".$always_copy.") method ...");
 	safe_map_named($request_var, $focus, $request_var, $always_copy);
 	$log->debug("Exiting safe_map method ...");
 }
@@ -249,7 +249,7 @@ function safe_map($request_var, & $focus, $always_copy = false)
 function safe_map_named($request_var, & $focus, $member_var, $always_copy)
 {
 	global $log;
-	$log->debug("Entering safe_map_named(".$request_var.",".$focus.",".$member_var.",".$always_copy.") method ...");
+	$log->debug("Entering safe_map_named(".$request_var.",".get_class($focus).",".$member_var.",".$always_copy.") method ...");
 	if (isset($_REQUEST[$request_var]) && ($always_copy || is_null($focus->$member_var))) {
 		$log->debug("safe map named called assigning '{$_REQUEST[$request_var]}' to $member_var");
 		$focus->$member_var = $_REQUEST[$request_var];
@@ -867,7 +867,7 @@ function to_html($string, $encode=true){
         global $toHtml;
         if($encode && is_string($string)){//$string = htmlentities($string, ENT_QUOTES);
 		if (is_array($toHtml))
-			$string = str_replace(array_keys($toHtml), array_values($toHtml), $string);
+			$string =strip_tags($string, '<span><br /><div><a><br><b><u><i><table><td><tr><style><p><command><h1><h2><h3><h4><h5><h6><li><ol><ul><th><tbody><font><center><big><hr><format> <strong><html><small>');
         }
 	$log->debug("Exiting to_html method ...");
         return $string;
@@ -1182,6 +1182,12 @@ function getRecordOwnerId($record)
 		{
 			$query1="select vtiger_groups.groupid from vtiger_campaigngrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_campaigngrouprelation.groupname where campaignid=".$record;
 		}
+		else
+		{
+			require_once("modules/$module/$module.php");
+			$modObj = new $module();
+			$query1="select vtiger_groups.groupid from vtiger_".$module."grouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_".$module."grouprelation.groupname where ".$modObj->groupTable[1]."=".$record;
+		}
 
 		$result1=$adb->query($query1);
 		$groupid=$adb->query_result($result1,0,'groupid');
@@ -1206,7 +1212,7 @@ function insertProfile2field($profileid)
 
 	global $adb;
 	$adb->database->SetFetchMode(ADODB_FETCH_ASSOC); 
-	$fld_result = $adb->query("select * from vtiger_field where generatedtype=1 and displaytype in (1,2) and tabid != 29");
+	$fld_result = $adb->query("select * from vtiger_field where generatedtype=1 and displaytype in (1,2,3) and tabid != 29");
         $num_rows = $adb->num_rows($fld_result);
         for($i=0; $i<$num_rows; $i++)
         {
@@ -1226,7 +1232,7 @@ function insert_def_org_field()
 	$log->debug("Entering insert_def_org_field() method ...");
 	global $adb;
 	$adb->database->SetFetchMode(ADODB_FETCH_ASSOC); 
-	$fld_result = $adb->query("select * from vtiger_field where generatedtype=1 and displaytype in (1,2) and tabid != 29");
+	$fld_result = $adb->query("select * from vtiger_field where generatedtype=1 and displaytype in (1,2,3) and tabid != 29");
         $num_rows = $adb->num_rows($fld_result);
         for($i=0; $i<$num_rows; $i++)
         {
@@ -1280,7 +1286,7 @@ function getProfile2FieldPermissionList($fld_module, $profileid)
 	$return_data=array();
     for($i=0; $i<$adb->num_rows($result); $i++)
     {
-		$return_data[]=array($adb->query_result($result,$i,"fieldlabel"),$adb->query_result($result,$i,"visible"),$adb->query_result($result,$i,"uitype"),$adb->query_result($result,$i,"visible"),$adb->query_result($result,$i,"fieldid"));
+		$return_data[]=array($adb->query_result($result,$i,"fieldlabel"),$adb->query_result($result,$i,"visible"),$adb->query_result($result,$i,"uitype"),$adb->query_result($result,$i,"visible"),$adb->query_result($result,$i,"fieldid"),$adb->query_result($result,$i,"displaytype"));
 	}	
 	$log->debug("Exiting getProfile2FieldPermissionList method ...");
 	return $return_data;

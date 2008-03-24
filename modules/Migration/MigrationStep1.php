@@ -9,6 +9,12 @@
 *
  ********************************************************************************/
 
+global $current_user;
+if($current_user->is_admin != 'on')
+{
+	die("<br><br><center>".$app_strings['LBL_PERMISSION']." <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
+}
+
 //To get the Current installed MySQL path
 include("connection.php");
 $vtiger_home = $_ENV["VTIGER_HOME"];

@@ -32,7 +32,7 @@ require_once('modules/Users/Users.php');
 require_once('modules/Products/Products.php');
 require_once('include/utils/UserInfoUtil.php');
 
-global $allow_exports;
+global $allow_exports,$app_strings;
 
 session_start();
 
@@ -60,7 +60,7 @@ if ($allow_exports=='none' || ( $allow_exports=='admin' && ! is_admin($current_u
 
 ?>
 	<script language=javascript>
-		alert("you are not permitted to export!");
+		alert("<?php echo $app_strings['NOT_PERMITTED_TO_EXPORT']?>");
 		window.location="index.php?module=<?php echo $_REQUEST['module'] ?>&action=index";
 	</script>
 <?php
@@ -113,7 +113,6 @@ function export_all($type)
 
 	$query = $focus->create_export_query($order_by,$where);
 
-
 	$result = $adb->query($query,true,"Error exporting $type: "."<BR>$query");
 
 	$fields_array = $adb->getFieldsArray($result);
@@ -131,10 +130,11 @@ function export_all($type)
 
 		foreach ($val as $key => $value)
 		{
-			if($key=="description")
+			if($key=="description" || $key=="note")
 			{
 				$value=br2nl_vt($value);
 			}
+			$value = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",html_entity_decode($value, ENT_QUOTES, "ISO-8859-1"));
 			array_push($new_arr, preg_replace("/\"/","\"\"",$value));
 		}
 		$line = implode("\",\"",$new_arr);

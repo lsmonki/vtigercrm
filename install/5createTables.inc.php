@@ -86,11 +86,10 @@ function create_default_users() {
         $user->column_fields["activity_view"] = 'This Year';	
 	$user->column_fields["lead_view"] = 'Today';
 	$user->column_fields["defhomeview"] = 'home_metrics';
-        //added by philip for default default admin emailid
+        //added by philip for default admin emailid
 	if($admin_email == '')
 	$admin_email ="admin@vtigeruser.com";
         $user->column_fields["email1"] = $admin_email;
-	//to get the role id for standard_user	
 	$role_query = "select roleid from vtiger_role where rolename='CEO'";
 	$db->checkConnection();
 	$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -135,12 +134,13 @@ function create_default_users() {
         $user->column_fields["namedays"] = '';
         $user->column_fields["currency_id"] = 1;
 	$user->column_fields["date_format"] = 'yyyy-mm-dd';
+	$user->column_fields["hour_format"] = '24';
+	$user->column_fields["start_hour"] = '08:00';
+	$user->column_fields["end_hour"] = '23:00';
 	$user->column_fields["imagename"] = '';
         $user->column_fields["activity_view"] = 'This Year';	
 	$user->column_fields["lead_view"] = 'Today';
 	$user->column_fields["defhomeview"] = 'home_metrics';
-        //added by philip for default default admin emailid
-	if($admin_email == '')
 	$std_email ="standarduser@vtigeruser.com";
         $user->column_fields["email1"] = $std_email;
 	//to get the role id for standard_user	

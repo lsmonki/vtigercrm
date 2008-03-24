@@ -61,7 +61,7 @@ $output ='<div id="roleLay" style="display:block;" class="layerPopup">
 <table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 <tr>
 	<td colspan="3" align="center" class="small">
-	<input type="button" onclick="gotoUpdateListPrice('.$return_id.','.$pricebook_id.','.$product_id.');return verify_data(EditView)" name="button" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'" class="crmbutton small save">
+	<input type="button" onclick="gotoUpdateListPrice('.$return_id.','.$pricebook_id.','.$product_id.'); if(verify_data(index) == false) document.getElementById(\'roleLay\').style.display=\'inline\';" name="button" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'" class="crmbutton small save">
 	<input title="'.$app_strings["LBL_CANCEL_BUTTON_LABEL"].'" accessKey="'.$app_strings["LBL_CANCEL_BUTTON_KEY"].'" class="crmbutton small cancel" onClick="document.getElementById(\'editlistprice\').style.display=\'none\';" type="button" name="button" value="'.$app_strings["LBL_CANCEL_BUTTON_LABEL"].'">
 	</td>
 </tr>

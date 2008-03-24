@@ -18,7 +18,7 @@
 <script type="text/javascript" src="jscalendar/calendar.js"></script>
 <script type="text/javascript" src="jscalendar/lang/calendar-{$CALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-<script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script type="text/javascript" src="include/js/Inventory.js"></script>
 
 <script type="text/javascript">
@@ -65,7 +65,11 @@ function sensex_info()
 			{$UPDATEINFO}	 
 		 {/if}
 		 {if $OP_MODE eq 'create_view'}
+			{if $DUPLICATE neq 'true'}
 			<span class="lvtHeaderText">{$APP.LBL_CREATING} {$APP.LBL_NEW} {$MOD[$SINGLE_MOD]}</span> <br>
+			{else}
+			<span class="lvtHeaderText">{$APP.LBL_DUPLICATING} "{$NAME}" </span> <br>
+			{/if}
 		 {/if}
 
 		 <hr noshade size=1>
@@ -201,5 +205,12 @@ function sensex_info()
 
         var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE})
 
+	var product_labelarr = {ldelim}CLEAR_COMMENT:'{$APP.LBL_CLEAR_COMMENT}',
+                                DISCOUNT:'{$APP.LBL_DISCOUNT}',
+                                TOTAL_AFTER_DISCOUNT:'{$APP.LBL_TOTAL_AFTER_DISCOUNT}',
+                                TAX:'{$APP.LBL_TAX}',
+                                ZERO_DISCOUNT:'{$APP.LBL_ZERO_DISCOUNT}',
+                                PERCENT_OF_PRICE:'{$APP.LBL_OF_PRICE}',
+                                DIRECT_PRICE_REDUCTION:'{$APP.LBL_DIRECT_PRICE_REDUCTION}'{rdelim};
 
 </script>

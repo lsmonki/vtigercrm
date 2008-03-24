@@ -16,7 +16,7 @@
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/5createTables.php,v 1.58 2005/04/19 16:57:08 ray Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
-set_time_limit(600);
+set_time_limit(2000);
 
 if (isset($_REQUEST['db_name'])) $db_name  				= $_REQUEST['db_name'];
 if (isset($_REQUEST['db_drop_tables'])) $db_drop_tables 	= $_REQUEST['db_drop_tables'];
@@ -100,36 +100,56 @@ if (isset($_REQUEST['currency_symbol'])) $currency_symbol	= $_REQUEST['currency_
 $renamefile = uniqid(rand(), true);
 
 //@rename("install.php", $renamefile."install.php.txt");
-if(!rename("install.php", $renamefile."install.php.txt"))
+if(!@rename("install.php", $renamefile."install.php.txt"))
 {
-	if (copy ("install.php", $renamefile."install.php.txt"))
+	if (@copy ("install.php", $renamefile."install.php.txt"))
        	{
         	 unlink($renamefile."install.php.txt");
      	}
+	else
+	{
+		echo "<b><font color='red'>We strongly suggest you to rename the install.php file.</font></b>";
+	}
 }
 
 //@rename("install/", $renamefile."install/");
-if(!rename("install/", $renamefile."install/"))
+if(!@rename("install/", $renamefile."install/"))
 {
-	if (copy ("install/", $renamefile."install/"))
+	if (@copy ("install/", $renamefile."install/"))
        	{
         	 unlink($renamefile."install/");
      	}
+	else
+	{
+		echo "<br><b><font color='red'>We strongly suggest you to rename the install directory.</font></b><br>";
+	}
+
 }
 //populate Calendar data
 
 
 ?>
-		<table border=0 cellspacing=0 cellpadding=5 align="center" width=75% style="background-color:#E1E1FD;border:1px dashed #111111;">
+		<table border=0 cellspacing=0 cellpadding=5 align="center" width="80%" style="background-color:#E1E1FD;border:1px dashed #111111;">
 		<tr>
 			<td align=center class=small>
-			<b>vtigercrm-5.0.2 is all set to go!</b>
+			<b>vtigercrm-5.0.3 is all set to go!</b>
 			<hr noshade size=1>
 			<div style="width:100%;padding:10px; "align=left>
 			<ul>
-			<li>Your install.php file has been renamed to <?echo $renamefile;?>install.php.txt.
-			<li>Your install folder too has been renamed to <?echo $renamefile;?>install/.  
+			<li>Your install.php file has been renamed to <?php echo $renamefile;?>install.php.txt.
+			<li>Your install folder too has been renamed to <?php echo $renamefile;?>install/.  
 			<li>Please log in using the "admin" user name and the password you entered in step 2.
+			<li>Do not forget to set the outgoing emailserver, setup accessible from Settings->Outgoing Server
+			</ul>
+			<ul>
+			<li><b><font color='red'>You are the most important to us!</font></b>
+<li><b> We take pride in being associated with you</li></b>
+			<p>
+			<b>Talk to us at <a href='http://forums.vtiger.com' target="_blank">forums</a></b>
+			<p>
+			<b>Discuss with us at <a href='http://blogs.vtiger.com' target="_blank">blogs</a></b>
+			<p>
+			<b>We aim to be - simply the best. Come on over,there is space for you too!</b>
 			</ul>
 			</div>
 
@@ -172,7 +192,7 @@ if(!rename("install/", $renamefile."install/"))
     <table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 
       <tr>
-        <td class=small align=center> <a href="#">www.vtiger.com</a></td>
+        <td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td>
       </tr>
     </table>
 </body>

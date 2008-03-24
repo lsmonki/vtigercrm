@@ -17,7 +17,7 @@
 	<table border=0 cellspacing=0 cellpadding=0 width="100%" class=small>
 	<tr>
 		<td width-90% class="mailSubHeader" background="{$IMAGE_PATH}qcBg.gif"><b >{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.$QCMODULE}</b></td>
-		<td nowrap class="mailSubHeader moduleName" align=right><i>Quick Create</i></td></tr>
+		<td nowrap class="mailSubHeader moduleName" align=right><i>{$APP.LBL_QUICK_CREATE}</i></td></tr>
 	</table>
 
 	<table border=0 cellspacing=0 cellpadding=0 width="100%" class="small">
@@ -66,10 +66,19 @@
 					{$fldlabel}
 				</td>
 				<td width="30%" align=left class="cellText">
-					<select name="{$fldname}">
+					{if $QCMODULE eq 'Event'}
+                                                {assign var=typejsfn value="onChange='calQCduedatetime();'"}
+                                        {else}
+                                                {assign var=typejsfn value=""}
+                                        {/if}
+					<select name="{$fldname}" {$typejsfn}>
 					{foreach item=arr from=$fldvalue}
 						{foreach key=sel_value item=value from=$arr}
+							{if $MOD.$sel_value neq ''}
 							<option value="{$sel_value}" {$value}>{$MOD.$sel_value}</option>
+							{else}
+							<option value="{$sel_value}" {$value}>{$sel_value}</option>
+							{/if}
 						{/foreach}
 					{/foreach}
 					</select>
@@ -150,14 +159,14 @@
 									{assign var='popuptype' value = 'specific_contact_account_address'}
 								{/if}
 							<td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
-							<td width="30%" align=left class="cellText"><input readonly size="9" name="account_name" style="border:1px solid #bababa;" type="text" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=EditView&form_submit=false&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.account_id.value=''; this.form.account_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
+							<td width="30%" align=left class="cellText"><input readonly size="9" name="account_name" style="border:1px solid #bababa;" type="text" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=EditView&form_submit=false&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.account_id.value=''; this.form.account_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
 	
 							{elseif $uitype eq 50}
 							<td width="20%" class="cellLabel" align=right><font color="red">*</font>{$fldlabel}</td>
-							<td width="30%" align=left class="cellText"><input readonly name="account_name" type="text" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=TasksEditView&form_submit=false&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'></td>
+							<td width="30%" align=left class="cellText"><input readonly name="account_name" type="text" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=TasksEditView&form_submit=false&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'></td>
 							{elseif $uitype eq 73}
                                                         <td width="20%" class="cellLabel" align=right><font color="red">*</font>{$fldlabel}</td>
-							<td width="30%" align=left class="cellText"><input readonly name="account_name" type="text" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific_account_address&form=TasksEditView&form_submit=false&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'></td>
+							<td width="30%" align=left class="cellText"><input readonly name="account_name" type="text" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific_account_address&form=TasksEditView&form_submit=false&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'></td>
 							
 							{elseif $uitype eq 75 || $uitype eq 81}
                                                           <td width="20%" class="cellLabel" align=right>
@@ -168,25 +177,25 @@
                                                                 {/if}
                                                                 {$fldlabel}
                                                           </td>
-                                                          <td width="30%" align=left class="cellText"><input name="vendor_name" readonly size="8" type="text" style="border:1px solid #bababa;" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Vendors&action=Popup&html=Popup_picker&popuptype={$pop_type}&form=EditView&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>
+                                                          <td width="30%" align=left class="cellText"><input name="vendor_name" readonly size="8" type="text" style="border:1px solid #bababa;" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module=Vendors&action=Popup&html=Popup_picker&popuptype={$pop_type}&form=EditView&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>
 							  {if $uitype eq 75}
-                                                           &nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.vendor_id.value='';this.form.vendor_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
+                                                           &nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.vendor_id.value='';this.form.vendor_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
 							  {/if}
 							{elseif $uitype eq 57}
 							<td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
-							<td width="30%" align=left class="cellText"><input size="8" name="contact_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.contact_id.value=''; this.form.contact_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
+							<td width="30%" align=left class="cellText"><input size="8" name="contact_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.contact_id.value=''; this.form.contact_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
 
 							{elseif $uitype eq 80}
 							<td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
-							<td width="30%" align=left class="cellText"><input size="8" name="salesorder_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.salesorder_id.value=''; this.form.salesorder_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
+							<td width="30%" align=left class="cellText"><input size="8" name="salesorder_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.salesorder_id.value=''; this.form.salesorder_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
 							
 							 {elseif $uitype eq 78}
 							 <td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
-							 <td width="30%" align=left class="cellText"><input size="8" name="quote_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$ID}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.quote_id.value=''; this.form.quote_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
+							 <td width="30%" align=left class="cellText"><input size="8" name="quote_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$ID}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.quote_id.value=''; this.form.quote_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
 
 							{elseif $uitype eq 76}
                                                         <td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
-                                                        <td width="30%" align=left class="cellText"><input size="8" name="potential_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.potential_id.value=''; this.form.potential_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
+                                                        <td width="30%" align=left class="cellText"><input size="8" name="potential_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.potential_id.value=''; this.form.potential_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
 
 							{elseif $uitype eq 17}
 							<td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
@@ -228,10 +237,22 @@
 								{assign var=date_val value="$date_value"}
 								{assign var=time_val value="$time_value"}
 							   {/foreach}
-							<input name="{$fldname}" id="jscal_field_{$fldname}" type="text" style="border:1px solid #bababa;" size="11" maxlength="10" value="{$date_val}">
+							   {foreach key=date_fmt item=date_str from=$secondvalue}
+                                                                {assign var=dateFormat value="$date_fmt"}
+                                                                {assign var=dateStr value="$date_str"}
+                                                           {/foreach}
+                                                        {if $uitype eq 6 && $QCMODULE eq 'Event'}
+                                                                {assign var=datejsfn value="onChange='dochange(\"jscal_field_date_start\",\"jscal_field_due_date\");'"}
+                                                                {assign var=timejsfn value="onChange='calQCduedatetime();'"}
+                                                                <input name="dateFormat" type="hidden" value="{$dateFormat}">
+                                                        {else}
+                                                                {assign var=datejsfn value=""}
+                                                                {assign var=timejsfn value=""}
+                                                        {/if}	
+							<input name="{$fldname}" id="jscal_field_{$fldname}" type="text" style="border:1px solid #bababa;" size="11" maxlength="10" value="{$date_val}" {$datejsfn}>
 							<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_{$fldname}">
 							{if $uitype eq 6}
-							   <input name="time_start" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}">
+							   <input name="time_start" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}" {$timejsfn} >
 							{/if}
 							{if $uitype eq 23 && $QCMODULE eq 'Event'}
                                                            <input name="time_end" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}">
@@ -239,10 +260,6 @@
                                                                 getCalendarPopup('jscal_trigger_{$fldname}','jscal_field_{$fldname}','{$dateFormat}');
                                                              </script>
                                                         {/if}
-							{foreach key=date_format item=date_str from=$secondvalue}
-                                                                {assign var=dateFormat value="$date_format"}
-							        {assign var=dateStr value="$date_str"}
-							{/foreach}
 							{if $uitype eq 5 || $uitype eq 23}
 							   <br><font size=1><em old="(yyyy-mm-dd)">({$dateStr})</em></font>
 							   {else}
@@ -275,7 +292,7 @@
 							  </td>
 							<td width="30%" align=left class="cellText">
 							<input name="{$fldname}" type="hidden" value="{$secondvalue}"><input size="8" name="parent_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}">
-						&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=''; this.form.parent_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
+						&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.parent_id.value=''; this.form.parent_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
 							
 							{elseif $uitype eq 357}
 								<td width="20%" class="cellLabel" align=right>To:&nbsp;</td>
@@ -287,7 +304,7 @@
 		                                                                <option value="{$labelval}" {$selectval}>{$labelval}</option>
                 	                                                {/foreach}
                                                                 </select>
-								&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=''; this.form.parent_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
+								&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView&fromlink=qcreate","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.parent_id.value=''; this.form.parent_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
 								<tr style="height:25px">
 								<td width="20%" class="cellLabel" align=right>CC:&nbsp;</td>	
 								<td width="30%" align=left class="cellText">
@@ -302,7 +319,7 @@
                                                            {$fldlabel}</td>
 	<td width="30%" align=left class="cellText">
 				<input name="{$fldname}" type="hidden" value="{$secondvalue}">
-				<input name="product_name" readonly type="text" value="{$fldvalue}">&nbsp;<img tabindex="{$vt_tab}" src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=specific&fromlink=qcreate","test","width=640,height=565,resizable=0,scrollbars=0,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.product_id.value=''; this.form.product_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
+				<input name="product_name" readonly type="text" value="{$fldvalue}">&nbsp;<img tabindex="{$vt_tab}" src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=specific&fromlink=qcreate","test","width=640,height=565,resizable=0,scrollbars=0,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.product_id.value=''; this.form.product_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
 			</td>
 		
 							{elseif $uitype eq 55} 
@@ -322,7 +339,7 @@
 						<td colspan="3" width="30%" align=left class="cellText">
 						{if $MODULE eq 'Products'}
 							<input name="imagelist" type="hidden" value="">
-						    <div id="files_list" style="border: 1px solid grey; width: 500px; padding: 5px; background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: x-small">Files Maximum 6
+						    <div id="files_list" style="border: 1px solid grey; width: 500px; padding: 5px; background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: x-small">{$APP.Files_Maximum_6}
 						    <input id="my_file_element" type="file" name="file_1" >
                             </div>
                             <script>
@@ -376,7 +393,14 @@
 		<!-- save cancel buttons -->
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class=qcTransport>
 		<tr>
-			<td width=50% align=right><input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" ></td>
+
+										{if $MODULE eq 'Accounts'}
+									<td width=50% align=right><input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  if(getFormValidate())AjaxDuplicateValidate('Accounts','accountname',this.form);" type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" ></td>
+										{else}
+											<td width=50% align=right><input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}" style="width:70px" ></td>
+										{/if}
+
+
 			<td width=50% align=left>
 				<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="hide('qcform'); $('qccombo').options.selectedIndex=0;" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
 			</td>
@@ -391,9 +415,15 @@
 </table>
 {if $QCMODULE eq 'Event'}
 <SCRIPT id="qcvalidate">
-        var qcfieldname = new Array('subject','date_start','eventstatus','activitytype','due_date','time_end');
-        var qcfieldlabel = new Array('Subject','Start Date & Time','Status','Activity Type','End Date & Time','End Date & Time');
-        var qcfielddatatype = new Array('V~M','DT~M~time_start','V~O','V~O','D~M~OTH~GE~date_start~Start Date & Time','T~M');
+        var qcfieldname = new Array('subject','date_start','time_start','eventstatus','activitytype','due_date','time_end');
+        var qcfieldlabel = new Array('Subject','Start Date & Time','Start Date & Time','Activity Type','End Date & Time','End Date & Time');
+        var qcfielddatatype = new Array('V~M','DT~M~time_start','T~O','V~O','V~O','D~M~OTH~GE~date_start~Start Date & Time','T~M');
+</SCRIPT>
+{elseif $QCMODULE eq 'Todo'}
+<SCRIPT id="qcvalidate">
+	var qcfieldname = new Array('subject','date_start','time_start','taskstatus');
+        var qcfieldlabel = new Array('Subject','Start Date & Time','Start Date & Time','Status');
+        var qcfielddatatype = new Array('V~M','DT~M~time_start','T~O','V~O');
 </SCRIPT>
 {else}
 <SCRIPT id="qcvalidate">

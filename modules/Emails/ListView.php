@@ -180,6 +180,7 @@ $smarty->assign("USERID", $current_user->id);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("theme", $theme);
 if($_REQUEST['ajax'] != '')
 	$smarty->display("EmailContents.tpl");
 else

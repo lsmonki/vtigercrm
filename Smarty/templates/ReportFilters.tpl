@@ -46,15 +46,29 @@
 		</select>
 		</td>
 		<td class="dvtCellInfo" width="25%">
-		<select name="stdDateFilter" onchange='showDateRange( this.options[ this.selectedIndex ].value )' class="txtBox">
+		<select name="stdDateFilter" id="stdDateFilter" onchange='showDateRange( this.options[ this.selectedIndex ].value )' class="txtBox">
 		{$BLOCKCRITERIA_STD}
 		</select>
 		</td>
-		<td class="dvtCellInfo"><input name="startdate" id="jscal_field_date_start" style="border: 1px solid rgb(186, 186, 186);" size="10" maxlength="10" value="{$STARTDATE_STD}" type="text">
-		<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start"><br><font size="1"><em old="{$APP.NTC_DATE_FORMAT}">{$APP.NTC_DATE_FORMAT}</em></font>
+		<td class="dvtCellInfo">
+		<input name="startdate" id="jscal_field_date_start" style="border: 1px solid rgb(186, 186, 186);" size="10" maxlength="10" value="{$STARTDATE_STD}" type="text" ><br>
+		<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start" >
+		<font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
+		<script type="text/javascript">
+                                        Calendar.setup ({ldelim}
+                                        inputField : "jscal_field_date_start", ifFormat : "{$JS_DATEFORMAT}", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
+                                        {rdelim})
+                </script>
 		</td>
-		<td class="dvtCellInfo"><input name="enddate" id="jscal_field_date_end" style="border: 1px solid rgb(186, 186, 186);" size="10" maxlength="10" value="{$ENDDATE_STD}" type="text">
-		<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end"><br><font size="1"><em old="{$APP.NTC_DATE_FORMAT}">{$APP.NTC_DATE_FORMAT}</em></font>
+		<td class="dvtCellInfo">
+		<input name="enddate" id="jscal_field_date_end" style="border: 1px solid rgb(186, 186, 186);" size="10" maxlength="10" value="{$ENDDATE_STD}" type="text"><br>
+                <img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end" >
+		<font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
+                <script type="text/javascript">
+                                        Calendar.setup ({ldelim}
+                                        inputField : "jscal_field_date_end", ifFormat : "{$JS_DATEFORMAT}", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1
+                                        {rdelim})
+                </script>
 		</td>
 		</tr>
 		<tr>
@@ -170,8 +184,13 @@
         showDateRange( filter );
     }
 </script>
-<script type="text/javascript">
-    	Calendar.setup ({inputField : "jscal_field_date_start", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1});
-	Calendar.setup ({inputField : "jscal_field_date_end", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1});
+<script>
+for(var i=1;i<=5;i++)
+{
+	var obj=document.getElementById("fcol"+i);
+	if(obj.selectedIndex != 0)
+		updatefOptions(obj, 'fop'+i);
+}
 </script>
+
 {/literal}

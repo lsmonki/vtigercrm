@@ -34,9 +34,9 @@ for($i=0 ; $i<$no_of_portals; $i++)
 	$portal_array['portalid'] = $adb->query_result($result,$i,'portalid'); 
 	$portal_array['portalname'] = $portalname;
 	$portal_array['portalurl'] = $portalurl;
+	$portal_array['portaldisplayurl'] = (strlen($portalurl) > 100) ? (substr($portalurl,0,100).'...') : $portalurl;
 	$portal_info[]=$portal_array;
 }
-
 $smarty = new vtigerCRM_Smarty;
 
 $smarty->assign("IMAGE_PATH", $image_path);

@@ -54,7 +54,7 @@ if($row != null)
 }
 if( count($home_section_order) < 1 )
 {
-	$home_section_order = array("ALVT","HDB","PLVT","QLTQ","CVLVT","HLT","OLV","GRT","OLTSO","ILTI","MNL","OLTPO","LTFAQ");
+	$home_section_order = array("HDB","ALVT","PLVT","QLTQ","CVLVT","HLT","OLV","GRT","OLTSO","ILTI","MNL","OLTPO","LTFAQ");
 }
 
 require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -67,8 +67,10 @@ foreach ( explode(",",$home_section_order) as $section )
 	{
 		$activities = Array();
                 include("modules/Calendar/OpenListView.php") ;
-                $activities[] = getPendingActivities(0);
-                $activities[] = getPendingActivities(1);
+                $activities[] = getPendingActivities(0,"today");
+                $activities[] = getPendingActivities(0,"all");
+                $activities[] = getPendingActivities(1,"today");
+                $activities[] = getPendingActivities(1,"all");
 	}
             break;
         case 'ALVT':
@@ -173,9 +175,13 @@ function getActivityType($id)
 }
 
 global $current_language;
+
+global $current_user;
+$user_name = $current_user->column_fields[user_name];
 $current_module_strings = return_module_language($current_language, 'Calendar');
 
 $t=Date("Ymd");
+//echo '<pre>';print_r($home_values); echo '</pre>'; 
 $buttoncheck['Calendar'] = isPermitted('Calendar','index');
 $smarty->assign("CHECK",$buttoncheck);
 $smarty->assign("IMAGE_PATH",$image_path);
@@ -186,6 +192,7 @@ $smarty->assign("CATEGORY",getParenttab('Home'));
 $smarty->assign("HOMEDETAILS",$home_values);
 $smarty->assign("HOMEDEFAULTVIEW",DefHomeView());
 $smarty->assign("ACTIVITIES",$activities);
+$smarty->assign("CURRENTUSER",$user_name);
 $freetag = new freetag();
 $smarty->assign("ALL_TAG",$freetag->get_tag_cloud_html("",$current_user->id));
 $smarty->display("HomePage.tpl");
@@ -230,11 +237,13 @@ function getGroupTaskLists()
 	global $app_strings;
 	$userid= $current_user->id;
 	$groupids = fetchUserGroupids($userid);
-	if($groupids !='')
+        //Check for permission before constructing the query.
+	if($groupids !='' && (isPermitted('Leads','index') == "yes"  || isPermitted('Calendar','index') == "yes" || isPermitted('HelpDesk','index') == "yes" || isPermitted('Potentials','index') == "yes"  || isPermitted('Accounts','index') == "yes" || isPermitted('Contacts','index') =='yes' || isPermitted('Campaigns','index') =='yes'  || isPermitted('SalesOrder','index') =='yes' || isPermitted('Invoice','index') =='yes' || isPermitted('PurchaseOrder','index') == 'yes'))
 	{
 		$query = '';
 		if(isPermitted('Leads','index') == "yes")
         	{
+
 			//code modified to list the vtiger_groups associates to a user om 21-11-05
 			//Get the leads assigned to group
 			$query = "select vtiger_leaddetails.leadid as id,vtiger_leaddetails.lastname as name,vtiger_leadgrouprelation.groupname as groupname, 'Leads     ' as Type from vtiger_leaddetails inner join vtiger_leadgrouprelation on vtiger_leaddetails.leadid=vtiger_leadgrouprelation.leadid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_leaddetails.leadid inner join vtiger_groups on vtiger_leadgrouprelation.groupname=vtiger_groups.groupname where  vtiger_crmentity.deleted=0  and vtiger_leadgrouprelation.groupname is not null and vtiger_groups.groupid in (".$groupids.")";
@@ -254,8 +263,66 @@ function getGroupTaskLists()
 			$query .= "select vtiger_troubletickets.ticketid,vtiger_troubletickets.title as name,vtiger_ticketgrouprelation.groupname,'Tickets   ' as Type from vtiger_troubletickets inner join vtiger_ticketgrouprelation on vtiger_ticketgrouprelation.ticketid=vtiger_troubletickets.ticketid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_troubletickets.ticketid inner join vtiger_groups on vtiger_ticketgrouprelation.groupname=vtiger_groups.groupname where vtiger_crmentity.deleted=0 and vtiger_troubletickets.status != 'Closed' and vtiger_ticketgrouprelation.groupname is not null and vtiger_groups.groupid in (".$groupids.")";
 
 		}
+		if(isPermitted('Potentials','index') == "yes")
+		{
+			if($query != '')
+			$query .=" union all ";	
+			//Get the potentials assigned to group(sales stage not Closed Lost or Closed Won-- hardcoded value)
+			$query .= "select vtiger_potential.potentialid,vtiger_potential.potentialname as name,vtiger_potentialgrouprelation.groupname as groupname,'Potentials ' as Type from vtiger_potential inner join vtiger_potentialgrouprelation on vtiger_potentialgrouprelation.potentialid = vtiger_potential.potentialid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_potential.potentialid inner join vtiger_groups on vtiger_potentialgrouprelation.groupname = vtiger_groups.groupname where vtiger_crmentity.deleted=0  and ((vtiger_potential.sales_stage !='Closed Lost') or (vtiger_potential.sales_stage != 'Closed Won')) and vtiger_potentialgrouprelation.groupname is not null and vtiger_groups.groupid in (".$groupids.")";
+			
+		}
+		if(isPermitted('Accounts','index') == "yes")
+		{
+			if($query != '')
+			$query .=" union all ";
+			//Get the Accounts assigned to group 
+			$query .= "select vtiger_account.accountid as id,vtiger_account.accountname as name,vtiger_accountgrouprelation.groupname as groupname, 'Accounts ' as Type from vtiger_account inner join vtiger_accountgrouprelation on vtiger_account.accountid=vtiger_accountgrouprelation.accountid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid inner join vtiger_groups on vtiger_accountgrouprelation.groupname=vtiger_groups.groupname where vtiger_crmentity.deleted=0  and vtiger_accountgrouprelation.groupname is not null and vtiger_groups.groupid in(".$groupids.")"; 
+		}
+		if(isPermitted('Contacts','index' =='yes'))
+		{
+			if($query != '')
+                        $query .=" union all ";
+                        //Get the Contacts assigned to group
+			$query .= "select vtiger_contactdetails.contactid as id, vtiger_contactdetails.lastname as name ,vtiger_contactgrouprelation.groupname as groupname, 'Contacts ' as Type from vtiger_contactdetails inner join vtiger_contactgrouprelation on vtiger_contactdetails.contactid = vtiger_contactgrouprelation.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid inner join vtiger_groups on vtiger_contactgrouprelation.groupname = vtiger_groups.groupname where vtiger_crmentity.deleted=0  and vtiger_contactgrouprelation.groupname is not null and vtiger_groups.groupid in (".$groupids.")";
+		}
+		if(isPermitted('Campaigns','index' =='yes'))
+		{
+			if($query != '')
+			$query .=" union all ";
+			//Get the Campaigns assigned to group(Campaign status not Complete -- hardcoded value)
+			$query .= "select vtiger_campaign.campaignid as id, vtiger_campaign.campaignname as name, vtiger_campaigngrouprelation.groupname as groupname,'Campaigns ' as Type from vtiger_campaign inner join vtiger_campaigngrouprelation on vtiger_campaign.campaignid=vtiger_campaigngrouprelation.campaignid  inner join  vtiger_crmentity on vtiger_crmentity.crmid = vtiger_campaign.campaignid inner join vtiger_groups on vtiger_campaigngrouprelation.groupname = vtiger_groups.groupname where vtiger_crmentity.deleted=0  and (vtiger_campaign.campaignstatus != 'Complete')  and vtiger_campaigngrouprelation.groupname is not null and vtiger_groups.groupid in (".$groupids.")";
+		}
+		if(isPermitted('Quotes','index' == 'yes'))
+		{
+			if($query != '')
+                        $query .=" union all ";
+                        //Get the Quotes assigned to group(Quotes stage not Rejected -- hardcoded value)
+			$query .="select vtiger_quotes.quoteid as id,vtiger_quotes.subject as name, vtiger_quotegrouprelation.groupname as groupname ,'Quotes 'as Type from vtiger_quotes inner join vtiger_quotegrouprelation on vtiger_quotes.quoteid = vtiger_quotegrouprelation.quoteid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_quotes.quoteid inner join vtiger_groups on vtiger_quotegrouprelation.groupname = vtiger_groups.groupname where vtiger_crmentity.deleted=0  and (vtiger_quotes.quotestage != 'Rejected')  and vtiger_quotegrouprelation.groupname is not null and vtiger_groups.groupid in (".$groupids.")";
+		}
+		if(isPermitted('SalesOrder','index' =='yes'))
+		{
+			if($query != '')
+                        $query .=" union all ";
+                        //Get the Sales Order assigned to group
+                        $query .="select vtiger_salesorder.salesorderid as id, vtiger_salesorder.subject as name,vtiger_sogrouprelation.groupname as groupname,'SalesOrder ' as Type from vtiger_salesorder inner join vtiger_sogrouprelation on vtiger_salesorder.salesorderid = vtiger_sogrouprelation.salesorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_salesorder.salesorderid inner join vtiger_groups on vtiger_sogrouprelation.groupname = vtiger_groups.groupname where vtiger_crmentity.deleted=0  and vtiger_sogrouprelation.groupname is not null and vtiger_groups.groupid in  (".$groupids.")";
+		}	
+		
+		if(isPermitted('Invoice','index' =='yes'))
+                {
+                        if($query != '')
+                        $query .=" union all ";
+                        //Get the Sales Order assigned to group(Invoice status not Paid -- hardcoded value)
+			$query .="select vtiger_invoice.invoiceid as Id , vtiger_invoice.subject as Name, vtiger_invoicegrouprelation.groupname as Groupname,'Invoice ' as Type from vtiger_invoice inner join vtiger_invoicegrouprelation on vtiger_invoice.invoiceid=vtiger_invoicegrouprelation.invoiceid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_invoice.invoiceid inner join vtiger_groups on vtiger_invoicegrouprelation.groupname = vtiger_groups.groupname where vtiger_crmentity.deleted=0 and(vtiger_invoice.invoicestatus != 'Paid') and vtiger_invoicegrouprelation.groupname is not null and vtiger_groups.groupid in  (".$groupids.")";
+		}
+		if(isPermitted('PurchaseOrder','index' == 'yes'))
+		{
+			if($query != '')
+                        $query .=" union all ";
+			 //Get the Purchase Order assigned to group
+			$query .="select vtiger_purchaseorder.purchaseorderid as id,vtiger_purchaseorder.subject as name,vtiger_pogrouprelation.groupname as groupname, 'PurchaseOrder ' as Type from vtiger_purchaseorder inner join vtiger_pogrouprelation on vtiger_purchaseorder.purchaseorderid= vtiger_pogrouprelation.purchaseorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid inner join  vtiger_groups on vtiger_pogrouprelation.groupname =vtiger_groups.groupname where vtiger_crmentity.deleted=0 and vtiger_pogrouprelation.groupname is not null and vtiger_groups.groupid in (".$groupids.")";
+		}
 		$log->info("Here is the where clause for the list view: $query");
-		$result = $adb->limitquery($query,0,5) or die("Couldn't get the group listing");
+		$result = $adb->query($query) or die("Couldn't get the group listing");
 
 		$title=array();
 		$title[]='myGroupAllocation.gif';

@@ -266,9 +266,11 @@ $combo_strings = Array(
 			),
 
 'campaignstatus_dom' => Array(''=>'',
-			      'Planning'=>'Planning',						      	      'Active'=>'Active',							      'Inactive'=>'Inactive',
-			      'Complete'=>'Complete',
-			      'Cancelled'=>'Cancelled',							      ),
+				'Planning'=>'Planning',
+				'Active'=>'Active',
+				'Inactive'=>'Inactive',
+				'Completed'=>'Completed',
+				'Cancelled'=>'Cancelled',							      ),
 			
 
 'campaigntype_dom' => Array(''=>'',

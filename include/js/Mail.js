@@ -31,7 +31,7 @@ function eMail(module,oButton)
 	}
 	else
 	{
-		alert("Please select at least one entity");
+		alert(alert_arr.SELECT);
 		return false;
 	}
 	allids = document.getElementById('idlist').value;	
@@ -63,7 +63,7 @@ function massMail(module)
 	}
 	else
 	{
-		alert("Please select at least one entity");
+		alert(alert_arr.SELECT);
 		return false;
 	}
 	document.massdelete.action="index.php?module=CustomView&action=SendMailAction&return_module="+module+"&return_action=index&viewname="+viewid;
@@ -79,7 +79,7 @@ function set_return_emails(entity_id,email_id,parentname,emailadd){
 		window.close();
 	}else
 	{
-		alert('The Record '+parentname+' does\'t have email id' );
+		alert('"'+parentname+alert_arr.DOESNOT_HAVE_AN_MAILID);
 		return false;
 	}
 }	
@@ -111,7 +111,7 @@ function validate_sendmail(idlist,module)
 	}
 	else
 	{
-		alert('Please Select a mailid');
+		alert(alert_arr.SELECT_MAILID);
 	}
 }
 function sendmail(module,idstrings)
@@ -122,7 +122,13 @@ function sendmail(module,idstrings)
                         method: 'post',
                         postBody: "module=Emails&return_module="+module+"&action=EmailsAjax&file=mailSelect&idlist="+idstrings,
                         onComplete: function(response) {
-                                        getObj('sendmail_cont').innerHTML=response.responseText;
+					if(response.responseText == "Mail Ids not permitted" || response.responseText == "No Mail Ids")
+					{
+						var url= 'index.php?module=Emails&action=EmailsAjax&pmodule='+module+'&file=EditView&sendmail=true';
+				                openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no');
+					}	
+					else
+						getObj('sendmail_cont').innerHTML=response.responseText;
                         }
                 }
         );

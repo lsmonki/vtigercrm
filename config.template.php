@@ -16,23 +16,23 @@
 include('vtigerversion.php');
 
 // more than 8MB memory needed for graphics
-// memory limit default value = 16M
-ini_set('memory_limit','16M');
+// memory limit default value = 64M
+ini_set('memory_limit','64M');
 
-// show or hide world clock, calculator and FCKEditor
-// world_clock_display default value = true
-// calculator_display default value = true
-// fckeditor_display default value = true
+// show or hide calendar, world clock, calculator, chat and FCKEditor 
+// Do NOT remove the quotes if you set these to false! 
+$CALENDAR_DISPLAY = 'true';
 $WORLD_CLOCK_DISPLAY = 'true';
 $CALCULATOR_DISPLAY = 'true';
+$CHAT_DISPLAY = 'true'; 
 $FCKEDITOR_DISPLAY = 'true';
 
 // url for customer portal (Example: http://vtiger.com/portal)
-$PORTAL_URL = 'http://your-domain.com/customerportal';
+$PORTAL_URL = 'http://vtiger.com/customerportal';
 
 // helpdesk support email id and support name (Example: 'support@vtiger.com' and 'vtiger support')
-$HELPDESK_SUPPORT_EMAIL_ID = 'support@your-domain.com';
-$HELPDESK_SUPPORT_NAME = 'your-domain name';
+$HELPDESK_SUPPORT_EMAIL_ID = '_USER_SUPPORT_EMAIL_';
+$HELPDESK_SUPPORT_NAME = 'your-support name';
 
 /* database configuration
       db_server

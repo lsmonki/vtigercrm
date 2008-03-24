@@ -32,6 +32,9 @@ function openPopup(){ldelim}
 function check_duplicate()
 {ldelim}
 	var user_name = window.document.EditView.user_name.value;
+	var status = CharValidation(user_name,'name');
+        if(status)
+	{ldelim}
 	new Ajax.Request(
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -39,18 +42,23 @@ function check_duplicate()
                         postBody: 'module=Users&action=UsersAjax&file=Save&ajax=true&dup_check=true&userName='+user_name,
                         onComplete: function(response) {ldelim}
 				if(response.responseText == 'SUCCESS')
+				{ldelim}
+					$('user_status').disabled = false;
 			                document.EditView.submit();
+				{rdelim}
        				else
 			                alert(response.responseText);
                         {rdelim}
                 {rdelim}
         );
-
+	{rdelim}
+	else
+            alert(alert_arr.NO_SPECIAL+alert_arr.IN_USERNAME)
 {rdelim}
 
 </script>
 
-
+<br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
         <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
@@ -90,7 +98,11 @@ function check_duplicate()
 					{if $MODE eq 'edit'}
 						{$UMOD.LBL_EDITING} "{$USERNAME}" 
 					{else}
+						{if $DUPLICATE neq 'true'}
 						{$UMOD.LBL_CREATE_NEW_USER}
+						{else}
+						{$APP.LBL_DUPLICATING} "{$USERNAME}"
+						{/if}
 					{/if}
 					</b></span>
 				{else}
@@ -106,7 +118,9 @@ function check_duplicate()
 			{if $MODE eq 'edit'}
 				<td><b class="small">{$UMOD.LBL_EDIT_VIEW} "{$USERNAME}"</b>
 			{else}
+				{if $DUPLICATE neq 'true'}
 				<td><b class="small">{$UMOD.LBL_CREATE_NEW_USER}</b>
+				{/if}
 			{/if}
 			</td>
                 </tr>

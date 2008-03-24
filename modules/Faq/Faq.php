@@ -133,13 +133,13 @@ class Faq extends CRMEntity {
 		$result = $this->db->query($sql);
 		$noofrows = $this->db->num_rows($result);
 
-		if($noofrows == 0)
+		//In ajax save we should not add this div
+		if($_REQUEST['action'] != 'FaqAjax')
 		{
-			$log->debug("Exiting getFAQComments method ...");
-			return '';
+			$list .= '<div id="comments_div" style="overflow: auto;height:200px;width:100%;">';
+			$enddiv = '</div>';
 		}
 
-		$list .= '<div style="overflow: auto;height:200px;width:100%;">';
 		for($i=0;$i<$noofrows;$i++)
 		{
 			$comment = $this->db->query_result($result,$i,'comments');
@@ -154,7 +154,9 @@ class Faq extends CRMEntity {
 				$list .= ' : '.$createdtime.'</font></div>';
 			}
 		}
-		$list .= '</div>';
+
+		$list .= $enddiv;
+		
 		$log->debug("Exiting getFAQComments method ...");
 		return $list;
 	}

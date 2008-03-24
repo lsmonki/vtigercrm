@@ -29,17 +29,18 @@ require_once('include/upload_file.php');
 
 // Note is used to store customer information.
 class Notes extends CRMEntity {
+	
 	var $log;
 	var $db;
 
 	var $default_note_name_dom = array('Meeting vtiger_notes', 'Reminder');
 
-	var $tab_name = Array('vtiger_crmentity','vtiger_notes','vtiger_attachments');
-	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_notes'=>'notesid','vtiger_senotesrel'=>'notesid','vtiger_attachments'=>'attachmentsid');
+	var $tab_name = Array('vtiger_crmentity','vtiger_notes');
+	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_notes'=>'notesid','vtiger_senotesrel'=>'notesid');
 
 	var $column_fields = Array();
 
-        var $sortby_fields = Array('notes_title','modifiedtime','contact_id','filename');		  
+        var $sortby_fields = Array('title','modifiedtime','contact_id','filename','createdtime','lastname');		  
 
 	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('', '', '', '');
@@ -47,7 +48,7 @@ class Notes extends CRMEntity {
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
 				'Subject'=>Array('notes'=>'notes_title'),
-				'Contact Name'=>Array('notes'=>'contact_id'),
+				'Contact Name'=>Array('contactdetails'=>'lastname'),
 				'Related to'=>Array('senotesrel'=>'crmid'),
 				'File'=>Array('notes'=>'filename'),
 				'Last Modified'=>Array('crmentity'=>'modifiedtime')
@@ -64,7 +65,6 @@ class Notes extends CRMEntity {
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'modifiedtime';
 	var $default_sort_order = 'ASC';
-
 	function Notes() {
 		$this->log = LoggerManager::getLogger('notes');
 		$this->log->debug("Entering Notes() method ...");
@@ -75,7 +75,8 @@ class Notes extends CRMEntity {
 
 	function save_module($module)
 	{
-
+		
+		$insertion_mode = $this->mode;
 		//inserting into vtiger_senotesrel
 		if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
 		{

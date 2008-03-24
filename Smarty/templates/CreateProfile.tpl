@@ -20,8 +20,8 @@
 	<br>
 	<div align=center>
 				{include file='SetMenu.tpl'}
-				<form action="index.php" method="post" name="profileform" id="form">
-                                <input type="hidden" name="module" value="Users">
+				<form action="index.php" method="post" name="profileform" id="form" onSubmit="return rolevalidate();">
+                                <input type="hidden" name="module" value="Settings">
                                 <input type="hidden" name="mode" value="{$MODE}">
                                 <input type="hidden" name="action" value="profilePrivileges">
                                 <input type="hidden" name="parenttab" value="Settings">
@@ -32,7 +32,7 @@
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<tr>
 					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-profile.gif" alt="{$MOD.LBL_PROFILES}" width="48" height="48" border=0 title="{$MOD.LBL_PROFILES}"></td>
-					<td class=heading2 valign=bottom><b> <a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Users&action=ListProfiles&parenttab=Settings">{$CMOD.LBL_PROFILE_PRIVILEGES}</a></b></td>
+					<td class=heading2 valign=bottom><b> <a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=ListProfiles&parenttab=Settings">{$CMOD.LBL_PROFILE_PRIVILEGES}</a></b></td>
 				</tr>
 				<tr>
 					<td valign=top class="small">{$MOD.LBL_PROFILE_DESCRIPTION}</td>
@@ -125,7 +125,7 @@
 					<tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;" height="75">&nbsp;</td></tr>
 					<tr>
 						<td colspan="2" align="right">
-						<input type="button" value=" {$APP.LNK_LIST_NEXT} &rsaquo; " name="Next" class="crmButton small" onClick="rolevalidate();"/>&nbsp;&nbsp;
+						<input type="button" value=" {$APP.LNK_LIST_NEXT} &rsaquo; " name="Next" class="crmButton small" onClick="return rolevalidate();"/>&nbsp;&nbsp;
 						<input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " title="{$APP.LBL_CANCEL_BUTTON_TITLE}" name="Cancel" onClick="window.history.back();" class="crmButton small cancel"/>
 						</td>
 					</tr>
@@ -144,7 +144,7 @@
 
 					<p>&nbsp;</p>
 					<table border="0" cellpadding="5" cellspacing="0" width="100%">
-					<tbody><tr><td class="small" align="right" nowrap="nowrap"><a href="#top">Scroll to Top</a></td></tr>
+					<tbody><tr><td class="small" align="right" nowrap="nowrap"><a href="#top">{$APP.LBL_SCROLL}</a></td></tr>
 					</tbody></table>
 				
 				
@@ -173,6 +173,7 @@
 </tbody>
 </table>
 <script>
+var profile_err_msg='{$MOD.LBL_ENTER_PROFILE}';
 function rolevalidate()
 {ldelim}
     var profilename = document.getElementById('pobox').value;
@@ -181,14 +182,19 @@ function rolevalidate()
 	dup_validation(profilename);
     else
     {ldelim}
-        alert('Enter The Profile name');
+        alert(profile_err_msg);
         document.getElementById('pobox').focus();
+	return false
     {rdelim}
+    return false
 {rdelim}
 
 
 function dup_validation(profilename)
 {ldelim}
+	var status = CharValidation(profilename,'namespace');
+	if(status)
+	{ldelim}
 	new Ajax.Request(
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -202,5 +208,8 @@ function dup_validation(profilename)
 				{rdelim}
 		{rdelim}
 	);
+	{rdelim}
+	else
+		alert(alert_arr.NO_SPECIAL+alert_arr.IN_PROFILENAME)
 {rdelim}
 </script>

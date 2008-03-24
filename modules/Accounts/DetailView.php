@@ -80,6 +80,13 @@ if(isPermitted("Accounts","EditView",$_REQUEST['record']) == 'yes')
 if(isPermitted("Accounts","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
+if(isPermitted("Emails","EditView",'') == 'yes') 
+{ 
+	$smarty->assign("SENDMAILBUTTON","permitted"); 
+	$smarty->assign("EMAIL1", $focus->column_fields['email1']); 
+	$smarty->assign("EMAIL2", $focus->column_fields['email2']); 
+} 
+
 if(isPermitted("Accounts","Merge",'') == 'yes')
 {
 	$smarty->assign("MERGEBUTTON","permitted");
@@ -92,6 +99,7 @@ if(isPermitted("Accounts","Merge",'') == 'yes')
 		$optionString[$tempVal["templateid"]]=$tempVal["filename"];
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
+	$smarty->assign("TEMPLATECOUNT",$tempCount);
 	$smarty->assign("WORDTEMPLATEOPTIONS",$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']);
         $smarty->assign("TOPTIONS",$optionString);
 }
@@ -110,12 +118,19 @@ $smarty->assign("CHECK", $check_button);
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
 if($singlepane_view == 'true')
 {
 	$related_array = getRelatedLists($currentModule,$focus);
 	$smarty->assign("RELATEDLISTS", $related_array);
 }
+//added for email link in detailv view
+$querystr="SELECT fieldid FROM vtiger_field WHERE tabid=".getTabid($currentModule)." and uitype=13;";
+$queryres = $adb->query($querystr);
+$fieldid = $adb->query_result($queryres,0,'fieldid');
+$smarty->assign("FIELD_ID",$fieldid);
+
 $smarty->assign("SinglePane_View", $singlepane_view);
 
 $smarty->display("DetailView.tpl");

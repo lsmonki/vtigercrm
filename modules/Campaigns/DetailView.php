@@ -12,7 +12,6 @@
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 require_once('modules/Campaigns/Campaigns.php');
-require_once('modules/CustomView/CustomView.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
@@ -29,7 +28,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
         $focus->id = "";
 }
-global $app_strings,$mod_strings,$theme,$currentModule,$default_module_view;
+global $app_strings,$mod_strings,$theme,$currentModule,$default_module_view,$adb;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -70,18 +69,36 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
 if($singlepane_view == 'true')
 {
 	$related_array = getRelatedLists($currentModule,$focus);
 	$smarty->assign("RELATEDLISTS", $related_array);
-	$cvObj = new CustomView("Contacts");
-	$cvcombo = $cvObj->getCustomViewCombo();
-	$smarty->assign("CONTCVCOMBO","<select id='cont_cv_list' onchange='loadCvList(\"Contacts\",".$_REQUEST["record"].");'><option value='None'>-- ".$mod_strings['Select One']." --</option>".$cvcombo."</select>");
+	/* To get Contacts CustomView -START */
+	$sql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype where vtiger_tab.tabid=".getTabid('Contacts');
+	$result = $adb->query($sql);
+	$chtml = "<select id='cont_cv_list'><option value='None'>-- ".$mod_strings['Select One']." --</option>";
+	while($cvrow=$adb->fetch_array($result))
+	{
+		$chtml .= "<option value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
+	}
+	$chtml .= "</select>";
+	$smarty->assign("CONTCVCOMBO",$chtml);
+	/* To get Contacts CustomView -END */
+	
+	/* To get Leads CustomView -START */
+	$sql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype where vtiger_tab.tabid=".getTabid('Leads');
+	$result = $adb->query($sql);
+	$lhtml = "<select id='lead_cv_list'><option value='None'>-- ".$mod_strings['Select One']." --</option>";
+	while($cvrow=$adb->fetch_array($result))
+	{
+		$lhtml .= "<option value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
+	}
+	$lhtml .= "</select>";
+	$smarty->assign("LEADCVCOMBO",$lhtml);
+	/* To get Leads CustomView -END */
 
-	$cvObj = new CustomView("Leads");
-	$cvcombo = $cvObj->getCustomViewCombo();
-	$smarty->assign("LEADCVCOMBO","<select id='lead_cv_list' onchange='loadCvList(\"Leads\",".$_REQUEST["record"].");'> <option value='None'>-- ".$mod_strings['Select One']." --</option>".$cvcombo."</select>");
 }
 
 $smarty->assign("SinglePane_View", $singlepane_view);

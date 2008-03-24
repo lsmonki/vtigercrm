@@ -40,11 +40,13 @@ $activity_mode = $_REQUEST['activity_mode'];
 if($activity_mode == 'Task')
 {
 	$tab_type = 'Calendar';
+	$taskcheck = true;	
 	$smarty->assign("SINGLE_MOD",$mod_strings['LBL_TODO']);
 }
 elseif($activity_mode == 'Events')
 {
 	$tab_type = 'Events';
+	$taskcheck = false;
 	$smarty->assign("SINGLE_MOD",$mod_strings['LBL_EVENT']);
 }
 
@@ -122,13 +124,21 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 	    $value['recurringcheck'] = 'No';
     }
 
+}else
+{
+	if(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id']!=''){
+		$smarty->assign("CONTACTSID",$_REQUEST['contact_id']);
+		$contact_name = getContactName($_REQUEST['contact_id']);
+		$smarty->assign("CONTACTSNAME",$contact_name);
+		$account_id = $_REQUEST['account_id'];
+                $account_name = getAccountName($account_id);
+	}	
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = ''; 	
 }
-$userDetails=getOtherUserName($current_user->id,true);
-//echo '<pre>';print_r($userDetails);echo '</pre>';
+$userDetails=getOtherUserName($current_user->id);
 $to_email = getUserEmailId('id',$current_user->id);
 $smarty->assign("CURRENTUSERID",$current_user->id);
 
@@ -158,11 +168,15 @@ foreach($act_data as $header=>$blockitem)
 		}
 	}
 }
-if($current_user->hour_format == '')
-	$format = 'am/pm';
-else
-	$format = $current_user->hour_format;
-//echo '<pre>';print_r($value);echo '</pre>';
+// jread.topik. patch account_id for create contact
+if (strlen($account_name) > 0)
+{
+	$fldlabel_sel['parent_id'][1]='selected';
+	$secondvalue['parent_id'] = $account_id;
+	$value['parent_id'] = $account_name;
+}
+
+$format = ($current_user->hour_format == '')?'am/pm':$current_user->hour_format;
 $stdate = key($value['date_start']);
 $enddate = key($value['due_date']);
 $sttime = $value['date_start'][$stdate];
@@ -174,9 +188,9 @@ $value['startfmt'] = $time_arr['startfmt'];
 $value['endhr'] = $time_arr['endhour'];
 $value['endmin'] = $time_arr['endmin'];
 $value['endfmt'] = $time_arr['endfmt'];
-$smarty->assign("STARTHOUR",getTimeCombo($format,'start',$time_arr['starthour'],$time_arr['startmin'],$time_arr['startfmt']));
+$smarty->assign("STARTHOUR",getTimeCombo($format,'start',$time_arr['starthour'],$time_arr['startmin'],$time_arr['startfmt'],$taskcheck));
 $smarty->assign("ENDHOUR",getTimeCombo($format,'end',$time_arr['endhour'],$time_arr['endmin'],$time_arr['endfmt']));
-//echo '<pre>';print_r($value);echo '</pre>';
+$smarty->assign("FOLLOWUP",getTimeCombo($format,'followup_start',$time_arr['endhour'],$time_arr['endmin'],$time_arr['endfmt']));
 $smarty->assign("ACTIVITYDATA",$value);
 $smarty->assign("LABEL",$fldlabel);
 $smarty->assign("secondvalue",$secondvalue);
@@ -189,6 +203,7 @@ $smarty->assign("HOURFORMAT",$format);
 $smarty->assign("USERSLIST",$userDetails);
 $smarty->assign("USEREMAILID",$to_email);
 $smarty->assign("MODULE",$currentModule);
+$smarty->assign("DATEFORMAT",parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -218,17 +233,35 @@ $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 if (isset($_REQUEST['return_module']))
-$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+	$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
 if (isset($_REQUEST['return_action']))
-$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+	$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
 if (isset($_REQUEST['return_id']))
-$smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+	$smarty->assign("RETURN_ID", $_REQUEST['return_id']);
 if (isset($_REQUEST['ticket_id']))
-$smarty->assign("TICKETID", $_REQUEST['ticket_id']);
+	$smarty->assign("TICKETID", $_REQUEST['ticket_id']);
 if (isset($_REQUEST['product_id']))
-$smarty->assign("PRODUCTID", $_REQUEST['product_id']);
+	$smarty->assign("PRODUCTID", $_REQUEST['product_id']);
 if (isset($_REQUEST['return_viewname']))
-$smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+	$smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
+	$smarty->assign("view",$_REQUEST['view']);
+if(isset($_REQUEST['hour']) && $_REQUEST['hour']!='')
+	$smarty->assign("hour",$_REQUEST['hour']);
+if(isset($_REQUEST['day']) && $_REQUEST['day']!='')
+	$smarty->assign("day",$_REQUEST['day']);
+if(isset($_REQUEST['month']) && $_REQUEST['month']!='')
+	$smarty->assign("month",$_REQUEST['month']);
+if(isset($_REQUEST['year']) && $_REQUEST['year']!='')
+	$smarty->assign("year",$_REQUEST['year']);
+if(isset($_REQUEST['viewOption']) && $_REQUEST['viewOption']!='')
+	$smarty->assign("viewOption",$_REQUEST['viewOption']);
+if(isset($_REQUEST['subtab']) && $_REQUEST['subtab']!='')
+	$smarty->assign("subtab",$_REQUEST['subtab']);
+if(isset($_REQUEST['maintab']) && $_REQUEST['maintab']!='')
+	$smarty->assign("maintab",$_REQUEST['maintab']);
+	
+	
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
@@ -240,6 +273,7 @@ $smarty->assign("ID", $focus->id);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 
 $smarty->display("ActivityEditView.tpl");
 

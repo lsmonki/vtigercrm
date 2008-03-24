@@ -25,7 +25,6 @@ $mod_strings = Array(
 'LBL_MODULE_TITLE'=>'Calendar: Home',
 'LBL_MODULE_APPOINTMENT'=>'Calendar: Appointment',
 'LBL_MODULE_APPOINTMENT_DETAIL'=>'Calendar: Appointment Detail',
-'LBL_CONTACT'=>'Contact:',
 'LBL_SAVE'=>'Save',
 'LBL_RESET'=>'Cancel',
 'LBL_LIST_USER_NAME'=>'User Name',
@@ -39,8 +38,7 @@ $mod_strings = Array(
 'LBL_USE24'=>'Use 24 hours format',
 'LBL_CALSTART'=>'Start my calendar time at',
 'LBL_TIMESETTINGS'=>'Time Settings',
-'LBL_OPENCAL'=>'Open Calendar',
-
+'LBL_HOLDFOLLOWUP'=>'Hold followup on',
 'LBL_CALL' => 'Call',
 'LBL_MEET' => 'Meeting',
 'LBL_APPNT' => 'Appointment',
@@ -82,10 +80,6 @@ $mod_strings = Array(
 
 
 'LBL_APPCREATED_BY' => 'Created by',
-'LBL_APP_START_DATE' => 'Start Date',
-'LBL_APP_START_TIME' => 'Start Time',
-'LBL_APP_END_DATE' => 'End Date',
-'LBL_APP_END_TIME' => 'End Time',
 'LBL_AT_DATE_TIME' => 'at',
 
 'LBL_MON' => 'Month',
@@ -94,7 +88,6 @@ $mod_strings = Array(
 'LBL_PREV_MON' => 'Previous Month',
 'LBL_NEXT_MON' => 'Next Month',
 
-'LBL_YEAR'=>'Year',
 'LBL_YEAR_BUTTON_KEY'=>'Y',
 'LBL_MON_BUTTON_TITLE'=>'Year [Alt+Y]',
 'LBL_PREV_YEAR'=>'Previous Year',
@@ -173,54 +166,56 @@ $mod_strings = Array(
 "Dec",
 ),
 
-'LBL_EVENTS'=>'Events',
-'LBL_TODOS'=>'To Dos',
 'LBL_TIME'=>'Time',
-'LBL_ADD_EVENT'=>'Add Event',
-'LBL_ADD'=>'Add',
-'LBL_ADDCALL'=>'Call',
-'LBL_ADDMEETING'=>'Meeting',
-'LBL_ADDTODO'=>'To Do',
-'LBL_INVITE'=>'Invite',
-'LBL_REMINDER'=>'Reminder',
-'LBL_SENDREMINDER'=>'Send Reminder',
-'LBL_BEFOREEVENT'=>'before the event starts',
-'LBL_BEFORETASK'=>'before the task starts',
-'LBL_REPEAT'=>'Repeat',
-'LBL_EVENTTYPE'=>'Event Type',
-'LBL_EVENTNAME'=>'Event Name',
-'LBL_EVENTSTAT'=>'Event starts at',
-'LBL_EVENTEDAT'=>'Event ends on',
-'LBL_HRVIEW'=>'Hour View',
+'LBL_START_TIME' => 'Start Time',
+'LBL_END_TIME' => 'End Time',
+'LBL_START_DATE'=>'Start Date',
+'LBL_TIME_START'=>'Time Start',
+'LBL_DUE_DATE'=>'Due Date',
+'LBL_START_DATE_TIME'=>'Start Date & Time',
+'LBL_END_DATE_TIME'=>'End Date & Time',
+'LBL_TODO'=>'To Do',
+'LBL_TODOS'=>'To Dos',
+'LBL_EVENTS'=>'Events',
+'LBL_TOTALEVENTS'=>'My Total Events :',
+'LBL_TOTALTODOS'=>'My Total To Dos :',
+'LBL_VIEW'=>'View',
 'LBL_LISTVIEW'=>'List View',
+'LBL_HRVIEW'=>'Hour View',
 'LBL_WEEKVIEW'=>'Weekly Calendar View',
 'LBL_MONTHVIEW'=>'Monthly Calendar View',
 'LBL_YEARVIEW'=>'Yearly Calendar View',
-'LBL_TOTALEVENTS'=>'Total Events :',
-'LBL_TOTALTODOS'=>'Total To Dos :',
-'LBL_EVTDTL'=>'Event Details',
+'LBL_STATUS'=>'Status',
 'LBL_ACTION'=>'Actions',
+'LBL_ADD'=>'Add',
+'LBL_OPENCAL'=>'Open Calendar',
+
+
+'LBL_ADD_EVENT'=>'Add Event',
+'LBL_ADDCALL'=>'Call',
+'LBL_ADDMEETING'=>'Meeting',
+'LBL_ADDTODO'=>'To Do',
+'LBL_BEFOREEVENT'=>'before the event starts',
+'LBL_BEFORETASK'=>'before the task starts',
+'LBL_EVENTDETAILS'=>'Event Details',
 'LBL_CURSTATUS'=>'Current Status',
 'LBL_ASSINGEDTO'=>'Assigned To',
 'LBL_RELATEDTO'=>'Related To',
-'LBL_STATUS'=>'Status',
 'LBL_PENDING'=>'Pending',
 'LBL_PUBLIC'=>'Mark Public',
 'LBL_MORE'=>'More',
-'LBL_VIEW'=>'View',
 'LBL_EDIT'=>'Edit',
 'LBL_EVERYDAY'=>'Every Day',
 'LBL_EVERYWEEK'=>'Every Week',
 'LBL_EVERYMON'=>'Every Month',
-'LBL_REPEATEVENT'=>'Repeat once in every',
-'LBL_DAYS'=>'Day(s)',
 'LBL_WEEKS'=>'Week(s)',
 'LBL_MONTHS'=>'Month(s)',
 'LBL_YEAR'=>'Year',
 'LBL_NONE_SCHEDULED'=>'None Scheduled',
 
 'LBL_INVITE_INST1'=>'To invite, select the users from the "Available Users" list and click the "Add" button.',
-'LBL_INVITE_INST2'=>'To remove, select the users in the "Selected Users" list and the click "Remove" button.',
+'LBL_INVITE_SHARE'=>'To share, select the users from the "Available Users" list and click the "Add" button.',
+'LBL_INVITE_INST2'=>'To remove, select the users from the "Selected Users" list and the click "Remove" button.',
 'LBL_SELUSR_INFO'=>' Selected users will receive an email about the Event.',
 'LBL_CALSHAREMESSAGE'=>'Share my calendar with the following selected users',
 'LBL_CALSHARE'=>'Calendar Sharing',
@@ -229,7 +224,6 @@ $mod_strings = Array(
 'LBL_ADD_BUTTON'=>'Add',
 'LBL_USERS'=>'Users',
 'LBL_RMV_BUTTON'=>'Remove',
-'LBL_RMD_ON'=>'Remind on',
 'LBL_SDRMD'=>'Send Reminder to',
 'LBL_ENABLE_REPEAT'=>'Enable Repeat',
 'LBL_REPEAT_ONCE'=>'Repeat once in every',
@@ -241,12 +235,13 @@ $mod_strings = Array(
 
 
 
-//DON'T CONVERT THESE THEY ARE MAPPINGS
+//DON'T CONVERT THESE THEY ARE MAPPINGS - STARTS
 'db_last_name' => 'LBL_LIST_LAST_NAME',
 'db_first_name' => 'LBL_LIST_FIRST_NAME',
 'db_title' => 'LBL_LIST_TITLE',
 'db_email1' => 'LBL_LIST_EMAIL_ADDRESS',
 'db_email2' => 'LBL_LIST_EMAIL_ADDRESS',
+//DON'T CONVERT THESE THEY ARE MAPPINGS -ENDS
 'LBL_COMPLETED'=>'Mark Completed',
 'LBL_DEFERRED'=>'Mark Deferred',
 'LBL_HELD'=>'Mark Held',
@@ -254,7 +249,6 @@ $mod_strings = Array(
 'LBL_POSTPONE'=>'Postpone',
 'LBL_CHANGEOWNER'=>'Change Owner',
 'LBL_DEL'=>'Delete',
-//END DON'T CONVERT
 
 //Added for actvity merge with calendar
 'LBL_SEARCH_FORM_TITLE'=>'Activity Search',
@@ -262,8 +256,13 @@ $mod_strings = Array(
 'LBL_NEW_FORM_TITLE'=>'New Activity',
 'LBL_TASK_INFORMATION'=>'Task Information',
 'LBL_EVENT_INFORMATION'=>'Event Information',
+'LBL_CALENDAR_INFORMATION'=>'Calendar Information',
 
 'LBL_NAME'=>'Subject:',
+'LBL_ACTIVITY_NOTIFICATION'=>'This is a notification that an activity is assigned to you that has been',
+'LBL_ACTIVITY_INVITATION'=>'You have been invited for an activity that has been ',
+'LBL_DETAILS_STRING'=>'The details are',
+'LBL_REGARDS_STRING'=>'Thanks & Regards',
 'LBL_CONTACT_NAME'=>'Contact Name',
 'LBL_OPEN_ACTIVITIES'=>'Open Activities',
 'LBL_ACTIVITY'=>'Activity:',
@@ -336,7 +335,7 @@ $mod_strings = Array(
 'Location'=>'Location',
 'No Time'=>'No Time',
 //Added for Send Reminder 4.2 release
-'Send Reminder'=>'Send Reminder',
+'Send Reminder'=>'Send Reminder (mins)',
 'LBL_YES'=>'Yes',
 'LBL_NO'=>'No',
 'LBL_DAYS'=>'day(s)',
@@ -362,14 +361,14 @@ $mod_strings = Array(
 'LBL_INVITE'=>'Invite',
 'LBL_REPEAT'=>'Repeat',
 'LBL_REMINDER'=>'Reminder',
-'LBL_ENABLE_REPEAT'=>'Enable Repeat',
 'LBL_SENDREMINDER'=>'Send Reminder',
 'LBL_NOTIFICATION'=>'Notification',
 'LBL_SENDNOTIFICATION'=>'Send Notification',
 'LBL_RMD_ON'=>'Remind on',
 'LBL_REPEATEVENT'=>'Repeat once in every',
 'LBL_TIMEDATE'=>'Time & Date',
-'LBL_TODO'=>'To Do',
+'LBL_HR'=>'Hr',
+'LBL_MIN'=>'min',
 'LBL_EVENT'=>'Event',
 'Daily'=>'Day(s)',
 'Weekly'=>'Week(s)',
@@ -389,6 +388,8 @@ $mod_strings = Array(
 'Last'=>'Last', 
 'on'=>'on', 
 'day of the month'=>'day of the month',
+'Private'=>'Private',
+'Public'=>'Public',
 
 //Added for existing Picklist entries
 
@@ -404,6 +405,19 @@ $mod_strings = Array(
 'LBL_REMAINDER_HRS'=>'hrs',
 'Call'=>'Call',
 'Meeting'=>'Meeting',
+
+//added to send dates and time in calendar notification/invitation mail.
+
+'Start date and time'=>'Start Date & Time',
+'End date and time'=>'End Date & Time',
+//this is for task
+'End date'=>'End date',
+'LBL_SET_DATE'=>'Set date..',
+'Recurrence'=>'Recurrence',
+'SHARED_EVENT_DEL_MSG'=>'The User does not have permission to Delete this record.',
+
+//added to send invitation mail Subject.
+'INVITATION'=>' Invitation ',
 
 );
 

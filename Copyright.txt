@@ -43,8 +43,9 @@ For Windows
 
 19. jscalendar is used under GNU LGPL downloaded from http://www.dynarch.com/projects/calendar/ available at http://www.gnu.org/licenses/lgpl.html
 
+20. script.oculo.us scripts used under MIT Style license from http://script.aculo.us available under http://script.aculo.us/#   
+21. NOCC scripts used under GNU GPL downloaded from http://nocc.sourceforge.net available at http://nocc.sourceforge.net/page.php?file=COPYING 
 
-21. script.oculo.us scripts used under MIT Style license from http://script.aculo.us available under http://script.aculo.us/#   
 22. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL).
 
 For Linux
@@ -87,8 +88,9 @@ For Linux
 
 19. jscalendar is used under GNU LGPL downloaded from http://www.dynarch.com/projects/calendar/ available at http://www.gnu.org/licenses/lgpl.html
 
+20. script.oculo.us scripts used under MIT Style license from http://script.aculo.us available under http://script.aculo.us/#     
+21. NOCC scripts used under GNU GPL downloaded from http://nocc.sourceforge.net available at http://nocc.sourceforge.net/page.php?file=COPYING
 
-21. script.oculo.us scripts used under MIT Style license from http://script.aculo.us available under http://script.aculo.us/#     
 22. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL)
 
 The licenses of the Open Source components are reproduced in full below.
@@ -730,6 +732,7 @@ is not removed.
 This software is provided "as is" and any express or implied waranties, 
 including but not limited to, the implied warranties of merchantability and
 fitness for a particular purpose are disclaimed.  In no event shall 
+
 Zeus Technology Ltd. be liable for any direct, indirect, incidental, special, 
 exemplary, or consequential damaged (including, but not limited to, 
 procurement of substitute good or services; loss of use, data, or profits;

@@ -25,35 +25,12 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once("modules/Emails/mail.php");
 
-
-/**
- * This function is used to get a random password.
- * @return a random password with alpha numeric chanreters of length 8
- */
-function makeRandomPassword() 
-{
-	global $log;
-	$log->debug("Entering makeRandomPassword() method ...");
-        $salt = "abcdefghijklmnopqrstuvwxyz0123456789";
-        srand((double)microtime()*1000000);
-        $i = 0;
-        while ($i <= 7)
-	{
-                $num = rand() % 33;
-                $tmp = substr($salt, $num, 1);
-                $pass = $pass . $tmp;
-                $i++;
-	}
-$log->debug("Exiting makeRandomPassword method ...");
-      return $pass;
-}
-
 $local_log =& LoggerManager::getLogger('index');
 
 global $log,$adb;
 $focus = new Contacts();
 
-setObjectValuesFromRequest(&$focus);
+setObjectValuesFromRequest($focus);
 
 if($_REQUEST['salutation'] == '--None--')	$_REQUEST['salutation'] = '';
 if (!isset($_REQUEST['email_opt_out'])) $focus->email_opt_out = 'off';
@@ -118,7 +95,14 @@ if($saveimage=="true")
 
 //if image added then we have to set that $_FILES['name'] in imagename field then only the image will be displayed
 if($_FILES['imagename']['name'] != '')
+{
 	$focus->column_fields['imagename'] = $_FILES['imagename']['name'];
+}
+elseif($focus->id != '')
+{
+	$result = $adb->query("select imagename from vtiger_contactdetails where contactid = ".$focus->id);
+	$focus->column_fields['imagename'] = $adb->query_result($result,0,'imagename');
+}
 	
 //Saving the contact
 if($image_error=="false")
@@ -193,20 +177,18 @@ if($image_error=="false")
 			$adb->query($sql);
 		}
 
-		$subject = "Customer Portal Login Details";
-		$contents = "Dear ".$_REQUEST['firstname'].' '.$_REQUEST['lastname'].',<br><br>';
-		$contents .= 'Your Customer Portal Login details are given below:';
-		$contents .= "<br><br>User Id : ".$_REQUEST['email'];
-		$contents .= '<br>Password : '.$password;
-		$contents .= "<br><br><a href='".$PORTAL_URL."/login.php'>Please Login Here</a>";
-
-		$contents .= '<br><br><b>Note : </b>We suggest you to change your password after logging in first time.';
-		$contents .= '<br><br>Support Team';
+		//changes made to send mail to portal user when we use ajax edit
+		$data_array = Array();
+		$data_array['first_name'] = $_REQUEST['firstname'];
+		$data_array['last_name'] = $_REQUEST['lastname'];
+		$data_array['email'] = $_REQUEST['email'];
+		$data_array['portal_url'] = "<a href=".$PORTAL_URL."/login.php>".$mod_strings['Please Login Here']."</a>";
+		$contents = getmail_contents_portalUser($data_array,$password);
 
 		$log->info("Customer Portal Information Updated in database and details are going to send => '".$_REQUEST['email']."'");
 		if($insert == 'true' || $update == 'true')
 		{
-			$mail_status = send_mail('Contacts',$_REQUEST['email'],$current_user->user_name,'',$subject,$contents);
+			$mail_status = send_mail('Contacts',$_REQUEST['email'],$current_user->user_name,'',$mod_strings['Customer Portal Login Details'],$contents);
 		}
 		$log->info("After return from the SendMailToCustomer function. Now control will go to the header.");
 	}
@@ -222,7 +204,7 @@ if($image_error=="false")
 
 	//Send notification mail to the assigned to owner about the contact creation
 	if($focus->column_fields['notify_owner'] == 1 || $focus->column_fields['notify_owner'] == 'on')
-		$status = sendNotificationToOwner('Contacts',&$focus);
+		$status = sendNotificationToOwner('Contacts',$focus);
 
 	header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&activity_mode=$activitymode&viewname=$return_viewname");
 

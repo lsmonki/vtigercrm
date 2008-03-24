@@ -97,7 +97,7 @@ ul {ldelim}color:black;{rdelim}
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-roles.gif" alt="Roles" width="48" height="48" border=0 title="Roles"></td>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-roles.gif" alt="{$MOD.LBL_ROLES}" width="48" height="48" border=0 title="{$MOD.LBL_ROLES}"></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_ROLES}</b></td>
 				</tr>
 				<tr>
@@ -201,7 +201,7 @@ ul {ldelim}color:black;{rdelim}
 			{ldelim}
 //				alert("Please Select the Node");
 				parentId = parentId.replace(/user_/gi,'');
-				window.location.href="index.php?module=Users&action=RoleDetailView&parenttab=Settings&roleid="+parentId;
+				window.location.href="index.php?module=Settings&action=RoleDetailView&parenttab=Settings&roleid="+parentId;
 			{rdelim}
 			else
 			{ldelim}
@@ -213,7 +213,7 @@ ul {ldelim}color:black;{rdelim}
 					        method: 'post',
 					        postBody: 'module=Users&action=UsersAjax&file=RoleDragDrop&ajax=true&parentId='+parentId+'&childId='+childId,
 						onComplete: function(response) {ldelim}
-							if(response.responseText != 'You cannot move a Parent Node under a Child Node')
+							if(response.responseText != alert_arr.ROLE_DRAG_ERR_MSG)
 							{ldelim}
 						                $('RoleTreeFull').innerHTML=response.responseText;
 						                hideAll = false;

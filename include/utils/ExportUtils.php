@@ -87,33 +87,33 @@ function getFieldsListFromQuery($query)
 	for($i=0; $i < $num_rows;$i++)
 	{
 		$columnName = $adb->query_result($result,$i,"columnname");
-		$fieldlable = $adb->query_result($result,$i,"fieldlabel");
+		$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 		$tablename = $adb->query_result($result,$i,"tablename");
 
 		//HANDLE HERE - Mismatch fieldname-tablename in field table, in future we have to avoid these if elses
 		if($columnName == 'smownerid')//for all assigned to user name
 		{
-			$fields .= "vtiger_users.user_name as '".$fieldlable."', ";
+			$fields .= "vtiger_users.user_name as '".$fieldlabel."',";
 		}
 		elseif($tablename == 'vtiger_account' && $columnName == 'parentid')//Account - Member Of
 		{
-			 $fields .= "vtiger_account2.accountname as '".$fieldlable."', ";
+			 $fields .= "vtiger_account2.accountname as '".$fieldlabel."',";
 		}
 		elseif($tablename == 'vtiger_contactdetails' && $columnName == 'accountid')//Contact - Account Name
 		{
-			$fields .= "vtiger_account.accountname as '".$fieldlable."', ";
+			$fields .= "vtiger_account.accountname as '".$fieldlabel."',";
 		}
 		elseif($tablename == 'vtiger_contactdetails' && $columnName == 'reportsto')//Contact - Reports To
 		{
-			$fields .= " concat(vtiger_contactdetails2.lastname,' ',vtiger_contactdetails2.firstname) as 'Reports To Contact', ";
+			$fields .= " concat(vtiger_contactdetails2.lastname,' ',vtiger_contactdetails2.firstname) as 'Reports To Contact',";
 		}
 		elseif($tablename == 'vtiger_potential' && $columnName == 'accountid')//Potential - Account Name
 		{
-			$fields .= "vtiger_account.accountname as '".$fieldlable."',";
+			$fields .= "vtiger_account.accountname as '".$fieldlabel."',";
 		}
 		elseif($tablename == 'vtiger_potential' && $columnName == 'campaignid')//Potential - Campaign Source
 		{
-			$fields .= "vtiger_campaign.campaignname as '".$fieldlable."',";
+			$fields .= "vtiger_campaign.campaignname as '".$fieldlabel."',";
 		}
 		elseif($tablename == 'vtiger_seproductsrel' && $columnName == 'crmid')//Product - Related To
 		{
@@ -131,7 +131,7 @@ function getFieldsListFromQuery($query)
 		}
 		elseif($tablename == 'vtiger_products' && $columnName == 'vendor_id')//Product - Vendor Name
 		{
-			$fields .= "vtiger_vendor.vendorname as '".$fieldlable."',";
+			$fields .= "vtiger_vendor.vendorname as '".$fieldlabel."',";
 		}
 		elseif($tablename == 'vtiger_producttaxrel' && $columnName == 'taxclass')//avoid product - taxclass
 		{
@@ -155,11 +155,11 @@ function getFieldsListFromQuery($query)
 		}
 		elseif($tablename == 'vtiger_attachments' && $columnName == 'filename')//Emails filename
 		{
-			$fields .= $tablename.".name '".$fieldlable."',";
+			$fields .= $tablename.".name as '".$fieldlabel."',";
 		}
 		else
 		{
-			$fields .= $tablename.".".$columnName. " '" .$fieldlable."',";
+			$fields .= $tablename.".".$columnName. " as '" .$fieldlabel."',";
 		}
 	}
 	$fields = trim($fields,",");

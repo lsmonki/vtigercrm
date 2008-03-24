@@ -33,7 +33,7 @@ $rate_symbol = getCurrencySymbolandCRate($currencyid);
 $rate = $rate_symbol['rate'];
 $curr_symbol= $rate_symbol['symbol'];
 
-setObjectValuesFromRequest(&$focus);
+setObjectValuesFromRequest($focus);
 
 if(isset($_REQUEST['amount']))
 {
@@ -42,7 +42,7 @@ if(isset($_REQUEST['amount']))
 }
 
 $focus->save("Potentials");
-$return_id = $focus->id;
+$pot_id = $return_id = $focus->id;
 
 if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
@@ -58,8 +58,8 @@ if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 
 //Added to send mail to the vtiger_potential-owner about the Potential
-$status = sendNotificationToOwner('Potentials',&$focus);
+$status = sendNotificationToOwner('Potentials',$focus);
 
-header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname");
+header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&pot_id=$pot_id&viewname=$return_viewname");
 
 ?>

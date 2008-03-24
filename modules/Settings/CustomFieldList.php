@@ -12,12 +12,10 @@ require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 
-global $mod_strings;
-global $app_strings;
+global $mod_strings,$app_strings,$theme;
 $smarty=new vtigerCRM_Smarty;
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
-global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
@@ -84,8 +82,7 @@ else
 function getCFListEntries($module)
 {
 	$tabid = getTabid($module);
-	global $adb;
-	global $theme;
+	global $adb,$app_strings,$theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$dbQuery = "select fieldid,columnname,fieldlabel,uitype,displaytype,vtiger_convertleadmapping.cfmid from vtiger_field left join vtiger_convertleadmapping on  vtiger_convertleadmapping.leadfid = vtiger_field.fieldid where tabid=".$tabid." and generatedtype=2 order by sequence";
@@ -109,7 +106,7 @@ function getCFListEntries($module)
 				$cf_element[]= $mapping_details['contactlabel'];
 				$cf_element[]= $mapping_details['potentiallabel'];
 			}
-			$cf_element['tool']='<img src="'.$image_path.'editfield.gif" border="0" style="cursor:pointer;" onClick="fnvshobj(this,\'createcf\');getCreateCustomFieldForm(\''.$module.'\',\''.$row["fieldid"].'\',\''.$tabid.'\',\''.$row["uitype"].'\')" alt="Edit" title="Edit"/>&nbsp;|&nbsp;<img style="cursor:pointer;" onClick="deleteCustomField('.$row["fieldid"].',\''.$module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')" src="'.$image_path.'delete.gif" border="0"  alt="Delete" title="Delete"/></a>';
+			$cf_element['tool']='<img src="'.$image_path.'editfield.gif" border="0" style="cursor:pointer;" onClick="fnvshobj(this,\'createcf\');getCreateCustomFieldForm(\''.$module.'\',\''.$row["fieldid"].'\',\''.$tabid.'\',\''.$row["uitype"].'\')" alt="'.$app_strings['LBL_EDIT_BUTTON_LABEL'].'" title="'.$app_strings['LBL_EDIT_BUTTON_LABEL'].'"/>&nbsp;|&nbsp;<img style="cursor:pointer;" onClick="deleteCustomField('.$row["fieldid"].',\''.$module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')" src="'.$image_path.'delete.gif" border="0"  alt="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'" title="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'"/></a>';
 
 			$cflist[] = $cf_element;
 			$count++;

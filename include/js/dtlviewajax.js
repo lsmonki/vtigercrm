@@ -185,14 +185,27 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 	}else if(uitype == '33')
 	{
 		tagValue = r.join(" |##| ");
-  	}else
+  	}else if(uitype == '24' || uitype == '21')
+        {
+                tagValue = document.getElementById(txtBox).value.replace(/<br\s*\/>/g, " ");
+
+        }else
 	{
 		tagValue = trim(document.getElementById(txtBox).value);
+		if(module == "Contacts")
+                {
+                        var port_obj = getObj('portal').checked;
+                        if(fieldName == "email" && tagValue == '' && port_obj == true)
+                        {
+                                alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+                                return false;
+                        }
+                }
 	}
 
 
 	var data = "file=DetailViewAjax&module=" + module + "&action=" + module + "Ajax&record=" + crmId+"&recordid=" + crmId ;
-	data = data + "&fldName=" + fieldName + "&fieldValue=" + escape(tagValue) + "&ajxaction=DETAILVIEW"+groupurl;
+	data = data + "&fldName=" + fieldName + "&fieldValue=" + escapeAll(tagValue) + "&ajxaction=DETAILVIEW"+groupurl;
 	new Ajax.Request(
 		'index.php',
                 {queue: {position: 'end', scope: 'command'},
@@ -201,18 +214,35 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
                         onComplete: function(response) {
                   				if(response.responseText.indexOf(":#:FAILURE")>-1)
                   				{
-                  					alert("Error while Editing");
+                  					alert(alert_arr.ERROR_WHILE_EDITING);
                   				}
                   				else if(response.responseText.indexOf(":#:SUCCESS")>-1)
-                       		{
+						{
+							//For HD & FAQ - comments, we should empty the field value
+							if((module == "HelpDesk" || module == "Faq") && fieldName == "comments")
+							{
+								getObj(dtlView).innerHTML = "";
+								getObj("comments").value = "";
+								getObj("comments_div").innerHTML = response.responseText.replace(":#:SUCCESS","");
+							}
+
                   					$("vtbusy_info").style.display="none";
-                       		}
+						}
                         }
                 }
             );
 	if(uitype == '13' || uitype == '104')
 	{
 		getObj(dtlView).innerHTML = "<a href=\"mailto:"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
+		if(fieldName == "email" || fieldName == "email1"){
+			var priEmail = getObj("pri_email");
+			if(priEmail)
+				priEmail.value = tagValue;
+		}else{
+			var secEmail = getObj("sec_email");
+			if(secEmail)
+                	        secEmail.value = tagValue;
+		}
 	}else if(uitype == '17')
 	{
 		getObj(dtlView).innerHTML = "<a href=\"http://"+ tagValue+"\" target=\"_blank\">"+tagValue+"&nbsp;</a>";
@@ -238,16 +268,38 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 			getObj(dtlView).innerHTML = "<a href=\"index.php?module=Users&action=DetailView&record="+tagValue+"\">"+hdObj.value+"&nbsp;</a>";
 		}else if(isAdmin == "1" && assign_type_G == true)
 		{
-			getObj(dtlView).innerHTML = "<a href=\"index.php?module=Users&action=GroupDetailView&groupId="+tagValue+"\">"+hdObj.value+"&nbsp;</a>";
+			getObj(dtlView).innerHTML = "<a href=\"index.php?module=Settings&action=GroupDetailView&groupId="+tagValue+"\">"+hdObj.value+"&nbsp;</a>";
 		}
-	}else if(uitype == '56')
+	}
+	else if(uitype == '52' || uitype == '77')
+	{
+		if(isAdmin == "1")
+			getObj(dtlView).innerHTML = "<a href=\"index.php?module=Users&action=DetailView&record="+tagValue+"\">"+document.getElementById(txtBox).options[document.getElementById(txtBox).selectedIndex].text+"&nbsp;</a>";
+		else
+			getObj(dtlView).innerHTML = document.getElementById(txtBox).options[document.getElementById(txtBox).selectedIndex].text;
+	}
+	else if(uitype == '56')
 	{
 		if(tagValue == '1')
 		{
-			getObj(dtlView).innerHTML = "yes";
+			if(module == "Contacts")
+                        {
+                                var obj = getObj("email");
+                                if((fieldName == "portal") && (obj.value == ''))
+                                {
+                                        alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+                                        return false;
+
+                                }
+                                else
+                                        getObj(dtlView).innerHTML = alert_arr.YES;
+
+                        }
+                        else
+                                getObj(dtlView).innerHTML = alert_arr.YES;
 		}else
 		{
-			getObj(dtlView).innerHTML = "";
+			getObj(dtlView).innerHTML = alert_arr.NO;
 		}
 
 	}else if(uitype == 116)
@@ -301,7 +353,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		{
 			if(tagValue == '1')
 			{
-				getObj(dtlView).innerHTML = "yes";
+				getObj(dtlView).innerHTML = alert_arr.YES;
 			}else
 			{
 				getObj(dtlView).innerHTML = "";
@@ -316,7 +368,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
   	{
 		/* Wordwrap a long list of multi-select combo box items at the
                  * item separator string */
-                const DETAILVIEW_WORDWRAP_WIDTH = "70"; // must match value in DetailViewUI.tpl.
+                var DETAILVIEW_WORDWRAP_WIDTH = "70"; // must match value in DetailViewUI.tpl.
 
                 var lineLength = 0;
                 for(var i=0; i < r.length; i++) {
@@ -332,26 +384,45 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
                  * EditViewUtils.php and CRMEntity.php)!!
                  */
        		getObj(dtlView).innerHTML = r.join(", ");
-	}else
+	}else if(uitype == '19'){
+		var desc = tagValue.replace(/(^|[\n ])([\w]+?:\/\/.*?[^ \"\n\r\t<]*)/g, "$1<a href=\"$2\" target=\"_blank\">$2</a>");
+		desc = desc.replace(/(^|[\n ])((www|ftp)\.[\w\-]+\.[\w\-.\~]+(?:\/[^ \"\t\n\r<]*)?)/g, "$1<a href=\"http://$2\" target=\"_blank\">$2</a>");
+		desc = desc.replace(/(^|[\n ])([a-z0-9&\-_.]+?)@([\w\-]+\.([\w\-\.]+\.)*[\w]+)/i, "$1<a href=\"mailto:$2@$3\">$2@$3</a>");
+		desc = desc.replace(/,\"|\.\"|\)\"|\)\.\"|\.\)\"/, "\"");
+		desc = desc.replace(/[\n\r]+/g, "<br>&nbsp;");
+		getObj(dtlView).innerHTML = desc;
+	}
+	else
 	{
-		getObj(dtlView).innerHTML = tagValue;
+		getObj(dtlView).innerHTML = tagValue.replace(/[\n\r]+/g, "<br>&nbsp;");
 	}
 	showHide(dtlView,editArea);  //show,hide
 	itsonview=false;
 }
 
-function SaveTag(txtBox,crmId,module)
+// Replace the % sign with %25 to make sure the AJAX url is going wel. 
+function escapeAll(tagValue) 
+{ 
+ 	return escape(tagValue.replace(/%/g, '%25')); 
+}
+ 
+function SaveTag(tagfield,crmId,module)
 {
-	var tagValue = document.getElementById(txtBox).value;
-	document.getElementById(txtBox).value ='';
+	var tagValue = $(tagfield).value;
 	$("vtbusy_info").style.display="inline";
 	new Ajax.Request(
 		'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: "file=TagCloud&module=" + module + "&action=" + module + "Ajax&recordid=" + crmId + "&ajxaction=SAVETAG&tagfields=" +tagValue,
-                        onComplete: function(response) {
-				        getObj('tagfields').innerHTML = response.responseText;
+                       postBody: "file=TagCloud&module=" + module + "&action=" + module + "Ajax&recordid=" + crmId + "&ajxaction=SAVETAG&tagfields=" +tagValue,
+                       onComplete: function(response) {
+					if(response.responseText.indexOf(":#:FAILURE") > -1)
+					{
+						alert(alert_arr.VALID_DATA)
+					}else{
+				        	getObj('tagfields').innerHTML = response.responseText;
+						$(tagfield).value = '';
+					}
 					$("vtbusy_info").style.display="none";
                         }
                 }

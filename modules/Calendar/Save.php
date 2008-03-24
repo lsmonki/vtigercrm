@@ -23,28 +23,19 @@
 
 require_once('modules/Calendar/Activity.php');
 require_once('include/logging.php');
-//require("modules/Emails/class.phpmailer.php");
 require_once("config.php");
 require_once('include/database/PearDatabase.php');
+require_once('modules/Calendar/CalendarCommon.php');
 global $adb;
 $local_log =& LoggerManager::getLogger('index');
 $focus = new Activity();
 $activity_mode = $_REQUEST['activity_mode'];
-if($activity_mode == 'Task')
-{
-        $tab_type = 'Calendar';
-	$focus->column_fields["activitytype"] = 'Task';
-}
-elseif($activity_mode == 'Events')
-{
-        $tab_type = 'Events';
-}
-
-
+$tab_type = 'Calendar';
+$focus->column_fields["activitytype"] = 'Task';
 if(isset($_REQUEST['record']))
 {
 	$focus->id = $_REQUEST['record'];
-$local_log->debug("id is ".$id);
+	$local_log->debug("id is ".$id);
 }
 if(isset($_REQUEST['mode']))
 {
@@ -66,8 +57,27 @@ if((isset($_REQUEST['change_status']) && $_REQUEST['change_status']) && ($_REQUE
 		$status = $_REQUEST['eventstatus'];	
 		$activity_type = "Events";	
 	}
-	
 	ChangeStatus($status,$return_id,$activity_type);
+	$mail_data = getActivityMailInfo($return_id,$status,$activity_type);
+	if($mail_data['sendnotification'] == 1)
+	{
+		getEventNotification($activity_type,$mail_data['subject'],$mail_data);
+	}
+	$invitee_qry = "select * from vtiger_invitees where activityid=".$return_id;
+	$invitee_res = $adb->query($invitee_qry);
+	$count = $adb->num_rows($invitee_res);
+	if($count != 0)
+	{
+		for($j = 0; $j < $count; $j++)
+		{
+			$invitees_ids[]= $adb->query_result($invitee_res,$j,"inviteeid");
+
+		}
+		$invitees_ids_string = implode(';',$invitees_ids);
+		sendInvitation($invitees_ids_string,$activity_type,$mail_data['subject'],$mail_data);
+	}
+
+
 }
 else
 {
@@ -92,13 +102,34 @@ else
 	else
 	        $focus->column_fields['visibility'] = 'Private';
 	$focus->save($tab_type);
+	$heldevent_id = $focus->id;
+	/* For Followup START -- by Minnie */
+	if(isset($_REQUEST['followup']) && $_REQUEST['followup'] == 'on' && $activity_mode == 'Events' && isset($_REQUEST['followup_time_start']) &&  $_REQUEST['followup_time_start'] != '')
+	{
+		$focus->column_fields['subject'] = '[Followup] '.$focus->column_fields['subject'];
+		$focus->column_fields['date_start'] = $_REQUEST['followup_date'];
+		$focus->column_fields['due_date'] = $_REQUEST['followup_date'];
+		$focus->column_fields['time_start'] = $_REQUEST['followup_time_start'];
+		$focus->column_fields['time_end'] = $_REQUEST['followup_time_end'];
+		$focus->column_fields['eventstatus'] = 'Planned';
+		$focus->mode = 'create';
+		$focus->save($tab_type);
+
+	}
+	/* For Followup END -- by Minnie */
 	$return_id = $focus->id;
 }
-if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
-else $return_module = "Calendar";
-if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
-else $return_action = "DetailView";
-if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
+
+if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") 
+	$return_module = $_REQUEST['return_module'];
+else 
+	$return_module = "Calendar";
+if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") 
+	$return_action = $_REQUEST['return_action'];
+else 
+	$return_action = "DetailView";
+if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") 
+	$return_id = $_REQUEST['return_id'];
 
 if($_REQUEST['mode'] != 'edit' && $_REQUEST['return_module'] == 'Products')
 {
@@ -116,48 +147,53 @@ if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] == "Contacts"
 	        {
 	                $sql = "insert into vtiger_cntactivityrel values (".$_REQUEST['return_id'].",".$focus->id.")";
 	                $adb->query($sql);
+			if(!empty($heldevent_id)){
+				$sql = "insert into vtiger_cntactivityrel values (".$_REQUEST['return_id'].",".$heldevent_id.")";
+				$adb->query($sql);
+			}
 	        }
 }
 									
 									
 $activemode = "";
-if($activity_mode != '') $activemode = "&activity_mode=".$activity_mode;
+if($activity_mode != '') 
+	$activemode = "&activity_mode=".$activity_mode;
 
-//Added code to send mail to the assigned to user about the details of the vtiger_activity if sendnotification = on and assigned to user
-if($_REQUEST['sendnotification'] == 'on' && $_REQUEST['assigntype'] == 'U')
+function getRequestData()
 {
-	global $current_user;
-	$local_log->info("send notification is on");
-        require_once("modules/Emails/mail.php");
-        $to_email = getUserEmailId('id',$_REQUEST['assigned_user_id']);
-
-	$subject = $_REQUEST['activity_mode'].' : '.$_REQUEST['subject'];
-	$description = getActivityDetails($_REQUEST['description']);
-
-        $mail_status  = send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
+	$mail_data = Array();
+	$mail_data['user_id'] = $_REQUEST['assigned_user_id'];
+	$mail_data['subject'] = $_REQUEST['subject'];
+	$mail_data['status'] = (($_REQUEST['activity_mode']=='Task')?($_REQUEST['taskstatus']):($_REQUEST['eventstatus']));
+	$mail_data['activity_mode'] = $_REQUEST['activity_mode'];
+	$mail_data['taskpriority'] = $_REQUEST['taskpriority'];
+	$mail_data['relatedto'] = $_REQUEST['parent_name'];
+	$mail_data['contact_name'] = $_REQUEST['contact_name'];
+	$mail_data['description'] = $_REQUEST['description'];
+	$mail_data['assingn_type'] = $_REQUEST['assigntype'];
+	$mail_data['group_name'] = $_REQUEST['assigned_group_name'];
+	$mail_data['mode'] = $_REQUEST['mode'];
+	$value = getaddEventPopupTime($_REQUEST['time_start'],$_REQUEST['time_end'],'24');
+	$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
+	if($_REQUEST['activity_mode']!='Task')
+		$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
+	$mail_data['st_date_time'] = getDisplayDate($_REQUEST['date_start'])." ".$start_hour;
+	$mail_data['end_date_time']=getDisplayDate($_REQUEST['due_date'])." ".$end_hour;
+	$mail_data['location']=$_REQUEST['location'];
+	return $mail_data;
+}
+//Added code to send mail to the assigned to user about the details of the vtiger_activity if sendnotification = on and assigned to user
+if($_REQUEST['sendnotification'] == 'on')
+{
+	$mail_contents = getRequestData();
+	getEventNotification($_REQUEST['activity_mode'],$_REQUEST['subject'],$mail_contents);
 }
 
 //code added to send mail to the vtiger_invitees
 if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
 {
-	global $current_user;
-	$local_log->info("send notification is on");
-	require_once("modules/Emails/mail.php");
-	$selected_users_string =  $_REQUEST['inviteesid'];
-	$invitees_array = explode(';',$selected_users_string);
-	$subject = $_REQUEST['activity_mode'].' : '.$_REQUEST['subject'];
-	$description = getActivityDetails($_REQUEST['description']);
-	foreach($invitees_array as $inviteeid)
-	{
-		if($inviteeid != '')
-		{
-			$to_email = getUserEmailId('id',$inviteeid);
-			$mail_status  = send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
-			$record = $focus->id;
-			$sql = "insert into vtiger_salesmanactivityrel values (".$inviteeid.",".$record.")";
-			$adb->query($sql);
-		}
-	}
+	$mail_contents = getRequestData();
+        sendInvitation($_REQUEST['inviteesid'],$_REQUEST['activity_mode'],$_REQUEST['subject'],$mail_contents);
 }
 
 if(isset($_REQUEST['contactidlist']) && $_REQUEST['contactidlist'] != '')
@@ -176,49 +212,33 @@ if(isset($_REQUEST['contactidlist']) && $_REQUEST['contactidlist'] != '')
 }
 
 
-if(isset($_REQUEST['view']) && $_REQUEST['view']!='') $view=$_REQUEST['view'];
-if(isset($_REQUEST['hour']) && $_REQUEST['hour']!='') $hour=$_REQUEST['hour'];
-if(isset($_REQUEST['day']) && $_REQUEST['day']!='') $day=$_REQUEST['day'];
-if(isset($_REQUEST['month']) && $_REQUEST['month']!='') $month=$_REQUEST['month'];
-if(isset($_REQUEST['year']) && $_REQUEST['year']!='') $year=$_REQUEST['year'];
-if(isset($_REQUEST['viewOption']) && $_REQUEST['viewOption']!='') $viewOption=$_REQUEST['viewOption'];
-if(isset($_REQUEST['subtab']) && $_REQUEST['subtab']!='') $subtab=$_REQUEST['subtab'];
+if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
+	$view=$_REQUEST['view'];
+if(isset($_REQUEST['hour']) && $_REQUEST['hour']!='')
+	$hour=$_REQUEST['hour'];
+if(isset($_REQUEST['day']) && $_REQUEST['day']!='')
+	$day=$_REQUEST['day'];
+if(isset($_REQUEST['month']) && $_REQUEST['month']!='')
+	$month=$_REQUEST['month'];
+if(isset($_REQUEST['year']) && $_REQUEST['year']!='') 
+	$year=$_REQUEST['year'];
+if(isset($_REQUEST['viewOption']) && $_REQUEST['viewOption']!='') 
+	$viewOption=$_REQUEST['viewOption'];
+if(isset($_REQUEST['subtab']) && $_REQUEST['subtab']!='') 
+	$subtab=$_REQUEST['subtab'];
 
 //code added for returning back to the current view after edit from list view
-if($_REQUEST['return_viewname'] == '') $return_viewname='0';
-if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
-if($_REQUEST['parenttab'] != '')$parenttab=$_REQUEST['parenttab'];
-if($_REQUEST['start'] !='')$page='&start='.$_REQUEST['start'];
+if($_REQUEST['return_viewname'] == '') 
+	$return_viewname='0';
+if($_REQUEST['return_viewname'] != '')
+	$return_viewname=$_REQUEST['return_viewname'];
+if($_REQUEST['parenttab'] != '')
+	$parenttab=$_REQUEST['parenttab'];
+if($_REQUEST['start'] !='')
+	$page='&start='.$_REQUEST['start'];
 if($_REQUEST['maintab'] == 'Calendar')
 	header("Location: index.php?action=".$return_action."&module=".$return_module."&view=".$view."&hour=".$hour."&day=".$day."&month=".$month."&year=".$year."&record=".$return_id."&viewOption=".$viewOption."&subtab=".$subtab."&parenttab=$parenttab");
 else
 	header("Location: index.php?action=$return_action&module=$return_module$view$hour$day$month$year&record=$return_id$activemode&viewname=$return_viewname$page&parenttab=$parenttab");
 
-/**
- * Function to get the vtiger_activity details for mail body
- * @param   string   $description       - activity description
- * return   string   $list              - HTML in string format
- */
-function getActivityDetails($description)
-{
-	global $log;
-	$log->debug("Entering getActivityDetails(".$description.") method ...");
-	global $adb;
-
-	$reply = (($_REQUEST['mode'] == 'edit')?'Replied':'Created');
-	$name = getUserName($_REQUEST['assigned_user_id']);
-	$status = (($_REQUEST['activity_mode']=='Task')?($_REQUEST['taskstatus']):($_REQUEST['eventstatus']));
-
-	$list = 'Dear '.$name.',';
-	$list .= '<br><br> There is an vtiger_activity('.$_REQUEST['activity_mode'].')'.$reply.'. The details are :';
-	$list .= '<br>Subject : '.$_REQUEST['subject'];
-	$list .= '<br>Status : '.$status;
-	$list .= '<br>Priority : '.$_REQUEST['taskpriority'];
-	$list .= '<br>Related to : '.$_REQUEST['parent_name'];
-	$list .= '<br>Contact : '.$_REQUEST['contact_name'];
-	$list .= '<br><br> Description : '.$description;
-
-	$log->debug("Exiting getActivityDetails method ...");
-	return $list;
-}
 ?>

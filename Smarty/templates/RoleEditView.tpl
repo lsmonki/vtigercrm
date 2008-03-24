@@ -20,11 +20,14 @@ function dup_validation()
 		var urlstring ="&mode="+mode+"&roleName="+rolename+"&roleid="+roleid;
 	else
 		var urlstring ="&roleName="+rolename;
+	var status = CharValidation(rolename,'namespace');
+	if(status)
+	{ldelim}
 	new Ajax.Request(
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
                                 method: 'post',
-                                postBody: 'module=Users&action=UsersAjax&file=SaveRole&ajax=true&dup_check=true'+urlstring,
+                                postBody: 'module=Settings&action=SettingsAjax&file=SaveRole&ajax=true&dup_check=true'+urlstring,
                                 onComplete: function(response) {ldelim}
 					if(response.responseText == 'SUCESS')
 						document.newRoleForm.submit();
@@ -33,21 +36,24 @@ function dup_validation()
                                 {rdelim}
                         {rdelim}
                 );
+	{rdelim}
+	else
+		alert(alert_arr.NO_SPECIAL+alert_arr.IN_ROLENAME)
 
 {rdelim}
 function validate()
 {ldelim}
 	formSelectColumnString();
-	if( !emptyCheck( "roleName", "Role Name" ) )
+	if( !emptyCheck("roleName", "Role Name", "text" ) )
 		return false;
 
 	if(document.newRoleForm.selectedColumnsString.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{ldelim}
 
-		alert('Role should have atlease one profile');
+		alert('{$APP.ROLE_SHOULDHAVE_INFO}');
 		return false;
 	{rdelim}
-	dup_validation();
+	dup_validation();return false
 {rdelim}
 </script>
 <br>
@@ -61,8 +67,8 @@ function validate()
 			{include file='SetMenu.tpl'}
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-				<form name="newRoleForm" action="index.php" method="post">
-				<input type="hidden" name="module" value="Users">
+				<form name="newRoleForm" action="index.php" method="post" onSubmit="return validate()">
+				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="action" value="SaveRole">
 				<input type="hidden" name="parenttab" value="Settings">
 				<input type="hidden" name="returnaction" value="{$RETURN_ACTION}">
@@ -70,11 +76,11 @@ function validate()
 				<input type="hidden" name="mode" value="{$MODE}">
 				<input type="hidden" name="parent" value="{$PARENT}">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-roles.gif" alt="Roles" width="48" height="48" border=0 title="Roles"></td>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-roles.gif" alt="{$CMOD.LBL_ROLES}" width="48" height="48" border=0 title="{$CMOD.LBL_ROLES}"></td>
 					{if $MODE eq 'edit'}
-					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Users&action=listroles&parenttab=Settings">{$CMOD.LBL_ROLES}</a> &gt; {$MOD.LBL_EDIT} &quot;{$ROLENAME}&quot; </b></td>
+					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=listroles&parenttab=Settings">{$CMOD.LBL_ROLES}</a> &gt; {$MOD.LBL_EDIT} &quot;{$ROLENAME}&quot; </b></td>
 					{else}	
-					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Users&action=listroles&parenttab=Settings">{$CMOD.LBL_ROLES}</a> &gt; {$CMOD.LBL_CREATE_NEW_ROLE}</b></td>
+					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=listroles&parenttab=Settings">{$CMOD.LBL_ROLES}</a> &gt; {$CMOD.LBL_CREATE_NEW_ROLE}</b></td>
 					{/if}
 				</tr>
 				<tr>

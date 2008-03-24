@@ -19,9 +19,10 @@ if($_REQUEST['mail_error'] != '')
 {
         require_once("modules/Emails/mail.php");
         $error_msg = strip_tags(parseEmailErrorString($_REQUEST['mail_error']));
-	if(strstr($error_msg,"Please check the assigned to user email id"))
-		$error_msg = "Mail could not be sent to the admin user. Please check the admin user email id.";
-	$smarty->assign("ERROR_MSG",'<b><font color="red">Test Mail status : '.$error_msg.'</font></b>');
+	//if(strstr($error_msg,"Please check the assigned to user email id"))
+	//if(strstr($error_msg,$mod_strings['LBL_CHECK_ASSIGNEDTO_MAILID']))
+	$error_msg = $mod_strings['LBL_MAILSENDERROR'];
+	$smarty->assign("ERROR_MSG",$mod_strings['LBL_TESTMAILSTATUS'].' <b><font color=red>'.$error_msg.'</font></b>');
 }
 
 global $adb;
@@ -36,14 +37,24 @@ $mail_server = $adb->query_result($result,0,'server');
 $mail_server_username = $adb->query_result($result,0,'server_username');
 $mail_server_password = $adb->query_result($result,0,'server_password');
 $smtp_auth = $adb->query_result($result,0,'smtp_auth');
-
-if (isset($mail_server))
+if(isset($_REQUEST['server_name']))
+	$smarty->assign("MAILSERVER",$_REQUEST['server_name']);
+elseif(isset($mail_server))
 	$smarty->assign("MAILSERVER",$mail_server);
-if (isset($mail_server_username))
+if(isset($_REQUEST['server_user']))
+	$smarty->assign("USERNAME",$_REQUEST['server_user']);
+elseif(isset($mail_server_username))
 	$smarty->assign("USERNAME",$mail_server_username);
 if (isset($mail_server_password))
 	$smarty->assign("PASSWORD",$mail_server_password);
-if (isset($smtp_auth))
+if(isset($_REQUEST['auth_check']))
+{
+	if($_REQUEST['auth_check'] == 'on')
+                $smarty->assign("SMTP_AUTH",'checked');
+        else
+                $smarty->assign("SMTP_AUTH",'');
+}
+elseif (isset($smtp_auth))
 {
 	if($smtp_auth == 'true')
 		$smarty->assign("SMTP_AUTH",'checked');

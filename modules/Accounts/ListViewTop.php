@@ -37,7 +37,17 @@ function getTopAccounts()
 	global $current_user;
 	$current_module_strings = return_module_language($current_language, "Accounts");
 
-	$list_query = "select vtiger_account.accountid, vtiger_account.accountname, vtiger_account.tickersymbol, sum(vtiger_potential.amount) as amount from vtiger_potential inner join vtiger_crmentity on (vtiger_potential.potentialid=vtiger_crmentity.crmid) inner join vtiger_account on (vtiger_potential.accountid=vtiger_account.accountid) where vtiger_crmentity.deleted=0 AND vtiger_crmentity.smownerid='".$current_user->id."' and vtiger_potential.sales_stage <> '".$app_strings['LBL_CLOSE_WON']."' and vtiger_potential.sales_stage <> '".$app_strings['LBL_CLOSE_LOST']."' group by vtiger_account.accountid, vtiger_account.accountname, vtiger_account.tickersymbol order by amount desc;";
+        require('user_privileges/user_privileges_'.$current_user->id.'.php');
+        require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+
+	$list_query = "select vtiger_account.accountid, vtiger_account.accountname, vtiger_account.tickersymbol, sum(vtiger_potential.amount) as amount from vtiger_potential inner join vtiger_crmentity on (vtiger_potential.potentialid=vtiger_crmentity.crmid) inner join vtiger_account on (vtiger_potential.accountid=vtiger_account.accountid) left join vtiger_accountgrouprelation on (vtiger_account.accountid = vtiger_accountgrouprelation.accountid) left join vtiger_groups on (vtiger_groups.groupname = vtiger_accountgrouprelation.groupname) where vtiger_crmentity.deleted=0 AND vtiger_crmentity.smownerid='".$current_user->id."' and vtiger_potential.sales_stage not in ('Closed Won', 'Closed Lost','".$app_strings['LBL_CLOSE_WON']."','".$app_strings['LBL_CLOSE_LOST']."')";
+	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[6] == 3)
+	{
+		$sec_parameter=getListViewSecurityParameter('Accounts');
+		$list_query .= $sec_parameter;
+
+	}
+	$list_query .= " group by vtiger_account.accountid, vtiger_account.accountname, vtiger_account.tickersymbol order by amount desc";
 	$list_result=$adb->query($list_query);
 	$open_accounts_list = array();
 	$noofrows = min($adb->num_rows($list_result),5);
@@ -74,7 +84,7 @@ function getTopAccounts()
 				'AMOUNT' => ($account['amount']),
 				);
 
-		$value[]='<a href="index.php?action=DetailView&module=Accounts&record='.$account['accountid'].'">'.$account['accountname'].'</a>';
+		$value[]='<a href="index.php?action=DetailView&module=Accounts&record='.$account['accountid'].'">'.substr($account['accountname'],0,20).'...'.'</a>';
 		$value[]=convertFromDollar($account['amount'],$rate);
 		$entries[$account['accountid']]=$value;	
 	}

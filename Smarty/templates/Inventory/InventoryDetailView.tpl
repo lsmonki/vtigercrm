@@ -11,7 +11,7 @@
  ********************************************************************************/
 
 -->*}
-<script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
 <script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
 <div id="convertleaddiv" style="display:block;position:absolute;left:225px;top:150px;"></div>
@@ -25,11 +25,11 @@ function tagvalidate()
 		SaveTag('txtbox_tagfields','{$ID}','{$MODULE}');	
 	else
 	{ldelim}
-		alert("Please enter a tag");
+		alert("{$APP.PLEASE_ENTER_TAG}");
 		return false;
 	{rdelim}
 {rdelim}
-function DeleteTag(id)
+function DeleteTag(id,recordid)
 {ldelim}
 	$("vtbusy_info").style.display="inline";
 	Effect.Fade('tag_'+id);
@@ -37,7 +37,7 @@ function DeleteTag(id)
 		'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
                         method: 'post',
-                        postBody: "file=TagCloud&module={$MODULE}&action={$MODULE}Ajax&ajxaction=DELETETAG&tagid=" +id,
+                        postBody: "file=TagCloud&module={$MODULE}&action={$MODULE}Ajax&ajxaction=DELETETAG&recordid="+recordid+"&tagid=" +id,
                         onComplete: function(response) {ldelim}
 						getTagCloud();
 						$("vtbusy_info").style.display="none";
@@ -125,7 +125,7 @@ function DeleteTag(id)
 				<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
 				{/if}
 				{if $DELETE eq 'permitted'}
-				<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+				<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; {if $MODULE eq 'Vendors'} return confirm('{$APP.NTC_VENDOR_DELETE_CONFIRMATION}')" {else} return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" {/if} type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
 				{/if}
 			</td>
                    </tr>
@@ -204,9 +204,6 @@ function DeleteTag(id)
 					{else}
 						{include file="DetailViewFields.tpl"}
 					{/if}
-				{else} 
-					<td class="dvtCellLabel" align=right>&nbsp;</td>
-					<td class="dvtCellInfo" align=left >&nbsp;</td>
 				{/if}
 		{/foreach}
 	   </tr>	
@@ -243,7 +240,7 @@ function DeleteTag(id)
 				<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
 				{/if}
 				{if $DELETE eq 'permitted'}
-				<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+				<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; {if $MODULE eq 'Vendors'} return confirm('{$APP.NTC_VENDOR_DELETE_CONFIRMATION}')" {else} return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" {/if} type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
 				{/if}
 			</td>
                    </tr>

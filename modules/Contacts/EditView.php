@@ -84,6 +84,9 @@ if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['r
         $focus->column_fields['otherzip']=$acct_focus->column_fields['ship_code'];
         $focus->column_fields['mailingcountry']=$acct_focus->column_fields['bill_country'];
         $focus->column_fields['othercountry']=$acct_focus->column_fields['ship_country'];
+	$focus->column_fields['mailingpobox']=$acct_focus->column_fields['bill_pobox'];
+	$focus->column_fields['otherpobox']=$acct_focus->column_fields['ship_pobox'];
+
         $log->debug("Accountid Id from the request is ".$_REQUEST['account_id']);
 
 }
@@ -101,7 +104,6 @@ else
 	$smarty->assign("BASBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS'));
 	$smarty->assign("ADVBLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'ADV'));
 }
-
 $smarty->assign("OP_MODE",$disp_view);
 
 //needed when creating a new contact with a default vtiger_account value passed in
@@ -205,6 +207,7 @@ if($errormessage!="")
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 
 if($focus->mode == 'edit')
 $smarty->display("salesEditView.tpl");

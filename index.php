@@ -22,6 +22,7 @@
 global $entityDel;
 global $display;
 global $category;
+
 require_once('include/utils/utils.php');
 
 
@@ -74,7 +75,8 @@ function insert_charset_header()
  	{
  	        $charset = $app_strings['LBL_CHARSET'];
  	}
- 	header('Content-Type: text/html; charset='. $charset);
+	if($_REQUEST['module'] != "Webmails")
+	 	header('Content-Type: text/html; charset='. $charset);
 }
  	
 insert_charset_header();
@@ -277,10 +279,13 @@ if(isset($action) && isset($module))
 		ereg("^HeadLines",$action) ||
 		ereg("^TodoSave",$action) ||
 		ereg("^RecalculateSharingRules",$action) ||
-		(ereg("^body",$action) &&
-			ereg("^Webmails",$module)) ||
-			(ereg("^DetailView",$action) &&
-			ereg("^Webmails",$module) ))
+		(ereg("^body",$action) && ereg("^Webmails",$module)) ||
+		(ereg("^dlAttachments",$action) && ereg("^Webmails",$module)) ||
+		(ereg("^DetailView",$action) &&	ereg("^Webmails",$module) ) ||
+		ereg("^savewordtemplate",$action) ||
+		ereg("^mailmergedownloadfile",$action) || ereg("^Webmails",$module) && ereg("^get_img",$action) || ereg("^download",$action) )
+	
+		
 	{
 		$skipHeaders=true;
 		//skip headers for all these invocations as they are mostly popups
@@ -295,10 +300,13 @@ if(isset($action) && isset($module))
 			ereg("^".$module."Ajax",$action) ||
 			ereg("^chat",$action) ||
 			ereg("^vtchat",$action) ||
-			ereg("^massdelete", $action))
+			ereg("^massdelete", $action) ||
+			ereg("^mailmergedownloadfile",$action) || 	ereg("^get_img",$action) ||
+			ereg("^download",$action) ||
+			ereg("^massdelete", $action ))
 			$skipFooters=true;
 		//skip footers for all these invocations as they are mostly popups
-		if(ereg("^downloadfile", $action) || ereg("^fieldtypes",$action))
+		if(ereg("^downloadfile", $action) || ereg("^fieldtypes",$action) || ereg("^mailmergedownloadfile",$action)|| ereg("^get_img",$action))
 		{
 			$viewAttachment = true;
 		}
@@ -437,6 +445,9 @@ if($action == "DetailView")
 		case 'Calendar':
 			require_once("modules/$currentModule/Activity.php");
 			$focus = new Activity();
+			break;
+		case 'Webmails':
+			//No need to create a webmail object here
 			break;
 		default:
 			require_once("modules/$currentModule/$currentModule.php");
@@ -639,8 +650,8 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 		echo "<script language = 'JavaScript' type='text/javascript' src = 'include/js/popup.js'></script>";
 		echo '<style type="text/css">@import url("themes/'.$theme.'/style.css"); </style>';
 		echo "<br><br><br><table border=0 cellspacing=0 cellpadding=5 width=100% class=settingsSelectedUI >";
-		echo "<tr><td class=small align=left>vtiger CRM 5.0.2 | Visit <a href='http://www.vtiger.com'>www.vtiger.com</a> for more information </td>";
-		echo "<td class=small align=right> &copy; <a href='javascript:mypopup()'>Copyright Details</a></td></tr></table>";
+		echo "<tr><td class=small align=left><span style='color: rgb(153, 153, 153);'>vtiger CRM 5.0.3</span></td>";
+		echo "<td class=small align=right><span style='color: rgb(153, 153, 153);'>&copy; 2004-2007 <a href='http://www.vtiger.com' target='_blank'>vtiger.com</a> | <a href='javascript:mypopup()'>".$app_strings['LNK_READ_LICENSE']."</a></span></td></tr></table>";
 			
 	//	echo "<table align='center'><tr><td align='center'>";
 		// Under the Sugar Public License referenced above, you are required to leave in all copyright statements

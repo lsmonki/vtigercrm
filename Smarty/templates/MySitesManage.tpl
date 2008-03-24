@@ -49,7 +49,7 @@
 <tr><td class="listTableRow small" align="left">{$smarty.foreach.portallists.iteration}</td>
 <td class="listTableRow small" align="left">
 <b>{$portaldetails.portalname}</b><br>
-<span class="big">{$portaldetails.portalurl}</span>
+<span class="big">{$portaldetails.portaldisplayurl}</span>
 </td>
 <td class="listTableRow small" align="left">
 <a href="javascript:;" onclick="fnvshobj(this,'editportal_cont');fetchAddSite('{$portaldetails.portalid}');" class="webMnu">{$APP.LBL_EDIT}</a>&nbsp;|&nbsp;

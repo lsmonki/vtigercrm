@@ -32,67 +32,48 @@ if($moduleName == 'Events')
 else
 	$temp_module_strings = return_module_language($current_language, $moduleName);
 
-//To get the Editable Picklist Values 
-if($uitype != 111)
-{
-	$query = "select * from vtiger_".$tableName ;
-	$result = $adb->query($query);
-	$fldVal='';
+//Get the Editable Picklist Values 
+$query = "select * from vtiger_".$tableName." where presence=1";
+$result = $adb->query($query);
+$fldVal='';
 
-	while($row = $adb->fetch_array($result))
-	{
-		if($temp_module_strings[$row[$tableName]] != '')
-			$fldVal .= $temp_module_strings[$row[$tableName]];
-		else
-			$fldVal .= $row[$tableName];
-		$fldVal .= "\n";	
-	}
-}
-else
+while($row = $adb->fetch_array($result))
 {
-	$query = "select * from vtiger_".$tableName." where presence=0"; 
-	$result = $adb->query($query);
-	$fldVal='';
-
-	while($row = $adb->fetch_array($result))
-	{
-		if($temp_module_strings[$row[$tableName]] != '')
-			$fldVal .= $temp_module_strings[$row[$tableName]];
-		else
-			$fldVal .= $row[$tableName];
-		$fldVal .= "\n";	
-	}
+	if($temp_module_strings[$row[$tableName]] != '')
+		$fldVal .= $temp_module_strings[$row[$tableName]];
+	else
+		$fldVal .= $row[$tableName];
+	$fldVal .= "\n";	
 }
 
-//To get the Non Editable Picklist Entries
-if($uitype == 111) 
-{
-	$qry = "select * from vtiger_".$tableName." where presence=1"; 
-	$res = $adb->query($qry);
-	$nonedit_fldVal='';
+//Get the Non - Editable Picklist Values 
+$qry = "select * from vtiger_".$tableName." where presence=0"; 
+$res = $adb->query($qry);
+$nonedit_fldVal='';
 
-	while($row = $adb->fetch_array($res))
-	{
-		if($temp_module_strings[$row[$tableName]] != '')
-			$nonedit_fldVal .= $temp_module_strings[$row[$tableName]];
-		else
-			$nonedit_fldVal .= $row[$tableName];
-		$nonedit_fldVal .= "<br>";	
-	}
+while($row = $adb->fetch_array($res))
+{
+	if($temp_module_strings[$row[$tableName]] != '')
+		$nonedit_fldVal .= $temp_module_strings[$row[$tableName]];
+	else
+		$nonedit_fldVal .= $row[$tableName];
+	$nonedit_fldVal .= "<br>";	
 }
+
+
 $query = 'select fieldlabel from vtiger_tab inner join vtiger_field on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.name="'.$moduleName.'" and fieldname="'.$tableName.'"';
 $fieldlabel = $adb->query_result($adb->query($query),0,'fieldlabel'); 
 
 if($nonedit_fldVal == '')
-		$smarty->assign("EDITABLE_MODE","edit");
-	else
-		$smarty->assign("EDITABLE_MODE","nonedit");
+	$smarty->assign("EDITABLE_MODE","edit");
+else
+	$smarty->assign("EDITABLE_MODE","nonedit");
 $smarty->assign("NON_EDITABLE_ENTRIES", $nonedit_fldVal);
 $smarty->assign("ENTRIES",$fldVal);
 $smarty->assign("MODULE",$moduleName);
 $smarty->assign("FIELDNAME",$tableName);
 //First look into app_strings and then mod_strings and if not available then original label will be displayed
-$temp_label = isset($app_strings[$fieldlabel])?$app_strings[$fieldlabel]:(isset($mod_strings[$fieldlabel])?$mod_strings[$fieldlabel]:$fieldlabel);
+$temp_label = getTranslatedString($fieldlabel);
 $smarty->assign("FIELDLABEL",$temp_label);
 $smarty->assign("UITYPE", $uitype);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));

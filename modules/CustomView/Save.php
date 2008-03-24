@@ -19,7 +19,7 @@ $parenttab = $_REQUEST["parenttab"];
 $return_action = $_REQUEST["return_action"];
 if($cvmodule != "")
 {
-	$viewname = $_REQUEST["viewName"];
+	$viewname = htmlentities($_REQUEST["viewName"]);
 	if(isset($_REQUEST["setDefault"]))
 	{
 	  $setdefault = 1;
@@ -55,8 +55,13 @@ if($cvmodule != "")
 	$stdcriteria = $_REQUEST["stdDateFilter"];
 	$std_filter_list["stdfilter"] = $stdcriteria;
 	$startdate = $_REQUEST["startdate"];
-	$std_filter_list["startdate"] = $startdate;
 	$enddate = $_REQUEST["enddate"];
+	if($stdcriteria == "custom")
+	{
+		$startdate = getDBInsertDateValue($startdate);
+		$enddate = getDBInsertDateValue($enddate);
+	}
+	$std_filter_list["startdate"] = $startdate;
 	$std_filter_list["enddate"]=$enddate;
 	//<<<<<<<standardfilters>>>>>>>>>
 
@@ -69,7 +74,6 @@ if($cvmodule != "")
            	$adv_filter_col[] = $_REQUEST[$allKeys[$i]];
    	   }
 	}
-
 	for ($i=0;$i<count($allKeys);$i++)
 	{
 	   $string = substr($allKeys[$i], 0, 3);
@@ -83,7 +87,7 @@ if($cvmodule != "")
    	   $string = substr($allKeys[$i], 0, 4);
 	   if($string == "fval")
    	   {
-		   $adv_filter_value[] = $_REQUEST[$allKeys[$i]];
+		   $adv_filter_value[] = htmlentities(trim($_REQUEST[$allKeys[$i]]));
    	   }
 	}
 	//<<<<<<<advancedfilter>>>>>>>>
@@ -120,24 +124,42 @@ if($cvmodule != "")
 						$columnresult = $adb->query($columnsql);
 					}
 					$log->info("CustomView :: Save :: vtiger_cvcolumnlist created successfully");
-
-					$stdfiltersql = "INSERT INTO vtiger_cvstdfilter
-								(cvid,
-								columnname,
-								stdfilter,
-								startdate,
-								enddate)
+					if($std_filter_list["columnname"] !="")
+					{
+						$stdfiltersql = "INSERT INTO vtiger_cvstdfilter
+							(cvid,
+							 columnname,
+							 stdfilter,
+							 startdate,
+							 enddate)
 							VALUES
-								(".$genCVid.",
-								".$adb->quote($std_filter_list["columnname"]).",
-								
-								".$adb->quote($std_filter_list["stdfilter"]).",
-								".$adb->formatDate($std_filter_list["startdate"]).",
-								".$adb->formatDate($std_filter_list["enddate"]).")";
-					$stdfilterresult = $adb->query($stdfiltersql);
-					$log->info("CustomView :: Save :: vtiger_cvstdfilter created successfully");
+							(".$genCVid.",
+							 ".$adb->quote($std_filter_list["columnname"]).",
+
+							 ".$adb->quote($std_filter_list["stdfilter"]).",
+							 ".$adb->formatDate($std_filter_list["startdate"]).",
+							 ".$adb->formatDate($std_filter_list["enddate"]).")";
+						$stdfilterresult = $adb->query($stdfiltersql);
+						$log->info("CustomView :: Save :: vtiger_cvstdfilter created successfully");
+					}
 					for($i=0;$i<count($adv_filter_col);$i++)
 					{
+						$col = explode(":",$adv_filter_col[$i]);
+						$temp_val = explode(",",$adv_filter_value[$i]);
+						if($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || $col[4] == 'DT')
+						{
+							$val = Array();
+							for($x=0;$x<count($temp_val);$x++)
+							{
+								//if date and time given then we have to convert the date and leave the time as it is, if date only given then temp_time value will be empty
+								list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
+								$temp_date = getDBInsertDateValue(trim($temp_date));
+								if(trim($temp_time) != '')
+									$temp_date .= ' '.$temp_time;
+								$val[$x] = $temp_date;
+							}
+							$adv_filter_value[$i] = implode(", ",$val);
+						}
 						$advfiltersql = "INSERT INTO vtiger_cvadvfilter
 								(cvid,
 								columnindex,
@@ -195,22 +217,42 @@ if($cvmodule != "")
 					$columnresult = $adb->query($columnsql);
 				}
 				$log->info("CustomView :: Save :: vtiger_cvcolumnlist update successfully".$genCVid);
-				$stdfiltersql = "INSERT INTO vtiger_cvstdfilter
-							(cvid,
-							columnname,
-							stdfilter,
-							startdate,
-							enddate)
+				if($std_filter_list["columnname"] !="")
+				{
+					$stdfiltersql = "INSERT INTO vtiger_cvstdfilter
+						(cvid,
+						 columnname,
+						 stdfilter,
+						 startdate,
+						 enddate)
 						VALUES
-							(".$genCVid.",
-							".$adb->quote($std_filter_list["columnname"]).",
-							".$adb->quote($std_filter_list["stdfilter"]).",
-							".$adb->formatDate($std_filter_list["startdate"]).",
-							".$adb->formatDate($std_filter_list["enddate"]).")";
-				$stdfilterresult = $adb->query($stdfiltersql);
-				$log->info("CustomView :: Save :: vtiger_cvstdfilter update successfully".$genCVid);
+						(".$genCVid.",
+						 ".$adb->quote($std_filter_list["columnname"]).",
+						 ".$adb->quote($std_filter_list["stdfilter"]).",
+						 ".$adb->formatDate($std_filter_list["startdate"]).",
+						 ".$adb->formatDate($std_filter_list["enddate"]).")";
+					$stdfilterresult = $adb->query($stdfiltersql);
+					$log->info("CustomView :: Save :: vtiger_cvstdfilter update successfully".$genCVid);
+				}
 				for($i=0;$i<count($adv_filter_col);$i++)
 				{
+					$col = explode(":",$adv_filter_col[$i]);
+					$temp_val = explode(",",$adv_filter_value[$i]);
+					if($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || $col[4] == 'DT')
+					{
+						$val = Array();
+						for($x=0;$x<count($temp_val);$x++){
+
+								//if date and time given then we have to convert the date and leave the time as it is, if date only given then temp_time value will be empty
+								list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
+								$temp_date = getDBInsertDateValue(trim($temp_date));
+								if(trim($temp_time) != '')
+									$temp_date .= ' '.$temp_time;
+								$val[$x] = $temp_date;
+			
+						}
+						$adv_filter_value[$i] = implode(", ",$val);	
+					}
 					$advfiltersql = "INSERT INTO vtiger_cvadvfilter
 								(cvid,
 								columnindex,

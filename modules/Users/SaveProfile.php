@@ -13,8 +13,8 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 global $adb;
-$profilename = $_REQUEST['profile_name'];
-$description= $_REQUEST['profile_description'];
+$profilename = addslashes($_REQUEST['profile_name']);
+$description= addslashes($_REQUEST['profile_description']);
 $def_module = $_REQUEST['selected_module'];
 $def_tab = $_REQUEST['selected_tab'];
 //Inserting values into Profile Table
@@ -27,10 +27,17 @@ $adb->query($sql1);
         $profileid = $adb->query_result($result2,0,'current_id');
 
 
-//Retreiving the vtiger_tabs permission array
-$tab_perr_result = $adb->query("select * from vtiger_profile2tab where profileid=1");
-$act_perr_result = $adb->query("select * from vtiger_profile2standardpermissions where profileid=1");
-$act_utility_result = $adb->query("select * from vtiger_profile2utility where profileid=1");
+	//Retreiving the vtiger_tabs permission array
+	//
+
+	//Retreiving the first profileid
+	$prof_query="select profileid from vtiger_profile order by profileid ASC";
+	$prof_result = $adb->query($prof_query);
+	$first_prof_id = $adb->query_result($prof_result,0,'profileid');
+
+$tab_perr_result = $adb->query("select * from vtiger_profile2tab where profileid=".$first_prof_id);
+$act_perr_result = $adb->query("select * from vtiger_profile2standardpermissions where profileid=".$first_prof_id);
+$act_utility_result = $adb->query("select * from vtiger_profile2utility where profileid=".$first_prof_id);
 $num_tab_per = $adb->num_rows($tab_perr_result);
 $num_act_per = $adb->num_rows($act_perr_result);
 $num_act_util_per = $adb->num_rows($act_utility_result);
@@ -154,7 +161,7 @@ $num_act_util_per = $adb->num_rows($act_utility_result);
 
 foreach($modArr as $fld_module => $fld_label)
 {
-	$fieldListResult = getProfile2FieldList($fld_module, 1);
+	$fieldListResult = getProfile2FieldList($fld_module, $first_prof_id);
 	$noofrows = $adb->num_rows($fieldListResult);
 	$tab_id = getTabid($fld_module);
 	for($i=0; $i<$noofrows; $i++)
@@ -171,7 +178,9 @@ foreach($modArr as $fld_module => $fld_label)
 		}
 		//Updating the Mandatory vtiger_fields
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
-		if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
+		$displaytype =  $adb->query_result($fieldListResult,$i,"displaytype");
+		$fieldname =  $adb->query_result($fieldListResult,$i,"fieldname");
+		if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20 || ($displaytype != 3 && $fieldname == "activitytype" && $uitype == 15))
 		{
 			$visible_value = 0;
 		}
@@ -180,7 +189,7 @@ foreach($modArr as $fld_module => $fld_label)
                 $adb->query($sql11);
 	}
 }
-	$loc = "Location: index.php?action=ListProfiles&module=Users&mode=view&parenttab=Settings&profileid=".$profileid."&selected_tab=".$def_tab."&selected_module=".$def_module;
+	$loc = "Location: index.php?action=ListProfiles&module=Settings&mode=view&parenttab=Settings&profileid=".$profileid."&selected_tab=".$def_tab."&selected_module=".$def_module;
 	header($loc);
 
 

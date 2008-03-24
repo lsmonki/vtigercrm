@@ -51,7 +51,7 @@ $smarty->assign("CATEGORY",$category);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("ID",$focus->id);
 $smarty->assign("MODULE",$currentmodule);
-$smarty->assign("SINGLE_MOD",$app_strings['SalesOrder']);
+$smarty->assign("SINGLE_MOD",$mod_strings['SalesOrder']);
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
 $smarty->assign("THEME", $theme);

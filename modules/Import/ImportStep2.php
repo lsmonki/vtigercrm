@@ -168,7 +168,23 @@ if($total_num_rows >2)
 	$thirdrow = $rows[2];
 }
 
-	
+//If the cell value is very large then UI mapping will be collpased. So we will display partial text
+foreach($firstrow as $ind => $val)
+{
+	if(strlen($val) > 30)
+		$firstrow[$ind] = substr($val,0,30)." ..........";
+}
+foreach($secondrow as $ind => $val)
+{
+	if(strlen($val) > 30)
+		$secondrow[$ind] = substr($val,0,30)." ..........";
+}
+foreach($thirdrow as $ind => $val)
+{
+	if(strlen($val) > 30)
+		$thirdrow[$ind] = substr($val,0,30)." ..........";
+}
+
 $field_map = $outlook_contacts_field_map;
 
 $mapping_file = new ImportMap();
@@ -226,10 +242,11 @@ for($row_count = $start_at; $row_count < count($rows); $row_count++ )
 $list_string_key = strtolower($_REQUEST['module']);
 $list_string_key .= "_import_fields";
 
-$translated_column_fields = $mod_list_strings[$list_string_key];
+//Now we are getting the import fields from DB instead of hard coded array $mod_list_strings
+$translated_column_fields = getImportFieldsList($_REQUEST['module']);//$mod_list_strings[$list_string_key];
 
 // adding custom vtiger_fields translations
-getCustomFieldTrans($_REQUEST['module'],&$translated_column_fields);
+//getCustomFieldTrans($_REQUEST['module'],&$translated_column_fields);
 
 $cnt=1;
 for($field_count = 0; $field_count < $ret_field_count; $field_count++)
@@ -385,7 +402,7 @@ function validate_import_map()
 			else
 			{
 				//if a vtiger_field mapped more than once, alert the user and return
-				alert("'"+tagName.options[tagName.selectedIndex].text+"' is mapped more than once. Please check the mapping.");
+				alert("'"+tagName.options[tagName.selectedIndex].text+"<?php echo $mod_strings['PLEASE_CHECK_MAPPING']?>");
 				return false;
 			}
 		}
@@ -397,7 +414,7 @@ function validate_import_map()
 	{
 		if(seq_string.indexOf(required_fields[inner_loop]) == -1)
 		{
-			alert('Please map the mandatory field "'+required_fields_name[inner_loop]+'"');
+			alert('<?php echo $mod_strings['MAP_MANDATORY_FIELD']?>'+required_fields_name[inner_loop]+'"');
 			return false;
 		}
 	}
@@ -407,7 +424,7 @@ function validate_import_map()
 	{
 		if(trim(document.getElementById("save_map_as").value) == '')
 		{
-			alert("Please Enter Save Map Name");
+			alert("<?php echo $mod_strings['ENTER_SAVEMAP_NAME'] ?>");
 			return false;
 		}
 	}

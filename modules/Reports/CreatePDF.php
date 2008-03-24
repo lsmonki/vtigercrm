@@ -8,6 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
+ini_set('max_execution_time','1800');
 require_once("modules/Reports/ReportRun.php");
 require_once("modules/Reports/Reports.php");
 require('include/fpdf/fpdf.php');
@@ -52,6 +53,7 @@ var $issetcolor;
 
 function Html2PDF($orientation='P',$unit='mm',$format='A4')
 {
+//echo '<pre>';print_r($format);echo '</pre>';	
     //Call parent constructor
     $this->FPDF($orientation,$unit,$format);
     //Initialization
@@ -298,35 +300,6 @@ $arr_val = $oReportRun->GenerateReport("PDF",$filterlist);
 
 if(isset($arr_val))
 {
-        $columnlength = count($arr_val[0]);
-}
-
-if($columnlength > 0 && $columnlength <= 4)
-{
-        $pdf = new Html2PDF('P','mm','A4');
-}elseif($columnlength >= 5 && $columnlength < 8)
-{
-        $pdf = new Html2PDF('L','mm','A4');
-}elseif($columnlength >= 8 && $columnlength <= 12)
-{
-        $pdf = new Html2PDF('P','mm','A3');
-}elseif($columnlength > 12)
-{
-        $pdf = new Html2PDF('L','mm','A3');
-}
-
-$pdf->AddPage();
-
-$pdf->SetFillColor(224,235,255);
-$pdf->SetTextColor(0);
-$pdf->SetFont('Arial','B',14);
-$pdf->Cell(($pdf->columnlength*50),10,$oReport->reportname,0,0,'C',0);
-$pdf->Ln();
-
-$pdf->SetFont('Arial','',10);
-
-if(isset($arr_val))
-{
 	
 	foreach($arr_val as $wkey=>$warray_value)
         {
@@ -395,6 +368,35 @@ $html='<table border="1">
 </tr>
 '.$dataHTML.'
 </table>';
+
+if(isset($arr_val))
+{
+	$columnlength = array_sum($col_width);
+}
+
+if($columnlength <= 420 )
+{
+        $pdf = new Html2PDF('P','mm','A5');
+}elseif($columnlength >= 421 && $columnlength <= 600)
+{
+        $pdf = new Html2PDF('L','mm','A4');
+}elseif($columnlength >=601 && $columnlength <= 850)
+{
+        $pdf = new Html2PDF('P','mm','A3');
+}elseif($columnlength >=851 )
+{
+        $pdf = new Html2PDF('L','mm','A1');
+}
+//echo '<pre>';print_r($columnlength);echo '</pre>';
+$pdf->AddPage();
+
+$pdf->SetFillColor(224,235,255);
+$pdf->SetTextColor(0);
+$pdf->SetFont('Arial','B',14);
+$pdf->Cell(($pdf->columnlength*50),10,$oReport->reportname,0,0,'C',0);
+$pdf->Ln();
+
+$pdf->SetFont('Arial','',10);
 
 $pdf->WriteHTML($html);
 $pdf->Output('Reports.pdf','D');

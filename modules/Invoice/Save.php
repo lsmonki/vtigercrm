@@ -30,7 +30,7 @@ $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Invoice();
 global $current_user;
-setObjectValuesFromRequest(&$focus);
+setObjectValuesFromRequest($focus);
 
 $focus->save("Invoice");
 

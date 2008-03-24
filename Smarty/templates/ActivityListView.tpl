@@ -16,7 +16,108 @@
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/search.js"></script>
-<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
+<script language="javascript" type="text/javascript">
+var typeofdata = new Array();
+typeofdata['V'] = ['is','isn','bwt','ewt','cts','dcts'];
+typeofdata['N'] = ['is','isn','lst','grt','lsteq','grteq'];
+typeofdata['T'] = ['is','isn','lst','grt','lsteq','grteq'];
+typeofdata['I'] = ['is','isn','lst','grt','lsteq','grteq'];
+typeofdata['C'] = ['is','isn'];
+typeofdata['DT'] = ['is','isn','lst','grt','lsteq','grteq'];
+typeofdata['D'] = ['is','isn','lst','grt','lsteq','grteq'];
+var fLabels = new Array();
+fLabels['is'] = '{$APP.is}';
+fLabels['isn'] = '{$APP.is_not}';
+fLabels['bwt'] = '{$APP.begins_with}';
+fLabels['ewt'] = '{$APP.ends_with}';
+fLabels['cts'] = '{$APP.contains}';
+fLabels['dcts'] = '{$APP.does_not_contains}';
+fLabels['lst'] = '{$APP.less_than}';
+fLabels['grt'] = '{$APP.greater_than}';
+fLabels['lsteq'] = '{$APP.less_or_equal}';
+fLabels['grteq'] = '{$APP.greater_or_equal}';
+var noneLabel;
+{literal}
+function trimfValues(value)
+{
+    var string_array;
+    string_array = value.split(":");
+    return string_array[4];
+}
+
+function updatefOptions(sel, opSelName) {
+    var selObj = document.getElementById(opSelName);
+    var fieldtype = null ;
+
+    var currOption = selObj.options[selObj.selectedIndex];
+    var currField = sel.options[sel.selectedIndex];
+    
+    var fld = currField.value.split(":");
+    var tod = fld[4];
+  /*  if(fld[4] == 'D' || (fld[4] == 'T' && fld[1] != 'time_start' && fld[1] != 'time_end') || fld[4] == 'DT')
+    {
+	$("and"+sel.id).innerHTML =  "";
+	if(sel.id != "fcol5")
+		$("and"+sel.id).innerHTML =  "<em old='(yyyy-mm-dd)'>("+$("user_dateformat").value+")</em>&nbsp;"+alert_arr.LBL_AND;
+	else
+		$("and"+sel.id).innerHTML =  "<em old='(yyyy-mm-dd)'>("+$("user_dateformat").value+")</em>&nbsp;";
+    }
+    else {
+	$("and"+sel.id).innerHTML =  "";
+	if(sel.id != "fcol5")
+		$("and"+sel.id).innerHTML =  "&nbsp;"+alert_arr.LBL_AND;
+	else
+		$("and"+sel.id).innerHTML =  "&nbsp;";
+    } 	
+*/
+    if(currField.value != null && currField.value.length != 0)
+    {
+	fieldtype = trimfValues(currField.value);
+	fieldtype = fieldtype.replace(/\\'/g,'');
+	ops = typeofdata[fieldtype];
+	var off = 0;
+	if(ops != null)
+	{
+
+		var nMaxVal = selObj.length;
+		for(nLoop = 0; nLoop < nMaxVal; nLoop++)
+		{
+			selObj.remove(0);
+		}
+	/*	selObj.options[0] = new Option ('None', '');
+		if (currField.value == '') {
+			selObj.options[0].selected = true;
+		}*/
+		for (var i = 0; i < ops.length; i++)
+		{
+			var label = fLabels[ops[i]];
+			if (label == null) continue;
+			var option = new Option (fLabels[ops[i]], ops[i]);
+			selObj.options[i] = option;
+			if (currOption != null && currOption.value == option.value)
+			{
+				option.selected = true;
+			}
+		}
+	}
+    }else
+    {
+	var nMaxVal = selObj.length;
+	for(nLoop = 0; nLoop < nMaxVal; nLoop++)
+	{
+		selObj.remove(0);
+	}
+	selObj.options[0] = new Option ('None', '');
+	if (currField.value == '') {
+		selObj.options[0].selected = true;
+	}
+    }
+
+}
+{/literal}
+</script>
+
 <script language="javascript">
 function checkgroup()
 {ldelim}
@@ -41,7 +142,6 @@ function callSearch(searchtype)
         	getObj(data_td_id).className = 'searchAlph';
     	{rdelim}
    	gPopupAlphaSearchUrl = '';
-
 	search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
         search_txt_val=document.basicSearch.search_text.value;
         var urlstring = '';
@@ -79,9 +179,11 @@ function callSearch(searchtype)
                                 $("ListViewContents").innerHTML= result[2];
                                 if(result[1] != '')
                                         alert(result[1]);
+				$('basicsearchcolumns').innerHTML = '';
 			{rdelim}
 	       {rdelim}
         );
+	return false;
 
 {rdelim}
 function alphabetic(module,url,dataid)
@@ -105,6 +207,7 @@ function alphabetic(module,url,dataid)
 				$("ListViewContents").innerHTML= result[2];
 				if(result[1] != '')
 			                alert(result[1]);
+				$('basicsearchcolumns').innerHTML = '';
 			{rdelim}
 		{rdelim}
 	);
@@ -117,7 +220,7 @@ function alphabetic(module,url,dataid)
                                         <table border=0 cellspacing=0 cellpadding=0 width=100%>
                                         <tr>
                                                 <td align=center>
-                                                <img src="images/searching.gif" alt="Searching... please wait"  title="Searching... please wait">
+                                                <img src="{$IMAGE_PATH}searching.gif" alt="{$APP.LBL_SEARCHING}"  title="{$APP.LBL_SEARCHING}">
                                                 </td>
                                         </tr>
                                         </table>
@@ -131,7 +234,6 @@ function alphabetic(module,url,dataid)
 </table>
 
 {*<!-- Contents -->*}
-<form name="basicSearch" action="index.php" onsubmit="return false;">
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
      <tr>
         <td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
@@ -139,18 +241,22 @@ function alphabetic(module,url,dataid)
 	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
 	 <!-- SIMPLE SEARCH -->
 <div id="searchAcc" style="z-index:1;display:none;position:relative;">
+<form name="basicSearch" method="post" action="index.php" onSubmit="return callSearch('Basic');">
 <table width="80%" cellpadding="5" cellspacing="0"  class="searchUIBasic small" align="center" border=0>
 	<tr>
 		<td class="searchUIName small" nowrap align="left">
-		<span class="moduleName">Search</span><br><span class="small"><a href="#" onClick="fnhide('searchAcc');show('advSearch');document.basicSearch.searchtype.value='advance';">{$APP.LBL_GO_TO} {$APP.LNK_ADVANCED_SEARCH}</a></span>
+		<span class="moduleName">{$APP.LBL_SEARCH}</span><br><span class="small"><a href="#" onClick="fnhide('searchAcc');show('advSearch');updatefOptions(document.getElementById('Fields0'), 'Condition0');document.basicSearch.searchtype.value='advance';">{$APP.LBL_GO_TO} {$APP.LNK_ADVANCED_SEARCH}</a></span>
 		<!-- <img src="{$IMAGE_PATH}basicSearchLens.gif" align="absmiddle" alt="{$APP.LNK_BASIC_SEARCH}" title="{$APP.LNK_BASIC_SEARCH}" border=0>&nbsp;&nbsp;-->
 		</td>
 		<td class="small" nowrap align=right><b>{$APP.LBL_SEARCH_FOR}</b></td>
 		<td class="small"><input type="text"  class="txtBox" style="width:120px" name="search_text"></td>
-		<td class="small" nowrap><b>{$APP.LBL_IN}</b>&nbsp;
-			<select name ="search_field" class="txtBox" style="width:150px">
-			 {html_options  options=$SEARCHLISTHEADER }
-			</select>
+		<td class="small" nowrap><b>{$APP.LBL_IN}</b>&nbsp;</td>
+		<td class="small" nowrap>
+			<div id="basicsearchcolumns_real">
+                        <select name="search_field" id="bas_searchfield" class="txtBox" style="width:150px">
+                         {html_options  options=$SEARCHLISTHEADER }
+                        </select>
+                        </div>
                         <input type="hidden" name="searchtype" value="BasicSearch">
                         <input type="hidden" name="module" value="{$MODULE}">
                         <input type="hidden" name="parenttab" value="{$CATEGORY}">
@@ -165,7 +271,7 @@ function alphabetic(module,url,dataid)
 		<td class="small" valign="top" onMouseOver="this.style.cursor='pointer';" onclick="moveMe('searchAcc');searchshowhide('searchAcc','advSearch')">[x]</td>
 	</tr>
 	<tr>
-		<td colspan="6" align="center" class="small">
+		<td colspan="7" align="center" class="small">
 			<table border=0 cellspacing=0 cellpadding=0 width=100%>
 				<tr>
                                                 {$ALPHABETICAL}
@@ -174,12 +280,14 @@ function alphabetic(module,url,dataid)
 		</td>
 	</tr>
 </table>
+</form>
 </div>
 <!-- ADVANCED SEARCH -->
 <div id="advSearch" style="display:none;">
+<form name="advSearch" method="post" action="index.php" onSubmit="totalnoofrows();return callSearch('Advanced');">
 		<table  cellspacing=0 cellpadding=5 width=80% class="searchUIAdv1 small" align="center" border=0>
 			<tr>
-					<td class="searchUIName small" nowrap align="left"><span class="moduleName">Search</span><br><span class="small"><a href="#" onClick="show('searchAcc');fnhide('advSearch')">{$APP.LBL_GO_TO} {$APP.LNK_BASIC_SEARCH}</a></span></td>
+					<td class="searchUIName small" nowrap align="left"><span class="moduleName">{$APP.LBL_SEARCH}</span><br><span class="small"><a href="#" onClick="show('searchAcc');fnhide('advSearch')">{$APP.LBL_GO_TO} {$APP.LNK_BASIC_SEARCH}</a></span></td>
 					<td nowrap class="small"><b><input name="matchtype" type="radio" value="all">&nbsp;{$APP.LBL_ADV_SEARCH_MSG_ALL}</b></td>
 					<td nowrap width=60% class="small" ><b><input name="matchtype" type="radio" value="any" checked>&nbsp;{$APP.LBL_ADV_SEARCH_MSG_ANY}</b></td>
 					<td class="small" valign="top" onMouseOver="this.style.cursor='pointer';" onclick="moveMe('searchAcc');searchshowhide('searchAcc','advSearch')">[x]</td>
@@ -194,13 +302,9 @@ function alphabetic(module,url,dataid)
 					<td align=left>
 						<table width="100%"  border="0" cellpadding="2" cellspacing="0" id="adSrc" align="left">
 						<tr  >
-							<td width="31%"><select name="Fields0" class="detailedViewTextBox">
-							{$FIELDNAMES}
-							</select>
+							<td width="31%"><select name="Fields0" id="Fields0" class="detailedViewTextBox" onchange="updatefOptions(this, 'Condition0')">{$FIELDNAMES}</select>
 							</td>
-							<td width="32%"><select name="Condition0" class="detailedViewTextBox">
-								{$CRITERIA}
-							</select>
+							<td width="32%"><select name="Condition0" id="Condition0" class="detailedViewTextBox">{$CRITERIA}</select>
 							</td>
 							<td width="32%"><input type="text" name="Srch_value0" class="detailedViewTextBox"></td>
 						</tr>
@@ -223,8 +327,8 @@ function alphabetic(module,url,dataid)
 			</td>
 		</tr>
 	</table>
-</div>		
 </form>
+</div>		
 {*<!-- Searching UI -->*}
 
 
@@ -307,7 +411,7 @@ function alphabetic(module,url,dataid)
 							<span class="small">|</span>
                                                         <a href="index.php?module={$MODULE}&action=CustomView&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_EDIT}</a>
                                                         <span class="small">|</span>
-							<a href="index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_DELETE}</a></td>
+							<a href="javascript:confirmdelete('index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}')">{$APP.LNK_CV_DELETE}</a></td>
 						    {/if}
 					</tr>
 				   </table>
@@ -315,7 +419,7 @@ function alphabetic(module,url,dataid)
        		       </tr>
 			 </table>
                          <div  class="calDIV" style="overflow:auto;">
-			 <table border=0 cellspacing=1 cellpadding=3 width=100% class="calListTable" class="small">
+			 <table border=0 cellspacing=1 cellpadding=3 width=100% class="lvt small" class="small">
 			      <tr>
              			 <td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>
 				 {foreach name="listviewforeach" item=header from=$LISTHEADER}
@@ -340,17 +444,12 @@ function alphabetic(module,url,dataid)
 							<table border="0" cellpadding="5" cellspacing="0" width="98%">
 							<tr>
 								<td rowspan="2" width="25%"><img src="{$IMAGE_PATH}empty.jpg" height="60" width="61"></td>
-								<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$APP.$MODULE_CREATE}s {$APP.LBL_FOUND} !</span></td>
+								<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$APP.ACTIVITIES} {$APP.LBL_FOUND} !</span></td>
 							</tr>
 							<tr>
 							<td class="small" align="left" nowrap="nowrap">{$APP.LBL_YOU_CAN_CREATE} {$APP.$vowel_conf} {$APP.$MODULE_CREATE} {$APP.LBL_NOW}. {$APP.LBL_CLICK_THE_LINK}:<br>
-								   {if $MODULE neq 'Calendar'}	
-						  			&nbsp;&nbsp;-<a href="index.php?module={$MODULE}&action=EditView&return_action=DetailView&parenttab={$CATEGORY}">{$APP.LBL_CREATE} {$APP.$vowel_conf} {$APP.$MODULE_CREATE}</a><br>
-								   {else}
-									&nbsp;&nbsp;-<a href="index.php?module={$MODULE}&amp;action=EditView&amp;return_module=Calendar&amp;activity_mode=Events&amp;return_action=DetailView&amp;activitytype=Meeting&amp;parenttab={$CATEGORY}">{$APP.LBL_CREATE} {$APP.LBL_A} {$APP.Meeting}</a><br>
-									&nbsp;&nbsp;-<a href="index.php?module={$MODULE}&amp;action=EditView&amp;return_module=Calendar&amp;activity_mode=Events&amp;return_action=DetailView&amp;activitytype=Call&amp;parenttab={$CATEGORY}">{$APP.LBL_CREATE} {$APP.LBL_A} {$APP.Call}</a><br>
+									&nbsp;&nbsp;-<a href="index.php?module={$MODULE}&amp;action=EditView&amp;return_module=Calendar&amp;activity_mode=Events&amp;return_action=DetailView&amp;parenttab={$CATEGORY}">{$APP.LBL_CREATE} {$APP.LBL_AN} {$APP.Event}</a><br>
 									&nbsp;&nbsp;-<a href="index.php?module={$MODULE}&amp;action=EditView&amp;return_module=Calendar&amp;activity_mode=Task&amp;return_action=DetailView&amp;parenttab={$CATEGORY}">{$APP.LBL_CREATE} {$APP.LBL_A} {$APP.Todo}</a>
-								   {/if}
 								</td>
 							</tr>
 							</table> 
@@ -358,7 +457,7 @@ function alphabetic(module,url,dataid)
 							<table border="0" cellpadding="5" cellspacing="0" width="98%">
 							<tr>
 								<td rowspan="2" width="25%"><img src="{$IMAGE_PATH}empty.jpg" height="60" width="61"></td>
-								<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$APP.$MODULE_CREATE}s {$APP.LBL_FOUND} !</span></td>
+								<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$APP.ACTIVITIES} {$APP.LBL_FOUND} !</span></td>
 							</tr>
 							<tr>
 								<td class="small" align="left" nowrap="nowrap">{$APP.LBL_YOU_ARE_NOT_ALLOWED_TO_CREATE} {$APP.$vowel_conf} {$APP.$MODULE_CREATE}<br>
@@ -442,10 +541,10 @@ function alphabetic(module,url,dataid)
 	        <input type = "radio" name = "user_lead_owner"  onclick=checkgroup();  checked>{$APP.LBL_USER}&nbsp;
 					<input type = "radio" name = "user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
 					<select name="lead_owner" id="lead_owner" class="detailedViewTextBox">
-					{$CHANGE_OWNER}
+						{$CHANGE_OWNER}
 					</select>
 					<select name="lead_group_owner" id="lead_group_owner" class="detailedViewTextBox" style="display:none;">
-					{$CHANGE_GROUP_OWNER}
+						{$CHANGE_GROUP_OWNER}
 					</select>
 					</form>
 	</td>
@@ -508,6 +607,7 @@ function ajaxChangeStatus(statusname)
                                 $("ListViewContents").innerHTML= result[2];
                                 if(result[1] != '')
                                         alert(result[1]);
+				$('basicsearchcolumns').innerHTML = '';
                         }
                 }
         );

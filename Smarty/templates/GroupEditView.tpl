@@ -21,6 +21,9 @@ function dup_validation()
 		var reminstr = '&mode='+mode+'&groupName='+groupname+'&groupid='+groupid;
 	else
 		var reminstr = '&groupName='+groupname;
+	var status = CharValidation(groupname,'namespace');
+	if(status)
+	{ldelim}
 	new Ajax.Request(
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -33,9 +36,11 @@ function dup_validation()
 					alert(response.responseText);
 			{rdelim}
 		{rdelim}
-	);
+		);
+	{rdelim}
+	else
+		alert(alert_arr.NO_SPECIAL+alert_arr.IN_GROUPNAME)
 {rdelim}
-
 var constructedOptionValue;
 var constructedOptionName;
 
@@ -136,7 +141,7 @@ function validate()
 
 	if(trim(document.newGroupForm.groupName.value) == "")
 	{ldelim}	
-		alert('Group Name cannot be none');
+		alert('{$APP.GROUPNAME_CANNNOT_BE_NONE}');
 		return false;		
 	{rdelim}
 
@@ -144,7 +149,7 @@ function validate()
 	if(document.newGroupForm.selectedColumnsString.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{ldelim}
 
-		alert('Group should have at least one member. Select a member to the group');
+		alert('{$APP.GROUP_SHOULDHAVE_ONEMEMBER_INFO}');
 		return false;
 	{rdelim}
 	dup_validation();	
@@ -170,11 +175,11 @@ function validate()
 				<input type="hidden" name="groupId" value="{$GROUPID}">
 				<input type="hidden" name="returnaction" value="{$RETURN_ACTION}">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-groups.gif" alt="Groups" width="48" height="48" border=0 title="Roles"></td>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-groups.gif" alt="{$CMOD.LBL_GROUPS}" title="{$CMOD.LBL_GROUPS}" width="48" height="48" border=0 ></td>
 					{if $MODE eq 'edit'}
-					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Users&action=listgroups&parenttab=Settings">{$CMOD.LBL_GROUPS}</a> &gt; {$MOD.LBL_EDIT} &quot;{$GROUPNAME}&quot; </b></td>
+					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=listgroups&parenttab=Settings">{$CMOD.LBL_GROUPS}</a> &gt; {$MOD.LBL_EDIT} &quot;{$GROUPNAME}&quot; </b></td>
 					{else}	
-					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Users&action=listgroups&parenttab=Settings">{$CMOD.LBL_GROUPS}</a> &gt; {$CMOD.LBL_CREATE_NEW_GROUP}</b></td>
+					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=listgroups&parenttab=Settings">{$CMOD.LBL_GROUPS}</a> &gt; {$CMOD.LBL_CREATE_NEW_GROUP}</b></td>
 					{/if}
 				</tr>
 				<tr>

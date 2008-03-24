@@ -1,60 +1,63 @@
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+* ("License"); You may not use this file except in compliance with the License
+* The Original Code is:  vtiger CRM Open Source
+* The Initial Developer of the Original Code is vtiger.
+* Portions created by vtiger are Copyright (C) vtiger.
+* All Rights Reserved.
+********************************************************************************/
+#positioningdiv {
+	left:5%;
+	right:5%;
+	width:600px;
+	position:absolute;
+	border:1px solid violet;
+}
+
 .small {
 	
         font-family: Arial, Helvetica, sans-serif;
         font-size: 11px;
         color:#000000;
-	
-	}
+	line-height:18px;
+}
 
-    .loginTopBg {
-        background:url(images/loginTopBg.gif) repeat-x;
-    }
+input {
+	border:1px solid #999999;
+}
 
-    .loginTopShade {
-        background:url(images/loginTopShade.gif) repeat-x;
-    }
+select {
+	border:1px solid #999999;
+}
 
-    .loginBg{
-        background:#818181 url(images/loginBg.gif) repeat-x;
-    }
+input[src] {
+	border:0px solid #999999;
+}
 
-    .textbox {
-        border:1px solid #999999;
-        background-color:#ffffff;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 11px;
-        width:120px;
-        padding:2px;
 
-    }
-    .loginBottomBg {
-        background:url(images/loginBottomBg.gif) repeat-x;
-    }
-    .loginSignin {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 18px;
-        color: #818181;
-        font-weight:bold;
-    }
+.bg {
+	background-image:url(images/topBg.gif);
+	background-repeat:repeat-x;
+	background-position:bottom;
+}
 
-    .loginBillBoard {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 11px;
-        color:#ffffff;
-    }
-
-a {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	text-decoration:none;
-color:#333366;
+#loginTable {
+	border-left:1px solid #C0C0FF;
+	border-right:1px solid #C0C0FF;
+	border-bottom:1px solid #C0C0FF;
 
 }
 
-a:hover {
-	  font-family: Arial, Helvetica, sans-serif;
-	  font-size: 11px;
-	  text-decoration:underline;
-color:#333333;
+.z1 {
+	border-left:2px solid #c0c0ff;
+	border-bottom:2px solid #c0c0ff;
+}
+.z2 {
+	border-right:2px solid #c0c0ff;
+	border-bottom:2px solid #c0c0ff;
+}
 
-  }
+.signinHdr {
+	border-bottom:2px dotted #c0c0ff;
+	padding:5px;
+}

@@ -26,7 +26,8 @@ require_once("modules/Potentials/Charts.php");
 require_once('include/ComboUtil.php');
 global $app_list_strings, $current_language, $tmp_dir, $currentModule, $action;
 $current_module_strings = return_module_language($current_language, 'Dashboard');
-
+require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+require('user_privileges/user_privileges_'.$current_user->id.'.php');
 $log = LoggerManager::getLogger('pipeline_by_sales_stage');
 
 if (isset($_REQUEST['pbss_refresh'])) { $refresh = $_REQUEST['pbss_refresh']; }
@@ -180,7 +181,11 @@ if (isset($_REQUEST['pbss_edit']) && $_REQUEST['pbss_edit'] == 'true') {
 <td valign='top' ><select name="pbss_sales_stages[]" multiple size='3'><?php echo get_select_options_with_id($comboFieldArray['sales_stage_dom'],$_SESSION['pbss_sales_stages']); ?></select></td>
 </tr><tr>
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_USERS'];?></td>
-<td valign='top' ><select name="pbss_ids[]" multiple size='3'><?php echo get_select_options_with_id(get_user_array(false),$_SESSION['pbss_ids']); ?></select></td>
+<?php if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid('Potentials')] == 3 or $defaultOrgSharingPermission[getTabid('Potentials')] == 0)) { ?>
+	<td valign='top'><select name="pbss_ids[]" multiple size='3'><?php echo get_select_options_with_id(get_user_array(FALSE, "Active", $current_user->id,'private'),$_SESSION['pbss_ids']); ?></select></td>
+	<?php } else { ?>
+	<td valign='top'><select name="pbss_ids[]" multiple size='3'><?php echo get_select_options_with_id(get_user_array(FALSE,"Active",$current_user->id),$_SESSION['pbss_ids']); ?></select></td>	
+<?php } ?>		
 </tr><tr>
 <td align="right"><br /> <input class="button" onclick="return verify_chart_data(pipeline_by_sales_stage);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
 </tr></table>

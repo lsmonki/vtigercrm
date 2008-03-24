@@ -52,31 +52,31 @@ class DefaultDataPopulator extends CRMEntity {
                 $this->db->query("insert into vtiger_role values('H".$role5_id."','Sales Man','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."::H".$role5_id."',4)");
                 
 
- $this->db->query("INSERT INTO vtiger_tab VALUES (3,'Home',0,1,'Home',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (7,'Leads',0,4,'Leads',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (6,'Accounts',0,5,'Accounts',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (4,'Contacts',0,6,'Contacts',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (2,'Potentials',0,7,'Potentials',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (8,'Notes',0,9,'Notes',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (9,'Calendar',0,3,'Calendar',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (10,'Emails',0,10,'Emails',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (13,'HelpDesk',0,11,'HelpDesk',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (14,'Products',0,8,'Products',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (1,'Dashboard',0,12,'Dashboards',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (15,'Faq',0,14,'Faq',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (16,'Events',2,13,'Events',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (18,'Vendors',0,15,'Vendors',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (19,'PriceBooks',0,16,'PriceBooks',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (20,'Quotes',0,17,'Quotes',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (21,'PurchaseOrder',0,18,'PurchaseOrder',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (22,'SalesOrder',0,19,'SalesOrder',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (23,'Invoice',0,20,'Invoice',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (24,'Rss',0,21,'Rss',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (25,'Reports',0,22,'Reports',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (26,'Campaigns',0,23,'Campaigns',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (27,'Portal',0,24,'Portal',null,null,1)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (28,'Webmails',0,25,'Webmails',null,null,1)");
- $this->db->query("insert into vtiger_tab values (29,'Users',0,26,'Users',null,null,1)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (3,'Home',0,1,'Home',null,null,0,1)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (7,'Leads',0,4,'Leads',null,null,0,0)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (6,'Accounts',0,5,'Accounts',null,null,0,0)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (4,'Contacts',0,6,'Contacts',null,null,0,0)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (2,'Potentials',0,7,'Potentials',null,null,0,0)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (8,'Notes',0,9,'Notes',null,null,0,1)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (9,'Calendar',0,3,'Calendar',null,null,0,0)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (10,'Emails',0,10,'Emails',null,null,0,1)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (13,'HelpDesk',0,11,'HelpDesk',null,null,0,0)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (14,'Products',0,8,'Products',null,null,0,1)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (1,'Dashboard',0,12,'Dashboards',null,null,0,1)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (15,'Faq',0,14,'Faq',null,null,0,1)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (16,'Events',2,13,'Events',null,null,0,0)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (18,'Vendors',0,15,'Vendors',null,null,0,1)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (19,'PriceBooks',0,16,'PriceBooks',null,null,0,1)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (20,'Quotes',0,17,'Quotes',null,null,0,0)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (21,'PurchaseOrder',0,18,'PurchaseOrder',null,null,0,0)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (22,'SalesOrder',0,19,'SalesOrder',null,null,0,0)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (23,'Invoice',0,20,'Invoice',null,null,0,0)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (24,'Rss',0,21,'Rss',null,null,0,1)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (25,'Reports',0,22,'Reports',null,null,0,1)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (26,'Campaigns',0,23,'Campaigns',null,null,0,0)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (27,'Portal',0,24,'Portal',null,null,0,1)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (28,'Webmails',0,25,'Webmails',null,null,0,1)");
+ $this->db->query("insert into vtiger_tab values (29,'Users',0,26,'Users',null,null,0,1)");
 
 // Populate the vtiger_blocks vtiger_table
 $this->db->query("insert into vtiger_blocks values (1,2,'LBL_OPPORTUNITY_INFORMATION',1,0,0,0,0,0)");
@@ -198,24 +198,24 @@ $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("v
 
 
  //Block 11
-$this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'street','vtiger_accountbillads',1,'21','bill_street','Billing Address',1,0,0,100,1,11,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'street','vtiger_accountshipads',1,'21','ship_street','Shipping Address',1,0,0,100,2,11,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'bill_street','vtiger_accountbillads',1,'21','bill_street','Billing Address',1,0,0,100,1,11,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'ship_street','vtiger_accountshipads',1,'21','ship_street','Shipping Address',1,0,0,100,2,11,1,'V~O',1,null,'BAS')");
 
- $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'city','vtiger_accountbillads',1,'1','bill_city','Billing City',1,0,0,100,5,11,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'city','vtiger_accountshipads',1,'1','ship_city','Shipping City',1,0,0,100,6,11,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'bill_city','vtiger_accountbillads',1,'1','bill_city','Billing City',1,0,0,100,5,11,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'ship_city','vtiger_accountshipads',1,'1','ship_city','Shipping City',1,0,0,100,6,11,1,'V~O',1,null,'BAS')");
 
- $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'state','vtiger_accountbillads',1,'1','bill_state','Billing State',1,0,0,100,7,11,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'state','vtiger_accountshipads',1,'1','ship_state','Shipping State',1,0,0,100,8,11,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'bill_state','vtiger_accountbillads',1,'1','bill_state','Billing State',1,0,0,100,7,11,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'ship_state','vtiger_accountshipads',1,'1','ship_state','Shipping State',1,0,0,100,8,11,1,'V~O',1,null,'BAS')");
 
- $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'code','vtiger_accountbillads',1,'1','bill_code','Billing Code',1,0,0,100,9,11,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'code','vtiger_accountshipads',1,'1','ship_code','Shipping Code',1,0,0,100,10,11,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'bill_code','vtiger_accountbillads',1,'1','bill_code','Billing Code',1,0,0,100,9,11,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'ship_code','vtiger_accountshipads',1,'1','ship_code','Shipping Code',1,0,0,100,10,11,1,'V~O',1,null,'BAS')");
 
 
- $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'country','vtiger_accountbillads',1,'1','bill_country','Billing Country',1,0,0,100,11,11,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'country','vtiger_accountshipads',1,'1','ship_country','Shipping Country',1,0,0,100,12,11,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'bill_country','vtiger_accountbillads',1,'1','bill_country','Billing Country',1,0,0,100,11,11,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'ship_country','vtiger_accountshipads',1,'1','ship_country','Shipping Country',1,0,0,100,12,11,1,'V~O',1,null,'BAS')");
 
-$this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'pobox','vtiger_accountbillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,11,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'pobox','vtiger_accountshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,11,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'bill_pobox','vtiger_accountbillads',1,'1','bill_pobox','Billing Po Box',1,0,0,100,3,11,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (6,".$this->db->getUniqueID("vtiger_field").",'ship_pobox','vtiger_accountshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,11,1,'V~O',1,null,'BAS')");
 
 
  //Block12
@@ -246,9 +246,9 @@ $this->db->query("insert into vtiger_field values (7,".$this->db->getUniqueID("v
  $this->db->query("insert into vtiger_field values (7,".$this->db->getUniqueID("vtiger_field").",'leadstatus','vtiger_leaddetails',1,'15','leadstatus','Lead Status',1,0,0,100,13,13,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (7,".$this->db->getUniqueID("vtiger_field").",'annualrevenue','vtiger_leaddetails',1,'71','annualrevenue','Annual Revenue',1,0,0,100,14,13,1,'I~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (7,".$this->db->getUniqueID("vtiger_field").",'rating','vtiger_leaddetails',1,'15','rating','Rating',1,0,0,100,15,13,1,'V~O',1,null,'ADV')");
- $this->db->query("insert into vtiger_field values (7,".$this->db->getUniqueID("vtiger_field").",'noofemployees','vtiger_leaddetails',1,'1','noofemployees','No Of Employees',1,0,0,100,16,13,1,'V~O',1,null,'ADV')");
+ $this->db->query("insert into vtiger_field values (7,".$this->db->getUniqueID("vtiger_field").",'noofemployees','vtiger_leaddetails',1,'1','noofemployees','No Of Employees',1,0,0,100,16,13,1,'I~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (7,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,17,13,1,'V~M',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (7,".$this->db->getUniqueID("vtiger_field").",'yahooid','vtiger_leaddetails',1,'13','yahooid','Yahoo Id',1,0,0,100,18,13,1,'V~O',1,null,'ADV')");
+ $this->db->query("insert into vtiger_field values (7,".$this->db->getUniqueID("vtiger_field").",'yahooid','vtiger_leaddetails',1,'13','yahooid','Yahoo Id',1,0,0,100,18,13,1,'E~O',1,null,'ADV')");
 $this->db->query("insert into vtiger_field values (7,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,19,13,2,'T~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (7,".$this->db->getUniqueID("vtiger_field").",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,20,13,2,'T~O',1,null,'BAS')");
 
@@ -286,7 +286,7 @@ $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("v
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'accountid','vtiger_contactdetails',1,'51','account_id','Account Name',1,0,0,100,6,4,1,'I~O',0,3,'BAS')");	
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'homephone','vtiger_contactsubdetails',1,'11','homephone','Home Phone',1,0,0,100,7,4,1,'V~O',1,null,'ADV')");	
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'leadsource','vtiger_contactsubdetails',1,'15','leadsource','Lead Source',1,0,0,100,8,4,1,'V~O',1,null,'BAS')");	
- $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'otherphone','vtiger_contactsubdetails',1,'11','otherphone','Phone',1,0,0,100,9,4,1,'V~O',1,null,'ADV')");
+ $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'otherphone','vtiger_contactsubdetails',1,'11','otherphone','Other Phone',1,0,0,100,9,4,1,'V~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'title','vtiger_contactdetails',1,'1','title','Title',1,0,0,100,10,4,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'fax','vtiger_contactdetails',1,'1','fax','Fax',1,0,0,100,11,4,1,'V~O',1,null,'BAS')");	
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'department','vtiger_contactdetails',1,'1','department','Department',1,0,0,100,12,4,1,'V~O',1,null,'ADV')");
@@ -294,7 +294,7 @@ $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("v
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'email','vtiger_contactdetails',1,'13','email','Email',1,0,0,100,15,4,1,'E~O',0,5,'BAS')");
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'reportsto','vtiger_contactdetails',1,'57','contact_id','Reports To',1,0,0,100,16,4,1,'V~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'assistant','vtiger_contactsubdetails',1,'1','assistant','Assistant',1,0,0,100,17,4,1,'V~O',1,null,'ADV')");
- $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'yahooid','vtiger_contactdetails',1,'13','yahooid','Yahoo Id',1,0,0,100,18,4,1,'V~O',1,null,'ADV')");
+ $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'yahooid','vtiger_contactdetails',1,'13','yahooid','Yahoo Id',1,0,0,100,18,4,1,'E~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'assistantphone','vtiger_contactsubdetails',1,'11','assistantphone','Assistant Phone',1,0,0,100,19,4,1,'V~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'donotcall','vtiger_contactdetails',1,'56','donotcall','Do Not Call',1,0,0,100,20,4,1,'C~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'emailoptout','vtiger_contactdetails',1,'56','emailoptout','Email Opt Out',1,0,0,100,21,4,1,'C~O',1,null,'ADV')");
@@ -426,7 +426,7 @@ $this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("
 //Block31-36 -- Start
 
 $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'productname','vtiger_products',1,'2','productname','Product Name',1,0,0,100,1,31,1,'V~M',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'productcode','vtiger_products',1,'1','productcode','Product Code',1,0,0,100,2,31,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'productcode','vtiger_products',1,'1','productcode','Part Number',1,0,0,100,2,31,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'discontinued','vtiger_products',1,'56','discontinued','Product Active',1,0,0,100,3,31,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'manufacturer','vtiger_products',1,'15','manufacturer','Manufacturer',1,0,0,100,4,31,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'productcategory','vtiger_products',1,'15','productcategory','Product Category',1,0,0,100,4,31,1,'V~O',1,null,'BAS')");
@@ -436,9 +436,6 @@ $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'expiry_date','vtiger_products',1,'5','expiry_date','Support Expiry Date',1,0,0,100,8,31,1,'D~O~OTH~GE~start_date~Start Date',1,null,'BAS')");
  
 
- $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'crmid','vtiger_seproductsrel',1,'66','parent_id','Related To',1,0,0,100,10,31,1,'I~O',1,null,'BAS')");
-
- $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'contactid','vtiger_products',1,'57','contact_id','Contact Name',1,0,0,100,11,31,1,'I~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'website','vtiger_products',1,'17','website','Website',1,0,0,100,12,31,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'vendor_id','vtiger_products',1,'75','vendor_id','Vendor Name',1,0,0,100,13,31,1,'I~O',1,null,'BAS')");
 $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'mfr_part_no','vtiger_products',1,'1','mfr_part_no','Mfr PartNo',1,0,0,100,14,31,1,'V~O',1,null,'BAS')");
@@ -454,7 +451,7 @@ $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("
 
 $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'unit_price','vtiger_products',1,'71','unit_price','Unit Price',1,0,0,100,1,32,1,'N~O',1,null,'BAS')"); 
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'commissionrate','vtiger_products',1,'9','commissionrate','Commission Rate',1,0,0,100,2,32,1,'N~O',1,null,'BAS')"); 
- $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'taxclass','vtiger_producttaxrel',1,'83','taxclass','Tax Class',1,0,0,100,4,32,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'taxclass','vtiger_products',1,'83','taxclass','Tax Class',1,0,0,100,4,32,1,'V~O',1,null,'BAS')");
 
 
 //Block 33 stock info
@@ -644,7 +641,7 @@ $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("
  $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'shipping','vtiger_quotes',1,'1','shipping','Shipping',1,0,0,100,10,51,1,'V~O',1,null,'BAS')");
 
  $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'inventorymanager','vtiger_quotes',1,'77','assigned_user_id1','Inventory Manager',1,0,0,100,11,51,1,'I~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'tax','vtiger_quotes',1,'1','txtTax','Tax',1,0,0,100,13,51,3,'N~O',1,null,'BAS')");
+ //$this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'tax','vtiger_quotes',1,'1','txtTax','Sales Tax',1,0,0,100,13,51,3,'N~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'adjustment','vtiger_quotes',1,'1','txtAdjustment','Adjustment',1,0,0,100,20,51,3,'NN~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'total','vtiger_quotes',1,'1','hdnGrandTotal','Total',1,0,0,100,14,51,3,'N~O',1,null,'BAS')");
 //Added fields taxtype, discount percent, discount amount and S&H amount for Tax process
@@ -698,9 +695,9 @@ $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("
 
  $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'tracking_no','vtiger_purchaseorder',1,'1','tracking_no','Tracking Number',1,0,0,100,5,57,1,'V~O',1,null,'BAS')");	
  $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'contactid','vtiger_purchaseorder',1,'57','contact_id','Contact Name',1,0,0,100,6,57,1,'I~O',1,null,'BAS')");	
- $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'duedate','vtiger_purchaseorder',1,'5','duedate','Due Date',1,0,0,100,7,57,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'duedate','vtiger_purchaseorder',1,'5','duedate','Due Date',1,0,0,100,7,57,1,'D~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'carrier','vtiger_purchaseorder',1,'15','carrier','Carrier',1,0,0,100,8,57,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'salestax','vtiger_purchaseorder',1,'1','txtTax','Sales Tax',1,0,0,100,10,57,3,'N~O',1,null,'BAS')");
+ //$this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'salestax','vtiger_purchaseorder',1,'1','txtTax','Sales Tax',1,0,0,100,10,57,3,'N~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'adjustment','vtiger_purchaseorder',1,'1','txtAdjustment','Adjustment',1,0,0,100,10,57,3,'NN~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'salescommission','vtiger_purchaseorder',1,'1','salescommission','Sales Commission',1,0,0,100,11,57,1,'N~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'exciseduty','vtiger_purchaseorder',1,'1','exciseduty','Excise Duty',1,0,0,100,12,57,1,'N~O',1,null,'BAS')");
@@ -762,12 +759,12 @@ $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'carrier','vtiger_salesorder',1,'15','carrier','Carrier',1,0,0,100,9,63,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'pending','vtiger_salesorder',1,'1','pending','Pending',1,0,0,100,10,63,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'sostatus','vtiger_salesorder',1,'111','sostatus','Status',1,0,0,100,11,63,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'salestax','vtiger_salesorder',1,'1','txtTax','Sales Tax',1,0,0,100,12,63,3,'N~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'adjustment','vtiger_salesorder',1,'1','txtAdjustment','Sales Tax',1,0,0,100,12,63,3,'NN~O',1,null,'BAS')");
+ //$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'salestax','vtiger_salesorder',1,'1','txtTax','Sales Tax',1,0,0,100,12,63,3,'N~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'adjustment','vtiger_salesorder',1,'1','txtAdjustment','Adjustment',1,0,0,100,12,63,3,'NN~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'salescommission','vtiger_salesorder',1,'1','salescommission','Sales Commission',1,0,0,100,13,63,1,'N~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'exciseduty','vtiger_salesorder',1,'1','exciseduty','Excise Duty',1,0,0,100,13,63,1,'N~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'total','vtiger_salesorder',1,'1','hdnGrandTotal','Total',1,0,0,100,14,63,3,'N~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'subtotal','vtiger_salesorder',1,'1','hdnSubTotal','Total',1,0,0,100,15,63,3,'N~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'subtotal','vtiger_salesorder',1,'1','hdnSubTotal','Sub Total',1,0,0,100,15,63,3,'N~O',1,null,'BAS')");
 //Added fields taxtype, discount percent, discount amount and S&H amount for Tax process
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'taxtype','vtiger_salesorder',1,'15','hdnTaxType','Tax Type',1,0,0,100,15,63,3,'V~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'discount_percent','vtiger_salesorder',1,'1','hdnDiscountPercent','Discount Percent',1,0,0,100,15,63,3,'N~O',1,null,'BAS')");
@@ -826,8 +823,8 @@ $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("
 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'invoicedate','vtiger_invoice',1,'5','invoicedate','Invoice Date',1,0,0,100,5,69,1,'D~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'duedate','vtiger_invoice',1,'5','duedate','Due Date',1,0,0,100,6,69,1,'D~O',1,null,'BAS')");
 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'purchaseorder','vtiger_invoice',1,'1','vtiger_purchaseorder','Purchase Order',1,0,0,100,8,69,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'salestax','vtiger_invoice',1,'1','txtTax','Sales Tax',1,0,0,100,9,69,3,'N~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'adjustment','vtiger_invoice',1,'1','txtAdjustment','Sales Tax',1,0,0,100,9,69,3,'NN~O',1,null,'BAS')");
+ //$this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'salestax','vtiger_invoice',1,'1','txtTax','Sales Tax',1,0,0,100,9,69,3,'N~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'adjustment','vtiger_invoice',1,'1','txtAdjustment','Adjustment',1,0,0,100,9,69,3,'NN~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'salescommission','vtiger_invoice',1,'1','salescommission','Sales Commission',1,0,0,10,13,69,1,'N~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'exciseduty','vtiger_invoice',1,'1','exciseduty','Excise Duty',1,0,0,100,11,69,1,'N~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'subtotal','vtiger_invoice',1,'1','hdnSubTotal','Sub Total',1,0,0,100,12,69,3,'N~O',1,null,'BAS')");
@@ -869,7 +866,8 @@ $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("
  $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'description','vtiger_crmentity',1,'19','description','Description',1,0,0,100,1,74,1,'V~O',1,null,'ADV')");
  //Block74
  $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'terms_conditions','vtiger_invoice',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,73,1,'V~O',1,null,'ADV')");
-
+//Added for Custom invoice Number
+$this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'invoice_no','vtiger_invoice',1,'3','invoice_no','Invoice No',1,0,0,100,3,69,1,'V~M',1,null,'BAS')");	
 
 //Invoice Details -- END
  //users Details Starts Block 79,80,81
@@ -913,25 +911,24 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 
 
 //The Entity Name for the modules are maintained in this table
-$this->db->query("insert into vtiger_entityname values(7,'Leads','vtiger_leaddetails','lastname,firstname','leadid')");
-$this->db->query("insert into vtiger_entityname values(6,'Accounts','vtiger_account','accountname','accountid')");
-$this->db->query("insert into vtiger_entityname values(4,'Contacts','vtiger_contactdetails','lastname,firstname','contactid')");
-$this->db->query("insert into vtiger_entityname values(2,'Potentials','vtiger_potential','potentialname','potentialid')");
-$this->db->query("insert into vtiger_entityname values(8,'Notes','vtiger_notes','title','notesid')");
-$this->db->query("insert into vtiger_entityname values(13,'HelpDesk','vtiger_troubletickets','title','ticketid')");
-$this->db->query("insert into vtiger_entityname values(9,'Calendar','vtiger_activity','subject','activityid')");
-$this->db->query("insert into vtiger_entityname values(10,'Emails','vtiger_activity','subject','activityid')");
-$this->db->query("insert into vtiger_entityname values(14,'Products','vtiger_products','productname','productid')");
-$this->db->query("insert into vtiger_entityname values(29,'Users','vtiger_users','last_name,first_name','id')");
-$this->db->query("insert into vtiger_entityname values(23,'Invoice','vtiger_invoice','subject','invoiceid')");
-$this->db->query("insert into vtiger_entityname values(20,'Quotes','vtiger_quotes','subject','quoteid')");
-$this->db->query("insert into vtiger_entityname values(21,'PurchaseOrder','vtiger_purchaseorder','subject','purchaseorderid')");
-$this->db->query("insert into vtiger_entityname values(22,'SalesOrder','vtiger_salesorder','subject','salesorderid')");
-$this->db->query("insert into vtiger_entityname values(18,'Vendors','vtiger_vendor','vendorname','vendorid')");
-$this->db->query("insert into vtiger_entityname values(19,'PriceBooks','vtiger_pricebook','bookname','pricebookid')");
-$this->db->query("insert into vtiger_entityname values(26,'Campaigns','vtiger_campaign','campaignname','campaignid')");
-$this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','question','id')");
-
+$this->db->query("insert into vtiger_entityname values(7,'Leads','vtiger_leaddetails','lastname,firstname','leadid','leadid')");
+$this->db->query("insert into vtiger_entityname values(6,'Accounts','vtiger_account','accountname','accountid','account_id')");
+$this->db->query("insert into vtiger_entityname values(4,'Contacts','vtiger_contactdetails','lastname,firstname','contactid','contact_id')");
+$this->db->query("insert into vtiger_entityname values(2,'Potentials','vtiger_potential','potentialname','potentialid','potential_id')");
+$this->db->query("insert into vtiger_entityname values(8,'Notes','vtiger_notes','title','notesid','notesid')");
+$this->db->query("insert into vtiger_entityname values(13,'HelpDesk','vtiger_troubletickets','title','ticketid','ticketid')");
+$this->db->query("insert into vtiger_entityname values(9,'Calendar','vtiger_activity','subject','activityid','activityid')");
+$this->db->query("insert into vtiger_entityname values(10,'Emails','vtiger_activity','subject','activityid','activityid')");
+$this->db->query("insert into vtiger_entityname values(14,'Products','vtiger_products','productname','productid','product_id')");
+$this->db->query("insert into vtiger_entityname values(29,'Users','vtiger_users','last_name,first_name','id','id')");
+$this->db->query("insert into vtiger_entityname values(23,'Invoice','vtiger_invoice','subject','invoiceid','invoiceid')");
+$this->db->query("insert into vtiger_entityname values(20,'Quotes','vtiger_quotes','subject','quoteid','quote_id')");
+$this->db->query("insert into vtiger_entityname values(21,'PurchaseOrder','vtiger_purchaseorder','subject','purchaseorderid','purchaseorderid')");
+$this->db->query("insert into vtiger_entityname values(22,'SalesOrder','vtiger_salesorder','subject','salesorderid','salesorder_id')");
+$this->db->query("insert into vtiger_entityname values(18,'Vendors','vtiger_vendor','vendorname','vendorid','vendor_id')");
+$this->db->query("insert into vtiger_entityname values(19,'PriceBooks','vtiger_pricebook','bookname','pricebookid','pricebookid')");
+$this->db->query("insert into vtiger_entityname values(26,'Campaigns','vtiger_campaign','campaignname','campaignid','campaignid')");
+$this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','question','id','id')");
                 // Insert End
 		
 		//Inserting into vtiger_groups table
@@ -1516,7 +1513,7 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
                 $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",7,6,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",8,6,0)");
                 //$this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",9,6,0)");
-                $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",10,6,0)");
+                //$this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",10,6,0)");
 		$this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",7,8,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",6,8,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",4,8,0)");
@@ -1537,7 +1534,7 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
                 $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",7,6,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",8,6,1)");
                 //$this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",9,6,1)");
-                $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",10,6,1)");
+                //$this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",10,6,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",7,8,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",6,8,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",4,8,0)");
@@ -1558,7 +1555,7 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
                 $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",7,6,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",8,6,1)");
                 //$this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",9,6,1)");
-                $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",10,6,1)");
+                //$this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",10,6,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",7,8,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",6,8,0)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",4,8,0)");
@@ -1579,7 +1576,7 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
                 $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",7,6,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",8,6,1)");
                 //$this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",9,6,1)");
-                $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",10,6,1)");
+                //$this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",10,6,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",7,8,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",6,8,1)");
                 $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",4,8,1)");		
@@ -1660,25 +1657,24 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
 
 	//insert into related list vtiger_table
 	//Inserting for vtiger_account related lists
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Potentials").",'get_opportunities',1,'Potentials',0)");	
 		
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Contacts").",'get_contacts',2,'Contacts',0)");
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Contacts").",'get_contacts',1,'Contacts',0)");
 
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Calendar").",'get_activities',3,'Activities',0)");
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Potentials").",'get_opportunities',2,'Potentials',0)");	
 
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("HelpDesk").",'get_tickets',4,'HelpDesk',0)");
-	
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Calendar").",'get_history',5,'Activity History',0)");
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Quotes").",'get_quotes',3,'Quotes',0)");
 
-	
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",0,'get_attachments',6,'Attachments',0)");
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("SalesOrder").",'get_salesorder',4,'Sales Order',0)");
 
-	
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Quotes").",'get_quotes',7,'Quotes',0)");
-	
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Invoice").",'get_invoices',8,'Invoice',0)");
-	
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("SalesOrder").",'get_salesorder',9,'Sales Order',0)");
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Invoice").",'get_invoices',5,'Invoice',0)");
+
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Calendar").",'get_activities',6,'Activities',0)");
+
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Calendar").",'get_history',7,'Activity History',0)");
+
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",0,'get_attachments',8,'Attachments',0)");
+
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("HelpDesk").",'get_tickets',9,'HelpDesk',0)");
 	
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Accounts").",".getTabid("Products").",'get_products',10,'Products',0)");
 
@@ -1756,7 +1752,12 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Invoice").",'get_invoices',7,'Invoice',0)");
 	
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("PriceBooks").",'get_product_pricebooks',8,'PriceBooks',0)");
-	
+
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Leads").",'get_leads',9,'Leads',0)");
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Accounts").",'get_accounts',10,'Accounts',0)");
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Contacts").",'get_contacts',11,'Contacts',0)");
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Potentials").",'get_opportunities',12,'Potentials',0)");
+
 		//Inserting Emails Related Lists	
 
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Emails").",".getTabid("Contacts").",'get_contacts',1,'Contacts',0)");
@@ -1793,9 +1794,11 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
         
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Quotes").",9,'get_activities',2,'Activities',0)");
 	
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Quotes").",9,'get_history',3,'Activity History',0)");
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Quotes").",0,'get_attachments',3,'Attachments',0)");
+	
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Quotes").",9,'get_history',4,'Activity History',0)");
 
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Quotes").",0,'get_quotestagehistory',4,'Quote Stage History',0)");
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Quotes").",0,'get_quotestagehistory',5,'Quote Stage History',0)");
 
 	// Inserting Purchase order Related Lists
 
@@ -1860,41 +1863,41 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
  		$this->db->query("insert into vtiger_notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("vtiger_notificationscheduler").",'LBL_ACTIVITY_REMINDER_DESCRIPTION' ,1,'Activity Reminder Notification','This is a reminder notification for the Activity','LBL_ACTIVITY_NOTIFICATION')");
 
 		//Inserting Inventory Notifications
-	$invoice_body = 'Dear {HANDLER},
-
+	$invoice_body = 'Dear {HANDLER},<br>
+<br>
 The current stock of {PRODUCTNAME} in our warehouse is {CURRENTSTOCK}. Kindly procure required number of units as the stock level is below reorder level {REORDERLEVELVALUE}.
-
+<br><br>
 Please treat this information as Urgent as the invoice is already sent  to the customer.
-
+<br><br>
 Severity: Critical
-
-Thanks,
+<br>
+Thanks,<br>
 {CURRENTUSER}';
 
 		
                $this->db->query("insert into vtiger_inventorynotification(notificationid,notificationname,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("vtiger_inventorynotification").",'InvoiceNotification','{PRODUCTNAME} Stock Level is Low','".$invoice_body." ','InvoiceNotificationDescription')");
 
-		$quote_body = 'Dear {HANDLER},
+		$quote_body = 'Dear {HANDLER},<br><br>
 
 Quote is generated for {QUOTEQUANTITY} units of {PRODUCTNAME}. The current stock of {PRODUCTNAME} in our warehouse is {CURRENTSTOCK}. 
-
+<br><br>
 Severity: Minor
-
-Thanks,
+<br><br>
+Thanks,<br>
 {CURRENTUSER}';	
 		
 		
                $this->db->query("insert into vtiger_inventorynotification(notificationid,notificationname,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("vtiger_inventorynotification").",'QuoteNotification','Quote given for {PRODUCTNAME}','".$quote_body." ','QuoteNotificationDescription')");
 
 		$so_body = 'Dear {HANDLER},
-
+<br><br>
 SalesOrder is generated for {SOQUANTITY} units of {PRODUCTNAME}. The current stock of {PRODUCTNAME} in our warehouse is {CURRENTSTOCK}. 
-
+<br><br>
 Please treat this information  with priority as the sales order is already generated.
-
+<br><br>
 Severity: Major
-
-Thanks,
+<br><br>
+Thanks,<br>
 {CURRENTUSER}';
 
 		
@@ -2126,7 +2129,7 @@ Should any need arise,please do give us a call.';
 	$this->db->query("insert into vtiger_parenttab values (8,'Settings',8,0)");
 
 	$this->db->query("insert into vtiger_parenttabrel values (1,9,2)");
-	$this->db->query("insert into vtiger_parenttabrel values (1,10,4)");
+	$this->db->query("insert into vtiger_parenttabrel values (1,28,4)");
 	$this->db->query("insert into vtiger_parenttabrel values (1,3,1)");
 	$this->db->query("insert into vtiger_parenttabrel values (3,7,1)");
 	$this->db->query("insert into vtiger_parenttabrel values (3,6,2)");
@@ -2159,8 +2162,8 @@ Should any need arise,please do give us a call.';
 	$this->db->query("insert into vtiger_parenttabrel values (2,26,1)");
 	$this->db->query("insert into vtiger_parenttabrel values (2,6,2)");
 	$this->db->query("insert into vtiger_parenttabrel values (2,4,3)");
-	$this->db->query("insert into vtiger_parenttabrel values (2,10,4)");
-	$this->db->query("insert into vtiger_parenttabrel values (4,10,7)");
+	$this->db->query("insert into vtiger_parenttabrel values (2,28,4)");
+	$this->db->query("insert into vtiger_parenttabrel values (4,28,7)");
 	$this->db->query("insert into vtiger_parenttabrel values (2,7,5)");
 	$this->db->query("insert into vtiger_parenttabrel values (2,9,6)");
 	$this->db->query("insert into vtiger_parenttabrel values (4,9,8)");
@@ -2192,7 +2195,10 @@ Should any need arise,please do give us a call.';
 	$this->db->query("alter table vtiger_inventoryshippingrel add column shtax$shsalesid decimal(7,3) default NULL");
 	$this->db->query("alter table vtiger_inventoryshippingrel add column shtax$shserviceid decimal(7,3) default NULL");
 
-
+	//version file is included here because without including this file version cannot be get
+	include('vtigerversion.php');
+	$this->db->query("insert into vtiger_version values('','".$vtiger_current_version."','".$vtiger_current_version."')");
+	
 	}
 }
 ?>

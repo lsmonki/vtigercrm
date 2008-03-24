@@ -23,6 +23,8 @@ require_once("modules/Potentials/Charts.php");
 require_once("modules/Dashboard/Forms.php");
 global $app_list_strings, $current_language, $tmp_dir, $currentModule, $action, $theme;
 $current_module_strings = return_module_language($current_language, 'Dashboard');
+require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
 $log = LoggerManager::getLogger('outcome_by_month');
 
@@ -139,7 +141,11 @@ if (isset($_REQUEST['obm_edit']) && $_REQUEST['obm_edit'] == 'true') {
 <td valign='top' ><input class="text" name="obm_date_end" size='12' maxlength='10' id='date_end' value='<?php if (isset($_SESSION['obm_date_end'])) echo $_SESSION['obm_date_end']?>'>  <img src="themes/<?php echo $theme ?>/images/calendar.gif" id="date_end_trigger"> </td>
 </tr><tr>
 <td nowrap><?php echo $current_module_strings['LBL_USERS'];?></td>
-<td valign='top' ><select name="obm_ids[]" multiple size='3'><?php echo get_select_options_with_id(get_user_array(false),$_SESSION['obm_ids']); ?></select></td>
+<?php if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid('Potentials')] == 3 or $defaultOrgSharingPermission[getTabid('Potentials')] == 0)) { ?>
+	<td valign='top' ><select name="obm_ids[]" multiple size='3'><?php echo get_select_options_with_id(get_user_array(FALSE, "Active", $current_user->id,'private'),$_SESSION['obm_ids']); ?></select></td>
+<?php } else { ?>
+	<td valign='top' ><select name="obm_ids[]" multiple size='3'><?php echo get_select_options_with_id(get_user_array(FALSE, "Active",$current_user->id),$_SESSION['obm_ids']); ?></select></td>
+<?php } ?>
 </tr><tr>
 <td align="right"><br /> <input class="button" onclick="return verify_chart_data(outcome_by_month);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
 </tr></table>

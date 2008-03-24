@@ -98,7 +98,10 @@ if($singlepane_view == 'true')
 {
 	$related_array = getRelatedLists($currentModule,$focus);
 	$smarty->assign("RELATEDLISTS", $related_array);
+	$smarty->assign("BASE_ACCOUNT",getAccountName($focus->column_fields[account_id]));	
 }
+
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
 $smarty->assign("SinglePane_View", $singlepane_view);
 

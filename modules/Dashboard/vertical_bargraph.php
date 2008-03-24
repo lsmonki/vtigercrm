@@ -44,7 +44,7 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 			$name=$datax[$i];
 		$pos = substr_count($name," ");
 		$alts[]=$name."=%d";
-//If the daatx value of a string is greater, adding '\n' to it so that it'll cme inh 2nd line
+//If the datax value of a string is greater, adding '\n' to it so that it'll cme inh 2nd line
 		 if(strlen($name)>=15)
                         $name=substr($name, 0, 15);
 		if($pos>=2)
@@ -154,7 +154,14 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 
 	// Add some grace to y-axis so the bars doesn't go
 	// all the way to the end of the plot area
-	$yaxis->forceMaximum(round(($max * 1.1) + 0.5));
+	if($max<=10)
+		$yaxis->forceMaximum(round(($max * 1.1) + 1.5));
+	elseif($max>10 && $max<=100)
+		$yaxis->forceMaximum(round(($max * 1.1) + 1.5));
+	elseif($max>100 && $max<=1000)
+		$yaxis->forceMaximum(round(($max * 1.1) + 10.5));
+	else
+		$yaxis->forceMaximum(round(($max * 1.1) + 100.5));	
 	$ticks = get_tickspacing($max);
 
 	// First make the labels look right

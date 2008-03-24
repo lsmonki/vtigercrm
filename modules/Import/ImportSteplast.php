@@ -145,11 +145,11 @@ global $list_max_entries_per_page;
 $implict_account = false;
 
 $import_modules_array = Array(
-				"Leads"=>"Lead",
-				"Accounts"=>"Account",
-				"Contacts"=>"Contact",
-				"Potentials"=>"Potential",
-				"Products"=>"Product" 
+				"Leads"=>"Leads",
+				"Accounts"=>"Accounts",
+				"Contacts"=>"Contacts",
+				"Potentials"=>"Potentials",
+				"Products"=>"Products" 
 			     );
 
 foreach($import_modules_array as $module_name => $object_name)
@@ -220,8 +220,8 @@ foreach($import_modules_array as $module_name => $object_name)
 		//Retreive the List View Header and Entries
 		$listview_header = getListViewHeader($object,$module_name);
 		$listview_entries = getListViewEntries($object,$module_name,$list_result,$navigation_array,"","","EditView","Delete","");
-
-		$smarty->assign("NAVIGATION", $navigationOutput);
+		//commented to remove navigation buttons from import list view
+		//$smarty->assign("NAVIGATION", $navigationOutput);
 		$smarty->assign("HIDE_CUSTOM_LINKS", 1);//Added to hide the CustomView links in imported records ListView
 		$smarty->assign("LISTHEADER", $listview_header);
 		$smarty->assign("LISTENTITY", $listview_entries);

@@ -9,26 +9,51 @@
  ********************************************************************************/
 function load_webmail(mid) {
         var node = $("row_"+mid);
-	if(node.className == "unread_email") {
-		var unread  = parseInt($(mailbox+"_unread").innerHTML);
-		if(unread != 0)
-			$(mailbox+"_unread").innerHTML = (unread-1);
+	preview_id = mid;
+	if(typeof($('fnt_subject_'+mid)) != "undefined" && $('fnt_subject_'+mid).color=="green")
+	{
+		$('fnt_subject_'+mid).color="";
+		$('fnt_date_'+mid).color="";
+		$('fnt_from_'+mid).color="";
+
+	}
+	if(node.className == "mailSelected") {
+	var unread  = parseInt($(mailbox+"_unread").innerHTML);
+	if(unread != 0)
+	{
+			var curUnread;
+			curUnread = unread -1;
+			if(curUnread == 0)
+				$(mailbox+"_count").style.display="none";
+			else
+				$(mailbox+"_unread").innerHTML = curUnread;
+		}
+			
 
                 $("unread_img_"+mid).removeChild($("unread_img_"+mid).firstChild);
                 $("unread_img_"+mid).appendChild(Builder.node('a',
-                        {href: 'javascript:;', onclick: 'OpenCompose('+mid+',"reply")'},
-                        [Builder.node('img',{src: 'modules/Webmails/images/stock_mail-read.png', border: '0', width: '10', height: '11'})]
+                        {href: 'javascript:;', onclick: 'OpenComposer('+mid+',\'reply\')'},
+                        [Builder.node('img',{src: 'themes/images/openmail.gif', border: '0', width: '12', height: '12'})]
                 ));
 	}
         node.className='read_email';
+	//Fix for webmails body display in IE - dartagnanlaf
+	/*
+        new Ajax.Request(
+                'index.php',
+                {queue: {position: 'end', scope: 'command'},
+                        method: 'post',
+                        postBody: 'module=Webmails&action=body&mailid=' + mid + '&mailbox='+mailbox,
+                        onComplete: function(response) {
+                                document.getElementById("body_area").innerHTML=response.responseText;
+                        }
+                }
+          );
+	*/
 
-        $("from_addy").innerHTML = "&nbsp;"+webmail[mid]["from"];
-        $("to_addy").innerHTML = "&nbsp;"+webmail[mid]["to"];
-        $("webmail_subject").innerHTML = "&nbsp;"+webmail[mid]["subject"];
-        $("webmail_date").innerHTML = "&nbsp;"+webmail[mid]["date"];
-
-        $("body_area").removeChild($("body_area").firstChild);
-        $("body_area").appendChild(Builder.node('iframe',{src: 'index.php?module=Webmails&action=body&mailid='+mid+'&mailbox='+mailbox, width: '100%', height: '210', frameborder: '0'},'You must enable iframes'));
+	oiframe = $("email_description");
+	oiframe.src = 'index.php?module=Webmails&action=body&theme='+theme+'&mailid='+mid+'&mailbox='+mailbox;
+        //$("body_area").appendChild(Builder.node('iframe',{src: 'index.php?module=Webmails&action=body&mailid='+mid+'&mailbox='+mailbox, width: '100%', height: '210', frameborder: '0'},'You must enable iframes'));
 
         tmp = document.getElementsByClassName("previewWindow");
         for(var i=0;i<tmp.length;i++) {
@@ -36,51 +61,98 @@ function load_webmail(mid) {
                         tmp[i].style.visibility="visible";
                 }
         }
-
+	if($("preview1").style.visibility === "hidden" || $("preview2").style.visibility === "hidden") {
+		$("preview1").style.visibility="visible";
+		$("preview2").style.visibility="visible";
+	}
+	
         $("delete_button").removeChild($("delete_button").firstChild);
-        $("delete_button").appendChild(Builder.node('input',{type: 'button', name: 'Button', value: 'Delete', className: 'classWebBtn', onclick: 'runEmailCommand(\'delete_msg\','+mid+')'}));
+        $("delete_button").appendChild(Builder.node('input',{type: 'button', name: 'Button', value: 'Delete', className: 'buttonok', onclick: 'runEmailCommand(\'delete_msg\','+mid+')'}));
 
         $("reply_button_all").removeChild($("reply_button_all").firstChild);
-        $("reply_button_all").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: ' Reply To All ', className: 'classWebBtn', onclick: 'OpenCompose('+mid+',\'replyall\')'}));
+        $("reply_button_all").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: ' Reply To All ', className: 'buttonok', onclick: 'OpenComposer('+mid+',\'replyall\')'}));
 
         $("reply_button").removeChild($("reply_button").firstChild);
-        $("reply_button").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: ' Reply To Sender ', className: 'classWebBtn', onclick: 'OpenCompose('+mid+',\'reply\')'}));
+        $("reply_button").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: ' Reply To Sender ', className: 'buttonok', onclick: 'OpenComposer('+mid+',\'reply\')'}));
 
         $("forward_button").removeChild($("forward_button").firstChild);
-        $("forward_button").appendChild(Builder.node('input',{type: 'button', name: 'forward', value: ' Forward ', className: 'classWebBtn', onclick: 'OpenCompose('+mid+',\'forward\')'}));
+        $("forward_button").appendChild(Builder.node('input',{type: 'button', name: 'forward', value: ' Forward ', className: 'buttonok', onclick: 'OpenComposer('+mid+',\'forward\')'}));
 
         $("qualify_button").removeChild($("qualify_button").firstChild);
-        $("qualify_button").appendChild(Builder.node('input',{type: 'button', name: 'Qualify2', value: ' Qualify ', className: 'classWebBtn', onclick: 'showRelationships('+mid+')'}));
-
+	if(showQualify == 'yes')
+        	$("qualify_button").appendChild(Builder.node('input',{type: 'button', name: 'Qualify2', value: ' Qualify ', className: 'buttonok', onclick: 'showRelationships('+mid+')'}));
+	else
+		$("qualify_button").appendChild(Builder.node('input',{type: 'hidden',name: 'hide'}));
         $("download_attach_button").removeChild($("download_attach_button").firstChild);
-        $("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: ' Download Attachments ', className: 'classWebBtn', onclick: 'displayAttachments('+mid+')'}));
+        $("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: ' Download Attachments ', className: 'buttonok', onclick: 'displayAttachments('+mid+')'}));
 
-        $("full_view").removeChild($("full_view").firstChild);
-        $("full_view").appendChild(Builder.node('a',{href: 'javascript:;', onclick: 'OpenCompose('+mid+',\'full_view\')'},'Full Email View'));
-
+        //$("full_view").removeChild($("full_view").firstChild);
+      //  $("full_view").appendChild(Builder.node('a',{href: 'javascript:;', onclick: 'OpenComposer('+mid+',\'full_view\')'},'Full Email View'));
+	makeSelected(node.id)
 }
 function displayAttachments(mid) {
         var url = "index.php?module=Webmails&action=dlAttachments&mailid="+mid+"&mailbox="+mailbox;
-        window.open(url,"Download Attachments",'menubar=no,toolbar=no,location=no,status=no,resizable=no,width=450,height=450');
+        window.open(url,"DownloadAttachments",'menubar=no,toolbar=no,location=no,status=no,resizable=no,width=450,height=450');
 }
+function OpenComposer(id,mode)
+{
+        switch(mode)
+                {
+                case 'edit':
+                        url = 'index.php?module=Webmails&action=EditView&record='+id;
+                        break;
+                case 'create':
+                        url = 'index.php?module=Emails&action=EmailsAjax&file=EditView';
+                        break;
+                case 'forward':
+                        url = 'index.php?module=Emails&action=EmailsAjax&mailid='+id+'&forward=true&webmail=true&file=EditView&mailbox='+mailbox;
+                        break;
+                case 'reply':
+                        url = 'index.php?module=Emails&action=EmailsAjax&mailid='+id+'&reply=single&webmail=true&file=EditView&mailbox='+mailbox;
+                        break;
+                case 'replyall':
+                        url = 'index.php?module=Emails&action=EmailsAjax&mailid='+id+'&reply=all&webmail=true&file=EditView&mailbox='+mailbox;
+                        break;
+                case 'attachments':
+                        url = 'index.php?module=Webmails&action=dlAttachments&mailid='+id+'&mailbox='+mailbox;
+                        break;
+                case 'full_view':
+                        url = 'index.php?module=Webmails&action=DetailView&record='+id+'&mailid='+id+'&mailbox='+mailbox;
+                        break;
+                }
+        openPopUp('xComposeEmail',this,url,'createemailWin',830,662,'menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes');
+}
+
+function makeSelected(rowId)
+{
+        if(gselected_mail != '')
+                $(gselected_mail).className = '';
+
+        $(rowId).className = 'mailSelected_select';
+        gselected_mail = rowId;
+}
+
 function showRelationships(mid) {
 	// TODO: present the user with a simple DHTML div to
 	// choose what type of relationship they would like to create
 	// before creating it.
-	alert('Are you sure you wish to Qualify this Mail as Contact?');
-        add_to_vtiger(mid);
+	if(confirm(alert_arr.WISH_TO_QUALIFY_MAIL_AS_CONTACT))
+       		add_to_vtiger(mid);
 }
 function add_to_vtiger(mid) {
 	// TODO: update this function to allow you to set what entity type
 	// you would like to associate to
+	var rowId = "row_"+mid;
+	$(rowId).className = "qualify_email";
         $("status").style.display="block";
         new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Webmails&action=Save&mailid='+mid+'&ajax=true',
+                        postBody: 'module=Webmails&action=Save&mailid='+mid+'&ajax=true'+'&mailbox='+mailbox,
                         onComplete: function(t) {
-                                $("status").style.display="block";
+				setTimeout('makeSelected("'+rowId+'");',500);
+				$("status").style.display="none";
                         }
                 }
         );
@@ -131,24 +203,26 @@ function check_in_all_boxes(mymbox) {
 	);
 }
 function check_for_new_mail(mbox) {
+	//window.location=window.location;
 	if(degraded_service == 'true') {
-		window.location=window.location;
 		return;
 	}
+	mailbox = mbox;
+	runEmailCommand("reload",0);
         $("status").style.display="block";
+/*
         new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
                         postBody: 'module=Webmails&action=WebmailsAjax&mailbox='+mbox+'&command=check_mbox&ajax=true&file=ListView',
                         onComplete: function(t) {
-			//alert(t.responseText);
-                            try {
+		             try {
 				// TODO: replace this at some point with prototype JSON
 				// tools
                                 var data = eval('(' + t.responseText + ')');
-				var read  = parseInt($(mailbox+"_read").innerHTML);
-				$(mailbox+"_read").innerHTML = (read+data.mails.length);
+				//var read  = parseInt($(mailbox+"_read").innerHTML);
+				//$(mailbox+"_read").innerHTML = (read+data.mails.length);
 				var unread  = parseInt($(mailbox+"_unread").innerHTML);
 				$(mailbox+"_unread").innerHTML = (unread+data.mails.length);
                                 for (var i=0;i<data.mails.length;i++) {
@@ -175,8 +249,11 @@ function check_for_new_mail(mbox) {
                                                 'td',
                                                 [ Builder.node(
                                                         'input',
-                                                        {type: 'checkbox', name: 'checkbox_'+mailid, className: 'msg_check'}
+ {type: 'checkbox', name: 'selected_id', value: mailid, className: 'msg_check'}
+                                                       
                                                 )]
+
+
                                         );
 
                                         tr.appendChild(check);
@@ -259,7 +336,9 @@ function check_for_new_mail(mbox) {
                                         for(var j=0;j<tels.length;j++) {
 					    try {
                                                 if(tels[j].id.match(/row_/)) {
-                                                	$("message_table").childNodes[1].insertBefore(tr,tels[j]);
+							//we are deleting the row and add it - AVOID THIS DELTE - MICKIE
+                                                	//$("message_table").childNodes[1].deleteRow(tr,tels[j]);commented since header does not come when new mails arrive                                                
+							$("message_table").childNodes[1].insertBefore(tr,tels[j]);
                                                         break;
                                         	}
 					    }catch(f){}
@@ -272,6 +351,7 @@ function check_for_new_mail(mbox) {
                         }
                 }
         );
+	*/
 }
 function periodic_event() {
 	// NOTE: any functions you put in here may race.  This could probably
@@ -301,49 +381,98 @@ function show_hidden() {
                         new Effect.Fade(els[i],{queue: {position: 'end', scope: 'show'}, duration: 0.2});
         }
 }
-function mass_delete() {
-	var ok = confirm("Are you sure you want to delete these messages?");
-	if(ok) {
-		// TODO: CHANGE THIS ASAP.  This spikes the client proc @ 100% and
-		// depending on the mbox size may seem completely unresponsive for
-		// extended periods.  Could be changed with getElementsByClassName()
-		// to shorten the loop.  The majority of the slowdown probably comes from
-		// executing an AJAX delete_msg for each mailid :).
-        	$("status").style.display="block";
-        	var els = document.getElementsByTagName("INPUT");
-        	var cnt = (els.length-1);
-		var nids='';
-		var j=0;
-        	for(var i=cnt;i>0;i--) {
-                	if(els[i].type === "checkbox" && els[i].name.indexOf("_")) {
-                        	if(els[i].checked) {
-                                	var nid = els[i].name.substr((els[i].name.indexOf("_")+1),els[i].name.length);
-					if(typeof nid == 'undefined' || nid == "checkbox")
-						nids += '';
-					else
-						nids += nid+":";
-				}
-			}
-			j++;
-		}
+function mass_delete()
+{
+       var select_options  =  document.getElementsByName('selected_id');
+       var x = select_options.length;
+       var nids = "";
+       var nid='';
+       xx = 0;
+        for(i = 0; i < x ; i++)
+        {
+            if(select_options[i].checked)
+            {
+                idvalue= select_options[i].value;
+		nid += idvalue +":";
+                xx++;
+            }
+        }
+        if (xx != 0)
+           nids=nid;
+        else
+        {
+            alert(alert_arr.SELECT_ATLEAST_ONEMSG_TO_DEL);
+            return false;
+        }
+        if(confirm(alert_arr.SURE_TO_DELETE))
 		runEmailCommand("delete_multi_msg",nids);
+}
+function move_messages()
+{
+	var nid = '';
+	var chkname=document.getElementsByName("selected_id");
+	mvmbox = $("mailbox_select").value;
+	var nid = Array();
+	var i=0;
+	move_mail = 1;
+	for(var m=0;m<chkname.length;m++)
+	{
+		if(chkname[m].checked)
+			nid[i++] =  chkname[m].value;
+	}
+	
+	if(nid.length > 0)
+	{
+		$("status").style.display="block";
+		new Ajax.Request(
+				'index.php',
+				{queue: {position: 'end', scope: 'command'},
+					method: 'post',
+					postBody: 'module=Webmails&action=WebmailsAjax&mailbox='+mailbox+'&start='+start+'&command=move_msg&ajax=true&mailid='+nid.join(":")+'&mvbox='+mvmbox,
+					onComplete: function(t) {
+						sh = $("show_msg");
+						var leftSide = findPosX(sh);
+					        var topSide = findPosY(sh);
+					        sh.style.left= leftSide + 400+'px';
+					        sh.style.top= topSide + 350 +'px';
+						sh.innerHTML = "Moving mail(s) from "+mailbox+" folder to "+mvmbox+" folder";
+                                                sh.style.display = "block";
+						sh.classname = "delete_email";
+                                                new Effect.Fade(sh,{queue: {position: 'end', scope: 'effect'},duration: '50'});
+						for(i=0;i<nid.length;i++)
+						{
+							var oRow = $('row_'+nid[i]);
+							new Effect.Fade(oRow,{queue: {position: 'end', scope: 'effect'},duration: '0.5'});
+						}
+						$("status").style.display = "none";
+					        start = t.responseText;	
+						runEmailCommand("reload",0);
+					}
+				}
+			);
+	}else
+	{
+		alert("Please select a mail and then move..");
 	}
 }
-function move_messages() {
+
+/*function move_messages() {
         $("status").style.display="block";
         var els = document.getElementsByTagName("INPUT");
         var cnt = (els.length-1);
         for(var i=cnt;i>0;i--) {
-                if(els[i].type === "checkbox" && els[i].name.indexOf("_")) {
+                if(els[i].type == "checkbox" && els[i].name.indexOf("_")) {
                         if(els[i].checked) {
                                 var nid = els[i].name.substr((els[i].name.indexOf("_")+1),els[i].name.length);
                                 var mvmbox = $("mailbox_select").value;
+                                var row = $("row_"+nid);
+                                new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'},duration: '0.5'});
                                 new Ajax.Request(
                                         'index.php',
                                         {queue: {position: 'end', scope: 'command'},
                                                 method: 'post',
-                                                postBody: 'module=Webmails&action=ListView&mailbox=INBOX&command=move_msg&ajax=true&mailid='+nid+'&mvbox='+mvmbox,
-                                                onComplete: function(t) {
+                                                postBody: 'module=Webmails&action=WebmailsAjax&file=ListView&mailbox='+gCurrentFolder+'&command=move_msg&ajax=true&mailid='+nid+'&mvbox='+mvmbox,
+                                              onComplete: function(t) {
                                                         //alert(t.responseText);
                                                 }
                                         }
@@ -351,9 +480,10 @@ function move_messages() {
                         }
                 }
         }
-        runEmailCommand('expunge','');
+	$('mailbox_select').selectedIndex=0;
+        //runEmailCommand('expunge','');
         $("status").style.display="none";
-}
+}*/
 function search_emails() {
 	// TODO: find a way to search in degraded functionality mode.
         var search_query = $("search_input").value;
@@ -361,34 +491,73 @@ function search_emails() {
         window.location = "index.php?module=Webmails&action=index&search=true&search_type="+search_type+"&search_input="+search_query;
 }
 function runEmailCommand(com,id) {
-        $("status").style.display="block";
         command=com;
         id=id;
+	gselected_mail = '';
+	if(com == 'delete_msg')
+	{
+		if(!confirm(alert_arr.DELETE+" "+alert_arr.MAIL+" ?"))
+			return;
+	}
+	if(com=="reload")
+                var file="ListViewAjax";
+        else
+                var file="";
+	
+	if(move_mail == 1){
+		var qry_str = "&mvbox="+mvmbox;
+		move_mail = 0;
+	}
+	else
+		qry_str = "";
+        
+	$("status").style.display="block";
         new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Webmails&action=WebmailsAjax&command='+command+'&mailid='+id+'&mailbox='+mailbox,
+                        postBody: 'module=Webmails&action=WebmailsAjax&start='+start+'&command='+command+'&mailid='+id+'&file='+file+'&mailbox='+mailbox+qry_str,
                         onComplete: function(t) {
                                 resp = t.responseText;
+				id=resp;
                                 if(resp.match(/ajax failed/)) {return;}
                                 switch(command) {
+				    case 'reload':
+					$("rssScroll").innerHTML = resp;
+					var unread_count = parseInt($(mailbox+"_tempcount").innerHTML);
+					if(unread_count > 0) {
+						$(mailbox+"_unread").innerHTML = unread_count;
+					}
+					else{
+						$(mailbox+"_count").innerHTML = "";
+					}
+					$("nav").innerHTML = $("navTemp").innerHTML;
+					$("box_list").innerHTML = $("temp_boxlist").innerHTML;
+					$("move_pane").innerHTML = $("temp_movepane").innerHTML;
+					$("temp_boxlist").innerHTML = "";
+					$("temp_movepane").innerHTML = "";
+					$("navTemp").innerHTML = '';
+					$(mailbox+"_tempcount").innerHTML = "";
+					break;
                                     case 'expunge':
                                         // NOTE: we either have to reload the page or count up from the messages that
                                         // are deleted and moved or we introduce a bug from invalid mail ids
-                                        window.location = window.location;
+                                        //window.location = window.location;
+					start = resp;
+					runEmailCommand("reload",0);
                                     break;
                                     case 'delete_multi_msg':
-					var ids=resp;
+					var ids;
+					eval(resp);
 					var rows = ids.split(":");
 					for(i=0;i<rows.length;i++)  {
 						var id = rows[i];
                                         	var row = $("row_"+id);
-						if(row.className == "unread_email") {
+						if(row.className == "mailSelected") {
 							var unread  = parseInt($(mailbox+"_unread").innerHTML);
 							$(mailbox+"_unread").innerHTML = (unread-1);
 						}
-                                        	row.className = "deletedRow";
+                                        	row.className = "delete_email";
 
                                         	Try.these (
 							function() {
@@ -408,20 +577,37 @@ function runEmailCommand(com,id) {
 
                                         	new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'},duration: '0.5'});
                                         	tmp = document.getElementsByClassName("previewWindow");
-                                                tmp[0].style.visibility="hidden";
+                                              //  tmp[0].style.visibility="hidden";
 					}catch(g){}
+					if(preview_id == id){
+					//	alert(preview_id + id);
+						$("preview1").style.visibility="hidden";
+                                                $("preview2").style.visibility="hidden";
+					}
+                                        /*for(var i=0;i<tmp.length;i++) {
+                                                if(tmp[i].style.visibility === "visible") {
+                                                        tmp[i].style.visibility="hidden";
+                                                }
+                                        }*/
 
                                 	$("status").style.display="none";
+						if(i == ((rows.length)-2)){ 
+							runEmailCommand("reload",0);
+						}
 					}
                                     break;
                                     case 'delete_msg':
-					id=resp;
+					//id=resp;
+					eval(resp);
+				if($("row_"+id))
+				{
                                         var row = $("row_"+id);
 					if(row.className == "unread_email") {
 						var unread  = parseInt($(mailbox+"_unread").innerHTML);
 						$(mailbox+"_unread").innerHTML = (unread-1);
 					}
-                                        row.className = "deletedRow";
+					row.className = 'delete_email';
+                                       // row.className = "deletedRow";
 
                                         Try.these (
 						function() {
@@ -437,14 +623,17 @@ function runEmailCommand(com,id) {
                                         );
 
                                         $("del_link_"+id).innerHTML = '<a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','+id+');"><img src="modules/Webmails/images/gnome-fs-trash-full.png" border="0" width="14" height="14" alt="del"></a>';
-
-                                        new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'},duration: '1.0'});
-                                        tmp = document.getElementsByClassName("previewWindow");
-                                        for(var i=0;i<tmp.length;i++) {
-                                                if(tmp[i].style.visibility === "visible") {
-                                                        tmp[i].style.visibility="hidden";
-                                                }
+	                                        new Effect.Fade(row,{queue: {position: 'end', scope: 'effect'},duration: '1.0'});
+				}
+					
+									
+					if(preview_id == id){
+                                        //      alert(preview_id + id);
+                                                $("preview1").style.visibility="hidden";
+                                                $("preview2").style.visibility="hidden";
                                         }
+
+					runEmailCommand("reload",0);
                                     break;
                                     case 'undelete_msg':
 					id=resp;
@@ -460,14 +649,14 @@ function runEmailCommand(com,id) {
                                         var nm = "clear_td_"+id;
                                         var el = $(nm);
                                         var tmp = el.innerHTML;
-                                        el.innerHTML ='<a href="javascript:void(0);" onclick="runEmailCommand(\'set_flag\','+id+');"><img src="modules/Webmails/images/plus.gif" border="0" width="11" height="11" id="set_flag_img_'+id+'"></a>';
+                                        el.innerHTML ='<a href="javascript:void(0);" onclick="runEmailCommand(\'set_flag\','+id+');"><img src="themes/images/important2.gif" border="0" width="11" height="11" id="set_flag_img_'+id+'"></a>';
                                         el.id = "set_td_"+id;
                                     break;
                                     case 'set_flag':
                                         var nm = "set_td_"+id;
                                         var el = $(nm);
                                         var tmp = el.innerHTML;
-                                        el.innerHTML ='<a href="javascript:void(0);" onclick="runEmailCommand(\'clear_flag\','+id+');"><img src="modules/Webmails/images/stock_mail-priority-high.png" border="0" width="11" height="11" id="clear_flag_img'+id+'"></a>';
+                                        el.innerHTML ='<a href="javascript:void(0);" onclick="runEmailCommand(\'clear_flag\','+id+');"><img src="themes/images/important1.gif" border="0" width="11" height="11" id="clear_flag_img'+id+'"></a>';
                                         el.id = "clear_td_"+id;
                                     break;
 
@@ -476,6 +665,11 @@ function runEmailCommand(com,id) {
                         }
                 }
         );
+}
+function cal_navigation(box,page){
+	start = page;
+	mailbox = box;
+	runEmailCommand("reload",0);
 }
 function remove(s, t) {
   /*
@@ -491,7 +685,11 @@ function remove(s, t) {
   return r;
 }
 function changeMbox(box) {
-        location.href = "index.php?module=Webmails&action=index&mailbox="+box;
+	mailbox=box;
+	start = 0;	
+	change_box=1;
+	runEmailCommand("reload",0);
+        //location.href = "index.php?module=Webmails&action=index&mailbox="+box;
 }
 // TODO: these two functions should be tied into a mailbox management panel of some kind.
 // could be a DHTML div with AJAX calls to execute the commands on the mailbox.  
@@ -504,8 +702,11 @@ function show_addfolder() {
 }
 function show_remfolder(mb) {
         var fldr = $("remove_"+mb);
+  if(typeof(fldr) != "undefined")
+	{
         if(fldr.style.display == 'none')
                 fldr.style.display="";
         else
                 fldr.style.display="none";
+}
 }

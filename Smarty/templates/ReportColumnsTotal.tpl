@@ -39,6 +39,11 @@
 		</tr>
 		{/foreach}
 		{/foreach}
+
+	{if $ROWS_COUNT eq 0}
+		<tr class="lvtColData" bgcolor="white"><td colspan="5"><b>{$MOD.NO_COLUMN}</b></td></tr>
+	{/if}
+
 		</tbody>
 	</table>
 	</div>

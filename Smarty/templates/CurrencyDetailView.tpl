@@ -27,7 +27,7 @@
 			<input type="hidden" name="action" value="index">
 			<input type="hidden" name="record" value="{$ID}">
 			<tr>
-				<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}currency.gif" alt="Users" width="48" height="48" border=0 title="Users"></td>
+				<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}currency.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
 				<td class="heading2" valign="bottom" ><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=CurrencyListView&parenttab=Settings">{$MOD.LBL_CURRENCY_SETTINGS}</a> > {$MOD.LBL_VIEWING} &quot;{$CURRENCY_NAME}&quot; </b></td>
 			</tr>
 			<tr>
@@ -66,7 +66,7 @@
                             <td class="small cellText">{$CURRENCY_SYMBOL}</td>
                           </tr>
                           <tr valign="top">
-                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_CURRENCY_CRATE}</strong><br>({$MOD.LBL_BASE_CURRENCY})</td>
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_CURRENCY_CRATE}</strong><br>({$MOD.LBL_BASE_CURRENCY}{$MASTER_CURRENCY})</td>
 
                             <td class="small cellText">{$CONVERSION_RATE}</td>
                           </tr>

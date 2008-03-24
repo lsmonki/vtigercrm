@@ -42,20 +42,20 @@ function validate() {
 	var mode = document.getElementById('cfedit_mode').value;
         if(fieldtype == "" && mode != 'edit')
 	{
-		alert("Field Type is not selected");
+		alert(alert_arr.FIELD_TYPE_NOT_SELECTED);
 		return false;
 	}
 	lengthLayer=getObj("lengthdetails")
         decimalLayer=getObj("decimaldetails")
         pickListLayer=getObj("picklist")
         var str = getObj("fldLabel").value;
-        if (!emptyCheck("fldLabel","Label"))
+        if (!emptyCheck("fldLabel","Label","text"))
                 return false
 
         var re1=/^[a-z\d\_ ]+$/i
         if (!re1.test(str))
         {
-                alert("Special characters are not allowed in Label field")
+                alert(alert_arr.SPECIAL_CHARACTERS_NOT_ALLOWED)
                 return false;
         }
 
@@ -66,7 +66,7 @@ function validate() {
                 if (!intValidate("fldLength","Length"))
                         return false
 
-                if (!numConstComp("fldLength","Length","GT",0))
+                if (!numConstComp("fldLength","Length","G",0))
                         return false
 
         }
@@ -82,7 +82,7 @@ function validate() {
                         return false
         }
 	var decimallength = document.addtodb.fldDecimal.value;
-        if(fieldtype == 'Percent' || fieldtype == 'Currency' || fieldtype == 'Number')
+        if(fieldValueArr[fieldtype] == 'Percent' || fieldValueArr[fieldtype] == 'Currency' || fieldValueArr[fieldtype] == 'Number')
         {
                 if(decimallength == '')
                         decimallength = 0;
@@ -99,7 +99,7 @@ var picklistObj=getObj("fldPickList")
                         //Empty Check validation
                         for (i=0;i<pickListAry.length;i++) {
                                 if (pickListAry[i]=="") {
-                                        alert("Picklist value cannot be empty")
+                                        alert(alert_arr.PICKLIST_CANNOT_BE_EMPTY)
                                         picklistObj.focus()
                                         return false
                                 }
@@ -109,7 +109,7 @@ var picklistObj=getObj("fldPickList")
                         for (i=0;i<pickListAry.length;i++) {
                                 for (j=i+1;j<pickListAry.length;j++) {
                                         if (pickListAry[i]==pickListAry[j]) {
-                                                alert("Duplicate Values found")
+                                                alert(alert_arr.DUPLICATE_VALUES_FOUND)
                                                 picklistObj.focus()
                                                 return false
                                         }
@@ -175,11 +175,11 @@ function selFieldType(id,scrollLayer,bool) {
                 lengthLayer.style.visibility="visible"
                 decimalLayer.style.visibility="hidden"
                 pickListLayer.style.visibility="hidden"
-        } else if (type=='date' || type=='email' || type=='phone' || type=='url' || type=='checkbox' || type=='textarea' || type=='skype') {
+        } else if (type=='date' || type=='percent' || type=='email' || type=='phone' || type=='url' || type=='checkbox' || type=='textarea' || type=='skype') {
                 getObj("lengthdetails").style.visibility="hidden"
                 decimalLayer.style.visibility="hidden"
                 pickListLayer.style.visibility="hidden"
-        } else if (type=='number' || type=='percent' || type=='currency') {
+        } else if (type=='number' || type=='currency') {
                 lengthLayer.style.visibility="visible"
                 decimalLayer.style.visibility="visible"
                 pickListLayer.style.visibility="hidden"
@@ -285,7 +285,7 @@ function validateCustomFieldAccounts()
                         {
                                 if( account[i] == account[j] && account[i]!="None" && account[j] !="None")
                                 {
-                                        alert("Duplicate mapping for accounts!!");
+                                        alert(alert_arr.DUPLICATE_MAPPING_ACCOUNTS);
                                         return false;
                                 }
                         }
@@ -296,7 +296,7 @@ for( i = 0; i < contact.length; i++)
                         {
                                 if( contact[i] == contact[k] && contact[i]!="None" && contact[k]!="None")
                                 {
-                                        alert("Duplicate mapping for Contacts!!");
+                                        alert(alert_arr.DUPLICATE_MAPPING_CONTACTS);
                                         return false;
                                 }
                         }
@@ -307,7 +307,7 @@ for( i = 0; i < contact.length; i++)
                         {
                                 if( potential[i] == potential[l] && potential[i]!="None" && potential[l]!="None")
                                 {
-                                        alert("Duplicate mapping for Potential!!");
+                                        alert(alert_arr.DUPLICATE_MAPPING_POTENTIAL);
                                         return false;
                                 }
                         }

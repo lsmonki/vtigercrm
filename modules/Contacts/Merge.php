@@ -24,6 +24,7 @@ else if (document.layers || (!document.all && document.getElementById))
 }
 else if(document.all)
 {
+	document.write("<br><br>Click <a href='#' onclick='window.history.back();'>here</a> to return to the previous page");
 	document.write("<OBJECT Name='vtigerCRM' codebase='modules/Settings/vtigerCRM.CAB#version=1,5,0,0' id='objMMPage' classid='clsid:0FC436C2-2E62-46EF-A3FB-E68E94705126' width=0 height=0></object>");
 }
 </script>
@@ -77,36 +78,49 @@ if($mass_merge != "")
 }
 
 //<<<<<<<<<<<<<<<<header for csv and select columns for query>>>>>>>>>>>>>>>>>>>>>>>>
-$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid where vtiger_field.tabid in (4,6) and vtiger_field.block <> 6 and vtiger_field.block <> 75 order by vtiger_field.tablename";
 
+global $current_user;
+require('user_privileges/user_privileges_'.$current_user->id.'.php');
+if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == "Users" || $module == "Emails")
+{
+	$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid where vtiger_field.tabid in (4,6) and vtiger_field.block <> 75 order by vtiger_field.tablename";
+}
+else
+{
+	$profileList = getCurrentUserProfileList();
+	$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid in (4,6) and vtiger_field.block <> 75 AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN ".$profileList." GROUP BY vtiger_field.fieldid order by vtiger_field.tablename";
+	//Postgres 8 fixes
+	if( $adb->dbType == "pgsql")
+	$sql = fixPostgresQuery( $sql, $log, 0);
+}
 $result = $adb->query($query1);
 $y=$adb->num_rows($result);
 	
 for ($x=0; $x<$y; $x++)
 { 
-  $tablename = $adb->query_result($result,$x,"tablename");
-  $columnname = $adb->query_result($result,$x,"columnname");
-  $modulename = $adb->query_result($result,$x,"name");
-  
+	$tablename = $adb->query_result($result,$x,"tablename");
+	$columnname = $adb->query_result($result,$x,"columnname");
+	$modulename = $adb->query_result($result,$x,"name");
+
 	if($tablename == "crmentity")
-  {
-  	if($modulename == "Accounts")
-  	{
-  		$tablename = "crmentityAccounts";
-  	}
-  }
-  $querycolumns[$x] = $tablename.".".$columnname;
-  if($columnname == "smownerid")
-  {
-    if($modulename == "Accounts")
-    {
-			$querycolumns[$x]="concat(usersAccounts.last_name,' ',usersAccounts.first_name) as username";
-    }
+	{
+		if($modulename == "Accounts")
+		{
+			$tablename = "crmentityAccounts";
+		}
+	}
+	$querycolumns[$x] = $tablename.".".$columnname;
+	if($columnname == "smownerid")
+	{
+		if($modulename == "Accounts")
+		{
+			$querycolumns[$x]="case when (usersAccounts.user_name not like '') then concat(usersAccounts.last_name,' ',usersAccounts.first_name) else groupsAccounts.groupname end as username";
+		}
 		if($modulename == "Contacts")
-    {
-    	$querycolumns[$x]="concat(vtiger_users.last_name,' ',vtiger_users.first_name) as usercname,vtiger_users.first_name,vtiger_users.last_name,vtiger_users.user_name,vtiger_users.yahoo_id,vtiger_users.title,vtiger_users.phone_work,vtiger_users.department,vtiger_users.phone_mobile,vtiger_users.phone_other,vtiger_users.phone_fax,vtiger_users.email1,vtiger_users.phone_home,vtiger_users.email2,vtiger_users.address_street,vtiger_users.address_city,vtiger_users.address_state,vtiger_users.address_postalcode,vtiger_users.address_country";
-    }
-  }
+		{
+			$querycolumns[$x]="case when (vtiger_users.user_name not like '') then concat(vtiger_users.last_name,' ',vtiger_users.first_name) else vtiger_groups.groupname end as usercname,vtiger_users.first_name,vtiger_users.last_name,vtiger_users.user_name,vtiger_users.yahoo_id,vtiger_users.title,vtiger_users.phone_work,vtiger_users.department,vtiger_users.phone_mobile,vtiger_users.phone_other,vtiger_users.phone_fax,vtiger_users.email1,vtiger_users.phone_home,vtiger_users.email2,vtiger_users.address_street,vtiger_users.address_city,vtiger_users.address_state,vtiger_users.address_postalcode,vtiger_users.address_country";
+		}
+	}
 	if($columnname == "parentid")
 	{
 		$querycolumns[$x] = "accountAccounts.accountname";
@@ -119,23 +133,23 @@ for ($x=0; $x<$y; $x++)
 	{
 		$querycolumns[$x] = "contactdetailsContacts.lastname";
 	}
-	
-	
+
+
 	if($modulename == "Accounts")
-  {
-  	$field_label[$x] = "ACCOUNT_".strtoupper(str_replace(" ","",$adb->query_result($result,$x,"fieldlabel")));
-  }
-	
+	{
+		$field_label[$x] = "ACCOUNT_".strtoupper(str_replace(" ","",$adb->query_result($result,$x,"fieldlabel")));
+	}
+
 	if($modulename == "Contacts")
-  {
-  	$field_label[$x] = "CONTACT_".strtoupper(str_replace(" ","",$adb->query_result($result,$x,"fieldlabel")));
-  	if($columnname == "smownerid")
-  		{
-  			$field_label[$x] = $field_label[$x].",USER_FIRSTNAME,USER_LASTNAME,USER_USERNAME,USER_YAHOOID,USER_TITLE,USER_OFFICEPHONE,USER_DEPARTMENT,USER_MOBILE,USER_OTHERPHONE,USER_FAX,USER_EMAIL,USER_HOMEPHONE,USER_OTHEREMAIL,USER_PRIMARYADDRESS,USER_CITY,USER_STATE,USER_POSTALCODE,USER_COUNTRY";
-  		}
-  }
-    
-	
+	{
+		$field_label[$x] = "CONTACT_".strtoupper(str_replace(" ","",$adb->query_result($result,$x,"fieldlabel")));
+		if($columnname == "smownerid")
+		{
+			$field_label[$x] = $field_label[$x].",USER_FIRSTNAME,USER_LASTNAME,USER_USERNAME,USER_YAHOOID,USER_TITLE,USER_OFFICEPHONE,USER_DEPARTMENT,USER_MOBILE,USER_OTHERPHONE,USER_FAX,USER_EMAIL,USER_HOMEPHONE,USER_OTHEREMAIL,USER_PRIMARYADDRESS,USER_CITY,USER_STATE,USER_POSTALCODE,USER_COUNTRY";
+		}
+	}
+
+
 }
 $csvheader = implode(",",$field_label);
 //echo $csvheader;
@@ -151,9 +165,14 @@ $query = "select ".$selectcolumns." from vtiger_contactdetails
 				inner join vtiger_contactaddress on vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid 
 				inner join vtiger_contactsubdetails on vtiger_contactdetails.contactid = vtiger_contactsubdetails.contactsubscriptionid 
 				inner join vtiger_contactscf on vtiger_contactdetails.contactid = vtiger_contactscf.contactid 
+				inner join vtiger_customerdetails on vtiger_contactdetails.contactid = vtiger_customerdetails.customerid 
 				left join vtiger_contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
 				left join vtiger_account as accountContacts on accountContacts.accountid = vtiger_contactdetails.accountid 
 				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
+				LEFT JOIN vtiger_contactgrouprelation
+					ON vtiger_contactscf.contactid = vtiger_contactgrouprelation.contactid
+				LEFT JOIN vtiger_groups 
+					ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
 				left join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid
 				left join vtiger_crmentity as crmentityAccounts on crmentityAccounts.crmid=vtiger_account.accountid
 				left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
@@ -161,7 +180,11 @@ $query = "select ".$selectcolumns." from vtiger_contactdetails
 				left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
 				left join vtiger_account as accountAccounts on accountAccounts.accountid = vtiger_account.parentid
 				left join vtiger_users as usersAccounts on usersAccounts.id = crmentityAccounts.smownerid 
-				where vtiger_crmentity.deleted=0 and (crmentityAccounts.deleted <> 1) and vtiger_contactdetails.contactid in(".$mass_merge.")";
+				LEFT JOIN vtiger_accountgrouprelation
+					ON vtiger_accountscf.accountid = vtiger_accountgrouprelation.accountid
+				LEFT JOIN vtiger_groups as groupsAccounts
+					ON groupsAccounts.groupname = vtiger_accountgrouprelation.groupname
+				where vtiger_crmentity.deleted=0 and (crmentityAccounts.deleted is NULL or crmentityAccounts.deleted <> 1) and vtiger_contactdetails.contactid in(".$mass_merge.")";
 				
 
 $result = $adb->query($query);

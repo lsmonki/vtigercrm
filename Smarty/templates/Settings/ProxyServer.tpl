@@ -27,7 +27,7 @@
 				<input type="hidden" name="proxy_server_mode">
 				<input type="hidden" name="parenttab" value="Settings">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}proxy.gif" alt="proxy" width="48" height="48" border=0 title="proxy"></td>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}proxy.gif" alt="{$MOD.LBL_PROXY}" width="48" height="48" border=0 title="{$MOD.LBL_PROXY}"></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_PROXY_SERVER_SETTINGS} </b></td>
 				</tr>
 				<tr>
@@ -50,7 +50,7 @@
 						{else}
 						<td class="small" align=right>
 							<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmButton small save" type="submit" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" onclick="this.form.action.value='Save'; return validate()">&nbsp;&nbsp;
-						    <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
+						    <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="javascript:document.location.href='index.php?module=Settings&action=ProxyServerConfig&parenttab=Settings'" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
 						</td>
 						{/if}
 					</tr>
@@ -63,20 +63,32 @@
                         <tr>
                             <td width="20%" nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_SERVER_ADDRESS} </strong></td>
                             <td width="80%" class="small cellText">
+				{if $smarty.request.server neq ''}
+				<input type="text" class="detailedViewTextBox small" value="{$smarty.request.server}" name="server"></strong>
+				{else}
 				<input type="text" class="detailedViewTextBox small" value="{$PROXYSERVER}" name="server"></strong>
+				{/if}
 			    </td>
                           </tr>
 			  <tr>
                             <td width="20%" nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_PROXY_PORT} </strong></td>
                             <td width="80%" class="small cellText">
+				{if $smarty.request.port neq ''}
+                                <input type="text" class="detailedViewTextBox small" value="{$smarty.request.port}" name="port"></strong>
+				{else}
                                 <input type="text" class="detailedViewTextBox small" value="{$PROXYPORT}" name="port"></strong>
+				{/if}
                             </td>
                           </tr>
                           <tr valign="top">
 
                             <td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_USERNAME}</strong></td>
                             <td class="small cellText">
+				{if $smarty.request.server_username neq ''}
+				<input type="text" class="detailedViewTextBox small" value="{$smarty.request.server_username}" name="server_username">
+				{else}
 				<input type="text" class="detailedViewTextBox small" value="{$PROXYUSER}" name="server_username">
+				{/if}
 			    </td>
                           </tr>
                           <tr>
@@ -116,11 +128,11 @@
 						</td>
 					  </tr>
 					</table>
-					<table border=0 cellspacing=0 cellpadding=5 width=100% >
+					<!--table border=0 cellspacing=0 cellpadding=5 width=100% >
 					<tr>
 					  <td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td>
 					</tr>
-					</table>
+					</table-->
 				</td>
 				</tr>
 				</table>
@@ -145,9 +157,13 @@
 <script>
 function validate() {
 	if (!emptyCheck("server","Proxy Server Name","text")) return false
-		if (!emptyCheck("port","Port Number","text")) return false
-			if (!emptyCheck("server_username","Proxy User Name","text")) return false
-				if (!emptyCheck("server_password","Proxy Password","text")) return false
+	if (!emptyCheck("port","Port Number","text")) return false
+	if(isNaN(document.tandc.port.value)){
+		alert(alert_arr.LBL_ENTER_VALID_PORT);
+		return false;
+	}
+	if (!emptyCheck("server_username","Proxy User Name","text")) return false
+	if (!emptyCheck("server_password","Proxy Password","text")) return false
 			return true;
 
 }

@@ -34,7 +34,7 @@ $smodule = $_REQUEST["secondarymodule"];
 //<<<<<<<reportmodules>>>>>>>>>
 
 //<<<<<<<report>>>>>>>>>
-$reportname = $_REQUEST["reportName"];
+$reportname = addslashes($_REQUEST["reportName"]);
 $reportdescription = $_REQUEST["reportDesc"];
 $reporttype = $_REQUEST["reportType"];
 $folderid = $_REQUEST["folder"];
@@ -43,8 +43,8 @@ $folderid = $_REQUEST["folder"];
 //<<<<<<<standarfilters>>>>>>>>>
 $stdDateFilterField = $_REQUEST["stdDateFilterField"];
 $stdDateFilter = $_REQUEST["stdDateFilter"];
-$startdate = $_REQUEST["startdate"];
-$enddate = $_REQUEST["enddate"];
+$startdate = getDBInsertDateValue($_REQUEST["startdate"]);
+$enddate = getDBInsertDateValue($_REQUEST["enddate"]);
 //<<<<<<<standardfilters>>>>>>>>>
 
 //<<<<<<<columnstototal>>>>>>>>>>
@@ -83,7 +83,7 @@ for ($i=0;$i<count($allKeys);$i++)
    $string = substr($allKeys[$i], 0, 4);
    if($string == "fval")
    {
-           $adv_filter_value[] = $_REQUEST[$allKeys[$i]];
+           $adv_filter_value[] = addslashes($_REQUEST[$allKeys[$i]]);
    }
 }
 //<<<<<<<advancedfilter>>>>>>>>

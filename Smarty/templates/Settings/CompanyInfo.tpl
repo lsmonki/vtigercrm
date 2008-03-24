@@ -26,7 +26,7 @@
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}company.gif" alt="Users" width="48" height="48" border=0 title="Users"></td>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}company.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_COMPANY_DETAILS} </b></td>
 				</tr>
 				<tr>
@@ -96,11 +96,11 @@
 						</td>
 					  </tr>
 					</table>
-					<table border=0 cellspacing=0 cellpadding=5 width=100% >
+					<!--table border=0 cellspacing=0 cellpadding=5 width=100% >
 					<tr>
 					  <td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td>
 					</tr>
-					</table>
+					</table-->
 				</td>
 				</tr>
 				</table>

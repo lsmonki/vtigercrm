@@ -25,7 +25,7 @@ $server->configureWSDL('vtigersoap');
 
 $server->register(
  	    'create_session',
- 	    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+	    array('user_name'=>'xsd:string','password'=>'xsd:string','version'=>'xsd:string'),
  	    array('return'=>'xsd:string'),
  	    $NAMESPACE);
 
@@ -52,6 +52,9 @@ $server->register(
 
 $server->register(
     'CheckContactViewPerm',array('user_name'=>'xsd:string'),array('return'=>'xsd:string'),$NAMESPACE);
+
+$server->register(
+	'CheckLeadViewPerm',array('user_name'=>'xsd:string'),array('return'=>'xsd:string'),$NAMESPACE);
 
 $server->register(
 	  'AddContact',
@@ -200,13 +203,18 @@ function SearchContactsByEmail($username,$emailaddress)
 
 function track_email($user_name, $contact_ids, $date_sent, $email_subject, $email_body)
 {
+	global $current_user;
 	global $adb;
+	global $log;
 	require_once('modules/Users/Users.php');
 	require_once('modules/Emails/Emails.php');
 
-	$seed_user = new Users();
-	$user_id = $seed_user->retrieve_user_id($user_name);
-
+	$current_user = new Users();
+	$user_id = $current_user->retrieve_user_id($user_name);
+	$query = "select email1 from vtiger_users where id =".$user_id;
+	$result = $adb->query($query);
+	$user_emailid = $adb->query_result($result,0,"email1");
+	$current_user = $current_user->retrieveCurrentUserInfoFromFile($user_id);
 	$email = new Emails();
 	//$log->debug($msgdtls['contactid']);
 	$emailbody = str_replace("'", "''", $email_body);
@@ -216,11 +224,13 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	$email->column_fields[subject] = $emailsubject;
 	$email->column_fields[assigned_user_id] = $user_id;
 	$email->column_fields[date_start] = $datesent;
-	$email->column_fields[description]  = htmlentities($emailbody);
+	$email->column_fields[description]  = $emailbody;
 	$email->column_fields[activitytype] = 'Emails';
 	$email->plugin_save = true;
 	$email->save("Emails");
-
+	$query = "select fieldid from vtiger_field where fieldname = 'email' and tabid = 4";
+	$result = $adb->query($query);
+	$field_id = $adb->query_result($result,0,"fieldid");
 	$email->set_emails_contact_invitee_relationship($email->id,$contact_ids);
 	$email->set_emails_se_invitee_relationship($email->id,$contact_ids);
 	$email->set_emails_user_invitee_relationship($email->id,$user_id);
@@ -230,7 +240,11 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	if(isset($camodulerow))
 	{
 		$emailid = $camodulerow["email"];
-		$query = 'insert into vtiger_emaildetails values ('.$email->id.',"","'.$emailid.'","","","","'.$contact_ids."@77|".'","THUNDERBIRD")';
+
+	    	//added to save < as $lt; and > as &gt; in the database so as to retrive the emailID
+	    	$user_emailid = str_replace('<','&lt;',$user_emailid);
+	    	$user_emailid = str_replace('>','&gt;',$user_emailid);
+		$query = 'insert into vtiger_emaildetails values ('.$email->id.',"'.$emailid.'","'.$user_emailid.'","","","","'.$user_id.'@-1|'.$contact_ids.'@'.$field_id.'|","THUNDERBIRD")';
 		$adb->query($query);
 	}
 	return $email->id;
@@ -387,7 +401,6 @@ function AddContact($user_name, $first_name, $last_name, $email_address ,$accoun
 	$contact = new Contacts();
 	$contact->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $first_name : "";
 	$contact->column_fields[lastname]=in_array('lastname',$permitted_lists) ? $last_name : "";
-	$contact->column_fields[birthday]=in_array('birthday',$permitted_lists) ? getDisplayDate("0000-00-00") : "";
 	$contact->column_fields[email]=in_array('email',$permitted_lists) ? $email_address : "";
 	$contact->column_fields[title]=in_array('title',$permitted_lists) ? $title : "";
 	$contact->column_fields[department]=in_array('department',$permitted_lists) ? $department : "";
@@ -445,7 +458,6 @@ function AddLead($user_name, $first_name, $last_name, $email_address ,$account_n
 	$Lead = new Leads();
 	$Lead->column_fields[firstname]=in_array('firstname',$permitted_lists) ? $first_name : "";
 	$Lead->column_fields[lastname]=in_array('lastname',$permitted_lists) ? $last_name : "";
-	$Lead->column_fields[birthday]=in_array('birthday',$permitted_lists) ? getDisplayDate("0000-00-00") : "";
 	$Lead->column_fields[company]=in_array('company',$permitted_lists) ? $account_name : "";
 	$Lead->column_fields[email]=in_array('email',$permitted_lists) ? $email_address : "";
 	$Lead->column_fields[title]=in_array('title',$permitted_lists) ? $title : "";
@@ -474,32 +486,45 @@ function AddLead($user_name, $first_name, $last_name, $email_address ,$account_n
 	return $Lead->id;
 }
 
-function create_session($user_name, $password)
+function create_session($user_name, $password,$version)
 {
   global $adb,$log;
-  $return_access = 'failure';
+  $return_access = 'FALSES';
+  include('vtigerversion.php');
+  if($version != $vtiger_current_version)
+  {
+	  return "VERSION";
+  }
   require_once('modules/Users/Users.php');
 	$objuser = new Users();
-  if($password != "" && $user_name != '')
+	if($password != "" && $user_name != '')
 	{
 		$objuser->column_fields['user_name'] = $user_name;
 		$encrypted_password = $objuser->encrypt_password($password);
-		$query = "select id from vtiger_users where user_name='$user_name' and user_password='$encrypted_password'";
-		$result = $adb->query($query);
-		if($adb->num_rows($result) > 0)
+		if($objuser->load_user($password) && $objuser->is_authenticated())
 		{
-			$return_access = 'success';
-			$log->debug("Logged in sucessfully from thunderbirdplugin");
-		}else
+			$query = "select id from vtiger_users where user_name='$user_name' and user_password='$encrypted_password'";
+			$result = $adb->query($query);
+			if($adb->num_rows($result) > 0)
+			{
+				$return_access = 'TRUES';
+				$log->debug("Logged in sucessfully from thunderbirdplugin");
+			}else
+			{
+				$return_access = 'FALSES';
+				$log->debug("Logged in failure from thunderbirdplugin");
+			}
+		}
+		else
 		{
-			$return_access = 'failure';
-			$log->debug("Logged in failure from thunderbirdplugin");
+			$return_access = 'LOGIN';
+			$log->debug("Logged in failure from thunderbirdplugin");	
 		}
 	}else
 	{
-		$return_access = 'failure';
+		$return_access = 'FALSES';
 		$log->debug("Logged in failure from thunderbirdplugin");
-  }
+	}
 	return $return_access;
 }
 
@@ -534,6 +559,30 @@ function CheckContactViewPerm($user_name)
 	$current_user = $seed_user;
 	$current_user->retrieve_entity_info($user_id,"Users");
 	if(isPermitted("Contacts","index") == "yes")
+	{	
+		if(isPermitted("Emails","EditView") == "yes")
+		{
+			return "allowed";
+		}
+		else
+		{
+			return "email";
+		}
+	}else
+	{
+		return "contact";
+	}
+}
+
+function CheckLeadViewPerm($user_name)
+{
+  global $current_user,$log;
+	require_once('modules/Users/Users.php');
+	$seed_user = new Users();
+	$user_id = $seed_user->retrieve_user_id($user_name);
+	$current_user = $seed_user;
+	$current_user->retrieve_entity_info($user_id,"Users");
+	if(isPermitted("Leads","EditView") == "yes")
 	{
 		return "allowed";
 	}else
@@ -541,7 +590,6 @@ function CheckContactViewPerm($user_name)
 		return "denied";
 	}
 }
-
 $server->service($HTTP_RAW_POST_DATA);
 exit();
 ?>

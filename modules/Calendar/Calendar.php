@@ -29,10 +29,11 @@ class Calendar
 	/*
 	constructor
 	*/
+	var $groupTable = Array('vtiger_activitygrouprelation','activityid');
 	function Calendar($view='',$data=Array())
 	{
 		$this->view = $view;
-		$this->date_time = new DateTime($data,true);
+		$this->date_time = new vt_DateTime($data,true);
 		$this->constructLayout();
 	}
 	/**
@@ -203,16 +204,16 @@ class Calendar
 		if ( $this->view == 'week')
 		{
 			$start_datetime = $this->date_time->getThisweekDaysbyIndex(0);
-			$end_datetime = $this->date_time->get_first_day_of_changed_week('increment');
+			$end_datetime = $this->date_time->getThisweekDaysbyIndex(6);
                 } elseif($this->view == 'month') {
 			$start_datetime = $this->date_time->getThismonthDaysbyIndex(0);
-			$end_datetime = $this->date_time->get_first_day_of_changed_month('increment');
+			$end_datetime = $this->date_time->getThismonthDaysbyIndex($this->date_time->daysinmonth-1);
 		} elseif($this->view == 'year'){
 			$start_datetime = $this->date_time->getThisyearMonthsbyIndex(0);
 			$end_datetime = $this->date_time->get_first_day_of_changed_year('increment');
 		}else {
 			$start_datetime = $this->date_time;
-                        $end_datetime = $this->date_time->get_changed_day('increment');
+                        $end_datetime = $this->date_time->getTodayDatetimebyIndex(23);
                 }
 		
 		$activities = Array();

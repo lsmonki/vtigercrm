@@ -36,7 +36,7 @@
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ogmailserver.gif" alt="Users" width="48" height="48" border=0 title="Users"></td>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ogmailserver.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_MAIL_SERVER_SETTINGS} </b></td>
 				</tr>
 				<tr>
@@ -51,7 +51,7 @@
 				
 					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 					<tr>
-						<td class="big"><strong>{$MOD.LBL_MAIL_SERVER_SMTP}</strong>&nbsp;<br>{$ERROR_MSG}</td>
+						<td class="big"><strong>{$MOD.LBL_MAIL_SERVER_SMTP}</strong></td>
 						{if $EMAILCONFIG_MODE neq 'edit'}	
 						<td class="small" align=right>
 							<input class="crmButton small edit" title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" onclick="this.form.action.value='EmailConfig';this.form.emailconfig_mode.value='edit'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">
@@ -59,10 +59,15 @@
 						{else}
 						<td class="small" align=right>
 							<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmButton small save" onclick="this.form.action.value='Save';" type="submit" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" >&nbsp;&nbsp;
-    							<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
+    							<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
 						</td>
 						{/if}
 					</tr>
+					{if $ERROR_MSG neq ''}
+					<tr>
+						{$ERROR_MSG}
+					</tr>
+					{/if}
 					</table>
 					
 					{if $EMAILCONFIG_MODE neq 'edit'}	
@@ -132,11 +137,11 @@
 						</td>
 					  </tr>
 					</table>
-					<table border=0 cellspacing=0 cellpadding=5 width=100% >
+					<!--table border=0 cellspacing=0 cellpadding=5 width=100% >
 					<tr>
 					  <td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td>
 					</tr>
-					</table>
+					</table-->
 				</td>
 				</tr>
 				</table>
@@ -164,8 +169,10 @@ function validate_mail_server(form)
 {
 	if(form.server.value =='')
 	{
-		alert("Server Name cannot be empty")
-			return false;
+		{/literal}
+                alert("{$APP.SERVERNAME_CANNOT_BE_EMPTY}")
+                        return false;
+                {literal}
 	}
 	return true;
 }

@@ -36,6 +36,12 @@ global $currentModule, $singlepane_view;
 $focus = new Contacts();
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
+        //Display the error message
+        if($_SESSION['image_type_error'] != '')
+        {
+                echo '<font color="red">'.$_SESSION['image_type_error'].'</font>';
+                session_unregister('image_type_error');
+        }
 
         $focus->id=$_REQUEST['record'];
         $focus->retrieve_entity_info($_REQUEST['record'],'Contacts');
@@ -72,7 +78,6 @@ $log->info("Detail Block Informations successfully retrieved.");
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("SINGLE_MOD", 'Contact');
-$smarty->assign("REDIR_MOD","contacts");
 
 $smarty->assign("ID", $_REQUEST['record']);
 if(isPermitted("Contacts","EditView",$_REQUEST['record']) == 'yes')
@@ -86,6 +91,9 @@ if(isPermitted("Emails","EditView",'') == 'yes')
 	$parent_email = getEmailParentsList('Contacts',$_REQUEST['record']);
 	$smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
 	$smarty->assign("SENDMAILBUTTON","permitted");
+	$smarty->assign("EMAIL1",$focus->column_fields['email']);
+	$smarty->assign("EMAIL2",$focus->column_fields['yahooid']);
+
 }
 
 if(isPermitted("Contacts","Merge",'') == 'yes')
@@ -100,6 +108,7 @@ if(isPermitted("Contacts","Merge",'') == 'yes')
 		$optionString[$tempVal["templateid"]]=$tempVal["filename"];
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
+	 $smarty->assign("TEMPLATECOUNT",$tempCount);
 	$smarty->assign("WORDTEMPLATEOPTIONS",$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']);
         $smarty->assign("TOPTIONS",$optionString);
 }
@@ -121,12 +130,22 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
+$sql = $adb->query('select accountid from vtiger_contactdetails where contactid='.$focus->id);
+$accountid = $adb->query_result($sql,0,'accountid');
+if($accountid == 0) $accountid='';
+$smarty->assign("accountid",$accountid);
 if($singlepane_view == 'true')
 {
 	$related_array = getRelatedLists($currentModule,$focus);
 	$smarty->assign("RELATEDLISTS", $related_array);
 }
+//added for email link in detailv view
+$querystr="SELECT fieldid FROM vtiger_field WHERE tabid=".getTabid($currentModule)." and uitype=13;";
+$queryres = $adb->query($querystr);
+$fieldid = $adb->query_result($queryres,0,'fieldid');
+$smarty->assign("FIELD_ID",$fieldid);
 
 $smarty->assign("SinglePane_View", $singlepane_view);
 

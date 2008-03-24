@@ -139,7 +139,6 @@ $mod_strings = Array(
 
 //Settings/index.php
 
-'LBL_CUSTOM_FIELD_SETTINGS'=>'Custom Field Settings:',
 
 'LBL_PICKLIST_FIELD_SETTINGS'=>'Picklist Field Settings:',
 
@@ -193,7 +192,6 @@ $mod_strings = Array(
 
 'PicklistFields'=>' Picklist Fields',
 
-'LBL_PICKLIST_EDITOR'=>'Picklist Editor',
 
 'Edit'=>'Edit',
 
@@ -340,8 +338,6 @@ $mod_strings = Array(
 
 'LBL_CURRENCY_SETTINGS'=>'Currencies',
 
-'LBL_YES'=>'yes',
-'LBL_NO'=>'no',
 
 'LBL_USERNAME'=>'User Name',
 'LBL_PASWRD'=>'Password',
@@ -358,7 +354,6 @@ $mod_strings = Array(
 
 'LBL_CREATE_AND_MANAGE_USERS'=>'- Create and Manage Users (e.g., admin)',
 
-'LBL_ROLES'=>'Roles',
 
 'LBL_CREATE_AND_MANAGE_USER_ROLES'=>'- Create and Manage user roles (e.g., Administrator, Standard User, etc.)',
 
@@ -561,7 +556,7 @@ $mod_strings = Array(
 'LBL_3_MIN'=>'3 minutes',
 'LBL_4_MIN'=>'4 minutes',
 'LBL_5_MIN'=>'5 minutes',
-'LBL_EMAILS_PER_PAGE'=>'Emails per Page',
+'LBL_EMAILS_PER_PAGE'=>'Email per Page',
 
 //Added for Organization Details (4.2 release)
 'LBL_ORGANIZATION_NAME'=>'Company Name',
@@ -725,7 +720,210 @@ $mod_strings = Array(
 'LBL_ENABLE'=>'Enable',
 'LBL_FAQ_FIELD_ACCESS'=>'Faq Field Access',
 'LBL_ADD_TAX_BUTTON'=>'Add Tax',
+'LBL_NO_TAXES_AVAILABLE'=>'No taxes available',
+'LBL_PLEASE'=>'Please',
+//Added while moving role file from User to Setting Module
+'LBL_ROLES'=>'Roles',
+'LBL_CREATE_NEW_ROLE'=>'Create New Role',
+'LBL_PROPERTIES'=>'Properties of',
+'LBL_NEW_ROLE'=>'New Role',
+'LBL_ROLE_NAME'=>'Role Name',
+'LBL_REPORTS_TO'=>'Reports to',
+'LBL_PROFILE_M'=>'Profile',
+'LBL_PROFILES_AVLBL'=>'Profiles Available',
+'LBL_ASSIGN_PROFILES'=>'Assigned Profiles',
+'LBL_MEMBER'=>'Members',
+'LBL_DELETE_ROLE'=>'Delete Role',
+'LBL_ROLE_TO_BE_DELETED'=>'Role to be Deleted',
+'LBL_TRANSFER_USER_ROLE'=>'Transfer Users to Role',
+'LBL_ASSOCIATED_PROFILES'=>'Associated Profiles :',
+'LBL_ASSOCIATED_USERS'=>'Associated Users :',
+//Added while moving email templates from Users to Settings
+'LBL_EMAIL_TEMPLATES'=>'Email Templates',
+'LBL_EMAIL_TEMPLATE_DESC'=>'Manage email templates used for Campaigns and Mass mailing',
+'LBL_LIST_SELECT'=>'Select',
+'LBL_EMAIL_TEMPLATE'=>'Email Template',
+'LBL_TEMPLATE_TOOLS'=>'Tools',
+'LBL_NEW_TEMPLATE' =>'New Template',
+'LBL_FOLDER'=>'Folder',
+'LBL_NAME'=>'Name',
+'LBL_PERSONAL'=>'Personal',
+'LBL_PUBLIC'=>'Public',
+'LBL_ACCOUNT_FIELDS'=>'Account Fields',
+'LBL_CONTACT_FIELDS'=>'Contact Fields',
+'LBL_LEAD_FIELDS'=>'Lead Fields',
+'LBL_USER_FIELDS'=>'User Fields',
+'LNK_SAMPLE_EMAIL'=>'View Sample Email',
+//Added while moving Mail Merge templates from Users to Settings
+'LBL_TEMPLATE_FILE'=>'Template File',
+'LBL_MODULENAMES'=>'Module',
+'LBL_DOWNLOAD'=>'Download',
+'LBL_ADD_TEMPLATE'=>'Add Template',
+'LBL_WORD_TEMPLATES'=>'Mail Merge Templates',
+//Added while moving Notification Schedulers from Users to Settings
+'LBL_TASK_NOTIFICATION'=>'Delayed Task Notification',
+'LBL_BIG_DEAL'=>'Big Deal Notification',
+'LBL_PENDING_TICKETS'=>'Pending Tickets Notification',
+'LBL_MANY_TICKETS'=>'Too many tickets  Notification',
+'LBL_START_NOTIFICATION'=>'Support Start Notification',
+'LBL_SUPPORT_NOTICIATION'=>'Support End Notification',
+'LBL_ACTIVITY_NOTIFICATION'=>'Event Reminder Notification',
+
+'LBL_TASK_NOTIFICATION_DESCRITPION'=>'Notify when a task is delayed beyond 24 hrs',
+'LBL_BIG_DEAL_DESCRIPTION'=>'Notify on completion of big deal',
+'LBL_TICKETS_DESCRIPTION'=>'Notify for getting attention to status of tickets which are pending',
+'LBL_MANY_TICKETS_DESCRIPTION'=>'Notify when a particular entity is allocated too many tickets, might reflect Service Level commitments',
+'LBL_START_DESCRIPTION'=>'Notifiy stating the start of support/service',
+'LBL_SUPPORT_DESCRIPTION'=>'Notify when support is about to end',
+'LBL_ACTIVITY_REMINDER_DESCRIPTION'=>'Notify before an event to occur based on the reminder set',
+//Added while moving Inventory Notifications from Users to Settings
+'QuoteNotificationDescription'=>'During quote generation if the product stock in warehouse is lesser than the  quantity mentioned in quote then this notification will be sent to the product handler',
+'SalesOrderNotificationDescription'=>'During sales order generation if the product stock in warehouse is lesser than the quantity mentioned in sales order then this notification will be sent to the product handler',
+'Tools'=>'Tools',
+'QuoteNotification'=>'Product Stock Notification during Quote Generation',
+'SalesOrderNotification'=>'Product Stock Notification during Sales Order Generation',
+'LBL_NOTE_DO_NOT_REMOVE_INFO'=>'Note: Donot remove or alter the values within {  }',
+
+//Added while moving Profile file from User to Setting Module
+'LBL_TOTAL'=>'Total :',
+'LBL_NEW_PROFILE'=>'New Profile',
+'LBL_LIST_NO'=>'#',
+'LBL_NEW_PROFILE_NAME'=>'Profile Name',
+'LBL_LIST_TOOLS'=>'Tools',
+'LBL_PROFILE_MESG'=>'Viewing access privileges for',
+'LBL_PROFILE_PRIVILEGES'=>'Profile Privileges',
+'LBL_DEFINE_PRIV_FOR'=>' Define Privileges for ',
+'LBL_USE_OPTION_TO_SET_PRIV'=>'Use the options below to set privileges',
+'LBL_SUPER_USER_PRIV'=>'Global Privileges',
+'LBL_SET_PRIV_FOR_EACH_MODULE'=>'Set Privileges for each Module ',
+'LBL_FIELDS_AND_TOOLS_SETTINGS'=>'Fields & Tools Settings',
+'LBL_VIEW_ALL'=>'View all',
+'LBL_EDIT_ALL'=>'Edit all',
+'LBL_ALLOW'=>'Allows',
+'LBL_MESG_VIEW'=>'to view all information / modules of vtiger CRM',
+'LBL_MESG_EDIT'=>'to edit all information / modules of vtiger CRM',
+'LBL_TAB_MESG_OPTION'=>'modules to be shown',
+'LBL_CREATE_EDIT'=>'Create/Edit',
+'LBL_VIEW'=>'View',
+'LBL_MANDATORY_MSG'=>'Mandatory Fields',
+'LBL_DISABLE_FIELD_MSG'=>'Fields Disabled from Global Field Access Settings',
+'LBL_DELETE'=>'Delete',
+
+'LBL_STEP_2_2'=>'Step 2 of 2',
+'LBL_FINISH_BUTTON'=>'Finish',
+
+//Added while moving Groups file from User to Setting Module
+'LBL_NEW_GROUP'=>'New Group',
+'LBL_GROUPS'=>'Groups',
+'LBL_GROUP_NAME'=>'Group Name',
+'LBL_ROLES_SUBORDINATES'=>'Roles and Subordinates',
+'LBL_MEMBER_AVLBL'=>'Available Entities & Members',
+'LBL_MEMBER_SELECTED'=>'Selected Members',
+'LBL_ENTITY'=>'Entity',
+'LBL_OF'=>'of',
+'LBL_CREATE_NEW_GROUP'=>'Create New Group',
+'LBL_ADD_GROUP_BUTTON'=>'Add Group',
+'LBL_GROUP_MESG1'=>'Groups are a flexible way to assign access rights, when complex access rights has to be defined. You can combine multiple entities like Roles, Users, profiles etc into a single group.',
+'LBL_GROUP_MESG2'=>'To add, select the Entity members from left and click the ">>" button.',
+'LBL_GROUP_MESG3'=>'To remove, select the group members from the right and click the "<<" button.',
+
+//Sharing Privileges
+'LBL_GLOBAL_ACCESS_PRIVILEGES'=>'Organization-level Sharing Rules',
+'LBL_RECALCULATE_BUTTON'=>'Recalculate',
+'LBL_CHANGE'=>'Change',
+'LBL_PRIVILEGES'=>'Privileges',
+'LBL_CUSTOM_ACCESS_PRIVILEGES'=>'Custom Sharing Rules',
+'LBL_ADD_PRIVILEGES_BUTTON'=>'Add Privileges',
+'LBL_RULE_NO'=>'Rule No.',
+'LBL_CAN_BE_ACCESSED'=>'can be accessed by',
+'LBL_CUSTOM_ACCESS_MESG'=>'No Custom Access Rules defined .',
+'LNK_CLICK_HERE'=>'Click here',
+'LBL_CREATE_RULE_MESG'=>'to create a new Rule',
+'LBL_RECALC_MSG'=>'Are you sure, you wish to Recalculate Sharing Access?',
+'LBL_YES'=>'Yes',
+'LBL_NO'=>'No',
+'LBL_IN_PERMISSION'=>'in the permission',
+'LBL_RELATED_MODULE_RIGHTS'=>'Related Module Rights',
+'LBL_USR_CAN_ACCESS'=>'Users can ',
+'LBL_USR_OTHERS'=>' other users ',
+'LBL_USR_CANNOT_ACCESS'=>'Users cannot access other users ',
+ 
+'LBL_ORG_SHARING_PRIVILEGES'=>'Organisation Sharing  Privileges',
+'LBL_EDIT_PERMISSIONS'=>'Edit Permissions',
+'LBL_SAVE_PERMISSIONS'=>'Save Permissions',
+'LBL_READ_ONLY'=>'Public: Read Only',
+'LBL_EDIT_CREATE_ONLY'=>'Public: Read, Create/Edit',
+'LBL_READ_CREATE_EDIT_DEL'=>'Public: Read, Create/Edit, Delete',
+'LBL_PRIVATE'=>'Private',
+ 
+'Public: Read Only'=>'Public: Read Only',
+'Public: Read, Create/Edit'=>'Public: Read, Create/Edit',
+'Public: Read, Create/Edit, Delete'=>'Public: Read, Create/Edit, Delete',
+'Private'=>'Private',
+'Hide Details'=>'Hide Details',
+'Hide Details and Add Events'=>'Hide Details and Add Events',
+'Show Details'=>'Show Details',
+'Show Details and Add Events'=>'Show Details and Add Events',
+
+//Added for User Login History While moving from User to Settings
+'LBL_LOGIN_HISTORY'=>'Login History',
+//Sharing Access module moved to Setting
+'Read/Write'=>'Read/Write',
+'Read Only '=>'Read Only ',
+'LBL_GROUP'=>'Group',
+'LBL_ACCESS_RIGHTS_FOR_MODULES'=>'Access rights for relative modules',
+'LBL_ADD_RULE'=>'Add Rule',
+'LBL_ADD_CUSTOM_RULE'=>'Add Custom Privilege Rule',
+'LBL_RULE_CONSTRUCTION'=>'Rule Construction Display',
+'LBL_STEP'=>'Step',
+'LBL_SELECT_ENTITY'=>'Select an entity below',
+'LBL_CAN_BE_ACCESSED_BY'=>'Can be accessed by',
+'LBL_PERMISSIONS'=>'Permissions',
+'LBL_DOC_MSWORD'=>'File has to be a Document of type doc/msword',
+'LBL_NODOC'=>'No doc File in this directory.Please try again!',
+
+//Added for error messages on Company Info.
+'LOGO_ERROR'=>'Logo has to be an Image of type jpeg/png',
+'Error_Message'=>'Error Message',
+'Invalid_file'=>'Invalid file OR',
+'File_has_no_data'=>'File has no data',
+'Sorry'=>'Sorry',
+'uploaded_file_exceeds_maximum_limit'=>'the uploaded file exceeds the maximum vtiger_filesize limit',
+'try_file_smaller'=>'Please try a file smaller than 800000 bytes',
+'Problems_in_upload'=>'Problems in file upload',
+'Please_try_again'=>'Please try again!',
+//5.0.3 fixes
+'LBL_TESTMAILSTATUS'=>'Test Mail Status : ',
+'LBL_CHECK_ASSIGNEDTO_MAILID'=>'Please check the assigned-to emailid',
+'LBL_MAILSENDERROR'=>'Mail could not be sent to the admin user. Please check the admin emailid/Server settings',
+'LBL_RECORD_NOEXIST'=>'Record not present',
+'LBL_ENTER_PROFILE'=>'Enter Profile Name',
+'LBL_ENABLE'=>'Enable',
+'LBL_DISABLE'=>'Disable',
+'LBL_PROXY'=>'proxy',
+'LBL_FIELDS_TO_BE_SHOWN'=>'Fields to be shown',
+//Added for alerts
+'SPECIFY_FILE_TO_MERGE' => 'Please Specify a File to Merge',
+'FILESIZE_EXCEEDS_INFO_CONFIG_INC' => 'Sorry, the uploaded file exceeds the maximum file size limit in config.inc.php. Please try a smaller file',
+'FILESIZE_EXCEEDS_INFO_PHP_INI' => 'Sorry, the uploaded file exceeds the maximum file size limit in php.ini. Please try a smaller file',
+'PROBLEMS_IN_FILEUPLOAD' => 'Problems in file upload. Please try again!',
+
+//Added fields for Invoice Number labels
+'LBL_CUSTOMIZE_INVOICE_NUMBER'=>'Customize Invoice Number',
+'LBL_CUSTOMIZE_INVOICE_NUMBER_DESCRIPTION'=>'Invoice Number Customization',
+'LBL_CUSTOM_INVOICE_NUMBER_VIEW'=>'Invoice Number Customization',
+'LBL_CUSTOMINVOICE_STRING'=>'Custom Invoice String',
+'LBL_CUSTOMINVOICE_NUMBER'=>'Custom Invoice Number',
+'LBL_INVOICE_NUMBER_PREVIEW'=>'Preview',
+'LBL_INVOICE_NUMBER_BUTTON'=>'Update Invoice Number',
+'LBL_PROXY_AUTHENTICATION_REQUIRED'=>'Proxy Authentication Required',
+'LBL_ENABLE_FTP' => 'You must have FTP support enabled in php',
+
+//Added for Role Labels
+'LBL_ADD_ROLE'=>'Add Role',
+'LBL_EDIT_ROLE'=>'Edit Role',
+'LBL_MOVE_ROLE'=>'Move Role',
+
+'LBL_BACKUP_DESC'=>' The CRM system allows you to make a backup of the database to your FTP server. The CRM will take backup of all data whenever an admin user logs out. Make sure you have enough disk space available on your FTP server. The created backup file will be in the following format: "backup-date-time.sql".',
 );
-
-
 ?>

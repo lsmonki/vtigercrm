@@ -29,6 +29,7 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 {
 	global $current_user;
 	global $adb;
+	global $mod_strings;
 
 // MWC ** Getting vtiger_users
 $temp = get_user_array(FALSE);
@@ -55,6 +56,10 @@ foreach ($rows1 as $row)
 	$do_save = 1;
 	//MWC
 	$my_userid = $current_user->id;
+
+	//If we want to set default values for some fields for each entity then we have to set here
+	if($module == 'Products')//discontinued is not null. if we unmap active, NULL will be inserted and query will fail
+		$focus->column_fields['discontinued'] = 'on';
 
 	for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 	{
@@ -233,7 +238,7 @@ function b()
 </script>
 
 <?php
-$_SESSION['import_display_message'] = '<br>'.$start.' to '.$end.' of '.$totalnoofrows.' are imported successfully';
+$_SESSION['import_display_message'] = '<br>'.$start.' '.$mod_strings['to'].' '.$end.' '.$mod_strings['of'].' '.$totalnoofrows.' '.$mod_strings['are_imported_succesfully'];
 //return $_SESSION['import_display_message'];
 }
 ?>

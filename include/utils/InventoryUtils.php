@@ -18,7 +18,7 @@
 function getProductDetailsBlockInfo($mode,$module,$focus='',$num_of_products='',$associated_prod='')
 {
 	global $log;
-	$log->debug("Entering getProductDetailsBlockInfo(".$mode.",".$module.",".$focus.",".$num_of_products.",".$associated_prod.") method ...");
+	$log->debug("Entering getProductDetailsBlockInfo(".$mode.",".$module.",".$num_of_products.",".$associated_prod.") method ...");
 	
 	$productDetails = Array();
 	$productBlock = Array();
@@ -472,7 +472,7 @@ function deleteInventoryProductDetails($objectid, $return_old_values='')
 function saveInventoryProductDetails($focus, $module, $update_prod_stock='false', $updateDemand='')
 {
 	global $log, $adb;
-	$log->debug("Entering into function saveInventoryProductDetails($focus, $module).");
+	$log->debug("Entering into function saveInventoryProductDetails($module).");
 
 	$ext_prod_arr = Array();
 	if($focus->mode == 'edit')
@@ -496,16 +496,23 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 	$prod_seq=1;
 	for($i=1; $i<=$tot_no_prod; $i++)
 	{
+		//if the product is deleted then we should avoid saving the deleted products
+		if($_REQUEST["deleted".$i] == 1)
+			continue;
+
 	        $prod_id = $_REQUEST['hdnProductId'.$i];
+		if(isset($_REQUEST['productDescription'.$i]))
+			$description = $_REQUEST['productDescription'.$i];
+		else{
+			$desc_duery = "select vtiger_products.product_description from vtiger_products where vtiger_products.productid=".$prod_id;
+			$desc_res = $adb->query($desc_duery);
+			$description = $adb->query_result($desc_res,0,"product_description");
+		}	
 	        $qty = $_REQUEST['qty'.$i];
 	        $listprice = $_REQUEST['listPrice'.$i];
 		$listprice = getConvertedPrice($listprice);//convert the listPrice into $
 
 		$comment = addslashes($_REQUEST['comment'.$i]);
-
-		//if the product is deleted then we should avoid saving the deleted products
-		if($_REQUEST["deleted".$i] == 1)
-			continue;
 
 		//we have to update the Product stock for PurchaseOrder if $update_prod_stock is true
 		if($module == 'PurchaseOrder' && $update_prod_stock == 'true')
@@ -524,7 +531,7 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 			}
 		}
 
-		$query ="insert into vtiger_inventoryproductrel(id, productid, sequence_no, quantity, listprice, comment) values($focus->id, $prod_id , $prod_seq, $qty, $listprice, '$comment')";
+		$query ="insert into vtiger_inventoryproductrel(id, productid, sequence_no, quantity, listprice, comment, description) values($focus->id, $prod_id , $prod_seq, $qty, $listprice, '$comment','$description')";
 		$prod_seq++;
 		$adb->query($query);
 
@@ -639,7 +646,7 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 	$sh_query = "insert into vtiger_inventoryshippingrel(".$sh_query_fields.") values(".$sh_query_values.")";
 	$adb->query($sh_query);
 
-	$log->debug("Exit from function saveInventoryProductDetails($focus, $module).");
+	$log->debug("Exit from function saveInventoryProductDetails($module).");
 }
 
 /**	function used to get the tax type for the entity (PO, SO, Quotes or Invoice)
@@ -706,6 +713,90 @@ function getInventorySHTaxPercent($id, $taxname)
 	$log->debug("Exit from function getInventorySHTaxPercent($id, $taxname)");
 
 	return $taxpercentage;
+}
+
+
+/**	function used to set invoice string and increment invoice id 
+ *	@param string $mode - mode should be configure_invoiceno or increment_incoiceno
+ *	@param string $req_str - invoice string which is part of the invoice number, this may be alphanumeric characters
+ *	@param int $req_no - This should be a number which will written in file and will be used as a next invoice number
+ *	@return void. The invoice string and number are stored in the  file CustomInvoiceNo.php so that concatenated string 		with number will be used as a next invoice number
+ */
+
+function setInventoryInvoiceNumber($mode, $req_str='', $req_no='')
+{
+        global $root_directory;
+        $filename = $root_directory.'user_privileges/CustomInvoiceNo.php';
+        $readhandle = fopen($filename, "r+");
+        $buffer = '';
+        $new_buffer = '';
+
+	//when we configure the invoice number in Settings this will be used
+	if ($mode == "configure_invoiceno" && $req_str != '' && $req_no != '')
+	{
+
+ 	        while(!feof($readhandle))
+               	{
+                       	$buffer = fgets($readhandle, 5200);
+			list($starter, $tmp) = explode(" = ", $buffer);
+
+			if($starter == '$inv_str')
+			{
+				$new_buffer .= "\$inv_str = '".$req_str."';\n";
+			}
+			elseif($starter == '$inv_no')
+			{
+				$new_buffer .= "\$inv_no = '".$req_no."';\n";
+			}
+			else
+				$new_buffer .= $buffer;
+		}
+	}
+	else if ($mode == "increment_invoiceno")//when we save new invoice we will increment the invoice id and write
+	{
+		require_once('user_privileges/CustomInvoiceNo.php');
+		while(!feof($readhandle))
+		{
+			$buffer = fgets($readhandle, 5200);
+			list($starter, $tmp) = explode(" = ", $buffer);
+
+			if($starter == '$inv_no')
+			{
+				//if number is 001, 002 like this (starting with zero) then when we increment 1, zeros will be striped out and result comes as 1,2, etc. So we have added 0 previously for the needed length ie., two zeros for 001, 002, etc.,
+				//If the value is less than 0, then we assign 0 to it(to avoid error).
+				$strip=strlen($inv_no)-strlen($inv_no+1);
+				if($strip<0)$strip=0;
+
+				$temp = str_repeat("0",$strip);
+				$new_buffer .= "\$inv_no = '".$temp.($inv_no+1)."';\n";
+			}
+			else
+				$new_buffer .= $buffer;
+
+		}
+	}
+
+	//we have the contents in buffer. Going to write the contents in file
+	fclose($readhandle);
+	$handle = fopen($filename, "w");
+	fputs($handle, $new_buffer);
+	fclose($handle);
+}
+
+/**	Function used to check whether the provided invoicenumber is already available or not
+ *	@param int $invoiceno - invoice number, which we are going to check for duplicate
+ *	@return binary true or false. If invoice number is already available then return true else return false
+ */
+function CheckDuplicateInvoiceNumber($invoiceno)
+{
+	global $adb;
+	$result=$adb->query("select invoice_no  from vtiger_invoice where invoice_no = '".$invoiceno."'");
+	$num_rows = $adb->num_rows($result);
+
+	if($num_rows > 0)
+		return true;
+	else
+		return false;
 }
 
 

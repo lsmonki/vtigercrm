@@ -30,7 +30,7 @@ $focus = new Campaigns();
  $currencyid=fetchCurrency($current_user->id);
  $rate_symbol = getCurrencySymbolandCRate($currencyid);
  $rate = $rate_symbol['rate'];
-setObjectValuesFromRequest(&$focus);
+setObjectValuesFromRequest($focus);
 
 if(isset($_REQUEST['expectedrevenue']))
 {

@@ -51,7 +51,7 @@ if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
 }
 $smarty->assign("ID",$focus->id);
 $smarty->assign("MODULE",$currentmodule);
-$smarty->assign("SINGLE_MOD",$app_strings['PurchaseOrder']);
+$smarty->assign("SINGLE_MOD",$mod_strings['PurchaseOrder']);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);

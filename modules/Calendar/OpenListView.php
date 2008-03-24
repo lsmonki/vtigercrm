@@ -25,15 +25,18 @@
  * @param integer  $mode     - number to differentiate upcoming and pending activities
  * return array    $values   - activities record in array format
  */
-function getPendingActivities($mode)
+function getPendingActivities($mode,$view='')
 {
 	global $log;
         $log->debug("Entering getPendingActivities() method ...");
 	require_once("data/Tracker.php");
 	require_once("include/utils/utils.php");
+	require_once('include/utils/CommonUtils.php'); //new
+	require_once('user_privileges/default_module_view.php');
+	
 
 	global $currentModule;
-
+	global $singlepane_view;
 	global $theme;
 	global $focus;
 	global $action;
@@ -46,6 +49,8 @@ function getPendingActivities($mode)
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	require_once($theme_path.'layout_utils.php');
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	//code added to customize upcomming and pending activities
 	if($_REQUEST['activity_view']=='')
 	{	
@@ -56,12 +61,12 @@ function getPendingActivities($mode)
 
 	$today = date("Y-m-d", time());
 
-	if($activity_view == 'today')
+	if($view == 'today')
 	{	
 		$upcoming_condition = " AND (date_start = '$today' OR vtiger_recurringevents.recurringdate = '$today')";
 		$pending_condition = " AND (due_date = '$today' OR vtiger_recurringevents.recurringdate = '$today')";
 	}	
-	else if($activity_view == 'all')
+	else if($view == 'all')
 	{
 		$upcoming_condition = " AND (date_start >= '$today' OR vtiger_recurringevents.recurringdate >= '$today')";
 		$pending_condition = " AND (due_date <= '$today' OR vtiger_recurringevents.recurringdate <= '$today')";
@@ -69,14 +74,27 @@ function getPendingActivities($mode)
 	if($mode != 1)
 	{
 		//for upcoming avtivities
-		$list_query = " select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_activity.*, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid, vtiger_account.accountid, vtiger_account.accountname, vtiger_recurringevents.recurringtype,vtiger_recurringevents.recurringdate from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid left outer join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 and (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task') AND ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Completed' ) and ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Deferred') and  (  vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus != 'Held') and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus != 'Not Held' ) ".$upcoming_condition." AND vtiger_crmentity.smownerid !=0 AND vtiger_salesmanactivityrel.smid ='$current_user->id'";
+		$list_query = " select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_activity.*, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid, vtiger_account.accountid, vtiger_account.accountname, vtiger_recurringevents.recurringtype,vtiger_recurringevents.recurringdate from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid LEFT JOIN vtiger_activitygrouprelation ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid left outer join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 and vtiger_activity.activitytype in ('Meeting','Call','Task') AND ( vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and  (  vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held') )".$upcoming_condition;
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[16] == 3)
+		{
+			$sec_parameter=getListViewSecurityParameter('Calendar');
+			$list_query .= $sec_parameter;
+		}
+
 	}	
 	else
 	{
 		//for pending activities
-		$list_query = " select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_activity.*, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid, vtiger_account.accountid, vtiger_account.accountname, vtiger_recurringevents.recurringtype,vtiger_recurringevents.recurringdate from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid left outer join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 and (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task') AND ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Completed' ) and ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Deferred') and (  vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus != 'Held') and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus != 'Not Held' ) ".$pending_condition." AND vtiger_crmentity.smownerid !=0 AND vtiger_salesmanactivityrel.smid ='$current_user->id'";
+		$list_query = " select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_activity.*, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid, vtiger_account.accountid, vtiger_account.accountname, vtiger_recurringevents.recurringtype,vtiger_recurringevents.recurringdate from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid  LEFT JOIN vtiger_activitygrouprelation ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid left outer join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 and (vtiger_activity.activitytype in ('Meeting','Call','Task')) AND (vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held')) ".$pending_condition;
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[16] == 3)                   
+                {
+			$sec_parameter=getListViewSecurityParameter('Calendar'); 
+	                $list_query .= $sec_parameter; 
+	                                                                                                                                    }
 	}
 	
+	$list_query.= " GROUP BY vtiger_activity.activityid";
+	$list_query.= " ORDER BY date_start,time_start ASC";
 	$res = $adb->query($list_query);
 	$noofrecords = $adb->num_rows($res);
 	$open_activity_list = array();
@@ -106,7 +124,7 @@ function getPendingActivities($mode)
 		}
 	
 	$title=array();
-	$title[]=$activity_view;
+	$title[]=$view;
 	$title[]='myUpcoPendAct.gif';
 	$title[]='home_myact';
 	//$title[]=getActivityView($activity_view);

@@ -16,16 +16,20 @@
  */
 function getSharedUserId($id)
 {
-        global $adb;
-	$sharedid = Array();
-        $query = "SELECT * from vtiger_sharedcalendar where userid=".$id;
+	global $adb;
+        $sharedid = Array();
+        $query = "SELECT vtiger_users.user_name,vtiger_sharedcalendar.* from vtiger_sharedcalendar left join vtiger_users on vtiger_sharedcalendar.sharedid=vtiger_users.id where userid=".$id;
         $result = $adb->query($query);
         $rows = $adb->num_rows($result);
         for($j=0;$j<$rows;$j++)
         {
-	        $sharedid[] = $adb->query_result($result,$j,'sharedid');
+
+                $id = $adb->query_result($result,$j,'sharedid');
+                $sharedname = $adb->query_result($result,$j,'user_name');
+                $sharedid[$id]=$sharedname;
+
         }
-        return $sharedid;
+	return $sharedid;
 }
 
 /**
@@ -50,18 +54,13 @@ function getSharedCalendarId($sharedid)
 /**
  * To get userid and username of all vtiger_users except the current user
  * @param $id -- The user id :: Type integer
- * @param $check -- true/false :: Type boolean
  * @returns $user_details -- Array in the following format:
  * $user_details=Array($userid1=>$username, $userid2=>$username,............,$useridn=>$username);
  */
-function getOtherUserName($id,$check)
+function getOtherUserName($id)
 {
-	global $adb,$current_user;
-	require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	global $adb;
 	$user_details=Array();
-	if($check)
-	{
 		$query="select * from vtiger_users where deleted=0 and status='Active' and id!=".$id;
 		$result = $adb->query($query);
 		$num_rows=$adb->num_rows($result);
@@ -71,20 +70,43 @@ function getOtherUserName($id,$check)
 			$username=$adb->query_result($result,$i,'user_name');
 			$user_details[$userid]=$username;
 		}
+		return $user_details;
+}
 
+/**
+ * To get userid and username of vtiger_users in hierarchy level
+ * @param $id -- The user id :: Type integer
+ * @returns $user_details -- Array in the following format:
+ * $user_details=Array($userid1=>$username, $userid2=>$username,............,$useridn=>$username);
+ */
+
+function getSharingUserName($id)
+{
+	global $adb,$current_user;
+        $user_details=Array();
+	$assigned_user_id = $current_user->id;
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid('Calendar')] == 3 or $defaultOrgSharingPermission[getTabid('Calendar')] == 0))
+	{
+		$role_seq = implode($parent_roles, "::");
+		$query = "select id as id,user_name as user_name from vtiger_users where id=".$current_user->id." and status='Active' union select vtiger_user2role.userid as id,vtiger_users.user_name as user_name from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$role_seq."::%' and status='Active' union select shareduserid as id,vtiger_users.user_name as user_name from vtiger_tmp_write_user_sharing_per inner join vtiger_users on vtiger_users.id=vtiger_tmp_write_user_sharing_per.shareduserid where status='Active' and vtiger_tmp_write_user_sharing_per.userid=".$current_user->id." and vtiger_tmp_write_user_sharing_per.tabid=9";
+		if (!empty($assigned_user_id)) {
+			$query .= " OR id='$assigned_user_id'";
+		}
+		$query .= " order by user_name ASC";
+		$result = $adb->query($query, true, "Error filling in user array: ");
+		while($row = $adb->fetchByAssoc($result))
+		{
+			$temp_result[$row['id']] = $row['user_name'];
+		}
+		$user_details = &$temp_result;
+		unset($user_details[$id]);
 	}
 	else
 	{
-		if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid('Calendar')] == 3 or $defaultOrgSharingPermission[getTabid('Calendar')] == 0))
-		{
-			$user_details = get_user_array(FALSE, "Active", $id, 'private');
-			unset($user_details[$id]);
-		}
-		else
-		{
-			$user_details = get_user_array(FALSE, "Active", $id);
-			unset($user_details[$id]);
-		}
+		$user_details = get_user_array(FALSE, "Active", $id);
+		unset($user_details[$id]);
 	}
 	return $user_details;
 }
@@ -104,69 +126,25 @@ function getaddEventPopupTime($starttime,$endtime,$format)
 	if($format == 'am/pm')
 	{
 		$hr = $sthr+0;
-		if($hr <= 11)
-		{
-			if($hr == 0)
-				$sthr = 12;
-			$timearr['starthour'] = $sthr;
-			$timearr['startfmt'] = 'am';
-		}
-		else
-		{
-			if($hr == 12) $sthr = $hr;
-			else $sthr = $hr - 12;
-				
-			if($sthr <= 9 && strlen(trim($sthr)) < 2)
-                                $hrvalue= '0'.$sthr;
-			else $hrvalue=$sthr;
-			
-			$timearr['starthour'] = $hrvalue;
-			$timearr['startfmt'] = 'pm';
-		}
-		$edhr = $edhr+0;
-                if($edhr <= 11)
-                {
-			if($edhr == 0)
-				$edhr = 12;
-				
-			if($edhr <= 9 && strlen(trim($edhr)) < 2)
-				$edhr = '0'.$edhr;
-			$timearr['endhour'] = $edhr;
-                        $timearr['endfmt'] = 'am';
-                }
-                else
-                {
-			$fmt = 'pm';
-			if($edhr == 12)
-				$edhr =	$edhr;
-			else
-			{
-				$edhr = $edhr - 12;
-				if($edhr == 12)
-					$fmt = 'am';
-			}
-                        if($edhr <= 9 && strlen(trim($edhr)) < 2)
-                                $hrvalue= '0'.$edhr;
-			else $hrvalue=$edhr;
-			
-                        $timearr['endhour'] = $hrvalue;
-                        $timearr['endfmt'] = $fmt;
-                }
+		$timearr['startfmt'] = ($hr >= 12) ? "pm" : "am";
+		if($hr == 0) $hr = 12;
+		$timearr['starthour'] = twoDigit(($hr>12)?($hr-12):$hr);
 		$timearr['startmin']  = $stmin;
+
+		$edhr = $edhr+0;
+		$timearr['endfmt'] = ($edhr >= 12) ? "pm" : "am";
+		if($edhr == 0) $edhr = 12;
+		$timearr['endhour'] = twoDigit(($edhr>12)?($edhr-12):$edhr);
 		$timearr['endmin']    = $edmin;
 		return $timearr;
 	}
 	if($format == '24')
 	{
-		if($edhr <= 9 && strlen(trim($edhr)) < 2)
-			$edhr = '0'.$edhr;
-		if($sthr <= 9 && strlen(trim($sthr)) < 2)
-			$sthr = '0'.$sthr;
-		$timearr['starthour'] = $sthr;
+		$timearr['starthour'] = twoDigit($sthr);
 		$timearr['startmin']  = $stmin;
 		$timearr['startfmt']  = '';
-		$timearr['endhour']   = $edhr;
-                $timearr['endmin']    = $edmin;
+		$timearr['endhour']   = twoDigit($edhr);
+		$timearr['endmin']    = $edmin;
 		$timearr['endfmt']    = '';
 		return $timearr;
 	}
@@ -179,13 +157,18 @@ function getaddEventPopupTime($starttime,$endtime,$format)
  *constructs html select combo box for time selection
  *and returns it in string format.
  */
-function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
+function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='',$todocheck=false)
 {
+	global $mod_strings;
 	$combo = '';
 	$min = $min - ($min%5);
+	if($bimode == 'start' && !$todocheck)
+		$jsfn = 'onChange="changeEndtime_StartTime();"';
+	else
+		$jsfn = null;
 	if($format == 'am/pm')
 	{
-		$combo .= '<select class=small name="'.$bimode.'hr" id="'.$bimode.'hr">';
+		$combo .= '<select class=small name="'.$bimode.'hr" id="'.$bimode.'hr" '.$jsfn.'>';
 		for($i=0;$i<12;$i++)
 		{
 			if($i == 0)
@@ -194,87 +177,46 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='')
 				$hrvalue = 12;
 			}
 			else
-			{	
-				if($i <= 9 && strlen(trim($i)) < 2)
-				{
-					$hrtext= '0'.$i;
-				}
-				else $hrtext= $i;
-				$hrvalue =  $hrtext;
-			}
-			if($hour == $hrvalue)
-				$hrsel = 'selected';
-			else
-				$hrsel = '';
+				$hrvalue = $hrtext = twoDigit($i);
+			$hrsel = ($hour == $hrvalue)?'selected':'';	
 			$combo .= '<option value="'.$hrvalue.'" '.$hrsel.'>'.$hrtext.'</option>';
 		}
 		$combo .= '</select>&nbsp;';
-		$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small>';
+		$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small '.$jsfn.'>';
 		for($i=0;$i<12;$i++)
 		{
-			$minvalue = 5;
 			$value = $i*5;
-			if($value <= 9 && strlen(trim($value)) < 2)
-			{
-				$value= '0'.$value;
-			}
-			else $value = $value;
-			if($min == $value)
-				$minsel = 'selected';
-			else
-				$minsel = '';
-				$combo .= '<option value="'.$value.'" '.$minsel.'>'.$value.'</option>';
+			$value = twoDigit($value);
+			$minsel = ($min == $value)?'selected':'';
+			$combo .= '<option value="'.$value.'" '.$minsel.'>'.$value.'</option>';
 		}
 		$combo .= '</select>&nbsp;';
-		$combo .= '<select name="'.$bimode.'fmt" id="'.$bimode.'fmt" class=small>';
-		if($fmt == 'am')
-		{
-			$amselected = 'selected';
-			$pmselected = '';
-		}
-		elseif($fmt == 'pm')
-		{
-			$amselected = '';
-			$pmselected = 'selected';
-		}
+		$combo .= '<select name="'.$bimode.'fmt" id="'.$bimode.'fmt" class=small '.$jsfn.'>';
+		$amselected = ($fmt == 'am')?'selected':'';
+		$pmselected = ($fmt == 'pm')?'selected':'';
 		$combo .= '<option value="am" '.$amselected.'>AM</option>';
 		$combo .= '<option value="pm" '.$pmselected.'>PM</option>';
 		$combo .= '</select>';
 		}
 		else
 		{
-			$combo .= '<select name="'.$bimode.'hr" id="'.$bimode.'hr" class=small>';
+			$combo .= '<select name="'.$bimode.'hr" id="'.$bimode.'hr" class=small '.$jsfn.'>';
 			for($i=0;$i<=23;$i++)
 			{
-				if($i <= 9 && strlen(trim($i)) < 2)
-				{
-					$hrvalue= '0'.$i;
-				}
-				else $hrvalue = $i;
-				if($hour == $hrvalue)
-					$hrsel = 'selected';
-				else
-					$hrsel = '';
+				$hrvalue = twoDigit($i);
+				$hrsel = ($hour == $hrvalue)?'selected':'';
 				$combo .= '<option value="'.$hrvalue.'" '.$hrsel.'>'.$hrvalue.'</option>';
 			}
-			$combo .= '</select>Hr&nbsp;';
-			$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small>';
+			$combo .= '</select>'.$mod_strings[LBL_HR].'&nbsp;';
+			$combo .= '<select name="'.$bimode.'min" id="'.$bimode.'min" class=small '.$jsfn.'>';
 			for($i=0;$i<12;$i++)
 			{
-				$minvalue = 5;
 				$value = $i*5;
-				if($value <= 9 && strlen(trim($value)) < 2)
-				{
-					$value= '0'.$value;
-				}
-				else $value=$value;
-				if($min == $value)
-					$minsel = 'selected';
-				else
-					$minsel = '';
+				$value= twoDigit($value);
+				$minsel = ($min == $value)?'selected':'';
 				$combo .= '<option value="'.$value.'" '.$minsel.'>'.$value.'</option>';
 			}
-			$combo .= '</select>&nbsp;min<input type="hidden" name="'.$bimode.'fmt" id="'.$bimode.'fmt">';
+			$combo .= '</select>&nbsp;'.$mod_strings[LBL_MIN].'<input type="hidden" name="'.$bimode.'fmt" id="'.$bimode.'fmt">';
 		}
 		return $combo;
 }
@@ -291,7 +233,10 @@ function getActFieldCombo($fieldname,$tablename)
 {
 	global $adb, $mod_strings;
 	$combo = '';
-	$combo .= '<select name="'.$fieldname.'" id="'.$fieldname.'" class=small>';
+	$js_fn = '';
+	if($fieldname == 'eventstatus')
+		$js_fn = 'onChange = "getSelectedStatus();"';
+	$combo .= '<select name="'.$fieldname.'" id="'.$fieldname.'" class=small '.$js_fn.'>';
 	$q = "select * from ".$tablename;
 	$Res = $adb->query($q);
 	$noofrows = $adb->num_rows($Res);
@@ -348,4 +293,212 @@ function getAssignedTo($tabid)
 }
 
 //Code Added by Minnie -Ends
+/**
+ * Function to get the vtiger_activity details for mail body
+ * @param   string   $description       - activity description
+ * @param   string   $from              - to differenciate from notification to invitation.
+ * return   string   $list              - HTML in string format
+ */
+function getActivityDetails($description,$user_id,$from='')
+{
+        global $log,$current_user;
+        global $adb,$mod_strings;
+        $log->debug("Entering getActivityDetails(".$description.") method ...");
+
+        $reply = (($description['mode'] == 'edit')?'updated':'created');
+	if($description['activity_mode'] == "Events")
+	{
+		$end_date_lable=$mod_strings['End date and time'];
+	}
+	else
+	{
+		$end_date_lable=$mod_strings['Due Date'];
+	}
+
+	$name = getUserName($user_id);
+	
+	if($from == "invite")
+		$msg = $mod_strings['LBL_ACTIVITY_INVITATION'];
+	else
+		$msg = $mod_strings['LBL_ACTIVITY_NOTIFICATION'];
+
+        $current_username = getUserName($current_user->id);
+        $status = $description['status'];
+
+        $list = $name.',';
+	$list .= '<br><br>'.$msg.' '.$reply.'.<br> '.$mod_strings['LBL_DETAILS_STRING'].':<br>';
+        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_SUBJECT"].' '.$description['subject'];
+	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Start date and time"].' : '.$description['st_date_time'];
+	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$end_date_lable.' : '.$description['end_date_time'];
+        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_STATUS"].': '.$status;
+        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Priority"].': '.$description['taskpriority'];
+        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Related To"].': '.$description['relatedto'];
+	if($description['activity_mode'] != 'Events')
+	{
+        	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_CONTACT"].' '.$description['contact_name'];
+	}
+	else
+		$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Location"].' : '.$description['location'];
+			
+        $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_APP_DESCRIPTION"].': '.$description['description'];
+        $list .= '<br><br>'.$mod_strings["LBL_REGARDS_STRING"].' ,';
+        $list .= '<br>'.$current_username.'.';
+
+        $log->debug("Exiting getActivityDetails method ...");
+        return $list;
+}
+
+function twoDigit( $no ){
+	if($no < 10 && strlen(trim($no)) < 2) return "0".$no;
+	else return "".$no;
+}
+
+function timeString($datetime,$fmt){
+
+	if(is_object($datetime)){
+		$hr = $datetime->hour;
+		$min = $datetime->minute;
+	} else {
+		$hr = $datetime['hour'];
+		$min = $datetime['minute'];
+	}
+	$timeStr = "";
+	if($fmt != 'am/pm'){
+		$timeStr .= twoDigit($hr).":".twoDigit($min);
+	}else{
+		$am = ($hr >= 12) ? "pm" : "am";
+		if($hr == 0) $hr = 12;
+		$timeStr .= ($hr>12)?($hr-12):$hr;
+		$timeStr .= ":".twoDigit($min);
+		$timeStr .= $am;
+	}
+	return $timeStr;
+}
+//added to fix Ticket#3068
+function getEventNotification($mode,$subject,$desc)
+{
+	global $current_user,$adb;
+	require_once("modules/Emails/mail.php");
+	$subject = $mode.' : '.$subject;
+	$crmentity = new CRMEntity();
+	if($desc['assingn_type'] == "U")
+	{
+		$to_email = getUserEmailId('id',$desc['user_id']);
+		$description = getActivityDetails($desc,$desc['user_id']);
+		send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
+	}
+	if($desc['assingn_type'] == "T")
+	{
+		$groupname=$desc['group_name'];
+		$resultqry=$adb->query("select groupid from vtiger_groups where groupname='".$groupname."'");
+		$groupid=$adb->query_result($resultqry,0,"groupid");
+		require_once('include/utils/GetGroupUsers.php');
+		$getGroupObj=new GetGroupUsers();
+		$getGroupObj->getAllUsersInGroup($groupid);
+		$userIds=$getGroupObj->group_users;
+		$groupqry="select email1,id from vtiger_users where id in(".implode(',',$userIds).")";
+		$groupqry_res=$adb->query($groupqry);
+		$noOfRows = $adb->num_rows($groupqry_res);
+		for($z=0;$z < $noOfRows;$z++)
+		{
+			$emailadd = $adb->query_result($groupqry_res,$z,'email1');
+			$curr_userid = $adb->query_result($groupqry_res,$z,'id');
+			$description = getActivityDetails($desc,$curr_userid);
+			$mail_status = send_mail('Calendar',$emailadd,getUserName($curr_userid),'',$subject,$description);
+
+		}
+	}
+}
+
+function sendInvitation($inviteesid,$mode,$subject,$desc)
+{
+	global $current_user,$mod_strings;
+	require_once("modules/Emails/mail.php");
+	$invites=$mod_strings['INVITATION'];
+	$invitees_array = explode(';',$inviteesid);
+	$subject = $invites.' : '.$subject;
+	$record = $focus->id;
+	foreach($invitees_array as $inviteeid)
+	{
+		if($inviteeid != '')
+		{
+			$description=getActivityDetails($desc,$inviteeid,"invite");
+			$to_email = getUserEmailId('id',$inviteeid);
+			send_mail('Calendar',$to_email,$current_user->user_name,'',$subject,$description);
+		}
+	}
+
+}
+
+function getActivityMailInfo($return_id,$status,$activity_type)
+{
+	$mail_data = Array();
+	global $adb;
+	$qry = "select * from vtiger_activity where activityid=".$return_id;
+	$ary_res = $adb->query($qry);
+	$send_notification = $adb->query_result($ary_res,0,"sendnotification");
+	$subject = $adb->query_result($ary_res,0,"subject");
+	$priority = $adb->query_result($ary_res,0,"priority");
+	$st_date = $adb->query_result($ary_res,0,"date_start");
+	$st_time = $adb->query_result($ary_res,0,"time_start");
+	$end_date = $adb->query_result($ary_res,0,"due_date");
+	$end_time = $adb->query_result($ary_res,0,"time_end");
+	$location = $adb->query_result($ary_res,0,"location");
+
+	$usr_qry = "select smownerid from vtiger_crmentity where crmid=".$return_id;
+	$res = $adb->query($usr_qry);
+	$usr_id = $adb->query_result($res,0,"smownerid");
+	$assignType = "U";
+	if($usr_id == 0)
+	{
+		$assignType = "T";
+		$group_qry = "select groupname from vtiger_activitygrouprelation where activityid=".$return_id;
+		$grp_res = $adb->query($group_qry);
+		$grp_name = $adb->query_result($grp_res,0,"groupname");
+	}
+
+
+	$desc_qry = "select description from vtiger_crmentity where crmid=".$return_id;
+	$des_res = $adb->query($desc_qry);
+	$description = $adb->query_result($des_res,0,"description");
+
+		
+	$rel_qry = "select case vtiger_crmentity.setype when 'Leads' then vtiger_leaddetails.lastname when 'Accounts' then vtiger_account.accountname when 'Potentials' then vtiger_potential.potentialname when 'Quotes' then vtiger_quotes.subject when 'PurchaseOrder' then vtiger_purchaseorder.subject when 'SalesOrder' then vtiger_salesorder.subject when 'Invoice' then vtiger_invoice.subject when 'Campaigns' then vtiger_campaign.campaignname when 'HelpDesk' then vtiger_troubletickets.title  end as relname from vtiger_seactivityrel inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_seactivityrel.crmid left join vtiger_leaddetails on vtiger_leaddetails.leadid = vtiger_seactivityrel.crmid  left join vtiger_account on vtiger_account.accountid=vtiger_seactivityrel.crmid left join vtiger_potential on vtiger_potential.potentialid=vtiger_seactivityrel.crmid left join vtiger_quotes on vtiger_quotes.quoteid= vtiger_seactivityrel.crmid left join vtiger_purchaseorder on vtiger_purchaseorder.purchaseorderid = vtiger_seactivityrel.crmid  left join vtiger_salesorder on vtiger_salesorder.salesorderid = vtiger_seactivityrel.crmid left join vtiger_invoice on vtiger_invoice.invoiceid = vtiger_seactivityrel.crmid  left join vtiger_campaign on vtiger_campaign.campaignid = vtiger_seactivityrel.crmid left join vtiger_troubletickets on vtiger_troubletickets.ticketid = vtiger_seactivityrel.crmid where vtiger_seactivityrel.activityid=".$return_id;
+
+	$rel_res = $adb->query($rel_qry);
+	$rel_name = $adb->query_result($rel_res,0,"relname");
+
+
+	$cont_qry = "select * from vtiger_cntactivityrel where activityid=".$return_id;
+	$cont_res = $adb->query($cont_qry);
+	$cont_id = $adb->query_result($cont_res,0,"contactid");
+	$cont_name = '';
+	if($cont_id != '')
+	{
+		$cont_name = getContactName($cont_id);
+	}
+	$mail_data['mode'] = "edit";
+	$mail_data['activity_mode'] = $activity_type;
+	$mail_data['sendnotification'] = $send_notification;
+	$mail_data['user_id'] = $usr_id;
+	$mail_data['subject'] = $subject;
+	$mail_data['status'] = $status;
+	$mail_data['taskpriority'] = $priority;
+	$mail_data['relatedto'] = $rel_name;
+	$mail_data['contact_name'] = $cont_name;
+	$mail_data['description'] = $description;
+	$mail_data['assingn_type'] = $assignType;
+	$mail_data['group_name'] = $grp_name;
+	$value = getaddEventPopupTime($st_time,$end_time,'24');
+	$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
+	if($activity_type != 'Task' )
+		$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
+	$mail_data['st_date_time']=getDisplayDate($st_date)." ".$start_hour;
+	$mail_data['end_date_time']=getDisplayDate($end_date)." ".$end_hour;
+	$mail_data['location']=$location;
+	return $mail_data;
+
+
+}
+
 ?>

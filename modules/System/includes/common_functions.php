@@ -32,7 +32,7 @@ function create_bargraph ($value, $maximum, $b, $type = "")
   
   $textdir = direction();
 
-  $imgpath = '/modules/System/templates/' . TEMPLATE_SET . '/images/';
+  $imgpath = 'modules/System/templates/' . TEMPLATE_SET . '/images/';
   $maximum == 0 ? $barwidth = 0 : $barwidth = round((100  / $maximum) * $value) * $b;
   $red = 90 * $b;
   $yellow = 75 * $b;

@@ -29,7 +29,7 @@ $RECORD = $_REQUEST['record'];
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $focus->retrieve_entity_info($_REQUEST['record'],"HelpDesk");
     $focus->id = $_REQUEST['record'];
-    $focus->name=$focus->column_fields['groupname'];
+    $focus->name=$focus->column_fields['ticket_title'];
 
 $log->debug("id is ".$focus->id);
 

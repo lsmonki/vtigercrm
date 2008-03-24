@@ -201,7 +201,7 @@ $server->register(
 
 $server->register(
     'create_session',
-    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+    array('user_name'=>'xsd:string','password'=>'xsd:string','version'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
@@ -320,31 +320,45 @@ function get_user_columns($user_name, $password)
 }
 
 
-function create_session($user_name, $password)
+function create_session($user_name, $password,$version)
 { 
-  	global $adb,$log;
+	global $adb,$log;
+	include('vtigerversion.php');
+	if($version != $vtiger_current_version)
+	{
+		return "VERSION";
+	}
 	require_once('modules/Users/Users.php');
 	$objuser = new Users();
 	if($password != "" && $user_name != '')
 	{
-		$objuser->column_fields['user_name'] = $user_name;
-		$encrypted_password = $objuser->encrypt_password($password);
-		$query = "select id from vtiger_users where user_name='$user_name' and user_password='$encrypted_password'";
-		$result = $adb->query($query);
-		if($adb->num_rows($result) > 0)
-		{
-			$return_access = "TempSessionID";
-			$log->debug("Logged in sucessfully from wordplugin");
-		}else
-		{
-			$return_access = "false";
-			$log->debug("Logged in failure from wordplugin");
-		}
+			$objuser->column_fields['user_name'] = $user_name;
+			$encrypted_password = $objuser->encrypt_password($password);
+			if($objuser->load_user($password) && $objuser->is_authenticated())
+			{
+				$query = "select id from vtiger_users where user_name='$user_name' and user_password='$encrypted_password'";
+				$result = $adb->query($query);
+				if($adb->num_rows($result) > 0)
+				{
+					$return_access = "TRUE";
+					$log->debug("Logged in sucessfully from wordplugin");
+				}else
+				{
+					$return_access = "FALSE";
+					$log->debug("Logged in failure from wordplugin");
+				}
+			}
+			else
+			{
+				$return_access = "LOGIN";
+				$log->debug("Logged in failure from wordplugin");	
+			}
+
 	}else
 	{
-		$return_access = "false";
+		$return_access = "FALSE";
 		$log->debug("Logged in failure from wordplugin");
-     }
+     	}
    return $return_access;
 		
 }

@@ -27,13 +27,17 @@ require_once('include/database/PearDatabase.php');
 
 $focus = new HelpDesk();
 
-setObjectValuesFromRequest(&$focus);
-
-global $adb;
+setObjectValuesFromRequest($focus);
+global $adb,$mod_strings;
 //Added to update the ticket history
 //Before save we have to construct the update log. 
 $mode = $_REQUEST['mode'];
-$fldvalue = $focus->constructUpdateLog(&$focus, $mode, $_REQUEST['assigned_group_name'], $_REQUEST['assigntype']);
+if($mode == 'edit')
+{
+	$usr_qry = $adb->query("select * from vtiger_crmentity where crmid='".$focus->id."'");
+	$old_user_id = $adb->query_result($usr_qry,0,"smownerid");
+}
+$fldvalue = $focus->constructUpdateLog($focus, $mode, $_REQUEST['assigned_group_name'], $_REQUEST['assigntype']);
 $fldvalue = from_html($adb->formatString('vtiger_troubletickets','update_log',$fldvalue),($mode == 'edit')?true:false);
 
 $focus->save("HelpDesk");
@@ -87,8 +91,8 @@ if($_REQUEST['mode'] == 'edit')
 else
 	$reply = '';
 
-$subject = '[ Ticket ID : '.$focus->id.' ] '.$reply.$_REQUEST['ticket_title'];
-$bodysubject = ' Ticket ID : '.$focus->id.'<br> Subject : '.$_REQUEST['ticket_title'];
+$subject = '[ '.$mod_strings['LBL_TICKET_ID'].' : '.$focus->id.' ] '.$reply.$_REQUEST['ticket_title'];
+$bodysubject = $mod_strings['LBL_TICKET_ID'].' : '.$focus->id.'<br> '.$mod_strings['LBL_SUBJECT'].$_REQUEST['ticket_title'];
 
 $emailoptout = 0;
 
@@ -120,32 +124,21 @@ if($contact_mailid != '')
 }
 if($isactive == 1)
 {
-	$bodydetails = "Dear ".$contactname.",<br><br>";
-	$bodydetails .= 'There is a reply to <b>'.$_REQUEST['ticket_title'].'</b> in the "Customer Portal" at VTiger.';
-	$bodydetails .= "You can use the following link to view the replies made:<br>";
-
-	$bodydetails .= "<a href='".$PORTAL_URL."/general.php?action=UserTickets&ticketid=".$focus->id."&fun=detail'>Ticket Details</a>";
-	$bodydetails .= "<br><br>Thanks,<br><br> Vtiger Support Team ";
-
-	$email_body = $bodysubject.'<br><br>'.$bodydetails;
+	$url = "<a href='".$PORTAL_URL."/index.php?module=Tickets&action=index&ticketid=".$focus->id."&fun=detail'>".$mod_strings['LBL_TICKET_DETAILS']."</a>";
+	$email_body = $bodysubject.'<br><br>'.getPortalInfo_Ticket($focus->id,$_REQUEST['ticket_title'],$contactname,$url,$_REQUEST['mode']);
 }
 else
 {
-	$desc = 'Ticket ID : '.$focus->id.'<br> Ticket Title : '.$reply.$_REQUEST['ticket_title'];
-	$desc .= "<br><br>Dear ".$parentname.",<br><br>The Ticket is replied and the details are : <br>";
-	$desc .= "<br> Status : ".$focus->column_fields['ticketstatus'];
-	$desc .= "<br> Category : ".$focus->column_fields['ticketcategories'];
-	$desc .= "<br> Severity : ".$focus->column_fields['ticketseverities'];
-	$desc .= "<br> Priority : ".$focus->column_fields['ticketpriorities'];
-	$desc .= '<br><br>Description : <br>'.$focus->column_fields['description'];
-	$desc .= '<br><br>Solution : <br>'.$focus->column_fields['solution'];
-	$desc .= getTicketComments($focus->id);
-
-	$desc .= '<br><br><br>';
-	$desc .= '<br><br><br>';
-	$desc .= '<br><br><br>';
-	$desc .= '<br>Regards, HelpDesk Team<br>';
-	$email_body = $desc;
+	$data['sub']=$_REQUEST['ticket_title'];
+	$data['parent_name']=$parentname;
+	$data['status']=$focus->column_fields['ticketstatus'];
+	$data['category']=$focus->column_fields['ticketcategories'];
+	$data['severity'] = $focus->column_fields['ticketseverities'];
+	$data['priority']=$focus->column_fields['ticketpriorities'];
+	$data['description']=$focus->column_fields['description'];
+	$data['solution'] = $focus->column_fields['solution'];
+	$data['mode']= $_REQUEST['mode'];
+	$email_body = getTicketDetails($focus->id,$data);
 }
 $_REQUEST['return_id'] = $return_id;
 
@@ -161,9 +154,22 @@ if($_REQUEST['product_id'] != '' && $focus->id != '' && $_REQUEST['mode'] != 'ed
 //send mail to the assigned to user and the parent to whom this ticket is assigned
 require_once('modules/Emails/mail.php');
 $user_emailid = getUserEmailId('id',$focus->column_fields['assigned_user_id']);
+
 if($user_emailid != '')
 {
-	$mail_status = send_mail('HelpDesk',$user_emailid,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+	if($_REQUEST['mode'] != 'edit')
+	{
+		$mail_status = send_mail('HelpDesk',$user_emailid,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+	}
+	else
+	{
+		if(($focus->column_fields['ticketstatus'] == $mod_strings["Closed"]) || ($focus->column_fields['comments'] != '') || ($_REQUEST['helpdesk_solution'] != $_REQUEST['solution']) || ($focus->column_fields['assigned_user_id'] != $old_user_id))	
+		{
+			$mail_status = send_mail('HelpDesk',$user_emailid,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+		}
+
+	}
+
 	$mail_status_str = $user_emailid."=".$mail_status."&&&";
 }
 else
@@ -179,8 +185,18 @@ if($emailoptout == 0)
                 $parentmodule = $_REQUEST['parent_type'];
                 $parentid = $_REQUEST['parent_id'];
 
-		$parent_email = getParentMailId($parentmodule,$parentid);	
+		$parent_email = getParentMailId($parentmodule,$parentid);
+		if($_REQUEST['mode'] != 'edit')
+        	{	
 		$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+		}
+	        else
+        	{
+			if(( $focus->column_fields['ticketstatus']== $mod_strings["Closed"]) || ($focus->column_fields['comments'] != '' ) || ($_REQUEST['helpdesk_solution'] != $_REQUEST['solution']))
+			{
+				$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+			}
+		}
 		$mail_status_str .= $parent_email."=".$mail_status."&&&";
         }
 }
@@ -195,33 +211,5 @@ $mail_error_status = getMailErrorString($mail_status_str);
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&$mail_error_status&viewname=$return_viewname");
-
-/**	Function to get all the comments for a troubleticket
-  *	@param int $ticketid -- troubleticket id
-  *	return all the comments as a sequencial string which are related to this ticket
-**/
-function getTicketComments($ticketid)
-{
-	global $log;
-	$log->debug("Entering getTicketComments(".$ticketid.") method ...");
-	global $adb;
-
-	$commentlist = '';
-	$sql = "select * from vtiger_ticketcomments where ticketid=".$ticketid;
-	$result = $adb->query($sql);
-	for($i=0;$i<$adb->num_rows($result);$i++)
-	{
-		$comment = $adb->query_result($result,$i,'comments');
-		if($comment != '')
-		{
-			$commentlist .= '<br><br>'.$comment;
-		}
-	}
-	if($commentlist != '')
-		$commentlist = '<br><br> The comments are : '.$commentlist;
-
-	$log->debug("Exiting getTicketComments method ...");
-	return $commentlist;
-}
 
 ?>

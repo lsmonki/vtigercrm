@@ -67,7 +67,6 @@ if($focus->is_authenticated())
 	createUserPrivilegesfile($focus->id);
 	
 	//Security related entries end
-	header("Location: index.php?action=index&module=Home");
 	session_unregister('login_password');
 	session_unregister('login_error');
 	session_unregister('login_user_name');
@@ -126,6 +125,7 @@ if($focus->is_authenticated())
 	{
 		unlink($tmp_file_name);
 	}
+	header("Location: index.php");
 }
 else
 {

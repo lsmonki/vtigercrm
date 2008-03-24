@@ -25,7 +25,7 @@ class HelpDesk extends CRMEntity {
 	var $db;
 
 	var $tab_name = Array('vtiger_crmentity','vtiger_troubletickets','vtiger_ticketcf');
-	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_troubletickets'=>'ticketid','vtiger_seticketsrel'=>'ticketid','vtiger_ticketcf'=>'ticketid','vtiger_ticketcomments'=>'ticketid','vtiger_attachments'=>'attachmentsid');
+	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_troubletickets'=>'ticketid','vtiger_seticketsrel'=>'ticketid','vtiger_ticketcf'=>'ticketid','vtiger_ticketcomments'=>'ticketid');
 	var $column_fields = Array();
 
 	var $sortby_fields = Array('title','status','priority','crmid','firstname','smownerid');
@@ -69,16 +69,18 @@ class HelpDesk extends CRMEntity {
 				);
 	var $search_fields = Array(
 		'Ticket ID' => Array('vtiger_crmentity'=>'crmid'),
-		'Subject' => Array('vtiger_troubletickets'=>'title')
+		'Title' => Array('vtiger_troubletickets'=>'title')
 		);
 	var $search_fields_name = Array(
 		'Ticket ID' => '',
-		'Subject'=>'ticket_title',
+		'Title'=>'ticket_title',
 		);
 
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'crmid';
 	var $default_sort_order = 'DESC';
+
+	var $groupTable = Array('vtiger_ticketgrouprelation','ticketid');
 
 	/**	Constructor which will set the column_fields in this object
 	 */
@@ -218,9 +220,8 @@ class HelpDesk extends CRMEntity {
 		else
 			$returnset = '&return_module=HelpDesk&return_action=CallRelatedList&return_id='.$id;
 
-		$query = "SELECT vtiger_activity.*, vtiger_crmentity.crmid, vtiger_recurringevents.recurringtype, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime, vtiger_users.user_name from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') AND ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Completed' ) and ( vtiger_activity.eventstatus is NULL OR vtiger_activity.eventstatus != 'Held')";
+		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_activity.*, vtiger_cntactivityrel.*, vtiger_contactdetails.lastname, vtiger_crmentity.crmid, vtiger_recurringevents.recurringtype, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid = vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') AND ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Completed' ) and ( vtiger_activity.eventstatus is NULL OR vtiger_activity.eventstatus != 'Held') ";
 		$log->debug("Exiting get_activities method ...");
-		
 		return GetRelatedList('HelpDesk','Calendar',$focus,$query,$button,$returnset);
 	}
 
@@ -440,11 +441,11 @@ class HelpDesk extends CRMEntity {
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 		{
-			$sql1 = "select fieldlabel from vtiger_field where tabid=13 and block <> 30 ";
+			$sql1 = "select fieldlabel from vtiger_field where tabid=13 and block <> 30 and vtiger_field.uitype <> 61";
 		}else
 		{
 			$profileList = getCurrentUserProfileList();
-			$sql1 = "select fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=13 and vtiger_field.block <> 30 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+			$sql1 = "select fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=13 and vtiger_field.block <> 30 and vtiger_field.uitype <> 61 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
 		}
 		$result = $this->db->query($sql1);
 		$numRows = $this->db->num_rows($result);
@@ -473,13 +474,13 @@ class HelpDesk extends CRMEntity {
 		$result = $adb->query($sql);
 		$noofrows = $adb->num_rows($result);
 
-		if($noofrows == 0)
+		//In ajax save we should not add this div
+		if($_REQUEST['action'] != 'HelpDeskAjax')
 		{
-			$log->debug("Exiting getCommentInformation method ...");
-			return '';
+			$list .= '<div id="comments_div" style="overflow: auto;height:200px;width:100%;">';
+			$enddiv = '</div>';
 		}
 
-		$list .= '<div style="overflow: auto;height:200px;width:100%;">';
 		for($i=0;$i<$noofrows;$i++)
 		{
 			if($adb->query_result($result,$i,'comments') != '')
@@ -504,7 +505,8 @@ class HelpDesk extends CRMEntity {
 				$list .= '</font></div>';
 			}
 		}
-		$list .= '</div>';
+		
+		$list .= $enddiv;
 
 		$log->debug("Exiting getCommentInformation method ...");
 		return $list;
@@ -534,16 +536,15 @@ class HelpDesk extends CRMEntity {
 	{
 		global $log;
 		$log->debug("Entering get_history(".$id.") method ...");
-		$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.status, vtiger_activity.eventstatus, vtiger_activity.date_start, vtiger_activity.due_date,
-		vtiger_activity.activitytype, vtiger_troubletickets.ticketid, vtiger_troubletickets.title, vtiger_crmentity.modifiedtime,
-		vtiger_crmentity.createdtime, vtiger_crmentity.description, vtiger_users.user_name
+		$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.status, vtiger_activity.eventstatus, vtiger_activity.date_start, vtiger_activity.due_date,vtiger_activity.time_start,vtiger_activity.time_end,vtiger_activity.activitytype, vtiger_troubletickets.ticketid, vtiger_troubletickets.title, vtiger_crmentity.modifiedtime,vtiger_crmentity.createdtime, vtiger_crmentity.description,
+case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
 				from vtiger_activity
 				inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid= vtiger_activity.activityid
 				inner join vtiger_troubletickets on vtiger_troubletickets.ticketid = vtiger_seactivityrel.crmid
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid
 				left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid
                                 left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname
-				inner join vtiger_users on vtiger_crmentity.smcreatorid= vtiger_users.id
+				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 				where (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task')
 				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred' or (vtiger_activity.eventstatus = 'Held' and vtiger_activity.eventstatus != ''))
 				and vtiger_seactivityrel.crmid=".$id;
@@ -562,7 +563,7 @@ class HelpDesk extends CRMEntity {
 
 		if($mode != 'edit')//this will be updated when we create new ticket
 		{
-			$updatelog = " Ticket created. Assigned to ";
+			$updatelog = "Ticket created. Assigned to ";
 
 			if($assigned_group_name != '' && $assigntype == 'T')
 			{

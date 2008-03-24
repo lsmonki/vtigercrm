@@ -13,7 +13,7 @@
 &#&#&#{$ERROR}&#&#&#
 {/if}
 
-<form name="massdelete" method="POST">
+<form name="massdelete" method="POST" id="massdelete">
      <input name='search_url' id="search_url" type='hidden' value='{$SEARCH_URL}'>
      <input name="idlist" id="idlist" type="hidden">
      <input name="change_owner" type="hidden">
@@ -54,7 +54,8 @@
 					</table>
                 </td>
 				<td width=100% align="right">
-					<!-- Filters -->
+				   <!-- Filters -->
+				   {if $HIDE_CUSTOM_LINKS neq '1'}
 					<table border=0 cellspacing=0 cellpadding=0 class="small">
 					<tr>
 						<td>{$APP.LBL_VIEW}</td>
@@ -71,10 +72,13 @@
 							<span class="small">|</span>
                             <a href="index.php?module={$MODULE}&action=CustomView&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_EDIT}</a>
                             <span class="small">|</span>
-							<a href="index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_DELETE}</a></td>
+							<a href="javascript:confirmdelete('index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}')">{$APP.LNK_CV_DELETE}</a></td>
 						    {/if}
 					</tr>
-					</table>
+					</table> 
+				   <!-- Filters  END-->
+				   {/if}
+
 				</td>	
        		    </tr>
 			</table>
@@ -117,6 +121,8 @@
 					<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">
 					{if $MODULE_CREATE eq 'SalesOrder' || $MODULE_CREATE eq 'PurchaseOrder' || $MODULE_CREATE eq 'Invoice' || $MODULE_CREATE eq 'Quotes'}
 						{$APP.LBL_NO} {$APP.$MODULE_CREATE} {$APP.LBL_FOUND} !
+					{elseif $MODULE eq 'Calendar'}
+						{$APP.LBL_NO} {$APP.ACTIVITIES} {$APP.LBL_FOUND} !
 					{else}
 						{$APP.LBL_NO} {$APP.$MODULE_CREATE}s {$APP.LBL_FOUND} !
 					{/if}

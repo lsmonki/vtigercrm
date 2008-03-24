@@ -47,7 +47,7 @@ DIV.fixedLay {
 			<!-- DISPLAY -->
 			<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 			<tr>
-				<td width="50" rowspan="2" valign="top"><img src="{$IMAGE_PATH}notification.gif" alt="Users" width="48" height="48" border=0 title="Users"></td>
+				<td width="50" rowspan="2" valign="top"><img src="{$IMAGE_PATH}notification.gif" alt="{$MOD.LBL_MODULE_NAME}" width="48" height="48" border=0 title="{$MOD.LBL_MODULE_NAME}"></td>
 				<td colspan="2" class="heading2" valign=bottom align="left"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.NOTIFICATIONSCHEDULERS} </b></td>
 				<td rowspan=2 class="small" align=right>&nbsp;</td>
 			</tr>
@@ -110,10 +110,16 @@ function fetchSaveNotify(id)
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'action=UsersAjax&module=Users&file=SaveNotification&active='+active+'&notifysubject='+subject+'&notifybody='+body+'&record='+id,
+                        postBody: 'action=SettingsAjax&module=Settings&file=SaveNotification&active='+active+'&notifysubject='+subject+'&notifybody='+body+'&record='+id,
                         onComplete: function(response) {
+					if(response.responseText.indexOf(":#:FAILURE") > -1)
+					{
+						alert(alert_arr.VALID_DATA);
+					}else
+					{
+						$("notifycontents").innerHTML=response.responseText;
+					}
                                 $("status").style.display="none";
-				$("notifycontents").innerHTML=response.responseText;
                         }
                 }
         );
@@ -126,7 +132,7 @@ function fetchEditNotify(id)
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody:'action=UsersAjax&module=Users&file=EditNotification&record='+id,
+                        postBody:'action=SettingsAjax&module=Settings&file=EditNotification&record='+id,
                         onComplete: function(response) {
                                 $("status").style.display="none";
                                 $("editdiv").innerHTML=response.responseText;

@@ -62,8 +62,7 @@ function massDelete()
                 else
                 {ldelim}
                          document.massdelete.profile.style.display="none";
-                        alert("Please select at least one entity");
-                        
+                        alert("{$APP.SELECT_ATLEAST_ONE}");
                         return false;
                 {rdelim}
         {rdelim}
@@ -84,13 +83,13 @@ function massDelete()
                 {rdelim}
                else
                 {ldelim}
-                        alert("Please select at least one entity");
+                        alert("{$APP.SELECT_ATLEAST_ONE}");
                         return false;
                 {rdelim}
        {rdelim}
-		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
+		if(confirm("{$APP.DELETE_CONFIRMATION}"+xx+"{$APP.RECORDS}"))
 		{ldelim}
-	        document.massdelete.action="index.php?module=Users&action=deleteemailtemplate&return_module=Users&return_action=listemailtemplates";
+	        document.massdelete.action="index.php?module=Settings&action=deleteemailtemplate&return_module=Settings&return_action=listemailtemplates";
 		{rdelim}
 		else
 		{ldelim}
@@ -113,10 +112,10 @@ function massDelete()
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<form  name="massdelete" method="POST">
 	    			<input name="idlist" type="hidden">
-    				<input name="module" type="hidden" value="Users">
+    				<input name="module" type="hidden" value="Settings">
     				<input name="action" type="hidden" value="deleteemailtemplate">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ViewTemplate.gif" width="45" height="60" border=0></td>
+					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ViewTemplate.gif" border=0></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$UMOD.LBL_EMAIL_TEMPLATES} </b></td>
 				</tr>
 				<tr>
@@ -145,23 +144,23 @@ function massDelete()
 					</table>
 					<table border="0" cellspacing="0" cellpadding="5" width="100%" class="listTable">
 					<tr>
-						<td width="2%" class="colHeader small">#</td>
-						<td width="3%" class="colHeader small">{$UMOD.LBL_LIST_SELECT}</td>
-						<td width="25%" class="colHeader small">{$UMOD.LBL_EMAIL_TEMPLATE}</td>
-						<td width="50%" class="colHeader small">{$UMOD.LBL_DESCRIPTION}</td>
-					        <td width="20%" class="colHeader small">{$UMOD.LBL_TEMPLATE_TOOLS}</td>
+						<td width="5%" class="colHeader small">#</td>
+						<td width="5%" class="colHeader small">{$UMOD.LBL_LIST_SELECT}</td>
+						<td width="30%" class="colHeader small">{$UMOD.LBL_EMAIL_TEMPLATE}</td>
+						<td width="60%" class="colHeader small">{$UMOD.LBL_DESCRIPTION}</td>
+					        <!--<td width="20%" class="colHeader small">{$UMOD.LBL_TEMPLATE_TOOLS}</td>-->
 					</tr>
 					{foreach name=emailtemplate item=template from=$TEMPLATES}
 					<tr>
 						<td class="listTableRow small" valign=top>{$smarty.foreach.emailtemplate.iteration}</td>
 						<td class="listTableRow small" valign=top><input type="checkbox" name="selected_id" value="{$template.templateid}" onClick="ifselected(); " class=small></td>
 						<td class="listTableRow small" valign=top>
-							<a href="index.php?module=Users&action=detailviewemailtemplate&parenttab=Settings&templateid={$template.templateid}" ><b>{$template.templatename}</b></a>
+							<a href="index.php?module=Settings&action=detailviewemailtemplate&parenttab=Settings&templateid={$template.templateid}" ><b>{$template.templatename}</b></a>
 						</td>
 						<td class="listTableRow small" valign=top>{$template.description}&nbsp;</td>
-					        <td class="listTableRow small" valign=top>
-							<a href="index.php?module=Users&action=detailviewemailtemplate&parenttab=Settings&templateid={$template.templateid}">{$UMOD.LNK_SAMPLE_EMAIL}</a>
-						</td>
+					        <!--<td class="listTableRow small" valign=top>
+							<a href="index.php?module=Settings&action=detailviewemailtemplate&parenttab=Settings&templateid={$template.templateid}">{$UMOD.LNK_SAMPLE_EMAIL}</a>
+						</td>-->
 					</tr>
 					{/foreach}	
 					</table>

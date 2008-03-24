@@ -36,7 +36,7 @@ class Activity extends CRMEntity {
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_activity'=>'activityid','vtiger_seactivityrel'=>'activityid','vtiger_cntactivityrel'=>'activityid','vtiger_salesmanactivityrel'=>'activityid','vtiger_activity_reminder'=>'activity_id','vtiger_recurringevents'=>'activityid');
 
 	var $column_fields = Array();
-	var $sortby_fields = Array('subject','due_date','date_start','smownerid','activitytype');	//Sorting is added for due date and start date	
+	var $sortby_fields = Array('subject','due_date','date_start','smownerid','activitytype','lastname');	//Sorting is added for due date and start date	
 
 	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'contactname', 'contact_phone', 'contact_email', 'parent_name');
@@ -48,9 +48,12 @@ class Activity extends CRMEntity {
        'Subject'=>Array('activity'=>'subject'),
        'Related to'=>Array('seactivityrel'=>'activityid'),
        'Start Date'=>Array('activity'=>'date_start'),
+       'Start Time'=>Array('activity','time_start'),
        'End Date'=>Array('activity'=>'due_date'),
+       'End Time'=>Array('activity','time_end'),
        'Recurring Type'=>Array('recurringevents'=>'recurringtype'),
-       'Assigned To'=>Array('crmentity'=>'smownerid')
+       'Assigned To'=>Array('crmentity'=>'smownerid'),
+       'Contact Name'=>Array('contactdetails'=>'lastname')
        );
 
        var $range_fields = Array(
@@ -76,8 +79,8 @@ class Activity extends CRMEntity {
        'Subject'=>'subject',
        'Contact Name'=>'lastname',
        'Related to'=>'activityid',
-       'Start Date'=>'date_start',
-       'End Date'=>'due_date',
+       'Start Date & Time'=>'date_start',
+       'End Date & Time'=>'due_date',
 	'Recurring Type'=>'recurringtype',	
        'Assigned To'=>'assigned_user_id');
 
@@ -86,6 +89,8 @@ class Activity extends CRMEntity {
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'due_date';
 	var $default_sort_order = 'ASC';
+
+	var $groupTable = Array('vtiger_activitygrouprelation','activityid');
 
 	function Activity() {
 		$this->log = LoggerManager::getLogger('Calendar');
@@ -96,61 +101,60 @@ class Activity extends CRMEntity {
 
 	function save_module($module)
 	{
+		global $adb;
 		//Handling module specific save
 		//Insert into seactivity rel			
-				if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
-				{
-					$this->insertIntoEntityTable("vtiger_seactivityrel", $module);
-				}
-				elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
-				{
-					$this->deleteRelation("vtiger_seactivityrel");
-				}
+		if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
+		{
+			$this->insertIntoEntityTable("vtiger_seactivityrel", $module);
+		}
+		elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
+		{
+			$this->deleteRelation("vtiger_seactivityrel");
+		}
 		//Insert into cntactivity rel		
-
-			if(isset($this->column_fields['contact_id']) && $this->column_fields['contact_id'] != '')
-			{
-				$this->insertIntoEntityTable('vtiger_cntactivityrel', $module);
-			}
-			elseif($this->column_fields['contact_id'] =='' && $insertion_mode=="edit")
-			{
-				$this->deleteRelation('vtiger_cntactivityrel');
-			}
-		
+		if(isset($this->column_fields['contact_id']) && $this->column_fields['contact_id'] != '')
+		{
+			$this->insertIntoEntityTable('vtiger_cntactivityrel', $module);
+		}
+		elseif($this->column_fields['contact_id'] =='' && $insertion_mode=="edit")
+		{
+			$this->deleteRelation('vtiger_cntactivityrel');
+		}
+	
+		$recur_type='';	
+		if(($recur_type == "--None--" || $recur_type == '') && $this->mode == "edit")
+		{
+			$sql = 'delete  from vtiger_recurringevents where activityid='.$this->id;
+			$adb->query($sql);		
+		}	
 		//Handling for recurring type
-			//Insert into vtiger_activity_remainder table
-			if(isset($this->column_fields['recurringtype']) && $this->column_fields['recurringtype']!='')
-				$recur_type = trim($this->column_fields['recurringtype']);
-			else
-    				$recur_type='';	
-		
-			if($recur_type == "--None--")
-			{
-				$this->insertIntoReminderTable('vtiger_activity_reminder',$module,"");
-			}
-
-			//Insert into vtiger_recurring event table
+		//Insert into vtiger_recurring event table
+		if(isset($this->column_fields['recurringtype']) && $this->column_fields['recurringtype']!='' && $this->column_fields['recurringtype']!='--None--')
+		{
 			$recur_type = trim($this->column_fields['recurringtype']);
-			if($recur_type != "--None--"  && $recur_type != '')
-		      	{		   
-				$recur_data = getrecurringObjValue();
-				if(is_object($recur_data))
-	      				$this->insertIntoRecurringTable($recur_data);
-			}
+			$recur_data = getrecurringObjValue();
+			if(is_object($recur_data))
+	      			$this->insertIntoRecurringTable($recur_data);
+		}	
+	
+		//Insert into vtiger_activity_remainder table
+		if(($recur_type == "--None--" || $recur_type=='') && $_REQUEST['set_reminder'] == 'Yes')
+		{
+			$this->insertIntoReminderTable('vtiger_activity_reminder',$module,"");
+		}
 
 		//Handling for invitees
 		if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
 		{
 			$selected_users_string =  $_REQUEST['inviteesid'];
 			$invitees_array = explode(';',$selected_users_string);
-			$this->insertIntoInviteeTable('vtiger_invitees',$module,$invitees_array);
+			$this->insertIntoInviteeTable($module,$invitees_array);
 
 		}
 
 		//Inserting into sales man activity rel
 		$this->insertIntoSmActivityRel($module);
-
-
 			
 	}	
 
@@ -311,10 +315,14 @@ function insertIntoRecurringTable(& $recurObj)
   	  * @param $module -- module:: Type varchar
 	  * @param $invitees_array Array
  	 */
-	function insertIntoInviteeTable($table_name,$module,$invitees_array)
+	function insertIntoInviteeTable($module,$invitees_array)
 	{
 		global $log,$adb;
-		$log->debug("Entering insertIntoInviteeTable(".$table_name.",".$module.",".$invitees_array.") method ...");
+		$log->debug("Entering insertIntoInviteeTable(".$module.",".$invitees_array.") method ...");
+		if($this->mode == 'edit'){
+			$sql = "delete from vtiger_invitees where activityid=".$this->id;
+			$adb->query($sql);
+		}	
 		foreach($invitees_array as $inviteeid)
 		{
 			if($inviteeid != '')
@@ -336,16 +344,25 @@ function insertIntoRecurringTable(& $recurObj)
   	{
     		global $adb;
     		global $current_user;
-    		if($this->mode == 'edit')
-    		{
-
-      			$sql = "delete from vtiger_salesmanactivityrel where activityid=".$this->id." and smid = ".$this->column_fields['assigned_user_id']."";
+    		if($this->mode == 'edit'){
+      			$sql = "delete from vtiger_salesmanactivityrel where activityid=".$this->id;
       			$adb->query($sql);
-
     		}
 		$sql_qry = "insert into vtiger_salesmanactivityrel (smid,activityid) values(".$this->column_fields['assigned_user_id'].",".$this->id.")";
     		$adb->query($sql_qry);
-
+		if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
+		{
+			$selected_users_string =  $_REQUEST['inviteesid'];
+			$invitees_array = explode(';',$selected_users_string);
+			foreach($invitees_array as $inviteeid)
+			{
+				if($inviteeid != '')
+				{
+					$query="insert into vtiger_salesmanactivityrel values(".$inviteeid.",".$this->id.")";
+					$adb->query($query);
+				}
+			}
+		}	
   	}
 	
 	
@@ -651,7 +668,7 @@ function get_tasksforol($username)
   }else
   {
     $profileList = getCurrentUserProfileList();
-    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and tablename <> 'vtiger_recurringevents' and tablename <> 'vtiger_activity_reminder' and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and tablename <> 'vtiger_recurringevents' and tablename <> 'vtiger_activity_reminder' and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
   }
   $result1 = $adb->query($sql1);
   for($i=0;$i < $adb->num_rows($result1);$i++)
@@ -703,18 +720,23 @@ function get_calendarsforol($user_name)
   }else
   {
     $profileList = getCurrentUserProfileList();
-    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and tablename <> 'vtiger_recurringevents' and tablename <> 'vtiger_activity_reminder' and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
+    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and tablename <> 'vtiger_recurringevents' and tablename <> 'vtiger_activity_reminder' and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in ".$profileList;
   }
   $result1 = $adb->query($sql1);
   for($i=0;$i < $adb->num_rows($result1);$i++)
   {
       $permitted_lists[] = $adb->query_result($result1,$i,'tablename');
       $permitted_lists[] = $adb->query_result($result1,$i,'columnname');
-      /*if($adb->query_result($result1,$i,'columnname') == "parentid")
+      if($adb->query_result($result1,$i,'columnname') == "date_start")
       {
-        $permitted_lists[] = 'vtiger_account';
-        $permitted_lists[] = 'accountname';
-      }*/
+        $permitted_lists[] = 'vtiger_activity';
+        $permitted_lists[] = 'time_start';
+      }
+      if($adb->query_result($result1,$i,'columnname') == "due_date")
+      {
+	$permitted_lists[] = 'vtiger_activity';
+        $permitted_lists[] = 'time_end';
+      }
   }
 	$permitted_lists = array_chunk($permitted_lists,2);
 	$column_table_lists = array();

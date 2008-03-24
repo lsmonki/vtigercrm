@@ -17,11 +17,12 @@ require_once('modules/Emails/mail.php');
 
 $log = &LoggerManager::getLogger('customerportal');
 
-//$serializer = new XML_Serializer();
-$NAMESPACE = 'http://www.vtigercrm.com/vtigercrm';
+error_reporting(0);
+
+$NAMESPACE = 'http://www.vtiger.com/products/crm';
 $server = new soap_server;
 
-$server->configureWSDL('vtigersoap');
+$server->configureWSDL('customerportal');
 
 
 
@@ -165,6 +166,17 @@ $server->wsdl->addComplexType(
              )
 );
 
+//Added to return the file content
+$server->wsdl->addComplexType(
+        'get_filecontent_array',
+        'complexType',
+        'array',
+        '',
+        array(
+		'fileid'=>'xsd:string','type'=>'tns:xsd:string',
+             )
+);
+
 $server->wsdl->addComplexType(
         'add_ticket_attachment_array',
         'complexType',
@@ -274,6 +286,12 @@ $server->register(
 	'get_ticket_attachments',
 	array('id'=>'xsd:string','ticketid'=>'xsd:string'),
 	array('return'=>'tns:get_ticket_attachments_array'),
+	$NAMESPACE);
+
+$server->register(
+	'get_filecontent',
+	array('id'=>'xsd:string','fileid'=>'xsd:string','filename'=>'xsd:string'),
+	array('return'=>'tns:get_filecontent_array'),
 	$NAMESPACE);
 
 $server->register(
@@ -569,7 +587,32 @@ function update_ticket_comment($ticketid,$ownerid,$comments)
   
  		$updatequery = "update vtiger_crmentity set modifiedtime=".$servercreatedtime." where crmid=".$ticketid;
   		$adb->query($updatequery);
-  	}	
+
+		//To get the username and user email id, user means assigned to user of the ticket
+		$result = $adb->query("select user_name, email1 from vtiger_users inner join vtiger_crmentity on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_crmentity.crmid=$ticketid");
+		$owner = $adb->query_result($result,0,'user_name');
+		$to_email = $adb->query_result($result,0,'email1');
+
+		//To get the contact name
+		$result1 = $adb->query("select lastname, firstname, email from vtiger_contactdetails where contactid=$ownerid");
+		$customername = $adb->query_result($result1,0,'firstname').' '.$adb->query_result($result1,0,'lastname');
+		$from_email = $adb->query_result($result1,0,'email');
+
+		//send mail to the assigned to user when customer add comment
+		$subject = "Respond to Ticket ID ## $ticketid ## in Customer Portal - URGENT";
+		$contents = "Dear $owner,<br><br>
+				Customer has provided the following additional information to your reply:<br><br>
+
+				<b>".nl2br($comments)."</b><br><br>
+
+				Kindly respond to above ticket at the earliest.<br><br>
+
+				Regards,<br>
+				Support Administrator
+			    ";
+
+		$mailstatus = send_mail('HelpDesk',$to_email,$customername,$from_email,$subject,$contents);
+  	}
 }
 
 /**	function used to close the ticket
@@ -781,16 +824,43 @@ function get_ticket_attachments($userid,$ticketid)
 		$filesize = filesize($filepath.$fileid."_".$filename);
 		$filetype = $adb->query_result($res,$i,'type');
 
-		$filecontents = base64_encode(file_get_contents($filepath.$fileid."_".$filename));//fread(fopen($filepath.$filename, "r"), $filesize));
+		//Now we will not pass the file content to CP, when the customer click on the link we will retrieve
+		//$filecontents = base64_encode(file_get_contents($filepath.$fileid."_".$filename));//fread(fopen($filepath.$filename, "r"), $filesize));
 
 		$output[$i]['fileid'] = $fileid;
 		$output[$i]['filename'] = $filename;
 		$output[$i]['filetype'] = $filetype;
 		$output[$i]['filesize'] = $filesize;
-		$output[$i]['filecontents'] = $filecontents;
+		//$output[$i]['filecontents'] = $filecontents;
 	}
 
 	return $output;
+}
+
+/**	function used to get the contents of a file
+ *	@param int $contactid - customer ie., contact id 
+ *	@param int $fileid - id of the file to which we want contents
+ *	@param string $filename - name of the file to which we want contents
+ *	return $filecontents array with single file contents like [fileid] => filecontent
+ */
+function get_filecontent($contactid, $fileid, $filename)
+{
+	global $adb;
+	$query = "select vtiger_attachments.path from vtiger_troubletickets 
+		inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid = vtiger_troubletickets.ticketid 
+		inner join vtiger_attachments on vtiger_attachments.attachmentsid = vtiger_seattachmentsrel.attachmentsid 
+		where 	vtiger_troubletickets.parent_id= $contactid and 
+			vtiger_attachments.attachmentsid= $fileid and 
+			vtiger_attachments.name='$filename'";
+	$res = $adb->query($query);
+
+	if($adb->num_rows($res)>0)
+	{
+		$filenamewithpath = $adb->query_result($res,0,'path').$fileid."_".$filename;
+		$filecontents[$fileid] = base64_encode(file_get_contents($filenamewithpath));
+		$adb->println("Going to return the content of the file ==> $filenamewithpath");
+	}
+	return $filecontents;
 }
 
 /**	function to add attachment for a ticket ie., the passed contents will be write in a file and the details will be stored in database
@@ -811,6 +881,8 @@ function add_ticket_attachment($ticketid, $filename, $filetype, $filesize, $file
 
 	$attachmentid = $adb->getUniqueID("vtiger_crmentity");
 
+	//fix for space in file name
+	$filename = preg_replace('/\s+/', '_', $filename);
 	$new_filename = $attachmentid.'_'.$filename;
 
 	$data = base64_decode($filecontents);

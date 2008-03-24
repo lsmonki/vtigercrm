@@ -56,12 +56,12 @@ class MailBox {
 		$this->mail_protocol=$this->boxinfo["mail_protocol"]; 
 		$this->ssltype=$this->boxinfo["ssltype"]; 
 		$this->sslmeth=$this->boxinfo["sslmeth"]; 
+
 		$this->box_refresh=trim($this->boxinfo["box_refresh"]);
-		$this->mails_per_page=trim($this->boxinf["mails_per_page"]);
+		$this->mails_per_page=trim($this->boxinfo["mails_per_page"]);
 		if($this->mails_per_page < 1)
         		$this->mails_per_page=20;
 
-		$this->mail_protocol=$this->boxinfo["mail_protocol"];
 		$this->account_name=$this->boxinfo["account_name"];
 		$this->display_name=$this->boxinfo["display_name"];
 		//$this->imapServerAddress=$this->boxinfo["mail_servername"];
@@ -105,46 +105,79 @@ class MailBox {
 
 		if($this->mail_protocol == "pop3")
 			$port = "110";
-		else {
-	    		if($mods["imap"]["SSL Support"] == "enabled" && $this->ssltype == "ssl")
+		else
+		{
+	    		if($mods["imap"]["SSL Support"] == "enabled" && $this->ssltype == "tls")
 				$port = "993";
 			else
 				$port = "143";
 		}
 
 		$this->db->println("Building connection string");
-                if(preg_match("/@/",$this->login_username)) {
+                if(preg_match("/@/",$this->login_username)) 
+		{
                         $mailparts = split("@",$this->login_username);
                         $user="".trim($mailparts[0])."";
                         $domain="".trim($mailparts[1])."";
 
 			// This section added to fix a bug when connecting as user@domain.com
-			if($this->readonly == "true") {
+			if($this->readonly == "true") 
+			{
 	    			if($mods["imap"]["SSL Support"] == "enabled")
-                                	$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/".$this->ssltype."/".$this->sslmeth."/user={$user}@{$domain}/readonly}".$this->mailbox;
+                                	$connectString = "/".$this->ssltype."/".$this->sslmeth."/user={$user}@{$domain}/readonly";
 				else
-                                	$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/notls/novalidate-cert/user={$user}@{$domain}/readonly}".$this->mailbox;
-			} else {
-	    			if($mods["imap"]["SSL Support"] == "enabled")
-                                	$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/".$this->ssltype."/".$this->sslmeth."/user={$user}@{$domain}}".$this->mailbox;
-				else
-                                	$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/notls/novalidate-cert/user={$user}@{$domain}}".$this->mailbox;
+                                	$connectString = "/notls/novalidate-cert/user={$user}@{$domain}/readonly";
 			}
-                } else {
-			if($this->readonly == "true") {
+			else
+			{
 	    			if($mods["imap"]["SSL Support"] == "enabled")
-					$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/".$this->ssltype."/".$this->sslmeth."/readonly}".$this->mailbox;
-	    			else
-					$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/notls/novalidate-cert/readonly}".$this->mailbox;
-			} else {
-	    			if($mods["imap"]["SSL Support"] == "enabled")
-					$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/".$this->ssltype."/".$this->sslmeth."}".$this->mailbox;
-	    			else
-					$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."/notls/novalidate-cert}".$this->mailbox;
+                                	$connectString = "/".$this->ssltype."/".$this->sslmeth."/user={$user}@{$domain}";
+				else
+                                	$connectString = "/notls/novalidate-cert/user={$user}@{$domain}";
 			}
 		}
+		else
+		{
+			if($this->readonly == "true")
+			{
+	    			if($mods["imap"]["SSL Support"] == "enabled")
+					$connectString = "/".$this->ssltype."/".$this->sslmeth."/readonly";
+	    			else
+					$connectString = "/notls/novalidate-cert/readonly";
+			}
+			else
+			{
+	    			if($mods["imap"]["SSL Support"] == "enabled")
+					$connectString = "/".$this->ssltype."/".$this->sslmeth;
+	    			else
+					$connectString = "/notls/novalidate-cert";
+			}
+		}
+
+		$connectString = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port.$connectString."}".$this->mailbox;
+		//Reference - http://forums.vtiger.com/viewtopic.php?p=33478#33478 - which has no tls or validate-cert
+		$connectString1 = "{".$this->imapServerAddress."/".$this->mail_protocol.":".$port."}".$this->mailbox; 
+
 		$this->db->println("Done Building Connection String.. Connecting to box");
-		$this->mbox = imap_open($connectString, $this->login_username, $this->secretkey); 
+		//checking the imap support in php
+		if(!function_exists('imap_open'))
+		{
+			echo "<strong>".$mod_strings['LBL_ENABLE_IMAP_SUPPORT']."</strong>";
+			exit();
+		}
+			
+		if(!$this->mbox = @imap_open($connectString, $this->login_username, $this->secretkey))
+		{
+			//try second string which has no tls or validate-cert
+			if(!$this->mbox = @imap_open($connectString1, $this->login_username, $this->secretkey))
+			{
+				global $current_user,$mod_strings;
+				$this->db->println("CONNECTION ERROR - Could not be connected to the server using imap_open function through the connection strings $connectString and $connectString1");
+				echo "<br>&nbsp;<b>".$mod_strings['LBL_MAIL_CONNECT_ERROR']."<a href='index.php?module=Users&action=AddMailAccount&return_module=Webmails&return_action=index&record=".$current_user->id."'> Here </a>. Please <a href='index.php?module=Emails&action=index&parenttab=My Home Page'>".$mod_strings['LBL_CLICK_HERE']."</a>".$mod_strings['LBL_GOTO_EMAILS_MODULE']." </b>";
+				exit;
+			}
+		}
+
 		$this->db->println("Done connecting to box");
 	}
 } // END CLASS

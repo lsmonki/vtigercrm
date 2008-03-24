@@ -12,7 +12,7 @@
 
 -->*}
 <br>
-<script language="JavaScript" type="text/javascript" src="modules/Reports/Report.js"></script>
+<script language="JavaScript" type="text/javascript" src="modules/Reports/Reports.js"></script>
 <link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
 <script type="text/javascript" src="jscalendar/calendar.js"></script>
 <script type="text/javascript" src="jscalendar/lang/calendar-en.js"></script>
@@ -64,13 +64,13 @@
 			{if $report_in_fld_id neq $REPORTID}
 				<option value={$report_in_fld_id}>{$MOD.$report_in_fld_name}</option>
 			{else}	
-				<option value={$report_in_fld_id} "selected">{$MOD.$report_in_fld_name}</option>
+				<option value={$report_in_fld_id} selected>{$MOD.$report_in_fld_name}</option>
 			{/if}
 		{else}
 			{if $report_in_fld_id neq $REPORTID}
 				<option value={$report_in_fld_id}>{$report_in_fld_name}</option>
 			{else}	
-				<option value={$report_in_fld_id} "selected">{$report_in_fld_name}</option>
+				<option value={$report_in_fld_id} selected>{$report_in_fld_name}</option>
 			{/if}
 		{/if}
 		{/foreach}
@@ -109,7 +109,14 @@
 				<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
 					<td align=left><input name="startdate" id="jscal_field_date_start" type="text" size="10" class="importBox" style="width:70px;" value="{$STARTDATE}"></td>
-					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start"></td>
+					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start"><font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
+						<script type="text/javascript">
+							Calendar.setup ({ldelim}
+							inputField : "jscal_field_date_start", ifFormat : "{$JS_DATEFORMAT}", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
+							{rdelim});
+						</script>
+
+					</td>
 				</tr>
 				</table>
 			</td>
@@ -118,7 +125,13 @@
 				<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
 					<td align=left><input name="enddate" id="jscal_field_date_end" type="text" size="10" class="importBox" style="width:70px;" value="{$ENDDATE}"></td>
-					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end"></td>
+					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end"><font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
+						<script type="text/javascript">
+							Calendar.setup ({ldelim}
+							inputField : "jscal_field_date_end", ifFormat : "{$JS_DATEFORMAT}", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1
+							{rdelim});
+						</script>
+					</td>
 				</tr>
 				</table>
 			</td>
@@ -163,14 +176,30 @@ var filter = getObj('stdDateFilter').options[document.NewReport.stdDateFilter.se
         showDateRange( filter );
     }
 
-Calendar.setup ({inputField : "jscal_field_date_start", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1});
-    Calendar.setup ({inputField : "jscal_field_date_end", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1});
 function generateReport(id)
 {
 	var stdDateFilterFieldvalue = document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value;
 	var stdDateFiltervalue = document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value;
 	var startdatevalue = document.NewReport.startdate.value;
 	var enddatevalue = document.NewReport.enddate.value;
+
+	var date1=getObj("startdate")
+        var date2=getObj("enddate")
+	
+if ((date1.value != '') || (date2.value != ''))
+{
+
+        if(!dateValidate("startdate","Start Date","D"))
+                return false
+
+        if(!dateValidate("enddate","End Date","D"))
+                return false
+
+        if(! compareDates(date1.value,'Start Date',date2.value,'End Date','LE'))
+                return false;
+}
+
+
 	new Ajax.Request(
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
@@ -187,7 +216,7 @@ function selectReport()
 {
 	var id = document.NewReport.another_report.options  [document.NewReport.another_report.selectedIndex].value;
 	var folderid = getObj('folderid').value;
-	url ='index.php?action=ReportsAjax&file=SaveAndRun&module=Reports&record='+id+'&folderid='+folderid;
+	url ='index.php?action=SaveAndRun&module=Reports&record='+id+'&folderid='+folderid;
 	goToURL(url);
 }
 function ReportInfor()
@@ -205,7 +234,9 @@ function ReportInfor()
 		var reportinfr = 'Reporting  "'+stdDateFilterFieldvalue+'"   (  till  '+enddatevalue+')';
 	}else if(startdatevalue == '' && enddatevalue =='')
 	{
-		var reportinfr = 'No filter Selected';
+		{/literal}
+                var reportinfr = "{$MOD.NO_FILTER_SELECTED}";
+                {literal}
 	}else if(startdatevalue != '' && enddatevalue !='')
 	{
 	var reportinfr = 'Reporting  "'+stdDateFilterFieldvalue+'"  of  "'+stdDateFiltervalue+'"  ( '+startdatevalue+'  to  '+enddatevalue+' )';

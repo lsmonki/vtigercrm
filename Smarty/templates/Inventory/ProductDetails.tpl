@@ -28,7 +28,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		var curr_productid = document.getElementById("hdnProductId"+curr_row).value;
 		if(curr_productid == '')
 		{ldelim}
-			alert("Please select a Product");
+			alert("{$APP.PLEASE_SELECT_PRODUCT}");
 			return false;
 		{rdelim}
 	{rdelim}
@@ -36,24 +36,24 @@ function displayCoords(currObj,obj,mode,curr_row)
 	//Set the Header value for Discount
 	if(mode == 'discount')
 	{ldelim}
-		document.getElementById("discount_div_title"+curr_row).innerHTML = '<b>Set Discount for : '+document.getElementById("productTotal"+curr_row).innerHTML+'</b>';
+		document.getElementById("discount_div_title"+curr_row).innerHTML = '<b>{$APP.LABEL_SET_DISCOUNT_FOR_COLON} '+document.getElementById("productTotal"+curr_row).innerHTML+'</b>';
 	{rdelim}
 	else if(mode == 'tax')
 	{ldelim}
-		document.getElementById("tax_div_title"+curr_row).innerHTML = "<b>Set Tax for "+document.getElementById("totalAfterDiscount"+curr_row).innerHTML+'</b>';
+		document.getElementById("tax_div_title"+curr_row).innerHTML = "<b>{$APP.LABEL_SET_TAX_FOR} "+document.getElementById("totalAfterDiscount"+curr_row).innerHTML+'</b>';
 	{rdelim}
 	else if(mode == 'discount_final')
 	{ldelim}
-		document.getElementById("discount_div_title_final").innerHTML = '<b>Set Discount for : '+document.getElementById("netTotal").innerHTML+'</b>';
+		document.getElementById("discount_div_title_final").innerHTML = '<b>{$APP.LABEL_SET_DISCOUNT_FOR} '+document.getElementById("netTotal").innerHTML+'</b>';
 	{rdelim}
 	else if(mode == 'sh_tax_div_title')
 	{ldelim}
-		document.getElementById("sh_tax_div_title").innerHTML = '<b>Set S&H Tax for : '+document.getElementById("shipping_handling_charge").value+'</b>';
+		document.getElementById("sh_tax_div_title").innerHTML = '<b>{$APP.LABEL_SET_SH_TAX_FOR_COLON} '+document.getElementById("shipping_handling_charge").value+'</b>';
 	{rdelim}
 	else if(mode == 'group_tax_div_title')
 	{ldelim}
 		var net_total_after_discount = eval(document.getElementById("netTotal").innerHTML)-eval(document.getElementById("discountTotal_final").innerHTML);
-		document.getElementById("group_tax_div_title").innerHTML = '<b>Set Group Tax for : '+net_total_after_discount+'</b>';
+		document.getElementById("group_tax_div_title").innerHTML = '<b>{$APP.LABEL_SET_GROUP_TAX_FOR_COLON} '+net_total_after_discount+'</b>';
 	{rdelim}
 
 	fnvshobj(currObj,'tax_container');
@@ -103,7 +103,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		<b>{$APP.LBL_TAX_MODE}</b>
 	</td>
 	<td class="dvInnerHeader">
-		<select id="taxtype" name="taxtype" onchange="decideTaxDiv();">
+		<select id="taxtype" name="taxtype" onchange="decideTaxDiv(); calcTotal();">
 			<OPTION value="individual" selected>{$APP.LBL_INDIVIDUAL}</OPTION>
 			<OPTION value="group">{$APP.LBL_GROUP}</OPTION>
 		</select>
@@ -170,7 +170,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 
 	<!-- column 4 - Quantity - starts -->
 	<td class="crmTableRow small lineOnTop">
-		<input id="qty1" name="qty1" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="FindDuplicate(); settotalnoofrows(); calcTotal(); loadTaxes_Ajax(1);" value=""/>
+		<input id="qty1" name="qty1" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="settotalnoofrows();calcTotal(); loadTaxes_Ajax(1); setDiscount(this,'1'); calcTotal();" value=""/>
 	</td>
 	<!-- column 4 - Quantity - ends -->
 
@@ -180,7 +180,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		<table width="100%" cellpadding="0" cellspacing="0">
 		   <tr>
 			<td align="right">
-				<input id="listPrice1" name="listPrice1" value="{$UNIT_PRICE}" type="text" class="small " style="width:70px" onBlur="calcTotal(); callTaxCalc(1);"/>&nbsp;<img src="{$IMAGE_PATH}pricebook.gif" onclick="priceBookPickList(this,1)">
+				<input id="listPrice1" name="listPrice1" value="{$UNIT_PRICE}" type="text" class="small " style="width:70px" onBlur="calcTotal();setDiscount(this,'1'); callTaxCalc(1);calcTotal();"/>&nbsp;<img src="{$IMAGE_PATH}pricebook.gif" onclick="priceBookPickList(this,1)">
 			</td>
 		   </tr>
 		   <tr>
@@ -194,16 +194,16 @@ function displayCoords(currObj,obj,mode,curr_row)
 						<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('discount_div1')" style="cursor:pointer;"></td>
 					   </tr>
 					   <tr>
-						<td align="left" class="lineOnTop"><input type="radio" name="discount1" checked onclick="setDiscount(this,1); callTaxCalc(1);">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
+						<td align="left" class="lineOnTop"><input type="radio" name="discount1" checked onclick="setDiscount(this,1); callTaxCalc(1);calcTotal();">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
 						<td class="lineOnTop">&nbsp;</td>
 					   </tr>
 					   <tr>
-						<td align="left"><input type="radio" name="discount1" onclick="setDiscount(this,1); callTaxCalc(1);">&nbsp; % {$APP.LBL_OF_PRICE}</td>
-						<td align="right"><input type="text" class="small" size="2" id="discount_percentage1" name="discount_percentage1" value="0" style="visibility:hidden" onBlur="setDiscount(this,1); callTaxCalc(1);">&nbsp;%</td>
+						<td align="left"><input type="radio" name="discount1" onclick="setDiscount(this,1); callTaxCalc(1);calcTotal();">&nbsp; % {$APP.LBL_OF_PRICE}</td>
+						<td align="right"><input type="text" class="small" size="5" id="discount_percentage1" name="discount_percentage1" value="0" style="visibility:hidden" onBlur="setDiscount(this,1); callTaxCalc(1);calcTotal();">&nbsp;%</td>
 					   </tr>
 					   <tr>
-						<td align="left" nowrap><input type="radio" name="discount1" onclick="setDiscount(this,1); callTaxCalc(1);">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
-						<td align="right"><input type="text" id="discount_amount1" name="discount_amount1" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,1); callTaxCalc(1);"></td>
+						<td align="left" nowrap><input type="radio" name="discount1" onclick="setDiscount(this,1); callTaxCalc(1);calcTotal();">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
+						<td align="right"><input type="text" id="discount_amount1" name="discount_amount1" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,1); callTaxCalc(1);calcTotal();"></td>
 					   </tr>
 					</table>
 				</div>
@@ -294,16 +294,16 @@ function displayCoords(currObj,obj,mode,curr_row)
 				<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('discount_div_final')" style="cursor:pointer;"></td>
 			   </tr>
 			   <tr>
-				<td align="left" class="lineOnTop"><input type="radio" name="discount_final" checked onclick="setDiscount(this,'_final'); calcGroupTax();">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
+				<td align="left" class="lineOnTop"><input type="radio" name="discount_final" checked onclick="setDiscount(this,'_final'); calcGroupTax();calcTotal();">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
 				<td class="lineOnTop">&nbsp;</td>
 			   </tr>
 			   <tr>
-				<td align="left"><input type="radio" name="discount_final" onclick="setDiscount(this,'_final'); calcGroupTax();">&nbsp; % {$APP.LBL_OF_PRICE}</td>
-				<td align="right"><input type="text" class="small" size="2" id="discount_percentage_final" name="discount_percentage_final" value="0" style="visibility:hidden" onBlur="setDiscount(this,'_final'); calcGroupTax();">&nbsp;%</td>
+				<td align="left"><input type="radio" name="discount_final" onclick="setDiscount(this,'_final'); calcGroupTax();calcTotal();">&nbsp; % {$APP.LBL_OF_PRICE}</td>
+				<td align="right"><input type="text" class="small" size="5" id="discount_percentage_final" name="discount_percentage_final" value="0" style="visibility:hidden" onBlur="setDiscount(this,'_final'); calcGroupTax();calcTotal();">&nbsp;%</td>
 			   </tr>
 			   <tr>
-				<td align="left" nowrap><input type="radio" name="discount_final" onclick="setDiscount(this,'_final'); calcGroupTax();">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
-				<td align="right"><input type="text" id="discount_amount_final" name="discount_amount_final" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,'_final'); calcGroupTax();"></td>
+				<td align="left" nowrap><input type="radio" name="discount_final" onclick="setDiscount(this,'_final'); calcGroupTax();calcTotal();">&nbsp;{$APP.LBL_DIRECT_PRICE_REDUCTION}</td>
+				<td align="right"><input type="text" id="discount_amount_final" name="discount_amount_final" size="5" value="0" style="visibility:hidden" onBlur="setDiscount(this,'_final'); calcGroupTax();calcTotal();"></td>
 			   </tr>
 			</table>
 		</div>
@@ -330,7 +330,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 
 					   <tr>
 						<td align="left" class="lineOnTop">
-							<input type="text" class="small" size="5" name="{$tax_detail.taxname}_group_percentage" id="group_tax_percentage{$smarty.foreach.group_tax_loop.iteration}" value="{$tax_detail.percentage}" onBlur="calcGroupTax()">&nbsp;%
+							<input type="text" class="small" size="5" name="{$tax_detail.taxname}_group_percentage" id="group_tax_percentage{$smarty.foreach.group_tax_loop.iteration}" value="{$tax_detail.percentage}" onBlur="calcTotal()">&nbsp;%
 						</td>
 						<td align="center" class="lineOnTop">{$tax_detail.taxlabel}</td>
 						<td align="right" class="lineOnTop">

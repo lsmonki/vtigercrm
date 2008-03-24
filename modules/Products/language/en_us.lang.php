@@ -63,7 +63,6 @@ $mod_strings = Array(
 'LBL_COLON'=>':',
 
 'LBL_ATTACHMENTS'=>'Attachments',
-'LBL_NEW_ATTACHMENT'=>'New Attachment',
 'LBL_ATTACH_FILE'=>'File Attachment',
 'LBL_DESCRIPTION'=>'Description',
 'LBL_FILE'=>'File Name',
@@ -94,7 +93,8 @@ $mod_strings = Array(
 
 //Added for 4GA
 'Product Name'=>'Product Name',
-'Product Code'=>'Part Number',
+//'Product Code'=>'Part Number',
+'Part Number'=>'Part Number',
 'Product Active'=>'Product Active',
 'Commission Rate'=>'Commission Rate (%)',
 'Qty/Unit'=>'Qty/Unit',
@@ -108,14 +108,12 @@ $mod_strings = Array(
 'Sales End Date'=>'Sales End Date',
 'Created Time'=>'Created Time',
 'Modified Time'=>'Modified Time',
-'Description'=>'Description',
 'Related To'=>'Related To',
 'Usage Unit'=>'Usage Unit',
 'Handler'=>'Handler',
 'Contact Name'=>'Contact Name',
 'Currency'=>'Currency',
 'Reorder Level'=>'Reorder Level',
-'Website'=>'Website',
 'Tax Class'=>'Tax Class',
 'Mfr PartNo'=>'Mfr Part No',
 'Vendor PartNo'=>'Vendor Part No',
@@ -210,6 +208,15 @@ $mod_strings = Array(
 'Sheet'=>'Sheet',
 'Spiral Binder'=>'Spiral Binder',
 'Sq Ft'=>'Sq Ft',
+
+//Added for 5.0.3
+'MSG_STOCK_LEVEL'=>'Stock Level is Low',
+'MSG_DEAR'=>'Dear',
+'MSG_CURRENT_STOCK'=>'The current stock of',
+'MSG_IN_OUR_WAREHOUSE'=>'in our warehouse is',
+'MSG_PROCURE_REQUIRED_NUMBER'=>'Kindly procure required number of units as the stock level is below reorder level',
+'MSG_SEVERITY'=>'Severity: Major',
+'MSG_THANKS'=>'Thanks,',
 
 );
 

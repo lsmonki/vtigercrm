@@ -48,5 +48,11 @@ if(isset($_REQUEST["record"]))
         $BLOCK1 = $oReport->sgetColumntoTotal($primarymodule,$secondarymodule);
 		$report_column_tot->assign("BLOCK1",$BLOCK1);
 }
+//added to avoid displaying "No data avaiable to total" when using related modules in report.
+if(count($BLOCK1[0]) == 0 &&  count($BLOCK1[1])==0)
+	$report_column_tot->assign("ROWS_COUNT",0);
+else
+	$report_column_tot->assign("ROWS_COUNT","-1");
+
 $report_column_tot->display('ReportColumnsTotal.tpl');
 ?>

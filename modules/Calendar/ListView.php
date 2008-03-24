@@ -28,6 +28,7 @@ require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
+require_once('modules/Calendar/CalendarCommon.php');
 require_once('include/database/PearDatabase.php');
 
 global $app_strings;
@@ -55,7 +56,7 @@ if(!$_SESSION['lvs'][$currentModule])
 if($_REQUEST['errormsg'] != '')
 {
         $errormsg = $_REQUEST['errormsg'];
-        $smarty->assign("ERROR","The User does not have permission to Change/Delete ".$errormsg." ".$currentModule);
+        $smarty->assign("ERROR",$mod_strings["SHARED_EVENT_DEL_MSG"]);
 }else
 {
         $smarty->assign("ERROR","");
@@ -75,6 +76,13 @@ $viewid = $oCustomView->getViewId($currentModule);
 $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
+$changeOwner = getAssignedTo(16);
+$userList = $changeOwner[0];
+$groupList = $changeOwner[1];
+//echo '<pre>';print_r($changeOwner); echo '</pre>';
+
+$smarty->assign("CHANGE_USER",$userList);
+$smarty->assign("CHANGE_GROUP",$groupList);
 $smarty->assign("CHANGE_OWNER",getUserslist());
 $smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
 $where = "";
@@ -141,8 +149,10 @@ if(isset($order_by) && $order_by != '')
         {
 		$tablename = getTableNameForField('Calendar',$order_by);
 		$tablename = (($tablename != '')?($tablename."."):'');
-
-        	$list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
+		if($order_by == 'lastname')
+         		$list_query .= ' ORDER BY vtiger_contactdetails.lastname '.$sorder;
+	        else
+			$list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder; 
 	}
 }
 //Constructing the list view
@@ -195,13 +205,14 @@ $url_string .="&viewname=".$viewid;
 
 //Cambiado code to add close button in custom vtiger_field
 if (($viewid!=0)&&($viewid!="")){
-  if (!isset($oCustomView->list_fields['Close'])) $oCustomView->list_fields['Close']=array ( 'activity' => 'status' );
-  if (!isset($oCustomView->list_fields_name['Close'])) $oCustomView->list_fields_name['Close']='status';
+  if (!isset($oCustomView->list_fields['Close'])) $oCustomView->list_fields['Close']=array ( 'vtiger_activity' => 'eventstatus' );
+  if (!isset($oCustomView->list_fields_name['Close'])) $oCustomView->list_fields_name['Close']='eventstatus';
 }
 $listview_header = getListViewHeader($focus,"Calendar",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_header_search=getSearchListHeaderValues($focus,"Calendar",$url_string,$sorder,$order_by,"",$oCustomView);
+unset($listview_header_search["eventstatus"]);
 $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"Calendar",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);

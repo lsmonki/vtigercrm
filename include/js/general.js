@@ -10,6 +10,8 @@
 
 //Utility Functions
 
+var gValidationCall='';
+
 if (document.all)
 
 	var browser_ie=true
@@ -22,8 +24,25 @@ else if (document.layers || (!document.all && document.getElementById))
 
 	var browser_nn6=true
 
+var gBrowserAgent = navigator.userAgent.toLowerCase();
 
+function hideSelect()
+{
+        var oselect_array = document.getElementsByTagName('SELECT');
+        for(var i=0;i<oselect_array.length;i++)
+        {
+                oselect_array[i].style.display = 'none';
+        }
+}
 
+function showSelect()
+{
+        var oselect_array = document.getElementsByTagName('SELECT');
+        for(var i=0;i<oselect_array.length;i++)
+        {
+                oselect_array[i].style.display = 'block';
+        }
+}
 function getObj(n,d) {
 
   var p,i,x; 
@@ -192,7 +211,7 @@ function emptyCheck(fldName,fldLabel, fldType) {
 	if (fldType=="text") {
 		if (currObj.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) {
 
-       			alert(fldLabel+" cannot be empty")
+       			alert(fldLabel+alert_arr.CANNOT_BE_EMPTY)
 
 			currObj.focus()
 
@@ -204,9 +223,9 @@ function emptyCheck(fldName,fldLabel, fldType) {
             	
 		return true
 	} else {
-		if (currObj.value == "" ) {
+		if (trim(currObj.value) == '') {
 
-	                alert(fldLabel+" cannot be none")
+	                alert(fldLabel+alert_arr.CANNOT_BE_NONE)
 
         	        return false
 
@@ -220,9 +239,18 @@ function emptyCheck(fldName,fldLabel, fldType) {
 
 function patternValidate(fldName,fldLabel,type) {
 	var currObj=getObj(fldName)
+	if (type.toUpperCase()=="YAHOO") //Email ID validation
+	{
+		//yahoo Id validation
+		var re=new RegExp(/^[a-z0-9]([a-z0-9_\-\.]*)@([y][a][h][o][o])(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/)
+	}
 	if (type.toUpperCase()=="EMAIL") //Email ID validation
-		var re=new RegExp(/^.+@.+\..+$/)
-	
+	{
+		/*changes made to fix -- ticket#3278 & ticket#3461
+		  var re=new RegExp(/^.+@.+\..+$/)*/
+		var re=new RegExp(/^[a-z0-9]([a-z0-9_\-\.]*)@([a-z0-9_\-\.]*)(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/)
+	}
+
 	if (type.toUpperCase()=="DATE") {//DATE validation 
 		//YMD
 		//var reg1 = /^\d{2}(\-|\/|\.)\d{1,2}\1\d{1,2}$/ //2 digit year
@@ -251,7 +279,7 @@ function patternValidate(fldName,fldLabel,type) {
 	}
 	
 	if (!re.test(currObj.value)) {
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID + fldLabel)
 		currObj.focus()
 		return false
 	}
@@ -290,27 +318,27 @@ function compareDates(date1,fldLabel1,date2,fldLabel2,type) {
 	var ret=true
 	switch (type) {
 		case 'L'	:	if (date1>=date2) {//DATE1 VALUE LESS THAN DATE2
-							alert(fldLabel1+" should be less than "+fldLabel2)
+							alert(fldLabel1+ alert_arr.SHOULDBE_LESS +fldLabel2)
 							ret=false
 						}
 						break;
 		case 'LE'	:	if (date1>date2) {//DATE1 VALUE LESS THAN OR EQUAL TO DATE2
-							alert(fldLabel1+" should be less than or equal to "+fldLabel2)
+							alert(fldLabel1+alert_arr.SHOULDBE_LESS_EQUAL+fldLabel2)
 							ret=false
 						}
 						break;
 		case 'E'	:	if (date1!=date2) {//DATE1 VALUE EQUAL TO DATE
-							alert(fldLabel1+" should be equal to "+fldLabel2)
+							alert(fldLabel1+alert_arr.SHOULDBE_EQUAL+fldLabel2)
 							ret=false
 						}
 						break;
 		case 'G'	:	if (date1<=date2) {//DATE1 VALUE GREATER THAN DATE2
-							alert(fldLabel1+" should be greater than "+fldLabel2)
+							alert(fldLabel1+alert_arr.SHOULDBE_GREATER+fldLabel2)
 							ret=false
 						}
 						break;	
 		case 'GE'	:	if (date1<date2) {//DATE1 VALUE GREATER THAN OR EQUAL TO DATE2
-							alert(fldLabel1+" should be greater than or equal to "+fldLabel2)
+							alert(fldLabel1+alert_arr.SHOULDBE_GREATER_EQUAL+fldLabel2)
 							ret=false
 						}
 						break;
@@ -332,19 +360,19 @@ function dateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 	yyyy=dateelements[2]
 	
 	if (dd<1 || dd>31 || mm<1 || mm>12 || yyyy<1 || yyyy<1000) {
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		getObj(dateFldName).focus()
 		return false
 	}
 	
 	if ((mm==2) && (dd>29)) {//checking of no. of days in february month
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		getObj(dateFldName).focus()
 		return false
 	}
 	
 	if ((mm==2) && (dd>28) && ((yyyy%4)!=0)) {//leap year checking
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		getObj(dateFldName).focus()
 		return false
 	}
@@ -355,7 +383,7 @@ function dateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 		case 6 : 
 		case 9 : 
 		case 11 :	if (dd>30) {
-						alert("Please enter a valid "+fldLabel)
+						alert(alert_arr.ENTER_VALID+fldLabel)
 						getObj(dateFldName).focus()
 						return false
 					}	
@@ -370,7 +398,7 @@ function dateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 	var currObj=getObj(timeFldName)
 	
 	if (hourval>23 || minval>59) {
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		currObj.focus()
 		return false
 	}
@@ -451,19 +479,19 @@ function dateValidate(fldName,fldLabel,type) {
 	yyyy=dateelements[2]
 	
 	if (dd<1 || dd>31 || mm<1 || mm>12 || yyyy<1 || yyyy<1000) {
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		getObj(fldName).focus()
 		return false
 	}
 	
 	if ((mm==2) && (dd>29)) {//checking of no. of days in february month
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		getObj(fldName).focus()
 		return false
 	}
 	
 	if ((mm==2) && (dd>28) && ((yyyy%4)!=0)) {//leap year checking
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		getObj(fldName).focus()
 		return false
 	}
@@ -474,7 +502,7 @@ function dateValidate(fldName,fldLabel,type) {
 		case 6 : 
 		case 9 : 
 		case 11 :	if (dd>30) {
-						alert("Please enter a valid "+fldLabel)
+						alert(alert_arr.ENTER_VALID+fldLabel)
 						getObj(fldName).focus()
 						return false
 					}	
@@ -539,7 +567,7 @@ function timeValidate(fldName,fldLabel,type) {
 	var currObj=getObj(fldName)
 	
 	if (hourval>23 || minval>59) {
-		alert("Please enter a valid "+fldLabel)
+		alert(alert_arr.ENTER_VALID+fldLabel)
 		currObj.focus()
 		return false
 	}
@@ -604,6 +632,8 @@ function numValidate(fldName,fldLabel,format,neg) {
            } else {
                if (val<0)
                    invalid=true
+	       else if (format[0]==2 && splitval[0]==100 && (!splitval[1] || splitval[1]==0))
+		   invalid=false
                else if (splitval[0].length>format[0])
                    invalid=true
            }
@@ -612,19 +642,36 @@ function numValidate(fldName,fldLabel,format,neg) {
                    invalid=true
        }
               if (invalid==true) {
-           alert("Invalid "+fldLabel)
+           alert(alert_arr.INVALID+fldLabel)
            getObj(fldName).focus()
            return false
        } else return true
    } else {
-	
+	   // changes made -- to fix the ticket#3272
 	   var splitval=val.split(".")
-
-                if(splitval[0]>2147483647)
-                {
-                        alert( fldLabel + " exceeds the maximum limit ");
+	   var arr_len = splitval.length;
+           var len = 0;
+	   if(fldName == "probability" || fldName == "commissionrate")
+           {
+                   if(arr_len > 1)
+                           len = splitval[1].length;
+                   if(isNaN(val))
+                   {
+                        alert(alert_arr.INVALID+fldLabel)
+                        getObj(fldName).focus()
+                        return false
+                   }
+                   else if(splitval[0] > 100 || len > 3)
+                   {
+                        alert( fldLabel + alert_arr.EXCEEDS_MAX);
                         return false;
-                }
+                   }
+           }
+	   else if(splitval[0]>18446744073709551615)
+           {
+                   alert( fldLabel + alert_arr.EXCEEDS_MAX);
+                   return false;
+           }
 
 
        if (neg==true)
@@ -632,8 +679,24 @@ function numValidate(fldName,fldLabel,format,neg) {
        else
            var re=/^\d+(\.\d\d*)*$/
    }
+
+	//for precision check. ie.number must contains only one "."	
+	var dotcount=0;
+	for (var i = 0; i < val.length; i++)
+	{   
+	  	if (val.charAt(i) == ".")
+			 dotcount++;
+	}	
+
+	if(dotcount>1)
+	{
+       		alert(alert_arr.INVALID+fldLabel)
+		getObj(fldName).focus()
+		return false;
+	}
+
       if (!re.test(val)) {
-       alert("Invalid "+fldLabel)
+       alert(alert_arr.INVALID+fldLabel)
        getObj(fldName).focus()
        return false
    } else return true
@@ -642,18 +705,22 @@ function numValidate(fldName,fldLabel,format,neg) {
 
 function intValidate(fldName,fldLabel) {
 	var val=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
-	if (isNaN(val) || (val.indexOf(".")!=-1 && fldName != 'potential_amount')) 
+	if (isNaN(val) || (val.indexOf(".")!=-1 && fldName != 'potential_amount' && fldName != 'list_price')) 
 	{
-		alert("Invalid "+fldLabel)
+		alert(alert_arr.INVALID+fldLabel)
 		getObj(fldName).focus()
 		return false
 	} 
-        else if( val < -2147483648 || val > 2147483647)
+        else if((fldName != 'employees' || fldName != 'noofemployees') && (val < -2147483648 || val > 2147483647))
         {
-                alert(fldLabel +" is out of range");
+                alert(fldLabel +alert_arr.OUT_OF_RANGE);
                 return false;
         }
-
+	else if((fldName == 'employees' || fldName != 'noofemployees') && (val < 0 || val > 2147483647))
+        {
+                alert(fldLabel +alert_arr.OUT_OF_RANGE);
+                return false;
+        }
 	else
 	{
 		return true
@@ -667,32 +734,32 @@ function numConstComp(fldName,fldLabel,type,constval) {
 	var ret=true
 	switch (type) {
 		case "L"  : if (val>=constval) {
-						alert(fldLabel+" should be less than "+constval)
+						alert(fldLabel+alert_arr.SHOULDBE_LESS+constval)
 						ret=false
 					}
 					break;
 		case "LE" :	if (val>constval) {
-					alert(fldLabel+" should be less than or equal to "+constval)
+					alert(fldLabel+alert_arr.SHOULDBE_LESS_EQUAL+constval)
 			        ret=false
 					}
 					break;
 		case "E"  :	if (val!=constval) {
-                                        alert(fldLabel+" should be equal to "+constval)
+                                        alert(fldLabel+alert_arr.SHOULDBE_EQUAL+constval)
                                         ret=false
                                 }
                                 break;
 		case "NE" : if (val==constval) {
-						 alert(fldLabel+" should not be equal to "+constval)
+						 alert(fldLabel+alert_arr.SHOULDNOTBE_EQUAL+constval)
 							ret=false
 					}
 					break;
 		case "G"  :	if (val<=constval) {
-							alert(fldLabel+" should be greater than "+constval)
+							alert(fldLabel+alert_arr.SHOULDBE_GREATER+constval)
 							ret=false
 					}
 					break;
 		case "GE" : if (val<constval) {
-							alert(fldLabel+" should be greater than or equal to "+constval)
+							alert(fldLabel+alert_arr.SHOULDBE_GREATER_EQUAL+constval)
 							ret=false
 					}
 					break;
@@ -705,6 +772,34 @@ function numConstComp(fldName,fldLabel,type,constval) {
 }
 
 function formValidate() {
+
+//Validation for Portal User
+if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
+{
+	if(getObj('portal').checked && trim(getObj('email').value) == '')   {
+		alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+		return false;
+	}
+}
+if(gVTModule == 'Contacts')
+{
+	if(getObj('imagename').value != '' )
+	{
+		var image_arr = new Array();
+		image_arr = (getObj('imagename').value).split(".");
+		if((image_arr[1] ==  "jpeg") || (image_arr[1] ==  "png") || (image_arr[1] ==  "jpg") || (image_arr[1] ==  "pjpeg") || (image_arr[1] ==  "x-png") || (image_arr[1] ==  "gif") )
+		{
+			return true;
+		}
+		else
+		{
+			alert(alert_arr.LBL_WRONG_IMAGE_TYPE);
+			return false;
+		}
+	}
+}
+
+
 	for (var i=0; i<fieldname.length; i++) {
 		if(getObj(fieldname[i]) != null)
 		{
@@ -722,7 +817,7 @@ function formValidate() {
 					if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
 					{	 
 						if (type[1]=="M")
-							if (!emptyCheck(type[2],fieldlabel[i],getObj(type[2]).type))
+							if (!emptyCheck(fieldname[2],fieldlabel[i],getObj(type[2]).type))
 								return false
 
 									if(typeof(type[3])=="undefined") var currdatechk="OTH"
@@ -809,41 +904,72 @@ function formValidate() {
 						if (getObj(fieldname[i]).value.length!=0)
 						{
 							var etype = "EMAIL"
-								if (!patternValidate(fieldname[i],fieldlabel[i],etype))
-									return false
+							if(fieldname[i] == "yahooid" || fieldname[i] == "yahoo_id")
+							{
+								etype = "YAHOO";
+							}
+							if (!patternValidate(fieldname[i],fieldlabel[i],etype))
+								return false;
 						}
 					}
 				break;
 			}
+			//start Birth day date validation
+			if(fieldname[i] == "birthday" && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0 )
+			{
+				var now =new Date()
+				var currtimechk="OTH"
+				var datelabel = fieldlabel[i]
+				var datefield = fieldname[i]
+				var datevalue =getObj(datefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+                        	if (!dateValidate(fieldname[i],fieldlabel[i],currdatechk))
+				{
+		        	        getObj(datefield).focus()
+                        		return false
+				}
+				else
+				{
+					datearr=splitDateVal(datevalue);
+					dd=datearr[0]
+					mm=datearr[1]
+					yyyy=datearr[2]
+					var datecheck = new Date()
+        				datecheck.setYear(yyyy)
+				        datecheck.setMonth(mm-1)
+        				datecheck.setDate(dd)
+                			if (!compareDates(datecheck,datelabel,now,"Current Date","L"))
+					{
+		                	        getObj(datefield).focus()
+                			        return false
+                			}
+				}
+			}
+		      //End Birth day	
 		}
+		
 	}
        //added to check Start Date & Time,if Activity Status is Planned.//start
-	
         for (var j=0; j<fieldname.length; j++)
 	{
-
 		if(getObj(fieldname[j]) != null)
 		{
-			if(fieldname[j] == "date_start")
+			if(fieldname[j] == "date_start" || fieldname[j] == "task_date_start" )
 			{
 				var datelabel = fieldlabel[j]
-					var datefield = fieldname[j]
-					var startdatevalue = getObj(datefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+				var datefield = fieldname[j]
+				var startdatevalue = getObj(datefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
 			}
-			if(fieldname[j] == "time_start")
+			if(fieldname[j] == "time_start" || fieldname[j] == "task_time_start")
 			{
 				var timelabel = fieldlabel[j]
-					var timefield = fieldname[j]
-					var timeval=getObj(timefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+				var timefield = fieldname[j]
+				var timeval=getObj(timefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
 			}
 			if(fieldname[j] == "eventstatus" || fieldname[j] == "taskstatus")
 			{
 				var statusvalue = getObj(fieldname[j]).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
-					var statuslabel = fieldlabel[j++]
+				var statuslabel = fieldlabel[j++]
 			}
-		}else
-		{
-			return true;
 		}
 	}
 	if(statusvalue == "Planned")
@@ -866,18 +992,18 @@ function formValidate() {
 
                chktime = new Date()
 
+               chktime.setMinutes(minval)
+               chktime.setHours(hourval)
                chktime.setYear(yyyy)
                chktime.setMonth(mm-1)
                chktime.setDate(dd)
-               chktime.setHours(hourval)
-               chktime.setMinutes(minval)
-                if (!compareDates(chkdate,datelabel,currdate,"Current date & time for Activities with status as Planned","GE")) {
+                if (!compareDates(chkdate,datelabel,currdate,alert_arr.DATE_SHOULDNOT_PAST,"GE")) {
                         getObj(datefield).focus()
                         return false
                 }
-                else if(!compareDates(chktime,timelabel,currdate,"Current Time for Activities with status as Planned","GE"))
+                else if(!compareDates(chktime,timelabel,currdate,alert_arr.TIME_SHOULDNOT_PAST,"GE"))
                 {
-                        getObj(timefield).focus()
+                        getObj(datefield).focus()
                         return false
                 }
                 else return true
@@ -1104,13 +1230,13 @@ function hideLocateMapMenu(ev)
 * @param divId :: div tag ID
 */
 function show(divId)
-
 {
+	if(getObj(divId))
+	{
+		var id = document.getElementById(divId);
 
-    var id = document.getElementById(divId);
-
-    id.style.display = 'inline';
-
+		id.style.display = 'inline';
+	}
 }
 
 /*
@@ -1148,6 +1274,8 @@ function fnLoadValues(obj1,obj2,SelTab,unSelTab,moduletype,module){
 	
    var oform = document.forms['EditView'];
    oform.action.value='Save';	
+   //global variable to check the validation calling function to avoid validating when tab change
+   gValidationCall = 'tabchange'; 	
    if((moduletype == 'inventory' && validateInventory(module)) ||(moduletype == 'normal') && formValidate())	
    if(formValidate())
    {	
@@ -1170,6 +1298,7 @@ function fnLoadValues(obj1,obj2,SelTab,unSelTab,moduletype,module){
 
 	   tagName2.style.display='none';
    }
+   gValidationCall = ''; 	
 }
 
 function fnCopy(source,design){
@@ -1267,7 +1396,7 @@ function fnAddSrch(option_values,criteria_values){
 
     var colthree = row.insertCell(2);
 
-    colone.innerHTML="<select id='Fields"+count+"' name='Fields"+count+"' class='detailedViewTextBox'>"+option_values+"</select>";
+    colone.innerHTML="<select id='Fields"+count+"' name='Fields"+count+"' onchange=\"updatefOptions(this, 'Condition"+count+"')\" class='detailedViewTextBox'>"+option_values+"</select>";
 
     coltwo.innerHTML="<select id='Condition"+count+"' name='Condition"+count+"' class='detailedViewTextBox'>"+criteria_values+"</select> ";
 
@@ -1374,6 +1503,10 @@ function fnvshobj(obj,Lay){
     var topSide = findPosY(obj);
     var maxW = tagName.style.width;
     var widthM = maxW.substring(0,maxW.length-2);
+    if(Lay == 'editdiv') {
+        leftSide = leftSide - 225;
+        topSide = topSide - 125;
+    }
     var getVal = eval(leftSide) + eval(widthM);
     if(getVal  > document.body.clientWidth ){
         leftSide = eval(leftSide) - eval(widthM);
@@ -1514,11 +1647,11 @@ function addOnloadEvent(fnc){
       window.onload = fnc;
   }
 }
-function InternalMailer(record_id,type) {
+function InternalMailer(record_id,field_id,par_module,type) {
         var url;
         switch(type) {
                 case 'record_id':
-                        url = 'index.php?module=Emails&action=EmailsAjax&internal_mailer=true&type='+type+'&record=&rec_id='+record_id+'&file=EditView';
+                        url = 'index.php?module=Emails&action=EmailsAjax&internal_mailer=true&type='+type+'&record=&field_id='+field_id+'&rec_id='+record_id+'&file=EditView&par_module='+par_module;//query string field_id added for listview-compose email issue
                 break;
                 case 'email_addy':
                         url = 'index.php?module=Emails&action=EmailsAjax&internal_mailer=true&type='+type+'&record=&email_addy='+record_id+'&file=EditView';
@@ -1533,7 +1666,12 @@ function InternalMailer(record_id,type) {
 function fnHide_Event(obj){
         document.getElementById(obj).style.visibility = 'hidden';
 }
-
+function ReplyCompose(id,mode)
+{
+			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id+'&reply=true';
+	
+	openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');	
+}
 function OpenCompose(id,mode) 
 {
 	switch(mode)
@@ -1559,8 +1697,8 @@ function SelectAll(mod,parmod)
 	var y=0;
 	if(parmod != 'Calendar')
         {
-                var module = window.opener.document.getElementById('return_module').value
-                var entity_id = window.opener.document.getElementById('parent_id').value
+                var module = window.opener.document.getElementById('RLreturn_module').value
+                var entity_id = window.opener.document.getElementById('RLparent_id').value
         }
         idstring = "";
 	namestr = "";
@@ -1577,7 +1715,7 @@ function SelectAll(mod,parmod)
                 }
                 else
 		{
-                        alert("Please select at least one entity");
+                        alert(alert_arr.SELECT);
                         return false;
                 }
         }
@@ -1604,10 +1742,10 @@ function SelectAll(mod,parmod)
         }
         else
         {
-                alert("Please select at least one entity");
+                alert(alert_arr.SELECT);
                 return false;
         }
-        if(confirm("Are you sure you want to add the selected "+y+" records ?"))
+        if(confirm(alert_arr.ADD_CONFIRMATION+y+alert_arr.RECORDS))
         {
 		if(parmod == 'Calendar')
                 {
@@ -1718,3 +1856,320 @@ function getCalendarPopup(imageid,fieldid,dateformat)
         });
 }
 
+//Added to check duplicate account creation
+
+function AjaxDuplicateValidate(module,fieldname,oform)
+{
+      var fieldvalue = getObj(fieldname).value;
+	if(fieldvalue == '')
+	{
+		alert(alert_arr.ACCOUNTNAME_CANNOT_EMPTY);
+		return false;	
+	}
+      var url = "module="+module+"&action="+module+"Ajax&file=Save&"+fieldname+"="+fieldvalue+"&dup_check=true"
+      new Ajax.Request(
+                            'index.php',
+                              {queue: {position: 'end', scope: 'command'},
+                                      method: 'post',
+                                      postBody:url,
+                                      onComplete: function(response) {
+                                              var str = response.responseText
+                                              if(str.indexOf('SUCCESS') > -1)
+                                              {
+                                                      oform.submit();
+                                              }else
+                                              {
+                                                      alert(str);
+                                              }
+                                      }
+                              }
+                              );
+}
+
+/**to get SelectContacts Popup
+check->to check select options enable or disable
+*type->to differentiate from task
+*frmName->form name*/
+
+function selectContact(check,type,frmName)
+{
+        if($("single_accountid"))
+        {
+		var potential_id = '';
+		if($("potential_id"))
+			potential_id = frmName.potential_id.value;
+		account_id = frmName.account_id.value;
+		if(potential_id != '')
+		{
+			record_id = potential_id;
+			module_string = "&parent_module=Potentials";
+		}	
+		else
+		{
+			record_id = account_id;
+			module_string = "&parent_module=Accounts";
+		}
+		if(record_id != '')
+	                window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView"+module_string+"&relmod_id="+record_id,"test","width=640,height=602,resizable=0,scrollbars=0");
+		else
+			 window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");	
+        }
+        else if(($("parentid")) && type != 'task')
+        {
+		if(getObj("parent_type")){
+                	rel_parent_module = frmName.parent_type.value;
+			record_id = frmName.parent_id.value;
+        	        module = rel_parent_module.split("&");	
+			if(record_id != '' && module[0] == "Leads")
+			{
+				alert(alert_arr.CANT_SELECT_CONTACTS);
+			}
+			else
+			{
+				if(check == 'true')
+					search_string = "&return_module=Calendar&select=enable&popuptype=detailview&form_submit=false";
+				else
+					search_string="&popuptype=specific";
+				if(record_id != '')
+					window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&form=EditView"+search_string+"&relmod_id="+record_id+"&parent_module="+module[0],"test","width=640,height=602,resizable=0,scrollbars=0");
+				else
+					window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&form=EditView"+search_string,"test","width=640,height=602,resizable=0,scrollbars=0");
+			}
+		}else{
+			window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&return_module=Calendar&select=enable&popuptype=detailview&form=EditView&form_submit=false","test","width=640,height=602,resizable=0,scrollbars=0");
+		}
+        }
+	else if(($("contact_name")) && type == 'task')
+	{
+		var formName = frmName.name;
+		if(formName == 'EditView')
+		{
+			task_parent_module = frmName.parent_type.value;
+			task_recordid = frmName.parent_id.value;
+			task_module = task_parent_module.split("&");
+			popuptype="&popuptype=specific";
+		}
+		else
+		{
+			task_parent_module = frmName.task_parent_type.value;
+			task_recordid = frmName.task_parent_id.value;
+			task_module = task_parent_module.split("&");
+			popuptype="&popuptype=toDospecific";
+		}
+		if(task_recordid != '' && task_module[0] == "Leads" )
+		{
+			alert(alert_arr.CANT_SELECT_CONTACTS);
+		}
+		else
+		{
+			if(task_recordid != '')
+				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker"+popuptype+"&form=EditView&task_relmod_id="+task_recordid+"&task_parent_module="+task_module[0],"test","width=640,height=602,resizable=0,scrollbars=0");
+			else	
+				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker"+popuptype+"&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+		}
+
+	}
+        else
+        {
+                window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+        }
+}
+//to get Select Potential Popup
+function selectPotential()
+{
+	var record_id= document.EditView.account_id.value;
+	if(record_id != '')
+		window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView&relmod_id="+record_id+"&parent_module=Accounts","test","width=640,height=602,resizable=0,scrollbars=0");
+	else
+		window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+}
+//to select Quote Popup
+function selectQuote()
+{
+	var record_id= document.EditView.account_id.value;
+        if(record_id != '')
+		window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&relmod_id="+record_id+"&parent_module=Accounts","test","width=640,height=602,resizable=0,scrollbars=0");
+
+	else
+		window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+}
+//to get select SalesOrder Popup
+function selectSalesOrder()
+{
+	var record_id= document.EditView.account_id.value;
+        if(record_id != '')
+		window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&relmod_id="+record_id+"&parent_module=Accounts","test","width=640,height=602,resizable=0,scrollbars=0");
+	else
+		window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+}
+
+function checkEmailid(parent_module,emailid,yahooid)
+ {
+       var check = true;
+       if(emailid == '' && yahooid == '')
+       {
+               alert(alert_arr.LBL_THIS+parent_module+alert_arr.DOESNOT_HAVE_MAILIDS);
+               check=false;
+       }
+       return check;
+ }
+
+function calQCduedatetime()
+{
+        var datefmt = document.QcEditView.dateFormat.value;
+        var type = document.QcEditView.activitytype.value;
+        var dateval1=getObj('date_start').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
+        var dateelements1=splitDateVal(dateval1);
+        dd1=parseInt(dateelements1[0],10);
+        mm1=dateelements1[1];
+        yyyy1=dateelements1[2];
+        var date1=new Date();
+        date1.setYear(yyyy1);
+        date1.setMonth(mm1-1,dd1+1);
+        var yy = date1.getFullYear();
+        var mm = date1.getMonth() + 1;
+        var dd = date1.getDate();
+        var date = document.QcEditView.date_start.value;
+        var starttime = document.QcEditView.time_start.value;
+        if (!timeValidate('time_start',' Start Date & Time','OTH'))
+                return false;
+        var timearr = starttime.split(":");
+        var hour = parseInt(timearr[0],10);
+        var min = parseInt(timearr[1],10);
+        dd = _2digit(dd);
+        mm = _2digit(mm);
+        var tempdate = yy+'-'+mm+'-'+dd;
+        if(datefmt == '%d-%m-%Y')
+                var tempdate = dd+'-'+mm+'-'+yy;
+        else if(datefmt == '%m-%d-%Y')
+                var tempdate = mm+'-'+dd+'-'+yy;
+        if(type == 'Meeting')
+        {
+                hour = hour + 1;
+                if(hour == 24)
+                {
+                        hour = 0;
+                        date =  tempdate;
+                }
+                hour = _2digit(hour);
+		min = _2digit(min);
+                document.QcEditView.due_date.value = date;
+                document.QcEditView.time_end.value = hour+':'+min;
+        }
+        if(type == 'Call')
+        {
+                if(min >= 55)
+                {
+                        min = min%55;
+                        hour = hour + 1;
+                }else min = min + 5;
+                if(hour == 24)
+                {
+                        hour = 0;
+                        date =  tempdate;
+                }
+                hour = _2digit(hour);
+		min = _2digit(min);
+                document.QcEditView.due_date.value = date;
+                document.QcEditView.time_end.value = hour+':'+min;
+        }
+
+}
+
+function _2digit( no ){
+        if(no < 10) return "0" + no;
+        else return "" + no;
+}
+
+function confirmdelete(url)
+{
+if(confirm(alert_arr.ARE_YOU_SURE))
+       {
+            document.location.href=url;
+       }
+}
+
+
+function valid(c,type)
+{
+	if(type == 'name')
+	{
+		return (((c >= 'a') && (c <= 'z')) ||((c >= 'A') && (c <= 'Z')) ||((c >= '0') && (c <= '9')) || (c == '.') || (c == '_') || (c == '-') );
+	}
+	else if(type == 'namespace')
+	{
+		return (((c >= 'a') && (c <= 'z')) ||((c >= 'A') && (c <= 'Z')) ||((c >= '0') && (c <= '9')) || (c == '.')||(c==' ') || (c == '_') || (c == '-') );
+	}
+}
+
+function CharValidation(s,type)
+{
+	for (var i = 0; i < s.length; i++)
+	{
+		if (!valid(s.charAt(i),type))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+
+/** Check Upload file is in specified format(extension).
+  * @param fldname -- name of the file field
+  * @param fldLabel -- Lable of the file field
+  * @param filter -- List of file extensions to allow. each extension must be seperated with a | sybmol.
+  * Example: upload_filter("imagename","Image", "jpg|gif|bmp|png") 
+  * @returns true -- if the extension is IN  specified extension.
+  * @returns false -- if the extension is NOT IN specified extension.
+  *
+  * NOTE: If this field is mandatory,  please call emptyCheck() function before calling this function.
+ */
+
+function upload_filter(fldName, filter)
+{
+	var currObj=getObj(fldName)
+	if(currObj.value !="")
+	{
+		var file=currObj.value;
+		var type=file.split(".");
+		var valid_extn=filter.split("|");	
+	
+		if(valid_extn.indexOf(type[type.length-1]) == -1)
+		{
+			alert(alert_arr.PLS_SELECT_VALID_FILE+valid_extn)
+			currObj.focus();
+		 	return false;
+		}
+	}	
+	return true
+	
+}
+
+function validateUrl(name)
+{
+	var Url = getObj(name);
+	var wProtocol;
+
+	var oRegex = new Object();
+	oRegex.UriProtocol = new RegExp('');
+	oRegex.UriProtocol.compile( '^(((http|https|ftp|news):\/\/)|mailto:)', 'gi' );
+	oRegex.UrlOnChangeProtocol = new RegExp('') ;
+	oRegex.UrlOnChangeProtocol.compile( '^(http|https|ftp|news)://(?=.)', 'gi' );
+
+	wUrl = Url.value;
+	wProtocol=oRegex.UrlOnChangeProtocol.exec( wUrl ) ;
+	if ( wProtocol )
+	{
+		wUrl = wUrl.substr( wProtocol[0].length );
+		Url.value = wUrl;
+	}
+}
+
+function LTrim( value )
+{
+
+        var re = /\s*((\S+\s*)*)/;
+        return value.replace(re, "$1");
+
+}

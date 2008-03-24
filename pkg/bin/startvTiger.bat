@@ -43,23 +43,23 @@ goto checkmysql
 echo ""
 echo "making an attempt to kill any existing vtigercrm service"
 echo ""
-bin\apache -k stop -n vtigercrm501
-bin\apache -k uninstall -n vtigercrm501
+bin\apache -k stop -n vtigercrm503
+bin\apache -k uninstall -n vtigercrm503
 echo "Uninstalling apache service again for confirmation after sleeping for 10 seconds"
 echo ""
 %SLEEP_STR% -n 10 127.0.0.1>nul
-bin\apache -k stop -n vtigercrm501
-bin\apache -k uninstall -n vtigercrm501 
+bin\apache -k stop -n vtigercrm503
+bin\apache -k uninstall -n vtigercrm503 
 echo ""
 echo ""
-echo "Installing  vtigercrm501 apache service after sleeping for 10 seconds"
+echo "Installing  vtigercrm503 apache service after sleeping for 10 seconds"
 echo ""
 %SLEEP_STR% -n 10 127.0.0.1>nul
-bin\apache -k install -n vtigercrm501 -f conf\httpd.conf
+bin\apache -k install -n vtigercrm503 -f conf\httpd.conf
 echo ""
-echo "Starting  vtigercrm501 apache service"
+echo "Starting  vtigercrm503 apache service"
 echo ""
-bin\apache -n vtigercrm501 -k start
+bin\apache -n vtigercrm503 -k start
 IF ERRORLEVEL 1 goto stopservice
 goto checkmysql
 
@@ -105,7 +105,7 @@ goto checkdatabase
 echo ""
 echo "Starting MySQL on port specified by the user"
 echo ""
-start mysqld-nt -b .. --skip-bdb --log-queries-not-using-indexes --log-slow-admin-statements --log-error --low-priority-updates --log-slow-queries=vtslowquery.log --datadir=../data --port=%mysql_port%
+start mysqld-nt -b .. --skip-bdb --log-queries-not-using-indexes --log-slow-admin-statements --log-error --low-priority-updates --log-slow-queries=vtslowquery.log --default-storage-engine=InnoDB --datadir=../data --port=%mysql_port%
 %SLEEP_STR% -n 11 127.0.0.1>nul
 mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases" > NUL
 IF ERRORLEVEL 1 goto notstarted
@@ -117,27 +117,27 @@ goto checkdatabase
 
 :checkdatabase
 echo ""
-echo "check to see if vtigercrm501 database already exists"
+echo "check to see if vtigercrm503 database already exists"
 echo ""
-mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases like 'vtigercrm501'" | "%WINDIR%\system32\find.exe" "vtigercrm501" > NUL
+mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases like 'vtigercrm503'" | "%WINDIR%\system32\find.exe" "vtigercrm503" > NUL
 IF ERRORLEVEL 1 goto dbnotexists
 echo ""
-ECHO  "vtigercrm501 database exists"
+ECHO  "vtigercrm503 database exists"
 echo ""
 goto end
 
 
 :dbnotexists
 echo ""
-ECHO "vtigercrm501 database does not exist"
+ECHO "vtigercrm503 database does not exist"
 echo ""
 echo %cd%
 echo ""
-echo "Proceeding to create database vtigercrm501 and populate the same"
+echo "Proceeding to create database vtigercrm503 and populate the same"
 echo ""
-mysql --user=%mysql_username% --password=%mysql_password% --port=%mysql_port% -e "create database if not exists vtigercrm501"
+mysql --user=%mysql_username% --password=%mysql_password% --port=%mysql_port% -e "create database if not exists vtigercrm503"
 echo ""
-echo "vtigercrm501 database created"
+echo "vtigercrm503 database created"
 echo ""
 goto end
 

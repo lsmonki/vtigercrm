@@ -10,6 +10,7 @@
  ********************************************************************************/
 
 require('include/fpdf/pdf.php');
+require_once('include/fpdf/pdfconfig.php');
 require_once('modules/PurchaseOrder/PurchaseOrder.php');
 require_once('include/database/PearDatabase.php');
 
@@ -21,8 +22,6 @@ $currency_symbol = $adb->query_result($result,0,'currency_symbol');
 
 // would you like and end page?  1 for yes 0 for no
 $endpage="1";
-global $products_per_page;
-$products_per_page="6";
 
 $id = $_REQUEST['record'];
 //retreiving the vtiger_invoice info
@@ -48,14 +47,15 @@ $bill_state = $focus->column_fields["bill_state"];
 $bill_code = $focus->column_fields["bill_code"];
 $bill_country = $focus->column_fields["bill_country"];
 
+$contact_name =getContactName($focus->column_fields["contact_id"]);
 $ship_street = $focus->column_fields["ship_street"];
 $ship_city = $focus->column_fields["ship_city"];
 $ship_state = $focus->column_fields["ship_state"];
 $ship_code = $focus->column_fields["ship_code"];
 $ship_country = $focus->column_fields["ship_country"];
 
-$conditions = $focus->column_fields["terms_conditions"];
-$description = $focus->column_fields["description"];
+$conditions = from_html($focus->column_fields["terms_conditions"]);
+$description = from_html($focus->column_fields["description"]);
 $status = $focus->column_fields["postatus"];
 
 // Company information
@@ -63,19 +63,19 @@ $add_query = "select * from vtiger_organizationdetails";
 $result = $adb->query($add_query);
 $num_rows = $adb->num_rows($result);
 
-if($num_rows == 1)
+if($num_rows > 0)
 {
-		$org_name = $adb->query_result($result,0,"organizationname");
-		$org_address = $adb->query_result($result,0,"address");
-		$org_city = $adb->query_result($result,0,"city");
-		$org_state = $adb->query_result($result,0,"state");
-		$org_country = $adb->query_result($result,0,"country");
-		$org_code = $adb->query_result($result,0,"code");
-		$org_phone = $adb->query_result($result,0,"phone");
-		$org_fax = $adb->query_result($result,0,"fax");
-		$org_website = $adb->query_result($result,0,"website");
+	$org_name = $adb->query_result($result,0,"organizationname");
+	$org_address = $adb->query_result($result,0,"address");
+	$org_city = $adb->query_result($result,0,"city");
+	$org_state = $adb->query_result($result,0,"state");
+	$org_country = $adb->query_result($result,0,"country");
+	$org_code = $adb->query_result($result,0,"code");
+	$org_phone = $adb->query_result($result,0,"phone");
+	$org_fax = $adb->query_result($result,0,"fax");
+	$org_website = $adb->query_result($result,0,"website");
 
-		$logo_name = $adb->query_result($result,0,"logoname");
+	$logo_name = $adb->query_result($result,0,"logoname");
 }
 
 //Population of Product Details - Starts
@@ -95,7 +95,11 @@ $discount_percent = $focus->column_fields["hdnDiscountPercent"];
 if($discount_amount != "")
 	$price_discount = number_format($discount_amount,2,'.',',');
 else if($discount_percent != "")
-	$price_discount = $discount_percent."%";
+{
+	//This will be displayed near Discount label - used in include/fpdf/templates/body.php
+	$final_price_discount_percent = "(".number_format($discount_percent,2,'.',',')." %)";
+	$price_discount = number_format((($discount_percent*$focus->column_fields["hdnSubTotal"])/100),2,'.',',');
+}
 else
 	$price_discount = "0.00";
 
@@ -153,6 +157,8 @@ for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 	$list_price[$i] = number_format($associated_products[$i]['listPrice'.$i],2,'.',',');
 	$list_pricet[$i] = $associated_products[$i]['listPrice'.$i];
 	$discount_total[$i] = $associated_products[$i]['discountTotal'.$i];
+        //aded for 5.0.3 pdf changes
+        $product_code[$i] = $associated_products[$i]['hdnProductcode'.$i];
 	
 	$taxable_total = $qty[$i]*$list_pricet[$i]-$discount_total[$i];
 
@@ -173,9 +179,8 @@ for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 		$product_line[$j]["Tax"] = number_format($total_taxes,2,'.',',')."\n ($total_tax_percent %) ";
 	}
 	$prod_total[$i] = number_format($producttotal,2,'.',',');
-
-	$product_line[$j]["Product Name"] = $product_name[$i];
-	$product_line[$j]["Description"] = $prod_description[$i];
+        $product_line[$j]["Product Code"] = $product_code[$i];
+	$product_line[$j]["Product Name"] = from_html($product_name[$i]);
 	$product_line[$j]["Qty"] = $qty[$i];
 	$product_line[$j]["Price"] = $list_price[$i];
 	$product_line[$j]["Discount"] = $discount_total[$i];
@@ -213,7 +218,14 @@ for($l=0;$l<$num_pages;$l++)
 	$pdf->AddPage();
 	include("pdf_templates/header.php");
 	include("include/fpdf/templates/body.php");
-	include("pdf_templates/footer.php");
+
+	//if bottom > 145 then we skip the Description and T&C in every page and display only in lastpage
+	//if you want to display the description and T&C in each page then set the display_desc_tc='true' and bottom <= 145 in pdfconfig.php
+	if($display_desc_tc == 'true')
+	if($bottom <= 145)
+	{
+		include("pdf_templates/footer.php");
+	}
 
 	$page_num++;
 

@@ -19,6 +19,8 @@ require_once('include/utils/utils.php');
  */
 function getCustomFieldTypeName($uitype)
 {
+	
+	global $mod_strings,$app_strings;
 	global $log;
 	$log->debug("Entering getCustomFieldTypeName(".$uitype.") method ...");
 	global $log;
@@ -27,55 +29,55 @@ function getCustomFieldTypeName($uitype)
 	
 	if($uitype == 1)
 	{
-		$fldname = 'Text';
+		$fldname = $mod_strings['Text'];
 	}
 	elseif($uitype == 7)
 	{
-		$fldname = 'Number';
+		$fldname = $mod_strings['Number'];
 	}
 	elseif($uitype == 9)
 	{
-		$fldname = 'Percent';
+		$fldname = $mod_strings['Percent'];
 	}
 	elseif($uitype == 5)
 	{
-		$fldname = 'Date';
+		$fldname = $mod_strings['Date'];
 	}
 	elseif($uitype == 13)
 	{
-		$fldname = 'Email';
+		$fldname = $mod_strings['Email'];
 	}
 	elseif($uitype == 11)
 	{
-		$fldname = 'Phone';
+		$fldname = $mod_strings['Phone'];
 	}
 	elseif($uitype == 15)
 	{
-		$fldname = 'PickList';
+		$fldname = $mod_strings['PickList'];
 	}
 	elseif($uitype == 17)
 	{
-		$fldname = 'Url';
+		$fldname = $mod_strings['LBL_URL'];
 	}
 	elseif($uitype == 56)
 	{
-		$fldname = 'Checkbox';
+		$fldname = $mod_strings['LBL_CHECK_BOX'];
 	}
 	elseif($uitype == 71)
 	{
-		$fldname = 'Currency';
+		$fldname = $mod_strings['Currency'];
 	}
 	elseif($uitype == 21)
 	{
-		$fldname = 'Text Area';
+		$fldname = $mod_strings['LBL_TEXT_AREA'];
 	}
 	elseif($uitype == 33)
 	{
-		$fldname = 'Multi-Select Combo Box';
+		$fldname = $mod_strings['LBL_MULTISELECT_COMBO'];
 	}
 	elseif($uitype == 85)
 	{
-		$fldname = 'Skype';
+		$fldname = $mod_strings['Skype'];
 	}
 $log->debug("Exiting getCustomFieldTypeName method ...");
 	return $fldname;
@@ -185,7 +187,7 @@ function getFldTypeandLengthValue($label,$typeofdata)
 	{
 		$types = explode("~",$typeofdata);
 		$data_decimal = explode(",",$types[2]);
-		$data_array=array('71',$data_decimal[0],$data_decimal[1]);
+		$data_array=array('3',$data_decimal[0],$data_decimal[1]);
 		$fieldtype = implode(";",$data_array);
 	}
 	elseif($label == 'Date')
@@ -200,7 +202,7 @@ function getFldTypeandLengthValue($label,$typeofdata)
 	{
 		$fieldtype = '6';
 	}
-	elseif($label == 'PickList')
+	elseif($label == 'Pick List')
 	{
 		$fieldtype = '7';
 	}

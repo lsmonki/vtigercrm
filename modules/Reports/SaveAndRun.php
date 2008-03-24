@@ -20,8 +20,7 @@ require_once("modules/Reports/ReportRun.php");
 require_once('include/utils/utils.php');
 require_once('Smarty_setup.php');
 
-global $adb;
-global $mod_strings;
+global $adb,$mod_strings,$app_strings;
 
 $reportid = $_REQUEST["record"];
 $folderid = $_REQUEST["folderid"];
@@ -30,11 +29,7 @@ $filter = $_REQUEST["stdDateFilter"];
 $startdate = $_REQUEST["startdate"];
 $enddate = $_REQUEST["enddate"];
 
-global $primarymodule;
-global $secondarymodule;
-global $orderbylistsql;
-global $orderbylistcolumns;
-global $ogReport;
+global $primarymodule,$secondarymodule,$orderbylistsql,$orderbylistcolumns,$ogReport;
 
 $ogReport = new Reports($reportid);
 $primarymodule = $ogReport->primodule;
@@ -45,7 +40,6 @@ $sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
 $totalhtml = $oReportRun->GenerateReport("TOTALHTML",$filterlist);
 if(isPermitted($primarymodule,'index') == "yes" && (isPermitted($secondarymodule,'index')== "yes"))
 {
-
 	$list_report_form = new vtigerCRM_Smarty;
 	$ogReport->getSelectedStandardCriteria($reportid);
 	//commented to omit dashboards for vtiger_reports
@@ -61,13 +55,15 @@ if(isPermitted($primarymodule,'index') == "yes" && (isPermitted($secondarymodule
 
 	$BLOCKCRITERIA = $ogReport->getSelectedStdFilterCriteria($ogReport->stdselectedfilter);
 	$list_report_form->assign("BLOCKCRITERIA",$BLOCKCRITERIA);
-
-	$startdate = $ogReport->startdate;
-	$list_report_form->assign("STARTDATE",$startdate);	
-
-	$enddate = $ogReport->enddate;
-	$list_report_form->assign("ENDDATE",$enddate);
-
+	if(isset($ogReport->startdate) && isset($ogReport->enddate))
+	{
+		$list_report_form->assign("STARTDATE",getDisplayDate($ogReport->startdate));
+		$list_report_form->assign("ENDDATE",getDisplayDate($ogReport->enddate));
+	}else
+	{
+		$list_report_form->assign("STARTDATE",$ogReport->startdate);
+		$list_report_form->assign("ENDDATE",$ogReport->enddate);	
+	}	
 	$list_report_form->assign("MOD", $mod_strings);
 	$list_report_form->assign("APP", $app_strings);
 	$list_report_form->assign("IMAGE_PATH", $image_path);
@@ -76,6 +72,9 @@ if(isPermitted($primarymodule,'index') == "yes" && (isPermitted($secondarymodule
 	$list_report_form->assign("REPORTHTML", $sshtml);
 	$list_report_form->assign("REPORTTOTHTML", $totalhtml);
 	$list_report_form->assign("FOLDERID", $folderid);
+	$list_report_form->assign("DATEFORMAT",$current_user->date_format);
+	$list_report_form->assign("JS_DATEFORMAT",parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+	
 	if($_REQUEST['mode'] != 'ajax')
 	{
 		$list_report_form->assign("REPINFOLDER", getReportsinFolder($folderid));

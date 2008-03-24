@@ -18,14 +18,23 @@
 <script type="text/javascript" src="jscalendar/calendar.js"></script>
 <script type="text/javascript" src="jscalendar/lang/calendar-{$CALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-<script type="text/javascript" src="modules/{$MODULE}/Activity.js"></script>
+<script type="text/javascript" src="modules/{$MODULE}/Calendar.js"></script>
 <script type="text/javascript">
+var gVTModule = '{$smarty.request.module}';
 </script>
 
 {*<!-- Contents -->*}
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
 <form name="EditView" method="POST" action="index.php">
 <input type="hidden" name="time_start" id="time_start">
+<input type="hidden" name="view" value="{$view}">
+<input type="hidden" name="hour" value="{$hour}">
+<input type="hidden" name="day" value="{$day}">
+<input type="hidden" name="month" value="{$month}">
+<input type="hidden" name="year" value="{$year}">
+<input type="hidden" name="viewOption" value="{$viewOption}">
+<input type="hidden" name="subtab" value="{$subtab}">
+<input type="hidden" name="maintab" value="{$maintab}">
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
 <tr>
         <td>
                 <table cellpadding="0" cellspacing="5" border="0">
@@ -43,7 +52,11 @@
 					<span class="small">{$UPDATEINFO}	 </span> 
 				{/if}
 				{if $OP_MODE eq 'create_view'}
+					{if $DUPLICATE neq 'true'}
 					<span class="lvtHeaderText">{$APP.LBL_CREATING} {$SINGLE_MOD}</span> <br>
+					{else}
+					<span class="lvtHeaderText">{$APP.LBL_DUPLICATING} "{$NAME}"</span> <br>
+					{/if}
 				{/if}
 			</td></tr>
 		</table>
@@ -85,9 +98,12 @@
 						     {/foreach}
 						     {if $ACTIVITY_MODE neq 'Task'}
 							<input type="hidden" name="time_end" id="time_end">
+							<input type="hidden" name="followup_time_start" id="followup_time_start">
+                                                        <input type="hidden" name="followup_time_end" id="followup_time_end">
 							<input type=hidden name="inviteesid" id="inviteesid" value="">
 							<input type="hidden" name="duration_hours" value="0">
 							<input type="hidden" name="duration_minutes" value="0">
+							<input type="hidden" name="dateformat" value="{$DATEFORMAT}">
 						     <table border=0 cellspacing=0 cellpadding=5 width=100% >
 							{if $LABEL.activitytype neq ''}
 							<tr>
@@ -97,25 +113,28 @@
 										<tr>
 										{foreach key=tyeparrkey item=typearr from=$ACTIVITYDATA.activitytype}
                                                                                 {foreach key=sel_value item=value from=$typearr}
-                                                                                {if $value eq 'selected' && $sel_value eq 'Meeting'}
+                                                                                {if $value eq 'selected' && $sel_value eq 'Call'}
+                                                                                        {assign var='meetcheck' value=''}
+                                                                                        {assign var='callcheck' value='checked'}
+                                                                                {elseif $value eq 'selected' && $sel_value eq 'Meeting'}
                                                                                         {assign var='meetcheck' value='checked'}
                                                                                         {assign var='callcheck' value=''}
                                                                                 {else}
-                                                                                        {assign var='meetcheck' value=''}
+											{assign var='meetcheck' value=''}
                                                                                         {assign var='callcheck' value='checked'}
                                                                                 {/if}
                                                                                 {/foreach}
                                                                                 {/foreach}
-											<td><input type="radio" name='activitytype' value='Call' style='vertical-align: middle;' {$callcheck}></td><td>{$APP.Call}</td><td style="width:10px">
-											<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;' {$meetcheck}></td><td>{$APP.Meeting}</td><td style="width:20px">
+											<td><input type="radio" name='activitytype' value='Call' style='vertical-align: middle;' {$callcheck} onClick="calDuedatetime('call');" ></td><td>{$APP.Call}</td>
+											<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;' {$meetcheck} onClick="calDuedatetime('meeting');" ></td><td>{$APP.Meeting}</td>
 										</tr>
 									</table>
 								</td>
 							</tr>
 							{/if}
 							<tr>
-								<td class="cellLabel" nowrap align="right"><b>{$MOD.LBL_EVENTNAME}</b></td>
-								<td class="cellInfo" align="left"><input name="subject" type="text" class="textbox" value="{$ACTIVITYDATA.subject}" style="width:50%">&nbsp;&nbsp;&nbsp;
+								<td class="cellLabel" nowrap align="right"><b><font color="red">*</font>{$MOD.LBL_EVENTNAME}</b></td>
+								<td class="cellInfo" align="left"><input name="subject" type="text" class="textbox" value="{$ACTIVITYDATA.subject|escape}" style="width:50%">&nbsp;&nbsp;&nbsp;
 								{if $LABEL.visibility neq ''}
 								{foreach key=key_one item=arr from=$ACTIVITYDATA.visibility}
                                                                         {foreach key=sel_value item=value from=$arr}
@@ -133,9 +152,16 @@
 							{if $LABEL.description neq ''}
 							<tr>
                         					<td class="cellLabel" valign="top" nowrap align="right"><b>{$LABEL.description}</b></td>
-								<td class="cellInfo" align="left"><textarea style="width:100%; height : 60px;" name="description">{$ACTIVITYDATA.description}</textarea></td>
+								<td class="cellInfo" align="left"><textarea style="width:100%; height : 60px;" name="description">{$ACTIVITYDATA.description|escape}</textarea></td>
                 					</tr>
 							{/if}
+							{if $LABEL.location neq ''}
+							<tr>
+			                                        <td class="cellLabel" align="right" valign="top"><b>{$MOD.LBL_APP_LOCATION}</b></td>
+								<td class="cellInfo" align="left"><input name="location" type="text" class="textbox" value="{$ACTIVITYDATA.location|escape}" style="width:50%">
+							</tr>
+							{/if}
+
 							<tr>
 								<td colspan=2 width=80% align="center">
 								<table border=0 cellspacing=0 cellpadding=3 width=80%>
@@ -148,7 +174,7 @@
 									<tr>
 										<td valign=top>
 										{if $LABEL.eventstatus neq ''}
-                                                                                <select name="eventstatus" id="eventstatus" class=small>
+                                                                                <select name="eventstatus" id="eventstatus" class=small onChange = "getSelectedStatus();" >
                                                                                         {foreach item=arr from=$ACTIVITYDATA.eventstatus}
                                                                                         {foreach key=sel_value item=value from=$arr}
                                                                                         <option value="{$sel_value}" {$value}>
@@ -213,7 +239,14 @@
 											{else}
 											<input name="assigned_user_id" value="{$CURRENTUSERID}" type="hidden">
 											{/if}
-											<br>{if $LABEL.sendnotification neq ''}<input type="checkbox" name="sendnotification" >&nbsp;{$LABEL.sendnotification}{/if}
+											<br>{if $LABEL.sendnotification neq ''}
+												{if $ACTIVITYDATA.sendnotification eq 1}
+
+												<input type="checkbox" name="sendnotification" checked>&nbsp;{$LABEL.sendnotification}
+												{else}
+												<input type="checkbox" name="sendnotification" >&nbsp;{$LABEL.sendnotification}
+												{/if}
+											{/if}
 										</td>
 									</tr>
 									{if $LABEL.taskpriority neq ''}
@@ -241,12 +274,12 @@
 							</td></tr>
 						     </table>
 						     <hr noshade size=1>
-						     <table border=0 cellspacing=0 cellpadding=5 width=90% align=center bgcolor="#FFFFFF">
+						     <table border=0 id="date_table" cellspacing=0 cellpadding=5 width=100% align=center bgcolor="#FFFFFF">
 							<tr>
 								<td >
 									<table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
-									<tr><td width=50% valign=top style="border-right:1px solid #dddddd">
-										<table border=0 cellspacing=0 cellpadding=2 width=90% align=center>
+									<tr><td width=50% id="date_table_firsttd" valign=top style="border-right:1px solid #dddddd">
+										<table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
 											<tr><td colspan=3 ><b>{$MOD.LBL_EVENTSTAT}</b></td></tr>
 											<tr><td colspan=3>{$STARTHOUR}</td></tr>
 											<tr><td>
@@ -254,7 +287,7 @@
                                                                                                         {assign var=date_val value="$date_value"}
                                                                                                         {assign var=time_val value="$time_value"}
 	                                                                                        {/foreach}
-                                                                                                <input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px" value="{$date_val}"></td><td width=100%><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start">
+                                                                                                <input type="text" name="date_start" id="jscal_field_date_start" class="textbox" style="width:90px" onChange="dochange('jscal_field_date_start','jscal_field_due_date');" value="{$date_val}"></td><td width=100%><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$MOD.LBL_SET_DATE}" title="{$MOD.LBL_SET_DATE}" id="jscal_trigger_date_start">
 													{foreach key=date_fmt item=date_str from=$secondvalue.date_start}
 													{assign var=date_vl value="$date_fmt"}
 													{/foreach}
@@ -265,8 +298,8 @@
 													</script>
 											</td></tr>
 										</table></td>
-										<td width=50% valign=top >
-											<table border=0 cellspacing=0 cellpadding=2 width=90% align=center>
+										<td width=50% valign=top id="date_table_secondtd">
+											<table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
 												<tr><td colspan=3><b>{$MOD.LBL_EVENTEDAT}</b></td></tr>
 												<tr><td colspan=3>{$ENDHOUR}
 												</td></tr>
@@ -275,7 +308,7 @@
 													{assign var=date_val value="$date_value"}
 													{assign var=time_val value="$time_value"}
 													{/foreach}
-													<input type="text" name="due_date" id="jscal_field_due_date" class="textbox" style="width:90px" value="{$date_val}"></td><td width=100%><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date">
+													<input type="text" name="due_date" id="jscal_field_due_date" class="textbox" style="width:90px" value="{$date_val}"></td><td width=100%><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$MOD.LBL_SET_DATE}" title="{$MOD.LBL_SET_DATE}" id="jscal_trigger_due_date">
 													{foreach key=date_fmt item=date_str from=$secondvalue.due_date}
 													{assign var=date_vl value="$date_fmt"}
                                                                                                         {/foreach}
@@ -287,6 +320,28 @@
 												</td></tr>
 											</table>
 										</td>
+										<td width=33% valign=top style="display:none;border-left:1px solid #dddddd" id="date_table_thirdtd">
+                                                                                        <table border=0 cellspacing=0 cellpadding=2 width=100% align=center>
+                                                                                                <tr><td colspan=3><b><input type="checkbox" name="followup"><b>{$MOD.LBL_HOLDFOLLOWUP}</b></td></tr>
+                                                                                                <tr><td colspan=3>{$FOLLOWUP}</td></tr>
+                                                                                                <tr><td>
+                                                                                                        {foreach key=date_value item=time_value from=$ACTIVITYDATA.due_date}
+                                                                                                        {assign var=date_val value="$date_value"}
+                                                                                                        {assign var=time_val value="$time_value"}
+                                                                                                        {/foreach}
+                                                                                                        <input type="text" name="followup_date" id="jscal_field_followup_date" class="textbox" style="width:90px" value="{$date_val}"></td><td width=100%><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$MOD.LBL_SET_DATE}" title="{$MOD.LBL_SET_DATE}" id="jscal_trigger_followup_date">
+                                                                                                        {foreach key=date_fmt item=date_str from=$secondvalue.due_date}
+                                                                                                        {assign var=date_vl
+ value="$date_fmt"}
+                                                                                                        {/foreach}
+													<script type="text/javascript">
+                                                                                                        Calendar.setup ({ldelim}
+                                                                                                                inputField : "jscal_field_followup_date", ifFormat : "{$date_vl}", showsTime : false, button : "jscal_trigger_followup_date", singleClick : true, step : 1
+                                                                                                                {rdelim})
+                                                                                                        </script>
+                                                                                                </td></tr>
+                                                                                        </table>
+                                                                                </td>
 									</tr>
 								</table></td>
 							</tr>
@@ -338,8 +393,8 @@
 														</select>
 														</td>
 														<td width=20% align=center valign=top>
-														<input type=button value="{$MOD.LBL_ADD_BUTTON} >>" class="crm button small save" style="width:100%" onClick="addColumn()"><br>
-														<input type=button value="<< {$MOD.LBL_RMV_BUTTON} " class="crm button small cancel" style="width:100%" onClick="delColumn()">
+														<input type=button value="{$MOD.LBL_ADD_BUTTON} >>" class="crm button small save" style="width:100%"  onClick="incUser('availableusers','selectedusers')"><br>
+														<input type=button value="<< {$MOD.LBL_RMV_BUTTON} " class="crm button small cancel" style="width:100%" onClick="rmvUser('selectedusers')">
 														</td>
 														<td width=40% align=center valign=top>
 														<select name="selectedusers" id="selectedusers" class=small size=5 multiple style="height:70px;width:100%">
@@ -463,13 +518,22 @@
 													<div id="repeatOptions" {$rptstyle}>
 													<table border=0 cellspacing=0 cellpadding=2>
 													<tr>
-													<td>Repeat once in every</td>
-													<td><input type="text" name="repeat_frequency" class="textbox" style="width:20px" value="{$ACTIVITYDATA.repeat_frequency}" ></td>
-													<td><select name="recurringtype">
-													<option value="Daily" onClick="ghide('repeatWeekUI'); ghide('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Daily'} selected {/if}>{$MOD.LBL_DAYS}</option>
-													<option value="Weekly" onClick="gshow('repeatWeekUI'); ghide('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Weekly'} selected {/if}>{$MOD.LBL_WEEKS}</option>
-												<option value="Monthly" onClick="ghide('repeatWeekUI'); gshow('repeatMonthUI');" {if $ACTIVITYDATA.eventrecurringtype eq 'Monthly'} selected {/if}>{$MOD.LBL_MONTHS}</option>
-													<option value="Yearly" onClick="ghide('repeatWeekUI'); ghide('repeatMonthUI');"; {if $ACTIVITYDATA.eventrecurringtype eq 'Yearly'} selected {/if}>{$MOD.LBL_YEAR}</option>
+													<td>{$MOD.LBL_REPEAT_ONCE}</td>
+													<td>
+													<select name="repeat_frequency">
+                                                                                                                {section name="repeat" loop=15 start=1 step=1}
+                                                                                                                {if $smarty.section.repeat.iteration eq $ACTIVITYDATA.repeat_frequency}
+                                                                                                                        {assign var="test" value="selected"}
+                                                                                                                {else}                                                                                                                             {assign var="test" value=""}                                                                                                                                                                                                                  {/if}
+                                                                                                                <option "{$test}" value="{$smarty.section.repeat.iteration}">{$smarty.section.repeat.iteration}</option>
+                                                                                                                {/section}
+                                                                                                        </select>
+													</td>
+													<td><select name="recurringtype" onChange="rptoptDisp(this)">
+													<option value="Daily" {if $ACTIVITYDATA.eventrecurringtype eq 'Daily'} selected {/if}>{$MOD.LBL_DAYS}</option>
+													<option value="Weekly" {if $ACTIVITYDATA.eventrecurringtype eq 'Weekly'} selected {/if}>{$MOD.LBL_WEEKS}</option>
+												<option value="Monthly" {if $ACTIVITYDATA.eventrecurringtype eq 'Monthly'} selected {/if}>{$MOD.LBL_MONTHS}</option>
+													<option value="Yearly" {if $ACTIVITYDATA.eventrecurringtype eq 'Yearly'} selected {/if}>{$MOD.LBL_YEAR}</option>
 													</select>
 													</td>
 												</tr>
@@ -477,13 +541,13 @@
 												<div id="repeatWeekUI" {$rptweekstyle}>
 												<table border=0 cellspacing=0 cellpadding=2>
 												<tr>
-													<td><input name="sun_flag" value="sunday" {$ACTIVITYDATA.week0} type="checkbox"></td><td>Sun</td>
-													<td><input name="mon_flag" value="monday" {$ACTIVITYDATA.week1} type="checkbox"></td><td>Mon</td>
-													<td><input name="tue_flag" value="tuesday" {$ACTIVITYDATA.week2} type="checkbox"></td><td>Tue</td>
-													<td><input name="wed_flag" value="wednesday" {$ACTIVITYDATA.week3} type="checkbox"></td><td>Wed</td>
-													<td><input name="thu_flag" value="thursday" {$ACTIVITYDATA.week4} type="checkbox"></td><td>Thu</td>
-													<td><input name="fri_flag" value="friday" {$ACTIVITYDATA.week5} type="checkbox"></td><td>Fri</td>
-													<td><input name="sat_flag" value="saturday" {$ACTIVITYDATA.week6} type="checkbox"></td><td>Sat</td>
+													<td><input name="sun_flag" value="sunday" {$ACTIVITYDATA.week0} type="checkbox"></td><td>{$MOD.LBL_SM_SUN}</td>
+													<td><input name="mon_flag" value="monday" {$ACTIVITYDATA.week1} type="checkbox"></td><td>{$MOD.LBL_SM_MON}</td>
+													<td><input name="tue_flag" value="tuesday" {$ACTIVITYDATA.week2} type="checkbox"></td><td>{$MOD.LBL_SM_TUE}</td>
+													<td><input name="wed_flag" value="wednesday" {$ACTIVITYDATA.week3} type="checkbox"></td><td>{$MOD.LBL_SM_WED}</td>
+													<td><input name="thu_flag" value="thursday" {$ACTIVITYDATA.week4} type="checkbox"></td><td>{$MOD.LBL_SM_THU}</td>
+													<td><input name="fri_flag" value="friday" {$ACTIVITYDATA.week5} type="checkbox"></td><td>{$MOD.LBL_SM_FRI}</td>
+													<td><input name="sat_flag" value="saturday" {$ACTIVITYDATA.week6} type="checkbox"></td><td>{$MOD.LBL_SM_SAT}</td>
 												</tr>
 												</table>
 												</div>
@@ -562,10 +626,8 @@
 								<td><b>{$APP.Contacts}</b></td>
 								<td colspan="2">
 									<input name="contactidlist" id="contactidlist" value="{$CONTACTSID}" type="hidden">
-									<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt">
-									{$CONTACTSNAME}
-									</textarea>&nbsp;
-									<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&return_module=Calendar&popuptype=detailview&select=enable&form=EditView&form_submit=false','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="Select Contacts">
+									<textarea rows="5" name="contactlist" readonly="readonly" class="calTxt" id='parentid'>{$CONTACTSNAME}</textarea>&nbsp;
+									<input type="button" onclick="selectContact('true','general',document.EditView);" class="crmButton small edit" name="selectcnt" value="Select Contacts">
 								</td>
 							</tr>
 						</table>
@@ -577,14 +639,14 @@
 		{else}
 		<table border="0" cellpadding="5" cellspacing="0" width="100%">
 			<tr>
-                        	<td class="cellLabel" width="20%" align="right"><b>{$MOD.LBL_TODO}</b></td>
-                        	<td class="cellInfo" width="80%" align="left"><input name="subject" value="{$ACTIVITYDATA.subject}" class="textbox" style="width: 70%;" type="text"></td>
+                        	<td class="cellLabel" width="20%" align="right"><b><font color="red">*</font>{$MOD.LBL_TODO}</b></td>
+                        	<td class="cellInfo" width="80%" align="left"><input name="subject" value="{$ACTIVITYDATA.subject|escape}" class="textbox" style="width: 70%;" type="text"></td>
            		</tr>
 			
 			<tr>
 				{if $LABEL.description != ''}
 				<td class="cellLabel" align="right"><b>{$LABEL.description}</b></td>
-				<td class="cellInfo" align="left"><textarea style="width: 90%; height: 60px;" name="description">{$ACTIVITYDATA.description}</textarea>
+				<td class="cellInfo" align="left"><textarea style="width: 90%; height: 60px;" name="description">{$ACTIVITYDATA.description|escape}</textarea>
 				{/if}
 				
 			</tr>
@@ -701,7 +763,7 @@
 	                                        		{assign var=date_val value="$date_value"}
 								{assign var=time_val value="$time_value"}
                                         		{/foreach}
-							<input name="date_start" id="date_start" class="textbox" style="width: 90px;" value="{$date_val}" type="text"></td><td width=100%><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_date_start" align="middle" border="0">
+							<input name="date_start" id="date_start" class="textbox" style="width: 90px;" onChange="dochange('date_start','due_date');" value="{$date_val}" type="text"></td><td width=100%><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$MOD.LBL_SET_DATE}" title="{$MOD.LBL_SET_DATE}" id="jscal_trigger_date_start" align="middle" border="0">
 							{foreach key=date_fmt item=date_str from=$secondvalue.date_start}
 								{assign var=date_vl value="$date_fmt"}
 							{/foreach}				
@@ -720,7 +782,7 @@
 									{assign var=date_val value="$date_value"}
 									{assign var=time_val value="$time_value"}
 								{/foreach}
-								<input name="due_date" id="due_date" class="textbox" style="width: 90px;" value="{$date_val}" type="text"></td><td width=100%><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="Set date.." title="Set date.." id="jscal_trigger_due_date" border="0">
+								<input name="due_date" id="due_date" class="textbox" style="width: 90px;" value="{$date_val}" type="text"></td><td width=100%><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$MOD.LBL_SET_DATE}" title="{$MOD.LBL_SET_DATE}" id="jscal_trigger_due_date" border="0">
 								{foreach key=date_fmt item=date_str from=$secondvalue.due_date}
                                                 			{assign var=date_vl value="$date_fmt"}
                                         			{/foreach}
@@ -794,8 +856,8 @@
 			     <tr>
                                      <td><b>{$LABEL.contact_id}</b></td>
 				     <td colspan="2">
-						<input name="contact_name" readonly type="text" class="calTxt" value="{$ACTIVITYDATA.contact_id}"><input name="contact_id" type="hidden" value="{$secondvalue.contact_id}">&nbsp;
-						<input type="button" onclick="return window.open('index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView','test','width=640,height=602,resizable=0,scrollbars=0');" class="crmButton small edit" name="selectcnt" value="Select Contact">
+						<input name="contact_name" id = "contact_name" readonly type="text" class="calTxt" value="{$ACTIVITYDATA.contact_id}"><input name="contact_id"  type="hidden" value="{$secondvalue.contact_id}">&nbsp;
+						<input type="button" onclick="selectContact('false','task',document.EditView);" class="crmButton small edit" name="selectcnt" value="Select Contact">
 				     </td>
                              </tr>
 			     {/if}
@@ -832,13 +894,13 @@
         </table>
 <script>
 {if $ACTIVITY_MODE eq 'Task'}
-	var fieldname = new Array('subject','date_start','time_start','taskstatus');
-	var fieldlabel = new Array('Subject','Date','Time','Status');
-	var fielddatatype = new Array('V~M','D~M~time_start','T~O','V~O');
+	var fieldname = new Array('subject','date_start','time_start','due_date','taskstatus');
+        var fieldlabel = new Array('{$MOD.LBL_LIST_SUBJECT}','{$MOD.LBL_START_DATE}','{$MOD.LBL_TIME}','{$MOD.LBL_DUE_DATE}','{$MOD.LBL_STATUS}');
+        var fielddatatype = new Array('V~M','D~M~time_start','T~O','D~M~OTH~GE~date_start~Start Date & Time','V~O');
 {else}
-	var fieldname = new Array('subject','date_start','due_date','taskpriority','sendnotification','parent_id','contact_id','reminder_time','recurringtype');
-	var fieldlabel = new Array('Subject','Start Date','Due Date','Priority','Send Notification','Related To','Contact Name','Send Reminder','Recurrence');
-	var fielddatatype = new Array('V~M','D~M','D~M~OTH~GE~date_start~Start Date','V~O','C~O','I~O','I~O','I~O','O~O');
+	var fieldname = new Array('subject','date_start','time_start','due_date','eventstatus','taskpriority','sendnotification','parent_id','contact_id','reminder_time','recurringtype');
+        var fieldlabel = new Array('{$MOD.LBL_LIST_SUBJECT}','{$MOD.LBL_START_DATE}','{$MOD.LBL_TIME_START}','{$MOD.LBL_DUE_DATE}','{$MOD.LBL_STATUS}','{$MOD.Priority}','{$MOD.LBL_SENDNOTIFICATION}','{$MOD.LBL_RELATEDTO}','{$MOD.LBL_CONTACT_NAME}','{$MOD.LBL_SENDREMINDER}','{$MOD.Recurrence}');
+        var fielddatatype = new Array('V~M','D~M','T~O','D~M~OTH~GE~date_start~Start Date','V~O','V~O','C~O','I~O','I~O','I~O','O~O');
 {/if}
 </script>
 <script>	
@@ -862,7 +924,4 @@
 			document.EditView.imagelist.value=imagelists
 	{rdelim}
 
-</script>
-<script language="JavaScript" type="text/JavaScript">
-	setObjects();
 </script>

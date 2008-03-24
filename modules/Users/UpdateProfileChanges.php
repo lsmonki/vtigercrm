@@ -162,7 +162,9 @@ foreach($modArr as $fld_module => $fld_label)
 		}
 		//Updating the Mandatory vtiger_fields
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
-		if($uitype == 2 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
+		$displaytype =  $adb->query_result($fieldListResult,$i,"displaytype");
+		$fieldname =  $adb->query_result($fieldListResult,$i,"fieldname");
+		if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $displaytype == 3 || $uitype == 20 || ($displaytype != 3 && $fieldname == "activitytype" && $uitype == 15))
 		{
 			$visible_value = 0;
 		}
@@ -172,7 +174,14 @@ foreach($modArr as $fld_module => $fld_label)
 
 	}
 }
-	$loc = "Location: index.php?action=".$return_action."&module=Users&mode=view&parenttab=Settings&profileid=".$profileid."&selected_tab=".$def_tab."&selected_module=".$def_module;
+	if($return_action == 'profilePrivileges' || $return_action == 'ListProfiles')
+	{
+		$loc = "Location: index.php?action=".$return_action."&module=Settings&mode=view&parenttab=Settings&profileid=".$profileid."&selected_tab=".$def_tab."&selected_module=".$def_module;
+	}
+	else
+	{
+		$loc = "Location: index.php?action=".$return_action."&module=Users&mode=view&parenttab=Settings&profileid=".$profileid."&selected_tab=".$def_tab."&selected_module=".$def_module;
+	}
 	header($loc);
 
  /** returns value 0 if request permission is on else returns value 1

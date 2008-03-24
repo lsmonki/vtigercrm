@@ -11,12 +11,25 @@
 
 require_once('modules/Portal/Portal.php');
 
-if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
+global $default_charset;
+$conv_pname = function_exists(iconv) ? @iconv("UTF-8",$default_charset, $_REQUEST['portalname']) : $_REQUEST['portalname'];
+$conv_purl = function_exists(iconv) ? @iconv("UTF-8",$default_charset, $_REQUEST['portalurl']) : $_REQUEST['portalurl'];
+$portlname =str_replace(array("'",'"'),'',$conv_pname);
+$portlurl =str_replace(array("'",'"'),'',$conv_purl);
+
+if($portlname != '' && $portlurl != '')
 {
-	$result=UpdatePortal($_REQUEST['portalname'],"http://".str_replace("#$#$#","&",$_REQUEST['portalurl']),$_REQUEST['record']);
+	if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
+	{
+		$result=UpdatePortal($portlname,"http://".str_replace("#$#$#","&",$portlurl),$_REQUEST['record']);
+	}
+	else
+	{
+		$result=SavePortal($portlname,"http://".str_replace("#$#$#","&",$portlurl));
+	}
+	header("Location: index.php?action=PortalAjax&module=Portal&file=ListView&mode=ajax&datamode=manage");
 }else
 {
-	$result=SavePortal($_REQUEST['portalname'],"http://".str_replace("#$#$#","&",$_REQUEST['portalurl']));
+	echo ":#:FAILURE";
 }
-header("Location: index.php?action=PortalAjax&module=Portal&file=ListView&mode=ajax&datamode=manage");
 ?>

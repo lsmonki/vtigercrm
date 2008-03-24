@@ -166,7 +166,7 @@ if(isset($where) && $where != '')
         $query .= ' and '.$where;
 }
 
-
+/*
 if(isset($order_by) && $order_by != '')
 {
 	$tablename = getTableNameForField('Leads',$order_by);
@@ -177,7 +177,24 @@ if(isset($order_by) && $order_by != '')
 	
         $query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
+*/
+if(isset($order_by) && $order_by != '')
+{
+	if($order_by == 'smownerid')
+	{
+		$query .= ' ORDER BY user_name '.$sorder;
+	}
+	else
+	{
+		$tablename = getTableNameForField('Leads',$order_by);
+		$tablename = (($tablename != '')?($tablename."."):'');
+		if( $adb->dbType == "pgsql")
+			$query .= ' GROUP BY '.$tablename.$order_by;
 
+
+		$query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
+	}
+}
 //Retreiving the no of rows
 $count_result = $adb->query( mkCountQuery( $query));
 $noofrows = $adb->query_result($count_result,0,"count");
@@ -221,7 +238,6 @@ if(isset($ids))
 }
 if(isPermitted("Leads","Merge") == 'yes') 
 {
-	$smarty->assign("MERGEBUTTON","<td><input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"crmbutton small create\" onclick=\"return massMerge('Leads')\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
 	$wordTemplateResult = fetchWordTemplateList("Leads");
 	$tempCount = $adb->num_rows($wordTemplateResult);
 	$tempVal = $adb->fetch_array($wordTemplateResult);
@@ -230,7 +246,23 @@ if(isPermitted("Leads","Merge") == 'yes')
 		$optionString .="<option value=\"".$tempVal["templateid"]."\">" .$tempVal["filename"] ."</option>";
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
-	$smarty->assign("WORDTEMPLATEOPTIONS","<td>".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."</td><td style=\"padding-left:5px;padding-right:5px\"><select class=\"small\" name=\"mergefile\">".$optionString."</select></td>");
+	if($tempCount > 0)
+	{
+		$smarty->assign("WORDTEMPLATEOPTIONS","<td>".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."</td><td style=\"padding-left:5px;padding-right:5px\"><select class=\"small\" name=\"mergefile\">".$optionString."</select></td>");
+
+		$smarty->assign("MERGEBUTTON","<td><input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"crmbutton small create\" onclick=\"return massMerge('Leads')\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+	}
+	else
+        {
+		global $current_user;
+                require("user_privileges/user_privileges_".$current_user->id.".php");
+                if($is_admin == true)
+                {
+			$smarty->assign("MERGEBUTTON",'<td><a href=index.php?module=Settings&action=upload&tempModule='.$currentModule.'>'. $app_strings["LBL_CREATE_MERGE_TEMPLATE"].'</td>');
+                }
+        }
+
+
 }
 //mass merge for word templates
 

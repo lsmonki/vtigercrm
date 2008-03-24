@@ -128,7 +128,7 @@ if(isset($order_by) && $order_by != '')
 {
 	if($order_by == 'smownerid')
         {
-                $query .= ' ORDER BY user_name '.$sorder;
+		$query .= " ORDER BY case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end ".$sorder;
         }
         else
         {

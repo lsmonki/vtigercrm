@@ -33,7 +33,7 @@
  */
 function is_admin($user) {
 	global $log;
-	$log->debug("Entering is_admin(".$user.") method ...");
+	$log->debug("Entering is_admin(".$user->user_name.") method ...");
 	
 	if ($user->is_admin == 'on')
 	{
@@ -329,6 +329,63 @@ function getTabid($module)
 	return $tabid;
 
 }
+/**
+ * Function to get the CustomViewName
+ * Takes the input as $cvid - customviewid
+ * returns the cvname string fromat
+ */
+
+function getCVname($cvid)
+{
+        global $log;
+        $log->debug("Entering getCVname method ...");
+
+        global $adb;
+        $sql = "select viewname from vtiger_customview where cvid=".$cvid;
+        $result = $adb->query($sql);
+        $cvname =  $adb->query_result($result,0,"viewname");
+
+        $log->debug("Exiting getCVname method ...");
+        return $cvname;
+
+}
+
+
+
+/**
+ * Function to get the ownedby value for the specified module 
+ * Takes the input as $module - module name
+ * returns the tabid, integer type
+ */
+
+function getTabOwnedBy($module)
+{
+	global $log;
+	$log->debug("Entering getTabid(".$module.") method ...");
+
+	$tabid=getTabid($module);
+	
+	if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0)) 
+	{
+		include('tabdata.php');
+		$tab_ownedby= $tab_ownedby_array[$tabid];
+	}
+	else
+	{	
+
+        	$log->info("module  is ".$module);
+        	global $adb;
+		$sql = "select ownedby from vtiger_tab where name='".$module."'";
+		$result = $adb->query($sql);
+		$tab_ownedby=  $adb->query_result($result,0,"ownedby");
+	}
+	$log->debug("Exiting getTabid method ...");
+	return $tab_ownedby;
+
+}
+
+
+
 
 /**
  * Function to get the tabid 
@@ -430,11 +487,15 @@ function getContactName($contact_id)
 	$log->info("in getContactName ".$contact_id);
 
         global $adb;
-        $sql = "select * from vtiger_contactdetails where contactid=".$contact_id;
-        $result = $adb->query($sql);
-        $firstname = $adb->query_result($result,0,"firstname");
-        $lastname = $adb->query_result($result,0,"lastname");
-        $contact_name = $lastname.' '.$firstname;
+	$contact_name = '';
+	if($contact_id != '')
+	{
+        	$sql = "select * from vtiger_contactdetails where contactid=".$contact_id;
+        	$result = $adb->query($sql);
+        	$firstname = $adb->query_result($result,0,"firstname");
+        	$lastname = $adb->query_result($result,0,"lastname");
+        	$contact_name = $lastname.' '.$firstname;
+	}
 	$log->debug("Exiting getContactName method ...");
         return $contact_name;
 }
@@ -617,6 +678,14 @@ function getGroupName($id, $module)
         {
                $sql = "select vtiger_activitygrouprelation.groupname,vtiger_groups.groupid from vtiger_activitygrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_activitygrouprelation.activityid=".$id;
 	}
+	else
+        {
+		$modObj = new $module();
+			
+               $sql = "select ".$modObj->groupTable[0].".groupname,vtiger_groups.groupid from ".$modObj->groupTable[0]." inner join vtiger_groups on vtiger_groups.groupname=".$modObj->groupTable[0].".groupname where ".$modObj->groupTable[0].".".$modObj->groupTable[1]."=".$id;
+	}
+	
+	
 	$result = $adb->query($sql);
         $group_info[] = $adb->query_result($result,0,"groupname");
         $group_info[] = $adb->query_result($result,0,"groupid");
@@ -677,7 +746,7 @@ function getUserFullName($userid)
 function getURLstring($focus)
 {
 	global $log;
-	$log->debug("Entering getURLstring(".$focus.") method ...");
+	$log->debug("Entering getURLstring(".get_class($focus).") method ...");
 	$qry = "";
 	foreach($focus->column_fields as $fldname=>$val)
 	{
@@ -1017,7 +1086,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	if($disp_view == "detail_view")
 	{
-		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == "Users")
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == "Users" || $module == "Emails")
   		{
  			$sql = "SELECT vtiger_field.* FROM vtiger_field WHERE vtiger_field.tabid=".$tabid." AND vtiger_field.block IN $blockid_list AND vtiger_field.displaytype IN (1,2,4) ORDER BY block,sequence";
   		}
@@ -1030,13 +1099,18 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
  			    $sql = fixPostgresQuery( $sql, $log, 0);
   		}
 		$result = $adb->query($sql);
+
+		// Added to unset the previous record's related listview session values
+		if(isset($_SESSION['rlvs']))
+			unset($_SESSION['rlvs']);
+
 		$getBlockInfo=getDetailBlockInformation($module,$result,$col_fields,$tabid,$block_label);
 	}
 	else
 	{
 		if ($info_type != '')
 		{
-			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2]== 0 || $module == 'Users')
+			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2]== 0 || $module == 'Users' || $module == "Emails")
   			{
  				$sql = "SELECT vtiger_field.* FROM vtiger_field WHERE vtiger_field.tabid=".$tabid." AND vtiger_field.block IN ".$blockid_list ." AND ".$display_type_check." AND info_type = '".$info_type."' ORDER BY block,sequence";
   			}
@@ -1051,7 +1125,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 		}
 		else
 		{
-		if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == 'Users')
+			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == 'Users' || $module == "Emails")
   			{
  				$sql = "SELECT vtiger_field.* FROM vtiger_field WHERE vtiger_field.tabid=".$tabid." AND vtiger_field.block IN ".$blockid_list." AND ".$display_type_check." ORDER BY block,sequence";
   			}
@@ -1070,26 +1144,29 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 	$log->debug("Exiting getBlocks method ...");
 	$index_count =1;
 	$max_index =0;
-	foreach($getBlockInfo as $label=>$contents)
+	if(count($getBlockInfo) > 0)
 	{
+		foreach($getBlockInfo as $label=>$contents)
+		{
 			$no_rows = count($contents);	
 			$index_count = $max_index+1;
-		foreach($contents as $block_row => $elements)
-		{
-			$max_index= $no_rows+$index_count;
-			
-			for($i=0;$i<count($elements);$i++)
-			{	
-				if(sizeof($getBlockInfo[$label][$block_row][$i])!=0)
-				{
-					if($i==0)
-					$getBlockInfo[$label][$block_row][$i][]=array($index_count);
-					else
-					$getBlockInfo[$label][$block_row][$i][]=array($max_index);
+			foreach($contents as $block_row => $elements)
+			{
+				$max_index= $no_rows+$index_count;
+
+				for($i=0;$i<count($elements);$i++)
+				{	
+					if(sizeof($getBlockInfo[$label][$block_row][$i])!=0)
+					{
+						if($i==0)
+						$getBlockInfo[$label][$block_row][$i][]=array($index_count);
+						else
+						$getBlockInfo[$label][$block_row][$i][]=array($max_index);
+					}
 				}
+				$index_count++;
+
 			}
-			$index_count++;
-			
 		}
 	}
 	return $getBlockInfo;
@@ -1234,6 +1311,7 @@ function getParentTabFromModule($module)
 			if(in_array($tabid,$childArr))
 			{
 				$parent_tabname= $parent_tab_info_array[$parid];
+				break;
 			}
 		}
 		$log->debug("Exiting getParentTabFromModule method ...");
@@ -1579,7 +1657,7 @@ function DefHomeView()
 function setObjectValuesFromRequest($focus)
 {
 	global $log;
-	$log->debug("Entering setObjectValuesFromRequest(".$focus.") method ...");
+	$log->debug("Entering setObjectValuesFromRequest(".get_class($focus).") method ...");
 	global $current_user;
 	$currencyid=fetchCurrency($current_user->id);
 	$rate_symbol = getCurrencySymbolandCRate($currencyid);
@@ -1641,13 +1719,17 @@ function create_tab_data_file()
         $num_rows=$adb->num_rows($result);
         $result_array=Array();
 	$seq_array=Array();
+	$ownedby_array=Array();
+	
         for($i=0;$i<$num_rows;$i++)
         {
                 $tabid=$adb->query_result($result,$i,'tabid');
                 $tabname=$adb->query_result($result,$i,'name');
 		$presence=$adb->query_result($result,$i,'presence');
+		$ownedby=$adb->query_result($result,$i,'ownedby');
                 $result_array[$tabname]=$tabid;
 		$seq_array[$tabid]=$presence;
+		$ownedby_array[$tabid]=$ownedby;
 
         }
 
@@ -1696,6 +1778,8 @@ if (file_exists($filename)) {
                 $newbuf .= "\$tab_info_array=".constructArray($result_array).";\n";
                 $newbuf .= "\n";
                 $newbuf .= "\$tab_seq_array=".constructArray($seq_array).";\n";
+		$newbuf .= "\n";
+		$newbuf .= "\$tab_ownedby_array=".constructArray($ownedby_array).";\n";
 		$newbuf .= "\n";
                 $newbuf .= "\$action_id_array=".constructSingleStringKeyAndValueArray($actionid_array).";\n";
 		$newbuf .= "\n";
@@ -1821,20 +1905,6 @@ function getQuickCreateModules()
          global $mod_strings;
 
 
-	$new_label=Array('Leads'=>'LNK_NEW_LEAD',
-			 'Accounts'=>'LNK_NEW_ACCOUNT',
-			 'Calendar'=>'LNK_NEW_TASK',
-			 'Campaigns'=>'LNK_NEW_CAMPAIGN',
-			 'Emails'=>'LNK_NEW_EMAIL',
-			 'Events'=>'LNK_NEW_EVENT',
-			 'HelpDesk'=>'LNK_NEW_HDESK',
-			 'Notes'=>'LNK_NEW_NOTE',
-			 'Potentials'=>'LNK_NEW_OPPORTUNITY',
-			 'PriceBooks'=>'LNK_NEW_PRICEBOOK',
-			 'Products'=>'LNK_NEW_PRODUCT',
-			 'Contacts'=>'LNK_NEW_CONTACT',
-			 'Vendors'=>'LNK_NEW_VENDOR'); 	
-
 $qc_query = "select distinct vtiger_tab.tablabel,vtiger_tab.name from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid where quickcreate=0 order by vtiger_tab.tablabel";
 $result = $adb->query($qc_query);
 $noofrows = $adb->num_rows($result);
@@ -1844,7 +1914,7 @@ for($i = 0; $i < $noofrows; $i++)
          $tablabel = $adb->query_result($result,$i,'tablabel');
 
          $tabname = $adb->query_result($result,$i,'name');
-	 $tablabel = $new_label[$tabname];
+	 $tablabel = "SINGLE_$tabname";
 	 if(isPermitted($tabname,'EditView','') == 'yes')
 	 {
          	$return_qcmodule[] = $tablabel;
@@ -1938,8 +2008,8 @@ for ($i=0,$j=0;$i<count($qcreate_arr);$i=$i+2,$j++)
 **/
 function sendNotificationToOwner($module,$focus)
 {
-	global $log;
-	$log->debug("Entering sendNotificationToOwner(".$module.",".$focus.") method ...");
+	global $log,$app_strings;
+	$log->debug("Entering sendNotificationToOwner(".$module.",".get_class($focus).") method ...");
 	require_once("modules/Emails/mail.php");
 	global $current_user;
 
@@ -1983,47 +2053,91 @@ function sendNotificationToOwner($module,$focus)
 			      		     );
 	}	
 	
-	$description = 'Dear '.$ownername.',<br><br>';
-
-	if($focus->mode == 'edit')
+	if($module == "Accounts" || $module == "Potentials" || $module == "Contacts")
 	{
-		$subject = 'Regarding '.$mod_name.' updation - '.$objectname;
-		$description .= 'The '.$mod_name.' has been updated.';
+		$description = $app_strings['MSG_DEAR'].' '.$ownername.',<br><br>';
+
+		if($focus->mode == 'edit')
+		{
+			$subject = $app_strings['MSG_REGARDING'].' '.$mod_name.' '.$app_strings['MSG_UPDATION'].' '.$objectname;
+			$description .= $app_strings['MSG_THE'].' '.$mod_name.' '.$app_strings['MSG_HAS_BEEN_UPDATED'].'.';
+		}
+		else
+		{
+			$subject = $app_strings['MSG_REGARDING'].' '.$mod_name.' '.$app_strings['MSG_ASSIGNMENT'].' '.$objectname;
+		        $description .= $app_strings['MSG_THE'].' '.$mod_name.' '.$app_strings['MSG_HAS_BEEN_ASSIGNED_TO_YOU'].'.';
+		}
+		$description .= '<br>'.$app_strings['MSG_THE'].' '.$mod_name.' '.$app_strings['MSG_DETAILS_ARE'].':<br><br>';
+                $description .= $mod_name.' '.$app_strings['MSG_ID'].' '.'<b>'.$focus->id.'</b><br>';
+		foreach($object_column_fields as $fieldname => $fieldlabel)
+		{
+			//Get the translated string
+			$temp_label = isset($app_strings[$fieldlabel])?$app_strings[$fieldlabel]:(isset($mod_strings[$fieldlabel])?$mod_strings[$fieldlabel]:$fieldlabel);
+
+			$description .= $temp_label.' : <b>'.$focus->column_fields[$fieldname].'</b><br>';
+		}
+
+		$description .= '<br><br>'.$app_strings['MSG_THANK_YOU'].',<br>'.$current_user->user_name.'.<br>';
+		$status = send_mail($module,$ownermailid,$current_user->user_name,'',$subject,$description);
+
+		$log->debug("Exiting sendNotificationToOwner method ...");
+		return $status;
+	}
+}
+
+//Function to send notification to the users of a group
+function sendNotificationToGroups($groupid,$crmid,$module)
+{
+       global $adb,$app_strings;
+       $returnEntity=Array();
+       $returnEntity=getEntityName($module,Array($crmid));
+       $mycrmid=$groupid;
+       require_once('include/utils/GetGroupUsers.php');
+       $getGroupObj=new GetGroupUsers();
+       $getGroupObj->getAllUsersInGroup($mycrmid);
+       $userIds=$getGroupObj->group_users;
+        $groupqry="select email1,id,user_name from vtiger_users where id in(".implode(',',$userIds).")";
+       $groupqry_res=$adb->query($groupqry);
+       for($z=0;$z < $adb->num_rows($groupqry_res);$z++)
+       {
+               //handle the mail send to vtiger_users
+               $emailadd = $adb->query_result($groupqry_res,$z,'email1');
+               $curr_userid = $adb->query_result($groupqry_res,$z,'id');
+               $tosender=$adb->query_result($groupqry_res,$z,'user_name');
+               $pmodule = 'Users';
+	       $description = $app_strings['MSG_DEAR']." ".$tosender.",<br>".$returnEntity[$crmid]." ".$app_strings['MSG_HAS_BEEN_CREATED_FOR']." ".$module."<br><br>".$app_strings['MSG_THANKS'].",<br>".$app_strings['MSG_VTIGERTEAM'];
+               require_once('modules/Emails/mail.php');
+               $mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'','Record created-vTiger Team',$description,'','','all',$focus->id);
+               $all_to_emailids []= $emailadd;
+                $mail_status_str .= $emailadd."=".$mail_status."&&&";
+        }
+}
+
+
+function getUserslist()
+{
+	global $log,$current_user,$module,$adb,$assigned_user_id;
+	$log->debug("Entering getUserslist() method ...");
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	
+	if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
+	{
+		$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $current_user->id,'private'), $current_user->id);
 	}
 	else
 	{
-		$subject = 'Regarding '.$mod_name.' assignment - '.$objectname;
-		$description .= 'The '.$mod_name.' has been assigned to you.';
+		$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $current_user->id),$current_user->id);
 	}
-	$description .= '<br>The '.$mod_name.' details are:<br><br>';
-	$description .= $mod_name.' Id : '.$focus->id.'<br>';
-
-	foreach($object_column_fields as $fieldname => $fieldlabel)
+	foreach($users_combo as $userid=>$value)	
 	{
-		//Get the translated string
-		$temp_label = isset($app_strings[$fieldlabel])?$app_strings[$fieldlabel]:(isset($mod_strings[$fieldlabel])?$mod_strings[$fieldlabel]:$fieldlabel);
 
-		$description .= $temp_label.' : <b>'.$focus->column_fields[$fieldname].'</b><br>';
+		foreach($value as $username=>$selected)
+		{
+			$change_owner .= "<option value=$userid $selected>".$username."</option>";
+		}
 	}
-
-	$description .= '<br><br>Thank You <br>';
-	$status = send_mail($module,$ownermailid,$current_user->user_name,'',$subject,$description);
-
-	$log->debug("Exiting sendNotificationToOwner method ...");
-	return $status;
-}
-function getUserslist()
-{
-	global $log;
-	$log->debug("Entering getUserslist() method ...");
-	global $adb;
-	$result=$adb->query("select * from vtiger_users");
-	for($i=0;$i<$adb->num_rows($result);$i++)
-	{
-	       $useridlist[$i]=$adb->query_result($result,$i,'id');
-	       $usernamelist[$useridlist[$i]]=$adb->query_result($result,$i,'user_name');
-	}
-	$change_owner = get_select_options_with_id($usernamelist,'admin');
+	
 	$log->debug("Exiting getUserslist method ...");
 	return $change_owner;
 }
@@ -2031,21 +2145,43 @@ function getUserslist()
 
 function getGroupslist()
 {
-	global $log;
+	global $log,$adb,$module,$current_user;
 	$log->debug("Entering getGroupslist() method ...");
-	global $adb;
-	$result=$adb->query("select * from vtiger_groups");
-	
-	for($i=0;$i<$adb->num_rows($result);$i++)
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
 	{
-	       $groupidlist[$i]=$adb->query_result($result,$i,'groupid');
-	       $groupnamelist[$groupidlist[$i]]=$adb->query_result($result,$i,'groupname');
-	       
+		$result=get_current_user_access_groups($module);
 	}
-	$change_groups_owner = get_select_options_with_id($groupnamelist,'');
-	$log->debug("Exiting getGroupslist method ...");
+	else
+	{
+		$result = get_group_options();
+	}
 
-	return $change_groups_owner;
+	$groupArray = $adb->fetch_array($result);
+	if(!empty($groupArray)){
+		do{
+			$groupname=$groupArray["groupname"];
+			$group_id=$groupArray["groupid"];
+			$selected = '';
+			if($groupname == $selected_groupname[0])
+			{
+				$selected = "selected";
+			}
+			if($groupname != '')
+				$group_option[$group_id] = array($groupname=>$selected);
+	          }while($groupArray = $adb->fetch_array($result));
+
+		foreach($group_option as $groupid=>$value)  
+		{ 
+			foreach($value as $groupname=>$selected) 
+			{
+				$change_groups_owner .= "<option value=$groupid $selected >".$groupname."</option>";  
+			}	 
+		}
+		$log->debug("Exiting getGroupslist method ...");
+		return $change_groups_owner;
+	}	
 }
 
 
@@ -2236,7 +2372,7 @@ function getModuleFileStoragePath($module)
 */
 function validateImageFile($file_details)
 {
-	global $adb, $log;
+	global $adb, $log,$app_strings;
 	$log->debug("Entering into validateImageFile($file_details) method.");
 	
 	$savefile = 'true';
@@ -2250,7 +2386,7 @@ function validateImageFile($file_details)
 	else
 	{
 		$saveimage = 'false';
-		$_SESSION['image_type_error'] .= "<br> &nbsp;&nbsp;<b>$file_details[name]</b> is not uploaded. Allowed file types - jpeg, png, jpg, pjpeg, x-png or gif.";
+		$_SESSION['image_type_error'] .= "<br> &nbsp;&nbsp;<b>".$file_details[name]."</b>".$app_strings['MSG_IS_NOT_UPLOADED'];
 		$log->debug("Invalid Image type == $filetype");
 	}
 
@@ -2367,12 +2503,13 @@ function getMergedDescription($description,$id,$parent_type)
 			break;
 	}
 	//replace the unwanted tokens by null
-	$token_data_pair = explode('$',$description);
+	//commented out to fix the bug #3721
+	/*$token_data_pair = explode('$',$description);
     for($i=1;$i < count($token_data_pair);$i+=2)
 	{
 		$token_data = '$'.$token_data_pair[$i].'$';
 		$description = str_replace($token_data,'',$description);
-	}
+	}*/
     $log->debug("Exiting from getMergedDescription ...");
 	return $description;
 }
@@ -2528,4 +2665,256 @@ function getrecurringObjValue()
 	}
 	
 }
+
+/**	Function used to get the translated string to the input string
+ *	@param string $str - input string which we want to translate
+ *	@return string $str - translated string, if the translated string is available then the translated string other wise original string will be returned
+ */
+function getTranslatedString($str)
+{
+	global $app_strings, $mod_strings, $log;
+	$trans_str = ($app_strings[$str] != '')?$app_strings[$str]:(($mod_strings[$str] != '')?$mod_strings[$str]:$str);
+	$log->debug("function getTranslatedString($str) - translated to ($trans_str)");
+	return $trans_str;
+}
+
+/**	function used to get the list of importable fields
+ *	@param string $module - module name
+ *	@return array $fieldslist - array with list of fieldnames and the corresponding translated fieldlabels. The return array will be in the format of [fieldname]=>[fieldlabel] where as the fieldlabel will be translated
+ */
+function getImportFieldsList($module)
+{
+	global $adb, $log;
+	$log->debug("Entering into function getImportFieldsList($module)");
+	
+	$tabid = getTabid($module);
+
+	//Here we can add special cases for module basis, ie., if we want the fields of display type 3, we can add
+	$displaytype = " displaytype=1 ";
+
+	$fieldnames = "";
+	//For module basis we can add the list of fields for Import mapping
+	if($module == "Leads")
+	{
+		$fieldnames = " fieldname='salutationtype' ";
+	}
+
+	//Form the where condition based on tabid , displaytype and extra fields
+	$where = " WHERE tabid=$tabid and ( $displaytype ";
+	if($fieldnames != "")
+	{
+		$where .= " or $fieldnames ";
+	}
+	$where .= ")";
+
+	//Get the list of fields and form as array with [fieldname] => [fieldlabel]
+	$query = "SELECT fieldname, fieldlabel FROM vtiger_field $where";
+	$result = $adb->query($query);
+	for($i=0;$i<$adb->num_rows($result);$i++)
+	{
+		$fieldname = $adb->query_result($result,$i,'fieldname');
+		$fieldlabel = $adb->query_result($result,$i,'fieldlabel');
+		$fieldslist[$fieldname] = getTranslatedString($fieldlabel);
+	}
+
+	$log->debug("Exit from function getImportFieldsList($module)");
+
+	return $fieldslist;
+}
+/**     Function to get all the comments for a troubleticket
+  *     @param int $ticketid -- troubleticket id
+  *     return all the comments as a sequencial string which are related to this ticket
+**/
+function getTicketComments($ticketid)
+{
+        global $log;
+        $log->debug("Entering getTicketComments(".$ticketid.") method ...");
+        global $adb;
+
+        $commentlist = '';
+        $sql = "select * from vtiger_ticketcomments where ticketid=".$ticketid;
+        $result = $adb->query($sql);
+        for($i=0;$i<$adb->num_rows($result);$i++)
+        {
+                $comment = $adb->query_result($result,$i,'comments');
+                if($comment != '')
+                {
+                        $commentlist .= '<br><br>'.$comment;
+                }
+        }
+        if($commentlist != '')
+                $commentlist = '<br><br> The comments are : '.$commentlist;
+
+        $log->debug("Exiting getTicketComments method ...");
+        return $commentlist;
+}
+
+function getTicketDetails($id,$whole_date)
+{
+	 global $adb,$mod_strings;
+	 if($whole_date['mode'] == 'edit')
+	 {
+		$reply = $mod_strings["replied"];
+		$temp = "Re : ";
+	 }
+	 else	
+	 {
+		$reply = $mod_strings["created"];
+		$temp = " ";
+	 }
+	
+	 $desc = $mod_strings['Ticket ID'] .' : '.$id.'<br> Ticket Title : '. $temp .' '.$whole_date['sub'];
+	 $desc .= "<br><br>".$mod_strings['Hi']." ". $whole_date['parent_name'].",<br><br>".$mod_strings['LBL_PORTAL_BODY_MAILINFO']." ".$reply." ".$mod_strings['LBL_DETAIL']."<br>";
+	 $desc .= "<br>".$mod_strings['Status']." : ".$whole_date['status'];
+	 $desc .= "<br>".$mod_strings['Category']." : ".$whole_date['category'];
+	 $desc .= "<br>".$mod_strings['Severity']." : ".$whole_date['severity'];
+	 $desc .= "<br>".$mod_strings['Priority']." : ".$whole_date['priority'];
+	 $desc .= "<br><br>".$mod_strings['Description']." : <br>".$whole_date['description'];
+	 $desc .= "<br><br>".$mod_strings['Solution']." : <br>".$whole_date['solution'];
+	 $desc .= getTicketComments($id);
+
+	 $sql = "SELECT * FROM vtiger_ticketcf WHERE ticketid = \"".$id."\"";
+	 $result = $adb->query($sql);
+	 $cffields = $adb->getFieldsArray($result);
+	 foreach ($cffields as $cfOneField)
+	 {
+		 if ($cfOneField != 'ticketid')
+		 {
+			 $cfData = $adb->query_result($result,0,$cfOneField);
+			 $sql = "SELECT fieldlabel FROM vtiger_field WHERE columnname = \"$cfOneField\"";
+			 $cfLabel = $adb->query_result($adb->query($sql),0,'fieldlabel');
+			 $desc .= '<br><br>'.$cfLabel.' : <br>'.$cfData;
+		 }
+	 }
+	 // end of contribution
+	 $desc .= '<br><br><br>';
+	 $desc .= '<br>'.$mod_strings["LBL_REGARDS"].',<br>'.$mod_strings["LBL_TEAM"].'.<br>';
+	 return $desc;
+
+}
+
+function getPortalInfo_Ticket($id,$title,$contactname,$portal_url)
+{
+	global $mod_strings;
+	$bodydetails =$mod_strings['Dear']." ".$contactname.",<br><br>";
+        $bodydetails .= $mod_strings['reply'].' <b>'.$title.'</b>'.$mod_strings['customer_portal'];
+        $bodydetails .= $mod_strings["link"].'<br>';
+        $bodydetails .= $portal_url;
+        $bodydetails .= '<br><br>'.$mod_strings["Thanks"].'<br><br>'.$mod_strings["Support_team"];
+	return $bodydetails;
+}
+
+/**
+ * This function is used to get a random password.
+ * @return a random password with alpha numeric chanreters of length 8
+ */
+function makeRandomPassword()
+{
+	global $log;
+	$log->debug("Entering makeRandomPassword() method ...");
+	$salt = "abcdefghijklmnopqrstuvwxyz0123456789";
+	srand((double)microtime()*1000000);
+	$i = 0;
+	while ($i <= 7)
+	{
+		$num = rand() % 33;
+		$tmp = substr($salt, $num, 1);
+		$pass = $pass . $tmp;
+		$i++;
+	}
+	$log->debug("Exiting makeRandomPassword method ...");
+	return $pass;
+}
+
+//added to get mail info for portal user
+function getmail_contents_portalUser($request_array,$password)
+{
+	global $mod_strings;
+	$subject = $mod_strings['Customer Portal Login Details'];
+	$contents = $mod_strings['Dear']." ".$request_array['first_name']." ".$request_array['last_name'].",<br><br>";
+	$contents .= $mod_strings['Your Customer Portal Login details are given below:'];
+	$contents .= "<br><br>".$mod_strings['User Id :']." ".$request_array['email'];
+	$contents .= "<br>".$mod_strings['Password :']." ".$password;
+	$contents .= "<br><br>".$request_array['portal_url'];
+
+	$contents .= "<br><br><b>".$mod_strings['Note :']." </b>".$mod_strings['We suggest you to change your password after logging in first time'];
+	$contents .= "<br><br>".$mod_strings['Support Team'];
+	return $contents;
+
+}
+
+/**
+ * Function to get the UItype for a field.
+ * Takes the input as $module - module name,and columnname of the field
+ * returns the uitype, integer type
+ */
+
+function getUItype($module,$columnname)
+{
+        global $log;
+        $log->debug("Entering getUItype(".$module.") method ...");
+	//To find tabid for this module
+	$tabid=getTabid($module);
+        global $adb;
+        $sql = "select uitype from vtiger_field where tabid=".$tabid." and columnname='".$columnname."'";
+        $result = $adb->query($sql);
+        $uitype =  $adb->query_result($result,0,"uitype");
+        $log->debug("Exiting getUItype method ...");
+        return $uitype;
+
+}
+
+function is_emailId($entity_id)
+{
+	global $log,$adb;
+	$log->debug("Entering is_EmailId(".$module.",".$entity_id.") method");
+
+	$module = getSalesEntityType($entity_id);
+	if($module == 'Contacts')
+	{
+		$sql = "select email,yahooid from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where contactid = ".$entity_id;
+		$result = $adb->query($sql);
+		$email1 = $adb->query_result($result,0,"email");
+		$email2 = $adb->query_result($result,0,"yahooid");
+		if(($email1 != "" || $email2 != "") || ($email1 != "" && $email2 != ""))
+		{
+			$check_mailids = "true";
+		}
+		else
+			$check_mailids = "false";
+	}
+	elseif($module == 'Leads')
+	{
+		$sql = "select email,yahooid from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_leaddetails.leadid where leadid = ".$entity_id;
+		$result = $adb->query($sql);
+		$email1 = $adb->query_result($result,0,"email");
+		$email2 = $adb->query_result($result,0,"yahooid");
+		if(($email1 != "" || $email2 != "") || ($email1 != "" && $email2 != ""))
+		{
+			$check_mailids = "true";
+		}
+		else
+			$check_mailids = "false";
+	}
+	$log->debug("Exiting is_EmailId() method ...");
+	return $check_mailids;
+}
+
+/**
+ * This function is used to get cvid of default "all" view for any module.
+ * @return a cvid of a module
+ */
+function getCvIdOfAll($module)
+{
+	global $adb,$log;
+	$log->debug("Entering getCvIdOfAll($module)");
+	$qry_res = $adb->query("select cvid from vtiger_customview where viewname='All' and entitytype='".$module."'");
+	$cvid = $adb->query_result($qry_res,0,"cvid");
+	$log->debug("Exiting getCvIdOfAll($module)");
+	return $cvid;
+
+
+}
+
+
 ?>

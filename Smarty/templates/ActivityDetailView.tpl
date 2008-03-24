@@ -11,7 +11,7 @@
  ********************************************************************************/
 
 -->*}
-<script type="text/javascript" src="modules/{$MODULE}/Activity.js"></script>
+<script type="text/javascript" src="modules/{$MODULE}/Calendar.js"></script>
 <script type="text/javascript" src="include/js/reflection.js"></script>
 <script src="include/scriptaculous/prototype.js" type="text/javascript"></script>
 <script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
@@ -27,26 +27,27 @@ function tagvalidate()
 		SaveTag('txtbox_tagfields','{$ID}','{$MODULE}');	
 	else
 	{ldelim}
-		alert("Please enter a tag");
+		alert("{$APP.PLEASE_ENTER_TAG}");
 		return false;
 	{rdelim}
 {rdelim}
-function DeleteTag(id)
+function DeleteTag(id,recordid)
 {ldelim}
-	$("vtbusy_info").style.display="inline";
-	Effect.Fade('tag_'+id);
-	new Ajax.Request(
-		'index.php',
+        $("vtbusy_info").style.display="inline";
+        Effect.Fade('tag_'+id);
+        new Ajax.Request(
+                'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
                         method: 'post',
-                        postBody: "file=TagCloud&module={$MODULE}&action={$MODULE}Ajax&ajxaction=DELETETAG&tagid=" +id,
+                        postBody: "file=TagCloud&module={$MODULE}&action={$MODULE}Ajax&ajxaction=DELETETAG&recordid="+recordid+"&tagid=" +id,
                         onComplete: function(response) {ldelim}
-						getTagCloud();
-						$("vtbusy_info").style.display="none";
+                                                getTagCloud();
+                                                $("vtbusy_info").style.display="none";
                         {rdelim}
                 {rdelim}
         );
 {rdelim}
+
 </script>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 <form action="index.php" method="post" name="DetailView" id="form">
@@ -114,12 +115,14 @@ function DeleteTag(id)
 						     <table border=0 cellspacing=0 cellpadding=5 width=100% >
                						 <tr>
 								{if $LABEL.activitytype neq ''}
+								{assign var=type value=$ACTIVITYDATA.activitytype}
 								<td class="cellLabel" width="20%" align="right"><b>{$MOD.LBL_EVENTTYPE}</b></td>
-								<td class="cellInfo" width="30%"align="left">{$ACTIVITYDATA.activitytype}</td>
+								<td class="cellInfo" width="30%"align="left">{$MOD.$type}</td>
 								{/if}
 								{if $LABEL.visibility neq ''}
+								{assign var=vblty value=$ACTIVITYDATA.visibility}
 								<td class="cellLabel" width="20%" align="right"><b>{$LABEL.visibility}</b></td>
-                                                                <td class="cellInfo" width="30%" align="left" >{$ACTIVITYDATA.visibility}</td>
+                                                                <td class="cellInfo" width="30%" align="left" >{$MOD.$vblty}</td>
 								{/if}
 							 </tr>
 							 <tr>
@@ -129,9 +132,15 @@ function DeleteTag(id)
 							 {if $LABEL.description neq ''}
 							 <tr>
 								<td class="cellLabel" align="right" nowrap valign="top"><b>{$LABEL.description}</b></td>
-								<td class="cellInfo" valign="top" align="left" colspan="3" height="60px">{$ACTIVITYDATA.description}</td>
+								<td class="cellInfo" valign="top" align="left" colspan="3" height="60px">{$ACTIVITYDATA.description}&nbsp;</td>
 							 </tr>
 							{/if}
+							{if $LABEL.location neq ''}
+							<tr>
+								<td class="cellLabel" align="right" valign="top"><b>{$LABEL.location}</b></td>
+								<td class="cellInfo" colspan=3 align="left" >{$ACTIVITYDATA.location}&nbsp;</td>
+							</tr>
+							{/if}	
 							 <tr>
 								{if $LABEL.eventstatus neq ''}
 								<td class="cellLabel" align="right" nowrap valign="top"><b>{$LABEL.eventstatus}</b></td>
@@ -142,6 +151,7 @@ function DeleteTag(id)
 								<td class="cellInfo" align="left" nowrap valign="top">{$ACTIVITYDATA.assigned_user_id}</td>
 								{/if}
                                                          </tr>
+							{if $LABEL.taskpriority neq '' || $LABEL.sendnotification neq ''}
 							 <tr>
 								{if $LABEL.taskpriority neq ''}
                                                                 <td class="cellLabel" align="right" nowrap valign="top"><b>{$LABEL.taskpriority}</b></td>
@@ -152,12 +162,15 @@ function DeleteTag(id)
                                                                 <td class="cellInfo" align="left" nowrap valign="top">{$ACTIVITYDATA.sendnotification}</td>
 								{/if}
                                                          </tr>
+							{/if}
+							{if $LABEL.createdtime neq '' || $LABEL.modifiedtime neq ''}
                                                          <tr>
                                                                 <td class="cellLabel" align="right" nowrap valign="top"align="right">{if $LABEL.createdtime neq ''}<b>{$LABEL.createdtime}</b>{/if}</td>
                                                                 <td class="cellInfo" align="left" nowrap valign="top">{if $LABEL.createdtime neq ''}{$ACTIVITYDATA.createdtime}{/if}</td>
                                                                 <td class="cellLabel" align="right" nowrap valign="top"align="right">{if $LABEL.modifiedtime neq ''}<b>{$LABEL.modifiedtime}</b>{/if}</td>
                                                                 <td class="cellInfo" align="left" nowrap valign="top">{if $LABEL.modifiedtime neq ''}{$ACTIVITYDATA.modifiedtime}{/if}</td>
                                                          </tr>
+							{/if}
 						     </table>
 						     <table border=0 cellspacing=1 cellpadding=0 width=100%>
 							<tr><td width=50% valign=top >
@@ -203,7 +216,7 @@ function DeleteTag(id)
                                                                                         <td width="30%" valign="top" align=right><b>{$MOD.LBL_USERS}</b></td>
                                                                                         <td width="70%" align=left valign="top" >
 												{foreach item=username key=userid from=$INVITEDUSERS}
-                                                                                        	        {$username.3}<br>
+                                                                                        	        {$username}<br>
                                                                                                 {/foreach}
 											</td>
                                                                                 </tr>
@@ -278,21 +291,29 @@ function DeleteTag(id)
 							{if $LABEL.description neq ''}
 							<tr>
 								<td class="cellLabel" align="right" valign="top"><b>{$LABEL.description}</b></td>
-                                                                <td class="cellInfo" align="left" colspan="3" valign="top" height="60px">{$ACTIVITYDATA.description}</td>
+                                                                <td class="cellInfo" align="left" colspan="3" valign="top" height="60px">{$ACTIVITYDATA.description}&nbsp;</td>
                 					</tr>
 							{/if}
 							<tr>
                         					<td colspan="2" align="center" style="padding:0px">
                                 				<table border="0" cellpadding="5" cellspacing="1" width="100%" >
                                        					<tr>
-                                                				<td class="cellLabel" width=33% align="left">{if $LABEL.taskstatus neq ''}<b>{$LABEL.taskstatus}</b>{/if}</td>
-										<td class="cellLabel" width=33% align="left">{if $LABEL.taskpriority neq ''}<b>{$LABEL.taskpriority}</b>{/if}</td>
-										<td class="cellLabel" width=34% align="left">{if $LABEL.assigned_user_id neq ''}<b>{$LABEL.assigned_user_id}</b>{/if}</td>
+										{if $LABEL.taskstatus neq ''}
+                                                					<td class="cellLabel" width=33% align="left"><b>{$LABEL.taskstatus}</b></td>
+										{/if}
+										{if $LABEL.taskpriority neq ''}
+											<td class="cellLabel" width=33% align="left"><b>{$LABEL.taskpriority}</b></td>
+										{/if}
+										<td class="cellLabel" width=34% align="left"><b>{$LABEL.assigned_user_id}</b></td>
 									</tr>
 									<tr>
-                                                				<td class="cellInfo" align="left" valign="top">{if $LABEL.taskstatus neq ''}{$ACTIVITYDATA.taskstatus}{/if}</td>
-										<td class="cellInfo" align="left" valign="top">{if $LABEL.taskpriority neq ''}{$ACTIVITYDATA.taskpriority}{/if}</td>
-										<td class="cellInfo" align="left" valign="top">{if $LABEL.taskpriority neq ''}{$ACTIVITYDATA.assigned_user_id}{/if}</td>
+										{if $LABEL.taskstatus neq ''}
+                                                					<td class="cellInfo" align="left" valign="top">{$ACTIVITYDATA.taskstatus}</td>
+										{/if}
+										{if $LABEL.taskpriority neq ''}		
+											<td class="cellInfo" align="left" valign="top">{$ACTIVITYDATA.taskpriority}</td>
+										{/if}
+										<td class="cellInfo" align="left" valign="top">{$ACTIVITYDATA.assigned_user_id}</td>
 									</tr>
 								</table>
 								</td>
@@ -313,7 +334,7 @@ function DeleteTag(id)
 									<tr><td class="cellInfo">&nbsp;</td></tr>
 								</table>
 							</td>
-						     </table>
+						     </table>	
 						     <table border=0 cellspacing=0 cellpadding=5 width=100% >
 							<tr>
 								<td class="cellLabel" align=right nowrap width=20%>{if $LABEL.createdtime neq ''}<b>{$LABEL.createdtime}</b>{/if}</td>
@@ -360,7 +381,7 @@ function DeleteTag(id)
                                                                                 </tr>
                                                                                 <tr>
                                                                                         <td align=right><b>{$MOD.LBL_CONTACT_NAME}</b></td>
-                                                                                        <td align=left>{$ACTIVITYDATA.contact_id}</td>
+											<td align=left><a href="{$ACTIVITYDATA.contact_idlink}">{$ACTIVITYDATA.contact_id}</a></td>
                                                                                 </tr>
                                                                         </table>
 									{/if}

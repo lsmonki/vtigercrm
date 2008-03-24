@@ -29,13 +29,13 @@ $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Notes();
 
-setObjectValuesFromRequest(&$focus);
+setObjectValuesFromRequest($focus);
 
 //Check if the file is exist or not.
 if($_FILES["filename"]["size"] == 0 && $_FILES["filename"]["name"] != '')
 {
 	$file_upload_error = true;
-	$_FILES = '';
+	//$_FILES = '';
 }
 
 if (!isset($_REQUEST['date_due_flag'])) $focus->date_due_flag = 'off';
@@ -66,7 +66,7 @@ if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST
 		fclose($handle);	
 
 		$adb->query("update vtiger_notes set filename=\"$filename\" where notesid=$focus->id");	
-		$adb->query("insert into vtiger_crmentity (crmid,setype,createdtime) values('".$new_attachmentid."','Notes Attachment','".$date_var."')");
+		$adb->query("insert into vtiger_crmentity (crmid,setype,createdtime) values('".$new_attachmentid."','Notes Attachment',".$date_var.")");
 
 		$adb->query("insert into vtiger_attachments values(".$new_attachmentid.",'".$filename."','','".$filetype."','".$upload_filepath."')");
 

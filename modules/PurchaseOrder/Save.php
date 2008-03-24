@@ -29,17 +29,22 @@ $local_log =& LoggerManager::getLogger('index');
 
 $focus = new PurchaseOrder();
 global $current_user;
-setObjectValuesFromRequest(&$focus);
+setObjectValuesFromRequest($focus);
 
 //Added code for auto product stock updation on receiving goods
 $focus->update_prod_stock='';
-if($focus->column_fields['postatus'] == 'Received Shipment' && $focus->mode == 'edit')
+if($focus->column_fields['postatus'] == 'Received Shipment')
 {
-        $prev_postatus=getPoStatus($focus->id);
-        if($focus->column_fields['postatus'] != $prev_postatus)
-        {
-                $focus->update_prod_stock='true';
-        }
+	if($focus->mode != 'edit')
+		$focus->update_prod_stock='true';
+	else
+	{
+        	$prev_postatus=getPoStatus($focus->id);
+        	if($focus->column_fields['postatus'] != $prev_postatus)
+        	{
+        	        $focus->update_prod_stock='true';
+        	}
+	}
 
 }
 

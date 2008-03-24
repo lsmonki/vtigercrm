@@ -29,11 +29,14 @@ $log = LoggerManager::getLogger('report_type');
 global $currentModule;
 global $image_path;
 global $theme;
+global $current_user;
 
 $report_std_filter = new vtigerCRM_Smarty; 
 $report_std_filter->assign("MOD", $mod_strings);
 $report_std_filter->assign("APP", $app_strings);
 $report_std_filter->assign("IMAGE_PATH",$image_path);
+$report_std_filter->assign("DATEFORMAT",$current_user->date_format);
+$report_std_filter->assign("JS_DATEFORMAT",parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 include("modules/Reports/StandardFilter.php");
 include("modules/Reports/AdvancedFilter.php");

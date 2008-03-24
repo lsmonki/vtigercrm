@@ -209,7 +209,7 @@ for($i = 0; $i < $company_name_count; $i++)
 
 //      $key = array_rand($app_list_strings['sales_stage_dom']);
 //      $opp->sales_stage = $app_list_strings['sales_stage_dom'][$key];
-	$comboSalesStageArray = Array ("Closed Won");
+	$comboSalesStageArray = Array ("Closed Won","Needs Analysis","Value Proposition","Qualification","Prospecting","Id.Decision Makers");
 	$key = array_rand($comboSalesStageArray);
 	$opp->column_fields["sales_stage"] = $comboSalesStageArray[$key];
 	
@@ -254,10 +254,6 @@ for($i=0; $i<10; $i++)
 	$contact->column_fields["mailingstate"] = "CA";
 	$contact->column_fields["mailingzip"] = '99999';
 	$contact->column_fields["mailingcountry"] = 'USA';	
-	if ($contact->column_fields["mailingcity"] == "San Mateo") 
-		$contact->column_fields["yahooid"] = "clint_oram";
-	elseif ($contact->column_fields["mailingcity"] == "San Francisco") 
-		$contact->column_fields["yahooid"] = "not_a_real_id";
 
 //      $key = array_rand($app_list_strings['lead_source_dom']);
 //      $contact->lead_source = $app_list_strings['lead_source_dom'][$key];
@@ -360,10 +356,6 @@ for($i=0; $i<10; $i++)
 	$lead->column_fields["state"] = "CA";
 	$lead->column_fields["code"] = '99999';
 	$lead->column_fields["country"] = 'USA';	
-	if ($lead->column_fields["city"] == "San Mateo") 
-		$lead->column_fields["yahooid"] = "clint_oram";
-	elseif ($lead->column_fields["city"] == "San Francisco") 
-		$lead->column_fields["yahooid"] = "not_a_real_id";
 
 //      $key = array_rand($app_list_strings['lead_source_dom']);
 //      $lead->lead_source = $app_list_strings['lead_source_dom'][$key];
@@ -477,6 +469,7 @@ for($i=0; $i<10; $i++)
         $product->column_fields["productname"] 	= 	$product_name_array[$i];
         $product->column_fields["productcode"] 	= 	$product_code_array[$i];
         $product->column_fields["manufacturer"]	= 	$manufacturer;
+        $product->column_fields["discontinued"]	= 	1;
 
 	$product->column_fields["productcategory"] = 	$category;
         $product->column_fields["website"] 	=	$website;
@@ -576,7 +569,7 @@ for($i=0;$i<12;$i++)
 $sub_array = array ("Prod_Quote", "Cont_Quote", "SO_Quote", "PO_Quote", "Vendor_Quote");
 $stage_array = array ("Created", "Reviewed", "Delivered", "Accepted" , "Rejected");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
-$validtill_array = array ("2006-09-21", "2006-10-29", "2006-12-11", "2006-10-09", "2006-11-18");
+$validtill_array = array ("2007-09-21", "2007-10-29", "2007-12-11", "2007-03-29", "2007-06-18");
 for($i=0;$i<5;$i++)
 {
 	$quote = new Quotes();
@@ -640,7 +633,7 @@ for($i=0;$i<5;$i++)
 	//Upto this added to set the request values which will be used to save the inventory product details
 
 	//Now call the saveInventoryProductDetails function
-	saveInventoryProductDetails(&$quote, 'Quotes');
+	saveInventoryProductDetails($quote, 'Quotes');
 }
 
 //Populate SalesOrder Data
@@ -648,7 +641,7 @@ for($i=0;$i<5;$i++)
 $subj_array = array ("SO_vtiger", "SO_zoho", "SO_vtiger5usrp", "SO_vt100usrpk", "SO_vendtl");
 $status_array = array ("Created",  "Delivered", "Approved" , "Cancelled" , "Created");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
-$duedate_array = array ("2006-09-21", "2006-10-29", "2006-12-11", "2006-10-09", "2006-11-18");
+$duedate_array = array ("2007-04-21", "2007-05-29", "2007-08-11", "2007-09-09", "2007-02-28");
 
 for($i=0;$i<5;$i++)
 {
@@ -714,7 +707,7 @@ for($i=0;$i<5;$i++)
 	//Upto this added to set the request values which will be used to save the inventory product details
 
 	//Now call the saveInventoryProductDetails function
-	saveInventoryProductDetails(&$so, 'SalesOrder');
+	saveInventoryProductDetails($so, 'SalesOrder');
 
 
 }
@@ -726,7 +719,7 @@ $psubj_array = array ("PO_vtiger", "PO_zoho", "PO_vtiger5usrp", "PO_vt100usrpk",
 $pstatus_array = array ("Created",  "Delivered", "Approved" , "Cancelled", "Recieved Shipment");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 $trkno_array = array ("po1425", "po2587", "po7974", "po7979", "po6411"); 
-$duedate_array = array ("2006-09-21", "2006-10-29", "2006-12-11", "2006-10-09", "2006-11-18");
+$duedate_array = array ("2007-04-21", "2007-05-29", "2007-07-11", "2007-04-09", "2006-08-18");
 
 for($i=0;$i<5;$i++)
 {
@@ -790,7 +783,7 @@ for($i=0;$i<5;$i++)
 	//Upto this added to set the request values which will be used to save the inventory product details
 
 	//Now call the saveInventoryProductDetails function
-	saveInventoryProductDetails(&$po, 'PurchaseOrder');
+	saveInventoryProductDetails($po, 'PurchaseOrder');
 
 
 }
@@ -798,6 +791,7 @@ for($i=0;$i<5;$i++)
 //Populate Invoice Data
 
 $isubj_array = array ("vtiger_invoice201", "zoho_inv7841", "vtiger5usrp_invoice71134", "vt100usrpk_inv113", "vendtl_inv214");
+$invoiceno_array = array ("INV2007_1","INV2007_2","INV2007_3","INV2007_4","INV2007_5");
 $istatus_array = array ("Created",  "Sent", "Approved" , "Credit Invoice", "Paid");
 $itotal_array = array ("4842.000", "4842.000", "4842.000", "4842.000", "4842.000");
 
@@ -814,6 +808,7 @@ for($i=0;$i<5;$i++)
         $invoice->column_fields["contactid"] = $contact_ids[$contact_key];
 	$rand = array_rand($num_array);
 	$invoice->column_fields["subject"] = $isubj_array[$i];
+	$invoice->column_fields["invoice_no"] = $invoiceno_array[$i];
 	$invoice->column_fields["invoicestatus"] = $istatus_array[$i];	
 	$invoice->column_fields["hdnGrandTotal"] = $itotal_array[$i];
 
@@ -873,7 +868,7 @@ for($i=0;$i<5;$i++)
 	//Upto this added to set the request values which will be used to save the inventory product details
 
 	//Now call the saveInventoryProductDetails function
-	saveInventoryProductDetails(&$invoice, 'Invoice');
+	saveInventoryProductDetails($invoice, 'Invoice');
 
 }
 
@@ -884,15 +879,15 @@ for($i=0;$i<5;$i++)
 
 //Populate Email Data
 
-$esubj_array =  array ("Vtiger 5 Released", "Try vtigercrm!", "Hi There!!!", "Welcome to Open Source", "Help needed in customization of Vtiger");
-$startdate_array =  array ("2006-1-2","2003-3-4","2003-4-5","2001-2-1","2005-8-8");
+$esubj_array =  array ("Vtiger 5.0.3 Released", "Try vtigercrm!", "Hi There!!!", "Welcome to Open Source", "Help needed in customization of Vtiger");
+$startdate_array =  array ("2007-07-27","2007-05-09","2007-04-05","2007-11-01","2007-08-18");
 $filename_array = array ("vtiger5alpha.tar.gz", "zohowriter.zip", "hi.doc", "welcome.pps", "sos.doc");
 
 $to_array = array("a@a.com","b@b.com", "tester@testvtiger.com","xanth@yaz.com","violet@bing.com");
 $cc_array = array("andrewa@a.com","casterb@b.com", "indomine@variancevtiger.com","becker@nosbest.com","electra@violet.com");
 $bcc_array = array("nathan@nathantests.com","jeff@karl1.com", "isotope@uranium.com","bunny@bugs.com","explosive@dud.com");
-$from_array = array("harvest@zss.com","rain@sunshine.com", "gloom@rainyday.com");
-$body_array = array("This is a good product! Have a go at it! ","Nice to have you visit us, very nice of you. Stay for sometime and have a look at our product. I am sure you will like it", "This will take some time to fix. Can you provide me more details please?","What a cool tool! I wish I had found it earlier. Oh it has a lot of my friends name in it too! I too can contribute. But how?","Urgent. I need this done last week! Guys, you are the ones I am depending on. Do something!");
+$from_array = array("harvest@zss.com","rain@sunshine.com", "gloom@rainyday.com","joy@vtiger.com","success@vtiger.com");
+$body_array = array("This release has close to 500 fixes in it and has gone through almost 7 rounds of validation. We think it is a stable product that you can directly use in deployment! ","Nice to have you visit us, very nice of you. Stay for sometime and have a look at our product. I am sure you will like it", "This will take some time to fix. Can you provide me more details please?","What a cool tool! I wish I had found it earlier. Oh it has a lot of my friends name in it too! I too can contribute. But how?","Urgent. I need this done last week! Guys, you are the ones I am depending on. Do something!");
 
 for($i=0;$i<5;$i++)
 {
@@ -963,7 +958,7 @@ for($i=0;$i<7;$i++)
 
 //$severity_array=array("Minor","Major","Critical","");
 $status_array=array("Open","In Progress","Wait For Response","Open","Closed");
-$category_array=array("Big Problem ","Small Problem","Other Problem","Small Problem","Other Problem");
+$category_array=array("Big Problem","Small Problem","Other Problem","Small Problem","Other Problem");
 $ticket_title_array=array("Upload Attachment problem",
 			"Individual Customization -Menu and RSS","Export Output query",
 		"Import Error CSV Leads","How to automatically add a lead from a web form to VTiger");

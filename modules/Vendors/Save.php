@@ -26,7 +26,7 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 
 $focus = new Vendors();
-setObjectValuesFromRequest(&$focus);
+setObjectValuesFromRequest($focus);
 
 $focus->save("Vendors");
 $return_id = $focus->id;

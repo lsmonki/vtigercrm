@@ -31,12 +31,14 @@ $mod_strings = Array(
 'LBL_STARRED_RSS'=>'Starred Feeds',
 'LBL_POP_CRM_RSS'=>'Popular CRM Related Feeds',
 'LBL_ALL_RSS_FEEDS'=>'All RSS Feeds',
+'LBL_VTIGER_RSS_READER'=>'vtiger RSS Reader',
 
 'LBL_MORE'=>'More...',
 'LBL_SUBJECT'=>'Subject',
 'LBL_SENDER'=>'Sender',
 'LBL_CATEGORY'=>'Category :',
 'LBL_FEED'=>'Feed :',
+'LBL_FEED_SOURCES'=> 'Feed Sources',
 'LBL_ADD_RSS_FEED'=>'Add RSS Feed',
 'LBL_DELETE_BUTTON'=>'Delete',
 'LBL_SET_DEFAULT_BUTTON'=>'Set As Default',
@@ -44,5 +46,7 @@ $mod_strings = Array(
 'LBL_ERROR_MSG'=>'No RSS Feeds are selected or Your Proxy Settings is not Proper',
 'LBL_REGRET_MSG'=>'Sorry: It\'s not possible to reach RSS URL',
 
+'UNABLE_TO_SAVE'=>'Unable to save the RSS Feed URL',
+'NOT_A_VALID'=>'Not a valid RSS Feed URL',
 );
 ?>

@@ -18,10 +18,10 @@
         <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 <form action="index.php" method="post" name="AuditTrail" id="form">
-<input type='hidden' name='module' value='Users'>
+<input type='hidden' name='module' value='Settings'>
 <input type='hidden' name='action' value='AuditTrail'>
 <input type='hidden' name='return_action' value='ListView'>
-<input type='hidden' name='return_module' value='Users'>
+<input type='hidden' name='return_module' value='Settings'>
 <input type='hidden' name='parenttab' value='Settings'>
 
         <br>
@@ -82,11 +82,11 @@
 	    </td>
                         </tr>
                         </table>	
-				<table border=0 cellspacing=0 cellpadding=5 width=100% >
+				<!--table border=0 cellspacing=0 cellpadding=5 width=100% >
 				<tr>
 					  <td class="small" nowrap align=right><a href="#top">{$MOD.LBL_SCROLL}</a></td>
 				</tr>
-				</table>
+				</table-->
 	
 				</td>
 				</tr>
@@ -135,7 +135,7 @@ function auditenabled(ochkbox)
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'module=Users&action=UsersAjax&file=SaveAuditTrail&ajax=true&audit_trail='+status,
+                        postBody: 'module=Settings&action=SettingsAjax&file=SaveAuditTrail&ajax=true&audit_trail='+status,
                         onComplete: function(response) {
                                 $("status").style.display="none";
                         }
@@ -149,7 +149,7 @@ function showAuditTrail()
 {
 	
 	var userid = $('user_list').options[$('user_list').selectedIndex].value;
-	window.open("index.php?module=Users&action=UsersAjax&file=ShowAuditTrail&userid="+userid,"","width=645,height=750,resizable=0,scrollbars=1,left=100");
+	window.open("index.php?module=Settings&action=SettingsAjax&file=ShowAuditTrail&userid="+userid,"","width=645,height=750,resizable=0,scrollbars=1,left=100");
 	
 
 }

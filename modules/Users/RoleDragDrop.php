@@ -14,7 +14,7 @@ $toid=$_REQUEST['parentId'];
 $fromid=$_REQUEST['childId'];
 
 
-global $adb;
+global $adb,$mod_strings;
 $query = "select * from vtiger_role where roleid='".$toid."'";
 $result=$adb->query($query);
 $parentRoleList=$adb->query_result($result,0,'parentrole');
@@ -27,7 +27,7 @@ $parentRoles=explode('::',$parentRoleList);
 
 if(in_array($fromid,$parentRoles))
 {
-	echo 'You cannot move a Parent Node under a Child Node';
+	echo $mod_strings['ROLE_DRAG_ERR_MSG'];
         die;
 }
 
@@ -46,7 +46,7 @@ $stdDepth=$fromRoleInfo['2'];
 //Constructing the query
 foreach($roleInfo as $mvRoleId=>$mvRoleInfo)
 {
-	$subPar=explode($replaceToString,$mvRoleInfo[1]);
+	$subPar=explode($replaceToString,$mvRoleInfo[1],2);//we have to spilit as two elements only
 	$mvParString=$replace_with.$subPar[1];
 	$subDepth=$mvRoleInfo[2];
 	$mvDepth=$orgDepth+(($subDepth-$stdDepth)+1);
@@ -58,5 +58,5 @@ foreach($roleInfo as $mvRoleId=>$mvRoleInfo)
 
 
 
-header("Location: index.php?action=UsersAjax&module=Users&file=listroles&ajax=true");
+header("Location: index.php?action=SettingsAjax&module=Settings&file=listroles&ajax=true");
 ?>

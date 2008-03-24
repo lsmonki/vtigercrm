@@ -42,7 +42,8 @@ class ImportContact extends Contacts {
        // This is the list of the functions to run when importing
         var $special_functions =  array(
 						//"get_names_from_full_name"
-						"add_create_account"
+						"add_create_account",
+						"map_reports_to",
 						//,"add_salutation"
 						//,"add_lead_source"
 						//,"add_birthdate"
@@ -230,7 +231,36 @@ class ImportContact extends Contacts {
 
         }
 
-	
+	/**     function used to map with existing Reports To(Contact) if the contact is map with reports to during import
+         */
+	function map_reports_to()
+	{
+		global $adb;
+
+		$contact_name = $this->column_fields['contact_id'];
+		$adb->println("Entering map_reports_to contact_id=".$contact_name);
+
+		if ((! isset($contact_name) || $contact_name == '') )
+		{
+			$adb->println("Exit map_reports_to. Contact Name(Reports To) not set for this entity.");
+			return; 
+		}
+
+		$contact_name = trim(addslashes($contact_name));
+
+		//Query to get the available Contact (Reports To) which is not deleted
+		$query = "select contactid from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid WHERE concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname) = '{$contact_name}' and vtiger_crmentity.deleted=0";
+
+		$contact_id = $adb->query_result($adb->query($query),0,'contactid');
+
+		if($contact_id == '' || !isset($contact_id))
+			$contact_id = 0;
+
+		$this->column_fields['contact_id'] = $contact_id;
+
+		$adb->println("Exit map_reports_to. Fetched Contact (Reports To) for '".$contact_name."' and the contactid = $contact_id");
+        }
+
 
 	// This is the list of vtiger_fields that can be imported
 	// some of these don't map directly to columns in the db

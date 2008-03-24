@@ -18,13 +18,14 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // $Id: system_header.php,v 1.27 2005/12/10 15:54:41 bigmichi1 Exp $
+global $app_strings;
 if (!defined('IN_PHPSYSINFO')) {
     die("No Hacking");
 }
 
 @header("Cache-Control: no-cache, must-revalidate");
 if (!isset($charset)) {
-  $charset = 'iso-8859-1';
+  $charset = $app_strings['LBL_CHARSET'];
 } 
 
 setlocale (LC_ALL, $text['locale']);

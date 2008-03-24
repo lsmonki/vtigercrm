@@ -25,7 +25,7 @@ global $log;
 function getMailServerInfo($user)
 {
 	global $log;
-	$log->debug("Entering getMailServerInfo(".$user.") method ...");
+	$log->debug("Entering getMailServerInfo(".$user->user_name.") method ...");
 	global $adb;
 	//$sql= "select vtiger_rolename from vtiger_user2role where userid='" .$userid ."'";
    $sql = "select * from vtiger_mail_accounts where status=1 and user_id=".$user->id;
@@ -526,7 +526,7 @@ function setPermittedDefaultSharingAction2Session($profileid)
 function createRole($roleName,$parentRoleId,$roleProfileArray)
 {
 	global $log;
-	$log->debug("Entering createRole(".$roleName.",".$parentRoleId.",".$roleProfileArray.") method ...");
+	$log->debug("Entering createRole(".$roleName.",".$parentRoleId.") method ...");
 	global $adb;
 	$parentRoleDetails=getRoleInformation($parentRoleId);
 	$parentRoleInfo=$parentRoleDetails[$parentRoleId];
@@ -564,7 +564,7 @@ function createRole($roleName,$parentRoleId,$roleProfileArray)
 function updateRole($roleId,$roleName,$roleProfileArray)
 {
 	global $log;
-	$log->debug("Entering updateRole(".$roleId.",".$roleName.",".$roleProfileArray.") method ...");
+	$log->debug("Entering updateRole(".$roleId.",".$roleName.") method ...");
 	global $adb;
 	$sql1 = "update vtiger_role set rolename='".$roleName."' where roleid='".$roleId."'";
         $adb->query($sql1);
@@ -613,7 +613,7 @@ function createNewGroup($groupName,$groupDescription)
 	$sql = "insert into vtiger_groups(name,description) values('" .$groupName ."','". $groupDescription ."')";
 	$result = $adb->query($sql); 
 	$log->debug("Exiting createNewGroup method ...");
-	header("Location: index.php?module=Users&action=listgroups");
+	header("Location: index.php?module=Settings&action=listgroups");
 	
 }
 
@@ -878,6 +878,58 @@ $log->debug("Entering substituteTokens(".$filename.",".$globals.") method ...");
 	$log->debug("Exiting substituteTokens method ...");
 	return $replacedString;
 }
+
+
+/** Function to add module group relation 
+  * @param $module -- module name:: Type varchar
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+ function insertIntoGroupRelation($module,$moduleid,$groupname)
+ {
+	 global $log;
+	 $log->debug("Entering insertIntoGroupRelation(".$module.",".$moduleid.",".$groupname.") method ...");
+	 global $adb;
+
+	 //Get the module grouptable name and the
+	require_once("modules/$module/$module.php");
+	$modObj = new $module();	 
+	 
+	 $sql = "insert into ".$modObj->groupTable[0]." values (" .$moduleid .",'".$groupname."')";
+	 
+	 $adb->query($sql);
+	 $log->debug("Exiting insert2LeadGroupRelation method ...");
+
+ }
+
+/** Function to update lead group relation
+  * @param $module -- module name:: Type varchar	
+  * @param $leadid -- Lead Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+function updateModuleGroupRelation($module,$moduleid,$groupname)
+{
+	global $log;
+	$log->debug("Entering updateModuleGroupRelation(".$moduleid.",".$groupname.") method ...");
+ 	global $adb;
+	
+	//Get the module grouptable name and the
+	require_once("modules/$module/$module.php");
+	$modObj = new $module();
+
+ 	//Deleting the existing entry	 
+  	$sqldelete = "delete from ".$modObj->groupTable[0]." where " .$modObj->groupTable[1] ."=".$moduleid;
+  	$adb->query($sqldelete);
+	if($groupname != ""){	
+	  	$sql = "insert into ".$modObj->groupTable[0]." values (".$moduleid .",'" .$groupname ."')";  
+	  	$adb->query($sql);
+	}	
+  	$log->debug("Exiting updateLeadGroupRelation method ...");
+
+}
+ 
+
 
 /** Function to add lead group relation 
   * @param $leadid -- Lead Id:: Type integer
@@ -1359,7 +1411,7 @@ function getProfileDescription($profileid)
         $sql1 = "select  description from vtiger_profile where profileid=".$profileid;
         $result = $adb->query($sql1);
         $profileDescription = $adb->query_result($result,0,"description");
-        $log->debug("Exiting getProfileName method ...");
+        $log->debug("Exiting getProfileDescription method ...");
         return $profileDescription;
 }
 
@@ -1491,7 +1543,8 @@ function isPermitted($module,$actionname,$record_id='')
 	//If modules is Notes,Products,Vendors,Faq,PriceBook then no sharing			
 	if($record_id != '')
 	{
-		if($module == 'Notes' || $module == 'Products' || $module == 'Faq' || $module == 'Vendors'  || $module == 'PriceBooks')
+		//if($module == 'Notes' || $module == 'Products' || $module == 'Faq' || $module == 'Vendors'  || $module == 'PriceBooks')
+		if(getTabOwnedBy($module) == 1)
 		{
 			$permission = "yes";
 			$log->debug("Exiting isPermitted method ...");
@@ -3738,17 +3791,17 @@ function getEntityDisplayLink($entityType,$entityid)
 	if($entityType == 'groups')
 	{
 		$groupNameArr = getGroupInfo($entityid); 
-		$display_out = "<a href='index.php?module=Users&action=GroupDetailView&returnaction=OrgSharingDetailView&groupId=".$entityid."'>Group::". $groupNameArr[0]." </a>";			
+		$display_out = "<a href='index.php?module=Settings&action=GroupDetailView&returnaction=OrgSharingDetailView&groupId=".$entityid."'>Group::". $groupNameArr[0]." </a>";			
 	}
 	elseif($entityType == 'roles')
 	{
 		$roleName=getRoleName($entityid);	
-		$display_out = "<a href='index.php?module=Users&action=RoleDetailView&returnaction=OrgSharingDetailView&roleid=".$entityid."'>Role::".$roleName. "</a>";			
+		$display_out = "<a href='index.php?module=Settings&action=RoleDetailView&returnaction=OrgSharingDetailView&roleid=".$entityid."'>Role::".$roleName. "</a>";			
 	}
 	elseif($entityType == 'rs')
 	{
 		$roleName=getRoleName($entityid);	
-		$display_out = "<a href='index.php?module=Users&action=RoleDetailView&returnaction=OrgSharingDetailView&roleid=".$entityid."'>RoleAndSubordinate::".$roleName. "</a>";			
+		$display_out = "<a href='index.php?module=Settings&action=RoleDetailView&returnaction=OrgSharingDetailView&roleid=".$entityid."'>RoleAndSubordinate::".$roleName. "</a>";			
 	}
 	$log->debug("Exiting getEntityDisplayLink method ...");
 	return $display_out;
@@ -4528,45 +4581,9 @@ function getListViewSecurityParameter($module)
 	}	
 	else
 	{
-
-		//Current User	
-		$sec_query = " and (vtiger_crmentity.smownerid=".$current_user->id;
-
-		//Subordinate User
-		$subUsersList=getSubordinateUsersList();
-		if($subUsersList != '')
-		{
-			$sec_query .= " or vtiger_crmentity.smownerid in".$subUsersList;
-		}
-
-		//Shared User
-		$sharedUsersList=getReadSharingUsersList($module);
-		if($sharedUsersList != '')
-		{
-			$sec_query .= " or vtiger_crmentity.smownerid in".$sharedUsersList;
-		}
-
-
-		//Current User Groups
-		if($module == 'Leads' or $module=='HelpDesk' or $module=='Calendar')
-		{
-			$userGroupsList=getCurrentUserGroupList();
-			if($userGroupsList != '')
-			{
-				$sec_query .= " or (vtiger_crmentity.smownerid in(0) and vtiger_groups.groupid in".$userGroupsList.")";
-			}
-
-			//Shared User Groups
-			$sharedGroupsList=getReadSharingGroupsList($module);
-			if($sharedGroupsList != '')
-			{
-				$sec_query .= " or (vtiger_crmentity.smownerid in(0) and vtiger_groups.groupid in".$sharedGroupsList.")";
-			}	
-
-
-		}
-
-		$sec_query .=") ";
+		$mobObj = new $module;
+		$sec_query = $modObj->getListViewSecurityParameter($module);
+		
 	}
 	$log->debug("Exiting getListViewSecurityParameter method ...");
 	return $sec_query;	
@@ -4667,8 +4684,20 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
 function getFieldModuleAccessArray()
 {
 	global $log;
+	global $adb;
 	$log->debug("Entering getFieldModuleAccessArray() method ...");
 
+	$fldModArr=Array();
+	$query = 'select distinct(name) from vtiger_profile2field inner join vtiger_tab on vtiger_tab.tabid=vtiger_profile2field.tabid where vtiger_tab.tabid != 10';
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$fldModArr[$adb->query_result($result,$i,'name')]=$adb->query_result($result,$i,'name');
+	}	
+		
+
+	/*
 	$fldModArr=Array('Leads'=>'LBL_LEAD_FIELD_ACCESS',
                 'Accounts'=>'LBL_ACCOUNT_FIELD_ACCESS',
                 'Contacts'=>'LBL_CONTACT_FIELD_ACCESS',
@@ -4687,6 +4716,7 @@ function getFieldModuleAccessArray()
                 'Campaigns'=>'LBL_CAMPAIGN_FIELD_ACCESS',
 		'Faq'=>'LBL_FAQ_FIELD_ACCESS'
               );
+	 */     
 
 	$log->debug("Exiting getFieldModuleAccessArray method ...");
 	return $fldModArr;

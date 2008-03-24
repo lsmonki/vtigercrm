@@ -29,7 +29,7 @@ $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Faq();
 
-setObjectValuesFromRequest(&$focus);
+setObjectValuesFromRequest($focus);
 
 $focus->save("Faq");
 $return_id = $focus->id;

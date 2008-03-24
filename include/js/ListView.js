@@ -29,7 +29,7 @@ function change(obj,divid)
 	}
 	else
 	{
-		alert("Please select at least one entity");
+		alert(alert_arr.SELECT);
 		return false;
 	}
 	fnvshobj(obj,divid);
@@ -47,13 +47,13 @@ function getviewId()
 	}
 	return viewid;	
 }
+var gstart='';
 function massDelete(module)
 {
 		var select_options  =  document.getElementsByName('selected_id');
 		var x = select_options.length;
 		var viewid =getviewId();		
 		idstring = "";
-
         xx = 0;
         for(i = 0; i < x ; i++)
         {
@@ -69,24 +69,32 @@ function massDelete(module)
         }
         else
         {
-            alert("Please select at least one entity");
+            alert(alert_arr.SELECT);
             return false;
         }
-		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
+		var alert_str = alert_arr.DELETE + xx +alert_arr.RECORDS;
+
+		if(module=="Accounts")
+			alert_str = alert_arr.DELETE_ACCOUNT +xx+alert_arr.RECORDS;
+		else if(module=="Vendors")
+			alert_str = alert_arr.DELETE_VENDOR+xx+alert_arr.RECORDS;
+
+		if(confirm(alert_str))
 		{
-			
 			$("status").style.display="inline";
 			new Ajax.Request(
           	  	      'index.php',
 			      	{queue: {position: 'end', scope: 'command'},
 		                        method: 'post',
-                		        postBody:"module=Users&action=massdelete&return_module="+module+"&viewname="+viewid+"&idlist="+idstring,
+                		        postBody:"module=Users&action=massdelete&return_module="+module+"&"+gstart+"&viewname="+viewid+"&idlist="+idstring,
 		                        onComplete: function(response) {
         	        	                $("status").style.display="none";
                 	        	        result = response.responseText.split('&#&#&#');
                         	        	$("ListViewContents").innerHTML= result[2];
 	                        	        if(result[1] != '')
                                         		alert(result[1]);
+
+						$('basicsearchcolumns').innerHTML = '';
 		                        }
               			 }
        			);
@@ -129,6 +137,8 @@ function getListViewEntries_js(module,url)
                 urlstring = $('search_url').value;
 	else
 		urlstring = '';
+
+	gstart = url;
         new Ajax.Request(
         	'index.php',
                 {queue: {position: 'end', scope: 'command'},
@@ -140,6 +150,7 @@ function getListViewEntries_js(module,url)
                                 $("ListViewContents").innerHTML= result[2];
                                 if(result[1] != '')
                                         alert(result[1]);
+				$('basicsearchcolumns').innerHTML = '';
                   	}
                 }
         );

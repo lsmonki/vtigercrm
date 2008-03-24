@@ -122,7 +122,9 @@ function FPDF($orientation='P',$unit='mm',$format='A4')
 	if(is_string($format))
 	{
 		$format=strtolower($format);
-		if($format=='a3')
+		if($format=='a1')
+			$format=array(2500,3000);
+		elseif($format=='a3')
 			$format=array(841.89,1190.55);
 		elseif($format=='a4')
 			$format=array(595.28,841.89);

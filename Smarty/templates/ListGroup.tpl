@@ -23,7 +23,7 @@
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<form action="index.php" method="post" name="new" id="form">
-				<input type="hidden" name="module" value="Users">
+				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="action" value="createnewgroup">
 				<input type="hidden" name="mode" value="create">
 				<input type="hidden" name="parenttab" value="Settings">
@@ -67,11 +67,11 @@
 					  <tr>
 						<td class="listTableRow small" valign=top>{$smarty.foreach.grouplist.iteration}</td>
 						<td class="listTableRow small" valign=top nowrap>
-							  	<a href="index.php?module=Users&action=createnewgroup&returnaction=listgroups&parenttab=Settings&mode=edit&groupId={$groupvalues.groupid}"><img src="{$IMAGE_PATH}editfield.gif" alt="{$APP.LNK_EDIT}" title="{$APP.LNK_EDIT}" border="0" align="absmiddle"></a>&nbsp;|	
+							  	<a href="index.php?module=Settings&action=createnewgroup&returnaction=listgroups&parenttab=Settings&mode=edit&groupId={$groupvalues.groupid}"><img src="{$IMAGE_PATH}editfield.gif" alt="{$APP.LNK_EDIT}" title="{$APP.LNK_EDIT}" border="0" align="absmiddle"></a>&nbsp;|	
 								<a href="#" onClick="deletegroup(this,'{$groupvalues.groupid}')";><img src="{$IMAGE_PATH}delete.gif" alt="{$LNK_DELETE}" title="{$APP.LNK_DELETE}" border="0" align="absmiddle"></a>
 						</td>
 						<td class="listTableRow small" valign=top><strong>
-                              				<a href="index.php?module=Users&action=GroupDetailView&parenttab=Settings&groupId={$groupvalues.groupid}">{$groupvalues.groupname}</a></strong>
+                              				<a href="index.php?module=Settings&action=GroupDetailView&parenttab=Settings&groupId={$groupvalues.groupid}">{$groupvalues.groupname}</a></strong>
 						</td>
 						<td class="listTableRow small" valign=top>{$groupvalues.description}</td>
 					  </tr>

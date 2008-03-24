@@ -30,6 +30,8 @@ require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
+//Addded for Custom Invoice Number
+require_once('user_privileges/CustomInvoiceNo.php');
 
 global $app_strings,$mod_strings,$currentModule,$log,$current_user;
 
@@ -349,9 +351,21 @@ $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
+//Added for Custom Invoice Number
+//we have check the Invoice Number for duplicate only in create view
+if($focus->mode != 'edit')
+{
+        $invoiceno=$inv_str.$inv_no;
+        if(CheckDuplicateInvoiceNumber($invoiceno))
+                echo '<br><font color="#FF0000"><b>Duplicate Invoice Number - Click <a href="index.php?module=Settings&action=CustomInvoiceNo&parenttab=Settings">here</a> to  Configure the Invoice Number</b></font>'.$num_rows;
+        else
+                $smarty->assign("inv_no",($inv_str.$inv_no));
+}
+
+
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
-
+$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 if($focus->mode == 'edit')
 	$smarty->display("Inventory/InventoryEditView.tpl");
 else

@@ -14,6 +14,7 @@ require_once('include/database/PearDatabase.php');
 
 global $adb;
 global $fileId;
+global $mod_strings;
 
 $fileid = $_REQUEST['fileid'];
 
@@ -41,7 +42,7 @@ echo base64_decode($fileContent);
 }
 else
 {
-echo "Record doesn't exist.";
+echo $mod_strings['LBL.RECORD_NOEXIST'];
 }
 ?>
 

@@ -13,3 +13,8 @@ function mypopup()
       mywindow = window.open("copyright.html","mywindow", "height=115, width=575");
       mywindow.moveTo(210,620);
 }
+
+function newpopup(str){
+                window.open (str,"mywinw","menubar=1,resizable=1,scrollbars=yes");
+//              window.parent.close();
+}

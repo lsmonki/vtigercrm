@@ -140,7 +140,7 @@ function getSecondaryColumns_AdvFilterHTML($module,$selected="")
 					{
 					  foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
 					  {
-						if(isset($mod_strings[$fieldlable]))
+						if(isset($mod_strings[$fieldlabel]))
 						{
 							if($selected == $field)
 							{

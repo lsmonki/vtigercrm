@@ -18,7 +18,8 @@
 			<td align="left">
 			  	<input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="crmbutton small edit" onClick=OpenCompose('{$ID}','forward')>&nbsp;
 				{if $EMAIL_FLAG neq 'WEBMAIL'}
-			  	<input type="button" name="Send" value=" {$MOD.LBL_SEND} " class="crmbutton small save" onClick=OpenCompose('{$ID}','edit')>&nbsp;
+			  	<input type="button" name="Send" value=" {$MOD.LBL_SEND} " class="crmbutton small save" onClick=OpenCompose('{$ID}','edit')>&nbsp;	
+	<input type="button" name="Reply" value=" {$MOD.LBL_REPLY_BUTTON} " class="crmbutton small edit" onClick=ReplyCompose('{$ID}','reply')>&nbsp;
 				{else}
 			  	<input type="button" name="Send" value=" {$MOD.LBL_REPLY_BUTTON} " class="crmbutton small edit" onClick=OpenCompose('{$ID}','edit')>&nbsp;
 				{/if}
@@ -39,12 +40,13 @@
 	</td>
 </tr>
 <tr>
-	<td height="250" bgcolor="#FFFFFF" valign="top" style="padding-top:10px;">
+	<td height="250" bgcolor="#FFFFFF" valign="top" class="MatrixLayer2">
 	{foreach item=row from=$BLOCKS}	
 	{foreach item=elements from=$row}	
 		{if $elements.fldname eq 'subject'}
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		<table class="tableHeadBg" width="100%" border="0" cellpadding="0" cellspacing="0">
 	{if $EMAIL_FLAG neq 'WEBMAIL'}
+	<tr><td width="20%" align="right" valign="top"><b>{$MOD.LBL_FROM}</b></td><td width="2%" align="left">&nbsp;</td><td align="left">{$FROM_MAIL}&nbsp;</td></tr>
 	<tr><td width="20%" align="right" valign="top"><b>{$MOD.LBL_TO}</b></td><td width="2%" align="left">&nbsp;</td><td align="left">{$TO_MAIL}&nbsp;</td></tr>
 	<tr><td align="right" valign="top">{$MOD.LBL_CC}</td><td align="left">&nbsp;</td><td align="left">{$CC_MAIL}&nbsp;</td></tr>
 	<tr><td align="right" valign="top">{$MOD.LBL_BCC}</td><td align="left">&nbsp;</td><td align="left">{$BCC_MAIL}&nbsp;</td></tr>

@@ -192,6 +192,14 @@
         <input type="hidden" name="return_module">
         <input type="hidden" name="return_action">
         <input type="hidden" name="return_id">
+{else}
+	<input type="hidden" name="module" value="{$MODULE}">
+        <input type="hidden" name="record" value="{$ID}">
+        <input type="hidden" name="isDuplicate" value=false>
+        <input type="hidden" name="action">
+        <input type="hidden" name="return_module">
+        <input type="hidden" name="return_action">
+        <input type="hidden" name="return_id">
 {/if}
 
 

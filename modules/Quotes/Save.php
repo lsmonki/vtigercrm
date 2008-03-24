@@ -28,23 +28,10 @@ include("modules/Emails/mail.php");
 
 $local_log =& LoggerManager::getLogger('index');
 
-global $log,$current_user;
-$currencyid=fetchCurrency($current_user->id);
-$rate_symbol = getCurrencySymbolandCRate($currencyid);
-$rate = $rate_symbol['rate'];
-$log->debug("Inside Quote Save");
-
 $focus = new Quotes();
+setObjectValuesFromRequest($focus);
 
-setObjectValuesFromRequest(&$focus);
-
-$log->debug("The Field Value Array -----> ".$focus->column_fields);
 $focus->save("Quotes");
-
-
-//Based on the total Number of rows we will save the product relationship with this entity
-saveInventoryProductDetails(&$focus, 'Quotes');
-
 
 $return_id = $focus->id;
 

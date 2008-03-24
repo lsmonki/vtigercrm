@@ -83,7 +83,7 @@
 <script>
 	function confirmdelete(url)
 	{ldelim}
-        	if(confirm("Are you sure?"))
+        	if(confirm("{$APP.ARE_YOU_SURE}"))
         	{ldelim}
                 	document.location.href=url;
 	       {rdelim}

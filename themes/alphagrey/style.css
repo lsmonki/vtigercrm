@@ -27,7 +27,7 @@
 .componentName {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 18px;
-	line-height: 18px;
+	line-height: 3px;
 	color: #000;
 	font-weight:bold;
 	border-left:2px dotted #333;
@@ -320,7 +320,6 @@ a:hover {
 	padding-left:10px;
 	padding-right:10px;
 	border-bottom:1px dotted #efefef;
-	white-space:nowrap;
 }
 
 .rightMailMerge {
@@ -866,7 +865,7 @@ a.submenu:Hover{
 	font-size:12px;
 	background-color:#FFFFFF;
 	width:100%;
-	height:130px;
+	height:175px;
 	overflow:auto;
 	border:0px solid #000000;
 }
@@ -1393,7 +1392,7 @@ a.calMnu:Hover{
 	background-color:#ddd;
 	border:1px solid #999999;
 	text-align:left;
-	width:100%;
+	width:95%;
 	position:relative;
 	left:0px;
 	top:0px;
@@ -1502,7 +1501,6 @@ level2Sel{
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:11px;
 	text-align:left;
-	width:300px;
 	border:3px solid #CCCCCC;
 	background-color:#FFFFFF;
 	padding:5px;
@@ -1622,12 +1620,48 @@ level2Sel{
 
 .unread_email {
 	font-weight:bold;
+        background-color:#00FF00;
 }
+.delete_email {
+	font-weight:bold;
+        background-color:#FF5151;
 
+}
+.qualify_email {
+	                   font-weight:bold;
+	                   background-color:#CDB5CD;
+	
+          }
+
+
+
+
+.mailSelected {
+	font-family:  Arial, Helvetica, sans-serif;
+	font-weight:bold;
+	font-size: 11px;
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:2px;
+	padding-bottom:2px;
+	
+}
+.mailSelected_select {
+	background:#E1DCB3 url(images/tabSelectedBg.gif) repeat-x;
+	background-color:#1F5EFF;
+	font-family:  Arial, Helvetica, sans-serif;
+	font-weight:bold;
+	font-size: 11px;
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:2px;
+	padding-bottom:2px;
+	
+}
 								    
 /* MY SITES */
 
-.unread_email {
+.unread_email:hover {
 	font-weight:bold;
 }
 
@@ -2214,6 +2248,14 @@ a.drop_down:Hover{
 	margin: 0;
 	font-weight: normal;
 }
+.groupname{
+		width:125px;
+	  }
+.winmarkModulesdef{
+   background-image:url(images/alphagrayHomeMark.gif);
+   background-position:top;
+   background-repeat:repeat-x;
+
 
 /* Recalculate Disable Ends */
 

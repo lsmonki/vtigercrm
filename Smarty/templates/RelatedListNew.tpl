@@ -11,8 +11,8 @@
  ********************************************************************************/
 
 -->*}
-<script language="JavaScript" type="text/javascript" src="modules/PriceBooks/PriceBook.js"></script>
-<script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
+<script language="JavaScript" type="text/javascript" src="modules/PriceBooks/PriceBooks.js"></script>
+<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 {literal}
 <script>
 function editProductListPrice(id,pbid,price)
@@ -40,7 +40,7 @@ function gotoUpdateListPrice(id,pbid,proid)
                         'index.php',
                         {queue: {position: 'end', scope: 'command'},
                                 method: 'post',
-                                postBody: 'module=Products&action=ProductsAjax&file=UpdateListPrice&ajax=true&return_action=DetailView&return_module=PriceBooks&record='+id+'&pricebook_id='+pbid+'&product_id='+proid+'&list_price='+listprice,
+                                postBody: 'module=Products&action=ProductsAjax&file=UpdateListPrice&ajax=true&return_action=CallRelatedList&return_module=PriceBooks&record='+id+'&pricebook_id='+pbid+'&product_id='+proid+'&list_price='+listprice,
                                 onComplete: function(response) {
                                         $("status").style.display="none";
                                         $("RLContents").innerHTML= response.responseText;
@@ -51,11 +51,22 @@ function gotoUpdateListPrice(id,pbid,proid)
 {/literal}
 
 function loadCvList(type,id) {ldelim}
+        $("status").style.display="inline";
 	if(type === 'Leads')
 	{ldelim}
 		if($("lead_cv_list").value != 'None')
 		{ldelim}
-			$("lead_list_button").innerHTML = '<input title="{$MOD.LBL_LOAD_LIST}" accessKey="" class="crmbutton small edit" value="{$MOD.LBL_LOAD_LIST}" type="button"  name="button" onclick="window.location.href=\'index.php?action=LoadList&module=Campaigns&return_action=DetailView&return_id='+id+'&list_type='+type+'&cvid='+$("lead_cv_list").value+'\'">';
+			new Ajax.Request(
+                        'index.php',
+                        {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                                method: 'post',
+                                postBody: 'module=Campaigns&action=CampaignsAjax&file=LoadList&ajax=true&return_action=DetailView&return_id='+id+'&list_type='+type+'&cvid='+$("lead_cv_list").value,
+                                onComplete: function(response) {ldelim}
+                                        $("status").style.display="none";
+                                        $("RLContents").innerHTML= response.responseText;
+                                {rdelim}
+                        {rdelim}
+                );
 		{rdelim}
 	{rdelim}
 
@@ -63,7 +74,17 @@ function loadCvList(type,id) {ldelim}
 	{ldelim}
 		if($("cont_cv_list").value != 'None')
 		{ldelim}
-		$("contact_list_button").innerHTML = '<input title="{$MOD.LBL_LOAD_LIST}" accessKey="" class="crmbutton small edit" value="{$MOD.LBL_LOAD_LIST}" type="button"  name="button" onclick="window.location.href=\'index.php?action=LoadList&module=Campaigns&return_action=DetailView&return_id='+id+'&list_type='+type+'&cvid='+$("cont_cv_list").value+'\'">';
+			new Ajax.Request(
+                        'index.php',
+                        {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+                                method: 'post',
+                                postBody: 'module=Campaigns&action=CampaignsAjax&file=LoadList&ajax=true&return_action=DetailView&return_id='+id+'&list_type='+type+'&cvid='+$("cont_cv_list").value,
+                                onComplete: function(response) {ldelim}
+                                        $("status").style.display="none";
+                                        $("RLContents").innerHTML= response.responseText;
+                                {rdelim}
+                        {rdelim}
+                );
 		{rdelim}
 	{rdelim}
 {rdelim}

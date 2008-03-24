@@ -97,10 +97,12 @@ foreach($pieces as $val)
 
 					<tr>
 						<td align=left class="small" style="padding-left:20px">
-		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This Configuration Wizard will create vtiger CRM 5.0.2 databases and tables and configuration files you need to start. The entire process should take about four minutes. Click the Start button when you are ready. 
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This Configuration Wizard will create the requisite data needed to get working with vtiger CRM. The entire process should take about four minutes. Click the Start button when you are ready. 
 <br><br>
-<p><span style="color:#555555">- vtiger CRM 5.0.2 is tested on mySQL 4.1.X, mySQL 5.0.19, PHP 5.0.19 and Apache 2.0.40.</p> 
-<p align="center"><font color='red'><b>vtiger CRM 5.0.2 will not work on mysql 4.0.x versions</b></font></center><center><font color='blue'><b>vtiger crm can run on a system which has xampp/lampp/wampp already installed in it provided it meets the above mentioned requirements</b></font></center>
+<p><span style="color:#555555">- vtiger CRM 5.0.3 is tested on mySQL 4.1.X, mySQL 5.0.19, PHP 5.0.19 and Apache 2.0.40.</p> 
+<p align="center"><font color='red'><b>vtiger CRM 5.0.3 will not work on mysql 4.0.x versions and PHP 5.2.x versions</b></font></center></p></font></center><center>
+ 
+<font color='blue'><b>vtiger CRM can run on a system which has xampp/lampp/wampp already installed in it provided it meets the above mentioned requirements</b></font></center>
 <p>The installation wizard will guide you with the installation regardless of the setup you may have.</span>
 						
 					  </td>
@@ -112,10 +114,10 @@ foreach($pieces as $val)
 					</tr>
 					<tr>
 						<td align=center>
-						<IFRAME src="http://www.vtiger.com/products/crm/registration.html" width="500" height=250 scrolling='no' frameborder="0">
+						<IFRAME src="http://www.vtiger.com/products/crm/registration.php" width="500" height=250 scrolling='no' frameborder="0">
 						  [Your user agent does not support frames or is currently configured
 						  not to display frames. However, you may visit
-						  <A href="http://www.vtiger.com/products/crm/registration.html">the related document.</A>] 
+						  <A href="http://www.vtiger.com/products/crm/registration.php">the related document.</A>] 
 						 </IFRAME>
 				 		 </td>
 					</tr>

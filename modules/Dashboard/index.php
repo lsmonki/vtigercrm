@@ -99,10 +99,28 @@ if(isset($_REQUEST['type']) && $_REQUEST['type'] != '')
 				<table border=0 cellspacing=0 cellpadding=5>
 
 				<tr>
+<?php 
+if($CALENDAR_DISPLAY == 'true') { 
+?> 
 					<td style="padding-right:0px;padding-left:10px;"><a href="javascript:;" onClick='fnvshobj(this,"miniCal");getMiniCal("parenttab=My Home Page");'><img src="<?php echo $image_path;?>btnL3Calendar.gif" alt="<?php echo $app_strings['LBL_CALENDAR_ALT']; ?>" title="<?php echo $app_strings['LBL_CALENDAR_TITLE']; ?>" border=0></a></a></td>
+<?php 
+} 
+if($WORLD_CLOCK_DISPLAY == 'true') { 
+?> 
 					<td style="padding-right:0px"><a href="javascript:;"><img src="<?php echo $image_path;?>btnL3Clock.gif" alt="<?php echo $app_strings['LBL_CLOCK_ALT']; ?>" title="<?php echo $app_strings['LBL_CLOCK_TITLE']; ?>" border=0 onClick="fnvshobj(this,'wclock');"></a></a></td>
+<?php 
+} 
+if($CALCULATOR_DISPLAY == 'true') { 
+?>
 					<td style="padding-right:0px"><a href="#"><img src="<?php echo $image_path;?>btnL3Calc.gif" alt="<?php echo $app_strings['LBL_CALCULATOR_ALT']; ?>" title="<?php echo $app_strings['LBL_CALCULATOR_TITLE']; ?>" border=0 onClick="fnvshobj(this,'calculator_cont');fetch_calc();"></a></td>
-					<td style="padding-right:10px"><a href="javascript:;" onClick='return window.open("index.php?module=Contacts&action=vtchat","Chat","width=600,height=450,resizable=1,scrollbars=1");'><img src="<?php echo $image_path;?>tbarChat.gif" alt="<?php echo $app_strings['LBL_CHAT_ALT']; ?>" title="<?php echo $app_strings['LBL_CHAT_TITLE']; ?>" border=0></a>
+<?php 
+} 
+if($CHAT_DISPLAY == 'true') { 
+?> 		
+			<td style="padding-right:10px"><a href="javascript:;" onClick='return window.open("index.php?module=Contacts&action=vtchat","Chat","width=600,height=450,resizable=1,scrollbars=1");'><img src="<?php echo $image_path;?>tbarChat.gif" alt="<?php echo $app_strings['LBL_CHAT_ALT']; ?>" title="<?php echo $app_strings['LBL_CHAT_TITLE']; ?>" border=0></a>
+<?php 
+} 
+?> 
                     </td>	
 				</tr>
 				</table>
@@ -337,6 +355,7 @@ function loadDashBoard(oSelect)
 			onComplete: function(response)
 			{
 				$("dashChart").innerHTML=response.responseText;
+				$("dashChart").style.display='none';
 				Effect.Appear("dashChart");
 				var dashst = document.getElementById('dash_script');
 				eval(dashst.innerHTML);
@@ -351,6 +370,8 @@ function changeView(displaytype)
 	gdash_displaytype = displaytype;
 	var oCombo = $('dashboard_combo');
 	var type = oCombo.options[oCombo.selectedIndex].value; 
+	var currenttime = new Date();
+	var time="&time="+currenttime.getTime();
 	if(type == 'DashboardHome')
 	{
 		if(displaytype == 'MATRIX')
@@ -365,7 +386,7 @@ function changeView(displaytype)
 		else
 			url = 'index.php?module=Dashboard&action=index&display_view=NORMAL&type='+type;
 	}
-	window.document.location.href = url;
+	window.document.location.href = url+time;
 
 }
 </script>

@@ -1,21 +1,25 @@
-<?php ?>
+<?php 
+global $mod_strings;
+global $app_strings;
+global $theme;
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-<meta content="text/html; charset=iso-8859-1" http-equiv="content-type"/>
+<meta content="text/html; charset=<?php echo $app_strings['LBL_CHARSET'];?>" http-equiv="content-type"/>
 <meta name="author" content="rolosworld@gmail.com"/>
 <meta http-equiv="expires" content="-1"/>
 <meta http-equiv="pragma" content="no-cache"/>
 
-<title>Ajax Css-Popup chat</title>
+<title><?php echo $mod_strings['TITLE_AJAX_CSS_POPUP_CHAT'];?></title>
 
 <!-- NEEDED SCRIPTS  -->
-<script type="text/javascript" charset="iso-8859-1" src="modules/Contacts/js/ajax.js"></script>
-<script type="text/javascript" charset="iso-8859-1" src="modules/Contacts/js/dom-drag_p.js"></script>
-<script type="text/javascript" charset="iso-8859-1" src="modules/Contacts/js/css-window_p.js"></script>
-<script type="text/javascript" charset="iso-8859-1" src="modules/Contacts/js/chat.js"></script>
+<script type="text/javascript" charset="<?php echo $app_strings['LBL_CHARSET']?>" src="modules/Contacts/js/ajax.js"></script>
+<script type="text/javascript" charset="<?php echo $app_strings['LBL_CHARSET']?>" src="modules/Contacts/js/dom-drag_p.js"></script>
+<script type="text/javascript" charset="<?php echo $app_strings['LBL_CHARSET']?>" src="modules/Contacts/js/css-window_p.js"></script>
+<script type="text/javascript" charset="<?php echo $app_strings['LBL_CHARSET']?>" src="modules/Contacts/js/chat.js"></script>
 <!-- /NEEDED SCRIPTS -->
 
 
@@ -42,11 +46,11 @@ function showPopup()
 </script>
 
 <!-- CSS classes for the popups -->
-<link rel="stylesheet" type="text/css" href="modules/Contacts/chat.css"/>
+<link rel="stylesheet" type="text/css" href="themes/<?php echo $theme;?>/chat.css"/>
 
 </head>
 
-<body onload="showPopup();" style="background-image:url(modules/Contacts/imgs/site_bg.gif);color:#ffffff;">
+<body onload="showPopup();" style="background-image:url(themes/<?php echo $theme;?>/images/site_bg.gif);color:#ffffff;">
 
 
 <!-- THIS IS NEEDED FOR THE USERS LIST TO APPEAR, -->
@@ -76,6 +80,7 @@ function showPopup()
 					<td class="pchathead"></td>
 					<td class="pchathead1"><b><?php echo $mod_strings['User List']; ?></b></td>
 					<td class="pchathead2"></td>
+					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td class="pchatbody"></td>
@@ -85,11 +90,13 @@ function showPopup()
 						</div>
 					</td>
 					<td class="pchatbody2"></td>
+					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td class="pchatfoot"></td>
 					<td class="pchatfoot1"></td>
 					<td class="pchatfoot2"></td>
+					<td>&nbsp;</td>
 				</tr>
 			</table>
 		</td>

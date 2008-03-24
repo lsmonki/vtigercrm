@@ -10,23 +10,27 @@
  ********************************************************************************/
 -->*}
 <div id="rssScroll">
-	<table class="rssTable" cellspacing="0" cellpadding="0" width=100%>
+	<table cellspacing="0" cellpadding="0" width=100%>
         <tr>
-			<th width="5%"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></th>
-            <th width="65%">{$LISTHEADER.0}</th>
-            <th width="15%">{$LISTHEADER.1}</th>
-            <th width="15%">{$LISTHEADER.2}</th>
+			<th width="5%" class='tableHeadBg'><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></th>
+            <th width="65%" class='tableHeadBg'>{$LISTHEADER.0}</th>
+            <th width="15%" class='tableHeadBg'>{$LISTHEADER.1}</th>
+            <th width="15%" class='tableHeadBg'>{$LISTHEADER.2}</th>
         </tr>
-		{foreach key=id item=row from=$LISTENTITY}
-	    <tr id="row_{$id}">
-			<td>
-			<span><input type="checkbox" name="selected_id" value= '{$id}' onClick=toggleSelectAll(this.name,"selectall")>
-</span></td>
-			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');" style="cursor:pointer;"><b>{$row.0}</b></td>
-			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');" style="cursor:pointer;">{$row.1}</td>
-			<td onClick="getEmailContents('{$id}'),setSubject('{$row.0}');" style="cursor:pointer;">{$row.2}</td>
-        </tr>
-		{/foreach}
+		{if $LISTENTITY != NULL}
+			{foreach key=id item=row from=$LISTENTITY}
+			    <tr id="row_{$id}">
+				<td>
+				<span><input type="checkbox" name="selected_id" value= '{$id}' onClick=toggleSelectAll(this.name,"selectall")>
+				</span></td>
+				<td onClick="getEmailContents('{$id}');" style="cursor:pointer;"><b>{$row.0}</b></td>
+				<td onClick="getEmailContents('{$id}');" style="cursor:pointer;">{$row.1}</td>
+				<td onClick="getEmailContents('{$id}');" style="cursor:pointer;">{$row.2}</td>
+			        </tr>
+			{/foreach}
+		{else}
+			<tr><td>&nbsp;</td><td align="center" nowrap><b>{$MOD.LBL_NO_RECORDS}</b></td></tr>
+		{/if}
     </table>
 </div>
 <SCRIPT>

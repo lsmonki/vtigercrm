@@ -143,16 +143,19 @@ function verify_data(form,company_name)
 {
 	if (form.organization_name.value == "" )
 	{
-		alert(company_name +" cannot be none");
-		form.organization_name.focus();
-		return false;
-
+		{/literal}
+                alert(company_name +"{$APP.CANNOT_BE_NONE}");
+                form.organization_name.focus();
+                return false;
+                {literal}
 	}
 	else if (form.organization_name.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{
-		alert(company_name +" cannot be empty");
-		form.organization_name.focus();
-		return false;
+	{/literal}
+                alert(company_name +"{$APP.CANNOT_BE_EMPTY}");
+                form.organization_name.focus();
+                return false;
+                {literal}
 	}
 	else
 	{

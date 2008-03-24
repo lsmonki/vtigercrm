@@ -34,8 +34,10 @@ function GetRssFeedList(id)
 function DeleteRssFeeds(id)
 {
    if(id != '')	
-   {		
-  	if(confirm('Are you sure to delete the rss feed?'))
+   {
+	{/literal}
+        if(confirm('{$APP.DELETE_RSSFEED_CONFIRMATION}'))
+        {literal}
 	{	
 		show('status');	
 		var feed = 'feed_'+id;
@@ -71,7 +73,9 @@ function SaveRssFeeds()
                                         $("status").style.display="none";
 					if(isNaN(parseInt(response.responseText)))
         				{
-				                alert(response.responseText);
+				               var rrt = response.responseText;
+						$("temp_alert").innerHTML = rrt;
+						removeHTMLTags();	
 				                $('rssurl').value = '';
 					}
 					else
@@ -90,11 +94,12 @@ function SaveRssFeeds()
 
 <!-- Contents -->
 {include file="Buttons_List1.tpl"}
+<div id="temp_alert" style="display:none"></div>
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 <tr>
 	<td valign=top align=right width=8><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
 	<td class="showPanelBg" valign="top" width="100%" align=center >	
-
+		
 			<!-- RSS Reader UI Starts here--><br>
 				<table width="100%"  border="0" cellspacing="0" cellpadding="5" class="mailClient mailClientBg">
 				<tr>
@@ -103,7 +108,7 @@ function SaveRssFeeds()
 						<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 						<tr>
 							<td width=95% align=left><img src='{$IMAGE_PATH}rssroot.gif' align='absmiddle'/><a href="javascript:;" onClick="fnvshobj(this,'PopupLay');$('rssurl').focus();" title='{$APP.LBL_ADD_RSS_FEEDS}'>{$MOD.LBL_ADD_RSS_FEED}</a></td>
-							<td  class="componentName" nowrap>vtiger RSS Reader</td>
+							<td  class="componentName" nowrap>{$MOD.LBL_VTIGER_RSS_READER}</td>
 						</tr>
 						<tr>
 							<td colspan="2">
@@ -112,8 +117,8 @@ function SaveRssFeeds()
 									<td width=30% valign=top>
 									<!-- Feed Folders -->
 										<table border=0 cellspacing=0 cellpadding=0 width=100%>
-										<tr><td class="small mailSubHeader" height="25"><b>Feed Sources</b></td></tr>
-										<tr><td class="hdrNameBg" bgcolor="#fff" height=155><div id="rssfolders" style="height:100%;overflow:auto;">{$RSSFEEDS}</div></td></tr>
+										<tr><td class="small mailSubHeader" height="25"><b>{$MOD.LBL_FEED_SOURCES}</b></td></tr>
+										<tr><td class="hdrNameBg" bgcolor="#fff" height=225><div id="rssfolders" style="height:100%;overflow:auto;">{$RSSFEEDS}</div></td></tr>
 										</table>
 									</td>
 									<td width=1%>&nbsp;</td>
@@ -226,4 +231,17 @@ function getrssfolders()
                         {rdelim}
                 );
 {rdelim}
+
+
+function removeHTMLTags()
+{ldelim}
+ 	if(document.getElementById && document.getElementById("temp_alert"))
+	{ldelim}
+ 		var strInputCode = document.getElementById("temp_alert").innerHTML;
+ 		var strTagStrippedText = strInputCode.replace(/<\/?[^>]+(>|$)/g, "");
+ 		alert("Output Message:\n" + strTagStrippedText);	
+ 	{rdelim}	
+{rdelim}
+
+
 </script>

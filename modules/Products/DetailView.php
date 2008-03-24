@@ -91,6 +91,8 @@ $smarty->assign("CHECK", $check_button);
 $smarty->assign("MODULE", $currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
 
+$smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
+
 if($singlepane_view == 'true')
 {
 	$related_array = getRelatedLists($currentModule,$focus);

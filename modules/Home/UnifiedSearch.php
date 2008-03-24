@@ -76,7 +76,17 @@ if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST[
 			$oCustomView = '';
 
 			$oCustomView = new CustomView($module);
-		
+			//Instead of getting current customview id, use cvid of All so that all entities will be found
+			//$viewid = $oCustomView->getViewId($module);
+			$cv_res = $adb->query("select cvid from vtiger_customview where viewname='All' and entitytype='$module'");
+			$viewid = $adb->query_result($cv_res,0,'cvid');
+			
+			$listquery = $oCustomView->getModifiedCvListQuery($viewid,$listquery,$module);
+                        if ($module == "Calendar"){
+                                if (!isset($oCustomView->list_fields['Close'])) $oCustomView->list_fields['Close']=array ( 'activity' => 'status' );
+                                if (!isset($oCustomView->list_fields_name['Close'])) $oCustomView->list_fields_name['Close']='status';
+                        }
+
 			if($search_module != '')//This is for Tag search
 			{
 		
@@ -93,7 +103,7 @@ if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST[
 
 			if($where != '')
 				$listquery .= ' and ('.$where.')';
-		
+			
 			$list_result = $adb->query($listquery);
 			$noofrows = $adb->num_rows($list_result);
 
@@ -133,7 +143,7 @@ if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST[
 	//Added to display the Total record count
 ?>
 	<script>
-document.getElementById("global_search_total_count").innerHTML = " <? echo $app_strings['LBL_TOTAL_RECORDS_FOUND'] ?><b><?php echo $total_record_count; ?></b>";
+document.getElementById("global_search_total_count").innerHTML = " <?php echo $app_strings['LBL_TOTAL_RECORDS_FOUND'] ?><b><?php echo $total_record_count; ?></b>";
 	</script>
 <?php
 
@@ -239,9 +249,9 @@ function getSearchModulesComboList($search_module)
 		 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 		     <tr>
 		        <td colspan="3" id="global_search_total_count" style="padding-left:30px">&nbsp;</td>
-		<td nowrap align="right"><? echo $app_strings['LBL_SHOW_RESULTS'] ?>&nbsp;
+		<td nowrap align="right"><?php echo $app_strings['LBL_SHOW_RESULTS'] ?>&nbsp;
 		                <select id="global_search_module" name="global_search_module" onChange="displayModuleList(this);">
-			<option value="All"><? echo $app_strings['COMBO_ALL'] ?></option>
+			<option value="All"><?php echo $app_strings['COMBO_ALL'] ?></option>
 						<?php
 						foreach($object_array as $module => $object_name)
 						{
