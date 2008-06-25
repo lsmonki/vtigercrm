@@ -212,7 +212,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$editview_label[]=$mod_strings[$fieldlabel];
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 		{
-			$pick_query="select $fieldname from vtiger_$fieldname";
+			$pick_query="select $fieldname from vtiger_$fieldname order by $fieldname asc";
 			$params = array();
 		}else
 		{
@@ -479,12 +479,12 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			}
 			if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 			{
-				$pick_query="select salutationtype from vtiger_salutationtype";
+				$pick_query="select salutationtype from vtiger_salutationtype order by salutationtype";
 				$params = array();
 			}
 			else
 			{
-				$pick_query="select * from vtiger_salutationtype left join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_salutationtype.picklist_valueid where picklistid in (select picklistid from vtiger_picklist where name='salutationtype') and roleid=? order by sortid";
+				$pick_query="select * from vtiger_salutationtype left join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_salutationtype.picklist_valueid where picklistid in (select picklistid from vtiger_picklist where name='salutationtype') and roleid=? order by salutationtype";
 				$params = array($current_user->roleid);
 			}
 			$pickListResult = $adb->pquery($pick_query, $params);
