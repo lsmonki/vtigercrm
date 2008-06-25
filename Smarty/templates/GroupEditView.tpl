@@ -310,48 +310,50 @@ selectedColumnsObj=getObj("selectedColumns")
 {rdelim}
 
 function addColumn() 
-{ldelim}
-for (i=0;i<selectedColumnsObj.length;i++) 
-{ldelim}
-selectedColumnsObj.options[i].selected=false
-{rdelim}
+        {ldelim}
+            for (i=0;i<selectedColumnsObj.length;i++) 
+            {ldelim}
+                selectedColumnsObj.options[i].selected=false
+            {rdelim}
 
-for (i=0;i<availListObj.length;i++) 
-{ldelim}
-if (availListObj.options[i].selected==true) 
-{ldelim}
-for (j=0;j<selectedColumnsObj.length;j++) 
-{ldelim}
-if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
-{ldelim}
-var rowFound=true
-var existingObj=selectedColumnsObj.options[j]
-break
-{rdelim}
-{rdelim}
+            for (i=0;i<availListObj.length;i++) 
+            {ldelim}
+                if (availListObj.options[i].selected==true) 
+                {ldelim}            	
+                	var rowFound=false;
+                	var existingObj=null;
+                    for (j=0;j<selectedColumnsObj.length;j++) 
+                    {ldelim}
+                        if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
+                        {ldelim}
+                            rowFound=true
+                            existingObj=selectedColumnsObj.options[j]
+                            break
+                        {rdelim}
+                    {rdelim}
 
-if (rowFound!=true) 
-{ldelim}
-var newColObj=document.createElement("OPTION")
-newColObj.value=availListObj.options[i].value
-if (browser_ie) newColObj.innerText=availListObj.options[i].innerText
-	else if (browser_nn4 || browser_nn6) newColObj.text=availListObj.options[i].text
-selectedColumnsObj.appendChild(newColObj)
-	availListObj.options[i].selected=false
-	newColObj.selected=true
-	rowFound=false
-{rdelim}
-else 
-{ldelim}
-existingObj.selected=true
-{rdelim}
-{rdelim}
-{rdelim}
-{rdelim}
+                    if (rowFound!=true) 
+                    {ldelim}
+                        var newColObj=document.createElement("OPTION")
+                        newColObj.value=availListObj.options[i].value
+                        if (browser_ie) newColObj.innerText=availListObj.options[i].innerText
+                        else if (browser_nn4 || browser_nn6) newColObj.text=availListObj.options[i].text
+                        selectedColumnsObj.appendChild(newColObj)
+                        availListObj.options[i].selected=false
+                        newColObj.selected=true
+                        rowFound=false
+                    {rdelim} 
+                    else 
+                    {ldelim}
+                        if(existingObj != null) existingObj.selected=true
+                    {rdelim}
+                {rdelim}
+            {rdelim}
+        {rdelim}
 
 function delColumn() 
 {ldelim}
-for (i=0;i<=selectedColumnsObj.options.length;i++) 
+for (i=selectedColumnsObj.options.length;i>0;i--) 
 {ldelim}
 	if (selectedColumnsObj.options.selectedIndex>=0)
 selectedColumnsObj.remove(selectedColumnsObj.options.selectedIndex)

@@ -252,7 +252,7 @@ function validate()
 
         function delColumn() 
         {ldelim}
-            for (i<=selectedColumnsObj.options.length;i>0;i--) 
+            for (i=selectedColumnsObj.options.length;i>0;i--) 
             {ldelim}
                 if (selectedColumnsObj.options.selectedIndex>=0)
                 selectedColumnsObj.remove(selectedColumnsObj.options.selectedIndex)
