@@ -36,7 +36,8 @@ require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/Import/ImportSave.php');
 
-set_time_limit(0);
+global $php_max_execution_time;
+set_time_limit($php_max_execution_time);
 ini_set("display_errors",'0');
 
 

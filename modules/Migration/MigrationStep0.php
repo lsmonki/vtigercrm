@@ -58,13 +58,7 @@ $db_migration_status = getMigrationCharsetFlag();
 if ($db_migration_status == MIG_CHARSET_PHP_UTF8_DB_UTF8) {
 	header("Location: index.php?module=Migration&action=index&parenttab=Settings");
 }
-/* Only for testing 
-$smarty->assign("DB_CHARSET", "latin1");
-$smarty->assign("DB_STATUS", 0);
-$smarty->assign("CONFIG_CHARSET", "ISO");
-$smarty->assign("CONFIG_STATUS", 0);
-$db_migration_status = 2;
-*/
+
 $smarty->assign("CONVERSION_MSG", $data_conversion_msg[$db_migration_status]);
 
 $smarty->display("MigrationStep0.tpl");

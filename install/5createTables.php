@@ -16,7 +16,7 @@
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/5createTables.php,v 1.58 2005/04/19 16:57:08 ray Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
-set_time_limit(2000);
+set_time_limit(0);
 
 if (isset($_REQUEST['db_name'])) $db_name  				= $_REQUEST['db_name'];
 if (isset($_REQUEST['db_drop_tables'])) $db_drop_tables 	= $_REQUEST['db_drop_tables'];

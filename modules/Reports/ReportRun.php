@@ -1801,7 +1801,7 @@ class ReportRun extends CRMEntity
 
 	function GenerateReport($outputformat,$filterlist)
 	{
-		global $adb,$current_user;
+		global $adb,$current_user,$php_max_execution_time;
 		global $modules,$app_strings;
 		global $mod_strings,$current_language;
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -1960,7 +1960,7 @@ class ReportRun extends CRMEntity
 					$secondvalue = $snewvalue;
 					$thirdvalue = $tnewvalue;
 					$arr_val[] = $arraylists;
-					set_time_limit(0);
+					set_time_limit($php_max_execution_time);
 				}while($custom_field_values = $adb->fetch_array($result));
 
 				$sHTML ='<table cellpadding="5" cellspacing="0" align="center" class="rptTable">
@@ -2051,7 +2051,7 @@ class ReportRun extends CRMEntity
 							$arraylists[str_replace($modules," ",$this->getLstringforReportHeaders($fld->name))] = $fieldvalue;
 					}
 					$arr_val[] = $arraylists;
-					set_time_limit(0);
+					set_time_limit($php_max_execution_time);
 				}while($custom_field_values = $adb->fetch_array($result));
 
 				return $arr_val;
@@ -2282,7 +2282,7 @@ class ReportRun extends CRMEntity
 					 $secondvalue = $snewvalue;
 					 $thirdvalue = $tnewvalue;
 					 $arr_val[] = $arraylists;
-					 set_time_limit(0);
+					 set_time_limit($php_max_execution_time);
 				}while($custom_field_values = $adb->fetch_array($result));
 				
 				$sHTML = '<tr>'.$header.'</tr>'.$valtemplate;	
