@@ -128,8 +128,7 @@
                                 if (!emptyCheck("currency_symbol","Currency Symbol","text")) return false
                                         if (!emptyCheck("conversion_rate","Conversion Rate","text")) return false
                                                 if (!emptyCheck("currency_status","Currency Status","text")) return false
-						if(isNaN(getObj("conversion_rate").value) || eval(getObj("conversion_rate")
-.value) == 0)
+						if(isNaN(getObj("conversion_rate").value) || eval(getObj("conversion_rate").value) <= 0)
                                                 {
 							{/literal}
                                                         alert("{$APP.ENTER_VALID_CONVERSION_RATE}")

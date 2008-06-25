@@ -27,10 +27,10 @@
 							<input type="hidden" name="action" value="Export">
 							<input type="hidden" name="idstring" value="{$IDSTRING}">
 							<input type="hidden" name="id_cur_str" value="{$IDCURSTR}">
-
 							<table align="center" cellpadding="15" cellspacing="0" width="85%" class="mailClient importLeadUI small" border="0">
 								<tr>
 									<td colspan="2" valign="middle" align="left" class="mailClientBg  genHeaderSmall">{$APP.$MODULE} >> {$APP.LBL_EXPORT} </td>
+									<br>
 								</tr>
 								<tr>
   									<td border="0" cellpadding="5" cellspacing="0" width="50%">
