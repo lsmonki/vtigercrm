@@ -202,3 +202,39 @@ function searchMapLocation(addressType)
 	mapParameter = removeHTMLFormatting(mapParameter);
 	window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
 }
+
+function set_return_contact_address(contact_id, contact_name, mailingstreet, otherstreet, mailingcity, othercity, mailingstate, otherstate, mailingcode, othercode, mailingcountry, othercountry,mailingpobox,otherpobox) {
+        window.opener.document.EditView.contact_name.value = contact_name;
+        window.opener.document.EditView.contact_id.value = contact_id;
+
+	//Ask the user to overwite the address or not - Modified on 06-01-2007
+	if(confirm(alert_arr.OVERWRITE_EXISTING_CONTACT1+contact_name+alert_arr.OVERWRITE_EXISTING_CONTACT2))
+	{
+		//made changes to avoid js error -- ref : hidding fields causes js error(ticket#4017)
+                if(typeof(window.opener.document.EditView.bill_street) != 'undefined')
+                        window.opener.document.EditView.bill_street.value = mailingstreet;
+                if(typeof(window.opener.document.EditView.ship_street) != 'undefined')
+                        window.opener.document.EditView.ship_street.value = otherstreet;
+                if(typeof(window.opener.document.EditView.bill_city) != 'undefined')
+                        window.opener.document.EditView.bill_city.value = mailingcity;
+                if(typeof(window.opener.document.EditView.ship_city) != 'undefined')
+                        window.opener.document.EditView.ship_city.value = othercity;
+                if(typeof(window.opener.document.EditView.bill_state) != 'undefined')
+                        window.opener.document.EditView.bill_state.value = mailingstate;
+                if(typeof(window.opener.document.EditView.ship_state) != 'undefined')
+                        window.opener.document.EditView.ship_state.value = otherstate;
+                if(typeof(window.opener.document.EditView.bill_code) != 'undefined')
+                        window.opener.document.EditView.bill_code.value = mailingcode;
+                if(typeof(window.opener.document.EditView.ship_code) != 'undefined')
+                        window.opener.document.EditView.ship_code.value = othercode;
+		if(typeof(window.opener.document.EditView.bill_country) != 'undefined')
+                        window.opener.document.EditView.bill_country.value = mailingcountry;
+                if(typeof(window.opener.document.EditView.ship_country) != 'undefined')
+                        window.opener.document.EditView.ship_country.value = othercountry;
+                if(typeof(window.opener.document.EditView.bill_pobox) != 'undefined')
+                        window.opener.document.EditView.bill_pobox.value = mailingpobox;
+                if(typeof(window.opener.document.EditView.ship_pobox) != 'undefined')
+                        window.opener.document.EditView.ship_pobox.value = otherpobox;
+		//end
+	}
+}

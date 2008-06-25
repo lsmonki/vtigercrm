@@ -1370,10 +1370,17 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 function getConvertSoToInvoice($focus,$so_focus,$soid)
 {
-	global $log;
+	global $log,$current_user; 
 	$log->debug("Entering getConvertSoToInvoice(".get_class($focus).",".get_class($so_focus).",".$soid.") method ...");
-        $log->info("in getConvertSoToInvoice ".$soid);
-
+    $log->info("in getConvertSoToInvoice ".$soid);
+    $xyz=array('bill_street','bill_city','bill_code','bill_pobox','bill_country','bill_state','ship_street','ship_city','ship_code','ship_pobox','ship_country','ship_state');
+	for($i=0;$i<12;$i++){
+		if (getFieldVisibilityPermission('SalesOrder', $current_user->id,$xyz[$i]) == '0'){
+			$so_focus->column_fields[$xyz[$i]] = $so_focus->column_fields[$xyz[$i]];
+		}
+		else
+			$so_focus->column_fields[$xyz[$i]] = '';
+	}
 	$focus->column_fields['salesorder_id'] = $soid;
 	$focus->column_fields['subject'] = $so_focus->column_fields['subject'];
 	$focus->column_fields['customerno'] = $so_focus->column_fields['customerno'];
@@ -1413,10 +1420,17 @@ function getConvertSoToInvoice($focus,$so_focus,$soid)
 
 function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
 {
-	global $log;
+	global $log,$current_user;
 	$log->debug("Entering getConvertQuoteToInvoice(".get_class($focus).",".get_class($quote_focus).",".$quoteid.") method ...");
         $log->info("in getConvertQuoteToInvoice ".$quoteid);
-
+    $xyz=array('bill_street','bill_city','bill_code','bill_pobox','bill_country','bill_state','ship_street','ship_city','ship_code','ship_pobox','ship_country','ship_state');
+	for($i=0;$i<12;$i++){
+		if (getFieldVisibilityPermission('Quotes', $current_user->id,$xyz[$i]) == '0'){
+			$quote_focus->column_fields[$xyz[$i]] = $quote_focus->column_fields[$xyz[$i]];
+		}
+		else
+			$quote_focus->column_fields[$xyz[$i]] = '';
+	}
 	$focus->column_fields['subject'] = $quote_focus->column_fields['subject'];
 	$focus->column_fields['account_id'] = $quote_focus->column_fields['account_id'];
 	$focus->column_fields['bill_street'] = $quote_focus->column_fields['bill_street'];
@@ -1448,10 +1462,17 @@ function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
 
 function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
 {
-	global $log;
+	global $log,$current_user;
 	$log->debug("Entering getConvertQuoteToSoObject(".get_class($focus).",".get_class($quote_focus).",".$quoteid.") method ...");
         $log->info("in getConvertQuoteToSoObject ".$quoteid);
-
+	    $xyz=array('bill_street','bill_city','bill_code','bill_pobox','bill_country','bill_state','ship_street','ship_city','ship_code','ship_pobox','ship_country','ship_state');
+		for($i=0;$i<12;$i++){
+			if (getFieldVisibilityPermission('Quotes', $current_user->id,$xyz[$i]) == '0'){
+				$quote_focus->column_fields[$xyz[$i]] = $quote_focus->column_fields[$xyz[$i]];
+			}
+			else
+				$quote_focus->column_fields[$xyz[$i]] = '';
+		}
         $focus->column_fields['quote_id'] = $quoteid;
         $focus->column_fields['subject'] = $quote_focus->column_fields['subject'];
         $focus->column_fields['contact_id'] = $quote_focus->column_fields['contact_id'];
