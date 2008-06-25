@@ -179,6 +179,7 @@ for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 		}
 		$producttotal = $taxable_total+$total_taxes;
 		$product_line[$j]["Tax"] = number_format($total_taxes,2,'.',',')."\n ($total_tax_percent %) ";
+		$price_salestax += $total_taxes;
 	}
 	$prod_total[$i] = number_format($producttotal,2,'.',',');
 
@@ -189,6 +190,7 @@ for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 	$product_line[$j]["Discount"] = $discount_total[$i];
 	$product_line[$j]["Total"] = $prod_total[$i];
 }
+$price_salestax = number_format($price_salestax,2,'.',',');
 //echo '<pre>Product Details ==>';print_r($product_line);echo '</pre>';
 //echo '<pre>';print_r($associated_products);echo '</pre>';
 
