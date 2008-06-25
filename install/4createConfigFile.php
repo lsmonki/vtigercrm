@@ -263,9 +263,12 @@ $cache_dir = 'cache/';
  	$config .= "********************************************************************************/\n\n";
  	$config .= "include('vtigerversion.php');\n\n";
  	$config .= "ini_set('memory_limit','64M');\n\n";
- 	$config .= "// show or hide world clock, calculator and FCKEditor\n\n";
+ 	$config .= "// show or hide calendar, world clock, calculator, chat and FCKEditor\n";
+	$config .= "// Do NOT remove the quotes if you set these to false! \n"; 
+	$config .= "$CALENDAR_DISPLAY = 'true';\n";
  	$config .= "\$WORLD_CLOCK_DISPLAY = 'true';\n";
  	$config .= "\$CALCULATOR_DISPLAY = 'true';\n";
+	$config .= "$CHAT_DISPLAY = 'true';\n"; 
  	$config .= "\$FCKEDITOR_DISPLAY = 'true';\n\n";
  	
  	$config .= "//This is the URL for customer portal. (Ex. http://vtiger.com/portal)\n";
@@ -281,7 +284,7 @@ $cache_dir = 'cache/';
  	$config .= "      db_password:         MySQL Password\n";
  	$config .= "      db_name:             MySQL Database Name\n*/\n";
  	$config .= "\$dbconfig['db_server'] =     '".$db_hostname."';\n";
- 	$config .= "\$dbconfig['db_port'] =     '".$db_port."';\n";
+ 	$config .= "\$dbconfig['db_port'] =     ':".$db_port."';\n";
  	$config .= "\$dbconfig['db_username'] =     '".$db_username."';\n";
  	$config .= "\$dbconfig['db_password'] =         '".$db_password."';\n";
  	$config .= "\$dbconfig['db_name'] =             '".$db_name."';\n";
@@ -356,8 +359,11 @@ $cache_dir = 'cache/';
 	$config .= "\$list_max_entries_per_page = '20';\n\n";
 
  	$config .= "// change this number to whatever you want. This is the number of pages that will appear in the pagination. by Raju \n";
- 	$config .= "\$limitpage_navigation = '9';\n\n";
+ 	$config .= "\$limitpage_navigation = '5';\n\n";
 	
+	$config .= "// define list of menu tabs \n";
+	$config .= "//$moduleList = Array('Home', 'Dashboard', 'Contacts', 'Accounts', 'Opportunities', 'Cases', 'Notes', 'Calls', 'Emails', 'Meetings', 'Tasks','MessageBoard'); \n\n";
+
 	$config .= "// history_max_viewed default value = 5\n";
  	$config .= "\$history_max_viewed = '5';\n\n";
  	
@@ -420,6 +426,12 @@ $cache_dir = 'cache/';
 
  	$config .= "// Generating Unique Application Key\n";
  	$config .= "\$application_unique_key = '".md5($root_directory)."';\n\n";
+
+	$config .= "// trim descriptions, titles in listviews to this value\n";
+	$config .= "\$listview_max_textlength = 40;\n\n";
+
+	$config .= "// Maximum time limit for PHP script execution (in seconds)\n";
+	$config .= "\$php_max_execution_time = 0;\n\n";
  	$config .= "?>";
 		
 			echo "<TEXTAREA class=\"dataInput\" rows=\"15\" cols=\"80\">".$config."</TEXTAREA><br><br>";
