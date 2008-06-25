@@ -1381,7 +1381,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$contact_id = $adb->query_result($result,$i,"contactid");
 		$id = $adb->query_result($result,$i,"activityid");
 		$subject = $adb->query_result($result,$i,"subject");
-		$eventstatus = getTranslatedString($adb->query_result($result,$i,"eventstatus"));
+		$eventstatus = $adb->query_result($result,$i,"eventstatus");
 		$assignedto = $adb->query_result($result,$i,"user_name");
 		$userid = $adb->query_result($result,$i,"smownerid");
 		$idShared = "normal";
@@ -1446,13 +1446,13 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 					$num_val = $adb->num_rows($res_val);
 				}
 				if($num_val > 0)
-				$element['status'] = $eventstatus;
+				$element['status'] = getTranslatedString(decode_html($eventstatus));
 				else
 				$element['status'] = "<font color='red'>".$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
 
 
 			}else
-			$element['status'] = decode_html($eventstatus);
+			$element['status'] = getTranslatedString(decode_html($eventstatus));
 		}
 		if(!empty($assignedto))
 			$element['assignedto'] = $assignedto;
@@ -1620,7 +1620,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		}*/
 		if(getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0')
 		{
-			$taskstatus = getTranslatedString(decode_html($adb->query_result($result,$i,"status")));
+			$taskstatus = $adb->query_result($result,$i,"status");
 
 			if(!$is_admin && $taskstatus != '')
 			{
@@ -1642,13 +1642,13 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 					$num_val = $adb->num_rows($res_val);
 				}
 				if($num_val > 0)
-				$element['status'] = $taskstatus;
+				$element['status'] = getTranslatedString(decode_html($taskstatus));
 				else
 				$element['status'] = "<font color='red'>".$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
 
 
 			}else
-			$element['status'] = decode_html($taskstatus);
+			$element['status'] = getTranslatedString(decode_html($taskstatus));
 			
 			
 		}
