@@ -2177,7 +2177,7 @@ function sendNotificationToGroups($groupid,$crmid,$module)
        $getGroupObj->getAllUsersInGroup($mycrmid);
        $userIds=$getGroupObj->group_users;
 	   if (count($userIds) > 0) {
-	       $groupqry="select email1,id,user_name from vtiger_users where id in(". generateQuestionMarks($userIds) .")";
+	       $groupqry="select email1,id,user_name from vtiger_users WHERE status='Active' AND id in(". generateQuestionMarks($userIds) .")";
 	       $groupqry_res=$adb->pquery($groupqry, array($userIds));
 	       for($z=0;$z < $adb->num_rows($groupqry_res);$z++)
 	       {
