@@ -470,7 +470,7 @@ DlgDocPreview		: "Podgląd",
 Templates			: "Sablony",
 DlgTemplatesTitle	: "Szablony zawartości",
 DlgTemplatesSelMsg	: "Wybierz szablon do otwarcia w edytorze<br>(obecna zawartość okna edytora zostanie utracona):",
-DlgTemplatesLoading	: "Ładowanie listy szablonów. Proszę czekać...",
+DlgTemplatesLoading	: "�?adowanie listy szablonów. Proszę czekać...",
 DlgTemplatesNoTpl	: "(Brak zdefiniowanych szablonów)",
 
 // About Dialog

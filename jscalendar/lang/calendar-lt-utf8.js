@@ -14,7 +14,7 @@ Calendar._DN = new Array
 ("Sekmadienis",
  "Pirmadienis",
  "Antradienis",
- "Trečiadienis",
+ "Tre�?iadienis",
  "Ketvirtadienis",
  "Pentadienis",
  "Šeštadienis",
@@ -89,8 +89,8 @@ Calendar._TT["ABOUT"] =
 "- Nuspauskite ir laikykite pelės klavišą greitesniam pasirinkimui.";
 Calendar._TT["ABOUT_TIME"] = "\n\n" +
 "Laiko pasirinkimas:\n" +
-"- Spustelkite ant valandų arba minučių - skaičius padidės vienetu.\n" +
-"- Jei spausite kartu su Shift, skaičius sumažės.\n" +
+"- Spustelkite ant valandų arba minu�?ių - skai�?ius padidės vienetu.\n" +
+"- Jei spausite kartu su Shift, skai�?ius sumažės.\n" +
 "- Greitam pasirinkimui spustelkite ir pajudinkite pelę.";
 
 Calendar._TT["PREV_YEAR"] = "Ankstesni metai (laikykite, jei norite meniu)";
