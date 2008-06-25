@@ -49,7 +49,9 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$sql = "delete from vtiger_seproductsrel where crmid=? and productid=?";
 			$adb->pquery($sql, array($record, $return_id));
 		}
-		delAccRelRecords($record);
+		else {
+			delAccRelRecords($record);
+		}
 	break;
 	case Campaigns:
 		if($return_module == "Leads") {

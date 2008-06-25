@@ -551,6 +551,4 @@ class Potentials extends CRMEntity {
 
 }
 
-
-
 ?>
