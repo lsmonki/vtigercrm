@@ -90,6 +90,11 @@
 						<td colspan="2" align="right" style="padding-right:40px;" class="reportCreateBottom">
 							<input title="{$MOD.LBL_EXPORT_RESULTS_GO}" accessKey="" class="crmButton small save" type="submit" name="button" value="  {$MOD.LBL_EXPORT_RESULTS_GO} &rsaquo; ">
 						</td>
+						<!-- ADDED FOR 5.0.4 GA; STARTS-->
+						<td colspan="2" align="right" style="padding-right:40px;" class="reportCreateBottom">
+							<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
+						</td>
+						<!-- ADDED FOR 5.0.4 GA ; ENDS-->
 				   </tr>				</form>
 				 </table>
 				<br>
