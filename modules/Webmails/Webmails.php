@@ -83,6 +83,8 @@ class Webmails extends CRMEntity {
 
 		$this->has_attachments = $this->get_attachments();
 		$this->db->println("Exiting Webmail($mbox,$mailid)");
+
+		$this->relationship = $this->find_relationships(); // Added by Puneeth for 5231
         }
 
 	function delete() {
