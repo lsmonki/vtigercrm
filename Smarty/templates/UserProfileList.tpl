@@ -72,7 +72,7 @@
 							<a href="index.php?module=Settings&action=profilePrivileges&return_action=ListProfiles&parenttab=Settings&mode=edit&profileid={$listvalues.profileid}"><img src="{$IMAGE_PATH}editfield.gif" alt="{$APP.LBL_EDIT}" title="{$APP.LBL_EDIT}" border="0" align="absmiddle"></a>
 	                                                {if $listvalues.del_permission eq 'yes'}
         	                                                &nbsp;|&nbsp;
-                	                                <a href="javascript:;"><img src="{$IMAGE_PATH}delete.gif" border="0" height="15" width="15" onclick="DeleteProfile(this,'{$listvalues.profileid}')" align="absmiddle"></a>
+                	                                <a href="javascript:;"><img src="{$IMAGE_PATH}delete.gif" border="0" height="15" width="15" onclick="DeleteProfile(this,'{$listvalues.profileid}')" align="absmiddle" title="{$APP.LBL_DELETE_BUTTON}"></a>
                                                 	{else}
                                                 	{/if}
 
