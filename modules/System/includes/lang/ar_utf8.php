@@ -37,10 +37,10 @@ $text['loadavg']        = 'معدل ألتشغيل';
 $text['hardware']       = 'معلومات ألمعدات';
 $text['numcpu']         = 'وحدات ألمعالجه';
 $text['cpumodel']       = 'نوع';
-$text['cpuspeed']       = 'سرعه �?ي';
+$text['cpuspeed']       = 'سرعه في';
 $text['busspeed']       = 'BUS Speed';
 $text['cache']          = ' cache سعة ذاكرة';
-$text['bogomips']       = 'Bogomips سرعه �?ي';
+$text['bogomips']       = 'Bogomips سرعه في';
 
 $text['pci']            = 'PCI معدات ';
 $text['ide']            = 'IDE معدات';
@@ -53,13 +53,13 @@ $text['received']       = 'إستقبل حتى ألآن';
 $text['sent']           = 'أرسل';
 $text['errors']         = 'أخطاء';
 
-$text['connections']    = 'إتصالات شبكه من�?ذه';
+$text['connections']    = 'إتصالات شبكه منفذه';
 
 $text['memusage']       = 'ذاكره مستعمله';
 $text['phymem']         = 'ذاكره جسديه';
 $text['swap']           = 'Swap ذاكرة';
 
-$text['fs']             = 'أنظمة مل�?ات مخططه';
+$text['fs']             = 'أنظمة ملفات مخططه';
 $text['mount']          = 'مخطط';
 $text['partition']      = 'تقطيع';
 
@@ -85,7 +85,7 @@ $text['created']        = 'إصدر بواسطة';
 
 $text['days']           = 'أيام';
 $text['hours']          = 'ساعات';
-$text['minutes']        = 'د�?ائق';
+$text['minutes']        = 'دفائق';
 
 $text['temperature']    = 'Temperature';
 $text['voltage']        = 'Voltage';

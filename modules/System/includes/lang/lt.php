@@ -37,7 +37,7 @@ $text['numcpu']         = 'Procesorių kiekis';
 $text['cpumodel']       = 'Modelis';
 $text['cpuspeed']       = 'Procesoriaus dažnis';
 $text['busspeed']       = 'Magistralės dažnis';
-$text['cache']          = 'Spartinan�?ioji atmintinė';
+$text['cache']          = 'Spartinančioji atmintinė';
 $text['bogomips']       = 'Sistemos „bogomips“';
 
 $text['pci']            = 'PCI įrenginiai';

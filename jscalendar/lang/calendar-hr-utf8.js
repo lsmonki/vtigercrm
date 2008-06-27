@@ -13,8 +13,8 @@ Calendar._DN = new Array
  "Subota",
  "Nedjelja");
 Calendar._MN = new Array
-("SijeÄ?anj",
- "VeljaÄ?a",
+("SijeÄanj",
+ "VeljaÄa",
  "OÅ¾ujak",
  "Travanj",
  "Svibanj",
@@ -28,7 +28,7 @@ Calendar._MN = new Array
 
 // tooltips
 Calendar._TT = {};
-Calendar._TT["TOGGLE"] = "Promjeni dan s kojim poÄ?inje tjedan";
+Calendar._TT["TOGGLE"] = "Promjeni dan s kojim poÄinje tjedan";
 Calendar._TT["PREV_YEAR"] = "Prethodna godina (dugi pritisak za meni)";
 Calendar._TT["PREV_MONTH"] = "Prethodni mjesec (dugi pritisak za meni)";
 Calendar._TT["GO_TODAY"] = "Idi na tekuÄ‡i dan";
