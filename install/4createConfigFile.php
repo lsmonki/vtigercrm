@@ -432,6 +432,9 @@ $cache_dir = 'cache/';
 
 	$config .= "// Maximum time limit for PHP script execution (in seconds)\n";
 	$config .= "\$php_max_execution_time = 0;\n\n";
+
+	$config .= "// Set the default timezone as per your preference\n";
+	$config .= "//\$default_timezone = '';\n\n";
  	$config .= "?>";
 		
 			echo "<TEXTAREA class=\"dataInput\" rows=\"15\" cols=\"80\">".$config."</TEXTAREA><br><br>";

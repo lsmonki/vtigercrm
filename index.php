@@ -104,8 +104,15 @@ if (is_file('config_override.php'))
 	require_once('config_override.php');
 }
 $default_config_values = Array( "allow_exports"=>"all","upload_maxsize"=>"3000000", "listview_max_textlength" => "40", "php_max_execution_time" => "0");
-	
+
 set_default_config($default_config_values);
+
+// Set the default timezone preferred by user
+global $default_timezone;
+if(isset($default_timezone) && function_exists('date_default_timezone_set')) {
+	@date_default_timezone_set($default_timezone);
+} 
+
 require_once('include/logging.php');
 require_once('modules/Users/Users.php');
 
@@ -189,7 +196,6 @@ if($use_current_login)
 {
 
 	//Added to prevent fatal error before starting migration(5.0.4. patch ).
-	//NOTE: These lines  should be removed at next release.
 	//Start
 	$arr=$adb->getColumnNames("vtiger_users");
 	if(!in_array("internal_mailer", $arr))

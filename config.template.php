@@ -196,4 +196,6 @@ $listview_max_textlength = 40;
 // Maximum time limit for PHP script execution (in seconds)
 $php_max_execution_time = 0;
 
+// Set the default timezone as per your preference
+//$default_timezone = '';
 ?>
