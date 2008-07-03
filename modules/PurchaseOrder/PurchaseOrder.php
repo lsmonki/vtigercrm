@@ -57,6 +57,7 @@ class PurchaseOrder extends CRMEntity {
 				'Subject'=>Array('purchaseorder'=>'subject'),
 				'Vendor Name'=>Array('purchaseorder'=>'vendorid'), 
 				'Tracking Number'=>Array('purchaseorder'=> 'tracking_no'),
+				'Total'=>Array('purchaseorder'=>'total'),
 				'Assigned To'=>Array('crmentity'=>'smownerid')
 				);
 	
@@ -65,6 +66,7 @@ class PurchaseOrder extends CRMEntity {
 				        'Subject'=>'subject',
 				        'Vendor Name'=>'vendor_id',
 					'Tracking Number'=>'tracking_no',
+					'Total'=>'hdnGrandTotal',
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';

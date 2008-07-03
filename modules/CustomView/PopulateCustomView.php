@@ -323,6 +323,7 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
                         'vtiger_purchaseorder:subject:subject:PurchaseOrder_Subject:V',
                         'vtiger_purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:I',
                         'vtiger_purchaseorder:tracking_no:tracking_no:PurchaseOrder_Tracking_Number:V',
+						'vtiger_purchaseorder:total:hdnGrandTotal:PurchaseOrder_Total:V',
                         'vtiger_crmentity:smownerid:assigned_user_id:PurchaseOrder_Assigned_To:V'),
 		  
 	          Array('vtiger_crmentity:crmid::SalesOrder_Order_No:I',
