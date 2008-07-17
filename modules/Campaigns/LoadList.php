@@ -29,8 +29,8 @@ elseif($_REQUEST["list_type"] == "Contacts"){
 }
 
 while($row=$adb->fetch_array($rs)) {
-	$sql = "delete from $reltable where $relid = ?";
-	$adb->pquery($sql, array($row["crmid"]));
+	$sql = "delete from $reltable where $relid = ? and campaignid = ?";
+	$adb->pquery($sql, array($row["crmid"], $_REQUEST['return_id']));
 	$adb->pquery("INSERT INTO ".$reltable." VALUES(?,?)", array($_REQUEST["return_id"], $row["crmid"]));
 }
 
