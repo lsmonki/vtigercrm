@@ -226,7 +226,7 @@ class Webmails extends CRMEntity {
 	if($numRows > 0)
 		return array('type'=>"Accounts",'id'=>$this->db->query_result($res,0,"accountid"),'name'=>$this->db->query_result($res,0,"accountname"));
 
-	return 0;
+	return array();
     }
 
     
