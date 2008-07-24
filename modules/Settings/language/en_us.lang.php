@@ -940,5 +940,9 @@ $mod_strings = Array(
 'LBL_PICKLIST_TRANSFER'=>'Transfering the values Of ',
 'LBL_REPLACE_VALUE_WITH'=>'Replace value with ',
 'LBL_EDIT_CUSTOM_RULE'=>'Edit Custom Privilege Rule',
+
+// Added after 5.0.4 GA
+
+'LBL_GENERAL_FIELDS'=>'General Fields',
 );
 ?>

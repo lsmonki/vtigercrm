@@ -2530,8 +2530,8 @@ function getMergedDescription($description,$id,$parent_type)
 			if(is_array($fields["accounts"]))
 			{
 				$columnfields = implode(',',$fields["accounts"]);
-				$query = 'select '.$columnfields.' from vtiger_account where accountid =?';
-				$result = $adb->pquery($query, array($id));
+				$query = "select $columnfields from vtiger_account inner join vtiger_accountscf where vtiger_account.accountid =? and vtiger_accountscf.accountid =?";
+				$result = $adb->pquery($query, array($id,$id));
 				foreach($fields["accounts"] as $columnname)			
 				{
 					$token_data = '$accounts-'.$columnname.'$';
@@ -2550,8 +2550,8 @@ function getMergedDescription($description,$id,$parent_type)
 				}	
 				
 				$columnfields = implode(',',$fields["contacts"]);
-				$query = "select $columnfields from vtiger_contactdetails inner join vtiger_customerdetails on vtiger_customerdetails.customerid=vtiger_contactdetails.contactid  where contactid=?";
-				$result = $adb->pquery($query, array($id));
+				$query = "select $columnfields from vtiger_contactdetails inner join vtiger_contactscf inner join vtiger_customerdetails on vtiger_customerdetails.customerid=vtiger_contactdetails.contactid and vtiger_customerdetails.customerid=vtiger_contactscf.contactid where vtiger_contactdetails.contactid=?";
+				$result = $adb->pquery($query, array($id,$id));
 				foreach($fields["contacts"] as $columnname)
 				{
 					$token_data = '$contacts-'.$columnname.'$';
@@ -2569,8 +2569,8 @@ function getMergedDescription($description,$id,$parent_type)
 					$fields["contacts"][$key]='salutation';
 				}
 				$columnfields = implode(',',$fields["leads"]);
-				$query = "select $columnfields from vtiger_leaddetails where leadid=?";
-				$result = $adb->pquery($query, array($id));
+				$query = "select $columnfields from vtiger_leaddetails inner join vtiger_leadscf where vtiger_leaddetails.leadid=? and vtiger_leadscf.leadid=?";
+				$result = $adb->pquery($query, array($id,$id));
 				foreach($fields["leads"] as $columnname)
 				{
 					$token_data = '$leads-'.$columnname.'$';
@@ -2592,9 +2592,27 @@ function getMergedDescription($description,$id,$parent_type)
 			}
 			break;
 	}
-    	$log->debug("Exiting from getMergedDescription ...");
+
+	$description = getMergedDescriptionCustomVars($fields, $description);//Puneeth : Added for custom date & time fields
+    $log->debug("Exiting from getMergedDescription ...");
 	return $description;
 }
+
+/* Function to merge the custom date & time fields in email templates */
+function getMergedDescriptionCustomVars($fields, $description) {
+	foreach($fields['custom'] as $columnname)
+	{
+		$token_data = '$custom-'.$columnname.'$';
+		$token_value = '';
+		switch($columnname) {
+			case 'currentdate': $token_value = date("F j, Y"); break;
+			case 'currenttime': $token_value = date("G:i:s T"); break;
+		}
+		$description = str_replace($token_data, $token_value, $description);
+	}
+	return $description;
+}
+//End : Custom date & time fields
 
 /**	Function used to retrieve a single field value from database
  *	@param string $tablename - tablename from which we will retrieve the field value
@@ -2941,12 +2959,12 @@ function getmail_contents_portalUser($request_array,$password,$type='')
 	return $contents;
 
 }
+
 /**
  * Function to get the UItype for a field.
  * Takes the input as $module - module name,and columnname of the field
  * returns the uitype, integer type
  */
-
 function getUItype($module,$columnname)
 {
         global $log;
@@ -3329,4 +3347,52 @@ function perform_post_migration_activities() {
 	create_parenttab_data_file();
 }
 
+/** Function To create Email template variables dynamically -- Pavani */
+function getEmailTemplateVariables(){
+	global $adb;
+	$modules_list = array('Accounts', 'Contacts', 'Leads', 'Users');
+	$module_cf_table = array('Accounts' => 'vtiger_accountscf',
+							'Contacts' => 'vtiger_contactscf',
+							'Leads' => 'vtiger_leadscf');
+	foreach($modules_list as $index=>$module){
+		if($module == 'Calendar') {
+			$focus = new Activity();
+		} else {
+			$focus = new $module();
+		}
+		$tabname = $focus->table_name;
+		$default_fields = $focus->emailTemplate_defaultFields;
+		// Set the default email template fields for the given module 
+		if ($default_fields != null) {
+			foreach($default_fields as $index=>$field){
+				if($field=='support_start_date' || $field=='support_end_date'){
+					$tabname='vtiger_customerdetails';
+				}
+				$sql="select fieldlabel from vtiger_field where tablename=? and columnname=?";
+				$result=$adb->pquery($sql,array($tabname,$field));
+				$option=array(getTranslatedString($module).': '.getTranslatedString($adb->query_result($result,'fieldlbel')),"$".strtolower($module)."-".$field."$");
+				$allFields[] = $option;
+			}
+		}
+		// Set the custom fields of a given module for Email templates
+			$custFields=getCustomFieldArray($module);
+			foreach($custFields as $val=>$key){
+				$sql="select fieldlabel from vtiger_field where tablename=? and columnname=? and uitype!=56";
+				$result=$adb->pquery($sql,array($module_cf_table[$module],$val));
+				if($adb->query_result($result,'fieldlbel') != '' and $adb->query_result($result,'fieldlbel') !=NULL){
+					$option=array(getTranslatedString($module).': '.getTranslatedString($adb->query_result($result,'fieldlbel')),"$".strtolower($module)."-".$val."$");
+					$allFields[] = $option;
+				}
+			}
+		//}
+		$allOptions[] = $allFields;
+		$allFields="";
+	}
+	$option=array('Current Date','$custom-currentdate$');
+	$allFields[] = $option;
+	$option=array('Current Time','$custom-currenttime$');
+	$allFields[] = $option;
+	$allOptions[] = $allFields;
+	return $allOptions;
+}
 ?>

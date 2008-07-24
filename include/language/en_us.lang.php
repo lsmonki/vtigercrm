@@ -989,53 +989,6 @@ $app_strings = array (
 'as'=>'as',
 'ie'=>'ie.,',
 'add_at_end_of_file'=>'Please add the following lines at the end of the file config.inc.php',
-//Added to Fix i18N issue in Email Template
-'Account_Account_Name'=>'Account: Account Name',
-'Account_Account_Type'=>'Account: Account Type',
-'Account_Industry'=>'Account: Industry',
-'Account_Annual_Revenue'=>'Account: Annual Revenue',
-'Account_Phone'=>'Account: Phone',
-'Account_Email'=>'Account: Email',
-'Account_Rating'=>'Account: Rating',
-'Account_Website'=>'Account: Website',
-'Account_Fax'=>'Account: Fax',
-//For Contact
-'Contact_First_Name'=>'Contact: First Name',
-'Contact_Last_Name'=>'Contact: Last Name',
-'Contact_Salutation'=>'Contact: Salutation',
-'Contact_Title'=>'Contact: Title',
-'Contact_Email'=>'Contact: Email',
-'Contact_Department'=>'Contact: Department',
-'Contact_Office_Phone'=>'Contact: Office Phone',
-'Contact_Mobile'=>'Contact: Mobile',
-'Contact_Support_Start_Date'=>'Contact: Support Start Date',
-'Contact_Support_End_Date'=>'Contact: Support End Date',
-//For Leads
-'Lead_First_Name'=>'Lead: First Name',
-'Lead_Last_Name'=>'Lead: Last Name',
-'Lead_Lead_Source'=>'Lead: Lead Source',
-'Lead_Status'=>'Lead: Status',
-'Lead_Rating'=>'Lead: Rating',
-'Lead_Industry'=>'Lead: Industry',
-'Lead_Yahoo_ID'=>'Lead: Yahoo ID',
-'Lead_Email'=>'Lead: Email',
-'Lead_Annual_Revenue'=>'Lead: Annual Revenue',
-'Lead_Title'=>'Lead: Title',
-'Lead_Salutation'=>'Lead: Salutation',
-//For Users
-'User_First_Name'=>'User: First Name',
-'User_Last_Name'=>'User: Last Name',
-'User_Title'=>'User: Title',
-'User_Department'=>'User: Department',
-'User_HomePhone'=>'User: HomePhone',
-'User_Mobile'=>'User: Mobile',
-'User_Signature'=>'User: Signature',
-'User_Email'=>'User: Email',
-'User_Street'=>'User: Street',
-'User_City'=>'User: City',
-'User_State'=>'User: State',
-'User_Country'=>'User: Country',
-'User_PostalCode'=>'User: PostalCode',
 // Added for Error message on Send Email failure
 'LBL_MAIL_SEND_STATUS' => 'Mail Send Status:',
 'LBL_MAIL_NOT_SENT_TO_USER' => 'Mail Could not be sent to user',
@@ -1112,7 +1065,22 @@ $app_strings = array (
 'Product Code'=>'Product Code',
 'Qty'=>'Qty',
 'Price'=>'Price',
-'Discount'=>'Discount'
+'Discount'=>'Discount',
+
+// Added after 5.0.4 GA
+
+//Added to Fix i18N issue in Email Template
+'LBL_GENERAL_FIELDS'=>'General Fields', 
+//For Users fields
+'HomePhone'=>'HomePhone',
+'Signature'=>'Signature',
+'Street'=>'Street',
+'State'=>'State',
+'Country'=>'Country',
+'PostalCode'=>'PostalCode',
+//For General fields
+'Current Date'=>'Current Date',
+'Current Time'=>'Current Time',
 
 
 );

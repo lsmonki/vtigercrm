@@ -119,6 +119,9 @@ class Contacts extends CRMEntity {
 
 	// This is the list of vtiger_fields that are required
 	var $required_fields =  array("lastname"=>1);
+	
+	//Default Fields for Email Templates -- Pavani
+	var $emailTemplate_defaultFields = array('firstname','lastname','salutation','title','email','department','phone','mobile','support_start_date','support_end_date');
 
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'lastname';

@@ -80,6 +80,9 @@ class Accounts extends CRMEntity {
 	// This is the list of vtiger_fields that are required
 	var $required_fields =  array("accountname"=>1);
 
+	//Default Fields for Email Templates -- Pavani
+	var $emailTemplate_defaultFields = array('accountname','account_type','industry','annualrevenue','phone','email1','rating','website','fax');
+	
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'accountname';
 	var $default_sort_order = 'ASC';

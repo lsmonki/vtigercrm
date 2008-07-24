@@ -93,13 +93,13 @@ function getCustomFieldArray($module)
 	global $log;
 	$log->debug("Entering getCustomFieldArray(".$module.") method ...");
 	global $adb;
-	$custquery = "select * from vtiger_field where tablename=?";
-	$custresult = $adb->pquery($custquery, array($module));
+	$custquery = "select tablename,fieldname from vtiger_field where tablename=? order by tablename";
+	$custresult = $adb->pquery($custquery, array('vtiger_'.strtolower($module).'cf'));
 	$custFldArray = Array();
 	$noofrows = $adb->num_rows($custresult);
 	for($i=0; $i<$noofrows; $i++)
 	{
-		$colName=$adb->query_result($custresult,$i,"column_name");
+		$colName=$adb->query_result($custresult,$i,"fieldname");
 		$custFldArray[$colName] = $i;
 	}
 	$log->debug("Exiting getCustomFieldArray method ...");
