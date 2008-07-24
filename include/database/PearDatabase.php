@@ -219,7 +219,7 @@ class PearDatabase{
 				else {
 					$vals[$index] = "'".mysql_real_escape_string($vals[$index]). "'";
 				}
-			} else if($vals[$index] == null) {
+			} else if($vals[$index] === null) {
 				$vals[$index] = "NULL";
 			}
 		}
