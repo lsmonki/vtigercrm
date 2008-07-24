@@ -178,7 +178,7 @@
 	</td>
    </tr>
 
-{if $MODULE eq 'Invoice'}
+{if $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Quotes' || $MODULE eq 'Invoice'}
 <!-- Added to give link to  send Invoice PDF through mail -->
  <tr>
 	<td align="left" style="padding-left:10px;">
@@ -219,7 +219,25 @@
 function sendpdf_submit()
 {
 	document.DetailView.submit();
+{/literal}
+	{if $MODULE eq 'Invoice'}
+{literal}
 	OpenCompose('','Invoice');
+{/literal}
+	{elseif $MODULE eq 'Quotes'}
+{literal}
+	OpenCompose('','Quote');
+{/literal}
+	{elseif $MODULE eq 'PurchaseOrder'}
+{literal}
+	OpenCompose('','PurchaseOrder');
+{/literal}
+	{elseif $MODULE eq 'SalesOrder'}
+{literal}
+	OpenCompose('','SalesOrder');
+{/literal}
+	{/if}
+{literal}
 }
 </script>
 {/literal}
