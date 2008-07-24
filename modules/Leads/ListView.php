@@ -31,6 +31,7 @@ require_once('include/DatabaseUtil.php');
 
 
 global $app_strings;
+global $current_user;
 global $list_max_entries_per_page;
 
 $log = LoggerManager::getLogger('contact_list');
@@ -119,8 +120,15 @@ if(isPermitted('Emails','EditView','') == 'yes')
 if(isPermitted('Leads','EditView','') == 'yes')
 {
 	$other_text['c_owner'] = $app_strings[LBL_CHANGE_OWNER];
+}
+
+$fieldpermission = getFieldVisibilityPermission('Leads',$current_user->id,'leadstatus');
+
+if($fieldpermission == 0)
+{
 	$other_text['c_status'] = $app_strings[LBL_CHANGE_STATUS];
 }
+
 if(isset($CActionDtls))
 {
 	$other_text['s_cmail'] = $app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON];
@@ -259,7 +267,6 @@ if(isPermitted("Leads","Merge") == 'yes')
 	}
 	else
         {
-		global $current_user;
                 require("user_privileges/user_privileges_".$current_user->id.".php");
                 if($is_admin == true)
                 {
