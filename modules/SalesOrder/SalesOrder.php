@@ -336,6 +336,11 @@ class SalesOrder extends CRMEntity {
 		return $return_data;
 	}
 
+	/** Function to handle module specific operations when restoring an entity 
+	*/
+	function restore_module($crmid) {
+		
+	}
 	
 }
 

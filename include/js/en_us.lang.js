@@ -161,5 +161,8 @@
 				LBL_CANT_REMOVE:'You can\'t remove all the values',
 
 				// Added after 5.0.4 GA
+				
 				ALL_FILTER_CREATION_DENIED:'Cannot create CustomView using name "All", try using different ViewName',
+				MSG_RESTORE_CONFIRMATION:'Are you sure you want to restore the selected'
+                
 			};

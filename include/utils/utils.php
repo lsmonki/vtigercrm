@@ -41,6 +41,7 @@
   require_once('include/utils/DeleteUtils.php');
   require_once('include/utils/SearchUtils.php');
   require_once('include/FormValidationUtil.php');
+  require_once('include/utils/RecyclebinUtils.php');
  
 /** Function to return a full name
   * @param $row -- row:: Type integer

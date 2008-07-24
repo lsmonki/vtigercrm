@@ -14,7 +14,11 @@
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 <tr><td style="height:2px"></td></tr>
 <tr>
-	<td style="padding-left:10px;padding-right:50px" class="moduleName" nowrap>{$APP.$CATEGORY} > <a class="hdrLink" href="index.php?action=ListView&module={$MODULE}&parenttab={$CATEGORY}">{$APP.$MODULE}</a></td>
+	{assign var="action" value="ListView"}
+	{if $MODULE eq 'Recyclebin'}
+		{assign var="action" value="index"}
+	{/if}	
+	<td style="padding-left:10px;padding-right:50px" class="moduleName" nowrap>{$APP.$CATEGORY} > <a class="hdrLink" href="index.php?action={$action}&module={$MODULE}&parenttab={$CATEGORY}">{$APP.$MODULE}</a></td>
 	<td width=100% nowrap>
 	
 		<table border="0" cellspacing="0" cellpadding="0" >
@@ -28,7 +32,7 @@
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
 					{if $CHECK.EditView eq 'yes' && $MODULE neq 'Emails' && $MODULE neq 'Webmails'}
-			        		{if $MODULE eq 'Calendar'}
+			        		{if $MODULE eq 'Calendar' || $MODULE eq 'Recyclebin'}
 		                      	        	<td style="padding-right:0px;padding-left:10px;"><img src="{$IMAGE_PATH}btnL3Add-Faded.gif" border=0></td>
                 	   			 {else}
 	                        		       	<td style="padding-right:0px;padding-left:10px;"><a href="index.php?module={$MODULE}&action=EditView&return_action=DetailView&parenttab={$CATEGORY}"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.$SINGLE_MOD}..." title="{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.$SINGLE_MOD}..." border=0></a></td>

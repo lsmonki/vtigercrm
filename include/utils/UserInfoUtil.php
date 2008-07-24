@@ -1168,7 +1168,6 @@ function getProfileDescription($profileid)
  */
 function isPermitted($module,$actionname,$record_id='')
 {
-
 	global $log;
 	$log->debug("Entering isPermitted(".$module.",".$actionname.",".$record_id.") method ...");
 
@@ -1188,7 +1187,7 @@ function isPermitted($module,$actionname,$record_id='')
 	}
 	
 	//Checking the Access for the Settings Module
-	if($module == 'Settings' || $module == 'Administration' || $module == 'System')
+	if($module == 'Settings' || $module == 'Administration' || $module == 'System' || $_REQUEST['parenttab'] == 'Settings')
 	{
 		if(! $is_admin)
 		{

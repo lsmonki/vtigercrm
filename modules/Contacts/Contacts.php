@@ -914,7 +914,11 @@ function get_contactsforol($user_name)
 		return parent::get_column_value($columname, $fldvalue, $fieldname, $uitype);
 	}
 
-//End
+	/** Function to handle module specific operations when restoring an entity 
+	*/
+	function restore_module($crmid) {
+		
+	}
 
 }
 

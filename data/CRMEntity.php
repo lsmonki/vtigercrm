@@ -653,28 +653,31 @@ class CRMEntity
 
 function whomToSendMail($module,$insertion_mode,$assigntype)
 {
- global $adb;
-       if($insertion_mode!="edit")
-       {
-               if($assigntype=='U')
-               {
-                       if($module == 'Events' || $module == 'Calendar')
-                       {
-                               $moduleObj=new Activity();
-                       }else
-                       {
-                               $moduleObj=new $module();
-                       }
-                       sendNotificationToOwner($module,$moduleObj);
-               }
-               elseif($assigntype=='T')
-               {
-                       $groupname=$_REQUEST['assigned_group_name'];
-                       $resultqry=$adb->pquery("select groupid from vtiger_groups where groupname=?", array($groupname));
-                       $groupid=$adb->query_result($resultqry,0,"groupid");
-                       sendNotificationToGroups($groupid,$this->id,$module);
-               }
-       }
+ 	global $adb;
+   	if($insertion_mode!="edit")
+   	{
+		if($assigntype=='U')
+		{
+			/*
+			This doesn't make sense. We are creating a new object and sending the empty object for reference. 
+			Either we should fill the object contents with appropriate or simpler would be to send the current object ($this) itself. 
+			if($module == 'Events' || $module == 'Calendar')
+			{
+				$moduleObj=new Activity();
+			}else
+			{
+				$moduleObj=new $module();
+			}*/
+			sendNotificationToOwner($module,$this);
+		}
+       	elseif($assigntype=='T')
+       	{
+               $groupname=$_REQUEST['assigned_group_name'];
+               $resultqry=$adb->pquery("select groupid from vtiger_groups where groupname=?", array($groupname));
+               $groupid=$adb->query_result($resultqry,0,"groupid");
+               sendNotificationToGroups($groupid,$this->id,$module);
+       	}
+   	}
 }
 
 
@@ -1134,6 +1137,31 @@ $log->info("in getOldFileName  ".$notesid);
 			if (getFieldVisibilityPermission($module, $current_user->id, $key) == '0')
 				$this->importable_fields[$key]=1;
 		}
+	}
+	
+	/** Function to restore a deleted record of specified module with given crmid
+  	  * @param $module -- module name:: Type varchar
+  	  * @param $entity_ids -- list of crmids :: Array
+ 	 */
+	function restore($module, $entity_ids)
+	{
+		global $current_user, $adb;
+	
+		$this->db->println("TRANS restore starts $module");
+		$this->db->startTransaction();		
+	
+		foreach($entity_ids as $crmid) {
+			$adb->pquery("update vtiger_crmentity set deleted=0 where crmid = ?", array($crmid));
+			//Restore related entities/records
+			restore_related_records($crmid, $module);
+			//Calling the Module specific restore code
+			$this->restore_module($crmid);
+			//Clean up the the backup data also after restoring
+			$adb->pquery("delete from vtiger_relatedlists_rb where entityid = ?", array($crmid));
+		}		
+		
+		$this->db->completeTransaction();
+	    $this->db->println("TRANS restore ends");
 	}
 }
 ?>

@@ -219,6 +219,12 @@ class Notes extends CRMEntity {
 		$log->debug("Exiting create_export_query method ...");
                 return $query;
         }
+        
+        /** Function to handle module specific operations when restoring an entity  
+		*/ 
+		function restore_module($crmid) { 
+		         
+		}
 
 }
 ?>

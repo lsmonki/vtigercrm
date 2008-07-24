@@ -202,14 +202,14 @@
 					</td>
 
 					<td width=25% valign=top>
-					<!-- empty-->
+					<!-- icon 11-->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
-							<td rowspan=2 valign=top>&nbsp;</td>
-							<td class=big valign=top>&nbsp;</td>
+							<td rowspan=2 valign=top><a href="index.php?module=Recyclebin&action=index&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}settingsTrash.gif" alt="{$MOD.LBL_RECYCLEBIN}" title="{$MOD.LBL_RECYCLEBIN}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Recyclebin&action=index&parenttab=Settings">{$MOD.LBL_RECYCLEBIN}</a></td>
 						</tr>
 						<tr>
-							<td class="small" valign=top>&nbsp;</td>
+							<td class="small" valign=top>{$MOD.LBL_RECYCLEBIN_DESCRIPTION}</td>
 
 						</tr>
 						</table>
@@ -251,7 +251,7 @@
 				<table border=0 cellspacing=0 cellpadding=10 width=100%>
 				<tr>
 					<td width=25% valign=top>
-					<!-- icon 11-->
+					<!-- icon 12-->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
 							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=listemailtemplates&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}ViewTemplate.gif" alt="{$MOD.EMAILTEMPLATES}" title="{$MOD.EMAILTEMPLATES}"></a></td>
@@ -264,7 +264,7 @@
 						</table>
 					</td>
 					<td width=25% valign=top>
-					<!-- icon 12-->
+					<!-- icon 13-->
 
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
@@ -278,7 +278,7 @@
 						</table>
 					</td>
 					<td width=25% valign=top>
-					<!-- icon 13-->
+					<!-- icon 14-->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>
 							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=listnotificationschedulers&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}notification.gif" alt="{$MOD.NOTIFICATIONSCHEDULERS}" title="{$MOD.NOTIFICATIONSCHEDULERS}"></a></td>
@@ -291,7 +291,7 @@
 						</table>
 					</td>
 					<td width=25% valign=top>
-					<!-- icon 14-->
+					<!-- icon 15-->
 
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>
 						<tr>

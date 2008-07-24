@@ -773,7 +773,12 @@ function get_calendarsforol($user_name)
 	$log->debug("Exiting get_calendarsforol method ...");
 	return $query;
 }
-//End
+
+	/** Function to handle module specific operations when restoring an entity 
+	*/
+	function restore_module($crmid) {
+		
+	}
 
 }
 ?>

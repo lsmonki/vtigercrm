@@ -1082,6 +1082,14 @@ $app_strings = array (
 'Current Date'=>'Current Date',
 'Current Time'=>'Current Time',
 
+//Added for Recyclebin feature
+'Recyclebin'=>'Recycle Bin',
+'LBL_EMPTY_MODULE'=>'No records found to Restore in module',
+'LBL_MASS_RESTORE'=>'Restore',
+'LBL_EMPTY_RECYCLEBIN'=>'Empty Recycle Bin',
+'LNK_RESTORE'=>'restore',
+'LBL_NO_PERMITTED_MODULES'=>'No permitted modules available',
+
 
 );
 
@@ -1111,6 +1119,9 @@ $app_list_strings = array (
     'PriceBooks' => 'PriceBooks',
     'SalesOrder' => 'SalesOrder',
     'Portal' => 'My Sites',
+	
+	// Added after 5.0.4 GA
+	'Recyclebin' => 'Recycle Bin',
   ),
   'opportunity_relationship_type_default_key' => 'Primary Decision Maker',
   'opportunity_relationship_type_dom' => 

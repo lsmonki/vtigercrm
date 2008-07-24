@@ -542,7 +542,12 @@ var $rel_serel_table = "vtiger_seactivityrel";
 		$log->debug("Exiting set_emails_user_invitee_relationship method ...");
 	}        
 
-
+	/** Function to handle module specific operations when restoring an entity 
+	*/
+	function restore_module($crmid) {
+		
+		
+	}
 }
 /** Function to get the emailids for the given ids form the request parameters 
  *  It returns an array which contains the mailids and the parentidlists

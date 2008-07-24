@@ -165,5 +165,11 @@ class Faq extends CRMEntity {
 		return $list;
 	}
 
+	/** Function to handle module specific operations when restoring an entity 
+	*/
+	function restore_module($crmid) {
+		
+	}
+
 }
 ?>

@@ -731,8 +731,8 @@ function getSoName($so_id)
 }
 
 /**
- * Function to get the Group Information for a given groupid  
- * Takes the input $id - group id and $module - module name
+ * Function to get the Assigned Group Information for a given entityid
+ * Takes the input $id - entity id (crmid) and $module - module name
  * returns the group information in an array format.
  */
 

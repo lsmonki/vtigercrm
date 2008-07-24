@@ -30,6 +30,24 @@ ExecuteQuery("UPDATE vtiger_field SET quickcreate = 0 WHERE tablename='vtiger_pr
 ExecuteQuery("UPDATE vtiger_field SET quickcreate = 0 WHERE tablename='vtiger_products' and columnname='discontinued'");
 ExecuteQuery("UPDATE vtiger_field SET quickcreate = 0 WHERE tablename='vtiger_products' and columnname='unit_price'");
 ExecuteQuery("UPDATE vtiger_field SET quickcreate = 0 WHERE tablename='vtiger_products' and columnname='qtyinstock'");
+
+/* Necessary DB Changes for Recycle bin feature */
+ExecuteQuery("create table vtiger_relatedlists_rb(entityid int(19), action varchar(50), rel_table varchar(200), rel_column varchar(200), ref_column varchar(200), related_crm_ids text)");
+
+ExecuteQuery("insert into vtiger_tab values('30', 'Recyclebin', '0', '27', 'Recyclebin', null, null, 0, '1')");
+
+ExecuteQuery("insert into vtiger_parenttabrel values('7', '30', '4')");
+
+// Enable Search icon for all profiles by default for Recyclebin module
+$profileresult = $adb->query("select * from vtiger_profile");
+$countprofiles = $adb->num_rows($profileresult);
+for($i=0;$i<$countprofiles;$i++)
+{
+	$profileid = $adb->query_result($profileresult,$i,'profileid');
+	ExecuteQuery("insert into vtiger_profile2utility values($profileid,30,3,0)");
+	ExecuteQuery("insert into vtiger_profile2tab values ($profileid,30,0)");
+}
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

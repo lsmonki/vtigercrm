@@ -441,7 +441,12 @@ function getColumnNames_Lead()
 	$log->debug("Exiting getColumnNames_Lead method ...");
 	return $mergeflds;
 }
-//End
+
+	/** Function to handle module specific operations when restoring an entity 
+	*/
+	function restore_module($crmid) {
+		
+	}
 
 }
 

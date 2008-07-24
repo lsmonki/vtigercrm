@@ -773,6 +773,12 @@ class Accounts extends CRMEntity {
 		return $mergeflds;
 	}
 
+	/** Function to handle module specific operations when restoring an entity 
+	*/
+	function restore_module($crmid) {
+		
+	}
+
 }
 
 ?>

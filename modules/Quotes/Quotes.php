@@ -341,6 +341,12 @@ class Quotes extends CRMEntity {
 		}
 		return parent::get_column_value($columname, $fldvalue, $fieldname, $uitype);
 	}
+
+	/** Function to handle module specific operations when restoring an entity 
+	*/
+	function restore_module($crmid) {
+		
+	}
 }
 
 ?>

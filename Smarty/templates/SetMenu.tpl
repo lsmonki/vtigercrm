@@ -23,7 +23,7 @@
 			<td class="settingsTabHeader" nowrap>{$MOD.LBL_USER_MANAGEMENT}</td>
 		</tr>
 
-		{if $smarty.request.action eq 'index' ||  $smarty.request.action eq 'DetailView' || $smarty.request.action eq 'EditView' || $smarty.request.action eq 'ListView' }
+		{if ($smarty.request.action eq 'index' && $smarty.request.module neq 'Recyclebin') ||  $smarty.request.action eq 'DetailView' || $smarty.request.action eq 'EditView' || $smarty.request.action eq 'ListView' }
 		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Administration&action=index&parenttab=Settings">{$MOD.LBL_USERS}</a></td></tr>
 		{else}
 		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Administration&action=index&parenttab=Settings">{$MOD.LBL_USERS}</a></td></tr>
@@ -83,6 +83,12 @@
 		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=PickList&parenttab=Settings">{$MOD.LBL_PICKLIST_EDITOR}</a></td></tr>						     {else}
 		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=PickList&parenttab=Settings">{$MOD.LBL_PICKLIST_EDITOR}</a></td></tr>
 		{/if}
+
+		{if $smarty.request.module eq 'Recyclebin' && $smarty.request.action eq 'index'}
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Recyclebin&action=index&parenttab=Settings">{$MOD.LBL_RECYCLEBIN}</a></td></tr>
+		{else}
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Recyclebin&action=index&parenttab=Settings">{$MOD.LBL_RECYCLEBIN}</a></td></tr>
+		{/if}		
 	
 		<tr><td class="settingsTabHeader" nowrap>{$MOD.LBL_COMMUNICATION_TEMPLATES}</td></tr>
 

@@ -215,5 +215,11 @@ class Vendors extends CRMEntity {
 		return $order_by;
 	}
 
+	/** Function to handle module specific operations when restoring an entity 
+	*/
+	function restore_module($crmid) {
+		
+	}
+
 }
 ?>

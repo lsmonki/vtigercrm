@@ -6323,6 +6323,17 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+	<!-- Database changes after 5.0.4 GA -->
+	
+	<table name="vtiger_relatedlists_rb">
+		<field name="entityid" type="I" size="19" />
+		<field name="action" type="C" size="50" />
+		<field name="rel_table" type="C" size="200" />
+		<field name="rel_column" type="C" size="200" />
+		<field name="ref_column" type="C" size="200" />
+		<field name="related_crm_ids" type="X" />
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
 
 	
 </schema>

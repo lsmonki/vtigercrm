@@ -944,5 +944,10 @@ $mod_strings = Array(
 // Added after 5.0.4 GA
 
 'LBL_GENERAL_FIELDS'=>'General Fields',
+
+// For Recyclebin feature
+'LBL_RECYCLEBIN'=>'Recycle Bin',
+'LBL_RECYCLEBIN_DESCRIPTION'=>'Contains the data you have deleted',
+
 );
 ?>

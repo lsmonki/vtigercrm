@@ -705,7 +705,11 @@ case when (vtiger_users.user_name not like '') then vtiger_users.user_name else 
 		return $updatelog;
 	}
 
-
+	/** Function to handle module specific operations when restoring an entity 
+	*/
+	function restore_module($crmid) {
+		
+	}
 
 }
 ?>
