@@ -195,38 +195,38 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 						{
 							$temp_sorder = 'ASC';
 						}
-							if($app_strings[$name])
-							{
-								$lbl_name = $app_strings[$name];
-							}
-							elseif($mod_strings[$name])
-							{
-								$lbl_name = $mod_strings[$name];
-							}else
-							{
-								$lbl_name = $name;
-							}
-							//added to display vtiger_currency symbol in listview header
-							if($lbl_name =='Amount')
-							{
-								$lbl_name .=' (in '.$user_info['currency_symbol'].')';
-							}
-							if($relatedlist !='' && $relatedlist != 'global')
-								if($singlepane_view == 'true')	
-									$name = "<a href='index.php?module=".$relatedmodule."&action=DetailView&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."&parenttab=".$tabname."' class='listFormHeaderLinks'>".$lbl_name."".$arrow."</a>";
-								else
-									$name = "<a href='index.php?module=".$relatedmodule."&action=CallRelatedList&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."&parenttab=".$tabname."' class='listFormHeaderLinks'>".$lbl_name."".$arrow."</a>";
-							elseif($module == 'Users' && $name == 'User Name')
-								$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"parenttab=".$tabname."&order_by=".$col."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".$mod_strings['LBL_LIST_USER_NAME_ROLE']."".$arrow."</a>";
-							elseif($relatedlist == "global")
-							        $name = $lbl_name;
+						if($app_strings[$name])
+						{
+							$lbl_name = $app_strings[$name];
+						}
+						elseif($mod_strings[$name])
+						{
+							$lbl_name = $mod_strings[$name];
+						}else
+						{
+							$lbl_name = $name;
+						}
+						//added to display vtiger_currency symbol in listview header
+						if($lbl_name =='Amount')
+						{
+							$lbl_name .=' (in '.$user_info['currency_symbol'].')';
+						}
+						if($relatedlist !='' && $relatedlist != 'global')
+							if($singlepane_view == 'true')	
+								$name = "<a href='index.php?module=".$relatedmodule."&action=DetailView&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."&parenttab=".$tabname."' class='listFormHeaderLinks'>".$lbl_name."".$arrow."</a>";
 							else
-								$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"parenttab=".$tabname."&order_by=".$col."&start=".$_SESSION["lvs"][$module]["start"]."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".$lbl_name."".$arrow."</a>";
-							$arrow = '';
+								$name = "<a href='index.php?module=".$relatedmodule."&action=CallRelatedList&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."&parenttab=".$tabname."' class='listFormHeaderLinks'>".$lbl_name."".$arrow."</a>";
+						elseif($module == 'Users' && $name == 'User Name')
+							$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"parenttab=".$tabname."&order_by=".$col."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".$mod_strings['LBL_LIST_USER_NAME_ROLE']."".$arrow."</a>";
+						elseif($relatedlist == "global")
+						        $name = $lbl_name;
+						else
+							$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"parenttab=".$tabname."&order_by=".$col."&start=".$_SESSION["lvs"][$module]["start"]."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".$lbl_name."".$arrow."</a>";
+						$arrow = '';
 					}
 					else
 					{
-					       if($app_strings[$name])
+					    if($app_strings[$name])
 						{
 							$name = $app_strings[$name];
 						}
@@ -234,8 +234,29 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 						{
 							$name = $mod_strings[$name];
 						}
+						elseif(stripos($col, 'cf_') === 0)
+						{
+							$tablenameArray = array_keys($tableinfo,$col);
+							$tablename = $tablenameArray[0];
+							$cf_columns = $adb->getColumnNames($tablename);
+							if (array_search($col, $cf_columns) != null) {
+								$pquery = "select fieldlabel,typeofdata from vtiger_field where tablename = ? and fieldname = ?";
+								$cf_res = $adb->pquery($pquery, array($tablename, $col));
+								if (count($cf_res) > 0){
+									$cf_fld_label = $adb->query_result($cf_res, 0, "fieldlabel");
+									$typeofdata = explode("~",$adb->query_result($cf_res, 0, "typeofdata"));
+									$new_field_label = $tablename. ":" . $col .":". $col .":". $module . "_" . str_replace(" ","_",$cf_fld_label) .":". $typeofdata[0];
+									$name = $cf_fld_label;
+									
+									// Update the existing field name in the database with new field name.
+									$upd_query = "update vtiger_cvcolumnlist set columnname = ? where columnname like '" .$tablename. ":" . $col .":". $col ."%'";
+									$upd_params = array($new_field_label);
+									$adb->pquery($upd_query, $upd_params);
+									
+								}
+							}
+						}
 					}
-
 				}
 			}
 																	//added to display vtiger_currency symbol in related listview header
