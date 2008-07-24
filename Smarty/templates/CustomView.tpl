@@ -727,6 +727,11 @@ if(document.CustomView.record.value == '')
 }
 function checkDuplicate()
 {
+	if(getObj('viewName').value.toLowerCase() == 'all')
+	{
+		alert(alert_arr.ALL_FILTER_CREATION_DENIED);
+		return false;
+	}
 	var cvselect_array = new Array('column1','column2','column3','column4','column5','column6','column7','column8','column9')
 		for(var loop=0;loop < cvselect_array.length-1;loop++)
 		{

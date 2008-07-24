@@ -158,5 +158,8 @@
 				LBL_DONT_HAVE_EMAIL_PERMISSION : "You don't have permission for Email field so you can't choose the email id",
 				LBL_NO_FEEDS_SELECTED: 'No Feeds Selected',
 				LBL_SELECT_PICKLIST:'Please select atleast one value to delete',
-				LBL_CANT_REMOVE:'You can\'t remove all the values'
-                       };
+				LBL_CANT_REMOVE:'You can\'t remove all the values',
+
+				// Added after 5.0.4 GA
+				ALL_FILTER_CREATION_DENIED:'Cannot create CustomView using name "All", try using different ViewName',
+			};
