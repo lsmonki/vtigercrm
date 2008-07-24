@@ -425,9 +425,9 @@ $this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("
 //Product Details -- START
 //Block31-36 -- Start
 
-$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'productname','vtiger_products',1,'2','productname','Product Name',1,0,0,100,1,31,1,'V~M',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'productname','vtiger_products',1,'2','productname','Product Name',1,0,0,100,1,31,1,'V~M',0,null,'BAS')");
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'productcode','vtiger_products',1,'1','productcode','Part Number',1,0,0,100,2,31,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'discontinued','vtiger_products',1,'56','discontinued','Product Active',1,0,0,100,3,31,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'discontinued','vtiger_products',1,'56','discontinued','Product Active',1,0,0,100,3,31,1,'V~O',0,null,'BAS')");
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'manufacturer','vtiger_products',1,'15','manufacturer','Manufacturer',1,0,0,100,4,31,1,'V~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'productcategory','vtiger_products',1,'15','productcategory','Product Category',1,0,0,100,4,31,1,'V~O',1,null,'BAS')");
 $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'sales_start_date','vtiger_products',1,'5','sales_start_date','Sales Start Date',1,0,0,100,5,31,1,'D~O',1,null,'BAS')");
@@ -449,7 +449,7 @@ $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("
 
 //Block32 Pricing Information
 
-$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'unit_price','vtiger_products',1,'71','unit_price','Unit Price',1,0,0,100,1,32,1,'N~O',1,null,'BAS')"); 
+$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'unit_price','vtiger_products',1,'71','unit_price','Unit Price',1,0,0,100,1,32,1,'N~O',0,null,'BAS')"); 
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'commissionrate','vtiger_products',1,'9','commissionrate','Commission Rate',1,0,0,100,2,32,1,'N~O',1,null,'BAS')"); 
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'taxclass','vtiger_products',1,'83','taxclass','Tax Class',1,0,0,100,4,32,1,'V~O',1,null,'BAS')");
 
@@ -458,7 +458,7 @@ $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("
 
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'usageunit','vtiger_products',1,'15','usageunit','Usage Unit',1,0,0,100,1,33,1,'V~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'qty_per_unit','vtiger_products',1,'1','qty_per_unit','Qty/Unit',1,0,0,100,2,33,1,'N~O',1,null,'ADV')");
- $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'qtyinstock','vtiger_products',1,'1','qtyinstock','Qty In Stock',1,0,0,100,3,33,1,'NN~O',1,null,'ADV')");
+ $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'qtyinstock','vtiger_products',1,'1','qtyinstock','Qty In Stock',1,0,0,100,3,33,1,'NN~O',0,null,'ADV')");
 $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'reorderlevel','vtiger_products',1,'1','reorderlevel','Reorder Level',1,0,0,100,4,33,1,'I~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'handler','vtiger_products',1,'52','assigned_user_id','Handler',1,0,0,100,5,33,1,'I~O',1,null,'ADV')");
  $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'qtyindemand','vtiger_products',1,'1','qtyindemand','Qty In Demand',1,0,0,100,6,33,1,'I~O',1,null,'ADV')");
