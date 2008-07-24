@@ -43,7 +43,11 @@ foreach($storearray as $id)
 				delAccRelRecords($id);
 			if($returnmodule == 'Contacts')
 				delContactRelRecords($id);
-        	}
+			if($returnmodule == 'Vendors')
+				delVendorRelRecords($id);
+			if($returnmodule == 'Calendar')
+				delCalendarRelRecords($id);
+        }
         else
         {
         	$ids_list[] = $id;
