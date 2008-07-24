@@ -211,6 +211,69 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 	return $user_array;
 }
 
+function get_group_array($add_blank=true, $status="Active", $assigned_user="",$private="")
+{
+	global $log;
+	$log->debug("Entering get_user_array(".$add_blank.",". $status.",".$assigned_user.",".$private.") method ...");
+	global $current_user;
+	if(isset($current_user) && $current_user->id != '')
+	{
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	}
+	static $group_array = null;
+	$module=$_REQUEST['module'];
+
+	if($group_array == null)
+	{
+		require_once('include/database/PearDatabase.php');
+		$db = new PearDatabase();
+		$temp_result = Array();
+		// Including deleted vtiger_users for now.
+		if (empty($status)) {
+				$query = "SELECT groupid, groupname from vtiger_groups";
+				$params = array();
+		}
+		else {
+				if($private == 'private')
+				{
+					$log->debug("Sharing is Private. Only the current user should be listed");
+					$query = "select groupid as groupid,groupname as groupname from vtiger_groups where id=? union select vtiger_group2role.groupid as groupid,vtiger_groups.groupname as groupname from vtiger_group2role inner join vtiger_groups on vtiger_groups.groupid=vtiger_group2role.groupid inner join vtiger_role on vtiger_role.roleid=vtiger_group2role.roleid where vtiger_role.parentrole like ? union select sharedgroupid as groupid,vtiger_groups.groupname as groupname from vtiger_tmp_write_group_sharing_per inner join vtiger_groups on vtiger_groups.groupid=vtiger_tmp_write_group_sharing_per.sharedgroupid where vtiger_tmp_write_group_sharing_per.groupid=? and vtiger_tmp_write_group_sharing_per.tabid=?";	
+					$params = array($current_user->id, $current_user_parent_role_seq."::%", $current_user->id, getTabid($module));	
+				}
+				else
+				{
+					$log->debug("Sharing is Public. All vtiger_users should be listed");
+					$query = "SELECT groupid, groupname from vtiger_groups";
+					$params = array();
+				}
+		}
+		if (!empty($assigned_user)) {
+			 $query .= "WHERE groupid=?";
+			 array_push($params, $assigned_user);
+		}
+
+		$query .= " order by groupname ASC";
+
+		$result = $db->pquery($query, $params, true, "Error filling in user array: ");
+
+		if ($add_blank==true){
+			// Add in a blank row
+			$temp_result[''] = '';
+		}
+
+		// Get the id and the name.
+		while($row = $db->fetchByAssoc($result))
+		{
+			$temp_result[$row['groupid']] = $row['groupname'];
+		}
+
+		$group_array = &$temp_result;
+	}
+
+	$log->debug("Exiting get_user_array method ...");
+	return $group_array;
+}
 /** Function skips executing arbitary commands given in a string
   * @param $string -- string:: Type string
   * @param $maxlength -- maximun length:: Type integer

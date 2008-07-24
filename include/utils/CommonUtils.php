@@ -79,7 +79,12 @@ function get_select_options_with_id (&$option_list, $selected_key, $advsearch='f
 	$log->debug("Exiting get_select_options_with_id  method ...");
 	return get_select_options_with_id_separate_key($option_list, $option_list, $selected_key, $advsearch);
 }
-
+function get_select_options_with_value (&$option_list, $selected_key, $advsearch='false') {
+	global $log;
+	$log->debug("Entering get_select_options_with_id (".$option_list.",".$selected_key.",".$advsearch.") method ...");
+	$log->debug("Exiting get_select_options_with_id  method ...");
+	return get_select_options_with_value_separate_key($option_list, $option_list, $selected_key, $advsearch);
+}
 /**
  * Create HTML to display select options in a dropdown list.  To be used inside
  * of a select statement in a form.   This method expects the option list to have keys and values.  The keys are the ids.
@@ -167,6 +172,37 @@ function get_select_options_with_id_separate_key(&$label_list, &$key_list, $sele
         $html_value = $option_key;
 
         $select_options .= "\n<OPTION ".$selected_string."value='$html_value'>$label_list[$option_key]</OPTION>";
+    }
+    $select_options = preg_replace($pattern, $replacement, $select_options);
+    $log->debug("Exiting get_select_options_with_id_separate_key method ...");
+    return $select_options;
+
+}
+
+function get_select_options_with_value_separate_key(&$label_list, &$key_list, $selected_key, $advsearch='false')
+{
+	global $log;
+    $log->debug("Entering get_select_options_with_id_separate_key(".$label_list.",".$key_list.",".$selected_key.",".$advsearch.") method ...");
+    global $app_strings;
+    if($advsearch=='true')
+    $select_options = "\n<OPTION value=''>--NA--</OPTION>";
+    else
+    $select_options = "";
+
+    $pattern = "/'0?'></";
+    $replacement = "''>".$app_strings['LBL_NONE']."<";
+    if (!is_array($selected_key)) $selected_key = array($selected_key);
+
+    foreach ($key_list as $option_key=>$option_value) {
+        $selected_string = '';
+        if (($option_key != '' && $selected_key == $option_key) || ($selected_key == '' && $option_key == '') || (in_array($option_key, $selected_key)))
+        {
+            $selected_string = 'selected ';
+        }
+
+        $html_value = $option_key;
+
+        $select_options .= "\n<OPTION ".$selected_string."value='$label_list[$option_key]'>$label_list[$option_key]</OPTION>";
     }
     $select_options = preg_replace($pattern, $replacement, $select_options);
     $log->debug("Exiting get_select_options_with_id_separate_key method ...");

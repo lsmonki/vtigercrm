@@ -117,7 +117,14 @@ $convertlead = '<form name="ConvertLead" method="POST" action="index.php">
                 <tr>
 						<td align="right" class="dvtCellLabel" width="50%">'.$app_strings['LBL_ASSIGNED_TO'].'</td>
                        	<td class="dvtCellInfo" width="50%">
-                        		<select name="assigned_user_id" class="detailedViewTextBox">'.get_select_options_with_id(get_user_array(false), $userid).'</select>
+						<input type="radio" name="assigntype" value="U" onclick="toggleAssignType(this.value)" checked=""/>&nbsp;'.$app_strings['LBL_USER'].'
+						<input type="radio" name="assigntype" value="T" onclick="toggleAssignType(this.value)"/>&nbsp;'.$app_strings['LBL_GROUP'].'
+						<span id="assign_user" style="display:block">
+                       		<select name="assigned_user_id" class="detailedViewTextBox">'.get_select_options_with_id(get_user_array(false), $userid).'</select>
+						</span>
+						<span id="assign_team" style="display:none">
+                       		<select name="assigned_group_name" class="detailedViewTextBox">'.get_select_options_with_value(get_group_array(false), $groupid).'</select>
+						</span>
 						</td>
 				</tr>
 				<tr>

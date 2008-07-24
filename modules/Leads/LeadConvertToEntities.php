@@ -20,14 +20,21 @@ $createpotential = $_REQUEST["createpotential"];
 $potential_name = $_REQUEST["potential_name"];
 $close_date = getDBInsertDateValue($_REQUEST["closedate"]);
 $current_user_id = $_REQUEST["current_user_id"];
+$assigned_to = $_REQUEST["assigntype"];
+if($assigned_to == "U")
 $assigned_user_id = $_REQUEST["assigned_user_id"];
+else
+$assigned_group_name = $_REQUEST["assigned_group_name"];
 $accountname = $_REQUEST['account_name'];
 $potential_amount = $_REQUEST['potential_amount'];
 $potential_sales_stage = $_REQUEST['potential_sales_stage'];
 
 global $log,$current_user;
 require('user_privileges/user_privileges_'.$current_user->id.'.php');
-$log->debug("id = $id \n assigned_user_id = $assigned_user_id \n createpotential = $createpotential \n close date = $close_date \n current user id = $current_user_id \n accountname = $accountname \n module = $module");
+if($assigned_to == "U")
+	$log->debug("id = $id \n assigned_user_id = $assigned_user_id \n createpotential = $createpotential \n close date = $close_date \n current user id = $current_user_id \n accountname = $accountname \n module = $module");
+else
+	$log->debug("id = $id \n assigned_group_id = $assigned_group_id \n createpotential = $createpotential \n close date = $close_date \n current user id = $current_user_id \n accountname = $accountname \n module = $module");
 
 $rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
 $rate = $rate_symbol['rate'];
@@ -352,9 +359,16 @@ else
 	$crmid = $adb->getUniqueID("vtiger_crmentity");
 
 	//Saving Account - starts
-	$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(?,?,?,?,?,?,?,?,?)";
-	$sql_params = array($crmid, $current_user_id, $assigned_user_id, 'Accounts', 1, $date_entered, $date_modified, 0, $row['description']);
-	$adb->pquery($sql_crmentity, $sql_params);
+	if($assigned_to == "U"){
+		$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(?,?,?,?,?,?,?,?,?)";
+		$sql_params = array($crmid, $current_user_id, $assigned_user_id, 'Accounts', 1, $date_entered, $date_modified, 0, $row['description']);
+		$adb->pquery($sql_crmentity, $sql_params);
+	}
+	else{
+		$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(?,?,?,?,?,?,?,?,?)";
+		$sql_params = array($crmid, $current_user_id, 0, 'Accounts', 1, $date_entered, $date_modified, 0, $row['description']);
+		$adb->pquery($sql_crmentity, $sql_params);
+	}
 	
 	/* Modified by Minnie to fix the convertlead issue -- START*/
 	if(isset($row["annualrevenue"]) && !empty($row["annualrevenue"])) $annualrevenue = $row["annualrevenue"];
@@ -367,7 +381,13 @@ else
 	/* Modified by Minnie -- END*/
 	$account_params = array($crmid, $accountname, $row["industry"], $annualrevenue, $row["phone"], $row["fax"], $row["rating"], $row["email"], $row["website"], $employees);
 	$adb->pquery($sql_insert_account, $account_params);
-
+	
+	if($assigned_to !="U"){
+		$sql_crmentity = "insert into vtiger_accountgrouprelation(accountid,groupname) values(?,?)";
+		$sql_params = array($crmid,$assigned_group_name);
+		$adb->pquery($sql_crmentity, $sql_params);
+	}
+	
 	$sql_insert_accountbillads = "INSERT INTO vtiger_accountbillads (accountaddressid,bill_city,bill_code,bill_country,bill_state,bill_street,bill_pobox) VALUES (?,?,?,?,?,?,?)";
 	$billads_params = array($crmid, $row["city"], $row["code"], $row["country"], $row["state"], $row["lane"], $row["pobox"]);
 	$adb->pquery($sql_insert_accountbillads, $billads_params);
@@ -407,10 +427,15 @@ $date_modified = $adb->formatDate(date('YmdHis'), true);
 
 //Saving Contact - starts
 $crmcontactid = $adb->getUniqueID("vtiger_crmentity");
-$sql_crmentity1 = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?,?,?)";
-$sql_params = array($crmcontactid, $current_user_id, $assigned_user_id, 'Contacts', 0, 0, $row['description'], $date_entered, $date_modified);
-$adb->pquery($sql_crmentity1, $sql_params);
-
+if($assigned_to =="U"){
+	$sql_crmentity1 = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?,?,?)";
+	$sql_params = array($crmcontactid, $current_user_id, $assigned_user_id, 'Contacts', 0, 0, $row['description'], $date_entered, $date_modified);
+	$adb->pquery($sql_crmentity1, $sql_params);
+}else{
+	$sql_crmentity1 = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?,?,?)";
+	$sql_params = array($crmcontactid, $current_user_id, 0, 'Contacts', 0, 0, $row['description'], $date_entered, $date_modified);
+	$adb->pquery($sql_crmentity1, $sql_params);
+}
 $contact_id = $crmcontactid;
 $log->debug("contact id is ".$contact_id);
 
@@ -418,7 +443,11 @@ $sql_insert_contact = "INSERT INTO vtiger_contactdetails (contactid,accountid,sa
 $contact_params = array($contact_id, $crmid, $row["salutationtype"], $row["firstname"], $row["lastname"], $row["email"], $row["phone"], $row["mobile"], $row["designation"], $row["fax"], $row['yahooid']);
 $adb->pquery($sql_insert_contact, $contact_params);
 
-
+if($assigned_to !="U"){
+	$sql_crmentity = "insert into vtiger_contactgrouprelation(contactid,groupname) values(?,?)";
+	$sql_params = array($contact_id,$assigned_group_name);
+	$adb->pquery($sql_crmentity, $sql_params);
+}
 $sql_insert_contactsubdetails = "INSERT INTO vtiger_contactsubdetails (contactsubscriptionid,homephone,otherphone,leadsource) VALUES (?,?,?,?)";
 $c_subd_params = array($contact_id, '', '', $row['leadsource']);
 $adb->pquery($sql_insert_contactsubdetails, $c_subd_params);
@@ -470,9 +499,17 @@ if(! isset($createpotential) || ! $createpotential == "on")
   
 
 	$oppid = $adb->getUniqueID("vtiger_crmentity");
-	$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,modifiedtime,description) values(?,?,?,?,?,?,?,?,?)";
-  	$sql_params = array($oppid, $current_user_id, $assigned_user_id, 'Potentials', 0, 0, $date_entered, $date_modified, $row['description']);
-	$adb->pquery($sql_crmentity, $sql_params);
+  	if($assigned_to == "U"){
+		$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,modifiedtime,description) values(?,?,?,?,?,?,?,?,?)";
+  		$sql_params = array($oppid, $current_user_id, $assigned_user_id, 'Potentials', 0, 0, $date_entered, $date_modified, $row['description']);
+		$adb->pquery($sql_crmentity, $sql_params);
+  	}
+  	else
+  	{
+		$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,modifiedtime,description) values(?,?,?,?,?,?,?,?,?)";
+  		$sql_params = array($oppid, $current_user_id, 0, 'Potentials', 0, 0, $date_entered, $date_modified, $row['description']);
+		$adb->pquery($sql_crmentity, $sql_params);
+  	}
 
 
 	if(!isset($potential_amount) || $potential_amount == null)
@@ -483,7 +520,13 @@ if(! isset($createpotential) || ! $createpotential == "on")
 	$sql_insert_opp = "INSERT INTO vtiger_potential (potentialid,accountid,potentialname,leadsource,closingdate,sales_stage,amount) VALUES (?,?,?,?,?,?,?)";
 	$opp_params = array($oppid, $crmid, $potential_name, $row['leadsource'], $close_date, $potential_sales_stage, $potential_amount);
 	$adb->pquery($sql_insert_opp, $opp_params);
-
+	
+	if($assigned_to !="U"){
+		$sql_crmentity = "insert into vtiger_potentialgrouprelation(potentialid,groupname) values(?,?)";
+		$sql_params = array($oppid,$assigned_group_name);
+		$adb->pquery($sql_crmentity, $sql_params);
+	}
+	
 	//Getting the customfield values from leads and inserting into the respected PotentialCustomfield to which it is mapped - Jaguar
 	$insert_column="potentialid";
 	$insert_str="?";
