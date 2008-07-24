@@ -1107,7 +1107,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 					}
 					else
 					{
-						if(($module == 'Calls' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails') && (($name=='Related to') || ($name=='Contact Name')))
+						if(($module == 'Calls' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Vendor Name')))
 						{
 							if ($name=='Related to')
 								$value=getRelatedTo($module,$list_result,$i-1);
@@ -1795,6 +1795,27 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 									$email_check = 3;
 							}
 						}
+						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? and uitype=13;";
+						$queryres = $adb->pquery($querystr, array(getTabid($module)));
+						//Change this index 0 - to get the vtiger_fieldid based on email1 or email2
+						$fieldid = $adb->query_result($queryres,0,'fieldid');
+
+						$slashes_name = popup_from_html($name);
+						$slashes_name = htmlspecialchars($slashes_name,ENT_QUOTES,$default_charset);
+						
+						$value = '<a href="javascript:window.close();" onclick=\'return set_return_emails('.$entity_id.','.$fieldid.',"'.decode_html($slashes_name).'","'.$emailaddress.'","'.$emailaddress2.'","'.$email_check.'"); \'>'.textlength_check($name).'</a>';
+
+					}elseif ($module=='Vendors')
+					{
+						$name = $adb->query_result($list_result,$list_result_count,'vendorname');
+						$venid =$adb->query_result($list_result,$list_result_count,'vendorid');
+						if(CheckFieldPermission('email',$module) == "true")
+						{
+							$emailaddress=$adb->query_result($list_result,$list_result_count,"email");
+							$email_check = 1;
+						}
+						else
+							$email_check = 0;
 						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? and uitype=13;";
 						$queryres = $adb->pquery($querystr, array(getTabid($module)));
 						//Change this index 0 - to get the vtiger_fieldid based on email1 or email2

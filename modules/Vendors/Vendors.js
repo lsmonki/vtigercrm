@@ -7,6 +7,7 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
+document.write("<script type='text/javascript' src='include/js/Mail.js'></"+"script>");
 
 function check4null(form)
 {
