@@ -1099,20 +1099,6 @@ $log->info("in getOldFileName  ".$notesid);
 	
 	/**
 	* Function to make change to column fields, depending on the current user's accessibility for the fields
-	*//*
-	function apply_field_security() {
-		global $current_user, $currentModule;
-		
-		require_once('include/utils/UserInfoUtil.php');
-		foreach($this->column_fields as $fieldname=>$fieldvalue) {
-			if (getFieldVisibilityPermission($currentModule, $current_user->id, $fieldname) != '0') {
-				$this->column_fields[$fieldname] = "";
-			}
-		}
-	}*/
-	
-	/**
-	* Function to make change to column fields, depending on the current user's accessibility for the fields
 	*/
 	function apply_field_security() {
 		global $current_user, $currentModule;
