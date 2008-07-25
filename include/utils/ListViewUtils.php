@@ -1282,10 +1282,25 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 71 || $uitype == 72)
 	{
-		$rate = $user_info['conv_rate'];
-		if($temp_val != '' && $temp_val != 0)
-		{       //changes made to remove vtiger_currency symbol infront of each vtiger_potential amount
-                        $value = convertFromDollar($temp_val,$rate);
+		if($temp_val != '')
+		{   
+			if($fieldname == 'unit_price') {
+				if($_REQUEST['currencyid'] != null 
+						&& ($popuptype == 'inventory_prod' || $popuptype == 'inventory_prod_po')) {
+					$currency_id = $_REQUEST['currencyid'];
+					$prod_prices = getPricesForProducts($currency_id, array($entity_id));
+					$value = $prod_prices[$entity_id];
+				} else {					
+					$currency_id = getProductBaseCurrency($entity_id);
+					$cursym_convrate = getCurrencySymbolandCRate($currency_id);
+					$value = "<font style='color:grey;'>".$cursym_convrate['symbol']."</font> ". $temp_val;
+				}
+			} else {
+				$rate = $user_info['conv_rate'];
+				//changes made to remove vtiger_currency symbol infront of each vtiger_potential amount
+        		if ($temp_val != 0) $value = convertFromDollar($temp_val,$rate);
+        		else $value = $temp_val;
+			}
 		}
 		else
 		{
@@ -1592,6 +1607,14 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		$value = ($temp_val != "") ? "<a href='skype:{$temp_val}?call'>{$temp_val}</a>" : "";
 	}
+	elseif($uitype == 116)
+	{
+		$value = ($temp_val != "") ? getCurrencyName($temp_val) : "";
+	}
+	elseif($uitype == 117)
+	{
+		$value = ($temp_val != "") ? getCurrencyName($temp_val,false) : "";
+	}
 	else
 	{
 		if($fieldname == $focus->list_link_field)
@@ -1673,14 +1696,23 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					}
 					$tax_str = trim($tax_str,',');
 					$rate = $user_info['conv_rate'];
-					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
-					$unitprice = convertFromDollar($unitprice,$rate);
+					if(getFieldVisibilityPermission('Products',$current_user->id,'unit_price') == '0') {
+						$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
+						if($_REQUEST['currencyid'] != null) {
+							$prod_prices = getPricesForProducts($_REQUEST['currencyid'], array($entity_id));
+							$unitprice = $prod_prices[$entity_id];
+						}
+					} else {
+						$unit_price = '';
+					}
 					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
 
 					$slashes_temp_val = popup_from_html($temp_val);
                                         $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
+					$description=$adb->query_result($list_result,$list_result_count,'product_description');
+					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
 
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'");\'>'.$temp_val.'</a>';
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'");\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_prod_po")
 				{
@@ -1695,13 +1727,23 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					}
 					$tax_str = trim($tax_str,',');
 					$rate = $user_info['conv_rate'];
-					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
-					$unitprice = convertFromDollar($unitprice,$rate);
+					
+					if(getFieldVisibilityPermission('Products',$current_user->id,'unit_price') == '0') {
+						$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
+						if($_REQUEST['currencyid'] != null) {
+							$prod_prices = getPricesForProducts($_REQUEST['currencyid'], array($entity_id));
+							$unitprice = $prod_prices[$entity_id];
+						}
+					} else {
+						$unit_price = '';
+					}
 
 					$slashes_temp_val = popup_from_html($temp_val);
                                         $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
+					$description=$adb->query_result($list_result,$list_result_count,'product_description');
+					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
 					
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_po("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'"); \'>'.$temp_val.'</a>';
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_po("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'"); \'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_pb")
 				{
@@ -1961,10 +2003,19 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				}
 			}
 		}
-		elseif($fieldname == 'hdnGrandTotal' || $fieldname == 'expectedroi' || $fieldname == 'actualroi' || $fieldname == 'actualcost' || $fieldname == 'budgetcost' || $fieldname == 'expectedrevenue')
+		elseif($fieldname == 'expectedroi' || $fieldname == 'actualroi' || $fieldname == 'actualcost' || $fieldname == 'budgetcost' || $fieldname == 'expectedrevenue')
 		{
 			$rate = $user_info['conv_rate'];
 			$value = convertFromDollar($temp_val,$rate);
+		}
+		elseif(($module == 'Invoice' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder') 
+				&& ($fieldname == 'hdnGrandTotal' || $fieldname == 'hdnSubTotal' || $fieldname == 'txtAdjustment' 
+						|| $fieldname == 'hdnDiscountAmount' || $fieldname == 'hdnS_H_Amount')) 
+		{								
+			$currency_info = getInventoryCurrencyInfo($module, $entity_id);
+			$currency_id = $currency_info['currency_id'];
+			$currency_symbol = $currency_info['currency_symbol'];
+			$value = $currency_symbol.$temp_val;
 		}
 		else
 		{
@@ -2376,12 +2427,14 @@ function getListQuery($module,$where='')
 			WHERE vtiger_crmentity.deleted = 0";
 			break;
 	Case "PriceBooks":
-		$query = "SELECT vtiger_crmentity.crmid, vtiger_pricebook.*
+		$query = "SELECT vtiger_crmentity.crmid, vtiger_pricebook.*, vtiger_currency_info.currency_name
 			FROM vtiger_pricebook
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_pricebook.pricebookid
 			INNER JOIN vtiger_pricebookcf 
 				ON vtiger_pricebook.pricebookid = vtiger_pricebookcf.pricebookid
+			LEFT JOIN vtiger_currency_info
+				ON vtiger_pricebook.currency_id = vtiger_currency_info.id
 			WHERE vtiger_crmentity.deleted = 0";
 			break;
 	Case "Quotes":
@@ -2391,7 +2444,8 @@ function getListQuery($module,$where='')
 			vtiger_quotesbillads.*,
 			vtiger_quotesshipads.*,
 			vtiger_potential.potentialname,
-			vtiger_account.accountname
+			vtiger_account.accountname,
+			vtiger_currency_info.currency_name
 			FROM vtiger_quotes
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_quotes.quoteid
@@ -2401,6 +2455,8 @@ function getListQuery($module,$where='')
 				ON vtiger_quotes.quoteid = vtiger_quotesshipads.quoteshipaddressid
 			LEFT JOIN vtiger_quotescf
 				ON vtiger_quotes.quoteid = vtiger_quotescf.quoteid
+			LEFT JOIN vtiger_currency_info
+				ON vtiger_quotes.currency_id = vtiger_currency_info.id
 			LEFT OUTER JOIN vtiger_account
 				ON vtiger_account.accountid = vtiger_quotes.accountid
 			LEFT OUTER JOIN vtiger_potential
@@ -2428,7 +2484,8 @@ function getListQuery($module,$where='')
 			vtiger_purchaseorder.*,
 			vtiger_pobillads.*,
 			vtiger_poshipads.*,
-			vtiger_vendor.vendorname
+			vtiger_vendor.vendorname,
+			vtiger_currency_info.currency_name
 			FROM vtiger_purchaseorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid
@@ -2442,6 +2499,8 @@ function getListQuery($module,$where='')
 				ON vtiger_purchaseorder.purchaseorderid = vtiger_poshipads.poshipaddressid
 			LEFT JOIN vtiger_purchaseordercf
 				ON vtiger_purchaseordercf.purchaseorderid = vtiger_purchaseorder.purchaseorderid
+			LEFT JOIN vtiger_currency_info
+				ON vtiger_purchaseorder.currency_id = vtiger_currency_info.id
 			LEFT JOIN vtiger_pogrouprelation
 				ON vtiger_purchaseorder.purchaseorderid = vtiger_pogrouprelation.purchaseorderid
 			LEFT JOIN vtiger_groups
@@ -2462,7 +2521,8 @@ function getListQuery($module,$where='')
 			vtiger_sobillads.*,
 			vtiger_soshipads.*,
 			vtiger_quotes.subject AS quotename,
-			vtiger_account.accountname
+			vtiger_account.accountname,
+			vtiger_currency_info.currency_name
 			FROM vtiger_salesorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_salesorder.salesorderid
@@ -2472,6 +2532,8 @@ function getListQuery($module,$where='')
 				ON vtiger_salesorder.salesorderid = vtiger_soshipads.soshipaddressid
 			LEFT JOIN vtiger_salesordercf
 				ON vtiger_salesordercf.salesorderid = vtiger_salesorder.salesorderid
+			LEFT JOIN vtiger_currency_info
+				ON vtiger_salesorder.currency_id = vtiger_currency_info.id
 			LEFT OUTER JOIN vtiger_quotes
 				ON vtiger_quotes.quoteid = vtiger_salesorder.quoteid
 			LEFT OUTER JOIN vtiger_account
@@ -2501,7 +2563,8 @@ function getListQuery($module,$where='')
 			vtiger_invoicebillads.*,
 			vtiger_invoiceshipads.*,
 			vtiger_salesorder.subject AS salessubject,
-			vtiger_account.accountname
+			vtiger_account.accountname,
+			vtiger_currency_info.currency_name
 			FROM vtiger_invoice
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_invoice.invoiceid
@@ -2509,6 +2572,8 @@ function getListQuery($module,$where='')
 				ON vtiger_invoice.invoiceid = vtiger_invoicebillads.invoicebilladdressid
 			INNER JOIN vtiger_invoiceshipads
 				ON vtiger_invoice.invoiceid = vtiger_invoiceshipads.invoiceshipaddressid
+			LEFT JOIN vtiger_currency_info
+				ON vtiger_invoice.currency_id = vtiger_currency_info.id
 			LEFT OUTER JOIN vtiger_salesorder
 				ON vtiger_salesorder.salesorderid = vtiger_invoice.salesorderid
 			LEFT OUTER JOIN vtiger_account

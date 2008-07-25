@@ -204,37 +204,37 @@
 							<td width="30%" align=left class="cellText"><input name="{$fldname}" type="text" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"  value="{$fldvalue}"></td>
 							
 							{elseif $uitype eq 56}
-                                                        <td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
-							{if $fldname eq 'notime' && $ACTIVITY_MODE eq 'Events'}
-                                                                {if $fldvalue eq 1}
-                                                                <td width="30%" align=left class="cellText"><input name="{$fldname}" type="checkbox"  onclick="toggleTime()" checked></td>
-                                                                {else}
-                                                                <td width="30%" align=left class="cellText"><input name="{$fldname}" type="checkbox" onclick="toggleTime()" ></td>
-                                                                {/if}
-                                                        {else}
-                                                                {if $fldvalue eq 1}
-                                                        <td width="30%" align=left class="cellText"><input name="{$fldname}" type="checkbox"  checked></td>
-                                                                {else}
-                                                        <td width="30%" align=left class="cellText"><input name="{$fldname}" type="checkbox"></td>
-                                                                {/if}
-                                                        {/if}
+                       					<td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
+										{if $fldname eq 'notime' && $ACTIVITY_MODE eq 'Events'}
+                                        	{if $fldvalue eq 1}
+                                            	<td width="30%" align=left class="cellText"><input name="{$fldname}" type="checkbox"  onclick="toggleTime()" checked></td>
+                                            {else}
+                                            	<td width="30%" align=left class="cellText"><input name="{$fldname}" type="checkbox" onclick="toggleTime()" ></td>
+                                         	{/if}
+                                        {else}
+                                        	{if $fldvalue eq 1}
+                                            	<td width="30%" align=left class="cellText"><input name="{$fldname}" type="checkbox"  checked></td>
+                                        	{else}
+                                            	<td width="30%" align=left class="cellText"><input name="{$fldname}" type="checkbox" {if ( $QCMODULE eq 'Product' ) ||( $QCMODULE eq 'PriceBook' )}checked{/if}></td>
+                                         	{/if}
+                                        {/if}
 							{elseif $uitype eq 23 || $uitype eq 5 || $uitype eq 6}
-							<td width="20%" class="cellLabel" align=right>
-							{if $uitype eq 23 && $QCMODULE eq 'Event'}
-                                                                {$APP.LBL_EVENT_ENDDATE}
-                                                        {else}
-                                                                {$fldlabel}
-                                                        {/if}
-                                                        </td>
-							<td width="30%" align=left class="cellText">
-							   {foreach key=date_value item=time_value from=$fldvalue}
-								{assign var=date_val value="$date_value"}
-								{assign var=time_val value="$time_value"}
-							   {/foreach}
-							   {foreach key=date_fmt item=date_str from=$secondvalue}
-                                                                {assign var=dateFormat value="$date_fmt"}
-                                                                {assign var=dateStr value="$date_str"}
-                                                           {/foreach}
+								<td width="20%" class="cellLabel" align=right>
+								{if $uitype eq 23 && $QCMODULE eq 'Event'}
+                                	{$APP.LBL_EVENT_ENDDATE}
+                            	{else}
+                                	{$fldlabel}
+                            	{/if}
+                            	</td>
+								<td width="30%" align=left class="cellText">
+							   	{foreach key=date_value item=time_value from=$fldvalue}
+									{assign var=date_val value="$date_value"}
+									{assign var=time_val value="$time_value"}
+							   	{/foreach}
+							   	{foreach key=date_fmt item=date_str from=$secondvalue}
+                                	{assign var=dateFormat value="$date_fmt"}
+                                	{assign var=dateStr value="$date_str"}
+                                {/foreach}
                                                         {if $uitype eq 6 && $QCMODULE eq 'Event'}
                                                                 {assign var=datejsfn value="onChange='dochange(\"jscal_field_date_start\",\"jscal_field_due_date\");'"}
                                                                 {assign var=timejsfn value="onChange='calQCduedatetime();'"}
@@ -355,7 +355,9 @@
                          {/if}
 				
                          {elseif $uitype eq 61}
-                         <td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
+                         <td width="20%" class="cellLabel" align=right>
+						 	{$fldlabel}
+						 </td>                         
 						 <td colspan="3" width="30%" align=left class="cellText">
 						 <input name="{$fldname}"  type="file" value="{$secondvalue}" onchange="validateFilename(this);"/>
 						 <input name="{$fldname}_hidden"  type="hidden" value="{$secondvalue}"/>
@@ -384,7 +386,26 @@
                                                         &nbsp;{$disp_text}
                                                 {/foreach}
                                                 </td>
-
+							{elseif $uitype eq 117}<!-- for currency in users details-->	
+								<td width="20%" class="dvtCellLabel" align=right>
+									{$fldlabel}
+								</td>
+								<td width="30%" align=left class="dvtCellInfo">
+								   	<select name="{$fldname}" tabindex="{$vt_tab}" class="small">
+					
+									{foreach item=arr key=uivalueid from=$fldvalue}
+										{foreach key=sel_value item=value from=$arr}
+											<option value="{$uivalueid}" {$value}>{$sel_value}</option>
+											<!-- code added to pass Currency field value, if Disabled for nonadmin -->
+											{if $value eq 'selected' && $secondvalue neq 1}
+												{assign var="curr_stat" value="$uivalueid"}
+											{/if}
+											<!--code ends -->
+										{/foreach}
+									{/foreach}
+								   </select>
+								</td>
+												
 							{else}
 							<td width="20%" class="cellLabel">&nbsp;</td><td width="30%" class="cellText">&nbsp;</td>
 							{/if}

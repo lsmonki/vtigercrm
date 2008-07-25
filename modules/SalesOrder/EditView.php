@@ -253,15 +253,14 @@ elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 elseif((isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] != '') || (isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '')) {
         $smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$InvTotal = getInventoryTotal($_REQUEST['return_module'],$_REQUEST['return_id']);
-	$InvTotal = convertFromDollar($InvTotal,$rate);
-        $smarty->assign("MODE", $focus->mode);
+	$smarty->assign("MODE", $focus->mode);
 
 	//this is to display the Product Details in first row when we create new PO from Product relatedlist
 	if($_REQUEST['return_module'] == 'Products')
 	{
 		$smarty->assign("PRODUCT_ID",$_REQUEST['product_id']);
 		$smarty->assign("PRODUCT_NAME",getProductName($_REQUEST['product_id']));
-		$smarty->assign("UNIT_PRICE",getUnitPrice($_REQUEST['product_id']));
+		$smarty->assign("UNIT_PRICE",$_REQUEST['product_id']);
 		$smarty->assign("QTY_IN_STOCK",getPrdQtyInStck($_REQUEST['product_id']));
 		$smarty->assign("VAT_TAX",getProductTaxPercentage("VAT",$_REQUEST['product_id']));
 		$smarty->assign("SALES_TAX",getProductTaxPercentage("Sales",$_REQUEST['product_id']));
@@ -327,6 +326,14 @@ if($focus->mode != 'edit')
                echo '<br><font color="#FF0000"><b>Duplicate SalesOrder Number - Click <a href="index.php?module=Settings&action=CustomInventorySeq&parenttab=Settings">here</a> to  Configure the SalesOrder Number</b></font>'.$num_rows;
         else
                 $smarty->assign("inv_no",$autostr);
+}
+
+$smarty->assign("CURRENCIES_LIST", getAllCurrencies());
+if($focus->mode == 'edit' || $_REQUEST['isDuplicate'] == 'true') {
+	$inventory_cur_info = getInventoryCurrencyInfo('SalesOrder', $focus->id);
+	$smarty->assign("INV_CURRENCY_ID", $inventory_cur_info['currency_id']);
+} else {
+	$smarty->assign("INV_CURRENCY_ID", $currencyid);
 }
 
 $check_button = Button_Check($module);

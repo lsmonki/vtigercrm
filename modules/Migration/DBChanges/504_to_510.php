@@ -324,6 +324,56 @@ ExecuteQuery("insert into vtiger_profile2utility values(4,18,10,0)");
 /* Local Backup Feature */
 ExecuteQuery("alter table vtiger_systems add column server_path varchar(256)");
 
+/* Multi-Currency Support in Products, Pricebooks and Other Inventory Modules */
+
+// To save mapping between products and its price in different currencies.
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_productcurrencyrel (productid int(11) not null, currencyid int(11) not null, converted_price decimal(25,2) default NULL, actual_price decimal(25, 2) default NULL) ENGINE=InnoDB");
+
+// Update Product related tables
+ExecuteQuery("alter table vtiger_products drop column currency");
+ExecuteQuery("alter table vtiger_products add column currency_id int(19) not null default '1'");
+
+// Update Currency related tables
+ExecuteQuery("alter table vtiger_currency_info add column deleted int(1) not null default '0'");
+
+// Update Inventory related tables
+ExecuteQuery("alter table vtiger_quotes drop column currency");
+ExecuteQuery("alter table vtiger_quotes add column currency_id int(19) not null default '1'");
+ExecuteQuery("alter table vtiger_quotes add column conversion_rate decimal(10,3) not null default '1.000'");
+ExecuteQuery("insert into vtiger_field values(20,".$adb->getUniqueID('vtiger_field').",'currency_id','vtiger_quotes','1','117','currency_id','Currency','1','0','1','100','21','51','3','I~O','1',null,'BAS')");
+ExecuteQuery("insert into vtiger_field values(20,".$adb->getUniqueID('vtiger_field').",'conversion_rate','vtiger_quotes','1','1','conversion_rate','Conversion Rate','1','0','1','100','22','51','3','N~O','1',null,'BAS')");
+
+ExecuteQuery("alter table vtiger_purchaseorder add column currency_id int(19) not null default '1'");
+ExecuteQuery("alter table vtiger_purchaseorder add column conversion_rate decimal(10,3) not null default '1.000'");
+ExecuteQuery("insert into vtiger_field values(21,".$adb->getUniqueID('vtiger_field').",'currency_id','vtiger_purchaseorder','1','117','currency_id','Currency','1','0','1','100','18','57','3','I~O','1',null,'BAS')");
+ExecuteQuery("insert into vtiger_field values(21,".$adb->getUniqueID('vtiger_field').",'conversion_rate','vtiger_purchaseorder','1','1','conversion_rate','Conversion Rate','1','0','1','100','19','57','3','N~O','1',null,'BAS')");
+
+ExecuteQuery("alter table vtiger_salesorder add column currency_id int(19) not null default '1'");
+ExecuteQuery("alter table vtiger_salesorder add column conversion_rate decimal(10,3) not null default '1.000'");
+ExecuteQuery("insert into vtiger_field values(22,".$adb->getUniqueID('vtiger_field').",'currency_id','vtiger_salesorder','1','117','currency_id','Currency','1','0','1','100','19','63','3','I~O','1',null,'BAS')");
+ExecuteQuery("insert into vtiger_field values(22,".$adb->getUniqueID('vtiger_field').",'conversion_rate','vtiger_salesorder','1','1','conversion_rate','Conversion Rate','1','0','1','100','20','63','3','N~O','1',null,'BAS')");
+
+ExecuteQuery("alter table vtiger_invoice add column currency_id int(19) not null default '1'");
+ExecuteQuery("alter table vtiger_invoice add column conversion_rate decimal(10,3) not null default '1.000'");
+ExecuteQuery("insert into vtiger_field values(23,".$adb->getUniqueID('vtiger_field').",'currency_id','vtiger_invoice','1','117','currency_id','Currency','1','0','1','100','18','69','3','I~O','1',null,'BAS')");
+ExecuteQuery("insert into vtiger_field values(23,".$adb->getUniqueID('vtiger_field').",'conversion_rate','vtiger_invoice','1','1','conversion_rate','Conversion Rate','1','0','1','100','19','69','3','N~O','1',null,'BAS')");
+
+// Update Price Book related tables
+ExecuteQuery("alter table vtiger_pricebook drop column description");
+ExecuteQuery("alter table vtiger_pricebook add column currency_id int(19) not null default '1'");
+ExecuteQuery("alter table vtiger_pricebookproductrel add column usedcurrency int(11) not null default '1'");
+$pb_currency_field_id = $adb->getUniqueID('vtiger_field');
+$pb_tab_id = getTabid('PriceBooks');
+$adb->query("insert into vtiger_field values($pb_tab_id,$pb_currency_field_id,'currency_id','vtiger_pricebook','1','117','currency_id','Currency','1','0','0','100','5','48','1','I~M','0','3','BAS')");
+$adb->query("insert into vtiger_cvcolumnlist values('23','2','vtiger_pricebook:currency_id:currency_id:PriceBooks_Currency:I')");
+$adb->query("insert into vtiger_def_org_field values($pb_tab_id, $pb_currency_field_id, 0, 1)");
+$profile_list = $adb->query("select profileid from vtiger_profile");
+$num_profiles = $adb->num_rows($profile_list);
+for($i=0;$i<$num_profiles;$i++) {
+	$profileid = $adb->query_result($profile_list,$i,'profileid');
+	$adb->query("insert into vtiger_profile2field values($profileid, $pb_tab_id, $pb_currency_field_id, 0, 1)");
+}
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

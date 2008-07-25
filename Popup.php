@@ -20,7 +20,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 global $app_strings;
-global $currentModule;
+global $currentModule, $current_user;
 global $theme;
 $url_string = '';
 $smarty = new vtigerCRM_Smarty;
@@ -208,12 +208,19 @@ $smarty->assign("MODULE",$currentModule);
 if($currentModule == 'PriceBooks')
 {
 	$productid=$_REQUEST['productid'];
-	$query = 'select vtiger_pricebook.*, vtiger_pricebookproductrel.productid, vtiger_pricebookproductrel.listprice, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_pricebook inner join vtiger_pricebookproductrel on vtiger_pricebookproductrel.pricebookid = vtiger_pricebook.pricebookid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_pricebook.pricebookid where vtiger_pricebookproductrel.productid='.$productid.' and vtiger_crmentity.deleted=0 and vtiger_pricebook.active=1';
+	$currency_id=$_REQUEST['currencyid'];
+	if($currency_id == null) $currency_id = fetchCurrency($current_user->id);
+	$query = 'select vtiger_pricebook.*, vtiger_pricebookproductrel.productid, vtiger_pricebookproductrel.listprice, ' .
+					'vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime ' .
+					'from vtiger_pricebook inner join vtiger_pricebookproductrel on vtiger_pricebookproductrel.pricebookid = vtiger_pricebook.pricebookid ' .
+					'inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_pricebook.pricebookid ' .
+					'where vtiger_pricebookproductrel.productid='.mysql_real_escape_string($productid).' and vtiger_crmentity.deleted=0 ' .
+							'and vtiger_pricebook.currency_id='.mysql_real_escape_string($currency_id).' and vtiger_pricebook.active=1';
 }
 else
 {
 	if(isset($_REQUEST['recordid']) && $_REQUEST['recordid'] != '')
-	{		
+	{
 		$smarty->assign("RECORDID",$_REQUEST['recordid']);
 		$url_string .='&recordid='.$_REQUEST['recordid'];
         	$where_relquery = getRelCheckquery($currentModule,$_REQUEST['return_module'],$_REQUEST['recordid']);

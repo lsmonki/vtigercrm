@@ -11,10 +11,14 @@
 
 $del_id = $_REQUEST['delete_currency_id'];
 $tran_id = $_REQUEST['transfer_currency_id'];
-$sql0 = "update vtiger_users set currency_id=? where currency_id=?";
-$adb->pquery($sql0, array($tran_id, $del_id));
-$sql = "delete from vtiger_currency_info where id =?";
+
+// Transfer all the data refering to currency $del_id to currency $tran_id
+transferCurrency($del_id, $tran_id);
+
+// Mark Currency as deleted
+$sql = "update vtiger_currency_info set deleted=1 where id =?";
 $adb->pquery($sql, array($del_id));
+
 header("Location: index.php?action=SettingsAjax&module=Settings&file=CurrencyListView&ajax=true");
 
 ?>

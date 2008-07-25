@@ -71,15 +71,20 @@ function add_data_to_relatedlist(entity_id,recordid) {
         opener.document.location.href="index.php?module={RETURN_MODULE}&action=updateRelations&smodule={SMODULE}&destination_module=Products&entityid="+entity_id+"&parid="+recordid;
 }
 
-function set_return_inventory(product_id,product_name,unitprice,qtyinstock,taxstr,row_id) {
+function set_return_inventory(product_id,product_name,unitprice,qtyinstock,taxstr,row_id,desc) {
 	curr_row = row_id;
 
         window.opener.document.EditView.elements["productName"+curr_row].value = product_name;
         window.opener.document.EditView.elements["hdnProductId"+curr_row].value = product_id;
 	window.opener.document.EditView.elements["listPrice"+curr_row].value = unitprice;
+	window.opener.document.EditView.elements["comment"+curr_row].value = desc;
 	//getOpenerObj("unitPrice"+curr_row).innerHTML = unitprice;
 	getOpenerObj("qtyInStock"+curr_row).innerHTML = qtyinstock;
 
+	// Apply decimal round-off to value
+	if(!isNaN(parseFloat(unitprice))) unitprice = roundPriceValue(unitprice);
+	window.opener.document.EditView.elements["listPrice"+curr_row].value = unitprice;
+	
 	var tax_array = new Array();
 	var tax_details = new Array();
 	tax_array = taxstr.split(',');
@@ -91,12 +96,17 @@ function set_return_inventory(product_id,product_name,unitprice,qtyinstock,taxst
 	window.opener.document.EditView.elements["qty"+curr_row].focus()
 }
 
-function set_return_inventory_po(product_id,product_name,unitprice,taxstr,curr_row) {
+function set_return_inventory_po(product_id,product_name,unitprice,taxstr,curr_row,desc) {
         window.opener.document.EditView.elements["productName"+curr_row].value = product_name;
         window.opener.document.EditView.elements["hdnProductId"+curr_row].value = product_id;
 	window.opener.document.EditView.elements["listPrice"+curr_row].value = unitprice;
+	window.opener.document.EditView.elements["comment"+curr_row].value = desc;
 	//getOpenerObj("unitPrice"+curr_row).innerHTML = unitprice;
-
+	
+	// Apply decimal round-off to value
+	if(!isNaN(parseFloat(unitprice))) unitprice = roundPriceValue(unitprice);
+	window.opener.document.EditView.elements["listPrice"+curr_row].value = unitprice;
+		
 	var tax_array = new Array();
 	var tax_details = new Array();
 	tax_array = taxstr.split(',');
@@ -124,4 +134,24 @@ function getImageListBody() {
 	}
 	return ImageListBody;
 }
+
+// Function to Round off the Price Value
+function roundPriceValue(val) {
+   val = parseFloat(val);
+   val = Math.round(val*100)/100;
+   val = val.toString();
+   
+   if (val.indexOf(".")<0) {
+      val+=".00"
+   } else {
+      var dec=val.substring(val.indexOf(".")+1,val.length)
+      if (dec.length>2)
+         val=val.substring(0,val.indexOf("."))+"."+dec.substring(0,2)
+      else if (dec.length==1)
+         val=val+"0"
+   }
+   
+   return val;
+} 
+// End
 

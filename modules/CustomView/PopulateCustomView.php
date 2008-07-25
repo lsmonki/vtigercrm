@@ -310,7 +310,8 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
                         'vtiger_crmentity:modifiedtime:modifiedtime:Notes_Modified_Time:V'),
 		
 		  Array('vtiger_pricebook:bookname:bookname:PriceBooks_Price_Book_Name:V',
-                        'vtiger_pricebook:active:active:PriceBooks_Active:V'),
+                        'vtiger_pricebook:active:active:PriceBooks_Active:V',
+                        'vtiger_pricebook:currency_id:currency_id:PriceBooks_Currency:I'),
 		  
 		  Array('vtiger_products:productname:productname:Products_Product_Name:V',
                         'vtiger_products:productcode:productcode:Products_Product_Code:V',

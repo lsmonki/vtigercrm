@@ -54,11 +54,6 @@ foreach($focus->column_fields as $fieldname => $val)
 			$value = trim($_REQUEST[$fieldname]);
 		$focus->column_fields[$fieldname] = $value;
 	}
-	if(isset($_REQUEST['unit_price']))
-	{
-		$value = convertToDollar($_REQUEST['unit_price'],$rate);
-		$focus->column_fields['unit_price'] = $value;
-	}
 }
 
 if($_REQUEST['imagelist'] != '')

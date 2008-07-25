@@ -15,14 +15,37 @@ require_once('include/utils/utils.php');
 require_once('include/utils/utils.php');
 require_once('include/ComboUtil.php');
 
-global $app_strings,$mod_strings,$current_language,$theme,$log;
+global $app_strings,$mod_strings,$current_language,$theme,$log,$current_user;
 $current_module_strings = return_module_language($current_language, 'Products');
 
 $pricebook_id = $_REQUEST['pricebook_id'];
+$currency_id = $_REQUEST['currency_id'];
+if ($currency_id == null) $currency_id = fetchCurrency($current_user->id);
 $parenttab = $_REQUEST['parenttab'];
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
+
+if(getFieldVisibilityPermission('Products',$current_user->id,'unit_price') != '0'){
+	echo "<link rel='stylesheet' type='text/css' href='themes/$theme/style.css'>";	
+	echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
+	echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
+
+		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+		<tbody><tr>
+		<td rowspan='2' width='11%'><img src='themes/$theme/images/denied.gif' ></td>
+		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>$app_strings[LBL_UNIT_PRICE_NOT_PERMITTED]</span></td>
+		</tr>
+		<tr>
+		<td class='small' align='right' nowrap='nowrap'>			   	
+		<a href='javascript:window.history.back();'>$app_strings[LBL_GO_BACK]</a><br>								   						     </td>
+		</tr>
+		</tbody></table> 
+		</div>";
+	echo "</td></tr></table>";
+	exit();
+}
+
 $pricebookname = getPriceBookName($pricebook_id);
 
 $smarty= new vtigerCRM_Smarty;
@@ -89,27 +112,7 @@ $other_text .='
 
 $smarty->assign("PRODUCTLISTHEADER", get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'], $other_text, false ));
 
-
-//if the product is not associated already then we should display that products
-$unit_price_array=array();
-$field_name_array=array();
-for($i=0; $i<$num_rows; $i++)
-{
-	
-	$entity_id = $adb->query_result($list_result,$i,"crmid");
-	if(! array_key_exists($entity_id, $prod_array))
-	{
-		$unit_price = 	$adb->query_result($list_result,$i,"unit_price");
-		$field_name=$entity_id."_listprice";
-		$unit_price_array[]="'".$unit_price."'";
-		$field_name_array[]="'".$field_name."'";
-	}
-}
-
-
 //Retreive the List View Table Header
-$smarty->assign("UNIT_PRICE_ARRAY",implode(",",$unit_price_array));
-$smarty->assign("FIELD_NAME_ARRAY",implode(",",$field_name_array));
 
 $list_header = '';
 $list_header .= '<tr>';
@@ -124,33 +127,51 @@ $list_header .= '</tr>';
 
 $smarty->assign("LISTHEADER", $list_header);
 
-$list_body ='';
+
+//if the product is not associated already then we should display that products
+$new_prod_array = array();
+$unit_price_array=array();
+$field_name_array=array();
 for($i=0; $i<$num_rows; $i++)
-{
-	$log->info("Products :: Showing the List of products to be added in price book");
+{	
 	$entity_id = $adb->query_result($list_result,$i,"crmid");
 	if(! array_key_exists($entity_id, $prod_array))
 	{
-		$list_body .= '<tr class="lvtColData" onmouseover="this.className=\'lvtColDataHover\'" onmouseout="this.className=\'lvtColData\'" bgcolor="white">';
-		$unit_price = 	$adb->query_result($list_result,$i,"unit_price");
-		$field_name=$entity_id."_listprice";
-
-		$list_body .= '<td><INPUT type=checkbox NAME="selected_id" id="check_'.$entity_id.'" value= '.$entity_id.' onClick=\'toggleSelectAll(this.name,"selectall");updateListPrice("'.$unit_price.'","'.$field_name.'",this)\'></td>';
-		$list_body .= '<td>'.$adb->query_result($list_result,$i,"productname").'</td>';
-		
-		if(getFieldVisibilityPermission('Products', $current_user->id, 'productcode') == '0')
-			$list_body .= '<td>'.$adb->query_result($list_result,$i,"productcode").'</td>';
-		if(getFieldVisibilityPermission('Products', $current_user->id, 'unit_price') == '0')
-			$list_body .= '<td>'.$unit_price.'</td>';
-		
-		$list_body .='<td>';		
-		if(isPermitted("PriceBooks","EditView","") == 'yes')
-			$list_body .= '<input type="text" name="'.$field_name.'" style="visibility:hidden;" id="'.$field_name.'">';
-		else
-			$list_body .= '<input type="text" name="'.$field_name.'" style="visibility:hidden;" readonly id="'.$field_name.'">';
-		$list_body .= '</td></tr>';	
+		$new_prod_array[] = $entity_id;
 	}
 }
+$prod_price_list = getPricesForProducts($currency_id, $new_prod_array);
+
+$list_body ='';
+for($i=0; $i<count($new_prod_array); $i++)
+{
+	$log->info("Products :: Showing the List of products to be added in price book");
+	$entity_id = $new_prod_array[$i];
+
+	$list_body .= '<tr class="lvtColData" onmouseover="this.className=\'lvtColDataHover\'" onmouseout="this.className=\'lvtColData\'" bgcolor="white">';
+	$unit_price = $prod_price_list[$entity_id];
+	$field_name = $entity_id."_listprice";
+	$unit_price_array[]="'".$unit_price."'";
+	$field_name_array[]="'".$field_name."'";
+
+	$list_body .= '<td><INPUT type=checkbox NAME="selected_id" id="check_'.$entity_id.'" value= '.$entity_id.' onClick=\'toggleSelectAll(this.name,"selectall");updateListPrice("'.$unit_price.'","'.$field_name.'",this)\'></td>';
+	$list_body .= '<td>'.$adb->query_result($list_result,$i,"productname").'</td>';
+		
+	if(getFieldVisibilityPermission('Products', $current_user->id, 'productcode') == '0')
+		$list_body .= '<td>'.$adb->query_result($list_result,$i,"productcode").'</td>';
+	if(getFieldVisibilityPermission('Products', $current_user->id, 'unit_price') == '0')
+		$list_body .= '<td>'.$unit_price.'</td>';
+		
+	$list_body .='<td>';		
+	if(isPermitted("PriceBooks","EditView","") == 'yes')
+		$list_body .= '<input type="text" name="'.$field_name.'" style="visibility:hidden;" id="'.$field_name.'">';
+	else
+		$list_body .= '<input type="text" name="'.$field_name.'" style="visibility:hidden;" readonly id="'.$field_name.'">';
+	$list_body .= '</td></tr>';
+}
+
+$smarty->assign("UNIT_PRICE_ARRAY",implode(",",$unit_price_array));
+$smarty->assign("FIELD_NAME_ARRAY",implode(",",$field_name_array));
 
 if($order_by !='')
 	$url_string .="&order_by=".$order_by;

@@ -164,7 +164,7 @@ elseif((isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] != '') || 
 	{
 		$smarty->assign("PRODUCT_ID",$_REQUEST['product_id']);
 		$smarty->assign("PRODUCT_NAME",getProductName($_REQUEST['product_id']));
-		$smarty->assign("UNIT_PRICE",getUnitPrice($_REQUEST['product_id']));
+		$smarty->assign("UNIT_PRICE",$_REQUEST['product_id']);
 		$smarty->assign("QTY_IN_STOCK",getPrdQtyInStck($_REQUEST['product_id']));
 		$smarty->assign("VAT_TAX",getProductTaxPercentage("VAT",$_REQUEST['product_id']));
 		$smarty->assign("SALES_TAX",getProductTaxPercentage("Sales",$_REQUEST['product_id']));
@@ -230,6 +230,14 @@ if($focus->mode != 'edit')
                 echo '<br><font color="#FF0000"><b>Duplicate Quote Number - Click <a href="index.php?module=Settings&action=CustomInvoiceNo&parenttab=Settings">here</a> to  Configure the Quote Number</b></font>'.$num_rows;
         else
                 $smarty->assign("inv_no",$autostr);
+}
+
+$smarty->assign("CURRENCIES_LIST", getAllCurrencies());
+if($focus->mode == 'edit' || $_REQUEST['isDuplicate'] == 'true') {
+	$inventory_cur_info = getInventoryCurrencyInfo('Quotes', $focus->id);
+	$smarty->assign("INV_CURRENCY_ID", $inventory_cur_info['currency_id']);
+} else {
+	$smarty->assign("INV_CURRENCY_ID", $currencyid);
 }
 
 if($focus->mode == 'edit')

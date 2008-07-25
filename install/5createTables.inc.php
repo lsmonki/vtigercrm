@@ -290,7 +290,7 @@ $db->getUniqueID("vtiger_freetags");
 
 //Master currency population
 //Insert into vtiger_currency vtiger_table
-               $db->pquery("insert into vtiger_currency_info values(?,?,?,?,?,?,?)", array($db->getUniqueID("vtiger_currency_info"),$currency_name,$currency_code,$currency_symbol,1,'Active','-11'));
+$db->pquery("insert into vtiger_currency_info values(?,?,?,?,?,?,?,?)", array($db->getUniqueID("vtiger_currency_info"),$currency_name,$currency_code,$currency_symbol,1,'Active','-11','0'));
 
 // populate the db with seed data
 if ($db_populate) {

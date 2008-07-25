@@ -925,7 +925,7 @@ class Users {
 		$this->column_fields["record_id"] = $record;
 		$this->column_fields["record_module"] = $module;
 
-		$currency_query = "select * from vtiger_currency_info where id=? and currency_status='Active'";
+		$currency_query = "select * from vtiger_currency_info where id=? and currency_status='Active' and deleted=0";
 		$currency_result = $adb->pquery($currency_query, array($this->column_fields["currency_id"]));
 		if($adb->num_rows($currency_result) == 0)
 		{

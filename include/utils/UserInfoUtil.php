@@ -4384,7 +4384,9 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
 		$result = $adb->pquery($query, $params);
 
 		$log->debug("Exiting getFieldVisibilityPermission method ...");
-		return $adb->query_result($result,"0","visible");
+		
+		if($adb->num_rows($result) == 0) return '1';
+		return ($adb->query_result($result,"0","visible")+"");
 	}
 }
 

@@ -86,14 +86,16 @@ class Products extends CRMEntity {
 		if($_REQUEST['ajxaction'] != 'DETAILVIEW')
 		{
 			$this->insertTaxInformation('vtiger_producttaxrel', 'Products');
+			$this->insertPriceInformation('vtiger_productcurrencyrel', 'Products');
 		}
-
+		// Update unit price value in vtiger_productcurrencyrel
+		$this->updateUnitPrice();
 		//Inserting into attachments
 		$this->insertIntoAttachment($this->id,'Products');	
 		
 	}	
 
-	/**	function to save the product tax information in producttarel vtiger_table
+	/**	function to save the product tax information in vtiger_producttaxrel table
 	 *	@param string $tablename - vtiger_tablename to save the product tax relationship (producttaxrel)
 	 *	@param string $module	 - current module name
 	 *	$return void
@@ -139,6 +141,51 @@ class Products extends CRMEntity {
 
 		$log->debug("Exiting from insertTaxInformation($tablename, $module) method ...");
 	}
+	
+	/**	function to save the product price information in vtiger_productcurrencyrel table
+	 *	@param string $tablename - vtiger_tablename to save the product currency relationship (productcurrencyrel)
+	 *	@param string $module	 - current module name
+	 *	$return void
+	*/
+	function insertPriceInformation($tablename, $module)
+	{
+		global $adb, $log, $current_user;
+		$log->debug("Entering into insertPriceInformation($tablename, $module) method ...");
+		// Update the currency_id based on the logged in user's preference
+		$currencyid=fetchCurrency($current_user->id);
+		$adb->pquery("update vtiger_products set currency_id=? where productid=?", array($currencyid, $this->id));
+		
+		$currency_details = getAllCurrencies('all');
+		
+		//Delete the existing currency relationship if any
+		if($this->mode == 'edit')
+		{
+			for($i=0;$i<count($currency_details);$i++)
+			{
+				$curid = $currency_details[$i]['curid'];
+				$sql = "delete from vtiger_productcurrencyrel where productid=? and currencyid=?";
+				$adb->pquery($sql, array($this->id,$curid));
+			}
+		}
+		
+		$product_base_conv_rate = getBaseConversionRateForProduct($this->id, $this->mode);
+		
+		//Save the Product - Currency relationship if corresponding currency check box is enabled
+		for($i=0;$i<count($currency_details);$i++)
+		{
+			$curid = $currency_details[$i]['curid'];
+			$curname = $currency_details[$i]['currencylabel'];
+			$cur_checkname = 'cur_' . $curid . '_check';
+			$cur_valuename = 'curname' . $curid;
+			$base_currency_check = 'base_currency' . $curid;
+			if($_REQUEST[$cur_checkname] == 'on' || $_REQUEST[$cur_checkname] == 1)
+			{
+				$conversion_rate = $currency_details[$i]['conversionrate'];
+				$actual_conversion_rate = $product_base_conv_rate * $conversion_rate;
+				$converted_price = $actual_conversion_rate * $_REQUEST['unit_price'];
+				$actual_price = $_REQUEST[$cur_valuename];
+				
+				$log->debug("Going to save the Product - $curname currency relationship");
 
 	
 	function insertIntoAttachment($id,$module)
@@ -177,8 +224,6 @@ class Products extends CRMEntity {
 
 		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
 	}
-
-
 	
 	/**	Function used to get the sort order for Product listview
 	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['PRODUCTS_SORT_ORDER'] if this session value is empty then default sort order will be returned. 

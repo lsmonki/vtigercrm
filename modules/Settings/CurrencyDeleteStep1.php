@@ -50,10 +50,10 @@ $output ='<div id="CurrencyDeleteLay"  class="layerPopup">
 					<td class="cellLabel small"><b>'.$mod_strings['LBL_TRANSCURR'].'</b></td>
 					<td class="cellText small">';
 						   
-				$output.='<select class="select" name="transfer_currency_id" id="transfer_currency_id">';
+				$output.='<select class="select small" name="transfer_currency_id" id="transfer_currency_id">';
 						 
 						 global $adb;	
-						 $sql = "select * from vtiger_currency_info where currency_status = ?";
+						 $sql = "select * from vtiger_currency_info where currency_status = ? and deleted=0";
 						 $result = $adb->pquery($sql, array('Active'));
 						 $temprow = $adb->fetch_array($result);
 						 do

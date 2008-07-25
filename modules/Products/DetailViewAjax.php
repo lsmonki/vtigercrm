@@ -28,10 +28,6 @@ if($ajaxaction == "DETAILVIEW")
 		$modObj = new Products();
 		$modObj->retrieve_entity_info($crmid,"Products");
 		$modObj->column_fields[$fieldname] = $fieldvalue;
-		if($fieldname == 'unit_price')//unit price converted to dollar value while saving
-		{
-			$modObj->column_fields[$fieldname] = getConvertedPrice($fieldvalue);	
-		}
 		$modObj->id = $crmid;
 		$modObj->mode = "edit";
 		$modObj->save("Products");

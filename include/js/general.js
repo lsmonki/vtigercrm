@@ -679,15 +679,6 @@ function numValidate(fldName,fldLabel,format,neg) {
 	   var splitval=val.split(".")
 	   var arr_len = splitval.length;
            var len = 0;
-	   //added to fix the issue4242 
-	   /*if(fldName == 'unit_price') 
-	   { 
-	   	if(splitval[0] == '' && arr_len > 1)
-                 {
-                         splitval[0] = '0';
-                         val = splitval[0]+val;
-                }
-	   }*/	
 	   if(fldName == "probability" || fldName == "commissionrate")
            {
                    if(arr_len > 1)
@@ -732,7 +723,7 @@ function numValidate(fldName,fldLabel,format,neg) {
 		return false;
 	}
 
-      if (!re.test(val)) {
+	if (!re.test(val)) {
        alert(alert_arr.INVALID+fldLabel)
        getObj(fldName).focus()
        return false
@@ -2620,6 +2611,17 @@ function toggleSelect_ListView(state,relCheckName) {
 function gotourl(url)
 {
                 document.location.href=url;
+}
+
+// Function to display the element with id given by showid and hide the element with id given by hideid
+function toggleShowHide(showid, hideid)
+{
+	var show_ele = document.getElementById(showid);
+	var hide_ele = document.getElementById(hideid);
+	if(show_ele != null) 
+		show_ele.style.display = "inline";
+	if(hide_ele != null) 
+		hide_ele.style.display = "none";
 }
 
 /******************************************************************************/

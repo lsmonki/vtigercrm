@@ -2179,3 +2179,20 @@ a.drop_down:Hover{
         color: #776643; /* Same as the background-color of .create Class */
 }
 
+.multiCurrencyEditUI{
+	border:3px solid #CCCCCC;
+	width:500px;
+	padding:5px;
+	position:absolute;
+	background-color:#FFFFFF;
+	display:none;
+}
+
+.multiCurrencyDetailUI{
+	border:3px solid #CCCCCC;
+	width:250px;
+	padding:5px;
+	position:absolute;
+	background-color:#FFFFFF;
+	display:none;
+}

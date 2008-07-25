@@ -22,6 +22,7 @@ $productid=$_REQUEST['product_id'];
 $parenttab = $_REQUEST['parenttab'];
 if(isset($_REQUEST['pricebook_id']) && $_REQUEST['pricebook_id']!='')
 {
+	$currency_id = getPriceBookCurrency($pricebook_id);
 	//split the string and store in an array
 	$storearray = explode(";",$idlist);
 	foreach($storearray as $id)
@@ -31,8 +32,8 @@ if(isset($_REQUEST['pricebook_id']) && $_REQUEST['pricebook_id']!='')
 			$list_price = $_REQUEST[$lp_name];
 			//Updating the vtiger_pricebook product rel vtiger_table
 			 $log->info("Products :: Inserting vtiger_products to price book");
-			$query= "insert into vtiger_pricebookproductrel (pricebookid,productid,listprice) values(?,?,?)";
-			$adb->pquery($query, array($pricebook_id,$id,$list_price));
+			$query= "insert into vtiger_pricebookproductrel (pricebookid,productid,listprice,usedcurrency) values(?,?,?,?)";
+			$adb->pquery($query, array($pricebook_id,$id,$list_price,$currency_id));
 		}
 	}
 	if($singlepane_view == 'true')
@@ -47,12 +48,13 @@ elseif(isset($_REQUEST['product_id']) && $_REQUEST['product_id']!='')
 	foreach($storearray as $id)
 	{
 		if($id != '') {
+			$currency_id = getPriceBookCurrency($id);
 			$lp_name = $id.'_listprice';
 			$list_price = $_REQUEST[$lp_name];
 			//Updating the vtiger_pricebook product rel vtiger_table
 			 $log->info("Products :: Inserting PriceBooks to Product");
-			$query= "insert into vtiger_pricebookproductrel (pricebookid,productid,listprice) values(?,?,?)";
-			$adb->pquery($query, array($id,$productid,$list_price));
+			$query= "insert into vtiger_pricebookproductrel (pricebookid,productid,listprice,usedcurrency) values(?,?,?,?)";
+			$adb->pquery($query, array($id,$productid,$list_price,$currency_id));
 		}
 	}
 	if($singlepane_view == 'true')

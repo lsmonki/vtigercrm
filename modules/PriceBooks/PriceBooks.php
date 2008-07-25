@@ -61,7 +61,36 @@ class PriceBooks extends CRMEntity {
 
 	function save_module($module)
 	{
+		// Update the list prices in the price book with the unit price, if the Currency has been changed
+		$this->updateListPrices();
 	}	
+	
+	/* Function to Update the List prices for all the products of a current price book 
+	   with its Unit price, if the Currency for Price book has changed. */
+	function updateListPrices() {
+		global $log, $adb;
+		$log->debug("Entering function updateListPrices...");
+		$pricebook_currency = $this->column_fields['currency_id'];
+		$prod_res = $adb->pquery("select productid from vtiger_pricebookproductrel where pricebookid=? and usedcurrency != ?", 
+							array($this->id,$pricebook_currency));
+		$numRows = $adb->num_rows($prod_res);
+		$prod_ids = array();
+		for($i=0;$i<$numRows;$i++) {
+			$prod_ids[] = $adb->query_result($prod_res,$i,'productid');
+		}
+		if(count($prod_ids) > 0) {
+			$prod_price_list = getPricesForProducts($pricebook_currency,$prod_ids);
+		
+			for($i=0;$i<count($prod_ids);$i++) {
+				$product_id = $prod_ids[$i];
+				$unit_price = $prod_price_list[$product_id];
+				$query = "update vtiger_pricebookproductrel set listprice=?, usedcurrency=? where pricebookid=? and productid=?";
+				$params = array($unit_price, $pricebook_currency, $this->id, $product_id);
+				$adb->pquery($query, $params);
+			}	
+		}
+		$log->debug("Exiting function updateListPrices...");
+	}
 
 	/**	Function used to get the sort order for PriceBook listview
 	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['PRICEBOOK_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
@@ -114,7 +143,7 @@ class PriceBooks extends CRMEntity {
 
 		$query = 'select vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_pricebookproductrel.listprice from vtiger_products inner join vtiger_pricebookproductrel on vtiger_products.productid = vtiger_pricebookproductrel.productid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid inner join vtiger_pricebook on vtiger_pricebook.pricebookid = vtiger_pricebookproductrel.pricebookid  where vtiger_pricebook.pricebookid = '.$id.' and vtiger_crmentity.deleted = 0'; 
 		$log->debug("Exiting get_pricebook_products method ...");
-		return getPriceBookRelatedProducts($query,$focus,$returnset);
+		return getPriceBookRelatedProducts($query,$this,$returnset);
 	}
 
 	/**	function used to get whether the pricebook has related with a product or not

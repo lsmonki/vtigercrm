@@ -16,7 +16,7 @@ require_once('include/FormValidationUtil.php');
 
 global $app_strings;
 global $mod_strings;
-global $currentModule;
+global $currentModule, $current_user;
 
 $encode_val=$_REQUEST['encode_val'];
 $decode_val=base64_decode($encode_val);
@@ -41,7 +41,10 @@ if($_REQUEST['record']!="")
     $focus->id = $_REQUEST['record'];
     $focus->mode = 'edit'; 	
     $focus->retrieve_entity_info($_REQUEST['record'],"Products");
-    $focus->name=$focus->column_fields['productname'];		
+    $focus->name=$focus->column_fields['productname'];	
+    $product_base_currency = getProductBaseCurrency($focus->id);
+} else {
+	$product_base_currency = fetchCurrency($current_user->id);
 }
 
 if($image_error=="true")
@@ -65,7 +68,7 @@ if(isset($_REQUEST['vendorid']) && $_REQUEST['vendorid']!='')
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
-    	$focus->mode = ''; 	
+    $focus->mode = ''; 	
 } 
 
 //needed when creating a new product with a default vtiger_vendor name to passed 
@@ -167,6 +170,12 @@ if($retrieve_taxes)
 $smarty->assign("TAX_DETAILS", $tax_details);
 //Tax handling - ends
 
+$unit_price = $focus->column_fields['unit_price'];
+$price_details = getPriceDetailsForProduct($productid, $unit_price, 'available');
+$smarty->assign("PRICE_DETAILS", $price_details);
+
+$base_currency = 'curname' . $product_base_currency;	
+$smarty->assign("BASE_CURRENCY", $base_currency);
 
 if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
 if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);

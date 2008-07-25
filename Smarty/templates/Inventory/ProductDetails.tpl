@@ -99,16 +99,30 @@ function displayCoords(currObj,obj,mode,curr_row)
 <table width="100%"  border="0" align="center" cellpadding="5" cellspacing="0" class="crmTable" id="proTab">
    <tr>
    	{if $MODULE neq 'PurchaseOrder'}
-			<td colspan="5" class="dvInnerHeader">
+			<td colspan="3" class="dvInnerHeader">
 	{else}
-			<td colspan="4" class="dvInnerHeader">
+			<td colspan="2" class="dvInnerHeader">
 	{/if}
 		<b>{$APP.LBL_PRODUCT_DETAILS}</b>
 	</td>
-	<td class="dvInnerHeader" align="right">
-		<b>{$APP.LBL_TAX_MODE}</b>
+	
+	<td class="dvInnerHeader" align="center" colspan="2">
+		<input type="hidden" value="{$INV_CURRENCY_ID}" id="prev_selected_currency_id" />
+		<b>{$APP.LBL_CURRENCY}</b>&nbsp;&nbsp;
+		<select class="small" id="inventory_currency" name="inventory_currency" onchange="updatePrices();">
+		{foreach item=currency_details key=count from=$CURRENCIES_LIST}
+			{if $currency_details.curid eq $INV_CURRENCY_ID}
+				{assign var=currency_selected value="selected"}
+			{else}
+				{assign var=currency_selected value=""}
+			{/if}
+			<OPTION value="{$currency_details.curid}" {$currency_selected}>{$currency_details.currencylabel} ({$currency_details.currencysymbol})</OPTION>
+		{/foreach}
+		</select>
 	</td>
-	<td class="dvInnerHeader">
+	
+	<td class="dvInnerHeader" align="center" colspan="2">
+		<b>{$APP.LBL_TAX_MODE}</b>&nbsp;&nbsp;
 		<select id="taxtype" name="taxtype" onchange="decideTaxDiv(); calcTotal();">
 			<OPTION value="individual" selected>{$APP.LBL_INDIVIDUAL}</OPTION>
 			<OPTION value="group">{$APP.LBL_GROUP}</OPTION>

@@ -125,6 +125,11 @@ class SalesOrder extends CRMEntity {
 			//Based on the total Number of rows we will save the product relationship with this entity
 			saveInventoryProductDetails(&$this, 'SalesOrder');	
 		}
+		
+		// Update the currency id and the conversion rate for the sales order
+		$update_query = "update vtiger_salesorder set currency_id=?, conversion_rate=? where salesorderid=?";
+		$update_params = array($this->column_fields['currency_id'], $this->column_fields['conversion_rate'], $this->id); 
+		$this->db->pquery($update_query, $update_params);
 	}	
 	
 	/**	Function used to get the sort order for Sales Order listview

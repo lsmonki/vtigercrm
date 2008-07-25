@@ -17,7 +17,7 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $smarty=new vtigerCRM_Smarty;
    $parenttab = $_REQUEST['parenttab'];
-   $sql = "select * from vtiger_currency_info";
+   $sql = "select * from vtiger_currency_info where deleted=0";
    $result = $adb->pquery($sql, array());
    $temprow = $adb->fetch_array($result);
    $cnt=1;

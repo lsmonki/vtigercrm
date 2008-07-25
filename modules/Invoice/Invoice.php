@@ -116,6 +116,11 @@ class Invoice extends CRMEntity {
 			//Based on the total Number of rows we will save the product relationship with this entity
 			saveInventoryProductDetails(&$this, 'Invoice');
 		}
+		
+		// Update the currency id and the conversion rate for the invoice
+		$update_query = "update vtiger_invoice set currency_id=?, conversion_rate=? where invoiceid=?";
+		$update_params = array($this->column_fields['currency_id'], $this->column_fields['conversion_rate'], $this->id); 
+		$this->db->pquery($update_query, $update_params);
 	}
 
 

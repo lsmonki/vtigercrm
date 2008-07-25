@@ -177,7 +177,7 @@ foreach($modArr as $fld_module => $fld_label)
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
 		$displaytype =  $adb->query_result($fieldListResult,$i,"displaytype");
 		$fieldname =  $adb->query_result($fieldListResult,$i,"fieldname");
-		if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || $uitype == 20 || ($displaytype != 3 && $fieldname == "activitytype" && $uitype == 15) ||  ($uitype == 111 && $fieldname == 'eventstatus'))
+		if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || $uitype == 20 || ($displaytype != 3 && $fieldname == "activitytype" && $uitype == 15) ||  ($uitype == 111 && $fieldname == 'eventstatus') ||  ($uitype == 117 && $fieldname == 'currency_id'))
 		{
 			$visible_value = 0;
 		}

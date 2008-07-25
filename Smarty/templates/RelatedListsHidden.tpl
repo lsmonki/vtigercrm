@@ -62,6 +62,7 @@
 	<input type="hidden" name="vendor_id" value="{$ID}">
 {elseif $MODULE eq 'PriceBooks'}
 	<input type="hidden" name="pricebook_id" value="{$ID}">
+	<input type="hidden" name="currency_id" value="{$CURRENCY_ID}">
 {elseif $MODULE eq 'Emails'}
         <input type="hidden" name="email_id" value="{$ID}">
 	<input type="hidden" name="user_id" value="{$USER_ID}">

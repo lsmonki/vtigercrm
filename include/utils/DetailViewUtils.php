@@ -60,11 +60,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] = $col_fields[$fieldname];
 		if($fieldname == 'confirm_password')
 			return null;
-	}elseif($uitype == 116)
+	}elseif($uitype == 116 || $uitype == 117)
 	{
 		$label_fld[] = $mod_strings[$fieldlabel];
                 $label_fld[] = getCurrencyName($col_fields[$fieldname]);
-		$pick_query="select * from vtiger_currency_info where currency_status = 'Active'";
+		$pick_query="select * from vtiger_currency_info where currency_status = 'Active' and deleted=0";
 		$pickListResult = $adb->pquery($pick_query, array());
 		$noofpickrows = $adb->num_rows($pickListResult);
 
@@ -1054,18 +1054,17 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	}
 	elseif($uitype == 71 || $uitype == 72)
 	{
-		$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
-                $rate = $rate_symbol['rate'];
-                $curr_symbol = $rate_symbol['symbol'];
-		$label_fld[] =$mod_strings[$fieldlabel];
-		$display_val = '';
-	        if($col_fields[$fieldname] != '' && $col_fields[$fieldname] != 0)
-		{
-	 	    $amount_user_specific=convertFromDollar($col_fields[$fieldname],$rate);
-                    $display_val = $amount_user_specific;	
+        $label_fld[] = $mod_strings[$fieldlabel];
+		if($fieldname == 'unit_price') {
+			$rate_symbol=getCurrencySymbolandCRate(getProductBaseCurrency($col_fields['record_id']));
+			$label_fld[]  = $col_fields[$fieldname];			
+		} else {
+			$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
+			$rate = $rate_symbol['rate'];
+			$label_fld[]  = convertFromDollar($col_fields[$fieldname],$rate);
 		}
-		$label_fld["cursymb"] = $curr_symbol;
-          	$label_fld[] = $display_val;
+        $currency = $rate_symbol['symbol'];
+        $label_fld["cursymb"] = $currency;
 	}
 	elseif($uitype == 75 || $uitype == 81)
         {
@@ -1203,15 +1202,16 @@ function getDetailAssociatedProducts($module,$focus)
 
 	if($module != 'PurchaseOrder')
 	{
-		$colspan = '4';
+		$colspan = '2';
 	}
 	else
 	{
-		$colspan = '3';
+		$colspan = '1';
 	}
 
 	//Get the taxtype of this entity
 	$taxtype = getInventoryTaxType($module,$focus->id);
+	$currencytype = getInventoryCurrencyInfo($module, $focus->id);
 
 	$output = '';
 	//Header Rows
@@ -1220,8 +1220,12 @@ function getDetailAssociatedProducts($module,$focus)
 	<table width="100%"  border="0" align="center" cellpadding="5" cellspacing="0" class="crmTable" id="proTab">
 	   <tr valign="top">
 	   	<td colspan="'.$colspan.'" class="dvInnerHeader"><b>'.$app_strings['LBL_PRODUCT_DETAILS'].'</b></td>
-		<td class="dvInnerHeader" align="right"><b>'.$app_strings['LBL_TAX_MODE'].' : </b></td>
-		<td class="dvInnerHeader">'.$app_strings[$taxtype].'</td>
+		<td class="dvInnerHeader" align="center" colspan="2"><b>'.
+			$app_strings['LBL_CURRENCY'].' : </b>'. $currencytype['currency_name']. '('. $currencytype['currency_symbol'] .')
+		</td>
+		<td class="dvInnerHeader" align="center" colspan="2"><b>'.
+			$app_strings['LBL_TAX_MODE'].' : </b>'.$app_strings[$taxtype].'
+		</td>
 	   </tr>
 	   <tr valign="top">
 		<td width=40% class="lvtCol"><font color="red">*</font>
@@ -1276,16 +1280,9 @@ function getDetailAssociatedProducts($module,$focus)
 		$listprice=$adb->query_result($result,$i-1,'listprice');
 		$total = $qty*$listprice;
 
-		$unitprice = getConvertedPriceFromDollar($unitprice);
-		$listprice = getConvertedPriceFromDollar($listprice);
-
 		//Product wise Discount calculation - starts
 		$discount_percent=$adb->query_result($result,$i-1,'discount_percent');
 		$discount_amount=$adb->query_result($result,$i-1,'discount_amount');
-		//we should convert the amount and not convert the percentage
-		$discount_amount = getConvertedPriceFromDollar($discount_amount);
-
-		$total = getConvertedPriceFromDollar($total);
 		$totalAfterDiscount = $total;
 
 		$productDiscount = '0.00';
@@ -1393,7 +1390,6 @@ function getDetailAssociatedProducts($module,$focus)
 
 	//$netTotal should be equal to $focus->column_fields['hdnSubTotal']
 	$netTotal = $focus->column_fields['hdnSubTotal'];
-	$netTotal = getConvertedPriceFromDollar($netTotal);
 
 	//Display the total, adjustment, S&H details
 	$output .= '<table width="100%" border="0" cellspacing="0" cellpadding="5" class="crmTable">';
@@ -1414,7 +1410,6 @@ function getDetailAssociatedProducts($module,$focus)
 	elseif($focus->column_fields['hdnDiscountAmount'] != '0')
 	{
 		$finalDiscount = $focus->column_fields['hdnDiscountAmount'];
-		$finalDiscount = getConvertedPriceFromDollar($finalDiscount);
 		$final_discount_info = $finalDiscount;
 	}
 
@@ -1456,7 +1451,6 @@ function getDetailAssociatedProducts($module,$focus)
 	}
 
 	$shAmount = ($focus->column_fields['hdnS_H_Amount'] != '')?$focus->column_fields['hdnS_H_Amount']:'0.00';
-	$shAmount = getConvertedPriceFromDollar($shAmount);
 	$output .= '<tr>'; 
 	$output .= '<td align="right" class="crmTableRow small">(+)&nbsp;<b>'.$app_strings['LBL_SHIPPING_AND_HANDLING_CHARGES'].'</b></td>';
 	$output .= '<td align="right" class="crmTableRow small">'.$shAmount.'</td>';
@@ -1485,14 +1479,12 @@ function getDetailAssociatedProducts($module,$focus)
 	$output .= '</tr>';
 
 	$adjustment = ($focus->column_fields['txtAdjustment'] != '')?$focus->column_fields['txtAdjustment']:'0.00';
-	$adjustment = getConvertedPriceFromDollar($adjustment);
 	$output .= '<tr>'; 
 	$output .= '<td align="right" class="crmTableRow small">&nbsp;<b>'.$app_strings['LBL_ADJUSTMENT'].'</b></td>';
 	$output .= '<td align="right" class="crmTableRow small">'.$adjustment.'</td>';
 	$output .= '</tr>';
 
 	$grandTotal = ($focus->column_fields['hdnGrandTotal'] != '')?$focus->column_fields['hdnGrandTotal']:'0.00';
-	$grandTotal = getConvertedPriceFromDollar($grandTotal);
 	$output .= '<tr>'; 
 	$output .= '<td align="right" class="crmTableRow small lineOnTop"><b>'.$app_strings['LBL_GRAND_TOTAL'].'</b></td>';
 	$output .= '<td align="right" class="crmTableRow small lineOnTop">'.$grandTotal.'</td>';

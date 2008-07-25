@@ -33,6 +33,16 @@ class ReportRun extends CRMEntity
 	var $reportname;
 	var $totallist;
 
+	var $convert_currency = array('Potentials_Amount', 'Accounts_Annual_Revenue', 'Leads_Annual_Revenue', 'Campaigns_Budget_Cost', 
+									'Campaigns_Actual_Cost', 'Campaigns_Expected_Revenue', 'Campaigns_Actual_ROI', 'Campaigns_Expected_ROI');
+	//var $add_currency_sym_in_headers = array('Amount', 'Unit_Price', 'Total', 'Sub_Total', 'S&H_Amount', 'Discount_Amount', 'Adjustment');
+	var $append_currency_symbol_to_value = array('Products_Unit_Price', 
+						'Invoice_Total', 'Invoice_Sub_Total', 'Invoice_S&H_Amount', 'Invoice_Discount_Amount', 'Invoice_Adjustment', 
+						'Quotes_Total', 'Quotes_Sub_Total', 'Quotes_S&H_Amount', 'Quotes_Discount_Amount', 'Quotes_Adjustment', 
+						'SalesOrder_Total', 'SalesOrder_Sub_Total', 'SalesOrder_S&H_Amount', 'SalesOrder_Discount_Amount', 'SalesOrder_Adjustment', 
+						'PurchaseOrder_Total', 'PurchaseOrder_Sub_Total', 'PurchaseOrder_S&H_Amount', 'PurchaseOrder_Discount_Amount', 'PurchaseOrder_Adjustment'
+						);
+	
 	/** Function to set reportid,primarymodule,secondarymodule,reporttype,reportname, for given reportid
 	 *  This function accepts the $reportid as argument
 	 *  It sets reportid,primarymodule,secondarymodule,reporttype,reportname for the given reportid
@@ -157,12 +167,16 @@ class ReportRun extends CRMEntity
 					{
 						$columnslist[$fieldcolname] = "vtiger_crmentity.".$selectedfields[1]." AS '".$header_label."'";
 					}
-				        elseif($selectedfields[0] == 'vtiger_invoice' && $selectedfields[1] == 'salesorderid')//handled for salesorder fields in Invoice Module Reports
+				    elseif($selectedfields[0] == 'vtiger_invoice' && $selectedfields[1] == 'salesorderid')//handled for salesorder fields in Invoice Module Reports
 					{
 						$columnslist[$fieldcolname] = 'vtiger_salesorderInvoice.subject	AS "'.$selectedfields[2].'"';
-					}elseif($selectedfields[0] == 'vtiger_campaign' && $selectedfields[1] == 'product_id')//handled for product fields in Campaigns Module Reports
+					}
+					elseif($selectedfields[0] == 'vtiger_campaign' && $selectedfields[1] == 'product_id')//handled for product fields in Campaigns Module Reports
 					{
 						$columnslist[$fieldcolname] = 'vtiger_productsCampaigns.productname AS "'.$header_label.'"';
+					}
+					elseif(in_array($selectedfields[2], $this->append_currency_symbol_to_value)) {
+						$columnslist[$fieldcolname] = 'concat('.$selectedfields[0].'.currency_id,"::",'.$selectedfields[0].'.'.$selectedfields[1].') as "' . $header_label .'"';
 					}
 					else
 					{
@@ -1033,7 +1047,7 @@ class ReportRun extends CRMEntity
 
 	function getRelatedModulesQuery($module,$secmodule)
 	{
-		global $log;
+		global $log,$current_user;
 
 		if($module == "Contacts")
 		{
@@ -1175,6 +1189,17 @@ class ReportRun extends CRMEntity
 			{
 				$query = " left join vtiger_seproductsrel on vtiger_seproductsrel.crmid = vtiger_account.accountid and vtiger_seproductsrel.setype = 'Accounts'
 					left join vtiger_products  as  vtiger_productstmp  on vtiger_productstmp.productid = vtiger_seproductsrel.productid
+					LEFT JOIN (
+						SELECT vtiger_products.productid, 
+								(CASE WHEN (vtiger_products.currency_id = " . $current_user->currency_id . " ) THEN vtiger_products.unit_price
+									WHEN (vtiger_productcurrencyrel.actual_price IS NOT NULL) THEN vtiger_productcurrencyrel.actual_price
+									ELSE (vtiger_products.unit_price / vtiger_currency_info.conversion_rate) * ". $current_user->conv_rate . " END
+								) AS actual_unit_price
+						FROM vtiger_products
+						LEFT JOIN vtiger_currency_info ON vtiger_products.currency_id = vtiger_currency_info.id
+						LEFT JOIN vtiger_productcurrencyrel ON vtiger_products.productid = vtiger_productcurrencyrel.productid
+						AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . "
+					) AS innerProduct ON innerProduct.productid = vtiger_productstmp.productid
 					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_productstmp.productid and vtiger_crmentityProducts.deleted=0
 					left join vtiger_products on vtiger_products.productid = vtiger_crmentityProducts.crmid
 					left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
@@ -1369,6 +1394,17 @@ class ReportRun extends CRMEntity
 			if($secmodule == "Products")
 			{
 				$query = " left join vtiger_products as vtiger_productstmp  on vtiger_productstmp.productid = vtiger_troubletickets.product_id
+					LEFT JOIN (
+						SELECT vtiger_products.productid, 
+								(CASE WHEN (vtiger_products.currency_id = " . $current_user->currency_id . " ) THEN vtiger_products.unit_price
+									WHEN (vtiger_productcurrencyrel.actual_price IS NOT NULL) THEN vtiger_productcurrencyrel.actual_price
+									ELSE (vtiger_products.unit_price / vtiger_currency_info.conversion_rate) * ". $current_user->conv_rate . " END
+								) AS actual_unit_price
+						FROM vtiger_products
+						LEFT JOIN vtiger_currency_info ON vtiger_products.currency_id = vtiger_currency_info.id
+						LEFT JOIN vtiger_productcurrencyrel ON vtiger_products.productid = vtiger_productcurrencyrel.productid
+						AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . "
+					) AS innerProduct ON innerProduct.productid = vtiger_productstmp.productid
 					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_productstmp.productid and vtiger_crmentityProducts.deleted=0
 					left join vtiger_products on vtiger_products.productid = vtiger_crmentityProducts.crmid
 					left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
@@ -1446,6 +1482,17 @@ class ReportRun extends CRMEntity
 			if($secmodule == 'Products')
 			{
 				$query = " left join vtiger_products as vtiger_productstmp on vtiger_productstmp.productid = vtiger_campaign.product_id  
+					LEFT JOIN (
+						SELECT vtiger_products.productid, 
+								(CASE WHEN (vtiger_products.currency_id = " . $current_user->currency_id . " ) THEN vtiger_products.unit_price
+									WHEN (vtiger_productcurrencyrel.actual_price IS NOT NULL) THEN vtiger_productcurrencyrel.actual_price
+									ELSE (vtiger_products.unit_price / vtiger_currency_info.conversion_rate) * ". $current_user->conv_rate . " END
+								) AS actual_unit_price
+						FROM vtiger_products
+						LEFT JOIN vtiger_currency_info ON vtiger_products.currency_id = vtiger_currency_info.id
+						LEFT JOIN vtiger_productcurrencyrel ON vtiger_products.productid = vtiger_productcurrencyrel.productid
+						AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . "
+					) AS innerProduct ON innerProduct.productid = vtiger_productstmp.productid
 					left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_productstmp.productid and vtiger_crmentityProducts.deleted=0
 					left join vtiger_products on vtiger_products.productid = vtiger_crmentityProducts.crmid  
 					left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
@@ -1463,7 +1510,7 @@ class ReportRun extends CRMEntity
 
 	function getReportsQuery($module)
 	{
-		global $log;
+		global $log, $current_user;
 		if($module == "Leads")
 		{
 			$query = "from vtiger_leaddetails 
@@ -1540,6 +1587,17 @@ class ReportRun extends CRMEntity
 				left join vtiger_vendor as vtiger_vendorRel on vtiger_vendorRel.vendorid = vtiger_products.vendor_id 
 				left join vtiger_seproductsrel on vtiger_seproductsrel.productid= vtiger_products.productid and vtiger_seproductsrel.setype='".$this->secondarymodule."'	
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
+				LEFT JOIN (
+						SELECT vtiger_products.productid, 
+								(CASE WHEN (vtiger_products.currency_id = " . $current_user->currency_id . " ) THEN vtiger_products.unit_price
+									WHEN (vtiger_productcurrencyrel.actual_price IS NOT NULL) THEN vtiger_productcurrencyrel.actual_price
+									ELSE (vtiger_products.unit_price / vtiger_currency_info.conversion_rate) * ". $current_user->conv_rate . " END
+								) AS actual_unit_price
+						FROM vtiger_products
+						LEFT JOIN vtiger_currency_info ON vtiger_products.currency_id = vtiger_currency_info.id
+						LEFT JOIN vtiger_productcurrencyrel ON vtiger_products.productid = vtiger_productcurrencyrel.productid
+						AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . "
+				) AS innerProduct ON innerProduct.productid = vtiger_products.productid
 				where vtiger_crmentity.deleted=0";
 		}
 
@@ -1875,10 +1933,21 @@ class ReportRun extends CRMEntity
 						$fld = $adb->field_name($result, $i);
 						$fld_type = $column_definitions[$i]->type;
 
-						if ($fld->name == "Potentials_Amount")
+						if (in_array($fld->name, $this->convert_currency)) {
 							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
-						else
+						} elseif(in_array($fld->name, $this->append_currency_symbol_to_value)) {
+							$curid_value = explode("::", $custom_field_values[$i]);
+							$currency_id = $curid_value[0];
+							$currency_value = $curid_value[1];
+							$cur_sym_rate = getCurrencySymbolandCRate($currency_id);
+							$fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
+						}elseif ($fld->name == "PurchaseOrder_Currency" || $fld->name == "SalesOrder_Currency" 
+									|| $fld->name == "Invoice_Currency" || $fld->name == "Quotes_Currency") {
+							$fieldvalue = getCurrencyName($custom_field_values[$i]);
+						}
+						else {
 							$fieldvalue = getTranslatedString($custom_field_values[$i]);
+						}
 
 						$fieldvalue = str_replace("<", "&lt;", $fieldvalue);
 						$fieldvalue = str_replace(">", "&gt;", $fieldvalue);
@@ -2005,11 +2074,22 @@ class ReportRun extends CRMEntity
 					for ($i=0; $i<$y; $i++)
 					{
 						$fld = $adb->field_name($result, $i);
-						if ($fld->name == "Potentials_Amount")
+						if (in_array($fld->name, $this->convert_currency)) {
 							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
-						else
-							$fieldvalue = $custom_field_values[$i];
-
+						} elseif(in_array($fld->name, $this->append_currency_symbol_to_value)) {
+							$curid_value = explode("::", $custom_field_values[$i]);
+							$currency_id = $curid_value[0];
+							$currency_value = $curid_value[1];
+							$cur_sym_rate = getCurrencySymbolandCRate($currency_id);
+							$fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
+						}elseif ($fld->name == "PurchaseOrder_Currency" || $fld->name == "SalesOrder_Currency" 
+									|| $fld->name == "Invoice_Currency" || $fld->name == "Quotes_Currency") {
+							$fieldvalue = getCurrencyName($custom_field_values[$i]);
+						}
+						else {
+							$fieldvalue = getTranslatedString($custom_field_values[$i]);
+						}
+					
 						$fieldvalue = str_replace("<", "&lt;", $fieldvalue);
 						$fieldvalue = str_replace(">", "&gt;", $fieldvalue);
 
@@ -2090,12 +2170,27 @@ class ReportRun extends CRMEntity
 					}
 					foreach($totclmnflds as $key=>$value)
 					{
-
-						$coltotalhtml .= '<tr class="rptGrpHead" valign=top><td class="rptData">'.getTranslatedString(trim(str_replace($modules," ",$value))).'</td>';
+						$coltotalhtml .= '<tr class="rptGrpHead" valign=top>'; 
+						$col_header = getTranslatedString(trim(str_replace($modules," ",$value)));
+						$fld_name_1 = $this->primarymodule . "_" . trim($value);
+						$fld_name_2 = $this->secondarymodule . "_" . trim($value);
+						if(in_array($fld_name_1,$this->convert_currency) || in_array($fld_name_1,$this->append_currency_symbol_to_value)
+								|| in_array($fld_name_2,$this->convert_currency) || in_array($fld_name_2,$this->append_currency_symbol_to_value)) {
+							$col_header .= " (in ".$current_user->currency_symbol.")";
+							$convert_price = true;
+						} else{
+							$convert_price = false;
+						}
+						$coltotalhtml .= '<td class="rptData">'. $col_header .'</td>';
+						
 						$arraykey = trim($value).'_SUM';
 						if(isset($keyhdr[$arraykey]))
 						{
-							$coltotalhtml .= '<td class="rptTotal">'.convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate).'</td>';
+							if($convert_price)
+								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+							else 
+								$conv_value = $keyhdr[$arraykey];
+							$coltotalhtml .= '<td class="rptTotal">'.$conv_value.'</td>';
 						}else
 						{
 							$coltotalhtml .= '<td class="rptTotal">&nbsp;</td>';
@@ -2104,7 +2199,11 @@ class ReportRun extends CRMEntity
 						$arraykey = trim($value).'_AVG';
 						if(isset($keyhdr[$arraykey]))
 						{
-							$coltotalhtml .= '<td class="rptTotal">'.convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate).'</td>';
+							if($convert_price)
+								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+							else 
+								$conv_value = $keyhdr[$arraykey];
+							$coltotalhtml .= '<td class="rptTotal">'.$conv_value.'</td>';
 						}else
 						{
 							$coltotalhtml .= '<td class="rptTotal">&nbsp;</td>';
@@ -2113,7 +2212,11 @@ class ReportRun extends CRMEntity
 						$arraykey = trim($value).'_MIN';
 						if(isset($keyhdr[$arraykey]))
 						{
-							$coltotalhtml .= '<td class="rptTotal">'.convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate).'</td>';
+							if($convert_price)
+								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+							else 
+								$conv_value = $keyhdr[$arraykey];
+							$coltotalhtml .= '<td class="rptTotal">'.$conv_value.'</td>';
 						}else
 						{
 							$coltotalhtml .= '<td class="rptTotal">&nbsp;</td>';
@@ -2121,8 +2224,12 @@ class ReportRun extends CRMEntity
 
 						$arraykey = trim($value).'_MAX';
 						if(isset($keyhdr[$arraykey]))
-						{
-							$coltotalhtml .= '<td class="rptTotal">'.convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate).'</td>';
+						{							
+							if($convert_price)
+								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+							else 
+								$conv_value = $keyhdr[$arraykey];
+							$coltotalhtml .= '<td class="rptTotal">'.$conv_value.'</td>';
 						}else
 						{
 							$coltotalhtml .= '<td class="rptTotal">&nbsp;</td>';
@@ -2195,11 +2302,22 @@ class ReportRun extends CRMEntity
 					for ($i=0; $i<$y; $i++)
 					{
 						$fld = $adb->field_name($result, $i);
-						if ($fld->name == "Potentials_Amount")
+						if (in_array($fld->name, $this->convert_currency)) {
 							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
-						else
+						} elseif(in_array($fld->name, $this->append_currency_symbol_to_value)) {
+							$curid_value = explode("::", $custom_field_values[$i]);
+							$currency_id = $curid_value[0];
+							$currency_value = $curid_value[1];
+							$cur_sym_rate = getCurrencySymbolandCRate($currency_id);
+							$fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
+						}elseif ($fld->name == "PurchaseOrder_Currency" || $fld->name == "SalesOrder_Currency" 
+									|| $fld->name == "Invoice_Currency" || $fld->name == "Quotes_Currency") {
+							$fieldvalue = getCurrencyName($custom_field_values[$i]);
+						}
+						else {
 							$fieldvalue = getTranslatedString($custom_field_values[$i]);
-
+						}
+					
 						$fieldvalue = str_replace("<", "&lt;", $fieldvalue);
 						$fieldvalue = str_replace(">", "&gt;", $fieldvalue);	
 
@@ -2324,12 +2442,27 @@ class ReportRun extends CRMEntity
 					}
 					foreach($totclmnflds as $key=>$value)
 					{
-
-						$coltotalhtml .= '<tr valign=top><td>'.str_replace($modules," ",$value).'</td>';
+						$coltotalhtml .= '<tr valign=top>'; 
+						$col_header = getTranslatedString(trim(str_replace($modules," ",$value)));
+						$fld_name_1 = $this->primarymodule . "_" . trim($value);
+						$fld_name_2 = $this->secondarymodule . "_" . trim($value);
+						if(in_array($fld_name_1,$this->convert_currency) || in_array($fld_name_1,$this->append_currency_symbol_to_value)
+								|| in_array($fld_name_2,$this->convert_currency) || in_array($fld_name_2,$this->append_currency_symbol_to_value)) {
+							$col_header .= " (in ".$current_user->currency_symbol.")";
+							$convert_price = true;
+						} else {
+							$convert_price = false;
+						}
+						$coltotalhtml .= '<td>'. $col_header .'</td>';
+						
 						$arraykey = trim($value).'_SUM';
 						if(isset($keyhdr[$arraykey]))
 						{
-							$coltotalhtml .= '<td>'.$keyhdr[$arraykey].'</td>';
+							if($convert_price)
+								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+							else 
+								$conv_value = $keyhdr[$arraykey];
+							$coltotalhtml .= '<td>'.$conv_value.'</td>';
 						}else
 						{
 							$coltotalhtml .= '<td>&nbsp;</td>';
@@ -2338,7 +2471,11 @@ class ReportRun extends CRMEntity
 						$arraykey = trim($value).'_AVG';
 						if(isset($keyhdr[$arraykey]))
 						{
-							$coltotalhtml .= '<td>'.$keyhdr[$arraykey].'</td>';
+							if($convert_price)
+								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+							else 
+								$conv_value = $keyhdr[$arraykey];
+							$coltotalhtml .= '<td>'.$conv_value.'</td>';
 						}else
 						{
 							$coltotalhtml .= '<td>&nbsp;</td>';
@@ -2347,7 +2484,11 @@ class ReportRun extends CRMEntity
 						$arraykey = trim($value).'_MIN';
 						if(isset($keyhdr[$arraykey]))
 						{
-							$coltotalhtml .= '<td>'.$keyhdr[$arraykey].'</td>';
+							if($convert_price)
+								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+							else 
+								$conv_value = $keyhdr[$arraykey];
+							$coltotalhtml .= '<td>'.$conv_value.'</td>';
 						}else
 						{
 							$coltotalhtml .= '<td>&nbsp;</td>';
@@ -2356,7 +2497,11 @@ class ReportRun extends CRMEntity
 						$arraykey = trim($value).'_MAX';
 						if(isset($keyhdr[$arraykey]))
 						{
-							$coltotalhtml .= '<td>'.$keyhdr[$arraykey].'</td>';
+							if($convert_price)
+								$conv_value = convertFromMasterCurrency($keyhdr[$arraykey],$current_user->conv_rate);
+							else 
+								$conv_value = $keyhdr[$arraykey];
+							$coltotalhtml .= '<td>'.$conv_value.'</td>';
 						}else
 						{
 							$coltotalhtml .= '<td>&nbsp;</td>';
@@ -2377,7 +2522,7 @@ class ReportRun extends CRMEntity
 	{
 		global $adb;
 		global $modules;
-		global $log;
+		global $log, $current_user;
 		
 		$query = "select * from vtiger_reportmodules where reportmodulesid =?";
 		$res = $adb->pquery($query , array($reportid));
@@ -2397,25 +2542,37 @@ class ReportRun extends CRMEntity
 			if($fieldcolname != "none")
 			{
 				$fieldlist = explode(":",$fieldcolname);
-			if((CheckColumnPermission($fieldlist[1],$fieldlist[2],$premod) != "false") || (CheckColumnPermission($fieldlist[1],$fieldlist[2],$secmod)) != "false")
+				$field_tablename = $fieldlist[1];
+				$field_columnname = $fieldlist[2];
+				$field_columnalias = $fieldlist[3];
+			if((CheckColumnPermission($field_tablename,$field_columnname,$premod) != "false") || (CheckColumnPermission($field_tablename,$field_columnname,$secmod)) != "false")
 			{
+				$field = $field_tablename.".".$field_columnname;
+				if($field_tablename == 'vtiger_products' && $field_columnname == 'unit_price') {
+					// Query needs to be rebuild to get the value in user preferred currency. [innerProduct and actual_unit_price are table and column alias.]
+					$field =  " innerProduct.actual_unit_price"; 
+				}
+				if(($field_tablename == 'vtiger_invoice' || $field_tablename == 'vtiger_quotes' || $field_tablename == 'vtiger_purchaseorder' || $field_tablename == 'vtiger_salesorder')
+						&& ($field_columnname == 'total' || $field_columnname == 'subtotal' || $field_columnname == 'discount_amount' || $field_columnname == 's_h_amount')) {
+					$field =  " $field_tablename.$field_columnname/$field_tablename.conversion_rate*". $current_user->conv_rate;
+				}
 				if($fieldlist[4] == 2)
 				{
-					$stdfilterlist[$fieldcolname] = "sum(".$fieldlist[1].".".$fieldlist[2].") '".$fieldlist[3]."'";
+					$stdfilterlist[$fieldcolname] = "sum($field) '".$field_columnalias."'";
 				}
 				if($fieldlist[4] == 3)
 				{
 					//Fixed average calculation issue due to NULL values ie., when we use avg() function, NULL values will be ignored.to avoid this we use (sum/count) to find average.
 					//$stdfilterlist[$fieldcolname] = "avg(".$fieldlist[1].".".$fieldlist[2].") '".$fieldlist[3]."'";
-					$stdfilterlist[$fieldcolname] = "(sum(".$fieldlist[1].".".$fieldlist[2].")/count(*)) '".$fieldlist[3]."'";
+					$stdfilterlist[$fieldcolname] = "(sum($field)/count(*)) '".$field_columnalias."'";
 				}
 				if($fieldlist[4] == 4)
 				{
-					$stdfilterlist[$fieldcolname] = "min(".$fieldlist[1].".".$fieldlist[2].") '".$fieldlist[3]."'";
+					$stdfilterlist[$fieldcolname] = "min($field) '".$field_columnalias."'";
 				}
 				if($fieldlist[4] == 5)
 				{
-					$stdfilterlist[$fieldcolname] = "max(".$fieldlist[1].".".$fieldlist[2].") '".$fieldlist[3]."'";
+					$stdfilterlist[$fieldcolname] = "max($field) '".$field_columnalias."'";
 				}
 			}
 			}
@@ -2488,15 +2645,16 @@ class ReportRun extends CRMEntity
 		$rep_module = ereg_replace('_'.$rep_header_temp,"",$fldname);
 		$temp_mod_strings = return_module_language($current_language,$rep_module);	
 		// htmlentities should be decoded in field names (eg. &). Noticed for fields like 'Terms & Conditions', 'S&H Amount'
-		$rep_header = decode_html($rep_header);
+		$rep_header = decode_html($rep_header);		
 		$curr_symb = "";
-                if($rep_header == 'Amount')
-                        $curr_symb = "(in ".$current_user->currency_symbol.")";
-                if($temp_mod_strings[$rep_header] != '')
-                {
-                        $rep_header = $temp_mod_strings[$rep_header];
-                        $rep_header .=$curr_symb;
-                }
+		if(in_array($fldname, $this->convert_currency)) {
+        	$curr_symb = " (in ".$current_user->currency_symbol.")";
+		}
+        if($temp_mod_strings[$rep_header] != '')
+        {
+            $rep_header = $temp_mod_strings[$rep_header];
+            $rep_header .=$curr_symb;
+        }
 		return $rep_header;  
 	}
 

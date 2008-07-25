@@ -60,6 +60,7 @@ if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
 $smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
 $smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $smarty->assign("ID",$focus->id);
+$smarty->assign("CURRENCY_ID",$focus->column_fields['currency_id']);
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("SINGLE_MOD",$app_strings['PriceBook']);

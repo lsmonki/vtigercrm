@@ -1124,6 +1124,16 @@ $app_strings = array (
 'LBL_BACKEDUPSUCCESSFULLY_TO_FILE' => 'Backed Up Successfully To File',//BACKUP
 'APP.LBL_NOW'=>'Now',//BACKUP
 'LBL_NOW'=>'Now',//BACKUP
+
+// Multi-Currency Customization
+'LBL_MORE_CURRENCIES'=>'more currencies',
+'LBL_BASE_CURRENCY'=>'Base Currency',
+'LBL_CURRENCY'=>'Currency',
+'LBL_PRICE'=>'Price',
+'LBL_CONVERSION_RATE'=>'Conversion rate',
+'LBL_RESET_PRICE'=>'Reset Price',
+'LBL_RESET'=>'Reset',
+'LBL_UNIT_PRICE_NOT_PERMITTED'=>'Access to Unit Price is Denied. So cannot select products.',
 );
 
 $app_list_strings = array (

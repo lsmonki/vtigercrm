@@ -521,11 +521,15 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 	if(isPermitted("PriceBooks","EditView","") == 'yes' || isPermitted("PriceBooks","Delete","") == 'yes')
 		$header[]=$mod_strings['LBL_ACTION'];
 	
-
+	$currency_id = $focus->column_fields['currency_id'];
 	for($i=0; $i<$num_rows; $i++)
 	{
 		$entity_id = $adb->query_result($list_result,$i,"crmid");
 		$unit_price = 	$adb->query_result($list_result,$i,"unit_price");
+		if($currency_id != null) {
+			$prod_prices = getPricesForProducts($currency_id, array($entity_id));
+			$unit_price = $prod_prices[$entity_id];
+		}
 		$listprice = $adb->query_result($list_result,$i,"listprice");
 		$field_name=$entity_id."_listprice";
 		

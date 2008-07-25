@@ -298,8 +298,76 @@
 				{/if}
 				{$fldlabel}
 			</td>
-			<td width="30%" align=left class="dvtCellInfo">
-				<input name="{$fldname}" tabindex="{$vt_tab}" type="text" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"  value="{$fldvalue}">
+			<td width="30%" align=left class="dvtCellInfo">				
+				{if $fldname eq "unit_price"}
+					<span id="multiple_currencies">
+						<input name="{$fldname}" id="{$fldname}" tabindex="{$vt_tab}" type="text" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'; updateUnitPrice('unit_price', '{$BASE_CURRENCY}');"  value="{$fldvalue}" style="width:60%;">
+						&nbsp;<a href="javascript:void(0);" onclick="updateUnitPrice('unit_price', '{$BASE_CURRENCY}'); toggleShowHide('currency_class','multiple_currencies');">{$APP.LBL_MORE_CURRENCIES} &raquo;</a>
+					</span>
+					<div id="currency_class" class="multiCurrencyEditUI" width="350">
+						<input type="hidden" name="base_currency" id="base_currency" value="{$BASE_CURRENCY}" />
+						<input type="hidden" name="base_conversion_rate" id="base_currency" value="{$BASE_CURRENCY}" />
+						<table width="100%" height="100%" class="small" cellpadding="5">
+						<tr class="detailedViewHeader">
+							<th colspan="4">
+								<b>{$MOD.LBL_PRODUCT_PRICES}</b>
+							</th>
+							<th align="right">
+								<img border="0" style="cursor: pointer;" onclick="toggleShowHide('multiple_currencies','currency_class');" src="{$IMAGE_PATH}/close.gif"/>
+							</th>
+						</tr>
+						<tr class="detailedViewHeader">
+							<th>{$APP.LBL_CURRENCY}</th>
+							<th>{$APP.LBL_PRICE}</th>
+							<th>{$APP.LBL_CONVERSION_RATE}</th>
+							<th>{$APP.LBL_RESET_PRICE}</th>							
+							<th>{$APP.LBL_BASE_CURRENCY}</th>
+						</tr>
+						{foreach item=price key=count from=$PRICE_DETAILS}
+							<tr>
+								{if $price.check_value eq 1 || $price.is_basecurrency eq 1}
+									{assign var=check_value value="checked"}
+									{assign var=disable_value value=""}
+								{else}
+									{assign var=check_value value=""}
+									{assign var=disable_value value="disabled=true"}
+								{/if}
+								
+								{if $price.is_basecurrency eq 1}
+									{assign var=base_cur_check value="checked"}
+								{else}
+									{assign var=base_cur_check value=""}
+								{/if}
+								
+								{if $price.curname eq $BASE_CURRENCY}
+									{assign var=call_js_update_func value="updateUnitPrice('$BASE_CURRENCY', 'unit_price');"}
+								{else}
+									{assign var=call_js_update_func value=""}
+								{/if}
+								
+								<td align="right" class="dvtCellLabel">
+									{$price.currencylabel} ({$price.currencysymbol})
+									<input type="checkbox" name="cur_{$price.curid}_check" id="cur_{$price.curid}_check" class="small" onclick="fnenableDisable(this,'{$price.curid}'); updateCurrencyValue(this,'{$price.curname}','{$BASE_CURRENCY}','{$price.conversionrate}');" {$check_value}>
+								</td>
+								<td class="dvtCellInfo" align="left">
+									<input {$disable_value} type="text" size="10" class="small" name="{$price.curname}" id="{$price.curname}" value="{$price.curvalue}" onBlur="{$call_js_update_func} fnpriceValidation('{$price.curname}');">
+								</td>
+								<td class="dvtCellInfo" align="left">
+									<input disabled=true type="text" size="10" class="small" name="cur_conv_rate{$price.curid}" value="{$price.conversionrate}">
+								</td>
+								<td class="dvtCellInfo" align="center">
+									<input {$disable_value} type="button" class="crmbutton small edit" id="cur_reset{$price.curid}"  onclick="updateCurrencyValue(this,'{$price.curname}','{$BASE_CURRENCY}','{$price.conversionrate}');" value="{$APP.LBL_RESET}"/>
+								</td>
+								<td class="dvtCellInfo">
+									<input {$disable_value} type="radio" class="detailedViewTextBox" id="base_currency{$price.curid}" name="base_currency_input" value="{$price.curname}" {$base_cur_check} onchange="updateBaseCurrencyValue()" />
+								</td>
+							</tr>
+						{/foreach}
+						</table>
+					</div>
+				{else}
+					<input name="{$fldname}" tabindex="{$vt_tab}" type="text" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"  value="{$fldvalue}">
+				{/if}
 			</td>
 
 		{elseif $uitype eq 56}
@@ -594,12 +662,15 @@
 				<td width="30%" align=left class="dvtCellInfo">
 				<input readonly name='reports_to_name' class="small" type="text" value='{$fldvalue}' tabindex="{$vt_tab}" ><input name='reports_to_id' type="hidden" value='{$secondvalue}'>&nbsp;<input title="Change [Alt+C]" accessKey="C" type="button" class="small" value='{$UMOD.LBL_CHANGE}' name=btn1 LANGUAGE=javascript onclick='return window.open("index.php?module=Users&action=Popup&form=UsersEditView&form_submit=false","test","width=640,height=603,resizable=0,scrollbars=0");'>
 	            </td>
-			{elseif $uitype eq 116}<!-- for currency in users details-->	
+			{elseif $uitype eq 116 || $uitype eq 117}<!-- for currency in users details-->	
 			<td width="20%" class="dvtCellLabel" align=right>
+				{if $uitype eq 117}
+					<font color="red">*</font>
+				{/if}
 				{$fldlabel}
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
-			   {if $secondvalue eq 1}
+			   {if $secondvalue eq 1 || $uitype eq 117}
 			   	<select name="{$fldname}" tabindex="{$vt_tab}" class="small">
 			   {else}
 			   	<select disabled name="{$fldname}" tabindex="{$vt_tab}" class="small">
@@ -617,7 +688,7 @@
 				{/foreach}
 			   </select>
 			<!-- code added to pass Currency field value, if Disabled for nonadmin -->
-			{if $curr_stat neq ''}
+			{if $curr_stat neq '' && $uitype neq 117}
 				<input name="{$fldname}" type="hidden" value="{$curr_stat}">
 			{/if}
 			<!--code ends -->
@@ -712,6 +783,12 @@
 			if (!numValidate(txtObj,"Tax","any"))
 				document.getElementById(txtObj).value = 0;
 	{rdelim}	
+	
+	function fnpriceValidation(txtObj)
+	{ldelim}
+		if (!numValidate(txtObj,"Price","any"))
+			document.getElementById(txtObj).value = 0;
+	{rdelim}	
 
 function delimage(id)
 {ldelim}
@@ -730,6 +807,66 @@ function delimage(id)
 		{rdelim}
 	);
 
+{rdelim}
+
+// Function to enable/disable related elements based on whether the current object is checked or not
+function fnenableDisable(currObj,enableId)
+{ldelim}
+	var disable_flag = true;
+	if(currObj.checked == true)
+		disable_flag = false;
+	
+	document.getElementById('curname'+enableId).disabled = disable_flag;
+	document.getElementById('cur_reset'+enableId).disabled = disable_flag;
+	document.getElementById('base_currency'+enableId).disabled = disable_flag;	
+{rdelim}
+
+// Update current value with current value of base currency and the conversion rate
+function updateCurrencyValue(currObj,txtObj,base_curid,conv_rate)
+{ldelim}
+	var unit_price = $(base_curid).value;
+	//if(currObj.checked == true)
+	//{ldelim}
+		document.getElementById(txtObj).value = unit_price * conv_rate;
+	//{rdelim}
+{rdelim}
+
+// Synchronize between Unit price and Base currency value.
+function updateUnitPrice(from_cur_id, to_cur_id)
+{ldelim}
+    var from_ele = document.getElementById(from_cur_id);
+    if (from_ele == null) return;
+    
+    var to_ele = document.getElementById(to_cur_id);
+    if (to_ele == null) return;
+
+    to_ele.value = from_ele.value;
+{rdelim}
+
+// Update hidden base currency value, everytime the base currency value is changed in multi-currency UI
+function updateBaseCurrencyValue()
+{ldelim}
+    var cur_list = document.getElementsByName('base_currency_input');
+    if (cur_list == null) return;
+    
+    var base_currency_ele = document.getElementById('base_currency');
+    if (base_currency_ele == null) return;
+    
+    for(var i=0; i<cur_list.length; i++) 
+    {ldelim}	
+		var cur_ele = cur_list[i];
+		if (cur_ele != null && cur_ele.checked == true)
+    		base_currency_ele.value = cur_ele.value;
+	{rdelim}
+{rdelim}
+
+function FileAdd(obj,Lay,return_action,crm_id)
+{ldelim}
+	fnvshobj(obj,Lay);
+	window.frames['AddFile'].document.getElementById('divHeader').innerHTML="Add file";
+	window.frames['AddFile'].document.FileAdd.return_action.value=return_action;
+	window.frames['AddFile'].document.FileAdd.crm_id.value=crm_id;
+	positionDivToCenter(Lay);
 {rdelim}
 
 </script>

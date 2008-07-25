@@ -178,5 +178,8 @@
 				TIC_MANDATORY: 'Select the mandatory field Ticket Title',
 				POTEN_MANDATORY: 'Select the mandatory field Potential Name',
 				VEN_MANDATORY: 'Select the mandatory field Vendor Name',
-				DEL_MANDATORY: 'You are not allowed to delete the mandatory field'
+				DEL_MANDATORY: 'You are not allowed to delete the mandatory field',
+				
+				/* For Multi-Currency Support */
+				MSG_CHANGE_CURRENCY_REVISE_UNIT_PRICE: 'Unit price of all the Currencies will be revised based on the selected Currency. Are you sure?'
 			};

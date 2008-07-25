@@ -314,7 +314,7 @@ function fetchCurrency($id)
   * @returns $currencyname -- Currency Name:: Type varchar
   *
  */
-function getCurrencyName($currencyid)
+function getCurrencyName($currencyid, $show_symbol=true)
 {
 	global $log;
 	$log->debug("Entering getCurrencyName(".$currencyid.") method ...");
@@ -324,7 +324,8 @@ function getCurrencyName($currencyid)
         $currencyname = $adb->query_result($result,0,"currency_name");
         $curr_symbol = $adb->query_result($result,0,"currency_symbol");
 	$log->debug("Exiting getCurrencyName method ...");
-        return $currencyname.' : '.$curr_symbol;
+        if($show_symbol) return $currencyname.' : '.$curr_symbol;
+        else return $currencyname;
 }
 
 
@@ -986,7 +987,7 @@ function getDisplayCurrency()
 	global $adb;
 	$log->debug("Entering getDisplayCurrency() method ...");
         $curr_array = Array();
-        $sql1 = "select * from vtiger_currency_info where currency_status=?";
+        $sql1 = "select * from vtiger_currency_info where currency_status=? and deleted=0";
         $result = $adb->pquery($sql1, array('Active'));
         $num_rows=$adb->num_rows($result);
         for($i=0; $i<$num_rows;$i++)
@@ -1009,7 +1010,7 @@ function convertToDollar($amount,$crate){
 	global $log;
 	$log->debug("Entering convertToDollar(".$amount.",".$crate.") method ...");
 	$log->debug("Exiting convertToDollar method ...");
-        return $amount / $crate;
+    return $amount / $crate;
 }
 
 /** This function returns the amount converted from dollar.
@@ -1020,13 +1021,13 @@ function convertFromDollar($amount,$crate){
 	global $log;
 	$log->debug("Entering convertFromDollar(".$amount.",".$crate.") method ...");
 	$log->debug("Exiting convertFromDollar method ...");
-        return $amount * $crate;
+	return $amount * $crate;
 }
 
 /** This function returns the amount converted from master currency.
   * param $amount - amount to be converted.
-    * param $crate - conversion rate.
-      */
+  * param $crate - conversion rate.
+  */
 function convertFromMasterCurrency($amount,$crate){
 	global $log;
 	$log->debug("Entering convertFromDollar(".$amount.",".$crate.") method ...");
@@ -1043,9 +1044,10 @@ function getCurrencySymbolandCRate($id)
 {
 	global $log;
 	$log->debug("Entering getCurrencySymbolandCRate(".$id.") method ...");
-        global $adb;
-        $sql1 = "select conversion_rate,currency_symbol from vtiger_currency_info where id=?";
-        $result = $adb->pquery($sql1, array($id));
+        
+    global $adb;
+    $sql1 = "select conversion_rate,currency_symbol from vtiger_currency_info where id=?";
+    $result = $adb->pquery($sql1, array($id));
 	$rate_symbol['rate'] = $adb->query_result($result,0,"conversion_rate");
 	$rate_symbol['symbol'] = $adb->query_result($result,0,"currency_symbol");
 	$log->debug("Exiting getCurrencySymbolandCRate method ...");
@@ -1809,27 +1811,6 @@ function setObjectValuesFromRequest($focus)
 				$value = trim($_REQUEST[$fieldname]);
 			$focus->column_fields[$fieldname] = $value;
 		}
-		if(isset($_REQUEST['txtTax']))
-		{
-			$value = convertToDollar($_REQUEST['txtTax'],$rate);
-			$focus->column_fields['txtTax'] = $value;
-		}
-		if(isset($_REQUEST['txtAdjustment']))
-		{
-			$value = convertToDollar($_REQUEST['txtAdjustment'],$rate);
-			$focus->column_fields['txtAdjustment'] = $value;
-		}
-		if(isset($_REQUEST['hdnSubTotal']))
-		{
-			$value = convertToDollar($_REQUEST['hdnSubTotal'],$rate);
-			$focus->column_fields['hdnSubTotal'] = $value;
-		}
-		if(isset($_REQUEST['hdnGrandTotal']))
-		{
-			$value = convertToDollar($_REQUEST['hdnGrandTotal'],$rate);
-			$focus->column_fields['hdnGrandTotal'] = $value;
-		}
-
 	}
 	$log->debug("Exiting setObjectValuesFromRequest method ...");
 }
@@ -3141,8 +3122,8 @@ function SaveTagCloudView($id="")
 	}else
 	{
 
-		$query = "update vtiger_users set tagcloud_view =$tag_cloud_view where id=?";
-		$adb->pquery($query, array($id));
+		$query = "update vtiger_users set tagcloud_view = ? where id=?";
+		$adb->pquery($query, array($tag_cloud_view,$id));
 
 	}
 
@@ -3288,6 +3269,8 @@ function ChangeTypeOfData_Filter($table_name,$column_name,$type_of_data)
 		
 		"vtiger_vendorcontactrel:vendorid"=>"V",
 		"vtiger_vendorcontactrel:contactid"=>"V",
+		
+		"vtiger_pricebook:currency_id"=>"V",		
 	);
 
 	//If the Fields details does not match with the array, then we return the same typeofdata

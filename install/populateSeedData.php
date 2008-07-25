@@ -604,7 +604,9 @@ for($i=0;$i<5;$i++)
 	$quote->column_fields["ship_state"] = $account->column_fields["bill_state"];
 	$quote->column_fields["ship_code"] = $account->column_fields["bill_code"];
 	$quote->column_fields["ship_country"] = $account->column_fields["bill_country"];	
-
+	
+	$quote->column_fields["currency_id"] = '1';	
+	$quote->column_fields["conversion_rate"] = '1';
 	
 	$quote->save("Quotes");
 
@@ -680,7 +682,9 @@ for($i=0;$i<5;$i++)
 	$so->column_fields["ship_state"] = $account->column_fields["bill_state"];
 	$so->column_fields["ship_code"] = $account->column_fields["bill_code"];
 	$so->column_fields["ship_country"] = $account->column_fields["bill_country"];	
-
+	
+	$so->column_fields["currency_id"] = '1';	
+	$so->column_fields["conversion_rate"] = '1';
 	
 	$so->save("SalesOrder");
 
@@ -758,7 +762,9 @@ for($i=0;$i<5;$i++)
 	$po->column_fields["ship_state"] = $account->column_fields["bill_state"];
 	$po->column_fields["ship_code"] = $account->column_fields["bill_code"];
 	$po->column_fields["ship_country"] = $account->column_fields["bill_country"];	
-		
+	
+	$po->column_fields["currency_id"] = '1';	
+	$po->column_fields["conversion_rate"] = '1';		
 	
 	$po->save("PurchaseOrder");
 
@@ -832,8 +838,10 @@ for($i=0;$i<5;$i++)
 	$invoice->column_fields["ship_city"] = $account->column_fields["bill_city"];
 	$invoice->column_fields["ship_state"] = $account->column_fields["bill_state"];
 	$invoice->column_fields["ship_code"] = $account->column_fields["bill_code"];
-	$invoice->column_fields["ship_country"] = $account->column_fields["bill_country"];	
+	$invoice->column_fields["ship_country"] = $account->column_fields["bill_country"];		
 	
+	$invoice->column_fields["currency_id"] = '1';	
+	$invoice->column_fields["conversion_rate"] = '1';	
 	
 	$invoice->save("Invoice");
 
@@ -936,6 +944,7 @@ for($i=0;$i<12;$i++)
 	$rand = array_rand($num_array);
 	$pricebook->column_fields["bookname"]   = $PB_array[$i];
 	$pricebook->column_fields["active"]     = $Active_array[$i];
+	$pricebook->column_fields["currency_id"]     = '1';
 
 	$pricebook->save("PriceBooks");
 	$pricebook_ids[] = $pricebook ->id;

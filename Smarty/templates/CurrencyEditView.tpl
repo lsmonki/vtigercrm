@@ -55,6 +55,41 @@
 						{/if}
 						<td class="small" align=right>
 							<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmButton small save" onclick="this.form.action.value='SaveCurrencyInfo'; return validate()" type="submit" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" >&nbsp;&nbsp;
+							<div id="CurrencyEditLay"  class="layerPopup" style="display:none;width:25%;">
+								<table width="100%" border="0" cellpadding="3" cellspacing="0" class="layerHeadingULine">
+								<tr>
+									<td class="layerPopupHeading"  align="left" width="60%">{$MOD.LBL_TRANSFER_CURRENCY}</td>
+									<td align="right" width="40%"><img src="{$IMAGE_PATH}close.gif" border=0 alt="{$APP.LBL_CLOSE}" title="{$APP.LBL_CLOSE}" style="cursor:pointer;" onClick="document.getElementById('CurrencyEditLay').style.display='none'";></td>
+								</tr>
+								<table>
+								<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
+									<tr>
+										<td class=small >
+											<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+												<tr>
+													<td width="50%" class="cellLabel small"><b>{$MOD.LBL_CURRENT_CURRENCY}</b></td>
+													<td width="50%" class="cellText small"><b>{$CURRENCY_NAME}</b></td>
+												</tr>
+												<tr>
+													<td class="cellLabel small"><b>{$MOD.LBL_TRANSCURR}</b></td>
+													<td class="cellText small">
+														<select class="select small" name="transfer_currency_id" id="transfer_currency_id">';
+														 {foreach key=cur_id item=cur_name from=$OTHER_CURRENCIES}
+															 <option value="{$cur_id}">{$cur_name}</option>
+														 {/foreach}
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+								<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
+									<tr>
+										<td align="center"><input type="button" onclick="form.submit();" name="Update" value="{$APP.LBL_SAVE_BUTTON_LABEL}" class="crmbutton small save">
+										</td>
+									</tr>
+								</table>
+							</div>
 							<input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
 						</td>
 					</tr>
@@ -84,9 +119,10 @@
                           <tr>
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_CURRENCY_STATUS}</strong></td>
                             <td class="small cellText">
-				<select name="currency_status" {$STATUS_DISABLE} class="importBox">
-					<option value="Active"  {$ACTSELECT}>{$MOD.LBL_ACTIVE}</option>
-		        	        <option value="Inactive" {$INACTSELECT}>{$MOD.LBL_INACTIVE}</option>
+                            	<input type="hidden" value="{$CURRENCY_STATUS}" id="old_currency_status" />
+								<select name="currency_status" {$STATUS_DISABLE} class="importBox">
+									<option value="Active"  {$ACTSELECT}>{$MOD.LBL_ACTIVE}</option>
+				        	        <option value="Inactive" {$INACTSELECT}>{$MOD.LBL_INACTIVE}</option>
               	                </select>
 			    </td>
                           </tr>	
@@ -123,20 +159,28 @@
 {literal}
 <script>
         function validate() {
-                if (!emptyCheck("currency_name","Currency Name","text")) return false
-                        if (!emptyCheck("currency_code","Currency Code","text")) return false
-                                if (!emptyCheck("currency_symbol","Currency Symbol","text")) return false
-                                        if (!emptyCheck("conversion_rate","Conversion Rate","text")) return false
-                                                if (!emptyCheck("currency_status","Currency Status","text")) return false
-						if(isNaN(getObj("conversion_rate").value) || eval(getObj("conversion_rate").value) <= 0)
-                                                {
-							{/literal}
-                                                        alert("{$APP.ENTER_VALID_CONVERSION_RATE}")
-                                                        return false
-                                                        {literal}
-                                                }
-                                                return true;
-
+			if (!emptyCheck("currency_name","Currency Name","text")) return false
+			if (!emptyCheck("currency_code","Currency Code","text")) return false
+			if (!emptyCheck("currency_symbol","Currency Symbol","text")) return false
+			if (!emptyCheck("conversion_rate","Conversion Rate","text")) return false
+			if (!emptyCheck("currency_status","Currency Status","text")) return false
+			if(isNaN(getObj("conversion_rate").value) || eval(getObj("conversion_rate").value) <= 0)
+			{
+{/literal}
+            	alert("{$APP.ENTER_VALID_CONVERSION_RATE}")
+                return false
+{literal}
+			}
+			if (getObj("currency_status") != null && getObj("currency_status").value == "Inactive" 
+					&& getObj("old_currency_status") != null && getObj("old_currency_status").value == "Active")
+			{
+				if (getObj("CurrencyEditLay") != null) getObj("CurrencyEditLay").style.display = "block";
+				return false;
+			} 
+			else 
+			{
+				return true;
+			}
         }
 </script>
 {/literal}

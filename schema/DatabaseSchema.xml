@@ -1120,7 +1120,6 @@
 		</field>
 		<field name="usageunit" type="C" size="200" />
 		<field name="handler" type="I" size="11" />
-		<field name="currency" type="C" size="200" />
 		<field name="reorderlevel" type="I" size="11" />
 		<field name="website" type="C" size="100" />
 		<field name="taxclass" type="C" size="200" />
@@ -1133,6 +1132,10 @@
 		<field name="glacct" type="C" size="200" />
 		<field name="vendor_id" type="I" size="11" />
 		<field name="imagename" type="X" />
+		<field name="currency_id" type="I" size="19">
+			<notnull />
+			<default value="1" />
+		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
@@ -2206,6 +2209,10 @@
 		<field name="conversion_rate" type="N" size="10.3" />
 		<field name="currency_status" type="C" size="25" />
 		<field name="defaultid" type="C" size="10">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="deleted" type="I" size="1">
 			<notnull />
 			<default value="0" />
 		</field>
@@ -3494,8 +3501,15 @@
 		<field name="accountid" type="I" size="19" />
 		<field name="terms_conditions" type="X" />
 		<field name="purchaseorder" type="C" size='200' />
-		<field name="sostatus" type="C" size='200' />
-
+		<field name="sostatus" type="C" size='200' />		
+		<field name="currency_id" type="I" size='19' >
+			<notnull />
+			<default value="1" />
+		</field>
+		<field name="conversion_rate" type="N" size='10.3' >
+			<notnull />
+			<default value="1.000" />
+		</field>
 		<index name="salesorder_vendorid_idx">
 			<col>vendorid</col>
 		</index>
@@ -3708,7 +3722,10 @@
 		</field>
 		<field name="bookname" type="C" size="100" />
 		<field name="active" type="I" size="1" />
-		<field name="description" type="X" />
+		<field name="currency_id" type="I" size="19">
+			<notnull />
+			<default value="1" />
+		</field>
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
@@ -3743,7 +3760,11 @@
 		<field name="productid" type="I" size="19">
 			<key />
 		</field>
-		<field name="listprice" type="N" size="25.3" />
+		<field name="listprice" type="N" size="25.3" />		
+		<field name="usedcurrency" type="I" size="11">
+			<notnull />
+			<default value="1" />
+		</field>
 
 		<index name="pricebookproductrel_pricebookid_idx">
 			<col>pricebookid</col>
@@ -3818,8 +3839,15 @@
 		<field name="discount_amount" type="N" size="25.3" />
 		<field name="s_h_amount" type="N" size="25.3" />
 		<field name="accountid" type="I" size="19" />
-		<field name="terms_conditions" type="X" />
-
+		<field name="terms_conditions" type="X" />		
+		<field name="currency_id" type="I" size='19' >
+			<notnull />
+			<default value="1" />
+		</field>
+		<field name="conversion_rate" type="N" size='10.3' >
+			<notnull />
+			<default value="1.000" />
+		</field>
 		<index name="quote_quotestage_idx">
 			<col>quotestage</col>
 		</index>
@@ -3957,6 +3985,14 @@
 		<field name="s_h_amount" type="N" size="25.3" />
 		<field name="terms_conditions" type="X" />
 		<field name="postatus" type="C" size="200" />
+		<field name="currency_id" type="I" size='19' >
+			<notnull />
+			<default value="1" />
+		</field>
+		<field name="conversion_rate" type="N" size='10.3' >
+			<notnull />
+			<default value="1.000" />
+		</field>
 
 		<index name="purchaseorder_vendorid_idx">
 			<col>vendorid</col>
@@ -4101,8 +4137,15 @@
 		<field name="invoice_no" type="C" size='100' >
                         <default value="NULL" />
                         <unique />
-                </field>
-
+		</field>
+		<field name="currency_id" type="I" size='19' >
+			<notnull />
+			<default value="1" />
+		</field>
+		<field name="conversion_rate" type="N" size='10.3' >
+			<notnull />
+			<default value="1.000" />
+		</field>
 		<index name="invoice_purchaseorderid_idx">
 			<col>invoiceid</col>
 		</index>
@@ -6412,6 +6455,18 @@
 		<field name="tabid" type="I" size="19" />
 		<field name="fieldid" type="I" size="19" />
 		<field name="visible" type="I" size="2" />
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_productcurrencyrel">
+		<field name="productid" type="I" size="11" >
+			<notnull />
+		</field>
+		<field name="currencyid" type="I" size="11" >
+			<notnull />
+		</field>
+		<field name="converted_price"  type="N" size="25.2" />
+		<field name="actual_price"  type="N" size="25.2" />
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 

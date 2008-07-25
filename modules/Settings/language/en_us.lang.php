@@ -62,7 +62,7 @@ $mod_strings = Array(
 
 'LBL_EMAIL_ADDRESS'=>'Email',
 
-'LBL_TRANSCURR'=>'Transfer User currency to',
+'LBL_TRANSCURR'=>'Transfer currency to',
 
 'LBL_CURRDEL'=>'Currency to be Deleted',
 
@@ -969,6 +969,12 @@ $mod_strings = Array(
 'LBL_CUSTOMPO_NUMBER'=>'Custom PurchaseOrder Number',
 'LBL_PO_NUMBER_PREVIEW'=>'Preview',
 'LBL_PO_NUMBER_BUTTON'=>'Update PurchaseOrder Number',
+
+// Added after 5.0.4 GA
+
+// Added for Multi-Currency Support
+'LBL_TRANSFER_CURRENCY'=>'Transfer Currency',
+'LBL_CURRENT_CURRENCY'=>'Current Currency',
 
 //Added for new backup labels
 'LBL_LOCAL'=>'Local',

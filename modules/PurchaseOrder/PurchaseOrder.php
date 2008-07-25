@@ -102,6 +102,7 @@ class PurchaseOrder extends CRMEntity {
 
 	function save_module($module)
 	{
+		global $adb;
 		//in ajax save we should not call this function, because this will delete all the existing product values
 		if($_REQUEST['action'] != 'PurchaseOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW')
 		{
@@ -125,6 +126,11 @@ class PurchaseOrder extends CRMEntity {
 				addToProductStock($productid,$quantity);
 			}
 		}
+		
+		// Update the currency id and the conversion rate for the purchase order
+		$update_query = "update vtiger_purchaseorder set currency_id=?, conversion_rate=? where purchaseorderid=?";
+		$update_params = array($this->column_fields['currency_id'], $this->column_fields['conversion_rate'], $this->id); 
+		$adb->pquery($update_query, $update_params);
 	}	
 
 

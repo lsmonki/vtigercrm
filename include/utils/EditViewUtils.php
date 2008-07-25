@@ -1149,14 +1149,17 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	
 	elseif($uitype == 71 || $uitype == 72)
 	{
-		$rate_symbol = getCurrencySymbolandCRate($user_info['currency_id']);
-		$rate = $rate_symbol['rate'];
-		$currency= $rate_symbol['symbol'];
-		$editview_label[]=$mod_strings[$fieldlabel].': ('.$currency.')';
-		if($value!='')
-		        $fieldvalue[] = convertFromDollar($value,$rate);
-		else
-		        $fieldvalue[] = $value;
+		if($col_fields['record_id'] != '' && $fieldname == 'unit_price') {
+			$rate_symbol=getCurrencySymbolandCRate(getProductBaseCurrency($col_fields['record_id']));
+			$fieldvalue[] = $value;			
+		} else {
+			$currency_id = fetchCurrency($current_user->id);
+			$rate_symbol=getCurrencySymbolandCRate($currency_id);
+			$rate = $rate_symbol['rate'];
+			$fieldvalue[] = convertFromDollar($value,$rate);
+		}
+        $currency = $rate_symbol['symbol'];
+		$editview_label[]=$mod_strings[$fieldlabel].': ('.$currency.')';		
 	}
 	elseif($uitype == 75 || $uitype ==81)
 	{
@@ -1284,10 +1287,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$fieldvalue [] = $options;
 		$fieldvalue [] = $is_admin;
 	}
-	elseif($uitype == 116)
+	elseif($uitype == 116 || $uitype == 117)
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
-		$pick_query="select * from vtiger_currency_info where currency_status = 'Active'";
+		$pick_query="select * from vtiger_currency_info where currency_status = 'Active' and deleted=0";
 		$pickListResult = $adb->pquery($pick_query, array());
 		$noofpickrows = $adb->num_rows($pickListResult);
 
@@ -1543,7 +1546,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$query="SELECT 
 					vtiger_products.productname,
  		                        vtiger_products.productcode, 
-					vtiger_products.unit_price, 
+								vtiger_products.unit_price,									
  		                        vtiger_products.qtyinstock, 
  		                        vtiger_inventoryproductrel.listprice, 
  		                        vtiger_inventoryproductrel.description AS product_description, 
@@ -1560,7 +1563,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$query="SELECT 
  		                        vtiger_products.productname, 
  		                        vtiger_products.productcode, 
- 		                        vtiger_products.unit_price, 
+ 		                        vtiger_products.unit_price,	
  		                        vtiger_products.qtyinstock, 
  		                        vtiger_inventoryproductrel.listprice, 
  		                        vtiger_inventoryproductrel.description AS product_description, 
@@ -1577,7 +1580,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$query="SELECT 
  		                        vtiger_products.productname, 
  		                        vtiger_products.productcode, 
- 		                        vtiger_products.unit_price, 
+ 		                        vtiger_products.unit_price,
  		                        vtiger_products.qtyinstock, 
  		                        vtiger_inventoryproductrel.listprice, 
  		                        vtiger_inventoryproductrel.description AS product_description, 
@@ -1680,8 +1683,6 @@ function getAssociatedProducts($module,$focus,$seid='')
 		{
 			$product_Detail[$i]['qtyInStock'.$i]=$qtyinstock;
 		}
-		$listprice = getConvertedPriceFromDollar($listprice);
-		$productTotal = getConvertedPriceFromDollar($productTotal);
 		$product_Detail[$i]['qty'.$i]=$qty;
 		$product_Detail[$i]['listPrice'.$i]=$listprice;
 		$product_Detail[$i]['unitPrice'.$i]=$unitprice;
@@ -1707,8 +1708,6 @@ function getAssociatedProducts($module,$focus,$seid='')
 		}
 		elseif($discount_amount != 'NULL' && $discount_amount != '')
 		{
-			$discount_amount = getConvertedPriceFromDollar($discount_amount);
-
 			$product_Detail[$i]['discount_type'.$i] = "amount";
 			$product_Detail[$i]['discount_amount'.$i] = $discount_amount;
 			$product_Detail[$i]['checked_discount_amount'.$i] = ' checked';
@@ -1777,8 +1776,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	$product_Detail[1]['final_details']['discount_type_final'] = 'zero';
 
 	$subTotal = ($focus->column_fields['hdnSubTotal'] != '')?$focus->column_fields['hdnSubTotal']:'0.00';
-	$subTotal = getConvertedPriceFromDollar($subTotal);
-
+	
 	$product_Detail[1]['final_details']['hdnSubTotal'] = $subTotal;
 	$discountPercent = ($focus->column_fields['hdnDiscountPercent'] != '')?$focus->column_fields['hdnDiscountPercent']:'0.00';
 	$discountAmount = ($focus->column_fields['hdnDiscountAmount'] != '')?$focus->column_fields['hdnDiscountAmount']:'0.00';
@@ -1799,9 +1797,6 @@ function getAssociatedProducts($module,$focus,$seid='')
 	elseif($focus->column_fields['hdnDiscountAmount'] != '0')
 	{
 		$finalDiscount = $focus->column_fields['hdnDiscountAmount'];
-		$finalDiscount = getConvertedPriceFromDollar($finalDiscount);
-		$discountAmount = getConvertedPriceFromDollar($discountAmount);
-
 		$product_Detail[1]['final_details']['discount_type_final'] = 'amount';
 		$product_Detail[1]['final_details']['discount_amount_final'] = $discountAmount;
 		$product_Detail[1]['final_details']['checked_discount_amount_final'] = ' checked';
@@ -1843,7 +1838,6 @@ function getAssociatedProducts($module,$focus,$seid='')
 	
 	//To set the Shipping & Handling charge
 	$shCharge = ($focus->column_fields['hdnS_H_Amount'] != '')?$focus->column_fields['hdnS_H_Amount']:'0.00';
-	$shCharge = getConvertedPriceFromDollar($shCharge);
 	$product_Detail[1]['final_details']['shipping_handling_charge'] = $shCharge;
 
 	//To set the Shipping & Handling tax values
@@ -1874,12 +1868,10 @@ function getAssociatedProducts($module,$focus,$seid='')
 
 	//To set the Adjustment value
 	$adjustment = ($focus->column_fields['txtAdjustment'] != '')?$focus->column_fields['txtAdjustment']:'0.00';
-	$adjustment = getConvertedPriceFromDollar($adjustment);
 	$product_Detail[1]['final_details']['adjustment'] = $adjustment;
 
 	//To set the grand total
 	$grandTotal = ($focus->column_fields['hdnGrandTotal'] != '')?$focus->column_fields['hdnGrandTotal']:'0.00';
-	$grandTotal = getConvertedPriceFromDollar($grandTotal);
 	$product_Detail[1]['final_details']['grandTotal'] = $grandTotal;
 
 	$log->debug("Exiting getAssociatedProducts method ...");

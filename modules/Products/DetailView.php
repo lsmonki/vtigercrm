@@ -75,6 +75,8 @@ for($i=0;$i<count($tax_details);$i++)
 }
 $smarty->assign("TAX_DETAILS", $tax_details);
 
+$price_details = getPriceDetailsForProduct($focus->id, $focus->unit_price, 'available_associated');
+$smarty->assign("PRICE_DETAILS", $price_details);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);

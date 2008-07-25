@@ -67,24 +67,26 @@ function settotalnoofrows() {
 function productPickList(currObj,module, row_no) {
 	var trObj=currObj.parentNode.parentNode
 	var rowId=row_no;//parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
+	var currencyid = document.getElementById("inventory_currency").value;
 
 	popuptype = 'inventory_prod';
 	if(module == 'PurchaseOrder')
 		popuptype = 'inventory_prod_po';
-	var record_id = ''
-        if(document.getElementsByName("account_id").length != 0)
-                record_id= document.EditView.account_id.value;
-        if(record_id != '')
-                window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId+"&relmod_id="+record_id+"&parent_module=Accounts","productWin","width=640,height=600,resizable=0,scrollbars=0,status=1,top=150,left=200");
-        else
-		window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId,"productWin","width=640,height=600,resizable=0,scrollbars=0,status=1,top=150,left=200");
+	var record_id = '';
+    if(document.getElementsByName("account_id").length != 0)
+    	record_id= document.EditView.account_id.value;
+    if(record_id != '')
+    	window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId+"&relmod_id="+record_id+"&parent_module=Accounts&currencyid="+currencyid,"productWin","width=640,height=600,resizable=0,scrollbars=0,status=1,top=150,left=200");
+    else
+		window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId+"&currencyid="+currencyid,"productWin","width=640,height=600,resizable=0,scrollbars=0,status=1,top=150,left=200");
 }
 
 function priceBookPickList(currObj, row_no) {
 	var trObj=currObj.parentNode.parentNode
 	var rowId=row_no;//parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
+	var currencyid = document.getElementById("inventory_currency").value;
 	var productId=getObj("hdnProductId"+rowId).value || -1;
-	window.open("index.php?module=PriceBooks&action=Popup&html=Popup_picker&form=EditView&popuptype=inventory_pb&fldname=listPrice"+rowId+"&productid="+productId,"priceBookWin","width=640,height=565,resizable=0,scrollbars=0,top=150,left=200");
+	window.open("index.php?module=PriceBooks&action=Popup&html=Popup_picker&form=EditView&popuptype=inventory_pb&fldname=listPrice"+rowId+"&productid="+productId+"&currencyid="+currencyid,"priceBookWin","width=640,height=565,resizable=0,scrollbars=0,top=150,left=200");
 }
 
 
@@ -117,7 +119,7 @@ function deleteRow(module,i)
 /*  End */
 
 
-
+// Function to Calcuate the Inventory total including all products
 function calcTotal() {
 
 	var max_row_count = document.getElementById('proTab').rows.length;
@@ -126,6 +128,13 @@ function calcTotal() {
 	for(var i=1;i<=max_row_count;i++)
 	{
 		rowId = i;
+		calcProductTotal(rowId);
+	}
+	calcGrandTotal();
+}
+
+// Function to Calculate the Total for a particular product in an Inventory
+function calcProductTotal(rowId) {	
 		
 		if(document.getElementById('deleted'+rowId).value == 0)
 		{
@@ -150,10 +159,9 @@ function calcTotal() {
 			getObj("netPrice"+rowId).innerHTML=roundValue(netprice.toString())
 
 		}
-	}
-	calcGrandTotal();
 }
 
+// Function to Calculate the Net and Grand total for all the products together of an Inventory
 function calcGrandTotal() {
 	var netTotal = 0.0, grandTotal = 0.0;
 	var discountTotal_final = 0.0, finalTax = 0.0, sh_amount = 0.0, sh_tax = 0.0, adjustment = 0.0;
@@ -199,10 +207,19 @@ function calcGrandTotal() {
 
 	//Add or substract the adjustment based on selection
 	adj_type = document.getElementById("adjustmentType").value;
-	if(adj_type == '+')
-		grandTotal = eval(netTotal)-eval(discountTotal_final)+eval(finalTax)+eval(sh_amount)+eval(sh_tax)+eval(adjustment)
-	else
-		grandTotal = eval(netTotal)-eval(discountTotal_final)+eval(finalTax)+eval(sh_amount)+eval(sh_tax)-eval(adjustment)
+	
+	grandTotal = eval(netTotal)-eval(discountTotal_final)+eval(finalTax);
+	if (sh_amount != '') {
+		grandTotal = grandTotal + eval(sh_amount)+eval(sh_tax);
+	}
+	if (adjustment != '') {
+		if(adj_type == '+') {		
+			grandTotal = grandTotal + eval(adjustment)
+		}
+		else {
+			grandTotal = grandTotal - eval(adjustment)
+		}
+	}
 
 	document.getElementById("grandTotal").innerHTML = roundValue(grandTotal.toString())
 	document.getElementById("total").value = roundValue(grandTotal.toString())
@@ -743,6 +760,7 @@ function calcSHTax()
 
 	for(var i=1;i<=sh_tax_count;i++)
 	{
+		if(sh_charge == '') sh_charge = '0';
 		tax_amount = eval(sh_charge)*eval(document.getElementById("sh_tax_percentage"+i).value)/eval(100);
 		//Rounded the decimal part of S&H Tax amount to two digits
 		document.getElementById("sh_tax_amount"+i).value = roundValue(tax_amount.toString());
@@ -805,3 +823,96 @@ function stock_alert(curr_row)
         else
      getObj("stock_alert"+curr_row).innerHTML='<font color="red" size="1">'+alert_arr.INVALID_QTY+'</font>';
 }
+
+// Function to Get the price for all the products of an Inventory based on the Currency choosen by the User
+function updatePrices() {
+	
+	var prev_cur = document.getElementById('prev_selected_currency_id');
+	var inventory_currency = document.getElementById('inventory_currency');
+	if(confirm(alert_arr.MSG_CHANGE_CURRENCY_REVISE_UNIT_PRICE)) {
+		var productsListElem = document.getElementById('proTab');
+		if (productsListElem == null) return;
+		
+		var max_row_count = productsListElem.rows.length;
+		max_row_count = eval(max_row_count)-2;//Because the table has two header rows. so we will reduce two from row length
+	
+	    var products_list = "";
+		for(var i=1;i<=max_row_count;i++)
+		{
+			var productid = document.getElementById("hdnProductId"+i).value;
+			if (i != 1)
+				products_list = products_list + "::";
+			products_list = products_list + productid;
+		}
+		
+		if (prev_cur != null && inventory_currency != null)
+			prev_cur.value = inventory_currency.value;
+			
+		var currency_id = inventory_currency.value;
+		//Retrieve all the prices for all the products in currently selected currency
+		new Ajax.Request(
+			'index.php',
+			{queue: {position: 'end', scope: 'command'},
+				method: 'post',
+				postBody: 'module=Products&action=ProductsAjax&file=InventoryPriceAjax&currencyid='+currency_id+'&productsList='+products_list,
+				onComplete: function(response)
+					{
+						if(trim(response.responseText).indexOf('SUCESS') == 0) {
+							var res = trim(response.responseText).split("$");
+							updatePriceValues(res[1]);							
+						} else {
+							alert(alert_arr.OPERATION_DENIED);
+						}			
+					}
+			}
+		);
+	} else {
+		if (prev_cur != null && inventory_currency != null)
+			inventory_currency.value = prev_cur.value;
+	}
+}
+
+// Function to Update the price for the products in the Inventory Edit View based on the Currency choosen by the User.
+function updatePriceValues(pricesList) {
+	
+	if (pricesList == null || pricesList == '') return;
+	var prices_list = pricesList.split("::");
+	
+	var productsListElem = document.getElementById('proTab');
+	if (productsListElem == null) return;
+	
+	var max_row_count = productsListElem.rows.length;
+	max_row_count = eval(max_row_count)-2;//Because the table has two header rows. so we will reduce two from row length
+
+    var products_list = "";
+	for(var i=1;i<=max_row_count;i++)
+	{
+		var list_price_elem = document.getElementById("listPrice"+i);
+		var unit_price = prices_list[i-1]; // Price values index starts from 0
+		list_price_elem.value = unit_price;
+		
+		// Set Direct Discout amount to 0
+		var discount_amount = document.getElementById("discount_amount"+i);
+		if(discount_amount != null) discount_amount.value = '0';
+		
+		calcProductTotal(i);
+		setDiscount(list_price_elem,i); 
+		callTaxCalc(i);
+	}
+	resetSHandAdjValues();
+	calcTotal();
+}
+
+// Function to Reset the S&H Charges and Adjustment value with change in Currency
+function resetSHandAdjValues() {
+	var sh_amount = document.getElementById('shipping_handling_charge');
+	if (sh_amount != null) sh_amount.value = '0';
+	
+	var sh_amount_tax = document.getElementById('shipping_handling_tax');
+	if (sh_amount_tax != null) sh_amount_tax.innerHTML = '0';
+	
+	var adjustment = document.getElementById('adjustment');
+	if (adjustment != null) adjustment.value = '0';
+	
+}
+// End
