@@ -657,7 +657,7 @@ function fnAddEvent(obj,CurrObj,start_date,end_date,start_hr,start_min,start_fmt
 }
 	
 function fnRemoveEvent(){
-	var tagName = document.getElementById('addEventDropDown').style.display= 'none';
+	var tagName = document.getElementById('addEventDropDown').style.display = 'none';
 }
 
 function fnShowEvent(){
@@ -710,17 +710,21 @@ function updateStatus(record,status,view,hour,day,month,year,type){
 					if(OptionData == 'listview')
 					{
 						result = response.responseText.split('####');
-                                                $("total_activities").innerHTML = result[1];
-                                                $("listView").innerHTML=result[0];
+                        $("total_activities").innerHTML = result[1];
+                        //$("listView").innerHTML=result[0];
+	                    document.EventViewOption.action.value = "index";
+						window.document.EventViewOption.submit();
 					}		
-                                	if(OptionData == 'hourview')
+                   	if(OptionData == 'hourview')
 					{
 						result = response.responseText.split('####');
-                                                $("total_activities").innerHTML = result[1];	
-                        			$("hrView").innerHTML=result[0];
+                        $("total_activities").innerHTML = result[1];
+                        //$("hrView").innerHTML=result[0];
+	                    document.EventViewOption.action.value = "index";
+						window.document.EventViewOption.submit();             
 					}
-                        	}
-                	}
+					
+               }}
 		);
 	}
 	if(type == 'todo')
@@ -856,9 +860,10 @@ function getcalAction(obj,Lay,id,view,hour,dateVal,type){
 function dispLayer(lay)
 {
 	var tagName = document.getElementById(lay);
-        tagName.style.visibility = 'visible';
-        tagName.style.display = 'block';
+	tagName.style.visibility = 'visible';
+	tagName.style.display = 'block';
 }
+
 //check whether user form selected or group form selected
 function checkgroup()
 {
@@ -910,14 +915,18 @@ function calendarChangeOwner()
 					if(OptionData == 'listview')
 					{
 						result = response.responseText.split('####');
-                                                $("total_activities").innerHTML = result[1];
-                                                $("listView").innerHTML=result[0];
+                        $("total_activities").innerHTML = result[1];
+                        $("listView").innerHTML=result[0];
+						document.EventViewOption.action.value = "index";
+						window.document.EventViewOption.submit();
 					}
 					if(OptionData == 'hourview')
 					{
 						result = response.responseText.split('####');
-                                                $("total_activities").innerHTML = result[1];
-                                                $("hrView").innerHTML=result[0];
+                        $("total_activities").innerHTML = result[1];
+                        $("hrView").innerHTML=result[0];
+						document.EventViewOption.action.value = "index";
+						window.document.EventViewOption.submit();
 					}
                         	}
                 	}
@@ -936,11 +945,10 @@ function calendarChangeOwner()
 					result = response.responseText.split('####');
 					$("total_activities").innerHTML = result[1];
 					$("mnuTab2").innerHTML=result[0];
-                                }
+                               }
                         }
                 );
         }
-
 }
 
 function delActivity(id,view,hour,day,month,year,subtab)
@@ -949,24 +957,23 @@ function delActivity(id,view,hour,day,month,year,subtab)
 	{
 		var OptionData = $('view_Option').options[$('view_Option').selectedIndex].value;
          	new Ajax.Request(
-                	'index.php',
-                	{queue: {position: 'end', scope: 'command'},
-                        	method: 'post',
-                        	postBody: 'module=Users&action=massdelete&return_module=Calendar&return_action=ActivityAjax&idlist='+id+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=activity_delete&viewOption='+OptionData+'&subtab=event&ajax=true',
-                        	onComplete: function(response) {
-					if(OptionData == 'listview')
-		                        {
-                                                result = response.responseText.split('####');
-                                                $("total_activities").innerHTML = result[1];
-                                                $("listView").innerHTML=result[0];
-                                        }
-                                	if(OptionData == 'hourview')
-					{
-
-                                                result = response.responseText.split('####');
-                                                $("total_activities").innerHTML = result[1];
-                                                $("hrView").innerHTML=result[0];
-                                        }
+	                	'index.php',
+	                	{queue: {position: 'end', scope: 'command'},
+	                        	method: 'post',
+	                        	postBody: 'module=Users&action=massdelete&return_module=Calendar&return_action=ActivityAjax&idlist='+id+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=activity_delete&viewOption='+OptionData+'&subtab=event&ajax=true',
+	                        	onComplete: function(response) {
+								if(OptionData == 'listview')
+								{
+									result = response.responseText.split('####');
+	                                $("total_activities").innerHTML = result[1];
+	                                $("listView").innerHTML=result[0];
+								}
+								if(OptionData == 'hourview')
+								{
+									result = response.responseText.split('####');
+									$("total_activities").innerHTML = result[1];
+									$("hrView").innerHTML=result[0];
+								}
                         	}
                 	}
 		);
@@ -982,11 +989,10 @@ function delActivity(id,view,hour,day,month,year,subtab)
 					result = response.responseText.split('####');
 					$("total_activities").innerHTML = result[1];
 					$("mnuTab2").innerHTML=result[0];
-                                }
+                               }
                         }
                 );
         }
-
 }
 
 

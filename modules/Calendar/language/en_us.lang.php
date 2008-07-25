@@ -424,6 +424,9 @@ $mod_strings = Array(
 'LBL_CREATED'=>'created',
 'LBL_UPDATED'=>'updated',
 
+//Added after 5.0.4 GA
+'LBL_BUSY' => 'Busy',
+
 );
 
 ?>
