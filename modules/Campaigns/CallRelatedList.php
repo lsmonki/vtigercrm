@@ -77,29 +77,28 @@ foreach($related_array as $mod_key=>$mod_val)
 
 $smarty->assign("RELATEDLISTS", $related_array);
 
+require_once('modules/CustomView/CustomView.php');
+
 /* To get Contacts CustomView -START */
-$sql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype where vtiger_tab.tabid=?";
-$result = $adb->pquery($sql, array(getTabid('Contacts')));
 $chtml = "<select id='cont_cv_list'><option value='None'>-- ".$mod_strings['Select One']." --</option>";
-while($cvrow=$adb->fetch_array($result))
-{
-	 $chtml .= "<option value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
-}
+$oCustomView = new CustomView('Contacts');
+$viewid = $oCustomView->getViewId('Contacts');
+$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid, false);
+$chtml .= $customviewcombo_html;
 $chtml .= "</select>";
 $smarty->assign("CONTCVCOMBO",$chtml);
 /* To get Contacts CustomView -END */
 
 /* To get Leads CustomView -START */
-$sql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype where vtiger_tab.tabid=?";
-$result = $adb->pquery($sql, array(getTabid('Leads')));
 $lhtml = "<select id='lead_cv_list'><option value='None'>-- ".$mod_strings['Select One']." --</option>";
-while($cvrow=$adb->fetch_array($result))
-{
-	 $lhtml .= "<option value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
-}
+$oCustomView = new CustomView('Leads');
+$viewid = $oCustomView->getViewId('Leads');
+$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid, false);
+$lhtml .= $customviewcombo_html;
 $lhtml .= "</select>";
 $smarty->assign("LEADCVCOMBO",$lhtml);
 /* To get Leads CustomView -END */
+
 $smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
 $smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $category = getParentTab();

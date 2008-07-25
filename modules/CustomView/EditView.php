@@ -81,86 +81,111 @@ if($recordid == "")
 }
 else
 {
-	$oCustomView = new CustomView();
-
-	$customviewdtls = $oCustomView->getCustomViewByCvid($recordid);
-	$log->info('CustomView :: Successfully got ViewDetails for the Viewid'.$recordid);
-	$modulecollist = $oCustomView->getModuleColumnsList($cv_module);
-
-	$selectedcolumnslist = $oCustomView->getColumnsListByCvid($recordid);
-	$log->info('CustomView :: Successfully got ColumnsList for the Viewid'.$recordid);
-
-	$smarty->assign("VIEWNAME",$customviewdtls["viewname"]);
-
-	if($customviewdtls["setdefault"] == 1)
+	$oCustomView = new CustomView($cv_module);
+	$now_action = $_REQUEST['action'];
+	if($oCustomView->isPermittedCustomView($recordid,$now_action,$oCustomView->customviewmodule) == 'yes')
 	{
-		$smarty->assign("CHECKED","checked");
-	}
-	if($customviewdtls["setmetrics"] == 1)
-	{
-		$smarty->assign("MCHECKED","checked");
-	}
-	for($i=1;$i<10;$i++)
-	{
-		$choosecolhtml = getByModule_ColumnsHTML($cv_module,$modulecollist,$selectedcolumnslist[$i-1]);
-		$smarty->assign("CHOOSECOLUMN".$i,$choosecolhtml);
-	}
-
-	$stdfilterlist = $oCustomView->getStdFilterByCvid($recordid);
-	$log->info('CustomView :: Successfully got Standard Filter for the Viewid'.$recordid);
-	$stdfilterlist["stdfilter"] = ($stdfilterlist["stdfilter"] != "") ? ($stdfilterlist["stdfilter"]) : ("custom");
-	$stdfilterhtml = $oCustomView->getStdFilterCriteria($stdfilterlist["stdfilter"]);
-	$stdfiltercolhtml = getStdFilterHTML($cv_module,$stdfilterlist["columnname"]);
-	$stdfilterjs = $oCustomView->getCriteriaJS();
-
-	if(isset($stdfilterlist["startdate"]) && isset($stdfilterlist["enddate"]))
-	{
-		$smarty->assign("STARTDATE",getDisplayDate($stdfilterlist["startdate"]));
-		$smarty->assign("ENDDATE",getDisplayDate($stdfilterlist["enddate"]));
-	}else{
-		$smarty->assign("STARTDATE",$stdfilterlist["startdate"]);
-		$smarty->assign("ENDDATE",$stdfilterlist["enddate"]);
-	}	
-
-	$advfilterlist = $oCustomView->getAdvFilterByCvid($recordid);
-	$log->info('CustomView :: Successfully got Advanced Filter for the Viewid'.$recordid,'info');
-	for($i=1;$i<6;$i++)
-	{
-		$advfilterhtml = getAdvCriteriaHTML($advfilterlist[$i-1]["comparator"]);
-		$advcolumnhtml = getByModule_ColumnsHTML($cv_module,$modulecollist,$advfilterlist[$i-1]["columnname"]);
-		$smarty->assign("FOPTION".$i,$advfilterhtml);
-		$smarty->assign("BLOCK".$i,$advcolumnhtml);
-		$col = explode(":",$advfilterlist[$i-1]["columnname"]);
-		$temp_val = explode(",",$advfilterlist[$i-1]["value"]);
-		$and_text = "&nbsp;".$mod_strings['LBL_AND'];
-		if($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || $col[4] == 'DT')
+		$customviewdtls = $oCustomView->getCustomViewByCvid($recordid);
+		$log->info('CustomView :: Successfully got ViewDetails for the Viewid'.$recordid);
+		$modulecollist = $oCustomView->getModuleColumnsList($cv_module);
+		$selectedcolumnslist = $oCustomView->getColumnsListByCvid($recordid);
+		$log->info('CustomView :: Successfully got ColumnsList for the Viewid'.$recordid);
+	
+		$smarty->assign("VIEWNAME",$customviewdtls["viewname"]);
+	
+		if($customviewdtls["setdefault"] == 1)
 		{
-			$val = Array();
-			for($x=0;$x<count($temp_val);$x++)
-			if(trim($temp_val[$x] != ""))
-				$val[$x] = getDisplayDate(trim($temp_val[$x]));
-			$advfilterlist[$i-1]["value"] = implode(", ",$val);
-			$and_text = "<em old='(yyyy-mm-dd)'>(".$current_user->date_format.")</em>&nbsp;".$mod_strings['LBL_AND'];
+			$smarty->assign("CHECKED","checked");
 		}
-		$smarty->assign("VALUE".$i,$advfilterlist[$i-1]["value"]);
-		$smarty->assign("AND_TEXT".$i,$and_text);
-	}
+		if($customviewdtls["setmetrics"] == 1)
+		{
+			$smarty->assign("MCHECKED","checked");
+		}
+		$status = $customviewdtls["status"];
+		$smarty->assign("STATUS",$status);
 
-	$smarty->assign("STDFILTERCOLUMNS",$stdfiltercolhtml);
-	$smarty->assign("STDCOLUMNSCOUNT",count($stdfiltercolhtml));
-	$smarty->assign("STDFILTERCRITERIA",$stdfilterhtml);
-	$smarty->assign("STDFILTER_JAVASCRIPT",$stdfilterjs);
-	$smarty->assign("MANDATORYCHECK",implode(",",array_unique($oCustomView->mandatoryvalues)));
-	$smarty->assign("SHOWVALUES",implode(",",$oCustomView->showvalues));
-	$smarty->assign("EXIST","true");
-	$cactionhtml = "<input name='customaction' class='button' type='button' value='Create Custom Action' onclick=goto_CustomAction('".$cv_module."');>";
+		for($i=1;$i<10;$i++)
+		{
+			$choosecolhtml = getByModule_ColumnsHTML($cv_module,$modulecollist,$selectedcolumnslist[$i-1]);
+			$smarty->assign("CHOOSECOLUMN".$i,$choosecolhtml);
+		}
+	
+		$stdfilterlist = $oCustomView->getStdFilterByCvid($recordid);
+		$log->info('CustomView :: Successfully got Standard Filter for the Viewid'.$recordid);
+		$stdfilterlist["stdfilter"] = ($stdfilterlist["stdfilter"] != "") ? ($stdfilterlist["stdfilter"]) : ("custom");
+		$stdfilterhtml = $oCustomView->getStdFilterCriteria($stdfilterlist["stdfilter"]);
+		$stdfiltercolhtml = getStdFilterHTML($cv_module,$stdfilterlist["columnname"]);
+		$stdfilterjs = $oCustomView->getCriteriaJS();
+	
+		if(isset($stdfilterlist["startdate"]) && isset($stdfilterlist["enddate"]))
+		{
+			$smarty->assign("STARTDATE",getDisplayDate($stdfilterlist["startdate"]));
+			$smarty->assign("ENDDATE",getDisplayDate($stdfilterlist["enddate"]));
+		}
+		else{
+			$smarty->assign("STARTDATE",$stdfilterlist["startdate"]);
+			$smarty->assign("ENDDATE",$stdfilterlist["enddate"]);
+		}	
+	
+		$advfilterlist = $oCustomView->getAdvFilterByCvid($recordid);
+		$log->info('CustomView :: Successfully got Advanced Filter for the Viewid'.$recordid,'info');
+		for($i=1;$i<6;$i++)
+		{
+			$advfilterhtml = getAdvCriteriaHTML($advfilterlist[$i-1]["comparator"]);
+			$advcolumnhtml = getByModule_ColumnsHTML($cv_module,$modulecollist,$advfilterlist[$i-1]["columnname"]);
+			$smarty->assign("FOPTION".$i,$advfilterhtml);
+			$smarty->assign("BLOCK".$i,$advcolumnhtml);
+			$col = explode(":",$advfilterlist[$i-1]["columnname"]);
+			$temp_val = explode(",",$advfilterlist[$i-1]["value"]);
+			$and_text = "&nbsp;".$mod_strings['LBL_AND'];
+			if($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || $col[4] == 'DT')
+			{
+				$val = Array();
+				for($x=0;$x<count($temp_val);$x++)
+					if(trim($temp_val[$x] != ""))
+						$val[$x] = getDisplayDate(trim($temp_val[$x]));
+				$advfilterlist[$i-1]["value"] = implode(", ",$val);
+				$and_text = "<em old='(yyyy-mm-dd)'>(".$current_user->date_format.")</em>&nbsp;".$mod_strings['LBL_AND'];
+			}
+			$smarty->assign("VALUE".$i,$advfilterlist[$i-1]["value"]);
+			$smarty->assign("AND_TEXT".$i,$and_text);
+		}
 
-	if($cv_module == "Leads" || $cv_module == "Accounts" || $cv_module == "Contacts")
-	{
-		$smarty->assign("CUSTOMACTIONBUTTON",$cactionhtml);
-	}
+		$smarty->assign("STDFILTERCOLUMNS",$stdfiltercolhtml);
+		$smarty->assign("STDCOLUMNSCOUNT",count($stdfiltercolhtml));
+		$smarty->assign("STDFILTERCRITERIA",$stdfilterhtml);
+		$smarty->assign("STDFILTER_JAVASCRIPT",$stdfilterjs);
+		$smarty->assign("MANDATORYCHECK",implode(",",array_unique($oCustomView->mandatoryvalues)));
+		$smarty->assign("SHOWVALUES",implode(",",$oCustomView->showvalues));
+		$smarty->assign("EXIST","true");
+		$cactionhtml = "<input name='customaction' class='button' type='button' value='Create Custom Action' onclick=goto_CustomAction('".$cv_module."');>";
+	
+		if($cv_module == "Leads" || $cv_module == "Accounts" || $cv_module == "Contacts")
+		{
+			$smarty->assign("CUSTOMACTIONBUTTON",$cactionhtml);
+		}
         $data_type[] = $oCustomView->data_type;
         $smarty->assign("DATATYPE",$data_type);
+	}
+    else
+	{
+		echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
+		echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
+			<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+			<tbody><tr>
+			<td rowspan='2' width='11%'><img src='themes/$theme/images/denied.gif' ></td>
+			<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>$app_strings[LBL_PERMISSION]</span></td>
+			</tr>
+			<tr>
+			<td class='small' align='right' nowrap='nowrap'>
+			<a href='javascript:window.history.back();'>$app_strings[LBL_GO_BACK]</a><br>
+			</td>
+			</tr>
+			</tbody></table>
+			</div>";
+		echo "</td></tr></table>";
+		exit;
+	}  
 }
 
 $smarty->assign("RETURN_MODULE", $cv_module);
@@ -168,7 +193,13 @@ if($cv_module == "Calendar")
         $return_action = "ListView";
 else
         $return_action = "index";
-	
+
+if($recordid == '')
+	$act = $mod_strings['LBL_NEW'];
+else
+	$act = $mod_strings['LBL_EDIT'];
+
+$smarty->assign("ACT", $act);
 $smarty->assign("RETURN_ACTION", $return_action);
 
 $smarty->display("CustomView.tpl");

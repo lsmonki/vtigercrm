@@ -75,7 +75,8 @@ class CustomView extends CRMEntity{
 	 */	
 	function getViewId($module)
 	{
-		global $adb;
+		global $adb,$current_user;
+		$now_action = $_REQUEST['action'];
 		if(isset($_REQUEST['viewname']) == false)
 		{
 			if (isset($_SESSION['lvs'][$module]["viewname"]) && $_SESSION['lvs'][$module]["viewname"]!='')
@@ -99,7 +100,10 @@ class CustomView extends CRMEntity{
 		}
 		else
 		{
-			$viewid =  $_REQUEST['viewname'];
+			if($this->isPermittedCustomView($_REQUEST['viewname'],$now_action,$this->customviewmodule) == 'yes')
+				$viewid =  $_REQUEST['viewname'];
+			else
+				$viewid = 0;
 		}
 		if(is_string($viewid) && strtolower($viewid) == 'all')
         		$viewid = $this->getViewIdByName('All', $module);
@@ -133,18 +137,28 @@ class CustomView extends CRMEntity{
 
 	function getCustomViewByCvid($cvid)
 	{
-		global $adb;
+		global $adb,$current_user;
 		$tabid = getTabid($this->customviewmodule);
+		
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		
 		$ssql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype";
-		$ssql .= " where vtiger_customview.cvid=?";		
-
-		$result = $adb->pquery($ssql, array($cvid));
+		$ssql .= " where vtiger_customview.cvid=?";	
+		$sparams = array($cvid);
+		
+		if($is_admin == false) {
+			$ssql .= " and (vtiger_customview.status=0 or vtiger_customview.userid = ? or vtiger_customview.status = 3 or vtiger_customview.userid in(select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%'))";
+			array_push($sparams, $current_user->id);
+		}
+		$result = $adb->pquery($ssql, $sparams);
 
 		while($cvrow=$adb->fetch_array($result))
 		{
 			$customviewlist["viewname"] = $cvrow["viewname"];
 			$customviewlist["setdefault"] = $cvrow["setdefault"];
 			$customviewlist["setmetrics"] = $cvrow["setmetrics"];
+			$customviewlist["userid"] = $cvrow["userid"];
+			$customviewlist["status"] = $cvrow["status"];
 		}
 		return $customviewlist;		
 	}	
@@ -155,14 +169,32 @@ class CustomView extends CRMEntity{
 	  * @returns  $customviewCombo :: Type String 
 	 */	
 
-	function getCustomViewCombo($viewid='')
+	function getCustomViewCombo($viewid='', $markselected=true)
 	{
-		global $adb;
+		global $adb,$current_user;
 		global $app_strings;
 		$tabid = getTabid($this->customviewmodule);
-		$ssql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype";
-		$ssql .= " where vtiger_tab.tabid=? order by viewname";
-		$result = $adb->pquery($ssql, array($tabid));
+		
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		
+		$shtml_user = '';
+		$shtml_pending = '';
+		$shtml_public = '';
+		$shtml_others = '';
+		
+		$selected = 'selected';
+		if ($markselected == false) $selected = '';
+		
+		$ssql = "select vtiger_customview.*, vtiger_users.user_name from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype 
+					left join vtiger_users on vtiger_customview.userid = vtiger_users.id ";
+		$ssql .= " where vtiger_tab.tabid=?";
+		$sparams = array($tabid);
+		
+		if($is_admin == false){
+			$ssql .= " and (vtiger_customview.status=0 or vtiger_customview.userid = ? or vtiger_customview.status = 3 or vtiger_customview.userid in(select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%'))";
+			array_push($sparams, $current_user->id);
+		}
+		$result = $adb->pquery($ssql, $sparams);
 		while($cvrow=$adb->fetch_array($result))
 		{
 			if($cvrow['viewname'] == 'All')
@@ -170,21 +202,52 @@ class CustomView extends CRMEntity{
 				$cvrow['viewname'] = $app_strings['COMBO_ALL'];
 			}
 			
+			$option = '';
+			$viewname = $cvrow['viewname'];
+			if ($cvrow['status'] == CV_STATUS_DEFAULT || $cvrow['userid'] == $current_user->id) {
+				$disp_viewname = $viewname;				
+			} else {
+				$disp_viewname = $viewname . " [" . $cvrow['user_name'] . "] ";	
+			}
+			
+			
 			if($cvrow['setdefault'] == 1 && $viewid =='')
-                        {
-	                         $shtml .= "<option selected value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
-		                 $this->setdefaultviewid = $cvrow['cvid'];
+			{
+				$option = "<option $selected value=\"".$cvrow['cvid']."\">".$disp_viewname."</option>";
+				$this->setdefaultviewid = $cvrow['cvid'];
 			}			
 			elseif($cvrow['cvid'] == $viewid)
 			{
-				$shtml .= "<option selected value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
+				$option = "<option $selected value=\"".$cvrow['cvid']."\">".$disp_viewname."</option>";
 				$this->setdefaultviewid = $cvrow['cvid'];
 			}
 			else
 			{
-				$shtml .= "<option value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
+				$option = "<option value=\"".$cvrow['cvid']."\">".$disp_viewname."</option>";
+			}
+
+			// Add the option to combo box at appropriate section
+			if($option != '') {
+				if ($cvrow['status'] == CV_STATUS_DEFAULT || $cvrow['userid'] == $current_user->id) {
+					$shtml_user .= $option;
+				} elseif ($cvrow['status'] == CV_STATUS_PUBLIC) {
+					if ($shtml_public == '')
+						$shtml_public = "<option disabled>--- " .$app_strings['LBL_PUBLIC']. " ---</option>";
+					$shtml_public .= $option;					
+				} elseif ($cvrow['status'] == CV_STATUS_PENDING) {
+					if ($shtml_pending == '')
+						$shtml_pending = "<option disabled>--- " .$app_strings['LBL_PENDING']. " ---</option>";
+					$shtml_pending .= $option;					
+				} else {
+					if ($shtml_others == '')
+						$shtml_others = "<option disabled>--- " .$app_strings['LBL_OTHERS']. " ---</option>";
+					$shtml_others .= $option;					
+				}
 			}
 		}
+		$shtml = $shtml_user;
+		if ($is_admin == true) $shtml .= $shtml_pending;
+		$shtml = $shtml . $shtml_public . $shtml_others;
 		return $shtml;
 	}
 
@@ -293,7 +356,7 @@ class CustomView extends CRMEntity{
 			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
 			if($fieldname == 'account_id' && $fieldtablename != 'vtiger_account')//Potential,Contacts,Invoice,SalesOrder & Quotes  records   sort by Account Name . But for account member of we have to avoid this
 				$optionvalue = "vtiger_account:accountname:accountname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
-			else if($fieldname == 'contact_id' && $module != "Contacts")//Calendar,Notes,PurchaseOrder,SalesOrder,Quotes,and Invoice records sort by Contact Name
+			else if($fieldname == 'contact_id' && $module != "Contacts")//Calendar,Documents,PurchaseOrder,SalesOrder,Quotes,and Invoice records sort by Contact Name
                                 $optionvalue = "vtiger_contactdetails:lastname:lastname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
 			else if($fieldname == 'product_id' && ($module != 'Products' && $module != 'HelpDesk' && $module !="Faq"))//Campaign records sort by Product Name.
 				$optionvalue = "vtiger_products:productname:productname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
@@ -836,7 +899,7 @@ class CustomView extends CRMEntity{
 						$sqllist_column = "case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name";
 					}
 					if($list[0] == "vtiger_contactdetails" && $list[1] == "lastname")
-                                                $sqllist_column = "vtiger_contactdetails.lastname,vtiger_contactdetails.firstname";	
+                    	$sqllist_column = "vtiger_contactdetails.lastname,vtiger_contactdetails.firstname";	
 					$sqllist[] = $sqllist_column;
 					//Ends
 					
@@ -854,7 +917,6 @@ class CustomView extends CRMEntity{
 			$returnsql = implode(",",$sqllist);
 		}
 		return $returnsql;
-
 	}
 
 	/** to get the customview stdFilter Query for the given customview Id  
@@ -998,6 +1060,7 @@ class CustomView extends CRMEntity{
 			"salesorderid"=>"vtiger_salesorder.subject",
 			"campaignid"=>"vtiger_campaign.campaignname",
 			"vtiger_contactdetails.reportsto"=>"concat(vtiger_contactdetails2.lastname,' ',vtiger_contactdetails2.firstname)",
+			"vtiger_pricebook.currency_id"=>"vtiger_currency_info.currency_name",
 			);
 
 		if($fieldname == "smownerid")
@@ -1703,7 +1766,7 @@ class CustomView extends CRMEntity{
 				$query = "select ".$this->getCvColumnListSQL($viewid).", vtiger_activity.activityid, vtiger_activity.activitytype as type, vtiger_activity.priority, case when (vtiger_activity.status not like '') then vtiger_activity.status else vtiger_activity.eventstatus end as status, vtiger_crmentity.crmid,vtiger_contactdetails.contactid ".$listviewquery;
 				if($module == "Calendar")
 					$query = str_replace('vtiger_seactivityrel.crmid,','',$query);
-			}else if($module == "Notes")
+			}else if($module == "Documents")
 			{
 				$query = "select ".$this->getCvColumnListSQL($viewid)." ,vtiger_crmentity.crmid,vtiger_notes.* ".$listviewquery;
 			}
@@ -1750,7 +1813,6 @@ class CustomView extends CRMEntity{
 			{
 				$query .= ' and '.$advfiltersql;
 			}
-
 		}
 		return $query;
 	}
@@ -1848,6 +1910,138 @@ class CustomView extends CRMEntity{
 		}
 		$this->module_list[$module] = $block_info;
 		return $this->module_list;
+	}
+
+	//Function to check if the current user is able to see the customView	
+	function isPermittedCustomView($record_id, $action, $module)
+	{
+		global $log, $adb;
+		global $current_user;
+		$log->debug("Entering isPermittedCustomView($record_id,$action,$module) method....");
+		
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		$permission = "yes";
+		
+		if($record_id != '')
+		{
+			$sql="select * from vtiger_customview where cvid=?";
+			$res = $adb->pquery($sql, array($record_id));
+			$record_cnt=$adb->num_rows($res);
+			if($record_cnt > 0)
+			{
+				$status=$adb->query_result($res, 0, 'status');
+				$userid=$adb->query_result($res, 0, 'userid');
+				if($status == CV_STATUS_DEFAULT)
+				{
+					$log->debug("Entering when status=0");
+					if($action == 'ListView' || $action == $module."Ajax" || $action == 'index')
+					{
+						$permission = "yes";
+					}
+					else
+						$permission = "no";
+				}
+				elseif($is_admin)
+				{
+					$permission = 'yes';
+				}
+				elseif ($action != 'ChangeStatus')
+				{
+					if($userid == $current_user->id)
+					{
+						$log->debug("Entering when $userid=$current_user->id");
+						$permission = "yes";
+					}
+					elseif($status == CV_STATUS_PUBLIC)
+					{
+						$log->debug("Entering when status=3");
+						if($action == 'ListView' || $action == $module."Ajax" || $action == 'index')
+						{
+							$permission = "yes";
+						}
+						else
+							$permission = "no";
+					}
+					elseif($status == CV_STATUS_PRIVATE || $status == CV_STATUS_PENDING)
+					{
+						$log->debug("Entering when status=1 or 2");
+						if($userid == $current_user->id)
+							$permission = "yes";
+						else		
+						{
+							/*if($action == 'ListView' || $action == $module."Ajax" || $action == 'index')
+							{*/
+								$log->debug("Entering when status=1 or status=2 & action = ListView or $module.Ajax or index");
+								$sql="select vtiger_users.id from vtiger_customview inner join vtiger_users where vtiger_customview.cvid = ? and vtiger_customview.userid in (select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '%".$current_user_parent_role_seq."::%')";
+								$result = $adb->pquery($sql, array($record_id));
+								
+								while($row = $adb->fetchByAssoc($result))
+								{
+									$temp_result[] = $row['id'];
+								}
+								$user_array = $temp_result;
+								if(sizeof($user_array) > 0)
+								{
+									if(!in_array($current_user->id,$user_array))
+										$permission = "no";
+									else
+										$permission = "yes";
+								}	
+								else
+									$permission = "no";
+							/*}							
+							else
+							{
+								$log->debug("Entering when status=1 or 2 & action = Editview or Customview");
+								$permission = "no";
+							}*/
+						}
+					}
+					else
+						$permission = "yes";
+				}
+				else
+				{
+					$log->debug("Entering else condition............");
+					$permission = "no";
+				}
+			}
+			else
+			{
+				$log->debug("Enters when count =0");
+				$permission = 'no';
+			}	
+		}
+		$log->debug("Permission @@@@@@@@@@@@@@@@@@@@@@@@@@@ : $permission");
+		$log->debug("Exiting isPermittedCustomView($record_id,$action,$module) method....");
+		return $permission;
+	}
+
+	function isPermittedChangeStatus($status)
+	{
+		global $current_user,$log;
+		global $current_language;
+		$custom_strings = return_module_language($current_language, "CustomView");
+
+		$log->debug("Entering isPermittedChangeStatus($status) method..............");
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		$status_details = Array();
+		if($is_admin)
+		{
+			if($status == CV_STATUS_PENDING)
+			{
+				$changed_status = CV_STATUS_PUBLIC;
+				$status_label = $custom_strings['LBL_STATUS_PUBLIC_APPROVE'];
+			}
+			elseif($status == CV_STATUS_PUBLIC)
+			{
+				$changed_status = CV_STATUS_PENDING;
+				$status_label = $custom_strings['LBL_STATUS_PUBLIC_DENY'];
+			}	
+			$status_details = Array('Status'=>$status,'ChangedStatus'=>$changed_status,'Label'=>$status_label);
+		}
+		$log->debug("Exiting isPermittedChangeStatus($status) method..............");
+		return $status_details;
 	}
 
 }

@@ -76,11 +76,25 @@
 							<span class="small">|</span>
 							<span class="small" disabled>{$APP.LNK_CV_DELETE}</span></td>
 						    {else}
-							<td><a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
-							<span class="small">|</span>
-                            <a href="index.php?module={$MODULE}&action=CustomView&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_EDIT}</a>
-                            <span class="small">|</span>
-							<a href="javascript:confirmdelete('index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}')">{$APP.LNK_CV_DELETE}</a></td>
+							<td>
+								<a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
+								<span class="small">|</span>
+								{if $CV_EDIT_PERMIT neq 'yes'}
+									<span class="small" disabled>{$APP.LNK_CV_EDIT}</span>
+								{else}
+									<a href="index.php?module={$MODULE}&action=CustomView&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_EDIT}</a>
+								{/if}
+								<span class="small">|</span>
+								{if $CV_DELETE_PERMIT neq 'yes'}
+									<span class="small" disabled>{$APP.LNK_CV_DELETE}</span>
+								{else}
+									<a href="javascript:confirmdelete('index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}')">{$APP.LNK_CV_DELETE}</a>
+								{/if}
+								{if $CUSTOMVIEW_PERMISSION.ChangedStatus neq '' && $CUSTOMVIEW_PERMISSION.Label neq ''}
+									<span class="small">|</span>	
+								   		<a href="#" id="customstatus_id" onClick="ChangeCustomViewStatus({$VIEWID},{$CUSTOMVIEW_PERMISSION.Status},{$CUSTOMVIEW_PERMISSION.ChangedStatus},'{$MODULE}','{$CUSTOMVIEW_PERMISSION.Label}')">{$CUSTOMVIEW_PERMISSION.Label}</a>
+								{/if}
+							</td>
 						    {/if}
 					</tr>
 					</table> 

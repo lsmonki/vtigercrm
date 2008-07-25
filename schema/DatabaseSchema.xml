@@ -4235,6 +4235,12 @@
 		<field name="entitytype" type="C" size="25">
 			<notnull />
 		</field>
+		<field name="status" type="I" size="1">
+			<default value="1" />
+		</field>
+		<field name="userid" type="I" size="19">
+			<default value="1" />
+		</field>
 		<index name="customview_entitytype_idx">
 			<col>entitytype</col>
 		</index>

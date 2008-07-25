@@ -43,6 +43,20 @@
   require_once('include/FormValidationUtil.php');
   require_once('include/utils/RecyclebinUtils.php');
  
+// Constants to be defined here
+
+// For Migration status.
+define("MIG_CHARSET_PHP_UTF8_DB_UTF8", 1);
+define("MIG_CHARSET_PHP_NONUTF8_DB_NONUTF8", 2);
+define("MIG_CHARSET_PHP_NONUTF8_DB_UTF8", 3);
+define("MIG_CHARSET_PHP_UTF8_DB_NONUTF8", 4);
+
+// For Customview status.
+define("CV_STATUS_DEFAULT", 0);				
+define("CV_STATUS_PRIVATE", 1);
+define("CV_STATUS_PENDING", 2);
+define("CV_STATUS_PUBLIC", 3);
+
 /** Function to return a full name
   * @param $row -- row:: Type integer
   * @param $first_column -- first column:: Type string

@@ -48,6 +48,11 @@ for($i=0;$i<$countprofiles;$i++)
 	ExecuteQuery("insert into vtiger_profile2tab values ($profileid,30,0)");
 }
 
+/* For Role based customview support */
+ExecuteQuery("alter table vtiger_customview add column status int(1) default '3'");
+ExecuteQuery("update vtiger_customview set status=0 where viewname='All'");
+ExecuteQuery("alter table vtiger_customview add column userid int(19) default '1'");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

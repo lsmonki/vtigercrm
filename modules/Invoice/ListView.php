@@ -190,6 +190,12 @@ else
 
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
+//To check if a user is able to edit/delete a customview
+$edit_permit = $oCustomView->isPermittedCustomView($viewid,'EditView',$currentModule);
+$delete_permit = $oCustomView->isPermittedCustomView($viewid,'Delete',$currentModule);
+$smarty->assign("CV_EDIT_PERMIT",$edit_permit);
+$smarty->assign("CV_DELETE_PERMIT",$delete_permit);
+
 //Retreive the List View Table Header
 if($viewid !='')
 $url_string .="&viewname=".$viewid;

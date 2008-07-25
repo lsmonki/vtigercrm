@@ -77,6 +77,17 @@ $oCustomView = new CustomView($currentModule);
 $viewid = $oCustomView->getViewId($currentModule);
 $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
+
+//Added to handle approving or denying status-public by the admin in CustomView
+$statusdetails = $oCustomView->isPermittedChangeStatus($viewnamedesc['status']);
+$smarty->assign("CUSTOMVIEW_PERMISSION",$statusdetails);
+
+//To check if a user is able to edit/delete a customview
+$edit_permit = $oCustomView->isPermittedCustomView($viewid,'EditView',$currentModule);
+$delete_permit = $oCustomView->isPermittedCustomView($viewid,'Delete',$currentModule);
+$smarty->assign("CV_EDIT_PERMIT",$edit_permit);
+$smarty->assign("CV_DELETE_PERMIT",$delete_permit);
+
 //<<<<<customview>>>>>
 $smarty->assign("CHANGE_OWNER",getUserslist());
 $smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
@@ -93,6 +104,28 @@ if($viewid != 0)
 {
 	$CActionDtls = $oCustomView->getCustomActionDetails($viewid);
 }
+elseif($viewid ==0)
+{
+	echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
+	echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
+
+		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+		<tbody><tr>
+		<td rowspan='2' width='11%'><img src='themes/$theme/images/denied.gif' ></td>
+		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'>
+			<span class='genHeaderSmall'>$app_strings[LBL_PERMISSION]</span></td>
+		</tr>
+		<tr>
+		<td class='small' align='right' nowrap='nowrap'>
+		<a href='javascript:window.history.back();'>$app_strings[LBL_GO_BACK]</a><br>
+		</td>
+		</tr>
+		</tbody></table>
+		</div>";
+	echo "</td></tr></table>";
+	exit;
+}
+
 if(isPermitted('Accounts','Delete','') == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
@@ -290,8 +323,6 @@ $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_header_search=getSearchListHeaderValues($focus,"Accounts",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
-
-
 
 $listview_entries = getListViewEntries($focus,"Accounts",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);

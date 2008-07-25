@@ -1090,6 +1090,10 @@ $app_strings = array (
 'LNK_RESTORE'=>'restore',
 'LBL_NO_PERMITTED_MODULES'=>'No permitted modules available',
 
+//Added for Role based Custom filters
+'LBL_PUBLIC'=>'Public',
+'LBL_PENDING'=>'Pending',
+'LBL_OTHERS'=>'Others',
 
 );
 

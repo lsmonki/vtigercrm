@@ -77,6 +77,17 @@ $oCustomView = new CustomView("PriceBooks");
 $viewid = $oCustomView->getViewId($currentModule);
 $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
+
+//Added to handle approving or denying status-public by the admin in CustomView
+$statusdetails = $oCustomView->isPermittedChangeStatus($viewnamedesc['status']);
+$smarty->assign("CUSTOMVIEW_PERMISSION",$statusdetails);
+
+//To check if a user is able to edit/delete a customview
+$edit_permit = $oCustomView->isPermittedCustomView($viewid,'EditView',$currentModule);
+$delete_permit = $oCustomView->isPermittedCustomView($viewid,'Delete',$currentModule);
+$smarty->assign("CV_EDIT_PERMIT",$edit_permit);
+$smarty->assign("CV_DELETE_PERMIT",$delete_permit);
+
 //<<<<<customview>>>>>
 if(isPermitted('PriceBooks','DeletePriceBook','') == 'yes')
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];

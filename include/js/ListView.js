@@ -100,7 +100,7 @@ function massDelete(module)
 function showDefaultCustomView(selectView,module,parenttab)
 {
 	$("status").style.display="inline";
-	var viewName = selectView.options[selectView.options.selectedIndex].value;
+	var viewName = encodeURIComponent(selectView.options[selectView.options.selectedIndex].value);
 	new Ajax.Request(
                	'index.php',
                 {queue: {position: 'end', scope: 'command'},
@@ -230,5 +230,32 @@ function update_selected_checkbox()
                 if(allsplit.indexOf(selsplit[i]) != "-1")
                         document.getElementById(selsplit[i]).checked='true';
         }
+}
 
+//Function to Set the status as Approve/Deny for Public access by Admin
+function ChangeCustomViewStatus(viewid,now_status,changed_status,module,label)
+{
+	$('status').style.display = 'block';
+	new Ajax.Request(
+       		'index.php',
+               	{queue: {position: 'end', scope: 'command'},
+               		method: 'post',
+                    postBody:'module=CustomView&action=CustomViewAjax&file=ChangeStatus&dmodule='+module+'&record='+viewid+'&status='+changed_status,
+					onComplete: function(response) 
+					{
+			        	var responseVal=response.responseText;
+						if(responseVal.indexOf(':#:FAILURE') > -1) {
+							alert('Failed');
+						} else if(responseVal.indexOf(':#:SUCCESS') > -1) {
+							var values = responseVal.split(':#:');
+							var module_name = values[2];
+							var customview_ele = $('viewname');
+							showDefaultCustomView(customview_ele, module_name);
+						} else {
+							$('ListViewContents').innerHTML = responseVal;
+						}
+						$('status').style.display = 'none';
+					} 
+				}
+	);
 }

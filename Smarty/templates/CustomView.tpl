@@ -121,34 +121,51 @@ function mandatoryCheck()
 	</span> <br>
       <hr noshade="noshade" size="1">
       <form name="EditView" method="post" enctype="multipart/form-data" action="index.php">
-            <table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
-             <tbody><tr>
-              <td align="left" valign="top">
-               <table width="100%"  border="0" cellspacing="0" cellpadding="5">
+      <table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
+      <tbody><tr>
+      <td align="left" valign="top">
+      <table width="100%"  border="0" cellspacing="0" cellpadding="5">
 		<tr>
-		 <td colspan="4" class="detailedViewHeader"><strong>{$MOD.Details}</strong></td>
+		 	<td colspan="4" class="detailedViewHeader"><strong>{$MOD.Details}</strong></td>
 		</tr>
 		<tr>
-		 <td class="dvtCellInfo" align="right" width="25%"><span class="style1">*</span>{$MOD.LBL_VIEW_NAME} </td>
-		 <td class="dvtCellInfo" width="25%">
-		  <input class="detailedViewTextBox" type="text" name='viewName' value="{$VIEWNAME}" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'"/>
-		 </td>
-		 <td class="dvtCellInfo" width="25%">
-		  {if $CHECKED eq 'checked'}
-		      <input type="checkbox" name="setDefault" value="1" checked/>{$MOD.LBL_SETDEFAULT}
-		  {else}
-		      <input type="checkbox" name="setDefault" value="0" />{$MOD.LBL_SETDEFAULT}
-		  {/if}
-		 </td>
-		 <td class="dvtCellInfo" width="25%">
-		  {if $MCHECKED eq 'checked'}
-		      <input type="checkbox" name="setMetrics" value="1" checked/>{$MOD.LBL_LIST_IN_METRICS}
-		  {else}
-		      <input type="checkbox" name="setMetrics" value="0" />{$MOD.LBL_LIST_IN_METRICS}
-		  {/if}
-		 </td>
+			<td colspan=4 width="100%" style="padding:0px">
+			<table cellpadding=0 cellspacing=0 width=100% border=0>
+				<tr>
+					<td class="dvtCellInfo" width="10%" align="right"><span class="style1">*</span>{$MOD.LBL_VIEW_NAME}
+					</td>
+					<td class="dvtCellInfo" width="30%">
+						<input class="detailedViewTextBox" type="text" name='viewName' value="{$VIEWNAME}" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" size="40"/>
+		 			</td>
+		 			<td class="dvtCellInfo" width="20%">
+		  			{if $CHECKED eq 'checked'}
+		      			<input type="checkbox" name="setDefault" value="1" checked/>{$MOD.LBL_SETDEFAULT}
+		  			{else}
+		      			<input type="checkbox" name="setDefault" value="0" />{$MOD.LBL_SETDEFAULT}
+		  			{/if}
+		 			</td>
+		 			<td class="dvtCellInfo" width="20%">
+		  			{if $MCHECKED eq 'checked'}
+		      			<input type="checkbox" name="setMetrics" value="1" checked/>{$MOD.LBL_LIST_IN_METRICS}
+		  			{else}
+		      			<input type="checkbox" name="setMetrics" value="0" />{$MOD.LBL_LIST_IN_METRICS}
+		  			{/if}
+		 			</td>
+					<td class="dvtCellInfo" width="20%">
+					{if $STATUS eq '' || $STATUS eq 1}
+						<input type="checkbox" name="setStatus" value="1"/>
+					{elseif $STATUS eq 2}
+						<input type="checkbox" name="setStatus" value="2" checked/>
+					{elseif $STATUS eq 3 || $STATUS eq 0}
+						<input type="checkbox" name="setStatus" value="3" checked/>
+					{/if}
+						{$MOD.LBL_SET_AS_PUBLIC}
+					</td>
+				</tr>
+			</table>
+			</td>
 		</tr>
-		<tr><td colspan="3">&nbsp;</td></tr>
+		<tr><td colspan="4">&nbsp;</td></tr>
 		<tr>
 		 <td colspan="4" class="detailedViewHeader">
 		  <b>{$MOD.LBL_STEP_2_TITLE} </b>
