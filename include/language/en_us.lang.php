@@ -1095,6 +1095,10 @@ $app_strings = array (
 'LBL_PENDING'=>'Pending',
 'LBL_OTHERS'=>'Others',
 
+//For Configuring/Using PurchaseOrder number
+'PO Number'=>'PO Number',
+'MSG_AUTO_GEN_ON_SAVE'=>'AUTO GEN ON SAVE',
+
 );
 
 $app_list_strings = array (

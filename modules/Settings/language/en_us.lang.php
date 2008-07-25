@@ -949,5 +949,26 @@ $mod_strings = Array(
 'LBL_RECYCLEBIN'=>'Recycle Bin',
 'LBL_RECYCLEBIN_DESCRIPTION'=>'Contains the data you have deleted',
 
+'LBL_CANCEL_BUTTON'=>'Cancel',
+
+//Added fields for Inventory Number labels
+'LBL_CUSTOMIZE_INVENTORY_NUMBER'=>'Customize Inventory Sequence',
+'LBL_CUSTOMIZE_INVENTORY_NUMBER_DESCRIPTION'=>'Inventory Sequence Customization',
+'LBL_CUSTOM_QUOTE_NUMBER_VIEW'=>'Quote Number Customization',
+'LBL_CUSTOMQUOTE_STRING'=>'Custom Quote String',
+'LBL_CUSTOMQUOTE_NUMBER'=>'Custom Quote Number',
+'LBL_QUOTE_NUMBER_PREVIEW'=>'Preview',
+'LBL_QUOTE_NUMBER_BUTTON'=>'Update Quote Number',
+'LBL_CUSTOM_SO_NUMBER_VIEW'=>'SalesOrder Number Customization',
+'LBL_CUSTOMSO_STRING'=>'Custom SalesOrder String',
+'LBL_CUSTOMSO_NUMBER'=>'Custom SalesOrder Number',
+'LBL_SO_NUMBER_PREVIEW'=>'Preview',
+'LBL_SO_NUMBER_BUTTON'=>'Update SalesOrder Number',
+'LBL_CUSTOM_PO_NUMBER_VIEW'=>'PurchaseOrder Number Customization',
+'LBL_CUSTOMPO_STRING'=>'Custom PurchaseOrder String',
+'LBL_CUSTOMPO_NUMBER'=>'Custom PurchaseOrder Number',
+'LBL_PO_NUMBER_PREVIEW'=>'Preview',
+'LBL_PO_NUMBER_BUTTON'=>'Update PurchaseOrder Number',
+
 );
 ?>

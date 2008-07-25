@@ -263,7 +263,7 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
                          'vtiger_troubletickets:product_id:product_id:HelpDesk_Product_Name:I',
                          'vtiger_crmentity:smownerid:assigned_user_id:HelpDesk_Assigned_To:V'),
 
-		   Array('vtiger_crmentity:crmid::Quotes_Quote_No:I',
+		   Array('vtiger_quotes:quote_no:quote_no:Quotes_Quote_No:V',
 			 'vtiger_quotes:subject:subject:Quotes_Subject:V',
                          'vtiger_quotes:quotestage:quotestage:Quotes_Quote_Stage:V',
                          'vtiger_quotes:potentialid:potential_id:Quotes_Potential_Name:I',
@@ -319,14 +319,14 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
                         'vtiger_products:qty_per_unit:qty_per_unit:Products_Qty/Unit:V',
                         'vtiger_products:unit_price:unit_price:Products_Unit_Price:V'),
 		  
-		  Array('vtiger_crmentity:crmid::PurchaseOrder_Order_No:I',
+		  Array('vtiger_purchaseorder:purchaseorder_no:purchaseorder_no:PurchaseOrder_PurchaseOrder_No:V',
                         'vtiger_purchaseorder:subject:subject:PurchaseOrder_Subject:V',
                         'vtiger_purchaseorder:vendorid:vendor_id:PurchaseOrder_Vendor_Name:I',
                         'vtiger_purchaseorder:tracking_no:tracking_no:PurchaseOrder_Tracking_Number:V',
 						'vtiger_purchaseorder:total:hdnGrandTotal:PurchaseOrder_Total:V',
                         'vtiger_crmentity:smownerid:assigned_user_id:PurchaseOrder_Assigned_To:V'),
 		  
-	          Array('vtiger_crmentity:crmid::SalesOrder_Order_No:I',
+	          Array('vtiger_salesorder:salesorder_no:salesorder_no:SalesOrder_SalesOrder_No:V',
                         'vtiger_salesorder:subject:subject:SalesOrder_Subject:V',
                        	'vtiger_account:accountname:accountname:SalesOrder_Account_Name:V',
                         'vtiger_quotes:quoteid:quote_id:SalesOrder_Quote_Name:I',

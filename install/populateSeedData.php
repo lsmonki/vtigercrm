@@ -574,6 +574,7 @@ $sub_array = array ("Prod_Quote", "Cont_Quote", "SO_Quote", "PO_Quote", "Vendor_
 $stage_array = array ("Created", "Reviewed", "Delivered", "Accepted" , "Rejected");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 $validtill_array = array ("2007-09-21", "2007-10-29", "2007-12-11", "2007-03-29", "2007-06-18");
+$quoteno_array = array ("QUOTE1","QUOTE2","QUOTE3","QUOTE4","QUOTE5");
 for($i=0;$i<5;$i++)
 {
 	$quote = new Quotes();
@@ -587,6 +588,7 @@ for($i=0;$i<5;$i++)
         $quote->column_fields["contact_id"] = $contact_ids[$contact_key];
 	$rand = array_rand($num_array);
 	$quote->column_fields["subject"] = $sub_array[$i];
+	$quote->column_fields["quote_no"] = $quoteno_array[$i];
 	$quote->column_fields["quotestage"] = $stage_array[$i];	
 	$quote->column_fields["carrier"] = $carrier_array[$i];
 	$quote->column_fields["validtill"] = $validtill_array[$i];
@@ -646,6 +648,7 @@ $subj_array = array ("SO_vtiger", "SO_zoho", "SO_vtiger5usrp", "SO_vt100usrpk", 
 $status_array = array ("Created",  "Delivered", "Approved" , "Cancelled" , "Created");
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 $duedate_array = array ("2007-04-21", "2007-05-29", "2007-08-11", "2007-09-09", "2007-02-28");
+$sono_array = array ("SO1","SO2","SO3","SO4","SO5");
 
 for($i=0;$i<5;$i++)
 {
@@ -660,6 +663,7 @@ for($i=0;$i<5;$i++)
         $so->column_fields["contact_id"] = $contact_ids[$contact_key];
 	$rand = array_rand($num_array);
 	$so->column_fields["subject"] = $subj_array[$i];
+	$so->column_fields["salesorder_no"] = $sono_array[$i];
 	$so->column_fields["sostatus"] = $status_array[$i];	
 	$so->column_fields["hdnGrandTotal"] = $sototal_array[$i];
 	$so->column_fields["carrier"] = $carrier_array[$i];
@@ -724,6 +728,7 @@ $pstatus_array = array ("Created",  "Delivered", "Approved" , "Cancelled", "Rece
 $carrier_array = array ("FedEx", "UPS", "USPS", "DHL", "BlueDart");
 $trkno_array = array ("po1425", "po2587", "po7974", "po7979", "po6411"); 
 $duedate_array = array ("2007-04-21", "2007-05-29", "2007-07-11", "2007-04-09", "2006-08-18");
+$pono_array = array ("PO1","PO2","PO3","PO4","PO5");
 
 for($i=0;$i<5;$i++)
 {
@@ -736,6 +741,7 @@ for($i=0;$i<5;$i++)
         $po->column_fields["contact_id"] = $contact_ids[$contact_key];
 	$rand = array_rand($num_array);
 	$po->column_fields["subject"] = $psubj_array[$i];
+	$po->column_fields["purchaseorder_no"] = $pono_array[$i];
 	$po->column_fields["postatus"] = $pstatus_array[$i];	
 	$po->column_fields["carrier"] = $carrier_array[$i];
 	$po->column_fields["tracking_no"] = $trkno_array[$i];
@@ -795,7 +801,7 @@ for($i=0;$i<5;$i++)
 //Populate Invoice Data
 
 $isubj_array = array ("vtiger_invoice201", "zoho_inv7841", "vtiger5usrp_invoice71134", "vt100usrpk_inv113", "vendtl_inv214");
-$invoiceno_array = array ("INV2007_1","INV2007_2","INV2007_3","INV2007_4","INV2007_5");
+$invoiceno_array = array ("INV1","INV2","INV3","INV4","INV5");
 $istatus_array = array ("Created",  "Sent", "Approved" , "Credit Invoice", "Paid");
 $itotal_array = array ("4842.000", "4842.000", "4842.000", "4842.000", "4842.000");
 

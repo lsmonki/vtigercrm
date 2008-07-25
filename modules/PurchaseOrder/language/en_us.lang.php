@@ -195,6 +195,9 @@ $mod_strings = Array(
 'Sub Total'=>'Sub Total',
 'S&H Amount'=>'S&H Amount',
 
+//Added after 5.0.4 GA
+'PurchaseOrder No'=>'PurchaseOrder No',
+
 );
 
 ?>

@@ -192,6 +192,10 @@ $mod_strings = Array(
 'Discount Amount'=>'Discount Amount',
 'Terms & Conditions'=>'Terms & Conditions',
 'S&H Amount'=>'S&H Amount',
+
+//Added after 5.0.4 GA
+'SalesOrder No'=>'SalesOrder No',
+
 );
 
 ?>

@@ -181,6 +181,8 @@ $mod_strings = Array(
 'Adjustment'=>'Adjustment',
 'S&H Amount'=>'S&H Amount',
 
+//Added after 5.0.4 GA
+'Quote No'=>'Quote No',
 );
 
 ?>

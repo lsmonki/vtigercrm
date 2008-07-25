@@ -94,7 +94,7 @@ $pdf->addRecBlock($contact_name, $app_strings["Contact Name"],$conBlock);
 
 // vtiger_invoice number block
 $invBlock=array("145","65");
-$pdf->addRecBlock($id, $app_strings["Order Number"],$invBlock);
+$pdf->addRecBlock($po_no, $app_strings["PO Number"],$invBlock);
 
 /* ************ End Invoice Data ************************ */
 

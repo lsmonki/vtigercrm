@@ -50,6 +50,10 @@ if($focus->column_fields['postatus'] == 'Received Shipment')
 	}
 
 }
+if($focus->mode != 'edit')
+{
+	$focus->column_fields['purchaseorder_no'] = setInventorySeqNumber("increment_invno",$module);
+}
 
 $focus->save("PurchaseOrder");
 

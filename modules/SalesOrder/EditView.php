@@ -29,7 +29,7 @@ require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
-global $app_strings,$mod_strings,$log,$theme,$currentModule,$current_user;
+global $app_strings,$mod_strings,$log,$theme,$currentModule,$current_user,$adb;
 
 $log->debug("Inside Sales Order EditView");
 
@@ -317,6 +317,17 @@ $smarty->assign("SH_TAXES",$sh_tax_details);
  $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
  $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
  $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+if($focus->mode != 'edit')
+{		
+		$autostr = getTranslatedString('MSG_AUTO_GEN_ON_SAVE');
+		$inv_no = $adb->pquery("SELECT prefix, cur_id from vtiger_inventory_num where semodule = ? and active=1",array($module));
+        $invstr = $adb->query_result($inv_no,0,'prefix');
+        $invno = $adb->query_result($inv_no,0,'cur_id');
+        if(CheckDuplicateSONumber($invstr.$invno))
+               echo '<br><font color="#FF0000"><b>Duplicate SalesOrder Number - Click <a href="index.php?module=Settings&action=CustomInventorySeq&parenttab=Settings">here</a> to  Configure the SalesOrder Number</b></font>'.$num_rows;
+        else
+                $smarty->assign("inv_no",$autostr);
+}
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);

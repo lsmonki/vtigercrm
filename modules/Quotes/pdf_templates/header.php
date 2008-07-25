@@ -90,7 +90,7 @@ $pdf->addRecBlock($contact_name, $app_strings["Contact Name"],$conBlock);
 
 // quote number block
 $invBlock=array("147","65");
-$pdf->addRecBlock($quote_id, $app_strings["Quote Number"],$invBlock);
+$pdf->addRecBlock($quote_no, $app_strings["Quote Number"],$invBlock);
 
 /* ************ End Quote Data ************************ */
 

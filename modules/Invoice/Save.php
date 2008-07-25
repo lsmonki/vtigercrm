@@ -34,6 +34,10 @@ $search=$_REQUEST['search_url'];
 
 global $current_user;
 setObjectValuesFromRequest($focus);
+if($focus->mode != 'edit')
+{
+	$focus->column_fields['invoice_no'] = setInventorySeqNumber("increment_invno",$module);
+}
 
 $focus->save("Invoice");
 

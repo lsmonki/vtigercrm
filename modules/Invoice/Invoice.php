@@ -116,13 +116,6 @@ class Invoice extends CRMEntity {
 			//Based on the total Number of rows we will save the product relationship with this entity
 			saveInventoryProductDetails(&$this, 'Invoice');
 		}
-		//Added For Custom Invoice Number 
-		//Here we Incrementing the new InvoiceNumber
-                if($this->mode != 'edit')
-                {
-                        setInventoryInvoiceNumber("increment_invoiceno");
-                }
-
 	}
 
 

@@ -32,6 +32,10 @@ $focus = new SalesOrder();
 //added to fix 4600
 $search=$_REQUEST['search_url'];
 setObjectValuesFromRequest($focus);
+if($focus->mode != 'edit')
+{
+	$focus->column_fields['salesorder_no'] = setInventorySeqNumber("increment_invno",$module);
+}
 
 $focus->save("SalesOrder");
 

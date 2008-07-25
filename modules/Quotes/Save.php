@@ -33,6 +33,10 @@ $focus = new Quotes();
 $search=$_REQUEST['search_url'];
 
 setObjectValuesFromRequest($focus);
+if($focus->mode != 'edit')
+{
+	$focus->column_fields['quote_no'] = setInventorySeqNumber("increment_invno",$module);
+}
 
 $focus->save("Quotes");
 

@@ -96,7 +96,7 @@ $pdf->addRecBlock($contact_name, $app_strings["Contact Name"],$conBlock);
 
 // vtiger_invoice number block
 $invBlock=array("145","67");
-$pdf->addRecBlock($id, $app_strings["SO Number"],$invBlock);
+$pdf->addRecBlock($so_no, $app_strings["SO Number"],$invBlock);
 
 /* ************ End Invoice Data ************************ */
 

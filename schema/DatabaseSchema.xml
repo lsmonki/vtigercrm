@@ -3469,6 +3469,7 @@
 		<field name="subject" type="C" size="100" />
 		<field name="potentialid" type="I" size="19" />
 		<field name="customerno" type="C" size="100" />
+		<field name="salesorder_no" type="C" size="100" />
 		<field name="quoteid" type="I" size="19" />
 		<field name="vendorterms" type="C" size="100" />
 		<field name="contactid" type="I" size="19">
@@ -3802,7 +3803,7 @@
 		<field name="validtill" type="D" />
 		<field name="contactid" type="I" size="19">
 		</field>
-		<field name="currency" type="C" size="100" />
+		<field name="quote_no" type="C" size="100" />
 		<field name="subtotal" type="N" size="25.3" />
 		<field name="carrier" type="C" size='200' />
 		<field name="shipping" type="C" size="100" />
@@ -3936,6 +3937,7 @@
 		<field name="vendorid" type="I" size="19">
 		</field>
 		<field name="requisition_no" type="C" size="100" />
+		<field name="purchaseorder_no" type="C" size="100" />
 		<field name="tracking_no" type="C" size="100" />
 		<field name="contactid" type="I" size="19">
 		</field>
@@ -6338,6 +6340,28 @@
 		<field name="rel_column" type="C" size="200" />
 		<field name="ref_column" type="C" size="200" />
 		<field name="related_crm_ids" type="X" />
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_inventory_num">
+		<field name="num_id" type="I" size="19" >
+			<key/>
+		</field>
+		<field name="semodule" type="C" size="50" >
+			<notnull />
+		</field>
+		<field name="prefix" type="C" size="50" >
+			<notnull />
+		</field>
+		<field name="start_id" type="C" size="50" >
+			<notnull />
+		</field>
+		<field name="cur_id" type="C" size="50" >
+			<notnull />
+		</field>
+		<field name="active" type="I" size="2" >
+			<notnull />
+		</field>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 

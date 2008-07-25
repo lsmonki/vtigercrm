@@ -798,71 +798,56 @@ function getInventorySHTaxPercent($id, $taxname)
 }
 
 
-/**	function used to set invoice string and increment invoice id 
- *	@param string $mode - mode should be configure_invoiceno or increment_incoiceno
- *	@param string $req_str - invoice string which is part of the invoice number, this may be alphanumeric characters
- *	@param int $req_no - This should be a number which will written in file and will be used as a next invoice number
- *	@return void. The invoice string and number are stored in the  file CustomInvoiceNo.php so that concatenated string 		with number will be used as a next invoice number
+/**	function used to set inventory string and increment inventory id 
+ *	@param string $mode - mode should be configure_invno or increment_invno
+ *	@param string $req_str - inventory string which is part of the inventory number, this may be alphanumeric characters
+ *	@param int $req_no - This should be a number which will saved and will be used as a next inventory number
+ *	@return void. The inventory string and number are saved in the table vtiger_inventory_num so that concatenated string with number will be used as a next inventory number
  */
 
-function setInventoryInvoiceNumber($mode, $req_str='', $req_no='')
+function setInventorySeqNumber($mode, $module, $req_str='', $req_no='')
 {
-        global $root_directory;
-        $filename = $root_directory.'user_privileges/CustomInvoiceNo.php';
-        $readhandle = fopen($filename, "r+");
-        $buffer = '';
-        $new_buffer = '';
-
+	global $adb;
 	//when we configure the invoice number in Settings this will be used
-	if ($mode == "configure_invoiceno" && $req_str != '' && $req_no != '')
+	if ($mode == "configure_invno" && $req_str != '' && $req_no != '')
 	{
-
- 	        while(!feof($readhandle))
-               	{
-                       	$buffer = fgets($readhandle, 5200);
-			list($starter, $tmp) = explode(" = ", $buffer);
-
-			if($starter == '$inv_str')
+			$check = $adb->pquery("select cur_id from vtiger_inventory_num where semodule=? and prefix = ?", array($module, $req_str));
+			if($adb->num_rows($check)== 0)
 			{
-				$new_buffer .= "\$inv_str = '".$req_str."';\n";
+				$numid = $adb->getUniqueId("vtiger_inventory_num");
+				$active = $adb->pquery("select num_id from vtiger_inventory_num where semodule=? and active=1", array($module));
+				$adb->pquery("UPDATE vtiger_inventory_num SET active=0 where num_id=?", array($adb->query_result($active,0,'num_id')));
+				$adb->pquery("INSERT into vtiger_inventory_num values(?,?,?,?,?,?)", array($numid,$module,$req_str,$req_no,$req_no,1));
+				return true;
 			}
-			elseif($starter == '$inv_no')
+			else if($adb->num_rows($check)!=0)
 			{
-				$new_buffer .= "\$inv_no = '".$req_no."';\n";
+				$num_check = $adb->query_result($check,0,'cur_id');
+				if($req_no < $num_check){
+					echo "Invoice Number already assigned ";
+					die();					
+				}
+				else
+				{
+					$adb->pquery("UPDATE vtiger_inventory_num SET active=0 where active=1 and semodule=?", array($module));
+					$adb->pquery("UPDATE vtiger_inventory_num SET cur_id=?, active = 1 where prefix=? and semodule=?", array($req_no,$req_str,$module));
+					return true;
+				}
 			}
-			else
-				$new_buffer .= $buffer;
-		}
 	}
-	else if ($mode == "increment_invoiceno")//when we save new invoice we will increment the invoice id and write
+	else if ($mode == "increment_invno")//when we save new invoice we will increment the invoice id and write
 	{
-		require_once('user_privileges/CustomInvoiceNo.php');
-		while(!feof($readhandle))
-		{
-			$buffer = fgets($readhandle, 5200);
-			list($starter, $tmp) = explode(" = ", $buffer);
-
-			if($starter == '$inv_no')
-			{
-				//if number is 001, 002 like this (starting with zero) then when we increment 1, zeros will be striped out and result comes as 1,2, etc. So we have added 0 previously for the needed length ie., two zeros for 001, 002, etc.,
-				//If the value is less than 0, then we assign 0 to it(to avoid error).
-				$strip=strlen($inv_no)-strlen($inv_no+1);
-				if($strip<0)$strip=0;
-
-				$temp = str_repeat("0",$strip);
-				$new_buffer .= "\$inv_no = '".$temp.($inv_no+1)."';\n";
-			}
-			else
-				$new_buffer .= $buffer;
-
-		}
+		$check = $adb->pquery("select cur_id,prefix from vtiger_inventory_num where semodule=? and active = 1", array($module));
+		$prefix = $adb->query_result($check,0,'prefix');
+		$curid = $adb->query_result($check,0,'cur_id');
+		$prev_inv_no=$prefix.$curid;
+		$strip=strlen($curid)-strlen($curid+1);
+		if($strip<0)$strip=0;
+		$temp = str_repeat("0",$strip);
+		$req_no.= $temp.($curid+1);
+		$adb->pquery("UPDATE vtiger_inventory_num SET cur_id=? where cur_id=? and active=1 AND semodule=?", array($req_no,$curid,$module));
+		return decode_html($prev_inv_no);	
 	}
-
-	//we have the contents in buffer. Going to write the contents in file
-	fclose($readhandle);
-	$handle = fopen($filename, "w");
-	fputs($handle, $new_buffer);
-	fclose($handle);
 }
 
 /**	Function used to check whether the provided invoicenumber is already available or not
@@ -881,5 +866,117 @@ function CheckDuplicateInvoiceNumber($invoiceno)
 		return false;
 }
 
+/**	Function used to check whether the provided Quotenumber is already available or not
+ *	@param int $quoteno - Quote number, which we are going to check for duplicate
+ *	@return binary true or false. If quote number is already available then return true else return false
+ */
+function CheckDuplicateQuoteNumber($quoteno)
+{
+	global $adb;
+	$result=$adb->pquery("select quote_no  from vtiger_quotes where quote_no = ?", array($quoteno));
+	$num_rows = $adb->num_rows($result);
+
+	if($num_rows > 0)
+		return true;
+	else
+		return false;
+}
+
+/**	Function used to check whether the provided salesordernumber is already available or not
+ *	@param int $salesorderno - salesorder number, which we are going to check for duplicate
+ *	@return binary true or false. If salesorder number is already available then return true else return false
+ */
+function CheckDuplicateSONumber($sono)
+{
+	global $adb;
+	$result=$adb->pquery("select salesorder_no  from vtiger_salesorder where salesorder_no = ?", array($sono));
+	$num_rows = $adb->num_rows($result);
+
+	if($num_rows > 0)
+		return true;
+	else
+		return false;
+}
+
+/**	Function used to check whether the provided purchaseordernumber is already available or not
+ *	@param int $purchaseorderno - purchaseorder number, which we are going to check for duplicate
+ *	@return binary true or false. If purchaseorder number is already available then return true else return false
+ */
+function CheckDuplicatePONumber($pono)
+{
+	global $adb;
+	$result=$adb->pquery("select purchaseorder_no  from vtiger_purchaseorder where purchaseorder_no = ?", array($pono));
+	$num_rows = $adb->num_rows($result);
+
+	if($num_rows > 0)
+		return true;
+	else
+		return false;
+}
+
+/**	Function used to get the list of all Currencies as a array
+ *  @param string available - if 'all' returns all the currencies, default value 'available' returns only the currencies which are available for use.
+ *	return array $currency_details - return details of all the currencies as a array
+ */
+function getAllCurrencies($available='available') {
+	global $adb, $log;
+	$log->debug("Entering into function getAllCurrencies($available)");
+	
+	$sql = "select * from vtiger_currency_info";
+	if ($available != 'all') {
+		$sql .= " where currency_status='Active' and deleted=0";
+	}
+	$res=$adb->pquery($sql, array());
+	$noofrows = $adb->num_rows($res);
+	
+	for($i=0;$i<$noofrows;$i++)
+	{
+		$currency_details[$i]['currencylabel'] = $adb->query_result($res,$i,'currency_name');
+		$currency_details[$i]['currencycode'] = $adb->query_result($res,$i,'currency_code');
+		$currency_details[$i]['currencysymbol'] = $adb->query_result($res,$i,'currency_symbol');
+		$currency_details[$i]['curid'] = $adb->query_result($res,$i,'id');
+		$currency_details[$i]['conversionrate'] = $adb->query_result($res,$i,'conversion_rate');
+		$currency_details[$i]['curname'] = 'curname' . $adb->query_result($res,$i,'id');			
+	}
+	
+	$log->debug("Entering into function getAllCurrencies($available)");
+	return $currency_details;
+	
+}
+
+/**	Function used to get all the price details for different currencies which are associated to the given product
+ *	@param int $productid - product id to which we want to get all the associated prices
+ *  @param decimal $unit_price - Unit price of the product
+ *  @param string $available - available or available_associated where as default is available, if available then the prices in the currencies which are available now will be returned, otherwise if the value is available_associated then prices of all the associated currencies will be retruned
+ *	@return array $price_details - price details as a array with productid, curid, curname
+ */
+function getPriceDetailsForProduct($productid, $unit_price, $available='available')
+{
+	global $log, $adb;
+	$log->debug("Entering into function getPriceDetailsForProduct($productid)");
+	if($productid != '')
+	{
+		$product_currency_id = getProductBaseCurrency($productid);
+		// Detail View
+		if ($available == 'available_associated') {
+			$base_currency_id = getProductBaseCurrency($productid);
+			$query = "select vtiger_currency_info.*, vtiger_productcurrencyrel.converted_price, vtiger_productcurrencyrel.actual_price 
+					from vtiger_currency_info 
+					inner join vtiger_productcurrencyrel on vtiger_currency_info.id = vtiger_productcurrencyrel.currencyid
+					where vtiger_currency_info.currency_status = 'Active' and vtiger_currency_info.deleted=0 
+					and vtiger_productcurrencyrel.productid = ? and vtiger_currency_info.id != ?";
+			$params = array($productid, $base_currency_id);
+		} else { // Edit View
+			$query = "select vtiger_currency_info.*, vtiger_productcurrencyrel.converted_price, vtiger_productcurrencyrel.actual_price 
+					from vtiger_currency_info 
+					left join vtiger_productcurrencyrel 
+					on vtiger_currency_info.id = vtiger_productcurrencyrel.currencyid and vtiger_productcurrencyrel.productid = ?
+					where vtiger_currency_info.currency_status = 'Active' and vtiger_currency_info.deleted=0";
+			$params = array($productid);			
+		}
+
+		//Postgres 8 fixes
+ 		if( $adb->dbType == "pgsql")
+ 		    $query = fixPostgresQuery( $query, $log, 0);
 
 ?>

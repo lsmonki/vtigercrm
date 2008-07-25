@@ -190,9 +190,9 @@
 <!-- Added For Custom Invoice Number #start -->
 
 		{if $smarty.request.action eq 'CustomInvoiceNo'}
-			<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=CustomInvoiceNo&parenttab=Settings">{$MOD.LBL_CUSTOMIZE_INVOICE_NUMBER}</a></td></tr>
+			<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=CustomInventorySeq&parenttab=Settings">{$MOD.LBL_CUSTOMIZE_INVENTORY_NUMBER}</a></td></tr>
 		{else}
-			<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=CustomInvoiceNo&parenttab=Settings">{$MOD.LBL_CUSTOMIZE_INVOICE_NUMBER}</a></td></tr>
+			<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=CustomInventorySeq&parenttab=Settings">{$MOD.LBL_CUSTOMIZE_INVENTORY_NUMBER}</a></td></tr>
 		{/if}
 
 <!-- Added For Custom Invoice Number #end -->
