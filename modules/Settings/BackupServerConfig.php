@@ -23,7 +23,7 @@ $image_path=$theme_path."images/";
 if(isset($_REQUEST['opmode']) && $_REQUEST['opmode'] != '')
 {
 	$sql_del = "delete from vtiger_systems where server_type=?";
-	$adb->pquery($sql_del, array('backup'));
+	$adb->pquery($sql_del, array('ftp_backup'));
 }
 
 $smarty = new vtigerCRM_Smarty;
@@ -31,16 +31,30 @@ if($_REQUEST['error'] != '')
 {
 		$smarty->assign("ERROR_MSG",'<b><font color="red">'.$_REQUEST["error"].'</font></b>');
 }
+if($_REQUEST['error1'] != '')
+{
+		$smarty->assign("ERROR_STR",'<b><font color="red">'.$_REQUEST["error1"].'</font></b>');
+}
 $sql="select * from vtiger_systems where server_type = ?";
-$result = $adb->pquery($sql, array('backup'));
+$result = $adb->pquery($sql, array('ftp_backup'));
 $server = $adb->query_result($result,0,'server');
 $server_username = $adb->query_result($result,0,'server_username');
 $server_password = $adb->query_result($result,0,'server_password');
+
+$result = $adb->pquery($sql, array('local_backup'));
+$local_server = $adb->query_result($result,0,'server');
+$server_path = $adb->query_result($result,0,'server_path');
 
 if(isset($_REQUEST['bkp_server_mode']) && $_REQUEST['bkp_server_mode'] != '')
 	$smarty->assign("BKP_SERVER_MODE",$_REQUEST['bkp_server_mode']);
 else
 	$smarty->assign("BKP_SERVER_MODE",'view');
+
+if(isset($_REQUEST['local_server_mode']) && $_REQUEST['local_server_mode'] != '')
+	$smarty->assign("LOCAL_SERVER_MODE",$_REQUEST['local_server_mode']);
+else
+	$smarty->assign("LOCAL_SERVER_MODE",'view');
+	
 if(isset($_REQUEST['server']))
 	$smarty->assign("FTPSERVER",$_REQUEST['server']);
 else if (isset($server))
@@ -53,22 +67,83 @@ if (isset($_REQUEST['password']))
 	$smarty->assign("FTPPASSWORD",$_REQUEST['password']);
 else if (isset($server_password))
 	$smarty->assign("FTPPASSWORD",$server_password);
-
-
+if (isset($_REQUEST['path']))
+	$smarty->assign("SERVER_BACKUP_PATH",$_REQUEST['server_path']);
+else if (isset($server_path))
+	$smarty->assign("SERVER_BACKUP_PATH",$server_path);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
 
-if($enable_backup == 'true')	
-	$backup_status = 'enabled';
+if($enable_local_backup == 'true')	
+	$local_backup_status = 'enabled';
 else
-	$backup_status = 'disabled';
+	$local_backup_status = 'disabled';
 
-$smarty->assign("BACKUP_STATUS", $backup_status);
+if($enable_ftp_backup == 'true')	
+	$ftp_backup_status = 'enabled';
+else
+	$ftp_backup_status = 'disabled';
+
+$smarty->assign("FTP_BACKUP_STATUS", $ftp_backup_status);
+$smarty->assign("LOCAL_BACKUP_STATUS", $local_backup_status);
+
+require_once('include/logging.php');
+require_once('database/DatabaseConnection.php');
+require_once('modules/Users/LoginHistory.php');
+require_once('modules/Users/Users.php');
+require_once('config.php');
+require_once('include/db_backup/backup.php');
+require_once('include/db_backup/ftp.php');
+require_once('include/database/PearDatabase.php');
+require_once('user_privileges/enable_backup.php');
+
+global $adb, $enable_backup;
+
+if((isset($_REQUEST['backupnow'])))
+{
+		define("dbserver", $dbconfig['db_hostname']);
+		define("dbuser", $dbconfig['db_username']);
+		define("dbpass", $dbconfig['db_password']);
+		define("dbname", $dbconfig['db_name']);  
+
+		$path_query = $adb->pquery("SELECT * FROM vtiger_systems WHERE server_type = ?",array('local_backup'));
+        $path = $adb->query_result($path_query,0,'server_path');
+        $currenttime=date("Ymd_His");
+        
+		if(is_dir($path) && is_writable($path))
+		{        
+			$fileName = $path.'/backup_'.$currenttime.'.zip';
+			$createZip = new createDirZip;
+	
+			$createZip->addDirectory('user_privileges/');
+			$createZip->get_files_from_folder('user_privileges/', 'user_privileges/');        
+	
+			$createZip->addDirectory('storage/');
+			$createZip->get_files_from_folder('storage/', 'storage/');        
+	
+			$backup_DBFileName = "sqlbackup_".$currenttime.".sql";
+			$dbdump = new DatabaseDump(dbserver, dbuser, dbpass);
+			$dumpfile = 'backup/'.$backup_DBFileName;
+			$dbdump->save(dbname, $dumpfile) ;
+
+			$filedata = implode("", file('backup/'.$backup_DBFileName));	
+			$createZip->addFile($filedata,$backup_DBFileName);
+			
+			$fd = fopen ($fileName, 'wb');
+			$out = fwrite ($fd, $createZip->getZippedfile());
+			fclose ($fd);
+		
+			$smarty->assign("BACKUP_RESULT", '<b><font color="red">'. $fileName.'</font></b>');
+		}
+		else
+			$smarty->assign("BACKUP_RESULT", '<b><font color="red">Failed to backup</font></b>');
+}
 
 if($_REQUEST['ajax'] == 'true')
 	$smarty->display("Settings/BackupServerContents.tpl");
 else
 	$smarty->display("Settings/BackupServer.tpl");
+
 ?>

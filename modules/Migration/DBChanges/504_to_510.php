@@ -321,6 +321,8 @@ ExecuteQuery("insert into vtiger_profile2utility values(4,13,10,0)");
 ExecuteQuery("insert into vtiger_profile2utility values(4,14,10,0)");
 ExecuteQuery("insert into vtiger_profile2utility values(4,18,10,0)");
 
+/* Local Backup Feature */
+ExecuteQuery("alter table vtiger_systems add column server_path varchar(256)");
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 

@@ -970,5 +970,9 @@ $mod_strings = Array(
 'LBL_PO_NUMBER_PREVIEW'=>'Preview',
 'LBL_PO_NUMBER_BUTTON'=>'Update PurchaseOrder Number',
 
+//Added for new backup labels
+'LBL_LOCAL'=>'Local',
+'LBL_BACKUP'=>'Backup',
+'LBL_BACKUP_LOCATION'=>'Backup Location',
 );
 ?>

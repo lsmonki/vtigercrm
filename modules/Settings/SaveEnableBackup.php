@@ -9,7 +9,7 @@
   *
  ********************************************************************************/
 
-if(isset($_REQUEST['enable_backup']) && $_REQUEST['enable_backup'] != '')
+if(isset($_REQUEST['enable_ftp_backup']) && $_REQUEST['enable_ftp_backup'] != '')
 {
 	global $root_directory;
 	$filename = $root_directory.'user_privileges/enable_backup.php';
@@ -25,13 +25,62 @@ if(isset($_REQUEST['enable_backup']) && $_REQUEST['enable_backup'] != '')
 			$buffer = fgets($readhandle, 5200);
 			list($starter, $tmp) = explode(" = ", $buffer);
 
-			if($starter == '$enable_backup' && stristr($tmp,'false'))
+			if($starter == '$enable_ftp_backup' && stristr($tmp,'false'))
 			{
-				$new_buffer .= "\$enable_backup = 'true';\n";
+				$new_buffer .= "\$enable_ftp_backup = 'true';\n";
 			}
-			elseif($starter == '$enable_backup' && stristr($tmp,'true'))
+			elseif($starter == '$enable_ftp_backup' && stristr($tmp,'true'))
 			{
-				$new_buffer .= "\$enable_backup = 'false';\n";
+				$new_buffer .= "\$enable_ftp_backup = 'false';\n";
+			}
+			else
+				$new_buffer .= $buffer;
+
+		}
+		fclose($readhandle);
+	}
+
+	$handle = fopen($filename, "w");
+	fputs($handle, $new_buffer);
+	fclose($handle);
+}
+elseif(isset($_REQUEST['GetBackupDetail']) && $_REQUEST['GetBackupDetail'] != '' && $_REQUEST['servertype'] == 'ftp_backup')
+{
+	require_once("include/database/PearDatabase.php");
+	global $mod_strings,$adb;
+
+	$GetBackup = $adb->pquery("select * from vtiger_systems where server_type = ?", array('ftp_backup'));
+	$BackRowsCheck = $adb->num_rows($GetBackup);
+
+	if($BackRowsCheck > 0)
+		echo "SUCESS";
+	else
+		echo "FAILURE";
+
+}
+if(isset($_REQUEST['enable_local_backup']) && $_REQUEST['enable_local_backup'] != '')
+{
+	global $root_directory;
+	$filename = $root_directory.'user_privileges/enable_backup.php';
+
+	$readhandle = @fopen($filename, "r+");
+
+	if($readhandle)
+	{
+		$buffer = '';
+		$new_buffer = '';
+		while(!feof($readhandle))
+		{
+			$buffer = fgets($readhandle, 5200);
+			list($starter, $tmp) = explode(" = ", $buffer);
+
+			if($starter == '$enable_local_backup' && stristr($tmp,'false'))
+			{
+				$new_buffer .= "\$enable_local_backup = 'true';\n";
+			}
+			elseif($starter == '$enable_local_backup' && stristr($tmp,'true'))
+			{
+				$new_buffer .= "\$enable_local_backup = 'false';\n";
 			}
 			else
 				$new_buffer .= $buffer;
@@ -43,12 +92,12 @@ if(isset($_REQUEST['enable_backup']) && $_REQUEST['enable_backup'] != '')
 	fputs($handle, $new_buffer);
 	fclose($handle);
 }
-elseif(isset($_REQUEST['GetBackupDetail']) && $_REQUEST['GetBackupDetail'] != '')
+elseif(isset($_REQUEST['GetBackupDetail']) && $_REQUEST['GetBackupDetail'] != '' && $_REQUEST['servertype'] == 'local_backup')
 {
 	require_once("include/database/PearDatabase.php");
 	global $mod_strings,$adb;
 
-	$GetBackup = $adb->pquery("select * from vtiger_systems where server_type = ?", array('backup'));
+	$GetBackup = $adb->pquery("select * from vtiger_systems where server_type = ?", array('local_backup'));
 	$BackRowsCheck = $adb->num_rows($GetBackup);
 
 	if($BackRowsCheck > 0)

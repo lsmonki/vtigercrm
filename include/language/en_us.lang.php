@@ -1119,6 +1119,11 @@ $app_strings = array (
 'LBL_MERGE_SELECT'=>'SelectRecords (max: 3)',
 'DuplicatesHandling' => 'DuplicatesHandling',
 'LBL_DESC_FOR_MERGE_FIELDS' => 'The primary record will be retained after the merge. You can select the column to retain the values. The other record will be deleted but the related information will be merged.',
+
+// Local Backup Feature
+'LBL_BACKEDUPSUCCESSFULLY_TO_FILE' => 'Backed Up Successfully To File',//BACKUP
+'APP.LBL_NOW'=>'Now',//BACKUP
+'LBL_NOW'=>'Now',//BACKUP
 );
 
 $app_list_strings = array (
