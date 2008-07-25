@@ -420,60 +420,65 @@ var gVTModule = '{$smarty.request.module}';
 											{assign var=no_val value=$secondval[2]}
 											
 											<tr><td>{$LABEL.reminder_time}</td><td>
+
+										{if $check eq 'CHECKED'}
+											{assign var=reminstyle value='style="display:block;width:100%"'}
 											<input type="radio" name="set_reminder" value="Yes" {$check} onClick="showBlock('reminderOptions')">&nbsp;{$yes_val}&nbsp;
 											<input type="radio" name="set_reminder" value="No" onClick="fnhide('reminderOptions')">&nbsp;{$no_val}&nbsp;
+											
+										{else}
+											{assign var=reminstyle value='style="display:none;width:100%"'}
+											<input type="radio" name="set_reminder" value="Yes" onClick="showBlock('reminderOptions')">&nbsp;{$yes_val}&nbsp;
+											<input type="radio" name="set_reminder" value="No" checked onClick="fnhide('reminderOptions')">&nbsp;{$no_val}&nbsp;
+											
+										{/if}
 											</td></tr>
 										</table>
-									{if $check eq 'CHECKED'}
-										{assign var=reminstyle value='style="display:block;width:100%"'}
-									{else}
-										{assign var=reminstyle value='style="display:none;width:100%"'}
+										<DIV id="reminderOptions" {$reminstyle}>
+											<table border=0 cellspacing=0 cellpadding=2  width=100%>
+												<tr>
+													<td nowrap align=right width=20% valign=top><b>{$MOD.LBL_RMD_ON} : </b></td>
+													<td width=80%>
+														<table border=0>
+														<tr>
+															<td colspan=2>
+															{foreach item=val_arr from=$ACTIVITYDATA.reminder_time}
+															{assign var=start value="$val_arr[0]"}
+															{assign var=end value="$val_arr[1]"}
+															{assign var=sendname value="$val_arr[2]"}
+															{assign var=disp_text value="$val_arr[3]"}
+															{assign var=sel_val value="$val_arr[4]"}
+															<select name="{$sendname}">
+															{section name=reminder start=$start max=$end loop=$end step=1 }
+															{if $smarty.section.reminder.index eq $sel_val}
+															<OPTION VALUE="{$smarty.section.reminder.index}" SELECTED>{$smarty.section.reminder.index}</OPTION>
+															{else}
+															<OPTION VALUE="{$smarty.section.reminder.index}" >{$smarty.section.reminder.index}</OPTION>
+															{/if}
+															<!--OPTION VALUE="{$smarty.section.reminder.index}" "{$sel_value}">{$smarty.section.reminder.index}</OPTION-->
+															{/section}
+															</select>
+															&nbsp;{$disp_text}
+															{/foreach}
+															</td>
+														</tr>
+														</table>
+													</td>
+												</tr>
+												<!--This is now required as of now, as we aree not allowing to change the email id
+	                                        and it is showing logged in User's email id, instead of Assigned to user's email id
+															
+												<tr>
+													<td nowrap align=right>
+														{$MOD.LBL_SDRMD}
+													</td>
+													<td >
+														<input type=text name="toemail" readonly="readonly" class=textbox style="width:90%" value="{$USEREMAILID}">
+													</td>
+												</tr> -->
+											</table>
+										</DIV>
 									{/if}
-									<DIV id="reminderOptions" {$reminstyle}>
-										<table border=0 cellspacing=0 cellpadding=2  width=100%>
-											<tr>
-												<td nowrap align=right width=20% valign=top><b>{$MOD.LBL_RMD_ON} : </b></td>
-												<td width=80%>
-													<table border=0>
-													<tr>
-														<td colspan=2>
-														{foreach item=val_arr from=$ACTIVITYDATA.reminder_time}
-														{assign var=start value="$val_arr[0]"}
-														{assign var=end value="$val_arr[1]"}
-														{assign var=sendname value="$val_arr[2]"}
-														{assign var=disp_text value="$val_arr[3]"}
-														{assign var=sel_val value="$val_arr[4]"}
-														<select name="{$sendname}">
-														{section name=reminder start=$start max=$end loop=$end step=1 }
-														{if $smarty.section.reminder.index eq $sel_val}
-														{assign var=sel_value value="SELECTED"}
-														{else}
-														{assign var=sel_value value=""}
-														{/if}
-														<OPTION VALUE="{$smarty.section.reminder.index}" "{$sel_value}">{$smarty.section.reminder.index}</OPTION>
-														{/section}
-														</select>
-														&nbsp;{$disp_text}
-														{/foreach}
-														</td>
-													</tr>
-													</table>
-												</td>
-											</tr>
-											<!--This is now required as of now, as we aree not allowing to change the email id
-                                        and it is showing logged in User's email id, instead of Assigned to user's email id
-														
-											<tr>
-												<td nowrap align=right>
-													{$MOD.LBL_SDRMD}
-												</td>
-												<td >
-													<input type=text name="toemail" readonly="readonly" class=textbox style="width:90%" value="{$USEREMAILID}">
-												</td>
-											</tr> -->
-										</table>
-									{/if}
-									</DIV>
 									</DIV>
 									<!-- Repeat UI -->
 									<div id="addEventRepeatUI" style="display:none;width:100%">

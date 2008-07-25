@@ -139,24 +139,53 @@ class Activity extends CRMEntity {
 		}	
 	
 		//Insert into vtiger_activity_remainder table
-		if(($recur_type == "--None--" || $recur_type=='') && $_REQUEST['set_reminder'] == 'Yes')
-		{
+
 			$this->insertIntoReminderTable('vtiger_activity_reminder',$module,"");
-		}
 
 		//Handling for invitees
-		if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
-		{
 			$selected_users_string =  $_REQUEST['inviteesid'];
 			$invitees_array = explode(';',$selected_users_string);
 			$this->insertIntoInviteeTable($module,$invitees_array);
 
-		}
-
 		//Inserting into sales man activity rel
 		$this->insertIntoSmActivityRel($module);
-			
+		
+		$this->insertIntoActivityReminderPopup($module);
 	}	
+	
+	
+	/** Function to insert values in vtiger_activity_reminder_popup table for the specified module
+  	  * @param $cbmodule -- module:: Type varchar
+ 	 */
+	function insertIntoActivityReminderPopup($cbmodule) {
+		
+		global $adb;
+		
+		$cbrecord = $this->id;		
+		if(isset($cbmodule) && isset($cbrecord)) {
+			$cbdate = $this->column_fields['date_start'];
+			$cbtime = $this->column_fields['time_start'];
+			
+			$reminder_query = "SELECT reminderid FROM vtiger_activity_reminder_popup WHERE semodule = ? and recordid = ?";
+			$reminder_params = array($cbmodule, $cbrecord);		
+			$reminderidres = $adb->pquery($reminder_query, $reminder_params);
+		
+			$reminderid = null;
+			if($adb->num_rows($reminderidres) > 0) {
+				$reminderid = $adb->query_result($reminderidres, 0, "reminderid");
+			}
+	
+			if(isset($reminderid)) {
+				$callback_query = "UPDATE vtiger_activity_reminder_popup set status = 0, date_start = ?, time_start = ? WHERE reminderid = ?"; 
+				$callback_params = array($cbdate, $cbtime, $reminderid);
+			} else {
+				$callback_query = "INSERT INTO vtiger_activity_reminder_popup (recordid, semodule, date_start, time_start) VALUES (?,?,?,?)";
+				$callback_params = array($cbrecord, $cbmodule, $cbdate, $cbtime);
+			}
+		
+			$adb->pquery($callback_query, $callback_params);
+		}		
+	}
 
 
 	/** Function to insert values in vtiger_activity_remainder table for the specified module,

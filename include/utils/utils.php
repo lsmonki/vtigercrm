@@ -3188,4 +3188,21 @@ function getMigrationCharsetFlag() {
 	}
 	return $db_migration_status;
 }
+
+/************ Function to convert a given time string to Minutes **************/
+function ConvertToMinutes($time_string)
+{
+	$interval = split(' ', $time_string);
+	$interval_minutes = intval($interval[0]);
+	$interval_string = strtolower($interval[1]);
+	if($interval_string == 'hour' || $interval_string == 'hours')
+	{
+		$interval_minutes = $interval_minutes * 60;
+	}
+	elseif($interval_string == 'day' || $interval_string == 'days')
+	{
+		$interval_minutes = $interval_minutes * 1440;
+	}		
+	return $interval_minutes;
+}
 ?>

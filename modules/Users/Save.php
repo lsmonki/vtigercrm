@@ -110,11 +110,19 @@ if(! $_REQUEST['changepassword'] == 'true')
 	if(isset($_SESSION['internal_mailer']) && $_SESSION['internal_mailer'] != $focus->column_fields['internal_mailer'])
 		$_SESSION['internal_mailer'] = $focus->column_fields['internal_mailer'];
 	setObjectValuesFromRequest($focus);
-
+	
+	// Added for Reminder Popup support
+	$query_prev_interval = $adb->pquery("SELECT reminder_interval from vtiger_users where id=?",array($focus->id));
+	$prev_reminder_interval = $adb->query_result($query_prev_interval,0,'reminder_interval');
+	
 	$focus->saveentity("Users");
 	//$focus->imagename = $image_upload_array['imagename'];
 	$focus->saveHomeOrder($focus->id);
 	SaveTagCloudView($focus->id);
+
+	// Added for Reminder Popup support
+	$focus->resetReminderInterval($prev_reminder_interval);
+
 	$return_id = $focus->id;
 
 if (isset($_POST['user_name']) && isset($_POST['new_password'])) {

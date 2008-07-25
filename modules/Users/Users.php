@@ -84,6 +84,7 @@ class Users {
 	'date_format' =>'',
 	'signature' =>'',
 	'description' =>'',
+	'reminder_interval' =>'',
 	'internal_mailer'=>'',
 	'address_street' =>'',
 	'address_city' =>'',
@@ -1130,6 +1131,19 @@ class Users {
 			return null;
 		}
 		return $fldvalue;
+	}
+	
+	/**
+	* Function to reset the Reminder Interval setup and update the time for next reminder interval 
+	* @param $prev_reminder_interval -- Last Reminder Interval on which the reminder popup's were triggered.
+	*/
+	function resetReminderInterval($prev_reminder_interval)
+	{
+		global $adb;
+		if($prev_reminder_interval != $this->column_fields['reminder_interval'] ){
+			$set_reminder_next = date('Y-m-d H:i');
+			$adb->pquery("UPDATE vtiger_users SET reminder_next_time=? WHERE id=?",array($set_reminder_next, $this->id));
+		}
 	}
 
 }

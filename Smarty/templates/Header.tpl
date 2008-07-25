@@ -15,6 +15,14 @@
 	<title>{$CURRENT_USER} - {$APP.$CATEGORY} - {$APP.$MODULE_NAME} - {$APP.LBL_BROWSER_TITLE}</title>
 	<link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">	
 	<style type="text/css">@import url("themes/{$THEME}/style.css");</style>
+	<!-- ActivityReminder customization for callback -->
+	{literal}
+	<style type="text/css">div.fixedLay1 { position:fixed; }</style>
+	<!--[if lte IE 6]>
+	<style type="text/css">div.fixedLay { position:absolute; }</style>
+	<![endif]-->
+	{/literal}
+	<!-- End -->
 </head>
 	<body leftmargin=0 topmargin=0 marginheight=0 marginwidth=0 class=small>
 	<a name="top"></a>
@@ -464,4 +472,7 @@ function openwin()
 </script>		
 
 
-
+<!-- ActivityReminder Customization for callback -->
+<div class="lvtCol fixedLay1" id="ActivityRemindercallback" style="right: 0px; bottom: 2px; display: padding: 2px; block; z-index: 10; font-weight: normal;" align="left">
+</div>
+<!-- End -->

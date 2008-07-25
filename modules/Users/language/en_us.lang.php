@@ -665,6 +665,11 @@ $mod_strings = Array(
 // Added for 5.0.4 to Support Email notication on User Creation
 'User Login Details'=>'User Login Details',
 'LBL_TO_LOGIN' => 'to Login',
+
+// Added after 5.0.4 GA
+
+'LBL_USER_ADV_OPTIONS'=>'User Advanced Options',
+'Reminder Interval'=>'Reminder Interval',
 );
 
 ?>

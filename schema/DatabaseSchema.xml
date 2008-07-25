@@ -89,7 +89,8 @@
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="reminder_interval" type="C" size="100" />
+		<field name="reminder_next_time" type="C" size="100" />
 		<field name="crypt_type" type="C" size="20">
 			<notnull />
 			<default value="MD5" />
@@ -6360,6 +6361,46 @@
 			<notnull />
 		</field>
 		<field name="active" type="I" size="2" >
+			<notnull />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_activity_reminder_popup">
+		<field name="reminderid" type="I" size="19" >
+			<key/>
+			<autoincrement />
+		</field>
+		<field name="semodule" type="C" size="100" >
+			<notnull />
+		</field>
+		<field name="recordid" type="I" size="19" >
+			<notnull />
+		</field>
+		<field name="date_start" type="D" >
+			<notnull />
+		</field>
+		<field name="time_start" type="C" size="100" >
+			<notnull />
+		</field>
+		<field name="status" type="I" size="2" >
+			<notnull />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="vtiger_reminder_interval">
+		<field name="reminder_intervalid" type="I" size="19" >
+			<key/>
+			<autoincrement />
+		</field>
+		<field name="reminder_interval" type="C" size="200" >
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19" >
+			<notnull />
+		</field>
+		<field name="presence" type="I" size="1" >
 			<notnull />
 		</field>
 		<opt platform="mysql">Type=InnoDB</opt>

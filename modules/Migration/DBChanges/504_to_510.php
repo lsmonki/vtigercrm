@@ -248,6 +248,22 @@ function ChangeCVColumnlist($paramArray){
 	}
 }
 
+/* Reminder Popup support for Calendar Events */
+ExecuteQuery("CREATE TABLE vtiger_activity_reminder_popup(reminderid int(19) NOT NULL AUTO_INCREMENT,semodule varchar(100) NOT NULL,recordid varchar(100) NOT NULL,date_start DATE,time_start varchar(100) NOT NULL,status int(2) NOT NULL, PRIMARY KEY(reminderid))");
+ExecuteQuery("CREATE TABLE vtiger_reminder_interval(reminder_intervalid int(19) NOT NULL AUTO_INCREMENT,reminder_interval varchar(200) NOT NULL,sortorderid int(19) NOT NULL,presence int(1) NOT NULL, PRIMARY KEY(reminder_intervalid))");
+ExecuteQuery("alter table vtiger_users add column reminder_interval varchar(100)");
+ExecuteQuery("alter table vtiger_users add column reminder_next_time varchar(100)");
+$adb->query("INSERT INTO vtiger_reminder_interval values(1,'None',0,1)");
+$adb->query("INSERT INTO vtiger_reminder_interval values(2,'1 Minute',1,1)");
+$adb->query("INSERT INTO vtiger_reminder_interval values(3,'5 Minutes',2,1)");
+$adb->query("INSERT INTO vtiger_reminder_interval values(4,'15 Minutes',3,1)");
+$adb->query("INSERT INTO vtiger_reminder_interval values(5,'30 Minutes',4,1)");
+$adb->query("INSERT INTO vtiger_reminder_interval values(6,'45 Minutes',5,1)");
+$adb->query("INSERT INTO vtiger_reminder_interval values(7,'1 Hour',6,1)");
+$adb->query("INSERT INTO vtiger_reminder_interval values(8,'1 Day',7,1)");
+$adb->query("UPDATE vtiger_users SET reminder_interval='1 Minute' AND reminder_next_time='".date('Y-m-d H:i')."'");
+
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

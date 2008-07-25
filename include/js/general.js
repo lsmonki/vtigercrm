@@ -2621,3 +2621,160 @@ function gotourl(url)
 {
                 document.location.href=url;
 }
+
+/******************************************************************************/
+/* Activity reminder Customization: Setup Callback */
+function ActivityReminderProgressIndicator(show) {
+	if(show) $("status").style.display = "inline";
+	else $("status").style.display = "none";
+}
+
+function ActivityReminderSetupCallback(cbmodule, cbrecord) { 
+	if(cbmodule && cbrecord) {
+
+		ActivityReminderProgressIndicator(true);
+		new Ajax.Request(
+    		'index.php',
+	        {queue: {position: 'end', scope: 'command'},
+        		method: 'post',
+                postBody:"module=Calendar&action=CalendarAjax&ajax=true&file=ActivityReminderSetupCallbackAjax&cbmodule="+ 
+					encodeURIComponent(cbmodule) + "&cbrecord=" + encodeURIComponent(cbrecord),
+                onComplete: function(response) {
+                $("ActivityReminder_callbacksetupdiv").innerHTML=response.responseText;
+				
+				ActivityReminderProgressIndicator(false);
+
+                }});
+	}
+}
+
+function ActivityReminderSetupCallbackSave(form) {
+	var cbmodule = form.cbmodule.value;   
+	var cbrecord = form.cbrecord.value;
+	var cbaction = form.cbaction.value;
+
+	var cbdate   = form.cbdate.value;
+	var cbtime   = form.cbhour.value + ":" + form.cbmin.value;
+
+	if(cbmodule && cbrecord) {
+		ActivityReminderProgressIndicator(true);
+
+		new Ajax.Request("index.php", 
+			{ queue:{position:"end", scope:"command"}, method:"post", 
+				postBody:"module=Calendar&action=CalendarAjax&ajax=true&file=ActivityReminderSetupCallbackAjax" + 
+				"&cbaction=" + encodeURIComponent(cbaction) +
+				"&cbmodule="+ encodeURIComponent(cbmodule) + 
+				"&cbrecord=" + encodeURIComponent(cbrecord) + 
+				"&cbdate=" + encodeURIComponent(cbdate) + 
+				"&cbtime=" + encodeURIComponent(cbtime),
+				onComplete:function (response) {ActivityReminderSetupCallbackSaveProcess(response.responseText);}}); 
+	}
+}
+function ActivityReminderSetupCallbackSaveProcess(message) {
+	ActivityReminderProgressIndicator(false);
+	$('ActivityReminder_callbacksetupdiv_lay').style.display='none';
+}
+
+function ActivityReminderPostponeCallback(cbmodule, cbrecord) { 
+	if(cbmodule && cbrecord) {
+
+		ActivityReminderProgressIndicator(true);
+		new Ajax.Request("index.php", 
+			{ queue:{position:"end", scope:"command"}, method:"post", 
+				postBody:"module=Calendar&action=CalendarAjax&ajax=true&file=ActivityReminderSetupCallbackAjax&cbaction=POSTPONE&cbmodule="+ 
+				encodeURIComponent(cbmodule) + "&cbrecord=" + encodeURIComponent(cbrecord), 
+				onComplete:function (response) {ActivityReminderPostponeCallbackProcess(response.responseText);}}); 
+	}
+}
+function ActivityReminderPostponeCallbackProcess(message) {
+	ActivityReminderProgressIndicator(false);
+}
+
+/* ActivityReminder Customization: Pool Callback */
+var ActivityReminder_regcallback_timer;
+
+var ActivityReminder_callback_delay = 40 * 1000; // Milli Seconds
+var ActivityReminder_autohide = false; // If the popup should auto hide after callback_delay?
+
+var ActivityReminder_popup_maxheight = 75;
+
+var ActivityReminder_callback;
+var ActivityReminder_timer;
+var ActivityReminder_progressive_height = 2; // px
+var ActivityReminder_popup_onscreen = 2 * 1000; // Milli Seconds (should be less than ActivityReminder_callback_delay)
+
+var ActivityReminder_callback_win_uniqueids = new Object();
+
+function ActivityReminderCallback() { 
+	if(ActivityReminder_regcallback_timer) {
+		window.clearTimeout(ActivityReminder_regcallback_timer);
+		ActivityReminder_regcallback_timer = null;
+	}
+	new Ajax.Request("index.php", 
+			{ queue:{position:"end", scope:"command"}, method:"post", 
+			postBody:"module=Calendar&action=CalendarAjax&file=ActivityReminderCallbackAjax&ajax=true", 
+			onComplete:function (response) {ActivityReminderCallbackProcess(response.responseText);}}); 
+}
+function ActivityReminderCallbackProcess(message) {
+	ActivityReminder_callback = document.getElementById("ActivityRemindercallback");
+	if(ActivityReminder_callback == null) return;
+	
+	var winuniqueid = 'ActivityReminder_callback_win_' + (new Date()).getTime();
+	if(ActivityReminder_callback_win_uniqueids[winuniqueid]) {
+		winuniqueid += "-" + (new Date()).getTime();
+	}
+	ActivityReminder_callback_win_uniqueids[winuniqueid] = true;
+
+	var ActivityReminder_callback_win = document.createElement("span");
+	ActivityReminder_callback_win.id  = winuniqueid;
+	ActivityReminder_callback.appendChild(ActivityReminder_callback_win);
+	
+	ActivityReminder_callback_win.innerHTML = message; 
+	ActivityReminder_callback_win.style.height = "0px"; 
+	ActivityReminder_callback_win.style.display = ""; 
+	if(message != "") ActivityReminderCallbackRollout(ActivityReminder_popup_maxheight, ActivityReminder_callback_win); 
+	else { ActivityReminderCallbackReset(0, ActivityReminder_callback_win); }
+}
+function ActivityReminderCallbackRollout(z, ActivityReminder_callback_win) {
+	ActivityReminder_callback_win = $(ActivityReminder_callback_win);
+
+	if (ActivityReminder_timer) { window.clearTimeout(ActivityReminder_timer); } 
+	if (parseInt(ActivityReminder_callback_win.style.height) < z) { 
+		ActivityReminder_callback_win.style.height = parseInt(ActivityReminder_callback_win.style.height) + ActivityReminder_progressive_height + "px"; 
+		ActivityReminder_timer = setTimeout("ActivityReminderCallbackRollout(" + z + ",'" + ActivityReminder_callback_win.id + "')", 1); 
+	} else { 
+		ActivityReminder_callback_win.style.height = z + "px"; 
+		if(ActivityReminder_autohide) ActivityReminder_timer = setTimeout("ActivityReminderCallbackRollin(1,'" + ActivityReminder_callback_win.id + "')", ActivityReminder_popup_onscreen);
+		else ActivityReminderRegisterCallback(ActivityReminder_callback_delay);
+	} 
+}
+function ActivityReminderCallbackRollin(z, ActivityReminder_callback_win) {
+	ActivityReminder_callback_win = $(ActivityReminder_callback_win);
+
+	if (ActivityReminder_timer) { window.clearTimeout(ActivityReminder_timer); } 
+	if (parseInt(ActivityReminder_callback_win.style.height) > z) { 
+		ActivityReminder_callback_win.style.height = parseInt(ActivityReminder_callback_win.style.height) - ActivityReminder_progressive_height + "px"; 
+		ActivityReminder_timer = setTimeout("ActivityReminderCallbackRollin(" + z + ",'" + ActivityReminder_callback_win.id + "')", 1); 
+	} else { 
+		ActivityReminderCallbackReset(z, ActivityReminder_callback_win);
+	} 
+}
+function ActivityReminderCallbackReset(z, ActivityReminder_callback_win) {
+	ActivityReminder_callback_win = $(ActivityReminder_callback_win);
+
+	if(ActivityReminder_callback_win) {
+		ActivityReminder_callback_win.style.height = z + "px"; 
+		ActivityReminder_callback_win.style.display = "none";
+	} 
+	if(ActivityReminder_timer) {
+		window.clearTimeout(ActivityReminder_timer);
+		ActivityReminder_timer = null;
+	}
+	ActivityReminderRegisterCallback(ActivityReminder_callback_delay);
+}
+function ActivityReminderRegisterCallback(timeout) {
+	if(timeout == null) timeout = 1;
+	if(ActivityReminder_regcallback_timer == null) {
+		ActivityReminder_regcallback_timer = setTimeout("ActivityReminderCallback()", timeout);
+	}
+}

@@ -80,6 +80,8 @@ function create_default_users() {
         $user->column_fields["weekstart"] = '1';
         $user->column_fields["namedays"] = '';
         $user->column_fields["currency_id"] = 1;
+        $user->column_fields["reminder_interval"] = '1 Minute';
+        $user->column_fields["reminder_next_time"] = date('Y-m-d H:i');
 	$user->column_fields["date_format"] = 'yyyy-mm-dd';
 	$user->column_fields["hour_format"] = 'am/pm';
 	$user->column_fields["start_hour"] = '08:00';
@@ -135,6 +137,8 @@ function create_default_users() {
         $user->column_fields["workdays"] = '0,1,2,3,4,5,6,';
         $user->column_fields["weekstart"] = '1';
         $user->column_fields["namedays"] = '';
+        $user->column_fields["reminder_interval"] = '1 Minute';
+        $user->column_fields["reminder_next_time"] = date('Y-m-d H:i');
         $user->column_fields["currency_id"] = 1;
 	$user->column_fields["date_format"] = 'yyyy-mm-dd';
 	$user->column_fields["hour_format"] = '24';

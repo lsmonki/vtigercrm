@@ -713,6 +713,25 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 		</script>
 <?php
 	}
+	// ActivityReminder Customization for callback
+	if($current_user->id != ''){
+		$test = $adb->pquery("select * from vtiger_users where id=?",array($current_user->id));
+		$reminder_next=$adb->query_result($test,0,"reminder_next_time");
+		$ar_temp=strtotime($reminder_next.":00");
+		$reminder_next1=$adb->query_result($test,0,"date_entered");
+		$ar_temp1 = strtotime($reminder_next1);	
+		
+		if($ar_temp1 > $ar_temp)
+		{
+			$adb->pquery("UPDATE vtiger_users set reminder_next_time=? where date_entered=?",array(date('Y-m-d H:i',$ar_temp1), $reminder_next1));
+		}
+	}
+	if(!$skipFooters) {
+		if($current_user->id!=NULL && isPermitted('Calendar','index') == 'yes')
+			echo "<script type='text/javascript'>if(typeof(ActivityReminderCallback) != 'undefined') ActivityReminderCallback();</script>";
+	}
+	// End
+	
 	if((!$skipFooters) && ($action != "body") && ($action != $module."Ajax") && ($action != "ActivityAjax"))
 		include('themes/'.$theme.'/footer.php');
 }

@@ -164,7 +164,7 @@ $this->db->query("insert into vtiger_blocks values (81,29,'LBL_ADDRESS_INFORMATI
 //Added an extra block for new UI Settings in Campaigns module 
 $this->db->query("insert into vtiger_blocks values (82,26,'LBL_DESCRIPTION_INFORMATION',4,0,0,0,0,0)");
 $this->db->query("insert into vtiger_blocks values (83,29,'LBL_USER_IMAGE_INFORMATION',4,0,0,0,0,0)"); //Added a New Block User Image Info in Users Module
-
+$this->db->query("insert into vtiger_blocks values (84,29,'LBL_USER_ADV_OPTIONS',5,0,0,0,0,0)"); //Added a New Block User Image Info in Users Module
 //
 
 //Account Details -- START
@@ -910,6 +910,7 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'imagename','vtiger_users',1,'105','imagename','User Image',1,0,0,250,10,83,1,'V~O',1,null,'BAS')");
 //added for internl_mailer
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'internal_mailer','vtiger_users',1,'56','internal_mailer','INTERNAL_MAIL_COMPOSER',1,0,0,50,15,80,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'reminder_interval','vtiger_users',1,'15','reminder_interval','Reminder Interval',1,0,0,100,1,84,1,'V~O',1,null,'BAS')");
  //user Details End
 
 
@@ -2616,7 +2617,40 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	$this->db->query("INSERT INTO vtiger_inventory_num values(".$this->db->getUniqueID('vtiger_inventory_num').",'Quotes','QUOTE','1','6','1')");
 	$this->db->query("INSERT INTO vtiger_inventory_num values(".$this->db->getUniqueID('vtiger_inventory_num').",'SalesOrder','SO','1','6','1')");
 	$this->db->query("INSERT INTO vtiger_inventory_num values(".$this->db->getUniqueID('vtiger_inventory_num').",'PurchaseOrder','PO','1','6','1')");
+
+	$this->db->query("INSERT INTO vtiger_reminder_interval values(".$this->db->getUniqueID('vtiger_reminder_interval').",'None',0,1)");
+	$this->db->query("INSERT INTO vtiger_reminder_interval values(".$this->db->getUniqueID('vtiger_reminder_interval').",'1 Minute',1,1)");
+	$this->db->query("INSERT INTO vtiger_reminder_interval values(".$this->db->getUniqueID('vtiger_reminder_interval').",'5 Minutes',2,1)");
+	$this->db->query("INSERT INTO vtiger_reminder_interval values(".$this->db->getUniqueID('vtiger_reminder_interval').",'15 Minutes',3,1)");
+	$this->db->query("INSERT INTO vtiger_reminder_interval values(".$this->db->getUniqueID('vtiger_reminder_interval').",'30 Minutes',4,1)");
+	$this->db->query("INSERT INTO vtiger_reminder_interval values(".$this->db->getUniqueID('vtiger_reminder_interval').",'45 Minutes',5,1)");
+	$this->db->query("INSERT INTO vtiger_reminder_interval values(".$this->db->getUniqueID('vtiger_reminder_interval').",'1 Hour',6,1)");
+	$this->db->query("INSERT INTO vtiger_reminder_interval values(".$this->db->getUniqueID('vtiger_reminder_interval').",'1 Day',7,1)");
+
+	$this->insertUser2mergefields(0);
+	$this->insertUser2mergefields(1);
+    $this->insertUser2mergefields(2);
+	$this->db->query("update vtiger_user2mergefields set visible=1 where fieldid in(1,38,40,65,104,106,111,152,156,255)");
+
+	}	
+		
+	//Added to insert the records in vtiger_user_mergefields
+	function insertUser2mergefields($userid)
+	{
+		global $log;
+		$log->debug("Entering insertUser2mergefields(".$userid.") method ...");
+	        $log->info("in insertUser2mergefields ".$userid);
 	
+		//$this->db->database->SetFetchMode(ADODB_FETCH_ASSOC); 
+		$fld_result = $this->db->query("select * from vtiger_field where generatedtype=1 and displaytype in (1,2,3) and tabid != 29 and uitype not in(70,69) and fieldid not in(87,148,151,155,102)");
+	    $num_rows = $this->db->num_rows($fld_result);
+        for($i=0; $i<$num_rows; $i++)
+        {
+			$tab_id = $this->db->query_result($fld_result,$i,'tabid');
+			$field_id = $this->db->query_result($fld_result,$i,'fieldid');
+			$this->db->query("insert into vtiger_user2mergefields values ($userid, $tab_id, $field_id, 0)");
+		}
+		$log->debug("Exiting insertUser2mergefields method ...");
 	}
 }
 ?>
