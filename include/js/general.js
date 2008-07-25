@@ -2030,7 +2030,7 @@ function AjaxDuplicateValidate(module,fieldname,oform)
 		alert(alert_arr.ACCOUNTNAME_CANNOT_EMPTY);
 		return false;	
 	}
-      var url = "module="+module+"&action="+module+"Ajax&file=Save&"+fieldname+"="+fieldvalue+"&dup_check=true"
+      var url = "module="+module+"&action="+module+"Ajax&file=Save&"+fieldname+"="+fieldvalue+"&dup_check=true";
       new Ajax.Request(
                             'index.php',
                               {queue: {position: 'end', scope: 'command'},
@@ -2778,3 +2778,643 @@ function ActivityReminderRegisterCallback(timeout) {
 		ActivityReminder_regcallback_timer = setTimeout("ActivityReminderCallback()", timeout);
 	}
 }
+
+//added for finding duplicates
+function movefields() 
+{
+	availListObj=getObj("availlist")
+	selectedColumnsObj=getObj("selectedCol")
+	for (i=0;i<selectedColumnsObj.length;i++) 
+	{
+		
+		selectedColumnsObj.options[i].selected=false
+	}
+
+	movefieldsStep1();
+}
+
+function movefieldsStep1()
+{
+	
+	availListObj=getObj("availlist")
+	selectedColumnsObj=getObj("selectedCol")	
+	document.getElementById("selectedCol").style.width="164px";
+	var count=0;
+	for(i=0;i<availListObj.length;i++)
+	{
+			if (availListObj.options[i].selected==true) 
+			{
+				count++;
+			}
+
+	}
+	var total_fields=count+selectedColumnsObj.length;	
+	if (total_fields >4 )
+	{
+		alert(alert_arr.MAX_RECORDS)
+			return false
+	}		
+	if (availListObj.options.selectedIndex > -1)
+	{
+		for (i=0;i<availListObj.length;i++) 
+		{
+			if (availListObj.options[i].selected==true) 
+			{
+				var rowFound=false;
+				for (j=0;j<selectedColumnsObj.length;j++) 
+				{
+					selectedColumnsObj.options[j].value==availListObj.options[i].value;
+					if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
+					{
+						var rowFound=true;
+						var existingObj=selectedColumnsObj.options[j];
+						break;
+					}
+				}
+
+				if (rowFound!=true) 
+				{
+					var newColObj=document.createElement("OPTION")
+					newColObj.value=availListObj.options[i].value
+					if (browser_ie) newColObj.innerText=availListObj.options[i].innerText
+					else if (browser_nn4 || browser_nn6) newColObj.text=availListObj.options[i].text
+					selectedColumnsObj.appendChild(newColObj)
+					newColObj.selected=true
+				} 
+				else 
+				{
+					existingObj.selected=true
+				}
+				availListObj.options[i].selected=false
+				movefieldsStep1();
+			}
+		}
+	}
+}
+
+function selectedColClick(oSel)
+{
+	if (oSel.selectedIndex == -1 || oSel.options[oSel.selectedIndex].disabled == true)
+	{
+		alert(alert_arr.NOT_ALLOWED_TO_EDIT);
+		oSel.options[oSel.selectedIndex].selected = false;	
+	}
+}	
+
+function delFields() 
+{
+	selectedColumnsObj=getObj("selectedCol");
+	selected_tab = $("dupmod").value;
+	if (selectedColumnsObj.options.selectedIndex > -1)
+	{
+		for (i=0;i < selectedColumnsObj.options.length;i++) 
+		{
+			if(selectedColumnsObj.options[i].selected == true)
+			{
+				if(selected_tab == 4)
+				{
+					if(selectedColumnsObj.options[i].innerHTML == "Last Name")
+					{
+						alert(alert_arr.DEL_MANDATORY);
+						del = false;
+						return false;
+					}
+					else
+						del = true;
+
+				}
+				else if(selected_tab == 7)
+				{
+					if(selectedColumnsObj.options[i].innerHTML == "Last Name" || selectedColumnsObj.options[i].innerHTML == "Company")
+					{
+						alert(alert_arr.DEL_MANDATORY);
+						del = false;
+						return false;
+					}
+					else
+						del = true;
+				}
+				else if(selected_tab == 6)
+				{
+					if(selectedColumnsObj.options[i].innerHTML == "Account Name")
+					{
+						alert(alert_arr.DEL_MANDATORY);
+						del = false;
+						return false;
+					}
+					else
+						del = true;
+				}
+				else if(selected_tab == 14)
+				{
+					if(selectedColumnsObj.options[i].innerHTML == "Product Name")
+					{
+						alert(alert_arr.DEL_MANDATORY);
+						del = false;
+						return false;
+					}
+					else
+						del = true;
+				}
+				if(del == true)
+				{
+					selectedColumnsObj.remove(i);
+					delFields();
+				}
+			}
+		}
+	}
+}
+
+function moveFieldUp() 
+{
+	selectedColumnsObj=getObj("selectedCol")
+	var currpos=selectedColumnsObj.options.selectedIndex
+	var tempdisabled= false;
+	for (i=0;i<selectedColumnsObj.length;i++) 
+	{
+		if(i != currpos)
+			selectedColumnsObj.options[i].selected=false
+	}
+	if (currpos>0) 
+	{
+		var prevpos=selectedColumnsObj.options.selectedIndex-1
+
+		if (browser_ie) 
+		{
+			temp=selectedColumnsObj.options[prevpos].innerText
+			tempdisabled = selectedColumnsObj.options[prevpos].disabled;
+			selectedColumnsObj.options[prevpos].innerText=selectedColumnsObj.options[currpos].innerText
+			selectedColumnsObj.options[prevpos].disabled = false;
+			selectedColumnsObj.options[currpos].innerText=temp
+			selectedColumnsObj.options[currpos].disabled = tempdisabled;     
+		} 
+		else if (browser_nn4 || browser_nn6) 
+		{
+			temp=selectedColumnsObj.options[prevpos].text
+			tempdisabled = selectedColumnsObj.options[prevpos].disabled;
+			selectedColumnsObj.options[prevpos].text=selectedColumnsObj.options[currpos].text
+			selectedColumnsObj.options[prevpos].disabled = false;
+			selectedColumnsObj.options[currpos].text=temp
+			selectedColumnsObj.options[currpos].disabled = tempdisabled;
+		}
+		temp=selectedColumnsObj.options[prevpos].value
+		selectedColumnsObj.options[prevpos].value=selectedColumnsObj.options[currpos].value
+		selectedColumnsObj.options[currpos].value=temp
+		selectedColumnsObj.options[prevpos].selected=true
+		selectedColumnsObj.options[currpos].selected=false
+		}
+		
+}
+
+function moveFieldDown() 
+{
+	selectedColumnsObj=getObj("selectedCol")
+	var currpos=selectedColumnsObj.options.selectedIndex
+	var tempdisabled= false;
+	for (i=0;i<selectedColumnsObj.length;i++) 
+	{
+		if(i != currpos)
+			selectedColumnsObj.options[i].selected=false
+	}
+	if (currpos<selectedColumnsObj.options.length-1)	
+	{
+		var nextpos=selectedColumnsObj.options.selectedIndex+1
+
+		if (browser_ie) 
+		{	
+			temp=selectedColumnsObj.options[nextpos].innerText
+			tempdisabled = selectedColumnsObj.options[nextpos].disabled;
+			selectedColumnsObj.options[nextpos].innerText=selectedColumnsObj.options[currpos].innerText
+			selectedColumnsObj.options[nextpos].disabled = false;
+			selectedColumnsObj.options[nextpos];
+
+			selectedColumnsObj.options[currpos].innerText=temp
+			selectedColumnsObj.options[currpos].disabled = tempdisabled;
+		}
+		else if (browser_nn4 || browser_nn6) 
+		{
+			temp=selectedColumnsObj.options[nextpos].text
+			tempdisabled = selectedColumnsObj.options[nextpos].disabled;
+			selectedColumnsObj.options[nextpos].text=selectedColumnsObj.options[currpos].text
+			selectedColumnsObj.options[nextpos].disabled = false;
+			selectedColumnsObj.options[nextpos];
+			selectedColumnsObj.options[currpos].text=temp
+			selectedColumnsObj.options[currpos].disabled = tempdisabled;
+		}
+		temp=selectedColumnsObj.options[nextpos].value
+		selectedColumnsObj.options[nextpos].value=selectedColumnsObj.options[currpos].value
+		selectedColumnsObj.options[currpos].value=temp
+
+		selectedColumnsObj.options[nextpos].selected=true
+		selectedColumnsObj.options[currpos].selected=false
+	}
+}
+
+function lastImport(module,req_module)
+{
+	var module_name= module;
+	var parent_tab= document.getElementById('parenttab').value;
+	if(module == '')
+	{
+		return false;
+	}
+	else
+	
+		//alert("index.php?module="+module_name+"&action=lastImport&req_mod="+req_module+"&parenttab="+parent_tab);
+		window.open("index.php?module="+module_name+"&action=lastImport&req_mod="+req_module+"&parenttab="+parent_tab,"lastImport","width=750,height=602,menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes");
+}
+
+function merge_fields(selectedNames,module,parent_tab)
+{
+			
+		var select_options=document.getElementsByName(selectedNames);
+		var x= select_options.length;
+		var req_module=module;
+		var num_group=$("group_count").innerHTML;
+		var pass_url="";
+		var flag=0;
+		//var i=0;		
+		var xx = 0;
+		for(i = 0; i < x ; i++)
+		{
+			if(select_options[i].checked)
+			{
+				pass_url = pass_url+select_options[i].value +","
+				xx++
+			}
+		}
+		var tmp = 0
+		if ( xx != 0)
+		{
+			
+			if(xx > 3)
+			{
+				alert(alert_arr.MAX_THREE)
+					return false;
+			}
+			if(xx > 0)
+			{
+				for(j=0;j<num_group;j++)
+				{
+					flag = 0
+					var group_options=document.getElementsByName("group"+j);
+					for(i = 0; i < group_options.length ; i++)
+						{
+							if(group_options[i].checked)
+							{
+								flag++
+							}
+						}
+					if(flag > 0)
+					tmp++;
+				}
+				if (tmp > 1)
+				{
+				alert(alert_arr.SAME_GROUPS)
+				return false;
+				}
+				if(xx <2)
+				{
+					alert(alert_arr.ATLEAST_TWO)
+					return false;
+				}
+				
+			}			
+					
+			window.open("index.php?module="+req_module+"&action=MergeField"+req_module+"&passurl="+pass_url+"&parenttab="+parent_tab,"Merge","width=750,height=602,menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes");	
+		}
+		else
+		{
+			alert(alert_arr.ATLEAST_TWO);			
+			return false;
+		}		
+}
+
+function delete_fields(module)
+{
+	var select_options=document.getElementsByName('del');
+	var x=select_options.length;
+	var xx=0;
+	url_rec="";
+	
+	for(var i=0;i<x;i++)
+	{
+		if(select_options[i].checked)
+		{
+		url_rec=url_rec+select_options[i].value +","
+		xx++
+		}	
+	}			
+	if($("current_action"))
+		cur_action = $("current_action").innerHTML		
+	if (xx == 0)
+        {
+            alert(alert_arr.SELECT);
+            return false;
+        } 
+        var alert_str = alert_arr.DELETE + xx +alert_arr.RECORDS;
+	if(module=="Accounts")
+	alert_str = alert_arr.DELETE_ACCOUNT + xx +alert_arr.RECORDS;
+	if(confirm(alert_str))
+		{
+			$("status").style.display="inline";
+			new Ajax.Request(
+          	  	      'index.php',
+			      	{queue: {position: 'end', scope: 'command'},
+		                        method: 'post',
+                		        postBody:"module="+module+"&action="+module+"Ajax&file=FindDuplicate"+module+"&del_rec=true&ajax=true&return_module="+module+"&idlist="+url_rec+"&current_action="+cur_action+"&"+dup_start,
+		                        onComplete: function(response) {
+        	        	                $("status").style.display="none";
+                	        	        $("duplicate_ajax").innerHTML= response.responseText;
+						}
+              			 }
+       			);
+		}
+	else
+		return false;	
+}
+
+	
+function validate_merge(module)
+{
+	var check_var=false;
+	var check_lead1=false;
+	var check_lead2=false;	
+	
+	var select_parent=document.getElementsByName('record');
+	var len = select_parent.length;
+	for(var i=0;i<len;i++)
+	{
+		if(select_parent[i].checked)
+		{
+			var check_parentvar=true;
+		}
+	}
+	if (check_parentvar!=true)
+	{
+		alert('Select one record as parent record');
+		return false;
+	}
+		if(module == 'Contacts')
+			{
+				var select_options=document.getElementsByName('lastname');
+				len=select_options.length;
+				for(var i=0;i<len;i++)
+				{	
+					
+					if(select_options[i].checked)
+						{
+							var check_var=true;
+						}
+				}
+				alert_str=alert_arr.CON_MANDATORY;
+					
+			}
+
+		else if(module == 'Leads')
+			{
+				var select_option_last=document.getElementsByName('lastname');
+				var select_option_com=document.getElementsByName('company');
+				var len=select_option_last.length;
+				for(var i=0;i<len;i++)
+				{	
+					
+					if(select_option_last[i].checked)
+						{
+						var check_lead1=true;	
+						}
+					 if(select_option_com[i].checked)
+						{
+						var check_lead2 = true;	
+						}
+				}
+				alert_str=alert_arr.LE_MANDATORY;	
+			}
+		else if(module == 'Accounts')
+			{
+				var select_options=document.getElementsByName('accountname');
+				var len=select_options.length;
+				for(var i=0;i<len;i++)
+				{	
+					
+					if(select_options[i].checked)
+						{
+							var check_var=true;
+						}
+				}
+				alert_str=alert_arr.ACC_MANDATORY;
+			}	
+		else if(module == 'Products')
+			{
+				var select_options=document.getElementsByName('productname');
+				var len=select_options.length;
+				for(var i=0;i<len;i++)
+				{	
+					
+					if(select_options[i].checked)
+						{
+							var check_var=true;
+						}
+				}
+					alert_str=alert_arr.PRO_MANDATORY;
+			}		
+		else if(module == 'HelpDesk')
+		{
+			var select_options=document.getElementsByName('ticket_title');
+			var len=select_options.length;
+				for(var i=0;i<len;i++)
+				{	
+					
+					if(select_options[i].checked)
+						{
+							var check_var=true;
+						}
+				}
+					alert_str=alert_arr.TIC_MANDATORY;
+		}
+		else if(module == 'Potentials')
+		{
+			var select_options=document.getElementsByName('potentialname');
+			var len=select_options.length;
+				for(var i=0;i<len;i++)
+				{	
+					
+					if(select_options[i].checked)
+						{
+							var check_var=true;
+						}
+				}
+				alert_str=alert_arr.POTEN_MANDATORY;
+		}
+		else if(module == 'Vendors')
+		{
+			var select_options=document.getElementsByName('vendorname');
+			var len=select_options.length;
+				for(var i=0;i<len;i++)
+				{	
+					
+					if(select_options[i].checked)
+						{
+							var check_var=true;
+						}
+				}
+				alert_str=alert_arr.VEN_MANDATORY;
+		}
+	
+	
+	
+	if (check_var == false &&  module!= 'Leads')
+		{
+			alert (alert_str);
+			return false;
+		}
+	else if((check_lead1 == false || check_lead2 == false) && module == 'Leads')
+		{
+			alert (alert_str);
+			return false;
+		}
+}		
+
+function select_All(fieldnames,cnt,module)
+{
+	var new_arr = Array();
+	new_arr = fieldnames.split(",");
+	var len=new_arr.length;
+	for(i=0;i<len;i++)
+	{
+		var fld_names=new_arr[i]
+		var value=document.getElementsByName(fld_names)
+		var fld_len=document.getElementsByName(fld_names).length;
+		for(j=0;j<fld_len;j++)
+		{
+			value[cnt].checked='true'
+			//	alert(value[j].checked)
+		}	
+				
+	}
+}
+
+function selectAllDel(state,checkedName)
+{
+		var selectedOptions=document.getElementsByName(checkedName);
+		var length=document.getElementsByName(checkedName).length;
+		if(typeof(length) == 'undefined')
+		{
+			return false;
+		}	
+		for(var i=0;i<length;i++)
+		{
+			selectedOptions[i].checked=state;
+		}	
+}
+
+function selectDel(ThisName,CheckAllName)
+	{
+		var ThisNameOptions=document.getElementsByName(ThisName);
+		var CheckAllNameOptions=document.getElementsByName(CheckAllName);
+		var len1=document.getElementsByName(ThisName).length;
+		var flag = true;
+		if (typeof(document.getElementsByName(ThisName).length)=="undefined")
+	       	{
+			flag=true;
+		}
+	       	else 
+		{
+			for (var j=0;j<len1;j++) 
+			{
+				if (ThisNameOptions[j].checked==false)
+		       		{
+					flag=false
+					break;
+				}
+			}
+		}
+		CheckAllNameOptions[0].checked=flag
+}
+
+// Added for page navigation in duplicate-listview
+var dup_start = "";
+function getDuplicateListViewEntries_js(module,url)
+{
+	dup_start = url;
+	$("status").style.display="block";
+	new Ajax.Request(
+			'index.php',
+			{queue: {position: 'end', scope: 'command'},
+				method: 'post',
+				postBody:"module="+module+"&action="+module+"Ajax&file=FindDuplicate"+module+"&ajax=true&"+dup_start,
+				onComplete: function(response) {
+					$("status").style.display="none";
+					$("duplicate_ajax").innerHTML = response.responseText;
+				}
+			}
+	);
+}
+
+/* End */
+
+//Added after 5.0.4 for Documents Module
+function positionDivToCenter(targetDiv)
+{
+	//Gets the browser's viewport dimension
+	getViewPortDimension();
+	//Gets the Target DIV's width & height in pixels using parseInt function
+	divWidth =(parseInt(document.getElementById(targetDiv).style.width))/2;
+	divHeight=(parseInt(document.getElementById(targetDiv).style.height))/2;
+	//calculate horizontal and vertical locations relative to Viewport's dimensions
+	mx = parseInt(XX/2)-parseInt(divWidth);
+	my = parseInt(YY/3)-parseInt(divHeight);
+	//Prepare the DIV and show in the center of the screen.
+	document.getElementById(targetDiv).style.left=mx+"px";
+	document.getElementById(targetDiv).style.top=my+"px";
+}
+
+function getViewPortDimension()
+{
+	if(!document.all)
+	{
+	  	XX = self.innerWidth;
+		YY = self.innerHeight;
+	}
+	else if(document.all)
+	{
+		XX = document.documentElement.clientWidth;
+		YY = document.documentElement.clientHeight;  
+	}
+}
+
+function toggleTable(id) {
+
+    var listTableObj=getObj(id);
+    if(listTableObj.style.display=="none")
+    {
+		listTableObj.style.display="";
+    }
+    else 
+    {
+		listTableObj.style.display="none";
+    }
+    //set_cookie(id,listTableObj.style.display)
+}
+
+function FileAdd(obj,Lay,return_action){
+	fnvshobj(obj,Lay);	
+	window.frames['AddFile'].document.getElementById('divHeader').innerHTML="Add file";
+	window.frames['AddFile'].document.FileAdd.return_action.value=return_action;
+	positionDivToCenter(Lay);
+}
+
+function dldCntIncrease(fileid)
+{
+	new Ajax.Request(
+            'index.php',
+            {queue: {position: 'end', scope: 'command'},
+             method: 'post',
+             postBody: 'action=DocumentsAjax&mode=ajax&file=SaveFile&module=Documents&file_id='+fileid+"&act=updateDldCnt",
+             onComplete: function(response) {
+                }
+                }
+                );
+}
+//End Documents Module

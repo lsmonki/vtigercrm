@@ -115,6 +115,15 @@
 				<td style="padding-right:0px;padding-left:10px;"><img src="{$IMAGE_PATH}tbarImport-Faded.gif" border="0"></td>
                 <td style="padding-right:10px"><img src="{$IMAGE_PATH}tbarExport-Faded.gif" border="0"></td>
 			{/if}
+			{if $MODULE eq 'Contacts' || $MODULE eq 'Leads' || $MODULE eq 'Accounts'|| $MODULE eq 'Products'|| $MODULE eq 'HelpDesk'|| $MODULE eq 'Potentials'|| $MODULE eq 'Vendors'} 
+				{if $VIEW eq true}
+					<td style="padding-right:10px"><a href="index.php?module={$MODULE}&action=FindDuplicate{$MODULE}&button_view&list_view"><img src="{$IMAGE_PATH}findduplicates.gif" alt="{$APP.LBL_FIND_DUPICATES}" title="{$APP.LBL_FIND_DUPLICATES}" border="0"></a></td>
+				{else}
+					<td style="padding-right:10px"><img src="{$IMAGE_PATH}FindDuplicates-Faded.gif" border="0"></td>	
+				{/if}
+			{else}
+				<td style="padding-right:10px"><img src="{$IMAGE_PATH}FindDuplicates-Faded.gif" border="0"></td>
+			{/if}
 			</tr>
 			</table>	
 		<td style="width:20px;">&nbsp;</td>

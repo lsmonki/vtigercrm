@@ -25,6 +25,17 @@ function searchshowhide(argg,argg2)
     }
 }
 
+function searchhide(argg,argg2)
+{
+	var ele_x = document.getElementById(argg);
+	var ele_y = document.getElementById(argg2);
+	var x, y;
+    if (ele_x != null) x = ele_x.style;
+    if (ele_y != null) y = ele_y.style;
+	if (y != null) y.display="none";
+    if (x != null) x.display="none";
+}
+
  function moveMe(arg1) {
     var posx = 0;
     var posy = 0;

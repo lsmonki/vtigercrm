@@ -89,6 +89,7 @@ function getHomeActivities(mode,view)
 							<tr>
 							<td style="padding-right:5px;padding-left:10px;"><img src="{$IMAGE_PATH}tbarImport-Faded.gif" border="0"></td>	
 							<td style="padding-right:5px"><img src="{$IMAGE_PATH}tbarExport-Faded.gif" border="0"></td>
+							<td style="padding-right:5px"><img src="{$IMAGE_PATH}FindDuplicates-Faded.gif" border="0"></td>
 							</tr>
 							</table>	
 					</td>

@@ -163,6 +163,20 @@
 				// Added after 5.0.4 GA
 				
 				ALL_FILTER_CREATION_DENIED:'Cannot create CustomView using name "All", try using different ViewName',
-				MSG_RESTORE_CONFIRMATION:'Are you sure you want to restore the selected'
-                
+				MSG_RESTORE_CONFIRMATION:'Are you sure you want to restore the selected',
+
+                /* For Duplicate merging feature */
+				SAME_GROUPS: 'You have to select the records in the same groups for merging',
+				ATLEAST_TWO: 'Select atleast two records for merging',
+				MAX_THREE: 'You are allowed to select a maximum of three records',
+				//PARENT_RECORD: 'Select a record as parent record',  MergeFields.tpl Line:59
+				MAX_RECORDS: 'You are allowed to select a maximum of four records',
+				CON_MANDATORY: 'Select the mandatory field Last Name',
+				LE_MANDATORY: 'Select the mandatory fields Last Name and Company',
+				ACC_MANDATORY: 'Select the mandatory field Account Name',
+				PRO_MANDATORY: 'Select the mandatory field Product Name',
+				TIC_MANDATORY: 'Select the mandatory field Ticket Title',
+				POTEN_MANDATORY: 'Select the mandatory field Potential Name',
+				VEN_MANDATORY: 'Select the mandatory field Vendor Name',
+				DEL_MANDATORY: 'You are not allowed to delete the mandatory field'
 			};

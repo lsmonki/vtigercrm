@@ -3128,6 +3128,11 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 			//$output .= '<a href="index.php?module=Calendar&action=index&start='.$navigation_array['prev'].$url_string.'" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
 			$output .= '<a href="javascript:;" onClick="cal_navigation(\''.$tab_type.'\',\''.$url_string.'\',\'&start='.$navigation_array['prev'].'\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
 		}
+		else if($action_val == "FindDuplicate")
+		{
+			$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start=1'.$url_string.'\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['prev'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
+		}
 		else{
 			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start=1'.$url_string.'\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
 			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['prev'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
@@ -3148,6 +3153,8 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 				//$output .= '<a href="index.php?module=Calendar&action=index&start='.$i.$url_string.'">'.$i.'</a>&nbsp;';
 				$output .= '<a href="javascript:;" onClick="cal_navigation(\''.$tab_type.'\',\''.$url_string.'\',\'&start='.$i.'\');" >'.$i.'</a>&nbsp;';
 			}
+			else if($action_val == "FindDuplicate")
+				$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'start='.$i.$url_string.'\');" >'.$i.'</a>&nbsp;';
 			else
 				$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$i.$url_string.'\');" >'.$i.'</a>&nbsp;';
 		}
@@ -3160,6 +3167,11 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 			$output .= '<a href="javascript:;" onClick="cal_navigation(\''.$tab_type.'\',\''.$url_string.'\',\'&start='.$navigation_array['next'].'\');" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
 			//$output .= '<a href="index.php?module=Calendar&action=index&start='.$navigation_array['verylast'].$url_string.'" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
 			$output .= '<a href="javascript:;" onClick="cal_navigation(\''.$tab_type.'\',\''.$url_string.'\',\'&start='.$navigation_array['verylast'].'\');" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
+		}
+		else if($action_val == "FindDuplicate")
+		{
+			$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['next'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['verylast'].$url_string.'\');" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
 		}
 		else
 		{
@@ -3800,8 +3812,92 @@ function getAccountId($account_name)
 		$result = $adb->pquery($sql, array($account_name));
 		$accountid = $adb->query_result($result,0,"accountid");
 	}
-	return $accountid;
+	if($accountid !='')
+		return $accountid;
+	else
+		return 0;
 }
+
+function getContactId($contact_name)
+{
+	global $log;
+	$log->info("in getContactId ".$contact_name);
+	global $adb;
+	if($contact_name != '')
+	{
+		$sql = "select contactid from vtiger_contactdetails INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted = 0 and concat( vtiger_contactdetails.lastname, ' ', vtiger_contactdetails.firstname ) =?";
+		$result = $adb->pquery($sql, array($contact_name));
+		$contactid = $adb->query_result($result,0,"contactid");
+	}
+	if($contactid !='')
+		return $contactid;
+	else
+		return 0;
+}
+
+function getVendorId($vendor_name)
+{
+	global $log;
+	$log->info("in getVendorId ".$vendor_name);
+	global $adb;
+	if($vendor_name != '')
+	{
+		$sql = "select vendorid from vtiger_vendor INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_vendor.vendorid where vtiger_crmentity.deleted = 0 and vtiger_vendor.vendorname =?";
+		$result = $adb->pquery($sql, array($vendor_name));
+		$vendorid = $adb->query_result($result,0,"vendorid");
+	}
+	if($vendorid !='')
+		return $vendorid;
+	else
+		return 0;
+}
+
+function getProductId($product_name)
+{
+	global $log;
+	$log->info("in getProductId ".$product_name);
+	global $adb;
+	if($product_name != '')
+	{
+		$sql = "select productid from vtiger_products INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_products.productid where vtiger_crmentity.deleted = 0 and vtiger_products.productname =?";
+		$result = $adb->pquery($sql, array($product_name));
+		$productid = $adb->query_result($result,0,"productid");
+	}
+	if($productid !='')
+		return $productid;
+	else
+		return 0;
+}
+
+/**	function used to get the parent id for the given input parent name --Pavani **/
+function getParentId($parent_name)
+{
+	global $adb; 
+	if($parent_name == '' || $parent_name == NULL)
+                        $parent_id = 0;
+	//For now it have conditions only for accounts and contacts, if needed can add more
+	$relatedTo = explode(':',$parent_name);
+	$parent_module = $relatedTo[0]; $parent_module = trim($parent_module," ");
+	$parent_name = $relatedTo[3]; $parent_name = trim($parent_name," ");
+	$num_rows = 0;
+	if($parent_module == 'Contacts')
+	{
+		$query ="select crmid from vtiger_contactdetails, vtiger_crmentity WHERE concat(lastname,' ',firstname)=? and vtiger_crmentity.crmid =vtiger_contactdetails.contactid and vtiger_crmentity.deleted=0";
+		$result = $adb->pquery($query, array($parent_name));
+		$num_rows=$adb->num_rows($result);
+	}
+	else if($parent_module == 'Accounts')
+	{
+		$query = "select crmid from vtiger_account, vtiger_crmentity WHERE accountname=? and vtiger_crmentity.crmid =vtiger_account.accountid and vtiger_crmentity.deleted=0";
+		$result = $adb->pquery($query, array($parent_name));
+		$num_rows = $adb->num_rows($result);
+	}
+	else $num_rows=0;
+	if($num_rows == 0) $parent_id = 0;
+	else $parent_id = $adb->query_result($result,0,"crmid");
+	return $parent_id;
+}
+
 function decode_html($str)
 {
 	global $default_charset;
@@ -3830,4 +3926,58 @@ function textlength_check($field_val)
         }
 	return $temp_val;
 }
+
+/** Function to get permitted fields of current user of a particular module to find duplicate records --Pavani*/
+function getMergeFields($module,$str){
+	global $adb,$current_user;
+	$tabid = getTabid($module);
+	$sql="select distinct(userid) from vtiger_user2mergefields where tabid=?";
+	$sql_result=$adb->pquery($sql,array($tabid));
+	$num_rows=$adb->num_rows($sql_result);
+	for($i=0; $i<$num_rows;$i++)
+	{
+		if($adb->query_result($sql_result,$i,"userid") == $current_user->id)
+		{
+			$user_id=$current_user->id;
+			break;
+		}
+		$user_id=0;
+	}
+	if($str == "available_fields"){
+		$sql="select * from vtiger_user2mergefields where tabid=? and userid=?";
+	}
+	else{ //if($str == fileds_to_merge)
+		$sql="select * from vtiger_user2mergefields where tabid=? and userid=? and visible=1";
+	}
+	$result = $adb->pquery($sql, array($tabid,$user_id));
+	$num_rows=$adb->num_rows($result);
+	$sql_profile="select profileid from vtiger_role2profile where roleid=(select roleid from vtiger_user2role where userid=?)";
+	$result_profile=$adb->pquery($sql_profile,array($current_user->id));
+	$permitted_list = getProfile2FieldPermissionList($module,$adb->query_result($result_profile,0,"profileid"));
+	
+	$sql_def_org="select fieldid from vtiger_def_org_field where tabid=? and visible=0";
+	$result_def_org=$adb->pquery($sql_def_org,array($tabid));
+	$num_rows_org=$adb->num_rows($result_def_org);
+	$permitted_org_list = Array();
+	for($i=0; $i<$num_rows_org; $i++)
+		$permitted_org_list[$i] = $adb->query_result($result_def_org,$i,"fieldid");
+	
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	for($i=0; $i<$num_rows;$i++)
+	{
+		$field_id = $adb->query_result($result,$i,"fieldid");
+		foreach($permitted_list as $field=>$data)
+			if($data[4] == $field_id and $data[1] == 0)
+			{
+				if($is_admin == 'true' || (in_array($field_id,$permitted_org_list)))
+				{
+					$field="<option value=\"".$field_id."\">".$data[0]."</option>";
+					$fields.=$field;
+						break;
+				}
+			}
+	}
+	return $fields;
+}
+
 ?>

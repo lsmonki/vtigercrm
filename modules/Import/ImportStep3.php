@@ -73,6 +73,7 @@ $image_path=$theme_path."images/";
 
 $log->info("Upload Step 3");
 
+include("include/saveMergeCriteria.php");
 
 $delimiter = ',';
 // file handle

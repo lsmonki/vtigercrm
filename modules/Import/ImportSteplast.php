@@ -36,6 +36,8 @@ global $mod_strings;
 global $app_list_strings;
 global $app_strings;
 global $current_user;
+$currentModule = "Import";
+$req_module=$_REQUEST['modulename'];
 
 if (! isset( $_REQUEST['module']))
 {
@@ -86,9 +88,10 @@ $smarty->assign("MODULE", $_REQUEST['modulename']);
 $smarty->assign("SINGLE_MOD", $_REQUEST['modulename']);
 $smarty->assign("CATEGORY", $_SESSION['import_parenttab']);
 //@session_unregister("import_parenttab");
-
-$smarty->display("Buttons_List1.tpl");
-
+if($req_module != 'Accounts' || $req_module != 'Contacts' || $req_module != 'Products' || $req_module != 'Leads' || $req_module != 'HelpDesk' || $req_module != 'Potentials' || $req_module != 'Vendors' )
+{
+	$smarty->display("Buttons_List1.tpl");
+}
 
 if ( isset($_REQUEST['message']))
 {
@@ -104,7 +107,13 @@ if ( isset($_REQUEST['message']))
 	   <tr><td>&nbsp;</td></tr>
 	   <tr>
 		<td align="left"  style="padding-left:40px;width:75%;" >
-			<span class="genHeaderGray"><?php echo $mod_strings['LBL_STEP_3_3']; ?></span>&nbsp; 
+			<?php	if($req_module == 'Contacts' || $req_module == 'Accounts' || $req_module == 'Leads' || $req_module == 'Products' || $req_module == 'HelpDesk' || $req_module == 'Potentials' || $req_module == 'Vendors') 
+				{ ?>
+					<span class="genHeaderGray"><?php echo $mod_strings['LBL_STEP_4_4']; ?></span>&nbsp; 
+			<?php	} 
+			        else { ?>
+				        <span class="genHeaderGray"><?php echo $mod_strings['LBL_STEP_3_3']; ?></span>&nbsp;		
+			<?php	} ?>
 			<span class="genHeaderSmall"><?php echo $mod_strings['LBL_MAPPING_RESULTS']; ?></span>
 		</td>
 	   </tr>	
@@ -119,18 +128,28 @@ if ( isset($_REQUEST['message']))
 	     <td class="reportCreateBottom" >
 		 <table width="100%" border="0" cellpadding="5" cellspacing="0" >
            <tr>
-             <td align="right" valign="top"><form enctype="multipart/form-data" name="Import" method="POST" action="index.php" style="float:right; ">
+             <td align="right" valign="top"><form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
                  <input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
-                 <input type="hidden" name="action" value="Import">
+                 <input type="hidden" name="action" id="import_action" value="Import">
                  <input type="hidden" name="step" value="1">
                  <input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
                  <input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
                  <input type="hidden" name="return_action" value="<?php echo (($_REQUEST['return_action'] != '')?$_REQUEST['return_action']:'index'); ?>">
-                 <input type="hidden" name="parenttab" value="<?php echo $parenttab; ?>">
+                 <input type="hidden" name="parenttab" id="parenttab"value="<?php echo $parenttab; ?>">
                  <input title="<?php echo $mod_strings['LBL_FINISHED'] ?>" accessKey="" class="crmbutton small save" type="submit" name="button" value="  <?php echo $mod_strings['LBL_FINISHED'] ?>  "  onclick="this.form.action.value=this.form.return_action.value;this.form.return_module.value=this.form.return_module.value;return true;">
-                 <input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="crmbutton small save" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="this.form.return_module.value=this.form.module.value; return true;">
-             </form>
-			 <form name="Import" method="POST" action="index.php" style="float:right; ">
+                <input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="crmbutton small save" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="this.form.return_module.value=this.form.module.value; return true;">
+		<?php 
+			//if check added for duplicate records handling -srini	
+		if( ($req_module == 'Contacts'|| $req_module == 'Accounts' || $req_module == 'Leads' ||$req_module == 'Products' ||$req_module == 'HelpDesk' ||$req_module == 'Potentials' ||$req_module == 'Vendors') && ($_REQUEST['dup_type'] == 'manual')) { ?>
+			 <input name="lastimport" value="<?php echo $mod_strings['LBL_LAST_IMPORT']?>" class="crmbutton small save" type="button" onclick="lastImport('<?php echo $currentModule; ?>','<?php echo $req_module; ?>');">
+<?php } ?>
+	     </form>
+		
+		
+		
+		
+		<td align="left">
+		 <form name="Import" method="POST" action="index.php">
                  <input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
                  <input type="hidden" name="action" value="Import">
                  <input type="hidden" name="step" value="undo">
@@ -146,102 +165,130 @@ if ( isset($_REQUEST['message']))
 	</table>
 	<?php 
 }
-
-echo "<br><br>";
-
-$currentModule = "Import";
-
-global $limit;
-global $list_max_entries_per_page;
-
-$implict_account = false;
-
-$import_modules_array = Array(
+//if check added for duplicate records handling -srini
+if( ($req_module == 'Accounts' || $req_module == 'Contacts' || $req_module == 'Leads' || $req_module == 'Products' ||$req_module == 'HelpDesk' ||$req_module == 'Potentials' ||$req_module == 'Vendors') && ($_REQUEST['dup_type'] == 'manual') )
+{	
+	echo "<br>";
+	$return_module=$_REQUEST['modulename'];
+	//$delete_idstring=$_REQUEST['idlist'];
+	
+	$ret_arr=getDuplicateRecordsArr($req_module);
+	$fld_values=$ret_arr[0];
+	$total_num_group=count($fld_values);
+	$fld_name=$ret_arr[1];
+	
+	$smarty->assign("MODULE",$req_module);
+	$smarty->assign("NUM_GROUP",$total_num_group);
+	$smarty->assign("FIELD_NAMES",$fld_name);
+	$smarty->assign("CATEGORY",$parenttab);
+	$smarty->assign("ALL_VALUES",$fld_values);
+	$smarty->assign("MOD", return_module_language($current_language,'Contacts'));
+	$smarty->assign("IMAGE_PATH",$image_path);
+	$smarty->assign("APP", $app_strings);
+	$smarty->assign("CMOD", $mod_strings);
+	$smarty->assign("MODE",'view'); 
+	$smarty->assign("NAVIGATION",$ret_arr["navigation"]);//Added for page navigation
+	if(isPermitted($req_module,'Delete','') == 'yes')
+		$button_del = $app_strings[LBL_MASS_DELETE];
+	$smarty->assign("DELETE",$button_del);
+	if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
+		$smarty->display("FindDuplicateAjax.tpl");
+	else
+		$smarty->display('FindDuplicateDisplay.tpl');
+}
+else
+{
+	echo "<br><br>";
+	$currentModule = "Import";
+	global $limit;
+	global $list_max_entries_per_page;
+	$implict_account = false;
+	$import_modules_array = Array(
 				"Leads"=>"Leads",
 				"Accounts"=>"Accounts",
 				"Contacts"=>"Contacts",
 				"Potentials"=>"Potentials",
-				"Products"=>"Products" ,
-				 "HelpDesk"=>"ImportTicket",
-                                "Vendors"=>"ImportVendors"
+				"Products"=>"Products",
+				"HelpDesk"=>"ImportTicket",
+                "Vendors"=>"ImportVendors"
 			     );
 
-foreach($import_modules_array as $module_name => $object_name)
-{
-
-	$seedUsersLastImport = new UsersLastImport();
-	$seedUsersLastImport->bean_type = $module_name;
-	$list_query = $seedUsersLastImport->create_list_query($o,$w);
-	$current_module_strings = return_module_language($current_language, $module_name);
-
-	$object = new $object_name();
-	$seedUsersLastImport->list_fields = $object->list_fields;
-
-	$list_result = $adb->query($list_query);
-	//Retreiving the no of rows
-	$noofrows = $adb->num_rows($list_result);
-
-	if($noofrows>=1) 
+	foreach($import_modules_array as $module_name => $object_name)
 	{
-		if($module_name != 'Accounts')
-		{
-			$implict_account=true;
-		}
-
-		if($module_name == 'Accounts' && $implict_account==true)
-			$display_header_msg = "Newly created Accounts";
-		else
-			$display_header_msg = "".$mod_strings['LBL_LAST_IMPORTED']." ".$app_strings[$module_name]."";
+		$seedUsersLastImport = new UsersLastImport();
+		$seedUsersLastImport->bean_type = $module_name;
+		$list_query = $seedUsersLastImport->create_list_query($o,$w);
+		$current_module_strings = return_module_language($current_language, $module_name);
 		
-		//Display the Header Message	
-		echo "
-			<table width='100%' border='0' cellpadding='5' cellspacing='0'>
-			   <tr>
-				<td class='dvtCellLabel' align='left'>
-					<b>".$mod_strings['LBL_LAST_IMPORTED']." ".$app_strings[$module_name]." </b>
-				</td>
-			   </tr>
-			</table>
-		      ";
-
-		$smarty = new vtigerCRM_Smarty;
-
-		$smarty->assign("MOD", $mod_strings);
-		$smarty->assign("APP", $app_strings);
-		$smarty->assign("IMAGE_PATH",$image_path);
-		$smarty->assign("MODULE",$module_name);
-		$smarty->assign("SINGLE_MOD",$module_name);
-		$smarty->assign("SHOW_MASS_SELECT",'false');
-
-		//Retreiving the start value from request
-		if($module_name == $_REQUEST['nav_module'] && isset($_REQUEST['start']) && $_REQUEST['start'] != '')
+		$object = new $object_name();
+		$seedUsersLastImport->list_fields = $object->list_fields;
+	
+		$list_result = $adb->query($list_query);
+		//Retreiving the no of rows
+		$noofrows = $adb->num_rows($list_result);
+	
+		if($noofrows>=1) 
 		{
-			$start = $_REQUEST['start'];
+			if($module_name != 'Accounts')
+			{
+				$implict_account=true;
+			}
+	
+			if($module_name == 'Accounts' && $implict_account==true)
+				$display_header_msg = "Newly created Accounts";
+			else
+				$display_header_msg = "".$mod_strings['LBL_LAST_IMPORTED']." ".$app_strings[$module_name]."";
+			
+			//Display the Header Message	
+			echo "
+				<table width='100%' border='0' cellpadding='5' cellspacing='0'>
+				   <tr>
+					<td class='dvtCellLabel' align='left'>
+						<b>".$mod_strings['LBL_LAST_IMPORTED']." ".$app_strings[$module_name]." </b>
+					</td>
+				   </tr>
+				</table>
+			      ";
+	
+			$smarty = new vtigerCRM_Smarty;
+	
+			$smarty->assign("MOD", $mod_strings);
+			$smarty->assign("APP", $app_strings);
+			$smarty->assign("IMAGE_PATH",$image_path);
+			$smarty->assign("MODULE",$module_name);
+			$smarty->assign("SINGLE_MOD",$module_name);
+			$smarty->assign("SHOW_MASS_SELECT",'false');
+	
+			//Retreiving the start value from request
+			if($module_name == $_REQUEST['nav_module'] && isset($_REQUEST['start']) && $_REQUEST['start'] != '')
+			{
+				$start = $_REQUEST['start'];
+			}
+			else
+			{
+				$start = 1;
+			}
+	
+			$info_message='&recordcount='.$_REQUEST['recordcount'].'&noofrows='.$_REQUEST['noofrows'].'&message='.$_REQUEST['message'].'&skipped_record_count='.$_REQUEST['skipped_record_count'];
+			$url_string = '&modulename='.$_REQUEST['modulename'].'&nav_module='.$module_name.$info_message;
+			$viewid = '';
+	
+			//Retreive the Navigation array
+			$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
+			$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Import","ImportSteplast",$viewid);
+	
+			//Retreive the List View Header and Entries
+			$listview_header = getListViewHeader($object,$module_name);
+			$listview_entries = getListViewEntries($object,$module_name,$list_result,$navigation_array,"","","EditView","Delete","");
+			//commented to remove navigation buttons from import list view
+			//$smarty->assign("NAVIGATION", $navigationOutput);
+			$smarty->assign("HIDE_CUSTOM_LINKS", 1);//Added to hide the CustomView links in imported records ListView
+			$smarty->assign("LISTHEADER", $listview_header);
+			$smarty->assign("LISTENTITY", $listview_entries);
+			
+			$smarty->display("ListViewEntries.tpl");
+			echo "<BR>";
 		}
-		else
-		{
-			$start = 1;
-		}
-
-		$info_message='&recordcount='.$_REQUEST['recordcount'].'&noofrows='.$_REQUEST['noofrows'].'&message='.$_REQUEST['message'].'&skipped_record_count='.$_REQUEST['skipped_record_count'];
-		$url_string = '&modulename='.$_REQUEST['modulename'].'&nav_module='.$module_name.$info_message;
-		$viewid = '';
-
-		//Retreive the Navigation array
-		$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
-		$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Import","ImportSteplast",$viewid);
-
-		//Retreive the List View Header and Entries
-		$listview_header = getListViewHeader($object,$module_name);
-		$listview_entries = getListViewEntries($object,$module_name,$list_result,$navigation_array,"","","EditView","Delete","");
-		//commented to remove navigation buttons from import list view
-		//$smarty->assign("NAVIGATION", $navigationOutput);
-		$smarty->assign("HIDE_CUSTOM_LINKS", 1);//Added to hide the CustomView links in imported records ListView
-		$smarty->assign("LISTHEADER", $listview_header);
-		$smarty->assign("LISTENTITY", $listview_entries);
-
-		$smarty->display("ListViewEntries.tpl");
-		echo "<BR>";
 	}
 }
 

@@ -59,6 +59,21 @@ function deleteMapping()
 {literal}
 function check_submit()
 {
+    var selectedColStr = "";
+    if(document.getElementById("merge_check").checked == true)
+    {
+    	setObjects();
+    	for (i=0;i<selectedColumnsObj.options.length;i++) 
+	        selectedColStr += selectedColumnsObj.options[i].value + ",";
+	    if (selectedColStr == "")
+	    {
+	    	{/literal}
+	    	alert('{$APP.LBL_MERGE_SHOULDHAVE_INFO}');
+	    	{literal}
+	    	return false;
+	    }
+	    document.Import.selectedColumnsString.value = selectedColStr;
+	}
 	if(validate_import_map())
 	{	
 		if(document.getElementById("save_map").checked)
@@ -90,8 +105,112 @@ function check_submit()
 	}
 }
 
+//added for duplicate handling -srini
+function show_option(obj)
+{
+	var sel_value = obj.value;
+	if(sel_value == 'auto')
+	{
+		$("auto_option").innerHTML = $("option_div").innerHTML;	
+	}
+	else
+		$("auto_option").innerHTML = "&nbsp;";
+}
 
+function showMergeOptions(curObj, arg)
+{
+	var ele = curObj;
+	var mergeoptions = document.getElementsByName('dup_type');
+	if (mergeoptions != null && ele != null) {
+		if (ele.checked == true) {
+			mergeoptions[0].checked = true;
+			mergeoptions[1].checked = false;
+		} else {
+			mergeoptions[0].checked = false;
+			mergeoptions[1].checked = false;
+		}
+		mergeshowhide(arg);
+	}
+}
 {/literal}
+      var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
+        function setObjects() 
+        {ldelim}
+            availListObj=getObj("availList")
+            selectedColumnsObj=getObj("selectedColumns")
+
+        {rdelim}
+
+        function addColumn() 
+        {ldelim}
+        setObjects();
+            for (i=0;i<selectedColumnsObj.length;i++) 
+            {ldelim}
+                selectedColumnsObj.options[i].selected=false
+            {rdelim}
+
+            for (i=0;i<availListObj.length;i++) 
+            {ldelim}
+                if (availListObj.options[i].selected==true) 
+                {ldelim}            	
+                	var rowFound=false;
+                	var existingObj=null;
+                    for (j=0;j<selectedColumnsObj.length;j++) 
+                    {ldelim}
+                        if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
+                        {ldelim}
+                            rowFound=true
+                            existingObj=selectedColumnsObj.options[j]
+                            break
+                        {rdelim}
+                    {rdelim}
+
+                    if (rowFound!=true) 
+                    {ldelim}
+                        var newColObj=document.createElement("OPTION")
+                        newColObj.value=availListObj.options[i].value
+                        if (browser_ie) newColObj.innerText=availListObj.options[i].innerText
+                        else if (browser_nn4 || browser_nn6) newColObj.text=availListObj.options[i].text
+                        selectedColumnsObj.appendChild(newColObj)
+                        availListObj.options[i].selected=false
+                        newColObj.selected=true
+                        rowFound=false
+                    {rdelim} 
+                    else 
+                    {ldelim}
+                        if(existingObj != null) existingObj.selected=true
+                    {rdelim}
+                {rdelim}
+            {rdelim}
+        {rdelim}
+
+        function delColumn() 
+        {ldelim}
+        setObjects();
+            for (i=selectedColumnsObj.options.length;i>0;i--) 
+            {ldelim}
+                if (selectedColumnsObj.options.selectedIndex>=0)
+                selectedColumnsObj.remove(selectedColumnsObj.options.selectedIndex)
+            {rdelim}
+        {rdelim}
+                        
+        function formSelectColumnString()
+        {ldelim}
+            var selectedColStr = "";
+            setObjects();
+            for (i=0;i<selectedColumnsObj.options.length;i++) 
+            {ldelim}
+                selectedColStr += selectedColumnsObj.options[i].value + ",";
+            {rdelim}
+            if (selectedColStr == "")
+            {ldelim}
+            	alert('{$APP.LBL_MERGE_SHOULDHAVE_INFO}');
+            	return false;
+            {rdelim}
+            document.Import.selectedColumnsString.value = selectedColStr;
+            return;
+        {rdelim}
+	setObjects();	
 </script>
 <!-- header - level 2 tabs -->
 {include file='Buttons_List1.tpl'}	
@@ -128,7 +247,11 @@ function check_submit()
 				   </tr>
 				   <tr>
 					<td align="left"  style="padding-left:40px;">
-						<span class="genHeaderGray">{$MOD.LBL_STEP_2_3} </span>&nbsp; 
+						{if $MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Leads' || $MODULE eq 'Products' || $MODULE == 'HelpDesk' || $MODULE == 'Potentials' || $MODULE == 'Vendors'}	
+							<span class="genHeaderGray">{$MOD.LBL_STEP_2_4}</span>&nbsp; 
+						{else}
+							<span class="genHeaderGray">{$MOD.LBL_STEP_2_3}</span>&nbsp;
+						{/if}
 						<span class="genHeaderSmall">{$APP.$MODULE} {$MOD.LBL_LIST_MAPPING} </span>
 					</td>
 				   </tr>
@@ -204,6 +327,84 @@ function check_submit()
 					</td>
 				   </tr>
 				   <tr >
+				   <!-- added for duplicate handling -srini -->
+					{if $MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Leads' || $MODULE eq 'Products' || $MODULE eq 'HelpDesk' || $MODULE eq 'Potentials' || $MODULE eq 'Vendors'}
+						<tr>
+							<td>&nbsp;</td>
+					   	</tr>
+					   	<tr>
+					   		<td align="left" style="padding-left:40px;" >
+					   		{if $MERGE eq 'Merge'}
+					   			<input id="merge_check" type="checkbox" onChange="showMergeOptions(this, 'importMergeDup')"/>
+								<span class="genHeaderGray">{$MOD.LBL_STEP_3_4} </span>
+								<span class="genHeaderSmall">Duplicate Merging </span>
+								<span>(Select this option to enable and set duplicate merging criteria)</span> 
+							{else}	
+					   			<input id="merge_check" type="checkbox" disabled="true" onChange="mergeshowhide(this, 'importMergeDup')"/>
+								<span class="genHeaderGray">{$MOD.LBL_STEP_3_4} </span>
+								<span class="genHeaderSmall">Duplicate Merging </span>
+								<span style="color:red;">(Access denied to perform this operation)</span>
+					   		{/if}
+							</td>
+					   	</tr>
+					   	<tr>
+	                   		<td align="left"  style="padding-left:40px;">
+							<div id="importMergeDup" style="z-index:1;display:none;position:relative;">
+		                        
+		                        <span  style="padding-left:40px;font-weight:bold;">{$MOD.Select_Criteria_For_Duplicate}</span>
+	                         
+								<table align="middle" border=0 width=100%>
+					           		<tr>
+		                           		<td align="left" style="padding-left:50px;">
+		                                	<input name="dup_type" value="manual" type="radio" onClick="show_option(this);">{$MOD.Manual_Merging}<br>
+											<input name="dup_type" value="auto" type="radio" onClick="show_option(this);">{$MOD.Auto_Merging}
+		                                </td>
+		                            </tr>
+		                            <tr>
+										<td id='auto_option' align="left" style="padding-left:50px;">&nbsp;</td>
+						   			</tr>
+								</table>
+									<div id='option_div' style="display:none;">
+										&nbsp;&nbsp;&nbsp;&nbsp;<input name="auto_type" value="ignore" type="radio" checked>{$MOD.Ignore_Duplicate}<br>
+	                                                        &nbsp;&nbsp;&nbsp;&nbsp;<input name="auto_type" value="overwrite" type="radio">{$MOD.Overwrite_Duplicate}
+									</div>
+								<input type="hidden" name="selectedColumnsString"/>
+								<table class="searchUIBasic small" border="0" cellpadding="5" cellspacing="0" width="80%" height="10" align="center">
+									<tbody>
+										<tr class="lvtCol" style="Font-Weight: normal"><br>
+											<td colspan="3">
+												<span class="moduleName">{$APP.LBL_SELECT_MERGECRITERIA_HEADER}</span><br>
+												<span font-weight:normal>{$APP.LBL_SELECT_MERGECRITERIA_TEXT}</span>
+											</td>
+				   						   </tr>
+				   						   <tr><td colspan="3"></td></tr>
+										   <tr>
+											<td><b>{$APP.LBL_AVAILABLE_FIELDS}</b></td>
+											<td></td>
+											<td><b>{$APP.LBL_SELECTED_FIELDS}</b></td>
+										   </tr>
+										   <tr>
+											<td width=47%>
+												<select id="availList" multiple size="10" name="availList" class="txtBox" Style="width: 100%">{$AVALABLE_FIELDS}</select>
+											</td>
+											<td width="6%">
+												<div align="center">
+													<input type="button" name="Button" value="&nbsp;&rsaquo;&rsaquo;&nbsp;" onClick="addColumn()" class="crmButton small" width="100%" /><br /><br />
+													<input type="button" name="Button1" value="&nbsp;&lsaquo;&lsaquo;&nbsp;" onClick="delColumn()" class="crmButton small" width="100%" /><br /><br />
+												</div>
+											</td>
+											<td width="47%">
+												<select id="selectedColumns" size="10" name="selectedColumns" multiple class="txtBox" Style="width: 100%">{$FIELDS_TO_MERGE}</select>
+											</td>
+										   </tr>
+									</tbody>
+								</table>
+							</div>
+							</td>
+					   	</tr>
+					{/if}
+				<!-- duplicate handling ends -->
+				   <tr>
 					<td align="right" style="padding-right:40px;" class="reportCreateBottom" >
 						<input type="submit" name="button"  value=" &nbsp;&lsaquo; {$MOD.LBL_BACK} &nbsp; " class="crmbutton small cancel" onclick="this.form.action.value='Import';this.form.step.value='1'; return true;" />
 						&nbsp;&nbsp;

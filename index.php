@@ -268,6 +268,14 @@ if(isset($action) && isset($module))
 		ereg("^TemplateMerge",$action) ||
 		ereg("^testemailtemplateusage",$action) ||
 		ereg("^saveemailtemplate",$action) ||
+		ereg("^MergeFieldContacts", $action ) ||
+		ereg("^MergeFieldLeads", $action ) ||
+		ereg("^MergeFieldAccounts", $action ) ||
+		ereg("^MergeFieldProducts", $action ) ||
+		ereg("^MergeFieldHelpDesk", $action ) ||
+		ereg("^MergeFieldPotentials", $action ) ||
+		ereg("^MergeFieldVendors", $action ) ||
+		ereg("^lastImport", $action ) ||
 		ereg("^lookupemailtemplate",$action) ||
 		ereg("^deletewordtemplate",$action) ||
 		ereg("^deleteemailtemplate",$action) ||
@@ -336,10 +344,18 @@ if(isset($action) && isset($module))
 			ereg("^massdelete", $action) ||
 			ereg("^mailmergedownloadfile",$action) || 	ereg("^get_img",$action) ||
 			ereg("^download",$action) ||
+			ereg("^MergeFieldContacts", $action ) ||
+			ereg("^MergeFieldLeads", $action ) ||
+			ereg("^MergeFieldAccounts", $action ) ||
+			ereg("^MergeFieldProducts", $action ) ||
+			ereg("^MergeFieldHelpDesk", $action ) ||
+			ereg("^MergeFieldPotentials", $action ) ||
+			ereg("^MergeFieldVendors", $action ) ||
+			ereg("^lastImport", $action ) ||
 			ereg("^massdelete", $action ))
 			$skipFooters=true;
 		//skip footers for all these invocations as they are mostly popups
-		if(ereg("^downloadfile", $action) || ereg("^fieldtypes",$action) || ereg("^mailmergedownloadfile",$action)|| ereg("^get_img",$action))
+		if(ereg("^downloadfile", $action) || ereg("^fieldtypes",$action) || ereg("^mailmergedownloadfile",$action)|| ereg("^get_img",$action) || ereg("^MergeFieldLeads", $action) || ereg("^MergeFieldContacts", $action ) || ereg("^MergeFieldAccounts", $action ) || ereg("^MergeFieldProducts", $action ) || ereg("^MergeFieldHelpDesk", $action ) || ereg("^MergeFieldPotentials", $action ) || ereg("^MergeFieldVendors", $action ))
 		{
 			$viewAttachment = true;
 		}
@@ -683,13 +699,13 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	</script>
 		";
 
-	if($action != "about_us" && $action != "vtchat" && $action != "ChangePassword" && $action != "body" && $action != $module."Ajax" && $action!='Popup' && $action != 'ImportStep3' && $action != 'ActivityAjax')
+	if((!$skipFooters) && $action != "about_us" && $action != "vtchat" && $action != "ChangePassword" && $action != "body" && $action != $module."Ajax" && $action!='Popup' && $action != 'ImportStep3' && $action != 'ActivityAjax')
 	
 	{
 		echo $copyrightstatement;
 		echo "<script language = 'JavaScript' type='text/javascript' src = 'include/js/popup.js'></script>";
 		echo "<br><br><br><table border=0 cellspacing=0 cellpadding=5 width=100% class=settingsSelectedUI >";
-		echo "<tr><td class=small align=left><span style='color: rgb(153, 153, 153);'>vtiger CRM 5.0.4</span></td>";
+		echo "<tr><td class=small align=left><span style='color: rgb(153, 153, 153);'>vtiger CRM 5.1.0</span></td>";
 		echo "<td class=small align=right><span style='color: rgb(153, 153, 153);'>&copy; 2004-2008 <a href='http://www.vtiger.com' target='_blank'>vtiger.com</a> | <a href='javascript:mypopup()'>".$app_strings['LNK_READ_LICENSE']."</a></span></td></tr></table>";
 			
 	//	echo "<table align='center'><tr><td align='center'>";

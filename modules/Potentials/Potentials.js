@@ -9,6 +9,7 @@
  ********************************************************************************/
 
 
+document.write("<script type='text/javascript' src='include/js/Merge.js'></"+"script>");
 
 function set_return(product_id, product_name) {
         window.opener.document.EditView.parent_name.value = product_name;

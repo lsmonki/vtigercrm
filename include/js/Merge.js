@@ -43,3 +43,42 @@ function massMerge(module)
 	document.massdelete.action.value = 'Merge';
 	document.getElementById('massdelete').action="index.php?module="+module+"&action=Merge&return_module="+module+"&return_action=index";
 }
+
+function mergeshowhide(argg)
+{
+    var x=document.getElementById(argg).style
+    if (x.display=="none")
+    {
+        x.display="block"
+   
+    }
+    else 
+	{
+		x.display="none"
+	}
+}
+
+function mergehide(argg)
+{
+    var x=document.getElementById(argg).style
+	x.display="none"
+}
+
+ function moveMe(arg1) {
+    var posx = 0;
+    var posy = 0;
+    var e=document.getElementById(arg1);
+   
+    if (!e) var e = window.event;
+   
+    if (e.pageX || e.pageY)
+    {
+        posx = e.pageX;
+        posy = e.pageY;
+    }
+    else if (e.clientX || e.clientY)
+    {
+        posx = e.clientX + document.body.scrollLeft;
+        posy = e.clientY + document.body.scrollTop;
+    }
+ }

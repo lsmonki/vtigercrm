@@ -42,7 +42,7 @@
 					{/if}
 									
 					{if $CHECK.index eq 'yes' && $MODULE neq 'Emails' && $MODULE neq 'Webmails'}
-						 <td style="padding-right:10px"><a href="javascript:;" onClick="moveMe('searchAcc');searchshowhide('searchAcc','advSearch')" ><img src="{$IMAGE_PATH}btnL3Search.gif" alt="{$APP.LBL_SEARCH_ALT}{$APP.$MODULE}..." title="{$APP.LBL_SEARCH_TITLE}{$APP.$MODULE}..." border=0></a></a></td>
+						 <td style="padding-right:10px"><a href="javascript:;" onClick="moveMe('searchAcc');searchshowhide('searchAcc','advSearch');mergehide('mergeDup')" ><img src="{$IMAGE_PATH}btnL3Search.gif" alt="{$APP.LBL_SEARCH_ALT}{$APP.$MODULE}..." title="{$APP.LBL_SEARCH_TITLE}{$APP.$MODULE}..." border=0></a></a></td>
 					{else}
 						<td style="padding-right:10px"><img src="{$IMAGE_PATH}btnL3Search-Faded.gif" border=0></td>
 					{/if}
@@ -116,6 +116,16 @@
 			{else}
 				<td style="padding-right:0px;padding-left:10px;"><img src="{$IMAGE_PATH}tbarImport-Faded.gif" border="0"></td>
                 		<td style="padding-right:10px"><img src="{$IMAGE_PATH}tbarExport-Faded.gif" border="0"></td>
+			{/if}
+			{if $MODULE eq 'Contacts' || $MODULE eq 'Leads' || $MODULE eq 'Accounts'|| $MODULE eq 'Products'|| $MODULE eq 'Potentials'|| $MODULE eq 'HelpDesk'|| $MODULE eq 'Vendors'} 
+				{if $CHECK.DuplicatesHandling eq 'yes'}	
+					<!--<td style="padding-right:10px"><a href="index.php?module={$MODULE}&action=FindDuplicate{$MODULE}&button_view=true&list_view=true&parenttab={$CATEGORY}"><img src="{$IMAGE_PATH}findduplicates.gif" alt="{$APP.LBL_FIND_DUPICATES}" title="{$APP.LBL_FIND_DUPLICATES}" border="0"></a></td> -->
+					<td style="padding-right:10px"><a href="javascript:;" onClick="moveMe('mergeDup');mergeshowhide('mergeDup');searchhide('searchAcc','advSearch');"><img src="{$IMAGE_PATH}findduplicates.gif" alt="{$APP.LBL_FIND_DUPICATES}" title="{$APP.LBL_FIND_DUPLICATES}" border="0"></a></td>
+				{else}
+					<td style="padding-right:10px"><img src="{$IMAGE_PATH}FindDuplicates-Faded.gif" border="0"></td>	
+				{/if}
+			{else}
+				<td style="padding-right:10px"><img src="{$IMAGE_PATH}FindDuplicates-Faded.gif" border="0"></td>
 			{/if}
 			</tr>
 			</table>	

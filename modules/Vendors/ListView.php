@@ -219,6 +219,10 @@ $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"Vendors",$list_result,$navigation_array,'','&return_module=Vendors&return_action=index','EditView','Delete',$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
+
+$smarty->assign("AVALABLE_FIELDS", getMergeFields($module,"available_fields"));
+$smarty->assign("FIELDS_TO_MERGE", getMergeFields($module,"fileds_to_merge"));
+
 //Added to select Multiple records in multiple pages
 $smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
 $smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);

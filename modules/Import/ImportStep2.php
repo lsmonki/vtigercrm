@@ -383,6 +383,11 @@ else
 	$smarty->assign("HAS_HEADER", 'off');
 }
 
+$smarty->assign("AVALABLE_FIELDS", getMergeFields($module,"available_fields"));
+$smarty->assign("FIELDS_TO_MERGE", getMergeFields($module,"fileds_to_merge"));
+if(isPermitted($module,'Merge','') == 'yes')
+	$smarty->assign("MERGE", 'Merge');
+
 $smarty->assign("MODULE", $_REQUEST['module']);
 $smarty->assign('CATEGORY' , $_REQUEST['parenttab']);
 @$_SESSION['import_parenttab'] = $_REQUEST['parenttab'];

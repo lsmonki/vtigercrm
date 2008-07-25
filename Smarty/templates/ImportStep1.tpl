@@ -66,7 +66,11 @@ function validateFile(form)
 				   <tr >
 					<td colspan="2" align="left" valign="top" style="padding-left:40px;">
 					<br>
-						<span class="genHeaderGray">{$MOD.LBL_STEP_1}</span>&nbsp; 
+						{if $MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Leads' || $MODULE eq 'Products' || $MODULE eq 'Potentials' || $MODULE eq 'HelpDesk' || $MODULE eq 'Vendors' }	
+							<span class="genHeaderGray">{$MOD.LBL_STEP_1_4}</span>&nbsp; 
+						{else}
+							<span class="genHeaderGray">{$MOD.LBL_STEP_1}</span>&nbsp;
+						{/if}
 						<span class="genHeaderSmall">{$MOD.LBL_STEP_1_TITLE}</span> 
 					</td>
 				   </tr>

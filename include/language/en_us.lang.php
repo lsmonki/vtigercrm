@@ -1099,6 +1099,26 @@ $app_strings = array (
 'PO Number'=>'PO Number',
 'MSG_AUTO_GEN_ON_SAVE'=>'AUTO GEN ON SAVE',
 
+//For Duplicate merging feature
+'LBL_MERGE' => 'Merge',
+'LBL_MERGE_BUTTON_TITLE' => 'Merge',
+'LBL_SAVE_MERGE_BUTTON_TITLE' => 'Find Duplicates',
+'LBL_SELECT_MERGECRITERIA_HEADER' => 'Merging Criteria Selection',
+'LBL_SELECT_AS_PARENT' => '(select as primary record)',
+'LBL_SELECT_MERGECRITERIA_TEXT' => 'Select the match fields to find duplicate records',
+'LBL_MERGE_SHOULDHAVE_INFO' => 'Select at least one field for merge criteria',
+'LBL_FIND_DUPLICATES'=>'Find Duplicates',
+'LBL_NO_RECORD'=>'No Records',
+'LBL_NO_DUPLICATE' => 'No Duplicate Records',
+'LBL_LAST_IMPORTED' => 'Last Imported',
+'LBL_NOW_IMPORTED'=>'Imported Now',
+'LBL_EXISTING'=> 'Existing',
+'LBL_TABLE_CREATED'=>'Table Created Successfully',
+'LBL_AVAILABLE_FIELDS'=>'Available Fields',
+'LBL_SELECTED_FIELDS'=>' Fields to be matched on',
+'LBL_MERGE_SELECT'=>'SelectRecords (max: 3)',
+'DuplicatesHandling' => 'DuplicatesHandling',
+'LBL_DESC_FOR_MERGE_FIELDS' => 'The primary record will be retained after the merge. You can select the column to retain the values. The other record will be deleted but the related information will be merged.',
 );
 
 $app_list_strings = array (

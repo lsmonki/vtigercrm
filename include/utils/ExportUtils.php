@@ -130,6 +130,11 @@ function getFieldsListFromQuery($query)
 		{
 			$fields .= "vtiger_vendor.vendorname as '".$fieldlabel."',";
 		}
+		//Pavani- Handling product handler
+		elseif($tablename == 'vtiger_products' && $columnName == 'handler')//Product - Handler
+		{
+			$fields .= "vtiger_users.user_name as '".$fieldlabel."',";
+		}
 		elseif($tablename == 'vtiger_producttaxrel' && $columnName == 'taxclass')//avoid product - taxclass
 		{
 			$fields .= "";

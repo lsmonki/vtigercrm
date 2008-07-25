@@ -273,6 +273,9 @@ $listview_entries = getListViewEntries($focus,"Potentials",$list_result,$navigat
 $smarty->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTENTITY", $listview_entries);
 
+$smarty->assign("AVALABLE_FIELDS", getMergeFields($module,"available_fields"));
+$smarty->assign("FIELDS_TO_MERGE", getMergeFields($module,"fileds_to_merge"));
+
 //Added to select Multiple records in multiple pages
 $smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
 $smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);

@@ -332,7 +332,10 @@ function alphabetic(module,url,dataid)
 </form>
 </div>		
 {*<!-- Searching UI -->*}
-	 
+
+<div id="mergeDup" style="z-index:1;display:none;position:relative;">
+	{include file="MergeColumns.tpl"}
+</div>	 
 	   <!-- PUBLIC CONTENTS STARTS-->
 	  <div id="ListViewContents" class="small" style="width:100%;position:relative;">
 			{include file="ListViewEntries.tpl"}
