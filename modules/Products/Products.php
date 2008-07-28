@@ -187,6 +187,28 @@ class Products extends CRMEntity {
 				
 				$log->debug("Going to save the Product - $curname currency relationship");
 
+				$query = "insert into vtiger_productcurrencyrel values(?,?,?,?)";
+				$adb->pquery($query, array($this->id,$curid,$converted_price,$actual_price));
+				
+				// Update the Product information with Base Currency choosen by the User.
+				if ($_REQUEST['base_currency'] == $cur_valuename) {
+					$adb->pquery("update vtiger_products set currency_id=?, unit_price=? where productid=?", array($curid, $actual_price, $this->id)); 
+				}
+			}
+		}
+
+		$log->debug("Exiting from insertPriceInformation($tablename, $module) method ...");
+	}
+	
+	function updateUnitPrice() {
+		$prod_res = $this->db->pquery("select unit_price, currency_id from vtiger_products where productid=?", array($this->id));
+		$prod_unit_price = $this->db->query_result($prod_res, 0, 'unit_price');
+		$prod_base_currency = $this->db->query_result($prod_res, 0, 'currency_id');	
+		
+		$query = "update vtiger_productcurrencyrel set actual_price=? where productid=? and currencyid=?";
+		$params = array($prod_unit_price, $this->id, $prod_base_currency);	
+		$this->db->pquery($query, $params);
+	}
 	
 	function insertIntoAttachment($id,$module)
 	{

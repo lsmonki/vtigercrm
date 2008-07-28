@@ -532,6 +532,12 @@ if (isset($_SESSION['authenticated_user_language'])) {
         setcookie('ck_login_language_vtiger', $_SESSION['authenticated_user_language']);
 }
 
+if($_REQUEST['module'] == 'Documents' && $action == 'DownloadFile')
+{
+	include('modules/Documents/DownloadFile.php');
+	exit;
+}
+
 //skip headers for popups, deleting, saving, importing and other actions
 if(!$skipHeaders) {
 	$log->debug("including headers");

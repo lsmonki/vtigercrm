@@ -31,6 +31,9 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record']))
 	$focus->name=$focus->column_fields['productname'];
 	$log->debug("id is ".$focus->id);
 	$log->debug("name is ".$focus->name);
+    $product_base_currency = getProductBaseCurrency($focus->id);
+} else {
+	$product_base_currency = fetchCurrency($current_user->id);
 }
 
 global $mod_strings;
@@ -55,6 +58,7 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 $smarty->assign("ID",$focus->id);
+$smarty->assign("CURRENCY_ID",$product_base_currency);
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("SINGLE_MOD",$app_strings['Product']);
