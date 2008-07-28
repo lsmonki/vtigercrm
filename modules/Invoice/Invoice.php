@@ -225,10 +225,16 @@ class Invoice extends CRMEntity {
         **/
 	function get_attachments($id)
 	{
-		global $log;
+		global $log,$current_user;
 		$log->debug("Entering get_attachments(".$id.") method ...");
-		
-		$query = "select vtiger_notes.title,'Notes      ' as ActivityType, vtiger_notes.filename,
+		$tab_id=getTabid('Documents');
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+        {
+			$sec_parameter=getListViewSecurityParameter('Documents');
+        }
+		$query = "select vtiger_notes.title,'Documents      ' as ActivityType, vtiger_notes.filename,
  		vtiger_attachments.type as FileType,crm2.modifiedtime as lastmodified,
  		vtiger_seattachmentsrel.attachmentsid as attachmentsid, vtiger_notes.notesid as crmid,
  		vtiger_notes.notecontent as description, vtiger_users.user_name	
@@ -236,11 +242,15 @@ class Invoice extends CRMEntity {
 			inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
 			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
 			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_notes.notesid and crm2.deleted=0
+			LEFT JOIN vtiger_notegrouprelation
+				ON vtiger_notegrouprelation.notesid = vtiger_notes.notesid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_notegrouprelation.groupname			
 			left join vtiger_seattachmentsrel  on vtiger_seattachmentsrel.crmid =vtiger_notes.notesid
 			left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
-			inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
+			inner join vtiger_users on crm2.smownerid= vtiger_users.id
 		where vtiger_crmentity.crmid=".$id;
-		
+		$query .= $sec_parameter;
 		$query .= ' union all ';
 
 		$query .= "select vtiger_attachments.subject as title ,'Attachments' as ActivityType,

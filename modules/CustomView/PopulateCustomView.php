@@ -304,10 +304,9 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
                          'vtiger_crmentity:smownerid:assigned_user_id:Invoice_Assigned_To:V'),
 		
 		  Array('vtiger_notes:title:notes_title:Notes_Title:V',
-                        'vtiger_contactdetails:lastname:lastname:Notes_Contact_Name:V',
-                        'vtiger_senotesrel:crmid:parent_id:Notes_Related_to:I',
                         'vtiger_notes:filename:filename:Notes_File:V',
-                        'vtiger_crmentity:modifiedtime:modifiedtime:Notes_Modified_Time:V'),
+                        'vtiger_crmentity:modifiedtime:modifiedtime:Notes_Modified_Time:V',
+		  				'vtiger_crmentity:smownerid:assigned_user_id:Notes_Assigned_To:V'),
 		
 		  Array('vtiger_pricebook:bookname:bookname:PriceBooks_Price_Book_Name:V',
                         'vtiger_pricebook:active:active:PriceBooks_Active:V',

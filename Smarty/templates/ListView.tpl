@@ -15,6 +15,8 @@
 {*<!-- module header -->*}
 <script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/search.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/Merge.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
 <script language="javascript" type="text/javascript">
 var typeofdata = new Array();
 typeofdata['E'] = ['is','isn','bwt','ewt','cts','dcts'];
@@ -338,7 +340,11 @@ function alphabetic(module,url,dataid)
 </div>	 
 	   <!-- PUBLIC CONTENTS STARTS-->
 	  <div id="ListViewContents" class="small" style="width:100%;position:relative;">
+	  {if $MODULE neq "Documents"}
 			{include file="ListViewEntries.tpl"}
+	  {else}
+	  	{include file="DocumentsListViewEntries.tpl"}
+	  {/if}
 	</div>
 
      </td>
@@ -436,6 +442,64 @@ function alphabetic(module,url,dataid)
 {if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts'}
 <form name="SendMail"><div id="sendmail_cont" style="z-index:100001;position:absolute;"></div></form>
 {/if}
+
+<!-- Add new Folder UI for Documents module starts -->
+<script language="JavaScript" type="text/javascript" src="modules/Documents/Documents.js"></script>
+<div id="orgLay" style="display:none;width:350px;" class="layerPopup">
+        <table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
+        <tr>
+                <td class="genHeaderSmall" nowrap align="left" width="30%" id="editfolder_info">{$MOD.LBL_ADD_NEW_FOLDER}</td>
+                <td align="right"><a href="javascript:;" onClick="closeFolderCreate();"><img src="{$IMAGE_PATH}close
+.gif" align="absmiddle" border="0"></a></td>
+        </tr>
+        </table>
+        <table border=0 cellspacing=0 cellpadding=5 width=95% align=center>
+        <tr>
+                <td class="small">
+                        <table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+                        <tr>
+                                <td align="right" nowrap class="cellLabel small"><font color='red'>*</font>&nbsp;<b>{$MOD.LBL_FOLDER_NAME}
+</b></td>
+                                <td align="left" class="cellText small">
+                                <input id="folder_id" name="folderId" type="hidden" value=''>
+                                <input id="fldrsave_mode" name="folderId" type="hidden" value='save'>
+                                <input id="folder_name" name="folderName" class="txtBox" type="text"> &nbsp;&nbsp;Maximum 20
+                                </td>
+                        </tr>
+                        <tr>
+                                <td class="cellLabel small" align="right" nowrap><b>{$MOD.LBL_FOLDER_DESC}
+</b></td>
+                                <td class="cellText small" align="left"><input id="folder_desc" name="folderDes
+c" class="txtBox" type="text"> &nbsp;&nbsp;Maximum 50</td>
+                        </tr>
+                        </table>
+                </td>
+        </tr>
+ </table>
+        <table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
+        <tr>
+                <td class="small" align="center">
+                <input name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmbutton small save" onClick="AddFolder();" type="button">&nbsp;&nbsp;
+                <input name="cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="crmbutton small cancel" onclick="closeFolderCreate();" type="button">
+                </td>
+        </tr>
+        </table>
+</div>
+<!-- Add new folder UI for Documents module ends -->
+<!-- Move documents UI for Documents module starts -->
+<div style="display: none;left:193px;top:106px;width:155px;" id="folderLay" onmouseout="fninvsh('folderLay')" onmouseover="fnvshNrm('folderLay')">
+<table bgcolor="#ffffff" border="1" cellpadding="0" cellspacing="0" width="100%">
+	<tr><td align="left"><b>{$MOD.LBL_MOVE_TO} :</b></td></tr>
+	<tr>
+	<td align="left">
+	{foreach item=folder from=$FOLDERS}
+		<a href="javascript:;" onClick="MoveFile('{$folder.folderid}','{$folder.foldername}');" class="drop_down">- {$folder.foldername}</a>
+	{/foreach}
+	</td>
+	</tr>
+</table>
+</div>
+<!-- Move documents UI for Documents module ends -->
 <script>
 {literal}
 

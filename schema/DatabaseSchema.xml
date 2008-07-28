@@ -737,14 +737,43 @@
 			<key />
 			<default value="0" />
 		</field>
-		<field name="contact_id" type="I" size="19">
-			<default value="0" />
-		</field>
 		<field name="title" type="C" size="50">
 			<notnull />
 		</field>
 		<field name="filename" type="C" size="50" />
 		<field name="notecontent" type="X" />
+		<field name="folderid" type="I" size="19">
+			<default value="0" />
+			<notnull />
+		</field>        
+		<field name="filepath" type="C" size="255">
+			<default value="NULL" />
+		</field>
+		<field name="filetype" type="C" size="50">
+			<default value="NULL" />
+		</field>
+		<field name="filelocationtype" type="C" size="5">
+			<default value="NULL" />
+		</field>
+		<field name="filedownloadcount" type="I" size="19">
+			<default value="NULL" />
+		</field>
+		<field name="filestatus" type="I" size="19">
+			<default value="NULL" />
+		</field>
+		<field name="filesize" type="I" size="19">
+			<default value="0" />
+			<notnull />
+		</field>
+		<field name="filearchitecture" type="C" size="50">
+			<default value="NULL" />
+		</field>
+		<field name="fileversion" type="C" size="50">
+			<default value="NULL" />
+		</field>
+		<field name="os" type="C" size="200">
+			<default value="NULL" />
+		</field>
 
 		<index name="notes_title_idx">
 			<col>title</col>
@@ -6468,7 +6497,75 @@
 		<field name="converted_price"  type="N" size="25.2" />
 		<field name="actual_price"  type="N" size="25.2" />
 		<opt platform="mysql">Type=InnoDB</opt>
+	</table>	
+
+	<table name="vtiger_attachmentsfolder">
+		<field name="folderid" type="I" size="19">
+			<key />
+			<notnull />
+		</field>
+		<field name="foldername" type="C" size="200">
+			<notnull />
+		</field>
+		<field name="description" type="C" size="250" />
+		<field name="createdby" type="I" size="19">
+			<notnull />
+		</field>
+		<field name="sequence" type="I" size="19">
+			<default value="NULL" />
+		</field>
+
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+	<table name="vtiger_os">
+		<field name="osid" type="I" size="19">
+			<key />
+			<autoincrement />
+			<notnull />
+		</field>
+		<field name="os" type="C" size="300">
+			<notnull />
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="presence" type="I" size="1">
+			<notnull />
+			<default value="1" />
+		</field>
+
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_notegrouprelation">
+		<field name="notesid" type="I" size="19">
+			<key />
+		</field>
+		<field name="groupname" type="C" size="100">
+		</field>
+
+		<index name="notegrouprelation_groupname_idx">
+			<col>groupname</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_notegrouprelation" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_notegrouprelation FOREIGN KEY (notesid) REFERENCES vtiger_notes(notesid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+	
+	<table name="vtiger_notegrouprelation" alter="true">
+		<constraint>ADD CONSTRAINT fk_2_vtiger_notegrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
 
 	
 </schema>

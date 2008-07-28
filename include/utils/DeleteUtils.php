@@ -205,14 +205,25 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$adb->pquery($sql, array($record));
 		}
 	break;
-	case Notes:
-		if($return_module== 'Contacts')
-		{
-			$sql = 'update vtiger_notes set contact_id = 0 where notesid = ?';
-			$adb->pquery($sql, array($record));
+	case Documents:
+		if($return_id == '') {
+			//Backup Documents Related Records
+			$se_q = "select crmid from vtiger_senotesrel where notesid = ?";
+			$se_res = $adb->pquery($se_q, array($record));
+			if ($adb->num_rows($se_res) > 0) {
+				for($k=0;$k < $adb->num_rows($se_res);$k++)
+				{
+					$se_id = $adb->query_result($se_res,$k,"crmid");
+					$params = array($record, RB_RECORD_DELETED, 'vtiger_senotesrel', 'notesid', 'crmid', $se_id);
+					$adb->pquery("insert into vtiger_relatedlists_rb values (?,?,?,?,?,?)", $params);
+				}
+			}
+			$sql = 'delete from vtiger_senotesrel where notesid = ?';
+			$adb->pquery($sql, array($record));			
+		} else {
+			$sql = 'delete from vtiger_senotesrel where notesid = ? and crmid = ?';
+			$adb->pquery($sql, array($record, $return_id));		
 		}
-		$sql = 'delete from vtiger_senotesrel where notesid = ?';
-		$adb->pquery($sql, array($record));
 	break;
 	case Products:
 		if($record != '' && $return_id != '')
@@ -562,21 +573,21 @@ function delContactRelRecords($record)
 	//Deleting Contact Activity Relation
 	$adb->pquery('delete from vtiger_seactivityrel where crmid = ?', array($record));
 
-	//Backup Contact-Notes Relation
-	$notes_q = "select notesid from vtiger_notes where contact_id=?";
+	//Backup Contact-Documents Relation
+	$notes_q = "select notesid from vtiger_senotesrel where crmid=?";
 	$notes_res = $adb->pquery($notes_q, array($record));
 	if ($adb->num_rows($notes_res) > 0) {
 		$notes_ids_list = array();
 		for($k=0;$k < $adb->num_rows($notes_res);$k++)
 		{
-			$notes_ids_list[] = $adb->query_result($con_res,$k,"notesid");
+			$notes_id = $adb->query_result($notes_res,$k,"notesid");
+			$params = array($record, RB_RECORD_DELETED, 'vtiger_senotesrel', 'crmid', 'notesid', $notes_id);
+			$adb->pquery("insert into vtiger_relatedlists_rb values (?,?,?,?,?,?)", $params);	
 		}
-		$params = array($record, RB_RECORD_UPDATED, 'vtiger_notes', 'contact_id', 'notesid', implode($notes_ids_list));
-		$adb->pquery("insert into vtiger_relatedlists_rb values (?,?,?,?,?,?)", $params);
 	}
 	//removing the relationship of contacts with notes
-	$adb->pquery("update vtiger_notes set contact_id=NULL where contact_id=?", array($record));
-	
+	$adb->pquery("delete from vtiger_senotesrel where crmid=?", array($record));
+
 	//Backup Contact-Trouble Tickets Relation
 	$tkt_q = "select ticketid from vtiger_troubletickets where parent_id=?";
 	$tkt_res = $adb->pquery($tkt_q, array($record));

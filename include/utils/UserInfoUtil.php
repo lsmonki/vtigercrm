@@ -1279,7 +1279,7 @@ function isPermitted($module,$actionname,$record_id='')
 		return $permission;
 	}
 
-	//If modules is Notes,Products,Vendors,Faq,PriceBook then no sharing			
+	//If modules is Products,Vendors,Faq,PriceBook then no sharing			
 	if($record_id != '')
 	{
 		if(getTabOwnedBy($module) == 1)
@@ -1774,12 +1774,12 @@ function isAllowed_Outlook($module,$action,$user_id,$record_id)
 			{
 				$permission = 'yes';
 				$rec_owner_id = '';
-				if($record_id != '' && $module != 'Notes' && $module != 'Products' && $module != 'Faq')
+				if($record_id != '' && $module != 'Products' && $module != 'Faq')
 				{
 					$rec_owner_id = getUserId($record_id);
 				}
 
-				if($record_id != '' && $others_permission_id != '' && $module != 'Notes' && $module != 'Products' && $module != 'Faq' && $rec_owner_id != 0)
+				if($record_id != '' && $others_permission_id != '' && $module != 'Products' && $module != 'Faq' && $rec_owner_id != 0)
 				{
 					if($rec_owner_id != $current_user->id)
 					{
@@ -3032,7 +3032,8 @@ function tranferGroupOwnership($groupId,$transferId,$transferType)
 			'vtiger_sogrouprelation'=>'salesorderid',
 			'vtiger_quotegrouprelation'=>'quoteid',
 			'vtiger_pogrouprelation'=>'purchaseorderid',
-			'vtiger_invoicegrouprelation'=>'invoiceid');
+			'vtiger_invoicegrouprelation'=>'invoiceid',
+			'vtiger_notegrouprelation'=>'notesid');
 
 	
 	$toBeTransferredGroupName=fetchGroupName($groupId);
@@ -4277,6 +4278,19 @@ function getListViewSecurityParameter($module)
 
 			
 	}	
+	
+	elseif($module == 'Documents')
+	{
+		$sec_query .= " and (vtiger_crmentity.smownerid in($current_user->id) or vtiger_crmentity.smownerid in(select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%') or vtiger_crmentity.smownerid in(select shareduserid from vtiger_tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tabid.") or (vtiger_crmentity.smownerid in (0) and (";
+
+                if(sizeof($current_user_groups) > 0)
+                {
+                	$sec_query .= " vtiger_groups.groupid in (". implode(",", $current_user_groups) .") or ";
+                }
+		$sec_query .= " vtiger_groups.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+	
+	}
+		
 	else
 	{
 		$mobObj = new $module;
@@ -4534,7 +4548,8 @@ function getSharingModuleList()
 				 'Quotes',
 				 'PurchaseOrder',
 				 'SalesOrder',
-				 'Invoice');
+				 'Invoice',
+				 'Documents');
 
 	return $sharingModuleArray;					
 }

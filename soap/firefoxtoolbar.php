@@ -336,7 +336,7 @@ function CheckNotePermission($username,$sessionid)
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 
-	if(isPermitted("Notes","EditView") == "yes")
+	if(isPermitted("Documents","EditView") == "yes")
 	{
 		return "allowed";
 	}else
@@ -507,25 +507,25 @@ function create_note_from_webform($username,$sessionid,$subject,$desc)
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
-	$adb->println("Create New Note from Web Form - Starts");
-	require_once("modules/Notes/Notes.php");
+	$adb->println("Create New Document from Web Form - Starts");
+	require_once("modules/Documents/Documents.php");
 
-	$focus = new Notes();
-	if(isPermitted("Notes","EditView") == "yes")
+	$focus = new Documents();
+	if(isPermitted("Documents","EditView") == "yes")
 	{
 		$focus->column_fields['notes_title'] = $subject;
 		$focus->column_fields['notecontent'] = $desc;
 
-		$focus->save("Notes");
+		$focus->save("Documents");
 
-		$focus->retrieve_entity_info($focus->id,"Notes");
+		$focus->retrieve_entity_info($focus->id,"Documents");
 
-		$adb->println("Create New Note from Web Form - Ends");
+		$adb->println("Create New Document from Web Form - Ends");
 
 		if($focus->id != '')
-		return 'Note added successfully.';
+		return 'Document added successfully.';
 		else
-		return "Note creation failed. Try again";
+		return "Document creation failed. Try again";
 	}
 	else
 	{

@@ -22,17 +22,17 @@
 
 require_once('data/Tracker.php');
 require_once('Smarty_setup.php');
-require_once('modules/Notes/Notes.php');
+require_once('modules/Documents/Documents.php');
 require_once('include/upload_file.php');
 require_once('include/utils/utils.php');
 global $app_strings;
 global $mod_strings;
 global $currentModule;
 
-$focus = new Notes();
+$focus = new Documents();
 
 if(isset($_REQUEST['record'])) {
-   $focus->retrieve_entity_info($_REQUEST['record'],"Notes");
+   $focus->retrieve_entity_info($_REQUEST['record'],"Documents");
    $focus->id = $_REQUEST['record'];
    $focus->name=$focus->column_fields['notes_title'];
 }
@@ -64,17 +64,58 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-$log->info("Note detail view");
+$log->info("Document detail view");
 
 $smarty = new vtigerCRM_Smarty;
+$dbQuery="select filename,folderid,filepath,filelocationtype,filestatus from vtiger_notes where notesid = ?";
+$result=$adb->pquery($dbQuery,array($focus->id));
+$filename=$adb->query_result($result,0,'filename');
+$folderid=$adb->query_result($result,0,'folderid');
+$filepath=$adb->query_result($result,0,'filepath');
+$filestatus=$adb->query_result($result,0,'filestatus');
+$filelocationtype=$adb->query_result($result,0,'filelocationtype');
+
+if(is_null($filename) || $filename == '')
+{
+	$dbQuery="update vtiger_blocks set visible=1 where blockid=85";
+	$result=$adb->pquery($dbQuery,array());
+	$smarty->assign("FILE_EXIST","no");
+}
+else
+{
+	$dbQuery="update vtiger_blocks set visible=0 where blockid=85";
+	$result=$adb->pquery($dbQuery,array());	
+	$smarty->assign("FILE_EXIST","yes");
+	//$flag = 0;
+}
+
+
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
-$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
+$allblocks = getBlocks($currentModule,"detail_view",'',$focus->column_fields);
+$flag = 0;
+foreach($allblocks as $blocks)
+{
+	foreach($blocks as $block_entries)
+	{
+		//print_r('<br>'.$block_entries['File']['value'].'<br>');
+		if($block_entries['File']['value'] != '' || isset($block_entries['File']['value']))
+			$flag = 1;
+	}
+}
+if($flag == 1)
+	$smarty->assign("FILE_EXIST","yes");
+elseif($flag == 0)
+	$smarty->assign("FILE_EXIST","no");
+	
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
+
+$smarty->assign("FILENAME", $filename);
 
 if (isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
 if (isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
@@ -87,18 +128,13 @@ $smarty->assign("ID", $focus->id);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
-if ( isset($focus->filename) && $focus->filename != '')
-{
-        $fileurl = "<a href=\"".UploadFile::get_url($focus->filename,$focus->id)."\" target=\"_blank\">". $focus->filename ."</a>";
-	$smarty->assign("FILELINK", $fileurl);
-}
 
-$smarty->assign("SINGLE_MOD", 'Note');
+$smarty->assign("SINGLE_MOD", 'Document');
 
-if(isPermitted("Notes","EditView",$_REQUEST['record']) == 'yes')
+if(isPermitted("Documents","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
-if(isPermitted("Notes","Delete",$_REQUEST['record']) == 'yes')
+if(isPermitted("Documents","Delete",$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETE","permitted");
 
 $check_button = Button_Check($module);
@@ -106,13 +142,24 @@ $smarty->assign("CHECK", $check_button);
 
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
-$tabid = getTabid("Notes");
+
+$tabid = getTabid("Documents");
  $validationData = getDBValidationData($focus->tab_name,$tabid);
  $data = split_validationdataArray($validationData);
 
  $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
  $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
  $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
+ if($current_user->id == 1)
+{
+ 	$smarty->assign("CHECK_INTEGRITY_PERMISSION","yes");
+    $smarty->assign("ADMIN","yes");
+}
+$smarty->assign("FILE_STATUS",$filestatus); 	
+ $smarty->assign("DLD_TYPE",$filelocationtype);
+ $smarty->assign("NOTESID",$focus->id);
+ $smarty->assign("FOLDERID",$folderid);
+ $smarty->assign("DLD_PATH",$filepath);
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));

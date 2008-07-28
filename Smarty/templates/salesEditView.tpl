@@ -216,11 +216,11 @@ function AddressSync(Addform,id)
 </form>
 
 
-{if ($MODULE eq 'Emails' || 'Notes') and ($FCKEDITOR_DISPLAY eq 'true')}
+{if ($MODULE eq 'Emails' || 'Documents') and ($FCKEDITOR_DISPLAY eq 'true')}
 	<script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
 	<script type="text/javascript" defer="1">
 		var oFCKeditor = null;
-		{if $MODULE eq 'Notes'}
+		{if $MODULE eq 'Documents'}
 			oFCKeditor = new FCKeditor( "notecontent" ) ;
 		{/if}
 		oFCKeditor.BasePath   = "include/fckeditor/" ;

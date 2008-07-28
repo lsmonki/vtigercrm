@@ -108,8 +108,8 @@ $mod_strings = Array(
 'LBL_MEETING_TITLE'=>'Meetings',
 'LBL_NEW_EMAIL'=>'New Email',
 'LBL_EMAIL_TITLE'=>'Emails',
-'LBL_NEW_NOTE'=>'New Note',
-'LBL_NOTE_TITLE'=>'Notes',
+'LBL_NEW_NOTE'=>'New Document',
+'LBL_NOTE_TITLE'=>'Documents',
 'LBL_NEW_ATTACHMENT'=>'New Attachment',
 'LBL_ATTACHMENT_TITLE'=>'Attachments',
 

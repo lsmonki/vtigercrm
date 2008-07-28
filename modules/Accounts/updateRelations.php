@@ -29,12 +29,21 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 	{
 		if($id != '')
 		{
-			$adb->pquery("insert into vtiger_seproductsrel values(?,?,?)", array($_REQUEST["parentid"], $id, 'Accounts'));
+			if($dest_mod == 'Documents')
+				$adb->pquery("insert into vtiger_senotesrel values (?,?)", array($_REQUEST['parentid'],$id));
+			else
+				$adb->pquery("insert into vtiger_seproductsrel values(?,?,?)", array($_REQUEST["parentid"], $id, 'Accounts'));
 		}
 	}	
 	header("Location: index.php?action=$action&module=Accounts&record=".$_REQUEST["parentid"]."&parenttab=".$parenttab);
-}elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != ''){
-	$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($_REQUEST["parid"], $_REQUEST["entityid"], 'Accounts'));
+}
+
+elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
+{
+	if($dest_mod == 'Documents')
+		$adb->pquery("insert into vtiger_senotesrel values (?,?)", array($_REQUEST['parentid'],$_REQUEST['entityid']));
+	else
+		$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($_REQUEST["parid"], $_REQUEST["entityid"], 'Accounts'));
 	header("Location: index.php?action=$action&module=Accounts&record=".$_REQUEST["parid"]);
 }
 

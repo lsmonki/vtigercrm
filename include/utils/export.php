@@ -26,7 +26,7 @@ require_once('modules/Leads/Leads.php');
 require_once('modules/Contacts/Contacts.php');
 require_once('modules/Emails/Emails.php');
 require_once('modules/Calendar/Activity.php');
-require_once('modules/Notes/Notes.php');
+require_once('modules/Documents/Documents.php');
 require_once('modules/Potentials/Potentials.php');
 require_once('modules/Users/Users.php');
 require_once('modules/Products/Products.php');
@@ -148,7 +148,7 @@ function export($type)
 		} elseif($type == 'Products' && count($idstring) > 0) {
 			$query .= ' and vtiger_products.productid in ('. generateQuestionMarks($idstring) .')';
 			array_push($params, $idstring);
-		} elseif($type == 'Notes' && count($idstring) > 0) {
+		} elseif($type == 'Documents' && count($idstring) > 0) {
 			$query .= ' and vtiger_notes.notesid in ('. generateQuestionMarks($idstring) .')';
 			array_push($params, $idstring);
 		}
@@ -168,7 +168,7 @@ function export($type)
 		{
 			$query .= ' ORDER BY user_name '.$sorder;
 		}
-		elseif($order_by == 'lastname' && $type == 'Notes')
+		elseif($order_by == 'lastname' && $type == 'Documents')
 		{
 			$query .= ' ORDER BY vtiger_contactdetails.lastname  '. $sorder;
 		}

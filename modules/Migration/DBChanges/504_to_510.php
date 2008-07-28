@@ -374,6 +374,90 @@ for($i=0;$i<$num_profiles;$i++) {
 	$adb->query("insert into vtiger_profile2field values($profileid, $pb_tab_id, $pb_currency_field_id, 0, 1)");
 }
 
+/* Documents module */
+ExecuteQuery("alter table vtiger_notes add(folderid int(19) NOT NULL,filepath varchar(255) default NULL,filetype varchar(50) default NULL,filelocationtype varchar(5) default NULL,filedownloadcount int(19) default NULL,filestatus int(19) default NULL,filesize int(19) NOT NULL default '0',filearchitecture varchar(50) default NULL,fileversion varchar(50) default NULL,os varchar(200) default NULL)");
+
+ExecuteQuery("create table vtiger_attachmentsfolder ( folderid int(19) NOT NULL auto_increment,foldername varchar(200) NOT NULL default '', description varchar(250) default '', createdby int(19) NOT NULL, sequence int(19) default NULL, PRIMARY KEY  (folderid))");
+
+ExecuteQuery("insert into vtiger_attachmentsfolder values (1,'Existing Notes','Contains all Notes migrated from the earlier version',1,1)");
+
+$notesQuery = $adb->query("select notesid from vtiger_notes");
+$noofnotes = $adb->num_rows($notesQuery);
+if($noofnotes > 0)
+{
+    for($k=0;$k<$noofnotes;$k++)
+    {
+        $notesid = $adb->query_result($notesQuery,$k,'notesid');
+        ExecuteQuery("update vtiger_notes set folderid=1 where notesid = ".$notesid);
+    }
+}
+
+ExecuteQuery("create table `vtiger_os`(`osid` int(19) NOT NULL auto_increment,`os` varchar(300) NOT NULL,`sortorderid` int(19) NOT NULL default '0',`presence` int(1) NOT NULL default '1',PRIMARY KEY  (`osid`),UNIQUE KEY `os_os_idx` (`os`))");
+
+ExecuteQuery("insert into vtiger_os values(1,'Windows',0,1)");
+ExecuteQuery("insert into vtiger_os values(2,'Linux',1,1)");
+ExecuteQuery("insert into vtiger_os values(3,'Mac',2,1)");
+
+$fieldid = Array();
+for($i=0;$i<8;$i++)
+{
+	$fieldid[$i] = $adb->getUniqueID("vtiger_field");
+}
+
+ExecuteQuery("insert into vtiger_blocks values(85,8,'LBL_FILE_INFORMATION',3,0,0,0,0,0)");
+
+ExecuteQuery("insert into vtiger_field values (8,".$fieldid[0].",'smownerid','vtiger_crmentity',1,53,'assigned_user_id','Assigned To',1,0,0,100,6,17,1,'V~M',1,NULL,'BAS')");
+ExecuteQuery("insert into vtiger_field values(8,".$fieldid[1].",'filetype','vtiger_notes',1,1,'filetype','File Type',1,0,0,100,2,85,2,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field values(8,".$fieldid[2].",'filesize','vtiger_notes',1,1,'filesize','File Size',1,0,0,100,3,85,2,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field values(8,".$fieldid[3].",'filelocationtype','vtiger_notes',1,1,'filelocationtype','Download Type',1,0,0,100,4,85,2,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field values(8,".$fieldid[4].",'fileversion','vtiger_notes',1,1,'fileversion','Version',1,0,0,100,5,85,2,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field values(8,".$fieldid[5].",'filestatus','vtiger_notes',1,56,'filestatus','Active',1,0,0,100,6,85,2,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field values(8,".$fieldid[6].",'filedownloadcount','vtiger_notes',1,1,'filedownloadcount','Download Count',1,0,0,100,11,85,2,'I~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field values(8,".$fieldid[7].",'os','vtiger_notes',1,1,'filearchitecture','Platform',1,0,0,100,12,85,2,'V~O',1,'','BAS')");
+
+for($i=0;$i<8;$i++)
+{
+	$adb->query("insert into vtiger_def_org_field values(8, ".$fieldid[$i].", 0, 1)");
+	for($j=0;$j<$num_profiles;$j++)
+	{
+		$profileid = $adb->query_result($profile_list,$j,'profileid');
+		$adb->query("insert into vtiger_profile2field values($profileid, 8, ".$fieldid[$i].", 0, 1)");
+	}
+}
+
+$dbQuery = "select notesid,contact_id from vtiger_notes";
+$dbresult = $adb->query($dbQuery);
+$noofrecords = $adb->num_rows($dbresult);
+if($noofrecords > 0)
+{
+    for($i=0;$i<$noofrecords;$i++)
+    {
+        $contactid = $adb->query_result($dbresult,$i,'contact_id');
+        $notesid = $adb->query_result($dbresult,$i,'notesid');
+        if($contactid != 0)
+            ExecuteQuery("insert into vtiger_senotesrel values (".$contactid.",".$notesid.")");
+    }
+}
+
+ExecuteQuery("delete from vtiger_field where tabid = 8 and fieldname = 'contact_id'");
+ExecuteQuery("delete from vtiger_field where tabid = 8 and fieldname = 'parent_id'");
+
+ExecuteQuery("alter table vtiger_notes drop column contact_id");
+
+ExecuteQuery("delete from vtiger_cvcolumnlist where columnname like '%Notes_Contact_Name%'");
+ExecuteQuery("delete from vtiger_cvcolumnlist where columnname like '%Notes_Related_to%'");
+ExecuteQuery("create table vtiger_notegrouprelation (notesid int(19) NOT NULL, groupname vachar(100) default NULL)");
+
+ExecuteQuery("insert into vtiger_def_org_share values (13,8,2,0)");
+
+for($i=0;$i<4;$i++)
+{
+	ExecuteQuery("insert into vtiger_org_share_action2tab values(".$i.",8)");
+}	
+
+ExecuteQuery("update vtiger_tab set ownedby=0,name='Documents',tablabel='Documents' where tabid=8");
+//End: Database changes regarding Documents module
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

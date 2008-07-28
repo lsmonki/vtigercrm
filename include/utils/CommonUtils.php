@@ -3178,7 +3178,7 @@ function ChangeTypeOfData_Filter($table_name,$column_name,$type_of_data)
 		"vtiger_leaddetails:email"=>"V",
 		"vtiger_leaddetails:yahooid"=>"V",
 
-		//Notes Related Fields
+		//Documents Related Fields
 		"vtiger_senotesrel:crmid"=>"V",
 
 		//Calendar Related Fields

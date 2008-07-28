@@ -295,7 +295,6 @@ function createUserSharingPrivilegesfile($userid)
 			$newbuf .= "\$HelpDesk_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($hd_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($hd_share_read_per['GROUP']).");\n\n";	
 			$newbuf .= "\$HelpDesk_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($hd_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($hd_share_write_per['GROUP']).");\n\n";
 	
-
 			//Constructing Emails Sharing Rules
 			$email_share_per_array=getUserModuleSharingObjects("Emails",$userid,$def_org_share,$current_user_roles,$parent_roles,$current_user_groups);
 			$email_share_read_per=$email_share_per_array['read'];
@@ -364,7 +363,13 @@ function createUserSharingPrivilegesfile($userid)
 			$newbuf .= "\$Invoice_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($inv_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($inv_share_read_per['GROUP']).");\n\n";	
 			$newbuf .= "\$Invoice_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($inv_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($inv_share_write_per['GROUP']).");\n\n";
 	
-
+			//Constructing Documents Sharing Rules
+			$hd_share_per_array=getUserModuleSharingObjects("Documents",$userid,$def_org_share,$current_user_roles,$parent_roles,$current_user_groups);
+			$hd_share_read_per=$hd_share_per_array['read'];
+			$hd_share_write_per=$hd_share_per_array['write'];
+			$newbuf .= "\$Documents_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($hd_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($hd_share_read_per['GROUP']).");\n\n";	
+			$newbuf .= "\$Documents_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($hd_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($hd_share_write_per['GROUP']).");\n\n";
+	
 			$newbuf .= "?>";
 			fputs($handle, $newbuf);
 			fclose($handle);
@@ -1533,7 +1538,7 @@ function populateSharingtmptables($userid)
 	}
 
 	//Populating Values into the tmp sharing tables
-	$sharingArray=Array('Leads','Accounts','Contacts','Potentials','HelpDesk','Emails','Campaigns','Quotes','PurchaseOrder','SalesOrder','Invoice');
+	$sharingArray=Array('Leads','Accounts','Contacts','Potentials','HelpDesk','Emails','Campaigns','Quotes','PurchaseOrder','SalesOrder','Invoice','Documents');
 	foreach($sharingArray as $module)
 	{
 		populateSharingPrivileges('USER',$userid,$module,'read');

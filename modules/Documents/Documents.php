@@ -28,7 +28,7 @@ require_once('data/CRMEntity.php');
 require_once('include/upload_file.php');
 
 // Note is used to store customer information.
-class Notes extends CRMEntity {
+class Documents extends CRMEntity {
 	
 	var $log;
 	var $db;
@@ -40,7 +40,7 @@ class Notes extends CRMEntity {
 
 	var $column_fields = Array();
 
-        var $sortby_fields = Array('title','modifiedtime','contact_id','filename','createdtime','lastname');		  
+        var $sortby_fields = Array('title','modifiedtime','filename','createdtime','lastname','filedownloadcount');		  
 
 	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('', '', '', '');
@@ -48,48 +48,64 @@ class Notes extends CRMEntity {
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
 				'Subject'=>Array('notes'=>'notes_title'),
-				'Contact Name'=>Array('contactdetails'=>'lastname'),
-				'Related to'=>Array('senotesrel'=>'crmid'),
 				'File'=>Array('notes'=>'filename'),
 				'Last Modified'=>Array('crmentity'=>'modifiedtime')
 				);
 	var $list_fields_name = Array(
 					'Subject'=>'notes_title',
-					'Contact Name'=>'contact_id',
-					'Related to'=>'crmid',
 					'File'=>'filename',
 					'Last Modified'=>'modifiedtime'
 				     );	
+				     
+	var $search_fields = Array(
+					'Subject' => Array('notes'=>'notes_title'),
+					'File' => Array('notes'=>'filename'),
+					'Last Modified'=>Array('crmentity'=>'modifiedtime')
+		);
+	
+	var $search_fields_name = Array(
+					'Subject' => 'notes_title',
+					'File' => 'filename',
+					'Last Modified'=>'modifiedtime'
+	);				     
 	var $list_link_field= 'notes_title';
+	
+	var $groupTable = Array('vtiger_notegrouprelation','notesid');
 
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'title';
 	var $default_sort_order = 'ASC';
-	function Notes() {
+	function Documents() {
 		$this->log = LoggerManager::getLogger('notes');
-		$this->log->debug("Entering Notes() method ...");
+		$this->log->debug("Entering Documents() method ...");
 		$this->db = new PearDatabase();
-		$this->column_fields = getColumnFields('Notes');
-		$this->log->debug("Exiting Note method ...");
+		$this->column_fields = getColumnFields('Documents');
+		$this->log->debug("Exiting Documents method ...");
 	}
 
 	function save_module($module)
 	{
 		
 		$insertion_mode = $this->mode;
+		if(isset($this->parentid) && $this->parentid != '')
+			$relid =  $this->parentid;		
 		//inserting into vtiger_senotesrel
-		if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
+		if(isset($relid) && $relid != '')
+		{
+			$this->insertintonotesrel($relid,$this->id);
+		}
+		/*if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
 		{
 			$this->insertIntoEntityTable('vtiger_senotesrel', $module);
 		}
 		elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
 		{
 			$this->deleteRelation('vtiger_senotesrel');
-		}
+		}*/
 
 
 		//Inserting into attachments table
-		$this->insertIntoAttachment($this->id,'Notes');
+		//$this->insertIntoAttachment($this->id,'Notes');
 				
 	}
 
@@ -118,7 +134,7 @@ class Notes extends CRMEntity {
 		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
 	}
 
-	/**    Function used to get the sort order for Notes listview
+	/**    Function used to get the sort order for Documents listview
 	*      @return string  $sorder - first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['NOTES_SORT_ORDER'] if this session value is empty then default sort order will be returned.
 	*/
 	function getSortOrder()
@@ -133,7 +149,7 @@ class Notes extends CRMEntity {
 		return $sorder;
 	}
 
-	/**     Function used to get the order by value for Notes listview
+	/**     Function used to get the order by value for Documents listview
 	*       @return string  $order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['NOTES_ORDER_BY'] if this session value is empty then default order by will be returned.
 	*/
 	function getOrderBy()
@@ -151,7 +167,7 @@ class Notes extends CRMEntity {
 
 	/** Function to export the notes in CSV Format
 	* @param reference variable - where condition is passed when the query is executed
-	* Returns Export Notes Query.
+	* Returns Export Documents Query.
 	*/
 	function create_export_query($where)
 	{
@@ -161,7 +177,7 @@ class Notes extends CRMEntity {
 		include("include/utils/ExportUtils.php");
 
 		//To get the Permitted fields query and the permitted fields list
-		$sql = getPermittedFieldsQuery("Notes", "detail_view");
+		$sql = getPermittedFieldsQuery("Documents", "detail_view");
 		$fields_list = getFieldsListFromQuery($sql);
 
 		$query = "SELECT $fields_list FROM vtiger_notes
@@ -219,12 +235,64 @@ class Notes extends CRMEntity {
 		$log->debug("Exiting create_export_query method ...");
                 return $query;
         }
-        
-        /** Function to handle module specific operations when restoring an entity  
-		*/ 
-		function restore_module($crmid) { 
-		         
-		}
 
+	/** Function to handle module specific operations when restoring an entity 
+	*/
+	function restore_module($crmid) {
+		
+		global $adb;
+		$restoreQuery = "update vtiger_notes set folderid = 0 where notesid = ?";
+		$restoreresult = $adb->pquery($restoreQuery,array($crmid));
+		
+	}
+	
+	function del_rec_unload_file($recordid)
+	{
+		global $adb;
+		$filelocationqry = "select concat(filepath,notesid,'_',folderid,'_',filename) as filepath from vtiger_notes where notesid= ? and filelocationtype='I'";
+		$filelocationqryresult = $adb->pquery($filelocationqry,array($recordid));
+		$filelocation = $adb->query_result($filelocationqryresult,0,'filepath');
+		$filelocation = $root_directory.$filelocation;
+		@unlink($filelocation);
+				
+		$dbQuery = "delete from vtiger_crmentity where crmid= ?";
+		$dbresult = $adb->pquery($dbQuery,array($recordid));
+		
+		$dbQuery2 = "delete from vtiger_notes where notesid = ?";
+		$dbresult = $adb->pquery($dbQuery2,array($recordid));
+
+	}
+
+	function del_create_def_folder($query)
+	{
+		global $adb;
+		$dbQuery = $query." and folderid = 0";
+		$dbresult = $adb->pquery($dbQuery,array());
+		$noofnotes = $adb->num_rows($dbresult);
+		if($noofnotes > 0)
+		{
+            $folderQuery = "select folderid from vtiger_attachmentsfolder where folderid = 0";
+            $folderresult = $adb->pquery($folderQuery,array());
+            $noofdeffolders = $adb->num_rows($folderresult);
+            if($noofdeffolders == 0)
+            {
+			    $insertQuery = "insert into vtiger_attachmentsfolder values (0,'Default','Contains all attachments for which a folder is not set',1,0)";
+			    $insertresult = $adb->pquery($insertQuery,array());
+            }
+		}
+		else
+		{
+			$deleteQuery = "delete from vtiger_attachmentsfolder where folderid = 0";
+			$deleteresult = $adb->pquery($deleteQuery,array());
+		}
+		
+	}
+	
+	function insertintonotesrel($relid,$id)
+	{
+		global $adb;
+		$dbQuery = "insert into vtiger_senotesrel values ( ?, ? )";
+		$dbresult = $adb->pquery($dbQuery,array($relid,$id));
+	}
 }
 ?>

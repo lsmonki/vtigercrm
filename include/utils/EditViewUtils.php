@@ -662,8 +662,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 					$value = $adb->query_result($adb->pquery($attachquery, array($attachmentid)),0,'name');
 				}
 			}
-			if($value!='')
+			if($value!='' && $module_name != 'Documents')
 				$filename=' [ '.$value. ' ]';
+			elseif($value != '' && $module_name == 'Documents')
+				$filename= $value;
 			if($filename != '')
 				$fieldvalue[] = $filename;
 			if($value != '')

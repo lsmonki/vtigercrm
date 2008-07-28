@@ -77,6 +77,9 @@ $custom_access['SalesOrder'] = getSharingRuleList('SalesOrder');
 //Invoice Sharing
 $custom_access['Invoice'] = getSharingRuleList('Invoice');
 
+//Document Sharing
+$custom_access['Documents'] = getSharingRuleList('Documents');
+
 
 
 $smarty->assign("MODSHARING", $custom_access);

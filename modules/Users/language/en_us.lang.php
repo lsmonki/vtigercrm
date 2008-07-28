@@ -146,7 +146,7 @@ $mod_strings = Array(
 'LBL_TASKS'=>'Tasks',
 'LBL_CASES'=>'Cases',
 'LBL_EMAILS'=>'Email',
-'LBL_NOTES'=>'Notes',
+'LBL_NOTES'=>'Documents',
 'LBL_MEETINGS'=>'Meetings',
 'LBL_CALLS'=>'Calls',
 'LBL_IMPORT_PERMISSIONS'=>'Import Permissions',
@@ -443,7 +443,7 @@ $mod_strings = Array(
 
 'LBL_PRODUCT_FIELD_ACCESS'=>'Product Field Access',
 
-'LBL_NOTE_FIELD_ACCESS'=>'Note Field Access',
+'LBL_NOTE_FIELD_ACCESS'=>'Document Field Access',
 
 'LBL_EMAIL_FIELD_ACCESS'=>'Email Field Access',
 
@@ -549,7 +549,7 @@ $mod_strings = Array(
 'Date Format'=>'Date Format',
 'Tag Cloud'=>'Tag Cloud',
 'Signature'=>'Signature',
-'Notes'=>'Notes',
+'Documents'=>'Documents',
 'Street Address'=>'Street Address',
 'City'=>'City',
 'State'=>'State',

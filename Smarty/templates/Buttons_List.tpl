@@ -104,15 +104,6 @@
 				{else}	
 					<td style="padding-right:10px"><img src="{$IMAGE_PATH}tbarExport-Faded.gif" border="0"></td>
                 	{/if}
-			{elseif $MODULE eq 'Notes'}	
-				
-				{if $CHECK.Export eq 'yes'}
-					<td style="padding-right:0px;padding-left:10px;"><img src="{$IMAGE_PATH}tbarImport-Faded.gif" border="0"></td>
-					<td style="padding-right:10px"><a name='export_link' href="javascript:void(0)" onclick="return selectedRecords('{$MODULE}','{$CATEGORY}')"><img src="{$IMAGE_PATH}tbarExport.gif" alt="{$APP.LBL_EXPORT} {$APP.$MODULE}" title="{$APP.LBL_EXPORT} {$APP.$MODULE}" border="0"></a></td>
-				{else}	 
-					<td style="padding-right:0px;padding-left:10px;"><img src="{$IMAGE_PATH}tbarImport-Faded.gif" border="0"></td>
-					<td style="padding-right:10px"><img src="{$IMAGE_PATH}tbarExport-Faded.gif" border="0"></td>
-				{/if}
 			{else}
 				<td style="padding-right:0px;padding-left:10px;"><img src="{$IMAGE_PATH}tbarImport-Faded.gif" border="0"></td>
                 		<td style="padding-right:10px"><img src="{$IMAGE_PATH}tbarExport-Faded.gif" border="0"></td>
@@ -131,13 +122,31 @@
 			</table>	
 		<td style="width:20px;">&nbsp;</td>
 		<td class="small">
-			<!-- All Menu -->
+				<!-- All Menu -->
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
 				<td style="padding-left:10px;"><a href="javascript:;" onmouseout="fninvsh('allMenu');" onClick="fnvshobj(this,'allMenu')"><img src="{$IMAGE_PATH}btnL3AllMenu.gif" alt="{$APP.LBL_ALL_MENU_ALT}" title="{$APP.LBL_ALL_MENU_TITLE}" border="0"></a></td>
 				</tr>
 				</table>
-		</td>			
+		</td>	
+		{if $MODULE eq 'Documents'}		
+			<td style="width:20px;">&nbsp;</td>
+			<td class="small">
+				<table border=0 cellspacing=0 cellpadding=5>
+				<tr>
+            		<td style="padding-right:5px"><a href="javascript:;" onclick="fnvshobj(this,'orgLay');"><img src="{$IMAGE_PATH}reportsFolderCreate.gif" alt="{$MOD.LBL_ADD_NEW_FOLDER}..." title="{$MOD.LBL_ADD_NEW_FOLDER}..." border=0></a>&nbsp;</td>
+            		{if $NO_FOLDERS neq 'yes'}
+                    	{if $IS_ADMIN eq 'on'}
+            				<td style="padding-right:5px"><a href="javascript:;" onclick="fnvshobj(this,'folderLay');"><img src="{$IMAGE_PATH}reportsMove.gif" alt="{$MOD.LBL_MOVE_DOCUMENTS}..." title="{$MOD.LBL_MOVE_DOCUMENTS}..." border=0></a></td>
+            			{/if}
+            			{if $MASS_DELETE eq 'yes'}
+            				<td style="padding-right:5px"><a href="javascript:;" onClick="return massDelete('{$MODULE}');"><img src="{$IMAGE_PATH}reportsDelete.gif" alt="{$MOD.LBL_DELETE_DOCUMENTS}..." title="{$MOD.LBL_DELETE_DOCUMENTS}..." border=0></a></td>
+            			{/if}
+            		{/if}
+				</tr>
+				</table>
+			</td>
+		{/if}
 		</tr>
 		</table>
 	</td>

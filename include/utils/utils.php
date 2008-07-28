@@ -1290,6 +1290,10 @@ function getRecordOwnerId($record)
 			{
 				$query1="select vtiger_groups.groupid from vtiger_campaigngrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_campaigngrouprelation.groupname where campaignid=?";
 			}
+			elseif($module == 'Documents')
+			{
+				$query1="select vtiger_groups.groupid from vtiger_notegrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_notegrouprelation.groupname where notesid=?";
+			}			
 			else
 			{
 				require_once("modules/$module/$module.php");
@@ -3120,10 +3124,6 @@ function getAccessPickListValues($module)
 
 	return $fieldlists;
 }
-define("MIG_CHARSET_PHP_UTF8_DB_UTF8", 1);
-define("MIG_CHARSET_PHP_NONUTF8_DB_NONUTF8", 2);
-define("MIG_CHARSET_PHP_NONUTF8_DB_UTF8", 3);
-define("MIG_CHARSET_PHP_UTF8_DB_NONUTF8", 4);
 
 //Added to check database charset and $default_charset are set to UTF8.
 //If both are not set to be UTF-8, Then we will show an alert message.

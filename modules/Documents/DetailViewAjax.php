@@ -10,11 +10,11 @@
   ********************************************************************************/
 
 require_once('include/logging.php');
-require_once('modules/Notes/Notes.php');
+require_once('modules/Documents/Documents.php');
 require_once('include/database/PearDatabase.php');
 global $adb;
 
-$local_log =& LoggerManager::getLogger('NotesAjax');
+$local_log =& LoggerManager::getLogger('DocumentsAjax');
 
 $ajaxaction = $_REQUEST["ajxaction"];
 if($ajaxaction == "DETAILVIEW")
@@ -25,12 +25,12 @@ if($ajaxaction == "DETAILVIEW")
      $fieldvalue = utf8RawUrlDecode($_REQUEST["fieldValue"]); 
      if($crmid != "")
 	 {
-		 $modObj = new Notes();
-		 $modObj->retrieve_entity_info($crmid,"Notes");
+		 $modObj = new Documents();
+		 $modObj->retrieve_entity_info($crmid,"Documents");
 		 $modObj->column_fields[$fieldname] = $fieldvalue;
 		 $modObj->id = $crmid;
 		 $modObj->mode = "edit";
-		 $modObj->save("Notes");
+		 $modObj->save("Documents");
 		 if($modObj->id != "")
 		 {
 			 echo ":#:SUCCESS";

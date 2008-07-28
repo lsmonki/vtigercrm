@@ -261,10 +261,17 @@ class Products extends CRMEntity {
         **/
 	function get_attachments($id)
 	{
-		global $log;
+		global $log,$current_user;
+		$tab_id=getTabid('Documents');
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+        {
+			$sec_parameter=getListViewSecurityParameter('Documents');
+        }
 		$log->debug("Entering get_attachments(".$id.") method ...");
 
-		$query = "SELECT vtiger_notes.title, 'Notes      ' AS ActivityType,
+		$query = "SELECT vtiger_notes.title, 'Documents      ' AS ActivityType,
 			vtiger_notes.filename, vtiger_attachments.type  AS FileType,
 				crm2.modifiedtime AS lastmodified,
 			vtiger_seattachmentsrel.attachmentsid AS attachmentsid,
@@ -279,13 +286,17 @@ class Products extends CRMEntity {
 			INNER JOIN vtiger_crmentity AS crm2
 				ON crm2.crmid = vtiger_notes.notesid
 				AND crm2.deleted = 0
+			LEFT JOIN vtiger_notegrouprelation
+				ON vtiger_notegrouprelation.notesid = vtiger_notes.notesid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_notegrouprelation.groupname				
 			LEFT JOIN vtiger_seattachmentsrel
 				ON vtiger_seattachmentsrel.crmid = vtiger_notes.notesid
 			LEFT JOIN vtiger_attachments
 				ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
 			INNER JOIN vtiger_users
-				ON vtiger_crmentity.smcreatorid = vtiger_users.id
-			WHERE vtiger_crmentity.crmid = ".$id."
+				ON vtiger_crmentity.smownerid = vtiger_users.id
+			WHERE vtiger_crmentity.crmid = ".$id." ".$sec_parameter."
 		UNION ALL
 			SELECT vtiger_attachments.subject AS title,
 				'Attachments' AS ActivityType,
@@ -823,7 +834,7 @@ class Products extends CRMEntity {
 			LEFT JOIN vtiger_productcf
 				ON vtiger_products.productid = vtiger_productcf.productid
 			INNER JOIN vtiger_users
-				ON vtiger_users.id=vtiger_crmentity.smownerid 
+				ON vtiger_users.id=vtiger_products.handler 
 
 			LEFT JOIN vtiger_vendor
 				ON vtiger_vendor.vendorid = vtiger_products.vendor_id

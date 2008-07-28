@@ -570,9 +570,26 @@
 				{$fldlabel}
 			</td>
 			<td colspan="3" width="30%" align=left class="dvtCellInfo">
-				<input name="{$fldname}"  type="file" value="{$secondvalue}" tabindex="{$vt_tab}" onchange="validateFilename(this)"/>
-				<input type="hidden" name="{$fldname}_hidden" value="{$secondvalue}"/>
-				<input type="hidden" name="id" value=""/>{$fldvalue}
+				{if $MODULE neq 'Documents'}
+					<input name="{$fldname}"  type="file" value="{$secondvalue}" tabindex="{$vt_tab}" onchange="validateFilename(this)"/>
+				{else}
+					<input type="text" style="border: 1px solid rgb(186, 186, 186);" readonly name="{$fldname}" id="{$fldname}" value="{$fldvalue}" /> &nbsp;
+					<input type="hidden" name="fileid" id="fileid" value="" />
+					{if $ID eq ''}
+						{assign var=id value=0}
+					{else}
+						{assign var=id value=$ID}
+					{/if}
+					<span id="fileaddbutton">
+						<a href="javascript:;" onclick="FileAdd(this,'fileLay','EditView',{$id});"><img id="FileAdd_img_id" src="{$IMAGE_PATH}select.gif" alt="Add File..." title="Add File..." border=0></a>
+					</span>
+				{/if}
+				<!-- Start: Popup layer to add file in Documents module -->
+				<div id="fileLay" class="layerPopup" style="height:345px;width:500px;z-index:2000;display:none;">
+        			<iframe height="345" width="500" name="AddFile" id="AddFile_id"  frameborder="0" scrolling="no" src="index.php?module=Documents&action=DocumentsAjax&file=AddFile" style="margin: 0;" allowTransparency="true"></iframe>
+				</div>
+				<!-- End: Popup layer to add file in Documents module -->
+
 			</td>
 		{elseif $uitype eq 156}
 			<td width="20%" class="dvtCellLabel" align=right>

@@ -28,7 +28,7 @@ require_once('include/utils/utils.php');
 require_once('modules/Potentials/Potentials.php');
 require_once('modules/Calendar/Activity.php');
 require_once('modules/Campaigns/Campaigns.php');
-require_once('modules/Notes/Notes.php');
+require_once('modules/Documents/Documents.php');
 require_once('modules/Emails/Emails.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 require_once('user_privileges/default_module_view.php');
@@ -454,9 +454,44 @@ class Contacts extends CRMEntity {
 	*/
 	function get_attachments($id)
 	{
-		global $log;
+		global $log,$current_user;
+		$tab_id=getTabid('Documents');
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+        {
+			$sec_parameter=getListViewSecurityParameter('Documents');
+        }		
 		$log->debug("Entering get_attachments(".$id.") method ...");
-		$query = "select vtiger_notes.title,'Notes      ' AS ActivityType,
+		$query = "select vtiger_notes.title,'Documents      ' ActivityType, vtiger_notes.filename,
+		vtiger_attachments.type  FileType,crm2.modifiedtime lastmodified,
+		vtiger_seattachmentsrel.attachmentsid attachmentsid, vtiger_notes.notesid crmid,
+		vtiger_notes.notecontent description, vtiger_users.user_name
+			from vtiger_notes
+			inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
+			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
+			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_notes.notesid and crm2.deleted=0
+			LEFT JOIN vtiger_notegrouprelation
+				ON vtiger_notegrouprelation.notesid = vtiger_notes.notesid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_notegrouprelation.groupname			
+			left join vtiger_seattachmentsrel  on vtiger_seattachmentsrel.crmid =vtiger_notes.notesid
+			left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
+			inner join vtiger_users on crm2.smownerid= vtiger_users.id
+			where vtiger_crmentity.crmid=".$id;
+		$query .= $sec_parameter;
+		$query .= ' union all ';
+		$query .= "select vtiger_attachments.subject AS title ,'Attachments' ActivityType,
+		vtiger_attachments.name filename, vtiger_attachments.type FileType,crm2.modifiedtime lastmodified,
+		vtiger_attachments.attachmentsid attachmentsid, vtiger_seattachmentsrel.attachmentsid crmid,
+		vtiger_attachments.description, vtiger_users.user_name
+			from vtiger_attachments
+			inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
+			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_seattachmentsrel.crmid
+			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_attachments.attachmentsid
+			inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
+			where vtiger_crmentity.crmid=".$id;		
+		/*$query = "select vtiger_notes.title,'Attachments      ' AS ActivityType,
 		vtiger_notes.filename, vtiger_attachments.type AS FileType,crm2.modifiedtime AS lastmodified,
 		vtiger_seattachmentsrel.attachmentsid AS attachmentsid, vtiger_notes.notesid AS crmid,
 		vtiger_notes.notecontent AS description, vtiger_users.user_name
@@ -477,7 +512,7 @@ class Contacts extends CRMEntity {
 			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_seattachmentsrel.crmid
 			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_attachments.attachmentsid
 			inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
-		where vtiger_crmentity.crmid=".$id;
+		where vtiger_crmentity.crmid=".$id;*/
 	  	$log->info("Notes&Attachmenmts for Contact Displayed");
 		$log->debug("Exiting get_attachments method ...");
 		return getAttachmentsAndNotes('Contacts',$query,$id);

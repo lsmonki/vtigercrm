@@ -42,7 +42,7 @@ class CRMEntity
   var $ownedby;
    
 	
-  function saveentity($module)
+  function saveentity($module,$fileid='')
   {
 	global $current_user, $adb;//$adb added by raju for mass mailing
 	$insertion_mode = $this->mode;
@@ -56,11 +56,11 @@ class CRMEntity
 			
 		if($table_name == "vtiger_crmentity")
 		{
-			$this->insertIntoCrmEntity($module);
+			$this->insertIntoCrmEntity($module,$fileid);
 		}
 		else
 		{
-			$this->insertIntoEntityTable($table_name, $module);			
+			$this->insertIntoEntityTable($table_name, $module,$fileid);			
 		}
 	}
 
@@ -194,12 +194,12 @@ class CRMEntity
 		if($save_file == 'true' && $upload_status == 'true')
 		{
 			//This is only to update the attached filename in the vtiger_notes vtiger_table for the Notes module
-			if($module=='Notes')
+			/*if($module=='Notes')
 			{
 				$sql="update vtiger_notes set filename=? where notesid = ?";
 				$params = array($filename, $id); 
 				$adb->pquery($sql, $params);
-			}
+			}*/
 			if($module == 'Contacts' || $module == 'Products')
 			{
 				$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?, ?, ?, ?, ?, ?, ?)";
@@ -225,7 +225,7 @@ class CRMEntity
 					$adb->pquery($delquery, $delparams);
 				}
 			}
-			if($module == 'Notes')
+			if($module == 'Documents')
 			{
 				$query = "delete from vtiger_seattachmentsrel where crmid = ?";
 				$qparams = array($id);
@@ -270,12 +270,18 @@ class CRMEntity
   	  * @param $module -- module:: Type varchar
  	 */	
 
-  function insertIntoCrmEntity($module)
+  function insertIntoCrmEntity($module,$fileid='')
   {
 	global $adb;
 	global $current_user;
 	global $log;
-                
+
+	if($fileid != '')
+	{
+		$this->id = $fileid;
+		$this->mode = 'edit';
+	}
+	
 	$date_var = date('YmdHis');
 	if($_REQUEST['assigntype'] == 'T')
 	{
@@ -366,13 +372,18 @@ class CRMEntity
   	  * @param $table_name -- table name:: Type varchar
   	  * @param $module -- module:: Type varchar
  	 */
-  function insertIntoEntityTable($table_name, $module)
+  function insertIntoEntityTable($table_name, $module, $fileid='')
   {
 	  global $log;
   	  global $current_user,$app_strings;
 	   $log->info("function insertIntoEntityTable ".$module.' vtiger_table name ' .$table_name);
 	  global $adb;
 	  $insertion_mode = $this->mode;
+	  if($module == 'Documents' && $fileid != '' && $insertion_mode != 'edit')
+	  {
+	  	$insertion_mode = 'edit';
+	  	$this->id = $fileid;
+	  }
 
 	  //Checkin whether an entry is already is present in the vtiger_table to update
 	  if($insertion_mode == 'edit')
@@ -398,8 +409,10 @@ class CRMEntity
 		  require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		  if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 		  {
-
-			 	$sql = "select * from vtiger_field where tabid in (". generateQuestionMarks($tabid) .") and tablename=? and displaytype in (1,3) group by columnname"; 
+				if($module == 'Documents')
+			 		$sql = "select * from vtiger_field where tabid in (". generateQuestionMarks($tabid) .") and tablename=? and displaytype in (1,2,3) group by columnname"; 
+			 	else
+			 		$sql = "select * from vtiger_field where tabid in (". generateQuestionMarks($tabid) .") and tablename=? and displaytype in (1,3) group by columnname";
 				$params = array($tabid, $table_name);	
 		  }
 		  else
@@ -539,27 +552,59 @@ class CRMEntity
 			$fldvalue = htmlentities($fldvalue);*/	
 		  if($insertion_mode == 'edit')
 		  {
-			  if($table_name == 'vtiger_notes' && $columname == 'filename' && $_FILES['filename']['name'] == '')
-			  {
-				  $fldvalue = $this->getOldFileName($this->id);
-			  }
 			  if($table_name != 'vtiger_ticketcomments')
 			  {
 				  if($i == 0)
 				  {
 					  $update = $columname."=?";
+					  array_push($update_params, $fldvalue);
 				  }
 				  else
 				  {
-					  $update .= ', '.$columname."=?";
+				  	 if($table_name == 'vtiger_notes')
+				  	 {
+				  	 	if($columname == 'notecontent' || $columname == 'title')
+				  	 	{
+				  	 		$update .= ', '.$columname."=?";
+				  	 		array_push($update_params, $fldvalue);
+				  	 	}
+				  	 	($_REQUEST['ajxaction'] == 'DETAILVIEW') ? $check_ajax = 0 : $check_ajax = 1;
+				  	 	if($columname == 'filestatus' && (($fldvalue != 0 && $fldvalue != 1) || $check_ajax == 0))
+		  				{
+				  	 		$update .= ', '.$columname."=?";
+				  	 		array_push($update_params, $fldvalue);
+		  				}				  	 	
+				  	 }
+				  	 else
+				  	 {
+					 	$update .= ', '.$columname."=?";
+					 	array_push($update_params, $fldvalue);
+				  	 }
 				  }
-				  array_push($update_params, $fldvalue);
+				  //array_push($update_params, $fldvalue);
 			  }
 		  }
 		  else
 		  {
-			  $column .= ", ".$columname;
-			  array_push($value, $fldvalue);
+		  	if($table_name == 'vtiger_notes')
+		  	{
+		  		if($columname == 'notecontent' || $columname == 'title')
+		  		{
+			  		$column .= ", ".$columname;
+			  		array_push($value, $fldvalue);
+		  		}
+		  		($_REQUEST['ajxaction'] == 'DETAILVIEW') ? $check_ajax = 0 : $check_ajax = 1;
+		  		if($columname == 'filestatus' && (($fldvalue != 0 && $fldvalue != 1) || $check_ajax == 0))
+		  		{
+			  		$column .= ", ".$columname;
+			  		array_push($value, $fldvalue);
+		  		}
+		  	}
+		  	else
+		  	{
+		  		$column .= ", ".$columname;
+			  	array_push($value, $fldvalue);
+		  	}
 		  }
 
 	  }
@@ -639,14 +684,14 @@ class CRMEntity
         	  {
 		  	$sql1 = "update $table_name set $update where ". $this->tab_name_index[$table_name] ."=?";
 			array_push($update_params, $this->id);
-		  	$adb->pquery($sql1, $update_params); 
+		  	$adb->pquery($sql1, $update_params);
 		  }
 		  
 	  }
 	  else
 	  {
 	  	  $sql1 = "insert into $table_name($column) values(". generateQuestionMarks($value) .")";
-		  $adb->pquery($sql1, $value); 
+		  $adb->pquery($sql1, $value);
 	  }
 
   }
@@ -799,12 +844,12 @@ $log->info("in getOldFileName  ".$notesid);
 	/** Function to saves the values in all the tables mentioned in the class variable $tab_name for the specified module
   	  * @param $module -- module:: Type varchar
  	 */
-	function save($module_name) 
+	function save($module_name,$fileid='') 
 	{
 		global $log;
 	        $log->debug("module name is ".$module_name);
 		//GS Save entity being called with the modulename as parameter
-		$this->saveentity($module_name);
+		$this->saveentity($module_name,$fileid);
 	}
   
 	function process_list_query($query, $row_offset, $limit= -1, $max_per_page = -1)

@@ -29,7 +29,7 @@ require_once('data/CRMEntity.php');
 require_once('modules/Contacts/Contacts.php');
 require_once('modules/Potentials/Potentials.php');
 require_once('modules/Calendar/Activity.php');
-require_once('modules/Notes/Notes.php');
+require_once('modules/Documents/Documents.php');
 require_once('modules/Emails/Emails.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
@@ -375,14 +375,22 @@ class Accounts extends CRMEntity {
  	 */
 	function get_attachments($id)
 	{
-		 global $log;
-                 $log->debug("Entering get_attachments(".$id.") method ...");
+		global $log,$current_user;
+        $log->debug("Entering get_attachments(".$id.") method ...");
 		// Armando Lüscher 18.10.2005 -> §visibleDescription
 		// Desc: Inserted crm2.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
 		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
+		$tab_id=getTabid('Documents');
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+            {
+				$sec_parameter=getListViewSecurityParameter('Documents');
+				//$query .= $sec_parameter;
+            }
 		$query = "SELECT vtiger_notes.title, vtiger_notes.notecontent AS description,
 			vtiger_notes.filename, vtiger_notes.notesid AS crmid,
-				'Notes      ' AS ActivityType,
+				'Documents      ' AS ActivityType,
 			vtiger_attachments.type AS FileType,
 				crm2.modifiedtime AS lastmodified, 
 			vtiger_seattachmentsrel.attachmentsid,
@@ -395,13 +403,17 @@ class Accounts extends CRMEntity {
 			INNER JOIN vtiger_crmentity crm2
 				ON crm2.crmid = vtiger_notes.notesid
 				AND crm2.deleted = 0
+			LEFT JOIN vtiger_notegrouprelation
+				ON vtiger_notegrouprelation.notesid = vtiger_notes.notesid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_notegrouprelation.groupname				
 			LEFT JOIN vtiger_seattachmentsrel
 				ON vtiger_seattachmentsrel.crmid = vtiger_notes.notesid
 			LEFT JOIN vtiger_attachments
 				ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
 			INNER JOIN vtiger_users
-				ON crm2.smcreatorid = vtiger_users.id
-			WHERE vtiger_crmentity.crmid = ".$id."
+				ON crm2.smownerid = vtiger_users.id
+			WHERE vtiger_crmentity.crmid = ".$id." ".$sec_parameter."
 		 UNION ALL
 			SELECT vtiger_attachments.subject AS title, vtiger_attachments.description,
 			vtiger_attachments.name AS filename,

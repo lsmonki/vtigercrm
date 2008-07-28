@@ -190,6 +190,17 @@ switch($currentModule)
 		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
 		break;
 
+	case 'Documents':
+		require_once("modules/$currentModule/Documents.php");
+		$focus = new Documents();
+		$smarty->assign("SINGLE_MOD",'Document');
+		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
+			$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
+		else
+			$smarty->assign("RETURN_MODULE",'Emails');
+		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup','notes_title','true','basic',$popuptype,"","",$url);
+		break;
 
 }
 $smarty->assign("RETURN_ACTION",$_REQUEST['return_action']);

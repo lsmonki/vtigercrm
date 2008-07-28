@@ -497,3 +497,22 @@ function setSelectValue(fieldLabel)
 
 	oHdTxtBox.value = oSelCombo.options[oSelCombo.selectedIndex].text;
 }
+
+//Added to ajax edit the folder name in Documents Module
+function hndMouseClick(fieldLabel)
+{
+	var mouseArea="";
+	mouseArea="mouseArea_"+ fieldLabel;
+	if(itsonview)
+	{
+		return;
+	}
+	globaldtlviewspanid= "dtlview_"+ fieldLabel;//valuespanid;
+	globaleditareaspanid="editarea_"+ fieldLabel;//textareapanid;
+	globalfieldlabel = fieldLabel;
+	globaltxtboxid="txtbox_"+ fieldLabel;//textboxpanid;
+	$(globaltxtboxid).value = $(globaldtlviewspanid).innerHTML;
+	handleEdit();
+	$(globaltxtboxid).select();
+
+}

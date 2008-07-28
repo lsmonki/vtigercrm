@@ -36,7 +36,7 @@ require_once('modules/PriceBooks/PriceBooks.php');
 require_once('modules/Vendors/Vendors.php');
 require_once('modules/Faq/Faq.php');
 require_once('modules/HelpDesk/HelpDesk.php');
-require_once('modules/Notes/Notes.php');
+require_once('modules/Documents/Documents.php');
 require_once('modules/Quotes/Quotes.php');
 require_once('modules/SalesOrder/SalesOrder.php');
 require_once('modules/PurchaseOrder/PurchaseOrder.php');
@@ -948,28 +948,6 @@ for($i=0;$i<12;$i++)
 
 	$pricebook->save("PriceBooks");
 	$pricebook_ids[] = $pricebook ->id;
-}
-
-
-//Populate Notes Data
-
-$notes_array = array ("Cont_Notes", "Prod_Notes", "Vendor_Notes", "Invoice_Notes", "Task_Notes", "Event_Notes", "Email_Notes");
-
-for($i=0;$i<7;$i++)
-{
-	$notes = new Notes();
-
-	$rand = array_rand($num_array);
-	$contact_key = array_rand($contact_ids);
-        $notes->column_fields["contact_id"] 	= 	$contact_ids[$contact_key];
-	$notes->column_fields["notes_title"]		=	$notes_array[$i];
-
-	$notes->save("Notes");
-	$notes_ids[] = $notes ->id;
-	
-	$product_key = array_rand($product_ids);
-    $query = "insert into vtiger_senotesrel (crmid, notesid) values (?,?)";
-	$db->pquery($query, array($product_ids[$product_key], $notes->id));	
 }
 
 

@@ -359,9 +359,22 @@
 						 	{$fldlabel}
 						 </td>                         
 						 <td colspan="3" width="30%" align=left class="cellText">
+						{if $MODULE neq 'Documents'}
 						 <input name="{$fldname}"  type="file" value="{$secondvalue}" onchange="validateFilename(this);"/>
 						 <input name="{$fldname}_hidden"  type="hidden" value="{$secondvalue}"/>
 						 <input type="hidden" name="id" value=""/>{$fldvalue}</td>
+						{else}
+							<input type="text" style="border: 1px solid rgb(186, 186, 186);" readonly name="{$fldname}" id="{$fldname}" value="{$fldvalue}" /> &nbsp;
+							<input type="hidden" name="fileid" id="fileid" value="" />
+							<a href="javascript:;" onclick="FileAdd(this,'fileLay','EditView');"><img id="FileAdd_img_id" src="{$IMAGE_PATH}select.gif" alt="Add File..." title="Add File..." border=0></a>
+						{/if}
+				
+						<!-- Start: Popup layer to add a file -->
+						<div id="fileLay" class="layerPopup" style="height:345px;width:500px;z-index:2000;display:none;">
+        					<iframe height="345" width="500" name="AddFile" id="AddFile_id"  frameborder="0" scrolling="no" src="index.php?module=Documents&action=DocumentsAjax&file=AddFile" style="margin: 0;" allowTransparency="true"></iframe>
+						</div>
+						<!-- End: Popup layer to add file -->				
+			</td>
 						{elseif $uitype eq 30}
                                                 <td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
                                                 <td colspan="3" width="30%" align=left class="cellText">

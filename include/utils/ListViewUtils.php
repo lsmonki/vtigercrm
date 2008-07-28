@@ -80,7 +80,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		{	
 			$fieldname = 'account_id';
 		}
-		if($fieldname == 'lastname' && ($module == 'Notes' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
+		if($fieldname == 'lastname' && ($module == 'Documents' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
 		{
                   $fieldname = 'contact_id';
 		}
@@ -145,7 +145,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
                 		{
                        	 		$fieldname = 'account_id';
                 		}
-				if($fieldname == 'lastname' && ($module == 'Notes' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar') )
+				if($fieldname == 'lastname' && ($module == 'Documents' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar') )
 				{
                                         $fieldname = 'contact_id';
 				}
@@ -164,7 +164,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 			{
 				$fieldname = 'account_id';
 			}
-			if($fieldname == 'lastname' && ($module == 'Notes' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar'))
+			if($fieldname == 'lastname' && ($module == 'Documents' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar'))
 			{
 				$fieldname = 'contact_id';
 			}
@@ -541,6 +541,7 @@ function getNavigationValues($display, $noofrows, $limit)
 function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='')
 {
 	global $log;
+	global $mod_strings;
 	$log->debug("Entering getListViewEntries(".get_class($focus).",". $module.",".$list_result.",".$navigation_array.",".$relatedlist.",".$returnset.",".$edit_action.",".$del_action.",".get_class($oCv).") method ...");
 	$tabname = getParentTab();
 	global $adb,$current_user;
@@ -580,7 +581,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		{
 			$fieldname = 'account_id';
 		}
-		if($fieldname == 'lastname' &&($module == 'Notes' ||$module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
+		if($fieldname == 'lastname' &&($module == 'Documents' ||$module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
                        $fieldname = 'contact_id';
 
 		if($fieldname == 'productname' && $module != 'Products')
@@ -707,7 +708,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                 	{
                                         	$fieldname = 'account_id';
                                 	}
-					if($fieldname == 'lastname' &&($module == 'Notes' ||$module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
+					if($fieldname == 'lastname' &&($module == 'Documents' ||$module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
         	                                $fieldname = 'contact_id';
 					if($fieldname == 'productname' && $module != 'Products')
 			                {
@@ -725,7 +726,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				{
 					$fieldname = 'account_id';
 				}
-				if($fieldname == 'lastname' && ($module == 'Notes' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar'))
+				if($fieldname == 'lastname' && ($module == 'Documents' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar'))
 				{
 					$fieldname = 'contact_id';
 				}
@@ -810,20 +811,148 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							}
 						}
 					}
+						//code for Documents module: start
+		elseif($module == "Documents" && ($fieldname == 'filelocationtype' || $fieldname == 'filename' || $fieldname == 'filesize' || $fieldname == 'filestatus' || $fieldname == 'filearchitecture' || $fieldname == 'filetype'))
+		{
+			$value = $adb->query_result($list_result,$i-1,$fieldname);
+			if($fieldname == 'filelocationtype')
+			{
+				if($value == 'I')
+					$value = $mod_strings['LBL_INTERNAL'];
+				elseif($value == 'E')
+					$value = $mod_strings['LBL_EXTERNAL'];
+				else
+					$value = ' --';
+			}
+			if($fieldname == 'filename')
+			{
+				$downloadtype = $adb->query_result($list_result,$i-1,'filelocationtype');
+				if($downloadtype == 'I')
+				{
+					//$file_value = $mod_strings['LBL_INTERNAL'];
+					$fld_value = $value;
+					$ext_pos = strrpos($fld_value, ".");
+					$ext =substr($fld_value, $ext_pos + 1);
+					$ext = strtolower($ext);
+					if($ext == 'bin' || $ext == 'exe' || $ext == 'rpm')
+						$fileicon="<img src='".$image_path."fExeBin.gif' hspace='3' align='absmiddle' border='0'>";
+					elseif($ext == 'jpg' || $ext == 'gif' || $ext == 'bmp')
+						$fileicon="<img src='".$image_path."fbImageFile.gif' hspace='3' align='absmiddle' border='0'>";
+					elseif($ext == 'txt' || $ext == 'doc' || $ext == 'xls')
+						$fileicon="<img src='".$image_path."fbTextFile.gif' hspace='3' align='absmiddle' border='0'>";
+					elseif($ext == 'zip' || $ext == 'gz' || $ext == 'rar')
+						$fileicon="<img src='".$image_path."fbZipFile.gif' hspace='3' align='absmiddle'	border='0'>";
+					else
+						$fileicon="<img src='".$image_path."fbUnknownFile.gif' hspace='3' align='absmiddle' border='0'>";
+				}
+				elseif($downloadtype == 'E')
+				{
+					$fld_value = $value;
+					$fileicon = "<img src='".$image_path."fbLink.gif' alt='".$mod_strings['LBL_EXTERNAL_LNK']."' title='".$mod_strings['LBL_EXTERNAL_LNK']."' hspace='3' align='absmiddle' border='0'>";
+				}
+				else
+				{
+					$fld_value = ' --';
+					$fileicon = '';
+				}
+
+				$file_name = $adb->query_result($list_result,$i-1,'filename');
+				$notes_id = $adb->query_result($list_result,$i-1,'crmid');
+				$folder_id = $adb->query_result($list_result,$i-1,'folderid');
+				$download_type = $adb->query_result($list_result,$i-1,'filelocationtype');
+				$file_path = $adb->query_result($list_result,$i-1,'filepath');
+				$file_status = $adb->query_result($list_result,$i-1,'filestatus');
+				if($file_name != '' && $file_status == 1)
+				{
+					if($download_type == 'I')
+					{
+						$fld_value = "<a href='index.php?module=Documents&action=DownloadFile&fileid=$notes_id&folderid=$folder_id' title='".$mod_strings["LBL_DOWNLOAD_FILE"]."'>".$fld_value."</a>";
+					}
+					elseif($download_type == 'E')
+					{
+						$fld_value = "<a href='$file_path' onclick='javascript:dldCntIncrease($notes_id);' title='".$mod_strings["LBL_DOWNLOAD_FILE"]."'>".$fld_value."</a>";
+					}
+					else
+					{
+						$fld_value = ' --';
+					}
+				}
+								
+				$value = $fileicon.$fld_value;
+			}
+			if($fieldname == 'filesize')
+			{
+				$downloadtype = $adb->query_result($list_result,$i-1,'filelocationtype');
+				if($downloadtype == 'I')
+				{
+					$filesize = $value;
+					if($filesize < 1024)
+						$value=$filesize.' B';
+					elseif($filesize > 1024 && $filesize < 1048576)
+						$value=round($filesize/1024,2).' KB';
+					else if($filesize > 1048576)
+						$value=round($filesize/(1024*1024),2).' MB';
+				}
+				else
+				{	
+					$value = ' --';
+				}
+			}			
+			if($fieldname == 'filestatus')
+			{
+				$filestatus = $value;
+				if($filestatus == 1)
+					$value=$app_strings['yes'];
+				elseif($filestatus == 0)
+					$value=$app_strings['no'];
+				else
+					$value=' --';				
+			}
+			if($fieldname == 'filetype')
+			{
+				$downloadtype = $adb->query_result($list_result,$i-1,'filelocationtype');
+				if($downloadtype == 'E' || $downloadtype != 'I')
+				{
+					$value = ' --';
+				}				
+			}
+			if($fieldname == 'filearchitecture')
+			{
+				$platform = $value;
+				if($platform == 'PI'){
+					$value=$app_strings['LBL_PLATFORM_INDEPENDENT'];
+				}
+				elseif($platform == 'PD')
+				{
+					$os = $adb->query_result($list_result,$i-1,'os');
+					if($os == 'Windows')
+					    $arc_icon="<img src='".$image_path."fbWindowsOS.gif' hspace='3' align='absmiddle' border='0'>";
+					elseif($os == 'Linux')
+						$arc_icon="<img src='".$image_path."fbLinuxOS.gif' hspace='3' align='absmiddle' border='0'>";
+					elseif($os == 'Mac')
+						$arc_icon="<img src='".$image_path."fbMacOS.gif' hspace='3' align='absmiddle' border='0'>"; 
+					$value=$arc_icon.$os;
+				}
+				else
+					$value=' --';				
+			}			
+		}
+						//code for Documents module: end
+					
 					elseif($module == "Products" && $name == "Related to")
 					{
 						$value=getRelatedTo($module,$list_result,$i-1);
 					}
-					elseif($module == 'Notes' && $name=='Related to')
+					elseif($module == 'Documents' && $name=='Related to')
 					{
 						$value = getRelatedTo($module,$list_result,$i-1);
 					}
 					//added for sorting by Contact Name ---------STARTS------------------
-                                        elseif($name=='Contact Name' && ($module == 'Notes' || $module =='SalesOrder' || $module == 'Quotes' || $module == 'PurchaseOrder'))
+                                        elseif($name=='Contact Name' && ($module == 'Documents' || $module =='SalesOrder' || $module == 'Quotes' || $module == 'PurchaseOrder'))
                                         {
                                                 if($name == 'Contact Name')
                                                 {
-                                                        if ($module == 'Notes')
+                                                        if ($module == 'Documents')
 								$contact_id = $adb->query_result($list_result,$i-1,"contact_id");
 							else
                 	                                       	$contact_id = $adb->query_result($list_result,$i-1,"contactid");
@@ -1071,6 +1200,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 		$tempArr[$uitype]=$columnname;
 		$ui_col_array[$field_name]=$tempArr;
 	}
+
 	//end
 	if($navigation_array['end_val'] > 0)
 	{
@@ -1120,7 +1250,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 									$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
 							}
 						}
-						elseif(($module == 'Faq' || $module == 'Notes') && $name=='Related to')
+						elseif(($module == 'Faq' || $module == 'Documents') && $name=='Related to')
 						{
 							$value=getRelatedToEntity($module,$list_result,$i-1);
 						}
@@ -1191,7 +1321,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		$uitype = $key;
 		$colname = $value;
-        }
+    }
 	//added for getting event status in Custom view - Jaguar
 	if($module == 'Calendar' && ($colname == "status" || $colname == "eventstatus"))
 	{
@@ -1380,9 +1510,15 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	//End
 	elseif($uitype == 61)
 	{
-
-		$attachmentid=$adb->query_result($adb->pquery("SELECT * FROM vtiger_seattachmentsrel WHERE crmid = ?", array($entity_id)),0,'attachmentsid');
-		$value = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$module.'&fileid='.$attachmentid.'&filename='.$temp_val.'">'.$temp_val.'</a>';
+		if($module == 'Documents')
+		{
+			$value = $temp_val;
+		}
+		else
+		{
+			$attachmentid=$adb->query_result($adb->pquery("SELECT * FROM vtiger_seattachmentsrel WHERE crmid = ?", array($entity_id)),0,'attachmentsid');
+			$value = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$module.'&fileid='.$attachmentid.'&filename='.$temp_val.'">'.$temp_val.'</a>';
+		}
 
 	}
 	elseif($uitype == 62)
@@ -1675,6 +1811,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					}
 					else
 						$value = '<a href="javascript:window.close();" onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'","'.$module.'");\'>'.$temp_val.'</a>';
+					
+					if($colname == 'title' && $module == 'Documents')
+					{
+						$value = $temp_val;
+					}						
 				}
 				elseif($popuptype == "formname_specific")
 				{
@@ -2223,51 +2364,25 @@ function getListQuery($module,$where='')
                         $query .= " INNER JOIN vtiger_inventoryproductrel on vtiger_inventoryproductrel.productid = vtiger_products.productid";
                 $query .= " WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
-	Case "Notes":
+	Case "Documents":
 		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.modifiedtime,
-			vtiger_notes.title, vtiger_notes.contact_id, vtiger_notes.filename,
-			vtiger_senotesrel.crmid AS relatedto,
-			vtiger_contactdetails.firstname, vtiger_contactdetails.lastname,
+			vtiger_notes.title, vtiger_notes.filename, vtiger_crmentity.smownerid,
 			vtiger_notes.*
 			FROM vtiger_notes
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_notes.notesid
-			LEFT JOIN vtiger_senotesrel
-				ON vtiger_senotesrel.notesid = vtiger_notes.notesid
-			LEFT JOIN vtiger_contactdetails
-				ON vtiger_contactdetails.contactid = vtiger_notes.contact_id
-			LEFT JOIN vtiger_leaddetails
-				ON vtiger_senotesrel.crmid = vtiger_leaddetails.leadid
-			LEFT JOIN vtiger_potential
-				ON vtiger_senotesrel.crmid = vtiger_potential.potentialid
-			LEFT JOIN vtiger_account
-				ON vtiger_senotesrel.crmid = vtiger_account.accountid
-			LEFT JOIN vtiger_products
-				ON vtiger_senotesrel.crmid = vtiger_products.productid
-			LEFT JOIN vtiger_invoice
-				ON vtiger_senotesrel.crmid = vtiger_invoice.invoiceid
-			LEFT JOIN vtiger_purchaseorder
-				ON vtiger_senotesrel.crmid = vtiger_purchaseorder.purchaseorderid
-			LEFT JOIN vtiger_salesorder
-				ON vtiger_senotesrel.crmid = vtiger_salesorder.salesorderid
-			LEFT JOIN vtiger_quotes
-				ON vtiger_senotesrel.crmid = vtiger_quotes.quoteid
-			LEFT JOIN vtiger_troubletickets
-				ON vtiger_senotesrel.crmid = vtiger_troubletickets.ticketid
-			WHERE vtiger_crmentity.deleted = 0
-			AND ((vtiger_senotesrel.crmid IS NULL
-					AND (vtiger_notes.contact_id = 0
-						OR vtiger_notes.contact_id IS NULL))
-				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Leads').")
-				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Accounts').")
-				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Potentials').")
-				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Products').")
-				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Invoice').")
-				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('PurchaseOrder').")
-				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('SalesOrder').")
-				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('Quotes').")
-				OR vtiger_senotesrel.crmid IN (".getReadEntityIds('HelpDesk').")
-				OR vtiger_notes.contact_id IN (".getReadEntityIds('Contacts').")) ";
+			LEFT JOIN vtiger_notegrouprelation
+				ON vtiger_notegrouprelation.notesid = vtiger_notes.notesid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname = vtiger_notegrouprelation.groupname
+			LEFT JOIN vtiger_users
+				ON vtiger_users.id = vtiger_crmentity.smownerid
+			WHERE vtiger_crmentity.deleted = 0 ".$where;
+	        if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+            {
+				$sec_parameter=getListViewSecurityParameter($module);
+				$query .= $sec_parameter;
+            }		
 			break;
 	Case "Contacts":
 		//Query modified to sort by assigned to
@@ -2971,7 +3086,7 @@ function getRelatedTo($module,$list_result,$rset)
 	global $adb,$log,$app_strings;
 	$log->debug("Entering getRelatedTo(".$module.",".$list_result.",".$rset.") method ...");
 	$tabname = getParentTab();
-	if($module == "Notes")
+	if($module == "Documents")
     {
 			$notesid = $adb->query_result($list_result,$rset,"notesid");
             $action = "DetailView";
@@ -3140,7 +3255,10 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	global $theme,$current_user;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	$output = '<td align="right" style="padding="5px;">';
+	if($module != 'Documents')
+		$output = '<td align="right" style="padding="5px;">';
+	else
+		$output = '';
 	$tabname = getParentTab();
 
 	//echo '<pre>';print_r($_REQUEST);echo '</pre>';
@@ -3198,6 +3316,11 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 			$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start=1'.$url_string.'\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
 			$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['prev'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
 		}
+		elseif($module == 'Documents')
+		{
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start=1'.$url_string.'\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['prev'].$url_string.'&folderid='.$action_val.'\');" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
+		}
 		else{
 			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start=1'.$url_string.'\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
 			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['prev'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
@@ -3220,6 +3343,11 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 			}
 			else if($action_val == "FindDuplicate")
 				$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'start='.$i.$url_string.'\');" >'.$i.'</a>&nbsp;';
+
+			elseif($module == 'Documents')
+			{
+				$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$i.$url_string.'&folderid='.$action_val.'\');" >'.$i.'</a>&nbsp;';
+			}
 			else
 				$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$i.$url_string.'\');" >'.$i.'</a>&nbsp;';
 		}
@@ -3238,6 +3366,11 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 			$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['next'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
 			$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['verylast'].$url_string.'\');" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
 		}
+		elseif($module == 'Documents')
+		{
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['next'].$url_string.'&folderid='.$action_val.'\');" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['verylast'].$url_string.'&folderid='.$action_val.'\');" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
+		}
 		else
 		{
 			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['next'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
@@ -3249,7 +3382,8 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 		$output .= '<img src="'.$image_path.'next_disabled.gif" border="0" align="absmiddle">&nbsp;';
 		$output .= '<img src="'.$image_path.'end_disabled.gif" border="0" align="absmiddle">&nbsp;';
 	}
-	$output .= '</td>';
+	if($module != 'Documents')
+		$output .= '</td>';
 	$log->debug("Exiting getTableHeaderNavigation method ...");
 	if($navigation_array['first']=='')
 	return;
@@ -3630,6 +3764,15 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 		array_push($params, $recordid);
 		$field = $selectfield ='productid';
 		$table = 'vtiger_products';
+	}
+	elseif($currentmodule == "Documents")
+	{
+		$reltable = "vtiger_senotesrel";
+		$selectfield = "notesid";
+		$condition = "where crmid = ?";
+		array_push($params, $recordid);
+		$table = "vtiger_notes";
+		$field = "notesid";
 	}
 	//end
 	if($reltable != null)

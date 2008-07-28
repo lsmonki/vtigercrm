@@ -91,7 +91,7 @@ function showhidediv()
 									create database new_db_name DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;<br />&nbsp;&nbsp;
 									To change the default character set for an existing database you can use<br />&nbsp;&nbsp;
 									alter database old_db_name DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;<br />&nbsp;&nbsp;
-									More Information about database UTF-8 support is <a href="http://www.vtiger.com/products/crm/help/5.0.4/vtiger_CRM_Database_UTF8Config.pdf" target="_new"><b>here</b></a>.<br />
+									More Information about database UTF-8 support is <a href="http://www.vtiger.com/products/crm/help/5.1.0/vtiger_CRM_Database_UTF8Config.pdf" target="_new"><b>here</b></a>.<br />
 							<li><a name='store_db_dump'></a> <b>How to store the data from database dump file to a new database?</b><br />
 								1. Edit the database dump file<br />&nbsp;&nbsp;
 									SET FOREIGN_KEY_CHECKS = 0; =&gt; add this line at the start of the dump file.<br />&nbsp;&nbsp;

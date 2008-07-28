@@ -14,7 +14,7 @@ global $adb;
 $dest_mod = $_REQUEST['destination_module'];
 
 //if select Lead, Account, Contact, Potential from Product RelatedList we have to insert in vtiger_seproductsrel
-if($dest_mod =='Leads' || $dest_mod =='Accounts' ||$dest_mod =='Contacts' ||$dest_mod =='Potentials')
+if($dest_mod =='Leads' || $dest_mod =='Accounts' ||$dest_mod =='Contacts' ||$dest_mod =='Potentials' || $dest_mod == 'Documents')
 {
 	//For Bulk updates
 	if($_REQUEST['idlist'] != '')
@@ -32,8 +32,16 @@ if($dest_mod =='Leads' || $dest_mod =='Accounts' ||$dest_mod =='Contacts' ||$des
 	{
 		if($crmid != '' && $productid != '')
 		{
-			$sql = "insert into vtiger_seproductsrel values (?,?,?)";
-			$adb->pquery($sql, array($crmid,$productid,$dest_mod));
+			if($dest_mod =='Documents')
+			{
+				$sql = "insert into vtiger_senotesrel values (?,?)";
+				$adb->pquery($sql, array($productid,$crmid));
+			}
+			else
+			{
+				$sql = "insert into vtiger_seproductsrel values (?,?,?)";
+				$adb->pquery($sql, array($crmid,$productid,$dest_mod));
+			}
 		}
 	}
 	

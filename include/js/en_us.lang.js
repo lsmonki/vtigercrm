@@ -181,5 +181,8 @@
 				DEL_MANDATORY: 'You are not allowed to delete the mandatory field',
 				
 				/* For Multi-Currency Support */
-				MSG_CHANGE_CURRENCY_REVISE_UNIT_PRICE: 'Unit price of all the Currencies will be revised based on the selected Currency. Are you sure?'
+				MSG_CHANGE_CURRENCY_REVISE_UNIT_PRICE: 'Unit price of all the Currencies will be revised based on the selected Currency. Are you sure?',
+				
+				/* Added for Documents module */
+				NO_SPECIAL_CHARS_DOCS:'Special characters like quotes, backslash, + symbol, % and ? are not allowed',
 			};

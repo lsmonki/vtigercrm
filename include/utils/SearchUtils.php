@@ -356,7 +356,7 @@ function BasicSearch($module,$search_field,$search_string)
 		//Check ends
 
 		//Added to search contact name by lastname
-		if(($module == "Calendar" || $module == "Invoice" || $module == "Notes" || $module == "SalesOrder" || $module== "PurchaseOrder") && ($search_field == "contact_id"))
+		if(($module == "Calendar" || $module == "Invoice" || $module == "Documents" || $module == "SalesOrder" || $module== "PurchaseOrder") && ($search_field == "contact_id"))
 		{
 			$module = 'Contacts';
 			$search_field = 'lastname';
@@ -365,6 +365,7 @@ function BasicSearch($module,$search_field,$search_string)
 			$search_field = "account_id";
 		if($search_field == 'productname' && $module == 'Campaigns')
 			$search_field = "product_id";
+		
 		$qry="select vtiger_field.columnname,tablename from vtiger_tab inner join vtiger_field on vtiger_field.tabid=vtiger_tab.tabid where vtiger_tab.name=? and (fieldname=? or columnname=?)";
 		$result = $adb->pquery($qry, array($module, $search_field, $search_field));
 		$noofrows = $adb->num_rows($result);

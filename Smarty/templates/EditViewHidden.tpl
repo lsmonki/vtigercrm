@@ -60,15 +60,15 @@
 {elseif $MODULE eq 'Accounts' || $MODULE eq 'Faq' || $MODULE eq 'PriceBooks' || $MODULE eq 'Vendors'}
 	<form name="EditView" method="POST" action="index.php">
 
-{elseif $MODULE eq 'Notes'}
+{elseif $MODULE eq 'Documents'}
 	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
 	<input type="hidden" name="max_file_size" value="{$MAX_FILE_SIZE}">
-	<input type="hidden" name="filename" value="{$FILENAME}">
 	<input type="hidden" name="form">
 	<input type="hidden" name="email_id" value="{$EMAILID}">
 	<input type="hidden" name="ticket_id" value="{$TICKETID}">
 	<input type="hidden" name="fileid" value="{$FILEID}">
 	<input type="hidden" name="old_id" value="{$OLD_ID}">
+	<input type="hidden" name="parentid" value="{$PARENTID}">
 
 {elseif $MODULE eq 'Products'}
 	{$ERROR_MESSAGE}

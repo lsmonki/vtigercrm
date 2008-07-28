@@ -64,6 +64,15 @@ function DeleteTag(id,recordid)
                 {rdelim}
         );
 {rdelim}
+
+//Added to send a file, in Documents module, as an attachment in an email
+function sendfile_email()
+{ldelim}
+	filename = $('dldfilename').value;
+	document.DetailView.submit();
+	OpenCompose(filename,'Documents');
+{rdelim}
+
 </script>
 {if $MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Leads'}
         {if $MODULE eq 'Accounts'}
@@ -203,7 +212,7 @@ function DeleteTag(id,recordid)
 						{/if}
 						</td>
 						<td align=right>
-								{if $EDIT_DUPLICATE eq 'permitted'}
+								{if $EDIT_DUPLICATE eq 'permitted' && $MODULE neq 'Documents'}
 								<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
 								{/if}
 								{if $DELETE eq 'permitted'}
@@ -285,11 +294,19 @@ function DeleteTag(id,recordid)
 					<td class="dvtCellLabel" align=right width=25%>{$label}<input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input> ({$keycursymb})</td>
 				{else}
 					<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label}</td>
-				{/if}  
-				{if $EDIT_PERMISSION eq 'yes'}
-					{include file="DetailViewUI.tpl"}
+				{/if}
+				{if $MODULE eq 'Documents' && $EDIT_PERMISSION eq 'yes' && $header eq 'File Information'}
+					{if $keyfldname eq 'filestatus' && $ADMIN eq 'yes'}
+						{include file="DetailViewUI.tpl"}
+					{else}
+						{include file="DetailViewFields.tpl"}
+					{/if}
 				{else}
-					{include file="DetailViewFields.tpl"}
+					{if $EDIT_PERMISSION eq 'yes'}
+						{include file="DetailViewUI.tpl"}
+					{else}
+						{include file="DetailViewFields.tpl"}
+					{/if}
 				{/if}
 			   {/if}
                                    {/foreach}
@@ -307,7 +324,7 @@ function DeleteTag(id,recordid)
 		   <tr>
 			{$ASSOCIATED_PRODUCTS}
 		   </tr>
-			{if $SinglePane_View eq 'false' || $MODULE eq 'Notes' || $MODULE eq 'Faq'}
+			{if $SinglePane_View eq 'false' || $MODULE eq 'Documents' || $MODULE eq 'Faq'}
 			                  <tr>
 					     <td style="padding:10px">
 		           <table border=0 cellspacing=0 cellpadding=0 width=100%>
@@ -358,7 +375,7 @@ function DeleteTag(id,recordid)
 						{/if}
 						</td>
 						<td align=right>
-								{if $EDIT_DUPLICATE eq 'permitted'}
+								{if $EDIT_DUPLICATE eq 'permitted' && $MODULE neq 'Documents'}
 								<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
 								{/if}
 								{if $DELETE eq 'permitted'}
@@ -382,13 +399,13 @@ function DeleteTag(id,recordid)
 			{/if}
 		</table>
 		</td>
-		<td width=22% valign=top style="border-left:2px dashed #cccccc;padding:13px">
+		<td width=22% valign=top style="border-left:1px dashed #cccccc;padding:13px">
 						<!-- right side relevant info -->
 		<!-- Action links for Event & Todo START-by Minnie -->
-                {if $MODULE eq 'Contacts' || $MODULE eq 'Accounts' || $MODULE eq 'Leads'}
+                {if $MODULE eq 'Contacts' || $MODULE eq 'Accounts' || $MODULE eq 'Leads' || ($MODULE eq 'Documents' && $FILE_EXIST eq 'yes'  && ($ADMIN eq 'yes' || $FILE_STATUS eq '1'))}
                         <table width="100%" border="0" cellpadding="5" cellspacing="0">
                                 <tr><td>&nbsp;</td></tr>
-{if $TODO_PERMISSION eq 'true' || $EVENT_PERMISSION eq 'true' || $CONTACT_PERMISSION eq 'true'|| $MODULE eq 'Contacts'}                              
+{if $TODO_PERMISSION eq 'true' || $EVENT_PERMISSION eq 'true' || $CONTACT_PERMISSION eq 'true'|| $MODULE eq 'Contacts' || ($MODULE eq 'Documents' && $FILE_EXIST eq 'yes')}                              
 <tr><td align="left" class="genHeaderSmall">{$APP.LBL_ACTIONS}</td></tr>
 {/if}
                                 {if $MODULE eq 'Contacts'}
@@ -416,6 +433,38 @@ function DeleteTag(id,recordid)
                                 <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Todo}</a>
 </td></tr>
 	{/if}
+
+<!-- Start: Actions for Documents Module -->
+	{if $MODULE eq 'Documents'}
+                                <tr><td align="left" style="padding-left:10px;">			        
+				{if $DLD_TYPE eq 'I'}	
+					<br><a href="index.php?module=Documents&action=DownloadFile&fileid={$NOTESID}&folderid={$FOLDERID}" class="webMnu"><img src="{$IMAGE_PATH}fbDownload.gif" hspace="5" align="absmiddle" title="{$APP.LNK_DOWNLOAD}" border="0"/></a>
+                    <a href="index.php?module=Documents&action=DownloadFile&fileid={$NOTESID}&folderid={$FOLDERID}">{$MOD.LBL_DOWNLOAD_FILE}</a>
+				{elseif $DLD_TYPE eq 'E'}
+					<br><a href="{$DLD_PATH}" onclick="javascript:dldCntIncrease({$NOTESID});"><img src="{$IMAGE_PATH}fbDownload.gif" align="absmiddle" title="{$APP.LNK_DOWNLOAD}" border="0"></a>
+					<a href="{$DLD_PATH}" onclick="javascript:dldCntIncrease({$NOTESID});">{$MOD.LBL_DOWNLOAD_FILE}</a>
+				{/if}
+</td></tr>
+{if $CHECK_INTEGRITY_PERMISSION eq 'yes'}
+<tr><td align="left" style="padding-left:10px;">	
+					<br><a href="javascript:;" onClick="checkFileIntegrityDetailView({$NOTESID});"><img id="CheckIntegrity_img_id" src="{$IMAGE_PATH}yes.gif" alt="Check integrity of this file" title="Check integrity of this file" hspace="5" align="absmiddle" border="0"/></a>
+                    <a href="javascript:;" onClick="checkFileIntegrityDetailView({$NOTESID});">{$MOD.LBL_CHECK_INTEGRITY}</a>&nbsp;
+                    <input type="hidden" id="dldfilename" name="dldfilename" value="{$FILENAME}">
+                    <span id="vtbusy_integrity_info" style="display:none;">
+						<img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span>
+					<span id="integrity_result" style="display:none"></span>						
+</td></tr>
+{/if}
+<tr><td align="left" style="padding-left:10px;">			        
+				{if $DLD_TYPE eq 'I'}	
+					<input type="hidden" id="dldfilename" name="dldfilename" value="{$FILENAME}">
+					<br><a href="javascript: document.DetailView.return_module.value='Documents'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='Documents'; document.DetailView.action.value='EmailFile'; document.DetailView.record.value={$NOTESID}; document.DetailView.return_id.value={$NOTESID}; sendfile_email();" class="webMnu"><img src="{$IMAGE_PATH}attachment.gif" hspace="5" align="absmiddle" border="0"/></a>
+                    <a href="javascript: document.DetailView.return_module.value='Attachments'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='Documents'; document.DetailView.action.value='EmailFile'; document.DetailView.record.value={$NOTESID}; document.DetailView.return_id.value={$NOTESID}; sendfile_email();">{$MOD.LBL_EMAIL_FILE}</a>                                      
+				{/if}
+</td></tr>
+<tr><td>&nbsp;</td></tr>
+	{/if}
+<!-- End: Actions for Documents Module -->	
                   </table>
                 <br>
                 {/if}

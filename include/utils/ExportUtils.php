@@ -139,11 +139,11 @@ function getFieldsListFromQuery($query)
 		{
 			$fields .= "";
 		}
-		elseif($tablename == 'vtiger_notes' && $columnName == 'contact_id')//Notes - contact_id
+		elseif($tablename == 'vtiger_notes' && $columnName == 'contact_id')//Documents - contact_id
 		{
 			$fields .= " concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname) as 'Contact Name',";
 		}
-		elseif($tablename == 'vtiger_senotesrel' && $columnName == 'crmid')//Notes - Related To
+		elseif($tablename == 'vtiger_senotesrel' && $columnName == 'crmid')//Documents - Related To
 		{
 			$fields .= "case vtiger_crmentityRelatedTo.setype 
 					when 'Leads' then concat('Leads ::: ',vtiger_leaddetails.lastname,' ',vtiger_leaddetails.firstname) 

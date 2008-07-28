@@ -57,7 +57,7 @@ class DefaultDataPopulator extends CRMEntity {
  $this->db->query("INSERT INTO vtiger_tab VALUES (6,'Accounts',0,5,'Accounts',null,null,0,0)");
  $this->db->query("INSERT INTO vtiger_tab VALUES (4,'Contacts',0,6,'Contacts',null,null,0,0)");
  $this->db->query("INSERT INTO vtiger_tab VALUES (2,'Potentials',0,7,'Potentials',null,null,0,0)");
- $this->db->query("INSERT INTO vtiger_tab VALUES (8,'Notes',0,9,'Notes',null,null,0,1)");
+ $this->db->query("INSERT INTO vtiger_tab VALUES (8,'Documents',0,9,'Documents',null,null,0,0)");
  $this->db->query("INSERT INTO vtiger_tab VALUES (9,'Calendar',0,3,'Calendar',null,null,0,0)");
  $this->db->query("INSERT INTO vtiger_tab VALUES (10,'Emails',0,10,'Emails',null,null,0,1)");
  $this->db->query("INSERT INTO vtiger_tab VALUES (13,'HelpDesk',0,11,'HelpDesk',null,null,0,0)");
@@ -165,7 +165,14 @@ $this->db->query("insert into vtiger_blocks values (81,29,'LBL_ADDRESS_INFORMATI
 $this->db->query("insert into vtiger_blocks values (82,26,'LBL_DESCRIPTION_INFORMATION',4,0,0,0,0,0)");
 $this->db->query("insert into vtiger_blocks values (83,29,'LBL_USER_IMAGE_INFORMATION',4,0,0,0,0,0)"); //Added a New Block User Image Info in Users Module
 $this->db->query("insert into vtiger_blocks values (84,29,'LBL_USER_ADV_OPTIONS',5,0,0,0,0,0)"); //Added a New Block User Image Info in Users Module
-//
+//Added block 'File Information' to Documents module
+$this->db->query("insert into vtiger_blocks values(85,8,'LBL_FILE_INFORMATION',3,0,0,0,0,0)");
+
+//Start: Entries for vtiger_os table in Documents module
+$this->db->query("insert into vtiger_os values(1,'Windows',0,1)");
+$this->db->query("insert into vtiger_os values(2,'Linux',1,1)");
+$this->db->query("insert into vtiger_os values(3,'Mac',2,1)");
+//End: Entries for vtiger_os table in Documents module
 
 //Account Details -- START
  //Block9
@@ -475,19 +482,25 @@ $this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("
 
 //Product Details -- END
 
-//Note Details -- START
+//Documents Details -- START
 //Block17 -- Start
 
-$this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'contact_id','vtiger_notes',1,'57','contact_id','Contact Name',1,0,0,100,1,17,1,'V~O',1,null,'BAS')");
- $this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'crmid','vtiger_senotesrel',1,'62','parent_id','Related To',1,0,0,100,2,17,1,'I~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'title','vtiger_notes',1,'2','notes_title','Title',1,0,0,100,3,17,1,'V~M',0,1,'BAS')");
 $this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,4,17,2,'T~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,5,17,2,'T~O',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'filename','vtiger_notes',1,'61','filename','File',1,0,0,100,4,17,1,'V~O',1,null,'BAS')");
+ $this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,6,17,1,'V~M',1,null,'BAS')");
  $this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'notecontent','vtiger_notes',1,'19','notecontent','Note',1,0,0,100,5,18,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'filetype','vtiger_notes',1,1,'filetype','File Type',1,0,0,100,2,85,2,'V~O',1,'','BAS')");
+$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'filesize','vtiger_notes',1,1,'filesize','File Size',1,0,0,100,3,85,2,'V~O',1,'','BAS')");
+$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'filelocationtype','vtiger_notes',1,1,'filelocationtype','Download Type',1,0,0,100,4,85,2,'V~O',1,'','BAS')");
+$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'fileversion','vtiger_notes',1,1,'fileversion','Version',1,0,0,100,5,85,2,'V~O',1,'','BAS')");
+$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'filestatus','vtiger_notes',1,56,'filestatus','Active',1,0,0,100,6,85,2,'V~O',1,'','BAS')");
+$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'filedownloadcount','vtiger_notes',1,1,'filedownloadcount','Download Count',1,0,0,100,11,85,2,'I~O',1,'','BAS')");
+$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'os','vtiger_notes',1,1,'filearchitecture','Platform',1,0,0,100,12,85,2,'V~O',1,'','BAS')");
 
 //Block17 -- End
-//Note Details -- END
+//Documents Details -- END
 
 //Email Details -- START
 //Block21 -- Start
@@ -927,7 +940,7 @@ $this->db->query("insert into vtiger_entityname values(7,'Leads','vtiger_leaddet
 $this->db->query("insert into vtiger_entityname values(6,'Accounts','vtiger_account','accountname','accountid','account_id')");
 $this->db->query("insert into vtiger_entityname values(4,'Contacts','vtiger_contactdetails','lastname,firstname','contactid','contact_id')");
 $this->db->query("insert into vtiger_entityname values(2,'Potentials','vtiger_potential','potentialname','potentialid','potential_id')");
-$this->db->query("insert into vtiger_entityname values(8,'Notes','vtiger_notes','title','notesid','notesid')");
+$this->db->query("insert into vtiger_entityname values(8,'Documents','vtiger_notes','title','notesid','notesid')");
 $this->db->query("insert into vtiger_entityname values(13,'HelpDesk','vtiger_troubletickets','title','ticketid','ticketid')");
 $this->db->query("insert into vtiger_entityname values(9,'Calendar','vtiger_activity','subject','activityid','activityid')");
 $this->db->query("insert into vtiger_entityname values(10,'Emails','vtiger_activity','subject','activityid','activityid')");
@@ -1526,7 +1539,7 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
         $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",6,6,0)");
         $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",7,5,0)");
         $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",7,6,0)");
-        $this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",8,6,0)");
+        //$this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",8,6,0)");
         //$this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",9,6,0)");
         //$this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",10,6,0)");
 		$this->db->query("insert into vtiger_profile2utility values (".$profile1_id.",7,8,0)");
@@ -1559,7 +1572,7 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
         $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",6,6,1)");
         $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",7,5,1)");
         $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",7,6,1)");
-        $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",8,6,1)");
+        //$this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",8,6,1)");
         //$this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",9,6,1)");
         //$this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",10,6,1)");
         $this->db->query("insert into vtiger_profile2utility values (".$profile2_id.",7,8,0)");
@@ -1592,7 +1605,7 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
         $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",6,6,1)");
         $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",7,5,1)");
         $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",7,6,1)");
-        $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",8,6,1)");
+        //$this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",8,6,1)");
         //$this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",9,6,1)");
         //$this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",10,6,1)");
         $this->db->query("insert into vtiger_profile2utility values (".$profile3_id.",7,8,0)");
@@ -1625,7 +1638,7 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
         $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",6,6,1)");
         $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",7,5,1)");
         $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",7,6,1)");
-        $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",8,6,1)");
+        //$this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",8,6,1)");
         //$this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",9,6,1)");
         //$this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",10,6,1)");
         $this->db->query("insert into vtiger_profile2utility values (".$profile4_id.",7,8,1)");
@@ -1661,7 +1674,7 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
 
 
 		//Inserting for all vtiger_tabs
-                $def_org_tabid= Array(2,4,6,7,9,10,13,16,20,21,22,23,26);
+                $def_org_tabid= Array(2,4,6,7,8,9,10,13,16,20,21,22,23,26);
 
                 foreach($def_org_tabid as $def_tabid)
                 {
@@ -1688,6 +1701,7 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
                $this->db->query("insert into vtiger_def_org_share values (".$this->db->getUniqueID('vtiger_def_org_share').",22,2,0)");
                $this->db->query("insert into vtiger_def_org_share values (".$this->db->getUniqueID('vtiger_def_org_share').",23,2,0)");
                $this->db->query("insert into vtiger_def_org_share values (".$this->db->getUniqueID('vtiger_def_org_share').",26,2,0)");
+               $this->db->query("insert into vtiger_def_org_share values (".$this->db->getUniqueID('vtiger_def_org_share').",8,2,0)");
 
 		//Populating the DataShare Related Modules
 
@@ -2561,7 +2575,7 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	$this->db->query("insert into vtiger_actionmapping values(10,'DuplicatesHandling',0)");
 
 	//Insert values for vtiger_moduleowners vtiger_table which contains the modules and their vtiger_users. default user id admin - after 4.2 patch 2
-	$module_array = Array('Potentials','Contacts','Accounts','Leads','Notes','Calendar','Emails','HelpDesk','Products','Faq','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Reports','Campaigns');
+	$module_array = Array('Potentials','Contacts','Accounts','Leads','Documents','Calendar','Emails','HelpDesk','Products','Faq','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Reports','Campaigns');
 	foreach($module_array as $mod)
 	{
 		$this->db->query("insert into vtiger_moduleowners values(".getTabid($mod).",1)");

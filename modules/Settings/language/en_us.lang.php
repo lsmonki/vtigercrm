@@ -395,7 +395,7 @@ $mod_strings = Array(
 
 'LBL_PRODUCT_FIELD_ACCESS'=>'Product Field Access',
 
-'LBL_NOTE_FIELD_ACCESS'=>'Note Field Access',
+'LBL_NOTE_FIELD_ACCESS'=>'Document Field Access',
 
 'LBL_EMAIL_FIELD_ACCESS'=>'Email Field Access',
 
@@ -619,7 +619,7 @@ $mod_strings = Array(
 //After 4.2 GA
 'LBL_TEXT_AREA'=>'Text Area',
 //for Edit ordering the blocks
-'NOTESCUSTOMFIELDS'=>'Notes Custom Fields',
+'NOTESCUSTOMFIELDS'=>'Documents Custom Fields',
 
 //Added fields after 4.2 ptach 2
 'LBL_ASSIGN_MODULE_OWNERS'=>'Assign Module Owners',

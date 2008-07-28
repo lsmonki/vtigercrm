@@ -121,7 +121,11 @@ function sensex_info()
 										{else}
 											<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  return formValidate()" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
 										{/if}
-                                                                 		<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
+										{if $MODULE eq 'Documents'}
+                                            <input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back();" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
+                                        {else}
+                                        	<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
+                                        {/if}
 									   </div>
 									</td>
 								   </tr>
@@ -258,13 +262,13 @@ function sensex_info()
 </table>
 </form>
 
-{if ($MODULE eq 'Emails' || 'Notes') and ($FCKEDITOR_DISPLAY eq 'true')}
+{if ($MODULE eq 'Emails' || 'Documents') and ($FCKEDITOR_DISPLAY eq 'true')}
        <script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
        <script type="text/javascript" defer="1">
 
        var oFCKeditor = null;
 
-       {if $MODULE eq 'Notes'}
+       {if $MODULE eq 'Documents'}
                oFCKeditor = new FCKeditor( "notecontent" ) ;
        {/if}
 

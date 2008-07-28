@@ -28,7 +28,7 @@ require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('modules/Contacts/Contacts.php');
 require_once('modules/Potentials/Potentials.php');
-require_once('modules/Notes/Notes.php');
+require_once('modules/Documents/Documents.php');
 require_once('modules/Emails/Emails.php');
 require_once('modules/Accounts/Accounts.php');
 require_once('include/ComboUtil.php');

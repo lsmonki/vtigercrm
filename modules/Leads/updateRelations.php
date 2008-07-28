@@ -30,6 +30,8 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 				$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($_REQUEST["parentid"],$id,'Leads'));
 			elseif($dest_mod == 'Campaigns')	
 		    	$adb->pquery("insert into  vtiger_campaignleadrel values(?,?)", array($id,$_REQUEST["parentid"]));
+		    elseif($dest_mod == 'Documents')
+		    	$adb->pquery("insert into vtiger_senotesrel values (?,?)", array($_REQUEST["parentid"],$id));
 		}
 	}
 	$record = $_REQUEST["parentid"];
@@ -40,6 +42,8 @@ elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 		$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($_REQUEST["parid"],$_REQUEST["entityid"],'Leads'));	
 	elseif($dest_mod == 'Campaigns')
 		$adb->pquery("insert into vtiger_campaignleadrel values(?,?)", array($_REQUEST["entityid"],$_REQUEST["parid"]));
+	elseif($dest_mod == 'Documents')
+		$adb->pquery("insert into vtiger_senotesrel values (?,?)", array($_REQUEST["parid"],$_REQUEST["entityid"]));
 	$record = $_REQUEST["parid"];
 }
 

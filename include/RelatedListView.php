@@ -74,7 +74,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 
 		//echo '<BR>*****************'.$relatedmodule.' ***************';
 	//Appending the security parameter
-	if($relatedmodule != 'Notes' && $relatedmodule != 'Products' && $relatedmodule != 'Faq' && $relatedmodule != 'PriceBook' && $relatedmodule != 'Vendors') //Security fix by Don
+	if($relatedmodule != 'Products' && $relatedmodule != 'Faq' && $relatedmodule != 'PriceBook' && $relatedmodule != 'Vendors') //Security fix by Don
 	{
 		global $current_user;
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
@@ -274,94 +274,140 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 	$header[] = $app_strings['LBL_TYPE'];		
 	$header[] = $app_strings['LBL_ACTION'];	
 	
-	while($row = $adb->fetch_array($result))
+	if($result)
 	{
-		if($row['activitytype'] == 'Attachments') {
-			$query1="select setype,createdtime from vtiger_crmentity where crmid=?";
-			$params1 = array($row['attachmentsid']);
-		} else {
-			$query1="select setype,createdtime from vtiger_crmentity where crmid=?";
-			$params1 = array($row['crmid']);
-		}
-
-		$query1 .=" order by createdtime desc";
-		$res=$adb->pquery($query1, $params1);
-		$num_rows = $adb->num_rows($res);
-		for($i=0; $i<$num_rows; $i++)
+		while($row = $adb->fetch_array($result))
 		{
-			$setype = $adb->query_result($res,$i,'setype');
-			$createdtime = $adb->query_result($res,$i,'createdtime');
-		}
-
-		if(($setype != "Products Image") && ($setype != "Contacts Image")) 
-		{
-			$entries = Array();
-			if(trim($row['activitytype']) == 'Notes')
-			{
-				$module = 'Notes';
-				$editaction = 'EditView';
-				$deleteaction = 'Delete';
+			if($row['activitytype'] == 'Attachments') {
+				$query1="select setype,createdtime from vtiger_crmentity where crmid=?";
+				$params1 = array($row['attachmentsid']);
+			} else {
+				$query1="select setype,createdtime from vtiger_crmentity where crmid=?";
+				$params1 = array($row['crmid']);
 			}
-			elseif($row['activitytype'] == 'Attachments')
+	
+			$query1 .=" order by createdtime desc";
+			$res=$adb->pquery($query1, $params1);
+			$num_rows = $adb->num_rows($res);
+			for($i=0; $i<$num_rows; $i++)
 			{
-				$module = 'uploads';
-				$editaction = 'upload';
-				$deleteaction = 'deleteattachments';
+				$setype = $adb->query_result($res,$i,'setype');
+				$createdtime = $adb->query_result($res,$i,'createdtime');
 			}
-			if($row['createdtime'] != '0000-00-00 00:00:00')
+	
+			if(($setype != "Products Image") && ($setype != "Contacts Image")) 
 			{
-				$created_arr = explode(" ",getDisplayDate($createdtime));
-				$created_date = $created_arr[0];
-				$created_time = substr($created_arr[1],0,5);
-			}
-			else
-			{
-				$created_date = '';
-				$created_time = '';
-			}
-
-			$entries[] = $created_date;
-			if($module == 'Notes')
-			{
-				$entries[] = '<a href="index.php?module='.$module.'&action=DetailView&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'&parenttab='.$_REQUEST["parenttab"].'">'.textlength_check($row['title']).'</a>';
-			}
-			elseif($module == 'uploads')
-			{
-				$entries[] = $row['title'];
-			}
-			if((getFieldVisibilityPermission('Notes', $current_user->id, 'notecontent') == '0') || $row['activitytype'] == 'Attachments')
-			{
-				$row['description'] = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$row['description']);
-				if(strlen($row['description']) > $listview_max_textlength)
+				$entries = Array();
+				if(trim($row['activitytype']) == 'Documents')
 				{
-					$row['description'] = substr($row['description'],0,$listview_max_textlength).'...';
+					$module = 'Documents';
+					$editaction = 'EditView';
+					$deleteaction = 'Delete';
 				}
-				$entries[] = nl2br($row['description']); 
+				elseif($row['activitytype'] == 'Attachments')
+				{
+					$module = 'uploads';
+					$editaction = 'upload';
+					$deleteaction = 'deleteattachments';
+				}
+				if($row['createdtime'] != '0000-00-00 00:00:00')
+				{
+					$created_arr = explode(" ",getDisplayDate($createdtime));
+					$created_date = $created_arr[0];
+					$created_time = substr($created_arr[1],0,5);
+				}
+				else
+				{
+					$created_date = '';
+					$created_time = '';
+				}
+	
+				$entries[] = $created_date;
+				if($module == 'Documents')
+				{
+					$entries[] = '<a href="index.php?module='.$module.'&action=DetailView&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'&parenttab='.$_REQUEST["parenttab"].'">'.textlength_check($row['title']).'</a>';
+				}
+				elseif($module == 'uploads')
+				{
+					$entries[] = $row['title'];
+				}
+				if((getFieldVisibilityPermission('Documents', $current_user->id, 'notecontent') == '0') || $row['activitytype'] == 'Documents')
+				{
+					$row['description'] = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$row['description']);
+					if(strlen($row['description']) > $listview_max_textlength)
+					{
+						$row['description'] = substr($row['description'],0,$listview_max_textlength).'...';
+					}
+					$entries[] = nl2br($row['description']); 
+				}
+				else
+					$entries[]=" <font color ='red' >" .$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
+	
+				$attachmentname = $row['filename'];//explode('_',$row['filename'],2);
+	
+				if((getFieldVisibilityPermission('Documents', $current_user->id, 'filename') == 0))
+				{
+					global $adb;
+					
+					$prof_id = fetchUserProfileId($current_user->id);
+					$modulepermissionQuery = "select permissions from vtiger_profile2tab where tabid=8 and profileid= ?";
+					$modulepermissionresult = $adb->pquery($modulepermissionQuery,array($prof_id));
+					$moduleviewpermission = $adb->query_result($modulepermissionresult,0,'permissions');
+					
+					$folderQuery = 'select folderid,filelocationtype,filepath,filestatus from vtiger_notes where notesid = ?';
+					$folderresult = $adb->pquery($folderQuery,array($row["crmid"]));
+					$folder_id = $adb->query_result($folderresult,0,'folderid');
+					$filepath = $adb->query_result($folderresult,0,'filepath');
+					$download_type = $adb->query_result($folderresult,0,'filelocationtype');
+					$filestatus = $adb->query_result($folderresult,0,'filestatus');
+					
+					if($moduleviewpermission == 0)
+					{
+						if($download_type == 'I')
+						{
+							if($filestatus == 1)
+								$entries[] = '<a href="index.php?module=Documents&action=DownloadFile&fileid='.$row["crmid"].'&folderid='.$folder_id.'">'.textlength_check($attachmentname).'</a>';
+							else
+								$entries[] = textlength_check($attachmentname);
+						}
+						if($download_type == 'E')
+						{
+							if($filestatus == 1)
+								$entries[] = '<a href="'.$filepath.'" onClick="javascript:dldCntIncrease('.$row['crmid'].');">'.textlength_check($attachmentname).'</a>';
+							else
+								$entries[] = textlength_check($attachmentname);
+						}
+						if(!isset($attachmentname))
+							$entries[] = ' --';
+					}
+					else
+					{
+						if(isset($attachmentname))
+							$entries[] = textlength_check($attachmentname);
+						else
+							$entries[] = ' --';
+					}
+				}
+				else
+					$entries[]='';			
+				if($row['activitytype'] == 'Attachments')
+					$entries[] = '<a href="index.php?module=uploads&action=downloadfile&entityid='.$id.'&fileid='.$row['attachmentsid'].'">'.textlength_check($attachmentname).'</a>';
+	
+				$entries[] = $row['activitytype'];	
+				$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&return_id='.$_REQUEST["record"].'&parenttab='.$_REQUEST["parenttab"];
+	
+				if($module == 'Documents')
+				{
+					$edit_param = 'index.php?module='.$module.'&action='.$editaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'&parenttab='.$_REQUEST["parenttab"];
+	
+					$entries[] .= '<a href="'.$edit_param.'">'.$app_strings['LNK_EDIT'].'</a> | <a href=\'javascript:confirmdelete("'.$del_param.'")\'>'.$app_strings['LNK_DELETE'].'</a>';
+				}
+				else
+				{
+					$entries[] = '<a href=\'javascript:confirmdelete("'.$del_param.'")\'>'.$app_strings['LNK_DELETE'].'</a>';
+				}
+				$entries_list[] = $entries;
 			}
-			else
-				$entries[]=" <font color ='red' >" .$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
-
-			$attachmentname = $row['filename'];//explode('_',$row['filename'],2);
-
-			if((getFieldVisibilityPermission('Notes', $current_user->id, 'filename') == '0') || $row['activitytype'] == 'Attachments')
-				$entries[] = '<a href="index.php?module=uploads&action=downloadfile&entityid='.$id.'&fileid='.$row['attachmentsid'].'">'.textlength_check($attachmentname).'</a>';
-			else
-				$entries[]='';
-
-			$entries[] = $row['activitytype'];	
-			$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&return_id='.$_REQUEST["record"].'&parenttab='.$_REQUEST["parenttab"];
-
-			if($module == 'Notes')
-			{
-				$edit_param = 'index.php?module='.$module.'&action='.$editaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'&parenttab='.$_REQUEST["parenttab"];
-
-				$entries[] .= '<a href="'.$edit_param.'">'.$app_strings['LNK_EDIT'].'</a> | <a href=\'javascript:confirmdelete("'.$del_param.'")\'>'.$app_strings['LNK_DELETE'].'</a>';
-			}
-			else
-			{
-				$entries[] = '<a href=\'javascript:confirmdelete("'.$del_param.'")\'>'.$app_strings['LNK_DELETE'].'</a>';
-			}
-			$entries_list[] = $entries;
 		}
 	}
 

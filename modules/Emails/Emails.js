@@ -18,10 +18,11 @@ function gotoWebmail()
                 	method: 'post',
 			postBody: "module=Webmails&action=WebmailsAjax&config_chk=true",
 			onComplete: function(response) {
-				if(response.responseText != 'SUCESS')
-					$('mailconfchk').style.display = 'block';
-				else
+				if(response.responseText.indexOf('SUCESS') > -1)
 					window.location.href = "index.php?module=Webmails&action=index&parenttab=My Home Page";
+				else
+					$('mailconfchk').style.display = 'block';
+					
 			}
 		}
 	);

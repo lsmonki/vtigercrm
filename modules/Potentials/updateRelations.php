@@ -40,6 +40,11 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 				$sql = "insert into vtiger_seproductsrel values (?,?,?)";
 				$adb->pquery($sql, array($_REQUEST["parentid"], $id,'Potentials'));
 			}
+			if($dest_mod == 'Documents')
+			{
+				$sql = "insert into vtiger_senotesrel values (?,?)";
+				$adb->pquery($sql, array($_REQUEST['parentid'], $id));
+			}
 		}
 	}
 
@@ -59,7 +64,11 @@ elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
 		$sql = "insert into vtiger_seproductsrel values (?,?,?)";
 		$adb->pquery($sql, array($_REQUEST["parid"], $_REQUEST["entityid"], 'Potentials'));
 	}
-
+	if($dest_mod == 'Documents')
+	{
+		$sql = "insert into vtiger_senotsrel values (?,?)";
+		$adb->pquery($sql, array($_REQUEST["parid"], $_REQUEST["entityid"]));
+	}
 	header("Location: index.php?action=$action&module=Potentials&record=".$_REQUEST["parid"]);
 }
 
