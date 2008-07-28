@@ -23,7 +23,7 @@
 /**Function to get the top 5 Accounts order by Amount in Descending Order
  *return array $values - array with the title, header and entries like  Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries) where as listview_header and listview_entries are arrays of header and entity values which are returned from function getListViewHeader and getListViewEntries
 */
-function getTopAccounts()
+function getTopAccounts($maxval,$calCnt)
 {
 	$log = LoggerManager::getLogger('top accounts_list');
 	$log->debug("Entering getTopAccounts() method ...");
@@ -50,7 +50,10 @@ function getTopAccounts()
 	$list_query .= " group by vtiger_account.accountid, vtiger_account.accountname, vtiger_account.tickersymbol order by amount desc";
 	$list_result=$adb->query($list_query);
 	$open_accounts_list = array();
-	$noofrows = min($adb->num_rows($list_result),5);
+	$noofrows = min($adb->num_rows($list_result),$maxval);
+	if($calCnt == 'calculateCnt')
+	      return $noofrows;
+
 	if (count($list_result)>0)
 		for($i=0;$i<$noofrows;$i++) 
 		{

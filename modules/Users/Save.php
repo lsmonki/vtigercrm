@@ -117,7 +117,7 @@ if(! $_REQUEST['changepassword'] == 'true')
 	
 	$focus->saveentity("Users");
 	//$focus->imagename = $image_upload_array['imagename'];
-	$focus->saveHomeOrder($focus->id);
+	$focus->saveHomeStuffOrder($focus->id);
 	SaveTagCloudView($focus->id);
 
 	// Added for Reminder Popup support

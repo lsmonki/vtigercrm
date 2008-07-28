@@ -275,6 +275,113 @@ create_parenttab_data_file();
 
 create_default_users();
 
+//to get the users lists
+$query = 'select id from vtiger_users';
+$result=$adb->pquery($query,array());
+for($i=0;$i<$adb->num_rows($result);$i++)
+{
+	$userid = $adb->query_result($result,$i,'id');
+
+	$s1=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s1.",1,'Default',".$userid.",0,'Top Accounts')";
+	$res=$adb->pquery($sql,array());
+
+	$s2=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s2.",2,'Default',".$userid.",1,'Home Page Dashboard')";
+	$res=$adb->pquery($sql,array());
+
+	$s3=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s3.",3,'Default',".$userid.",0,'Top Potentials')";
+	$res=$adb->pquery($sql,array());
+
+	$s4=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s4.",4,'Default',".$userid.",0,'Top Quotes')";
+	$res=$adb->pquery($sql,array());
+
+	$s5=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s5.",5,'Default',".$userid.",0,'Key Metrics')";
+	$res=$adb->pquery($sql,array());
+
+	$s6=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s6.",6,'Default',".$userid.",0,'Top Trouble Tickets')";
+	$res=$adb->pquery($sql,array());
+
+	$s7=$adb->getUniqueID("vtiger_homestuff"); 
+	$sql="insert into vtiger_homestuff values(".$s7.",7,'Default',".$userid.",0,'Upcoming Activities')";
+	$res=$adb->pquery($sql,array());
+
+	$s8=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s8.",8,'Default',".$userid.",0,'My Group Allocation')";
+	$res=$adb->pquery($sql,array());
+
+	$s9=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s9.",9,'Default',".$userid.",0,'Top Sales Orders')";
+	$res=$adb->pquery($sql,array());
+
+	$s10=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s10.",10,'Default',".$userid.",0,'Top Invoices')";
+	$res=$adb->pquery($sql,array());
+
+	$s11=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s11.",11,'Default',".$userid.",0,'My New Leads')";
+	$res=$adb->pquery($sql,array());
+
+	$s12=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s12.",12,'Default',".$userid.",0,'Top Purchase Orders')";
+	$res=$adb->pquery($sql,array());
+
+	$s13=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s13.",13,'Default',".$userid.",0,'Pending Activities')";
+	$res=$adb->pquery($sql,array());
+
+	$s14=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s14.",14,'Default',".$userid.",0,'My Recent FAQs')";
+	$res=$adb->pquery($sql,array());
+
+
+	$sql="insert into vtiger_homedefault values(".$s1.",'ALVT',5,'Accounts')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s2.",'HDB',5,'Dashboard')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s3.",'PLVT',5,'Potentials')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s4.",'QLTQ',5,'Quotes')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s5.",'CVLVT',5,'NULL')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s6.",'HLT',5,'HelpDesk')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s7.",'UA',5,'Calendar')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s8.",'GRT',5,'NULL')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s9.",'OLTSO',5,'SalesOrder')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s10.",'ILTI',5,'Invoice')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s11.",'MNL',5,'Leads')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s12.",'OLTPO',5,'PurchaseOrder')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s13.",'PA',5,'Calendar')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s14.",'LTFAQ',5,'Faq')";
+	$adb->pquery($sql,array());
+}
+
 // default report population
 require_once('modules/Reports/PopulateReports.php');
 

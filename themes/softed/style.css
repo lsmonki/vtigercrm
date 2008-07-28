@@ -14,6 +14,13 @@
 
 /* SOFTED  - COLOR THEME*/
 
+/*added to change color of disabled button: */
+input:disabled { 
+    background-color : #cccccc;
+    color: #666666; 
+}
+/*add ends: */
+
 .small {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -256,7 +263,7 @@ a:hover {
 }
 
 .lvtColDataHover {
-	background-color:#ffffcc;	
+	background-color:#ffffcc;
 }
 
 
@@ -1224,17 +1231,21 @@ a.alpha:Hover{
 
 /* Home Page */
 .MatrixLayer{
-	border-left:1px solid #dedede;
+	border:1px solid #dedede;
+	background-color:#FFFFFF;
 	border-right:1px solid #dedede;
-	border-bottom:0px solid #dedede;
-	border-top:1px solid #dedede;	
+	border-bottom:0px solid #dedede;              									
+	border-top:1px solid #dedede;
 	background:#ffffff url(images/softedHomeMark.gif) repeat-x;
 	background-position:bottom left;
-	width:29%;
+	width:31%;
 	position:relative;
 	visibility:visible;
-	margin:9px;
-	height:280px;
+	margin:0.9%;
+	height:325px;
+	padding-top:0px;
+	padding-left:0px;
+	padding-right:0px;
 }
 
 .fontBold{
@@ -1354,9 +1365,9 @@ a.allMnu:Hover{
 }
 
 .calInnerBorder {
-	border-left:2px solid #ddd;
-	border-right:2px solid #ddd;
-	border-bottom:2px solid #ddd;
+	border-left:2px solid #DDDDDD;
+	border-right:2px solid #DDDDDD;
+	border-bottom:2px solid #DDDDDD;
 }
 
 .calBorder {
@@ -1808,7 +1819,8 @@ ul {
 
 .colHeader{
 	background-color:#fff;
-background-image:url(images/mailSubHeaderBg-grey.gif);	
+	background-repeat:repeat-x;
+	background-image:url(images/mailSubHeaderBg-grey.gif);	
 	border-left:1px solid #fff;
 	border-top:1px solid #ddd;
 	border-right:1px solid #ddd;
@@ -1981,6 +1993,11 @@ textarea {
 }
 
 /* Inventory */
+/* styles for RSS Display starts */
+.rssDisplay{
+	background-color:#e8e3ca;
+}
+/* styles for RSS Display ends */
 
 /* Email Client Classes ++++++++++++++++++++++ */
 
@@ -2253,6 +2270,11 @@ a.drop_down:Hover{
 }
 
 /* Recalculate Disable Ends */
+
+.hide_tab{display:none;}
+
+.show_tab{display:inline-table;}
+
 .mailSelected {
 	font-family:  Arial, Helvetica, sans-serif;
 	font-weight:bold;
@@ -2273,6 +2295,24 @@ a.drop_down:Hover{
 	padding-right:10px;
 	padding-top:2px;
 	padding-bottom:2px;
+}
+
+.winmarkModulesusr{
+    background-image:url(images/windowmarkModulesusr.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
+}
+
+.winmarkRSS{
+    background-image:url(images/windowmarkRSS.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
+}
+
+.winmarkDashboardusr{
+    background-image:url(images/windowmarkDashboardusr.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
 }
 
 .groupname{

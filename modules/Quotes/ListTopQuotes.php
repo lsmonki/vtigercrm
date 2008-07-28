@@ -16,7 +16,7 @@
 /**	function used to get the top 5 quotes from the ListView query
  *	@return array $values - array with the title, header and entries like  Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries) where as listview_header and listview_entries are arrays of header and entity values which are returned from function getListViewHeader and getListViewEntries
  */
-function getTopQuotes()
+function getTopQuotes($maxval,$calCnt)
 {
 	require_once("data/Tracker.php");
 	require_once('modules/Quotes/Quotes.php');
@@ -68,10 +68,13 @@ function getTopQuotes()
 	$query .=" ORDER BY total DESC";
 	//<<<<<<<<customview>>>>>>>>>
 
-	$list_result = $adb->limitQuery($query,0,5);
+	$list_result = $adb->limitQuery($query,0,$maxval);
 
 	//Retreiving the no of rows
 	$noofrows = $adb->num_rows($list_result);
+	if($calCnt == 'calculateCnt')
+	     return $noofrows;
+
 
 	//Retreiving the start value from request
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
@@ -121,11 +124,15 @@ function getTopQuotes()
 	$title=array('TopOpenQuotes.gif',$current_module_strings['LBL_MY_TOP_QUOTE'],'home_mytopquote');
 	//Retreive the List View Table Header
 	$listview_header = getListViewHeader($focus,"Quotes",$url_string,$sorder,$order_by,"HomePage",$oCustomView);
-
+	$header = Array($listview_header[1],$listview_header[3]);
 
 	$listview_entries = getListViewEntries($focus,"Quotes",$list_result,$navigation_array,"HomePage","","EditView","Delete",$oCustomView);
+	foreach($listview_entries as $crmid=>$valuearray)
+	{
+		$entries[$crmid] = Array($valuearray[1],$valuearray[3]);	
+	}
 
-	$values=Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries);
+	$values=Array('ModuleName'=>'Quotes','Title'=>$title,'Header'=>$header,'Entries'=>$entries);
 
 	if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )
 		return $values;

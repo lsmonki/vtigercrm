@@ -12,7 +12,7 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
  ********************************************************************************/
-function getTopInvoice()
+function getTopInvoice($maxval,$calCnt)
 {
 	require_once("data/Tracker.php");
 	require_once('modules/Invoice/Invoice.php');
@@ -57,10 +57,12 @@ function getTopInvoice()
 	$query .= " ORDER BY total DESC";
 	//<<<<<<<<customview>>>>>>>>>
 
-	$list_result = $adb->limitQuery($query,0,5);
+	$list_result = $adb->limitQuery($query,0,$maxval);
 
 	//Retreiving the no of rows
 	$noofrows = $adb->num_rows($list_result);
+	if($calCnt == 'calculateCnt')
+	   return $noofrows;
 
 	//Retreiving the start value from request
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
@@ -111,9 +113,14 @@ function getTopInvoice()
 	//Retreive the List View Table Header
 	$listview_header = getListViewHeader($focus,"Invoice",$url_string,$sorder,$order_by,"HomePage",$oCustomView);
 
+	$header = Array($listview_header[1],$listview_header[2]);
 
 	$listview_entries = getListViewEntries($focus,"Invoice",$list_result,$navigation_array,"HomePage","","EditView","Delete",$oCustomView);
-	$values=Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries);
+	foreach($listview_entries as $crmid=>$valuearray)
+	{
+		$entries[$crmid] = Array($valuearray[1],$valuearray[2]);	
+	}
+	$values=Array('ModuleName'=>'Invoice','Title'=>$title,'Header'=>$header,'Entries'=>$entries);
 
 	if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )
 		return $values;

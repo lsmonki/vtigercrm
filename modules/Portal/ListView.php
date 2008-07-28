@@ -55,7 +55,7 @@ for($i=0 ; $i<$no_of_portals; $i++)
 }
 ?>
 </script>
-<?
+<?php
 if($def_ault == '')
 	$def_ault = $adb->query_result($result,0,'portalurl');
 $smarty = new vtigerCRM_Smarty;

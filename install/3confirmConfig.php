@@ -143,7 +143,7 @@ if(!$db_type_status || !$db_server_status)
 {
 	$error_msg = 'Unable to connect to database Server. Invalid mySQL Connection Parameters specified';
 	$error_msg_info = 'This may be due to the following reasons:<br>
-			-  specified database user, password, hostname, database type, or port is invalid. <a href="http://www.vtiger.com/products/crm/help/5.0.4/vtiger_CRM_Database_Hostname.pdf" target="_blank">More Information</a><BR>
+			-  specified database user, password, hostname, database type, or port is invalid. <a href="http://www.vtiger.com/products/crm/help/5.1.0/vtiger_CRM_Database_Hostname.pdf" target="_blank">More Information</a><BR>
 			-  specified database user does not have access to connect to the database server from the host';
 }
 elseif($db_type == 'mysql' && $mysql_server_version < '4.1')
@@ -279,7 +279,7 @@ $log->info($php_info);
 					</tr>
 					<tr bgcolor="White">
 						<td noWrap bgcolor="#F5F5F5" width="40%">Database UTF-8 Support</td>
-						<td align="left" nowrap> <font class="dataInput"><?php echo ($db_utf8_support)? "Enabled" : "<strong style='color:#DF0000';>Not Enabled</strong>" ?></font>&nbsp;<a href="http://www.vtiger.com/products/crm/help/5.0.4/vtiger_CRM_Database_UTF8Config.pdf" target="_blank">More Information</a></td>
+						<td align="left" nowrap> <font class="dataInput"><?php echo ($db_utf8_support)? "Enabled" : "<strong style='color:#DF0000';>Not Enabled</strong>" ?></font>&nbsp;<a href="http://www.vtiger.com/products/crm/help/5.1.0/vtiger_CRM_Database_UTF8Config.pdf" target="_blank">More Information</a></td>
 					</tr>
 					</table>
 					<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">

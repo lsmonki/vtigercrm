@@ -6566,6 +6566,145 @@
 		</data>
 	</table>
 
+	<table name="vtiger_homestuff">
+		<field name="stuffid" type="I" size="19">
+			<key />
+			<default value="0" />
+		</field>
+		<field name="stuffsequence" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="stufftype" type="C" size="100" />
+		<field name="userid" type="I" size="19">
+			<notnull />
+		</field>
+		<field name="visible" type="I" size="10">
+			<notnull />
+			<default value="0" />
+		</field>
+		<field name="stufftitle" type="C" size="100" />
+		<index name="stuff_stuffid_idx">
+			<col>stuffid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	<table name="vtiger_homestuff" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_homestuff FOREIGN KEY (userid) REFERENCES vtiger_users(id) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
 
+	<table name="vtiger_homemodule">
+		<field name="stuffid" type="I" size="19">
+			<key />
+		</field>
+		<field name="modulename" type="C" size="100" />
+		<field name="maxentries" type="I" size="19" >
+			<notnull />
+		</field>
+		<field name="customviewid" type="I" size="19">
+			<notnull />
+		</field>
+		<field name="setype" type="C" size="30">
+			<notnull />
+		</field>
+		<index name="stuff_stuffid_idx">
+			<col>stuffid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
 	
+	<table name="vtiger_homemodule" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_homemodule FOREIGN KEY (stuffid) REFERENCES vtiger_homestuff(stuffid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+	
+	<table name="vtiger_homemoduleflds">
+		<field name="stuffid" type="I" size="19">
+		</field>
+		<field name="fieldname" type="C" size="100" />
+		<index name="stuff_stuffid_idx">
+			<col>stuffid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="vtiger_homemoduleflds" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_homemoduleflds FOREIGN KEY (stuffid) REFERENCES vtiger_homemodule(stuffid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="vtiger_homerss">
+		<field name="stuffid" type="I" size="19">
+			<key />
+			<default value="0" />
+		</field>
+		<field name="url" type="C" size="100" />
+		<field name="maxentries" type="I" size="19" >
+			<notnull />
+		</field>
+		<index name="stuff_stuffid_idx">
+			<col>stuffid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="vtiger_homerss" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_homerss FOREIGN KEY (stuffid) REFERENCES vtiger_homestuff(stuffid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="vtiger_homedashbd">
+		<field name="stuffid" type="I" size="19">
+			<key />
+			<default value="0" />
+		</field>
+		<field name="dashbdname" type="C" size="100" />
+		<field name="dashbdtype" type="C" size="100" />
+		<index name="stuff_stuffid_idx">
+			<col>stuffid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="vtiger_homedashbd" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_homedashbd FOREIGN KEY (stuffid) REFERENCES vtiger_homestuff(stuffid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+	
+	<table name="vtiger_homedefault">
+		<field name="stuffid" type="I" size="19">
+			<key />
+			<default value="0" />
+		</field>
+		<field name="hometype" type="C" size="30">
+			<notnull />
+		</field>
+		<field name="maxentries" type="I" size="19">
+		</field>	
+		<field name="setype" type="C" size="30">
+		</field>	
+		<index name="stuff_stuffid_idx">
+			<col>stuffid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="vtiger_homedefault" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_homedefault FOREIGN KEY (stuffid) REFERENCES vtiger_homestuff(stuffid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
 </schema>

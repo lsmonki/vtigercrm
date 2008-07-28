@@ -111,7 +111,16 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 	$max=0;
 	$xlabels = array();
 	$dataset = & Image_Graph::factory('dataset');
-	$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL_MIRRORED, 'blue', 'white'));
+	if($theme == 'woodspice')
+		$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL_MIRRORED, '#804000', 'white'));
+	elseif($theme == 'bluelagoon')
+		$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL_MIRRORED, 'blue', 'white'));
+	elseif($theme == 'softed')
+		$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL_MIRRORED, 'blue', 'white'));
+	else
+		$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL_MIRRORED, 'black', 'white'));
+	
+		
 	for($i=0;$i<count($datay); $i++)
 	{
 		$x=1+2*$i;
@@ -138,7 +147,7 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 	$bplot->setBarWidth(50/count($datax),"%");
 	$bplot->setPadding(array('top'=>20));
 
-	$bplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL, 'white', '#E5E5E5')));
+	$bplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL, 'white', 'white')));
 
 	// Setup X-axis
 	$xaxis =& $plotarea->getAxis(IMAGE_GRAPH_AXIS_X);
@@ -147,9 +156,9 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 			
 	// set grid
 	$gridY =& $plotarea->addNew('line_grid', IMAGE_GRAPH_AXIS_Y);
-	$gridY->setLineColor('#E5E5E5@0.5');
+	$gridY->setLineColor('#FFFFFF@0.5');
 	$gridY2 =& $plotarea->addNew('bar_grid', null, IMAGE_GRAPH_AXIS_Y); 
-	$gridY2->setFillColor('#66CDAA@0.2'); 
+	$gridY2->setFillColor('#FFFFFF@0.2'); 
 
 
 	// Add some grace to y-axis so the bars doesn't go
@@ -162,7 +171,7 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 		$yaxis->forceMaximum(round(($max * 1.1) + 10.5));
 	else
 		$yaxis->forceMaximum(round(($max * 1.1) + 100.5));	
-	$ticks = get_tickspacing($max);
+	$ticks = get_tickspacing(round(($max * 1.1) + 2.0));
 
 	// First make the labels look right
 	$yaxis->setLabelInterval($ticks[0]);

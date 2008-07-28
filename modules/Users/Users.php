@@ -1048,62 +1048,203 @@ class Users {
 
 	/** gives the order in which the modules have to be displayed in the home page for the specified user id  
   	  * @param $id -- user id:: Type integer
-  	  * @returns the home page order in $return_array
- 	 */	
-	function getHomeOrder($id="")	
+  	  * @returns the customized home page order in $return_array
+ 	 */
+	function getHomeStuffOrder($id)
 	{
-		global $log;
 		global $adb;
-		$log->debug("Entering in function getHomeOrder($id)");
-		if($id == '')
+		$this->homeorder_array = array('ALVT','HDB','PLVT','QLTQ','CVLVT','HLT','GRT','OLTSO','ILTI','MNL','OLTPO','LTFAQ');
+		$return_array = Array();
+		$homeorder=Array();
+		if($id != '')
 		{
-			for($i = 0;$i < count($this->homeorder_array);$i++)
-                        {
-				$return_array[$this->homeorder_array[$i]] = $this->homeorder_array[$i];
+			$qry=" select distinct(vtiger_homedefault.hometype) from vtiger_homedefault inner join vtiger_homestuff  on vtiger_homestuff.stuffid=vtiger_homedefault.stuffid where vtiger_homestuff.visible=0 and vtiger_homestuff.userid=".$id;
+			$res=$adb->query($qry);
+			for($q=0;$q<$adb->num_rows($res);$q++)
+			{
+				$homeorder[]=$adb->query_result($res,$q,"hometype");
 			}
-		}else
-		{
-			$query = "select homeorder from vtiger_users where id=?";
-			$homeorder = $adb->query_result($adb->pquery($query, array($id)),0,'homeorder');
 			for($i = 0;$i < count($this->homeorder_array);$i++)
 			{
-				if(!stristr($homeorder,$this->homeorder_array[$i]))
-				{
-					$return_array[$this->homeorder_array[$i]] = '';
-				}else
+				if(in_array($this->homeorder_array[$i],$homeorder))
 				{
 					$return_array[$this->homeorder_array[$i]] = $this->homeorder_array[$i];
+
+				}else
+				{
+					$return_array[$this->homeorder_array[$i]] = '';	
 				}
-					
+
 			}
-
 		}
-
-		$log->debug("Exiting from function getHomeOrder($id)");
+		else
+		{
+			
+			for($i = 0;$i < count($this->homeorder_array);$i++)
+			{
+				$return_array[$this->homeorder_array[$i]] = $this->homeorder_array[$i];
+			}
+		}
 		return $return_array;
 	}
 
+	function getDefaultHomeModuleVisibility($home_string,$inVal)
+	{
+		$homeModComptVisibility=1;
+		if($inVal == 'postinstall')
+		{
+			if($_REQUEST[$home_string] != '')
+			{
+				$homeModComptVisibility=0;
+			}
+		}
+		else 
+			$homeModComptVisibility=0;		
+		return $homeModComptVisibility;
+		
+	}	
+	
+	function insertUserdetails($inVal)
+	{
+		global $adb;
+		$uid=$this->id;
+		$s1=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('ALVT',$inVal);
+		$sql="insert into vtiger_homestuff values(".$s1.",1,'Default',".$uid.",".$visibility.",'Top Accounts')";
+		$res=$adb->query($sql);
+
+		$s2=$adb->getUniqueID("vtiger_homestuff");
+		$sql="insert into vtiger_homestuff values(".$s2.",2,'Default',".$uid.",0,'Home Page Dashboard')";
+		$res=$adb->query($sql);
+
+		$s3=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('PLVT',$inVal);
+		$sql="insert into vtiger_homestuff values(".$s3.",3,'Default',".$uid.",".$visibility.",'Top Potentials')";
+		$res=$adb->query($sql);
+
+		$s4=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('QLTQ',$inVal);
+		$sql="insert into vtiger_homestuff values(".$s4.",4,'Default',".$uid.",".$visibility.",'Top Quotes')";
+		$res=$adb->query($sql);
+
+		$s5=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('CVLVT',$inVal);
+		$sql="insert into vtiger_homestuff values(".$s5.",5,'Default',".$uid.",".$visibility.",'Key Metrics')";
+		$res=$adb->query($sql);
+
+		$s6=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('HLT',$inVal);
+		$sql="insert into vtiger_homestuff values(".$s6.",6,'Default',".$uid.",".$visibility.",'Top Issue Logs')";
+		$res=$adb->query($sql);
+
+		$s8=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('GRT',$inVal);
+		$sql="insert into vtiger_homestuff values(".$s8.",8,'Default',".$uid.",".$visibility.",'My Group Allocation')";
+		$res=$adb->query($sql);
+
+		$s9=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('OLTSO',$inVal);
+		$sql="insert into vtiger_homestuff values(".$s9.",9,'Default',".$uid.",".$visibility.",'Top Sales Orders')";
+		$res=$adb->query($sql);
+
+
+		$s10=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('ILTI',$inVal);
+		$sql="insert into vtiger_homestuff values(".$s10.",10,'Default',".$uid.",".$visibility.",'Top Invoices')";
+		$res=$adb->query($sql);
+
+
+		$s11=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('MNL',$inVal);
+		$sql="insert into vtiger_homestuff values(".$s11.",11,'Default',".$uid.",".$visibility.",'My Top Leads')";
+		$res=$adb->query($sql);
+
+		$s12=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('OLTPO',$inVal);
+		$sql="insert into vtiger_homestuff values(".$s12.",12,'Default',".$uid.",".$visibility.",'Top Purchase Orders')";
+		$res=$adb->query($sql);
+
+		$s14=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('LTFAQ',$inVal);
+		$sql="insert into vtiger_homestuff values(".$s14.",14,'Default',".$uid.",".$visibility.",'My Recent FAQs')";
+		$res=$adb->query($sql);
+
+
+		$sql="insert into vtiger_homedefault values(".$s1.",'ALVT',5,'Accounts')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s2.",'HDB',5,'Dashboard')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s3.",'PLVT',5,'Potentials')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s4.",'QLTQ',5,'Quotes')";
+		$adb->query($sql);
+
+
+		$sql="insert into vtiger_homedefault values(".$s5.",'CVLVT',5,'NULL')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s6.",'HLT',5,'HelpDesk')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s8.",'GRT',5,'NULL')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s9.",'OLTSO',5,'SalesOrder')";
+		$adb->query($sql);
+
+
+		$sql="insert into vtiger_homedefault values(".$s10.",'ILTI',5,'Invoice')";
+		$adb->query($sql);
+
+
+		$sql="insert into vtiger_homedefault values(".$s11.",'MNL',5,'Leads')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s12.",'OLTPO',5,'PurchaseOrder')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s14.",'LTFAQ',5,'Faq')";
+		$adb->query($sql);	
+	
+	}
 
 	/** function to save the order in which the modules have to be displayed in the home page for the specified user id  
   	  * @param $id -- user id:: Type integer
  	 */	
-	function saveHomeOrder($id)
-	{
-		if($id == '')
-			return null;
-		global $log,$adb;
-                $log->debug("Entering in function saveHomeOrder($id)");
-		for($i = 0;$i < count($this->homeorder_array);$i++)
-                {
-			if($_REQUEST[$this->homeorder_array[$i]] != '')
-				$save_array[] = $this->homeorder_array[$i];
-		}
-		if(count($save_array))
-			$homeorder = implode(',',$save_array);	
-		$query = "update vtiger_users set homeorder =? where id=?";
-		$adb->pquery($query, array($homeorder, $id));
-                $log->debug("Exiting from function saveHomeOrder($id)");
-	}
+	 function saveHomeStuffOrder($id)
+	 {
+		 global $log,$adb;
+		 $log->debug("Entering in function saveHomeOrder($id)");
+
+		 if($this->mode == 'edit')
+		 {
+			 for($i = 0;$i < count($this->homeorder_array);$i++)
+			 {
+				 if($_REQUEST[$this->homeorder_array[$i]] != '')
+				 {
+					 $save_array[] = $this->homeorder_array[$i];
+					 $qry=" update vtiger_homestuff,vtiger_homedefault set vtiger_homestuff.visible=0 where vtiger_homestuff.stuffid=vtiger_homedefault.stuffid and vtiger_homestuff.userid=".$id." and vtiger_homedefault.hometype='".$this->homeorder_array[$i]."'";//To show the default Homestuff on the the Home Page
+					 $result=$adb->query($qry);
+				 }
+				 else
+				 {
+					 $qry="update vtiger_homestuff,vtiger_homedefault set vtiger_homestuff.visible=1 where vtiger_homestuff.stuffid=vtiger_homedefault.stuffid and vtiger_homestuff.userid=".$id." and vtiger_homedefault.hometype='".$this->homeorder_array[$i]."'";//To hide the default Homestuff on the the Home Page
+					 $result=$adb->query($qry);
+				 }
+			 }
+			 if($save_array !="")
+			 	$homeorder = implode(',',$save_array);	
+		 }
+		 else
+		 {
+			$this->insertUserdetails('postinstall');
+
+		 }	
+		 $log->debug("Exiting from function saveHomeOrder($id)");
+ 	}
 
 	/**
 	 * Track the viewing of a detail record.  This leverages get_summary_text() which is object specific

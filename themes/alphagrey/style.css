@@ -10,6 +10,12 @@
 
 
 /* ALPHA GRAY  - COLOR THEME*/
+/*added to change color of disabled button */
+input:disabled { 
+    background-color : #cccccc;
+    color: #666666; 
+}
+/*add ends:*/
 
 .small {
 	font-family: Arial, Helvetica, sans-serif;
@@ -214,7 +220,7 @@ a:hover {
 }
 
 .lvtColDataHover {
-	background-color:#ffffee;	
+	background-color:#ffffee;
 }
 
 /* List View Table classes ends --------------------------------*/
@@ -1156,13 +1162,16 @@ a.alpha:Hover{
 
 /* Home Page */
 .MatrixLayer{
-	border:2px solid #aaaaaa;
+	border:1px solid #aaaaaa;
 	background-color:#FFFFFF;
-	width:29%;
+	width:31%;
 	position:relative;
 	visibility:visible;
-	margin:9px;
-	height:280px;
+	margin:0.9%;
+	height:325px;
+	padding-top:0px;
+	padding-left:0px;
+	padding-right:0px;
 }
 
 .fontBold{
@@ -1317,6 +1326,10 @@ a.calMnu:Hover{
 	height:20px;
 	padding-left:5px;
 	padding-top:3px;
+}
+
+.bgwhite{
+	background-color: #FFFFFF;
 }
 
 #mnuTab{
@@ -2168,12 +2181,39 @@ a.drop_down:Hover{
 	width:125px;
 }
 
+.hide_tab{display:none;}
+
+.show_tab{display:inline-table;}
+
 .winmarkModulesdef{
-	background-image:url(images/alphagrayHomeMark.gif);
-	background-position:top;
-   	background-repeat:repeat-x;
+    background-image:url(images/windowmarkModules.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
 }
-/* Recalculate Disable Ends */
+
+.winmarkModulesusr{
+    background-image:url(images/windowmarkModulesusr.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
+}
+
+.winmarkRSS{
+    background-image:url(images/windowmarkRSS.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
+}
+
+.winmarkDashboardusr{
+    background-image:url(images/windowmarkDashboardusr.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
+}
+
+.winmarkDashboarddef{
+    background-image:url(images/windowmarkDashboard.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
+}	
 
 /*added for the hanlder of the div in the home page */
 .headerrow{

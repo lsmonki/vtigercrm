@@ -13,8 +13,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/CommonUtils.php');
 include("modules/Dashboard/horizontal_bargraph.php");
 include("modules/Dashboard/vertical_bargraph.php");
-include("modules/Dashboard/pie_graph.php");
-
+include_once("modules/Dashboard/pie_graph.php");
 //To get the vtiger_account names
 
 /* Function to get the Account name for a given vtiger_account id
@@ -462,7 +461,7 @@ function save_image_map($filename,$image_map)
 	return true;
 }
 
-function get_graph_by_type($graph_by,$graph_title,$module,$where,$query,$width=900,$height=500)
+function get_graph_by_type($graph_by,$graph_title,$module,$where,$query,$width=900,$height=900,$frompage='')
 {
 	global $user_id,$date_start,$end_date,$type,$mod_strings;
 	$time = time();
@@ -484,7 +483,7 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query,$width=9
 		
 		if(isset($_REQUEST['display_view']) && $_REQUEST['display_view'] == 'MATRIX')
 		{
-			$width = 450;
+			$width = 250;
 			$height = 250;
 		}else
 		{
@@ -496,8 +495,16 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query,$width=9
 		$left=140;
 		$bottom=120;
 		$title=$graph_title;
-
-		return get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring,$test_target_val,$date_start,$end_date);
+       if($frompage != '')
+		{
+			//echo $width.'------'.$height.'------'.$left.'------'.$right.'------'.$top.'------'.$bottom.'------'.$title.'------'.$test_target_val.'------'.$date_start.'------'.$end_date;
+			//die;
+			return get_graph_homepg($cache_file_name,$html_imagename,$cnt_val,$name_val,280,285,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring,$test_target_val,$date_start,$end_date);
+			
+		}else
+		{
+			return get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring,$test_target_val,$date_start,$end_date);
+		}
 	}
 	else
 	{
@@ -537,7 +544,7 @@ $sHTML .= "<tr>
 	   <td><a name='1'></a><table width=20%  border=0 cellspacing=12 cellpadding=0 align=left>
 	         <tr>
 	    	   <td rowspan=2 valign=top><span class=\"dash_count\">1</span></td>
-	           <td nowrap><span class=genHeaderSmall>".$graph_title."</span></td>
+	           <td nowrap><span class=genHeaderSmall>".$display_title."</span></td>
 		 </tr>
 		 <tr>
 		   <td nowrap><span class=big>".$mod_strings['LBL_HORZ_BAR_CHART']."</span> </td>
@@ -663,11 +670,11 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 	//Checks whether the cached image is present or not
 	if(file_exists($cache_file_name))
 	{
-		unlink($cache_file_name);
+		@unlink($cache_file_name);
 	}
 	if(file_exists($cache_file_name.'.map'))
 	{
-		unlink($cache_file_name.'.map');
+		@unlink($cache_file_name.'.map');
 	}
 	if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map'))
 	{
@@ -698,5 +705,24 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 		$return .= "<img src=$ccc ismap usemap=#$html_imagename border='0'>";
 		return $return;
 	}
+}
+function get_graph_homepg($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring,$test_target_val,$date_start,$end_date)
+{
+	global $tmp_dir;
+	global $graph_title, $mod_strings;
+	global $theme;
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+
+	$val=explode(":",$title);
+	$display_title=$val[0];
+	$type = $_REQUEST[Chart_Type];
+	if($type == 'horizontalbarchart')
+	   $sHTML .= render_graph($tmp_dir."hor_".$cache_file_name,$html_imagename."_hor",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"horizontal");
+	elseif($type == 'verticalbarchart')
+	   $sHTML .= render_graph($tmp_dir."vert_".$cache_file_name,$html_imagename."_vert",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"vertical");
+	elseif($type == 'piechart')
+	   $sHTML .= render_graph($tmp_dir."pie_".$cache_file_name,$html_imagename."_pie",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"pie");
+	 return $sHTML;
 }
 ?>

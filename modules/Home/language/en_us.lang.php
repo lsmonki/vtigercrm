@@ -62,6 +62,24 @@ $mod_strings = Array(
 'TITLE_AJAX_CSS_POPUP_CHAT'=>'Ajax Css-Popup chat',
 'User List'=>'User List',
 
+// Added after 5.0.4 GA
+
+//ADDED for Home Page Customization
+'LBL_HOME_MODULE' => 'Module',
+'LBL_HOME_RSS' => 'RSS',
+'LBL_HOME_DASHBOARD' => 'Dashboard',
+'LBL_HOME_STUFFTITLE'=>'Window Title',
+'LBL_HOME_SHOW'=>'Show',
+'LBL_HOME_FILTERBY'=>'Filter By',
+'LBL_HOME_Fields'=>'Fields To Show <br>(select any two)',
+'LBL_HOME_PRESSCTRL'=>'(Press "Ctrl" <br> for multiple selection)',
+'LBL_HOME_RSSURL'=>'RSS URL',
+'LBL_HOME_DASHBOARD_NAME'=>'DashBoard Name', 
+'LBL_HOME_DASHBOARD_TYPE'=>'DashBoard Type',
+'LBL_HOME_HORIZONTAL_BARCHART'=>'Horizontal Bar Chart',
+'LBL_HOME_VERTICAL_BARCHART'=>'Vertical Bar Chart',
+'LBL_HOME_PIE_CHART'=>'Pie Chart',
+'LBL_HOME_ITEMS'=>'item(s)',
 );
 
 ?>

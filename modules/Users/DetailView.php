@@ -192,7 +192,7 @@ $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 $smarty->assign("MODULE", 'Users');
 $smarty->assign("CURRENT_USERID", $current_user->id);
-$smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
+$smarty->assign("HOMEORDER",$focus->getHomeStuffOrder($focus->id));
 //Added to provide User based Tagcloud
 $smarty->assign("TAGCLOUDVIEW",getTagCloudView($focus->id));
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));

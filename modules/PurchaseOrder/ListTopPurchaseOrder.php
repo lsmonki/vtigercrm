@@ -17,7 +17,7 @@
 /**	function used to get the top 5 purchase orders from Listview query
  *	@return array $values - array with the title, header and entries like  Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries) where as listview_header and listview_entries are arrays of header and entity values which are returned from function getListViewHeader and getListViewEntries
  */
-function getTopPurchaseOrder()
+function getTopPurchaseOrder($maxval,$calCnt)
 {
 	require_once("data/Tracker.php");
 	require_once('modules/PurchaseOrder/PurchaseOrder.php');
@@ -62,10 +62,12 @@ function getTopPurchaseOrder()
 
 	//<<<<<<<<customview>>>>>>>>>
 
-	$list_result = $adb->limitQuery($query,0,5);
+	$list_result = $adb->limitQuery($query,0,$maxval);
 
 	//Retreiving the no of rows
 	$noofrows = $adb->num_rows($list_result);
+	if($calCnt == 'calculateCnt')
+	      return $noofrows;
 
 	//Retreiving the start value from request
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
@@ -115,9 +117,14 @@ function getTopPurchaseOrder()
 	//Retreive the List View Table Header
 	$title=array('myTopPurchaseOrders.gif',$current_module_strings['LBL_MY_TOP_PO'],'home_mytoppo');
 	$listview_header = getListViewHeader($focus,"PurchaseOrder",$url_string,$sorder,$order_by,"HomePage",$oCustomView);
+	$header = Array($listview_header[1],$listview_header[2]);
 
 	$listview_entries = getListViewEntries($focus,"PurchaseOrder",$list_result,$navigation_array,"HomePage","","EditView","Delete",$oCustomView);
-	$values=Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries);
+	foreach($listview_entries as $crmid=>$valuearray)
+	{
+		$entries[$crmid] = Array($valuearray[1],$valuearray[2]);	
+	}
+	$values=Array('ModuleName'=>'PurchaseOrder','Title'=>$title,'Header'=>$header,'Entries'=>$entries);
 	if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )	
 		return $values;
 }

@@ -24,6 +24,8 @@ require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
 require_once('user_privileges/default_module_view.php'); //new
+require_once('include/utils/UserInfoUtil.php');
+
 
 /**This function is used to get the list view header values in a list view
 *Param $focus - module object
@@ -538,7 +540,7 @@ function getNavigationValues($display, $noofrows, $limit)
 */
 
 //parameter added for vtiger_customview $oCv 27/5
-function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='')
+function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='',$page='',$selectedfields='',$contRelatedfields='')
 {
 	global $log;
 	global $mod_strings;
@@ -562,6 +564,10 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		{
 			$focus->list_fields = $oCv->list_fields;
 		}
+	}
+	if(is_array($selectedfields) && $selectedfields != '')
+	{
+		$focus->list_fields = $selectedfields;
 	}
 	//Added to reduce the no. of queries logging for non-admin user -- by minnie-start
 	$field_list = array();
@@ -1084,22 +1090,25 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 
 		//Added for Actions ie., edit and delete links in listview 
 		$links_info = "";
-		if(isPermitted($module,"EditView","") == 'yes'){
+		if(!(is_array($selectedfields) && $selectedfields != ''))
+		{
+			if(isPermitted($module,"EditView","") == 'yes'){
 				$edit_link = getListViewEditLink($module,$entity_id,$relatedlist,$varreturnset,$list_result,$list_result_count);	
 			if(isset($_REQUEST['start']) && $_REQUEST['start'] > 1)
 				$links_info .= "<a href=\"$edit_link&start=".$_REQUEST['start']."\">".$app_strings["LNK_EDIT"]."</a> ";
 			else
 				$links_info .= "<a href=\"$edit_link\">".$app_strings["LNK_EDIT"]."</a> ";
-					}
+			}
 		
 			
-		if(isPermitted($module,"Delete","") == 'yes'){
-			$del_link = getListViewDeleteLink($module,$entity_id,$relatedlist,$varreturnset);
-			if($links_info != "" && $del_link != "")
-				$links_info .=  " | ";
-			if($del_link != "")
-				$links_info .=	"<a href='javascript:confirmdelete(\"".addslashes(urlencode($del_link))."\")'>".$app_strings["LNK_DELETE"]."</a>";
-		}	
+			if(isPermitted($module,"Delete","") == 'yes'){
+				$del_link = getListViewDeleteLink($module,$entity_id,$relatedlist,$varreturnset);
+				if($links_info != "" && $del_link != "")
+					$links_info .=  " | ";
+				if($del_link != "")
+					$links_info .=	"<a href='javascript:confirmdelete(\"".addslashes(urlencode($del_link))."\")'>".$app_strings["LNK_DELETE"]."</a>";
+			}
+		}
 		if($links_info != "")
 			$list_header[] = $links_info;
 		$list_block[$entity_id] = $list_header;
@@ -1553,7 +1562,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$sql="SELECT * FROM $tablename WHERE $idname = ?";
 			$fieldvalue=$adb->query_result($adb->pquery($sql, array($parentid)),0,$fieldname);
 
-			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
+			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.urlencode($tabname).'>'.$fieldvalue.'</a>';
 		}
 		else
 			$value='';
@@ -1580,7 +1589,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$sql="SELECT * FROM $tablename WHERE $idname = ?";
 			$fieldvalue=$adb->query_result($adb->pquery($sql, array($parentid)),0,$fieldname);
 
-			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
+			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.urlencode($tabname).'>'.$fieldvalue.'</a>';
 		}
 		else
 			$value='';
@@ -1603,7 +1612,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$sql="SELECT * FROM $tablename WHERE $idname = ?";
 			$fieldvalue=$adb->query_result($adb->pquery($sql, array($parentid)),0,$fieldname);
 
-			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
+			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.urlencode($tabname).'>'.$fieldvalue.'</a>';
 		}
 		else
 			$value='';
@@ -1629,7 +1638,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$sql="SELECT * FROM $tablename WHERE $idname = ?";
 			$fieldvalue=$adb->query_result($adb->pquery($sql, array($parentid)),0,$fieldname);
 
-			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
+			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.urlencode($tabname).'>'.$fieldvalue.'</a>';
 		}
 		else
 			$value='';
@@ -1640,7 +1649,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			
                         $quote_name = getQuoteName($temp_val);
-			$value= '<a href=index.php?module=Quotes&action=DetailView&record='.$temp_val.'&parenttab='.$tabname.'>'.textlength_check($quote_name).'</a>';
+			$value= '<a href=index.php?module=Quotes&action=DetailView&record='.$temp_val.'&parenttab='.urlencode($tabname).'>'.textlength_check($quote_name).'</a>';
 		}
 		else
 			$value='';
@@ -1651,7 +1660,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			
                         $purchaseorder_name = getPoName($temp_val);
-			$value= '<a href=index.php?module=PurchaseOrder&action=DetailView&record='.$temp_val.'&parenttab='.$tabname.'>'.textlength_check($purchaseorder_name).'</a>';
+			$value= '<a href=index.php?module=PurchaseOrder&action=DetailView&record='.$temp_val.'&parenttab='.urlencode($tabname).'>'.textlength_check($purchaseorder_name).'</a>';
 		}
 		else
 			$value='';
@@ -1662,7 +1671,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			
                         $salesorder_name = getSoName($temp_val);
-			$value= '<a href=index.php?module=SalesOrder&action=DetailView&record='.$temp_val.'&parenttab='.$tabname.'>'.textlength_check($salesorder_name).'</a>';
+			$value= "<a href=index.php?module=SalesOrder&action=DetailView&record=$temp_val&parenttab=".urlencode($tabname).">".textlength_check($salesorder_name).'</a>';
 		}
 		else
 			$value='';
@@ -1674,7 +1683,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			
                         $vendor_name = getVendorName($temp_val);
-			$value= '<a href=index.php?module=Vendors&action=DetailView&record='.$temp_val.'&parenttab='.$tabname.'>'.textlength_check($vendor_name).'</a>';
+			$value= '<a href=index.php?module=Vendors&action=DetailView&record='.$temp_val.'&parenttab='.urlencode($tabname).'>'.textlength_check($vendor_name).'</a>';
 		}
 		else
 			$value='';

@@ -104,7 +104,6 @@ function getCustomFieldArray($module)
 	}
 	$log->debug("Exiting getCustomFieldArray method ...");
 	return $custFldArray;
-	
 }
 
 /**

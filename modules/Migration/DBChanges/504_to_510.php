@@ -458,6 +458,138 @@ for($i=0;$i<4;$i++)
 ExecuteQuery("update vtiger_tab set ownedby=0,name='Documents',tablabel='Documents' where tabid=8");
 //End: Database changes regarding Documents module
 
+/* Home Page Customization */
+ExecuteQuery("CREATE TABLE vtiger_homestuff (stuffid int(19) NOT NULL default '0', stuffsequence int(19) NOT NULL default '0', stufftype varchar(100) default NULL, userid int(19) NOT NULL, visible int(10) NOT NULL default '0', stufftitle varchar(100) default NULL, PRIMARY KEY  (stuffid), KEY stuff_stuffid_idx (stuffid), KEY fk_1_vtiger_homestuff (userid))");
+ExecuteQuery("CREATE TABLE vtiger_homedashbd (stuffid int(19) NOT NULL default 0, dashbdname varchar(100) default NULL, dashbdtype varchar(100) default NULL, PRIMARY KEY  (stuffid), KEY stuff_stuffid_idx (stuffid))");
+ExecuteQuery("CREATE TABLE vtiger_homedefault (stuffid int(19) NOT NULL default 0, hometype varchar(30) NOT NULL, maxentries int(19) default NULL, setype varchar(30) default NULL, PRIMARY KEY  (stuffid), KEY stuff_stuffid_idx (stuffid))");
+ExecuteQuery("CREATE TABLE vtiger_homemodule (stuffid int(19) NOT NULL, modulename varchar(100) default NULL, maxentries int(19) NOT NULL, customviewid int(19) NOT NULL, setype varchar(30) NOT NULL, PRIMARY KEY  (stuffid), KEY stuff_stuffid_idx (stuffid))");
+ExecuteQuery("CREATE TABLE vtiger_homemoduleflds (stuffid int(19) default NULL, fieldname varchar(255) default NULL, KEY stuff_stuffid_idx (stuffid))");
+ExecuteQuery("CREATE TABLE vtiger_homerss (stuffid int(19) NOT NULL default 0, url varchar(100) default NULL, maxentries int(19) NOT NULL, PRIMARY KEY  (stuffid), KEY stuff_stuffid_idx (stuffid))"); 
+
+ExecuteQuery("ALTER TABLE vtiger_homestuff ADD CONSTRAINT fk_1_vtiger_homestuff FOREIGN KEY (userid) REFERENCES vtiger_users (id) ON DELETE CASCADE");
+ExecuteQuery("ALTER TABLE vtiger_homedashbd ADD CONSTRAINT fk_1_vtiger_homedashbd FOREIGN KEY (stuffid) REFERENCES vtiger_homestuff (stuffid) ON DELETE CASCADE");
+ExecuteQuery("ALTER TABLE vtiger_homedefault ADD CONSTRAINT fk_1_vtiger_homedefault FOREIGN KEY (stuffid) REFERENCES vtiger_homestuff (stuffid) ON DELETE CASCADE");
+ExecuteQuery("ALTER TABLE vtiger_homemodule ADD CONSTRAINT fk_1_vtiger_homemodule FOREIGN KEY (stuffid) REFERENCES vtiger_homestuff (stuffid) ON DELETE CASCADE");
+ExecuteQuery("ALTER TABLE vtiger_homemoduleflds ADD CONSTRAINT fk_1_vtiger_homemoduleflds FOREIGN KEY (stuffid) REFERENCES vtiger_homemodule (stuffid) ON DELETE CASCADE");
+ExecuteQuery("ALTER TABLE vtiger_homerss ADD CONSTRAINT fk_1_vtiger_homerss FOREIGN KEY (stuffid) REFERENCES vtiger_homestuff (stuffid) ON DELETE CASCADE");
+
+//to get the users lists
+$query = $adb->pquery('select * from vtiger_users',array());
+for($i=0;$i<$adb->num_rows($query);$i++)
+{
+	$userid = $adb->query_result($query,$i,'id');
+
+	$s1=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s1.",1,'Default',".$userid.",1,'Top Accounts')";
+	$res=$adb->pquery($sql,array());
+
+	$s2=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s2.",2,'Default',".$userid.",1,'Home Page Dashboard')";
+	$res=$adb->pquery($sql,array());
+
+	$s3=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s3.",3,'Default',".$userid.",1,'Top Potentials')";
+	$res=$adb->pquery($sql,array());
+
+	$s4=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s4.",4,'Default',".$userid.",1,'Top Quotes')";
+	$res=$adb->pquery($sql,array());
+
+	$s5=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s5.",5,'Default',".$userid.",1,'Key Metrics')";
+	$res=$adb->pquery($sql,array());
+
+	$s6=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s6.",6,'Default',".$userid.",1,'Top Trouble Tickets')";
+	$res=$adb->pquery($sql,array());
+
+	$s7=$adb->getUniqueID("vtiger_homestuff"); 
+	$sql="insert into vtiger_homestuff values(".$s7.",7,'Default',".$userid.",1,'Upcoming Activities')";
+	$res=$adb->pquery($sql,array());
+
+	$s8=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s8.",8,'Default',".$userid.",1,'My Group Allocation')";
+	$res=$adb->pquery($sql,array());
+
+	$s9=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s9.",9,'Default',".$userid.",1,'Top Sales Orders')";
+	$res=$adb->pquery($sql,array());
+
+	$s10=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s10.",10,'Default',".$userid.",1,'Top Invoices')";
+	$res=$adb->pquery($sql,array());
+
+	$s11=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s11.",11,'Default',".$userid.",1,'My New Leads')";
+	$res=$adb->pquery($sql,array());
+
+	$s12=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s12.",12,'Default',".$userid.",1,'Top Purchase Orders')";
+	$res=$adb->pquery($sql,array());
+
+	$s13=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s13.",13,'Default',".$userid.",1,'Pending Activities')";
+	$res=$adb->pquery($sql,array());
+
+	$s14=$adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values(".$s14.",14,'Default',".$userid.",1,'My Recent FAQs')";
+	$res=$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s1.",'ALVT',5,'Accounts')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s2.",'HDB',5,'Dashboard')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s3.",'PLVT',5,'Potentials')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s4.",'QLTQ',5,'Quotes')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s5.",'CVLVT',5,'NULL')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s6.",'HLT',5,'HelpDesk')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s7.",'UA',5,'Calendar')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s8.",'GRT',5,'NULL')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s9.",'OLTSO',5,'SalesOrder')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s10.",'ILTI',5,'Invoice')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s11.",'MNL',5,'Leads')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s12.",'OLTPO',5,'PurchaseOrder')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s13.",'PA',5,'Calendar')";
+	$adb->pquery($sql,array());
+
+	$sql="insert into vtiger_homedefault values(".$s14.",'LTFAQ',5,'Faq')";
+	$adb->pquery($sql,array());
+}
+for($i=0;$i<$adb->num_rows($query);$i++)
+{
+	$def_homeorder = $adb->query_result($query,$i,'homeorder');
+	$user_id = $adb->query_result($query,$i,'id');
+	$def_array = explode(",",$def_homeorder);
+	$sql = $adb->pquery("SELECT vtiger_homestuff.stuffid FROM vtiger_homestuff INNER JOIN vtiger_homedefault WHERE vtiger_homedefault.hometype in (". generateQuestionMarks($def_array) . ") AND vtiger_homestuff.stuffid = vtiger_homedefault.stuffid AND vtiger_homestuff.userid = ?",array($def_array,$user_id));
+	$stuffid_list = array();
+	for($j=0;$j<$adb->num_rows($sql);$j++) {
+		$stuffid_list[] = $adb->query_result($sql,$j,'stuffid');
+	}
+	$adb->pquery("UPDATE vtiger_homestuff SET visible = 0 WHERE stuffid in (". generateQuestionMarks($stuffid_list) .")",array($stuffid_list));
+}
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

@@ -111,7 +111,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['isDuplicate'] != 'true')
 	$smarty->assign("USERNAME_READONLY", "readonly");
 }
 
-$smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
+$smarty->assign("HOMEORDER",$focus->getHomeStuffOrder($focus->id));
 //Added to provide User based Tagcloud
 $smarty->assign("TAGCLOUDVIEW",getTagCloudView($focus->id));
 $smarty->assign("DUPLICATE",$_REQUEST['isDuplicate']);

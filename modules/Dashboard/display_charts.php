@@ -8,11 +8,18 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
+
+function dashBoardDisplayChart()
+{
+
 require_once("modules/Dashboard/Entity_charts.php");
-global $tmp_dir;
+global $tmp_dir,$adb;
 global $mod_strings,$app_strings;
 global $current_user;
 require('user_privileges/user_privileges_'.$current_user->id.'.php');
+global $current_language;
+$mod_strings = return_module_language($current_language, 'Dashboard');
+
 
 $period=($_REQUEST['period'])?$_REQUEST['period']:"tmon"; // Period >> lmon- Last Month, tmon- This Month, lweek-LastWeek, tweek-ThisWeek; lday- Last Day 
 $type=($_REQUEST['type'])?$_REQUEST['type']:"leadsource";
@@ -98,62 +105,6 @@ $tickets_by_contact="select vtiger_troubletickets.*, vtiger_ticketgrouprelation.
 
 $product_category = "select vtiger_products.*,vtiger_crmentity.deleted from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid where vtiger_crmentity.deleted=0";
 
-/**This function generates the security parameters for a given module based on the assigned profile 
-*Param $module - module name
-*Returns an string value
-*/
-
-function dashboard_check($module)
-{
-	global $current_user;
-	$sec_parameter = '';
-	$tab_id = getTabid($module);
-	require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-	{
-		$sec_parameter=getListViewSecurityParameter($module);
-	}
-	return $sec_parameter;
-}
-
-/**This function generates the security parameters for a given user base picklist values
-*Param $graph - name of the graph
-*Returns an string value
-*/
-
-function picklist_check($module,$graph_by)
-{
-	global $current_user,$adb;
-	$pick_query = '';
-	require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	$roleid=$current_user->roleid;
-	$subrole = getRoleSubordinates($roleid);
-	if(count($subrole)> 0)
-	{
-		$roleids = $subrole;
-		array_push($roleids, $roleid);
-	}
-	else
-	{
-		$roleids = $roleid;
-	}
-	if($graph_by == 'sostatus' || $graph_by == 'leadsource' || $graph_by == 'leadstatus' ||$graph_by == 'industry' || $graph_by == 'productcategory' || $graph_by == 'postatus' || $graph_by == 'invoicestatus' || $graph_by == 'ticketstatus' || $graph_by == 'priority' || $graph_by == 'category' || $graph_by == 'quotestage')
-	{
-		$temp_fieldname = $graph_by;
-		if($graph_by == 'priority')
-			$temp_fieldname = 'ticketpriorities';
-		if($graph_by == 'category')
-			$temp_fieldname = 'ticketcategories';
-
-		if(count($roleids) > 1)
-			$pick_query = " in (select distinct $temp_fieldname from vtiger_".$temp_fieldname."  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_".$temp_fieldname.".picklist_valueid where roleid in (\"". implode($roleids,"\",\"") ."\") order by sortid asc ) ";
-		else
-			$pick_query = " in (select distinct $temp_fieldname from vtiger_".$temp_fieldname."  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_".$temp_fieldname.".picklist_valueid where roleid in ('$roleids') order by sortid asc ) ";
-	}
-	return $pick_query;
-}
-
 $graph_array = Array(
 	  "DashboardHome" => $mod_strings['DashboardHome'],
           "leadsource" => $mod_strings['leadsource'],
@@ -185,24 +136,19 @@ $graph_array = Array(
 	  "contactbycampaign"=> $mod_strings['contactbycampaign'],
 	  "ticketsbyaccount"=> $mod_strings['ticketsbyaccount'],
 	  "ticketsbycontact"=> $mod_strings['ticketsbycontact'],
-          );
+  );
+	if(isset($_REQUEST['from_page']) && $_REQUEST['from_page'] == 'HomePage')
+	{
 
-?>
-			<table width="100%"  border="0" cellspacing="0" cellpadding="0">
-				<!--char goes here-->
-				<?php 
-				sleep(1);
-				//Charts for Lead Source
+		//Charts for Lead Source
                     if($profileTabsPermission[getTabid("Leads")] == 0 && ($type == "leadsource") && (getFieldVisibilityPermission('Leads',$user_id,'leadsource') == "0"))
                     {
                     	$graph_by="leadsource";
                     	$graph_title= $mod_strings['leadsource'];
                     	$module="Leads";
                     	$where="";
-                    	$query=$leads_query." ".dashboard_check($module);
-			if(!$is_admin)
-				$query .= ' and vtiger_leaddetails.leadsource '.picklist_check($module,$graph_by);
-                    	echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    	$query=$leads_query." ".dashboard_check($module);                   
+                    	return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
                     
                     }
                     // To display the charts  for Lead status                   
@@ -214,8 +160,312 @@ $graph_array = Array(
                     	$where="";
                     	$query=$leads_query." ".dashboard_check($module);
 			if(!$is_admin)
-				$query .= ' and vtiger_leaddetails.leadstatus '.picklist_check($module,$graph_by);
-                    	echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+				$query .= ' and vtiger_leaddetails.leadsource '.picklist_check($module,$graph_by);
+                    	return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+                    }
+                    //Charts for Lead Industry
+                    elseif ($profileTabsPermission[getTabid("Leads")] == 0 && ($type == "leadindustry") && (getFieldVisibilityPermission('Leads',$user_id,'industry') == "0"))
+                    {
+                    	$graph_by="industry";
+                            $graph_title=$mod_strings['leadindustry'];
+                            $module="Leads";
+                            $where="";
+                            $query=$leads_query." ".dashboard_check($module);
+                            return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+                    }
+                    //Sales by Lead Source
+                    elseif ($profileTabsPermission[getTabid("Potentials")] == 0 && ($type == "salesbyleadsource")&& (getFieldVisibilityPermission('Potentials',$user_id,'leadsource') == "0"))
+                    {
+                            $graph_by="leadsource";
+                            $graph_title=$mod_strings['salesbyleadsource'];
+                            $module="Potentials";
+                            $where=" and vtiger_potential.sales_stage like '%Closed Won%' ";
+                            $query=$potential_query." ".dashboard_check($module);
+                            return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+                    }
+                    //Sales by Account
+                    elseif ($profileTabsPermission[getTabid("Potentials")] == 0 && ($type == "salesbyaccount") && (getFieldVisibilityPermission('Potentials',$user_id,'account_id') == "0"))
+                    {
+                    	 $graph_by="accountid";
+                         $graph_title=$mod_strings['salesbyaccount'];
+                         $module="Potentials";
+                         $where=" and vtiger_potential.sales_stage like '%Closed Won%' ";
+                         $query=$potential_query." ".dashboard_check($module);
+                         return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+                    }
+		    //Sales by User
+		    elseif ($profileTabsPermission[getTabid("Potentials")] == 0 && ($type == "salesbyuser"))
+		    {
+			$graph_by="smownerid";
+			$graph_title=$mod_strings['salesbyuser'];
+			$module="Potentials";
+			$where=" and vtiger_potential.sales_stage like '%Closed Won%' and (vtiger_crmentity.smownerid != NULL || vtiger_crmentity.smownerid != ' ')";
+			$query=$potential_query." ".dashboard_check($module);
+			return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+		    }
+		    //Sales by team
+		    elseif ($profileTabsPermission[getTabid("Potentials")] == 0 && ($type == "salesbyteam"))
+		    {
+			$graph_by="groupname";
+			$graph_title=$mod_strings['salesbyteam'];
+			$module="Potentials";
+			$where=" and vtiger_potential.sales_stage like '%Closed Won%' and (vtiger_potentialgrouprelation.groupname != NULL || vtiger_potentialgrouprelation.groupname != '')";
+			$query=$potential_query." ".dashboard_check($module);
+			return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+		    }
+                    //Charts for Account by Industry
+                    elseif ($profileTabsPermission[getTabid("Accounts")] == 0 && ($type == "accountindustry") && (getFieldVisibilityPermission('Accounts',$user_id,'industry') == "0"))
+                    {
+                    	$graph_by="industry";
+                            $graph_title=$mod_strings['accountindustry'];
+                            $module="Accounts";
+                            $where="";
+                            $query=$account_query." ".dashboard_check($module);
+                            return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+                    }
+                    //Charts for Products by Category
+                    elseif ($profileTabsPermission[getTabid("Products")] == 0 && ($type == "productcategory") && (getFieldVisibilityPermission('Products',$user_id,'productcategory') == "0"))
+                    {
+                    	$graph_by="productcategory";
+                            $graph_title=$mod_strings['productcategory'];
+                            $module="Products";
+                            $where="";
+                            $query=$product_category." ".dashboard_check($module);
+                            return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+                    }
+		    //Charts for Products by Quantity in stock
+		    elseif ($profileTabsPermission[getTabid("Products")] == 0 && ($type == "productbyqtyinstock") && (getFieldVisibilityPermission('Products',$user_id,'qtyinstock') == "0"))
+		    {
+			$graph_by="productname";
+			    $graph_title=$mod_strings['productbyqtyinstock'];
+			    $module="Products";
+			    $where="";
+			    $query=$products_query." ".dashboard_check($module);
+			    return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+		    }
+		    //Charts for Products by PO
+		    elseif ($profileTabsPermission[getTabid("Products")] == 0 && ($type == "productbypo") && $profileTabsPermission[getTabid("PurchaseOrder")] == 0)
+		    { 
+			    $graph_by="purchaseorderid";
+			    $graph_title=$mod_strings['productbypo'];
+			    $module="Products";
+			    $where="";
+			    $query=$probyPO." ".dashboard_check($module);
+			    return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+		    }
+		    //Charts for Products by Quotes
+		    elseif ($profileTabsPermission[getTabid("Products")] == 0 && ($type == "productbyquotes") && $profileTabsPermission[getTabid("Quotes")] == 0)
+		    { 
+                            $graph_by="quoteid";
+   			    $graph_title=$mod_strings['productbyquotes'];
+			    $module="Products";
+			    $where=""; 
+			    $query=$probyQ." ".dashboard_check($module);
+			    return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+		    }
+		    //Charts for Products by Invoice
+		    elseif ($profileTabsPermission[getTabid("Products")] == 0 && ($type == "productbyinvoice") && $profileTabsPermission[getTabid("Invoice")] == 0)
+		    {
+		            $graph_by="invoiceid";
+			    $graph_title=$mod_strings['productbyinvoice'];
+			    $module="Products";
+			    $where="";
+			    $query=$probyInv." ".dashboard_check($module);
+			    return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+		    }
+
+                    // Sales Order by Accounts
+                    elseif ($profileTabsPermission[getTabid("SalesOrder")] == 0 && ($type == "sobyaccounts") && (getFieldVisibilityPermission('SalesOrder',$user_id,'account_id') == "0"))
+                    {
+                    	$graph_by="accountid";
+                            $graph_title=$mod_strings['sobyaccounts'];
+                            $module="SalesOrder";
+                            $where="";
+                            $query=$so_query." ".dashboard_check($module);
+                            return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+                    }
+                    //Sales Order by Status
+                    elseif ($profileTabsPermission[getTabid("SalesOrder")] == 0 && ($type == "sobystatus") && (getFieldVisibilityPermission('SalesOrder',$user_id,'sostatus') == "0"))
+                    {
+                            $graph_by="sostatus";
+                            $graph_title=$mod_strings['sobystatus'];
+                            $module="SalesOrder";
+                            $where="";
+                            $query=$so_query." ".dashboard_check($module);
+                            return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+                    }
+                    //Purchase Order by Status
+                    elseif ($profileTabsPermission[getTabid("PurchaseOrder")] == 0 && ($type == "pobystatus") && (getFieldVisibilityPermission('PurchaseOrder',$user_id,'postatus') == "0"))
+                    {
+                            $graph_by="postatus";
+                            $graph_title=$mod_strings['pobystatus'];
+                            $module="PurchaseOrder";
+                            $where="";
+                            $query=$po_query." ".dashboard_check($module);
+                            return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+                    }
+                    //Quotes by Accounts
+                    elseif ($profileTabsPermission[getTabid("Quotes")] == 0 && ($type == "quotesbyaccounts") && (getFieldVisibilityPermission('Quotes',$user_id,'account_id') == "0"))
+                    {
+                            $graph_by="accountid";
+                            $graph_title= $mod_strings['quotesbyaccounts'];
+                            $module="Quotes";
+                            $where="";
+                            $query=$quotes_query." ".dashboard_check($module);
+                            return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+                    }
+                    //Quotes by Stage
+                    elseif ($profileTabsPermission[getTabid("Quotes")] == 0 && ($type == "quotesbystage") && (getFieldVisibilityPermission('Quotes',$user_id,'quotestage') == "0"))
+                    {
+                            $graph_by="quotestage";
+                            $graph_title=$mod_strings['quotesbystage'];
+                            $module="Quotes";
+                            $where="";
+                            $query=$quotes_query." ".dashboard_check($module);
+                            return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+                    }
+                    //Invoice by Accounts
+                    elseif ($profileTabsPermission[getTabid("Invoice")] == 0 && ($type == "invoicebyacnts") && (getFieldVisibilityPermission('Invoice',$user_id,'account_id') == "0"))
+                    {
+                            $graph_by="accountid";
+                            $graph_title=$mod_strings['invoicebyacnts'];
+                            $module="Invoice";
+                            $where="";
+                            $query=$invoice_query." ".dashboard_check($module);
+                            return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+                    }
+                    //Invoices by status
+                    elseif ($profileTabsPermission[getTabid("Invoice")] == 0 && ($type == "invoicebystatus") && (getFieldVisibilityPermission('Invoice',$user_id,'invoicestatus') == "0"))
+                    {
+                            $graph_by="invoicestatus";
+                            $graph_title=$mod_strings['invoicebystatus'];
+                            $module="Invoice";
+                            $where="";
+                            $query=$invoice_query." ".dashboard_check($module);
+                            return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+                    }
+                    //Tickets by Status
+                    elseif ($profileTabsPermission[getTabid("HelpDesk")] == 0 && ($type == "ticketsbystatus") && (getFieldVisibilityPermission('HelpDesk',$user_id,'ticketstatus') == "0"))
+                    {
+                            $graph_by="ticketstatus";
+                            $graph_title=$mod_strings['ticketsbystatus'];
+                            $module="HelpDesk";
+                            $where="";
+                            $query=$helpdesk_query." ".dashboard_check($module);
+                            return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+                    }
+                    //Tickets by Priority
+                    elseif ($profileTabsPermission[getTabid("HelpDesk")] == 0 && ($type == "ticketsbypriority") && (getFieldVisibilityPermission('HelpDesk',$user_id,'ticketpriorities') == "0"))
+                    {
+                            $graph_by="priority";
+                            $graph_title=$mod_strings['ticketsbypriority'];
+                            $module="HelpDesk";
+                            $where="";
+                            $query=$helpdesk_query." ".dashboard_check($module);
+                            return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+                    }
+		    //Tickets by Category
+		    elseif ($profileTabsPermission[getTabid("HelpDesk")] == 0 && ($type == "ticketsbycategory") && (getFieldVisibilityPermission('HelpDesk',$user_id,'ticketcategories') == "0"))
+		    {
+			    $graph_by="category";
+			    $graph_title=$mod_strings['ticketsbycategory'];
+			    $module="HelpDesk";
+			    $where="";
+			    $query=$helpdesk_query." ".dashboard_check($module);
+			    return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+		    }
+		    //Tickets by User   
+		    elseif ($profileTabsPermission[getTabid("HelpDesk")] == 0 && ($type == "ticketsbyuser"))
+		    {
+			    $graph_by="smownerid";
+			    $graph_title=$mod_strings['ticketsbyuser'];
+			    $module="HelpDesk";
+			    $where=" and (vtiger_crmentity.smownerid != NULL || vtiger_crmentity.smownerid != ' ')";
+			    $query=$helpdesk_query." ".dashboard_check($module);
+			    return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+		    }
+		    //Tickets by Team
+		    elseif ($profileTabsPermission[getTabid("HelpDesk")] == 0 && ($type == "ticketsbyteam"))
+		    {
+			    $graph_by="ticketgroupname";
+			    $graph_title=$mod_strings['ticketsbyteam'];
+			    $module="HelpDesk";
+			    $where=" and (vtiger_ticketgrouprelation.groupname != NULL || vtiger_ticketgrouprelation.groupname != ' ')";
+			    $query=$helpdesk_query." ".dashboard_check($module);
+			    return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+		    }    
+		    //Tickets by Product
+		    elseif ($profileTabsPermission[getTabid("HelpDesk")] == 0 && ($type == "ticketsbyproduct") && (getFieldVisibilityPermission('HelpDesk',$user_id,'product_id') == "0"))
+		    {
+			    $graph_by="product_id";
+			    $graph_title=$mod_strings['ticketsbyproduct'];
+			    $module="HelpDesk";
+			    $where="";
+			    $query=$helpdesk_query." ".dashboard_check($module);
+			    return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+		    }
+		    //Campaigns by Contact
+		    elseif ($profileTabsPermission[getTabid("Contacts")] == 0 && ($type == "contactbycampaign") && $profileTabsPermission[getTabid("Campaigns")] == 0)
+		    {
+			    $graph_by="campaignid";
+			    $graph_title=$mod_strings['contactbycampaign'];
+			    $module="Contacts";
+			    $where="";
+			    $query=$campaign_query." ".dashboard_check($module);
+			    return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+		    }
+		    //Tickets by Account
+		    elseif ($profileTabsPermission[getTabid("HelpDesk")] == 0 && ($type == "ticketsbyaccount") && (getFieldVisibilityPermission('HelpDesk',$user_id,'parent_id') == "0"))
+		    {
+			    $graph_by="accountid";
+			    $graph_title=$mod_strings['ticketsbyaccount'];
+			    $module="HelpDesk";
+			    $where="";
+			    $query=$tickets_by_account." ".dashboard_check($module);
+			    return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+		    }
+		    //Tickets by Contact
+		    elseif ($profileTabsPermission[getTabid("HelpDesk")] == 0 && ($type == "ticketsbycontact") && (getFieldVisibilityPermission('HelpDesk',$user_id,'parent_id') == "0"))
+			    {
+				    $graph_by="contactid";
+				    $graph_title=$mod_strings['ticketsbycontact'];
+				    $module="HelpDesk";
+				    $where="";
+				    $query=$tickets_by_contact." ".dashboard_check($module);
+				    return get_graph_by_type($graph_by,$graph_title,$module,$where,$query,"210","210","forhomepage");
+				    }
+		    else
+                    {
+                        //echo $mod_strings['LBL_NO_PERMISSION_FIELD'];
+			sleep(1);
+                        return '<h3>'.$mod_strings['LBL_NO_PERMISSION_FIELD'].'</h3>';
+		    }
+	}
+	else
+	{
+		$html='<table width="100%"  border="0" cellspacing="0" cellpadding="0">';
+		//Charts for Lead Source
+                    if($profileTabsPermission[getTabid("Leads")] == 0 && ($type == "leadsource") && (getFieldVisibilityPermission('Leads',$user_id,'leadsource') == "0"))
+                    {
+                    	$graph_by="leadsource";
+                    	$graph_title= $mod_strings['leadsource'];
+                    	$module="Leads";
+                    	$where="";
+                    	$query=$leads_query." ".dashboard_check($module);                   
+                    	//$html .= get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                            echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+                    }
+                    // To display the charts  for Lead status                   
+                    elseif ($profileTabsPermission[getTabid("Leads")] == 0 && ($type == "leadstatus")&& (getFieldVisibilityPermission('Leads',$user_id,'leadstatus') == "0"))
+                    {
+                    	$graph_by="leadstatus";
+                    	$graph_title= $mod_strings['leadstatus'];
+                    	$module="Leads";
+                    	$where="";
+                    	$query=$leads_query." ".dashboard_check($module);
+						if(!$is_admin)
+							$query .= ' and vtiger_leaddetails.leadstatus '.picklist_check($module,$graph_by);
+			                    	echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Charts for Lead Industry
                     elseif ($profileTabsPermission[getTabid("Leads")] == 0 && ($type == "leadindustry") && (getFieldVisibilityPermission('Leads',$user_id,'industry') == "0"))
@@ -417,13 +667,13 @@ $graph_array = Array(
                     //Tickets by Status
                     elseif ($profileTabsPermission[getTabid("HelpDesk")] == 0 && ($type == "ticketsbystatus") && (getFieldVisibilityPermission('HelpDesk',$user_id,'ticketstatus') == "0"))
                     {
-                            $graph_by="ticketstatus";
-                            $graph_title=$mod_strings['ticketsbystatus'];
-                            $module="HelpDesk";
-                            $where="";
-			    $query=$helpdesk_query." ".dashboard_check($module);
-			    if(!$is_admin)
-			    	$query .= ' and vtiger_troubletickets.status '.picklist_check($module,$graph_by);
+                        $graph_by="ticketstatus";
+                        $graph_title=$mod_strings['ticketsbystatus'];
+                        $module="HelpDesk";
+                        $where="";
+					    $query=$helpdesk_query." ".dashboard_check($module);
+					    if(!$is_admin)
+					    	$query .= ' and vtiger_troubletickets.status '.picklist_check($module,$graph_by);
                             echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
                     }
                     //Tickets by Priority
@@ -480,7 +730,7 @@ $graph_array = Array(
 			    $query=$helpdesk_query." ".dashboard_check($module);
 			    echo get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 		    }
-		    //Contacts by Campaign
+		    //Campaigns by Contact
 		    elseif ($profileTabsPermission[getTabid("Contacts")] == 0 && ($type == "contactbycampaign") && $profileTabsPermission[getTabid("Campaigns")] == 0)
 		    {
 			    $graph_by="campaignid";
@@ -515,11 +765,66 @@ $graph_array = Array(
                         //echo $mod_strings['LBL_NO_PERMISSION_FIELD'];
 			sleep(1);
                         echo '<h3>'.$mod_strings['LBL_NO_PERMISSION_FIELD'].'</h3>';
-                    }
+		    }
+	}
+}
 
-	?>
+/**This function generates the security parameters for a given module based on the assigned profile 
+*Param $module - module name
+*Returns an string value
+*/
 
-	</table>
+function dashboard_check($module)
+{
+	global $current_user;
+	$sec_parameter = '';
+	$tab_id = getTabid($module);
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+	{
+		$sec_parameter=getListViewSecurityParameter($module);
+	}
+	return $sec_parameter;
+}
+
+/**This function generates the security parameters for a given user base picklist values
+*Param $graph - name of the graph
+*Returns an string value
+*/
+
+function picklist_check($module,$graph_by)
+{
+	global $current_user,$adb;
+	$pick_query = '';
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	$roleid=$current_user->roleid;
+	$subrole = getRoleSubordinates($roleid);
+	if(count($subrole)> 0)
+	{
+		$roleids = $subrole;
+		array_push($roleids, $roleid);
+	}
+	else
+	{
+		$roleids = $roleid;
+	}
+	if($graph_by == 'sostatus' || $graph_by == 'leadsource' || $graph_by == 'leadstatus' ||$graph_by == 'industry' || $graph_by == 'productcategory' || $graph_by == 'postatus' || $graph_by == 'invoicestatus' || $graph_by == 'ticketstatus' || $graph_by == 'priority' || $graph_by == 'category' || $graph_by == 'quotestage')
+	{
+		$temp_fieldname = $graph_by;
+		if($graph_by == 'priority')
+			$temp_fieldname = 'ticketpriorities';
+		if($graph_by == 'category')
+			$temp_fieldname = 'ticketcategories';
+
+		if(count($roleids) > 1)
+			$pick_query = " in (select distinct $temp_fieldname from vtiger_".$temp_fieldname."  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_".$temp_fieldname.".picklist_valueid where roleid in (\"". implode($roleids,"\",\"") ."\") order by sortid asc ) ";
+		else
+			$pick_query = " in (select distinct $temp_fieldname from vtiger_".$temp_fieldname."  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_".$temp_fieldname.".picklist_valueid where roleid in ('$roleids') order by sortid asc ) ";
+	}
+	return $pick_query;
+}
+?>
 	<script id="dash_script">
 		var gdash_display_type = '<?php echo $_REQUEST['display_view'];?>';
 	</script>

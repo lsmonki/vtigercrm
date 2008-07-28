@@ -23,7 +23,7 @@
 /** Function to get the 5 New Leads 
  *return array $values - array with the title, header and entries like  Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries) where as listview_header and listview_entries are arrays of header and entity values which are returned from function getListViewHeader and getListViewEntries
 */
-function getNewLeads()
+function getNewLeads($maxval,$calCnt)
 {
 	global $log;
 	$log->debug("Entering getNewLeads() method ...");
@@ -70,15 +70,15 @@ function getNewLeads()
 	$list_query = 'select vtiger_leaddetails.*,vtiger_crmentity.createdtime,vtiger_crmentity.description from vtiger_leaddetails inner join vtiger_crmentity on vtiger_leaddetails.leadid = vtiger_crmentity.crmid where vtiger_crmentity.deleted =0 AND vtiger_leaddetails.converted =0 AND vtiger_leaddetails.leadstatus not in ("Lost Lead", "Junk Lead","'.$current_module_strings['Lost Lead'].'","'.$current_module_strings['Junk Lead'].'") AND vtiger_crmentity.createdtime >=? AND vtiger_crmentity.smownerid = ?'; 
 	$list_result = $adb->pquery($list_query, array($start_date, $current_user->id));
 	$noofrows = $adb->num_rows($list_result);
+	if($calCnt == 'calculateCnt')
+	   return $noofrows;
+
 	$open_lead_list =array();
 	if ($noofrows > 0)
-		for($i=0;$i<$noofrows && $i<5;$i++) 
+		for($i=0;$i<$noofrows && $i<$maxval;$i++) 
 		{
 			$open_lead_list[] = Array('leadname' => $adb->query_result($list_result,$i,'firstname').' '.$adb->query_result($list_result,$i,'lastname'),
 					'company' => $adb->query_result($list_result,$i,'company'),
-					'annualrevenue' => $adb->query_result($list_result,$i,'annualrevenue'),
-					'leadstatus' => $adb->query_result($list_result,$i,'leadstatus'),
-					'leadsource' => $adb->query_result($list_result,$i,'leadsource'),
 					'id' => $adb->query_result($list_result,$i,'leadid'),
 					);
 		}
@@ -95,9 +95,6 @@ function getNewLeads()
 	$header=array();
 	$header[] =$current_module_strings['LBL_LIST_LEAD_NAME'];
 	$header[] =$current_module_strings['Company'];
-	$header[] =$current_module_strings['Annual Revenue'];
-	$header[] =$current_module_strings['Lead Status'];
-	$header[] =$current_module_strings['Lead Source'];
 	
     $entries=array();
     foreach($open_lead_list as $lead)
@@ -106,19 +103,13 @@ function getNewLeads()
 		$lead_fields = array(
 				'LEAD_NAME' => $lead['leadname'],
 				'COMPANY' => $lead['company'],
-				'ANNUAL_REVENUE' => $lead['annualrevenue'],
-				'LEAD_STATUS' => $lead['leadstatus'],
-				'LEAD_SOURCE' => $lead['leadsource'],
 				'LEAD_ID' => $lead['id'],
 				);
 
 		$Top_Leads = (strlen($lead['leadname']) > 20) ? (substr($lead['leadname'],0,20).'...') : $lead['leadname'];
 		$value[]= '<a href="index.php?action=DetailView&module=Leads&record='.$lead_fields['LEAD_ID'].'">'.$Top_Leads.'</a>';
 		$value[]=$lead_fields['COMPANY'];
-		$value[]=$lead_fields['ANNUAL_REVENUE'];
-		$value[]=$lead_fields['LEAD_STATUS'];
-		$value[]=$lead_fields['LEAD_SOURCE'];
-		
+
 		$entries[$lead_fields['LEAD_ID']]=$value;
 	}
 	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);

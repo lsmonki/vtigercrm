@@ -143,6 +143,7 @@ if (isset($_REQUEST['obm_edit']) && $_REQUEST['obm_edit'] == 'true') {
 <form name="outcome_by_month" action="index.php" method="post" >
 <input type="hidden" name="module" value="<?php echo $currentModule;?>">
 <input type="hidden" name="action" value="<?php echo $action;?>">
+<input type="hidden" name="display_view" value="<?php echo $_REQUEST['display_view']?>">
 <input type="hidden" name="obm_refresh" value="true">
 <table cellpadding="2" border="0"><tbody>
 <tr>
@@ -160,7 +161,7 @@ if (isset($_REQUEST['obm_edit']) && $_REQUEST['obm_edit'] == 'true') {
 	<td valign='top' ><select name="obm_ids[]" multiple size='3'><?php echo get_select_options_with_id(get_user_array(FALSE, "Active",$current_user->id),$_SESSION['obm_ids']); ?></select></td>
 <?php } ?>
 </tr><tr>
-<td align="right"><br /> <input class="button" onclick="return chk_form(outcome_by_month);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
+<td align="right"><br /> <input class="button" onclick="return verify_chart_data(outcome_by_month);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
 </tr></table>
 </form>
 <script type="text/javascript">
@@ -183,8 +184,8 @@ else {
 ?>
 <div align=right><FONT size='1'>
 <em><?php  echo $current_module_strings['LBL_CREATED_ON'].' '.$file_date; ?> 
-</em>[<a href="javascript:;" onClick="changeView('DashboardHome','NORMAL');"><?php echo $current_module_strings['LBL_REFRESH'];?></a>]
-[<a href="index.php?module=<?php echo $currentModule;?>&action=index&obm_edit=true"><?php echo $current_module_strings['LBL_EDIT'];?></a>]
+</em>[<a href="javascript:;" onClick="changeView('<?php echo $_REQUEST['display_view'];?>');"><?php echo $current_module_strings['LBL_REFRESH'];?></a>]
+[<a href="index.php?module=<?php echo $currentModule;?>&action=index&obm_edit=true&display_view=<?php echo $_REQUEST['display_view'];?>"><?php echo $current_module_strings['LBL_EDIT'];?></a>]
 </FONT></div>
 <?php } 
 }

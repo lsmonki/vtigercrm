@@ -75,6 +75,8 @@ function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bott
 	{
 		$font_color = "#000000";
 	}
+     
+    $width = $width + 140;	
 	
 	$canvas =& Image_Canvas::factory('png', array('width' => $width, 'height' => $height, 'usemap' => true));
 	$imagemap = $canvas->getImageMap();
@@ -149,6 +151,7 @@ function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bott
 
 	// create the pie chart and associate the filling colours			
 	$gbplot = & $plotarea->addNew('pie', $dataset);
+	$plotarea->setPadding(array('top'=>20,'bottom'=>0,'left'=>0,'right'=>50));
 	$plotarea->hideAxis();
 	$gbplot->setFillStyle($fills);
 
@@ -167,7 +170,7 @@ function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bott
 			
 	// set legend
 	$legend_box =& $plotarea->addNew('legend');
-	$legend_box->setPadding(array('top'=>4,'bottom'=>-10,'left'=>0,'right'=>0));
+	$legend_box->setPadding(array('top'=>20,'bottom'=>0,'left'=>0,'right'=>0));
 	$legend_box->setFillColor('#F5F5F5');
 	$legend_box->showShadow();
 

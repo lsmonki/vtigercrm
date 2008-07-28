@@ -11,6 +11,13 @@
 
 /* WOOD SPICE  - COLOR THEME*/
 
+/*added to change color of disabled button: */
+input:disabled { 
+    background-color : #cccccc;
+    color: #666666; 
+}
+/*add ends: */
+
 .small {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -1177,11 +1184,14 @@ a.alpha:Hover{
 .MatrixLayer{
 	border:2px solid #a3a295;
 	background-color:#FFFFFF;
-	width:29%;
+	width:31%;
 	position:relative;
 	visibility:visible;
 	margin:9px;
-	height:280px;
+	height:325px;
+	padding-top:0px;
+	padding-left:0px;
+	padding-right:0px;
 }
 
 .fontBold{
@@ -1341,6 +1351,10 @@ a.calMnu:Hover{
 	height:20px;
 	padding-left:5px;
 	padding-top:3px;
+}
+
+.bgwhite{
+	background-color: #FFFFFF;
 }
 
 #mnuTab{
@@ -2164,6 +2178,39 @@ a.drop_down:Hover{
    	background-repeat:repeat-x;
 }
 /* Recalculate Disable Ends */
+.hide_tab{display:none;}
+
+.show_tab{display:inline-table;}
+
+.winmarkModulesdef{
+    background-image:url(images/windowmarkModules.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
+}
+
+.winmarkModulesusr{
+    background-image:url(images/windowmarkModulesusr.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
+}
+
+.winmarkRSS{
+    background-image:url(images/windowmarkRSS.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
+}
+
+.winmarkDashboardusr{
+    background-image:url(images/windowmarkDashboardusr.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
+}
+
+.winmarkDashboarddef{
+    background-image:url(images/windowmarkDashboard.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
+}
 
 /*added for the hanlder of the div in the home page */
 .headerrow{

@@ -93,6 +93,40 @@ class vtigerRSS extends CRMEntity
 		}
 	}
 
+	/** Function to get the List of Rss feeds in the Customized Home page 
+	  * This Function accepts maximum entries as arguments and returns the listview contents on Success
+	  * returns "Sorry: It's not possible to reach RSS URL" if fails
+	 */
+	function getListViewHomeRSSHtml($maxentries)
+	{
+		$return_value=Array();
+		$return_more=Array();
+		if(isset($this->rss_object))
+		{
+			$y = 0;
+		
+			foreach($this->rss_object as $key=>$item)
+			{
+				$title =$item[title];
+				$link = $item[link];
+				
+				if($y == $maxentries)
+				{
+					$return_more=Array("Details"=>$return_value,"More"=>$this->rss_link);
+					return $return_more;
+				}
+				$y = $y + 1;
+		     		$return_value[]=Array($title,$link);
+			}
+			$return_more=Array("Details"=>$return_value,"More"=>$this->rss_link);
+			return $return_more;
+
+		}else
+		{
+			return $return_more;
+		}
+	}	
+
 	/** Function to save the Rss Feeds  
 	  * This Function accepts the RssURl,Starred Status as arguments and 
 	  * returns true on sucess 

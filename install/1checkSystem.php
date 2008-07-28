@@ -338,7 +338,7 @@ $array = Array(
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>allow_call_time_pass_reference = On</strong></tr>
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>log_errors = Off</strong></tr>
 				<tr bgcolor="#ffffff"> <td valign=top ><strong>short_open_tag= On</strong></tr>
-				<tr bgcolor="#ffffff">  <td valign=top ><a href="http://www.vtiger.com/products/crm/help/5.0.4/vtiger_CRM_Linux_Dependencies.pdf" target="_blank">Linux installation pre-requisites</a></tr>
+				<tr bgcolor="#ffffff">  <td valign=top ><a href="http://www.vtiger.com/products/crm/help/5.1.0/vtiger_CRM_Linux_Dependencies.pdf" target="_blank">Linux installation pre-requisites</a></tr>
 				</table>
 			</td>
 			</tr>

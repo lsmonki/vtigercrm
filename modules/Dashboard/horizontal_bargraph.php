@@ -90,7 +90,7 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 	$font->setColor($font_color);
 		
 	$graph->setFont($font);
-	$titlestr =& Image_Graph::factory('title', array($title,10));
+	$titlestr =& Image_Graph::factory('title', array($title,8));
    	$plotarea =& Image_Graph::factory('plotarea',array(
 				'axis',
 				'axis',
@@ -111,7 +111,15 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 	
 	$xlabels = array();
 	$dataset = & Image_Graph::factory('dataset');
-	$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL_MIRRORED, 'blue', 'white'));
+	if($theme == 'woodspice')
+		$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL_MIRRORED, '#804000', 'white'));
+	elseif($theme == 'bluelagoon')
+		$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL_MIRRORED, 'blue', 'white'));
+	elseif($theme == 'softed')
+		$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL_MIRRORED, 'blue', 'white'));
+	else
+		$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL_MIRRORED, 'black', 'white'));
+	
 	for($i=0;$i<count($datay); $i++)
 	{
 		$x=1+2*$i;
@@ -138,15 +146,13 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 			$uniquex[$datax[$i]] = $datax_appearance + 1;			
 		}
 	}
-	//print_r($uniquex);
-
 
 	$bplot = & $plotarea->addNew('bar', $dataset);
 	$bplot->setFillStyle($fill);
 
 	//You can change the width of the bars if you like
 	$bplot->setBarWidth(50/count($datax),"%");
-	$bplot->setPadding(array('top'=>20));
+	$bplot->setPadding(array('top'=>10));
 
 	// We want to display the value of each bar at the top
 	//$bplot->value->Show();
@@ -156,7 +162,7 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 	//$bplot->value->SetFormat('%d');
 
 	//$graph->SetBackgroundGradient('#E5E5E5','white',GRAD_VER,BGRAD_PLOT);
-	$bplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL, '#7a8fee', '#E5E5E5')));
+	$bplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL, 'white', 'white')));
 	//$bplot->setBackground(Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_HORIZONTAL, 'white', '#E5E5E5')));
 	//$bplot->SetFillGradient("navy","lightsteelblue",GRAD_MIDVER);
 
@@ -182,15 +188,15 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 			
 	// set grid
 	$gridY =& $plotarea->addNew('line_grid', IMAGE_GRAPH_AXIS_Y);
-	$gridY->setLineColor('#E5E5E5@0.5');
+	$gridY->setLineColor('#FFFFFF@0.5');
 	$gridY2 =& $plotarea->addNew('bar_grid', null, IMAGE_GRAPH_AXIS_Y); 
-	$gridY2->setFillColor('#dadada@0.2');
+	$gridY2->setFillColor('#FFFFFF@0.2');
 
 
 	// Add some grace to y-axis so the bars doesn't go
 	// all the way to the end of the plot area
 	$yaxis->forceMaximum(round(($max * 1.1) + 0.5));
-	$ticks = get_tickspacing($max);
+	$ticks = get_tickspacing(round(($max * 1.1) + 0.5));
 
 	// First make the labels look right
 	$yaxis->setLabelInterval($ticks[0]);
@@ -218,7 +224,7 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 	$marker->setBorderColor('000000@0.0');
 	$marker->setFontSize(10);
 	// shift markers 10 pix right
-	$marker_pointing =& $graph->addNew('Image_Graph_Marker_Pointing', array(10,0,& $marker));
+	$marker_pointing =& $graph->addNew('Image_Graph_Marker_Pointing', array(40,0,& $marker));
 	$marker_pointing->setLineColor('000000@0.0');
 	$bplot->setMarker($marker_pointing);
 
