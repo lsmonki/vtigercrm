@@ -1132,7 +1132,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 */
 
 
-function getSearchListViewEntries($focus, $module,$list_result,$navigation_array)
+function getSearchListViewEntries($focus, $module,$list_result,$navigation_array,$form='')
 {
 	global $log;
 	$log->debug("Entering getSearchListViewEntries(".get_class($focus).",". $module.",".$list_result.",".$navigation_array.") method ...");
@@ -1283,8 +1283,8 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 						}
 						else
 						{
-							$list_result_count = $i-1;
-							$value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"search",$focus->popup_type);
+							$list_result_count = $i-1; 
+							$value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"search",$focus->popup_type, $form);
 						}
 
 					}
@@ -1315,9 +1315,9 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 */
 
 
-function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='',$viewid='')
+function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$form='', $returnset='',$viewid='')
 {
-	global $log, $listview_max_textlength, $app_strings, $current_language;
+	global $log, $listview_max_textlength, $app_strings, $current_language,$currentModule;
 	$log->debug("Entering getValue(".$field_result.",". $list_result.",".$fieldname.",".get_class($focus).",".$module.",".$entity_id.",".$list_result_count.",".$mode.",".$popuptype.",".$returnset.",".$viewid.") method ...");
 	global $adb, $current_user, $default_charset;
 	
@@ -1795,7 +1795,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 							else
 								$cntct_focus->column_fields[$xyz[$i]] = '';
 						}
-						$value = '<a href="javascript:window.close();" onclick=\'set_return_contact_address("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.popup_decode_html($cntct_focus->column_fields['mailingstreet']).'", "'.popup_decode_html($cntct_focus->column_fields['otherstreet']).'", "'.popup_decode_html($cntct_focus->column_fields['mailingcity']).'", "'.popup_decode_html($cntct_focus->column_fields['othercity']).'", "'.popup_decode_html($cntct_focus->column_fields['mailingstate']).'", "'.popup_decode_html($cntct_focus->column_fields['otherstate']).'", "'.popup_decode_html($cntct_focus->column_fields['mailingzip']).'", "'.popup_decode_html($cntct_focus->column_fields['otherzip']).'", "'.popup_decode_html($cntct_focus->column_fields['mailingcountry']).'", "'.popup_decode_html($cntct_focus->column_fields['othercountry']).'","'.popup_decode_html($cntct_focus->column_fields['mailingpobox']).'", "'.popup_decode_html($cntct_focus->column_fields['otherpobox']).'");\'>'.$temp_val.'</a>';
+						$value = '<a href="javascript:window.close();" onclick=\'set_return_contact_address("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.popup_decode_html($cntct_focus->column_fields['mailingstreet']).'", "'.popup_decode_html($cntct_focus->column_fields['otherstreet']).'", "'.popup_decode_html($cntct_focus->column_fields['mailingcity']).'", "'.popup_decode_html($cntct_focus->column_fields['othercity']).'", "'.popup_decode_html($cntct_focus->column_fields['mailingstate']).'", "'.popup_decode_html($cntct_focus->column_fields['otherstate']).'", "'.popup_decode_html($cntct_focus->column_fields['mailingzip']).'", "'.popup_decode_html($cntct_focus->column_fields['otherzip']).'", "'.popup_decode_html($cntct_focus->column_fields['mailingcountry']).'", "'.popup_decode_html($cntct_focus->column_fields['othercountry']).'","'.popup_decode_html($cntct_focus->column_fields['mailingpobox']).'", "'.popup_decode_html($cntct_focus->column_fields['otherpobox']).'","'.$form.'");\'>'.$temp_val.'</a>';
 					}					
 
 					else

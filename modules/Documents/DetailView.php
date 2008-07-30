@@ -101,7 +101,7 @@ foreach($allblocks as $blocks)
 	foreach($blocks as $block_entries)
 	{
 		//print_r('<br>'.$block_entries['File']['value'].'<br>');
-		if($block_entries['File']['value'] != '' || isset($block_entries['File']['value']))
+		if($block_entries['File']['value'] != '')
 			$flag = 1;
 	}
 }

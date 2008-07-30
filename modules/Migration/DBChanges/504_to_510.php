@@ -377,7 +377,7 @@ for($i=0;$i<$num_profiles;$i++) {
 /* Documents module */
 ExecuteQuery("alter table vtiger_notes add(folderid int(19) NOT NULL,filepath varchar(255) default NULL,filetype varchar(50) default NULL,filelocationtype varchar(5) default NULL,filedownloadcount int(19) default NULL,filestatus int(19) default NULL,filesize int(19) NOT NULL default '0',filearchitecture varchar(50) default NULL,fileversion varchar(50) default NULL,os varchar(200) default NULL)");
 
-ExecuteQuery("create table vtiger_attachmentsfolder ( folderid int(19) NOT NULL auto_increment,foldername varchar(200) NOT NULL default '', description varchar(250) default '', createdby int(19) NOT NULL, sequence int(19) default NULL, PRIMARY KEY  (folderid))");
+ExecuteQuery("create table vtiger_attachmentsfolder ( folderid int(19) NOT NULL,foldername varchar(200) NOT NULL default '', description varchar(250) default '', createdby int(19) NOT NULL, sequence int(19) default NULL, PRIMARY KEY  (folderid))");
 
 ExecuteQuery("insert into vtiger_attachmentsfolder values (1,'Existing Notes','Contains all Notes migrated from the earlier version',1,1)");
 
@@ -392,7 +392,7 @@ if($noofnotes > 0)
     }
 }
 
-ExecuteQuery("create table `vtiger_os`(`osid` int(19) NOT NULL auto_increment,`os` varchar(300) NOT NULL,`sortorderid` int(19) NOT NULL default '0',`presence` int(1) NOT NULL default '1',PRIMARY KEY  (`osid`),UNIQUE KEY `os_os_idx` (`os`))");
+ExecuteQuery("create table vtiger_os(osid int(19) NOT NULL auto_increment,os varchar(300) NOT NULL,sortorderid int(19) NOT NULL default '0',presence int(1) NOT NULL default '1',PRIMARY KEY  (osid))");
 
 ExecuteQuery("insert into vtiger_os values(1,'Windows',0,1)");
 ExecuteQuery("insert into vtiger_os values(2,'Linux',1,1)");
@@ -446,7 +446,7 @@ ExecuteQuery("alter table vtiger_notes drop column contact_id");
 
 ExecuteQuery("delete from vtiger_cvcolumnlist where columnname like '%Notes_Contact_Name%'");
 ExecuteQuery("delete from vtiger_cvcolumnlist where columnname like '%Notes_Related_to%'");
-ExecuteQuery("create table vtiger_notegrouprelation (notesid int(19) NOT NULL, groupname vachar(100) default NULL)");
+ExecuteQuery("create table vtiger_notegrouprelation (notesid int(19) NOT NULL, groupname varchar(100) default NULL)");
 
 ExecuteQuery("insert into vtiger_def_org_share values (13,8,2,0)");
 
@@ -455,7 +455,11 @@ for($i=0;$i<4;$i++)
 	ExecuteQuery("insert into vtiger_org_share_action2tab values(".$i.",8)");
 }	
 
+ExecuteQuery("alter table vtiger_customview drop foreign key fk_1_vtiger_customview ");
+ExecuteQuery("update vtiger_customview set entitytype='Documents' where entitytype='Notes'");
 ExecuteQuery("update vtiger_tab set ownedby=0,name='Documents',tablabel='Documents' where tabid=8");
+ExecuteQuery("update vtiger_entityname set modulename='Documents' where tabid=8");
+ExecuteQuery("alter table vtiger_customview add constraint FOREIGN KEY fk_1_vtiger_customview (entitytype) REFERENCES vtiger_tab (name) ON DELETE CASCADE");
 //End: Database changes regarding Documents module
 
 /* Home Page Customization */

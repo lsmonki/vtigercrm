@@ -33,7 +33,7 @@ $smarty->assign("CATEGORY",$parent_tab);}
 $url = '';
 $popuptype = '';
 $popuptype = $_REQUEST["popuptype"];
-
+$form = $_REQUEST['form'];
 //added to get relatedto field value for todo, while selecting from the popup list, after done the alphabet or basic search.
 if(isset($_REQUEST['maintab']) && $_REQUEST['maintab'] != '')
 {
@@ -332,7 +332,7 @@ $listview_header = getSearchListViewHeader($focus,"$currentModule",$url_string,$
 $smarty->assign("LISTHEADER", $listview_header);
 $smarty->assign("HEADERCOUNT",count($listview_header)+1);
 
-$listview_entries = getSearchListViewEntries($focus,"$currentModule",$list_result,$navigation_array);
+$listview_entries = getSearchListViewEntries($focus,"$currentModule",$list_result,$navigation_array,$form); 
 $smarty->assign("LISTENTITY", $listview_entries);
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,$currentModule,"Popup");

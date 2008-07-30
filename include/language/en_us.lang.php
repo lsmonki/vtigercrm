@@ -1137,6 +1137,7 @@ $app_strings = array (
 'LBL_NOTE' => 'Document',
 'LBL_CREATING_NEW_Documents' => 'Creating New Document',
 'LBL_PLATFORM_INDEPENDENT'=>'Platform Independent',
+'Attachments' => 'Attachments', //added for list header label in related lists
 );
 
 $app_list_strings = array (

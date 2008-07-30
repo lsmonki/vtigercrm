@@ -2074,28 +2074,29 @@ function selectContact(check,type,frmName)
         }
         else if(($("parentid")) && type != 'task')
         {
-		if(getObj("parent_type")){
-                	rel_parent_module = frmName.parent_type.value;
-			record_id = frmName.parent_id.value;
-        	        module = rel_parent_module.split("&");	
-			if(record_id != '' && module[0] == "Leads")
-			{
-				alert(alert_arr.CANT_SELECT_CONTACTS);
-			}
-			else
-			{
-				if(check == 'true')
-					search_string = "&return_module=Calendar&select=enable&popuptype=detailview&form_submit=false";
+			if(getObj("parent_type")){
+	                	rel_parent_module = frmName.parent_type.value;
+				record_id = frmName.parent_id.value;
+	        	        module = rel_parent_module.split("&");	
+				if(record_id != '' && module[0] == "Leads")
+				{
+					alert(alert_arr.CANT_SELECT_CONTACTS);
+				}
 				else
-					search_string="&popuptype=specific";
-				if(record_id != '')
-					window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&form=EditView"+search_string+"&relmod_id="+record_id+"&parent_module="+module[0],"test","width=640,height=602,resizable=0,scrollbars=0");
-				else
-					window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&form=EditView"+search_string,"test","width=640,height=602,resizable=0,scrollbars=0");
+				{
+					if(check == 'true')
+						search_string = "&return_module=Calendar&select=enable&popuptype=detailview&form_submit=false";
+					else
+						search_string="&popuptype=specific";
+					if(record_id != '')
+						window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&form=EditView"+search_string+"&relmod_id="+record_id+"&parent_module="+module[0],"test","width=640,height=602,resizable=0,scrollbars=0");
+					else
+						window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&form=EditView"+search_string,"test","width=640,height=602,resizable=0,scrollbars=0");
+					
+				}
+			}else{
+				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&return_module=Calendar&select=enable&popuptype=detailview&form=EditView&form_submit=false","test","width=640,height=602,resizable=0,scrollbars=0");
 			}
-		}else{
-			window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&return_module=Calendar&select=enable&popuptype=detailview&form=EditView&form_submit=false","test","width=640,height=602,resizable=0,scrollbars=0");
-		}
         }
 	else if(($("contact_name")) && type == 'task')
 	{
@@ -2128,9 +2129,9 @@ function selectContact(check,type,frmName)
 		else
 		{
 			if(task_recordid != '')
-				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker"+popuptype+"&form=EditView&task_relmod_id="+task_recordid+"&task_parent_module="+task_module[0],"test","width=640,height=602,resizable=0,scrollbars=0");
+				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker"+popuptype+"&form="+formName+"&task_relmod_id="+task_recordid+"&task_parent_module="+task_module[0],"test","width=640,height=602,resizable=0,scrollbars=0");
 			else	
-				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form="+formName,"test","width=640,height=602,resizable=0,scrollbars=0");
 		}
 
 	}
@@ -2694,6 +2695,7 @@ function ActivityReminderPostponeCallback(cbmodule, cbrecord) {
 function ActivityReminderPostponeCallbackProcess(message) {
 	ActivityReminderProgressIndicator(false);
 }
+/* END */
 
 /* ActivityReminder Customization: Pool Callback */
 var ActivityReminder_regcallback_timer;
