@@ -192,6 +192,13 @@ if(isset($_SESSION["authenticated_user_id"]) && (isset($_SESSION["app_unique_key
         $use_current_login = true;
 }
 
+// Prevent loading Login again if there is an authenticated user in the session.
+if (isset($_SESSION["authenticated_user_id"]) && $module == 'Users' && $action == 'Login') {
+
+    header("Location: index.php?action=$default_action&module=$default_module");
+
+} 
+
 if($use_current_login)
 {
 
