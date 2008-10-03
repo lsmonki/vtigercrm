@@ -980,5 +980,10 @@ $mod_strings = Array(
 'LBL_LOCAL'=>'Local',
 'LBL_BACKUP'=>'Backup',
 'LBL_BACKUP_LOCATION'=>'Backup Location',
+
+'LBL_LAYOUT_EDITOR'=>'Layout Editor',
+'LBL_LAYOUT_EDITOR_DESCRIPTION'=>'Designing and Modifying the layout in each of the modules',
+'LBL_Show'=>'Show',
+'LBL_Hide'=>'Hide'
 );
 ?>

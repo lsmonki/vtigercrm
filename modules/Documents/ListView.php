@@ -211,6 +211,8 @@ if($foldercount > 0)
 	{
 		$query = '';
 		$query = $focus->query;
+		$list_query = '';
+		$list_query = $focus->query;
 		$folder_id = $adb->query_result($result,$i,"folderid");
 		$query .= " and folderid = $folder_id";
 		if($folder_id != $request_folderid)
@@ -240,10 +242,12 @@ if($foldercount > 0)
 			if( $adb->dbType == "pgsql")
 			{
  	    		$query .= ' GROUP BY '.$tablename.$order_by;
+ 	    		$list_query .= ' GROUP BY '.$tablename.$order_by;
  	    		$focus->additional_query .= ' GROUP BY '.$tablename.$order_by;
 			}
 
         	$query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
+        	$list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
         	$focus->additional_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 		}
 		
@@ -303,6 +307,7 @@ else
 {
 	$smarty->assign("NO_FOLDERS","yes");
 }
+
 $smarty->assign("NO_OF_FOLDERS",$foldercount);
 $smarty->assign("FOLDERS", $folders);
 $smarty->assign("HIDE_EMPTY_FOLDERS", $hide_empty_folders);
@@ -324,6 +329,8 @@ if($current_user->id == 1)
 	$smarty->assign("IS_ADMIN","on");
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+
+$_SESSION['documents_listquery'] = $list_query;
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '' || $_REQUEST['mode'] == 'ajax')
 	$smarty->display("DocumentsListViewEntries.tpl");

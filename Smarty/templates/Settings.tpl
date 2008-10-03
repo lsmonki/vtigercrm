@@ -174,6 +174,22 @@
 				<table border=0 cellspacing=0 cellpadding=10 width=100%>
 				<tr>
 
+				<!-- Start of code added by ONTAP  -->
+					<td width=25% valign=top>
+					<!-- icon 9-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=LayoutBlockList&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}orgshar.gif" alt="{$MOD.LBL_LAYOUT_EDITOR}" title="{$MOD.LBL_LAYOUT_EDITOR}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=LayoutBlockList&parenttab=Settings">{$MOD.LBL_LAYOUT_EDITOR}</a></td>
+						</tr>
+						<tr>
+
+							<td class="small" valign=top>{$MOD.LBL_LAYOUT_EDITOR_DESCRIPTION}</td>
+						</tr>
+						</table>
+					</td>
+					<!-- End of code added by ONTAP -->
+
 					<td width=25% valign=top>
 					<!-- icon 9-->
 						<table border=0 cellspacing=0 cellpadding=5 width=100%>

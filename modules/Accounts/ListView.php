@@ -325,6 +325,7 @@ $listview_header_search=getSearchListHeaderValues($focus,"Accounts",$url_string,
 $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"Accounts",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
+
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 $smarty->assign("CATEGORY",$category);
@@ -349,6 +350,8 @@ $smarty->assign("RECORD_COUNTS", $record_string);
 
 $check_button = Button_Check($module); 
 $smarty->assign("CHECK", $check_button);
+
+$_SESSION['accounts_listquery'] = $query;
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");

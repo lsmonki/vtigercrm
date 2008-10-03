@@ -88,5 +88,45 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 //Added to display the Faq comments information
 $smarty->assign("COMMENT_BLOCK",$focus->getFAQComments($_REQUEST['record']));
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+
+if(isset($_SESSION['faq_listquery'])){
+	$arrayTotlist = array();
+	$aNamesToList = array(); 
+	$forAllCRMIDlist_query=$_SESSION['faq_listquery'];
+	$resultAllCRMIDlist_query=$adb->pquery($forAllCRMIDlist_query,array());
+	while($forAllCRMID = $adb->fetch_array($resultAllCRMIDlist_query))
+	{
+		$arrayTotlist[]=$forAllCRMID['crmid'];
+	}
+	$_SESSION['listEntyKeymod'] = $module.":".implode(",",$arrayTotlist);
+	if(isset($_SESSION['listEntyKeymod']))
+	{
+	$split_temp=explode(":",$_SESSION['listEntyKeymod']);
+		if($split_temp[0] == $module)
+		{	
+			$smarty->assign("SESMODULE",$split_temp[0]);
+			$ar_allist=explode(",",$split_temp[1]);
+			
+			for($listi=0;$listi<count($ar_allist);$listi++)
+			{
+				if($ar_allist[$listi]==$_REQUEST[record])
+				{
+					if($listi-1>=0)
+					{
+						$privrecord=$ar_allist[$listi-1];
+						$smarty->assign("privrecord",$privrecord);
+					}else {unset($privrecord);}
+					if($listi+1<count($ar_allist))
+					{
+						$nextrecord=$ar_allist[$listi+1];
+						$smarty->assign("nextrecord",$nextrecord);
+					}else {unset($nextrecord);}
+					break;
+				}
+				
+			}
+		}
+	}
+}
 $smarty->display("DetailView.tpl");
 ?>

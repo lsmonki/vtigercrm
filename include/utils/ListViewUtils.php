@@ -758,11 +758,10 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				}
 				else
 				{
-
-					if(($module == 'Calendar' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice' || $module == 'Leads' || $module == 'Contacts') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close') || ($name == 'First Name')))
+					if(($module == 'Calendar' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice' || $module == 'Leads' || $module == 'Contacts') && (($fieldname=='parent_id') || ($name=='Contact Name') || ($name=='Close') || ($fieldname == 'firstname')))
 					{
 						$status = $adb->query_result($list_result,$i-1,"status");
-						if ($name=='Related to')
+						if ($fieldname=='parent_id')
 							$value=getRelatedTo($module,$list_result,$i-1);
 						if($name=='Contact Name')
 						{
@@ -782,7 +781,8 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 								$value =  "<a href='index.php?module=Contacts&action=DetailView&parenttab=".$tabname."&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 							}
 						}
-						if($name == "First Name")
+
+						if($fieldname == "firstname")
 						{
 							$first_name = textlength_check($adb->query_result($list_result,$i-1,"firstname"));
 							
@@ -1315,7 +1315,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 */
 
 
-function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$form='', $returnset='',$viewid='')
+function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='',$viewid='')
 {
 	global $log, $listview_max_textlength, $app_strings, $current_language,$currentModule;
 	$log->debug("Entering getValue(".$field_result.",". $list_result.",".$fieldname.",".get_class($focus).",".$module.",".$entity_id.",".$list_result_count.",".$mode.",".$popuptype.",".$returnset.",".$viewid.") method ...");

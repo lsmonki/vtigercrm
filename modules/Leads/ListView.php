@@ -366,6 +366,8 @@ $smarty->assign("RECORD_COUNTS", $record_string);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
+$_SESSION['leads_listquery'] = $query;
+
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");
 else	

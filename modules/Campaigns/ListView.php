@@ -184,7 +184,6 @@ else
 }
 
 //Constructing the list view
-
 //Retreiving the no of rows
 $count_result = $adb->query( mkCountQuery( $list_query));
 $noofrows = $adb->query_result($count_result,0,"count");
@@ -252,6 +251,7 @@ $listview_header_search = getSearchListHeaderValues($focus,"Campaigns",$url_stri
 $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"Campaigns",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
+
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 //Added to select Multiple records in multiple pages
@@ -272,6 +272,8 @@ $smarty->assign("RECORD_COUNTS", $record_string);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+
+$_SESSION['campaigns_listquery'] = $list_query;
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");

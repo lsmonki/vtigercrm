@@ -193,6 +193,7 @@ if(isset($order_by) && $order_by != '')
 			$list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder; 
 	}
 }
+
 //Constructing the list view
 $smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
 $smarty->assign("VIEWID", $viewid);
@@ -204,7 +205,6 @@ $smarty->assign("SINGLE_MOD",'Activity');
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("NEW_EVENT",$app_strings['LNK_NEW_EVENT']);
 $smarty->assign("NEW_TASK",$app_strings['LNK_NEW_TASK']);
-
 
 //Retreiving the no of rows
 $count_result = $adb->query("select count(*) count,vtiger_activity.activitytype ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query))); 
@@ -280,6 +280,8 @@ $smarty->assign("CATEGORY",$category);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+
+$_SESSION['activity_listquery'] = $list_query;
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");

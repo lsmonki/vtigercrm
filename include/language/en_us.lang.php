@@ -1138,6 +1138,13 @@ $app_strings = array (
 'LBL_CREATING_NEW_Documents' => 'Creating New Document',
 'LBL_PLATFORM_INDEPENDENT'=>'Platform Independent',
 'Attachments' => 'Attachments', //added for list header label in related lists
+
+// Layout Editor and Ease navigation between records in Detail view
+'LNK_LIST_NEXT' => 'Next',
+'LNK_LIST_PREVIOUS' => 'Previous',
+'LBL_JUMP_BTN'=> 'JUMP',
+
+'LBL_ASSIGN_BUTTON_LABEL'=>'Assign Fields',
 );
 
 $app_list_strings = array (

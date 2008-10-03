@@ -732,8 +732,8 @@ function getSoName($so_id)
 }
 
 /**
- * Function to get the Assigned Group Information for a given entityid
- * Takes the input $id - entity id (crmid) and $module - module name
+ * Function to get the Group Information for a given groupid  
+ * Takes the input $id - group id and $module - module name
  * returns the group information in an array format.
  */
 
@@ -1184,7 +1184,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
         $tabid = getTabid($module);
         $block_detail = Array();
         $getBlockinfo = "";
-        $query="select blockid,blocklabel,show_title from vtiger_blocks where tabid=? and $disp_view=0 and visible = 0 order by sequence";
+        $query="select blockid,blocklabel,show_title,display_status from vtiger_blocks where tabid=? and $disp_view=0 and visible = 0 order by sequence";
         $result = $adb->pquery($query, array($tabid));
         $noofrows = $adb->num_rows($result);
         $prev_header = "";
@@ -1194,6 +1194,9 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 		$blockid = $adb->query_result($result,$i,"blockid");
 		array_push($blockid_list,$blockid);
 		$block_label[$blockid] = $adb->query_result($result,$i,"blocklabel");
+		
+		$sLabelVal = $mod_strings[$block_label[$blockid]];
+		$aBlockStatus[$sLabelVal] = $adb->query_result($result,$i,"display_status");
 	}
 	if($mode == 'edit')	
 	{
@@ -1291,10 +1294,14 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 					}
 				}
 				$index_count++;
-
 			}
+				if(empty($getBlockInfo[$label]))
+				{
+					unset($getBlockInfo[$label]);
+				}
 		}
 	}
+	$_SESSION['BLOCKINITIALSTATUS'] = $aBlockStatus;
 	return $getBlockInfo;
 }	
 /**

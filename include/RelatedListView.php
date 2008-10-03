@@ -135,7 +135,13 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		$query .= ' GROUP BY vtiger_activity.activityid ORDER BY '.$query_order_by.' '.$sorder;
 	else
 		$query .= ' ORDER BY '.$query_order_by.' '.$sorder;		
-
+	
+	if($relatedmodule == 'Calendar')
+		$mod_listquery = "activity_listquery";
+	else 
+		$mod_listquery = strtolower($relatedmodule)."_listquery";
+	$_SESSION[$mod_listquery] = $query;
+	
 	$url_qry .="&order_by=".$order_by."&sorder=".$sorder;
 	//Added for PHP version less than 5
 	if (!function_exists("stripos"))
@@ -267,6 +273,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 	$result=$adb->query($query);
 	$noofrows = $adb->num_rows($result);
 
+	$_SESSION['documents_listquery'] = $query;
 	$header[] = $app_strings['LBL_CREATED'];
 	$header[] = $app_strings['LBL_TITLE'];
 	$header[] = $app_strings['LBL_DESCRIPTION'];
@@ -310,6 +317,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 					$editaction = 'upload';
 					$deleteaction = 'deleteattachments';
 				}
+				
 				if($row['createdtime'] != '0000-00-00 00:00:00')
 				{
 					$created_arr = explode(" ",getDisplayDate($createdtime));

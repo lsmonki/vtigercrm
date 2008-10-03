@@ -101,7 +101,7 @@ foreach($allblocks as $blocks)
 	foreach($blocks as $block_entries)
 	{
 		//print_r('<br>'.$block_entries['File']['value'].'<br>');
-		if($block_entries['File']['value'] != '')
+		if($block_entries['File']['value'] != '' || isset($block_entries['File']['value']))
 			$flag = 1;
 	}
 }
@@ -163,6 +163,46 @@ $smarty->assign("FILE_STATUS",$filestatus);
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+
+if(isset($_SESSION['documents_listquery'])){
+	$arrayTotlist = array();
+	$aNamesToList = array(); 
+	$forAllCRMIDlist_query=$_SESSION['documents_listquery'];
+	$resultAllCRMIDlist_query=$adb->pquery($forAllCRMIDlist_query,array());
+	while($forAllCRMID = $adb->fetch_array($resultAllCRMIDlist_query))
+	{
+		$arrayTotlist[]=$forAllCRMID['crmid'];
+	}
+	$_SESSION['listEntyKeymod'] = $module.":".implode(",",$arrayTotlist);
+	if(isset($_SESSION['listEntyKeymod']))
+	{
+	$split_temp=explode(":",$_SESSION['listEntyKeymod']);
+		if($split_temp[0] == $module)
+		{	
+			$smarty->assign("SESMODULE",$split_temp[0]);
+			$ar_allist=explode(",",$split_temp[1]);
+			
+			for($listi=0;$listi<count($ar_allist);$listi++)
+			{
+				if($ar_allist[$listi]==$_REQUEST[record])
+				{
+					if($listi-1>=0)
+					{
+						$privrecord=$ar_allist[$listi-1];
+						$smarty->assign("privrecord",$privrecord);
+					}else {unset($privrecord);}
+					if($listi+1<count($ar_allist))
+					{
+						$nextrecord=$ar_allist[$listi+1];
+						$smarty->assign("nextrecord",$nextrecord);
+					}else {unset($nextrecord);}
+					break;
+				}
+				
+			}
+		}
+	}
+}
 $smarty->display("DetailView.tpl");
 
 ?>

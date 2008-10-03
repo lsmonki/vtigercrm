@@ -36,8 +36,83 @@ function callConvertLeadDiv(id)
                 }
         );
 }
-{/literal}
+<!-- Start Of Code modified by SAKTI on 10th Apr, 2008 -->
+function showHideStatus(sId,anchorImgId,sImagePath)
+{
+	oObj = eval(document.getElementById(sId));
+	if(oObj.style.display == 'block')
+	{
+		oObj.style.display = 'none';
+		eval(document.getElementById(anchorImgId)).src = sImagePath + 'inactivate.gif';
+		eval(document.getElementById(anchorImgId)).alt = 'Display';
+		eval(document.getElementById(anchorImgId)).title = 'Display';
+	}
+	else
+	{
+		oObj.style.display = 'block';
+		eval(document.getElementById(anchorImgId)).src = sImagePath + 'activate.gif';
+		eval(document.getElementById(anchorImgId)).alt = 'Hide';
+		eval(document.getElementById(anchorImgId)).title = 'Hide';
+	}
+}
+<!-- End Of Code modified by SAKTI on 10th Apr, 2008 -->
 
+<!-- Start of code added by SAKTI on 16th Jun, 2008 -->
+function setCoOrdinate()
+{
+	oBtnObj = eval(document.getElementById('jumpBtnId'));
+	var tagName = document.getElementById('lstRecordLayout');
+	leftpos  = 0;
+	toppos = 0;
+	aTag = oBtnObj;
+	do 
+	{					  
+	  leftpos  += aTag.offsetLeft;
+	  toppos += aTag.offsetTop;
+	} while(aTag = aTag.offsetParent);
+	
+	tagName.style.top= toppos + 20 + 'px';
+	tagName.style.left= leftpos - 276 + 'px';
+}
+
+function getListOfRecords(obj, sModule, iId,sParentTab)
+{
+		new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Users&action=getListOfRecords&ajax=true&CurModule='+sModule+'&CurRecordId='+iId+'&CurParentTab='+sParentTab,
+			onComplete: function(response) {
+				sResponse = response.responseText;
+				$("lstRecordLayout").innerHTML = sResponse;
+				Lay = 'lstRecordLayout';	
+				var tagName = document.getElementById(Lay);
+				var leftSide = findPosX(obj);
+				var topSide = findPosY(obj);
+				var maxW = tagName.style.width;
+				var widthM = maxW.substring(0,maxW.length-2);
+				var getVal = eval(leftSide) + eval(widthM);
+				if(getVal  > document.body.clientWidth ){
+					leftSide = eval(leftSide) - eval(widthM);
+					tagName.style.left = leftSide + 230 + 'px';
+					tagName.style.top = top + 20 + 'px';
+					
+				}
+				else
+					tagName.style.left = leftSide + 230 + 'px';
+				
+				setCoOrdinate();
+				
+				tagName.style.display = 'block';
+				tagName.style.visibility = "visible";
+			}
+		}
+	);
+}
+
+window.onresize = setCoOrdinate;
+<!-- End of code added by SAKTI on 16th Jun, 2008 -->
+{/literal}
 function tagvalidate()
 {ldelim}
 	if(trim(document.getElementById('txtbox_tagfields').value) != '')
@@ -74,6 +149,9 @@ function sendfile_email()
 {rdelim}
 
 </script>
+
+<div id="lstRecordLayout" class="layerPopup" style="display:none;width:325px;height:300px;"></div> <!-- Code added by SAKTI on 16th Jun, 2008 -->
+
 {if $MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Leads'}
         {if $MODULE eq 'Accounts'}
                 {assign var=address1 value='$MOD.LBL_BILLING_ADDRESS'}
@@ -167,8 +245,7 @@ function sendfile_email()
 					
 						<table border=0 cellspacing=0 cellpadding=0 width=100%>
 						<tr>
-						<td>
-					
+						<td width=35%>
 						{if $EDIT_DUPLICATE eq 'permitted'}
 						<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
 						{/if}
@@ -211,20 +288,41 @@ function sendfile_email()
 								{/if}
 						{/if}
 						</td>
-						<td align=right>
+						<td width=30% align=center>
+									{if $privrecord neq ''}
+										<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="{$IMAGE_PATH}b_left.gif">&nbsp;
+									{else}
+										<img title="{$APP.LNK_LIST_PREVIOUS}" src="{$IMAGE_PATH}b_left_disable.gif">
+									{/if}
+									&nbsp;
+									{if $nextrecord neq ''}
+										<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="{$IMAGE_PATH}b_right.gif">&nbsp;
+									{else}
+										<img title="{$APP.LNK_LIST_NEXT}" src="{$IMAGE_PATH}b_right_disable.gif">&nbsp;
+									{/if}
+									
+							</td>
+						<td width=35% align=right>
+									{if $privrecord neq '' || $nextrecord neq ''}
+										<input title="{$APP.LBL_JUMP_BTN}" accessKey="{$APP.LBL_JUMP_BTN}" class="crmbutton small create" onclick="location.href='javascript:getListOfRecords(this, \'{$MODULE}\',{$ID},\'{$CATEGORY}\');'" type="button" name="jumpBtnId" id="jumpBtnId" value="{$APP.LBL_JUMP_BTN}">
+									{/if}
 								{if $EDIT_DUPLICATE eq 'permitted' && $MODULE neq 'Documents'}
 								<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
 								{/if}
 								{if $DELETE eq 'permitted'}
-								<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; {if $MODULE eq 'Accounts'} return confirm('{$APP.NTC_ACCOUNT_DELETE_CONFIRMATION}')" {else} return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" {/if} type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+								<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; {if $MODULE eq 'Accounts'} return confirm('{$APP.NTC_ACCOUNT_DELETE_CONFIRMATION}') {else} return confirm('{$APP.NTC_DELETE_CONFIRMATION}') {/if}" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
 								{/if}
-
 						</td>
 						</tr>
 						</table>
 
 							</td>
 						     </tr>{/strip}	
+							 
+							  <!-- Start of File Include by SAKTI on 10th Apr, 2008 -->
+							 {include_php file="./include/DetailViewBlockStatus.php"}
+							 <!-- Start of File Include by SAKTI on 10th Apr, 2008 -->
+
 							{foreach key=header item=detail from=$BLOCKS}
 
 							<!-- Detailed View Code starts here-->
@@ -258,16 +356,39 @@ function sendfile_email()
 							{/if}
 
 
-
-
+<!-- ADD by tanmoy on 26/04/2008-->
+	{if $header neq 'Comments'}
+   <!-- end by tanmoy on 26/04/2008 -->
 
 						     <tr>{strip}
 						     <td colspan=4 class="dvInnerHeader">
-							<b>
+							
+							<!-- Start Of Code modified by SAKTI on 10th Apr, 2008 -->
+							<div style="float:left;font-weight:bold;"><div style="float:left;"><a href="javascript:showHideStatus('tbl{$header|replace:' ':''}','aid{$header|replace:' ':''}','{$IMAGE_PATH}');">
+							{if $BLOCKINITIALSTATUS[$header] eq 1}
+								<img id="aid{$header|replace:' ':''}" src="{$IMAGE_PATH}activate.gif" style="border: 0px solid #000000;" alt="Hide" title="Hide"/>
+							{else}
+							<img id="aid{$header|replace:' ':''}" src="{$IMAGE_PATH}inactivate.gif" style="border: 0px solid #000000;" alt="Display" title="Display"/>
+							{/if}
+								</a></div><b>&nbsp;
 						        	{$header}
-	  			     			</b>
+	  			     			</b></div>
 						     </td>{/strip}
 					             </tr>
+		<!-- ADD by tanmoy on 26/04/2008-->
+{/if}
+<!-- end by tanmoy on 26/04/2008 -->						 
+							</table>
+	<!-- ADD by tanmoy on 26/04/2008-->
+{if $header neq 'Comments'}
+<!-- end by tanmoy on 26/04/2008 -->						
+							{if $BLOCKINITIALSTATUS[$header] eq 1}
+							<div style="width:auto;display:block;" id="tbl{$header|replace:' ':''}" >
+							{else}
+							<div style="width:auto;display:none;" id="tbl{$header|replace:' ':''}" >
+							{/if}
+							<table border=0 cellspacing=0 cellpadding=0 width="100%" class="small">
+							<!-- End Of Code modified by SAKTI on 10th Apr, 2008-->
 						   {foreach item=detail from=$detail}
 						     <tr style="height:25px">
 							{foreach key=label item=data from=$detail}
@@ -313,6 +434,9 @@ function sendfile_email()
 						      </tr>	
 						   {/foreach}	
 						     </table>
+							 </div> <!-- Line added by SAKTI on 10th Apr, 2008 -->
+							 <!-- ADD by tanmoy on 26/04/2008-->
+{/if}
                      	                      </td>
 					   </tr>
 		<tr>                                                                                                               <td style="padding:10px">
@@ -332,7 +456,7 @@ function sendfile_email()
 							<td  colspan=4 style="padding:5px">
 						<table border=0 cellspacing=0 cellpadding=0 width=100%>
 						<tr>
-						<td>
+						<td width=35%>
 					
 						{if $EDIT_DUPLICATE eq 'permitted'}
 						<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
@@ -374,7 +498,23 @@ function sendfile_email()
 								{/if}
 						{/if}
 						</td>
-						<td align=right>
+						<td width=30% align=center>
+									{if $privrecord neq ''}
+										<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="{$IMAGE_PATH}b_left.gif">&nbsp;
+									{else}
+										<img title="{$APP.LNK_LIST_PREVIOUS}" src="{$IMAGE_PATH}b_left_disable.gif">
+									{/if}
+									&nbsp;
+									{if $nextrecord neq ''}
+										<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="{$IMAGE_PATH}b_right.gif">&nbsp;
+									{else}
+										<img title="{$APP.LNK_LIST_NEXT}" src="{$IMAGE_PATH}b_right_disable.gif">&nbsp;
+									{/if}
+							</td>
+						<td width=35% align=right>
+								{if $privrecord neq '' || $nextrecord neq ''}
+									<input title="{$APP.LBL_JUMP_BTN}" accessKey="{$APP.LBL_JUMP_BTN}" class="crmbutton small create" onclick="location.href='javascript:getListOfRecords(this, \'{$MODULE}\',{$ID},\'{$CATEGORY}\');'" type="button" name="jumpBtnId" id="jumpBtnId" value="{$APP.LBL_JUMP_BTN}">
+								{/if}
 								{if $EDIT_DUPLICATE eq 'permitted' && $MODULE neq 'Documents'}
 								<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
 								{/if}

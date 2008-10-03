@@ -1376,7 +1376,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		WHERE vtiger_crmentity.deleted = 0
 		AND (vtiger_activity.activitytype = 'Meeting' OR vtiger_activity.activitytype = 'Call') $and ";
 		
-	$query = "SELECT vtiger_groups.groupname, vtiger_users.user_name,vtiger_crmentity.smownerid,
+	$query = "SELECT vtiger_groups.groupname, vtiger_users.user_name,vtiger_crmentity.smownerid, vtiger_crmentity.crmid,
        		vtiger_activity.* FROM vtiger_activity
 		INNER JOIN vtiger_crmentity
 			ON vtiger_crmentity.crmid = vtiger_activity.activityid
@@ -1390,7 +1390,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 			ON vtiger_recurringevents.activityid = vtiger_activity.activityid
 		WHERE vtiger_crmentity.deleted = 0
 			AND (vtiger_activity.activitytype = 'Meeting' OR vtiger_activity.activitytype = 'Call') $and ";
-
+	$list_query = $query." AND vtiger_crmentity.smownerid = "  . $current_user->id;
 	// User Select Customization
 	$only_for_user = getSelectedUserId();
 	if($only_for_user != 'ALL') {
@@ -1398,7 +1398,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$count_qry .= " AND vtiger_crmentity.smownerid = "  . $only_for_user;
 	}
 	// END
-
+	
 	$params = $info_params = array($start_date, $end_date, $start_date, $end_date, $start_date, $end_date, $start_date, $end_date);
 	if($info != '')
 	{
@@ -1433,6 +1433,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	{
 		$sec_parameter=getCalendarViewSecurityParameter();
 		$query .= $sec_parameter;
+		$list_query .= $sec_parameter;
 		$count_qry .= $sec_parameter;
 	}
 	if(isset($_REQUEST['type']) && $_REQUEST['type'] == 'search')
@@ -1457,9 +1458,14 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	else
 		$start_rec = $start_rec-1;
 	$query .= $group_cond." limit $start_rec,$list_max_entries_per_page";
+	$list_query .= $group_cond;
 
- 	if( $adb->dbType == "pgsql")
+ 	if( $adb->dbType == "pgsql"){
  	    $query = fixPostgresQuery( $query, $log, 0);
+ 	    $list_query = fixPostgresQuery( $list_query, $log, 0);
+ 	}
+	$list_query = $adb->convert2Sql($list_query, $params);
+	$_SESSION['activity_listquery'] = $list_query;
 		
 	$result = $adb->pquery($query, $params);
 	$rows = $adb->num_rows($result);
@@ -1603,8 +1609,9 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		ON vtiger_users.id = vtiger_crmentity.smownerid
 		WHERE vtiger_crmentity.deleted = 0
 		AND vtiger_activity.activitytype = 'Task'
-		AND (vtiger_activity.date_start BETWEEN ? AND ?)";
-        $query = "SELECT vtiger_groups.groupname, vtiger_users.user_name, vtiger_cntactivityrel.contactid, 
+		AND (vtiger_activity.date_start BETWEEN ? AND ?) AND vtiger_crmentity.smownerid = "  . $current_user->id;
+   
+   $query = "SELECT vtiger_groups.groupname, vtiger_users.user_name, vtiger_crmentity.crmid, vtiger_cntactivityrel.contactid, 
 		vtiger_activity.* FROM vtiger_activity
                 INNER JOIN vtiger_crmentity
                         ON vtiger_crmentity.crmid = vtiger_activity.activityid
@@ -1618,19 +1625,20 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 			ON vtiger_users.id = vtiger_crmentity.smownerid
                 WHERE vtiger_crmentity.deleted = 0
                         AND vtiger_activity.activitytype = 'Task'
-                        AND (vtiger_activity.date_start BETWEEN ? AND ?)";
+                        AND (vtiger_activity.date_start BETWEEN ? AND ?) AND vtiger_crmentity.smownerid = "  . $current_user->id;
+
+	$list_query = $query;
 
 	// User Select Customization
-	$only_for_user = getSelectedUserId();
+	/*$only_for_user = getSelectedUserId();
 	if($only_for_user != 'ALL') {
 		$query .= " AND vtiger_crmentity.smownerid = "  . $only_for_user;
 		$count_qry .= " AND vtiger_crmentity.smownerid = "  . $only_for_user;
-	}
+	}*/
 	// END
-			
 		$params = $info_params = array($start_date, $end_date);
         if($info != '')
-	{
+		{
 			//added to fix #4816
 			$groupids = explode(",", fetchUserGroupids($current_user->id));
 			if (count($groupids) > 0) {
@@ -1668,6 +1676,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 	{
 		$sec_parameter=getListViewSecurityParameter('Calendar');
 		$query .= $sec_parameter;
+		$list_query .= $sec_parameter;
 		$count_qry .= $sec_parameter;
 	}
 	$group_cond = '';
@@ -1687,9 +1696,15 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 	else
 		$start_rec = $start_rec-1;
 	$query .= $group_cond." limit $start_rec,$list_max_entries_per_page";
+	$list_query .= $group_cond;
 		
-	if( $adb->dbType == "pgsql")
+	if( $adb->dbType == "pgsql"){
  	    $query = fixPostgresQuery( $query, $log, 0);
+ 	    $llist_query = fixPostgresQuery( $list_query, $log, 0);
+	}
+	
+	$list_query = $adb->convert2Sql($list_query, $params);
+	$_SESSION['activity_listquery'] = $list_query;
 
     $result = $adb->pquery($query, $params);
     $rows = $adb->num_rows($result);

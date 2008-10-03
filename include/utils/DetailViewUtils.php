@@ -1722,12 +1722,12 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 	foreach($label_data as $headerid=>$value_array)
 	{
 		$detailview_data = Array();
-		for ($i=0,$j=0;$i<count($value_array);$i=$i+2,$j++)
+		for ($i=0,$j=0;$i<count($value_array);$j++)
 		{
 			$key2 = null;
 			$keys=array_keys($value_array[$i]);
 			$key1=$keys[0];
-			if(is_array($value_array[$i+1]))
+			if(is_array($value_array[$i+1]) && ($value_array[$i][$key1][ui]!=19 && $value_array[$i][$key1][ui]!=20))
 			{
 				$keys=array_keys($value_array[$i+1]);
 				$key2=$keys[0];
@@ -1737,7 +1737,14 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 			if($key1 == $key2) {
 				$use_key1 = " " . $key1;
 			}
-			$detailview_data[$j]=array($use_key1 => $value_array[$i][$key1],$key2 => $value_array[$i+1][$key2]);
+			
+			if($value_array[$i][$key1][ui]!=19 && $value_array[$i][$key1][ui]!=20){
+				$detailview_data[$j]=array($use_key1 => $value_array[$i][$key1],$key2 => $value_array[$i+1][$key2]);
+				$i+=2;
+			}else{
+				$detailview_data[$j]=array($use_key1 => $value_array[$i][$key1]);
+				$i++;
+			}
 		}
 		$label_data[$headerid] = $detailview_data;
 	}

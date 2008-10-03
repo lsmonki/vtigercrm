@@ -244,6 +244,8 @@ $smarty->assign("BUTTONS", $other_text);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
+$_SESSION['vendors_listquery'] = $list_query;
+
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");
 else	

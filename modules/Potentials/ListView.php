@@ -295,6 +295,8 @@ $smarty->assign("SELECT_SCRIPT", $view_script);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
+$_SESSION['potentials_listquery'] = $list_query;
+
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");
 else	

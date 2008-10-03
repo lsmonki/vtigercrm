@@ -246,19 +246,19 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
 
 		   Array('vtiger_crmentity:crmid::HelpDesk_Ticket_ID:I',
 			 'vtiger_troubletickets:title:ticket_title:HelpDesk_Title:V',
-                         'vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_to:I',
+                         'vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_To:I',
                          'vtiger_troubletickets:status:ticketstatus:HelpDesk_Status:V',
                          'vtiger_troubletickets:priority:ticketpriorities:HelpDesk_Priority:V',
                          'vtiger_crmentity:smownerid:assigned_user_id:HelpDesk_Assigned_To:V'),
 
 		   Array('vtiger_troubletickets:title:ticket_title:HelpDesk_Title:V',
-                         'vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_to:I',
+                         'vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_To:I',
                          'vtiger_troubletickets:priority:ticketpriorities:HelpDesk_Priority:V',
                          'vtiger_troubletickets:product_id:product_id:HelpDesk_Product_Name:I',
                          'vtiger_crmentity:smownerid:assigned_user_id:HelpDesk_Assigned_To:V'),
 
 		   Array('vtiger_troubletickets:title:ticket_title:HelpDesk_Title:V',
-                         'vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_to:I',
+                         'vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_To:I',
                          'vtiger_troubletickets:status:ticketstatus:HelpDesk_Status:V',
                          'vtiger_troubletickets:product_id:product_id:HelpDesk_Product_Name:I',
                          'vtiger_crmentity:smownerid:assigned_user_id:HelpDesk_Assigned_To:V'),
