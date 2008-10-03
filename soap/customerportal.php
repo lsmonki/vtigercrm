@@ -49,6 +49,81 @@ $server->wsdl->addComplexType(
 	'tns:common_array'
 );
 
+//Puneeth : Added for enhancement from Rosa Weber
+
+$server->wsdl->addComplexType(
+        'add_contact_detail_array',
+        'complexType',
+        'array',
+        '',
+        array(
+                'salutation' => array('name'=>'salutation','type'=>'xsd:string'),
+                'firstname' => array('name'=>'firstname','type'=>'xsd:string'),
+                'phone' => array('name'=>'phone','type'=>'xsd:string'),
+                'lastname' => array('name'=>'lastname','type'=>'xsd:string'),
+                'mobile' => array('name'=>'mobile','type'=>'xsd:string'),
+                'accountid' => array('name'=>'accountid','type'=>'xsd:string'),
+                'leadsource' => array('name'=>'leadsource','type'=>'xsd:string'),
+             )
+);
+
+$server->wsdl->addComplexType(
+        'field_details_array',
+        'complexType',
+        'array',
+        '',
+        array(
+                'fieldlabel' => array('name'=>'fieldlabel','type'=>'xsd:string'),
+                'fieldvalue' => array('name'=>'fieldvalue','type'=>'xsd:string'),
+             )
+);
+$server->wsdl->addComplexType(
+        'field_datalist_array',
+        'complexType',
+        'array',
+        '',
+        array(
+                'fielddata' => array('name'=>'fielddata','type'=>'xsd:string'),
+             )
+);
+
+
+$server->wsdl->addComplexType(
+        'product_list_array',
+        'complexType',
+        'array',
+        '',
+        array(
+                'productid' => array('name'=>'productid','type'=>'xsd:string'),
+                'productname' => array('name'=>'productname','type'=>'xsd:string'),
+                'productcode' => array('name'=>'productcode','type'=>'xsd:string'),
+                'commissionrate' => array('name'=>'commissionrate','type'=>'xsd:string'),
+                'qtyinstock' => array('name'=>'qtyinstock','type'=>'xsd:string'),
+                'qty_per_unit' => array('name'=>'qty_per_unit','type'=>'xsd:string'),
+                'unit_price' => array('name'=>'unit_price','type'=>'xsd:string'),
+             )
+     );
+
+$server->wsdl->addComplexType(
+        'get_ticket_attachments_array',
+        'complexType',
+        'array',
+        '',
+        array(
+                'files' => array(
+		'fileid'=>'xsd:string','type'=>'tns:xsd:string',
+		'filename'=>'xsd:string','type'=>'tns:xsd:string',
+		'filesize'=>'xsd:string','type'=>'tns:xsd:string',
+		'filetype'=>'xsd:string','type'=>'tns:xsd:string',
+		'filecontents'=>'xsd:string','type'=>'tns:xsd:string'
+		),
+       )
+);
+
+
+//Puneeth : End
+
+
 
 $server->register(
 	'authenticate_user',
@@ -152,7 +227,112 @@ $server->register(
 	array('return'=>'tns:common_array'),
 	$NAMESPACE);
 
+//Puneeth : Added for enhancement from Rosa Weber
 
+$server->register(
+        'get_portalmessage',
+        array('id'=>'xsd:string'),
+        array('return'=>'xsd:string'),
+        $NAMESPACE);
+
+$server->register(
+	'get_contact_detail',
+	array('id'=>'xsd:string','block'=>'xsd:string'),
+	array('return'=>'tns:field_details_array'),
+	$NAMESPACE);
+
+$server->register(
+	'get_cf_field_details',
+	array('id'=>'xsd:string'),
+	array('return'=>'tns:field_details_array'),
+	$NAMESPACE);
+
+$server->register(
+	'get_account_detail',
+	array('id'=>'xsd:string','block'=>'xsd:string'),
+	array('return'=>'tns:field_details_array'),
+	$NAMESPACE);
+
+$server->register(
+        'get_check_account_id',
+        array('id'=>'xsd:string'),
+        array('return'=>'xsd:string'),
+        $NAMESPACE);
+
+$server->register(
+        'get_account_name',
+        array('id'=>'xsd:string'),
+        array('return'=>'xsd:string'),
+        $NAMESPACE);
+
+$server->register(
+        'get_ownername',
+        array('id'=>'xsd:string','modulename'=>'xsd:string'),
+        array('return'=>'xsd:string'),
+        $NAMESPACE);
+
+$server->register(
+	'get_product_list',
+	array('id'=>'xsd:string','block'=>'xsd:string'),
+	array('return'=>'tns:product_list_array'),
+	$NAMESPACE);
+
+$server->register(
+	'get_product_detail',
+	array('id'=>'xsd:string','block'=>'xsd:string'),
+	array('return'=>'tns:field_details_array'),
+	$NAMESPACE);
+
+$server->register(
+        'get_vendor_name',
+        array('id'=>'xsd:string'),
+        array('return'=>'xsd:string'),
+        $NAMESPACE);
+
+$server->register(
+	'get_image_url',
+	array('id'=>'xsd:string','module'=>'xsd:string'),
+	array('return'=>'tns:field_details_array'),
+	$NAMESPACE);
+
+$server->register(
+	'get_list_values',
+	array('id'=>'xsd:string','block'=>'xsd:string'),
+	array('return'=>'tns:field_datalist_array'),
+	$NAMESPACE);
+
+$server->register(
+	'get_product_urllist',
+	array('customerid'=>'xsd:string','productid'=>'xsd:string','block'=>'xsd:string'),
+	array('return'=>'tns:field_datalist_array'),
+	$NAMESPACE);
+
+$server->register(
+	'get_pdf',
+	array('id'=>'xsd:string','block'=>'xsd:string'),
+	array('return'=>'tns:field_datalist_array'),
+	$NAMESPACE);
+
+$server->register(
+        'get_salesorder_name',
+        array('id'=>'xsd:string'),
+        array('return'=>'xsd:string'),
+        $NAMESPACE);
+
+$server->register(
+	'get_filecontent_detail',
+	array('id'=>'xsd:string','block'=>'xsd:string'),
+	array('return'=>'tns:get_ticket_attachments_array'),
+	$NAMESPACE);
+
+$server->register(
+	'get_invoice_detail',
+	array('id'=>'xsd:string','block'=>'xsd:string'),
+	array('return'=>'tns:field_details_array'),
+	$NAMESPACE);
+
+
+//Puneeth : End
 
 /**	function used to get the list of ticket comments
 	@param array $input_array - array which contains the following parameters
@@ -1098,6 +1278,694 @@ function unsetServerSessionId($id)
 
 	return;
 }
+
+//Puneeth : Added for enhancement from Rosa Weber
+
+/**	function used to get the Contact Portal message 
+ *	@param int $id - contact id
+ *	return string $message - contact posrtal message will be returned from :ustomerdetails table
+ */
+function get_portalmessage($id)
+{
+	global $adb;
+
+	$res = $adb->pquery("select * from vtiger_customerdetails where customerid=".$id);
+	$message = $adb->query_result($res,0,'portalmessage');
+
+	return $message;
+}
+
+/**	function used to get the Contact Information
+ *	@param int $id - contact id
+ *	return string $message - contact informations will be returned from :contactdetails table
+ */
+function get_contact_detail($id,$block)
+{
+
+	global $adb;
+	if($block == 'MYINFO')
+	{
+		$fields_list = "'firstname','phone','lastname','mobile','accountid','leadsource','title','fax','email','smownerid'";
+	}
+	elseif($block =='ADDRESSINFO')
+	{
+		$fields_list ="'mailingstreet','otherstreet','mailingpobox','otherpobox','mailingcity','othercity','mailingstate','otherstate','mailingzip','otherzip','mailingcountry','othercountry'";
+	}
+	elseif($block =='DESCINFO')
+	{
+		$fields_list ="'description'";
+	}
+	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=4 and columnname in ($fields_list) order by sequence";
+	$fieldres = $adb->pquery($fieldquery);
+	$nooffields = $adb->num_rows($fieldres);
+
+	$query = "select vtiger_contactdetails.*,vtiger_contactaddress.*,vtiger_contactsubdetails.*,vtiger_customerdetails.customerid,vtiger_crmentity.* 
+	from vtiger_contactdetails 
+	inner join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid 
+	inner join vtiger_contactsubdetails on vtiger_contactsubdetails.contactsubscriptionid=vtiger_contactdetails.contactid 	     inner join vtiger_customerdetails on vtiger_customerdetails.customerid =vtiger_contactdetails.contactid 
+	inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid  
+	where vtiger_contactdetails.contactid=".$id;
+	$res = $adb->pquery($query);
+
+	for($i=0;$i<$nooffields;$i++)
+	{
+		$fieldname  = $adb->query_result($fieldres,$i,'columnname');
+		$fieldlabel = $adb->query_result($fieldres,$i,'fieldlabel');
+		$fieldvalue = $adb->query_result($res,0,$fieldname);
+		if($block=='MYINFO' && $fieldname == 'accountid' && $fieldvalue != '')
+		{
+			//$fieldvalue = get_account_name($fieldvalue);
+			$fieldvalue = '<a href=index.php?module=Accounts&action=index&id='.$fieldvalue.'>'.get_account_name($fieldvalue).'</a>';
+				
+		}
+		if($block=='MYINFO' && $fieldname == 'smownerid' && $fieldvalue != '')
+		{
+			$temp_fieldvalue = get_ownername($id,"contact");
+			$fieldlabel = '';	
+			$fieldvalue = '';
+			//$fieldvalue = $temp_fieldvalue[0]['groupname'][0]['fieldvalue'];
+			$output[0]['assigninfo'] = $temp_fieldvalue[0]['assigninfo'];
+		}
+		$output[0][$block][$i]['fieldlabel'] = $fieldlabel;
+		$output[0][$block][$i]['fieldvalue'] = $fieldvalue;
+	}
+	
+	return $output;
+}
+
+
+/**	function used to get the Contact CustomField Information
+ *	@param int $id - contact id
+ *	return string $message - contact informations will be returned from :contactdetails table
+ */
+function get_cf_field_details($id)
+{
+
+	global $adb;
+
+	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=4 and tablename='vtiger_contactscf'";
+	$fieldres = $adb->pquery($fieldquery);
+	$nooffields = $adb->num_rows($fieldres);
+
+	$query = "
+	  select vtiger_contactscf.* from vtiger_contactdetails 
+   		inner join vtiger_contactscf on vtiger_contactscf.contactid = vtiger_contactdetails.contactid
+		inner join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid 
+		inner join vtiger_contactsubdetails on vtiger_contactsubdetails.contactsubscriptionid=vtiger_contactdetails.contactid 
+		inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid 
+		where vtiger_contactscf.contactid=".$id;
+
+   	$adb->println($query);
+	$res = $adb->pquery($query);
+	$output[0]['CUSTOMINFO'][0]['customfield']['fieldlabel'] =0;
+	for($i=0;$i<$nooffields;$i++)
+	{
+		$output[0]['CUSTOMINFO'][0]['customfield']['fieldlabel'] ='1';
+		$fieldname = $adb->query_result($fieldres,$i,'columnname');
+		$output[0]['CUSTOMINFO'][$i]['fieldlabel'] = $adb->query_result($fieldres,$i,'fieldlabel');
+		$output[0]['CUSTOMINFO'][$i]['fieldvalue'] = $adb->query_result($res,0,$fieldname);
+	}
+	
+	return $output;
+}
+
+/**	function used to get the Assign_To Values
+ *	@param int $id - id,modulename
+ *	return string $message - Assigned To name returned
+ */
+
+function get_ownername($id,$modulename)
+{
+	global $adb;
+ 	$assignres = $adb->pquery("select * from vtiger_crmentity where crmid=".$id);
+	$ownerid=$adb->query_result($assignres,0,'smownerid');
+	if($ownerid == 0 && $modulename != '')
+	{
+		if($modulename =='contact')
+			$query='select * from vtiger_contactgrouprelation where contactid ='.$id;
+		else if($modulename =='account')
+			$query='select * from vtiger_accountgrouprelation where accountid ='.$id;
+ 		$assigngroupres = $adb->pquery($query);
+		$groupname[0]['groupname'][0]['fieldlabel']='groupname';
+		$groupname[0]['groupname'][0]['fieldvalue']=$adb->query_result($assigngroupres,0,'groupname');
+		$groupname[0]['assigninfo'][0]['fieldlabel']='Group Name';
+		$groupname[0]['assigninfo'][0]['fieldvalue']=$adb->query_result($assigngroupres,0,'groupname');
+	}
+	else if($ownerid != 0 && $ownerid != '')
+	{
+		$query='select * from vtiger_users where id ='.$ownerid;
+		$assignuserres = $adb->pquery($query);
+		$groupname[0]['groupname'][0]['fieldlabel']='username';
+		$groupname[0]['groupname'][0]['fieldvalue']=$adb->query_result($assignuserres,0,'user_name');
+		$groupname[0]['assigninfo'][0]['fieldlabel']='First Name';
+		$groupname[0]['assigninfo'][0]['fieldvalue']=$adb->query_result($assignuserres,0,'first_name');
+		$groupname[0]['assigninfo'][1]['fieldlabel']='Last Name';
+		$groupname[0]['assigninfo'][1]['fieldvalue']=$adb->query_result($assignuserres,0,'last_name');
+		$groupname[0]['assigninfo'][2]['fieldlabel']='Email';
+		$groupname[0]['assigninfo'][2]['fieldvalue']=$adb->query_result($assignuserres,0,'email1');
+		$groupname[0]['assigninfo'][3]['fieldlabel']='Office Phone';
+		$groupname[0]['assigninfo'][3]['fieldvalue']=$adb->query_result($assignuserres,0,'phone_work');
+	}
+ return $groupname;	 
+}
+
+
+/**	function used to get the Account name
+ *	@param int $id - Account id
+ *	return string $message - Account name returned
+ */
+
+function get_account_name($accountid)
+{
+	 global $adb;
+	 $res = $adb->pquery("select * from vtiger_account where accountid=".$accountid);
+	 $accountname=$adb->query_result($res,0,'accountname');
+	 return $accountname;	 
+}
+
+/**     function used to get the Account id
+	*  *      @param int $id - Contact id
+	*   *      return string $message - Account id returned
+	*    */
+
+function get_check_account_id($id)
+{
+	 global $adb;
+	 $res = $adb->pquery("select * from vtiger_contactdetails where contactid=".$id);
+	 $accountid=$adb->query_result($res,0,'accountid');
+	 return $accountid;
+}
+
+/**	function used to get the Account Information
+ *	@param int $id - account id
+ *	return string $message - Account informations will be returned from :Accountdetails table
+ */
+function get_account_detail($id,$block)
+{
+
+	global $adb;
+	if($block == 'ACCINFORMATION')
+		$fields_list = "'accountname','phone','website','fax','tickersymbol','parentid','email1','smownerid'";
+	elseif($block =='ACCADDRESSINFORMATION')
+		$fields_list ="'bill_street','ship_street','bill_pobox','ship_pobox','bill_city','ship_city','bill_state','ship_state','bill_code','ship_code','bill_country','ship_country'";
+	elseif($block =='ACCDESCINFO')
+		$fields_list ="'description'";
+	
+	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=6 and columnname in ($fields_list) order by sequence";
+	$fieldres = $adb->pquery($fieldquery);
+	$nooffields = $adb->num_rows($fieldres);
+
+	$query = "select 
+		vtiger_account.*,vtiger_accountbillads.*,vtiger_accountshipads.*,vtiger_crmentity.*,vtiger_accountscf.* 
+		from vtiger_account 
+		inner join vtiger_accountbillads on vtiger_accountbillads.accountaddressid=vtiger_account.accountid 
+		inner join vtiger_accountshipads on vtiger_accountshipads.accountaddressid = vtiger_account.accountid 
+		inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_account.accountid 
+		inner join vtiger_accountscf on vtiger_accountscf.accountid =vtiger_account.accountid 
+		where vtiger_account.accountid=".$id;
+	$res = $adb->pquery($query);
+
+	for($i=0;$i<$nooffields;$i++)
+	{
+		$fieldname  = $adb->query_result($fieldres,$i,'columnname');
+		$fieldlabel = $adb->query_result($fieldres,$i,'fieldlabel');
+		$fieldvalue = $adb->query_result($res,0,$fieldname);
+		if($block=='ACCINFORMATION' && $fieldname == 'smownerid')
+		{
+			$temp_fieldvalue = get_ownername($id,"account");
+			$fieldlabel ='';
+			$fieldvalue ='';
+		//	$fieldvalue =$temp_fieldvalue[0]['groupname'][0]['fieldvalue'];
+			$output[0]['assigninfo'] = $temp_fieldvalue[0]['assigninfo'];
+		}
+		if($block=='ACCINFORMATION' && $fieldname == 'parentid' && $fieldvalue != '')
+			$fieldvalue = get_account_name($fieldvalue);
+		$output[0][$block][$i]['fieldlabel'] = $fieldlabel;
+		$output[0][$block][$i]['fieldvalue'] = $fieldvalue;
+	}
+        $adb->println($output);	
+	return $output;
+}
+// get A product list
+//
+function get_product_list($id,$block)
+{
+	
+	global $adb;
+	$sql = "select 
+		vtiger_products.*
+		from vtiger_products 
+		inner join vtiger_inventoryproductrel on vtiger_inventoryproductrel.productid=vtiger_products.productid 
+		inner join vtiger_invoice on vtiger_inventoryproductrel.id = vtiger_invoice.invoiceid  
+		where vtiger_invoice.accountid=".$id." 
+	       	group by vtiger_inventoryproductrel.productid";
+	$result = $adb->pquery($sql);	
+	$noofdata = $adb->num_rows($result);
+	for($i=0;$i<$noofdata;$i++)
+	{
+		$list['0'][$block][$i]['productid'] = $adb->query_result($result,$i,'productid');
+		$list['0'][$block][$i]['productname'] = $adb->query_result($result,$i,'productname');
+		$list['0'][$block][$i]['productcode'] = $adb->query_result($result,$i,'productcode');
+		$list['0'][$block][$i]['commissionrate'] = $adb->query_result($result,$i,'commissionrate');
+		$list['0'][$block][$i]['qtyinstock'] = $adb->query_result($result,$i,'qtyinstock');
+		$list['0'][$block][$i]['qty_per_unit'] = $adb->query_result($result,$i,'qty_per_unit');
+		$list['0'][$block][$i]['unit_price'] = $adb->query_result($result,$i,'unit_price');
+	}
+        $adb->println($list);	
+	
+	return $list;
+}
+
+/**	function used to get the Account Information
+ *	@param int $id - account id
+ *	return string $message - Account informations will be returned from :Accountdetails table
+ */
+function get_product_detail($id,$block)
+{
+
+	global $adb;
+	if($block == 'PROINFORMATION')
+		$fields_list = "'productname','productcode','discontinued','manufacturer','productcategory','sales_start_date','sales_end_date','start_date','expiry_date','website','vendor_id','mfr_part_no','vendor_part_no','serialno','productsheet','glacct'";
+	elseif($block =='PRODESCINFO')
+		$fields_list ="'product_description'";
+	
+	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=14 and columnname in ($fields_list) order by sequence";
+	$fieldres = $adb->pquery($fieldquery);
+	$nooffields = $adb->num_rows($fieldres);
+
+	$query = "select 
+		vtiger_products.*,vtiger_crmentity.* 
+		from vtiger_products 
+		inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid 
+		where vtiger_products.productid=".$id;
+	
+	$res = $adb->pquery($query);
+
+	for($i=0;$i<$nooffields;$i++)
+	{
+		$fieldname = $adb->query_result($fieldres,$i,'columnname');
+		$output[0][$block][$i]['fieldlabel'] = $adb->query_result($fieldres,$i,'fieldlabel');
+		$fieldvalue = $adb->query_result($res,0,$fieldname);
+		if($block=='PROINFORMATION' && $fieldname == 'vendor_id' && $fieldvalue !='')
+		{
+			$fieldvalue = get_vendor_name($fieldvalue);
+		}
+		if($block=='PROINFORMATION' && $fieldname == 'discontinued')
+		{
+			if($fieldvalue == "1")
+				$fieldvalue = "yes";
+			else 
+				$fieldvalue = "No";
+		}
+		$output[0][$block][$i]['fieldvalue'] = $fieldvalue;
+	}
+        $adb->println($output);	
+	return $output;
+}
+
+
+/**	function used to get the vendor name
+ *	@param int $id - vendor id
+ *	return string $name - Vendor name returned
+ */
+
+function get_vendor_name($vendorid)
+{
+ 	global $adb;
+ 	$res = $adb->pquery("select * from vtiger_vendor where vendorid=".$vendorid);
+ 	$name=$adb->query_result($res,0,'vendorname');
+ 	return $name;	 
+}
+
+/**	function used to get the Image url
+ *	@param int $id - id
+ *	return string $url - Image url returned
+ */
+
+function get_image_url($id,$module)
+{
+	global $adb;
+	global $site_URL;
+	
+	$query ='select vtiger_attachments.*,vtiger_seattachmentsrel.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid =vtiger_attachments.attachmentsid where vtiger_seattachmentsrel.crmid ='.$id; 
+	$res = $adb->pquery($query);
+	$noofdata = $adb->num_rows($res);
+	for($i=0;$i<$noofdata;$i++)
+	{
+ 		$filename=$adb->query_result($res,$i,'name');
+ 		$path=$adb->query_result($res,$i,'path');
+ 		$attachmentid=$adb->query_result($res,$i,'attachmentsid');
+        	$url[0][$module][$i]['fieldlabel']="Image $i";
+        	$url[0][$module][$i]['fieldvalue']=$site_URL.'/'.$path.$attachmentid.'_'.$filename;
+	}
+
+	if($noofdata == '')
+	{	
+        	$url[0][$module][0]['fieldlabel']="Image $i";
+        	$url[0][$module][0]['fieldvalue']='';
+	}
+	$adb->println($url);	
+
+ return $url;	 
+}
+
+/**	function used to get the Quotes/Invoice List
+ *	@param int $id - id -Contactid
+ *	return string $output - Quotes/Invoice list Array 
+ */
+
+function get_list_values($id,$block)
+{
+	global $adb;
+	$adb->println("inside get_list_values ".$id."block".$block);
+	if($block == 'Quotes')
+	{	
+		$fields_list ="'quoteid','subject','quotestage','validtill','team','accountid','total'";
+		$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=20 and columnname in ($fields_list) order by sequence";
+		$query ='select vtiger_quotes.* from vtiger_quotes inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_quotes.quoteid where vtiger_crmentity.deleted != 1 and vtiger_quotes.contactid='.$id.'  order by vtiger_quotes.quoteid desc'; 
+	}
+	else if($block == 'Invoice')
+	{	
+		$fields_list ="'invoice_no','subject','salesorderid','invoicestatus','total'";
+		$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=23 and columnname in ($fields_list) order by sequence";
+		$query ='select vtiger_invoice.* from vtiger_invoice inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_invoice.invoiceid where  vtiger_crmentity.deleted != 1 and  vtiger_invoice.contactid='.$id.' order by vtiger_invoice.invoiceid desc '; 
+	}
+	else if ($block == 'Documents')
+	{
+		$fields_list ="'title','filename','createdtime','modifiedtime'";
+		$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=8 and columnname in ($fields_list) order by sequence";
+		$query ='select vtiger_notes.*,vtiger_crmentity.* from vtiger_notes inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_notes.notesid where vtiger_crmentity.deleted != 1 and  vtiger_notes.contact_id='.$id.' order by vtiger_notes.notesid desc '; 
+	}
+	else if ($block == 'Product')
+	{
+		$fields_list ="'productid','productname','productcode','qty_per_unit','unit_price'";
+		$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=14 and columnname in ($fields_list) order by sequence";
+	$query ="select case when vtiger_quotes.contactid not like '' then \"Quotes\" when vtiger_invoice.contactid not like '' then \"Invoice\" else vtiger_crmentity.setype end as type, vtiger_invoice.contactid as invo,vtiger_products.*, productname,vtiger_inventoryproductrel.id from vtiger_products left join vtiger_seproductsrel on vtiger_seproductsrel.productid = vtiger_products.productid left join vtiger_inventoryproductrel on vtiger_inventoryproductrel.productid = vtiger_products.productid left join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_seproductsrel.crmid left join vtiger_invoice on vtiger_invoice.invoiceid = vtiger_inventoryproductrel.id left join vtiger_quotes on vtiger_quotes.quoteid = vtiger_inventoryproductrel.id where (vtiger_quotes.contactid = $id or vtiger_invoice.contactid = $id or vtiger_seproductsrel.crmid = $id or vtiger_seproductsrel.crmid in (select accountid from vtiger_contactdetails where contactid=$id)) group by vtiger_products.productid order by vtiger_products.productid desc";
+	}
+	else if ($block == 'ProductPurchased' || $block == 'ProductPending' || $block == 'ProductCompleted')
+	{
+		$fields_list ="'productid','productname','productcode','qty_per_unit','unit_price'";
+		$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=14 and columnname in ($fields_list) order by sequence";
+		$query ="select case when vtiger_quotes.contactid not like '' then \"Quotes\" when vtiger_invoice.contactid not like '' then \"Invoice\" else vtiger_crmentity.setype end as type, vtiger_invoice.contactid as invo,vtiger_products.*, productname,vtiger_inventoryproductrel.id from vtiger_products left join vtiger_seproductsrel on vtiger_seproductsrel.productid = vtiger_products.productid left join vtiger_inventoryproductrel on vtiger_inventoryproductrel.productid = vtiger_products.productid left join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_seproductsrel.crmid left join vtiger_invoice on vtiger_invoice.invoiceid = vtiger_inventoryproductrel.id left join vtiger_quotes on vtiger_quotes.quoteid = vtiger_inventoryproductrel.id ";
+		$where ="where (vtiger_quotes.contactid = $id or vtiger_invoice.contactid = $id or vtiger_seproductsrel.crmid = $id or vtiger_seproductsrel.crmid in (select accountid from vtiger_contactdetails where contactid=$id)) and vtiger_invoice.contactid not like '' ";
+		if($block == 'ProductPending')
+			$where .= " and vtiger_invoice.download_status != 1 ";
+		if($block == 'ProductCompleted')
+			$where .= " and vtiger_invoice.download_status = 1 ";
+
+		$groupby =' group by vtiger_products.productid order by vtiger_invoice.invoiceid desc';
+		
+		$query .=$where.$groupby;
+
+	}
+	$fieldres = $adb->pquery($fieldquery);
+	$nooffields = $adb->num_rows($fieldres);
+	for($i=0;$i<$nooffields;$i++)
+		{
+		$fieldname = $adb->query_result($fieldres,$i,'columnname');
+		$output[0][$block]['head'][0][$i]['fielddata'] = $adb->query_result($fieldres,$i,'fieldlabel');
+		}
+	
+	$res = $adb->pquery($query);
+	$noofdata = $adb->num_rows($res);
+	for( $j= 0;$j < $noofdata; $j++)
+	{
+		for($i=0;$i<$nooffields;$i++)
+		{
+			$fieldname = $adb->query_result($fieldres,$i,'columnname');
+			$fieldvalue = $adb->query_result($res,$j,$fieldname);
+			if($block == 'Quotes' && $fieldname =='subject') 
+			{
+				$fieldid = $adb->query_result($res,$j,'quoteid');
+				$filename = $fieldid.'_Quotes.pdf';
+				$fieldvalue = '<a href="index.php?downloadfile=true&module=Quotes&action=index&id='.$fieldid.'">'.$fieldvalue.'</a>';
+			}
+			if($block == 'Invoice' && $fieldname =='subject') 
+			{
+				$fieldid = $adb->query_result($res,$j,'invoiceid');
+				$filename = $fieldid.'_Invoice.pdf';
+				$fieldvalue = '<a href="index.php?downloadfile=true&module=Invoice&action=index&status=true&id='.$fieldid.'">'.$fieldvalue.'</a>';
+			}
+			if($block == 'Documents' && $fieldname =='filename') 
+			{
+				$fieldid = $adb->query_result($res,$j,'notesid');
+				$filename = $fieldvalue;
+				$fieldvalue = '<a href="index.php?downloadfile=true&filename='.$filename.'&module=Attachments&action=index&id='.$fieldid.'">'.$fieldvalue.'</a>';
+			}
+			if(($block == 'Product' || $block == 'ProductPurchased' || $block == 'ProductPending'|| $block == 'ProductCompleted')&& $fieldname =='productname') 
+			{
+				$fieldid = $adb->query_result($res,$j,'productid');
+				if($block == 'ProductCompleted')
+					$status = 'Completed';
+				else
+					$status = $block;
+				$fieldvalue = '<a href="index.php?module=Products&action=index&productid='.$fieldid.'&status='.$status.'">'.$fieldvalue.'</a>';
+			}
+			if($block == 'Quotes' && $fieldname == 'accountid')
+			{
+				$fieldvalue = get_account_name($fieldvalue);
+			}	
+			if($block == 'Invoice' && $fieldname == 'salesorderid')
+			{
+				if($fieldvalue != '')
+				$fieldvalue = get_salesorder_name($fieldvalue);
+			}	
+			$output[1][$block]['data'][$j][$i]['fielddata'] = $fieldvalue;
+		}
+	}
+	
+	$adb->println($output);	
+
+ return $output;	 
+	
+}
+
+/**	function used to get the Quotes/Invoice pdf
+ *	@param int $id - id -id
+ *	return string $output - pd link value
+ */
+
+function get_pdf($id,$block)
+{
+	global $adb;
+	global $current_user,$log;
+	global $currentModule,$mod_strings,$app_strings,$app_list_strings;
+	require_once("modules/Users/Users.php");
+	require_once("config.inc.php");
+	$seed_user=new Users();
+	$user_id=$seed_user->retrieve_user_id('admin');
+	$current_user=$seed_user;
+	$current_user->retrieve_entity_info($user_id, 'Users');
+	$currentModule = $block;
+	$current_language = $default_language;
+	$app_strings = return_application_language($current_language);
+	$app_list_strings = return_app_list_strings_language($current_language);
+	$mod_strings = return_module_language($current_language, $currentModule);
+//	$adb->println("inside get_pdf".$id."block".$block);
+
+	$_REQUEST['record']= $id;
+	$_REQUEST['savemode']= 'file';
+	$filenamewithpath='test/product/'.$id.'_'.$block.'.pdf';
+	if (file_exists($filenamewithpath) && (filesize($filenamewithpath) != 0)) 
+		unlink($filenamewithpath);
+	
+	include("modules/$block/CreatePDF.php");
+	
+	if (file_exists($filenamewithpath) && (filesize($filenamewithpath) != 0)) 
+	{
+		//$output[0][$block][0]['fielddata']='Success';
+		//we have to pass the file content
+		$filecontents[] = base64_encode(file_get_contents($filenamewithpath));
+		unlink($filenamewithpath);
+		// TODO: Delete the file to avoid public access.
+
+	//	exit();
+	}
+	else
+	{
+		//$output[0][$block][0]['fielddata']='Failed';
+		$filecontents = "failure";
+	}
+
+	//$adb->println($output);	
+	return $filecontents;	 
+}
+
+/**	function used to get the salesorder name
+ *	@param int $id -  id
+ *	return string $name - Salesorder name returned
+ */
+
+function get_salesorder_name($id)
+{
+ 	global $adb;
+ 	$res = $adb->pquery(" select * from vtiger_salesorder where salesorderid=".$id);
+ 	$name=$adb->query_result($res,0,'subject');
+ 	return $name;	 
+}
+
+/**	function used to get the contents of a file
+ *	@param int $id - customer ie., id 
+ *	return $filecontents array with single file contents like [fileid] => filecontent
+ */
+function get_filecontent_detail($id,$block)
+{
+	global $adb;
+	global $site_URL;
+	$query ='select vtiger_attachments.*,vtiger_seattachmentsrel.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid=vtiger_attachments.attachmentsid where vtiger_seattachmentsrel.crmid ='.$id; 
+	$res = $adb->pquery($query);
+	$filename = $adb->query_result($res,0,'name');
+	$filepath = $adb->query_result($res,0,'path');
+	$fileid = $adb->query_result($res,0,'attachmentsid');
+	$filesize = filesize($filepath.$fileid."_".$filename);
+	$filetype = $adb->query_result($res,0,'type');
+	$filenamewithpath=$filepath.$fileid.'_'.$filename;
+
+	$output[0]['fileid'] = $fileid;
+	$output[0]['filename'] = $filename;
+	$output[0]['filetype'] = $filetype;
+	$output[0]['filesize'] = $filesize;
+	$output[0]['filecontents']= base64_encode(file_get_contents($filenamewithpath));
+	return $output;
+}
+
+/**	function used to get the Product Url ListDetails name
+ *	@param int $id -  id
+ *	return $arr - downoadlisturl array returned
+ */
+
+function get_product_urllist($customerid,$productid,$block)
+{
+		global $adb,$site_URL;
+		$fieldheader = array('Invoice No','Invoice Name','Download Url','License Key','Status');
+		$query=" select vtiger_invoice.* from vtiger_invoice 
+			inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_invoice.invoiceid 
+			inner join vtiger_inventoryproductrel on vtiger_invoice.invoiceid = vtiger_inventoryproductrel.id 
+			where vtiger_invoice.contactid= $customerid and vtiger_inventoryproductrel.productid = $productid  ";
+		$groupby= " group by vtiger_invoice.invoiceid order by vtiger_invoice.invoiceid desc ";
+		if($block =='ProductPending')
+			$spl_con =" and vtiger_invoice.download_status = 0 ";
+		if($block =='Completed')
+			$spl_con =" and vtiger_invoice.download_status = 1 ";
+		$query .=$spl_con.$groupby;
+		$res = $adb->pquery($query);
+		$noofdata = $adb->num_rows($res);
+		$nooffield =count($fieldheader);
+		for( $i= 0;$i < $nooffield; $i++)
+		$output[0][$block]['head'][0][0][$i]['fielddata'] = $fieldheader[$i];
+		$fieldlist =array('invoice_no','subject','file_path','license_key','download_status');
+		
+		for( $i= 0;$i < $noofdata; $i++)
+		{
+			$sql =" select vtiger_invoice.* from vtiger_invoice where vtiger_invoice.contactid= $customerid ".$spl_con." and vtiger_invoice.invoiceid =".$adb->query_result($res,$i,'invoiceid');
+			
+		$result = $adb->pquery($sql);
+		$noresult = $adb->num_rows($result);
+			for($j= 0;$j < $noresult; $j++)
+		$result = $adb->pquery($sql);
+		$noresult = $adb->num_rows($result);
+			for($j= 0;$j < $noresult; $j++)
+			{
+				for( $i1= 0;$i1 < $nooffield; $i1++)
+				{
+					$fieldvalue = $adb->query_result($result,$j,$fieldlist[$i1]);
+					if($fieldlist[$i1] == 'file_path' && $fieldvalue != '')
+					{
+						$id     = $adb->query_result($result,$j,'invoiceid');
+						$subject= $adb->query_result($result,$j,'subject');
+						$file_path = $adb->query_result($result,$j,'file_path');
+						$inv_status = $adb->query_result($result,$j,'invoicestatus');
+						$status = $adb->query_result($result,$j,$fieldlist[$nooffield-1]);
+						if($status != '' && $status == 0 && $file_path != '' && $inv_status == 'Paid')
+						{
+							$param = "action=download&parentid=$id";
+							$param = base64_encode($param);
+							$fieldvalue ='<a href='.$site_URL.'/dindex.php?param='.$param.'>Download</a>'; 
+						}
+						else
+							$fieldvalue ='Un Available';
+					}
+					if($fieldlist[$i1]=='download_status')
+					{
+						if($fieldvalue == 0)
+							$fieldvalue ='Not Done';
+						else 
+							$fieldvalue ='Done';
+					
+					}
+				$output[1][$block]['data'][$i][$j][$i1]['fielddata'] = $fieldvalue;
+				}
+			}
+		}
+ 	return $output;	 
+}
+ 
+function get_invoice_detail($id,$block)
+{
+
+	global $adb,$site_URL;
+	if($block == 'INVINFORMATION')
+		$fields_list = "'subject','invoicedate','duedate','total','createdtime','invoicestatus'";
+	elseif($block =='INVDESCINFO')
+		$fields_list ="'download_status','license_key','subject','file_path'";
+	
+	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=23 and columnname in ($fields_list) order by sequence";
+	$fieldres = $adb->pquery($fieldquery);
+	$nooffields = $adb->num_rows($fieldres);
+
+	$query = "select 
+		vtiger_invoice.*,vtiger_crmentity.* 
+		from vtiger_invoice 
+		inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_invoice.invoiceid 
+		where vtiger_invoice.invoiceid=".$id;
+	
+	$res = $adb->pquery($query);
+
+	for($i=0;$i<$nooffields;$i++)
+	{
+		$fieldname = $adb->query_result($fieldres,$i,'columnname');
+		$fieldlabel = $adb->query_result($fieldres,$i,'fieldlabel');
+		$fieldvalue = $adb->query_result($res,0,$fieldname);
+		if($block=='INVDESCINFO' && $fieldname == 'subject' && $fieldvalue !='')
+		{
+			$fieldid = $adb->query_result($res,0,'invoiceid');
+			$filename = $fieldid.'_Invoice.pdf';
+			$fieldlabel = 'Download PDF';
+			$fieldvalue = '<a href="index.php?downloadfile=true&module=Invoice&action=index&id='.$fieldid.'">Invoice.pdf</a>';
+		}
+		if($block=='INVDESCINFO' && $fieldname == 'download_status')
+		{
+			if($fieldvalue == "1")
+				$fieldvalue = " Done ";
+			else 
+				$fieldvalue = " Not Done";
+		}
+		if($block == 'INVDESCINFO' && $fieldname == 'file_path' && $fieldvalue != '')
+		{
+			$fieldlabel='Download Product';
+			$inv_id     = $adb->query_result($res,$j,'invoiceid');
+			$subject= $adb->query_result($res,$j,'subject');
+			$file_path = $adb->query_result($res,$j,'file_path');
+			$inv_status = $adb->query_result($res,$j,'invoicestatus');
+			$status = $adb->query_result($res,$j,'download_status');
+			if($status != '' && $status == 0 && $file_path != '' && $inv_status == 'Paid')
+			{
+				$param = "action=download&parentid=$inv_id";
+				$param = base64_encode($param);
+				$fieldvalue ='<a href='.$site_URL.'/dindex.php?param='.$param.'>Download</a>'; 
+			}
+			else
+				$fieldvalue ='Un Available';
+		}
+		$output[0][$block][$i]['fieldlabel'] = $fieldlabel;//adb->query_result($fieldres,$i,'fieldlabel');
+		$output[0][$block][$i]['fieldvalue'] = $fieldvalue;
+	}
+        $adb->println($output);	
+	return $output;
+}
+
+
+//Puneeth : End
 
 /* Begin the HTTP listener service and exit. */ 
 $server->service($HTTP_RAW_POST_DATA); 
