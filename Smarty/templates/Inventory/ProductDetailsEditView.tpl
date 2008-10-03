@@ -146,7 +146,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 	<td width=13% valign="top" class="lvtCol" align="right"><b>{$APP.LBL_NET_PRICE}</b></td>
    </tr>
 
-   {foreach key=row_no item=data from=$ASSOCIATEDPRODUCTS}
+   {foreach key=row_no item=data from=$ASSOCIATEDPRODUCTS name=outer1}
 	{assign var="deleted" value="deleted"|cat:$row_no}
 	{assign var="hdnProductId" value="hdnProductId"|cat:$row_no}
 	{assign var="productName" value="productName"|cat:$row_no}
@@ -177,13 +177,22 @@ function displayCoords(currObj,obj,mode,curr_row)
 	<!-- column 1 - delete link - starts -->
 	<td  class="crmTableRow small lineOnTop">
 		{if $row_no neq 1}
-			<img src="{$IMAGE_PATH}delete.gif" border="0" onclick="deleteRow('{$MODULE}',{$row_no})">
+			<img src="{$IMAGE_PATH}delete.gif" border="0" onclick="deleteRow('{$MODULE}',{$row_no},'{$IMAGE_PATH}')">
+		{/if}<br/><br/>
+		{if $row_no neq 1}
+			&nbsp;<a href="javascript:moveUpDown('UP','{$MODULE}',{$row_no})" title="Move Upward"><img src="{$IMAGE_PATH}up_layout.gif" border="0"></a>
+		{/if}
+		{if not $smarty.foreach.outer1.last}
+			&nbsp;<a href="javascript:moveUpDown('DOWN','{$MODULE}',{$row_no})" title="Move Downward"><img src="{$IMAGE_PATH}down_layout.gif" border="0" ></a>
 		{/if}
 		<input type="hidden" id="{$deleted}" name="{$deleted}" value="0">
 	</td>
 
 	<!-- column 2 - Product Name - starts -->
 	<td class="crmTableRow small lineOnTop">
+	<!-- Product Re-Ordering Feature Code Addition Starts -->
+	<input type="hidden" name="hidtax_row_no{$row_no}" id="hidtax_row_no{$row_no}" value="{$tax_row_no}"/>
+	<!-- Product Re-Ordering Feature Code Addition ends -->
 		<table width="100%"  border="0" cellspacing="0" cellpadding="1">
 		   <tr>
 			<td class="small" valign="top">

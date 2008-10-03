@@ -104,16 +104,61 @@ function getProdListBody() {
 }
 
 
-function deleteRow(module,i)
+function deleteRow(module,i,image_path)
 {
 	rowCnt--;
 	var tableName = document.getElementById('proTab');
 	var prev = tableName.rows.length;
+
 //	document.getElementById('proTab').deleteRow(i);
 	document.getElementById("row"+i).style.display = 'none';
+
+// Added For product Reordering starts
+	image_path = document.getElementById("hidImagePath").value;
+	iMax = tableName.rows.length;
+	for(iCount=i;iCount>=1;iCount--)
+	{
+		if(document.getElementById("row"+iCount) && document.getElementById("row"+iCount).style.display != 'none')
+		{
+			iPrevRowIndex = iCount;
+			break;
+		}
+	}
+	iPrevCount = iPrevRowIndex;
+	oCurRow = eval(document.getElementById("row"+i));
+	sTemp = oCurRow.cells[0].innerHTML;
+	ibFound = sTemp.indexOf("down_layout.gif");
+	
+	if(i != 2 && ibFound == -1 && iPrevCount != 1)
+	{
+		oPrevRow = eval(document.getElementById("row"+iPrevCount));
+			
+		iPrevCount = eval(iPrevCount);
+		oPrevRow.cells[0].innerHTML = '<img src="'+image_path+'delete.gif" border="0" onclick="deleteRow(\''+module+'\','+iPrevCount+')"><input id="deleted'+iPrevCount+'" name="deleted'+iPrevCount+'" type="hidden" value="0">&nbsp;<a href="javascript:moveUpDown(\'UP\',\''+module+'\','+iPrevCount+')" title="Move Upward"><img src="'+image_path+'up_layout.gif" border="0"></a>';
+	}
+	else if(iPrevCount == 1)
+	{
+		iSwapIndex = i;
+		for(iCount=i;iCount<=iMax-2;iCount++)
+		{
+			if(document.getElementById("row"+iCount) && document.getElementById("row"+iCount).style.display != 'none')
+			{
+				iSwapIndex = iCount;
+				break;
+			}
+		}	
+		if(iSwapIndex == i)
+		{
+			oPrevRow = eval(document.getElementById("row"+iPrevCount));
+			iPrevCount = eval(iPrevCount);
+			oPrevRow.cells[0].innerHTML = '<input type="hidden" id="deleted1" name="deleted1" value="0">&nbsp;'; 
+		}
+	}
+// Product reordering addition ends
 	document.getElementById("hdnProductId"+i).value = "";
 	//document.getElementById("productName"+i).value = "";
 	document.getElementById('deleted'+i).value = 1;
+
 	calcTotal()
 }
 /*  End */
@@ -355,7 +400,7 @@ function validateInventory(module)
 				return false;
 			}
 		}
-
+	calcTotal(); /* Product Re-Ordering Feature Code Addition */
 
 	return true;    
 }
@@ -540,11 +585,10 @@ function fnAddProductRow(module,image_path){
 
 	var tableName = document.getElementById('proTab');
 	var prev = tableName.rows.length;
-    	var count = eval(prev)-1;//As the table has two headers, we should reduce the count
-    	var row = tableName.insertRow(prev);
-		row.id = "row"+count;
-		row.style.verticalAlign = "top";
-
+	var count = eval(prev)-1;//As the table has two headers, we should reduce the count
+	var row = tableName.insertRow(prev);
+	row.id = "row"+count;
+	row.style.verticalAlign = "top";
 	
 	var colone = row.insertCell(0);
 	var coltwo = row.insertCell(1);
@@ -561,10 +605,36 @@ function fnAddProductRow(module,image_path){
 		var colsix = row.insertCell(5);
 		var colseven = row.insertCell(6);
 	}
+	/* Product Re-Ordering Feature Code Addition Starts */
+	iMax = tableName.rows.length;
+	for(iCount=1;iCount<=iMax-3;iCount++)
+	{
+		if(document.getElementById("row"+iCount) && document.getElementById("row"+iCount).style.display != 'none')
+		{
+			iPrevRowIndex = iCount;
+		}
+	}
+	iPrevCount = eval(iPrevRowIndex);
+	var oPrevRow = tableName.rows[iPrevRowIndex+1]; 
+	var delete_row_count=count;
+	/* Product Re-Ordering Feature Code Addition ends */
+	
+	
 	//Delete link
 	colone.className = "crmTableRow small";
-	colone.innerHTML='<img src="'+image_path+'delete.gif" border="0" onclick="deleteRow(\''+module+'\','+count+')"><input id="deleted'+count+'" name="deleted'+count+'" type="hidden" value="0">';
-
+	colone.id = row.id+"_col1";
+	colone.innerHTML='<img src="'+image_path+'delete.gif" border="0" onclick="deleteRow(\''+module+'\','+count+',\''+image_path+'\')"><input id="deleted'+count+'" name="deleted'+count+'" type="hidden" value="0"><br/><br/>&nbsp;<a href="javascript:moveUpDown(\'UP\',\''+module+'\','+count+')" title="Move Upward"><img src="'+image_path+'up_layout.gif" border="0"></a>';
+	/* Product Re-Ordering Feature Code Addition Starts */
+	if(iPrevCount != 1)
+	{
+		oPrevRow.cells[0].innerHTML = '<img src="'+image_path+'delete.gif" border="0" onclick="deleteRow(\''+module+'\','+iPrevCount+')"><input id="deleted'+iPrevCount+'" name="deleted'+iPrevCount+'" type="hidden" value="0"><br/><br/>&nbsp;<a href="javascript:moveUpDown(\'UP\',\''+module+'\','+iPrevCount+')" title="Move Upward"><img src="'+image_path+'up_layout.gif" border="0"></a>&nbsp;&nbsp;<a href="javascript:moveUpDown(\'DOWN\',\''+module+'\','+iPrevCount+')" title="Move Downward"><img src="'+image_path+'down_layout.gif" border="0"></a>';
+	}
+	else
+	{
+		oPrevRow.cells[0].innerHTML = '<input id="deleted'+iPrevCount+'" name="deleted'+iPrevCount+'" type="hidden" value="0"><br/><br/><a href="javascript:moveUpDown(\'DOWN\',\''+module+'\','+iPrevCount+')" title="Move Downward"><img src="'+image_path+'down_layout.gif" border="0"></a>';
+	}
+	/* Product Re-Ordering Feature Code Addition ends */
+	
 	//Product Name with Popup image to select product
 	coltwo.className = "crmTableRow small"
 	coltwo.innerHTML= '<table border="0" cellpadding="1" cellspacing="0" width="100%"><tr><td class="small"><input id="productName'+count+'" name="productName'+count+'" class="small" style="width: 70%;" value="" readonly="readonly" type="text"><input id="hdnProductId'+count+'" name="hdnProductId'+count+'" value="" type="hidden"><img src="'+image_path+'search.gif" style="cursor: pointer;" onclick="productPickList(this,\''+module+'\','+count+')" align="absmiddle"></td></tr><tr><td class="small" id="setComment'+count+'"><textarea id="comment'+count+'" name="comment'+count+'" class=small style="width:70%;height:40px"></textarea><br>[<a href="javascript:;" onclick="getObj(\'comment'+count+'\').value=\'\'";>'+product_labelarr.CLEAR_COMMENT+'</a>]</td></tr></tbody></table>';	
@@ -916,3 +986,144 @@ function resetSHandAdjValues() {
 	
 }
 // End
+
+/** Function for Product Re-Ordering Feature Code Addition Starts 
+ * It will be responsible for moving record up/down, 1 step at a time
+ */
+function moveUpDown(sType,oModule,iIndex)
+{
+	var aFieldIds = Array('hidtax_row_no','productName','hdnProductId','comment','qty','listPrice','discount_type','discount_percentage','discount_amount','tax1_percentage','hidden_tax1_percentage','popup_tax_row','tax2_percentage','hidden_tax2_percentage','');
+	
+	var aContentIds = Array('qtyInStock','netPrice');
+	iIndex = eval(iIndex) + 1;
+	var oTable = document.getElementById('proTab');
+	iMax = oTable.rows.length;
+	iSwapIndex = 1;
+	if(sType == 'UP')
+	{ 
+		for(iCount=iIndex-2;iCount>=1;iCount--)
+		{
+			if(document.getElementById("row"+iCount))
+			{
+				if(document.getElementById("row"+iCount).style.display != 'none' && document.getElementById('deleted'+iCount).value == 0)
+				{
+					iSwapIndex = iCount+1;
+					break;
+				}
+			}
+		}
+	}
+	else
+	{
+		for(iCount=iIndex;iCount<=iMax-2;iCount++)
+		{
+			if(document.getElementById("row"+iCount) && document.getElementById("row"+iCount).style.display != 'none' && document.getElementById('deleted'+iCount).value == 0)
+			{
+				iSwapIndex = iCount;
+				break;
+			}
+		}
+		iSwapIndex += 1;
+	}
+	
+	var oCurTr = oTable.rows[iIndex];
+	var oSwapRow = oTable.rows[iSwapIndex];
+	
+	iMaxCols = oCurTr.cells.length;
+	iIndex -= 1;
+	iSwapIndex -= 1;
+	
+	iCheckIndex = 0;
+	iSwapCheckIndex = 0;
+	for(j=0;j<=2;j++)
+	{
+		if(eval('document.getElementById(\'frmEditView\').discount'+iIndex+'['+j+']'))
+		{
+			sFormElement = eval('document.getElementById(\'frmEditView\').discount'+iIndex+'['+j+']');
+			if(sFormElement.checked)
+			{
+				iCheckIndex = j;
+				break;
+			}
+		}
+	}
+	
+	for(j=0;j<=2;j++)
+	{
+		if(eval('document.getElementById(\'frmEditView\').discount'+iSwapIndex+'['+j+']'))
+		{
+			sFormElement = eval('document.getElementById(\'frmEditView\').discount'+iSwapIndex+'['+j+']');
+			if(sFormElement.checked)
+			{
+				iSwapCheckIndex = j;
+				break;
+			}
+		}
+	}
+	if(eval('document.getElementById(\'frmEditView\').discount'+iIndex+'['+iSwapCheckIndex+']'))
+	{
+		oElement = eval('document.getElementById(\'frmEditView\').discount'+iIndex+'['+iSwapCheckIndex+']');
+		oElement.checked = true;
+	}
+	if(eval('document.getElementById(\'frmEditView\').discount'+iSwapIndex+'['+iCheckIndex+']'))
+	{
+		oSwapElement = eval('document.getElementById(\'frmEditView\').discount'+iSwapIndex+'['+iCheckIndex+']');
+		oSwapElement.checked = true;
+	}
+
+	iMaxElement = aFieldIds.length;
+	for(iCt=0;iCt<iMaxElement;iCt++)
+	{
+		sId = aFieldIds[iCt] + iIndex;
+		sSwapId = aFieldIds[iCt] + iSwapIndex;
+		if(document.getElementById(sId) && document.getElementById(sSwapId))
+		{
+			sTemp = document.getElementById(sId).value;
+			document.getElementById(sId).value = document.getElementById(sSwapId).value;
+			document.getElementById(sSwapId).value = sTemp;
+		}
+		//oCurTr.cells[iCt].innerHTML;
+	}
+	iMaxElement = aContentIds.length;
+	for(iCt=0;iCt<iMaxElement;iCt++)
+	{
+		sId = aContentIds[iCt] + iIndex;
+		sSwapId = aContentIds[iCt] + iSwapIndex;
+		if(document.getElementById(sId) && document.getElementById(sSwapId))
+		{
+			sTemp = document.getElementById(sId).innerHTML;
+			document.getElementById(sId).innerHTML = document.getElementById(sSwapId).innerHTML;
+			document.getElementById(sSwapId).innerHTML = sTemp;
+		}
+	}
+	//FindDuplicate(); 
+	settotalnoofrows(); 
+	calcTotal();
+	
+	loadTaxes_Ajax(iIndex);
+	loadTaxes_Ajax(iSwapIndex);
+	callTaxCalc(iIndex);
+	callTaxCalc(iSwapIndex);
+	setDiscount(this,iIndex); 
+	setDiscount(this,iSwapIndex); 
+	sId = 'tax1_percentage' + iIndex;
+	sTaxRowId = 'hidtax_row_no' + iIndex;
+	if(document.getElementById(sTaxRowId))
+	{
+		if(!(iTaxVal = document.getElementById(sTaxRowId).value))
+			iTaxVal = 0;
+		//calcCurrentTax(sId,iIndex,iTaxVal);
+	}
+	
+	sSwapId = 'tax1_percentage' + iSwapIndex;
+	sSwapTaxRowId = 'hidtax_row_no' + iSwapIndex;
+	if(document.getElementById(sSwapTaxRowId))
+	{
+		if(!(iSwapTaxVal = document.getElementById(sSwapTaxRowId).value))
+			iSwapTaxVal = 0;
+		//calcCurrentTax(sSwapId,iSwapIndex,iSwapTaxVal);
+	}
+	calcTotal();
+}
+
+
