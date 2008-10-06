@@ -88,7 +88,7 @@ if(isset($_SESSION['listEntyKeymod']))
 				}
 			}
 		}
-		for($listi=$start;$listi<=$end;$listi++)
+		for($listi=$start;$listi<$end;$listi++)
 		{
 			$field_query = $adb->pquery("SELECT * from ".$tables_array[$sModule]." WHERE ".$id_array[$sModule]." = ".$ar_allist[$listi],array());
 			$field_value = $adb->query_result($field_query,0,$fields_array[$sModule]);

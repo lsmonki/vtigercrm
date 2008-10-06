@@ -594,6 +594,9 @@ for($i=0;$i<$adb->num_rows($query);$i++)
 	$adb->pquery("UPDATE vtiger_homestuff SET visible = 0 WHERE stuffid in (". generateQuestionMarks($stuffid_list) .")",array($stuffid_list));
 }
 
+/* For Layout Editor */
+ExecuteQuery("ALTER TABLE vtiger_blocks ADD COLUMN display_status int(1) NOT NULL DEFAULT '1'");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>
