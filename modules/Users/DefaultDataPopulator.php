@@ -84,7 +84,7 @@ $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vt
 $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",2,'LBL_CUSTOM_INFORMATION',2,0,0,0,0,0,1)");
 $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",2,'LBL_DESCRIPTION_INFORMATION',3,0,0,0,0,0,1)");
 $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",4,'LBL_CONTACT_INFORMATION',1,0,0,0,0,0,1)");
-$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",4,'LBL_CUSTOM_INFORMATION',2,0,0,0,0,0)");
+$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",4,'LBL_CUSTOM_INFORMATION',2,0,0,0,0,0,1)");
 $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",4,'LBL_CUSTOMER_PORTAL_INFORMATION',3,0,0,0,0,0,1)");
 $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",4,'LBL_ADDRESS_INFORMATION',4,0,0,0,0,0,1)");
 $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",4,'LBL_DESCRIPTION_INFORMATION',6,0,0,0,0,0,1)");
