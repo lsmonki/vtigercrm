@@ -55,12 +55,16 @@ global $upload_maxsize;
 
 global $import_dir;
 $focus = 0;
-$delimiter = ',';
 $max_lines = 3;
 
-$has_header = 0;
+$delimiter = ',';
+if (isset($_REQUEST['delimiter']))
+{
+	$delimiter = $_REQUEST['delimiter'];
+}
 
-if ( isset($_REQUEST['has_header']))
+$has_header = 0;
+if (isset($_REQUEST['has_header']))
 {
 	$has_header = 1;
 }
@@ -89,6 +93,19 @@ $tmp_file_name = $import_dir. "IMPORT_".$current_user->id;
 
 move_uploaded_file($_FILES['userfile']['tmp_name'], $tmp_file_name);
 
+// Convert ISO-8859 file (as saved by MS Excel) into UTF-8 to preserve umlauts and accents
+if ($_REQUEST["format"] != "UTF-8")
+{
+	$fh = fopen($tmp_file_name,"r");
+	$content = fread($fh, filesize($tmp_file_name));
+	fclose($fh);
+
+	$content = mb_convert_encoding($content, 'UTF-8', $_REQUEST["format"]);	
+
+	$fh = fopen($tmp_file_name,"w");
+	fwrite($fh, $content);
+	fclose($fh);
+}
 
 // Now parse the file and look for errors
 $ret_value = 0;
@@ -346,6 +363,7 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 		$cnt++;
 	}
 }
+@session_unregister('import_delimiter');
 @session_unregister('import_has_header');
 @session_unregister('import_firstrow');
 @session_unregister('import_field_map');
@@ -353,6 +371,7 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 @session_unregister('import_module_field_count');
 @session_unregister('import_module_object_required_fields');
 @session_unregister('import_module_translated_column_fields');
+$_SESSION['import_delimiter'] = $delimiter;
 $_SESSION['import_has_header'] = $has_header;
 $_SESSION['import_firstrow'] = $firstrow;
 $_SESSION['import_field_map'] = $field_map;

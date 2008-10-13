@@ -188,6 +188,8 @@ $mod_strings = Array(
 'LBL_STEP_2_4'=>'Step 2 of 4 :',
 'LBL_STEP_1_4'=>'Step 1 of 4 : ',
 
+'LBL_DELIMITER' => 'Delimiter:',
+'LBL_FORMAT' => 'Format:',
 );
 
 /*$mod_list_strings = Array(

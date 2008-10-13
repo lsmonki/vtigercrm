@@ -87,6 +87,8 @@ $current_bean_type = "";
 $id_exists_count = 0;
 $broken_ids = 0;
 
+$delimiter = $_SESSION['import_delimiter'];
+
 $has_header = 0;
 
 if ( isset( $_REQUEST['has_header']) && $_REQUEST['has_header'] == 'on')

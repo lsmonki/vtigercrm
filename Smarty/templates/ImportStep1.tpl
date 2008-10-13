@@ -83,9 +83,20 @@ function validateFile(form)
 				   <tr >
 					<td align="right" valign="top" width="25%" class=small><b>{$MOD.LBL_FILE_LOCATION} </b></td>
 					<td align="left" valign="top" width="75%">
-						<input type="file" name="userfile"  size="40"   class=small onchange="validateFilename(this);" />&nbsp;
-						<input type="hidden" name="userfile_hidden" value=""/>
-                		<input type="checkbox" name="has_header"{$HAS_HEADER_CHECKED} />&nbsp; {$MOD.LBL_HAS_HEADER}
+						<input type="file" name="userfile" size="65" class=small onchange="validateFilename(this);" />&nbsp;
+						<input type="hidden" name="userfile_hidden" value=""/><br />
+						<br /><b>{$MOD.LBL_HAS_HEADER}</b>&nbsp;<input type="checkbox" name="has_header"{$HAS_HEADER_CHECKED} />
+						&nbsp;&nbsp;&nbsp;&nbsp;<b>{$MOD.LBL_DELIMITER}</b>&nbsp;
+							<select name="delimiter" class="small" style="font-family:Times;">
+								<option value=",">,</option>
+								<option value=";">;</option>
+							</select>
+					  	&nbsp;&nbsp;&nbsp;&nbsp;<b>{$MOD.LBL_FORMAT}</b>&nbsp;
+							<select name="format" class="small">
+							<!-- value must be a known format for mb_convert_encoding() -->
+					  			<option value="ISO-8859-1">ISO-8859-1</option>
+					  			<option value="UTF-8">UTF-8</option>
+					  		</select>
 					</td>
 				   </tr>
 				   {*<tr >
@@ -117,9 +128,10 @@ function validateFile(form)
  <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="" class="crmButton small cancel" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" onclick="gotourl('index.php?action=ListView&module={$MODULE}&parenttab={$CATEGORY}')">
 
 						</td>
-				   </tr>				</form>
+				   </tr>
 				 </table>
 				<br>
+				</form>
 				<!-- IMPORT LEADS ENDS HERE -->
 			</td>
 		   </tr>

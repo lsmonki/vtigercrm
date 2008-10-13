@@ -149,10 +149,23 @@ foreach ($rows1 as $row)
 		$fv = trim($focus->column_fields[$field]);
 		if (! isset($fv) || $fv == '') 
 		{
-		       p("fv ".$field." not set");	
-			$do_save = 0; 
-			$skip_required_count++; 
-			break; 
+			// Leads Import does not allow an empty lastname because the link is created on the lastname
+			// Without lastname the Lead could not be opened.
+			// But what if the import file has only company and telefone information?
+			// It would be stupid to skip all the companies which don't have a contact person yet!
+			// So we set lastname ="?????" and the user can later enter a name.
+			// So the lastname is still mandatory but may be empty.
+			if ($field == 'lastname' && $module == 'Leads')
+			{
+				$focus->column_fields[$field] = '?????';
+			}
+			else
+			{
+				p("fv ".$field." not set");	
+				$do_save = 0; 
+				$skip_required_count++; 
+				break;
+			}       	
 		} 
 	}
 

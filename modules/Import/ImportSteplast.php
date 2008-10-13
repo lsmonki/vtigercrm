@@ -135,9 +135,9 @@ if ( isset($_REQUEST['message']))
                  <input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
                  <input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
                  <input type="hidden" name="return_action" value="<?php echo (($_REQUEST['return_action'] != '')?$_REQUEST['return_action']:'index'); ?>">
-                 <input type="hidden" name="parenttab" id="parenttab"value="<?php echo $parenttab; ?>">
+                 <input type="hidden" name="parenttab" id="parenttab" value="<?php echo $parenttab; ?>">
                  <input title="<?php echo $mod_strings['LBL_FINISHED'] ?>" accessKey="" class="crmbutton small save" type="submit" name="button" value="  <?php echo $mod_strings['LBL_FINISHED'] ?>  "  onclick="this.form.action.value=this.form.return_action.value;this.form.return_module.value=this.form.return_module.value;return true;">
-                <input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="crmbutton small save" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="this.form.return_module.value=this.form.module.value; return true;">
+                 <input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="crmbutton small save" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="this.form.return_module.value=this.form.module.value; return true;">
 		<?php 
 			//if check added for duplicate records handling -srini	
 		if( ($req_module == 'Contacts'|| $req_module == 'Accounts' || $req_module == 'Leads' ||$req_module == 'Products' ||$req_module == 'HelpDesk' ||$req_module == 'Potentials' ||$req_module == 'Vendors') && ($_REQUEST['dup_type'] == 'manual')) { ?>
