@@ -958,10 +958,9 @@ $log->info("in getOldFileName  ".$notesid);
 	*/
 	function mark_deleted($id)
 	{
-		$query = "UPDATE vtiger_crmentity set deleted=1 where crmid=?";
-		$this->db->pquery($query, array($id), true,"Error marking record deleted: ");
-
-
+		$date_var = date('Y-m-d H:i:s');
+		$query = "UPDATE vtiger_crmentity set deleted=1,modifiedtime=? where crmid=?";
+		$this->db->pquery($query, array($this->db->formatDate($date_var, true),$id), true,"Error marking record deleted: ");
 	}
 
 

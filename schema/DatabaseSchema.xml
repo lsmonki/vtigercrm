@@ -95,6 +95,7 @@
 			<notnull />
 			<default value="MD5" />
 		</field>
+		<field name="accesskey" type="C" size="36" />
 
 		<index name="user_user_name_idx">
 			<col>user_name</col>
@@ -6710,5 +6711,61 @@
 		<data>
 		</data>
 	</table>
+	
+	<table name="vtiger_ws_fieldtype">
+		<field name="fieldtypeid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="uitype" type="C" size="30">
+			<notnull />
+		</field>
+		<field name="fieldtype" type="C" size="200">
+			<notnull />
+		</field>
+		<index name="uitype_idx">
+			<unique />
+			<col>uitype</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
 
+	<table name="vtiger_ws_referencetype">
+		<field name="fieldtypeid" type="I" size="19">
+			<key />
+			<notnull />
+		</field>
+		<field name="type" type="C" size="25">
+			<key />
+			<notnull />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="vtiger_ws_referencetype" alter="true">
+		<constraint>ADD CONSTRAINT `fk_1_vtiger_referencetype` FOREIGN KEY (`fieldtypeid`) REFERENCES `vtiger_ws_fieldtype` (`fieldtypeid`) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+	
+	<table name="vtiger_ws_userauthtoken">
+		<field name="userid" type="I" size="19">
+			<key />
+		</field>
+		<field name="token" type="C" size="36">
+			<notnull />
+		</field>
+		<field name="expiretime" type="I" size="19">
+			<key />
+			<notnull />
+		</field>
+		<index name="userid_idx">
+			<unique />
+			<col>userid</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	
 </schema>

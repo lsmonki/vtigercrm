@@ -35,6 +35,7 @@ require_once('include/utils/UserInfoUtil.php');
 require_once('modules/Calendar/Activity.php');
 require_once('modules/Contacts/Contacts.php');
 require_once('data/Tracker.php');
+require_once 'include/utils/CommonUtils.php';
 
 // User is used to store customer information.
  /** Main class for the user module
@@ -708,10 +709,21 @@ class Users {
 		}
 		require_once('modules/Users/CreateUserPrivilegeFile.php');
 		createUserPrivilegesfile($this->id);
+		$this->createAccessKey();
 		$this->db->completeTransaction();
 		$this->db->println("TRANS saveentity ends");
 	}
-
+	
+	function createAccessKey(){
+		global $adb,$log;
+		
+		$log->info("Entering Into function createAccessKey()");
+		$updateQuery = "update vtiger_users set accesskey=? where id=?";
+		$insertResult = $adb->pquery($updateQuery,array(generateRandomAccessKey(16),$this->id));
+		$log->info("Exiting function createAccessKey()");
+		
+	}
+	
 	/** Function to insert values in the specifed table for the specified module
   	  * @param $table_name -- table name:: Type varchar
   	  * @param $module -- module:: Type varchar

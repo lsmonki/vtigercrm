@@ -670,6 +670,7 @@ $mod_strings = Array(
 
 'LBL_USER_ADV_OPTIONS'=>'User Advanced Options',
 'Reminder Interval'=>'Reminder Interval',
+'Webservice Access Key'=>'Access Key',
 );
 
 ?>

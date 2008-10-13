@@ -124,6 +124,10 @@ class PearDatabase{
 	$this->println("TRANS  Completed");
     }
 
+    function hasFailedTransaction(){
+    	return $this->database->HasFailedTrans();
+    }
+    
     function checkError($msg='', $dieOnError=false)
     {
 /*

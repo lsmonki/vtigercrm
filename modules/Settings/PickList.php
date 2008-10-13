@@ -11,6 +11,7 @@
 require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 require_once('database/DatabaseConnection.php');
+require_once 'include/utils/CommonUtils.php';
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
@@ -117,25 +118,6 @@ function getUserFldArray($fld_module,$roleid)
     	}
     }
     return $fieldlist;
-}
-
-	/** Function to get picklist values for the given field  
-	 *  @ param $tablename
-	 *  It gets the picklist values for the given fieldname
-	 *  			$fldVal = Array(0=>value,1=>value1,-------------,n=>valuen)	
-	 */
-
-function getPickListValues($tablename,$roleid)
-{
-	global $adb;
-	$query = "select $tablename from vtiger_$tablename inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tablename.picklist_valueid where roleid=? and picklistid in (select picklistid from vtiger_picklist) order by sortid";
-	$result = $adb->pquery($query, array($roleid));
-	$fldVal = Array();
-	while($row = $adb->fetch_array($result))
-	{
-		$fldVal []= $row[$tablename];
-	}
-	return $fldVal;
 }
 	/** Function to get modules which has picklist values  
 	 *  It gets the picklist modules and return in an array in the following format 
