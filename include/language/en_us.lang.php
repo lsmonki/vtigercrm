@@ -1139,6 +1139,9 @@ $app_strings = array (
 'LBL_PLATFORM_INDEPENDENT'=>'Platform Independent',
 'Attachments' => 'Attachments', //added for list header label in related lists
 
+// Email Ticketing
+'ID'=>'ID',
+
 // Layout Editor and Ease navigation between records in Detail view
 'LNK_LIST_NEXT' => 'Next',
 'LNK_LIST_PREVIOUS' => 'Previous',

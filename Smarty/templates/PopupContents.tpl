@@ -57,9 +57,9 @@
                                         <td rowspan="2" width="25%"><img src="{$IMAGE_PATH}empty.jpg" height="60" width="61%"></td>
                                         {if $recid_var_value neq '' && $mod_var_value neq '' && $RECORD_COUNTS eq 0 }
 					<script>redirectWhenNoRelatedRecordsFound();</script>
-                                        <td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$MODULE} {$APP.RELATED} !</td>
+                                        <td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$APP[$MODULE]} {$APP.RELATED} !</td>
                                         {else}
-                                        <td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$MODULE} {$APP.LBL_FOUND} !</td>
+                                        <td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$APP[$MODULE]} {$APP.LBL_FOUND} !</td>
                                         {/if}
                                 </tr>
                         </table>

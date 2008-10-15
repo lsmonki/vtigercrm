@@ -62,7 +62,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
 					{if $recid_var_value neq ''}
-                                                <td class="moduleName" width="80%" style="padding-left:10px;">{$APP[$MODULE]}&nbsp;{$APP.RELATED_PARENT}</td>
+                                                <td class="moduleName" width="80%" style="padding-left:10px;">{$APP[$MODULE]}&nbsp;{$APP.LBL_RELATED_TO}&nbsp;{$APP[$PARENT_MODULE]}</td>
                                         {else}
                                                 <td class="moduleName" width="80%" style="padding-left:10px;">{$APP[$MODULE]}</td>
                                         {/if}

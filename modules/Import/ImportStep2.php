@@ -100,7 +100,12 @@ if ($_REQUEST["format"] != "UTF-8")
 	$content = fread($fh, filesize($tmp_file_name));
 	fclose($fh);
 
-	$content = mb_convert_encoding($content, 'UTF-8', $_REQUEST["format"]);	
+	if (function_exists("mb_convert_encoding")) 
+	{
+		$content = mb_convert_encoding($content, 'UTF-8', $_REQUEST["format"]);
+	} else {
+		$content = iconv('UTF-8', $_REQUEST["format"], $content);		
+	}
 
 	$fh = fopen($tmp_file_name,"w");
 	fwrite($fh, $content);

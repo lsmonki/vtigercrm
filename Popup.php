@@ -339,6 +339,7 @@ $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,$cur
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("POPUPTYPE", $popuptype);
+$smarty->assign("PARENT_MODULE", $_REQUEST['parent_module']);
 
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
