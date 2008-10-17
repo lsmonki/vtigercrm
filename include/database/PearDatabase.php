@@ -589,20 +589,20 @@ class PearDatabase{
     /* ADODB newly added. replacement for mysql_result() */
     function query_result(&$result, $row, $col=0)
     {		
-	//$this->println("ADODB query_result r=".$row." c=".$col);
-	if (!is_object($result))
-                throw new Exception("result is not an object");
-	$result->Move($row);
-	$rowdata = $this->change_key_case($result->FetchRow());
-	//$this->println($rowdata);
-	//Commented strip_selected_tags and added to_html function for HTML tags vulnerability
-	//$coldata = strip_selected_tags($rowdata[$col],'script');
-	if($col == 'fieldlabel')
-		$coldata = $rowdata[$col];
-	else
-		$coldata = to_html($rowdata[$col]);
-	//$this->println("ADODB query_result ". $coldata);
-	return $coldata;
+		//$this->println("ADODB query_result r=".$row." c=".$col);
+		if (!is_object($result))
+	                throw new Exception("result is not an object");
+		$result->Move($row);
+		$rowdata = $this->change_key_case($result->FetchRow());
+		//$this->println($rowdata);
+		//Commented strip_selected_tags and added to_html function for HTML tags vulnerability
+		//$coldata = strip_selected_tags($rowdata[$col],'script');
+		if($col == 'fieldlabel')
+			$coldata = $rowdata[$col];
+		else
+			$coldata = to_html($rowdata[$col]);
+		//$this->println("ADODB query_result ". $coldata);
+		return $coldata;
     }
 
 	// Function to get particular row from the query result
@@ -657,40 +657,40 @@ class PearDatabase{
     function fetchByAssoc(&$result, $rowNum = -1, $encode=true)
     {
 	//$this->println("ADODB fetchByAssoc ".$rowNum." fetch mode=".$adb->database->$ADODB_FETCH_MODE);
-	if($result->EOF)
-	{
-	    $this->println("ADODB fetchByAssoc return null");
-	    return NULL;
-	}
-	if(isset($result) && $rowNum < 0)
-	{			
-	    $row = $this->change_key_case($result->GetRowAssoc(false));			
-	    $result->MoveNext();			
-	    //print_r($row);
-	    //$this->println("ADODB fetchByAssoc r< 0 isarray r=".is_array($row)." r1=".is_array($row[1]));			
-	    //$this->println($row);
-	    if($encode&& is_array($row))
-		return array_map('to_html', $row);
-	    //$this->println("ADODB fetchByAssoc r< 0 not array r1=".$row[1]);			
-	    return $row;			
-	}
+		if($result->EOF)
+		{
+		    $this->println("ADODB fetchByAssoc return null");
+		    return NULL;
+		}
+		if(isset($result) && $rowNum < 0)
+		{			
+		    $row = $this->change_key_case($result->GetRowAssoc(false));			
+		    $result->MoveNext();			
+		    //print_r($row);
+		    //$this->println("ADODB fetchByAssoc r< 0 isarray r=".is_array($row)." r1=".is_array($row[1]));			
+		    //$this->println($row);
+		    if($encode&& is_array($row))
+				return array_map('to_html', $row);
+		    //$this->println("ADODB fetchByAssoc r< 0 not array r1=".$row[1]);			
+		    return $row;			
+		}
 
-	//$this->println("ADODB fetchByAssoc after if ".$rowNum);	
-	
-	if($this->getRowCount($result) > $rowNum)
-	{
-	    $result->Move($rowNum);				
-	}
+		//$this->println("ADODB fetchByAssoc after if ".$rowNum);	
+		
+		if($this->getRowCount($result) > $rowNum)
+		{
+		    $result->Move($rowNum);				
+		}
 
-	$this->lastmysqlrow = $rowNum; //srini - think about this
-	$row = $this->change_key_case($result->GetRowAssoc(false));		
-	$result->MoveNext();
-	//print_r($row);		
-	$this->println($row);
-			
-	if($encode&& is_array($row))
-	    return array_map('to_html', $row);	
-	return $row;
+		$this->lastmysqlrow = $rowNum; //srini - think about this
+		$row = $this->change_key_case($result->GetRowAssoc(false));		
+		$result->MoveNext();
+		//print_r($row);		
+		$this->println($row);
+				
+		if($encode&& is_array($row))
+		    return array_map('to_html', $row);	
+		return $row;
     }
     
     function getNextRow(&$result, $encode=true){

@@ -6766,6 +6766,27 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
-	
-	
+
+	<table name="vtiger_eventhandlers">
+	    <field name="eventhandler_id" type="I" >
+			<key />
+			<autoincrement />
+		</field>
+		<field name="event_name" type="C" size="100">
+			<key />
+		</field>
+		<field name="handler_path" type="C" size="400">
+			<notnull />
+		</field>
+		<field name="handler_class" type="C" size="100">
+			<key />
+			<notnull />
+		</field>
+		<index name="eventhandler_idx">
+			<unique />
+			<col>eventhandler_id</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
 </schema>

@@ -663,6 +663,9 @@ function webserviceMigration(){
 	
 }
 
+//For the event api
+ExecuteQuery("create table vtiger_eventhandlers (eventhandler_id int, event_name varchar(100), handler_path varchar(400), handler_class varchar(100), primary key(eventhandler_id))");
+
 webserviceMigration();
 
 //Adding Custom Events Migration

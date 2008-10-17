@@ -848,8 +848,22 @@ $log->info("in getOldFileName  ".$notesid);
 	{
 		global $log;
 	        $log->debug("module name is ".$module_name);
+	
+		//Event triggering code
+		require_once("include/events/include.inc");
+		global $adb;
+		$em = new VTEventsManager($adb);
+		$em->triggerEvent("vtiger.entity.beforesave", 
+			VTEntityData::fromCRMEntity($this));
+		//Event triggering code ends
+	
 		//GS Save entity being called with the modulename as parameter
 		$this->saveentity($module_name,$fileid);
+		
+		//Event triggering code
+		$em->triggerEvent("vtiger.entity.aftersave", 
+			VTEntityData::fromCRMEntity($this));
+		//Event triggering code ends
 	}
   
 	function process_list_query($query, $row_offset, $limit= -1, $max_per_page = -1)
