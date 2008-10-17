@@ -1,7 +1,7 @@
 <?php
 	
 	require_once 'modules/Users/Users.php';
-	function getchallenge($username){
+	function vtws_getchallenge($username){
 		
 		global $adb;
 		

@@ -3446,7 +3446,7 @@ function getEmailTemplateVariables(){
  * @param $id - id of the user
  * returns Array:UserIds userid of all the users in the groups that this user is part of.
  */
-function getUsersInTheSameGroup($id){
+function vtws_getUsersInTheSameGroup($id){
 	require_once('include/utils/GetGroupUsers.php');
 	require_once('include/utils/GetUserGroups.php');
 	require_once('include/utils/UserInfoUtil.php');
@@ -3468,7 +3468,7 @@ function getUsersInTheSameGroup($id){
 	return $allUsers;
 }
 
-function generateRandomAccessKey($length=10){
+function vtws_generateRandomAccessKey($length=10){
 	$source = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 	$accesskey = "";
 	$maxIndex = strlen($source);
@@ -3484,7 +3484,7 @@ function generateRandomAccessKey($length=10){
  *  	$fldVal = Array(0=>value,1=>value1,-------------,n=>valuen)
  *  @return Array of picklist values accessible by the user.	
  */
-function getPickListValues($tablename,$roleid)
+function vt_getPickListValues($tablename,$roleid)
 {
 	global $adb;
 	$query = "select $tablename from vtiger_$tablename inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tablename.picklist_valueid where roleid=? and picklistid in (select picklistid from vtiger_picklist) order by sortid";

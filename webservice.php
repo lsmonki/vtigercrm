@@ -42,7 +42,7 @@
 							"sync"=>&$_GET,
 							"query"=>&$_GET,
 							"logout"=>&$_POST,
-							"listentities"=>&$_GET,
+							"listtypes"=>&$_GET,
 							"getchallenge"=>&$_GET,
 							"describeobject"=>&$_GET
 						);

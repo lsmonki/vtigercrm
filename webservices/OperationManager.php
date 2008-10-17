@@ -99,32 +99,32 @@
 													),
 										"retrieve"=>array(
 															"includes"=>array(
-																				"webservices/retrieve.php"
+																				"webservices/Retrieve.php"
 																			)
 													),
 										"create"=>array(
 															"includes"=>array(
-																				"webservices/create.php"
+																				"webservices/Create.php"
 																			)
 													),
 										"update"=>array(
 															"includes"=>array(
-																				"webservices/update.php"
+																				"webservices/Update.php"
 																			)
 													),
 										"delete"=>array(
 															"includes"=>array(
-																				"webservices/delete.php"
+																				"webservices/Delete.php"
 																			)
 													),
 										"sync"=>array(
 														"includes"=>array(
-																			"webservices/getUpdates.php"
+																			"webservices/GetUpdates.php"
 																		)
 													),
 										"query"=>array(
 														"includes"=>array(
-																			"webservices/query.php"
+																			"webservices/Query.php"
 																		)
 													),
 										"logout"=>array(
@@ -149,6 +149,20 @@
 													)
 													
 									);
+		private $operationHandle = array(
+										"login"=>"vtws_login",
+										"getchallenge"=>"vtws_getchallenge",
+										"listtypes"=>"vtws_listtypes",
+										"describeobject"=>"vtws_describeobject",
+										"create"=>"vtws_create",
+										"update"=>"vtws_update",
+										"retrieve"=>"vtws_retrieve",
+										"delete"=>"vtws_delete",
+										"query"=>"vtws_query",
+										"sync"=>"vtws_sync",
+										"logout"=>"vtws_logout"
+									);
+
 		private $preLoginOperations = array("getchallenge","login");
 		private $formatObjects ;
 		private $inParamProcess ;
@@ -207,24 +221,33 @@
 		
 		function runOperation($operation, $params,$user){
 			global $app_strings,$API_VERSION;
-			$app_strings = return_application_language($default_language);
-			
-			$operation = strtolower($operation);
-			if(!in_array($operation,$this->preLoginOperations)){
-				$params[] = $user;
-				return call_user_func_array($operation,$params);
-			}else{
+			try{
+				$app_strings = return_application_language($default_language);
 				
-				$userDetails = call_user_func_array($operation,$params);
-				if(is_a($userDetails,"WebServiceError") || is_array($userDetails)){
-					return $userDetails;
-				}else{
-					$this->sessionManager->set("authenticatedUserId", $userDetails->id);
-					$crmObject = new VtigerCRMObject("Users");
-					$userId = $crmObject->getIdFromComponents($crmObject->getModuleId(),$userDetails->id);
-					$resp = array("sessionId"=>$this->sessionManager->getSessionId(),"userId"=>$userId,"version"=>$API_VERSION);
-					return $resp;
+				$operation = strtolower($operation);
+				
+				if(!isset($this->operationHandle[$operation]) || $this->operationHandle[$operation] ==null){
+					return new WebServiceError(WebServiceErrorCode::$UNKNOWNOPERATION,"Unknown operation requested");
 				}
+				
+				if(!in_array($operation,$this->preLoginOperations)){
+					$params[] = $user;
+					return call_user_func_array($this->operationHandle[$operation],$params);
+				}else{
+					
+					$userDetails = call_user_func_array($this->operationHandle[$operation],$params);
+					if(is_a($userDetails,"WebServiceError") || is_array($userDetails)){
+						return $userDetails;
+					}else{
+						$this->sessionManager->set("authenticatedUserId", $userDetails->id);
+						$crmObject = new VtigerCRMObject("Users");
+						$userId = $crmObject->getIdFromComponents($crmObject->getModuleId(),$userDetails->id);
+						$resp = array("sessionId"=>$this->sessionManager->getSessionId(),"userId"=>$userId,"version"=>$API_VERSION);
+						return $resp;
+					}
+				}
+			}catch(Exception $e){
+				return new WebServiceError(WebServiceErrorCode::$INTERNALERROR,"Unknown Error while processing request");
 			}
 		}
 		

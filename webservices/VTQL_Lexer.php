@@ -1,7 +1,9 @@
 <?php
-global $where_col,$orderby;
+global $where_col,$orderby,$in_started,$count;
 $where_col = false;
 $orderby = false;
+$in_started = false;
+$count = false;
 function incrementN($lexer, $count){
 $i = 0;
 for(;$i<$count;$i++){
@@ -23,11 +25,21 @@ return VTQL_Parser::SELECT;
 }
 }
 function handlecolumn_list($lexer, $val){
+global $count;
 if($lexer->mandatory){
 if(!(strcasecmp($val, $lexer->mandatory_states[2])===0)){
 if(strcmp($val, "*")===0){
+if(!$count){
 incrementN($lexer, 1);
+}
 return VTQL_Parser::ASTERISK;	
+}else if((strcmp($val, "(")===0)){
+return VTQL_Parser::PARENOPEN;
+}else if(strcmp($val, ")")===0){
+return VTQL_Parser::PARENCLOSE;
+}else if((strcasecmp($val, "count")===0)){
+$count = true;
+return VTQL_Parser::COUNT;
 }else if(strcmp($val, ",")===0){
 return VTQL_Parser::COMMA;
 }else{
@@ -55,19 +67,29 @@ return VTQL_Parser::TABLENAME;
 }
 }
 function handlewhere($lexer, $val){
-global $where_col;
+global $where_col,$in_started;
 if((strcmp($val, "=")===0)){
 return VTQL_Parser::EQ;
 }else if((strcasecmp($val, $lexer->optional_states[$lexer->current_state])===0)){
 return VTQL_Parser::WHERE;
 }else if((strcmp($val, "<")===0)){
 return VTQL_Parser::LT;
+}else if((strcmp($val, "<=")===0)){
+return VTQL_Parser::LTE;
+}else if((strcmp($val, ">=")===0)){
+return VTQL_Parser::GTE;
+}else if((strcmp($val, "!=")===0)){
+return VTQL_Parser::NE;
 }else if((strcmp($val, ">")===0)){
 return VTQL_Parser::GT;
 }else if((strcmp($val, "(")===0)){
-return VTQL_Parser::LPAREN;
+return VTQL_Parser::PARENOPEN;
 }else if((strcmp($val, ")")===0)){
-return VTQL_Parser::RPAREN;
+if($in_started){
+$in_started = false;
+$where_col = false;
+}
+return VTQL_Parser::PARENCLOSE;
 }else if((strcasecmp($val, "and")===0)){
 return VTQL_Parser::LOGICAL_AND;
 }else if((strcasecmp($val, "or")===0)){
@@ -75,8 +97,17 @@ return VTQL_Parser::LOGICAL_OR;
 }else if(!$where_col){
 $where_col = true;
 return VTQL_Parser::COLUMNNAME;
+}else if((strcasecmp($val, "in")===0)){
+$in_started = true;
+return VTQL_Parser::IN;
+}else if(strcmp($val, ",")===0){
+return VTQL_Parser::COMMA;
+}else if(strcasecmp($val, "like")===0){
+return VTQL_Parser::LIKE;
 }else if($where_col){
+if(!$in_started){
 $where_col = false;
+}
 return VTQL_Parser::VALUE;
 }
 }
@@ -87,9 +118,9 @@ if(!$orderby){
 	return VTQL_Parser::ORDERBY;
 }
 if((strcmp($val, "(")===0)){
-return VTQL_Parser::LPAREN;
+return VTQL_Parser::PARENOPEN;
 }else if((strcmp($val, ")")===0)){
-return VTQL_Parser::RPAREN;
+return VTQL_Parser::PARENCLOSE;
 }else if(strcmp($val, ",")===0){
 return VTQL_Parser::COMMA;
 }else{
@@ -100,9 +131,9 @@ function handlelimit($lexer, $val){
 if((strcasecmp($val, "limit")===0)){
 return VTQL_Parser::LIMIT;
 }else if((strcmp($val, "(")===0)){
-return VTQL_Parser::LPAREN;
+return VTQL_Parser::PARENOPEN;
 }else if((strcmp($val, ")")===0)){
-return VTQL_Parser::RPAREN;
+return VTQL_Parser::PARENCLOSE;
 }else if(strcmp($val, ",")===0){
 return VTQL_Parser::COMMA;
 }else{
@@ -133,31 +164,6 @@ $this->current_state = 0;
 }
 function __toString(){
 return $this->token."";
-}
-function s(){
-global $orderby;
-//can't do this as it might mess column name. 
-//$this->value = strtolower($this->value);
-//echo "<br> ql state: ",$this->current_state," ",$this->value,"<br>";
-if($this->mandatory){
-//echo "<br> ql state: ",$this->current_state," ",$this->value,"<br>";
-$handler = 'handle'.$this->mandatory_states[$this->current_state];
-$this->token = $handler($this, $this->value);
-}else{
-$str = $this->value;
-if(strcasecmp($this->value, "order")===0){
-
-return false;
-}else if(strcasecmp($this->value, "by") ===0 && $orderby ===true){
-$str = "orderby";
-}
-$index = array_search($str, $this->optional_states, true);
-if($index !== false){
-$this->current_state = $index;
-}
-$handler = 'handle'.$this->optional_states[$this->current_state];
-$this->token = $handler($this, $this->value);
-}
 }
 
     private $_yy_state = 1;
@@ -195,7 +201,7 @@ $this->token = $handler($this, $this->value);
         if ($this->index >= strlen($this->data)) {
             return false; // end of input
         }
-        $yy_global_pattern = "/^((\\w+|'(?:[^']|'')+'|\\(|\\)|(\\+|-)?\\d+|,|\\*|=|<|>|;))|^([ \t\n]+)/";
+        $yy_global_pattern = "/^((\\w+|'(?:[^']|'')+'|\\(|\\)|(\\+|-)?\\d+|,|\\*|=|<|>|;))|^([ \t\r\n]+)/";
 
         do {
             if (preg_match($yy_global_pattern, substr($this->data, $this->index), $yymatches)) {
@@ -235,7 +241,7 @@ $this->token = $handler($this, $this->value);
                     // skip this token
                     continue;
                 } else {                    $yy_yymore_patterns = array(
-        1 => "^([ \t\n]+)",
+        1 => "^([ \t\r\n]+)",
         4 => "",
     );
 
@@ -272,8 +278,6 @@ $this->token = $handler($this, $this->value);
     {
 
 global $orderby;
-//can't do this as it might mess column name. 
-//$this->value = strtolower($this->value);
 //echo "<br> ql state: ",$this->current_state," ",$this->value,"<br>";
 if($this->mandatory){
 //echo "<br> ql state: ",$this->current_state," ",$this->value,"<br>";
@@ -292,11 +296,10 @@ return false;
 $orderby = false;
 $this->current_state = 1;
 }
-$index = array_search($str, $this->optional_states, true);
+$index = array_search(strtolower($str), $this->optional_states, true);
 if($index !== false){
 $this->current_state = $index;
 }
-//echo "<br> ql state: ",$this->current_state," :value: ",$this->value,"<br>";
 $handler = 'handle'.$this->optional_states[$this->current_state];
 $this->token = $handler($this, $this->value);
 }//$this->yypushstate($this->value);

@@ -96,12 +96,12 @@ class VTQL_ParseryyStackEntry
 // code external to the class is included here
 
 // declare_class is output here
-#line 355 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 420 "e:\workspace\parsergenerator\VTQL_parser.y"
 class VTQL_Parser#line 102 "e:\workspace\parsergenerator\VTQL_parser.php"
 {
 /* First off, code is included which follows the "include_class" declaration
 ** in the input file. */
-#line 150 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 210 "e:\workspace\parsergenerator\VTQL_parser.y"
 
 /*
 sample format(for contacts) for generated sql object 
@@ -185,6 +185,8 @@ $i++;
 $this->query = $this->query.','.$columnTable[$col].'.'.$col;
 }
 }
+}else if(strcmp($sqlDump['column_list'],'count(*)')===0){
+$this->query = $this->query." COUNT(*)";
 }else{
 $i=0;
 foreach($sqlDump['column_list'] as $ind=>$field){
@@ -210,7 +212,7 @@ $this->query = $this->query.' WHERE ';
 $i=0;
 $referenceFields = $meta->getReferenceFieldDetails();
 for(;$i<sizeof($sqlDump['where_condition']['column_values']);++$i){
-if(!$sqlDump['where_condition']['column_names'][$i]){
+if(!$fieldcol[$sqlDump['where_condition']['column_names'][$i]]){
 $this->exception = true;
 $this->error_msg = new WebServiceError(WebServiceErrorCode::$ACCESSDENIED, "Permission to access ".$sqlDump['where_condition']['column_names'][$i]." attribute denied.");
 }
@@ -226,14 +228,17 @@ $this->exception = true;
 $this->error_msg = new WebServiceError(WebServiceErrorCode::$INVALIDID,"Id specified is incorrect");
 }
 }
-$this->query = $this->query.$columnTable[$fieldcol[$whereField]].'.'.$fieldcol[$whereField].$whereOperator.$whereValue;
+if(is_array($whereValue)){
+$whereValue = "(".implode(',',$whereValue).")";
+}
+$this->query = $this->query.$columnTable[$fieldcol[$whereField]].'.'.$fieldcol[$whereField]." ".$whereOperator." ".$whereValue;
 if($i <sizeof($sqlDump['where_condition']['column_values'])-1){
 $this->query = $this->query.' ';
 $this->query = $this->query.$sqlDump['where_condition']['operators'][$i].' ';
 }
 }
 }else{
-$this->execption = true;
+$this->exception = true;
 $this->error_msg = new WebServiceError(WebServiceErrorCode::$QUERYSYNTAX, "columns data inappropriate");
 }
 $this->query = $this->query." AND ";
@@ -305,7 +310,7 @@ return $this->query;
 function getObjectMetaData(){
 return $this->out['meta'];
 }
-#line 311 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 316 "e:\workspace\parsergenerator\VTQL_parser.php"
 
 /* Next is all token values, as class constants
 */
@@ -316,30 +321,33 @@ return $this->out['meta'];
 **
 ** Each symbol here is a terminal symbol in the grammar.
 */
-    const LPAREN                         =  1;
-    const RPAREN                         =  2;
-    const SELECT                         =  3;
-    const FRM                            =  4;
-    const COLUMNNAME                     =  5;
-    const ASTERISK                       =  6;
-    const COMMA                          =  7;
-    const TABLENAME                      =  8;
-    const WHERE                          =  9;
-    const LOGICAL_AND                    = 10;
-    const LOGICAL_OR                     = 11;
-    const VALUE                          = 12;
-    const EQ                             = 13;
-    const LT                             = 14;
-    const GT                             = 15;
-    const LTE                            = 16;
-    const GTE                            = 17;
-    const NE                             = 18;
-    const ORDERBY                        = 19;
-    const LIMIT                          = 20;
-    const SEMICOLON                      = 21;
-    const YY_NO_ACTION = 87;
-    const YY_ACCEPT_ACTION = 86;
-    const YY_ERROR_ACTION = 85;
+    const SELECT                         =  1;
+    const FRM                            =  2;
+    const COLUMNNAME                     =  3;
+    const ASTERISK                       =  4;
+    const COUNT                          =  5;
+    const PARENOPEN                      =  6;
+    const PARENCLOSE                     =  7;
+    const COMMA                          =  8;
+    const TABLENAME                      =  9;
+    const WHERE                          = 10;
+    const LOGICAL_AND                    = 11;
+    const LOGICAL_OR                     = 12;
+    const VALUE                          = 13;
+    const EQ                             = 14;
+    const LT                             = 15;
+    const GT                             = 16;
+    const LTE                            = 17;
+    const GTE                            = 18;
+    const NE                             = 19;
+    const IN                             = 20;
+    const LIKE                           = 21;
+    const ORDERBY                        = 22;
+    const LIMIT                          = 23;
+    const SEMICOLON                      = 24;
+    const YY_NO_ACTION = 104;
+    const YY_ACCEPT_ACTION = 103;
+    const YY_ERROR_ACTION = 102;
 
 /* Next are that tables used to determine what action to take based on the
 ** current state and lookahead token.  These tables are used to implement
@@ -391,64 +399,68 @@ return $this->out['meta'];
 **                          shifting non-terminals after a reduce.
 **  self::$yy_default       Default action for each state.
 */
-    const YY_SZ_ACTTAB = 48;
+    const YY_SZ_ACTTAB = 63;
 static public $yy_action = array(
- /*     0 */    26,   24,   27,   23,   22,   28,   86,   36,   31,   34,
- /*    10 */     9,   19,   18,   12,   14,   11,   32,   46,   45,    3,
- /*    20 */    16,   33,   15,    6,    5,   10,   13,   37,   40,    2,
- /*    30 */    21,    8,   41,   25,   29,    1,    4,   43,   17,    7,
- /*    40 */    35,   30,   38,   44,   20,   47,   39,   42,
+ /*     0 */    32,   33,   31,   29,   35,   38,   37,   41,   54,   20,
+ /*    10 */    19,   53,    8,   28,   21,   56,   42,   16,    7,   18,
+ /*    20 */    19,   13,   52,   53,   36,   27,   17,   39,  103,   57,
+ /*    30 */    58,   14,   22,   49,   48,   51,   34,   24,   50,    3,
+ /*    40 */    46,   12,   26,   25,   40,   10,   30,   45,   43,   55,
+ /*    50 */    44,    6,    5,    1,   15,    4,    2,   23,   11,   93,
+ /*    60 */    93,   47,    9,
     );
     static public $yy_lookahead = array(
- /*     0 */    13,   14,   15,   16,   17,   18,   23,   24,   25,   26,
- /*    10 */    40,   41,   42,    4,   29,   31,    7,   10,   11,    9,
- /*    20 */    35,    8,   36,   37,   19,   32,   30,    7,   12,    3,
- /*    30 */     7,   33,    5,   12,    5,   27,    5,    1,   39,   20,
- /*    40 */    38,    6,   28,   21,   12,   34,    2,   43,
+ /*     0 */    14,   15,   16,   17,   18,   19,   20,   21,   41,   42,
+ /*    10 */    43,    8,   44,   45,   46,   11,   12,   37,   38,   42,
+ /*    20 */    43,    2,    7,    8,    4,    5,   28,    8,   26,   27,
+ /*    30 */    13,   32,   34,   24,   33,    3,    7,    6,    8,    1,
+ /*    40 */    13,   29,    8,    4,    3,   23,    9,   36,    6,   39,
+ /*    50 */     7,    3,    6,   40,   31,   10,   35,   13,   30,   48,
+ /*    60 */    48,   47,   22,
 );
-    const YY_SHIFT_USE_DFLT = -14;
-    const YY_SHIFT_MAX = 21;
+    const YY_SHIFT_USE_DFLT = -15;
+    const YY_SHIFT_MAX = 28;
     static public $yy_shift_ofst = array(
- /*     0 */    26,  -14,   35,  -14,  -13,   36,   31,   32,   22,   44,
- /*    10 */    19,    5,   13,   10,    9,    7,   29,   21,   27,   20,
- /*    20 */    23,   16,
+ /*     0 */    38,   46,  -15,   20,  -15,  -15,  -14,   48,   43,   42,
+ /*    10 */    44,   40,   45,   37,    9,   22,    4,   19,   15,   17,
+ /*    20 */     3,   32,   41,   34,   39,   29,   27,   31,   30,
 );
-    const YY_REDUCE_USE_DFLT = -31;
-    const YY_REDUCE_MAX = 13;
+    const YY_REDUCE_USE_DFLT = -34;
+    const YY_REDUCE_MAX = 15;
     static public $yy_reduce_ofst = array(
- /*     0 */   -17,  -30,  -15,  -14,   -1,    8,    2,    4,   11,   14,
- /*    10 */    -2,   -7,   -4,  -16,
+ /*     0 */     2,  -33,  -32,   -2,  -20,  -23,   13,   10,   11,   21,
+ /*    10 */    14,   23,   28,   12,    1,   -1,
 );
     static public $yyExpectedTokens = array(
-        /* 0 */ array(3, ),
-        /* 1 */ array(),
-        /* 2 */ array(6, ),
-        /* 3 */ array(),
-        /* 4 */ array(13, 14, 15, 16, 17, 18, ),
-        /* 5 */ array(1, ),
-        /* 6 */ array(5, ),
-        /* 7 */ array(12, ),
-        /* 8 */ array(21, ),
-        /* 9 */ array(2, ),
-        /* 10 */ array(20, ),
-        /* 11 */ array(19, ),
-        /* 12 */ array(8, ),
+        /* 0 */ array(1, ),
+        /* 1 */ array(6, ),
+        /* 2 */ array(),
+        /* 3 */ array(4, 5, ),
+        /* 4 */ array(),
+        /* 5 */ array(),
+        /* 6 */ array(14, 15, 16, 17, 18, 19, 20, 21, ),
+        /* 7 */ array(3, ),
+        /* 8 */ array(7, ),
+        /* 9 */ array(6, ),
+        /* 10 */ array(13, ),
+        /* 11 */ array(22, ),
+        /* 12 */ array(10, ),
         /* 13 */ array(9, ),
-        /* 14 */ array(4, 7, ),
-        /* 15 */ array(10, 11, ),
-        /* 16 */ array(5, ),
-        /* 17 */ array(12, ),
-        /* 18 */ array(5, ),
-        /* 19 */ array(7, ),
-        /* 20 */ array(7, ),
-        /* 21 */ array(12, ),
-        /* 22 */ array(),
-        /* 23 */ array(),
-        /* 24 */ array(),
-        /* 25 */ array(),
-        /* 26 */ array(),
-        /* 27 */ array(),
-        /* 28 */ array(),
+        /* 14 */ array(24, ),
+        /* 15 */ array(23, ),
+        /* 16 */ array(11, 12, ),
+        /* 17 */ array(2, 8, ),
+        /* 18 */ array(7, 8, ),
+        /* 19 */ array(13, ),
+        /* 20 */ array(8, ),
+        /* 21 */ array(3, ),
+        /* 22 */ array(3, ),
+        /* 23 */ array(8, ),
+        /* 24 */ array(4, ),
+        /* 25 */ array(7, ),
+        /* 26 */ array(13, ),
+        /* 27 */ array(6, ),
+        /* 28 */ array(8, ),
         /* 29 */ array(),
         /* 30 */ array(),
         /* 31 */ array(),
@@ -468,13 +480,25 @@ static public $yy_action = array(
         /* 45 */ array(),
         /* 46 */ array(),
         /* 47 */ array(),
+        /* 48 */ array(),
+        /* 49 */ array(),
+        /* 50 */ array(),
+        /* 51 */ array(),
+        /* 52 */ array(),
+        /* 53 */ array(),
+        /* 54 */ array(),
+        /* 55 */ array(),
+        /* 56 */ array(),
+        /* 57 */ array(),
+        /* 58 */ array(),
 );
     static public $yy_default = array(
- /*     0 */    85,   79,   59,   66,   85,   52,   85,   85,   85,   54,
- /*    10 */    81,   75,   85,   62,   85,   61,   85,   85,   85,   76,
- /*    20 */    82,   85,   72,   71,   69,   67,   68,   70,   73,   56,
- /*    30 */    57,   49,   58,   60,   50,   63,   48,   78,   74,   53,
- /*    40 */    83,   77,   80,   51,   84,   65,   64,   55,
+ /*     0 */   102,   82,   96,   65,   76,   82,  102,  102,   70,   68,
+ /*    10 */   102,   92,   72,  102,  102,   98,   71,  102,  102,  102,
+ /*    20 */    79,  102,  102,   99,  102,  102,  102,  102,   93,   86,
+ /*    30 */    66,   85,   83,   84,   63,   87,   62,   89,   88,   64,
+ /*    40 */    61,   90,   75,   67,   69,   91,  100,   97,   60,  101,
+ /*    50 */    95,   94,   78,   81,   77,   73,   74,   59,   80,
 );
 /* The next thing included is series of defines which control
 ** various aspects of the generated parser.
@@ -491,11 +515,11 @@ static public $yy_action = array(
 **    self::YYERRORSYMBOL is the code number of the error symbol.  If not
 **                        defined, then do no error processing.
 */
-    const YYNOCODE = 45;
+    const YYNOCODE = 49;
     const YYSTACKDEPTH = 100;
-    const YYNSTATE = 48;
-    const YYNRULE = 37;
-    const YYERRORSYMBOL = 22;
+    const YYNSTATE = 59;
+    const YYNRULE = 43;
+    const YYERRORSYMBOL = 25;
     const YYERRSYMDT = 'yy0';
     const YYFALLBACK = 0;
     /** The next table maps tokens into fallback tokens.  If a construct
@@ -577,16 +601,17 @@ static public $yy_action = array(
      * @var array
      */
     static public $yyTokenName = array( 
-  '$',             'LPAREN',        'RPAREN',        'SELECT',      
-  'FRM',           'COLUMNNAME',    'ASTERISK',      'COMMA',       
-  'TABLENAME',     'WHERE',         'LOGICAL_AND',   'LOGICAL_OR',  
-  'VALUE',         'EQ',            'LT',            'GT',          
-  'LTE',           'GTE',           'NE',            'ORDERBY',     
-  'LIMIT',         'SEMICOLON',     'error',         'sql',         
-  'data_operator',  'select_clause',  'select_statement',  'lparen',      
-  'rparen',        'selectcol_list',  'table_list',    'where_condition',
-  'order_clause',  'limit_clause',  'end_stmt',      'selectcolumn_exp',
-  'condition',     'expr_set',      'expr',          'logical_term',
+  '$',             'SELECT',        'FRM',           'COLUMNNAME',  
+  'ASTERISK',      'COUNT',         'PARENOPEN',     'PARENCLOSE',  
+  'COMMA',         'TABLENAME',     'WHERE',         'LOGICAL_AND', 
+  'LOGICAL_OR',    'VALUE',         'EQ',            'LT',          
+  'GT',            'LTE',           'GTE',           'NE',          
+  'IN',            'LIKE',          'ORDERBY',       'LIMIT',       
+  'SEMICOLON',     'error',         'sql',           'select_statement',
+  'selectcol_list',  'table_list',    'where_condition',  'order_clause',
+  'limit_clause',  'end_stmt',      'selectcolumn_exp',  'lparen',      
+  'rparen',        'condition',     'expr_set',      'expr',        
+  'logical_term',  'valuelist',     'valueref',      'value_exp',   
   'column_group',  'column_list',   'column_exp',    'limit_set',   
     );
 
@@ -595,43 +620,49 @@ static public $yy_action = array(
      * @var array
      */
     static public $yyRuleName = array(
- /*   0 */ "sql ::= data_operator",
- /*   1 */ "data_operator ::= select_clause",
- /*   2 */ "select_clause ::= select_statement",
- /*   3 */ "lparen ::= LPAREN",
- /*   4 */ "lparen ::=",
- /*   5 */ "rparen ::= RPAREN",
- /*   6 */ "rparen ::=",
- /*   7 */ "select_statement ::= SELECT selectcol_list FRM table_list where_condition order_clause limit_clause end_stmt",
- /*   8 */ "selectcol_list ::= selectcolumn_exp COLUMNNAME",
- /*   9 */ "selectcol_list ::= ASTERISK",
- /*  10 */ "selectcolumn_exp ::= selectcol_list COMMA",
- /*  11 */ "selectcolumn_exp ::=",
- /*  12 */ "table_list ::= TABLENAME",
- /*  13 */ "where_condition ::= WHERE condition",
- /*  14 */ "where_condition ::=",
- /*  15 */ "condition ::= expr_set expr",
- /*  16 */ "expr_set ::= condition LOGICAL_AND",
- /*  17 */ "expr_set ::= condition LOGICAL_OR",
- /*  18 */ "expr_set ::=",
- /*  19 */ "expr ::= COLUMNNAME logical_term VALUE",
- /*  20 */ "logical_term ::= EQ",
- /*  21 */ "logical_term ::= LT",
- /*  22 */ "logical_term ::= GT",
- /*  23 */ "logical_term ::= LTE",
- /*  24 */ "logical_term ::= GTE",
- /*  25 */ "logical_term ::= NE",
- /*  26 */ "order_clause ::= ORDERBY lparen column_group rparen",
- /*  27 */ "order_clause ::=",
- /*  28 */ "column_group ::= column_list",
- /*  29 */ "column_list ::= column_exp COLUMNNAME",
- /*  30 */ "column_exp ::= column_list COMMA",
- /*  31 */ "column_exp ::=",
- /*  32 */ "limit_clause ::= LIMIT limit_set",
- /*  33 */ "limit_clause ::=",
- /*  34 */ "limit_set ::= VALUE",
- /*  35 */ "limit_set ::= VALUE COMMA VALUE",
- /*  36 */ "end_stmt ::= SEMICOLON",
+ /*   0 */ "sql ::= select_statement",
+ /*   1 */ "select_statement ::= SELECT selectcol_list FRM table_list where_condition order_clause limit_clause end_stmt",
+ /*   2 */ "selectcol_list ::= selectcolumn_exp COLUMNNAME",
+ /*   3 */ "selectcol_list ::= ASTERISK",
+ /*   4 */ "selectcol_list ::= COUNT PARENOPEN ASTERISK PARENCLOSE",
+ /*   5 */ "selectcolumn_exp ::= selectcol_list COMMA",
+ /*   6 */ "selectcolumn_exp ::=",
+ /*   7 */ "table_list ::= TABLENAME",
+ /*   8 */ "lparen ::= PARENOPEN",
+ /*   9 */ "lparen ::=",
+ /*  10 */ "rparen ::= PARENCLOSE",
+ /*  11 */ "rparen ::=",
+ /*  12 */ "where_condition ::= WHERE condition",
+ /*  13 */ "where_condition ::=",
+ /*  14 */ "condition ::= expr_set expr",
+ /*  15 */ "expr_set ::= condition LOGICAL_AND",
+ /*  16 */ "expr_set ::= condition LOGICAL_OR",
+ /*  17 */ "expr_set ::=",
+ /*  18 */ "expr ::= COLUMNNAME logical_term valuelist",
+ /*  19 */ "valuelist ::= PARENOPEN valueref PARENCLOSE",
+ /*  20 */ "valuelist ::= valueref",
+ /*  21 */ "valueref ::= value_exp VALUE",
+ /*  22 */ "value_exp ::= valueref COMMA",
+ /*  23 */ "value_exp ::=",
+ /*  24 */ "logical_term ::= EQ",
+ /*  25 */ "logical_term ::= LT",
+ /*  26 */ "logical_term ::= GT",
+ /*  27 */ "logical_term ::= LTE",
+ /*  28 */ "logical_term ::= GTE",
+ /*  29 */ "logical_term ::= NE",
+ /*  30 */ "logical_term ::= IN",
+ /*  31 */ "logical_term ::= LIKE",
+ /*  32 */ "order_clause ::= ORDERBY lparen column_group rparen",
+ /*  33 */ "order_clause ::=",
+ /*  34 */ "column_group ::= column_list",
+ /*  35 */ "column_list ::= column_exp COLUMNNAME",
+ /*  36 */ "column_exp ::= column_list COMMA",
+ /*  37 */ "column_exp ::=",
+ /*  38 */ "limit_clause ::= LIMIT limit_set",
+ /*  39 */ "limit_clause ::=",
+ /*  40 */ "limit_set ::= VALUE",
+ /*  41 */ "limit_set ::= VALUE COMMA VALUE",
+ /*  42 */ "end_stmt ::= SEMICOLON",
     );
 
     /**
@@ -961,10 +992,10 @@ static public $yy_action = array(
             }
             /* Here code is inserted which will execute if the parser
             ** stack ever overflows */
-#line 368 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 433 "e:\workspace\parsergenerator\VTQL_parser.y"
 
 	$this->error_msg = new WebServiceError(WebServiceErrorCode::$QUERYSYNTAX, "Parser stack overflow");
-#line 973 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 1004 "e:\workspace\parsergenerator\VTQL_parser.php"
             return;
         }
         $yytos = new VTQL_ParseryyStackEntry;
@@ -998,43 +1029,49 @@ static public $yy_action = array(
      * </pre>
      */
     static public $yyRuleInfo = array(
-  array( 'lhs' => 23, 'rhs' => 1 ),
-  array( 'lhs' => 24, 'rhs' => 1 ),
-  array( 'lhs' => 25, 'rhs' => 1 ),
-  array( 'lhs' => 27, 'rhs' => 1 ),
-  array( 'lhs' => 27, 'rhs' => 0 ),
+  array( 'lhs' => 26, 'rhs' => 1 ),
+  array( 'lhs' => 27, 'rhs' => 8 ),
+  array( 'lhs' => 28, 'rhs' => 2 ),
   array( 'lhs' => 28, 'rhs' => 1 ),
-  array( 'lhs' => 28, 'rhs' => 0 ),
-  array( 'lhs' => 26, 'rhs' => 8 ),
-  array( 'lhs' => 29, 'rhs' => 2 ),
+  array( 'lhs' => 28, 'rhs' => 4 ),
+  array( 'lhs' => 34, 'rhs' => 2 ),
+  array( 'lhs' => 34, 'rhs' => 0 ),
   array( 'lhs' => 29, 'rhs' => 1 ),
-  array( 'lhs' => 35, 'rhs' => 2 ),
+  array( 'lhs' => 35, 'rhs' => 1 ),
   array( 'lhs' => 35, 'rhs' => 0 ),
-  array( 'lhs' => 30, 'rhs' => 1 ),
-  array( 'lhs' => 31, 'rhs' => 2 ),
-  array( 'lhs' => 31, 'rhs' => 0 ),
-  array( 'lhs' => 36, 'rhs' => 2 ),
+  array( 'lhs' => 36, 'rhs' => 1 ),
+  array( 'lhs' => 36, 'rhs' => 0 ),
+  array( 'lhs' => 30, 'rhs' => 2 ),
+  array( 'lhs' => 30, 'rhs' => 0 ),
   array( 'lhs' => 37, 'rhs' => 2 ),
-  array( 'lhs' => 37, 'rhs' => 2 ),
-  array( 'lhs' => 37, 'rhs' => 0 ),
-  array( 'lhs' => 38, 'rhs' => 3 ),
-  array( 'lhs' => 39, 'rhs' => 1 ),
-  array( 'lhs' => 39, 'rhs' => 1 ),
-  array( 'lhs' => 39, 'rhs' => 1 ),
-  array( 'lhs' => 39, 'rhs' => 1 ),
-  array( 'lhs' => 39, 'rhs' => 1 ),
-  array( 'lhs' => 39, 'rhs' => 1 ),
-  array( 'lhs' => 32, 'rhs' => 4 ),
-  array( 'lhs' => 32, 'rhs' => 0 ),
-  array( 'lhs' => 40, 'rhs' => 1 ),
-  array( 'lhs' => 41, 'rhs' => 2 ),
+  array( 'lhs' => 38, 'rhs' => 2 ),
+  array( 'lhs' => 38, 'rhs' => 2 ),
+  array( 'lhs' => 38, 'rhs' => 0 ),
+  array( 'lhs' => 39, 'rhs' => 3 ),
+  array( 'lhs' => 41, 'rhs' => 3 ),
+  array( 'lhs' => 41, 'rhs' => 1 ),
   array( 'lhs' => 42, 'rhs' => 2 ),
-  array( 'lhs' => 42, 'rhs' => 0 ),
-  array( 'lhs' => 33, 'rhs' => 2 ),
-  array( 'lhs' => 33, 'rhs' => 0 ),
-  array( 'lhs' => 43, 'rhs' => 1 ),
-  array( 'lhs' => 43, 'rhs' => 3 ),
-  array( 'lhs' => 34, 'rhs' => 1 ),
+  array( 'lhs' => 43, 'rhs' => 2 ),
+  array( 'lhs' => 43, 'rhs' => 0 ),
+  array( 'lhs' => 40, 'rhs' => 1 ),
+  array( 'lhs' => 40, 'rhs' => 1 ),
+  array( 'lhs' => 40, 'rhs' => 1 ),
+  array( 'lhs' => 40, 'rhs' => 1 ),
+  array( 'lhs' => 40, 'rhs' => 1 ),
+  array( 'lhs' => 40, 'rhs' => 1 ),
+  array( 'lhs' => 40, 'rhs' => 1 ),
+  array( 'lhs' => 40, 'rhs' => 1 ),
+  array( 'lhs' => 31, 'rhs' => 4 ),
+  array( 'lhs' => 31, 'rhs' => 0 ),
+  array( 'lhs' => 44, 'rhs' => 1 ),
+  array( 'lhs' => 45, 'rhs' => 2 ),
+  array( 'lhs' => 46, 'rhs' => 2 ),
+  array( 'lhs' => 46, 'rhs' => 0 ),
+  array( 'lhs' => 32, 'rhs' => 2 ),
+  array( 'lhs' => 32, 'rhs' => 0 ),
+  array( 'lhs' => 47, 'rhs' => 1 ),
+  array( 'lhs' => 47, 'rhs' => 3 ),
+  array( 'lhs' => 33, 'rhs' => 1 ),
     );
 
     /**
@@ -1044,23 +1081,27 @@ static public $yy_action = array(
      * If a rule is not set, it has no handler.
      */
     static public $yyReduceMap = array(
+        1 => 1,
+        2 => 2,
+        3 => 3,
+        4 => 4,
         7 => 7,
-        8 => 8,
-        9 => 9,
-        12 => 12,
-        16 => 16,
-        17 => 16,
-        19 => 19,
-        20 => 20,
+        15 => 15,
+        16 => 15,
+        18 => 18,
         21 => 21,
-        22 => 22,
-        23 => 23,
         24 => 24,
         25 => 25,
+        26 => 26,
+        27 => 27,
+        28 => 28,
         29 => 29,
-        34 => 34,
+        30 => 30,
+        31 => 31,
         35 => 35,
-        36 => 36,
+        40 => 40,
+        41 => 41,
+        42 => 42,
     );
     /* Beginning here are the reduction cases.  A typical example
     ** follows:
@@ -1068,8 +1109,8 @@ static public $yy_action = array(
     **   function yy_r0($yymsp){ ... }           // User supplied code
     **  #line <lineno> <thisfile>
     */
-#line 11 "e:\workspace\parsergenerator\VTQL_parser.y"
-    function yy_r7(){ 
+#line 5 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r1(){ 
 if($this->yystack[$this->yyidx + -7]->minor){
 $this->out['select'] = $this->yystack[$this->yyidx + -7]->minor;
 }
@@ -1083,20 +1124,25 @@ if($this->out['select']){
 $this->buildSelectStmt($this->out);
 }
     }
-#line 1092 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 25 "e:\workspace\parsergenerator\VTQL_parser.y"
-    function yy_r8(){ 
+#line 1133 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 19 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r2(){ 
 $this->out['column_list'][] = $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 1097 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 28 "e:\workspace\parsergenerator\VTQL_parser.y"
-    function yy_r9(){
+#line 1138 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 22 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r3(){
 $this->out['column_list'] = $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 1102 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 33 "e:\workspace\parsergenerator\VTQL_parser.y"
-    function yy_r12(){
-if($this->out["column_list"] !=="*"){
+#line 1143 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 25 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r4(){
+$this->out['column_list'] = 'count(*)';
+    }
+#line 1148 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 30 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r7(){
+if($this->out["column_list"] !=="*" && strcmp($this->out["column_list"],"count(*)") !==0){
 if(!in_array("id",$this->out["column_list"])){
 	$this->out["column_list"][] = "id";
 } 
@@ -1107,79 +1153,133 @@ if(!$moduleName){
 	$this->error_msg = new WebServiceError(WebServiceErrorCode::$QUERYSYNTAX, "There is an syntax error in query");
 	return;
 }
+if(strcasecmp('calendar',$this->yystack[$this->yyidx + 0]->minor)===0){
+$this->out['where_condition']['column_names'][] = 'activitytype';
+$this->out['where_condition']['column_operators'][] = '!=';
+$this->out['where_condition']['column_values'][] = "'Emails'";
+$this->out['default_where']=true;
+}else if(strcasecmp('emails',$this->yystack[$this->yyidx + 0]->minor)===0){
+$this->out['where_condition']['column_names'][] = 'activitytype';
+$this->out['where_condition']['column_operators'][] = '=';
+$this->out['where_condition']['column_values'][] = "'Emails'";
+$this->out['default_where']=true;
+}
 $inst = new VtigerCRMObject($moduleName,false);
 $inst = $inst->getInstance();
 $this->module_instance = $inst;
 $this->out['moduleName'] = $moduleName;
 $this->out['tableName'] = implode(',',$inst->tab_name);
     }
-#line 1122 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 54 "e:\workspace\parsergenerator\VTQL_parser.y"
-    function yy_r16(){
+#line 1179 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 66 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r15(){
 $this->out['where_condition']['operators'][] = $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 1127 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 61 "e:\workspace\parsergenerator\VTQL_parser.y"
-    function yy_r19(){ 
-if(strcmp($this->yystack[$this->yyidx + -2]->minor, 'id')===0){
-$this->yystack[$this->yyidx + 0]->minor = getIdComponents($this->yystack[$this->yyidx + 0]->minor);
-$this->yystack[$this->yyidx + 0]->minor = $this->yystack[$this->yyidx + 0]->minor[1];
-}
+#line 1184 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 73 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r18(){
+$this->out['columnDone']=true;
 $this->out['where_condition']['column_names'][] = $this->yystack[$this->yyidx + -2]->minor;
-$this->out['where_condition']['column_values'][] = $this->yystack[$this->yyidx + 0]->minor;
+if(strcmp($this->yystack[$this->yyidx + -2]->minor, 'id')===0){
+$prev = $this->out['where_condition']['column_values'][sizeof($this->out['where_condition']['column_values'])-1];
+if(is_array($prev)){
+$new = array();
+foreach($prev as $ind=>$val){
+$val = trim($val,'\'"');
+$value = getIdComponents($val);
+$new[] = $value[1];
+}
+$this->out['where_condition']['column_values'][sizeof($this->out['where_condition']['column_values'])-1] = $new;
+}else{
+$prev = trim($prev,'\'"');
+$value = getIdComponents($prev);
+if(strcasecmp($this->out['where_condition']['column_operators'][sizeof($this->out['where_condition']['column_operators'])-1],'like')===0){
+$value[1] = "'".$value[1]."'";
+}
+$this->out['where_condition']['column_values'][sizeof($this->out['where_condition']['column_values'])-1] = $value[1];
+}
+}
+if(isset($this->out['default_where']) && $this->out['default_where'] === true){
+$this->out['where_condition']['operators'][] = 'AND';
+$this->out['default_where'] = false;
+}
     }
-#line 1137 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 69 "e:\workspace\parsergenerator\VTQL_parser.y"
-    function yy_r20(){
+#line 1213 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 102 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r21(){
+$length = sizeof($this->out['where_condition']['column_values']);
+if(strcasecmp($this->out['where_condition']['column_operators'][$length-1],"in")===0 && $length !==0 && !$this->out['columnDone']){
+if(!is_array($this->out['where_condition']['column_values'][$length - 1])){
+$prev = $this->out['where_condition']['column_values'][$length - 1];
+$this->out['where_condition']['column_values'][$length - 1] = array();
+$this->out['where_condition']['column_values'][$length - 1][] = $prev; 
+}
+$this->out['where_condition']['column_values'][$length - 1][] = $this->yystack[$this->yyidx + 0]->minor;
+}else{
+$this->out['columnDone'] = false;
+$this->out['where_condition']['column_values'][] = $this->yystack[$this->yyidx + 0]->minor;
+}
+    }
+#line 1229 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 118 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r24(){
 $this->out['where_condition']['column_operators'][] = '=';
     }
-#line 1142 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 72 "e:\workspace\parsergenerator\VTQL_parser.y"
-    function yy_r21(){
+#line 1234 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 121 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r25(){
 $this->out['where_condition']['column_operators'][] = '<';
     }
-#line 1147 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 75 "e:\workspace\parsergenerator\VTQL_parser.y"
-    function yy_r22(){
+#line 1239 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 124 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r26(){
 $this->out['where_condition']['column_operators'][] = '>';
     }
-#line 1152 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 78 "e:\workspace\parsergenerator\VTQL_parser.y"
-    function yy_r23(){
+#line 1244 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 127 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r27(){
 $this->out['where_condition']['column_operators'][] = '<=';
     }
-#line 1157 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 81 "e:\workspace\parsergenerator\VTQL_parser.y"
-    function yy_r24(){
+#line 1249 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 130 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r28(){
 $this->out['where_condition']['column_operators'][] = '>=';
     }
-#line 1162 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 84 "e:\workspace\parsergenerator\VTQL_parser.y"
-    function yy_r25(){
+#line 1254 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 133 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r29(){
 $this->out['where_condition']['column_operators'][] = '!=';
     }
-#line 1167 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 90 "e:\workspace\parsergenerator\VTQL_parser.y"
-    function yy_r29(){
+#line 1259 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 136 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r30(){
+$this->out['where_condition']['column_operators'][] = 'IN';
+    }
+#line 1264 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 139 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r31(){
+$this->out['where_condition']['column_operators'][] = 'LIKE';
+    }
+#line 1269 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 145 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r35(){
 $this->out['orderby'][] = $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 1172 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 97 "e:\workspace\parsergenerator\VTQL_parser.y"
-    function yy_r34(){
+#line 1274 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 152 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r40(){
 $this->out['limit'][] = $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 1177 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 100 "e:\workspace\parsergenerator\VTQL_parser.y"
-    function yy_r35(){
+#line 1279 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 155 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r41(){
 $this->out['limit'][] = $this->yystack[$this->yyidx + -2]->minor;
 $this->out['limit'][] = $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 1183 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 104 "e:\workspace\parsergenerator\VTQL_parser.y"
-    function yy_r36(){ 
+#line 1285 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 159 "e:\workspace\parsergenerator\VTQL_parser.y"
+    function yy_r42(){
 if(!$this->out['meta']){
-//TODO tmp fix remove this.
-
 $module = $this->out['moduleName'];
 $objectMeta = new VtigerCRMObjectMeta(new VtigerCRMObject($module,false),$this->user);
 $objectMeta->retrieveMeta();
@@ -1189,7 +1289,7 @@ $fieldcol = $meta->getFieldColumnMapping();
 $columns = array();
 if(strcmp($this->out['column_list'],'*')===0){
 $columns = array_values($fieldcol);
-}else{
+}else if( strcmp($this->out['column_list'],'count(*)')!==0){
 foreach($this->out['column_list'] as $ind=>$field){
 $columns[] = $fieldcol[$field];
 }
@@ -1199,16 +1299,23 @@ foreach($this->out['where_condition']['column_names'] as $ind=>$field){
 $columns[] = $fieldcol[$field];
 }
 }
+$module = $this->module_instance;
 $tables = $this->getTables($this->out, $columns);
+if(sizeof($tables)===0){
+$tables[] = $module->table_name;
+}
 if(!in_array("vtiger_crmentity",$tables)){
 array_push($tables,"vtiger_crmentity");
 }
-$module = $this->module_instance;
 $firstTable = $module->table_name;
 $firstIndex = $module->tab_name_index[$firstTable];
 foreach($tables as $ind=>$table){
 if($module->table_name!=$table){
-	$this->out['defaultJoinConditions'] = $this->out['defaultJoinConditions'].' LEFT JOIN '.$table.' ON '.$table.'.'.$module->tab_name_index[$table].'='.$firstTable.'.'.$firstIndex;
+	if(!isset($module->tab_name_index[$table]) && $table == "vtiger_crmentity"){
+		$this->out['defaultJoinConditions'] = $this->out['defaultJoinConditions'].' LEFT JOIN '.$table.' ON '.$table.'.crmid='.$firstTable.'.'.$firstIndex;
+	}else{
+		$this->out['defaultJoinConditions'] = $this->out['defaultJoinConditions'].' LEFT JOIN '.$table.' ON '.$table.'.'.$module->tab_name_index[$table].'='.$firstTable.'.'.$firstIndex;
+	}
 }else{
 	$this->out['tableName'] = $table;
 }
@@ -1222,7 +1329,7 @@ break;
 }
 */
     }
-#line 1231 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 1338 "e:\workspace\parsergenerator\VTQL_parser.php"
 
     /**
      * placeholder for the left hand side in a reduce operation.
@@ -1323,12 +1430,12 @@ break;
         }
         /* Here code is inserted which will be executed whenever the
         ** parser fails */
-#line 362 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 427 "e:\workspace\parsergenerator\VTQL_parser.y"
 
 	if(!$this->syntax_error){
 		$this->error_msg = new WebServiceError(WebServiceErrorCode::$QUERYSYNTAX, "Parsing failed");
 	}
-#line 1338 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 1445 "e:\workspace\parsergenerator\VTQL_parser.php"
     }
 
     /**
@@ -1340,12 +1447,10 @@ break;
      */
     function yy_syntax_error($yymajor, $TOKEN)
     {
-#line 372 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 437 "e:\workspace\parsergenerator\VTQL_parser.y"
 
     $synMsg = "Syntax Error on line " . $this->lex->linenum . ": token '" .$this->lex->value."' ";
-    /*foreach ($this->yystack as $entry) {
-        $this->error_msg =$this->error_msg.$this->tokenName($entry->major) . ' ';
-    }*/
+    $expect = array();
     foreach ($this->yy_get_expected_tokens($yymajor) as $token) {
         $expect[] = self::$yyTokenName[$token];
     }
@@ -1353,9 +1458,9 @@ break;
         . '), expected one of: ' . implode(',', $expect));
     
     $this->error_msg = new WebServiceError(WebServiceErrorCode::$QUERYSYNTAX, $synMsg);
-     
+    $this->exception = true;
 	$this->syntax_error = true;
-#line 1366 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 1471 "e:\workspace\parsergenerator\VTQL_parser.php"
     }
 
     /**
@@ -1373,12 +1478,12 @@ break;
         }
         /* Here code is inserted which will be executed whenever the
         ** parser accepts */
-#line 356 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 421 "e:\workspace\parsergenerator\VTQL_parser.y"
 
 		if(!$this->exception){
 			$this->success = true;
       	}
-   #line 1390 "e:\workspace\parsergenerator\VTQL_parser.php"
+   #line 1495 "e:\workspace\parsergenerator\VTQL_parser.php"
     }
 
     /**

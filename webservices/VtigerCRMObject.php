@@ -52,8 +52,9 @@ class VtigerCRMObject{
 		
 		global $adb;
 		
-		$sql = "select * from vtiger_tab where name='".$objectName."';";
-		$result = $adb->query($sql, true, "<br>Error: failed to get details for module<br>");
+		$sql = "select * from vtiger_tab where name=?;";
+		$params = array($objectName);
+		$result = $adb->pquery($sql, $params);
 		$data1 = $adb->fetchByAssoc($result,1,false);
 		
 		$tid = $data1["tabid"];
@@ -88,8 +89,9 @@ class VtigerCRMObject{
 		
 		global $adb;
 		
-		$sql = "select * from vtiger_tab where tabid=".$moduleId;
-		$result = $adb->query($sql, true, "Failed to get Object Name from ObjectId");
+		$sql = "select * from vtiger_tab where tabid=?";
+		$params = array($moduleId);
+		$result = $adb->pquery($sql, $params);
 		$data = $adb->fetchByAssoc($result,1,false);
 		return $data["name"];
 		

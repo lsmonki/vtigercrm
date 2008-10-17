@@ -719,7 +719,7 @@ class Users {
 		
 		$log->info("Entering Into function createAccessKey()");
 		$updateQuery = "update vtiger_users set accesskey=? where id=?";
-		$insertResult = $adb->pquery($updateQuery,array(generateRandomAccessKey(16),$this->id));
+		$insertResult = $adb->pquery($updateQuery,array(vtws_generateRandomAccessKey(16),$this->id));
 		$log->info("Exiting function createAccessKey()");
 		
 	}

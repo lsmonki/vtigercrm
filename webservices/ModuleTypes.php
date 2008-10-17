@@ -2,7 +2,7 @@
 	require_once("webservices/WebServiceError.php");
 	require_once 'include/utils/UserInfoUtil.php';
 	
-	function listtypes($user){
+	function vtws_listtypes($user){
 		try{
 			//get All the modules the current user is permitted to Access.
 			$allModuleNames = getPermittedModuleNames();
@@ -16,7 +16,7 @@
 			return new WebServiceError(WebServiceErrorCode::$DATABASEQUERYERROR,
 											"An Database error occured while performing the operation");
 		}
-		return array("types"=>array_intersect($crmEntityNames,$allModuleNames));
+		return array("types"=>array_values(array_intersect($crmEntityNames,$allModuleNames)));
 	}
 	
 	/** function to get the module List to which are crm entities. 
