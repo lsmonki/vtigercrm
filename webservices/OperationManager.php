@@ -94,7 +94,7 @@
 		private $operationMeta = array(
 										"login"=>array(
 														"includes"=>array(
-																		"webservices/login.php"
+																		"webservices/Login.php"
 																	)
 													),
 										"retrieve"=>array(
@@ -129,7 +129,7 @@
 													),
 										"logout"=>array(
 														"includes"=>array(
-																			"webservices/logout.php"
+																			"webservices/Logout.php"
 																		)
 													),
 										"listtypes"=>array(
