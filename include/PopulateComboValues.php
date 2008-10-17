@@ -82,7 +82,7 @@ class PopulateComboValues
 				
 		global $app_list_strings,$adb;
 		global $combo_strings;
-		$comboTables = Array('leadsource','accounttype','industry','leadstatus','rating','opportunity_type','salutationtype','sales_stage','ticketstatus','ticketpriorities','ticketseverities','ticketcategories','eventstatus','taskstatus','taskpriority','manufacturer','productcategory','faqcategories','usageunit','glacct','quotestage','carrier','faqstatus','invoicestatus','postatus','sostatus','campaigntype','campaignstatus','expectedresponse');
+		$comboTables = Array('leadsource','accounttype','industry','leadstatus','rating','opportunity_type','salutationtype','sales_stage','ticketstatus','ticketpriorities','ticketseverities','ticketcategories','eventstatus','taskstatus','taskpriority','manufacturer','productcategory','faqcategories','usageunit','glacct','quotestage','carrier','faqstatus','invoicestatus','postatus','sostatus','campaigntype','campaignstatus','expectedresponse','activitytype');
 
 		foreach ($comboTables as $comTab)
 		{
@@ -99,7 +99,7 @@ class PopulateComboValues
 		//we have to decide what are all the picklist and picklist values are non editable
 		//presence = 0 means you cannot edit the picklist value
 		//presence = 1 means you can edit the picklist value
-		$noneditable_tables = Array("ticketstatus","taskstatus","eventstatus","faqstatus","quotestage","postatus","sostatus","invoicestatus");
+		$noneditable_tables = Array("ticketstatus","taskstatus","eventstatus","faqstatus","quotestage","postatus","sostatus","invoicestatus","activitytype");
 		$noneditable_values = Array(
 						"Closed Won"=>"sales_stage",
 						"Closed Lost"=>"sales_stage",
@@ -126,7 +126,7 @@ class PopulateComboValues
 				
 		global $app_list_strings,$adb;
 		global $combo_strings;
-		$comboTables = Array('duration_minutes','activitytype','visibility','status','activity_view','lead_view','date_format','recurringtype','currency','licencekeystatus','taxclass');
+		$comboTables = Array('duration_minutes','visibility','status','activity_view','lead_view','date_format','recurringtype','currency','licencekeystatus','taxclass');
 
 		foreach ($comboTables as $comTab)
 		{

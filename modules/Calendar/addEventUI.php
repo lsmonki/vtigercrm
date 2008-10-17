@@ -224,10 +224,9 @@ function getAssignedToHTML($assignedto,$toggletype)
 			<td nowrap  width=20% align="right"><b><?php echo $mod_strings['LBL_EVENTTYPE']?></b></td>
 			<td width=80% align="left">
 				<table>
-					<tr>
-					<td><input type="radio" name='activitytype' value='Call' style='vertical-align: middle;' checked onClick="calDuedatetime('call');"></td><td><?php echo $mod_strings['LBL_CALL']?></td>
-					<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;' onClick="calDuedatetime('meeting');"></td><td><?php echo $mod_strings['LBL_MEET']?></td>
-					</tr>
+					<tr><td>
+							<?php echo getActFieldCombo('activitytype','vtiger_activitytype'); ?>
+					</td></tr>
 				</table>
 			</td>
 			</tr>
@@ -692,8 +691,39 @@ function getAssignedToHTML($assignedto,$toggletype)
 <!-- Dropdown for Add Event -->
 <div id='addEventDropDown' style='width:160px' onmouseover='fnShowEvent()' onmouseout='fnRemoveEvent()'>
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
-	<tr><td><a href='' id="addcall" class='drop_down'><?php echo $mod_strings['LBL_ADDCALL']?></a></td></tr>
-	<tr><td><a href='' id="addmeeting" class='drop_down'><?php echo $mod_strings['LBL_ADDMEETING']?></a></td></tr>
+<?php
+	global $adb;
+	if($current_user->column_fields['is_admin']=='on')
+		$Res = $adb->pquery("select * from vtiger_activitytype",array());
+	else
+	{
+		$role_id=$current_user->roleid;
+		$subrole = getRoleSubordinates($role_id);
+		if(count($subrole)> 0)
+		{
+			$roleids = $subrole;
+			array_push($roleids, $role_id);
+		}
+		else
+		{	
+			$roleids = $role_id;
+		}
+
+		if (count($roleids) > 1) {
+			$Res=$adb->pquery("select distinct activitytype from  vtiger_activitytype inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_activitytype.picklist_valueid where roleid in (". generateQuestionMarks($roleids) .") and picklistid in (select picklistid from vtiger_activitytype) order by sortid asc",array($roleids));
+		} else {
+			$Res=$adb->pquery("select distinct activitytype from vtiger_activitytype inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_activitytype.picklist_valueid where roleid = ? and picklistid in (select picklistid from vtiger_activitytype) order by sortid asc",array($role_id));
+		}
+	}
+	$eventlist='';
+	for($i=0; $i<$adb->num_rows($Res);$i++)
+	{
+		$eventlist = $adb->query_result($Res,$i,'activitytype');
+?>		
+	<tr><td><a href='' id="add<?php echo strtolower($eventlist);?>" class='drop_down'><?php echo $eventlist?></a></td></tr>
+<?php
+	}
+?>
 	<tr><td><a href='' id="addtodo" class='drop_down'><?php echo $mod_strings['LBL_ADDTODO']?></a></td></tr>
 </table>
 </div>

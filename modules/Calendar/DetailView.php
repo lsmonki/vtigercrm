@@ -48,7 +48,7 @@ if($activity_mode =='' || strlen($activity_mode) < 1)
 	{
 		$activity_mode = $actType;	
 	}
-	elseif($actType == 'Meeting' || $actType == 'Call')
+	elseif($actType != 'Emails')
 	{
 		$activity_mode = 'Events';
 	}		

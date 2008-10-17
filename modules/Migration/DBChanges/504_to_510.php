@@ -665,6 +665,20 @@ function webserviceMigration(){
 
 webserviceMigration();
 
+//Adding Custom Events Migration
+ExecuteQuery("UPDATE table vtiger_field SET uitype=111,typeofdata='V~M' WHERE tabid=16 and columnname='activitytype'");
+ExecuteQuery("alter table vtiger_activitytype drop column sortorderid");
+ExecuteQuery("alter table vtiger_activitytype add column picklist_valueid");
+
+$query = $adb->pquery("SELECT * from vtiger_activitytype",array());
+for($i=0;$i<$adb->num_rows($query);$i++){
+	$adb->pquery("UPDATE vtiger_picklistvalues_seq SET id = id + 1");
+	$picklist_valueid_query = $adb=>pquery("SELECT id from vtiger_picklistvalues_seq");
+	$picklist_valueid = $adb->query_result($picklist_valueid,0,'id');
+	$activitytypeid = $adb->query_result($query,$i,'activitytypeid');
+	$adb->pquery("UPDATE vtiger_activitytype SET picklist_valueid=? , presence=0 WHERE activitytypeid = ? ",array($picklist_valueid,$activitytypeid);
+}
+//CustomEvents Migration Ends
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

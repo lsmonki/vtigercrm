@@ -278,7 +278,7 @@ class Accounts extends CRMEntity {
 			WHERE vtiger_seactivityrel.crmid = ".$id."
 			AND vtiger_crmentity.deleted = 0
 			AND ((vtiger_activity.activitytype='Task' and vtiger_activity.status not in ('Completed','Deferred')) 
-			OR (vtiger_activity.activitytype in ('Meeting','Call') and  vtiger_activity.eventstatus not in ('','Held'))) ";
+			OR (vtiger_activity.activitytype not in ('Emails','Task') and  vtiger_activity.eventstatus not in ('','Held'))) ";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Accounts','Calendar',$focus,$query,$button,$returnset);
 

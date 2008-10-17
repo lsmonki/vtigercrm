@@ -74,7 +74,7 @@ function getPendingActivities($mode,$view='')
 	{
 		//CHANGE : TO IMPROVE PERFORMANCE
 		//for upcoming avtivities
-		$list_query = " select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_recurringevents.recurringdate, vtiger_activity.* from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid LEFT JOIN vtiger_activitygrouprelation ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 and vtiger_activity.activitytype in ('Meeting','Call','Task') AND ( vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and  (  vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held') )".$upcoming_condition;
+		$list_query = " select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_recurringevents.recurringdate, vtiger_activity.* from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid LEFT JOIN vtiger_activitygrouprelation ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 and vtiger_activity.activitytype not in ('Emails') AND ( vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and  (  vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held') )".$upcoming_condition;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[16] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter('Calendar');
@@ -86,7 +86,7 @@ function getPendingActivities($mode,$view='')
 	{
 		//CHANGE : TO IMPROVE PERFORMANCE
 		//for pending activities
-		$list_query = "select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_recurringevents.recurringdate, vtiger_activity.* from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid  LEFT JOIN vtiger_activitygrouprelation ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 and (vtiger_activity.activitytype in ('Meeting','Call','Task')) AND (vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held')) ".$pending_condition;
+		$list_query = "select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_recurringevents.recurringdate, vtiger_activity.* from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid  LEFT JOIN vtiger_activitygrouprelation ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 and (vtiger_activity.activitytype not in ('Emails')) AND (vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held')) ".$pending_condition;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[16] == 3)                   
                 {
 			$sec_parameter=getListViewSecurityParameter('Calendar'); 
@@ -192,7 +192,7 @@ function getPendingActivities($mode,$view='')
 				break;
 		}*/
 
-		if($event['type'] == 'Call' || $event['type'] == 'Meeting')
+		if($event['type'] != 'Task' && $event['type'] != 'Emails' && $event['type'] != '')
 			$activity_type = 'Events';
 		else
 			$activity_type = 'Task';

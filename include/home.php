@@ -206,7 +206,7 @@ class Homestuff
 				$fieldmod_strings = return_module_language($current_language, $modname);
 				
 				if($modname == 'Calendar')
-					$query .= "AND vtiger_activity.activitytype in ('Task','Meeting','Call')";
+					$query .= "AND vtiger_activity.activitytype NOT IN ('Emails')";
 				
 				if( $adb->dbType == "pgsql")
 					$list_result = $adb->query($query. " OFFSET 0 LIMIT ".$maxval);

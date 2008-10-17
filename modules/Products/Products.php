@@ -576,9 +576,7 @@ class Products extends CRMEntity {
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
 			WHERE vtiger_seactivityrel.crmid=".$id."
-			AND (activitytype = 'Task'
-				OR vtiger_activitytype = 'Call'
-				OR vtiger_activitytype = 'Meeting')";
+			AND (activitytype != 'Emails')";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Products','Calendar',$focus,$query,$button,$returnset);
 	}

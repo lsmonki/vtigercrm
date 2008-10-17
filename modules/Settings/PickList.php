@@ -94,7 +94,7 @@ function getUserFldArray($fld_module,$roleid)
 			$fld_name = $adb->query_result($result,$i,"fieldname");
 			if($fld_module == 'Events')	
 			{
-				if($adb->query_result($result,$i,"fieldname") != 'recurringtype' && $adb->query_result($result,$i,"fieldname") != 'activitytype' && $adb->query_result($result,$i,"fieldname") != 'visibility')	
+				if($adb->query_result($result,$i,"fieldname") != 'recurringtype' && $adb->query_result($result,$i,"fieldname") != 'visibility')	
 				{	
 					$user_fld['fieldlabel'] = $adb->query_result($result,$i,"fieldlabel");	
 					$user_fld['generatedtype'] = $adb->query_result($result,$i,"generatedtype");	

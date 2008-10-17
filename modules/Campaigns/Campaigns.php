@@ -246,8 +246,7 @@ class Campaigns extends CRMEntity {
 			WHERE vtiger_seactivityrel.crmid=".$id."
 			AND vtiger_crmentity.deleted = 0
 			AND (activitytype = 'Task'
-				OR activitytype = 'Call'
-				OR activitytype = 'Meeting')";
+				OR activitytype !='Emails')";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Campaigns','Calendar',$focus,$query,$button,$returnset);
 	

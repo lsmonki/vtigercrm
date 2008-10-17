@@ -112,7 +112,7 @@ var gVTModule = '{$smarty.request.module}';
 								<td class="cellInfo" width=80% align="left">
 									<table>
 										<tr>
-										{foreach key=tyeparrkey item=typearr from=$ACTIVITYDATA.activitytype}
+<!--										{foreach key=tyeparrkey item=typearr from=$ACTIVITYDATA.activitytype}
                                                                                 {if $typearr[2] eq 'selected' && $typearr[1] eq 'Call'}
                                                                                         {assign var='meetcheck' value=''}
                                                                                         {assign var='callcheck' value='checked'}
@@ -120,12 +120,23 @@ var gVTModule = '{$smarty.request.module}';
                                                                                         {assign var='meetcheck' value='checked'}
                                                                                         {assign var='callcheck' value=''}
                                                                                 {else}
-											{assign var='meetcheck' value=''}
+																						{assign var='meetcheck' value=''}
                                                                                         {assign var='callcheck' value='checked'}
                                                                                 {/if}
-                                                                                {/foreach}
-											<td><input type="radio" name='activitytype' value='Call' style='vertical-align: middle;' {$callcheck} onClick="calDuedatetime('call');" ></td><td>{$APP.Call}</td>
-											<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;' {$meetcheck} onClick="calDuedatetime('meeting');" ></td><td>{$APP.Meeting}</td>
+                                        {/foreach}-->
+	                                    <select name="activitytype" class="small">
+											{foreach item=arr from=$ACTIVITYDATA.activitytype}
+												{if $arr[0] eq $APP.LBL_NOT_ACCESSIBLE}
+												<option value="{$arr[0]}" {$arr[2]}>
+													{$arr[0]}
+												</option>
+												{else}
+												<option value="{$arr[1]}" {$arr[2]}>
+							                                                {$arr[0]}
+							                                        </option>
+												{/if}
+											{/foreach}
+									   </select>
 										</tr>
 									</table>
 								</td>

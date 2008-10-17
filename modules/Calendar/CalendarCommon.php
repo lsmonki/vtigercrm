@@ -172,7 +172,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='',$todocheck=false)
 	$combo = '';
 	$min = $min - ($min%5);
 	if($bimode == 'start' && !$todocheck)
-		$jsfn = 'onChange="changeEndtime_StartTime();"';
+		$jsfn = 'onChange="changeEndtime_StartTime(document.EditView.activitytype.value);"';
 	else
 		$jsfn = null;
 	if($format == 'am/pm')

@@ -96,19 +96,22 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
         smin = smin - (smin%5);
 	var y=document.getElementById(argg1).style;
 	
-		if(type == 'call' || type == 'meeting')
+		if(type != 'todo' && type!='')
 		{
-			if(type == 'call')
-	                        document.EditView.activitytype[0].checked = true;
-	                if(type == 'meeting')
-        	                document.EditView.activitytype[1].checked = true;
-                        smin = _2digit(smin);
+			for(var i=0;;i++){
+				if( document.EditView.activitytype[i].value == type){
+					document.EditView.activitytype[i].selected='yes';	
+					break;
+				}
+			}
+				
+			smin = _2digit(smin);
 			document.EditView.date_start.value = startdate;
 			document.EditView.starthr.value = starthr;
 			document.EditView.startmin.value = smin;
 			document.EditView.startfmt.value = startfmt;
 			document.EditView.viewOption.value = viewOption;
-                        document.EditView.subtab.value = subtab;
+            document.EditView.subtab.value = subtab;
 			calDuedatetime(type);
 		}
 		if(type == 'todo')
@@ -122,10 +125,10 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
 			document.createTodo.viewOption.value = viewOption;
                         document.createTodo.subtab.value = subtab;
 		}
-	if (y.display=="none")
-        {
-		y.display="block";
-	}
+		if (y.display=="none")
+	        {
+			y.display="block";
+		}
 }
 
 function rptoptDisp(Opt){
@@ -643,17 +646,18 @@ function fnRedirect() {
 	}
 }
 
-function fnAddEvent(obj,CurrObj,start_date,end_date,start_hr,start_min,start_fmt,end_hr,end_min,end_fmt,viewOption,subtab){
+function fnAddEvent(obj,CurrObj,start_date,end_date,start_hr,start_min,start_fmt,end_hr,end_min,end_fmt,viewOption,subtab,eventlist){
 	var tagName = document.getElementById(CurrObj);
 	var left_Side = findPosX(obj);
 	var top_Side = findPosY(obj);
 	tagName.style.left= left_Side  + 'px';
 	tagName.style.top= top_Side + 22+ 'px';
 	tagName.style.display = 'block';
-	document.getElementById("addcall").href="javascript:gshow('addEvent','call','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"','"+viewOption+"','"+subtab+"');fnRemoveEvent();";
-	document.getElementById("addmeeting").href="javascript:gshow('addEvent','meeting','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"','"+viewOption+"','"+subtab+"');fnRemoveEvent();";
+	eventlist = eventlist.split(";");
+	for(var i=0;i<(eventlist.length-1);i++){
+		document.getElementById("add"+eventlist[i].toLowerCase()).href="javascript:gshow('addEvent','"+eventlist[i]+"','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"','"+viewOption+"','"+subtab+"');fnRemoveEvent();";
+	}
 	document.getElementById("addtodo").href="javascript:gshow('createTodo','todo','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"','"+viewOption+"','"+subtab+"');fnRemoveEvent();";
-	
 }
 	
 function fnRemoveEvent(){
@@ -1193,18 +1197,12 @@ function getSelectedStatus()
 
 }
 
-function changeEndtime_StartTime()
+function changeEndtime_StartTime(type)
 {
-        var select_call = document.EditView.activitytype[0].checked;
-        var select_meeting = document.EditView.activitytype[1].checked;
-        if(select_call)
-                calDuedatetime('call');
-        else if(select_meeting)
-                calDuedatetime('meeting');
-        else
-                alert(alert_arr.EVENT_TYPE_NOT_SELECTED);
+	calDuedatetime(type);
+	return true;
 }
-
+ 
 function calDuedatetime(type)
 {
         var dateval1=getObj('date_start').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
@@ -1221,7 +1219,7 @@ function calDuedatetime(type)
         var hour = parseInt(document.EditView.starthr.value,10);
         var min = parseInt(document.EditView.startmin.value,10);
         var fmt = document.EditView.startfmt.value;
-	if(type == 'meeting')
+	if(type != 'Call')
         {
                 if(fmt == 'pm')
                 {

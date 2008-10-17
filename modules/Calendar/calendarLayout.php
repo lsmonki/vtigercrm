@@ -264,7 +264,7 @@ function get_cal_header_tab(& $header,$viewBox,$subtab)
  */
 function get_cal_header_data(& $cal_arr,$viewBox,$subtab)
 {
-	global $mod_strings,$cal_log;
+	global $mod_strings,$cal_log,$current_user,$adb;
 	$cal_log->debug("Entering get_cal_header_data() method...");
 	global $current_user,$app_strings;
         $date_format = $current_user->date_format;
@@ -275,6 +275,36 @@ function get_cal_header_data(& $cal_arr,$viewBox,$subtab)
 	$temp_ts = $cal_arr['calendar']->date_time->ts;
 	//To get date in user selected format
         $temp_date = (($date_format == 'dd-mm-yyyy')?(date('d-m-Y',$temp_ts)):(($date_format== 'mm-dd-yyyy')?(date('m-d-Y',$temp_ts)):(($date_format == 'yyyy-mm-dd')?(date('Y-m-d', $temp_ts)):(''))));
+	
+	if($current_user->column_fields['is_admin']=='on')
+		$Res = $adb->pquery("select * from vtiger_activitytype",array());
+	else
+	{
+		$roleid=$current_user->roleid;
+		$subrole = getRoleSubordinates($roleid);
+		if(count($subrole)> 0)
+		{
+			$roleids = $subrole;
+			array_push($roleids, $roleid);
+		}
+		else
+		{	
+			$roleids = $roleid;
+		}
+
+		if (count($roleids) > 1) {
+			$Res=$adb->pquery("select distinct activitytype from  vtiger_activitytype inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_activitytype.picklist_valueid where roleid in (". generateQuestionMarks($roleids) .") and picklistid in (select picklistid from vtiger_activitytype) order by sortid asc", array($roleids));
+		} else {
+			$Res=$adb->pquery("select distinct activitytype from vtiger_activitytype inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_activitytype.picklist_valueid where roleid = ? and picklistid in (select picklistid from vtiger_activitytype) order by sortid asc", array($roleid));
+		}
+	}
+	
+	$eventlist='';
+	for($i=0; $i<$adb->num_rows($Res);$i++)
+	{
+		$eventlist .= $adb->query_result($Res,$i,'activitytype').";";
+	}
+	
 	$headerdata = "";
 	$headerdata .="
 			<div style='display: block;' id='mnuTab'>
@@ -285,7 +315,7 @@ function get_cal_header_data(& $cal_arr,$viewBox,$subtab)
 			{
 			$headerdata .="<tr>
 				<td>
-				<table><tr><td class='calAddButton' style='cursor:pointer;height:30px' align='center' width='15%' onMouseOver='fnAddEvent(this,\"addEventDropDown\",\"".$temp_date."\",\"".$temp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\",\"".$viewBox."\",\"".$subtab."\");'>
+				<table><tr><td class='calAddButton' style='cursor:pointer;height:30px' align='center' width='15%' onMouseOver='fnAddEvent(this,\"addEventDropDown\",\"".$temp_date."\",\"".$temp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\",\"".$viewBox."\",\"".$subtab."\",\"".$eventlist."\");'>
 					".$mod_strings['LBL_ADD']."
 					<img src='".$cal_arr['IMAGE_PATH']."menuDnArrow.gif' style='padding-left: 5px;' border='0'>
 				</td></tr></table> </td>";
@@ -1374,7 +1404,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		LEFT OUTER JOIN vtiger_recurringevents
 		ON vtiger_recurringevents.activityid = vtiger_activity.activityid
 		WHERE vtiger_crmentity.deleted = 0
-		AND (vtiger_activity.activitytype = 'Meeting' OR vtiger_activity.activitytype = 'Call') $and ";
+		AND (vtiger_activity.activitytype not in ('Emails','Task')) $and ";
 		
 	$query = "SELECT vtiger_groups.groupname, vtiger_users.user_name,vtiger_crmentity.smownerid, vtiger_crmentity.crmid,
        		vtiger_activity.* FROM vtiger_activity
@@ -1389,8 +1419,9 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		LEFT OUTER JOIN vtiger_recurringevents
 			ON vtiger_recurringevents.activityid = vtiger_activity.activityid
 		WHERE vtiger_crmentity.deleted = 0
-			AND (vtiger_activity.activitytype = 'Meeting' OR vtiger_activity.activitytype = 'Call') $and ";
+			AND (vtiger_activity.activitytype not in ('Emails','Task')) $and ";
 	$list_query = $query." AND vtiger_crmentity.smownerid = "  . $current_user->id;
+
 	// User Select Customization
 	$only_for_user = getSelectedUserId();
 	if($only_for_user != 'ALL') {
@@ -1398,7 +1429,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$count_qry .= " AND vtiger_crmentity.smownerid = "  . $only_for_user;
 	}
 	// END
-	
+
 	$params = $info_params = array($start_date, $end_date, $start_date, $end_date, $start_date, $end_date, $start_date, $end_date);
 	if($info != '')
 	{
@@ -1517,8 +1548,10 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$type = $adb->query_result($result,$i,"activitytype");
 		if($type == 'Call')
 			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Calls.gif' align='middle'>&nbsp;".$app_strings['Call'];
-		if($type == 'Meeting')
+		else if($type == 'Meeting')
 			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Meetings.gif' align='middle'>&nbsp;".$app_strings['Meeting'];
+		else
+			$image_tag = "&nbsp;".getTranslatedString($type);
         	$element['eventtype'] = $image_tag;
 		$element['eventdetail'] = $contact_data." ".$subject."&nbsp;".$more_link;
 		/*if(getFieldVisibilityPermission('Events',$current_user->id,'parent_id') == '0')
@@ -1700,7 +1733,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		
 	if( $adb->dbType == "pgsql"){
  	    $query = fixPostgresQuery( $query, $log, 0);
- 	    $llist_query = fixPostgresQuery( $list_query, $log, 0);
+ 	    $list_query = fixPostgresQuery( $list_query, $log, 0);
 	}
 	
 	$list_query = $adb->convert2Sql($list_query, $params);
@@ -1949,9 +1982,8 @@ function constructEventListView(& $cal,$entry_list,$navigation_array='')
 			//checking permission for Create/Edit Operation
 			if(isPermitted("Calendar","EditView") == "yes")
                         {
-                                $list_view .="<td class='small' align='left' nowrap='nowrap'>".$app_strings['LBL_YOU_CAN_CREATE']."&nbsp;".$app_strings['LBL_AN']."&nbsp;".$app_strings['Event']."&nbsp;".$app_strings['LBL_NOW'].".&nbsp;".$app_strings['LBL_CLICK_THE_LINK']."&nbsp;:<br>
-					&nbsp;&nbsp;-<a href='javascript:void(0)' onClick='gshow(\"addEvent\",\"meeting\",\"".$temp_date."\",\"".$endtemp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\",\"listview\",\"event\");'>".$app_strings['LBL_CREATE']." ".$app_strings['LBL_A']." ".$app_strings['Meeting']."</a><br>
-					&nbsp;&nbsp;-<a href='javascript:void(0);' onClick='gshow(\"addEvent\",\"call\",\"".$temp_date."\",\"".$endtemp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\",\"listview\",\"event\");'>".$app_strings['LBL_CREATE']."&nbsp;".$app_strings['LBL_A']."&nbsp;".$app_strings['Call']."</a><br>
+                                $list_view .="<td class='small' align='left' nowrap='nowrap'>".$app_strings['LBL_YOU_CAN_CREATE']."&nbsp;".$app_strings['LBL_AN']."&nbsp;".$app_strings['Event']."&nbsp;".$app_strings['LBL_NOW'].".<br>
+					&nbsp;&nbsp;-<a href='javascript:void(0);' onClick='gshow(\"addEvent\",\"call\",\"".$temp_date."\",\"".$endtemp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\",\"listview\",\"event\");'>".$app_strings['LBL_CREATE']."&nbsp;".$app_strings['LBL_AN']."&nbsp;".$app_strings['Event']."</a><br>
 					</td>";
 			}
 			else
@@ -1976,7 +2008,7 @@ function constructEventListView(& $cal,$entry_list,$navigation_array='')
  */
 function constructTodoListView($todo_list,$cal,$subtab,$navigation_array='')
 {
-	global $mod_strings,$cal_log;
+	global $mod_strings,$cal_log,$adb;
 	$cal_log->debug("Entering constructTodoListView() method...");
         global $current_user,$app_strings;
         $date_format = $current_user->date_format;
@@ -2064,13 +2096,41 @@ function constructTodoListView($todo_list,$cal,$subtab,$navigation_array='')
 		array_push($header_width,'15%');
 		
 	}
+	if($current_user->column_fields['is_admin']=='on')
+		$Res = $adb->pquery("select * from vtiger_activitytype",array());
+	else
+	{
+		$roleid=$current_user->roleid;
+		$subrole = getRoleSubordinates($roleid);
+		if(count($subrole)> 0)
+		{
+			$roleids = $subrole;
+			array_push($roleids, $roleid);
+		}
+		else
+		{	
+			$roleids = $roleid;
+		}
+
+		if (count($roleids) > 1) {
+			$Res=$adb->pquery("select distinct activitytype from  vtiger_activitytype inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_activitytype.picklist_valueid where roleid in (". generateQuestionMarks($roleids) .") and picklistid in (select picklistid from vtiger_activitytype) order by sortid asc",array(roleids));
+		} else {
+			$Res=$adb->pquery("select distinct activitytype from vtiger_activitytype inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_activitytype.picklist_valueid where roleid = ? and picklistid in (select picklistid from vtiger_activitytype) order by sortid asc",array($roleid));
+		}
+	}
+	$eventlist='';
+	for($i=0; $i<$adb->num_rows($Res);$i++)
+	{
+		$eventlist .= $adb->query_result($Res,$i,'activitytype').";";
+	}
+	
 	$list_view .="<table align='center' border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tr><td colspan='3'>&nbsp;</td></tr>";
 			//checking permission for Create/Edit Operation
 			if(isPermitted("Calendar","EditView") == "yes")
 			{
 			$list_view .="<tr>
-				<td class='calAddButton' onMouseOver='fnAddEvent(this,\"addEventDropDown\",\"".$temp_date."\",\"".$endtemp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\",\"\",\"".$subtab."\");'style='border: 1px solid #666666;cursor:pointer;height:30px' align='center' width='10%'>
+				<td class='calAddButton' onMouseOver='fnAddEvent(this,\"addEventDropDown\",\"".$temp_date."\",\"".$endtemp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\",\"\",\"".$subtab."\",\"".$eventlist."\");'style='border: 1px solid #666666;cursor:pointer;height:30px' align='center' width='10%'>
                                         ".$mod_strings['LBL_ADD']."
                                         <img src='".$cal['IMAGE_PATH']."menuDnArrow.gif' style='padding-left: 5px;' border='0'>                                                                                                                         </td>";
 			}

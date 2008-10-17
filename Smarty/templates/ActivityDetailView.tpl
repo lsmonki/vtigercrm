@@ -189,7 +189,7 @@ function DeleteTag(id,recordid)
 								{if $LABEL.activitytype neq ''}
 								{assign var=type value=$ACTIVITYDATA.activitytype}
 								<td class="cellLabel" width="20%" align="right"><b>{$MOD.LBL_EVENTTYPE}</b></td>
-								<td class="cellInfo" width="30%"align="left">{$MOD.$type}</td>
+								<td class="cellInfo" width="30%"align="left">{$type}</td>
 								{/if}
 								{if $LABEL.visibility neq ''}
 								{assign var=vblty value=$ACTIVITYDATA.visibility}
