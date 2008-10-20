@@ -2025,29 +2025,28 @@ function getQuickCreateModules()
          global $mod_strings;
 
 
-$qc_query = "select distinct vtiger_tab.tablabel,vtiger_tab.name from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid where quickcreate=0 order by vtiger_tab.tablabel";
-$result = $adb->pquery($qc_query, array());
-$noofrows = $adb->num_rows($result);
-$return_qcmodule = Array();
-for($i = 0; $i < $noofrows; $i++)
-{
-         $tablabel = $adb->query_result($result,$i,'tablabel');
-
-         $tabname = $adb->query_result($result,$i,'name');
-	 $tablabel = "SINGLE_$tabname";
-	 if(isPermitted($tabname,'EditView','') == 'yes')
-	 {
+	$result = $adb->pquery($qc_query, array());
+	$noofrows = $adb->num_rows($result);
+	$return_qcmodule = Array();
+	for($i = 0; $i < $noofrows; $i++)
+	{
+		$tablabel = $adb->query_result($result,$i,'tablabel');
+	
+		$tabname = $adb->query_result($result,$i,'name');
+	 	$tablabel = "SINGLE_$tabname";
+	 	if(isPermitted($tabname,'EditView','') == 'yes')
+	 	{
          	$return_qcmodule[] = $tablabel;
 	        $return_qcmodule[] = $tabname;
-	}	
-}
+		}	
+	}
 	if(sizeof($return_qcmodule >0))
-        {
-        	$return_qcmodule = array_chunk($return_qcmodule,2);
+	{
+		$return_qcmodule = array_chunk($return_qcmodule,2);
 	}
 	
 	$log->debug("Exiting getQuickCreateModules method ...");
-        return $return_qcmodule;
+	return $return_qcmodule;
 }
 																					   
 /**
@@ -2392,33 +2391,32 @@ function getEntityName($module, $ids_list)
 
 function getAllParenttabmoduleslist()
 {
-        global $adb;
+	global $adb;
 	global $current_user;
-        $resultant_array = Array();
-        $query = 'select name,tablabel,parenttab_label,vtiger_tab.tabid from vtiger_parenttabrel inner join vtiger_tab on vtiger_parenttabrel.tabid = vtiger_tab.tabid inner join vtiger_parenttab on vtiger_parenttabrel.parenttabid = vtiger_parenttab.parenttabid order by vtiger_parenttab.sequence, vtiger_parenttabrel.sequence';
-        $result = $adb->pquery($query, array());
+	$resultant_array = Array();
+        
+	$query = 'select name,tablabel,parenttab_label,vtiger_tab.tabid from vtiger_parenttabrel inner join vtiger_tab on vtiger_parenttabrel.tabid = vtiger_tab.tabid inner join vtiger_parenttab on vtiger_parenttabrel.parenttabid = vtiger_parenttab.parenttabid order by vtiger_parenttab.sequence, vtiger_parenttabrel.sequence';
+	
+	$result = $adb->pquery($query, array());
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
-        for($i=0;$i<$adb->num_rows($result);$i++)
-        {
-                $parenttabname = $adb->query_result($result,$i,'parenttab_label');
-                $modulename = $adb->query_result($result,$i,'name');
-                $tablabel = $adb->query_result($result,$i,'tablabel');
+	for($i=0;$i<$adb->num_rows($result);$i++)
+	{
+		$parenttabname = $adb->query_result($result,$i,'parenttab_label');
+		$modulename = $adb->query_result($result,$i,'name');
+		$tablabel = $adb->query_result($result,$i,'tablabel');
 		$tabid = $adb->query_result($result,$i,'tabid');
-		if($is_admin)
-		{
+		if($is_admin){
 			$resultant_array[$parenttabname][] = Array($modulename,$tablabel);
 		}	
 		elseif($profileGlobalPermission[2]==0 || $profileGlobalPermission[1]==0 || $profileTabsPermission[$tabid]==0)		     {
-                	$resultant_array[$parenttabname][] = Array($modulename,$tablabel);
+			$resultant_array[$parenttabname][] = Array($modulename,$tablabel);
 		}
-        }
+	}
 	
-	if($is_admin)
-	{
-               	$resultant_array['Settings'][] = Array('Settings','Settings');
+	if($is_admin){
+		$resultant_array['Settings'][] = Array('Settings','Settings');
 	}			
-
-	        return $resultant_array;
+	return $resultant_array;
 }
 
 /**
@@ -3484,7 +3482,7 @@ function vtws_generateRandomAccessKey($length=10){
  *  	$fldVal = Array(0=>value,1=>value1,-------------,n=>valuen)
  *  @return Array of picklist values accessible by the user.	
  */
-function vt_getPickListValues($tablename,$roleid)
+function getPickListValues($tablename,$roleid)
 {
 	global $adb;
 	$query = "select $tablename from vtiger_$tablename inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tablename.picklist_valueid where roleid=? and picklistid in (select picklistid from vtiger_picklist) order by sortid";
