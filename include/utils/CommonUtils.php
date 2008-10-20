@@ -2024,7 +2024,10 @@ function getQuickCreateModules()
          global $adb;
          global $mod_strings;
 
-
+	$qc_query = "select distinct vtiger_tab.tablabel,vtiger_tab.name from vtiger_field " .
+			" inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid " .
+			" where quickcreate=0 order by vtiger_tab.tablabel";
+			
 	$result = $adb->pquery($qc_query, array());
 	$noofrows = $adb->num_rows($result);
 	$return_qcmodule = Array();
