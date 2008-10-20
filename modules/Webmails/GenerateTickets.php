@@ -9,7 +9,8 @@ require_once('include/utils/UserInfoUtil.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 require_once('include/language/en_us.lang.php');
 require_once('include/database/PearDatabase.php');
-require_once('modules/Emails/class.phpmailer.php');
+require_once('modules/Emails/mail.php');
+
 
 global $adb,$log,$default_charset,$current_user;
 global $app_strings;
@@ -207,7 +208,7 @@ for($mailcount=0;$mailcount<$nummails;$mailcount++)
 		$focus->column_fields['createdtime']='';
 		$focus->column_fields['modifiedtime']='';
 		$focus->column_fields['filename']='';
-		$focus->column_fields['ticket_title']=addslashes($mailheaderinfo->subject);
+		$focus->column_fields['ticket_title']=addslashes($mailsubject);
 		$focus->column_fields['description']=$description;
 		$focus->column_fields['comments']='';
 		$focus->column_fields['solution']='';
@@ -215,14 +216,6 @@ for($mailcount=0;$mailcount<$nummails;$mailcount++)
 		$focus->save('HelpDesk');
 		$ticketid=$focus->id;
 		
-		/*	$query = "INSERT INTO vtiger_crmentity VALUES (?,?,?,?,?,'".addslashes($description)."',?,?,?,?,?,?,?)";
-		$result = $adb->pquery($query,array($crmid,$smcreatorid,$smownerid,$modifiedby,$setype,$adb->formatDate($date_var, true),$adb->formatDate($date_var, true),null,null,0,1,0));
-		// Create ticket
-		$query="INSERT INTO vtiger_troubletickets set ticketid='".$ticketid."',groupname='null',parent_id='',product_id='',priority='Normal',severity='Minor',status='Open',category='Other Problem',title='".addslashes($mailsubject)."',filename='',solution='',update_log='Ticket created from mail import.',version_id='null'";
-		$result = $adb->pquery($query,array());
-		// Create custom field
-		$query="INSERT INTO vtiger_ticketcf SET ticketid= ?";
-		$result = $adb->pquery($query,array($ticketid));*/
 		
 		$_REQUEST['server']=$smtpserver;
 	
@@ -231,25 +224,7 @@ for($mailcount=0;$mailcount<$nummails;$mailcount++)
 		$hyperlink= $PORTAL_URL.'/index.php?action=index&module=Tickets&ticketid='.$ticketid.'&fun=detail';
 		$ackemailbody="Received your issue and filed a ticket. We'll get back to you soon \n The link for the ticket is as given below \n ".$hyperlink; //kiran: TO DO - this message should be configurable
 		$mail= new PHPMailer();
-		$mail->IsSMTP();	// set mailer to use SMTP	
-		$mail->From     = $mailbox[username];
-		$mail->FromName = $mailbox[username];
-		$mail->Host     = $smtpserver;
-		//$mail->Mailer   = "smtp";
-		$mail->Body     = $ackemailbody;
-		$mail->AddAddress($fromaddress);
-		$mail->Subject = $ackemailsubject;
-		$mail->Username = $smtp_server_username ;	// SMTP username
-		$mail->Password = $smtp_server_password ;	
-		$mail->AddCustomHeader('ticketid: '.$ticketid);
-		if($smtp_auth == 'true')
-			$mail->SMTPAuth = true;
-		else
-		$mail->SMTPAuth = false;
-		
-		$mail->WordWrap = 50;                                 // set word wrap to 50 characters
-	
-		$mail->IsHTML(true);                                  // set email format to HTMl
+		setMailerProperties($mail,$ackemailsubject,$contents,$mailbox[username],$mailbox[username],trim($fromaddress,","),'','','Webmails','');		
 
 		if(!MailSend($mail))
 		{
@@ -620,27 +595,12 @@ function get_part($stream, $msg_number, $mime_type, $structure = false, $part_nu
     return false;
 }
 
-function MailSend($mail)
-{
-	global $log;
-        if(!$mail->Send())
-        {
-		$log->info("Error in Mail Sending : Error log = '".$mail->ErrorInfo."'");
-           $msg = $mail->ErrorInfo;
-        }
-	else
-       	{	
-		$log->info("Mail has been sent from the vtigerCRM system : Status : '".$mail->ErrorInfo."'");
-		return true;
-	}		
-}
-
 function brtonl($str) {
     $str = preg_replace("/(\r\n|\n|\r)/", "", $str);
     return preg_replace("=<br */?>=i", "\n", $str);
 }
 
-//End: kiran
-header("Location: index.php?action=index&module=Webmails");	
+//End: Sandeep
+print_r("<script type='text/javascript'>document.location.href='index.php?action=index&module=Webmails';</script>");
 ?>
 
