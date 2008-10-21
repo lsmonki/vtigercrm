@@ -1247,7 +1247,6 @@ function add_ticket_attachment($input_array)
 
 	//decide the file path where we should upload the file in the server
 	$upload_filepath = decideFilePath();
-	$log->debug("ASHA - $upload_filepath");
 
 	$attachmentid = $adb->getUniqueID("vtiger_crmentity");
 
@@ -1669,14 +1668,14 @@ function get_vendor_name($vendorid)
  */
 
 function get_image_url($id,$module,$customerid)
-{
+{	
+	global $adb, $log;
+	global $site_URL;
+	
 	$isPermitted = check_permission($customerid,$module,$id);
 	if($isPermitted == false) {
 		return array("#NOT AUTHORIZED#");
 	}
-	
-	global $adb;
-	global $site_URL;
 	
 	$query ='select vtiger_attachments.*,vtiger_seattachmentsrel.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid =vtiger_attachments.attachmentsid where vtiger_seattachmentsrel.crmid ='.$id; 
 	$res = $adb->pquery($query);
@@ -2289,6 +2288,10 @@ function get_details($id,$block,$customerid)
 			} else {
 				$fieldvalue = '';
 			}
+		}
+		if($columnname == 'product_id') {
+			$fieldvalues = getEntityName('Products', array($fieldvalue));
+			$fieldvalue = '<a href="index.php?module=Products&action=index&productid='.$fieldvalue.'">'.$fieldvalues[$fieldvalue].'</a>';
 		}
 		if($block == 'Notes' && $fieldname == 'filename')
 		{
