@@ -2276,15 +2276,17 @@ function get_details($id,$block,$customerid)
 		
 		$fieldvalue = $adb->query_result($res,0,$columnname);
 		
-		if($columnname == 'parent_id' || $columnname == 'contactid' || $columnname == 'accountid'){
+		if($columnname == 'parent_id' || $columnname == 'contactid' || $columnname == 'accountid' || $columnname == 'potentialid'){
 			$crmid = $fieldvalue; 
 			$module = getSalesEntityType($crmid);
 			if ($crmid != '' && $module != '') {
 				$fieldvalues = getEntityName($module, array($crmid));
 				if($module == 'Contacts')
-				$fieldvalue = '<a href="index.php?module=Contacts&action=index&customer_id='.$crmid.'">'.$fieldvalues[$crmid].'</a>';
+					$fieldvalue = '<a href="index.php?module=Contacts&action=index&customer_id='.$crmid.'">'.$fieldvalues[$crmid].'</a>';
 				elseif($module == 'Accounts')
-				$fieldvalue = '<a href="index.php?module=Accounts&action=index&id='.$crmid.'">'.$fieldvalues[$crmid].'</a>';
+					$fieldvalue = '<a href="index.php?module=Accounts&action=index&id='.$crmid.'">'.$fieldvalues[$crmid].'</a>';
+				else
+					$fieldvalue = $fieldvalues[$crmid];
 			} else {
 				$fieldvalue = '';
 			}
