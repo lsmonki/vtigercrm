@@ -330,62 +330,6 @@ class HelpDesk extends CRMEntity {
 		$log->debug("Exiting get_ticket_comments_list method ...");
 		 return $output;
 	 }
-		
-	/**	Function to form the query which will give the list of tickets based on customername and id ie., contactname and contactid
-	 *	@param  string $user_name - name of the customer ie., contact name
-	 *	@param  int    $id	 - contact id 
-	 * 	@return array  - return an array which will be returned from the function process_list_query
-	**/
-	function get_user_tickets_list($user_name,$id,$where='',$match='')
-	{
-		global $log;
-		$log->debug("Entering get_user_tickets_list(".$user_name.",".$id.",".$where.",".$match.") method ...");
-
-		$this->db->println("where ==> ".$where);
-
-		$query = "select vtiger_crmentity.crmid, vtiger_troubletickets.*, vtiger_crmentity.description, vtiger_crmentity.smownerid, vtiger_crmentity.createdtime, vtiger_crmentity.modifiedtime, vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, vtiger_products.productid, vtiger_products.productname, vtiger_ticketcf.* from vtiger_troubletickets inner join vtiger_ticketcf on vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid left join vtiger_contactdetails on vtiger_troubletickets.parent_id=vtiger_contactdetails.contactid left join vtiger_products on vtiger_products.productid = vtiger_troubletickets.product_id left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id  where vtiger_crmentity.deleted=0 and vtiger_contactdetails.email='".$user_name."' and vtiger_troubletickets.parent_id = '".$id."'";
-
-		if(trim($where) != '')
-		{
-			if($match == 'all' || $match == '')
-			{
-				$join = " and ";
-			}
-			elseif($match == 'any')
-			{
-				$join = " or ";
-			}
-			$where = explode("&&&",$where);
-			$count = count($where);
-			$count --;
-			$where_conditions = "";
-			foreach($where as $key => $value)
-			{
-				$this->db->println('key : '.$key.'...........value : '.$value);
-				$val = explode(" = ",$value);
-				$this->db->println('val0 : '.$val[0].'...........val1 : '.$val[1]);
-				if($val[0] == 'vtiger_troubletickets.title')
-				{
-					$where_conditions .= $val[0]."  ".$val[1];
-					if($count != $key) 	$where_conditions .= $join;
-				}
-				elseif($val[1] != '' && $val[1] != 'Any')
-				{
-					$where_conditions .= $val[0]." = ".$val[1];
-					if($count != $key)	$where_conditions .= $join;
-				}
-			}
-			if($where_conditions != '')
-				$where_conditions = " and ( ".$where_conditions." ) ";
-
-			$query .= $where_conditions;
-			$this->db->println("where condition for customer portal tickets search : ".$where_conditions);
-		}
-
-		$query .= " order by vtiger_crmentity.crmid desc";
-		$log->debug("Exiting get_user_tickets_list method ...");
-		return $this->process_list_query($query);
-	}
 
 	/**	Function to process the list query and return the result with number of rows
 	 *	@param  string $query - query 
