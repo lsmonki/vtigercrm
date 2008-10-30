@@ -1196,8 +1196,8 @@ function get_filecontent($input_array)
 	$fileid = $input_array['fileid'];
 	$filename = $input_array['filename'];
 
-	if(!validateSession($id,$sessionid))
-		return null;
+//	if(!validateSession($id,$sessionid))
+//		return null;
 
 	$query = "select vtiger_attachments.path from vtiger_troubletickets 
 		inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid = vtiger_troubletickets.ticketid 
@@ -1866,7 +1866,6 @@ function get_filecontent_detail($id,$folderid,$block,$customerid)
 		return array("#NOT AUTHORIZED#");
 	}
 	
-	$log->debug("id ".$id."Fid".$folderid);
 	if($block == 'Notes')
 	{
 		$query="SELECT * FROM vtiger_notes WHERE notesid ='$id' and folderid= '$folderid'";
@@ -2049,10 +2048,7 @@ function get_invoice_detail($id,$block,$customerid)
 	}
 	
 	if($block == 'INVINFORMATION')
-		$fields_list = "'subject','invoicedate','duedate','total','createdtime','invoicestatus'";
-	elseif($block =='INVDESCINFO')
-		$fields_list ="'download_status','license_key','subject','file_path'";
-	
+		$fields_list ="'subject','invoicedate','duedate','total','createdtime','invoicestatus','salesorderid','customerno','contactid','accountid','purchaseorder','salescommission'";
 	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=23 and columnname in ($fields_list) order by sequence";
 	$fieldres = $adb->pquery($fieldquery);
 	$nooffields = $adb->num_rows($fieldres);
@@ -2070,36 +2066,28 @@ function get_invoice_detail($id,$block,$customerid)
 		$fieldname = $adb->query_result($fieldres,$i,'columnname');
 		$fieldlabel = $adb->query_result($fieldres,$i,'fieldlabel');
 		$fieldvalue = $adb->query_result($res,0,$fieldname);
-		if($block=='INVDESCINFO' && $fieldname == 'subject' && $fieldvalue !='')
+		if($block=='INVINFORMATION' && $fieldname == 'subject' && $fieldvalue !='')
 		{
 			$fieldid = $adb->query_result($res,0,'invoiceid');
-			$filename = $fieldid.'_Invoice.pdf';
-			$fieldlabel = 'Download PDF';
-			$fieldvalue = '<a href="index.php?downloadfile=true&module=Invoice&action=index&id='.$fieldid.'">Invoice.pdf</a>';
+			//$filename = $fieldid.'_Invoice.pdf';
+			$fieldlabel = "(Download PDF)  ".$fieldlabel;
+			$fieldvalue = '<a href="index.php?downloadfile=true&module=Invoice&action=index&id='.$fieldid.'">'.$fieldvalue.'</a>';
 		}
-		if($block=='INVDESCINFO' && $fieldname == 'download_status')
+		if( $fieldname == 'salesorderid' || $fieldname == 'contactid' || $fieldname == 'accountid' || $fieldname == 'potentialid')
 		{
-			if($fieldvalue == "1")
-				$fieldvalue = " Done ";
-			else 
-				$fieldvalue = " Not Done";
-		}
-		if($block == 'INVDESCINFO' && $fieldname == 'file_path' && $fieldvalue != '')
-		{
-			$fieldlabel='Download Product';
-			$inv_id     = $adb->query_result($res,$i,'invoiceid');
-			$subject= $adb->query_result($res,$i,'subject');
-			$file_path = $adb->query_result($res,$i,'file_path');
-			$inv_status = $adb->query_result($res,$i,'invoicestatus');
-			$status = $adb->query_result($res,$i,'download_status');
-			if($status != '' && $status == 0 && $file_path != '' && $inv_status == 'Paid')
-			{
-				$param = "action=download&parentid=$inv_id";
-				$param = base64_encode($param);
-				$fieldvalue ='<a href='.$site_URL.'/dindex.php?param='.$param.'>Download</a>'; 
+			$crmid = $fieldvalue; 
+			$module = getSalesEntityType($crmid);
+			if ($crmid != '' && $module != '') {
+				$fieldvalues = getEntityName($module, array($crmid));
+				if($module == 'Contacts')
+					$fieldvalue = '<a href="index.php?module=Contacts&action=index&customer_id='.$crmid.'">'.$fieldvalues[$crmid].'</a>';
+				elseif($module == 'Accounts')
+					$fieldvalue = '<a href="index.php?module=Accounts&action=index&id='.$crmid.'">'.$fieldvalues[$crmid].'</a>';
+				else
+					$fieldvalue = $fieldvalues[$crmid];
+			} else {
+				$fieldvalue = '';
 			}
-			else
-				$fieldvalue ='Un Available';
 		}
 		$output[0][$block][$i]['fieldlabel'] = $fieldlabel;//adb->query_result($fieldres,$i,'fieldlabel');
 		$output[0][$block][$i]['fieldvalue'] = $fieldvalue;
@@ -2239,7 +2227,7 @@ function get_details($id,$block,$customerid)
 	}
 	else if($block == "Notes")
 	{
-		$fields_list_arr = array('notesid','notes_title','filename','notecontent','filetype','filesize','filelocationtype','fileversion','filestatus','filedownloadcount','filearchitecture','createdtime','modifiedtime');
+		$fields_list_arr = array('notesid','title','filename','notecontent','filetype','filesize','filelocationtype','fileversion','filestatus','os','createdtime','modifiedtime');
 		$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=8 and columnname in (". generateQuestionMarks($fields_list_arr) .") order by sequence";
 		$fieldparams = array($fields_list_arr);
 		$query =  "select 
@@ -2294,6 +2282,12 @@ function get_details($id,$block,$customerid)
 		if($columnname == 'product_id') {
 			$fieldvalues = getEntityName('Products', array($fieldvalue));
 			$fieldvalue = '<a href="index.php?module=Products&action=index&productid='.$fieldvalue.'">'.$fieldvalues[$fieldvalue].'</a>';
+		}
+		if($block=='Quotes' && $fieldname == 'subject' && $fieldvalue !='')
+		{
+			$fieldid = $adb->query_result($res,0,'quoteid');
+			$output[0][$block][$i]['fieldlabel']= "(Download PDF)  ".$adb->query_result($fieldres,$i,'fieldlabel');
+			$fieldvalue = '<a href="index.php?downloadfile=true&module=Quotes&action=index&id='.$fieldid.'">'.$fieldvalue.'</a>';
 		}
 		if($block == 'Notes' && $fieldname == 'filename')
 		{
