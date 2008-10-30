@@ -9,7 +9,6 @@
 *
  ********************************************************************************/
 
-require_once('user_privileges/enable_backup.php');
 require_once('Smarty_setup.php');
 
 global $mod_strings;
@@ -76,6 +75,8 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
 
+require_once('user_privileges/enable_backup.php');
+
 if($enable_local_backup == 'true')	
 	$local_backup_status = 'enabled';
 else
@@ -141,7 +142,7 @@ if((isset($_REQUEST['backupnow'])))
 			$smarty->assign("BACKUP_RESULT", '<b><font color="red">Failed to backup</font></b>');
 }
 
-if($_REQUEST['ajax'] == 'true')
+if($_REQUEST['ajax'] == 'true' && $_REQUEST['server_type'] == 'ftp_backup')
 	$smarty->display("Settings/BackupServerContents.tpl");
 else
 	$smarty->display("Settings/BackupServer.tpl");

@@ -49,7 +49,7 @@ if($enable_ftp_backup == 'true' && is_admin($current_user) == true)
 	if($ftpserver != '' && $ftpuser != '' && $ftppassword != '')
 	{
 		$createZip = new createDirZip;
-		$fileName = $root_directory.'/backup_'.$currenttime.'.zip';
+		$fileName = '/backup_'.$currenttime.'.zip';
 
 		$createZip->addDirectory('user_privileges/');
 		$createZip->get_files_from_folder('user_privileges/', 'user_privileges/');        
