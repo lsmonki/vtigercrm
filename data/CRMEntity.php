@@ -78,14 +78,14 @@ class CRMEntity
           $this->whomToSendMail($module,$this ->mode,$assigntype);
 	
 	$this->db->completeTransaction();
-        $this->db->println("TRANS saveentity ends");
+    $this->db->println("TRANS saveentity ends");
   }
 
 
 	
 	function insertIntoAttachment1($id,$module,$filedata,$filename,$filesize,$filetype,$user_id)
 	{
-		$date_var = date('YmdHis');
+		$date_var = date('Y-m-d H:i:s');
 		global $current_user;
 		global $adb;
 		//global $root_directory;
@@ -146,7 +146,7 @@ class CRMEntity
 		global $adb, $current_user;
 		global $upload_badext;
 
-		$date_var = date('YmdHis');
+		$date_var = date('Y-m-d H:i:s');
 
 		//to get the owner id
 		$ownerid = $this->column_fields['assigned_user_id'];
@@ -194,12 +194,6 @@ class CRMEntity
 		if($save_file == 'true' && $upload_status == 'true')
 		{
 			//This is only to update the attached filename in the vtiger_notes vtiger_table for the Notes module
-			/*if($module=='Notes')
-			{
-				$sql="update vtiger_notes set filename=? where notesid = ?";
-				$params = array($filename, $id); 
-				$adb->pquery($sql, $params);
-			}*/
 			if($module == 'Contacts' || $module == 'Products')
 			{
 				$sql1 = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?, ?, ?, ?, ?, ?, ?)";
@@ -238,7 +232,7 @@ class CRMEntity
 				$attachmentsid= $adb->query_result($res,0,'attachmentsid');
 				if($attachmentsid !='' )
 				{
-					$delquery='delete from vtiger_seattachmentsrel where crmid=? && attachmentsid=?';
+					$delquery='delete from vtiger_seattachmentsrel where crmid=? and attachmentsid=?';
 					$adb->pquery($delquery, array($id, $attachmentsid));
 					$crm_delquery="delete from vtiger_crmentity where crmid=?";
 					$adb->pquery($crm_delquery, array($attachmentsid));
@@ -282,7 +276,7 @@ class CRMEntity
 		$this->mode = 'edit';
 	}
 	
-	$date_var = date('YmdHis');
+	$date_var = date('Y-m-d H:i:s');
 	if($_REQUEST['assigntype'] == 'T')
 	{
 		$ownerid= 0;
@@ -300,8 +294,10 @@ class CRMEntity
 	{
 		$log->info("module is =".$module);
 		$ownerid = $current_user->id;
-	}	
-	
+	}
+	// Asha - Change ownerid from '' to null since its an integer field. 
+	// It is empty for modules like Invoice/Quotes/SO/PO which do not have Assigned to field
+	if($ownerid === '') $ownerid = null;
 	
 	if($module == 'Events')
 	{
@@ -464,12 +460,14 @@ class CRMEntity
 
 	  $result = $adb->pquery($sql, $params);
 	  $noofrows = $adb->num_rows($result);
-	  for($i=0; $i<$noofrows; $i++)
-	  {
-		  $fieldname=$adb->query_result($result,$i,"fieldname");
-		  $columname=$adb->query_result($result,$i,"columnname");
-		  $uitype=$adb->query_result($result,$i,"uitype");
-
+	  for($i=0; $i<$noofrows; $i++) {
+		$fieldname=$adb->query_result($result,$i,"fieldname");
+		$columname=$adb->query_result($result,$i,"columnname");
+		$uitype=$adb->query_result($result,$i,"uitype");
+		$typeofdata=$adb->query_result($result,$i,"typeofdata");
+		$typeofdata_array = explode("~",$typeofdata);
+		$datatype = $typeofdata_array[0];
+		
 		  if(isset($this->column_fields[$fieldname]))
 		  {
 			  if($uitype == 56)
@@ -544,12 +542,10 @@ class CRMEntity
 		  {
 			  $fldvalue = '';
 		  }
-		  if($fldvalue=='') {
-		  	$fldvalue = $this->get_column_value($columname, $fldvalue, $fieldname, $uitype);
-			//$fldvalue =null;
+		  if($fldvalue == '') {
+		  	$fldvalue = $this->get_column_value($columname, $fldvalue, $fieldname, $uitype, $datatype);
 		  }
-		  /*else
-			$fldvalue = htmlentities($fldvalue);*/	
+		  
 		  if($insertion_mode == 'edit')
 		  {
 			  if($table_name != 'vtiger_ticketcomments')
@@ -703,16 +699,6 @@ function whomToSendMail($module,$insertion_mode,$assigntype)
    	{
 		if($assigntype=='U')
 		{
-			/*
-			This doesn't make sense. We are creating a new object and sending the empty object for reference. 
-			Either we should fill the object contents with appropriate or simpler would be to send the current object ($this) itself. 
-			if($module == 'Events' || $module == 'Calendar')
-			{
-				$moduleObj=new Activity();
-			}else
-			{
-				$moduleObj=new $module();
-			}*/
 			sendNotificationToOwner($module,$this);
 		}
        	elseif($assigntype=='T')
@@ -847,7 +833,7 @@ $log->info("in getOldFileName  ".$notesid);
 	function save($module_name,$fileid='') 
 	{
 		global $log;
-	        $log->debug("module name is ".$module_name);
+		$log->debug("module name is ".$module_name);
 	
 		//Event triggering code
 		require_once("include/events/include.inc");
@@ -1144,17 +1130,28 @@ $log->info("in getOldFileName  ".$notesid);
 	}
 	
 	/**
-	* Function to get the column value of a field 
+	* Function to get the column value of a field when the field value is empty ''
 	* @param $columnname -- Column name for the field
 	* @param $fldvalue -- Input value for the field taken from the User
 	* @param $fieldname -- Name of the Field
 	* @param $uitype -- UI type of the field
 	* @return Column value of the field.
 	*/
-	function get_column_value($columname, $fldvalue, $fieldname, $uitype) {
+	function get_column_value($columnname, $fldvalue, $fieldname, $uitype, $datatype='') {
+		global $log;
+		$log->debug("Entering function get_column_value ($columnname, $fldvalue, $fieldname, $uitype, $datatype='')");
+		
+		// Added for the fields of uitype '57' which has datatype mismatch in crmentity table and particular entity table
+		if ($uitype == 57 && $fldvalue == '') {
+			return 0;
+		}
 		if (is_uitype($uitype, "_date_") && $fldvalue == '') {
 			return null;
 		}
+		if ($datatype == 'I' || $datatype == 'N' || $datatype == 'NN'){
+			return 0;
+		}
+		$log->debug("Exiting function get_column_value");
 		return $fldvalue;
 	}
 	

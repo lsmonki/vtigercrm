@@ -1752,13 +1752,13 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 	{
 		if($label == '')
 		{
-			$returndata[getTranslatedString($curBlock)]=array_merge((array)$returndata[getTranslatedString($curBlock)],(array)$label_data[$blockid]);
+			$returndata[getTranslatedString($curBlock,$module)]=array_merge((array)$returndata[getTranslatedString($curBlock,$module)],(array)$label_data[$blockid]);
 		}
 		else
 		{
 			$curBlock = $label;
 			if(is_array($label_data[$blockid]))
-				$returndata[getTranslatedString($curBlock)]=array_merge((array)$returndata[getTranslatedString($curBlock)],(array)$label_data[$blockid]);
+				$returndata[getTranslatedString($curBlock,$module)]=array_merge((array)$returndata[getTranslatedString($curBlock,$module)],(array)$label_data[$blockid]);
 		}
 	}
 	$log->debug("Exiting getDetailBlockInformation method ...");

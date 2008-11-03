@@ -58,7 +58,7 @@ class SugarBean
 		}
 
 		//$this->date_modified = $this->db->formatDate(date('YmdHis'));
-		$this->date_modified = date('YmdHis');
+		$this->date_modified = date('Y-m-d H:i:s');
 		if (isset($current_user)) $this->modified_user_id = $current_user->id;
 		
 		if($isUpdate)
@@ -68,7 +68,7 @@ class SugarBean
 		else
 		{
     			//$this->date_entered = $this->db->formatDate(date('YmdHis'));
-			$this->date_entered = date('YmdHis');
+			$this->date_entered = date('Y-m-d H:i:s');
 
 			if($this->new_schema && 
 				$this->new_with_id == false)

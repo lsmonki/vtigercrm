@@ -20,7 +20,7 @@ require_once("modules/Emails/mail.php");
 	}
 $mail_status = send_mail('Emails',$_REQUEST["parent_name"],$from_name,$from_add,$_REQUEST['subject'],$_REQUEST['description'],$_REQUEST["ccmail"],$_REQUEST["bccmail"],'all',$focus->id);
 	
-$query = 'update vtiger_emaildetails set email_flag ="SENT" where emailid=?';
+$query = "update vtiger_emaildetails set email_flag ='SENT' where emailid=?";
 $adb->pquery($query, array($focus->id));
 
 //set the errorheader1 to 1 if the mail has not been sent to the assigned to user

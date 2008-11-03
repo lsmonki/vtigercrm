@@ -28,10 +28,19 @@ class PreparedQMark2SqlValue {
         $this->ctr = 0;
         $this->vals = $vals;
     }
-    function call($matches){
-		$this->ctr++;
-		return $matches[1].$this->vals[$this->ctr-1];
-    }
+    function call($matches){ 
+            /** 
+             * If ? is found as expected in regex used in function convert2sql 
+             * /('[^']*')|(\"[^\"]*\")|([?])/ 
+             * 
+             */ 
+            if($matches[3]=='?'){ 
+                    $this->ctr++; 
+                    return $this->vals[$this->ctr-1]; 
+            }else{ 
+                    return $matches[0]; 
+            } 
+    } 
 }
 
 class PearDatabase{
@@ -53,8 +62,9 @@ class PearDatabase{
     // PreparedStatement will be converted to normal SQL statement for execution
     var $avoidPreparedSql = false;
 	
-    function isMySQL() { return dbType=='mysql'; }
-    function isOracle() { return dbType=='oci8'; }
+    function isMySQL() { return $this->dbType=='mysql'; }
+    function isOracle() { return $this->dbType=='oci8'; }
+    function isPostgres() { return $this->dbType=='pgsql'; }
     
     function println($msg)
     {
@@ -108,13 +118,15 @@ class PearDatabase{
 
     function startTransaction()
     {
+    if($this->isPostgres()) return;
 	$this->checkConnection();
 	$this->println("TRANS Started");
 	$this->database->StartTrans();
     }
 
     function completeTransaction()
-    {		
+    {	
+    if($this->isPostgres()) return;	
 	if($this->database->HasFailedTrans()) 
 	    $this->println("TRANS  Rolled Back");
 	else
@@ -221,13 +233,14 @@ class PearDatabase{
 					$vals[$index] = $this->database->Quote($vals[$index]);
 				}
 				else {
-					$vals[$index] = "'".mysql_real_escape_string($vals[$index]). "'";
+					$vals[$index] = "'".$this->sql_escape_string($vals[$index]). "'";
 				}
-			} else if($vals[$index] === null) {
+			} 
+			if($vals[$index] === null) {
 				$vals[$index] = "NULL";
 			}
 		}
-		$sql = preg_replace_callback("/((('[^']*')|(\"[^\"]*\")|[^?])+)(\?)/", array(new PreparedQMark2SqlValue($vals),"call"), $ps);
+		$sql = preg_replace_callback("/('[^']*')|(\"[^\"]*\")|([?])/", array(new PreparedQMark2SqlValue($vals),"call"), $ps); 
 		return $sql;
 	}
 
@@ -675,22 +688,22 @@ class PearDatabase{
 		    return $row;			
 		}
 
-		//$this->println("ADODB fetchByAssoc after if ".$rowNum);	
-		
-		if($this->getRowCount($result) > $rowNum)
-		{
-		    $result->Move($rowNum);				
-		}
+	//$this->println("ADODB fetchByAssoc after if ".$rowNum);	
+	
+	if($this->getRowCount($result) > $rowNum)
+	{
+	    $result->Move($rowNum);				
+	}
 
-		$this->lastmysqlrow = $rowNum; //srini - think about this
-		$row = $this->change_key_case($result->GetRowAssoc(false));		
-		$result->MoveNext();
-		//print_r($row);		
-		$this->println($row);
-				
-		if($encode&& is_array($row))
-		    return array_map('to_html', $row);	
-		return $row;
+	$this->lastmysqlrow = $rowNum; //srini - think about this
+	$row = $this->change_key_case($result->GetRowAssoc(false));		
+	$result->MoveNext();
+	//print_r($row);		
+	$this->println($row);
+			
+	if($encode&& is_array($row))
+		return array_map('to_html', $row);	
+	return $row;
     }
     
     function getNextRow(&$result, $encode=true){
@@ -960,6 +973,32 @@ class PearDatabase{
 	$this->println($result);
 	return $result;		
     }
+	
+	//To get a function name with respect to the database type which escapes strings in given text 
+	function sql_escape_string($str)
+	{
+		if($this->isMySql())
+			$result_data = mysql_real_escape_string($str);
+		elseif($this->isPostgres())
+			$result_data = pg_escape_string($str);
+			
+		return $result_data;
+	}
+	
+	// Function to get the last insert id based on the type of database
+	function getLastInsertID($seqname) {
+		if($this->isPostgres()) {
+			$result = pg_query("SELECT currval('".$seqname."_seq')");
+			if($result)
+			{
+				$row = pg_fetch_row($result);
+				$last_insert_id = $row[0];
+			}
+		} else {
+			$last_insert_id = $this->Insert_ID();
+		}		
+		return $last_insert_id;
+	}
 } /* End of class */
 
 $adb = new PearDatabase();

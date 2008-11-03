@@ -260,7 +260,7 @@ var $rel_serel_table = "vtiger_seactivityrel";
 		elseif($transfer == 'QUOTED-PRINTABLE')
 			    $file = imap_qprint($file);
 		$current_id = $adb->getUniqueID("vtiger_crmentity");
-		$date_var = date('YmdHis');
+		$date_var = date('Y-m-d H:i:s');
 		//to get the owner id
 		$ownerid = $this->column_fields['assigned_user_id'];
 		if(!isset($ownerid) || $ownerid=='')
@@ -552,13 +552,6 @@ var $rel_serel_table = "vtiger_seactivityrel";
 		$query = "insert into $this->rel_users_table (smid,activityid) values (?,?)";
 		$this->db->pquery($query, array($user_id, $email_id), true,"Error setting email to user relationship: "."<BR>$query");
 		$log->debug("Exiting set_emails_user_invitee_relationship method ...");
-	}        
-
-	/** Function to handle module specific operations when restoring an entity 
-	*/
-	function restore_module($crmid) {
-		
-		
 	}
 }
 /** Function to get the emailids for the given ids form the request parameters 
@@ -645,7 +638,7 @@ function pdfAttach($obj,$module,$file_name,$id)
 
 	global $adb, $current_user;
 	global $upload_badext;
-	$date_var = date('YmdHis');
+	$date_var = date('Y-m-d H:i:s');
 
 	$ownerid = $obj->column_fields['assigned_user_id'];
 	if(!isset($ownerid) || $ownerid=='')

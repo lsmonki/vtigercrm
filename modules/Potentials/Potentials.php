@@ -557,12 +557,6 @@ class Potentials extends CRMEntity {
 		return GetRelatedList('Potentials','SalesOrder',$focus,$query,$button,$returnset);
 
 	}
-
-	/** Function to handle module specific operations when restoring an entity 
-	*/
-	function restore_module($crmid) {
-		
-	}
 	
 }
 

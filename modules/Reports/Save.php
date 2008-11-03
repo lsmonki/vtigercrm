@@ -48,7 +48,7 @@ $enddate = getDBInsertDateValue($_REQUEST["enddate"]);
 //<<<<<<<standardfilters>>>>>>>>>
 
 //<<<<<<<columnstototal>>>>>>>>>>
-$allKeys = array_keys($HTTP_POST_VARS);
+$allKeys = array_keys($_REQUEST);
 for ($i=0;$i<count($allKeys);$i++)
 {
    $string = substr($allKeys[$i], 0, 3);

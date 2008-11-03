@@ -105,7 +105,7 @@ class Faq extends CRMEntity {
 		$log->info("in insertIntoFAQCommentTable  ".$table_name."    module is  ".$module);
         	global $adb;
 
-        	$current_time = $adb->formatDate(date('YmdHis'), true);
+        	$current_time = $adb->formatDate(date('Y-m-d H:i:s'), true);
 
 		if($this->column_fields['comments'] != '')
 			$comment = $this->column_fields['comments'];
@@ -163,12 +163,6 @@ class Faq extends CRMEntity {
 		
 		$log->debug("Exiting getFAQComments method ...");
 		return $list;
-	}
-
-	/** Function to handle module specific operations when restoring an entity 
-	*/
-	function restore_module($crmid) {
-		
 	}
 
 }

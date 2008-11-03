@@ -156,9 +156,9 @@ else
 if(isset($where) && $where != '')
 {
 	if(isset($_REQUEST['from_homepagedb']) && $_REQUEST['from_homepagedb'] == 'true')
-                $list_query .= ' and (vtiger_troubletickets.status!="Closed" or vtiger_troubletickets.status is null) and '.$where;
+		$list_query .= " and (vtiger_troubletickets.status!='Closed' or vtiger_troubletickets.status is null) and ".$where;
 	$list_query .= ' and '.$where;
- $_SESSION['export_where'] = $where;
+ 	$_SESSION['export_where'] = $where;
 }
 else
    unset($_SESSION['export_where']);

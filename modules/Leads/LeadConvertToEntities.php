@@ -52,8 +52,8 @@ $focus->retrieve_entity_info($id,"Leads");
 //get all the lead related columns 
 $row = $focus->column_fields;
 
-$date_entered = $adb->formatDate(date('YmdHis'), true);
-$date_modified = $adb->formatDate(date('YmdHis'), true);
+$date_entered = $adb->formatDate(date('Y-m-d H:i:s'), true);
+$date_modified = $adb->formatDate(date('Y-m-d H:i:s'), true);
 
 /** Function for getting the custom values from leads and saving to vtiger_account/contact/potential custom vtiger_fields.
  *  @param string $type - Field Type (eg: text, list)
@@ -129,30 +129,25 @@ function getInsertValues($type,$type_id)
 		{ 
 			$type_result=$adb->pquery($sql_type, $params);
 			//To construct the cf array
-            		$colname = $adb->query_result($type_result,0,"columnname");
-			if(isset($type_insert_column))
-				$type_insert_column.=",";
-			$type_insert_column.=$colname ;
+            $colname = $adb->query_result($type_result,0,"columnname");
+			$type_insert_column[] = $colname;
 			$type_uitype =$adb->query_result($type_result,0,"uitype") ;
 
 			//To construct the cf array
-                        $ins_val = $adb->query_result($lead_val_result,0,$lead_column_name);
-			if(isset($insert_value))
-				$insert_value.=",";
+			$ins_val = $adb->query_result($lead_val_result,0,$lead_column_name);
 			
 			//This array is used to store the tablename as the key and the value for that table in the custom field of the uitype only for 15 and 33(Multiselect cf)...
-			if($lead_uitype == 33 || $lead_uitype == 15)
-			{
-                                $lead_val_arr[$colname] = $lead_column_name;
-                                $value_cf_array[$colname]=$ins_val;	
+			if($lead_uitype == 33 || $lead_uitype == 15) {
+                $lead_val_arr[$colname] = $lead_column_name;
+                $value_cf_array[$colname]=$ins_val;	
 			}
 			
-			$insert_value.=$ins_val;
+			$insert_value[] = $ins_val;
 		}
 	}
 	if(count($value_cf_array) > 0)
 	{
-		if($type_insert_column != '')
+		if(count($type_insert_column) > 0)
 		{
 			foreach($value_cf_array as $key => $value)
 			{
@@ -212,8 +207,8 @@ function getInsertValues($type,$type_id)
 		}
 	}
 	$log->debug("columns to be inserted are ".$type_insert_column);
-        $log->debug("columns to be inserted are ".$insert_value);
-	$values = array ($type_insert_column,$insert_value);
+    $log->debug("columns to be inserted are ".$insert_value);
+	$values = array ('columns'=>$type_insert_column,'values'=>$insert_value);
 	$log->debug("Exiting getInsertValues method ...");
 	return $values;	
 }
@@ -397,17 +392,13 @@ else
 	$adb->pquery($sql_insert_accountshipads, $shipads_params);
 
 	//Getting the custom vtiger_field values from leads and inserting into Accounts if the vtiger_field is mapped - Jaguar
-	$insert_values=array($crmid);
-	$insert_str = "?";
-	$insert_column="accountid";	
-	$val= getInsertValues("Accounts",$crmid);
-	if($val[0]!="" && $val[1]!="") {
-		$insert_column.=",".$val[0];
-		$tempval = explode(",",$val[1]);
-		$insert_str .= str_repeat(",?", count($tempval));
-		array_push($insert_values, $tempval);
-	}
-	$sql_insert_accountcustomfield = "INSERT INTO vtiger_accountscf (".$insert_column.") VALUES (".$insert_str.")";
+	$col_val= getInsertValues("Accounts",$crmid);
+	$insert_columns = $col_val['columns'];
+	$insert_columns[] = "accountid";
+	$insert_values = $col_val['values'];
+	$insert_values[] = $crmid;
+	$insert_val_str = generateQuestionMarks($insert_values);
+	$sql_insert_accountcustomfield = "INSERT INTO vtiger_accountscf (". implode(",",$insert_columns) .") VALUES (".$insert_val_str.")";
 	$adb->pquery($sql_insert_accountcustomfield, $insert_values);
 	//Saving Account - ends
 }
@@ -422,8 +413,8 @@ saveLeadRelatedProducts($id, $crmid, "Accounts");
 //Up to this, Account related data save finshed
 
 
-$date_entered = $adb->formatDate(date('YmdHis'), true);
-$date_modified = $adb->formatDate(date('YmdHis'), true);
+$date_entered = $adb->formatDate(date('Y-m-d H:i:s'), true);
+$date_modified = $adb->formatDate(date('Y-m-d H:i:s'), true);
 
 //Saving Contact - starts
 $crmcontactid = $adb->getUniqueID("vtiger_crmentity");
@@ -460,18 +451,13 @@ $sql_insert_customerdetails = "INSERT INTO vtiger_customerdetails (customerid) V
 $adb->pquery($sql_insert_customerdetails, array($contact_id));
 
 //Getting the customfield values from leads and inserting into the respected ContactCustomfield to which it is mapped - Jaguar
-$insert_column="contactid";
-$insert_str = "?";
-$insert_values=array($contact_id);
-
-$val= getInsertValues("Contacts",$contact_id);
-if($val[0]!="" && $val[1]!="") {
-	$insert_column.=",".$val[0];	
-	$tempval = explode(",",$val[1]);
-	$insert_str .= str_repeat(",?", count($tempval));
-	array_push($insert_values, $tempval);
-}
-$sql_insert_contactcustomfield = "INSERT INTO vtiger_contactscf (".$insert_column.") VALUES (".$insert_str.")";
+$col_val= getInsertValues("Contacts",$contact_id);
+$insert_columns = $col_val['columns'];
+$insert_columns[] = "contactid";
+$insert_values = $col_val['values'];
+$insert_values[] = $contact_id;
+$insert_val_str = generateQuestionMarks($insert_values);
+$sql_insert_contactcustomfield = "INSERT INTO vtiger_contactscf (". implode(",",$insert_columns) .") VALUES (".$insert_val_str.")";
 $adb->pquery($sql_insert_contactcustomfield, $insert_values);
 //Saving Contact - ends
 
@@ -494,8 +480,8 @@ if(! isset($createpotential) || ! $createpotential == "on")
 {
 	$log->info("createpotential is not set");
 
-	$date_entered = $adb->formatDate(date('YmdHis'), true);
-	$date_modified = $adb->formatDate(date('YmdHis'), true);
+	$date_entered = $adb->formatDate(date('Y-m-d H:i:s'), true);
+	$date_modified = $adb->formatDate(date('Y-m-d H:i:s'), true);
   
 
 	$oppid = $adb->getUniqueID("vtiger_crmentity");
@@ -526,20 +512,15 @@ if(! isset($createpotential) || ! $createpotential == "on")
 		$sql_params = array($oppid,$assigned_group_name);
 		$adb->pquery($sql_crmentity, $sql_params);
 	}
-	
-	//Getting the customfield values from leads and inserting into the respected PotentialCustomfield to which it is mapped - Jaguar
-	$insert_column="potentialid";
-	$insert_str="?";
-	$insert_values=array($oppid);
-	$val= getInsertValues("Potentials",$oppid);
-	if($val[0]!="" && $val[1]!="") {
-		$insert_column.=",".$val[0];		
-		$tempval = explode(",",$val[1]);
-		$insert_str .= str_repeat(",?", count($tempval));
-		array_push($insert_values, $tempval);
-	}
 
-	$sql_insert_potentialcustomfield = "INSERT INTO vtiger_potentialscf (".$insert_column.") VALUES (".$insert_str.")";
+	//Getting the customfield values from leads and inserting into the respected PotentialCustomfield to which it is mapped - Jaguar
+	$col_val= getInsertValues("Potentials",$oppid);
+	$insert_columns = $col_val['columns'];
+	$insert_columns[] = "potentialid";
+	$insert_values = $col_val['values'];
+	$insert_values[] = $oppid;
+	$insert_val_str = generateQuestionMarks($insert_values);
+	$sql_insert_potentialcustomfield = "INSERT INTO vtiger_potentialscf (". implode(",",$insert_columns) .") VALUES (".$insert_val_str.")";
 	$adb->pquery($sql_insert_potentialcustomfield, $insert_values);
 
 	$sql_insert2contpotentialrel ="insert into vtiger_contpotentialrel values(?,?)";

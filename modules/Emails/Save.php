@@ -176,12 +176,12 @@ $userid = $current_user->id;
 
 if($adb->num_rows($result) > 0)
 {
-	$query = 'update vtiger_emaildetails set to_email=?, cc_email=?, bcc_email=?, idlists=?, email_flag="SAVED" where emailid = ?';
+	$query = "update vtiger_emaildetails set to_email=?, cc_email=?, bcc_email=?, idlists=?, email_flag='SAVED' where emailid = ?";
 	$qparams = array($all_to_ids, $all_cc_ids, $all_bcc_ids, $_REQUEST["parent_id"], $email_id);
 }else
 {
-	$query = 'insert into vtiger_emaildetails values (?,?,?,?,?,"",?,"SAVED")';
-	$qparams = array($email_id, $user_email, $all_to_ids, $all_cc_ids, $all_bcc_ids, $_REQUEST["parent_id"]);
+	$query = 'insert into vtiger_emaildetails values (?,?,?,?,?,?,?,?)';
+	$qparams = array($email_id, $user_email, $all_to_ids, $all_cc_ids, $all_bcc_ids, "", $_REQUEST["parent_id"], 'SAVED');
 }
 $adb->pquery($query, $qparams);
 

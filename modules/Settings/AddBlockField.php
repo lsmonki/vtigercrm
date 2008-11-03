@@ -183,7 +183,7 @@ $output=str_replace('CHANGE_FIELDLABEL',$mod_strings[$customfield_fieldlabel],$o
 else
 $output=str_replace('CHANGE_FIELDLABEL',$customfield_fieldlabel,$output);	
  
-$sql="SELECT fieldid,fieldlabel,fieldname FROM vtiger_field WHERE tabid='".$_REQUEST[tabid]."' AND block NOT IN ('".$_REQUEST[blockid]."') AND block NOT IN (SELECT blockid from vtiger_blocks where blocklabel='LBL_RELATED_PRODUCTS') ORDER BY fieldlabel ASC"; // added by projjwal on 22-11-2007
+$sql="SELECT fieldid,fieldlabel,fieldname FROM vtiger_field WHERE tabid='".$_REQUEST[tabid]."' AND block NOT IN ('".$_REQUEST[blockid]."') AND block NOT IN (SELECT blockid from vtiger_blocks where blocklabel='LBL_RELATED_PRODUCTS') AND displaytype in (1,2,4) ORDER BY fieldlabel ASC"; // added by projjwal on 22-11-2007
 $res= $adb->pquery($sql,array());
 
 $combo_output='<select name="field_assignid[]" style="width:250px" size=10 multiple>';// added by projjwal on 22-11-2007

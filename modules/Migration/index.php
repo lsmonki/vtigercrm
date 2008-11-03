@@ -42,12 +42,12 @@ if($exists)
 	}
 
 }
-if(isset($_REQUEST['dbconversionutf8']))
-{
-	if($_REQUEST['dbconversionutf8'] == 'yes')
-	{
-	$query = " ALTER DATABASE ".$dbconfig['db_name']." DEFAULT CHARACTER SET utf8";
-	$adb->query($query);
+if(!$adb->isPostgres()) {
+	if(isset($_REQUEST['dbconversionutf8'])) {
+		if($_REQUEST['dbconversionutf8'] == 'yes') {
+			$query = " ALTER DATABASE ".$dbconfig['db_name']." DEFAULT CHARACTER SET utf8";
+			$adb->query($query);
+		}
 	}
 }	
 

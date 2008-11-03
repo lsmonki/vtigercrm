@@ -12,24 +12,24 @@
 function eMail(module,oButton)
 {
 	var select_options  =  document.getElementById('allselectedboxes').value;
-        //Added to remove the semi colen ';' at the end of the string.done to avoid error.
-        var x = select_options.split(";");
-        var count=x.length
-        var viewid =getviewId();
-        var idstring = "";
-        select_options=select_options.slice(0,(select_options.length-1));
+    //Added to remove the semi colen ';' at the end of the string.done to avoid error.
+    var x = select_options.split(";");
+    var count=x.length
+    var viewid =getviewId();
+    var idstring = "";
+    select_options=select_options.slice(0,(select_options.length-1));
 
-        if (count > 1)
-        {
-                idstring=select_options.replace(/;/g,':')
-                document.getElementById('idlist').value=idstring;
-        }
+    if (count > 1)
+    {
+            idstring=select_options.replace(/;/g,':')
+            document.getElementById('idlist').value=idstring;
+    }
 	else
 	{
 		alert(alert_arr.SELECT);
 		return false;
 	}
-	allids = document.getElementById('idlist').value;	
+	allids = document.getElementById('idlist').value;
 	fnvshobj(oButton,'sendmail_cont');
 	sendmail(module,allids);
 }

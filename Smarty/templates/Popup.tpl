@@ -69,6 +69,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 					<td  width=30% nowrap class="componentName" align=right>{$APP.VTIGER}</td>
 				</tr>
 			</table>
+			<div id="status" style="position:absolute;display:none;right:135px;top:15px;height:27px;white-space:nowrap;"><img src="{$IMAGE_PATH}status.gif"></div>
 			<table width="100%" cellpadding="5" cellspacing="0" border="0"  class="homePageMatrixHdr">
 				<tr>
 					<td style="padding:10px;" >
@@ -116,7 +117,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 				</tr>
 				{if $recid_var_value neq ''}
                                 <tr>
-                                        <td align="right"><input id="all_contacts" alt="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.$MODULE}" title="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.$MODULE}" accessKey="" class="crmbutton small edit" value="{$APP.SHOW_ALL}&nbsp;{$MODULE}" LANGUAGE=javascript onclick="window.location.href=showAllRecords();" type="button"  name="button"></td>
+                                        <td align="right"><input id="all_contacts" alt="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.$MODULE}" title="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.$MODULE}" accessKey="" class="crmbutton small edit" value="{$APP.SHOW_ALL}&nbsp;{$APP.$MODULE}" LANGUAGE=javascript onclick="window.location.href=showAllRecords();" type="button"  name="button"></td>
                                 </tr>
                                 {/if}
 			</table>
@@ -155,12 +156,14 @@ function callSearch(searchtype)
 	urlstring += '&maintab='+act_tab;
 	urlstring = urlstring +'&query=true&file=Popup&module={$MODULE}&action={$MODULE}Ajax&ajax=true&search=true';
 	urlstring +=gethiddenelements();
+	$("status").style.display="inline";
 	new Ajax.Request(
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
 				method: 'post',
 				postBody: urlstring,
 				onComplete: function(response) {ldelim}
+					$("status").style.display="none";
 					$("ListViewContents").innerHTML= response.responseText;
 				{rdelim}
 			{rdelim}
@@ -179,13 +182,15 @@ function alphabetic(module,url,dataid)
     gPopupAlphaSearchUrl = '&'+url;	
     var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true&search=true&"+url;
     urlstring +=gethiddenelements();
+    $("status").style.display="inline";
     new Ajax.Request(
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
                                 method: 'post',
                                 postBody: urlstring,
                                 onComplete: function(response) {ldelim}
-                                        $("ListViewContents").innerHTML= response.responseText;
+                                	$("status").style.display="none";
+									$("ListViewContents").innerHTML= response.responseText;
 				{rdelim}
 			{rdelim}
 		);

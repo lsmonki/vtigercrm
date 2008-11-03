@@ -168,13 +168,14 @@ function callSearch(searchtype)
                 urlstring += 'search_cnt='+no_rows+'&';
                 urlstring += 'searchtype=advance&'
         {rdelim}
+    $("status").style.display="inline";
 	new Ajax.Request(
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
 			method: 'post',
 			postBody:urlstring +'query=true&file=ListView&module={$MODULE}&action={$MODULE}Ajax&ajax=true&search=true',
 			onComplete: function(response) {ldelim}
-				$("status").style.display="none";
+								$("status").style.display="none";
                                 result = response.responseText.split('&#&#&#');
                                 $("ListViewContents").innerHTML= result[2];
                                 if(result[1] != '')
@@ -397,25 +398,32 @@ function alphabetic(module,url,dataid)
 					     <tr>{$NAVIGATION}</tr>
 					</table>
                     </td>
-				 <td width=100% align="right">
+				 <td width="100%" align="right">
 				   <table border=0 cellspacing=0 cellpadding=0 class="small">
 					<tr>
 						<td>{$APP.LBL_VIEW}</td>
 						<td style="padding-left:5px;padding-right:5px">
-                                                    <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT></td>
-                                                    {if $ALL eq 'All'}
-							<td><a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
-							<span class="small">|</span>
-							<span class="small" disabled>{$APP.LNK_CV_EDIT}</span>
-							<span class="small">|</span>
-                                                        <span class="small" disabled>{$APP.LNK_CV_DELETE}</span></td>
+                            <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT>
+                        </td>
+                        <td>
+                            {if $ALL eq 'All'}
+								<a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
+								<span class="small">|</span>
+								<span class="small" disabled>{$APP.LNK_CV_EDIT}</span>
+								<span class="small">|</span>
+                            	<span class="small" disabled>{$APP.LNK_CV_DELETE}</span></td>
 						    {else}
-							<td><a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
-							<span class="small">|</span>
-                                                        <a href="index.php?module={$MODULE}&action=CustomView&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_EDIT}</a>
-                                                        <span class="small">|</span>
-							<a href="javascript:confirmdelete('index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}')">{$APP.LNK_CV_DELETE}</a></td>
+								<a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
+								<span class="small">|</span>
+                                <a href="index.php?module={$MODULE}&action=CustomView&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_EDIT}</a>
+                                <span class="small">|</span>
+								<a href="javascript:confirmdelete('index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}')">{$APP.LNK_CV_DELETE}</a>
 						    {/if}
+							{if $CUSTOMVIEW_PERMISSION.ChangedStatus neq '' && $CUSTOMVIEW_PERMISSION.Label neq ''}
+								<span class="small">|</span>	
+							   		<a href="#" id="customstatus_id" onClick="ChangeCustomViewStatus({$VIEWID},{$CUSTOMVIEW_PERMISSION.Status},{$CUSTOMVIEW_PERMISSION.ChangedStatus},'{$MODULE}','{$CUSTOMVIEW_PERMISSION.Label}')">{$CUSTOMVIEW_PERMISSION.Label}</a>
+							{/if}
+						</td>
 					</tr>
 				   </table>
 				 </td>	

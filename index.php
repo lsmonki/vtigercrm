@@ -455,7 +455,7 @@ if($use_current_login)
 		else
 			$auditrecord = $record;	
 
-		$date_var = $adb->formatDate(date('YmdHis'), true);
+		$date_var = $adb->formatDate(date('Y-m-d H:i:s'), true);
 		if ($action != 'chat')
 		{	
 			$query = "insert into vtiger_audit_trial values(?,?,?,?,?,?)";
@@ -716,7 +716,7 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	</script>
 		";
 
-	if((!$skipFooters) && $action != "about_us" && $action != "vtchat" && $action != "ChangePassword" && $action != "body" && $action != $module."Ajax" && $action!='Popup' && $action != 'ImportStep3' && $action != 'ActivityAjax')
+	if((!$skipFooters) && $action != "about_us" && $action != "vtchat" && $action != "ChangePassword" && $action != "body" && $action != $module."Ajax" && $action!='Popup' && $action != 'ImportStep3' && $action != 'ActivityAjax' && $action != 'getListOfRecords')
 	
 	{
 		echo $copyrightstatement;

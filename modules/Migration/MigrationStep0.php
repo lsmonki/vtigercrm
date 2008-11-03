@@ -33,10 +33,17 @@ $smarty->assign("MODULE","Migration");
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 
-$db_status=check_db_utf8_support($adb);
+if($adb->isPostgres())
+	$db_status='1';
+else
+	$db_status=check_db_utf8_support($adb);
+	
 $config_status=get_config_status();
 
-$smarty->assign("DB_CHARSET", get_db_charset($adb));
+if($adb->isPostgres())
+	$smarty->assign("DB_CHARSET", 'UTF8');
+else
+	$smarty->assign("DB_CHARSET", get_db_charset($adb));
 $smarty->assign("DB_STATUS", $db_status);
 $smarty->assign("CONFIG_CHARSET", $default_charset);
 $smarty->assign("CONFIG_STATUS", $config_status);

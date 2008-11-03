@@ -31,15 +31,15 @@ require_once('include/utils/utils.php');
 
 		if($account_id_val=="None")
 		{
-			$account_id_val="";
+			$account_id_val=0;
 		}
 		if($contact_id_val=="None")
 		{
-			$contact_id_val="";
+			$contact_id_val=0;
 		}
 		if($potential_id_val =="None")	
 		{
-			$potential_id_val="";
+			$potential_id_val=0;
 		}
 		$update_sql="update vtiger_convertleadmapping set accountfid=?, contactfid=?, potentialfid=? where leadfid=?";
 		$update_params = array($account_id_val, $contact_id_val, $potential_id_val, $lead_id);

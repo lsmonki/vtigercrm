@@ -982,43 +982,6 @@ function to_html($string, $encode=true)
 	return $string;
 }
 
-/** Function to get the assigned user name or group name
-  * @param $id -- user id:: Type integer
-  * @param $module -- module name:: Type string
-    * @returns $string -- string:: Type string 
-      *
-       */
-
-//it seems the fun ction is not used
-function get_assigned_user_or_group_name($id,$module)
-{
-	global $log;
-	$log->debug("Entering get_assigned_user_or_group_name(".$id.",".$module.") method ...");
-	global $adb;
-
-	//it might so happen that an entity is assigned to a group but at that time the group has no members. even in this case, the query should return a valid value and not just blank
-
-  if($module == 'Leads')
-  {
-
-   $sql="select (case when (user_name is null) then  (vtiger_leadgrouprelation.groupname) else (user_name) end) as name from leads left join vtiger_users on vtiger_users.id= assigned_user_id left join vtiger_leadgrouprelation on vtiger_leadgrouprelation.leadid=leads.id where leads.deleted=0 and leads.id=?";
-   
-  }
-  else if($module == 'Tasks')
-  {
-       $sql="select (case when (user_name is null) then  (taskgrouprelation.groupname) else (user_name) end) as name from tasks left join vtiger_users on vtiger_users.id= assigned_user_id left join taskgrouprelation on taskgrouprelation.taskid=tasks.id where tasks.deleted=0 and tasks.id=?";
-  }
-  else if($module == 'Calls')
-  {
-       $sql="select (case when (user_name is null) then  (callgrouprelation.groupname) else (user_name) end) as name from calls left join vtiger_users on vtiger_users.id= assigned_user_id left join callgrouprelation on callgrouprelation.callid=calls.id where calls.deleted=0 and calls.id=?";
-  }
-
-	$result = $adb->pquery($sql, array($id));
-	$tempval = $adb->fetch_row($result);
-	$log->debug("Exiting get_assigned_user_or_group_name method ...");
-	return $tempval[0];
-}
-
 /** Function to get the tabname for a given id
   * @param $tabid -- tab id:: Type integer
     * @returns $string -- string:: Type string 
@@ -3054,7 +3017,7 @@ function getAccessPickListValues($module)
 	$log->debug("Entering into function getAccessPickListValues($module)");
 	
 	$id = getTabid($module);
-	$query = 'select fieldname,columnname,fieldid,fieldlabel,tabid,uitype from vtiger_field where tabid = ? and uitype in (15,16,111,33,55)';
+	$query = "select fieldname,columnname,fieldid,fieldlabel,tabid,uitype from vtiger_field where tabid = ? and uitype in ('15','16','111','33','55')";
 	$result = $adb->pquery($query, array($id));
 	
 	$roleid = $current_user->roleid;
@@ -3171,7 +3134,8 @@ function get_config_status() {
 function getMigrationCharsetFlag() {
 	global $adb;
 	
-	$db_status=check_db_utf8_support($adb);
+	if(!$adb->isPostgres())
+		$db_status=check_db_utf8_support($adb);
 	$config_status=get_config_status();	
 	
 	if ($db_status == $config_status) {

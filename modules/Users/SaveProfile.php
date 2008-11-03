@@ -17,9 +17,10 @@ $profilename = from_html(decode_html($_REQUEST['profile_name']));
 $description= from_html(decode_html($_REQUEST['profile_description']));
 $def_module = $_REQUEST['selected_module'];
 $def_tab = $_REQUEST['selected_tab'];
+$profile_id = $adb->getUniqueID("vtiger_profile");
 //Inserting values into Profile Table
-$sql1 = "insert into vtiger_profile values(?,?,?)";
-$adb->pquery($sql1, array('', $profilename, $description));
+$sql1 = "insert into vtiger_profile(profileid, profilename, description) values(?,?,?)";
+$adb->pquery($sql1, array($profile_id,$profilename, $description));
 
         //Retreiving the vtiger_profileid
         $sql2 = "select max(profileid) as current_id from vtiger_profile";

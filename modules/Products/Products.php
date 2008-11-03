@@ -24,6 +24,7 @@ class Products extends CRMEntity {
 
 	 // Josh added for importing and exporting -added in patch2
         var $unit_price;
+		var $module_id = "productid";
         var $table_name = "vtiger_products";
         var $object_name = "Product";
         var $entity_table = "vtiger_crmentity";
@@ -467,7 +468,7 @@ class Products extends CRMEntity {
 		else
 			$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
 
-		$query = "SELECT vtiger_potential.potentialid, vtiger_crmentity.crmid, vtiger_potential.potentialname, vtiger_account.accountname, vtiger_potential.accountid, vtiger_potential.sales_stage, vtiger_potential.amount, vtiger_potential.closingdate, case when (vtiger_users.user_name not like \"\") then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_crmentity.smownerid, vtiger_products.productname, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_products.expiry_date
+		$query = "SELECT vtiger_potential.potentialid, vtiger_crmentity.crmid, vtiger_potential.potentialname, vtiger_account.accountname, vtiger_potential.accountid, vtiger_potential.sales_stage, vtiger_potential.amount, vtiger_potential.closingdate, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_crmentity.smownerid, vtiger_products.productname, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_products.expiry_date
 			FROM vtiger_potential
 			INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_potential.potentialid
 			INNER JOIN vtiger_account ON vtiger_potential.accountid = vtiger_account.accountid
@@ -867,12 +868,6 @@ class Products extends CRMEntity {
 		$log->debug("Exiting create_export_query method ...");
                 return $query;
 
-	}
-
-	/** Function to handle module specific operations when restoring an entity 
-	*/
-	function restore_module($crmid) {
-		
 	}
 
 }

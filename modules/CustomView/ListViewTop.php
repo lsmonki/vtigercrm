@@ -73,7 +73,7 @@ function getKeyMetrics()
 				$listquery .= " AND vtiger_activity.activitytype != 'Emails' ";
 			$oCustomView = new CustomView($metriclist['module']);
 			$metricsql = $oCustomView->getMetricsCvListQuery($metriclist['id'],$listquery,$metriclist['module']);
-			if($metriclist['module'] == "Calendar")
+			if($metriclist['module'] == "Calendar" and !$adb->isPostgres())
 				$metricsql.=" group by vtiger_activity.activityid ";
 				
 			$metricresult = $adb->query($metricsql);

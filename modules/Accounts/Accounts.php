@@ -38,6 +38,7 @@ require_once('user_privileges/default_module_view.php');
 class Accounts extends CRMEntity {
 	var $log;
 	var $db;
+	var $module_id = "accountid";
 	var $table_name = "vtiger_account";
 	var $tab_name = Array('vtiger_crmentity','vtiger_account','vtiger_accountbillads','vtiger_accountshipads','vtiger_accountscf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_account'=>'accountid','vtiger_accountbillads'=>'accountaddressid','vtiger_accountshipads'=>'accountaddressid','vtiger_accountscf'=>'accountid');
@@ -783,12 +784,6 @@ class Accounts extends CRMEntity {
 		$mergeflds = $custom_fields;
 		$log->debug("Exiting getColumnNames_Acnt method ...");
 		return $mergeflds;
-	}
-
-	/** Function to handle module specific operations when restoring an entity 
-	*/
-	function restore_module($crmid) {
-		
 	}
 
 }

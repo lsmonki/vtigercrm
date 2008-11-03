@@ -783,6 +783,11 @@ class Users {
 			$fieldname=$this->db->query_result($result,$i,"fieldname");
 			$columname=$this->db->query_result($result,$i,"columnname");
 			$uitype=$this->db->query_result($result,$i,"uitype");
+		 	$typeofdata=$adb->query_result($result,$i,"typeofdata");
+		  
+		 	$typeofdata_array = explode("~",$typeofdata);
+		  	$datatype = $typeofdata_array[0];
+		  
 			if(isset($this->column_fields[$fieldname]))
 			{
 				if($uitype == 56)
@@ -834,7 +839,7 @@ class Users {
 				$fldvalue = '';
 			}
 			if($fldvalue=='') {
-				$fldvalue = $this->get_column_value($columname, $fldvalue, $fieldname, $uitype);
+				$fldvalue = $this->get_column_value($columname, $fldvalue, $fieldname, $uitype, $datatype);
 				//$fldvalue =null;
 			}
 			if($insertion_mode == 'edit')
@@ -854,7 +859,6 @@ class Users {
 				$column .= ", ".$columname;
 				array_push($qparams, $fldvalue);
 			}
-
 		}
 
 		if($insertion_mode == 'edit')
@@ -873,7 +877,6 @@ class Users {
 			$sql1 = "insert into $table_name ($column) values(". generateQuestionMarks($qparams) .")";
 			$this->db->pquery($sql1, $qparams); 
 		}
-
 	}
 
 
@@ -973,7 +976,7 @@ class Users {
 		global $current_user;
 		global $upload_badext;
 
-		$date_var = date('YmdHis');
+		$date_var = date('Y-m-d H:i:s');
 
 		//to get the owner id
 		$ownerid = $this->column_fields['assigned_user_id'];
@@ -1279,9 +1282,12 @@ class Users {
 	* @param $input_value -- Input value for the column taken from the User
 	* @return Column value of the field.
 	*/
-	function get_column_value($columname, $fldvalue, $fieldname, $uitype) {
+	function get_column_value($columname, $fldvalue, $fieldname, $uitype, $datatype) {
 		if (is_uitype($uitype, "_date_") && $fldvalue == '') {
 			return null;
+		}
+		if ($datatype == 'I' || $datatype == 'N' || $datatype == 'NN'){
+			return 0;
 		}
 		return $fldvalue;
 	}

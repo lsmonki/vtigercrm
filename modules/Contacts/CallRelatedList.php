@@ -66,7 +66,7 @@ $parent_email = getEmailParentsList('Contacts',$_REQUEST['record']);
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
 	$userid = $current_user->id;
-	$sql = "select fieldname from vtiger_field where uitype = 13 and tabid = 4";
+	$sql = "select fieldname from vtiger_field where uitype = '13' and tabid = 4";
 	$result = $adb->pquery($sql, array());
 	$num_fieldnames = $adb->num_rows($result);
 	for($i = 0; $i < $num_fieldnames; $i++)

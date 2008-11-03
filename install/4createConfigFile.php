@@ -58,10 +58,10 @@ if (isset($_REQUEST['db_hostname']))
 	else
 	{
 		$db_hostname = $_REQUEST['db_hostname'];
-		if($db_type == "pgsql")
+		/*if($db_type == "pgsql")
 		     $db_port = '5432';
 		else
-		     $db_port = '3306';
+		     $db_port = '3306';*/
 	}	
 }
 if (isset($_REQUEST['db_username']))$db_username = $_REQUEST['db_username'];

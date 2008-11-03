@@ -31,7 +31,6 @@ function tagvalidate()
 	{rdelim}
 {rdelim}
 
-<!-- Start of code added by SAKTI on 17th Jun, 2008 -->
 {literal}
 function setCoOrdinate()
 {

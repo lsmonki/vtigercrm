@@ -36,7 +36,6 @@ function callConvertLeadDiv(id)
                 }
         );
 }
-<!-- Start Of Code modified by SAKTI on 10th Apr, 2008 -->
 function showHideStatus(sId,anchorImgId,sImagePath)
 {
 	oObj = eval(document.getElementById(sId));
@@ -356,14 +355,11 @@ function sendfile_email()
 							{/if}
 
 
-<!-- ADD by tanmoy on 26/04/2008-->
 	{if $header neq 'Comments'}
-   <!-- end by tanmoy on 26/04/2008 -->
-
+ 
 						     <tr>{strip}
 						     <td colspan=4 class="dvInnerHeader">
 							
-							<!-- Start Of Code modified by SAKTI on 10th Apr, 2008 -->
 							<div style="float:left;font-weight:bold;"><div style="float:left;"><a href="javascript:showHideStatus('tbl{$header|replace:' ':''}','aid{$header|replace:' ':''}','{$IMAGE_PATH}');">
 							{if $BLOCKINITIALSTATUS[$header] eq 1}
 								<img id="aid{$header|replace:' ':''}" src="{$IMAGE_PATH}activate.gif" style="border: 0px solid #000000;" alt="Hide" title="Hide"/>
@@ -375,20 +371,15 @@ function sendfile_email()
 	  			     			</b></div>
 						     </td>{/strip}
 					             </tr>
-		<!-- ADD by tanmoy on 26/04/2008-->
 {/if}
-<!-- end by tanmoy on 26/04/2008 -->						 
 							</table>
-	<!-- ADD by tanmoy on 26/04/2008-->
 {if $header neq 'Comments'}
-<!-- end by tanmoy on 26/04/2008 -->						
 							{if $BLOCKINITIALSTATUS[$header] eq 1}
 							<div style="width:auto;display:block;" id="tbl{$header|replace:' ':''}" >
 							{else}
 							<div style="width:auto;display:none;" id="tbl{$header|replace:' ':''}" >
 							{/if}
 							<table border=0 cellspacing=0 cellpadding=0 width="100%" class="small">
-							<!-- End Of Code modified by SAKTI on 10th Apr, 2008-->
 						   {foreach item=detail from=$detail}
 						     <tr style="height:25px">
 							{foreach key=label item=data from=$detail}
@@ -434,8 +425,7 @@ function sendfile_email()
 						      </tr>	
 						   {/foreach}	
 						     </table>
-							 </div> <!-- Line added by SAKTI on 10th Apr, 2008 -->
-							 <!-- ADD by tanmoy on 26/04/2008-->
+							 </div>
 {/if}
                      	                      </td>
 					   </tr>

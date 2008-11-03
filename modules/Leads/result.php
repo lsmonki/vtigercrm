@@ -25,95 +25,95 @@ $data->read($filename);
 
 //echo 'First Name';
 
-$firstname = $HTTP_POST_VARS['First_Name'];
+$firstname = $_REQUEST['First_Name'];
 
 $log->info("firstname is ".$firstname);
-$lastname = $HTTP_POST_VARS['Last_Name'];
+$lastname = $_REQUEST['Last_Name'];
 
 $log->info("lastname is ".$lastname);
-$phone = $HTTP_POST_VARS['Phone'];
+$phone = $_REQUEST['Phone'];
 $log->info("phone is ".$phone);
-$mobile = $HTTP_POST_VARS['Mobile'];
+$mobile = $_REQUEST['Mobile'];
 $log->info("mobile is ".$mobile);
 
-$company = $HTTP_POST_VARS['Company'];
+$company = $_REQUEST['Company'];
 $log->info("company is ".$company);
 //echo $company;
 
-$fax = $HTTP_POST_VARS['Fax'];
+$fax = $_REQUEST['Fax'];
 $log->info("fax is ".$fax);
 
-$designation = $HTTP_POST_VARS['Designation'];
+$designation = $_REQUEST['Designation'];
 
 $log->info("designation is ".$designation);
-$email = $HTTP_POST_VARS['Email'];
+$email = $_REQUEST['Email'];
 
 $log->info("email is ".$email);
-$salutation = $HTTP_POST_VARS['Salutation'];
+$salutation = $_REQUEST['Salutation'];
 //not being used
 
 $log->info("salutation is  ".$salutation);
 //echo 'LeadSource';
-$leadsource = $HTTP_POST_VARS['LeadSource'];
+$leadsource = $_REQUEST['LeadSource'];
 
 $log->info("leadsource is ".$leadsource);  
-$website = $HTTP_POST_VARS['Website'];
+$website = $_REQUEST['Website'];
 $log->info("website is ".$website);  
 //echo 'Industry';
-$industry = $HTTP_POST_VARS['Industry'];
+$industry = $_REQUEST['Industry'];
 $log->info("industry is ".$industry);
 //echo $industry;
 
 //echo 'LeadStatus';
-$leadstatus = $HTTP_POST_VARS['LeadStatus'];
+$leadstatus = $_REQUEST['LeadStatus'];
 $log->info("leadstatus is ".$leadstatus);  
 //echo $leadstatus;
 
 //echo 'AnnualRevenue';
-$annualrevenue = $HTTP_POST_VARS['Annual_Revenue'];
+$annualrevenue = $_REQUEST['Annual_Revenue'];
 $log->info("annualrevenue is ".$annualrevenue);  
 //echo $annualrevenue;
 
 
 //echo 'Rating';
-$rating = $HTTP_POST_VARS['Rating'];
+$rating = $_REQUEST['Rating'];
 //echo $rating;
 
 
 //echo 'LicenseKey';
-$licensekey = $HTTP_POST_VARS['License_Key'];
+$licensekey = $_REQUEST['License_Key'];
 //echo $licensekey;
 
 //echo 'EmpCount';
-$employeecount = $HTTP_POST_VARS['Number_of_Employees'];
+$employeecount = $_REQUEST['Number_of_Employees'];
 //echo $employeecount;
 
 //echo 'Assto';
-$assignedto = $HTTP_POST_VARS['Assigned_To'];
+$assignedto = $_REQUEST['Assigned_To'];
 //echo $assignedto;
 
 
 //echo 'yahooid';
-$yahooid = $HTTP_POST_VARS['Yahoo_ID'];
+$yahooid = $_REQUEST['Yahoo_ID'];
 //echo $yahooid;
 
 
 //echo 'Street';
-$street = $HTTP_POST_VARS['Street'];
+$street = $_REQUEST['Street'];
 //echo 'Postal';
-$postalcode = $HTTP_POST_VARS['Postal_Code'];
+$postalcode = $_REQUEST['Postal_Code'];
 //echo $postalcode;
 
 //echo 'City';
-$city = $HTTP_POST_VARS['City'];
+$city = $_REQUEST['City'];
 //echo $city;
 
 //echo 'COuntry';
-$country = $HTTP_POST_VARS['Country'];
+$country = $_REQUEST['Country'];
 //echo $country;
-$description = $HTTP_POST_VARS['Description'];
+$description = $_REQUEST['Description'];
 //echo $description;
-$stage = $HTTP_POST_VARS['Stage'];
+$stage = $_REQUEST['Stage'];
 //echo $description;
 function deleteFile($filename)
 {
@@ -181,7 +181,7 @@ for($i=2;$i<=$data->sheets[0]['numRows']; $i++)
 				{
 					$fldLabel=$adb->query_result($custresult,$j,"fieldlabel");
 					$colName=$adb->query_result($custresult,$j,"column_name");
-					$colNameMapping = $HTTP_POST_VARS[$colName];
+					$colNameMapping = $_REQUEST[$colName];
 					$value_colName = $data->sheets[0]['cells'][$i][$colNameMapping];
 
 					if($j == 0)
@@ -208,8 +208,8 @@ function insert2DB($salutation,$firstname,$lastname,$company,$designation,$leads
   global $log;
   $log->debug("Entering insert2DB(".$salutation.",".$firstname.",".$lastname.",".$company.",".$designation.",".$leadsrc.",".$industry.",".$annualrevenue.",".$licensekey.",".$phone.",".$mobile.",".$fax.",".$email.",".$yahooid.",".$website.",".$leadstatus.",".$rating.",".$empct.") method ...");
   $id = create_guid();
-  $date_entered = date('YmdHis');
-  $date_modified = date('YmdHis');
+  $date_entered = date('Y-m-d H:i:s');
+  $date_modified = date('Y-m-d H:i:s');
   global $current_user;	
 
   $modified_user_id = $current_user->id;

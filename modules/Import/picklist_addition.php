@@ -12,7 +12,7 @@ global $adb;
 $tabid = getTabid($_REQUEST['module']);
 
 //First we have to collect all available picklist and their values from the corresponding picklist tables
-$picklist_result = $adb->query("select fieldname from vtiger_field where uitype in (15,16,111) and tabid=$tabid");
+$picklist_result = $adb->query("select fieldname from vtiger_field where uitype in ('15','16','111') and tabid=$tabid");
 $no_of_picklists = $adb->num_rows($picklist_result);
 for($i=0;$i<$no_of_picklists;$i++)
 {

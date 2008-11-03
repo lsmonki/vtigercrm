@@ -62,7 +62,7 @@ if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
 	$userid = $current_user->id;
-	$sql = "select fieldname from vtiger_field where uitype = 13 and tabid = 7";
+	$sql = "select fieldname from vtiger_field where uitype = '13' and tabid = 7";
 	$result = $adb->pquery($sql, array());
 	$num_fieldnames = $adb->num_rows($result);
 	for($i = 0; $i < $num_fieldnames; $i++)

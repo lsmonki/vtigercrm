@@ -240,9 +240,7 @@ window.onresize = setCoOrdinate;
    {/strip}
 </table>
 <!-- Button displayed - finished-->
-							  <!-- Start of File Include by SAKTI on 10th Apr, 2008 -->
 							 {include_php file="./include/DetailViewBlockStatus.php"}
-							 <!-- Start of File Include by SAKTI on 10th Apr, 2008 -->
 
 <!-- Entity information(blocks) display - start -->
 {foreach key=header item=detail from=$BLOCKS}
@@ -258,7 +256,6 @@ window.onresize = setCoOrdinate;
 		{strip}
 		<td colspan=4 class="dvInnerHeader" >
 							
-							<!-- Start Of Code modified by SAKTI on 10th Apr, 2008 -->
 							<div style="float:left;font-weight:bold;"><div style="float:left;"><a href="javascript:showHideStatus('tbl{$header|replace:' ':''}','aid{$header|replace:' ':''}','{$IMAGE_PATH}');">
 							{if $BLOCKINITIALSTATUS[$header] eq 1}
 								<img id="aid{$header|replace:' ':''}" src="{$IMAGE_PATH}activate.gif" style="border: 0px solid #000000;" alt="Hide" title="Hide"/>
@@ -278,7 +275,6 @@ window.onresize = setCoOrdinate;
 							<div style="width:auto;display:none;" id="tbl{$header|replace:' ':''}" >
 							{/if}
 							<table border=0 cellspacing=0 cellpadding=0 width="100%" class="small">
-							<!-- End Of Code modified by SAKTI on 10th Apr, 2008-->
 
 	   {foreach item=detail from=$detail}
 	   <tr style="height:25px">

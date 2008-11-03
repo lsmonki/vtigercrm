@@ -90,23 +90,29 @@ class CustomView extends CRMEntity{
 			{
 				$query="select cvid from vtiger_customview where setdefault=1 and entitytype=?";
 				$cvresult=$adb->pquery($query, array($module));
-				if($adb->num_rows($cvresult) == 0)
-				{
-					$query="select cvid from vtiger_customview where viewname='All' and entitytype=?";
-					$cvresult=$adb->pquery($query, array($module));
-				}
-				$viewid = $adb->query_result($cvresult,0,'cvid');;
+				if($adb->num_rows($cvresult) > 0) {
+					$viewid = $adb->query_result($cvresult,0,'cvid');
+				} else $viewid = '';
+			}
+		
+			if($viewid == '' || $viewid == 0 || $this->isPermittedCustomView($viewid,$now_action,$module) != 'yes')
+			{
+				$query="select cvid from vtiger_customview where viewname='All' and entitytype=?";
+				$cvresult=$adb->pquery($query, array($module));
+				$viewid = $adb->query_result($cvresult,0,'cvid');
 			}
 		}
 		else
 		{
-			if($this->isPermittedCustomView($_REQUEST['viewname'],$now_action,$this->customviewmodule) == 'yes')
-				$viewid =  $_REQUEST['viewname'];
-			else
+			$viewname = $_REQUEST['viewname'];
+			if((is_string($viewname) && strtolower($viewname) == 'all') || $viewname == 0) {
+        		$viewid = $this->getViewIdByName('All', $module);
+			} else { 
+        		$viewid = $viewname;
+			}
+			if($this->isPermittedCustomView($viewid,$now_action,$this->customviewmodule) != 'yes')
 				$viewid = 0;
 		}
-		if(is_string($viewid) && strtolower($viewid) == 'all')
-        		$viewid = $this->getViewIdByName('All', $module);
 		$_SESSION['lvs'][$module]["viewname"] = $viewid;
 		return $viewid;
 
@@ -1416,7 +1422,7 @@ class CustomView extends CRMEntity{
 	{
 	
 		global $adb, $default_charset;
-                $value=html_entity_decode(trim($value),ENT_QUOTES,$default_charset);
+		$value=html_entity_decode(trim($value),ENT_QUOTES,$default_charset);
 		$value = mysql_real_escape_string($value);
 		if($comparator == "e")
 		{

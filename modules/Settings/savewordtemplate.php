@@ -65,7 +65,7 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 		//$data = addslashes(fread(fopen($uploaddir.$binFile, "r"), $filesize));
 	        //$textDesc = $_REQUEST['txtDescription'];	
 	//    $fileid = create_guid();
-		$date_entered = date('YmdHis');
+		$date_entered = date('Y-m-d H:i:s');
 		//Retreiving the return module and setting the parent type
 		
 		$ret_module = $_REQUEST['return_module'];

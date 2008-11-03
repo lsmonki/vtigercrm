@@ -11,28 +11,28 @@
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 global $mod_strings;
- $fldmodule=$_REQUEST['fld_module'];
- $fldType= $_REQUEST['fieldType'];
- $parenttab=$_REQUEST['parenttab'];
- $mode=$_REQUEST['mode'];
- $fldlabel = trim($_REQUEST[fldLabel]);
- $tabid = getTabid($fldmodule);
+$fldmodule=$_REQUEST['fld_module'];
+$fldType= $_REQUEST['fieldType'];
+$parenttab=$_REQUEST['parenttab'];
+$mode=$_REQUEST['mode'];
+$fldlabel = trim($_REQUEST[fldLabel]);
+$tabid = getTabid($fldmodule);
 
 function InStrCount($String,$Find,$CaseSensitive = false) {
     $i=0;
     $x=0;
     while (strlen($String)>=$i) {
-     unset($substring);
-     if ($CaseSensitive) {
-      $Find=strtolower($Find);
-      $String=strtolower($String);
-     }
-     $substring=substr($String,$i,strlen($Find));
-     if ($substring==$Find) $x++;
-     $i++;
+     	unset($substring);
+     	if ($CaseSensitive) {
+      		$Find=strtolower($Find);
+      		$String=strtolower($String);
+     	}
+     	$substring=substr($String,$i,strlen($Find));
+     	if ($substring==$Find) $x++;
+     	$i++;
     }
     return $x;
-   }
+}
    
 if($_REQUEST[mode]=='edit')
 {
@@ -129,19 +129,7 @@ if($_REQUEST[mode]=='edit')
 			}//check if blank
 		}
 	}
-}	
+}
 
-////to delete file that are old ////
-
- function fileDelete($filepath,$filename) {  
-        $success = FALSE;  
-       if (file_exists($filepath.$filename)&&$filename!=""&&$filename!="n/a") {  
-         unlink ($filepath.$filename);  
-         $success = TRUE;  
-         }  
-     return $success;      
-   }  
-   
-///end of delete/////////// 
-	header("Location:index.php?module=Settings&action=LayoutBlockList&fld_module=".$fldmodule."&parenttab=".$parenttab."&duplicate=".$dup_error);
+header("Location:index.php?module=Settings&action=LayoutBlockList&fld_module=".$fldmodule."&parenttab=".$parenttab."&duplicate=".$dup_error);
 ?>

@@ -245,16 +245,6 @@ if($cvmodule != "")
 						$advfiltersql = "INSERT INTO vtiger_cvadvfilter (cvid,columnindex,columnname,comparator,value) VALUES (?,?,?,?,?)";
 						$advfilterparams = array($genCVid, $i, $adv_filter_col[$i], $adv_filter_option[$i], $adv_filter_value[$i]);
 						$advfilterresult = $adb->pquery($advfiltersql, $advfilterparams);
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 					}
 					$log->info("CustomView :: Save :: vtiger_cvadvfilter update successfully".$genCVid);
 				}

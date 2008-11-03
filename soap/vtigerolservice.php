@@ -476,7 +476,7 @@ function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$us
 	require_once('modules/Users/Users.php');
 	require_once('include/utils/utils.php');
 	$filename = preg_replace('/\s+/', '_', $filename);//replace space with _ in filename
-	$date_var = date('YmdHis');
+	$date_var = date('Y-m-d H:i:s');
 
 	$seed_user = new Users();
 	$user_id = $seed_user->retrieve_user_id($username);

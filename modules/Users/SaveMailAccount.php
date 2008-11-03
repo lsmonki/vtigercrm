@@ -24,6 +24,8 @@ $mails_per_page = $_REQUEST['mails_per_page'];
 $ssltype = $_REQUEST["ssltype"];
 $sslmeth = $_REQUEST["sslmeth"];
 
+if($mails_per_page == '') $mails_per_page='0';
+
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
 	$id=$_REQUEST['record'];

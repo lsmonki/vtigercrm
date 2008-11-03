@@ -54,7 +54,7 @@ function getStdContactFlds(&$queryFields, $adb, $valueArray)
 {
   global $current_language;
   require_once('modules/Contacts/language/'.$current_language.'.lang.php');
-  $query = "SELECT fieldid, columnname, fieldlabel FROM vtiger_field WHERE tablename='vtiger_contactdetails' AND uitype=56";
+  $query = "SELECT fieldid, columnname, fieldlabel FROM vtiger_field WHERE tablename='vtiger_contactdetails' AND uitype='56'";
 	$result = $adb->query ($query,true,"Error: "."<BR>$query");
 	for ($tmp=0; $tmp < $adb->num_rows($result); $tmp++)
 	{
@@ -186,7 +186,7 @@ else
 	   INNER JOIN vtiger_accountscf ON vtiger_account.accountid = vtiger_accountscf.accountid
 	   INNER JOIN vtiger_contactdetails contactdetails ON vtiger_account.accountid = contactdetails.accountid
 	   INNER JOIN vtiger_contactscf contactscf ON contactscf.contactid = contactdetails.contactid
-	   WHERE crmentity.deleted=0 AND contactdetails.email != \"\" ".$where;
+	   WHERE crmentity.deleted=0 AND contactdetails.email != '' ".$where;
 
 	 if (strlen ($exportWhere))
 	      $exquery[0] .= " AND ".$exportWhere;

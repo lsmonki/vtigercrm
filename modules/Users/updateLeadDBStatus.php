@@ -74,7 +74,7 @@ $storearray = explode(";",trim($idlist,';'));
 
 $ids_list = array();
 
-$date_var = date('YmdHis');
+$date_var = date('Y-m-d H:i:s');
 
 if((isset($_REQUEST['user_id']) && $_REQUEST['user_id']!='') || ($_REQUEST['group_id'] != ''))
 {

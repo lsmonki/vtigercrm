@@ -55,9 +55,9 @@ $log->debug("DEBUG In add2db.php");
 		{
 			$desc = $_REQUEST['txtDescription'];
 			$subject = $_REQUEST['uploadsubject'];
-			$date_var = $adb->formatDate(date('YmdHis'), true);	
+			$date_var = $adb->formatDate(date('Y-m-d H:i:s'), true);	
 			$current_date = getdate();
-			$current_date = $adb->formatDate(date('YmdHis'), true);	
+			$current_date = $adb->formatDate(date('Y-m-d H:i:s'), true);	
 			$query = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?)";
 			$params = array($current_id, $current_user->id, $current_user->id, $_REQUEST['return_module'].' Attachment', $desc, $date_var, $current_date);	
 			$result = $adb->pquery($query, $params);

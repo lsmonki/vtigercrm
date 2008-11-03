@@ -16,19 +16,33 @@
 //Make a count query
 function mkCountQuery($query)
 {
+    // Remove all the \n, \r and white spaces to keep the space between the words consistent. 
+    // This is required for proper pattern matching for words like ' FROM ', 'ORDER BY', 'GROUP BY' as they depend on the spaces between the words.
+    $query = preg_replace("/[\n\r\s]+/"," ",$query);
+    
     //Strip of the current SELECT fields and replace them by "select count(*) as count"
-    $query = "SELECT count(*) AS count ".substr($query, strpos($query,'FROM'),strlen($query));
+    // Space across FROM has to be retained here so that we do not have a clash with string "from" found in select clause
+    $query = "SELECT count(*) AS count ".substr($query, stripos($query,' FROM '),strlen($query));
 
     //Strip of any "GROUP BY" clause
-    if( strpos($query,'GROUP') > 0)
-	$query = substr($query, 0, strpos($query,'GROUP'));
+    if(stripos($query,'GROUP BY') > 0)
+	$query = substr($query, 0, stripos($query,'GROUP BY'));
 
     //Strip of any "ORDER BY" clause
-    if( strpos($query,'ORDER') > 0)
-	$query = substr($query, 0, strpos($query,'ORDER'));
+    if(stripos($query,'ORDER BY') > 0)
+	$query = substr($query, 0, stripos($query,'ORDER BY'));
 
     //That's it
     return( $query);
+}
+
+//Added for PHP version less than 5
+if (!function_exists("stripos"))
+{
+	function stripos($query,$needle)
+	{
+		return strpos(strtolower($query),strtolower($needle));
+	}
 }
 
 ?>

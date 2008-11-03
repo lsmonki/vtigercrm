@@ -335,7 +335,7 @@ function addInventoryHistory($module, $id, $relatedname, $total, $history_fldval
 				    );
 
 	$histid = $adb->getUniqueID($history_table_array[$module]);
- 	$modifiedtime = $adb->formatDate(date('YmdHis'), true);
+ 	$modifiedtime = $adb->formatDate(date('Y-m-d H:i:s'), true);
  	$query = "insert into $history_table_array[$module] values(?,?,?,?,?,?)";
 	$qparams = array($histid,$id,$relatedname,$total,$history_fldval,$modifiedtime);	
 	$adb->pquery($query, $qparams);

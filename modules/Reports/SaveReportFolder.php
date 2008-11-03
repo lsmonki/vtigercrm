@@ -36,8 +36,8 @@ if($mode=="Save")
 	if($rfid=="")
 	{
 		$sql = "INSERT INTO vtiger_reportfolder ";
-		$sql .= "(FOLDERID,FOLDERNAME,DESCRIPTION,STATE) VALUES (?,?,?,?)";
-		$sql_params = array('', trim($foldername), $folderdesc,'CUSTOMIZED');
+		$sql .= "(FOLDERNAME,DESCRIPTION,STATE) VALUES (?,?,?)";
+		$sql_params = array(trim($foldername), $folderdesc,'CUSTOMIZED');
 		$result = $adb->pquery($sql, $sql_params);
 		if($result!=false)
 		{

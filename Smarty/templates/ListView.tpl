@@ -173,18 +173,19 @@ function callSearch(searchtype)
                 urlstring += 'search_cnt='+no_rows+'&';
                 urlstring += 'searchtype=advance&'
         {rdelim}
+	$("status").style.display="inline";
 	new Ajax.Request(
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
 			method: 'post',
 			postBody:urlstring +'query=true&file=index&module={$MODULE}&action={$MODULE}Ajax&ajax=true&search=true',
 			onComplete: function(response) {ldelim}
-				$("status").style.display="none";
+								$("status").style.display="none";
                                 result = response.responseText.split('&#&#&#');
                                 $("ListViewContents").innerHTML= result[2];
                                 if(result[1] != '')
-                                       alert(result[1]);
-				$('basicsearchcolumns').innerHTML = '';
+									alert(result[1]);
+								$('basicsearchcolumns').innerHTML = '';
 			{rdelim}
 	       {rdelim}
         );

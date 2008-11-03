@@ -567,15 +567,9 @@
 		<field name="user_name" type="C" size="50" />
 		<field name="user_password" type="C" size="30" />
 		<field name="type" type="C" size="5" />
-		<field name="last_login_time" type="T">
-			<notnull />
-		</field>
-		<field name="login_time" type="T">
-			<notnull />
-		</field>
-		<field name="logout_time" type="T">
-			<notnull />
-		</field>
+		<field name="last_login_time" type="T" />
+		<field name="login_time" type="T" />
+		<field name="logout_time" type="T" />
 		<field name="isactive" type="I" size="1" />
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
@@ -984,16 +978,11 @@
 		<field name="name" type="C" size="255">
 			<notnull />
 		</field>
-		<field name="description" type="C" size="100" />
+		<field name="description" type="X" />
 		<field name="type" type="C" size="100" />
 		<field name="path" type="X" />
 		<field name="subject" type="C" size="255" />
 		<index name="attachments_attachmentsid_idx">
-			<col>attachmentsid</col>
-		</index>
-		<index name="attachments_description_type_attachmentsid_idx">
-			<col>description</col>
-			<col>type</col>
 			<col>attachmentsid</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
@@ -3067,7 +3056,7 @@
 		</field>
 		<field name="sales_stage" type="C" size="200">
 		</field>
-		<field name="PRESENCE" type="I" size="1">
+		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
@@ -3084,7 +3073,7 @@
 			<autoincrement />
 		</field>
 		<field name="faqcategories" type="C" size="200" />
-		<field name="PRESENCE" type="I" size="1">
+		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
@@ -3101,7 +3090,7 @@
 			<autoincrement />
 		</field>
 		<field name="faqstatus" type="C" size="200" />
-		<field name="PRESENCE" type="I" size="1">
+		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
@@ -3118,7 +3107,7 @@
 			<autoincrement />
 		</field>
 		<field name="rating" type="C" size="200" />
-		<field name="PRESENCE" type="I" size="1">
+		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="1" />
 		</field>
@@ -3135,7 +3124,7 @@
 			<autoincrement />
 		</field>
 		<field name="ticketcategories" type="C" size="200" />
-		<field name="PRESENCE" type="I" size="1">
+		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="0" />
 		</field>
@@ -3152,7 +3141,7 @@
 			<autoincrement />
 		</field>
 		<field name="ticketpriorities" type="C" size="200" />
-		<field name="PRESENCE" type="I" size="1">
+		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="0" />
 		</field>
@@ -3169,7 +3158,7 @@
 			<autoincrement />
 		</field>
 		<field name="ticketseverities" type="C" size="200" />
-		<field name="PRESENCE" type="I" size="1">
+		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="0" />
 		</field>
@@ -3186,7 +3175,7 @@
 			<autoincrement />
 		</field>
 		<field name="ticketstatus" type="C" size="200" />
-		<field name="PRESENCE" type="I" size="1">
+		<field name="presence" type="I" size="1">
 			<notnull />
 			<default value="0" />
 		</field>
@@ -3354,15 +3343,15 @@
 		<field name="tabid" type="I" size="10">
 			<key />
 		</field>
-		<field name="Operation" type="I" size="10">
+		<field name="operation" type="I" size="10">
 			<key />
 		</field>
 		<field name="permissions" type="I" size="1" />
 
-		<index name="profile2standardpermissions_profileid_tabid_Operation_idx">
+		<index name="profile2standardpermissions_profileid_tabid_operation_idx">
 			<col>profileid</col>
 			<col>tabid</col>
-			<col>Operation</col>
+			<col>operation</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
@@ -5756,17 +5745,14 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
-	<table name="vtiger_picklistvalues_seq">
-		<field name="id" type="I" size="11" />
-	</table>
 	<table name="vtiger_role2picklist" alter="true">
-		<constraint>ADD CONSTRAINT `fk_1_vtiger_role2picklist` FOREIGN KEY (`roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE</constraint>
+		<constraint>ADD CONSTRAINT fk_1_vtiger_role2picklist FOREIGN KEY (roleid) REFERENCES vtiger_role (roleid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
 	</table>
 	<table name="vtiger_role2picklist" alter="true">
-		<constraint>ADD CONSTRAINT `fk_2_vtiger_role2picklist` FOREIGN KEY (`picklistid`) REFERENCES `vtiger_picklist` (`picklistid`) ON DELETE CASCADE</constraint>
+		<constraint>ADD CONSTRAINT fk_2_vtiger_role2picklist FOREIGN KEY (picklistid) REFERENCES vtiger_picklist (picklistid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
@@ -6013,7 +5999,7 @@
 			<notnull />
 			<default value="" />
 		</field>
-		<field name="idlists" type="C" size="50">
+		<field name="idlists" type="X">
 			<notnull />
 			<default value="" />
 		</field>

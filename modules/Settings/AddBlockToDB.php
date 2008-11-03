@@ -30,57 +30,27 @@ global $mod_strings;
 		}
 	}
 	if($flag!=1){
-		    $sql_seq="select sequence from vtiger_blocks where blockid='".$_REQUEST[blockselect]."'";
-			$res_seq= $adb->query($sql_seq);
+		    $sql_seq="select sequence from vtiger_blocks where blockid=?";
+			$res_seq= $adb->pquery($sql_seq, array($_REQUEST[blockselect]));
 		    $row_seq=$adb->fetch_array($res_seq);
 			$fld_sequence=$row_seq[sequence];
 			$newfld_sequence=$fld_sequence+1;
 			$fieldselect=$_REQUEST[fieldselect];
 			
-			$sql_up="update vtiger_blocks set sequence=sequence+1 where tabid='".$tabid."' and sequence > ".$fld_sequence;
-			$adb->query($sql_up);
-			
-			$blocklabel='CUSTOM_LBL_ADD_'.strtoupper(str_replace(" ","_",$_REQUEST[blocklabel]));
+			$sql_up="update vtiger_blocks set sequence=sequence+1 where tabid=? and sequence > ?";
+			$adb->pquery($sql_up, array($tabid,$fld_sequence));
 			
 			$sql='select max(blockid) as max_id from vtiger_blocks';
 			$res=$adb->query($sql);
 			$row=$adb->fetch_array($res);
 			$max_blockid=$row['max_id']+1;
 	
-			$sql="INSERT INTO vtiger_blocks set tabid='".$tabid."',blockid='".$max_blockid."',sequence='".$newfld_sequence."',blocklabel='".$_REQUEST[blocklabel]."'";	
-			$adb->query($sql);
-		
-			$replace_which=");";
-			
-			$replace_by="'".$blocklabel."'=>'".$_REQUEST[blocklabel]."',);";
-			$text=ereg_replace($replace_which,$replace_by,$text);
-			
-			/////for en_us.lang.php file///////
-			
-			/*$url='modules/'.$_REQUEST['fld_module'].'/language/'.$current_language.'.lang.php';
-			$text = implode('', file($url));
-			$takecopy=$text;
-			
-			$text=ereg_replace($replace_which,$replace_by,$text);
-			
-			$fh = fopen($url, 'w') or die("can't open file");
-			fwrite($fh, $text);
-			fclose($fh);*/
+			$sql="INSERT INTO vtiger_blocks (tabid, blockid, sequence, blocklabel) values (?,?,?,?)";	
+			$params = array($tabid,$max_blockid,$newfld_sequence,$_REQUEST[blocklabel]);
+			$adb->pquery($sql,$params);
 	}
 	else
 		$duplicate='yes';
-
-////to delete file that are old ////
-
- function fileDelete($filepath,$filename) {  
-        $success = FALSE;  
-       if (file_exists($filepath.$filename)&&$filename!=""&&$filename!="n/a") {  
-         unlink ($filepath.$filename);  
-         $success = TRUE;  
-         }  
-     return $success;      
-   }  
-   
-///end of delete///////////   
+  
 header("Location:index.php?module=Settings&action=LayoutBlockList&fld_module=".$fldmodule."&duplicate=".$duplicate."&parenttab=".$parenttab);
 ?>

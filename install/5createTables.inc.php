@@ -152,7 +152,7 @@ function create_default_users() {
 	$std_email ="standarduser@vtigeruser.com";
         $user->column_fields["email1"] = $standarduser_email;
 	//to get the role id for standard_user	
-	$role_query = "select roleid from vtiger_role where rolename='Vice President'";
+	$role_query = "SELECT roleid FROM vtiger_role WHERE rolename='Vice President'";
 	$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
 	$role_result = $db->query($role_query);
 	$role_id = $db->query_result($role_result,0,"roleid");

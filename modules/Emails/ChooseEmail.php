@@ -14,15 +14,15 @@ $entityid=$_REQUEST['entityid'];
 
 if ($pmodule=='Accounts')
 {
-	$querystr="select fieldid,fieldlabel,columnname,tablename from vtiger_field where tabid=6 and uitype=13;"; 
+	$querystr="select fieldid,fieldlabel,columnname,tablename from vtiger_field where tabid=6 and uitype='13';"; 
 }
 elseif ($pmodule=='Contacts')
 {
-	$querystr="select fieldid,fieldlabel,columnname from vtiger_field where tabid=4 and uitype=13;";
+	$querystr="select fieldid,fieldlabel,columnname from vtiger_field where tabid=4 and uitype='13';";
 }
 elseif ($pmodule=='Leads')
 {
-	$querystr="select fieldid,fieldlabel,columnname from vtiger_field where tabid=7 and uitype=13;";
+	$querystr="select fieldid,fieldlabel,columnname from vtiger_field where tabid=7 and uitype='13';";
 }
 $result=$adb->pquery($querystr, array());
 $numrows = $adb->num_rows($result);

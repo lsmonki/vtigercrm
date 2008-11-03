@@ -91,7 +91,8 @@ if($db_type)
 				$query = "create database ".$db_name;
 				// TODO: MySQL version less than 4.1.2 does not suppot UTF-8, a check here is required for it.
 				if($create_utf8_db == 'true') { 
-					$query .= " default character set utf8 default collate utf8_general_ci"; 
+					if($db_type=='mysql')
+						$query .= " default character set utf8 default collate utf8_general_ci"; 
 					$db_utf8_support = true;
 				}
 				if($createdb_conn->Execute($query)) {
@@ -120,6 +121,9 @@ $vt_charset = ($db_utf8_support)? "UTF-8" : "ISO-8859-1";
 // Check if the database suggested to be used has UTF-8 support
 // Prasad, 05 Dec 2007
 function check_db_utf8_support($conn) {
+	global $db_type;
+	if($db_type == 'pgsql')
+		return true;
 	$dbvarRS = &$conn->Execute("show variables like '%_database' ");
 	$db_character_set = null;
    	$db_collation_type = null;

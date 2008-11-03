@@ -4420,7 +4420,8 @@ function getFieldModuleAccessArray()
 	$num_rows=$adb->num_rows($result);
 	for($i=0;$i<$num_rows;$i++)
 	{
-		$fldModArr[$adb->query_result($result,$i,'name')]=$adb->query_result($result,$i,'name');
+		$mod_name = $adb->query_result($result,$i,'name');
+		$fldModArr[$mod_name] = $mod_name;
 	}	
 	$log->debug("Exiting getFieldModuleAccessArray method ...");
 	return $fldModArr;

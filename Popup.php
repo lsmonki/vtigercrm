@@ -33,6 +33,16 @@ $smarty->assign("CATEGORY",$parent_tab);}
 $url = '';
 $popuptype = '';
 $popuptype = $_REQUEST["popuptype"];
+
+
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("THEME_PATH",$theme_path);
+$smarty->assign("MODULE",$currentModule);
+
 $form = $_REQUEST['form'];
 //added to get relatedto field value for todo, while selecting from the popup list, after done the alphabet or basic search.
 if(isset($_REQUEST['maintab']) && $_REQUEST['maintab'] != '')
@@ -205,16 +215,6 @@ switch($currentModule)
 }
 $smarty->assign("RETURN_ACTION",$_REQUEST['return_action']);
 
-
-$theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
-$smarty->assign("MOD", $mod_strings);
-$smarty->assign("APP", $app_strings);
-$smarty->assign("IMAGE_PATH",$image_path);
-$smarty->assign("THEME_PATH",$theme_path);
-$smarty->assign("MODULE",$currentModule);
-
-
 //Retreive the list from Database
 if($currentModule == 'PriceBooks')
 {
@@ -288,18 +288,16 @@ if(isset($order_by) && $order_by != '')
 {
         $query .= ' ORDER BY '.$order_by.' '.$sorder;
 }
-$list_result = $adb->query($query);
-//Retreiving the no of rows
-$noofrows = $adb->num_rows($list_result);
+$count_result = $adb->query(mkCountQuery($query));
+$noofrows = $adb->query_result($count_result, 0, 'count');
 //Retreiving the start value from request
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {
-        $start = $_REQUEST['start'];
+	$start = $_REQUEST['start'];
 }
 else
 {
-
-        $start = 1;
+	$start = 1;
 }
 $limstart=($start-1)*$list_max_entries_per_page;
 $query.=" LIMIT $limstart,$list_max_entries_per_page";

@@ -150,7 +150,7 @@ if(isset($order_by) && $order_by != '')
 }
 
 //Retreiving the no of rows
-$count_result = $adb->query("select count(*) count ".substr($query, strpos($query,'FROM'),strlen($query)));
+$count_result = $adb->query(mkCountQuery( $query));
 $noofrows = $adb->query_result($count_result,0,"count");
 
 //Storing Listview session object

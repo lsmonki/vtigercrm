@@ -330,10 +330,10 @@ function get_attachments($id)
 	// Armando Lüscher 18.10.2005 -> §visibleDescription
 	// Desc: Inserted crm2.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
 	// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
-	$query = "select vtiger_notes.title,'Documents      ' ActivityType, vtiger_notes.filename,
-	vtiger_attachments.type  FileType,crm2.modifiedtime lastmodified,
-	vtiger_seattachmentsrel.attachmentsid attachmentsid, vtiger_notes.notesid crmid,
-	vtiger_notes.notecontent description, vtiger_users.user_name
+	$query = "select vtiger_notes.title,'Documents      ' as ActivityType, vtiger_notes.filename,
+	vtiger_attachments.type as FileType,crm2.modifiedtime as lastmodified,
+	vtiger_seattachmentsrel.attachmentsid as attachmentsid, vtiger_notes.notesid as crmid,
+	vtiger_notes.notecontent as description, vtiger_users.user_name
 			from vtiger_notes
 			inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
 			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
@@ -352,9 +352,9 @@ function get_attachments($id)
 	// Desc: Inserted crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
 	// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
 	// Inserted order by createdtime desc
-	$query .= "select vtiger_attachments.subject AS title ,'Attachments' ActivityType,
-	vtiger_attachments.name filename, vtiger_attachments.type FileType,crm2.modifiedtime lastmodified,
-	vtiger_attachments.attachmentsid attachmentsid, vtiger_seattachmentsrel.attachmentsid crmid,
+	$query .= "select vtiger_attachments.subject AS title ,'Attachments' as ActivityType,
+	vtiger_attachments.name as filename, vtiger_attachments.type as FileType,crm2.modifiedtime as lastmodified,
+	vtiger_attachments.attachmentsid as attachmentsid, vtiger_seattachmentsrel.attachmentsid as crmid,
 	vtiger_attachments.description, vtiger_users.user_name
 			from vtiger_attachments
 			inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
@@ -453,12 +453,7 @@ function getColumnNames_Lead()
 	$log->debug("Exiting getColumnNames_Lead method ...");
 	return $mergeflds;
 }
-
-	/** Function to handle module specific operations when restoring an entity 
-	*/
-	function restore_module($crmid) {
-		
-	}
+//End
 
 }
 

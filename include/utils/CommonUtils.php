@@ -1195,7 +1195,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 		array_push($blockid_list,$blockid);
 		$block_label[$blockid] = $adb->query_result($result,$i,"blocklabel");
 		
-		$sLabelVal = $mod_strings[$block_label[$blockid]];
+		$sLabelVal = getTranslatedString($block_label[$blockid], $module);
 		$aBlockStatus[$sLabelVal] = $adb->query_result($result,$i,"display_status");
 	}
 	if($mode == 'edit')	
@@ -2859,7 +2859,7 @@ function getImportFieldsList($module)
 	{
 		$fieldname = $adb->query_result($result,$i,'fieldname');
 		$fieldlabel = $adb->query_result($result,$i,'fieldlabel');
-		$fieldslist[$fieldname] = getTranslatedString($fieldlabel);
+		$fieldslist[$fieldname] = getTranslatedString($fieldlabel, $module);
 	}
 
 	$log->debug("Exit from function getImportFieldsList($module)");

@@ -57,7 +57,7 @@ $mod_strings = Array(
 'LBL_CATEGORY'=>'Category',
 
 'LBL_ANSWER'=>'Answer',
-'LBL_COMMENTS'=>'Comments',
+'LBL_COMMENTS'=>'COMMENTS',
 
 'LBL_AUTHOR'=>'Author',
 'LBL_QUESTION'=>'Question',
