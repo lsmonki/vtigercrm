@@ -95,7 +95,7 @@ if($focus->column_fields["hdnTaxType"] != "individual")
 	$data= $app_strings['LBL_NET_TOTAL'].":";//                                                                  ".$price_subtotal."";
 	$pdf->SetXY( 105 , ($nettotal_y+(0*$next_y)) );
 	$pdf->SetFont( "Helvetica", "", 10);
-	$pdf->MultiCell(110, 4, $data);
+	$pdf->MultiCell(17, 4, $data);
 
 //Added for value field alignment
         $pdf->SetXY( $space[strlen($price_subtotal)] , ($nettotal_y+(0*$next_y)) );
@@ -137,7 +137,7 @@ if($focus->column_fields["hdnTaxType"] != "individual")
 	$data = $app_strings['LBL_SHIPPING_AND_HANDLING_CHARGES'].":";//                                  ".$price_shipping;
 	$pdf->SetXY( 105 , ($nettotal_y+(3*$next_y)) );
 	$pdf->SetFont( "Helvetica", "", 10);
-	$pdf->MultiCell(110, 4, $data);
+	$pdf->MultiCell(50, 4, $data);
 
 //Added for value field alignment
         $pdf->SetXY( $space[strlen($price_shipping)] , ($nettotal_y+(3*$next_y)) );
@@ -152,7 +152,7 @@ else
 	$data= $app_strings['LBL_NET_TOTAL'].":";//                                              ".$price_subtotal."";
 	$pdf->SetXY( 105 , ($nettotal_y+(1*$next_y)) );
 	$pdf->SetFont( "Helvetica", "", 10);
-	$pdf->MultiCell(110, 4, $data);
+	$pdf->MultiCell(17, 4, $data);
 
 // added for value field allignment
 
@@ -184,13 +184,13 @@ else
 	$data = $app_strings['LBL_SHIPPING_AND_HANDLING_CHARGES'].":";//                                  ".$price_shipping;
 	$pdf->SetXY( 105 , ($nettotal_y+(3*$next_y)) );
 	$pdf->SetFont( "Helvetica", "", 10);
-	$pdf->MultiCell(110, 4, $data);
+	$pdf->MultiCell(50, 4, $data);
 
 //Added for value field alignment
 
-        $pdf->SetXY( $space[strlen($price_shipping)] , ($nettotal_y+(3*$next_y)) );
-        $pdf->SetFont( "Helvetica", "", 10);
-        $pdf->MultiCell(110, 4, $price_shipping);
+    $pdf->SetXY( $space[strlen($price_shipping)] , ($nettotal_y+(3*$next_y)) );
+    $pdf->SetFont( "Helvetica", "", 10);
+    $pdf->MultiCell(110, 4, $price_shipping);
 
 }
 
@@ -200,7 +200,7 @@ $pdf->drawLine($lineData);
 $data = $app_strings['LBL_TAX_FOR_SHIPPING_AND_HANDLING'].":  ($sh_tax_percent %)";//               ".$price_shipping_tax;
 $pdf->SetXY( 105 , ($nettotal_y+(4*$next_y)) );
 $pdf->SetFont( "Helvetica", "", 10);
-$pdf->MultiCell(110, 4, $data);
+$pdf->MultiCell(65, 4, $data);
 
 //Added for value field alignment
 $pdf->SetXY( $space[strlen($price_shipping_tax)] , ($nettotal_y+(4*$next_y)) );
@@ -225,7 +225,7 @@ $pdf->drawLine($lineData);
 $data = $app_strings['LBL_GRAND_TOTAL'].":(in $currency_symbol)";//                                                    ".$price_total;
 $pdf->SetXY( 105 , ($nettotal_y+(6*$next_y)) );
 $pdf->SetFont( "Helvetica", "", 10);
-$pdf->MultiCell(110, 4, $data);
+$pdf->MultiCell(28, 4, $data);
 
 //Added for value field alignment
 $pdf->SetXY( $space[strlen($price_total)] , ($nettotal_y+(6*$next_y)) );
