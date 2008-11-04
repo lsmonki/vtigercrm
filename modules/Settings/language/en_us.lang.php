@@ -984,6 +984,6 @@ $mod_strings = Array(
 'LBL_LAYOUT_EDITOR'=>'Layout Editor',
 'LBL_LAYOUT_EDITOR_DESCRIPTION'=>'Designing and Modifying the layout in each of the modules',
 'LBL_Show'=>'Show',
-'LBL_Hide'=>'Hide'
+'LBL_Hide'=>'Hide',
 );
 ?>

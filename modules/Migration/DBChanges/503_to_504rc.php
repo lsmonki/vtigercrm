@@ -497,8 +497,8 @@ $adb->query("alter table vtiger_role2picklist add CONSTRAINT `fk_1_vtiger_role2p
 $adb->query("alter table vtiger_role2picklist type='InnoDB'");
 
 
-$adb->query("CREATE TABLE `vtiger_picklistvalues_seq` (`id` int(11) NOT NULL)");
-$adb->query("insert into vtiger_picklistvalues_seq values(1)");
+//$adb->query("CREATE TABLE `vtiger_picklistvalues_seq` (`id` int(11) NOT NULL)");
+//$adb->query("insert into vtiger_picklistvalues_seq values(1)");
 //Alter picklist tables
 $picklist_arr = array('leadsource','accounttype','industry','leadstatus','rating','opportunity_type','salutationtype','sales_stage','ticketstatus','ticketpriorities','ticketseverities','ticketcategories','eventstatus','taskstatus','taskpriority','manufacturer','productcategory','faqcategories','usageunit','glacct','quotestage','carrier','faqstatus','invoicestatus','postatus','sostatus','campaigntype','campaignstatus','expectedresponse');
 

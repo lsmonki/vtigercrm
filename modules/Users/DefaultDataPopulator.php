@@ -2647,7 +2647,7 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	$this->db->query("alter table vtiger_inventoryproductrel add column tax$serviceid decimal(7,3) default NULL");
 	
 	//Added to handle picklist uniqueid for the picklist values
-        $this->db->query("insert into vtiger_picklistvalues_seq values(1)");
+	//$this->db->query("insert into vtiger_picklistvalues_seq values(1)");
 
 	//Added to populate the default Shipping & Hanlding tax informations
 	$shvatid = $this->db->getUniqueID("vtiger_shippingtaxinfo");

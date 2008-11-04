@@ -308,8 +308,8 @@ else
 							$picklist_valueid = getUniquePicklistID();
 							$query = "insert into vtiger_".$columnName." values(?,?,?,?)";				
 							$adb->pquery($query, array($adb->getUniqueID("vtiger_".$columnName),$pickArray[$i],1,$picklist_valueid));
-							$sql="update vtiger_picklistvalues_seq set id = ?";
-							$adb->pquery($sql, array(++$picklist_valueid));
+							/*$sql="update vtiger_picklistvalues_seq set id = ?";
+							$adb->pquery($sql, array(++$picklist_valueid));*/
 						}
 						$sql = "select picklist_valueid from vtiger_$columnName where $columnName=?";
 						$pick_valueid = $adb->query_result($adb->pquery($sql, array($pickArray[$i])),0,'picklist_valueid');
