@@ -655,7 +655,7 @@ function webserviceMigration(){
 	$rowCount = $adb->num_rows($result);
 	for($i=0;$i<$rowCount;$i++){
 		$userId = $adb->query_result($result,$i,"id");
-		$insertResult = $adb->pquery($updateQuery,array(generateRandomAccessKey(16),$userId));
+		$insertResult = $adb->pquery($updateQuery,array(vtws_generateRandomAccessKey(16),$userId));
 		if(!is_object($insertResult)){
 			echo "failed for user: ".$adb->query_result($result,$i,"user_name");
 			break;
