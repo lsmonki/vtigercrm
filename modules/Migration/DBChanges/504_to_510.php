@@ -683,8 +683,8 @@ for($i=0;$i<$adb->num_rows($query);$i++){
 //CustomEvents Migration Ends
 
 /* Important column renaming to support database porting */
-$adb->pquery("ALTER TABLE vtiger_profile2standardpermissions RENAME COLUMN Operation TO testoperation", array());
-$adb->pquery("ALTER TABLE vtiger_profile2standardpermissions RENAME COLUMN testoperation TO operation", array());
+$adb->pquery("ALTER TABLE vtiger_profile2standardpermissions CHANGE Operation testoperation INTEGER", array());
+$adb->pquery("ALTER TABLE vtiger_profile2standardpermissions CHANGE testoperation operation INTEGER", array());
 
 $renameArray = array(
 		"vtiger_sales_stage",
@@ -697,8 +697,8 @@ $renameArray = array(
 		"vtiger_ticketstatus"
 );
 foreach($renameArray as $tablename) {
-	$adb->pquery("ALTER TABLE $tablename RENAME COLUMN PRESENCE TO testpresence", array());
-	$adb->pquery("ALTER TABLE $tablename RENAME COLUMN testpresence TO presence", array());	
+	$adb->pquery("ALTER TABLE $tablename CHANGE PRESENCE testpresence INTEGER", array());
+	$adb->pquery("ALTER TABLE $tablename CHANGE testpresence presence INTEGER", array());	
 }
 // Renaming completed
 
