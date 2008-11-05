@@ -3522,4 +3522,9 @@ function getPickListValues($tablename,$roleid)
 	}
 	return $fldVal;
 }
+
+// vtlib customization: Extended vtiger CRM utlitiy functions
+require_once('include/utils/VtlibUtils.php');
+// END
+
 ?>
