@@ -33,6 +33,8 @@ class HelpDesk extends CRMEntity {
 
 	var $sortby_fields = Array('title','status','priority','crmid','firstname','smownerid');
 
+	var $non_mass_edit_fields = Array('filename');		
+
 	var $list_fields = Array(
 					'Ticket ID'=>Array('crmentity'=>'crmid'),
 					'Subject'=>Array('troubletickets'=>'title'),	  			

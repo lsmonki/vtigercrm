@@ -27,6 +27,7 @@ class Campaigns extends CRMEntity {
 	var $db;
 	var $table_name = "vtiger_campaign";
 
+	var $non_mass_edit_fields = Array();		
 
 	var $tab_name = Array('vtiger_crmentity','vtiger_campaign','vtiger_campaignscf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_campaign'=>'campaignid','vtiger_campaignscf'=>'campaignid');

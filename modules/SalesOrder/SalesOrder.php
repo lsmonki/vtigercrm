@@ -44,6 +44,8 @@ class SalesOrder extends CRMEntity {
 
 	var $object_name = "SalesOrder";
 
+	var $non_mass_edit_fields = Array("quote_id","salesorder_no");		
+
 	var $new_schema = true;
 	
 	var $module_id = "salesorderid";
@@ -120,7 +122,7 @@ class SalesOrder extends CRMEntity {
 		}
 
 		//in ajax save we should not call this function, because this will delete all the existing product values
-		if($_REQUEST['action'] != 'SalesOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW')
+		if($_REQUEST['action'] != 'SalesOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW' && $_REQUEST['action'] != 'MassEditSave')
 		{
 			//Based on the total Number of rows we will save the product relationship with this entity
 			saveInventoryProductDetails(&$this, 'SalesOrder');	

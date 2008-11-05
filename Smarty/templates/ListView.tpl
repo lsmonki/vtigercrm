@@ -17,6 +17,13 @@
 <script language="JavaScript" type="text/javascript" src="include/js/search.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/Merge.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
+
+<script type="text/javascript">	
+var fieldname = new Array({$VALIDATION_DATA_FIELDNAME})
+var fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL})
+var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE})
+</script>
+
 <script language="javascript" type="text/javascript">
 var typeofdata = new Array();
 typeofdata['E'] = ['is','isn','bwt','ewt','cts','dcts'];
@@ -353,6 +360,19 @@ function alphabetic(module,url,dataid)
    </tr>
 </table>
 
+<!-- MassEdit Feature -->
+<div id="massedit" class="layerPopup" style="display:none;width:700px;">
+<table width="100%" border="0" cellpadding="3" cellspacing="0" class="layerHeadingULine">
+<tr>
+	<td class="layerPopupHeading" align="left" width="60%">{$APP.LBL_MASSEDIT_FORM_HEADER}</td>
+	<td>&nbsp;</td>
+	<td align="right" width="40%"><img onClick="fninvsh('massedit');" title="{$APP.LBL_CLOSE}" alt="{$APP.LBL_CLOSE}" style="cursor:pointer;" src="{$IMAGE_PATH}close.gif" align="absmiddle" border="0"></td>
+</tr>
+</table>
+<div id="massedit_form_div"></div>
+
+</div>
+<!-- END -->
 
 <div id="changeowner" class="layerPopup" style="display:none;width:325px;">
 <table width="100%" border="0" cellpadding="3" cellspacing="0" class="layerHeadingULine">

@@ -46,6 +46,8 @@ class PurchaseOrder extends CRMEntity {
 
 	var $column_fields = Array();
 
+	var $non_mass_edit_fields = Array('purchaseorder_no');		
+
 	var $sortby_fields = Array('subject','tracking_no','smownerid','lastname');		
 
 	// This is used to retrieve related vtiger_fields from form posts.
@@ -104,7 +106,7 @@ class PurchaseOrder extends CRMEntity {
 	{
 		global $adb;
 		//in ajax save we should not call this function, because this will delete all the existing product values
-		if($_REQUEST['action'] != 'PurchaseOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW')
+		if($_REQUEST['action'] != 'PurchaseOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW' && $_REQUEST['action'] != 'MassEditSave')
 		{
 			//Based on the total Number of rows we will save the product relationship with this entity
 			saveInventoryProductDetails(&$this, 'PurchaseOrder', $this->update_prod_stock);

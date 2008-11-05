@@ -840,22 +840,51 @@ function validateFilename(form_ele) {
         return true;
 }
 
-function formValidate() {
+function formValidate(){
+	return doformValidation('');
+}
+
+function massEditFormValidate(){
+	return doformValidation('mass_edit');
+}
+
+function doformValidation(edit_type) {
 
 //Validation for Portal User
 if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 {
 	//if existing portal value = 0, portal checkbox = checked, ( email field is not available OR  email is empty ) then we should not allow -- OR --
 	//if existing portal value = 1, portal checkbox = checked, ( email field is available     AND email is empty ) then we should not allow
-	if((getObj('existing_portal').value == 0 && getObj('portal').checked && (getObj('email') == null || trim(getObj('email').value) == '')) ||
-	    getObj('existing_portal').value == 1 && getObj('portal').checked && getObj('email') != null && trim(getObj('email').value) == '')
+	if(edit_type=='')
 	{
-		alert(alert_arr.PORTAL_PROVIDE_EMAILID);
-		return false;
+		if((getObj('existing_portal').value == 0 && getObj('portal').checked && (getObj('email') == null || trim(getObj('email').value) == '')) ||
+		    getObj('existing_portal').value == 1 && getObj('portal').checked && getObj('email') != null && trim(getObj('email').value) == '')
+		{
+			alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+			return false;
+		}
+	}
+	else
+	{
+		if(getObj('portal').checked && getObj('portal_mass_edit_check').checked && (getObj('email') == null || trim(getObj('email').value) == '' || getObj('email_mass_edit_check').checked==false))
+		{
+			alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+			return false;
+		}
+		if((getObj('email') != null && trim(getObj('email').value) == '' && getObj('email_mass_edit_check').checked) && !(getObj('portal').checked==false && getObj('portal_mass_edit_check').checked))
+		{
+			alert(alert_arr.EMAIL_CHECK_MSG);
+			return false;
+		}
 	}
 }
 
 	for (var i=0; i<fieldname.length; i++) {
+		if(edit_type != '') {
+			if(fieldname[i]!='salutationtype')			
+			var obj = getObj(fieldname[i]+"_mass_edit_check");
+			if(obj.checked != true) continue;
+		}
 		if(getObj(fieldname[i]) != null)
 		{
 			var type=fielddatatype[i].split("~")

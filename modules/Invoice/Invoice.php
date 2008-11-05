@@ -43,6 +43,8 @@ class Invoice extends CRMEntity {
 
 	var $sortby_fields = Array('subject','invoice_no','invoicestatus','smownerid','accountname','lastname');
 
+	var $non_mass_edit_fields = Array('invoice_no','salesorder_id');		
+
 	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'smownerid', 'opportunity_id', 'case_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id', 'parent_name', 'member_id' );
 
@@ -111,7 +113,7 @@ class Invoice extends CRMEntity {
 		}
 
 		//in ajax save we should not call this function, because this will delete all the existing product values
-		if($_REQUEST['action'] != 'InvoiceAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW')
+		if($_REQUEST['action'] != 'InvoiceAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW' && $_REQUEST['action'] != 'MassEditSave')
 		{
 			//Based on the total Number of rows we will save the product relationship with this entity
 			saveInventoryProductDetails(&$this, 'Invoice');

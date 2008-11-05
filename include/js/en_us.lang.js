@@ -187,5 +187,6 @@
 				NO_SPECIAL_CHARS_DOCS:'Special characters like quotes, backslash, + symbol, % and ? are not allowed',
 				
 				ALL_FILTER_CREATION_DENIED:'Cannot create CustomView using name "All", try using different ViewName',
-				OPERATION_DENIED:'You are denied to perform this operation'
+				OPERATION_DENIED:'You are denied to perform this operation',
+				EMAIL_CHECK_MSG: 'Disable portal access to save the email field as blank'
 			};

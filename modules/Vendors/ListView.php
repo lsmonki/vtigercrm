@@ -101,6 +101,8 @@ if(isPermitted('Vendors','DeleteVendor','') == 'yes')
 {
 	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
+if(isPermitted('Vendors','EditView','') == 'yes')
+	$other_text['mass_edit'] = $app_strings[LBL_MASS_EDIT];
 
 if($viewnamedesc['viewname'] == 'All')
 {
@@ -245,6 +247,14 @@ $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
 $_SESSION['vendors_listquery'] = $list_query;
+
+$tabid = getTabid("Vendors");
+$validationData = getDBValidationData($focus->tab_name,$tabid);
+$data = split_validationdataArray($validationData);
+
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");

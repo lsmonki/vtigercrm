@@ -47,6 +47,8 @@ class Quotes extends CRMEntity {
 
 	var $new_schema = true;
 	
+	var $non_mass_edit_fields = Array('quote_no');		
+
 	var $module_id = "quoteid";
 
 	var $column_fields = Array();
@@ -114,7 +116,7 @@ class Quotes extends CRMEntity {
 	{
 		global $adb;
 		//in ajax save we should not call this function, because this will delete all the existing product values
-		if($_REQUEST['action'] != 'QuotesAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW')
+		if($_REQUEST['action'] != 'QuotesAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW' && $_REQUEST['action'] != 'MassEditSave')
 		{
 			//Based on the total Number of rows we will save the product relationship with this entity
 			saveInventoryProductDetails($this, 'Quotes');

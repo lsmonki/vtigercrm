@@ -7,6 +7,126 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ********************************************************************************/
+
+// MassEdit Feature
+function mass_edit(obj,divid,module) {
+	var select_options = document.getElementById('allselectedboxes').value;
+	var x = select_options.split(';');
+	var count = x.length;
+	
+	if(count > 1) {
+		idstring=select_options;
+		mass_edit_formload(idstring,module);
+	} else {
+		alert(alert_arr.SELECT);
+		return false;
+	}
+	fnvshobj(obj, divid);
+}
+function mass_edit_formload(idstring,module) {
+	$("status").style.display="inline";
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+	    	method: 'post',
+			postBody:"module="+encodeURIComponent(module)+"&action="+encodeURIComponent(module+'Ajax')+"&file=MassEdit&mode=ajax&idstring="+idstring,
+				onComplete: function(response) {
+                	$("status").style.display="none";
+               	    var result = response.responseText;
+                    $("massedit_form_div").innerHTML= result;
+					$("massedit_form")["massedit_recordids"].value = idstring;
+					$("massedit_form")["massedit_module"].value = module;
+				}
+		}
+	);
+}
+function mass_edit_fieldchange(selectBox) {
+	var oldSelectedIndex = selectBox.oldSelectedIndex;
+	var selectedIndex = selectBox.selectedIndex;
+
+	if($('massedit_field'+oldSelectedIndex)) $('massedit_field'+oldSelectedIndex).style.display='none';
+	if($('massedit_field'+selectedIndex)) $('massedit_field'+selectedIndex).style.display='block';
+
+	selectBox.oldSelectedIndex = selectedIndex;
+}
+
+function mass_edit_save(){
+	var masseditform = $("massedit_form");
+	var module = masseditform["massedit_module"].value;
+	var viewid = document.getElementById("viewname").options[document.getElementById("viewname").options.selectedIndex].value; 
+	var searchurl = document.getElementById("search_url").value; 
+
+	var urlstring = 
+		"module="+encodeURIComponent(module)+"&action="+encodeURIComponent(module+'Ajax')+
+		"&return_module="+encodeURIComponent(module)+"&return_action=ListView"+
+		"&mode=ajax&file=MassEditSave&viewname=" + viewid ;//+"&"+ searchurl;
+
+	fninvsh("massedit");
+
+	new Ajax.Request(
+		"index.php", 
+		{queue:{position:"end", scope:"command"}, 
+			method:"post", 
+			postBody:urlstring, 
+			onComplete:function (response) {
+				$("status").style.display = "none";
+				var result = response.responseText.split("&#&#&#");
+				$("ListViewContents").innerHTML = result[2];
+				if (result[1] != "") {
+					alert(result[1]);
+				}
+				$("basicsearchcolumns").innerHTML = "";
+			}
+		}
+	); 
+	
+}
+function ajax_mass_edit() {
+	alert();
+	$("status").style.display = "inline";
+
+	var masseditform = $("massedit_form");
+	var module = masseditform["massedit_module"].value;
+
+	var viewid = document.getElementById("viewname").options[document.getElementById("viewname").options.selectedIndex].value; 
+	var idstring = masseditform["massedit_recordids"].value; 
+	var searchurl = document.getElementById("search_url").value; 
+	var tplstart = "&"; 
+	if (gstart != "") { tplstart = tplstart + gstart; }
+
+	var masseditfield = masseditform['massedit_field'].value;
+	var masseditvalue = masseditform['massedit_value_'+masseditfield].value;
+
+	var urlstring = 
+		"module="+encodeURIComponent(module)+"&action="+encodeURIComponent(module+'Ajax')+
+		"&return_module="+encodeURIComponent(module)+
+		"&mode=ajax&file=MassEditSave&viewname=" + viewid + 
+		"&massedit_field=" + encodeURIComponent(masseditfield) +
+		"&massedit_value=" + encodeURIComponent(masseditvalue) +
+	   	"&idlist=" + idstring + searchurl;
+
+	fninvsh("massedit");
+
+	new Ajax.Request(
+		"index.php", 
+		{queue:{position:"end", scope:"command"}, 
+			method:"post", 
+			postBody:urlstring, 
+			onComplete:function (response) {
+				$("status").style.display = "none";
+				var result = response.responseText.split("&#&#&#");
+				$("ListViewContents").innerHTML = result[2];
+				if (result[1] != "") {
+					alert(result[1]);
+				}
+				$("basicsearchcolumns").innerHTML = "";
+			}
+		}
+	); 
+}
+	
+// END
+
 function change(obj,divid)
 {
 	var select_options  =  document.getElementById('allselectedboxes').value;

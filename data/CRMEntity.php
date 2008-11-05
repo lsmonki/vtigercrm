@@ -1100,7 +1100,7 @@ $log->info("in getOldFileName  ".$notesid);
 		{
 						
 		  	//to disable the update of groupentity relation in ajax edit for the fields except assigned_user_id field
-			if($_REQUEST['ajxaction'] != 'DETAILVIEW' || ($_REQUEST['ajxaction'] == 'DETAILVIEW' && $_REQUEST['fldName'] == 'assigned_user_id'))
+			if(($_REQUEST['ajxaction'] != 'DETAILVIEW' && $_REQUEST['action'] != 'MassEditSave') || ($_REQUEST['ajxaction'] == 'DETAILVIEW' && $_REQUEST['fldName'] == 'assigned_user_id') || ($_REQUEST['action'] == 'MassEditSave' && isset($_REQUEST['assigned_user_id_mass_edit_check'])))
 		  	{	  
 			  	if($_REQUEST['assigntype'] == 'T')
 			  	{

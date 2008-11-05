@@ -27,6 +27,8 @@ class PriceBooks extends CRMEntity {
 
 	var $sortby_fields = Array('bookname');		  
 
+	var $non_mass_edit_fields = Array();		
+
         // This is the list of fields that are in the lists.
 	var $list_fields = Array(
                                 'Price Book Name'=>Array('pricebook'=>'bookname'),

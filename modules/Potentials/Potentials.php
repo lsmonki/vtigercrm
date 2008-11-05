@@ -48,6 +48,7 @@ class Potentials extends CRMEntity {
 
 	var $sortby_fields = Array('potentialname','amount','closingdate','smownerid','accountname');
 
+	var $non_mass_edit_fields = Array();		
 
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(

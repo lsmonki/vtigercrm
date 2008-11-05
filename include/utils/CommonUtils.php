@@ -1175,7 +1175,7 @@ function make_clickable($text)
  * This function returns an array
  */
 
-function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
+function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='',$non_mass_edit_fields='')
 {
 	global $log;
 	$log->debug("Entering getBlocks(".$module.",".$disp_view.",".$mode.",".$col_fields.",".$info_type.") method ...");
@@ -1205,6 +1205,11 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 	{
 		$display_type_check = 'vtiger_field.displaytype in (1,4)';
 	}
+	
+	if($non_mass_edit_fields!='' && sizeof($non_mass_edit_fields)!=0){
+		$mass_edit_query = "AND vtiger_field.fieldname NOT IN (". generateQuestionMarks($non_mass_edit_fields) .")";
+	}
+	
 	//retreive the vtiger_profileList from database
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	if($disp_view == "detail_view")
@@ -1254,15 +1259,21 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 		{
 			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == 'Users' || $module == "Emails")
   			{
- 				$sql = "SELECT vtiger_field.* FROM vtiger_field WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list).") AND $display_type_check ORDER BY block,sequence";
-  				$params = array($tabid, $blockid_list);
+ 				$sql = "SELECT vtiger_field.* FROM vtiger_field WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list).") AND $display_type_check  ".$mass_edit_query." ORDER BY block,sequence";
+				if($non_mass_edit_fields!='' && sizeof($non_mass_edit_fields)!=0)
+					$params = array($tabid, $blockid_list,$non_mass_edit_fields);
+				else
+					$params = array($tabid, $blockid_list);
 			}
   			else
   			{
   				$profileList = getCurrentUserProfileList();
- 				$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid  WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list).") AND $display_type_check AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList).") GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
- 				$params = array($tabid, $blockid_list, $profileList);
-				//Postgres 8 fixes
+ 				$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid  WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list).") AND $display_type_check AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList).") ".$mass_edit_query." GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+				if($non_mass_edit_fields!='' && sizeof($non_mass_edit_fields)!=0)
+					$params = array($tabid, $blockid_list, $profileList,$non_mass_edit_fields);
+				else
+					$params = array($tabid, $blockid_list, $profileList);
+ 				//Postgres 8 fixes
  				if( $adb->dbType == "pgsql")
  				    $sql = fixPostgresQuery( $sql, $log, 0);
   			}	

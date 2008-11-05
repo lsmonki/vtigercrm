@@ -1148,6 +1148,10 @@ $app_strings = array (
 'LBL_JUMP_BTN'=> 'JUMP',
 
 'LBL_ASSIGN_BUTTON_LABEL'=>'Assign Fields',
+
+// Mass Edit Feature
+'LBL_MASS_EDIT'=>'Mass Edit',
+'LBL_MASSEDIT_FORM_HEADER'=>'Mass Edit - Records Fields'
 );
 
 $app_list_strings = array (

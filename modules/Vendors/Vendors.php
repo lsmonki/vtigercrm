@@ -27,6 +27,8 @@ class Vendors extends CRMEntity {
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_vendor'=>'vendorid','vtiger_vendorcf'=>'vendorid');
 	var $column_fields = Array();
 
+	var $non_mass_edit_fields = Array();		
+
         //Pavani: Assign value to entity_table
         var $entity_table = "vtiger_crmentity";
         var $sortby_fields = Array('vendorname','category');

@@ -265,10 +265,22 @@ $smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
 $smarty->assign("VIEWID", $viewid);
 $smarty->assign("SINGLE_MOD" ,'Faq');
 
+if(isPermitted('Faq','EditView','') == 'yes') {
+	$other_text['mass_edit'] = $app_strings[LBL_MASS_EDIT];
+}
+$smarty->assign("BUTTONS",$other_text);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
 $_SESSION['faq_listquery'] = $list_query;
+
+$tabid = getTabid("Faq");
+$validationData = getDBValidationData($focus->tab_name,$tabid);
+$data = split_validationdataArray($validationData);
+
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");

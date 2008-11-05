@@ -157,7 +157,8 @@ if(isPermitted('Contacts','Delete','') == 'yes')
 }
 if(isPermitted('Contacts','EditView','') == 'yes')
 {
-        $other_text['c_owner'] = $app_strings[LBL_CHANGE_OWNER];
+	$other_text['mass_edit'] = $app_strings[LBL_MASS_EDIT];
+	$other_text['c_owner'] = $app_strings[LBL_CHANGE_OWNER];
 }
 if(isPermitted('Emails','EditView','') == 'yes')
 	$other_text['s_mail'] = $app_strings[LBL_SEND_MAIL_BUTTON];
@@ -341,6 +342,14 @@ $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
 $_SESSION['contacts_listquery'] = $list_query;
+
+$tabid = getTabid("Contacts");
+$validationData = getDBValidationData($focus->tab_name,$tabid);
+$data = split_validationdataArray($validationData);
+
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");
