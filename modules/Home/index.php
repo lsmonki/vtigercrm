@@ -67,13 +67,13 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 {
 	$modName=$adb->query_result($result,$i,'name');
 	//Security check done by Don
-	if(isPermitted($modName,'DetailView') == 'yes')
+	if(isPermitted($modName,'DetailView') == 'yes' && vtlib_isModuleActive($modName))
 	{
 		$modulenamearr[]=array($adb->query_result($result,$i,'tabid'),$modName);
 	}	
 }
-
-	if(isPermitted('Calendar','index') == "yes")
+		
+	if(isPermitted('Calendar','index') == "yes" && vtlib_isModuleActive('Calendar'))
 	{
 		$activities = Array();
                 include("modules/Calendar/OpenListView.php") ;
@@ -86,11 +86,11 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 //Security Check done for RSS and Dashboards
 $allow_rss='no';
 $allow_dashbd='no';
-if(isPermitted('Rss','DetailView') == 'yes')
+if(isPermitted('Rss','DetailView') == 'yes' && vtlib_isModuleActive('Rss'))
 {
 	$allow_rss='yes';
 }	
-if(isPermitted('Dashboard','DetailView') == 'yes')
+if(isPermitted('Dashboard','DetailView') == 'yes' && vtlib_isModuleActive('Dashboard'))
 {
 	$allow_dashbd='yes';
 }

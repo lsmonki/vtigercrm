@@ -213,6 +213,12 @@ else
                 "Vendors"=>"ImportVendors"
 			     );
 
+	// vtlib customization: Hook provide to include custom modules
+	$module = $_REQUEST['modulename'];
+	require_once("modules/$module/$module.php");
+	$import_modules_array[$module] = $module;
+	// END
+
 	foreach($import_modules_array as $module_name => $object_name)
 	{
 		$seedUsersLastImport = new UsersLastImport();

@@ -78,7 +78,23 @@ class CRMEntity
           $this->whomToSendMail($module,$this ->mode,$assigntype);
 	
 	$this->db->completeTransaction();
-    $this->db->println("TRANS saveentity ends");
+	$this->db->println("TRANS saveentity ends");
+
+	// vtlib customization: Hook provide to enable generic module relation.
+	if($_REQUEST['return_action'] == 'CallRelatedList') {
+		$for_module = $_REQUEST['return_module'];
+		$for_crmid  = $_REQUEST['return_id'];
+
+		require_once("modules/$for_module/$for_module.php");
+		$on_focus = new $for_module();
+		if(method_exists($on_focus, 'save_related_module')) {
+			$with_module = $module;
+			$with_crmid = $this->id;
+			$on_focus->save_related_module(
+				$for_module, $for_crmid, $with_module, $with_crmid);
+		}
+	}
+	// END
   }
 
 

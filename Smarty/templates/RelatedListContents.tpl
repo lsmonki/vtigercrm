@@ -32,7 +32,13 @@
                 {$detail.navigation.1}
                 {/if}
                 <td align=right>
-			{if $header eq 'Potentials'}
+			
+			{* vtlib customization: Hook provided to add custom related list buttons. *}
+			{if $CUSTOM_MODULE eq 'true'}
+				{$detail.CUSTOM_BUTTON}
+			{* END *}
+
+			{elseif $header eq 'Potentials'}
 				{if $MODULE eq 'Products'}
 					<input alt="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Potential}" title="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Potential}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Potential}" LANGUAGE=javascript onclick='return window.open("index.php?module=Potentials&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}&parenttab={$CATEGORY}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">	
 				{elseif $MODULE eq 'Contacts'}

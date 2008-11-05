@@ -95,6 +95,13 @@
 		{else}
 		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Recyclebin&action=index&parenttab=Settings">{$MOD.LBL_RECYCLEBIN}</a></td></tr>
 		{/if}		
+
+		{* vtlib customization: Module Manager *}
+		{if  $smarty.request.action eq 'ModuleManager' ||  $smarty.request.action eq 'SettingsAjax'}
+		<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=ModuleManager&parenttab=Settings">{$MOD.VTLIB_LBL_MODULE_MANAGER}</a></td></tr>						     {else}
+		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=ModuleManager&parenttab=Settings">{$MOD.VTLIB_LBL_MODULE_MANAGER}</a></td></tr>
+		{/if}
+		{* END *}
 	
 		<tr><td class="settingsTabHeader" nowrap>{$MOD.LBL_COMMUNICATION_TEMPLATES}</td></tr>
 

@@ -985,5 +985,11 @@ $mod_strings = Array(
 'LBL_LAYOUT_EDITOR_DESCRIPTION'=>'Designing and Modifying the layout in each of the modules',
 'LBL_Show'=>'Show',
 'LBL_Hide'=>'Hide',
+
+// vtlib customization: Language Stings
+'VTLIB_LBL_MODULE_MANAGER'=>'Module Manager',
+'VTLIB_LBL_MODULE_MANAGER_DESCRIPTION'=>'Manage module behavior inside vtiger CRM',
+'VTLIB_LBL_CRM_MODULES'=>'Vtiger CRM Modules',
+// END
 );
 ?>

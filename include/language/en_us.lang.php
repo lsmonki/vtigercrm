@@ -1155,6 +1155,10 @@ $app_strings = array (
 
 // Product Bundles
 'Product Bundles'=>'Product Bundles',
+
+// vtlib customization: Language strings
+'VTLIB_MOD_NOT_ACTIVE' => ' module is not active!',
+// END
 );
 
 $app_list_strings = array (

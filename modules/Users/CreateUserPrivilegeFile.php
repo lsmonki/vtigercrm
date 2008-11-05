@@ -369,6 +369,24 @@ function createUserSharingPrivilegesfile($userid)
 			$hd_share_write_per=$hd_share_per_array['write'];
 			$newbuf .= "\$Documents_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($hd_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($hd_share_read_per['GROUP']).");\n\n";	
 			$newbuf .= "\$Documents_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($hd_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($hd_share_write_per['GROUP']).");\n\n";
+
+			// vtlib customization: Writing Sharing Rules For Custom Modules.
+			$vtlib_modules = vtlib_getModuleNameForSharing();
+			for($idx = 0; $idx < count($vtlib_modules); ++$idx) {
+				$module_name = $vtlib_modules[$idx];
+				$mod_share_perm_array = getUserModuleSharingObjects($module_name,$userid,
+					$def_org_share,$current_user_roles,$parent_roles,$current_user_groups);
+
+				$mod_share_read_perm = $mod_share_perm_array['read'];
+				$mod_share_write_perm= $mod_share_perm_array['write'];
+				$newbuf .= '$'.$module_name."_share_read_permission=array('ROLE'=>".
+					constructTwoDimensionalCharIntSingleValueArray($mod_share_read_perm['ROLE']).",'GROUP'=>".
+					constructTwoDimensionalArray($mod_share_read_perm['GROUP']).");\n\n";
+				$newbuf .= '$'.$module_name."_share_write_permission=array('ROLE'=>".
+					constructTwoDimensionalCharIntSingleValueArray($mod_share_write_perm['ROLE']).",'GROUP'=>".
+					constructTwoDimensionalArray($mod_share_write_perm['GROUP']).");\n\n";
+			}
+			// END
 	
 			$newbuf .= "?>";
 			fputs($handle, $newbuf);
@@ -1539,6 +1557,12 @@ function populateSharingtmptables($userid)
 
 	//Populating Values into the tmp sharing tables
 	$sharingArray=Array('Leads','Accounts','Contacts','Potentials','HelpDesk','Emails','Campaigns','Quotes','PurchaseOrder','SalesOrder','Invoice','Documents');
+
+	// vtlib customization: Add custom modules to sharing access as well.
+	$vtlib_modules = vtlib_getModuleNameForSharing();
+	$sharingArray = array_merge($sharingArray, $vtlib_modules);
+	// END
+
 	foreach($sharingArray as $module)
 	{
 		populateSharingPrivileges('USER',$userid,$module,'read');

@@ -174,7 +174,18 @@ $import_object_array = Array(
 if(isset($_REQUEST['module']) && $_REQUEST['module'] != '')
 {
 	$object_name = $import_object_array[$_REQUEST['module']];
+	// vtlib customization: Hook added to enable import for un-mapped modules
+	$module = $_REQUEST['module'];	
+	if($object_name == null) {
+		require_once("modules/$module/$module.php");
+		$object_name = $module;
+		$callInitImport = true;		
+	}
+	// END
 	$focus = new $object_name();
+	// vtlib customization: Call the import initializer
+	if($callInitImport) $focus->initImport($module);
+	// END
 }
 else
 {
@@ -339,6 +350,14 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 		$focus1=new Vendors();
 	}
 	//end checking
+
+	// vtlib customization: Hook to provide generic import for other modules
+	if($_REQUEST['module']) {
+		$focus1 = new $_REQUEST['module'];
+		$tablename = $focus->table_name;
+	}
+	// END
+	
 	$smarty->assign("FIRSTROW",$firstrow);
 	$smarty->assign("SECONDROW",$secondrow);
 	$smarty->assign("THIRDROW",$thirdrow);

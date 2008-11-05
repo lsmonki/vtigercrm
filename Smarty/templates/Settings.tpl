@@ -244,6 +244,22 @@
 						</table>
 					</td>
 				</tr>
+				<tr>										
+
+					<!-- vtlib customization: Module manager -->
+					<td width=25% valign=top>
+					<!-- empty-->
+						<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<tr>
+							<td rowspan=2 valign=top><a href="index.php?module=Settings&action=ModuleManager&parenttab=Settings"><img border=0 src="{$IMAGE_PATH}vtlib_modmng.gif" alt="{$MOD.VTLIB_LBL_MODULE_MANAGER}" title="{$MOD.VTLIB_LBL_MODULE_MANAGER}"></a></td>
+							<td class=big valign=top><a href="index.php?module=Settings&action=ModuleManager&parenttab=Settings">{$MOD.VTLIB_LBL_MODULE_MANAGER}</a></td>
+						</tr>
+						<tr>
+							<td class="small" valign=top>{$MOD.VTLIB_LBL_MODULE_MANAGER_DESCRIPTION}</td>
+						</tr>
+						</table>
+					</td>
+				</tr>
 				</table>
 				
 				

@@ -100,8 +100,14 @@ function export($type)
         $content = '';
 
         if ($type != "")
-        {
-                $focus = new $type;
+		{
+			// vtlib customization: Hook to dynamically include required module file.
+			// TODO: Make security check if the file access is within vtigercrm directory
+			// Refer to the logic in setting $currentModule in index.php
+			require_once("modules/$type/$type.php");
+			// END
+
+			$focus = new $type;
         }
         $log = LoggerManager::getLogger('export_'.$type);
         $db = new PearDatabase();
@@ -159,6 +165,11 @@ function export($type)
 		} elseif($type == 'Vendors' && count($idstring) > 0) {
 			$query .= ' and vtiger_vendor.vendorid in ('. generateQuestionMarks($idstring) .')';
 			array_push($params, $idstring);
+		} else if(count($idstring) > 0) {
+			// vtlib customization: Hook to make the export feature available for custom modules.
+			$query .= " and $focus->table_name.$focus->table_index in (" . generateQuestionMarks($idstring) . ')';
+			array_push($params, $idstring);
+			// END
 		}
 	}
 	

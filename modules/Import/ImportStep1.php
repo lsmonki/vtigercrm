@@ -57,7 +57,19 @@ $import_object_array = Array(
 if(isset($_REQUEST['module']) && $_REQUEST['module'] != '')
 {
 	$object_name = $import_object_array[$_REQUEST['module']];
+	// vtlib customization: Hook added to enable import for un-mapped modules
+	$module = $_REQUEST['module'];	
+	if($object_name == null) {
+		require_once("modules/$module/$module.php");
+		$object_name = $module;
+		$callInitImport = true;
+	}
+	// END
+
 	$focus = new $object_name();
+	// vtlib customization: Call the import initializer
+	if($callInitImport) $focus->initImport($module);
+	// END
 }
 else
 {

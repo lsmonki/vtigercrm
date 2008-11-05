@@ -1624,7 +1624,10 @@ function getRelatedLists($module,$focus)
 	
 	$cur_tab_id = getTabid($module);
 
-	$sql1 = "select * from vtiger_relatedlists where tabid=? order by sequence";
+	//$sql1 = "select * from vtiger_relatedlists where tabid=? order by sequence";
+	// vtlib customization: Do not picklist module which are set as in-active
+	$sql1 = "select * from vtiger_relatedlists where tabid=? and related_tabid not in (SELECT tabid FROM vtiger_tab WHERE presence = 1) order by sequence";
+	// END
 	$result = $adb->pquery($sql1, array($cur_tab_id));
 	$num_row = $adb->num_rows($result);
 	for($i=0; $i<$num_row; $i++)
@@ -1638,14 +1641,18 @@ function getRelatedLists($module,$focus)
 			if($profileTabsPermission[$rel_tab_id] == 0)
 			{
 		        	if($profileActionPermission[$rel_tab_id][3] == 0)
-        			{
-		                	$focus_list[$label] = $focus->$function_name($focus->id);
+					{
+						// vtlib customization: Send more information related to (from module, related module) name to the callee
+						$focus_list[$label] = $focus->$function_name($focus->id, $cur_tab_id, $rel_tab_id);
+						// END
         			}
 			}
 		}
 		else
 		{
-			$focus_list[$label] = $focus->$function_name($focus->id);
+			// vtlib customization: Send more information related to (from module, related module) name to the callee
+			$focus_list[$label] = $focus->$function_name($focus->id, $cur_tab_id, $rel_tab_id);
+			// END
 		}
 	}
 	$log->debug("Exiting getRelatedLists method ...");

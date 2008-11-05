@@ -55,8 +55,11 @@ if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 $related_array=getRelatedLists($currentModule,$focus);
 //Added for multi select check box for contacts and leads in Campaigns related lists..
 //Alter the $related_array and check the selected item on previous page.
-foreach($related_array as $mod_key=>$mod_val)
-{
+
+// vtlib customization: Related module could be disabled, check it
+if(isset($related_array)) {
+	foreach($related_array as $mod_key=>$mod_val)
+	{
         if($mod_key == "Contacts" || $mod_key == "Leads")
         {
                 $rel_checked=$_REQUEST[$mod_key.'_all'];
@@ -73,8 +76,9 @@ foreach($related_array as $mod_key=>$mod_val)
                         }
                 }
         }
+	}
 }
-
+// END
 $smarty->assign("RELATEDLISTS", $related_array);
 
 require_once('modules/CustomView/CustomView.php');

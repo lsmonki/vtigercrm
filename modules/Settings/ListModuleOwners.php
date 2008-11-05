@@ -99,7 +99,10 @@ function getModuleNameList()
 {
 	global $adb;
 
-	$sql = "select vtiger_moduleowners.*, vtiger_tab.name from vtiger_moduleowners inner join vtiger_tab on vtiger_moduleowners.tabid = vtiger_tab.tabid order by vtiger_tab.tabsequence";
+	// vtlib customization: Ignore disabled modules
+	//$sql = "select vtiger_moduleowners.*, vtiger_tab.name from vtiger_moduleowners inner join vtiger_tab on vtiger_moduleowners.tabid = vtiger_tab.tabid order by vtiger_tab.tabsequence";
+	$sql = "select vtiger_moduleowners.*, vtiger_tab.name from vtiger_moduleowners inner join vtiger_tab on vtiger_moduleowners.tabid = vtiger_tab.tabid WHERE vtiger_tab.presence != 1 order by vtiger_tab.tabsequence";
+	// END
 	$res = $adb->pquery($sql, array());
 	$mod_array = Array();
 	while($row = $adb->fetchByAssoc($res))

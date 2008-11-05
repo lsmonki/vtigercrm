@@ -112,6 +112,14 @@ $import_object_array = Array(
 if(isset($_REQUEST['module']) && $_REQUEST['module'] != '')
 {
 	$current_bean_type = $import_object_array[$_REQUEST['module']];
+	// vtlib customization: Hook added to enable import for un-mapped modules
+	$module = $_REQUEST['module'];	
+	if($current_bean_type == null) {
+		require_once("modules/$module/$module.php");
+		$current_bean_type = $module;
+		$callInitImport = true;		
+	}
+	// END
 }
 else
 {
@@ -119,6 +127,9 @@ else
 }
 
 $focus = new $current_bean_type();
+// vtlib customization: Call the import initializer
+if($callInitImport) $focus->initImport($module);
+// END
 
 //Constructing the custom vtiger_field Array
 require_once('include/CustomFieldUtil.php');

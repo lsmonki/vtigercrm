@@ -156,7 +156,10 @@ function getListLeadMapping($cfid)
 function getCustomFieldSupportedModules()
 {
 	global $adb;
-	$sql="select distinct vtiger_field.tabid,name from vtiger_field inner join vtiger_tab on vtiger_field.tabid=vtiger_tab.tabid where vtiger_field.tabid not in(9,10,16,15,8,29)";
+	// vtlib customization: Do not list disabled modules.
+	//$sql="select distinct vtiger_field.tabid,name from vtiger_field inner join vtiger_tab on vtiger_field.tabid=vtiger_tab.tabid where vtiger_field.tabid not in(9,10,16,15,8,29)";
+	$sql="select distinct vtiger_field.tabid,name from vtiger_field inner join vtiger_tab on vtiger_field.tabid=vtiger_tab.tabid where vtiger_field.tabid not in(9,10,16,15,8,29) and vtiger_tab.presence != 1";
+	// END
 	$result = $adb->pquery($sql, array());
 	while($moduleinfo=$adb->fetch_array($result))
 	{

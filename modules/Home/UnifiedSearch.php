@@ -302,7 +302,10 @@ function getSearchModulesComboList($search_module)
  function getSearchModules()
  {
 	 global $adb;
-	 $sql = 'select distinct vtiger_field.tabid,name from vtiger_field inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.tabid not in (16,29)';
+	 // vtlib customization: Ignore disabled modules.
+	 //$sql = 'select distinct vtiger_field.tabid,name from vtiger_field inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.tabid not in (16,29)';
+	 $sql = 'select distinct vtiger_field.tabid,name from vtiger_field inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.tabid not in (16,29) and vtiger_tab.presence != 1';
+	 // END
 	$result = $adb->pquery($sql, array());
 	while($module_result = $adb->fetch_array($result))
 	{

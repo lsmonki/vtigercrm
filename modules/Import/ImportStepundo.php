@@ -57,6 +57,16 @@ $image_path=$theme_path."images/";
 $log->info("Import Undo");
 $last_import = new UsersLastImport();
 $ret_value = $last_import->undo($current_user->id);
+
+// vtlib customization: Invoke undo import function of the module.
+$module = $_REQUEST['module'];
+require_once("modules/$module/$module.php");
+$undo_focus = new $module();
+if(method_exists($undo_focus, 'undo_import')) {
+	$ret_value += $undo_focus->undo_import($module, $current_user->id);
+}
+// END
+
 ?>
 
 <br>

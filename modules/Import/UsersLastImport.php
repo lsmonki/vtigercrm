@@ -230,6 +230,13 @@ class UsersLastImport extends SugarBean
 				AND vtiger_users.status='Active'";
 
 		}
+		// vtlib customization: Hook for getting the query from the module class itself.
+		else {
+			require_once("modules/$this->bean_type/$this->bean_type.php");
+			$bean_focus = new $this->bean_type();
+			$query = $bean_focus->create_import_query($this->bean_type);
+		}
+		// END
 
 		return $query;
 
