@@ -43,6 +43,7 @@ class ImportProduct extends Products {
 	var $special_functions =  array(
 					"assign_user",
 					"map_vendor_name",
+					"map_member_of",
 				       );
 
 	var $importable_fields = Array();
@@ -125,6 +126,34 @@ class ImportProduct extends Products {
 		$adb->println("Exit map_vendor_name. Fetched Vendor for '".$vendor_name."' and the vendorid = $vendor_id");
         }
 
+	/** Function used to map with existing Member Of(Product) if the product is map with an member of during import
+    */
+	function map_member_of()
+	{
+		global $adb;
+
+		$product_name = $this->column_fields['product_id'];
+		$adb->println("Entering map_member_of product_id=".$product_name);
+
+		if ((! isset($product_name) || $product_name == '') )
+		{
+			$adb->println("Exit map_member_of. Product Name(Member Of) not set for this entity.");
+			return; 
+		}
+
+		$product_name = trim($product_name);
+
+		//Query to get the available Product which is not deleted
+		$query = "select productid from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_products.productid WHERE vtiger_products.productname=? and vtiger_crmentity.deleted=0";
+		$product_id = $adb->query_result($adb->pquery($query, array($product_name)),0,'productid');
+
+		if($product_id == '' || !isset($product_id))
+			$product_id = 0;
+
+		$this->column_fields['product_id'] = $product_id;
+
+		$adb->println("Exit map_member_of. Fetched Account for '".$product_name."' and the account_id = $product_id");
+    }
 
 }
 ?>

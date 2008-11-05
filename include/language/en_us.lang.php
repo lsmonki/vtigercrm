@@ -1151,7 +1151,10 @@ $app_strings = array (
 
 // Mass Edit Feature
 'LBL_MASS_EDIT'=>'Mass Edit',
-'LBL_MASSEDIT_FORM_HEADER'=>'Mass Edit - Records Fields'
+'LBL_MASSEDIT_FORM_HEADER'=>'Mass Edit - Records Fields',
+
+// Product Bundles
+'Product Bundles'=>'Product Bundles',
 );
 
 $app_list_strings = array (

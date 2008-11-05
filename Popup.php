@@ -263,12 +263,30 @@ else
 		$smarty->assign("recid_var_value",$_REQUEST['task_relmod_id']);
 		$where_relquery.= getPopupCheckquery($currentModule,$_REQUEST['task_parent_module'],$_REQUEST['task_relmod_id']);
 	}
-	if($currentModule == 'Products')
-       		$where_relquery .=" and discontinued <> 0 ";
-
+	if($currentModule == 'Products' && !$_REQUEST['record_id'] && ($popuptype == 'inventory_prod' || $popuptype == 'inventory_mo' || $popuptype == 'inventory_prod_po'))
+       		$where_relquery .=" and vtiger_products.discontinued <> 0 AND vtiger_products.parentid=0";
+	elseif($currentModule == 'Products' && $_REQUEST['record_id'] && ($popuptype == 'inventory_prod' || $popuptype == 'inventory_prod_po'))
+       		$where_relquery .=" and vtiger_products.discontinued <> 0 AND vtiger_products.parentid=".$_REQUEST['record_id'];
+	elseif($currentModule == 'Products' && $_REQUEST['return_module'] != 'Products')
+       		$where_relquery .=" and vtiger_products.discontinued <> 0";
+       		
+	if($_REQUEST['return_module'] == 'Products' && $_REQUEST['record_id'])
+       		$where_relquery .=" and vtiger_products.discontinued <> 0 AND vtiger_crmentity.crmid NOT IN (".$_REQUEST['record_id'].") AND vtiger_products.parentid=0";
 	$query = getListQuery($currentModule,$where_relquery);
 }
-			
+
+if($currentModule == 'Products' && $_REQUEST['record_id'] && ($popuptype == 'inventory_prod' || $popuptype == 'inventory_prod_po'))
+{
+	$product_name = getProductName($_REQUEST['record_id']);
+	$smarty->assign("PRODUCT_NAME", $product_name);
+	$smarty->assign("RECORD_ID", $_REQUEST['record_id']);
+}
+else
+{
+	$listview_header_search=getSearchListHeaderValues($focus,"$currentModule",$url_string,$sorder,$order_by);
+	$smarty->assign("SEARCHLISTHEADER", $listview_header_search);
+	$smarty->assign("ALPHABETICAL", $alphabetical);
+}			
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
@@ -320,10 +338,7 @@ if(isset($_REQUEST['select']) && $_REQUEST['select'] == 'enable')
 	$url_string .='&select=enable';
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != '')
 	$url_string .='&return_module='.$_REQUEST['return_module'];
-$listview_header_search=getSearchListHeaderValues($focus,"$currentModule",$url_string,$sorder,$order_by);
-$smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
-$smarty->assign("ALPHABETICAL", $alphabetical);
 
 
 $listview_header = getSearchListViewHeader($focus,"$currentModule",$url_string,$sorder,$order_by);
@@ -331,7 +346,10 @@ $smarty->assign("LISTHEADER", $listview_header);
 $smarty->assign("HEADERCOUNT",count($listview_header)+1);
 
 $listview_entries = getSearchListViewEntries($focus,"$currentModule",$list_result,$navigation_array,$form); 
-$smarty->assign("LISTENTITY", $listview_entries);
+$smarty->assign("LISTENTITY", $listview_entries[0]);
+
+require_once('include/Zend/Json.php');
+$smarty->assign("LISTENTITYACTION", Zend_Json::encode($listview_entries[1]));
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,$currentModule,"Popup");
 $smarty->assign("NAVIGATION", $navigationOutput);

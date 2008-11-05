@@ -3213,6 +3213,7 @@ function ChangeTypeOfData_Filter($table_name,$column_name,$type_of_data)
 		"vtiger_products:discontinued"=>"C",
 		"vtiger_products:vendor_id"=>"V",
 		"vtiger_products:handler"=>"V",
+		"vtiger_products:parentid"=>"V",
 		
 		//Faq Related Fields
 		"vtiger_faq:product_id"=>"V",

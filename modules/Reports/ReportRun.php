@@ -1598,6 +1598,7 @@ class ReportRun extends CRMEntity
 						LEFT JOIN vtiger_productcurrencyrel ON vtiger_products.productid = vtiger_productcurrencyrel.productid
 						AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . "
 				) AS innerProduct ON innerProduct.productid = vtiger_products.productid
+				left join vtiger_products as vtiger_productsProducts on vtiger_productsProducts.productid = vtiger_products.parentid
 				where vtiger_crmentity.deleted=0";
 		}
 

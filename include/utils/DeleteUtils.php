@@ -53,7 +53,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$sql = 'delete from vtiger_seactivityrel where crmid = ?';
 			$adb->pquery($sql, array($record));
 		}
-	break;
+		break;
 	case Accounts:
 		if($return_module == 'Products')//Delete Account from Product relatedlist
 		{
@@ -63,7 +63,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		else {
 			delAccRelRecords($record);
 		}
-	break;
+		break;
 	case Campaigns:
 		if($return_module == "Leads") {
 			$sql = 'delete from vtiger_campaignleadrel where campaignid=? and leadid=?';
@@ -72,7 +72,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$sql = 'delete from vtiger_campaigncontrel where campaignid=? and contactid=?';
 			$adb->pquery($sql, array($record, $return_id));
 		}
-	break;
+		break;
 	case Contacts:
 		if($return_module == 'Accounts')
 		{
@@ -110,7 +110,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 				delContactRelRecords($record);
 			}	
 		}	
-	break;
+		break;
 	case Potentials:
 		if($return_module == 'Accounts')
 		{
@@ -163,7 +163,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$sql ='delete from vtiger_seactivityrel where crmid = ?';
 			$adb->pquery($sql, array($record));
 		}	
-	break;
+		break;
 	case Calendar:
 		if($return_module == 'Contacts')
 		{
@@ -185,11 +185,11 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			delCalendarRelRecords($record);
 		}
 		
-	break;
+		break;
 	case Emails:
 		$sql='delete from vtiger_seactivityrel where activityid=?';
 		$adb->pquery($sql, array($record));
-	break;
+		break;
 	case HelpDesk:
 		if($return_module == 'Contacts' || $return_module == 'Accounts')
 		{
@@ -204,7 +204,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$sql = "update vtiger_troubletickets set product_id=null where ticketid=?";
 			$adb->pquery($sql, array($record));
 		}
-	break;
+		break;
 	case Documents:
 		if($return_id == '') {
 			//Backup Documents Related Records
@@ -224,7 +224,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$sql = 'delete from vtiger_senotesrel where notesid = ? and crmid = ?';
 			$adb->pquery($sql, array($record, $return_id));		
 		}
-	break;
+		break;
 	case Products:
 		if($record != '' && $return_id != '')
 		{
@@ -243,6 +243,12 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 				$sql = "update vtiger_products set vendor_id = null where productid = ?";
 				$adb->pquery($sql, array($record));
 			}
+			
+			if($return_module == "Products")
+			{
+				$sql = "update vtiger_products set parentid = 0 where productid = ?";
+				$adb->pquery($sql, array($record));
+			}
 		} else {
 			//Backup Campaigns-Product Relation
 			$cmp_q = "select campaignid from vtiger_campaign where product_id = ?";
@@ -258,8 +264,9 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			}
 			//we have to update the product_id as null for the campaigns which are related to this product
 			$adb->pquery("update vtiger_campaign set product_id=NULL where product_id = ?", array($record));
+			$adb->pquery("update vtiger_products set parentid = 0 where parentid = ?", array($record));
 		}
-	break;
+		break;
 	case PurchaseOrder:
 		if($return_module == "Vendors")
 		{
@@ -271,7 +278,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$sql_req ='UPDATE vtiger_purchaseorder set contactid="" where purchaseorderid = ?';
 			$adb->pquery($sql_req, array($record));
 		}
-	break;
+		break;
 	case SalesOrder:
 		if($return_module == "Accounts")
 		{
@@ -292,7 +299,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$relation_query = "UPDATE vtiger_salesorder set contactid=null where salesorderid=?";
 			$adb->pquery($relation_query, array($record));
 		}
-	break;
+		break;
 	case Quotes:	
 		if($return_module == "Accounts" )
 		{
@@ -308,7 +315,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$relation_query = "UPDATE vtiger_quotes set contactid=null where quoteid=?";
 			$adb->pquery($relation_query, array($record));
 		}
-	break;
+		break;
 	case Invoice:
 		if($return_module == "Accounts")
 		{
@@ -319,25 +326,26 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$relation_query = "UPDATE vtiger_invoice set salesorderid=null where invoiceid=?";
 			$adb->pquery($relation_query, array($record));
 		}
-	break;
+		break;
 	case Rss:
 		$del_query = "delete from vtiger_rss where rssid=?";
 		$adb->pquery($del_query, array($record));
-	break;
+		break;
 	case Portal:
 		$del_query = "delete from vtiger_portal where portalid=?";
 		$adb->pquery($del_query, array($record));
-	break;
+		break;
 	endswitch;
 	}
-
 	//this is added to update the crmentity.deleted=1 when we delete from listview and not from relatedlist
 	if($return_module == $module && $return_module !='Rss' && $return_module !='Portal')
 	{	
-		require_once('include/freetag/freetag.class.php');
-		$freetag=new freetag();
-		$freetag->delete_all_object_tags_for_user($current_user->id,$record);
-		$focus->mark_deleted($record);
+		if(!($return_id!='' && $record != $return_id)){
+			require_once('include/freetag/freetag.class.php');
+			$freetag=new freetag();
+			$freetag->delete_all_object_tags_for_user($current_user->id,$record);
+			$focus->mark_deleted($record);
+		}
 	}
 
 	//This is to delete the entity information from tracker ie., lastviewed 
@@ -712,6 +720,14 @@ function delCalendarRelRecords($record){
 		$sql= 'delete from vtiger_seactivityrel where activityid=? and crmid in (' . generateQuestionMarks($se_id_list) .')';
 		$adb->pquery($sql, array($record, $se_id_list));
 	}
+}
+
+function delProductRelRecords($record) {	
+	global $adb;
+
+	//Deleting Product-Product Relation.
+	$pro_q = "update vtiger_products set parentid = 0 where parentid = ?";
+	$adb->pquery($pro_q, array($record));
 }
 
 ?>

@@ -1159,7 +1159,9 @@
 			<notnull />
 			<default value="1" />
 		</field>
-
+		<field name="parentid" type="I" size="19">
+			<default value="0" />
+		</field>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 

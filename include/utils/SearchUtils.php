@@ -391,6 +391,11 @@ function BasicSearch($module,$search_field,$search_string)
 				$table_name = "vtiger_account2";
 				$column_name = "accountname";
 			}
+			if($column_name == "parentid" && $module == "Products")
+			{
+				$table_name = "vtiger_products2";
+				$column_name = "productname";
+			}
 			if($column_name == "reportsto" && $module == "Contacts")
 			{
 				$table_name = "vtiger_contactdetails2";
@@ -711,6 +716,8 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 	}
 	if($searchfield == "vtiger_account.parentid")
 		$searchfield = "vtiger_account2.accountname";
+	if($searchfield == "vtiger_products.parentid")
+		$searchfield = "vtiger_products2.productname";
 	if($searchfield == "vtiger_pricebook.currency_id" || $searchfield == "vtiger_quotes.currency_id" || $searchfield == "vtiger_invoice.currency_id"
 			|| $searchfield == "vtiger_purchaseorder.currency_id" || $searchfield == "vtiger_salesorder.currency_id")
 		$searchfield = "vtiger_currency_info.currency_name";

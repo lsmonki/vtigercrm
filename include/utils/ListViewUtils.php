@@ -1291,11 +1291,50 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 					$list_header[]=$value;
 				}
 			}	
+
+			if($module=='Products' && ($focus->popup_type=='inventory_prod' || $focus->popup_type=='inventory_prod_po'))
+			{
+					require('user_privileges/user_privileges_'.$current_user->id.'.php');
+					$row_id = $_REQUEST['curr_row'];
+
+					//To get all the tax types and values and pass it to product details
+					$tax_str = '';
+					$tax_details = getAllTaxes();
+					for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
+					{
+						$tax_str .= $tax_details[$tax_count]['taxname'].'='.$tax_details[$tax_count]['percentage'].',';
+					}
+					$tax_str = trim($tax_str,',');
+					$rate = $user_info['conv_rate'];
+					if(getFieldVisibilityPermission('Products',$current_user->id,'unit_price') == '0') {
+						$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
+						if($_REQUEST['currencyid'] != null) {
+							$prod_prices = getPricesForProducts($_REQUEST['currencyid'], array($entity_id));
+							$unitprice = $prod_prices[$entity_id];
+						}
+					} else {
+						$unit_price = '';
+					}
+					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
+
+					$slashes_temp_val = popup_from_html(getProductName($entity_id));
+                                        $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
+					$description=$adb->query_result($list_result,$list_result_count,'product_description');
+					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
+
+					if($focus->popup_type == 'inventory_prod')$value_array[$entity_id] = array($entity_id, nl2br($slashes_temp_val), $unitprice, $qty_stock,$tax_str,$row_id,$slashes_desc);
+					if($focus->popup_type == 'inventory_prod_po')$value_array[$entity_id] = array($entity_id, nl2br($slashes_temp_val), $unitprice, $tax_str,$row_id,$slashes_desc);
+					$sub_products_link = '<a href="index.php?module=Products&action=Popup&html=Popup_picker&return_module='.$_REQUEST['return_module'].'&record_id='.$entity_id.'&form=HelpDeskEditView&select=enable&popuptype='.$focus->popup_type.'&curr_row='.$row_id.'&currencyid='.$_REQUEST['currencyid'].'" > Sub Products</a>';	
+					if($adb->query_result($list_result,$i-1,"parentid")==0)
+						$list_header[]=$sub_products_link;
+			}
 			$list_block[$entity_id]=$list_header;
 		}
 	}
+	$list[0]=$list_block;
+	$list[1]=$value_array;
 	$log->debug("Exiting getSearchListViewEntries method ...");
-	return $list_block;
+	return $list;
 }
 
 
@@ -1356,8 +1395,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	elseif($uitype == 51)//Accounts - Member Of
 	{
 		$parentid = $adb->query_result($list_result,$list_result_count,"parentid");
-		$account_name = textlength_check(getAccountName($parentid));
-		$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>';
+		if($module=='Accounts')
+			$entity_name = textlength_check(getAccountName($parentid));
+		elseif($module == 'Products')
+			$entity_name = textlength_check(getProductName($parentid));
+		$value = '<a href="index.php?module='.$module.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$entity_name.'</a>';
 
 	}
 	elseif($uitype == 77) 
@@ -1905,6 +1947,15 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$temp_val = popup_from_html($temp_val);
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_pb("'.$listprice.'", "'.$flname.'"); \'>'.$temp_val.'</a>';
 				}
+				elseif($popuptype == "inventory_mo")
+				{
+					$prod_id = $_REQUEST['productid'];
+					$flname =  $_REQUEST['fldname'];
+					$listprice=getListPrice($prod_id,$entity_id);	
+
+					$slashes_temp_val = popup_from_html($temp_val);
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_product("'.$entity_id.'", "'.nl2br($slashes_temp_val).'"); \'>'.$temp_val.'</a>';
+				}
 				elseif($popuptype == "specific_account_address")
 				{
 					require_once('modules/Accounts/Accounts.php');
@@ -2367,6 +2418,8 @@ function getListQuery($module,$where='')
 				ON vtiger_products.productid = vtiger_productcf.productid
 			LEFT JOIN vtiger_vendor
 				ON vtiger_vendor.vendorid = vtiger_products.vendor_id
+			LEFT JOIN vtiger_products vtiger_products2
+				ON vtiger_products.parentid = vtiger_products2.productid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_products.handler";
 		if((isset($_REQUEST["from_dashboard"]) && $_REQUEST["from_dashboard"] == true) && (isset($_REQUEST["type"]) && $_REQUEST["type"] =="dbrd"))

@@ -41,13 +41,13 @@
 	                                <input title="{$APP.LBL_ADD_NEW} {$APP.Potential}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView';this.form.module.value='Potentials'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Potential}">
 				{/if}
                 </td>
-                        {elseif $header eq 'PriceBooks'}
-                                {if $MODULE eq 'Products'}
-                                <input title="{$APP.LBL_ADD_TO} {$APP.PriceBooks}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_ADD_TO} {$APP.PriceBooks}" LANGUAGE=javascript onclick="this.form.action.value='AddProductToPriceBooks';this.form.module.value='Products'"  type="submit" name="button">
-                                {/if}
-                        {elseif $header eq 'Products'}
-                                {if $MODULE eq 'PriceBooks'}
-	                                <input alt="{$APP.LBL_SELECT_PRODUCT_BUTTON_LABEL}" title="{$APP.LBL_SELECT_PRODUCT_BUTTON_LABEL}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_PRODUCT_BUTTON_LABEL}" LANGUAGE=javascript onclick="this.form.action.value='AddProductsToPriceBook';this.form.module.value='Products';this.form.return_module.value='Products';this.form.return_action.value='PriceBookDetailView'"  type="submit" name="button"></td>
+            {elseif $header eq 'PriceBooks'}
+                    {if $MODULE eq 'Products'}
+                    <input title="{$APP.LBL_ADD_TO} {$APP.PriceBooks}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_ADD_TO} {$APP.PriceBooks}" LANGUAGE=javascript onclick="this.form.action.value='AddProductToPriceBooks';this.form.module.value='Products'"  type="submit" name="button">
+                    {/if}
+            {elseif $header eq 'Products'}
+                {if $MODULE eq 'PriceBooks'}
+					<input alt="{$APP.LBL_SELECT_PRODUCT_BUTTON_LABEL}" title="{$APP.LBL_SELECT_PRODUCT_BUTTON_LABEL}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_PRODUCT_BUTTON_LABEL}" LANGUAGE=javascript onclick="this.form.action.value='AddProductsToPriceBook';this.form.module.value='Products';this.form.return_module.value='Products';this.form.return_action.value='PriceBookDetailView'"  type="submit" name="button"></td>
 				{elseif $MODULE eq 'Leads'}
 					<input alt="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Products}" title="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Products}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Products}" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}&parenttab={$CATEGORY}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">
 				{elseif $MODULE eq 'Accounts'}
@@ -143,29 +143,33 @@
 				<input title="{$APP.LBL_ADD_NEW} {$APP.SINGLE_SalesOrder}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView';this.form.module.value='SalesOrder'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.SINGLE_SalesOrder}"></td>
 				{/if}
 			{elseif $header eq 'Purchase Order'}
-                                <input title="{$APP.LBL_ADD_NEW} {$APP.SINGLE_PurchaseOrder}" accessyKey="O" class="crmbutton small create" onclick="this.form.action.value='EditView'; this.form.module.value='PurchaseOrder'; this.form.return_module.value='{$MODULE}'; this.form.return_action.value='{$return_modname}'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.SINGLE_PurchaseOrder}"></td>
-                        {elseif $header eq 'Emails'}
-                                <input type="hidden" name="email_directing_module">
-                                <input type="hidden" name="record">
-				{if $PERMIT eq '0'}
-                                {if $MAIL_CHECK eq 'true'}
-                                <input title="{$APP.LBL_ADD_NEW} {$APP.Email}" accessyKey="F" class="crmbutton small create" onclick="fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID});" type="button" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Email}"></td>
-				{else}
-                                <input title="{$APP.LBL_ADD_NEW} {$APP.Email}" accessyKey="F" class="crmbutton small create" onclick="OpenCompose('','create');" type="button" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Email}"></td>
-                                {/if}
-                                {else}
-                                <input title="{$APP.LBL_ADD_NEW} {$APP.Email}" accessyKey="F" class="crmbutton small create" onclick="fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID});" type="button" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Email}"></td>
-                                {/if}
+                    <input title="{$APP.LBL_ADD_NEW} {$APP.SINGLE_PurchaseOrder}" accessyKey="O" class="crmbutton small create" onclick="this.form.action.value='EditView'; this.form.module.value='PurchaseOrder'; this.form.return_module.value='{$MODULE}'; this.form.return_action.value='{$return_modname}'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.SINGLE_PurchaseOrder}"></td>
+            {elseif $header eq 'Emails'}
+                    <input type="hidden" name="email_directing_module">
+                    <input type="hidden" name="record">
+					{if $PERMIT eq '0'}
+                            {if $MAIL_CHECK eq 'true'}
+                            <input title="{$APP.LBL_ADD_NEW} {$APP.Email}" accessyKey="F" class="crmbutton small create" onclick="fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID});" type="button" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Email}"></td>
+							{else}
+                            <input title="{$APP.LBL_ADD_NEW} {$APP.Email}" accessyKey="F" class="crmbutton small create" onclick="OpenCompose('','create');" type="button" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Email}"></td>
+                            {/if}
+                	{else}
+                        <input title="{$APP.LBL_ADD_NEW} {$APP.Email}" accessyKey="F" class="crmbutton small create" onclick="fnvshobj(this,'sendmail_cont');sendmail('{$MODULE}',{$ID});" type="button" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Email}"></td>
+                    {/if}
 			{elseif $header eq 'Users'}
-                                {if $MODULE eq 'Calendar'}
-				<input title="Change" accessKey="" tabindex="2" type="button" class="crmbutton small edit" value="{$APP.LBL_SELECT_USER_BUTTON_LABEL}" name="button" LANGUAGE=javascript onclick='return window.open("index.php?module=Users&return_module=Calendar&return_action={$return_modname}&activity_mode=Events&action=Popup&popuptype=detailview&form=EditView&form_submit=true&select=enable&return_id={$ID}&recordid={$ID}","test","width=640,height=525,resizable=0,scrollbars=0")';>
-                                {elseif $MODULE eq 'Emails'}
-                                <input title="{$APP.LBL_BULK_MAILS}" accessykey="F" class="crmbutton small create" onclick="this.form.action.value='sendmail';this.form.return_action.value='DetailView';this.form.module.value='Emails';this.form.return_module.value='Emails';" name="button" value="{$APP.LBL_BULK_MAILS}" type="submit">&nbsp;
-                                <input title="Change" accesskey="" tabindex="2" class="crmbutton small edit" value="{$APP.LBL_SELECT_USER_BUTTON_LABEL}" name="Button" language="javascript" onclick='return window.open("index.php?module=Users&return_module=Emails&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=true&return_id={$ID}&recordid={$ID}","test","width=640,height=520,resizable=0,scrollbars=0");' type="button">&nbsp;</td>
-                                {/if}
-                        {elseif $header eq 'Activity History'}
-                                &nbsp;</td>
-                        {/if}
+                    {if $MODULE eq 'Calendar'}
+						<input title="Change" accessKey="" tabindex="2" type="button" class="crmbutton small edit" value="{$APP.LBL_SELECT_USER_BUTTON_LABEL}" name="button" LANGUAGE=javascript onclick='return window.open("index.php?module=Users&return_module=Calendar&return_action={$return_modname}&activity_mode=Events&action=Popup&popuptype=detailview&form=EditView&form_submit=true&select=enable&return_id={$ID}&recordid={$ID}","test","width=640,height=525,resizable=0,scrollbars=0")';>
+                    {elseif $MODULE eq 'Emails'}
+                        <input title="{$APP.LBL_BULK_MAILS}" accessykey="F" class="crmbutton small create" onclick="this.form.action.value='sendmail';this.form.return_action.value='DetailView';this.form.module.value='Emails';this.form.return_module.value='Emails';" name="button" value="{$APP.LBL_BULK_MAILS}" type="submit">&nbsp;
+                        <input title="Change" accesskey="" tabindex="2" class="crmbutton small edit" value="{$APP.LBL_SELECT_USER_BUTTON_LABEL}" name="Button" language="javascript" onclick='return window.open("index.php?module=Users&return_module=Emails&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=true&return_id={$ID}&recordid={$ID}","test","width=640,height=520,resizable=0,scrollbars=0");' type="button">&nbsp;</td>
+                    {/if}
+            {elseif $header eq 'Activity History'}
+                    &nbsp;</td>
+			{elseif $header eq 'Product Bundles'}
+					{if $MODULE eq 'Products' && $IS_MEMBER eq 0}
+						<input alt="{$APP.LBL_ADD_NEW} {$APP.Product}" title="{$APP.LBL_ADD_NEW} {$APP.Product}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_ADD_NEW} {$APP.Product}" onClick="this.form.action.value='EditView'; this.form.return_action.value='{$return_modname}'; this.form.module.value='Products'; this.form.return_module.value='{$MODULE}'; this.form.return_viewname.value='{$NAME}'; this.form.return_id.value='{$ID}';" type="submit"  name="button">
+					{/if}
+            {/if}
         </tr>
 </table>
 {assign var=check_status value=$detail}

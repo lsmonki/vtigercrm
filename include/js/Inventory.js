@@ -76,9 +76,9 @@ function productPickList(currObj,module, row_no) {
     if(document.getElementsByName("account_id").length != 0)
     	record_id= document.EditView.account_id.value;
     if(record_id != '')
-    	window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId+"&relmod_id="+record_id+"&parent_module=Accounts&currencyid="+currencyid,"productWin","width=640,height=600,resizable=0,scrollbars=0,status=1,top=150,left=200");
+    	window.open("index.php?module=Products&action=Popup&html=Popup_picker&select=enable&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId+"&relmod_id="+record_id+"&parent_module=Accounts&return_module="+module+"&currencyid="+currencyid,"productWin","width=640,height=600,resizable=0,scrollbars=0,status=1,top=150,left=200");
     else
-		window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId+"&currencyid="+currencyid,"productWin","width=640,height=600,resizable=0,scrollbars=0,status=1,top=150,left=200");
+		window.open("index.php?module=Products&action=Popup&html=Popup_picker&select=enable&form=HelpDeskEditView&popuptype="+popuptype+"&curr_row="+rowId+"&return_module="+module+"&currencyid="+currencyid,"productWin","width=640,height=600,resizable=0,scrollbars=0,status=1,top=150,left=200");
 }
 
 function priceBookPickList(currObj, row_no) {
@@ -673,6 +673,8 @@ function fnAddProductRow(module,image_path){
 	decideTaxDiv();
 
 	calcTotal();
+
+	return count;
 }
 
 function decideTaxDiv()
@@ -1126,4 +1128,63 @@ function moveUpDown(sType,oModule,iIndex)
 	calcTotal();
 }
 
-
+function InventorySelectAll(mod,z,image_pth)
+{
+    if(document.selectall.selected_id != undefined)
+    {
+		var x = document.selectall.selected_id.length;
+		var y=0;
+		idstring = "";
+		namestr = "";
+		var action_str="";
+		if ( x == undefined) {
+			if (document.selectall.selected_id.checked) {
+				idstring = document.selectall.selected_id.value;
+				c = document.selectall.selected_id.value;
+				var tmp = z[c];
+				if(mod!='PurchaseOrder') {
+					set_return_inventory(tmp[0],tmp[1],tmp[2],tmp[3],tmp[4],parseInt(tmp[5]),tmp[6]);
+				} else {
+					set_return_inventory_po(tmp[0],tmp[1],tmp[2],tmp[3],parseInt(tmp[4]),tmp[5]);
+				}
+				y=1;
+			} else {
+				alert(alert_arr.SELECT);
+				return false;
+			}
+		} else {
+			y=0;
+			for(i = 0; i < x ; i++) {
+				if(document.selectall.selected_id[i].checked) {
+					idstring = document.selectall.selected_id[i].value+";"+idstring;
+					c = document.selectall.selected_id[i].value;
+					var tmp = z[c];
+					if(y>0) {
+						row_id = window.opener.fnAddProductRow(mod,image_pth);
+					}				
+					if(y==0) {
+						if(mod!='PurchaseOrder') {
+							set_return_inventory(tmp[0],tmp[1],tmp[2],tmp[3],tmp[4],parseInt(tmp[5]),tmp[6]);
+						} else {
+							set_return_inventory_po(tmp[0],tmp[1],tmp[2],tmp[3],parseInt(tmp[4]),tmp[5]);
+						}					
+					} else {
+						if(mod!='PurchaseOrder') {
+							set_return_inventory(tmp[0],tmp[1],tmp[2],tmp[3],tmp[4],parseInt(row_id),tmp[6]);
+						} else {
+							set_return_inventory_po(tmp[0],tmp[1],tmp[2],tmp[3],parseInt(row_id),tmp[5]);
+						}	
+					}
+					y=y+1;
+				}
+			}
+		}
+		if (y != 0) {
+			document.selectall.idlist.value=idstring;
+			return true;
+		} else {
+			alert(alert_arr.SELECT);
+			return false;
+		}
+    }
+}

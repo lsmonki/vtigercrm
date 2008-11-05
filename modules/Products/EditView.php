@@ -185,8 +185,16 @@ if(isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", $_REQ
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
+if(isset($focus->id) && $_REQUEST['isDuplicate'] != 'true')
+	$is_parent = $focus->isparent_check();
+else
+	$is_parent = 0;
+$smarty->assign("IS_PARENT",$is_parent);
 
-
+if($_REQUEST['return_module']=='Products' && isset($_REQUEST['return_action'])){
+	$return_name = getProductName($_REQUEST['return_id']);
+	$smarty->assign("RETURN_NAME", $return_name);
+}
 
  $tabid = getTabid("Products");
  $validationData = getDBValidationData($focus->tab_name,$tabid);

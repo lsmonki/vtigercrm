@@ -188,5 +188,6 @@
 				
 				ALL_FILTER_CREATION_DENIED:'Cannot create CustomView using name "All", try using different ViewName',
 				OPERATION_DENIED:'You are denied to perform this operation',
-				EMAIL_CHECK_MSG: 'Disable portal access to save the email field as blank'
+				EMAIL_CHECK_MSG: 'Disable portal access to save the email field as blank',
+				IS_PARENT : 'This Product has Sub Products, You are not allowed to choose a Parent for this Product'
 			};

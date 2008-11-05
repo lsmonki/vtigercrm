@@ -707,6 +707,27 @@ ExecuteQuery("alter table vtiger_attachments drop index attachments_description_
 ExecuteQuery("alter table vtiger_attachments modify column description LONGTEXT");
 ExecuteQuery("alter table vtiger_emaildetails modify column idlists LONGTEXT");
 
+/* Product Bundles Feature */
+$field_id = $adb->getUniqueID("vtiger_field");
+ExecuteQuery("insert into vtiger_field values (14,".$field_id.",'parentid','vtiger_products',1,'51','product_id','Member Of',1,0,0,100,21,31,1,'I~O',1,null,'BAS')");
+ExecuteQuery("ALTER TABLE vtiger_products ADD COLUMN parentid int(19) DEFAULT '0'");
+ExecuteQuery("INSERT INTO vtiger_def_org_field (tabid, fieldid, visible, readonly) VALUES (".getTabid("Products").", $field_id, 0, 1)");
+	
+$sqlresult = $adb->pquery("select profileid from vtiger_profile",array());
+$profilecnt = $adb->num_rows($sqlresult);
+for($pridx = 0; $pridx < $profilecnt; ++$pridx) {
+	$profileid = $adb->query_result($sqlresult, $pridx, "profileid");
+	ExecuteQuery("INSERT INTO vtiger_profile2field (profileid, tabid, fieldid, visible, readonly) VALUES($profileid, ".getTabid("Products").", $field_id, 0, 1)");
+}
+
+$users_query = $adb->pquery("SELECT id from vtiger_users",array());
+for($i=0; $i<$adb->num_rows($users_query); $i++){
+	$userid = $adb->query_result($users_query,$i,'id');
+	ExecuteQuery("insert into vtiger_user2mergefields values ($userid,".getTabid("Products").", $field_id, 0)");
+}
+
+ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Products").",'get_products',13,'Product Bundles',0)");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

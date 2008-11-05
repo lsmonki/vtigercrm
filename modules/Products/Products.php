@@ -834,6 +834,45 @@ class Products extends CRMEntity {
 		$log->debug("Exiting product_novendor method ...");
 		return $this->db->num_rows($result);
 	}
+
+	/**
+	* Function to get Product's related Products 
+	* @param  integer   $id      - productid
+	* returns related Products record in array format
+	*/
+	function get_products($id)
+	{
+		global $log, $singlepane_view;
+                $log->debug("Entering get_products(".$id.") method ...");
+		
+		global $app_strings;
+
+		$focus = new Products();
+
+		$button = '';
+
+		if(isPermitted("Products",1,"") == 'yes')
+		{
+
+
+			$button .= '<input title="New Product" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Products\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;';
+		}
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Products&return_action=CallRelatedList&return_id='.$id;
+
+		$query = "SELECT vtiger_products.productid, vtiger_products.productname,
+			vtiger_products.productcode, vtiger_products.commissionrate,
+			vtiger_products.qty_per_unit, vtiger_products.unit_price,
+			vtiger_crmentity.crmid, vtiger_crmentity.smownerid
+			FROM vtiger_products
+			INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_products.productid
+			WHERE vtiger_crmentity.deleted = 0 AND vtiger_products.parentid = $id";
+
+		$log->debug("Exiting get_products method ...");
+		return GetRelatedList('Products','Products',$focus,$query,$button,$returnset);
+	}
 	
 	/**	function used to get the export query for product
 	 *	@param reference $where - reference of the where variable which will be added with the query
@@ -860,6 +899,8 @@ class Products extends CRMEntity {
 
 			LEFT JOIN vtiger_vendor
 				ON vtiger_vendor.vendorid = vtiger_products.vendor_id
+			LEFT JOIN vtiger_products vtiger_products2 
+				ON vtiger_products2.productid = vtiger_products.parentid
 			WHERE vtiger_crmentity.deleted = 0 and vtiger_users.status = 'Active'";
 	
 
@@ -871,5 +912,22 @@ class Products extends CRMEntity {
 
 	}
 
+	/** Function to check if the product is parent of any other product 
+	*/
+	function isparent_check(){
+		global $adb;
+		$isparent_query = $adb->pquery(getListQuery("Products")." AND vtiger_products.parentid=?",array($this->id));
+		$isparent = $adb->num_rows($isparent_query);
+		return $isparent;
+	}
+
+	/** Function to check if the product is member of other product
+	*/
+	function ismember_check(){
+		global $adb;
+		$parentid_query = $adb->pquery("SELECT parentid from vtiger_products WHERE productid=?",array($this->id));
+		$parentid = $adb->query_result($parentid_query,0,'parentid');
+		return $parentid;
+	}
 }
 ?>

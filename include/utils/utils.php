@@ -3232,9 +3232,13 @@ function getRecordValues($id_array,$module)
 				}
 				elseif($ui_type == 51 || $ui_type == 50)
 				{
-					$account_id=$field_values[$j][$fld_name];
-					$account_name=getAccountName($account_id);
-				        $value_pair['disp_value']=$account_name;	
+					$entity_id=$field_values[$j][$fld_name];
+					if($module !='Products')
+						$entity_name=getAccountName($entity_id);
+					else
+						$entity_name=getProductName($entity_id);
+					
+					$value_pair['disp_value']=$entity_name;	
 				}	
 				elseif($ui_type == 53)
 				{
@@ -4426,10 +4430,16 @@ function getDuplicateRecordsArr($module)
 			}	
 			if($ui_type[$fld_arr[$k]] ==50 or $ui_type[$fld_arr[$k]] ==51)
 			{
-				$account_name=getAccountName($result[$col_arr[$k]]);
-				if($account_name != '')
-					$result[$col_arr[$k]]=$account_name;
-				else $result[$col_arr[$k]]='';
+				if($module!='Products') {
+					$entity_name=getAccountName($result[$col_arr[$k]]);
+				} else {
+					$entity_name=getProductName($result[$col_arr[$k]]);
+				}
+				if($entity_name != '') {
+					$result[$col_arr[$k]]=$entity_name;
+				} else {
+					$result[$col_arr[$k]]='';
+				}
 			}
 			if($ui_type[$fld_arr[$k]] ==58)
 			{

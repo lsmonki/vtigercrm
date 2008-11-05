@@ -67,6 +67,9 @@ $smarty->assign("APP",$app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 
+$is_member = $focus->ismember_check();
+$smarty->assign("IS_MEMBER",$is_member);
+
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 $smarty->display("RelatedLists.tpl");

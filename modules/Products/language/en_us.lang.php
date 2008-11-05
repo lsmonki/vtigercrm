@@ -231,6 +231,7 @@ $mod_strings = Array(
 'LBL_RECORD'=>'Record #',
 
 'LBL_PRODUCT_PRICES'=>'Product Prices',
+'Member Of'=>'Member Of',
 );
 
 ?>

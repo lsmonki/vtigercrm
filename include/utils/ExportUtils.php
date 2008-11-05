@@ -130,6 +130,10 @@ function getFieldsListFromQuery($query)
 		{
 			$fields .= "vtiger_vendor.vendorname as '".$fieldlabel."',";
 		}
+		elseif($tablename == 'vtiger_products' && $columnName == 'parentid')//Product - Member Of
+		{
+			 $fields .= "vtiger_products2.productname as '".$fieldlabel."',";
+		}
 		//Pavani- Handling product handler
 		elseif($tablename == 'vtiger_products' && $columnName == 'handler')//Product - Handler
 		{

@@ -193,16 +193,29 @@
 		{elseif $uitype eq 51}
 			{if $MODULE eq 'Accounts'}
 				{assign var='popuptype' value = 'specific_account_address'}
+			{elseif $MODULE eq 'Products'}
+				{assign var='popuptype' value = 'inventory_mo'}
 			{else}
 				{assign var='popuptype' value = 'specific_contact_account_address'}
 			{/if}
 			<td width="20%" class="dvtCellLabel" align=right>
 				{$fldlabel} {if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}
 			</td>
+			{if $MODULE neq 'Products'}
 			<td width="30%" align=left class="dvtCellInfo">
 				<input readonly name="account_name" style="border:1px solid #bababa;" type="text" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img tabindex="{$vt_tab}" src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype={$popuptype}&form=TasksEditView&form_submit=false","test","width=640,height=602,resizable=0,scrollbars=0");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.account_id.value=''; this.form.account_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
 			</td>
-
+			{else}
+				{if $RETURN_MODULE eq 'Products' && ($RETURN_ID neq '' && $RETURN_ID neq $ID)}
+				<td width="30%" align=left class="dvtCellInfo">
+					<input readonly name="product_name" style="border:1px solid #bababa;" type="text" value="{$RETURN_NAME}"><input name="{$fldname}" type="hidden" value="{$RETURN_ID}">&nbsp;<img tabindex="{$vt_tab}" src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&return_module=Products&record_id={$ID}&action=Popup&popuptype={$popuptype}&form=TasksEditView&form_submit=false","test","width=640,height=602,resizable=0,scrollbars=0");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.product_id.value=''; this.form.product_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
+				</td>
+				{else}
+				<td width="30%" align=left class="dvtCellInfo">
+					<input readonly name="product_name" style="border:1px solid #bababa;" type="text" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img tabindex="{$vt_tab}" src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='if({$IS_PARENT}==0)return window.open("index.php?module=Products&return_module=Products&record_id={$ID}&action=Popup&popuptype={$popuptype}&form=TasksEditView&form_submit=false","test","width=640,height=602,resizable=0,scrollbars=0"); else alert(alert_arr.IS_PARENT);' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="this.form.product_id.value=''; this.form.product_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
+				</td>
+				{/if}
+			{/if}
 		{elseif $uitype eq 50}
 			<td width="20%" class="dvtCellLabel" align=right>
 				<font color="red">*</font>{$fldlabel} {if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}

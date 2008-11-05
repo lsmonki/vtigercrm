@@ -412,14 +412,21 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			if(isset($_REQUEST['account_id']) && $_REQUEST['account_id'] != '')
 				$value = $_REQUEST['account_id'];	
 		}
-
-		if($value != '')
-		{		
-			$account_name = getAccountName($value);	
+		if($module_name == 'Products') {
+			if($value != '') {		
+				$product_name = getProductName($value);	
+			}
+			$editview_label[]=$mod_strings[$fieldlabel];
+			$fieldvalue[]=$product_name;
+			$fieldvalue[] = $value;			
+		} else {
+			if($value != '') {		
+				$account_name = getAccountName($value);	
+			}
+			$editview_label[]=$mod_strings[$fieldlabel];
+			$fieldvalue[]=$account_name;
+			$fieldvalue[] = $value;
 		}
-		$editview_label[]=$mod_strings[$fieldlabel];
-		$fieldvalue[]=$account_name;
-		$fieldvalue[] = $value;
 	}
 	elseif($uitype == 54)
 	{

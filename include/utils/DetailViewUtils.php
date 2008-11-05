@@ -35,7 +35,7 @@ require_once('include/utils/CommonUtils.php'); //new
   * Return type is an array
   */
 
-function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid='')
+function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid='',$module='')
 {
 	global $log;
 	$log->debug("Entering getDetailViewOutputHtml(".$uitype.",". $fieldname.",". $fieldlabel.",". $col_fields.",".$generatedtype.",".$tabid.") method ...");
@@ -300,16 +300,30 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	}
 	elseif($uitype == 51 || $uitype == 50 || $uitype == 73)
 	{
-		$account_id = $col_fields[$fieldname];
-		if($account_id != '')
+		if($module=='Products'){
+			$product_id = $col_fields[$fieldname];
+			if($product_id != '')
+			{
+				$product_name = getProductName($product_id);
+			}
+			$label_fld[] = $mod_strings[$fieldlabel];
+			$label_fld[] = $product_name;
+			$label_fld["secid"] = $product_id;
+			$label_fld["link"] = "index.php?module=Products&action=DetailView&record=".$product_id;
+		}
+		else
 		{
-			$account_name = getAccountName($account_id);
+			$account_id = $col_fields[$fieldname];
+			if($account_id != '')
+			{
+				$account_name = getAccountName($account_id);
+			}
+			$label_fld[] = $mod_strings[$fieldlabel];
+			$label_fld[] = $account_name;
+			$label_fld["secid"] = $account_id;
+			$label_fld["link"] = "index.php?module=Accounts&action=DetailView&record=".$account_id;
 		}
 		//Account Name View	
-		$label_fld[] = $mod_strings[$fieldlabel];
-		$label_fld[] = $account_name;
-		$label_fld["secid"] = $account_id;
-		$label_fld["link"] = "index.php?module=Accounts&action=DetailView&record=".$account_id;
 	}
 	elseif($uitype == 52 || $uitype == 77  || $uitype == 101)
 	{
@@ -1692,7 +1706,7 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 		$block = $adb->query_result($result,$i,"block");
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");
 		$tabid = $adb->query_result($result,$i,"tabid");
-		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
+		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid,$module);
 		if(is_array($custfld))
 		{
 			$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"notaccess"=>$custfld["notaccess"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname,"fldid"=>$fieldid));
@@ -1711,7 +1725,7 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 			$generatedtype = $adb->query_result($result,$i,"generatedtype");
 			$tabid = $adb->query_result($result,$i,"tabid");
 
-			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
+			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid,$module);
 			if(is_array($custfld))
 			{
 				$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"notaccess"=>$custfld["notaccess"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname,"fldid"=>$fieldid));

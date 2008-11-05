@@ -47,6 +47,8 @@ foreach($storearray as $id)
 				delVendorRelRecords($id);
 			if($returnmodule == 'Calendar')
 				delCalendarRelRecords($id);
+ 			if($returnmodule == 'Products')
+				delProductRelRecords($id);
         }
         else
         {

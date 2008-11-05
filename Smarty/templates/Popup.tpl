@@ -12,6 +12,9 @@
 
 -->*}
 <script>
+var z={$LISTENTITYACTION};
+var image_pth = '{$IMAGE_PATH}';
+
 function showAllRecords()
 {ldelim}
         modname = document.getElementById("relmod").name;
@@ -45,6 +48,7 @@ function redirectWhenNoRelatedRecordsFound()
 </script>
 <link rel="stylesheet" type="text/css" href="{$THEME_PATH}style.css">
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/Inventory.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/{php} echo $_SESSION['authenticated_user_language'];{/php}.lang.js?{php} echo $_SESSION['vtiger_version'];{/php}"></script>
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
@@ -62,10 +66,14 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
 					{if $recid_var_value neq ''}
-                                                <td class="moduleName" width="80%" style="padding-left:10px;">{$APP[$MODULE]}&nbsp;{$APP.LBL_RELATED_TO}&nbsp;{$APP[$PARENT_MODULE]}</td>
-                                        {else}
-                                                <td class="moduleName" width="80%" style="padding-left:10px;">{$APP[$MODULE]}</td>
-                                        {/if}
+                            <td class="moduleName" width="80%" style="padding-left:10px;">{$APP[$MODULE]}&nbsp;{$APP.LBL_RELATED_TO}&nbsp;{$APP[$PARENT_MODULE]}</td>
+                    {else}
+                            {if $RECORD_ID}
+	                            <td class="moduleName" width="80%" style="padding-left:10px;"><a href="javascript:;" onclick="window.history.back();">{$APP[$MODULE]}</a> > {$PRODUCT_NAME}</td>
+							{else}
+	                            <td class="moduleName" width="80%" style="padding-left:10px;">{$APP[$MODULE]}</td>
+							{/if}
+                    {/if}
 					<td  width=30% nowrap class="componentName" align=right>{$APP.VTIGER}</td>
 				</tr>
 			</table>
@@ -75,6 +83,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 					<td style="padding:10px;" >
 						<form name="basicSearch" action="index.php" onsubmit="return false;">
 						<table width="100%" cellpadding="5" cellspacing="0">
+						{if !$RECORD_ID}
 						<tr>
 							<td width="20%" class="dvtCellLabel"><img src="{$IMAGE_PATH}basicSearchLens.gif"></td>
 							<td width="30%" class="dvtCellLabel"><input type="text" name="search_text" class="txtBox"> </td>
@@ -102,6 +111,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 								<input type="button" name="search" value=" &nbsp;{$APP.LBL_SEARCH_NOW_BUTTON}&nbsp; " onClick="callSearch('Basic');" class="crmbutton small create">
 							</td>
 						</tr>
+						{/if}
 						 <tr>
 							<td colspan="4" align="center">
 								<table width="100%" class="small">
@@ -264,5 +274,15 @@ function getListViewSorted_js(module,url)
 			{rdelim}
 		);
 {rdelim}
+
+var product_labelarr = {ldelim}
+	CLEAR_COMMENT:'{$APP.LBL_CLEAR_COMMENT}',
+	DISCOUNT:'{$APP.LBL_DISCOUNT}',
+	TOTAL_AFTER_DISCOUNT:'{$APP.LBL_TOTAL_AFTER_DISCOUNT}',
+	TAX:'{$APP.LBL_TAX}',
+	ZERO_DISCOUNT:'{$APP.LBL_ZERO_DISCOUNT}',
+	PERCENT_OF_PRICE:'{$APP.LBL_OF_PRICE}',
+	DIRECT_PRICE_REDUCTION:'{$APP.LBL_DIRECT_PRICE_REDUCTION}'
+{rdelim};
 
 </script>

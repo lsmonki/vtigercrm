@@ -421,6 +421,11 @@ class Reports extends CRMEntity{
 				$fieldtablename = "vtiger_productsCampaigns";
 				$fieldcolname = "productname";
 			}
+			if($fieldname == 'product_id' && $fieldtablename == 'vtiger_products') 
+			{
+				$fieldtablename = "vtiger_productsProducts";
+				$fieldcolname = "productname";
+			}
 			if($fieldname == 'campaignid')
 			{
 				$fieldtablename = "vtiger_campaign";
@@ -1146,7 +1151,7 @@ function getEscapedColumns($selectedfields)
 				$ssql.= " and vtiger_field.fieldname not in ('parent_id','product_id')";
 				break;
 			case 14://Products
-				$ssql.= " and vtiger_field.fieldname not in ('vendor_id')";
+				$ssql.= " and vtiger_field.fieldname not in ('vendor_id','product_id')";
 				break;
 			case 20://Quotes
 				$ssql.= " and vtiger_field.fieldname not in ('potential_id','assigned_user_id1','account_id')";
