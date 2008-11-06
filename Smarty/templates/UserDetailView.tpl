@@ -88,7 +88,7 @@
 														{$DUPLICATE_BUTTON}
 												{/if}
 									{$EDIT_BUTTON}
-									{if $CATEGORY eq 'Settings' && $ID neq 1 && $ID neq 2 & $ID neq $CURRENT_USERID}
+									{if $CATEGORY eq 'Settings' && $ID neq 1 && $ID neq $CURRENT_USERID}
 									<input type="button" onclick="deleteUser({$ID});" class="crmButton small cancel" value="{$UMOD.LBL_DELETE}"></input>
 									{/if}
 								</td>

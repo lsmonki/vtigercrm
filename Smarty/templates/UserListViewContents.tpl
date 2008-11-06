@@ -45,7 +45,7 @@
 <tr>
 	<td class="listTableRow small" valign=top>{$smarty.foreach.userlist.iteration}</td>
 	<td class="listTableRow small" nowrap valign=top><a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record={$userid}"><img src="{$IMAGE_PATH}settingsActBtnEdit.gif" alt="{$APP.LBL_EDIT_BUTTON}" title="{$APP.LBL_EDIT_BUTTON}" border="0"></a>
-	{if $userid neq 1 && $userid neq 2 && $userid neq $CURRENT_USERID}	
+	{if $userid neq 1  && $userid neq $CURRENT_USERID}	
 	<img src="{$IMAGE_PATH}settingsActBtnDelete.gif" onclick="deleteUser(this,'{$userid}')" border="0"  alt="{$APP.LBL_DELETE_BUTTON}" title="{$APP.LBL_DELETE_BUTTON}" style="cursor:pointer;"/>
 	{/if}
 	<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record={$userid}&isDuplicate=true"><img src="{$IMAGE_PATH}settingsActBtnDuplicate.gif" alt="{$APP.LBL_DUPLICATE_BUTTON}" title="{$APP.LBL_DUPLICATE_BUTTON}" border="0"></a>

@@ -132,7 +132,7 @@ function indent($hrarray,$roleout,$role_det)
 													<a href="index.php?module=Settings&action=createrole&parenttab=Settings&parent='.$roleid.'"><img src="'.$image_path.'/Rolesadd.gif" align="absmiddle" border="0" alt="'.$mod_strings['LBL_ADD_ROLE'].'" title="'.$mod_strings['LBL_ADD_ROLE'].'"></a>
 													<a href="index.php?module=Settings&action=createrole&roleid='.$roleid.'&parenttab=Settings&mode=edit"><img src="'.$image_path.'/RolesEdit.gif" align="absmiddle" border="0" alt="'.$mod_strings['LBL_EDIT_ROLE'].'" title="'.$mod_strings['LBL_EDIT_ROLE'].'"></a>';
 
-			if($roleid != 'H1' && $roleid != 'H2' && $roleid != 'H3' && $roleid != 'H4' && $roleid != 'H5')
+			if($roleid != 'H1'  && $roleid != 'H2')
 			{
 							
 				$roleout .=	'<a href="index.php?module=Settings&action=RoleDeleteStep1&roleid='.$roleid.'&parenttab=Settings"><img src="'.$image_path.'/RolesDelete.gif" align="absmiddle" border="0" alt="'.$mod_strings['LBL_DELETE_ROLE'].'" title="'.$mod_strings['LBL_DELETE_ROLE'].'"></a>';
