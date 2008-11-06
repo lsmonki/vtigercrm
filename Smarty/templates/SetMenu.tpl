@@ -210,6 +210,14 @@
 
 <!-- Added For Custom Invoice Number #end -->
 
+		<!-- MailScanner Customization -->
+		{if $smarty.request.action eq 'MailScanner'}
+			<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=MailScanner&parenttab=Settings">{$MOD.LBL_MAIL_SCANNER}</a></td></tr>
+		{else}
+			<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=MailScanner&parenttab=Settings">{$MOD.LBL_MAIL_SCANNER}</a></td></tr>
+		{/if}
+		<!-- END -->
+
 		</table>
 		<!-- Left side navigation table ends -->
 		

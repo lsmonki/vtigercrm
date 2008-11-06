@@ -399,6 +399,14 @@ $db->getUniqueID("vtiger_freetags");
 //Insert into vtiger_currency vtiger_table
 $db->pquery("insert into vtiger_currency_info values(?,?,?,?,?,?,?,?)", array($db->getUniqueID("vtiger_currency_info"),$currency_name,$currency_code,$currency_symbol,1,'Active','-11','0'));
 
+// Run the performance scripts based on the database type and the vtiger version.
+require_once('modules/Migration/versions.php');
+if($adb->isMySQL()) {
+	@include_once('modules/Migration/Performance/'.$current_version.'_mysql.php');
+} elseif($adb->isPostgres()) {
+	@include_once('modules/Migration/Performance/'.$current_version.'_postgres.php');		
+}
+
 // populate the db with seed data
 if ($db_populate) {
         //eecho ("Populate seed data into $db_name");

@@ -539,6 +539,22 @@
 
 			</table>
 			</td>
+
+			<!-- MailScanner Customization -->
+			<td width=25% valign=top>
+			<table border=0 cellspacing=0 cellpadding=5 width=100%>
+			<tr>
+				<td rowspan=2 valign=top><a href="index.php?module=Settings&action=MailScanner&parenttab=Settings"><img src="{$IMAGE_PATH}mailScanner.gif" alt="{$MOD.LBL_MAIL_SCANNER}" width="48" height="48" border=0 title="{$MOD.LBL_MAIL_SCANNER}"></a></td>
+				<td class=big valign=top><a href="index.php?module=Settings&action=MailScanner&parenttab=Settings">{$MOD.LBL_MAIL_SCANNER}</a></td>
+			</tr>
+			<tr>
+				<td class="small" valign=top>{$MOD.LBL_MAIL_SCANNER_DESCRIPTION}</td>
+			</tr>
+
+			</table>
+			</td>
+
+			<!-- END -->
 		</tr>
 		<!-- Added for Custom Invoice Number #end -->
 

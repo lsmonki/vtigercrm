@@ -6748,4 +6748,79 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+	<!-- vtmailscanner -->
+	<table name="vtiger_mailscanner">
+		<field name="scannerid" type="I">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="scannername" type="C" size="30"></field>
+		<field name="server" type="C" size="100"></field>
+		<field name="protocol" type="C" size="10"></field>
+		<field name="username" type="C" size="30"></field>
+		<field name="password" type="C" size="255"></field>
+		<field name="ssltype" type="C" size="10"></field>
+		<field name="sslmethod" type="C" size="30"></field>
+		<field name="connecturl" type="C" size="255"></field>
+		<field name="isvalid" type="I" size="1"></field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_mailscanner_ids">
+		<field name="scannerid" type="I"></field>
+		<field name="messageid" type="X"></field>
+		<field name="crmid" type="I"></field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_mailscanner_folders">
+		<field name="folderid" type="I">
+			<key />
+			<autoincrement/>
+		</field>
+		<field name="scannerid" type="I"></field>
+		<field name="foldername" type="C" size="255"></field>
+		<field name="lastscan" type="C" size="30"></field>
+		<field name="enabled" type="I" size="1"></field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_mailscanner_rules">
+		<field name="ruleid" type="I">
+			<key />
+			<autoincrement/>
+		</field>
+		<field name="scannerid" type="I"></field>
+		<field name="fromaddress" type="C" size="255"></field>
+		<field name="toaddress" type="C" size="255"></field>
+		<field name="subjectop" type="C" size="20"></field>
+		<field name="subject" type="C" size="255"></field>
+		<field name="bodyop" type="C" size="20"></field>
+		<field name="body" type="C" size="255"></field>
+		<field name="matchusing" type="C" size="5"></field>
+		<field name="sequence" type="I"></field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_mailscanner_actions">
+		<field name="actionid" type="I">
+			<key />
+			<autoincrement/>
+		</field>
+		<field name="scannerid" type="I"></field>
+		<field name="actiontype" type="C" size="10"></field>
+		<field name="module" type="C" size="30"></field>
+		<field name="lookup" type="C" size="30"></field>
+		<field name="sequence" type="I"></field>
+		<field name="actiontype" type="C" size="10"></field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_mailscanner_ruleactions">
+		<field name="ruleid" type="I"></field>
+		<field name="actionid" type="I"></field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	<!-- END -->
+
 </schema>

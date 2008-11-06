@@ -13,7 +13,7 @@ ini_set("memory_limit","32M");
 global $php_max_execution_time;
 set_time_limit($php_max_execution_time);
 
-global $current_user;
+global $current_user, $adb;
 if($current_user->is_admin != 'on')
 {
 	die("<br><br><center>".$app_strings['LBL_PERMISSION']." <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
@@ -90,6 +90,11 @@ for($patch_count=0;$patch_count<count($temp);$patch_count++)
 		//No file available or Migration not provided for this release
 		//echo '<br>No Migration / No File ==> '.$filename;
 	}
+	if($adb->isMySQL()) {
+		@include_once('modules/Migration/Performance/'.$temp[$patch_count+1].'_mysql.php');
+	} elseif($adb->isPostgres()) {
+		@include_once('modules/Migration/Performance/'.$temp[$patch_count+1].'_postgres.php');		
+	}
 }
 	
 	if(getMigrationCharsetFlag() == MIG_CHARSET_PHP_UTF8_DB_UTF8)
@@ -117,7 +122,7 @@ if(!isset($continue_42P2))//This variable is used in MigrationInfo.php to avoid 
 
 //HANDLE HERE - Mickie
 //Here we have to update the version in table. so that when we do migration next time we will get the version
-global $adb, $vtiger_current_version;
+global $vtiger_current_version;
 $res = $adb->pquery("select * from vtiger_version", array());
 if($adb->num_rows($res))
 {

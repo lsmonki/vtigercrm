@@ -50,6 +50,13 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 	setCCAddress($mail,'cc',$cc);
 	setCCAddress($mail,'bcc',$bcc);
 
+	// vtmailscanner customization: If Support Reply to is defined use it.
+	global $HELPDESK_SUPPORT_EMAIL_REPLY_ID;
+	if($HELPDESK_SUPPORT_EMAIL_REPLY_ID && $HELPDESK_SUPPORT_EMAIL_ID != $HELPDESK_SUPPORT_EMAIL_REPLY_ID) {
+		$mail->AddReplyTo($HELPDESK_SUPPORT_EMAIL_REPLY_ID);
+	}
+	// END
+
 	$mail_status = MailSend($mail);
 
 	if($mail_status != 1)

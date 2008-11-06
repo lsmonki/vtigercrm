@@ -46,7 +46,10 @@ For Windows
 20. script.oculo.us scripts used under MIT Style license from http://script.aculo.us available under http://script.aculo.us/#   
 21. NOCC scripts used under GNU GPL downloaded from http://nocc.sourceforge.net available at http://nocc.sourceforge.net/page.php?file=COPYING 
 
-22. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL).
+22. PHP Class mimetype under BSD License from http://www.phpclasses.org/browse/package/834.html
+
+23. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL).
+
 
 For Linux
 
@@ -91,7 +94,9 @@ For Linux
 21. script.oculo.us scripts used under MIT Style license from http://script.aculo.us available under http://script.aculo.us/#     
 22. NOCC scripts used under GNU GPL downloaded from http://nocc.sourceforge.net available at http://nocc.sourceforge.net/page.php?file=COPYING
 
-23. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL)
+23. PHP Class mimetype under BSD License from http://www.phpclasses.org/browse/package/834.html
+
+24. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL)
 
 The licenses of the Open Source components are reproduced in full below.
 
