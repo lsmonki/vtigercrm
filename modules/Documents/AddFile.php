@@ -23,14 +23,7 @@ for($i=0;$i<$adb->num_rows($res);$i++)
 	$fid=$adb->query_result($res,$i,"folderid");
 	$fldr_name[$fid]=$adb->query_result($res,$i,"foldername");
 }
-$params=array();
-$sqlOS="select os from vtiger_os order by osid";
-$res=$adb->pquery($sqlOS,$params);
-$OS_array=array();
-for($o=0;$o<$adb->num_rows($res);$o++)
-{
-	$OS_array[]=$adb->query_result($res,$o,"os");
-}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -88,25 +81,6 @@ for($o=0;$o<$adb->num_rows($res);$o++)
 		      <td class="dvtCellLabel"  width="110" align="right"><font color='red'>*</font>&nbsp;<?php echo $mod_strings['LBL_FILE_LOCATION'];?></td>
 			 <td class="dvtCellInfo" colspan="2" width="300" id="fileCol_id"><input type="text" name=filelocation id="location_id" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" style="width:57%" value="http://"></td>
 		      </tr>
-		       <tr>
-			  <td class="dvtCellLabel"  width="110" align="right"><?php echo $mod_strings['architecture'];?></td>
-			  <td class="dvtCellInfo" colspan="2" width="300" nowrap><input type="radio" id="arc_0" name="arc" value="PD" checked onclick="javascript:choosePltfrm('PD')"><?php echo $mod_strings['LBL_PD'];?><input type="radio" id="arc_1" name="arc" value="PI" onclick="javascript:choosePltfrm('PI')"><?php echo $mod_strings['LBL_PIND'];?></td>
-		       </tr>
-			 <tr id="choosePltfrm_id">
-			  <td class="dvtCellLabel"  width="110" align="right"><?php echo $mod_strings['ChoosePlatform'];?></td>
-			  <td class="dvtCellInfo" colspan="2" width="300">
-				 <select name="os" id="os_id" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" style="width:60%">
-					<?php 
-					foreach($OS_array as $os){
-					?>
-					<option value='<?php echo $os;?>'><?php echo $os;?></option>
-					<?php }?>
-				</select>	
-			  </td>
-		       </tr>
-
-			
-
 			<tr>
 			<td class="dvtCellLabel"  width="110" align="right"><?php echo $mod_strings['filestatus'];?></td> 
 			<td class="dvtCellInfo" colspan="2" width="300"><input type="radio" id="status_0" name="status" value="0"><?php echo $mod_strings['LBL_INACTIVE'];?>&nbsp;&nbsp;<input type="radio" id="status_1" name="status" value="1" checked><?php echo $mod_strings['LBL_ACTIVE'];?></td>
@@ -175,14 +149,6 @@ function changeDldType(type)
 	}
 		
 	addFileName(type);		
-
-}
-function choosePltfrm(pltfrm)
-{
-	if(pltfrm == 'PD')
-		$('choosePltfrm_id').style.display="";
-	else
-		$('choosePltfrm_id').style.display="none";
 
 }
 function addFileName(type)

@@ -99,6 +99,9 @@ if(isset($_REQUEST['filemode']) && $_REQUEST['filemode'] == 'AddFile')
 		if(!isset($_REQUEST['crm_id']) || $_REQUEST['crm_id'] == 0)
 		{
 			$focus = new Documents();
+			if(!isset($_REQUEST['assigned_user_id'])){
+				$focus->column_fields['assigned_user_id'] = 1;
+			}
 			$focus->insertIntoCrmEntity('Documents');
 			$notesid = $adb->getUniqueID("vtiger_crmentity") - 1;
 		}
@@ -126,8 +129,8 @@ if(isset($_REQUEST['filemode']) && $_REQUEST['filemode'] == 'AddFile')
 		if(!isset($_REQUEST['crm_id']) || $_REQUEST['crm_id'] == 0)
 		{
 			$focus->mode='edit';
-			$sql="insert into vtiger_notes (notesid,folderid,filename,filelocationtype,filetype,filesize,filedownloadcount,filepath,filestatus,filearchitecture,fileversion,os) values(?,?,?,?,?,?,?,?,?,?,?,?) ";
-			$res=$adb->pquery($sql,array($notesid,$folderid,$filename,$dldtype,$filetype,$filesize,$dldcnt,$upload_file_path,$status,$arc,$version,$os));
+			$sql="insert into vtiger_notes (notesid,folderid,filename,filelocationtype,filetype,filesize,filedownloadcount,filepath,filestatus,fileversion) values(?,?,?,?,?,?,?,?,?,?) ";
+			$res=$adb->pquery($sql,array($notesid,$folderid,$filename,$dldtype,$filetype,$filesize,$dldcnt,$upload_file_path,$status,$version));
 		}		
 		/*
 		$sql="insert into vtiger_notes(folderid,filename,dldtype,description,filetype,filesize,dldcnt,path,createdtime,modifiedtime,createdby,lastmodifiedby,status,architecture,version,os) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -135,8 +138,8 @@ if(isset($_REQUEST['filemode']) && $_REQUEST['filemode'] == 'AddFile')
 		*/
 		else
 		{
-			$sql="update vtiger_notes set folderid = ?,filename= ?,filelocationtype= ?,filetype= ?,filesize= ?,filedownloadcount= ?,filepath= ?,filestatus= ?,filearchitecture= ?,fileversion= ?,os= ? where notesid= ?";
-			$res=$adb->pquery($sql,array($folderid,$filename,$dldtype,$filetype,$filesize,$dldcnt,$upload_file_path,$status,$arc,$version,$os,$notesid));
+			$sql="update vtiger_notes set folderid = ?,filename= ?,filelocationtype= ?,filetype= ?,filesize= ?,filedownloadcount= ?,filepath= ?,filestatus= ?,fileversion= ? where notesid= ?";
+			$res=$adb->pquery($sql,array($folderid,$filename,$dldtype,$filetype,$filesize,$dldcnt,$upload_file_path,$status,$version,$notesid));
 		}
 		
 		if(!$res)
@@ -259,6 +262,9 @@ function uploadAndSaveDownloadFiles($file_details,$notesid)
 	if(!isset($_REQUEST['crm_id']) || $_REQUEST['crm_id'] == 0)
 	{
 		$focus = new Documents();
+		if(!isset($_REQUEST['assigned_user_id'])){
+		$focus->column_fields['assigned_user_id'] = 1;
+		}
 		$focus->insertIntoCrmEntity('Documents');
 		$notesid = $adb->getUniqueID("vtiger_crmentity") - 1;
 	}
@@ -315,15 +321,15 @@ function uploadAndSaveDownloadFiles($file_details,$notesid)
 		$log->debug("File saved and uploaded");
 		if(!isset($_REQUEST['crm_id']) || $_REQUEST['crm_id'] == 0)
 		{
-			$focus->mode='edit';
-			$sql="insert into vtiger_notes (notesid,folderid,filename,filelocationtype,filetype,filesize,filedownloadcount,filepath,filestatus,filearchitecture,fileversion,os) values(?,?,?,?,?,?,?,?,?,?,?,?) ";
-			$res=$adb->pquery($sql,array($notesid,$folderid,$filename,$dldtype,$filetype,$filesize,$dldcnt,$upload_filepath,$status,$arc,$version,$os));
+			$focus->mode = 'edit';
+			$sql="insert into vtiger_notes (notesid,folderid,filename,filelocationtype,filetype,filesize,filedownloadcount,filepath,filestatus,fileversion) values(?,?,?,?,?,?,?,?,?,?) ";
+			$res=$adb->pquery($sql,array($notesid,$folderid,$filename,$dldtype,$filetype,$filesize,$dldcnt,$upload_filepath,$status,$version));
 		}
 		else
 		{		
 			delete_old_file($notesid);
-			$sql="update vtiger_notes set folderid = ?,filename= ?,filelocationtype= ?,filetype= ?,filesize= ?,filedownloadcount= ?,filepath= ?,filestatus= ?,filearchitecture= ?,fileversion= ?,os= ? where notesid= ?";
-			$res=$adb->pquery($sql,array($folderid,$filename,$dldtype,$filetype,$filesize,$dldcnt,$upload_filepath,$status,$arc,$version,$os,$notesid));
+			$sql="update vtiger_notes set folderid = ?,filename= ?,filelocationtype= ?,filetype= ?,filesize= ?,filedownloadcount= ?,filepath= ?,filestatus= ?,fileversion= ? where notesid= ?";
+			$res=$adb->pquery($sql,array($folderid,$filename,$dldtype,$filetype,$filesize,$dldcnt,$upload_filepath,$status,$version,$notesid));
 		}	
 		if(!$res)
 		{

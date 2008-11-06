@@ -764,16 +764,9 @@
 			<default value="0" />
 			<notnull />
 		</field>
-		<field name="filearchitecture" type="C" size="50">
-			<default value="NULL" />
-		</field>
 		<field name="fileversion" type="C" size="50">
 			<default value="NULL" />
 		</field>
-		<field name="os" type="C" size="200">
-			<default value="NULL" />
-		</field>
-
 		<index name="notes_title_idx">
 			<col>title</col>
 		</index>
@@ -6510,28 +6503,6 @@
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
-
-	<table name="vtiger_os">
-		<field name="osid" type="I" size="19">
-			<key />
-			<autoincrement />
-			<notnull />
-		</field>
-		<field name="os" type="C" size="300">
-			<notnull />
-		</field>
-		<field name="sortorderid" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
-		<field name="presence" type="I" size="1">
-			<notnull />
-			<default value="1" />
-		</field>
-
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
 	<table name="vtiger_notegrouprelation">
 		<field name="notesid" type="I" size="19">
 			<key />

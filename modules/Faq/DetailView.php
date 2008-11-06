@@ -128,5 +128,6 @@ if(isset($_SESSION['faq_listquery'])){
 		}
 	}
 }
+$smarty->assign("SinglePane_View", $singlepane_view);
 $smarty->display("DetailView.tpl");
 ?>

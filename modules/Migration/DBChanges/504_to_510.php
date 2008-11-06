@@ -375,7 +375,7 @@ for($i=0;$i<$num_profiles;$i++) {
 }
 
 /* Documents module */
-ExecuteQuery("alter table vtiger_notes add(folderid int(19) NOT NULL,filepath varchar(255) default NULL,filetype varchar(50) default NULL,filelocationtype varchar(5) default NULL,filedownloadcount int(19) default NULL,filestatus int(19) default NULL,filesize int(19) NOT NULL default '0',filearchitecture varchar(50) default NULL,fileversion varchar(50) default NULL,os varchar(200) default NULL)");
+ExecuteQuery("alter table vtiger_notes add(folderid int(19) NOT NULL,filepath varchar(255) default NULL,filetype varchar(50) default NULL,filelocationtype varchar(5) default NULL,filedownloadcount int(19) default NULL,filestatus int(19) default NULL,filesize int(19) NOT NULL default '0',fileversion varchar(50) default NULL)");
 
 ExecuteQuery("create table vtiger_attachmentsfolder ( folderid int(19) NOT NULL,foldername varchar(200) NOT NULL default '', description varchar(250) default '', createdby int(19) NOT NULL, sequence int(19) default NULL, PRIMARY KEY  (folderid))");
 
@@ -392,12 +392,6 @@ if($noofnotes > 0)
     }
 }
 
-ExecuteQuery("create table vtiger_os(osid int(19) NOT NULL auto_increment,os varchar(300) NOT NULL,sortorderid int(19) NOT NULL default '0',presence int(1) NOT NULL default '1',PRIMARY KEY  (osid))");
-
-ExecuteQuery("insert into vtiger_os values(1,'Windows',0,1)");
-ExecuteQuery("insert into vtiger_os values(2,'Linux',1,1)");
-ExecuteQuery("insert into vtiger_os values(3,'Mac',2,1)");
-
 $fieldid = Array();
 for($i=0;$i<8;$i++)
 {
@@ -413,7 +407,6 @@ ExecuteQuery("insert into vtiger_field values(8,".$fieldid[3].",'filelocationtyp
 ExecuteQuery("insert into vtiger_field values(8,".$fieldid[4].",'fileversion','vtiger_notes',1,1,'fileversion','Version',1,0,0,100,5,85,2,'V~O',1,'','BAS')");
 ExecuteQuery("insert into vtiger_field values(8,".$fieldid[5].",'filestatus','vtiger_notes',1,56,'filestatus','Active',1,0,0,100,6,85,2,'V~O',1,'','BAS')");
 ExecuteQuery("insert into vtiger_field values(8,".$fieldid[6].",'filedownloadcount','vtiger_notes',1,1,'filedownloadcount','Download Count',1,0,0,100,11,85,2,'I~O',1,'','BAS')");
-ExecuteQuery("insert into vtiger_field values(8,".$fieldid[7].",'os','vtiger_notes',1,1,'filearchitecture','Platform',1,0,0,100,12,85,2,'V~O',1,'','BAS')");
 
 for($i=0;$i<8;$i++)
 {
@@ -680,6 +673,9 @@ for($i=0;$i<$adb->num_rows($query);$i++){
 	$activitytypeid = $adb->query_result($query,$i,'activitytypeid');
 	$adb->pquery("UPDATE vtiger_activitytype SET picklist_valueid=? , presence=0 WHERE activitytypeid = ? ",array($picklist_valueid,$activitytypeid));
 }
+
+$uniqueid = $adb->getUniqueID("vtiger_relatedlists");
+ExecuteQuery("insert into vtiger_relatedlists values($uniqueid,15,8,'get_attachments',1,'Attachments',0)");
 //CustomEvents Migration Ends
 
 /* Important column renaming to support database porting */
