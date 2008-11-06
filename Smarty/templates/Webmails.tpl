@@ -36,10 +36,6 @@
 								<img src="themes/{$THEME}/images/compose.gif" align="absmiddle" />
 								&nbsp;<a href="javascript:;" onclick="OpenComposer('','create');" class="webMnu">{$MOD.LBL_COMPOSE}</a>
 							</td>
-							<td width="15%">
-								<img src="themes/{$THEME}/images/tbarImport.gif" align="absmiddle" />
-								&nbsp;<a href="index.php?module=Webmails&action=GenerateTickets" class="webMnu">{$MOD.LBL_GENERATE_TICKETS}</a>
-							</td>
 							<td width="20%" nowrap>
 								<img src="themes/{$THEME}/images/webmail_settings.gif" align="absmiddle" />
 								&nbsp;<a href="index.php?module=Users&action=AddMailAccount&record={$USERID}&return_module=Webmails&return_action=index" class="webMnu">{$MOD.LBL_SETTINGS}</a>

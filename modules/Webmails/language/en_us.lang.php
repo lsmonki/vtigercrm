@@ -166,6 +166,5 @@ $mod_strings = Array(
 'LBL_CONFIGURE_MAIL_SETTINGS'=>'Please configure your mail settings',
 'LBL_PLEASE'=>'Please',
 'LBL_HERE'=>'Here',
-'LBL_GENERATE_TICKETS'=>'Generate Tickets'
 );
 ?>
