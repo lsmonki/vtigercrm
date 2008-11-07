@@ -132,7 +132,7 @@ class UploadFile
 
 		$ext = substr($stored_file_name, $ext_pos + 1);
 
-                if (in_array($ext, $upload_badext)) 
+                if (in_array(strtolower($ext), $upload_badext)) 
 		{
                         $stored_file_name .= ".txt";
                 }

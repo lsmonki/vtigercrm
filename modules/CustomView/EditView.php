@@ -16,7 +16,7 @@ global $app_strings;
 global $current_user;
 $focus = 0;
 global $theme;
-global $log;
+global $log,$default_charset;
 
 //<<<<<>>>>>>
 global $oCustomView;
@@ -32,7 +32,7 @@ $cv_module = $_REQUEST['module'];
 $recordid = $_REQUEST['record'];
 
 $smarty->assign("MOD", $mod_strings);
-$smarty->assign("CATEGORY", $_REQUEST['parenttab']);
+$smarty->assign("CATEGORY", htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("MODULE",$cv_module);

@@ -19,7 +19,7 @@ global $app_strings,$mod_strings,$current_language,$theme,$log;
 $current_module_strings = return_module_language($current_language, 'Products');
 
 $productid = $_REQUEST['return_id'];
-$parenttab = $_REQUEST['parenttab'];
+$parenttab = htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset);
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');

@@ -48,7 +48,7 @@ require_once("include/calculator/Calc.php");
 
 
 
-global $currentModule;
+global $currentModule,$default_charset;
 global $app_strings;
 global $app_list_strings;
 global $moduleList;
@@ -95,7 +95,7 @@ require_once('include/Menu.php');
 
 //Assign the entered global search string to a variable and display it again
 if($_REQUEST['query_string'] != '')
-	$smarty->assign("QUERY_STRING",$_REQUEST['query_string']);
+	$smarty->assign("QUERY_STRING",htmlspecialchars($_REQUEST['query_string'],ENT_QUOTES,$default_charset));//BUGFIX   "Cross-Site-Scripting "
 else
 	$smarty->assign("QUERY_STRING","$app_strings[LBL_SEARCH_STRING]");
 

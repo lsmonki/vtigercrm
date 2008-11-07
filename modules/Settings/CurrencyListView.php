@@ -12,11 +12,11 @@
 require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
-global $mod_strings,$adb,$theme,$app_strings;
+global $mod_strings,$adb,$theme,$app_strings,$default_charset;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $smarty=new vtigerCRM_Smarty;
-   $parenttab = $_REQUEST['parenttab'];
+   $parenttab = htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset);
    $sql = "select * from vtiger_currency_info where deleted=0";
    $result = $adb->pquery($sql, array());
    $temprow = $adb->fetch_array($result);

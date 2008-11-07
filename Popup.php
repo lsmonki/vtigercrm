@@ -19,7 +19,7 @@ require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
-global $app_strings;
+global $app_strings, $default_charset;
 global $currentModule, $current_user;
 global $theme;
 $url_string = '';
@@ -27,7 +27,7 @@ $smarty = new vtigerCRM_Smarty;
 if (!isset($where)) $where = "";
 
 if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab']){
-$parent_tab=$_REQUEST['parenttab'];
+$parent_tab=htmlspecialchars($_REQUEST['parenttab'], ENT_QUOTES, $default_charset);
 $smarty->assign("CATEGORY",$parent_tab);}
 
 $url = '';

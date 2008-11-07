@@ -20,7 +20,7 @@ global $mod_strings;
 global $app_list_strings;
 global $adb;
 global $upload_maxsize;
-global $theme;
+global $theme,$default_charset;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -50,7 +50,7 @@ $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("UMOD", $mod_strings);
-$smarty->assign("PARENTTAB", $_REQUEST['parenttab']);
+$smarty->assign("PARENTTAB", htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
 $smarty->assign("MAX_FILE_SIZE", $upload_maxsize);
 
 $template = Array(

@@ -25,13 +25,13 @@ require_once('modules/Users/CreateUserPrivilegeFile.php');
 require_once('include/logging.php');
 require_once('user_privileges/audit_trail.php');
 
-global $mod_strings;
+global $mod_strings, $default_charset;
 
 $focus = new Users();
 
 // Add in defensive code here.
 $focus->column_fields["user_name"] = to_html($_REQUEST['user_name']);
-$user_password = $_REQUEST['user_password'];
+$user_password = htmlspecialchars($_REQUEST['user_password'],ENT_QUOTES,$default_charset); //BUGFIX  " Cross-Site-Scripting "
 
 $focus->load_user($user_password);
 

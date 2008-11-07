@@ -21,7 +21,7 @@ global $current_language;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-global $log;
+global $log,$default_charset;
 
 $mode = 'create';
 
@@ -52,7 +52,7 @@ $smarty->assign("DESCRIPTION", $emailtemplateResult["description"]);
 $smarty->assign("SUBJECT", $emailtemplateResult["subject"]);
 $smarty->assign("BODY", $emailtemplateResult["body"]);
 $smarty->assign("MODULE", 'Settings');
-$smarty->assign("PARENTTAB", $_REQUEST['parenttab']);
+$smarty->assign("PARENTTAB", htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
 $smarty->assign("EMODE", $mode);
 $smarty->assign("ALL_VARIABLES", $allOptions);
 

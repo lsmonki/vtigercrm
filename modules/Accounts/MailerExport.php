@@ -27,9 +27,9 @@ global $currentModule;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-global $current_language;
+global $current_language,$default_charset;
 
-$category = $_REQUEST['parenttab'];
+$category = htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset);
 
 //Function added to convert line breaks to space in description during export
 function br2nl_int($str) {

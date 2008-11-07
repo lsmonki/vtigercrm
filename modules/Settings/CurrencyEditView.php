@@ -9,7 +9,7 @@
 *
  ********************************************************************************/
 require_once('Smarty_setup.php');
-global $mod_strings,$app_strings,$adb,$theme;
+global $mod_strings,$app_strings,$adb,$theme,$default_charset;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -57,7 +57,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
-$smarty->assign("PARENTTAB",$_REQUEST['parenttab']);
+$smarty->assign("PARENTTAB",htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
 $smarty->assign("MASTER_CURRENCY",$currency_name);
 $smarty->assign("IMAGE_PATH",$image_path);
 

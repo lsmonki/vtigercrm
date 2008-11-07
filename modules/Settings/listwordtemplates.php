@@ -39,7 +39,7 @@ for($i=0;$i < $num_rows; $i++)
 require_once('include/utils/UserInfoUtil.php');
 global $app_strings;
 global $mod_strings;
-global $theme;
+global $theme,$default_charset;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
@@ -49,7 +49,7 @@ $smod_strings = return_module_language($current_language,'Settings');
 $smarty->assign("MOD", $smod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("UMOD", $mod_strings);
-$smarty->assign("PARENTTAB", $_REQUEST['parenttab']);
+$smarty->assign("PARENTTAB", htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
 $smarty->assign("IMAGE_PATH",$image_path);
 
 
