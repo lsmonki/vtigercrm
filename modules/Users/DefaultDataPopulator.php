@@ -168,12 +168,6 @@ $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vt
 //Added block 'File Information' to Documents module
 $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",8,'LBL_FILE_INFORMATION',3,0,0,0,0,0,1)");
 
-//Start: Entries for vtiger_os table in Documents module
-$this->db->query("insert into vtiger_os values(1,'Windows',0,1)");
-$this->db->query("insert into vtiger_os values(2,'Linux',1,1)");
-$this->db->query("insert into vtiger_os values(3,'Mac',2,1)");
-//End: Entries for vtiger_os table in Documents module
-
 //Account Details -- START
  //Block9
 
