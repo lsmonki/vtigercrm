@@ -56,7 +56,7 @@ class ModuleClass extends CRMEntity {
 	var $default_order_by = 'payslipname';
 	var $default_sort_order='ASC';
 
-	function ModuleClass() {
+	function __construct() {
 		global $log, $currentModule;
 		$this->column_fields = getColumnFields($currentModule);
 		$this->db = new PearDatabase();
@@ -92,20 +92,20 @@ class ModuleClass extends CRMEntity {
 		$query = "SELECT vtiger_crmentity.*, $this->table_name.*";
 
 		// Select Custom Field Table Columns if present
-		if(isset($this->customFieldTable)) $query .= ", " . $this->customFieldTable[0] . ".* ";
+		if(!empty($this->customFieldTable)) $query .= ", " . $this->customFieldTable[0] . ".* ";
 
 		$query .= " FROM $this->table_name";
 
 		$query .= "	INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = $this->table_name.$this->table_index";
 
 		// Consider custom table join as well.
-		if(isset($this->customFieldTable)) {
+		if(!empty($this->customFieldTable)) {
 			$query .= " INNER JOIN ".$this->customFieldTable[0]." ON ".$this->customFieldTable[0].'.'.$this->customFieldTable[1] .
 				      " = $this->table_name.$this->table_index"; 
 		}
 		$query .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid";
 
-		if(isset($this->groupTable)) {
+		if(!empty($this->groupTable)) {
 			$query .= "
 				LEFT JOIN " . $this->groupTable[0] . " ON " . $this->groupTable[0].'.'.$this->groupTable[1] . " = $this->table_name.$this->table_index
 				LEFT JOIN vtiger_groups ON vtiger_groups.groupname = " . $this->groupTable[0] . '.' . $this->groupTable[1];
@@ -145,7 +145,7 @@ class ModuleClass extends CRMEntity {
 					(
 						vtiger_crmentity.smownerid in (0)";
 
-				if(isset($this->groupTable)) {
+				if(!empty($this->groupTable)) {
 					$sec_query .= " AND 
 						(";
 		
@@ -187,7 +187,7 @@ class ModuleClass extends CRMEntity {
 				CASE WHEN (vtiger_users.user_name NOT LIKE '') THEN vtiger_users.user_name ELSE vtiger_groups.groupname END 
 				AS user_name FROM vtiger_crmentity INNER JOIN $this->table_name ON vtiger_crmentity.crmid=$this->table_name.$this->table_index";
 
-		if(isset($this->customFieldTable)) {
+		if(!empty($this->customFieldTable)) {
 			$query .= " INNER JOIN ".$this->customFieldTable[0]." ON ".$this->customFieldTable[0].'.'.$this->customFieldTable[1] .
 				      " = $this->table_name.$this->table_index"; 
 		}
@@ -311,20 +311,20 @@ class ModuleClass extends CRMEntity {
 
 		$query = "SELECT vtiger_crmentity.*, $other->table_name.*";
 
-		if(isset($other->groupTable)) {
+		if(!empty($other->groupTable)) {
 			$query .= ", CASE WHEN (vtiger_users.user_name NOT LIKE '') THEN vtiger_users.user_name ELSE vtiger_groups.groupname END AS user_name";
 		} else {
 			$query .= ", vtiger_users.user_name AS user_name";
 		}
 
 		$more_relation = '';
-		if(isset($other->related_tables)) {
+		if(!empty($other->related_tables)) {
 			foreach($other->related_tables as $tname=>$relmap) {
 				$query .= ", $tname.*";
 
 				// Setup the default JOIN conditions if not specified
-				if(!isset($relmap[1])) $relmap[1] = $other->table_name;
-				if(!isset($relmap[2])) $relmap[2] = $relmap[0];
+				if(empty($relmap[1])) $relmap[1] = $other->table_name;
+				if(empty($relmap[2])) $relmap[2] = $relmap[0];
 				$more_relation .= " LEFT JOIN $tname ON $tname.$relmap[0] = $relmap[1].$relmap[2]";
 			}
 		}
@@ -336,7 +336,7 @@ class ModuleClass extends CRMEntity {
 		$query .= $more_relation;
 		$query .= " LEFT  JOIN vtiger_users        ON vtiger_users.id = vtiger_crmentity.smownerid";
 
-		if(isset($other->groupTable)) {
+		if(!empty($other->groupTable)) {
 			$query .= " LEFT  JOIN ".$other->groupTable[0].' ON '.$other->groupTable[0].'.'.$other->groupTable[1].
 				" = $other->table_name.$other->table_index ";
 			$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupname = " . $other->groupTable[0].'.groupname';

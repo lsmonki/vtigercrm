@@ -61,7 +61,39 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	if($generatedtype == 2)
 		$mod_strings[$fieldlabel] = $fieldlabel;
 
-	if($uitype == 5 || $uitype == 6 || $uitype ==23)
+	// vtlib customization: Related type field
+	if($uitype == '10') {
+		global $adb;
+		$fldmod_result = $adb->pquery('SELECT relmodule, status FROM vtiger_fieldmodulerel WHERE fieldid=
+			(SELECT fieldid FROM vtiger_field, vtiger_tab WHERE vtiger_field.tabid=vtiger_tab.tabid AND fieldname=? AND name=?)', 
+			Array($fieldname, $module_name));
+
+		$entityTypes = Array();
+		for($index = 0; $index < $adb->num_rows($fldmod_result); ++$index) {
+			$entityTypes[] = $adb->query_result($fldmod_result, $index, 'relmodule');
+		}
+
+		if(!empty($value)) {
+			$valueType = getSalesEntityType($value);
+			$displayValueArray = getEntityName($valueType, $value);
+			if(!empty($displayValueArray)){
+				foreach($displayValueArray as $key=>$value){
+					$displayValue = $value;
+				}
+			}
+		} else {
+			$displayValue='';
+			$valueType='';
+			$value='';
+		}
+
+		$displayValue = $value;
+
+		$editview_label[] = Array('options'=>$entityTypes, 'selected'=>$valueType, 'displaylabel'=>$mod_strings[$fieldlabel]);
+		$fieldvalue[] = Array('displayvalue'=>$displayValue,'entityid'=>$value);
+
+	} // END
+	else if($uitype == 5 || $uitype == 6 || $uitype ==23)
 	{	
 		$log->info("uitype is ".$uitype);
 		if($value=='')

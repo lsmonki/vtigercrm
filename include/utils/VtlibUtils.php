@@ -92,7 +92,7 @@ function vtlib_getToggleModuleInfo() {
  */
 function vtlib_setup_modulevars($module, $focus) {
 
-	$checkfor = Array('table_name', 'table_index', 'related_tables');
+	$checkfor = Array('table_name', 'table_index', 'related_tables', 'popup_fields');
 	foreach($checkfor as $check) {
 		if(!isset($focus->$check)) $focus->$check = __vtlib_get_modulevar_value($module, $check);
 	}
@@ -111,13 +111,15 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'related_tables' => Array( 
 					'vtiger_accountbillads' => Array ('accountaddressid', 'vtiger_account', 'accountid'),					
 					'vtiger_accountshipads' => Array ('accountaddressid', 'vtiger_account', 'accountid'), 
-				)
+				),
+				'popup_fields' => Array('accountname'), // TODO: Add this initialization to all the standard module
 			),
 			'Contacts' => 
 			Array(
 				'table_name'  => 'vtiger_contactdetails',
 				'table_index' => 'contactid',
-				'related_tables'=> Array( 'vtiger_account' => Array ('accountid' ) )
+				'related_tables'=> Array( 'vtiger_account' => Array ('accountid' ) ),
+				'popup_fields' => Array ('lastname'),
 			),
 			'Leads' =>
 			Array(
@@ -165,6 +167,7 @@ function __vtlib_get_modulevar_value($module, $varname) {
 			Array(
 				'table_name' => 'vtiger_troubletickets',
 				'table_index'=> 'ticketid',
+				'popup_fields'=> Array('ticket_title')
 			),
 			'Faq'=>
 			Array(

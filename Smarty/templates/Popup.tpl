@@ -48,7 +48,9 @@ function redirectWhenNoRelatedRecordsFound()
 </script>
 <link rel="stylesheet" type="text/css" href="{$THEME_PATH}style.css">
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/Inventory.js"></script>
+<!-- vtlib customization: Javascript hook -->
+<script language="JavaScript" type="text/javascript" src="include/js/vtlib.js"></script>
+<!-- END -->
 <script language="JavaScript" type="text/javascript" src="include/js/{php} echo $_SESSION['authenticated_user_language'];{/php}.lang.js?{php} echo $_SESSION['vtiger_version'];{/php}"></script>
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>

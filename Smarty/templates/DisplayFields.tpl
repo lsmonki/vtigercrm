@@ -30,7 +30,36 @@
 		{assign var="thirdvalue" value="$maindata[3][2]"}
 		{assign var="vt_tab" value="$maindata[4][0]"}
 
-		{if $uitype eq 2}
+		{* vtlib customization *}
+		{if $uitype eq '10'}
+			<td width=20% class="dvtCellLabel" align=right>
+			{$fldlabel.displaylabel}<br>
+
+			{if count($fldlabel.options) eq 1}
+				{assign var="use_parentmodule" value=$fldlabel.options.0}
+				<input type='hidden' class='small' name="{$fldname}_type" value="{$use_parentmodule}">{$APP.$use_parentmodule}
+			{else}
+			<select id="{$fldname}_type" class="small" name="{$fldname}_type" onChange='document.EditView.{$fldname}_display.value=""; document.EditView.{$fldname}.value="";$("qcform").innerHTML=""'>
+			{foreach item=option from=$fldlabel.options}
+				<option value="{$option}" 
+				{if $fldlabel.selected == $option}selected{/if}>
+				{if $APP.$option neq ''}{$APP.$option}{else}{$option}{/if}
+				</option> 
+			{/foreach}
+			</select>
+			{/if}
+			{if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}
+			</td>
+			<td width="30%" align=left class="dvtCellInfo">
+				<input id="{$fldname}" name="{$fldname}" type="hidden" value="{$fldvalue.entityid}" id="{$fldname}">
+				<input id="{$fldname}_display" name="{$fldname}_display" id="edit_{$fldname}_display" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue.displayvalue}">&nbsp;
+				<img src="{$IMAGE_PATH}select.gif" tabindex="{$vt_tab}" 
+alt="Select" title="Select" LANGUAGE=javascript  onclick='return window.open("index.php?module="+ document.EditView.{$fldname}_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView&forfield={$fldname}","test","width=640,height=602,resizable=0,scrollbars=0,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;
+				<input type="image" src="{$IMAGE_PATH}clear_field.gif" 
+alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.value=''; this.form.{$fldname}_display.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;
+			</td>
+		{* END *}
+		{elseif $uitype eq 2}
 			<td width=20% class="dvtCellLabel" align=right>
 				<font color="red">*</font>{$fldlabel} {if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small">{/if}
 			</td>

@@ -65,9 +65,9 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 			if(count($matches) && strcmp($modulename, $matches[1]) === 0) { $languagefile_found = true; continue; }
 		}
 
-		if(isset($this->_modulexml) && 
-			isset($this->_modulexml->dependencies) &&
-			isset($this->_modulexml->dependencies->vtiger_version)) {
+		if(!empty($this->_modulexml) && 
+			!empty($this->_modulexml->dependencies) &&
+			!empty($this->_modulexml->dependencies->vtiger_version)) {
 				$vtigerversion_found = true;
 		}
 
@@ -107,7 +107,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 			);
 
 			// If data is not yet available
-			if(!isset($this->_modulexml)) {
+			if(empty($this->_modulexml)) {
 				$this->__parseManifestFile($unzip);
 			}
 		}
@@ -152,7 +152,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	 * Import Tables of the module.
 	 */
 	function import_Tables($modulenode) {
-		if(!isset($modulenode->tables) || !isset($modulenode->tables->table)) return;
+		if(empty($modulenode->tables) || empty($modulenode->tables->table)) return;
 		foreach($modulenode->tables->table as $tablenode) {
 			$tablename = $tablenode->name;
 			$tablesql  = $tablenode->sql;
@@ -167,7 +167,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	 * Import Blocks of the module.
 	 */
 	function import_Blocks($modulenode) {
-		if(!isset($modulenode->blocks) || !isset($modulenode->blocks->block)) return;
+		if(empty($modulenode->blocks) || empty($modulenode->blocks->block)) return;
 		foreach($modulenode->blocks->block as $blocknode) {
 			$blocklabel = $blocknode->label;
 			
@@ -181,7 +181,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	 * Import Fields of the module.
 	 */
 	function import_Fields($modulenode, $blocknode) {
-		if(!isset($blocknode->fields) || !isset($blocknode->fields->field)) return;
+		if(empty($blocknode->fields) || empty($blocknode->fields->field)) return;
 		foreach($blocknode->fields->field as $fieldnode) {
 			$field = new Vtiger_Field();
 			$field-> set('module', $modulenode->name)
@@ -206,19 +206,28 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 			$field->create();
 
 			// Set the field as entity identifier if marked.
-			if(isset($fieldnode->entityidentifier)) {
+			if(!empty($fieldnode->entityidentifier)) {
 				$field->set('entityidfield', $fieldnode->entityidentifier->entityidfield)
 					->set('entityidcolumn', $fieldnode->entityidentifier->entityidcolumn);
 				$field->setEntityIdentifier();
 			}
 
 			// Check picklist values associated with field if any.
-			if(isset($fieldnode->picklistvalues) && isset($fieldnode->picklistvalues->picklistvalue)) {
+			if(!empty($fieldnode->picklistvalues) && !empty($fieldnode->picklistvalues->picklistvalue)) {
 				$picklistvalues = Array();
 				foreach($fieldnode->picklistvalues->picklistvalue as $picklistvaluenode) {
 					$picklistvalues[] = $picklistvaluenode;
 				}
 				$field->setupPicklistValues( $picklistvalues );
+			}
+
+			// Check related modules associated with this field
+			if(!empty($fieldnode->relatedmodules) && !empty($fieldnode->relatedmodules->relatedmodule)) {
+				$relatedmodules = Array();
+				foreach($fieldnode->relatedmodules->relatedmodule as $relatedmodulenode) {
+					$relatedmodules[] = $relatedmodulenode;
+				}
+				$field->setRelatedModules($relatedmodules);
 			}
 
 			$this->_modulefields["$modulenode->name"]["$fieldnode->fieldname"] = $field;
@@ -229,7 +238,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	 * Import Custom views of the module.
 	 */
 	function import_CustomViews($modulenode) {
-		if(!isset($modulenode->customviews) || !isset($modulenode->customviews->customview)) return;
+		if(empty($modulenode->customviews) || empty($modulenode->customviews->customview)) return;
 		foreach($modulenode->customviews->customview as $customviewnode) {
 			$viewname = $customviewnode->viewname;
 			$setdefault=$customviewnode->setdefault;
@@ -238,7 +247,13 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 			Vtiger_CustomView::create($modulenode->name, $viewname, $setdefault, $setmetrics);			
 			$cv = new Vtiger_CustomView($modulenode->name, $viewname);
 			foreach($customviewnode->fields->field as $fieldnode) {
-				$cv->addColumn($this->_modulefields["$modulenode->name"]["$fieldnode->fieldname"], $fieldnode->columnindex);
+				$cvfield = $this->_modulefields["$modulenode->name"]["$fieldnode->fieldname"];
+				$cv->addColumn($cvfield, $fieldnode->columnindex);
+				if(!empty($fieldnode->rules->rule)) {
+					foreach($fieldnode->rules->rule as $rulenode) {
+						$cv->addRule($cvfield, $rulenode->comparator, $rulenode->value, $rulenode->columnindex);
+					}
+				}
 			}
 		}
 	}
@@ -247,9 +262,9 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	 * Import Sharing Access of the module.
 	 */
 	function import_SharingAccess($modulenode) {
-		if(!isset($modulenode->sharingaccess)) return;
+		if(empty($modulenode->sharingaccess)) return;
 
-		if(isset($modulenode->sharingaccess->default)) {
+		if(!empty($modulenode->sharingaccess->default)) {
 			foreach($modulenode->sharingaccess->default as $defaultnode) {
 				Vtiger_Module::setDefaultSharingAccess($modulenode->name, $defaultnode);
 			}
@@ -260,7 +275,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	 * Import actions of the module.
 	 */
 	function import_Actions($modulenode) {
-		if(!isset($modulenode->actions) || !isset($modulenode->actions->action)) return;
+		if(empty($modulenode->actions) || empty($modulenode->actions->action)) return;
 		foreach($modulenode->actions->action as $actionnode) {
 			$actionstatus = $actionnode->status;
 			if($actionstatus == 'enabled') 

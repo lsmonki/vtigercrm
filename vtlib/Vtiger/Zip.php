@@ -61,7 +61,7 @@ class Vtiger_Zip extends dZip {
 			if($file != '.' && $file != '..' && 
 				$file != '.svn' && $file != 'CVS') {
 					// Exclude the file/directory 
-					if(isset($excludeList) && in_array("$dirname$file", $excludeList))
+					if(!empty($excludeList) && in_array("$dirname$file", $excludeList))
 						continue;
 
 					if(is_dir("$dirname$file")) {

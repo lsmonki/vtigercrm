@@ -57,7 +57,34 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	if($generatedtype == 2)
 		$mod_strings[$fieldlabel] = $fieldlabel;
 
-	if($uitype == 99)
+	// vtlib customization: New uitype to handle relation between modules
+	if($uitype == '10'){
+		if($generatedtype != 2 && $mod_strings[$fieldlabel]) 
+			$fieldlabel = $mod_strings[$fieldlabel];
+
+		$parent_id = $col_fields[$fieldname];
+		if(!empty($parent_id)) {
+			$parent_module = getSalesEntityType($parent_id);			
+			$valueTitle=$parent_module;
+			if($app_strings[$valueTitle]) $valueTitle = $app_strings[$valueTitle];
+
+			$displayValueArray = getEntityName($parent_module, $parent_id);
+			if(!empty($displayValueArray)){
+				foreach($displayValueArray as $key=>$value){
+					$displayValue = $value;
+				}
+			}
+			$label_fld=array($fieldlabel,
+				"<a href='index.php?module=$parent_module&action=DetailView&record=$parent_id' title='$valueTitle'>$displayValue</a>");
+		} else {
+			$moduleSpecificMessage = 'MODULE_NOT_SELECTED';
+			if($mod_strings[$moduleSpecificMessage] != ""){
+				$moduleSpecificMessage = $mod_strings[$moduleSpecificMessage];
+			}
+			$label_fld=array($fieldlabel, $app_strings[LBL_NONE]);
+		}
+	} // END	
+	else if($uitype == 99)
 	{
 		$label_fld[] = $mod_strings[$fieldlabel];
 		$label_fld[] = $col_fields[$fieldname];

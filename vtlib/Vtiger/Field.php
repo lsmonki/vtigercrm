@@ -17,6 +17,33 @@ class Vtiger_Field {
 	}
 
 	/**
+	 * Get id of this field
+	 */
+	function __getId($tabid=false) {
+		global $adb;
+		$fieldid = $this->get('fieldid');
+
+		if(empty($fieldid)) $fieldid = false;
+
+		if(!$fieldid) {
+			if(!$tabid) $tabid = Vtiger_Module::getId($this->get('module'));
+
+			$sqlresult = $adb->query("SELECT fieldid from vtiger_field where tablename = '"
+				. Vtiger_Utils::SQLEscape($this->get('tablename')) . "' and columnname = '"
+				. Vtiger_Utils::SQLEscape($this->get('columnname')) . "' and fieldname = '"
+				. Vtiger_Utils::SQLEscape($this->get('fieldname')) .  "' and fieldlabel = '"
+				. Vtiger_Utils::SQLEscape($this->get('fieldlabel')) . "' and tabid = '$tabid'"
+			);
+
+			if($adb->num_rows($sqlresult)) {
+				$fieldid = $adb->query_result($sqlresult, 0, 'fieldid');
+				$this->set('fieldid', $fieldid);
+			}
+		}
+		return $fieldid;
+	}
+
+	/**
 	 * Create new field based on the parameters set.
 	 */
 	function create() {
@@ -24,17 +51,10 @@ class Vtiger_Field {
 
 		$tabid = Vtiger_Module::getId($this->get('module'));
 
-		$sqlresult = $adb->query("SELECT fieldid from vtiger_field where tablename = '"
-			. Vtiger_Utils::SQLEscape($this->get('tablename')) . "' and columnname = '"
-			. Vtiger_Utils::SQLEscape($this->get('columnname')) . "' and fieldname = '"
-			. Vtiger_Utils::SQLEscape($this->get('fieldname')) .  "' and fieldlabel = '"
-			. Vtiger_Utils::SQLEscape($this->get('fieldlabel')) . "' and tabid = '$tabid'"
-		);
-
-		$fieldid = $adb->query_result($sqlresult, 0, 'fieldid');
+		$fieldid = $this->__getId($tabid);
 
 		// Avoid duplicate entries
-		if(isset($fieldid)) return;
+		if(!empty($fieldid)) return;
 
 		$fieldid = self::getUniqueId();
 
@@ -60,23 +80,23 @@ class Vtiger_Field {
 		// Set proper values for input if not sent
 		if(is_null($generatedtype)) $generatedtype = 1;
 
-		if(!isset($block)) {
+		if(empty($block)) {
 			$blocklabel = $this->get('blocklabel');
 			$sqlresult = $adb->query("select blockid from vtiger_blocks where tabid=$tabid and blocklabel='$blocklabel'");
 			$block = $adb->query_result($sqlresult, 0, "blockid");
 		}
 
-		if(!isset($sequence)) {
+		if(empty($sequence)) {
 			$sqlresult = $adb->query("select max(sequence) as max_sequence from vtiger_field where tabid=$tabid and block=$block");
 			$sequence = $adb->query_result($sqlresult, 0, "max_sequence") + 1;
 		}
 
-		if(!isset($quickcreatesequence)) {
+		if(empty($quickcreatesequence)) {
 			if($quickcreate == '0') {
-				$sqlresult = $adb->query("select max(quicksequence) as max_quickcreatesequence from vtiger_field where tabid=$tabid");
-				$sequence = $adb->query_result($sqlresult, 0, "max_quickcreatesequence") + 1;
+				$sqlresult = $adb->query("select max(quickcreatesequence) as max_quickcreatesequence from vtiger_field where tabid=$tabid");
+				$quickcreatesequence = $adb->query_result($sqlresult, 0, "max_quickcreatesequence") + 1;
 			} else {
-				$quickcreatesequce = 'NULL';
+				$quickcreatesequence = 'NULL';
 			}
 		}
 
@@ -101,10 +121,13 @@ class Vtiger_Field {
 		}
 
 		// Create the mapping table column
-		if(!in_array($columnname, $adb->getColumnNames($tablename)) && isset($columntype)) {
+		if(!in_array($columnname, $adb->getColumnNames($tablename)) && !empty($columntype)) {
 			$columntype = $this->get('columntype');
 			Vtiger_Utils::AlterTable($tablename, " ADD COLUMN $columnname $columntype");
 		}
+
+		// Set the fieldid now
+		$this->set('fieldid', $fieldid);
 
 		Vtiger_Utils::Log("Adding " . $this->get('fieldlabel') . " to " . $this->get('module') . " ... DONE");
 		Vtiger_Utils::Log("Check Module Language Mapping entry for " . $this->get('fieldlabel') . " ... TODO");
@@ -184,6 +207,54 @@ class Vtiger_Field {
 			$adb->query("INSERT INTO vtiger_role2picklist (roleid, picklistvalueid, picklistid, sortid)
 				SELECT roleid, $new_picklistvalueid, $new_picklistid, $sortid FROM vtiger_role");
 		}
+	}
+
+	/**
+	 * Set this field relation with other module (popup)
+	 */
+	function setRelatedModules($modules) {
+		$fieldid = $this->__getId();
+
+		if(!$fieldid) return false;
+
+		// We need to create core table to capture the relation between the field and modules.
+		Vtiger_Utils::CreateTable(
+			'vtiger_fieldmodulerel',
+			'(fieldid INT NOT NULL, module VARCHAR(100) NOT NULL, relmodule VARCHAR(100) NOT NULL, status VARCHAR(10), sequence INT)'
+		);
+		// END
+
+		global $adb;
+		foreach($modules as $relmodule) {
+			$checkres = $adb->pquery('SELECT * FROM vtiger_fieldmodulerel WHERE fieldid=? AND module=? AND relmodule=?',
+				Array($fieldid, $this->get('module'), $relmodule));
+
+			// If relation already exist continue
+			if($adb->num_rows($chekres)) continue;
+
+			$adb->pquery('INSERT INTO vtiger_fieldmodulerel(fieldid, module, relmodule) VALUES(?,?,?)', 
+				Array($this->get('fieldid'), $this->get('module'), $relmodule));
+			
+			Vtiger_Utils::Log("Setting " . $this->get('fieldlabel') . " relation with " . $relmodule . " ... DONE");
+		}
+		return true;
+	}
+
+	/**
+	 * Unset this field relation with other module specified
+	 */
+	function unsetRelatedModules($modules) {
+		$fieldid = $this->__getId();
+		if(!$fieldid) return false;
+
+		global $adb;
+		foreach($modules as $relmodule) {
+			$adb->pquery('DELETE FROM vtiger_fieldmodulerel WHERE fieldid=? AND module=? AND relmodule = ?', 
+				Array($fieldid, $this->get('module'), $relmodule));
+			
+			Vtiger_Utils::Log("Unsetting " . $this->get('fieldlabel') . " relation with " . $relmodule . " ... DONE");
+		}
+		return true;
 	}
 }
 

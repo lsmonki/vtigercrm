@@ -419,11 +419,20 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
                                                                 $arrow = "<img src ='".$image_path."arrow_up.gif' border='0'>";
                                                         }
                                                 }
-                                                $name = "<a href='javascript:;' onClick=\"getListViewSorted_js('".$module."','".$sort_qry.$pass_url."&order_by=".$col."&sorder=".$sorder."')\" class='listFormHeaderLinks'>".$app_strings[$name]."&nbsp;".$arrow."</a>";
+												// vtlib customization: If translation is not available use the given name
+												$tr_name = $app_strings[$name];
+												if(!$tr_name) $tr_name = $name;
+												$name = "<a href='javascript:;' onClick=\"getListViewSorted_js('".$module."','".$sort_qry.$pass_url."&order_by=".$col."&sorder=".$sorder."')\" class='listFormHeaderLinks'>".$tr_name."&nbsp;".$arrow."</a>";
+												// END
                                                 $arrow = '';
                                         }
-                                        else
-                                                $name = $app_strings[$name];
+                                        else {
+												// vtlib customization: If translation is not available use the given name
+												$tr_name = $app_strings[$name];
+												if(!$tr_name) $tr_name = $name;
+												$name = $tr_name;
+												// END
+										}
                                 }
                         }
 			$list_header[]=$name;
@@ -1281,6 +1290,16 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 							$account_name = getAccountName($account_id);
 							$value = textlength_check($account_name);
 						}
+						// vtlib customization: Generic popup handling
+						elseif(isset($focus->popup_fields) && in_array($fieldname, $focus->popup_fields)) {
+							global $default_charset;
+							$forfield = htmlspecialchars($_REQUEST['forfield'], ENT_QUOTES, $default_charset);
+							$list_result_count = $i-1;
+							$value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"search",$focus->popup_type);
+							$value = strip_tags($value); // Remove any previous html conversion
+							$value = "<a href='javascript:window.close();' onclick='return vtlib_setvalue_from_popup($entity_id, \"$value\", \"$forfield\")'>$value</a>";
+						}
+						// END
 						else
 						{
 							$list_result_count = $i-1; 
@@ -1384,7 +1403,27 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		$temp_val = substr(preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val),0,$listview_max_textlength).'...';
 	}*/
-	if($uitype == 53)
+
+	// vtlib customization: New uitype to handle relation between modules
+	if($uitype == '10'){
+		$parent_id = $field_val;
+		if(!empty($parent_id)) {
+			$parent_module = getSalesEntityType($parent_id);			
+			$valueTitle=$parent_module;
+			if($app_strings[$valueTitle]) $valueTitle = $app_strings[$valueTitle];
+
+			$displayValueArray = getEntityName($parent_module, $parent_id);
+			if(!empty($displayValueArray)){
+				foreach($displayValueArray as $key=>$value){
+					$displayValue = $value;
+				}
+			}
+			$value = "<a href='index.php?module=$parent_module&action=DetailView&record=$parent_id' title='$valueTitle'>$displayValue</a>";
+		} else {
+			$label_fld=array($fieldlabel, $app_strings[LBL_NONE]);
+		}
+	} // END
+	else if($uitype == 53)
 	{
 		$value = textlength_check($adb->query_result($list_result,$list_result_count,'user_name'));
 	}

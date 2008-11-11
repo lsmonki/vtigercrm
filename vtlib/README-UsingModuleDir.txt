@@ -8,20 +8,18 @@ Creating basic skeleton module
 
 4. Edit ModuleName.php
 
-   a. Rename Class ModuleClass to ModuleName 
+   a. Update $table_name and $table_index (Module table name and table index column)
 
-   b. Update $table_name and $table_index (Module table name and table index column)
+   b. Update $groupTable
 
-   c. Update $groupTable
+   c. Update $tab_name, $tab_name_index
 
-   d. Update $tab_name, $tab_name_index
+   d. Update $list_fields, $list_fields_name, $sortby_fields
 
-   e. Update $list_fields, $list_fields_name, $sortby_fields
+   e. Update $detailview_links
 
-   f. Update $detailview_links
+   f. Update $default_order_by, $default_sort_order
 
-   g. Update $default_order_by, $default_sort_order
+   g. Update $customFieldTable
 
-   h. Update $customFieldTable
-
-   i. Rename function ModuleClass to function ModuleName [This is the Constructor Class]
+   h. Rename function ModuleClass to function ModuleName [This is the Constructor Class]

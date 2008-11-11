@@ -3,6 +3,7 @@ include_once('vtlib/Vtiger/Common.inc.php');
 
 include_once('vtlib/Vtiger/ParentTab.php');
 include_once('vtlib/Vtiger/Module.php');
+include_once('vtlib/Vtiger/CustomView.php');
 include_once('vtlib/Vtiger/Zip.php');
 
 include_once('include/utils/VtlibUtils.php');
@@ -42,7 +43,7 @@ class Vtiger_PackageExport {
 	 * return its temporary path.
 	 */
 	function __getManifestFilePath() {
-		if(!isset($this->_export_modulexml_filename)) {
+		if(empty($this->_export_modulexml_filename)) {
 			// Set the module xml filename to be written for exporting.
 			$this->_export_modulexml_filename = "manifest-".time().".xml";
 		}
@@ -63,7 +64,7 @@ class Vtiger_PackageExport {
 	 * Post export work.
 	 */
 	function __finishExport() {
-		if(isset($this->_export_modulexml_file)) {
+		if(!empty($this->_export_modulexml_file)) {
 			fclose($this->_export_modulexml_file);
 			$this->_export_modulexml_file = null;
 		}
@@ -73,7 +74,7 @@ class Vtiger_PackageExport {
      * Clean up the temporary files created.
      */
 	function __cleanupExport() {
-		if(isset($this->_export_modulexml_filename)) {
+		if(!empty($this->_export_modulexml_filename)) {
 			unlink($this->__getManifestFilePath());
 		}
 	}
@@ -176,8 +177,8 @@ class Vtiger_PackageExport {
 		vtlib_setup_modulevars($module, $focus);
 
 		$tables = Array ($focus->table_name);
-		if(isset($focus->groupTable)) $tables[] = $focus->groupTable[0];
-		if(isset($focus->customFieldTable)) $tables[] = $focus->customFieldTable[0];
+		if(!empty($focus->groupTable)) $tables[] = $focus->groupTable[0];
+		if(!empty($focus->customFieldTable)) $tables[] = $focus->customFieldTable[0];
 
 		$this->openNode('tables');
 
@@ -229,8 +230,9 @@ class Vtiger_PackageExport {
 			$this->openNode('field');
 			$fieldname = $adb->query_result($fieldresult, $index, 'fieldname');
 			$uitype = $adb->query_result($fieldresult, $index, 'uitype');
+			$fieldid = $adb->query_result($fieldresult, $index, 'fieldid');
 
-			$this->outputNode($fieldname, 'fieldname');			
+			$this->outputNode($fieldname, 'fieldname');	
 			$this->outputNode($uitype,    'uitype');
 			$this->outputNode($adb->query_result($fieldresult, $index, 'columnname'),'columnname');			
 			$this->outputNode($adb->query_result($fieldresult, $index, 'tablename'),     'tablename');
@@ -261,6 +263,19 @@ class Vtiger_PackageExport {
 					$this->outputNode($picklistvalue, 'picklistvalue');
 				}
 				$this->closeNode('picklistvalues');
+			}
+
+			// Export field to module relations
+			if($uitype == '10') {
+				$relatedmodres = $adb->pquery("SELECT * FROM vtiger_fieldmodulerel WHERE fieldid=?", Array($fieldid));
+				$relatedmodcount = $adb->num_rows($relatedmodres);
+				if($relatedmodcount) {
+					$this->openNode('relatedmodules');
+					for($relmodidx = 0; $relmodidx < $relatedmodcount; ++$relmodidx) {
+						$this->outputNode($adb->query_result($relatedmodres, $relmodidx, 'relmodule'), 'relatedmodule');
+					}
+					$this->closeNode('relatedmodules');
+				}
 			}
 
 			$this->closeNode('field');
@@ -308,6 +323,29 @@ class Vtiger_PackageExport {
 				$this->openNode('field');
 				$this->outputNode($cvfieldname, 'fieldname');
 				$this->outputNode($cvcolumnindex,'columnindex');
+
+				$cvcolumnruleres = $adb->pquery("SELECT * FROM vtiger_cvadvfilter WHERE cvid=? AND columnname=?",
+					Array($cvid, $cvcolumnname));
+				$cvcolumnrulecount = $adb->num_rows($cvcolumnruleres);
+
+				if($cvcolumnrulecount) {
+					$this->openNode('rules');
+					for($rindex = 0; $rindex < $cvcolumnrulecount; ++$rindex) {
+						$cvcolumnruleindex = $adb->query_result($cvcolumnruleres, $rindex, 'columnindex');
+						$cvcolumnrulecomp  = $adb->query_result($cvcolumnruleres, $rindex, 'comparator');
+						$cvcolumnrulevalue = $adb->query_result($cvcolumnruleres, $rindex, 'value');
+						$cvcolumnrulecomp  = Vtiger_CustomView::translateComparator($cvcolumnrulecomp, true);
+
+						$this->openNode('rule');
+						$this->outputNode($cvcolumnruleindex, 'columnindex');
+						$this->outputNode($cvcolumnrulecomp, 'comparator');
+						$this->outputNode($cvcolumnrulevalue, 'value');
+						$this->closeNode('rule');
+
+					}
+					$this->closeNode('rules');
+				}
+
 				$this->closeNode('field');
 			}
 			$this->closeNode('fields');

@@ -212,7 +212,19 @@ switch($currentModule)
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','notes_title','true','basic',$popuptype,"","",$url);
 		break;
 
+	// vtlib customization: Generic hook for Popup selection
+	default:
+		require_once("modules/$currentModule/$currentModule.php");
+		$focus = new $currentModule();
+		$smarty->assign("SINGLE_MOD", $currentModule);
+		break;
+	// END
+
 }
+// vtlib customization: Initialize focus to get generic popup
+vtlib_setup_modulevars($currentModule, $focus);
+// END
+
 $smarty->assign("RETURN_ACTION",$_REQUEST['return_action']);
 
 //Retreive the list from Database

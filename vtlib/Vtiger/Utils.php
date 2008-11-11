@@ -48,7 +48,7 @@ class Vtiger_Utils {
 		$tablecheck = $adb->query("select count(*) as count from $tablename");
 
 		$tablePresent = true;
-		if(!isset($tablecheck) || $tablecheck == null || $adb->num_rows($tablecheck) <= 0)
+		if(empty($tablecheck) || $adb->num_rows($tablecheck) <= 0)
 			$tablePresent = false;
 
 		$adb->dieOnError = $old_dieOnError;
