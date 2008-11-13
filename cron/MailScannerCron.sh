@@ -7,4 +7,4 @@
 # All Rights Reserved.
 #
 # ********************************************************************************
-wget "http://localhost:APACHEPORT/MailScannerCron.php?scannername=DEFAULT&app_key=YOUR_APP_KEY_HERE" -O /dev/null
+wget "http://localhost:APACHEPORT/vtigercron.php?service=MailScanner&scannername=DEFAULT&app_key=YOUR_APP_KEY_HERE" -O /dev/null

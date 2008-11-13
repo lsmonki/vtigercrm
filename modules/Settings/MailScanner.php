@@ -16,7 +16,7 @@ $mode = $_REQUEST['mode'];
 
 /** Based on the mode include the MailScanner file. */
 if($mode == 'scannow') {
-	include('MailScannerCron.php');
+	include('vtigercron.php');
 } else if($mode == 'edit') {
 	include('modules/Settings/MailScanner/MailScannerEdit.php');
 } else if($mode == 'save') {

@@ -19,7 +19,7 @@ function performScanNow(app_key, scannername) {
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
 			postBody: 'module=Settings&action=SettingsAjax&file=MailScanner' + 
-					  '&mode=scannow&app_key=' + encodeURIComponent(app_key)+ '&scannername=' + encodeURIComponent(scannername),
+					  '&mode=scannow&service=MailScanner&app_key=' + encodeURIComponent(app_key)+ '&scannername=' + encodeURIComponent(scannername),
 			onComplete: function(response) {
 				$('status').style.display = 'none';
 			}
