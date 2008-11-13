@@ -222,7 +222,9 @@ switch($currentModule)
 
 }
 // vtlib customization: Initialize focus to get generic popup
-vtlib_setup_modulevars($currentModule, $focus);
+if($_REQUEST['form'] == 'vtlibPopupView') {
+	vtlib_setup_modulevars($currentModule, $focus);
+}
 // END
 
 $smarty->assign("RETURN_ACTION",$_REQUEST['return_action']);
