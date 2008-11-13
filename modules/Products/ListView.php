@@ -56,6 +56,9 @@ if($_REQUEST['errormsg'] != '')
 $url_string = '&smodule=PRODUCTS'; // assigning http url string
 
 $focus = new Products();
+// Initialize sort by fields
+$focus->initSortbyField('Products');
+// END
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 $sorder = $focus->getSortOrder();

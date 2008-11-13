@@ -49,6 +49,9 @@ if (!isset($where)) $where = "";
 $url_string = ''; // assigning http url string
 
 $focus = new Leads();
+// Initialize sort by fields
+$focus->initSortbyField('Leads');
+// END
 $smarty = new vtigerCRM_Smarty;
 $other_text=Array();
 

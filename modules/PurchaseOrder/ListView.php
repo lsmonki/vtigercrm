@@ -35,6 +35,9 @@ if (!isset($where)) $where = "";
 $url_string = '&smodule=PO';
 
 $focus = new PurchaseOrder();
+// Initialize sort by fields
+$focus->initSortbyField('PurchaseOrder');
+// END
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 

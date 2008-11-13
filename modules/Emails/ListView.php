@@ -42,6 +42,9 @@ global $theme;
 $url_string = ''; // assigning http url string
 
 $focus = new Emails();
+// Initialize sort by fields
+$focus->initSortbyField('Emails');
+// END
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 

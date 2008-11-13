@@ -12,6 +12,7 @@ global $current_user;
 require_once('include/utils/ListViewUtils.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('include/DatabaseUtil.php');
+require_once('include/utils/CommonUtils.php');
 require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
 class Homestuff
@@ -594,19 +595,6 @@ function getGroupTaskLists($maxval,$calCnt)
 		if(count($entries)>0)	
 			return $values;
 		} 
-}
-
-/** Function to get the ActivityType for the given entity id
- *  @param entityid : Type Integer
- *  return the activity type for the given id
- */
-function getActivityType($id)
-{
-	global $adb;
-	$quer = "select activitytype from vtiger_activity where activityid=?";
-	$res = $adb->pquery($quer, array($id));
-	$acti_type = $adb->query_result($res,0,"activitytype");
-	return $acti_type;
 }
 
 ?>

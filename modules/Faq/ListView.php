@@ -41,6 +41,9 @@ else
 }
 
 $focus = new Faq();
+// Initialize sort by fields
+$focus->initSortbyField('Faq');
+// END
 $smarty = new vtigerCRM_Smarty;
 
 $other_text = Array();

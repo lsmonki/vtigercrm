@@ -1305,5 +1305,8 @@ class Users {
 		}
 	}
 
+	function initSortByField($module) {
+		// Right now, we do not have any fields to be handled for Sorting in Users module. This is just a place holder as it is called from Popup.php 
+	}
 }
 ?>

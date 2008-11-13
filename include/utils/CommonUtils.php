@@ -3536,6 +3536,19 @@ function checkFileAccess($filepath) {
 	}
 }
 
+/** Function to get the ActivityType for the given entity id
+ *  @param entityid : Type Integer
+ *  return the activity type for the given id
+ */
+function getActivityType($id)
+{
+	global $adb;
+	$quer = "select activitytype from vtiger_activity where activityid=?";
+	$res = $adb->pquery($quer, array($id));
+	$acti_type = $adb->query_result($res,0,"activitytype");
+	return $acti_type;
+}
+
 // vtlib customization: Extended vtiger CRM utlitiy functions
 require_once('include/utils/VtlibUtils.php');
 // END

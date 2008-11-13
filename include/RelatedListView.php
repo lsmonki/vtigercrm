@@ -69,7 +69,10 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	$smarty->assign("IMAGE_PATH",$image_path);
 	$smarty->assign("MODULE",$relatedmodule);
 
-
+	// We do not have RelatedListView in Detail View mode of Calendar module. So need to skip it.
+ 	if ($module!= 'Calendar') {
+ 		$focus->initSortByField($relatedmodule);
+ 	}
 	//Retreive the list from Database
 	//$query = getListQuery("Accounts");
 
@@ -128,15 +131,15 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	}
 		//Added by Don for AssignedTo ordering issue in Related Lists
 	$query_order_by = $order_by;
-	if($order_by == 'smownerid')
-	{
+	if($order_by == 'smownerid') {
 		$query_order_by = "case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end ";
+	} elseif($order_by != 'crmid') {
+		$tabname = getTableNameForField($relatedmodule, $order_by);
+		if($tabname !== '' and $tabname != NULL)
+			$query_order_by = $tabname.".".$query_order_by;
 	}
-	if($relatedmodule == "Calendar")
-		$query .= ' GROUP BY vtiger_activity.activityid ORDER BY '.$query_order_by.' '.$sorder;
-	else
-		$query .= ' ORDER BY '.$query_order_by.' '.$sorder;		
-	
+	$query .= ' ORDER BY '.$query_order_by.' '.$sorder;
+		
 	if($relatedmodule == 'Calendar')
 		$mod_listquery = "activity_listquery";
 	else 
@@ -455,6 +458,7 @@ function getHistory($parentmodule,$query,$id)
                 $query .= ' '.$sec_parameter;
 
         }
+        $query.= ' '."ORDER BY vtiger_activity.date_start DESC,vtiger_activity.time_start DESC";
 	$result=$adb->query($query);
 	$noofrows = $adb->num_rows($result);
 

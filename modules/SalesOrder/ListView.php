@@ -31,6 +31,9 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 $focus = new SalesOrder();
+// Initialize sort by fields
+$focus->initSortbyField('SalesOrder');
+// END
 $other_text = Array();
 $url_string = ''; // assigning http url string
 

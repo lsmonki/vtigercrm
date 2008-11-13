@@ -1234,5 +1234,43 @@ $log->info("in getOldFileName  ".$notesid);
 		$this->db->completeTransaction();
 	    $this->db->println("TRANS restore ends");
 	}
+
+	/** 
+	* Function to initialize the sortby fields array
+	*/
+	function initSortByField($module) {
+		global $adb, $log;
+		$log->debug("Entering function initSortByField ($module)");
+		// Define the columnname's and uitype's which needs to be excluded
+		$exclude_columns = Array ('parent_id','quoteid','vendorid');
+		$exclude_uitypes = Array ();
+		
+		$tabid = getTabId($module);
+		if($module == 'Calendar') {
+			$tabid = array('9','16');
+		}
+		$sql = "SELECT columnname FROM vtiger_field ".
+				" WHERE (fieldname not like '%\_id' OR fieldname in ('assigned_user_id'))".
+				" AND tabid in (". generateQuestionMarks($tabid) .")";
+		$params = array($tabid);
+		if (count($exclude_columns) > 0) {		
+			$sql .= " AND columnname NOT IN (". generateQuestionMarks($exclude_columns) .")";
+			array_push($params, $exclude_columns);
+		}
+		if (count($exclude_uitypes) > 0) {		
+			$sql .= " AND uitype NOT IN (". generateQuestionMarks($exclude_uitypes) . ")";
+			array_push($params, $exclude_uitypes);
+		}
+		$result = $adb->pquery($sql,$params);
+		$num_rows = $adb->num_rows($result);
+		for($i=0; $i<$num_rows; $i++) {
+			$columnname = $adb->query_result($result,$i,'columnname');
+			if(in_array($columnname, $this->sortby_fields)) continue;
+			else $this->sortby_fields[] = $columnname;
+		}
+		if($tabid == 21 or $tabid == 22)
+			$this->sortby_fields[] = 'crmid';
+		$log->debug("Exiting initSortByField");
+	}
 }
 ?>

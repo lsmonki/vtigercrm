@@ -28,6 +28,9 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
 $focus = new Campaigns();
+// Initialize sort by fields
+$focus->initSortbyField('Campaigns');
+// END
 $category = getParentTab();
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();

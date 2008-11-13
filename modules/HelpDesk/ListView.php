@@ -31,6 +31,9 @@ global $mod_strings;
 global $currentModule;
 
 $focus = new HelpDesk();
+// Initialize sort by fields
+$focus->initSortbyField('HelpDesk');
+// END
 $smarty = new vtigerCRM_Smarty;
 $category = getParentTab();
 $other_text = Array();

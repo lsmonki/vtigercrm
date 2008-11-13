@@ -344,7 +344,7 @@ if($navigation_array['start'] != 0)
 	$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
 //Retreive the List View Table Header
-
+$focus->initSortbyField($currentModule);
 $focus->list_mode="search";
 $focus->popup_type=$popuptype;
 $url_string .='&popuptype='.$popuptype;

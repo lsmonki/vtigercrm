@@ -43,6 +43,9 @@ if (!isset($where)) $where = "";
 $url_string = '';
 
 $focus = new Accounts();
+// Initialize sort by fields
+$focus->initSortbyField('Accounts');
+// END
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 

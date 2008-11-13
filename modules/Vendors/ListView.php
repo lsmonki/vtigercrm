@@ -32,6 +32,9 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 $focus = new Vendors();
+// Initialize sort by fields
+$focus->initSortbyField('Vendors');
+// END
 $other_text = Array();
 
 if(!$_SESSION['lvs'][$currentModule])

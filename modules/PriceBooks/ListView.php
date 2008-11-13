@@ -33,6 +33,9 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 $focus = new PriceBooks();
+// Initialize sort by fields
+$focus->initSortbyField('PriceBooks');
+// END
 $other_text=Array();
 
 if(!$_SESSION['lvs'][$currentModule])

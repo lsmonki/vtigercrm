@@ -34,6 +34,9 @@ if (!isset($where)) $where = "";
 $url_string = '';
 
 $focus = new Invoice();
+// Initialize sort by fields
+$focus->initSortbyField('Invoice');
+// END
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 

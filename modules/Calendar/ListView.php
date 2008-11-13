@@ -40,6 +40,9 @@ global $currentModule,$image_path,$theme,$adb;
 if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
 
 $focus = new Activity();
+// Initialize sort by fields
+$focus->initSortbyField('Calendar');
+// END
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 

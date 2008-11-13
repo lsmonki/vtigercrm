@@ -1538,7 +1538,16 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		{	
 			//check added for email link in user detailview
 			$querystr="SELECT fieldid FROM vtiger_field WHERE tabid=? and fieldname=?";
-			$queryres = $adb->pquery($querystr, array(getTabid($module), $fieldname));
+			if($module == 'Calendar') {
+				if(getActivityType($entity_id) == 'Task') {
+					$tabid = 9;
+				} else {
+					$tabid = 16;
+				}
+			} else {
+				$tabid = getTabid($module);
+			}
+			$queryres = $adb->pquery($querystr, array($tabid, $fieldname));
 			//Change this index 0 - to get the vtiger_fieldid based on email1 or email2
 			$fieldid = $adb->query_result($queryres,0,'fieldid');
 			$value = '<a href="javascript:InternalMailer('.$entity_id.','.$fieldid.',\''.$fieldname.'\',\''.$module.'\',\'record_id\');">'.$temp_val.'</a>';

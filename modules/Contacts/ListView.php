@@ -39,6 +39,9 @@ $log = LoggerManager::getLogger('contact_list');
 global $currentModule,$theme;
 
 $focus = new Contacts();
+// Initialize sort by fields
+$focus->initSortbyField('Contacts');
+// END
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 
