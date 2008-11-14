@@ -3468,49 +3468,13 @@ function getEmailTemplateVariables(){
 	return $allOptions;
 }
 
-/* Function to return all the users in the groups that this user is part of.
- * @param $id - id of the user
- * returns Array:UserIds userid of all the users in the groups that this user is part of.
- */
-function vtws_getUsersInTheSameGroup($id){
-	require_once('include/utils/GetGroupUsers.php');
-	require_once('include/utils/GetUserGroups.php');
-	require_once('include/utils/UserInfoUtil.php');
-	$groupUsers = new GetGroupUsers();
-	$userGroups = new GetUserGroups();
-	$allUsers = Array();
-	$userGroups->getAllUserGroups($id);
-	$groups = $userGroups->user_groups;
-	
-	foreach ($groups as $group) {
-		$groupUsers->getAllUsersInGroup($group);
-		$usersInGroup = $groupUsers->group_users;
-		foreach ($usersInGroup as $user) {
-	                        if($user != $id){
-				$allUsers[$user] = getUserName($user); 
-			}
-		}		
-	}
-	return $allUsers;
-}
-
-function vtws_generateRandomAccessKey($length=10){
-	$source = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-	$accesskey = "";
-	$maxIndex = strlen($source);
-	for($i=0;$i<$length;++$i){
-		$accesskey = $accesskey.substr($source,rand(null,$maxIndex),1);
-	}
-	return $accesskey;
-}
-
 /** Function to get picklist values for the given field that are accessible for the given role.
  *  @ param $tablename picklist fieldname.
  *  It gets the picklist values for the given fieldname
  *  	$fldVal = Array(0=>value,1=>value1,-------------,n=>valuen)
  *  @return Array of picklist values accessible by the user.	
  */
-function getPickListValues($tablename,$roleid)
+function vt_getPickListValues($tablename,$roleid)
 {
 	global $adb;
 	$query = "select $tablename from vtiger_$tablename inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tablename.picklist_valueid where roleid=? and picklistid in (select picklistid from vtiger_picklist) order by sortid";

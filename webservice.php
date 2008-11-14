@@ -3,15 +3,19 @@
 	require_once("config.inc.php");
 	require_once("include/HTTP_Session/Session.php");
 	require_once('include/database/PearDatabase.php');
+	require_once 'include/Webservices/Utils.php';
 	require_once("modules/Users/Users.php");
-	require_once("webservices/State.php");
-	require_once("webservices/OperationManager.php");
-	require_once("webservices/SessionManager.php");
+	require_once("include/Webservices/State.php");
+	require_once("include/Webservices/OperationManager.php");
+	require_once("include/Webservices/SessionManager.php");
 	require_once("include/Zend/Json.php");
-	require_once("webservices/VtigerCRMObject.php");
-	require_once("webservices/VtigerCRMObjectMeta.php");
-	require_once("webservices/DataTransform.php");
-	require_once("webservices/WebServiceError.php");
+	require_once("include/Webservices/VtigerCRMObject.php");
+	require_once("include/Webservices/VtigerCRMObjectMeta.php");
+	require_once("include/Webservices/DataTransform.php");
+	require_once("include/Webservices/WebServiceError.php");
+	require_once 'include/utils/utils.php';
+	require_once 'include/utils/UserInfoUtil.php';
+	require_once 'include/Webservices/ModuleTypes.php';
 	
 	$API_VERSION = "0.1";
 	
@@ -44,7 +48,8 @@
 							"logout"=>&$_POST,
 							"listtypes"=>&$_GET,
 							"getchallenge"=>&$_GET,
-							"describeobject"=>&$_GET
+							"describeobject"=>&$_GET,
+							"extendsession"=>&$_GET
 						);
 	
 	function getRequestParamsArrayForOperation($operation){
@@ -85,7 +90,12 @@
 	if(!$sessionId || strcasecmp($sessionId,"null")===0){
 		$sessionId = null;
 	}
-	$sid = $sessionManager->startSession($sessionId);
+	$adoptSession = false;
+	if(strcasecmp($operation,"extendsession")===0){
+		$sessionId = getParameter($_REQUEST,"PHPSESSID");
+		$adoptSession = true;
+	}
+	$sid = $sessionManager->startSession($sessionId,$adoptSession);
 	
 	if(!$sessionId && !in_array($operation,$operationManager->getPreLoginOperations())){
 		writeErrorOutput($operationManager,new WebServiceError(WebServiceErrorCode::$AUTHREQUIRED,"Authencation required"));
@@ -132,5 +142,5 @@
 	function getId($objId, $elemId){
 		return $objId."x".$elemId;
 	}
-
+	
 ?>

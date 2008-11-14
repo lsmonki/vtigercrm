@@ -36,6 +36,7 @@ require_once('modules/Calendar/Activity.php');
 require_once('modules/Contacts/Contacts.php');
 require_once('data/Tracker.php');
 require_once 'include/utils/CommonUtils.php';
+require_once 'include/Webservices/Utils.php';
 
 // User is used to store customer information.
  /** Main class for the user module
@@ -709,7 +710,9 @@ class Users {
 		}
 		require_once('modules/Users/CreateUserPrivilegeFile.php');
 		createUserPrivilegesfile($this->id);
-		$this->createAccessKey();
+		if($insertion_mode != 'edit'){
+			$this->createAccessKey();
+		}
 		$this->db->completeTransaction();
 		$this->db->println("TRANS saveentity ends");
 	}
@@ -734,7 +737,6 @@ class Users {
 		$log->info("function insertIntoEntityTable ".$module.' vtiger_table name ' .$table_name);
 		global $adb;
 		$insertion_mode = $this->mode;
-		
 		//Checkin whether an entry is already is present in the vtiger_table to update
 		if($insertion_mode == 'edit')
 		{
