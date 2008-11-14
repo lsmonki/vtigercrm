@@ -56,6 +56,16 @@ if (! isset( $_REQUEST['return_action']))
 	$_REQUEST['return_action'] = '';
 }
 
+// Delete data file used for import 
+// http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/5255 
+if(isset($_REQUEST['tmp_file'])) { 
+	$tmp_file = $_REQUEST['tmp_file']; 
+} else if(isset($_SESSION['tmp_file'])) { 
+	$tmp_file = $_SESSION['tmp_file']; 
+} 
+if(isset($tmp_file) && file_exists($tmp_file)) unlink($tmp_file); 
+// End 
+	
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";

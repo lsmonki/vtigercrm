@@ -955,7 +955,8 @@ function getdashboardcondition()
 		$res = $adb->pquery($user_qry, array($owner));
 		$uid = $adb->query_result($res,0,'id');
 		array_push($where_clauses, "vtiger_crmentity.smownerid = ".$uid);
-		$url_string .= "&assigned_user_id=".$uid;
+		//$url_string .= "&assigned_user_id=".$uid;
+		$url_string .= "&owner=".$owner;
 	}
 	if(isset($campaign) && $campaign != "")
 	{
@@ -977,7 +978,13 @@ function getdashboardcondition()
 		array_push($where_clauses, "vtiger_inventoryproductrel.id = ".$po);
 		$url_string .= "&purchaseorderid=".$po;
 	}
-
+	if(isset($_REQUEST['from_homepagedb']) && $_REQUEST['from_homepagedb'] != '') {
+		$url_string .= "&from_homepagedb=".$_REQUEST['from_homepagedb'];
+	}
+	if(isset($_REQUEST['type']) && $_REQUEST['type'] != '') {
+		$url_string .= "&type=".$_REQUEST['type'];
+	}
+	
 	$where = "";
 	foreach($where_clauses as $clause)
 	{

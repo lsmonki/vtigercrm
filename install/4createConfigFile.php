@@ -346,7 +346,7 @@ $cache_dir = 'cache/';
 
  	$config .= "// Files with one of these extensions will have '.txt' appended to their filename on upload\n";
 	$config .= "// upload_badext default value = php, php3, php4, php5, pl, cgi, py, asp, cfm, js, vbs, html, htm\n";
- 	$config .= "\$upload_badext = array('php', 'php3', 'php4', 'php5', 'pl', 'cgi', 'py', 'asp', 'cfm', 'js', 'vbs', 'html', 'htm');\n\n";
+ 	$config .= "\$upload_badext = array('php', 'php3', 'php4', 'php5', 'pl', 'cgi', 'py', 'asp', 'cfm', 'js', 'vbs', 'html', 'htm', 'phtml');\n\n";
 
  	$config .= "// This is the full path to the include directory including the trailing slash\n";
 	$config .= "// includeDirectory default value = $root_directory..'include/\n";

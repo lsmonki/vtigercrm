@@ -36,7 +36,8 @@ require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/Import/ImportSave.php');
 
-set_time_limit(0);
+global $php_max_execution_time;
+set_time_limit($php_max_execution_time);
 ini_set("display_errors",'0');
 
 
@@ -178,6 +179,15 @@ $max_lines = -1;
 
 $ret_value = 0;
 
+// Save the file for name for next round of import 
+// http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/5255 
+if(isset($_REQUEST['tmp_file'])) { 
+	$_SESSION['tmp_file'] = $_REQUEST['tmp_file']; 
+} else { 
+	$_REQUEST['tmp_file'] = $_SESSION['tmp_file']; 
+} 
+// End 
+
 if ($_REQUEST['source'] == 'act')
 {
         $ret_value = parse_import_act($_REQUEST['tmp_file'],$delimiter,$max_lines,$has_header);
@@ -187,10 +197,13 @@ else
 	$ret_value = parse_import($_REQUEST['tmp_file'],$delimiter,$max_lines,$has_header);
 }
 
+// We should delete the data file only in the last step of import 
+/* http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/5255 
 if (file_exists($_REQUEST['tmp_file']))
 {
 	unlink($_REQUEST['tmp_file']);
 }
+*/
 
 $datarows = $ret_value['rows'];
 

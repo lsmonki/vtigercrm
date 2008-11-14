@@ -14,12 +14,12 @@ require_once('modules/PriceBooks/PriceBooks.php');
 require_once('include/utils/utils.php');
 require_once('include/ComboUtil.php');
 
-global $app_strings,$mod_strings,$current_language,$theme,$log;
+global $app_strings,$mod_strings,$current_language,$theme,$log,$default_charset;
 
 $current_module_strings = return_module_language($current_language, 'Products');
 
 $productid = $_REQUEST['return_id'];
-$parenttab = $_REQUEST['parenttab'];
+$parenttab = htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset);
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');

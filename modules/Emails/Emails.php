@@ -244,7 +244,7 @@ var $rel_serel_table = "vtiger_seactivityrel";
 		$binFile = preg_replace('/\s+/', '_', $file_details['name']);//replace space with _ in filename
                 $ext_pos = strrpos($binFile, ".");
                 $ext = substr($binFile, $ext_pos + 1);
-                if (in_array($ext, $upload_badext))
+                if (in_array(strtolower($ext), $upload_badext))
                 {
                     $binFile .= ".txt";
                 }

@@ -949,23 +949,27 @@ class freetag {
 
 	function get_tag_cloud_tags($max = 100, $tagger_id = NULL,$module = "",$obj_id = NULL) {
 		global $adb;
+		$params = array();
 		if(isset($tagger_id) && ($tagger_id > 0)) {
-			$tagger_sql = " AND tagger_id = $tagger_id";
+			$tagger_sql = " AND tagger_id = ?";
+			array_push($params, $tagger_id);
 		} else {
 			$tagger_sql = "";
 		}
 
 		if($module != "") {
-			$tagger_sql .= " AND module = '$module'";
+			$tagger_sql .= " AND module = ?";
+			array_push($params, $module);
 		} else {
 			$tagger_sql .= "";
 		}
 
 		if(isset($obj_id) && $obj_id > 0) {
-                        $tagger_sql .= " AND object_id = $obj_id";
-                } else {
-                        $tagger_sql .= "";
-                }
+  			$tagger_sql .= " AND object_id = ?";
+			array_push($params, $obj_id);
+		} else {
+			$tagger_sql .= "";
+		}
 
 		$prefix = $this->_table_prefix;
 		$sql = "SELECT tag,tag_id,COUNT(object_id) AS quantity
@@ -974,9 +978,9 @@ class freetag {
 			WHERE 1=1
 			$tagger_sql
 			GROUP BY tag,tag_id
-			ORDER BY quantity DESC";
+			ORDER BY quantity DESC LIMIT 0, $max";
         //echo $sql;
-		$rs = $adb->limitQuery($sql, 0, $max) or die("Syntax Error: $sql");
+		$rs = $adb->pquery($sql, $params) or die("Syntax Error: $sql");
 		$retarr = array();
 		while(!$rs->EOF) {
 			$retarr[$rs->fields['tag']] = $rs->fields['quantity'];

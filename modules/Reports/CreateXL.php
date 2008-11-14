@@ -8,7 +8,8 @@
  * All Rights Reserved.
 *
 ********************************************************************************/
-set_time_limit(10);
+global $php_max_execution_time;
+set_time_limit($php_max_execution_time);
 
 require_once("include/php_writeexcel/class.writeexcel_workbook.inc.php");
 require_once("include/php_writeexcel/class.writeexcel_worksheet.inc.php");

@@ -32,7 +32,7 @@ require_once('modules/Leads/ListViewTop.php');
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
-global $currentModule;
+global $currentModule,$default_charset;
 
 
 $smarty=new vtigerCRM_Smarty;
@@ -116,7 +116,7 @@ $smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
 $smarty->assign("TAGCLOUDVIEW",getTagCloudView($focus->id));
 $smarty->assign("DUPLICATE",$_REQUEST['isDuplicate']);
 $smarty->assign("USER_MODE",$mode);
-$smarty->assign('PARENTTAB',$_REQUEST['parenttab']);
+$smarty->assign('PARENTTAB',htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
 
 $smarty->display('UserEditView.tpl');
 

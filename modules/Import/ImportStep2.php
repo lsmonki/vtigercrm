@@ -49,7 +49,7 @@ global $mod_strings;
 global $mod_list_strings;
 global $app_strings;
 global $app_list_strings;
-global $current_user;
+global $current_user,$default_charset;
 global $import_file_name;
 global $upload_maxsize;
 
@@ -383,8 +383,8 @@ else
 	$smarty->assign("HAS_HEADER", 'off');
 }
 
-$smarty->assign("MODULE", $_REQUEST['module']);
-$smarty->assign('CATEGORY' , $_REQUEST['parenttab']);
+$smarty->assign("MODULE", htmlspecialchars($_REQUEST['module'],ENT_QUOTES,$default_charset));
+$smarty->assign('CATEGORY' , htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
 @$_SESSION['import_parenttab'] = $_REQUEST['parenttab'];
 $smarty->assign("JAVASCRIPT2", get_readonly_js() );
 

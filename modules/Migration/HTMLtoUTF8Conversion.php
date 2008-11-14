@@ -9,7 +9,8 @@
 ********************************************************************************/
 
 ini_set("memory_limit","32M");
-set_time_limit(-1);
+global $php_max_execution_time;
+set_time_limit($php_max_execution_time);
 
 echo '<div align = "center"><br><b>Started UTF8 Conversion</b><br></div>';
 @ob_flush();

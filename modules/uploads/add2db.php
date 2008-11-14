@@ -32,7 +32,7 @@ $log->debug("DEBUG In add2db.php");
 
 	$ext = substr($binFile, $ext_pos + 1);
 
-	if (in_array($ext, $upload_badext))
+	if (in_array(strtolower($ext), $upload_badext))
 	{
 		$binFile .= ".txt";
 	}

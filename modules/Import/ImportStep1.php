@@ -24,7 +24,7 @@ require_once('include/utils/CommonUtils.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
-global $current_user;
+global $current_user,$default_charset;
 
 global $import_mod_strings;
 
@@ -42,7 +42,7 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMP", $import_mod_strings);
 
-$smarty->assign("CATEGORY", $_REQUEST['parenttab']);
+$smarty->assign("CATEGORY", htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
 
 $import_object_array = Array(
 				"Leads"=>"ImportLead",

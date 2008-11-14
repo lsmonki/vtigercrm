@@ -193,4 +193,7 @@ $application_unique_key = '_VT_APP_UNIQKEY_';
 // trim descriptions, titles in listviews to this value
 $listview_max_textlength = 40;
 
+// Maximum time limit for PHP script execution (in seconds)
+$php_max_execution_time = 0;
+
 ?>

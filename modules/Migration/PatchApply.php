@@ -10,7 +10,8 @@
 ********************************************************************************/
 
 ini_set("memory_limit","32M");
-set_time_limit(-1);
+global $php_max_execution_time;
+set_time_limit($php_max_execution_time);
 
 global $current_user;
 if($current_user->is_admin != 'on')

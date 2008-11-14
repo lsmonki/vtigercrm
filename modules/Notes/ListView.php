@@ -30,14 +30,14 @@ require_once('modules/CustomView/CustomView.php');
 require_once('include/database/Postgres8.php');
 require_once('include/DatabaseUtil.php');
 
-global $app_strings,$mod_strings,$list_max_entries_per_page;
+global $app_strings,$mod_strings,$list_max_entries_per_page,$default_charset;
 
 $log = LoggerManager::getLogger('note_list');
 
 global $currentModule,$image_path,$theme;
 if($_REQUEST['parenttab'] != '')
 {
-	$category = $_REQUEST['parenttab'];
+	$category = htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset);
 }
 else
 {

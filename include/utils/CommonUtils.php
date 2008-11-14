@@ -1405,12 +1405,12 @@ function getParentTabFromModule($module)
 
 function getParentTab()
 {
-    global $log;	
+    global $log, $default_charset;	
     $log->debug("Entering getParentTab() method ...");
     if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] !='')
     {
      	       $log->debug("Exiting getParentTab method ...");
-               return $_REQUEST['parenttab'];
+               return htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset); //BUGFIX  " Cross-Site-Scripting "
     }
     else
     {
@@ -3329,4 +3329,16 @@ function perform_post_migration_activities() {
 	create_parenttab_data_file();
 }
 
+/** Function to check the file access is made within web root directory. */
+function checkFileAccess($filepath) {
+	global $root_directory;
+	$realfilepath = realpath($filepath);
+
+	$realfilepath = str_replace('\\', '/', $realfilepath);
+	$rootdirpath  = str_replace('\\', '/', $root_directory);
+
+	if(stripos($realfilepath, $rootdirpath) !== 0) {
+		die("Sorry! Attempt to access restricted file.");
+	}
+}
 ?>

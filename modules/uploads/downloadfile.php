@@ -30,7 +30,8 @@ if($adb->num_rows($result) == 1)
 	$filepath = @$adb->query_result($result, 0, "path");
 	$name = html_entity_decode($name, ENT_QUOTES, $default_charset);
 	$saved_filename = $attachmentsid."_".$name;
-	$filesize = filesize($filepath.$saved_filename);
+	$disk_file_size = filesize($filepath.$saved_filename);
+	$filesize = $disk_file_size + ($disk_file_size % 1024);
 	$fileContent = fread(fopen($filepath.$saved_filename, "r"), $filesize);
 
 	header("Content-type: $fileType");
