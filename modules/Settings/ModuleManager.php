@@ -1,4 +1,17 @@
 <?php
+
+include_once('vtlib/Vtiger/Utils.php');
+
+if($_REQUEST['module_settings'] == 'true') {
+	$targetmodule = $_REQUEST['formodule'];
+	$targetSettingPage = "modules/$targetmodule/Settings.php"; 
+	if(file_exists($targetSettingPage)) { 
+		Vtiger_Utils::checkFileAccess($targetSettingPage); 
+		require_once($targetSettingPage); 
+		exit; 
+	} 
+}
+
 $modulemanager_uploaddir = 'test/vtlib';
 
 if($_REQUEST['module_import'] != '') {
@@ -32,7 +45,7 @@ $smarty->assign("TOGGLE_MODINFO", vtlib_getToggleModuleInfo());
 if($_REQUEST['mode'] !='') $mode = $_REQUEST['mode'];
 $smarty->assign("MODE", $mode);
 
-if($_REQUEST['ajax'] != 'true')	$smarty->display('vtlib/ModuleManager.tpl');	
-else $smarty->display('vtlib/ModuleManagerAjax.tpl');
+if($_REQUEST['ajax'] != 'true')	$smarty->display('Settings/ModuleManager/ModuleManager.tpl');	
+else $smarty->display('Settings/ModuleManager/ModuleManagerAjax.tpl');
 
 ?>

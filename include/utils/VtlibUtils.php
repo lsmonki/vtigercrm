@@ -92,7 +92,7 @@ function vtlib_getToggleModuleInfo() {
  */
 function vtlib_setup_modulevars($module, $focus) {
 
-	$checkfor = Array('table_name', 'table_index', 'related_tables', 'popup_fields');
+	$checkfor = Array('table_name', 'table_index', 'related_tables', 'popup_fields', 'IsCustomModule');
 	foreach($checkfor as $check) {
 		if(!isset($focus->$check)) $focus->$check = __vtlib_get_modulevar_value($module, $check);
 	}
@@ -102,6 +102,7 @@ function __vtlib_get_modulevar_value($module, $varname) {
 		Array(
 			'Accounts' => 
 			Array(
+				'IsCustomModule'=>false,
 				'table_name'  => 'vtiger_account',
 				'table_index' => 'accountid',
 				// related_tables variable should define the association (relation) between dependent tables
@@ -116,6 +117,7 @@ function __vtlib_get_modulevar_value($module, $varname) {
 			),
 			'Contacts' => 
 			Array(
+				'IsCustomModule'=>false,
 				'table_name'  => 'vtiger_contactdetails',
 				'table_index' => 'contactid',
 				'related_tables'=> Array( 'vtiger_account' => Array ('accountid' ) ),
@@ -123,6 +125,7 @@ function __vtlib_get_modulevar_value($module, $varname) {
 			),
 			'Leads' =>
 			Array(
+				'IsCustomModule'=>false,
 				'table_name'  => 'vtiger_leaddetails',
 				'table_index' => 'leadid',
 				'related_tables' => Array ( 
@@ -132,65 +135,77 @@ function __vtlib_get_modulevar_value($module, $varname) {
 			),
 			'Campaigns' =>
 			Array(
+				'IsCustomModule'=>false,
 				'table_name'  => 'vtiger_campaign',
 				'table_index' => 'campaignid',
 			),
 			'Potentials' =>
 			Array(
+				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_potential',
 				'table_index'=> 'potentialid',
 				'related_tables' => Array ('vtiger_account' => Array('accountid'))
 			),
 			'Quotes' =>
 			Array(
+				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_quotes',
 				'table_index'=> 'quoteid',
 				'related_tables' => Array ('vtiger_account' => Array('accountid'))
 			),
 			'SalesOrder'=>
 			Array(
+				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_salesorder',
 				'table_index'=> 'salesorderid',
 				'related_tables'=> Array ('vtiger_account' => Array('accountid'))
 			),
 			'PurchaseOrder'=>
 			Array(
+				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_purchaseorder',
 				'table_index'=> 'purchaseorderid',
 			),
 			'Invoice'=>
 			Array(
+				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_invoice',
 				'table_index'=> 'invoiceid',
 			),
 			'HelpDesk'=>
 			Array(
+				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_troubletickets',
 				'table_index'=> 'ticketid',
 				'popup_fields'=> Array('ticket_title')
 			),
 			'Faq'=>
 			Array(
+				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_faq',
 				'table_index'=> 'id',
 			),
 			'Notes'=>
 			Array(
+				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_notes',
 				'table_index'=> 'notesid',
 			),
 			'Products'=>
 			Array(
+				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_products',
 				'table_index'=> 'productid',
 			),
 			'PriceBooks'=>
 			Array(
+				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_pricebook',
 				'table_index'=> 'pricebookid',
 			),
 			'Vendors'=>
 			Array(
+				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_vendor',
 				'table_index'=> 'vendorid',
 			)
@@ -258,7 +273,7 @@ function vtlib_getPicklistValues_AccessibleToAll($field_columnname) {
  * Get module specific smarty template path.
  */
 function vtlib_getModuleTemplate($module, $templateName) {
-	return ("Smarty/templates/modules/$module/$templateName");
+	return ("modules/$module/$templateName");
 }
 
 ?>

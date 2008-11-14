@@ -30,7 +30,7 @@ function vtlib_toggleModule(module, action) {
 		
 		<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
 		<tr>
-			<td rowspan="2" valign="top" width="50"><img src="{$IMAGE_PATH}vtlib_modmng.gif" alt="{$MOD.LBL_USERS}" title="{$MOD.LBL_USERS}" border="0" height="48" width="48"></td>
+			<td rowspan="2" valign="top" width="50"><img src="{$IMAGE_PATH}vtlib_modmng.gif" alt="{$MOD.LBL_MODULE_MANAGER}" title="{$MOD.LBL_MODULE_MANAGER}" border="0" height="48" width="48"></td>
 			<td class="heading2" valign="bottom"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> &gt; {$MOD.VTLIB_LBL_MODULE_MANAGER}</b></td>
 		</tr>
 
@@ -44,7 +44,7 @@ function vtlib_toggleModule(module, action) {
 		<tr>
 			<td>
 				<div id="vtlib_modulemanager_list">
-                	{include file="vtlib/ModuleManagerAjax.tpl"}
+                	{include file="Settings/ModuleManager/ModuleManagerAjax.tpl"}
                 </div>	
 			
 				<table border="0" cellpadding="5" cellspacing="0" width="100%">

@@ -10,6 +10,9 @@ class ModuleClass extends CRMEntity {
 	var $table_index= 'payslipid';
 	var $column_fields = Array();
 
+	// Indicator if this is a custom module or standard module
+	var $IsCustomModule = true;
+
 	// Mandatory for function getGroupName
 	// Array(groupTableName, groupColumnId)
 	// groupTableName should have (groupname column)
@@ -33,10 +36,21 @@ class ModuleClass extends CRMEntity {
 		'Assigned To' => Array('crmentity','smownerid')
 	);
 	var $list_fields_name = Array(
-		// Field Label=>columnname
+		// Field Label=>fieldname
 		'Payslip Name'=> 'payslipname',
 		'Assigned To' => 'assigned_user_id'
 	);
+	
+	// For Popup listview
+	var $search_fields = Array(
+		'Payslip Name'=> Array('payslip', 'payslipname')
+	);
+	var $search_fields_name = Array(
+		'Payslip Name'=> 'payslipname'
+	);
+
+	var $popup_fields = Array('payslipname');
+	
 	var $sortby_fields = Array('payslipname', 'payslipmonth', 'smownerid', 'modifiedtime');
 	// Should contain field labels
 	var $detailview_links = Array('PayslipName', 'Month');

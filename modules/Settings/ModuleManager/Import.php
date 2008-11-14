@@ -59,6 +59,6 @@ if($module_import_step == 'Step2') {
 	$smarty->assign("MODULEIMPORT_PACKAGE_FILE", $uploadfilename);
 }
 
-$smarty->display("vtlib/ModuleImport$module_import_step.tpl");
+$smarty->display("Settings/ModuleManager/ModuleImport$module_import_step.tpl");
 
 ?>

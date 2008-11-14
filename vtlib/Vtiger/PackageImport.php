@@ -203,6 +203,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 				-> set('displaytype',  $fieldnode->displaytype)
 				-> set('quickcreatesequence',null)
 				-> set('info_type',    $fieldnode->info_type);
+			if(isset($fieldnode->columntype) && !empty($fieldnode->columntype)) 
+				$field->set('columntype', $fieldnode->columntype);
 			$field->create();
 
 			// Set the field as entity identifier if marked.

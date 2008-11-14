@@ -5,7 +5,7 @@ class Vtiger_Utils {
 	/** 
 	 * Function to check the file access is made within web root directory. 
 	 */
-	function checkFileAccess($filepath) {
+	static function checkFileAccess($filepath) {
 		global $root_directory;
 		$realfilepath = realpath($filepath);
 

@@ -31,11 +31,15 @@ class Vtiger_Zip extends dZip {
 	 * Get relative path (w.r.t base)
 	 */
 	function __getRelativePath($basepath, $srcpath) {
-		$base_realpath = realpath($basepath);
-		$src_realpath  = realpath($srcpath);
-		$search_index  = strpos($base_realpath, $src_realpath);
-		if($serach_index == 0)
-			$relpath = substr($src_realpath, strlen($base_realpath)+1);
+		$base_realpath = $this->__normalizePath(realpath($basepath));
+		$src_realpath  = $this->__normalizePath(realpath($srcpath));
+		$search_index  = strpos($src_realpath, $base_realpath);
+		if($search_index === 0) {
+			$startindex = strlen($base_realpath)+1;
+			// On windows $base_realpath ends with / and On Linux it will not have / at end!
+			if(strrpos($base_realpath, '/') == strlen($base_realpath)-1) $startindex -= 1;
+			$relpath = substr($src_realpath, $startindex);
+		}
 		return $relpath;
 	}
 
@@ -44,6 +48,14 @@ class Vtiger_Zip extends dZip {
 	 */
 	function __fixDirSeparator($path) {
 		if($path != '' && (strripos($path, '/') != strlen($path)-1)) $path .= '/';
+		return $path;
+	}
+
+	/**
+	 * Normalize the directory path separators.
+	 */
+	function __normalizePath($path) {
+		if($path && strpos($path, '\\')!== false) $path = preg_replace("/\\\\/", "/", $path);
 		return $path;
 	}
 
