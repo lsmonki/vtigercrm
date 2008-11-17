@@ -15,6 +15,12 @@
 $adb = $_SESSION['adodb_current_object'];
 $conn = $_SESSION['adodb_current_object'];
 
+$tmp = $adb->getUniqueId('vtiger_blocks');
+$max_block_id_query = $adb->pquery("SELECT MAX(blockid) AS max_blockid FROM vtiger_blocks");
+$max_block_id = $adb->query_result($max_block_id_query,0,"max_blockid");
+
+ExecuteQuery("UPDATE vtiger_blocks_seq SET id=".$max_block_id);
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Starts \n\n");
 
 /* Add Total column in default customview of Purchase Order */
@@ -253,14 +259,14 @@ ExecuteQuery("CREATE TABLE vtiger_activity_reminder_popup(reminderid int(19) NOT
 ExecuteQuery("CREATE TABLE vtiger_reminder_interval(reminder_intervalid int(19) NOT NULL AUTO_INCREMENT,reminder_interval varchar(200) NOT NULL,sortorderid int(19) NOT NULL,presence int(1) NOT NULL, PRIMARY KEY(reminder_intervalid))");
 ExecuteQuery("alter table vtiger_users add column reminder_interval varchar(100)");
 ExecuteQuery("alter table vtiger_users add column reminder_next_time varchar(100)");
-$adb->query("INSERT INTO vtiger_reminder_interval values(1,'None',0,1)");
-$adb->query("INSERT INTO vtiger_reminder_interval values(2,'1 Minute',1,1)");
-$adb->query("INSERT INTO vtiger_reminder_interval values(3,'5 Minutes',2,1)");
-$adb->query("INSERT INTO vtiger_reminder_interval values(4,'15 Minutes',3,1)");
-$adb->query("INSERT INTO vtiger_reminder_interval values(5,'30 Minutes',4,1)");
-$adb->query("INSERT INTO vtiger_reminder_interval values(6,'45 Minutes',5,1)");
-$adb->query("INSERT INTO vtiger_reminder_interval values(7,'1 Hour',6,1)");
-$adb->query("INSERT INTO vtiger_reminder_interval values(8,'1 Day',7,1)");
+$adb->query("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'None',0,1)");
+$adb->query("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'1 Minute',1,1)");
+$adb->query("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'5 Minutes',2,1)");
+$adb->query("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'15 Minutes',3,1)");
+$adb->query("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'30 Minutes',4,1)");
+$adb->query("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'45 Minutes',5,1)");
+$adb->query("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'1 Hour',6,1)");
+$adb->query("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'1 Day',7,1)");
 $adb->query("UPDATE vtiger_users SET reminder_interval='1 Minute' AND reminder_next_time='".date('Y-m-d H:i')."'");
 
 /* For Duplicate Records Merging feature */
@@ -667,12 +673,24 @@ ExecuteQuery("create table vtiger_eventhandlers (eventhandler_id int, event_name
 ExecuteQuery("UPDATE vtiger_field SET uitype=111,typeofdata='V~M' WHERE tabid=16 and columnname='activitytype'");
 ExecuteQuery("alter table vtiger_activitytype drop column sortorderid");
 ExecuteQuery("alter table vtiger_activitytype add column picklist_valueid int(19) NOT NULL default '0'");
+$picklist_id = $adb->getUniqueId("vtiger_picklist");
+ExecuteQuery("INSERT INTO vtiger_picklist VALUES(".$picklist_id.",'activitytype')");
 
 $query = $adb->pquery("SELECT * from vtiger_activitytype",array());
 for($i=0;$i<$adb->num_rows($query);$i++){
 	$picklist_valueid = $adb->getUniqueID('vtiger_picklistvalues');
 	$activitytypeid = $adb->query_result($query,$i,'activitytypeid');
 	$adb->pquery("UPDATE vtiger_activitytype SET picklist_valueid=? , presence=0 WHERE activitytypeid = ? ",array($picklist_valueid,$activitytypeid));
+}
+
+$role_query = $adb->query("SELECT * FROM vtiger_role");
+for($j=0;$j<$adb->num_rows($role_query);$j++){
+	$roleid = $adb->query_result($role_query,$j,'roleid');
+	$query = $adb->pquery("SELECT * from vtiger_activitytype",array());
+	for($i=0;$i<$adb->num_rows($query);$i++){
+		$picklist_valueid = $adb->query_result($query,$i,'picklist_valueid');
+		ExecuteQuery("INSERT INTO vtiger_role2picklist VALUES('".$roleid."',".$picklist_valueid.",".$picklist_id.",$i)");
+	}
 }
 
 $uniqueid = $adb->getUniqueID("vtiger_relatedlists");
@@ -725,7 +743,7 @@ for($i=0; $i<$adb->num_rows($users_query); $i++){
 
 ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Products").",'get_products',13,'Product Bundles',0)");
 
-// vtmailscanner customization
+/* vtmailscanner customization */
 ExecuteQuery("CREATE TABLE vtiger_mailscanner(scannerid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,scannername VARCHAR(30),
 	server VARCHAR(100),protocol VARCHAR(10),username VARCHAR(30),password VARCHAR(255),ssltype VARCHAR(10),
 sslmethod VARCHAR(30),connecturl VARCHAR(255),isvalid INT(1))");
