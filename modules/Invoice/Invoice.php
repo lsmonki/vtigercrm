@@ -113,10 +113,12 @@ class Invoice extends CRMEntity {
 		}
 
 		//in ajax save we should not call this function, because this will delete all the existing product values
-		if($_REQUEST['action'] != 'InvoiceAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW' && $_REQUEST['action'] != 'MassEditSave')
-		{
-			//Based on the total Number of rows we will save the product relationship with this entity
-			saveInventoryProductDetails(&$this, 'Invoice');
+		if(isset($_REQUEST)) {
+			if($_REQUEST['action'] != 'InvoiceAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW' && $_REQUEST['action'] != 'MassEditSave')
+			{
+				//Based on the total Number of rows we will save the product relationship with this entity
+				saveInventoryProductDetails(&$this, 'Invoice');
+			}
 		}
 		
 		// Update the currency id and the conversion rate for the invoice

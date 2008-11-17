@@ -1478,10 +1478,9 @@ function getDBInsertDateValue($value)
 	$log->debug("Entering getDBInsertDateValue(".$value.") method ...");
 	global $current_user;
 	$dat_fmt = $current_user->date_format;
-	if($dat_fmt == '')
-        {
-                $dat_fmt = 'dd-mm-yyyy';
-        }
+	if($dat_fmt == '') {
+		$dat_fmt = 'dd-mm-yyyy';
+	}
 	$insert_date='';
 	if($dat_fmt == 'dd-mm-yyyy')
 	{
@@ -1495,7 +1494,7 @@ function getDBInsertDateValue($value)
 	{
 		list($y,$m,$d) = split('-',$value);
 	}
-		
+
 	if(!$y && !$m && !$d) {
 		$insert_date = '';
 	} else {
