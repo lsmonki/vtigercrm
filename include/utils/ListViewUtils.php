@@ -2767,6 +2767,8 @@ function getListQuery($module,$where='')
 				ON vtiger_salesorder.contactid = vtiger_contactdetails.contactid	
 			LEFT JOIN vtiger_potential
 				ON vtiger_potential.potentialid = vtiger_salesorder.potentialid
+			LEFT JOIN vtiger_invoice_recurring_info
+				ON vtiger_invoice_recurring_info.salesorderid = vtiger_salesorder.salesorderid
 			LEFT JOIN vtiger_sogrouprelation
 				ON vtiger_salesorder.salesorderid = vtiger_sogrouprelation.salesorderid
 			LEFT JOIN vtiger_groups

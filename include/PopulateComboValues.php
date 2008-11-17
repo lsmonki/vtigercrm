@@ -126,7 +126,7 @@ class PopulateComboValues
 				
 		global $app_list_strings,$adb;
 		global $combo_strings;
-		$comboTables = Array('duration_minutes','visibility','status','activity_view','lead_view','date_format','recurringtype','currency','licencekeystatus','taxclass');
+		$comboTables = Array('duration_minutes','visibility','status','activity_view','lead_view','date_format','recurringtype','currency','licencekeystatus','taxclass','recurring_frequency');
 
 		foreach ($comboTables as $comTab)
 		{

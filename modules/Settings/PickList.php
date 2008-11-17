@@ -100,8 +100,7 @@ function getUserFldArray($fld_module,$roleid)
 			$fld_name = $adb->query_result($result,$i,"fieldname");
 			if($fld_module == 'Events')	
 			{
-				if($adb->query_result($result,$i,"fieldname") != 'recurringtype' && $adb->query_result($result,$i,"fieldname") != 'visibility')	
-				{	
+				if($adb->query_result($result,$i,"fieldname") != 'recurringtype' && $adb->query_result($result,$i,"fieldname") != 'visibility')	{	
 					$user_fld['fieldlabel'] = $adb->query_result($result,$i,"fieldlabel");	
 					$user_fld['generatedtype'] = $adb->query_result($result,$i,"generatedtype");	
 					$user_fld['columnname'] = $adb->query_result($result,$i,"columnname");	
@@ -113,6 +112,7 @@ function getUserFldArray($fld_module,$roleid)
 			}
 			else
 			{
+				if($adb->query_result($result,$i,"fieldname") != 'recurring_frequency') {
 					$user_fld['fieldlabel'] = $adb->query_result($result,$i,"fieldlabel");	
 					$user_fld['generatedtype'] = $adb->query_result($result,$i,"generatedtype");	
 					$user_fld['columnname'] = $adb->query_result($result,$i,"columnname");	
@@ -120,6 +120,7 @@ function getUserFldArray($fld_module,$roleid)
 					$user_fld['uitype'] = $adb->query_result($result,$i,"uitype");	
 					$user_fld['value'] = getPickListValues($user_fld['fieldname'],$roleid); 
 					$fieldlist[] = $user_fld;
+				}
 			}
     	}
     }

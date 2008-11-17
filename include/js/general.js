@@ -850,40 +850,61 @@ function massEditFormValidate(){
 
 function doformValidation(edit_type) {
 
-//Validation for Portal User
-if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
-{
-	//if existing portal value = 0, portal checkbox = checked, ( email field is not available OR  email is empty ) then we should not allow -- OR --
-	//if existing portal value = 1, portal checkbox = checked, ( email field is available     AND email is empty ) then we should not allow
-	if(edit_type=='')
+	//Validation for Portal User
+	if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 	{
-		if((getObj('existing_portal').value == 0 && getObj('portal').checked && (getObj('email') == null || trim(getObj('email').value) == '')) ||
-		    getObj('existing_portal').value == 1 && getObj('portal').checked && getObj('email') != null && trim(getObj('email').value) == '')
+		//if existing portal value = 0, portal checkbox = checked, ( email field is not available OR  email is empty ) then we should not allow -- OR --
+		//if existing portal value = 1, portal checkbox = checked, ( email field is available     AND email is empty ) then we should not allow
+		if(edit_type=='')
 		{
-			alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+			if((getObj('existing_portal').value == 0 && getObj('portal').checked && (getObj('email') == null || trim(getObj('email').value) == '')) ||
+			    getObj('existing_portal').value == 1 && getObj('portal').checked && getObj('email') != null && trim(getObj('email').value) == '')
+			{
+				alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+				return false;
+			}
+		}
+		else
+		{
+			if(getObj('portal').checked && getObj('portal_mass_edit_check').checked && (getObj('email') == null || trim(getObj('email').value) == '' || getObj('email_mass_edit_check').checked==false))
+			{
+				alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+				return false;
+			}
+			if((getObj('email') != null && trim(getObj('email').value) == '' && getObj('email_mass_edit_check').checked) && !(getObj('portal').checked==false && getObj('portal_mass_edit_check').checked))
+			{
+				alert(alert_arr.EMAIL_CHECK_MSG);
+				return false;
+			}
+		}
+	}
+	if(gVTModule == 'SalesOrder') {
+		if(edit_type == 'mass_edit') {
+			if (getObj('enable_recurring_mass_edit_check') != null 
+				&& getObj('enable_recurring_mass_edit_check').checked
+				&& getObj('enable_recurring') != null) {
+					if(getObj('enable_recurring').checked && (getObj('recurring_frequency') == null 
+						|| trim(getObj('recurring_frequency').value) == '--None--' || getObj('recurring_frequency_mass_edit_check').checked==false)) {
+						alert("Recurring frequency not provided");
+						return false;
+					}
+					if(getObj('enable_recurring').checked == false && getObj('recurring_frequency_mass_edit_check').checked
+						&& getObj('recurring_frequency') != null && trim(getObj('recurring_frequency').value) !=  '--None--') {
+						alert("Recurring frequency is provided, but recurring is not enabled");
+						return false;
+					}	
+			}
+		} else if(getObj('enable_recurring') != null && getObj('enable_recurring').checked && 
+					(getObj('recurring_frequency') == null || getObj('recurring_frequency').value == '--None--')) {
+			alert("Recurring frequency not provided");
 			return false;
 		}
 	}
-	else
-	{
-		if(getObj('portal').checked && getObj('portal_mass_edit_check').checked && (getObj('email') == null || trim(getObj('email').value) == '' || getObj('email_mass_edit_check').checked==false))
-		{
-			alert(alert_arr.PORTAL_PROVIDE_EMAILID);
-			return false;
-		}
-		if((getObj('email') != null && trim(getObj('email').value) == '' && getObj('email_mass_edit_check').checked) && !(getObj('portal').checked==false && getObj('portal_mass_edit_check').checked))
-		{
-			alert(alert_arr.EMAIL_CHECK_MSG);
-			return false;
-		}
-	}
-}
-
 	for (var i=0; i<fieldname.length; i++) {
-		if(edit_type != '') {
-			if(fieldname[i]!='salutationtype')			
+		if(edit_type == 'mass_edit') {
+			if(fieldname[i]!='salutationtype')	
 			var obj = getObj(fieldname[i]+"_mass_edit_check");
-			if(obj.checked != true) continue;
+			if(obj == null || obj.checked == false) continue;
 		}
 		if(getObj(fieldname[i]) != null)
 		{

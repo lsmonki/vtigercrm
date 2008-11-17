@@ -41,5 +41,8 @@ $service = $_REQUEST['service'];
 if($service == 'MailScanner') {
 	include_once('cron/MailScanner.service');
 }
+if($service == 'RecurringInvoice') {
+	include_once('cron/modules/SalesOrder/RecurringInvoice.service');
+}
 
 ?>

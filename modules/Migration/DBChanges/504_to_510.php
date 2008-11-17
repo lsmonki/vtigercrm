@@ -23,6 +23,9 @@ ExecuteQuery("UPDATE vtiger_blocks_seq SET id=".$max_block_id);
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Starts \n\n");
 
+require_once('include/events/include.inc');
+$em = new VTEventsManager($adb);
+
 /* Add Total column in default customview of Purchase Order */
 $res = $adb->query("select cvid from vtiger_customview where viewname='All' and entitytype='PurchaseOrder'");
 $po_cvid = $adb->query_result($res, 0, 'cvid');
@@ -758,6 +761,38 @@ ExecuteQuery("CREATE TABLE vtiger_mailscanner_actions(actionid INT AUTO_INCREMEN
 
 ExecuteQuery("CREATE TABLE vtiger_mailscanner_ruleactions(ruleid INT,actionid INT)");
 // END
+
+/* Recurring Invoice Feature */
+$new_block_seq_no = 2;
+// Get all the blocks of the same module (SalesOrder), and update their sequence depending on the sequence of the new block added.
+$res = $adb->query("SELECT blockid FROM vtiger_blocks WHERE tabid = ". getTabid('SalesOrder') ." AND sequence >= ". $new_block_seq_no);
+$no_of_blocks = $adb->num_rows($res);
+for ($i=0; $i<$no_of_blocks;$i++) {
+	$blockid = $adb->query_result($res, $i, 'blockid');
+	ExecuteQuery("UPDATE vtiger_blocks SET sequence = sequence+1 WHERE blockid=$blockid");
+}
+// Add new block to show recurring invoice information at specified position (sequence of blocks)
+$new_block_id = $adb->getUniqueID('vtiger_blocks');
+ExecuteQuery("INSERT INTO vtiger_blocks VALUES (".$new_block_id.",".getTabid('SalesOrder').",'Recurring Invoice Information',$new_block_seq_no,0,0,0,0,0,1)");
+
+ExecuteQuery("ALTER TABLE vtiger_salesorder ADD COLUMN enable_recurring INT default 0");
+ExecuteQuery("CREATE TABLE vtiger_invoice_recurring_info(salesorderid INT, recurring_frequency VARCHAR(200), start_period DATE, end_period DATE, last_recurring_date DATE default NULL)");
+
+ExecuteQuery("CREATE TABLE vtiger_recurring_frequency(recurring_frequency_id INT, recurring_frequency VARCHAR(200), sortorderid INT, presence INT)");
+// Add default values for teh recurring_frequency picklist
+ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'--None--',0,1)");
+ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Daily',0,1)");
+ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Weekly',0,1)");
+ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Monthly',0,1)");
+ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Quarterly',0,1)");
+ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Yearly',0,1)");
+// Add fields for the Recurring Information block
+ExecuteQuery("insert into vtiger_field values(".getTabid('SalesOrder').",".$adb->getUniqueID('vtiger_field').",'enable_recurring','vtiger_salesorder',1,'56','enable_recurring','Enable Recurring',1,0,0,100,1,$new_block_id,1,'C~O',1,null,'BAS')");
+ExecuteQuery("insert into vtiger_field values(".getTabid('SalesOrder').",".$adb->getUniqueID('vtiger_field').",'recurring_frequency','vtiger_invoice_recurring_info',1,'15','recurring_frequency','Frequency',1,0,0,100,2,$new_block_id,1,'V~O',1,null,'BAS')");
+ExecuteQuery("insert into vtiger_field values(".getTabid('SalesOrder').",".$adb->getUniqueID('vtiger_field').",'start_period','vtiger_invoice_recurring_info',1,'5','start_period','Start Period',1,0,0,100,3,$new_block_id,1,'D~O',1,null,'BAS')");
+ExecuteQuery("insert into vtiger_field values(".getTabid('SalesOrder').",".$adb->getUniqueID('vtiger_field').",'end_period','vtiger_invoice_recurring_info',1,'5','end_period','End Period',1,0,0,100,4,$new_block_id,1,'D~O',1,null,'BAS')");
+// Add Event handler for Recurring Invoice
+$em->registerHandler('vtiger.entity.aftersave', 'modules/SalesOrder/RecurringInvoiceHandler.php', 'RecurringInvoiceHandler');
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 

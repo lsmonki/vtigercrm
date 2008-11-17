@@ -388,6 +388,8 @@ require_once('modules/Reports/PopulateReports.php');
 // default customview population
 require_once('modules/CustomView/PopulateCustomView.php');
 
+// Register All the Events
+registerEvents($adb);
 
 // ensure required sequences are created (adodb creates them as needed, but if
 // creation occurs within a transaction we get problems
@@ -405,6 +407,16 @@ if($adb->isMySQL()) {
 	@include_once('modules/Migration/Performance/'.$current_version.'_mysql.php');
 } elseif($adb->isPostgres()) {
 	@include_once('modules/Migration/Performance/'.$current_version.'_postgres.php');		
+}
+	
+// Register all the events here
+function registerEvents($adb) {
+	require_once('include/events/include.inc');
+	$em = new VTEventsManager($adb);
+
+	// Registering event for Recurring Invoices
+	$em->registerHandler('vtiger.entity.aftersave', 'modules/SalesOrder/RecurringInvoiceHandler.php', 'RecurringInvoiceHandler');
+	
 }
 
 // populate the db with seed data

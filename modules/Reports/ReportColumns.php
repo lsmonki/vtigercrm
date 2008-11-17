@@ -72,7 +72,7 @@ function getPrimaryColumnsHTML($module)
 		if(isset($ogReport->pri_module_columnslist[$module][$key]))
 		{
 			
-			$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".$app_strings[$key]."\" class=\"select\" style=\"border:none\">";
+			$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
 			foreach($ogReport->pri_module_columnslist[$module][$key] as $field=>$fieldlabel)
 			{
 				if(isset($mod_strings[$fieldlabel]))
@@ -111,7 +111,7 @@ function getSecondaryColumnsHTML($module)
 			{
 				if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
 				{
-					$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".$app_strings[$key]."\" class=\"select\" style=\"border:none\">";
+					$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
 					foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
 					{
 						if(isset($mod_strings[$fieldlabel]))

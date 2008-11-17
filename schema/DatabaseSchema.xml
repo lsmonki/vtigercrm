@@ -3528,6 +3528,9 @@
 			<notnull />
 			<default value="1.000" />
 		</field>
+		<field name="enable_recurring" type="I">
+			<default value="0" />
+		</field>
 		<index name="salesorder_vendorid_idx">
 			<col>vendorid</col>
 		</index>
@@ -6819,6 +6822,27 @@
 	<table name="vtiger_mailscanner_ruleactions">
 		<field name="ruleid" type="I"></field>
 		<field name="actionid" type="I"></field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	<!-- END -->
+
+	<!-- Recurring Invoice -->
+	<table name="vtiger_invoice_recurring_info">
+		<field name="salesorderid" type="I"></field>
+		<field name="recurring_frequency" type="C" size="200"></field>
+		<field name="start_period" type="D"></field>
+		<field name="end_period" type="D"></field>
+		<field name="last_recurring_date" type="D">
+			<default value="NULL" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="vtiger_recurring_frequency">
+		<field name="recurring_frequency_id" type="I"></field>
+		<field name="recurring_frequency" type="C" size="200"></field>
+		<field name="sortorderid" type="I"></field>
+		<field name="presence" type="I"></field>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 	<!-- END -->

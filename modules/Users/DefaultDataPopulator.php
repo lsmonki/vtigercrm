@@ -143,11 +143,11 @@ $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vt
 $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",21,'LBL_TERMS_INFORMATION',5,0,0,0,0,0,1)");
 $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",21,'LBL_DESCRIPTION_INFORMATION',6,0,0,0,0,0,1)");
 $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",22,'LBL_SO_INFORMATION',1,0,0,0,0,0,1)");
-$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",22,'LBL_CUSTOM_INFORMATION',2,0,0,0,0,0,1)");
-$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",22,'LBL_ADDRESS_INFORMATION',3,0,0,0,0,0,1)");
-$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",22,'LBL_RELATED_PRODUCTS',4,0,0,0,0,0,1)");
-$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",22,'LBL_TERMS_INFORMATION',5,0,0,0,0,0,1)");
-$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",22,'LBL_DESCRIPTION_INFORMATION',6,0,0,0,0,0,1)");
+$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",22,'LBL_CUSTOM_INFORMATION',3,0,0,0,0,0,1)");
+$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",22,'LBL_ADDRESS_INFORMATION',4,0,0,0,0,0,1)");
+$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",22,'LBL_RELATED_PRODUCTS',5,0,0,0,0,0,1)");
+$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",22,'LBL_TERMS_INFORMATION',6,0,0,0,0,0,1)");
+$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",22,'LBL_DESCRIPTION_INFORMATION',7,0,0,0,0,0,1)");
 $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",23,'LBL_INVOICE_INFORMATION',1,0,0,0,0,0,1)");
 $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",23,'LBL_CUSTOM_INFORMATION',2,0,0,0,0,0,1)");
 $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",23,'LBL_ADDRESS_INFORMATION',3,0,0,0,0,0,1)");
@@ -167,6 +167,8 @@ $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vt
 $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",29,'LBL_USER_ADV_OPTIONS',5,0,0,0,0,0,1)"); //Added a New Block User Image Info in Users Module
 //Added block 'File Information' to Documents module
 $this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",8,'LBL_FILE_INFORMATION',3,0,0,0,0,0,1)");
+//Added block for storing the Recurring Inovice Informaiton in SalesOrder
+$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",22,'Recurring Invoice Information',2,0,0,0,0,0,1)");
 
 //Account Details -- START
  //Block9
@@ -818,6 +820,11 @@ $this->db->query("insert into vtiger_field values (19,".$this->db->getUniqueID("
  //Block68
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'terms_conditions','vtiger_salesorder',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,67,1,'V~O',1,null,'ADV')");
 
+// Add fields for the Recurring Information block - Block 86
+$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'enable_recurring','vtiger_salesorder',1,'56','enable_recurring','Enable Recurring',1,0,0,100,1,86,1,'C~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'recurring_frequency','vtiger_invoice_recurring_info',1,'15','recurring_frequency','Frequency',1,0,0,100,2,86,1,'V~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'start_period','vtiger_invoice_recurring_info',1,'5','start_period','Start Period',1,0,0,100,3,86,1,'D~O',1,null,'BAS')");
+$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'end_period','vtiger_invoice_recurring_info',1,'5','end_period','End Period',1,0,0,100,4,86,1,'D~O',1,null,'BAS')");
 
 //Sales Order Details -- END
 

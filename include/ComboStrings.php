@@ -307,7 +307,14 @@ $combo_strings = Array(
 'date_format_dom' => Array('dd-mm-yyyy'=>'dd-mm-yyyy',
 			      'mm-dd-yyyy'=>'mm-dd-yyyy',
                               'yyyy-mm-dd'=>'yyyy-mm-dd'
-			      ),		      
+			      ),	
+'recurring_frequency_dom' => Array('--None--'=>'--None--',
+								'Daily' => 'Daily',
+								'Weekly' => 'Weekly',
+								'Monthly' => 'Monthly',
+								'Quarterly' => 'Quarterly',
+								'Yearly' => 'Yearly'
+							),	      
 		
 );
 
