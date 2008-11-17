@@ -990,6 +990,7 @@ $mod_strings = Array(
 'VTLIB_LBL_MODULE_MANAGER'=>'Module Manager',
 'VTLIB_LBL_MODULE_MANAGER_DESCRIPTION'=>'Manage module behavior inside vtiger CRM',
 'VTLIB_LBL_CRM_MODULES'=>'Vtiger CRM Modules',
+'VTLIB_LBL_MODULE_MANAGER_HELP'=>'vtiger CRM Modules',
 
 // vtmailscanner START
 'LBL_MAIL_SCANNER'=>'Mail Scanner',

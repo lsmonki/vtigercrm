@@ -4,6 +4,7 @@ include_once('vtlib/Vtiger/Common.inc.php');
 include_once('vtlib/Vtiger/ParentTab.php');
 include_once('vtlib/Vtiger/Module.php');
 include_once('vtlib/Vtiger/CustomView.php');
+include_once('vtlib/Vtiger/Event.php');
 include_once('vtlib/Vtiger/Zip.php');
 
 include_once('include/utils/VtlibUtils.php');
@@ -158,6 +159,9 @@ class Vtiger_PackageExport {
 
 		// Export Sharing Access
 		$this->export_SharingAccess($module, $moduleid);
+
+		// Export Events
+		$this->export_Events($module, $moduleid);		
 
 		// Export Actions
 		$this->export_Actions($module, $moduleid);
@@ -378,6 +382,24 @@ class Vtiger_PackageExport {
 			}
 		}
 		$this->closeNode('sharingaccess');		
+	}
+
+	/**
+	 * Export Events of the module.
+	 */
+	function export_Events($module, $moduleid) {
+		$events = Vtiger_Events::getAll($module);
+		if(!$events) return;
+
+		$this->openNode('events');
+		foreach($events as $event) {
+			$this->openNode('event');
+			$this->outputNode('eventname', $event->eventname);
+			$this->outputNode('classname', $event->classname);
+			$this->outputNode('filename', $event->filename);
+			$this->closeNode('event');
+		}
+		$this->closeNode('events');
 	}
 
 	/**

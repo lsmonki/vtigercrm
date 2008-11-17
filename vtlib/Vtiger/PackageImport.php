@@ -8,7 +8,7 @@ include_once('vtlib/Vtiger/Module.php');
 include_once('vtlib/Vtiger/Block.php');
 include_once('vtlib/Vtiger/Field.php');
 include_once('vtlib/Vtiger/CustomView.php');
-
+include_once('vtlib/Vtiger/Event.php');
 
 /**
  * Package Manager class for vtiger Modules.
@@ -145,6 +145,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		$this->import_Blocks($this->_modulexml);
 		$this->import_CustomViews($this->_modulexml);
 		$this->import_SharingAccess($this->_modulexml);
+		$this->import_Events($this->_modulexml);
 		$this->import_Actions($this->_modulexml);
 	}
 
@@ -269,6 +270,20 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		if(!empty($modulenode->sharingaccess->default)) {
 			foreach($modulenode->sharingaccess->default as $defaultnode) {
 				Vtiger_Module::setDefaultSharingAccess($modulenode->name, $defaultnode);
+			}
+		}
+	}
+
+	/**
+	 * Import Events of the module.
+	 */
+	function import_Events($modulenode) {
+		if(empty($modulenode->events)) return;
+
+		if(!empty($modulenode->events->event)) {
+			foreach($modulenode->events->event as $eventnode) {
+				Vtiger_Event::register($modulenode->name, 
+					$eventnode->eventname, $eventnode->classname, $eventnode->filename);
 			}
 		}
 	}

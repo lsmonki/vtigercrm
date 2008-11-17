@@ -1,7 +1,6 @@
 <?php
 
 include_once('vtlib/Vtiger/Utils.php');
-include_once('vtlib/Vtiger/Field.php');
 include_once('vtlib/Vtiger/Module.php');
 
 class Vtiger_Field {
@@ -230,7 +229,7 @@ class Vtiger_Field {
 				Array($fieldid, $this->get('module'), $relmodule));
 
 			// If relation already exist continue
-			if($adb->num_rows($chekres)) continue;
+			if($adb->num_rows($checkres)) continue;
 
 			$adb->pquery('INSERT INTO vtiger_fieldmodulerel(fieldid, module, relmodule) VALUES(?,?,?)', 
 				Array($this->get('fieldid'), $this->get('module'), $relmodule));

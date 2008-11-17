@@ -3,7 +3,7 @@
 <tr>
 	<td class="big tableHeading"><strong>{$MOD.VTLIB_LBL_MODULE_MANAGER_HELP}</strong></td>
 	<td class="big tableHeading" colspan=3 width=10% align="center">
-		<form action="index.php?module=Settings&action=ModuleManager&module_import=Step1&parenttab=Settings" method="POST">
+		<form style="display: inline;" action="index.php?module=Settings&action=ModuleManager&module_import=Step1&parenttab=Settings" method="POST">
 			<input type="submit" class="crmbutton small create" value='{$APP.LBL_IMPORT} {$APP.LBL_NEW}' title='{$APP.LBL_IMPORT}'>
 		</form>
 	</td>

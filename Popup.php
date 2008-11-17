@@ -320,6 +320,17 @@ if(isset($order_by) && $order_by != '')
 {
         $query .= ' ORDER BY '.$order_by.' '.$sorder;
 }
+
+// vtlib customization: To override module specific popup query for a given field
+$override_query = false;
+if(method_exists($focus, 'getQueryByModuleField')) {
+	$override_query = $focus->getQueryByModuleField($_REQUEST['srcmodule'], $_REQUEST['forfield'], $_REQUEST['forrecord']);
+	if($override_query) {
+		$query = $override_query;
+	}
+}
+// END
+
 $count_result = $adb->query(mkCountQuery($query));
 $noofrows = $adb->query_result($count_result, 0, 'count');
 //Retreiving the start value from request

@@ -4,12 +4,13 @@ include_once('vtlib/Vtiger/Utils.php');
 
 if($_REQUEST['module_settings'] == 'true') {
 	$targetmodule = $_REQUEST['formodule'];
-	$targetSettingPage = "modules/$targetmodule/Settings.php"; 
-	if(file_exists($targetSettingPage)) { 
-		Vtiger_Utils::checkFileAccess($targetSettingPage); 
-		require_once($targetSettingPage); 
-		exit; 
-	} 
+
+	$targetSettingPage = "modules/$targetmodule/Settings.php";
+	if(file_exists($targetSettingPage)) {
+		Vtiger_Utils::checkFileAccess($targetSettingPage);
+		require_once($targetSettingPage);
+		exit;
+	}
 }
 
 $modulemanager_uploaddir = 'test/vtlib';

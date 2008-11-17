@@ -5,7 +5,7 @@ class Vtiger_Utils {
 	/** 
 	 * Function to check the file access is made within web root directory. 
 	 */
-	static function checkFileAccess($filepath) {
+	static function checkFileAccess($filepath, $dieOnFail=true) {
 		global $root_directory;
 		$realfilepath = realpath($filepath);
 
@@ -13,8 +13,12 @@ class Vtiger_Utils {
 		$rootdirpath  = str_replace('\\', '/', $root_directory);
 
 		if(stripos($realfilepath, $rootdirpath) !== 0) {
-			die("Sorry! Attempt to access restricted file.");
+			if($dieOnFail) {
+				die("Sorry! Attempt to access restricted file.");
+			}
+			return false;
 		}
+		return true;
 	}
 
 	/**
