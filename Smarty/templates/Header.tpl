@@ -140,10 +140,14 @@
 			{foreach  key=maintabs item=detail from=$HEADERS}
 				{if $maintabs eq $CATEGORY}
 					{foreach  key=number item=module from=$detail}
+						{assign var="modulelabel" value=$module}
+      					{if $APP.$module} 
+      						{assign var="modulelabel" value=$APP.$module} 
+      					{/if}
 						{if $module eq $MODULE_NAME}
-							<td class="level2SelTab" nowrap><a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$APP[$module]}</a></td>
+							<td class="level2SelTab" nowrap><a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$modulelabel}</a></td>
 						{else}
-							<td class="level2UnSelTab" nowrap> <a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$APP[$module]}</a> </td>
+							<td class="level2UnSelTab" nowrap> <a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$modulelabel}</a> </td>
 						{/if}	
 					{/foreach}
 				{/if}
@@ -420,8 +424,12 @@ function getFormValidate(divValidate)
 			{if $loopvalue eq '0'}
 				</td><td valign="top">
 			{/if}
-			<a href="index.php?module={$modules.0}&action=index&parenttab={$parenttab}" class="allMnu">{$APP[$modules.1]}</a>
-		{/foreach}
+			{assign var="modulelabel" value=$modules[0]}
+   			{if $APP[$modules.1]}
+   				{assign var="modulelabel" value=$APP[$modules.1]}
+   			{/if}
+			<a href="index.php?module={$modules.0}&action=index&parenttab={$parenttab}" class="allMnu">{$modulelabel}</a>
+			{/foreach}
 		{/foreach}
 		</td>
 	</tr>
@@ -432,6 +440,10 @@ function getFormValidate(divValidate)
 {foreach name=parenttablist key=parenttab item=details from=$QUICKACCESS}
 <div class="drop_mnu" id="{$parenttab}_sub" onmouseout="fnHideDrop('{$parenttab}_sub')" onmouseover="fnShowDrop('{$parenttab}_sub')">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		{assign var="modulelabel" value=$modules[0]}
+		{if $APP[$modules.1]}
+			{assign var="modulelabel" value=$APP[$modules.1]}
+		{/if}
 		{foreach name=modulelist item=modules from=$details}
 		<tr><td><a href="index.php?module={$modules.0}&action=index&parenttab={$parenttab}" class="drop_down">{$APP[$modules.1]}</a></td></tr>
 		{/foreach}

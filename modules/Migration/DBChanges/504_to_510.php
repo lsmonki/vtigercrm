@@ -16,7 +16,7 @@ $adb = $_SESSION['adodb_current_object'];
 $conn = $_SESSION['adodb_current_object'];
 
 $tmp = $adb->getUniqueId('vtiger_blocks');
-$max_block_id_query = $adb->pquery("SELECT MAX(blockid) AS max_blockid FROM vtiger_blocks");
+$max_block_id_query = $adb->query("SELECT MAX(blockid) AS max_blockid FROM vtiger_blocks");
 $max_block_id = $adb->query_result($max_block_id_query,0,"max_blockid");
 
 ExecuteQuery("UPDATE vtiger_blocks_seq SET id=".$max_block_id);
@@ -610,14 +610,14 @@ function webserviceMigration(){
 			"80"=>array("SalesOrder"),"81"=>array("Vendors"),"101"=>array("Users"),"52"=>array("Users"),
 			"357"=>array("Contacts","Accounts","Leads","Users","Vendors"),"59"=>array("Products"),
 			"66"=>array("Leads","Accounts","Potentials","HelpDesk"),"77"=>array("Users"),"68"=>array("Contacts","Accounts"));
-	echo "<table border=1 margin=2>";
+	//echo "<table border=1 margin=2>";
 	ExecuteQuery("Create table vtiger_ws_fieldtype(fieldtypeid integer(19) not null auto_increment,uitype varchar(30)not null,fieldtype varchar(200) not null,PRIMARY KEY(fieldtypeid),UNIQUE KEY uitype_idx (uitype))ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	ExecuteQuery("Create table vtiger_ws_referencetype(fieldtypeid integer(19) not null,type varchar(25) not null,PRIMARY KEY(fieldtypeid,type),  CONSTRAINT `fk_1_vtiger_referencetype` FOREIGN KEY (`fieldtypeid`) REFERENCES `vtiger_ws_fieldtype` (`fieldtypeid`) ON DELETE CASCADE)ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	ExecuteQuery("Create table vtiger_ws_userauthtoken(userid integer(19) not null,token varchar(25) not null,expiretime INTEGER(19),PRIMARY KEY(userid,expiretime),UNIQUE KEY userid_idx (userid))ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	ExecuteQuery("alter table vtiger_users add column accesskey varchar(36);");
 	$fieldid = $adb->getUniqueID("vtiger_field");
 	ExecuteQuery("insert into vtiger_field values(29,$fieldid,'accesskey','vtiger_users',1,3,'accesskey','Webservice Access Key',1,0,0,100,2,84,2,'V~O',1,null,'BAS');");
-	echo "</table>";
+	//echo "</table>";
 	
 	foreach($referenceMapping as $uitype=>$referenceArray){
 		$success = true;

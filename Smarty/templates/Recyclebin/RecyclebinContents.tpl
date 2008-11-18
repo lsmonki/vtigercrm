@@ -36,16 +36,18 @@
           	</td>
 		<td width=100% align="right">
 		<b>{$MOD.LBL_SELECT_MODULE} : </b> 
-		<select id="select_module" onChange="change_module(this);">
-
-                {foreach key=mod_name item=module from=$MODULE_NAME}
+		<select id="select_module" onChange="change_module(this);" class="small">
+			{foreach key=mod_name item=module from=$MODULE_NAME}
+			{assign var="modulelabel" value=$module}
+   			{if $APP.$module}
+   				{assign var="modulelabel" value=$APP.$module}
+   			{/if}
 			{if $module eq $SELECTED_MODULE}
-                	<option value="{$module}" selected>{$APP.$module}</option>
+                	<option value="{$module}" selected>{$modulelabel}</option>
 			{else}
-					<option value="{$module}">{$APP.$module}</option>
+					<option value="{$module}">{$modulelabel}</option>
 			{/if}
-
-                {/foreach}
+			{/foreach}
         	</select>
 		</td>
        	 	</tr>
