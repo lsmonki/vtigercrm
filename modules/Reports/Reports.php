@@ -119,7 +119,7 @@ class Reports extends CRMEntity{
 				"HelpDesk"=>Array("Information"=>'25,26',"Custom Information"=>27,"Description"=>28,"Solution"=>29),//patch2
 				"Quotes"=>Array("Information"=>51,"Address"=>53,"Description"=>56,"Terms and Conditions"=>55,"Custom Information"=>52),
 				"PurchaseOrder"=>Array("Information"=>57,"Address"=>59,"Description"=>62,"Terms and Conditions"=>61,"Custom Information"=>58),
-				"SalesOrder"=>Array("Information"=>63,"Address"=>65,"Description"=>68,"Recurring Information"=>86,"Terms and Conditions"=>67,"Custom Information"=>64),
+				"SalesOrder"=>Array("Information"=>63,"Address"=>65,"Description"=>68,"Terms and Conditions"=>67,"Custom Information"=>64),
 				"Invoice"=>Array("Information"=>69,"Address"=>71,"Description"=>74,"Terms and Conditions"=>73,"Custom Information"=>70)
 				);
 
@@ -150,7 +150,28 @@ class Reports extends CRMEntity{
 		}
 	}
 
-
+	// Update the module list for listing columns for report creation.
+	function updateModuleList($module) {
+		global $adb;
+		if (!isset($module)) return;
+		require_once('include/utils/utils.php');
+		$tabid = getTabid($module); 
+		if ($module == 'Calendar') {
+			$tabid = array(9, 16);
+		} 
+		$sql = "SELECT blockid, blocklabel FROM vtiger_blocks WHERE tabid IN (". generateQuestionMarks($tabid) .")";
+		$res = $adb->pquery($sql, array($tabid));
+		$noOfRows = $adb->num_rows($res);
+		if ($noOfRows <= 0) return;
+		for($index = 0; $index < $noOfRows; ++$index) {
+			$blockid = $adb->query_result($res,$index,'blockid');
+			if(in_array($blockid, $this->module_list[$module])) continue;
+			$blockid_list[] = $blockid;
+			$blocklabel = $adb->query_result($res,$index,'blocklabel');
+			$this->module_list[$module][$blocklabel] = $blockid;
+		}
+	}
+ 	
 	/** Function to get the Listview of Reports
 	 *  This function accepts no argument
 	 *  This generate the Reports view page and returns a string
@@ -265,6 +286,7 @@ class Reports extends CRMEntity{
 
 	function getPriModuleColumnsList($module)
 	{
+		$this->updateModuleList($module);
 		foreach($this->module_list[$module] as $key=>$value)
 		{
 			$ret_module_list[$module][$key] = $this->getColumnsListbyBlock($module,$value);
@@ -286,6 +308,7 @@ class Reports extends CRMEntity{
 			$secmodule = explode(":",$module);
 			for($i=0;$i < count($secmodule) ;$i++)
 			{
+				$this->updateModuleList($secmodule[$i]);
 				foreach($this->module_list[$secmodule[$i]] as $key=>$value)
 				{
 					$ret_module_list[$secmodule[$i]][$key] = $this->getColumnsListbyBlock($secmodule[$i],$value);
