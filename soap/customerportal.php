@@ -2133,7 +2133,9 @@ function get_product_list_values($id,$modulename,$sessionid,$only_mine='true')
 		for($k=0;$k<count($query);$k++)
 		{
 			$res[$k] = $adb->pquery($query[$k],$params[$k]);
-			$noofdata[$k] = $adb->num_rows($res[$k]);
+			$noofdata[$k] = $adb->num_rows($res[$k]);			
+			if($noofdata[$k] == 0)
+   				$output[$k][$modulename]['data'] = '';
 			for( $j= 0;$j < $noofdata[$k]; $j++)
 			{
 				$i=0;
