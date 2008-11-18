@@ -9,15 +9,13 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
-
-require_once('include/database/PearDatabase.php');
-require_once('include/utils/utils.php');
-require_once('modules/Leads/Leads.php');
+global $currentModule;
+require_once("modules/$currentModule/$currentModule.php");
 
 $idlist= $_REQUEST['massedit_recordids'];
 $viewid = $_REQUEST['viewname'];
 $return_module = $_REQUEST['massedit_module'];
-$return_action = 'ListView';
+$return_action = 'index';
 
 global $rstart;
 //Added to fix 4600
@@ -34,8 +32,8 @@ if(isset($idlist)) {
 		if($recordid == '') continue;
 
 		// Save each module record with update value.
-		$focus = new Leads();
-		$focus->retrieve_entity_info($recordid, 'Leads');
+		$focus = new $currentModule();
+		$focus->retrieve_entity_info($recordid, $currentModule);
 		$focus->mode = 'edit';		
 		$focus->id = $recordid;		
 		foreach($focus->column_fields as $fieldname => $val)
@@ -45,24 +43,16 @@ if(isset($idlist)) {
 				if(is_array($_REQUEST[$fieldname]))
 					$value = $_REQUEST[$fieldname];
 				else
-					$value = trim($_REQUEST[$fieldname]);	
-				$log->info("the value is ".$value);
+					$value = trim($_REQUEST[$fieldname]);
 				$focus->column_fields[$fieldname] = $value;
 			}
 			else{
 				$focus->column_fields[$fieldname] = decode_html($focus->column_fields[$fieldname]);
 			}
-			if(isset($_REQUEST['annualrevenue'])  && isset($_REQUEST["annualrevenue_mass_edit_check"]))
-        	{
-                        $value = convertToDollar($_REQUEST['annualrevenue'],$rate);
-                        $focus->column_fields['annualrevenue'] = $value;
-        	}
 		}
-   		$focus->save('Leads');
+   		$focus->save($currentModule);
 	}
 }
-//print_r("index.php?module=$return_module&action=".$return_action.$rstart."&errormsg=".$errormsg.$url);
-//header("Location: index.php?module=$return_module&action=".$return_action.$rstart);
-//header("Location: install.php");
-print_r("<script type='text/javascript'>document.location.href='index.php?module=$return_module&action=$return_action"."$rstart';</script>");
+
+header("Location: index.php?module=$return_module&action=$return_action$rstart");
 ?>

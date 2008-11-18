@@ -476,7 +476,7 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 					<br><font size=1><em old="(yyyy-mm-dd)">({$dateStr})</em></font>
 				{/if}
 
-				<script type="text/javascript">
+				<script type="text/javascript" id="massedit_calendar_{$fldname}">
 					Calendar.setup ({ldelim}
 						inputField : "jscal_field_{$fldname}", ifFormat : "{$dateFormat}", showsTime : false, button : "jscal_trigger_{$fldname}", singleClick : true, step : 1
 					{rdelim})

@@ -15,6 +15,10 @@
 		<td class=small >		
 			<!-- popup specific content fill in starts -->
 	      <form name="EditView" id="massedit_form" action="index.php">
+				<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
+				<script type="text/javascript" src="jscalendar/calendar.js"></script>
+				<script type="text/javascript" src="jscalendar/lang/calendar-{$CALENDAR_LANG}.js"></script>
+				<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 				<input id="idstring" value="{$IDS}" type="hidden" />
 				<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
 				<tr>
@@ -54,13 +58,16 @@
 	</tr>
 </table>
 
-<script type="text/javascript">	
+<script type="text/javascript" id="massedit_javascript">
 
-        var fieldname = new Array({$VALIDATION_DATA_FIELDNAME})
+        var mass_fieldname = new Array({$VALIDATION_DATA_FIELDNAME});
 
-        var fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL})
+        var mass_fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL});
 
-        var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE})
+        var mass_fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE});
 
-	var count=0;
+		var mass_count=0;
+	
+		//massedit_initOnChangeHandlers(); 
+
 </script>

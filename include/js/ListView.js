@@ -36,6 +36,22 @@ function mass_edit_formload(idstring,module) {
                     $("massedit_form_div").innerHTML= result;
 					$("massedit_form")["massedit_recordids"].value = idstring;
 					$("massedit_form")["massedit_module"].value = module;
+					
+					var jscripts = $('massedit_javascript');
+					if(jscripts) { 
+						eval(jscripts.innerHTML); 
+						// Updating global variables
+						fieldname = mass_fieldname;
+						for(var i=0;i<fieldname.length;i++){
+							calendar_jscript = $('massedit_calendar_'+fieldname[i]);			
+							if(calendar_jscript){
+								eval(calendar_jscript.innerHTML);
+							}
+						}
+						fieldlabel = mass_fieldlabel;
+						fielddatatype = mass_fielddatatype;
+						count = mass_count;
+					}
 				}
 		}
 	);

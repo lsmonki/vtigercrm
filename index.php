@@ -341,7 +341,8 @@ if(isset($action) && isset($module))
 		ereg("^getListOfRecords", $action) ||
 		ereg("^MoveBlockFieldToDB", $action) ||
 		ereg("^AddBlockFieldToDB", $action) ||
-		ereg("^AddBlockToDB", $action) 
+		ereg("^AddBlockToDB", $action)  ||
+		ereg("^MassEditSave", $action)
 		)
 	{
 		$skipHeaders=true;
@@ -369,7 +370,8 @@ if(isset($action) && isset($module))
 			ereg("^MergeFieldVendors", $action ) ||
 			ereg("^lastImport", $action ) ||
 			ereg("^massdelete", $action ) ||
-			ereg("^getListOfRecords", $action))
+			ereg("^getListOfRecords", $action) ||
+			ereg("^MassEditSave", $action))
 			$skipFooters=true;
 		//skip footers for all these invocations as they are mostly popups
 		if(ereg("^downloadfile", $action) || ereg("^fieldtypes",$action) || ereg("^mailmergedownloadfile",$action)|| ereg("^get_img",$action) || ereg("^MergeFieldLeads", $action) || ereg("^MergeFieldContacts", $action ) || ereg("^MergeFieldAccounts", $action ) || ereg("^MergeFieldProducts", $action ) || ereg("^MergeFieldHelpDesk", $action ) || ereg("^MergeFieldPotentials", $action ) || ereg("^MergeFieldVendors", $action ))
