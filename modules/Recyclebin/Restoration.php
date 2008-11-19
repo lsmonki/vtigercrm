@@ -18,7 +18,7 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 }
 
 $selected_module = $_REQUEST['selectmodule'];
-
+checkFileAccess("modules/$selected_module/$selected_module.php");
 require_once("modules/$selected_module/$selected_module.php");
 
 if($selected_module != 'Calendar')
