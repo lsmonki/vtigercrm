@@ -1313,6 +1313,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 
 			if($module=='Products' && ($focus->popup_type=='inventory_prod' || $focus->popup_type=='inventory_prod_po'))
 			{
+					global $default_charset;
 					require('user_privileges/user_privileges_'.$current_user->id.'.php');
 					$row_id = $_REQUEST['curr_row'];
 
@@ -1337,7 +1338,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
 
 					$slashes_temp_val = popup_from_html(getProductName($entity_id));
-                                        $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
+					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 					$description=$adb->query_result($list_result,$list_result_count,'product_description');
 					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
 
