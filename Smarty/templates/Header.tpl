@@ -137,7 +137,10 @@
 	<td >
 		<table border=0 cellspacing=0 cellpadding=0>
 		<tr>
-			{foreach  key=maintabs item=detail from=$HEADERS}
+			<!-- ASHA: Avoid using this as it gives module name instead of module label. 
+			Now Using the same array QUICKACCESS that is used to show drop down menu
+			(which gives both module name and module label)-->
+			<!--{foreach  key=maintabs item=detail from=$HEADERS}
 				{if $maintabs eq $CATEGORY}
 					{foreach  key=number item=module from=$detail}
 						{assign var="modulelabel" value=$module}
@@ -145,6 +148,23 @@
       						{assign var="modulelabel" value=$APP.$module} 
       					{/if}
 						{if $module eq $MODULE_NAME}
+							<td class="level2SelTab" nowrap><a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$modulelabel}</a></td>
+						{else}
+							<td class="level2UnSelTab" nowrap> <a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$modulelabel}</a> </td>
+						{/if}	
+					{/foreach}
+				{/if}
+			{/foreach}-->
+			
+			{foreach key=maintabs item=details from=$QUICKACCESS}
+				{if $maintabs eq $CATEGORY}
+					{foreach  key=number item=modules from=$details}
+						{assign var="modulelabel" value=$modules[1]}
+	   					{if $APP[$modules.1]}
+	   						{assign var="modulelabel" value=$APP[$modules.1]}
+	   					{/if}
+				
+						{if $modules.0 eq $MODULE_NAME}
 							<td class="level2SelTab" nowrap><a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$modulelabel}</a></td>
 						{else}
 							<td class="level2UnSelTab" nowrap> <a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$modulelabel}</a> </td>
@@ -424,7 +444,7 @@ function getFormValidate(divValidate)
 			{if $loopvalue eq '0'}
 				</td><td valign="top">
 			{/if}
-			{assign var="modulelabel" value=$modules[0]}
+			{assign var="modulelabel" value=$modules[1]}
    			{if $APP[$modules.1]}
    				{assign var="modulelabel" value=$APP[$modules.1]}
    			{/if}
@@ -440,12 +460,13 @@ function getFormValidate(divValidate)
 {foreach name=parenttablist key=parenttab item=details from=$QUICKACCESS}
 <div class="drop_mnu" id="{$parenttab}_sub" onmouseout="fnHideDrop('{$parenttab}_sub')" onmouseover="fnShowDrop('{$parenttab}_sub')">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0">
-		{assign var="modulelabel" value=$modules[0]}
+		{foreach name=modulelist item=modules from=$details}
+		{assign var="modulelabel" value=$modules[1]}
 		{if $APP[$modules.1]}
 			{assign var="modulelabel" value=$APP[$modules.1]}
 		{/if}
-		{foreach name=modulelist item=modules from=$details}
-		<tr><td><a href="index.php?module={$modules.0}&action=index&parenttab={$parenttab}" class="drop_down">{$APP[$modules.1]}</a></td></tr>
+		
+		<tr><td><a href="index.php?module={$modules.0}&action=index&parenttab={$parenttab}" class="drop_down">{$modulelabel}</a></td></tr>
 		{/foreach}
 	</table>
 </div>

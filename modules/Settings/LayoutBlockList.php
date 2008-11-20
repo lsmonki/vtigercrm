@@ -81,7 +81,7 @@ if(isset($_REQUEST['what_to_do']))
 		$row= $adb->fetch_array($result);
 		$current_sequence=$row[sequence];
 		
-		$sql_next="select * from vtiger_blocks where sequence > ? and tabid=? " . getLimitClause(1,0);
+		$sql_next="select * from vtiger_blocks where sequence > ? and tabid=? limit 0,1";
 		$result_next = $adb->pquery($sql_next, array($current_sequence,$_REQUEST[tabid]));
 		$row_next= $adb->fetch_array($result_next);
 		$next_sequence=$row_next[sequence];
@@ -103,7 +103,7 @@ if(isset($_REQUEST['what_to_do']))
 		$row= $adb->fetch_array($result);
 		$current_sequence=$row[sequence];
 		
-		$sql_previous="select * from vtiger_blocks where sequence < ? and tabid=?  order by sequence desc ". getLimitClause(1,0);
+		$sql_previous="select * from vtiger_blocks where sequence < ? and tabid=?  order by sequence desc limit 0,1";
 		$result_previous = $adb->pquery($sql_previous, array($current_sequence,$_REQUEST[tabid]));
 		$row_previous= $adb->fetch_array($result_previous);
 		$previous_sequence=$row_previous[sequence];
@@ -127,12 +127,12 @@ if(isset($_REQUEST['what_to_do']))
 		
 		if($_REQUEST['what_to_do']=='down')
 		{
-			$sql_next="select * from vtiger_field where sequence > ? and block = ? order by sequence ". getLimitClause(2,1);
+			$sql_next="select * from vtiger_field where sequence > ? and block = ? order by sequence limit 1,2";
 			$sql_next_params = array($current_sequence, $_REQUEST[blockid]);
 		}
 		else
 		{
-			$sql_next="select * from vtiger_field where sequence > ? and block = ? order by sequence ". getLimitClause(1,0);
+			$sql_next="select * from vtiger_field where sequence > ? and block = ? order by sequence limit 0,1";
 			$sql_next_params = array($current_sequence, $_REQUEST[blockid]);
 		}
 	
@@ -157,12 +157,12 @@ if(isset($_REQUEST['what_to_do']))
 		
 		if($_REQUEST['what_to_do']=='up')
 		{
-			$sql_previous="select * from vtiger_field where sequence < ? and block=? order by sequence desc " . getLimitClause(2,1);
+			$sql_previous="select * from vtiger_field where sequence < ? and block=? order by sequence desc limit 1,2";
 			$sql_prev_params = array($current_sequence,$_REQUEST[blockid]);
 		}
 		else
 		{
-			$sql_previous="select * from vtiger_field where sequence < ? and block=? order by sequence desc " . getLimitClause(1,0);
+			$sql_previous="select * from vtiger_field where sequence < ? and block=? order by sequence desc limit 0,1";
 			$sql_prev_params = array($current_sequence,$_REQUEST[blockid]);
 		}
 		

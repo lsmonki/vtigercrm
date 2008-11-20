@@ -19,7 +19,7 @@
 		{assign var="action" value="index"}
 	{/if}	
 	{assign var="modulelabel" value=$MODULE}
-	{if $APP[$modules.1]}
+	{if $APP[$MODULE]}
 		{assign var="modulelabel" value=$APP[$MODULE]}
 	{/if}	
 	<td style="padding-left:10px;padding-right:50px" class="moduleName" nowrap>{$APP.$CATEGORY} > <a class="hdrLink" href="index.php?action={$action}&module={$MODULE}&parenttab={$CATEGORY}">{$modulelabel}</a></td>

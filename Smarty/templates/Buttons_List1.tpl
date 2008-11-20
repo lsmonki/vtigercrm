@@ -15,14 +15,14 @@
 <tr><td style="height:2px"></td></tr>
 <tr>
 	{assign var="modulelabel" value=$MODULE}
-	{if $APP[$modules.1]}
+	{if $APP[$MODULE]}
 		{assign var="modulelabel" value=$APP[$MODULE]}
 	{/if}
 	{if $CATEGORY eq 'Settings'}
 <!-- No List View in Settings - Action is index -->
-		<td style="padding-left:10px;padding-right:50px" class="moduleName" nowrap><a class="hdrLink" href="index.php?action=index&module={$MODULE}&parenttab={$CATEGORY}">{$APP.$MODULE}</a></td>
+		<td style="padding-left:10px;padding-right:50px" class="moduleName" nowrap><a class="hdrLink" href="index.php?action=index&module={$MODULE}&parenttab={$CATEGORY}">{$modulelabel}</a></td>
 	{else}
-		<td style="padding-left:10px;padding-right:50px" class="moduleName" nowrap>{$APP.$CATEGORY} > <a class="hdrLink" href="index.php?action=ListView&module={$MODULE}&parenttab={$CATEGORY}">{$APP.$MODULE}</a></td>
+		<td style="padding-left:10px;padding-right:50px" class="moduleName" nowrap>{$APP.$CATEGORY} > <a class="hdrLink" href="index.php?action=ListView&module={$MODULE}&parenttab={$CATEGORY}">{$modulelabel}</a></td>
 	{/if}
 	<td width=100% nowrap>
 	
