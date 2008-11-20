@@ -554,9 +554,24 @@
 			</table>
 			</td>
 
-			<!-- END -->
+	<!-- Added for Workflow #start -->
+			<td width=25% valign=top>
+			<!-- empty-->
+
+			<table border=0 cellspacing=0 cellpadding=5 width=100%>
+			<tr>
+				<td rowspan=2 valign=top><a href="index.php?module=com_vtiger_workflow&action=workflowlist&parenttab=Settings"><img src="{$IMAGE_PATH}settingsWorkflow.png" alt="{$MOD.LBL_LIST_WORKFLOWS}" width="48" height="48" border=0 title="{$MOD.LBL_LIST_WORKFLOWS}"></a></td>
+				<td class=big valign=top><a href="index.php?module=com_vtiger_workflow&action=workflowlist&parenttab=Settings">{$MOD.LBL_LIST_WORKFLOWS}</a></td>
+			</tr>
+			<tr>
+				<td class="small" valign=top>{$MOD.LBL_LIST_WORKFLOWS_DESCRIPTION}</td>
+			</tr>
+
+			</table>
+			</td>
+	<!-- Added for Workflow #end -->
 		</tr>
-		<!-- Added for Custom Invoice Number #end -->
+	<!-- END -->
 
 		</table>
 		

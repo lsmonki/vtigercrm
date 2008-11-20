@@ -218,6 +218,15 @@
 		{/if}
 		<!-- END -->
 
+<!--Added for Workflow list #start-->
+
+{if $smarty.request.action eq 'workflowlist'}
+	<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=com_vtiger_workflow&action=workflowlist&parenttab=Settings">{$MOD.LBL_LIST_WORKFLOWS}</a></td></tr>
+{else}
+	<tr><td class="settingsTabList" nowrap><a href="index.php?module=com_vtiger_workflow&action=workflowlist&parenttab=Settings">{$MOD.LBL_LIST_WORKFLOWS}</a></td></tr>
+{/if}
+<!--Added for Workflow list #end-->
+
 		</table>
 		<!-- Left side navigation table ends -->
 		

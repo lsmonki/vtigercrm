@@ -6847,4 +6847,84 @@
 	</table>
 	<!-- END -->
 
+    <!-- com_vtiger_workflow -->
+    <table name="com_vtiger_workflows">
+	    <field name="workflow_id" type="I" >
+			<key />
+			<autoincrement />
+		</field>
+		<field name="module_name" type="C" size="100">
+		</field>
+		<field name="summary" type="C" size="400">
+			<notnull />
+		</field>
+		<field name="test" type="X">
+			<notnull />
+		</field>
+		<field name="execution_condition" type="I">
+			<notnull />
+		</field>
+		
+		<index name="com_vtiger_workflows_idx">
+			<unique />
+			<col>workflow_id</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="com_vtiger_workflowtasks">
+	    <field name="task_id" type="I" >
+			<key />
+			<autoincrement />
+		</field>
+		<field name="workflow_id" type="I" >
+		</field>
+		<field name="summary" type="C" size="400">
+			<notnull />
+		</field>
+		<field name="task" type="X">
+			<notnull />
+		</field>
+		<index name="com_vtiger_workflowtasks_idx">
+			<unique />
+			<col>task_id</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="com_vtiger_workflowtask_queue">
+	    <field name="task_id" type="I" >
+		</field>
+		<field name="entity_id" type="I" >
+		</field>
+		<field name="do_after" type="I" >
+		</field>
+		<index name="com_vtiger_workflowtask_queue_idx">
+			<unique />
+			<col>task_id</col>
+			<col>entity_id</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="com_vtiger_workflowtasks_entitymethod">
+	    <field name="workflowtasks_entitymethod_id" type="I" >
+	        <key />
+		</field>
+		<field name="module_name" type="C" size="100" >
+		</field>
+		<field name="method_name" type="C" size="100" >
+		</field>
+		<field name="function_path" type="C" size="400" >
+		</field>
+		<field name="function_name" type="C" size="100" >
+		</field>
+		<index name="com_vtiger_workflowtasks_entitymethod_idx">
+			<unique />
+			<col>workflowtasks_entitymethod_id</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+    <!-- com_vtiger_workflow ends-->
+
 </schema>

@@ -417,6 +417,10 @@ function registerEvents($adb) {
 	// Registering event for Recurring Invoices
 	$em->registerHandler('vtiger.entity.aftersave', 'modules/SalesOrder/RecurringInvoiceHandler.php', 'RecurringInvoiceHandler');
 	
+	// Workflow manager
+	$em->registerHandler('vtiger.entity.aftersave', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler');
+	
+	
 }
 
 // populate the db with seed data

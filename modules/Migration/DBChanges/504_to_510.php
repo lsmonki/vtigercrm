@@ -794,6 +794,24 @@ ExecuteQuery("insert into vtiger_field values(".getTabid('SalesOrder').",".$adb-
 // Add Event handler for Recurring Invoice
 $em->registerHandler('vtiger.entity.aftersave', 'modules/SalesOrder/RecurringInvoiceHandler.php', 'RecurringInvoiceHandler');
 
+/* Workflow Manager - com_vtiger_workflow */
+ExecuteQuery("create table com_vtiger_workflows_seq (id int(11))");
+ExecuteQuery("insert into com_vtiger_workflows_seq (id) values(1)");
+ExecuteQuery("create table com_vtiger_workflows (workflow_id int, module_name varchar(100), summary varchar(100), test varchar(400), task_id int(11), exec_date int, execution_condition varchar(50))");
+
+ExecuteQuery("create table com_vtiger_workflowtasks_seq (id int(11))");
+ExecuteQuery("insert into com_vtiger_workflowtasks_seq (id) values(1)");
+ExecuteQuery("create table com_vtiger_workflowtasks (task_id int, workflow_id int, summary varchar(100), task text, primary key(task_id))");
+
+ExecuteQuery("create table com_vtiger_workflowtask_queue (task_id int, entity_id int, do_after int, primary key(task_id, entity_id))");
+
+ExecuteQuery("create table com_vtiger_workflowtasks_entitymethod_seq (id int(11))");
+ExecuteQuery("insert into  com_vtiger_workflowtasks_entitymethod_seq (id) values(1)");
+ExecuteQuery("create table com_vtiger_workflowtasks_entitymethod (workflowtasks_entitymethod_id int, module_name varchar(100), method_name varchar(100), function_path varchar(400), function_name varchar(100), primary key(workflowtasks_entitymethod_id))");
+
+$em->registerHandler('vtiger.entity.aftersave', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler');
+// com_vtiger_workflow ends
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

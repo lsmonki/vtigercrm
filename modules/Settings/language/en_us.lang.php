@@ -1059,6 +1059,10 @@ $mod_strings = Array(
 'LBL_FOLDERS'=>'Folders',
 'LBL_UNSELECT'=>'Unselect',
 'LBL_MATCH'=>'Match',
+
+//Added for the workflow module
+'LBL_LIST_WORKFLOWS'=>'List Workflows',
+'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'List the Workflows defined for vtiger',
 // END
 );
 ?>

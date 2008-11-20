@@ -49,7 +49,7 @@ function vtlib_isModuleActive($module) {
  * Get list module names which are always active (cannot be disabled)
  */
 function vtlib_moduleAlwaysActive() {
-	$modules = Array ('Administration', 'CustomView', 'Settings', 'Users', 'Migration', 'Utilities', 'uploads', 'Import');
+	$modules = Array ('Administration', 'CustomView', 'Settings', 'Users', 'Migration', 'Utilities', 'uploads', 'Import', 'com_vtiger_workflow');
 	return $modules;
 }
 

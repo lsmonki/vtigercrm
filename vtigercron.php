@@ -45,4 +45,8 @@ if($service == 'RecurringInvoice') {
 	include_once('cron/modules/SalesOrder/RecurringInvoice.service');
 }
 
+if($service == 'com_vtiger_workflow'){
+	include_once('cron/modules/com_vtiger_workflow/com_vtiger_workflow.service');
+}
+
 ?>

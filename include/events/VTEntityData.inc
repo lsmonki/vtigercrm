@@ -3,7 +3,7 @@
 	 * A wrapper around CRMEntity instances
 	 */
 	class VTEntityData{
-		
+		private $isNew = false;
 		
 		/**
 		 * Get an entity data object.
@@ -22,6 +22,7 @@
 			$focus = new $setype();
 			$focus->retrieve_entity_info($entityId, $setype);
 			$focus->id = $entityId;
+			$obj->isNew = isset($crmEntity->id) && $crmEntity->id != null;
 			$obj->focus = $focus;
 			return $obj;
 		}
@@ -36,6 +37,7 @@
 		function fromCRMEntity($crmEntity){
 			$obj = new VTEntityData();
 			$obj->focus = $crmEntity;
+			$obj->isNew = isset($crmEntity->id) && $crmEntity->id != null;
 			return $obj;
 		}
 		
@@ -71,7 +73,26 @@
 		}
 		
 		function set($fieldName, $value){
-			$data = $this->focus->column_fields[$fieldName] =$value;
+			$data = $this->focus->column_fields[$fieldName] = $value;
+		}
+		
+		/**
+		 * Check whether the object is stored on the database.
+		 * 
+		 * @return True if the object is saved false otherwiser.
+		 */
+		function isSaved(){
+			return isset($this->focus->id);
+		}
+		
+		
+		/**
+		* Check wether the obkect is new.
+		* 
+		* @return True if the object is new, false otherwise.
+		*/
+		function isNew(){
+			return $this->isNew;
 		}
 		
 	}
