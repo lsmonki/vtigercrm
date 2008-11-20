@@ -1,6 +1,16 @@
 <?php
+include_once('config.inc.php');
+include_once('include/database/PearDatabase.php');
+include_once('include/utils/utils.php');
 
 class Vtiger_Utils {
+
+	/**
+	 * Check if given value is a number or not
+	 */
+	static function isNumber($value) {
+		return is_numeric($value)? intval($value) == $value : false;
+	}
 
 	/** 
 	 * Function to check the file access is made within web root directory. 
@@ -24,13 +34,15 @@ class Vtiger_Utils {
 	/**
 	 * Log the debug message if set.
 	 */
-	static function Log($message) {
+	static function Log($message, $delimit=true) {
 		global $Vtiger_Utils_Log;
 		if(!isset($Vtiger_Utils_Log) || $Vtiger_Utils_Log == false) return;
 
 		print_r($message);
-		if(isset($_REQUEST)) echo "<BR>";
-		else echo "\n";		
+		if($delimit) {
+			if(isset($_REQUEST)) echo "<BR>";
+			else echo "\n";
+		}
 	}
 
 	/**

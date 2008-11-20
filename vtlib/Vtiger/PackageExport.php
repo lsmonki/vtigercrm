@@ -1,13 +1,9 @@
 <?php
-include_once('vtlib/Vtiger/Common.inc.php');
 
-include_once('vtlib/Vtiger/ParentTab.php');
 include_once('vtlib/Vtiger/Module.php');
-include_once('vtlib/Vtiger/CustomView.php');
+include_once('vtlib/Vtiger/Menu.php');
 include_once('vtlib/Vtiger/Event.php');
 include_once('vtlib/Vtiger/Zip.php');
-
-include_once('include/utils/VtlibUtils.php');
 
 /**
  * Package Manager class for vtiger Modules.
@@ -83,11 +79,14 @@ class Vtiger_PackageExport {
 	/**
 	 * Export Module as a zip file.
 	 */
-	function export($module, $todir='', $zipfilename='', $directDownload=false) {
+	function export($moduleInstance, $todir='', $zipfilename='', $directDownload=false) {
+
+		$module = $moduleInstance->name;
+
 		$this->__initExport($module);
 
 		// Call module export function
-		$this->export_Module($module);
+		$this->export_Module($moduleInstance);
 
 		$this->__finishExport();		
 
@@ -126,14 +125,15 @@ class Vtiger_PackageExport {
 	/**
 	 * Export Module Handler.
 	 */
-	function export_Module($module) {
+	function export_Module($moduleInstance) {
 		global $adb;
 
-		$moduleid = Vtiger_Module::getId($module);
+		$moduleid = $moduleInstance->id;
 
 		$sqlresult = $adb->query("SELECT * FROM vtiger_parenttabrel WHERE tabid = $moduleid");
 		$parenttabid = $adb->query_result($sqlresult, 0, 'parenttabid');
-		$parent_name = Vtiger_ParentTab::getNameById($parenttabid);
+		$menu = Vtiger_Menu::getInstance($parenttabid);
+		$parent_name = $menu->label;
 
 		$sqlresult = $adb->query("SELECT * FROM vtiger_tab WHERE tabid = $moduleid");
 		$tabname = $adb->query_result($sqlresult, 0, 'name');
@@ -149,22 +149,22 @@ class Vtiger_PackageExport {
 		$this->export_Dependencies();
 
 		// Export module tables
-		$this->export_Tables($module);
+		$this->export_Tables($moduleInstance);
 
 		// Export module blocks
-		$this->export_Blocks($moduleid);
+		$this->export_Blocks($moduleInstance);
 
 		// Export module filters
-		$this->export_CustomViews($module, $moduleid);
+		$this->export_CustomViews($moduleInstance);
 
 		// Export Sharing Access
-		$this->export_SharingAccess($module, $moduleid);
+		$this->export_SharingAccess($moduleInstance);
 
 		// Export Events
-		$this->export_Events($module, $moduleid);		
+		$this->export_Events($moduleInstance);		
 
 		// Export Actions
-		$this->export_Actions($module, $moduleid);
+		$this->export_Actions($moduleInstance);
 
 		$this->closeNode('module');
 	}
@@ -172,13 +172,15 @@ class Vtiger_PackageExport {
 	/**
 	 * Export module base and related tables.
 	 */
-	function export_Tables($module) {
-		require_once("modules/$module/$module.php");
+	function export_Tables($moduleInstance) {
+		$modulename = $moduleInstance->name;
 
-		$focus = new $module();
+		require_once("modules/$modulename/$modulename.php");
+
+		$focus = new $modulename();
 
 		// Setup required module variables which is need for vtlib API's
-		vtlib_setup_modulevars($module, $focus);
+		vtlib_setup_modulevars($modulename, $focus);
 
 		$tables = Array ($focus->table_name);
 		if(!empty($focus->groupTable)) $tables[] = $focus->groupTable[0];
@@ -198,9 +200,9 @@ class Vtiger_PackageExport {
 	/**
 	 * Export module blocks with its related fields.
 	 */
-	function export_Blocks($moduleid) {
+	function export_Blocks($moduleInstance) {
 		global $adb;
-		$sqlresult = $adb->query("SELECT * FROM vtiger_blocks WHERE tabid = $moduleid");
+		$sqlresult = $adb->pquery("SELECT * FROM vtiger_blocks WHERE tabid = ?", Array($moduleInstance->id));
 		$resultrows= $adb->num_rows($sqlresult);
 
 		$this->openNode('blocks');
@@ -211,7 +213,7 @@ class Vtiger_PackageExport {
 			$this->openNode('block');
 			$this->outputNode($blocklabel, 'label');
 			// Export fields associated with the block
-			$this->export_Fields($moduleid, $blockid);
+			$this->export_Fields($moduleInstance, $blockid);
 			$this->closeNode('block');
 		}
 		$this->closeNode('blocks');
@@ -220,13 +222,13 @@ class Vtiger_PackageExport {
 	/**
 	 * Export fields related to a module block.
 	 */
-	function export_Fields($moduleid, $blockid) {
+	function export_Fields($moduleInstance, $blockid) {
 		global $adb;
 		
-		$fieldresult = $adb->query("SELECT * FROM vtiger_field WHERE tabid=$moduleid AND block=$blockid");
+		$fieldresult = $adb->pquery("SELECT * FROM vtiger_field WHERE tabid=? AND block=?", Array($moduleInstance->id, $blockid));
 		$fieldcount = $adb->num_rows($fieldresult);
 
-		$entityresult = $adb->query("SELECT * FROM vtiger_entityname WHERE tabid=$moduleid");
+		$entityresult = $adb->pquery("SELECT * FROM vtiger_entityname WHERE tabid=?", Array($moduleInstance->id));
 		$entity_fieldname = $adb->query_result($entityresult, 0, 'fieldname');
 
 		$this->openNode('fields');
@@ -245,9 +247,11 @@ class Vtiger_PackageExport {
 			$this->outputNode($adb->query_result($fieldresult, $index, 'readonly'),      'readonly');
 			$this->outputNode($adb->query_result($fieldresult, $index, 'presence'),      'presence');
 			$this->outputNode($adb->query_result($fieldresult, $index, 'selected'),      'selected');
+			$this->outputNode($adb->query_result($fieldresult, $index, 'sequence'),      'sequence');
 			$this->outputNode($adb->query_result($fieldresult, $index, 'maximumlength'), 'maximumlength');
 			$this->outputNode($adb->query_result($fieldresult, $index, 'typeofdata'),    'typeofdata');
 			$this->outputNode($adb->query_result($fieldresult, $index, 'quickcreate'),   'quickcreate');
+			$this->outputNode($adb->query_result($fieldresult, $index, 'quickcreatesequence'),   'quickcreatesequence');
 			$this->outputNode($adb->query_result($fieldresult, $index, 'displaytype'),   'displaytype');
 			$this->outputNode($adb->query_result($fieldresult, $index, 'info_type'),     'info_type');
 
@@ -291,10 +295,10 @@ class Vtiger_PackageExport {
 	/**
 	 * Export Custom views of the module.
 	 */
-	function export_CustomViews($module, $moduleid) {
+	function export_CustomViews($moduleInstance) {
 		global $adb;
 
-		$customviewres = $adb->query("SELECT * FROM vtiger_customview WHERE entitytype = '$module'");
+		$customviewres = $adb->pquery("SELECT * FROM vtiger_customview WHERE entitytype = ?", Array($moduleInstance->name));
 		$customviewcount=$adb->num_rows($customviewres);
 
 		$this->openNode('customviews');
@@ -338,7 +342,7 @@ class Vtiger_PackageExport {
 						$cvcolumnruleindex = $adb->query_result($cvcolumnruleres, $rindex, 'columnindex');
 						$cvcolumnrulecomp  = $adb->query_result($cvcolumnruleres, $rindex, 'comparator');
 						$cvcolumnrulevalue = $adb->query_result($cvcolumnruleres, $rindex, 'value');
-						$cvcolumnrulecomp  = Vtiger_CustomView::translateComparator($cvcolumnrulecomp, true);
+						$cvcolumnrulecomp  = Vtiger_Filter::translateComparator($cvcolumnrulecomp, true);
 
 						$this->openNode('rule');
 						$this->outputNode($cvcolumnruleindex, 'columnindex');
@@ -362,10 +366,10 @@ class Vtiger_PackageExport {
 	/**
 	 * Export Sharing Access of the module.
 	 */
-	function export_SharingAccess($module, $moduleid) {
+	function export_SharingAccess($moduleInstance) {
 		global $adb;
 
-		$deforgshare = $adb->query("SELECT * FROM vtiger_def_org_share WHERE tabid=$moduleid");
+		$deforgshare = $adb->pquery("SELECT * FROM vtiger_def_org_share WHERE tabid=?", Array($moduleInstance->id));
 		$deforgshareCount = $adb->num_rows($deforgshare);
 
 		$this->openNode('sharingaccess');
@@ -387,8 +391,8 @@ class Vtiger_PackageExport {
 	/**
 	 * Export Events of the module.
 	 */
-	function export_Events($module, $moduleid) {
-		$events = Vtiger_Events::getAll($module);
+	function export_Events($moduleInstance) {
+		$events = Vtiger_Event::getAll($moduleInstance);
 		if(!$events) return;
 
 		$this->openNode('events');
@@ -406,7 +410,7 @@ class Vtiger_PackageExport {
 	 * Export actions (tools) associated with module.
 	 * TODO: Need to pickup values based on status for all user (profile)
 	 */
-	function export_Actions($module, $moduleid) {
+	function export_Actions($moduleInstance) {
 		$this->openNode('actions');
 
 		$this->openNode('action');

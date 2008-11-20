@@ -28,7 +28,8 @@ if($module_import_step == 'Step2') {
 			$smarty->assign("MODULEIMPORT_FAILED", "true");
 			$smarty->assign("MODULEIMPORT_FILE_INVALID", "true");
 		} else {
-			$moduleimport_exists=(Vtiger_Module::getId($moduleimport_name) != null)? "true" : "false";
+			$moduleInstance = Vtiger_Module::getInstance($moduleimport_name);
+			$moduleimport_exists=($moduleInstance)? "true" : "false";
 			$moduleimport_dir_name="modules/$moduleimport_name";
 			$moduleimport_dir_exists= (is_dir($moduleimport_dir_name)? "true" : "false");
 

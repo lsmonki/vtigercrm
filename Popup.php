@@ -216,7 +216,11 @@ switch($currentModule)
 	default:
 		require_once("modules/$currentModule/$currentModule.php");
 		$focus = new $currentModule();
-		$smarty->assign("SINGLE_MOD", $currentModule);
+		$smarty->assign("SINGLE_MOD", $currentModule);		
+		if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
+		$smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
+		$alphabetical = AlphabeticalSearch($currentModule,'Popup',$focus->def_basicsearch_col,'true','basic',$popuptype,"","",$url);
+		if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
 		break;
 	// END
 

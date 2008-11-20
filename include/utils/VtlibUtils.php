@@ -131,46 +131,53 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'related_tables' => Array ( 
 					'vtiger_leadsubdetails' => Array ( 'leadsubscriptionid', 'vtiger_leaddetails', 'leadid' ),
 					'vtiger_leadaddress'    => Array ( 'leadaddressid', 'vtiger_leaddetails', 'leadid' ),		   	
-				)	
+				),
+				'popup_fields'=> Array ('lastname'),
 			),
 			'Campaigns' =>
 			Array(
 				'IsCustomModule'=>false,
 				'table_name'  => 'vtiger_campaign',
 				'table_index' => 'campaignid',
+				'popup_fields' => Array ('campaignname'),
 			),
 			'Potentials' =>
 			Array(
 				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_potential',
 				'table_index'=> 'potentialid',
-				'related_tables' => Array ('vtiger_account' => Array('accountid'))
+				'related_tables' => Array ('vtiger_account' => Array('accountid')),
+				'popup_fields'=> Array('potentialname'),
 			),
 			'Quotes' =>
 			Array(
 				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_quotes',
 				'table_index'=> 'quoteid',
-				'related_tables' => Array ('vtiger_account' => Array('accountid'))
+				'related_tables' => Array ('vtiger_account' => Array('accountid')),
+				'popup_fields'=>Array('subject'),				
 			),
 			'SalesOrder'=>
 			Array(
 				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_salesorder',
 				'table_index'=> 'salesorderid',
-				'related_tables'=> Array ('vtiger_account' => Array('accountid'))
+				'related_tables'=> Array ('vtiger_account' => Array('accountid')),
+				'popup_fields'=>Array('subject'),
 			),
 			'PurchaseOrder'=>
 			Array(
 				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_purchaseorder',
 				'table_index'=> 'purchaseorderid',
+				'popup_fields'=>Array('subject'),
 			),
 			'Invoice'=>
 			Array(
 				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_invoice',
 				'table_index'=> 'invoiceid',
+				'popup_fields'=> Array('subject'),
 			),
 			'HelpDesk'=>
 			Array(
@@ -196,6 +203,7 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_products',
 				'table_index'=> 'productid',
+				'popup_fields'=> Array('productname'),
 			),
 			'PriceBooks'=>
 			Array(
@@ -208,6 +216,7 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_vendor',
 				'table_index'=> 'vendorid',
+				'popup_fields'=>Array('vendorname'),				
 			)
 		);
 	return $mod_var_mapping[$module][$varname];

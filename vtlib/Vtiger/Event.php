@@ -1,7 +1,6 @@
 <?php
 
 include_once('vtlib/Vtiger/Utils.php');
-include_once('vtlib/Vtiger/Module.php');
 
 @include_once('include/events/include.inc');
 
@@ -10,6 +9,10 @@ class Vtiger_Event {
 	var $eventname;
 	var $classname;
 	var $filename;
+
+	static function log($message, $delim=true) {
+		Vtiger_Utils::Log($message, $delim);
+	}
 
 	/**
 	 * Check if vtiger CRM support Events.
@@ -21,23 +24,23 @@ class Vtiger_Event {
 	/**
 	 * Handle event registration
 	 */
-	static function register($module, $eventname, $classname, $filename) {
+	static function register($moduleInstance, $eventname, $classname, $filename) {
 		// Security check on fileaccess, don't die if it fails
 		if(Vtiger_Utils::checkFileAccess($filename, false)) {
 			global $adb;
 			$eventsManager = new VTEventsManager($adb);
 			// TODO Update the call when API is fixed
-			// $eventsManager->registerHandler($module, $eventname, $classname, $filename);
-			$eventsManager->registerHandler($eventname, $classname, $filename);
+			// $eventsManager->registerHandler($eventname, $classname, $filename,$moduleInstance->name);
+			$eventsManager->registerHandler($eventname, $filename, $classname);
 
-			Vtiger_Utils::Log("Register Event $eventname with [$filename] $classname ... DONE");
+			self::log("Registering Event $eventname with [$filename] $classname ... DONE");
 		}
 	}
 
 	/**
 	 * Get events registered for a module.
 	 */
-	static function getAll($module) {
+	static function getAll($moduleInstance) {
 		global $adb;
 		$events = false;
 		if(self::hasSupport()) {
