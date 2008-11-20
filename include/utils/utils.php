@@ -3041,7 +3041,7 @@ function getAccessPickListValues($module)
 		$tabid = $adb->query_result($result,$i,"tabid");
 		$uitype = $adb->query_result($result,$i,"uitype");
 
-		if(!in_array($fieldname,array('activitytype','visibility','duration_minutes','recurringtype','hdnTaxType')))
+		if(!in_array($fieldname,array('visibility','duration_minutes','recurringtype','hdnTaxType','recurring_frequency')))
 		{
 			$keyvalue = $columnname;
 			$fieldvalues = Array();

@@ -266,28 +266,20 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		{
 			$name .=' (in '.$user_info['currency_symbol'].')';
 		}
-		//Added condition to hide the close column in Related Lists
-		if($name == $app_strings['Close'] && $relatedlist != '' && $relatedlist != 'global')
-                {
-                        // $list_header[] = '';
-               }
-
-		else
+		
+		if($module == "Calendar" && $name == $app_strings['Close'])
 		{
-			if($module == "Calendar" && $name == $app_strings['Close'])
+			if(isPermitted("Calendar","EditView") == 'yes')
 			{
-				if(isPermitted("Calendar","EditView") == 'yes')
+				if((getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0'))
 				{
-					if((getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0'))
-					{
-						array_push($list_header,$name);
-					}
+					array_push($list_header,$name);
 				}
 			}
-			else
-			{
-				$list_header[]=$name;
-			}
+		}
+		else
+		{
+			$list_header[]=$name;
 		}
 	}
      }
@@ -800,29 +792,37 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						}
 
 						if ($name == 'Close')
-						{
+						{														
+							$activityid = $adb->query_result($list_result,$i-1,"activityid");
+							$activitytype = $adb->query_result($list_result,$i-1,"activitytype");
+							if ($activitytype != 'Task' && $activitytype != 'Emails') {
+								$eventstatus = $adb->query_result($list_result,$i-1,"eventstatus");
+								if(isset($eventstatus)) {
+									$status = $eventstatus;
+								}
+							}
 							if($status =='Deferred' || $status == 'Completed' || $status == 'Held' || $status == '')
 							{
 								$value="";
 							}
 							else
-							{
-								$activityid = $adb->query_result($list_result,$i-1,"activityid");
-								$activitytype = $adb->query_result($list_result,$i-1,"type");
+							{	
 								if($activitytype=='Task')
 									$evt_status='&status=Completed';
 								else
 									$evt_status='&eventstatus=Held';
 								if(isPermitted("Calendar",'EditView',$activityid) == 'yes')
 								{
+									if ($returnset == '') {
+										$returnset = '&return_module=Calendar&return_action=ListView&return_id='.$activityid.'&return_viewname='.$oCv->setdefaultviewid;
+									} 
 									// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-									$value = "<a href='index.php?return_module=Calendar&return_action=ListView&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Calendar&record=".$activityid."&parenttab=".$tabname."&change_status=true".$evt_status."&start=".$navigation_array['current']."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+									$value = "<a href='index.php?action=Save&module=Calendar&record=".$activityid."&parenttab=".$tabname."&change_status=true".$returnset.$evt_status."&start=".$navigation_array['current']."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 								}
 								else
 								{
 									$value = "";
 								}
-
 							}
 						}
 					}
@@ -1054,26 +1054,20 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						$value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
 					}
 				}
-				//Added condition to hide the close symbol in Related Lists
-				if($name == 'Close' && $relatedlist != '')
+				
+				if($module == "Calendar" && $name == $app_strings['Close'])
 				{
-					//$list_header[]= '';
-				}
-				else
-				{
-					if($module == "Calendar" && $name == $app_strings['Close'])
+					if(isPermitted("Calendar","EditView") == 'yes')
 					{
-						if(isPermitted("Calendar","EditView") == 'yes')
+						if((getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0'))
 						{
-							if((getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0'))
-							{
-								array_push($list_header,$value);
-							}
+							array_push($list_header,$value);
 						}
 					}
-					else
-						$list_header[] = $value;
 				}
+				else
+					$list_header[] = $value;
+
 				if($fieldname=='filename')
 				{
 					$filename = $adb->query_result($list_result,$list_result_count,$fieldname);
@@ -1466,7 +1460,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	elseif($uitype == 15 || $uitype == 111 ||  $uitype == 16 || ($uitype == 55 && $fieldname =="salutationtype"))
 	{
 		$temp_val = decode_html($adb->query_result($list_result,$list_result_count,$colname));
-		if(($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1) && $temp_val != ''  && !in_array($fieldname,array('activitytype','visibility','duration_minutes','recurringtype','hdnTaxType')))
+		if(($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1) && $temp_val != ''  && !in_array($fieldname,array('visibility','duration_minutes','recurringtype','hdnTaxType','recurring_type')))
 		{	
 			$temp_acttype = $adb->query_result($list_result,$list_result_count,'type');
 			if(($temp_acttype == 'Meeting' || $temp_acttype == 'Call') && $fieldname =="taskstatus")

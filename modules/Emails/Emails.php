@@ -51,14 +51,14 @@ var $rel_serel_table = "vtiger_seactivityrel";
 	// This is the list of vtiger_fields that are in the lists.
         var $list_fields = Array(
 				       'Subject'=>Array('activity'=>'subject'),
-				       'Related to'=>Array('seactivityrel'=>'activityid'),
+				       'Related to'=>Array('seactivityrel'=>'parent_id'),
 				       'Date Sent'=>Array('activity'=>'date_start'),
 				       'Assigned To'=>Array('crmentity','smownerid')
 			        );
 
        var $list_fields_name = Array(
 				       'Subject'=>'subject',
-				       'Related to'=>'activityid',
+				       'Related to'=>'parent_id',
 				       'Date Sent'=>'date_start',
 				       'Assigned To'=>'assigned_user_id'
 				    );

@@ -2694,7 +2694,7 @@ class ReportRun extends CRMEntity
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 			$tabid = $adb->query_result($result,$i,"tabid");
 			$uitype = $adb->query_result($result,$i,"uitype");
-			if(!in_array($fieldname,array('activitytype','visibility','duration_minutes','recurringtype','hdnTaxType')))
+			if(!in_array($fieldname,array('visibility','duration_minutes','recurringtype','hdnTaxType','recurring_frequency')))
 			{
 				$fieldlabel1 = str_replace(" ","_",$fieldlabel);
 				$keyvalue = getTabModuleName($tabid)."_".$fieldlabel1;
