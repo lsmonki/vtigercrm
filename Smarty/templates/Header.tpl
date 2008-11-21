@@ -165,9 +165,9 @@
 	   					{/if}
 				
 						{if $modules.0 eq $MODULE_NAME}
-							<td class="level2SelTab" nowrap><a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$modulelabel}</a></td>
+							<td class="level2SelTab" nowrap><a href="index.php?module={$modules.0}&action=index&parenttab={$maintabs}">{$modulelabel}</a></td>
 						{else}
-							<td class="level2UnSelTab" nowrap> <a href="index.php?module={$module}&action=index&parenttab={$maintabs}">{$modulelabel}</a> </td>
+							<td class="level2UnSelTab" nowrap> <a href="index.php?module={$modules.0}&action=index&parenttab={$maintabs}">{$modulelabel}</a> </td>
 						{/if}	
 					{/foreach}
 				{/if}
