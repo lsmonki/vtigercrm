@@ -1,14 +1,33 @@
 <?php
-
+/************************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ************************************************************************************/
 include_once('vtlib/Vtiger/ModuleBasic.php');
 
+/**
+ * Provides API to work with vtiger CRM Modules
+ * @package vtlib
+ */
 class Vtiger_Module extends Vtiger_ModuleBasic {
 
+	/**
+	 * Get unique id for related list
+	 * @access private
+	 */
 	function __getRelatedListUniqueId() {
 		global $adb;
 		return $adb->getUniqueId('vtiger_relatedlists');
 	}
 
+	/**
+	 * Get related list sequence to use
+	 * @access private
+	 */
 	function __getNextRelatedListSequence() {
 		global $adb;
 		$max_sequence = 0;
@@ -17,7 +36,16 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 		return ++$max_sequence;
 	}
 
-	function setRelatedList($moduleInstance, $label='', $function_name='get_related_list') {
+	/**
+	 * Set related list information between other module
+	 * @param Vtiger_Module Instance of target module with which relation should be setup
+	 * @param String Label to display in related list (default is target module name)
+	 * @param Array List of action button to show ('ADD', 'SELECT')
+	 * @param String Callback function name of this module to use as handler
+	 *
+	 * @internal Creates table vtiger_crmentityrel if it does not exists
+	 */
+	function setRelatedList($moduleInstance, $label='', $actions=false, $function_name='get_related_list') {
 		global $adb;
 
 		if(empty($moduleInstance)) return;
@@ -33,13 +61,29 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 
 		if(empty($label)) $label = $moduleInstance->name;
 
-		$adb->pquery("INSERT INTO vtiger_relatedlists(relation_id,tabid,related_tabid,name,sequence,label,presence) VALUES(?,?,?,?,?,?,?)",
-			Array($relation_id,$this->id,$moduleInstance->id,$function_name,$sequence,$label,$presence));
+		// Allow ADD action of other module records (default)
+		if(!$actions) $actions = Array('ADD');
+
+		$useactions_text = $actions;
+		if(is_array($actions)) $useactions_text = implode(',', $actions);
+		$useactions_text = strtoupper($useactions_text);
+
+		// Add column to vtiger_relatedlists to save extended actions
+		Vtiger_Utils::AddColumn('vtiger_relatedlists', 'actions', 'VARCHAR(50)');
+
+		$adb->pquery("INSERT INTO vtiger_relatedlists(relation_id,tabid,related_tabid,name,sequence,label,presence,actions) VALUES(?,?,?,?,?,?,?,?)",
+			Array($relation_id,$this->id,$moduleInstance->id,$function_name,$sequence,$label,$presence,$useactions_text));
 
 		self::log("Setting relation with $moduleInstance->name ... DONE");
 	}
 
-	function unsetRelatedList($moduleInstance, $label, $function_name='get_related_list') {
+	/**
+	 * Unset related list information that exists with other module
+	 * @param Vtiger_Module Instance of target module with which relation should be setup
+	 * @param String Label to display in related list (default is target module name)
+	 * @param String Callback function name of this module to use as handler
+	 */
+	function unsetRelatedList($moduleInstance, $label='', $function_name='get_related_list') {
 		global $adb;
 
 		if(empty($moduleInstance)) return;
@@ -52,6 +96,26 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 		self::log("Unsetting relation with $moduleInstance->name ... DONE");		
 	}
 
-}
+	/**
+	 * Get instance by id or name
+	 * @param mixed id or name of the module
+	 */
+	static function getInstance($value) {
+		global $adb;
+		$instance = false;
 
+		$query = false;
+		if(Vtiger_Utils::isNumber($value)) {
+			$query = "SELECT * FROM vtiger_tab WHERE tabid=?";
+		} else {
+			$query = "SELECT * FROM vtiger_tab WHERE name=?";
+		}
+		$result = $adb->pquery($query, Array($value));
+		if($adb->num_rows($result)) {
+			$instance = new self();
+			$instance->initialize($adb->fetch_array($result));
+		}
+		return $instance;
+	}
+}
 ?>

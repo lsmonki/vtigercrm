@@ -1,18 +1,27 @@
 <?php
-
+/************************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ************************************************************************************/
 include_once('include/utils/UserInfoUtil.php');
 include_once('vtlib/Vtiger/Utils.php');
 include_once('vtlib/Vtiger/Profile.php');
 
 /**
- * Access Controller class.
+ * Provides API to control Access like Sharing, Tools etc. for vtiger CRM Module
+ * @package vtlib
  */
 class Vtiger_Access {
 
 	/**
-	 * Helper function to log messages.
-	 * @param $message Message to log
-	 * @param $delim true (default) end with a linebreak (\n or <BR>), false to avoid it.
+	 * Helper function to log messages
+	 * @param String Message to log
+	 * @param Boolean true appends linebreak, false to avoid it
+	 * @access private
 	 */
 	static function log($message, $delim=true) {
 		Vtiger_Utils::Log($message, $delim);
@@ -28,7 +37,9 @@ class Vtiger_Access {
 	}
 
 	/**
-	 * Synchronize sharing access with recalculation
+	 * Recalculate sharing access rules.
+	 * @internal This function could take up lot of resource while execution
+	 * @access private
 	 */
 	static function syncSharingAccess() {
 		self::log("Recalculating sharing rules ... ", false);
@@ -37,9 +48,10 @@ class Vtiger_Access {
 	}
 
 	/**
-	 * Enable or Disable sharing access control to module.
-	 * @param $moduleInstance Vtiger_Module instance
-	 * @param $enable true (default) enable sharing access or false disable sharing access
+	 * Enable or Disable sharing access control to module
+	 * @param Vtiger_Module Instance of the module to use
+	 * @param Boolean true to enable sharing access, false disable sharing access
+	 * @access private
 	 */
 	static function allowSharing($moduleInstance, $enable=true) {
 		global $adb;
@@ -50,9 +62,9 @@ class Vtiger_Access {
 
 	/**
 	 * Initialize sharing access.
-	 * @param $moduleInstance Vtiger_Module instance
+	 * @param Vtiger_Module Instance of the module to use
 	 * @access private
-	 * NOTE: This method is called from Vtiger_Module during creation.
+	 * @internal This method is called from Vtiger_Module during creation.
 	 */
 	static function initSharing($moduleInstance) {
 		global $adb;
@@ -68,9 +80,22 @@ class Vtiger_Access {
 	}
 
 	/**
+	 * Delete sharing access setup for module
+	 * @param Vtiger_Module Instance of module to use
+	 * @access private
+	 * @internal This method is called from Vtiger_Module during deletion.
+	 */
+	static function deleteSharing($moduleInstance) {
+		global $adb;
+		$adb->pquery("DELETE FROM vtiger_org_share_action2tab WHERE tabid=?", Array($moduleInstance->id));
+		self::log("Deleting sharing access ... DONE");
+	}
+
+	/**
 	 * Set default sharing for a module
-	 * @param $moduleInstance Vtiger_Module instance
-	 * @param $permission_text 'Public_ReadWriteDelete' (default), 'Public_ReadOnly', 'Public_ReadWrite', 'Private'
+	 * @param Vtiger_Module Instance of the module
+	 * @param String Permission text should be one of ['Public_ReadWriteDelete', 'Public_ReadOnly', 'Public_ReadWrite', 'Private']
+	 * @access private
 	 */
 	static function setDefaultSharing($moduleInstance, $permission_text='Public_ReadWriteDelete') {
 		global $adb;
@@ -100,10 +125,11 @@ class Vtiger_Access {
 
 	/**
 	 * Enable tool for module.
-	 * @param $moduleInstance Vtiger_Module instance
-	 * @param $toolAction Tool actions like Import, Export, Merge
-	 * @param $flag true to enable toolAction, false to disable toolAction
-	 * @param $profileid false (default) applies update on all profile
+	 * @param Vtiger_Module Instance of module to use
+	 * @param String Tool (action name) like Import, Export, Merge
+	 * @param Boolean true to enable tool, false to disable 
+	 * @param Integer (optional) profile id to use, false applies to all profile.
+	 * @access private
 	 */
 	static function updateTool($moduleInstance, $toolAction, $flag, $profileid=false) {
 		global $adb;
@@ -123,14 +149,17 @@ class Vtiger_Access {
 			self::log( ($flag? 'Enabling':'Disabling') . " $toolAction for Profile [", false);
 
 			foreach($profileids as $useprofileid) {
-				$result = $adb->pquery("SELECT permission FROM vtiger_profile2utility WHERE profileid=? AND tabid=? AND activityid=?", Array($useprofileid, $moduleInstance->id, $actionid));
+				$result = $adb->pquery("SELECT permission FROM vtiger_profile2utility WHERE profileid=? AND tabid=? AND activityid=?", 
+					Array($useprofileid, $moduleInstance->id, $actionid));
 				if($adb->num_rows($result)) {
 					$curpermission = $adb->query_result($result, 0, 'permission');
 					if($curpermission != $permission) {
-						$adb->pquery("UPDATE vtiger_profile2utility set permission=? WHERE profileid=? AND tabid=? AND activityid=?", Array($permission, $useprofileid, $moduleInstance->id, $actionid));
+						$adb->pquery("UPDATE vtiger_profile2utility set permission=? WHERE profileid=? AND tabid=? AND activityid=?", 
+							Array($permission, $useprofileid, $moduleInstance->id, $actionid));
 					}
 				} else {
-						$adb->pquery("INSERT INTO vtiger_profile2utility (profileid, tabid, activityid, permission) VALUES(?,?,?,?)", Array($useprofileid, $moduleInstance->id, $actionid, $permission));
+					$adb->pquery("INSERT INTO vtiger_profile2utility (profileid, tabid, activityid, permission) VALUES(?,?,?,?)",
+					   	Array($useprofileid, $moduleInstance->id, $actionid, $permission));
 				}
 
 				self::log("$useprofileid,", false);
@@ -138,6 +167,15 @@ class Vtiger_Access {
 			self::log("] ... DONE");
 		}
 	}
-}
 
+	/**
+	 * Delete tool (actions) of the module
+	 * @param Vtiger_Module Instance of module to use
+	 */
+	static function deleteTools($moduleInstance) {
+		global $adb;
+		$adb->pquery("DELETE FROM vtiger_profile2utility WHERE tabid=?", Array($moduleInstance->id));
+		self::log("Deleting tools ... DONE");
+	}
+}
 ?>

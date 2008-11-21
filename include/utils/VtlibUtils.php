@@ -49,7 +49,10 @@ function vtlib_isModuleActive($module) {
  * Get list module names which are always active (cannot be disabled)
  */
 function vtlib_moduleAlwaysActive() {
-	$modules = Array ('Administration', 'CustomView', 'Settings', 'Users', 'Migration', 'Utilities', 'uploads', 'Import', 'com_vtiger_workflow');
+	$modules = Array (
+		'Administration', 'CustomView', 'Settings', 'Users', 'Migration', 
+		'Utilities', 'uploads', 'Import', 'com_vtiger_workflow'
+	);
 	return $modules;
 }
 
@@ -276,6 +279,22 @@ function vtlib_getPicklistValues_AccessibleToAll($field_columnname) {
 	}
 
 	return $allrolevalues;
+}
+
+/**
+ * Check for custom module by its name.
+ */
+function vtlib_isCustomModule($moduleName) {
+	$moduleFile = "modules/$moduleName/$moduleName.php";
+	if(file_exists($moduleFile)) {
+		if(function_exists('checkFileAccess')) {
+			checkFileAccess($moduleFile);
+		}
+		include_once($moduleFile);
+		$focus = new $moduleName();
+		return (isset($focus->IsCustomModule) && $focus->IsCustomModule);
+	}
+	return false;
 }
 
 /**

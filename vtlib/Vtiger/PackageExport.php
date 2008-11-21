@@ -1,36 +1,52 @@
 <?php
-
+/************************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ************************************************************************************/
 include_once('vtlib/Vtiger/Module.php');
 include_once('vtlib/Vtiger/Menu.php');
 include_once('vtlib/Vtiger/Event.php');
 include_once('vtlib/Vtiger/Zip.php');
 
 /**
- * Package Manager class for vtiger Modules.
+ * Provides API to package vtiger CRM module and associated files.
+ * @package vtlib
  */
 class Vtiger_PackageExport {
 	var $_export_tmpdir = 'test/vtlib';
 	var $_export_modulexml_filename = null;
 	var $_export_modulexml_file = null;
 
+	/**
+	 * Constructor
+	 */
 	function Vtiger_PackageExport() {
 		if(is_dir($this->_export_tmpdir) === FALSE) {
 			mkdir($this->_export_tmpdir);
 		}
 	}
 
-	/** Output Handler Functions **/
+	/** Output Handlers */
+
+	/** @access private */
 	function openNode($node,$delimiter="\n") {
 		$this->__write("<$node>$delimiter");
-	}	
+	}
+	/** @access private */
 	function closeNode($node,$delimiter="\n") {
 		$this->__write("</$node>$delimiter");
 	}
+	/** @access private */
 	function outputNode($value, $node='') {
 		if($node != '') $this->openNode($node,'');
 		$this->__write($value);
 		if($node != '') $this->closeNode($node);
 	}
+	/** @access private */
 	function __write($value) {
 		fwrite($this->_export_modulexml_file, $value);
 	}
@@ -38,6 +54,7 @@ class Vtiger_PackageExport {
 	/**
 	 * Set the module.xml file path for this export and 
 	 * return its temporary path.
+	 * @access private
 	 */
 	function __getManifestFilePath() {
 		if(empty($this->_export_modulexml_filename)) {
@@ -49,6 +66,7 @@ class Vtiger_PackageExport {
 
 	/**
 	 * Initialize Export
+	 * @access private
 	 */
 	function __initExport($module) {
 		// We will be including the file, so do a security check.
@@ -59,6 +77,7 @@ class Vtiger_PackageExport {
 
 	/**
 	 * Post export work.
+	 * @access private
 	 */
 	function __finishExport() {
 		if(!empty($this->_export_modulexml_file)) {
@@ -68,7 +87,8 @@ class Vtiger_PackageExport {
 	}
 
     /**
-     * Clean up the temporary files created.
+	 * Clean up the temporary files created.
+	 * @access private
      */
 	function __cleanupExport() {
 		if(!empty($this->_export_modulexml_filename)) {
@@ -78,6 +98,10 @@ class Vtiger_PackageExport {
 
 	/**
 	 * Export Module as a zip file.
+	 * @param Vtiger_Module Instance of module
+	 * @param Path Output directory path
+	 * @param String Zipfilename to use
+	 * @param Boolean True for sending the output as download
 	 */
 	function export($moduleInstance, $todir='', $zipfilename='', $directDownload=false) {
 
@@ -113,7 +137,8 @@ class Vtiger_PackageExport {
 	}
 
 	/**
-	 * Export vtiger dependencies.
+	 * Export vtiger dependencies
+	 * @access private
 	 */
 	function export_Dependencies() {
 		global $vtiger_current_version;
@@ -123,7 +148,8 @@ class Vtiger_PackageExport {
 	}
 
 	/**
-	 * Export Module Handler.
+	 * Export Module Handler
+	 * @access private
 	 */
 	function export_Module($moduleInstance) {
 		global $adb;
@@ -170,7 +196,8 @@ class Vtiger_PackageExport {
 	}
 
 	/**
-	 * Export module base and related tables.
+	 * Export module base and related tables
+	 * @access private
 	 */
 	function export_Tables($moduleInstance) {
 		$modulename = $moduleInstance->name;
@@ -198,7 +225,8 @@ class Vtiger_PackageExport {
 	}
 
 	/**
-	 * Export module blocks with its related fields.
+	 * Export module blocks with its related fields
+	 * @access private
 	 */
 	function export_Blocks($moduleInstance) {
 		global $adb;
@@ -220,7 +248,8 @@ class Vtiger_PackageExport {
 	}
 
 	/**
-	 * Export fields related to a module block.
+	 * Export fields related to a module block
+	 * @access private
 	 */
 	function export_Fields($moduleInstance, $blockid) {
 		global $adb;
@@ -293,7 +322,8 @@ class Vtiger_PackageExport {
 	}
 
 	/**
-	 * Export Custom views of the module.
+	 * Export Custom views of the module
+	 * @access private
 	 */
 	function export_CustomViews($moduleInstance) {
 		global $adb;
@@ -364,7 +394,8 @@ class Vtiger_PackageExport {
 	}
 
 	/**
-	 * Export Sharing Access of the module.
+	 * Export Sharing Access of the module
+	 * @access private
 	 */
 	function export_SharingAccess($moduleInstance) {
 		global $adb;
@@ -389,7 +420,8 @@ class Vtiger_PackageExport {
 	}
 
 	/**
-	 * Export Events of the module.
+	 * Export Events of the module
+	 * @access private
 	 */
 	function export_Events($moduleInstance) {
 		$events = Vtiger_Event::getAll($moduleInstance);
@@ -409,6 +441,7 @@ class Vtiger_PackageExport {
 	/**
 	 * Export actions (tools) associated with module.
 	 * TODO: Need to pickup values based on status for all user (profile)
+	 * @access private
 	 */
 	function export_Actions($moduleInstance) {
 		$this->openNode('actions');

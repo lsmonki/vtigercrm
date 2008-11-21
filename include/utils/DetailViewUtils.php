@@ -1662,6 +1662,7 @@ function getRelatedLists($module,$focus)
 		$rel_tab_id = $adb->query_result($result,$i,"related_tabid");
 		$function_name = $adb->query_result($result,$i,"name");
 		$label = $adb->query_result($result,$i,"label");
+		$actions = $adb->query_result($result,$i,"actions");
 		if($rel_tab_id != 0)
 		{
 
@@ -1669,16 +1670,16 @@ function getRelatedLists($module,$focus)
 			{
 		        	if($profileActionPermission[$rel_tab_id][3] == 0)
 					{
-						// vtlib customization: Send more information related to (from module, related module) name to the callee
-						$focus_list[$label] = $focus->$function_name($focus->id, $cur_tab_id, $rel_tab_id);
+						// vtlib customization: Send more information (from module, related module) to the callee
+						$focus_list[$label] = $focus->$function_name($focus->id, $cur_tab_id, $rel_tab_id, $actions);
 						// END
         			}
 			}
 		}
 		else
 		{
-			// vtlib customization: Send more information related to (from module, related module) name to the callee
-			$focus_list[$label] = $focus->$function_name($focus->id, $cur_tab_id, $rel_tab_id);
+			// vtlib customization: Send more information (from module, related module) to the callee
+			$focus_list[$label] = $focus->$function_name($focus->id, $cur_tab_id, $rel_tab_id, $actions);
 			// END
 		}
 	}

@@ -89,23 +89,27 @@
 				{/if}
 			{/foreach}
 			<td style="padding-left:10px" nowrap>
-			{if $CNT eq 1}
-                                <select class=small id="qccombo" style="width:120px"  onclick="QCreate(this);">
-					<option value="none">{$APP.LBL_QUICK_CREATE}...</option>
+				{if $CNT eq 1}
+					<select class=small id="qccombo" style="width:120px"  onclick="QCreate(this);">
+						<option value="none">{$APP.LBL_QUICK_CREATE}...</option>
                         {foreach  item=detail from=$QCMODULE}
-                                        <option value="{$detail.1}">{$APP.NEW}&nbsp;{$APP[$detail.0]}</option>
+						{* vtlib customization: Use translated string if available *}
+						{assign var="modulelabel" value=$detail.0}
+						{if $APP[$detail.0]}{assign var="modulelabel" value=$APP[$detail.0]}{/if}
+                        <option value="{$detail.1}">{$APP.NEW}&nbsp;{$modulelabel}</option>
                         {/foreach}
-                                </select>
-                        {else}
-                                <select class=small id="qccombo" style="width:120px"  onchange="QCreate(this);">
-					<option value="none">{$APP.LBL_QUICK_CREATE}...</option>
+					</select>
+				{else}
+					<select class=small id="qccombo" style="width:120px"  onchange="QCreate(this);">
+						<option value="none">{$APP.LBL_QUICK_CREATE}...</option>
                         {foreach  item=detail from=$QCMODULE}
-                                        <option value="{$detail.1}">{$APP.NEW}&nbsp;{$APP[$detail.0]}</option>
+						{* vtlib customization: Use translated string if available *}
+						{assign var="modulelabel" value=$detail.0}
+						{if $APP[$detail.0]}{assign var="modulelabel" value=$APP[$detail.0]}{/if}
+                        <option value="{$detail.1}">{$APP.NEW}&nbsp;{$modulelabel}</option>
                         {/foreach}
-                                </select>
-
-                        {/if}
-	
+					</select>
+				{/if}	
 			</td>
 		</tr>
 

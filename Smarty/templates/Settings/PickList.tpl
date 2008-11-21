@@ -138,10 +138,13 @@ function validate() {
 	                        <td width="32%" class="cellText" >
 					<select name="pickmodule" id="pickmodule" class="detailedViewTextBox" onChange="changeModule();">
 					{foreach key=tabid item=module from=$MODULE_LISTS}
+						{* vtlib customization: Use translation only if available *}
+						{assign var="modulelabel" value=$module}
+						{if $APP.$module}{assign var="modulelabel" value=$APP.$module}{/if}
 						{if $SEL_MODULE eq $module}
-						<option value="{$module}" selected>{$APP.$module}</option>
+						<option value="{$module}" selected>{$modulelabel}</option>
 						{else}
-						<option value="{$module}">{$APP.$module}</option>
+						<option value="{$module}">{$modulelabel}</option>
 						{/if}
 					{/foreach}
 					</select>

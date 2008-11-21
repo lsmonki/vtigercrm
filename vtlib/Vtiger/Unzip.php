@@ -1,14 +1,23 @@
 <?php
-
+/************************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ************************************************************************************/
 require_once('vtlib/thirdparty/dUnzip2.inc.php');
 
 /**
- * Wrapper class over dUnzip2.
+ * Provides API to make working with zip file extractions easy
+ * @package vtlib
  */
 class Vtiger_Unzip extends dUnzip2 {
 
 	/**
-	 * Check existence of path in the given array.
+	 * Check existence of path in the given array
+	 * @access private
 	 */
 	function __checkPathInArray($path, $pathArray) {
 		foreach($pathArray as $checkPath) {
@@ -21,6 +30,7 @@ class Vtiger_Unzip extends dUnzip2 {
 	/**
 	 * Extended unzipAll function (look at base class)
 	 * Allows you to rename while unzipping and handle exclusions.
+	 * @access private
 	 */
 	Function unzipAllEx($targetDir=false, $includeExclude=false, $renamePaths=false, $ignoreFiles=false, 
 		$baseDir="", $applyChmod=0777){

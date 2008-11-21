@@ -1,6 +1,19 @@
 <?php
+/************************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ************************************************************************************/
 
+/**
+ * Provides basic API to work with vtiger CRM Fields
+ * @package vtlib
+ */
 class Vtiger_FieldBasic {
+	/** ID of this field instance */
 	var $id;
 	var $name;
 	var $label = false;	
@@ -24,10 +37,20 @@ class Vtiger_FieldBasic {
 	
 	var $block;
 
+	/**
+	 * Constructor
+	 */
 	function __construct() {
 	}
 
-	function initialize($valuemap, $blockInstance=false, $moduleInstance=false) {
+	/**
+	 * Initialize this instance
+	 * @param Array 
+	 * @param Vtiger_Module Instance of module to which this field belongs
+	 * @param Vtiger_Block Instance of block to which this field belongs
+	 * @access private
+	 */
+	function initialize($valuemap, $moduleInstance=false, $blockInstance=false) {
 		$this->id = $valuemap[fieldid];
 		$this->name = $valuemap[fieldname];
 		$this->label= $valuemap[fieldlabel];
@@ -38,11 +61,19 @@ class Vtiger_FieldBasic {
 		$this->block= $blockInstance? $blockInstance : Vtiger_Block::getInstance($valuemap[block], $moduleInstance);
 	}
 
+	/**
+	 * Get unique id for this instance
+	 * @access private
+	 */
 	function __getUniqueId() {
 		global $adb;
 		return $adb->getUniqueId('vtiger_field');
 	}
 
+	/**
+	 * Get next sequence id to use within a block for this instance
+	 * @access private
+	 */
 	function __getNextSequence() {
 		global $adb;
 		$result = $adb->pquery("SELECT MAX(sequence) AS max_seq FROM vtiger_field WHERE tabid=? AND block=?",
@@ -54,6 +85,11 @@ class Vtiger_FieldBasic {
 		}
 		return $maxseq;
 	}
+
+	/**
+	 * Get next quick create sequence id for this instance
+	 * @access private
+	 */
 	function __getNextQuickCreateSequence() {
 		global $adb;
 		$result = $adb->pquery("SELECT MAX(quickcreatesequence) AS max_quickcreateseq FROM vtiger_field WHERE tabid=?",
@@ -66,6 +102,11 @@ class Vtiger_FieldBasic {
 		return $max_quickcreateseq;
 	}
 
+	/**
+	 * Create this field instance
+	 * @param Vtiger_Block Instance of the block to use
+	 * @access private
+	 */
 	function __create($blockInstance) {
 		global $adb;
 
@@ -102,105 +143,89 @@ class Vtiger_FieldBasic {
 
 		Vtiger_Profile::initForField($this);
 
-		echo "$this->columntype ... create? $this->column ... $this->table";
-		print_r($adb->getColumnNames($this->table));
-
-		if(!empty($this->columntype) && !in_array($this->column, $adb->getColumnNames($this->table))) {
-			echo "ALTER TABLE ADD COLUMN $this->column $this->columntype";
-			Vtiger_Utils::AlterTable($this->table, " ADD COLUMN $this->column $this->columntype");
+		if(!empty($this->columntype)) {
+			Vtiger_Utils::AddColumn($this->table, $this->column, $this->columntype);
 		}	
 
 		self::log("Creating Field $this->name ... DONE");
 		self::log("Module language mapping for $this->label ... CHECK");
 	}
 
+	/**
+	 * Update this field instance
+	 * @access private
+	 * @internal TODO
+	 */
 	function __update() {
 		self::log("Updating Field $this->name ... DONE");
 	}
 
+	/**
+	 * Delete this field instance
+	 * @access private
+	 */
+	function __delete() {
+		global $adb;
+
+		Vtiger_Profile::deleteForField($this);
+
+		$adb->pquery("DELETE FROM vtiger_field WHERE fieldid=?", Array($this->id));
+		self::log("Deleteing Field $this->name ... DONE");
+	}
+
+	/**
+	 * Get block id to which this field instance is associated
+	 */
 	function getBlockId() {
 		return $this->block->id;
 	}
 
+	/**
+	 * Get module id to which this field instance is associated
+	 */
 	function getModuleId() {
 		return $this->block->module->id;
 	}
 
+	/**
+	 * Get module name to which this field instance is associated
+	 */
 	function getModuleName() {
 		return $this->block->module->name;
 	}
 
+	/**
+	 * Get module instance to which this field instance is associated
+	 */
 	function getModuleInstance(){
 		return $this->block->module;
 	}
 
-	function save($blockInstance) {
+	/**
+	 * Save this field instance
+	 * @param Vtiger_Block Instance of block to which this field should be added.
+	 */
+	function save($blockInstance=false) {
 		if($this->id) $this->__update();
 		else $this->__create($blockInstance);
 		return $this->id;
 	}
 
-	static function log($message) {
-		Vtiger_Utils::Log($message);
+	/**
+	 * Delete this field instance
+	 */
+	function delete() {
+		$this->__delete();
 	}
 
-	static function getInstance($value, $blockInstance=false, $moduleInstance=false) {
-		global $adb;
-		$instance = false;
-
-		$query = false;
-		$queryParams = false;
-		if(Vtiger_Utils::isNumber($value)) {
-			$query = "SELECT * FROM vtiger_field WHERE fieldid=?";
-			$queryParams = Array($value);
-		} else {
-			$query = "SELECT * FROM vtiger_field WHERE fieldname=? AND block=? AND tabid=?";
-			$queryParams = Array($value, $blockInstance->id, $moduleInstance->id);
-		}
-		$result = $adb->pquery($query, $queryParams);
-		if($adb->num_rows($result)) {
-			$instance = new self();
-			$instance->initialize($adb->fetch_array($result), $blockInstance, $moduleInstance);
-		}
-		return $instance;
-	}
-
-	static function getAllForBlock($blockInstance, $moduleInstance=false) {
-		global $adb;
-		$instances = false;
-
-		$query = false;
-		$queryParams = false;
-		if($moduleInstance) {
-			$query = "SELECT * FROM vtiger_field WHERE block=? AND tabid=?";
-			$queryParams = Array($blockInstance->id, $moduleInstance->id);
-		} else {
-			$query = "SELECT * FROM vtiger_field WHERE block=?";
-			$queryParams = Array($blockInstance->id);
-		}
-		$result = $adb->pquery($query, $queryParams);
-		for($index = 0; $index < $adb->num_rows($result); ++$index) {
-			$instance = new self();
-			$instance->initialize($adb->fetch_array($result), $blockInstance, $moduleInstance);
-			$instances[] = $instance;
-		}
-		return $instances;
-	}
-
-	static function getAllForModule($moduleInstance) {
-		global $adb;
-		$instances = false;
-
-		$query = "SELECT * FROM vtiger_field WHERE tabid=?";
-		$queryParams = Array($moduleInstance->id);
-		
-		$result = $adb->pquery($query, $queryParams);
-		for($index = 0; $index < $adb->num_rows($result); ++$index) {
-			$instance = new self();
-			$instance->initialize($adb->fetch_array($result), false, $moduleInstance);
-			$instances[] = $instance;
-		}
-		return $instances;
+	/**
+	 * Helper function to log messages
+	 * @param String Message to log
+	 * @param Boolean true appends linebreak, false to avoid it
+	 * @access private
+	 */
+	static function log($message, $delim=true) {
+		Vtiger_Utils::Log($message, $delim);
 	}
 }
 ?>

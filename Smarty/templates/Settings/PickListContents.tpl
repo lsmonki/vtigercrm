@@ -30,7 +30,10 @@
 		 </tr>
 	</table>
 	<br>
-	<table  class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%"><tr><td><strong>2. {$MOD.LBL_PICKLIST_AVAIL} {$APP.$MODULE} </strong></td>
+	{* vtlib customization: Use translated string only if available *}
+	{assign var="MODULELABEL" value=$MODULE}
+	{if $APP.$MODULE}{assign var="MODULELABEL" value=$MODULE}{/if}
+	<table  class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%"><tr><td><strong>2. {$MOD.LBL_PICKLIST_AVAIL} {$MODULELABEL} </strong></td>
 		<td class="small" align=right>&nbsp;</td>
 		</tr>
 	</table>

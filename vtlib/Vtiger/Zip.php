@@ -4,6 +4,7 @@ require_once('vtlib/thirdparty/dZip.inc.php');
 
 /**
  * Wrapper class over dZip.
+ * @package vtlib
  */
 class Vtiger_Zip extends dZip {
 	/**

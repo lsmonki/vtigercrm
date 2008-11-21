@@ -4107,6 +4107,17 @@ function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
 
 	$del_link .= "&parenttab=".$tabname."&return_viewname=".$viewname.$url;
 	
+	// vtlib customization: override default delete link for custom modules
+	$requestModule = $_REQUEST['module'];
+	$requestRecord = $_REQUEST['record'];
+	$parenttab = $_REQUEST['parenttab'];
+	$isCustomModule = vtlib_isCustomModule($requestModule);
+	if($isCustomModule) {
+		$del_link = "index.php?module=$requestModule&action=updateRelations&parentid=$requestRecord";
+		$del_link .= "&destination_module=$module&idlist=$entity_id&mode=delete&parenttab=$parenttab";
+	}
+	// END
+	
 	return $del_link;
 }
 

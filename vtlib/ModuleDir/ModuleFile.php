@@ -50,7 +50,10 @@ class ModuleClass extends CRMEntity {
 	);
 
 	var $popup_fields = Array('payslipname');
-	
+
+	// Placeholder for fields not available for mass edit
+	var $non_mass_edit_fields = Array();
+
 	var $sortby_fields = Array('payslipname', 'payslipmonth', 'smownerid', 'modifiedtime');
 	// Should contain field labels
 	var $detailview_links = Array('PayslipName', 'Month');
@@ -306,10 +309,12 @@ class ModuleClass extends CRMEntity {
 	 * NOTE: Vtiger_Module::setRelatedList sets reference to this function in vtiger_relatedlists table
 	 * if function name is not explicitly specified.
 	 */
-	function get_related_list($id, $cur_tab_id, $rel_tab_id) {
+	function get_related_list($id, $cur_tab_id, $rel_tab_id, $actions=false) {
 
 		global $currentModule, $app_strings;
-		$this_module = $currentModule; //vtlib_getModuleNameById($cur_tab_id);
+		$this_module = $currentModule;
+
+		if(isset($_REQUEST)) $parenttab = $_REQUEST['parenttab'];
 
 		$related_module = vtlib_getModuleNameById($rel_tab_id);
 
@@ -323,10 +328,19 @@ class ModuleClass extends CRMEntity {
 		$singular_modname = vtlib_toSingular($related_module);
 
 		$button = '';
-		if(isPermitted($related_module,1, '') == 'yes') {
-			$button .= "<input title='New $related_module' class='crmbutton small edit' onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\"' type='submit' name='button' value='$app_strings[LBL_ADD_NEW] $singular_modname'>&nbsp;</td>";
+		if($actions) {
+			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
+			if(in_array('SELECT', $actions) && isPermitted($related_module,4, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_SELECT')." ". getTranslatedString($related_module). "' class='crmbutton small edit' type='button' onclick=\"return window.open('index.php?module=$related_module&return_module=$currentModule&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid=$id&parenttab=$parenttab','test','width=640,height=602,resizable=0,scrollbars=0');\" value='". getTranslatedString('LBL_SELECT'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
+			}
+			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_NEW'). " ". getTranslatedString($related_module) ."' class='crmbutton small create'" .
+					" onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\"' type='submit' name='button'" .
+					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
+			}
 		}
-
+		$button .= '</td>';
+		
 		// To make the edit or del link actions to return back to same view.
 		if($singlepane_view == 'true') $returnset = "&return_module=$this_module&return_action=DetailView&return_id=$id";
 		else $returnset = "&return_module=$this_module&return_action=CallRelatedList&return_id=$id";
@@ -374,13 +388,35 @@ class ModuleClass extends CRMEntity {
 	}
 
 	/**
-	 * Save the related module record information. Triggerd from CRMEntity->saveentity method.
+	 * Save the related module record information. Triggered from CRMEntity->saveentity method or updateRelations.php
+	 * @param String This module name
+	 * @param Integer This module record number
+	 * @param String Related module name
+	 * @param mixed Integer or Array of related module record number
 	 */
 	function save_related_module($module, $crmid, $with_module, $with_crmid) {
 		global $adb;
-		$adb->query("INSERT INTO vtiger_crmentityrel(crmid, module, relcrmid, relmodule)
-		   	VALUES($crmid, '$module', $with_crmid, '$with_module')");
+		if(!is_array($with_crmid)) $with_crmid = Array($with_crmid);
+		foreach($with_crmid as $relcrmid) {
+			$adb->pquery("INSERT INTO vtiger_crmentityrel(crmid, module, relcrmid, relmodule) VALUES(?,?,?,?)", 
+				Array($crmid, $module, $relcrmid, $with_module));
+		}
+	}
+
+	/**
+	 * Delete the related module record information. Triggered from updateRelations.php
+	 * @param String This module name
+	 * @param Integer This module record number
+	 * @param String Related module name
+	 * @param mixed Integer or Array of related module record number
+	 */
+	function delete_related_module($module, $crmid, $with_module, $with_crmid) {
+		global $adb;
+		if(!is_array($with_crmid)) $with_crmid = Array($with_crmid);
+		foreach($with_crmid as $relcrmid) {
+			$adb->pquery("DELETE FROM vtiger_crmentityrel WHERE crmid=? AND module=? AND relcrmid=? AND relmodule=?",
+				Array($crmid, $module, $relcrmid, $with_module));
+		}
 	}
 }
-
 ?>

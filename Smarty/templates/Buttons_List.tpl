@@ -18,11 +18,11 @@
 	{if $MODULE eq 'Recyclebin'}
 		{assign var="action" value="index"}
 	{/if}	
-	{assign var="modulelabel" value=$MODULE}
+	{assign var="MODULELABEL" value=$MODULE}
 	{if $APP[$MODULE]}
-		{assign var="modulelabel" value=$APP[$MODULE]}
+		{assign var="MODULELABEL" value=$APP[$MODULE]}
 	{/if}	
-	<td style="padding-left:10px;padding-right:50px" class="moduleName" nowrap>{$APP.$CATEGORY} > <a class="hdrLink" href="index.php?action={$action}&module={$MODULE}&parenttab={$CATEGORY}">{$modulelabel}</a></td>
+	<td style="padding-left:10px;padding-right:50px" class="moduleName" nowrap>{$APP.$CATEGORY} > <a class="hdrLink" href="index.php?action={$action}&module={$MODULE}&parenttab={$CATEGORY}">{$MODULELABEL}</a></td>
 	<td width=100% nowrap>
 	
 		<table border="0" cellspacing="0" cellpadding="0" >

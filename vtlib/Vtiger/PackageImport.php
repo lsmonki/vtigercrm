@@ -6,26 +6,33 @@ include_once('vtlib/Vtiger/Module.php');
 include_once('vtlib/Vtiger/Event.php');
 
 /**
- * Package Manager class for vtiger Modules.
+ * Provides API to import module into vtiger CRM
+ * @package vtlib
  */
 class Vtiger_PackageImport extends Vtiger_PackageExport {
 
 	/**
-	 * Module Meta XML File (Parsed).
+	 * Module Meta XML File (Parsed)
+	 * @access private
 	 */
 	var $_modulexml;
 	/**
 	 * Module Fields mapped by [modulename][fieldname] which
 	 * will be used to create customviews.
+	 * @access private
 	 */
 	var $_modulefields = Array();
 
+	/**
+	 * Constructor
+	 */
 	function Vtiger_PackageImport() {
 		parent::__construct();
 	}
 
 	/**
-	 * Parse the manifest file.
+	 * Parse the manifest file
+	 * @access private
 	 */
 	function __parseManifestFile($unzip) {
 		$manifestfile = $this->__getManifestFilePath();
@@ -35,7 +42,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
-	 * Check if zipfile is a valid package.
+	 * Check if zipfile is a valid package
+	 * @access private
 	 */
 	function checkzip($zipfile) {
 		$unzip = new Vtiger_Unzip($zipfile);
@@ -74,7 +82,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
-	 * Get module name packaged in the zip file.
+	 * Get module name packaged in the zip file
+	 * @access private
 	 */
 	function getModuleNameFromZip($zipfile) {
 		if(!$this->checkZip($zipfile)) return null;
@@ -84,6 +93,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 
 	/**
 	 * Initialize Import
+	 * @access private
 	 */
 	function initImport($zipfile, $overwrite) {
 		$module = $this->getModuleNameFromZip($zipfile);
@@ -110,14 +120,17 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
-	 * Get dependent version.
+	 * Get dependent version
+	 * @access private
 	 */
 	function getDependentVtigerVersion() {
 		return $this->_modulexml->dependencies->vtiger_version;
 	}
 
 	/**
-	 * Import Module from zip file.
+	 * Import Module from zip file
+	 * @param String Zip file name
+	 * @param Boolean True for overwriting existing module
 	 */
 	function import($zipfile, $overwrite=false) {
 		$module = $this->initImport($zipfile, $overwrite);
@@ -127,7 +140,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
-	 * Import Module.
+	 * Import Module
+	 * @access private
 	 */
 	function import_Module() {
 		$tabname = $this->_modulexml->name;
@@ -151,7 +165,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
-	 * Import Tables of the module.
+	 * Import Tables of the module
+	 * @access private
 	 */
 	function import_Tables($modulenode) {
 		if(empty($modulenode->tables) || empty($modulenode->tables->table)) return;
@@ -166,7 +181,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
-	 * Import Blocks of the module.
+	 * Import Blocks of the module
+	 * @access private
 	 */
 	function import_Blocks($modulenode, $moduleInstance) {
 		if(empty($modulenode->blocks) || empty($modulenode->blocks->block)) return;
@@ -182,7 +198,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
-	 * Import Fields of the module.
+	 * Import Fields of the module
+	 * @access private
 	 */
 	function import_Fields($blocknode, $blockInstance, $moduleInstance) {
 		if(empty($blocknode->fields) || empty($blocknode->fields->field)) return;
@@ -224,7 +241,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 				foreach($fieldnode->picklistvalues->picklistvalue as $picklistvaluenode) {
 					$picklistvalues[] = $picklistvaluenode;
 				}
-				$fieldInstance->setupPicklistValues( $picklistvalues );
+				$fieldInstance->setPicklistValues( $picklistvalues );
 			}
 
 			// Check related modules associated with this field
@@ -241,7 +258,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
-	 * Import Custom views of the module.
+	 * Import Custom views of the module
+	 * @access private
 	 */
 	function import_CustomViews($modulenode, $moduleInstance) {
 		if(empty($modulenode->customviews) || empty($modulenode->customviews->customview)) return;
@@ -271,7 +289,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
-	 * Import Sharing Access of the module.
+	 * Import Sharing Access of the module
+	 * @access private
 	 */
 	function import_SharingAccess($modulenode, $moduleInstance) {
 		if(empty($modulenode->sharingaccess)) return;
@@ -284,7 +303,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
-	 * Import Events of the module.
+	 * Import Events of the module
+	 * @access private
 	 */
 	function import_Events($modulenode, $moduleInstance) {
 		if(empty($modulenode->events) || empty($modulenode->events->event))	return;
@@ -298,7 +318,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
-	 * Import actions of the module.
+	 * Import actions of the module
+	 * @access private
 	 */
 	function import_Actions($modulenode, $moduleInstance) {
 		if(empty($modulenode->actions) || empty($modulenode->actions->action)) return;

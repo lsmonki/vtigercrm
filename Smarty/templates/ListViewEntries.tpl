@@ -148,7 +148,8 @@
 					{elseif $MODULE eq 'Calendar'}
 						{$APP.LBL_NO} {$APP.ACTIVITIES} {$APP.LBL_FOUND} !
 					{else}
-						{$APP.LBL_NO} {$APP.$MODULE_CREATE}s {$APP.LBL_FOUND} !
+						{* vtlib customization: Use translation string only if available *}
+						{$APP.LBL_NO} {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}s{else}{$MODULE_CREATE}{/if} {$APP.LBL_FOUND} !
 					{/if}
 					</span></td>
 				</tr>
@@ -158,7 +159,8 @@
 					{if $MODULE_CREATE eq 'SalesOrder' || $MODULE_CREATE eq 'PurchaseOrder' || $MODULE_CREATE eq 'Invoice' || $MODULE_CREATE eq 'Quotes'}
 						 {$MOD.$MODULE_CREATE}
 					{else}
-						 {$APP.$MODULE_CREATE}
+						 {* vtlib customization: Use translation string only if available *}
+						 {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}{else}{$MODULE_CREATE}{/if}
 					{/if}
 
 					{$APP.LBL_NOW}. {$APP.LBL_CLICK_THE_LINK}:<br>
@@ -167,7 +169,8 @@
 					{if $MODULE_CREATE eq 'SalesOrder' || $MODULE_CREATE eq 'PurchaseOrder' || $MODULE_CREATE eq 'Invoice' || $MODULE_CREATE eq 'Quotes'}
 						 {$MOD.$MODULE_CREATE}
 					{else}
-						 {$APP.$MODULE_CREATE}
+						 {* vtlib customization: Use translation string only if available *}
+						 {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}{else}{$MODULE_CREATE}{/if}
 					{/if}
 					</a><br>
 					{else}
@@ -185,7 +188,8 @@
 				{if $MODULE_CREATE eq 'SalesOrder' || $MODULE_CREATE eq 'PurchaseOrder' || $MODULE_CREATE eq 'Invoice' || $MODULE_CREATE eq 'Quotes'}
 					{$APP.LBL_NO} {$APP.$MODULE_CREATE} {$APP.LBL_FOUND} !</span></td>
 				{else}
-					{$APP.LBL_NO} {$APP.$MODULE_CREATE}s {$APP.LBL_FOUND} !</span></td>
+					{* vtlib customization: Use translation string only if available *}
+					{$APP.LBL_NO} {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}s{else}{$MODULE_CREATE}{/if} {$APP.LBL_FOUND} !</span></td>
 				{/if}
 				</tr>
 				<tr>
@@ -193,7 +197,8 @@
 				{if $MODULE_CREATE eq 'SalesOrder' || $MODULE_CREATE eq 'PurchaseOrder' || $MODULE_CREATE eq 'Invoice' || $MODULE_CREATE eq 'Quotes'}
 					 {$MOD.$MODULE_CREATE}
 				{else}
-					 {$APP.$MODULE_CREATE}
+					 {* vtlib customization: Use translation string only if available *}
+					 {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}{else}{$MODULE_CREATE}{/if}
 				{/if}
 				<br>
 				</td>

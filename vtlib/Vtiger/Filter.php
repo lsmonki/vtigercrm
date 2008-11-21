@@ -1,8 +1,20 @@
 <?php
-
+/************************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ************************************************************************************/
 include_once('vtlib/Vtiger/Utils.php');
 
+/**
+ * Provides API to work with vtiger CRM Custom View (Filter)
+ * @package vtlib
+ */
 class Vtiger_Filter {
+	/** ID of this filter instance */
 	var $id;
 	var $name;
 	var $isdefault;
@@ -12,20 +24,37 @@ class Vtiger_Filter {
 
 	var $module;
 
+	/**
+	 * Constructor
+	 */
 	function __construct() {
 	}
 
+	/**
+	 * Get unique id for this instance
+	 * @access private
+	 */
 	function __getUniqueId() {
 		global $adb;
 		return $adb->getUniqueId('vtiger_customview');
 	}
 
+	/**
+	 * Initialize this filter instance
+	 * @param Vtiger_Module Instance of the module to which this filter is associated.
+	 * @access private
+	 */
 	function initialize($valuemap, $moduleInstance=false) {
 		$this->id = $valuemap[cvid];
 		$this->name= $valuemap[viewname];
 		$this->module=$moduleInstance? $moduleInstance: Vtiger_Module::getInstance($valuemap[tabid]);
 	}
 
+	/**
+	 * Create this instance
+	 * @param Vtiger_Module Instance of the module to which this filter should be associated with
+	 * @access private
+	 */
 	function __create($moduleInstance) {
 		global $adb;
 		$this->module = $moduleInstance;
@@ -34,21 +63,55 @@ class Vtiger_Filter {
 		$this->isdefault = ($this->isdefault===true||$this->isdefault=='true')?1:0;
 		$this->inmetrics = ($this->inmetrics===true||$this->inmetrics=='true')?1:0;
 
-		$adb->pquery("INSERT INTO vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) VALUES(?,?,?,?,?)", Array($this->id, $this->name, $this->isdefault, $this->inmetrics, $this->module->name));
+		$adb->pquery("INSERT INTO vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) VALUES(?,?,?,?,?)", 
+			Array($this->id, $this->name, $this->isdefault, $this->inmetrics, $this->module->name));
 		
 		self::log("Creating Filter $this->name ... DONE");
 	}
 
+	/**
+	 * Update this instance
+	 * @access private
+	 * @internal TODO
+	 */
 	function __update() {
 		self::log("Updating Filter $this->name ... DONE");
 	}
 
+	/**
+	 * Delete this instance
+	 * @access private
+	 */
+	function __delete() {
+		global $adb;
+		$adb->pquery("DELETE FROM vtiger_cvadvfilter WHERE cvid=?", Array($this->id));
+		$adb->pquery("DELETE FROM vtiger_cvcolumnlist WHERE cvid=?", Array($this->id));
+		$adb->pquery("DELETE FROM vtiger_customview WHERE cvid=?", Array($this->id));
+	}
+
+	/**
+	 * Save this instance
+	 * @param Vtiger_Module Instance of the module to use
+	 */
 	function save($moduleInstance=false) {
 		if($this->id) $this->__update();
 		else $this->__create($moduleInstance);
 		return $this->id;
 	}
 
+	/**
+	 * Delete this instance
+	 * @access private
+	 */
+	function delete() {
+		$this->__delete();
+	}
+
+	/**
+	 * Get the column value to use in custom view tables.
+	 * @param Vtiger_Field Instance of the field
+	 * @access private
+	 */
 	function __getColumnValue($fieldInstance) {
 		$tod = split('~', $fieldInstance->typeofdata);
 		$displayinfo = $fieldInstance->getModuleName().'_'.str_replace(' ','_',$fieldInstance->label).':'.$tod[0];
@@ -56,6 +119,11 @@ class Vtiger_Filter {
 		return $cvcolvalue;
 	}
 
+	/**
+	 * Add the field to this filer instance
+	 * @param Vtiger_Field Instance of the field
+	 * @param Integer Index count to use
+	 */
 	function addField($fieldInstance, $index=0) {
 		global $adb;
 
@@ -69,6 +137,14 @@ class Vtiger_Filter {
 		return $this;
 	}
 
+	/**
+	 * Add rule to this filter instance
+	 * @param Vtiger_Field Instance of the field
+	 * @param String One of [EQUALS, NOT_EQUALS, STARTS_WITH, ENDS_WITH, CONTAINS, DOES_NOT_CONTAINS, LESS_THAN, 
+	 *                       GREATER_THAN, LESS_OR_EQUAL, GREATER_OR_EQUAL]
+	 * @param String Value to use for comparision
+	 * @param Integer Index count to use
+	 */
 	function addRule($fieldInstance, $comparator, $comparevalue, $index=0) {
 		global $adb;
 
@@ -88,8 +164,9 @@ class Vtiger_Filter {
 	}
 
 	/**
-	 * Translate comparator (condition) to long or short form
-	 * Used in PackageExport also.
+	 * Translate comparator (condition) to long or short form.
+	 * @access private
+	 * @internal Used from Vtiger_PackageExport also
 	 */
 	static function translateComparator($value, $tolongform=false) {
 		$comparator = false;
@@ -121,10 +198,21 @@ class Vtiger_Filter {
 		return $comparator;
 	}
 
-	static function log($message) {
-		Vtiger_Utils::Log($message);
+	/**
+	 * Helper function to log messages
+	 * @param String Message to log
+	 * @param Boolean true appends linebreak, false to avoid it
+	 * @access private
+	 */
+	static function log($message, $delim=true) {
+		Vtiger_Utils::Log($message, $delim);
 	}
 
+	/**
+	 * Get instance by filterid or filtername
+	 * @param mixed filterid or filtername
+	 * @param Vtiger_Module Instance of the module to use when filtername is used
+	 */
 	static function getInstance($value, $moduleInstance=false) {
 		global $adb;
 		$instance = false;
@@ -132,11 +220,11 @@ class Vtiger_Filter {
 		$query = false;
 		$queryParams = false;
 		if(Vtiger_Utils::isNumber($value)) {
-			$query = "SELECT * FROM vtiger_blocks WHERE blockid=?";
+			$query = "SELECT * FROM vtiger_customview WHERE cvid=?";
 			$queryParams = Array($value);
 		} else {
-			$query = "SELECT * FROM vtiger_blocks WHERE blocklabel=? AND tabid=?";
-			$queryParams = Array($value, $moduleInstance->id);
+			$query = "SELECT * FROM vtiger_customview WHERE viewname=? AND entitytype=?";
+			$queryParams = Array($value, $moduleInstance->name);
 		}
 		$result = $adb->pquery($query, $queryParams);
 		if($adb->num_rows($result)) {
@@ -146,12 +234,16 @@ class Vtiger_Filter {
 		return $instance;
 	}
 
+	/**
+	 * Get all instances of filter for the module
+	 * @param Vtiger_Module Instance of module
+	 */
 	static function getAllForModule($moduleInstance) {
 		global $adb;
 		$instances = false;
 
-		$query = "SELECT * FROM vtiger_blocks WHERE tabid=?";
-		$queryParams = Array($moduleInstance->id);
+		$query = "SELECT * FROM vtiger_customview WHERE entitytype=?";
+		$queryParams = Array($moduleInstance->name);
 		
 		$result = $adb->pquery($query, $queryParams);
 		for($index = 0; $index < $adb->num_rows($result); ++$index) {
@@ -160,6 +252,27 @@ class Vtiger_Filter {
 			$instances[] = $instance;
 		}
 		return $instances;
+	}
+
+	/**
+	 * Delete filter associated for module
+	 * @param Vtiger_Module Instance of module
+	 */
+	static function deleteForModule($moduleInstance) {
+		global $adb;
+
+		$cvidres = $adb->pquery("SELECT cvid FROM vtiger_customview WHERE entitytype=?", Array($moduleInstance->name));
+		if($adb->num_rows($cvidres)) {
+			$cvids = Array();
+			for($index = 0; $index < $adb->num_rows($cvidres); ++$index) {
+				$cvids[] = $adb->query_result($cvidres, $index, 'cvid');
+			}
+			if(!empty($cvids)) {
+				$adb->query("DELETE FROM vtiger_cvadvfilter WHERE cvid  IN (" . implode(',', $cvids) . ")");
+				$adb->query("DELETE FROM vtiger_cvcolumnlist WHERE cvid IN (" . implode(',', $cvids) . ")");
+				$adb->query("DELETE FROM vtiger_customview WHERE cvid   IN (" . implode(',', $cvids) . ")");
+			}
+		}
 	}
 }
 ?>
