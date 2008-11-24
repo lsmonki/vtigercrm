@@ -81,7 +81,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			if($mod_strings[$moduleSpecificMessage] != ""){
 				$moduleSpecificMessage = $mod_strings[$moduleSpecificMessage];
 			}
-			$label_fld=array($fieldlabel, $app_strings[LBL_NONE]);
+			$label_fld=array($fieldlabel, '');
 		}
 	} // END	
 	else if($uitype == 99)

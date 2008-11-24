@@ -1415,7 +1415,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			}
 			$value = "<a href='index.php?module=$parent_module&action=DetailView&record=$parent_id' title='$valueTitle'>$displayValue</a>";
 		} else {
-			$label_fld=array($fieldlabel, $app_strings[LBL_NONE]);
+			$value = '';
 		}
 	} // END
 	else if($uitype == 53)
