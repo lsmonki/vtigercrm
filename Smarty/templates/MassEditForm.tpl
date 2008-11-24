@@ -10,7 +10,7 @@
  ********************************************************************************/
 -->*}
 
-<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
+<table border=0 cellspacing=0 cellpadding=5 width=100% align=center> 
 	<tr>
 		<td class=small >		
 			<!-- popup specific content fill in starts -->
@@ -30,17 +30,49 @@
 						<input type="hidden" name="module" value="{$MODULE}">
 						<input type="hidden" name="action" value="MassEditSave">
 					</td>
-
-
 				</tr>
-				{foreach key=header item=data from=$BLOCKS}
 					<tr>
-						<td colspan=4 class="detailedViewHeader">
-							<b>{$header}</b>
+						<td colspan=4>
+							<table class="small" border="0" cellpadding="3" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td class="dvtTabCache" style="width: 10px;" nowrap>&nbsp;</td>
+									
+									{foreach key=header name=block item=data from=$BLOCKS}
+									    {if $smarty.foreach.block.index eq 0}
+										    <td style="width: 100px;" nowrap class="dvtSelectedCell" id="tab{$smarty.foreach.block.index}" onclick="massedit_togglediv({$smarty.foreach.block.index},{$BLOCKS|@count});">
+										     <b>{$header}</b>
+										    </td>
+									    {else}
+										    <td style="width: 100px;" nowrap class="dvtUnSelectedCell" id="tab{$smarty.foreach.block.index}" onclick="massedit_togglediv({$smarty.foreach.block.index},{$BLOCKS|@count});">
+										     <b>{$header}</b>
+										    </td>
+									    {/if}
+									{/foreach}
+						    		<td class="dvtTabCache" nowrap style="width:55%;">&nbsp;</td>
+							    </tr>
+								</tbody>
+						    </table>		
 						</td>
 					</tr>
-					{include file="DisplayFields.tpl"}
-				{/foreach}
+					<tr>
+						<td colspan=4>
+							{foreach key=header name=block item=data from=$BLOCKS}
+							    {if $smarty.foreach.block.index eq 0}
+								    <div id="massedit_div{$smarty.foreach.block.index}" style='display:block;'>
+									<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+										{include file="DisplayFields.tpl"}
+									</table>
+									</div>
+							    {else}
+								    <div id="massedit_div{$smarty.foreach.block.index}" style='display:none;'>
+									<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+										{include file="DisplayFields.tpl"}
+									</table>
+									</div>
+							    {/if}
+							{/foreach}
+						</td>
+					</tr>
 			</table>
 			<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 				<tr>
@@ -68,6 +100,8 @@
 
 		var mass_count=0;
 	
-		//massedit_initOnChangeHandlers(); 
+		massedit_initOnChangeHandlers(); 
+		
+
 
 </script>

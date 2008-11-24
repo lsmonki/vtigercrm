@@ -18,12 +18,6 @@
 <script language="JavaScript" type="text/javascript" src="include/js/Merge.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
 
-<script type="text/javascript">	
-var fieldname = new Array({$VALIDATION_DATA_FIELDNAME})
-var fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL})
-var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE})
-</script>
-
 <script language="javascript" type="text/javascript">
 var typeofdata = new Array();
 typeofdata['E'] = ['is','isn','bwt','ewt','cts','dcts'];
@@ -361,7 +355,7 @@ function alphabetic(module,url,dataid)
 </table>
 
 <!-- MassEdit Feature -->
-<div id="massedit" class="layerPopup" style="display:none;width:700px;">
+<div id="massedit" class="layerPopup" style="display:none;width:80%;">
 <table width="100%" border="0" cellpadding="3" cellspacing="0" class="layerHeadingULine">
 <tr>
 	<td class="layerPopupHeading" align="left" width="60%">{$APP.LBL_MASSEDIT_FORM_HEADER}</td>

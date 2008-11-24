@@ -812,6 +812,23 @@ ExecuteQuery("create table com_vtiger_workflowtasks_entitymethod (workflowtasks_
 $em->registerHandler('vtiger.entity.aftersave', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler');
 // com_vtiger_workflow ends
 
+/* Mass Edit Feature */
+ExecuteQuery("ALTER TABLE vtiger_field ADD COLUMN masseditable int(11) NOT NULL DEFAULT '1'");
+$tab_field_array = array(
+	'Accounts'=>array('accountname'),
+	'Contacts'=>array('imagename'),
+	'Products'=>array('imagename','product_id'),
+	'Invoice'=>array('invoice_no','salesorder_id'),
+	'SalesOrder'=>array('quote_id','salesorder_no'),
+	'PurchaseOrder'=>array('purchaseorder_no'),
+	'Quotes'=>array('quote_no'),
+	'HelpDesk'=>array('filename'),
+);
+foreach($tab_field_array as $index=>$value){
+	$tabid = getTabid($index);
+	$adb->pquery("UPDATE vtiger_field SET masseditable=0 WHERE tabid=? AND fieldname IN (".generateQuestionMarks($value).")",array($tabid,$value));
+}
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

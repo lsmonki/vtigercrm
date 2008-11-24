@@ -9,6 +9,44 @@
  ********************************************************************************/
 
 // MassEdit Feature
+function massedit_togglediv(curTabId,total){
+
+   for(var i=0;i<total;i++){
+	tagName = $('massedit_div'+i);
+	tagName1 = $('tab'+i)
+	tagName.style.display = 'none';
+	tagName1.className = 'dvtUnSelectedCell';
+   }
+
+   tagName = $('massedit_div'+curTabId);
+   tagName.style.display = 'block';
+   tagName1 = $('tab'+curTabId)
+   tagName1.className = 'dvtSelectedCell';
+}
+
+function massedit_initOnChangeHandlers() {
+	var form = document.getElementById('massedit_form');
+	// Setup change handlers for input boxes
+	var inputs = form.getElementsByTagName('input');
+	for(var index = 0; index < inputs.length; ++index) {
+		var massedit_input = inputs[index];
+		// TODO Onchange on readonly and hidden fields are to be handled later.
+		massedit_input.onchange = function() {
+			var checkbox = document.getElementById(this.name + '_mass_edit_check');
+			if(checkbox) checkbox.checked = true;
+		}
+	}
+	// Setup change handlers for select boxes
+	var selects = form.getElementsByTagName('select');
+	for(var index = 0; index < selects.length; ++index) {
+		var massedit_select = selects[index];
+		massedit_select.onchange = function() {
+			var checkbox = document.getElementById(this.name + '_mass_edit_check');
+			if(checkbox) checkbox.checked = true;
+		}
+	}
+}
+
 function mass_edit(obj,divid,module) {
 	var select_options = document.getElementById('allselectedboxes').value;
 	var x = select_options.split(';');

@@ -12,7 +12,7 @@ $mode = 'mass_edit';
 $disp_view = getView($focus->mode);
 
 $smarty = new vtigerCRM_Smarty;
-$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'',$focus->non_mass_edit_fields));	
+$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));	
 $smarty->assign("IDS",$_REQUEST['idstring']);
 $smarty->assign("MASS_EDIT","1");
 $smarty->assign("MODULE",$currentModule);

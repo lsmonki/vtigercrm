@@ -226,14 +226,6 @@ $smarty->assign("CHECK", $check_button);
 
 $_SESSION['salesorder_listquery'] = $list_query;
 
-$tabid = getTabid("SalesOrder");
-$validationData = getDBValidationData($focus->tab_name,$tabid);
-$data = split_validationdataArray($validationData);
-
-$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
-$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
-$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
-
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");
 else	
