@@ -41,8 +41,6 @@ class Faq extends CRMEntity {
 	
 	var $column_fields = Array();
 		
-	var $non_mass_edit_fields = Array();
-
 	var $sortby_fields = Array('question','category','id');		
 
 	// This is the list of vtiger_fields that are in the lists.

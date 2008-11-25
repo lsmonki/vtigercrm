@@ -32,8 +32,6 @@ class Products extends CRMEntity {
                 'productname'=>1
         );
 
-	var $non_mass_edit_fields = Array('imagename');		
-
 	var $tab_name = Array('vtiger_crmentity','vtiger_products','vtiger_productcf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_products'=>'productid','vtiger_productcf'=>'productid','vtiger_seproductsrel'=>'productid','vtiger_producttaxrel'=>'productid');
 	var $column_fields = Array();

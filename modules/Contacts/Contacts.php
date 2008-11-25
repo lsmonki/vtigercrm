@@ -44,8 +44,6 @@ class Contacts extends CRMEntity {
 	var $tab_name = Array('vtiger_crmentity','vtiger_contactdetails','vtiger_contactaddress','vtiger_contactsubdetails','vtiger_contactscf','vtiger_customerdetails');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_contactdetails'=>'contactid','vtiger_contactaddress'=>'contactaddressid','vtiger_contactsubdetails'=>'contactsubscriptionid','vtiger_contactscf'=>'contactid','vtiger_customerdetails'=>'customerid');
 
-	var $non_mass_edit_fields = Array('imagename');		
-
 	var $column_fields = Array();
 	
 	var $sortby_fields = Array('lastname','firstname','title','email','phone','smownerid','accountname');

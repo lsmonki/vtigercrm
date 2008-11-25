@@ -44,8 +44,6 @@ class SalesOrder extends CRMEntity {
 
 	var $object_name = "SalesOrder";
 
-	var $non_mass_edit_fields = Array("quote_id","salesorder_no");		
-
 	var $new_schema = true;
 	
 	var $module_id = "salesorderid";

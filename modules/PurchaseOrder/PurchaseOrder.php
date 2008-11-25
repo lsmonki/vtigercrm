@@ -46,8 +46,6 @@ class PurchaseOrder extends CRMEntity {
 
 	var $column_fields = Array();
 
-	var $non_mass_edit_fields = Array('purchaseorder_no');		
-
 	var $sortby_fields = Array('subject','tracking_no','smownerid','lastname');		
 
 	// This is used to retrieve related vtiger_fields from form posts.

@@ -45,8 +45,6 @@ class Leads extends CRMEntity {
 	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('smcreatorid', 'smownerid', 'contactid','potentialid' ,'crmid');
 
-	var $non_mass_edit_fields = Array();		
-
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
 		'Last Name'=>Array('leaddetails'=>'lastname'),

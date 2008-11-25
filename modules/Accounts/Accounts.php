@@ -49,8 +49,6 @@ class Accounts extends CRMEntity {
 
 	var $sortby_fields = Array('accountname','bill_city','website','phone','smownerid');		
 
-	var $non_mass_edit_fields = Array('accountname');		
-
 	var $groupTable = Array('vtiger_accountgrouprelation','accountid');
 	
 	// This is the list of vtiger_fields that are in the lists.

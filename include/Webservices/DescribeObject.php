@@ -136,7 +136,7 @@
 				array_push($options,$elem);
 			}
 		}else{
-			$details = vt_getPickListValues($fieldName,$user->roleid);
+			$details = getPickListValues($fieldName,$user->roleid);
 			for($i=0;$i<sizeof($details);++$i){
 				$elem = array();
 				$elem["label"] = $details[$i];

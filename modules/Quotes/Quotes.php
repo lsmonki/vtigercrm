@@ -46,8 +46,6 @@ class Quotes extends CRMEntity {
 	var $object_name = "Quote";
 
 	var $new_schema = true;
-	
-	var $non_mass_edit_fields = Array('quote_no');		
 
 	var $module_id = "quoteid";
 
