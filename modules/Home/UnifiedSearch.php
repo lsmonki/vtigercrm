@@ -269,7 +269,7 @@ function getSearchModulesComboList($search_module)
 		     <tr>
 		        <td colspan="3" id="global_search_total_count" style="padding-left:30px">&nbsp;</td>
 		<td nowrap align="right"><?php echo $app_strings['LBL_SHOW_RESULTS'] ?>&nbsp;
-		                <select id="global_search_module" name="global_search_module" onChange="displayModuleList(this);">
+		                <select id="global_search_module" name="global_search_module" onChange="displayModuleList(this);" class="small">
 			<option value="All"><?php echo $app_strings['COMBO_ALL'] ?></option>
 						<?php
 						foreach($object_array as $module => $object_name)
@@ -283,7 +283,9 @@ function getSearchModulesComboList($search_module)
 							<?php if(isPermitted($module,"index") == "yes")
 							{
 							?> 
-							<option value="<?php echo $module; ?>" <?php echo $selected; ?> ><?php echo $app_strings[$module]; ?></option>
+							<!-- vtlib customization: Use translation if available -->
+							<?php $modulelabel = $module; if($app_strings[$module]) { $modulelabel = $app_strings[$module]; } ?>
+							<option value="<?php echo $module; ?>" <?php echo $selected; ?> ><?php echo $modulelabel; ?></option>
 							<?php
 							}
 						}	

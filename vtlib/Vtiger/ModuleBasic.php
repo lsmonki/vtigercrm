@@ -1,5 +1,5 @@
 <?php
-/************************************************************************************
+/*+**********************************************************************************
  * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
@@ -13,6 +13,7 @@ include_once('vtlib/Vtiger/Field.php');
 include_once('vtlib/Vtiger/Filter.php');
 include_once('vtlib/Vtiger/Profile.php');
 include_once('vtlib/Vtiger/Menu.php');
+include_once('vtlib/Vtiger/Event.php');
 
 /**
  * Provide API to work with vtiger CRM Module
@@ -54,6 +55,23 @@ class Vtiger_ModuleBasic {
 		$this->presence = $valuemap[presence];
 		$this->ownedby = $valuemap[ownedby];
 		$this->tabsequence = $valuemap[tabsequence];
+
+		// Initialize other details too
+		$this->initialize2();
+	}
+
+	/**
+	 * Initialize more information of this instance
+	 * @access private
+	 */
+	function initialize2() {
+		global $adb;
+		$result = $adb->pquery("SELECT tablename,entityidfield FROM vtiger_entityname WHERE tabid=?", 
+			Array($this->id));
+		if($adb->num_rows($result)) {
+			$this->basetable = $adb->query_result($result, 0, 'tablename');
+			$this->basetableid=$adb->query_result($result, 0, 'entityidfield');
+		}
 	}
 
 	/**

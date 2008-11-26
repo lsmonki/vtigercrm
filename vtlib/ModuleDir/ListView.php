@@ -1,5 +1,12 @@
 <?php
-
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ************************************************************************************/
 global $app_strings, $mod_strings, $current_language, $currentModule, $theme;
 global $list_max_entries_per_page;
 
@@ -18,7 +25,8 @@ $list_buttons = Array();
 if(isPermitted($currentModule,'Delete','') == 'yes') $list_buttons['del'] = $app_strings[LBL_MASS_DELETE];
 if(isPermitted($currentModule,'Edit','') == 'yes') {
 	$list_buttons['mass_edit'] = $app_strings[LBL_MASS_EDIT];
-	$list_buttons['c_owner'] = $app_strings[LBL_CHANGE_OWNER];	
+	// Mass Edit could be used to change the owner as well!
+	//$list_buttons['c_owner'] = $app_strings[LBL_CHANGE_OWNER];	
 }
 
 $focus = new $currentModule();

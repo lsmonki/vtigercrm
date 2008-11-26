@@ -59,10 +59,14 @@
         		<td  style="padding-left:5px;" class="big">{$CMOD.LBL_SELECT_SCREEN}&nbsp; 
 			<select name="Screen" class="detailedViewTextBox" style="width:30%;"  onChange="changemodules(this)">
 			{foreach item=module from=$FIELD_INFO}
+				{assign var="MODULELABEL" value=$module}
+				{if $APP.$module neq ''}
+					{assign var="MODULELABEL" value=$APP.$module}
+				{/if}
 				{if $module == $DEF_MODULE}
-					<option selected value='{$module}'>{$APP.$module}</option>
+					<option selected value='{$module}'>{$MODULELABEL}</option>
 				{else}		
-					<option value='{$module}' >{$APP.$module}</option>
+					<option value='{$module}' >{$MODULELABEL}</option>
 				{/if}
 			{/foreach}
 			</select>
@@ -71,6 +75,10 @@
                 </tr>
 		</table>
 		{foreach key=module item=info name=allmodules from=$FIELD_LISTS}
+		{assign var="MODULELABEL" value=$module}
+		{if $APP.$module neq ''}
+			{assign var="MODULELABEL" value=$APP.$module}
+		{/if}
 		{if $module eq $DEF_MODULE}
 			<div id="{$module}_fields" style="display:block">	
 		{else}
@@ -79,7 +87,7 @@
 	 	<table cellspacing=0 cellpadding=5 width=100% class="listTable small">
        		<tr>
 			<td colspan="2" class="listRow" valign="top" nowrap>
-			<b>{$CMOD.LBL_FIELDS_AVLBL} {$APP.$module}</b>
+			<b>{$CMOD.LBL_FIELDS_AVLBL} {$MODULELABEL}</b>
 			</td>
 		</tr>
 		<tr>

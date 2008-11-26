@@ -1,5 +1,12 @@
 <?php
-
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ************************************************************************************/
 require_once('data/CRMEntity.php');
 require_once('data/Tracker.php');
 
@@ -133,7 +140,7 @@ class ModuleClass extends CRMEntity {
 		if(!empty($this->groupTable)) {
 			$query .= "
 				LEFT JOIN " . $this->groupTable[0] . " ON " . $this->groupTable[0].'.'.$this->groupTable[1] . " = $this->table_name.$this->table_index
-				LEFT JOIN vtiger_groups ON vtiger_groups.groupname = " . $this->groupTable[0] . '.' . $this->groupTable[1];
+				LEFT JOIN vtiger_groups ON vtiger_groups.groupname = " . $this->groupTable[0] . '.groupname';
 		}
 		$query .= "	WHERE vtiger_crmentity.deleted = 0";
 		$query .= $this->getListViewSecurityParameter($module);
@@ -219,7 +226,7 @@ class ModuleClass extends CRMEntity {
 
 		$query .= " 
 			LEFT JOIN " . $this->groupTable[0] . " ON " . $this->groupTable[0].'.'.$this->groupTable[1] . " = $this->table_name.$this->table_index
-			LEFT JOIN vtiger_groups ON vtiger_groups.groupname = " . $this->groupTable[0] . '.' . $this->groupTable[1];
+			LEFT JOIN vtiger_groups ON vtiger_groups.groupname = " . $this->groupTable[0] . '.groupname';
 		$query .= " LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid = vtiger_users.id and vtiger_users.status='Active'";
 
 		$where_auto = " vtiger_crmentity.deleted=0";
@@ -340,7 +347,7 @@ class ModuleClass extends CRMEntity {
 			}
 		}
 		$button .= '</td>';
-		
+
 		// To make the edit or del link actions to return back to same view.
 		if($singlepane_view == 'true') $returnset = "&return_module=$this_module&return_action=DetailView&return_id=$id";
 		else $returnset = "&return_module=$this_module&return_action=CallRelatedList&return_id=$id";
@@ -398,6 +405,11 @@ class ModuleClass extends CRMEntity {
 		global $adb;
 		if(!is_array($with_crmid)) $with_crmid = Array($with_crmid);
 		foreach($with_crmid as $relcrmid) {
+			$checkpresence = $adb->pquery("SELECT crmid FROM vtiger_crmentityrel WHERE 
+				crmid = ? AND module = ? AND relcrmid = ? AND relmodule = ?", Array($crmid, $module, $relcrmid, $with_module));
+			// Relation already exists? No need to add again
+			if($checkpresence && $adb->num_rows($checkpresence)) continue;
+
 			$adb->pquery("INSERT INTO vtiger_crmentityrel(crmid, module, relcrmid, relmodule) VALUES(?,?,?,?)", 
 				Array($crmid, $module, $relcrmid, $with_module));
 		}

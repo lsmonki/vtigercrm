@@ -72,8 +72,12 @@ DIV.fixedLay {
 				</table>
 				<table cellspacing="0" cellpadding="5" class="listTable" width="100%">
 				{foreach item=module from=$DEFAULT_SHARING}	
+				  {assign var="MODULELABEL" value=$module.0}
+				  {if $APP[$module.0] neq}
+					{assign var="MODULELABEL" value=$APP[$module.0]}
+				  {/if}	
                   <tr>
-                    <td width="20%" class="colHeader small" nowrap>{$APP[$module.0]}</td>
+                    <td width="20%" class="colHeader small" nowrap>{$MODULELABEL}</td>
                     <td width="30%" class="listTableRow small" nowrap>
 			{if $module.1 neq 'Private' && $module.1 neq 'Hide Details'}
 				<img src="{$IMAGE_PATH}public.gif" align="absmiddle">
@@ -101,7 +105,11 @@ DIV.fixedLay {
 				</table>
 				<!-- Start of Module Display -->
 				{foreach  key=modulename item=details from=$MODSHARING}
-				{assign var="mod_display" value=$APP.$modulename}
+				{assign var="MODULELABEL" value=$modulename}
+				{if $APP.$modulename neq ''}
+					{assign var="MODULELABEL" value=$APP.$modulename}
+				{/if}
+				{assign var="mod_display" value=$MODULELABEL}
 				{if $mod_display eq $APP.Accounts}
 					{assign var="xx" value=$APP.Contacts}
 					{assign var="mod_display" value=$mod_display|cat:" & $xx"}

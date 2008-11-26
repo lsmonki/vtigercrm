@@ -47,7 +47,11 @@
 			<td>
 				<table border=0 cellspacing=0 cellpadding=2 width=100% class="small">
 				   <tr>
-					<td style="padding-right:20px" nowrap ><b class=big>{$APP.$MODULE}</b>{$SEARCH_CRITERIA}</td>
+					{assign var="MODULELABEL" value=$MODULE}
+					{if $APP.$MODULE neq ''}
+						{assign var="MODULELABEL" value=$APP.$MODULE}
+					{/if}
+					<td style="padding-right:20px" nowrap ><b class=big>{$MODULELABEL}</b>{$SEARCH_CRITERIA}</td>
 					<!-- Not used, may be used in future when we do the pagination and customeviews
 						<td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 						<td nowrap >

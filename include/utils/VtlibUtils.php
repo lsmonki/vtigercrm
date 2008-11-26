@@ -51,7 +51,7 @@ function vtlib_isModuleActive($module) {
 function vtlib_moduleAlwaysActive() {
 	$modules = Array (
 		'Administration', 'CustomView', 'Settings', 'Users', 'Migration', 
-		'Utilities', 'uploads', 'Import', 'com_vtiger_workflow'
+		'Utilities', 'uploads', 'Import', 'System', 'com_vtiger_workflow'
 	);
 	return $modules;
 }
@@ -79,13 +79,15 @@ function vtlib_getToggleModuleInfo() {
 
 	$modinfo = Array();
 
-	$sqlresult = $adb->query("SELECT name, presence FROM vtiger_tab WHERE name NOT IN ('Users') AND presence IN (0,1) ORDER BY name");
+	$sqlresult = $adb->query("SELECT name, presence, customized FROM vtiger_tab WHERE name NOT IN ('Users') AND presence IN (0,1) ORDER BY name");
 	$num_rows  = $adb->num_rows($sqlresult);
 	for($idx = 0; $idx < $num_rows; ++$idx) {
 		$module = $adb->query_result($sqlresult, $idx, 'name');
 		$presence=$adb->query_result($sqlresult, $idx, 'presence');
+		$customized=$adb->query_result($sqlresult, $idx, 'customized');
+		$hassettings=file_exists("modules/$module/Settings.php");
 
-		$modinfo[$module] = $presence;
+		$modinfo[$module] = Array( 'customized'=>$customized, 'presence'=>$presence, 'hassettings'=>$hassettings );
 	}
 	return $modinfo;
 }
@@ -195,7 +197,7 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'table_name' => 'vtiger_faq',
 				'table_index'=> 'id',
 			),
-			'Documents'=>
+			'Notes'=>
 			Array(
 				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_notes',

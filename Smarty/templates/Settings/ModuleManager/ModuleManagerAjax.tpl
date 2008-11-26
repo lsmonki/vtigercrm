@@ -1,37 +1,115 @@
-<table border=0 cellspacing=0 cellpadding=5 width=100% class="listRow">
+<script type="text/javascript">
+{literal}
+function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighlighttab) {
+	if($(shownode)) $(shownode).show();
+	if($(hidenode)) $(hidenode).hide();
+	if($(highlighttab)) { $(highlighttab).addClassName('dvtSelectedCell'); $(highlighttab).removeClassName('dvtUnSelectedCell'); }
+	if($(dehighlighttab)) { $(dehighlighttab).addClassName('dvtUnSelectedCell'); $(dehighlighttab).removeClassName('dvtSelectedCell'); }
+}
+{/literal}
+</script>
 
+<table class="small" width="100%" cellpadding=2 cellspacing=0 border=0>
+	<tr>
+		<td class="dvtTabCache" style="width: 10px;" nowrap>&nbsp;</td>
+		<td class="dvtSelectedCell" style="width: 20px;" align="center" nowrap id="modmgr_custom_tab" 
+			onclick="vtlib_modulemanager_toggleTab('modmgr_custom','modmgr_standard','modmgr_custom_tab','modmgr_standard_tab');">
+		{$MOD.VTLIB_LBL_MODULE_MANAGER_CUSTOMMOD}</td>
+		<td class="dvtTabCache" style="width: 10px;" nowrap>&nbsp;</td>
+		<td class="dvtUnSelectedCell" style="width: 20px;" align="center" nowrap id="modmgr_standard_tab"
+			onclick="vtlib_modulemanager_toggleTab('modmgr_standard','modmgr_custom','modmgr_standard_tab','modmgr_custom_tab');">
+		{$MOD.VTLIB_LBL_MODULE_MANAGER_STANDARDMOD}</td>
+		<td class="dvtTabCache" style="width: 10px;" nowrap>&nbsp;</td>
+	</tr>
+</table>
+
+<!-- Custom Modules -->
+<table border=0 cellspacing=0 cellpadding=3 width=100% class="listRow" id="modmgr_custom">
 <tr>
-	<td class="big tableHeading"><strong>{$MOD.VTLIB_LBL_MODULE_MANAGER_HELP}</strong></td>
-	<td class="big tableHeading" colspan=3 width=10% align="center">
+	<td class="big tableHeading">&nbsp;</td>
+	<td class="big tableHeading" colspan=3 width="10%" align="right">
 		<form style="display: inline;" action="index.php?module=Settings&action=ModuleManager&module_import=Step1&parenttab=Settings" method="POST">
 			<input type="submit" class="crmbutton small create" value='{$APP.LBL_IMPORT} {$APP.LBL_NEW}' title='{$APP.LBL_IMPORT}'>
 		</form>
 	</td>
 </tr>
-
-{foreach key=modulename item=modpresence from=$TOGGLE_MODINFO}
-{assign var="modulelabel" value=$modulename}
-{if $APP.$modulename}{assign var="modulelabel" value=$APP.$modulename}{/if}
-
 <tr>
-	<td class="cellLabel small">{$modulelabel}</td>
-	<td class="cellText small" width="15px" align=center>
-	{if $modpresence eq 0}
-		<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_disable');"><img src="{$IMAGE_PATH}enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE} {$modulelabel}" title="{$MOD.LBL_DISABLE} {$modulelabel}"></a>
-	{else}
-		<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_enable');"><img src="{$IMAGE_PATH}disabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE} {$modulelabel}" title="{$MOD.LBL_ENABLE} {$modulelabel}"></a>
-	{/if}
-	</td>
-	<td class="cellText small" width="15px" align=center>
-		{if $modulename eq 'Calendar' || $modulename eq 'Home'}
-			<img src="{$IMAGE_PATH}menuDnArrow.gif" border="0" align="absmiddle">
-		{else}
-			<a href="index.php?modules=Settings&action=ModuleManagerExport&module_export={$modulename}"><img src="{$IMAGE_PATH}webmail_uparrow.gif" border="0" align="absmiddle" alt="{$APP.LBL_EXPORT} {$modulelabel}" title="{$APP.LBL_EXPORT} {$modulelabel}"></a>
-		{/if}
-	</td>
-	<td class="cellText small" width="15px" align=center>
-		<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$modulename}&parenttab=Settings"><img src="{$IMAGE_PATH}Settings.gif" border="0" align="absmiddle" alt="{$modulelabel} {$MOD.LBL_SETTINGS}" title="{$modulelabel} {$MOD.LBL_SETTINGS}"></a>
-	</td>
 </tr>
+
+{assign var="totalCustomModules" value="0"}
+
+{foreach key=modulename item=modinfo from=$TOGGLE_MODINFO}
+{if $modinfo.customized eq true}
+	{assign var="totalCustomModules" value=$totalCustomModules+1}
+
+	{assign var="modulelabel" value=$modulename}
+	{if $APP.$modulename}{assign var="modulelabel" value=$APP.$modulename}{/if}
+	<tr>
+		<td class="cellLabel small">{$modulelabel}</td>
+		<td class="cellText small" width="15px" align=center>
+		{if $modinfo.presence eq 0}
+			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_disable');"><img src="{$IMAGE_PATH}enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE} {$modulelabel}" title="{$MOD.LBL_DISABLE} {$modulelabel}"></a>
+		{else}
+			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_enable');"><img src="{$IMAGE_PATH}disabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE} {$modulelabel}" title="{$MOD.LBL_ENABLE} {$modulelabel}"></a>
+		{/if}
+		</td>
+		<td class="cellText small" width="15px" align=center>
+			{if $modulename eq 'Calendar' || $modulename eq 'Home'}
+				<img src="{$IMAGE_PATH}menuDnArrow.gif" border="0" align="absmiddle">
+			{else}
+				<a href="index.php?modules=Settings&action=ModuleManagerExport&module_export={$modulename}"><img src="{$IMAGE_PATH}webmail_uparrow.gif" border="0" align="absmiddle" alt="{$APP.LBL_EXPORT} {$modulelabel}" title="{$APP.LBL_EXPORT} {$modulelabel}"></a>
+			{/if}
+		</td>
+		<td class="cellText small" width="15px" align=center>
+			{if $modinfo.hassettings}<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$modulename}&parenttab=Settings"><img src="{$IMAGE_PATH}Settings.gif" border="0" align="absmiddle" alt="{$modulelabel} {$MOD.LBL_SETTINGS}" title="{$modulelabel} {$MOD.LBL_SETTINGS}"></a>
+			{else}&nbsp;{/if}
+		</td>
+	</tr>
+{/if}
+{/foreach}
+{if $totalCustomModules eq 0}
+	<tr>
+		<td class="cellLabel small" colspan=4><b>{$MOD.VTLIB_LBL_MODULE_MANAGER_NOMODULES}</b></td>
+	</tr>
+{/if}
+</table>
+
+<!-- Standard modules -->
+<table border=0 cellspacing=0 cellpadding=3 width=100% class="listRow" id="modmgr_standard" style="display: none;">
+<tr>
+	<td class="big tableHeading">&nbsp;</td>
+	<td class="big tableHeading" colspan=3 width=10% align="center">&nbsp;</td>
+</tr>
+<tr>
+</tr>
+{foreach key=modulename item=modinfo from=$TOGGLE_MODINFO}
+
+{if $modinfo.customized eq false}
+	{assign var="modulelabel" value=$modulename}
+	{if $APP.$modulename}{assign var="modulelabel" value=$APP.$modulename}{/if}
+	<tr>
+		<td class="cellLabel small">{$modulelabel}</td>
+		<td class="cellText small" width="15px" align=center>
+		{if $modinfo.presence eq 0}
+			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_disable');"><img src="{$IMAGE_PATH}enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE} {$modulelabel}" title="{$MOD.LBL_DISABLE} {$modulelabel}"></a>
+		{else}
+			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_enable');"><img src="{$IMAGE_PATH}disabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE} {$modulelabel}" title="{$MOD.LBL_ENABLE} {$modulelabel}"></a>
+		{/if}
+		</td>
+		<td class="cellText small" width="15px" align=center>&nbsp;</td>
+		<!--td class="cellText small" width="15px" align=center>
+			{if $modulename eq 'Calendar' || $modulename eq 'Home'}
+				<img src="{$IMAGE_PATH}menuDnArrow.gif" border="0" align="absmiddle">
+			{else}
+				<a href="index.php?modules=Settings&action=ModuleManagerExport&module_export={$modulename}"><img src="{$IMAGE_PATH}webmail_uparrow.gif" border="0" align="absmiddle" alt="{$APP.LBL_EXPORT} {$modulelabel}" title="{$APP.LBL_EXPORT} {$modulelabel}"></a>
+			{/if}
+		</td-->
+		<td class="cellText small" width="15px" align=center>
+			{if $modinfo.hassettings}<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$modulename}&parenttab=Settings"><img src="{$IMAGE_PATH}Settings.gif" border="0" align="absmiddle" alt="{$modulelabel} {$MOD.LBL_SETTINGS}" title="{$modulelabel} {$MOD.LBL_SETTINGS}"></a>
+			{else}&nbsp;{/if}
+		</td>
+	</tr>
+{/if}
 {/foreach}
 </table>
+
