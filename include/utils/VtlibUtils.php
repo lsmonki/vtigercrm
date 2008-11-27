@@ -197,7 +197,7 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'table_name' => 'vtiger_faq',
 				'table_index'=> 'id',
 			),
-			'Notes'=>
+			'Documents'=>
 			Array(
 				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_notes',

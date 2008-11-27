@@ -75,13 +75,15 @@ else
 	{
 		$max_fieldid = $adb->getUniqueID("vtiger_field");
 		$columnName = 'cf_'.$max_fieldid;
+		$custfld_fieldid=$adb->getUniqueID("vtiger_field");
 	}
 	else
 	{
 		$max_fieldid = $_REQUEST['column'];
 		$columnName = $max_fieldid;
+		$custfld_fieldid= $_REQUEST['fieldid'];
 	}
-  
+
 	//Assigning the vtiger_table Name
 	$tableName ='';
 	if($fldmodule == 'HelpDesk')
@@ -205,24 +207,10 @@ else
 	}
 	// No Decimal Pleaces Handling
 
-        
-
-
-        
-
-        //1. add the customfield vtiger_table to the vtiger_field vtiger_table as Block4
-        //2. fetch the contents of the custom vtiger_field and show in the UI
-        
-	//retreiving the sequence
-	if($_REQUEST['fieldid'] == '')
-	{
-		$custfld_fieldid=$adb->getUniqueID("vtiger_field");
-	}
-	else
-	{
-		$custfld_fieldid= $_REQUEST['fieldid'];
-	}
-	$custfld_sequece=$adb->getUniqueId("vtiger_customfield_sequence");
+   	//1. add the customfield vtiger_table to the vtiger_field vtiger_table as Block4
+	//2. fetch the contents of the custom vtiger_field and show in the UI
+  
+	$custfld_sequece=$adb->getUniqueID("vtiger_customfield_sequence");
     	
 	$blockid ='';
         //get the blockid for this custom block
@@ -237,8 +225,8 @@ else
 		}
 		else if($_REQUEST['fieldid'] == '')
 		{
-			$query = "insert into vtiger_field values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-			$qparams = array($tabid,$custfld_fieldid,$columnName,$tableName,2,$uitype,$columnName,$fldlabel,0,0,0,100,$custfld_sequece,$blockid,1,$uichekdata,1,0,'BAS');
+			$query = "insert into vtiger_field values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			$qparams = array($tabid,$custfld_fieldid,$columnName,$tableName,2,$uitype,$columnName,$fldlabel,0,0,0,100,$custfld_sequece,$blockid,1,$uichekdata,1,0,'BAS',1);
 			$adb->pquery($query, $qparams);
 			$adb->alterTable($tableName, $columnName." ".$type, "Add_Column");
 			
