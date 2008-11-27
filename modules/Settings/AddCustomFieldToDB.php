@@ -75,7 +75,7 @@ else
 	{
 		$max_fieldid = $adb->getUniqueID("vtiger_field");
 		$columnName = 'cf_'.$max_fieldid;
-		$custfld_fieldid=$adb->getUniqueID("vtiger_field");
+		$custfld_fieldid=$max_fieldid;
 	}
 	else
 	{
