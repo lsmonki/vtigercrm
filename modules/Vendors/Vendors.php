@@ -216,5 +216,50 @@ class Vendors extends CRMEntity {
 		return $order_by;
 	}
 
+	/** Returns a list of the associated emails
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
+	*/
+	function get_emails($id)
+	{
+		global $log, $singlepane_view;
+		$log->debug("Entering get_emails(".$id.") method ...");
+		global $mod_strings;
+
+		$focus = new Emails();
+
+		$button = '';
+
+		if(isPermitted("Emails",1,"") == 'yes')
+		{
+						$button .= '<input title="New Email" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Emails\';this.form.email_directing_module.value=\'vendors\';this.form.record.value='.$id.';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_EMAIL'].'">';
+		}
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Vendors&return_action=CallRelatedList&return_id='.$id;
+
+		$log->info("Email Related List for Vendor Displayed");
+		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
+			vtiger_activity.activityid, vtiger_activity.subject,
+			vtiger_activity.activitytype, vtiger_crmentity.modifiedtime,
+			vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_activity.date_start, vtiger_seactivityrel.crmid as parent_id 
+			FROM vtiger_activity, vtiger_seactivityrel, vtiger_vendor, vtiger_users, vtiger_crmentity
+			LEFT JOIN vtiger_activitygrouprelation
+				ON vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupname=vtiger_activitygrouprelation.groupname
+			WHERE vtiger_seactivityrel.activityid = vtiger_activity.activityid
+				AND vtiger_vendor.vendorid = vtiger_seactivityrel.crmid
+				AND vtiger_users.id=vtiger_crmentity.smownerid
+				AND vtiger_crmentity.crmid = vtiger_activity.activityid
+				AND vtiger_vendor.vendorid = ".$id."
+				AND vtiger_activity.activitytype='Emails'
+				AND vtiger_crmentity.deleted = 0";
+		$log->debug("Exiting get_emails method ...");
+		return GetRelatedList('Vendors','Emails',$focus,$query,$button,$returnset);
+	}	
+
 }
 ?>

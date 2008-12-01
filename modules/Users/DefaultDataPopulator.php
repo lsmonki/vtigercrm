@@ -1883,6 +1883,7 @@ $this->db->query("insert into vtiger_entityname values(15,'Faq','vtiger_faq','qu
         $this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Vendors").",21,'get_purchase_orders',2,'Purchase Order',0)");
 
         $this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Vendors").",4,'get_contacts',3,'Contacts',0)");
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Vendors").",".getTabid("Emails").",'get_emails',4,'Emails',0)");
 
 	// Inserting Quotes Related Lists
 	
