@@ -3233,18 +3233,18 @@ function getRelatedTo($module,$list_result,$rset)
 		}
 	}
 	//added by raju to change the related to in emails inot multiple if email is for more than one contact
-        $evt_result = $adb->pquery($evt_query, $params);
-		$numrows= $adb->num_rows($evt_result);
-		
-		$parent_module = $adb->query_result($evt_result,0,'setype');
-        $parent_id = $adb->query_result($evt_result,0,'crmid');
+	$evt_result = $adb->pquery($evt_query, $params);
+	$numrows= $adb->num_rows($evt_result);
+
+	$parent_module = $adb->query_result($evt_result,0,'setype');
+ 	$parent_id = $adb->query_result($evt_result,0,'crmid');
 
 
 		
-		if ($numrows>1){
+	if ($numrows>1){
 		$parent_module ='Multiple';
 		$parent_name=$app_strings['LBL_MULTIPLE'];
-        }
+	}
         //Raju -- Ends
 	if($module == 'HelpDesk' && ($parent_module == 'Accounts' || $parent_module == 'Contacts'))
         {

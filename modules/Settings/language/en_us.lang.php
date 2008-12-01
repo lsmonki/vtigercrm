@@ -1060,6 +1060,13 @@ $mod_strings = Array(
 'LBL_FOLDERS'=>'Folders',
 'LBL_UNSELECT'=>'Unselect',
 'LBL_MATCH'=>'Match',
+'LBL_SCANNING'=>'Scanning',
+'LBL_LOOKFOR'=>'Look for',
+'LBL_UNREAD'=>'Unread',
+'LBL_READ'=>'Read',
+'LBL_AFTER_SCAN'=>'After scan',
+'LBL_MESSAGES_FROM_LASTSCAN'=>'Messages from lastscan',
+'LBL_MARK_MESSAGE_AS'=>'Mark message as',
 
 //Added for the workflow module
 'LBL_LIST_WORKFLOWS'=>'List Workflows',

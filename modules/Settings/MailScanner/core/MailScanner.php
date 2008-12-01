@@ -85,6 +85,11 @@ class Vtiger_MailScanner {
 				$this->log("\nIgnoring Folder: $lookAtFolder\n");
 				continue; 
 			}
+			// If a new folder has been added we should avoid scanning it
+			if(!isset($folderinfoList[$lookAtFolder])) {
+				$this->log("\nSkipping New Folder: $lookAtFolder\n");
+				continue;
+			}
 
 			// Search for mail in the folder
 			$mailsearch = $mailbox->search($lookAtFolder);
@@ -117,6 +122,7 @@ class Vtiger_MailScanner {
 				}
 				// Mark the email message as scanned
 				$this->markMessageScanned($mailrecord, $crmid);
+				$mailbox->markMessage($messageid);
 
 				/** Free the resources consumed. */
 				unset($mailrecord);
@@ -268,14 +274,14 @@ class Vtiger_MailScanner {
 
 		$checkTicketId = $this->__toInteger($subjectOrId);
 		if(!$checkTicketId) {
-			$ticketres = $adb->pquery("SELECT ticketid FROM vtiger_troubletickets WHERE title = ?", Array("%$subjectOrId%"));
+			$ticketres = $adb->pquery("SELECT ticketid FROM vtiger_troubletickets WHERE title = ?", Array($subjectOrId));
 			if($adb->num_rows($ticketres)) $checkTicketId = $adb->query_result($ticketres, 0, 'ticketid');
 		}
 		if(!$checkTicketId) return false;
 
 		if($this->_cachedTicketIds[$checkTicketId]) {
 			$this->log("Reusing Cached Ticket Id for: $subjectOrId");
-			return $this->_cachedTicketIds[$subjectOrId];
+			return $this->_cachedTicketIds[$checkTicketId];
 		}
 		
 		$ticketid = false;
@@ -283,7 +289,7 @@ class Vtiger_MailScanner {
 			$crmres = $adb->pquery("SELECT setype, deleted FROM vtiger_crmentity WHERE crmid=?", Array($checkTicketId));
 			if($adb->num_rows($crmres)) {
 				if($adb->query_result($crmres, 0, 'setype') == 'HelpDesk' &&
-					$adb->query_result($crmres, 0, 'deleted') == 0) $ticketid = $checkTicketId;
+					$adb->query_result($crmres, 0, 'deleted') == '0') $ticketid = $checkTicketId;
 			}
 		}
 		if($ticketid) {
@@ -341,30 +347,44 @@ class Vtiger_MailScanner {
 		}
 		return $contact_focus;
 	}
+
+	/**
+	 * Lookup Contact or Account based on from email and with respect to given CRMID
+	 */
+	function LookupContactOrAccount($fromemail, $checkWithId=false) {
+		$recordid = $this->LookupContact($fromemail);
+		if($checkWithId && $recordid != $checkWithId) {
+			$recordid = $this->LookupAccount($fromemail);
+			if($checkWithId && $recordid != $checkWithId) $recordid = false;
+		}
+		return $recordid;
+	}
+
 	/**
 	 * Get Ticket record information based on subject or id.
 	 */
-	function GetTicketRecord($subjectOrId, $parentid=false) {
+	function GetTicketRecord($subjectOrId, $fromemail=false) {
 		require_once('modules/HelpDesk/HelpDesk.php');
 		$ticketid = $this->LookupTicket($subjectOrId);
 		$ticket_focus = false;
 		if($ticketid) {
 			if($this->_cachedTickets[$ticketid]) {
+				$ticket_focus = $this->_cachedTickets[$ticketid];
 				// Check the parentid association if specified.
-				if($parentid && $parentid != $ticket_focus['parent_id']) {
+				if($fromemail && !$this->LookupContactOrAccount($fromemail, $ticket_focus->column_fields[parent_id])) {
 					$ticket_focus = false;
 				}
-				if($ticket_focus) 
+				if($ticket_focus) {
 					$this->log("Reusing Cached Ticket [" . $ticket_focus->column_fields[ticket_title] ."]");
+				}
 			} else {
 				$ticket_focus = new HelpDesk();
 				$ticket_focus->retrieve_entity_info($ticketid, 'HelpDesk');
 				$ticket_focus->id = $ticketid;
 				// Check the parentid association if specified.
-				if($parentid && $parentid != $ticket_focus->column_fields[parent_id]) {
+				if($fromemail && !$this->LookupContactOrAccount($fromemail, $ticket_focus->column_fields[parent_id])) {
 					$ticket_focus = false;
 				}
-
 				if($ticket_focus) {
 					$this->log("Caching Ticket [" . $ticket_focus->column_fields[ticket_title] . "]");
 					$this->_cachedTickets[$ticketid] = $ticket_focus;

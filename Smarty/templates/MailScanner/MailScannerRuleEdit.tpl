@@ -87,8 +87,8 @@
 									>{$MOD.LBL_BEGINS} {$MOD.LBL_WITH}</option>
 									<option value='Ends With'   {if $SCANNERRULE->subjectop eq 'Ends With'}selected=true{/if}
 									>{$MOD.LBL_ENDS} {$MOD.LBL_WITH}</option>
-									<!--option value='Regex'       {if $SCANNERRULE->subjectop eq 'Regex'}selected=true{/if}
-									>{$MOD.LBL_REGEX}</option--> 
+									<option value='Regex'       {if $SCANNERRULE->subjectop eq 'Regex'}selected=true{/if}
+									>{$MOD.LBL_REGEX}</option> 
 								</select>
 							</td>
 							<td width="70%">
@@ -151,8 +151,8 @@
 									{* <option value="">-- None --</option> *}{* EMPTY ACTION NOT SUPPORTED *}
 									<option value="CREATE,HelpDesk,FROM" {if $RULEACTIONTEXT eq 'CREATE,HelpDesk,FROM'}selected=true{/if}
 									>{$MOD.LBL_CREATE} {$MOD.LBL_TICKET}</option>
-									<!--option value="UPDATE,HelpDesk,SUBJECT" {if $RULEACTIONTEXT eq 'UPDATE,HelpDesk,SUBJECT'}selected=true{/if}
-									>{$MOD.LBL_UPDATE} {$MOD.LBL_TICKET}</option-->
+									<option value="UPDATE,HelpDesk,SUBJECT" {if $RULEACTIONTEXT eq 'UPDATE,HelpDesk,SUBJECT'}selected=true{/if}
+									>{$MOD.LBL_UPDATE} {$MOD.LBL_TICKET}</option>
 									<option value="LINK,Contacts,FROM" {if $RULEACTIONTEXT eq 'LINK,Contacts,FROM'}selected=true{/if}
 									>{$MOD.LBL_ADD} {$MOD.LBL_TO_SMALL} {$MOD.LBL_CONTACT} [{$MOD.LBL_FROM_CAPS}]</option>
 									<option value="LINK,Contacts,TO" {if $RULEACTIONTEXT eq 'LINK,Contacts,TO'}selected=true{/if}
@@ -195,3 +195,8 @@
 </form>
 </table>
 
+</tr>
+</table>
+
+</tr>
+</table>

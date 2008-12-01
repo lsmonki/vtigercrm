@@ -32,6 +32,11 @@ class Vtiger_MailScannerInfo {
 	var $sslmethod = false;
 	// last successful connection url to use
 	var $connecturl= false;
+	// search for type
+	var $searchfor = false;
+	// post scan mark record as
+	var $markas = false;
+
 	// is the scannered enabled?
 	var $isvalid   = false;
 
@@ -77,6 +82,8 @@ class Vtiger_MailScannerInfo {
 			$this->ssltype    = $adb->query_result($result, 0, 'ssltype');
 			$this->sslmethod  = $adb->query_result($result, 0, 'sslmethod');
 			$this->connecturl = $adb->query_result($result, 0, 'connecturl');
+			$this->searchfor  = $adb->query_result($result, 0, 'searchfor');
+			$this->markas     = $adb->query_result($result, 0, 'markas');
 			$this->isvalid    = $adb->query_result($result, 0, 'isvalid');
 
 			$this->initializeLastscan();
@@ -166,6 +173,23 @@ class Vtiger_MailScannerInfo {
 	}
 
 	/**
+	 * Update the folder information with given folder names
+	 */
+	function updateFolderInfo($foldernames) {
+		if($this->scannerid && !empty($foldernames)) {
+			global $adb;
+			$qmarks = Array();
+			foreach($foldernames as $foldername) {
+				$qmarks[] = '?';
+				$this->updateLastscan($foldername);
+			}
+			// Delete the folder that is no longer present
+			$adb->pquery("DELETE FROM vtiger_mailscanner_folders WHERE scannerid=? AND foldername NOT IN
+				(". implode(',', $qmarks) . ")", Array($this->scannerid, $foldernames));
+		}
+	}
+
+	/**
 	 * Enable only given folders for scanning
 	 */
 	function enableFoldersForScan($folderinfo) {
@@ -206,7 +230,8 @@ class Vtiger_MailScannerInfo {
 	 */
 	function getAsMap() {
 		$infomap = Array();
-		$keys = Array('scannerid', 'scannername', 'server', 'protocol', 'username', 'password', 'ssltype', 'sslmethod', 'connecturl', 'isvalid', 'rules');
+		$keys = Array('scannerid', 'scannername', 'server', 'protocol', 'username', 'password', 'ssltype', 
+			'sslmethod', 'connecturl', 'searchfor', 'markas', 'isvalid', 'rules');
 		foreach($keys as $key) {
 			$infomap[$key] = $this->$key; 
 		}
@@ -217,7 +242,7 @@ class Vtiger_MailScannerInfo {
 	 * Compare this instance with give instance
 	 */
 	function compare($otherInstance) {
-		$checkkeys = Array('server', 'scannername', 'protocol', 'username', 'password', 'ssltype', 'sslmethod');
+		$checkkeys = Array('server', 'scannername', 'protocol', 'username', 'password', 'ssltype', 'sslmethod', 'searchfor', 'markas',);
 		foreach($checkkeys as $key) { 
 			if($this->$key != $otherInstance->$key) return false;
 		}
@@ -245,6 +270,8 @@ class Vtiger_MailScannerInfo {
 		$this->ssltype   = $otherInstance->ssltype;
 		$this->sslmethod = $otherInstance->sslmethod;
 		$this->connecturl= $otherInstance->connecturl;
+		$this->searchfor = $otherInstance->searchfor;
+		$this->markas    = $otherInstance->markas;
 		$this->isvalid   = $otherInstance->isvalid;
 
 		$useisvalid = ($this->isvalid)? 1 : 0;
@@ -254,13 +281,14 @@ class Vtiger_MailScannerInfo {
 		global $adb;
 		if($this->scannerid) { // This record exists in the database
 			$adb->pquery("UPDATE vtiger_mailscanner SET scannername=?,server=?,protocol=?,username=?,password=?,ssltype=?,
-				sslmethod=?,connecturl=?,isvalid=? WHERE scannerid=?", 
+				sslmethod=?,connecturl=?,searchfor=?,markas=?,isvalid=? WHERE scannerid=?", 
 				Array($this->scannername,$this->server,$this->protocol, $this->username, $usepassword, $this->ssltype, 
-				$this->sslmethod, $this->connecturl,$useisvalid, $this->scannerid));
+				$this->sslmethod, $this->connecturl,$this->searchfor, $this->markas,$useisvalid, $this->scannerid));
 		} else {
-			$adb->pquery("INSERT INTO vtiger_mailscanner(scannername,server,protocol,username,password,ssltype,sslmethod,connecturl,isvalid)
-				VALUE(?,?,?,?,?,?,?,?,?)", Array($this->scannername,$this->server, $this->protocol, $this->username, $usepassword, 
-				$this->ssltype, $this->sslmethod, $this->connecturl,$useisvalid));
+			$adb->pquery("INSERT INTO vtiger_mailscanner(scannername,server,protocol,username,password,ssltype,
+				sslmethod,connecturl,searchfor,markas,isvalid) VALUES(?,?,?,?,?,?,?,?,?,?,?)", 
+				Array($this->scannername,$this->server, $this->protocol, $this->username, $usepassword, 
+				$this->ssltype, $this->sslmethod, $this->connecturl, $this->searchfor, $this->markas, $useisvalid));
 			$this->scannerid = $adb->database->Insert_ID();
 		}
 

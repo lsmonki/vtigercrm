@@ -24,6 +24,8 @@ class Vtiger_MailBox {
 	var $_imapurl = false;
 	// IMAP folder currently opened
 	var $_imapfolder = false;
+	// Should we need to expunge while closing imap connection?
+	var $_needExpunge = false;
 
 	// Mailbox crendential information (as a map)
 	var $_mailboxsettings = false;
@@ -127,6 +129,10 @@ class Vtiger_MailBox {
 		$this->log("Trying to open folder using $connectString$folder");
 		$imap = @imap_open("$connectString$folder", $mailboxsettings[username], $mailboxsettings[password]);
 		if($imap) {
+
+			// Perform cleanup task before re-initializing the connection
+			$this->close(); 
+
 			$this->_imapfolder = $folder;
 			$this->_imap = $imap;
 			$isconnected = true;
@@ -143,9 +149,19 @@ class Vtiger_MailBox {
 	function search($folder, $searchQuery=false) {
 		if(!$searchQuery) {
 			$lastscanOn = $this->_scannerinfo->getLastscan($folder);
-			$searchQuery = $lastscanOn? "SINCE $lastscanOn" : "BEFORE ". date('d-M-Y');
+			$searchfor = $this->_scannerinfo->searchfor;
+
+			if($searchfor && $lastscanOn) {				
+				if($searchfor == 'ALL') {
+					$searchQuery = "SINCE $lastscanOn";
+				} else {
+					$searchQuery = "$useSearchFor SINCE $lastscanOn";
+				}
+			} else {
+				$searchQuery = $lastscanOn? "SINCE $lastscanOn" : "BEFORE ". date('d-M-Y');
+			}
 		}
-		if($this->open($folder, $searchQuery)) {
+		if($this->open($folder)) {
 			$this->log("Searching mailbox[$folder] using query: $searchQuery");
 			return imap_search($this->_imap, $searchQuery);
 		}
@@ -176,12 +192,30 @@ class Vtiger_MailBox {
 	function getMessage($messageid, $fetchbody=true) {
 		return new Vtiger_MailRecord($this->_imap, $messageid, $fetchbody);
 	}
+
+	/**
+	 * Mark the message in the mailbox.
+	 */
+	function markMessage($messageid) {
+		$markas = $this->_scannerinfo->_markas;
+		if($this->_imap && $markas) {
+			if(strtoupper($markas) == 'SEEN') $markas = "\\Seen";
+			imap_setflag_full($this->_imap, '1', $markas);
+		}
+	}
 	
 	/**
 	 * Close the open IMAP connection.
 	 */
 	function close() {
-		if($this->_imap) { imap_close($this->_imap); $this->_imap = false; }
+		if($this->_needExpunge) {
+			imap_expunge($this->_imap);
+		}
+		$this->_needExpunge = false;
+		if($this->_imap) { 
+			imap_close($this->_imap); 
+			$this->_imap = false; 
+		}
 	}
 }
 

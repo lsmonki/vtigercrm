@@ -133,7 +133,7 @@ class Vtiger_MailScannerAction {
 			$returnid = $this->__LinkToRecord($mailscanner, $mailrecord);
 		} else if($this->actiontype == 'UPDATE') {
 			if($this->module == 'HelpDesk') {
-				$this->__UpdateTicket($mailscanner, $mailrecord, 
+				$returnid = $this->__UpdateTicket($mailscanner, $mailrecord, 
 					$mailscannerrule->hasRegexMatch($matchresult));
 			}
 		}
@@ -156,23 +156,23 @@ class Vtiger_MailScannerAction {
 
 			// Get the ticket record that was created by SENDER earlier
 			$fromemail = $mailrecord->_from[0];
-			
-			$relatedid = $mailscanner->LookupContact($fromemail);
-			if(!$relatedid) $relatedid = $mailscanner->LookupAccount($fromemail);
 
-			$linkfocus = $mailscanner->GetTicketRecord($usesubject, $relatedid);
-
+			$linkfocus = $mailscanner->GetTicketRecord($usesubject, $fromemail);
+			$relatedid = $linkfocus->column_fields[parent_id];
+ 
 			// If matching ticket is found, update comment, attach email
 			if($linkfocus) {
 				$timestamp = $adb->formatDate(date('YmdHis'), true);
 				$adb->pquery("INSERT INTO vtiger_ticketcomments(ticketid, comments, ownerid, ownertype, createdtime) VALUES(?,?,?,?,?)",
 					Array($linkfocus->id, $mailrecord->getBodyText(), $relatedid, 'customer', $timestamp));
+				// Set the ticket status to Open if its Closed
+				$adb->pquery("UPDATE vtiger_troubletickets set status=? WHERE ticketid=? AND status='Closed'", Array('Open', $linkfocus->id));
 
 				$returnid = $this->__CreateNewEmail($mailrecord, $this->module, $linkfocus);
 
 			} else {
-				// If matching ticket was not found, create ticket
-				$returnid = $this->__CreateTicket($mailscanner, $mailrecord);
+				// TODO If matching ticket was not found, create ticket?
+				// $returnid = $this->__CreateTicket($mailscanner, $mailrecord);
 			}
 		}
 		return $returnid;

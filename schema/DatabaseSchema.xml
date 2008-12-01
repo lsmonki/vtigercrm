@@ -6769,6 +6769,8 @@
 		<field name="ssltype" type="C" size="10"></field>
 		<field name="sslmethod" type="C" size="30"></field>
 		<field name="connecturl" type="C" size="255"></field>
+		<field name="searchfor" type="C" size="10"></field>
+		<field name="markas" type="C" size="10"></field>
 		<field name="isvalid" type="I" size="1"></field>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>

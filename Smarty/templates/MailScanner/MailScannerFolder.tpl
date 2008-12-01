@@ -66,6 +66,7 @@ function vtmailscanner_folders_resetAll_To(checktype) {
 				<tr>
 					<td class="big" width="70%"><strong>{$MOD.LBL_MAILBOX} {$MOD.LBL_FOLDER}</strong></td>
 					<td align="right">
+						<input type="submit" class="crmbutton small create" onclick="this.form.mode.value='folderupdate'" value="{$MOD.LBL_UPDATE}"> 
 						<a href='javascript:void(0);' onclick="vtmailscanner_folders_resetAll_To(true);">{$MOD.LBL_SELECT} {$MOD.LBL_ALL}</a> |
 						<a href='javascript:void(0);' onclick="vtmailscanner_folders_resetAll_To(false);">{$MOD.LBL_UNSELECT} {$MOD.LBL_ALL}</a>
 					</td>
@@ -125,3 +126,8 @@ function vtmailscanner_folders_resetAll_To(checktype) {
 </form>
 </table>
 
+</tr>
+</table>
+
+</tr>
+</table>

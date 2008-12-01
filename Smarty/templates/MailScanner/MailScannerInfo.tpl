@@ -125,7 +125,35 @@ function performScanNow(app_key, scannername) {
 				    </td>
             	</tr>
 				</table>	
-				
+				{if $SCANNERINFO.isvalid}
+					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
+					<tr>
+					<td class="big" width="70%"><strong>{$MOD.LBL_SCANNING} {$MOD.LBL_INFORMATION}</strong></td>
+					<td width="30%" nowrap align="right">&nbsp;</td>
+					</tr>
+					</table>
+
+					<table border=0 cellspacing=0 cellpadding=0 width=100% class="listRow">
+					<tr>
+	        	 	    <td class="small" valign=top ><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+							<tr>
+                    	        <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_LOOKFOR}</strong></td>
+                        	    <td width="80%" class="small cellText">
+									{if $SCANNERINFO.searchfor eq 'ALL'}{$MOD.LBL_ALL}
+									{elseif $SCANNERINFO.searchfor eq 'UNSEEN'}{$MOD.LBL_UNREAD}{/if}
+									{$MOD.LBL_MESSAGES_FROM_LASTSCAN}
+								</td>
+                        	</tr>
+							<tr>
+                           		<td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_AFTER_SCAN}</strong></td>
+                           		<td width="80%" class="small cellText">
+									{if $SCANNERINFO.markas eq 'SEEN'}{$MOD.LBL_MARK_MESSAGE_AS} {$MOD.LBL_READ}{/if}
+								</td>
+    	                    </tr>
+						</td>
+					</tr>
+					</table>
+				{/if}
 				</td>
 				</tr>
 				</table>
@@ -146,3 +174,8 @@ function performScanNow(app_key, scannername) {
 </form>
 </table>
 
+</tr>
+</table>
+
+</tr>
+</table>

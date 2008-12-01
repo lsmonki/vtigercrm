@@ -18,10 +18,19 @@ if($_REQUEST['app_key'] != $application_unique_key) {
 
 ?>
 
+=====================================================================================================================================
 
 2. Create <ServiceName>Cron.sh file which should have the following:
 
-wget "http://localhost:APACHEPORT/vtigercron.php?service=<ServiceName>&app_key=YOUR_APP_KEY_HERE&<param>=<value>" -O /dev/null
+#wget "http://localhost:APACHEPORT/vtigercron.php?service=<ServiceName>&app_key=YOUR_APP_KEY_HERE&<param>=<value>" -O /dev/null
+export VTIGERCRM_ROOTDIR=`pwd`/..
+export USE_PHP=php
+
+cd $VTIGERCRM_ROOTDIR
+
+$USE_PHP -f vtigercron.sh service="MailScanner" app_key="YOUR_APP_KEY_HERE"
+
+=====================================================================================================================================
 
 3. Create <ServiceName>Cron.bat file which should have the following:
 
@@ -33,4 +42,4 @@ set PHP_EXE="C:\Program Files\vtigercrm5\php\php.exe"
 cd /D %VTIGERCRM_ROOTDIR%
 
 %PHP_EXE% -f vtigercron.php service="<ServiceName>" app_key="YOUR_APP_KEY_HERE" <param>="<value>"
-
+=====================================================================================================================================

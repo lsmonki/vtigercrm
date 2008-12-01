@@ -37,6 +37,8 @@ if($mode == 'scannow') {
 	include('modules/Settings/MailScanner/MailScannerFolder.php');
 } else if($mode == 'foldersave') {
 	include('modules/Settings/MailScanner/MailScannerFolderSave.php');
+} else if($mode == 'folderupdate') {
+	include('modules/Settings/MailScanner/MailScannerFolderUpdate.php');
 } else {
 	include('modules/Settings/MailScanner/MailScannerInfo.php');
 }

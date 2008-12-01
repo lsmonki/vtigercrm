@@ -150,6 +150,39 @@
                         </tr>
 				    </td>
             	</tr>
+
+				<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
+				<tr>
+				<td class="big" width="70%"><strong>{$MOD.LBL_SCANNING} {$MOD.LBL_INFORMATION}</strong></td>
+				<td width="30%" nowrap align="right">&nbsp;</td>
+				</tr>
+				</table>
+
+				<table border=0 cellspacing=0 cellpadding=0 width=100% class="listRow">
+				<tr>
+	         	    <td class="small" valign=top ><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+						<tr>
+                            <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_LOOKFOR}</strong></td>
+                            <td width="80%" class="small cellText"> 
+							<select name="mailboxinfo_searchfor" class="small">
+								<option value="ALL" {if $SCANNERINFO.searchfor eq 'ALL'}selected=true{/if}>{$MOD.LBL_ALL}</option>
+								<option value="UNSEEN" {if $SCANNERINFO.searchfor eq 'UNSEEN'}selected=true{/if}>{$MOD.LBL_UNREAD}</option> 
+							</select> {$MOD.LBL_MESSAGES_FROM_LASTSCAN}
+							</td>
+                        </tr>
+						<tr>
+                            <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_AFTER_SCAN}</strong></td>
+                            <td width="80%" class="small cellText">{$MOD.LBL_MARK_MESSAGE_AS}
+							<select name="mailboxinfo_markas" class="small">
+								<option value=""></option>
+								<option value="SEEN" {if $SCANNERINFO.markas eq 'SEEN'}selected=true{/if} >{$MOD.LBL_READ}</option> 
+							</select>	
+							</td>
+                        </tr>
+					</td>
+				</tr>
+				</table>
+
 				<tr>
 					<td colspan=2 nowrap align="center">
 						<input type="submit" class="crmbutton small save" value="{$APP.LBL_SAVE_LABEL}" />
@@ -178,3 +211,8 @@
 </form>
 </table>
 
+</tr>
+</table>
+
+</tr>
+</table>

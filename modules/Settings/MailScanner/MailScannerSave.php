@@ -21,6 +21,8 @@ $newscannerinfo->password   = $_REQUEST['mailboxinfo_password'];
 $newscannerinfo->ssltype    = $_REQUEST['mailboxinfo_ssltype'];
 $newscannerinfo->sslmethod  = $_REQUEST['mailboxinfo_sslmethod'];
 $newscannerinfo->server     = $_REQUEST['mailboxinfo_server'];
+$newscannerinfo->searchfor  = $_REQUEST['mailboxinfo_searchfor'];
+$newscannerinfo->markas     = $_REQUEST['mailboxinfo_markas'];
 $newscannerinfo->isvalid    =($_REQUEST['mailboxinfo_enable'] == 'true')? true : false;
 
 $isconnected = false;
