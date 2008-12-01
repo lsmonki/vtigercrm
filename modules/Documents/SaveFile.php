@@ -232,9 +232,10 @@ if(isset($_REQUEST['act']) && $_REQUEST['act'] == 'checkFileIntegrityDetailView'
 		$folderid = @$adb->query_result($result,0,"folderid");
 		$name = @$adb->query_result($result,0,"filename");
 		$filepath = @$adb->query_result($result,0,"filepath");
-		if($download_type == 'I')
+		if($download_type == 'I'){
 			$saved_filename = $fileid."_".$folderid."_".$name;
-		else
+			if(!file($filepath.$saved_filename))$saved_filename = $fileid."_".$name;
+		}else
 			$saved_filename = '';
 		if(!fopen($filepath.$saved_filename, "r"))
 		{

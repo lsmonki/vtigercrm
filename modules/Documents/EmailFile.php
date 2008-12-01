@@ -15,13 +15,16 @@ global $adb;
 
 $fileid = $_REQUEST['record'];
 
-$dbQuery = "select filename,folderid from vtiger_notes where notesid= ?";
+$dbQuery = "select filename,folderid,filepath from vtiger_notes where notesid= ?";
 $result = $adb->pquery($dbQuery,array($fileid));
 
 $folderid = $adb->query_result($result,0,'folderid');
+$filepath = $adb->query_result($result,0,'filepath');
 $filename = $adb->query_result($result,0,'filename');
 
-$fileinattachments = $root_directory.'/storage/attachments/'.$fileid.'_'.$folderid.'_'.$filename;
+$fileinattachments = $root_directory.$filepath.$fileid.'_'.$folderid.'_'.$filename;
+if(!file($fileinattachments))$fileinattachments = $root_directory.$filepath.$fileid."_".$filename;
+
 $newfileinstorage = $root_directory.'/storage/'.$filename;
 
 copy($fileinattachments,$newfileinstorage);

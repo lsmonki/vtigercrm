@@ -260,17 +260,21 @@ function ChangeCVColumnlist($paramArray){
 /* Reminder Popup support for Calendar Events */
 ExecuteQuery("CREATE TABLE vtiger_activity_reminder_popup(reminderid int(19) NOT NULL AUTO_INCREMENT,semodule varchar(100) NOT NULL,recordid varchar(100) NOT NULL,date_start DATE,time_start varchar(100) NOT NULL,status int(2) NOT NULL, PRIMARY KEY(reminderid))");
 ExecuteQuery("CREATE TABLE vtiger_reminder_interval(reminder_intervalid int(19) NOT NULL AUTO_INCREMENT,reminder_interval varchar(200) NOT NULL,sortorderid int(19) NOT NULL,presence int(1) NOT NULL, PRIMARY KEY(reminder_intervalid))");
-ExecuteQuery("alter table vtiger_users add column reminder_interval varchar(100)");
+ExecuteQuery("alter table vtiger_users add column reminder_interval varchar(100) NOT NULL");
 ExecuteQuery("alter table vtiger_users add column reminder_next_time varchar(100)");
-$adb->query("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'None',0,1)");
-$adb->query("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'1 Minute',1,1)");
-$adb->query("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'5 Minutes',2,1)");
-$adb->query("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'15 Minutes',3,1)");
-$adb->query("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'30 Minutes',4,1)");
-$adb->query("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'45 Minutes',5,1)");
-$adb->query("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'1 Hour',6,1)");
-$adb->query("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'1 Day',7,1)");
-$adb->query("UPDATE vtiger_users SET reminder_interval='1 Minute' AND reminder_next_time='".date('Y-m-d H:i')."'");
+
+ExecuteQuery("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'None',0,1)");
+ExecuteQuery("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'1 Minute',1,1)");
+ExecuteQuery("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'5 Minutes',2,1)");
+ExecuteQuery("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'15 Minutes',3,1)");
+ExecuteQuery("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'30 Minutes',4,1)");
+ExecuteQuery("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'45 Minutes',5,1)");
+ExecuteQuery("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'1 Hour',6,1)");
+ExecuteQuery("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("vtiger_reminder_interval").",'1 Day',7,1)");
+ExecuteQuery("UPDATE vtiger_users SET reminder_interval='5 Minutes', reminder_next_time='".date('Y-m-d H:i')."'");
+$user_adv_block_id = $adb->getUniqueID('vtiger_blocks');
+ExecuteQuery("insert into vtiger_blocks values (".$user_adv_block_id.",29,'LBL_USER_ADV_OPTIONS',5,0,0,0,0,0)"); //Added a New Block User Image Info in Users Module
+ExecuteQuery("insert into vtiger_field values (29,".$adb->getUniqueID("vtiger_field").",'reminder_interval','vtiger_users',1,'15','reminder_interval','Reminder Interval',1,0,0,100,1,$user_adv_block_id,1,'V~O',1,null,'BAS')");
 
 /* For Duplicate Records Merging feature */
 ExecuteQuery("INSERT INTO vtiger_actionmapping values(10,'DuplicatesHandling',0)");
@@ -390,6 +394,9 @@ ExecuteQuery("create table vtiger_attachmentsfolder ( folderid int(19) NOT NULL,
 
 ExecuteQuery("insert into vtiger_attachmentsfolder values (1,'Existing Notes','Contains all Notes migrated from the earlier version',1,1)");
 
+ExecuteQuery("alter table vtiger_senotesrel drop foreign key fk_2_vtiger_senotesrel ");
+ExecuteQuery("alter table vtiger_senotesrel add constraint FOREIGN KEY fk_2_vtiger_senotesrel (notesid) REFERENCES vtiger_notes (notesid) ON UPDATE CASCADE ON DELETE CASCADE");
+
 $notesQuery = $adb->query("select notesid from vtiger_notes");
 $noofnotes = $adb->num_rows($notesQuery);
 if($noofnotes > 0)
@@ -400,14 +407,29 @@ if($noofnotes > 0)
         ExecuteQuery("update vtiger_notes set folderid=1 where notesid = ".$notesid);
     }
 }
+$attachmentsquery = $adb->query("select * from vtiger_attachments");
+$noofattachments = $adb->num_rows($attachmentsquery);
+if($noofattachments > 0)
+{
+    for($k=0;$k<$noofattachments;$k++)
+    {
+        $attachmentid = $adb->query_result($attachmentsquery,$k,'attachmentsid');
+        $filename = $adb->query_result($attachmentsquery,$k,'name');
+        $filepath = $adb->query_result($attachmentsquery,$k,'path');
+        $filetype = $adb->query_result($attachmentsquery,$k,'type');
+        $filesize = filesize($filepath.$attachmentid."_".$filename);
+        ExecuteQuery("update vtiger_notes set filestatus=1,filelocationtype='I',filedownloadcount=0,fileversion='',filetype='".$filetype."',filesize='".$filesize."',filename='".$filename."',filepath='".$filepath."',notesid='".$attachmentid."' where notesid = ".($attachmentid-1));
+    }
+}
+
 
 $fieldid = Array();
-for($i=0;$i<8;$i++)
+for($i=0;$i<7;$i++)
 {
 	$fieldid[$i] = $adb->getUniqueID("vtiger_field");
 }
 
-ExecuteQuery("insert into vtiger_blocks values(85,8,'LBL_FILE_INFORMATION',3,0,0,0,0,0)");
+ExecuteQuery("insert into vtiger_blocks values(".$adb->getUniqueId('vtiger_blocks').",8,'LBL_FILE_INFORMATION',3,0,0,0,0,0)");
 
 ExecuteQuery("insert into vtiger_field values (8,".$fieldid[0].",'smownerid','vtiger_crmentity',1,53,'assigned_user_id','Assigned To',1,0,0,100,6,17,1,'V~M',1,NULL,'BAS')");
 ExecuteQuery("insert into vtiger_field values(8,".$fieldid[1].",'filetype','vtiger_notes',1,1,'filetype','File Type',1,0,0,100,2,85,2,'V~O',1,'','BAS')");
@@ -417,13 +439,13 @@ ExecuteQuery("insert into vtiger_field values(8,".$fieldid[4].",'fileversion','v
 ExecuteQuery("insert into vtiger_field values(8,".$fieldid[5].",'filestatus','vtiger_notes',1,56,'filestatus','Active',1,0,0,100,6,85,2,'V~O',1,'','BAS')");
 ExecuteQuery("insert into vtiger_field values(8,".$fieldid[6].",'filedownloadcount','vtiger_notes',1,1,'filedownloadcount','Download Count',1,0,0,100,11,85,2,'I~O',1,'','BAS')");
 
-for($i=0;$i<8;$i++)
+for($i=0;$i<7;$i++)
 {
-	$adb->query("insert into vtiger_def_org_field values(8, ".$fieldid[$i].", 0, 1)");
+	ExecuteQuery("insert into vtiger_def_org_field values(8, ".$fieldid[$i].", 0, 1)");
 	for($j=0;$j<$num_profiles;$j++)
 	{
 		$profileid = $adb->query_result($profile_list,$j,'profileid');
-		$adb->query("insert into vtiger_profile2field values($profileid, 8, ".$fieldid[$i].", 0, 1)");
+		ExecuteQuery("insert into vtiger_profile2field values($profileid, 8, ".$fieldid[$i].", 0, 1)");
 	}
 }
 
@@ -610,14 +632,13 @@ function webserviceMigration(){
 			"80"=>array("SalesOrder"),"81"=>array("Vendors"),"101"=>array("Users"),"52"=>array("Users"),
 			"357"=>array("Contacts","Accounts","Leads","Users","Vendors"),"59"=>array("Products"),
 			"66"=>array("Leads","Accounts","Potentials","HelpDesk"),"77"=>array("Users"),"68"=>array("Contacts","Accounts"));
-	//echo "<table border=1 margin=2>";
 	ExecuteQuery("Create table vtiger_ws_fieldtype(fieldtypeid integer(19) not null auto_increment,uitype varchar(30)not null,fieldtype varchar(200) not null,PRIMARY KEY(fieldtypeid),UNIQUE KEY uitype_idx (uitype))ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	ExecuteQuery("Create table vtiger_ws_referencetype(fieldtypeid integer(19) not null,type varchar(25) not null,PRIMARY KEY(fieldtypeid,type),  CONSTRAINT `fk_1_vtiger_referencetype` FOREIGN KEY (`fieldtypeid`) REFERENCES `vtiger_ws_fieldtype` (`fieldtypeid`) ON DELETE CASCADE)ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	ExecuteQuery("Create table vtiger_ws_userauthtoken(userid integer(19) not null,token varchar(25) not null,expiretime INTEGER(19),PRIMARY KEY(userid,expiretime),UNIQUE KEY userid_idx (userid))ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	ExecuteQuery("alter table vtiger_users add column accesskey varchar(36);");
 	$fieldid = $adb->getUniqueID("vtiger_field");
-	ExecuteQuery("insert into vtiger_field values(29,$fieldid,'accesskey','vtiger_users',1,3,'accesskey','Webservice Access Key',1,0,0,100,2,84,2,'V~O',1,null,'BAS');");
-	//echo "</table>";
+	$user_adv_block_id = getBlockId(29,'LBL_USER_ADV_OPTIONS');
+	ExecuteQuery("insert into vtiger_field values(29,$fieldid,'accesskey','vtiger_users',1,3,'accesskey','Webservice Access Key',1,0,0,100,2,$user_adv_block_id,2,'V~O',1,null,'BAS');");
 	
 	foreach($referenceMapping as $uitype=>$referenceArray){
 		$success = true;

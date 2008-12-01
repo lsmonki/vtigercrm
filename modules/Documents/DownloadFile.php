@@ -32,6 +32,7 @@ if($adb->num_rows($result) == 1)
 	$filepath = @$adb->query_result($result, 0, "filepath");
 
 	$saved_filename = $fileid."_".$folderid."_".$name;
+	if(!file($filepath.$saved_filename))$saved_filename = $fileid."_".$name;
 	$filesize = filesize($filepath.$saved_filename);
 	if(!fopen($filepath.$saved_filename, "r"))
 	{

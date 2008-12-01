@@ -167,7 +167,7 @@ function check_duplicate()
 			    	<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 			    	<tr>
 				     <td class="big">	
-					<strong>5. {$UMOD.LBL_HOME_PAGE_COMP}</strong>
+					<strong>6. {$UMOD.LBL_HOME_PAGE_COMP}</strong>
 				     </td>
 				     <td class="small" align="right">&nbsp;</td>	
 			        </tr>
@@ -193,7 +193,7 @@ function check_duplicate()
                                 <table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
                                 <tr>
                                      <td class="big">
-                                        <strong>6. {$UMOD.LBL_TAGCLOUD_DISPLAY}</strong>
+                                        <strong>7. {$UMOD.LBL_TAGCLOUD_DISPLAY}</strong>
                                      </td>
                                      <td class="small" align="right">&nbsp;</td>
                                 </tr>
