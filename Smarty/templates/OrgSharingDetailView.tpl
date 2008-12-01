@@ -73,22 +73,22 @@ DIV.fixedLay {
 				<table cellspacing="0" cellpadding="5" class="listTable" width="100%">
 				{foreach item=module from=$DEFAULT_SHARING}	
 				  {assign var="MODULELABEL" value=$module.0}
-				  {if $APP[$module.0] neq}
+				  {if $APP[$module.0] neq ''}
 					{assign var="MODULELABEL" value=$APP[$module.0]}
 				  {/if}	
                   <tr>
                     <td width="20%" class="colHeader small" nowrap>{$MODULELABEL}</td>
                     <td width="30%" class="listTableRow small" nowrap>
-			{if $module.1 neq 'Private' && $module.1 neq 'Hide Details'}
-				<img src="{$IMAGE_PATH}public.gif" align="absmiddle">
-			{else}
-				<img src="{$IMAGE_PATH}private.gif" align="absmiddle">
-			{/if}
-				{$CMOD[$module.1]}
-		    </td>
+					{if $module.1 neq 'Private' && $module.1 neq 'Hide Details'}
+						<img src="{$IMAGE_PATH}public.gif" align="absmiddle">
+					{else}
+						<img src="{$IMAGE_PATH}private.gif" align="absmiddle">
+					{/if}
+						{$CMOD[$module.1]}
+		    		</td>
                     <td width="50%" class="listTableRow small" nowrap>{$module.2}</td>
                   </tr>
-		  {/foreach}
+		  		{/foreach}
 		</form>	
               </table>
 		</div>	
