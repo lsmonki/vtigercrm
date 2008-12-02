@@ -220,7 +220,7 @@ $cache_dir = 'cache/';
 				      			$buffer = str_replace( "_MASTER_CURRENCY_", $currency_name, $buffer);
 
 						      	/* replace the application unique key variable */
-					      		$buffer = str_replace( "_VT_APP_UNIQKEY_", md5($root_directory), $buffer);
+					      		$buffer = str_replace( "_VT_APP_UNIQKEY_", md5(time() + rand(1,9999999) + md5($root_directory)) , $buffer);
 							/* replace support email variable */
 							$buffer = str_replace( "_USER_SUPPORT_EMAIL_", $admin_email, $buffer);
 
@@ -425,7 +425,7 @@ $cache_dir = 'cache/';
  	$config .= "\$display_empty_home_blocks = false;\n\n";
 
  	$config .= "// Generating Unique Application Key\n";
- 	$config .= "\$application_unique_key = '".md5($root_directory)."';\n\n";
+ 	$config .= "\$application_unique_key = '".md5(time() + rand(1,9999999) + md5($root_directory)) ."';\n\n";
 
 	$config .= "// trim descriptions, titles in listviews to this value\n";
 	$config .= "\$listview_max_textlength = 40;\n\n";

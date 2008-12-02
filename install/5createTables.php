@@ -141,6 +141,14 @@ if(!@rename("install/", $renamefile."install/"))
 }
 //populate Calendar data
 
+// Status tracking
+$statimage = '';
+@include_once('config.inc.php');
+if(isset($application_unique_key) && !empty($application_unique_key)) {
+	$statimage = "<img src='http://stats.vtiger.com/stats.php?uid=$application_unique_key&v=$vtiger_current_version&type=I' 
+		alt='|' title='' border=0 width='1px' height='1px'>";
+}
+// END
 
 ?>
 		<table border=0 cellspacing=0 cellpadding=5 align="center" width="80%" style="background-color:#E1E1FD;border:1px dashed #111111;">
@@ -217,7 +225,7 @@ if(!@rename("install/", $renamefile."install/"))
     <table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 
       <tr>
-        <td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td>
+		  <td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td> | <?php echo $statimage ?>
       </tr>
     </table>
 </body>

@@ -748,10 +748,17 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	
 	{
 		echo $copyrightstatement;
+		// Status tracking
+		$statimage = '';
+		if($currentModule == 'Users' && empty($current_user->id)) {
+			$statimage = "<img src='http://stats.vtiger.com/stats.php?uid=$application_unique_key&v=$vtiger_current_version&type=U' 
+				alt='|' title='' border=0 width='1px' height='1px'>";
+		}
+		// END
 		echo "<script language = 'JavaScript' type='text/javascript' src = 'include/js/popup.js'></script>";
 		echo "<br><br><br><table border=0 cellspacing=0 cellpadding=5 width=100% class=settingsSelectedUI >";
 		echo "<tr><td class=small align=left><span style='color: rgb(153, 153, 153);'>vtiger CRM 5.1.0</span></td>";
-		echo "<td class=small align=right><span style='color: rgb(153, 153, 153);'>&copy; 2004-2008 <a href='http://www.vtiger.com' target='_blank'>vtiger.com</a> | <a href='javascript:mypopup()'>".$app_strings['LNK_READ_LICENSE']."</a></span></td></tr></table>";
+		echo "<td class=small align=right><span style='color: rgb(153, 153, 153);'>&copy; 2004-2008 <a href='http://www.vtiger.com' target='_blank'>vtiger.com</a> | <a href='javascript:mypopup()'>".$app_strings['LNK_READ_LICENSE']."</a></span> $statimage</td></tr></table>";
 			
 	//	echo "<table align='center'><tr><td align='center'>";
 		// Under the Sugar Public License referenced above, you are required to leave in all copyright statements
