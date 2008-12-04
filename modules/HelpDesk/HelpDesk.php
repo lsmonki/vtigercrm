@@ -215,7 +215,21 @@ class HelpDesk extends CRMEntity {
 		else
 			$returnset = '&return_module=HelpDesk&return_action=CallRelatedList&return_id='.$id;
 
-		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_activity.*, vtiger_cntactivityrel.*, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_crmentity.crmid, vtiger_recurringevents.recurringtype, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid = vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and vtiger_crmentity.deleted=0 and (activitytype NOT IN ('Emails')) AND ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Completed' ) and ( vtiger_activity.eventstatus is NULL OR vtiger_activity.eventstatus != 'Held') ";
+		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name," .
+					" vtiger_activity.*, vtiger_cntactivityrel.contactid, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname," .
+					" vtiger_crmentity.crmid, vtiger_recurringevents.recurringtype, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime," .
+					" vtiger_seactivityrel.crmid as parent_id " .
+					" from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid" .
+					" inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid" .
+					" left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid = vtiger_activity.activityid " .
+					" left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid" .
+					" left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid" .
+					" left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid" .
+					" left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid" .
+					" left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname" .
+					" where vtiger_seactivityrel.crmid=".$id." and vtiger_crmentity.deleted=0 and (activitytype NOT IN ('Emails'))" .
+							" AND ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Completed' )" .
+							" and ( vtiger_activity.eventstatus is NULL OR vtiger_activity.eventstatus != 'Held') ";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('HelpDesk','Calendar',$focus,$query,$button,$returnset);
 	}

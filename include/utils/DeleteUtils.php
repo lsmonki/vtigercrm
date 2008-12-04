@@ -21,8 +21,8 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 	global $adb;
 	global $current_user;
 
-	//if we delete the entity from relatedlist then this if will be used ie., the relationship will be deleted otherwise if we delete the entiry from listview then the relationship will not be deleted where as total entity will be deleted 
-	if($module != $related_module)
+	//if we delete the entity from relatedlist then this will be used ie., the relationship will be deleted otherwise if we delete the entiry from listview then the relationship will not be deleted where as total entity will be deleted 
+	if($module != $return_module)
 	{
 
 	switch($module):

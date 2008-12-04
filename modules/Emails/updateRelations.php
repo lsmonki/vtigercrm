@@ -18,7 +18,7 @@ $idlist = $_REQUEST['idlist'];
 if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 {
 	//split the strings & store in an array
-	$storearray = explode (";",$idlist);
+	$storearray = explode (";",trim($idlist,";")t);
 	foreach($storearray as $id)
 	{
 		if($id != '')

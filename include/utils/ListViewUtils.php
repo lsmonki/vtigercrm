@@ -761,9 +761,9 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				{
 					if(($module == 'Calendar' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice' || $module == 'Leads' || $module == 'Contacts') && (($fieldname=='parent_id') || ($name=='Contact Name') || ($name=='Close') || ($fieldname == 'firstname')))
 					{
-						$status = $adb->query_result($list_result,$i-1,"status");
-						if ($fieldname=='parent_id')
+						if ($fieldname=='parent_id') {
 							$value=getRelatedTo($module,$list_result,$i-1);
+						}
 						if($name=='Contact Name')
 						{
 							$contact_id = $adb->query_result($list_result,$i-1,"contactid");
@@ -793,6 +793,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 
 						if ($name == 'Close')
 						{														
+							$status = $adb->query_result($list_result,$i-1,"status");
 							$activityid = $adb->query_result($list_result,$i-1,"activityid");
 							$activitytype = $adb->query_result($list_result,$i-1,"activitytype");
 							if ($activitytype != 'Task' && $activitytype != 'Emails') {

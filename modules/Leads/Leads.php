@@ -199,221 +199,221 @@ class Leads extends CRMEntity {
  	 * @param  integer   $id      - leadid
  	 * returns related Task or Event record in array format
 	*/
-function get_activities($id)
-{
-	global $log, $singlepane_view;
-	$log->debug("Entering get_activities(".$id.") method ...");
-	global $app_strings;
-
-	$focus = new Activity();
-	$button = '';
-
-	if(isPermitted("Calendar",1,"") == 'yes')
+	function get_activities($id)
 	{
-		$button .= '<input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Calendar\';i;this.form.return_module.value=\'Leads\';this.form.activity_mode.value=\'Task\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_TASK'].'">&nbsp;';
-		$button .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Calendar\';this.form.return_module.value=\'Leads\';this.form.activity_mode.value=\'Events\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;</td>';
-	}
-	if($singlepane_view == 'true')
-		$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
-	else
-		$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
-
-
-	// First, get the list of IDs.
-	$query = "SELECT vtiger_activity.*,vtiger_seactivityrel.*, vtiger_contactdetails.lastname, vtiger_contactdetails.contactid, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime,case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_recurringevents.recurringtype from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid = vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and vtiger_crmentity.deleted = 0 and ((vtiger_activity.activitytype='Task' and vtiger_activity.status not in ('Completed','Deferred')) or (vtiger_activity.activitytype NOT in ('Emails','Task') and  vtiger_activity.eventstatus not in ('','Held'))) ";
-	$log->debug("Exiting get_activities method ...");
-	return  GetRelatedList('Leads','Calendar',$focus,$query,$button,$returnset);
-}
-
-/** Returns a list of the associated Campaigns
-  * @param $id -- campaign id :: Type Integer
-  * @returns list of campaigns in array format
-  */
-function get_campaigns($id)
-{
-	global $log, $singlepane_view;
-	$log->debug("Entering get_campaigns(".$id.") method ...");
-	global $mod_strings;
-	$focus = new Campaigns();
-	$button = '';
-
-	if($singlepane_view == 'true')
-		$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
-	else
-		$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
-
-	$log->info("Campaign Related List for Lead Displayed");
-	$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name ,vtiger_campaign.campaignid, vtiger_campaign.campaignname, vtiger_campaign.campaigntype, vtiger_campaign.campaignstatus, vtiger_campaign.expectedrevenue, vtiger_campaign.closingdate, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_campaign inner join vtiger_campaignleadrel on vtiger_campaignleadrel.campaignid=vtiger_campaign.campaignid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_campaign.campaignid left join vtiger_campaigngrouprelation on vtiger_campaign.campaignid=vtiger_campaigngrouprelation.campaignid left join vtiger_groups on vtiger_groups.groupname=vtiger_campaigngrouprelation.groupname left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid where vtiger_campaignleadrel.leadid=".$id." and vtiger_crmentity.deleted=0";
-
-	$log->debug("Exiting get_campaigns method ...");
-	return GetRelatedList('Leads','Campaigns',$focus,$query,$button,$returnset);
-
-}
-
-
-	/** Returns a list of the associated emails
- 	 * @param  integer   $id      - leadid
- 	 * returns related emails record in array format
-	*/
-function get_emails($id)
-{
-	global $log, $singlepane_view;	
-	$log->debug("Entering get_emails(".$id.") method ...");
-	global $mod_strings;
-	require_once('include/RelatedListView.php');
-
-	$focus = new Emails();
-
-	$button = '';
-
-	if(isPermitted("Emails",1,"") == 'yes')
-	{
-
-		$button .= '<input title="New Email" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Emails\';this.form.email_directing_module.value=\'leads\';this.form.record.value='.$id.';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_EMAIL'].'">&nbsp;';
-	}
-	if($singlepane_view == 'true')
-		$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
-	else
-		$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
-
-	$query ="select case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name," .
-			" vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.semodule, vtiger_activity.activitytype," .
-			" vtiger_activity.date_start, vtiger_activity.status, vtiger_activity.priority, vtiger_crmentity.crmid," .
-			" vtiger_crmentity.smownerid,vtiger_crmentity.modifiedtime, vtiger_users.user_name, vtiger_seactivityrel.crmid as parent_id " .
-			" from vtiger_activity" .
-			" inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid" .
-			" inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid" .
-			" left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid" .
-			" left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname" .
-			" inner join vtiger_users on  vtiger_users.id=vtiger_crmentity.smownerid" .
-			" where vtiger_activity.activitytype='Emails' and vtiger_crmentity.deleted=0 and vtiger_seactivityrel.crmid=".$id;	
-	$log->debug("Exiting get_emails method ...");
-	return GetRelatedList('Leads','Emails',$focus,$query,$button,$returnset);
-}
-
-/**
- * Function to get Lead related Task & Event which have activity type Held, Completed or Deferred.
- * @param  integer   $id      - leadid
- * returns related Task or Event record in array format
- */
-function get_history($id)
-{
-	global $log;
-	$log->debug("Entering get_history(".$id.") method ...");
-	$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.status,
-		vtiger_activity.eventstatus, vtiger_activity.activitytype,vtiger_activity.date_start, 
-		vtiger_activity.due_date,vtiger_activity.time_start,vtiger_activity.time_end,
-		vtiger_crmentity.modifiedtime,vtiger_crmentity.createdtime,
-		vtiger_crmentity.description, vtiger_users.user_name,vtiger_activitygrouprelation.groupname
-			from vtiger_activity
-			inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid
-			inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid
-			left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid
-			left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname 
-			left join vtiger_users on vtiger_crmentity.smownerid= vtiger_users.id
-			where (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task')
-			and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred' or (vtiger_activity.eventstatus = 'Held' and vtiger_activity.eventstatus != ''))
-			and vtiger_seactivityrel.crmid=".$id."
-                        and vtiger_crmentity.deleted = 0";
-	//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
-
-	$log->debug("Exiting get_history method ...");
-	return getHistory('Leads',$query,$id);
-}
-
-/**
- * Function to get Lead related Attachments
- * @param  integer   $id      - leadid
- * returns related Attachment record in array format
- */
-function get_attachments($id)
-{
-	global $log,$current_user;
-	$tab_id=getTabid('Documents');
-	require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-    {
-		$sec_parameter=getListViewSecurityParameter('Documents');
-    }
-	$log->debug("Entering get_attachments(".$id.") method ...");
-	// Armando Lüscher 18.10.2005 -> §visibleDescription
-	// Desc: Inserted crm2.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
-	// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
-	$query = "select vtiger_notes.title,'Documents      ' as ActivityType, vtiger_notes.filename,
-	vtiger_attachments.type as FileType,crm2.modifiedtime as lastmodified,
-	vtiger_seattachmentsrel.attachmentsid as attachmentsid, vtiger_notes.notesid as crmid,
-	vtiger_notes.notecontent as description, vtiger_users.user_name
-			from vtiger_notes
-			inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
-			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
-			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_notes.notesid and crm2.deleted=0
-			LEFT JOIN vtiger_notegrouprelation
-				ON vtiger_notegrouprelation.notesid = vtiger_notes.notesid
-			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_notegrouprelation.groupname			
-			left join vtiger_seattachmentsrel  on vtiger_seattachmentsrel.crmid =vtiger_notes.notesid
-			left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
-			inner join vtiger_users on crm2.smownerid= vtiger_users.id
-			where vtiger_crmentity.crmid=".$id;
-	$query .= $sec_parameter;
-	$query .= ' union all ';
-	// Armando Lüscher 18.10.2005 -> §visibleDescription
-	// Desc: Inserted crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
-	// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
-	// Inserted order by createdtime desc
-	$query .= "select vtiger_attachments.subject AS title ,'Attachments' as ActivityType,
-	vtiger_attachments.name as filename, vtiger_attachments.type as FileType,crm2.modifiedtime as lastmodified,
-	vtiger_attachments.attachmentsid as attachmentsid, vtiger_seattachmentsrel.attachmentsid as crmid,
-	vtiger_attachments.description, vtiger_users.user_name
-			from vtiger_attachments
-			inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
-			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_seattachmentsrel.crmid
-			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_attachments.attachmentsid
-			inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
-			where vtiger_crmentity.crmid=".$id;
-	$log->debug("Exiting get_attachments method ...");
-	return getAttachmentsAndNotes('Leads',$query,$id);
-}
+		global $log, $singlepane_view;
+		$log->debug("Entering get_activities(".$id.") method ...");
+		global $app_strings;
 	
-/**
-* Function to get lead related Products 
-* @param  integer   $id      - leadid
-* returns related Products record in array format
-*/
-function get_products($id)
-{
-	global $log, $singlepane_view;
-	$log->debug("Entering get_products(".$id.") method ...");
-	require_once('modules/Products/Products.php');
-	global $mod_strings;
-	global $app_strings;
-
-	$focus = new Products();
-
-	$button = '';
-
-	if(isPermitted("Products",1,"") == 'yes')
-	{
-		$button .= '<input title="New Product" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Leads\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;';
+		$focus = new Activity();
+		$button = '';
+	
+		if(isPermitted("Calendar",1,"") == 'yes')
+		{
+			$button .= '<input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Calendar\';i;this.form.return_module.value=\'Leads\';this.form.activity_mode.value=\'Task\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_TASK'].'">&nbsp;';
+			$button .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Calendar\';this.form.return_module.value=\'Leads\';this.form.activity_mode.value=\'Events\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;</td>';
+		}
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
+	
+	
+		// First, get the list of IDs.
+		$query = "SELECT vtiger_activity.*,vtiger_seactivityrel.*, vtiger_contactdetails.lastname, vtiger_contactdetails.contactid, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime,case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_recurringevents.recurringtype from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid = vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and vtiger_crmentity.deleted = 0 and ((vtiger_activity.activitytype='Task' and vtiger_activity.status not in ('Completed','Deferred')) or (vtiger_activity.activitytype NOT in ('Emails','Task') and  vtiger_activity.eventstatus not in ('','Held'))) ";
+		$log->debug("Exiting get_activities method ...");
+		return  GetRelatedList('Leads','Calendar',$focus,$query,$button,$returnset);
 	}
-	if($singlepane_view == 'true')
-		$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
-	else
-		$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
-
-	$query = "SELECT vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, 
-			vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, 
-			vtiger_crmentity.crmid, vtiger_crmentity.smownerid 
-		   FROM vtiger_products 
-		   INNER JOIN vtiger_seproductsrel ON vtiger_products.productid = vtiger_seproductsrel.productid and vtiger_seproductsrel.setype = 'Leads'
-		   INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_products.productid 
-		   INNER JOIN vtiger_leaddetails ON vtiger_leaddetails.leadid = vtiger_seproductsrel.crmid  
-		   WHERE vtiger_crmentity.deleted = 0 AND vtiger_leaddetails.leadid = $id";
-
-	$log->debug("Exiting get_products method ...");
-	return  GetRelatedList('Leads','Products',$focus,$query,$button,$returnset);
-}
+	
+	/** Returns a list of the associated Campaigns
+	  * @param $id -- campaign id :: Type Integer
+	  * @returns list of campaigns in array format
+	  */
+	function get_campaigns($id)
+	{
+		global $log, $singlepane_view;
+		$log->debug("Entering get_campaigns(".$id.") method ...");
+		global $mod_strings;
+		$focus = new Campaigns();
+		$button = '';
+	
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
+	
+		$log->info("Campaign Related List for Lead Displayed");
+		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name ,vtiger_campaign.campaignid, vtiger_campaign.campaignname, vtiger_campaign.campaigntype, vtiger_campaign.campaignstatus, vtiger_campaign.expectedrevenue, vtiger_campaign.closingdate, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_campaign inner join vtiger_campaignleadrel on vtiger_campaignleadrel.campaignid=vtiger_campaign.campaignid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_campaign.campaignid left join vtiger_campaigngrouprelation on vtiger_campaign.campaignid=vtiger_campaigngrouprelation.campaignid left join vtiger_groups on vtiger_groups.groupname=vtiger_campaigngrouprelation.groupname left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid where vtiger_campaignleadrel.leadid=".$id." and vtiger_crmentity.deleted=0";
+	
+		$log->debug("Exiting get_campaigns method ...");
+		return GetRelatedList('Leads','Campaigns',$focus,$query,$button,$returnset);
+	
+	}
+	
+	
+		/** Returns a list of the associated emails
+	 	 * @param  integer   $id      - leadid
+	 	 * returns related emails record in array format
+		*/
+	function get_emails($id)
+	{
+		global $log, $singlepane_view;	
+		$log->debug("Entering get_emails(".$id.") method ...");
+		global $mod_strings;
+		require_once('include/RelatedListView.php');
+	
+		$focus = new Emails();
+	
+		$button = '';
+	
+		if(isPermitted("Emails",1,"") == 'yes')
+		{
+	
+			$button .= '<input title="New Email" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Emails\';this.form.email_directing_module.value=\'leads\';this.form.record.value='.$id.';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_EMAIL'].'">&nbsp;';
+		}
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
+	
+		$query ="select case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name," .
+				" vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.semodule, vtiger_activity.activitytype," .
+				" vtiger_activity.date_start, vtiger_activity.status, vtiger_activity.priority, vtiger_crmentity.crmid," .
+				" vtiger_crmentity.smownerid,vtiger_crmentity.modifiedtime, vtiger_users.user_name, vtiger_seactivityrel.crmid as parent_id " .
+				" from vtiger_activity" .
+				" inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid" .
+				" inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid" .
+				" left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid" .
+				" left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname" .
+				" inner join vtiger_users on  vtiger_users.id=vtiger_crmentity.smownerid" .
+				" where vtiger_activity.activitytype='Emails' and vtiger_crmentity.deleted=0 and vtiger_seactivityrel.crmid=".$id;	
+		$log->debug("Exiting get_emails method ...");
+		return GetRelatedList('Leads','Emails',$focus,$query,$button,$returnset);
+	}
+	
+	/**
+	 * Function to get Lead related Task & Event which have activity type Held, Completed or Deferred.
+	 * @param  integer   $id      - leadid
+	 * returns related Task or Event record in array format
+	 */
+	function get_history($id)
+	{
+		global $log;
+		$log->debug("Entering get_history(".$id.") method ...");
+		$query = "SELECT vtiger_activity.activityid, vtiger_activity.subject, vtiger_activity.status,
+			vtiger_activity.eventstatus, vtiger_activity.activitytype,vtiger_activity.date_start, 
+			vtiger_activity.due_date,vtiger_activity.time_start,vtiger_activity.time_end,
+			vtiger_crmentity.modifiedtime,vtiger_crmentity.createdtime,
+			vtiger_crmentity.description, vtiger_users.user_name,vtiger_activitygrouprelation.groupname
+				from vtiger_activity
+				inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid
+				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid
+				left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid
+				left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname 
+				left join vtiger_users on vtiger_crmentity.smownerid= vtiger_users.id
+				where (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task')
+				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred' or (vtiger_activity.eventstatus = 'Held' and vtiger_activity.eventstatus != ''))
+				and vtiger_seactivityrel.crmid=".$id."
+	                        and vtiger_crmentity.deleted = 0";
+		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
+	
+		$log->debug("Exiting get_history method ...");
+		return getHistory('Leads',$query,$id);
+	}
+	
+	/**
+	 * Function to get Lead related Attachments
+	 * @param  integer   $id      - leadid
+	 * returns related Attachment record in array format
+	 */
+	function get_attachments($id)
+	{
+		global $log,$current_user;
+		$tab_id=getTabid('Documents');
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+	    {
+			$sec_parameter=getListViewSecurityParameter('Documents');
+	    }
+		$log->debug("Entering get_attachments(".$id.") method ...");
+		// Armando Lüscher 18.10.2005 -> §visibleDescription
+		// Desc: Inserted crm2.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
+		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
+		$query = "select vtiger_notes.title,'Documents      ' as ActivityType, vtiger_notes.filename,
+		vtiger_attachments.type as FileType,crm2.modifiedtime as lastmodified,
+		vtiger_seattachmentsrel.attachmentsid as attachmentsid, vtiger_notes.notesid as crmid,
+		vtiger_notes.notecontent as description, vtiger_users.user_name
+				from vtiger_notes
+				inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
+				inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
+				inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_notes.notesid and crm2.deleted=0
+				LEFT JOIN vtiger_notegrouprelation
+					ON vtiger_notegrouprelation.notesid = vtiger_notes.notesid
+				LEFT JOIN vtiger_groups
+					ON vtiger_groups.groupname = vtiger_notegrouprelation.groupname			
+				left join vtiger_seattachmentsrel  on vtiger_seattachmentsrel.crmid =vtiger_notes.notesid
+				left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
+				inner join vtiger_users on crm2.smownerid= vtiger_users.id
+				where vtiger_crmentity.crmid=".$id;
+		$query .= $sec_parameter;
+		$query .= ' union all ';
+		// Armando Lüscher 18.10.2005 -> §visibleDescription
+		// Desc: Inserted crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
+		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
+		// Inserted order by createdtime desc
+		$query .= "select vtiger_attachments.subject AS title ,'Attachments' as ActivityType,
+		vtiger_attachments.name as filename, vtiger_attachments.type as FileType,crm2.modifiedtime as lastmodified,
+		vtiger_attachments.attachmentsid as attachmentsid, vtiger_seattachmentsrel.attachmentsid as crmid,
+		vtiger_attachments.description, vtiger_users.user_name
+				from vtiger_attachments
+				inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
+				inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_seattachmentsrel.crmid
+				inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_attachments.attachmentsid
+				inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
+				where vtiger_crmentity.crmid=".$id;
+		$log->debug("Exiting get_attachments method ...");
+		return getAttachmentsAndNotes('Leads',$query,$id);
+	}
+		
+	/**
+	* Function to get lead related Products 
+	* @param  integer   $id      - leadid
+	* returns related Products record in array format
+	*/
+	function get_products($id)
+	{
+		global $log, $singlepane_view;
+		$log->debug("Entering get_products(".$id.") method ...");
+		require_once('modules/Products/Products.php');
+		global $mod_strings;
+		global $app_strings;
+	
+		$focus = new Products();
+	
+		$button = '';
+	
+		if(isPermitted("Products",1,"") == 'yes')
+		{
+			$button .= '<input title="New Product" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Leads\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;';
+		}
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
+	
+		$query = "SELECT vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, 
+				vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, 
+				vtiger_crmentity.crmid, vtiger_crmentity.smownerid 
+			   FROM vtiger_products 
+			   INNER JOIN vtiger_seproductsrel ON vtiger_products.productid = vtiger_seproductsrel.productid and vtiger_seproductsrel.setype = 'Leads'
+			   INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_products.productid 
+			   INNER JOIN vtiger_leaddetails ON vtiger_leaddetails.leadid = vtiger_seproductsrel.crmid  
+			   WHERE vtiger_crmentity.deleted = 0 AND vtiger_leaddetails.leadid = $id";
+	
+		$log->debug("Exiting get_products method ...");
+		return  GetRelatedList('Leads','Products',$focus,$query,$button,$returnset);
+	}
 	
 	/** Function to get the Combo List Values of Leads Field
 	 * @param string $list_option 
@@ -428,41 +428,41 @@ function get_products($id)
 		return $comboFieldArray[$list_option];
 	}
 	
-/** Function to get the Columnnames of the Leads Record
-* Used By vtigerCRM Word Plugin
-* Returns the Merge Fields for Word Plugin
-*/
-function getColumnNames_Lead()
-{
-	global $log,$current_user;
-	$log->debug("Entering getColumnNames_Lead() method ...");
-	require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+	/** Function to get the Columnnames of the Leads Record
+	* Used By vtigerCRM Word Plugin
+	* Returns the Merge Fields for Word Plugin
+	*/
+	function getColumnNames_Lead()
 	{
-		$sql1 = "select fieldlabel from vtiger_field where tabid=7";
-		$params1 = array();
-	}else
-	{
-		$profileList = getCurrentUserProfileList();
-		$sql1 = "select vtiger_field.fieldid,fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=7 and vtiger_field.displaytype in (1,2,3,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
-		$params1 = array();
-		if (count($profileList) > 0) {
-			$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")  group by fieldid";
-			array_push($params1, $profileList);
+		global $log,$current_user;
+		$log->debug("Entering getColumnNames_Lead() method ...");
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
+		{
+			$sql1 = "select fieldlabel from vtiger_field where tabid=7";
+			$params1 = array();
+		}else
+		{
+			$profileList = getCurrentUserProfileList();
+			$sql1 = "select vtiger_field.fieldid,fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=7 and vtiger_field.displaytype in (1,2,3,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+			$params1 = array();
+			if (count($profileList) > 0) {
+				$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")  group by fieldid";
+				array_push($params1, $profileList);
+			}
 		}
+		$result = $this->db->pquery($sql1, $params1);
+		$numRows = $this->db->num_rows($result);
+		for($i=0; $i < $numRows;$i++)
+		{
+	   	$custom_fields[$i] = $this->db->query_result($result,$i,"fieldlabel");
+	   	$custom_fields[$i] = ereg_replace(" ","",$custom_fields[$i]);
+	   	$custom_fields[$i] = strtoupper($custom_fields[$i]);
+		}
+		$mergeflds = $custom_fields;
+		$log->debug("Exiting getColumnNames_Lead method ...");
+		return $mergeflds;
 	}
-	$result = $this->db->pquery($sql1, $params1);
-	$numRows = $this->db->num_rows($result);
-	for($i=0; $i < $numRows;$i++)
-	{
-   	$custom_fields[$i] = $this->db->query_result($result,$i,"fieldlabel");
-   	$custom_fields[$i] = ereg_replace(" ","",$custom_fields[$i]);
-   	$custom_fields[$i] = strtoupper($custom_fields[$i]);
-	}
-	$mergeflds = $custom_fields;
-	$log->debug("Exiting getColumnNames_Lead method ...");
-	return $mergeflds;
-}
 //End
 
 }

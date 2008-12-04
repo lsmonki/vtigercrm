@@ -21,7 +21,7 @@ else $action = "CallRelatedList";
 if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 {
 	//split the string and store in an array
-	$storearray = explode (";",$idlist);
+	$storearray = explode (";",trim($idlist,";"));
 	foreach($storearray as $id)
 	{
 		if($id != '')

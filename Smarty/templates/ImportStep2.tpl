@@ -12,6 +12,7 @@
 
 
 <script type="text/javascript" src="include/js/general.js"></script>
+<script type="text/javascript" src="include/js/Merge.js"></script>
 <script>
 
 function getImportSavedMap(impoptions)

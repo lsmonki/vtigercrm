@@ -859,16 +859,15 @@ $log->info("in getOldFileName  ".$notesid);
 		require_once("include/events/include.inc");
 		global $adb;
 		$em = new VTEventsManager($adb);
-		$em->triggerEvent("vtiger.entity.beforesave", 
-			VTEntityData::fromCRMEntity($this));
+		$entityData  = VTEntityData::fromCRMEntity($this);
+		$em->triggerEvent("vtiger.entity.beforesave", $entityData);
 		//Event triggering code ends
 	
 		//GS Save entity being called with the modulename as parameter
 		$this->saveentity($module_name,$fileid);
 		
 		//Event triggering code
-		$em->triggerEvent("vtiger.entity.aftersave", 
-			VTEntityData::fromCRMEntity($this));
+		$em->triggerEvent("vtiger.entity.aftersave", $entityData);
 		//Event triggering code ends
 	}
   

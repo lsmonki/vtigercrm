@@ -38,7 +38,7 @@ if($mode == 'delete') {
 }
 
 if(!empty($_REQUEST['idlist'])) {
-	$ids = explode (";",$idlist);
+	$ids = explode (";",trim($idlist,";"));
 	if(function_exists('checkFileAccess')) {
 		checkFileAccess("modules/$currentModule/$currentModule.php");
 	}

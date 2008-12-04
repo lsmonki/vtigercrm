@@ -24,9 +24,13 @@
 {foreach key=header item=detail from=$RELATEDLISTS}
 
 {assign var=rel_mod value=$header}
+{assign var="HEADERLABEL" value=$header}
+{if $APP.$header neq ''}
+	{assign var="HEADERLABEL" value=$APP.$header}
+{/if}
 <table border=0 cellspacing=0 cellpadding=0 width=100% class="small" style="border-bottom:1px solid #999999;padding:5px;">
         <tr>
-                <td  valign=bottom><b>{$APP.$header}</b> {if $MODULE eq 'Campaigns' && ($rel_mod eq 'Contacts' || $rel_mod eq 'Leads')}<br><br>{$APP.LBL_SELECT_BUTTON_LABEL}: <a href="javascript:;" onclick="clear_checked_all('{$rel_mod}');">{$APP.LBL_NONE_NO_LINE}</a>{/if} </td>
+                <td  valign=bottom><b>{$HEADERLABEL}</b> {if $MODULE eq 'Campaigns' && ($rel_mod eq 'Contacts' || $rel_mod eq 'Leads')}<br><br>{$APP.LBL_SELECT_BUTTON_LABEL}: <a href="javascript:;" onclick="clear_checked_all('{$rel_mod}');">{$APP.LBL_NONE_NO_LINE}</a>{/if} </td>
                 {if $detail ne ''}
                 <td align=center>{$detail.navigation.0}</td>
                 {$detail.navigation.1}

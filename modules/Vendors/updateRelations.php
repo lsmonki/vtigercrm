@@ -28,7 +28,7 @@ if($_REQUEST['destination_module']=='Products')
 	if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
 	{
 		$record = $_REQUEST["parentid"];
-		$storearray = explode (";",$idlist);
+		$storearray = explode (";",trim($idlist,";"));
 		foreach($storearray as $id)
 		{
 			if($id != '')

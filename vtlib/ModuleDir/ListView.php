@@ -67,6 +67,16 @@ $viewid = $customView->getViewId($currentModule);
 $customview_html = $customView->getCustomViewCombo($viewid);
 $viewinfo = $customView->getCustomViewByCvid($viewid);
 
+//Added to handle approving or denying status-public by the admin in CustomView
+$statusdetails = $customView->isPermittedChangeStatus($viewinfo['status']);
+$smarty->assign("CUSTOMVIEW_PERMISSION",$statusdetails);
+
+//To check if a user is able to edit/delete a customview
+$edit_permit = $customView->isPermittedCustomView($viewid,'EditView',$currentModule);
+$delete_permit = $customView->isPermittedCustomView($viewid,'Delete',$currentModule);
+$smarty->assign("CV_EDIT_PERMIT",$edit_permit);
+$smarty->assign("CV_DELETE_PERMIT",$delete_permit);
+
 $smarty->assign("VIEWID", $viewid);
 
 if($viewinfo['viewname'] == 'All') $smarty->assign('ALL', 'All');
@@ -157,6 +167,8 @@ $criteria = getcriteria_options();
 $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("FIELDNAMES", $fieldnames);
 $smarty->assign("CRITERIA", $criteria);
+
+$_SESSION[$module.'_listquery'] = $list_query;
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");
