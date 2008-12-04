@@ -260,9 +260,9 @@ class Vtiger_MailScannerRule {
 			$matches = $searchfor;
 			break;
 		case 'Regex':
-			// TODO Yet to be implemented.
 			$regmatches = Array();
 			$matchfound = false;
+			$searchfor  = str_replace('/', '\/', $searchfor);
 			if(preg_match("/$searchfor/i", $input, $regmatches)) {
 				// Pick the last matching group
 				$matches = $regmatches[count($regmatches)-1];

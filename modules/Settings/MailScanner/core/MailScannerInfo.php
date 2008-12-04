@@ -43,6 +43,9 @@ class Vtiger_MailScannerInfo {
 	// Last scan on the folders.
 	var $lastscan  = false;
 
+	// Need rescan on the folders?
+	var $rescan    = false;
+
 	// Rules associated with this mail scanner
 	var $rules = false;
 
@@ -86,25 +89,28 @@ class Vtiger_MailScannerInfo {
 			$this->markas     = $adb->query_result($result, 0, 'markas');
 			$this->isvalid    = $adb->query_result($result, 0, 'isvalid');
 
-			$this->initializeLastscan();
+			$this->initializeFolderInfo();
 			$this->initializeRules();
 		}
 	}
 
 	/**
-	 * Initialize the folder lastscan details
+	 * Initialize the folder details
 	 */
-	function initializeLastscan() {
+	function initializeFolderInfo() {
 		global $adb;
 		if($this->scannerid) {
 			$this->lastscan = Array();
+			$this->rescan   = Array();
 			$lastscanres = $adb->pquery("SELECT * FROM vtiger_mailscanner_folders WHERE scannerid=?",Array($this->scannerid));
 			$lastscancount = $adb->num_rows($lastscanres);
 			if($lastscancount) {
 				for($lsindex = 0; $lsindex < $lastscancount; ++$lsindex) {
 					$folder = $adb->query_result($lastscanres, $lsindex, 'foldername');
 					$scannedon =$adb->query_result($lastscanres, $lsindex, 'lastscan');
+					$nextrescan =$adb->query_result($lastscanres, $lsindex, 'rescan');
 					$this->lastscan[$folder] = $scannedon;
+					$this->rescan[$folder]   = ($nextrescan == 0)? false : true;
 				}
 			}
 		}
@@ -120,25 +126,46 @@ class Vtiger_MailScannerInfo {
 	}
 
 	/**
-	 * Update lastscan information on folder
+	 * Update rescan flag on all folders
 	 */
-	function updateLastscan($folderName) {
+	function updateAllFolderRescan($rescanFlag=false) {
+		global $adb;
+		$useRescanFlag = $rescanFlag? 1 : 0;
+		$adb->pquery("UPDATE vtiger_mailscanner_folders set rescan=? WHERE scannerid=?", 
+			Array($rescanFlag, $this->scannerid));
+		if($this->rescan) {
+			foreach($this->rescan as $folderName=>$oldRescanFlag) {
+				$this->rescan[$folderName] = $rescanFlag;
+			}
+		}
+	}
+
+	/**
+	 * Update lastscan information on folder (or set for rescan next)
+	 */
+	function updateLastscan($folderName, $rescanFolder=false) {
 		global $adb;
 
 		$scannedOn = date('d-M-Y');
+
+		$needRescan = $rescanFolder? 1 : 0;
 
 		$folderInfo = $adb->pquery("SELECT folderid FROM vtiger_mailscanner_folders WHERE scannerid=? AND foldername=?",
 			Array($this->scannerid, $folderName));
 		if($adb->num_rows($folderInfo)) {
 			$folderid = $adb->query_result($folderInfo, 0, 'folderid');
-			$adb->pquery("UPDATE vtiger_mailscanner_folders SET lastscan=? WHERE folderid=?", Array($scannedOn, $folderid));
+			$adb->pquery("UPDATE vtiger_mailscanner_folders SET lastscan=?, rescan=? WHERE folderid=?", 
+				Array($scannedOn, $needRescan, $folderid));
 		} else {
 			$enabledForScan = 1; // Enable folder for scan by default
-			$adb->pquery("INSERT INTO vtiger_mailscanner_folders(scannerid, foldername, lastscan, enabled)
-			   VALUES(?,?,?,?)", Array($this->scannerid, $folderName, $scannedOn, $enabledForScan));
+			$adb->pquery("INSERT INTO vtiger_mailscanner_folders(scannerid, foldername, lastscan, rescan, enabled)
+			   VALUES(?,?,?,?,?)", Array($this->scannerid, $folderName, $scannedOn, $needRescan, $enabledForScan));
 		}
 		if(!$this->lastscan) $this->lastscan = Array();
 		$this->lastscan[$folderName] = $scannedOn;
+
+		if(!$this->rescan) $this->rescan = Array();
+		$this->rescan[$folderName] = $needRescan;
 	}
 
 	/**
@@ -147,6 +174,33 @@ class Vtiger_MailScannerInfo {
 	function getLastscan($folderName) {
 		if($this->lastscan) return $this->lastscan[$folderName];
 		else return false;
+	}
+
+	/**
+	 * Does the folder need message rescan?
+	 */
+	function needRescan($folderName) {
+		if($this->rescan && isset($this->rescan[$folderName])) {
+			return $this->rescan[$folderName];
+		}
+		// TODO Pick details of rescan flag of folder from database?
+		return false;
+	}
+
+	/**
+	 * Check if rescan is required atleast on a folder?
+	 */
+	function checkRescan() {
+		$rescanRequired = false;
+		if($this->rescan) {
+			foreach($this->rescan as $folderName=>$rescan) {
+				if($rescan) { 
+					$rescanRequired = $folderName;
+					break;
+				}
+			}
+		}
+		return $rescanRequired;
 	}
 
 	/**
@@ -164,8 +218,9 @@ class Vtiger_MailScannerInfo {
 					$foldername = $adb->query_result($fldres, $index, 'foldername');
 					$folderid   = $adb->query_result($fldres, $index, 'folderid');
 					$lastscan   = $adb->query_result($fldres, $index, 'lastscan');
+					$rescan     = $adb->query_result($fldres, $index, 'rescan');
 					$enabled    = $adb->query_result($fldres, $index, 'enabled');
-					$folderinfo[$foldername] = Array ('folderid'=>$folderid, 'lastscan'=>$lastscan,'enabled'=>$enabled);
+					$folderinfo[$foldername] = Array ('folderid'=>$folderid, 'lastscan'=>$lastscan, 'rescan'=> $rescan, 'enabled'=>$enabled);
 				}
 			}
 		}
@@ -175,13 +230,13 @@ class Vtiger_MailScannerInfo {
 	/**
 	 * Update the folder information with given folder names
 	 */
-	function updateFolderInfo($foldernames) {
+	function updateFolderInfo($foldernames, $rescanFolder=false) {
 		if($this->scannerid && !empty($foldernames)) {
 			global $adb;
 			$qmarks = Array();
 			foreach($foldernames as $foldername) {
 				$qmarks[] = '?';
-				$this->updateLastscan($foldername);
+				$this->updateLastscan($foldername, $rescanFolder);
 			}
 			// Delete the folder that is no longer present
 			$adb->pquery("DELETE FROM vtiger_mailscanner_folders WHERE scannerid=? AND foldername NOT IN
@@ -235,6 +290,7 @@ class Vtiger_MailScannerInfo {
 		foreach($keys as $key) {
 			$infomap[$key] = $this->$key; 
 		}
+		$infomap['requireRescan'] = $this->checkRescan();
 		return $infomap;
 	}
 

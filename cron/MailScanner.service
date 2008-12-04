@@ -18,6 +18,25 @@ if($_REQUEST['app_key'] != $application_unique_key) {
 	exit;
 }
 
+/**
+ * Check if instance of this service is already running?
+ */
+$svcname = $_REQUEST['service'];
+// We need to make sure the PIDfile name is unqique
+$servicePIDFile = "logs/$svcname-". $_REQUEST['scannername']. '-service.pid';
+
+if(file_exists($servicePIDFile)) {
+	echo "Service $svcname already running! Check $servicePIDFile";
+	exit;
+} else {
+	$servicePIDFp = fopen($servicePIDFile, 'a');
+}
+
+/**
+ * Turn-off PHP error reporting.
+ */
+try { error_reporting(0); } catch (Exception $e) { }
+
 require_once('include/utils/utils.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
@@ -30,7 +49,7 @@ require_once('modules/Settings/MailScanner/core/MailScanner.php');
  * Execution of this is based on number of emails and connection to mailserver.
  * So setting infinite timeout.
  */
-set_time_limit(0);
+@set_time_limit(0);
 
 /** Turn-off this if not required. */
 $debug = true;
@@ -55,4 +74,9 @@ $scanner->performScanNow();
 
 echo "\nScanning " . $scannerinfo->server . " completed\n";
 
+/** Close and remove the PID file. */
+if($servicePIDFp) {
+	fclose($servicePIDFp);
+	unlink($servicePIDFile);
+}
 ?>

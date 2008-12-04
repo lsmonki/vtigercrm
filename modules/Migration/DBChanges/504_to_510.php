@@ -774,7 +774,7 @@ sslmethod VARCHAR(30),connecturl VARCHAR(255),searchfor VARCHAR(10),markas VARCH
 
 ExecuteQuery("CREATE TABLE vtiger_mailscanner_ids(scannerid INT, messageid TEXT,crmid INT)");
 
-ExecuteQuery("CREATE TABLE vtiger_mailscanner_folders(folderid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,scannerid INT,foldername VARCHAR(255),lastscan VARCHAR(30),enabled INT(1))");
+ExecuteQuery("CREATE TABLE vtiger_mailscanner_folders(folderid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,scannerid INT,foldername VARCHAR(255),lastscan VARCHAR(30),rescan INT(1), enabled INT(1))");
 
 ExecuteQuery("CREATE TABLE vtiger_mailscanner_rules(ruleid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,scannerid INT,fromaddress VARCHAR(255),toaddress VARCHAR(255),subjectop VARCHAR(20),subject VARCHAR(255),bodyop VARCHAR(20),body VARCHAR(255),matchusing VARCHAR(5),sequence INT)");
 

@@ -105,8 +105,8 @@ class Vtiger_MailScanner {
 				$mailrecord->debug = $mailbox->debug;
 				$mailrecord->log();
 
-				// If the email is already scanned, skip
-				if($this->isMessageScanned($mailrecord)) {
+				// If the email is already scanned & rescanning is not set, skip it
+				if($this->isMessageScanned($mailrecord, $lookAtFolder)) {
 					$this->log("\nMessage already scanned [$mailrecord->_subject], IGNORING...\n");
 					unset($mailrecord);					
 					continue;
@@ -127,9 +127,10 @@ class Vtiger_MailScanner {
 				/** Free the resources consumed. */
 				unset($mailrecord);
 			}
-			/* Update lastscan for this folder */
+			/* Update lastscan for this folder and reset rescan flag */
 			// TODO: Update lastscan only if all the mail searched was parsed successfully?
-			$this->updateLastScan($lookAtFolder);
+			$rescanFolderFlag = false;
+			$this->updateLastScan($lookAtFolder, $rescanFolderFlag);
 		}
 		// Close the mailbox at end
 		$mailbox->close();
@@ -169,6 +170,7 @@ class Vtiger_MailScanner {
 	function markMessageScanned($mailrecord, $crmid=false) {
 		global $adb;
 		if($crmid === false) $crmid = null;
+		// TODO Make sure we have unique entry
 		$adb->pquery("INSERT INTO vtiger_mailscanner_ids(scannerid, messageid, crmid) VALUES(?,?,?)",
 			Array($this->_scannerinfo->scannerid, $mailrecord->_uniqueid, $crmid));
 	}
@@ -176,15 +178,27 @@ class Vtiger_MailScanner {
 	/**
 	 * Check if email was scanned.
 	 */
-	function isMessageScanned($mailrecord) {
+	function isMessageScanned($mailrecord, $lookAtFolder) {
 		global $adb;
-		$messages = $adb->pquery("SELECT count(*) as message_count FROM vtiger_mailscanner_ids WHERE scannerid=? AND messageid=?",
+		$messages = $adb->pquery("SELECT * FROM vtiger_mailscanner_ids WHERE scannerid=? AND messageid=?",
 			Array($this->_scannerinfo->scannerid, $mailrecord->_uniqueid));
-		$messageCount = 0;
+
+		$folderRescan = $this->_scannerinfo->needRescan($lookAtFolder);
+		$isScanned = false;
+
 		if($adb->num_rows($messages)) {
-			$messageCount = $adb->query_result($messages, 0, 'message_count');
+			$isScanned = true;
+
+			// If folder is scheduled for rescan and earlier message was not acted upon?
+			$relatedCRMId = $adb->query_result($messages, 0, 'crmid');
+
+			if($folderRescan && empty($relatedCRMId)) {
+				$adb->pquery("DELETE FROM vtiger_mailscanner_ids WHERE scannerid=? AND messageid=?",
+					Array($this->_scannerinfo->scannerid, $mailrecord->_uniqueid));
+				$isScanned = false;
+			}
 		}
-		return ($messageCount? true : false);
+		return $isScanned;
 	}
 
 	/**

@@ -6790,6 +6790,7 @@
 		<field name="scannerid" type="I"></field>
 		<field name="foldername" type="C" size="255"></field>
 		<field name="lastscan" type="C" size="30"></field>
+		<field name="rescan" type="I" size="1"></field>
 		<field name="enabled" type="I" size="1"></field>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>

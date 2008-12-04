@@ -142,6 +142,7 @@ function performScanNow(app_key, scannername) {
 									{if $SCANNERINFO.searchfor eq 'ALL'}{$MOD.LBL_ALL}
 									{elseif $SCANNERINFO.searchfor eq 'UNSEEN'}{$MOD.LBL_UNREAD}{/if}
 									{$MOD.LBL_MESSAGES_FROM_LASTSCAN}
+									{if $SCANNERINFO.requireRescan} [{$MOD.LBL_INCLUDE} {$MOD.LBL_SKIPPED}] {/if}
 								</td>
                         	</tr>
 							<tr>

@@ -25,6 +25,9 @@ $newscannerinfo->searchfor  = $_REQUEST['mailboxinfo_searchfor'];
 $newscannerinfo->markas     = $_REQUEST['mailboxinfo_markas'];
 $newscannerinfo->isvalid    =($_REQUEST['mailboxinfo_enable'] == 'true')? true : false;
 
+// Rescan all folders on next run?
+$rescanfolder = ($_REQUEST['mailboxinfo_rescan_folders'] == 'true')? true : false;
+
 $isconnected = false;
 
 $scannerinfo = new Vtiger_MailScannerInfo('DEFAULT');
@@ -57,6 +60,9 @@ if(!$isconnected) {
 } else {
 
 	$mailServerChanged = $scannerinfo->update($newscannerinfo);
+	
+	$scannerinfo->updateAllFolderRescan($rescanfolder);
+
 	// Update lastscan on all the available folders.
 	if($mailServerChanged && $mailbox) {
 		$folders = $mailbox->getFolders();

@@ -165,9 +165,21 @@
                             <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_LOOKFOR}</strong></td>
                             <td width="80%" class="small cellText"> 
 							<select name="mailboxinfo_searchfor" class="small">
-								<option value="ALL" {if $SCANNERINFO.searchfor eq 'ALL'}selected=true{/if}>{$MOD.LBL_ALL}</option>
-								<option value="UNSEEN" {if $SCANNERINFO.searchfor eq 'UNSEEN'}selected=true{/if}>{$MOD.LBL_UNREAD}</option> 
+								<option value="ALL" {if $SCANNERINFO.searchfor eq 'ALL'}selected=true{/if} 
+									onclick="$('mailboxinfo_rescan_folders_span').show()">{$MOD.LBL_ALL}</option>
+								<option value="UNSEEN" {if $SCANNERINFO.searchfor eq 'UNSEEN'}selected=true{/if} 
+									onclick="this.form.mailboxinfo_rescan_folders.checked=false;$('mailboxinfo_rescan_folders_span').hide()">{$MOD.LBL_UNREAD}</option> 
 							</select> {$MOD.LBL_MESSAGES_FROM_LASTSCAN}
+
+							{if $SCANNERINFO.searchfor eq 'ALL'}
+								<span id="mailboxinfo_rescan_folders_span">
+								{* Disabling Rescanning of messages for later use *}
+								{* -- START	
+								<input type="checkbox" name="mailboxinfo_rescan_folders" value="true" class="small" {if $SCANNERINFO.requireRescan}checked=true{/if}> {$MOD.LBL_INCLUDE} {$MOD.LBL_SKIPPED}</input>
+								-- END *}
+								</span>
+							{/if}
+
 							</td>
                         </tr>
 						<tr>

@@ -14,7 +14,33 @@ if($_REQUEST['app_key'] != $application_unique_key) {
 	exit;
 }
 
+/**
+ * Check if instance of this service is already running?
+ */
+$svcname = $_REQUEST['service'];
+// We need to make sure the PIDfile name is unqique
+$servicePIDFile = "logs/$svcname-service.pid';
+
+if(file_exists($servicePIDFile)) {
+	echo "Service $svcname already running! Check $servicePIDFile";
+	exit;
+} else {
+	$servicePIDFp = fopen($servicePIDFile, 'a');
+}
+
+/**
+ * Turn-off PHP error reporting.
+ */
+try { error_reporting(0); } catch(Exception $e) { }
+
 // ... REST OF YOUR CODE ...
+
+// AT END
+/** Close and remove the PID file. */
+if($servicePIDFp) {
+	fclose($servicePIDFp);
+	unlink($servicePIDFile);
+}
 
 ?>
 
