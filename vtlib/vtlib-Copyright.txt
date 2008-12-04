@@ -12,3 +12,10 @@ BSD License: http://www.opensource.org/licenses/bsd-license.html
 
 NOTE: Bug Fix was added to function addFile of dZip class.
 
+2. For RSS Parsing
+-- ===============
+vtlib/thirdparty/parser/rss/simplepie.inc
+
+DOWNLOAD URL: http://simplepie.org
+
+BSD License: http://www.opensource.org/licenses/bsd-license.php

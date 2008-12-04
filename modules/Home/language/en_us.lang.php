@@ -80,6 +80,10 @@ $mod_strings = Array(
 'LBL_HOME_VERTICAL_BARCHART'=>'Vertical Bar Chart',
 'LBL_HOME_PIE_CHART'=>'Pie Chart',
 'LBL_HOME_ITEMS'=>'item(s)',
+
+// vtiger CRM News
+'LBL_NEWS_NO'=>'No news',
+// END
 );
 
 ?>

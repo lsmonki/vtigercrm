@@ -57,6 +57,11 @@
 		<td class=small nowrap>
 			<table border=0 cellspacing=0 cellpadding=0>
 			 <tr>
+			 {if $ADMIN_LINK neq ''} {* Show links only for admin *}
+			 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="javascript:void(0);" onclick="vtiger_news(this)">{$APP.LBL_VTIGER_NEWS}</a></td>
+			 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="javascript:void(0);" onclick="vtiger_feedback();">{$APP.LBL_FEEDBACK}</a></td>
+			 {/if}
+
 			 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="index.php?module=Users&action=DetailView&record={$CURRENT_USER_ID}&modechk=prefview">{$APP.LBL_MY_PREFERENCES}</a></td>
 			 <td style="padding-left:10px;padding-right:10px" class=small nowrap><a href="http://wiki.vtiger.com/index.php/Main_Page" target="_blank">{$APP.LNK_HELP}</a></td>
 			 <td style="padding-left:10px;padding-right:10px" class=small nowrap><a href="javascript:;" onClick="openwin();">{$APP.LNK_WEARE}</a></td>
@@ -511,6 +516,38 @@ function openwin()
 	Drag.init(THandle, TRoot);
 </script>		
 
+<!-- vtiger Feedback -->
+<script type="text/javascript">
+{literal}
+function vtiger_feedback() {
+	window.open("http://www.vtiger.com/products/crm/feedback.php?uid={/literal}{php}global $application_unique_key; echo $application_unique_key;{/php}{literal}","feedbackwin","height=300,width=515,top=200,left=300")
+}
+{/literal}
+</script>
+<!-- vtiger news -->
+<script type="text/javascript">
+{literal}
+function vtiger_news(obj) {
+	$('status').style.display = 'inline';
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Home&action=HomeAjax&file=HomeNews',
+			onComplete: function(response) {
+				$("vtigerNewsPopupLay").innerHTML=response.responseText;
+				fnvshobj(obj, 'vtigerNewsPopupLay');
+				$('status').style.display = 'none';
+			}
+		}
+	);
+		
+}
+{/literal}
+</script>
+<div class="lvtCol fixedLay1" id="vtigerNewsPopupLay" style="display: none; height: 250px; bottom: 2px; display: padding: 2px; block; z-index: 12; font-weight: normal;" align="left">
+</div>
+<!-- END -->
 
 <!-- ActivityReminder Customization for callback -->
 <div class="lvtCol fixedLay1" id="ActivityRemindercallback" style="right: 0px; bottom: 2px; display: padding: 2px; block; z-index: 10; font-weight: normal;" align="left">
