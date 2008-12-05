@@ -54,6 +54,7 @@ class ImportOpportunity extends Potentials {
 	var $special_functions =  array(
 						"add_create_account",
 						"map_campaign_source",
+						"modseq_number",
 						//"add_lead_source",
 						//"add_opportunity_type",
 				        	//"add_date_closed"
@@ -264,6 +265,12 @@ class ImportOpportunity extends Potentials {
 		$this->db->println($this->importable_fields);
 	}
 
+	// Module Sequence Numbering	
+	function modseq_number() {
+		$this->column_fields['potential_no'] = $this->setModuleSeqNumber('increment', 'Potentials');
+	}
+	// END
+	
 }
 
 

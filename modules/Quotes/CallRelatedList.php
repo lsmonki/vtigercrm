@@ -48,6 +48,11 @@ $smarty->assign("CATEGORY",$category);
 if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
 	$smarty->assign("OP_MODE",$_REQUEST['mode']);
 }
+
+// Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['quote_no']);
+// END
+
 $smarty->assign("ID",$focus->id);
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("SINGLE_MOD",$app_strings['Quote']);

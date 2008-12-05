@@ -359,19 +359,19 @@ $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
-//Added for Custom Invoice Number
-//we have check the Invoice Number for duplicate only in create view
-if($focus->mode != 'edit')
-{
+// Module Sequence Numbering
+if($focus->mode != 'edit') {
 		$autostr = getTranslatedString('MSG_AUTO_GEN_ON_SAVE');
-		$inv_no = $adb->pquery("SELECT prefix, cur_id from vtiger_inventory_num where semodule = ? and active=1",array($module));
+		$inv_no = $adb->pquery("SELECT prefix, cur_id from vtiger_modentity_num where semodule = ? and active=1",array($module));
         $invstr = $adb->query_result($inv_no,0,'prefix');
         $invno = $adb->query_result($inv_no,0,'cur_id');
-        if(CheckDuplicateInvoiceNumber($invstr.$invno))
-                echo '<br><font color="#FF0000"><b>Duplicate Invoice Number - Click <a href="index.php?module=Settings&action=CustomInvoiceNo&parenttab=Settings">here</a> to  Configure the Invoice Number</b></font>'.$num_rows;
+        if($focus->checkModuleSeqNumber('vtiger_invoice', 'invoice_no', $invstr.$invno))
+                echo '<br><font color="#FF0000"><b>Duplicate Invoice Number - Click <a href="index.php?module=Settings&action=CustomModEntityNo&parenttab=Settings">here</a> to Configure the Invoice Number</b></font>'.$num_rows;
         else
                 $smarty->assign("inv_no",$autostr);
 }
+// END
+
 
 $smarty->assign("CURRENCIES_LIST", getAllCurrencies());
 if($focus->mode == 'edit' || $_REQUEST['isDuplicate'] == 'true') {

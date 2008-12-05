@@ -249,6 +249,10 @@ $mod_strings = Array(
 'LBL_ACTION'=>'Action',
 'LBL_FIELDLISTS'=> 'List Of Fields',
 'LBL_RECORD'=>'Record #',
+// Module Sequence Numbering
+'Contact No' => 'Contact No',
+// END
+
 );
 
 ?>

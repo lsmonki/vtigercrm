@@ -240,6 +240,10 @@ $mod_strings = Array(
 'LBL_FIELDLISTS'=> 'List Of Fields',
 'LBL_RECORD'=>'Record #',
 
+//Module Sequence Numbering
+'Account No'=>'Account No',
+// END
+
 );
 
 ?>

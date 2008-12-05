@@ -82,6 +82,10 @@ $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->colu
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("SINGLE_MOD", 'Contact');
 
+// Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['contact_no']);
+// END
+
 $smarty->assign("ID", $_REQUEST['record']);
 if(isPermitted("Contacts","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");

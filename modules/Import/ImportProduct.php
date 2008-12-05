@@ -44,6 +44,7 @@ class ImportProduct extends Products {
 					"assign_user",
 					"map_vendor_name",
 					"map_member_of",
+					"modseq_number",
 				       );
 
 	var $importable_fields = Array();
@@ -155,5 +156,10 @@ class ImportProduct extends Products {
 		$adb->println("Exit map_member_of. Fetched Account for '".$product_name."' and the account_id = $product_id");
     }
 
+	//Module Sequence Numbering	
+	function modseq_number() {
+		$this->column_fields['product_no'] = $this->setModuleSeqNumber('increment', 'Products');
+	}
+	// END
 }
 ?>

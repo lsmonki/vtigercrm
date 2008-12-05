@@ -65,6 +65,10 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("ACCOUNTID",$focus->column_fields['account_id']);
 
+// Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['potential_no']);
+// END
+
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 $smarty->display("RelatedLists.tpl");

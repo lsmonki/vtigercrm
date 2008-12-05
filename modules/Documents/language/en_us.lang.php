@@ -119,6 +119,10 @@ $mod_strings = Array(
 'Download Count'=>'Download Count',
 'Platform'=>'Platform',
 'Assigned To'=>'Assigned To',
+// Module Sequence Numbering
+'Note No' => 'Document No',
+// END
+
 );
 
 ?>

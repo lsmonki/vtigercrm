@@ -103,6 +103,10 @@ $lhtml .= "</select>";
 $smarty->assign("LEADCVCOMBO",$lhtml);
 /* To get Leads CustomView -END */
 
+// Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['campaign_no']);
+// END
+
 $smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
 $smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $category = getParentTab();

@@ -57,7 +57,10 @@ class SalesOrder extends CRMEntity {
 
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
-				'Order No'=>Array('crmentity'=>'crmid'),
+				// Module Sequence Numbering
+				//'Order No'=>Array('crmentity'=>'crmid'),
+				'Order No'=>Array('salesorder','salesorder_no'),
+				// END
 				'Subject'=>Array('salesorder'=>'subject'),
 				'Account Name'=>Array('account'=>'accountid'), 
 				'Quote Name'=>Array('quotes'=>'quoteid'), 
@@ -309,7 +312,7 @@ class SalesOrder extends CRMEntity {
 		global $mod_strings;
 		global $app_strings;
 
-		$query = 'select vtiger_sostatushistory.*, vtiger_salesorder.subject from vtiger_sostatushistory inner join vtiger_salesorder on vtiger_salesorder.salesorderid = vtiger_sostatushistory.salesorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_salesorder.salesorderid where vtiger_crmentity.deleted = 0 and vtiger_salesorder.salesorderid = ?';
+		$query = 'select vtiger_sostatushistory.*, vtiger_salesorder.* from vtiger_sostatushistory inner join vtiger_salesorder on vtiger_salesorder.salesorderid = vtiger_sostatushistory.salesorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_salesorder.salesorderid where vtiger_crmentity.deleted = 0 and vtiger_salesorder.salesorderid = ?';
 		$result=$adb->pquery($query, array($id));
 		$noofrows = $adb->num_rows($result);
 
@@ -336,7 +339,10 @@ class SalesOrder extends CRMEntity {
 		{
 			$entries = Array();
 
-			$entries[] = $row['salesorderid'];
+			// Module Sequence Numbering			
+			//$entries[] = $row['salesorderid'];
+			$entries[] = $row['salesorder_no'];
+			// END
 			$entries[] = $row['accountname'];
 			$entries[] = $row['total'];
 			$entries[] = (in_array($row['sostatus'], $sostatus_array))? $row['sostatus']: $error_msg;

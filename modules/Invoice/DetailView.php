@@ -63,6 +63,11 @@ $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->colu
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("ID", $_REQUEST['record']);
+
+// Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['invoice_no']);
+// END
+
 $smarty->assign("SINGLE_MOD", 'Invoice');
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);

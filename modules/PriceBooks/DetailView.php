@@ -54,6 +54,11 @@ if(isPermitted("PriceBooks","DeletePriceBook",$_REQUEST['record']) == 'yes')
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $_REQUEST['record']);
+
+// Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['pricebook_no']);
+// END
+
 $smarty->assign("NAME", $focus->name);
 
 

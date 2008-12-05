@@ -53,7 +53,10 @@ class PurchaseOrder extends CRMEntity {
 
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
-				'Order No'=>Array('crmentity'=>'crmid'),
+				//  Module Sequence Numbering
+				//'Order No'=>Array('crmentity'=>'crmid'),
+				'Order No'=>Array('purchaseorder'=>'purchaseorder_no'),
+				// END
 				'Subject'=>Array('purchaseorder'=>'subject'),
 				'Vendor Name'=>Array('purchaseorder'=>'vendorid'), 
 				'Tracking Number'=>Array('purchaseorder'=> 'tracking_no'),
@@ -279,7 +282,7 @@ class PurchaseOrder extends CRMEntity {
 		global $mod_strings;
 		global $app_strings;
 
-		$query = 'select vtiger_postatushistory.*, vtiger_purchaseorder.subject from vtiger_postatushistory inner join vtiger_purchaseorder on vtiger_purchaseorder.purchaseorderid = vtiger_postatushistory.purchaseorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid where vtiger_crmentity.deleted = 0 and vtiger_purchaseorder.purchaseorderid = ?';
+		$query = 'select vtiger_postatushistory.*, vtiger_purchaseorder.* from vtiger_postatushistory inner join vtiger_purchaseorder on vtiger_purchaseorder.purchaseorderid = vtiger_postatushistory.purchaseorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid where vtiger_crmentity.deleted = 0 and vtiger_purchaseorder.purchaseorderid = ?';
 		$result=$adb->pquery($query, array($id));
 		$noofrows = $adb->num_rows($result);
 
@@ -306,7 +309,10 @@ class PurchaseOrder extends CRMEntity {
 		{
 			$entries = Array();
 
-			$entries[] = $row['purchaseorderid'];
+			//Module Sequence Numbering
+			//$entries[] = $row['purchaseorderid'];
+			$entries[] = $row['purchaseorder_no'];
+			// END
 			$entries[] = $row['vendorname'];
 			$entries[] = $row['total'];
 			$entries[] = (in_array($row['postatus'], $postatus_array))? $row['postatus']: $error_msg;

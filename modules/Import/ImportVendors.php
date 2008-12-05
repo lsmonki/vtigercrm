@@ -21,7 +21,7 @@ class ImportVendors extends Vendors {
 	 var $db;
 
 	// This is the list of the functions to run when importing
-	var $special_functions =  array("assign_user");
+	var $special_functions =  array("assign_user","modseq_number");
 
 	var $importable_fields = Array();
 
@@ -73,6 +73,13 @@ class ImportVendors extends Vendors {
 		
 		$this->db->println($this->importable_fields);
 	}
+
+	//Module Sequence Numbering	
+	function modseq_number() {
+		$this->column_fields['vendor_no'] = $this->setModuleSeqNumber('increment', 'Vendors');
+	}
+	// END
+	
 
 }
 ?>

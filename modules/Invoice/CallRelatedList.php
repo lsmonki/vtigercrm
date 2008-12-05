@@ -54,6 +54,11 @@ if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
 $smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
 $smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $smarty->assign("ID",$focus->id);
+
+// Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['invoice_no']);
+// END
+
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("SINGLE_MOD",$mod_strings['Invoice']);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));

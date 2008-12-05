@@ -63,5 +63,8 @@ $mod_strings = array(
 'LBL_FIELDLISTS'=> 'List Of Fields',
 'LBL_RECORD'=>'Record #',
 
+// Module Sequence Numbering
+'Vendor No' => 'Vendor No',
+// END
 );
 ?>

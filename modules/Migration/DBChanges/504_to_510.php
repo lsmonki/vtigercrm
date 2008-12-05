@@ -853,6 +853,272 @@ foreach($tab_field_array as $index=>$value){
 /* Showing Emails in Vendors related list */
 ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Vendors").",".getTabid("Emails").",'get_emails',4,'Emails',0)");
 
+/** Added for module sequence number customization */
+
+ExecuteQuery("CREATE TABLE vtiger_modentity_num (num_id int(19) NOT NULL, semodule varchar(50) NOT NULL, prefix varchar(50) NOT NULL DEFAULT '', start_id varchar(50) NOT NULL, cur_id varchar(50) NOT NULL, active int(2) NOT NULL, PRIMARY KEY(num_id))");
+
+// Setup module sequence numbering.
+function custom_addInventoryRows($paramArray){
+	global $adb;
+
+	$fieldCreateCount = 0;
+
+	for($index = 0; $index < count($paramArray); ++$index) {
+		$criteria = $paramArray[$index];
+
+		$semodule = $criteria['semodule'];
+
+		require_once("modules/$semodule/$semodule.php");
+		$modfocus = new $semodule();
+		$modfocus->setModuleSeqNumber('configure', $semodule, $criteria['prefix'], $criteria['startid']);
+	}
+}
+$modseq = array(
+	'Leads'     =>'LEA',
+	'Accounts'  =>'ACC',
+	'Campaigns' =>'CAM',	
+	'Contacts'  =>'CON',
+	'Potentials'=>'POT',
+	'HelpDesk'  =>'TT',
+	'Quotes'    =>'QUO',
+	'SalesOrder'=>'SO',
+	'PurchaseOrder'=>'PO',
+	'Invoice'   =>'INV',
+	'Products'  =>'PRO',
+	'Vendors'   =>'VEN',
+	'PriceBooks'=>'PB',
+	'Faq'       =>'FAQ',
+	'Documents' =>'DOC'
+);
+foreach($modseq as $modname => $prefix) {
+	custom_addInventoryRows(
+		array(
+			array('semodule'=>$modname, 'active'=>'1','prefix'=>$prefix,'startid'=>'1','curid'=>'1')
+		)
+	);
+}
+
+ // Add Module Number Field to UI.						
+
+ExecuteQuery("insert into vtiger_field values (6,".$adb->getUniqueID("vtiger_field").",'account_no','vtiger_account',1,'4','account_no','Account No',1,0,0,100,2,9,1,'V~M',0,1,'BAS',0)");
+ExecuteQuery("ALTER TABLE vtiger_account ADD COLUMN account_no varchar(100) not null");
+
+ExecuteQuery("insert into vtiger_field values (7,".$adb->getUniqueID("vtiger_field").",'lead_no','vtiger_leaddetails',1,'4','lead_no','Lead No',1,0,0,100,3,13,1,'V~M',0,1,'BAS',0)");
+ExecuteQuery("ALTER TABLE vtiger_leaddetails ADD COLUMN lead_no varchar(100) not null");
+
+ExecuteQuery("insert into vtiger_field values (4,".$adb->getUniqueID("vtiger_field").",'contact_no','vtiger_contactdetails',1,'4','contact_no','Contact No',1,0,0,100,3,4,1,'V~M',0,1,'BAS',0)");		
+ExecuteQuery("ALTER TABLE vtiger_contactdetails ADD COLUMN contact_no varchar(100) not null");
+
+ExecuteQuery("insert into vtiger_field values (2,".$adb->getUniqueID("vtiger_field").",'potential_no','vtiger_potential',1,'4','potential_no','Potential No',1,0,0,100,2,1,1,'V~M',0,1,'BAS',0)");
+ExecuteQuery("ALTER TABLE vtiger_potential ADD COLUMN potential_no varchar(100) not null");
+
+ExecuteQuery("insert into vtiger_field values (26,".$adb->getUniqueID("vtiger_field").",'campaign_no','vtiger_campaign',1,'4','campaign_no','Campaign No',1,0,0,100,2,76,1,'V~M',0,1,'BAS',0)");
+ExecuteQuery("ALTER TABLE vtiger_campaign ADD COLUMN campaign_no varchar(100) not null");
+
+ExecuteQuery("insert into vtiger_field values (13,".$adb->getUniqueID("vtiger_field").",'ticket_no','vtiger_troubletickets',1,'4','ticket_no','Ticket No',1,0,0,100,1,25,1,'V~M',0,1,'BAS',0)");
+ExecuteQuery("ALTER TABLE vtiger_troubletickets ADD COLUMN ticket_no varchar(100) not null");
+
+ExecuteQuery("insert into vtiger_field values (14,".$adb->getUniqueID("vtiger_field").",'product_no','vtiger_products',1,'4','product_no','Product No',1,0,0,100,2,31,1,'V~M',0,1,'BAS',0)");
+ExecuteQuery("ALTER TABLE vtiger_products ADD COLUMN product_no varchar(100) not null");
+
+ExecuteQuery("insert into vtiger_field values (8,".$adb->getUniqueID("vtiger_field").",'note_no','vtiger_notes',1,'4','note_no','Note No',1,0,0,100,7,17,1,'V~M',0,1,'BAS',0)");
+ExecuteQuery("ALTER TABLE vtiger_notes ADD COLUMN note_no varchar(100) not null");
+
+ExecuteQuery("insert into vtiger_field values (15,".$adb->getUniqueID("vtiger_field").",'faq_no','vtiger_faq',1,'4','faq_no','Faq No',1,0,0,100,2,37,1,'V~M',0,1,'BAS',0)");
+ExecuteQuery("ALTER TABLE vtiger_faq ADD COLUMN faq_no varchar(100) not null");
+
+ExecuteQuery("insert into vtiger_field values (18,".$adb->getUniqueID("vtiger_field").",'vendor_no','vtiger_vendor',1,'4','vendor_no','Vendor No',1,0,0,100,2,44,1,'V~M',0,1,'BAS',0)");
+ExecuteQuery("ALTER TABLE vtiger_vendor ADD COLUMN vendor_no varchar(100) not null");
+
+ExecuteQuery("insert into vtiger_field values (19,".$adb->getUniqueID("vtiger_field").",'pricebook_no','vtiger_pricebook',1,'4','pricebook_no','PriceBook No',1,0,0,100,3,48,1,'V~M',0,1,'BAS',0)");
+ExecuteQuery("ALTER TABLE vtiger_pricebook ADD COLUMN pricebook_no varchar(100) not null");
+
+$field_result = $adb->query("select tabid, fieldid from vtiger_field where uitype='4'");
+$num_fields = $adb->num_rows($field_result);
+for($i = 0; $i<$num_fields; $i++)
+{
+	$tab_id = $adb->query_result($field_result,$i,'tabid');
+	$fld_id = $adb->query_result($field_result,$i,'fieldid');
+	ExecuteQuery("INSERT INTO vtiger_def_org_field (tabid, fieldid, visible, readonly) VALUES ($tab_id, $fld_id, 0, 1)");
+
+	$profile_result = $adb->query("select distinct(profileid) as profileid from vtiger_profile");
+	$num_profiles = $adb->num_rows($profile_result);
+	for($j=0; $j<$num_profiles; $j++) {
+		$profile_id = $adb->query_result($profile_result,$j,'profileid');
+		ExecuteQuery("INSERT INTO vtiger_profile2field (profileid, tabid, fieldid, visible, readonly) VALUES($profile_id, $tab_id, $fld_id, 0, 1)");
+	}
+	
+	$user_result = $adb->query("select distinct(id) as userid from vtiger_users");
+	$num_users = $adb->num_rows($user_result);
+	for($j=0; $j<$num_users; $j++) {
+		$user_id = $adb->query_result($user_result,$j,'userid');
+		ExecuteQuery("INSERT INTO vtiger_user2mergefields VALUES($user_id, $tab_id, $fld_id, 0)");
+	}
+}
+
+
+// Update Existing Module Record Numbers.
+function custom_updateModSeqNumber($module, $tablename, $colname, $reccol) {
+	global $adb;
+
+	if($tablename == '' || $colname == '') return;
+
+	$result = $adb->query("select * from $tablename");
+	$rowcount = $adb->num_rows($result);
+	for($i=0;$i<$rowcount;$i++)
+	{
+		$modres= $adb->query("select prefix, cur_id from vtiger_modentity_num where semodule='$module' and active=1");
+		$prefix=$adb->query_result($modres,0,'prefix');
+		$cur_id=$adb->query_result($modres,0,'cur_id');
+		$recid = $adb->query_result($result,$i,$reccol);
+		if($colid != '') continue;
+		ExecuteQuery("UPDATE $tablename set $colname='".$prefix.$cur_id."' where $reccol=".$recid);
+		ExecuteQuery("UPDATE vtiger_modentity_num set cur_id='".($cur_id+1)."' where semodule='$module' and active=1");
+	}
+}
+
+$upmodrecs = array(
+	array('Leads',       'vtiger_leaddetails',    'lead_no',      'leadid'),
+	array('Accounts',    'vtiger_account',        'account_no',   'accountid'),
+	array('Campaigns',   'vtiger_campaign',       'campaign_no',  'campaignid'),
+	array('Contacts',    'vtiger_contactdetails', 'contact_no',   'contactid'),
+	array('Potentials',  'vtiger_potential',      'potential_no', 'potentialid'),
+	array('HelpDesk',    'vtiger_troubletickets', 'ticket_no',    'ticketid'),
+	array('Quotes',      'vtiger_quotes',         'quote_no',     'quoteid'),
+	array('SalesOrder',  'vtiger_salesorder',     'salesorder_no','salesorderid'),
+	array('PurchaseOrder','vtiger_purchaseorder', 'purchaseorder_no','purchaseorderid'),
+	array('Products',    'vtiger_products',       'product_no',   'productid'),
+	array('Vendors',     'vtiger_vendor',         'vendor_no',    'vendorid'),
+	array('PriceBooks',  'vtiger_pricebook',      'pricebook_no', 'pricebookid'),
+	array('Faq',         'vtiger_faq',            'faq_no',       'id'),
+	array('Documents',   'vtiger_notes',          'note_no',      'notesid'),
+	array('Invoice',	 'vtiger_invoice', 		  'invoice_no',	  'invoiceid')
+);
+for($index = 0; $index < count($upmodrecs); ++$index) {
+	custom_updateModSeqNumber($upmodrecs[$index][0], $upmodrecs[$index][1], $upmodrecs[$index][2], $upmodrecs[$index][3]);
+}
+
+// Rearrange Fields on UI.
+$seq_array = array(
+		6 => array( 
+				'phone' => 4, 'website' => 3, 'fax' => 6, 'tickersymbol' => 5, 'otherphone' => 8, 'parentid' => 7, 'email1' => 10,
+				'employees' => 9, 'email2' => 11, 'ownership' => 12, 'rating' => 14, 'industry' => 13, 'siccode' => 16,
+				'account_type' => 15, 'annualrevenue' => 18
+			  ),
+		7 => array(
+				'phone' => 5, 'lastname' => 4, 'mobile' => 7, 'company' => 6, 'fax' => 9, 'designation' => 8, 'email' => 11, 'leadsource' => 10,
+				'website' => 13, 'industry' =>12, 'leadstatus' => 15, 'annualrevenue' => 14, 'rating' => 17, 'noofemployees' => 16, 'smownerid' => 19,
+				'yahooid' => 18, 'createdtime' => 21, 'modifiedtime' => 20
+			),
+		4 => array(
+				'phone' => 5, 'lastname' => 4, 'mobile' => 7, 'accountid' => 6, 'homephone' => 9, 'leadsource' => 8, 'otherphone' => 11, 'title' => 10,
+				'fax' => 13, 'department' => 12, 'birthday' => 16, 'email' => 15, 'reportsto' => 18,
+				'assistant' => 17, 'yahooid' => 20, 'assistantphone' => 19, 'donotcall' => 22, 'emailoptout' => 21, 'smownerid' => 24,
+				'reference' => 23, 'notify_owner' => 26, 'createdtime' => 25, 'modifiedtime' => 27
+			),
+		2 => array(
+				'amount' => 4, 'accountid' => 3, 'closingdate' => 7, 'potentialtype' => 6, 'nextstep' => 9,
+				'leadsource' => 8, 'sales_stage' => 11, 'smownerid' => 10, 'probability'  => 13,
+				'campaignid' => 12, 'createdtime' => 15, 'modifiedtime' => 14
+			),
+		26 => array(
+				'campaigntype' => 5, 'product_id' => 6, 'campaignstatus' => 4, 'closingdate' => 8, 'smownerid' => 3, 'numsent' => 12,
+				'sponsor' => 9, 'targetaudience' => 7, 'targetsize' => 10, 'createdtime' => 11, 'modifiedtime' => 13
+			),
+		13 => array (
+				'smownerid' => 4, 'parent_id' => 2, 'priority' => 6, 'product_id' => 5, 'severity' => 8, 'status' => 7,
+				'category' => 10, 'update_log' => 10, 'createdtime' => 9, 'modifiedtime' => 12, 'filename' => 11
+			),
+		14 => array (
+				'productcode' => 4, 'discontinued'  => 3, 'manufacturer' => 6, 'productcategory' => 6, 'sales_start_date' => 5,  'sales_end_date' => 8,
+				'start_date' => 7, 'expiry_date' => 10, 'website' => 14, 'vendor_id' => 13, 'mfr_part_no' => 16, 'vendor_part_no' => 15, 'serialno' => 18, 
+				'productsheet' => 17, 'glacct' => 20, 'createdtime' => 19, 'modifiedtime' => 21
+			),
+		15 => array (
+				'category' => 4
+			),
+		18 => array (
+				'phone' => 4, 'email' => 3, 'website' => 6, 'glacct' => 5, 'category' => 8, 'createdtime' => 7
+			),
+		19 => array (
+				'active' => 2
+			)
+	);
+
+foreach ( $seq_array as $tabid=> $field_seq) {
+	foreach ($field_seq as $field=>$seq) {
+		ExecuteQuery("update vtiger_field set sequence = $seq where tabid = $tabid and columnname = '". $field ."'");
+
+	}
+}
+
+ExecuteQuery("update vtiger_field set uitype = '4' where tabid = 20 and columnname = 'quote_no' ");
+ExecuteQuery("update vtiger_field set uitype = '4' where tabid = 21 and columnname = 'purchaseorder_no' ");
+ExecuteQuery("update vtiger_field set uitype = '4' where tabid = 22 and columnname = 'salesorder_no' ");
+ExecuteQuery("update vtiger_field set uitype = '4' where tabid = 23 and columnname = 'invoice_no' ");
+
+// ADD COLUMN TO SPECIFIED MODULE CUSTOM VIEW / FILTER.
+function custom_addCustomFilterColumn($module, $filtername, $tablename, $columnname, $fieldname, $displayinfo, $columnindex=0) {
+	global $adb;
+
+	$result = $adb->query("SELECT * FROM vtiger_customview WHERE entitytype = '".$adb->sql_escape_string($module)."' AND viewname = '".$adb->sql_escape_string($filtername)."'");
+	if($adb->num_rows($result) > 0) {
+		$cvid = $adb->query_result($result, 0, 'cvid');
+	}
+	
+	if($cvid == null) return;
+
+	// (cvid, columnindex) is combined key so we have to update columnindex suitably
+	ExecuteQuery("UPDATE vtiger_cvcolumnlist set columnindex=columnindex+1 WHERE cvid = $cvid AND columnindex >= $columnindex ORDER BY columnindex DESC");
+
+	$cvcolumnname_value = $tablename . ":" . $columnname . ":" . $fieldname . ":" . $displayinfo;
+	ExecuteQuery("INSERT INTO vtiger_cvcolumnlist(cvid, columnindex, columnname) VALUES ($cvid, $columnindex, '$cvcolumnname_value')");
+}
+
+// REMOVE SPECIFIED COLUMN FROM MODULE FILTER.
+function custom_removeCustomFilterColumn($module, $filtername, $tablename, $columnname, $fieldname, $displayinfo) {
+	global $adb;
+
+	$result = $adb->query("SELECT * FROM vtiger_customview WHERE entitytype = '".$adb->sql_escape_string($module)."' AND viewname = '".$adb->sql_escape_string($filtername)."'");
+	if($adb->num_rows($result) > 0) {
+		$cvid = $adb->query_result($result, 0, 'cvid');
+	}
+
+	if($cvid == null) return;
+
+	$cvcolumnname_value = $tablename . ":" . $columnname . ":" . $fieldname . ":" . $displayinfo;
+	ExecuteQuery("DELETE FROM vtiger_cvcolumnlist where cvid = $cvid and columnname like '$cvcolumnname_value:%' ");
+}
+
+custom_addCustomFilterColumn('Leads',      'All', 'vtiger_leaddetails',    'lead_no',      'lead_no',      'Leads_Lead_No:V');
+custom_addCustomFilterColumn('Accounts',   'All', 'vtiger_account',        'account_no',   'account_no',   'Accounts_Account_No:V');
+custom_addCustomFilterColumn('Campaigns',  'All', 'vtiger_campaign',       'campaign_no',  'campaign_no',  'Campaigns_Campaign_No:V');
+custom_addCustomFilterColumn('Contacts',   'All', 'vtiger_contactdetails', 'contact_no',   'contact_no',   'Contacts_Contact_No:V');
+custom_addCustomFilterColumn('Potentials', 'All', 'vtiger_potential',      'potential_no', 'potential_no', 'Potentials_Potential_No:V');
+
+custom_removeCustomFilterColumn('HelpDesk', 'All', 'vtiger_crmentity',      'crmid',     '',          'HelpDesk_Ticket_ID');
+custom_addCustomFilterColumn('HelpDesk',    'All', 'vtiger_troubletickets', 'ticket_no', 'ticket_no', 'HelpDesk_Ticket_No:V');
+
+//custom_removeCustomFilterColumn('Quotes', 'All', 'vtiger_crmentity', 'crmid',    '',         'Quotes_Quote_No');
+//custom_addCustomFilterColumn('Quotes',    'All', 'vtiger_quotes',    'quote_no', 'quote_no', 'Quotes_Quote_No:V');
+
+custom_removeCustomFilterColumn('SalesOrder', 'All', 'vtiger_salesorder',  'salesorder_no','salesorder_no','SalesOrder_Order_No');
+custom_addCustomFilterColumn('SalesOrder',    'All', 'vtiger_salesorder', 'salesorder_no', 'salesorder_no', 'SalesOrder_SalesOrder_No:V');
+
+custom_removeCustomFilterColumn('PurchaseOrder', 'All', 'vtiger_purchaseorder', 'purchaseorder_no', 'purchaseorder_no', 'PurchaseOrder_Order_No');
+custom_addCustomFilterColumn('PurchaseOrder',    'All', 'vtiger_purchaseorder', 'purchaseorder_no', 'purchaseorder_no', 'PurchaseOrder_PurchaseOrder_No:V');
+
+custom_addCustomFilterColumn('Products',   'All', 'vtiger_products',  'product_no',   'product_no',   'Products_Product_No:V');
+custom_addCustomFilterColumn('Vendors',    'All', 'vtiger_vendor',    'vendor_no',    'vendor_no',    'Vendors_Vendor_No:V');
+custom_addCustomFilterColumn('PriceBooks', 'All', 'vtiger_pricebook', 'pricebook_no', 'pricebook_no', 'PriceBooks_PriceBook_No:V');
+
+custom_removeCustomFilterColumn('Faq', 'All', 'vtiger_faq', 'id',     '',       'Faq_FAQ_Id');
+custom_addCustomFilterColumn('Faq',    'All', 'vtiger_faq', 'faq_no', 'faq_no', 'Faq_Faq_No:V');
+
+custom_addCustomFilterColumn('Documents',  'All', 'vtiger_notes', 'note_no', 'note_no', 'Notes_Note_No:V');
+
+/** Sequence number customization ends */
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

@@ -58,6 +58,10 @@ $smarty->assign("RELATEDLISTS", $related_array);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
+// Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['ticket_no']);
+// END
+
 $smarty->assign("ID",$focus->id);
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("SINGLE_MOD",$app_strings['Ticket']);

@@ -57,6 +57,9 @@ $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_st
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("ID", $_REQUEST['record']);
 
+// Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['campaign_no']);
+// END
 
 $tabid = getTabid("Campaigns");
 $validationData = getDBValidationData($focus->tab_name,$tabid);

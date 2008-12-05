@@ -85,6 +85,10 @@ $smarty->assign("NAME",$focus->name);
 $smarty->assign("EMAIL",$focus->column_fields['email']);
 $smarty->assign("YAHOO",$focus->column_fields['yahooid']);
 
+// Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['contact_no']);
+// END
+
 $related_array = getRelatedLists($currentModule,$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("MODULE",$currentmodule);

@@ -44,6 +44,7 @@ class ImportContact extends Contacts {
 						//"get_names_from_full_name"
 						"add_create_account",
 						"map_reports_to",
+						"modseq_number",
 						//,"add_salutation"
 						//,"add_lead_source"
 						//,"add_birthdate"
@@ -149,6 +150,12 @@ class ImportContact extends Contacts {
 
         }
 	*/
+
+	// Module Sequence Numbering	
+	function modseq_number() {
+		$this->column_fields['contact_no'] = $this->setModuleSeqNumber('increment', 'Contacts');
+	}
+	// END
 
 	/**	function used to create or map with existing account if the contact has mapped with an account during import
 	 */

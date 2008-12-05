@@ -59,6 +59,11 @@ if(isset($focus->name))
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("NAME", $focus->name);
 $smarty->assign("ID",$focus->id);
+
+// Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['vendor_no']);
+// END
+
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("SINGLE_MOD",$app_strings['Vendor']);
 $smarty->assign("RELATEDLISTS", $related_array);

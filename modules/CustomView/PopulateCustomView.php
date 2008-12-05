@@ -160,7 +160,8 @@ $customviews = Array(Array('viewname'=>'All',
 		    );
 
 
-$cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V',
+$cvcolumns = Array(Array('vtiger_leaddetails:lead_no:lead_no:Leads_Lead_No:V',
+						 'vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V',
                          'vtiger_leaddetails:firstname:firstname:Leads_First_Name:V',
                          'vtiger_leaddetails:company:company:Leads_Company:V',
 			 'vtiger_leadaddress:phone:phone:Leads_Phone:V',
@@ -182,7 +183,8 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
                          'vtiger_leadsubdetails:website:website:Leads_Website:V',
                          'vtiger_leaddetails:email:email:Leads_Email:E'),
 	
-		   Array('vtiger_account:accountname:accountname:Accounts_Account_Name:V',
+		  		 Array('vtiger_account:account_no:account_no:Accounts_Account_No:V',
+				 		'vtiger_account:accountname:accountname:Accounts_Account_Name:V',
                          'vtiger_accountbillads:bill_city:bill_city:Accounts_City:V',
                          'vtiger_account:website:website:Accounts_Website:V',
                          'vtiger_account:phone:phone:Accounts_Phone:V',
@@ -200,7 +202,8 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
                          'vtiger_accountbillads:bill_city:bill_city:Accounts_City:V',
                          'vtiger_crmentity:smownerid:assigned_user_id:Accounts_Assigned_To:V'),
 
-		   Array('vtiger_contactdetails:firstname:firstname:Contacts_First_Name:V',
+		   Array('vtiger_contactdetails:contact_no:contact_no:Contacts_Contact_No:V',
+		   			'vtiger_contactdetails:firstname:firstname:Contacts_First_Name:V',
                          'vtiger_contactdetails:lastname:lastname:Contacts_Last_Name:V',
                          'vtiger_contactdetails:title:title:Contacts_Title:V',
                          'vtiger_account:accountname:accountname:Contacts_Account_Name:V',
@@ -224,7 +227,8 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
 			 'vtiger_contactsubdetails:otherphone:otherphone:Contacts_Phone:V',
 			 'vtiger_crmentity:smownerid:assigned_user_id:Contacts_Assigned_To:V'),
 		  
-		   Array('vtiger_potential:potentialname:potentialname:Potentials_Potential_Name:V',
+		   Array('vtiger_potential:potential_no:potential_no:Potentials_Potential_No:V',
+		   			'vtiger_potential:potentialname:potentialname:Potentials_Potential_Name:V',
                          'vtiger_account:accountname:accountname:Potentials_Account_Name:V',
                          'vtiger_potential:sales_stage:sales_stage:Potentials_Sales_Stage:V',
                          'vtiger_potential:leadsource:leadsource:Potentials_Lead_Source:V',
@@ -244,7 +248,8 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
                          'vtiger_potential:closingdate:closingdate:Potentials_Expected_Close_Date:D',
                          'vtiger_crmentity:smownerid:assigned_user_id:Potentials_Assigned_To:V'),
 
-		   Array('vtiger_crmentity:crmid::HelpDesk_Ticket_ID:I',
+		   Array(//'vtiger_crmentity:crmid::HelpDesk_Ticket_ID:I',
+		   				'vtiger_troubletickets:ticket_no:ticket_no:HelpDesk_Ticket_No:V',
 			 'vtiger_troubletickets:title:ticket_title:HelpDesk_Title:V',
                          'vtiger_troubletickets:parent_id:parent_id:HelpDesk_Related_To:I',
                          'vtiger_troubletickets:status:ticketstatus:HelpDesk_Status:V',
@@ -303,16 +308,19 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
                          'vtiger_invoice:total:hdnGrandTotal:Invoice_Total:I',
                          'vtiger_crmentity:smownerid:assigned_user_id:Invoice_Assigned_To:V'),
 		
-		  Array('vtiger_notes:title:notes_title:Notes_Title:V',
+		  Array('vtiger_notes:note_no:note_no:Notes_Note_No:V',
+		  				'vtiger_notes:title:notes_title:Notes_Title:V',
                         'vtiger_notes:filename:filename:Notes_File:V',
                         'vtiger_crmentity:modifiedtime:modifiedtime:Notes_Modified_Time:V',
 		  				'vtiger_crmentity:smownerid:assigned_user_id:Notes_Assigned_To:V'),
 		
-		  Array('vtiger_pricebook:bookname:bookname:PriceBooks_Price_Book_Name:V',
+		  Array('vtiger_pricebook:pricebook_no:pricebook_no:PriceBooks_PriceBook_No:V',
+					  'vtiger_pricebook:bookname:bookname:PriceBooks_Price_Book_Name:V',
                         'vtiger_pricebook:active:active:PriceBooks_Active:V',
                         'vtiger_pricebook:currency_id:currency_id:PriceBooks_Currency:I'),
 		  
-		  Array('vtiger_products:productname:productname:Products_Product_Name:V',
+		  Array('vtiger_products:product_no:product_no:Products_Product_No:V',
+		  		'vtiger_products:productname:productname:Products_Product_Name:V',
                         'vtiger_products:productcode:productcode:Products_Product_Code:V',
                         'vtiger_products:commissionrate:commissionrate:Products_Commission_Rate:V',
 			'vtiger_products:qtyinstock:qtyinstock:Products_Quantity_In_Stock:V',
@@ -333,7 +341,8 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
                         'vtiger_salesorder:total:hdnGrandTotal:SalesOrder_Total:V',
                         'vtiger_crmentity:smownerid:assigned_user_id:SalesOrder_Assigned_To:V'),
 
-	          Array('vtiger_vendor:vendorname:vendorname:Vendors_Vendor_Name:V',
+	          Array('vtiger_vendor:vendor_no:vendor_no:Vendors_Vendor_No:V',
+			  'vtiger_vendor:vendorname:vendorname:Vendors_Vendor_Name:V',
 			'vtiger_vendor:phone:phone:Vendors_Phone:V',
 			'vtiger_vendor:email:email:Vendors_Email:E',
                         'vtiger_vendor:category:category:Vendors_Category:V'),
@@ -341,14 +350,16 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lastname:lastname:Leads_Last_Name:V
 
 
 
-		 Array('vtiger_faq:id::Faq_FAQ_Id:I',
+		 Array(//'vtiger_faq:id::Faq_FAQ_Id:I',
+		 		'vtiger_faq:faq_no:faq_no:Faq_Faq_No:V',
 		       'vtiger_faq:question:question:Faq_Question:V',
 		       'vtiger_faq:category:faqcategories:Faq_Category:V',
 		       'vtiger_faq:product_id:product_id:Faq_Product_Name:I',
 		       'vtiger_crmentity:createdtime:createdtime:Faq_Created_Time:D',
                        'vtiger_crmentity:modifiedtime:modifiedtime:Faq_Modified_Time:D'),
 		      //this sequence has to be maintained 
-		 Array('vtiger_campaign:campaignname:campaignname:Campaigns_Campaign_Name:V',
+		 Array('vtiger_campaign:campaign_no:campaign_no:Campaigns_Campaign_No:V',
+		 		'vtiger_campaign:campaignname:campaignname:Campaigns_Campaign_Name:V',
 		       'vtiger_campaign:campaigntype:campaigntype:Campaigns_Campaign_Type:N',
 		       'vtiger_campaign:campaignstatus:campaignstatus:Campaigns_Campaign_Status:N',
 		       'vtiger_campaign:expectedrevenue:expectedrevenue:Campaigns_Expected_Revenue:V',

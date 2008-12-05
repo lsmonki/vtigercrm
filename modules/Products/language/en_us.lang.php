@@ -232,6 +232,10 @@ $mod_strings = Array(
 
 'LBL_PRODUCT_PRICES'=>'Product Prices',
 'Member Of'=>'Member Of',
+
+// Module Sequence Numbering
+'Product No' => 'Product No',
+// END
 );
 
 ?>

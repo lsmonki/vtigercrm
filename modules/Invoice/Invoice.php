@@ -48,7 +48,8 @@ class Invoice extends CRMEntity {
 
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
-				'Invoice No'=>Array('crmentity'=>'crmid'),
+				//'Invoice No'=>Array('crmentity'=>'crmid'),
+				'Invoice No'=>Array('invoice'=>'invoice_no'),		
 				'Subject'=>Array('invoice'=>'subject'),
 				'Sales Order'=>Array('invoice'=>'salesorderid'),
 				'Status'=>Array('invoice'=>'invoicestatus'),
@@ -67,7 +68,8 @@ class Invoice extends CRMEntity {
 	var $list_link_field= 'subject';
 
 	var $search_fields = Array(
-				'Invoice No'=>Array('crmentity'=>'crmid'),
+				//'Invoice No'=>Array('crmentity'=>'crmid'),
+				'Invoice No'=>Array('invoice'=>'invoice_no'),
 				'Subject'=>Array('purchaseorder'=>'subject'), 
 				);
 	
@@ -283,7 +285,7 @@ class Invoice extends CRMEntity {
 		global $mod_strings;
 		global $app_strings;
 
-		$query = 'select vtiger_invoicestatushistory.*, vtiger_invoice.subject from vtiger_invoicestatushistory inner join vtiger_invoice on vtiger_invoice.invoiceid = vtiger_invoicestatushistory.invoiceid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_invoice.invoiceid where vtiger_crmentity.deleted = 0 and vtiger_invoice.invoiceid = ?';
+		$query = 'select vtiger_invoicestatushistory.*, vtiger_invoice.* from vtiger_invoicestatushistory inner join vtiger_invoice on vtiger_invoice.invoiceid = vtiger_invoicestatushistory.invoiceid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_invoice.invoiceid where vtiger_crmentity.deleted = 0 and vtiger_invoice.invoiceid = ?';
 		$result=$adb->pquery($query, array($id));
 		$noofrows = $adb->num_rows($result);
 
@@ -310,7 +312,10 @@ class Invoice extends CRMEntity {
 		{
 			$entries = Array();
 
-			$entries[] = $row['invoiceid'];
+			// Module Sequence Numbering
+			//$entries[] = $row['invoiceid'];
+			$entries[] = $row['invoice_no'];
+			// END
 			$entries[] = $row['accountname'];
 			$entries[] = $row['total'];
 			$entries[] = (in_array($row['invoicestatus'], $invoicestatus_array))? $row['invoicestatus']: $error_msg;

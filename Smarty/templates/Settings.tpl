@@ -528,16 +528,17 @@
 			<td width=25% valign=top>
 			<!-- empty-->
 
+			<!-- Module Sequence Numbering -->
 			<table border=0 cellspacing=0 cellpadding=5 width=100%>
 			<tr>
-				<td rowspan=2 valign=top><a href="index.php?module=Settings&action=CustomInventorySeq&parenttab=Settings"><img src="{$IMAGE_PATH}settingsInvNumber.gif" alt="{$MOD.LBL_CUSTOMIZE_INVENTORY_NUMBER}" width="48" height="48" border=0 title="{$MOD.LBL_CUSTOMIZE_INVENTORY_NUMBER}"></a></td>
-				<td class=big valign=top><a href="index.php?module=Settings&action=CustomInventorySeq&parenttab=Settings">{$MOD.LBL_CUSTOMIZE_INVENTORY_NUMBER}</a></td>
+				<td rowspan=2 valign=top><a href="index.php?module=Settings&action=CustomModEntityNo&parenttab=Settings"><img src="{$IMAGE_PATH}settingsInvNumber.gif" alt="{$MOD.LBL_CUSTOMIZE_MODENT_NUMBER}" width="48" height="48" border=0 title="{$MOD.LBL_CUSTOMIZE_MODENT_NUMBER}"></a></td>
+				<td class=big valign=top><a href="index.php?module=Settings&action=CustomModEntityNo&parenttab=Settings">{$MOD.LBL_CUSTOMIZE_MODENT_NUMBER}</a></td>
 			</tr>
 			<tr>
-				<td class="small" valign=top>{$MOD.LBL_CUSTOMIZE_INVENTORY_NUMBER_DESCRIPTION}</td>
+				<td class="small" valign=top>{$MOD.LBL_CUSTOMIZE_MODENT_NUMBER_DESCRIPTION}</td>
 			</tr>
-
 			</table>
+			<!-- END -->
 			</td>
 
 			<!-- MailScanner Customization -->

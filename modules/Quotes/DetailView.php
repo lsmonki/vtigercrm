@@ -62,6 +62,11 @@ $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("ID", $_REQUEST['record']);
+
+//Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['quote_no']);
+// END
+
 $smarty->assign("SINGLE_MOD",'Quote');
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);

@@ -34,10 +34,7 @@ $search=$_REQUEST['search_url'];
 
 global $current_user;
 setObjectValuesFromRequest($focus);
-if($focus->mode != 'edit')
-{
-	$focus->column_fields['invoice_no'] = setInventorySeqNumber("increment_invno",$module);
-}
+
 $focus->column_fields['currency_id'] = $_REQUEST['inventory_currency'];
 $cur_sym_rate = getCurrencySymbolandCRate($_REQUEST['inventory_currency']);
 $focus->column_fields['conversion_rate'] = $cur_sym_rate['rate'];

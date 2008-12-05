@@ -56,6 +56,11 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $focus->id);
+
+// Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['potential_no']);
+// END
+
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 $smarty->assign("ACCOUNTID",$focus->column_fields['account_id']);

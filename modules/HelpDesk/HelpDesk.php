@@ -34,7 +34,10 @@ class HelpDesk extends CRMEntity {
 	var $sortby_fields = Array('title','status','priority','crmid','firstname','smownerid');
 
 	var $list_fields = Array(
-					'Ticket ID'=>Array('crmentity'=>'crmid'),
+					//Module Sequence Numbering
+					//'Ticket ID'=>Array('crmentity'=>'crmid'),
+					'Ticket No'=>Array('troubletickets'=>'ticket_no'),
+					// END
 					'Subject'=>Array('troubletickets'=>'title'),	  			
 					'Related to'=>Array('troubletickets'=>'parent_id'),	  			
 					'Status'=>Array('troubletickets'=>'status'),
@@ -71,7 +74,8 @@ class HelpDesk extends CRMEntity {
 					'createdtime'
 				);
 	var $search_fields = Array(
-		'Ticket ID' => Array('vtiger_crmentity'=>'crmid'),
+		//'Ticket ID' => Array('vtiger_crmentity'=>'crmid'),
+		'Ticket ID' =>Array('vtiger_troubletickets'=>'ticket_no'),
 		'Title' => Array('vtiger_troubletickets'=>'title')
 		);
 	var $search_fields_name = Array(

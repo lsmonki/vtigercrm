@@ -244,6 +244,11 @@ $mod_strings = Array(
 'LBL_MERGE_DATA_IN'=>'Merge Records In',
 'LBL_FIELDLISTS'=> 'List Of Fields',
 'LBL_RECORD'=>'Record #',     
+
+//Module Sequence Numbering
+'Lead No'=>'Lead No',
+// END
+     
 );
 
 ?>

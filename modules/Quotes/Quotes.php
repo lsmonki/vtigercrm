@@ -58,7 +58,10 @@ class Quotes extends CRMEntity {
 
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
-				'Quote No'=>Array('crmentity'=>'crmid'),
+				//'Quote No'=>Array('crmentity'=>'crmid'),
+				// Module Sequence Numbering
+				'Quote No'=>Array('quotes'=>'quote_no'),
+				// END
 				'Subject'=>Array('quotes'=>'subject'),
 				'Quote Stage'=>Array('quotes'=>'quotestage'), 
 				'Potential Name'=>Array('quotes'=>'potentialid'),
@@ -308,7 +311,7 @@ class Quotes extends CRMEntity {
 		global $mod_strings;
 		global $app_strings;
 
-		$query = 'select vtiger_quotestagehistory.*, vtiger_quotes.subject from vtiger_quotestagehistory inner join vtiger_quotes on vtiger_quotes.quoteid = vtiger_quotestagehistory.quoteid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_quotes.quoteid where vtiger_crmentity.deleted = 0 and vtiger_quotes.quoteid = ?';
+		$query = 'select vtiger_quotestagehistory.*, vtiger_quotes.* from vtiger_quotestagehistory inner join vtiger_quotes on vtiger_quotes.quoteid = vtiger_quotestagehistory.quoteid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_quotes.quoteid where vtiger_crmentity.deleted = 0 and vtiger_quotes.quoteid = ?';
 		$result=$adb->pquery($query, array($id));
 		$noofrows = $adb->num_rows($result);
 
@@ -335,7 +338,10 @@ class Quotes extends CRMEntity {
 		{
 			$entries = Array();
 
-			$entries[] = $row['quoteid'];
+			// Module Sequence Numbering
+			//$entries[] = $row['quoteid'];
+			$entries[] = $row['quote_no'];
+			// END
 			$entries[] = $row['accountname'];
 			$entries[] = $row['total'];
 			$entries[] = (in_array($row['quotestage'], $quotestage_array))? $row['quotestage']: $error_msg;

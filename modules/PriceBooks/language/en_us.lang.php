@@ -31,6 +31,10 @@ $mod_strings = array(
 
 // Added after 5.0.4 GA
 'Currency'=>'Currency',
+
+// Module Sequence Numbering
+'PriceBook No' => 'PriceBook No',
+// END
 );
 
 

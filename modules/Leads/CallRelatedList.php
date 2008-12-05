@@ -79,6 +79,10 @@ $smarty->assign("CATEGORY",$category);
 $parent_email = getEmailParentsList('Leads',$focus->id);
         $smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
 
+// Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['lead_no']);
+// END
+
 $smarty->assign("ID",$focus->id);
 $smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
 $smarty->assign("EMAIL",$focus->column_fields['email']);

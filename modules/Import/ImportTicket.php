@@ -21,7 +21,7 @@ class ImportTicket extends HelpDesk {
 	 var $db;
 
 	// This is the list of the functions to run when importing
-	var $special_functions =  array("assign_user","add_product","empty_relatedto");
+	var $special_functions =  array("assign_user","add_product","empty_relatedto","modseq_number");
 
 	var $importable_fields = Array();
 
@@ -130,5 +130,11 @@ class ImportTicket extends HelpDesk {
 		$this->db->println($this->importable_fields);
 	}
 
+	// Module Sequence Numbering	
+	function modseq_number() {
+		$this->column_fields['ticket_no'] = $this->setModuleSeqNumber('increment', 'HelpDesk');
+	}
+	// END
+	
 }
 ?>

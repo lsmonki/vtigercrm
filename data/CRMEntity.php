@@ -548,15 +548,18 @@ class CRMEntity
 				  $fldvalue = str_replace(",","",$this->column_fields[$fieldname]);//trim($this->column_fields[$fieldname],",");
 
 			  }
+			  elseif($uitype == 4 && $insertion_mode != 'edit') {
+				// This check is added to avoid mod num generation multiple times for imported records
+			  	if(!isset($this->column_fields[$fieldname]) || $this->column_fields[$fieldname] == '' || $this->column_fields[$fieldname] == 'AUTO GEN ON SAVE')
+					$this->column_fields[$fieldname] = $this->setModuleSeqNumber("increment",$module);
+				$fldvalue = $this->column_fields[$fieldname];
+			  }
 			  else
 			  {
 				  $fldvalue = $this->column_fields[$fieldname]; 
 			  }
 			  if($uitype != 33)
 				  $fldvalue = from_html($fldvalue,($insertion_mode == 'edit')?true:false);
-
-
-
 		  }
 		  else
 		  {
@@ -624,10 +627,6 @@ class CRMEntity
 		  }
 
 	  }
-
-
-
-
 
 	  if($insertion_mode == 'edit')
 	  {
@@ -1203,10 +1202,21 @@ $log->info("in getOldFileName  ".$notesid);
 	* Function to initialize the importable fields array, based on the User's accessibility to the fields
 	*/
 	function initImportableFields($module) {		
-		global $current_user;
+		global $current_user, $adb;
 		require_once('include/utils/UserInfoUtil.php');
 		
-		$colf = getColumnFields($module);
+		//$colf = getColumnFields($module);
+		$colf = Array();
+		$tabid = getTabid($module);
+		$skip_uitypes = array('4'); // uitype 4 is for Mod numbers
+		$sql = "select * from vtiger_field where tabid=? and uitype not in (". generateQuestionMarks($skip_uitypes) .")";
+	        $result = $adb->pquery($sql, array($tabid, $skip_uitypes));
+	        $noofrows = $adb->num_rows($result);
+		for($i=0; $i<$noofrows; $i++)
+		{
+			$fieldname = $adb->query_result($result,$i,"fieldname");
+			$colf[$fieldname] = ''; 
+		}
 		foreach($colf as $key=>$value) {
 			if (getFieldVisibilityPermission($module, $current_user->id, $key) == '0')
 				$this->importable_fields[$key]=1;

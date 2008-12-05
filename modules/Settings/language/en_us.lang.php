@@ -1072,5 +1072,10 @@ $mod_strings = Array(
 'LBL_LIST_WORKFLOWS'=>'List Workflows',
 'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'List the Workflows defined for vtiger',
 // END
+
+// Module Sequence Numbering
+'LBL_CUSTOMIZE_MODENT_NUMBER'=>'Customize Record Numbering',
+'LBL_CUSTOMIZE_MODENT_NUMBER_DESCRIPTION'=>'Module Entity Number customization',
+// END
 );
 ?>

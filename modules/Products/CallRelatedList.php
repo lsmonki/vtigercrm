@@ -57,6 +57,10 @@ $smarty->assign("RELATEDLISTS", $related_array);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
+// Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['product_no']);
+// END
+
 $smarty->assign("ID",$focus->id);
 $smarty->assign("CURRENCY_ID",$product_base_currency);
 $smarty->assign("MODULE",$currentmodule);

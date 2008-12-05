@@ -410,6 +410,16 @@ getRelatedNotesAttachments($id,$crmid); //To Convert Related Notes & Attachments
 //Retrieve the lead related products and relate them with this new account
 saveLeadRelatedProducts($id, $crmid, "Accounts");
 
+//Module Sequence Numbering
+require_once('modules/Accounts/Accounts.php');
+$acc_no_focus = new Accounts();
+$acc_no_focus->retrieve_entity_info($account_id, 'Accounts');
+$acc_no_focus->id = $account_id;
+$acc_no_focus->mode = "edit";
+$acc_no_focus->column_fields['account_no'] = $acc_no_focus->setModuleSeqNumber("increment",'Accounts');
+$acc_no_focus->save('Accounts');
+// END
+
 //Up to this, Account related data save finshed
 
 
@@ -471,8 +481,15 @@ saveLeadRelatedCampaigns($id, $contact_id);
 
 //Up to this, Contact related data save finshed
 
-
-
+// Module Sequence Numbering
+require_once('modules/Contacts/Contacts.php');
+$cont_no_focus = new Contacts();
+$cont_no_focus->retrieve_entity_info($contact_id, 'Contacts');
+$cont_no_focus->id = $contact_id;
+$cont_no_focus->mode = "edit";
+$cont_no_focus->column_fields['contact_no'] = $cont_no_focus->setModuleSeqNumber("increment",'Contacts');
+$cont_no_focus->save('Contacts');
+// END
 
 
 //Saving Potential - starts
@@ -528,6 +545,16 @@ if(! isset($createpotential) || ! $createpotential == "on")
 
 	//Retrieve the lead related products and relate them with this new potential
 	saveLeadRelatedProducts($id, $oppid, "Potentials");
+
+	// Module Sequence Numbering
+	require_once('modules/Potentials/Potentials.php');
+	$pot_no_focus = new Potentials();
+	$pot_no_focus->retrieve_entity_info($oppid, 'Potentials');
+	$pot_no_focus->id = $oppid;
+	$pot_no_focus->mode = "edit";
+	$pot_no_focus->column_fields['potential_no'] = $pot_no_focus->setModuleSeqNumber("increment",'Potentials');
+	$pot_no_focus->save('Potentials');
+	// END
 
 }
 //Saving Potential - ends

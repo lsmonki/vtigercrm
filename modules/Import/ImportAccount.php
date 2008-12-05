@@ -44,7 +44,7 @@ class ImportAccount extends Accounts {
 	
 	// This is the list of the functions to run when importing
 	var $special_functions =  array(
-						"map_member_of",
+						"map_member_of","modseq_number",
 						//"add_billing_address_streets"
 						//,"add_shipping_address_streets"
 						//,"fix_website"
@@ -203,6 +203,12 @@ class ImportAccount extends Accounts {
 
 		$adb->println("Exit map_member_of. Fetched Account for '".$account_name."' and the account_id = $account_id");
         }
+
+	// Module Sequence Numbering	
+	function modseq_number() {
+		$this->column_fields['account_no'] = $this->setModuleSeqNumber('increment', 'Accounts');	
+	}
+	// END
 
 }
 

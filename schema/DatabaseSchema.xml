@@ -340,6 +340,10 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="account_no" type="C" size="100">
+			<notnull />
+			<unique />
+		</field>
 		<field name="accountname" type="C" size="100">
 			<unique />
 			<notnull />
@@ -449,6 +453,10 @@
 		<field name="contactid" type="I" size="19">
 			<key />
 			<default value="0" />
+		</field>
+		<field name="contact_no" type="C" size="100">
+			<notnull />
+			<unique />
 		</field>
 		<field name="accountid" type="I" size="19" />
 		<field name="salutation" type="C" size="200">
@@ -606,6 +614,10 @@
 		<field name="leadid" type="I" size="19">
 			<key />
 		</field>
+		<field name="lead_no" type="C" size="100">
+			<notnull />
+			<unique />
+		</field>
 		<field name="email" type="C" size="100" />
 		<field name="interest" type="C" size="50" />
 		<field name="firstname" type="C" size="40" />
@@ -740,6 +752,10 @@
 			<key />
 			<default value="0" />
 		</field>
+		<field name="note_no" type="C" size="100">
+			<notnull />
+			<unique />
+		</field>
 		<field name="title" type="C" size="50">
 			<notnull />
 		</field>
@@ -794,6 +810,10 @@
 		<field name="potentialid" type="I" size="19">
 			<key />
 			<default value="0" />
+		</field>
+		<field name="potential_no" type="C" size="100">
+			<notnull />
+			<unique />
 		</field>
 		<field name="accountid" type="I" size="19" />
 		<field name="potentialname" type="C" size="120">
@@ -1086,6 +1106,10 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="vendor_no" type="C" size="100">
+			<notnull />
+			<unique />
+		</field>
 		<field name="vendorname" type="C" size="100" />
 		<field name="phone" type="C" size="100" />
 		<field name="email" type="C" size="100" />
@@ -1113,6 +1137,10 @@
 	<table name="vtiger_products">
 		<field name="productid" type="I" size="11">
 			<key />
+		</field>
+		<field name="product_no" type="C" size="100">
+			<notnull />
+			<unique />
 		</field>
 		<field name="productname" type="C" size="50">
 			<notnull />
@@ -1425,6 +1453,10 @@
 </table>
 
 	<table name="vtiger_campaign">
+		<field name="campaign_no" type="C" size="100">
+			<notnull />
+			<unique />
+		</field>
 		<field name="campaignname" type="C" size="255" />
 		<field name="campaigntype" type="C" size="200" />
 		<field name="campaignstatus" type="C" size="200" />
@@ -1736,6 +1768,10 @@
 	<table name="vtiger_troubletickets">
 		<field name="ticketid" type="I" size="19">
 			<key />
+		</field>
+		<field name="ticket_no" type="C" size="100">
+			<notnull />
+			<unique />
 		</field>
 		<field name="groupname" type="C" size="100" />
 		<field name="parent_id" type="C" size="100" />
@@ -2286,6 +2322,10 @@
 		<field name="id" type="I" size="11">
 			<key />
 			<autoincrement />
+		</field>
+		<field name="faq_no" type="C" size="100">
+			<notnull />
+			<unique />
 		</field>
 		<field name="product_id" type="C" size="100" />
 		<field name="question" type="X">
@@ -3744,6 +3784,10 @@
 			<key />
 			<notnull />
 			<default value="0" />
+		</field>
+		<field name="pricebook_no" type="C" size="100">
+			<notnull />
+			<unique />
 		</field>
 		<field name="bookname" type="C" size="100" />
 		<field name="active" type="I" size="1" />
@@ -6934,4 +6978,31 @@
 	</table>
     <!-- com_vtiger_workflow ends-->
 
+	<table name="vtiger_modentity_num">
+	    <field name="num_id" type="I" size="19">
+			<key />
+			<notnull />
+		</field>
+		<field name="semodule" type="C" size="50">
+			<notnull />
+		</field>
+		<field name="prefix" type="C" size="50">
+			<notnull />
+			<default value="" />
+		</field>
+		<field name="start_id" type="C" size="50">
+			<notnull />
+		</field>
+		<field name="cur_id" type="C" size="50">
+			<notnull />
+		</field>
+		<field name="active" type="C" size="2">
+			<notnull />
+		</field>
+		<index name="num_idx" type="C" size="50">
+			<unique />
+			<col>num_id</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
 </schema>

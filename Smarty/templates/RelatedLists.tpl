@@ -95,9 +95,8 @@ function loadCvList(type,id)
 	<td class="showPanelBg" valign=top width=100%>
 		<!-- PUBLIC CONTENTS STARTS-->
 		<div class="small" style="padding:20px">
-		
-		
-			 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$SINGLE_MOD} {$APP.LBL_MORE} {$APP.LBL_INFORMATION}</span> <br>
+ 	        {* Module Record numbering, used MOD_SEQ_ID instead of ID *}	
+			 <span class="lvtHeaderText"><font color="purple">[ {$MOD_SEQ_ID} ] </font>{$NAME} -  {$SINGLE_MOD} {$APP.LBL_MORE} {$APP.LBL_INFORMATION}</span> <br>
 			 {$UPDATEINFO}
 			 <hr noshade size=1>
 			 <br> 

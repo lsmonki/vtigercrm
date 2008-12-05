@@ -51,6 +51,11 @@ $smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("ID",$focus->id);
+
+// Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['salesorder_no']);
+// END
+
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("SINGLE_MOD",$mod_strings['SalesOrder']);
 $smarty->assign("MOD",$mod_strings);

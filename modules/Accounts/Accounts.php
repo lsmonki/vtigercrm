@@ -604,7 +604,7 @@ class Accounts extends CRMEntity {
 		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_users.id,
 			vtiger_troubletickets.title, vtiger_troubletickets.ticketid AS crmid,
 			vtiger_troubletickets.status, vtiger_troubletickets.priority,
-			vtiger_troubletickets.parent_id,
+			vtiger_troubletickets.parent_id, vtiger_troubletickets.ticket_no,
 			vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime
 			FROM vtiger_troubletickets
 			INNER JOIN vtiger_crmentity

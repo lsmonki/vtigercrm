@@ -66,6 +66,10 @@ $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->colu
 $smarty->assign("SINGLE_MOD",$currentModule);
 $smarty->assign("MODULE",$currentModule);
 
+// Module Sequence Numbering
+$smarty->assign("MOD_SEQ_ID", $focus->column_fields['faq_no']);
+// END
+
 $smarty->assign("ID", $_REQUEST['record']);
 if(isPermitted("Faq","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");

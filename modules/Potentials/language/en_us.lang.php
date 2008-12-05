@@ -157,6 +157,10 @@ $mod_strings = Array(
 'LBL_FIELDLISTS'=> 'List Of Fields',
 'LBL_RECORD'=>'Record #',
 
+// Module Sequence Numbering
+'Potential No' => 'Potential No',
+// END
+
 );
 
 ?>

@@ -200,13 +200,13 @@
 		<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=OrganizationTermsandConditions&parenttab=Settings">{$MOD.LBL_INVENTORY_TANDC}</a></td></tr>
 		{/if}
 
-<!-- Added For Custom Invoice Number #start -->
-
-		{if $smarty.request.action eq 'CustomInvoiceNo'}
-			<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=CustomInventorySeq&parenttab=Settings">{$MOD.LBL_CUSTOMIZE_INVENTORY_NUMBER}</a></td></tr>
+		<!-- Module Sequence Numbering -->
+		{if $smarty.request.action eq 'CustomModEntityNo'}
+			<tr><td class="settingsTabSelected" nowrap><a href="index.php?module=Settings&action=CustomModEntityNo&parenttab=Settings">{$MOD.LBL_CUSTOMIZE_MODENT_NUMBER}</a></td></tr>
 		{else}
-			<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=CustomInventorySeq&parenttab=Settings">{$MOD.LBL_CUSTOMIZE_INVENTORY_NUMBER}</a></td></tr>
+			<tr><td class="settingsTabList" nowrap><a href="index.php?module=Settings&action=CustomModEntityNo&parenttab=Settings">{$MOD.LBL_CUSTOMIZE_MODENT_NUMBER}</a></td></tr>
 		{/if}
+		<!-- END -->
 
 <!-- Added For Custom Invoice Number #end -->
 
