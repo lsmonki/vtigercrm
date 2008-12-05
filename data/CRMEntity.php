@@ -1285,5 +1285,75 @@ $log->info("in getOldFileName  ".$notesid);
 			$this->sortby_fields[] = 'crmid';
 		$log->debug("Exiting initSortByField");
 	}
+
+	/* Function to set the Sequence string and sequence number starting value */
+	function setModuleSeqNumber($mode, $module, $req_str='', $req_no='')
+	{
+		global $adb;
+		//when we configure the invoice number in Settings this will be used
+		if ($mode == "configure" && $req_no != '') {
+			$check = $adb->pquery("select cur_id from vtiger_modentity_num where semodule=? and prefix = ?", array($module, $req_str));
+			if($adb->num_rows($check)== 0) {
+				$numid = $adb->getUniqueId("vtiger_modentity_num");
+				$active = $adb->pquery("select num_id from vtiger_modentity_num where semodule=? and active=1", array($module));
+				$adb->pquery("UPDATE vtiger_modentity_num SET active=0 where num_id=?", array($adb->query_result($active,0,'num_id')));
+				
+				$adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?)", array($numid,$module,$req_str,$req_no,$req_no,1));
+				return true;
+			}
+			else if($adb->num_rows($check)!=0) {
+				$num_check = $adb->query_result($check,0,'cur_id');
+				if($req_no < $num_check) {
+					return false;
+				}
+				else {
+					$adb->pquery("UPDATE vtiger_modentity_num SET active=0 where active=1 and semodule=?", array($module));
+					$adb->pquery("UPDATE vtiger_modentity_num SET cur_id=?, active = 1 where prefix=? and semodule=?", array($req_no,$req_str,$module));
+					return true;
+				}
+			}
+		}
+		else if ($mode == "increment") {
+			//when we save new invoice we will increment the invoice id and write
+			$check = $adb->pquery("select cur_id,prefix from vtiger_modentity_num where semodule=? and active = 1", array($module));
+			$prefix = $adb->query_result($check,0,'prefix');
+			$curid = $adb->query_result($check,0,'cur_id');
+			$prev_inv_no=$prefix.$curid;
+			$strip=strlen($curid)-strlen($curid+1);
+			if($strip<0)$strip=0;
+			$temp = str_repeat("0",$strip);
+			$req_no.= $temp.($curid+1);
+			$adb->pquery("UPDATE vtiger_modentity_num SET cur_id=? where cur_id=? and active=1 AND semodule=?", array($req_no,$curid,$module));
+			return decode_html($prev_inv_no);	
+		}
+	}
+	// END
+	
+	/* Function to get the next module sequence number for a given module */
+	function getModuleSeqInfo($module) {
+		global $adb;
+		$check = $adb->pquery("select cur_id,prefix from vtiger_modentity_num where semodule=? and active = 1", array($module));
+		$prefix = $adb->query_result($check,0,'prefix');
+		$curid = $adb->query_result($check,0,'cur_id');
+		return array($prefix, $curid);
+	}
+	// END
+	
+	/* Function to check if the mod number already exits */	
+	function checkModuleSeqNumber($table, $column, $no)
+	{
+		global $adb;
+		$result=$adb->pquery("select ".mysql_real_escape_string($column). 
+			" from ".mysql_real_escape_string($table). 
+			" where ".mysql_real_escape_string($column)." = ?", array($no));
+	
+		$num_rows = $adb->num_rows($result);
+	
+		if($num_rows > 0)
+			return true;
+		else
+			return false;
+	}
+	// END
 }
 ?>

@@ -133,7 +133,7 @@ function createInvoice($salesorder_id) {
 	// Cleanup focus object, to duplicate the Invoice.
 	$focus->id = '';
 	$focus->mode = '';
-	$focus->column_fields['invoice_no'] = setInventorySeqNumber("increment_invno",'Invoice');
+	$focus->column_fields['invoice_no'] = $focus->setModuleSeqNumber("increment",'Invoice');
 	$focus->column_fields['invoicestatus'] = 'Created';
 	$focus->column_fields['invoicedate'] = date('Y-m-d');
 	
