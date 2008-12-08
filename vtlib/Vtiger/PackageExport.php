@@ -126,6 +126,9 @@ class Vtiger_PackageExport {
 		// Copy templates directory of the module (if any)
 		if(is_dir("Smarty/templates/modules/$module"))
 			$zip->copyDirectoryFromDisk("Smarty/templates/modules/$module", "templates");
+		// Copy cron files of the module (if any)
+		if(is_dir("cron/modules/$module"))
+			$zip->copyDirectoryFromDisk("cron/modules/$moduel", "cron");
 
 		$zip->save();
 
@@ -430,9 +433,9 @@ class Vtiger_PackageExport {
 		$this->openNode('events');
 		foreach($events as $event) {
 			$this->openNode('event');
-			$this->outputNode('eventname', $event->eventname);
-			$this->outputNode('classname', $event->classname);
-			$this->outputNode('filename', $event->filename);
+			$this->outputNode($event->eventname, 'eventname');
+			$this->outputNode($event->classname, 'classname');
+			$this->outputNode($event->filename, 'filename');
 			$this->closeNode('event');
 		}
 		$this->closeNode('events');

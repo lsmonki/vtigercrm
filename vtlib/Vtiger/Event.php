@@ -8,6 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 include_once('vtlib/Vtiger/Utils.php');
+include_once('modules/Users/Users.php');
 @include_once('include/events/include.inc');
 
 /**
@@ -60,6 +61,39 @@ class Vtiger_Event {
 	}
 
 	/**
+	 * Trigger event based on CRM Record
+	 * @param String Name of the Event to trigger
+	 * @param Integer CRM record id on which event needs to be triggered.
+	 */
+	static function trigger($eventname, $crmid) {
+		if(!self::hasSupport()) return;
+
+		global $adb;
+		$checkres = $adb->pquery("SELECT setype, crmid, deleted FROM vtiger_crmentity WHERE crmid=?", Array($crmid));
+		if($adb->num_rows($checkres)) {
+			$result = $adb->fetch_array($checkres, 0);
+			if($result['deleted'] == '0') {
+				$module = $result['setype'];
+				require_once("modules/$module/$module.php");
+				// TODO Special case handling to be done for calendar.
+				$moduleInstance = new $module();
+				$moduleInstance->retrieve_entity_info($result['crmid'], $module);
+				$moduleInstance->id = $result['crmid'];
+
+				global $current_user;
+				if(!$current_user) {
+					$current_user = new Users();
+					$current_user->id = $moduleInstance->column_fields['assigned_user_id'];
+				}
+
+				// Trigger the event
+				$em = new VTEventsManager($adb);
+				$em->triggerEvent($eventname, VTEntityData::fromCRMEntity($moduleInstance));
+			}
+		}		
+	}
+
+	/**
 	 * Get all the registered module events
 	 * @param Vtiger_Module Instance of the module to use
 	 */
@@ -68,7 +102,7 @@ class Vtiger_Event {
 		$events = false;
 		if(self::hasSupport()) {
 			// TODO VTEventManager should provide API to get list of registered events on module
-			$records = $adb->pquery("SELECT * FROM vtiger_eventhandlers"); 
+			$records = $adb->query("SELECT * FROM vtiger_eventhandlers"); 
 			$reccount = $adb->num_rows($records);
 			if($reccount) {
 				for($index = 0; $index < $reccount; ++$index) {

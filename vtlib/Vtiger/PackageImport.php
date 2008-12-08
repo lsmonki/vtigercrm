@@ -116,7 +116,10 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 					//'exclude' => Array('manifest.xml')                // DEFAULT: excludes all not in include
 				),
 				// Templates folder to be renamed while copying
-				Array('templates' => "Smarty/templates/modules/$module") 
+				Array('templates' => "Smarty/templates/modules/$module"),
+
+				// Cron folder to be renamed while copying
+				Array('cron' => "cron/modules/$module")	
 			);
 
 			// If data is not yet available
