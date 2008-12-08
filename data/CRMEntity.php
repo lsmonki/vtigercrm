@@ -1355,5 +1355,59 @@ $log->info("in getOldFileName  ".$notesid);
 			return false;
 	}
 	// END
+
+	/**
+	 * For Record View Notification
+	 */
+	function isViewed($crmid=false) {
+		if(!$crmid) { $crmid = $this->id; }
+		if($crmid) {
+			global $adb;
+			$result = $adb->pquery("SELECT viewedtime,modifiedtime,smcreatorid,smownerid,modifiedby FROM vtiger_crmentity WHERE crmid=?", Array($crmid));
+			$resinfo = $adb->fetch_array($result);
+
+			$lastviewed = $resinfo['viewedtime'];
+			$modifiedon = $resinfo['modifiedtime'];
+			$smownerid   = $resinfo['smownerid'];
+			$smcreatorid = $resinfo['smcreatorid'];
+			$modifiedby = $resinfo['modifiedby'];
+		
+			if($modifiedby == '0' && ($smownerid == $smcreatorid)) {
+				/** When module record is created **/
+				return true; 
+			} else if($smownerid == $modifiedby) {
+				/** Owner and Modifier as same. **/
+				return true;
+			} else if($lastviewed && $modifiedon) {
+				/** Lastviewed and Modified time is available. */
+				if($this->__timediff($modifiedon, $lastviewed) > 0) return true;
+			} 
+		}
+		return false;
+	}
+
+	function __timediff($d1, $d2) {
+		list($t1_1, $t1_2) = explode(' ', $d1);
+		list($t1_y, $t1_m, $t1_d) = explode('-', $t1_1);
+		list($t1_h, $t1_i, $t1_s) = explode(':', $t1_2);
+
+		$t1 = mktime($t1_h, $t1_i, $t1_s, $t1_m, $t1_d, $t1_y);
+
+		list($t2_1, $t2_2) = explode(' ', $d2);
+		list($t2_y, $t2_m, $t2_d) = explode('-', $t2_1);
+		list($t2_h, $t2_i, $t2_s) = explode(':', $t2_2);
+
+		$t2 = mktime($t2_h, $t2_i, $t2_s, $t2_m, $t2_d, $t2_y);
+
+		if( $t1 == $t2 ) return 0;
+		return $t2 - $t1;
+	}
+
+	function markAsViewed($userid) {
+		global $adb;
+		$adb->pquery("UPDATE vtiger_crmentity set viewedtime=? WHERE crmid=? AND smownerid=?",
+			Array( date('Y-m-d H:i:s', time()), $this->id, $userid));
+	}
+	/** END **/
 }
 ?>

@@ -167,7 +167,10 @@ if(isset($_SESSION['helpdesk_listquery'])){
 }
 $smarty->assign("SinglePane_View", $singlepane_view);
 
-$smarty->display("DetailView.tpl");
+// Record Change Notification
+$focus->markAsViewed($current_user->id);
+// END
 
+$smarty->display("DetailView.tpl");
 
 ?>

@@ -144,6 +144,11 @@ if(isset($_SESSION['invoice_listquery'])){
 		}
 	}
 }
+
+// Record Change Notification
+$focus->markAsViewed($current_user->id);
+// END
+
 $smarty->display("Inventory/InventoryDetailView.tpl");
 
 ?>

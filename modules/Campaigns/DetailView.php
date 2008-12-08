@@ -147,6 +147,11 @@ if(isset($_SESSION['campaigns_listquery'])){
 		}
 	}
 }
+
+// Record Change Notification
+$focus->markAsViewed($current_user->id);
+// END
+
 $smarty->display("DetailView.tpl");
 
 $focus->id = $_REQUEST['record'];

@@ -193,6 +193,10 @@ if(isset($_SESSION['leads_listquery'])){
 		}
 	}
 }
+// Record Change Notification
+$focus->markAsViewed($current_user->id);
+// END
+
 $smarty->display("DetailView.tpl");
 
 ?>

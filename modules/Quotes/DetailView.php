@@ -155,6 +155,10 @@ if(isset($_SESSION['quotes_listquery'])){
 		}
 	}
 }
+// Record Change Notification
+$focus->markAsViewed($current_user->id);
+// END
+
 $smarty->display("Inventory/InventoryDetailView.tpl");
 
 ?>

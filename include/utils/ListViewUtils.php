@@ -1113,6 +1113,13 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					$links_info .=	"<a href='javascript:confirmdelete(\"".addslashes(urlencode($del_link))."\")'>".$app_strings["LNK_DELETE"]."</a>";
 			}
 		}
+		// Record Change Notification
+		if(method_exists($focus, 'isViewed')) {
+			if(!$focus->isViewed($entity_id)) {
+				$links_info .= " | <img src='themes/images/important1.gif' border=0>";
+			}
+		}
+		// END
 		if($links_info != "")
 			$list_header[] = $links_info;
 		$list_block[$entity_id] = $list_header;

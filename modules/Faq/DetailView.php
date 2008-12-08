@@ -133,5 +133,10 @@ if(isset($_SESSION['faq_listquery'])){
 	}
 }
 $smarty->assign("SinglePane_View", $singlepane_view);
+
+// Record Change Notification
+$focus->markAsViewed($current_user->id);
+// END
+
 $smarty->display("DetailView.tpl");
 ?>

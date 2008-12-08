@@ -207,6 +207,11 @@ if(isset($_SESSION['documents_listquery'])){
 		}
 	}
 }
+
+// Record Change Notification
+$focus->markAsViewed($current_user->id);
+// END
+
 $smarty->display("DetailView.tpl");
 
 ?>
