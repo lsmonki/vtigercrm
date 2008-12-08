@@ -68,7 +68,7 @@ Configuration file for TCPDF.<br /><br /><br /><br />
     <td><b>author:</b>&nbsp;&nbsp;</td><td>Nicola Asuni</td>
   </tr>
   <tr>
-    <td><b>version:</b>&nbsp;&nbsp;</td><td>3.0.013</td>
+    <td><b>version:</b>&nbsp;&nbsp;</td><td>4.0.014</td>
   </tr>
   <tr>
     <td><b>copyright:</b>&nbsp;&nbsp;</td><td>2004-2008 Nicola Asuni - Tecnick.com S.r.l (www.tecnick.com) Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com</td>
@@ -89,7 +89,7 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 <br /><br />
   <hr />
 	<a name="defineHEAD_MAGNIFICATION"></a>
-	<h3>HEAD_MAGNIFICATION <span class="smalllinenumber">[line 200]</span></h3>
+	<h3>HEAD_MAGNIFICATION <span class="smalllinenumber">[line 206]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -102,11 +102,11 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="defineK_BLANK_IMAGE"></a>
-	<h3>K_BLANK_IMAGE <span class="smalllinenumber">[line 95]</span></h3>
+	<h3>K_BLANK_IMAGE <span class="smalllinenumber">[line 101]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>K_BLANK_IMAGE = K_PATH_IMAGES.&quot;_blank.png&quot;</code>
+		<code>K_BLANK_IMAGE = K_PATH_IMAGES.'_blank.png'</code>
     </td></tr></table>
     </td></tr></table>
 
@@ -115,7 +115,7 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="defineK_CELL_HEIGHT_RATIO"></a>
-	<h3>K_CELL_HEIGHT_RATIO <span class="smalllinenumber">[line 205]</span></h3>
+	<h3>K_CELL_HEIGHT_RATIO <span class="smalllinenumber">[line 211]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -128,11 +128,11 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="defineK_PATH_CACHE"></a>
-	<h3>K_PATH_CACHE <span class="smalllinenumber">[line 80]</span></h3>
+	<h3>K_PATH_CACHE <span class="smalllinenumber">[line 86]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>K_PATH_CACHE = K_PATH_MAIN.&quot;cache/&quot;</code>
+		<code>K_PATH_CACHE = K_PATH_MAIN.'cache/'</code>
     </td></tr></table>
     </td></tr></table>
 
@@ -141,24 +141,24 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="defineK_PATH_FONTS"></a>
-	<h3>K_PATH_FONTS <span class="smalllinenumber">[line 75]</span></h3>
+	<h3>K_PATH_FONTS <span class="smalllinenumber">[line 81]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>K_PATH_FONTS = K_PATH_MAIN.&quot;fonts/&quot;</code>
+		<code>K_PATH_FONTS = K_PATH_MAIN.'fonts/'</code>
     </td></tr></table>
     </td></tr></table>
 
-    path for PDF fonts<br /><br /><p>use K_PATH_MAIN.&quot;fonts/old/&quot; for old non-UTF8 fonts</p><br />    <br />
+    path for PDF fonts<br /><br /><p>use K_PATH_MAIN.'fonts/old/' for old non-UTF8 fonts</p><br />    <br />
 		</div>
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="defineK_PATH_IMAGES"></a>
-	<h3>K_PATH_IMAGES <span class="smalllinenumber">[line 90]</span></h3>
+	<h3>K_PATH_IMAGES <span class="smalllinenumber">[line 96]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>K_PATH_IMAGES = K_PATH_MAIN.&quot;images/&quot;</code>
+		<code>K_PATH_IMAGES = K_PATH_MAIN.'images/'</code>
     </td></tr></table>
     </td></tr></table>
 
@@ -167,37 +167,37 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="defineK_PATH_MAIN"></a>
-	<h3>K_PATH_MAIN <span class="smalllinenumber">[line 52]</span></h3>
+	<h3>K_PATH_MAIN <span class="smalllinenumber">[line 58]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>K_PATH_MAIN = realpath(substr(dirname(__FILE__),0,0-strlen(&quot;config&quot;))).&quot;/&quot;</code>
+		<code>K_PATH_MAIN = $k_path_main</code>
     </td></tr></table>
     </td></tr></table>
 
-    Installation path (/var/www/tcpdf/).<br /><br /><p>By default it is automatically calculated but you can also set it as a fixed string.</p><br />    <br />
+    Installation path (/var/www/tcpdf/).<br /><br /><p>By default it is automatically calculated but you can also set it as a fixed string to improve performances.</p><br />    <br />
 		</div>
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="defineK_PATH_URL"></a>
-	<h3>K_PATH_URL <span class="smalllinenumber">[line 69]</span></h3>
+	<h3>K_PATH_URL <span class="smalllinenumber">[line 75]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>K_PATH_URL = $path_url</code>
+		<code>K_PATH_URL = $k_path_url</code>
     </td></tr></table>
     </td></tr></table>
 
-    URL path to tcpdf installation folder (http://localhost/tcpdf/).<br /><br /><p>By default it is automatically calculated but you can also set it as a fixed string.</p><br />    <br />
+    URL path to tcpdf installation folder (http://localhost/tcpdf/).<br /><br /><p>By default it is automatically calculated but you can also set it as a fixed string to improve performances..</p><br />    <br />
 		</div>
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="defineK_PATH_URL_CACHE"></a>
-	<h3>K_PATH_URL_CACHE <span class="smalllinenumber">[line 85]</span></h3>
+	<h3>K_PATH_URL_CACHE <span class="smalllinenumber">[line 91]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>K_PATH_URL_CACHE = K_PATH_URL.&quot;cache/&quot;</code>
+		<code>K_PATH_URL_CACHE = K_PATH_URL.'cache/'</code>
     </td></tr></table>
     </td></tr></table>
 
@@ -206,7 +206,7 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="defineK_SMALL_RATIO"></a>
-	<h3>K_SMALL_RATIO <span class="smalllinenumber">[line 215]</span></h3>
+	<h3>K_SMALL_RATIO <span class="smalllinenumber">[line 221]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -219,7 +219,7 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="defineK_TITLE_MAGNIFICATION"></a>
-	<h3>K_TITLE_MAGNIFICATION <span class="smalllinenumber">[line 210]</span></h3>
+	<h3>K_TITLE_MAGNIFICATION <span class="smalllinenumber">[line 216]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -232,11 +232,11 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_AUTHOR"></a>
-	<h3>PDF_AUTHOR <span class="smalllinenumber">[line 115]</span></h3>
+	<h3>PDF_AUTHOR <span class="smalllinenumber">[line 121]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>PDF_AUTHOR = &quot;TCPDF&quot;</code>
+		<code>PDF_AUTHOR = 'TCPDF'</code>
     </td></tr></table>
     </td></tr></table>
 
@@ -245,11 +245,11 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_CREATOR"></a>
-	<h3>PDF_CREATOR <span class="smalllinenumber">[line 110]</span></h3>
+	<h3>PDF_CREATOR <span class="smalllinenumber">[line 116]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>PDF_CREATOR = &quot;TCPDF&quot;</code>
+		<code>PDF_CREATOR = 'TCPDF'</code>
     </td></tr></table>
     </td></tr></table>
 
@@ -258,11 +258,11 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_FONT_NAME_DATA"></a>
-	<h3>PDF_FONT_NAME_DATA <span class="smalllinenumber">[line 185]</span></h3>
+	<h3>PDF_FONT_NAME_DATA <span class="smalllinenumber">[line 191]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>PDF_FONT_NAME_DATA = &quot;dejavusans&quot;</code>
+		<code>PDF_FONT_NAME_DATA = 'helvetica'</code>
     </td></tr></table>
     </td></tr></table>
 
@@ -271,11 +271,11 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_FONT_NAME_MAIN"></a>
-	<h3>PDF_FONT_NAME_MAIN <span class="smalllinenumber">[line 175]</span></h3>
+	<h3>PDF_FONT_NAME_MAIN <span class="smalllinenumber">[line 181]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>PDF_FONT_NAME_MAIN = &quot;dejavusans&quot;</code>
+		<code>PDF_FONT_NAME_MAIN = 'helvetica'</code>
     </td></tr></table>
     </td></tr></table>
 
@@ -284,7 +284,7 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_FONT_SIZE_DATA"></a>
-	<h3>PDF_FONT_SIZE_DATA <span class="smalllinenumber">[line 190]</span></h3>
+	<h3>PDF_FONT_SIZE_DATA <span class="smalllinenumber">[line 196]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -297,7 +297,7 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_FONT_SIZE_MAIN"></a>
-	<h3>PDF_FONT_SIZE_MAIN <span class="smalllinenumber">[line 180]</span></h3>
+	<h3>PDF_FONT_SIZE_MAIN <span class="smalllinenumber">[line 186]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -310,11 +310,11 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_HEADER_LOGO"></a>
-	<h3>PDF_HEADER_LOGO <span class="smalllinenumber">[line 130]</span></h3>
+	<h3>PDF_HEADER_LOGO <span class="smalllinenumber">[line 136]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>PDF_HEADER_LOGO = &quot;tcpdf_logo.jpg&quot;</code>
+		<code>PDF_HEADER_LOGO = 'tcpdf_logo.jpg'</code>
     </td></tr></table>
     </td></tr></table>
 
@@ -323,7 +323,7 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_HEADER_LOGO_WIDTH"></a>
-	<h3>PDF_HEADER_LOGO_WIDTH <span class="smalllinenumber">[line 135]</span></h3>
+	<h3>PDF_HEADER_LOGO_WIDTH <span class="smalllinenumber">[line 141]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -336,7 +336,7 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_HEADER_STRING"></a>
-	<h3>PDF_HEADER_STRING <span class="smalllinenumber">[line 125]</span></h3>
+	<h3>PDF_HEADER_STRING <span class="smalllinenumber">[line 131]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -349,11 +349,11 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_HEADER_TITLE"></a>
-	<h3>PDF_HEADER_TITLE <span class="smalllinenumber">[line 120]</span></h3>
+	<h3>PDF_HEADER_TITLE <span class="smalllinenumber">[line 126]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>PDF_HEADER_TITLE = &quot;TCPDF Example&quot;</code>
+		<code>PDF_HEADER_TITLE = 'TCPDF Example'</code>
     </td></tr></table>
     </td></tr></table>
 
@@ -362,7 +362,7 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_IMAGE_SCALE_RATIO"></a>
-	<h3>PDF_IMAGE_SCALE_RATIO <span class="smalllinenumber">[line 195]</span></h3>
+	<h3>PDF_IMAGE_SCALE_RATIO <span class="smalllinenumber">[line 201]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -370,12 +370,12 @@ Configuration file for TCPDF.<br /><br /><br /><br />
     </td></tr></table>
     </td></tr></table>
 
-    scale factor for images (number of points in user unit)<br /><br />    <br />
+    Ratio used to scale the images<br /><br />    <br />
 		</div>
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_MARGIN_BOTTOM"></a>
-	<h3>PDF_MARGIN_BOTTOM <span class="smalllinenumber">[line 160]</span></h3>
+	<h3>PDF_MARGIN_BOTTOM <span class="smalllinenumber">[line 166]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -388,7 +388,7 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_MARGIN_FOOTER"></a>
-	<h3>PDF_MARGIN_FOOTER <span class="smalllinenumber">[line 150]</span></h3>
+	<h3>PDF_MARGIN_FOOTER <span class="smalllinenumber">[line 156]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -401,7 +401,7 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_MARGIN_HEADER"></a>
-	<h3>PDF_MARGIN_HEADER <span class="smalllinenumber">[line 145]</span></h3>
+	<h3>PDF_MARGIN_HEADER <span class="smalllinenumber">[line 151]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -414,7 +414,7 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_MARGIN_LEFT"></a>
-	<h3>PDF_MARGIN_LEFT <span class="smalllinenumber">[line 165]</span></h3>
+	<h3>PDF_MARGIN_LEFT <span class="smalllinenumber">[line 171]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -427,7 +427,7 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_MARGIN_RIGHT"></a>
-	<h3>PDF_MARGIN_RIGHT <span class="smalllinenumber">[line 170]</span></h3>
+	<h3>PDF_MARGIN_RIGHT <span class="smalllinenumber">[line 176]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -440,7 +440,7 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_MARGIN_TOP"></a>
-	<h3>PDF_MARGIN_TOP <span class="smalllinenumber">[line 155]</span></h3>
+	<h3>PDF_MARGIN_TOP <span class="smalllinenumber">[line 161]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -453,11 +453,11 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_PAGE_FORMAT"></a>
-	<h3>PDF_PAGE_FORMAT <span class="smalllinenumber">[line 100]</span></h3>
+	<h3>PDF_PAGE_FORMAT <span class="smalllinenumber">[line 106]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>PDF_PAGE_FORMAT = &quot;A4&quot;</code>
+		<code>PDF_PAGE_FORMAT = 'A4'</code>
     </td></tr></table>
     </td></tr></table>
 
@@ -466,11 +466,11 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_PAGE_ORIENTATION"></a>
-	<h3>PDF_PAGE_ORIENTATION <span class="smalllinenumber">[line 105]</span></h3>
+	<h3>PDF_PAGE_ORIENTATION <span class="smalllinenumber">[line 111]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>PDF_PAGE_ORIENTATION = &quot;P&quot;</code>
+		<code>PDF_PAGE_ORIENTATION = 'P'</code>
     </td></tr></table>
     </td></tr></table>
 
@@ -479,11 +479,11 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 	<div class="top">[ <a href="#top">Top</a> ]</div><br /><br />
   <hr />
 	<a name="definePDF_UNIT"></a>
-	<h3>PDF_UNIT <span class="smalllinenumber">[line 140]</span></h3>
+	<h3>PDF_UNIT <span class="smalllinenumber">[line 146]</span></h3>
 	<div class="tags">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>PDF_UNIT = &quot;mm&quot;</code>
+		<code>PDF_UNIT = 'mm'</code>
     </td></tr></table>
     </td></tr></table>
 
@@ -494,7 +494,7 @@ Configuration file for TCPDF.<br /><br /><br /><br />
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Fri, 13 Jun 2008 15:02:24 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.0</a>
+		    Documentation generated on Tue, 25 Nov 2008 16:30:57 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
 	      </div>
       </td></tr></table>
     </td>

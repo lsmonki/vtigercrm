@@ -74,7 +74,7 @@ Source Location: /barcodes.php<br /><br />
                 
 <h4>Version:</h4>
 <ul>
-  <li>1.0.000</li>
+  <li>1.0.001</li>
 </ul>
 
         
@@ -121,7 +121,7 @@ Source Location: /barcodes.php<br /><br />
 <a name="class_details"></a>
 <h3>Class Details</h3>
 <div class="tags">
-[line 61]<br />
+[line 62]<br />
 PHP class to creates array representations for common 1D barcodes to be used with TCPDF (http://www.tcpdf.org).<br /><br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -130,7 +130,7 @@ PHP class to creates array representations for common 1D barcodes to be used wit
     <td><b>author:</b>&nbsp;&nbsp;</td><td>Nicola Asuni</td>
   </tr>
   <tr>
-    <td><b>version:</b>&nbsp;&nbsp;</td><td>1.0.000</td>
+    <td><b>version:</b>&nbsp;&nbsp;</td><td>1.0.001</td>
   </tr>
   <tr>
     <td><b>link:</b>&nbsp;&nbsp;</td><td><a href="http://www.tcpdf.org">http://www.tcpdf.org</a></td>
@@ -153,7 +153,7 @@ PHP class to creates array representations for common 1D barcodes to be used wit
 	<a name="var$barcode_array"></a>
 	<p></p>
 	<h4>$barcode_array = <span class="value"></span></h4>
-	<p>[line 67]</p>
+	<p>[line 68]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -186,7 +186,7 @@ PHP class to creates array representations for common 1D barcodes to be used wit
 
   <hr />
 	<a name="method__construct"></a>
-	<h3>constructor __construct <span class="smalllinenumber">[line 83]</span></h3>
+	<h3>constructor __construct <span class="smalllinenumber">[line 84]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -197,7 +197,7 @@ $type)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		This is the class constructor.<br /><br /><p>Return an array representations for common 1D barcodes:<ul><li>$arrcode[&quot;code&quot;] code to be printed on text label</li><li>$arrcode[&quot;maxh&quot;] max bar height</li><li>$arrcode[&quot;maxw&quot;] max bar width</li><li>$arrcode[&quot;bcode&quot;][$k] single bar or space in $k position</li><li>$arrcode[&quot;bcode&quot;][$k][&quot;t&quot;] bar type: true = bar, false = space.</li><li>$arrcode[&quot;bcode&quot;][$k][&quot;w&quot;] bar width in units.</li><li>$arrcode[&quot;bcode&quot;][$k][&quot;h&quot;] bar height in units.</li><li>$arrcode[&quot;bcode&quot;][$k][&quot;p&quot;] bar top position (0 = top, 1 = middle)</li></ul></p><br /><br /><br />
+		This is the class constructor.<br /><br /><p>Return an array representations for common 1D barcodes:<ul><li>$arrcode['code'] code to be printed on text label</li><li>$arrcode['maxh'] max bar height</li><li>$arrcode['maxw'] max bar width</li><li>$arrcode['bcode'][$k] single bar or space in $k position</li><li>$arrcode['bcode'][$k]['t'] bar type: true = bar, false = space.</li><li>$arrcode['bcode'][$k]['w'] bar width in units.</li><li>$arrcode['bcode'][$k]['h'] bar height in units.</li><li>$arrcode['bcode'][$k]['p'] bar top position (0 = top, 1 = middle)</li></ul></p><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
@@ -228,14 +228,14 @@ $type)</code>
   </div>
   <hr />
 	<a name="methodbarcode_c128"></a>
-	<h3>method barcode_c128 <span class="smalllinenumber">[line 389]</span></h3>
+	<h3>method barcode_c128 <span class="smalllinenumber">[line 390]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
 		<code>array barcode_c128(
 string
 $code, [string
-$type = &quot;B&quot;])</code>
+$type = 'B'])</code>
     </td></tr></table>
     </td></tr></table><br />
 	
@@ -273,7 +273,7 @@ $type = &quot;B&quot;])</code>
   </div>
   <hr />
 	<a name="methodbarcode_codabar"></a>
-	<h3>method barcode_codabar <span class="smalllinenumber">[line 742]</span></h3>
+	<h3>method barcode_codabar <span class="smalllinenumber">[line 753]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -312,7 +312,7 @@ $code)</code>
   </div>
   <hr />
 	<a name="methodbarcode_code39"></a>
-	<h3>method barcode_code39 <span class="smalllinenumber">[line 165]</span></h3>
+	<h3>method barcode_code39 <span class="smalllinenumber">[line 166]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -363,7 +363,7 @@ $checksum = false])</code>
   </div>
   <hr />
 	<a name="methodbarcode_ean13"></a>
-	<h3>method barcode_ean13 <span class="smalllinenumber">[line 570]</span></h3>
+	<h3>method barcode_ean13 <span class="smalllinenumber">[line 581]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -408,7 +408,7 @@ $len = 13])</code>
   </div>
   <hr />
 	<a name="methodbarcode_i25"></a>
-	<h3>method barcode_i25 <span class="smalllinenumber">[line 331]</span></h3>
+	<h3>method barcode_i25 <span class="smalllinenumber">[line 332]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -453,7 +453,7 @@ $checksum)</code>
   </div>
   <hr />
 	<a name="methodbarcode_postnet"></a>
-	<h3>method barcode_postnet <span class="smalllinenumber">[line 688]</span></h3>
+	<h3>method barcode_postnet <span class="smalllinenumber">[line 699]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -492,7 +492,7 @@ $code)</code>
   </div>
   <hr />
 	<a name="methodchecksum_code39"></a>
-	<h3>method checksum_code39 <span class="smalllinenumber">[line 308]</span></h3>
+	<h3>method checksum_code39 <span class="smalllinenumber">[line 309]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -531,7 +531,7 @@ $code)</code>
   </div>
   <hr />
 	<a name="methodencode_code39_ext"></a>
-	<h3>method encode_code39_ext <span class="smalllinenumber">[line 258]</span></h3>
+	<h3>method encode_code39_ext <span class="smalllinenumber">[line 259]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -570,7 +570,7 @@ $code)</code>
   </div>
   <hr />
 	<a name="methodgetBarcodeArray"></a>
-	<h3>method getBarcodeArray <span class="smalllinenumber">[line 91]</span></h3>
+	<h3>method getBarcodeArray <span class="smalllinenumber">[line 92]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -595,7 +595,7 @@ $code)</code>
   </div>
   <hr />
 	<a name="methodsetBarcode"></a>
-	<h3>method setBarcode <span class="smalllinenumber">[line 101]</span></h3>
+	<h3>method setBarcode <span class="smalllinenumber">[line 102]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -640,7 +640,7 @@ $type)</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Fri, 13 Jun 2008 15:02:13 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.0</a>
+		    Documentation generated on Tue, 25 Nov 2008 16:30:52 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
 	      </div>
       </td></tr></table>
     </td>

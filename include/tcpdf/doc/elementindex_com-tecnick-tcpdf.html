@@ -88,12 +88,10 @@
 		<dl>
 							<dt><b>_addfield</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_addfield">TCPDF::_addfield()</a></dd>
-							<dt><b>_begindoc</b></dt>
-				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_begindoc">TCPDF::_begindoc()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Start document</dd>
 							<dt><b>_beginpage</b></dt>
-				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_beginpage">TCPDF::_beginpage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Initialize a page.</dd>
-							<dt><b>_datestring</b></dt>
-				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_datestring">TCPDF::_datestring()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Format a date string for meta information</dd>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_beginpage">TCPDF::_beginpage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Initialize a new page.</dd>
+							<dt><b>_datastring</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_datastring">TCPDF::_datastring()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Format a date string for meta information</dd>
 							<dt><b>_dochecks</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_dochecks">TCPDF::_dochecks()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Check for locale-related bug</dd>
 							<dt><b>_dolinethrough</b></dt>
@@ -140,10 +138,14 @@
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_parsejpeg">TCPDF::_parsejpeg()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Extract info from a JPEG file without using the GD library.</dd>
 							<dt><b>_parsepng</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_parsepng">TCPDF::_parsepng()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Extract info from a PNG file without using the GD library.</dd>
+							<dt><b>_putannots</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_putannots">TCPDF::_putannots()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Output Page Annotations.</dd>
 							<dt><b>_putbookmarks</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_putbookmarks">TCPDF::_putbookmarks()</a></dd>
 							<dt><b>_putcatalog</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_putcatalog">TCPDF::_putcatalog()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Output Catalog.</dd>
+							<dt><b>_putcidfont0</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_putcidfont0">TCPDF::_putcidfont0()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Output CID-0 fonts.</dd>
 							<dt><b>_putencryption</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_putencryption">TCPDF::_putencryption()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Put encryption on PDF document.</dd>
 							<dt><b>_putextgstates</b></dt>
@@ -168,6 +170,8 @@
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_putresources">TCPDF::_putresources()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Output Resources.</dd>
 							<dt><b>_putshaders</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_putshaders">TCPDF::_putshaders()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Output shaders.</dd>
+							<dt><b>_putspotcolors</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_putspotcolors">TCPDF::_putspotcolors()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Output Spot Colors Resources.</dd>
 							<dt><b>_putstream</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_putstream">TCPDF::_putstream()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Output a stream.</dd>
 							<dt><b>_puttrailer</b></dt>
@@ -186,8 +190,6 @@
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_textstring">TCPDF::_textstring()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Format a text string for meta information</dd>
 							<dt><b>_toJPEG</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_toJPEG">TCPDF::_toJPEG()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Convert the loaded php image to a JPEG and then return a structure for the PDF creator.</dd>
-							<dt><b>_uristring</b></dt>
-				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_uristring">TCPDF::_uristring()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Format an URI string</dd>
 							<dt><b>_Uvalue</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#method_Uvalue">TCPDF::_Uvalue()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Compute U value (used for RC4 encryption)</dd>
 							<dt><b>__construct</b></dt>
@@ -215,15 +217,21 @@
 							<dt><b>addExtGState</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodaddExtGState">TCPDF::addExtGState()</a></dd>
 							<dt><b>AddFont</b></dt>
-				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodAddFont">TCPDF::AddFont()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Imports a TrueType or Type1 font and makes it available.</dd>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodAddFont">TCPDF::AddFont()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Imports a TrueType, Type1, core, or CID0 font and makes it available.</dd>
 							<dt><b>addHtmlLink</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodaddHtmlLink">TCPDF::addHtmlLink()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Output anchor link.</dd>
+							<dt><b>addHTMLVertSpace</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodaddHTMLVertSpace">TCPDF::addHTMLVertSpace()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Add vertical spaces if needed.</dd>
 							<dt><b>AddLink</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodAddLink">TCPDF::AddLink()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Creates a new internal link and returns its identifier. An internal link is a clickable area which directs to another place within the document.<br />  The identifier can then be passed to Cell(), Write(), Image() or Link(). The destination is defined with SetLink().</dd>
 							<dt><b>AddPage</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodAddPage">TCPDF::AddPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Adds a new page to the document. If a page is already present, the Footer() method is called first to output the footer. Then the page is added, the current position set to the top-left corner according to the left and top margins, and Header() is called to display the header.</dd>
+							<dt><b>AddSpotColor</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodAddSpotColor">TCPDF::AddSpotColor()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines a new spot color.</dd>
 							<dt><b>AliasNbPages</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodAliasNbPages">TCPDF::AliasNbPages()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines an alias for the total number of pages. It will be substituted as the document is closed.<br /></dd>
+							<dt><b>Annotation</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodAnnotation">TCPDF::Annotation()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Puts a markup annotation on a rectangular area of the page.</dd>
 							<dt><b>arrUTF8ToUTF16BE</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodarrUTF8ToUTF16BE">TCPDF::arrUTF8ToUTF16BE()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Converts array of UTF-8 characters to UTF16-BE string.<br /></dd>
 					</dl>
@@ -234,18 +242,16 @@
 	<div>
 		<h2>b</h2>
 		<dl>
-							<dt><b>$b</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$b">TCPDF::$b</a></dd>
 							<dt><b>$barcode</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$barcode">TCPDF::$barcode</a></dd>
 							<dt><b>$barcode_array</b></dt>
 				<dd>in file barcodes.php, variable <a href="com-tecnick-tcpdf/TCPDFBarcode.html#var$barcode_array">TCPDFBarcode::$barcode_array</a></dd>
 							<dt><b>$bgcolor</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$bgcolor">TCPDF::$bgcolor</a></dd>
-							<dt><b>$bgtag</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$bgtag">TCPDF::$bgtag</a><br>&nbsp;&nbsp;&nbsp;&nbsp;ID of html tags with bgcolor attribute</dd>
 							<dt><b>$bMargin</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$bMargin">TCPDF::$bMargin</a></dd>
+							<dt><b>$booklet</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$booklet">TCPDF::$booklet</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Booklet mode for double-sided pages</dd>
 							<dt><b>$buffer</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$buffer">TCPDF::$buffer</a></dd>
 							<dt><b>barcodes.php</b></dt>
@@ -292,10 +298,14 @@
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$CurrentFont">TCPDF::$CurrentFont</a></dd>
 							<dt><b>$currpagegroup</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$currpagegroup">TCPDF::$currpagegroup</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Contains the alias of the current page group</dd>
+							<dt><b>$customlistindent</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$customlistindent">TCPDF::$customlistindent</a></dd>
 							<dt><b>Cell</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodCell">TCPDF::Cell()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Prints a cell (rectangular area) with optional borders, background color and character string. The upper-left corner of the cell corresponds to the current position. The text can be aligned or centered. After the call, the current position moves to the right or to the next line. It is possible to put a link on the text.<br />  If automatic page breaking is enabled and the cell goes beyond the limit, a page break is done before outputting.</dd>
 							<dt><b>CheckBox</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodCheckBox">TCPDF::CheckBox()</a></dd>
+							<dt><b>checkPageBreak</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodcheckPageBreak">TCPDF::checkPageBreak()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Add page if needed.</dd>
 							<dt><b>checksum_code39</b></dt>
 				<dd>in file barcodes.php, method <a href="com-tecnick-tcpdf/TCPDFBarcode.html#methodchecksum_code39">TCPDFBarcode::checksum_code39()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Calculate CODE 39 checksum (modulo 43).</dd>
 							<dt><b>Circle</b></dt>
@@ -304,8 +314,8 @@
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodClip">TCPDF::Clip()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set a rectangular clipping area.</dd>
 							<dt><b>Close</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodClose">TCPDF::Close()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Terminates the PDF document. It is not necessary to call this method explicitly because Output() does it automatically. If the document contains no page, AddPage() is called to prevent from getting an invalid document.</dd>
-							<dt><b>closedHTMLTagHandler</b></dt>
-				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodclosedHTMLTagHandler">TCPDF::closedHTMLTagHandler()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Process closing tags.</dd>
+							<dt><b>closeHTMLTagHandler</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodcloseHTMLTagHandler">TCPDF::closeHTMLTagHandler()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Process closing tags.</dd>
 							<dt><b>ComboBox</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodComboBox">TCPDF::ComboBox()</a></dd>
 							<dt><b>convertHTMLColorToDec</b></dt>
@@ -322,8 +332,6 @@
 	<div>
 		<h2>d</h2>
 		<dl>
-							<dt><b>$d</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$d">TCPDF::$d</a></dd>
 							<dt><b>$default_table_columns</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$default_table_columns">TCPDF::$default_table_columns</a></dd>
 							<dt><b>$diffs</b></dt>
@@ -344,14 +352,22 @@
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$encoding">TCPDF::$encoding</a></dd>
 							<dt><b>$encrypted</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$encrypted">TCPDF::$encrypted</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Indicates whether document is protected</dd>
+							<dt><b>$encryption_key</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$encryption_key">TCPDF::$encryption_key</a><br>&nbsp;&nbsp;&nbsp;&nbsp;RC4 encryption key</dd>
 							<dt><b>$enc_obj_id</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$enc_obj_id">TCPDF::$enc_obj_id</a><br>&nbsp;&nbsp;&nbsp;&nbsp;encryption object id</dd>
+							<dt><b>$endlinex</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$endlinex">TCPDF::$endlinex</a><br>&nbsp;&nbsp;&nbsp;&nbsp;End position of the latest inserted line</dd>
+							<dt><b>$epsmarker</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$epsmarker">TCPDF::$epsmarker</a><br>&nbsp;&nbsp;&nbsp;&nbsp;String used to mark the beginning and end of EPS image blocks</dd>
 							<dt><b>$extgstates</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$extgstates">TCPDF::$extgstates</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Array of transparency objects and parameters.</dd>
 							<dt><b>Ellipse</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodEllipse">TCPDF::Ellipse()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Draws an ellipse.</dd>
 							<dt><b>encode_code39_ext</b></dt>
 				<dd>in file barcodes.php, method <a href="com-tecnick-tcpdf/TCPDFBarcode.html#methodencode_code39_ext">TCPDFBarcode::encode_code39_ext()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Encode a string to be used for CODE 39 Extended mode.</dd>
+							<dt><b>endPage</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodendPage">TCPDF::endPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Terminate the current page</dd>
 							<dt><b>Error</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodError">TCPDF::Error()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This method is automatically called in case of fatal error; it simply outputs the message and halts the execution. An inherited class may override it to customize the error handling but should always halt the script, or the resulting document would probably be invalid.</dd>
 					</dl>
@@ -362,6 +378,8 @@
 	<div>
 		<h2>f</h2>
 		<dl>
+							<dt><b>$feps</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$feps">TCPDF::$feps</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Epsilon value used for float calculations</dd>
 							<dt><b>$fgcolor</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$fgcolor">TCPDF::$fgcolor</a></dd>
 							<dt><b>$fhPt</b></dt>
@@ -376,8 +394,8 @@
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$FontFamily">TCPDF::$FontFamily</a></dd>
 							<dt><b>$FontFiles</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$FontFiles">TCPDF::$FontFiles</a></dd>
-							<dt><b>$fontList</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$fontList">TCPDF::$fontList</a></dd>
+							<dt><b>$fontlist</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$fontlist">TCPDF::$fontlist</a></dd>
 							<dt><b>$fonts</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$fonts">TCPDF::$fonts</a></dd>
 							<dt><b>$FontSize</b></dt>
@@ -386,6 +404,10 @@
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$FontSizePt">TCPDF::$FontSizePt</a></dd>
 							<dt><b>$FontStyle</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$FontStyle">TCPDF::$FontStyle</a></dd>
+							<dt><b>$footerlen</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$footerlen">TCPDF::$footerlen</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Array used to store footer lenght of each page.</dd>
+							<dt><b>$footerpos</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$footerpos">TCPDF::$footerpos</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Array used to store footer positions of each page.</dd>
 							<dt><b>$footer_font</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$footer_font">TCPDF::$footer_font</a></dd>
 							<dt><b>$footer_margin</b></dt>
@@ -394,6 +416,8 @@
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$fwPt">TCPDF::$fwPt</a></dd>
 							<dt><b>Footer</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodFooter">TCPDF::Footer()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This method is used to render the page footer.</dd>
+							<dt><b>formatPageNumber</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodformatPageNumber">TCPDF::formatPageNumber()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Format the page numbers.</dd>
 					</dl>
 	</div>
 	<a href="elementindex_com-tecnick-tcpdf.html#top">top</a><br>
@@ -406,24 +430,64 @@
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$gradients">TCPDF::$gradients</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Array for storing gradient information.</dd>
 							<dt><b>GetAbsX</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodGetAbsX">TCPDF::GetAbsX()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the absolute X value of current position.</dd>
+							<dt><b>getAliasNbPages</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetAliasNbPages">TCPDF::getAliasNbPages()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the string alias used for the total number of pages.</dd>
 							<dt><b>GetArrStringWidth</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodGetArrStringWidth">TCPDF::GetArrStringWidth()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the string length of an array of chars in user unit. A font must be selected.<br /></dd>
+							<dt><b>getBarcode</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetBarcode">TCPDF::getBarcode()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Get current barcode.</dd>
 							<dt><b>getBarcodeArray</b></dt>
 				<dd>in file barcodes.php, method <a href="com-tecnick-tcpdf/TCPDFBarcode.html#methodgetBarcodeArray">TCPDFBarcode::getBarcodeArray()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Return an array representations of barcode.</dd>
 							<dt><b>getBreakMargin</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetBreakMargin">TCPDF::getBreakMargin()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the page break margin.</dd>
+							<dt><b>getCellCode</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetCellCode">TCPDF::getCellCode()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the PDF string code to print a cell (rectangular area) with optional borders, background color and character string. The upper-left corner of the cell corresponds to the current position. The text can be aligned or centered. After the call, the current position moves to the right or to the next line. It is possible to put a link on the text.<br />  If automatic page breaking is enabled and the cell goes beyond the limit, a page break is done before outputting.</dd>
+							<dt><b>getCellHeightRatio</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetCellHeightRatio">TCPDF::getCellHeightRatio()</a></dd>
 							<dt><b>GetCharWidth</b></dt>
-				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodGetCharWidth">TCPDF::GetCharWidth()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the length of the char in user unit. A font must be selected.<br /></dd>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodGetCharWidth">TCPDF::GetCharWidth()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the length of the char in user unit for the current font.<br /></dd>
+							<dt><b>getFontSize</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetFontSize">TCPDF::getFontSize()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the current font size.</dd>
+							<dt><b>getFontSizePt</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetFontSizePt">TCPDF::getFontSizePt()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the current font size in points unit.</dd>
+							<dt><b>getFontsList</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetFontsList">TCPDF::getFontsList()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Fill the list of available fonts ($this-&gt;fontlist).</dd>
+							<dt><b>getFooterFont</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetFooterFont">TCPDF::getFooterFont()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Get Footer font.</dd>
+							<dt><b>getFooterMargin</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetFooterMargin">TCPDF::getFooterMargin()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns footer margin in user units.</dd>
+							<dt><b>getGraphicVars</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetGraphicVars">TCPDF::getGraphicVars()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns current graphic variables as array.</dd>
 							<dt><b>getGroupPageNo</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetGroupPageNo">TCPDF::getGroupPageNo()</a></dd>
+							<dt><b>getGroupPageNoFormatted</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetGroupPageNoFormatted">TCPDF::getGroupPageNoFormatted()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the current group page number formatted as a string.</dd>
+							<dt><b>getHeaderData</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetHeaderData">TCPDF::getHeaderData()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns header data:</dd>
+							<dt><b>getHeaderFont</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetHeaderFont">TCPDF::getHeaderFont()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Get header font.</dd>
+							<dt><b>getHeaderMargin</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetHeaderMargin">TCPDF::getHeaderMargin()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns header margin in user units.</dd>
+							<dt><b>getHtmlDomArray</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetHtmlDomArray">TCPDF::getHtmlDomArray()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the HTML DOM array.</dd>
+							<dt><b>getImageRBX</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetImageRBX">TCPDF::getImageRBX()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Return the right-bottom (or left-bottom for RTL) corner X coordinate of last inserted image</dd>
+							<dt><b>getImageRBY</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetImageRBY">TCPDF::getImageRBY()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Return the right-bottom (or left-bottom for RTL) corner Y coordinate of last inserted image</dd>
 							<dt><b>getImageScale</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetImageScale">TCPDF::getImageScale()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the image scale.</dd>
+							<dt><b>getLastH</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetLastH">TCPDF::getLastH()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Get the last cell height.</dd>
 							<dt><b>GetLineWidth</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodGetLineWidth">TCPDF::GetLineWidth()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the current the line width.</dd>
+							<dt><b>getMargins</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetMargins">TCPDF::getMargins()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns an array containing current margins:</dd>
 							<dt><b>GetNumChars</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodGetNumChars">TCPDF::GetNumChars()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the numbero of characters in a string.</dd>
 							<dt><b>getNumPages</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetNumPages">TCPDF::getNumPages()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Get the total number of insered pages.</dd>
+							<dt><b>getOriginalMargins</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetOriginalMargins">TCPDF::getOriginalMargins()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns an array containing original margins:</dd>
 							<dt><b>getPage</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetPage">TCPDF::getPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Get current document page number.</dd>
 							<dt><b>getPageGroupAlias</b></dt>
@@ -436,6 +500,8 @@
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetPDFData">TCPDF::getPDFData()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the PDF data.</dd>
 							<dt><b>getRemainingWidth</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetRemainingWidth">TCPDF::getRemainingWidth()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the remaining width between the current position and margins.</dd>
+							<dt><b>getRTL</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetRTL">TCPDF::getRTL()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Return the RTL status</dd>
 							<dt><b>getScaleFactor</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodgetScaleFactor">TCPDF::getScaleFactor()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the scale factor (number of points in user unit).</dd>
 							<dt><b>GetStringWidth</b></dt>
@@ -468,12 +534,12 @@
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$header_string">TCPDF::$header_string</a></dd>
 							<dt><b>$header_title</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$header_title">TCPDF::$header_title</a></dd>
-							<dt><b>$header_width</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$header_width">TCPDF::$header_width</a></dd>
 							<dt><b>$hPt</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$hPt">TCPDF::$hPt</a></dd>
 							<dt><b>$HREF</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$HREF">TCPDF::$HREF</a></dd>
+							<dt><b>$htmlvspace</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$htmlvspace">TCPDF::$htmlvspace</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Count the latest inserted vertical spaces on HTML</dd>
 							<dt><b>Header</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodHeader">TCPDF::Header()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This method is used to render the page header.</dd>
 							<dt><b>HEAD_MAGNIFICATION</b></dt>
@@ -488,8 +554,6 @@
 	<div>
 		<h2>i</h2>
 		<dl>
-							<dt><b>$i</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$i">TCPDF::$i</a></dd>
 							<dt><b>$images</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$images">TCPDF::$images</a></dd>
 							<dt><b>$imgscale</b></dt>
@@ -502,8 +566,8 @@
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$InFooter">TCPDF::$InFooter</a></dd>
 							<dt><b>$internal_encoding</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$internal_encoding">TCPDF::$internal_encoding</a></dd>
-							<dt><b>$issetfont</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$issetfont">TCPDF::$issetfont</a></dd>
+							<dt><b>$intmrk</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$intmrk">TCPDF::$intmrk</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Array used to store positions inside the pages buffer.</dd>
 							<dt><b>$isunicode</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$isunicode">TCPDF::$isunicode</a></dd>
 							<dt><b>Image</b></dt>
@@ -592,6 +656,14 @@
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$last_rc4_key_c">TCPDF::$last_rc4_key_c</a><br>&nbsp;&nbsp;&nbsp;&nbsp;last RC4 computed key</dd>
 							<dt><b>$LayoutMode</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$LayoutMode">TCPDF::$LayoutMode</a></dd>
+							<dt><b>$linestyleCap</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$linestyleCap">TCPDF::$linestyleCap</a><br>&nbsp;&nbsp;&nbsp;&nbsp;PDF string for last line width</dd>
+							<dt><b>$linestyleDash</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$linestyleDash">TCPDF::$linestyleDash</a><br>&nbsp;&nbsp;&nbsp;&nbsp;PDF string for last line width</dd>
+							<dt><b>$linestyleJoin</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$linestyleJoin">TCPDF::$linestyleJoin</a><br>&nbsp;&nbsp;&nbsp;&nbsp;PDF string for last line width</dd>
+							<dt><b>$linestyleWidth</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$linestyleWidth">TCPDF::$linestyleWidth</a><br>&nbsp;&nbsp;&nbsp;&nbsp;PDF string for last line width</dd>
 							<dt><b>$linethrough</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$linethrough">TCPDF::$linethrough</a><br>&nbsp;&nbsp;&nbsp;&nbsp;line trough state</dd>
 							<dt><b>$LineWidth</b></dt>
@@ -608,6 +680,8 @@
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$listnum">TCPDF::$listnum</a></dd>
 							<dt><b>$listordered</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$listordered">TCPDF::$listordered</a></dd>
+							<dt><b>$lisymbol</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$lisymbol">TCPDF::$lisymbol</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Symbol used for HTML unordered list items</dd>
 							<dt><b>$lMargin</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$lMargin">TCPDF::$lMargin</a></dd>
 							<dt><b>lastPage</b></dt>
@@ -650,6 +724,8 @@
 		<dl>
 							<dt><b>$n</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$n">TCPDF::$n</a></dd>
+							<dt><b>$newline</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$newline">TCPDF::$newline</a><br>&nbsp;&nbsp;&nbsp;&nbsp;True if a newline is created.</dd>
 							<dt><b>$newpagegroup</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$newpagegroup">TCPDF::$newpagegroup</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Indicates whether a new page group was requested</dd>
 							<dt><b>$n_js</b></dt>
@@ -668,6 +744,12 @@
 		<dl>
 							<dt><b>$offsets</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$offsets">TCPDF::$offsets</a></dd>
+							<dt><b>$oldcMargin</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$oldcMargin">TCPDF::$oldcMargin</a></dd>
+							<dt><b>$opencell</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$opencell">TCPDF::$opencell</a></dd>
+							<dt><b>$openMarkedContent</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$openMarkedContent">TCPDF::$openMarkedContent</a><br>&nbsp;&nbsp;&nbsp;&nbsp;True if marked-content sequence is open</dd>
 							<dt><b>$original_lMargin</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$original_lMargin">TCPDF::$original_lMargin</a></dd>
 							<dt><b>$original_rMargin</b></dt>
@@ -692,26 +774,24 @@
 	<div>
 		<h2>p</h2>
 		<dl>
+							<dt><b>$padding</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$padding">TCPDF::$padding</a><br>&nbsp;&nbsp;&nbsp;&nbsp;RC4 padding</dd>
 							<dt><b>$page</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$page">TCPDF::$page</a></dd>
+							<dt><b>$PageAnnots</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$PageAnnots">TCPDF::$PageAnnots</a></dd>
 							<dt><b>$PageBreakTrigger</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$PageBreakTrigger">TCPDF::$PageBreakTrigger</a></dd>
 							<dt><b>$pagedim</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$pagedim">TCPDF::$pagedim</a></dd>
 							<dt><b>$pagegroups</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$pagegroups">TCPDF::$pagegroups</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Contains the number of pages of the groups</dd>
-							<dt><b>$PageLinks</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$PageLinks">TCPDF::$PageLinks</a></dd>
 							<dt><b>$PageMode</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$PageMode">TCPDF::$PageMode</a><br>&nbsp;&nbsp;&nbsp;&nbsp;A name object specifying how the document should be displayed when opened.</dd>
 							<dt><b>$pages</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$pages">TCPDF::$pages</a></dd>
 							<dt><b>$PDFVersion</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$PDFVersion">TCPDF::$PDFVersion</a></dd>
-							<dt><b>$prevFontFamily</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$prevFontFamily">TCPDF::$prevFontFamily</a></dd>
-							<dt><b>$prevFontStyle</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$prevFontStyle">TCPDF::$prevFontStyle</a></dd>
 							<dt><b>$print_footer</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$print_footer">TCPDF::$print_footer</a></dd>
 							<dt><b>$print_header</b></dt>
@@ -720,6 +800,8 @@
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$Pvalue">TCPDF::$Pvalue</a><br>&nbsp;&nbsp;&nbsp;&nbsp;P entry in pdf document</dd>
 							<dt><b>PageNo</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodPageNo">TCPDF::PageNo()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the current page number.</dd>
+							<dt><b>PageNoFormatted</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodPageNoFormatted">TCPDF::PageNoFormatted()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the current page number formatted as a string.</dd>
 							<dt><b>PDF_AUTHOR</b></dt>
 				<dd>in file tcpdf_config.php, constant <a href="com-tecnick-tcpdf/_config---tcpdf_config.php.html#definePDF_AUTHOR">PDF_AUTHOR</a><br>&nbsp;&nbsp;&nbsp;&nbsp;document author</dd>
 							<dt><b>PDF_CREATOR</b></dt>
@@ -741,7 +823,7 @@
 							<dt><b>PDF_HEADER_TITLE</b></dt>
 				<dd>in file tcpdf_config.php, constant <a href="com-tecnick-tcpdf/_config---tcpdf_config.php.html#definePDF_HEADER_TITLE">PDF_HEADER_TITLE</a><br>&nbsp;&nbsp;&nbsp;&nbsp;header title</dd>
 							<dt><b>PDF_IMAGE_SCALE_RATIO</b></dt>
-				<dd>in file tcpdf_config.php, constant <a href="com-tecnick-tcpdf/_config---tcpdf_config.php.html#definePDF_IMAGE_SCALE_RATIO">PDF_IMAGE_SCALE_RATIO</a><br>&nbsp;&nbsp;&nbsp;&nbsp;scale factor for images (number of points in user unit)</dd>
+				<dd>in file tcpdf_config.php, constant <a href="com-tecnick-tcpdf/_config---tcpdf_config.php.html#definePDF_IMAGE_SCALE_RATIO">PDF_IMAGE_SCALE_RATIO</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Ratio used to scale the images</dd>
 							<dt><b>PDF_MARGIN_BOTTOM</b></dt>
 				<dd>in file tcpdf_config.php, constant <a href="com-tecnick-tcpdf/_config---tcpdf_config.php.html#definePDF_MARGIN_BOTTOM">PDF_MARGIN_BOTTOM</a><br>&nbsp;&nbsp;&nbsp;&nbsp;bottom margin</dd>
 							<dt><b>PDF_MARGIN_FOOTER</b></dt>
@@ -802,6 +884,8 @@
 	<div>
 		<h2>s</h2>
 		<dl>
+							<dt><b>$spot_colors</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$spot_colors">TCPDF::$spot_colors</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Array of Spot colors</dd>
 							<dt><b>$state</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$state">TCPDF::$state</a></dd>
 							<dt><b>$subject</b></dt>
@@ -821,9 +905,11 @@
 							<dt><b>SetAutoPageBreak</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetAutoPageBreak">TCPDF::SetAutoPageBreak()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Enables or disables the automatic page breaking mode. When enabling, the second parameter is the distance from the bottom of the page that defines the triggering limit. By default, the mode is on and the margin is 2 cm.</dd>
 							<dt><b>setBarcode</b></dt>
-				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetBarcode">TCPDF::setBarcode()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set document barcode.</dd>
-							<dt><b>setBarcode</b></dt>
 				<dd>in file barcodes.php, method <a href="com-tecnick-tcpdf/TCPDFBarcode.html#methodsetBarcode">TCPDFBarcode::setBarcode()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set the barcode.</dd>
+							<dt><b>setBarcode</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetBarcode">TCPDF::setBarcode()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set document barcode.</dd>
+							<dt><b>SetBooklet</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetBooklet">TCPDF::SetBooklet()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set the booklet mode for double-sided pages.</dd>
 							<dt><b>setCellHeightRatio</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetCellHeightRatio">TCPDF::setCellHeightRatio()</a></dd>
 							<dt><b>SetCellPadding</b></dt>
@@ -840,26 +926,38 @@
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetDrawColor">TCPDF::SetDrawColor()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines the color used for all drawing operations (lines, rectangles and cell borders). It can be expressed in RGB components or gray scale. The method can be called before the first page is created and the value is retained from page to page.</dd>
 							<dt><b>SetDrawColorArray</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetDrawColorArray">TCPDF::SetDrawColorArray()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines the color used for all drawing operations (lines, rectangles and cell borders).</dd>
+							<dt><b>SetDrawSpotColor</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetDrawSpotColor">TCPDF::SetDrawSpotColor()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines the spot color used for all drawing operations (lines, rectangles and cell borders).</dd>
 							<dt><b>setExtGState</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetExtGState">TCPDF::setExtGState()</a></dd>
 							<dt><b>SetFillColor</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetFillColor">TCPDF::SetFillColor()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines the color used for all filling operations (filled rectangles and cell backgrounds). It can be expressed in RGB components or gray scale. The method can be called before the first page is created and the value is retained from page to page.</dd>
 							<dt><b>SetFillColorArray</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetFillColorArray">TCPDF::SetFillColorArray()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines the color used for all filling operations (filled rectangles and cell backgrounds).</dd>
+							<dt><b>SetFillSpotColor</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetFillSpotColor">TCPDF::SetFillSpotColor()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines the spot color used for all filling operations (filled rectangles and cell backgrounds).</dd>
 							<dt><b>SetFont</b></dt>
-				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetFont">TCPDF::SetFont()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Sets the font used to print character strings. It is mandatory to call this method at least once before printing text or the resulting document would not be valid.</dd>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetFont">TCPDF::SetFont()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Sets the font used to print character strings.</dd>
 							<dt><b>SetFontSize</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetFontSize">TCPDF::SetFontSize()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines the size of the current font.</dd>
+							<dt><b>setFooter</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetFooter">TCPDF::setFooter()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This method is used to render the page footer.</dd>
 							<dt><b>setFooterFont</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetFooterFont">TCPDF::setFooterFont()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set footer font.</dd>
 							<dt><b>setFooterMargin</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetFooterMargin">TCPDF::setFooterMargin()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set footer margin.</dd>
+							<dt><b>setGraphicVars</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetGraphicVars">TCPDF::setGraphicVars()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set graphic variables.</dd>
+							<dt><b>setHeader</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetHeader">TCPDF::setHeader()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This method is used to render the page header.</dd>
 							<dt><b>setHeaderData</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetHeaderData">TCPDF::setHeaderData()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set header data.</dd>
 							<dt><b>setHeaderFont</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetHeaderFont">TCPDF::setHeaderFont()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set header font.</dd>
 							<dt><b>setHeaderMargin</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetHeaderMargin">TCPDF::setHeaderMargin()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set header margin.</dd>
+							<dt><b>setHtmlVSpace</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetHtmlVSpace">TCPDF::setHtmlVSpace()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set the vertical spaces for HTML tags.</dd>
 							<dt><b>setImageScale</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetImageScale">TCPDF::setImageScale()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set the image scale.</dd>
 							<dt><b>setJPEGQuality</b></dt>
@@ -878,16 +976,24 @@
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetLineWidth">TCPDF::SetLineWidth()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines the line width. By default, the value equals 0.2 mm. The method can be called before the first page is created and the value is retained from page to page.</dd>
 							<dt><b>SetLink</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetLink">TCPDF::SetLink()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines the page and position a link points to.</dd>
+							<dt><b>setListIndentWidth</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetListIndentWidth">TCPDF::setListIndentWidth()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set custom width for list indentation.</dd>
+							<dt><b>setLIsymbol</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetLIsymbol">TCPDF::setLIsymbol()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set the character or string to be used as LI item symbol on UL lists.</dd>
 							<dt><b>SetMargins</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetMargins">TCPDF::SetMargins()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines the left, top and right margins. By default, they equal 1 cm. Call this method to change them.</dd>
+							<dt><b>setOpenCell</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetOpenCell">TCPDF::setOpenCell()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set the top/bottom cell sides to be open or closed when the cell cross the page.</dd>
 							<dt><b>setPage</b></dt>
-				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetPage">TCPDF::setPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Move pointer to the apecified document page.</dd>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetPage">TCPDF::setPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Move pointer at the specified document page and update page dimensions.</dd>
 							<dt><b>setPageFormat</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetPageFormat">TCPDF::setPageFormat()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set the page format</dd>
+							<dt><b>setPageMark</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetPageMark">TCPDF::setPageMark()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set start-writing mark on current page for multicell borders and fills.</dd>
 							<dt><b>setPageOrientation</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetPageOrientation">TCPDF::setPageOrientation()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set page orientation.</dd>
 							<dt><b>setPageUnit</b></dt>
-				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetPageUnit">TCPDF::setPageUnit()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set the units of measure for page.</dd>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetPageUnit">TCPDF::setPageUnit()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Set the units of measure for the document.</dd>
 							<dt><b>setPDFVersion</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetPDFVersion">TCPDF::setPDFVersion()</a></dd>
 							<dt><b>setPrintFooter</b></dt>
@@ -900,8 +1006,6 @@
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetRightMargin">TCPDF::SetRightMargin()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines the right margin. The method can be called before creating the first page.</dd>
 							<dt><b>setRTL</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetRTL">TCPDF::setRTL()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Enable or disable Right-To-Left language mode</dd>
-							<dt><b>setStyle</b></dt>
-				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodsetStyle">TCPDF::setStyle()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Sets font style.</dd>
 							<dt><b>SetSubject</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetSubject">TCPDF::SetSubject()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines the subject of the document.</dd>
 							<dt><b>setTempRTL</b></dt>
@@ -910,6 +1014,8 @@
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetTextColor">TCPDF::SetTextColor()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines the color used for text. It can be expressed in RGB components or gray scale. The method can be called before the first page is created and the value is retained from page to page.</dd>
 							<dt><b>SetTextColorArray</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetTextColorArray">TCPDF::SetTextColorArray()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines the color used for text. It can be expressed in RGB components or gray scale.</dd>
+							<dt><b>SetTextSpotColor</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetTextSpotColor">TCPDF::SetTextSpotColor()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines the spot color used for text.</dd>
 							<dt><b>SetTitle</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSetTitle">TCPDF::SetTitle()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Defines the title of the document.</dd>
 							<dt><b>SetTopMargin</b></dt>
@@ -934,12 +1040,16 @@
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodSkewY">TCPDF::SkewY()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Skew vertically.</dd>
 							<dt><b>StarPolygon</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodStarPolygon">TCPDF::StarPolygon()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Draws a star polygon</dd>
+							<dt><b>startPage</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodstartPage">TCPDF::startPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Starts a new page to the document. The page must be closed using the endPage() function.</dd>
 							<dt><b>startPageGroup</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodstartPageGroup">TCPDF::startPageGroup()</a></dd>
 							<dt><b>StartTransform</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodStartTransform">TCPDF::StartTransform()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Starts a 2D tranformation saving current graphic state.</dd>
 							<dt><b>StopTransform</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodStopTransform">TCPDF::StopTransform()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Stops a 2D tranformation restoring previous graphic state.</dd>
+							<dt><b>swapMargins</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodswapMargins">TCPDF::swapMargins()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Swap the left and right margins.</dd>
 					</dl>
 	</div>
 	<a href="elementindex_com-tecnick-tcpdf.html#top">top</a><br>
@@ -948,18 +1058,8 @@
 	<div>
 		<h2>t</h2>
 		<dl>
-							<dt><b>$tableborder</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$tableborder">TCPDF::$tableborder</a></dd>
-							<dt><b>$tdalign</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$tdalign">TCPDF::$tdalign</a></dd>
-							<dt><b>$tdbegin</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$tdbegin">TCPDF::$tdbegin</a></dd>
-							<dt><b>$tdcolspan</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$tdcolspan">TCPDF::$tdcolspan</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Colspan attribute value for the current HTML cell.</dd>
-							<dt><b>$tdheight</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$tdheight">TCPDF::$tdheight</a></dd>
-							<dt><b>$tdwidth</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$tdwidth">TCPDF::$tdwidth</a></dd>
+							<dt><b>$tagvspaces</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$tagvspaces">TCPDF::$tagvspaces</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Array used for custom vertical spaces for HTML tags</dd>
 							<dt><b>$tempfontsize</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$tempfontsize">TCPDF::$tempfontsize</a></dd>
 							<dt><b>$TextColor</b></dt>
@@ -970,6 +1070,8 @@
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$tMargin">TCPDF::$tMargin</a></dd>
 							<dt><b>$tmprtl</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$tmprtl">TCPDF::$tmprtl</a></dd>
+							<dt><b>$transfmatrix</b></dt>
+				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$transfmatrix">TCPDF::$transfmatrix</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Array of transformation matrix</dd>
 							<dt><b>tcpdf_config.php</b></dt>
 				<dd>procedural page <a href="com-tecnick-tcpdf/_config---tcpdf_config.php.html">tcpdf_config.php</a></dd>
 							<dt><b>TCPDF</b></dt>
@@ -979,7 +1081,7 @@
 							<dt><b>TCPDFBarcode</b></dt>
 				<dd>in file barcodes.php, class <a href="com-tecnick-tcpdf/TCPDFBarcode.html">TCPDFBarcode</a><br>&nbsp;&nbsp;&nbsp;&nbsp;PHP class to creates array representations for common 1D barcodes to be used with TCPDF (http://www.tcpdf.org).<br /></dd>
 							<dt><b>Text</b></dt>
-				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodText">TCPDF::Text()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Prints a character string. The origin is on the left of the first charcter, on the baseline. This method allows to place a string precisely on the page, but it is usually easier to use Cell(), MultiCell() or Write() which are the standard methods to print text.</dd>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodText">TCPDF::Text()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Prints a character string.</dd>
 							<dt><b>TextField</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodTextField">TCPDF::TextField()</a></dd>
 							<dt><b>Transform</b></dt>
@@ -998,8 +1100,6 @@
 	<div>
 		<h2>u</h2>
 		<dl>
-							<dt><b>$u</b></dt>
-				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$u">TCPDF::$u</a></dd>
 							<dt><b>$underline</b></dt>
 				<dd>in file tcpdf.php, variable <a href="com-tecnick-tcpdf/TCPDF.html#var$underline">TCPDF::$underline</a></dd>
 							<dt><b>$ur</b></dt>
@@ -1028,6 +1128,8 @@
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodUTF8StringToArray">TCPDF::UTF8StringToArray()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Converts UTF-8 strings to codepoints array.<br /></dd>
 							<dt><b>utf8StrRev</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodutf8StrRev">TCPDF::utf8StrRev()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Reverse the RLT substrings using the Bidirectional Algorithm (http://unicode.org/reports/tr9/).</dd>
+							<dt><b>UTF8ToLatin1</b></dt>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodUTF8ToLatin1">TCPDF::UTF8ToLatin1()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Converts UTF-8 strings to Latin1 when using the standard 14 core fonts.<br /></dd>
 							<dt><b>UTF8ToUTF16BE</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodUTF8ToUTF16BE">TCPDF::UTF8ToUTF16BE()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Converts UTF-8 strings to UTF16-BE.<br /></dd>
 					</dl>
@@ -1063,7 +1165,7 @@
 							<dt><b>writeBarcode</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodwriteBarcode">TCPDF::writeBarcode()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This function is DEPRECATED, please use the new write1DBarcode() function.</dd>
 							<dt><b>writeHTML</b></dt>
-				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodwriteHTML">TCPDF::writeHTML()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Allows to preserve some HTML formatting (limited support).<br /></dd>
+				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodwriteHTML">TCPDF::writeHTML()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Allows to preserve some HTML formatting (limited support).<br />  IMPORTANT: The HTML must be well formatted - try to clean-up it using an application like HTML-Tidy before submitting.</dd>
 							<dt><b>writeHTMLCell</b></dt>
 				<dd>in file tcpdf.php, method <a href="com-tecnick-tcpdf/TCPDF.html#methodwriteHTMLCell">TCPDF::writeHTMLCell()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Prints a cell (rectangular area) with optional borders, background color and html text string.</dd>
 					</dl>
@@ -1101,7 +1203,7 @@
 	<a href="elementindex_com-tecnick-tcpdf.html#top">top</a><br>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Fri, 13 Jun 2008 15:02:12 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.0</a>
+		    Documentation generated on Tue, 25 Nov 2008 16:30:52 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
 	      </div>
       </td></tr></table>
     </td>
