@@ -76,13 +76,17 @@ FCKConfig.PreserveSessionOnFileBrowser = false ;
 FCKConfig.FloatingPanelsZIndex = 10000 ;
 
 FCKConfig.ToolbarSets["Default"] = [
-	['Bold','Italic','Underline','-'],
+	['Source','-','NewPage','Preview','Templates'],
+	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
+	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['TextColor','BGColor'],
+	['Link','Unlink','Anchor'],
+	['Table','Rule','Smiley','SpecialChar','PageBreak','UniversalKey'],
 	'/',
-	['FontFormat','FontName','FontSize'],
-
+	['Style','FontFormat','FontName','FontSize'],
+	['TextColor','BGColor'],
 	['About']
 ] ;
 //FCKConfig.ToolbarSets["Default"] = [
