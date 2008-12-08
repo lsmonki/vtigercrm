@@ -1,13 +1,12 @@
 <?php
-include_once('vtlib/Vtiger/Rss/Parser.php');
+include_once('vtlib/Vtiger/Feed/Parser.php');
 
 global $app_strings, $mod_strings, $theme, $currentModule;
 
-
 $ftimeout = 60;
-$fparser = new Vtiger_RSS_Parser();
-$fparser->fetch('http://www.vtiger.com/products/crm/newsfeed.php', $ftimeout);
-$items = $fparser->items();
+$fparser = new Vtiger_Feed_Parser();
+$fparser->vt_dofetch('http://www.vtiger.com/products/crm/newsfeed.php', $ftimeout);
+$items = $fparser->get_items();
 $NEWSLIST = Array();
 foreach($items as $item) {
 	$NEWSLIST[] = $item;
