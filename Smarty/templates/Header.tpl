@@ -545,11 +545,11 @@ function vtiger_news(obj) {
 }
 {/literal}
 </script>
-<div class="lvtCol fixedLay1" id="vtigerNewsPopupLay" style="display: none; height: 250px; bottom: 2px; display: padding: 2px; block; z-index: 12; font-weight: normal;" align="left">
+<div class="lvtCol fixedLay1" id="vtigerNewsPopupLay" style="display: none; height: 250px; bottom: 2px; padding: 2px; block; z-index: 12; font-weight: normal;" align="left">
 </div>
 <!-- END -->
 
 <!-- ActivityReminder Customization for callback -->
-<div class="lvtCol fixedLay1" id="ActivityRemindercallback" style="right: 0px; bottom: 2px; display: padding: 2px; block; z-index: 10; font-weight: normal;" align="left">
+<div class="lvtCol fixedLay1" id="ActivityRemindercallback" style="right: 0px; bottom: 2px; display:none; padding: 2px; block; z-index: 10; font-weight: normal;" align="left">
 </div>
 <!-- End -->
