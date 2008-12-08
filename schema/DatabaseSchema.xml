@@ -6454,28 +6454,6 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="vtiger_inventory_num">
-		<field name="num_id" type="I" size="19" >
-			<key/>
-		</field>
-		<field name="semodule" type="C" size="50" >
-			<notnull />
-		</field>
-		<field name="prefix" type="C" size="50" >
-			<notnull />
-		</field>
-		<field name="start_id" type="C" size="50" >
-			<notnull />
-		</field>
-		<field name="cur_id" type="C" size="50" >
-			<notnull />
-		</field>
-		<field name="active" type="I" size="2" >
-			<notnull />
-		</field>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
 	<table name="vtiger_activity_reminder_popup">
 		<field name="reminderid" type="I" size="19" >
 			<key/>
