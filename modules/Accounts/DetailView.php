@@ -168,6 +168,7 @@ if(isset($_SESSION['accounts_listquery'])){
 }
 
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
+$smarty->assign("USE_ASTERISK", get_use_asterisk($current_user->id));
 
 if($singlepane_view == 'true')
 {

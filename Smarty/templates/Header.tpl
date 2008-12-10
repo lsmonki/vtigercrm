@@ -39,10 +39,20 @@
 	<script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
 	<script language="JavaScript" type="text/javascript" src="modules/Calendar/script.js"></script>
 	<script language="javascript" type="text/javascript" src="include/scriptaculous/dom-drag.js"></script>
+	<script language="JavaScript" type="text/javascript" src="include/js/notificationPopup.js"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
         <script type="text/javascript" src="jscalendar/calendar.js"></script>
         <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
         <script type="text/javascript" src="jscalendar/lang/calendar-{$APP.LBL_JSCALENDAR_LANG}.js"></script>
+        
+    <!-- asterisk Integration -->
+    {if $USE_ASTERISK eq 'true'}
+    	<script type="text/javascript" src="include/js/asterisk.js"></script>
+    {/if}
+	<script language="javascript">
+		use_asterisk = {$USE_ASTERISK};
+	</script>
+    <!-- END -->
 	
 	<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="hdrNameBg">
 	<tr>
@@ -73,6 +83,8 @@
 	</TABLE>
 
 <div id='miniCal' style='width:300px; position:absolute; display:none; left:100px; top:100px; z-index:100000'>
+</div>
+<div class="lvtCol fixedLay1" id="notificationDiv" style="float: right;  padding-right: 5px; overflow: hidden; border-style: solid; right: 0px; border-color: rgb(141, 141, 141); bottom: 0px; display: none; padding: 2px; block; z-index: 10; font-weight: normal;" align="left">
 </div>
 
 <!-- header - master tabs -->
@@ -509,6 +521,24 @@ function openwin()
 	{/foreach}
 	</table>
 </div>
+
+<!-- divs for asterisk integration -->
+<div id="OutgoingCall" style="display: none;position: absolute;z-index:200;" class="layerPopup">
+	<table  border='0' cellpadding='5' cellspacing='0' width='100%'>
+		<tr style='cursor:move;' >
+			<td class='mailClientBg small' id='outgoing_handle'>
+				<b>{$APP.LBL_OUTGOING_CALL}</b>
+			</td>
+		</tr>
+	</table>
+	<table  border='0' cellpadding='0' cellspacing='0' width='100%' class='hdrNameBg'>
+		</tr>
+		<tr><td style='padding:10px;' colspan='2'>
+			{$APP.LBL_OUTGOING_CALL_MESSAGE}
+		</td></tr>
+	</table>
+</div>
+<!-- divs for asterisk integration :: end-->
 	
 <script>
 	var THandle = document.getElementById("Track_Handle");

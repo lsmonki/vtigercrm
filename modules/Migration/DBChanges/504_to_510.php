@@ -948,8 +948,49 @@ custom_removeCustomFilterColumn('Faq', 'All', 'vtiger_faq', 'id',     '',       
 custom_addCustomFilterColumn('Faq',    'All', 'vtiger_faq', 'faq_no', 'faq_no', 'Faq_Faq_No:V');
 
 custom_addCustomFilterColumn('Documents',  'All', 'vtiger_notes', 'note_no', 'note_no', 'Notes_Note_No:V');
+// Sequence number customization ends
 
-/** Sequence number customization ends */
+/* Asterisk integration starts here*/
+$blockid = $adb->getUniqueID('vtiger_blocks');
+	
+$sql = "insert into vtiger_blocks values ($blockid,".getTabid('Users').",'LBL_USER_ASTERISK_OPTIONS',6,0,0,0,0,0,1)";
+ExecuteQuery($sql);
+$sql = "insert into vtiger_field values (".getTabid('Users').",".$adb->getUniqueID('vtiger_field').",'asterisk_extension','vtiger_asteriskextensions',1,1,'asterisk_extension','Asterisk Extension',1,0,0,30,1,$blockid,1,'V~O',1,NULL,'BAS',1)";
+ExecuteQuery($sql);
+$sql = "insert into vtiger_field values (".getTabid('Users').",".$adb->getUniqueID('vtiger_field').",'use_asterisk','vtiger_asteriskextensions',1,56,'use_asterisk','Use Asterisk',1,0,0,30,2,$blockid,1,'C~O',1,NULL,'BAS',1)";
+ExecuteQuery($sql);
+$sql = "drop table if exists vtiger_asteriskextensions";
+ExecuteQuery($sql);
+$sql = "create table vtiger_asteriskextensions (userid varchar(30), asterisk_extension varchar(50), use_asterisk varchar(3))";
+ExecuteQuery($sql);
+$sql = "drop table if exists vtiger_asterisk";
+ExecuteQuery($sql);
+$sql = "create table vtiger_asterisk (server varchar(30), port varchar(30), username varchar(50), password varchar(50))";
+ExecuteQuery($sql);
+$sql = "drop table if exists vtiger_asteriskincomingcalls";
+ExecuteQuery($sql);
+$sql = "create table vtiger_asteriskincomingcalls (from_number varchar(50) not null, from_name varchar(50) not null, to_number varchar(50) not null, callertype varchar(30))";
+ExecuteQuery($sql);
+$sql = "drop table if exists vtiger_asteriskoutgoingcalls";
+ExecuteQuery($sql);
+$sql = "create table vtiger_asteriskoutgoingcalls (userid varchar(30) not null, from_number varchar(30) not null, to_number varchar(30) not null)";
+ExecuteQuery($sql);
+$sql = "drop table if exists vtiger_tab_name_index";
+ExecuteQuery($sql);
+$sql = "create table vtiger_tab_name_index (tabid int(19), tablename varchar(50), primaryKey varchar(50))";
+ExecuteQuery($sql);
+$tabid = getTabid('Users');
+$tab_name_index_users = array('vtiger_asteriskextensions'=>'userid');
+foreach($tab_name_index_users as $key=>$value){
+	$sql = "insert into vtiger_tab_name_index values ($tabid, '$key', '$value')";
+	ExecuteQuery($sql);
+}
+ExecuteQuery("update vtiger_field set uitype='11' where fieldname='mobile' and tabid=".getTabid('Leads'));
+ExecuteQuery("update vtiger_field set uitype='11' where fieldname='mobile' and tabid=".getTabid('Contacts'));
+ExecuteQuery("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Leads'));
+ExecuteQuery("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Contacts'));
+ExecuteQuery("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Accounts'));
+// asterisk integration ends
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 

@@ -140,6 +140,7 @@
 									</tr>
 									{/foreach}
 									</table>
+									{assign var=list_numbering value=$smarty.foreach.blockforeach.iteration}
 									{/foreach}
 									
 									<br>
@@ -147,7 +148,7 @@
 									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 									<tr>
 										 <td class="big">	
-										<strong>6. {$UMOD.LBL_HOME_PAGE_COMP}</strong>
+										<strong>{$list_numbering+1}. {$UMOD.LBL_HOME_PAGE_COMP}</strong>
 										 </td>
 										 <td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="ShowHidefn('home_comp');"></td>	
 									</tr>
@@ -174,7 +175,7 @@
 									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 									<tr>
 										<td class="big">
-										<strong>7. {$UMOD.LBL_TAGCLOUD_DISPLAY}</strong>
+										<strong>{$list_numbering+2}. {$UMOD.LBL_TAGCLOUD_DISPLAY}</strong>
 										</td>
 										<td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="ShowHidefn('tagcloud_disp');"></td>
 									</tr>
@@ -196,7 +197,7 @@
 									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 									<tr>
 										<td class="big">	
-										<strong>8. {$UMOD.LBL_MY_GROUPS}</strong>
+										<strong>{$list_numbering+3}. {$UMOD.LBL_MY_GROUPS}</strong>
 										 </td>
 										 <td class="small" align="right">
 										{if $GROUP_COUNT > 0}
@@ -217,7 +218,7 @@
 									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 										<tr>
 										 <td class="big">	
-										<strong>9. {$UMOD.LBL_LOGIN_HISTORY}</strong>
+										<strong>{$list_numbering+4}. {$UMOD.LBL_LOGIN_HISTORY}</strong>
 										 </td>
 										 <td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="fetchlogin_js({$ID});"></td>	
 										</tr>

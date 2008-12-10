@@ -279,7 +279,7 @@ function patternValidate(fldName,fldLabel,type) {
 		var re = /^\d{1,2}\:\d{1,2}$/
 	}
 	//Asha: Remove spaces on either side of a Email id before validating
-	if (type.toUpperCase()=="EMAIL") currObj.value = trim(currObj.value);	
+	if (type.toUpperCase()=="EMAIL" || type.toUpperCase() == "DATE") currObj.value = trim(currObj.value);	
 	if (!re.test(currObj.value)) {
 		alert(alert_arr.ENTER_VALID + fldLabel)
 		currObj.focus()
@@ -3475,3 +3475,51 @@ function dldCntIncrease(fileid)
                 );
 }
 //End Documents Module
+
+//asterisk integration :: starts
+
+/**
+ * this function gets the dimension of a node
+ * @param node - the node whose dimension you want
+ * @return height and width in array format
+ */
+function getDimension(node){
+	var ht = node.offsetHeight;
+	var wdth = node.offsetWidth;
+	var nodeChildren = node.getElementsByTagName("*");
+	var noOfChildren = nodeChildren.length;
+	for(var index =0;index<noOfChildren;++index){
+		ht = Math.max(nodeChildren[index].offsetHeight, ht);
+		wdth = Math.max(nodeChildren[index].offsetWidth,wdth);
+	}
+	return {x: wdth,y: ht};
+}
+
+/**
+ * this function accepts a number and displays a div stating that there is an outgoing call
+ * then it calls the number
+ * @param number - the number to be called
+ */
+function startCall(number){
+	div = document.getElementById('OutgoingCall').innerHTML;					
+	outgoingPopup = _defPopup();
+	outgoingPopup.content = div;
+	outgoingPopup.displayPopup(outgoingPopup.content);
+	
+	//var ASTERISK_DIV_TIMEOUT = 6000;
+	new Ajax.Request(
+		'index.php',
+		{	queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'action=UsersAjax&mode=ajax&file=StartCall&module=Users&number='+number,
+			onComplete: function(response) {
+							if(response.responseText == ''){
+								//successfully called
+							}else{
+								alert(response.responseText);
+							}
+						}
+		}
+	);
+}
+//asterisk integration :: ends

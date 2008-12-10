@@ -83,7 +83,7 @@ $smarty->assign("CATEGORY",getParentTab());
 $smarty->assign("CALC",get_calc($image_path));
 $smarty->assign("QUICKACCESS",getAllParenttabmoduleslist());
 $smarty->assign("ANNOUNCEMENT",get_announcements());
-
+$smarty->assign("USE_ASTERISK", get_use_asterisk($current_user->id));
 
 if (is_admin($current_user)) $smarty->assign("ADMIN_LINK", "<a href='index.php?module=Settings&action=index'>".$app_strings['LBL_SETTINGS']."</a>");
 

@@ -1399,13 +1399,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	//Ends
 	$field_val = $adb->query_result($list_result,$list_result_count,$colname);
-	$temp_val = textlength_check($field_val);
-
-	/*preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val);
-	if(strlen($field_val) > $listview_max_textlength)
-	{
-		$temp_val = substr(preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val),0,$listview_max_textlength).'...';
-	}*/
+	if(stristr($field_val, "<a href")){
+		$temp_val = textlength_check($field_val);
+	}else{
+		$temp_val = html_entity_decode($field_val);
+	}
 
 	// vtlib customization: New uitype to handle relation between modules
 	if($uitype == '10'){
@@ -1853,6 +1851,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		$value = ($temp_val != "") ? getCurrencyName($temp_val,false) : "";
 	}
+	//added for asterisk integration
+	elseif($uitype == 11 && get_use_asterisk($current_user->id) == 'true'){
+		$value = "<a href='javascript:;' onclick='startCall(&quot;$temp_val&quot;)'>".$temp_val."</a>";
+	}
+	//asterisk changes end here
 	else
 	{
 		if($fieldname == $focus->list_link_field)
@@ -2854,6 +2857,7 @@ function getListQuery($module,$where='')
 		$query = "select id,user_name,roleid,first_name,last_name,email1,phone_mobile,phone_work,is_admin,status from vtiger_users inner join vtiger_user2role on vtiger_user2role.userid=vtiger_users.id where deleted=0 ".$where ;
 			break;
 	default:
+		require_once "modules/$module/$module.php";	//without this line the new modulw() would not work
 		$focus = new $module();	
 		$query = $focus->getListQuery($module);
 	}

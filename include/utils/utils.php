@@ -4783,4 +4783,213 @@ function transferPriceBookCurrency($old_cur, $new_cur) {
 	$log->debug("Exiting function updatePriceBookCurrency...");
 }
 
+//functions for asterisk integration start
+/**
+ * this function returns the caller name based on the phone number that is passed to it
+ * @param $from - the number which is calling
+ * returns caller information in name(type) format :: for e.g. Mary Smith (Contact)
+ * if no information is present in database, it returns :: Unknown Caller (Unknown)
+ */
+function getCallerName($from) {
+	global $adb;
+
+	//information found
+	$callerInfo = getCallerInfo(getStrippedNumber($from));
+
+	if($callerInfo != false){
+		$callerName = $callerInfo[name];
+		$module = $callerInfo[module];
+		$callerModule = " (<a href='index.php?module=$module&action=index'>$module</a>)";
+		$callerID = $callerInfo[id];
+		
+		$caller = "<a href='index.php?module=$module&action=DetailView&record=$callerID'>$callerName</a>$callerModule";
+	}else{
+		$caller = $caller."<br>
+						<a target='_blank' href='index.php?module=Leads&action=EditView&phone=$from'>Create Lead</a><br>
+						<a target='_blank' href='index.php?module=Contacts&action=EditView&phone=$from'>Create Contact</a><br>
+						<a target='_blank' href='index.php?module=Accounts&action=EditView&phone=$from'>Create Account</a>";
+	}
+	return $caller;
+}
+
+/**
+ * this function searches for a given number in vtiger and returns the callerInfo in an array format
+ * currently the search is made across only leads, accounts and contacts modules
+ * 
+ * @param $number - the number whose information you want
+ * @return array in format array(name=>callername, module=>module, id=>id);
+ */
+function getCallerInfo($number){
+	global $adb, $log;
+	$caller = "Unknown Number (Unknown)"; //declare caller as unknown in beginning
+	
+	$name['Contacts'] = array('name'=>"concat(firstname,' ',lastname)", 'table'=>'vtiger_contactdetails', 'field'=>"phone,mobile,fax", 'id'=>'contactid');
+	$name['Accounts'] = array('name'=>"accountname", 'table'=>"vtiger_account", 'field'=>"phone, otherphone, fax", 'id'=>'accountid');
+	$name['Leads'] = array('name'=>"concat(firstname,' ',lastname)", 'table'=>"vtiger_leaddetails inner join vtiger_leadaddress on vtiger_leaddetails.leadid = vtiger_leadaddress.leadaddressid", 'field'=>"phone,mobile,fax", 'id'=>'leadid'); 
+	
+	foreach ($name as $module => $info) {
+		$phones = explode(",",$info[field]);
+		
+		$sql = "select *,".$info[name]." as name from ".$info[table]." inner join vtiger_crmentity on ".$info['id']."=crmid where deleted=0";
+		$result = $adb->query($sql);
+		
+		$id = searchPhoneNumber($number, $phones, $result, 1);
+
+		if($id){
+			$callerName = $adb->query_result($result, $id, "name");
+			$callerID = $adb->query_result($result,$id,$info['id']);
+			$data = array("name"=>$callerName, "module"=>$module, "id"=>$callerID);
+			return $data;			
+		}
+	}
+	return false;
+}
+
+/**
+ * this function searches the given record in the result for the given fields
+ * @param integer $record - the value to search
+ * @param array $fields - the fields to search
+ * @param object $result - the adodb result set in which to search
+ * @param integer $flag - if on, it removes the non-integers from the fields before comparison - 1 to set
+ */
+function searchPhoneNumber($record, $fields, $result, $flag=0){
+	global $adb;
+	$count = $adb->num_rows($result);
+
+	for($i=0;$i<$count;$i++){
+		foreach($fields as $field){
+			$number = $adb->query_result($result, $i, $field);
+			if($flag == 1){
+				$number = getStrippedNumber($number);
+			}
+			if($number == $record){
+				return $i;			
+			}
+		}
+	}
+	return false;
+}
+
+/**
+ * this function removes any pre-codes like SIP:, PSTN:, etc added to a number
+ * it also removes any braces or spaces present in a number
+ * @param string $number - the number to be processed
+ */
+function getStrippedNumber($number){
+	$number = preg_replace("/[^\d]/i","",$number);
+	return $number;
+}
+
+/**
+ * this function returns the tablename and primarykeys for a given module in array format
+ * @param object $adb - peardatabase type object
+ * @param string $module - module name for  which you want the array
+ * @return array(tablename1=>primarykey1,.....)
+ */
+function get_tab_name_index($adb, $module){
+	$tabid = getTabid($module);
+	$sql = "select * from vtiger_tab_name_index where tabid = ?";
+	$result = $adb->pquery($sql, array($tabid));
+	$count = $adb->num_rows($result);
+	$data = array();
+	
+	for($i=0; $i<$count; $i++){
+		$tablename = $adb->query_result($result, $i, "tablename");
+		$primaryKey = $adb->query_result($result, $i, "primarykey");
+		$data[$tablename] = $primaryKey;
+	}
+	return $data;
+}
+
+/**
+ * this function returns the value of use_asterisk from the database for the current user
+ * @param string $id - the id of the current user
+ */
+function get_use_asterisk($id){
+	global $adb;
+	$sql = "select * from vtiger_asteriskextensions where userid = ?";
+	$result = $adb->pquery($sql, array($id));
+	if($adb->num_rows($result)>0){
+		$use_asterisk = $adb->query_result($result, 0, "use_asterisk");
+		$asterisk_extension = $adb->query_result($result, 0, "asterisk_extension");
+		if($use_asterisk == 0 || empty($asterisk_extension)){
+			return 'false';
+		}else{
+			return 'true';
+		}
+	}else{
+		return 'false';
+	}
+}
+
+/**
+ * this function adds a record to the callhistory module
+ * 
+ * @param string $userExtension - the extension of the current user
+ * @param string $callfrom - the caller number
+ * @param string $callto - the called number
+ * @param string $status - the status of the call (outgoing/incoming/missed)
+ * @param object $adb - the peardatabase object
+ */
+function addToCallHistory($userExtension, $callfrom, $callto, $status, $adb){
+	$sql = "select * from vtiger_asteriskextensions where asterisk_extension=".$userExtension;
+	$result = $adb->pquery($sql,array());
+	$userID = $adb->query_result($result, 0, "userid");
+	
+	$crmID = $adb->getUniqueID('vtiger_crmentity');
+	$timeOfCall = date('Y-m-d H:i:s');
+	
+	$sql = "insert into vtiger_crmentity values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	$params = array($crmID, $userID, $userID, 0, "PBXManager", "", $timeOfCall, $timeOfCall, NULL, NULL, 0, 1, 0);
+	$adb->pquery($sql, $params);
+	
+	if(empty($callfrom)){
+		$callfrom = "Unknown";
+	}
+	if(empty($callto)){
+		$callto = "Unknown";
+	}
+	
+	if($status == 'outgoing'){
+		//call is from user to record
+		$sql = "select * from vtiger_asteriskextensions where asterisk_extension=$callfrom";
+		$result = $adb->query($sql);
+		if($adb->num_rows($result)>0){
+			$userid = $adb->query_result($result, 0, "userid");
+			$callerName = getUserFullName($userid);
+		}
+		
+		$receiver = getCallerInfo($callto);
+		if($receiver == false){
+			$receiver = getCallerInfo(getStrippedNumber($callto));
+		}
+		if(empty($receiver)){
+			$receiver = "Unknown";
+		}else{
+			$receiver = "<a href='index.php?module=".$receiver[module]."&action=DetailView&record=".$receiver[id]."'>".$receiver[name]."</a>";
+		}
+	}else{
+		//call is from record to user
+		$sql = "select * from vtiger_asteriskextensions where asterisk_extension=$callto";
+		$result = $adb->query($sql);
+		if($adb->num_rows($result)>0){
+			$userid = $adb->query_result($result, 0, "userid");
+			$receiver = getUserFullName($userid);
+		}
+		$callerName = getCallerInfo($callfrom);
+		if($callerName == false){
+			$callerName = getCallerInfo(getStrippedNumber($callfrom));
+		}
+		if(empty($callerName)){
+			$callerName = "Unknown";
+		}else{
+			$callerName = "<a href='index.php?module=".$callerName[module]."&action=DetailView&record=".$callerName[id].">'".$callerName[name]."</a>";
+		}
+	}
+	
+	$sql = "insert into vtiger_pbxmanager values (?,?,?,?,?)";
+	$params = array($crmID, $callerName, $receiver, $timeOfCall, $status);
+	$adb->pquery($sql, $params);
+}
+//functions for asterisk integration end
 ?>

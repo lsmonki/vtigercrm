@@ -1077,5 +1077,20 @@ $mod_strings = Array(
 'LBL_CUSTOMIZE_MODENT_NUMBER'=>'Customize Record Numbering',
 'LBL_CUSTOMIZE_MODENT_NUMBER_DESCRIPTION'=>'Module Entity Number customization',
 // END
+
+//added for softphone integration
+'LBL_SOFTPHONE_SERVER_SETTINGS'=>'SoftPhone Server Settings',
+'LBL_SOFTPHONE_SERVER_SETTINGS_DESCRIPTION'=>'Configure your softphone here',
+'ASTERISK_SERVER_IP'=>'Asterisk server IP ',
+'ASTERISK_PORT'=>'Asterisk server port',
+'ASTERISK_USERNAME'=>'Asterisk username',
+'ASTERISK_PASSWORD'=>'Asterisk password',
+'ASTERISK_SERVER_IP_TITLE'=>'The URL of the asterisk server',
+'ASTERISK_PORT_TITLE'=>'The port where asterisk call manager API can connect to Asterisk (default 5038)',
+'ASTERISK_USERNAME_TITLE'=>'The asterisk username (generally the admin username)',
+'ASTERISK_PASSWORD_TITLE'=>'Password for the asterisk user',
+'LBL_CANCEL_BUTTON'=>'Cancel',
+//softphone integration ends
+
 );
 ?>

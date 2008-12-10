@@ -671,6 +671,12 @@ $mod_strings = Array(
 'LBL_USER_ADV_OPTIONS'=>'User Advanced Options',
 'Reminder Interval'=>'Reminder Interval',
 'Webservice Access Key'=>'Access Key',
+
+//for asterisk integration
+'LBL_USER_ASTERISK_OPTIONS'=>'Asterisk Configuration',
+'Asterisk Extension'=>'Asterisk Extension',
+'Use Asterisk'=>'Use Asterisk',
+//asterisk changes end
 );
 
 ?>

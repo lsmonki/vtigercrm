@@ -945,6 +945,21 @@ $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("
 //added for internl_mailer
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'internal_mailer','vtiger_users',1,'56','internal_mailer','INTERNAL_MAIL_COMPOSER',1,0,0,50,15,80,1,'V~O',1,null,'BAS',1)");
 $this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'reminder_interval','vtiger_users',1,'15','reminder_interval','Reminder Interval',1,0,0,100,1,84,1,'V~O',1,null,'BAS',1)");
+
+/*asterisk integration starts here*/
+$blockid = $this->db->getUniqueID('vtiger_blocks');
+$this->db->query("insert into vtiger_blocks values ($blockid,29,'LBL_USER_ASTERISK_OPTIONS',6,0,0,0,0,0,1)");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID('vtiger_field').",'asterisk_extension','vtiger_asteriskextensions',1,1,'asterisk_extension','Asterisk Extension',1,0,0,30,1,$blockid,1,'V~O',1,NULL,'BAS',1)");
+$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID('vtiger_field').",'use_asterisk','vtiger_asteriskextensions',1,56,'use_asterisk','Use Asterisk',1,0,0,30,2,$blockid,1,'C~O',1,NULL,'BAS',1)");
+
+$this->db->query("update vtiger_field set uitype='11' where fieldname='mobile' and tabid=".getTabid('Leads'));
+$this->db->query("update vtiger_field set uitype='11' where fieldname='mobile' and tabid=".getTabid('Contacts'));
+$this->db->query("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Leads'));
+$this->db->query("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Contacts'));
+$this->db->query("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Accounts'));
+/*asterisk integration ends*/
+
+
  //user Details End
 $tab_field_array = array(
 'Accounts'=>array('accountname'),

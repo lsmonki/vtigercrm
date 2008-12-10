@@ -6955,6 +6955,48 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
     <!-- com_vtiger_workflow ends-->
+	
+	<!--  asterisk integration starts -->
+	<table name="vtiger_asteriskextensions">
+		<field name="userid" type="C" size="30">
+		</field>
+		<field name="asterisk_extension" type="C" size="50">
+		</field>
+		<field name="use_asterisk" type="C" size="3">
+		</field>
+	</table>
+
+	<table name="vtiger_asterisk">
+		<field name="server" type="C" size="30">
+		</field>
+		<field name="port" type="C" size="30">
+		</field>
+		<field name="username" type="C" size="50">
+		</field>
+		<field name="password" type="C" size="50">
+		</field>
+	</table>
+
+	<table name="vtiger_asteriskincomingcalls">
+		<field name="from_number" type="C" size="50">
+		</field>
+		<field name="from_name" type="C" size="50">
+		</field>
+		<field name="to_number" type="C" size="50">
+		</field>
+		<field name="callertype" type="C" size="30">
+		</field>
+	</table>
+
+	<table name="vtiger_asteriskoutgoingcalls">
+		<field name="userid" type="C" size="30">
+		</field>
+		<field name="from_number" type="C" size="50">
+		</field>
+		<field name="to_number" type="C" size="30">
+		</field>
+	</table>
+	<!--  asterisk integration ends -->
 
 	<table name="vtiger_modentity_num">
 	    <field name="num_id" type="I" size="19">

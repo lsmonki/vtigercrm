@@ -14,17 +14,24 @@
 
 <!-- This file is used to display the fields based on the ui type in detailview -->
 		{if $keyid eq '1' || $keyid eq 2 || $keyid eq '11' || $keyid eq '7' || $keyid eq '9' || $keyid eq '55' || $keyid eq '71' || $keyid eq '72' || $keyid eq '103' || $keyid eq '255'} <!--TextBox-->
-        	<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');" valign="top">
-            	{if $keyid eq '55' || $keyid eq '255'}<!--SalutationSymbol-->
+			<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');" valign="top">
+				{if $keyid eq '55' || $keyid eq '255'}<!--SalutationSymbol-->
 					{if $keyaccess eq $APP.LBL_NOT_ACCESSIBLE}
 						<font color='red'>{$APP.LBL_NOT_ACCESSIBLE}</font>	
-                    {else}
-                    	{$keysalut}
-                    {/if}
-                {*elseif $keyid eq '71' || $keyid eq '72'}  <!--CurrencySymbol-->
-                	{$keycursymb*}
-                {/if}
-                &nbsp;&nbsp;<span id="dtlview_{$label}" width="60%">{$keyval}</span>
+					{else}
+						{$keysalut}
+					{/if}
+				{/if}
+
+				{if $keyid eq 11}
+					{if $USE_ASTERISK eq 'true'}
+						&nbsp;&nbsp;<span id="dtlview_{$label}"><a href='javascript:;' onclick='startCall("{$keyval}")'>{$keyval}</a></span>
+					{else}
+						&nbsp;&nbsp;<span id="dtlview_{$label}">{$keyval}</span>
+					{/if}
+				{else}
+					&nbsp;&nbsp;<span id="dtlview_{$label}">{$keyval}</span>
+				{/if}
                 <div id="editarea_{$label}" style="display:none;">
                 	<input class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" type="text" id="txtbox_{$label}" name="{$keyfldname}" maxlength='100' value="{$keyval}"></input>
                     <br><input name="button_{$label}" type="button" class="crmbutton small save" value="{$APP.LBL_SAVE_LABEL}" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');fnhide('crmspanid');"/> {$APP.LBL_OR}
@@ -351,6 +358,23 @@
 							   </tr>
 							{/foreach}
 
+				{elseif $keyid eq 5}
+					<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">
+						&nbsp;&nbsp;<span id="dtlview_{$label}">
+							{$keyval}
+						</span>
+						<div id="editarea_{$label}" style="display:none;">
+							<input style="border:1px solid #bababa;" size="11" maxlength="10" type="text" id="txtbox_{$label}" name="{$keyfldname}" maxlength='100' value="{$keyval|regex_replace:'/[^-]*(--)[^-]*$/':''}"></input>
+							<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_{$keyfldname}">
+							<br><input name="button_{$label}" type="button" class="crmbutton small save" value="{$APP.LBL_SAVE_LABEL}" onclick="dtlViewAjaxSave('{$label}','{$MODULE}',{$keyid},'{$keytblname}','{$keyfldname}','{$ID}');fnhide('crmspanid');"/> {$APP.LBL_OR}
+							<a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">{$APP.LBL_CANCEL_BUTTON_LABEL}</a>
+							<script type="text/javascript">
+								Calendar.setup ({ldelim}
+									inputField : "txtbox_{$label}", ifFormat : '%Y-%m-%d', showsTime : false, button : "jscal_trigger_{$keyfldname}", singleClick : true, step : 1
+								{rdelim})
+							</script>
+						</div>
+					</td>
 
 				{elseif $keyid eq 69}<!-- for Image Reflection -->
                                                   	<td align="left" width=25%">&nbsp;{$keyval}</td>

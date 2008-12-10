@@ -53,9 +53,8 @@ class Users {
 	var $deleted;
 	var $homeorder;
 
-
-	var $tab_name = Array('vtiger_users','vtiger_attachments','vtiger_user2role');	
-	var $tab_name_index = Array('vtiger_users'=>'id','vtiger_attachments'=>'attachmentsid','vtiger_user2role'=>'userid');
+	var $tab_name = Array('vtiger_users','vtiger_attachments','vtiger_user2role','vtiger_asteriskextensions');	
+	var $tab_name_index = Array('vtiger_users'=>'id','vtiger_attachments'=>'attachmentsid','vtiger_user2role'=>'userid','vtiger_asteriskextensions'=>'userid');
 	var $column_fields = Array('user_name'=>'','is_admin' =>'','user_password'=>'','confirm_password'=>'',
 	'first_name' =>'',
 	'last_name' =>'',
@@ -93,6 +92,8 @@ class Users {
 	'address_state' =>'',
 	'address_postalcode' =>'',
 	'address_country' =>'',
+	'asterisk_extension'=>'',
+	'use_asterisk'=>'',
 );
 	var $table_name = "vtiger_users";
 
@@ -169,7 +170,6 @@ class Users {
 		$this->log->debug("Entering Users() method ...");
 		$this->db = new PearDatabase();
 		$this->log->debug("Exiting Users() method ...");
-
 	}
 
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
