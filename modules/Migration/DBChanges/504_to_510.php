@@ -887,6 +887,8 @@ foreach ( $seq_array as $tabid=> $field_seq) {
 	}
 }
 
+ExecuteQuery("update vtiger_field set uitype = '4' where tabid = 23 and columnname = 'invoice_no' ");
+
 // ADD COLUMN TO SPECIFIED MODULE CUSTOM VIEW / FILTER.
 function custom_addCustomFilterColumn($module, $filtername, $tablename, $columnname, $fieldname, $displayinfo, $columnindex=0) {
 	global $adb;
