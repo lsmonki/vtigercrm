@@ -123,25 +123,46 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] = getTranslatedString($fieldlabel);
 		$label_fld[] = $col_fields[$fieldname];	
 	}
-	elseif($uitype == 15 || $uitype == 16 || $uitype == 111) //uitype 111 added for non editable picklist - ahmed
+	elseif($uitype == 16) {
+		$label_fld[] = getTranslatedString($fieldlabel);
+		$label_fld[] = $col_fields[$fieldname];
+		
+		$fieldname = mysql_real_escape_string($fieldname);
+		$pick_query="select $fieldname from vtiger_$fieldname order by sortorderid";
+		$params = array();
+		$pickListResult = $adb->pquery($pick_query, $params);
+		$noofpickrows = $adb->num_rows($pickListResult);
+		
+		$options = array();
+		$count=0;
+		$found = false;
+		for($j = 0; $j < $noofpickrows; $j++)
+		{
+			$pickListValue=decode_html($adb->query_result($pickListResult,$j,strtolower($fieldname)));
+			$col_fields[$fieldname] = decode_html($col_fields[$fieldname]);
+
+			if($col_fields[$fieldname] == $pickListValue)
+			{
+				$chk_val = "selected";	
+				$count++;
+				$found = true;
+			}
+			else
+			{	
+				$chk_val = '';
+			}
+			$pickListValue = to_html($pickListValue);
+			$options[] = array(getTranslatedString($pickListValue),$pickListValue,$chk_val );	
+		}
+		
+		$label_fld ["options"] = $options;
+	}
+	elseif($uitype == 15 || $uitype == 111) //uitype 111 added for non editable picklist - ahmed
 	{
 		$label_fld[] = getTranslatedString($fieldlabel);
 		$label_fld[] = $col_fields[$fieldname];
 		$roleid=$current_user->roleid;
-		//here we are checking whether the table contains the sortorder column .If  sortorder is present in the main picklist table, then the role2picklist will be applicable for this table... 
-
-		$sql="select * from vtiger_" . mysql_real_escape_string($fieldname);
-		$result = $adb->pquery($sql, array());
-		$nameArray = $adb->fetch_array($result);
-		while($row = $adb->fetch_array($result))
-		{
-			$sortid = $row['sortorderid'];
-		}
-		 if ($uitype == 111)
-		  {
-			  $pickListValue = $mod_strings[$pickListValue];
-		    }
-
+		
 		$subrole = getRoleSubordinates($roleid);	
 		if(count($subrole)> 0)
 		{
@@ -152,7 +173,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		{
 			$roleids = $roleid;
 		}
-		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $sortid != '')
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 		{
 			$pick_query="select $fieldname from vtiger_$fieldname";
 			$params = array();

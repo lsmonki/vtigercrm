@@ -91,10 +91,6 @@ $combo_strings = Array(
                 , 'Project Cancelled'=>'Project Cancelled'
                 , 'Shutdown'=>'Shutdown'
                 ),
-'licencekeystatus_dom' => Array(''=>''
-                , 'Sent'=>'Sent'
-                , 'Not Sent'=>'Not Sent'
-                ),
 'opportunity_type_dom' => Array(''=>''
                 , 'Existing Business'=>'Existing Business'
                 , 'New Business'=>'New Business'

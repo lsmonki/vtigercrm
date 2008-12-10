@@ -162,7 +162,42 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$fieldvalue[] = array($date_format=>$current_user->date_format.' '.$app_strings['YEAR_MONTH_DATE']);
 		}
 	}
-	elseif($uitype == 15 || $uitype == 16 || $uitype == 111) //uitype 111 added for non editable picklist - ahmed
+	elseif($uitype == 16) {
+		$editview_label[]=getTranslatedString($fieldlabel);
+		
+		$fieldname = mysql_real_escape_string($fieldname);
+		$pick_query="select $fieldname from vtiger_$fieldname order by sortorderid";
+		$params = array();		
+		$pickListResult = $adb->pquery($pick_query, $params);
+		$noofpickrows = $adb->num_rows($pickListResult);
+
+		$options = array();
+		$pickcount=0;
+		$found = false;
+		for($j = 0; $j < $noofpickrows; $j++)
+		{
+			$value = decode_html($value);
+			$pickListValue=decode_html($adb->query_result($pickListResult,$j,strtolower($fieldname)));
+			if($value == trim($pickListValue))
+			{
+
+				$chk_val = "selected";
+				$pickcount++;	
+				$found = true;
+			}
+			else
+			{	
+				$chk_val = '';
+			}
+			$pickListValue = to_html($pickListValue);
+			if(isset($_REQUEST['file']) && $_REQUEST['file'] == 'QuickCreate')
+				$options[] = array(htmlentities(getTranslatedString($pickListValue),ENT_QUOTES,$default_charset),$pickListValue,$chk_val );	
+			else
+				$options[] = array(getTranslatedString($pickListValue),$pickListValue,$chk_val );
+		}
+		$fieldvalue [] = $options;
+	}
+	elseif($uitype == 15 || $uitype == 111) //uitype 111 added for non editable picklist - ahmed
 	{
 		$roleid=$current_user->roleid;
 		$subrole = getRoleSubordinates($roleid);
@@ -175,16 +210,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			$roleids = $roleid;
 		}
-		//here we are checking wheather the table contains the sortorder column .If  sortorder is present in the main
-		// picklist table, then the role2picklist will be applicable for this table...
-		$sql="select * from vtiger_" . mysql_real_escape_string($fieldname);
-		$result = $adb->pquery($sql, array());
-		$nameArray = $adb->fetch_array($result);
-		while($row = $adb->fetch_array($result))
-		{
-			$sortid = $row['sortorderid'];
-		}
-		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $sortid != '')
+		
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 		{
 			$pick_query="select $fieldname from vtiger_$fieldname";
 			$params = array();

@@ -15,16 +15,47 @@
 $adb = $_SESSION['adodb_current_object'];
 $conn = $_SESSION['adodb_current_object'];
 
+$migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Starts \n\n");
+
+require_once('include/events/include.inc');
+$em = new VTEventsManager($adb);
+
+/* Update the block id in sequence table, to the current highest value of block id used. */
 $tmp = $adb->getUniqueId('vtiger_blocks');
 $max_block_id_query = $adb->query("SELECT MAX(blockid) AS max_blockid FROM vtiger_blocks");
 $max_block_id = $adb->query_result($max_block_id_query,0,"max_blockid");
 
 ExecuteQuery("UPDATE vtiger_blocks_seq SET id=".$max_block_id);
 
-$migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Starts \n\n");
+/* Migration queries to cleanup ui type 15, 16, 111 - 15 and 111 for Standard picklist types, 
+ * 16 for non-standard picklist types which do not support Role-based picklist */
+ExecuteQuery("update vtiger_field set uitype = '111' where fieldname='sales_stage' and uitype='16'");
 
-require_once('include/events/include.inc');
-$em = new VTEventsManager($adb);
+ExecuteQuery("update vtiger_field set uitype=16 where fieldname in " .
+		"('visibility','duration_minutes','recurringtype','hdnTaxType','recurring_frequency','activity_view','lead_view','date_format','reminder_interval')" .
+		" and uitype in (15, 111)");
+
+/* Function to add Field Security for newly added fields */
+function addFieldSecurity($tabid, $fieldid, $allow_merge=true) {
+	global $adb;
+	ExecuteQuery("INSERT INTO vtiger_def_org_field (tabid, fieldid, visible, readonly) VALUES ($tabid, $fieldid, 0, 1)");
+
+	$profile_result = $adb->query("select distinct(profileid) as profileid from vtiger_profile");
+	$num_profiles = $adb->num_rows($profile_result);
+	for($j=0; $j<$num_profiles; $j++) {
+		$profileid = $adb->query_result($profile_result,$j,'profileid');
+		ExecuteQuery("INSERT INTO vtiger_profile2field (profileid, tabid, fieldid, visible, readonly) VALUES($profileid, $tabid, $fieldid, 0, 1)");
+	}
+	
+	if ($allow_merge) {
+		$user_result = $adb->query("select distinct(id) as userid from vtiger_users");
+		$num_users = $adb->num_rows($user_result);
+		for($j=0; $j<$num_users; $j++) {
+			$userid = $adb->query_result($user_result,$j,'userid');
+			ExecuteQuery("INSERT INTO vtiger_user2mergefields VALUES($userid, $tabid, $fieldid, 0)");
+		}
+	}
+}
 
 /* Add Total column in default customview of Purchase Order */
 $res = $adb->query("select cvid from vtiger_customview where viewname='All' and entitytype='PurchaseOrder'");
@@ -79,7 +110,7 @@ ExecuteQuery("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("v
 ExecuteQuery("UPDATE vtiger_users SET reminder_interval='5 Minutes', reminder_next_time='".date('Y-m-d H:i')."'");
 $user_adv_block_id = $adb->getUniqueID('vtiger_blocks');
 ExecuteQuery("insert into vtiger_blocks values (".$user_adv_block_id.",29,'LBL_USER_ADV_OPTIONS',5,0,0,0,0,0)"); //Added a New Block User Image Info in Users Module
-ExecuteQuery("insert into vtiger_field values (29,".$adb->getUniqueID("vtiger_field").",'reminder_interval','vtiger_users',1,'15','reminder_interval','Reminder Interval',1,0,0,100,1,$user_adv_block_id,1,'V~O',1,null,'BAS')");
+ExecuteQuery("insert into vtiger_field values (29,".$adb->getUniqueID("vtiger_field").",'reminder_interval','vtiger_users',1,'16','reminder_interval','Reminder Interval',1,0,0,100,1,$user_adv_block_id,1,'V~O',1,null,'BAS')");
 
 /* For Duplicate Records Merging feature */
 ExecuteQuery("INSERT INTO vtiger_actionmapping values(10,'DuplicatesHandling',0)");
@@ -158,23 +189,43 @@ ExecuteQuery("alter table vtiger_currency_info add column deleted int(1) not nul
 ExecuteQuery("alter table vtiger_quotes drop column currency");
 ExecuteQuery("alter table vtiger_quotes add column currency_id int(19) not null default '1'");
 ExecuteQuery("alter table vtiger_quotes add column conversion_rate decimal(10,3) not null default '1.000'");
-ExecuteQuery("insert into vtiger_field values(20,".$adb->getUniqueID('vtiger_field').",'currency_id','vtiger_quotes','1','117','currency_id','Currency','1','0','1','100','21','51','3','I~O','1',null,'BAS')");
-ExecuteQuery("insert into vtiger_field values(20,".$adb->getUniqueID('vtiger_field').",'conversion_rate','vtiger_quotes','1','1','conversion_rate','Conversion Rate','1','0','1','100','22','51','3','N~O','1',null,'BAS')");
+$field_id = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("insert into vtiger_field values(20,$field_id,'currency_id','vtiger_quotes','1','117','currency_id','Currency','1','0','1','100','21','51','3','I~O','1',null,'BAS')");
+addFieldSecurity(20,$field_id);
+
+$field_id = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("insert into vtiger_field values(20,$field_id,'conversion_rate','vtiger_quotes','1','1','conversion_rate','Conversion Rate','1','0','1','100','22','51','3','N~O','1',null,'BAS')");
+addFieldSecurity(20,$field_id);
 
 ExecuteQuery("alter table vtiger_purchaseorder add column currency_id int(19) not null default '1'");
 ExecuteQuery("alter table vtiger_purchaseorder add column conversion_rate decimal(10,3) not null default '1.000'");
-ExecuteQuery("insert into vtiger_field values(21,".$adb->getUniqueID('vtiger_field').",'currency_id','vtiger_purchaseorder','1','117','currency_id','Currency','1','0','1','100','18','57','3','I~O','1',null,'BAS')");
-ExecuteQuery("insert into vtiger_field values(21,".$adb->getUniqueID('vtiger_field').",'conversion_rate','vtiger_purchaseorder','1','1','conversion_rate','Conversion Rate','1','0','1','100','19','57','3','N~O','1',null,'BAS')");
+$field_id = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("insert into vtiger_field values(21,$field_id,'currency_id','vtiger_purchaseorder','1','117','currency_id','Currency','1','0','1','100','18','57','3','I~O','1',null,'BAS')");
+addFieldSecurity(21,$field_id);
+
+$field_id = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("insert into vtiger_field values(21,$field_id,'conversion_rate','vtiger_purchaseorder','1','1','conversion_rate','Conversion Rate','1','0','1','100','19','57','3','N~O','1',null,'BAS')");
+addFieldSecurity(21,$field_id);
 
 ExecuteQuery("alter table vtiger_salesorder add column currency_id int(19) not null default '1'");
 ExecuteQuery("alter table vtiger_salesorder add column conversion_rate decimal(10,3) not null default '1.000'");
-ExecuteQuery("insert into vtiger_field values(22,".$adb->getUniqueID('vtiger_field').",'currency_id','vtiger_salesorder','1','117','currency_id','Currency','1','0','1','100','19','63','3','I~O','1',null,'BAS')");
-ExecuteQuery("insert into vtiger_field values(22,".$adb->getUniqueID('vtiger_field').",'conversion_rate','vtiger_salesorder','1','1','conversion_rate','Conversion Rate','1','0','1','100','20','63','3','N~O','1',null,'BAS')");
+$field_id = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("insert into vtiger_field values(22,$field_id,'currency_id','vtiger_salesorder','1','117','currency_id','Currency','1','0','1','100','19','63','3','I~O','1',null,'BAS')");
+addFieldSecurity(22,$field_id);
+
+$field_id = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("insert into vtiger_field values(22,$field_id,'conversion_rate','vtiger_salesorder','1','1','conversion_rate','Conversion Rate','1','0','1','100','20','63','3','N~O','1',null,'BAS')");
+addFieldSecurity(22,$field_id);
 
 ExecuteQuery("alter table vtiger_invoice add column currency_id int(19) not null default '1'");
 ExecuteQuery("alter table vtiger_invoice add column conversion_rate decimal(10,3) not null default '1.000'");
-ExecuteQuery("insert into vtiger_field values(23,".$adb->getUniqueID('vtiger_field').",'currency_id','vtiger_invoice','1','117','currency_id','Currency','1','0','1','100','18','69','3','I~O','1',null,'BAS')");
-ExecuteQuery("insert into vtiger_field values(23,".$adb->getUniqueID('vtiger_field').",'conversion_rate','vtiger_invoice','1','1','conversion_rate','Conversion Rate','1','0','1','100','19','69','3','N~O','1',null,'BAS')");
+$field_id = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("insert into vtiger_field values(23,$field_id,'currency_id','vtiger_invoice','1','117','currency_id','Currency','1','0','1','100','18','69','3','I~O','1',null,'BAS')");
+addFieldSecurity(23,$field_id);
+
+$field_id = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("insert into vtiger_field values(23,$field_id,'conversion_rate','vtiger_invoice','1','1','conversion_rate','Conversion Rate','1','0','1','100','19','69','3','N~O','1',null,'BAS')");
+addFieldSecurity(23,$field_id);
 
 // Update Price Book related tables
 ExecuteQuery("alter table vtiger_pricebook drop column description");
@@ -184,13 +235,7 @@ $pb_currency_field_id = $adb->getUniqueID('vtiger_field');
 $pb_tab_id = getTabid('PriceBooks');
 $adb->query("insert into vtiger_field values($pb_tab_id,$pb_currency_field_id,'currency_id','vtiger_pricebook','1','117','currency_id','Currency','1','0','0','100','5','48','1','I~M','0','3','BAS')");
 $adb->query("insert into vtiger_cvcolumnlist values('23','2','vtiger_pricebook:currency_id:currency_id:PriceBooks_Currency:I')");
-$adb->query("insert into vtiger_def_org_field values($pb_tab_id, $pb_currency_field_id, 0, 1)");
-$profile_list = $adb->query("select profileid from vtiger_profile");
-$num_profiles = $adb->num_rows($profile_list);
-for($i=0;$i<$num_profiles;$i++) {
-	$profileid = $adb->query_result($profile_list,$i,'profileid');
-	$adb->query("insert into vtiger_profile2field values($profileid, $pb_tab_id, $pb_currency_field_id, 0, 1)");
-}
+addFieldSecurity($pb_tab_id,$pb_currency_field_id);
 
 /* Documents module */
 ExecuteQuery("alter table vtiger_notes add(folderid int(19) NOT NULL,filepath varchar(255) default NULL,filetype varchar(50) default NULL,filelocationtype varchar(5) default NULL,filedownloadcount int(19) default NULL,filestatus int(19) default NULL,filesize int(19) NOT NULL default '0',fileversion varchar(50) default NULL)");
@@ -555,14 +600,7 @@ ExecuteQuery("alter table vtiger_emaildetails modify column idlists LONGTEXT");
 $field_id = $adb->getUniqueID("vtiger_field");
 ExecuteQuery("insert into vtiger_field values (14,".$field_id.",'parentid','vtiger_products',1,'51','product_id','Member Of',1,0,0,100,21,31,1,'I~O',1,null,'BAS')");
 ExecuteQuery("ALTER TABLE vtiger_products ADD COLUMN parentid int(19) DEFAULT '0'");
-ExecuteQuery("INSERT INTO vtiger_def_org_field (tabid, fieldid, visible, readonly) VALUES (".getTabid("Products").", $field_id, 0, 1)");
-	
-$sqlresult = $adb->pquery("select profileid from vtiger_profile",array());
-$profilecnt = $adb->num_rows($sqlresult);
-for($pridx = 0; $pridx < $profilecnt; ++$pridx) {
-	$profileid = $adb->query_result($sqlresult, $pridx, "profileid");
-	ExecuteQuery("INSERT INTO vtiger_profile2field (profileid, tabid, fieldid, visible, readonly) VALUES($profileid, ".getTabid("Products").", $field_id, 0, 1)");
-}
+addFieldSecurity(getTabid("Products"), $field_id);
 
 $users_query = $adb->pquery("SELECT id from vtiger_users",array());
 for($i=0; $i<$adb->num_rows($users_query); $i++){
@@ -612,11 +650,25 @@ ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID(
 ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Monthly',0,1)");
 ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Quarterly',0,1)");
 ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Yearly',0,1)");
+
 // Add fields for the Recurring Information block
-ExecuteQuery("insert into vtiger_field values(".getTabid('SalesOrder').",".$adb->getUniqueID('vtiger_field').",'enable_recurring','vtiger_salesorder',1,'56','enable_recurring','Enable Recurring',1,0,0,100,1,$new_block_id,1,'C~O',1,null,'BAS')");
-ExecuteQuery("insert into vtiger_field values(".getTabid('SalesOrder').",".$adb->getUniqueID('vtiger_field').",'recurring_frequency','vtiger_invoice_recurring_info',1,'15','recurring_frequency','Frequency',1,0,0,100,2,$new_block_id,1,'V~O',1,null,'BAS')");
-ExecuteQuery("insert into vtiger_field values(".getTabid('SalesOrder').",".$adb->getUniqueID('vtiger_field').",'start_period','vtiger_invoice_recurring_info',1,'5','start_period','Start Period',1,0,0,100,3,$new_block_id,1,'D~O',1,null,'BAS')");
-ExecuteQuery("insert into vtiger_field values(".getTabid('SalesOrder').",".$adb->getUniqueID('vtiger_field').",'end_period','vtiger_invoice_recurring_info',1,'5','end_period','End Period',1,0,0,100,4,$new_block_id,1,'D~O',1,null,'BAS')");
+$salesorder_tabid = getTabid('SalesOrder');
+$field_id = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'enable_recurring','vtiger_salesorder',1,'56','enable_recurring','Enable Recurring',1,0,0,100,1,$new_block_id,1,'C~O',1,null,'BAS')");
+addFieldSecurity($salesorder_tabid,$field_id);
+
+$field_id = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'recurring_frequency','vtiger_invoice_recurring_info',1,'16','recurring_frequency','Frequency',1,0,0,100,2,$new_block_id,1,'V~O',1,null,'BAS')");
+addFieldSecurity($salesorder_tabid,$field_id);
+
+$field_id = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'start_period','vtiger_invoice_recurring_info',1,'5','start_period','Start Period',1,0,0,100,3,$new_block_id,1,'D~O',1,null,'BAS')");
+addFieldSecurity($salesorder_tabid,$field_id);
+
+$field_id = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'end_period','vtiger_invoice_recurring_info',1,'5','end_period','End Period',1,0,0,100,4,$new_block_id,1,'D~O',1,null,'BAS')");
+addFieldSecurity($salesorder_tabid,$field_id);
+
 // Add Event handler for Recurring Invoice
 $em->registerHandler('vtiger.entity.aftersave', 'modules/SalesOrder/RecurringInvoiceHandler.php', 'RecurringInvoiceHandler');
 
@@ -658,7 +710,7 @@ foreach($tab_field_array as $index=>$value){
 /* Showing Emails in Vendors related list */
 ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Vendors").",".getTabid("Emails").",'get_emails',4,'Emails',0)");
 
-/** Added for module sequence number customization */
+/* Added for module sequence number customization */
 
 ExecuteQuery("CREATE TABLE vtiger_modentity_num (num_id int(19) NOT NULL, semodule varchar(50) NOT NULL, prefix varchar(50) NOT NULL DEFAULT '', start_id varchar(50) NOT NULL, cur_id varchar(50) NOT NULL, active int(2) NOT NULL, PRIMARY KEY(num_id))");
 
@@ -768,21 +820,7 @@ for($i = 0; $i<$num_fields; $i++)
 {
 	$tab_id = $adb->query_result($field_result,$i,'tabid');
 	$fld_id = $adb->query_result($field_result,$i,'fieldid');
-	ExecuteQuery("INSERT INTO vtiger_def_org_field (tabid, fieldid, visible, readonly) VALUES ($tab_id, $fld_id, 0, 1)");
-
-	$profile_result = $adb->query("select distinct(profileid) as profileid from vtiger_profile");
-	$num_profiles = $adb->num_rows($profile_result);
-	for($j=0; $j<$num_profiles; $j++) {
-		$profile_id = $adb->query_result($profile_result,$j,'profileid');
-		ExecuteQuery("INSERT INTO vtiger_profile2field (profileid, tabid, fieldid, visible, readonly) VALUES($profile_id, $tab_id, $fld_id, 0, 1)");
-	}
-	
-	$user_result = $adb->query("select distinct(id) as userid from vtiger_users");
-	$num_users = $adb->num_rows($user_result);
-	for($j=0; $j<$num_users; $j++) {
-		$user_id = $adb->query_result($user_result,$j,'userid');
-		ExecuteQuery("INSERT INTO vtiger_user2mergefields VALUES($user_id, $tab_id, $fld_id, 0)");
-	}
+	addFieldSecurity($tab_id, $fld_id, false);
 }
 
 

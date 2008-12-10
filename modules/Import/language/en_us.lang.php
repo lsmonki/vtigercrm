@@ -354,7 +354,6 @@ $mod_list_strings = Array(
 		"leadstatus"=>"Lead Status",
 		"annualrevenue"=>"Annual Revenue",
 		"rating"=>"Rating",
-		"licencekeystatus"=>"License Key",
 		"noofemployees"=>"No Of Employees",
 		"assigned_user_id"=>"Assigned To",
 		"yahooid"=>"Yahoo Id",		

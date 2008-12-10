@@ -57,7 +57,7 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 	global $adb;
 	global $image_path;
 	$standCustFld = Array();		
-	for($i=0; $i<$noofrows; $i++,$row++)
+	for($i=0; $i<$noofrows; $i++)
 	{
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
 		$fieldlabel = $adb->query_result($fieldListResult,$i,"fieldlabel");
@@ -69,7 +69,7 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 			$standCustFld []= $fieldlabel;
 			
 		
-		if($adb->query_result($fieldListResult,$i,"visible") == 0 || ($uitype == 111 && $fieldtype[1] == "M")  || ($uitype == 111 && $fieldtype[1] == "M") || ($uitype == 117 && $fieldtype[1] == "M"))
+		if($adb->query_result($fieldListResult,$i,"visible") == 0 || ($uitype == 111 && $fieldtype[1] == "M") || ($uitype == 117 && $fieldtype[1] == "M"))
 		{
 			$visible = "<img src=".$image_path."/prvPrfSelectedTick.gif>";
 		}

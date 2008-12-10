@@ -41,37 +41,18 @@ else
 	$temp_module_strings = return_module_language($current_language, $moduleName);
 
 //To get the Editable Picklist Values 
-if($uitype != 111)
+$query = "select * from vtiger_".$tableName." inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_$tableName.picklist_valueid where roleid=? and  presence=1 order by sortid"; 
+$result = $adb->pquery($query, array($roleid));
+$fldVal='';
+
+while($row = $adb->fetch_array($result))
 {
-	$query = "select * from vtiger_$tableName inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_$tableName.picklist_valueid where roleid=? and  presence=1 order by sortid";
-	$result = $adb->pquery($query, array($roleid));
-	$fldVal='';
-
-	while($row = $adb->fetch_array($result))
-	{
-		if($temp_module_strings[$row[$tableName]] != '')
-			$fldVal .= $temp_module_strings[$row[$tableName]];
-		else
-			$fldVal .= $row[$tableName];
-		$fldVal .= "\n";	
-	}
+	if($temp_module_strings[$row[$tableName]] != '')
+		$fldVal .= $temp_module_strings[$row[$tableName]];
+	else
+		$fldVal .= $row[$tableName];
+	$fldVal .= "\n";	
 }
-else
-{
-	$query = "select * from vtiger_".$tableName." inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_$tableName.picklist_valueid where roleid=? and  presence=1 order by sortid"; 
-	$result = $adb->pquery($query, array($roleid));
-	$fldVal='';
-
-	while($row = $adb->fetch_array($result))
-	{
-		if($temp_module_strings[$row[$tableName]] != '')
-			$fldVal .= $temp_module_strings[$row[$tableName]];
-		else
-			$fldVal .= $row[$tableName];
-		$fldVal .= "\n";	
-	}
-}
-
 
 if(isset($_REQUEST['parentroleid']) && $_REQUEST['parentroleid']!= '')
 {
@@ -84,27 +65,25 @@ if(isset($_REQUEST['parentroleid']) && $_REQUEST['parentroleid']!= '')
 }
 
 //To get the Non Editable Picklist Entries
-if($uitype == 111 || $uitype == 16) 
+$qry = "select * from vtiger_".$tableName." inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_$tableName.picklist_valueid where roleid=? and presence=0 order by sortid"; 
+$res = $adb->pquery($qry, array($roleid));
+if($adb->num_rows($res) > 0)
 {
-	$qry = "select * from vtiger_".$tableName." inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid=vtiger_$tableName.picklist_valueid where roleid=? and presence=0 order by sortid"; 
-	$res = $adb->pquery($qry, array($roleid));
-	if($adb->num_rows($res) > 0)
+	$nonedit_fldVal='<div id="nonedit_pl">';
+	$c = 0;
+	while($row = $adb->fetch_array($res))
 	{
-		$nonedit_fldVal='<div id="nonedit_pl">';
-		$c = 0;
-		while($row = $adb->fetch_array($res))
-		{
-			if($c != 0)	
-				$nonedit_fldVal .= "<br>";
-			if($temp_module_strings[$row[$tableName]] != '')
-				$nonedit_fldVal .= $temp_module_strings[$row[$tableName]];
-			else
-				$nonedit_fldVal .= $row[$tableName];
-			$c++;
-		}
-		$nonedit_fldVal .= "</div>";
-	}	
-}
+		if($c != 0)	
+			$nonedit_fldVal .= "<br>";
+		if($temp_module_strings[$row[$tableName]] != '')
+			$nonedit_fldVal .= $temp_module_strings[$row[$tableName]];
+		else
+			$nonedit_fldVal .= $row[$tableName];
+		$c++;
+	}
+	$nonedit_fldVal .= "</div>";
+}	
+
 $query = 'select fieldlabel from vtiger_tab inner join vtiger_field on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.name=? and fieldname=?';
 $fieldlabel = $adb->query_result($adb->pquery($query, array($moduleName, $tableName)),0,'fieldlabel'); 
 

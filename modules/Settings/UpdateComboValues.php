@@ -24,25 +24,16 @@ $picklistid = $adb->query_result($adb->pquery($sql, array($tableName)),0,'pickli
 
 //Deleting the already existing values
 
-if($uitype == 111 || $uitype == 16)
+$qry="select roleid,picklistvalueid from vtiger_role2picklist left join vtiger_$tableName on vtiger_$tableName.picklist_valueid=vtiger_role2picklist.picklistvalueid where roleid=? and picklistid=? and presence=1";
+$res = $adb->pquery($qry, array($roleid, $picklistid));
+$num_row = $adb->num_rows($res);
+for($s=0;$s < $num_row; $s++)
 {
-	$qry="select roleid,picklistvalueid from vtiger_role2picklist left join vtiger_$tableName on vtiger_$tableName.picklist_valueid=vtiger_role2picklist.picklistvalueid where roleid=? and picklistid=? and presence=1";
-	$res = $adb->pquery($qry, array($roleid, $picklistid));
-	$num_row = $adb->num_rows($res);
-	for($s=0;$s < $num_row; $s++)
-	{
-		$valid = $adb->query_result($res,$s,'picklistvalueid');
-		$sql="delete from vtiger_role2picklist where roleid=? and picklistvalueid=?";
-		$adb->pquery($sql, array($roleid, $valid));
-	}
-//$sql = "delete from vtiger_role2picklist left join vtiger_$tableName on vtiger_$tableName.picklist_valueid=vtiger_role2picklist.picklistvalueid where roleid='$roleid' and picklistid=$picklistid and presence=0";
-	//$adb->query($sql);
+	$valid = $adb->query_result($res,$s,'picklistvalueid');
+	$sql="delete from vtiger_role2picklist where roleid=? and picklistvalueid=?";
+	$adb->pquery($sql, array($roleid, $valid));
 }
-else
-{
-	$sql = "delete from vtiger_role2picklist where roleid=? and picklistid=?";
-	$adb->pquery($sql, array($roleid, $picklistid));
-}
+
 $pickArray = explode("\n",$fldPickList);
 $count = count($pickArray);
 

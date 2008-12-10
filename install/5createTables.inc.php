@@ -187,7 +187,6 @@ $success = $adb->createTables("schema/DatabaseSchema.xml");
  	"vtiger_industry_seq",
  	"vtiger_leadstatus_seq",
  	"vtiger_rating_seq",
- 	"vtiger_licencekeystatus_seq",
  	"vtiger_opportunity_type_seq",
  	"vtiger_salutationtype_seq",
  	"vtiger_sales_stage_seq",

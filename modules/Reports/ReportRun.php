@@ -2673,7 +2673,7 @@ class ReportRun extends CRMEntity
 		if($this->secondarymodule != '')
 			array_push($id,  getTabid($this->secondarymodule));
 
-		$query = 'select fieldname,columnname,fieldid,fieldlabel,tabid,uitype from vtiger_field where tabid in('. generateQuestionMarks($id) .') and uitype in (15,16,111,33,55)'; //and columnname in (?)';
+		$query = 'select fieldname,columnname,fieldid,fieldlabel,tabid,uitype from vtiger_field where tabid in('. generateQuestionMarks($id) .') and uitype in (15,111,33,55)'; //and columnname in (?)';
 		$result = $adb->pquery($query, $id);//,$select_column));
 		$roleid=$current_user->roleid;
 		$subrole = getRoleSubordinates($roleid);
@@ -2694,45 +2694,43 @@ class ReportRun extends CRMEntity
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 			$tabid = $adb->query_result($result,$i,"tabid");
 			$uitype = $adb->query_result($result,$i,"uitype");
-			if(!in_array($fieldname,array('visibility','duration_minutes','recurringtype','hdnTaxType','recurring_frequency')))
-			{
-				$fieldlabel1 = str_replace(" ","_",$fieldlabel);
-				$keyvalue = getTabModuleName($tabid)."_".$fieldlabel1;
-				$fieldvalues = Array();
-				if (count($roleids) > 1) {
-					$mulsel="select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where roleid in (\"". implode($roleids,"\",\"") ."\") and picklistid in (select picklistid from vtiger_$fieldname) order by sortid asc";
-				} else {
-					$mulsel="select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where roleid ='".$roleid."' and picklistid in (select picklistid from vtiger_$fieldname) order by sortid asc";
-				}
-				if($fieldname != 'firstname')
-				$mulselresult = $adb->query($mulsel);
-				for($j=0;$j < $adb->num_rows($mulselresult);$j++)
-				{
-					$fieldvalues[] = $adb->query_result($mulselresult,$j,$fieldname);
-				}
-				$field_count = count($fieldvalues);
-				if( $uitype == 111 && $field_count > 0 && ($fieldname == 'taskstatus' || $fieldname == 'eventstatus'))
-				{
-					$temp_count =count($temp_status[$keyvalue]);
-					if($temp_count > 0)
-					{
-						for($t=0;$t < $field_count;$t++)
-						{
-							$temp_status[$keyvalue][($temp_count+$t)] = $fieldvalues[$t];
-						}
-						$fieldvalues = $temp_status[$keyvalue];
-					}
-					else
-						$temp_status[$keyvalue] = $fieldvalues;
-				}
-
-				if($uitype == 33)
-					$fieldlists[1][$keyvalue] = $fieldvalues;
-				else if($uitype == 55 && $fieldname == 'salutationtype')
-			                $fieldlists[$keyvalue] = $fieldvalues;
-			        else if($uitype == 16 || $uitype == 15 || $uitype == 111)
-				        $fieldlists[$keyvalue] = $fieldvalues; 
+			
+			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
+			$keyvalue = getTabModuleName($tabid)."_".$fieldlabel1;
+			$fieldvalues = Array();
+			if (count($roleids) > 1) {
+				$mulsel="select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where roleid in (\"". implode($roleids,"\",\"") ."\") and picklistid in (select picklistid from vtiger_$fieldname) order by sortid asc";
+			} else {
+				$mulsel="select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where roleid ='".$roleid."' and picklistid in (select picklistid from vtiger_$fieldname) order by sortid asc";
 			}
+			if($fieldname != 'firstname')
+			$mulselresult = $adb->query($mulsel);
+			for($j=0;$j < $adb->num_rows($mulselresult);$j++)
+			{
+				$fieldvalues[] = $adb->query_result($mulselresult,$j,$fieldname);
+			}
+			$field_count = count($fieldvalues);
+			if( $uitype == 111 && $field_count > 0 && ($fieldname == 'taskstatus' || $fieldname == 'eventstatus'))
+			{
+				$temp_count =count($temp_status[$keyvalue]);
+				if($temp_count > 0)
+				{
+					for($t=0;$t < $field_count;$t++)
+					{
+						$temp_status[$keyvalue][($temp_count+$t)] = $fieldvalues[$t];
+					}
+					$fieldvalues = $temp_status[$keyvalue];
+				}
+				else
+					$temp_status[$keyvalue] = $fieldvalues;
+			}
+
+			if($uitype == 33)
+				$fieldlists[1][$keyvalue] = $fieldvalues;
+			else if($uitype == 55 && $fieldname == 'salutationtype')
+				$fieldlists[$keyvalue] = $fieldvalues;
+	        else if($uitype == 15 || $uitype == 111)
+		        $fieldlists[$keyvalue] = $fieldvalues; 
 		}
 		return $fieldlists;
 	}
