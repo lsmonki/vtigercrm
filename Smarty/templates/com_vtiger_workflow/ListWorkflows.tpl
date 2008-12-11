@@ -34,8 +34,8 @@
 		</div>
 	<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerPopupTransport">
 		<tr><td align="center">
-			<input type="submit" class="crmButton small save" value="Create" name="save" id='new_workflow_popup_save'/> 
-			<input type="button" class="crmButton small cancel" value="Cancel " name="cancel" id='new_workflow_popup_cancel'/>
+			<input type="submit" class="crmButton small save" value="{$APP.LBL_CREATE_BUTTON_LABEL}" name="save" id='new_workflow_popup_save'/> 
+			<input type="button" class="crmButton small cancel" value="{$APP.LBL_CANCEL_BUTTON_LABEL} " name="cancel" id='new_workflow_popup_cancel'/>
 		</td></tr>
 	</table>
 	</form>
@@ -50,16 +50,21 @@
 				<strong><span id="module_info"></span></strong>
 			</td>
 			<td class="small" align="right">
-				<b>Select Module: </b>
-				<select class="importBox" name="pick_module" id='pick_module'>
-					<option value="All">All</a>
-					<option value="All">-----------------------------</a>
+				<b>{$MOD.LBL_SELECT_MODULE}: </b>
+				<form action="index.php" method="get" accept-charset="utf-8" id="filter_modules">
+					<select class="importBox" name="list_module" id='pick_module'>
+						<option value="All">All</a>
+							<option value="All">-----------------------------</a>
 {foreach  item=moduleName from=$moduleNames}
-					<option value="{$moduleName}" {if $moduleName eq $listModule}selected{/if}>
-						{$moduleName}
-					</option>
+						<option value="{$moduleName}" {if $moduleName eq $listModule}selected{/if}>
+							{$moduleName}
+						</option>
 {/foreach}
-				</select>
+					</select>
+					<input type="hidden" name="module" value="{$module->name}">
+					<input type="hidden" name="action" value="workflowlist">
+				</form>
+
 			</td>
 		</tr>
 	</table>

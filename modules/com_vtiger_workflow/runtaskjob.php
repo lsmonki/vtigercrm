@@ -15,7 +15,7 @@
 			list($taskId, $entityId) = $pair;
 			$task = $tm->retrieveTask($taskId);
 			$entity = VTEntityData::fromEntityId($adb, $entityId);
-			$task->doTask($entity->getModuleName(), $entity->getData());
+			$task->doTask($entity);
 		}
 	}
 	vtRunTaskJob($adb);

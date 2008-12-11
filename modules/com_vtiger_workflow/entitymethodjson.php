@@ -6,8 +6,6 @@ function vtEntityMethodJson($adb, $request){
 	$moduleName = $request['module_name'];
 	$emm = new VTEntityMethodManager($adb);
 	$methodNames = $emm->methodsForModule($moduleName);
-	global $log;
-	$log->fatal("Logging:".print_r($methodNames, TRUE));
 	echo Zend_Json::encode($methodNames);
 }
 

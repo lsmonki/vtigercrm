@@ -13,33 +13,33 @@
 	<form name="new_task">
 		<table>
 			<tr>
-				<td>Summary</td>
+				<td>{$MOD.LBL_TASK_TITLE}</td>
 				<td><input type="text" name="summary" value="{$task->summary}" id="save_summary"></td>
 			</tr>
 			<tr>
-				<td>Workflow</td>
+				<td>{$MOD.LBL_PARENT_WORKFLOW}</td>
 				<td>
-					{$workflow->description}
+					{$workflow->id} {$workflow->description}
 					<input type="hidden" name="workflow_id" value="{$workflow->id}" id="save_workflow_id">
 				</td>
 			</tr>
 			<tr>
-				<td>Status</td>
+				<td>{$MOD.LBL_STATUS}</td>
 				<td>
 					<select name="active">
-						<option value="true">Active</option>
-						<option value="false" {if not $task->active}selected{/if}>Inactive</option>
+						<option value="true">{$MOD.LBL_ACTIVE}</option>
+						<option value="false" {if not $task->active}selected{/if}>{$MOD.LBL_INACTIVE}</option>
 					</select> 
 				</td>
 			</tr>
 		</table>
 		<h4><input type="checkbox" name="check_select_date" value="" id="check_select_date" {if $trigger neq null}checked{/if}> 
-			Execute the task after some delay.</h4>
+			{$MOD.MSG_EXECUTE_TASK_DELAY}.</h4>
 		<div id="select_date" style="display:none;">
 			<input type="text" name="select_date_days" value="{$trigger.days}" id="select_date_days" cols="3"> days 
 			<select name="select_date_direction">
-				<option {if $trigger.direction eq 'after'}selected{/if}>after</option>
-				<option {if $trigger.direction eq 'after'}selected{/if}>before</option>
+				<option {if $trigger.direction eq 'after'}selected{/if} value='after'>{$MOD.LBL_AFTER}</option>
+				<option {if $trigger.direction eq 'after'}selected{/if} value='before'>{$MOD.LBL_BEFORE}</option>
 			</select> 
 			<select name="select_date_field">
 {foreach key=name item=label from=$dateFields}
@@ -50,6 +50,13 @@
 			</select> 
 		</div>
 		<br>
+		<table class="tableHeading" border="0"  width="100%" cellspacing="0" cellpadding="5">
+			<tr>
+				<td class="big" nowrap="">
+					<strong>{$MOD.LBL_TASK_OPERATIONS}</strong>
+				</td>
+			</tr>
+		</table>
 {include file="$taskTemplate"}
 		<input type="hidden" name="save_type" value="{$saveType}" id="save_save_type">
 {if $edit}
@@ -59,6 +66,6 @@
 		<input type="hidden" name="action" value="savetask" id="save_action">
 		<input type="hidden" name="module" value="{$module->name}" id="save_module">
 		<input type="hidden" name="return_url" value="{$returnUrl}" id="save_return_url">
-		<p><input type="submit" name="save" value="Save" id="save"></p>
+		<p><input type="submit" name="save" value="{$APP.LBL_SAVE_BUTTON_LABEL}" id="save"></p>
 	</form>
 </div>

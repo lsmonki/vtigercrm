@@ -1071,6 +1071,24 @@ $mod_strings = Array(
 //Added for the workflow module
 'LBL_LIST_WORKFLOWS'=>'List Workflows',
 'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'List the Workflows defined for vtiger',
+'LBL_TASK_TITLE'=>'Task Title',
+'LBL_PARENT_WORKFLOW'=>'Parent Workflow',
+'MSG_EXECUTE_TASK_DELAY'=>'Execute the task after some delay',
+'LBL_AFTER'=>'After',
+'LBL_BEFORE'=>'Before',
+'LBL_TASK_OPERATIONS'=>'Task Operations',
+'LBL_CREATE_TASK'=>'Create Task',
+'LBL_CREATE_TASK_OF_TYPE'=>'Create a new task of type',
+'LBL_SUMMARY'=>'Summary',
+'LBL_WHEN_TO_RUN_WORKFLOW'=>'When to run the workflow',
+'LBL_ONLY_ON_FIRST_SAVE'=>'Only on the first save',
+'LBL_UNTIL_FIRST_TIME_CONDITION_TRUE'=>'Until the first time the condition is true',
+'LBL_EVERYTIME_RECORD_SAVED'=>'Every time the the record is saved',
+'LBL_CONDITIONS'=>'Conditions',
+'LBL_NEW_CONDITION_BUTTON_LABEL'=>'New Condition',
+'LBL_TASKS'=>'Tasks',
+'LBL_NEW_TASK_BUTTON_LABEL'=>'New Task',
+'LBL_TASK'=>'Task',
 // END
 
 // Module Sequence Numbering

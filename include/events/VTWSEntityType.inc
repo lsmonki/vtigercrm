@@ -7,7 +7,7 @@ require_once("include/Webservices/DataTransform.php");
 require_once("include/Webservices/WebServiceError.php");
 require_once 'include/utils/utils.php';
 require_once 'include/Webservices/ModuleTypes.php';
-require_once('include/webservices/DescribeObject.php');
+require_once('include/Webservices/DescribeObject.php');
 /*
  * An implementation of VTEntityType that uses the webservices api to reflect on vtiger's types.
  */

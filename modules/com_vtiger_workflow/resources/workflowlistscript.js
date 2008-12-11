@@ -34,7 +34,7 @@ function workflowlistscript($){
 		newWorkflowPopup = NewWorkflowPopup();
 		$("#new_workflow").click(newWorkflowPopup.show);
 		$("#pick_module").change(function(){
-			alert("change the module to "+$(this).attr("value"));
+			$("#filter_modules").submit();
 		});
 	});
 }

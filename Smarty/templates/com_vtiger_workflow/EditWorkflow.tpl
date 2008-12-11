@@ -8,21 +8,19 @@
 	jQuery.noConflict();
 	fn.addStylesheet('modules/{$module->name}/resources/style.css');
 	var moduleName = '{$workflow->moduleName}';
-	var fieldNames = {$fieldNames};
-	var fieldTypes = {$fieldTypes};
 {if $workflow->test}
 	var conditions = {$workflow->test};
 {else}
 	var conditions = null;
 {/if}
-	editworkflowscript(jQuery, fieldNames, fieldTypes, conditions);
+	editworkflowscript(jQuery, conditions);
 </script>
 
 <div id="new_task_popup" class='layerPopup' style="display:none;">
 	<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerHeadingULine">
 		<tr>
 			<td width="60%" align="left" class="layerPopupHeading">
-				Create Task
+				{$MOD.LBL_CREATE_TASK}
 				</td>
 			<td width="40%" align="right">
 				<a href="javascript:void;" id="new_task_popup_close">
@@ -34,7 +32,7 @@
 
 	<form action="index.php" method="get" accept-charset="utf-8">
 	<div class="popup_content">
-		Create a new task of type 
+		{$MOD.LBL_CREATE_TASK_OF_TYPE} 
 		<select name="task_type">
 	{foreach item=taskType from=$taskTypes}
 			<option>
@@ -51,8 +49,8 @@
 	</div>
 	<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerPopupTransport">
 		<tr><td align="center">
-			<input type="submit" class="crmButton small save" value="Create" name="save" id='new_task_popup_save'/> 
-			<input type="button" class="crmButton small cancel" value="Cancel " name="cancel" id='new_task_popup_cancel'/>
+			<input type="submit" class="crmButton small save" value="{$APP.LBL_CREATE_BUTTON_LABEL}" name="save" id='new_task_popup_save'/> 
+			<input type="button" class="crmButton small cancel" value="{$APP.LBL_CANCEL_BUTTON_LABEL} " name="cancel" id='new_task_popup_cancel'/>
 		</td></tr>
 	</table>
 	</form>
@@ -64,31 +62,31 @@
 	<form name="new_workflow" action="index.php">
 		<table>
 			<tr>
-				<td>Summary</td>
+				<td>{$MOD.LBL_SUMMARY}</td>
 				<td colspan="3"><input type="text" name="description" id="save_description" value="{$workflow->description}"></td>
 			</tr>
 			<tr>
-				<td>Module</td>
+				<td>{$APP.LBL_MODULE}</td>
 				<td>{$workflow->moduleName}</td>
 			</tr>
 		</table>
-		<h4>When to run the workflow</h4>
+		<h4>{$MOD.LBL_WHEN_TO_RUN_WORKFLOW}</h4>
 		<table border="0" >
 			<tr><td><input type="radio" name="execution_condition" value="ON_FIRST_SAVE" 
 				{if $workflow->executionConditionAsLabel() eq 'ON_FIRST_SAVE'}checked{/if}/></td> 
-				<td>Only on the first save.</td></tr>
+				<td>{$MOD.LBL_ONLY_ON_FIRST_SAVE}.</td></tr>
 			<!-- <tr><td><input type="radio" name="execution_condition" value="ONCE" 
 							{if $workflow->executionConditionAsLabel() eq 'ONCE'}checked{/if} /></td>
-							<td>Until the first time the condition is true.</td></tr> -->
+							<td>{$MOD.LBL_UNTIL_FIRST_TIME_CONDITION_TRUE}.</td></tr> -->
 						<tr><td><input type="radio" name="execution_condition" value="ON_EVERY_SAVE" 
 				{if $workflow->executionConditionAsLabel() eq 'ON_EVERY_SAVE'}checked{/if}/></td>
-				<td>Every time the the record is saved.</td></tr>
+				<td>{$MOD.LBL_EVERYTIME_RECORD_SAVED}.</td></tr>
 		</table>
 		<br>
 		<table class="tableHeading" width="75%" border="0" cellspacing="0" cellpadding="5">
 			<tr>
 				<td class="big" nowrap="">
-					<strong>Conditions</strong>
+					<strong>{$MOD.LBL_CONDITIONS}</strong>
 				</td>
 			</tr>
 		</table>
@@ -97,7 +95,7 @@
 				<td class="small"> <span id="status_message"></span> </td>
 				<td class="small" align="right">
 					<input type="button" class="crmButton create small" 
-						value="New Condition" id="save_conditions_add"/>
+						value="{$MOD.LBL_NEW_CONDITION_BUTTON_LABEL}" id="save_conditions_add"/>
 				</td>
 			</tr>
 		</table>
@@ -117,7 +115,7 @@
 	<table class="tableHeading" width="75%" border="0" cellspacing="0" cellpadding="5">
 		<tr>
 			<td class="big" nowrap="">
-				<strong>Tasks</strong>
+				<strong>{$MOD.LBL_TASKS}</strong>
 			</td>
 		</tr>
 	</table>
@@ -126,20 +124,20 @@
 			<td class="small"> <span id="status_message"></span> </td>
 			<td class="small" align="right">
 				<input type="button" class="crmButton create small" 
-					value="New Task" id='new_task'/>
+					value="{$MOD.LBL_NEW_TASK_BUTTON_LABEL}" id='new_task'/>
 			</td>
 		</tr>
 	</table>
 	<table class="listTable" width="75%" border="0" cellspacing="0" cellpadding="5" id='expressionlist'>
 		<tr>
 			<td class="colHeader small" width="70%">
-				Task
+				{$MOD.LBL_TASK}
 			</td>
 			<td class="colHeader small" width="15%">
-				Status
+				{$MOD.LBL_STATUS}
 			</td>
 			<td class="colHeader small" width="15%">
-				Tools
+				{$MOD.LBL_LIST_TOOLS}
 			</td>
 		</tr>
 {foreach item=task from=$tasks}
@@ -152,7 +150,7 @@
 						style="cursor: pointer;" id="expressionlist_editlink_{$task->id}" \
 						src="themes/softed/images/editfield.gif"/>
 				</a>
-				<a href="">
+				<a href="{$module->deleteTaskUrl($task->id)}">
 					<img border="0" title="Delete" alt="Delete"\
 			 			src="themes/softed/images/delete.gif" \
 						style="cursor: pointer;" id="expressionlist_deletelink_{$task->id}"/>

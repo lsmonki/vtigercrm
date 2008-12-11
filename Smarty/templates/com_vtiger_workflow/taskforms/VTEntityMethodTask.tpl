@@ -28,9 +28,8 @@ var methodName = '{$task->methodName}';
 				}else{
 					$('#method_name_select').css("display", "inline");
 					$('#message_text').css("display", "none");
-					
 					$.each(result, function(i, v){
-						var optionText = '<option value="'+moduleName+'" '+(v==moduleName?'selected':'')+'>'+moduleName+'</option>';
+						var optionText = '<option value="'+v+'" '+(v==methodName?'selected':'')+'>'+v+'</option>';
 						$('#method_name_select').append(optionText);
 					});
 				}

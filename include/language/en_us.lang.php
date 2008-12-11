@@ -1170,7 +1170,6 @@ $app_strings = array (
 'LBL_OPERATION_NOT_SUPPORTED'=>'This Operation is currently not supported',
 'LBL_ASTERISK_SET_ERROR'=>'Asterisk server details are not set. Set them first.',
 //asterisk integration ends
-
 );
 
 $app_list_strings = array (

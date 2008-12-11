@@ -1,7 +1,7 @@
 <?php
-	require 'VTEntityData.inc';
-	require 'VTEntityType.inc';
-	require 'VTEventHandler.inc';
-	require 'VTEventsManager.inc';
-	require 'VTEventTrigger.inc';
+	require_once 'VTEntityData.inc';
+	require_once 'VTEntityType.inc';
+	require_once 'VTEventHandler.inc';
+	require_once 'VTEventsManager.inc';
+	require_once 'VTEventTrigger.inc';
 ?>

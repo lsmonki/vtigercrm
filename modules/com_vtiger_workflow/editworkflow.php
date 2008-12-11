@@ -22,9 +22,9 @@ require_once("VTWorkflowApplication.inc");
 			
 		}
 
-		$et = VTWSEntityType::usingGlobalCurrentUser($workflow->moduleName);
-		$smarty->assign("fieldNames", Zend_Json::encode($et->getFieldNames()));
-		$smarty->assign("fieldTypes", Zend_Json::encode($et->getFieldTypes()));
+		//$et = VTWSEntityType::usingGlobalCurrentUser($workflow->moduleName);
+		//$smarty->assign("fieldNames", Zend_Json::encode($et->getFieldNames()));
+		//$smarty->assign("fieldTypes", Zend_Json::encode($et->getFieldTypes()));
 		
 		
 		$tm = new VTTaskManager($adb);

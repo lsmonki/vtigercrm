@@ -45,5 +45,10 @@ class VTWorkflowApplication{
 		}
 		return "index.php?module={$this->name}&action=edittask$idPart&return_url=".urlencode($this->currentUrl());
 	}
+	
+	function deleteTaskUrl($id){
+		$idPart="&task_id=$id";
+		return "index.php?module={$this->name}&action=deletetask$idPart&return_url=".urlencode($this->currentUrl());
+	}
 }
 ?>

@@ -36,6 +36,11 @@
 			}
 		}
 		
+		public function deleteTask($taskId){
+			$adb = $this->adb;
+			$adb->pquery("delete from com_vtiger_workflowtasks where task_id=?", array($taskId));
+		}
+		
 		
 		/**
 		 * Create a new class instance
@@ -49,6 +54,7 @@
 			$task->active=false; 
 			return $task;
 		}
+		
 		
 		/**
 		 * Retrieve a task from the database
@@ -86,7 +92,7 @@
 		
 		
 		function getTaskTypes(){
-			return array("VTEmailTask", "VTEntityMethodTask");
+			return array("VTEmailTask", "VTEntityMethodTask", "VTCreateTodoTask");
 		}
 		
 		private function getTasksForResult($result){
@@ -117,7 +123,7 @@
 	}
 	
 	abstract class VTTask{
-		public abstract function doTask($module, $data);
+		public abstract function doTask($data);
 		public abstract function getFieldNames();
 	}
 	

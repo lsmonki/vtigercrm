@@ -135,12 +135,4 @@
 		writeOutput($operationManager, $rawOutput);
 	}
 	
-	function getIdComponents($elementid){
-		return explode("x",$elementid);
-	}
-	
-	function getId($objId, $elemId){
-		return $objId."x".$elemId;
-	}
-	
 ?>

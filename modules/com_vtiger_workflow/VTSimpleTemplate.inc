@@ -5,17 +5,34 @@ class VTSimpleTemplate{
 		$this->template = $templateString;
 	}
 	
-	function render($data){
-		$this->data = $data;
-		return $this->parseTemplate($this->template);
+	function render($entityCache, $entityId){
+		$this->cache = $entityCache;
+		$this->parent = $this->cache->forId($entityId);
+		return $this->parseTemplate();
 	}
 	
 	private function matchHandler($match){
-		return $this->data[$match[1]];
+		preg_match('/\((\w+) : \((\w+)\) (\w+)\)/', $match[1], $matches);
+		if(count($matches)==0){
+			$fieldname = $match[1];
+			$data = $this->parent->getData();
+			$result = $data[$fieldname];
+		}else{
+			list($full, $referenceField, $referenceModule, $fieldname) = $matches;
+			$referenceId = $this->parent->get($referenceField);
+			$entity = $this->cache->forId($referenceId);
+			if($entity->getModuleName()==$referenceModule){
+				$data = $entity->getData();
+				$result = $data[$fieldname];
+			}else{
+				$result = "";
+			}
+		}
+		return $result;
 	}
 	
-	function parseTemplate($str){
-		return preg_replace_callback('/\\$(\w+)/', array($this,"matchHandler"), $this->template);
+	function parseTemplate(){
+		return preg_replace_callback('/\\$(\w+|\((\w+) : \((\w+)\) (\w+)\))/', array($this,"matchHandler"), $this->template);
 	}
 }
 ?>

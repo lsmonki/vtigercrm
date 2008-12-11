@@ -18,11 +18,17 @@
 			$result = $adb->pquery("select setype from vtiger_crmentity where crmid=?", array($entityId));
 			$setype =  $adb->query_result($result,0,"setype");
 			$obj->moduleName = $setype;
-			require_once("modules/".$setype."/".$setype.".php");
+			$moduleName = $setype;
+			if(strtolower($setype)==='calendar'){
+				$setype = 'Activity';
+			}
+			require_once("modules/".$moduleName."/".$setype.".php");
 			$focus = new $setype();
+			
+			
 			$focus->retrieve_entity_info($entityId, $setype);
 			$focus->id = $entityId;
-			$obj->isNew = isset($crmEntity->id) && $crmEntity->id != null;
+			$obj->isNew = false;
 			$obj->focus = $focus;
 			return $obj;
 		}
@@ -37,7 +43,7 @@
 		function fromCRMEntity($crmEntity){
 			$obj = new VTEntityData();
 			$obj->focus = $crmEntity;
-			$obj->isNew = isset($crmEntity->id) && $crmEntity->id != null;
+			$obj->isNew = !(isset($crmEntity->id) && $crmEntity->id != null);
 			return $obj;
 		}
 		
@@ -69,7 +75,7 @@
 		}
 		
 		function get($fieldName){
-			$this->focus->data[$fieldName];
+			return $this->focus->column_fields[$fieldName];
 		}
 		
 		function set($fieldName, $value){

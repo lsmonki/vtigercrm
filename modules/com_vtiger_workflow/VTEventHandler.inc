@@ -17,10 +17,9 @@
 		 */
 		function handleEvent($eventName, $entityData){
 			global $adb;
-			$data = $entityData->getData();
-			
 			$entityCache = new VTEntityCache($adb);
-			$entityCache->put($entityData);
+			$entityData = $entityCache->forId($entityData->getId());
+			$data = $entityData->getData();
 			$wfs = new VTWorkflowManager($adb);
 			$workflows = $wfs->getWorkflowsForModule($entityData->getModuleName());
 			$tm = new VTTaskManager($adb);
@@ -30,9 +29,9 @@
 				switch($workflow->executionCondition){
 					case VTWorkflowManager::$ON_FIRST_SAVE:{
 						if($entityData->isNew()){
-							$doEvaluate = false;
-						}else{
 							$doEvaluate = true;
+						}else{
+							$doEvaluate = false;
 						}
 						break;
 					}
@@ -59,7 +58,7 @@
 							$delay = 0;
 						}
 						if($task->executeImmediately==true){
-							$task->doTask($entityData->getModuleName(), $entityData->getData());
+							$task->doTask($entityData);
 						}else{
 							$taskQueue->queueTask($task->id, $entityData->getId(), $delay);
 						}

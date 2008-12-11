@@ -95,4 +95,12 @@ function vtws_getUserWebservicesGroups($crmObject,$user){
 	return vtws_getWebserviceGroupFromGroups($groups);
 }
 
+function getIdComponents($elementid){
+	return explode("x",$elementid);
+}
+
+function getId($objId, $elemId){
+	return $objId."x".$elemId;
+}
+
 ?>

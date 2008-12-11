@@ -1,4 +1,4 @@
-function editworkflowscript($, fieldNames, fieldTypes, conditions){
+function editworkflowscript($, conditions){
 	var vtinst = new VtigerWebservices("webservice.php");
 	var desc = null;
 	
@@ -88,6 +88,17 @@ function editworkflowscript($, fieldNames, fieldTypes, conditions){
 		}
 	}
 	
+	function implode(sep, arr){
+		var out = "";
+		$.each(arr, function(i, v){
+			out+=v;
+			if(i<arr.length-1){
+				out+=sep;
+			}
+		});
+		return out;
+	}
+	
 	function mergeObjects(obj1, obj2){
 		var res = {};
 		for(var k in obj1){
@@ -149,60 +160,61 @@ function editworkflowscript($, fieldNames, fieldTypes, conditions){
 		}
 	}
 	
-	
-	
-	var operations = {
-		string:["is", "contains", "does not contain", "starts with", "ends with"],
-		integer:["equal to", "less than", "greater than", "does not equal", "less than or equal to", "greater than or equal to"],
-		double:["equal to", "less than", "greater than", "does not equal", "less than or equal to", "greater than or equal to"],
-		reference:["is"],
-		url:["is", "contains", "does not contain", "starts with", "ends with"],
-		picklist:['is'],
-		datetime:['is'],
-		email:["is", "contains", "does not contain", "starts with", "ends with"],
-		phone:["is", "contains", "does not contain", "starts with", "ends with"],
-		date:["is"],
-		time:["is"],
-	};
+	var operations = function(){
+		var op = {
+			string:["is", "contains", "does not contain", "starts with", "ends with"],
+			number:["equal to", "less than", "greater than", "does not equal", "less than or equal to", "greater than or equal to"],
+			value:['is']
+		}
+		var mapping = [
+			['string', ['string', 'text', 'url', 'email', 'phone']],
+			['number', ['integer', 'double']],
+			['value', ['reference', 'picklist', 'multipicklist', 'datetime', 'time', 'date', 'boolean']]
+		];
+		
+		
+		var out = {}
+		$.each(mapping, function(i, v){
+			var opName = v[0];
+			var types = v[1];
+			$.each(types, function(i, v){
+				out[v] = op[opName];
+			});
+		});
+		return out;
+	}();
 	
 	function defaultValue(fieldType){
+		
+		function forPicklist(opType, condno){
+			var value = $("#save_condition_"+condno+"_value");
+			var options = implode('',
+				map(function (e){return '<option value="'+e.value+'">'+e.label+'</option>'}, 
+					opType['picklistValues'])
+			);
+			value.replaceWith('<select id="save_condition_'+condno+'_value" class="value">'+options+'</select>')
+		}
+		
+		function forInteger(opType, condno){
+			var value = $(format("#save_condition_%s_value", condno));
+			value.replaceWith(format('<input type="text" id="save_condition_%s_value" value="0" class="value">', condno));
+		}
 		var functions = {
 			string:function(opType, condno){
 				var value = $(format("#save_condition_%s_value", condno));
 				value.replaceWith(format('<input type="text" id="save_condition_%s_value" value="" class="value">', condno));
 			},
-			integer:function(opType, condno){
-				var value = $(format("#save_condition_%s_value", condno));
-				value.replaceWith(format('<input type="text" id="save_condition_%s_value" value="0" class="value">', condno));
+			boolean: function(opType, condno){
+				var value = $("#save_condition_"+condno+"_value");
+				value.replaceWith(
+					'<select id="save_condition_'+condno+'_value" value="true" class="value"> \
+						<option value="true:boolean">True</option>\
+						<option value="false:boolean">False</option>\
+					</select>');
 			},
-			reference:function(opType, condno){
-				defaultValue('String')(opType, condno);
-				// value = $(format("#save_condition_%s_value", condno));
-				// value.replaceWith('<div id="save_condition_%s_value" class="value save_condition"></div>');
-				/*var value = $(format("#save_condition_%s_value", condno));
-				value.replaceWith(format('\
-							<div id="save_condition_%s_value" class="value save_condition"> \
-							<input type="text" id="save_condition_%s_value_label" readonly style="width:50px"> \
-							<span id="save_condition_%s_value_change" class="select_entity"> \
-							<img src="themes/softed/images/select.gif"></span> \
-							<input type="hidden" id="save_condition_%s_value_id" value="" class="value"> \
-							</div>', condno, condno, condno, condno));
-				$(format("#save_condition_%s_value_change", condno)).bind("click", function(){
-					vtInst.describeOBject(opType.relatedTo[0], function(status, result){
-						if(status){
-						
-						}else{
-							errorMessage("Web service failed");
-						}
-					});
-					// var win = window.open(format("index.php?module=%s&action=Popup", opType.relatedTo), 
-					// 					"test", "width=640, height=602, resizable=0, scrollbars=0");
-					// 				$(win.document).load(function(){
-					// 					$(win.document.body).append("Hello World");
-					// 				});
-				
-				});*/
-			}
+			integer: forInteger,
+			picklist:forPicklist,
+			multipicklist:forPicklist
 		};
 		var ret = functions[fieldType];
 		if(ret==null){
@@ -235,21 +247,24 @@ function editworkflowscript($, fieldNames, fieldTypes, conditions){
 		}
 	}
 	
-
-	
-	
-
-	
-	//var fieldNames=null;
-	//var fieldTypes=null;
-
 	
 	function getDescribeObjects(moduleName, callback){
 		vtinst.describeObject(moduleName, handleError(function(result){
 			var parent = result;
 			var fields = parent['fields'];
 			var referenceFields = filter(function(e){return e['type']['name']=='reference';}, fields);
-			var referenceFieldModules = map(function(e){return e['type']['refersTo'];}, referenceFields);
+			var referenceFieldModules = 
+				map(
+					function(e){
+						return filter(
+							function(f){
+								return f!='Users';
+							},
+							e['type']['refersTo']
+						);
+					}, 
+					referenceFields
+				);
 			function union(a, b){
 				newfields = filter(function(e){return !contains(a, e);}, b)
 				return a.concat(newfields);
@@ -278,11 +293,19 @@ function editworkflowscript($, fieldNames, fieldTypes, conditions){
 		vtinst.extendSession(handleError(function(result){
 			getDescribeObjects(moduleName, handleError(function(modules){
 				var parent = modules[moduleName];
-				var parentFields = map(function(e){return[e['name'],e['label']];}, parent['fields']);
-				var referenceFieldTypes = filter(function(e){return e['type']['name']=='reference';}, parent['fields']);
+				function filteredFields(fields){
+					return filter(
+						function(e){return !contains(['autogenerated', 'reference', 'owner'], e.type.name);}, 
+						fields
+					);
+				}
+				;
+				var parentFields = map(function(e){return[e['name'],e['label']];}, filteredFields(parent['fields']));
+				var referenceFieldTypes = filter(function(e){return e['type']['name']=='reference' && !contains(e['type']['refersTo'], 'Users');}, parent['fields']);
 				var moduleFieldTypes = {};
 				$.each(modules, function(k, v){
-					moduleFieldTypes[k] = dict(map(function(e){return [e['name'], e['type']];}, v['fields']));
+					moduleFieldTypes[k] = dict(map(function(e){return [e['name'], e['type']];},
+						filteredFields(v['fields'])));
 				});
 				
 				function getFieldType(fullFieldName){
@@ -304,7 +327,7 @@ function editworkflowscript($, fieldNames, fieldTypes, conditions){
 						return map(function(field){
 							return [name+' : '+'('+moduleName+') '+field['name'],
 									label+' : '+'('+moduleName+') '+field['label']];},
-							modules[moduleName]['fields']);
+							filteredFields(modules[moduleName]['fields']));
 					}
 					return reduceR(concat, map(forModule,referenceField['type']['refersTo']),[]);
 				}
@@ -312,7 +335,6 @@ function editworkflowscript($, fieldNames, fieldTypes, conditions){
 				
 				var referenceFields = reduceR(concat, map(fieldReferenceNames, referenceFieldTypes), []);
 				var fieldLabels = dict(parentFields.concat(referenceFields));
-				
 				
 				function addCondition(condno){
 					$("#save_conditions").append(

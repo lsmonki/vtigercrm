@@ -16,13 +16,18 @@
 					$result = $this->checkCondition($data, $cond);
 				}else{
 					list($full,  $referenceField, $referenceModule, $fieldname) = $matches;
-					$entity = $entityCache->forId($data[$referenceField]);
-					if($entity->getModuleName()==$referenceModule){
-						$entityData = $entity->getData();
-						$cond['fieldname'] = $fieldname;
-						$result = $this->checkCondition($entityData, $cond);
+					$referenceFieldId = $data[$referenceField];
+					if($referenceFieldId != 0){
+						$entity = $entityCache->forId($data[$referenceField]);
+						if($entity->getModuleName()==$referenceModule){
+							$entityData = $entity->getData();
+							$cond['fieldname'] = $fieldname;
+							$result = $this->checkCondition($entityData, $cond);
+						}else{
+							$result = false;
+						}
 					}else{
-						$result = false;
+						return false;
 					}
 				}
 				if($result==false){
@@ -70,7 +75,16 @@
 				case "greater than or equal to":
 					return $fieldValue >= $value;
 				case "is":
-					return $fieldValue == $value;
+					if(preg_match('/([^:]+):boolean$/', $value, $match)){
+						$value = $match[1];
+						if($value=='true'){
+							return $fieldValue==='on' || $fieldValue===1 || $fieldValue==='1';
+						}else{
+							return $fieldValue==='off' || $fieldValue===0 || $fieldValue==='0' || $fieldValue==='';
+						}
+					}else{
+						return $fieldValue == $value;
+					}
 				case "contains":
 					return strpos($fieldValue, $value) !== FALSE;
 				case "does not contain":
