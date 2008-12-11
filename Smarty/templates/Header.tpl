@@ -49,9 +49,6 @@
     {if $USE_ASTERISK eq 'true'}
     	<script type="text/javascript" src="include/js/asterisk.js"></script>
     {/if}
-	<script language="javascript">
-		use_asterisk = {$USE_ASTERISK};
-	</script>
     <!-- END -->
 	
 	<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="hdrNameBg">
