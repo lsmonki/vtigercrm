@@ -14,13 +14,6 @@
 
 /* SOFTED  - COLOR THEME*/
 
-/*added to change color of disabled button: */
-input:disabled { 
-    background-color : #cccccc;
-    color: #666666; 
-}
-/*add ends: */
-
 .small {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -122,6 +115,10 @@ input:disabled {
 	background: #fff url(images/toolbar-div.png) bottom no-repeat;
 	background-color:#fff;
 	width:2px;
+}
+
+.tabSelected, .tabUnSelected {
+	padding: 7px 10px;
 }
 
 .level2text {    
@@ -2149,6 +2146,7 @@ a.customMnuSelected{
     overflow-x:hidden;
     overflow-y:hidden;
     background-color:#ffffcc;
+	margin-top: 1px; /* added */
 }
 
 a.drop_down{

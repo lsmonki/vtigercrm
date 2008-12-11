@@ -100,6 +100,10 @@ input:disabled {
 	width:2px;
 }
 
+.tabSelected, .tabUnSelected {
+	padding: 7px 10px;
+}
+
 .searchUIBasic {
 	border:2px dotted #aaaaaa;
 	background-color:#FFF6CF;
@@ -2062,20 +2066,21 @@ a.customMnuSelected{
 
 /* Drop Down Menu */
 .drop_mnu{
-    	position:absolute;
-    	left:0px;
-    	top:0px;
-    	z-index:1000000001;
-    	border-left:1px solid #E7E3C0;
-    	border-right:1px solid #E7E3C0;
-    	border-bottom:1px solid #E7E3C0;
-    	width:150px;
-    	display:none;
-    	padding:0px;
-    	text-align:left;
-    	overflow-x:hidden;
-    	overflow-y:hidden;
-    	background-color:#F6F4E7;
+    position:absolute;
+    left:0px;
+    top:0px;
+    z-index:1000000001;
+    border-left:1px solid #E7E3C0;
+    border-right:1px solid #E7E3C0;
+    border-bottom:1px solid #E7E3C0;
+    width:150px;
+    display:none;
+    padding:0px;
+    text-align:left;
+    overflow-x:hidden;
+    overflow-y:hidden;
+    background-color:#F6F4E7;
+	margin-top: 1px; /* added */
 }
 
 a.drop_down{

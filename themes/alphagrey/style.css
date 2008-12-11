@@ -107,6 +107,10 @@ input:disabled {
 	width:1px;
 }
 
+.tabSelected, .tabUnSelected {
+	padding: 7px 10px;
+}
+
 .level2Bg {
 	background-color:#9a9a9a;
 	font-family: Arial, Helvetica, sans-serif;
@@ -2046,20 +2050,21 @@ a.customMnuSelected{
 
 /* Drop Down Menu */
 .drop_mnu{
-    	position:absolute;
-    	left:0px;
-    	top:0px;
-    	z-index:1000000001;
-    	border-left:1px solid #a5a5a5;
-    	border-right:1px solid #a5a5a5;
-    	border-bottom:1px solid #a5a5a5;
-    	width:150px;
-    	display:none;
-    	padding:0px;
-    	text-align:left;
-    	overflow-x:hidden;
-    	overflow-y:hidden;
-    	background-color:#eee;
+    position:absolute;
+    left:0px;
+    top:0px;
+    z-index:1000000001;
+    border-left:1px solid #a5a5a5;
+    border-right:1px solid #a5a5a5;
+    border-bottom:1px solid #a5a5a5;
+    width:150px;
+    display:none;
+    padding:0px;
+    text-align:left;
+    overflow-x:hidden;
+    overflow-y:hidden;
+    background-color:#eee;
+	margin-top: 1px; /* added */
 }
 
 a.drop_down{
