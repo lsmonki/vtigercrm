@@ -9,7 +9,7 @@ require_once("VTWorkflowApplication.inc");
 require_once("VTTaskManager.inc");
 require_once("VTWorkflowManager.inc");
 
-	function vtTaskEdit($adb, $request, $current_language){
+	function vtTaskEdit($adb, $request, $current_language, $app_strings){
 		$module = new VTWorkflowApplication('edittask');
 		$smarty = new vtigerCRM_Smarty();
 		$tm = new VTTaskManager($adb);
@@ -63,7 +63,7 @@ require_once("VTWorkflowManager.inc");
 		}
 		
 		
-		$smarty->assign("MOD", return_module_language($current_language,'Settings'));
+		$smarty->assign("MOD", array_merge(return_module_language($current_language,'Settings'), return_module_language($current_language,'com_vtiger_workflow')));
 		$smarty->assign("APP", $app_strings);
 		$smarty->assign("IMAGE_PATH",$image_path);
 		
@@ -75,5 +75,5 @@ require_once("VTWorkflowManager.inc");
 		
 		$smarty->display("{$module->name}/EditTask.tpl");
 	}
-	vtTaskEdit($adb, $_REQUEST, $current_language);
+	vtTaskEdit($adb, $_REQUEST, $current_language, $app_strings);
 ?>

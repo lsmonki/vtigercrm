@@ -10,7 +10,7 @@ require_once("VTWorkflowManager.inc");
 require_once("VTTaskManager.inc");
 require_once("VTWorkflowApplication.inc");
 
-	function vtWorkflowEdit($adb, $request, $requestUrl, $current_language){
+	function vtWorkflowEdit($adb, $request, $requestUrl, $current_language, $app_strings){
 		$module = new VTWorkflowApplication("editworkflow");
 		$smarty = new vtigerCRM_Smarty();
 		$wfs = new VTWorkflowManager($adb);
@@ -34,8 +34,10 @@ require_once("VTWorkflowApplication.inc");
 		$smarty->assign("newTaskReturnUrl", $requestUrl);
 		
 		$smarty->assign("returnUrl", $request["return_url"]);
-		
-		$smarty->assign("MOD", return_module_language($current_language,'Settings'));
+		$smarty->assign("APP", $app_strings);
+		$smarty->assign("MOD", array_merge(
+			return_module_language($current_language,'Settings'),
+			return_module_language($current_language, $module->name)));
 		$smarty->assign("IMAGE_PATH", $image_path);
 		$smarty->assign("MODULE_NAME", $module->label);
 		$smarty->assign("PAGE_NAME", 'Edit Workflow');
@@ -47,5 +49,5 @@ require_once("VTWorkflowApplication.inc");
 		
 		$smarty->display("{$module->name}/EditWorkflow.tpl");
 	}
-vtWorkflowEdit($adb, $_REQUEST, $_SERVER["REQUEST_URI"], $current_language);
+vtWorkflowEdit($adb, $_REQUEST, $_SERVER["REQUEST_URI"], $current_language, $app_strings);
 ?>
