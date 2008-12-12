@@ -9,7 +9,7 @@
 # ********************************************************************************
 # wget "http://localhost:APACHEPORT/vtigercron.php?service=RecurringInvoice&app_key=YOUR_APP_KEY_HERE" -O /dev/null
 
-export VTIGERCRM_ROOTDIR=`dirname "$0"`/..
+export VTIGERCRM_ROOTDIR=`dirname "$0"`/../../..
 export USE_PHP=php
 
 cd $VTIGERCRM_ROOTDIR
