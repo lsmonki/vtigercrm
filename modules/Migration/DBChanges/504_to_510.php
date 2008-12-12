@@ -640,16 +640,23 @@ $new_block_id = $adb->getUniqueID('vtiger_blocks');
 ExecuteQuery("INSERT INTO vtiger_blocks VALUES (".$new_block_id.",".getTabid('SalesOrder').",'Recurring Invoice Information',$new_block_seq_no,0,0,0,0,0,1)");
 
 ExecuteQuery("ALTER TABLE vtiger_salesorder ADD COLUMN enable_recurring INT default 0");
-ExecuteQuery("CREATE TABLE vtiger_invoice_recurring_info(salesorderid INT, recurring_frequency VARCHAR(200), start_period DATE, end_period DATE, last_recurring_date DATE default NULL)");
+ExecuteQuery("CREATE TABLE vtiger_invoice_recurring_info(salesorderid INT, recurring_frequency VARCHAR(200), start_period DATE, end_period DATE, last_recurring_date DATE default NULL, " .
+		"			payment_duration VARCHAR(200), invoice_status VARCHAR(200))");
 
 ExecuteQuery("CREATE TABLE vtiger_recurring_frequency(recurring_frequency_id INT, recurring_frequency VARCHAR(200), sortorderid INT, presence INT)");
-// Add default values for teh recurring_frequency picklist
-ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'--None--',0,1)");
-ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Daily',0,1)");
-ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Weekly',0,1)");
-ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Monthly',0,1)");
-ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Quarterly',0,1)");
-ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Yearly',0,1)");
+// Add default values for the recurring_frequency picklist
+ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'--None--',1,1)");
+ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Daily',2,1)");
+ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Weekly',3,1)");
+ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Monthly',4,1)");
+ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Quarterly',5,1)");
+ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Yearly',6,1)");
+
+ExecuteQuery("CREATE TABLE vtiger_payment_duration(payment_duration_id INT, payment_duration VARCHAR(200), sortorderid INT, presence INT)");
+// Add default values for the vtiger_payment_duration picklist
+ExecuteQuery("INSERT INTO vtiger_payment_duration values(".$adb->getUniqueID('vtiger_payment_duration').",'Net 30 days',1,1)");
+ExecuteQuery("INSERT INTO vtiger_payment_duration values(".$adb->getUniqueID('vtiger_payment_duration').",'Net 45 days',2,1)");
+ExecuteQuery("INSERT INTO vtiger_payment_duration values(".$adb->getUniqueID('vtiger_payment_duration').",'Net 60 days',3,1)");
 
 // Add fields for the Recurring Information block
 $salesorder_tabid = getTabid('SalesOrder');
@@ -668,6 +675,35 @@ addFieldSecurity($salesorder_tabid,$field_id);
 $field_id = $adb->getUniqueID('vtiger_field');
 ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'end_period','vtiger_invoice_recurring_info',1,'5','end_period','End Period',1,0,0,100,4,$new_block_id,1,'D~O',1,null,'BAS')");
 addFieldSecurity($salesorder_tabid,$field_id);
+
+$field_id = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'payment_duration','vtiger_invoice_recurring_info',1,'16','payment_duration','Payment Duration',1,0,0,100,5,$new_block_id,1,'I~O',1,null,'BAS')");
+addFieldSecurity($salesorder_tabid,$field_id);
+
+$field_id = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'invoice_status','vtiger_invoice_recurring_info',1,'111','invoicestatus','Invoice Status',1,0,0,100,6,$new_block_id,1,'V~O',1,null,'BAS')");
+addFieldSecurity($salesorder_tabid,$field_id);
+
+// Add new picklist value 'AutoCreated' for Invoice Status and add the same for all the existing roles.
+$picklistRes = $adb->query("SELECT picklistid FROM vtiger_picklist WHERE name='invoicestatus'");
+$picklistid = $adb->query_result($picklistRes,0,'picklistid');
+
+$picklist_valueid = $adb->getUniqueID('vtiger_picklistvalues');
+$id = $adb->getUniqueID('vtiger_invoicestatus');
+$val = 'AutoCreated';
+
+ExecuteQuery("insert into vtiger_invoicestatus values($id, $val, 1, $picklist_valueid)", $params);
+
+//Default entries for role2picklist relation has been inserted..
+$sql="select roleid from vtiger_role";
+$role_result = $adb->pquery($sql, array());
+$numrow = $adb->num_rows($role_result);
+for($k=0; $k < $numrow; $k ++)
+{
+	$roleid = $adb->query_result($role_result,$k,'roleid');
+	$params = array($roleid, $picklist_valueid, $picklistid, $id-1);
+	$adb->pquery("insert into vtiger_role2picklist values(?,?,?,?)", $params);
+}
 
 // Add Event handler for Recurring Invoice
 $em->registerHandler('vtiger.entity.aftersave', 'modules/SalesOrder/RecurringInvoiceHandler.php', 'RecurringInvoiceHandler');

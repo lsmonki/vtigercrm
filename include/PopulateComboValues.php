@@ -82,10 +82,11 @@ class PopulateComboValues
 				
 		global $app_list_strings,$adb;
 		global $combo_strings;
-		$comboTables = Array('leadsource','accounttype','industry','leadstatus','rating','opportunity_type','salutationtype','sales_stage','ticketstatus','ticketpriorities','ticketseverities','ticketcategories','eventstatus','taskstatus','taskpriority','manufacturer','productcategory','faqcategories','usageunit','glacct','quotestage','carrier','faqstatus','invoicestatus','postatus','sostatus','campaigntype','campaignstatus','expectedresponse','activitytype');
-
-		foreach ($comboTables as $comTab)
+		$comboRes = $adb->query("SELECT distinct fieldname FROM vtiger_field WHERE uitype IN ('15','111') OR fieldname = 'salutationtype'");
+		$noOfCombos = $adb->num_rows($comboRes);
+		for($i=0; $i<$noOfCombos; $i++)
 		{
+			$comTab = $adb->query_result($comboRes, $i, 'fieldname');
 			$picklistid = $adb->getUniqueID("vtiger_picklist");
 			$params = array($picklistid, $comTab);
 			$picklist_qry = "insert into vtiger_picklist values(?,?)";
@@ -93,9 +94,7 @@ class PopulateComboValues
 
 			$this->insertComboValues($combo_strings[$comTab."_dom"],$comTab,$picklistid);
 		}
-
-
-
+		
 		//we have to decide what are all the picklist and picklist values are non editable
 		//presence = 0 means you cannot edit the picklist value
 		//presence = 1 means you can edit the picklist value
@@ -120,16 +119,17 @@ class PopulateComboValues
 
 	function create_nonpicklist_tables ()
 	{
-	
 		global $log;
 		$log->debug("Entering create_nonpicklist_tables () method ...");
 				
 		global $app_list_strings,$adb;
 		global $combo_strings;
-		$comboTables = Array('duration_minutes','visibility','status','activity_view','lead_view','date_format','recurringtype','taxclass','recurring_frequency');
-
-		foreach ($comboTables as $comTab)
+		// uitype -> 16 - Non standard picklist, 115 - User status, 83 - Tax Class
+		$comboRes = $adb->query("SELECT distinct fieldname FROM vtiger_field WHERE uitype IN ('16','115','83') AND fieldname != 'hdnTaxType'");
+		$noOfCombos = $adb->num_rows($comboRes);
+		for($i=0; $i<$noOfCombos; $i++)
 		{
+			$comTab = $adb->query_result($comboRes, $i, 'fieldname');
 			$this->insertNonPicklistValues($combo_strings[$comTab."_dom"],$comTab);
 		}
 		$log->debug("Exiting create_tables () method ...");

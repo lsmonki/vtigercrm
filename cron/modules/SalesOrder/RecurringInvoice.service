@@ -23,7 +23,7 @@ if($_REQUEST['app_key'] != $application_unique_key) {
  */
 $svcname = $_REQUEST['service'];
 // We need to make sure the PIDfile name is unqique
-$servicePIDFile = "logs/$svcname-service.pid';
+$servicePIDFile = "logs/$svcname-service.pid";
 
 if(file_exists($servicePIDFile)) {
 	echo "Service $svcname already running! Check $servicePIDFile";
@@ -46,8 +46,8 @@ global $adb, $log;
 $log =& LoggerManager::getLogger('RecurringInvoice');
 $log->debug("invoked RecurringInvoice");
 
-$sql="SELECT vtiger_salesorder.salesorderid, recurring_frequency, start_period, end_period, last_recurring_date 
-		 FROM vtiger_salesorder 
+$sql="SELECT vtiger_salesorder.salesorderid, recurring_frequency, start_period, end_period, last_recurring_date,  
+		 payment_duration, invoice_status FROM vtiger_salesorder 
 		 INNER JOIN vtiger_crmentity ON vtiger_salesorder.salesorderid = vtiger_crmentity.crmid AND vtiger_crmentity.deleted = 0 
 		 INNER JOIN vtiger_invoice_recurring_info ON vtiger_salesorder.salesorderid = vtiger_invoice_recurring_info.salesorderid
 		 WHERE DATE_FORMAT(start_period,'%Y-%m-%d') <= '".date('Y-m-d')."' AND DATE_FORMAT(end_period,'%Y-%m-%d') >= '".date('Y-m-d')."'";
@@ -116,7 +116,14 @@ function createInvoice($salesorder_id) {
 	
 	global $log, $adb;
 	global $current_user;
-		
+	
+	// Payment duration in days
+	$payment_duration_values = Array(
+		'net 30 days' => '30',
+		'net 45 days' => '45',
+		'net 60 days' => '60'
+	);
+
 	if(!$current_user) {
 		$current_user = new Users();
 		$current_user->id = 1;
@@ -129,13 +136,19 @@ function createInvoice($salesorder_id) {
 	$focus = new Invoice();
 	// This will only fill in the basic columns from SO to Invoice and also Update the SO id in new Invoice
 	$focus = getConvertSoToInvoice($focus,$so_focus,$salesorder_id);
-		
+	
+	// Pick up the Payment due date based on the Configuration in SO
+	$payment_duration = $so_focus->column_fields['payment_duration'];
+	$due_duration = $payment_duration_values[trim(strtolower($payment_duration))];
+	$durationinsec = mktime(0,0,0,date('m'),date('d')+$due_duration,date('Y'));
+	
 	// Cleanup focus object, to duplicate the Invoice.
 	$focus->id = '';
 	$focus->mode = '';
 	$focus->column_fields['invoice_no'] = $focus->setModuleSeqNumber("increment",'Invoice');
-	$focus->column_fields['invoicestatus'] = 'Created';
+	$focus->column_fields['invoicestatus'] = $so_focus->column_fields['invoicestatus'];
 	$focus->column_fields['invoicedate'] = date('Y-m-d');
+	$focus->column_fields['duedate'] = date('Y-m-d', $durationinsec);
 	
 	// Additional SO fields to copy -> Invoice field name mapped to equivalent SO field name
 	$invoice_so_fields = Array (

@@ -19,7 +19,7 @@ if($_REQUEST['app_key'] != $application_unique_key) {
  */
 $svcname = $_REQUEST['service'];
 // We need to make sure the PIDfile name is unqique
-$servicePIDFile = "logs/$svcname-service.pid';
+$servicePIDFile = "logs/$svcname-service.pid";
 
 if(file_exists($servicePIDFile)) {
 	echo "Service $svcname already running! Check $servicePIDFile";

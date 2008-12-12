@@ -18,21 +18,23 @@ class RecurringInvoiceHandler extends VTEventHandler {
 		if ($moduleName == 'SalesOrder') {
 			$soId = $entityData->getId();
 			$data = $entityData->getData();
-			if($data['enable_recurring'] == 'on') {
+			if($data['enable_recurring'] == 'on' || $data['enable_recurring'] == 1) {
 				$frequency = $data['recurring_frequency'];
 				$startPeriod = $data['start_period'];
 				$endPeriod = $data['end_period'];
+				$paymentDuration = $data['payment_duration'];
+				$invoiceStatus = $data['invoicestatus'];
 				if (isset($frequency) && $frequency != '' && $frequency != '--None--') {
 					$check_query = "SELECT * FROM vtiger_invoice_recurring_info WHERE salesorderid=?";
 					$check_res = $adb->pquery($check_query, array($soId));
 					$noofrows = $adb->num_rows($check_res);
 					if ($noofrows > 0) {
 						$row = $adb->query_result_rowdata($check_res, 0);
-						$query = "UPDATE vtiger_invoice_recurring_info SET recurring_frequency=?, start_period=?, end_period=? WHERE salesorderid=?";
-						$params = array($frequency,$startPeriod,$endPeriod,$soId);
+						$query = "UPDATE vtiger_invoice_recurring_info SET recurring_frequency=?, start_period=?, end_period=?, payment_duration=?, invoice_status=? WHERE salesorderid=?";
+						$params = array($frequency,$startPeriod,$endPeriod,$paymentDuration,$invoiceStatus,$soId);
 					} else {
-						$query = "INSERT INTO vtiger_invoice_recurring_info VALUES (?,?,?,?,?)";
-						$params = array($soId,$frequency,$startPeriod,$endPeriod,$startPeriod);
+						$query = "INSERT INTO vtiger_invoice_recurring_info VALUES (?,?,?,?,?,?,?)";
+						$params = array($soId,$frequency,$startPeriod,$endPeriod,$startPeriod,$paymentDuration,$invoiceStatus);
 					}
 					$adb->pquery($query, $params);
 				}
