@@ -548,7 +548,7 @@ class CRMEntity
 				  $fldvalue = str_replace(",","",$this->column_fields[$fieldname]);//trim($this->column_fields[$fieldname],",");
 
 			  }
-			  elseif($uitype == 4 && $insertion_mode != 'edit') {
+			  elseif($uitype == 4 && ($insertion_mode != 'edit'|| ($insertion_mode == 'edit' && $module == 'Documents'))) {
 				// This check is added to avoid mod num generation multiple times for imported records
 			  	if(!isset($this->column_fields[$fieldname]) || $this->column_fields[$fieldname] == '' || $this->column_fields[$fieldname] == 'AUTO GEN ON SAVE')
 					$this->column_fields[$fieldname] = $this->setModuleSeqNumber("increment",$module);
@@ -582,7 +582,7 @@ class CRMEntity
 				  {
 				  	 if($table_name == 'vtiger_notes')
 				  	 {
-				  	 	if($columname == 'notecontent' || $columname == 'title')
+				  	 	if($columname == 'notecontent' || $columname == 'title' || $columname == 'note_no')
 				  	 	{
 				  	 		$update .= ', '.$columname."=?";
 				  	 		array_push($update_params, $fldvalue);
@@ -607,7 +607,7 @@ class CRMEntity
 		  {
 		  	if($table_name == 'vtiger_notes')
 		  	{
-		  		if($columname == 'notecontent' || $columname == 'title')
+		  		if($columname == 'notecontent' || $columname == 'title' || $columname == 'note_no')
 		  		{
 			  		$column .= ", ".$columname;
 			  		array_push($value, $fldvalue);
