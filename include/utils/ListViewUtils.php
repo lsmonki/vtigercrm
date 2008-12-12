@@ -1399,7 +1399,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	//Ends
 	$field_val = $adb->query_result($list_result,$list_result_count,$colname);
-	if(stristr($field_val, "<a href")){
+	if(stristr($field_val, "<a href") === false){
 		$temp_val = textlength_check($field_val);
 	}else{
 		$temp_val = html_entity_decode($field_val);
