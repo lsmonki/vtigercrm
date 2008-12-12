@@ -2309,7 +2309,7 @@ function getListQuery($module,$where='')
 			vtiger_troubletickets.priority, vtiger_troubletickets.parent_id,
 			vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,
 			vtiger_contactdetails.lastname, vtiger_account.accountid,
-			vtiger_account.accountname, vtiger_ticketcf.*
+			vtiger_account.accountname, vtiger_ticketcf.*, vtiger_troubletickets.ticket_no
 			FROM vtiger_troubletickets
 			INNER JOIN vtiger_ticketcf
 				ON vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid

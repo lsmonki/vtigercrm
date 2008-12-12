@@ -46,7 +46,7 @@ class HelpDesk extends CRMEntity {
 				);
 
 	var $list_fields_name = Array(
-					'Ticket ID'=>'',
+					'Ticket No'=>'ticket_no',
 					'Subject'=>'ticket_title',	  			
 					'Related to'=>'parent_id',	  			
 					'Status'=>'ticketstatus',
@@ -75,11 +75,11 @@ class HelpDesk extends CRMEntity {
 				);
 	var $search_fields = Array(
 		//'Ticket ID' => Array('vtiger_crmentity'=>'crmid'),
-		'Ticket ID' =>Array('vtiger_troubletickets'=>'ticket_no'),
+		'Ticket No' =>Array('vtiger_troubletickets'=>'ticket_no'),
 		'Title' => Array('vtiger_troubletickets'=>'title')
 		);
 	var $search_fields_name = Array(
-		'Ticket ID' => '',
+		'Ticket No' => 'ticket_no',
 		'Title'=>'ticket_title',
 		);
 	
