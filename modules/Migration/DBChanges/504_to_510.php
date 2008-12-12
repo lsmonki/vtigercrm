@@ -690,9 +690,8 @@ $picklistid = $adb->query_result($picklistRes,0,'picklistid');
 
 $picklist_valueid = $adb->getUniqueID('vtiger_picklistvalues');
 $id = $adb->getUniqueID('vtiger_invoicestatus');
-$val = 'AutoCreated';
 
-ExecuteQuery("insert into vtiger_invoicestatus values($id, $val, 1, $picklist_valueid)", $params);
+ExecuteQuery("insert into vtiger_invoicestatus values($id, 'AutoCreated', 1, $picklist_valueid)", $params);
 
 //Default entries for role2picklist relation has been inserted..
 $sql="select roleid from vtiger_role";
