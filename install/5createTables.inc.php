@@ -390,6 +390,12 @@ require_once('modules/CustomView/PopulateCustomView.php');
 // Register All the Events
 registerEvents($adb);
 
+// Register All the Entity Methods
+registerEntityMethods($adb);
+
+// Populate Default Workflows
+populateDefaultWorkflows($adb);
+
 // ensure required sequences are created (adodb creates them as needed, but if
 // creation occurs within a transaction we get problems
 $db->getUniqueID("vtiger_crmentity");
@@ -418,8 +424,37 @@ function registerEvents($adb) {
 	
 	// Workflow manager
 	$em->registerHandler('vtiger.entity.aftersave', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler');
+}
+
+// Register all the entity methods here
+function registerEntityMethods($adb) {
+	require_once("modules/com_vtiger_workflow/include.inc");
+	require_once("modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc");
+	require_once("modules/com_vtiger_workflow/VTEntityMethodManager.inc");
+	$emm = new VTEntityMethodManager($adb);
 	
-	
+	// Registering method for Updating Inventory Stock
+	$emm->addEntityMethod("SalesOrder","UpdateInventory","include/InventoryHandler.php","handleInventoryProductRel");//Adding EntityMethod for Updating Products data after creating SalesOrder
+	$emm->addEntityMethod("Invoice","UpdateInventory","include/InventoryHandler.php","handleInventoryProductRel");//Adding EntityMethod for Updating Products data after creating Invoice
+}
+
+function populateDefaultWorkflows($adb) {
+	require_once("modules/com_vtiger_workflow/include.inc");
+	require_once("modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc");
+	require_once("modules/com_vtiger_workflow/VTEntityMethodManager.inc");
+
+	// Creating Workflow for Updating Inventory Stock for Invoice
+	$vtWorkFlow = new VTWorkflowManager($adb);
+	$invWorkFlow = $vtWorkFlow->newWorkFlow("Invoice");
+	$invWorkFlow->test = '[{"fieldname":"subject","operation":"does not contain","value":"`!`"}]';
+	$invWorkFlow->description = "UpdateInventoryProducts On Every Save";
+	$vtWorkFlow->save($invWorkFlow);
+
+	$tm = new VTTaskManager($adb);
+	$task = $tm->createTask('VTEntityMethodTask', $invWorkFlow->id);
+	$task->active=true;
+	$task->methodName = "UpdateInventory";
+	$tm->saveTask($task);
 }
 
 // populate the db with seed data

@@ -77,7 +77,7 @@ function updateStk($product_id,$qty,$mode,$ext_prod_arr,$module)
 	$qtyinstk= getPrdQtyInStck($product_id);
 	$log->debug("Prd Qty in Stock ".$qtyinstk);
 	
-	if($mode == 'edit')
+	/*if($mode == 'edit')
 	{
 		if(array_key_exists($product_id,$ext_prod_arr))
 		{
@@ -98,25 +98,12 @@ function updateStk($product_id,$qty,$mode,$ext_prod_arr,$module)
 			{
 				$diff_qty = $qty - $old_qty;
 				$upd_qty = $qtyinstk-$diff_qty;
-				if($module == 'Invoice')
-				{
-					updateProductQty($product_id, $upd_qty);
-					sendPrdStckMail($product_id,$upd_qty,$prod_name,'','',$module);
-				}
-				else
 					sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module);
 			}
 		}
 		else
 		{
-			$upd_qty = $qtyinstk-$qty;
-			if($module == 'Invoice')
-			{
-				updateProductQty($product_id, $upd_qty);
 				sendPrdStckMail($product_id,$upd_qty,$prod_name,'','',$module);
-			}
-			else
-				sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module);
 		}
 	}
 	else
@@ -127,9 +114,9 @@ function updateStk($product_id,$qty,$mode,$ext_prod_arr,$module)
 				updateProductQty($product_id, $upd_qty);
 				sendPrdStckMail($product_id,$upd_qty,$prod_name,'','',$module);
 			}
-			else
-				sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module);
-	}
+			else*/
+				sendPrdStckMail($product_id,$qty,$prod_name,$qtyinstk,$qty,$module);
+	//}
 	$log->debug("Exiting updateStk method ...");
 }
 
@@ -484,34 +471,55 @@ function getTaxDetailsForProduct($productid, $available='all')
  *	@param string $return_old_values - string which contains the string return_old_values or may be empty, if the string is return_old_values then before delete old values will be retrieved
  *	@return array $ext_prod_arr - if the second input parameter is 'return_old_values' then the array which contains the productid and quantity which will be retrieved before delete the product details will be returned otherwise return empty
  */
-function deleteInventoryProductDetails($objectid, $return_old_values='')
+function deleteInventoryProductDetails($focus)
 {
 	global $log, $adb;
-	$log->debug("Entering into function deleteInventoryProductDetails($objectid, $return_old_values='').");
+	$log->debug("Entering into function deleteInventoryProductDetails(".$focus->id.").");
 	
-	$ext_prod_arr = Array();
-
-	if($return_old_values == 'return_old_values')
-	{
-		$query1  = "select * from vtiger_inventoryproductrel where id=?";
-        	$result1 = $adb->pquery($query1, array($objectid));
-        	$num_rows = $adb->num_rows($result1);
-        	for($i=0; $i<$num_rows;$i++)
-        	{
-        	        $pro_id = $adb->query_result($result1,$i,"productid");
-        	        $pro_qty = $adb->query_result($result1,$i,"quantity");
-        	        $ext_prod_arr[$pro_id] = $pro_qty;
-        	}
+	$product_info = $adb->pquery("SELECT productid, quantity, incrementondel from vtiger_inventoryproductrel WHERE id=?",array($focus->id));
+	$numrows = $adb->num_rows($product_info);
+	for($index = 0;$index <$numrows;$index++){
+		$productid = $adb->query_result($product_info,$index,'productid');
+		$qty = $adb->query_result($product_info,$index,'quantity');
+		$incrementondel = $adb->query_result($product_info,$index,'incrementondel');
+		
+		if($incrementondel){
+			$focus->update_product_array[$productid]=$qty;
+		}
 	}
+
+    $adb->pquery("delete from vtiger_inventoryproductrel where id=?", array($focus->id));
+    $adb->pquery("delete from vtiger_inventoryshippingrel where id=?", array($focus->id));
+
+	$log->debug("Exit from function deleteInventoryProductDetails(".$focus->id.")");
+}
+
+function updateInventoryProductRel($focus)
+{
+	global $log, $adb;
+	$log->debug("Entering into function updateInventoryProductRel(".$focus->id.").");
+
+	if(!empty($focus->update_product_array)){
+		foreach($focus->update_product_array as $index=>$qty){
+			$qtyinstk= getPrdQtyInStck($index);
+			$upd_qty = $qtyinstk+$qty;
+			updateProductQty($index, $upd_qty);
+		}
+	}
+
+	$adb->pquery("UPDATE vtiger_inventoryproductrel SET incrementondel=1 WHERE id=?",array($focus->id));
 	
-        $query2 = "delete from vtiger_inventoryproductrel where id=?";
-        $adb->pquery($query2, array($objectid));
+	$product_info = $adb->pquery("SELECT productid, quantity from vtiger_inventoryproductrel WHERE id=?",array($focus->id));
+	$numrows = $adb->num_rows($product_info);
+	for($index = 0;$index <$numrows;$index++){
+		$productid = $adb->query_result($product_info,$index,'productid');
+		$qty = $adb->query_result($product_info,$index,'quantity');
+		$qtyinstk= getPrdQtyInStck($productid);
+		$upd_qty = $qtyinstk-$qty;
+		updateProductQty($productid, $upd_qty);
+	}
 
-        $query3 = "delete from vtiger_inventoryshippingrel where id=?";
-        $adb->pquery($query3, array($objectid));
-
-	$log->debug("Exit from function deleteInventoryProductDetails($objectid, $return_old_values='').");
-	return $ext_prod_arr;
+	$log->debug("Exit from function updateInventoryProductRel(".$focus->id.")");
 }
 
 /**	Function used to save the Inventory product details for the passed entity
@@ -547,7 +555,8 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 		}
 
 		//we will retrieve the existing product details and store it in a array and then delete all the existing product details and save new values, retrieve the old value and update stock only for SO, Quotes and Invoice not for PO
-		$ext_prod_arr = deleteInventoryProductDetails($focus->id,$return_old_values);
+		//$ext_prod_arr = deleteInventoryProductDetails($focus->id,$return_old_values);
+		deleteInventoryProductDetails($focus);
 	}
 	else
 	{

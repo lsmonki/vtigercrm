@@ -20,6 +20,11 @@ $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Starts \n\n");
 require_once('include/events/include.inc');
 $em = new VTEventsManager($adb);
 
+require_once("modules/com_vtiger_workflow/include.inc");
+require_once("modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc");
+require_once("modules/com_vtiger_workflow/VTEntityMethodManager.inc");
+$emm = new VTEntityMethodManager($adb);
+
 /* Update the block id in sequence table, to the current highest value of block id used. */
 $tmp = $adb->getUniqueId('vtiger_blocks');
 $max_block_id_query = $adb->query("SELECT MAX(blockid) AS max_blockid FROM vtiger_blocks");
@@ -1064,6 +1069,29 @@ ExecuteQuery("update vtiger_field set uitype='11' where fieldname='fax' and tabi
 ExecuteQuery("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Contacts'));
 ExecuteQuery("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Accounts'));
 // asterisk integration ends
+
+/* Support to Configure the functionality of Updating Inventory Stock for Invoice/SalesOrder */
+ExecuteQuery("ALTER TABLE vtiger_inventoryproductrel ADD COLUMN incrementondel int(11) not null default '0'");
+$invoiceids = $adb->pquery("SELECT invoiceid from vtiger_invoice",array());
+$noOfRows = $adb->num_rows($invoiceids);
+for($i=0;$i<$noOfRows;$i++){
+	$adb->pquery("UPDATE vtiger_inventoryproductrel SET incrementondel = 1 WHERE id=?",array($adb->query_result($invoiceids,$i,"invoiceid")));
+}
+
+$emm->addEntityMethod("SalesOrder","UpdateInventory","include/InventoryHandler.php","handleInventoryProductRel");//Adding EntityMethod for Updating Products data after creating SalesOrder
+$emm->addEntityMethod("Invoice","UpdateInventory","include/InventoryHandler.php","handleInventoryProductRel");//Adding EntityMethod for Updating Products data after creating Invoice
+
+$vtWorkFlow = new VTWorkflowManager($adb);
+$invWorkFlow = $vtWorkFlow->newWorkFlow("Invoice");
+$invWorkFlow->test = '[{"fieldname":"subject","operation":"does not contain","value":"`!`"}]';
+$invWorkFlow->description = "UpdateInventoryProducts On Every Save";
+$vtWorkFlow->save($invWorkFlow);
+
+$tm = new VTTaskManager($adb);
+$task = $tm->createTask('VTEntityMethodTask', $invWorkFlow->id);
+$task->active=true;
+$task->methodName = "UpdateInventory";
+$tm->saveTask($task);
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 

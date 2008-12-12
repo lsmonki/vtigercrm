@@ -41,6 +41,8 @@ class Invoice extends CRMEntity {
 				
 	var $column_fields = Array();
 
+	var $update_product_array = Array();	
+
 	var $sortby_fields = Array('subject','invoice_no','invoicestatus','smownerid','accountname','lastname');
 
 	// This is used to retrieve related vtiger_fields from form posts.

@@ -6334,6 +6334,10 @@
 		<field name="discount_amount" type="N" size="7.3" />
 		<field name="comment" type="C" size="250" />
 		<field name="description" type="X" />
+		<field name="incrementondel" type="I" size="11">
+			<notnull />
+			<default value="0" />
+		</field>
 
 		<index name="inventoryproductrel_id_idx">
 			<col>id</col>

@@ -46,6 +46,8 @@ class SalesOrder extends CRMEntity {
 
 	var $new_schema = true;
 	
+	var $update_product_array = Array();	
+
 	var $module_id = "salesorderid";
 
 	var $column_fields = Array();
