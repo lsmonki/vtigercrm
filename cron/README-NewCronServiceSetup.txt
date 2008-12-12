@@ -49,12 +49,12 @@ if($servicePIDFp) {
 2. Create <ServiceName>Cron.sh file which should have the following:
 
 #wget "http://localhost:APACHEPORT/vtigercron.php?service=<ServiceName>&app_key=YOUR_APP_KEY_HERE&<param>=<value>" -O /dev/null
-export VTIGERCRM_ROOTDIR=`pwd`/..
+export VTIGERCRM_ROOTDIR=`dirname "$0"`/..
 export USE_PHP=php
 
 cd $VTIGERCRM_ROOTDIR
 
-$USE_PHP -f vtigercron.sh service="MailScanner" app_key="YOUR_APP_KEY_HERE"
+$USE_PHP -f vtigercron.sh service="<ServiceName>" app_key="YOUR_APP_KEY_HERE" <param>="<value>"
 
 =====================================================================================================================================
 

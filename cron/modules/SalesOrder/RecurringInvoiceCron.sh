@@ -7,4 +7,11 @@
 # All Rights Reserved.
 #
 # ********************************************************************************
-wget "http://localhost:APACHEPORT/vtigercron.php?service=RecurringInvoice&app_key=YOUR_APP_KEY_HERE" -O /dev/null
+# wget "http://localhost:APACHEPORT/vtigercron.php?service=RecurringInvoice&app_key=YOUR_APP_KEY_HERE" -O /dev/null
+
+export VTIGERCRM_ROOTDIR=`dirname "$0"`/..
+export USE_PHP=php
+
+cd $VTIGERCRM_ROOTDIR
+
+$USE_PHP -f vtigercron.sh service="RecurringInvoice" app_key="YOUR_APP_KEY_HERE"
