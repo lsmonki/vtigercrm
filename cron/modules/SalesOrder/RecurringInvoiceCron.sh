@@ -14,4 +14,4 @@ export USE_PHP=php
 
 cd $VTIGERCRM_ROOTDIR
 
-$USE_PHP -f vtigercron.sh service="RecurringInvoice" app_key="YOUR_APP_KEY_HERE"
+$USE_PHP -f vtigercron.php service="RecurringInvoice" app_key="YOUR_APP_KEY_HERE"

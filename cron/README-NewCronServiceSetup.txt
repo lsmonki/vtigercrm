@@ -54,7 +54,7 @@ export USE_PHP=php
 
 cd $VTIGERCRM_ROOTDIR
 
-$USE_PHP -f vtigercron.sh service="<ServiceName>" app_key="YOUR_APP_KEY_HERE" <param>="<value>"
+$USE_PHP -f vtigercron.php service="<ServiceName>" app_key="YOUR_APP_KEY_HERE" <param>="<value>"
 
 =====================================================================================================================================
 
