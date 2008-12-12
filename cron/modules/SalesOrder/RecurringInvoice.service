@@ -132,6 +132,9 @@ function createInvoice($salesorder_id) {
 	$so_focus = new SalesOrder();
 	$so_focus->id = $salesorder_id;
 	$so_focus->retrieve_entity_info($salesorder_id,"SalesOrder");
+	foreach($so_focus->column_fields as $fieldname=>$value) {
+		$so_focus->column_fields[$fieldname] = decode_html($value);
+	}
 	
 	$focus = new Invoice();
 	// This will only fill in the basic columns from SO to Invoice and also Update the SO id in new Invoice
