@@ -7043,4 +7043,27 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+	<!-- Table added to store languages -->
+	<table name="vtiger_language">
+		<field name="id" type="I">
+			<key />
+			<autoincrement />
+			<notnull />
+		</field>
+		<field name="name" type="C" size="50">
+		</field>
+		<field name="prefix" type="C" size="10">
+		</field>
+		<field name="label" type="C" size="30">
+		</field>
+		<field name="lastupdated" type="C" size="30">
+		</field>
+		<field name="sequence" type="I">
+		</field>
+		<field name="isdefault" type="I" size="1">
+		</field>
+		<field name="active" type="I" size="1">
+		</field>
+	</table>
 </schema>
