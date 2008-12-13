@@ -1093,6 +1093,9 @@ $task->active=true;
 $task->methodName = "UpdateInventory";
 $tm->saveTask($task);
 
+/* Support to track if a module is of CrmEntity type or not */
+ExecuteQuery("ALTER TABLE vtiger_tab ADD COLUMN isentitytype INT NOT NULL DEFAULT 1");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

@@ -197,6 +197,10 @@
 		<field name="modifiedtime" type="I" size="19" />
 		<field name="customized" type="I" size="19" />
 		<field name="ownedby" type="I" size="19" />
+		<field name="isentitytype" type="I">
+			<notnull />
+			<default value="1" />
+		</field>
 
 		<index name="tab_name_idx">
 			<col>name</col>
