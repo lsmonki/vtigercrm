@@ -128,7 +128,7 @@ class Vtiger_PackageExport {
 			$zip->copyDirectoryFromDisk("Smarty/templates/modules/$module", "templates");
 		// Copy cron files of the module (if any)
 		if(is_dir("cron/modules/$module"))
-			$zip->copyDirectoryFromDisk("cron/modules/$moduel", "cron");
+			$zip->copyDirectoryFromDisk("cron/modules/$module", "cron");
 
 		$zip->save();
 
@@ -174,6 +174,10 @@ class Vtiger_PackageExport {
 		$this->outputNode($tablabel, 'label');
 		$this->outputNode($parent_name, 'parent');
 
+		if(!$moduleInstance->isentitytype) {
+			$this->outputNode('extension', 'type');
+		}
+
 		// Export dependency information
 		$this->export_Dependencies();
 
@@ -195,6 +199,9 @@ class Vtiger_PackageExport {
 		// Export Actions
 		$this->export_Actions($moduleInstance);
 
+		// Export Related Lists
+		$this->export_RelatedLists($moduleInstance);
+
 		$this->closeNode('module');
 	}
 
@@ -203,26 +210,53 @@ class Vtiger_PackageExport {
 	 * @access private
 	 */
 	function export_Tables($moduleInstance) {
+
+		$_exportedTables = Array();
+
 		$modulename = $moduleInstance->name;
-
-		require_once("modules/$modulename/$modulename.php");
-
-		$focus = new $modulename();
-
-		// Setup required module variables which is need for vtlib API's
-		vtlib_setup_modulevars($modulename, $focus);
-
-		$tables = Array ($focus->table_name);
-		if(!empty($focus->groupTable)) $tables[] = $focus->groupTable[0];
-		if(!empty($focus->customFieldTable)) $tables[] = $focus->customFieldTable[0];
 
 		$this->openNode('tables');
 
-		foreach($tables as $table) {
-			$this->openNode('table');
-			$this->outputNode($table, 'name');
-			$this->outputNode(Vtiger_Utils::CreateTableSql($table), 'sql');
-			$this->closeNode('table');
+		if($moduleInstance->isentitytype) {
+			require_once("modules/$modulename/$modulename.php");
+
+			$focus = new $modulename();
+
+			// Setup required module variables which is need for vtlib API's
+			vtlib_setup_modulevars($modulename, $focus);
+
+			$tables = Array ($focus->table_name);
+			if(!empty($focus->groupTable)) $tables[] = $focus->groupTable[0];
+			if(!empty($focus->customFieldTable)) $tables[] = $focus->customFieldTable[0];
+
+			foreach($tables as $table) {
+				$this->openNode('table');
+				$this->outputNode($table, 'name');
+				$this->outputNode('<![CDATA['.Vtiger_Utils::CreateTableSql($table).']]>', 'sql');
+				$this->closeNode('table');
+
+				$_exportedTables[] = $table;
+			}
+			
+		}
+		
+		// Now export table information recorded in schema file
+		if(file_exists("modules/$modulename/schema.xml")) {
+			$schema = simplexml_load_file("modules/$modulename/schema.xml");
+
+			if(!empty($schema->tables) && !empty($schema->tables->table)) {
+				foreach($schema->tables->table as $tablenode) {
+					$table = trim($tablenode->name);
+					if(!in_array($table,$_exportedTables)) {
+						$this->openNode('table');
+						$this->outputNode($table, 'name');
+						$this->outputNode('<![CDATA['.Vtiger_Utils::CreateTableSql($table).']]>', 'sql');
+						$this->closeNode('table');
+
+						$_exportedTables[] = $table;
+					}
+				}
+			}
 		}
 		$this->closeNode('tables');
 	}
@@ -235,6 +269,8 @@ class Vtiger_PackageExport {
 		global $adb;
 		$sqlresult = $adb->pquery("SELECT * FROM vtiger_blocks WHERE tabid = ?", Array($moduleInstance->id));
 		$resultrows= $adb->num_rows($sqlresult);
+
+		if(empty($resultrows)) return;
 
 		$this->openNode('blocks');
 		for($index = 0; $index < $resultrows; ++$index) {
@@ -259,6 +295,8 @@ class Vtiger_PackageExport {
 		
 		$fieldresult = $adb->pquery("SELECT * FROM vtiger_field WHERE tabid=? AND block=?", Array($moduleInstance->id, $blockid));
 		$fieldcount = $adb->num_rows($fieldresult);
+
+		if(empty($fieldcount)) return;
 
 		$entityresult = $adb->pquery("SELECT * FROM vtiger_entityname WHERE tabid=?", Array($moduleInstance->id));
 		$entity_fieldname = $adb->query_result($entityresult, 0, 'fieldname');
@@ -334,6 +372,8 @@ class Vtiger_PackageExport {
 		$customviewres = $adb->pquery("SELECT * FROM vtiger_customview WHERE entitytype = ?", Array($moduleInstance->name));
 		$customviewcount=$adb->num_rows($customviewres);
 
+		if(empty($customviewcount)) return;
+
 		$this->openNode('customviews');
 		for($cvindex = 0; $cvindex < $customviewcount; ++$cvindex) {
 
@@ -406,6 +446,8 @@ class Vtiger_PackageExport {
 		$deforgshare = $adb->pquery("SELECT * FROM vtiger_def_org_share WHERE tabid=?", Array($moduleInstance->id));
 		$deforgshareCount = $adb->num_rows($deforgshare);
 
+		if(empty($deforgshareCount)) return;
+
 		$this->openNode('sharingaccess');
 		if($deforgshareCount) {
 			for($index = 0; $index < $deforgshareCount; ++$index) {
@@ -447,6 +489,9 @@ class Vtiger_PackageExport {
 	 * @access private
 	 */
 	function export_Actions($moduleInstance) {
+
+		if(!$moduleInstance->isentitytype) return;
+
 		$this->openNode('actions');
 
 		$this->openNode('action');
@@ -460,6 +505,59 @@ class Vtiger_PackageExport {
 		$this->closeNode('action');
 
 		$this->closeNode('actions');
+	}
+
+	/**
+	 * Export related lists associated with module.
+	 * @access private
+	 */
+	function export_RelatedLists($moduleInstance) {
+
+		if(!$moduleInstance->isentitytype) return;
+
+		global $adb;
+		$result = $adb->pquery("SELECT * FROM vtiger_relatedlists WHERE tabid = ?", Array($moduleInstance->id));
+		if($adb->num_rows($result)) {
+			$this->openNode('relatedlists');
+
+			for($index = 0; $index < $adb->num_rows($result); ++$index) {
+				$row = $adb->fetch_array($result);
+				$this->openNode('relatedlist');
+
+				$this->outputNode($row['name'], 'name');
+				$this->outputNode($row['label'], 'label');
+				$this->outputNode($row['sequence'], 'sequence');
+				$this->outputNode($row['presence'], 'presence');
+
+				$action_text = $row['actions'];
+				if(!empty($action_text)) {
+					$this->openNode('actions');
+					$actions = explode(',', $action_text);
+					foreach($actions as $action) {
+						$this->outputNode($action, 'action');
+					}
+					$this->closeNode('actions');
+				}
+				
+				$relModuleInstance = Vtiger_Module::getInstance($row['related_tabid']);
+				$this->outputNode($relModuleInstance->name, 'relatedmodule');
+
+				$this->closeNode('relatedlist');
+			}
+
+			$this->closeNode('relatedlists');
+		}
+	}
+
+
+	/**
+	 * Helper function to log messages
+	 * @param String Message to log
+	 * @param Boolean true appends linebreak, false to avoid it
+	 * @access private
+	 */
+	static function log($message, $delim=true) {
+		Vtiger_Utils::Log($message, $delim);
 	}
 }
 ?>

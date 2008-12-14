@@ -1298,8 +1298,10 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 							$forfield = htmlspecialchars($_REQUEST['forfield'], ENT_QUOTES, $default_charset);
 							$list_result_count = $i-1;
 							$value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"search",$focus->popup_type);
-							$value = strip_tags($value); // Remove any previous html conversion
-							$value = "<a href='javascript:window.close();' onclick='return vtlib_setvalue_from_popup($entity_id, \"$value\", \"$forfield\")'>$value</a>";
+							if(isset($forfield) && $forfield != '' && $focus->popup_type != 'detailview') {
+								$value = strip_tags($value); // Remove any previous html conversion
+								$value = "<a href='javascript:window.close();' onclick='return vtlib_setvalue_from_popup($entity_id, \"$value\", \"$forfield\")'>$value</a>";
+							}
 						}
 						// END
 						else
@@ -2857,9 +2859,11 @@ function getListQuery($module,$where='')
 		$query = "select id,user_name,roleid,first_name,last_name,email1,phone_mobile,phone_work,is_admin,status from vtiger_users inner join vtiger_user2role on vtiger_user2role.userid=vtiger_users.id where deleted=0 ".$where ;
 			break;
 	default:
-		require_once "modules/$module/$module.php";	//without this line the new modulw() would not work
+		// vtlib customization: Include the module file
+		if(file_exists("modules/$module/$module.php")) include_once("modules/$module/$module.php");
 		$focus = new $module();	
 		$query = $focus->getListQuery($module);
+		// END
 	}
 
 	$log->debug("Exiting getListQuery method ...");
@@ -3390,7 +3394,14 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	/*    //commented due to usablity conflict -- Philip
 	$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'&allflag='.$navigation_array['allflag'].'" >'.$navigation_array['allflag'].'</a>&nbsp;';
 	 */
-		$url_string = '';
+	$url_string = '';
+
+	// vtlib Customization : For uitype 10 popup during paging
+	if($_REQUEST['form'] == 'vtlibPopupView') {
+		$url_string .= '&form=vtlibPopupView&forfield='.$_REQUEST['forfield'].'&srcmodule='.$_REQUEST['srcmodule'].'&forrecord='.$_REQUEST['forrecord'];
+	}
+	// END
+	
 	if($module == 'Calendar' && $action_val == 'index')
 	{
 		if($_REQUEST['view'] == ''){

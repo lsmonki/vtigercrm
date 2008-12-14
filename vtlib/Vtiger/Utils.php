@@ -146,7 +146,12 @@ class Vtiger_Utils {
 		global $adb;
 
 		$create_table = $adb->query("SHOW CREATE TABLE $tablename");
-		return $adb->query_result($create_table, 0, 1);
+		$sql = $adb->query_result($create_table, 0, 1);
+		$lastIndex = strripos($sql, ')');
+		if($lastIndex !== false) {
+			$sql = substr($sql, 0, $lastIndex+1);
+		}
+		return $sql;
 	}
 }
 ?>

@@ -69,6 +69,40 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 	}
 
 	/**
+	 * Set values for picklist field (non-role based)
+	 * @param Array List of values to add
+	 *
+	 * @internal Creates picklist base if it does not exists
+	 */
+	function setNonStandardPicklistValues($values) {
+		global $adb;
+
+		$picklist_table = 'vtiger_'.$this->name;
+		$picklist_idcol = $this->name.'id';
+
+		if(!Vtiger_Utils::CheckTable($picklist_table)) {
+			Vtiger_Utils::CreateTable(
+				$picklist_table,
+				"($picklist_idcol INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				$this->name VARCHAR(200) NOT NULL,
+				sortorderid INT(11),
+				presence INT (11) NOT NULL DEFAULT 1)");
+			self::log("Creating table $picklist_table ... DONE");
+		}
+
+		// Add value to picklist now
+		$sortid = 1;
+		foreach($values as $value) {
+			$presence = 1; // 0 - readonly, Refer function in include/ComboUtil.php
+			$new_id = $adb->getUniqueId($picklist_table);
+			$adb->pquery("INSERT INTO $picklist_table($picklist_idcol, $this->name, sortorderid, presence) VALUES(?,?,?,?)",
+				Array($new_id, $value, $sortid, $presence));
+			
+			$sortid = $sortid+1;
+		}
+	}
+
+	/**
 	 * Set relation between field and modules (UIType 10)
 	 * @param Array List of module names
 	 *

@@ -705,10 +705,9 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 	$updatequery .= " total=?";
 	array_push($updateparams, $total);
 
-	$id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid');
+	//$id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid');
 	//Added where condition to which entity we want to update these values
-	//$updatequery .= " where ".$focus->$module_id."=$focus->id";
-	$updatequery .= " where ".$id_array[$module]."=?";
+	$updatequery .= " where ".$focus->table_index."=?";
 	array_push($updateparams, $focus->id);
 
 	$adb->pquery($updatequery,$updateparams);

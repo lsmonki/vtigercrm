@@ -54,6 +54,16 @@ if($singlepane_view == 'true' && $action == 'CallRelatedList') {
 
 	$smarty->assign('NAME', $focus->column_fields[$focus->def_detailview_recname]);
 	$smarty->assign('UPDATEINFO',updateInfo($focus->id));
+	
+	// Module Sequence Numbering
+	$mod_seq_field = getModuleSequenceField($currentModule);
+	if ($mod_seq_field != null) {
+		$mod_seq_id = $focus->column_fields[$mod_seq_field['name']];
+	} else {
+		$mod_seq_id = $focus->id;
+	}
+	$smarty->assign('MOD_SEQ_ID', $mod_seq_id);
+	// END
 
 	$related_array = getRelatedLists($currentModule, $focus);
 

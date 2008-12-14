@@ -274,7 +274,11 @@ var gselected_fieldtype = '';
 
 				<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tbody><tr>
-					<td class="big" nowrap><strong><span id="module_info">{$MOD.LBL_CUSTOM_FILED_IN} "{$APP.$MODULE}" {$APP.LBL_MODULE}</span></strong> </td>
+					{assign var="MODULELBL" value=$MODULE}
+					{if $APP.$MODULE}
+						{assign var="MODULELBL" value=$APP.$MODULE}
+					{/if}
+					<td class="big" nowrap><strong><span id="module_info">{$MOD.LBL_CUSTOM_FILED_IN} "{$MODULELBL}" {$APP.LBL_MODULE}</span></strong> </td>
 					<td class="small" align="right">
 					{$MOD.LBL_SELECT_CF_TEXT}
 		                	<select name="pick_module" class="importBox" onChange="getCustomFieldList(this)" id='pick_module'>
@@ -283,8 +287,12 @@ var gselected_fieldtype = '';
                 	                       	{assign var = "selected_val" value="selected"}
 		                        {else}
                         	                {assign var = "selected_val" value=""}
-                                	{/if}
-	                                <option value="{$sel_value}" {$selected_val}>{$APP.$value}</option>
+                                	{/if}	                                
+									{assign var="modulelabel" value=$value}
+									{if $APP.$value}
+										{assign var="modulelabel" value=$APP.$value}
+									{/if}
+	                                <option value="{$sel_value}" {$selected_val}>{$modulelabel}</option>
         		                {/foreach}
 			                </select>
 					</td>

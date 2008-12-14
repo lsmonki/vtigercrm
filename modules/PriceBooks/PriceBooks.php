@@ -21,6 +21,7 @@ class PriceBooks extends CRMEntity {
 	var $log;
 	var $db;
 	var $table_name = "vtiger_pricebook";
+	var $table_index= 'pricebookid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_pricebook','vtiger_pricebookcf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_pricebook'=>'pricebookid','vtiger_pricebookcf'=>'pricebookid');
 	var $column_fields = Array();

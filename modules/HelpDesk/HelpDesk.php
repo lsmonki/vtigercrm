@@ -23,8 +23,8 @@ require_once('user_privileges/default_module_view.php');
 class HelpDesk extends CRMEntity {
 	var $log;
 	var $db;
-	var $module_id = "ticketid";
 	var $table_name = "vtiger_troubletickets";
+	var $table_index= 'ticketid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_troubletickets','vtiger_ticketcf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_troubletickets'=>'ticketid','vtiger_ticketcf'=>'ticketid','vtiger_ticketcomments'=>'ticketid');
 	var $column_fields = Array();

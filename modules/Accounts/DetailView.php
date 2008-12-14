@@ -62,8 +62,15 @@ if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
 $smarty->assign("BLOCKS", getBlocks("Accounts","detail_view",'',$focus->column_fields));
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
+
 // Module Sequence Numbering
-$smarty->assign("MOD_SEQ_ID", $focus->column_fields['account_no']);
+$mod_seq_field = getModuleSequenceField($currentModule);
+if ($mod_seq_field != null) {
+	$mod_seq_id = $focus->column_fields[$mod_seq_field['name']];
+} else {
+	$mod_seq_id = $focus->id;
+}
+$smarty->assign('MOD_SEQ_ID', $mod_seq_id);
 // END
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);

@@ -33,6 +33,7 @@ class Documents extends CRMEntity {
 	var $log;
 	var $db;
 	var $table_name = "vtiger_notes";
+	var $table_index= 'notesid';
 	var $default_note_name_dom = array('Meeting vtiger_notes', 'Reminder');
 
 	var $tab_name = Array('vtiger_crmentity','vtiger_notes');

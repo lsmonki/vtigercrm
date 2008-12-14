@@ -69,6 +69,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			Array($fieldname, $module_name));
 
 		$entityTypes = Array();
+		$parent_id = $value;
 		for($index = 0; $index < $adb->num_rows($fldmod_result); ++$index) {
 			$entityTypes[] = $adb->query_result($fldmod_result, $index, 'relmodule');
 		}
@@ -87,10 +88,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$value='';
 		}
 
-		$displayValue = $value;
-
 		$editview_label[] = Array('options'=>$entityTypes, 'selected'=>$valueType, 'displaylabel'=>getTranslatedString($fieldlabel));
-		$fieldvalue[] = Array('displayvalue'=>$displayValue,'entityid'=>$value);
+		$fieldvalue[] = Array('displayvalue'=>$displayValue,'entityid'=>$parent_id);
 
 	} // END
 	else if($uitype == 5 || $uitype == 6 || $uitype ==23)

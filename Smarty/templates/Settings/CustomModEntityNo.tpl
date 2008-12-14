@@ -117,7 +117,11 @@ function updateModEntityNoSetting(button, form) {
 		                {else}
                         	{assign var = "selected_val" value=""}
                         {/if}
-	                    <option value="{$sel_value}" {$selected_val}>{$APP.$value}</option>
+                        {assign var="MODULE_LABEL" value=$value}
+						{if $APP.$value neq ''}		
+							{assign var="MODULE_LABEL" value=$APP.$value}
+						{/if}
+	                    <option value="{$sel_value}" {$selected_val}>{$MODULE_LABEL}</option>
         		        {/foreach}
 			        </select>
 					</td>

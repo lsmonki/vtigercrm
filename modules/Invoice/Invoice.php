@@ -35,7 +35,7 @@ class Invoice extends CRMEntity {
 	var $db;
 
 	var $table_name = "vtiger_invoice";
-	var $module_id = "invoiceid";	
+	var $table_index= 'invoiceid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_invoice','vtiger_invoicebillads','vtiger_invoiceshipads','vtiger_invoicecf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_invoice'=>'invoiceid','vtiger_invoicebillads'=>'invoicebilladdressid','vtiger_invoiceshipads'=>'invoiceshipaddressid','vtiger_invoicecf'=>'invoiceid');
 				

@@ -8,6 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 include_once('vtlib/Vtiger/Utils.php');
+include_once('vtlib/Vtiger/Version.php');
 
 /**
  * Provides API to work with vtiger CRM Custom View (Filter)
@@ -19,6 +20,7 @@ class Vtiger_Filter {
 	var $name;
 	var $isdefault;
 
+	var $status    = false; // 5.1.0 onwards
 	var $inmetrics = false;
 	var $entitytype= false;
 
@@ -65,8 +67,21 @@ class Vtiger_Filter {
 
 		$adb->pquery("INSERT INTO vtiger_customview(cvid,viewname,setdefault,setmetrics,entitytype) VALUES(?,?,?,?,?)", 
 			Array($this->id, $this->name, $this->isdefault, $this->inmetrics, $this->module->name));
-		
+
 		self::log("Creating Filter $this->name ... DONE");
+
+		// Filters are role based from 5.1.0 onwards
+		if(Vtiger_Version::check('5.1.0', '>=')) {
+			if(!$this->status) {
+				if(strtoupper(trim($this->name)) == 'ALL') $this->status = '0'; // Default
+				else $this->status = '3'; // Public
+				$adb->pquery("UPDATE vtiger_customview SET status=? WHERE cvid=?", Array($this->status, $this->id));
+
+				self::log("Setting Filter $this->name to status [$this->status] ... DONE");
+			}
+		}
+		// END
+		
 	}
 
 	/**

@@ -1099,6 +1099,13 @@ ExecuteQuery("ALTER TABLE vtiger_tab ADD COLUMN isentitytype INT NOT NULL DEFAUL
 /* Support for different languages to be stored in database instead of config file - Vtlib */
 ExecuteQuery("create table vtiger_language(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50), " .
 		"prefix VARCHAR(10), label VARCHAR(30), lastupdated DATETIME, sequence INT, isdefault INT(1), active INT(1))");
+		
+//Add all the existing languages from $languages variable of config file to vtiger_language table.
+global $languages;
+foreach($languages as $langkey=>$langlabel) {
+	$adb->pquery('INSERT INTO vtiger_language(name,prefix,label,lastupdated,active) VALUES(?,?,?,?,?)',
+		Array($langlabel,$langkey,$langlabel,date('Y-m-d H:i:s',time()), 1));
+}
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 

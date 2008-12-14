@@ -39,9 +39,9 @@ class Potential extends CRMEntity {
 
 	var $module_name="Potentials";
 	var $table_name = "vtiger_potential";
+	var $table_index= 'potentialid';
 	var $rel_product_table = "vtiger_seproductsrel";
 	var $rel_opportunity_table = "vtiger_contpotentialrel";
-	var $module_id = "potentialid";
 	var $object_name = "potential";
 
 	var $tab_name = Array('vtiger_crmentity','vtiger_potential','vtiger_potentialscf');

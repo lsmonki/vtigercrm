@@ -1408,6 +1408,166 @@ $log->info("in getOldFileName  ".$notesid);
 		$adb->pquery("UPDATE vtiger_crmentity set viewedtime=? WHERE crmid=? AND smownerid=?",
 			Array( date('Y-m-d H:i:s', time()), $this->id, $userid));
 	}
+	
+	/**
+	 * Default (generic) function to handle the related list for the module.
+	 * NOTE: Vtiger_Module::setRelatedList sets reference to this function in vtiger_relatedlists table
+	 * if function name is not explicitly specified.
+	 */
+	function get_related_list($id, $cur_tab_id, $rel_tab_id, $actions=false) {
+
+		global $currentModule, $app_strings;
+		$this_module = $currentModule;
+
+		if(isset($_REQUEST)) $parenttab = $_REQUEST['parenttab'];
+
+		$related_module = vtlib_getModuleNameById($rel_tab_id);
+
+		require_once("modules/$related_module/$related_module.php");
+		$other = new $related_module();
+		
+		// Some standard module class doesn't have required variables
+		// that are used in the query, they are defined in this generic API
+		vtlib_setup_modulevars($related_module, $other);
+
+		$singular_modname = vtlib_toSingular($related_module);
+
+		$button = '';
+		if($actions) {
+			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
+			if(in_array('SELECT', $actions) && isPermitted($related_module,4, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_SELECT')." ". getTranslatedString($related_module). "' class='crmbutton small edit' " .
+						" type='button' onclick=\"return window.open('index.php?module=$related_module&return_module=$currentModule&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid=$id&parenttab=$parenttab','test','width=640,height=602,resizable=0,scrollbars=0');\"" .
+						" value='". getTranslatedString('LBL_SELECT'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
+			}
+			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_NEW'). " ". getTranslatedString($related_module) ."' class='crmbutton small create'" .
+					" onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\"' type='submit' name='button'" .
+					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
+			}
+		}
+		$button .= '</td>';
+
+		// To make the edit or del link actions to return back to same view.
+		if($singlepane_view == 'true') $returnset = "&return_module=$this_module&return_action=DetailView&return_id=$id";
+		else $returnset = "&return_module=$this_module&return_action=CallRelatedList&return_id=$id";
+
+		$query = "SELECT vtiger_crmentity.*, $other->table_name.*";
+
+		if(!empty($other->groupTable)) {
+			$query .= ", CASE WHEN (vtiger_users.user_name NOT LIKE '') THEN vtiger_users.user_name ELSE vtiger_groups.groupname END AS user_name";
+		} else {
+			$query .= ", vtiger_users.user_name AS user_name";
+		}
+
+		$more_relation = '';
+		if(!empty($other->related_tables)) {
+			foreach($other->related_tables as $tname=>$relmap) {
+				$query .= ", $tname.*";
+
+				// Setup the default JOIN conditions if not specified
+				if(empty($relmap[1])) $relmap[1] = $other->table_name;
+				if(empty($relmap[2])) $relmap[2] = $relmap[0];
+				$more_relation .= " LEFT JOIN $tname ON $tname.$relmap[0] = $relmap[1].$relmap[2]";
+			}
+		}
+
+		$query .= " FROM $other->table_name";
+		$query .= " INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = $other->table_name.$other->table_index";
+		$query .= " INNER JOIN vtiger_crmentityrel ON vtiger_crmentityrel.relcrmid = vtiger_crmentity.crmid";
+		$query .= " LEFT  JOIN $this->table_name   ON $this->table_name.$this->table_index = $other->table_name.$other->table_index";
+		$query .= $more_relation;
+		$query .= " LEFT  JOIN vtiger_users        ON vtiger_users.id = vtiger_crmentity.smownerid";
+
+		if(!empty($other->groupTable)) {
+			$query .= " LEFT  JOIN ".$other->groupTable[0].' ON '.$other->groupTable[0].'.'.$other->groupTable[1].
+				" = $other->table_name.$other->table_index ";
+			$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupname = " . $other->groupTable[0].'.groupname';
+		}
+		$query .= " WHERE vtiger_crmentity.deleted = 0 AND vtiger_crmentityrel.crmid = $id";
+
+		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);	
+
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+		
+		return $return_value;
+	}
+	
+	/**
+	 * Save the related module record information. Triggered from CRMEntity->saveentity method or updateRelations.php
+	 * @param String This module name
+	 * @param Integer This module record number
+	 * @param String Related module name
+	 * @param mixed Integer or Array of related module record number
+	 */
+	function save_related_module($module, $crmid, $with_module, $with_crmid) {
+		global $adb;
+		if(!is_array($with_crmid)) $with_crmid = Array($with_crmid);
+		foreach($with_crmid as $relcrmid) {
+			$checkpresence = $adb->pquery("SELECT crmid FROM vtiger_crmentityrel WHERE 
+				crmid = ? AND module = ? AND relcrmid = ? AND relmodule = ?", Array($crmid, $module, $relcrmid, $with_module));
+			// Relation already exists? No need to add again
+			if($checkpresence && $adb->num_rows($checkpresence)) continue;
+
+			$adb->pquery("INSERT INTO vtiger_crmentityrel(crmid, module, relcrmid, relmodule) VALUES(?,?,?,?)", 
+				Array($crmid, $module, $relcrmid, $with_module));
+		}
+	}
+
+	/**
+	 * Delete the related module record information. Triggered from updateRelations.php
+	 * @param String This module name
+	 * @param Integer This module record number
+	 * @param String Related module name
+	 * @param mixed Integer or Array of related module record number
+	 */
+	function delete_related_module($module, $crmid, $with_module, $with_crmid) {
+		global $adb;
+		if(!is_array($with_crmid)) $with_crmid = Array($with_crmid);
+		foreach($with_crmid as $relcrmid) {
+			$adb->pquery("DELETE FROM vtiger_crmentityrel WHERE crmid=? AND module=? AND relcrmid=? AND relmodule=?",
+				Array($crmid, $module, $relcrmid, $with_module));
+		}
+	}
+
+	/**
+	 * Move the related records of the specified list of id's to the given record.
+	 * @param String This module name
+	 * @param Array List of Entity Id's from which related records need to be transfered 
+	 * @param Integer Id of the the Record to which the related records are to be moved
+	 */
+	function transferRelatedRecords($module, $transferEntityIds, $entityId) {
+		global $adb,$log;
+		$log->debug("Entering function transferRelatedRecords ($module, $transferEntityIds, $entityId)");
+		foreach($transferEntityIds as $transferId){
+			
+			// Pick the records related to the entity to be transfered, but do not pick the once which are already related to the current entity.
+			$relatedRecords =  $adb->pquery("SELECT relcrmid, relmodule FROM vtiger_crmentityrel WHERE crmid=? AND module=?" .
+					" AND relcrmid NOT IN (SELECT relcrmid FROM vtiger_crmentityrel WHERE crmid=? AND module=?)",
+					 array($transferId, $module, $entityId, $module));
+			$numOfRecords = $adb->num_rows($relatedRecords);
+			for($i=0;$i<$numOfRecords;$i++) {
+				$relcrmid = $adb->query_result($relatedRecords,$i,'relcrmid');
+				$relmodule = $adb->query_result($relatedRecords,$i,'relmodule');
+				$adb->pquery("UPDATE vtiger_crmentityrel SET crmid=? WHERE relcrmid=? AND relmodule=? AND crmid=? AND module=?", 
+								array($entityId, $relcrmid, $relmodule, $transferId, $module));
+			}
+			
+			// Pick the records to which the entity to be transfered is related, but do not pick the once to which current entity is already related.
+			$parentRecords =  $adb->pquery("SELECT crmid, module FROM vtiger_crmentityrel WHERE relcrmid=? AND relmodule=?" .
+					" AND crmid NOT IN (SELECT crmid FROM vtiger_crmentityrel WHERE relcrmid=? AND relmodule=?)",
+					 array($transferId, $module, $entityId, $module));
+			$numOfRecords = $adb->num_rows($parentRecords);
+			for($i=0;$i<$numOfRecords;$i++) {
+				$parcrmid = $adb->query_result($parentRecords,$i,'crmid');
+				$parmodule = $adb->query_result($parentRecords,$i,'module');
+				$adb->pquery("UPDATE vtiger_crmentityrel SET relcrmid=? WHERE crmid=? AND module=? AND relcrmid=? AND relmodule=?", 
+								array($entityId, $parcrmid, $parmodule, $transferId, $module));
+			}
+		}
+		$log->debug("Exiting transferRelatedRecords...");
+	}
 	/** END **/
 }
 ?>

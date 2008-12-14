@@ -11,68 +11,44 @@
 
 require_once('include/database/PearDatabase.php');
 require_once('user_privileges/default_module_view.php');
-global $adb, $singlepane_view;
+
+global $adb, $singlepane_view, $currentModule;
 
 $idlist = $_REQUEST['idlist'];
+$dest_mod = $_REQUEST['destination_module'];
+$parenttab = $_REQUEST['parenttab'];
+
+$forCRMRecord = $_REQUEST['parentid'];
 
 if($singlepane_view == 'true')
 	$action = "DetailView";
 else
 	$action = "CallRelatedList";
 
-$dest_mod = $_REQUEST['destination_module'];
-
-//This will be true, when we select product from vendor related list
-if($_REQUEST['destination_module']=='Products')
+$storearray = array();
+if(!empty($_REQUEST['idlist'])) {
+	// Split the string of ids
+	$storearray = explode (";",trim($idlist,";"));
+} else if(!empty($_REQUEST['entityid'])){
+	$storearray = array($_REQUEST['entityid']);
+}
+foreach($storearray as $id)
 {
-	if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
+	if($id != '')
 	{
-		$record = $_REQUEST["parentid"];
-		$storearray = explode (";",trim($idlist,";"));
-		foreach($storearray as $id)
-		{
-			if($id != '')
-				$adb->pquery("update vtiger_products set vendor_id=? where productid=?", array($record ,$id));
+		if($dest_mod == 'Contacts')
+			$adb->pquery("insert into vtiger_vendorcontactrel values (?,?)", array($forCRMRecord, $id));
+		elseif($dest_mod == 'Products')
+			$adb->pquery("update vtiger_products set vendor_id=? where productid=?", array($forCRMRecord, $id));
+		else {				
+			checkFileAccess("modules/$currentModule/$currentModule.php");
+			require_once("modules/$currentModule/$currentModule.php");
+			$focus = new $currentModule();
+			$focus->save_related_module($currentModule, $forCRMRecord, $dest_mod, $id);
 		}
-	}
-	elseif($_REQUEST['parid'] != '' && $_REQUEST['entityid'] != '')
-	{
-		$sql = "update vtiger_products set vendor_id=? where productid=?";
-		$adb->pquery($sql, array($_REQUEST['parid'], $_REQUEST['entityid']));
-		$record = $_REQUEST['parid'];
 	}
 }
 
-//select contact from vendor relatedlist
-if($_REQUEST['destination_module']=='Contacts')
-{
-	if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
-	{
-		$record = $_REQUEST["parentid"];
-
-		//split the string and store in an array
-		$storearray = explode (";",$idlist);
-		foreach($storearray as $id)
-		{
-			if($id != '')
-			{
-				$sql = "insert into vtiger_vendorcontactrel values (?,?)";
-				$adb->pquery($sql, array($record, $id));
-			}
-		}
-	}
-	elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
-	{
-		$record = $_REQUEST["parid"];
-
-		$sql = "insert into vtiger_vendorcontactrel values (?,?)";
-		$adb->pquery($sql, array($record, $_REQUEST['entityid']));
-	}
-}
-
-
-header("Location:index.php?action=$action&module=Vendors&record=".$record);
-
-
+header("Location: index.php?action=$action&module=$currentModule&record=".$forCRMRecord."&parenttab=".$parenttab);
 
 ?>

@@ -14,6 +14,7 @@ include_once('vtlib/Vtiger/Filter.php');
 include_once('vtlib/Vtiger/Profile.php');
 include_once('vtlib/Vtiger/Menu.php');
 include_once('vtlib/Vtiger/Event.php');
+include_once('vtlib/Vtiger/Version.php');
 
 /**
  * Provide API to work with vtiger CRM Module
@@ -28,6 +29,8 @@ class Vtiger_ModuleBasic {
 	var $presence = 0;
 	var $ownedby = 0; // 0 - Sharing Access Enabled, 1 - Sharing Access Disabled
 	var $tabsequence = false;
+
+	var $isentitytype = true; // Real module or an extension?
 
 	var $entityidcolumn = false;
 	var $entityidfield = false;
@@ -55,9 +58,15 @@ class Vtiger_ModuleBasic {
 		$this->presence = $valuemap[presence];
 		$this->ownedby = $valuemap[ownedby];
 		$this->tabsequence = $valuemap[tabsequence];
+		
+		if(Vtiger_Version::check('5.1.0', '>=')) {
+			$this->isentitytype = $valuemap[isentitytype];
+		}
 
-		// Initialize other details too
-		$this->initialize2();
+		if($this->isentitytype) {
+			// Initialize other details too
+			$this->initialize2();
+		}
 	}
 
 	/**
@@ -115,11 +124,21 @@ class Vtiger_ModuleBasic {
 			modifiedtime,customized,ownedby) VALUES (?,?,?,?,?,?,?,?,?)", 
 			Array($this->id, $this->name, $this->presence, $this->tabsequence, $this->label, NULL, NULL, $customized, $this->ownedby));
 
-		Vtiger_Profile::initForModule($this);
-		
+		if(Vtiger_Version::check('5.1.0','>=')) {
+			$useisentitytype = $this->isentitytype? 1 : 0;
+			$adb->pquery('UPDATE vtiger_tab set isentitytype=? WHERE tabid=?',
+				Array($useisentitytype, $this->id));
+		}
+
+		if($this->isentitytype) {
+			Vtiger_Profile::initForModule($this);
+		}
+
 		self::syncfile();
 
-		Vtiger_Access::initSharing($this);
+		if($this->isentitytype) {
+			Vtiger_Access::initSharing($this);
+		}
 
 		self::log("Creating Module $this->name ... DONE");
 	}
@@ -138,7 +157,10 @@ class Vtiger_ModuleBasic {
 	 */
 	function __delete() {
 		global $adb;
-		$this->unsetEntityIdentifier();
+		if($this->isentitytype) {		
+			$this->unsetEntityIdentifier();
+			$this->deleteRelatedLists();
+		}
 
 		$adb->pquery("DELETE FROM vtiger_tab WHERE tabid=?", Array($this->id));
 		self::log("Deleting Module $this->name ... DONE");
@@ -157,12 +179,14 @@ class Vtiger_ModuleBasic {
 	 * Delete this instance
 	 */
 	function delete() {
-		Vtiger_Access::deleteSharing($this);
-		Vtiger_Access::deleteTools($this);
-		Vtiger_Profile::deleteForModule($this);
-		Vtiger_Filter::deleteForModule($this);
-		Vtiger_Block::deleteForModule($this);
-		$this->__delete();
+		if($this->isentitytype) {
+			Vtiger_Access::deleteSharing($this);
+			Vtiger_Access::deleteTools($this);
+			Vtiger_Profile::deleteForModule($this);
+			Vtiger_Filter::deleteForModule($this);
+			Vtiger_Block::deleteForModule($this);
+		}
+		$this->__delete();		
 		Vtiger_Menu::detachModule($this);
 		self::syncfile();
 	}
@@ -220,6 +244,15 @@ class Vtiger_ModuleBasic {
 		global $adb;
 		$adb->pquery("DELETE FROM vtiger_entityname WHERE tabid=?", Array($this->id));
 		self::log("Unsetting entity identifier ... DONE");
+	}
+
+	/**
+	 * Delete related lists information
+	 */
+	function deleteRelatedLists() {
+		global $adb;
+		$adb->pquery("DELETE FROM vtiger_relatedlists WHERE tabid=?", Array($this->id));
+		self::log("Deleting related lists ... DONE");
 	}
 
 	/**

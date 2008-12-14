@@ -2,7 +2,7 @@
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/scriptaculous.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/unittest.js"></script>
-<script language="javascript" type="text/javascript" src="include/tooltip/wz_tooltip.js"></script>;
+<script language="javascript" type="text/javascript" src="include/tooltip/wz_tooltip.js"></script>
 {*<!--Home Page Entries  -->*}
 	<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 	<tr>
@@ -131,7 +131,11 @@
 						<td width="300" class="dvtCellInfo" colspan="2">
 							<select name="selmodule" id="selmodule_id" onchange="setFilter(this)" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" style="width:60%">
 								{foreach item=arr from=$MODULE_NAME}
-									<option value="{$arr.1}">{$APP[$arr.1]}</option>
+									{assign var="MODULE_LABEL" value=$arr.1}
+									{if $APP[$arr.1] neq ''}		
+										{assign var="MODULE_LABEL" value=$APP[$arr.1]}
+									{/if}
+									<option value="{$arr.1}">{$MODULE_LABEL}</option>
 								{/foreach}
 							</select>
 							<input type="hidden" name="fldname">

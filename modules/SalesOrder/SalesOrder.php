@@ -35,6 +35,7 @@ class SalesOrder extends CRMEntity {
 	var $db;
 
 	var $table_name = "vtiger_salesorder";
+	var $table_index= 'salesorderid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_salesorder','vtiger_sobillads','vtiger_soshipads','vtiger_salesordercf','vtiger_invoice_recurring_info');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_salesorder'=>'salesorderid','vtiger_sobillads'=>'sobilladdressid','vtiger_soshipads'=>'soshipaddressid','vtiger_salesordercf'=>'salesorderid','vtiger_invoice_recurring_info'=>'salesorderid');
 	
@@ -46,9 +47,7 @@ class SalesOrder extends CRMEntity {
 
 	var $new_schema = true;
 	
-	var $update_product_array = Array();	
-
-	var $module_id = "salesorderid";
+	var $update_product_array = Array();
 
 	var $column_fields = Array();
 

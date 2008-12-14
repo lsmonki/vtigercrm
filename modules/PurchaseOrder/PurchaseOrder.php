@@ -35,14 +35,13 @@ class PurchaseOrder extends CRMEntity {
 	var $db;
 		
 	var $table_name = "vtiger_purchaseorder";
+	var $table_index= 'purchaseorderid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_purchaseorder','vtiger_pobillads','vtiger_poshipads','vtiger_purchaseordercf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_purchaseorder'=>'purchaseorderid','vtiger_pobillads'=>'pobilladdressid','vtiger_poshipads'=>'poshipaddressid','vtiger_purchaseordercf'=>'purchaseorderid');
 	
 	var $entity_table = "vtiger_crmentity";
 	
 	var $billadr_table = "vtiger_pobillads";
-
-	var $module_id = "purchaseorderid";
 
 	var $column_fields = Array();
 

@@ -42,15 +42,27 @@ $smarty->assign('THEME', $theme);
 $smarty->assign('ID', $focus->id);
 $smarty->assign('MODE', $focus->mode);
 
-$smarty->assign('NAME', $focus->column_fields[$focus->def_detailview_recname]);
+$recordName = array_values(getEntityName($currentModule, $focus->id));
+$recordName = $recordName[0];
+$smarty->assign('NAME', $recordName);
 $smarty->assign('UPDATEINFO',updateInfo($focus->id));
+
+// Module Sequence Numbering
+$mod_seq_field = getModuleSequenceField($currentModule);
+if ($mod_seq_field != null) {
+	$mod_seq_id = $focus->column_fields[$mod_seq_field['name']];
+} else {
+	$mod_seq_id = $focus->id;
+}
+$smarty->assign('MOD_SEQ_ID', $mod_seq_id);
+// END
 
 $smarty->assign('IS_REL_LIST',isPresentRelatedLists($currentModule));
 
 $validationArray = split_validationdataArray(getDBValidationData($focus->tab_name, $tabid));
-$smarty->assign('VALIDATION_DATA_FIELDNAME',$data['fieldname']);
-$smarty->assign('VALIDATION_DATA_FIELDDATATYPE',$data['datatype']);
-$smarty->assign('VALIDATION_DATA_FIELDLABEL',$data['fieldlabel']);
+$smarty->assign('VALIDATION_DATA_FIELDNAME',$validationArray['fieldname']);
+$smarty->assign('VALIDATION_DATA_FIELDDATATYPE',$validationArray['datatype']);
+$smarty->assign('VALIDATION_DATA_FIELDLABEL',$validationArray['fieldlabel']);
 
 $smarty->assign('EDIT_PERMISSION', isPermitted($currentModule, 'EditView', $record));
 $smarty->assign('CHECK', $tool_buttons);

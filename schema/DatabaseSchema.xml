@@ -7057,7 +7057,7 @@
 		</field>
 		<field name="label" type="C" size="30">
 		</field>
-		<field name="lastupdated" type="C" size="30">
+		<field name="lastupdated" type="T">
 		</field>
 		<field name="sequence" type="I">
 		</field>

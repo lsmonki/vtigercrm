@@ -68,7 +68,7 @@ function set_return_formname_specific(formname,product_id, product_name) {
 }
 function add_data_to_relatedlist(entity_id,recordid) {
 
-        opener.document.location.href="index.php?module={RETURN_MODULE}&action=updateRelations&smodule={SMODULE}&destination_module=Products&entityid="+entity_id+"&parid="+recordid;
+        opener.document.location.href="index.php?module={RETURN_MODULE}&action=updateRelations&smodule={SMODULE}&destination_module=Products&entityid="+entity_id+"&parentid="+recordid;
 }
 
 function set_return_inventory(product_id,product_name,unitprice,qtyinstock,taxstr,row_id,desc) {

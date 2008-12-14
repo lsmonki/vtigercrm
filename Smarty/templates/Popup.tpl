@@ -57,7 +57,7 @@ function redirectWhenNoRelatedRecordsFound()
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script type="text/javascript">
 function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
-        opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_module="+mod+"&entityid="+entity_id+"&parid="+recordid+"&return_module={$RETURN_MODULE}&return_action={$RETURN_ACTION}&parenttab={$CATEGORY}";
+        opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_module="+mod+"&entityid="+entity_id+"&parentid="+recordid+"&return_module={$RETURN_MODULE}&return_action={$RETURN_ACTION}&parenttab={$CATEGORY}";
 {rdelim}
 
 </script>

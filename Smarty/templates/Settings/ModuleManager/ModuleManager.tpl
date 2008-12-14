@@ -1,7 +1,9 @@
 {literal}
 <script type='text/javascript'>
-function vtlib_toggleModule(module, action) {
-	var data = "module=Settings&action=SettingsAjax&file=ModuleManager&module_name=" + encodeURIComponent(module) + "&" + action + "=true";
+function vtlib_toggleModule(module, action, type) {
+	if(typeof(type) == 'undefined') type = '';
+
+	var data = "module=Settings&action=SettingsAjax&file=ModuleManager&module_name=" + encodeURIComponent(module) + "&" + action + "=true" + "&module_type=" + type;
 	new Ajax.Request(
 		'index.php',
         {queue: {position: 'end', scope: 'command'},

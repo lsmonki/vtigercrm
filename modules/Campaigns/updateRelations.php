@@ -11,10 +11,18 @@
 
 require_once('include/database/PearDatabase.php');
 require_once('user_privileges/default_module_view.php');
-global $adb, $singlepane_view;
+global $adb, $singlepane_view, $currentModule;
 $idlist = $_REQUEST['idlist'];
 $update_mod = $_REQUEST['destination_module'];
 $parenttab = $_REQUEST['parenttab'];
+
+$forCRMRecord = $_REQUEST['parentid'];
+
+if($singlepane_view == 'true')
+	$action = "DetailView";
+else
+	$action = "CallRelatedList";
+	
 if($update_mod == 'Leads')
 {
 	$rel_table = 'vtiger_campaignleadrel';
@@ -23,32 +31,30 @@ elseif($update_mod == 'Contacts')
 {
 	$rel_table = 'vtiger_campaigncontrel';
 }
-if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
-{
-	//split the string and store in an array
+
+$storearray = array();
+if(!empty($_REQUEST['idlist'])) {
+	// Split the string of ids
 	$storearray = explode (";",trim($idlist,";"));
-	foreach($storearray as $id)
+} else if(!empty($_REQUEST['entityid'])){
+	$storearray = array($_REQUEST['entityid']);
+}
+foreach($storearray as $id)
+{
+	if($id != '')
 	{
-		if($id != '')
-		{
+		if ($update_mod == 'Leads' || $update_mod == 'Contacts') {
 			$sql = "insert into  $rel_table values(?,?)";
-	        $adb->pquery($sql, array($_REQUEST["parentid"], $id));
+	        $adb->pquery($sql, array($forCRMRecord, $id));
+		} else {				
+			checkFileAccess("modules/$currentModule/$currentModule.php");
+			require_once("modules/$currentModule/$currentModule.php");
+			$focus = new $currentModule();
+			$focus->save_related_module($currentModule, $forCRMRecord, $update_mod, $id);
 		}
 	}
-	if($singlepane_view == 'true')
-		header("Location: index.php?action=DetailView&module=Campaigns&record=".$_REQUEST["parentid"]."&parenttab=".$parenttab);
-	else
- 		header("Location: index.php?action=CallRelatedList&module=Campaigns&record=".$_REQUEST["parentid"]."&parenttab=".$parenttab);
 }
-elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
-{	
-		$sql = "insert into $rel_table values(?,?)";
-		$adb->pquery($sql, array($_REQUEST["parid"], $_REQUEST["entityid"]));
-		
-		if($singlepane_view == 'true')
-			header("Location: index.php?action=DetailView&module=Campaigns&record=".$_REQUEST["parid"]."&parenttab=".$parenttab);
-		else
- 			header("Location: index.php?action=CallRelatedList&module=Campaigns&record=".$_REQUEST["parid"]."&parenttab=".$parenttab);
-}
+
+header("Location: index.php?action=$action&module=$currentModule&record=".$forCRMRecord."&parenttab=".$parenttab);
 
 ?>

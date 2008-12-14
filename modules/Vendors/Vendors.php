@@ -21,8 +21,8 @@ require_once('user_privileges/default_module_view.php');
 class Vendors extends CRMEntity {
 	var $log;
 	var $db;
-	var $module_id = "vendorid";
 	var $table_name = "vtiger_vendor";
+	var $table_index= 'vendorid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_vendor','vtiger_vendorcf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_vendor'=>'vendorid','vtiger_vendorcf'=>'vendorid');
 	var $column_fields = Array();

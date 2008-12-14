@@ -10,49 +10,48 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('user_privileges/default_module_view.php');
-global $adb, $singlepane_view;
+global $adb, $singlepane_view, $currentModule;
 $idlist = $_REQUEST['idlist'];
 $dest_mod = $_REQUEST['destination_module'];
 $record = $_REQUEST['record'];
 $parenttab = $_REQUEST['parenttab'];
 
-if($singlepane_view == 'true') $action = "DetailView";
-else $action = "CallRelatedList";
+$forCRMRecord = $_REQUEST['parentid'];
 
-if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
-{
-	//split the string and store in an array
+if($singlepane_view == 'true')
+	$action = "DetailView";
+else
+	$action = "CallRelatedList";
+
+$storearray = array();
+if(!empty($_REQUEST['idlist'])) {
+	// Split the string of ids
 	$storearray = explode (";",trim($idlist,";"));
-	foreach($storearray as $id)
-	{
-		if($id != '')
-		{
-			if($dest_mod == 'Products')
-				$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($_REQUEST["parentid"], $id, 'Contacts'));	
-			elseif($dest_mod == 'Campaigns')
-				$adb->pquery("insert into vtiger_campaigncontrel values(?,?)", array($id, $_REQUEST["parentid"]));
-			elseif($dest_mod == 'Documents')
-				$adb->pquery("insert into vtiger_senotesrel values(?,?)", array($_REQUEST['parentid'],$id));
-		}
-	}
-	$record = $_REQUEST["parentid"];
-}
-elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
-{
-	if($dest_mod == 'Products')
-		$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($_REQUEST["parid"], $_REQUEST["entityid"], 'Contacts'));
-	elseif($dest_mod == 'Campaigns')
-		$adb->pquery("insert into vtiger_campaigncontrel values(?,?)", array($_REQUEST["entityid"], $_REQUEST["parid"]));
-	elseif($dest_mod == 'Documents')
-		$adb->pquery("insert into vtiger_senotesrel values(?,?)", array($_REQUEST["parid"], $_REQUEST["entityid"]));
-	$record = $_REQUEST["parid"];
-}
-elseif(isset($_REQUEST['pot_id']) && $_REQUEST['pot_id'] != '')
-{	
+} else if(!empty($_REQUEST['entityid'])){
+	$storearray = array($_REQUEST['entityid']);
+}elseif(!empty($_REQUEST['pot_id'])) {	
 	$sql = "insert into vtiger_contpotentialrel values(?,?)";
 	$adb->pquery($sql, array($record, $_REQUEST["pot_id"]));
 }
+foreach($storearray as $id)
+{
+	if($id != '')
+	{
+		if($dest_mod == 'Products')
+			$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($forCRMRecord, $id, 'Contacts'));	
+		elseif($dest_mod == 'Campaigns')
+			$adb->pquery("insert into vtiger_campaigncontrel values(?,?)", array($id, $forCRMRecord));
+		elseif($dest_mod == 'Documents')
+			$adb->pquery("insert into vtiger_senotesrel values(?,?)", array($forCRMRecord,$id));
+		else {				
+			checkFileAccess("modules/$currentModule/$currentModule.php");
+			require_once("modules/$currentModule/$currentModule.php");
+			$focus = new $currentModule();
+			$focus->save_related_module($currentModule, $forCRMRecord, $dest_mod, $id);
+		}
+	}
+}
 
-header("Location: index.php?action=$action&module=Contacts&record=$record&parenttab=$parenttab");
+header("Location: index.php?action=$action&module=$currentModule&record=".$forCRMRecord."&parenttab=".$parenttab);
 
 ?>

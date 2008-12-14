@@ -61,7 +61,13 @@ $smarty->assign("NAME", $focus->name);
 $smarty->assign("ID",$focus->id);
 
 // Module Sequence Numbering
-$smarty->assign("MOD_SEQ_ID", $focus->column_fields['vendor_no']);
+$mod_seq_field = getModuleSequenceField($currentModule);
+if ($mod_seq_field != null) {
+	$mod_seq_id = $focus->column_fields[$mod_seq_field['name']];
+} else {
+	$mod_seq_id = $focus->id;
+}
+$smarty->assign('MOD_SEQ_ID', $mod_seq_id);
 // END
 
 $smarty->assign("MODULE",$currentmodule);

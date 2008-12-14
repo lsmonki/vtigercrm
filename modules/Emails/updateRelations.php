@@ -10,45 +10,32 @@
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
-global $adb;
+global $adb, $currentModule;
 $idlist = $_REQUEST['idlist'];
+$record = $_REQUEST["parentid"];
 
-//echo '<pre>'; print_r($_REQUEST['entityid']); echo '</pre>';
-
-if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '')
+$storearray = array();
+if(!empty($_REQUEST['idlist'])) {
+	// Split the string of ids
+	$storearray = explode (";",trim($idlist,";"));
+} else if(!empty($_REQUEST['entityid'])){
+	$storearray = array($_REQUEST['entityid']);
+}
+foreach($storearray as $id)
 {
-	//split the strings & store in an array
-	$storearray = explode (";",trim($idlist,";")t);
-	foreach($storearray as $id)
-	{
-		if($id != '')
-		{
-			$record = $_REQUEST["parentid"];
-			$sql = "insert into vtiger_seactivityrel values (?,?)";
-			$adb->pquery($sql, array($id, $_REQUEST["parentid"]));
-		}
+	if($id != '')
+	{			
+		$sql = "insert into vtiger_seactivityrel values (?,?)";
+		$adb->pquery($sql, array($id, $record));
 	}
-	header("Location: index.php?action=CallRelatedList&module=Emails&record=".$record);
 }
-elseif (isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '')
-{
-	$record = $_REQUEST["parid"];
-	//$sql = "insert into vtiger_seactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
-	$sql = "insert into vtiger_seactivityrel values (?,?)";
-	$adb->pquery($sql, array($_REQUEST["entityid"], $_REQUEST["parid"]));
-	header("Location: index.php?action=CallRelatedList&module=Emails&record=".$record);
-}
-
-
-
 if(isset($_REQUEST['user_id']) && $_REQUEST['user_id'] != '')
 {
 	$record = $_REQUEST['record'];
-	//$sql = "insert into vtiger_salesmanactivityrel values (". $_REQUEST["user_id"] .",".$_REQUEST["record"] .")";
 	$sql = "insert into vtiger_salesmanactivityrel values (?,?)";
-	$adb->pquery($sql, array($_REQUEST["user_id"], $_REQUEST["record"]));
-	header("Location: index.php?action=CallRelatedList&module=Emails&record=".$record);
+	$adb->pquery($sql, array($_REQUEST["user_id"], $record));	
 }
 
+header("Location: index.php?action=CallRelatedList&module=Emails&record=".$record);
 
 ?>

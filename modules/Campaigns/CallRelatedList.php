@@ -104,7 +104,13 @@ $smarty->assign("LEADCVCOMBO",$lhtml);
 /* To get Leads CustomView -END */
 
 // Module Sequence Numbering
-$smarty->assign("MOD_SEQ_ID", $focus->column_fields['campaign_no']);
+$mod_seq_field = getModuleSequenceField($currentModule);
+if ($mod_seq_field != null) {
+	$mod_seq_id = $focus->column_fields[$mod_seq_field['name']];
+} else {
+	$mod_seq_id = $focus->id;
+}
+$smarty->assign('MOD_SEQ_ID', $mod_seq_id);
 // END
 
 $smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));

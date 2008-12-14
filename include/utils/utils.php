@@ -4550,6 +4550,7 @@ function lower_array(&$string){
 }
 
 /** Function to get recordids for subquery where condition */
+// TODO - Need to check if this method is used anywhere? 
 function get_subquery_recordids($sub_query)
 {
 	global $adb;
@@ -4989,4 +4990,27 @@ function addToCallHistory($userExtension, $callfrom, $callto, $status, $adb){
 	$adb->pquery($sql, $params);
 }
 //functions for asterisk integration end
+
+/* Function to get the name of the Field which is used for Module Specific Sequence Numbering, if any 
+ * @param module String - Module label
+ * return Array - Field name and label are returned */
+function getModuleSequenceField($module) {
+	global $adb, $log;
+	$log->debug("Entering function getModuleSequenceFieldName ($module)...");
+	$field = null;
+	
+	if (!empty($module)) {
+		//uitype 4 points to Module Numbering Field
+		$seqColRes = $adb->pquery("SELECT fieldname, fieldlabel FROM vtiger_field WHERE uitype=? AND tabid=?", array('4', getTabid($module)));
+		if($adb->num_rows($seqColRes) > 0) {
+			$fieldname = $adb->query_result($seqColRes,0,'fieldname');
+			$fieldlabel = $adb->query_result($seqColRes,0,'fieldlabel');
+			$field['name'] = $fieldname;
+			$field['label'] = $fieldlabel;
+		}
+	}
+	
+	$log->debug("Exiting getModuleSequenceFieldName...");
+	return $field;
+}
 ?>

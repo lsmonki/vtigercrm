@@ -36,6 +36,7 @@ class Quotes extends CRMEntity {
 	var $db;
 		
 	var $table_name = "vtiger_quotes";
+	var $table_index= 'quoteid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_quotes','vtiger_quotesbillads','vtiger_quotesshipads','vtiger_quotescf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_quotes'=>'quoteid','vtiger_quotesbillads'=>'quotebilladdressid','vtiger_quotesshipads'=>'quoteshipaddressid','vtiger_quotescf'=>'quoteid');
 	
@@ -46,8 +47,6 @@ class Quotes extends CRMEntity {
 	var $object_name = "Quote";
 
 	var $new_schema = true;
-
-	var $module_id = "quoteid";
 
 	var $column_fields = Array();
 

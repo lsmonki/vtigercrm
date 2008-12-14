@@ -28,6 +28,15 @@ class Vtiger_Unzip extends dUnzip2 {
 	}
 
 	/**
+	 * Check if the file path is directory
+	 * @param String Zip file path
+	 */
+	function isdir($filepath) {
+		if(substr($filepath, -1, 1) == "/") return true;
+		return false;
+	}
+
+	/**
 	 * Extended unzipAll function (look at base class)
 	 * Allows you to rename while unzipping and handle exclusions.
 	 * @access private

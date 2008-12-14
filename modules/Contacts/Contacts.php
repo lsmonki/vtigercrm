@@ -39,8 +39,8 @@ class Contacts extends CRMEntity {
 	var $log;
 	var $db;
 
-	var $module_id = "contactid";
 	var $table_name = "vtiger_contactdetails";
+	var $table_index= 'contactid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_contactdetails','vtiger_contactaddress','vtiger_contactsubdetails','vtiger_contactscf','vtiger_customerdetails');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_contactdetails'=>'contactid','vtiger_contactaddress'=>'contactaddressid','vtiger_contactsubdetails'=>'contactsubscriptionid','vtiger_contactscf'=>'contactid','vtiger_customerdetails'=>'customerid');
 

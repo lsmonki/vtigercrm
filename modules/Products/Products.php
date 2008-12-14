@@ -23,14 +23,14 @@ class Products extends CRMEntity {
 	var $db;
 
 	 // Josh added for importing and exporting -added in patch2
-        var $unit_price;
-		var $module_id = "productid";
-        var $table_name = "vtiger_products";
-        var $object_name = "Product";
-        var $entity_table = "vtiger_crmentity";
-        var $required_fields = Array(
-                'productname'=>1
-        );
+    var $unit_price;
+	var $table_name = "vtiger_products";
+	var $table_index= 'productid';
+    var $object_name = "Product";
+    var $entity_table = "vtiger_crmentity";
+    var $required_fields = Array(
+            'productname'=>1
+    );
 
 	var $tab_name = Array('vtiger_crmentity','vtiger_products','vtiger_productcf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_products'=>'productid','vtiger_productcf'=>'productid','vtiger_seproductsrel'=>'productid','vtiger_producttaxrel'=>'productid');

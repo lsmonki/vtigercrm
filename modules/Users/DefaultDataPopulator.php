@@ -2702,6 +2702,11 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	include('vtigerversion.php');
 	$this->db->query("insert into vtiger_version values('','".$vtiger_current_version."','".$vtiger_current_version."')");
 
+	//Register default language English
+	require_once('vtlib/Vtiger/Language.php');
+	$vtlanguage = new Vtiger_Language();
+	$vtlanguage->register('en_us','US English',1,1,'English');
+	
 	$this->insertUser2mergefields(0);
 	$this->insertUser2mergefields(1);
     $this->insertUser2mergefields(2);

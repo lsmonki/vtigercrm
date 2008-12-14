@@ -96,6 +96,7 @@ class Users {
 	'use_asterisk'=>'',
 );
 	var $table_name = "vtiger_users";
+	var $table_index= 'id';
 
 	// This is the list of fields that are in the lists.
 	var $list_link_field= 'last_name';

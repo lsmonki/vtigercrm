@@ -24,7 +24,7 @@ function set_return_specific(product_id, product_name) {
 }
 function add_data_to_relatedlist(entity_id,recordid) 
 {
-	opener.document.location.href="index.php?module=Emails&action=updateRelations&destination_module=Contacts&entityid="+entity_id+"&parid="+recordid;
+	opener.document.location.href="index.php?module=Emails&action=updateRelations&destination_module=Contacts&entityid="+entity_id+"&parentid="+recordid;
 }
 function set_return_address(potential_id, potential_name, account_id, account_name, bill_street, ship_street, bill_city, ship_city, bill_state, ship_state, bill_code, ship_code, bill_country, ship_country,bill_pobox,ship_pobox) {
 

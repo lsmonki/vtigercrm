@@ -29,7 +29,7 @@ function set_return_specific(product_id, product_name) {
 }
 function add_data_to_relatedlist(entity_id,recordid) {
 
-        opener.document.location.href="index.php?module=Emails&action=updateRelations&destination_module=Accounts&entityid="+entity_id+"&parid="+recordid;
+        opener.document.location.href="index.php?module=Emails&action=updateRelations&destination_module=Accounts&entityid="+entity_id+"&parentid="+recordid;
 }
 function set_return_formname_specific(formname,product_id, product_name) {
         window.opener.document.EditView1.quote_name.value = product_name;

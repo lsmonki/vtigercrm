@@ -93,6 +93,46 @@ function vtlib_getToggleModuleInfo() {
 }
 
 /**
+ * Get list of language and its current status.
+ */
+function vtlib_getToggleLanguageInfo() {
+	global $adb;
+
+	// The table might not exists!
+	$old_dieOnError = $adb->dieOnError;
+	$adb->dieOnError = false;
+
+	$langinfo = Array();
+	$sqlresult = $adb->query("SELECT * FROM vtiger_language");
+	if($sqlresult) {
+		for($idx = 0; $idx < $adb->num_rows($sqlresult); ++$idx) {
+			$row = $adb->fetch_array($sqlresult);
+			$langinfo[$row['prefix']] = Array( 'label'=>$row['label'], 'active'=>$row['active'] );
+		}
+	}
+	$adb->dieOnError = $old_dieOnError;
+	return $langinfo;
+}
+
+/**
+ * Toggle the language (enable/disable)
+ */
+function vtlib_toggleLanguageAccess($langprefix, $enable_disable) {
+	global $adb;
+
+	// The table might not exists!
+	$old_dieOnError = $adb->dieOnError;
+	$adb->dieOnError = false;
+
+	if($enable_disable === true) $enable_disable = 1;
+	else if($enable_disable === false) $enable_disable = 0;
+
+	$adb->pquery('UPDATE vtiger_language set active = ? WHERE prefix = ?', Array($enable_disable, $langprefix));
+
+	$adb->dieOnError = $old_dieOnError;
+}
+
+/**
  * Setup mandatory (requried) module variable values in the module class.
  */
 function vtlib_setup_modulevars($module, $focus) {

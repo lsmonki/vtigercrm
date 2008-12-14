@@ -488,11 +488,12 @@ function overwrite_duplicate_records($module,$focus)
 	global $adb;
 	global $dup_ow_count;
 	global $process_fields;
-	$module_id_array = Array("Leads"=>"leadid","Accounts"=>"accountid","Contacts"=>"contactid","Products"=>"productid","HelpDesk"=>"ticketid","Potentials"=>"potentialid","Vendors"=>"vendorid");
-	$where_clause = "";
+	//$module_id_array = Array("Leads"=>"leadid","Accounts"=>"accountid","Contacts"=>"contactid","Products"=>"productid","HelpDesk"=>"ticketid","Potentials"=>"potentialid","Vendors"=>"vendorid");
 	//$field_values_array=getFieldValues($module);
 	//$field_values=$field_values_array['fieldnames_list'];
 	//$tblname_field_arr = explode(",",$field_values);
+	
+	$where_clause = "";
 	$where = get_where_clause($module,$focus->column_fields);
 	$sec_parameter = getSecParameterforMerge($module);
 	if($module == "Leads")
@@ -595,7 +596,7 @@ function overwrite_duplicate_records($module,$focus)
 	{
 		for($i=0;$i<$no_rows;$i++)
 		{
-			$id_field = $module_id_array[$module];
+			$id_field = $moduleObj->table_index;
 			$id_value = $adb->query_result($result,$i,$id_field);
 			if($i == 0)
 			{

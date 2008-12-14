@@ -65,6 +65,22 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$validationArray['fieldlabel']);
 // In case you have a date field
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 
+// Module Sequence Numbering
+$mod_seq_field = getModuleSequenceField($currentModule);
+if($focus->mode != 'edit' && $mod_seq_field != null) {
+		$autostr = getTranslatedString('MSG_AUTO_GEN_ON_SAVE');
+		$mod_seq_string = $adb->pquery("SELECT prefix, cur_id from vtiger_modentity_num where semodule = ? and active=1",array($currentModule));
+        $mod_seq_prefix = $adb->query_result($mod_seq_string,0,'prefix');
+        $mod_seq_no = $adb->query_result($mod_seq_string,0,'cur_id');
+        if($focus->checkModuleSeqNumber($focus->table_name, $mod_seq_field['name'], $mod_seq_prefix.$mod_seq_no))
+                echo '<br><font color="#FF0000"><b>'. getTranslatedString('LBL_DUPLICATE'). ' '. getTranslatedString($mod_seq_field['label'])
+                	.' - '. getTranslatedString('LBL_CLICK') .' <a href="index.php?module=Settings&action=CustomModEntityNo&parenttab=Settings">'.getTranslatedString('LBL_HERE').'</a> '
+                	. getTranslatedString('LBL_TO_CONFIGURE'). ' '. getTranslatedString($mod_seq_field['label']) .'</b></font>';
+        else
+                $smarty->assign("MOD_SEQ_ID",$autostr);
+}
+// END
+
 if($focus->mode == 'edit') $smarty->display('salesEditView.tpl');
 else $smarty->display('CreateView.tpl');
 

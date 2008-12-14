@@ -18,41 +18,31 @@ $parenttab         = $_REQUEST['parenttab'];
 $forCRMRecord = $_REQUEST['parentid'];
 $mode = $_REQUEST['mode'];
 
-// Split the string of ids
+if($singlepane_view == 'true')
+	$action = "DetailView";
+else
+	$action = "CallRelatedList";
+
+checkFileAccess("modules/$currentModule/$currentModule.php");
+require_once("modules/$currentModule/$currentModule.php");
+$focus = new $currentModule();
+
 if($mode == 'delete') {
+	// Split the string of ids
 	$ids = explode (";",$idlist);
-	if(function_exists('checkFileAccess')) {
-		checkFileAccess("modules/$currentModule/$currentModule.php");
-	}
-	require_once("modules/$currentModule/$currentModule.php");
-	$focus = new $currentModule();
-	if(method_exists($focus, 'delete_related_module')) {
+	if(!empty($ids)) {
 		$focus->delete_related_module($currentModule, $forCRMRecord, $destinationModule, $ids);
 	}
-	if($singlepane_view == 'true') {
-		header("Location: index.php?module=$currentModule&record=$forCRMRecord&action=DetailView&parenttab=$parenttab");
-	} else {
-		header("Location: index.php?module=$currentModule&record=$forCRMRecord&action=CallRelatedList&parenttab=$parenttab");
+} else {
+	if(!empty($_REQUEST['idlist'])) {
+		// Split the string of ids
+		$ids = explode (";",trim($idlist,";"));
+	} else if(!empty($_REQUEST['entityid'])){
+		$ids = $_REQUEST['entityid'];
 	}
-	exit;
-}
-
-if(!empty($_REQUEST['idlist'])) {
-	$ids = explode (";",trim($idlist,";"));
-	if(function_exists('checkFileAccess')) {
-		checkFileAccess("modules/$currentModule/$currentModule.php");
-	}
-	require_once("modules/$currentModule/$currentModule.php");
-	$focus = new $currentModule();
-	if(method_exists($focus, 'save_related_module')) {
+	if(!empty($ids)) {
 		$focus->save_related_module($currentModule, $forCRMRecord, $destinationModule, $ids);
 	}
-	if($singlepane_view == 'true') {
-		header("Location: index.php?module=$currentModule&record=$forCRMRecord&action=DetailView&parenttab=$parenttab");
-	} else {
-		header("Location: index.php?module=$currentModule&record=$forCRMRecord&action=CallRelatedList&parenttab=$parenttab");
-	}
-} else if(!empty($_REQUEST['entityid'])){
-	// TODO: Handle this case
 }
+header("Location: index.php?module=$currentModule&record=$forCRMRecord&action=$action&parenttab=$parenttab");
 ?>

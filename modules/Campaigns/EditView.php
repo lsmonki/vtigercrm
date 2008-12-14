@@ -104,16 +104,20 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 $smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
+
 // Module Sequence Numbering
-if($focus->mode != 'edit') {
+$mod_seq_field = getModuleSequenceField($currentModule);
+if($focus->mode != 'edit' && $mod_seq_field != null) {
 		$autostr = getTranslatedString('MSG_AUTO_GEN_ON_SAVE');
-		$inv_no = $adb->pquery("SELECT prefix, cur_id from vtiger_modentity_num where semodule = ? and active=1",array($module));
-        $invstr = $adb->query_result($inv_no,0,'prefix');
-        $invno = $adb->query_result($inv_no,0,'cur_id');
-        if($focus->checkModuleSeqNumber('vtiger_campaign', 'campaign_no', $invstr.$invno))
-                echo '<br><font color="#FF0000"><b>Duplicate Campaign Number - Click <a href="index.php?module=Settings&action=CustomModEntityNo&parenttab=Settings">here</a> to Configure the Campaign Number</b></font>'.$num_rows;
+		$mod_seq_string = $adb->pquery("SELECT prefix, cur_id from vtiger_modentity_num where semodule = ? and active=1",array($currentModule));
+        $mod_seq_prefix = $adb->query_result($mod_seq_string,0,'prefix');
+        $mod_seq_no = $adb->query_result($mod_seq_string,0,'cur_id');
+        if($focus->checkModuleSeqNumber($focus->table_name, $mod_seq_field['name'], $mod_seq_prefix.$mod_seq_no))
+                echo '<br><font color="#FF0000"><b>'. getTranslatedString('LBL_DUPLICATE'). ' '. getTranslatedString($mod_seq_field['label'])
+                	.' - '. getTranslatedString('LBL_CLICK') .' <a href="index.php?module=Settings&action=CustomModEntityNo&parenttab=Settings">'.getTranslatedString('LBL_HERE').'</a> '
+                	. getTranslatedString('LBL_TO_CONFIGURE'). ' '. getTranslatedString($mod_seq_field['label']) .'</b></font>';
         else
-                $smarty->assign("inv_no",$autostr);
+                $smarty->assign("MOD_SEQ_ID",$autostr);
 }
 // END
 

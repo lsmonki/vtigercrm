@@ -42,8 +42,8 @@ class ImportMap extends SugarBean
 	var $is_published;
 
 	var $table_name = "vtiger_import_maps";
+	var $table_index= 'id';
 	var $object_name = "ImportMap";
-	var $module_id="id";
 	
 	var $tab_name_index = Array("import_maps"=>"id");
 	var $new_schema = true;

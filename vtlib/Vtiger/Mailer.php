@@ -131,7 +131,7 @@ class Vtiger_Mailer extends PHPMailer {
 					'(id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
 					fromname VARCHAR(100), fromemail VARCHAR(100),
 					mailer VARCHAR(10), content_type VARCHAR(15), subject VARCHAR(999), body TEXT, relcrmid INT, 
-					failed INT(1), failreason VARCHAR(255))');
+					failed INT(1) NOT NULL DEFAULT 0, failreason VARCHAR(255))');
 			}
 			if(!Vtiger_Utils::CheckTable('vtiger_mailer_queueinfo')) {
 				Vtiger_Utils::CreateTable('vtiger_mailer_queueinfo',

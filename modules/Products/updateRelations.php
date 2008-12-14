@@ -10,56 +10,44 @@
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
-global $adb;
-$dest_mod = $_REQUEST['destination_module'];
+require_once('user_privileges/default_module_view.php');
 
-//if select Lead, Account, Contact, Potential from Product RelatedList we have to insert in vtiger_seproductsrel
-if($dest_mod =='Leads' || $dest_mod =='Accounts' ||$dest_mod =='Contacts' ||$dest_mod =='Potentials' || $dest_mod == 'Documents')
-{
-	//For Bulk updates
-	if($_REQUEST['idlist'] != '')
-	{
-		$entityids = explode(';',trim($_REQUEST['idlist'],';'));
-		$productid = $_REQUEST['parentid'];
-	}
-	else
-	{
-		$entityids[] = $_REQUEST['entityid'];
-		$productid = $_REQUEST['parid'];
-	}
-	
-	foreach($entityids as $ind => $crmid)
-	{
-		if($crmid != '' && $productid != '')
-		{
-			if($dest_mod =='Documents')
-			{
-				$sql = "insert into vtiger_senotesrel values (?,?)";
-				$adb->pquery($sql, array($productid,$crmid));
-			}
-			else
-			{
-				$sql = "insert into vtiger_seproductsrel values (?,?,?)";
-				$adb->pquery($sql, array($crmid,$productid,$dest_mod));
-			}
-		}
-	}
-	
-	$return_module = 'Products';
-}
+global $adb, $singlepane_view, $currentModule;
+$idlist = $_REQUEST['idlist'];
+$dest_mod = $_REQUEST['destination_module'];
+$parenttab = $_REQUEST['parenttab'];
+
+$forCRMRecord = $_REQUEST['parentid'];
 
 if($singlepane_view == 'true')
-	$return_action = "DetailView";
+	$action = "DetailView";
 else
-	$return_action = "CallRelatedList";
-if($_REQUEST['parenttab'] != '') $parent_tab =$_REQUEST['parenttab'];
+	$action = "CallRelatedList";
 
-if($_REQUEST['return_module'] != '') $return_module = $_REQUEST['return_module'];
-header("Location:index.php?action=$return_action&module=$return_module&record=".$productid."&parenttab=".$parent_tab);
+$storearray = array();
+if(!empty($_REQUEST['idlist'])) {
+	// Split the string of ids
+	$storearray = explode (";",trim($idlist,";"));
+} else if(!empty($_REQUEST['entityid'])){
+	$storearray = array($_REQUEST['entityid']);
+}
+foreach($storearray as $id)
+{
+	if($id != '')
+	{
+		if($dest_mod == 'Documents')
+			$adb->pquery("insert into vtiger_senotesrel values (?,?)", array($forCRMRecord, $id));
+		elseif($dest_mod =='Leads' || $dest_mod =='Accounts' ||$dest_mod =='Contacts' ||$dest_mod =='Potentials')
+			$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($id, $forCRMRecord, $dest_mod));
+		else {						
+			checkFileAccess("modules/$currentModule/$currentModule.php");
+			require_once("modules/$currentModule/$currentModule.php");
+			$focus = new $currentModule();
+			$focus->save_related_module($currentModule, $forCRMRecord, $dest_mod, $id);
+		}
+	}
+}
 
-
-
-
-
+header("Location: index.php?action=$action&module=$currentModule&record=".$forCRMRecord."&parenttab=".$parenttab);
 
 ?>

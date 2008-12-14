@@ -35,13 +35,20 @@ $smarty->assign("IMAGE_PATH", "themes/$theme/images/");
 $module_disable = $_REQUEST['module_disable'];
 $module_name = $_REQUEST['module_name'];
 $module_enable = $_REQUEST['module_enable'];
+$module_type = $_REQUEST['module_type'];
 
 if($module_name != '') {
-	if($module_enable == 'true') vtlib_toggleModuleAccess($module_name, true);
-	if($module_disable== 'true') vtlib_toggleModuleAccess($module_name, false);
+	if($module_type == 'language') {
+		if($module_enable == 'true') vtlib_toggleLanguageAccess($module_name, true);
+		if($module_disable== 'true') vtlib_toggleLanguageAccess($module_name, false);
+	} else {
+		if($module_enable == 'true') vtlib_toggleModuleAccess($module_name, true);
+		if($module_disable== 'true') vtlib_toggleModuleAccess($module_name, false);
+	}
 }
 
 $smarty->assign("TOGGLE_MODINFO", vtlib_getToggleModuleInfo());
+$smarty->assign("TOGGLE_LANGINFO", vtlib_getToggleLanguageInfo());
 
 if($_REQUEST['mode'] !='') $mode = $_REQUEST['mode'];
 $smarty->assign("MODE", $mode);

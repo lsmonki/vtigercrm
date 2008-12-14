@@ -74,7 +74,7 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 		$adb->pquery("INSERT INTO vtiger_relatedlists(relation_id,tabid,related_tabid,name,sequence,label,presence,actions) VALUES(?,?,?,?,?,?,?,?)",
 			Array($relation_id,$this->id,$moduleInstance->id,$function_name,$sequence,$label,$presence,$useactions_text));
 
-		self::log("Setting relation with $moduleInstance->name ... DONE");
+		self::log("Setting relation with $moduleInstance->name [$useactions_text] ... DONE");
 	}
 
 	/**

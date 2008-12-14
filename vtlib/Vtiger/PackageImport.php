@@ -32,6 +32,12 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	var $_modulefields = Array();
 
 	/**
+	 * License of the package.
+	 * @access private
+	 */
+	var $_licensetext = false;
+
+	/**
 	 * Constructor
 	 */
 	function Vtiger_PackageImport() {
@@ -47,6 +53,37 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		$unzip->unzip('manifest.xml', $manifestfile);
 		$this->_modulexml = simplexml_load_file($manifestfile);
 		unlink($manifestfile);
+	}
+
+	/**
+	 * Get type of package (as specified in manifest)
+	 */
+	function type() {
+		if(!empty($this->_modulexml) && !empty($this->_modulexml->type)) {
+			return $this->_modulexml->type;
+		}
+		return false;
+	}
+
+	/**
+	 * Are we trying to import language package?
+	 */
+	function isLanguageType() {
+		$packagetype = $this->type();
+
+		if($packagetype) {
+			$lcasetype = strtolower($packagetype);
+			if($lcasetype == 'language') return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Get the license of this package
+	 * NOTE: checkzip should have been called earlier.
+	 */
+	function getLicense() {
+		return $this->_licensetext;
 	}
 
 	/**
@@ -72,6 +109,10 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 				$modulename = $this->_modulexml->name;
 				continue; 
 			}
+			if($this->isLanguageType()) {
+				$languagefile_found = true; // This check is not required.
+				break;
+			}
 			preg_match("/modules\/([^\/]+)\/language\/en_us.lang.php/", $filename, $matches);
 			if(count($matches) && strcmp($modulename, $matches[1]) === 0) { $languagefile_found = true; continue; }
 		}
@@ -85,6 +126,24 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		$validzip = false;
 		if($manifestxml_found && $languagefile_found && $vtigerversion_found) 
 			$validzip = true;
+
+		if($validzip) {
+			if(!empty($this->_modulexml->license)) {
+				if(!empty($this->_modulexml->license->inline)) {
+					$this->_licensetext = $this->_modulexml->license->inline;
+				} else if(!empty($this->_modulexml->license->file)) {
+					$licensefile = $this->_modulexml->license->file;
+					$licensefile = "$licensefile";
+					if(!empty($filelist[$licensefile])) {
+						$this->_licensetext = $unzip->unzip($licensefile);
+					} else {
+						$this->_licensetext = "Missing $licensefile!";
+					}
+				}
+			}
+		}
+
+		if($unzip) $unzip->close();
 
 		return $validzip;
 	}
@@ -109,7 +168,6 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 			$unzip = new Vtiger_Unzip($zipfile, $overwrite);
 
 			// Unzip selectively
-	
 			$unzip->unzipAllEx( ".",
 				Array(
 					'include' => Array('templates', "modules/$module"), // We don't need manifest.xml
@@ -126,6 +184,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 			if(empty($this->_modulexml)) {
 				$this->__parseManifestFile($unzip);
 			}
+
+			if($unzip) $unzip->close();
 		}
 		return $module;
 	}
@@ -159,13 +219,23 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		$tablabel= $this->_modulexml->label;
 		$parenttab=$this->_modulexml->parent;
 
+		$isextension= false;
+		if(!empty($this->_modulexml->type)) {
+			$type = strtolower($this->_modulexml->type);
+			if($type == 'extension' || $type == 'language')
+				$isextension = true;
+		}
+
 		$moduleInstance = new Vtiger_Module();
 		$moduleInstance->name = $tabname;
 		$moduleInstance->label= $tablabel;
+		$moduleInstance->isentitytype = ($isextension != true);
 		$moduleInstance->save();
 
-		$menuInstance = Vtiger_Menu::getInstance($parenttab);
-		$menuInstance->addModule($moduleInstance);
+		if(!empty($parenttab) && $parenttab != '') {
+			$menuInstance = Vtiger_Menu::getInstance($parenttab);
+			$menuInstance->addModule($moduleInstance);
+		}
 		
 		$this->import_Tables($this->_modulexml);
 		$this->import_Blocks($this->_modulexml, $moduleInstance);
@@ -173,6 +243,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		$this->import_SharingAccess($this->_modulexml, $moduleInstance);
 		$this->import_Events($this->_modulexml, $moduleInstance);
 		$this->import_Actions($this->_modulexml, $moduleInstance);
+		$this->import_RelatedLists($this->_modulexml, $moduleInstance);
 	}
 
 	/**
@@ -181,13 +252,36 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	 */
 	function import_Tables($modulenode) {
 		if(empty($modulenode->tables) || empty($modulenode->tables->table)) return;
+
+		/**
+		 * Record the changes in schema file
+		 */
+		$schemafile = fopen("modules/$modulenode->name/schema.xml", 'w');
+		if($schemafile) {
+			fwrite($schemafile, "<?xml version='1.0'?>\n");
+			fwrite($schemafile, "<schema>\n");
+			fwrite($schemafile, "\t<tables>\n");
+		}
+
+		// Import the table via queries
 		foreach($modulenode->tables->table as $tablenode) {
 			$tablename = $tablenode->name;
 			$tablesql  = $tablenode->sql;
 
+			// Save the information in the schema file.
+			fwrite($schemafile, "\t\t<table>\n");
+			fwrite($schemafile, "\t\t\t<name>$tablename</name>\n");
+			fwrite($schemafile, "\t\t\t<sql><![CDATA[$tablesql]]></sql>\n");
+			fwrite($schemafile, "\t\t</table>\n");
+
 			if(!Vtiger_Utils::checkTable($tablename)) {
-				Vtiger_Utils::ExecuteQuery($tablesql);
+				Vtiger_Utils::ExecuteQuery($tablesql);				
 			}
+		}
+		if($schemafile) {
+			fwrite($schemafile, "\t</tables>\n");
+			fwrite($schemafile, "</schema>\n");
+			fclose($schemafile);
 		}
 	}
 
@@ -340,6 +434,28 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 				$moduleInstance->enableTools($actionnode->name);
 			else
 				$moduleInstance->disableTools($actionnode->name);
+		}
+	}
+
+	/**
+	 * Import related lists of the module
+	 * @access private
+	 */
+	function import_RelatedLists($modulenode, $moduleInstance) {
+		if(empty($modulenode->relatedlists) || empty($modulenode->relatedlists->relatedlist)) return;
+		foreach($modulenode->relatedlists->relatedlist as $relatedlistnode) {
+			$relModuleInstance = Vtiger_Module::getInstance($relatedlistnode->relatedmodule);
+			$label = $relatedlistnode->label;
+			$actions = false; 
+			if(!empty($relatedlistnode->actions) && !empty($relatedlistnode->actions->action)) {
+				$actions = Array();
+				foreach($relatedlistnode->actions->action as $actionnode) {
+					$actions[] = "$actionnode";
+				}
+			}			
+			if($relModuleInstance) {
+				$moduleInstance->setRelatedList($relModuleInstance, "$label", $actions, "$relatedlistnode->function");
+			}
 		}
 	}
 }			

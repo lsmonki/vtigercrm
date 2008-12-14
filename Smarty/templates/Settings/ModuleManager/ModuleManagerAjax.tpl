@@ -12,11 +12,11 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 <table class="small" width="100%" cellpadding=2 cellspacing=0 border=0>
 	<tr>
 		<td class="dvtTabCache" style="width: 10px;" nowrap>&nbsp;</td>
-		<td class="dvtSelectedCell" style="width: 20px;" align="center" nowrap id="modmgr_custom_tab" 
+		<td class="dvtSelectedCell" style="width: 120px;" align="center" nowrap id="modmgr_custom_tab" 
 			onclick="vtlib_modulemanager_toggleTab('modmgr_custom','modmgr_standard','modmgr_custom_tab','modmgr_standard_tab');">
 		{$MOD.VTLIB_LBL_MODULE_MANAGER_CUSTOMMOD}</td>
 		<td class="dvtTabCache" style="width: 10px;" nowrap>&nbsp;</td>
-		<td class="dvtUnSelectedCell" style="width: 20px;" align="center" nowrap id="modmgr_standard_tab"
+		<td class="dvtUnSelectedCell" style="width: 120px;" align="center" nowrap id="modmgr_standard_tab"
 			onclick="vtlib_modulemanager_toggleTab('modmgr_standard','modmgr_custom','modmgr_standard_tab','modmgr_custom_tab');">
 		{$MOD.VTLIB_LBL_MODULE_MANAGER_STANDARDMOD}</td>
 		<td class="dvtTabCache" style="width: 10px;" nowrap>&nbsp;</td>
@@ -26,7 +26,7 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 <!-- Custom Modules -->
 <table border=0 cellspacing=0 cellpadding=3 width=100% class="listRow" id="modmgr_custom">
 <tr>
-	<td class="big tableHeading">&nbsp;</td>
+	<td class="big tableHeading" colspan=2>&nbsp;</td>
 	<td class="big tableHeading" colspan=3 width="10%" align="right">
 		<form style="display: inline;" action="index.php?module=Settings&action=ModuleManager&module_import=Step1&parenttab=Settings" method="POST">
 			<input type="submit" class="crmbutton small create" value='{$APP.LBL_IMPORT} {$APP.LBL_NEW}' title='{$APP.LBL_IMPORT}'>
@@ -45,6 +45,7 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 	{assign var="modulelabel" value=$modulename}
 	{if $APP.$modulename}{assign var="modulelabel" value=$APP.$modulename}{/if}
 	<tr>
+		<td class="cellText small" width="20px"><img src="{$IMAGE_PATH}uparrow.gif" border="0"></td>
 		<td class="cellLabel small">{$modulelabel}</td>
 		<td class="cellText small" width="15px" align=center>
 		{if $modinfo.presence eq 0}
@@ -67,6 +68,31 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 	</tr>
 {/if}
 {/foreach}
+{foreach key=langprefix item=langinfo from=$TOGGLE_LANGINFO}
+	{if $langprefix neq 'en_us'}
+
+	{assign var="totalCustomModules" value=$totalCustomModules+1}
+	<tr>
+		<td class="cellText small"><img src="{$IMAGE_PATH}text.gif" border=0"></td>
+		<td class="cellLabel small">{$langinfo.label}</td>
+		<td class="cellText small" width="15px" align=center>
+		{if $langinfo.active eq 1}
+			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$langprefix}', 'module_disable', 'language');"><img src="{$IMAGE_PATH}enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE} Language {$langinfo.label}" title="{$MOD.LBL_DISABLE} Language {$langinfo.label}"></a>
+		{else}
+			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$langprefix}', 'module_enable', 'language');"><img src="{$IMAGE_PATH}disabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE} Language {$langinfo.label}" title="{$MOD.LBL_ENABLE} Language {$langinfo.label}"></a>
+		{/if}
+		</td>
+		<td class="cellText small" width="15px" align=center colspan=2>&nbsp;</td>
+		<!--td class="cellText small" width="15px" align=center>
+			{if $modulename eq 'Calendar' || $modulename eq 'Home'}
+				<img src="{$IMAGE_PATH}menuDnArrow.gif" border="0" align="absmiddle">
+			{else}
+				<a href="index.php?modules=Settings&action=ModuleManagerExport&module_export={$modulename}"><img src="{$IMAGE_PATH}webmail_uparrow.gif" border="0" align="absmiddle" alt="{$APP.LBL_EXPORT} {$modulelabel}" title="{$APP.LBL_EXPORT} {$modulelabel}"></a>
+			{/if}
+		</td-->
+	</tr>
+	{/if}
+{/foreach}
 {if $totalCustomModules eq 0}
 	<tr>
 		<td class="cellLabel small" colspan=4><b>{$MOD.VTLIB_LBL_MODULE_MANAGER_NOMODULES}</b></td>
@@ -77,7 +103,7 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 <!-- Standard modules -->
 <table border=0 cellspacing=0 cellpadding=3 width=100% class="listRow" id="modmgr_standard" style="display: none;">
 <tr>
-	<td class="big tableHeading">&nbsp;</td>
+	<td class="big tableHeading" colspan=2>&nbsp;</td>
 	<td class="big tableHeading" colspan=3 width=10% align="center">&nbsp;</td>
 </tr>
 <tr>
@@ -88,7 +114,8 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 	{assign var="modulelabel" value=$modulename}
 	{if $APP.$modulename}{assign var="modulelabel" value=$APP.$modulename}{/if}
 	<tr>
-		<td class="cellLabel small">{$modulelabel}</td>
+		<!--td class="cellLabel small" width="20px">&nbsp;</td -->
+		<td class="cellLabel small" colspan=2>{$modulelabel}</td>
 		<td class="cellText small" width="15px" align=center>
 		{if $modinfo.presence eq 0}
 			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_disable');"><img src="{$IMAGE_PATH}enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE} {$modulelabel}" title="{$MOD.LBL_DISABLE} {$modulelabel}"></a>
@@ -111,5 +138,6 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 	</tr>
 {/if}
 {/foreach}
+
 </table>
 

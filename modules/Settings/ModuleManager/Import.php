@@ -4,6 +4,7 @@ $module_import_step = $_REQUEST['module_import'];
 
 require_once('Smarty_setup.php');
 require_once('vtlib/Vtiger/Package.php');
+require_once('vtlib/Vtiger/Language.php');
 
 global $mod_strings,$app_strings,$theme;
 $smarty = new vtigerCRM_Smarty;
@@ -28,19 +29,26 @@ if($module_import_step == 'Step2') {
 			$smarty->assign("MODULEIMPORT_FAILED", "true");
 			$smarty->assign("MODULEIMPORT_FILE_INVALID", "true");
 		} else {
-			$moduleInstance = Vtiger_Module::getInstance($moduleimport_name);
-			$moduleimport_exists=($moduleInstance)? "true" : "false";
-			$moduleimport_dir_name="modules/$moduleimport_name";
-			$moduleimport_dir_exists= (is_dir($moduleimport_dir_name)? "true" : "false");
+
+			if(!$package->isLanguageType()) {
+				$moduleInstance = Vtiger_Module::getInstance($moduleimport_name);
+				$moduleimport_exists=($moduleInstance)? "true" : "false";			
+				$moduleimport_dir_name="modules/$moduleimport_name";				
+				$moduleimport_dir_exists= (is_dir($moduleimport_dir_name)? "true" : "false");
+
+				$smarty->assign("MODULEIMPORT_EXISTS", $moduleimport_exists);
+				$smarty->assign("MODULEIMPORT_DIR", $moduleimport_dir_name);	
+				$smarty->assign("MODULEIMPORT_DIR_EXISTS", $moduleimport_dir_exists);
+			}
 
 			$moduleimport_dep_vtversion = $package->getDependentVtigerVersion();
+			$moduleimport_license = $package->getLicense();
 
 			$smarty->assign("MODULEIMPORT_FILE", $uploadfile);
-			$smarty->assign("MODULEIMPORT_NAME", $moduleimport_name);
-			$smarty->assign("MODULEIMPORT_EXISTS", $moduleimport_exists);
-			$smarty->assign("MODULEIMPORT_DIR", $moduleimport_dir_name);	
-			$smarty->assign("MODULEIMPORT_DIR_EXISTS", $moduleimport_dir_exists);
+			$smarty->assign("MODULEIMPORT_TYPE", $package->type());
+			$smarty->assign("MODULEIMPORT_NAME", $moduleimport_name);			
 			$smarty->assign("MODULEIMPORT_DEP_VTVERSION", $moduleimport_dep_vtversion);
+			$smarty->assign("MODULEIMPORT_LICENSE", $moduleimport_license);
 		}
 	}
 } else if($module_import_step == 'Step3') {
@@ -50,7 +58,12 @@ if($module_import_step == 'Step2') {
 	//$overwritedir = ($_REQUEST['module_dir_overwrite'] == 'true')? true : false;
 	$overwritedir = false; // Disallowing overwrites through Module Manager UI
 
-	$package = new Vtiger_Package();
+	$importtype = $_REQUEST['module_import_type'];
+	if(strtolower($importtype) == 'language') {
+		$package = new Vtiger_Language();
+	} else {
+		$package = new Vtiger_Package();
+	}
 	$Vtiger_Utils_Log = true;
 	// NOTE: Import function will be called from Smarty to capture the log cleanly.
 	//$package->import($uploadfilename, $overwritedir);

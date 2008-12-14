@@ -61,7 +61,7 @@
 							</table>
 							<table cellpadding=5 cellspacing=0 border=0 width=100%>
 							<tr valign=top>
-								<td class='cellLabel small' width=30%>
+								<td class='cellLabel small' width=20%>
 									<b>Module Name</b>
 								</td>
 								<td class='cellText small'>
@@ -69,8 +69,9 @@
 									{if $MODULEIMPORT_EXISTS eq 'true'} <font color=red><b>Exists</b></font> {/if}
 								</td>
 							</tr>
+							{if $MODULEIMPORT_DIR}
 							<tr valign=top>
-								<td class='cellLabel small' width=30%>
+								<td class='cellLabel small' width=20%>
 									<b>Module Directory</b>
 								</td>
 								<td class='cellText small'>
@@ -82,14 +83,32 @@
 									{/if}
 								</td>
 							</tr>
+							{/if}
 							<tr valign=top>
-								<td class='cellLabel small' width=30%>
+								<td class='cellLabel small' width=20%>
 									<b>Req. vtiger version</b>
 								</td>
 								<td class='cellText small'>
 									{$MODULEIMPORT_DEP_VTVERSION}
 								</td>
 							</tr>
+
+							{assign var="need_license_agreement" value="false"}
+
+							{if $MODULEIMPORT_LICENSE}
+							{assign var="need_license_agreement" value="true"}
+							<tr valign=top>
+								<td class='cellLabel small' width=20%>
+									<b>License</b>
+								</td>
+								<td class='cellText small'>
+									<textarea readonly class='small' style="background-color: #F5F5F5; border: 0; height: 150px; font: 10px 'Lucida Console', 'Courier New', Arial, sans-serif;">{$MODULEIMPORT_LICENSE}</textarea><br>
+									{literal}
+									<input type="checkbox" onclick="if(this.form.yesbutton){if(this.checked){this.form.yesbutton.disabled=false;}else{this.form.yesbutton.disabled=true;}}"> I accept the license agreement.
+									{/literal}
+								</td>
+							</tr>
+							{/if}
 							</table>
 							<table class='tableHeading' cellpadding=5 cellspacing=0 border=0 width=100%>
 							<tr valign=top>
@@ -98,6 +117,7 @@
 									<input type="hidden" name="action" value="ModuleManager">
 									<input type="hidden" name="parenttab" value="Settings">
 									<input type="hidden" name="module_import_file" value="{$MODULEIMPORT_FILE}">
+									<input type="hidden" name="module_import_type" value="{$MODULEIMPORT_TYPE}">
 									<input type="hidden" name="module_import" value="Step3">
 									<input type="hidden" name="module_import_cancel" value="false">
 
@@ -106,7 +126,8 @@
 												onclick="this.form.module_import.value=''; this.form.module_import_cancel.value='true';">
 									{else}
 										{literal}Do you want to proceed with the import?{/literal}
-										<input type="submit" class="crmbutton small edit" value="{$MOD.LBL_YES}">
+										<input type="submit" class="crmbutton small edit" value="{$MOD.LBL_YES}" 
+											{if $need_license_agreement eq 'true'} disabled=true {/if}	name="yesbutton">
 										<input type="submit" class="crmbutton small delete" value="{$MOD.LBL_NO}" 
 												onclick="this.form.module_import.value=''; this.form.module_import_cancel.value='true';">
 									{/if}

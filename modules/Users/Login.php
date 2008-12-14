@@ -29,6 +29,8 @@ $current_module_strings = return_module_language($current_language, 'Users');
 
  define("IN_LOGIN", true);
 
+include_once('vtlib/Vtiger/Language.php');
+
 // Retrieve username and password from the session if possible.
 if(isset($_SESSION["login_user_name"]))
 {
@@ -155,7 +157,9 @@ function set_focus() {
 							<tr bgcolor="#f5f5f5">
 								<td class="small" align="right" width="30%"><?php echo $current_module_strings['LBL_LANGUAGE'] ?></td>
 								<td class="small" align="left" width="70%"><select class="small" name='login_language' style="width:70%" tabindex="4">
-									<?php echo get_select_options_with_id(get_languages(), $display_language) ?>
+									<!-- vtlib Customization -->
+									<? /* php echo get_select_options_with_id(get_languages(), $display_language) */ ?>
+									<?php echo get_select_options_with_id(Vtiger_Language::getAll(), $display_language) ?>
 								</select></td>		
 							</tr>
 							<?php

@@ -31,9 +31,9 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '' && $_REQUEST['destina
 }
 elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '' && $_REQUEST['destination_module'] == 'Contacts')
 {
-	$record = $_REQUEST["parid"];
+	$record = $_REQUEST["parentid"];
 	$sql = "insert into vtiger_cntactivityrel values (?,?)";
-	$adb->pquery($sql, array($_REQUEST["entityid"], $_REQUEST["parid"]));
+	$adb->pquery($sql, array($_REQUEST["entityid"], $_REQUEST["parentid"]));
 	header("Location: index.php?action=DetailView&module=Calendar&activity_mode=Events&record=".$record);
 }
 
@@ -58,9 +58,9 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist'] != '' && $_REQUEST['destina
 }
 elseif(isset($_REQUEST['entityid']) && $_REQUEST['entityid'] != '' && $_REQUEST['destination_module'] == 'Users')
 {
-	$record = $_REQUEST['parid'];
+	$record = $_REQUEST['parentid'];
 	$sql = "insert into vtiger_salesmanactivityrel values (?,?)";
-	$adb->pquery($sql, array($_REQUEST["entityid"], $_REQUEST["parid"]));
+	$adb->pquery($sql, array($_REQUEST["entityid"], $_REQUEST["parentid"]));
 	header("Location: index.php?action=DetailView&module=Calendar&activity_mode=Events&record=".$record);
 	
 }
