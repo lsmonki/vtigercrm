@@ -177,7 +177,7 @@ class SugarBean
 			return null;
 		}
 // GS porting vtiger_crmentity
-$query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
+$query = "SELECT * FROM $this->table_name WHERE $this->table_index = '$id'";
 //		$query = "SELECT * FROM $this->table_name WHERE ID = '$id'";
 		$this->log->debug("Retrieve $this->object_name: ".$query);
 

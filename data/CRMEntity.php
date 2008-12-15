@@ -679,7 +679,7 @@ class CRMEntity
 					 
 					  //If the value in the request is Not Accessible for a picklist, the existing value will be replaced instead of Not Accessible value.
 					  $his_col = $history_field_array[$inventory_module];
-					  $his_sql="select $his_col from  $this->table_name where ".$this->module_id."=?";
+					  $his_sql="select $his_col from  $this->table_name where ".$this->table_index."=?";
 					 $his_res = $adb->pquery($his_sql,array($this->id));
 					  $status_value = $adb->query_result($his_res,0,$his_col);
 					 $stat_value = $status_value;
@@ -688,7 +688,7 @@ class CRMEntity
 				  {
 					  $stat_value  = $this->column_fields["$history_field_array[$inventory_module]"];
 				  }
-			  $oldvalue = getSingleFieldValue($this->table_name,$history_field_array[$inventory_module],$this->module_id,$this->id);
+			  $oldvalue = getSingleFieldValue($this->table_name,$history_field_array[$inventory_module],$this->table_index,$this->id);
 			  if($this->column_fields["$history_field_array[$inventory_module]"]!= '' &&  $oldvalue != $stat_value )
 			  {
 				  addInventoryHistory($inventory_module, $this->id,$relatedname,$total,$stat_value);
@@ -943,10 +943,10 @@ $log->info("in getOldFileName  ".$notesid);
 
 		if($this->db->getRowCount($result) > 0){
 		
-		//	$this->db->println("process_full mid=".$this->module_id." mname=".$this->module_name);
+		//	$this->db->println("process_full mid=".$this->table_index." mname=".$this->module_name);
 			// We have some data.
 			while ($row = $this->db->fetchByAssoc($result)) {				
-				$rowid=$row[$this->module_id];
+				$rowid=$row[$this->table_index];
 
 				if(isset($rowid))
 			       		$this->retrieve_entity_info($rowid,$this->module_name);
@@ -1421,13 +1421,16 @@ $log->info("in getOldFileName  ".$notesid);
 
 		if(isset($_REQUEST)) $parenttab = $_REQUEST['parenttab'];
 
+		$this_module_name = vtlib_getModuleNameById($cur_tab_id);
 		$related_module = vtlib_getModuleNameById($rel_tab_id);
 
+		checkFileAccess("modules/$related_module/$related_module.php");
 		require_once("modules/$related_module/$related_module.php");
 		$other = new $related_module();
 		
 		// Some standard module class doesn't have required variables
 		// that are used in the query, they are defined in this generic API
+		vtlib_setup_modulevars($this_module_name, $this_module);
 		vtlib_setup_modulevars($related_module, $other);
 
 		$singular_modname = vtlib_toSingular($related_module);
