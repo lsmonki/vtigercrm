@@ -1417,11 +1417,9 @@ $log->info("in getOldFileName  ".$notesid);
 	function get_related_list($id, $cur_tab_id, $rel_tab_id, $actions=false) {
 
 		global $currentModule, $app_strings;
-		$this_module = $currentModule;
 
 		if(isset($_REQUEST)) $parenttab = $_REQUEST['parenttab'];
 
-		$this_module_name = vtlib_getModuleNameById($cur_tab_id);
 		$related_module = vtlib_getModuleNameById($rel_tab_id);
 
 		checkFileAccess("modules/$related_module/$related_module.php");
@@ -1430,7 +1428,7 @@ $log->info("in getOldFileName  ".$notesid);
 		
 		// Some standard module class doesn't have required variables
 		// that are used in the query, they are defined in this generic API
-		vtlib_setup_modulevars($this_module_name, $this_module);
+		vtlib_setup_modulevars($currentModule, $this);
 		vtlib_setup_modulevars($related_module, $other);
 
 		$singular_modname = vtlib_toSingular($related_module);
@@ -1452,8 +1450,8 @@ $log->info("in getOldFileName  ".$notesid);
 		$button .= '</td>';
 
 		// To make the edit or del link actions to return back to same view.
-		if($singlepane_view == 'true') $returnset = "&return_module=$this_module&return_action=DetailView&return_id=$id";
-		else $returnset = "&return_module=$this_module&return_action=CallRelatedList&return_id=$id";
+		if($singlepane_view == 'true') $returnset = "&return_module=$currentModule&return_action=DetailView&return_id=$id";
+		else $returnset = "&return_module=$currentModule&return_action=CallRelatedList&return_id=$id";
 
 		$query = "SELECT vtiger_crmentity.*, $other->table_name.*";
 
@@ -1489,7 +1487,7 @@ $log->info("in getOldFileName  ".$notesid);
 		}
 		$query .= " WHERE vtiger_crmentity.deleted = 0 AND vtiger_crmentityrel.crmid = $id";
 
-		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);	
+		$return_value = GetRelatedList($currentModule, $related_module, $other, $query, $button, $returnset);	
 
 		if($return_value == null) $return_value = Array();
 		$return_value['CUSTOM_BUTTON'] = $button;
