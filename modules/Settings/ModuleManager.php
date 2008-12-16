@@ -47,6 +47,16 @@ if($module_name != '') {
 	}
 }
 
+// Check write permissions on the required directories
+$dir_notwritable = Array();
+if(!vtlib_isDirWriteable('test/vtlib')) $dir_notwritable[] = 'test/vtlib';
+if(!vtlib_isDirWriteable('cron/modules')) $dir_notwritable[] = 'cron/modules';
+if(!vtlib_isDirWriteable('modules')) $dir_notwritable[] = 'modules';
+if(!vtlib_isDirWriteable('Smarty/templates/modules')) $dir_notwritable[] = 'Smarty/templates/modules';
+
+$smarty->assign("DIR_NOTWRITABLE_LIST", $dir_notwritable);
+// END
+
 $smarty->assign("TOGGLE_MODINFO", vtlib_getToggleModuleInfo());
 $smarty->assign("TOGGLE_LANGINFO", vtlib_getToggleLanguageInfo());
 

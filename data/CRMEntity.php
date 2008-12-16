@@ -1410,6 +1410,43 @@ $log->info("in getOldFileName  ".$notesid);
 	}
 	
 	/**
+	 * Save the related module record information. Triggered from CRMEntity->saveentity method or updateRelations.php
+	 * @param String This module name
+	 * @param Integer This module record number
+	 * @param String Related module name
+	 * @param mixed Integer or Array of related module record number
+	 */
+	function save_related_module($module, $crmid, $with_module, $with_crmid) {
+		global $adb;
+		if(!is_array($with_crmid)) $with_crmid = Array($with_crmid);
+		foreach($with_crmid as $relcrmid) {
+			$checkpresence = $adb->pquery("SELECT crmid FROM vtiger_crmentityrel WHERE 
+				crmid = ? AND module = ? AND relcrmid = ? AND relmodule = ?", Array($crmid, $module, $relcrmid, $with_module));
+			// Relation already exists? No need to add again
+			if($checkpresence && $adb->num_rows($checkpresence)) continue;
+
+			$adb->pquery("INSERT INTO vtiger_crmentityrel(crmid, module, relcrmid, relmodule) VALUES(?,?,?,?)", 
+				Array($crmid, $module, $relcrmid, $with_module));
+		}
+	}
+
+	/**
+	 * Delete the related module record information. Triggered from updateRelations.php
+	 * @param String This module name
+	 * @param Integer This module record number
+	 * @param String Related module name
+	 * @param mixed Integer or Array of related module record number
+	 */
+	function delete_related_module($module, $crmid, $with_module, $with_crmid) {
+		global $adb;
+		if(!is_array($with_crmid)) $with_crmid = Array($with_crmid);
+		foreach($with_crmid as $relcrmid) {
+			$adb->pquery("DELETE FROM vtiger_crmentityrel WHERE crmid=? AND module=? AND relcrmid=? AND relmodule=?",
+				Array($crmid, $module, $relcrmid, $with_module));
+		}
+	}
+
+	/**
 	 * Default (generic) function to handle the related list for the module.
 	 * NOTE: Vtiger_Module::setRelatedList sets reference to this function in vtiger_relatedlists table
 	 * if function name is not explicitly specified.
@@ -1494,43 +1531,6 @@ $log->info("in getOldFileName  ".$notesid);
 		
 		return $return_value;
 	}
-	
-	/**
-	 * Save the related module record information. Triggered from CRMEntity->saveentity method or updateRelations.php
-	 * @param String This module name
-	 * @param Integer This module record number
-	 * @param String Related module name
-	 * @param mixed Integer or Array of related module record number
-	 */
-	function save_related_module($module, $crmid, $with_module, $with_crmid) {
-		global $adb;
-		if(!is_array($with_crmid)) $with_crmid = Array($with_crmid);
-		foreach($with_crmid as $relcrmid) {
-			$checkpresence = $adb->pquery("SELECT crmid FROM vtiger_crmentityrel WHERE 
-				crmid = ? AND module = ? AND relcrmid = ? AND relmodule = ?", Array($crmid, $module, $relcrmid, $with_module));
-			// Relation already exists? No need to add again
-			if($checkpresence && $adb->num_rows($checkpresence)) continue;
-
-			$adb->pquery("INSERT INTO vtiger_crmentityrel(crmid, module, relcrmid, relmodule) VALUES(?,?,?,?)", 
-				Array($crmid, $module, $relcrmid, $with_module));
-		}
-	}
-
-	/**
-	 * Delete the related module record information. Triggered from updateRelations.php
-	 * @param String This module name
-	 * @param Integer This module record number
-	 * @param String Related module name
-	 * @param mixed Integer or Array of related module record number
-	 */
-	function delete_related_module($module, $crmid, $with_module, $with_crmid) {
-		global $adb;
-		if(!is_array($with_crmid)) $with_crmid = Array($with_crmid);
-		foreach($with_crmid as $relcrmid) {
-			$adb->pquery("DELETE FROM vtiger_crmentityrel WHERE crmid=? AND module=? AND relcrmid=? AND relmodule=?",
-				Array($crmid, $module, $relcrmid, $with_module));
-		}
-	}
 
 	/**
 	 * Move the related records of the specified list of id's to the given record.
@@ -1569,6 +1569,7 @@ $log->info("in getOldFileName  ".$notesid);
 		}
 		$log->debug("Exiting transferRelatedRecords...");
 	}
+
 	/** END **/
 }
 ?>

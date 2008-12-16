@@ -22,7 +22,7 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 	 */
 	function __getPicklistUniqueId() {
 		global $adb;
-		return $adb->getUniqueId('vtiger_picklist');
+		return $adb->getUniqueID('vtiger_picklist');
 	}
 
 	/**
@@ -57,7 +57,7 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 		foreach($values as $value) {
 			$new_picklistvalueid = getUniquePicklistID();
 			$presence = 1; // 0 - readonly, Refer function in include/ComboUtil.php
-			$new_id = $adb->getUniqueId($picklist_table);
+			$new_id = $adb->getUniqueID($picklist_table);
 			$adb->pquery("INSERT INTO $picklist_table($picklist_idcol, $this->name, presence, picklist_valueid) VALUES(?,?,?,?)",
 				Array($new_id, $value, $presence, $new_picklistvalueid));
 			++$sortid;

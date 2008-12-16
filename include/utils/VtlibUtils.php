@@ -346,4 +346,26 @@ function vtlib_getModuleTemplate($module, $templateName) {
 	return ("modules/$module/$templateName");
 }
 
+/**
+ * Check if given directory is writeable.
+ * NOTE: The check is made by trying to create a random file in the directory.
+ */
+function vtlib_isDirWriteable($dirpath) {
+	if(is_dir($dirpath)) {
+		do {
+			$tmpfile = 'vtiger' . time() . '-' . rand(1,1000) . '.tmp';
+			// Continue the loop unless we find a name that does not exists already.
+			$usefilename = "$dirpath/$tmpfile";
+			if(!file_exists($usefilename)) break;
+		} while(true);
+		$fh = @fopen($usefilename,'a');
+		if($fh) {
+			fclose($fh);
+			unlink($usefilename);
+			return true;
+		}
+	}
+	return false;
+}
+
 ?>

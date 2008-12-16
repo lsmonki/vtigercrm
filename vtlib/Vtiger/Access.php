@@ -33,7 +33,7 @@ class Vtiger_Access {
 	 */
 	static function __getDefaultSharingAccessId() {
 		global $adb;
-		return $adb->getUniqueId('vtiger_def_org_share');
+		return $adb->getUniqueID('vtiger_def_org_share');
 	}
 
 	/**

@@ -38,7 +38,7 @@ class Vtiger_Filter {
 	 */
 	function __getUniqueId() {
 		global $adb;
-		return $adb->getUniqueId('vtiger_customview');
+		return $adb->getUniqueID('vtiger_customview');
 	}
 
 	/**

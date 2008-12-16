@@ -9,6 +9,17 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 {/literal}
 </script>
 
+{if $DIR_NOTWRITABLE_LIST && !empty($DIR_NOTWRITABLE_LIST)}
+<table class="small" width="100%" cellpadding=0 cellspacing=0 border=0>
+	<tr>
+		<td>
+			<div style='background-color: #FFFABF; padding: 2px; margin: 0 0 2px 0; border: 1px solid yellow'>
+			<b style='color: red'>Warning:</b> {$DIR_NOTWRITABLE_LIST|@implode:', '} <b>not writeable!</b>
+		</td>
+	</tr>
+</table>
+{/if}	
+
 <table class="small" width="100%" cellpadding=2 cellspacing=0 border=0>
 	<tr>
 		<td class="dvtTabCache" style="width: 10px;" nowrap>&nbsp;</td>

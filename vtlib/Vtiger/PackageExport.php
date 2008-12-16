@@ -524,7 +524,7 @@ class Vtiger_PackageExport {
 				$row = $adb->fetch_array($result);
 				$this->openNode('relatedlist');
 
-				$this->outputNode($row['name'], 'name');
+				$this->outputNode($row['name'], 'function');
 				$this->outputNode($row['label'], 'label');
 				$this->outputNode($row['sequence'], 'sequence');
 				$this->outputNode($row['presence'], 'presence');

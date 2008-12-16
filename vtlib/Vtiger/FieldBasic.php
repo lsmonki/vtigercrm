@@ -67,7 +67,7 @@ class Vtiger_FieldBasic {
 	 */
 	function __getUniqueId() {
 		global $adb;
-		return $adb->getUniqueId('vtiger_field');
+		return $adb->getUniqueID('vtiger_field');
 	}
 
 	/**
@@ -115,7 +115,11 @@ class Vtiger_FieldBasic {
 		$moduleInstance = $this->getModuleInstance();
 
 		$this->id = $this->__getUniqueId();
-		$this->sequence = $this->__getNextSequence();
+
+		if(!$this->sequence) {
+			$this->sequence = $this->__getNextSequence();
+		}
+
 		if($this->quickcreate) {
 			if(!$this->quicksequence) {
 				$this->quicksequence = $this->__getNextQuickCreateSequence();

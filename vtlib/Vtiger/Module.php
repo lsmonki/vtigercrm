@@ -21,7 +21,7 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 	 */
 	function __getRelatedListUniqueId() {
 		global $adb;
-		return $adb->getUniqueId('vtiger_relatedlists');
+		return $adb->getUniqueID('vtiger_relatedlists');
 	}
 
 	/**
