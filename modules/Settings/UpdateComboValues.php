@@ -86,40 +86,25 @@ $columnName = $tableName;
 
 		 if($picklistcount == 0)
 		 {	//Inserting a new pick list value to the corresponding picklist table
-		 $picklistvalue_id = getUniquePicklistID();
-		 $picklist_id = $adb->getUniqueID("vtiger_".$tableName);
-		 if($uitype == 111)
-		 {
+			 $picklistvalue_id = getUniquePicklistID();
+			 $picklist_id = $adb->getUniqueID("vtiger_".$tableName);
 			 $query = "insert into vtiger_".$tableName." values(?,?,?,?)";		
 			 $params = array($picklist_id, $pickArray[$i], 1, $picklistvalue_id);
-		 }
-		 else
-		 {
-			 $query = "insert into vtiger_".$tableName." values(?,?,?,?)";		
-			 $params = array($picklist_id, $pickArray[$i], 1, $picklistvalue_id);
-		 }
+	
+			 $adb->pquery($query, $params);
 
-		 $adb->pquery($query, $params);
-
-	 }
-	 $picklistcount =0;
-	 $sql = "select picklist_valueid from vtiger_$tableName where $tableName=?";
-	 $pick_valueid = $adb->query_result($adb->pquery($sql, array($pickArray[$i])),0,'picklist_valueid');
-	 if($uitype == 111 || $uiytpe==16)
-	 {
+	 	}
+	 	$picklistcount =0;
+		$sql = "select picklist_valueid from vtiger_$tableName where $tableName=?";
+		$pick_valueid = $adb->query_result($adb->pquery($sql, array($pickArray[$i])),0,'picklist_valueid');
+		
 		 //To get the max sortid for the non editable picklist and the inserting by increasing the sortid for editable values....
 		 $sql ="select max(sortid)+1 as sortid from vtiger_role2picklist left join vtiger_$tableName on vtiger_$tableName.picklist_valueid=vtiger_role2picklist.picklistvalueid where roleid=? and picklistid=?  and presence=0";
 		 $sortid = $adb->query_result($adb->pquery($sql, array($roleid, $picklistid)),0,'sortid');
 
 		 $sql = "insert into vtiger_role2picklist values(?,?,?,?)";
 		 $adb->pquery($sql, array($roleid, $pick_valueid, $picklistid, $sortid));
-	 }
-	 else
-	 {		
-		 $sql = "insert into vtiger_role2picklist values(?,?,?,?)";
-		 $adb->pquery($sql, array($roleid, $pick_valueid, $picklistid, $i));
-	 }	
- }
+ 	}
 } 
 
 header("Location:index.php?action=SettingsAjax&module=Settings&directmode=ajax&file=PickList&fld_module=".$fld_module."&roleid=".$roleid);

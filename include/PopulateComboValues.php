@@ -82,7 +82,7 @@ class PopulateComboValues
 				
 		global $app_list_strings,$adb;
 		global $combo_strings;
-		$comboRes = $adb->query("SELECT distinct fieldname FROM vtiger_field WHERE uitype IN ('15','111') OR fieldname = 'salutationtype'");
+		$comboRes = $adb->query("SELECT distinct fieldname FROM vtiger_field WHERE uitype IN ('15') OR fieldname = 'salutationtype'");
 		$noOfCombos = $adb->num_rows($comboRes);
 		for($i=0; $i<$noOfCombos; $i++)
 		{

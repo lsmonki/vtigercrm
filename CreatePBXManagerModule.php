@@ -13,6 +13,11 @@ $Vtiger_Utils_Log = true;
 include_once('vtlib/Vtiger/Menu.php');
 include_once('vtlib/Vtiger/Module.php');
 
+if(Vtiger_Module::getInstance('PBXManager')) {
+   echo "PBXManager Already Installed."; 
+   die;
+}
+
 // Create module instance and save it first
 $module = new Vtiger_Module();
 $module->name = 'PBXManager';

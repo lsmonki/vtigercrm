@@ -498,7 +498,7 @@ class CRMEntity
 				  }
 
 			  }
-			  elseif($uitype == 15 || $uitype == 16 || $uitype == 111)
+			  elseif($uitype == 15 || $uitype == 16)
 			  {
 
 				  if($this->column_fields[$fieldname] == $app_strings['LBL_NOT_ACCESSIBLE'])

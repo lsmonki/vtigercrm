@@ -107,7 +107,7 @@ foreach($act_data as $block=>$entry)
 		foreach($value as $label=>$field)
 		{
 			$fldlabel[$field['fldname']] = $label;
-			if($field['ui'] == 15 || $field['ui'] == 16 || $field['ui'] == 111)
+			if($field['ui'] == 15 || $field['ui'] == 16)
 			{
 				foreach($field['options'] as $index=>$arr_val)
 				{

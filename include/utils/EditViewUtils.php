@@ -196,7 +196,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		}
 		$fieldvalue [] = $options;
 	}
-	elseif($uitype == 15 || $uitype == 111) //uitype 111 added for non editable picklist - ahmed
+	elseif($uitype == 15)
 	{
 		$roleid=$current_user->roleid;
 		$subrole = getRoleSubordinates($roleid);

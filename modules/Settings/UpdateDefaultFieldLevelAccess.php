@@ -39,7 +39,7 @@ foreach($field_module as $fld_module=>$fld_name)
 		$fieldname = $adb->query_result($fieldListResult,$i,"fieldname");
 		$typeofdata = $adb->query_result($fieldListResult,$i,"typeofdata");
 		$fieldtype = explode("~",$typeofdata);
-		if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || $uitype == 20 || ($displaytype != 3 && $fieldname == "activitytype" && $uitype == 15)|| ($uitype == 111 && $fieldtype[1] == "M") || ($uitype == 117 && $fieldtype[1] == "M"))
+		if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || $uitype == 20 || ($displaytype != 3 && $fieldname == "activitytype" && $uitype == 15)|| ($uitype == 117 && $fieldtype[1] == "M"))
 		{
 			$visible_value = 0; 
 		}		

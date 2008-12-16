@@ -88,8 +88,7 @@
                 </div>
 				<div id="internal_mailer_{$keyfldname}" style="display: none;">{$keyfldid}####{$smarty.session.internal_mailer}</div>
                                                   </td>
-						<!-- uitype 111 added for noneditable existing picklist values - ahmed -->
-                                             {elseif $keyid eq '15' || $keyid eq '16' || $keyid eq '111'} <!--ComboBox-->
+						                     {elseif $keyid eq '15' || $keyid eq '16'} <!--ComboBox-->
 						{foreach item=arr from=$keyoptions}
 							{if $arr[0] eq $APP.LBL_NOT_ACCESSIBLE && $arr[2] eq 'selected'}
 								{assign var=keyval value=$APP.LBL_NOT_ACCESSIBLE}

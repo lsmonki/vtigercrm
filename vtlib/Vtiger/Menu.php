@@ -44,7 +44,7 @@ class Vtiger_Menu {
 	 */
 	function __getNextRelSequence() {
 		global $adb;
-		$result = $adb->pquery("SELECT MAX(sequence) AS max_seq FROM vtiger_parenttab WHERE parenttabid=?", 
+		$result = $adb->pquery("SELECT MAX(sequence) AS max_seq FROM vtiger_parenttabrel WHERE parenttabid=?", 
 			Array($this->id));
 		$maxseq = $adb->query_result($result, 0, 'max_seq');
 		return ++$maxseq;

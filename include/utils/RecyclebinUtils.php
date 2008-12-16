@@ -371,7 +371,7 @@ function getRbListViewEntries($list_result,$lv_array,$module)
 					$lv_val[$crmid][$lv_array[$k]['columnname']]= $group_info[0];
 				}
 			}
-			if($lv_array[$k]['ui_type'] == 111 && $lv_array[$k]['columnname'] == 'status' && $lv_val[$crmid][$lv_array[$k]['columnname']] == '')
+			if($lv_array[$k]['ui_type'] == 15 && $lv_array[$k]['columnname'] == 'status' && $lv_val[$crmid][$lv_array[$k]['columnname']] == '')
 			{
 
 				$lv_val[$crmid][$lv_array[$k]['columnname']]=$adb->query_result($list_result,$j,'eventstatus');

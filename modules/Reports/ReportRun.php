@@ -2673,7 +2673,7 @@ class ReportRun extends CRMEntity
 		if($this->secondarymodule != '')
 			array_push($id,  getTabid($this->secondarymodule));
 
-		$query = 'select fieldname,columnname,fieldid,fieldlabel,tabid,uitype from vtiger_field where tabid in('. generateQuestionMarks($id) .') and uitype in (15,111,33,55)'; //and columnname in (?)';
+		$query = 'select fieldname,columnname,fieldid,fieldlabel,tabid,uitype from vtiger_field where tabid in('. generateQuestionMarks($id) .') and uitype in (15,33,55)'; //and columnname in (?)';
 		$result = $adb->pquery($query, $id);//,$select_column));
 		$roleid=$current_user->roleid;
 		$subrole = getRoleSubordinates($roleid);
@@ -2710,7 +2710,7 @@ class ReportRun extends CRMEntity
 				$fieldvalues[] = $adb->query_result($mulselresult,$j,$fieldname);
 			}
 			$field_count = count($fieldvalues);
-			if( $uitype == 111 && $field_count > 0 && ($fieldname == 'taskstatus' || $fieldname == 'eventstatus'))
+			if( $uitype == 15 && $field_count > 0 && ($fieldname == 'taskstatus' || $fieldname == 'eventstatus'))
 			{
 				$temp_count =count($temp_status[$keyvalue]);
 				if($temp_count > 0)
@@ -2729,7 +2729,7 @@ class ReportRun extends CRMEntity
 				$fieldlists[1][$keyvalue] = $fieldvalues;
 			else if($uitype == 55 && $fieldname == 'salutationtype')
 				$fieldlists[$keyvalue] = $fieldvalues;
-	        else if($uitype == 15 || $uitype == 111)
+	        else if($uitype == 15)
 		        $fieldlists[$keyvalue] = $fieldvalues; 
 		}
 		return $fieldlists;

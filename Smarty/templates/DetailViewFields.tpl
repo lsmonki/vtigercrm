@@ -71,7 +71,7 @@
 				{/if}
 				</span>
 			</td>
-		{elseif $keyid eq '15' || $keyid eq '16' || $keyid eq '111'} <!--ComboBox-->
+		{elseif $keyid eq '15' || $keyid eq '16'} <!--ComboBox-->
 			<td width=25% class="dvtCellInfo" align="left">&nbsp;
 				{foreach item=arr from=$keyoptions}
 					{if $arr[0] eq $APP.LBL_NOT_ACCESSIBLE}

@@ -138,7 +138,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		}
 
 	}
-	else if(uitype == 15 || uitype == 16 || uitype == 111)
+	else if(uitype == 15 || uitype == 16)
 	{	
 		var txtBox= "txtbox_"+ fieldLabel;
 		var not_access =document.getElementById(txtBox);
@@ -406,7 +406,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 			getObj(dtlView).innerHTML = popObj.value;
 		}
 	}
-	else if(uitype == '111' || uitype == '15' || uitype == '16' )
+	else if(uitype == '15' || uitype == '16' )
         {
                         var notaccess =document.getElementById(txtBox);
                         tagValue = notaccess.options[notaccess.selectedIndex].text;

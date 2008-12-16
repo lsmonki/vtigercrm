@@ -426,7 +426,7 @@ function BasicSearch($module,$search_field,$search_string)
 					$where="$table_name.$column_name = '-1'";
 
 			}
-			elseif ($uitype == 111 || $uitype == 15 || $uitype == 16)
+			elseif ($uitype == 15 || $uitype == 16)
 			{
 				if(is_uitype($uitype, '_picklist_')) 
 				{ 
@@ -836,7 +836,7 @@ function getWhereCondition($currentModule)
 				else
 					$adv_string .= " ".getSearch_criteria($srch_cond,"-1",$tab_name.'.'.$column_name)." ".$matchtype;
 			}
-			elseif ($uitype == 111 || $uitype == 15 || $uitype == 16)
+			elseif ($uitype == 15 || $uitype == 16)
 			{
 				if(is_uitype($uitype, '_picklist_')) { 
 					// Get all the keys for the for the Picklist value

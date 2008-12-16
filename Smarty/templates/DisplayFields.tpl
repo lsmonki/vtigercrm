@@ -109,7 +109,7 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 			<td width=30% align=left class="dvtCellInfo">
 				<textarea value="{$fldvalue}" name="{$fldname}" tabindex="{$vt_tab}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" rows=2>{$fldvalue}</textarea>
 			</td>
-		{elseif $uitype eq 15 || $uitype eq 16 || $uitype eq 111} <!-- uitype 111 added for noneditable existing picklist values - ahmed -->
+		{elseif $uitype eq 15 || $uitype eq 16} <!-- uitype 111 added for noneditable existing picklist values - ahmed -->
 			<td width="20%" class="dvtCellLabel" align=right>
 				{if $uitype eq 16}
 					<font color="red">*</font>
