@@ -1174,7 +1174,11 @@ $app_strings = array (
 // Module Sequence Numbering
 'LBL_DUPLICATE' => 'Duplicate',
 'LBL_CLICK' => 'Click',
-'LBL_TO_CONFIGURE' => 'to Configure the', 
+'LBL_TO_CONFIGURE' => 'to Configure the',
+
+// For Privacy Policy
+'LNK_PRIVACY_POLICY'=>'Privacy Policy',
+ 
 );
 
 $app_list_strings = array (

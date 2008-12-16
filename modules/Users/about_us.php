@@ -200,6 +200,7 @@ global $mod_strings;
 							<td width="70%" align="left" class="small">
 							<span class="small" style="color:#999999;"><?php echo $mod_strings['LBL_VERSION'] ." ".$patch_string;?></span>&nbsp;|&nbsp;
 									<a href="javascript:;" onClick=" newpopup('http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt')"><?php echo $mod_strings['LBL_READ_LICENSE'];?></a>&nbsp;|&nbsp;
+									<a href="javascript:;" onClick=" newpopup('http://www.vtiger.com/products/crm/privacy_policy.html')"><?php echo $app_strings['LNK_PRIVACY_POLICY'];?></a>&nbsp;|&nbsp;
 									<a href="javascript:;" onClick=" newpopup('http://www.vtiger.com/index.php?option=com_content&task=view&id=26&Itemid=54')"><?php echo $mod_strings['LBL_CONTACT_US'];?></a>
 							</td>
 							<td align="right">

@@ -682,7 +682,7 @@ ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'end_p
 addFieldSecurity($salesorder_tabid,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'payment_duration','vtiger_invoice_recurring_info',1,'16','payment_duration','Payment Duration',1,0,0,100,5,$new_block_id,1,'I~O',1,null,'BAS')");
+ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'payment_duration','vtiger_invoice_recurring_info',1,'16','payment_duration','Payment Duration',1,0,0,100,5,$new_block_id,1,'V~O',1,null,'BAS')");
 addFieldSecurity($salesorder_tabid,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
