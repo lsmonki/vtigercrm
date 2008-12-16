@@ -550,7 +550,7 @@ class CRMEntity
 			  }
 			  elseif($uitype == 4 && ($insertion_mode != 'edit'|| ($insertion_mode == 'edit' && $module == 'Documents'))) {
 				// This check is added to avoid mod num generation multiple times for imported records
-			  	if(!isset($this->column_fields[$fieldname]) || $this->column_fields[$fieldname] == '' || $this->column_fields[$fieldname] == 'AUTO GEN ON SAVE')
+			  	if(!isset($this->column_fields[$fieldname]) || $this->column_fields[$fieldname] == '' || $this->column_fields[$fieldname] == getTranslatedString('MSG_AUTO_GEN_ON_SAVE'))
 					$this->column_fields[$fieldname] = $this->setModuleSeqNumber("increment",$module);
 				$fldvalue = $this->column_fields[$fieldname];
 			  }
