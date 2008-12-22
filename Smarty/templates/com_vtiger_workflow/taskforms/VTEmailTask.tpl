@@ -130,7 +130,7 @@ function VTEmailTask($){
 				$.each(fieldLabels, function(k, v){
 					select.append('<option class="task-fieldnames_option" value="'+k+'">'+v+'</option>');
 				});
-				$('.task-fieldnames_option').click(function(){
+				$('#task-fieldnames').change(function(){
 					var textarea = $('#save_content').get(0);
 					var value = '$'+$(this).attr('value');
 

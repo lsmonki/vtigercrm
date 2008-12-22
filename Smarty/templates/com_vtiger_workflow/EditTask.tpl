@@ -10,22 +10,29 @@
 {include file='SetMenu.tpl'}
 <div id="view">
 	{include file='com_vtiger_workflow/ModuleTitle.tpl'}
+	<table class="tableHeading" width="75%" border="0" cellspacing="0" cellpadding="5">
+		<tr>
+			<td class="big" nowrap="">
+				<strong>{$MOD.LBL_SUMMARY}</strong>
+			</td>
+		</tr>
+	</table>
 	<form name="new_task">
-		<table>
+		<table border="0" cellpadding="5" cellspacing="0" width="75%">
 			<tr>
-				<td>{$MOD.LBL_TASK_TITLE}</td>
-				<td><input type="text" name="summary" value="{$task->summary}" id="save_summary"></td>
+				<td class="dvtCellLabel" align=right width=25%>{$MOD.LBL_TASK_TITLE}</td>
+				<td class="dvtCellInfo" align="left" colspan="3"><input type="text" name="summary" value="{$task->summary}" id="save_summary"></td>
 			</tr>
 			<tr>
-				<td>{$MOD.LBL_PARENT_WORKFLOW}</td>
-				<td>
+				<td class="dvtCellLabel" align=right width=25%>{$MOD.LBL_PARENT_WORKFLOW}</td>
+				<td class="dvtCellInfo" align="left" colspan="3">
 					{$workflow->id} {$workflow->description}
 					<input type="hidden" name="workflow_id" value="{$workflow->id}" id="save_workflow_id">
 				</td>
 			</tr>
 			<tr>
-				<td>{$MOD.LBL_STATUS}</td>
-				<td>
+				<td class="dvtCellLabel" align=right width=25%>{$MOD.LBL_STATUS}</td>
+				<td class="dvtCellInfo" align="left" colspan="3">
 					<select name="active">
 						<option value="true">{$MOD.LBL_ACTIVE}</option>
 						<option value="false" {if not $task->active}selected{/if}>{$MOD.LBL_INACTIVE}</option>

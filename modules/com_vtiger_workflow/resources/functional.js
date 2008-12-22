@@ -147,7 +147,15 @@ function functional($){
 	    		args[args.length]=largs;
 	    		return fn.apply(this, args);
 	    	}
-	    }
+	    },
+	
+		htmlentities: function(s){
+			var out = "";
+			for(var i = 0; i<s.length;i++){
+				out+="&#"+s.charCodeAt(i)+";"
+			}
+			return out;
+		}
 	}
 }
 

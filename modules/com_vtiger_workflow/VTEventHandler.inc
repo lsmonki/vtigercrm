@@ -36,7 +36,15 @@
 						break;
 					}
 					case VTWorkflowManager::$ONCE:{
-						$doEvaluate = false;
+						$result = $adb->pquery("SELECT * FROM com_vtiger_workflow_activatedonce 
+							WHERE entity_id=? and workflow_id=?", array($entityData->getId(), $workflow->id));
+						if($adb->num_rows($result)===0){
+							$adb->pquery("INSERT INTO com_vtiger_workflow_activatedonce (entity_id, workflow_id)
+								VALUES (?,?)", array($entityData->getId(), $workflow->id));
+							$doEvaluate = true;
+						}else{
+							$doEvaluate = false;
+						}
 						break;
 					}
 					case VTWorkflowManager::$ON_EVERY_SAVE:{

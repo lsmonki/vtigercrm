@@ -74,7 +74,7 @@
 			$adb = $this->adb;
 			$val = $adb->query_result($this->result,$this->row,$column);
 			if(is_string($val)){
-				$val = html_entity_decode($val);
+				$val = html_entity_decode($val, ENT_QUOTES);
 			}
 			return $val;
 		}

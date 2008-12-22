@@ -8,6 +8,9 @@
 
 	
 	function vtDisplayTaskList($adb, $requestUrl, $current_language){
+		global $theme, $app_strings;
+		$image_path = "themes/$theme/images/";
+		
 		$module = new VTWorkflowApplication();
 		$smarty = new vtigerCRM_Smarty();
 		$tm = new VTTaskManager($adb);

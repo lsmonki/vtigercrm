@@ -859,7 +859,9 @@ $log->info("in getOldFileName  ".$notesid);
 		global $adb;
 		$em = new VTEventsManager($adb);
 		$entityData  = VTEntityData::fromCRMEntity($this);
+		$em->triggerEvent("vtiger.entity.beforesave.modifiable", $entityData);
 		$em->triggerEvent("vtiger.entity.beforesave", $entityData);
+		$em->triggerEvent("vtiger.entity.beforesave.final", $entityData);
 		//Event triggering code ends
 	
 		//GS Save entity being called with the modulename as parameter

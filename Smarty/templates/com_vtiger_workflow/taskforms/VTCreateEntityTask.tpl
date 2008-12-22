@@ -147,9 +147,9 @@
 						$.each(result, function(fieldName, expression){
 							editLink = format('<img border="0" title="Edit" alt="Edit" \
 													style="cursor: pointer;" id="expressionlist_editlink_%s" \
-													src="themes/softed/images/editfield.gif"/>', fieldName);
+													src="{$IMAGE_PATH}editfield.gif"/>', fieldName);
 							deleteLink = format('<img border="0" title="Delete" alt="Delete"\
-							 					src="themes/softed/images/delete.gif" \
+							 					src="{$IMAGE_PATH}delete.gif" \
 												style="cursor: pointer;" id="expressionlist_deletelink_%s"/>', fieldName);
 							row = format('<tr class="expressionlistrow" id="expressionlistrow_%s"> \
 										<td class="listTableRow small" valign="top" nowrap="">%s</td>\
@@ -203,7 +203,7 @@
 				</td>
 			<td width="40%" align="right">
 				<a href="javascript:void;" id="editpopup_close">
-					<img border="0" align="absmiddle" src="themes/softed/images/close.gif"/>
+					<img border="0" align="absmiddle" src="{$IMAGE_PATH}close.gif"/>
 				</a>
 			</td>
 		</tr>

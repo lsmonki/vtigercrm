@@ -2,16 +2,10 @@ jQuery.noConflict();
 function workflowlistscript($){
 	
 	function center(el){
-		el.css({position: 'fixed'});
-		var height = el.height();
-		var width = el.width();
-		el.css({
-			position: 'fixed',
-			top: '50%',
-			left: '50%',
-			'margin-left': (-width/2)+'px',
-			'margin-top': (-height/2)+'px'
-		});
+		el.css({position: 'absolute'});
+		el.width("400px");
+		el.height("110px");
+		positionDivToCenter(el.attr('id'));
 	}
 	
 	function NewWorkflowPopup(){

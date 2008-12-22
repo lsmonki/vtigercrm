@@ -22,6 +22,9 @@
 	}
 	
 	function vtDisplayWorkflowList($adb, $request, $requestUrl, $app_strings, $current_language){
+		global $theme;
+		$image_path = "themes/$theme/images/";
+		
 		$module = new VTWorkflowApplication("workflowlist");
 		$smarty = new vtigerCRM_Smarty();
 		$wfs = new VTWorkflowManager($adb);

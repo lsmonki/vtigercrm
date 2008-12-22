@@ -11,6 +11,9 @@ require_once("VTTaskManager.inc");
 require_once("VTWorkflowApplication.inc");
 
 	function vtWorkflowEdit($adb, $request, $requestUrl, $current_language, $app_strings){
+		global $theme;
+		$image_path = "themes/$theme/images/";
+		
 		$module = new VTWorkflowApplication("editworkflow");
 		$smarty = new vtigerCRM_Smarty();
 		$wfs = new VTWorkflowManager($adb);

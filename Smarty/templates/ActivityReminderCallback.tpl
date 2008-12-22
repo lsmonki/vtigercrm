@@ -15,7 +15,7 @@
 <table border='0' cellpadding='2' cellspacing='0'>
 	<tr>
 		<td align='left'><b>
-		<img align="top" src="themes/softed/images/{$activitytype}s.gif"/> {$activitytype} - {$cbstatus}</b> </td>
+		<img align="top" src="themes/{$theme}/images/{$activitytype}s.gif"/> {$activitytype} - {$cbstatus}</b> </td>
 		<td align='right'><b><font color={$cbcolor}>{$cbdate} {$cbtime}</font></b></td>
 		<td align='right'>
 			<a style='padding-left: 10px;' href="javascript:;" onclick="ActivityReminderCallbackReset(0, '{$popupid}');fninvsh('{$popupid}');"><img src='themes/{$theme}/images/close.gif' align='absmiddle' border='0'></a></td>

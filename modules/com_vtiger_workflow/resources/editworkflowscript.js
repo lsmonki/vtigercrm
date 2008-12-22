@@ -129,16 +129,10 @@ function editworkflowscript($, conditions){
 
 	
 	function center(el){
-		el.css({position: 'fixed'});
-		var height = el.height();
-		var width = el.width();
-		el.css({
-			position: 'fixed',
-			top: '50%',
-			left: '50%',
-			'margin-left': (-width/2)+'px',
-			'margin-top': (-height/2)+'px'
-		});
+		el.css({position: 'absolute'});
+		el.width("400px");
+		el.height("110px");
+		positionDivToCenter(el.attr('id'));
 	}
 	
 	
@@ -360,8 +354,8 @@ function editworkflowscript($, conditions){
 						removeCondition(condno);
 					});
 
-					fe.find("option").bind("click", function(){ 
-						var select = $(this).parent();
+					fe.bind("change", function(){ 
+						var select = $(this);
 						var condNo = select.attr("id").match(/save_condition_(\d+)_fieldname/)[1];
 						var fullFieldName = $(this).attr('value');
 						resetFields(getFieldType(fullFieldName), condNo);
@@ -380,7 +374,9 @@ function editworkflowscript($, conditions){
 						$(format("#save_condition_%s_fieldname", condno)).attr("value", fieldname);
 						resetFields(getFieldType(fieldname), condno);
 						$(format("#save_condition_%s_operation", condno)).attr("value", condition["operation"]);
-						$(format("#save_condition_%s_value", condno)).attr("value", condition["value"]);
+						$('#dump').html(condition["value"]);
+						var text = $('#dump').text();
+						$(format("#save_condition_%s_value", condno)).attr("value", text);
 						condno+=1;
 					});
 				}else{
@@ -395,7 +391,7 @@ function editworkflowscript($, conditions){
 					$("#save_conditions").children().each(function(i){
 						var fieldname = $(this).children(".fieldname").attr("value");
 						var operation = $(this).children(".operation").attr("value");
-						var value = $(this).children(".value").attr("value");
+						var value = fn.htmlentities($(this).children(".value").attr("value"));
 						condition = {fieldname:fieldname, operation:operation, value:value};
 						conditions[i]=condition;
 					});

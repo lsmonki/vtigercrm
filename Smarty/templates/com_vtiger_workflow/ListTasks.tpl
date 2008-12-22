@@ -20,7 +20,7 @@
 	
 	<table width="98%" cellspacing="0" cellpadding="0" border="0" align="center"><tbody>
 		<tr>
-			<td valign="top"><img src="themes/softed/images/showPanelTopLeft.gif"/></td>
+			<td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"/></td>
 			<td width="100%" valign="top" style="padding: 10px;" class="showPanelBg">
 	
 	

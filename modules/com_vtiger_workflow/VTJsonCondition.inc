@@ -60,7 +60,7 @@
 		function checkCondition($data, $cond){
 			$condition = $cond['operation'];
 			$fieldValue=$data[$cond['fieldname']];
-			$value = $cond['value'];
+			$value = html_entity_decode($cond['value']);
 			switch($condition){
 				case "equal to":
 					return $fieldValue == $value;

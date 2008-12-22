@@ -9,7 +9,7 @@
 	fn.addStylesheet('modules/{$module->name}/resources/style.css');
 	var moduleName = '{$workflow->moduleName}';
 {if $workflow->test}
-	var conditions = {$workflow->test};
+	var conditions = JSON.parse('{$workflow->test}');
 {else}
 	var conditions = null;
 {/if}
@@ -24,7 +24,7 @@
 				</td>
 			<td width="40%" align="right">
 				<a href="javascript:void;" id="new_task_popup_close">
-					<img border="0" align="absmiddle" src="themes/softed/images/close.gif"/>
+					<img border="0" align="absmiddle" src="{$IMAGE_PATH}close.gif"/>
 				</a>
 			</td>
 		</tr>
@@ -58,26 +58,40 @@
 {include file='SetMenu.tpl'}
 <div id="view">
 	{include file='com_vtiger_workflow/ModuleTitle.tpl'}
-	
+	<br>
 	<form name="new_workflow" action="index.php">
-		<table>
+		<table class="tableHeading" width="75%" border="0" cellspacing="0" cellpadding="5">
 			<tr>
-				<td>{$MOD.LBL_SUMMARY}</td>
-				<td colspan="3"><input type="text" name="description" id="save_description" value="{$workflow->description}"></td>
-			</tr>
-			<tr>
-				<td>{$APP.LBL_MODULE}</td>
-				<td>{$workflow->moduleName}</td>
+				<td class="big" nowrap="">
+					<strong>{$MOD.LBL_SUMMARY}</strong>
+				</td>
 			</tr>
 		</table>
-		<h4>{$MOD.LBL_WHEN_TO_RUN_WORKFLOW}</h4>
+		<table border="0" cellpadding="5" cellspacing="0" width="75%">
+			<tr>
+				<td class="dvtCellLabel" align=right width=25%>{$MOD.LBL_SUMMARY}</td>
+				<td class="dvtCellInfo" align="left" colspan="3"><input type="text" name="description" id="save_description" value="{$workflow->description}"></td>
+			</tr>
+			<tr>
+				<td class="dvtCellLabel" align=right width=25%>{$APP.LBL_MODULE}</td>
+				<td class="dvtCellInfo" align="left" colspan="3">{$workflow->moduleName}</td>
+			</tr>
+		</table>
+		<br>
+		<table class="tableHeading" width="75%" border="0" cellspacing="0" cellpadding="5">
+			<tr>
+				<td class="big" nowrap="">
+					<strong>{$MOD.LBL_WHEN_TO_RUN_WORKFLOW}</strong>
+				</td>
+			</tr>
+		</table>
 		<table border="0" >
 			<tr><td><input type="radio" name="execution_condition" value="ON_FIRST_SAVE" 
 				{if $workflow->executionConditionAsLabel() eq 'ON_FIRST_SAVE'}checked{/if}/></td> 
 				<td>{$MOD.LBL_ONLY_ON_FIRST_SAVE}.</td></tr>
-			<!-- <tr><td><input type="radio" name="execution_condition" value="ONCE" 
+			<tr><td><input type="radio" name="execution_condition" value="ONCE" 
 							{if $workflow->executionConditionAsLabel() eq 'ONCE'}checked{/if} /></td>
-							<td>{$MOD.LBL_UNTIL_FIRST_TIME_CONDITION_TRUE}.</td></tr> -->
+							<td>{$MOD.LBL_UNTIL_FIRST_TIME_CONDITION_TRUE}.</td></tr>
 						<tr><td><input type="radio" name="execution_condition" value="ON_EVERY_SAVE" 
 				{if $workflow->executionConditionAsLabel() eq 'ON_EVERY_SAVE'}checked{/if}/></td>
 				<td>{$MOD.LBL_EVERYTIME_RECORD_SAVED}.</td></tr>
@@ -148,11 +162,11 @@
 				<a href="{$module->editTaskUrl($task->id)}">
 					<img border="0" title="Edit" alt="Edit" \
 						style="cursor: pointer;" id="expressionlist_editlink_{$task->id}" \
-						src="themes/softed/images/editfield.gif"/>
+						src="{$IMAGE_PATH}editfield.gif"/>
 				</a>
 				<a href="{$module->deleteTaskUrl($task->id)}">
 					<img border="0" title="Delete" alt="Delete"\
-			 			src="themes/softed/images/delete.gif" \
+			 			src="{$IMAGE_PATH}delete.gif" \
 						style="cursor: pointer;" id="expressionlist_deletelink_{$task->id}"/>
 				</a>
 			</td>
@@ -161,3 +175,4 @@
 	</table>
 {/if}
 </div>
+<div id="dump" style="display:None;"></div>

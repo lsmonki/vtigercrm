@@ -51,7 +51,8 @@ class VTCreateTodoTask extends VTTask{
 			'sendnotification'=>$this->sendNotification!=''?1:0,
 			'date_start'=>$date,
 			'due_date'=>$date,
-			'visibility'=>'all'
+			'visibility'=>'all',
+			'eventstatus'=>''
 		);
 		$moduleName = $entityData->getModuleName();
 		$id = getTabid($moduleName).'x'.$entityData->getId();
