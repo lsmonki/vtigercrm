@@ -11,71 +11,86 @@ require_once('data/CRMEntity.php');
 require_once('data/Tracker.php');
 
 class ModuleClass extends CRMEntity {
-	var $db, $log; // Used in class functions like CRMEntity
+	var $db, $log; // Used in class functions of CRMEntity
 
 	var $table_name = 'vtiger_payslip';
 	var $table_index= 'payslipid';
 	var $column_fields = Array();
 
-	// Indicator if this is a custom module or standard module
+	/** Indicator if this is a custom module or standard module */
 	var $IsCustomModule = true;
 
-	// Mandatory for function getGroupName
-	// Array(groupTableName, groupColumnId)
-	// groupTableName should have (groupname column)
+	/**
+	 * Mandatory for function getGroupName
+	 * Format: Array(GroupTablename, GroupTableKeyColumn)
+	 */
 	var $groupTable = Array('vtiger_payslipgrouprel', 'payslipid');
 
-	// Mandatory table for supporting custom fields
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
 	var $customFieldTable = Array('vtiger_payslipcf', 'payslipid');
 
-	// Mandatory for Saving, Include tables related to this module.
+	/**
+	 * Mandatory for Saving, Include tables related to this module.
+	 */
 	var $tab_name = Array('vtiger_crmentity', 'vtiger_payslip', 'vtiger_payslipcf');
-	// Mandatory for Saving, Include the table name and index column mapping here.
+
+	/**
+	 * Mandatory for Saving, Include tablename and tablekey columnname here.
+	 */
 	var $tab_name_index = Array(
 		'vtiger_crmentity' => 'crmid',
 		'vtiger_payslip'   => 'payslipid',
 	    'vtiger_payslipcf' => 'payslipid');
 
-	// Mandatory for Listing
+	/**
+	 * Mandatory for Listing (Related listview)
+	 */
 	var $list_fields = Array (
-		// Field Label=> Array(tablename, columnname)
+		/* Format: Field Label => Array(tablename, columnname) */
+		// tablename should not have prefix 'vtiger_'
 		'Payslip Name'=> Array('payslip', 'payslipname'),
 		'Assigned To' => Array('crmentity','smownerid')
 	);
 	var $list_fields_name = Array(
-		// Field Label=>fieldname
+		/* Format: Field Label => fieldname */
 		'Payslip Name'=> 'payslipname',
 		'Assigned To' => 'assigned_user_id'
 	);
-	
-	// For Popup listview
+
+	// Make the field link to detail view 
+	var $list_link_field = 'payslipname';
+
+	// For Popup listview and UI type support
 	var $search_fields = Array(
+		/* Format: Field Label => Array(tablename, columnname) */
+		// tablename should not have prefix 'vtiger_'
 		'Payslip Name'=> Array('payslip', 'payslipname')
 	);
 	var $search_fields_name = Array(
+		/* Format: Field Label => fieldname */
 		'Payslip Name'=> 'payslipname'
 	);
 
+	// For Popup window record selection
 	var $popup_fields = Array('payslipname');
 
-	// Placeholder for fields not available for mass edit
-	var $non_mass_edit_fields = Array();
 
-	var $sortby_fields = Array('payslipname', 'payslipmonth', 'smownerid', 'modifiedtime');
 	// Should contain field labels
 	var $detailview_links = Array('PayslipName', 'Month');
 
-	// For alphabetical search
+	// For Alphabetical search
 	var $def_basicsearch_col = 'payslipname';
 
-	// Column value to use on detail view record text display.
+	// Column value to use on detail view record text display
 	var $def_detailview_recname = 'payslipname';
 
-	// Required information for enabling Import feature
+	// Required Information for enabling Import feature
 	var $required_fields = Array('payslipname'=>1);
 
 	// Callback function list during Importing
-	var $special_functions =  array("set_import_assigned_user");
+	var $special_functions = Array('set_import_assigned_user');
 
 	var $default_order_by = 'payslipname';
 	var $default_sort_order='ASC';

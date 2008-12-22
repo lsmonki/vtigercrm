@@ -507,7 +507,7 @@ class Products extends CRMEntity {
 			vtiger_troubletickets.parent_id, vtiger_troubletickets.title,
 			vtiger_troubletickets.status, vtiger_troubletickets.priority,
 			vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
-			vtiger_crmentity.modifiedtime
+			vtiger_crmentity.modifiedtime, vtiger_troubletickets.ticket_no
 			FROM vtiger_troubletickets
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid

@@ -459,7 +459,18 @@ class Contacts extends CRMEntity {
 		else
 			$returnset = '&return_module=Contacts&return_action=CallRelatedList&return_id='.$id;
 
-		$query = "select case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_crmentity.crmid, vtiger_troubletickets.title, vtiger_contactdetails.contactid, vtiger_troubletickets.parent_id, vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, vtiger_troubletickets.status, vtiger_troubletickets.priority, vtiger_crmentity.smownerid from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid left join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_troubletickets.parent_id left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_ticketgrouprelation on vtiger_troubletickets.ticketid=vtiger_ticketgrouprelation.ticketid left join vtiger_groups on vtiger_groups.groupname=vtiger_ticketgrouprelation.groupname where vtiger_crmentity.deleted=0 and vtiger_contactdetails.contactid=".$id;
+		$query = "select case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
+					vtiger_crmentity.crmid, vtiger_troubletickets.title, vtiger_contactdetails.contactid, vtiger_troubletickets.parent_id, 
+					vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, vtiger_troubletickets.status, vtiger_troubletickets.priority, 
+					vtiger_crmentity.smownerid, vtiger_troubletickets.ticket_no from vtiger_troubletickets  
+					inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid 
+					left join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_troubletickets.parent_id 
+					left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
+					left join vtiger_ticketgrouprelation on vtiger_troubletickets.ticketid=vtiger_ticketgrouprelation.ticketid
+					left join vtiger_groups on vtiger_groups.groupname=vtiger_ticketgrouprelation.groupname
+					where vtiger_crmentity.deleted=0 and vtiger_contactdetails.contactid=".$id;
+		
+		
 		$log->info("Ticket Related List for Contact Displayed");
 		$log->debug("Exiting get_tickets method ...");
 		return GetRelatedList('Contacts','HelpDesk',$focus,$query,$button,$returnset);

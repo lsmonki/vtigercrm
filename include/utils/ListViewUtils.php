@@ -2860,7 +2860,10 @@ function getListQuery($module,$where='')
 			break;
 	default:
 		// vtlib customization: Include the module file
-		if(file_exists("modules/$module/$module.php")) include_once("modules/$module/$module.php");
+		if(file_exists("modules/$module/$module.php")) {
+			checkFileAccess("modules/$module/$module.php");
+			include_once("modules/$module/$module.php");
+		}
 		$focus = new $module();	
 		$query = $focus->getListQuery($module);
 		// END

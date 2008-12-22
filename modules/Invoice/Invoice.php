@@ -60,7 +60,7 @@ class Invoice extends CRMEntity {
 				);
 	
 	var $list_fields_name = Array(
-				        'Invoice No'=>'',
+				        'Invoice No'=>'invoice_no',
 				        'Subject'=>'subject',
 				        'Sales Order'=>'salesorder_id',
 				        'Status'=>'invoicestatus',

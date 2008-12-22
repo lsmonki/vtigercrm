@@ -64,7 +64,7 @@ class PurchaseOrder extends CRMEntity {
 				);
 	
 	var $list_fields_name = Array(
-				        'Order No'=>'',
+				        'Order No'=>'purchaseorder_no',
 				        'Subject'=>'subject',
 				        'Vendor Name'=>'vendor_id',
 					'Tracking Number'=>'tracking_no',
@@ -74,12 +74,12 @@ class PurchaseOrder extends CRMEntity {
 	var $list_link_field= 'subject';
 
 	var $search_fields = Array(
-				'Order No'=>Array('crmentity'=>'crmid'),
+				'Order No'=>Array('purchaseorder'=>'purchaseorder_no'),
 				'Subject'=>Array('purchaseorder'=>'subject'), 
 				);
 	
 	var $search_fields_name = Array(
-				        'Order No'=>'',
+				        'Order No'=>'purchaseorder_no',
 				        'Subject'=>'subject',
 				      );
 

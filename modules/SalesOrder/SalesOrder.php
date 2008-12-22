@@ -70,7 +70,7 @@ class SalesOrder extends CRMEntity {
 				);
 	
 	var $list_fields_name = Array(
-				        'Order No'=>'',
+				        'Order No'=>'salesorder_no',
 				        'Subject'=>'subject',
 				        'Account Name'=>'account_id',
 				        'Quote Name'=>'quote_id',
@@ -80,14 +80,14 @@ class SalesOrder extends CRMEntity {
 	var $list_link_field= 'subject';
 
 	var $search_fields = Array(
-				'Order No'=>Array('crmentity'=>'crmid'),
+				'Order No'=>Array('salesorder'=>'salesorder_no'),
 				'Subject'=>Array('salesorder'=>'subject'),
 				'Account Name'=>Array('account'=>'accountid'),
 				'Quote Name'=>Array('salesorder'=>'quoteid') 
 				);
 	
 	var $search_fields_name = Array(
-					'Order No'=>'',
+					'Order No'=>'salesorder_no',
 				        'Subject'=>'subject',
 				        'Account Name'=>'account_id',
 				        'Quote Name'=>'quote_id'

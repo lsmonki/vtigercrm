@@ -14,6 +14,8 @@ require_once('Smarty_setup.php');
 require_once('include/ListView/ListView.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('include/DatabaseUtil.php');
+
+checkFileAccess("modules/$currentModule/$currentModule.php");
 require_once("modules/$currentModule/$currentModule.php");
 
 $category = getParentTab();

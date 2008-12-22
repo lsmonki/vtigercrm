@@ -9,9 +9,11 @@
  ************************************************************************************/
 require_once('Smarty_setup.php');
 require_once('user_privileges/default_module_view.php');
-require_once("modules/$currentModule/$currentModule.php");
 
 global $mod_strings, $app_strings, $currentModule, $current_user, $theme, $singlepane_view;
+
+checkFileAccess("modules/$currentModule/$currentModule.php");
+require_once("modules/$currentModule/$currentModule.php");
 
 $tool_buttons = Button_Check($currentModule);
 

@@ -293,7 +293,7 @@ class CRMEntity
 	}
 	
 	$date_var = date('Y-m-d H:i:s');
-	if($_REQUEST['assigntype'] == 'T')
+	if($_REQUEST['assigntype'] == 'T' && ($_REQUEST['action']!='MassEditSave' || (isset($_REQUEST['assigned_user_id_mass_edit_check'])&& $_REQUEST['action']=='MassEditSave')))
 	{
 		$ownerid= 0;
 	}

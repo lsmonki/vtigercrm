@@ -11,8 +11,10 @@
 global $mod_strings,$app_strings,$theme,$currentModule,$current_user;
 
 require_once('Smarty_setup.php');
-require_once("modules/$currentModule/$currentModule.php");
 require_once('include/utils/utils.php');
+
+checkFileAccess("modules/$currentModule/$currentModule.php");
+require_once("modules/$currentModule/$currentModule.php");
 
 $focus = new $currentModule();
 $focus->mode = '';

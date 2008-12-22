@@ -5001,11 +5001,13 @@ function getModuleSequenceField($module) {
 	
 	if (!empty($module)) {
 		//uitype 4 points to Module Numbering Field
-		$seqColRes = $adb->pquery("SELECT fieldname, fieldlabel FROM vtiger_field WHERE uitype=? AND tabid=?", array('4', getTabid($module)));
+		$seqColRes = $adb->pquery("SELECT fieldname, fieldlabel, columnname FROM vtiger_field WHERE uitype=? AND tabid=?", array('4', getTabid($module)));
 		if($adb->num_rows($seqColRes) > 0) {
 			$fieldname = $adb->query_result($seqColRes,0,'fieldname');
+			$columnname = $adb->query_result($seqColRes,0,'columnname');
 			$fieldlabel = $adb->query_result($seqColRes,0,'fieldlabel');
 			$field['name'] = $fieldname;
+			$field['column'] = $columnname;
 			$field['label'] = $fieldlabel;
 		}
 	}

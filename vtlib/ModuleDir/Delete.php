@@ -9,6 +9,7 @@
  ************************************************************************************/
 global $currentModule;
 
+checkFileAccess("modules/$currentModule/$currentModule.php");
 require_once("modules/$currentModule/$currentModule.php");
 
 $focus = new $currentModule();

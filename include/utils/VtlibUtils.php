@@ -324,6 +324,28 @@ function vtlib_getPicklistValues_AccessibleToAll($field_columnname) {
 }
 
 /**
+ * Get all picklist values for a non-standard picklist type.
+ */
+function vtlib_getPicklistValues($field_columnname) {
+	global $adb;
+
+	$columnname =  mysql_real_escape_string($field_columnname);
+	$tablename = "vtiger_$columnname";
+
+	$picklistres = $adb->query("SELECT $columnname as pickvalue FROM $tablename");
+	
+	$picklistresCount = $adb->num_rows($picklistres);
+
+	$picklistvalues = Array();
+	if($picklistresCount) {
+		for($index = 0; $index < $picklistresCount; ++$index) {
+			$picklistvalues[] = $adb->query_result($picklistres, $index, 'pickvalue');
+		}
+	}
+	return $picklistvalues;
+}
+
+/**
  * Check for custom module by its name.
  */
 function vtlib_isCustomModule($moduleName) {

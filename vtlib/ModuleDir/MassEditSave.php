@@ -10,6 +10,8 @@
  ********************************************************************************/
  
 global $currentModule, $rstart;
+
+checkFileAccess("modules/$currentModule/$currentModule.php");
 require_once("modules/$currentModule/$currentModule.php");
 
 $idlist= $_REQUEST['massedit_recordids'];

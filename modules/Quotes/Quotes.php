@@ -70,7 +70,7 @@ class Quotes extends CRMEntity {
 				);
 	
 	var $list_fields_name = Array(
-				        'Quote No'=>'',
+				        'Quote No'=>'quote_no',
 				        'Subject'=>'subject',
 				        'Quote Stage'=>'quotestage',
 				        'Potential Name'=>'potential_id',
@@ -81,14 +81,14 @@ class Quotes extends CRMEntity {
 	var $list_link_field= 'subject';
 
 	var $search_fields = Array(
-				'Quote No'=>Array('crmentity'=>'crmid'),
+				'Quote No'=>Array('quotes'=>'quote_no'),
 				'Subject'=>Array('quotes'=>'subject'),
 				'Account Name'=>Array('quotes'=>'accountid'),
 				'Quote Stage'=>Array('quotes'=>'quotestage'), 
 				);
 	
 	var $search_fields_name = Array(
-					'Quote No'=>'',
+					'Quote No'=>'quote_no',
 				        'Subject'=>'subject',
 				        'Account Name'=>'account_id',
 				        'Quote Stage'=>'quotestage',

@@ -29,9 +29,10 @@ if(!empty($_REQUEST['idlist'])) {
 	$storearray = explode (";",trim($idlist,";"));
 } else if(!empty($_REQUEST['entityid'])){
 	$storearray = array($_REQUEST['entityid']);
-}elseif(!empty($_REQUEST['pot_id'])) {	
+}elseif(!empty($_REQUEST['pot_id'])) {
+	$forCRMRecord = $record;
 	$sql = "insert into vtiger_contpotentialrel values(?,?)";
-	$adb->pquery($sql, array($record, $_REQUEST["pot_id"]));
+	$adb->pquery($sql, array($forCRMRecord, $_REQUEST["pot_id"]));
 }
 foreach($storearray as $id)
 {

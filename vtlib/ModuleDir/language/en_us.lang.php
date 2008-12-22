@@ -7,6 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
+
 $mod_strings = Array(
 	'ModuleName' => 'Module Name',
 

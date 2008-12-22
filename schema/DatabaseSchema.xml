@@ -6778,6 +6778,13 @@
 			<key />
 			<notnull />
 		</field>
+		<field name="cond" type="X">
+			<notnull />
+		</field>
+        <field name="is_active" type="I" size="1">
+			<notnull />
+		</field>
+        
 		<index name="eventhandler_idx">
 			<unique />
 			<col>eventhandler_id</col>
@@ -6918,6 +6925,17 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+	
+	<table name="com_vtiger_workflow_activatedonce">
+	    <field name="workflow_id" type="I" >
+			<key />
+		</field>
+	    <field name="entity_id" type="I" >
+			<key />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+    
 	
 	<table name="com_vtiger_workflowtasks">
 	    <field name="task_id" type="I" >
@@ -7065,5 +7083,42 @@
 		</field>
 		<field name="active" type="I" size="1">
 		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+	<table name="vtiger_crmentityrel">
+		<field name="crmid" type="I">
+			<notnull />
+		</field>
+		<field name="module" type="C" size="100">
+			<notnull />
+		</field>
+		<field name="relcrmid" type="I">
+			<notnull />
+		</field>
+		<field name="relmodule" type="C" size="100">
+			<notnull />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_fieldmodulerel">
+		<field name="fieldid" type="I">
+			<notnull />
+		</field>
+		<field name="module" type="C" size="100">
+			<notnull />
+		</field>
+		<field name="relmodule" type="C" size="100">
+			<notnull />
+		</field>
+		<field name="status" type="C" size="10">
+			<default value="NULL" />
+		</field>
+		<field name="sequence" type="I">
+			<default value="NULL" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
 </schema>
