@@ -21,12 +21,6 @@ class ModuleClass extends CRMEntity {
 	var $IsCustomModule = true;
 
 	/**
-	 * Mandatory for function getGroupName
-	 * Format: Array(GroupTablename, GroupTableKeyColumn)
-	 */
-	var $groupTable = Array('vtiger_payslipgrouprel', 'payslipid');
-
-	/**
 	 * Mandatory table for supporting custom fields.
 	 */
 	var $customFieldTable = Array('vtiger_payslipcf', 'payslipid');
@@ -151,12 +145,8 @@ class ModuleClass extends CRMEntity {
 				      " = $this->table_name.$this->table_index"; 
 		}
 		$query .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid";
+		$query .= " LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_crmentity.smownerid";
 
-		if(!empty($this->groupTable)) {
-			$query .= "
-				LEFT JOIN " . $this->groupTable[0] . " ON " . $this->groupTable[0].'.'.$this->groupTable[1] . " = $this->table_name.$this->table_index
-				LEFT JOIN vtiger_groups ON vtiger_groups.groupname = " . $this->groupTable[0] . '.groupname';
-		}
 		$query .= "	WHERE vtiger_crmentity.deleted = 0";
 		$query .= $this->getListViewSecurityParameter($module);
 		return $query;
