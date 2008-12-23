@@ -84,7 +84,7 @@ class Leads extends CRMEntity {
 	var $default_order_by = 'lastname';
 	var $default_sort_order = 'ASC';
 
-	var $groupTable = Array('vtiger_leadgrouprelation','leadid');
+	//var $groupTable = Array('vtiger_leadgrouprelation','leadid');
 	
 	function Leads()	{
 		$this->log = LoggerManager::getLogger('lead');
@@ -154,7 +154,7 @@ class Leads extends CRMEntity {
 		$sql = getPermittedFieldsQuery("Leads", "detail_view");
 		$fields_list = getFieldsListFromQuery($sql);
 
-		$query = "SELECT $fields_list, vtiger_leadgrouprelation.groupname as 'Assigned To Group',case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name 
+		$query = "SELECT $fields_list, vtiger_groups.groupname as 'Assigned To Group',case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name 
 	      			FROM ".$this->entity_table."
 				INNER JOIN vtiger_leaddetails
 					ON vtiger_crmentity.crmid=vtiger_leaddetails.leadid
@@ -164,10 +164,8 @@ class Leads extends CRMEntity {
 					ON vtiger_leaddetails.leadid=vtiger_leadaddress.leadaddressid
 				LEFT JOIN vtiger_leadscf 
 					ON vtiger_leadscf.leadid=vtiger_leaddetails.leadid
-				LEFT JOIN vtiger_leadgrouprelation
-                	                ON vtiger_leadscf.leadid = vtiger_leadgrouprelation.leadid
 	                        LEFT JOIN vtiger_groups
-                        	        ON vtiger_groups.groupname = vtiger_leadgrouprelation.groupname
+                        	        ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_users
 					ON vtiger_crmentity.smownerid = vtiger_users.id and vtiger_users.status='Active'
 				";
@@ -220,7 +218,7 @@ class Leads extends CRMEntity {
 	
 	
 		// First, get the list of IDs.
-		$query = "SELECT vtiger_activity.*,vtiger_seactivityrel.*, vtiger_contactdetails.lastname, vtiger_contactdetails.contactid, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime,case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_recurringevents.recurringtype from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid = vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and vtiger_crmentity.deleted = 0 and ((vtiger_activity.activitytype='Task' and vtiger_activity.status not in ('Completed','Deferred')) or (vtiger_activity.activitytype NOT in ('Emails','Task') and  vtiger_activity.eventstatus not in ('','Held'))) ";
+		$query = "SELECT vtiger_activity.*,vtiger_seactivityrel.*, vtiger_contactdetails.lastname, vtiger_contactdetails.contactid, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime,case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_recurringevents.recurringtype from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid = vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid where vtiger_seactivityrel.crmid=".$id." and vtiger_crmentity.deleted = 0 and ((vtiger_activity.activitytype='Task' and vtiger_activity.status not in ('Completed','Deferred')) or (vtiger_activity.activitytype NOT in ('Emails','Task') and  vtiger_activity.eventstatus not in ('','Held'))) ";
 		$log->debug("Exiting get_activities method ...");
 		return  GetRelatedList('Leads','Calendar',$focus,$query,$button,$returnset);
 	}
@@ -243,7 +241,7 @@ class Leads extends CRMEntity {
 			$returnset = '&return_module=Leads&return_action=CallRelatedList&return_id='.$id;
 	
 		$log->info("Campaign Related List for Lead Displayed");
-		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name ,vtiger_campaign.campaignid, vtiger_campaign.campaignname, vtiger_campaign.campaigntype, vtiger_campaign.campaignstatus, vtiger_campaign.expectedrevenue, vtiger_campaign.closingdate, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_campaign inner join vtiger_campaignleadrel on vtiger_campaignleadrel.campaignid=vtiger_campaign.campaignid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_campaign.campaignid left join vtiger_campaigngrouprelation on vtiger_campaign.campaignid=vtiger_campaigngrouprelation.campaignid left join vtiger_groups on vtiger_groups.groupname=vtiger_campaigngrouprelation.groupname left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid where vtiger_campaignleadrel.leadid=".$id." and vtiger_crmentity.deleted=0";
+		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name ,vtiger_campaign.campaignid, vtiger_campaign.campaignname, vtiger_campaign.campaigntype, vtiger_campaign.campaignstatus, vtiger_campaign.expectedrevenue, vtiger_campaign.closingdate, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_campaign inner join vtiger_campaignleadrel on vtiger_campaignleadrel.campaignid=vtiger_campaign.campaignid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_campaign.campaignid left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid where vtiger_campaignleadrel.leadid=".$id." and vtiger_crmentity.deleted=0";
 	
 		$log->debug("Exiting get_campaigns method ...");
 		return GetRelatedList('Leads','Campaigns',$focus,$query,$button,$returnset);
@@ -283,8 +281,7 @@ class Leads extends CRMEntity {
 				" from vtiger_activity" .
 				" inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid" .
 				" inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid" .
-				" left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid" .
-				" left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname" .
+				" left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid" .
 				" inner join vtiger_users on  vtiger_users.id=vtiger_crmentity.smownerid" .
 				" where vtiger_activity.activitytype='Emails' and vtiger_crmentity.deleted=0 and vtiger_seactivityrel.crmid=".$id;	
 		$log->debug("Exiting get_emails method ...");
@@ -304,12 +301,11 @@ class Leads extends CRMEntity {
 			vtiger_activity.eventstatus, vtiger_activity.activitytype,vtiger_activity.date_start, 
 			vtiger_activity.due_date,vtiger_activity.time_start,vtiger_activity.time_end,
 			vtiger_crmentity.modifiedtime,vtiger_crmentity.createdtime,
-			vtiger_crmentity.description, vtiger_users.user_name,vtiger_activitygrouprelation.groupname
+			vtiger_crmentity.description, vtiger_users.user_name,vtiger_groups.groupname
 				from vtiger_activity
 				inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid
-				left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid
-				left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname 
+				left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid 
 				left join vtiger_users on vtiger_crmentity.smownerid= vtiger_users.id
 				where (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task')
 				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred' or (vtiger_activity.eventstatus = 'Held' and vtiger_activity.eventstatus != ''))
@@ -337,7 +333,7 @@ class Leads extends CRMEntity {
 			$sec_parameter=getListViewSecurityParameter('Documents');
 	    }
 		$log->debug("Entering get_attachments(".$id.") method ...");
-		// Armando Lüscher 18.10.2005 -> §visibleDescription
+		// Armando Lï¿½scher 18.10.2005 -> ï¿½visibleDescription
 		// Desc: Inserted crm2.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
 		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
 		$query = "select vtiger_notes.title,'Documents      ' as ActivityType, vtiger_notes.filename,
@@ -348,17 +344,15 @@ class Leads extends CRMEntity {
 				inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
 				inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
 				inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_notes.notesid and crm2.deleted=0
-				LEFT JOIN vtiger_notegrouprelation
-					ON vtiger_notegrouprelation.notesid = vtiger_notes.notesid
 				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupname = vtiger_notegrouprelation.groupname			
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid			
 				left join vtiger_seattachmentsrel  on vtiger_seattachmentsrel.crmid =vtiger_notes.notesid
 				left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
 				inner join vtiger_users on crm2.smownerid= vtiger_users.id
 				where vtiger_crmentity.crmid=".$id;
 		$query .= $sec_parameter;
 		$query .= ' union all ';
-		// Armando Lüscher 18.10.2005 -> §visibleDescription
+		// Armando Lï¿½scher 18.10.2005 -> ï¿½visibleDescription
 		// Desc: Inserted crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
 		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
 		// Inserted order by createdtime desc

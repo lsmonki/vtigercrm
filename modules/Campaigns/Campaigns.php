@@ -57,7 +57,7 @@ class Campaigns extends CRMEntity {
 	var $default_order_by = 'crmid';
 	var $default_sort_order = 'DESC';
 
-	var $groupTable = Array('vtiger_campaigngrouprelation','campaignid');
+	//var $groupTable = Array('vtiger_campaigngrouprelation','campaignid');
 
 	var $search_fields = Array(
 			'Campaign Name'=>Array('vtiger_campaign'=>'campaignname'),
@@ -146,9 +146,8 @@ class Campaigns extends CRMEntity {
 					vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime 
 					FROM vtiger_contactdetails 
 					INNER JOIN vtiger_campaigncontrel ON vtiger_campaigncontrel.contactid = vtiger_contactdetails.contactid 
-					INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid 
-					LEFT JOIN vtiger_contactgrouprelation ON vtiger_contactdetails.contactid=vtiger_contactgrouprelation.contactid 
-					LEFT JOIN vtiger_groups ON vtiger_groups.groupname=vtiger_contactgrouprelation.groupname 
+					INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid  
+					LEFT JOIN vtiger_groups ON vtiger_groups.groupid=vtiger_crmentity.smownerid 
 					LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id 
 					LEFT JOIN vtiger_account ON vtiger_account.accountid = vtiger_contactdetails.accountid 
 					WHERE vtiger_campaigncontrel.campaignid = ".$id." AND vtiger_crmentity.deleted=0";
@@ -184,8 +183,7 @@ class Campaigns extends CRMEntity {
 					INNER JOIN vtiger_leadsubdetails  ON vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid 			
 					INNER JOIN vtiger_leadaddress ON vtiger_leadaddress.leadaddressid = vtiger_leadsubdetails.leadsubscriptionid
 					LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid = vtiger_users.id
-					LEFT JOIN vtiger_leadgrouprelation ON vtiger_leaddetails.leadid=vtiger_leadgrouprelation.leadid
-					LEFT JOIN vtiger_groups ON vtiger_groups.groupname=vtiger_leadgrouprelation.groupname 
+					LEFT JOIN vtiger_groups ON vtiger_groups.groupid=vtiger_crmentity.smownerid
 					WHERE vtiger_crmentity.deleted=0 AND vtiger_campaignleadrel.campaignid = ".$id;
 					
 		$log->debug("Exiting get_leads method ...");
@@ -217,8 +215,7 @@ class Campaigns extends CRMEntity {
 					vtiger_crmentity.crmid, vtiger_crmentity.smownerid FROM vtiger_campaign  
 					INNER JOIN vtiger_potential ON vtiger_campaign.campaignid = vtiger_potential.campaignid  
 					INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_potential.potentialid 
-					LEFT JOIN vtiger_potentialgrouprelation ON vtiger_potential.potentialid=vtiger_potentialgrouprelation.potentialid
-					LEFT JOIN vtiger_groups ON vtiger_groups.groupname=vtiger_potentialgrouprelation.groupname
+					LEFT JOIN vtiger_groups ON vtiger_groups.groupid=vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_users ON vtiger_users.id=vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_account ON vtiger_account.accountid = vtiger_potential.accountid
 					WHERE vtiger_campaign.campaignid = ".$id." AND vtiger_crmentity.deleted=0";
@@ -273,10 +270,8 @@ class Campaigns extends CRMEntity {
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT OUTER JOIN vtiger_recurringevents
 				ON vtiger_recurringevents.activityid = vtiger_activity.activityid
-			LEFT JOIN vtiger_activitygrouprelation
-				ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			WHERE vtiger_seactivityrel.crmid=".$id."
 			AND vtiger_crmentity.deleted = 0
 			AND (activitytype = 'Task'

@@ -120,6 +120,12 @@ if($saveimage=="true")
 	$focus->column_fields['imagename']=$image_lists_db;
 	$log->debug("Assign the Image name to the vtiger_field name ");
 }
+if($_REQUEST['assigntype'] == 'U') {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_user_id'];
+}
+else {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
+}
 //Saving the product
 if($image_error=="false")
 {

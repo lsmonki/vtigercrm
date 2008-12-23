@@ -89,7 +89,7 @@ class HelpDesk extends CRMEntity {
         var $default_order_by = 'title';
         var $default_sort_order = 'DESC';
 
-	var $groupTable = Array('vtiger_ticketgrouprelation','ticketid');
+	//var $groupTable = Array('vtiger_ticketgrouprelation','ticketid');
 
 	/**	Constructor which will set the column_fields in this object
 	 */
@@ -229,8 +229,7 @@ class HelpDesk extends CRMEntity {
 					" left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid" .
 					" left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid" .
 					" left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid" .
-					" left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid" .
-					" left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname" .
+					" left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid" .
 					" where vtiger_seactivityrel.crmid=".$id." and vtiger_crmentity.deleted=0 and (activitytype NOT IN ('Emails'))" .
 							" AND ( vtiger_activity.status is NULL OR vtiger_activity.status != 'Completed' )" .
 							" and ( vtiger_activity.eventstatus is NULL OR vtiger_activity.eventstatus != 'Held') ";
@@ -289,10 +288,8 @@ class HelpDesk extends CRMEntity {
 			inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
 			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
 			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_notes.notesid and crm2.deleted=0
-			LEFT JOIN vtiger_notegrouprelation
-				ON vtiger_notegrouprelation.notesid = vtiger_notes.notesid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_notegrouprelation.groupname			
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid			
 			left join vtiger_seattachmentsrel  on vtiger_seattachmentsrel.crmid =vtiger_notes.notesid
 			left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
 			inner join vtiger_users on crm2.smownerid= vtiger_users.id
@@ -524,7 +521,7 @@ class HelpDesk extends CRMEntity {
                 $sql = getPermittedFieldsQuery("HelpDesk", "detail_view");
                 $fields_list = getFieldsListFromQuery($sql);
 
-                $query = "SELECT $fields_list,vtiger_ticketgrouprelation.groupname as 'Assigned To Group',case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
+                $query = "SELECT $fields_list,vtiger_groups.groupname as 'Assigned To Group',case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
                        FROM ".$this->entity_table. "
 				INNER JOIN vtiger_troubletickets 
 					ON vtiger_troubletickets.ticketid =vtiger_crmentity.crmid 
@@ -538,10 +535,8 @@ class HelpDesk extends CRMEntity {
 					ON vtiger_ticketcomments.ticketid = vtiger_troubletickets.ticketid 
 				LEFT JOIN vtiger_ticketcf 
 					ON vtiger_ticketcf.ticketid=vtiger_troubletickets.ticketid 
-				LEFT JOIN vtiger_ticketgrouprelation 
-					ON vtiger_ticketgrouprelation.ticketid=vtiger_ticketcf.ticketid
 				LEFT JOIN vtiger_groups 
-					ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname 
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid 
 				LEFT JOIN vtiger_users 
 					ON vtiger_users.id=vtiger_crmentity.smownerid and vtiger_users.status='Active' 
 				LEFT JOIN vtiger_seattachmentsrel 
@@ -586,8 +581,7 @@ case when (vtiger_users.user_name not like '') then vtiger_users.user_name else 
 				inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid= vtiger_activity.activityid
 				inner join vtiger_troubletickets on vtiger_troubletickets.ticketid = vtiger_seactivityrel.crmid
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid
-				left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid
-                                left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname
+                                left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
 				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 				where (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task')
 				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred' or (vtiger_activity.eventstatus = 'Held' and vtiger_activity.eventstatus != ''))
@@ -636,24 +630,20 @@ case when (vtiger_users.user_name not like '') then vtiger_users.user_name else 
 
 			$updatelog = decode_html($adb->query_result($tktresult,0,"update_log"));
 
-			$old_user_id = $adb->query_result($crmresult,0,"smownerid");
+			$old_owner_id = $adb->query_result($crmresult,0,"smownerid");
 			$old_status = $adb->query_result($tktresult,0,"status");
 			$old_priority = $adb->query_result($tktresult,0,"priority");
 			$old_severity = $adb->query_result($tktresult,0,"severity");
 			$old_category = $adb->query_result($tktresult,0,"category");
 
 			//Assigned to change log
-			if($assigned_group_name != '' && $assigntype == 'T')
+			if($focus->column_fields['assigned_user_id'] != $old_owner_id)
 			{
-				$group_info = getGroupName($ticketid,'HelpDesk');
-				$group_name = $group_info[0];
-				if($group_name != $assigned_group_name)
-					$updatelog .= ' Transferred to group '.$assigned_group_name.'\.';
-			}
-			elseif($focus->column_fields['assigned_user_id'] != $old_user_id)
-			{
-				$user_name = getUserName($focus->column_fields['assigned_user_id']);
-				$updatelog .= ' Transferred to user '.decode_html($user_name).'\.'; // Need to decode UTF characters which are migrated from versions < 5.0.4.
+				$owner_name = getOwnerName($focus->column_fields['assigned_user_id']);
+				if($assigntype == 'T')
+					$updatelog .= ' Transferred to group '.$owner_name.'\.';
+				else
+					$updatelog .= ' Transferred to user '.decode_html($owner_name).'\.'; // Need to decode UTF characters which are migrated from versions < 5.0.4.
 			}
 			//Status change log
 			if($old_status != $focus->column_fields['ticketstatus'] && $focus->column_fields['ticketstatus'] != '')

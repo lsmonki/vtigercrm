@@ -480,18 +480,21 @@ function getActivityMailInfo($return_id,$status,$activity_type)
 	$end_time = $adb->query_result($ary_res,0,"time_end");
 	$location = $adb->query_result($ary_res,0,"location");
 
-	$usr_qry = "select smownerid from vtiger_crmentity where crmid=?";
-	$res = $adb->pquery($usr_qry, array($return_id));
-	$usr_id = $adb->query_result($res,0,"smownerid");
-	$assignType = "U";
-	if($usr_id == 0)
-	{
+	$owner_qry = "select smownerid from vtiger_crmentity where crmid=?";
+	$res = $adb->pquery($owner_qry, array($return_id));
+	$owner_id = $adb->query_result($res,0,"smownerid");
+	
+	$usr_res = $adb->pquery("select count(*) as count from vtiger_users where id=?",array($owner_id));
+	if($adb->query_result($usr_res, 0, 'count')>0) {
+		$assignType = "U";
+		$usr_id = $owner_id;
+	}
+	else {
 		$assignType = "T";
-		$group_qry = "select groupname from vtiger_activitygrouprelation where activityid=?";
-		$grp_res = $adb->pquery($group_qry, array($return_id));
+		$group_qry = "select groupname from vtiger_groups where groupid=?";
+		$grp_res = $adb->pquery($group_qry, array($owner_id));
 		$grp_name = $adb->query_result($grp_res,0,"groupname");
 	}
-
 
 	$desc_qry = "select description from vtiger_crmentity where crmid=?";
 	$des_res = $adb->pquery($desc_qry, array($return_id));

@@ -142,13 +142,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 		$htmlStr .= '<span id="assign_user" style="'.$style_user.'">
 				<select name="assigned_user_id" class=small>';
 	}
-	foreach($userlist as $key_one=>$arr)
-	{
-		foreach($arr as $sel_value=>$value)
-		{
-			$htmlStr .= '<option value="'.$key_one.'" '.$value.'>'.$sel_value.'</option>';
-		}
-	}
+	$htmlStr .= getUserslist();
 	$htmlStr .= '</select>
 			</span>';
 	if($grouplist != '')
@@ -156,20 +150,14 @@ function getAssignedToHTML($assignedto,$toggletype)
 		if($toggletype == 'task')
 		{
 			$htmlStr .= '<span id="task_assign_team" style="'.$style_group.'">
-					<select name="task_assigned_group_name" class=small>';
+					<select name="task_assigned_group_id" class=small>';
 		}
 		else
 		{
 			$htmlStr .= '<span id="assign_team" style="'.$style_group.'">
-					<select name="assigned_group_name" class=small>';
+					<select name="assigned_group_id" class=small>';
 		}
-		foreach($grouplist as $key_one=>$arr)
-		{
-			foreach($arr as $sel_value=>$value)
-			{
-				$htmlStr .= '<option value="'.$sel_value.'" '.$value.'>'.$sel_value.'</option>';
-			}
-		}
+		$htmlStr .= getGroupslist();
 		$htmlStr .= '</select>
 				</span>';
 	}

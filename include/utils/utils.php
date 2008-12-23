@@ -223,6 +223,7 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 	}
 
 	$log->debug("Exiting get_user_array method ...");
+	
 	return $user_array;
 }
 
@@ -245,29 +246,49 @@ function get_group_array($add_blank=true, $status="Active", $assigned_user="",$p
 		$db = new PearDatabase();
 		$temp_result = Array();
 		// Including deleted vtiger_users for now.
-		if (empty($status)) {
-				$query = "SELECT groupid, groupname from vtiger_groups";
-				$params = array();
-		}
-		else {
-				if($private == 'private')
-				{
-					$log->debug("Sharing is Private. Only the current user should be listed");
-					$query = "select groupid as groupid,groupname as groupname from vtiger_groups where id=? union select vtiger_group2role.groupid as groupid,vtiger_groups.groupname as groupname from vtiger_group2role inner join vtiger_groups on vtiger_groups.groupid=vtiger_group2role.groupid inner join vtiger_role on vtiger_role.roleid=vtiger_group2role.roleid where vtiger_role.parentrole like ? union select sharedgroupid as groupid,vtiger_groups.groupname as groupname from vtiger_tmp_write_group_sharing_per inner join vtiger_groups on vtiger_groups.groupid=vtiger_tmp_write_group_sharing_per.sharedgroupid where vtiger_tmp_write_group_sharing_per.groupid=? and vtiger_tmp_write_group_sharing_per.tabid=?";	
-					$params = array($current_user->id, $current_user_parent_role_seq."::%", $current_user->id, getTabid($module));	
+		$log->debug("Sharing is Public. All vtiger_users should be listed");
+		$query = "SELECT groupid, groupname from vtiger_groups";
+		$params = array();		
+		
+		if($private == 'private'){
+			//To get users list
+				
+			$user_query = "select id as id,user_name as user_name from vtiger_users where id=? and status='Active' union select vtiger_user2role.userid as id,vtiger_users.user_name as user_name from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like ? and status='Active' union select shareduserid as id,vtiger_users.user_name as user_name from vtiger_tmp_write_user_sharing_per inner join vtiger_users on vtiger_users.id=vtiger_tmp_write_user_sharing_per.shareduserid where status='Active' and vtiger_tmp_write_user_sharing_per.userid=? and vtiger_tmp_write_user_sharing_per.tabid=?";	
+			$user_params = array($current_user->id, $current_user_parent_role_seq."::%", $current_user->id, getTabid($module));	
+					
+			if (!empty($assigned_user)) {
+				$user_query .= " OR id=?";
+				array_push($user_params, $assigned_user);
+			}
+			$user_result = $db->pquery($user_query, $user_params, true, "Error filling in user array: ");
+			while($row = $db->fetchByAssoc($user_result)) {
+				$user_array[$row['id']] = $row['id'];
+			}
+				
+			$group_ids = array();
+			$usr_res = $db->pquery("select distinct groupid from vtiger_users2group where userid in(".generateQuestionMarks($user_array).")",array($user_array));
+			$num_grps = $db->num_rows($usr_res);
+					
+			$query .= " WHERE groupid=?";			
+			$params = array( $current_user->id);
+			if ($num_grps > 0) {
+				for($i=0; $i<$num_grps; $i++) {
+					$group_ids[] = $db->query_result($usr_res, $i, 'groupid');
 				}
-				else
-				{
-					$log->debug("Sharing is Public. All vtiger_users should be listed");
-					$query = "SELECT groupid, groupname from vtiger_groups";
-					$params = array();
-				}
-		}
-		if (!empty($assigned_user)) {
-			 $query .= "WHERE groupid=?";
-			 array_push($params, $assigned_user);
-		}
+				$query .= " OR groupid in (".generateQuestionMarks($group_ids).")";
+				array_push($params, $group_ids);
+			}
+		
+			$log->debug("Sharing is Private. Only the current user should be listed");
+			$query .= " union select vtiger_group2role.groupid as groupid,vtiger_groups.groupname as groupname from vtiger_group2role inner join vtiger_groups on vtiger_groups.groupid=vtiger_group2role.groupid inner join vtiger_role on vtiger_role.roleid=vtiger_group2role.roleid where vtiger_role.parentrole like ?";
+			array_push($params, $current_user_parent_role_seq."::%");
+					
+			$query .= " union select sharedgroupid as groupid,vtiger_groups.groupname as groupname from vtiger_tmp_write_group_sharing_per inner join vtiger_groups on vtiger_groups.groupid=vtiger_tmp_write_group_sharing_per.sharedgroupid where vtiger_tmp_write_group_sharing_per.sharedgroupid=?";
+			array_push($params, $current_user->id);
 
+			$query .= " and vtiger_tmp_write_group_sharing_per.tabid=?";
+			array_push($params,  getTabid($module));
+		}		
 		$query .= " order by groupname ASC";
 
 		$result = $db->pquery($query, $params, true, "Error filling in user array: ");
@@ -1197,77 +1218,16 @@ function getRecordOwnerId($record)
 	$log->debug("Entering getRecordOwnerId(".$record.") method ...");
 	global $adb;
 	$ownerArr=Array();
-	$query="select * from vtiger_crmentity where crmid = ?";
+	$query="select smownerid from vtiger_crmentity where crmid = ?";
 	$result=$adb->pquery($query, array($record));
 	if($adb->num_rows($result) > 0)
 	{
-		$user_id=$adb->query_result($result,0,'smownerid');
-		if($user_id != 0)
-		{
-			$ownerArr['Users']=$user_id;
-		}
-		elseif($user_id == 0)
-		{
-			$module=$adb->query_result($result,0,'setype');
-			if($module == 'Leads')
-			{
-				$query1="select vtiger_groups.groupid from vtiger_leadgrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_leadgrouprelation.groupname where leadid=?";
-			}
-			elseif($module == 'Calendar' || $module == 'Emails')
-			{
-				$query1="select vtiger_groups.groupid from vtiger_activitygrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname where activityid=?";
-			}
-			elseif($module == 'HelpDesk')
-			{
-				$query1="select vtiger_groups.groupid from vtiger_ticketgrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname where ticketid=?";
-			}
-			elseif($module == 'Accounts')
-			{
-				$query1="select vtiger_groups.groupid from vtiger_accountgrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_accountgrouprelation.groupname where accountid=?";
-			}
-			elseif($module == 'Contacts')
-			{
-				$query1="select vtiger_groups.groupid from vtiger_contactgrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_contactgrouprelation.groupname where contactid=?";
-			}
-			elseif($module == 'Potentials')
-			{
-				$query1="select vtiger_groups.groupid from vtiger_potentialgrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname where potentialid=?";
-			}
-			elseif($module == 'Quotes')
-			{
-				$query1="select vtiger_groups.groupid from vtiger_quotegrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_quotegrouprelation.groupname where quoteid=?";
-			}
-			elseif($module == 'PurchaseOrder')
-			{
-				$query1="select vtiger_groups.groupid from vtiger_pogrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_pogrouprelation.groupname where purchaseorderid=?";
-			}
-			elseif($module == 'SalesOrder')
-			{
-				$query1="select vtiger_groups.groupid from vtiger_sogrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_sogrouprelation.groupname where salesorderid=?";
-			}
-			elseif($module == 'Invoice')
-			{
-				$query1="select vtiger_groups.groupid from vtiger_invoicegrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_invoicegrouprelation.groupname where invoiceid=?";
-			}
-			elseif($module == 'Campaigns')
-			{
-				$query1="select vtiger_groups.groupid from vtiger_campaigngrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_campaigngrouprelation.groupname where campaignid=?";
-			}
-			elseif($module == 'Documents')
-			{
-				$query1="select vtiger_groups.groupid from vtiger_notegrouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_notegrouprelation.groupname where notesid=?";
-			}			
-			else
-			{
-				require_once("modules/$module/$module.php");
-				$modObj = new $module();
-				$query1="select vtiger_groups.groupid from vtiger_".$module."grouprelation inner join vtiger_groups on vtiger_groups.groupname = vtiger_".$module."grouprelation.groupname where ".$modObj->groupTable[1]."=?";
-			}
-
-			$result1=$adb->pquery($query1, array($record));
-			$groupid=$adb->query_result($result1,0,'groupid');
-			$ownerArr['Groups']=$groupid;
-		}
+		$ownerId=$adb->query_result($result,0,'smownerid');
+		$sql_result = $adb->pquery("select count(*) as count from vtiger_users where id = ?",array($ownerId));
+		if($adb->query_result($sql_result,0,'count') > 0)
+			$ownerArr['Users'] = $ownerId;
+		else
+			$ownerArr['Groups'] = $ownerId;
 	}	
 	$log->debug("Exiting getRecordOwnerId method ...");
 	return $ownerArr;
@@ -3238,15 +3198,9 @@ function getRecordValues($id_array,$module)
 				}	
 				elseif($ui_type == 53)
 				{
-					$user_id=$field_values[$j][$fld_name];
-					$username=getUserName($user_id);
-					$group_info=getGroupName($field_values[$j]['record_id'],$module);
-					$groupname = $group_info[0];
-					$groupid = $group_info[1];
-					if($user_id != 0)
-						$value_pair['disp_value']=$username;
-					else
-						$value_pair['disp_value']=$groupname;
+					$owner_id=$field_values[$j][$fld_name];
+					$ownername=getOwnerName($owner_id);
+					$value_pair['disp_value']=$ownername;
 				}				
 				elseif($ui_type ==57)
 				{
@@ -3840,10 +3794,8 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 						ON vtiger_account.accountid=vtiger_contactdetails.accountid
 					LEFT JOIN vtiger_customerdetails
 						ON vtiger_customerdetails.customerid=vtiger_contactdetails.contactid
-					LEFT JOIN vtiger_contactgrouprelation
-						ON vtiger_contactgrouprelation.contactid = vtiger_contactdetails.contactid
 					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
+						ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_users
 						ON vtiger_users.id = vtiger_crmentity.smownerid
 					INNER JOIN (select $select_clause from vtiger_contactdetails t
@@ -3879,10 +3831,8 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 					ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
 				LEFT JOIN vtiger_users_last_import
                     ON vtiger_users_last_import.bean_id=vtiger_account.accountid
-				LEFT JOIN vtiger_accountgrouprelation
-					ON vtiger_account.accountid = vtiger_accountgrouprelation.accountid
 				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_users
 					ON vtiger_users.id = vtiger_crmentity.smownerid
 				INNER JOIN (select $select_clause from vtiger_account t
@@ -3910,10 +3860,8 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 						ON vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid 
 					INNER JOIN vtiger_leadaddress 
 						ON vtiger_leadaddress.leadaddressid = vtiger_leadsubdetails.leadsubscriptionid 
-					LEFT JOIN vtiger_leadgrouprelation
-						ON vtiger_leaddetails.leadid = vtiger_leadgrouprelation.leadid
 					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupname = vtiger_leadgrouprelation.groupname
+						ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_users
 						ON vtiger_users.id = vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_users_last_import 
@@ -3965,10 +3913,8 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 					ON vtiger_account.accountid = vtiger_troubletickets.parent_id 
 				LEFT JOIN vtiger_contactdetails 
 					ON vtiger_contactdetails.contactid = vtiger_troubletickets.parent_id
-				LEFT JOIN vtiger_ticketgrouprelation
-					ON vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
 				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_users
 					ON vtiger_crmentity.smownerid = vtiger_users.id
 				LEFT JOIN vtiger_users_last_import
@@ -3999,10 +3945,8 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 				FROM vtiger_potential
 				INNER JOIN vtiger_crmentity
 					ON vtiger_crmentity.crmid=vtiger_potential.potentialid
-				LEFT JOIN vtiger_potentialgrouprelation
-					ON vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_users
 					ON vtiger_users.id = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_users_last_import
@@ -4056,10 +4000,8 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 						ON vtiger_account.accountid=vtiger_contactdetails.accountid
 					LEFT JOIN vtiger_customerdetails
 						ON vtiger_customerdetails.customerid=vtiger_contactdetails.contactid
-					LEFT JOIN vtiger_contactgrouprelation
-						ON vtiger_contactgrouprelation.contactid = vtiger_contactdetails.contactid
 					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
+						ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_users
 						ON vtiger_users.id = vtiger_crmentity.smownerid
 					INNER JOIN (SELECT $table_cols
@@ -4074,10 +4016,8 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 								ON vtiger_account.accountid=vtiger_contactdetails.accountid
 							LEFT JOIN vtiger_customerdetails
 								ON vtiger_customerdetails.customerid=vtiger_contactdetails.contactid
-							LEFT JOIN vtiger_contactgrouprelation
-						ON vtiger_contactgrouprelation.contactid = vtiger_contactdetails.contactid
 					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
+						ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_users
 						ON vtiger_users.id = vtiger_crmentity.smownerid
 							WHERE vtiger_crmentity.deleted=0 $sec_parameter
@@ -4099,10 +4039,8 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 					ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
 				LEFT JOIN vtiger_users_last_import
 					ON vtiger_users_last_import.bean_id=vtiger_account.accountid
-				LEFT JOIN vtiger_accountgrouprelation
-					ON vtiger_account.accountid = vtiger_accountgrouprelation.accountid
 				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_users
 					ON vtiger_users.id = vtiger_crmentity.smownerid
 				INNER JOIN (SELECT $table_cols
@@ -4113,10 +4051,8 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 					ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
 					INNER JOIN vtiger_accountshipads
 						ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid 
-					LEFT JOIN vtiger_accountgrouprelation
-						ON vtiger_account.accountid = vtiger_accountgrouprelation.accountid
 					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
+						ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_users
 						ON vtiger_users.id = vtiger_crmentity.smownerid
 					WHERE vtiger_crmentity.deleted=0 $sec_parameter
@@ -4134,10 +4070,8 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 						ON vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid 
 					INNER JOIN vtiger_leadaddress 
 						ON vtiger_leadaddress.leadaddressid = vtiger_leadsubdetails.leadsubscriptionid 
-					LEFT JOIN vtiger_leadgrouprelation 
-						ON vtiger_leaddetails.leadid = vtiger_leadgrouprelation.leadid 
 					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupname = vtiger_leadgrouprelation.groupname
+						ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_users
 						ON vtiger_users.id = vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_users_last_import 
@@ -4149,10 +4083,8 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 								ON vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid 
 							INNER JOIN vtiger_leadaddress 
 								ON vtiger_leadaddress.leadaddressid = vtiger_leadsubdetails.leadsubscriptionid 
-							LEFT JOIN vtiger_leadgrouprelation 
-								ON vtiger_leaddetails.leadid = vtiger_leadgrouprelation.leadid 
 							LEFT JOIN vtiger_groups
-								ON vtiger_groups.groupname = vtiger_leadgrouprelation.groupname
+								ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 							LEFT JOIN vtiger_users
 								ON vtiger_users.id = vtiger_crmentity.smownerid
 							WHERE vtiger_crmentity.deleted=0 AND vtiger_leaddetails.converted = 0 $sec_parameter
@@ -4189,10 +4121,8 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 					ON vtiger_users_last_import.bean_id=vtiger_troubletickets.ticketid
 				LEFT JOIN vtiger_attachments
 					ON vtiger_attachments.attachmentsid=vtiger_crmentity.crmid
-				LEFT JOIN vtiger_ticketgrouprelation
-					ON vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
 				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_contactdetails 
 					ON vtiger_contactdetails.contactid = vtiger_troubletickets.parent_id
 				LEFT JOIN vtiger_ticketcomments
@@ -4206,10 +4136,8 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 								ON vtiger_contactdetails.contactid = vtiger_troubletickets.parent_id
 							LEFT JOIN vtiger_ticketcomments
 								ON vtiger_ticketcomments.ticketid = vtiger_crmentity.crmid
-							LEFT JOIN vtiger_ticketgrouprelation
-								ON vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
 							LEFT JOIN vtiger_groups
-								ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
+								ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 							LEFT JOIN vtiger_contactdetails contd
 								ON contd.contactid = vtiger_troubletickets.parent_id
 				WHERE vtiger_crmentity.deleted=0 $sec_parameter
@@ -4226,20 +4154,16 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 					ON vtiger_crmentity.crmid=vtiger_potential.potentialid
 				LEFT JOIN vtiger_users_last_import
 					ON vtiger_users_last_import.bean_id=vtiger_potential.potentialid
-				LEFT JOIN vtiger_potentialgrouprelation
-					ON vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_users
 					ON vtiger_users.id = vtiger_crmentity.smownerid
 					INNER JOIN (SELECT $table_cols
 							FROM vtiger_potential
 							INNER JOIN vtiger_crmentity
 								ON vtiger_crmentity.crmid = vtiger_potential.potentialid 
-							LEFT JOIN vtiger_potentialgrouprelation
-								ON vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 							LEFT JOIN vtiger_groups
-								ON vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
+								ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 							LEFT JOIN vtiger_users
 								ON vtiger_users.id = vtiger_crmentity.smownerid	
 							WHERE vtiger_crmentity.deleted=0 $sec_parameter
@@ -4350,7 +4274,7 @@ function getDuplicateRecordsArr($module)
 		//echo '<pre>';print_r($result);echo '</pre>';	
 		if($rec_cnt != 0)
 		{
-			$sl_arr = array_slice($result,2);	
+			$sl_arr = array_slice($result,2);
 			array_walk($temp,'lower_array');
 			array_walk($sl_arr,'lower_array');
 			$arr_diff = array_diff($temp,$sl_arr);
@@ -4409,20 +4333,11 @@ function getDuplicateRecordsArr($module)
 			}
 			if($ui_type[$fld_arr[$k]] ==53 || $ui_type[$fld_arr[$k]] ==52)
 			{
-				$assigned_to= $result[$col_arr[$k]];
-				if($assigned_to != '')
+				if($result[$col_arr[$k]] != '')
 				{
-					$user=getUserName($assigned_to);
+					$owner=getOwnerName($result[$col_arr[$k]]);
 				}
-				if($assigned_to == 0 and $module != 'Products')
-				{
-					$group_info = Array();
-					$sql_group="select setype from vtiger_crmentity where crmid=?";
-					$result_group=$adb->pquery($sql_group,array($fld_values[$grp][$ii]['recordid']));
-					$group_info=getGroupName($fld_values[$grp][$ii]['recordid'],$adb->query_result($result_group,'setype'));
-					$user=$group_info[0];
-				}
-				$result[$col_arr[$k]]=$user;
+				$result[$col_arr[$k]]=$owner;
 			}	
 			if($ui_type[$fld_arr[$k]] ==50 or $ui_type[$fld_arr[$k]] ==51)
 			{
@@ -4680,15 +4595,14 @@ function getSecParameterforMerge($module)
 					 OR (vtiger_crmentity.smownerid in (0)
 					 AND (";
 
-                        if(sizeof($current_user_groups) > 0)
-                        {
-                              $sec_parameter .= " vtiger_accountgrouprelation.groupname IN (
-				      		SELECT groupname
-						FROM vtiger_groups
-						WHERE groupid IN (". implode(",", getCurrentUserGroupList()) ."))
-					OR ";
-                        }
-                         $sec_parameter .= " vtiger_accountgrouprelation.groupname IN (
+			if(sizeof($current_user_groups) > 0) {
+				$sec_parameter .= " vtiger_groups.groupname IN (
+									SELECT groupname
+									FROM vtiger_groups
+									WHERE groupid IN (". implode(",", getCurrentUserGroupList()) ."))
+									OR ";
+			}
+			$sec_parameter .= " vtiger_groups.groupname IN (
 				 	SELECT vtiger_groups.groupname
 					FROM vtiger_tmp_read_group_sharing_per
 					INNER JOIN vtiger_groups

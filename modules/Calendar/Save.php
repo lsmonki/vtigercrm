@@ -129,6 +129,12 @@ else
 	        $focus->column_fields['visibility'] = $_REQUEST['visibility'];
 	else
 	        $focus->column_fields['visibility'] = 'Private';
+	if($_REQUEST['assigntype'] == 'U') {
+		$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_user_id'];
+	}
+	else {
+		$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
+	}
 	$focus->save($tab_type);
 	/* For Followup START -- by Minnie */
 	if(isset($_REQUEST['followup']) && $_REQUEST['followup'] == 'on' && $activity_mode == 'Events' && isset($_REQUEST['followup_time_start']) &&  $_REQUEST['followup_time_start'] != '')
@@ -174,7 +180,7 @@ function getRequestData()
 	$mail_data['contact_name'] = $_REQUEST['contact_name'];
 	$mail_data['description'] = $_REQUEST['description'];
 	$mail_data['assingn_type'] = $_REQUEST['assigntype'];
-	$mail_data['group_name'] = $_REQUEST['assigned_group_name'];
+	$mail_data['group_name'] = getGroupName($_REQUEST['assigned_group_id']);
 	$mail_data['mode'] = $_REQUEST['mode'];
 	$value = getaddEventPopupTime($_REQUEST['time_start'],$_REQUEST['time_end'],'24');
 	$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];

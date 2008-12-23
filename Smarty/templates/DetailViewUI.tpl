@@ -278,7 +278,7 @@
 							<input name="assigntype" checked="checked" id="assigntype" value="T" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;{$APP.LBL_GROUP_NAME}
 							<span id="assign_user" style="display: none;">
 						{/if}
-                   				<select id="txtbox_U{$label}" onchange="setSelectValue('{$label}')" name="{$keyfldname}">
+                   				<select id="txtbox_U{$label}" onchange="setSelectValue('{$label}')" name="{$keyfldname}" class="small">
 				                    {foreach item=arr key=id from=$keyoptions.1}
 				                    	{foreach key=sel_value item=value from=$arr}
                        						 <option value="{$id}" {$value}>{$sel_value}</option>
@@ -291,7 +291,7 @@
 					{else}
 						<span id="assign_team" style="display: none;">
 					{/if}
-                   	<select id="txtbox_G{$label}" onchange="setSelectValue('{$label}')" name="assigned_group_name" class="groupname">
+                   	<select id="txtbox_G{$label}" onchange="setSelectValue('{$label}')" name="assigned_group_id" class="groupname small">
                     {foreach item=arr key=id from=$keyoptions.2}
                     	{foreach key=sel_value item=value from=$arr}
                        		 <option value="{$id}" {$value}>{$sel_value}</option>

@@ -42,22 +42,27 @@ if(isset($_REQUEST['mode']))
 
 foreach($focus->column_fields as $fieldname => $val)
 {
-    	if(isset($_REQUEST[$fieldname]))
-	{
+    if(isset($_REQUEST[$fieldname])) {
 		if(is_array($_REQUEST[$fieldname]))
 			$value = $_REQUEST[$fieldname];
 		else
 			$value = trim($_REQUEST[$fieldname]);	
-            $log->info("the value is ".$value);
-          $focus->column_fields[$fieldname] = $value;
-        }
-	if(isset($_REQUEST['annualrevenue']))
-        {
-                        $value = convertToDollar($_REQUEST['annualrevenue'],$rate);
-                        $focus->column_fields['annualrevenue'] = $value;
-        }
-        
+        $log->info("the value is ".$value);
+        $focus->column_fields[$fieldname] = $value;
+    }
 }
+if(isset($_REQUEST['annualrevenue'])) {
+    $value = convertToDollar($_REQUEST['annualrevenue'],$rate);
+    $focus->column_fields['annualrevenue'] = $value;
+}
+
+if($_REQUEST['assigntype'] == 'U') {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_user_id'];
+}
+else {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
+}
+
 $focus->save("Leads");
 
 $return_id = $focus->id;

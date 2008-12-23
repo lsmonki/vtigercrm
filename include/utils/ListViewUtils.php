@@ -2317,17 +2317,14 @@ function getListQuery($module,$where='')
 				ON vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid
-			LEFT JOIN vtiger_ticketgrouprelation
-				ON vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_contactdetails
 				ON vtiger_troubletickets.parent_id = vtiger_contactdetails.contactid
 			LEFT JOIN vtiger_account
 				ON vtiger_account.accountid = vtiger_troubletickets.parent_id
 			LEFT JOIN vtiger_users
 				ON vtiger_crmentity.smownerid = vtiger_users.id
-				AND vtiger_troubletickets.ticketid = vtiger_ticketcf.ticketid
 			LEFT JOIN vtiger_products 
 				ON vtiger_products.productid = vtiger_troubletickets.product_id 
 			WHERE vtiger_crmentity.deleted = 0 ";
@@ -2355,10 +2352,8 @@ function getListQuery($module,$where='')
 				ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
 			INNER JOIN vtiger_accountscf
 				ON vtiger_account.accountid = vtiger_accountscf.accountid
-			LEFT JOIN vtiger_accountgrouprelation
-				ON vtiger_accountscf.accountid = vtiger_accountgrouprelation.accountid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_account vtiger_account2
@@ -2381,24 +2376,18 @@ function getListQuery($module,$where='')
 						 FROM vtiger_tmp_read_user_sharing_per
 						 WHERE userid=".$current_user->id."
 						 AND tabid=".$tab_id.")
-					 OR (vtiger_crmentity.smownerid in (0)
-					 AND (";
+					 OR (";
 
                         if(sizeof($current_user_groups) > 0)
                         {
-                              $query .= " vtiger_accountgrouprelation.groupname IN (
-				      		SELECT groupname
-						FROM vtiger_groups
-						WHERE groupid IN (". implode(",", getCurrentUserGroupList()) ."))
+                              $query .= " vtiger_groups.groupid IN (". implode(",", getCurrentUserGroupList()) ."))
 					OR ";
                         }
-                         $query .= " vtiger_accountgrouprelation.groupname IN (
-				 	SELECT vtiger_groups.groupname
+                         $query .= " vtiger_groups.groupid IN (
+				 	SELECT vtiger_tmp_read_group_sharing_per.sharedgroupid
 					FROM vtiger_tmp_read_group_sharing_per
-					INNER JOIN vtiger_groups
-						ON vtiger_groups.groupid = vtiger_tmp_read_group_sharing_per.sharedgroupid
 					WHERE userid=".$current_user->id."
-					AND tabid=".$tab_id.")))) ";
+					AND tabid=".$tab_id.")) ";
                 }
 			break;
 
@@ -2420,10 +2409,8 @@ function getListQuery($module,$where='')
 				ON vtiger_potentialscf.potentialid = vtiger_potential.potentialid
 			LEFT JOIN vtiger_campaign
 				ON vtiger_campaign.campaignid = vtiger_potential.campaignid
-			LEFT JOIN vtiger_potentialgrouprelation
-				ON vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 ".$where; 
@@ -2451,14 +2438,13 @@ function getListQuery($module,$where='')
 				ON vtiger_leadaddress.leadaddressid = vtiger_leadsubdetails.leadsubscriptionid
 			INNER JOIN vtiger_leadscf
 				ON vtiger_leaddetails.leadid = vtiger_leadscf.leadid
-			LEFT JOIN vtiger_leadgrouprelation
-				ON vtiger_leadscf.leadid = vtiger_leadgrouprelation.leadid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_leadgrouprelation.groupname
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_leaddetails.converted = 0 ".$where;
+		
                if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -2489,10 +2475,8 @@ function getListQuery($module,$where='')
 			FROM vtiger_notes
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_notes.notesid
-			LEFT JOIN vtiger_notegrouprelation
-				ON vtiger_notegrouprelation.notesid = vtiger_notes.notesid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_notegrouprelation.groupname
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 ".$where;
@@ -2519,10 +2503,8 @@ function getListQuery($module,$where='')
 				ON vtiger_contactscf.contactid = vtiger_contactdetails.contactid
 			LEFT JOIN vtiger_account
 				ON vtiger_account.accountid = vtiger_contactdetails.accountid
-			LEFT JOIN vtiger_contactgrouprelation
-				ON vtiger_contactgrouprelation.contactid = vtiger_contactdetails.contactid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_contactdetails vtiger_contactdetails2
@@ -2553,16 +2535,14 @@ function getListQuery($module,$where='')
 			ON vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid
 		LEFT JOIN vtiger_seactivityrel
 			ON vtiger_seactivityrel.activityid = vtiger_activity.activityid
-		LEFT JOIN vtiger_activitygrouprelation
-			ON vtiger_activitygrouprelation.activityid = vtiger_activity.activityid
-		LEFT JOIN vtiger_groups
-			ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
 		LEFT OUTER JOIN vtiger_activity_reminder
 			ON vtiger_activity_reminder.activity_id = vtiger_activity.activityid
 		LEFT JOIN vtiger_crmentity
 			ON vtiger_crmentity.crmid = vtiger_activity.activityid
 		LEFT JOIN vtiger_users
 			ON vtiger_users.id = vtiger_crmentity.smownerid
+		LEFT JOIN vtiger_groups
+			ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 		LEFT OUTER JOIN vtiger_account
 			ON vtiger_account.accountid = vtiger_contactdetails.accountid
 		LEFT OUTER JOIN vtiger_leaddetails
@@ -2618,10 +2598,8 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_cntactivityrel
 				ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
 				AND vtiger_cntactivityrel.contactid = vtiger_cntactivityrel.contactid
-			LEFT JOIN vtiger_activitygrouprelation
-				ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_salesmanactivityrel
 				ON vtiger_salesmanactivityrel.activityid = vtiger_activity.activityid
 			LEFT JOIN vtiger_emaildetails
@@ -2696,10 +2674,8 @@ function getListQuery($module,$where='')
 				ON vtiger_potential.potentialid = vtiger_quotes.potentialid
 			LEFT JOIN vtiger_contactdetails
 				ON vtiger_contactdetails.contactid = vtiger_quotes.contactid
-			LEFT JOIN vtiger_quotegrouprelation
-				ON vtiger_quotes.quoteid = vtiger_quotegrouprelation.quoteid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_quotegrouprelation.groupname
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users as vtiger_usersQuotes
@@ -2734,10 +2710,8 @@ function getListQuery($module,$where='')
 				ON vtiger_purchaseordercf.purchaseorderid = vtiger_purchaseorder.purchaseorderid
 			LEFT JOIN vtiger_currency_info
 				ON vtiger_purchaseorder.currency_id = vtiger_currency_info.id
-			LEFT JOIN vtiger_pogrouprelation
-				ON vtiger_purchaseorder.purchaseorderid = vtiger_pogrouprelation.purchaseorderid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_pogrouprelation.groupname
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 ".$where;
@@ -2777,10 +2751,8 @@ function getListQuery($module,$where='')
 				ON vtiger_potential.potentialid = vtiger_salesorder.potentialid
 			LEFT JOIN vtiger_invoice_recurring_info
 				ON vtiger_invoice_recurring_info.salesorderid = vtiger_salesorder.salesorderid
-			LEFT JOIN vtiger_sogrouprelation
-				ON vtiger_salesorder.salesorderid = vtiger_sogrouprelation.salesorderid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_sogrouprelation.groupname
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 ".$where;
@@ -2817,10 +2789,8 @@ function getListQuery($module,$where='')
 				ON vtiger_contactdetails.contactid = vtiger_invoice.contactid
 			INNER JOIN vtiger_invoicecf
 				ON vtiger_invoice.invoiceid = vtiger_invoicecf.invoiceid
-			LEFT JOIN vtiger_invoicegrouprelation
-				ON vtiger_invoice.invoiceid = vtiger_invoicegrouprelation.invoiceid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_invoicegrouprelation.groupname
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 ".$where;
@@ -2838,12 +2808,10 @@ function getListQuery($module,$where='')
 			FROM vtiger_campaign
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_campaign.campaignid
-			LEFT JOIN vtiger_campaigngrouprelation
-				ON vtiger_campaign.campaignid = vtiger_campaigngrouprelation.campaignid
 			INNER JOIN vtiger_campaignscf
 			        ON vtiger_campaign.campaignid = vtiger_campaignscf.campaignid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_campaigngrouprelation.groupname
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_products
@@ -2893,21 +2861,16 @@ function getReadEntityIds($module)
 			FROM vtiger_leaddetails
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_leaddetails.leadid
-			LEFT JOIN vtiger_leadgrouprelation
-				ON vtiger_leaddetails.leadid = vtiger_leadgrouprelation.leadid
 			LEFT JOIN vtiger_groups
-                                ON vtiger_groups.groupname = vtiger_leadgrouprelation.groupname
+                 ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_leaddetails.converted = 0 ";
-               if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-                {
+        if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+        {
 			$sec_parameter=getListViewSecurityParameter($module);
 			$query .= $sec_parameter;
-                }				
-
+         }
 	}
-
-
 	if($module == "Accounts")
 	{
 		//Query modified to sort by assigned to
@@ -2915,10 +2878,8 @@ function getReadEntityIds($module)
 			FROM vtiger_account
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_account.accountid
-			LEFT JOIN vtiger_accountgrouprelation
-				ON vtiger_accountgrouprelation.accountid = vtiger_account.accountid
 			LEFT JOIN vtiger_groups
-                               	ON vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
+                ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
                 {
@@ -2936,10 +2897,8 @@ function getReadEntityIds($module)
 			FROM vtiger_potential
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_potential.potentialid
-			LEFT JOIN vtiger_potentialgrouprelation
-				ON vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 			LEFT JOIN vtiger_groups
-                                ON vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
+                                ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 "; 
 
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
@@ -2959,10 +2918,8 @@ function getReadEntityIds($module)
 			FROM vtiger_contactdetails
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
-			LEFT JOIN vtiger_contactgrouprelation
-				ON vtiger_contactgrouprelation.contactid = vtiger_contactdetails.contactid
 			LEFT JOIN vtiger_groups
-                                ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
+                                ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 ";
 
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
@@ -2994,10 +2951,8 @@ function getReadEntityIds($module)
 			FROM vtiger_purchaseorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid
-			LEFT JOIN vtiger_pogrouprelation
-				ON vtiger_purchaseorder.purchaseorderid = vtiger_pogrouprelation.purchaseorderid
 			LEFT JOIN vtiger_groups
-                                ON vtiger_groups.groupname = vtiger_pogrouprelation.groupname
+                                ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
@@ -3012,10 +2967,8 @@ function getReadEntityIds($module)
 			FROM vtiger_salesorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_salesorder.salesorderid
-			LEFT JOIN vtiger_sogrouprelation
-				ON vtiger_salesorder.salesorderid = vtiger_sogrouprelation.salesorderid
 			LEFT JOIN vtiger_groups
-                                ON vtiger_groups.groupname = vtiger_sogrouprelation.groupname
+                ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
@@ -3029,10 +2982,8 @@ function getReadEntityIds($module)
 			FROM vtiger_invoice
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_invoice.invoiceid
-			LEFT JOIN vtiger_invoicegrouprelation
-				ON vtiger_invoice.invoiceid = vtiger_invoicegrouprelation.invoiceid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_invoicegrouprelation.groupname
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
@@ -3046,10 +2997,8 @@ function getReadEntityIds($module)
 		        FROM vtiger_quotes
 			INNER JOIN vtiger_crmentity
 			        ON vtiger_crmentity.crmid = vtiger_quotes.quoteid
-			LEFT JOIN vtiger_quotegrouprelation
-			        ON vtiger_quotes.quoteid  = vtiger_quotegrouprelation.quoteid
 			LEFT JOIN vtiger_groups
-			        ON vtiger_groups.groupname = vtiger_quotegrouprelation.groupname
+			        ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
@@ -3063,10 +3012,8 @@ function getReadEntityIds($module)
 			FROM vtiger_troubletickets
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid
-			LEFT JOIN vtiger_ticketgrouprelation
-				ON vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{

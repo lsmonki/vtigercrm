@@ -92,7 +92,7 @@ class Activity extends CRMEntity {
 	var $default_order_by = 'due_date';
 	var $default_sort_order = 'ASC';
 
-	var $groupTable = Array('vtiger_activitygrouprelation','activityid');
+	//var $groupTable = Array('vtiger_activitygrouprelation','activityid');
 
 	function Activity() {
 		$this->log = LoggerManager::getLogger('Calendar');
@@ -378,6 +378,9 @@ function insertIntoRecurringTable(& $recurObj)
       			$sql = "delete from vtiger_salesmanactivityrel where activityid=?";
       			$adb->pquery($sql, array($this->id));
     		}
+
+		$user_sql = $adb->pquery("select count(*) as count from vtiger_users where id=?", array($this->column_fields['assigned_user_id']));
+    	if($adb->query_result($user_sql, 0, 'count') != 0) {
 		$sql_qry = "insert into vtiger_salesmanactivityrel (smid,activityid) values(?,?)";
     		$adb->pquery($sql_qry, array($this->column_fields['assigned_user_id'], $this->id));
 		
@@ -394,10 +397,11 @@ function insertIntoRecurringTable(& $recurObj)
 						$query="insert into vtiger_salesmanactivityrel values(?,?)";
 						$adb->pquery($query, array($inviteeid, $this->id));
 					}	
-				}
+				}	
 			}
-		}	
-  	}
+		}
+	}	
+}
 	
 	
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
@@ -453,7 +457,7 @@ function insertIntoRecurringTable(& $recurObj)
 
 			$returnset = '&return_module=Calendar&return_action=CallRelatedList&activity_mode=Events&return_id='.$id;
 
-			$query = 'select vtiger_users.user_name,vtiger_contactdetails.accountid,vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,vtiger_contactdetails.lastname, vtiger_contactdetails.department, vtiger_contactdetails.title, vtiger_contactdetails.email, vtiger_contactdetails.phone, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_contactdetails inner join vtiger_cntactivityrel on vtiger_cntactivityrel.contactid=vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_cntactivityrel.activityid = vtiger_activitygrouprelation.activityid left join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname where vtiger_cntactivityrel.activityid='.$id.' and vtiger_crmentity.deleted=0';
+			$query = 'select vtiger_users.user_name,vtiger_contactdetails.accountid,vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,vtiger_contactdetails.lastname, vtiger_contactdetails.department, vtiger_contactdetails.title, vtiger_contactdetails.email, vtiger_contactdetails.phone, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_contactdetails inner join vtiger_cntactivityrel on vtiger_cntactivityrel.contactid=vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid where vtiger_cntactivityrel.activityid='.$id.' and vtiger_crmentity.deleted=0';
 			$log->debug("Exiting get_contacts method ...");
 			return GetRelatedList('Calendar','Contacts',$focus,$query,$button,$returnset);
         }

@@ -537,22 +537,20 @@ function ajaxChangeStatus(statusname)
 	}
 	else if(statusname == 'owner')
 	{
-	   if($("user_checkbox").checked)
-	   {
+		if($("user_checkbox").checked)
+		{
 		    fninvsh('changeowner');
-		    var url='&user_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
+		    var url='&owner_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
 		    {/literal}
 		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring+searchurl;
 		    {literal}
-     }
-    else
-    {
-        fninvsh('changeowner');
-		    var url='&group_id='+document.getElementById('lead_group_owner').options[document.getElementById('lead_group_owner').options.selectedIndex].value;
-	       {/literal}
+		} else {
+			fninvsh('changeowner');
+			var url='&owner_id='+document.getElementById('lead_group_owner').options[document.getElementById('lead_group_owner').options.selectedIndex].value;
+	      	{/literal}
 		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring+searchurl;
-        {literal}
-    }
+        	{literal}
+    	}
 	}
 	new Ajax.Request(
                 'index.php',

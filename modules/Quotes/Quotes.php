@@ -100,9 +100,7 @@ class Quotes extends CRMEntity {
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'crmid';
 	var $default_sort_order = 'ASC';
-	var $groupTable = Array('vtiger_quotegrouprelation','quoteid');
-	
-	
+	//var $groupTable = Array('vtiger_quotegrouprelation','quoteid');
 
 	/**	Constructor which will set the column_fields in this object
 	 */
@@ -180,9 +178,8 @@ class Quotes extends CRMEntity {
 		from vtiger_salesorder
 		inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_salesorder.salesorderid
 		left outer join vtiger_quotes on vtiger_quotes.quoteid=vtiger_salesorder.quoteid 
-		left outer join vtiger_account on vtiger_account.accountid=vtiger_salesorder.accountid 
-		left join vtiger_sogrouprelation on vtiger_salesorder.salesorderid=vtiger_sogrouprelation.salesorderid 
-		left join vtiger_groups on vtiger_groups.groupname=vtiger_sogrouprelation.groupname 
+		left outer join vtiger_account on vtiger_account.accountid=vtiger_salesorder.accountid  
+		left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
 		left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 		where vtiger_crmentity.deleted=0 and vtiger_salesorder.quoteid = ".$id;
 		$log->debug("Exiting get_salesorder method ...");
@@ -208,7 +205,7 @@ class Quotes extends CRMEntity {
 		else
 			$returnset = '&return_module=Quotes&return_action=CallRelatedList&return_id='.$id;
 
-		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_contactdetails.contactid, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime,vtiger_recurringevents.recurringtype from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and vtiger_crmentity.deleted=0 and activitytype='Task' and (vtiger_activity.status is not NULL and vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL and vtiger_activity.status != 'Deferred')";
+		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_contactdetails.contactid, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime,vtiger_recurringevents.recurringtype from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid where vtiger_seactivityrel.crmid=".$id." and vtiger_crmentity.deleted=0 and activitytype='Task' and (vtiger_activity.status is not NULL and vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL and vtiger_activity.status != 'Deferred')";
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Quotes','Calendar',$focus,$query,$button,$returnset);
 	}
@@ -232,8 +229,7 @@ class Quotes extends CRMEntity {
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid
 				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid
 				left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid
-				left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid
-                                left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname
+                                left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
 				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 				where vtiger_activity.activitytype='Task'
   				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred')
@@ -269,10 +265,8 @@ class Quotes extends CRMEntity {
 		 inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
 		 inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
 		 inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_notes.notesid and crm2.deleted=0
-		 LEFT JOIN vtiger_notegrouprelation
-		 	 ON vtiger_notegrouprelation.notesid = vtiger_notes.notesid
 		 LEFT JOIN vtiger_groups
-			 ON vtiger_groups.groupname = vtiger_notegrouprelation.groupname		 
+			 ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 		 left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid =vtiger_notes.notesid
 		 left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
 		 inner join vtiger_users on crm2.smownerid= vtiger_users.id

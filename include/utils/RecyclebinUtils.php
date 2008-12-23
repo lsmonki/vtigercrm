@@ -363,13 +363,7 @@ function getRbListViewEntries($list_result,$lv_array,$module)
 
 			if($lv_array[$k]['ui_type'] == 53 && $lv_array[$k]['columnname'] == 'smownerid')
 			{
-				if($lv_val[$crmid][$lv_array[$k]['columnname']] != 0) {
-					$lv_val[$crmid][$lv_array[$k]['columnname']]= getUserName($lv_val[$crmid][$lv_array[$k]['columnname']]);
-				}
-				else {
-					$group_info = getGroupName($crmid, $module); 
-					$lv_val[$crmid][$lv_array[$k]['columnname']]= $group_info[0];
-				}
+				$lv_val[$crmid][$lv_array[$k]['columnname']]= getOwnerName($lv_val[$crmid][$lv_array[$k]['columnname']]);
 			}
 			if($lv_array[$k]['ui_type'] == 15 && $lv_array[$k]['columnname'] == 'status' && $lv_val[$crmid][$lv_array[$k]['columnname']] == '')
 			{

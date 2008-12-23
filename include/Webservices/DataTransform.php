@@ -48,7 +48,7 @@
 					$groupId = vtws_getGroupIdFromWebserviceGroupId($row[$field]);
 					if($groupId !== null){
 						$_REQUEST['assigntype'] = 'T';
-						$_REQUEST['assigned_group_name'] = fetchGroupName($groupId);
+						$_REQUEST['assigned_group_id'] = $groupId;//fetchGroupName($groupId);
 						$row[$field] = 0;
 					}else {
 						$ownerDetails = getIdComponents($row[$field]);

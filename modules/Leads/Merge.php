@@ -132,10 +132,8 @@ $query = "select ".$selectcolumns." from vtiger_leaddetails
   inner join vtiger_leadsubdetails on vtiger_leadsubdetails.leadsubscriptionid=vtiger_leaddetails.leadid 
   inner join vtiger_leadaddress on vtiger_leadaddress.leadaddressid=vtiger_leadsubdetails.leadsubscriptionid 
   inner join vtiger_leadscf on vtiger_leaddetails.leadid = vtiger_leadscf.leadid 
-  LEFT JOIN vtiger_leadgrouprelation
-	ON vtiger_leaddetails.leadid = vtiger_leadgrouprelation.leadid
   LEFT JOIN vtiger_groups
-  	ON vtiger_groups.groupname = vtiger_leadgrouprelation.groupname
+  	ON vtiger_groups.groupid = vtiger_crmentity.smownerid
   left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
   where vtiger_crmentity.deleted=0 and vtiger_leaddetails.leadid in (". generateQuestionMarks($mass_merge) .")";
 		

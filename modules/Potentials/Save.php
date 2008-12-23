@@ -43,7 +43,12 @@ if(isset($_REQUEST['amount']))
 	$value = convertToDollar($_REQUEST['amount'],$rate);
 	$focus->column_fields['amount'] = $value;
 }
-
+if($_REQUEST['assigntype'] == 'U')  {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_user_id'];
+}
+else {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
+}
 $focus->save("Potentials");
 $pot_id = $return_id = $focus->id;
 

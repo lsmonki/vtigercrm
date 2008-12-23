@@ -426,15 +426,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		if($value != '' && $value != 0)
 			$assigned_user_id = $value;
-		else{
-			if($value=='0'){
-				$record = $col_fields["record_id"];
-				$module = $col_fields["record_module"];
-				$selected_groupname = getGroupName($record, $module);
-			}else
+		else {
 				$assigned_user_id = $current_user->id;
 		}
-		
+
 		if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0))
 		{
 			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
@@ -446,22 +441,19 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		if($noof_group_rows!=0)
 		{
-			do
+			//Commented to avoid security for groups
+			/*if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0))
 			{
-				$groupname=decode_html($nameArray["groupname"]);
-				$selected = '';	
-				if($groupname == $selected_groupname[0])
-				{
-					$selected = "selected";
-				}	
-				$group_option[] = array($groupname=>$selected);
-
-			}while($nameArray = $adb->fetch_array($result));
-
+				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
+			}
+			else
+			{
+				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
+			}*/
+			$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
 		}
-
 		$fieldvalue[]=$users_combo;  
-		$fieldvalue[] = $group_option;
+		$fieldvalue[] = $groups_combo;
 	}
 	elseif($uitype == 51 || $uitype == 50 || $uitype == 73)
 	{

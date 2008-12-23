@@ -594,7 +594,7 @@ function ajaxChangeStatus(statusname)
 	   if($("user_checkbox").checked)
 	   {
 		    fninvsh('changeowner');
-		    var url='&user_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
+		    var url='&owner_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value+'&owner_type=User';
 		    {/literal}
 		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+url+"&viewname="+viewid+"&idlist="+idstring;
 		    {literal}
@@ -602,7 +602,7 @@ function ajaxChangeStatus(statusname)
     else
     {
         fninvsh('changeowner');
-		    var url='&group_id='+document.getElementById('lead_group_owner').options[document.getElementById('lead_group_owner').options.selectedIndex].value;
+		    var url='&owner_id='+document.getElementById('lead_group_owner').options[document.getElementById('lead_group_owner').options.selectedIndex].value+'&owner_type=Group';
 	       {/literal}
 		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+url+"&viewname="+viewid+"&idlist="+idstring;
 		    {literal}

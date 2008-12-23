@@ -29,10 +29,10 @@ else
 
 $adb->println("\n\nMail Sending Process has been started.");
 //This function call is used to send mail to the assigned to user. In this mail CC and BCC addresses will be added.
-if($focus->column_fields["assigned_user_id"]==0 && $_REQUEST['assigned_group_name']!='')
+if($REQUEST['assigntype' == 'T'] && $_REQUEST['assigned_group_id']!='')
 {
 	$grp_obj = new GetGroupUsers();
-	$grp_obj->getAllUsersInGroup(getGrpId($_REQUEST['assigned_group_name']));
+	$grp_obj->getAllUsersInGroup($_REQUEST['assigned_group_id']);
 	$users_list = constructList($grp_obj->group_users,'INTEGER');
 	if (count($users_list) > 0) {
 		$sql = "select first_name, last_name, email1, email2, yahoo_id from vtiger_users where id in (". generateQuestionMarks($users_list) .")";

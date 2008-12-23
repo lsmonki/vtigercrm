@@ -113,8 +113,8 @@ function createUserSharingPrivilegesfile($userid)
 	global $adb;
 	require('user_privileges/user_privileges_'.$userid.'.php');
 	$handle=@fopen($root_directory.'user_privileges/sharing_privileges_'.$userid.'.php',"w+");
-
-	if($handle)
+	
+if($handle)
 	{
 		$newbuf='';
 		$newbuf .="<?php\n\n";
@@ -132,7 +132,6 @@ function createUserSharingPrivilegesfile($userid)
 		}
 		else
 		{
-
 			//Constructig the Default Org Share Array
 			$def_org_share=getAllDefaultSharingAction();
 			$newbuf .= "\$defaultOrgSharingPermission=".constructArray($def_org_share).";\n";

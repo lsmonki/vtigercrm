@@ -187,10 +187,8 @@ class Faq extends CRMEntity {
 					inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
 					inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
 					inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_notes.notesid and crm2.deleted=0
-					LEFT JOIN vtiger_notegrouprelation
-						ON vtiger_notegrouprelation.notesid = vtiger_notes.notesid
 					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupname = vtiger_notegrouprelation.groupname			
+						ON vtiger_groups.groupid = vtiger_crmentity.smownerid			
 					inner join vtiger_users on crm2.smownerid= vtiger_users.id
 					where vtiger_crmentity.crmid=".$id;
 		$query .= $sec_parameter;

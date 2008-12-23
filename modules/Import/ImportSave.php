@@ -347,10 +347,8 @@ function is_record_exist($module,$focus)
 		       		inner join vtiger_crmentity  on vtiger_crmentity.crmid = vtiger_leaddetails.leadid	
 				inner join vtiger_leadsubdetails on vtiger_leaddetails.leadid = vtiger_leadsubdetails.leadsubscriptionid 
 				inner join vtiger_leadaddress on vtiger_leadaddress.leadaddressid = vtiger_leaddetails.leadid 
-				LEFT JOIN vtiger_leadgrouprelation
-						ON vtiger_leaddetails.leadid = vtiger_leadgrouprelation.leadid
 					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupname = vtiger_leadgrouprelation.groupname
+						ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_users
 						ON vtiger_users.id = vtiger_crmentity.smownerid
 				where vtiger_crmentity.deleted = 0 AND vtiger_leaddetails.converted = 0 $sec_parameter";
@@ -364,10 +362,8 @@ function is_record_exist($module,$focus)
 					ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
 				INNER JOIN vtiger_accountshipads
 					ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
-				LEFT JOIN vtiger_accountgrouprelation
-					ON vtiger_account.accountid = vtiger_accountgrouprelation.accountid
 				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_users
 					ON vtiger_users.id = vtiger_crmentity.smownerid
 				WHERE vtiger_crmentity.deleted = 0 $sec_parameter";
@@ -383,10 +379,8 @@ function is_record_exist($module,$focus)
 					ON vtiger_contactsubdetails.contactsubscriptionid = vtiger_contactdetails.contactid
 				LEFT JOIN vtiger_customerdetails
 						ON vtiger_customerdetails.customerid=vtiger_contactdetails.contactid 
-				LEFT JOIN vtiger_contactgrouprelation
-						ON vtiger_contactgrouprelation.contactid = vtiger_contactdetails.contactid
 					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
+						ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_users
 						ON vtiger_users.id = vtiger_crmentity.smownerid
 				WHERE vtiger_crmentity.deleted = 0 $sec_parameter";
@@ -403,10 +397,8 @@ function is_record_exist($module,$focus)
 			$sel_qry = "select count(*) as count from vtiger_troubletickets
 		       		INNER JOIN vtiger_crmentity
 						ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid
-					LEFT JOIN vtiger_ticketgrouprelation
-					ON vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
 				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_users
 					ON vtiger_crmentity.smownerid = vtiger_users.id
 				WHERE vtiger_crmentity.deleted = 0 $sec_parameter";
@@ -416,10 +408,8 @@ function is_record_exist($module,$focus)
 			$sel_qry = "select count(*) as count from vtiger_potential
 		       		INNER JOIN vtiger_crmentity
 					ON vtiger_crmentity.crmid = vtiger_potential.potentialid
-				LEFT JOIN vtiger_potentialgrouprelation
-					ON vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_users
 					ON vtiger_users.id = vtiger_crmentity.smownerid	 
 				WHERE vtiger_crmentity.deleted = 0 $sec_parameter";
@@ -502,10 +492,8 @@ function overwrite_duplicate_records($module,$focus)
 			inner join vtiger_crmentity  on vtiger_crmentity.crmid = vtiger_leaddetails.leadid
 			inner join vtiger_leadsubdetails on vtiger_leaddetails.leadid = vtiger_leadsubdetails.leadsubscriptionid
 			inner join vtiger_leadaddress on vtiger_leadaddress.leadaddressid = vtiger_leaddetails.leadid
-			LEFT JOIN vtiger_leadgrouprelation
-						ON vtiger_leaddetails.leadid = vtiger_leadgrouprelation.leadid
 					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupname = vtiger_leadgrouprelation.groupname
+						ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_users
 						ON vtiger_users.id = vtiger_crmentity.smownerid
 			where vtiger_crmentity.deleted = 0 AND vtiger_leaddetails.converted = 0 $where $sec_parameter order by vtiger_leaddetails.leadid ASC";
@@ -519,10 +507,8 @@ function overwrite_duplicate_records($module,$focus)
 			ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
 			INNER JOIN vtiger_accountshipads
 			ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
-			LEFT JOIN vtiger_accountgrouprelation
-					ON vtiger_account.accountid = vtiger_accountgrouprelation.accountid
 				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupname = vtiger_accountgrouprelation.groupname
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_users
 					ON vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 $where $sec_parameter order by vtiger_account.accountid ASC";
@@ -538,10 +524,8 @@ function overwrite_duplicate_records($module,$focus)
 			ON vtiger_contactsubdetails.contactsubscriptionid = vtiger_contactdetails.contactid
 			LEFT JOIN vtiger_customerdetails
 						ON vtiger_customerdetails.customerid=vtiger_contactdetails.contactid
-			LEFT JOIN vtiger_contactgrouprelation
-						ON vtiger_contactgrouprelation.contactid = vtiger_contactdetails.contactid
 					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
+						ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_users
 						ON vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 $where $sec_parameter order by vtiger_contactdetails.contactid ASC";
@@ -558,10 +542,8 @@ function overwrite_duplicate_records($module,$focus)
 		$sel_qry = "SELECT vtiger_troubletickets.ticketid FROM vtiger_troubletickets
 			INNER JOIN vtiger_crmentity
 			ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid
-			LEFT JOIN vtiger_ticketgrouprelation
-					ON vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
 				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_users
 					ON vtiger_crmentity.smownerid = vtiger_users.id
 			WHERE vtiger_crmentity.deleted = 0 $where $sec_parameter order by vtiger_troubletickets.ticketid ASC";
@@ -571,10 +553,8 @@ function overwrite_duplicate_records($module,$focus)
 		$sel_qry = "SELECT vtiger_potential.potentialid FROM vtiger_potential
 			INNER JOIN vtiger_crmentity
 			ON vtiger_crmentity.crmid = vtiger_potential.potentialid
-			LEFT JOIN vtiger_potentialgrouprelation
-					ON vtiger_potential.potentialid = vtiger_potentialgrouprelation.potentialid
 				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupname = vtiger_potentialgrouprelation.groupname
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_users
 					ON vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0 $where $sec_parameter order by vtiger_potential.potentialid ASC";

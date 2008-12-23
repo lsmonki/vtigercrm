@@ -59,7 +59,12 @@ if(isset($_REQUEST['expectedroi']))
 	$value = convertToDollar($_REQUEST['expectedroi'],$rate);
 	$focus->column_fields['expectedroi'] = $value;
 }
-
+if($_REQUEST['assigntype'] == 'U')  {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_user_id'];
+}
+else {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
+}
 
 $focus->save("Campaigns");
 $return_id = $focus->id;

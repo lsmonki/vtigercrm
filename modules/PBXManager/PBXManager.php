@@ -13,7 +13,7 @@ class PBXManager extends CRMEntity {
 	// Mandatory for function getGroupName
 	// Array(groupTableName, groupColumnId)
 	// groupTableName should have (groupname column)
-	var $groupTable = Array('vtiger_pbxmanagergrouprel','pbxmanagerid');
+	//var $groupTable = Array('vtiger_pbxmanagergrouprel','pbxmanagerid');
 
 	// Mandatory table for supporting custom fields
 	var $customFieldTable = Array();
@@ -95,10 +95,8 @@ class PBXManager extends CRMEntity {
 
 		$query .= "	INNER JOIN vtiger_crmentity
 						ON vtiger_crmentity.crmid = $this->table_name.$this->table_index
-					LEFT JOIN ".$this->groupTable[0].
-						" ON ".$this->table_name.".".$this->table_index."=".$this->groupTable[0].".".$this->groupTable[1].
-					" LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupname = ".$this->groupTable[0].".".groupname;
+					 LEFT JOIN vtiger_groups
+						ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
 
 		// Consider custom table join as well.
 		if(!empty($this->customFieldTable)) {
@@ -180,7 +178,7 @@ class PBXManager extends CRMEntity {
 		
 		$fields_list = getFieldsListFromQuery($sql);
 
-		$query = "SELECT $fields_list, ". $this->groupTable[0].'.'.$this->groupTable[1] ." as 'Assigned To Group', 
+		$query = "SELECT $fields_list, 'vtiger_groups_groupname as Assigned To Group', 
 				CASE WHEN (vtiger_users.user_name NOT LIKE '') THEN vtiger_users.user_name ELSE vtiger_groups.groupname END 
 				AS user_name FROM vtiger_crmentity INNER JOIN $this->table_name ON vtiger_crmentity.crmid=$this->table_name.$this->table_index";
 
@@ -189,9 +187,9 @@ class PBXManager extends CRMEntity {
 				      " = $this->table_name.$this->table_index"; 
 		}
 
-		$query .= " 
-			LEFT JOIN " . $this->groupTable[0] . " ON " . $this->groupTable[0].'.'.$this->groupTable[1] . " = $this->table_name.$this->table_index
-			LEFT JOIN vtiger_groups ON vtiger_groups.groupname = " . $this->groupTable[0] . '.' . $this->groupTable[1];
+		$query .=  
+			//"LEFT JOIN " . $this->groupTable[0] . " ON " . $this->groupTable[0].'.'.$this->groupTable[1] . " = $this->table_name.$this->table_index
+			"LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
 		$query .= " LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid = vtiger_users.id and vtiger_users.status='Active'";
 
 		$where_auto = " vtiger_crmentity.deleted=0";
@@ -308,11 +306,9 @@ class PBXManager extends CRMEntity {
 
 		$query = "SELECT vtiger_crmentity.*, $other->table_name.*";
 
-		if(!empty($other->groupTable)) {
+		
 			$query .= ", CASE WHEN (vtiger_users.user_name NOT LIKE '') THEN vtiger_users.user_name ELSE vtiger_groups.groupname END AS user_name";
-		} else {
-			$query .= ", vtiger_users.user_name AS user_name";
-		}
+		
 
 		$more_relation = '';
 		if(!empty($other->related_tables)) {
@@ -333,11 +329,9 @@ class PBXManager extends CRMEntity {
 		$query .= $more_relation;
 		$query .= " LEFT  JOIN vtiger_users        ON vtiger_users.id = vtiger_crmentity.smownerid";
 
-		if(!empty($other->groupTable)) {
-			$query .= " LEFT  JOIN ".$other->groupTable[0].' ON '.$other->groupTable[0].'.'.$other->groupTable[1].
-				" = $other->table_name.$other->table_index ";
-			$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupname = " . $other->groupTable[0].'.groupname';
-		}
+		
+			$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		
 		$query .= " WHERE vtiger_crmentity.deleted = 0 AND vtiger_crmentityrel.crmid = $id";
 
 		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);	

@@ -71,7 +71,7 @@ class Documents extends CRMEntity {
 	);				     
 	var $list_link_field= 'notes_title';
 	
-	var $groupTable = Array('vtiger_notegrouprelation','notesid');
+	//var $groupTable = Array('vtiger_notegrouprelation','notesid');
 
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'title';

@@ -36,6 +36,12 @@ setObjectValuesFromRequest($focus);
 $focus->column_fields['currency_id'] = $_REQUEST['inventory_currency'];
 $cur_sym_rate = getCurrencySymbolandCRate($_REQUEST['inventory_currency']);
 $focus->column_fields['conversion_rate'] = $cur_sym_rate['rate'];
+if($_REQUEST['assigned_type'] == 'U') {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_user_id'];
+}
+else {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
+}
 $focus->save("SalesOrder");
 
 $return_id = $focus->id;

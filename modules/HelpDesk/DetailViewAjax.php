@@ -38,7 +38,7 @@ if($ajaxaction == "DETAILVIEW")
 		$modObj->mode = "edit";
 
 		//Added to construct the update log for Ticket history
-		$assigned_group_name = $_REQUEST['assigned_group_name'];
+		$assigned_group_name = getGroupName($_REQUEST['assigned_group_id']);
 		$assigntype = $_REQUEST['assigntype'];
 
 		$fldvalue = $modObj->constructUpdateLog($modObj, $modObj->mode, $assigned_group_name, $assigntype);

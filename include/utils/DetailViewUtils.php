@@ -406,37 +406,36 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	//asterisk integration ends
 	elseif($uitype == 53)
 	{
-		global $noof_group_rows;
-		$user_id = $col_fields[$fieldname];
-		$user_name = getUserName($user_id);
-		$id = $col_fields["record_id"];	
-		$module = $col_fields["record_module"];
-		$group_info = getGroupName($id, $module);
-		$groupname = $group_info[0];
-		$groupid = $group_info[1];
-		if($user_id != 0)
-		{	
-			$label_fld[] =getTranslatedString($fieldlabel).' '.$app_strings['LBL_USER'];
-			$label_fld[] =$user_name;
-			$label_fld ["options"][] = 'User';
-		}else
-		{
-			
-			$label_fld[] =getTranslatedString($fieldlabel).' '.$app_strings['LBL_GROUP'];
-			$label_fld[] =$groupname;
-			$label_fld ["options"][] = 'Group';
+		global $noof_group_rows, $adb;
+		$owner_id = $col_fields[$fieldname];
+		
+		$user = 'no';
+		$result = $adb->pquery("SELECT count(*) as count from vtiger_users where id = ?",array($owner_id));
+		if($adb->query_result($result,0,'count') > 0) {
+			$user = 'yes';
 		}
+		
+		$owner_name = getOwnerName($owner_id);
+		$label_fld[] =getTranslatedString($fieldlabel);
+		$label_fld[] =$owner_name;
+		
 		if(is_admin($current_user))
 		{
-			$label_fld["secid"][] = $user_id;
-			$label_fld["link"][] = "index.php?module=Users&action=DetailView&record=".$user_id;
-			$label_fld["secid"][] = $groupid;
-			$label_fld["link"][] = "index.php?module=Settings&action=GroupDetailView&groupId=".$groupid;
+			$label_fld["secid"][] = $owner_id;
+			if($user == 'no') {
+				$label_fld["link"][] = "index.php?module=Settings&action=GroupDetailView&groupId=".$owner_id;
+			}
+			else {
+				$label_fld["link"][] = "index.php?module=Users&action=DetailView&record=".$owner_id;
+			}
+			//$label_fld["secid"][] = $groupid;
+			//$label_fld["link"][] = "index.php?module=Settings&action=GroupDetailView&groupId=".$groupid;
 		}
+	
 		//Security Checks
-		if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
+	if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0))
 		{
-			$result=get_current_user_access_groups($module);
+			$result=get_current_user_access_groups($module_name);
 		}
 		else
 		{ 		
@@ -444,64 +443,64 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		}
 		if($result) $nameArray = $adb->fetch_array($result);
 
-
+//echo"<pre>";print_r($nameArray);echo"<pre>";die;
 		global $current_user;
-		$value = $user_id;
-		if($value != '' && $value != 0)
-		{
-			$assigned_user_id = $value;
-			$user_checked = "checked";
-			$team_checked = '';
-			$user_style='display:block';
-			$team_style='display:none';			
-		}
-		else
-		{
-			if($value=='0')
-			{
-				$record = $col_fields["record_id"];
-				$module = $col_fields["record_module"];
-
-				$selected_groupname = getGroupName($record, $module);
+		//$value = $user_id;
+		if($owner_id != '') {
+			if($user == 'yes') {
+				$label_fld ["options"][] = 'User';
+				$assigned_user_id = $owner_id;
+				$user_checked = "checked";
+				$team_checked = '';
+				$user_style='display:block';
+				$team_style='display:none';
+			}
+			else {
+				//$record = $col_fields["record_id"];
+				//$module = $col_fields["record_module"];
+				$label_fld ["options"][] = 'Group';
+				$assigned_group_id = $owner_id;
 				$user_checked = '';
 				$team_checked = 'checked';
 				$user_style='display:none';
 				$team_style='display:block';
 			}
-			else	
-			{				
-				$assigned_user_id = $current_user->id;
-				$user_checked = "checked";
-				$team_checked = '';
-				$user_style='display:block';
-				$team_style='display:none';
-			}	
 		}
-
+		else {
+			$label_fld ["options"][] = 'User';
+			$assigned_user_id = $owner_id;
+			$user_checked = "checked";
+			$team_checked = '';
+			$user_style='display:block';
+			$team_style='display:none';
+		}
+		
+	
 		if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
 		{
-			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
+			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $current_user->id,'private'), $current_user->id);
 		}
 		else
 		{
-			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
+			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $current_user->id), $current_user->id);
 		}
+
 		if($noof_group_rows!=0)
-                {
-			do{
-				$groupname= decode_html($nameArray["groupname"]);
-				$group_id=$nameArray["groupid"];
-				$selected = '';	
-				if($groupname == $selected_groupname[0])
-				{
-					$selected = "selected";
-				}	
-				if($groupname != '')
-					$group_option[$group_id] = array($groupname=>$selected);
-			}while($nameArray = $adb->fetch_array($result));
-		}	
+		{
+			//Commented to avoid security for groups
+			/*if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
+			{
+				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id,'private'), $current_user->id);
+			}
+			else
+			{
+				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id), $current_user->id);
+			}*/
+			$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id), $current_user->id);
+		}
+		
 		$label_fld ["options"][] = $users_combo;
-		$label_fld ["options"][] = $group_option; 
+		$label_fld ["options"][] = $groups_combo; 
 	}
 	elseif($uitype == 55 || $uitype == 255)
         {
@@ -1793,7 +1792,6 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 				$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"notaccess"=>$custfld["notaccess"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname,"fldid"=>$fieldid));
 			}
 		}
-
 	}
 	foreach($label_data as $headerid=>$value_array)
 	{

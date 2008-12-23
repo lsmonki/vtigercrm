@@ -728,12 +728,7 @@ function create_ticket($input_array)
 
 	$adb->println($ticket->column_fields);
     $ticket->save("HelpDesk");
-    if($user_id == 0 && $groupname != '') {
-    	$sql = "insert into ".$ticket->groupTable[0]." values (?,?)";
-	 	$params = array($ticket->id, $groupname);
-	 	$adb->pquery($sql, $params);
-    }
-
+    
 	$subject = '[From Portal][ Ticket ID : '.$ticket->id.' ] '.$title;
 	$contents = ' Ticket ID : '.$ticket->id.'<br> Ticket Title : '.$title.'<br><br>'.$description;
 
@@ -1472,19 +1467,17 @@ function get_ownername($id,$modulename)
 		return 'false';
  	$assignres = $adb->pquery("select * from vtiger_crmentity where crmid=".$id);
 	$ownerid=$adb->query_result($assignres,0,'smownerid');
-	if($ownerid == 0 && $modulename != '')
+	
+	$query='select groupname from vtiger_groups where groupid ='.$ownerid;
+	$assigngroupres = $adb->pquery($query, 0, 'groupname');
+	if($assigngroupres != '' && $modulename != '')
 	{
-		if($modulename =='Contacts')
-			$query='select * from vtiger_contactgrouprelation where contactid ='.$id;
-		else if($modulename =='Accounts')
-			$query='select * from vtiger_accountgrouprelation where accountid ='.$id;
- 		$assigngroupres = $adb->pquery($query);
 		$groupname[0]['groupname'][0]['fieldlabel']='groupname';
-		$groupname[0]['groupname'][0]['fieldvalue']=$adb->query_result($assigngroupres,0,'groupname');
+		$groupname[0]['groupname'][0]['fieldvalue']=$assigngroupres;
 		$groupname[0]['assigninfo'][0]['fieldlabel']='Group Name';
-		$groupname[0]['assigninfo'][0]['fieldvalue']=$adb->query_result($assigngroupres,0,'groupname');
+		$groupname[0]['assigninfo'][0]['fieldvalue']=$assigngroupres;
 	}
-	else if($ownerid != 0 && $ownerid != '')
+	else if(($assigngroupres == '' || !isset($assigngroupres)) && $ownerid != '')
 	{
 		$query='select * from vtiger_users where id ='.$ownerid;
 		$assignuserres = $adb->pquery($query);
@@ -2427,10 +2420,8 @@ function get_faq_documents($id,$module,$customerid,$sessionid)
 				inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
 				inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
 				inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_notes.notesid and crm2.deleted=0
-				LEFT JOIN vtiger_notegrouprelation
-				ON vtiger_notegrouprelation.notesid = vtiger_notes.notesid
 				LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_notegrouprelation.groupname			
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid			
 				inner join vtiger_users on crm2.smownerid= vtiger_users.id
 				where vtiger_crmentity.crmid=?";
 				$res = $adb->pquery($query,array($id));

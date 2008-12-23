@@ -1395,10 +1395,8 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	$count_qry = "SELECT count(*) as count FROM vtiger_activity
 		INNER JOIN vtiger_crmentity
 		ON vtiger_crmentity.crmid = vtiger_activity.activityid
-		LEFT JOIN vtiger_activitygrouprelation
-		ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
 		LEFT JOIN vtiger_groups
-		ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+		ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 		LEFT JOIN vtiger_users
 		ON vtiger_users.id = vtiger_crmentity.smownerid
 		LEFT OUTER JOIN vtiger_recurringevents
@@ -1410,10 +1408,8 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
        		vtiger_activity.* FROM vtiger_activity
 		INNER JOIN vtiger_crmentity
 			ON vtiger_crmentity.crmid = vtiger_activity.activityid
-		LEFT JOIN vtiger_activitygrouprelation
-	       		ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
 		LEFT JOIN vtiger_groups
-	       		ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+	       		ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 		LEFT JOIN vtiger_users
 	       		ON vtiger_users.id = vtiger_crmentity.smownerid 
 		LEFT OUTER JOIN vtiger_recurringevents
@@ -1634,10 +1630,8 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		ON vtiger_crmentity.crmid = vtiger_activity.activityid
 		LEFT JOIN vtiger_cntactivityrel
 		ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
-		LEFT JOIN vtiger_activitygrouprelation
-		ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
 		LEFT JOIN vtiger_groups
-		ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+		ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 		LEFT JOIN vtiger_users
 		ON vtiger_users.id = vtiger_crmentity.smownerid
 		WHERE vtiger_crmentity.deleted = 0
@@ -1650,10 +1644,8 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
                         ON vtiger_crmentity.crmid = vtiger_activity.activityid
                 LEFT JOIN vtiger_cntactivityrel
                         ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
-		LEFT JOIN vtiger_activitygrouprelation
-		        ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid
 		LEFT JOIN vtiger_groups
-		        ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname
+		        ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 		LEFT JOIN vtiger_users
 			ON vtiger_users.id = vtiger_crmentity.smownerid
                 WHERE vtiger_crmentity.deleted = 0
@@ -2221,7 +2213,7 @@ function getCalendarViewSecurityParameter()
 
 		if(sizeof($current_user_groups) > 0)
 		{
-			$sec_query .= " or (vtiger_crmentity.smownerid in (0) and (vtiger_groups.groupid in (". implode(",", $current_user_groups) .")))";
+			$sec_query .= " or (vtiger_groups.groupid in (". implode(",", $current_user_groups) ."))";
 		}
 		$sec_query .= ")";	
 		return $sec_query;

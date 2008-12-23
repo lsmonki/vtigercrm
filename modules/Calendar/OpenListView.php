@@ -74,7 +74,7 @@ function getPendingActivities($mode,$view='')
 	{
 		//CHANGE : TO IMPROVE PERFORMANCE
 		//for upcoming avtivities
-		$list_query = " select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_recurringevents.recurringdate, vtiger_activity.* from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid LEFT JOIN vtiger_activitygrouprelation ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 and vtiger_activity.activitytype not in ('Emails') AND ( vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and  (  vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held') )".$upcoming_condition;
+		$list_query = " select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_recurringevents.recurringdate, vtiger_activity.* from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 and vtiger_activity.activitytype not in ('Emails') AND ( vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and  (  vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held') )".$upcoming_condition;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[16] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter('Calendar');
@@ -86,7 +86,7 @@ function getPendingActivities($mode,$view='')
 	{
 		//CHANGE : TO IMPROVE PERFORMANCE
 		//for pending activities
-		$list_query = "select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_recurringevents.recurringdate, vtiger_activity.* from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid  LEFT JOIN vtiger_activitygrouprelation ON vtiger_activitygrouprelation.activityid = vtiger_crmentity.crmid LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_activitygrouprelation.groupname left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 and (vtiger_activity.activitytype not in ('Emails')) AND (vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held')) ".$pending_condition;
+		$list_query = "select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_recurringevents.recurringdate, vtiger_activity.* from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid left outer join vtiger_recurringevents on vtiger_recurringevents.activityid=vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 and (vtiger_activity.activitytype not in ('Emails')) AND (vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held')) ".$pending_condition;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[16] == 3)                   
                 {
 			$sec_parameter=getListViewSecurityParameter('Calendar'); 
@@ -121,7 +121,7 @@ function getPendingActivities($mode,$view='')
 					'recurringdate' => getDisplayDate($adb->query_result($res,$i,'recurringdate')),
 					//'parent'=> $parent_name,
 					// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-					'priority' => $adb->query_result($res,$i,'priority'), // Armando Lüscher 04.07.2005 -> §priority -> Desc: Get vtiger_priority from db
+					'priority' => $adb->query_result($res,$i,'priority'), // Armando Lï¿½scher 04.07.2005 -> ï¿½priority -> Desc: Get vtiger_priority from db
 					);
 		}
 	
@@ -158,7 +158,7 @@ function getPendingActivities($mode,$view='')
 		if($recur_date!="")
 			$event['date_start']=$event['recurringdate'];
 			// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-		// begin: Armando Lüscher 04.07.2005 -> §priority
+		// begin: Armando Lï¿½scher 04.07.2005 -> ï¿½priority
 		// Desc: Set vtiger_priority colors
 		$font_color_high = "color:#00DD00;";
 		$font_color_medium = "color:#DD00DD;";
@@ -174,7 +174,7 @@ function getPendingActivities($mode,$view='')
 			default:
 				$font_color='';
 		}
-		// end: Armando Lüscher 04.07.2005 -> §priority
+		// end: Armando Lï¿½scher 04.07.2005 -> ï¿½priority
 
 
 		$end_date=$event['due_date']; //included for getting the OverDue Activities in the Upcoming Activities
@@ -182,13 +182,13 @@ function getPendingActivities($mode,$view='')
 		//CHANGE : TO IMPROVE PERFORMANCE
 		/*switch ($event['type']) {
 			case 'Call':
-				$activity_fields = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Calendar&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&eventstatus=Held' style='".$font_color."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+				$activity_fields = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Calendar&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&eventstatus=Held' style='".$font_color."'>X</a>"; // Armando Lï¿½scher 05.07.2005 -> ï¿½priority -> Desc: inserted style="$P_FONT_COLOR"
 				break;
 			case 'Meeting':
-				$activity_fields = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Calendar&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&eventstatus=Held' style='".$font_color."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+				$activity_fields = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Calendar&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&eventstatus=Held' style='".$font_color."'>X</a>"; // Armando Lï¿½scher 05.07.2005 -> ï¿½priority -> Desc: inserted style="$P_FONT_COLOR"
 
 			case 'Task':
-				$activity_fields = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Calendar&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&status=Completed' style='".$font_color."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+				$activity_fields = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Calendar&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&status=Completed' style='".$font_color."'>X</a>"; // Armando Lï¿½scher 05.07.2005 -> ï¿½priority -> Desc: inserted style="$P_FONT_COLOR"
 				break;
 		}*/
 

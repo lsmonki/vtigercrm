@@ -737,69 +737,21 @@ function getSoName($so_id)
  * returns the group information in an array format.
  */
 
-function getGroupName($id, $module)
+function getGroupName($groupid)
 {
-	global $log;
-	$log->debug("Entering getGroupName(".$id.",".$module.") method ...");
+	global $adb, $log;
+	$log->debug("Entering getGroupName(".$groupid.") method ...");
 	$group_info = Array();
-        $log->info("in getGroupName, entityid is ".$id.'  module is    '.$module);
-        global $adb;
-        if($module == 'Leads')
-        {
-               $sql = "select vtiger_leadgrouprelation.groupname,vtiger_groups.groupid from vtiger_leadgrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_leadgrouprelation.groupname where vtiger_leadgrouprelation.leadid=?";
-        }
-        elseif($module == 'Accounts')
-        {
-               $sql = "select vtiger_accountgrouprelation.groupname,vtiger_groups.groupid from vtiger_accountgrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_accountgrouprelation.groupname where vtiger_accountgrouprelation.accountid=?";
-        }
-        elseif($module == 'Contacts')
-        {
-               $sql = "select vtiger_contactgrouprelation.groupname,vtiger_groups.groupid from vtiger_contactgrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_contactgrouprelation.groupname where vtiger_contactgrouprelation.contactid=?";
-        }
-		elseif($module == 'Potentials')
-        {
-               $sql = "select vtiger_potentialgrouprelation.groupname,vtiger_groups.groupid from vtiger_potentialgrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_potentialgrouprelation.groupname where vtiger_potentialgrouprelation.potentialid=?";
-        }
-		elseif($module == 'Quotes')
-        {
-               $sql = "select vtiger_quotegrouprelation.groupname,vtiger_groups.groupid from vtiger_quotegrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_quotegrouprelation.groupname where vtiger_quotegrouprelation.quoteid=?";
-        }
-		elseif($module == 'SalesOrder')
-        {
-               $sql = "select vtiger_sogrouprelation.groupname,vtiger_groups.groupid from vtiger_sogrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_sogrouprelation.groupname where vtiger_sogrouprelation.salesorderid=?";
-        }
-		elseif($module == 'Invoice')
-        {
-               $sql = "select vtiger_invoicegrouprelation.groupname,vtiger_groups.groupid from vtiger_invoicegrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_invoicegrouprelation.groupname where vtiger_invoicegrouprelation.invoiceid=?";
-        }
-		elseif($module == 'PurchaseOrder')
-        {
-               $sql = "select vtiger_pogrouprelation.groupname,vtiger_groups.groupid from vtiger_pogrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_pogrouprelation.groupname where vtiger_pogrouprelation.purchaseorderid=?";
-        }
-        elseif($module == 'HelpDesk')
-        {
-               $sql = "select vtiger_ticketgrouprelation.groupname,vtiger_groups.groupid from vtiger_ticketgrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_ticketgrouprelation.groupname where vtiger_ticketgrouprelation.ticketid=?";
-        }
-		elseif($module == 'Campaigns')
-		{
-	       	   $sql = "select vtiger_campaigngrouprelation.groupname,vtiger_groups.groupid from vtiger_campaigngrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_campaigngrouprelation.groupname where vtiger_campaigngrouprelation.campaignid=?";
-        }
-        elseif($module == 'Calendar' || $module == 'Emails' || $module == 'Events')
-        {
-               $sql = "select vtiger_activitygrouprelation.groupname,vtiger_groups.groupid from vtiger_activitygrouprelation inner join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_activitygrouprelation.activityid=?";
-		}
-		else
-        {
-			$modObj = new $module();			
-            $sql = "select ".$modObj->groupTable[0].".groupname,vtiger_groups.groupid from ".$modObj->groupTable[0]." inner join vtiger_groups on vtiger_groups.groupname=".$modObj->groupTable[0].".groupname where ".$modObj->groupTable[0].".".$modObj->groupTable[1]."=?";
-		}
-		
-		$result = $adb->pquery($sql, array($id));
+    $log->info("in getGroupName, entityid is ".$groupid);
+    if($groupid != '')
+	{
+		$sql = "select groupname,groupid from vtiger_groups where groupid = ?";
+		$result = $adb->pquery($sql, array($groupid));
         $group_info[] = decode_html($adb->query_result($result,0,"groupname"));
         $group_info[] = $adb->query_result($result,0,"groupid");
+	}
 		$log->debug("Exiting getGroupName method ...");
         return $group_info;
-
 }
 
 /**
@@ -808,11 +760,10 @@ function getGroupName($id, $module)
      
 function getUserName($userid)
 {
-	global $log;
+	global $adb, $log;
 	$log->debug("Entering getUserName(".$userid.") method ...");
 	$log->info("in getUserName ".$userid);
 
-	global $adb;
 	if($userid != '')
 	{
 		$sql = "select user_name from vtiger_users where id=?";
@@ -2296,7 +2247,9 @@ function getGroupslist()
 	$log->debug("Entering getGroupslist() method ...");
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-	if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
+	
+	//Commented to avoid security check for groups
+	/*if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
 	{
 		$result=get_current_user_access_groups($module);
 	}
@@ -2305,30 +2258,30 @@ function getGroupslist()
 		$result = get_group_options();
 	}
 
-	if($result) $groupArray = $adb->fetch_array($result);
-	if(!empty($groupArray)){
-		do{
-			$groupname=$groupArray["groupname"];
-			$group_id=$groupArray["groupid"];
-			$selected = '';
-			if($groupname == $selected_groupname[0])
-			{
-				$selected = "selected";
-			}
-			if($groupname != '')
-				$group_option[$group_id] = array($groupname=>$selected);
-	          }while($groupArray = $adb->fetch_array($result));
-
-		foreach($group_option as $groupid=>$value)  
+	if($result) $nameArray = $adb->fetch_array($result);
+	if(!empty($nameArray))
+	{
+		if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
+		{
+			$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id,'private'), $current_user->id);
+		}
+		else
+		{
+			$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id), $current_user->id);
+		}
+	}*/
+	$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id), $current_user->id);
+	if(count($groups_combo) > 0) {
+		foreach($groups_combo as $groupid=>$value)  
 		{ 
 			foreach($value as $groupname=>$selected) 
 			{
 				$change_groups_owner .= "<option value=$groupid $selected >".$groupname."</option>";  
 			}	 
 		}
-		$log->debug("Exiting getGroupslist method ...");
-		return $change_groups_owner;
-	}	
+	}
+	$log->debug("Exiting getGroupslist method ...");
+	return $change_groups_owner;
 }
 
 
@@ -3510,6 +3463,26 @@ function getActivityType($id)
 	return $acti_type;
 }
 
+/** Function to get owner name either user or group */
+function getOwnerName($id)
+{
+	global $adb, $log;
+	$log->debug("Entering getOwnerName(".$id.") method ...");
+	$log->info("in getOwnerName ".$id);
+
+	if($id != '') {
+		$sql = "select user_name from vtiger_users where id=?";
+		$result = $adb->pquery($sql, array($id));
+		$ownername = $adb->query_result($result,0,"user_name");
+	}
+	if($ownername == '') {
+		$sql = "select groupname from vtiger_groups where groupid=?";
+		$result = $adb->pquery($sql, array($id));
+		$ownername = $adb->query_result($result,0,"groupname");
+	}
+	$log->debug("Exiting getOwnerName method ...");
+	return $ownername;	
+}
 // vtlib customization: Extended vtiger CRM utlitiy functions
 require_once('include/utils/VtlibUtils.php');
 // END

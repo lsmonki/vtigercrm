@@ -13,6 +13,12 @@ setObjectValuesFromRequest($focus);
 $mode = $_REQUEST['mode'];
 $record=$_REQUEST['record'];
 
+if($_REQUEST['assigntype'] == 'U')  {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_user_id'];
+}
+else {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
+}
 $focus->save($currentModule);
 $return_id = $focus->id;
 

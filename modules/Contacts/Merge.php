@@ -174,10 +174,8 @@ if(count($querycolumns) > 0)
 				left join vtiger_contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
 				left join vtiger_account as accountContacts on accountContacts.accountid = vtiger_contactdetails.accountid 
 				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
-				LEFT JOIN vtiger_contactgrouprelation
-					ON vtiger_contactscf.contactid = vtiger_contactgrouprelation.contactid
 				LEFT JOIN vtiger_groups 
-					ON vtiger_groups.groupname = vtiger_contactgrouprelation.groupname
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				left join vtiger_account on vtiger_account.accountid = vtiger_contactdetails.accountid
 				left join vtiger_crmentity as crmentityAccounts on crmentityAccounts.crmid=vtiger_account.accountid
 				left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
@@ -185,10 +183,8 @@ if(count($querycolumns) > 0)
 				left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
 				left join vtiger_account as accountAccounts on accountAccounts.accountid = vtiger_account.parentid
 				left join vtiger_users as usersAccounts on usersAccounts.id = crmentityAccounts.smownerid 
-				LEFT JOIN vtiger_accountgrouprelation
-					ON vtiger_accountscf.accountid = vtiger_accountgrouprelation.accountid
 				LEFT JOIN vtiger_groups as groupsAccounts
-					ON groupsAccounts.groupname = vtiger_accountgrouprelation.groupname
+					ON groupsAccounts.groupid = vtiger_crmentity.smownerid
 				where vtiger_crmentity.deleted=0 and (crmentityAccounts.deleted is NULL or crmentityAccounts.deleted <> 1) and vtiger_contactdetails.contactid in(". generateQuestionMarks($mass_merge) .")";
 				
 

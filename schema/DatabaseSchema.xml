@@ -2054,197 +2054,6 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<table name="vtiger_leadgrouprelation">
-		<field name="leadid" type="I" size="19">
-			<key />
-		</field>
-		<field name="groupname" type="C" size="100">
-		</field>
-
-		<index name="leadgrouprelation_leadid_idx">
-			<col>leadid</col>
-		</index>
-		<index name="leadgrouprelation_groupname_idx">
-			<col>groupname</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-<table name="vtiger_leadgrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_leadgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-<table name="vtiger_leadgrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_2_vtiger_leadgrouprelation FOREIGN KEY (leadid) REFERENCES vtiger_leaddetails(leadid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-
-	<table name="vtiger_accountgrouprelation">
-		<field name="accountid" type="I" size="19">
-			<key />
-		</field>
-		<field name="groupname" type="C" size="100">
-		</field>
-
-		<index name="accountgrouprelation_groupname_idx">
-			<col>groupname</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-<table name="vtiger_accountgrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_accountgrouprelation FOREIGN KEY (accountid) REFERENCES vtiger_account(accountid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-<table name="vtiger_accountgrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_2_vtiger_accountgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-
-	<table name="vtiger_contactgrouprelation">
-		<field name="contactid" type="I" size="19">
-			<key />
-		</field>
-		<field name="groupname" type="C" size="100">
-		</field>
-
-		<index name="contactgrouprelation_groupname_idx">
-			<col>groupname</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-<table name="vtiger_contactgrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_contactgrouprelation FOREIGN KEY (contactid) REFERENCES vtiger_contactdetails(contactid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-<table name="vtiger_contactgrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_2_vtiger_contactgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-
-	<table name="vtiger_potentialgrouprelation">
-		<field name="potentialid" type="I" size="19">
-			<key />
-		</field>
-		<field name="groupname" type="C" size="100">
-		</field>
-
-		<index name="potentialgrouprelation_groupname_idx">
-			<col>groupname</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-<table name="vtiger_potentialgrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_potentialgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-<table name="vtiger_potentialgrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_2_vtiger_potentialgrouprelation FOREIGN KEY (potentialid) REFERENCES vtiger_potential(potentialid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-
-	<table name="vtiger_campaigngrouprelation">
-		<field name="campaignid" type="I" size="19">
-			<key />
-		</field>
-		<field name="groupname" type="C" size="100">
-		</field>
-
-		<index name="campaigngrouprelation_IDX1">
-			<col>groupname</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-<table name="vtiger_campaigngrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_campaigngrouprelation FOREIGN KEY (campaignid) REFERENCES vtiger_campaign(campaignid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-<table name="vtiger_campaigngrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_2_vtiger_campaigngrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-
-	<table name="vtiger_activitygrouprelation">
-		<field name="activityid" type="I" size="19">
-			<key />
-		</field>
-		<field name="groupname" type="C" size="100">
-		</field>
-
-		<index name="activitygrouprelation_activityid_idx">
-			<col>activityid</col>
-		</index>
-		<index name="activitygrouprelation_groupname_idx">
-			<col>groupname</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-<table name="vtiger_activitygrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_activitygrouprelation FOREIGN KEY (activityid) REFERENCES vtiger_activity(activityid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-<table name="vtiger_activitygrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_2_vtiger_activitygrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-
-	<table name="vtiger_ticketgrouprelation">
-		<field name="ticketid" type="I" size="19">
-			<key />
-		</field>
-		<field name="groupname" type="C" size="100">
-		</field>
-
-		<index name="ticketgrouprelation_ticketid_idx">
-			<col>ticketid</col>
-		</index>
-		<index name="ticketgrouprelation_groupname_idx">
-			<col>groupname</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-<table name="vtiger_ticketgrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_ticketgrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-<table name="vtiger_ticketgrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_2_vtiger_ticketgrouprelation FOREIGN KEY (ticketid) REFERENCES vtiger_troubletickets(ticketid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-
 	<table name="vtiger_systems">
 		<field name="id" type="I" size="19">
 			<key />
@@ -3597,32 +3406,6 @@
 </data>
 </table>
 
-	<table name="vtiger_sogrouprelation">
-		<field name="salesorderid" type="I" size="19">
-			<key />
-		</field>
-		<field name="groupname" type="C" size="100">
-		</field>
-
-		<index name="sogrouprelation_groupname_idx">
-			<col>groupname</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-<table name="vtiger_sogrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_sogrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-<table name="vtiger_sogrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_2_vtiger_sogrouprelation FOREIGN KEY (salesorderid) REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-
 	<table name="vtiger_sobillads">
 		<field name="sobilladdressid" type="I" size="19">
 			<key />
@@ -3986,32 +3769,6 @@
 </data>
 </table>
 
-	<table name="vtiger_quotegrouprelation">
-		<field name="quoteid" type="I" size="19">
-			<key />
-		</field>
-		<field name="groupname" type="C" size="100">
-		</field>
-
-		<index name="quotegrouprelation_groupname_idx">
-			<col>groupname</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-<table name="vtiger_quotegrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_quotegrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-<table name="vtiger_quotegrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_2_vtiger_quotegrouprelation FOREIGN KEY (quoteid) REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-
 	<table name="vtiger_quotescf">
 		<field name="quoteid" type="I" size="19">
 			<key />
@@ -4084,33 +3841,6 @@
 <constraint>ADD CONSTRAINT fk_2_vtiger_purchaseorder FOREIGN KEY (purchaseorderid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 <constraint>ADD CONSTRAINT fk_3_vtiger_purchaseorder FOREIGN KEY (quoteid) REFERENCES vtiger_quotes(quoteid) ON DELETE CASCADE</constraint>
 <constraint>ADD CONSTRAINT fk_4_vtiger_purchaseorder FOREIGN KEY (vendorid) REFERENCES vtiger_vendor(vendorid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-
-	<table name="vtiger_pogrouprelation">
-		<field name="purchaseorderid" type="I" size="19">
-			<key />
-		</field>
-		<field name="groupname" type="C" size="100">
-		</field>
-
-		<index name="pogrouprelation_groupname_purchaseorderid_idx">
-			<col>groupname</col>
-			<col>purchaseorderid</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-<table name="vtiger_pogrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_pogrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-<table name="vtiger_pogrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_2_vtiger_pogrouprelation FOREIGN KEY (purchaseorderid) REFERENCES vtiger_purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
 <opt>Type=InnoDB</opt>
 <data>
 </data>
@@ -4228,33 +3958,6 @@
 <table name="vtiger_invoice" alter="true">
 <constraint>ADD CONSTRAINT fk_1_vtiger_invoice FOREIGN KEY (invoiceid) REFERENCES vtiger_crmentity(crmid) ON DELETE CASCADE</constraint>
 <constraint>ADD CONSTRAINT fk_2_vtiger_invoice FOREIGN KEY (salesorderid) REFERENCES vtiger_salesorder(salesorderid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-
-	<table name="vtiger_invoicegrouprelation">
-		<field name="invoiceid" type="I" size="19">
-			<key />
-		</field>
-		<field name="groupname" type="C" size="100">
-		</field>
-
-		<index name="invoicegrouprelation_groupname_invoiceid_idx">
-			<col>groupname</col>
-			<col>invoiceid</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-<table name="vtiger_invoicegrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_invoicegrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
-<table name="vtiger_invoicegrouprelation" alter="true">
-<constraint>ADD CONSTRAINT fk_2_vtiger_invoicegrouprelation FOREIGN KEY (invoiceid) REFERENCES vtiger_invoice(invoiceid) ON DELETE CASCADE</constraint>
 <opt>Type=InnoDB</opt>
 <data>
 </data>
@@ -6540,33 +6243,7 @@
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
-	<table name="vtiger_notegrouprelation">
-		<field name="notesid" type="I" size="19">
-			<key />
-		</field>
-		<field name="groupname" type="C" size="100">
-		</field>
-
-		<index name="notegrouprelation_groupname_idx">
-			<col>groupname</col>
-		</index>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>
-
-	<table name="vtiger_notegrouprelation" alter="true">
-		<constraint>ADD CONSTRAINT fk_1_vtiger_notegrouprelation FOREIGN KEY (notesid) REFERENCES vtiger_notes(notesid) ON DELETE CASCADE</constraint>
-		<opt>Type=InnoDB</opt>
-		<data>
-		</data>
-	</table>
 	
-	<table name="vtiger_notegrouprelation" alter="true">
-		<constraint>ADD CONSTRAINT fk_2_vtiger_notegrouprelation FOREIGN KEY (groupname) REFERENCES vtiger_groups(groupname) ON UPDATE CASCADE</constraint>
-		<opt>Type=InnoDB</opt>
-		<data>
-		</data>
-	</table>
-
 	<table name="vtiger_homestuff">
 		<field name="stuffid" type="I" size="19">
 			<key />

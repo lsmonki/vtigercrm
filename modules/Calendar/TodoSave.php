@@ -34,7 +34,7 @@ if(isset($_REQUEST['mode']))
  $focus->column_fields["subject"] = $_REQUEST["task_subject"];
  $focus->column_fields["time_start"] = $_REQUEST["task_time_start"];
  $focus->column_fields["assigned_user_id"] =  $_REQUEST["task_assigned_user_id"];
- $_REQUEST["assigned_group_name"]  = $_REQUEST['task_assigned_group_name'];
+ $_REQUEST["assigned_group_id"]  = $_REQUEST['task_assigned_group_id'];
  $_REQUEST['assigntype'] = $_REQUEST['task_assigntype'];
  $focus->column_fields["taskstatus"] =  $_REQUEST["taskstatus"];
  $focus->column_fields["date_start"] =  $_REQUEST["task_date_start"];
@@ -65,7 +65,7 @@ function getRequestedToData()
 	$mail_data['contact_name'] = $_REQUEST['task_contact_name'];
 	$mail_data['description'] = $_REQUEST['task_description'];
 	$mail_data['assingn_type'] = $_REQUEST['task_assigntype'];
-	$mail_data['group_name'] = $_REQUEST['task_assigned_group_name'];
+	$mail_data['group_name'] = getGroupName($_REQUEST['task_assigned_group_id']);
 	$mail_data['mode'] = $_REQUEST['task_mode'];
 	$value = getaddEventPopupTime($_REQUEST['task_time_start'],$_REQUEST['task_time_end'],'24');
 	$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];

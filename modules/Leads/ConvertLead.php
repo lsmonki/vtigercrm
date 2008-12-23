@@ -123,7 +123,7 @@ $convertlead = '<form name="ConvertLead" method="POST" action="index.php">
                        		<select name="assigned_user_id" class="detailedViewTextBox">'.get_select_options_with_id(get_user_array(false), $userid).'</select>
 						</span>
 						<span id="assign_team" style="display:none">
-                       		<select name="assigned_group_name" class="detailedViewTextBox">'.get_select_options_with_value(get_group_array(false), $groupid).'</select>
+                       		<select name="assigned_group_id" class="detailedViewTextBox">'.get_select_options_with_id(get_group_array(false), $groupid).'</select>
 						</span>
 						</td>
 				</tr>

@@ -40,9 +40,16 @@ if($mode == 'edit')
 	$usr_qry = $adb->pquery("select * from vtiger_crmentity where crmid=?", array($focus->id));
 	$old_user_id = $adb->query_result($usr_qry,0,"smownerid");
 }
-$fldvalue = $focus->constructUpdateLog($focus, $mode, $_REQUEST['assigned_group_name'], $_REQUEST['assigntype']);
+$grp_name = getGroupName($_REQUEST['assigned_group_id']);
+$fldvalue = $focus->constructUpdateLog($focus, $mode, $grp_name, $_REQUEST['assigntype']);
 $fldvalue = from_html($fldvalue,($mode == 'edit')?true:false);
 
+if($_REQUEST['assigntype'] == 'U')  {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_user_id'];
+}
+else {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
+}
 $focus->save("HelpDesk");
 
 //After save the record, we should update the log

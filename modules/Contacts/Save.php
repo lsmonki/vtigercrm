@@ -108,6 +108,12 @@ elseif($focus->id != '')
 	$result = $adb->pquery("select imagename from vtiger_contactdetails where contactid = ?", array($focus->id));
 	$focus->column_fields['imagename'] = $adb->query_result($result,0,'imagename');
 }
+if($_REQUEST['assigntype'] == 'U')  {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_user_id'];
+}
+else {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
+}
 //Saving the contact
 if($image_error=="false")
 {

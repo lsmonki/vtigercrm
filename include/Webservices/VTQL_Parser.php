@@ -253,7 +253,7 @@ $groupId = "'$groupId'";
 }
 $whereValue = 0;
 }
-$groupTable = $this->module_inst->groupTable;
+//$groupTable = $this->module_inst->groupTable;
 $this->query = $this->query."vtiger_groups.groupid ".$whereOperator." ".$groupId." and ";
 if(strcasecmp($whereOperator,'like')===0){
 $whereOperator = '=';
@@ -1372,9 +1372,9 @@ if($module->table_name!=$table){
 	$this->out['tableName'] = $table;
 }
 }
-if(isset($module->groupTable) && array_intersect){
-$this->out['defaultJoinConditions'] = $this->out['defaultJoinConditions']." LEFT JOIN {$module->groupTable[0]} ON $firstTable.$firstIndex=".$module->groupTable[0].".".$module->groupTable[1];
-$this->out['defaultJoinConditions'] = $this->out['defaultJoinConditions']." LEFT JOIN vtiger_groups ON vtiger_groups.groupname={$module->groupTable[0]}.groupname";
+if(array_intersect){
+//$this->out['defaultJoinConditions'] = $this->out['defaultJoinConditions']." LEFT JOIN {$module->groupTable[0]} ON $firstTable.$firstIndex=".$module->groupTable[0].".".$module->groupTable[1];
+$this->out['defaultJoinConditions'] = $this->out['defaultJoinConditions']." LEFT JOIN vtiger_groups ON vtiger_groups.groupid=vtiger_crmentity.smownerid";
 }
 }
 /*

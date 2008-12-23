@@ -63,12 +63,6 @@ class CRMEntity
 			$this->insertIntoEntityTable($table_name, $module,$fileid);			
 		}
 	}
-
-	//Inserting into the group Table
-	if($this->ownedby == 0)
-	{
-		$this->insertIntoGroupTable($module);
-	}	
 	
 	//Calling the Module specific save code
 	$this->save_module($module);
@@ -293,15 +287,9 @@ class CRMEntity
 	}
 	
 	$date_var = date('Y-m-d H:i:s');
-	if($_REQUEST['assigntype'] == 'T' && ($_REQUEST['action']!='MassEditSave' || (isset($_REQUEST['assigned_user_id_mass_edit_check'])&& $_REQUEST['action']=='MassEditSave')))
-	{
-		$ownerid= 0;
-	}
-	else
-	{
-		$ownerid = $this->column_fields['assigned_user_id'];
-	}
-        
+	
+	$ownerid = $this->column_fields['assigned_user_id'];
+     
 	$sql="select ownedby from vtiger_tab where name=?";
 	$res=$adb->pquery($sql, array($module));
 	$this->ownedby = $adb->query_result($res,0,'ownedby');
@@ -722,10 +710,8 @@ function whomToSendMail($module,$insertion_mode,$assigntype)
 		}
        	elseif($assigntype=='T')
        	{
-               $groupname=$_REQUEST['assigned_group_name'];
-               $resultqry=$adb->pquery("select groupid from vtiger_groups where groupname=?", array($groupname));
-               $groupid=$adb->query_result($resultqry,0,"groupid");
-               sendNotificationToGroups($groupid,$this->id,$module);
+			$groupid=$_REQUEST['assigned_group_id'];
+			sendNotificationToGroups($groupid,$this->id,$module);
        	}
    	}
 }
@@ -841,7 +827,7 @@ $log->info("in getOldFileName  ".$notesid);
 
 		}
 	}
-		
+	
     $this->column_fields["record_id"] = $record;
     $this->column_fields["record_module"] = $module;
   }
@@ -1108,7 +1094,7 @@ $log->info("in getOldFileName  ".$notesid);
 		$tracker->track_view($user_id, $current_module, $id, '');
 	}
 
-	function insertIntoGroupTable($module)
+	/*function insertIntoGroupTable($module)
 	{
 		global $log;
 
@@ -1124,7 +1110,7 @@ $log->info("in getOldFileName  ".$notesid);
 		  	{	  
 			  	if($_REQUEST['assigntype'] == 'T')
 			  	{
-					$groupname = $_REQUEST['assigned_group_name'];
+					$groupname = $_REQUEST['assigned_group_id'];
 
 					updateModuleGroupRelation($module,$this->id,$groupname);
 
@@ -1139,7 +1125,7 @@ $log->info("in getOldFileName  ".$notesid);
       		}
 		else
 		{
-			$groupname = $_REQUEST['assigned_group_name'];
+			$groupname = $_REQUEST['assigned_group_id'];
 		 	if($_REQUEST['assigntype'] == 'T')
 		  	{
 			  	insertIntoGroupRelation($module,$this->id,$groupname);
@@ -1147,7 +1133,7 @@ $log->info("in getOldFileName  ".$notesid);
 		  
 		}			
 
-	}
+	}*/
 	
 	/**
 	* Function to get the column value of a field when the field value is empty ''
@@ -1494,12 +1480,8 @@ $log->info("in getOldFileName  ".$notesid);
 
 		$query = "SELECT vtiger_crmentity.*, $other->table_name.*";
 
-		if(!empty($other->groupTable)) {
-			$query .= ", CASE WHEN (vtiger_users.user_name NOT LIKE '') THEN vtiger_users.user_name ELSE vtiger_groups.groupname END AS user_name";
-		} else {
-			$query .= ", vtiger_users.user_name AS user_name";
-		}
-
+		$query .= ", CASE WHEN (vtiger_users.user_name NOT LIKE '') THEN vtiger_users.user_name ELSE vtiger_groups.groupname END AS user_name";
+		
 		$more_relation = '';
 		if(!empty($other->related_tables)) {
 			foreach($other->related_tables as $tname=>$relmap) {
@@ -1518,12 +1500,8 @@ $log->info("in getOldFileName  ".$notesid);
 		$query .= " LEFT  JOIN $this->table_name   ON $this->table_name.$this->table_index = $other->table_name.$other->table_index";
 		$query .= $more_relation;
 		$query .= " LEFT  JOIN vtiger_users        ON vtiger_users.id = vtiger_crmentity.smownerid";
+		$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupid = " . $other->table_name.$other->table_index;
 
-		if(!empty($other->groupTable)) {
-			$query .= " LEFT  JOIN ".$other->groupTable[0].' ON '.$other->groupTable[0].'.'.$other->groupTable[1].
-				" = $other->table_name.$other->table_index ";
-			$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupname = " . $other->groupTable[0].'.groupname';
-		}
 		$query .= " WHERE vtiger_crmentity.deleted = 0 AND vtiger_crmentityrel.crmid = $id";
 
 		$return_value = GetRelatedList($currentModule, $related_module, $other, $query, $button, $returnset);	
