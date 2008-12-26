@@ -1,3 +1,4 @@
+<div style='overflow: hidden;'>
 <table border='0' cellpadding='2' cellspacing='0' width="100%">
 	<tr valign=top>
 		<td align='left'><b>{$APP.LBL_VTIGER_NEWS}</b></td>
@@ -20,3 +21,4 @@
 	</tr>
 	{/foreach}
 </table>
+</div>

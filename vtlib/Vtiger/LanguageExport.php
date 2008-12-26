@@ -47,8 +47,15 @@ class Vtiger_LanguageExport extends Vtiger_Package {
 	/**
 	 * Register language pack information.
 	 */
-	static function register($prefix, $label, $isdefault=0, $active=1, $name='') {
+	static function register($prefix, $label, $name='', $isdefault=false, $isactive=true, $overrideCore=false) {
 		self::__initSchema();
+
+		$prefix = trim($prefix);
+		// We will not allow registering core language unless forced
+		if(strtolower($prefix) == 'en_us' && $overrideCore == false) return;
+
+		$useisdefault = ($isdefault)? 1 : 0;
+		$useisactive  = ($isactive)?  1 : 0;
 
 		global $adb;
 		$checkres = $adb->pquery('SELECT * FROM '.self::TABLENAME.' WHERE prefix=?', Array($prefix));
@@ -56,16 +63,10 @@ class Vtiger_LanguageExport extends Vtiger_Package {
 		if($adb->num_rows($checkres)) {
 			$id = $adb->query_result($checkres, 0, 'id');
 			$adb->pquery('UPDATE '.self::TABLENAME.' set label=?, name=?, lastupdated=?, isdefault=?, active=? WHERE id=?',
-				Array($label, $name, $datetime, $isdefault, $active, $id));
+				Array($label, $name, $datetime, $useisdefault, $useisactive, $id));
 		} else {
-			$seqres = $adb->query('SELECT max(sequence) as lastseq FROM '.self::TABLENAME);
-			$lastseq = $adb->query_result($seqres, 0, 'lastseq');
-			$nextseq = 1;
-			if (isset($lastseq) && $lastseq != '') {
-				$nextseq = $lastseq + 1;
-			}
-			$adb->pquery('INSERT INTO '.self::TABLENAME.' (name,prefix,label,lastupdated,isdefault,active,sequence) VALUES(?,?,?,?,?,?,?)',
-				Array($name, $prefix, $label, $datetime, $isdefault, $active, $nextseq));
+			$adb->pquery('INSERT INTO '.self::TABLENAME.' (name,prefix,label,lastupdated,isdefault,active) VALUES(?,?,?,?,?,?)',
+				Array($name, $prefix, $label, $datetime, $useisdefault, $useisactive));
 		}
 		self::log("Registering Language $label [$prefix] ... DONE");		
 	}

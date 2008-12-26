@@ -81,7 +81,10 @@ class CRMEntity
 
 		require_once("modules/$for_module/$for_module.php");
 		$on_focus = new $for_module();
-		if(method_exists($on_focus, 'save_related_module')) {
+		// Do conditional check && call only for Custom Module at present
+		// TOOD: $on_focus->IsCustomModule is not required if save_related_module function
+		// is used for core modules as well.
+		if($on_focus->IsCustomModule && method_exists($on_focus, 'save_related_module')) {
 			$with_module = $module;
 			$with_crmid = $this->id;
 			$on_focus->save_related_module(
@@ -1500,7 +1503,7 @@ $log->info("in getOldFileName  ".$notesid);
 		$query .= " LEFT  JOIN $this->table_name   ON $this->table_name.$this->table_index = $other->table_name.$other->table_index";
 		$query .= $more_relation;
 		$query .= " LEFT  JOIN vtiger_users        ON vtiger_users.id = vtiger_crmentity.smownerid";
-		$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupid = " . $other->table_name.$other->table_index;
+		$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupid = $other->table_name.$other->table_index";
 
 		$query .= " WHERE vtiger_crmentity.deleted = 0 AND vtiger_crmentityrel.crmid = $id";
 

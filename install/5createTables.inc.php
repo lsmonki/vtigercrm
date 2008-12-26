@@ -56,8 +56,8 @@ function eecho($msg = FALSE) {
 	}
 }
 
-function create_default_users() {
-        global $log, $db;
+function create_default_users_access() {
+      	global $log, $adb;
         global $admin_email;
         global $admin_password;
 		global $standarduser_email;
@@ -67,6 +67,23 @@ function create_default_users() {
         global $default_password;
         global $default_user_is_admin;
 
+        $role1_id = $adb->getUniqueID("vtiger_role");
+		$role2_id = $adb->getUniqueID("vtiger_role");
+		$role3_id = $adb->getUniqueID("vtiger_role");
+		$role4_id = $adb->getUniqueID("vtiger_role");
+		$role5_id = $adb->getUniqueID("vtiger_role");
+		
+		$profile1_id = $adb->getUniqueID("vtiger_profile");
+		$profile2_id = $adb->getUniqueID("vtiger_profile");
+		$profile3_id = $adb->getUniqueID("vtiger_profile");
+		$profile4_id = $adb->getUniqueID("vtiger_profile");
+		
+		$adb->query("insert into vtiger_role values('H".$role1_id."','Organisation','H".$role1_id."',0)");
+        $adb->query("insert into vtiger_role values('H".$role2_id."','CEO','H".$role1_id."::H".$role2_id."',1)");
+        $adb->query("insert into vtiger_role values('H".$role3_id."','Vice President','H".$role1_id."::H".$role2_id."::H".$role3_id."',2)");
+        $adb->query("insert into vtiger_role values('H".$role4_id."','Sales Manager','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."',3)");
+        $adb->query("insert into vtiger_role values('H".$role5_id."','Sales Man','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."::H".$role5_id."',4)");
+                
         // create default admin user
     	$user = new Users();
         $user->column_fields["last_name"] = 'Administrator';
@@ -82,50 +99,30 @@ function create_default_users() {
         $user->column_fields["currency_id"] = 1;
         $user->column_fields["reminder_interval"] = '1 Minute';
         $user->column_fields["reminder_next_time"] = date('Y-m-d H:i');
-	$user->column_fields["date_format"] = 'yyyy-mm-dd';
-	$user->column_fields["hour_format"] = 'am/pm';
-	$user->column_fields["start_hour"] = '08:00';
-	$user->column_fields["end_hour"] = '23:00';
-	$user->column_fields["imagename"] = '';
-	$user->column_fields["internal_mailer"] = '1';
-        $user->column_fields["activity_view"] = 'This Week';	
-	$user->column_fields["lead_view"] = 'Today';
-	$user->column_fields["defhomeview"] = 'home_metrics';
+		$user->column_fields["date_format"] = 'yyyy-mm-dd';
+		$user->column_fields["hour_format"] = 'am/pm';
+		$user->column_fields["start_hour"] = '08:00';
+		$user->column_fields["end_hour"] = '23:00';
+		$user->column_fields["imagename"] = '';
+		$user->column_fields["internal_mailer"] = '1';
+		$user->column_fields["activity_view"] = 'This Week';	
+		$user->column_fields["lead_view"] = 'Today';
+		$user->column_fields["defhomeview"] = 'home_metrics';
         //added by philip for default admin emailid
-	if($admin_email == '')
-	$admin_email ="admin@vtigeruser.com";
+		if($admin_email == '')
+			$admin_email ="admin@vtigeruser.com";
         $user->column_fields["email1"] = $admin_email;
-	$role_query = "select roleid from vtiger_role where rolename='CEO'";
-	$db->checkConnection();
-	$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
-	$role_result = $db->query($role_query);
-	$role_id = $db->query_result($role_result,0,"roleid");
-	$user->column_fields["roleid"] = $role_id;
+		$role_query = "select roleid from vtiger_role where rolename='CEO'";
+		$adb->checkConnection();
+		$adb->database->SetFetchMode(ADODB_FETCH_ASSOC);
+		$role_result = $adb->query($role_query);
+		$role_id = $adb->query_result($role_result,0,"roleid");
+		$user->column_fields["roleid"] = $role_id;
 
         $user->save("Users");
+        $admin_user_id = $user->id;
 
-	//Inserting Entries into vtiger_groups table
-	$result = $db->query("select groupid from vtiger_groups where groupname='Team Selling';");
- 	$group1_id = $db->query_result($result,0,"groupid");
- 	$result = $db->query("select groupid from vtiger_groups where groupname='Marketing Group';");
- 	$group2_id = $db->query_result($result,0,"groupid");
- 	$result = $db->query("select groupid from vtiger_groups where groupname='Support Group';");
- 	$group3_id = $db->query_result($result,0,"groupid");
-
- 	$db->pquery("insert into vtiger_users2group values (?,?)", array($group2_id, $user->id));
-
-        // we need to change the admin user to a fixed id of 1.
-        //$query = "update vtiger_users set id='1' where user_name='$user->user_name'";
-        //$result = $db->query($query, true, "Error updating admin user ID: ");
-
-        $log->info("Created ".$user->table_name." vtiger_table. for user $user->id");
-
-	//Creating the flat files
-	createUserPrivilegesfile($user->id);
-        createUserSharingPrivilegesfile($user->id);
-
-
-	//Creating the Standard User
+		//Creating the Standard User
     	$user = new Users();
         $user->column_fields["last_name"] = 'StandardUser';
         $user->column_fields["user_name"] = 'standarduser';
@@ -140,34 +137,739 @@ function create_default_users() {
         $user->column_fields["reminder_interval"] = '1 Minute';
         $user->column_fields["reminder_next_time"] = date('Y-m-d H:i');
         $user->column_fields["currency_id"] = 1;
-	$user->column_fields["date_format"] = 'yyyy-mm-dd';
-	$user->column_fields["hour_format"] = '24';
-	$user->column_fields["start_hour"] = '08:00';
-	$user->column_fields["end_hour"] = '23:00';
-	$user->column_fields["imagename"] = '';
-	$user->column_fields["internal_mailer"] = '1';
+		$user->column_fields["date_format"] = 'yyyy-mm-dd';
+		$user->column_fields["hour_format"] = '24';
+		$user->column_fields["start_hour"] = '08:00';
+		$user->column_fields["end_hour"] = '23:00';
+		$user->column_fields["imagename"] = '';
+		$user->column_fields["internal_mailer"] = '1';
         $user->column_fields["activity_view"] = 'This Week';	
-	$user->column_fields["lead_view"] = 'Today';
-	$user->column_fields["defhomeview"] = 'home_metrics';
-	$std_email ="standarduser@vtigeruser.com";
+		$user->column_fields["lead_view"] = 'Today';
+		$user->column_fields["defhomeview"] = 'home_metrics';
+		$std_email ="standarduser@vtigeruser.com";
         $user->column_fields["email1"] = $standarduser_email;
-	//to get the role id for standard_user	
-	$role_query = "SELECT roleid FROM vtiger_role WHERE rolename='Vice President'";
-	$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
-	$role_result = $db->query($role_query);
-	$role_id = $db->query_result($role_result,0,"roleid");
-	$user->column_fields["roleid"] = $role_id;
+		//to get the role id for standard_user	
+		$role_query = "SELECT roleid FROM vtiger_role WHERE rolename='Vice President'";
+		$adb->database->SetFetchMode(ADODB_FETCH_ASSOC);
+		$role_result = $adb->query($role_query);
+		$role_id = $adb->query_result($role_result,0,"roleid");
+		$user->column_fields["roleid"] = $role_id;
 
-    $user->save('Users');
+	    $user->save('Users');
+		$std_user_id = $user->id;
 
-	//Creating the flat vtiger_files
-	createUserPrivilegesfile($user->id);
-        createUserSharingPrivilegesfile($user->id);
+	    //Inserting into vtiger_groups table
+		$group1_id = $adb->getUniqueID("vtiger_users");
+		$group2_id = $adb->getUniqueID("vtiger_users");
+		$group3_id = $adb->getUniqueID("vtiger_users");
+		
+		$adb->query("insert into vtiger_groups values ('".$group1_id."','Team Selling','Group Related to Sales')");	
+		$adb->query("insert into vtiger_group2role values ('".$group1_id."','H".$role4_id."')");	
+		$adb->query("insert into vtiger_group2rs values ('".$group1_id."','H".$role5_id."')");	
 
-	$db->pquery("insert into vtiger_users2group values (?,?)", array($group1_id, $user->id));
- 	$db->pquery("insert into vtiger_users2group values (?,?)", array($group2_id, $user->id));
- 	$db->pquery("insert into vtiger_users2group values (?,?)", array($group3_id, $user->id));
+		$adb->query("insert into vtiger_groups values ('".$group2_id."','Marketing Group','Group Related to Marketing Activities')");	
+		$adb->query("insert into vtiger_group2role values ('".$group2_id."','H".$role2_id."')");	
+		$adb->query("insert into vtiger_group2rs values ('".$group2_id."','H".$role3_id."')");	
 
+		$adb->query("insert into vtiger_groups values ('".$group3_id."','Support Group','Group Related to providing Support to Customers')");
+		$adb->query("insert into vtiger_group2role values ('".$group3_id."','H".$role3_id."')");
+		$adb->query("insert into vtiger_group2rs values ('".$group3_id."','H".$role3_id."')");
+	
+		//Insert into vtiger_role2profile
+		$adb->query("insert into vtiger_role2profile values ('H".$role2_id."',".$profile1_id.")");
+		$adb->query("insert into vtiger_role2profile values ('H".$role3_id."',".$profile2_id.")");
+	  	$adb->query("insert into vtiger_role2profile values ('H".$role4_id."',".$profile2_id.")");
+		$adb->query("insert into vtiger_role2profile values ('H".$role5_id."',".$profile2_id.")"); 
+	   
+		// Setting user group relation for admin user
+	 	$adb->pquery("insert into vtiger_users2group values (?,?)", array($group2_id, $admin_user_id));
+	
+		// Setting user group relation for standard user
+	 	$adb->pquery("insert into vtiger_users2group values (?,?)", array($group1_id, $std_user_id));
+	 	$adb->pquery("insert into vtiger_users2group values (?,?)", array($group2_id, $std_user_id));
+	 	$adb->pquery("insert into vtiger_users2group values (?,?)", array($group3_id, $std_user_id));	
+		
+		//New Security Start
+		//Inserting into vtiger_profile vtiger_table
+		$adb->query("insert into vtiger_profile values ('".$profile1_id."','Administrator','Admin Profile')");	
+		$adb->query("insert into vtiger_profile values ('".$profile2_id."','Sales Profile','Profile Related to Sales')");
+		$adb->query("insert into vtiger_profile values ('".$profile3_id."','Support Profile','Profile Related to Support')");
+		$adb->query("insert into vtiger_profile values ('".$profile4_id."','Guest Profile','Guest Profile for Test Users')");
+		
+		//Inserting into vtiger_profile2gloabal permissions
+		$adb->query("insert into vtiger_profile2globalpermissions values ('".$profile1_id."',1,0)");
+		$adb->query("insert into vtiger_profile2globalpermissions values ('".$profile1_id."',2,0)");
+		$adb->query("insert into vtiger_profile2globalpermissions values ('".$profile2_id."',1,1)");
+		$adb->query("insert into vtiger_profile2globalpermissions values ('".$profile2_id."',2,1)");
+		$adb->query("insert into vtiger_profile2globalpermissions values ('".$profile3_id."',1,1)");
+		$adb->query("insert into vtiger_profile2globalpermissions values ('".$profile3_id."',2,1)");
+		$adb->query("insert into vtiger_profile2globalpermissions values ('".$profile4_id."',1,1)");
+		$adb->query("insert into vtiger_profile2globalpermissions values ('".$profile4_id."',2,1)");
+
+		//Inserting into vtiger_profile2tab
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",1,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",2,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",3,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",4,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",6,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",7,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",8,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",9,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",10,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",13,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",14,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",15,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",16,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",18,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",19,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",20,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",21,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",22,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",23,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",24,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",25,0)");
+       	$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",26,0)");
+       	$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",27,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",30,0)");
+
+		//Inserting into vtiger_profile2tab
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",1,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",2,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",3,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",4,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",6,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",7,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",8,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",9,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",10,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",13,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",14,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",15,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",16,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",18,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",19,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",20,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",21,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",22,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",23,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",24,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",25,0)");
+        $adb->query("insert into vtiger_profile2tab values (".$profile2_id.",26,0)");
+       	$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",27,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",30,0)");
+
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",1,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",2,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",3,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",4,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",6,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",7,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",8,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",9,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",10,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",13,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",14,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",15,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",16,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",18,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",19,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",20,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",21,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",22,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",23,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",24,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",25,0)");
+        $adb->query("insert into vtiger_profile2tab values (".$profile3_id.",26,0)");
+       	$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",27,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",30,0)");        
+
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",1,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",2,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",3,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",4,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",6,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",7,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",8,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",9,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",10,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",13,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",14,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",15,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",16,0)");	
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",18,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",19,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",20,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",21,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",22,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",23,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",24,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",25,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",26,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",27,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",30,0)"); 
+		//Inserting into vtiger_profile2standardpermissions  Adminsitrator
+		
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",2,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",2,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",2,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",2,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",2,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",4,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",4,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",4,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",4,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",4,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",6,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",6,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",6,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",6,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",6,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",7,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",7,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",7,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",7,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",7,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",8,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",8,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",8,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",8,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",8,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",9,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",9,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",9,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",9,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",9,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",13,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",13,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",13,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",13,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",13,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",14,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",14,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",14,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",14,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",14,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",15,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",15,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",15,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",15,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",15,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",16,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",16,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",16,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",16,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",16,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",18,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",18,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",18,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",18,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",18,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",19,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",19,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",19,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",19,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",19,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",20,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",20,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",20,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",20,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",20,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",21,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",21,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",21,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",21,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",21,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",22,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",22,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",22,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",22,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",22,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",23,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",23,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",23,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",23,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",23,4,0)");
+
+        $adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",26,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",26,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",26,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",26,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",26,4,0)");
+
+		//Insert into Profile 2 std permissions for Sales User  
+		//Help Desk Create/Delete not allowed. Read-Only	
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",2,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",2,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",2,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",2,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",2,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",4,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",4,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",4,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",4,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",4,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",6,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",6,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",6,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",6,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",6,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",7,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",7,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",7,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",7,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",7,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",8,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",8,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",8,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",8,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",8,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",9,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",9,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",9,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",9,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",9,4,0)");
+		
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",13,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",13,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",13,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",13,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",13,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",14,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",14,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",14,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",14,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",14,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",15,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",15,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",15,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",15,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",15,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",16,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",16,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",16,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",16,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",16,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",18,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",18,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",18,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",18,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",18,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",19,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",19,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",19,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",19,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",19,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",20,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",20,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",20,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",20,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",20,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",21,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",21,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",21,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",21,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",21,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",22,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",22,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",22,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",22,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",22,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",23,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",23,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",23,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",23,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",23,4,0)");
+
+
+        	$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",26,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",26,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",26,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",26,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile2_id.",26,4,0)");
+
+		//Inserting into vtiger_profile2std for Support Profile
+		// Potential is read-only
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",2,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",2,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",2,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",2,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",2,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",4,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",4,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",4,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",4,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",4,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",6,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",6,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",6,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",6,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",6,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",7,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",7,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",7,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",7,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",7,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",8,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",8,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",8,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",8,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",8,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",9,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",9,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",9,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",9,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",9,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",13,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",13,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",13,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",13,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",13,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",14,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",14,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",14,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",14,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",14,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",15,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",15,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",15,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",15,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",15,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",16,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",16,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",16,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",16,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",16,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",18,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",18,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",18,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",18,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",18,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",19,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",19,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",19,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",19,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",19,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",20,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",20,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",20,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",20,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",20,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",21,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",21,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",21,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",21,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",21,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",22,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",22,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",22,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",22,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",22,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",23,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",23,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",23,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",23,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",23,4,0)");
+
+
+        $adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",26,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",26,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",26,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",26,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile3_id.",26,4,0)");
+        
+		//Inserting into vtiger_profile2stdper for Profile Guest Profile
+		//All Read-Only
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",2,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",2,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",2,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",2,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",2,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",4,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",4,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",4,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",4,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",4,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",6,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",6,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",6,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",6,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",6,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",7,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",7,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",7,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",7,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",7,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",8,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",8,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",8,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",8,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",8,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",9,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",9,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",9,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",9,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",9,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",13,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",13,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",13,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",13,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",13,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",14,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",14,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",14,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",14,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",14,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",15,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",15,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",15,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",15,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",15,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",16,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",16,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",16,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",16,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",16,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",18,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",18,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",18,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",18,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",18,4,0)");	
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",19,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",19,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",19,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",19,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",19,4,0)");	
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",20,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",20,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",20,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",20,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",20,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",21,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",21,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",21,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",21,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",21,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",22,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",22,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",22,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",22,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",22,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",23,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",23,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",23,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",23,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",23,4,0)");	
+
+
+        $adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",26,0,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",26,1,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",26,2,1)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",26,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile4_id.",26,4,0)");
+
+		//Inserting into vtiger_profile 2 utility Admin
+        $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",2,5,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",2,6,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",4,5,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",4,6,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",6,5,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",6,6,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",7,5,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",7,6,0)");
+        //$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",8,6,0)");
+        //$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",9,6,0)");
+        //$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",10,6,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",7,8,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",6,8,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",4,8,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",13,5,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",13,6,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",13,8,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",14,5,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",14,6,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",7,9,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",18,5,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",18,6,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",30,3,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",7,10,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",6,10,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",4,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",2,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",13,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",14,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",18,10,0)");
+
+		//Inserting into vtiger_profile2utility Sales Profile
+		//Import Export Not Allowed.	
+		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",2,5,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",2,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",4,5,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",4,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",6,5,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",6,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",7,5,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",7,6,1)");
+        //$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",8,6,1)");
+        //$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",9,6,1)");
+        //$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",10,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",7,8,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",6,8,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",4,8,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",13,5,1)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",13,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",13,8,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",14,5,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",14,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",7,9,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",18,5,1)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",18,6,1)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",30,3,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",7,10,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",6,10,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",4,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",2,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",13,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",14,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",18,10,0)");
+
+		//Inserting into vtiger_profile2utility Support Profile
+		//Import Export Not Allowed.	
+		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",2,5,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",2,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",4,5,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",4,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",6,5,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",6,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",7,5,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",7,6,1)");
+        //$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",8,6,1)");
+        //$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",9,6,1)");
+        //$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",10,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",7,8,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",6,8,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",4,8,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",13,5,1)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",13,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",13,8,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",14,5,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",14,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",7,9,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",18,5,1)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",18,6,1)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",30,3,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",7,10,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",6,10,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",4,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",2,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",13,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",14,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",18,10,0)");
+
+		//Inserting into vtiger_profile2utility Guest Profile Read-Only
+		//Import Export BusinessCar Not Allowed.	
+		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",2,5,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",2,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",4,5,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",4,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",6,5,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",6,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",7,5,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",7,6,1)");
+        //$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",8,6,1)");
+        //$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",9,6,1)");
+        //$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",10,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",7,8,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",6,8,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",4,8,1)");	
+		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",13,5,1)");
+    	$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",13,6,1)");	 
+        $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",13,8,1)");		
+		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",14,5,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",14,6,1)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",7,9,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",18,5,1)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",18,6,1)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",30,3,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",7,10,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",6,10,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",4,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",2,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",13,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",14,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",18,10,0)");
+	
+		//Creating the flat files for admin user
+		createUserPrivilegesfile($admin_user_id);
+		createUserSharingPrivilegesfile($admin_user_id);
+		
+		//Creating the flat vtiger_files for standard user
+		createUserPrivilegesfile($std_user_id);
+		createUserSharingPrivilegesfile($std_user_id);
+
+		//Insert into vtiger_profile2field
+		insertProfile2field($profile1_id);
+        insertProfile2field($profile2_id);	
+        insertProfile2field($profile3_id);	
+        insertProfile2field($profile4_id);
+
+		insert_def_org_field();	
 }
 
 //$startTime = microtime();
@@ -262,6 +964,7 @@ foreach ($modules as $module )
 	$focus->create_tables();
 }
 			
+create_default_users_access();
 
 // create and populate combo tables
 require_once('include/PopulateComboValues.php');
@@ -271,8 +974,6 @@ $combo->create_nonpicklist_tables();
 //Writing tab data in flat file
 create_tab_data_file();
 create_parenttab_data_file();
-
-create_default_users();
 
 //to get the users lists
 $query = 'select id from vtiger_users';

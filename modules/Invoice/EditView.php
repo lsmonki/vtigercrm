@@ -111,7 +111,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
               $focus->column_fields['invoicedate'] = getDBInsertDateValue($curr_due_date);
         }
 
-	$soid = $focus->column_fields['salesorder_id'];
+		$soid = $focus->column_fields['salesorder_id'];
         $so_focus = new SalesOrder();
         $so_focus->id = $soid;
         $so_focus->retrieve_entity_info($soid,"SalesOrder");

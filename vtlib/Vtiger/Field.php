@@ -27,12 +27,18 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 
 	/**
 	 * Set values for picklist field (for all the roles)
-	 * @param Array List of values to add
+	 * @param Array List of values to add.
 	 *
 	 * @internal Creates picklist base if it does not exists
 	 */
 	function setPicklistValues($values) {
 		global $adb;
+
+		// Non-Role based picklist values
+		if($this->uitype == '16') {
+			$this->setNoRolePicklistValues($values);
+			return;
+		}
 
 		$picklist_table = 'vtiger_'.$this->name;
 		$picklist_idcol = $this->name.'id';
@@ -73,8 +79,9 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 	 * @param Array List of values to add
 	 *
 	 * @internal Creates picklist base if it does not exists
+	 * @access private
 	 */
-	function setNonStandardPicklistValues($values) {
+	function setNoRolePicklistValues($values) {
 		global $adb;
 
 		$picklist_table = 'vtiger_'.$this->name;

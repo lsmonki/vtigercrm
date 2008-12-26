@@ -1103,12 +1103,10 @@ ExecuteQuery("ALTER TABLE vtiger_tab ADD COLUMN isentitytype INT NOT NULL DEFAUL
 ExecuteQuery("create table vtiger_language(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50), " .
 		"prefix VARCHAR(10), label VARCHAR(30), lastupdated DATETIME, sequence INT, isdefault INT(1), active INT(1)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 		
-//Add all the existing languages from $languages variable of config file to vtiger_language table.
-global $languages;
-foreach($languages as $langkey=>$langlabel) {
-	$adb->pquery('INSERT INTO vtiger_language(name,prefix,label,lastupdated,active) VALUES(?,?,?,?,?)',
-		Array($langlabel,$langkey,$langlabel,date('Y-m-d H:i:s',time()), 1));
-}
+/* Register default language English. This will automatically register all the other langauges from config file */
+require_once('vtlib/Vtiger/Language.php');
+$vtlanguage = new Vtiger_Language();
+$vtlanguage->register('en_us','US English','English',true,true,true);
 
 /* To store relationship between the modules in a common table */
 ExecuteQuery("CREATE TABLE vtiger_crmentityrel (crmid int(11) NOT NULL, module varchar(100) NOT NULL, relcrmid int(11) NOT NULL, relmodule varchar(100) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
@@ -1116,7 +1114,83 @@ ExecuteQuery("CREATE TABLE vtiger_crmentityrel (crmid int(11) NOT NULL, module v
 /* To store the field to module relationship for uitype 10 */
 ExecuteQuery("CREATE TABLE vtiger_fieldmodulerel (fieldid int(11) NOT NULL, module varchar(100) NOT NULL, relmodule varchar(100) NOT NULL,
   					status varchar(10) default NULL, sequence int(11) default NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-  					
+
+/* Making users and groups depends on vtiger_users_seq */
+
+$user_result = $adb->pquery("select max(id) as userid from vtiger_users",array());
+$inc_num = $adb->query_result($user_result,0,"userid");
+$grp_result = $adb->pquery("select groupid from vtiger_groups",array());
+$num_grps = $adb->num_rows($grp_result);
+for($i=$num_grps; $i>=0; $i--) {
+	$oldId = $adb->query_result($grp_result,$i,"groupid");
+	$newId = $inc_num+$oldId;
+	
+	//Added just to increment users_seq table
+	$adb->getUniqueId("vtiger_users");
+	
+	ExecuteQuery("UPDATE vtiger_groups set groupid = $newId where groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_users2group set groupid = $newId where groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_group2grouprel set groupid = $newId where groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_group2role set groupid = $newId where groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_group2rs set groupid = $newId where groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_datashare_grp2grp set share_groupid = $newId where share_groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_datashare_grp2grp set to_groupid = $newId where to_groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_datashare_grp2role set share_groupid = $newId where share_groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_datashare_grp2rs set share_groupid = $newId where share_groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_datashare_role2group set to_groupid = $newId where to_groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_datashare_rs2grp set to_groupid = $newId where to_groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_tmp_read_group_sharing_per set sharedgroupid = $newId where sharedgroupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_tmp_write_group_sharing_per set sharedgroupid = $newId where sharedgroupid = $oldId");
+}
+
+$sql_result = $adb->query("select crmid,setype from vtiger_crmentity where smownerid=0 order by setype");
+$num_rows = $adb->num_rows($sql_result);
+$groupTables_array = array (
+							'Leads'=>array ('vtiger_leadgrouprelation','leadid'),
+							'Accounts'=>array ('vtiger_accountgrouprelation','accountid'),
+							'Contacts'=>array ('vtiger_contactgrouprelation','contactid'),
+							'Potentials'=>array ('vtiger_potentialgrouprelation','potentialid'),
+							'Quotes'=>array ('vtiger_quotegrouprelation','quoteid'),
+							'SalesOrder'=>array ('vtiger_sogrouprelation','salesorderid'),
+							'Invoice'=>array ('vtiger_invoicegrouprelation','invoiceid'),
+							'PurchaseOrder'=>array ('vtiger_pogrouprelation','purchaseorderid'),
+							'HelpDesk'=>array ('vtiger_ticketgrouprelation','ticketid'),
+							'Campaigns'=>array ('vtiger_campaigngrouprelation','campaignid'),
+							'Calendar'=>array ('vtiger_activitygrouprelation','activityid')
+                            );
+for($i=0; $i<$num_rows; $i++) {
+	$setype = $adb->query_result($sql_result, $i, 'setype');
+	$crmid = $adb->query_result($sql_result, $i, 'crmid');
+	
+	if(array_key_exists($setype, $groupTables_array)) {
+		$groupid_sql = "select groupid from vtiger_groups where groupname in (select groupname from ".$groupTables_array[$setype][0]." where ".$groupTables_array[$setype][1]. " = ".$crmid.")";
+		$groupid_res = $adb->query($groupid_sql);
+		$groupid = $adb->query_result($groupid_res, 0, 'groupid');
+	}
+	else {
+		$sql1_res = $adb->query("select crmid as entityid from vtiger_seattachmentsrel where attachmentsid = ".$crmid);
+		$se_recordid = $adb->query_result($sql1_res, 0, 'entityid');
+		
+		$groupid_res = $adb->query("select smownerid from vtiger_crmentity where crmid = ".$se_recordid);
+		$groupid = $adb->query_result($groupid_res, 0, 'smownerid');
+	}
+	if(isset($groupid) && $groupid != '')
+	ExecuteQuery("update vtiger_crmentity set smownerid = $groupid where crmid = $crmid");
+}
+
+ExecuteQuery("DROP TABLE vtiger_leadgrouprelation");
+ExecuteQuery("DROP TABLE vtiger_accountgrouprelation");
+ExecuteQuery("DROP TABLE vtiger_contactgrouprelation");
+ExecuteQuery("DROP TABLE vtiger_potentialgrouprelation");
+ExecuteQuery("DROP TABLE vtiger_quotegrouprelation");
+ExecuteQuery("DROP TABLE vtiger_sogrouprelation");
+ExecuteQuery("DROP TABLE vtiger_invoicegrouprelation");
+ExecuteQuery("DROP TABLE vtiger_pogrouprelation");
+ExecuteQuery("DROP TABLE vtiger_ticketgrouprelation");
+ExecuteQuery("DROP TABLE vtiger_campaigngrouprelation");
+ExecuteQuery("DROP TABLE vtiger_activitygrouprelation");
+// user-group ends
+			
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

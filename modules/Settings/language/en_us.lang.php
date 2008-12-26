@@ -1110,5 +1110,24 @@ $mod_strings = Array(
 'LBL_CANCEL_BUTTON'=>'Cancel',
 //softphone integration ends
 
+'VTLIB_LBL_SELECT_PACKAGE_FILE'=>'Select the Package File',
+'VTLIB_LBL_FILE_LOCATION'=>'File location:',
+'VTLIB_LBL_PACKAGE_FILE_HELP'=>'vtiger module is packaged as a zip file.',
+'VTLIB_LBL_IMPORT_FAILURE'=>'Import Failure',
+'VTLIB_LBL_INVALID_FILE'=>'Invalid file',
+'VTLIB_LBL_INVALID_IMPORT_TRY_AGAIN'=>'provided for module import! Try Again.',
+'VTLIB_LBL_UNABLE_TO_UPLOAD'=>'Unable to upload',
+'VTLIB_LBL_UNABLE_TO_UPLOAD2'=>'the package on the server! Try Again.',
+'VTLIB_LBL_VERIFY_IMPORT_DETAILS'=>'Verify Import Details',
+'VTLIB_LBL_MODULE_NAME'=>'Module Name',
+'VTLIB_LBL_MODULE_DIR'=>'Module Directory',
+'VTLIB_LBL_REQ_VTIGER_VERSION'=>'Req. vtiger version',
+'VTLIB_LBL_LICENSE'=>'License',
+'VTLIB_LBL_LICENSE_ACCEPT_AGREEMENT'=>'I accept the license agreement.',
+'VTLIB_LBL_PROCEED_WITH_IMPORT'=>'Do you want to proceed with the import?',
+'VTLIB_LBL_IMPORTING_MODULE_START'=>'Importing Module ...',
+'VTLIB_LBL_WARNING'=>'Warning',
+'VTLIB_LBL_NOT_WRITEABLE'=>'not writeable',
+// END
 );
 ?>

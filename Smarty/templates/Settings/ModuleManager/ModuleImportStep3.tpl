@@ -29,7 +29,7 @@
                 	<form method="POST" action="index.php">
 						<table class='tableHeading' cellpadding=5 cellspacing=0 border=0 width=100%>
 						<tr>
-							<td class='big' colspan=2><b>Importing Module ...</b></td>
+							<td class='big' colspan=2><b>{$MOD.VTLIB_LBL_IMPORTING_MODULE_START}</b></td>
 						</tr>
 						</table>
 						

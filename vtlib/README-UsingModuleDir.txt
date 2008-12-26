@@ -1,12 +1,12 @@
-Creating basic skeleton module
-==============================
+Using skeleton module
+=====================
 
-1. Rename ModuleDir to ModuleName
-2. Rename ModuleDir/ModuleFile.php to ModuleName.php
-3. Rename ModuleDir/ModuleFileAjax.php to ModuleNameAjax.php
-4. Rename ModuleDir/ModuleFile.js to ModuleName.js
+1. Copy ModuleDir/<target_vtiger_version> to modules/<NewModuleName>
+2. Rename modules/<NewModuleName>/ModuleFile.php     to <NewModuleName>.php
+3. Rename modules/<NewModuleName>/ModuleFileAjax.php to <NewModuleName>Ajax.php
+4. Rename modules/<NewModuleName>/ModuleFile.js      to <NewModuleName>.js
 
-4. Edit ModuleName.php
+5. Edit <NewModuleName>.php
 
    a. Update $table_name and $table_index (Module table name and table index column)
 
@@ -22,4 +22,6 @@ Creating basic skeleton module
 
    g. Update $customFieldTable
 
-   h. Rename function ModuleClass to function ModuleName [This is the Constructor Class]
+   h. Rename class ModuleClass to class <NewModuleName>
+
+Refer documentation for more details.

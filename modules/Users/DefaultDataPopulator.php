@@ -1955,7 +1955,7 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	//Register default language English
 	require_once('vtlib/Vtiger/Language.php');
 	$vtlanguage = new Vtiger_Language();
-	$vtlanguage->register('en_us','US English',1,1,'English');
+	$vtlanguage->register('en_us','US English','English',true,true,true);
 	
 	$this->insertUser2mergefields(0);
 	$this->insertUser2mergefields(1);

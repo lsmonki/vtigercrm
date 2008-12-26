@@ -11,80 +11,72 @@ require_once('data/CRMEntity.php');
 require_once('data/Tracker.php');
 
 class ModuleClass extends CRMEntity {
-	var $db, $log; // Used in class functions of CRMEntity
+	var $db, $log; // Used in class functions like CRMEntity
 
 	var $table_name = 'vtiger_payslip';
 	var $table_index= 'payslipid';
 	var $column_fields = Array();
 
-	/** Indicator if this is a custom module or standard module */
+	// Indicator if this is a custom module or standard module
 	var $IsCustomModule = true;
 
-	/**
-	 * Mandatory table for supporting custom fields.
-	 */
+	// Mandatory for function getGroupName
+	// Array(groupTableName, groupColumnId)
+	// groupTableName should have (groupname column)
+	var $groupTable = Array('vtiger_payslipgrouprel', 'payslipid');
+
+	// Mandatory table for supporting custom fields
 	var $customFieldTable = Array('vtiger_payslipcf', 'payslipid');
 
-	/**
-	 * Mandatory for Saving, Include tables related to this module.
-	 */
+	// Mandatory for Saving, Include tables related to this module.
 	var $tab_name = Array('vtiger_crmentity', 'vtiger_payslip', 'vtiger_payslipcf');
-
-	/**
-	 * Mandatory for Saving, Include tablename and tablekey columnname here.
-	 */
+	// Mandatory for Saving, Include the table name and index column mapping here.
 	var $tab_name_index = Array(
 		'vtiger_crmentity' => 'crmid',
 		'vtiger_payslip'   => 'payslipid',
 	    'vtiger_payslipcf' => 'payslipid');
 
-	/**
-	 * Mandatory for Listing (Related listview)
-	 */
+	// Mandatory for Listing
 	var $list_fields = Array (
-		/* Format: Field Label => Array(tablename, columnname) */
-		// tablename should not have prefix 'vtiger_'
+		// Field Label=> Array(tablename, columnname)
 		'Payslip Name'=> Array('payslip', 'payslipname'),
 		'Assigned To' => Array('crmentity','smownerid')
 	);
 	var $list_fields_name = Array(
-		/* Format: Field Label => fieldname */
+		// Field Label=>fieldname
 		'Payslip Name'=> 'payslipname',
 		'Assigned To' => 'assigned_user_id'
 	);
 
-	// Make the field link to detail view 
+	// Make the field link detail view from list view (Fieldname)
 	var $list_link_field = 'payslipname';
-
-	// For Popup listview and UI type support
+	
+	// For Popup listview
 	var $search_fields = Array(
-		/* Format: Field Label => Array(tablename, columnname) */
-		// tablename should not have prefix 'vtiger_'
 		'Payslip Name'=> Array('payslip', 'payslipname')
 	);
 	var $search_fields_name = Array(
-		/* Format: Field Label => fieldname */
 		'Payslip Name'=> 'payslipname'
 	);
 
-	// For Popup window record selection
 	var $popup_fields = Array('payslipname');
 
+	// Placeholder for fields not available for mass edit
+	var $non_mass_edit_fields = Array();
 
-	// Should contain field labels
-	var $detailview_links = Array('PayslipName', 'Month');
+	var $sortby_fields = Array('payslipname', 'payslipmonth', 'smownerid', 'modifiedtime');
 
-	// For Alphabetical search
+	// For alphabetical search
 	var $def_basicsearch_col = 'payslipname';
 
-	// Column value to use on detail view record text display
+	// Column value to use on detail view record text display.
 	var $def_detailview_recname = 'payslipname';
 
-	// Required Information for enabling Import feature
+	// Required information for enabling Import feature
 	var $required_fields = Array('payslipname'=>1);
 
 	// Callback function list during Importing
-	var $special_functions = Array('set_import_assigned_user');
+	var $special_functions =  array("set_import_assigned_user");
 
 	var $default_order_by = 'payslipname';
 	var $default_sort_order='ASC';
@@ -145,8 +137,12 @@ class ModuleClass extends CRMEntity {
 				      " = $this->table_name.$this->table_index"; 
 		}
 		$query .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid";
-		$query .= " LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_crmentity.smownerid";
 
+		if(!empty($this->groupTable)) {
+			$query .= "
+				LEFT JOIN " . $this->groupTable[0] . " ON " . $this->groupTable[0].'.'.$this->groupTable[1] . " = $this->table_name.$this->table_index
+				LEFT JOIN vtiger_groups ON vtiger_groups.groupname = " . $this->groupTable[0] . '.groupname';
+		}
 		$query .= "	WHERE vtiger_crmentity.deleted = 0";
 		$query .= $this->getListViewSecurityParameter($module);
 		return $query;

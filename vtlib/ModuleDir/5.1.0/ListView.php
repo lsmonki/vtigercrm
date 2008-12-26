@@ -148,21 +148,6 @@ $listview_header = getListViewHeader($focus,$currentModule,$url_string,$sorder,$
 $listview_entries = getListViewEntries($focus,$currentModule,$list_result,$navigation_array,'','','EditView','Delete',$customView);
 $listview_header_search = getSearchListHeaderValues($focus,$currentModule,$url_string,$sorder,$order_by,'',$customView);
 
-// Convert field value to DetailView Link
-if(isset($focus->detailview_links) && count($focus->detailview_links)) {
-	foreach($listview_entries as $listview_recid=>$listview_row) {
-		foreach($listview_row as $listview_key=>$listview_val) {
-			$listview_key_header = $listview_header[$listview_key];
-			preg_match('/(<[^>]+>)([^<]+)(<[^>]+>)/', $listview_key_header, $matches);
-			$linktext = array_search(trim($matches[2], ' &nbsp;\t\r\n'), $mod_strings);
-			if(in_array($linktext, $focus->detailview_links)) {
-				$listview_row[$listview_key] = 
-					"<a href='index.php?action=DetailView&module=$currentModule&record=$listview_recid&parenttab=$category'>".$listview_val."</a>";
-			}
-		}
-		$listview_entries[$listview_recid] = $listview_row;
-	}
-}
 $smarty->assign('LISTHEADER', $listview_header);
 $smarty->assign('LISTENTITY', $listview_entries);
 $smarty->assign('SEARCHLISTHEADER',$listview_header_search);

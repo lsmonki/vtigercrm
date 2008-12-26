@@ -29,16 +29,16 @@
 						{if $MODULEIMPORT_FAILED neq ''}
 							<table class='tableHeading' cellpadding=5 cellspacing=0 border=0 width=100%>
 							<tr>
-								<td class='big' colspan=2><b>Import Failure</b></td>
+								<td class='big' colspan=2><b>{$MOD.VTlIB_LBL_IMPORT_FAILURE}</b></td>
 							</tr>
 							</table>
 							<table cellpadding=5 cellspacing=0 border=0 width=80%>
 							<tr valign=top>
 								<td class='cellText small'>
 									{if $MODULEIMPORT_FILE_INVALID eq "true"}
-										<font color=red><b>Invalid file</b></font> provided for module import! Try Again.
+										<font color=red><b>{$MOD.VTLIB_LBL_INVALID_FILE}</b></font> {$MOD.VTLIB_LBL_INVALID_IMPORT_TRY_AGAIN}
 									{else}
-										We were <font color=red>unable to upload</font> the zipfile on the server! Try Again.
+										<font color=red>{$MOD.VTLIB_LBL_UNABLE_TO_UPLOAD}</font> {$MOD.VTLIB_LBL_UNABLE_TO_UPLOAD2}
 									{/if}
 								</td>
 							</tr>
@@ -56,13 +56,13 @@
 						{else}
 							<table class='tableHeading' cellpadding=5 cellspacing=0 border=0 width=100%>
 							<tr>
-								<td class='big' colspan=2><b>Verify Import Details</b></td>
+								<td class='big' colspan=2><b>{$MOD.VTLIB_LBL_UNABLE_TO_UPLOAD2}</b></td>
 							</tr>
 							</table>
 							<table cellpadding=5 cellspacing=0 border=0 width=100%>
 							<tr valign=top>
 								<td class='cellLabel small' width=20%>
-									<b>Module Name</b>
+									<b>{$MOD.VTLIB_LBL_MODULE_NAME}</b>
 								</td>
 								<td class='cellText small'>
 									{$MODULEIMPORT_NAME}
@@ -72,7 +72,7 @@
 							{if $MODULEIMPORT_DIR}
 							<tr valign=top>
 								<td class='cellLabel small' width=20%>
-									<b>Module Directory</b>
+									<b>{$MOD.VTLIB_LBL_MODULE_DIR}</b>
 								</td>
 								<td class='cellText small'>
 									{$MODULEIMPORT_DIR}
@@ -86,7 +86,7 @@
 							{/if}
 							<tr valign=top>
 								<td class='cellLabel small' width=20%>
-									<b>Req. vtiger version</b>
+									<b>{$MOD.VTLIB_LBL_REQ_VTIGER_VERSION}</b>
 								</td>
 								<td class='cellText small'>
 									{$MODULEIMPORT_DEP_VTVERSION}
@@ -99,12 +99,12 @@
 							{assign var="need_license_agreement" value="true"}
 							<tr valign=top>
 								<td class='cellLabel small' width=20%>
-									<b>License</b>
+									<b>{$MOD.VTLIB_LBL_LICENSE}</b>
 								</td>
 								<td class='cellText small'>
 									<textarea readonly class='small' style="background-color: #F5F5F5; border: 0; height: 150px; font: 10px 'Lucida Console', 'Courier New', Arial, sans-serif;">{$MODULEIMPORT_LICENSE}</textarea><br>
 									{literal}
-									<input type="checkbox" onclick="if(this.form.yesbutton){if(this.checked){this.form.yesbutton.disabled=false;}else{this.form.yesbutton.disabled=true;}}"> I accept the license agreement.
+									<input type="checkbox" onclick="if(this.form.yesbutton){if(this.checked){this.form.yesbutton.disabled=false;}else{this.form.yesbutton.disabled=true;}}"> {$MOD.VTLIB_LBL_LICENSE_ACCEPT_AGREEMENT}
 									{/literal}
 								</td>
 							</tr>
@@ -125,7 +125,7 @@
 										<input type="submit" class="crmbutton small delete" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" 
 												onclick="this.form.module_import.value=''; this.form.module_import_cancel.value='true';">
 									{else}
-										{literal}Do you want to proceed with the import?{/literal}
+										{$MOD.VTLIB_LBL_PROCEED_WITH_IMPORT}
 										<input type="submit" class="crmbutton small edit" value="{$MOD.LBL_YES}" 
 											{if $need_license_agreement eq 'true'} disabled=true {/if}	name="yesbutton">
 										<input type="submit" class="crmbutton small delete" value="{$MOD.LBL_NO}" 

@@ -81,8 +81,6 @@
 
 <div id='miniCal' style='width:300px; position:absolute; display:none; left:100px; top:100px; z-index:100000'>
 </div>
-<div class="lvtCol fixedLay1" id="notificationDiv" style="float: right;  padding-right: 5px; overflow: hidden; border-style: solid; right: 0px; border-color: rgb(141, 141, 141); bottom: 0px; display: none; padding: 2px; block; z-index: 10; font-weight: normal;" align="left">
-</div>
 
 <!-- header - master tabs -->
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="hdrTabBg">
@@ -518,24 +516,6 @@ function openwin()
 	{/foreach}
 	</table>
 </div>
-
-<!-- divs for asterisk integration -->
-<div id="OutgoingCall" style="display: none;position: absolute;z-index:200;" class="layerPopup">
-	<table  border='0' cellpadding='5' cellspacing='0' width='100%'>
-		<tr style='cursor:move;' >
-			<td class='mailClientBg small' id='outgoing_handle'>
-				<b>{$APP.LBL_OUTGOING_CALL}</b>
-			</td>
-		</tr>
-	</table>
-	<table  border='0' cellpadding='0' cellspacing='0' width='100%' class='hdrNameBg'>
-		</tr>
-		<tr><td style='padding:10px;' colspan='2'>
-			{$APP.LBL_OUTGOING_CALL_MESSAGE}
-		</td></tr>
-	</table>
-</div>
-<!-- divs for asterisk integration :: end-->
 	
 <script>
 	var THandle = document.getElementById("Track_Handle");
@@ -572,11 +552,32 @@ function vtiger_news(obj) {
 }
 {/literal}
 </script>
-<div class="lvtCol fixedLay1" id="vtigerNewsPopupLay" style="display: none; height: 250px; bottom: 2px; padding: 2px; block; z-index: 12; font-weight: normal;" align="left">
+<div class="lvtCol fixedLay1" id="vtigerNewsPopupLay" style="display: none; height: 250px; bottom: 2px; padding: 2px; z-index: 12; font-weight: normal;" align="left">
 </div>
 <!-- END -->
 
 <!-- ActivityReminder Customization for callback -->
-<div class="lvtCol fixedLay1" id="ActivityRemindercallback" style="right: 0px; bottom: 2px; display:none; padding: 2px; block; z-index: 10; font-weight: normal;" align="left">
+<div class="lvtCol fixedLay1" id="ActivityRemindercallback" style="right: 0px; bottom: 2px; display:none; padding: 2px; z-index: 10; font-weight: normal;" align="left">
 </div>
 <!-- End -->
+
+<!-- divs for asterisk integration -->
+<div class="lvtCol fixedLay1" id="notificationDiv" style="float: right;  padding-right: 5px; overflow: hidden; border-style: solid; right: 0px; border-color: rgb(141, 141, 141); bottom: 0px; display: none; padding: 2px; z-index: 10; font-weight: normal;" align="left">
+</div>
+
+<div id="OutgoingCall" style="display: none;position: absolute;z-index:200;" class="layerPopup">
+	<table  border='0' cellpadding='5' cellspacing='0' width='100%'>
+		<tr style='cursor:move;' >
+			<td class='mailClientBg small' id='outgoing_handle'>
+				<b>{$APP.LBL_OUTGOING_CALL}</b>
+			</td>
+		</tr>
+	</table>
+	<table  border='0' cellpadding='0' cellspacing='0' width='100%' class='hdrNameBg'>
+		</tr>
+		<tr><td style='padding:10px;' colspan='2'>
+			{$APP.LBL_OUTGOING_CALL_MESSAGE}
+		</td></tr>
+	</table>
+</div>
+<!-- divs for asterisk integration :: end-->

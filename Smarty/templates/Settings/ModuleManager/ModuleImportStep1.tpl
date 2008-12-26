@@ -40,18 +40,18 @@ function modulemanager_import_validate(form) {
                 	<form method="POST" action="index.php" enctype="multipart/form-data">
 						<table class='tableHeading' cellpadding=5 cellspacing=0 border=0 width=100%>
 						<tr>
-							<td class='big' colspan=2><b>Select the Zip File</b></td>
+							<td class='big' colspan=2><b>{$MOD.VTLIB_LBL_SELECT_PACKAGE_FILE}</b></td>
 						</tr>
 						</table>
 						<table cellpadding=5 cellspacing=0 border=0 width=100%>
 						<tr valign=top>
 							<td class='cellLabel small'>
-								<font color=red>*</font> <b>File location:</b>
+								<font color=red>*</font> <b>{$MOD.VTLIB_LBL_FILE_LOCATION}</b>
 							</td>
 							<td class='cellText small'>
 								<input type="file" class="small" name="module_zipfile" size=50>
 								<p>
-									vtiger module is packaged as a zip file. 
+									{$MOD.VTLIB_LBL_PACKAGE_FILE_HELP}
 								</p>
 							</td>
 						</tr>

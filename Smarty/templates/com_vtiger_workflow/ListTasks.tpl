@@ -10,13 +10,13 @@
 		cssNode.media = 'screen';
 		headID.appendChild(cssNode);
 	}
-	addStylesheet('http://localhost/504/modules/Workflow/resources/style.css');
+	addStylesheet('modules/com_vtiger_workflow/resources/style.css');
 	
 	{/literal}
 </script>
 {include file='SetMenu.tpl'}
 <div id="view">
-	{include file='Workflow/ModuleTitle.tpl'}
+	{include file='com_vtiger_workflow/ModuleTitle.tpl'}
 	
 	<table width="98%" cellspacing="0" cellpadding="0" border="0" align="center"><tbody>
 		<tr>
