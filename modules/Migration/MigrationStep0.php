@@ -40,10 +40,7 @@ else
 	
 $config_status=get_config_status();
 
-if($adb->isPostgres())
-	$smarty->assign("DB_CHARSET", 'UTF8');
-else
-	$smarty->assign("DB_CHARSET", get_db_charset($adb));
+$smarty->assign("DB_CHARSET", get_db_charset($adb));
 $smarty->assign("DB_STATUS", $db_status);
 $smarty->assign("CONFIG_CHARSET", $default_charset);
 $smarty->assign("CONFIG_STATUS", $config_status);

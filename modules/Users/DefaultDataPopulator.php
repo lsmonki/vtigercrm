@@ -436,7 +436,7 @@ class DefaultDataPopulator extends CRMEntity {
  		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'imagename','vtiger_products',1,'69','imagename','Product Image',1,0,0,100,1,35,1,'V~O',1,null,'ADV',1)");
 
 		//Block 36 Description Info
- 		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'product_description','vtiger_products',1,'19','product_description','Description',1,0,0,100,1,36,1,'V~O',1,null,'BAS',1)");
+ 		$this->db->query("insert into vtiger_field values (14,".$this->db->getUniqueID("vtiger_field").",'description','vtiger_crmentity',1,'19','description','Description',1,0,0,100,1,36,1,'V~O',1,null,'BAS',1)");
 
 		//Product Details -- END
 
@@ -1888,15 +1888,13 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	$this->db->query("insert into vtiger_parenttabrel values (3,20,5)");
 	$this->db->query("insert into vtiger_parenttabrel values (3,22,6)");
 	$this->db->query("insert into vtiger_parenttabrel values (3,23,7)");
-	$this->db->query("insert into vtiger_parenttabrel values (3,14,8)");
-	$this->db->query("insert into vtiger_parenttabrel values (3,19,9)");
-	$this->db->query("insert into vtiger_parenttabrel values (3,8,10)");
+	$this->db->query("insert into vtiger_parenttabrel values (3,19,8)");
+	$this->db->query("insert into vtiger_parenttabrel values (3,8,9)");
 	$this->db->query("insert into vtiger_parenttabrel values (4,13,1)");
 	$this->db->query("insert into vtiger_parenttabrel values (4,15,2)");
 	$this->db->query("insert into vtiger_parenttabrel values (4,6,3)");
 	$this->db->query("insert into vtiger_parenttabrel values (4,4,4)");
-	$this->db->query("insert into vtiger_parenttabrel values (4,14,5)");
-	$this->db->query("insert into vtiger_parenttabrel values (4,8,6)");
+	$this->db->query("insert into vtiger_parenttabrel values (4,8,5)");
 	$this->db->query("insert into vtiger_parenttabrel values (5,1,1)");
 	$this->db->query("insert into vtiger_parenttabrel values (5,25,2)");
 	$this->db->query("insert into vtiger_parenttabrel values (6,14,1)");

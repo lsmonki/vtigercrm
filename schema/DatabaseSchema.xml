@@ -1152,7 +1152,6 @@
 		<field name="productcode" type="C" size="40" />
 		<field name="productcategory" type="C" size="200" />
 		<field name="manufacturer" type="C" size="200" />
-		<field name="product_description" type="X" />
 		<field name="qty_per_unit" type="N" size="11.2">
 			<default value="0" />
 		</field>
@@ -5812,13 +5811,6 @@
 
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
-
-<table name="vtiger_producttaxrel" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_producttaxrel FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
-<opt>Type=InnoDB</opt>
-<data>
-</data>
-</table>
 
 	<table name="vtiger_status">
 		<field name="statusid" type="I" size="19">

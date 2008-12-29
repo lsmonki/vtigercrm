@@ -49,21 +49,21 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 {
     if(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'quotetoinvoice')
     {
-	$quoteid = $_REQUEST['record'];
-	$quote_focus = new Quotes();
-	$quote_focus->id = $quoteid;
-	$quote_focus->retrieve_entity_info($quoteid,"Quotes");
-	$focus = getConvertQuoteToInvoice($focus,$quote_focus,$quoteid);
-
-	//Added to display the Quote's associated vtiger_products -- when we create vtiger_invoice from Quotes DetailView 
-	$associated_prod = getAssociatedProducts("Quotes",$quote_focus);
-	$txtTax = (($quote_focus->column_fields['txtTax'] != '')?$quote_focus->column_fields['txtTax']:'0.000');
-	$txtAdj = (($quote_focus->column_fields['txtAdjustment'] != '')?$quote_focus->column_fields['txtAdjustment']:'0.000');
-
-	$smarty->assign("CONVERT_MODE", $_REQUEST['convertmode']);
-	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
-	$smarty->assign("MODE", $quote_focus->mode);
-	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
+		$quoteid = $_REQUEST['record'];
+		$quote_focus = new Quotes();
+		$quote_focus->id = $quoteid;
+		$quote_focus->retrieve_entity_info($quoteid,"Quotes");
+		$focus = getConvertQuoteToInvoice($focus,$quote_focus,$quoteid);
+	
+		//Added to display the Quote's associated vtiger_products -- when we create vtiger_invoice from Quotes DetailView 
+		$associated_prod = getAssociatedProducts("Quotes",$quote_focus);
+		$txtTax = (($quote_focus->column_fields['txtTax'] != '')?$quote_focus->column_fields['txtTax']:'0.000');
+		$txtAdj = (($quote_focus->column_fields['txtAdjustment'] != '')?$quote_focus->column_fields['txtAdjustment']:'0.000');
+	
+		$smarty->assign("CONVERT_MODE", $_REQUEST['convertmode']);
+		$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+		$smarty->assign("MODE", $quote_focus->mode);
+		$smarty->assign("AVAILABLE_PRODUCTS", 'true');
     }
     elseif(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'sotoinvoice')
     {
@@ -73,19 +73,19 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
         $so_focus->retrieve_entity_info($soid,"SalesOrder");
         $focus = getConvertSoToInvoice($focus,$so_focus,$soid);
 
-	//added to set the PO number and terms and conditions
-	$focus->column_fields['vtiger_purchaseorder'] = $so_focus->column_fields['vtiger_purchaseorder'];
-	$focus->column_fields['terms_conditions'] = $so_focus->column_fields['terms_conditions'];
-
-	//Added to display the SalesOrder's associated vtiger_products -- when we create vtiger_invoice from SO DetailView
-	$associated_prod = getAssociatedProducts("SalesOrder",$so_focus);
-	$txtTax = (($so_focus->column_fields['txtTax'] != '')?$so_focus->column_fields['txtTax']:'0.000');
-	$txtAdj = (($so_focus->column_fields['txtAdjustment'] != '')?$so_focus->column_fields['txtAdjustment']:'0.000');
-
-	$smarty->assign("CONVERT_MODE", $_REQUEST['convertmode']);
-	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
-	$smarty->assign("MODE", $so_focus->mode);
-	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
+		//added to set the PO number and terms and conditions
+		$focus->column_fields['vtiger_purchaseorder'] = $so_focus->column_fields['vtiger_purchaseorder'];
+		$focus->column_fields['terms_conditions'] = $so_focus->column_fields['terms_conditions'];
+	
+		//Added to display the SalesOrder's associated vtiger_products -- when we create vtiger_invoice from SO DetailView
+		$associated_prod = getAssociatedProducts("SalesOrder",$so_focus);
+		$txtTax = (($so_focus->column_fields['txtTax'] != '')?$so_focus->column_fields['txtTax']:'0.000');
+		$txtAdj = (($so_focus->column_fields['txtAdjustment'] != '')?$so_focus->column_fields['txtAdjustment']:'0.000');
+	
+		$smarty->assign("CONVERT_MODE", $_REQUEST['convertmode']);
+		$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+		$smarty->assign("MODE", $so_focus->mode);
+		$smarty->assign("AVAILABLE_PRODUCTS", 'true');
 
     }
     elseif(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'potentoinvoice')

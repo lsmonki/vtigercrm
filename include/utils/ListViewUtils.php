@@ -1343,7 +1343,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 
 					$slashes_temp_val = popup_from_html(getProductName($entity_id));
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
-					$description=$adb->query_result($list_result,$list_result_count,'product_description');
+					$description=$adb->query_result($list_result,$list_result_count,'description');
 					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
 
 					if($focus->popup_type == 'inventory_prod')$value_array[$entity_id] = array($entity_id, nl2br($slashes_temp_val), $unitprice, $qty_stock,$tax_str,$row_id,$slashes_desc);
@@ -1957,7 +1957,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 					$slashes_temp_val = popup_from_html($temp_val);
                                         $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
-					$description=$adb->query_result($list_result,$list_result_count,'product_description');
+					$description=$adb->query_result($list_result,$list_result_count,'description');
 					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
 
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'");\'>'.$temp_val.'</a>';
@@ -2452,7 +2452,7 @@ function getListQuery($module,$where='')
                 }				
 			break;
 	Case "Products":
-		$query = "SELECT vtiger_crmentity.crmid, vtiger_products.*, vtiger_productcf.*
+		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.description, vtiger_products.*, vtiger_productcf.*
 			FROM vtiger_products
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_products.productid

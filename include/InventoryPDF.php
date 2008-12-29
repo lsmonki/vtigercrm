@@ -154,7 +154,8 @@ function get_invoice_pdf()
 	for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 	{
 		$product_name[$i] = $associated_products[$i]['productName'.$i];
-		$prod_description[$i] = $associated_products[$i]['productDescription'.$i];
+		//$prod_description[$i] = $associated_products[$i]['productDescription'.$i];
+		$comment[$i] = $associated_products[$i]['comment'.$i];
 		$product_id[$i] = $associated_products[$i]['hdnProductId'.$i];
 		$qty[$i] = $associated_products[$i]['qty'.$i];
 		$unit_price[$i] = number_format($associated_products[$i]['unitPrice'.$i],2,'.',',');
@@ -186,7 +187,9 @@ function get_invoice_pdf()
 		$prod_total[$i] = number_format($producttotal,2,'.',',');
 	
 		$product_line[$j]["Product Code"] = $product_code[$i];
-		$product_line[$j]["Product Name"] = decode_html($product_name[$i]);
+		$product_name_with_comment = decode_html($product_name[$i]);
+		if ($comment[$i] != '') $product_name_with_comment .= "\n".decode_html($comment[$i]);
+		$product_line[$j]["Product Name"] = $product_name_with_comment;
 		$product_line[$j]["Qty"] = $qty[$i];
 		$product_line[$j]["Price"] = $list_price[$i];
 		$product_line[$j]["Discount"] = $discount_total[$i];
@@ -390,7 +393,8 @@ function get_po_pdf() {
 	for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 	{
 		$product_name[$i] = $associated_products[$i]['productName'.$i];
-		$prod_description[$i] = $associated_products[$i]['productDescription'.$i];
+		//$prod_description[$i] = $associated_products[$i]['productDescription'.$i];
+		$comment[$i] = $associated_products[$i]['comment'.$i];
 		$product_id[$i] = $associated_products[$i]['hdnProductId'.$i];
 		$qty[$i] = $associated_products[$i]['qty'.$i];
 		$unit_price[$i] = number_format($associated_products[$i]['unitPrice'.$i],2,'.',',');
@@ -420,8 +424,10 @@ function get_po_pdf() {
 			$price_salestax += $total_taxes;
 		}
 		$prod_total[$i] = number_format($producttotal,2,'.',',');
-	        $product_line[$j]["Product Code"] = $product_code[$i];
-		$product_line[$j]["Product Name"] = decode_html($product_name[$i]);
+		$product_line[$j]["Product Code"] = $product_code[$i];
+		$product_name_with_comment = decode_html($product_name[$i]);
+		if ($comment[$i] != '') $product_name_with_comment .= "\n".decode_html($comment[$i]);
+		$product_line[$j]["Product Name"] = $product_name_with_comment;
 		$product_line[$j]["Qty"] = $qty[$i];
 		$product_line[$j]["Price"] = $list_price[$i];
 		$product_line[$j]["Discount"] = $discount_total[$i];
@@ -630,7 +636,8 @@ function get_so_pdf() {
 	for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 	{
 		$product_name[$i] = $associated_products[$i]['productName'.$i];
-		$prod_description[$i] = $associated_products[$i]['productDescription'.$i];
+		//$prod_description[$i] = $associated_products[$i]['productDescription'.$i];
+		$comment[$i] = $associated_products[$i]['comment'.$i];
 		$product_id[$i] = $associated_products[$i]['hdnProductId'.$i];
 		$qty[$i] = $associated_products[$i]['qty'.$i];
 		$unit_price[$i] = number_format($associated_products[$i]['unitPrice'.$i],2,'.',',');
@@ -661,8 +668,10 @@ function get_so_pdf() {
 		}
 		$prod_total[$i] = number_format($producttotal,2,'.',',');
 	
-	        $product_line[$j]["Product Code"] = $product_code[$i];
-		$product_line[$j]["Product Name"] = decode_html($product_name[$i]);
+		$product_line[$j]["Product Code"] = $product_code[$i];
+		$product_name_with_comment = decode_html($product_name[$i]);
+		if ($comment[$i] != '') $product_name_with_comment .= "\n".decode_html($comment[$i]);
+		$product_line[$j]["Product Name"] = $product_name_with_comment;
 		$product_line[$j]["Qty"] = $qty[$i];
 		$product_line[$j]["Price"] = $list_price[$i];
 		$product_line[$j]["Discount"] = $discount_total[$i];
@@ -870,7 +879,8 @@ function get_quote_pdf() {
 	for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 	{
 		$product_name[$i] = $associated_products[$i]['productName'.$i];
-		$prod_description[$i] = $associated_products[$i]['productDescription'.$i];
+		//$prod_description[$i] = $associated_products[$i]['productDescription'.$i];
+		$comment[$i] = $associated_products[$i]['comment'.$i];
 		$product_id[$i] = $associated_products[$i]['hdnProductId'.$i];
 		$qty[$i] = $associated_products[$i]['qty'.$i];
 		$unit_price[$i] = number_format($associated_products[$i]['unitPrice'.$i],2,'.',',');
@@ -902,7 +912,9 @@ function get_quote_pdf() {
 		$prod_total[$i] = number_format($producttotal,2,'.',',');
 	
 		$product_line[$j]["Product Code"] = $product_code[$i];
-		$product_line[$j]["Product Name"] = decode_html($product_name[$i]);
+		$product_name_with_comment = decode_html($product_name[$i]);
+		if ($comment[$i] != '') $product_name_with_comment .= "\n".decode_html($comment[$i]);
+		$product_line[$j]["Product Name"] = $product_name_with_comment;
 		$product_line[$j]["Qty"] = $qty[$i];
 		$product_line[$j]["Price"] = $list_price[$i];
 		$product_line[$j]["Discount"] = $discount_total[$i];

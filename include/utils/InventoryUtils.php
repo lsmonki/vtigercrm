@@ -575,11 +575,11 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 	    $prod_id = $_REQUEST['hdnProductId'.$i];
 		if(isset($_REQUEST['productDescription'.$i]))
 			$description = $_REQUEST['productDescription'.$i];
-		else{
-			$desc_duery = "select vtiger_products.product_description from vtiger_products where vtiger_products.productid=?";
+		/*else{
+			$desc_duery = "select vtiger_crmentity.description AS product_description from vtiger_crmentity where vtiger_crmentity.crmid=?";
 			$desc_res = $adb->pquery($desc_duery,array($prod_id));
 			$description = $adb->query_result($desc_res,0,"product_description");
-		}	
+		}	*/
         $qty = $_REQUEST['qty'.$i];
         $listprice = $_REQUEST['listPrice'.$i];
 		$comment = $_REQUEST['comment'.$i];

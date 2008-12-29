@@ -1616,7 +1616,7 @@ function get_product_detail($id,$block,$customerid,$sessionid)
 	if($block == 'PROINFORMATION')
 		$fields_list = "'productname','productcode','discontinued','manufacturer','productcategory','sales_start_date','sales_end_date','start_date','expiry_date','website','vendor_id','mfr_part_no','vendor_part_no','serialno','productsheet','glacct'";
 	elseif($block =='PRODESCINFO')
-		$fields_list ="'product_description'";
+		$fields_list ="'description'";
 	
 	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=14 and columnname in ($fields_list) order by sequence";
 	$fieldres = $adb->pquery($fieldquery);

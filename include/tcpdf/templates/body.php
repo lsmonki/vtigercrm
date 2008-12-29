@@ -92,7 +92,7 @@ if($focus->column_fields["hdnTaxType"] != "individual")
 {
 	$lineData=array("105",$bottom+37,"94");
 	$pdf->drawLine($lineData);
-	$data= $app_strings['LBL_NET_TOTAL'].":";//                                                                  ".$price_subtotal."";
+	$data= $app_strings['LBL_NET_TOTAL'].":";
 	$pdf->SetXY( 105 , ($nettotal_y+(0*$next_y)) );
 	$pdf->SetFont( "Helvetica", "", 10);
 	$pdf->MultiCell(17, 4, $data);

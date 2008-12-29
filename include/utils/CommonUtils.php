@@ -20,8 +20,6 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-  require_once('include/database/PearDatabase.php');
-  require_once('include/ComboUtil.php'); //new
   require_once('include/utils/utils.php'); //new
   require_once('include/utils/RecurringType.php');
 

@@ -1190,7 +1190,24 @@ ExecuteQuery("DROP TABLE vtiger_ticketgrouprelation");
 ExecuteQuery("DROP TABLE vtiger_campaigngrouprelation");
 ExecuteQuery("DROP TABLE vtiger_activitygrouprelation");
 // user-group ends
-			
+
+/* Product Comment was Missing in Inventory PDF's - Fixed this by eliminating column product_description from vtiger_products
+ * and referring to description column of vtiger_crmentity wherever required */
+ExecuteQuery("UPDATE vtiger_crmentity, vtiger_products SET vtiger_crmentity.description=vtiger_products.product_description
+					WHERE vtiger_products.productid = vtiger_crmentity.crmid");		
+ExecuteQuery("ALTER TABLE vtiger_products DROP COLUMN product_description");
+ExecuteQuery("UPDATE vtiger_field set fieldname='description', columnname='description', tablename='vtiger_crmentity'
+					WHERE tablename='vtiger_products' AND fieldname='product_description'");
+
+/* Remove Products from all the Main tabs except for Inventory */
+$productTabId = getTabid('Products');
+
+$inventoryTabRes = $adb->query("SELECT parenttabid FROM vtiger_parenttab WHERE parenttab_label='Inventory'");
+$inventoryTabId = $adb->query_result($inventoryTabRes, 0, 'parenttabid');
+
+ExecuteQuery("DELETE FROM vtiger_parenttabrel WHERE tabid=$productTabId AND parenttabid != $inventoryTabId");
+$adb->query("ALTER TABLE vtiger_producttaxrel DROP FOREIGN KEY fk_1_vtiger_producttaxrel");
+ 	
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>
