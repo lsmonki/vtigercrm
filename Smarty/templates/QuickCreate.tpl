@@ -116,10 +116,10 @@
         </select></span>
         {if $secondvalue neq ''}
         <span id="assign_team" style="{$style_group}">
-        <select name="assigned_group_name">';
+        <select name="assigned_group_id">';
         {foreach key=key_one item=arr from=$secondvalue}
         {foreach key=sel_value item=value from=$arr}
-        <option value="{$sel_value}" {$value}>{$sel_value}</option>
+        <option value="{$key_one}" {$value}>{$sel_value}</option>
         {/foreach}
         {/foreach}
         </select></span>

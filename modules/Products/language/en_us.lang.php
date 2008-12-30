@@ -220,16 +220,6 @@ $mod_strings = Array(
 
 // Added after 5.0.4 GA
 
-//added for find duplicate
-'LBL_DUPLICATE_DATA_IN'=>'Duplicate ',
-'LBL_DELETE'=>'Delete',
-'LBL_MERGE_SELECT'=>'Merge Select',
-'LBL_MERGE'=>'Merge',
-'LBL_MERGE_DATA_IN'=>'Merge Records In',
-'LBL_ACTION'=>'Action',
-'LBL_FIELDLISTS'=> 'List Of Fields',
-'LBL_RECORD'=>'Record #',
-
 'LBL_PRODUCT_PRICES'=>'Product Prices',
 'Member Of'=>'Member Of',
 

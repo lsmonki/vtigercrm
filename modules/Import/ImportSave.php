@@ -464,11 +464,7 @@ function get_where_clause($module,$column_fields)
 		if(is_uitype($uitype_arr[$fld],'_users_list_') && $field_value == '') {
 			$field_value = $current_user->id;
 		}
-
-		if(is_uitype($uitype_arr[$fld],'_date_')== true)
-			$where_clause .= " AND ifnull(". $col_name .",'') = ifnull('".$field_value."','') ";
-		else
-			$where_clause .= " AND ". $col_name ." = '".$field_value."' ";
+		$where_clause .= " AND ifnull(". $col_name .",'') = ifnull('".$field_value."','') ";
 	}
 	return $where_clause;	
 }

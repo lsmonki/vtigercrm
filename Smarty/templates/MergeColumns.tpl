@@ -91,10 +91,10 @@
 	setObjects();		
 </script>	
 
-<form enctype="multipart/form-data" name="mergeDuplicates" method="post" action="index.php?module={$MODULE}&action=FindDuplicate{$MODULE}">
+<form enctype="multipart/form-data" name="mergeDuplicates" method="post" action="index.php?module={$MODULE}&action=FindDuplicateRecords">
 	<input type="hidden" name="module" value="{$MODULE}">
 	<input type="hidden" name="parenttab" value="{$CATEGORY}">
-	<input type="hidden" name="action" value="FindDuplicate{$MODULE}">
+	<input type="hidden" name="action" value="FindDuplicateRecords">
 	<input type="hidden" name="selectedColumnsString"/>
 	<table class="searchUIBasic small" border="0" cellpadding="5" cellspacing="0" width="80%" height="10" align="center">
 		<tbody><tr class="lvtCol" style="Font-Weight: normal"><br>

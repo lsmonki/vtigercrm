@@ -248,12 +248,12 @@ function showMergeOptions(curObj, arg)
 				   </tr>
 				   <tr>
 					<td align="left"  style="padding-left:40px;">
-						{if $MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Leads' || $MODULE eq 'Products' || $MODULE == 'HelpDesk' || $MODULE == 'Potentials' || $MODULE == 'Vendors'}	
 							<span class="genHeaderGray">{$MOD.LBL_STEP_2_4}</span>&nbsp; 
-						{else}
-							<span class="genHeaderGray">{$MOD.LBL_STEP_2_3}</span>&nbsp;
+						{assign var="MODULELABEL" value=$MODULE}
+						{if $APP.$MODULE neq ''}
+							{assign var="MODULELABEL" value=$APP.$MODULE}
 						{/if}
-						<span class="genHeaderSmall">{$APP.$MODULE} {$MOD.LBL_LIST_MAPPING} </span>
+						<span class="genHeaderSmall">{$MODULELABEL} {$MOD.LBL_LIST_MAPPING} </span>
 					</td>
 				   </tr>
 				   <tr>
@@ -327,21 +327,19 @@ function showMergeOptions(curObj, arg)
 						<input type="text" readonly name="save_map_as" id="save_map_as" value="" class="importBox" >
 					</td>
 				   </tr>
-				   <tr >
 				   <!-- added for duplicate handling -srini -->
-					{if $MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Leads' || $MODULE eq 'Products' || $MODULE eq 'HelpDesk' || $MODULE eq 'Potentials' || $MODULE eq 'Vendors'}
 						<tr>
 							<td>&nbsp;</td>
 					   	</tr>
 					   	<tr>
 					   		<td align="left" style="padding-left:40px;" >
-					   		{if $MERGE eq 'Merge'}
-					   			<input id="merge_check" type="checkbox" onChange="showMergeOptions(this, 'importMergeDup')"/>
+					   		{if $DUPLICATESHANDLING eq 'DuplicatesHandling'}
+					   			<input id="merge_check" type="checkbox" onclick="showMergeOptions(this, 'importMergeDup')"/>
 								<span class="genHeaderGray">{$MOD.LBL_STEP_3_4} </span>
 								<span class="genHeaderSmall">Duplicate Merging </span>
 								<span>(Select this option to enable and set duplicate merging criteria)</span> 
 							{else}	
-					   			<input id="merge_check" type="checkbox" disabled="true" onChange="mergeshowhide(this, 'importMergeDup')"/>
+					   			<input id="merge_check" type="checkbox" disabled="true" onclick="mergeshowhide(this, 'importMergeDup')"/>
 								<span class="genHeaderGray">{$MOD.LBL_STEP_3_4} </span>
 								<span class="genHeaderSmall">Duplicate Merging </span>
 								<span style="color:red;">(Access denied to perform this operation)</span>
@@ -403,7 +401,6 @@ function showMergeOptions(curObj, arg)
 							</div>
 							</td>
 					   	</tr>
-					{/if}
 				<!-- duplicate handling ends -->
 				   <tr>
 					<td align="right" style="padding-right:40px;" class="reportCreateBottom" >

@@ -140,7 +140,7 @@ if ( isset($_REQUEST['message']))
                  <input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="crmbutton small save" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="this.form.return_module.value=this.form.module.value; return true;">
 		<?php 
 			//if check added for duplicate records handling -srini	
-		if( ($req_module == 'Contacts'|| $req_module == 'Accounts' || $req_module == 'Leads' ||$req_module == 'Products' ||$req_module == 'HelpDesk' ||$req_module == 'Potentials' ||$req_module == 'Vendors') && ($_REQUEST['dup_type'] == 'manual')) { ?>
+		if($_REQUEST['dup_type'] == 'manual') { ?>
 			 <input name="lastimport" value="<?php echo $mod_strings['LBL_LAST_IMPORT']?>" class="crmbutton small save" type="button" onclick="lastImport('<?php echo $currentModule; ?>','<?php echo $req_module; ?>');">
 <?php } ?>
 	     </form>
@@ -166,7 +166,7 @@ if ( isset($_REQUEST['message']))
 	<?php 
 }
 //if check added for duplicate records handling -srini
-if( ($req_module == 'Accounts' || $req_module == 'Contacts' || $req_module == 'Leads' || $req_module == 'Products' ||$req_module == 'HelpDesk' ||$req_module == 'Potentials' ||$req_module == 'Vendors') && ($_REQUEST['dup_type'] == 'manual') )
+if( $_REQUEST['dup_type'] == 'manual')
 {	
 	echo "<br>";
 	$return_module=$_REQUEST['modulename'];

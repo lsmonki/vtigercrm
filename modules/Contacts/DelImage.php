@@ -23,6 +23,9 @@ function DelImage($id)
 	
 	$crm_delquery="delete from vtiger_crmentity where crmid=?";
 	$adb->pquery($crm_delquery, array($attachmentsid));
+
+	$base_query="update vtiger_contactdetails set imagename='' where contactid=?";
+	$adb->pquery($base_query, array($id));
 }
 
 function DelAttachment($id)

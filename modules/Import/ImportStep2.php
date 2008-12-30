@@ -428,8 +428,8 @@ else
 
 $smarty->assign("AVALABLE_FIELDS", getMergeFields($module,"available_fields"));
 $smarty->assign("FIELDS_TO_MERGE", getMergeFields($module,"fileds_to_merge"));
-if(isPermitted($module,'Merge','') == 'yes')
-	$smarty->assign("MERGE", 'Merge');
+if(isPermitted($module,'DuplicatesHandling','') == 'yes')
+	$smarty->assign("DUPLICATESHANDLING", 'DuplicatesHandling');
 
 $smarty->assign("MODULE", htmlspecialchars($_REQUEST['module'],ENT_QUOTES,$default_charset));
 $smarty->assign('CATEGORY' , htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));

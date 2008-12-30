@@ -1179,6 +1179,16 @@ $app_strings = array (
 // For Privacy Policy
 'LNK_PRIVACY_POLICY'=>'Privacy Policy',
  
+//added for find duplicate
+'LBL_DUPLICATE_DATA_IN'=>'Duplicate ',
+'LBL_DELETE'=>'Delete',
+'LBL_MERGE_SELECT'=>'Merge Select',
+'LBL_MERGE_DATA_IN'=>'Merge Records In',
+'LBL_MERGE'=>'Merge',
+'LBL_ACTION'=>'Action',
+'LBL_FIELDLISTS'=> 'List Of Fields',
+'LBL_RECORD'=>'Record #',
+'LBL_DUP_PERMISSION' => 'You are not permitted to delete ',
 );
 
 $app_list_strings = array (

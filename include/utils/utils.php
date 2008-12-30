@@ -3234,487 +3234,6 @@ function getRecordValues($id_array,$module)
 	return $parent_array;
 }
 
-/** To save the parent record after merging with child records*/
-function mergeSave($module,$return_module,$parent_tab,$merge_id,$recordids)
-{
-	
-	global $adb;
-	global $app_strings;
-	$result =  $adb->query("select count(*) count from vtiger_crmentity where crmid='".$merge_id."' and deleted=0");
-	$count = $adb->query_result($result,0,count);
-	if($count != 0)
-	{	
-		$focus = new $module();	
-		$focus->mode="edit";
-		setObjectValuesFromRequest($focus);
-		$focus->save($module);
-		$rec_values=$focus->column_fields;
-		
-		$del_value=explode(",",$recordids,-1);
-		$offset = array_search($merge_id,$del_value);
-		unset($del_value[$offset]);
-		save_relatedrecords($module,$del_value,$merge_id);
-		foreach($del_value as $value)
-			{
-				DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$value,"");
-			}
-		
-		return $rec_values;
-	}
-}
-
-/** Specifying related tables for each and every module which supports duplicates handling*/
-function save_relatedrecords($module,$del_ids,$recordid)
-{
-	$related_module_table_array = Array (
-		"Accounts" => Array("Contacts"=>"vtiger_contactdetails","Potentials"=>"vtiger_potential","Quotes"=>"vtiger_quotes","SalesOrder"=>"vtiger_salesorder","Invoice"=>"vtiger_invoice","Activities"=>"vtiger_seactivityrel","Documents"=>"vtiger_senotesrel","Attachments"=>"vtiger_seattachmentsrel","HelpDesk"=>"vtiger_troubletickets","Products"=>"vtiger_seproductsrel"),
-
-		"Contacts" => Array("Potentials"=>"vtiger_contpotentialrel","Activities"=>"vtiger_cntactivityrel","Emails"=>"vtiger_seactivityrel","HelpDesk"=>"vtiger_troubletickets","Quotes"=>"vtiger_quotes","PurchaseOrder"=>"vtiger_purchaseorder","SalesOrder"=>"vtiger_salesorder","Products"=>"vtiger_seproductsrel","Documents"=>"vtiger_senotesrel","Attachments"=>"vtiger_seattachmentsrel","Campaigns"=>"vtiger_campaigncontrel"),
-
-		"Leads" => Array("Activities"=>"vtiger_seactivityrel","Documents"=>"vtiger_senotesrel","Attachments"=>"vtiger_seattachmentsrel","Products"=>"vtiger_seproductsrel","Campaigns"=>"vtiger_campaignleadrel"),
-
-		"Products"=> Array("HelpDesk"=>"vtiger_troubletickets","Products"=>"vtiger_seproductsrel","Attachments"=>"vtiger_seattachmentsrel","Quotes"=>"vtiger_inventoryproductrel","PurchaseOrder"=>"vtiger_inventoryproductrel","SalesOrder"=>"vtiger_inventoryproductrel","Invoice"=>"vtiger_inventoryproductrel","PriceBooks"=>"vtiger_pricebookproductrel","Leads"=>"vtiger_seproductsrel","Accounts"=>"vtiger_seproductsrel","Potentials"=>"vtiger_seproductsrel","Contacts"=>"vtiger_seproductsrel"),
-		
-		"HelpDesk"=> Array("Activities"=>"vtiger_seactivityrel","Attachments"=>"vtiger_seattachmentsrel"),
-		
-		"Potentials"=>Array("Activities"=>"vtiger_seactivityrel","Contacts"=>"vtiger_contactdetails","Products"=>"vtiger_seproductsrel","Attachments"=>"vtiger_seattachmentsrel","Quotes"=>"vtiger_quotes","SalesOrder"=>"vtiger_salesorder"),
-		
-		"Vendors"=>Array("Products"=>"vtiger_seproductsrel","PurchaseOrder"=>"vtiger_purchaseorder","Contacts"=>"vtiger_vendorcontactrel")
-	);
-	$func = "save_".$module."_related_entries";
-	$func($related_module_table_array[$module],$del_ids,$recordid);
-}
-
-/** Function to merge the related entries of accounts module*/
-function save_Accounts_related_entries($rel_table_arr,$del_ids,$saved_id)
-{
-	global $adb;
-	$tbl_field_arr = Array("vtiger_contactdetails"=>"contactid","vtiger_potential"=>"potentialid","vtiger_quotes"=>"quoteid","vtiger_salesorder"=>"salesorderid","vtiger_invoice"=>"invoiceid","vtiger_seactivityrel"=>"activityid","vtiger_senotesrel"=>"notesid","vtiger_seattachmentsrel"=>"attachmentsid","vtiger_troubletickets"=>"ticketid","vtiger_seproductsrel"=>"productid");
-	foreach($del_ids as $id_tobe_del)
-	{
-		foreach($rel_table_arr as $rel_module=>$rel_table)
-		{
-			if($rel_module == "Contacts" || $rel_module == "Potentials" || $rel_module == "Quotes" || $rel_module == "SalesOrder" || $rel_module == "vtiger_invoice")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where accountid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						$adb->query("update $rel_table set accountid='".$saved_id."' where $id_field='".$id_field_value."'");
-					}
-				}
-			}
-			else if($rel_module == "Activities" || $rel_module == "Documents" || $rel_module == "Attachments")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where crmid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						if(!is_related($rel_table,$id_field,$id_field_value,$saved_id))
-							$adb->query("insert into $rel_table (crmid,$id_field) values($saved_id,$id_field_value)");
-					}
-				}
-			}
-			else if($rel_module == "Products")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where crmid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						if(!is_related($rel_table,$id_field,$id_field_value,$saved_id))
-							$adb->query("insert into $rel_table (crmid,$id_field,setype) values($saved_id,$id_field_value,'Accounts')");
-					}
-				}
-			}
-			else if($rel_module == "HelpDesk")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where parent_id='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						$adb->query("update $rel_table set parent_id=$saved_id where $id_field=$id_field_value");
-					}
-				}
-			}
-
-		}
-	}
-}
-
-/** Function to save the related entries of contacts during duplicate merge */
-function save_Contacts_related_entries($rel_table_arr,$del_ids,$saved_id)
-{
-	global $adb;
-	$tbl_field_arr = Array("vtiger_contpotentialrel"=>"potentialid","vtiger_cntactivityrel"=>"activityid","vtiger_seactivityrel"=>"activityid","vtiger_troubletickets"=>"ticketid","vtiger_quotes"=>"quoteid","vtiger_salesorder"=>"salesorderid","vtiger_invoice"=>"invoiceid","vtiger_senotesrel"=>"notesid","vtiger_seattachmentsrel"=>"attachmentsid","vtiger_troubletickets"=>"ticketid","vtiger_seproductsrel"=>"productid","vtiger_campaigncontrel"=>"campaignid");
-	foreach($del_ids as $id_tobe_del)
-	{
-		foreach($rel_table_arr as $rel_module=>$rel_table)
-		{
-			if($rel_module == "Quotes" || $rel_module == "SalesOrder" || $rel_module == "Invoice")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where contactid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						$adb->query("update $rel_table set contactid='".$saved_id."' where $id_field='".$id_field_value."'");
-					}
-				}
-			}
-			else if($rel_module == "Activities" || $rel_module == "Potentials" || $rel_module == "Campaigns")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where contactid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						$check_res = $adb->query("select * from $rel_table where $id_field=$id_field_value and contactid=$saved_id");
-						$count = $adb->num_rows($check_res);
-					        if($count == 0)	
-							$adb->query("insert into $rel_table (contactid,$id_field) values($saved_id,$id_field_value)");		
-					}			
-				}
-			}
-			else if($rel_module == "Documents" || $rel_module == "Emails" || $rel_module == "Attachments")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where crmid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						if(!is_related($rel_table,$id_field,$id_field_value,$saved_id))
-							$adb->query("insert into $rel_table (crmid,$id_field) values($saved_id,$id_field_value)");
-
-					}
-				}
-			}
-			else if($rel_module == "Products")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where crmid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						if(!is_related($rel_table,$id_field,$id_field_value,$saved_id))
-							$adb->query("insert into $rel_table (crmid,$id_field,setype) values($saved_id,$id_field_value,'Contacts')");
-					}
-				}
-			}
-			else if($rel_module == "HelpDesk")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where parent_id='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						$adb->query("update $rel_table set parent_id=$saved_id where $id_field=$id_field_value");
-					}
-				}
-			}
-		}
-	}
-}
-
-/** Function to save the related entries of leads during duplicate merge */
-function save_Leads_related_entries($rel_table_arr,$del_ids,$saved_id) 
-{
-	global $adb;
-	$tbl_field_arr = Array("vtiger_seactivityrel"=>"activityid","vtiger_senotesrel"=>"notesid","vtiger_seattachmentsrel"=>"attachmentsid","vtiger_seproductsrel"=>"productid","vtiger_campaignleadrel"=>"campaignid");
-	foreach($del_ids as $id_tobe_del)
-	{
-		foreach($rel_table_arr as $rel_module=>$rel_table)
-		{
-			if($rel_module == "Activities" || $rel_module == "Documents" || $rel_module == "Attachments")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where crmid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						if(!is_related($rel_table,$id_field,$id_field_value,$saved_id))
-						{
-							$adb->query("insert into $rel_table (crmid,$id_field) values($saved_id,$id_field_value)");
-							if($rel_module == "Activities")
-								$adb->query("delete from vtiger_seactivityrel where crmid = $id_tobe_del");
-						}
-
-					}
-				}
-			}
-			else if($rel_module == "Products")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where crmid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						if(!is_related($rel_table,$id_field,$id_field_value,$saved_id))
-							$adb->query("insert into $rel_table (crmid,$id_field,setype) values($saved_id,$id_field_value,'Leads')");
-					}
-				}
-			}
-			else if($rel_module == "Campaigns")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where leadid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						$check_res = $adb->query("select * from $rel_table where $id_field=$id_field_value and leadid=$saved_id");
-						$count = $adb->num_rows($check_res);
-						if($count == 0)
-							$adb->query("insert into $rel_table (leadid,$id_field) values($saved_id,$id_field_value)");
-					}
-				}
-			}
-		}
-	}	
-}
-
-/** Function to save the related entries of Products during duplicate merge */
-function save_Products_related_entries($rel_table_arr,$del_ids,$saved_id)
-{
-	global $adb;
-	$tbl_field_arr = Array("vtiger_troubletickets"=>"ticketid","vtiger_seproductsrel"=>"crmid","vtiger_seattachmentsrel"=>"attachmentsid","vtiger_inventoryproductrel"=>"id","vtiger_pricebookproductrel"=>"pricebookid","vtiger_seproductsrel"=>"crmid");
-	foreach($del_ids as $id_tobe_del)
-	{
-		foreach($rel_table_arr as $rel_module=>$rel_table)
-		{
-			if($rel_module == "HelpDesk")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where product_id='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						$adb->query("update $rel_table set product_id=$saved_id where $id_field=$id_field_value");
-					}
-				}
-			}
-			else if($rel_module == "Quotes" || $rel_module == "SalesOrder" || $rel_module == "Invoice")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select distinct $id_field from $rel_table where productid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						$adb->query("update $rel_table set productid=$saved_id where $id_field=$id_field_value");
-					}
-				}
-			}
-			else if($rel_module == "Documents" || $rel_module == "Attachments")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where crmid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						if(!is_related($rel_table,$id_field,$id_field_value,$saved_id))
-							$adb->query("insert into $rel_table (crmid,$id_field) values($saved_id,$id_field_value)");
-					}
-				}
-			}
-			else if($rel_module == "Leads" || $rel_module == "Accounts" || $rel_module == "Potentials" || $rel_module == "Contacts")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where productid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						$check_res = $adb->query("select * from $rel_table where $id_field=$id_field_value and productid=$saved_id");
-						$count = $adb->num_rows($check_res);
-						if($count == 0)
-							$adb->query("insert into $rel_table (productid,$id_field,setype) values($saved_id,$id_field_value,'$rel_module')");
-					}
-				}
-			}
-			else if($rel_module == "PriceBooks")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field,listprice from $rel_table where productid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						$listprice = $adb->query_result($sel_result,$i,"listprice");
-						$check_res = $adb->query("select * from $rel_table where $id_field=$id_field_value and productid=$saved_id");
-						$count = $adb->num_rows($check_res);
-						if($count == 0)
-							$adb->query("insert into $rel_table ($id_field,productid,listprice) values($id_field_value,$saved_id,$listprice)");
-					}
-				}	
-			}
-		}
-	}
-	
-}
-
-//For potentials,troubletickets and vendors -- Pavani
-/** Function to save the related entries of Trouble Tickets during duplicate merge */
-function save_HelpDesk_related_entries($rel_table_arr,$del_ids,$saved_id)
-{
-	global $adb;
-	$tbl_field_arr = Array("vtiger_seactivityrel"=>"activityid","vtiger_seattachmentsrel"=>"attachmentsid");
-	foreach($del_ids as $id_tobe_del)
-	{
-		if($rel_module == "Documents" || $rel_module == "Attachments")
-		{
-			$id_field = $tbl_field_arr[$rel_table];
-			$sel_result =  $adb->query("select $id_field from $rel_table where crmid='".$id_tobe_del."'");
-			$res_cnt = $adb->num_rows($sel_result);
-			if($res_cnt > 0)
-			{
-				for($i=0;$i<$res_cnt;$i++)
-				{
-					$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-					if(!is_related($rel_table,$id_field,$id_field_value,$saved_id))
-						$adb->query("insert into $rel_table (crmid,$id_field) values($saved_id,$id_field_value)");
-				}
-			}
-		}
-	}	
-}
-
-/** Function to save the related entries of Potentials during duplicate merge */
-function save_Potentials_related_entries($rel_table_arr,$del_ids,$saved_id) 
-{
-	global $adb;
-	$tbl_field_arr = Array("vtiger_seactivityrel"=>"activityid","vtiger_senotesrel"=>"notesid","vtiger_seattachmentsrel"=>"attachmentsid","vtiger_seproductsrel"=>"productid","vtiger_contactdetails"=>"contactid","vtiger_quotes"=>"quoteid","vtiger_salesorder"=>"salesorderid");
-	foreach($del_ids as $id_tobe_del)
-	{
-		foreach($rel_table_arr as $rel_module=>$rel_table)
-		{
-			if($rel_module == "Quotes" || $rel_module == "SalesOrder")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where potentialid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						$adb->query("update $rel_table set potentialid='".$saved_id."' where $id_field='".$id_field_value."'");
-					}
-				}
-			}
-			else if($rel_module == "Activities" || $rel_module == "Documents" || $rel_module == "Attachments" || $rel_module == "Products")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where crmid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						if(!is_related($rel_table,$id_field,$id_field_value,$saved_id))
-							$adb->query("insert into $rel_table (crmid,$id_field) values($saved_id,$id_field_value)");
-
-					}
-				}
-			}
-		}
-	}
-}
-
-/** Function to save the related entries of Vendors during duplicate merge */
-function save_Vendors_related_entries($rel_table_arr,$del_ids,$saved_id) 
-{
-	global $adb;
-	$tbl_field_arr = Array("vtiger_seproductsrel"=>"productid","vtiger_vendorcontactrel"=>"contactid","vtiger_purchaseorder"=>"purchaseorderid");
-	foreach($del_ids as $id_tobe_del)
-	{
-		foreach($rel_table_arr as $rel_module=>$rel_table)
-		{
-			if($rel_module == "Contacts" || $rel_module == "PurchaseOrder")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where vendorid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						$adb->query("update $rel_table set vendorid='".$saved_id."' where $id_field='".$id_field_value."'");
-					}
-				}
-			}
-			else if($rel_module == "Products")
-			{
-				$id_field = $tbl_field_arr[$rel_table];
-				$sel_result =  $adb->query("select $id_field from $rel_table where crmid='".$id_tobe_del."'");
-				$res_cnt = $adb->num_rows($sel_result);
-				if($res_cnt > 0)
-				{
-					for($i=0;$i<$res_cnt;$i++)
-					{
-						$id_field_value = $adb->query_result($sel_result,$i,$id_field);
-						if(!is_related($rel_table,$id_field,$id_field_value,$saved_id))
-							$adb->query("insert into $rel_table (crmid,$id_field) values($saved_id,$id_field_value)");
-
-					}
-				}
-			}
-		}
-	}
-}
-
 /** Function to check whether the relationship entries are exist or not on elationship tables */
 function is_related($relation_table,$crm_field,$related_module_id,$crmid)
 {
@@ -3945,6 +3464,16 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 					ON ".get_on_clause($field_values,$ui_type_arr,$module)."
 				WHERE vtiger_crmentity.deleted=0 ORDER BY $table_cols,vtiger_vendor.vendorid ASC";
 							
+		} else {
+			$ret_arr = get_special_on_clause($field_values);
+			$select_clause = $ret_arr['sel_clause'];
+			$on_clause = $ret_arr['on_clause'];
+			checkFileAccess("modules/$module/$module.php");
+			require_once("modules/$module/$module.php");
+			$modObj = new $module();
+			if ($modObj != null && method_exists($modObj, 'getDuplicatesQuery')) {
+				$nquery = $modObj->getDuplicatesQuery($module,$table_cols,$field_values,$ui_type_arr,$select_clause);
+			}
 		}		
 	}
 	else
@@ -4154,6 +3683,13 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 							GROUP BY ".$table_cols." HAVING COUNT(*)>1) as temp
 				ON ".get_on_clause($field_values,$ui_type_arr,$module) ."
                                 WHERE vtiger_crmentity.deleted=0  ORDER BY $table_cols,vtiger_vendor.vendorid ASC";
+		} else {
+			checkFileAccess("modules/$module/$module.php");
+			require_once("modules/$module/$module.php");
+			$modObj = new $module();
+			if ($modObj != null && method_exists($modObj, 'getDuplicatesQuery')) {
+				$nquery = $modObj->getDuplicatesQuery($module,$table_cols,$field_values,$ui_type_arr);
+			}
 		}				
 	}
 	return $nquery;
@@ -4172,8 +3708,8 @@ function getDuplicateRecordsArr($module)
 
 	$dup_query = getDuplicateQuery($module,$field_values,$ui_type);
 	// added for page navigation
-	$dup_count_query = substr($dup_query, strpos($dup_query,'FROM'),strlen($dup_query));
-	$dup_count_query = "Select count(*) as count ".$dup_count_query;
+	$dup_count_query = substr($dup_query, stripos($dup_query,'FROM'),strlen($dup_query));
+	$dup_count_query = "SELECT count(*) as count ".$dup_count_query;
 	$count_res = $adb->query($dup_count_query);
 	$no_of_rows = $adb->query_result($count_res,0,"count");
 
@@ -4200,7 +3736,7 @@ function getDuplicateRecordsArr($module)
 	require_once($theme_path.'layout_utils.php');	
 	if($no_rows == 0)
 	{
-		if ($_REQUEST['action'] == 'FindDuplicate'.$module)
+		if ($_REQUEST['action'] == 'FindDuplicateRecords')
 		{
 			//echo "<br><br><center>".$app_strings['LBL_NO_DUPLICATE']." <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>";
 			//die;
@@ -4416,10 +3952,9 @@ function get_on_clause($field_list,$uitype_arr,$module)
 		$tbl_name = $sub_arr[0];
 		$col_name = $sub_arr[1];
 		$fld_name = $sub_arr[2];
-		if(is_uitype($uitype_arr[$fld_name],'_date_')== true)
-			$ret_str .= " ifnull($tbl_name.$col_name,'null') = ifnull(temp.$col_name,'null')";
-		else
-			$ret_str .= " $tbl_name.$col_name = temp.$col_name";
+
+		$ret_str .= " ifnull($tbl_name.$col_name,'null') = ifnull(temp.$col_name,'null')";
+		
 		if (count($field_array) != $i) $ret_str .= " and ";
 		$i++;
 	}
@@ -4541,45 +4076,44 @@ function getSecParameterforMerge($module)
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	if($is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 	{
-		if($module == "Leads" || $module == "Contacts" || $module == "HelpDesk" || $module == "Potentials")			
+		if($module == "Products" || $module == "Vendors") {
+			$sec_parameter = "";
+		} else {
 			$sec_parameter=getListViewSecurityParameter($module);
-		else if($module == "Accounts")
-		{
-			$sec_parameter .= " AND (vtiger_crmentity.smownerid IN (".$current_user->id.")
-		   		 OR vtiger_crmentity.smownerid IN (
-					 SELECT vtiger_user2role.userid
-					 FROM vtiger_user2role
-					 INNER JOIN vtiger_users
-						 ON vtiger_users.id = vtiger_user2role.userid
-					 INNER JOIN vtiger_role
-						 ON vtiger_role.roleid = vtiger_user2role.roleid
-					 WHERE vtiger_role.parentrole LIKE '".$current_user_parent_role_seq."::%')
-					 OR vtiger_crmentity.smownerid IN (
-						 SELECT shareduserid
-						 FROM vtiger_tmp_read_user_sharing_per
-						 WHERE userid=".$current_user->id."
-						 AND tabid=".$tab_id.")
-					 OR (vtiger_crmentity.smownerid in (0)
-					 AND (";
+			if($module == "Accounts") {
+				$sec_parameter .= " AND (vtiger_crmentity.smownerid IN (".$current_user->id.")
+						OR vtiger_crmentity.smownerid IN (
+					 	SELECT vtiger_user2role.userid
+					 	FROM vtiger_user2role
+					 	INNER JOIN vtiger_users
+						ON vtiger_users.id = vtiger_user2role.userid
+						INNER JOIN vtiger_role
+						ON vtiger_role.roleid = vtiger_user2role.roleid
+					 	WHERE vtiger_role.parentrole LIKE '".$current_user_parent_role_seq."::%')
+						OR vtiger_crmentity.smownerid IN (
+						SELECT shareduserid
+						FROM vtiger_tmp_read_user_sharing_per
+						WHERE userid=".$current_user->id."
+						AND tabid=".$tab_id.")
+						OR (vtiger_crmentity.smownerid in (0)
+						AND (";
 
-			if(sizeof($current_user_groups) > 0) {
-				$sec_parameter .= " vtiger_groups.groupname IN (
+				if(sizeof($current_user_groups) > 0) {
+					$sec_parameter .= " vtiger_groups.groupname IN (
 									SELECT groupname
 									FROM vtiger_groups
 									WHERE groupid IN (". implode(",", getCurrentUserGroupList()) ."))
 									OR ";
-			}
-			$sec_parameter .= " vtiger_groups.groupname IN (
+				}
+				$sec_parameter .= " vtiger_groups.groupname IN (
 				 	SELECT vtiger_groups.groupname
 					FROM vtiger_tmp_read_group_sharing_per
 					INNER JOIN vtiger_groups
 						ON vtiger_groups.groupid = vtiger_tmp_read_group_sharing_per.sharedgroupid
 					WHERE userid=".$current_user->id."
 					AND tabid=".$tab_id.")))) ";
-
+			}
 		}
-		else if($module == "Products" || $module == "Vendors")
-			$sec_parameter = "";
 	}	
 	return $sec_parameter;
 }
@@ -4895,5 +4429,53 @@ function getModuleSequenceField($module) {
 	
 	$log->debug("Exiting getModuleSequenceFieldName...");
 	return $field;
+}
+
+/* Function to get the Result of all the field ids allowed for Duplicates merging for specified tab/module (tabid) */
+function getFieldsResultForMerge($tabid) {
+	global $log, $adb;
+	$log->debug("Entering getFieldsResultForMerge(".$tabid.") method ...");
+	
+	$nonmergable_tabids = array(29);
+	
+	if (in_array($tabid, $nonmergable_tabids)) {
+		return null;
+	}
+	
+	// List of Fields not allowed for Duplicates Merging based on the module (tabid) [tabid to fields mapping]
+	$nonmergable_field_tab = Array(
+		4 => array('portal','imagename'),
+		13 => array('update_log','filename','comments'),
+	);
+	
+	$nonmergable_displaytypes = Array(4);
+	$nonmergable_uitypes = Array('70','69','4');
+	
+	$sql = "SELECT fieldid,typeofdata FROM vtiger_field WHERE tabid = ? ";
+	$params = array($tabid);
+
+	$where = '';
+	
+	if (isset($nonmergable_field_tab[$tabid]) && count($nonmergable_field_tab[$tabid]) > 0) {
+		$where .= " AND fieldname NOT IN (". generateQuestionMarks($nonmergable_field_tab[$tabid]) .")";
+		array_push($params, $nonmergable_field_tab[$tabid]);
+	}
+	
+	if (count($nonmergable_displaytypes) > 0) {
+		$where .= " AND displaytype NOT IN (". generateQuestionMarks($nonmergable_displaytypes) .")";
+		array_push($params, $nonmergable_displaytypes);
+	}
+	if (count($nonmergable_uitypes) > 0) {
+		$where .= " AND uitype NOT IN ( ". generateQuestionMarks($nonmergable_uitypes) .")" ;
+		array_push($params, $nonmergable_uitypes);
+	}
+	
+	if (trim($where) != '') {
+		$sql .= $where;
+	}
+	  
+	$res = $adb->pquery($sql, $params);
+	$log->debug("Exiting getFieldsResultForMerge method ...");
+	return $res;
 }
 ?>

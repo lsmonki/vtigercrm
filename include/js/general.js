@@ -3139,7 +3139,7 @@ function merge_fields(selectedNames,module,parent_tab)
 				
 			}			
 					
-			window.open("index.php?module="+req_module+"&action=MergeField"+req_module+"&passurl="+pass_url+"&parenttab="+parent_tab,"Merge","width=750,height=602,menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes");	
+			window.open("index.php?module="+req_module+"&action=ProcessDuplicates&mergemode=mergefields&passurl="+pass_url+"&parenttab="+parent_tab,"Merge","width=750,height=602,menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes");	
 		}
 		else
 		{
@@ -3180,7 +3180,7 @@ function delete_fields(module)
           	  	      'index.php',
 			      	{queue: {position: 'end', scope: 'command'},
 		                        method: 'post',
-                		        postBody:"module="+module+"&action="+module+"Ajax&file=FindDuplicate"+module+"&del_rec=true&ajax=true&return_module="+module+"&idlist="+url_rec+"&current_action="+cur_action+"&"+dup_start,
+                		        postBody:"module="+module+"&action="+module+"Ajax&file=FindDuplicateRecords&del_rec=true&ajax=true&return_module="+module+"&idlist="+url_rec+"&current_action="+cur_action+"&"+dup_start,
 		                        onComplete: function(response) {
         	        	                $("status").style.display="none";
                 	        	        $("duplicate_ajax").innerHTML= response.responseText;
@@ -3213,124 +3213,7 @@ function validate_merge(module)
 		alert('Select one record as parent record');
 		return false;
 	}
-		if(module == 'Contacts')
-			{
-				var select_options=document.getElementsByName('lastname');
-				len=select_options.length;
-				for(var i=0;i<len;i++)
-				{	
-					
-					if(select_options[i].checked)
-						{
-							var check_var=true;
-						}
-				}
-				alert_str=alert_arr.CON_MANDATORY;
-					
-			}
-
-		else if(module == 'Leads')
-			{
-				var select_option_last=document.getElementsByName('lastname');
-				var select_option_com=document.getElementsByName('company');
-				var len=select_option_last.length;
-				for(var i=0;i<len;i++)
-				{	
-					
-					if(select_option_last[i].checked)
-						{
-						var check_lead1=true;	
-						}
-					 if(select_option_com[i].checked)
-						{
-						var check_lead2 = true;	
-						}
-				}
-				alert_str=alert_arr.LE_MANDATORY;	
-			}
-		else if(module == 'Accounts')
-			{
-				var select_options=document.getElementsByName('accountname');
-				var len=select_options.length;
-				for(var i=0;i<len;i++)
-				{	
-					
-					if(select_options[i].checked)
-						{
-							var check_var=true;
-						}
-				}
-				alert_str=alert_arr.ACC_MANDATORY;
-			}	
-		else if(module == 'Products')
-			{
-				var select_options=document.getElementsByName('productname');
-				var len=select_options.length;
-				for(var i=0;i<len;i++)
-				{	
-					
-					if(select_options[i].checked)
-						{
-							var check_var=true;
-						}
-				}
-					alert_str=alert_arr.PRO_MANDATORY;
-			}		
-		else if(module == 'HelpDesk')
-		{
-			var select_options=document.getElementsByName('ticket_title');
-			var len=select_options.length;
-				for(var i=0;i<len;i++)
-				{	
-					
-					if(select_options[i].checked)
-						{
-							var check_var=true;
-						}
-				}
-					alert_str=alert_arr.TIC_MANDATORY;
-		}
-		else if(module == 'Potentials')
-		{
-			var select_options=document.getElementsByName('potentialname');
-			var len=select_options.length;
-				for(var i=0;i<len;i++)
-				{	
-					
-					if(select_options[i].checked)
-						{
-							var check_var=true;
-						}
-				}
-				alert_str=alert_arr.POTEN_MANDATORY;
-		}
-		else if(module == 'Vendors')
-		{
-			var select_options=document.getElementsByName('vendorname');
-			var len=select_options.length;
-				for(var i=0;i<len;i++)
-				{	
-					
-					if(select_options[i].checked)
-						{
-							var check_var=true;
-						}
-				}
-				alert_str=alert_arr.VEN_MANDATORY;
-		}
-	
-	
-	
-	if (check_var == false &&  module!= 'Leads')
-		{
-			alert (alert_str);
-			return false;
-		}
-	else if((check_lead1 == false || check_lead2 == false) && module == 'Leads')
-		{
-			alert (alert_str);
-			return false;
-		}
+	return true;
 }		
 
 function select_All(fieldnames,cnt,module)
@@ -3400,7 +3283,7 @@ function getDuplicateListViewEntries_js(module,url)
 			'index.php',
 			{queue: {position: 'end', scope: 'command'},
 				method: 'post',
-				postBody:"module="+module+"&action="+module+"Ajax&file=FindDuplicate"+module+"&ajax=true&"+dup_start,
+				postBody:"module="+module+"&action="+module+"Ajax&file=FindDuplicateRecords&ajax=true&"+dup_start,
 				onComplete: function(response) {
 					$("status").style.display="none";
 					$("duplicate_ajax").innerHTML = response.responseText;

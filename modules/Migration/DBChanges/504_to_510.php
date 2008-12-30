@@ -123,59 +123,52 @@ ExecuteQuery("insert into vtiger_field values (29,".$adb->getUniqueID("vtiger_fi
 ExecuteQuery("INSERT INTO vtiger_actionmapping values(10,'DuplicatesHandling',0)");
 ExecuteQuery("CREATE TABLE vtiger_user2mergefields (userid int(11) REFERENCES vtiger_users( id ) , tabid int( 19 ) ,fieldid int( 19 ), visible int(2))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
-function insertUser2mergefields($userid)
+function insertUser2mergefields($userid, $tabid)
 {
 	global $log,$adb;
 	$log->debug("Entering insertUser2mergefields(".$userid.") method ...");
         $log->info("in insertUser2mergefields ".$userid);
 
-	//$adb->database->SetFetchMode(ADODB_FETCH_ASSOC); 
-	$fld_result = $adb->query("select * from vtiger_field where generatedtype=1 and displaytype in (1,2,3) and tabid != 29 and uitype not in(70,69) and fieldid not in(87,148,151,155,102)");
-    $num_rows = $adb->num_rows($fld_result);
-    for($i=0; $i<$num_rows; $i++)
-    {
-		$tab_id = $adb->query_result($fld_result,$i,'tabid');
-		$field_id = $adb->query_result($fld_result,$i,'fieldid');
-		$adb->query("insert into vtiger_user2mergefields values ($userid, $tab_id, $field_id, 0)");
+	foreach($tabid AS $key=>$tab_id) { 
+        $fld_result = getFieldsResultForMerge($tab_id);
+        if ($fld_result != null) {
+    		$num_rows = $adb->num_rows($fld_result);
+			for($j=0; $j<$num_rows; $j++) {
+				$field_id = $adb->query_result($fld_result,$j,'fieldid'); 
+				$data_type = explode("~",$adb->query_result($fld_result,$j,'typeofdata')); 
+				if($data_type[1] == 'M') { 
+					$visible = 1; 
+				} else { 
+					$visible = 2; 
+				} 
+				ExecuteQuery("insert into vtiger_user2mergefields values ($userid, $tab_id, $field_id, $visible)");
+	        }
+        }
 	}
 	$log->debug("Exiting insertUser2mergefields method ...");
 }
-insertUser2mergefields(0);
-insertUser2mergefields(1);
-insertUser2mergefields(2);
-ExecuteQuery("update vtiger_user2mergefields set visible=1 where fieldid in(1,38,40,65,104,106,111,152,156,255)");
 
-ExecuteQuery("insert into vtiger_profile2utility values(1,2,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(1,4,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(1,6,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(1,7,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(1,13,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(1,14,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(1,18,10,0)");
+$tabid = Array(); 
+$tab_res = $adb->query("SELECT distinct tabid FROM vtiger_tab"); 
+$noOfTabs = $adb->num_rows($tab_res); 
+for($i=0;$i<$noOfTabs;$i++) { 
+	$tabid[] = $adb->query_result($tab_res,$i,'tabid'); 
+} 
 
-ExecuteQuery("insert into vtiger_profile2utility values(2,2,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(2,4,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(2,6,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(2,7,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(2,13,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(2,14,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(2,18,10,0)");
+$usr_sql = $adb->query("select id from vtiger_users"); 
+$num_usr = $adb->num_rows($usr_sql); 
+for($i=0;$i<$num_usr;$i++) { 
+	insertUser2mergefields($adb->query_result($usr_sql,$i,'id'),$tabid); 
+} 
 
-ExecuteQuery("insert into vtiger_profile2utility values(3,2,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(3,4,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(3,6,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(3,7,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(3,13,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(3,14,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(3,18,10,0)");
-
-ExecuteQuery("insert into vtiger_profile2utility values(4,2,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(4,4,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(4,6,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(4,7,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(4,13,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(4,14,10,0)");
-ExecuteQuery("insert into vtiger_profile2utility values(4,18,10,0)");
+$profile_sql = $adb->query("select profileid from vtiger_profile"); 
+$num_profile = $adb->num_rows($profile_sql); 
+for($i=0;$i<$num_profile;$i++) { 
+	$profile_id = $adb->query_result($profile_sql,$i,'profileid'); 
+	foreach($tabid AS $key=>$tab_id) { 
+		ExecuteQuery("insert into vtiger_profile2utility values($profile_id,$tab_id,10,0)"); 
+	} 
+} 
 
 /* Local Backup Feature */
 ExecuteQuery("alter table vtiger_systems add column server_path varchar(256)");

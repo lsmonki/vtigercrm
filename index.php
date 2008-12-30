@@ -281,13 +281,7 @@ if(isset($action) && isset($module))
 		ereg("^TemplateMerge",$action) ||
 		ereg("^testemailtemplateusage",$action) ||
 		ereg("^saveemailtemplate",$action) ||
-		ereg("^MergeFieldContacts", $action ) ||
-		ereg("^MergeFieldLeads", $action ) ||
-		ereg("^MergeFieldAccounts", $action ) ||
-		ereg("^MergeFieldProducts", $action ) ||
-		ereg("^MergeFieldHelpDesk", $action ) ||
-		ereg("^MergeFieldPotentials", $action ) ||
-		ereg("^MergeFieldVendors", $action ) ||
+		ereg("^ProcessDuplicates", $action ) ||
 		ereg("^lastImport", $action ) ||
 		ereg("^lookupemailtemplate",$action) ||
 		ereg("^deletewordtemplate",$action) ||
@@ -361,13 +355,7 @@ if(isset($action) && isset($module))
 			ereg("^massdelete", $action) ||
 			ereg("^mailmergedownloadfile",$action) || 	ereg("^get_img",$action) ||
 			ereg("^download",$action) ||
-			ereg("^MergeFieldContacts", $action ) ||
-			ereg("^MergeFieldLeads", $action ) ||
-			ereg("^MergeFieldAccounts", $action ) ||
-			ereg("^MergeFieldProducts", $action ) ||
-			ereg("^MergeFieldHelpDesk", $action ) ||
-			ereg("^MergeFieldPotentials", $action ) ||
-			ereg("^MergeFieldVendors", $action ) ||
+			ereg("^ProcessDuplicates", $action ) ||
 			ereg("^lastImport", $action ) ||
 			ereg("^massdelete", $action ) ||
 			ereg("^getListOfRecords", $action) ||

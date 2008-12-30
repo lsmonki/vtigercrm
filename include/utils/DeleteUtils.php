@@ -22,8 +22,8 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 	global $current_user;
 
 	//if we delete the entity from relatedlist then this will be used ie., the relationship will be deleted otherwise if we delete the entiry from listview then the relationship will not be deleted where as total entity will be deleted 
-	if($module != $return_module)
-	{
+	//if($module != $return_module)
+	//{
 
 	switch($module):
 	case Leads:
@@ -76,7 +76,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 	case Contacts:
 		if($return_module == 'Accounts')
 		{
-			$sql = 'update vtiger_contactdetails set accountid = null where contactid = ?';
+			$sql = 'update vtiger_contactdetails set accountid = 0 where contactid = ?';
 			$adb->pquery($sql, array($record));
 		}
 		elseif($return_module == 'Potentials' && $record != '' && $return_id != '')
@@ -134,7 +134,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		elseif($return_module == 'Campaigns')
 		{
-			$sql = 'update vtiger_potential set campaignid = null where potentialid = ?';
+			$sql = 'update vtiger_potential set campaignid = 0 where potentialid = ?';
 			$adb->pquery($sql, array($record));
 		}
 		elseif($return_module == 'Products')//Delete Potential from Product relatedlist
@@ -193,7 +193,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 	case HelpDesk:
 		if($return_module == 'Contacts' || $return_module == 'Accounts')
 		{
-			$sql = "update vtiger_troubletickets set parent_id=null where ticketid=?";
+			$sql = "update vtiger_troubletickets set parent_id=0 where ticketid=?";
 			$adb->pquery($sql, array($record));
 			$se_sql= 'delete from vtiger_seticketsrel where ticketid=?';
 			$adb->pquery($se_sql, array($record));
@@ -201,7 +201,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		if($return_module == 'Products')
 		{
-			$sql = "update vtiger_troubletickets set product_id=null where ticketid=?";
+			$sql = "update vtiger_troubletickets set product_id=0 where ticketid=?";
 			$adb->pquery($sql, array($record));
 		}
 		break;
@@ -240,7 +240,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 
 			if($return_module == "Vendors")
 			{
-				$sql = "update vtiger_products set vendor_id = null where productid = ?";
+				$sql = "update vtiger_products set vendor_id = 0 where productid = ?";
 				$adb->pquery($sql, array($record));
 			}
 			
@@ -263,7 +263,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 				$adb->pquery("insert into vtiger_relatedlists_rb values (?,?,?,?,?,?)", $params);
 			}
 			//we have to update the product_id as null for the campaigns which are related to this product
-			$adb->pquery("update vtiger_campaign set product_id=NULL where product_id = ?", array($record));
+			$adb->pquery("update vtiger_campaign set product_id=0 where product_id = ?", array($record));
 			$adb->pquery("update vtiger_products set parentid = 0 where parentid = ?", array($record));
 		}
 		break;
@@ -275,7 +275,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		elseif($return_module == "Contacts")
 		{
-			$sql_req ='UPDATE vtiger_purchaseorder set contactid="" where purchaseorderid = ?';
+			$sql_req ='UPDATE vtiger_purchaseorder set contactid=0 where purchaseorderid = ?';
 			$adb->pquery($sql_req, array($record));
 		}
 		break;
@@ -286,17 +286,17 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		elseif($return_module == "Quotes")
 		{
-			$relation_query = "UPDATE vtiger_salesorder set quoteid=null where salesorderid=?";
+			$relation_query = "UPDATE vtiger_salesorder set quoteid=0 where salesorderid=?";
 			$adb->pquery($relation_query, array($record));
 		}
 		elseif($return_module == "Potentials")
 		{
-			$relation_query = "UPDATE vtiger_salesorder set potentialid=null where salesorderid=?";
+			$relation_query = "UPDATE vtiger_salesorder set potentialid=0 where salesorderid=?";
 			$adb->pquery($relation_query, array($record));
 		}
 		elseif($return_module == "Contacts")
 		{
-			$relation_query = "UPDATE vtiger_salesorder set contactid=null where salesorderid=?";
+			$relation_query = "UPDATE vtiger_salesorder set contactid=0 where salesorderid=?";
 			$adb->pquery($relation_query, array($record));
 		}
 		break;
@@ -307,12 +307,12 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		elseif($return_module == "Potentials")
 		{
-			$relation_query = "UPDATE vtiger_quotes set potentialid=null where quoteid=?";
+			$relation_query = "UPDATE vtiger_quotes set potentialid=0 where quoteid=?";
 			$adb->pquery($relation_query, array($record));
 		}
 		elseif($return_module == "Contacts")
 		{
-			$relation_query = "UPDATE vtiger_quotes set contactid=null where quoteid=?";
+			$relation_query = "UPDATE vtiger_quotes set contactid=0 where quoteid=?";
 			$adb->pquery($relation_query, array($record));
 		}
 		break;
@@ -323,7 +323,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		}
 		elseif($return_module=="SalesOrder")
 		{
-			$relation_query = "UPDATE vtiger_invoice set salesorderid=null where invoiceid=?";
+			$relation_query = "UPDATE vtiger_invoice set salesorderid=0 where invoiceid=?";
 			$adb->pquery($relation_query, array($record));
 		}
 		break;
@@ -336,7 +336,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		$adb->pquery($del_query, array($record));
 		break;
 	endswitch;
-	}
+	//}
 	//this is added to update the crmentity.deleted=1 when we delete from listview and not from relatedlist
 	if($return_module == $module && $return_module !='Rss' && $return_module !='Portal')
 	{	
@@ -404,7 +404,7 @@ function delAccRelRecords($record){
 		$adb->pquery("insert into vtiger_relatedlists_rb values (?,?,?,?,?,?)", $params);
 	}
 	//Deleting Contact-Account Relation.
-	$con_q = "update vtiger_contactdetails set accountid = null where accountid = ?";
+	$con_q = "update vtiger_contactdetails set accountid = 0 where accountid = ?";
 	$adb->pquery($con_q, array($record));
 
 	//Backup Trouble Tickets-Account Relation
@@ -420,7 +420,7 @@ function delAccRelRecords($record){
 		$adb->pquery("insert into vtiger_relatedlists_rb values (?,?,?,?,?,?)", $params);
 	}
 	//Deleting Trouble Tickets-Account Relation.
-	$tt_q = "update vtiger_troubletickets set parent_id = null where parent_id = ?";
+	$tt_q = "update vtiger_troubletickets set parent_id = 0 where parent_id = ?";
 	$adb->pquery($tt_q, array($record));
 
 	//Backup Activity-Account Relation
@@ -471,7 +471,7 @@ function delVendorRelRecords($record){
 		$adb->pquery("insert into vtiger_relatedlists_rb values (?,?,?,?,?,?)", $params);
 	}
 	//Deleting Product-Vendor Relation.
-	$pro_q = "update vtiger_products set vendor_id = null where vendor_id = ?";
+	$pro_q = "update vtiger_products set vendor_id = 0 where vendor_id = ?";
 	$adb->pquery($pro_q, array($record));
 
 	//Backup Contact-Vendor Relaton
@@ -609,7 +609,7 @@ function delContactRelRecords($record)
 		$adb->pquery("insert into vtiger_relatedlists_rb values (?,?,?,?,?,?)", $params);
 	}	
 	//removing the relationship of contacts with Trouble Tickets
-	$adb->pquery("update vtiger_troubletickets set parent_id=NULL where parent_id=?", array($record));
+	$adb->pquery("update vtiger_troubletickets set parent_id=0 where parent_id=?", array($record));
 
 	//Backup Contact-PurchaseOrder Relation
 	$po_q = "select purchaseorderid from vtiger_purchaseorder where contactid=?";
@@ -624,7 +624,7 @@ function delContactRelRecords($record)
 		$adb->pquery("insert into vtiger_relatedlists_rb values (?,?,?,?,?,?)", $params);
 	}	
 	//removing the relationship of contacts with PurchaseOrder
-	$adb->pquery("update vtiger_purchaseorder set contactid=NULL where contactid=?", array($record));
+	$adb->pquery("update vtiger_purchaseorder set contactid=0 where contactid=?", array($record));
 
 	//Backup Contact-SalesOrder Relation
 	$so_q = "select salesorderid from vtiger_salesorder where contactid=?";
@@ -639,7 +639,7 @@ function delContactRelRecords($record)
 		$adb->pquery("insert into vtiger_relatedlists_rb values (?,?,?,?,?,?)", $params);
 	}	
 	//removing the relationship of contacts with SalesOrder
-	$adb->pquery("update vtiger_salesorder set contactid=NULL where contactid=?", array($record));
+	$adb->pquery("update vtiger_salesorder set contactid=0 where contactid=?", array($record));
 
 	//Backup Contact-Quotes Relation
 	$quo_q = "select quoteid from vtiger_quotes where contactid=?";
@@ -654,7 +654,7 @@ function delContactRelRecords($record)
 		$adb->pquery("insert into vtiger_relatedlists_rb values (?,?,?,?,?,?)", $params);
 	}	
 	//removing the relationship of contacts with Quotes
-	$adb->pquery("update vtiger_quotes set contactid=NULL where contactid=?", array($record));
+	$adb->pquery("update vtiger_quotes set contactid=0 where contactid=?", array($record));
 
 	$log->debug("Exiting delContactRelRecords method ...");
 

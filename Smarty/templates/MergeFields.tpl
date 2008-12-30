@@ -14,16 +14,20 @@
 <head>
 <link rel="stylesheet" type="text/css" href="themes/{$THEME}/style.css">
 	<link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">	
-	<style type="text/css">@import url("themes/{$THEME}/style.css");</style>
+	<link rel="stylesheet" type="text/css" href="themes/{$THEME}/style.css">
 </head>
+<body>
+{if $EDIT_DUPLICATE eq 'permitted'}
+
 <form name="merge" method="POST" action="index.php" id="form" onsubmit="return validate_merge('{$MODULENAME}');">
 	<input type=hidden name="module" value="{$MODULENAME}">
 	
 	<input type=hidden name="return_module" value="{$MODULENAME}">
-	<input type="hidden" name="action" value="MergeSave{$MODULENAME}">
+	<input type="hidden" name="action" value="ProcessDuplicates">
+	<input type="hidden" name="mergemode" value="mergesave">
 	<input type="hidden" name="parent" value="{$PARENT_TAB}">
 	<input type="hidden" name="pass_rec" value="{$IDSTRING}">
-	<input type="hidden" name="return_action" value="FindDuplicate{$MODULENAME}">
+	<input type="hidden" name="return_action" value="FindDuplicateRecords">
 	<script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
 	<script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 	<script src="include/scriptaculous/prototype.js" type="text/javascript"></script>
@@ -34,7 +38,11 @@
 		<table border="0" cellspacing=0  cellpadding=o width="100%">	
 			<tr>
 				<td align="left" colspan="2">
-				<span class="moduleName">{$MOD.LBL_MERGE_DATA_IN} {$MODULENAME}</span><br>
+				{assign var="MODULELABEL" value=$MODULENAME}
+				{if $APP.$MODULENAME neq ''}
+					{assign var="MODULELABEL" value=$APP.$MODULENAME}
+				{/if}	
+				<span class="moduleName">{$APP.LBL_MERGE_DATA_IN} {$MODULELABEL}</span><br>
 				<span font-weight:normal><font size="2">{$APP.LBL_DESC_FOR_MERGE_FIELDS}</font></span>
 				</td>
 			</tr>
@@ -43,14 +51,14 @@
 		<table class="lvt small" border="0" cellpadding="3" cellspacing="1" width="100%">
 			<tr >
 				<td  class="lvtCol">
-					<b>{$MOD.LBL_FIELDLISTS}</b>
+					<b>{$APP.LBL_FIELDLISTS}</b>
 				</td>
 				{assign var=count value=1}
 				{assign var=cnt_rec value=0}
 				{if $NO_EXISTING eq 1}
 					{foreach key=cnt item=record from=$ID_ARRAY}	
 						<td  class="lvtCol" >
-							<b>{$MOD.LBL_RECORD}{$count}</b>
+							<b>{$APP.LBL_RECORD}{$count}</b>
 							{if $count eq 1}
 								<input name="record" value="{$record}" onclick="select_All('{$JS_ARRAY}','{$cnt}','{$MODULENAME}');" type="radio" checked> <span style="font-size:11px">{$APP.LBL_SELECT_AS_PARENT}</span>
 							{else}
@@ -63,7 +71,7 @@
 				{else}
 					{foreach key=cnt item=record from=$ID_ARRAY}	
 						<td  class="lvtCol" >
-							<b>{$MOD.LBL_RECORD}{$count}</b>
+							<b>{$APP.LBL_RECORD}{$count}</b>
 						{assign var=found value=0}
 						{foreach item=child key=k from=$IMPORTED_RECORDS}
 							{if $record eq $child}	
@@ -122,4 +130,27 @@
 				</tr>	
 			</table>
 </form>
+
+{else}
+
+	<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>
+	<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
+
+		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+		<tbody><tr>
+		<td rowspan='2' width='11%'><img src='themes/{$THEME}/images/denied.gif' ></td>
+		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'>
+			<span class='genHeaderSmall'>{$APP.LBL_PERMISSION}</span></td>
+		</tr>
+		<tr>
+		<td class='small' align='right' nowrap='nowrap'>
+		<a href='javascript:self.close();'>{$APP.LBL_GO_BACK}</a><br>
+		</td>
+		</tr>
+		</tbody></table>
+	</div>
+	</td></tr></table>
+				
+{/if}
+</body>
 </html>			

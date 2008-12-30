@@ -1994,18 +1994,29 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	//Added to insert the records in vtiger_user_mergefields
 	function insertUser2mergefields($userid)
 	{
-		global $log;
+		global $log, $adb;
 		$log->debug("Entering insertUser2mergefields(".$userid.") method ...");
 	        $log->info("in insertUser2mergefields ".$userid);
 	
 		//$this->db->database->SetFetchMode(ADODB_FETCH_ASSOC); 
-		$fld_result = $this->db->query("select * from vtiger_field where generatedtype=1 and displaytype in (1,2,3) and tabid != 29 and uitype not in(70,69) and fieldid not in(87,148,151,155,102)");
-	    $num_rows = $this->db->num_rows($fld_result);
-        for($i=0; $i<$num_rows; $i++)
-        {
-			$tab_id = $this->db->query_result($fld_result,$i,'tabid');
-			$field_id = $this->db->query_result($fld_result,$i,'fieldid');
-			$this->db->query("insert into vtiger_user2mergefields values ($userid, $tab_id, $field_id, 0)");
+		$tab_res = $adb->query("SELECT distinct tabid FROM vtiger_tab");
+		$noOfTabs = $adb->num_rows($tab_res);
+		for($i=0;$i<$noOfTabs;$i++) {
+			$tab_id = $this->db->query_result($tab_res,$i,'tabid');
+	        $fld_result = getFieldsResultForMerge($tab_id);
+	        if ($fld_result != null) {
+	    		$num_rows = $this->db->num_rows($fld_result);
+			    for($j=0; $j<$num_rows; $j++) {
+					$field_id = $this->db->query_result($fld_result,$j,'fieldid');
+					$data_type = explode("~",$this->db->query_result($fld_result,$j,'typeofdata')); 
+					if($data_type[1] == 'M') { 
+						$visible = 1; 
+					} else { 
+						$visible = 2; 
+					} 
+					$this->db->query("insert into vtiger_user2mergefields values ($userid, $tab_id, $field_id, $visible)");
+				}
+	        }
 		}
 		$log->debug("Exiting insertUser2mergefields method ...");
 	}
