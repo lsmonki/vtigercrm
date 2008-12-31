@@ -304,7 +304,7 @@ class CRMEntity
 	}
 	// Asha - Change ownerid from '' to null since its an integer field. 
 	// It is empty for modules like Invoice/Quotes/SO/PO which do not have Assigned to field
-	if($ownerid === '') $ownerid = null;
+	if($ownerid === '') $ownerid = 0;
 	
 	if($module == 'Events')
 	{
@@ -562,7 +562,7 @@ class CRMEntity
 		  
 		  if($insertion_mode == 'edit')
 		  {
-			  if($table_name != 'vtiger_ticketcomments')
+			  if($table_name != 'vtiger_ticketcomments' && $uitype != 4)
 			  {
 				  if($i == 0)
 				  {

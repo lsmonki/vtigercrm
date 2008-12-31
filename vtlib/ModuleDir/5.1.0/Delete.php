@@ -21,10 +21,13 @@ $return_action = $_REQUEST['return_action'];
 $parenttab = $_REQUEST['parenttab'];
 $return_id = $_REQUEST['return_id'];
 
+//Added to fix 4600
+$url = getBasic_Advance_SearchURL();
+
 DeleteEntity($currentModule, $return_module, $focus, $record, $return_id);
 
 if($_REQUEST['parenttab']) $parenttab = $_REQUEST['parenttab'];
 
-header("Location: index.php?module=$return_module&action=$return_action&record=$return_id&parenttab=$parenttab&relmodule=$module");
+header("Location: index.php?module=$return_module&action=$return_action&record=$return_id&parenttab=$parenttab&relmodule=$module".$url);
 
 ?>

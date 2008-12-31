@@ -129,10 +129,10 @@ else
 	        $focus->column_fields['visibility'] = $_REQUEST['visibility'];
 	else
 	        $focus->column_fields['visibility'] = 'Private';
+	
 	if($_REQUEST['assigntype'] == 'U') {
 		$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_user_id'];
-	}
-	else {
+	} elseif($_REQUEST['assigntype'] == 'T') {
 		$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
 	}
 	$focus->save($tab_type);

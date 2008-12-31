@@ -23,6 +23,7 @@ $smarty = new vtigerCRM_Smarty();
 $record = $_REQUEST['record'];
 $isduplicate = $_REQUEST['isDuplicate'];
 $tabid = getTabid($currentModule);
+$category = getParentTab($currentModule);
 
 if($record != '') {
 	$focus->id = $record;
@@ -37,7 +38,7 @@ $smarty->assign('APP', $app_strings);
 $smarty->assign('MOD', $mod_strings);
 $smarty->assign('MODULE', $currentModule);
 // TODO: Update Single Module Instance name here.
-$smarty->assign('SINGLE_MOD', $currentModule); 
+$smarty->assign('SINGLE_MOD', getTranslatedString($currentModule)); 
 $smarty->assign('CATEGORY', $category);
 $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
 $smarty->assign('THEME', $theme);
@@ -124,6 +125,10 @@ if(isPermitted($currentModule, 'Delete', $record) == 'yes')
 	$smarty->assign('DELETE', 'permitted');
 
 $smarty->assign('BLOCKS', getBlocks($currentModule,'detail_view','',$focus->column_fields));
+
+// Record Change Notification
+$focus->markAsViewed($current_user->id);
+// END
 
 $smarty->display('DetailView.tpl');
 

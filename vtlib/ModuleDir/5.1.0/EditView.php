@@ -21,6 +21,11 @@ $category = getParentTab($currentModule);
 $record = $_REQUEST['record'];
 $isduplicate = $_REQUEST['isDuplicate'];
 
+//added to fix the issue4600
+$searchurl = getBasic_Advance_SearchURL();
+$smarty->assign("SEARCH", $searchurl);
+//4600 ends
+
 if($record) {
 	$focus->id = $record;
 	$focus->mode = 'edit';
@@ -41,7 +46,7 @@ $smarty->assign('APP', $app_strings);
 $smarty->assign('MOD', $mod_strings);
 $smarty->assign('MODULE', $currentModule);
 // TODO: Update Single Module Instance name here.
-$smarty->assign('SINGLE_MOD', $currentModule);
+$smarty->assign('SINGLE_MOD', getTranslatedString($currentModule));
 $smarty->assign('CATEGORY', $category);
 $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
 $smarty->assign('ID', $focus->id);

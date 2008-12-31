@@ -141,7 +141,7 @@ class ModuleClass extends CRMEntity {
 				      " = $this->table_name.$this->table_index"; 
 		}
 		$query .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid";
-		$query .= " LEFT JOIN vtiger_groups ON vtiger_groups.groupname = vtiger_crmentity.smownerid";
+		$query .= " LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
 
 		$query .= "	WHERE vtiger_crmentity.deleted = 0";
 		$query .= $this->getListViewSecurityParameter($module);
@@ -175,11 +175,6 @@ class ModuleClass extends CRMEntity {
 						WHERE userid=".$current_user->id." AND tabid=".$tabid."
 					) 
 					OR 
-					(
-						vtiger_crmentity.smownerid in (0)";
-
-				if(!empty($this->groupTable)) {
-					$sec_query .= " AND 
 						(";
 		
 					// Build the query based on the group association of current user.
@@ -192,9 +187,6 @@ class ModuleClass extends CRMEntity {
 							FROM vtiger_tmp_read_group_sharing_per
 							WHERE userid=".$current_user->id." and tabid=".$tabid."
 						)";
-					$sec_query .= ") ";
-				}
-
 				$sec_query .= ")
 				)";
 		}
@@ -216,18 +208,15 @@ class ModuleClass extends CRMEntity {
 		
 		$fields_list = getFieldsListFromQuery($sql);
 
-		$query = "SELECT $fields_list, ". $this->groupTable[0].'.'.$this->groupTable[1] ." as 'Assigned To Group', 
-				CASE WHEN (vtiger_users.user_name NOT LIKE '') THEN vtiger_users.user_name ELSE vtiger_groups.groupname END 
-				AS user_name FROM vtiger_crmentity INNER JOIN $this->table_name ON vtiger_crmentity.crmid=$this->table_name.$this->table_index";
+		$query = "SELECT $fields_list, vtiger_groups.groupname as 'Assigned To Group', vtiger_users.user_name AS user_name 
+					FROM vtiger_crmentity INNER JOIN $this->table_name ON vtiger_crmentity.crmid=$this->table_name.$this->table_index";
 
 		if(!empty($this->customFieldTable)) {
 			$query .= " INNER JOIN ".$this->customFieldTable[0]." ON ".$this->customFieldTable[0].'.'.$this->customFieldTable[1] .
 				      " = $this->table_name.$this->table_index"; 
 		}
 
-		$query .= " 
-			LEFT JOIN " . $this->groupTable[0] . " ON " . $this->groupTable[0].'.'.$this->groupTable[1] . " = $this->table_name.$this->table_index
-			LEFT JOIN vtiger_groups ON vtiger_groups.groupname = " . $this->groupTable[0] . '.groupname';
+		$query .= " LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
 		$query .= " LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid = vtiger_users.id and vtiger_users.status='Active'";
 
 		$where_auto = " vtiger_crmentity.deleted=0";
@@ -312,6 +301,47 @@ class ModuleClass extends CRMEntity {
 		}
 	}
 	
+	/** 
+	 * Function which will give the basic query to find duplicates
+	 */
+	function getDuplicatesQuery($module,$table_cols,$field_values,$ui_type_arr,$select_cols='') {
+		$select_clause = "SELECT ". $this->table_name .".".$this->table_index ." AS recordid, vtiger_users_last_import.deleted,".$table_cols;
+
+		// Select Custom Field Table Columns if present
+		if(isset($this->customFieldTable)) $query .= ", " . $this->customFieldTable[0] . ".* ";
+
+		$from_clause = " FROM $this->table_name";
+
+		$from_clause .= "	INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = $this->table_name.$this->table_index";
+
+		// Consider custom table join as well.
+		if(isset($this->customFieldTable)) {
+			$from_clause .= " INNER JOIN ".$this->customFieldTable[0]." ON ".$this->customFieldTable[0].'.'.$this->customFieldTable[1] .
+				      " = $this->table_name.$this->table_index"; 
+		}
+		$from_clause .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
+						LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		
+		$where_clause = "	WHERE vtiger_crmentity.deleted = 0";
+		$where_clause .= $this->getListViewSecurityParameter($module);
+					
+		if (isset($select_cols) && trim($select_cols) != '') {
+			$sub_query = "SELECT $select_cols FROM  $this->table_name AS t " .
+				" INNER JOIN vtiger_crmentity AS crm ON crm.crmid = t.".$this->table_index.
+					" GROUP BY $select_cols HAVING COUNT(*)>1";	
+		} else {
+			$sub_query = "SELECT $table_cols $from_clause $where_clause GROUP BY $table_cols HAVING COUNT(*)>1";
+		}	
+		
+		
+		$query = $select_clause . $from_clause .
+					" LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=" . $this->table_name .".".$this->table_index .
+					" INNER JOIN (" . $sub_query . ") AS temp ON ".get_on_clause($field_values,$ui_type_arr,$module) .
+					$where_clause .
+					" ORDER BY $table_cols,". $this->table_name .".".$this->table_index ." ASC";
+					
+		return $query;		
+	}
 	/** 
 	 * Handle saving related module information.
 	 * NOTE: This function has been added to CRMEntity (base class).

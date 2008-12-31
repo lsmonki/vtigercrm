@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
- 
+
 global $currentModule, $rstart;
 
 checkFileAccess("modules/$currentModule/$currentModule.php");

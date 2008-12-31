@@ -45,8 +45,7 @@ if(isset($_REQUEST['parentid']) && $_REQUEST['parentid'] != '')
 
 if($_REQUEST['assigntype'] == 'U')  {
 	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_user_id'];
-}
-else {
+} elseif($_REQUEST['assigntype'] == 'T') {
 	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
 }
 //Save the Document
