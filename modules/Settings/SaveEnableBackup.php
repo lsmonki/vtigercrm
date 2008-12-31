@@ -53,7 +53,7 @@ elseif(isset($_REQUEST['GetBackupDetail']) && $_REQUEST['GetBackupDetail'] != ''
 	$BackRowsCheck = $adb->num_rows($GetBackup);
 
 	if($BackRowsCheck > 0)
-		echo "SUCESS";
+		echo "SUCCESS";
 	else
 		echo "FAILURE";
 
@@ -101,7 +101,7 @@ elseif(isset($_REQUEST['GetBackupDetail']) && $_REQUEST['GetBackupDetail'] != ''
 	$BackRowsCheck = $adb->num_rows($GetBackup);
 
 	if($BackRowsCheck > 0)
-		echo "SUCESS";
+		echo "SUCCESS";
 	else
 		echo "FAILURE";
 

@@ -294,7 +294,7 @@ function server_check()
                 	method: 'post',
                         postBody:"module=Emails&action=EmailsAjax&file=Save&ajax=true&server_check=true",
 			onComplete: function(response) {
-			if(response.responseText.indexOf('SUCESS') > -1)
+			if(response.responseText.indexOf('SUCCESS') > -1)
 			{
 				oform.send_mail.value='true';
 				oform.action.value='Save';

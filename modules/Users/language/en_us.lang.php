@@ -656,7 +656,7 @@ $mod_strings = Array(
 
 'LBL_SSL' => 'SSL',
 //Added to fix the issue #4081
-'LBL_USERNAME_EXIST' => 'User Name Already Exists!',
+'LBL_USERNAME_EXIST' => 'A User with the specified name Already Exists!',
 'LBL_UNAUTHORIZED_ACCESS' => 'Unauthorized access to user administration',
 //Added to provide User based TagCloud
 'LBL_TAGCLOUD_DISPLAY'=>'Tag Cloud Display',
@@ -677,6 +677,10 @@ $mod_strings = Array(
 'Asterisk Extension'=>'Asterisk Extension',
 'Use Asterisk'=>'Use Asterisk',
 //asterisk changes end
+
+//user-group fixes
+'LBL_GROUPNAME_EXIST' => 'A Group with the specified name Already Exists!',
+'LBL_PROFILENAME_EXIST' => 'A Profile with the specified name Already Exists!',
 );
 
 ?>

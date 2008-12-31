@@ -31,6 +31,6 @@ for ($i=0;$i<count($product_ids);++$i) {
 }
 
 $price_values = implode("::", $price_list);
-echo "SUCESS$".$price_values;
+echo "SUCCESS$".$price_values;
 
 ?>

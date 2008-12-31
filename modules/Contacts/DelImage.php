@@ -48,5 +48,5 @@ else
 {
 	DelImage($id);
 }
-echo 'SUCESS';
+echo 'SUCCESS';
 ?>

@@ -14,6 +14,7 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
+global $mod_strings;
 $profilename=$_REQUEST['profile_name'];
 
 if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='')
@@ -23,11 +24,11 @@ if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='')
 
         if($adb->num_rows($result) > 0)
         {
-                echo 'A Profile in the specified name "'.$profilename.'" already exists';
+                echo $mod_strings['LBL_PROFILENAME_EXIST'];
                 die;
         }else
         {
-                echo 'SUCESS';
+                echo 'SUCCESS';
                 die;
         }
 

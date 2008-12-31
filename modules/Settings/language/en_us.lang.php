@@ -1129,5 +1129,10 @@ $mod_strings = Array(
 'VTLIB_LBL_WARNING'=>'Warning',
 'VTLIB_LBL_NOT_WRITEABLE'=>'not writeable',
 // END
+
+//User group fixes
+'LBL_USERNAME_EXIST' => 'A User in the specified name Already Exists!',
+'LBL_GROUPNAME_EXIST' => 'A Group in the specified name Already Exists!',
+'LBL_ROLENAME_EXIST' => 'Role name already exists',
 );
 ?>

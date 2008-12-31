@@ -29,7 +29,7 @@ function dup_validation()
                                 method: 'post',
                                 postBody: 'module=Settings&action=SettingsAjax&file=SaveRole&ajax=true&dup_check=true'+urlstring,
                                 onComplete: function(response) {ldelim}
-					if(response.responseText.indexOf('SUCESS') > -1)
+					if(response.responseText.indexOf('SUCCESS') > -1)
 						document.newRoleForm.submit();
 					else
 						alert(response.responseText);

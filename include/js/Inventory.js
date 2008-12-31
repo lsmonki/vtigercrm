@@ -929,7 +929,7 @@ function updatePrices() {
 				postBody: 'module=Products&action=ProductsAjax&file=InventoryPriceAjax&currencyid='+currency_id+'&productsList='+products_list,
 				onComplete: function(response)
 					{
-						if(trim(response.responseText).indexOf('SUCESS') == 0) {
+						if(trim(response.responseText).indexOf('SUCCESS') == 0) {
 							var res = trim(response.responseText).split("$");
 							updatePriceValues(res[1]);							
 						} else {

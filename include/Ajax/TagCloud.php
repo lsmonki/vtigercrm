@@ -59,7 +59,7 @@ elseif($ajaxaction == 'GETTAGCLOUD')
 		$result=$adb->pquery($query, array($tagid, $crmid));
 		/*$query="delete from vtiger_freetags where id=?";
 		$result=$adb->pquery($query, array($tagid));*/
-		echo 'SUCESS';
+		echo 'SUCCESS';
 	}else
 	{
 		 die("An invalid tagid to delete.");

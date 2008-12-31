@@ -24,7 +24,7 @@ if($_POST['config_chk'] == 'true')
 		echo 'FAILED';
 		exit();
 	} else {
-		echo 'SUCESS';
+		echo 'SUCCESS';
 		exit();
 	}
 	exit();

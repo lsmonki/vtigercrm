@@ -26,7 +26,7 @@ if(isset($_REQUEST['server_check']) && $_REQUEST['server_check'] == 'true')
 	$sql="select * from vtiger_systems where server_type = ?";
 	$records=$adb->num_rows($adb->pquery($sql, array('email')),0,"id");
 	if($records != '')
-		echo 'SUCESS';
+		echo 'SUCCESS';
 	else
 		echo 'FAILURE';	
 	die;	

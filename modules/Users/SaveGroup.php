@@ -10,40 +10,37 @@
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
-global $adb;
+global $adb, $mod_strings;
 
 $groupName = from_html(trim($_REQUEST['groupName']));
 $description = from_html($_REQUEST['description']);
 $mode = $_REQUEST['mode'];
 
-if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='')
-{
-        if($mode != 'edit')
-        {
-                $query = 'select groupname from vtiger_groups where groupname=?';
-				$params = array($groupName);
-        }
-        else
-        {
-                $groupid = $_REQUEST['groupid'];
-                $query = 'select groupname from vtiger_groups  where groupname=? and groupid !=?';
-				$params = array($groupName, $groupid);
-
-        }
-        $result = $adb->pquery($query, $params);
-        if($adb->num_rows($result) > 0)
-        {
-                echo 'A Group in the specified name "'.$groupName.'" already exists';
-                die;
-        }else
-        {
-                echo 'SUCESS';
-                die;
-        }
-
+if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='') {
+	if($mode != 'edit') {
+		$query = 'select groupname from vtiger_groups where groupname=?';
+		$params = array($groupName);
+	} else {
+		$groupid = $_REQUEST['groupid'];
+		$query = 'select groupname from vtiger_groups  where groupname=? and groupid !=?';
+		$params = array($groupName, $groupid);
+	}
+	$result = $adb->pquery($query, $params);
+	
+	$user_query = "SELECT user_name FROM vtiger_users WHERE user_name =?";
+	$user_result = $adb->pquery($user_query, array($groupName));
+        
+	if($adb->num_rows($result) > 0) {
+		echo $mod_strings['LBL_GROUPNAME_EXIST'];
+		die;
+	} elseif($adb->num_rows($user_result) > 0) {
+		echo $mod_strings['LBL_USERNAME_EXIST'];
+		die;
+	} else {
+		echo 'SUCCESS';
+		die;
+	}
 }
-
-
 
 
 /** returns the group members in an formatted array  

@@ -30,7 +30,7 @@ function dup_validation()
 			method: 'post',
 			postBody: 'module=Users&action=UsersAjax&file=SaveGroup&ajax=true&dup_check=true'+reminstr,
 			onComplete: function(response) {ldelim}
-				if(response.responseText.indexOf('SUCESS') >-1)
+				if(response.responseText.indexOf('SUCCESS') >-1)
 					document.newGroupForm.submit();
 				else
 					alert(response.responseText);

@@ -201,7 +201,7 @@ function dup_validation(profilename)
 			method: 'post',
 			postBody: 'module=Users&action=UsersAjax&file=CreateProfile&ajax=true&dup_check=true&profile_name='+profilename,
 			onComplete: function(response) {ldelim}
-					if(response.responseText.indexOf('SUCESS') > -1)
+					if(response.responseText.indexOf('SUCCESS') > -1)
 						document.profileform.submit();
 					else
 						alert(response.responseText);
