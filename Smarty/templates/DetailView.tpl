@@ -604,6 +604,35 @@ function sendfile_email()
                   </table>
                 <br>
                 {/if}
+		
+		{* vtlib customization: Custom links on the Detail view *}
+		{if $CUSTOM_LINKS}
+			<table width="100%" border="0" cellpadding="5" cellspacing="0">
+				<tr><td align="left" class="dvtUnSelectedCell dvtCellLabel">
+					<a href="javascript:;" onclick="fnvshobj(this,'customLinksLay');"><b>{$APP.LBL_MORE} {$APP.LBL_ACTIONS} &#187;</b></a>
+				</td></tr>
+			</table>
+			<br>
+			<div style="display: none; left: 193px; top: 106px;width:155px; position:absolute;" id="customLinksLay" 
+				onmouseout="fninvsh('customLinksLay')" onmouseover="fnvshNrm('customLinksLay')">
+				<table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
+				<tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;"><b>{$APP.LBL_MORE} {$APP.LBL_ACTIONS} &#187;</b></td></tr>
+				<tr>
+					<td>
+						{foreach item=CUSTOMLINK from=$CUSTOM_LINKS}
+							{assign var="customlink_href" value=$CUSTOMLINK->linkurl}
+							{assign var="customlink_label" value=$CUSTOMLINK->linklabel}
+							{if $customlink_label eq ''}
+								{assign var="customlink_label" value=$customlink_href}
+							{/if}
+							<a href="{$customlink_href}" class="drop_down">{$customlink_label}</a>
+						{/foreach}
+					</td>
+				</tr>
+			</table>
+			</div>
+		{/if}
+		{* END *}
                 <!-- Action links for Event & Todo END-by Minnie -->
 
 		{if $TAG_CLOUD_DISPLAY eq 'true'}

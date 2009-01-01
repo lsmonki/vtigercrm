@@ -53,7 +53,7 @@ class ModuleClass extends CRMEntity {
 		'Assigned To' => 'assigned_user_id'
 	);
 
-	// Make the field link to detail view 
+	// Make the field link to detail view from list view (Fieldname)
 	var $list_link_field = 'payslipname';
 
 	// For Popup listview and UI type support
@@ -69,6 +69,8 @@ class ModuleClass extends CRMEntity {
 
 	// For Popup window record selection
 	var $popup_fields = Array('payslipname');
+
+	var $sortby_fields = Array('payslipname', 'payslipmonth', 'smownerid', 'modifiedtime');
 
 	// For Alphabetical search
 	var $def_basicsearch_col = 'payslipname';

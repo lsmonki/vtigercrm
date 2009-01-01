@@ -72,6 +72,12 @@ if(isPermitted($currentModule, 'Delete', $record) == 'yes')
 
 $smarty->assign('BLOCKS', getBlocks($currentModule,'detail_view','',$focus->column_fields));
 
+// Gather the custom link information to display
+include_once('vtlib/Vtiger/Link.php');
+$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>$_REQUEST['action']);
+$smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType($tabid, 'DETAILVIEW', $customlink_params));
+// END
+
 $smarty->display('DetailView.tpl');
 
 ?>

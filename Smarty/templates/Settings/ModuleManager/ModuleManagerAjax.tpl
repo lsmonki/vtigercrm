@@ -38,7 +38,7 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 <table border=0 cellspacing=0 cellpadding=3 width=100% class="listRow" id="modmgr_custom">
 <tr>
 	<td class="big tableHeading" colspan=2>&nbsp;</td>
-	<td class="big tableHeading" colspan=3 width="10%" align="right">
+	<td class="big tableHeading" colspan=4 width="10%" align="right">
 		<form style="display: inline;" action="index.php?module=Settings&action=ModuleManager&module_import=Step1&parenttab=Settings" method="POST">
 			<input type="submit" class="crmbutton small create" value='{$APP.LBL_IMPORT} {$APP.LBL_NEW}' title='{$APP.LBL_IMPORT}'>
 		</form>
@@ -58,6 +58,9 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 	<tr>
 		<td class="cellText small" width="20px"><img src="{$IMAGE_PATH}uparrow.gif" border="0"></td>
 		<td class="cellLabel small">{$modulelabel}</td>
+		<td class="cellText small" width="15px" align=center>
+			<a href="index.php?module=Settings&action=ModuleManager&module_update=Step1&src_module={$modulename}&parenttab=Settings"><img src="{$IMAGE_PATH}reload.gif" border="0" align="absmiddle" alt="{$MOD.LBL_UPGRADE} {$modulelabel}" title="{$MOD.LBL_UPGRADE} {$modulelabel}"></a>
+		</td>
 		<td class="cellText small" width="15px" align=center>
 		{if $modinfo.presence eq 0}
 			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_disable');"><img src="{$IMAGE_PATH}enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE} {$modulelabel}" title="{$MOD.LBL_DISABLE} {$modulelabel}"></a>
@@ -86,6 +89,9 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 	<tr>
 		<td class="cellText small"><img src="{$IMAGE_PATH}text.gif" border=0"></td>
 		<td class="cellLabel small">{$langinfo.label}</td>
+		<td class="cellText small" width="15px" align=center>
+			<a href="index.php?module=Settings&action=ModuleManager&module_update=Step1&src_module={$langinfo.label}&parenttab=Settings"><img src="{$IMAGE_PATH}reload.gif" border="0" align="absmiddle" alt="{$MOD.LBL_UPGRADE} {$langinfo.label}" title="{$MOD.LBL_UPGRADE} {$langinfo.label}"></a>
+		</td>
 		<td class="cellText small" width="15px" align=center>
 		{if $langinfo.active eq 1}
 			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$langprefix}', 'module_disable', 'language');"><img src="{$IMAGE_PATH}enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE} Language {$langinfo.label}" title="{$MOD.LBL_DISABLE} Language {$langinfo.label}"></a>

@@ -18,6 +18,9 @@ $modulemanager_uploaddir = 'test/vtlib';
 if($_REQUEST['module_import'] != '') {
 	require_once('modules/Settings/ModuleManager/Import.php');
 	exit;
+} else if($_REQUEST['module_update'] != '') {
+	require_once('modules/Settings/ModuleManager/Update.php');
+	exit;
 } else if($_REQUEST['module_import_cancel'] == 'true') {
 	$uploadfile = $_REQUEST['module_import_file'];
 	$uploadfilename = "$modulemanager_uploaddir/$uploadfile";

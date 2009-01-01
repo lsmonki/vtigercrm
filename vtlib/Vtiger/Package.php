@@ -7,13 +7,13 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-require_once('vtlib/Vtiger/PackageImport.php');
+require_once('vtlib/Vtiger/PackageUpdate.php');
 
 /**
  * Package Manager class for vtiger Modules.
  * @package vtlib
  */
-class Vtiger_Package extends Vtiger_PackageImport {
+class Vtiger_Package extends Vtiger_PackageUpdate {
 
 	/**
 	 * Constructor

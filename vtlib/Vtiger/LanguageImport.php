@@ -49,6 +49,16 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 	}
 
 	/**
+	 * Update Module from zip file
+	 * @param Object Instance of Language (to keep Module update API consistent)
+	 * @param String Zip file name
+	 * @param Boolean True for overwriting existing module
+	 */
+	function update($instance, $zipfile, $overwrite=true) {
+		$this->import($zipfile, $overwrite);
+	}
+
+	/**
 	 * Import Module
 	 * @access private
 	 */

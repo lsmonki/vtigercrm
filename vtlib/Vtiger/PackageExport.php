@@ -165,10 +165,13 @@ class Vtiger_PackageExport {
 		$parent_name = $menu->label;
 
 		$sqlresult = $adb->query("SELECT * FROM vtiger_tab WHERE tabid = $moduleid");
-		$tabname = $adb->query_result($sqlresult, 0, 'name');
-		$tablabel= $adb->query_result($sqlresult, 0, 'tablabel');
+		$tabresultrow = $adb->fetch_array($sqlresult);
 
-		$this->openNode('module');
+		$tabname = $tabresultrow['name'];
+		$tablabel= $tabresultrow['tablabel'];
+		$tabversion = isset($tabresultrow['version'])? $tabresultrow['version'] : false;
+
+		$this->openNode('module');		
 		$this->outputNode(date('Y-m-d H:i:s'),'exporttime');
 		$this->outputNode($tabname, 'name');
 		$this->outputNode($tablabel, 'label');
@@ -176,6 +179,10 @@ class Vtiger_PackageExport {
 
 		if(!$moduleInstance->isentitytype) {
 			$this->outputNode('extension', 'type');
+		}
+
+		if($tabversion) {
+			$this->outputNode($tabversion, 'version');
 		}
 
 		// Export dependency information
@@ -201,6 +208,9 @@ class Vtiger_PackageExport {
 
 		// Export Related Lists
 		$this->export_RelatedLists($moduleInstance);
+
+		// Export Custom Links
+		$this->export_CustomLinks($moduleInstance);
 
 		$this->closeNode('module');
 	}
@@ -554,6 +564,26 @@ class Vtiger_PackageExport {
 		}
 	}
 
+	/**
+	 * Export custom links of the module.
+	 * @access priavate
+	 */
+	function export_CustomLinks($moduleInstance) {
+		$customlinks = $moduleInstance->getLinks();
+		if(!empty($customlinks)) {
+			$this->openNode('customlinks');
+			foreach($customlinks as $customlink) {
+				$this->openNode('customlink');
+				$this->outputNode($customlink->linktype, 'linktype');
+				$this->outputNode($customlink->linklabel, 'linklabel');
+				$this->outputNode("<![CDATA[$customlink->linkurl]]>", 'linkurl');
+				$this->outputNode("<![CDATA[$customlink->linkicon]]>", 'linkicon');
+				$this->outputNode($customlink->sequence, 'sequence');
+				$this->closeNode('customlink');
+			}
+			$this->closeNode('customlinks');
+		}
+	}
 
 	/**
 	 * Helper function to log messages

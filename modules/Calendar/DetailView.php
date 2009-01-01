@@ -378,6 +378,13 @@ if(isset($_SESSION['activity_listquery'])){
 		}
 	}
 }
+
+// Gather the custom link information to display
+include_once('vtlib/Vtiger/Link.php');
+$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>$_REQUEST['action']);
+$smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), 'DETAILVIEW', $customlink_params));
+// END
+
 $smarty->display("ActivityDetailView.tpl");
 
 ?>

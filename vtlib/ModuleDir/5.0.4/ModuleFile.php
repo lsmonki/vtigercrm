@@ -61,10 +61,7 @@ class ModuleClass extends CRMEntity {
 
 	var $popup_fields = Array('payslipname');
 
-	// Placeholder for fields not available for mass edit
-	var $non_mass_edit_fields = Array();
-
-	var $sortby_fields = Array('payslipname', 'payslipmonth', 'smownerid', 'modifiedtime');
+	var $sortby_fields = Array();
 
 	// For alphabetical search
 	var $def_basicsearch_col = 'payslipname';

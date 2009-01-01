@@ -29,7 +29,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	 * will be used to create customviews.
 	 * @access private
 	 */
-	var $_modulefields = Array();
+	var $_modulefields_cache = Array();
 
 	/**
 	 * License of the package.
@@ -159,6 +159,22 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
+	 * Cache the field instance for re-use
+	 * @access private
+	 */
+	function __AddModuleFieldToCache($moduleInstance, $fieldname, $fieldInstance) {
+		$this->_modulefields_cache["$moduleInstance->name"]["$fieldname"] = $fieldInstance;
+	}
+
+	/**
+	 * Get field instance from cache
+	 * @access private
+	 */
+	function __GetModuleFieldFromCache($moduleInstance, $fieldname) {
+		return $this->_modulefields_cache["$moduleInstance->name"]["$fieldname"];
+	}
+
+	/**
 	 * Initialize Import
 	 * @access private
 	 */
@@ -199,6 +215,14 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
+	 * Get package version
+	 * @access private
+	 */
+	function getVersion() {
+		return $this->_modulexml->version;
+	}
+
+	/**
 	 * Import Module from zip file
 	 * @param String Zip file name
 	 * @param Boolean True for overwriting existing module
@@ -218,6 +242,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		$tabname = $this->_modulexml->name;
 		$tablabel= $this->_modulexml->label;
 		$parenttab=$this->_modulexml->parent;
+		$tabversion=$this->_modulexml->version;
 
 		$isextension= false;
 		if(!empty($this->_modulexml->type)) {
@@ -230,6 +255,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		$moduleInstance->name = $tabname;
 		$moduleInstance->label= $tablabel;
 		$moduleInstance->isentitytype = ($isextension != true);
+		$moduleInstance->version = (!$tabversion)? 0 : $tabversion;
 		$moduleInstance->save();
 
 		if(!empty($parenttab) && $parenttab != '') {
@@ -244,6 +270,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		$this->import_Events($this->_modulexml, $moduleInstance);
 		$this->import_Actions($this->_modulexml, $moduleInstance);
 		$this->import_RelatedLists($this->_modulexml, $moduleInstance);
+		$this->import_CustomLinks($this->_modulexml, $moduleInstance);
 	}
 
 	/**
@@ -266,7 +293,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		// Import the table via queries
 		foreach($modulenode->tables->table as $tablenode) {
 			$tablename = $tablenode->name;
-			$tablesql  = $tablenode->sql;
+			$tablesql  = "$tablenode->sql"; // Convert to string format
 
 			// Save the information in the schema file.
 			fwrite($schemafile, "\t\t<table>\n");
@@ -274,8 +301,21 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 			fwrite($schemafile, "\t\t\t<sql><![CDATA[$tablesql]]></sql>\n");
 			fwrite($schemafile, "\t\t</table>\n");
 
-			if(!Vtiger_Utils::checkTable($tablename)) {
-				Vtiger_Utils::ExecuteQuery($tablesql);				
+			// Avoid executing SQL that will DELETE or DROP table data
+			if(Vtiger_Utils::IsCreateSql($tablesql)) {
+				if(!Vtiger_Utils::checkTable($tablename)) {
+					self::log("SQL: $tablesql ... ", false);
+					Vtiger_Utils::ExecuteQuery($tablesql);
+					self::log("DONE");
+				}
+			} else {
+				if(Vtiger_Utils::IsDestructiveSql($tablesql)) {
+					self::log("SQL: $tablesql ... SKIPPED");
+				} else {
+					self::log("SQL: $tablesql ... ", false);
+					Vtiger_Utils::ExecuteQuery($tablesql);
+					self::log("DONE");
+				}
 			}
 		}
 		if($schemafile) {
@@ -292,14 +332,22 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	function import_Blocks($modulenode, $moduleInstance) {
 		if(empty($modulenode->blocks) || empty($modulenode->blocks->block)) return;
 		foreach($modulenode->blocks->block as $blocknode) {
-			$blocklabel = $blocknode->label;
-
-			$blockInstance = new Vtiger_Block();
-			$blockInstance->label = $blocklabel;
-			$moduleInstance->addBlock($blockInstance);
-			
+			$blockInstance = $this->import_Block($modulenode, $moduleInstance, $blocknode);			
 			$this->import_Fields($blocknode, $blockInstance, $moduleInstance);
 		}
+	}
+
+	/**
+	 * Import Block of the module
+	 * @access private
+	 */
+	function import_Block($modulenode, $moduleInstance, $blocknode) {
+		$blocklabel = $blocknode->label;
+
+		$blockInstance = new Vtiger_Block();
+		$blockInstance->label = $blocklabel;
+		$moduleInstance->addBlock($blockInstance);
+		return $blockInstance;
 	}
 
 	/**
@@ -310,56 +358,65 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		if(empty($blocknode->fields) || empty($blocknode->fields->field)) return;
 
 		foreach($blocknode->fields->field as $fieldnode) {
-			$fieldInstance = new Vtiger_Field();
-			$fieldInstance->name         = $fieldnode->fieldname;
-			$fieldInstance->label        = $fieldnode->fieldlabel;
-			$fieldInstance->table        = $fieldnode->tablename;
-			$fieldInstance->column       = $fieldnode->columnname;
-			$fieldInstance->uitype       = $fieldnode->uitype;
-			$fieldInstance->generatedtype= $fieldnode->generatedtype;
-			$fieldInstance->readonly     = $fieldnode->readonly;
-			$fieldInstance->presence     = $fieldnode->presence;
-			$fieldInstance->selected     = $fieldnode->selected;
-			$fieldInstance->maximumlength= $fieldnode->maximumlength;
-			$fieldInstance->sequence     = $fieldnode->sequence;
-			$fieldInstance->quickcreate  = $fieldnode->quickcreate;
-			$fieldInstance->quicksequence= $fieldnode->quickcreatesequence;
-			$fieldInstance->typeofdata   = $fieldnode->typeofdata;
-			$fieldInstance->displaytype  = $fieldnode->displaytype;
-			$fieldInstance->info_type    = $fieldnode->info_type;
-
-			if(isset($fieldnode->columntype) && !empty($fieldnode->columntype)) 
-				$fieldInstance->columntype = $fieldnode->columntype;
-
-			$blockInstance->addField($fieldInstance);
-
-			// Set the field as entity identifier if marked.
-			if(!empty($fieldnode->entityidentifier)) {
-				$moduleInstance->entityidfield = $fieldnode->entityidentifier->entityidfield;
-				$moduleInstance->entityidcolumn= $fieldnode->entityidentifier->entityidcolumn;
-				$moduleInstance->setEntityIdentifier($fieldInstance);
-			}
-
-			// Check picklist values associated with field if any.
-			if(!empty($fieldnode->picklistvalues) && !empty($fieldnode->picklistvalues->picklistvalue)) {
-				$picklistvalues = Array();
-				foreach($fieldnode->picklistvalues->picklistvalue as $picklistvaluenode) {
-					$picklistvalues[] = $picklistvaluenode;
-				}
-				$fieldInstance->setPicklistValues( $picklistvalues );
-			}
-
-			// Check related modules associated with this field
-			if(!empty($fieldnode->relatedmodules) && !empty($fieldnode->relatedmodules->relatedmodule)) {
-				$relatedmodules = Array();
-				foreach($fieldnode->relatedmodules->relatedmodule as $relatedmodulenode) {
-					$relatedmodules[] = $relatedmodulenode;
-				}
-				$fieldInstance->setRelatedModules($relatedmodules);
-			}
-
-			$this->_modulefields["$moduleInstance->name"]["$fieldnode->fieldname"] = $fieldInstance;
+			$fieldInstance = $this->import_Field($blocknode, $blockInstance, $moduleInstance, $fieldnode);
 		}
+	}
+
+	/**
+	 * Import Field of the module
+	 * @access private
+	 */
+	function import_Field($blocknode, $blockInstance, $moduleInstance, $fieldnode) {
+		$fieldInstance = new Vtiger_Field();
+		$fieldInstance->name         = $fieldnode->fieldname;
+		$fieldInstance->label        = $fieldnode->fieldlabel;
+		$fieldInstance->table        = $fieldnode->tablename;
+		$fieldInstance->column       = $fieldnode->columnname;
+		$fieldInstance->uitype       = $fieldnode->uitype;
+		$fieldInstance->generatedtype= $fieldnode->generatedtype;
+		$fieldInstance->readonly     = $fieldnode->readonly;
+		$fieldInstance->presence     = $fieldnode->presence;
+		$fieldInstance->selected     = $fieldnode->selected;
+		$fieldInstance->maximumlength= $fieldnode->maximumlength;
+		$fieldInstance->sequence     = $fieldnode->sequence;
+		$fieldInstance->quickcreate  = $fieldnode->quickcreate;
+		$fieldInstance->quicksequence= $fieldnode->quickcreatesequence;
+		$fieldInstance->typeofdata   = $fieldnode->typeofdata;
+		$fieldInstance->displaytype  = $fieldnode->displaytype;
+		$fieldInstance->info_type    = $fieldnode->info_type;
+
+		if(isset($fieldnode->columntype) && !empty($fieldnode->columntype)) 
+			$fieldInstance->columntype = $fieldnode->columntype;
+
+		$blockInstance->addField($fieldInstance);
+
+		// Set the field as entity identifier if marked.
+		if(!empty($fieldnode->entityidentifier)) {
+			$moduleInstance->entityidfield = $fieldnode->entityidentifier->entityidfield;
+			$moduleInstance->entityidcolumn= $fieldnode->entityidentifier->entityidcolumn;
+			$moduleInstance->setEntityIdentifier($fieldInstance);
+		}
+
+		// Check picklist values associated with field if any.
+		if(!empty($fieldnode->picklistvalues) && !empty($fieldnode->picklistvalues->picklistvalue)) {
+			$picklistvalues = Array();
+			foreach($fieldnode->picklistvalues->picklistvalue as $picklistvaluenode) {
+				$picklistvalues[] = $picklistvaluenode;
+			}
+			$fieldInstance->setPicklistValues( $picklistvalues );
+		}
+
+		// Check related modules associated with this field
+		if(!empty($fieldnode->relatedmodules) && !empty($fieldnode->relatedmodules->relatedmodule)) {
+			$relatedmodules = Array();
+			foreach($fieldnode->relatedmodules->relatedmodule as $relatedmodulenode) {
+				$relatedmodules[] = $relatedmodulenode;
+			}
+			$fieldInstance->setRelatedModules($relatedmodules);
+		}
+
+		$this->__AddModuleFieldToCache($moduleInstance, $fieldnode->fieldname, $fieldInstance);
+		return $fieldInstance;
 	}
 
 	/**
@@ -369,25 +426,34 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	function import_CustomViews($modulenode, $moduleInstance) {
 		if(empty($modulenode->customviews) || empty($modulenode->customviews->customview)) return;
 		foreach($modulenode->customviews->customview as $customviewnode) {
-			$viewname = $customviewnode->viewname;
-			$setdefault=$customviewnode->setdefault;
-			$setmetrics=$customviewnode->setmetrics;
+			$filterInstance = $this->import_CustomView($modulenode, $moduleInstance, $customviewnode);
+			
+		}
+	}
 
-			$filterInstance = new Vtiger_Filter();
-			$filterInstance->name = $viewname;
-			$filterInstance->isdefault = $setdefault;
-			$filterInstance->inmetrics = $setmetrics;
+	/**
+	 * Import Custom View of the module
+	 * @access private
+	 */
+	function import_CustomView($modulenode, $moduleInstance, $customviewnode) {
+		$viewname = $customviewnode->viewname;
+		$setdefault=$customviewnode->setdefault;
+		$setmetrics=$customviewnode->setmetrics;
 
-			$moduleInstance->addFilter($filterInstance);
+		$filterInstance = new Vtiger_Filter();
+		$filterInstance->name = $viewname;
+		$filterInstance->isdefault = $setdefault;
+		$filterInstance->inmetrics = $setmetrics;
 
-			foreach($customviewnode->fields->field as $fieldnode) {
-				$fieldInstance = $this->_modulefields["$moduleInstance->name"]["$fieldnode->fieldname"];
-				$filterInstance->addField($fieldInstance, $fieldnode->columnindex);
+		$moduleInstance->addFilter($filterInstance);
 
-				if(!empty($fieldnode->rules->rule)) {
-					foreach($fieldnode->rules->rule as $rulenode) {
-						$filterInstance->addRule($fieldInstance, $rulenode->comparator, $rulenode->value, $rulenode->columnindex);
-					}
+		foreach($customviewnode->fields->field as $fieldnode) {
+			$fieldInstance = $this->__GetModuleFieldFromCache($moduleInstance, $fieldnode->fieldname);
+			$filterInstance->addField($fieldInstance, $fieldnode->columnindex);
+
+			if(!empty($fieldnode->rules->rule)) {
+				foreach($fieldnode->rules->rule as $rulenode) {
+					$filterInstance->addRule($fieldInstance, $rulenode->comparator, $rulenode->value, $rulenode->columnindex);
 				}
 			}
 		}
@@ -416,10 +482,18 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 
 		if(Vtiger_Event::hasSupport()) {
 			foreach($modulenode->events->event as $eventnode) {
-				Vtiger_Event::register($moduleInstance, 
-					$eventnode->eventname, $eventnode->classname, $eventnode->filename);
+				$this->import_Event($modulenode, $moduleInstance, $eventnode);
 			}
 		}
+	}
+
+	/**
+	 * Import Event of the module
+	 * @access private
+	 */
+	function import_Event($modulenode, $moduleInstance, $eventnode) {
+		Vtiger_Event::register($moduleInstance, 
+					$eventnode->eventname, $eventnode->classname, $eventnode->filename);
 	}
 
 	/**
@@ -429,12 +503,20 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	function import_Actions($modulenode, $moduleInstance) {
 		if(empty($modulenode->actions) || empty($modulenode->actions->action)) return;
 		foreach($modulenode->actions->action as $actionnode) {
-			$actionstatus = $actionnode->status;
-			if($actionstatus == 'enabled') 
-				$moduleInstance->enableTools($actionnode->name);
-			else
-				$moduleInstance->disableTools($actionnode->name);
+			$this->import_Action($modulenode, $moduleInstance, $actionnode);
 		}
+	}
+
+	/**
+	 * Import action of the module
+	 * @access private
+	 */
+	function import_Action($modulenode, $moduleInstance, $actionnode) {
+		$actionstatus = $actionnode->status;
+		if($actionstatus == 'enabled') 
+			$moduleInstance->enableTools($actionnode->name);
+		else
+			$moduleInstance->disableTools($actionnode->name);
 	}
 
 	/**
@@ -444,18 +526,45 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	function import_RelatedLists($modulenode, $moduleInstance) {
 		if(empty($modulenode->relatedlists) || empty($modulenode->relatedlists->relatedlist)) return;
 		foreach($modulenode->relatedlists->relatedlist as $relatedlistnode) {
-			$relModuleInstance = Vtiger_Module::getInstance($relatedlistnode->relatedmodule);
-			$label = $relatedlistnode->label;
-			$actions = false; 
-			if(!empty($relatedlistnode->actions) && !empty($relatedlistnode->actions->action)) {
-				$actions = Array();
-				foreach($relatedlistnode->actions->action as $actionnode) {
-					$actions[] = "$actionnode";
-				}
-			}			
-			if($relModuleInstance) {
-				$moduleInstance->setRelatedList($relModuleInstance, "$label", $actions, "$relatedlistnode->function");
+			$relModuleInstance = $this->import_Relatedlist($modulenode, $moduleInstance, $relatedlistnode);
+		}
+	}
+
+	/**
+	 * Import related list of the module.
+	 * @access private
+	 */
+	function import_Relatedlist($modulenode, $moduleInstance, $relatedlistnode) {
+		$relModuleInstance = Vtiger_Module::getInstance($relatedlistnode->relatedmodule);
+		$label = $relatedlistnode->label;
+		$actions = false; 
+		if(!empty($relatedlistnode->actions) && !empty($relatedlistnode->actions->action)) {
+			$actions = Array();
+			foreach($relatedlistnode->actions->action as $actionnode) {
+				$actions[] = "$actionnode";
 			}
+		}			
+		if($relModuleInstance) {
+			$moduleInstance->setRelatedList($relModuleInstance, "$label", $actions, "$relatedlistnode->function");
+		}
+		return $relModuleInstance;
+	}
+
+	/**
+	 * Import custom links of the module.
+	 * @access private
+	 */
+	function import_CustomLinks($modulenode, $moduleInstance) {
+		if(empty($modulenode->customlinks) || empty($modulenode->customlinks->customlink)) return;
+
+		foreach($modulenode->customlinks->customlink as $customlinknode) {
+			$moduleInstance->addLink(
+				"$customlinknode->linktype",
+				"$customlinknode->linklabel",
+				"$customlinknode->linkurl",
+				"$customlinknode->linkicon",
+				"$customlinknode->sequence"	
+			);
 		}
 	}
 }			

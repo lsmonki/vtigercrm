@@ -13,6 +13,7 @@ include_once('vtlib/Vtiger/Field.php');
 include_once('vtlib/Vtiger/Filter.php');
 include_once('vtlib/Vtiger/Profile.php');
 include_once('vtlib/Vtiger/Menu.php');
+include_once('vtlib/Vtiger/Link.php');
 include_once('vtlib/Vtiger/Event.php');
 include_once('vtlib/Vtiger/Version.php');
 
@@ -25,6 +26,7 @@ class Vtiger_ModuleBasic {
 	var $id = false;
 	var $name = false;
 	var $label = false;
+	var $version= 0;
 
 	var $presence = 0;
 	var $ownedby = 0; // 0 - Sharing Access Enabled, 1 - Sharing Access Disabled
@@ -51,16 +53,17 @@ class Vtiger_ModuleBasic {
 	 * @access private
 	 */
 	function initialize($valuemap) {
-		$this->id = $valuemap[tabid];
-		$this->name=$valuemap[name];
-		$this->label=$valuemap[tablabel];
+		$this->id = $valuemap['tabid'];
+		$this->name=$valuemap['name'];
+		$this->label=$valuemap['tablabel'];
+		$this->version=$valuemap['version'];
 
-		$this->presence = $valuemap[presence];
-		$this->ownedby = $valuemap[ownedby];
-		$this->tabsequence = $valuemap[tabsequence];
+		$this->presence = $valuemap['presence'];
+		$this->ownedby = $valuemap['ownedby'];
+		$this->tabsequence = $valuemap['tabsequence'];
 		
 		if(Vtiger_Version::check('5.1.0', '>=')) {
-			$this->isentitytype = $valuemap[isentitytype];
+			$this->isentitytype = $valuemap['isentitytype'];
 		}
 
 		if($this->isentitytype) {
@@ -106,6 +109,14 @@ class Vtiger_ModuleBasic {
 	}
 
 	/**
+	 * Initialize vtiger schema changes.
+	 */
+	function __handleVtigerCoreSchemaChanges() {
+		// Add version column to the table first
+		Vtiger_Utils::AddColumn('vtiger_tab', 'version', ' VARCHAR(10)');
+	}
+
+	/**
 	 * Create this module instance
 	 * @access private
 	 */
@@ -120,9 +131,11 @@ class Vtiger_ModuleBasic {
 
 		$customized = 1; // To indicate this is a Custom Module
 
+		$this->__handleVtigerCoreSchemaChanges();
+
 		$adb->pquery("INSERT INTO vtiger_tab (tabid,name,presence,tabsequence,tablabel,modifiedby,
-			modifiedtime,customized,ownedby) VALUES (?,?,?,?,?,?,?,?,?)", 
-			Array($this->id, $this->name, $this->presence, $this->tabsequence, $this->label, NULL, NULL, $customized, $this->ownedby));
+			modifiedtime,customized,ownedby,version) VALUES (?,?,?,?,?,?,?,?,?,?)", 
+			Array($this->id, $this->name, $this->presence, $this->tabsequence, $this->label, NULL, NULL, $customized, $this->ownedby, $this->version));
 
 		if(Vtiger_Version::check('5.1.0','>=')) {
 			$useisentitytype = $this->isentitytype? 1 : 0;
@@ -167,6 +180,18 @@ class Vtiger_ModuleBasic {
 	}
 
 	/**
+	 * Update module version information
+	 * @access private
+	 */
+	function __updateVersion($newversion) {
+		$this->__handleVtigerCoreSchemaChanges();
+		global $adb;
+		$adb->pquery("UPDATE vtiger_tab SET version=? WHERE tabid=?", Array($newversion, $this->id));
+		$this->version = $newversion;		
+		self::log("Updating version to $newversion ... DONE");
+	}
+
+	/**
 	 * Save this instance
 	 */
 	function save() {
@@ -186,7 +211,8 @@ class Vtiger_ModuleBasic {
 			Vtiger_Filter::deleteForModule($this);
 			Vtiger_Block::deleteForModule($this);
 		}
-		$this->__delete();		
+		$this->__delete();
+		Vtiger_Link::deleteAll($this->id);
 		Vtiger_Menu::detachModule($this);
 		self::syncfile();
 	}

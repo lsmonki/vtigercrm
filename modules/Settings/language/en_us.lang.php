@@ -1128,6 +1128,20 @@ $mod_strings = Array(
 'VTLIB_LBL_IMPORTING_MODULE_START'=>'Importing Module ...',
 'VTLIB_LBL_WARNING'=>'Warning',
 'VTLIB_LBL_NOT_WRITEABLE'=>'not writeable',
+'VTLIB_LBL_PACKAGE_VERSION'=>'Version',
+
+'LBL_UPGRADE'=>'Upgrade',
+'VTLIB_LBL_UPDATE_FAILURE'=>'Upgrade Failure',
+'VTLIB_LBL_MODULENAME_MISMATCH'=>'Module name mistmach',
+'VTLIB_LBL_TRY_AGAIN'=>'Try Again',
+'VTLIB_LBL_VERIFY_UPDATE_DETAILS'=>'Verify Upgrade Details',
+'VTLIB_LBL_PROCEED_WITH_UPDATE'=>'Do you want to proceed with the upgrade?',
+'VTLIB_LBL_UPDAING_MODULE_START'=>'Updating module...',
+'VTLIB_LBL_EXISTS'=>'Exists',
+'VTLIB_LBL_NOT_PRESENT'=>'Not Present',
+'VTLIB_LBL_INST_VERSION'=>'Installed Version',
+'VTLIB_LBL_MATCHES_PACKAGE_VERSION'=>'matches Package Version',
+'VTLIB_LBL_CANNOT_UPGRADE'=>'Cannot updgrade!',
 // END
 
 //User group fixes

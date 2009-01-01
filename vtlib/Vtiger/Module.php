@@ -97,6 +97,28 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 	}
 
 	/**
+	 * Add custom link for a module page
+	 * @param String Type can be like 'DETAILVIEW', 'LISTVIEW' etc.. 
+ 	 * @param String Label to use for display
+	 * @param String HREF value to use for generated link 
+	 * @param String Path to the image file (relative or absolute)
+	 * @param Integer Sequence of appearance
+	 *
+	 * NOTE: $url can have variables like $MODULE (module for which link is associated), 
+	 * $RECORD (record on which link is dispalyed)
+	 */
+	function addLink($type, $label, $url, $iconpath='', $sequence=0) {
+		Vtiger_Link::addLink($this->id, $type, $label, $url, $iconpath, $sequence);
+	}
+
+	/**
+	 * Get all the custom links related to this module.
+	 */
+	function getLinks() {
+		return Vtiger_Link::getAll($this->id);
+	}
+
+	/**
 	 * Get instance by id or name
 	 * @param mixed id or name of the module
 	 */

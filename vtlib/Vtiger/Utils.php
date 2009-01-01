@@ -133,9 +133,15 @@ class Vtiger_Utils {
 	 * Get SQL query
 	 * @param String SQL query statement
 	 */
-	static function ExecuteQuery($sqlquery) {
+	static function ExecuteQuery($sqlquery, $supressdie=false) {
 		global $adb;
+		$old_dieOnError = $adb->dieOnError;
+
+		if($supressdie) $adb->dieOnError = false;
+
 		$adb->query($sqlquery);
+
+		$adb->dieOnError = $old_dieOnError;
 	}
 
 	/**
@@ -152,6 +158,29 @@ class Vtiger_Utils {
 			$sql = substr($sql, 0, $lastIndex+1);
 		}
 		return $sql;
+	}
+
+	/**
+	 * Check if the given SQL is a CREATE statement
+	 * @param String SQL String
+	 */
+	static function IsCreateSql($sql) {
+		if(preg_match('/(CREATE TABLE)/', strtoupper($sql))) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Check if the given SQL is destructive (DELETE's DATA)
+	 * @param String SQL String
+	 */
+	static function IsDestructiveSql($sql) {
+		if(preg_match('/(DROP TABLE)|(DROP COLUMN)|(DELETE FROM)/', 
+			strtoupper($sql))) {
+			return true;
+		}
+		return false;
 	}
 }
 ?>
