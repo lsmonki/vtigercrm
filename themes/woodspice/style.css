@@ -122,7 +122,7 @@ input:disabled {
 	border-left:2px dotted #aaaaaa;
 	border-right:2px dotted #aaaaaa;
 	background-color:#fff6cf;
-	background-image:url(images/searchUIBg.gif);
+	background-image:url(images/searchuibg.gif);
 }
 
 .searchUIAdv3{
@@ -166,7 +166,7 @@ input:disabled {
 }
 
 .showPanelBg {
-	background:url(images/showPanelTopBg.gif) repeat-x;
+	background:url(../images/showPanelTopBg.gif) repeat-x;
 }
 
 a {
@@ -563,7 +563,7 @@ a:hover {
 }
 
 .dash_row_sel{
-	background-image:url(images/dash_sel_chart.jpg);
+	background-image:url(../images/dash_sel_chart.jpg);
 	background-repeat:no-repeat;
 	background-position:center;
 	width:26px;height:26px;
@@ -575,7 +575,7 @@ a:hover {
 }
 
 .dash_row_unsel{
-	background-image:url(images/dash_unsel_chart.jpg);
+	background-image:url(../images/dash_unsel_chart.jpg);
 	background-repeat:no-repeat;
 	background-position:center;
 	width:26px;height:26px;
@@ -600,7 +600,7 @@ a:hover {
 }
 
 .dash_btm{
-	background-image:url(images/dash_btm_center.jpg);
+	background-image:url(../images/dash_btm_center.jpg);
 	background-repeat:repeat-x;
 	position:top;
 }
@@ -778,28 +778,28 @@ a.submenu:Hover{
 }
 
 .calcBackBtn {
-	background: url(images/calc_back_btn.gif) no-repeat;
+	background: url(../images/calc_back_btn.gif) no-repeat;
 	width:25px;
 }
 
 .calcBlackBtn {
-	background: url(images/calc_black_btn.gif) no-repeat;
+	background: url(../images/calc_black_btn.gif) no-repeat;
 	width:25px;
 }
 
 .calcGreyBtn {
-	background: url(images/calc_grey_btn.gif) no-repeat;
+	background: url(../images/calc_grey_btn.gif) no-repeat;
 	width:25px;
 }
 
 .calcCancBtn {
-	background: url(images/calc_canc_btn.gif) no-repeat;
+	background: url(../images/calc_canc_btn.gif) no-repeat;
 	width:25px;
 	
 }
 
 .calcMemBtn {
-	background: url(images/calc_mem_btn.gif) no-repeat;
+	background: url(../images/calc_mem_btn.gif) no-repeat;
 	width:25px;
 }
 
@@ -821,7 +821,7 @@ a.submenu:Hover{
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:12px;
 	color:#FFFFFF;
-	background-image:url(images/rssHeader.gif);
+	background-image:url(../images/rssHeader.gif);
 	background-position:top left;
 	background-repeat:repeat-x;
 	height:27px;
@@ -833,7 +833,7 @@ a.submenu:Hover{
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:12px;
 	color:#FFFFFF;
-	background-image:url(images/rssdelete.gif);
+	background-image:url(../images/rssdelete.gif);
 	background-position:top left;
 	background-repeat:repeat-x;
 	height:27px;
@@ -882,7 +882,7 @@ a.submenu:Hover{
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:12px;
 	color:#000000;
-	background-image:url(images/rssforward.gif);
+	background-image:url(../images/rssforward.gif);
 	background-position:top left;
 	background-repeat:repeat-x;
 	height:27px;
@@ -1221,7 +1221,7 @@ a.alpha:Hover{
     	z-index:1000001;
     	display:none;
     	padding:10px;
-    	background:#ffffff url(images/layerPopUpBg.gif);
+    	background:#ffffff url(../images/layerPopUpBg.gif);
 }
 
 
@@ -1322,7 +1322,7 @@ a.allMnu:Hover{
 	border-left: 1px solid #939271; 
 	border-right: 1px solid #939271; 
 	border-bottom: 1px solid #939271; 
-	background:#fefefe url(images/layerPopupBg.gif);
+	background:#fefefe url(../images/layerPopupBg.gif);
 }
 
 .calTopRight {
@@ -1393,7 +1393,7 @@ a.calMnu:Hover{
 	font-weight:bold;
 	padding-left:10px;
 	padding-right:10px;
-	background-image:url(images/cal_nav.gif);
+	background-image:url(../images/cal_nav.gif);
 	background-repeat:repeat-x;
 }
 
@@ -1747,7 +1747,7 @@ ul {
 
 .settingsSelectedUI {
 	padding:10px;
-	background:url(images/settingsSelUIBg.gif) repeat-x;
+	background:url(../images/settingsSelUIBg.gif) repeat-x;
 	background-color:#ffffff;
 }
 
@@ -1988,7 +1988,7 @@ textarea {
 /* Layer Popup */
 .layerPopup {
 	border:3px solid #939271;
-	background:#fffff5 url(images/layerPopupBg.gif) ;
+	background:#fffff5 url(../images/layerPopupBg.gif) ;
 	position:absolute;
 }
 
@@ -2013,7 +2013,7 @@ textarea {
 
 .homePageMatrixHdr {
 	border-bottom:1px solid #d3d2c1;
-	background:#fffff5 url(images/layerPopupBg.gif) ;
+	background:#fffff5 url(../images/layerPopupBg.gif) ;
 }
 
 .reportsListTable {
@@ -2036,7 +2036,7 @@ textarea {
 }
 
 .importLeadUI{
-	background:#fffff5 url(images/layerPopupBg.gif) ;
+	background:#fffff5 url(../images/layerPopupBg.gif) ;
 }
 
 a.customMnu{
@@ -2188,31 +2188,31 @@ a.drop_down:Hover{
 .show_tab{display:inline-table;}
 
 .winmarkModulesdef{
-    background-image:url(images/windowmarkModules.jpg);
+    background-image:url(../images/windowmarkModules.jpg);
     background-position:top right;
     background-repeat:no-repeat;
 }
 
 .winmarkModulesusr{
-    background-image:url(images/windowmarkModulesusr.jpg);
+    background-image:url(../images/windowmarkModulesusr.jpg);
     background-position:top right;
     background-repeat:no-repeat;
 }
 
 .winmarkRSS{
-    background-image:url(images/windowmarkRSS.jpg);
+    background-image:url(../images/windowmarkRSS.jpg);
     background-position:top right;
     background-repeat:no-repeat;
 }
 
 .winmarkDashboardusr{
-    background-image:url(images/windowmarkDashboardusr.jpg);
+    background-image:url(../images/windowmarkDashboardusr.jpg);
     background-position:top right;
     background-repeat:no-repeat;
 }
 
 .winmarkDashboarddef{
-    background-image:url(images/windowmarkDashboard.jpg);
+    background-image:url(../images/windowmarkDashboard.jpg);
     background-position:top right;
     background-repeat:no-repeat;
 }

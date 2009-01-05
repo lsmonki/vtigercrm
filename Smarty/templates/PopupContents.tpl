@@ -57,7 +57,7 @@
                         <div style="border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 99%;position: relative; z-index: 10000000;">
                         <table border="0" cellpadding="5" cellspacing="0" width="98%">
                                 <tr>
-                                        <td rowspan="2" width="25%"><img src="{$IMAGE_PATH}empty.jpg" height="60" width="61%"></td>
+                                        <td rowspan="2" width="25%"><img src="themes/images/empty.jpg" height="60" width="61%"></td>
                                         {if $recid_var_value neq '' && $mod_var_value neq '' && $RECORD_COUNTS eq 0 }
 					<script>redirectWhenNoRelatedRecordsFound();</script>
                                         <td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$APP[$MODULE]} {$APP.RELATED} !</td>

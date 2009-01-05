@@ -102,8 +102,8 @@ $convertlead = '<form name="ConvertLead" method="POST" action="index.php">
 	<div id="orgLay" style="display: block;" class="layerPopup" >
 	<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 		<tr>
-			<td class="genHeaderSmall" align="left"><IMG src="'.$image_path.'Leads.gif">'.$mod_strings['LBL_CONVERT_LEAD'].' '.$firstname.' '.$lastname.'</td>
-			<td align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'.$image_path.'close.gif" align="absmiddle" border="0"></a></td>
+			<td class="genHeaderSmall" align="left"><IMG src="themes/images/Leads.gif">'.$mod_strings['LBL_CONVERT_LEAD'].' '.$firstname.' '.$lastname.'</td>
+			<td align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="themes/images/close.gif" align="absmiddle" border="0"></a></td>
 		</tr>
 		</table>
 	
@@ -168,7 +168,7 @@ $convertlead .='<tr>
 							<td align="right" class="dvtCellLabel"><font color="red">*</font>'.$mod_strings['LBL_POTENTIAL_CLOSE_DATE'].'</td>
 							<td class="dvtCellInfo">
 								<input name="closedate" style="border: 1px solid rgb(186, 186, 186);" id="jscal_field_closedate" type="text" tabindex="4" size="10" maxlength="10" value="'.$focus->closedate.'">
-								<img src="'.$image_path.'calendar.gif" id="jscal_trigger_closedate" >
+								<img src="themes/'.$theme.'/images/btnL3Calendar.gif" id="jscal_trigger_closedate" >
 								<font size=1><em old="(yyyy-mm-dd)">('.$current_user->date_format.')</em></font>
 							<script id="conv_leadcal">
 								getCalendarPopup(\'jscal_trigger_closedate\',\'jscal_field_closedate\',\''.$date_format.'\')

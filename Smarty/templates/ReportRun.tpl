@@ -23,7 +23,7 @@
 
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-    <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+    <td valign="top"><img src="themes/images/showPanelTopLeft.gif"></td>
 	<td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 	
 	
@@ -109,7 +109,7 @@
 				<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
 					<td align=left><input name="startdate" id="jscal_field_date_start" type="text" size="10" class="importBox" style="width:70px;" value="{$STARTDATE}"></td>
-					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start"><font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
+					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}btnL3Calendar.gif" id="jscal_trigger_date_start"><font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
 						<script type="text/javascript">
 							Calendar.setup ({ldelim}
 							inputField : "jscal_field_date_start", ifFormat : "{$JS_DATEFORMAT}", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
@@ -125,7 +125,7 @@
 				<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
 					<td align=left><input name="enddate" id="jscal_field_date_end" type="text" size="10" class="importBox" style="width:70px;" value="{$ENDDATE}"></td>
-					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end"><font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
+					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}btnL3Calendar.gif" id="jscal_trigger_date_end"><font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
 						<script type="text/javascript">
 							Calendar.setup ({ldelim}
 							inputField : "jscal_field_date_end", ifFormat : "{$JS_DATEFORMAT}", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1
@@ -152,7 +152,7 @@
 <br>
 
 </td>
-<td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+<td valign="top"><img src="themes/images/showPanelTopRight.gif"></td>
 </tr>
 </table>
 

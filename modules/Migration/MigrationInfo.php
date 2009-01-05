@@ -38,7 +38,7 @@ $image_path=$theme_path."images/";
 			<td class="mailClientBg" style="padding-left:10px;padding-top:10px;vertical-align:top;">
 				<table width="100%"  border="0" cellpadding="5" cellspacing="0">
 				   <tr>
-					   <td width="10%"><img src="<?php echo $image_path; ?>migrate.gif" align="absmiddle"/></td>
+					   <td width="10%"><img src="themes/images/migrate.gif" align="absmiddle"/></td>
 					<td width="90%">
 						<span class="genHeaderBig">Migrate From Previous Version</span><br />
 						Update your new vtiger CRM 5 database with the data from previous installation<br />
@@ -52,7 +52,7 @@ $image_path=$theme_path."images/";
 						<div id="Mig_result" style="position:relative;border:2px solid #8BB73C;width:50%;left:25%;">
 							<table>
 							   <tr>
-								<td><img id="migration_image" src="<?php echo $image_path; ?>migration_sucess.jpg" align="absmiddle" style="display:none;"/></td>
+								<td><img id="migration_image" src="themes/images/migration_sucess.jpg" align="absmiddle" style="display:none;"/></td>
 								<td><span id="migration_message1" class="genHeaderBig"> Migration is in progress. Please wait...</span><br />
 								<span id="migration_message2" class="genHeaderGray">Your old data is now moving into new vtiger CRM</span></td>
 							   </tr>

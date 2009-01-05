@@ -17,7 +17,6 @@ require_once('include/utils/utils.php');
 global $mod_strings, $app_strings;
 global $theme;
 $theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
 
 $delete_user_id = $_REQUEST['record'];
 $delete_user_name = getUserName($delete_user_id);
@@ -32,7 +31,7 @@ $output ='<div id="DeleteLay" class="layerPopup">
 <table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 <tr>
 	<td class=layerPopupHeading " align="left">'.$mod_strings['LBL_DELETE'].' '.$mod_strings['LBL_USER'].'</td>
-	<td align="right" class="small"><img src="'.$image_path.'close.gif" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="document.getElementById(\'DeleteLay\').style.display=\'none\'";></td>
+	<td align="right" class="small"><img src="themes/images/close.gif" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="document.getElementById(\'DeleteLay\').style.display=\'none\'";></td>
 </tr>
 </table>
 <table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 

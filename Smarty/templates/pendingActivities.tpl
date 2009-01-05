@@ -14,14 +14,14 @@
 {assign var=label value=$ACTIVITIES.1.Title.0}
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="small">
         <tr>
-		<td><img src="{$IMAGE_PATH}pending_left.gif"></td>
-                <td width="100%" background="{$IMAGE_PATH}pendingEvents.gif" valign="bottom" style="background-repeat:repeat-x;">
+		<td><img src="themes/images/pending_left.gif"></td>
+                <td width="100%" background="themes/images/pendingEvents.gif" valign="bottom" style="background-repeat:repeat-x;">
                         <b class="fontBold">{$APP.$label}&nbsp;{$APP.LBL_PENDING_EVENTS}&nbsp;({$ACTIVITIES.1.noofactivities})</b><br />
                         <b>{$APP.LBL_SHOW}</b>
 	                       {$APP.LBL_TODAY}&nbsp;&nbsp;|&nbsp;&nbsp;<a href="index.php?action=ListView&module=Calendar&parenttab=My%20Home%20Page&viewname={$VIEWID}&from_homepage=pending_activities">{$APP.LBL_ALL}</a> 
 		</td>
 
-                <td><img src="{$IMAGE_PATH}pending_right.gif"></td>
+                <td><img src="themes/images/pending_right.gif"></td>
         </tr>
         <tr>
                 <td colspan="3" bgcolor="#FEF7C1" style="border-left:2px solid #A6A4A5;border-right:2px solid #A6A4A5;border-bottom:2px solid #A6A4A5;">

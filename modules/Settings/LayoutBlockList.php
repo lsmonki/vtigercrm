@@ -228,7 +228,7 @@ function getCFListEntries($module)
 	global $adb, $smarty;
 	global $theme;
 	$theme_path="themes/".$theme."/";
-	$image_path=$theme_path."images/";
+	$image_path="themes/images/";
 	
 	$dbQuery = "select blocklabel,blockid,display_status from vtiger_blocks where tabid=? order by sequence";
 	$result = $adb->pquery($dbQuery, array($tabid));

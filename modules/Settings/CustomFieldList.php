@@ -17,7 +17,7 @@ $smarty=new vtigerCRM_Smarty;
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
 $theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
+$image_path="themes/images/";
 $smarty->assign("IMAGE_PATH", $image_path);
 $module_array=getCustomFieldSupportedModules();
 
@@ -83,7 +83,7 @@ function getCFListEntries($module)
 	$tabid = getTabid($module);
 	global $adb,$app_strings,$theme;
 	$theme_path="themes/".$theme."/";
-	$image_path=$theme_path."images/";
+	$image_path="themes/images/";
 	$dbQuery = "select fieldid,columnname,fieldlabel,uitype,displaytype,vtiger_convertleadmapping.cfmid from vtiger_field left join vtiger_convertleadmapping on  vtiger_convertleadmapping.leadfid = vtiger_field.fieldid where tabid=? and generatedtype=2 order by sequence";
 	$result = $adb->pquery($dbQuery, array($tabid));
 	$row = $adb->fetch_array($result);

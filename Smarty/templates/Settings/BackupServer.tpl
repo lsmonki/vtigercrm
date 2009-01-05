@@ -14,7 +14,7 @@
 <strong>{if $BACKUP_RESULT neq ''} {$APP.LBL_BACKEDUPSUCCESSFULLY_TO_FILE} : {$BACKUP_RESULT}{/if}</strong>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="themes/images/showPanelTopLeft.gif"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 <br>
 														
@@ -23,7 +23,7 @@
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}backupserver.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
+					<td width=50 rowspan=2 valign=top><img src="themes/images/backupserver.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_BACKUP_SERVER_SETTINGS} </b></td>
 				</tr>
 				<tr>

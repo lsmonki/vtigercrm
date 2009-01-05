@@ -74,7 +74,7 @@ function UpdateProfile()
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="themes/images/showPanelTopLeft.gif"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
         <br>
 	<div align=center>
@@ -91,7 +91,7 @@ function UpdateProfile()
 				<!-- DISPLAY -->
 				<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tbody><tr>
-					<td rowspan="2" valign="top" width="50"><img src="{$IMAGE_PATH}ico-profile.gif" alt="{$MOD.LBL_PROFILES}" title="{$MOD.LBL_PROFILES}" border="0" height="48" width="48"></td>
+					<td rowspan="2" valign="top" width="50"><img src="themes/images/ico-profile.gif" alt="{$MOD.LBL_PROFILES}" title="{$MOD.LBL_PROFILES}" border="0" height="48" width="48"></td>
 					<td class="heading2" valign="bottom"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=ListProfiles&parenttab=Settings">{$CMOD.LBL_PROFILE_PRIVILEGES}</a> &gt; {$CMOD.LBL_VIEWING} &quot;{$PROFILE_NAME}&quot;</b></td>
 				</tr>
 				<tr>
@@ -107,9 +107,9 @@ function UpdateProfile()
                       <tbody><tr>
                         <td><table border="0" cellpadding="0" cellspacing="0" width="100%">
                             <tbody><tr class="small">
-                              <td><img src="{$IMAGE_PATH}prvPrfTopLeft.gif"></td>
+                              <td><img src="themes/images/prvPrfTopLeft.gif"></td>
                               <td class="prvPrfTopBg" width="100%"></td>
-                              <td><img src="{$IMAGE_PATH}prvPrfTopRight.gif"></td>
+                              <td><img src="themes/images/prvPrfTopRight.gif"></td>
                             </tr>
                           </tbody></table>
                             <table class="prvPrfOutline" border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -124,7 +124,7 @@ function UpdateProfile()
                                               <td><!-- Module name heading -->
                                                   <table class="small" border="0" cellpadding="2" cellspacing="0">
                                                     <tbody><tr>
-                                                      <td valign="top"><img src="{$IMAGE_PATH}prvPrfHdrArrow.gif"> </td>
+                                                      <td valign="top"><img src="themes/images/prvPrfHdrArrow.gif"> </td>
                                                       <td class="prvPrfBigText"><b> {$CMOD.LBL_DEFINE_PRIV_FOR} &lt;{$PROFILE_NAME}&gt; </b><br>
                                                       <font class="small">{$CMOD.LBL_USE_OPTION_TO_SET_PRIV}</font> </td>
                                                       <td class="small" style="padding-left: 10px;" align="right"></td>
@@ -265,7 +265,7 @@ function UpdateProfile()
         			  </div></td>
 			          <td class="small cellText" width="22%">&nbsp;<div align="center">
 				{if $FIELD_PRIVILEGES[$tabid] neq NULL}
-				<img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onclick="fnToggleVIew('{$modulename}_view')" border="0" height="16" width="40">
+				<img src="themes/images/showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onclick="fnToggleVIew('{$modulename}_view')" border="0" height="16" width="40">
 				{/if}
 				</div></td>
 				  </tr>
@@ -362,9 +362,9 @@ function UpdateProfile()
       </tbody></table>
       <table class="small" border="0" cellpadding="0" cellspacing="0" width="100%">
            <tbody><tr>
-                <td><img src="{$IMAGE_PATH}prvPrfBottomLeft.gif"></td>
+                <td><img src="themes/images/prvPrfBottomLeft.gif"></td>
                 <td class="prvPrfBottomBg" width="100%"></td>
-                <td><img src="{$IMAGE_PATH}prvPrfBottomRight.gif"></td>
+                <td><img src="themes/images/prvPrfBottomRight.gif"></td>
                 </tr>
             </tbody>
       </table></td>
@@ -389,7 +389,7 @@ function UpdateProfile()
 	</div>
 
 	</td>
-	<td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+	<td valign="top"><img src="themes/images/showPanelTopRight.gif"></td>
 	</tr>
 </tbody>
 </table>

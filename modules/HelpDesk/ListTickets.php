@@ -22,7 +22,7 @@ function getMyTickets($maxval,$calCnt)
 	global $adb;
 	$current_module_strings = return_module_language($current_language, 'HelpDesk');
 	$theme_path="themes/".$theme."/";
-	$image_path=$theme_path."images/";
+	$image_path="themes/images/";
 
 	$search_query="select vtiger_troubletickets.ticketid, parent_id, priority, vtiger_troubletickets.status, category, vtiger_troubletickets.title, vtiger_crmentity.description, update_log, version_id,
 	vtiger_crmentity.createdtime, vtiger_crmentity.modifiedtime, 

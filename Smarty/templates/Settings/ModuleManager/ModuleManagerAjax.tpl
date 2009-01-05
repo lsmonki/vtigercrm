@@ -56,27 +56,27 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 	{assign var="modulelabel" value=$modulename}
 	{if $APP.$modulename}{assign var="modulelabel" value=$APP.$modulename}{/if}
 	<tr>
-		<td class="cellText small" width="20px"><img src="{$IMAGE_PATH}uparrow.gif" border="0"></td>
+		<td class="cellText small" width="20px"><img src="themes/images/uparrow.gif" border="0"></td>
 		<td class="cellLabel small">{$modulelabel}</td>
 		<td class="cellText small" width="15px" align=center>
-			<a href="index.php?module=Settings&action=ModuleManager&module_update=Step1&src_module={$modulename}&parenttab=Settings"><img src="{$IMAGE_PATH}reload.gif" border="0" align="absmiddle" alt="{$MOD.LBL_UPGRADE} {$modulelabel}" title="{$MOD.LBL_UPGRADE} {$modulelabel}"></a>
+			<a href="index.php?module=Settings&action=ModuleManager&module_update=Step1&src_module={$modulename}&parenttab=Settings"><img src="themes/images/reload.gif" border="0" align="absmiddle" alt="{$MOD.LBL_UPGRADE} {$modulelabel}" title="{$MOD.LBL_UPGRADE} {$modulelabel}"></a>
 		</td>
 		<td class="cellText small" width="15px" align=center>
 		{if $modinfo.presence eq 0}
-			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_disable');"><img src="{$IMAGE_PATH}enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE} {$modulelabel}" title="{$MOD.LBL_DISABLE} {$modulelabel}"></a>
+			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_disable');"><img src="themes/images/enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE} {$modulelabel}" title="{$MOD.LBL_DISABLE} {$modulelabel}"></a>
 		{else}
-			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_enable');"><img src="{$IMAGE_PATH}disabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE} {$modulelabel}" title="{$MOD.LBL_ENABLE} {$modulelabel}"></a>
+			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_enable');"><img src="themes/images/disabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE} {$modulelabel}" title="{$MOD.LBL_ENABLE} {$modulelabel}"></a>
 		{/if}
 		</td>
 		<td class="cellText small" width="15px" align=center>
 			{if $modulename eq 'Calendar' || $modulename eq 'Home'}
 				<img src="{$IMAGE_PATH}menuDnArrow.gif" border="0" align="absmiddle">
 			{else}
-				<a href="index.php?modules=Settings&action=ModuleManagerExport&module_export={$modulename}"><img src="{$IMAGE_PATH}webmail_uparrow.gif" border="0" align="absmiddle" alt="{$APP.LBL_EXPORT} {$modulelabel}" title="{$APP.LBL_EXPORT} {$modulelabel}"></a>
+				<a href="index.php?modules=Settings&action=ModuleManagerExport&module_export={$modulename}"><img src="themes/images/webmail_uparrow.gif" border="0" align="absmiddle" alt="{$APP.LBL_EXPORT} {$modulelabel}" title="{$APP.LBL_EXPORT} {$modulelabel}"></a>
 			{/if}
 		</td>
 		<td class="cellText small" width="15px" align=center>
-			{if $modinfo.hassettings}<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$modulename}&parenttab=Settings"><img src="{$IMAGE_PATH}Settings.gif" border="0" align="absmiddle" alt="{$modulelabel} {$MOD.LBL_SETTINGS}" title="{$modulelabel} {$MOD.LBL_SETTINGS}"></a>
+			{if $modinfo.hassettings}<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$modulename}&parenttab=Settings"><img src="themes/images/Settings.gif" border="0" align="absmiddle" alt="{$modulelabel} {$MOD.LBL_SETTINGS}" title="{$modulelabel} {$MOD.LBL_SETTINGS}"></a>
 			{else}&nbsp;{/if}
 		</td>
 	</tr>
@@ -87,16 +87,16 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 
 	{assign var="totalCustomModules" value=$totalCustomModules+1}
 	<tr>
-		<td class="cellText small"><img src="{$IMAGE_PATH}text.gif" border=0"></td>
+		<td class="cellText small"><img src="themes/images/text.gif" border=0"></td>
 		<td class="cellLabel small">{$langinfo.label}</td>
 		<td class="cellText small" width="15px" align=center>
-			<a href="index.php?module=Settings&action=ModuleManager&module_update=Step1&src_module={$langinfo.label}&parenttab=Settings"><img src="{$IMAGE_PATH}reload.gif" border="0" align="absmiddle" alt="{$MOD.LBL_UPGRADE} {$langinfo.label}" title="{$MOD.LBL_UPGRADE} {$langinfo.label}"></a>
+			<a href="index.php?module=Settings&action=ModuleManager&module_update=Step1&src_module={$langinfo.label}&parenttab=Settings"><img src="themes/images/reload.gif" border="0" align="absmiddle" alt="{$MOD.LBL_UPGRADE} {$langinfo.label}" title="{$MOD.LBL_UPGRADE} {$langinfo.label}"></a>
 		</td>
 		<td class="cellText small" width="15px" align=center>
 		{if $langinfo.active eq 1}
-			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$langprefix}', 'module_disable', 'language');"><img src="{$IMAGE_PATH}enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE} Language {$langinfo.label}" title="{$MOD.LBL_DISABLE} Language {$langinfo.label}"></a>
+			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$langprefix}', 'module_disable', 'language');"><img src="themes/images/enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE} Language {$langinfo.label}" title="{$MOD.LBL_DISABLE} Language {$langinfo.label}"></a>
 		{else}
-			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$langprefix}', 'module_enable', 'language');"><img src="{$IMAGE_PATH}disabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE} Language {$langinfo.label}" title="{$MOD.LBL_ENABLE} Language {$langinfo.label}"></a>
+			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$langprefix}', 'module_enable', 'language');"><img src="themes/images/disabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE} Language {$langinfo.label}" title="{$MOD.LBL_ENABLE} Language {$langinfo.label}"></a>
 		{/if}
 		</td>
 		<td class="cellText small" width="15px" align=center colspan=2>&nbsp;</td>
@@ -104,7 +104,7 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 			{if $modulename eq 'Calendar' || $modulename eq 'Home'}
 				<img src="{$IMAGE_PATH}menuDnArrow.gif" border="0" align="absmiddle">
 			{else}
-				<a href="index.php?modules=Settings&action=ModuleManagerExport&module_export={$modulename}"><img src="{$IMAGE_PATH}webmail_uparrow.gif" border="0" align="absmiddle" alt="{$APP.LBL_EXPORT} {$modulelabel}" title="{$APP.LBL_EXPORT} {$modulelabel}"></a>
+				<a href="index.php?modules=Settings&action=ModuleManagerExport&module_export={$modulename}"><img src="themes/images/webmail_uparrow.gif" border="0" align="absmiddle" alt="{$APP.LBL_EXPORT} {$modulelabel}" title="{$APP.LBL_EXPORT} {$modulelabel}"></a>
 			{/if}
 		</td-->
 	</tr>
@@ -135,9 +135,9 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 		<td class="cellLabel small" colspan=2>{$modulelabel}</td>
 		<td class="cellText small" width="15px" align=center>
 		{if $modinfo.presence eq 0}
-			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_disable');"><img src="{$IMAGE_PATH}enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE} {$modulelabel}" title="{$MOD.LBL_DISABLE} {$modulelabel}"></a>
+			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_disable');"><img src="themes/images/enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE} {$modulelabel}" title="{$MOD.LBL_DISABLE} {$modulelabel}"></a>
 		{else}
-			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_enable');"><img src="{$IMAGE_PATH}disabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE} {$modulelabel}" title="{$MOD.LBL_ENABLE} {$modulelabel}"></a>
+			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_enable');"><img src="themes/images/disabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE} {$modulelabel}" title="{$MOD.LBL_ENABLE} {$modulelabel}"></a>
 		{/if}
 		</td>
 		<td class="cellText small" width="15px" align=center>&nbsp;</td>
@@ -145,11 +145,11 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 			{if $modulename eq 'Calendar' || $modulename eq 'Home'}
 				<img src="{$IMAGE_PATH}menuDnArrow.gif" border="0" align="absmiddle">
 			{else}
-				<a href="index.php?modules=Settings&action=ModuleManagerExport&module_export={$modulename}"><img src="{$IMAGE_PATH}webmail_uparrow.gif" border="0" align="absmiddle" alt="{$APP.LBL_EXPORT} {$modulelabel}" title="{$APP.LBL_EXPORT} {$modulelabel}"></a>
+				<a href="index.php?modules=Settings&action=ModuleManagerExport&module_export={$modulename}"><img src="themes/images/webmail_uparrow.gif" border="0" align="absmiddle" alt="{$APP.LBL_EXPORT} {$modulelabel}" title="{$APP.LBL_EXPORT} {$modulelabel}"></a>
 			{/if}
 		</td-->
 		<td class="cellText small" width="15px" align=center>
-			{if $modinfo.hassettings}<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$modulename}&parenttab=Settings"><img src="{$IMAGE_PATH}Settings.gif" border="0" align="absmiddle" alt="{$modulelabel} {$MOD.LBL_SETTINGS}" title="{$modulelabel} {$MOD.LBL_SETTINGS}"></a>
+			{if $modinfo.hassettings}<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$modulename}&parenttab=Settings"><img src="themes/images/Settings.gif" border="0" align="absmiddle" alt="{$modulelabel} {$MOD.LBL_SETTINGS}" title="{$modulelabel} {$MOD.LBL_SETTINGS}"></a>
 			{else}&nbsp;{/if}
 		</td>
 	</tr>

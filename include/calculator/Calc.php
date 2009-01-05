@@ -34,7 +34,7 @@ $the_calc = <<<EOQ
               </table></td>
           </tr>
           <tr>
-            <td colspan="3"><!-- div align="center"><img src="$image_path/calc_logo.gif" width="80" height="17"></div--></td>
+            <td colspan="3"><!-- div align="center"><img src="../images/calc_logo.gif" width="80" height="17"></div--></td>
             <td width="25"> <input type="button" name="CE" class="calcCancBtn" value="CE" onClick="CECalc(); return false;">
             </td>
             <td width="25"> <input type="reset" name="C" class="calcCancBtn" value="C" onClick="ClearCalc(); return false;">

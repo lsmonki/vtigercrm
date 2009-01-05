@@ -16,7 +16,6 @@ global $mod_strings,$app_strings,$app_list_strings,$theme,$adb,$current_user;
 global $list_max_entries_per_page;
 
 $theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
 
 require_once($theme_path.'layout_utils.php');
 
@@ -39,7 +38,7 @@ else
 
 $output = '<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 			<tr><td width="60%" align="left" style="font-size:12px;font-weight:bold;">Jump to '.$app_strings[$sModule].':</td>
-			<td width="5%" align="right"><a href="javascript:fninvsh(\'lstRecordLayout\');"><img src="'.$image_path.'close.gif" border="0"  align="absmiddle" /></a></td>
+			<td width="5%" align="right"><a href="javascript:fninvsh(\'lstRecordLayout\');"><img src="themes/images/close.gif" border="0"  align="absmiddle" /></a></td>
 			</tr>
 			</table><table border=0 cellspacing=0 cellpadding=0 width=100% align=center> 
 							<tr>

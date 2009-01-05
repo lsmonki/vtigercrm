@@ -26,17 +26,17 @@
 							  				</td>
 											<td class="colHeader small"  align='right'> 
 												{if $smarty.foreach.outer.first}
-												  <img src="{$IMAGE_PATH}arrow_down.png" border="0" style="cursor:pointer;" onclick="changeBlockorder(this,'block_down','{$entries.tabid}','{$entries.blockid}') " alt="change order" title="change order">
+												<img src="{$IMAGE_PATH}arrow_down.png" border="0" style="cursor:pointer;" onclick="changeBlockorder(this,'block_down','{$entries.tabid}','{$entries.blockid}') " alt="change order" title="change order">
 												{elseif $smarty.foreach.outer.last}
-												 <img src="{$IMAGE_PATH}arrow_up.png" border="0" style="cursor:pointer;" onclick="changeBlockorder(this,'block_up','{$entries.tabid}','{$entries.blockid}') " alt="Up" title="Up">
+												<img src="{$IMAGE_PATH}arrow_up.png" border="0" style="cursor:pointer;" onclick="changeBlockorder(this,'block_up','{$entries.tabid}','{$entries.blockid}') " alt="Up" title="Up">
 												{else}
-												 <img src="{$IMAGE_PATH}arrow_up.png" border="0" style="cursor:pointer;" onclick="changeBlockorder(this,'block_up','{$entries.tabid}','{$entries.blockid}') " alt="Up" title="Up">&nbsp;
-												 <img src="{$IMAGE_PATH}arrow_down.png" border="0" style="cursor:pointer;" onclick="changeBlockorder(this,'block_down','{$entries.tabid}','{$entries.blockid}') " alt="Down" title="Down">
+												<img src="{$IMAGE_PATH}arrow_up.png" border="0" style="cursor:pointer;" onclick="changeBlockorder(this,'block_up','{$entries.tabid}','{$entries.blockid}') " alt="Up" title="Up">&nbsp;
+												<img src="{$IMAGE_PATH}arrow_down.png" border="0" style="cursor:pointer;" onclick="changeBlockorder(this,'block_down','{$entries.tabid}','{$entries.blockid}') " alt="Down" title="Down">
 												{/if}
 										
 												&nbsp;&nbsp;<img src="{$IMAGE_PATH}plus_layout.gif" border="0" style="cursor:pointer;" onclick="fnvshobj(this,'createcf');getCreateCustomBlockForm('{$MODULE}','{$entries.blockselect}','{$entries.tabid}','','add')" alt="Add" title="Add"/>&nbsp;&nbsp;
 												{if $entries.customblockflag!=0}
-												<img style="cursor:pointer;" onClick="fnvshobj(this,'createcf');deleteCustomBlock('{$MODULE}', '{$entries.blockid}', '{$entries.tabid}','{$entries.blocklabel}','{$entries.no}')" src="{$IMAGE_PATH}delete.gif" border="0"  alt="Delete" title="Delete"/>
+												<img style="cursor:pointer;" onClick="fnvshobj(this,'createcf');deleteCustomBlock('{$MODULE}', '{$entries.blockid}', '{$entries.tabid}','{$entries.blocklabel}','{$entries.no}')" src="themes/images/delete.gif" border="0"  alt="Delete" title="Delete"/>
 												{/if}
 												
 												<select name="display_status" align='right' style="border:1px solid #666666;font-family:Arial, Helvetica, sans-serif;font-size:11px; width:auto" onChange="changeShowstatus(this,'{$entries.tabid}','{$entries.blockid}',this.value)" id='display_status'>
@@ -65,14 +65,14 @@
 							  		<!--&nbsp;&nbsp;<img src="{$IMAGE_PATH}plus_layout.gif" border="0" style="cursor:pointer;" onclick="fnvshobj(this,'createcf');getCreateCustomFieldForm('{$MODULE}','{$value.blockid}','{$value.tabid}','','{$entries.blocklabel}','{$value.fieldselect}','')"  alt="Add" title="Add"/>-->
 	
 									{if $entries.no!=1}
-											&nbsp&nbsp;<img src="{$IMAGE_PATH}arrow_right.png" border="0" style="cursor:pointer;" onclick="changeFieldorder(this,'Right','{$value.fieldselect}','{$value.blockid}')" alt="Right" title="Right"/>
+											&nbsp&nbsp;<img src="themes/images/arrow_right.png" border="0" style="cursor:pointer;" onclick="changeFieldorder(this,'Right','{$value.fieldselect}','{$value.blockid}')" alt="Right" title="Right"/>
 									{/if}							
 							  		</td>
 									{if $value.no % 2 == 0}<td style="border-left:solid 1px #ccc; width:1px;"></td>	{/if}
 									
 								{elseif $smarty.foreach.inner.last}
 									{if $value.no % 2 != 0}
-										<img src="{$IMAGE_PATH}arrow_left.png" border="0" style="cursor:pointer;" onclick="changeFieldorder(this,'Left','{$value.fieldselect}','{$value.blockid}')" alt="Left" title="Left"/>
+										<img src="themes/images/arrow_left.png" border="0" style="cursor:pointer;" onclick="changeFieldorder(this,'Left','{$value.fieldselect}','{$value.blockid}')" alt="Left" title="Left"/>
 									{/if}						 
 							 		&nbsp;&nbsp;<img src="{$IMAGE_PATH}arrow_up.png" border="0" style="cursor:pointer;" onclick="changeFieldorder(this,'up','{$value.fieldselect}','{$value.blockid}') " alt="Up" title="Up"/>&nbsp;&nbsp;{$value.label}&nbsp;&nbsp;</td>
 							 		<td width="19%" align = right>
@@ -85,7 +85,7 @@
 									
 								{else}												
 									{if $value.no % 2 != 0}
-										<img src="{$IMAGE_PATH}arrow_left.png" border="0" style="cursor:pointer;" onclick="changeFieldorder(this,'Left','{$value.fieldselect}','{$value.blockid}')" alt="Left" title="Left"/>
+										<img src="themes/images/arrow_left.png" border="0" style="cursor:pointer;" onclick="changeFieldorder(this,'Left','{$value.fieldselect}','{$value.blockid}')" alt="Left" title="Left"/>
 									{/if}
 									{if $value.no != 1}
 									 	&nbsp;&nbsp;<img src="{$IMAGE_PATH}arrow_up.png" border="0" style="cursor:pointer;" onclick="changeFieldorder(this,'up','{$value.fieldselect}','{$value.blockid}')" alt="Up" title="Up"/>
@@ -99,7 +99,7 @@
 									<!--&nbsp;&nbsp;<img src="{$IMAGE_PATH}plus_layout.gif" border="0" style="cursor:pointer;" onclick="fnvshobj(this,'createcf');getCreateCustomFieldForm('{$MODULE}','{$value.blockid}','{$value.tabid}','','{$entries.blocklabel}','{$value.fieldselect}','')" alt="Add" title="Add"/>-->
 							
 									{if $value.no % 2 == 0}
-										&nbsp&nbsp;<img src="{$IMAGE_PATH}arrow_right.png" border="0" style="cursor:pointer;" onclick="changeFieldorder(this,'Right','{$value.fieldselect}','{$value.blockid}')" alt="Right" title="Right"/>
+										&nbsp&nbsp;<img src="themes/images/arrow_right.png" border="0" style="cursor:pointer;" onclick="changeFieldorder(this,'Right','{$value.fieldselect}','{$value.blockid}')" alt="Right" title="Right"/>
 									{/if}							
 									</td>
 									{if $value.no % 2 == 0}

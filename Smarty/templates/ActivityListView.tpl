@@ -221,7 +221,7 @@ function alphabetic(module,url,dataid)
                                         <table border=0 cellspacing=0 cellpadding=0 width=100%>
                                         <tr>
                                                 <td align=center>
-                                                <img src="{$IMAGE_PATH}searching.gif" alt="{$APP.LBL_SEARCHING}"  title="{$APP.LBL_SEARCHING}">
+                                                <img src="themes/images/searching.gif" alt="{$APP.LBL_SEARCHING}"  title="{$APP.LBL_SEARCHING}">
                                                 </td>
                                         </tr>
                                         </table>
@@ -237,7 +237,7 @@ function alphabetic(module,url,dataid)
 {*<!-- Contents -->*}
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
      <tr>
-        <td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign=top><img src="themes/images/showPanelTopLeft.gif"></td>
 
 	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
 	 <!-- SIMPLE SEARCH -->
@@ -247,7 +247,7 @@ function alphabetic(module,url,dataid)
 	<tr>
 		<td class="searchUIName small" nowrap align="left">
 		<span class="moduleName">{$APP.LBL_SEARCH}</span><br><span class="small"><a href="#" onClick="fnhide('searchAcc');show('advSearch');updatefOptions(document.getElementById('Fields0'), 'Condition0');document.basicSearch.searchtype.value='advance';">{$APP.LBL_GO_TO} {$APP.LNK_ADVANCED_SEARCH}</a></span>
-		<!-- <img src="{$IMAGE_PATH}basicSearchLens.gif" align="absmiddle" alt="{$APP.LNK_BASIC_SEARCH}" title="{$APP.LNK_BASIC_SEARCH}" border=0>&nbsp;&nbsp;-->
+		<!-- <img src="themes/images/basicSearchLens.gif" align="absmiddle" alt="{$APP.LNK_BASIC_SEARCH}" title="{$APP.LNK_BASIC_SEARCH}" border=0>&nbsp;&nbsp;-->
 		</td>
 		<td class="small" nowrap align=right><b>{$APP.LBL_SEARCH_FOR}</b></td>
 		<td class="small"><input type="text"  class="txtBox" style="width:120px" name="search_text"></td>
@@ -454,7 +454,7 @@ function alphabetic(module,url,dataid)
 							
 							<table border="0" cellpadding="5" cellspacing="0" width="98%">
 							<tr>
-								<td rowspan="2" width="25%"><img src="{$IMAGE_PATH}empty.jpg" height="60" width="61"></td>
+								<td rowspan="2" width="25%"><img src="themes/images/empty.jpg" height="60" width="61"></td>
 								<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$APP.ACTIVITIES} {$APP.LBL_FOUND} !</span></td>
 							</tr>
 							<tr>
@@ -467,7 +467,7 @@ function alphabetic(module,url,dataid)
 							{else}
 							<table border="0" cellpadding="5" cellspacing="0" width="98%">
 							<tr>
-								<td rowspan="2" width="25%"><img src="{$IMAGE_PATH}empty.jpg" height="60" width="61"></td>
+								<td rowspan="2" width="25%"><img src="themes/images/empty.jpg" height="60" width="61"></td>
 								<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$APP.ACTIVITIES} {$APP.LBL_FOUND} !</span></td>
 							</tr>
 							<tr>
@@ -529,7 +529,7 @@ function alphabetic(module,url,dataid)
         </div>
 
      </td>
-        <td valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign=top><img src="themes/images/showPanelTopRight.gif"></td>
    </tr>
 </table>
 

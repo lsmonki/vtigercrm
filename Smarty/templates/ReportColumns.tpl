@@ -43,17 +43,17 @@ var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
 	<table border="0" cellpadding="0" cellspacing="0">
 		<tbody><tr> 
 		<td>
-		<img src="{$IMAGE_PATH}movecol_up.gif" onmouseover="this.src='{$IMAGE_PATH}movecol_up_over.gif'" onmouseout="this.src='{$IMAGE_PATH}movecol_up.gif'" onclick="moveUp()" onmousedown="this.src='{$IMAGE_PATH}movecol_up_down.gif'" align="absmiddle" border="0"> 
+		<img src="themes/images/movecol_up.gif" onmouseover="this.src='themes/images/movecol_up.gif'" onmouseout="this.src='themes/images/movecol_up.gif'" onclick="moveUp()" onmousedown="this.src='themes/images/movecol_up.gif'" align="absmiddle" border="0"> 
 		</td>
 		</tr>
 		<tr> 
 		<td> 
-		<img src="{$IMAGE_PATH}movecol_down.gif" onmouseover="this.src='{$IMAGE_PATH}movecol_down_over.gif'" onmouseout="this.src='{$IMAGE_PATH}movecol_down.gif'" onclick="moveDown()" onmousedown="this.src='{$IMAGE_PATH}movecol_down_down.gif'" align="absmiddle" border="0"> 
+		<img src="themes/images/movecol_down.gif" onmouseover="this.src='themes/images/movecol_down.gif'" onmouseout="this.src='themes/images/movecol_down.gif'" onclick="moveDown()" onmousedown="this.src='themes/images/movecol_down.gif'" align="absmiddle" border="0"> 
 		</td>
 		</tr>
 		<tr> 
 		<td>
-		<img src="{$IMAGE_PATH}movecol_del.gif" onmouseover="this.src='{$IMAGE_PATH}movecol_del_over.gif'" onmouseout="this.src='{$IMAGE_PATH}movecol_del.gif'" onclick="delColumn()" onmousedown="this.src='{$IMAGE_PATH}movecol_del_down.gif'" align="absmiddle" border="0">
+		<img src="themes/images/movecol_del.gif" onmouseover="this.src='themes/images/movecol_del.gif'" onmouseout="this.src='themes/images/movecol_del.gif'" onclick="delColumn()" onmousedown="this.src='themes/images/movecol_del.gif'" align="absmiddle" border="0">
 		</td>
 		</tr>
 		</tbody>

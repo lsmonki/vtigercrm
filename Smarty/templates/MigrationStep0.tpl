@@ -72,7 +72,7 @@ function checkDataConversion()
 					<td class="mailClientBg" style="padding-left:10px;padding-top:10px;vertical-align:top;">
 						<table width="100%"  border="0" cellpadding="5" cellspacing="0" class="small">
 					   		<tr>
-								<td width="10%"><img src="{$IMAGE_PATH}migrate.gif" align="absmiddle"/></td>
+								<td width="10%"><img src="themes/images/migrate.gif" align="absmiddle"/></td>
 								<td width="90%">
 									<span class="genHeaderBig">{$MOD.LBL_UPGRADE_VTIGER}</span><br />
 										({$MOD.LBL_UPGRADE_FROM_VTIGER_5X})
@@ -86,13 +86,13 @@ function checkDataConversion()
 									<table width="40%" cellpadding="0" cellspacing="5" style="border: 1px solid #777;">
 										<tr><th>vtigerCRM Charset</th><th>Database Charset</th></tr>
 										<tr><th>{$CONFIG_CHARSET}
-											{if $CONFIG_STATUS eq '1'} <img src="{$IMAGE_PATH}/yes.gif" /> 
-											{else} <img src="{$IMAGE_PATH}/no.gif" /> 
+											{if $CONFIG_STATUS eq '1'} <img src="themes/images/yes.gif" /> 
+											{else} <img src="themes/images/no.gif" /> 
 											{/if}
 											</th>
 											<th>{$DB_CHARSET}
-												{if $DB_STATUS eq '1'} <img src="{$IMAGE_PATH}/yes.gif" /> 
-												{else} <img src="{$IMAGE_PATH}/no.gif" /> 
+												{if $DB_STATUS eq '1'} <img src="themes/images/yes.gif" /> 
+												{else} <img src="themes/images/no.gif" /> 
 												{/if}
 											</th>
 										</tr>
@@ -102,8 +102,8 @@ function checkDataConversion()
 							<tr>
 	           					<td colspan="2" align="center">
 						            For UTF-8 Support:&nbsp;
-						            <img src="{$IMAGE_PATH}/no.gif" /> Not recommended setting &nbsp;
-						            <img src="{$IMAGE_PATH}/yes.gif" /> Meets recommended setting
+						            <img src="themes/images/no.gif" /> Not recommended setting &nbsp;
+						            <img src="themes/images/yes.gif" /> Meets recommended setting
 					           </td>
 					        </tr>
 						
@@ -203,13 +203,13 @@ function checkDataConversion()
 									<table width="40%" cellpadding="0" cellspacing="5" style="border: 1px solid #777;">
 										<tr><th>vtigerCRM Charset (config.inc.php)</th><th>Database Charset</th></tr>
 										<tr><th>{$CONFIG_CHARSET}
-											{if $CONFIG_STATUS eq '1'} <img src="{$IMAGE_PATH}/yes.gif" /> 
-											{else} <img src="{$IMAGE_PATH}/no.gif" /> 
+											{if $CONFIG_STATUS eq '1'} <img src="themes/images/yes.gif" /> 
+											{else} <img src="themes/images/no.gif" /> 
 											{/if}
 											</th>
 											<th>{$DB_CHARSET}
-												{if $DB_STATUS eq '1'} <img src="{$IMAGE_PATH}/yes.gif" /> 
-												{else} <img src="{$IMAGE_PATH}/no.gif" /> 
+												{if $DB_STATUS eq '1'} <img src="themes/images/yes.gif" /> 
+												{else} <img src="themes/images/no.gif" /> 
 												{/if}
 											</th>
 										</tr>
@@ -218,8 +218,8 @@ function checkDataConversion()
 							</tr>
 							<tr>
 	           					<td colspan="2" align="center">
-						            <img src="{$IMAGE_PATH}/no.gif" /> Not recommended setting for UTF-8 Support. &nbsp;
-						            <img src="{$IMAGE_PATH}/yes.gif" /> Meets recommended setting for UTF-8 Support.
+						            <img src="themes/images/no.gif" /> Not recommended setting for UTF-8 Support. &nbsp;
+						            <img src="themes/images/yes.gif" /> Meets recommended setting for UTF-8 Support.
 					           </td>
 					        </tr>
 						

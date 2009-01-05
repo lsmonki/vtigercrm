@@ -52,7 +52,7 @@
 		</td>
 		<td class="dvtCellInfo">
 		<input name="startdate" id="jscal_field_date_start" style="border: 1px solid rgb(186, 186, 186);" size="10" maxlength="10" value="{$STARTDATE_STD}" type="text" ><br>
-		<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start" >
+		<img src="{$IMAGE_PATH}btnL3Calendar.gif" id="jscal_trigger_date_start" >
 		<font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
 		<script type="text/javascript">
                                         Calendar.setup ({ldelim}
@@ -62,7 +62,7 @@
 		</td>
 		<td class="dvtCellInfo">
 		<input name="enddate" id="jscal_field_date_end" style="border: 1px solid rgb(186, 186, 186);" size="10" maxlength="10" value="{$ENDDATE_STD}" type="text"><br>
-                <img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end" >
+                <img src="{$IMAGE_PATH}btnL3Calendar.gif" id="jscal_trigger_date_end" >
 		<font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
                 <script type="text/javascript">
                                         Calendar.setup ({ldelim}

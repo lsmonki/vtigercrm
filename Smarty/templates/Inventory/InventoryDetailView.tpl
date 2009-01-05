@@ -51,14 +51,14 @@ function showHideStatus(sId,anchorImgId,sImagePath)
 	if(oObj.style.display == 'block')
 	{
 		oObj.style.display = 'none';
-		eval(document.getElementById(anchorImgId)).src = sImagePath + 'inactivate.gif';
+		eval(document.getElementById(anchorImgId)).src =  'themes/images/inactivate.gif';
 		eval(document.getElementById(anchorImgId)).alt = 'Display';
 		eval(document.getElementById(anchorImgId)).title = 'Display';
 	}
 	else
 	{
 		oObj.style.display = 'block';
-		eval(document.getElementById(anchorImgId)).src = sImagePath + 'activate.gif';
+		eval(document.getElementById(anchorImgId)).src =  'themes/images/activate.gif';
 		eval(document.getElementById(anchorImgId)).alt = 'Hide';
 		eval(document.getElementById(anchorImgId)).title = 'Hide';
 	}
@@ -128,7 +128,7 @@ window.onresize = setCoOrdinate;
 		<!-- Contents -->
 		<table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 		   <tr>
-			<td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+			<td valign=top><img src="themes/images/showPanelTopLeft.gif"></td>
 			<td class="showPanelBg" valign=top width=100%>
 			<!-- PUBLIC CONTENTS STARTS-->
 			   <div class="small" style="padding:20px" >
@@ -137,7 +137,7 @@ window.onresize = setCoOrdinate;
 				   <tr>
 					<td>
 			         {* Module Record numbering, used MOD_SEQ_ID instead of ID *}
-						<span class="lvtHeaderText"><font color="purple">[ {$MOD_SEQ_ID} ] </font>{$NAME} -  {$MOD[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span>
+						<span class="lvtHeaderText"><font color="purple">[ {$MOD_SEQ_ID} ] </font>{$NAME} -  {$MOD[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="themes/images/vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="themes/images/vtbusy.gif" border="0"></span>
 					</td>
 					<td>&nbsp;</td>
 				   </tr>
@@ -195,15 +195,15 @@ window.onresize = setCoOrdinate;
 			</td>
 			<td width=30% align=center>
 					{if $privrecord neq ''}
-						<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="{$IMAGE_PATH}b_left.gif">&nbsp;
+						<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="themes/images/b_left.gif">&nbsp;
 					{else}
-						<img title="{$APP.LNK_LIST_PREVIOUS}" src="{$IMAGE_PATH}b_left_disable.gif">
+						<img title="{$APP.LNK_LIST_PREVIOUS}" src="themes/images/b_left_disable.gif">
 					{/if}
 					&nbsp;
 					{if $nextrecord neq ''}
-						<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="{$IMAGE_PATH}b_right.gif">&nbsp;
+						<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="themes/images/b_right.gif">&nbsp;
 					{else}
-						<img title="{$APP.LNK_LIST_NEXT}" src="{$IMAGE_PATH}b_right_disable.gif">&nbsp;
+						<img title="{$APP.LNK_LIST_NEXT}" src="themes/images/b_right_disable.gif">&nbsp;
 					{/if}
 			</td>
 			<td width=35% align=right>
@@ -259,9 +259,9 @@ window.onresize = setCoOrdinate;
 							
 							<div style="float:left;font-weight:bold;"><div style="float:left;"><a href="javascript:showHideStatus('tbl{$header|replace:' ':''}','aid{$header|replace:' ':''}','{$IMAGE_PATH}');">
 							{if $BLOCKINITIALSTATUS[$header] eq 1}
-								<img id="aid{$header|replace:' ':''}" src="{$IMAGE_PATH}activate.gif" style="border: 0px solid #000000;" alt="Hide" title="Hide"/>
+								<img id="aid{$header|replace:' ':''}" src="themes/images/activate.gif" style="border: 0px solid #000000;" alt="Hide" title="Hide"/>
 							{else}
-							<img id="aid{$header|replace:' ':''}" src="{$IMAGE_PATH}inactivate.gif" style="border: 0px solid #000000;" alt="Display" title="Display"/>
+								<img id="aid{$header|replace:' ':''}" src="themes/images/inactivate.gif" style="border: 0px solid #000000;" alt="Display" title="Display"/>
 							{/if}
 								</a></div><b>&nbsp;
 						        	{$header}
@@ -343,15 +343,15 @@ window.onresize = setCoOrdinate;
 			</td>
 			<td width=30% align=center>
 					{if $privrecord neq ''}
-						<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="{$IMAGE_PATH}b_left.gif">&nbsp;
+						<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="themes/images/b_left.gif">&nbsp;
 					{else}
-						<img title="{$APP.LNK_LIST_PREVIOUS}" src="{$IMAGE_PATH}b_left_disable.gif">
+						<img title="{$APP.LNK_LIST_PREVIOUS}" src="themes/images/b_left_disable.gif">
 					{/if}
 					&nbsp;
 					{if $nextrecord neq ''}
-						<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="{$IMAGE_PATH}b_right.gif">&nbsp;
+						<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="themes/images/b_right.gif">&nbsp;
 					{else}
-						<img title="{$APP.LNK_LIST_NEXT}" src="{$IMAGE_PATH}b_right_disable.gif">&nbsp;
+						<img title="{$APP.LNK_LIST_NEXT}" src="themes/images/b_right_disable.gif">&nbsp;
 					{/if}
 			</td>
 			<td width=35% align=right>
@@ -419,7 +419,7 @@ window.onresize = setCoOrdinate;
 					<!-- PUBLIC CONTENTS STOPS-->
 					</td>
 					<td align=right valign=top>
-						<img src="{$IMAGE_PATH}showPanelTopRight.gif">
+						<img src="themes/images/showPanelTopRight.gif">
 					</td>
 				   </tr>
 				</table>

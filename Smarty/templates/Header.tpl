@@ -13,7 +13,7 @@
 <html>
 <head>
 	<title>{$CURRENT_USER} - {$APP.$CATEGORY} - {$APP.$MODULE_NAME} - {$APP.LBL_BROWSER_TITLE}</title>
-	<link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">	
+	<link REL="SHORTCUT ICON" HREF="themes/images/vtigercrm_icon.ico">	
 	<style type="text/css">@import url("themes/{$THEME}/style.css");</style>
 	<!-- ActivityReminder customization for callback -->
 	{literal}
@@ -90,14 +90,14 @@
 		<table border=0 cellspacing=0 cellpadding=0>
 
 		<tr>
-			<td class=tabSeperator><img src="{$IMAGEPATH}/spacer.gif" width=2px height=28px></td>		
+			<td class=tabSeperator><img src="themes/images/spacer.gif" width=2px height=28px></td>		
 			{foreach key=maintabs item=detail from=$HEADERS}
 				{if $maintabs ne $CATEGORY}
 				  <td class="tabUnSelected"  onmouseover="fnDropDown(this,'{$maintabs}_sub');" onmouseout="fnHideDrop('{$maintabs}_sub');" align="center" nowrap><a href="index.php?module={$detail[0]}&action=index&parenttab={$maintabs}">{$APP[$maintabs]}</a><img src="{$IMAGEPATH}/menuDnArrow.gif" border=0 style="padding-left:5px"></td>
-				  <td class="tabSeperator"><img src="{$IMAGEPATH}/spacer.gif"></td>
+				  <td class="tabSeperator"><img src="themes/images/spacer.gif"></td>
 				{else}
 				  <td class="tabSelected"  onmouseover="fnDropDown(this,'{$maintabs}_sub');" onmouseout="fnHideDrop('{$maintabs}_sub');" align="center" nowrap><a href="index.php?module={$detail[0]}&action=index&parenttab={$maintabs}">{$APP[$maintabs]}</a><img src="{$IMAGEPATH}/menuDnArrow.gif" border=0 style="padding-left:5px"></td>
-				  <td class="tabSeperator"><img src="{$IMAGEPATH}/spacer.gif"></td>
+				  <td class="tabSeperator"><img src="themes/images/spacer.gif"></td>
 				{/if}
 			{/foreach}
 			<td style="padding-left:10px" nowrap>
@@ -505,7 +505,7 @@ function openwin()
 	<tr style="cursor:move;">
 		<td colspan="2" class="mailClientBg small" id="Track_Handle"><strong>{$APP.LBL_LAST_VIEWED}</strong></td>
 		<td align="right" style="padding:5px;" class="mailClientBg small">
-		<a href="javascript:;"><img src="{$IMAGEPATH}close.gif" border="0"  onClick="fninvsh('tracker')" hspace="5" align="absmiddle"></a>
+		<a href="javascript:;"><img src="themes/images/close.gif" border="0"  onClick="fninvsh('tracker')" hspace="5" align="absmiddle"></a>
 		</td></tr>
 	</table>
 	<table border="0" cellpadding="5" cellspacing="0" width="200" class="hdrNameBg">

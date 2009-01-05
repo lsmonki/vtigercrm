@@ -135,7 +135,7 @@ function get_mini_calendar(& $cal)
 				<td class='calHdr'>&nbsp;</td>
 				<td style='padding:5px' colspan='6' class='calHdr' align='center'>".get_previous_cal($cal)."&nbsp;";
 				$minical .= "<a style='text-decoration: none;' href='index.php?module=Calendar&action=index&view=".$cal['view']."".$cal['calendar']->date_time->get_date_str()."&parenttab=".$category."'><b>".display_date($cal['view'],$cal['calendar']->date_time)."</b></a>&nbsp;".get_next_cal($cal)."</td>";
-				$minical .= "<td class='calHdr' align='right'><a href='javascript:ghide(\"miniCal\");'><img src='".$cal['IMAGE_PATH']."close.gif' align='right' border='0'></a>
+				$minical .= "<td class='calHdr' align='right'><a href='javascript:ghide(\"miniCal\");'><img src='themes/images/close.gif' align='right' border='0'></a>
 	                     </td></tr>";
 	$minical .= "<tr class='hdrNameBg'>";
 	//To display days in week 
@@ -454,7 +454,7 @@ function get_previous_cal(& $cal,$viewBox='',$subtab='')
 	$cal_log->debug("Entering get_previous_cal() method...");
 	if(isset($cal['size']) && $cal['size'] == 'small')
         {
-		$link = "<a href='javascript:getMiniCal(\"view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('prev')."&parenttab=".$category."\")'><img src='".$cal['IMAGE_PATH']."small_left.gif' border='0' align='absmiddle' /></a>";
+		$link = "<a href='javascript:getMiniCal(\"view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('prev')."&parenttab=".$category."\")'><img src='themes/images/small_left.gif' border='0' align='absmiddle' /></a>";
 	}
 	else
 	{
@@ -478,7 +478,7 @@ function get_next_cal(& $cal,$viewBox='',$subtab='')
 	$cal_log->debug("Entering get_next_cal() method...");
 	if(isset($cal['size']) && $cal['size'] == 'small')
 	{
-		$link = "<a href='javascript:getMiniCal(\"view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('next')."&parenttab=".$category."\")' ><img src='".$cal['IMAGE_PATH']."small_right.gif' border='0' align='absmiddle' /></a>";
+		$link = "<a href='javascript:getMiniCal(\"view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('next')."&parenttab=".$category."\")' ><img src='themes/images/small_right.gif' border='0' align='absmiddle' /></a>";
 	}
 	else
 	{
@@ -591,7 +591,7 @@ function getHourView(& $view)
 		</td></tr></table>
 		</div>
 		</td>
-	        <td valign=top><img src="'.$view['IMAGE_PATH'].'showPanelTopRight.gif"></td>
+	        <td valign=top><img src="themes/images/showPanelTopRight.gif"></td>
 		</tr>
 		   </table>
 	<br>';
@@ -661,7 +661,7 @@ function getEventListView(& $cal,$mode='')
 		</div>
 		</td></tr></table>
 		</td>
-		<td valign=top><img src='".$cal['IMAGE_PATH']."showPanelTopRight.gif'></td>
+		<td valign=top><img src='themes/images/showPanelTopRight.gif'></td>
 		</tr>
 	</table>
 	<br>";
@@ -731,7 +731,7 @@ function getTodosListView($cal, $check='',$subtab='')
 		</td></tr></table>
 		</div>
 		</td>
-		<td valign=top><img src='".$cal['IMAGE_PATH']."showPanelTopRight.gif'></td>
+		<td valign=top><img src='themes/images/showPanelTopRight.gif'></td>
 	</tr>
 	</table>
 
@@ -873,7 +873,7 @@ function getWeekViewLayout(& $cal)
 			$weekview_layout .= '<td class="cellNormal" onMouseOver="cal_show(\'create_'.$sttemp_date.''.$time_arr['starthour'].''.$time_arr['startfmt'].'\')" onMouseOut="fnHide_Event(\'create_'.$sttemp_date.''.$time_arr['starthour'].''.$time_arr['startfmt'].'\')"  style="height: 40px;" bgcolor="white" valign="top" width="12%" align=right vlign=top>';
 			$weekview_layout .= '<div id="create_'.$sttemp_date.''.$time_arr['starthour'].''.$time_arr['startfmt'].'" style="visibility: hidden;">';
 			if(isPermitted("Calendar","EditView") == "yes")
-		                        $weekview_layout .='<img onClick="fnvshobj(this,\'addEvent\'); gshow(\'addEvent\',\'Call\',\''.$sttemp_date.'\',\''.$endtemp_date.'\',\''.$time_arr['starthour'].'\',\''.$time_arr['startmin'].'\',\''.$time_arr['startfmt'].'\',\''.$time_arr['endhour'].'\',\''.$time_arr['endmin'].'\',\''.$time_arr['endfmt'].'\',\'hourview\',\'event\')" src="'.$cal['IMAGE_PATH'].'cal_add.gif" border="0">';
+		                        $weekview_layout .='<img onClick="fnvshobj(this,\'addEvent\'); gshow(\'addEvent\',\'Call\',\''.$sttemp_date.'\',\''.$endtemp_date.'\',\''.$time_arr['starthour'].'\',\''.$time_arr['startmin'].'\',\''.$time_arr['startfmt'].'\',\''.$time_arr['endhour'].'\',\''.$time_arr['endmin'].'\',\''.$time_arr['endfmt'].'\',\'hourview\',\'event\')" src="themes/images/cal_add.gif" border="0">';
 					
                         $weekview_layout .='</div>';
 			//To display events in WeekView
@@ -952,7 +952,7 @@ function getMonthViewLayout(& $cal)
 				$monthview_layout .= '</a>';
 				$monthview_layout .= '<div id="create_'.$temp_date.''.$time_arr['starthour'].'" style="visibility:hidden;">';
 				if(isPermitted("Calendar","EditView") == "yes")
-                                $monthview_layout .='<a onClick="fnvshobj(this,\'addEvent\'); gshow(\'addEvent\',\'Call\',\''.$temp_date.'\',\''.$endtemp_date.'\',\''.$time_arr['starthour'].'\',\''.$time_arr['startmin'].'\',\''.$time_arr['startfmt'].'\',\''.$time_arr['endhour'].'\',\''.$time_arr['endmin'].'\',\''.$time_arr['endfmt'].'\',\'hourview\',\'event\')" href="javascript:void(0)"><img src="'.$cal['IMAGE_PATH'].'cal_add.gif" border="0"></a>';
+                                $monthview_layout .='<a onClick="fnvshobj(this,\'addEvent\'); gshow(\'addEvent\',\'Call\',\''.$temp_date.'\',\''.$endtemp_date.'\',\''.$time_arr['starthour'].'\',\''.$time_arr['startmin'].'\',\''.$time_arr['startfmt'].'\',\''.$time_arr['endhour'].'\',\''.$time_arr['endmin'].'\',\''.$time_arr['endfmt'].'\',\'hourview\',\'event\')" href="javascript:void(0)"><img src="themes/images/cal_add.gif" border="0"></a>';
                                 $monthview_layout .= '  </div></td>';
 			}
 			else
@@ -1143,7 +1143,7 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			{
 				if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
 					$javacript_str = 'onMouseOver="cal_show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');"';
-				$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->get_formatted_date().'\',\'event\');" align="middle" border="0">';
+				$action_str = '<img src="themes/images/cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->get_formatted_date().'\',\'event\');" align="middle" border="0">';
 			}
 			else
 			{
@@ -1181,7 +1181,7 @@ function getdayEventLayer(& $cal,$slice,$rows)
 				</tr>
 				<tr><td align="center">';
 				if($act[$i]->shared)
-					$eventlayer .= '<img src="'.$cal['IMAGE_PATH'].'cal12x12Shared.gif" align="middle" border="0">';
+					$eventlayer .= '<img src="themes/images/cal12x12Shared.gif" align="middle" border="0">';
 				else
 					$eventlayer .= '&nbsp;';
 				$eventlayer .= '</td><td>('.$user.' | '.getTranslatedString($eventstatus).' | '.getTranslatedString($priority).')</td></tr><tr><td align="center">'.$action_str.'</td><td>&nbsp;</td></tr>';
@@ -1241,7 +1241,7 @@ function getweekEventLayer(& $cal,$slice)
 			{
 				if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
 					$javacript_str = 'onMouseOver="cal_show(\''.$arrow_img_name.'\');" onMouseOut="fnHide_Event(\''.$arrow_img_name.'\');"';
-				$action_str = '<img src="'.$cal['IMAGE_PATH'].'cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->get_formatted_date().'\',\'event\');" align="middle" border="0">';
+				$action_str = '<img src="themes/images/cal_event.jpg" id="'.$arrow_img_name.'" style="visibility: hidden;" onClick="getcalAction(this,\'eventcalAction\','.$id.',\''.$cal['view'].'\',\''.$cal['calendar']->date_time->hour.'\',\''.$cal['calendar']->date_time->get_formatted_date().'\',\'event\');" align="middle" border="0">';
 			}
 			else
 			{
@@ -1280,7 +1280,7 @@ function getweekEventLayer(& $cal,$slice)
 							</tr>
 							<tr><td align="center">';
 						if($act[$i]->shared)
-							$eventlayer .= '<img src="'.$cal['IMAGE_PATH'].'cal12x12Shared.gif" align="middle" border="0">';
+							$eventlayer .= '<img src="themes/images/cal12x12Shared.gif" align="middle" border="0">';
 						else
 							$eventlayer .= '&nbsp;';
 						$eventlayer .= '</td><td>('.$user.' | '.getTranslatedString($eventstatus).' | '.getTranslatedString($priority).')</td></tr><tr><td align="center">'.$action_str.'</td><td>&nbsp;</td></tr>';
@@ -1409,7 +1409,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		INNER JOIN vtiger_crmentity
 			ON vtiger_crmentity.crmid = vtiger_activity.activityid
 		LEFT JOIN vtiger_groups
-	       		ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+			ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 		LEFT JOIN vtiger_users
 	       		ON vtiger_users.id = vtiger_crmentity.smownerid 
 		LEFT OUTER JOIN vtiger_recurringevents
@@ -1543,9 +1543,9 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		$more_link = "<a href='index.php?action=DetailView&module=Calendar&record=".$id."&activity_mode=Events&viewtype=calendar&parenttab=".$category."' class='webMnu'>[".$mod_strings['LBL_MORE']."...]</a>";
 		$type = $adb->query_result($result,$i,"activitytype");
 		if($type == 'Call')
-			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Calls.gif' align='middle'>&nbsp;".$app_strings['Call'];
+			$image_tag = "<img src='themes/images/Calls.gif' align='middle'>&nbsp;".$app_strings['Call'];
 		else if($type == 'Meeting')
-			$image_tag = "<img src='".$calendar['IMAGE_PATH']."Meetings.gif' align='middle'>&nbsp;".$app_strings['Meeting'];
+			$image_tag = "<img src='themes/images/Meetings.gif' align='middle'>&nbsp;".$app_strings['Meeting'];
 		else
 			$image_tag = "&nbsp;".getTranslatedString($type);
         	$element['eventtype'] = $image_tag;
@@ -1557,12 +1557,12 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		if($idShared == "normal")
 		{
 			if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete")=="yes")
-				$element['action'] ="<img onClick='getcalAction(this,\"eventcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"event\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+				$element['action'] ="<img onClick='getcalAction(this,\"eventcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"event\");' src='themes/images/cal_event.jpg' border='0'>";
 		}
 		else
 		{
 			if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete")=="yes")
-				$element['action']="<img onClick=\"alert('".$mod_strings["SHARED_EVENT_DEL_MSG"]."')\"; src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+				$element['action']="<img onClick=\"alert('".$mod_strings["SHARED_EVENT_DEL_MSG"]."')\"; src='themes/images/cal_event.jpg' border='0'>";
 		}
 		if(getFieldVisibilityPermission('Events',$current_user->id,'eventstatus') == '0')
 		{
@@ -1639,18 +1639,18 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 		AND (vtiger_activity.date_start BETWEEN ? AND ?) AND vtiger_crmentity.smownerid = "  . $current_user->id;
    
    $query = "SELECT vtiger_groups.groupname, vtiger_users.user_name, vtiger_crmentity.crmid, vtiger_cntactivityrel.contactid, 
-		vtiger_activity.* FROM vtiger_activity
+				vtiger_activity.* FROM vtiger_activity
                 INNER JOIN vtiger_crmentity
-                        ON vtiger_crmentity.crmid = vtiger_activity.activityid
+					ON vtiger_crmentity.crmid = vtiger_activity.activityid
                 LEFT JOIN vtiger_cntactivityrel
-                        ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
-		LEFT JOIN vtiger_groups
-		        ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-		LEFT JOIN vtiger_users
-			ON vtiger_users.id = vtiger_crmentity.smownerid
+					ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
+				LEFT JOIN vtiger_groups
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+				LEFT JOIN vtiger_users
+					ON vtiger_users.id = vtiger_crmentity.smownerid
                 WHERE vtiger_crmentity.deleted = 0
-                        AND vtiger_activity.activitytype = 'Task'
-                        AND (vtiger_activity.date_start BETWEEN ? AND ?) AND vtiger_crmentity.smownerid = "  . $current_user->id;
+					AND vtiger_activity.activitytype = 'Task'
+					AND (vtiger_activity.date_start BETWEEN ? AND ?) AND vtiger_crmentity.smownerid = "  . $current_user->id;
 
 	$list_query = $query;
 
@@ -1807,7 +1807,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 			
 		}
 		if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
-			$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"todo\");' src='".$calendar['IMAGE_PATH']."cal_event.jpg' border='0'>";
+			$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_formatted_date()."\",\"todo\");' src='themes/images/cal_event.jpg' border='0'>";
 		$assignedto = $adb->query_result($result,$i,"user_name");
 		if(!empty($assignedto))
 			$element['assignedto'] = $assignedto;
@@ -1967,7 +1967,7 @@ function constructEventListView(& $cal,$entry_list,$navigation_array='')
 					<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 						<tr>
 							<td rowspan='2' width='25%'>
-								<img src='".$cal['IMAGE_PATH']."empty.jpg' height='60' width='61'></td>
+								<img src='themes/images/empty.jpg' height='60' width='61'></td>
 							<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='75%'><span class='genHeaderSmall'>".$app_strings['LBL_NO']." ".$app_strings['Events']." ".$app_strings['LBL_FOUND']." !</span></td>
 						</tr>
 						<tr>";
@@ -2124,7 +2124,7 @@ function constructTodoListView($todo_list,$cal,$subtab,$navigation_array='')
 			$list_view .="<tr>
 				<td class='calAddButton' onMouseOver='fnAddEvent(this,\"addEventDropDown\",\"".$temp_date."\",\"".$endtemp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\",\"\",\"".$subtab."\",\"".$eventlist."\");'style='border: 1px solid #666666;cursor:pointer;height:30px' align='center' width='10%'>
                                         ".$mod_strings['LBL_ADD']."
-                                        <img src='".$cal['IMAGE_PATH']."menuDnArrow.gif' style='padding-left: 5px;' border='0'>                                                                                                                         </td>";
+                                        <img src='".$cal_arr['IMAGE_PATH']."menuDnArrow.gif' style='padding-left: 5px;' border='0'>                                                                                                                         </td>";
 			}
 			else
 			{
@@ -2170,7 +2170,7 @@ function constructTodoListView($todo_list,$cal,$subtab,$navigation_array='')
 			<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tr>
 				<td rowspan='2' width='25%'>
-					<img src='".$cal['IMAGE_PATH']."empty.jpg' height='60' width='61'></td>
+					<img src='themes/images/empty.jpg' height='60' width='61'></td>
 				<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='75%'><span class='genHeaderSmall'>".$app_strings['LBL_NO']." ".$app_strings['Todo']."s ".$app_strings['LBL_FOUND']." !</span></td>
 			</tr>
 			<tr>";

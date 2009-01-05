@@ -71,11 +71,11 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 		
 		if($adb->query_result($fieldListResult,$i,"visible") == 0 || ($uitype == 117 && $fieldtype[1] == "M"))
 		{
-			$visible = "<img src=".$image_path."/prvPrfSelectedTick.gif>";
+			$visible ="<img src=themes/images/prvPrfSelectedTick.gif>";
 		}
 		else
 		{
-			$visible = "<img src=".$image_path."/no.gif>";
+			$visible = "<img src=themes/images/no.gif>";
 		}	
 		$standCustFld []= $visible;
 	}

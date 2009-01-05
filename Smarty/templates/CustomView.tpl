@@ -109,7 +109,7 @@ function mandatoryCheck()
 
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
  <tbody><tr>
-  <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+  <td valign="top"><img src="themes/images/showPanelTopLeft.gif"></td>
   <td class="showPanelBg" valign="top" width="100%">
    <div class="small" style="padding: 20px;">
 	<span class="lvtHeaderText"><a class="hdrLink" href="index.php?action=ListView&module={$MODULE}&parenttab={$CATEGORY}">{$APP.$MODULE}</a> &gt;
@@ -548,7 +548,7 @@ function mandatoryCheck()
 				{assign var=msg_style value="readonly"}
 			     {/if}	
 			     <input name="startdate" id="jscal_field_date_start" type="text" size="10" class="textField" value="{$STARTDATE}" {$msg_style}>
-			     <img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start" style={$img_style}>
+			     <img src="{$IMAGE_PATH}btnL3Calendar.gif" id="jscal_trigger_date_start" style={$img_style}>
 			     <font size=1><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
 			     <script type="text/javascript">
 			  		Calendar.setup ({ldelim}
@@ -560,7 +560,7 @@ function mandatoryCheck()
 			     <td align="right" class="dvtCellLabel">{$MOD.End_Date} :</td> 
   			     <td width="25%" align=left class="dvtCellInfo">
 			     <input name="enddate" {$msg_style} id="jscal_field_date_end" type="text" size="10" class="textField" value="{$ENDDATE}">
-			     <img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end" style={$img_style}>
+			     <img src="{$IMAGE_PATH}btnL3Calendar.gif" id="jscal_trigger_date_end" style={$img_style}>
 			     <font size=1><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
 			     <script type="text/javascript">
 					Calendar.setup ({ldelim}

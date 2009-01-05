@@ -15,7 +15,6 @@ require_once('Smarty_setup.php');
 global $mod_strings,$app_strings,$app_list_strings,$theme,$adb;
 
 $theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
 
 require_once($theme_path.'layout_utils.php');
 
@@ -63,7 +62,7 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 			else
 				$output .= '<td width="95%" align="left" class="layerPopupHeading">Add Block</td>';
 				
-			$output .= '<td width="5%" align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'.$image_path.'close.gif" border="0"  align="absmiddle" /></a></td>
+			$output .= '<td width="5%" align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="themes/images/close.gif" border="0"  align="absmiddle" /></a></td>
 			</tr>';
 			$output .='</table><table border=0 cellspacing=0 cellpadding=0 width=95% align=center> 
 							<tr>

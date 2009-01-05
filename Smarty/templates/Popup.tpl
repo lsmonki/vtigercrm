@@ -88,7 +88,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 						<table width="100%" cellpadding="5" cellspacing="0">
 						{if !$RECORD_ID}
 						<tr>
-							<td width="20%" class="dvtCellLabel"><img src="{$IMAGE_PATH}basicSearchLens.gif"></td>
+							<td width="20%" class="dvtCellLabel"><img src="themes/images/basicSearchLens.gif"></td>
 							<td width="30%" class="dvtCellLabel"><input type="text" name="search_text" class="txtBox"> </td>
 							<td width="30%" class="dvtCellLabel"><b>{$APP.LBL_IN}</b>&nbsp;
 								<select name ="search_field" class="txtBox">

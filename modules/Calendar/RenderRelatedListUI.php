@@ -150,11 +150,11 @@ require_once('include/utils/UserInfoUtil.php');
 		}	
 	 	if($avail_flag == "true")
                 {
-                        $availability=' <IMG SRC="'.$image_path.'/busy.gif">';
+                        $availability=' <IMG SRC="themes/images/busy.gif">';
                 }
                 else
                 {
-                        $availability=' <IMG SRC="'.$image_path.'/free.gif">';
+                        $availability=' <IMG SRC="themes/images/free.gif">';
                 }
 		$log->debug("Exiting status_availability method ...");
 		return $availability;

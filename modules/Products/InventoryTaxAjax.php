@@ -11,7 +11,7 @@
 
 global $theme;
 $theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
+
 
 $productid = $_REQUEST['productid'];
 $rowid = $_REQUEST['curr_row'];
@@ -26,7 +26,7 @@ $tax_div = '
 		   <tr>
 			<td id="tax_div_title'.$rowid.'" nowrap align="left" ><b>Set Tax for : '.$product_total.'</b></td>
 			<td>&nbsp;</td>
-			<td align="right"><img src="'.$image_path.'close.gif" border="0" onClick="fnHidePopDiv(\'tax_div'.$rowid.'\')" style="cursor:pointer;"></td>
+			<td align="right"><img src="themes/images/close.gif" border="0" onClick="fnHidePopDiv(\'tax_div'.$rowid.'\')" style="cursor:pointer;"></td>
 		   </tr>
 	   ';
 

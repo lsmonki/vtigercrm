@@ -86,12 +86,12 @@ function showhide(argg,imgId)
         	if (x.display=="none")
         	{ldelim}
             		x.display="block";
-					document.all[imgId].src = "{$IMAGE_PATH}minus.gif";
+					document.all[imgId].src = "themes/images/minus.gif";
         	{rdelim}
         	else
 			{ldelim}
             			x.display="none";
-						document.all[imgId].src = "{$IMAGE_PATH}plus.gif";
+						document.all[imgId].src = "themes/images/plus.gif";
             {rdelim}
 	{rdelim}
 {rdelim}

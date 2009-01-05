@@ -29,8 +29,8 @@ $html_string = '<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=sma
 			<td class=small>
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
-					 <td style="padding-left:10px"><img src="'.$image_path.'btnL3Add-Faded.gif" border=0></td>
-					 <td style="padding-right:10px"><img src="'.$image_path.'btnL3Search-Faded.gif" border=0></td>
+					 <td style="padding-left:10px"><img src="themes/images/btnL3Add-Faded.gif" border=0></td>
+					 <td style="padding-right:10px"><img src="themes/images/btnL3Search-Faded.gif" border=0></td>
 		</tr>
 		</table>
 	</td>
@@ -64,8 +64,8 @@ $html_string = '<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=sma
 
 		<table border=0 cellspacing=0 cellpadding=5>
 			<tr>
-				<td style="padding-right:0px;padding-left:10px;"><img src="'.$image_path.'tbarImport-Faded.gif" border="0"></td>
-                <td style="padding-right:10px"><img src="'.$image_path.'tbarExport-Faded.gif" border="0"></td>
+				<td style="padding-right:0px;padding-left:10px;"><img src="themes/images/tbarImport-Faded.gif" border="0"></td>
+                <td style="padding-right:10px"><img src="themes/images/tbarExport-Faded.gif" border="0"></td>
 			</tr>
 		</table>	
 	</td>
@@ -84,7 +84,7 @@ $html_string = '<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=sma
 	</TABLE>
 	<table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 	     <tr>
-	             <td valign=top><img src="'.$image_path.'showPanelTopLeft.gif"></td>
+	             <td valign=top><img src="themes/images/showPanelTopLeft.gif"></td>
 
 		     	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
 			

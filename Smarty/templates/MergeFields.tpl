@@ -13,8 +13,8 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="themes/{$THEME}/style.css">
-	<link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">	
-	<link rel="stylesheet" type="text/css" href="themes/{$THEME}/style.css">
+	<link REL="SHORTCUT ICON" HREF="themes/images/vtigercrm_icon.ico">	
+	<style type="text/css">@import url("themes/{$THEME}/style.css");</style>
 </head>
 <body>
 {if $EDIT_DUPLICATE eq 'permitted'}

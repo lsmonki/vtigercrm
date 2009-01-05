@@ -51,7 +51,7 @@ function sensex_info()
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
    <tr>
 	<td valign=top>
-		<img src="{$IMAGE_PATH}showPanelTopLeft.gif">
+		<img src="themes/images/showPanelTopLeft.gif">
 	</td>
 
 	<td class="showPanelBg" valign=top width=100%>
@@ -188,7 +188,7 @@ function sensex_info()
 		</table>
 	 </div>
 	</td>
-	<td align=right valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+	<td align=right valign=top><img src="themes/images/showPanelTopRight.gif"></td>
    </tr>
 </table>
 </form>

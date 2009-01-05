@@ -81,7 +81,7 @@
 					<div style="border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255);width:90%;">	
 					<table cellspacing=0 cellpadding=5 width=98%  border=0 align=center>
 						<tr>
-							<td rowspan="2" width="30%" align='right'><img src="{$IMAGE_PATH}empty.jpg" height="60"></td>	
+							<td rowspan="2" width="30%" align='right'><img src="themes/images/empty.jpg" height="60"></td>	
 							<td style="border-bottom: 1 px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_EMPTY_MODULE} {$APP.$SELECTED_MODULE}</td>
 						</tr>
 					</table>

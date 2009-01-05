@@ -14,7 +14,7 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="themes/images/showPanelTopLeft.gif"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 <br>
 	<div align=center>
@@ -27,7 +27,7 @@
 			<input type="hidden" name="action" value="index">
 			<input type="hidden" name="record" value="{$ID}">
 			<tr>
-				<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}currency.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
+				<td width=50 rowspan=2 valign=top><img src="themes/images/currency.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
 				<td class="heading2" valign="bottom" ><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=CurrencyListView&parenttab=Settings">{$MOD.LBL_CURRENCY_SETTINGS}</a> > 
 				{if $ID neq ''}
 					{$MOD.LBL_EDIT} &quot;{$CURRENCY_NAME}&quot; 
@@ -59,7 +59,7 @@
 								<table width="100%" border="0" cellpadding="3" cellspacing="0" class="layerHeadingULine">
 								<tr>
 									<td class="layerPopupHeading"  align="left" width="60%">{$MOD.LBL_TRANSFER_CURRENCY}</td>
-									<td align="right" width="40%"><img src="{$IMAGE_PATH}close.gif" border=0 alt="{$APP.LBL_CLOSE}" title="{$APP.LBL_CLOSE}" style="cursor:pointer;" onClick="document.getElementById('CurrencyEditLay').style.display='none'";></td>
+									<td align="right" width="40%"><img src="themes/images/close.gif" border=0 alt="{$APP.LBL_CLOSE}" title="{$APP.LBL_CLOSE}" style="cursor:pointer;" onClick="document.getElementById('CurrencyEditLay').style.display='none'";></td>
 								</tr>
 								<table>
 								<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
@@ -152,7 +152,7 @@
 		
 	</div>
 </td>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign="top"><img src="themes/images/showPanelTopRight.gif"></td>
    </tr>
 </tbody>
 </table>

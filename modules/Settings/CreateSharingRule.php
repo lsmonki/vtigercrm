@@ -27,7 +27,6 @@ global $mod_strings;
 global $app_strings;
 global $theme;
 $theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
 global $adb;
 
 $mode = $_REQUEST['mode'];
@@ -268,7 +267,7 @@ if($mode == 'edit')
     	$output .=$mod_strings[LBL_EDIT_CUSTOM_RULE].'</td>';
 else
 	$output .=$mod_strings[LBL_ADD_CUSTOM_RULE].'</td>';
-$output .= '<td align="right" class="small"><img src="'.$image_path.'close.gif" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="hide(\'sharingRule\')";></td>
+$output .= '<td align="right" class="small"><img src="themes/images/close.gif" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="hide(\'sharingRule\')";></td>
 
 </tr>
 </table>

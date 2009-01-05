@@ -37,7 +37,7 @@
 			<td class="mailClientBg" style="padding-left:10px;padding-top:10px;vertical-align:top;">
 				<table width="100%"  border="0" cellpadding="5" cellspacing="0" class="small">
 				   <tr>
-					<td width="10%"><img src="{$IMAGE_PATH}migrate.gif" align="absmiddle"/></td>
+					<td width="10%"><img src="themes/images/migrate.gif" align="absmiddle"/></td>
 					<td width="90%">
 						<span class="genHeaderBig">{$MOD.LBL_UPGRADE_VTIGER}</span><br />
 						({$MOD.LBL_UPGRADE_FROM_VTIGER_423})

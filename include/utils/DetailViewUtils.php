@@ -443,7 +443,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		}
 		if($result) $nameArray = $adb->fetch_array($result);
 
-//echo"<pre>";print_r($nameArray);echo"<pre>";die;
+
 		global $current_user;
 		//$value = $user_id;
 		if($owner_id != '') {
@@ -1254,11 +1254,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				{
 					$os = $col_fields[$fieldname];
 					if($os == 'Windows')
-					    $arc_icon="<img src='".$image_path."fbWindowsOS.gif' hspace='3' align='absmiddle' border='0'>";
+					    $arc_icon="<img src='themes/images/fbWindowsOS.gif' hspace='3' align='absmiddle' border='0'>";
 					elseif($os == 'Linux')
-						$arc_icon="<img src='".$image_path."fbLinuxOS.gif' hspace='3' align='absmiddle' border='0'>";
+						$arc_icon="<img src='themes/images/fbLinuxOS.gif' hspace='3' align='absmiddle' border='0'>";
 					elseif($os == 'Mac')
-						$arc_icon="<img src='".$image_path."fbMacOS.gif' hspace='3' align='absmiddle' border='0'>"; 
+						$arc_icon="<img src='themes/images/fbMacOS.gif' hspace='3' align='absmiddle' border='0'>"; 
 					$label_fld[]=$arc_icon.$os;					
 				}
 			}
@@ -1281,20 +1281,20 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 					$ext =substr($fld_value, $ext_pos + 1);
 					$ext = strtolower($ext);
 					if($ext == 'bin' || $ext == 'exe' || $ext == 'rpm')
-						$fileicon="<img src='".$image_path."fExeBin.gif' hspace='3' align='absmiddle' border='0'>";
+						$fileicon="<img src='themes/images/fExeBin.gif' hspace='3' align='absmiddle' border='0'>";
 					elseif($ext == 'jpg' || $ext == 'gif' || $ext == 'bmp')
-						$fileicon="<img src='".$image_path."fbImageFile.gif' hspace='3' align='absmiddle' border='0'>";
+						$fileicon="<img src='themes/images/fbImageFile.gif' hspace='3' align='absmiddle' border='0'>";
 					elseif($ext == 'txt' || $ext == 'doc' || $ext == 'xls')
-						$fileicon="<img src='".$image_path."fbTextFile.gif' hspace='3' align='absmiddle' border='0'>";
+						$fileicon="<img src='themes/images/fbTextFile.gif' hspace='3' align='absmiddle' border='0'>";
 					elseif($ext == 'zip' || $ext == 'gz' || $ext == 'rar')
-						$fileicon="<img src='".$image_path."fbZipFile.gif' hspace='3' align='absmiddle'	border='0'>";
+						$fileicon="<img src='themes/images/fbZipFile.gif' hspace='3' align='absmiddle'	border='0'>";
 					else
-						$fileicon="<img src='".$image_path."fbUnknownFile.gif' hspace='3' align='absmiddle' border='0'>";
+						$fileicon="<img src='themes/images/fbUnknownFile.gif' hspace='3' align='absmiddle' border='0'>";
 				}
 				else
 				{
 					$fld_value = $col_fields['filename'];
-					$fileicon = "<img src='".$image_path."fbLink.gif' alt='".$mod_strings['LBL_EXTERNAL_LNK']."' title='".$mod_strings['LBL_EXTERNAL_LNK']."' hspace='3' align='absmiddle' border='0'>";
+					$fileicon = "<img src='themes/images/fbLink.gif' alt='".$mod_strings['LBL_EXTERNAL_LNK']."' title='".$mod_strings['LBL_EXTERNAL_LNK']."' hspace='3' align='absmiddle' border='0'>";
 				}
 				$label_fld[] = $fileicon.$fld_value;
 			}

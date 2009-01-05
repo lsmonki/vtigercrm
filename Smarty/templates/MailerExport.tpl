@@ -18,7 +18,7 @@
 
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%" class="small">
    <tr>
-	<td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif" /></td>
+	<td valign="top"><img src="themes/images/showPanelTopLeft.gif" /></td>
 	<td class="showPanelBg" valign="top" width="100%">
 
 		<table  cellpadding="0" cellspacing="0" width="100%" border=0>
@@ -103,6 +103,6 @@
 		</table>
 
 	</td>
-	<td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif" /></td>
+	<td valign="top"><img src="themes/images/showPanelTopRight.gif" /></td>
    </tr>
 </table>

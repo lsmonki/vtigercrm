@@ -22,7 +22,7 @@ require_once('modules/Calendar/CalendarCommon.php');
 	<tr>
 		<td class="layerPopupHeading" align="left"><?php echo $mod_strings['LBL_CALSETTINGS']?></td>
 		<td align=right>
-			<a href="javascript:fninvsh('calSettings');"><img src="<?php echo $image_path?>close.gif" border="0"  align="absmiddle" /></a>
+			<a href="javascript:fninvsh('calSettings');"><img src="themes/images/close.gif" border="0"  align="absmiddle" /></a>
 		</td>
 	</tr>
 	</table>
@@ -45,7 +45,7 @@ require_once('modules/Calendar/CalendarCommon.php');
 		<td class=small >
 			<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
 			<tr>
-		<td align="right" width="10%" valign="top"><img src="<?php echo $image_path?>cal_clock.jpg" align="absmiddle"></td>
+		<td align="right" width="10%" valign="top"><img src="themes/images/cal_clock.jpg" align="absmiddle"></td>
 		<td align="left" width="90%">
 			<b><?php echo $mod_strings['LBL_TIMESETTINGS']?></b><br>
 			<input type="checkbox" name="sttime_check" <?php if($current_user->start_hour != ''){?> checked <?php } ?> onClick="enableCalstarttime();">&nbsp;<?php echo $mod_strings['LBL_CALSTART']?> 
@@ -88,7 +88,7 @@ require_once('modules/Calendar/CalendarCommon.php');
 	</tr>
 	<tr><td colspan="2" style="border-bottom:1px dotted #CCCCCC;"></td></tr>
 	<tr>
-		<td align="right" valign="top"><img src="<?php echo $image_path?>cal_sharing.jpg" width="45" height="38" align="absmiddle"></td>
+		<td align="right" valign="top"><img src="themes/images/cal_sharing.jpg" width="45" height="38" align="absmiddle"></td>
 		<td align="left">
 		<b><?php echo $mod_strings['LBL_CALSHARE']?></b><br>
 		<?php echo $mod_strings['LBL_CALSHAREMESSAGE']?><br><br>

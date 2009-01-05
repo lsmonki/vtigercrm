@@ -14,7 +14,7 @@ function modulemanager_import_validate(form) {
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tr>
-	<td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+	<td valign="top"><img src="themes/images/showPanelTopLeft.gif"></td>
     <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
     <br>
 
@@ -23,7 +23,7 @@ function modulemanager_import_validate(form) {
 		
 		<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
 		<tr>
-			<td rowspan="2" valign="top" width="50"><img src="{$IMAGE_PATH}vtlib_modmng.gif" alt="{$MOD.LBL_USERS}" title="{$MOD.LBL_USERS}" border="0" height="48" width="48"></td>
+			<td rowspan="2" valign="top" width="50"><img src="themes/images/vtlib_modmng.gif" alt="{$MOD.LBL_USERS}" title="{$MOD.LBL_USERS}" border="0" height="48" width="48"></td>
 			<td class="heading2" valign="bottom"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> &gt; {$MOD.VTLIB_LBL_MODULE_MANAGER} &gt; {$APP.LBL_IMPORT} </b></td>
 		</tr>
 
@@ -86,7 +86,7 @@ function modulemanager_import_validate(form) {
    </div>
 
         </td>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign="top"><img src="themes/images/showPanelTopRight.gif"></td>
 	</tr>
 </table>
 <br>

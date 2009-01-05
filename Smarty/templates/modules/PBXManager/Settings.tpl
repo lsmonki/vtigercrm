@@ -17,7 +17,7 @@
 <tbody>
 	<tr>
         <td valign="top">
-        	<img src="{$IMAGE_PATH}showPanelTopLeft.gif">
+        	<img src="themes/images/showPanelTopLeft.gif">
         </td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 			<form action="index.php" method="post" id="form">
@@ -31,7 +31,7 @@
 				{include file='SetMenu.tpl'}
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 					<tr>
-						<td width=50 rowspan=3 valign=top><img src="{$IMAGE_PATH}call.gif" alt="{$MOD.LBL_SOFTPHONE_SERVER_SETTINGS}" width="48" height="38" border=0 title="{$MOD.LBL_SOFTPHONE_SERVER_SETTINGS}"></td>
+						<td width=50 rowspan=3 valign=top><img src="themes/images/call.gif" alt="{$MOD.LBL_SOFTPHONE_SERVER_SETTINGS}" width="48" height="38" border=0 title="{$MOD.LBL_SOFTPHONE_SERVER_SETTINGS}"></td>
 						<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_SOFTPHONE_SERVER_SETTINGS}</b></td>
 					</tr>
 					<tr>
@@ -111,7 +111,7 @@
 			</div>
 		</td>
 		<td valign="top">
-			<img src="{$IMAGE_PATH}showPanelTopRight.gif">
+			<img src="themes/images/showPanelTopRight.gif">
 		</td>
 	</tr>
 </tbody>

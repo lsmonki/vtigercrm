@@ -13,7 +13,7 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="themes/images/showPanelTopLeft.gif"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 <br>
 	<div align=center>
@@ -30,7 +30,7 @@
 				<input type="hidden" name="foldername" value="{$FOLDERNAME}">
 				<input type="hidden" name="parenttab" value="{$PARENTTAB}">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ViewTemplate.gif" width="45" height="60" border=0 ></td>
+					<td width=50 rowspan=2 valign=top><img src="themes/images/ViewTemplate.gif" width="45" height="60" border=0 ></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=listemailtemplates&parenttab=Settings">{$UMOD.LBL_EMAIL_TEMPLATES}</a> &gt; {$MOD.LBL_VIEWING} &quot;{$TEMPLATENAME}&quot; </b></td>
 				</tr>
 				<tr>
@@ -111,7 +111,7 @@
 	</div>
 
 </td>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign="top"><img src="themes/images/showPanelTopRight.gif"></td>
    </tr>
 </tbody>
 </table>

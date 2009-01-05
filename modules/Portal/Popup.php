@@ -29,7 +29,7 @@ $portal_inputs.='<div style="display:block;position:relative;" id="orgLay" class
 		<table border="0" cellpadding="3" cellspacing="0" width="100%" class="layerHeadingULine">
 		<tr>
 			<td class="layerPopupHeading" align="left" width="60%">' .$mod_strings['LBL_ADD'] .' '.$mod_strings['LBL_BOOKMARK'].'</td>
-			<td align="right" width="40%"><a href="javascript:fninvsh(\'orgLay\');"><img src="'.$image_path.'close.gif" align="absmiddle" border="0"></a></td>
+			<td align="right" width="40%"><a href="javascript:fninvsh(\'orgLay\');"><img src="themes/images/close.gif" align="absmiddle" border="0"></a></td>
 		</tr>
 		</table>
 <table border="0" cellspacing="0" cellpadding="5" width="95%" align="center"> 

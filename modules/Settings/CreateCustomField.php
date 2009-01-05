@@ -16,7 +16,7 @@ require_once('Smarty_setup.php');
 global $mod_strings,$app_strings,$app_list_strings,$theme,$adb;
 
 $theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
+$image_path="themes/images/";
 
 $tabid=$_REQUEST['tabid'];
 $fieldid=$_REQUEST['fieldid'];
@@ -193,7 +193,7 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 								$output .= '<tr id="picklist">
 									<td class="dataLabel" nowrap="nowrap" align="right" valign="top"><b>'.$mod_strings['LBL_PICK_LIST_VALUES'].'</b></td>
 									<td align="left" valign="top"><textarea name="fldPickList" rows="10" class="txtBox" '.$readonly.'>'.$fldVal.'</textarea></td>
-									<!--td style="padding-left:10px"><img src="themes/Aqua/images/picklist_hint.gif"/></td-->
+									<!--td style="padding-left:10px"><img src="themes/images/picklist_hint.gif"/></td-->
 								</tr>';
 								break;
 								
@@ -212,7 +212,7 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 						<tr id="picklist" style="visibility:hidden;">
 							<td class="dataLabel" nowrap="nowrap" align="right" valign="top"><b>'.$mod_strings['LBL_PICK_LIST_VALUES'].'</b></td>
 							<td align="left" valign="top"><textarea name="fldPickList" rows="10" class="txtBox" '.$readonly.'>'.$fldVal.'</textarea></td>
-							<!--td style="padding-left:10px"><img src="themes/Aqua/images/picklist_hint.gif"/></td-->
+							<!--td style="padding-left:10px"><img src="themes/images/picklist_hint.gif"/></td-->
 						</tr>';
 					}
 				$output .= '	

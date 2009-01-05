@@ -30,7 +30,7 @@
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody>
    <tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="themes/images/showPanelTopLeft.gif"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 	<br>
 	<div align=center>
@@ -49,7 +49,7 @@
 <!-- This table is used to display the Tax Configuration values-->
 <table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
    <tr>
-	<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}taxConfiguration.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
+	<td width=50 rowspan=2 valign=top><img src="themes/images/taxConfiguration.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
 	<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > 
 		{if $EDIT_MODE eq 'true'}
 			<strong>{$MOD.LBL_EDIT} {$MOD.LBL_TAX_SETTINGS} </strong>
@@ -134,9 +134,9 @@
 				</td>
 				<td width=10% class="cellText small">
 						{if $tax.deleted eq 0}
-							<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings&disable=true&taxname={$tax.taxname}"><img src="{$IMAGE_PATH}enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE}" title="{$MOD.LBL_ENABLE}"></a>
+							<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings&disable=true&taxname={$tax.taxname}"><img src="themes/images/enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE}" title="{$MOD.LBL_ENABLE}"></a>
 						{else}
-							<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings&enable=true&taxname={$tax.taxname}"><img src="{$IMAGE_PATH}disabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE}" title="{$MOD.LBL_DISABLE}"></a>
+							<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings&enable=true&taxname={$tax.taxname}"><img src="themes/images/disabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE}" title="{$MOD.LBL_DISABLE}"></a>
 						{/if}
 				</td>
 			   </tr>
@@ -218,9 +218,9 @@
 			</td>
 			<td width=10% class="cellText small"> 
 				{if $tax.deleted eq 0}
-						<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings&sh_disable=true&sh_taxname={$tax.taxname}"><img src="{$IMAGE_PATH}enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE}" title="{$MOD.LBL_ENABLE}"></a>
+						<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings&sh_disable=true&sh_taxname={$tax.taxname}"><img src="themes/images/enabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE}" title="{$MOD.LBL_ENABLE}"></a>
 					{else}
-						<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings&sh_enable=true&sh_taxname={$tax.taxname}"><img src="{$IMAGE_PATH}disabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE}" title="{$MOD.LBL_DISABLE}"></a>
+						<a href="index.php?module=Settings&action=TaxConfig&parenttab=Settings&sh_enable=true&sh_taxname={$tax.taxname}"><img src="themes/images/disabled.gif" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE}" title="{$MOD.LBL_DISABLE}"></a>
 					{/if}
 			</td>
 		   </tr>
@@ -255,7 +255,7 @@
 	</div>
 
 </td>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign="top"><img src="themes/images/showPanelTopRight.gif"></td>
    </tr>
 </tbody>
 </table>

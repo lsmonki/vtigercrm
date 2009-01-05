@@ -219,7 +219,7 @@ function showMergeOptions(curObj, arg)
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%" class="small">
 <tbody>
    <tr>
-	<td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif" /></td>
+	<td valign="top"><img src="themes/images/showPanelTopLeft.gif" /></td>
 	<td class="showPanelBg" valign="top" width="100%">
 		<table  cellpadding="0" cellspacing="0" width="100%" class="small">
 		   <tr>

@@ -55,38 +55,38 @@ function show_msg($mails,$start_message)
 
         // Attachment Icons
         if($msg_ob->has_attachments)
-                $flags.='<a href="javascript:;" onclick="displayAttachments('.$num.');"><img src="themes/'.$theme.'/images/attachments.gif" border="0" width="8px" height="13" title="Attachment"></a>&nbsp;';
+                $flags.='<a href="javascript:;" onclick="displayAttachments('.$num.');"><img src="themes/images/attachment.gif" border="0" width="8px" height="13" title="Attachment"></a>&nbsp;';
         else
-                $flags.='<img src="themes/'.$theme.'/images/blank.gif" border="0" width="8px" height="14" alt="">&nbsp;';
+                $flags.='<img src="themes/images/blank.gif" border="0" width="8px" height="14" alt="">&nbsp;';
 
 
 
         // read/unread/forwarded/replied
         if(!$mails[$start_message]->seen || $mails[$start_message]->recent)
 	{
-		$flags.='<span id="unread_img_'.$num.'"><a href="javascript:;" onclick="OpenCompose(\''.$num.'\',\'reply\');"><img src="themes/'.$theme.'/images/newmail.gif" border="0" width="12" height="10" title="Unread"></a></span>&nbsp;';
+		$flags.='<span id="unread_img_'.$num.'"><a href="javascript:;" onclick="OpenCompose(\''.$num.'\',\'reply\');"><img src="themes/images/newmail.gif" border="0" width="12" height="10" title="Unread"></a></span>&nbsp;';
 	}
 	elseif ($mails[$start_message]->in_reply_to || $mails[$start_message]->references || preg_match("/^re:/i",$mails[$start_message]->subject))
 	{
-		$flags.='<a href="javascript:;" onclick="OpenComposer(\''.$num.'\',\'reply\');"><img src="themes/'.$theme.'/images/stock_mail-replied.png" border="0" width="14" height="16" title="Replied" ></a>&nbsp;';
+		$flags.='<a href="javascript:;" onclick="OpenComposer(\''.$num.'\',\'reply\');"><img src="themes/images/stock_mail-replied.png" border="0" width="14" height="16" title="Replied" ></a>&nbsp;';
 	}
 	elseif (preg_match("/^fw:/i",$mails[$start_message]->subject))
 	{
-		$flags.='<a href="javascript:;" onclick="OpenComposer(\''.$num.'\',\'reply\');"><img src="themes/'.$theme.'/images/stock_mail-forward.png" border="0" width="10" height="13" title="Forward" ></a>&nbsp;';
+		$flags.='<a href="javascript:;" onclick="OpenComposer(\''.$num.'\',\'reply\');"><img src="themes/images/stock_mail-forward.png" border="0" width="10" height="13" title="Forward" ></a>&nbsp;';
 	}
 	else
 	{
-                $flags.='<a href="javascript:;" onclick="OpenComposer(\''.$num.'\',\'reply\');"><img src="themes/'.$theme.'/images/openmail.gif" border="0" width="12" height="12" title="Read" ></a>&nbsp;';
+                $flags.='<a href="javascript:;" onclick="OpenComposer(\''.$num.'\',\'reply\');"><img src="themes/images/openmail.gif" border="0" width="12" height="12" title="Read" ></a>&nbsp;';
 	}
 
         // Set IMAP flag
 	if($mails[$start_message]->flagged)
 	{
-		$flags.='<span id="clear_td_'.$num.'"><a href="javascript:runEmailCommand(\'clear_flag\','.$num.');"><img src="themes/'.$theme.'/images/important1.gif" border="0" width="11" height="11" id="clear_flag_img_'.$num.'"title="Important"></a></span>';
+		$flags.='<span id="clear_td_'.$num.'"><a href="javascript:runEmailCommand(\'clear_flag\','.$num.');"><img src="themes/images/important1.gif" border="0" width="11" height="11" id="clear_flag_img_'.$num.'"title="Important"></a></span>';
 	}
 	else
 	{
-                $flags.='<span id="set_td_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'set_flag\','.$num.');"><img src="themes/'.$theme.'/images/important2.gif" border="0" width="11" height="11" id="set_flag_img_'.$num.'"title="Important"></a></span>';
+                $flags.='<span id="set_td_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'set_flag\','.$num.');"><img src="themes/images/important2.gif" border="0" width="11" height="11" id="set_flag_img_'.$num.'"title="Important"></a></span>';
 
 	}
 
@@ -139,9 +139,9 @@ function show_msg($mails,$start_message)
 
 	
         if($mails[$start_message]->deleted)
-                $listview_entries[$num][] = '<td nowrap align="center" id="deleted_td_'.$num.'"><span id="del_link_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','.$num.');"><img src="themes/'.$theme.'/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"  title="Delete"></a></span></td></tr>';
+                $listview_entries[$num][] = '<td nowrap align="center" id="deleted_td_'.$num.'"><span id="del_link_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'undelete_msg\','.$num.');"><img src="themes/images/gnome-fs-trash-empty.png" border="0" width="14" height="14" alt="del"  title="Delete"></a></span></td></tr>';
         else
-                $listview_entries[$num][] = '<td nowrap align="center" id="ndeleted_td_'.$num.'"><span id="del_link_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','.$num.');"><img src="themes/'.$theme.'/images/no.gif" border="0" width="14" height="14" alt="del"  title="Delete"></a></span></td></tr>';
+                $listview_entries[$num][] = '<td nowrap align="center" id="ndeleted_td_'.$num.'"><span id="del_link_'.$num.'"><a href="javascript:void(0);" onclick="runEmailCommand(\'delete_msg\','.$num.');"><img src="themes/images/no.gif" border="0" width="14" height="14" alt="del"  title="Delete"></a></span></td></tr>';
 
 
         return $listview_entries[$num];

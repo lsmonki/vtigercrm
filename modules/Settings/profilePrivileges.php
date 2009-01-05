@@ -438,15 +438,15 @@ if($mode=='view')
 			$field=array();
 			if($fieldListResult[$module_name][$j][1] == 0)
 			{
-				$visible = "<img src=".$image_path."/prvPrfSelectedTick.gif>";
+				$visible = "<img src=themes/images/prvPrfSelectedTick.gif>";
 			}
 			else
 			{
-				$visible = "<img src=".$image_path."/no.gif>";
+				$visible = "<img src=themes/images/no.gif>";
 			}
 			if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
 			{
-				$visible = "<img src=".$image_path."/no.gif>";
+				$visible = "<img src=themes/images/no.gif>";
 			}
 			if($language_strings[$fieldListResult[$module_name][$j][0]] != '')
 				$field[]=$language_strings[$fieldListResult[$module_name][$j][0]];
@@ -636,11 +636,11 @@ function getGlobalDisplayValue($id,$actionid)
 	}
 	elseif($id == 0)
 	{
-		$value = '<img src="'.$image_path.'prvPrfSelectedTick.gif">';
+		$value = '<img src="themes/images/prvPrfSelectedTick.gif">';
 	}
 	elseif($id == 1)
 	{
-		$value = '<img src="'.$image_path.'no.gif">';
+		$value = '<img src="themes/images/no.gif">';
 	}
 	else
 	{
@@ -701,11 +701,11 @@ function getDisplayValue($id)
 	}
 	elseif($id == 0)
 	{
-		$value = '<img src="'.$image_path.'prvPrfSelectedTick.gif">';
+		$value = '<img src="themes/images/prvPrfSelectedTick.gif">';
 	}
 	elseif($id == 1)
 	{
-		$value = '<img src="'.$image_path.'no.gif">';
+		$value = '<img src="themes/images/no.gif">';
 	}
 	else
 	{

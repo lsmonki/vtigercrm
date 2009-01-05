@@ -20,7 +20,7 @@
 				&nbsp;
 			</td>
 			<td width="10%" align="right">
-				<a href="javascript:fninvsh('roleLay');"><img title="{$APP.LBL_CLOSE}" alt="{$APP.LBL_CLOSE}" src="{$IMAGE_PATH}close.gif" border="0"  align="absmiddle" /></a>
+				<a href="javascript:fninvsh('roleLay');"><img title="{$APP.LBL_CLOSE}" alt="{$APP.LBL_CLOSE}" src="themes/images/close.gif" border="0"  align="absmiddle" /></a>
 			</td>
 		</tr>
 	</table>

@@ -169,11 +169,11 @@ class vtigerRSS extends CRMEntity
 			if($allrssrow["starred"] == 1)
 			{
 				$shtml .= "<td width=\"15\">
-					<img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"></td>";
+					<img src=\"themes/images/onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"></td>";
 			}else
 			{
 				$shtml .= "<td width=\"15\">
-					<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onClick=\"makedefaultRss($allrssrow[rssid])\"></td>";
+					<img src=\"themes/images/offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onClick=\"makedefaultRss($allrssrow[rssid])\"></td>";
 			}
 			$shtml .= "<td class=\"rssTitle\"><a href=\"index.php?module=Rss&action=ListView&record=$allrssrow[rssid]
 				\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td>";
@@ -197,11 +197,11 @@ class vtigerRSS extends CRMEntity
 			if($allrssrow["starred"] == 1)
 			{
 				$shtml .= "<td width=\"15\">
-					<img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"></td>";
+					<img src=\"themes/images/onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"></td>";
 			}else
 			{		
 				$shtml .= "<td width=\"15\">
-					<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onClick=\"makedefaultRss($allrssrow[rssid])\"></td>";
+					<img src=\"themes/images/offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onClick=\"makedefaultRss($allrssrow[rssid])\"></td>";
 			}
 			$shtml .= "<td class=\"rssTitle\"><a href=\"index.php?module=Rss&action=ListView&record=$allrssrow[rssid]\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td><td>&nbsp;</td>";
 			$shtml .= "</tr>";
@@ -276,11 +276,11 @@ class vtigerRSS extends CRMEntity
 
 		$sSQL = "select * from vtiger_rss where starred=1";
 		$result = $adb->pquery($sSQL, array());
-		$shtml .= "<img src=\"".$image_path."rss.gif\" border=\"0\" align=\"absmiddle\" hspace=\"2\"><a href=\"#\" onclick='window.open(\"index.php?module=Rss&action=Popup\",\"new\",\"width=500,height=300,resizable=1,scrollbars=1\");'>Add New Rss</a>";
+		$shtml .= "<img src=\"themes/images/rss.gif\" border=\"0\" align=\"absmiddle\" hspace=\"2\"><a href=\"#\" onclick='window.open(\"index.php?module=Rss&action=Popup\",\"new\",\"width=500,height=300,resizable=1,scrollbars=1\");'>Add New Rss</a>";
 
 		while($allrssrow = $adb->fetch_array($result))
 		{
-			$shtml .= "<img src=\"".$image_path."rss.gif\" border=\"0\" align=\"absmiddle\" hspace=\"2\">"; 
+			$shtml .= "<img src=\"themes/images/rss.gif\" border=\"0\" align=\"absmiddle\" hspace=\"2\">"; 
 			$shtml .= "<a href=\"index.php?module=Rss&action=ListView&record=$allrssrow[rssid]\" class=\"rssFavLink\">				 ".substr($allrssrow['rsstitle'],0,10)."...</a></img>";
 		}
 		return $shtml;
@@ -416,10 +416,10 @@ class vtigerRSS extends CRMEntity
 			$shtml .= "<td align='left' width=\"15\">";
 			if($allrssrow["starred"] == 1)
 			{
-				 	   $shtml .= "<img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\">";
+				 	   $shtml .= "<img src=\"themes/images/onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\">";
 			}else
 			{
-				 	   $shtml .= "<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"  onClick=\"makedefaultRss($allrssrow[rssid])\">";
+				 	   $shtml .= "<img src=\"themes/images/offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"  onClick=\"makedefaultRss($allrssrow[rssid])\">";
 			}
 					   $shtml .= "</td>";
 			$shtml .= "<td class=\"rssTitle\" width=\"10%\" nowrap><a href=\"javascript:GetRssFeedList('$allrssrow[rssid]')\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td><td>&nbsp;</td>";

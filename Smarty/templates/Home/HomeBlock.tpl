@@ -40,7 +40,7 @@
 		   </tr>
 		{foreach item=row key=crmid from=$HOME_STUFF.Entries}
 		 	<tr>
-				<td><a href="index.php?module={$HOME_STUFF.ModuleName}&action=DetailView&record={$crmid}"><img src="{$IMAGE_PATH}bookMark.gif" align="absmiddle" border="0" alt="Details" title="Details"/></a></td>
+				<td><a href="index.php?module={$HOME_STUFF.ModuleName}&action=DetailView&record={$crmid}"><img src="themes/images/bookMark.gif" align="absmiddle" border="0" alt="Details" title="Details"/></a></td>
 				{foreach item=element from=$row}
 					<td align="left"/> {$element}</td>
 				{/foreach}
@@ -61,13 +61,13 @@
 			<tr>
 				<td>
 					{if $HOME_STUFF.Details.Title.1 eq "My Sites"}
-						<img src="{$IMAGE_PATH}bookMark.gif" align="absmiddle" border="0" alt="Details" title="Details"/>
+						<img src="themes/images/bookMark.gif" align="absmiddle" border="0" alt="Details" title="Details"/>
 					{elseif $HOME_STUFF.Details.Title.1 neq "Key Metrics" && $HOME_STUFF.Details.Title.1 neq "My Group Allocation"}
-						<img src="{$IMAGE_PATH}bookMark.gif" align="absmiddle" border="0" alt="Details" title="Details"/>
+						<img src="themes/images/bookMark.gif" align="absmiddle" border="0" alt="Details" title="Details"/>
 					{elseif $HOME_STUFF.Details.Title.1 eq "Key Metrics"}
-						<img src="{$IMAGE_PATH}bookMark.gif" align="absmiddle" border="0" alt="Details" title="Details"/>
+						<img src="themes/images/bookMark.gif" align="absmiddle" border="0" alt="Details" title="Details"/>
 					{elseif $HOME_STUFF.Details.Title.1 eq "My Group Allocation"}
-						<img src="{$IMAGE_PATH}bookMark.gif" align="absmiddle" border="0" alt="Details" title="Details"/>
+						<img src="themes/images/bookMark.gif" align="absmiddle" border="0" alt="Details" title="Details"/>
 					{/if}
 				</td>
 				{foreach item=element from=$row}

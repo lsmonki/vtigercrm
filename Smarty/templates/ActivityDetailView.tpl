@@ -120,7 +120,7 @@ function DeleteTag(id,recordid)
 	
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
 			<tr><td>		
-				 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$SINGLE_MOD} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span></td><td>&nbsp;
+				 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$SINGLE_MOD} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="themes/images/vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="themes/images/vtbusy.gif" border="0"></span></td><td>&nbsp;
 			</td></tr>
 			 <tr height=20><td class=small>{$UPDATEINFO}</td></tr>
 		 </table>
@@ -148,15 +148,15 @@ function DeleteTag(id,recordid)
 							</td>
 							<td width=40% align=center>
 									{if $privrecord neq ''}
-										<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="{$IMAGE_PATH}b_left.gif">&nbsp;
+										<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="themes/images/b_left.gif">&nbsp;
 									{else}
-										<img title="{$APP.LNK_LIST_PREVIOUS}" src="{$IMAGE_PATH}b_left_disable.gif">
+										<img title="{$APP.LNK_LIST_PREVIOUS}" src="themes/images/b_left_disable.gif">
 									{/if}
 									&nbsp;
 									{if $nextrecord neq ''}
-										<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="{$IMAGE_PATH}b_right.gif">&nbsp;
+										<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="themes/images/b_right.gif">&nbsp;
 									{else}
-										<img title="{$APP.LNK_LIST_NEXT}" src="{$IMAGE_PATH}b_right_disable.gif">&nbsp;
+										<img title="{$APP.LNK_LIST_NEXT}" src="themes/images/b_right_disable.gif">&nbsp;
 									{/if}
 							</td>
 							<td width=30% align=right>
@@ -518,15 +518,15 @@ function DeleteTag(id,recordid)
 							</td>
 							<td width=30% align=center>
 									{if $privrecord neq ''}
-										<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="{$IMAGE_PATH}b_left.gif">&nbsp;
+										<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="themes/images/b_left.gif">&nbsp;
 									{else}
-										<img title="{$APP.LNK_LIST_PREVIOUS}" src="{$IMAGE_PATH}b_left_disable.gif">
+										<img title="{$APP.LNK_LIST_PREVIOUS}" src="themes/images/b_left_disable.gif">
 									{/if}
 									&nbsp;
 									{if $nextrecord neq ''}
-										<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="{$IMAGE_PATH}b_right.gif">&nbsp;
+										<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="themes/images/b_right.gif">&nbsp;
 									{else}
-										<img title="{$APP.LNK_LIST_NEXT}" src="{$IMAGE_PATH}b_right_disable.gif">&nbsp;
+										<img title="{$APP.LNK_LIST_NEXT}" src="themes/images/b_right_disable.gif">&nbsp;
 									{/if}
 							</td>
 							<td width=30% align=right>
@@ -553,12 +553,12 @@ function DeleteTag(id,recordid)
 		{if $CUSTOM_LINKS}
 			<table width="100%" border="0" cellpadding="5" cellspacing="0">
 				<tr><td align="left" class="dvtUnSelectedCell dvtCellLabel">
-					<a href="javascript:;" onclick="fnvshobj(this,'customLinksLay');"><b>{$APP.LBL_MORE} {$APP.LBL_ACTIONS} &#187;</b></a>
+					<a href="javascript:;" onmouseover="fnvshobj(this,'vtlib_customLinksLay');" onclick="fnvshobj(this,'vtlib_customLinksLay');"><b>{$APP.LBL_MORE} {$APP.LBL_ACTIONS} &#187;</b></a>
 				</td></tr>
 			</table>
 			<br>
-			<div style="display: none; left: 193px; top: 106px;width:155px; position:absolute;" id="customLinksLay" 
-				onmouseout="fninvsh('customLinksLay')" onmouseover="fnvshNrm('customLinksLay')">
+			<div style="display: none; left: 193px; top: 106px;width:155px; position:absolute;" id="vtlib_customLinksLay" 
+				onmouseout="fninvsh('vtlib_customLinksLay')" onmouseover="fnvshNrm('vtlib_customLinksLay')">
 				<table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
 				<tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;"><b>{$APP.LBL_MORE} {$APP.LBL_ACTIONS} &#187;</b></td></tr>
 				<tr>
@@ -645,7 +645,7 @@ getTagCloud();
         </td></tr></table>
         </div>
         </td>
-        <td valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign=top><img src="themes/images/showPanelTopRight.gif"></td>
         </tr>
         </table>
 

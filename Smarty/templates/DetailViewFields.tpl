@@ -39,7 +39,7 @@
 									<b>{$MOD.LBL_PRODUCT_PRICES}</b>
 								</th>
 								<th align="right">
-									<img border="0" style="cursor: pointer;" onclick="toggleShowHide('multiple_currencies','currency_class');" src="{$IMAGE_PATH}/close.gif"/>
+									<img border="0" style="cursor: pointer;" onclick="toggleShowHide('multiple_currencies','currency_class');" src="themes/images/close.gif"/>
 								</th>
 							</tr>							
 							<tr class="detailedViewHeader">

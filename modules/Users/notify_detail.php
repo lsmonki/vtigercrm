@@ -13,7 +13,7 @@ global $theme;
 global $app_strings;
 global $mod_strings;
 $theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
+$image_path="themes/images/";
 
 
 ?>

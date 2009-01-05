@@ -3,7 +3,7 @@
 		<div style="border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 45%; position: relative; z-index: 10000000;">
 			<table width="98%" cellspacing="0" cellpadding="5" border="0"><tbody>
 				<tr>
-					<td width="25%" rowspan="2"><img width="61" height="60" src="{$IMAGE_PATH}empty.jpg"/></td>
+					<td width="25%" rowspan="2"><img width="61" height="60" src="themes/images/empty.jpg"/></td>
 					<td width="75%" nowrap="nowrap" style="border-bottom: 1px solid rgb(204, 204, 204);">
 						<span class="genHeaderSmall">{$APP.LBL_NO} {$module->label} {$APP.LBL_FOUND}</span>
 					</td>

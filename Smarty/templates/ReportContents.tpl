@@ -11,7 +11,7 @@
 -->*}
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="99%"  class="showPanelBg">
 	<tbody><tr>
-	<td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+	<td valign=top><img src="themes/images/showPanelTopLeft.gif"></td>
 	<td valign="top" width="50%" style="padding: 10px;border-right:1px dashed #CCCCCC">
 	<!-- Reports Table Starts Here  -->
 	{foreach item=reportfolder from=$REPT_FLDR}
@@ -52,10 +52,10 @@
 				{/if}
 				<td align="center" nowrap>
 				{if $reportdetails.customizable eq '1'}
-				<a href="javascript:;" onClick="editReport('{$reportdetails.reportid}');"><img src="{$IMAGE_PATH}editfield.gif" align="absmiddle" title="{$MOD.LBL_CUSTOMIZE_BUTTON}..." border="0"></a>
+				<a href="javascript:;" onClick="editReport('{$reportdetails.reportid}');"><img src="themes/images/editfield.gif" align="absmiddle" title="{$MOD.LBL_CUSTOMIZE_BUTTON}..." border="0"></a>
 				{/if}
 				{if $reportdetails.state neq 'SAVED'}
-				&nbsp;| &nbsp;<a href="javascript:;" onclick="DeleteReport('{$reportdetails.reportid}');"><img src="{$IMAGE_PATH}delete.gif" align="absmiddle" title="{$MOD.LBL_DELETE}..." border="0"></a>
+				&nbsp;| &nbsp;<a href="javascript:;" onclick="DeleteReport('{$reportdetails.reportid}');"><img src="themes/images/delete.gif" align="absmiddle" title="{$MOD.LBL_DELETE}..." border="0"></a>
 				{/if}
 				</td>
 				</tr>
@@ -75,7 +75,7 @@
 		{include file="ReportsCustomize.tpl"}	
 	</div>
 	</td>
-	<td valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+	<td valign=top><img src="themes/images/showPanelTopRight.gif"></td>
 	</tr>
 	<tr>
 	<td colspan="2" align="center">&nbsp;</td>

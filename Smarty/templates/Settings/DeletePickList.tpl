@@ -15,7 +15,7 @@
 	<table border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 		<tr>
 			<td class="layerPopupHeading" align="left" width="40%" nowrap>{$APP.DELETE_PICKLIST_VALUES} - {$FIELDLABEL}</td>
-			<td align="right" width="60%"><img src="{$IMAGE_PATH}close.gif" align="middle" border="0" onclick="Myhide('deletediv');"></td>
+			<td align="right" width="60%"><img src="themes/images/close.gif" align="middle" border="0" onclick="Myhide('deletediv');"></td>
 		</tr>
 	</table>
 	
@@ -28,7 +28,7 @@
 			</select>
 			</td>
 			<td valign=top align=left>
-				<!--img src="{$IMAGE_PATH}movecol_del.gif" onmouseover="this.src='{$IMAGE_PATH}movecol_del_over.gif'" onmouseout="this.src='{$IMAGE_PATH}movecol_del.gif'" onclick="" onmousedown="this.src='{$IMAGE_PATH}movecol_del_down.gif'" align="absmiddle" border="0" -->
+				<!--img src="themes/images/movecol_del.gif" onmouseover="this.src='themes/images/movecol_del.gif'" onmouseout="this.src='themes/images/movecol_del.gif'" onclick="" onmousedown="this.src='themes/images/movecol_del.gif'" align="absmiddle" border="0" -->
 				<input type="button" value="{$APP.LBL_APPLY_LABEL}" name="del" class="crmButton small edit" onclick="delPickList(this,'{$MODULE}',{$NONEDIT_FLAG});">
 				<input type="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" name="cancel" class="crmButton small cancel" onclick="Myhide('deletediv');">
 			</td>

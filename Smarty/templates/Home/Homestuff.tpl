@@ -19,8 +19,8 @@
 					<td>
 					<table border=0 cellspacing=0 cellpadding=5>
 					<tr>
-						<td style="padding-right:5px;padding-left:5px;"><img src="{$IMAGE_PATH}btnL3Add-Faded.gif" border=0></td>	
-						<td style="padding-right:5px"><img src="{$IMAGE_PATH}btnL3Search-Faded.gif" border=0></td>
+						<td style="padding-right:5px;padding-left:5px;"><img src="themes/images/btnL3Add-Faded.gif" border=0></td>	
+						<td style="padding-right:5px"><img src="themes/images/btnL3Search-Faded.gif" border=0></td>
 					</tr>
 					</table>
 					</td>
@@ -34,7 +34,7 @@
 					{if $CHECK.Calendar eq 'yes'}
 					<td style="padding-right:5px;padding-left:5px;"><a href="javascript:;" onClick='fnvshobj(this,"miniCal");getMiniCal();'><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$APP.LBL_CALENDAR_ALT}" title="{$APP.LBL_CALENDAR_TITLE}" border=0></a></a></td>
 					{else}
-					<td style="padding-right:5px;padding-left:5px;"><img src="{$IMAGE_PATH}btnL3Calendar-Faded.gif" border=0></td>
+					<td style="padding-right:5px;padding-left:5px;"><img src="themes/images/btnL3Calendar-Faded.gif" border=0></td>
 					{/if}
 					<td style="padding-right:5px"><a href="javascript:;"><img src="{$IMAGE_PATH}btnL3Clock.gif" alt="{$APP.LBL_CLOCK_ALT}" title="{$APP.LBL_CLOCK_TITLE}" border=0 onClick="fnvshobj(this,'wclock');"></a></a></td>
 					<td style="padding-right:5px"><a href="#"><img src="{$IMAGE_PATH}btnL3Calc.gif" alt="{$APP.LBL_CALCULATOR_ALT}" title="{$APP.LBL_CALCULATOR_TITLE}" border=0 onClick="fnvshobj(this,'calculator_cont');fetch_calc();"></a></td>
@@ -47,8 +47,8 @@
 				<td class="small">
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
-					<td style="padding-right:5px;padding-left:10px;"><img src="{$IMAGE_PATH}tbarImport-Faded.gif" border="0"></td>	
-					<td style="padding-right:5px"><img src="{$IMAGE_PATH}tbarExport-Faded.gif" border="0"></td>
+					<td style="padding-right:5px;padding-left:10px;"><img src="themes/images/tbarImport-Faded.gif" border="0"></td>	
+					<td style="padding-right:5px"><img src="themes/images/tbarExport-Faded.gif" border="0"></td>
 				</tr>
 				</table>	
 				</td>
@@ -82,7 +82,7 @@
 		<td width="20%"><marquee onmouseover="javascript:stop();" onmouseout="javascript:start();">{$CONFIGPROXY}</marquee</td>
 		<td width=5%><div id="vtbusy_info" style="display:none;"><img src="{$IMAGE_PATH}status.gif" border="0"></div></td>
 	</TABLE>
-<div id="vtbusy_homeinfo" style="display:none;"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></div>
+<div id="vtbusy_homeinfo" style="display:none;"><img src="themes/images/vtbusy.gif" border="0"></div>
 
 {* Main Contents Starts Here *}
 <form name="Homestuff" id="formStuff">
@@ -104,7 +104,7 @@
 	<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 		<tr>
 			<td class="layerPopupHeading" align="left" id="divHeader"></td>
-			<td align="right"><a href="javascript:;" onclick="fnhide('PopupLay');$('stufftitle_id').value='';"><img src="{$IMAGE_PATH}close.gif" border="0"  align="absmiddle" /></a></td>
+			<td align="right"><a href="javascript:;" onclick="fnhide('PopupLay');$('stufftitle_id').value='';"><img src="themes/images/close.gif" border="0"  align="absmiddle" /></a></td>
 		</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
@@ -272,7 +272,7 @@
 				<tr>
 					<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">{$APP.LBL_CHANGE_OWNER}</td>
 					<td style="border-bottom: 1px solid rgb(204, 204, 204);">&nbsp;</td>
-					<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('act_changeowner')"><img src="{$IMAGE_PATH}close.gif" align="absmiddle" border="0"></a></td>
+					<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('act_changeowner')"><img src="themes/images/close.gif" align="absmiddle" border="0"></a></td>
 				</tr>
 				<tr>
 					<td colspan="3">&nbsp;</td>
