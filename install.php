@@ -57,6 +57,8 @@ if (!isset($_SERVER['REQUEST_METHOD'])) {
 if (isset($_POST['file'])) $the_file = $_POST['file'];
 else $the_file = "0welcome.php";
 
+if (isset($_REQUEST['file'])) $the_file = $_REQUEST['file'];
+
 include("install/".$the_file);
 
 ?>

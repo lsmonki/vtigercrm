@@ -141,7 +141,8 @@ $cache_dir = 'cache/';
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
 		<td class="cwHeadBg" align=left><img src="include/install/images/configwizard.gif" alt="Configuration Wizard" hspace="20" title="Configuration Wizard"></td>
-		<td class="cwHeadBg" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
+		<td class="cwHeadBg1" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
+		<td class="cwHeadBg1" width=2%></td>
 	</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
@@ -156,9 +157,9 @@ $cache_dir = 'cache/';
 			<!-- Master display -->
 			<table border=0 cellspacing=0 cellpadding=0 width=97%>
 			<tr>
-				<td width=20% valign=top>
+				<!-- td width=20% valign=top>
 
-				<!-- Left side tabs -->
+				<!-- Left side tabs --\>
 					<table border=0 cellspacing=0 cellpadding=10 width=100%>
 					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Welcome</div></td></tr>
 					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Installation Check</div></td></tr>
@@ -169,13 +170,15 @@ $cache_dir = 'cache/';
 					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Finish</div></td></tr>
 					</table>
 					
-				</td>
+				</td -->
 				<td width=80% valign=top class="cwContentDisplay" align=left>
-				<table border=0 cellspacing=0 cellpadding=10 width=100%>
+				<table border=0 cellspacing=0 cellpadding=5 width=100%>
 				<tr><td class=small align=left><img id="title_img" src="include/install/images/confWizConfFile.gif" alt="Config File Creation" title="Config File Creation"><img id="title_img1" src="include/install/images/confWizDbGeneration.gif" style="display:none;" alt="Database Generation" title="Database Generation"><br>
 					  <hr noshade size=1></td></tr>
 				<tr>
-					<td align=left class="small" style="padding-left:20px">
+					<td align=left><br>
+					<table width="95%" cellpadding="0" border="0" align=center class="level3" cellspacing="1">
+					<tr><td>
 					<?php
 					if (isset($_REQUEST['root_directory']))
 						$root_directory = $_REQUEST['root_directory'];
@@ -235,12 +238,11 @@ $cache_dir = 'cache/';
   
 	if ($templateHandle && $includeHandle) {?>
 			<div id="config_info">
-			<p><strong class="big">Successfully created configuration file (config.inc.php) in :</strong><br><br>
-			<font color="green"><b><?php echo $root_directory; ?></b></font><br><br>
-			The installation will take at least 4 minutes.<p> Grab a coffee,sit back and relax or browse through our <a href='http://blogs.vtiger.com/index.php' target="_blank">blogs</a><br>
-			</p>
-			</div>
-			<br>		
+			<p><strong class="big">Successfully created configuration file (config.inc.php) in :</strong><br>
+			<font color="green"><b><?php echo $root_directory; ?></b></font><br>
+			The installation will take at least 4 minutes.<br> Grab a coffee,sit back and relax or browse through our <a href='http://blogs.vtiger.com/index.php' target="_blank">blogs</a><br>
+			
+			</div>	
 	<?php } 
 	else {?>
 			<div id="config_info"><p><strong class="big"><font color="red">Cannot write configuration file (config.inc.php ) in : </font></strong><br><br>
@@ -442,7 +444,11 @@ $cache_dir = 'cache/';
 	
 				  
 		}	?>
-				</div></td>
+				</div>
+				</td>					</tr>
+					</table>
+				
+				</td>
 				</tr>
 				<tr><td align="center"><img id="populating_info" src="include/install/images/loading.gif" style="visibility:hidden;"></td></tr>
 				<tr>
@@ -499,10 +505,10 @@ $cache_dir = 'cache/';
 	<script>
 	function createtablejs()
 	{
-		document.getElementById('dbcreate_tab').innerHTML = '<div align="left"><b>Database Generation</b></div>';
-		document.getElementById('configfile_tab').className = 'small cwUnSelectedTab';
-		document.getElementById('configfile_tab').innerHTML = '<div align="left">Config File Creation</div>';
-		document.getElementById('dbcreate_tab').className = 'small cwSelectedTab';
+		//document.getElementById('dbcreate_tab').innerHTML = '<div align="left"><b>Database Generation</b></div>';
+		//document.getElementById('configfile_tab').className = 'small cwUnSelectedTab';
+		//document.getElementById('configfile_tab').innerHTML = '<div align="left">Config File Creation</div>';
+		//document.getElementById('dbcreate_tab').className = 'small cwSelectedTab';
 		oImg = document.getElementById('title_img').style.display = 'none';
 		oImg = document.getElementById('title_img1').style.display = 'block';
 		document.getElementById('populating_info').style.visibility='visible';

@@ -58,7 +58,7 @@ class DatabaseDump {
 			// Write some information regarding database dump and the time first.	
 			$this->writeln("-- $database database dump");
 			$this->writeln("-- Date: " . date("D, M j, G:i:s T Y"));
-			$this->writeln("------------------------------------------------");
+			$this->writeln("-- ----------------------------------");
 			$this->writeln("");
 	
 			// Meta information which helps to import into mysql database.

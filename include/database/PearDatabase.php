@@ -1001,8 +1001,10 @@ class PearDatabase{
 	}
 } /* End of class */
 
-$adb = new PearDatabase();
-$adb->connect();
+if(empty($adb)) {
+	$adb = new PearDatabase();
+	$adb->connect();
+}
 //$adb->database->setFetchMode(ADODB_FETCH_NUM);
 
 ?>

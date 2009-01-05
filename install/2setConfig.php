@@ -29,13 +29,15 @@ $hostname = $_SERVER['SERVER_NAME'];
 //$web_root = $hostname.$_SERVER['PHP_SELF'];
 //$web_root = $HTTP_SERVER_VARS["HTTP_HOST"] . $HTTP_SERVER_VARS["REQUEST_URI"];
 $web_root = ($_SERVER["HTTP_HOST"]) ? $_SERVER["HTTP_HOST"]:$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'];
-$web_root .= $HTTP_SERVER_VARS["REQUEST_URI"];
+$web_root .= $_SERVER["REQUEST_URI"];
 $web_root = str_replace("/install.php", "", $web_root);
 $web_root = "http://".$web_root;
 
 $current_dir = pathinfo(dirname(__FILE__));
 $current_dir = $current_dir['dirname']."/";
 $cache_dir = "cache/";
+
+require_once('currencies.php');
 
 if (is_file("config.php") && is_file("config.inc.php")) {
 	require_once("config.inc.php");
@@ -74,17 +76,18 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 													
 	global $dbconfig;
 
+	if (isset($_REQUEST['db_username']))
+	$db_username = $_REQUEST['db_username'];
+	elseif (isset($dbconfig['db_username']))
+	$db_username = $dbconfig['db_username'];
+
 	if (isset($_REQUEST['db_hostname']))
 	$db_hostname = $_REQUEST['db_hostname'];
 	elseif (isset($dbconfig['db_hostname']))
 	$db_hostname = $dbconfig['db_hostname'];
 	else
-	$db_hostname = 'localhost'; //Asha: Set the datbase hostname to 'localhost' by default instead of $hostname
-
-	if (isset($_REQUEST['db_username']))
-	$db_username = $_REQUEST['db_username'];
-	elseif (isset($dbconfig['db_username']))
-	$db_username = $dbconfig['db_username'];
+	$db_hostname = 'localhost';
+	
 
 	if (isset($_REQUEST['db_password']))
 	$db_password = $_REQUEST['db_password'];
@@ -141,15 +144,6 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	
 	if (isset($_REQUEST['currency_name']))
 		$currency_name = $_REQUEST['currency_name'];
-	else
-		$currency_name = '';
-	
-	if (isset($_REQUEST['currency_symbol']))
-	$currency_symbol = $_REQUEST['currency_symbol'];
-	
-	if (isset($_REQUEST['currency_code']))
-	$currency_code = $_REQUEST['currency_code'];
-
 	}
 	else {
 		!isset($_REQUEST['db_hostname']) ? $db_hostname = $hostname: $db_hostname = $_REQUEST['db_hostname'];
@@ -189,7 +183,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 <body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 <style>
 	.hide_tab{display:none;}
-	.show_tab{display:inline-table;}
+	.show_tab{}
 </style>
 
 <script type="text/javascript" language="Javascript">
@@ -279,17 +273,6 @@ function verify_data(form) {
                 errorMessage += "\n currency name";
                 form.currency_name.focus();
         }
-	if (trim(form.currency_symbol.value) =='') {
-                isError = true;
-                errorMessage += "\n currency symbol";
-                form.currency_symbol.focus();
-        }	
-	if (trim(form.currency_code.value) =='') {
-                isError = true;
-                errorMessage += "\n currency code";
-                form.currency_code.focus();
-        }
-
 
 	if(document.getElementById('check_createdb').checked == true)
 	{
@@ -342,7 +325,8 @@ function verify_data(form) {
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
 		<td class="cwHeadBg" align=left><img src="include/install/images/configwizard.gif" alt="Configuration Wizard" hspace="20" title="Configuration Wizard"></td>
-		<td class="cwHeadBg" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
+		<td class="cwHeadBg1" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
+		<td class="cwHeadBg1" width=2%></td>
 	</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
@@ -357,9 +341,9 @@ function verify_data(form) {
 			<!-- Master display -->
 			<table border=0 cellspacing=0 cellpadding=0 width=97%>
 			<tr>
-				<td width=20% valign=top>
+				<!-- td width=20% valign=top>
 
-				<!-- Left side tabs -->
+				<!-- Left side tabs --\>
 					<table border=0 cellspacing=0 cellpadding=10 width=100%>
 					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Welcome</div></td></tr>
 					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Installation Check</div></td></tr>
@@ -369,194 +353,149 @@ function verify_data(form) {
 					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Database Generation</div></td></tr>
 					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Finish</div></td></tr>
 					</table>
-					
-				</td>
+				</td -->
 				<td width=80% valign=top class="cwContentDisplay" align=left>
 				<!-- Right side tabs -->
 				    <form action="install.php" method="post" name="installform" id="form" name="setConfig" id="form">
 				    <table border=0 cellspacing=0 cellpadding=10 width=100%>
-				    <tr><td class=small align=left><img src="include/install/images/confWizSysConfig.gif" alt="System Configuration" title="System Configuration"><br>
+				    <tr><td class=small align=left colspan=2><img src="include/install/images/confWizSysConfig.gif" alt="System Configuration" title="System Configuration"><br>
 					  <hr noshade size=1></td></tr>
-				    <tr>
-					<td align=left class="small" style="padding-left:20px">
-
-	
-				<table width="100%" cellpadding="5"  cellspacing="1" border="0" class=small><tbody>
-				<tr>
-					<td >
-		          		<b>Please enter your database configuration information below...</b><br>
-
-					  If you do not have root access to your database (for example you are installing in a virtual
-					  hosting environment), you will need to have your database created for you before you proceed.
-					  However, this installer will still be able to create the necessary database tables. <br><br>
-			
-					  If you are unsure of your database host, username or password, we suggest that you use the default
-					  values below. <br><br>
-					  
-					  *- required information
-					  
-
-					</td>
-				</tr>
-				</table>
-			
-			<br>
-			
-			<table width="90%" cellpadding="5"  cellspacing="1" border="0" class=small style="background-color:#cccccc"><tbody>
-			<tr><td colspan=2><strong>Database Configuration</strong></td></tr>
+				    <tr valign=top >
+					<td align=left class="small" width=50% style="padding-left:10px">
+		
+			<table width="100%" cellpadding="0"  cellspacing="1" border="0" align=center class="level3"><tbody>
+			<tr><td colspan=4><strong>Database Information</strong><hr noshade size=1></td></tr>
 			<tr>
-               <td width="25%" nowrap bgcolor="#F5F5F5" ><strong>Database Type</strong> <sup><font color=red>*</font></sup></td>
-               <td width="75%" bgcolor="white" align="left">
+               <td width="20%" nowrap >Database Type <sup><font color=red>*</font></sup></td>
+               <td width="30%" align="left">
 		<?php if(!$db_options) : ?>
 			No Database Support Detected
 		<?php elseif(count($db_options) == 1) : ?>
 			<?php list($db_type, $label) = each($db_options); ?>
 			<input type="hidden" name="db_type" value="<?php echo $db_type ?>"><?php echo $label ?>
 		<?php else : ?>
-			<select name="db_type">
+			<select length=40 name="db_type">
 			<?php foreach($db_options as $db_option_type => $label) : ?>
 				<option value="<?php echo $db_option_type ?>" <?php if(isset($db_type) && $db_type == $db_option_type) { echo "SELECTED"; } ?>><?php echo $label ?></option>
-			<?php endforeach ?>
+			<?php endforeach; ?>
 			</select>
-		<?php endif ?>
+		<?php endif; ?>
 			   </td>
             </tr>
 			<tr>
-               <td width="25%" nowrap bgcolor="#F5F5F5" ><strong>Host Name</strong> <sup><font color=red>*</font></sup></td>
-               <td width="75%" bgcolor="white" align="left"><input type="text" class="dataInput" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" />
-			   &nbsp;<a href="http://www.vtiger.com/products/crm/help/5.1.0/vtiger_CRM_Database_Hostname.pdf" target="_blank">More Information</a></td>
+               <td width="25%" nowrap >Host Name <sup><font color=red>*</font></sup></td>
+               <td width="75%" align="left"><input type="text" class="dataInput" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" />
+			   &nbsp;<a href="http://www.vtiger.com/products/crm/help/5.1.0/vtiger_CRM_Database_Hostname.pdf" target="_blank">More...</a></td>
               </tr>
               <tr>
-               <td nowrap bgcolor="#F5F5F5"><strong>User Name</strong> <sup><font color=red>*</font></sup></td>
-               <td bgcolor="white" align="left"><input type="text" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" /></td>
+               <td nowrap>User Name <sup><font color=red>*</font></sup></td>
+               <td align="left"><input type="text" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" /></td>
               </tr>
               <tr>
-               <td nowrap bgcolor="#F5F5F5"><strong>Password</strong></td>
-               <td bgcolor="white" align="left"><input type="password" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" /></td>
+               <td nowrap>Password</td>
+               <td align="left"><input type="password" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" /></td>
               </tr>
               <tr>
-               <td nowrap bgcolor="#F5F5F5"><strong>Database Name</strong> <sup><font color=red>*</font></sup></td>
-               <td bgcolor="white" align="left"><input type="text" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />&nbsp;
-		       <?php if($check_createdb == 'on')
+               <td nowrap>Database Name <sup><font color=red>*</font></sup></td>
+               <td align="left" width='30%'><input type="text" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />&nbsp;
+		      </tr>
+		      <tr>
+		      <td colspan=2> 
+		      	<?php if($check_createdb == 'on')
 			       {?>
-			       <input name="check_createdb" type="checkbox" id="check_createdb" checked onClick="fnShow_Hide()"/>
+			       <input name="check_createdb" type="checkbox" id="check_createdb" checked onClick="fnShow_Hide()"/> 
 			       <?php }else{?>
-				       <input name="check_createdb" type="checkbox" id="check_createdb" onClick="fnShow_Hide()"/>
+				       <input name="check_createdb" type="checkbox" id="check_createdb" onClick="fnShow_Hide()"/> 
 			       <?php } ?>
-			       &nbsp;Create Database (will drop the database if exists)</td>
+			       &nbsp;Create Database ( Will drop if the database if exists)</td>
+              </td>
               </tr>
 	      <tr id="root_user" class="hide_tab">
-			   <td bgcolor="#f5f5f5" nowrap="nowrap" width="25%"><strong>Root Username</strong> <sup><font color="red">*</font></sup></td>
-			   <td align="left" bgcolor="white"><input class="dataInput" name="root_user" id="root_user_txtbox" value="<?php echo $root_user;?>" type="text"></td>
+			   <td nowrap="nowrap" width="20%">Root Username<sup><font color="red">*</font></sup></td>
+			   <td align="left" width="30%"><input class="dataInput" name="root_user" id="root_user_txtbox" value="<?php echo $root_user;?>" type="text"></td>
  	      </tr>
 	      <tr id="root_pass" class="hide_tab">
-			   <td bgcolor="#f5f5f5" nowrap="nowrap"><strong>Root Password</strong></td>
-			   <td align="left" bgcolor="white"><input class="dataInput" name="root_password" value="<?php echo $root_password;?>" type="password"></td>
+			   <td nowrap="nowrap" width="20%">Root Password</td>
+			   <td align="left" width="30%"><input class="dataInput" name="root_password" value="<?php echo $root_password;?>" type="password"></td>
 		  </tr>
           <tr id="create_db_config" class="hide_tab">
-			   <td bgcolor="#f5f5f5" nowrap="nowrap"><strong>UTF-8 Support</strong></td>
-			   <td align="left" bgcolor="white"><input name="create_utf8_db" type="checkbox" id="create_utf8_db" <?php if($create_utf8_db == 'true') echo "checked"; ?> /> DEFAULT CHARACTER SET utf8, DEFAULT COLLATE utf8_general_ci</td>
+			   <td nowrap="nowrap">UTF-8 Support</td>
+			   <td align="left" colspan=3><input name="create_utf8_db" type="checkbox" id="create_utf8_db" <?php if($create_utf8_db == 'true') echo "checked"; ?> /> <!-- DEFAULT CHARACTER SET utf8, DEFAULT COLLATE utf8_general_ci --></td>
 	      </tr>
               </table>
-			
-			<br><br>
-			
-		  <!-- Web site configuration -->
-		<table width="90%" cellpadding="5" border="0" style="background-color:#cccccc" cellspacing="1" class="small"><tbody>
+			<br>
+		</td>			
+		<td align=left class="small" width=50% style="padding-left:20px">
+	  <!-- Web site configuration -->
+		<table width="100%" cellpadding="0" border="0" cellspacing="1" align=center class="level3"><tbody>
             <tr>
-				<td ><strong>Site Configuration</strong></td>
+				<td colspan=2><strong>CRM Configuration</strong><hr noshade size=1></td>
             </tr>
 			<tr>
-				<td width="25%" bgcolor="#F5F5F5" ><strong>URL</strong> <sup><font color=red>*</font></sup></td>
-				<td width="75%" bgcolor=white align="left"><input class="dataInput" type="text" name="site_URL"
+				<td width="20%" >URL <sup><font color=red>*</font></sup></td>
+				<td width="80%" align="left"><input class="dataInput" type="text" name="site_URL"
 				value="<?php if (isset($site_URL)) echo $site_URL; ?>" size="40" />
 				</td>
 			</tr>
 			<tr>
-				<td bgcolor="#F5F5F5"><strong>Path</strong> <sup><font color=red>*</font></sup></td>
-				<td align="left" bgcolor="white"><input class="dataInput" type="text" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" size="40" /> </td>
+				<td nowrap width=20% >Currency Name<sup><font color=red>*</font></sup></td>
+				<td width=80% align="left">
+					<!-- input class="dataInput" type="text" name="currency_name" value="< ?php if (isset($currency_name)) echo "$currency_name"; ?>" -->
+					<select id='currency_name' name='currency_name''>
+						<?php
+							foreach($currencies as $index=>$value){
+								if(isset($currency_name)){
+									if($index==$currency_name){
+										echo "<option value='$index' selected>$index(".$value[1].")</option>";
+									}
+									else{
+										echo "<option value='$index'>$index(".$value[1].")</option>";
+									}
+								} else
+								{ 
+									if($index=='United States of America, Dollars'){
+										echo "<option value='$index' selected>$index(".$value[1].")</option>";
+									} else {
+										echo "<option value='$index'>$index(".$value[1].")</option>";
+									}
+								}
+							}
+						?>
+					</select>
+				</td>
 			</tr>
-			<tr valign="top">
-				<td bgcolor="#F5F5F5"><strong>Path to Cache Directory  <sup><font color=red>*</font></sup><br>(must be writable)</td>
-				<td align="left" bgcolor="white"><?php echo $root_directory; ?><input class="dataInput" type="text" name="cache_dir" size='14' value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" size="40" /> </td>
-          </tr>
+			<input class="dataInput" type="hidden" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" size="40" />
+			<input class="dataInput" type="hidden" name="cache_dir" size='40' value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" size="40" />
           </table>
-			<br><br>
+			<br>
 			
 			<!-- Admin Configuration -->
-            <table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
+            <table width="100%" cellpadding="0" border="0" align=center class="level3" cellspacing="1" >
 			<tr>
-				<td colspan=2><strong>Admin Configuration</strong></td>
+				<td colspan=3><strong>User Configuration</strong><hr noshade size=1></td>
             </tr>
 			<tr>
-				<td nowrap width=25% bgcolor="#F5F5F5" ><strong>User name</strong></td>
-				<td width=75% bgcolor="white" align="left">admin</td>
+				<td nowrap width=20% >Username</td>
+				<td width=40% align="left"><i>admin</i></td>
+				<td width=40% align="left"><i>standarduser</i></td>
 			</tr>
 			<tr>
-				<td bgcolor="#F5F5F5" nowrap><strong>Password</strong><sup><font color=red>*</font></sup></td>
-				<td bgcolor="white" align="left"><input class="dataInput" type="password" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin"; ?>"></td>
+				<td nowrap>Password<sup><font color=red>*</font></sup></td>
+				<td align="left"><input class="dataInput" size=15 type="password" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin"; ?>"></td>
+				<td align="left"><input class="dataInput" size=15 type="password" name="standarduser_password" value="<?php if (isset($stand_password)) echo "$stand_password"; else echo "standarduser"; ?>"></td>
 			</tr>
 			<tr>
-				<td bgcolor="#F5F5F5" nowrap><strong>Email</strong><sup><font color=red>*</font></sup></td>
-				<td bgcolor="white" align="left"><input class="dataInput" type="text" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>"></td>
-			</tr>
-			<tr>
-				<td colspan="2" bgcolor="white"><font color=blue> <b>Note:</b> The default password is 'admin'. You can change the password if necessary now or else you can change it later after logging-in.</font></td>
+				<td nowrap>Email<sup><font color=red>*</font></sup></td>
+				<td align="left"><input class="dataInput" size=15 type="text" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>"></td>
+				<td align="left"><input class="dataInput" size=15 type="text" name="standarduser_email" value="<?php if (isset($stand_email)) echo "$stand_email"; ?>"></td>
 			</tr>
 			</table>
 	
-			<br><br>
-			<!-- StandardUser Configuration -->
-			<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
-			<tr>
-				<td colspan=2><strong>Standarduser Configuration</strong></td>
-			</tr>
-			<tr>
-				<td nowrap width=25% bgcolor="#F5F5F5" ><strong>User name</strong></td>
-				<td width=75% bgcolor="white" align="left">standarduser</td>
-			</tr>
-			<tr>
-				<td bgcolor="#F5F5F5" nowrap><strong>Password</strong><sup><font color=red>*</font></sup></td>
-				<td bgcolor="white" align="left"><input class="dataInput" type="password" name="standarduser_password" value="<?php if (isset($stand_password)) echo "$stand_password"; else echo "standarduser"; ?>"></td>
-			</tr>
-			<tr>
-				<td bgcolor="#F5F5F5" nowrap><strong>Email</strong><sup><font color=red>*</font></sup></td>
-				<td bgcolor="white" align="left"><input class="dataInput" type="text" name="standarduser_email" value="<?php if (isset($stand_email)) echo "$stand_email"; ?>"></td>
-			</tr>
-			<tr>
-				<td colspan="2" bgcolor="white"><font color=blue> <b>Note:</b> The default password is 'standarduser'. You can change the password if necessary now or else you can change it later after logging-in.</font></td>
-			</tr>
-			</table>
-
-			<br><br>
-
-		<!-- Currency Configuration -->
-            <table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
-			<tr>
-				<td colspan=2><strong>Currency
-		Configuration</strong></td> <i>This will setup the
-		default currency which will be used for maintaining
-		transactions in vtiger.</i> 
-            </tr>
-			<tr>
-				<td nowrap width=25% bgcolor="#F5F5F5" ><strong>Name</strong><sup><font color=red>*</font></sup></td>
-				<td width=75% bgcolor="white" align="left"><input class="dataInput" type="text" name="currency_name" value="<?php if (isset($currency_name)) echo "$currency_name"; ?>"></td>
-			</tr>
-			<tr>
-				<td bgcolor="#F5F5F5" nowrap><strong>Symbol</strong><sup><font color=red>*</font></sup></td>
-				<td bgcolor="white" align="left"><input class="dataInput" type="text" name="currency_symbol" value="<?php if (isset($currency_symbol)) echo "$currency_symbol";?>"></td>
-			</tr>
-			<tr>
-				<td bgcolor="#F5F5F5" nowrap><strong>Code</strong><sup><font color=red>*</font></sup></td>
-				<td bgcolor="white" align="left"><input class="dataInput" type="text" name="currency_code" value="<?php if (isset($currency_code)) echo "$currency_code"; ?>"></td>
-			</tr>
-			</table>
-
 		<!-- System Configuration -->
 		</td>
 		</tr>
 		<tr>
-				<td align=center>
+				<td align=center colspan=2>
 					<input type="hidden" name="file" value="3confirmConfig.php" />
 					<input type="image" src="include/install/images/cwBtnNext.gif" id="starttbn" alt="Next" border="0" title="Next" onClick="return verify_data(window.document.installform);">
 					<br>

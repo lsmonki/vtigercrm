@@ -16,21 +16,10 @@
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/5createTables.php,v 1.58 2005/04/19 16:57:08 ray Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
-global $php_max_execution_time;
-set_time_limit($php_max_execution_time);
+set_time_limit(0);
 
-if (isset($_REQUEST['db_name'])) $db_name  				= $_REQUEST['db_name'];
-if (isset($_REQUEST['db_drop_tables'])) $db_drop_tables 	= $_REQUEST['db_drop_tables'];
-if (isset($_REQUEST['db_create'])) $db_create 			= $_REQUEST['db_create'];
-if (isset($_REQUEST['db_populate'])) $db_populate		= $_REQUEST['db_populate'];
-if (isset($_REQUEST['admin_email'])) $admin_email		= $_REQUEST['admin_email'];
-if (isset($_REQUEST['admin_password'])) $admin_password	= $_REQUEST['admin_password'];
-if (isset($_REQUEST['standarduser_email'])) $standarduser_email  = $_REQUEST['standarduser_email'];
-if (isset($_REQUEST['standarduser_password'])) $standarduser_password = $_REQUEST['standarduser_password'];
-if (isset($_REQUEST['currency_name'])) $currency_name	= $_REQUEST['currency_name'];
-if (isset($_REQUEST['currency_code'])) $currency_code	= $_REQUEST['currency_code'];
-if (isset($_REQUEST['currency_symbol'])) $currency_symbol	= $_REQUEST['currency_symbol'];
-
+if (isset($_REQUEST['root_directory'])) $root_directory = $_REQUEST['root_directory'];
+if (isset($_REQUEST['source_directory'])) $source_directory = $_REQUEST['source_directory'];
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -38,18 +27,6 @@ if (isset($_REQUEST['currency_symbol'])) $currency_symbol	= $_REQUEST['currency_
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>vtiger CRM 5 - Configuration Wizard - Finish</title>
-
-<script type="text/javascript">
-function showhidediv()
-{
-	var div_style = document.getElementById("htaccess_div").style.display;
-	if(div_style == "inline")
-		document.getElementById("htaccess_div").style.display = "none";
-	else
-		document.getElementById("htaccess_div").style.display = "inline";
-		
-}
-</script>
 
 <link href="include/install/install.css" rel="stylesheet" type="text/css">
 </head>
@@ -77,20 +54,6 @@ function showhidediv()
 			<!-- Master display -->
 			<table border=0 cellspacing=0 cellpadding=0 width=97%>
 			<tr>
-				<!-- td width=20% valign=top>
-
-				<!-- Left side tabs --\>
-					<table border=0 cellspacing=0 cellpadding=10 width=100%>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Welcome</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Installation Check</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">System Configuration</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Confirm Settings</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Config File Creation</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Database Generation</div></td></tr>
-					<tr><td class="small cwSelectedTab" align=right><div align="left"><b>Finish</b></div></td></tr>
-					</table>
-					
-				</td -->
 				<td width=80% valign=top class="cwContentDisplay" align=left>
 				<!-- Right side tabs -->
 					<table border=0 cellspacing=0 cellpadding=10 width=100%>
@@ -102,13 +65,6 @@ function showhidediv()
 
 <?php
 
-	// Output html instead of plain text for the web
-	$useHtmlEntities = true;
-
-	require_once('install/5createTables.inc.php');
-
-	
-//populating forums data
 
 //this is to rename the installation file and folder so that no one destroys the setup
 $renamefile = uniqid(rand(), true);
@@ -137,30 +93,24 @@ if(!@rename("install/", $renamefile."install/"))
 	{
 		echo "<br><b><font color='red'>We strongly suggest you to rename the install directory.</font></b><br>";
 	}
-
+$_SESSION['VTIGER_DB_VERSION']='5.1.0';
 }
 //populate Calendar data
 
-// Status tracking
-$statimage = '';
-@include_once('config.inc.php');
-if(isset($application_unique_key) && !empty($application_unique_key)) {
-	$statimage = "<img src='http://stats.vtiger.com/stats.php?uid=$application_unique_key&v=$vtiger_current_version&type=I' 
-		alt='|' title='' border=0 width='1px' height='1px'>";
-}
-// END
 
 ?>
 		<table border=0 cellspacing=0 cellpadding=5 align="center" width="80%" style="background-color:#E1E1FD;border:1px dashed #111111;">
 		<tr>
 			<td align=center class=small>
-			<b>vtigercrm-5.1.0 is all set to go!</b>
+			<b>Migration Successfully finished. All new vtigercrm-5.1.0 is set to go!</b>
 			<hr noshade size=1>
 			<div style="width:100%;padding:10px; "align=left>
 			<ul>
 			<li>Your install.php file has been renamed to <?php echo $renamefile;?>install.php.txt.
 			<li>Your install folder too has been renamed to <?php echo $renamefile;?>install/.  
-			<li>Please log in using the "admin" user name and the password you entered in step 2.
+			<li>Your older version is available at <?php echo $source_directory;?>.
+			<li>Your current source path is <?php echo $root_directory;?>.
+			<li>Please log in using the "admin" user name and password of your old installation.
 			<li>Do not forget to set the outgoing emailserver, setup accessible from Settings-&gt;Outgoing Server
 			</ul>
 			<ul>
@@ -225,7 +175,7 @@ if(isset($application_unique_key) && !empty($application_unique_key)) {
     <table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 
       <tr>
-		  <td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td> | <?php echo $statimage ?>
+        <td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td>
       </tr>
     </table>
 </body>

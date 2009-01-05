@@ -25,6 +25,13 @@ ob_end_clean();
 
 $pieces = explode("<h2", $string);
 $settings = array();
+
+require_once('config.inc.php');
+$install_permitted = false;
+if(!isset($dbconfig['db_hostname']) || $dbconfig['db_status']=='_DB_STAT_') {
+	$install_permitted = true;
+}
+
 foreach($pieces as $val)
 {
    preg_match("/<a name=\"module_([^<>]*)\">/", $val, $sub_key);
@@ -54,13 +61,14 @@ foreach($pieces as $val)
 
 <body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 
-	<br><br><br>
+	<br>
 	<!-- Table for cfgwiz starts -->
 
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
 		<td class="cwHeadBg" align=left><img src="include/install/images/configwizard.gif" alt="Configuration Wizard" hspace="20" title="Configuration Wizard"></td>
-		<td class="cwHeadBg" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
+		<td class="cwHeadBg1" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
+		<td class="cwHeadBg1" width=2%></td>
 	</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
@@ -75,64 +83,48 @@ foreach($pieces as $val)
 			<!-- Master display -->
 			<table border=0 cellspacing=0 cellpadding=0 width=97%>
 			<tr>
-				<td width=20% valign=top>
-
-				<!-- Left side tabs -->
-					<table border=0 cellspacing=0 cellpadding=10 width=100%>
-					<tr><td class="small cwSelectedTab" align=right><div align="left"><b>Welcome</b></div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Installation Check</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">System Configuration</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Confirm Settings</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Config File Creation</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Database Generation</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Finish</div></td></tr>
-					</table>
-					
-				</td>
-				<td width=80% valign=top class="cwContentDisplay" align=left>
+				<td width=100% valign=top class="cwContentDisplay" align=left>
 				<!-- Right side tabs -->
-					<table border=0 cellspacing=0 cellpadding=10 width=100%>
-					<tr><td class=small align=left><img src="include/install/images/welcome.gif" alt="Welcome to Configuration Wizard" title="Welcome to Configuration Wizard"><br>
+					<table border=0 cellspacing=0 cellpadding=10 width=70% align=center>
+					<tr><td class=small align=left colspan=2><img src="include/install/images/welcome.gif" alt="Welcome to Configuration Wizard" title="Welcome to Configuration Wizard"><br>
 					  <hr noshade size=1></td></tr>
 
-					<tr>
-						<td align=left class="small" style="padding-left:20px">
-		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This Configuration Wizard will create the requisite data needed to get working with vtiger CRM. The entire process should take about four minutes. Click the Start button when you are ready. 
-<br><br>
-<p><span style="color:#555555">- vtiger CRM 5.1.0 is tested on mySQL 4.1.X, mySQL 5.0.19, PHP 5.0.19, PHP 5.2.1 and Apache 2.0.40.</p> 
-<p align="center"><font color='#0000FF'><b>vtiger CRM 5.1.0 will not work on mysql 4.0.x versions and PHP 4.x versions</b></font></center></p></font></center><center>
- 
-<font color='blue'><b>vtiger CRM can run on a system which has xampp/lampp/wampp already installed in it provided it meets the above mentioned requirements</b></font></center>
-<p>The installation wizard will guide you with the installation regardless of the setup you may have.</span>
-						
+					<tr class='level3'>
+						<td valign=top align=left class="small" style="padding-left:20px;height:250px;" colspan=2>
+			<p style='text-align:center;font-weight:bold;'>This configuration Wizard helps you install vtigerCRM 5.1.0.</p>
+<br>
+<p align="center"><i>Contents yet to added</i> </p>
 					  </td>
 					</tr>
 					<tr>
-					<td><span style="color:#999999">Please take a moment to register your copy of vtiger CRM. Though this is optional, we encourage you to register. Only your name and email address are required for registration. We do not sell, rent, share or otherwise, distribute your information to third parties.<br></span>
+					<td colspan=2></span>
 		
 					</td>
 					</tr>
 					<tr>
-						<td align=center>
-						<IFRAME src="http://www.vtiger.com/products/crm/registration.php" width="500" height=250 scrolling='no' frameborder="0">
-						  [Your user agent does not support frames or is currently configured
-						  not to display frames. However, you may visit
-						  <A href="http://www.vtiger.com/products/crm/registration.php">the related document.</A>] 
-						 </IFRAME>
-				 		 </td>
-					</tr>
-					<tr>
-						<td align="center">
-							Please read the <a href="Copyright.txt" target="_BLANK">license agreement</a> and click the "Start" button to continue. 
-						</td>
-					</tr>		
-					<tr>
-						<td align=center>
+						<?php
+							if($install_permitted == true){
+						?>
+						<td align=right>
 						<form action="install.php" method="post" name="installform" id="form">
-				                <input type="hidden" name="file" value="1checkSystem.php" />	
-						<input type="image" src="include/install/images/start.jpg" alt="Start" border="0" title="Start" style="cursor:pointer;" onClick="window.document.installform.submit();">
-						</form><br>
-					    <br></td>
+				        <input type="hidden" name="file" value="1LicenceAgreement.php" />	
+				        <input type="hidden" name="install" value="true" />	
+						<input type="image" src="include/install/images/cwBtnInstall.gif" value='install' alt="install" border="0" title="install" style="cursor:pointer;" onClick="window.document.installform.submit();">
+						</form></td>
+						<td align=left>
+						<?php
+							}
+							else{
+						?>
+						<td align=center colspan=2>
+						<?php
+							}
+						?>
+						<form action="install.php" method="post" name="Migrateform" id="form">
+						<input type="hidden" name="file" value="1LicenceAgreement.php" />	
+				        <input type="hidden" name="migrate" value="true" />	
+						<input type="image" src="include/install/images/cwBtnMigrate.gif" value='migrate' alt="migrate" border="0" title="migrate" style="cursor:pointer;" onClick="window.document.Migrateform.submit();">
+						</form></td>
 					</tr>
 					
 					
@@ -148,7 +140,7 @@ foreach($pieces as $val)
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
 
-		<td background="include/install/images/bottomGradient.gif"><img src="include/install/images/bottomGradient.gif"></td>
+		<td class='cwfooterBg' background="include/install/images/bottomGradient.gif"><br></td>
 	</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>

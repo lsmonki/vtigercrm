@@ -16,6 +16,7 @@
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/3confirmConfig.php,v 1.14 2005/04/25 09:41:26 samk Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
+require_once('currencies.php');
 require_once('include/logging.php');
 $log =& LoggerManager::getLogger('PLATFORM');
 
@@ -30,8 +31,8 @@ if (isset($_REQUEST['admin_password'])) $admin_password = $_REQUEST['admin_passw
 if (isset($_REQUEST['standarduser_email'])) $standarduser_email= $_REQUEST['standarduser_email'];
 if (isset($_REQUEST['standarduser_password'])) $standarduser_password = $_REQUEST['standarduser_password'];
 if (isset($_REQUEST['currency_name'])) $currency_name = $_REQUEST['currency_name'];
-if (isset($_REQUEST['currency_symbol'])) $currency_symbol = $_REQUEST['currency_symbol'];
-if (isset($_REQUEST['currency_code'])) $currency_code = $_REQUEST['currency_code'];
+//if (isset($_REQUEST['currency_symbol'])) $currency_symbol = $_REQUEST['currency_symbol'];
+//if (isset($_REQUEST['currency_code'])) $currency_code = $_REQUEST['currency_code'];
 if (isset($_REQUEST['cache_dir'])) $cache_dir= $_REQUEST['cache_dir'];
 if (isset($_REQUEST['mail_server'])) $mail_server= $_REQUEST['mail_server'];
 if (isset($_REQUEST['mail_server_username'])) $mail_server_username= $_REQUEST['mail_server_username'];
@@ -46,6 +47,10 @@ if (isset($_REQUEST['root_user'])) $root_user = $_REQUEST['root_user'];
 if (isset($_REQUEST['root_password'])) $root_password = $_REQUEST['root_password'];
 if (isset($_REQUEST['create_utf8_db'])) $create_utf8_db = 'true';
 
+if(isset($currency_name)){
+	$currency_code = $currencies[$currency_name][0];
+	$currency_symbol = $currencies[$currency_name][1];
+}
 $db_type_status = false; // is there a db type?
 $db_server_status = false; // does the db server connection exist?
 $db_creation_failed = false; // did we try to create a database and fail?
@@ -54,6 +59,7 @@ $db_utf8_support = false; // does the database support utf8?
 $vt_charset = ''; // set it based on the database charset support
 $next = false; // allow installation to continue
 
+require_once('include/DatabaseUtil.php');
 //Checking for database connection parameters
 if($db_type)
 {
@@ -117,28 +123,6 @@ if($db_type)
 
 // Update vtiger charset to use
 $vt_charset = ($db_utf8_support)? "UTF-8" : "ISO-8859-1";
-
-// Check if the database suggested to be used has UTF-8 support
-// Prasad, 05 Dec 2007
-function check_db_utf8_support($conn) {
-	global $db_type;
-	if($db_type == 'pgsql')
-		return true;
-	$dbvarRS = &$conn->Execute("show variables like '%_database' ");
-	$db_character_set = null;
-   	$db_collation_type = null;
-	while(!$dbvarRS->EOF) {
-		$arr = $dbvarRS->FetchRow();
-		$arr = array_change_key_case($arr);
-		switch($arr['variable_name']) {
-			case 'character_set_database' : $db_character_set = $arr['value']; break;
-			case 'collation_database'     : $db_collation_type = $arr['value']; break;
-		}
-		// If we have all the required information break the loop.
-		if($db_character_set != null && $db_collation_type != null) break;
-	}
-	return (stristr($db_character_set, 'utf8') && stristr($db_collation_type, 'utf8'));
-}
 
 $error_msg = '';
 $error_msg_info = '';
@@ -208,13 +192,14 @@ $log->info($php_info);
 
 <body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 
-<br><br><br>
+<br>
 	<!-- Table for cfgwiz starts -->
 
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
 		<td class="cwHeadBg" align=left><img src="include/install/images/configwizard.gif" alt="Configuration Wizard" hspace="20" title="Configuration Wizard"></td>
-		<td class="cwHeadBg" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
+		<td class="cwHeadBg1" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
+		<td class="cwHeadBg1" width=2%></td>
 	</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
@@ -229,140 +214,95 @@ $log->info($php_info);
 			<!-- Master display -->
 			<table border=0 cellspacing=0 cellpadding=0 width=97%>
 			<tr>
-				<td width=20% valign=top>
+				<!-- td width=20% valign=top>
 
-				<!-- Left side tabs -->
+				<!-- Left side tabs --\>
 					<table border=0 cellspacing=0 cellpadding=10 width=100%>
 					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Welcome</div></td></tr>
 					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Installation Check</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">System Configuration</div></td></tr>
-					<tr><td class="small cwSelectedTab" align=right><div align="left"><b>Confirm Settings</b></div></td></tr>
+					<tr><td class="small cwSelectedTab" align=right><div align="left"><b>System Configuration</b></div></td></tr>
+					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Confirm Settings</div></td></tr>
 					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Config File Creation</div></td></tr>
 					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Database Generation</div></td></tr>
 					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Finish</div></td></tr>
 					</table>
 					
-				</td>
+				</td -->
 				<td width=80% valign=top class="cwContentDisplay" align=left>
 				<table border=0 cellspacing=0 cellpadding=10 width=100%>
-				<tr><td class=small align=left><img src="include/install/images/confWizConfirmSettings.gif" alt="Confirm Configuration Settings" title="Confirm Configuration Settings"><br>
+				<tr><td class=small align=left colspan=2><img src="include/install/images/confWizConfirmSettings.gif" alt="Confirm Configuration Settings" title="Confirm Configuration Settings"><br>
 					  <hr noshade size=1></td></tr>
 				<tr>
-					<td align=left class="small" style="padding-left:20px">
+					<td align=left class="small" colspan=2 width=50% style="padding-left:10px">
 					<?php if($error_msg) : ?>
 						<div style="background-color:#ff0000;color:#ffffff;padding:5px">
 						<b><?php echo $error_msg ?></b>
 						</div>
 						<?php if($error_msg_info) : ?>
 							<p><?php echo $error_msg_info ?><p>
-						<?php endif ?>
-					<?php endif ?>
-					<table width="90%" cellpadding="5" border="0" class="small" style="background-color:#cccccc" cellspacing="1">
+						<?php endif; ?>
+					<?php endif; ?>
+					</td>
+				</tr>
+				<tr>
+					<td align=left class="small" width=50% style="padding-left:10px">
+					<table width="100%" cellpadding="0" border="0" align=center class="level3" cellspacing="1">
 					<tr>
-						<td colspan=2><strong>Database Configuration</strong></td>
+						<td colspan=2><strong>Database Configuration</strong><hr noshade size=1></td>
 					</tr>
-					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">Host Name</td>
-						<td align="left" nowrap> <font class="dataInput"><?php if (isset($db_hostname)) echo "$db_hostname"; ?></font></td>
+					<tr>
+						<td noWrap width="40%">Database Type</td>
+						<td align="left" nowrap> <font class="dataInput"><i><?php if (isset($db_type)) echo "$db_type"; ?></i></font></td>
 					</tr>
-					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">User Name</td>
-						<td align="left" nowrap> <font class="dataInput"><?php if (isset($db_username)) echo "$db_username"; ?></font></td>
+					<tr>
+						<td noWrap width="40%">Database Name</td>
+						<td align="left" nowrap> <font class="dataInput"><i><?php if (isset($db_name)) echo "$db_name"; ?></i></font></td>
 					</tr>
-					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%" noWrap>Password</td>
-						<td align="left" nowrap> <font class="dataInput"><?php if (isset($db_password)) echo ereg_replace('.', '*', $db_password); ?></font></td>
-					</tr>
-					<tr bgcolor="White">
-						<td noWrap bgcolor="#F5F5F5" width="40%">Database Type</td>
-						<td align="left" nowrap> <font class="dataInput"><?php if (isset($db_type)) echo "$db_type"; ?></font></td>
-					</tr>
-					<tr bgcolor="White">
-						<td noWrap bgcolor="#F5F5F5" width="40%">Database Name</td>
-						<td align="left" nowrap> <font class="dataInput"><?php if (isset($db_name)) echo "$db_name"; ?></font></td>
-					</tr>
-					<tr bgcolor="White">
-						<td noWrap bgcolor="#F5F5F5" width="40%">Database UTF-8 Support</td>
+					<tr>
+						<td noWrap width="40%">Database UTF-8 Support</td>
 						<td align="left" nowrap> <font class="dataInput"><?php echo ($db_utf8_support)? "Enabled" : "<strong style='color:#DF0000';>Not Enabled</strong>" ?></font>&nbsp;<a href="http://www.vtiger.com/products/crm/help/5.1.0/vtiger_CRM_Database_UTF8Config.pdf" target="_blank">More Information</a></td>
 					</tr>
 					</table>
-					<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
+					</td>
+					<td align=left class="small" width=50% style="padding-left:10px">
+					<table width="100%" cellpadding="0" border="0" align=center class="level3" cellspacing="1">
 					<tr>
-						<td colspan=2 ><strong>Site Configuration</strong></td>
+						<td colspan=2 ><strong>Site Configuration</strong><hr noshade size=1></td>
 					</tr>
-					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">URL</td>
-						<td align="left"> <font class="dataInput"><?php if (isset($site_URL)) echo $site_URL; ?></font></td>
-					</tr>
-					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">Path</td>
-						<td align="left"><font class="dataInput"><?php if (isset($root_directory)) echo $root_directory; ?></font></td>
-					</tr>
-					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">Cache Path</td>
-						<td align="left"> <font class="dataInput"><?php if (isset($cache_dir)) echo $root_directory.''.$cache_dir; ?></font></td>
-					</tr>
-					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">Default Charset</td>
-						<td align="left"> <font class="dataInput"><?php if (isset($vt_charset)) echo $vt_charset; ?></font></td>
-					</tr>
-					</table>	
-					<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
 					<tr>
-						<td colspan=2 ><strong>Admin Configuration</strong></td>
+						<td width="40%">URL</td>
+						<td align="left"> <i><?php if (isset($site_URL)) echo $site_URL; ?></i></td>
 					</tr>
-					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">Username</td>
-						<td align="left"> <font class="dataInput">admin</font></td>
+					<tr>
+						<td width="40%">Default Charset</td>
+						<td align="left"> <i><?php if (isset($vt_charset)) echo $vt_charset; ?></i></td>
 					</tr>
-					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">Password</td>
-						<td align="left"> <font class="dataInput"><?php if (isset($admin_password)) echo ereg_replace('.', '*', $admin_password); ?></font></td>
-					</tr>
-					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">Email</td>
-						<td align="left"> <font class="dataInput"><?php if (isset($admin_email)) echo $admin_email; ?></font></td>
+					<tr>
+						<td width="40%">Currency</td>
+						<td align="left"> <i><?php if (isset($currency_name)) echo $currency_name; ?></i></td>
 					</tr>
 					</table>
-					<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
+					</td>
+					</tr>
 					<tr>
-						<td colspan=2 ><strong>Standarduser Configuration</strong></td>
+					<td colspan=2>	
+					<table width="100%" cellpadding="0" border="0" align=center class="level3" cellspacing="1">
+					<tr>
+						<td colspan=3 ><strong>User Configuration</strong><hr noshade size=1></td>
 					</tr>
-					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">Username</td>
-						<td align="left"> <font class="dataInput">standarduser</font></td>
+					<tr>
+						<td width="40%">Username</td>
+						<td align="left" width="30%"> <i>admin</i></td>
+						<td align="left" width="30%"> <i>standarduser</i></td>
 					</tr>
-					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">Password</td>
-						<td align="left"> <font class="dataInput"><?php if (isset($standarduser_password)) echo ereg_replace('.', '*', $standarduser_password); ?></font></td>
-					</tr>
-					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">Email</td>
-						<td align="left"> <font class="dataInput"><?php if (isset($standarduser_email)) echo $standarduser_email; ?></font></td>
+					<tr>
+						<td width="40%">Email</td>
+						<td align="left" width="30%"> <i><?php if (isset($admin_email)) echo $admin_email; ?></i></td>
+						<td align="left" width="30%"> <i><?php if (isset($standarduser_email)) echo $standarduser_email; ?></i></td>
 					</tr>
 					</table>
-
-					<table width="90%" cellpadding="5" border="0" class="small" cellspacing="1" style="background-color:#cccccc">
-					<tr>
-						<td colspan=2 ><strong>Currency Configuration</strong></td>
-					</tr>
-					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">Name</td>
-						<td align="left"> <font class="dataInput"><?php if (isset($currency_name)) echo $currency_name; ?></font></td>
-					</tr>
-					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">Symbol</td>
-						<td align="left"> <font class="dataInput"><?php if (isset($currency_symbol)) echo $currency_symbol; ?></font></td>
-					</tr>
-					<tr bgcolor="White">
-						<td bgcolor="#F5F5F5" width="40%">Code</td>
-						<td align="left"> <font class="dataInput"><?php if (isset($currency_code)) echo $currency_code; ?></font></td>
-					</tr>
-					</table>
-
-
-					<br><br>
-					<table width="90%" cellpadding="5" border="0" class="small" >
+					<br>
+					<table width="100%" cellpadding="5" border="0" class="small" >
 					<tr>
 					<td align="left" valign="bottom">
 					<form action="install.php" method="post" name="form" id="form">
@@ -380,8 +320,6 @@ $log->info($php_info);
 						<input type="hidden" class="dataInput" name="standarduser_email" value="<?php if (isset($standarduser_email)) echo "$standarduser_email"; ?>" />
                         <input type="hidden" class="dataInput" name="standarduser_password" value="<?php if (isset($standarduser_password)) echo "$standarduser_password"; ?>" />
 						<input type="hidden" class="dataInput" name="currency_name" value="<?php if (isset($currency_name)) echo "$currency_name"; ?>" />
-						<input type="hidden" class="dataInput" name="currency_symbol" value="<?php if (isset($currency_symbol)) echo "$currency_symbol"; ?>" />
-						<input type="hidden" class="dataInput" name="currency_code" value="<?php if (isset($currency_code)) echo "$currency_code"; ?>" />
 						<input type="hidden" class="dataInput" name="cache_dir" value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" />
 						<input type="hidden" class="dataInput" name="mail_server" value="<?php if (isset($maill_server)) echo $mail_server; ?>" />
 						<input type="hidden" class="dataInput" name="mail_server_username" value="<?php if (isset($maill_server_username)) echo $mail_server_username; ?>" />
@@ -421,8 +359,8 @@ $log->info($php_info);
 						<input type="hidden" class="dataInput" name="standarduser_email" value="<?php if (isset($standarduser_email)) echo "$standarduser_email"; ?>" />
                         <input type="hidden" class="dataInput" name="standarduser_password" value="<?php if (isset($standarduser_password)) echo "$standarduser_password"; ?>" />
 						<input type="hidden" class="dataInput" name="currency_name" value="<?php if (isset($currency_name)) echo "$currency_name"; ?>" />
-						<input type="hidden" class="dataInput" name="currency_code" value="<?php if (isset($currency_code)) echo "$currency_code"; ?>" />
-						<input type="hidden" class="dataInput" name="currency_symbol" value="<?php if (isset($currency_symbol)) echo "$currency_symbol"; ?>" />
+						<input type="hidden" class="dataInput" name="currency_code" value="<?php if (isset($currency_name)) echo "$currency_code"; ?>" />
+						<input type="hidden" class="dataInput" name="currency_symbol" value="<?php if (isset($currency_name)) echo "$currency_symbol"; ?>" />
 						<input type="hidden" class="dataInput" name="cache_dir" value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" />
 						<input type="hidden" class="dataInput" name="mail_server" value="<?php if (isset($mail_server)) echo $mail_server; ?>" />
 						<input type="hidden" class="dataInput" name="mail_server_username" value="<?php if (isset($mail_server_username)) echo $mail_server_username; ?>" />
