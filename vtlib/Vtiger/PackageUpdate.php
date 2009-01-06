@@ -115,7 +115,7 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
 
 	/**
 	 * Parse migration information from manifest
-	 * @access priavet
+	 * @access private
 	 */
 	function parse_Migration($modulenode) {
 		if(!$this->_migrations) {
@@ -227,6 +227,8 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
 	 */
 	function update_Field($blocknode, $blockInstance, $moduleInstance, $fieldnode, $fieldInstance) {
 		// TODO Handle field property update
+
+		if(!empty($fieldnode->helpinfo)) $fieldInstance->setHelpInfo($fieldnode->helpinfo);
 	}
 
 	/**

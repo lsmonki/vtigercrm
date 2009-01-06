@@ -1,4 +1,34 @@
 <?php
+/*+***********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ *************************************************************************************/
+
+/*
+ * Check for image existence in themes orelse
+ * use the common one.
+ */
+// Let us create cache to improve performance
+if(!isset($__cache_vtiger_imagepath)) {
+    $__cache_vtiger_imagepath = Array();
+}
+function vtiger_imageurl($imagename, $themename) {
+	global $__cache_vtiger_imagepath;
+	if($__cache_vtiger_imagepath[$imagename]) {
+        $imagepath = $__cache_vtiger_imagepath[$imagename];
+    } else {
+        $imagepath = "themes/images/$imagename";
+        if(file_exists("themes/$themename/images/$imagename")) {
+            $imagepath =  "themes/$themename/images/$imagename";
+        }
+        $__cache_vtiger_imagepath[$imagename] = $imagepath;
+    }
+	return $imagepath;
+}
 
 /**
  * Get module name by id.
@@ -130,6 +160,27 @@ function vtlib_toggleLanguageAccess($langprefix, $enable_disable) {
 	$adb->pquery('UPDATE vtiger_language set active = ? WHERE prefix = ?', Array($enable_disable, $langprefix));
 
 	$adb->dieOnError = $old_dieOnError;
+}
+
+/**
+ * Get help information set for the module fields.
+ */
+function vtlib_getFieldHelpInfo($module) {
+	global $adb;
+	$fieldhelpinfo = Array();
+	if(in_array('helpinfo', $adb->getColumnNames('vtiger_field'))) {
+		$result = $adb->pquery('SELECT fieldname,helpinfo FROM vtiger_field '.
+			'WHERE tabid = (SELECT tabid FROM vtiger_tab WHERE name =?)', Array($module));
+		if($result && $adb->num_rows($result)) {
+			while($fieldrow = $adb->fetch_array($result)) {
+				$helpinfo = decode_html($fieldrow['helpinfo']);
+				if(!empty($helpinfo)) {
+					$fieldhelpinfo[$fieldrow['fieldname']] = $helpinfo;
+				}
+			}
+		}
+	}
+	return $fieldhelpinfo;
 }
 
 /**

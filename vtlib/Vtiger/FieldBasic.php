@@ -20,6 +20,7 @@ class Vtiger_FieldBasic {
 	var $table = false;
 	var $column = false;
 	var $columntype = false;
+	var $helpinfo = '';
 
 	var $uitype = 1;
 	var $typeofdata = 'V~O';
@@ -51,14 +52,30 @@ class Vtiger_FieldBasic {
 	 * @access private
 	 */
 	function initialize($valuemap, $moduleInstance=false, $blockInstance=false) {
-		$this->id = $valuemap[fieldid];
-		$this->name = $valuemap[fieldname];
-		$this->label= $valuemap[fieldlabel];
-		$this->column = $valuemap[columnname];
-		$this->table  = $valuemap[tablename];
-		$this->uitype = $valuemap[uitype];
-		$this->typeofdata = $valuemap[typeofdata];
-		$this->block= $blockInstance? $blockInstance : Vtiger_Block::getInstance($valuemap[block], $moduleInstance);
+		$this->id = $valuemap['fieldid'];
+		$this->name = $valuemap['fieldname'];
+		$this->label= $valuemap['fieldlabel'];
+		$this->column = $valuemap['columnname'];
+		$this->table  = $valuemap['tablename'];
+		$this->uitype = $valuemap['uitype'];
+		$this->typeofdata = $valuemap['typeofdata'];
+		$this->helpinfo = $valuemap['helpinfo'];
+		$this->block= $blockInstance? $blockInstance : Vtiger_Block::getInstance($valuemap['block'], $moduleInstance);
+	}
+
+	/** Cache (Record) the schema changes to improve performance */
+	static $__cacheSchemaChanges = Array();
+
+	/**
+	 * Initialize vtiger schema changes.
+	 * @access private
+	 */
+	function __handleVtigerCoreSchemaChanges() {
+		// Add helpinfo column to the vtiger_field table
+		if(empty(self::$__cacheSchemaChanges['vtiger_field.helpinfo'])) {
+			Vtiger_Utils::AddColumn('vtiger_field', 'helpinfo', ' TEXT');
+			self::$__cacheSchemaChanges['vtiger_field.helpinfo'] = true;
+		}
 	}
 
 	/**
@@ -108,6 +125,8 @@ class Vtiger_FieldBasic {
 	 * @access private
 	 */
 	function __create($blockInstance) {
+		$this->__handleVtigerCoreSchemaChanges();
+
 		global $adb;
 
 		$this->block = $blockInstance;
@@ -134,16 +153,17 @@ class Vtiger_FieldBasic {
 			$this->column = strtolower($this->name);
 			if(!$this->columntype) $this->columntype = 'VARCHAR(100)';
 		}
+
 		if(!$this->label) $this->label = $this->name;
 
 		$adb->pquery("INSERT INTO vtiger_field (tabid, fieldid, columnname, tablename, generatedtype,
 			uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence,
-			block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) 
-			VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+			block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, helpinfo) 
+			VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
 				Array($this->getModuleId(), $this->id, $this->column, $this->table, $this->generatedtype,
 				$this->uitype, $this->name, $this->label, $this->readonly, $this->presence, $this->selected,
 				$this->maximumlength, $this->sequence, $this->getBlockId(), $this->displaytype, $this->typeofdata,
-				$this->quickcreate, $this->quicksequence, $this->info_type));
+				$this->quickcreate, $this->quicksequence, $this->info_type, $this->helpinfo));
 
 		Vtiger_Profile::initForField($this);
 
@@ -220,6 +240,19 @@ class Vtiger_FieldBasic {
 	 */
 	function delete() {
 		$this->__delete();
+	}
+
+	/**
+	 * Set Help Information for this instance.
+	 * @param String Help text (content)
+	 */
+	function setHelpInfo($helptext) {
+		// Make sure to initialize the core tables first
+		$this->__handleVtigerCoreSchemaChanges();
+
+		global $adb;
+		$adb->pquery('UPDATE vtiger_field SET helpinfo=? WHERE fieldid=?', Array($helptext, $this->id));
+		self::log("Updated help information of $this->name ... DONE");
 	}
 
 	/**

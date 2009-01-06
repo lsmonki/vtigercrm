@@ -18,7 +18,7 @@ include_once('vtlib/Vtiger/Event.php');
 include_once('vtlib/Vtiger/Version.php');
 
 /**
- * Provide API to work with vtiger CRM Module
+ * Provides API to work with vtiger CRM Module
  * @package vtlib
  */
 class Vtiger_ModuleBasic {
@@ -110,6 +110,7 @@ class Vtiger_ModuleBasic {
 
 	/**
 	 * Initialize vtiger schema changes.
+	 * @access private
 	 */
 	function __handleVtigerCoreSchemaChanges() {
 		// Add version column to the table first

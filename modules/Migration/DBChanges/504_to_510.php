@@ -1200,7 +1200,15 @@ $inventoryTabId = $adb->query_result($inventoryTabRes, 0, 'parenttabid');
 
 ExecuteQuery("DELETE FROM vtiger_parenttabrel WHERE tabid=$productTabId AND parenttabid != $inventoryTabId");
 $adb->query("ALTER TABLE vtiger_producttaxrel DROP FOREIGN KEY fk_1_vtiger_producttaxrel");
- 	
+
+/* Vtlib Changes - Table added to store different types of links */
+ExecuteQuery("CREATE TABLE vtiger_links (linkid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    		tabid INT, linktype VARCHAR(20), linklabel VARCHAR(30), linkurl VARCHAR(255), linkicon VARCHAR(100), sequence INT)");
+ExecuteQuery("CREATE INDEX link_tabidtype_idx ON vtiger_links(tabid,linktype)");
+
+/* Column added to vtiger_tab to track the version of the module */
+ExecuteQuery("ALTER TABLE vtiger_tab ADD COLUMN version VARCHAR(10)");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

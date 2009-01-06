@@ -41,16 +41,30 @@ class Vtiger_Link {
 	}
 
 	/**
+	 * Get unique id for the insertion
+	 */
+	static function __getUniqueId() {
+		global $adb;
+		return $adb->getUniqueID('vtiger_links');
+	}
+
+	/** Cache (Record) the schema changes to improve performance */
+	static $__cacheSchemaChanges = Array();
+
+	/**
 	 * Initialize the schema (tables)
 	 */
 	static function __initSchema() {
-		if(!Vtiger_Utils::CheckTable('vtiger_links')) {
-			Vtiger_Utils::CreateTable(
-				'vtiger_links',
-				'(linkid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-				tabid INT, linktype VARCHAR(20), linklabel VARCHAR(30), linkurl VARCHAR(255), linkicon VARCHAR(100), sequence INT)');
-			Vtiger_Utils::ExecuteQuery(
-				'CREATE INDEX link_tabidtype_idx on vtiger_links(tabid,linktype)');
+		if(empty(self::$__cacheSchemaChanges['vtiger_links'])) {
+			if(!Vtiger_Utils::CheckTable('vtiger_links')) {
+				Vtiger_Utils::CreateTable(
+					'vtiger_links',
+					'(linkid INT NOT NULL PRIMARY KEY,
+					tabid INT, linktype VARCHAR(20), linklabel VARCHAR(30), linkurl VARCHAR(255), linkicon VARCHAR(100), sequence INT)');
+				Vtiger_Utils::ExecuteQuery(
+					'CREATE INDEX link_tabidtype_idx on vtiger_links(tabid,linktype)');
+			}
+			self::$__cacheSchemaChanges['vtiger_links'] = true;
 		}
 	}
 
@@ -69,8 +83,9 @@ class Vtiger_Link {
 		$checkres = $adb->pquery('SELECT linkid FROM vtiger_links WHERE tabid=? AND linktype=? AND linkurl=? AND linkicon=? AND linklabel=?',
 			Array($tabid, $type, $url, $iconpath, $label));
 		if(!$adb->num_rows($checkres)) {
-			$adb->pquery('INSERT INTO vtiger_links (tabid,linktype,linklabel,linkurl,linkicon,sequence) VALUES(?,?,?,?,?,?)',
-				Array($tabid, $type, $label, $url, $iconpath, $sequence));
+			$uniqueid = self::__getUniqueId();
+			$adb->pquery('INSERT INTO vtiger_links (linkid,tabid,linktype,linklabel,linkurl,linkicon,sequence) VALUES(?,?,?,?,?,?,?)',
+				Array($uniqueid, $tabid, $type, $label, $url, $iconpath, $sequence));
 			self::log("Adding Link ($type - $label) ... DONE");
 		}
 	}

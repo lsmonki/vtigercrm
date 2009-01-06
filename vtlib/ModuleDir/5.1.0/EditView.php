@@ -42,6 +42,7 @@ if($disp_view == 'edit_view')
 else
 	$smarty->assign('BASBLOCKS', getBlocks($currentModule, $disp_view, $focus->mode, $focus->column_fields, 'BAS'));
 
+$smarty->assign('OP_MODE',$disp_view);
 $smarty->assign('APP', $app_strings);
 $smarty->assign('MOD', $mod_strings);
 $smarty->assign('MODULE', $currentModule);
@@ -54,6 +55,13 @@ $smarty->assign('MODE', $focus->mode);
 
 $smarty->assign('CHECK', Button_Check($currentModule));
 $smarty->assign('DUPLICATE', $isduplicate);
+
+if($focus->mode == 'edit') {
+	$recordName = array_values(getEntityName($currentModule, $focus->id));
+	$recordName = $recordName[0];
+	$smarty->assign('NAME', $recordName);
+	$smarty->assign('UPDATEINFO',updateInfo($focus->id));
+}
 
 if(isset($_REQUEST['return_module']))    $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
 if(isset($_REQUEST['return_action']))    $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
@@ -87,6 +95,10 @@ if($focus->mode != 'edit' && $mod_seq_field != null) {
         else
                 $smarty->assign("MOD_SEQ_ID",$autostr);
 }
+// END
+
+// Gather the help information associated with fields
+$smarty->assign('FIELDHELPINFO', vtlib_getFieldHelpInfo($currentModule));
 // END
 
 if($focus->mode == 'edit') {

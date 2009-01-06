@@ -199,3 +199,14 @@ function sensex_info()
 			document.EditView.del_file_list.value=ProductImages.join('###');
 	{rdelim}
 </script>
+
+<!-- vtlib customization: Help information assocaited with the fields -->
+{if $FIELDHELPINFO}
+<script type='text/javascript'>
+{literal}var fieldhelpinfo = {}; {/literal}
+{foreach item=FIELDHELPVAL key=FIELDHELPKEY from=$FIELDHELPINFO}
+	fieldhelpinfo["{$FIELDHELPKEY}"] = "{$FIELDHELPVAL}";
+{/foreach}
+</script>
+{/if}
+<!-- END -->

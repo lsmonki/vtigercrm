@@ -68,9 +68,11 @@ class Vtiger_PackageExport {
 	 * Initialize Export
 	 * @access private
 	 */
-	function __initExport($module) {
-		// We will be including the file, so do a security check.
-		Vtiger_Utils::checkFileAccess("modules/$module/$module.php");
+	function __initExport($module, $moduleInstance) {
+		if($moduleInstance->isentitytype) {
+			// We will be including the file, so do a security check.
+			Vtiger_Utils::checkFileAccess("modules/$module/$module.php");
+		}
 		$this->_export_modulexml_file = fopen($this->__getManifestFilePath(), 'w');
 		$this->__write("<?xml version='1.0'?>\n");
 	}
@@ -107,7 +109,7 @@ class Vtiger_PackageExport {
 
 		$module = $moduleInstance->name;
 
-		$this->__initExport($module);
+		$this->__initExport($module, $moduleInstance);
 
 		// Call module export function
 		$this->export_Module($moduleInstance);
@@ -334,6 +336,7 @@ class Vtiger_PackageExport {
 			$this->outputNode($adb->query_result($fieldresult, $index, 'quickcreatesequence'),   'quickcreatesequence');
 			$this->outputNode($adb->query_result($fieldresult, $index, 'displaytype'),   'displaytype');
 			$this->outputNode($adb->query_result($fieldresult, $index, 'info_type'),     'info_type');
+			$this->outputNode('<![CDATA['.$adb->query_result($fieldresult, $index, 'helpinfo').']]>', 'helpinfo');
 
 			// Export Entity Identifier Information
 			if($fieldname == $entity_fieldname) {
@@ -507,19 +510,20 @@ class Vtiger_PackageExport {
 
 		if(!$moduleInstance->isentitytype) return;
 
-		$this->openNode('actions');
+		global $adb;
+		$result = $adb->pquery('SELECT distinct(actionname) FROM vtiger_profile2utility, vtiger_actionmapping 
+			WHERE vtiger_profile2utility.activityid=vtiger_actionmapping.actionid and tabid=?', Array($moduleInstance->id));
 
-		$this->openNode('action');
-		$this->outputNode('Export', 'name');
-		$this->outputNode('enabled', 'status');
-		$this->closeNode('action');
-
-		$this->openNode('action');
-		$this->outputNode('Import', 'name');
-		$this->outputNode('enabled', 'status');
-		$this->closeNode('action');
-
-		$this->closeNode('actions');
+		if($adb->num_rows($result)) {
+			$this->openNode('actions');
+			while($resultrow = $adb->fetch_array($result)) {
+				$this->openNode('action');
+				$this->outputNode('<![CDATA['. $resultrow['actionname'] .']]>', 'name');
+				$this->outputNode('enabled', 'status');
+				$this->closeNode('action');
+			}
+			$this->closeNode('actions');
+		}
 	}
 
 	/**
@@ -566,7 +570,7 @@ class Vtiger_PackageExport {
 
 	/**
 	 * Export custom links of the module.
-	 * @access priavate
+	 * @access private
 	 */
 	function export_CustomLinks($moduleInstance) {
 		$customlinks = $moduleInstance->getLinks();

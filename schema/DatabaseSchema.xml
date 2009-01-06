@@ -201,6 +201,7 @@
 			<notnull />
 			<default value="1" />
 		</field>
+		<field name="version" type="C" size="10" />
 
 		<index name="tab_name_idx">
 			<col>name</col>
@@ -6788,6 +6789,24 @@
 			<default value="NULL" />
 		</field>
 		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_links">
+		<field name="linkid" type="I">
+			<notnull />
+			<key />
+		</field>
+		<field name="tabid" type="I" />
+		<field name="linktype" type="C" size="20" />
+		<field name="linklabel" type="C" size="30" />
+		<field name="linkurl" type="C" size="255" />
+		<field name="linkicon" type="C" size="100" />
+		<field name="sequence" type="I" />
+		<opt platform="mysql">Type=InnoDB</opt>
+		<index name="link_tabidtype_idx">
+			<col>tabid</col>
+			<col>linktype</col>
+		</index>
 	</table>
 
 </schema>

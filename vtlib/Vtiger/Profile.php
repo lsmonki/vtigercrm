@@ -10,7 +10,7 @@
 include_once('vtlib/Vtiger/Utils.php');
 
 /**
- * Provide API to work with vtiger CRM Profile
+ * Provides API to work with vtiger CRM Profile
  * @package vtlib
  */
 class Vtiger_Profile {

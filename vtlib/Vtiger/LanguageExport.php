@@ -25,6 +25,15 @@ class Vtiger_LanguageExport extends Vtiger_Package {
 	}
 
 	/**
+	 * Generate unique id for insertion
+	 * @access private
+	 */
+	function __getUniqueId() {
+		global $adb;
+		return $adb->getUniqueID(self::TABLENAME);
+	}
+
+	/**
 	 * Initialize Language Schema
 	 * @access private
 	 */
@@ -33,13 +42,14 @@ class Vtiger_LanguageExport extends Vtiger_Package {
 		if(!$hastable) {
 			Vtiger_Utils::CreateTable(
 				self::TABLENAME,
-				'(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				'(id INT NOT NULL PRIMARY KEY,
 				name VARCHAR(50), prefix VARCHAR(10), label VARCHAR(30), lastupdated DATETIME, sequence INT, isdefault INT(1), active INT(1))'
 			);
 			global $languages, $adb;
 			foreach($languages as $langkey=>$langlabel) {
-				$adb->pquery('INSERT INTO '.self::TABLENAME.'(name,prefix,label,lastupdated,active) VALUES(?,?,?,?,?)',
-					Array($langlabel,$langkey,$langlabel,date('Y-m-d H:i:s',time()), 1));
+				$uniqueid = self::__getUniqueId();
+				$adb->pquery('INSERT INTO '.self::TABLENAME.'(id, name,prefix,label,lastupdated,active) VALUES(?,?,?,?,?)',
+					Array($uniqueid, $langlabel,$langkey,$langlabel,date('Y-m-d H:i:s',time()), 1));
 			}
 		}
 	}
@@ -65,8 +75,9 @@ class Vtiger_LanguageExport extends Vtiger_Package {
 			$adb->pquery('UPDATE '.self::TABLENAME.' set label=?, name=?, lastupdated=?, isdefault=?, active=? WHERE id=?',
 				Array($label, $name, $datetime, $useisdefault, $useisactive, $id));
 		} else {
-			$adb->pquery('INSERT INTO '.self::TABLENAME.' (name,prefix,label,lastupdated,isdefault,active) VALUES(?,?,?,?,?,?)',
-				Array($name, $prefix, $label, $datetime, $useisdefault, $useisactive));
+			$uniqueid = self::__getUniqueId();
+			$adb->pquery('INSERT INTO '.self::TABLENAME.' (id,name,prefix,label,lastupdated,isdefault,active) VALUES(?,?,?,?,?,?,?)',
+				Array($uniqueid, $name, $prefix, $label, $datetime, $useisdefault, $useisactive));
 		}
 		self::log("Registering Language $label [$prefix] ... DONE");		
 	}

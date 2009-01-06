@@ -60,13 +60,16 @@ function AddressSync(Addform,id)
 	<td class="showPanelBg" valign=top width=100%>
 		{*<!-- PUBLIC CONTENTS STARTS-->*}
 		<div class="small" style="padding:20px">
-		
-			{if $OP_MODE eq 'edit_view'}   
-				<span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} - {$APP.LBL_EDITING} {$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span> <br>
+			{* vtlib customization: use translated label if available *}
+			{assign var="SINGLE_MOD_LABEL" value=$SINGLE_MOD}
+			{if $APP.$SINGLE_MOD} {assign var="SINGLE_MOD_LABEL" value=$APP.SINGLE_MOD} {/if}
+				
+			{if $OP_MODE eq 'edit_view'}  				
+				<span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} - {$APP.LBL_EDITING} {$SINGLE_MOD_LABEL} {$APP.LBL_INFORMATION}</span> <br>
 				{$UPDATEINFO}	 
 			{/if}
 			{if $OP_MODE eq 'create_view'}
-				<span class="lvtHeaderText">{$APP.LBL_CREATING} {$APP[$SINGLE_MOD]}</span> <br>
+				<span class="lvtHeaderText">{$APP.LBL_CREATING} {$SINGLE_MOD_LABEL}</span> <br>
 			{/if}
 
 			<hr noshade size=1>
@@ -263,3 +266,14 @@ function AddressSync(Addform,id)
 	{rdelim}
 
 </script>
+
+<!-- vtlib customization: Help information assocaited with the fields -->
+{if $FIELDHELPINFO}
+<script type='text/javascript'>
+{literal}var fieldhelpinfo = {}; {/literal}
+{foreach item=FIELDHELPVAL key=FIELDHELPKEY from=$FIELDHELPINFO}
+	fieldhelpinfo["{$FIELDHELPKEY}"] = "{$FIELDHELPVAL}";
+{/foreach}
+</script>
+{/if}
+<!-- END -->

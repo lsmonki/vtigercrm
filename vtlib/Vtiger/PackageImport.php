@@ -66,6 +66,26 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
+	 * XPath evaluation on the root module node.
+	 * @param String Path expression 
+	 */
+	function xpath($path) {
+		return $this->_modulexml->xpath($path);
+	}
+
+	/**
+	 * Get the value of matching path (instead of complete xpath result)
+	 * @param String Path expression for which value is required
+	 */
+	function xpath_value($path) {
+		$xpathres = $this->xpath($path);
+		foreach($xpathres as $pathkey=>$pathvalue) {
+			if($pathkey == $path) return $pathvalue;
+		}
+		return false;
+	}
+
+	/**
 	 * Are we trying to import language package?
 	 */
 	function isLanguageType() {
@@ -384,6 +404,9 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		$fieldInstance->typeofdata   = $fieldnode->typeofdata;
 		$fieldInstance->displaytype  = $fieldnode->displaytype;
 		$fieldInstance->info_type    = $fieldnode->info_type;
+
+		if(!empty($fieldnode->helpinfo)) 
+			$fieldInstance->helpinfo = $fieldnode->helpinfo;
 
 		if(isset($fieldnode->columntype) && !empty($fieldnode->columntype)) 
 			$fieldInstance->columntype = $fieldnode->columntype;

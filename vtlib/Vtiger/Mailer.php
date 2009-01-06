@@ -30,6 +30,15 @@ class Vtiger_Mailer extends PHPMailer {
 	}
 
 	/**
+	 * Get the unique id for insertion
+	 * @access private
+	 */
+	function __getUniqueId() {
+		global $adb;
+		return $adb->getUniqueID('vtiger_mailer_queue');
+	}
+
+	/**
 	 * Initialize this instance
 	 * @access private
 	 */
@@ -128,7 +137,7 @@ class Vtiger_Mailer extends PHPMailer {
 		if(!$this->_queueinitialized) {
 			if(!Vtiger_Utils::CheckTable('vtiger_mailer_queue')) {
 				Vtiger_Utils::CreateTable('vtiger_mailer_queue',
-					'(id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+					'(id INT NOT NULL PRIMARY KEY,
 					fromname VARCHAR(100), fromemail VARCHAR(100),
 					mailer VARCHAR(10), content_type VARCHAR(15), subject VARCHAR(999), body TEXT, relcrmid INT, 
 					failed INT(1) NOT NULL DEFAULT 0, failreason VARCHAR(255))');
@@ -148,8 +157,9 @@ class Vtiger_Mailer extends PHPMailer {
 	function __AddToQueue($linktoid) {
 		if($this->__initializeQueue()) {
 			global $adb;
-			$adb->pquery('INSERT INTO vtiger_mailer_queue(fromname,fromemail,content_type,subject,body,mailer,relcrmid) VALUES(?,?,?,?,?,?,?)',
-				Array($this->FromName, $this->From, $this->ContentType, $this->Subject, $this->Body, $this->Mailer, $linktoid));
+			$uniqueid = self::__getUniqueId();
+			$adb->pquery('INSERT INTO vtiger_mailer_queue(id,fromname,fromemail,content_type,subject,body,mailer,relcrmid) VALUES(?,?,?,?,?,?,?,?)',
+				Array($uniqueid, $this->FromName, $this->From, $this->ContentType, $this->Subject, $this->Body, $this->Mailer, $linktoid));
 			$queueid = $adb->database->Insert_ID();
 			foreach($this->to as $toinfo) {
 				if(empty($toinfo[0])) continue;

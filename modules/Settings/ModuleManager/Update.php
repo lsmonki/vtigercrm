@@ -30,7 +30,10 @@ if($module_update_step == 'Step2') {
 		if($moduleupdate_name == null) {
 			$smarty->assign("MODULEUPDATE_FAILED", "true");
 			$smarty->assign("MODULEUPDATE_FILE_INVALID", "true");
-		} else if($moduleupdate_name != $target_modulename) {
+		} else if(!$package->isLanguageType() && ($moduleupdate_name != $target_modulename)) {
+			$smarty->assign("MODULEUPDATE_FAILED", "true");
+			$smarty->assign("MODULEUPDATE_NAME_MISMATCH", "true");
+		} else if($package->isLanguageType() && (trim($package->xpath_value('prefix')) != $target_modulename)) {
 			$smarty->assign("MODULEUPDATE_FAILED", "true");
 			$smarty->assign("MODULEUPDATE_NAME_MISMATCH", "true");
 		} else {

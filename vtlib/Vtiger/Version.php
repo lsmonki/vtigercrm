@@ -30,30 +30,7 @@ class Vtiger_Version {
 	 */
 	static function check($with_version, $condition='=') {
 		$current_version = self::current();
-		if($condition == '=') {
-			return (version_compare($current_version, $with_version)===1);
-		} 
-		if($condition == '!=') {
-			return (version_compare($current_version, $with_version)===0);
-		} 
-		if($condition == '<') {
-			return version_compare($current_version, $with_version, '<');
-		}
-		if($condition == '>') {
-			return version_compare($current_version, $with_version, '<');
-		}
-		if($condition == '>=' || $condition == '=>') {
-			return (
-				(version_compare($current_version, $with_version)===1)
-				|| version_compare($current_version, $with_version, '>')
-			);
-		}
-		if($condition == '<=' || $condition == '=<') {
-			return (
-				(version_compare($current_version, $with_version)===1)
-				|| version_compare($current_version, $with_version, '<')
-			);
-		}
+		return version_compare($current_version, $with_version, $condition);
 	}
 }
 ?>

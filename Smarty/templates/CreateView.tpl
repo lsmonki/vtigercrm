@@ -56,14 +56,26 @@ function sensex_info()
 	     {*<!-- PUBLIC CONTENTS STARTS-->*}
 	     <div class="small" style="padding:20px">
 		
+		{* vtlib customization: use translation only if present *}
+		{assign var="SINGLE_MOD_LABEL" value=$SINGLE_MOD}
+		{if $APP.$SINGLE_MOD} {assign var="SINGLE_MOD_LABEL" value=$APP.SINGLE_MOD} {/if}
+				
 		 {if $OP_MODE eq 'edit_view'}   
-			 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$APP.LBL_EDITING} {$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span> <br>
+			 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$APP.LBL_EDITING} {$SINGLE_MOD_LABEL} {$APP.LBL_INFORMATION}</span> <br>
 			{$UPDATEINFO}	 
 		 {/if}
+
 		 {if $OP_MODE eq 'create_view'}
 			{if $DUPLICATE neq 'true'}
 			{assign var=create_new value="LBL_CREATING_NEW_"|cat:$MODULE}
-		        <span class="lvtHeaderText">{$APP[$create_new]}</span> <br>
+				{* vtlib customization: use translation only if present *}
+				{assign var="create_newlabel" value=$APP.$create_new}
+				{if $create_newlabel neq ''}
+					<span class="lvtHeaderText">{$create_newlabel}</span> <br>
+				{else}
+					<span class="lvtHeaderText">{$APP.LBL_CREATING} {$APP.LBL_NEW} {$MODULE}</span> <br>
+				{/if}
+		        
 			{else}
 			<span class="lvtHeaderText">{$APP.LBL_DUPLICATING} "{$NAME}" </span> <br>
 			{/if}
@@ -121,11 +133,7 @@ function sensex_info()
 										{else}
 											<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  return formValidate()" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
 										{/if}
-										{if $MODULE eq 'Documents'}
-                                            <input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back();" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
-                                        {else}
-                                        	<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
-                                        {/if}
+										<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
 									   </div>
 									</td>
 								   </tr>
@@ -284,14 +292,18 @@ function sensex_info()
 </script>
 {/if}
 <script>
-
-
-
         var fieldname = new Array({$VALIDATION_DATA_FIELDNAME})
-
         var fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL})
-
         var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE})
-
-
 </script>
+
+<!-- vtlib customization: Help information assocaited with the fields -->
+{if $FIELDHELPINFO}
+<script type='text/javascript'>
+{literal}var fieldhelpinfo = {}; {/literal}
+{foreach item=FIELDHELPVAL key=FIELDHELPKEY from=$FIELDHELPINFO}
+	fieldhelpinfo["{$FIELDHELPKEY}"] = "{$FIELDHELPVAL}";
+{/foreach}
+</script>
+{/if}
+<!-- END -->
