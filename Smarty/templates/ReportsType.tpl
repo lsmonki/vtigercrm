@@ -9,7 +9,7 @@
   *
  ********************************************************************************/
 -->*}
-<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="100%">
+<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" height="600" valign="top" width="100%">
 	<tbody><tr>
 	<td colspan="2">
 	<span class="genHeaderGray"> {$MOD.LBL_REPORT_TYPE} </span><br>

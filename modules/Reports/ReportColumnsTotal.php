@@ -43,8 +43,12 @@ if(isset($_REQUEST["record"]))
 }else
 {
         $primarymodule = $_REQUEST["primarymodule"];
-        $secondarymodule = $_REQUEST["secondarymodule"];
         $oReport = new Reports();
+        $secondarymodule = Array();
+		foreach($ogReport->related_modules[$primarymodule] as $key=>$value){
+        	$secondarymodule[] = $_REQUEST["secondarymodule_".$value];
+        	
+		}
         $BLOCK1 = $oReport->sgetColumntoTotal($primarymodule,$secondarymodule);
 		$report_column_tot->assign("BLOCK1",$BLOCK1);
 }

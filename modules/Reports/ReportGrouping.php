@@ -51,9 +51,11 @@ if(isset($_REQUEST["record"]))
 }else
 {
 	$primarymodule = $_REQUEST["primarymodule"];
-	$secondarymodule = $_REQUEST["secondarymodule"];
 	$BLOCK1 = getPrimaryColumns_GroupingHTML($primarymodule);
-	$BLOCK1 .= getSecondaryColumns_GroupingHTML($secondarymodule);
+	$ogReport =  new Reports();
+	foreach($ogReport->related_modules[$primarymodule] as $key=>$value){
+		$BLOCK1 .= getSecondaryColumns_GroupingHTML($_REQUEST["secondarymodule_".$value]);
+	}
 	$report_group->assign("BLOCK1",$BLOCK1);
 	$report_group->assign("BLOCK2",$BLOCK1);
 	$report_group->assign("BLOCK3",$BLOCK1);

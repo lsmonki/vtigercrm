@@ -440,7 +440,7 @@ foreach($reports as $key=>$report)
 		insertSortColumns($queryid,$sortorder[$report['sortid']]);
 	}
 }
-
+$adb->pquery("UPDATE vtiger_report SET sharingtype='Public'",array());
 /** Function to store the foldername and folderdescription to database
  *  This function accepts the given folder name and description
  *  ans store it in db as SAVED

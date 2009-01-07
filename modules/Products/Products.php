@@ -69,7 +69,6 @@ class Products extends CRMEntity {
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'productname';
 	var $default_sort_order = 'ASC';
-
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function Products() {
@@ -954,5 +953,74 @@ class Products extends CRMEntity {
 		}
 		$log->debug("Exiting transferRelatedRecords...");
 	}
+
+	/*
+	 * Function to get the secondary query part of a report 
+	 * @param - $module primary module name
+	 * @param - $secmodule secondary module name
+	 * returns the query string formed on fetching the related data for report for secondary module
+	 */
+	function generateReportsSecQuery($module,$secmodule){
+		global $current_user;
+		$tab = getRelationTables($module,$secmodule);
+		
+		foreach($tab as $key=>$value){
+			$tables[]=$key;
+			$fields[] = $value;
+		}
+		$tabname = $tables[0];
+		$prifieldname = $fields[0][0];
+		$secfieldname = $fields[0][1];
+		$tmpname = $tabname."tmp".$secmodule;
+		$condvalue = $tables[1].".".$fields[1];
+	
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT productid from vtiger_products)";
+		$query .= " left join vtiger_products as vtiger_productsRelProducts  on vtiger_productsRelProducts.productid = $tmpname.$secfieldname
+			LEFT JOIN (
+				SELECT vtiger_products.productid, 
+						(CASE WHEN (vtiger_products.currency_id = " . $current_user->currency_id . " ) THEN vtiger_products.unit_price
+							WHEN (vtiger_productcurrencyrel.actual_price IS NOT NULL) THEN vtiger_productcurrencyrel.actual_price
+							ELSE (vtiger_products.unit_price / vtiger_currency_info.conversion_rate) * ". $current_user->conv_rate . " END
+						) AS actual_unit_price
+				FROM vtiger_products
+				LEFT JOIN vtiger_currency_info ON vtiger_products.currency_id = vtiger_currency_info.id
+				LEFT JOIN vtiger_productcurrencyrel ON vtiger_products.productid = vtiger_productcurrencyrel.productid
+				AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . "
+			) AS innerProduct ON innerProduct.productid = vtiger_productsRelProducts.productid
+			left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_productsRelProducts.productid and vtiger_crmentityProducts.deleted=0
+			left join vtiger_products on vtiger_products.productid = vtiger_crmentityProducts.crmid
+			left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
+			left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_products.handler
+			left join vtiger_vendor as vtiger_vendorRelProducts on vtiger_vendorRelProducts.vendorid = vtiger_products.vendor_id
+			left join vtiger_seproductsrel on vtiger_seproductsrel.productid = vtiger_products.productid
+			left join vtiger_crmentity as vtiger_crmentityRelProducts on vtiger_crmentityRelProducts.crmid = vtiger_seproductsrel.crmid and vtiger_crmentityRelProducts.deleted=0
+			left join vtiger_account as vtiger_accountRelProducts on vtiger_accountRelProducts.accountid=vtiger_seproductsrel.crmid
+			left join vtiger_leaddetails as vtiger_leaddetailsRelProducts on vtiger_leaddetailsRelProducts.leadid = vtiger_seproductsrel.crmid
+			left join vtiger_products as vtiger_productsProducts on vtiger_productsProducts.productid = vtiger_products.parentid
+			left join vtiger_potential as vtiger_potentialRelProducts on vtiger_potentialRelProducts.potentialid = vtiger_seproductsrel.crmid ";
+		return $query;
+	}
+
+	/*
+	 * Function to get the relation tables for related modules 
+	 * @param - $secmodule secondary module name
+	 * returns the array with table names and fieldnames storing relations between module and this module
+	 */
+	function setRelationTables($secmodule){
+		$rel_tables = array (
+			"HelpDesk" => array("vtiger_troubletickets"=>array("product_id","ticketid"),"vtiger_products"=>"productid"),
+			"Quotes" => array("vtiger_inventoryproductrel"=>array("productid","id"),"vtiger_products"=>"productid"),
+			"PurchaseOrder" => array("vtiger_inventoryproductrel"=>array("productid","id"),"vtiger_products"=>"productid"),
+			"SalesOrder" => array("vtiger_inventoryproductrel"=>array("productid","id"),"vtiger_products"=>"productid"),
+			"Invoice" => array("vtiger_inventoryproductrel"=>array("productid","id"),"vtiger_products"=>"productid"),
+			"Leads" => array("vtiger_seproductsrel"=>array("productid","crmid"),"vtiger_products"=>"productid"),
+			"Accounts" => array("vtiger_seproductsrel"=>array("productid","crmid"),"vtiger_products"=>"productid"),
+			"Contacts" => array("vtiger_seproductsrel"=>array("productid","crmid"),"vtiger_products"=>"productid"),
+			"Potentials" => array("vtiger_seproductsrel"=>array("productid","crmid"),"vtiger_products"=>"productid"),
+			"Products" => array("vtiger_products"=>array("product_id","productid"),"vtiger_products"=>"productid"),
+		);
+		return $rel_tables[$secmodule];
+	}
+
 }
 ?>

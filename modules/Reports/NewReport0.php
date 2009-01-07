@@ -32,14 +32,16 @@ $image_path=$theme_path."images/";
 $list_report_form = new vtigerCRM_Smarty;
 $list_report_form->assign("MOD", $mod_strings);
 $list_report_form->assign("APP", $app_strings);
+$repObj = new Reports ();
+
 if($_REQUEST['reportmodule'] != '')
 {
-	$list_report_form->assign("RELATEDMODULES",getReportRelatedModules($_REQUEST['reportmodule']));
+	$list_report_form->assign("RELATEDMODULES",getReportRelatedModules($_REQUEST['reportmodule'],$repObj));
 	$list_report_form->assign("REP_MODULE",$_REQUEST['reportmodule']);
 }
 if($_REQUEST['reportName'] !='')
 {
-	$list_report_form->assign("RELATEDMODULES",getReportRelatedModules($_REQUEST['primarymodule']));
+	$list_report_form->assign("RELATEDMODULES",getReportRelatedModules($_REQUEST['primarymodule'],$repObj));
 	$list_report_form->assign("REPORTNAME",$_REQUEST['reportName']);
 	$list_report_form->assign("REPORTDESC",$_REQUEST['reportDesc']);
 	$list_report_form->assign("REP_MODULE",$_REQUEST['primarymodule']);
@@ -48,7 +50,6 @@ if($_REQUEST['reportName'] !='')
 		
 }
 $list_report_form->assign("FOLDERID",$_REQUEST['folder']);
-$repObj = new Reports ();
 $list_report_form->assign("REP_FOLDERS",$repObj->sgetRptFldr());
 $list_report_form->assign("IMAGE_PATH", $image_path);
 $list_report_form->assign("THEME_PATH", $theme_path);

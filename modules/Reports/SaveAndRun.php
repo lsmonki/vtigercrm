@@ -44,12 +44,19 @@ if($numOfRows > 0)
 
 	$ogReport = new Reports($reportid);
 	$primarymodule = $ogReport->primodule;
-	$secondarymodule = $ogReport->secmodule;
+	$secondarymodule = split(":",$ogReport->secmodule);
+	$secmodule_permitted = true;
+	for($i=0;$i<count($secondarymodule);$i++){
+		if(isPermitted($secondarymodule[$i],'index')!= "yes"){
+			$secmodule_permitted = false;
+			break;
+		}
+	}
 	$oReportRun = new ReportRun($reportid);
 	$filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
 	$sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
 	$totalhtml = $oReportRun->GenerateReport("TOTALHTML",$filterlist);
-	if(isPermitted($primarymodule,'index') == "yes" && (isPermitted($secondarymodule,'index')== "yes"))
+	if(isPermitted($primarymodule,'index') == "yes" && $secmodule_permitted == true)
 	{
 		$list_report_form = new vtigerCRM_Smarty;
 		$ogReport->getSelectedStandardCriteria($reportid);
@@ -84,16 +91,24 @@ if($numOfRows > 0)
 		$list_report_form->assign("APP", $app_strings);
 		$list_report_form->assign("IMAGE_PATH", $image_path);
 		$list_report_form->assign("REPORTID", $reportid);
+		$list_report_form->assign("IS_EDITABLE", $ogReport->is_editable);
+		
 		$list_report_form->assign("REPORTNAME", $ogReport->reportname);
-		$list_report_form->assign("REPORTHTML", $sshtml);
+		if(is_array($sshtml))$list_report_form->assign("REPORTHTML", $sshtml);
+		else $list_report_form->assign("ERROR_MSG", $sshtml);
 		$list_report_form->assign("REPORTTOTHTML", $totalhtml);
 		$list_report_form->assign("FOLDERID", $folderid);
 		$list_report_form->assign("DATEFORMAT",$current_user->date_format);
 		$list_report_form->assign("JS_DATEFORMAT",parse_calendardate($app_strings['NTC_DATE_FORMAT']));
-
+		$rep_in_fldr = $ogReport->sgetRptsforFldr($folderid);
+		for($i=0;$i<count($rep_in_fldr);$i++){
+			$rep_id = $rep_in_fldr[$i]['reportid'];
+			$rep_name = $rep_in_fldr[$i]['reportname'];
+			$reports_array[$rep_id]=$rep_name;
+		}
 		if($_REQUEST['mode'] != 'ajax')
 		{
-			$list_report_form->assign("REPINFOLDER", getReportsinFolder($folderid));
+			$list_report_form->assign("REPINFOLDER", $reports_array);
 			include('themes/'.$theme.'/header.php');
 			$list_report_form->display('ReportRun.tpl');
 		}

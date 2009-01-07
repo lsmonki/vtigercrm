@@ -12,7 +12,7 @@
 <script>
 var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
 </script>
-<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="100%">
+<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0"  valign="top" height="600" width="100%">
 	<tbody><tr>
 	<td colspan="4">
 	<span class="genHeaderGray">{$MOD.LBL_SELECT_COLUMNS}</span><br>
@@ -24,7 +24,7 @@ var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
 	<td colspan="2" height="26"><b>{$MOD.LBL_AVAILABLE_FIELDS}</b></td>
 	<td colspan="2"><b>{$MOD.LBL_SELECTED_FIELDS}</b></td>
 	</tr>
-	<tr>
+	<tr  valign="top">
 	<td style="padding-right: 5px;" align="right" width="40%">
 	<select id="availList" multiple size="16" name="availList" class="txtBox">
 	{$BLOCK1}

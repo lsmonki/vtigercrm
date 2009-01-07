@@ -57,7 +57,7 @@
 							<td width="75%" valign="top"  bgcolor=white >
 								<!-- STEP 1 -->
 								<div id="step1" style="display:block;">
-									<table width="100%" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF" class="small">
+									<table width="100%" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF" height="600" class="small">
 										<tr>
 											<td colspan="2">
 												<span class="genHeaderGray">{$MOD.LBL_REPORT_DETAILS}</span><br>
@@ -87,33 +87,35 @@
 											<td align="left" style="padding-left:5px;"><textarea name="reportdes" class="txtBox" rows="5">{$REPORTDESC}</textarea></td>
 										</tr>
 										<tr> 
-							 	                        <td colspan="2" height="285">&nbsp;</td> 
+							 	                        <td colspan="2" height="355">&nbsp;</td> 
 										</tr>
 										
 									</table>
 								</div>
 								<!-- STEP 2 -->
 								<div id="step2" style="display:none;">
-									<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="100%">
+									<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" height="600" width="100%">
 										<tr>
 										<td colspan="2">
 											<span class="genHeaderGray">{$MOD.LBL_RELATIVE_MODULE}</span><br>
 											{$MOD.LBL_SELECT_RELATIVE_MODULE_FOR_REPORT}<hr>
 										</td>
 										</tr>
-										<tr>
+										<tr valign=top>
 											<td style="padding-right: 5px;" align="right" nowrap width="25%"><b>{$MOD.LBL_NEW_REP0_HDR2}</b></td>
-											<td style="padding-left: 5px;" align="left" width="75%">
-												<select name="secondarymodule" class="txtBox">
-												<option value="">--None--</option>
+											<td style="padding-left: 5px; " align="left" width="75%">
+												<!--select name="secondarymodule" class="txtBox">
+												<option value="">--None--</option -->
+												<table class="small">
 												{foreach item=relmod from=$RELATEDMODULES}
 												{if $SEC_MODULE eq $relmod}
-													<option selected value="{$relmod}">{$APP.$relmod}</option>
+													<tr><td><input type='checkbox' name="secondarymodule_{$relmod}" checked value="{$relmod}" />{$APP.$relmod}</td></tr>
 												{else}
-													<option value="{$relmod}">{$APP.$relmod}</option>
+													<tr><td><input type='checkbox' name="secondarymodule_{$relmod}" value="{$relmod}" />{$APP.$relmod}</td></tr>
 												{/if}
 												{/foreach}
-												</select>
+												</table>
+												<!--/select-->
 											</td>
 										</tr>
 										<tr><td colspan="2" height="438">&nbsp;</td></tr> 

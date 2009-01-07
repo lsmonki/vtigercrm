@@ -9,7 +9,7 @@
   *
  ********************************************************************************/
 -->*}
-<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="100%">
+<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" height="600" width="100%" valign="top">
 	<tbody><tr>
 	<td colspan="2">
 	<span class="genHeaderGray">{$MOD.LBL_CALCULATIONS}</span><br>

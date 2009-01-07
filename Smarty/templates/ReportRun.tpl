@@ -51,8 +51,9 @@
 			{$REPORTNAME}
 		{/if}
 		</span>&nbsp;&nbsp;
-		
+		{if $IS_EDITABLE eq 'true'}
 		<input type="button" name="custReport" value="{$MOD.LBL_CUSTOMIZE_REPORT}" class="crmButton small edit" onClick="editReport('{$REPORTID}');">
+		{/if}
 		<br>
 		<a href="index.php?module=Reports&action=ListView" class="reportMnu" style="border-bottom: 0px solid rgb(0, 0, 0);">&lt;{$MOD.LBL_BACK_TO_REPORTS}</a>
 	</td>

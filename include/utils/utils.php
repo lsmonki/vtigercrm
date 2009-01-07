@@ -2890,18 +2890,27 @@ function escape_single_quotes($value) {
  *                If set to 2 - Will look for cases string%.
  * @return String formatted as per the SQL like clause requirement
  */
-function formatForSqlLike($str, $flag=0) {
+function formatForSqlLike($str, $flag=0,$is_field=false) {
 	if (isset($str)) {
-		$str = str_replace('%', '\%', $str);
-		$str = str_replace('_', '\_', $str);
-		
-		if ($flag == 0) {
-			$str = '%'. $str .'%';			
-		} elseif ($flag == 1) {
-			$str = '%'. $str;
-		} elseif ($flag == 2) {
-			$str = $str .'%';
-		} 
+		if($is_field==false){
+			$str = str_replace('%', '\%', $str);
+			$str = str_replace('_', '\_', $str);
+			if ($flag == 0) {
+				$str = '%'. $str .'%';			
+			} elseif ($flag == 1) {
+				$str = '%'. $str;
+			} elseif ($flag == 2) {
+				$str = $str .'%';
+			} 
+		} else {
+			if ($flag == 0) {
+				$str = 'concat("%",'. $str .',"%")';			
+			} elseif ($flag == 1) {
+				$str = 'concat("%",'. $str .')';
+			} elseif ($flag == 2) {
+				$str = 'concat('. $str .',"%")';
+			} 
+		}
 	}
 	return mysql_real_escape_string($str);
 }
@@ -4536,4 +4545,30 @@ function getFieldsResultForMerge($tabid) {
 	$log->debug("Exiting getFieldsResultForMerge method ...");
 	return $res;
 }
+
+/* Function to get the related tables data  
+ * @param - $module - Primary module name
+ * @param - $secmodule - Secondary module name
+ * return Array $rel_array tables and fields to be compared are sent
+ * */
+function getRelationTables($module,$secmodule){
+	require_once("modules/$module/$module.php");
+	$primary_obj = new $module();
+	
+	require_once("modules/$secmodule/$secmodule.php");
+	$secondary_obj = new $secmodule();
+	
+	if(method_exists($primary_obj,setRelationTables)){
+		$reltables = $primary_obj->setRelationTables($secmodule);	
+	} else {
+		$reltables = '';
+	}
+	if(is_array($reltables) && !empty($reltables)){
+		$rel_array = $reltables;
+	} else {
+		$rel_array = array("vtiger_crmentityrel"=>array("crmid","relcrmid"),"".$primary_obj->table_name."" => "".$primary_obj->table_index."");
+	}
+	return $rel_array;
+}
+
 ?>

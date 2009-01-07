@@ -2230,6 +2230,12 @@ a.drop_down:Hover{
         font-family:Arial, Helvetica, sans-serif;
         font-size:11px;
 }
+.repBox1{
+        width:200px;
+        border:1px solid #666666;
+        font-family:Arial, Helvetica, sans-serif;
+        font-size:11px;
+}
 .warning {
         color: #000099; /* Same as the background-color of .create Class */
 }

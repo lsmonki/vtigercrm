@@ -14,7 +14,6 @@ require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Reports/Reports.php');
 require_once('include/database/PearDatabase.php');
-
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
@@ -46,9 +45,11 @@ if(isset($_REQUEST["record"]))
 }else
 {
 	$primarymodule = $_REQUEST["primarymodule"];
-	$secondarymodule = $_REQUEST["secondarymodule"];
 	$BLOCK1 = getPrimaryColumnsHTML($primarymodule);
-	$BLOCK1 .= getSecondaryColumnsHTML($secondarymodule);
+	$ogReport = new Reports();
+	foreach($ogReport->related_modules[$primarymodule] as $key=>$value){
+		$BLOCK1 .= getSecondaryColumnsHTML($_REQUEST["secondarymodule_".$value]);
+	}
 	$report_column->assign("BLOCK1",$BLOCK1);
 
 }

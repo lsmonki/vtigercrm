@@ -88,9 +88,9 @@ class HelpDesk extends CRMEntity {
         //Added these variables which are used as default order by and sortorder in ListView
         var $default_order_by = 'title';
         var $default_sort_order = 'DESC';
-
+		
 	//var $groupTable = Array('vtiger_ticketgrouprelation','ticketid');
-
+	
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function HelpDesk() 
@@ -706,6 +706,52 @@ case when (vtiger_users.user_name not like '') then vtiger_users.user_name else 
 			}
 		}
 		$log->debug("Exiting transferRelatedRecords...");
+	}
+	
+	/*
+	 * Function to get the secondary query part of a report 
+	 * @param - $module primary module name
+	 * @param - $secmodule secondary module name
+	 * returns the query string formed on fetching the related data for report for secondary module
+	 */
+	function generateReportsSecQuery($module,$secmodule){
+		$tab = getRelationTables($module,$secmodule);
+		
+		foreach($tab as $key=>$value){
+			$tables[]=$key;
+			$fields[] = $value;
+		}
+		$tabname = $tables[0];
+		$prifieldname = $fields[0][0];
+		$secfieldname = $fields[0][1];
+		$tmpname = $tabname."tmp".$secmodule;
+		$condvalue = $tables[1].".".$fields[1];
+	
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT ticketid from vtiger_troubletickets)";
+		$query .=" left join vtiger_troubletickets as vtiger_troubleticketsHelpDesk on vtiger_troubleticketsHelpDesk.ticketid=$tmpname.$secfieldname  
+				left join vtiger_crmentity as vtiger_crmentityHelpDesk on vtiger_crmentityHelpDesk.crmid=vtiger_troubleticketsHelpDesk.ticketid and vtiger_crmentityHelpDesk.deleted=0 
+				left join vtiger_troubletickets on vtiger_troubletickets.ticketid = vtiger_crmentityHelpDesk.crmid 
+				left join vtiger_ticketcf on vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid
+				left join vtiger_crmentity as vtiger_crmentityRelHelpDesk on vtiger_crmentityRelHelpDesk.crmid = vtiger_troubletickets.parent_id
+				left join vtiger_account as vtiger_accountRelHelpDesk on vtiger_accountRelHelpDesk.accountid=vtiger_crmentityRelHelpDesk.crmid 
+				left join vtiger_contactdetails as vtiger_contactdetailsRelHelpDesk on vtiger_contactdetailsRelHelpDesk.contactid= vtiger_crmentityRelHelpDesk.crmid
+				left join vtiger_products as vtiger_productsRel on vtiger_productsRel.productid = vtiger_troubletickets.product_id 
+				left join vtiger_groups as vtiger_groupsHelpDesk on vtiger_groupsHelpDesk.groupid = vtiger_crmentityHelpDesk.smownerid
+				left join vtiger_users as vtiger_usersHelpDesk on vtiger_usersHelpDesk.id = vtiger_crmentityHelpDesk.smownerid"; 
+
+		return $query;
+	}
+
+	/*
+	 * Function to get the relation tables for related modules 
+	 * @param - $secmodule secondary module name
+	 * returns the array with table names and fieldnames storing relations between module and this module
+	 */
+	function setRelationTables($secmodule){
+		$rel_tables = array (
+			"Calendar" => array("vtiger_seactivityrel"=>array("crmid","activityid"),"vtiger_troubletickets"=>"ticketid"),
+		);
+		return $rel_tables[$secmodule];
 	}
 
 }

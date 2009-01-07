@@ -68,7 +68,6 @@ class Campaigns extends CRMEntity {
 			'Campaign Name'=>'campaignname',
 			'Campaign Type'=>'campaigntype',
 			);
-
 	function Campaigns() 
 	{
 		$this->log =LoggerManager::getLogger('campaign');
@@ -279,6 +278,52 @@ class Campaigns extends CRMEntity {
 		$log->debug("Exiting get_activities method ...");
 		return GetRelatedList('Campaigns','Calendar',$focus,$query,$button,$returnset);
 	
+	}
+	
+	/*
+	 * Function to get the secondary query part of a report 
+	 * @param - $module primary module name
+	 * @param - $secmodule secondary module name
+	 * returns the query string formed on fetching the related data for report for secondary module
+	 */
+	function generateReportsSecQuery($module,$secmodule){
+		$tab = getRelationTables($module,$secmodule);
+		
+		foreach($tab as $key=>$value){
+			$tables[]=$key;
+			$fields[] = $value;
+		}
+		$tabname = $tables[0];
+		$prifieldname = $fields[0][0];
+		$secfieldname = $fields[0][1];
+		$tmpname = $tabname."tmp".$secmodule;
+		$condvalue = $tables[1].".".$fields[1];
+	
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT campaignid from vtiger_campaign)";
+		$query .=" left join vtiger_campaign as vtiger_campaignCampaigns on vtiger_campaignCampaigns.campaignid=$tmpname.$secfieldname  
+				left join vtiger_crmentity as vtiger_crmentityCampaigns on vtiger_crmentityCampaigns.crmid=vtiger_campaignCampaigns.campaignid and vtiger_crmentityCampaigns.deleted=0 
+				left join vtiger_campaign on vtiger_campaign.campaignid = vtiger_crmentityCampaigns.crmid 
+				left join vtiger_products as vtiger_productsCampaigns on vtiger_campaign.product_id = vtiger_productsCampaigns.productid 
+				left join vtiger_campaignscf on vtiger_campaignscf.campaignid = vtiger_crmentityCampaigns.crmid 
+				left join vtiger_groups as vtiger_groupsCampaigns on vtiger_groupsCampaigns.groupid = vtiger_crmentityCampaigns.smownerid
+				left join vtiger_users as vtiger_usersCampaigns on vtiger_usersCampaigns.id = vtiger_crmentityCampaigns.smownerid"; 
+
+		return $query;
+	}
+
+	/*
+	 * Function to get the relation tables for related modules 
+	 * @param - $secmodule secondary module name
+	 * returns the array with table names and fieldnames storing relations between module and this module
+	 */
+	function setRelationTables($secmodule){
+		$rel_tables = array (
+			"Contacts" => array("vtiger_campaigncontrel"=>array("campaignid","contactid"),"vtiger_campaign"=>"campaignid"),
+			"Leads" => array("vtiger_campaignleadrel"=>array("campaignid","leadid"),"vtiger_campaign"=>"campaignid"),
+			"Potentials" => array("vtiger_potential"=>array("campaignid","potentialid"),"vtiger_campaign"=>"campaignid"),
+			"Calendar" => array("vtiger_seactivityrel"=>array("crmid","activityid"),"vtiger_campaign"=>"campaignid"),
+		);
+		return $rel_tables[$secmodule];
 	}
 
 }

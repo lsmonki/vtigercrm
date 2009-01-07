@@ -400,7 +400,7 @@ function saveAndRunReport()
 		alert(alert_arr.COLUMNS_CANNOT_BE_EMPTY);
 		return false;
 	}
-
+	formSelectedColumnString();
 	formSelectColumnString();
 	document.NewReport.submit();
 }       
@@ -626,7 +626,7 @@ function CreateReport(module)
 	fnPopupWin(arg);
 }
 function fnPopupWin(winName){
-	window.open(winName, "ReportWindow","width=740px,height=625px,scrollbars=yes");
+	window.open(winName, "ReportWindow","width=900px,height=750px,scrollbars=yes");
 }
 function re_dateValidate(fldval,fldLabel,type) {
 	if(re_patternValidate(fldval,fldLabel,"DATE")==false)
@@ -722,4 +722,73 @@ function standardFilterDisplay()
 		getObj('jscal_trigger_date_start').style.visibility="visible";
 		getObj('jscal_trigger_date_end').style.visibility="visible";
 	}
+}
+
+
+function updateRelFieldOptions(sel, opSelName) {
+    var selObj = document.getElementById(opSelName);
+    var fieldtype = null ;
+
+    var currOption = selObj.options[selObj.selectedIndex];
+    var currField = sel.options[sel.selectedIndex];
+ 
+    if(currField.value != null && currField.value.length != 0)
+    {
+	fieldtype = trimfValues(currField.value);
+	ops = rel_fields[fieldtype];
+ 	
+	var off = 0;
+	if(ops != null)
+	{
+		var nMaxVal = selObj.length;
+		for(nLoop = 0; nLoop < nMaxVal; nLoop++)
+		{
+			selObj.remove(0);
+		}
+		selObj.options[0] = new Option ('None', '');
+		if (currField.value == '') {
+			selObj.options[0].selected = true;
+		}
+		off = 1;
+		for (var i = 0; i < ops.length; i++)
+		{
+			var field_array = ops[i].split("::");
+			var label = field_array[1];
+			var field = field_array[0];
+			if (label == null) continue;
+			var option = new Option (label, field);
+			selObj.options[i + off] = option;
+			if (currOption != null && currOption.value == option.value)
+			{
+				option.selected = true;
+			}
+		}
+	}
+    }else
+    {
+	var nMaxVal = selObj.length;
+	for(nLoop = 0; nLoop < nMaxVal; nLoop++)
+	{
+		selObj.remove(0);
+	}
+	selObj.options[0] = new Option ('None', '');
+	if (currField.value == '') {
+		selObj.options[0].selected = true;
+	}
+    }
+
+}
+
+function AddFieldToFilter(id, sel){
+	if(trim(document.getElementById("fval"+id).value)==''){
+		document.getElementById("fval"+id).value = document.getElementById("fval_"+id).value;
+	} else {
+		document.getElementById("fval"+id).value = document.getElementById("fval"+id).value+","+document.getElementById("fval_"+id).value;
+	}
+}
+function fnLoadRepValues(tab1,tab2,block1,block2){
+	document.getElementById(block1).style.display='block';
+	document.getElementById(block2).style.display='none';
+	document.getElementById(tab1).className='dvtSelectedCell';
+	document.getElementById(tab2).className='dvtUnSelectedCell';
 }

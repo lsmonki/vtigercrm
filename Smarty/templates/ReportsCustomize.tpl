@@ -17,7 +17,15 @@
 	{assign var=poscount value=$poscount+1}
 		<table class="reportsListTable" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">		
 		<tr>
-		<td class="mailSubHeader" align="left" colspan="3" id='folder{$reportfolder.id}' style="font-weight:bold;">{$reportfolder.name}</td>
+		<td class="mailSubHeader" align="left" colspan="3" style="font-weight:bold;">
+		<span id='folder{$reportfolder.id}'> {$reportfolder.name}</span>
+		<i><font color='#C0C0C0'>
+			{if $reportfolder.description neq ''}
+				 - {$reportfolder.description}
+			{/if}
+		</font></i>
+		
+		</td>
 		</tr>
 		<tr>
 			<td  class="hdrNameBg" colspan="3" style="padding: 5px;" align="right" >
@@ -47,13 +55,17 @@
 			{foreach name=reportdtls item=reportdetails from=$reportfolder.details}
 			<tr class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
 			<td><input name="selected_id{$reportfolder.id}" value="{$reportdetails.reportid}" onclick='toggleSelectAll(this.name,"selectall")' type="checkbox"></td>
-			<td align="left"><a href="index.php?module=Reports&action=SaveAndRun&record={$reportdetails.reportid}&folderid={$reportfolder.id}">{$reportdetails.reportname}</a></td>
-			<td align="left">{$reportdetails.description}</td>
-			<td align="center" nowrap>
-			{if $reportdetails.customizable eq '1'}
-			<a href="javascript:;" onClick="editReport('{$reportdetails.reportid}');"><img src="{'editfield.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" title="Customize..." border="0"></a>
+			<td align="left"><a href="index.php?module=Reports&action=SaveAndRun&record={$reportdetails.reportid}&folderid={$reportfolder.id}">{$reportdetails.reportname}</a>
+			{if $reportdetails.sharingtype eq 'Shared'}
+				<img src="{'Meetings.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" border=0 height=12 width=12 /> 
 			{/if}
-			{if $reportdetails.state neq 'SAVED'}
+			</td>
+			<td align="left">{$reportdetails.description}</td>
+			<td align="right" nowrap>
+			{if $reportdetails.customizable eq '1' && $reportdetails.editable eq 'true'}
+				<a href="javascript:;" onClick="editReport('{$reportdetails.reportid}');"><img src="{'editfield.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" title="Customize..." border="0"></a>
+			{/if}
+			{if $reportdetails.state neq 'SAVED' && $reportdetails.editable eq 'true'}
 			&nbsp;| &nbsp;<a href="javascript:;" onClick="DeleteReport('{$reportdetails.reportid}');"><img src="{'delete.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" title="Delete..." border="0"></a>
 			{/if}
 			</td>

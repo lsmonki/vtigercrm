@@ -2563,6 +2563,7 @@ function deleteGroup($groupId,$transferId)
 
 	deleteGroupRelatedGroups($groupId);
 	deleteGroupRelatedRoles($groupId);
+	deleteGroupReportRelations($groupId);
 	deleteGroupRelatedRolesAndSubordinates($groupId);
 	deleteGroupRelatedUsers($groupId);
 	$log->debug("Exiting deleteGroup method ...");
@@ -4061,6 +4062,19 @@ function insertRole2Picklist($roleid,$parentroleid)
 	$sql = "insert into vtiger_role2picklist select '".$roleid."',picklistvalueid,picklistid,sortid from vtiger_role2picklist where roleid=?";
 	$adb->pquery($sql, array($parentroleid));
 	$log->debug("Exiting from the function insertRole2Picklist($roleid,$parentroleid)");
+}
+
+/** Function to delete group to report relation of the  specified group  
+  * @param $groupId -- Group Id :: Type integer 
+ */
+function deleteGroupReportRelations($groupId)
+{
+	global $log;
+	$log->debug("Entering deleteGroupReportRelations(".$groupId.") method ...");
+	global $adb;
+	$query="delete from vtiger_reportsharing where shareid=? and setype='groups'";
+	$adb->pquery($query, array($groupId));
+	$log->debug("Exiting deleteGroupReportRelations method ...");
 }
 //end					   
 ?>

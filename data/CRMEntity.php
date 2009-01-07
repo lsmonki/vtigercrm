@@ -1553,6 +1553,123 @@ $log->info("in getOldFileName  ".$notesid);
 		$log->debug("Exiting transferRelatedRecords...");
 	}
 
+	/*
+	 * Function to get the primary query part of a report for which generateReportsQuery Doesnt exist in module 
+	 * @param - $module Primary module name
+	 * returns the query string formed on fetching the related data for report for primary module
+	 */
+	function generateReportsQuery($module){
+		global $adb;
+		checkFileAccess("modules/$module/$module.php");
+		require_once("modules/$module/$module.php");
+		$primary = new $module();
+
+		vtlib_setup_modulevars($module, $primary);
+		$moduletable = $primary->table_name;
+		$moduleindex = $primary->table_index;
+		$modulecftable = $primary->customFieldTable[0];
+		$modulecfindex = $primary->customFieldTable[1];
+		$query = "from $moduletable
+	        inner join $modulecftable as $modulecftable on $modulecftable.$modulecfindex=$moduletable.$moduleindex   
+			inner join vtiger_crmentity on vtiger_crmentity.crmid=$moduletable.$moduleindex
+			left join vtiger_groups as vtiger_groups".$module." on vtiger_groups".$module.".groupid = vtiger_crmentity.smownerid
+            left join vtiger_users as vtiger_users".$module." on vtiger_users".$module.".id = vtiger_crmentity.smownerid
+			left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
+            left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid";
+            
+        $fields_query = $adb->pquery("SELECT vtiger_field.fieldname,vtiger_field.tablename,vtiger_field.fieldid from vtiger_field INNER JOIN vtiger_tab on vtiger_tab.name = ? WHERE vtiger_tab.tabid=vtiger_field.tabid AND vtiger_field.uitype IN (10)",array($module));
+        
+        if($adb->num_rows($fields_query)>0){
+	        for($i=0;$i<$adb->num_rows($fields_query);$i++){
+	        	$field_name = $adb->query_result($fields_query,$i,'fieldname');
+	        	$field_id = $adb->query_result($fields_query,$i,'fieldid');
+		        $tab_name = $adb->query_result($fields_query,$i,'tablename');
+		        $ui10_modules_query = $adb->pquery("SELECT relmodule FROM vtiger_fieldmodulerel WHERE fieldid=?",array($field_id));
+		        
+		       if($adb->num_rows($ui10_modules_query)>0){
+			        $query.= " left join vtiger_crmentity as vtiger_crmentityRel$module on vtiger_crmentityRel$module.crmid = $tab_name.$field_name and vtiger_crmentityRel$module.deleted=0";
+			        for($j=0;$j<$adb->num_rows($ui10_modules_query);$j++){
+			        	$rel_mod = $adb->query_result($ui10_modules_query,$j,'relmodule');
+			        	require_once("modules/$rel_mod/$rel_mod.php");
+			        	$rel_obj = new $rel_mod();
+			        	vtlib_setup_modulevars($rel_mod, $rel_obj);
+						
+						$rel_tab_name = $rel_obj->table_name;
+						$rel_tab_index = $rel_obj->table_index;
+				        $query.= " left join $rel_tab_name as ".$rel_tab_name."Rel$module on ".$rel_tab_name."Rel$module.$rel_tab_index = vtiger_crmentityRel$module.crmid";
+			        }
+		       }
+	        }
+        }
+ 		return $query;
+	 		            
+	}
+	
+	/*
+	 * Function to get the secondary query part of a report for which generateReportsSecQuery Doesnt exist in module 
+	 * @param - $module primary module name
+	 * @param - $secmodule secondary module name
+	 * returns the query string formed on fetching the related data for report for secondary module
+	 */
+	function generateReportsSecQuery($module,$secmodule){
+		checkFileAccess("modules/$secmodule/$secmodule.php");
+		require_once("modules/$secmodule/$secmodule.php");
+		$secondary = new $secmodule();
+
+		vtlib_setup_modulevars($secmodule, $secondary);
+	 	
+		$tablename = $secondary->table_name;
+		$tableindex = $secondary->table_index;
+		$modulecftable = $secondary->customFieldTable[0];
+		$modulecfindex = $secondary->customFieldTable[1];
+	 	$tab = getRelationTables($module,$secmodule);
+		
+		foreach($tab as $key=>$value){
+			$tables[]=$key;
+			$fields[] = $value;
+		}
+		$tabname = $tables[0];
+		$prifieldname = $fields[0][0];
+		$secfieldname = $fields[0][1];
+		$tmpname = $tabname."tmp";
+		$condvalue = $tables[1].".".$fields[1];
+	
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT notesid from vtiger_notes)";
+		$query .=" 	left join $tablename as $tablename".$secmodule." on $tablename".$secmodule.".$tableindex = $tmpname.$secfieldname
+					left join vtiger_crmentity as vtiger_crmentity$secmodule on vtiger_crmentity$secmodule.crmid = $tablename".$secmodule.".$tableindex AND vtiger_crmentity$secmodule.deleted=0   
+					left join $tablename on $tablename.$tableindex=vtiger_crmentity$secmodule.crmid   
+					left join $modulecftable on $modulecftable.$modulecfindex=$tablename.$tableindex   
+					left join vtiger_groups as vtiger_groups".$secmodule." on vtiger_groups".$secmodule.".groupid = vtiger_crmentity$secmodule.smownerid
+		            left join vtiger_users as vtiger_users".$secmodule." on vtiger_users".$secmodule.".id = vtiger_crmentity$secmodule.smownerid"; 
+   
+       $fields_query = $adb->pquery("SELECT vtiger_field.fieldname,vtiger_field.tablename,vtiger_field.fieldid from vtiger_field INNER JOIN vtiger_tab on vtiger_tab.name = ? WHERE vtiger_tab.tabid=vtiger_field.tabid AND vtiger_field.uitype IN (10)",array($secmodule));
+        
+        if($adb->num_rows($fields_query)>0){
+	        for($i=0;$i<$adb->num_rows($fields_query);$i++){
+	        	$field_name = $adb->query_result($fields_query,$i,'fieldname');
+	        	$field_id = $adb->query_result($fields_query,$i,'fieldid');
+	        	$tab_name = $adb->query_result($fields_query,$i,'tablename');
+		        $ui10_modules_query = $adb->pquery("SELECT relmodule FROM vtiger_fieldmodulerel WHERE fieldid=?",array($field_id));
+		        
+		       if($adb->num_rows($ui10_modules_query)>0){
+			        $query.= " left join vtiger_crmentity as vtiger_crmentityRel$secmodule on vtiger_crmentityRel$secmodule.crmid = $tab_name.$field_name and vtiger_crmentityRel$secmodule.deleted=0";
+			        for($j=0;$j<$adb->num_rows($ui10_modules_query);$j++){
+			        	$rel_mod = $adb->query_result($ui10_modules_query,$j,'relmodule');
+			        	require_once("modules/$rel_mod/$rel_mod.php");
+			        	$rel_obj = new $rel_mod();
+			        	vtlib_setup_modulevars($rel_mod, $rel_obj);
+						
+						$rel_tab_name = $rel_obj->table_name;
+						$rel_tab_index = $rel_obj->table_index;
+				        $query.= " left join $rel_tab_name as ".$rel_tab_name."Rel$secmodule on ".$rel_tab_name."Rel$secmodule.$rel_tab_index = vtiger_crmentityRel$secmodule.crmid";
+			        }
+		       }
+	        }
+        }
+
+		return $query;
+	}	
+
 	/** END **/
 }
 ?>

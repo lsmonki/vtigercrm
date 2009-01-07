@@ -295,5 +295,63 @@ class Documents extends CRMEntity {
 		$dbQuery = "insert into vtiger_senotesrel values ( ?, ? )";
 		$dbresult = $adb->pquery($dbQuery,array($relid,$id));
 	}
+	
+	/*
+	 * Function to get the primary query part of a report
+	 * @param - $module Primary module name
+	 * returns the query string formed on fetching the related data for report for primary module
+	 */
+	function generateReportsQuery($module){
+	 			$moduletable = $this->table_name;
+	 			$moduleindex = $this->tab_name_index[$moduletable];
+	 				$query = "from $moduletable 
+			        inner join vtiger_crmentity on vtiger_crmentity.crmid=$moduletable.$moduleindex
+					left join vtiger_groups as vtiger_groups".$module." on vtiger_groups".$module.".groupid = vtiger_crmentity.smownerid
+		            left join vtiger_users as vtiger_users".$module." on vtiger_users".$module.".id = vtiger_crmentity.smownerid
+					left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
+		            left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid";
+		            return $query;
+		            
+	}
+	
+	/*
+	 * Function to get the secondary query part of a report 
+	 * @param - $module primary module name
+	 * @param - $secmodule secondary module name
+	 * returns the query string formed on fetching the related data for report for secondary module
+	 */
+	function generateReportsSecQuery($module,$secmodule){
+		$tab = getRelationTables($module,$secmodule);
+		
+		foreach($tab as $key=>$value){
+			$tables[]=$key;
+			$fields[] = $value;
+		}
+		$tabname = $tables[0];
+		$prifieldname = $fields[0][0];
+		$secfieldname = $fields[0][1];
+		$tmpname = $tabname."tmp".$secmodule;
+		$condvalue = $tables[1].".".$fields[1];
+	
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT notesid from vtiger_notes)";
+		$query .=" left join vtiger_notes as vtiger_notesDocuments on vtiger_notesDocuments.notesid=$tmpname.$secfieldname  
+				left join vtiger_crmentity as vtiger_crmentityDocuments on vtiger_crmentityDocuments.crmid=vtiger_notesDocuments.notesid and vtiger_crmentityDocuments.deleted=0 
+				left join vtiger_notes on vtiger_notes.notesid = vtiger_crmentityDocuments.crmid 
+				left join vtiger_groups as vtiger_groupsDocuments on vtiger_groupsDocuments.groupid = vtiger_crmentityDocuments.smownerid
+				left join vtiger_users as vtiger_usersDocuments on vtiger_usersDocuments.id = vtiger_crmentityDocuments.smownerid"; 
+
+		return $query;
+	}
+
+	/*
+	 * Function to get the relation tables for related modules 
+	 * @param - $secmodule secondary module name
+	 * returns the array with table names and fieldnames storing relations between module and this module
+	 */
+	function setRelationTables($secmodule){
+		$rel_tables = array();
+		return $rel_tables[$secmodule];
+	}
+
 }
 ?>

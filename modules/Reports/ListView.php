@@ -46,7 +46,7 @@ $list_report_form->assign("CATEGORY",getParentTab());
 $list_report_form->assign("MODULE",$currentModule);
 $list_report_form->assign("NEWRPT_BUTTON",$newrpt_button);
 $list_report_form->assign("NEWRPT_FLDR_BUTTON",$newrpt_fldr_button);
-$repObj = new Reports ();
+$repObj = new Reports();
 $list_report_form->assign("REPT_FLDR",$repObj->sgetRptFldr('SAVED'));
 $cusFldrDtls = Array();
 $cusFldrDtls = $repObj->sgetRptFldr('CUSTOMIZED');
@@ -57,7 +57,7 @@ foreach($cusFldrDtls as $entries)
 }
 if(count($fldrids_lists) > 0)
 	$list_report_form->assign("FOLDE_IDS",implode(',',$fldrids_lists));
-$list_report_form->assign("REPT_MODULES",getReportsModuleList());
+$list_report_form->assign("REPT_MODULES",getReportsModuleList($repObj));
 $list_report_form->assign("REPT_FOLDERS",$repObj->sgetRptFldr());
 if($_REQUEST['mode'] == 'ajax')
 	$list_report_form->display("ReportsCustomize.tpl");

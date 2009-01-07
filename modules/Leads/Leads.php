@@ -83,7 +83,6 @@ class Leads extends CRMEntity {
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'lastname';
 	var $default_sort_order = 'ASC';
-
 	//var $groupTable = Array('vtiger_leadgrouprelation','leadid');
 	
 	function Leads()	{
@@ -496,6 +495,52 @@ class Leads extends CRMEntity {
 			}
 		}
 		$log->debug("Exiting transferRelatedRecords...");
+	}
+
+	/*
+	 * Function to get the secondary query part of a report 
+	 * @param - $module primary module name
+	 * @param - $secmodule secondary module name
+	 * returns the query string formed on fetching the related data for report for secondary module
+	 */
+	function generateReportsSecQuery($module,$secmodule){
+		$tab = getRelationTables($module,$secmodule);
+		
+		foreach($tab as $key=>$value){
+			$tables[]=$key;
+			$fields[] = $value;
+		}
+		$tabname = $tables[0];
+		$prifieldname = $fields[0][0];
+		$secfieldname = $fields[0][1];
+		$tmpname = $tabname."tmp".$secmodule;
+		$condvalue = $tables[1].".".$fields[1];
+	
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT leadid from vtiger_leaddetails)";
+		$query .= " left join vtiger_leaddetails as vtiger_leaddetailsLeads on vtiger_leaddetailsLeads.leadid = $tmpname.$secfieldname 
+			left join vtiger_crmentity as vtiger_crmentityLeads on vtiger_crmentityLeads.crmid = vtiger_leaddetailsLeads.leadid and vtiger_crmentityLeads.deleted=0 
+			left join vtiger_leaddetails on vtiger_leaddetails.leadid = vtiger_crmentityLeads.crmid
+			left join vtiger_leadaddress on vtiger_leaddetails.leadid = vtiger_leadaddress.leadaddressid 
+			left join vtiger_leadsubdetails on vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid 
+			left join vtiger_leadscf on vtiger_leadscf.leadid = vtiger_leaddetails.leadid 
+			left join vtiger_groups as vtiger_groupsLeads on vtiger_groupsLeads.groupid = vtiger_crmentityLeads.smownerid
+			left join vtiger_users as vtiger_usersLeads on vtiger_usersLeads.id = vtiger_crmentityLeads.smownerid ";
+
+		return $query;
+	}
+
+	/*
+	 * Function to get the relation tables for related modules 
+	 * @param - $secmodule secondary module name
+	 * returns the array with table names and fieldnames storing relations between module and this module
+	 */
+	function setRelationTables($secmodule){
+		$rel_tables = array (
+			"Calendar" => array("vtiger_seactivityrel"=>array("crmid","activityid"),"vtiger_leaddetails"=>"leadid"),
+			"Products" => array("vtiger_seproductsrel"=>array("crmid","productid"),"vtiger_leaddetails"=>"leadid"),
+			"Campaigns" => array("vtiger_campaignleadrel"=>array("leadid","campaignid"),"vtiger_leaddetails"=>"leadid"),
+		);
+		return $rel_tables[$secmodule];
 	}
 //End
 

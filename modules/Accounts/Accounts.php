@@ -87,7 +87,7 @@ class Accounts extends CRMEntity {
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'accountname';
 	var $default_sort_order = 'ASC';
-
+	
 	function Accounts() {
 		$this->log =LoggerManager::getLogger('account');
 		$this->db = new PearDatabase();
@@ -368,7 +368,7 @@ class Accounts extends CRMEntity {
 	{
 		global $log,$current_user;
         $log->debug("Entering get_attachments(".$id.") method ...");
-		// Armando Lüscher 18.10.2005 -> §visibleDescription
+		// Armando Lscher 18.10.2005 -> visibleDescription
 		// Desc: Inserted crm2.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
 		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
 		$tab_id=getTabid('Documents');
@@ -807,6 +807,59 @@ class Accounts extends CRMEntity {
 		}
 		$log->debug("Exiting transferRelatedRecords...");
 	}
+	
+	/*
+	 * Function to get the relation tables for related modules 
+	 * @param - $secmodule secondary module name
+	 * returns the array with table names and fieldnames storing relations between module and this module
+	 */
+	function setRelationTables($secmodule){
+		$rel_tables =  array (
+			"Contacts" => array("vtiger_contactdetails"=>array("accountid","contactid"),"vtiger_account"=>"accountid"),
+			"Potentials" => array("vtiger_potential"=>array("accountid","potentialid"),"vtiger_account"=>"accountid"),
+			"Quotes" => array("vtiger_quotes"=>array("accountid","quoteid"),"vtiger_account"=>"accountid"),
+			"SalesOrder" => array("vtiger_salesorder"=>array("accountid","salesorderid"),"vtiger_account"=>"accountid"),
+			"Invoice" => array("vtiger_invoice"=>array("accountid","invoiceid"),"vtiger_account"=>"accountid"),
+			"Calendar" => array("vtiger_seactivityrel"=>array("crmid","activityid"),"vtiger_account"=>"accountid"),
+			"HelpDesk" => array("vtiger_troubletickets"=>array("parent_id","ticketid"),"vtiger_account"=>"accountid"),
+			"Products" => array("vtiger_seproductsrel"=>array("crmid","productid"),"vtiger_account"=>"accountid"),
+		);
+		return $rel_tables[$secmodule];
+	}
+	
+	/*
+	 * Function to get the secondary query part of a report 
+	 * @param - $module primary module name
+	 * @param - $secmodule secondary module name
+	 * returns the query string formed on fetching the related data for report for secondary module
+	 */
+	function generateReportsSecQuery($module,$secmodule){
+		$tab = getRelationTables($module,$secmodule);
+		
+		foreach($tab as $key=>$value){
+			$tables[]=$key;
+			$fields[] = $value;
+		}
+		$tabname = $tables[0];
+		$prifieldname = $fields[0][0];
+		$secfieldname = $fields[0][1];
+		$tmpname = $tabname."tmp".$secmodule;
+		$condvalue = $tables[1].".".$fields[1];
+		
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue and $tmpname.$secfieldname IN (SELECT accountid from vtiger_account)";
+			$query .= " left join vtiger_account as vtiger_accountAccount on vtiger_accountAccount.accountid=$tmpname.$secfieldname 
+			left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_accountAccount.accountid and vtiger_crmentityAccounts.deleted=0
+			left join vtiger_account on vtiger_account.accountid = vtiger_crmentityAccounts.crmid
+			left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
+			left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
+			left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
+			left join vtiger_account as vtiger_accountAccounts on vtiger_accountAccounts.accountid = vtiger_account.parentid
+			left join vtiger_groups as vtiger_groupsAccounts on vtiger_groupsAccounts.groupid = vtiger_crmentityAccounts.smownerid
+			left join vtiger_users as vtiger_usersAccounts on vtiger_usersAccounts.id = vtiger_crmentityAccounts.smownerid ";
+
+		return $query;
+	}
+
 }
 
 ?>

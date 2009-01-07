@@ -49,14 +49,25 @@ if(isset($_REQUEST["record"]))
         $ogReport->getSecModuleColumnsList($oReport->secmodule);
 }else
 {
-	$primarymodule = $_REQUEST["primarymodule"];
-	$secondarymodule = $_REQUEST["secondarymodule"];
 	$reportname = $_REQUEST["reportname"];
 	$reportdescription = $_REQUEST["reportdes"];
 	$folderid = $_REQUEST["reportfolder"];
 	$ogReport = new Reports();
+	$primarymodule = $_REQUEST["primarymodule"];
+	$secondarymodule = '';
+	$secondarymodules =Array();
+	foreach($ogReport->related_modules[$primarymodule] as $key=>$value){
+		if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= $_REQUEST["secondarymodule_".$value];
+		$ogReport->getSecModuleColumnsList($_REQUEST["secondarymodule_".$value]);
+		if(!isPermitted($_REQUEST["secondarymodule_".$value],'index')== "yes" && !isset($_REQUEST["secondarymodule_".$value]))
+		{
+			$permission = false;
+		}
+	}
+	$secondarymodule = implode(":",$secondarymodules);
 	$ogReport->getPriModuleColumnsList($primarymodule);
-	$ogReport->getSecModuleColumnsList($secondarymodule);
+	
+	//$ogReport->getSecModuleColumnsList($secondarymodule);
 	$list_report_form->assign('BACK_WALK','true');
 }
 
@@ -72,7 +83,7 @@ $list_report_form->assign('REPORT_DESC',$reportdescription);
 $list_report_form->assign('FOLDERID',$folderid);
 $list_report_form->assign("IMAGE_PATH", $image_path);
 $list_report_form->assign("THEME_PATH", $theme_path);
-if(isPermitted($primarymodule,'index') == "yes" && (isPermitted($secondarymodule,'index')== "yes"))
+if(isPermitted($primarymodule,'index') == "yes" && $permission==false)
 {
 	$list_report_form->display("ReportsStep1.tpl");
 }

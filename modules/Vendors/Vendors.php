@@ -295,6 +295,69 @@ class Vendors extends CRMEntity {
 		$log->debug("Exiting get_emails method ...");
 		return GetRelatedList('Vendors','Emails',$focus,$query,$button,$returnset);
 	}	
+	
+	/*
+	 * Function to get the primary query part of a report 
+	 * @param - $module Primary module name
+	 * returns the query string formed on fetching the related data for report for primary module
+	 */
+	function generateReportsQuery($module){
+	 			$moduletable = $this->table_name;
+	 			$moduleindex = $this->table_index;
+	 			$modulecftable = $this->tab_name[2];
+	 			$modulecfindex = $this->tab_name_index[$modulecftable];
+	 			
+	 			$query = "from $moduletable
+			        inner join $modulecftable as $modulecftable on $modulecftable.$modulecfindex=$moduletable.$moduleindex   
+					inner join vtiger_crmentity on vtiger_crmentity.crmid=$moduletable.$moduleindex
+					left join vtiger_users as vtiger_users".$module." on vtiger_users".$module.".id = vtiger_crmentity.smownerid
+					left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid";
+	            return $query;
+	}
+	
+	/*
+	 * Function to get the secondary query part of a report 
+	 * @param - $module primary module name
+	 * @param - $secmodule secondary module name
+	 * returns the query string formed on fetching the related data for report for secondary module
+	 */
+	function generateReportsSecQuery($module,$secmodule){
+		$tab = getRelationTables($module,$secmodule);
+		
+		foreach($tab as $key=>$value){
+			$tables[]=$key;
+			$fields[] = $value;
+		}
+		$tabname = $tables[0];
+		$prifieldname = $fields[0][0];
+		$secfieldname = $fields[0][1];
+		$tmpname = $tabname."tmp".$secmodule;
+		$condvalue = $tables[1].".".$fields[1];
+	
+		$query = " left join $tabname as $tmpname on $tmpname.$fieldname = $condvalue and $tmpname.$secfieldname IN (SELECT vendorid from vtiger_vendor)";
+		$query .=" left join vtiger_vendor as vtiger_vendorVendors on vtiger_vendorVendors.vendorid=$tmpname.$secfieldname  
+				left join vtiger_crmentity as vtiger_crmentityVendors on vtiger_crmentityVendors.crmid=vtiger_vendorVendors.vendorid and vtiger_crmentityVendors.deleted=0 
+				left join vtiger_vendor on vtiger_vendor.vendorid = vtiger_crmentityVendors.crmid 
+				left join vtiger_vendorcf on vtiger_vendorcf.vendorid = vtiger_crmentityVendors.crmid 
+				left join vtiger_users as vtiger_usersVendors on vtiger_usersVendors.id = vtiger_crmentityVendors.smownerid
+				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid"; 
+
+		return $query;
+	}
+
+	/*
+	 * Function to get the relation tables for related modules 
+	 * @param - $secmodule secondary module name
+	 * returns the array with table names and fieldnames storing relations between module and this module
+	 */
+	function setRelationTables($secmodule){
+		$rel_tables = array (
+			"Products" =>array("vtiger_seproductsrel"=>array("crmid","productid"),"vtiger_vendor"=>"vendorid"),
+			"PurchaseOrder" =>array("vtiger_purchaseorder"=>array("vendorid","purchaseorderid"),"vtiger_vendor"=>"vendorid"),
+			"Contacts" =>array("vtiger_vendorcontactrel"=>array("vendorid","contactid"),"vtiger_vendor"=>"vendorid"),
+		);
+		return $rel_tables[$secmodule];
+	}
 
 }
 ?>

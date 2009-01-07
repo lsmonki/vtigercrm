@@ -202,6 +202,10 @@
 			<default value="1" />
 		</field>
 		<field name="version" type="C" size="10" />
+		<field name="enablereports" type="I" size="19">
+			<notnull />
+			<default value="0" />
+		</field>
 
 		<index name="tab_name_idx">
 			<col>name</col>
@@ -4317,6 +4321,12 @@
 		<field name="category" type="I" size="11">
 			<default value="1" />
 		</field>
+		<field name="owner" type="I" size="11">
+			<default value="1" />
+		</field>
+		<field name="sharingtype" type="C" size="200">
+			<default value="Private" />
+		</field>
 
 		<index name="report_queryid_idx">
 			<col>queryid</col>
@@ -6869,6 +6879,29 @@
 			<col>mailid</col>
 			<unique />
 		</index>
+	</table>
+
+	<table name="vtiger_reportsharing">
+		<field name="reportid" type="I" size="19">
+			<notnull />
+		</field>
+		<field name="shareid" type="I" size="19">
+			<notnull />
+		</field>
+		<field name="setype" type="C" size="200">
+			<notnull />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="vtiger_reportfilters">
+		<field name="filterid" type="I" size="19">
+			<notnull />
+		</field>
+		<field name="name" type="C" size="200">
+			<notnull />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 </schema>

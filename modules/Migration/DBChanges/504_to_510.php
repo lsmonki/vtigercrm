@@ -1424,6 +1424,17 @@ ExecuteQuery("INSERT INTO vtiger_field VALUES ('10',".$fieldid.", 'count', 'vtig
 addFieldSecurity(10, $fieldid, 'false');
 // END
 
+ExecuteQuery("ALTER TABLE vtiger_tab ADD COLUMN enablereports int(11) NOT NULL DEFAULT '0'");
+ExecuteQuery("UPDATE vtiger_tab SET enablereports =1 WHERE name IN (\"Dashboard\",\"Home\",\"Reports\",\"Rss\",\"Emails\",\"Users\",\"PriceBooks\",\"Portal\",\"Events\",\"Faq\",\"Webmails\",\"Recyclebin\")");
+ExecuteQuery("ALTER TABLE vtiger_report ADD COLUMN owner int(11) NOT NULL");
+ExecuteQuery("ALTER TABLE vtiger_report ADD COLUMN sharingtype varchar(200) NOT NULL DEFAULT 'Private'");
+ExecuteQuery("UPDATE vtiger_report SET sharingtype='Public', owner=1 WHERE state='SAVED'");
+ExecuteQuery("Create table vtiger_reportsharing(reportid int(19) not null,shareid int(19) not null,setype varchar(200) NOT NULL)");
+ExecuteQuery("Create table vtiger_reportfilters(filterid int(11) not null,name varchar(200) not null)");
+ExecuteQuery("INSERT INTO vtiger_reportfilters values(1,'Private')");
+ExecuteQuery("INSERT INTO vtiger_reportfilters values(2,'Public')");
+ExecuteQuery("INSERT INTO vtiger_reportfilters values(3,'Shared')");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

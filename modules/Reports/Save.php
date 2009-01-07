@@ -47,6 +47,11 @@ $startdate = getDBInsertDateValue($_REQUEST["startdate"]);
 $enddate = getDBInsertDateValue($_REQUEST["enddate"]);
 //<<<<<<<standardfilters>>>>>>>>>
 
+//<<<<<<<shared entities>>>>>>>>>
+$sharetype = $_REQUEST["stdtypeFilter"];
+$shared_entities = $_REQUEST["selectedColumnsStr"];
+//<<<<<<<shared entities>>>>>>>>>
+
 //<<<<<<<columnstototal>>>>>>>>>>
 $allKeys = array_keys($_REQUEST);
 for ($i=0;$i<count($allKeys);$i++)
@@ -108,13 +113,26 @@ if($reportid == "")
 					$icolumnsqlresult = $adb->pquery($icolumnsql, array($genQueryId,$i,$selectedcolumns[$i]));
 				}
 			}
+			if($shared_entities != "")
+			{
+				if($sharetype == "Shared")
+				{
+					$selectedcolumn = explode(";",$shared_entities);
+					for($i=0 ;$i< count($selectedcolumn) -1 ;$i++)
+					{
+						$temp = split("::",$selectedcolumn[$i]);
+						$icolumnsql = "insert into vtiger_reportsharing (reportid,shareid,setype) values (?,?,?)";
+						$icolumnsqlresult = $adb->pquery($icolumnsql, array($genQueryId,$temp[1],$temp[0]));
+					}
+				}
+			}
 			$log->info("Reports :: Save->Successfully saved vtiger_selectcolumn");
 			//<<<<step2 vtiger_selectcolumn>>>>>>>>
 
 			if($genQueryId != "")
 			{
-				$ireportsql = "insert into vtiger_report (REPORTID,FOLDERID,REPORTNAME,DESCRIPTION,REPORTTYPE,QUERYID,STATE) values (?,?,?,?,?,?,?)";
-				$ireportparams = array($genQueryId, $folderid, $reportname, $reportdescription, $reporttype, $genQueryId,'CUSTOM');
+				$ireportsql = "insert into vtiger_report (REPORTID,FOLDERID,REPORTNAME,DESCRIPTION,REPORTTYPE,QUERYID,STATE,OWNER,SHARINGTYPE) values (?,?,?,?,?,?,?,?,?)";
+				$ireportparams = array($genQueryId, $folderid, $reportname, $reportdescription, $reporttype, $genQueryId,'CUSTOM',$current_user->id,$sharetype);
 				$ireportresult = $adb->pquery($ireportsql, $ireportparams);
 				$log->info("Reports :: Save->Successfully saved vtiger_report");
 				if($ireportresult!=false)
@@ -219,9 +237,23 @@ if($reportid == "")
 				}
 			}
 		}
-
-		$ireportsql = "update vtiger_report set REPORTNAME=?, DESCRIPTION=?, REPORTTYPE=? where REPORTID=?";
-		$ireportparams = array($reportname, $reportdescription, $reporttype, $reportid);
+		if($shared_entities != "")
+		{
+			$delsharesqlresult = $adb->pquery("DELETE FROM vtiger_reportsharing WHERE reportid=?", array($reportid));
+			if($delsharesqlresult != false  && $sharetype=="Shared")
+			{
+				$selectedcolumn = explode(";",$shared_entities);
+				for($i=0 ;$i< count($selectedcolumn) -1 ;$i++)
+				{
+					$temp = split("::",$selectedcolumn[$i]);
+					$icolumnsql = "INSERT INTO vtiger_reportsharing (reportid,shareid,setype) VALUES (?,?,?)";
+					$icolumnsqlresult = $adb->pquery($icolumnsql, array($reportid,$temp[1],$temp[0]));
+				}
+			}
+		}
+		
+		$ireportsql = "update vtiger_report set REPORTNAME=?, DESCRIPTION=?, REPORTTYPE=?, SHARINGTYPE=? where REPORTID=?";
+		$ireportparams = array($reportname, $reportdescription, $reporttype, $sharetype, $reportid);
 		$ireportresult = $adb->pquery($ireportsql, $ireportparams);
 		$log->info("Reports :: Save->Successfully saved vtiger_report");
 

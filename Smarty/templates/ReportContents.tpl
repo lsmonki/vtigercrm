@@ -25,6 +25,13 @@
 			{$reportfolder.name}
 		{/if}
 		</b>
+		<i><font color='#C0C0C0'>
+			{if $MOD[$reportfolder.description] neq ''}
+				 - {$MOD[$reportfolder.description]}
+			{else}
+				 - {$reportfolder.description}
+			{/if}
+		</font></i>
 		</td>
 		</tr>
 		<tr>

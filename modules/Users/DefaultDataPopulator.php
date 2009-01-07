@@ -33,32 +33,32 @@ class DefaultDataPopulator extends CRMEntity {
 	function create_tables () {
 		global $app_strings;
 	
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (3,'Home',0,1,'Home',0,1,0)");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,enablereports) VALUES (3,'Home',0,1,'Home',0,1,0,1)");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (7,'Leads',0,4,'Leads',0,0,1)");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (6,'Accounts',0,5,'Accounts',0,0,1)");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (4,'Contacts',0,6,'Contacts',0,0,1)");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (2,'Potentials',0,7,'Potentials',0,0,1)");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (8,'Documents',0,9,'Documents',0,0,1)");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (9,'Calendar',0,3,'Calendar',0,0,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (10,'Emails',0,10,'Emails',0,1,1)");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,enablereports) VALUES (10,'Emails',0,10,'Emails',0,1,1,1)");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (13,'HelpDesk',0,11,'HelpDesk',0,0,1)");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (14,'Products',0,8,'Products',0,1,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (1,'Dashboard',0,12,'Dashboards',0,1,0)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (15,'Faq',0,14,'Faq',0,1,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (16,'Events',2,13,'Events',0,0,1)");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,enablereports) VALUES (1,'Dashboard',0,12,'Dashboards',0,1,0,1)");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,enablereports) VALUES (15,'Faq',0,14,'Faq',0,1,1,1)");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,enablereports) VALUES (16,'Events',2,13,'Events',0,0,1,1)");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (18,'Vendors',0,15,'Vendors',0,1,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (19,'PriceBooks',0,16,'PriceBooks',0,1,1)");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,enablereports) VALUES (19,'PriceBooks',0,16,'PriceBooks',0,1,1,1)");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (20,'Quotes',0,17,'Quotes',0,0,1)");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (21,'PurchaseOrder',0,18,'PurchaseOrder',0,0,1)");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (22,'SalesOrder',0,19,'SalesOrder',0,0,1)");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (23,'Invoice',0,20,'Invoice',0,0,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (24,'Rss',0,21,'Rss',0,1,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (25,'Reports',0,22,'Reports',0,1,0)");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,enablereports) VALUES (24,'Rss',0,21,'Rss',0,1,1,1)");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,enablereports) VALUES (25,'Reports',0,22,'Reports',0,1,0,1)");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (26,'Campaigns',0,23,'Campaigns',0,0,1)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (27,'Portal',0,24,'Portal',0,1,0)");
-		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (28,'Webmails',0,25,'Webmails',0,1,1)");
-		$this->db->query("insert into vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) values (29,'Users',0,26,'Users',0,1,0)");
-		$this->db->query("insert into vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) values(30,'Recyclebin',0,27,'Recyclebin',0,1,1)");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,enablereports) VALUES (27,'Portal',0,24,'Portal',0,1,0,1)");
+		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,enablereports) VALUES (28,'Webmails',0,25,'Webmails',0,1,1,1)");
+		$this->db->query("insert into vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,enablereports) values (29,'Users',0,26,'Users',0,1,0,1)");
+		$this->db->query("insert into vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype,enablereports) values(30,'Recyclebin',0,27,'Recyclebin',0,1,1,1)");
 
 		// Populate the vtiger_blocks vtiger_table
 		$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",2,'LBL_OPPORTUNITY_INFORMATION',1,0,0,0,0,0,1)");
@@ -1130,7 +1130,7 @@ $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Accounts").",'get_accounts',10,'Accounts',0)");
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Contacts").",'get_contacts',11,'Contacts',0)");
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Potentials").",'get_opportunities',12,'Potentials',0)");
-	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Products").",'get_products',13,'Product Bundles',0)");
+	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",0,'get_products',13,'Product Bundles',0)");
 
 		//Inserting Emails Related Lists	
 
@@ -1165,7 +1165,7 @@ $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('
 
 	// Inserting Quotes Related Lists
 	
-        $this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Quotes").",".getTabid("Invoice").",'get_salesorder',1,'Sales Order',0)");
+        $this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Quotes").",".getTabid("SalesOrder").",'get_salesorder',1,'Sales Order',0)");
         
 	$this->db->query("insert into vtiger_relatedlists values(".$this->db->getUniqueID('vtiger_relatedlists').",".getTabid("Quotes").",9,'get_activities',2,'Activities',0)");
 	
@@ -1922,7 +1922,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	//add settings page to database starts
 	$this->addEntriesForSettings();
 	//add settings page to database end
-
 	
 	//Added to populate the default inventory tax informations
 	$vatid = $this->db->getUniqueID("vtiger_inventorytaxinfo");
@@ -1993,6 +1992,11 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 			)
 		);
 	}
+
+	// Adding Sharing Types for Reports
+	$this->db->query("insert into vtiger_reportfilters values(1,'Private')");
+	$this->db->query("insert into vtiger_reportfilters values(2,'Public')");
+	$this->db->query("insert into vtiger_reportfilters values(3,'Shared')");
 	
 	}	
 		

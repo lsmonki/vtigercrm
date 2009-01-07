@@ -45,7 +45,11 @@
 		<tr><td colspan="2">&nbsp;</td></tr>
 		<tr>
 		<td colspan="2">
+		{if $ERROR_MSG eq ''}
 		{$REPORTHTML.0}
+		{else}
+		{$ERROR_MSG}
+		{/if}
 		</td>
 		</tr>
 		<tr><td colspan="2">&nbsp;</td></tr>

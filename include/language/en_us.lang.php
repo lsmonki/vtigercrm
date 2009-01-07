@@ -1194,6 +1194,12 @@ $app_strings = array (
 'LBL_GMAIL'=>'Gmail',
 'LBL_BOOKMARKLET'=>'Bookmarklet',
 // END
+
+//ADDED for REPORTS CUSTOMIZING
+'PRIVATE_FILTER'=>'Private',
+'SHARE_FILTER'=>'Share',
+'PUBLIC_FILTER'=>'Public',
+
 );
 
 $app_list_strings = array (

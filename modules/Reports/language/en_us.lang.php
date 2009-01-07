@@ -208,6 +208,15 @@ $mod_strings = Array(
 
 // Added/Updated for vtiger CRM 5.0.4
 'LBL_REPORT_DELETED' => 'The report you are trying to view has been deleted.',
+
+//Added for Reports
+'LBL_SHARING'=>'Sharing',
+'SELECT_FILTER_TYPE'=>'Select Report Type',
+'LBL_USERS'=>'Users',
+'LBL_GROUPS'=>'Groups',
+'LBL_SELECT_FIELDS'=>'Select Fields',
+'LBL_MEMBERS'=>'Members',
+'LBL_RELATED_FIELDS'=>'Related Fields',
 )
 
 ?>

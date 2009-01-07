@@ -13,10 +13,12 @@ if(isset($_REQUEST["record"]) == false)
 {
         $oReport = new Reports();
         $primarymodule = $_REQUEST["primarymodule"];
-        $secondarymodule = $_REQUEST["secondarymodule"];
+        //$secondarymodule = $_REQUEST["secondarymodule"];
 
-	$BLOCK1 = getPrimaryStdFilterHTML($primarymodule);
-	$BLOCK1 .= getSecondaryStdFilterHTML($secondarymodule);
+		$BLOCK1 = getPrimaryStdFilterHTML($primarymodule);
+		foreach($ogReport->related_modules[$primarymodule] as $key=>$value){
+			$BLOCK1 .= getSecondaryStdFilterHTML($_REQUEST["secondarymodule_".$value]);
+		}
 		$report_std_filter->assign("BLOCK1_STD",$BLOCK1);
         $BLOCKJS = $oReport->getCriteriaJS();
 		$report_std_filter->assign("BLOCKJS_STD",$BLOCKJS);
