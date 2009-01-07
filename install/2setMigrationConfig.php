@@ -327,14 +327,16 @@ function migrate(){
 					}
 					else
 					{
-						str=str.replace('QF: ','');
-						str=str.replace(/:: /gi,'\n\n');
 						
-						if(str!='QF: '){
+						if(trim(str)!='QF: ') {
+							location.href ='install.php?source_directory='+source_path+'&root_directory='+root_directory+'&file=3MigrationComplete.php';
+						}else{
+							str=str.replace('QF: ','');
+							str=str.replace(/:: /gi,'\n\n');alert('failure');
 							placeAtCenter($('failedqueries'));
 							$('failedqueries').style.display = 'block';
 							$('queries').value = str;
-						}
+						} 
 						$('divId').style.display = 'none';
 						return true;
 					}

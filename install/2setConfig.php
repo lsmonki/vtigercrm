@@ -453,7 +453,7 @@ function verify_data(form) {
 									}
 								} else
 								{ 
-									if($index=='United States of America, Dollars'){
+									if($index=='USA, Dollars'){
 										echo "<option value='$index' selected>$index(".$value[1].")</option>";
 									} else {
 										echo "<option value='$index'>$index(".$value[1].")</option>";
