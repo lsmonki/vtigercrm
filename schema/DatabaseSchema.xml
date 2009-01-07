@@ -6808,5 +6808,46 @@
 			<col>linktype</col>
 		</index>
 	</table>
+	
+	<!-- move settings page to database starts -->
+	<table name="vtiger_settings_blocks">
+		<field name="blockid" type="I" size="19">
+			<key />
+			<notnull />
+		</field>
+		<field name="label" type="C" size="250">
+		</field>
+		<field name="sequence" type="I" size="19">
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
 
+	<table name="vtiger_settings_field">
+		<field name="fieldid" type="I" size="19">
+			<key />
+			<notnull />
+		</field>
+		<field name="blockid" type="I" size="19">
+		</field>
+		<field name="name" type="C" size="250">
+		</field>
+		<field name="iconpath" type="C" size="300">
+		</field>
+		<field name="description" type="X">
+		</field>
+		<field name="linkto" type="X">
+		</field>
+		<field name="sequence" type="I" size="19">
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>		
+
+	<table name="vtiger_settings_field" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_settings_field FOREIGN KEY (blockid) REFERENCES vtiger_settings_blocks(blockid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+	<!-- move settings page to database ends -->
+	
 </schema>

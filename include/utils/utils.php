@@ -4406,6 +4406,64 @@ function addToCallHistory($userExtension, $callfrom, $callto, $status, $adb){
 }
 //functions for asterisk integration end
 
+//functions for settings page
+/**
+ * this function returns the blocks for the settings page
+ */
+function getSettingsBlocks(){
+	global $adb;
+	$sql = "select * from vtiger_settings_blocks order by sequence";
+	$result = $adb->query($sql);
+	$count = $adb->num_rows($result);
+	$blocks = array();
+	
+	if($count>0){
+		for($i=0;$i<$count;$i++){
+			$blockid = $adb->query_result($result, $i, "blockid");
+			$label = $adb->query_result($result, $i, "label");
+			$blocks[$blockid] = $label;
+		}
+	}
+	return $blocks;
+}
+
+/**
+ * this function returns the fields for the settings page
+ */
+function getSettingsFields(){
+	global $adb;
+	$sql = "select * from vtiger_settings_field order by blockid,sequence";
+	$result = $adb->query($sql);
+	$count = $adb->num_rows($result);
+	$fields = array();
+	
+	if($count>0){
+		for($i=0;$i<$count;$i++){
+			$blockid = $adb->query_result($result, $i, "blockid");
+			$iconpath = $adb->query_result($result, $i, "iconpath");
+			$description = $adb->query_result($result, $i, "description");
+			$linkto = $adb->query_result($result, $i, "linkto");
+			$action = getPropertiesFromURL($linkto, "action");
+			$module = getPropertiesFromURL($linkto, "module");
+			$name = $adb->query_result($result, $i, "name");
+	
+			$fields[$blockid][] = array("icon"=>$iconpath, "description"=>$description, "link"=>$linkto, "name"=>$name, "action"=>$action, "module"=>$module);
+		}
+	}
+	return $fields;
+}
+
+/**
+ * this function takes an url and returns the module name from it
+ */
+function getPropertiesFromURL($url, $action){
+	$result = array();
+	preg_match("/$action=([^&]+)/",$url,$result);
+	return $result[1];
+}
+
+//functions for settings page end
+
 /* Function to get the name of the Field which is used for Module Specific Sequence Numbering, if any 
  * @param module String - Module label
  * return Array - Field name and label are returned */

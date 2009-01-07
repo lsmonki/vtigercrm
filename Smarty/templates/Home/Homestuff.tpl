@@ -2,7 +2,6 @@
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/scriptaculous.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/unittest.js"></script>
-<script language="javascript" type="text/javascript" src="include/tooltip/wz_tooltip.js"></script>
 {*<!--Home Page Entries  -->*}
 	<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 	<tr>
