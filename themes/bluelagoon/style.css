@@ -2232,3 +2232,9 @@ a.drop_down:Hover{
 	display:none;
 }
 
+.tooltipClass{
+	padding: 5px;
+	border: 2px solid #b69559;
+	background-color: #e8e4ee;
+}
+

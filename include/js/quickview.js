@@ -1,0 +1,108 @@
+/*********************************************************************************
+  ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+   * ("License"); You may not use this file except in compliance with the License
+   * The Original Code is:  vtiger CRM Open Source
+   * The Initial Developer of the Original Code is vtiger.
+   * Portions created by vtiger are Copyright (C) vtiger.
+   * All Rights Reserved.
+  *
+ ********************************************************************************/
+
+/**
+ * this function takes a module name and returns the fields associated with it
+ */
+function getFieldInfo(id){
+	var modulename = id.options[id.options.selectedIndex].value;
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Settings&action=SettingsAjax&file=QuickViewFieldList&fld_module='+modulename+'&parenttab=Settings&ajax=true',
+			onComplete: function(response) {
+				if(response.responseText == false){
+					alert("Some error in module selection ");
+				}else{
+					fieldlist = response.responseText;
+					$('pick_field_list').innerHTML = fieldlist;
+				}
+			}
+		}
+	);
+	//clear out the blank field
+	var node = document.getElementById('fieldList');
+	node.innerHTML = "";
+}
+
+/**
+ * this function takes a fieldname and returns the fields related to it
+ */
+function getRelatedFieldInfo(id){
+	var selectElement = $('pick_module');
+	var modulename = selectElement.options[selectElement.options.selectedIndex].value;
+
+	var fieldname = id.options[id.options.selectedIndex].value;
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Settings&action=SettingsAjax&file=EditQuickView&field_name='+fieldname+'&module_name='+modulename+'&parenttab=Settings&ajax=true',
+			onComplete: function(response) {
+				if(response.responseText == false){
+					alert("Some error in field selection ");
+				}else{
+					var related_fields = response.responseText;
+					$('fieldList').innerHTML = related_fields;
+				}
+			}
+		}
+	);
+}
+
+/**
+ * this function saves the tooltip related information in the database using an ajax call
+ */
+function saveTooltipInformation(fieldid, checkedFields){
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Settings&action=SettingsAjax&file=SaveTooltipInformation&fieldid='+fieldid+'&checkedFields='+checkedFields+'&parenttab=Settings&ajax=true',
+			onComplete: function(response) {
+				if(response.responseText == "FAILURE"){
+					alert("Some error in field selection ");
+					return false;
+				}else{
+					//success
+					var div = document.getElementById('fieldList');
+					div.innerHTML = response.responseText;
+				}
+			}
+		}
+	);
+}
+
+/**
+ * this function saves the tooltip
+ */
+function doSaveTooltipInfo(){
+	var fieldid = document.getElementById('fieldid').value;
+	var div = document.getElementById('fieldList');
+	var fields = div.getElementsByTagName('input');
+	var checkedFields = [];
+	
+	for(var i=0, j=0;i<fields.length;i++){
+		if(fields[i].type == "checkbox" && fields[i].checked == true){
+			checkedFields[j++] = fields[i].value;
+		}
+	}
+	relatedFields = checkedFields.join(",");
+	saveTooltipInformation(fieldid, relatedFields);
+}
+
+/**
+ * this function takes a fieldid and displays the quick editview for that field
+ */
+function displayEditView(){
+	var node = document.getElementById('pick_field');
+	getRelatedFieldInfo(node);
+}

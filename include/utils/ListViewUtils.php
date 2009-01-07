@@ -25,7 +25,7 @@ require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
 require_once('user_privileges/default_module_view.php'); //new
 require_once('include/utils/UserInfoUtil.php');
-
+require_once 'include/utils/TooltipUtils.php';
 
 /**This function is used to get the list view header values in a list view
 *Param $focus - module object
@@ -1055,7 +1055,13 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						$value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
 					}
 				}
+				//added for tooltip manager
+				$field_id = ToolTipExists($fieldname,$tabid);
 				
+				if($field_id !== false){
+					$value = getToolTipValue($value, $field_id, $module,$entity_id);
+				}
+				//tooltip changes end
 				if($module == "Calendar" && $name == $app_strings['Close'])
 				{
 					if(isPermitted("Calendar","EditView") == 'yes')

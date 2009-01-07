@@ -3406,3 +3406,92 @@ function startCall(number){
 	);
 }
 //asterisk integration :: ends
+
+//added for tooltip manager
+function ToolTipManager(){
+	var state = false;
+	var divName = '__VT_tooltip';
+	/**
+	 * this function creates the tooltip div and adds the information to it
+	 * @param string text - the text to be added to the tooltip
+	 */
+	function tip(node, text){
+		state=true;
+		var div = document.getElementById(divName)
+		if(!div){
+			div = document.createElement('div');
+			div.id = divName;
+			div.style.position = 'absolute';
+			if(typeof div.style.opacity == "string"){
+				div.style.opacity = 0.8;
+			}
+			div.className = "tooltipClass";
+		}
+		
+		div.innerHTML = text;
+		document.body.appendChild(div);
+		div.style.display = "block";
+		positionTooltip(node, divName);
+	}
+	
+	/**
+	 * this function removes the tooltip div
+	 */
+	function unTip(nodelay){
+		state=false;
+		var div = document.getElementById(divName);
+		if(typeof nodelay != 'undefined' && nodelay){
+			div.style.display = "none";
+		}else{
+			setTimeout(function(){	
+			if(!state){
+				div.style.display = "none";
+				}
+			}, 700);
+		}
+	}
+	
+	/**
+	 * this function is used to position the tooltip div
+	 * @param string obj - the id of the element where the div has to appear
+	 * @param object div - the div which contains the info
+	 */
+	function positionTooltip(obj,div){
+		var tooltip = document.getElementById(div);
+		var leftSide = findPosX(obj);
+		var topSide = findPosY(obj);
+		var dimensions = getDimension(tooltip);
+		var widthM = dimensions.x;
+		var getVal = eval(leftSide) + eval(widthM);
+		var tooltipDimensions = getDimension(obj);
+		var tooltipWidth = tooltipDimensions.x;
+		
+		if(getVal  > document.body.clientWidth ){
+			leftSide = eval(leftSide) - eval(widthM);
+			tooltip.style.left = leftSide + 'px';
+		}else{
+			leftSide = eval(leftSide) + eval(tooltipWidth)+10;
+			tooltip.style.left = leftSide + 'px';
+		}
+		
+		var heightTooltip = dimensions.y;
+		var bottomSide = eval(topSide) + eval(heightTooltip);
+		if(bottomSide > document.body.clientHeight){
+			topSide = topSide - (bottomSide - document.body.clientHeight) - 10;
+		}else{
+			topSide = eval(topSide) - eval(heightTooltip)/2;
+			if(topSide<0){
+				topSide = 10;
+			}
+		}
+		tooltip.style.top= topSide + 'px';
+	}
+	
+	return {tip:tip, untip:unTip};
+}
+if(!tooltip){
+	var tooltip = ToolTipManager();
+}
+//tooltip manager changes end
+
+

@@ -1424,6 +1424,7 @@ ExecuteQuery("INSERT INTO vtiger_field VALUES ('10',".$fieldid.", 'count', 'vtig
 addFieldSecurity(10, $fieldid, 'false');
 // END
 
+/* Reports Revamped */
 ExecuteQuery("ALTER TABLE vtiger_tab ADD COLUMN enablereports int(11) NOT NULL DEFAULT '0'");
 ExecuteQuery("UPDATE vtiger_tab SET enablereports =1 WHERE name IN (\"Dashboard\",\"Home\",\"Reports\",\"Rss\",\"Emails\",\"Users\",\"PriceBooks\",\"Portal\",\"Events\",\"Faq\",\"Webmails\",\"Recyclebin\")");
 ExecuteQuery("ALTER TABLE vtiger_report ADD COLUMN owner int(11) NOT NULL");
@@ -1434,6 +1435,11 @@ ExecuteQuery("Create table vtiger_reportfilters(filterid int(11) not null,name v
 ExecuteQuery("INSERT INTO vtiger_reportfilters values(1,'Private')");
 ExecuteQuery("INSERT INTO vtiger_reportfilters values(2,'Public')");
 ExecuteQuery("INSERT INTO vtiger_reportfilters values(3,'Shared')");
+
+/* Added for tooltip manager */
+$sql = "create table vtiger_quickview (fieldid int(19) not null, related_fieldid int(19) not null, sequence int(19) not null, view int(19) not null, foreign key(fieldid) references vtiger_field(fieldid) on delete cascade)";
+ExecuteQuery($sql);
+//add tooltip manager ends
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
