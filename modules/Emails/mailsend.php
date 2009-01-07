@@ -166,6 +166,13 @@ for ($i=0;$i<(count($myids)-1);$i++)
 			if($emailadd != '')
 			{
 				$description = getMergedDescription($_REQUEST['description'],$mycrmid,$pmodule);
+				//Email Open Tracking
+				global $site_URL, $application_unique_key;
+				$emailid = $focus->id;
+				$track_URL = "$site_URL/modules/Emails/TrackAccess.php?record=$mycrmid&mailid=$emailid&app_key=$application_unique_key";
+				$description = "<img src='$track_URL' alt='' width='1' height='1'>$description";
+				// END
+
 				$pos = strpos($description, '$logo$');
 				if ($pos !== false)
 				{

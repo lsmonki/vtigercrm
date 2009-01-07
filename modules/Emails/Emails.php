@@ -54,14 +54,16 @@ var $rel_serel_table = "vtiger_seactivityrel";
 				       'Subject'=>Array('activity'=>'subject'),
 				       'Related to'=>Array('seactivityrel'=>'parent_id'),
 				       'Date Sent'=>Array('activity'=>'date_start'),
-				       'Assigned To'=>Array('crmentity','smownerid')
+						'Assigned To'=>Array('crmentity','smownerid'),
+						'Access Count'=>Array('vantage_email_track','count')
 			        );
 
        var $list_fields_name = Array(
 				       'Subject'=>'subject',
 				       'Related to'=>'parent_id',
 				       'Date Sent'=>'date_start',
-				       'Assigned To'=>'assigned_user_id'
+						'Assigned To'=>'assigned_user_id',
+       					'Access Count'=>'count'
 				    );
 
        var $list_link_field= 'subject';

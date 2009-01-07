@@ -403,12 +403,12 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
                                                         if($sorder == 'ASC')
                                                         {
                                                                 $sorder = "DESC";
-                                                                $arrow = "<img src ='themes/images/arrow_down.gif' border='0'>";
+                                                                $arrow = "<img src ='".vtiger_imageurl('arrow_down.gif', $theme)."' border='0'>";
                                                          }
                                                         else
                                                         {
                                                                 $sorder = 'ASC';
-                                                                $arrow = "<img src ='themes/images/arrow_up.gif' border='0'>";
+                                                                $arrow = "<img src ='".vtiger_imageurl('arrow_up.gif', $theme)."' border='0'>";
                                                         }
                                                 }
 												// vtlib customization: If translation is not available use the given name
@@ -1858,6 +1858,18 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		$value = "<a href='javascript:;' onclick='startCall(&quot;$temp_val&quot;)'>".$temp_val."</a>";
 	}
 	//asterisk changes end here
+	//Added for email status tracking
+	elseif($uitype == 25) 
+	{
+		$contactid=$_REQUEST['record'];
+		$emailid=$adb->query_result($list_result,$list_result_count,"activityid");
+		$result = $adb->query("select count from vtiger_email_track where crmid=$contactid and mailid=$emailid");
+		$value=$adb->query_result($result,0,"count");
+		if(!$value) {
+			$value = 0;
+		}
+	}
+	//end email status tracking
 	else
 	{
 		if($fieldname == $focus->list_link_field)
@@ -2380,14 +2392,14 @@ function getListQuery($module,$where='')
 
                         if(sizeof($current_user_groups) > 0)
                         {
-                              $query .= " vtiger_groups.groupid IN (". implode(",", getCurrentUserGroupList()) ."))
+                              $query .= " vtiger_groups.groupid IN (". implode(",", getCurrentUserGroupList()) .")
 					OR ";
                         }
                          $query .= " vtiger_groups.groupid IN (
 				 	SELECT vtiger_tmp_read_group_sharing_per.sharedgroupid
 					FROM vtiger_tmp_read_group_sharing_per
 					WHERE userid=".$current_user->id."
-					AND tabid=".$tab_id.")) ";
+					AND tabid=".$tab_id."))) ";
                 }
 			break;
 

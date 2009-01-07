@@ -6849,5 +6849,26 @@
 		</data>
 	</table>
 	<!-- move settings page to database ends -->
+
+	<!-- Added for Email Status Tracking -->
+	<table name="vtiger_email_access">
+		<field name="crmid" type="I" />
+		<field name="mailid" type="I" />
+		<field name="accessdate" type="D" />
+		<field name="accesstime" type="T" />
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
 	
+	<table name="vtiger_email_track">
+		<field name="crmid" type="I" />
+		<field name="mailid" type="I" />
+		<field name="count" type="I" />
+		<opt platform="mysql">Type=InnoDB</opt>
+		<index name="link_tabidtype_idx">
+			<col>crmid</col>
+			<col>mailid</col>
+			<unique />
+		</index>
+	</table>
+
 </schema>

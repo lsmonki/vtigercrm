@@ -1414,6 +1414,16 @@ moveSettingsToDatabase($adb);
 //settings page to database ends
 // END
 
+
+/* Email status tracking*/
+ExecuteQuery("CREATE TABLE vtiger_email_access(crmid INT, mailid INT, accessdate DATE, accesstime TIME)");
+ExecuteQuery("CREATE TABLE vtiger_email_track(crmid INT, mailid INT, count INT, primary key(crmid, mailid))");
+
+$fieldid = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("INSERT INTO vtiger_field VALUES ('10',".$fieldid.", 'count', 'vtiger_email_track', '1', '25', 'count', 'Access Count', '1', '0', '0', '100', '6', '21', '3', 'V~O', '1', NULL, 'BAS', 0)");
+addFieldSecurity(10, $fieldid, 'false');
+// END
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>
