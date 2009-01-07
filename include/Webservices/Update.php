@@ -34,6 +34,27 @@
 			return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to update given object is denied");
 		}
 		
+		$referenceFields = $meta->getReferenceFieldDetails();
+		foreach($referenceFields as $fieldName=>$details){
+			if(isset($element[$fieldName]) && strlen($element[$fieldName]) > 0){
+				$ids = getIdComponents($element[$fieldName]);
+				$elemTypeId = $ids[0];
+				$elemId = $ids[1];
+				$referenceObject = new VtigerCRMObject($elemTypeId,true);
+				if(!in_array($referenceObject->getModuleName(),$details)){
+					return new WebServiceError(WebServiceErrorCode::$REFERENCEINVALID,
+						"Invalid reference specified for $fieldName");
+				}
+				$referenceMeta = new VtigerCRMObjectMeta($referenceObject,$user);
+				if(!$referenceMeta->hasAccess()){
+					return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,
+						"Permission to access reference type is denied");
+				}else if($element[$fieldName] !== NULL){
+					unset($element[$fieldName]);
+				}
+			}
+		}
+		
 		if(!$crmObject->exists($elemid)){
 			return new WebServiceError(WebServiceErrorCode::$RECORDNOTFOUND,"Record you are trying to access is not found");
 		}

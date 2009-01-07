@@ -34,7 +34,20 @@
 			return $newRow;
 		}
 		
+		function getUsersWebserviceId(){
+			return 29;
+		}
+		
 		function sanitizeForInsert($row,$meta){
+			$associatedToUser = false;
+			if(strtolower($meta->getObjectName()) == "emails"){
+				if(isset($row['parent_id'])){
+					$components = getIdComponents($row['parent_id']);
+					if($components[0] == DataTransform::getUsersWebserviceId()){
+						$associatedToUser = true;
+					}
+				}
+			}
 			$references = $meta->getReferenceFieldDetails();
 			foreach($references as $field=>$typeList){
 				if(strpos($row[$field],'x')!==false){
@@ -56,10 +69,22 @@
 					}
 				}
 			}
+			if(strtolower($meta->getObjectName()) == "emails"){
+				if(isset($row['parent_id'])){
+					if($associatedToUser === true){
+						$_REQUEST['module'] = 'Emails';
+						$row['parent_id'] = $row['parent_id']."@-1|";
+						$_REQUEST['parent_id'] = $row['parent_id']; 
+					}else{
+						$emailFields = $meta->getEmailFields();
+						$fieldId = getEmailFieldId($meta,$row['parent_id'],$emailFields);
+						$row['parent_id'] = $row['parent_id']."@$fieldId|";
+					}
+				}
+			}
 			if($row["id"]){
 				unset($row["id"]);
 			}
-			
 			return $row;
 			
 		}
@@ -128,6 +153,10 @@
 						$object = new VtigerCRMObject($type);
 						$row[$field] = getId($object->getModuleId(),$row[$field]);
 					}
+				//0 is the default for most of the reference fields, so handle the case and return null instead as its the 
+				//only valid value, which is not a reference Id.
+				}elseif(isset($row[$field]) && $row[$field]==0){
+					$row[$field] = null;
 				}
 			}
 			return $row;

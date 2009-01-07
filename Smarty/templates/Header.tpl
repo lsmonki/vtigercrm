@@ -64,6 +64,11 @@
 		<td class=small nowrap>
 			<table border=0 cellspacing=0 cellpadding=0>
 			 <tr>
+			 <!-- gmailbookmarklet customization -->
+			 <td style="padding-left:10px;padding-right:10px" class=small nowrap>
+				{$GMAIL_BOOKMARKLET}
+			 </td>
+			 <!-- END -->
 			 {if $ADMIN_LINK neq ''} {* Show links only for admin *}
 			 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="javascript:void(0);" onclick="vtiger_news(this)">{$APP.LBL_VTIGER_NEWS}</a></td>
 			 <td style="padding-left:10px;padding-right:10px" class=small nowrap> <a href="javascript:void(0);" onclick="vtiger_feedback();">{$APP.LBL_FEEDBACK}</a></td>

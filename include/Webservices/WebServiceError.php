@@ -2,12 +2,12 @@
 	require_once("include/Webservices/WebServiceErrorCode.php");
 	class WebServiceError{
 		
-		public $errorCode;
-		public $errorMsg;
+		public $code;
+		public $message;
 		
 		function WebServiceError($errCode,$msg){
-			$this->errorCode = $errCode;
-			$this->errorMsg = $msg;
+			$this->code = $errCode;
+			$this->message = $msg;
 		}
 		
 	}

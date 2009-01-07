@@ -1189,6 +1189,11 @@ $app_strings = array (
 'LBL_FIELDLISTS'=> 'List Of Fields',
 'LBL_RECORD'=>'Record #',
 'LBL_DUP_PERMISSION' => 'You are not permitted to delete ',
+
+// gmailbookmarklet customization
+'LBL_GMAIL'=>'Gmail',
+'LBL_BOOKMARKLET'=>'Bookmarklet',
+// END
 );
 
 $app_list_strings = array (

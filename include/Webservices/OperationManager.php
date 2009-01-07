@@ -47,7 +47,7 @@
 										"getchallenge"=>array(
 														"username"=>"String"
 													),
-										"describeobject"=>array(
+										"describe"=>array(
 														"elementType"=>"String"
 													),
 										"extendsession"=>array(
@@ -85,7 +85,7 @@
 											"getchallenge"=>array(
 															"username"
 														),
-											"describeobject"=>array(
+											"describe"=>array(
 															"elementType"
 														),
 											"extendsession"=>array(
@@ -143,7 +143,7 @@
 																			"include/Webservices/AuthToken.php"
 																		)
 													),
-										"describeobject"=>array(
+										"describe"=>array(
 														"includes"=>array(
 																			"include/Webservices/DescribeObject.php"
 																		)
@@ -159,7 +159,7 @@
 										"login"=>"vtws_login",
 										"getchallenge"=>"vtws_getchallenge",
 										"listtypes"=>"vtws_listtypes",
-										"describeobject"=>"vtws_describeobject",
+										"describe"=>"vtws_describe",
 										"create"=>"vtws_create",
 										"update"=>"vtws_update",
 										"retrieve"=>"vtws_retrieve",
@@ -209,7 +209,7 @@
 			
 			foreach($ordering as $ind=>$columnName){
 				$type = $mapping[$columnName];
-				$sanitizedInput[$columnName] = $this->handleType($type,$input[$columnName]);
+				$sanitizedInput[$columnName] = $this->handleType($type,vtws_getParameter($input,$columnName));
 			}
 			return $sanitizedInput;
 		}
@@ -250,7 +250,7 @@
 						$crmObject = new VtigerCRMObject("Users");
 						$userId = getId($crmObject->getModuleId(),$userDetails->id);
 						$vtigerVersion = vtws_getVtigerVersion();
-						$resp = array("sessionId"=>$this->sessionManager->getSessionId(),"userId"=>$userId,"version"=>$API_VERSION,"vtigerVersion"=>$vtigerVersion);
+						$resp = array("sessionName"=>$this->sessionManager->getSessionId(),"userId"=>$userId,"version"=>$API_VERSION,"vtigerVersion"=>$vtigerVersion);
 						return $resp;
 					}
 				}

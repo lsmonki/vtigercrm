@@ -16,26 +16,14 @@
 	require_once 'include/utils/utils.php';
 	require_once 'include/utils/UserInfoUtil.php';
 	require_once 'include/Webservices/ModuleTypes.php';
+	require_once 'include/utils/VtlibUtils.php';
+	require_once('include/logging.php');
 	
 	$API_VERSION = "0.1";
 	
 	global $seclog,$log;
 	$seclog =& LoggerManager::getLogger('SECURITY');
 	$log =& LoggerManager::getLogger('webservice');
-	
-	function getParameter($ParameterArray, $paramName,$default=null){
-		
-		if (!get_magic_quotes_gpc()) {
-			$param = addslashes($ParameterArray[$paramName]);
-		} else {
-			$param = $ParameterArray[$paramName];
-		}
-		
-		if(!$param){
-			$param = $default;
-		}
-		return $param;
-	}
 	
 	$operationInput = array(
 							"login"=>&$_POST,
@@ -48,8 +36,8 @@
 							"logout"=>&$_POST,
 							"listtypes"=>&$_GET,
 							"getchallenge"=>&$_GET,
-							"describeobject"=>&$_GET,
-							"extendsession"=>&$_GET
+							"describe"=>&$_GET,
+							"extendsession"=>&$_POST
 						);
 	
 	function getRequestParamsArrayForOperation($operation){
@@ -79,10 +67,10 @@
 		
 	}
 	
-	$operation = getParameter($_REQUEST, "operation");
+	$operation = vtws_getParameter($_REQUEST, "operation");
 	$operation = strtolower($operation);
-	$format = getParameter($_REQUEST, "format","json");
-	$sessionId = getParameter($_REQUEST,"sessionName");
+	$format = vtws_getParameter($_REQUEST, "format","json");
+	$sessionId = vtws_getParameter($_REQUEST,"sessionName");
 	
 	$sessionManager = new SessionManager();
 	$operationManager = new OperationManager($format,$sessionManager);
@@ -90,11 +78,19 @@
 	if(!$sessionId || strcasecmp($sessionId,"null")===0){
 		$sessionId = null;
 	}
+	
+	$input = getRequestParamsArrayForOperation($operation);
 	$adoptSession = false;
 	if(strcasecmp($operation,"extendsession")===0){
-		$sessionId = getParameter($_REQUEST,"PHPSESSID");
-		$adoptSession = true;
+		if(isset($input['operation'])){
+			$sessionId = vtws_getParameter($_REQUEST,"PHPSESSID");
+			$adoptSession = true;
+		}else{
+			writeErrorOutput($operationManager,new WebServiceError(WebServiceErrorCode::$AUTHREQUIRED,"Authencation required"));
+			return;
+		}
 	}
+	
 	$sid = $sessionManager->startSession($sessionId,$adoptSession);
 	
 	if(!$sessionId && !in_array($operation,$operationManager->getPreLoginOperations())){
@@ -117,8 +113,6 @@
 	}else{
 		$current_user = null;
 	}
-	
-	$input = getRequestParamsArrayForOperation($operation);
 	
 	$operationInput = $operationManager->sanitizeOperation($operation,$input);
 	$includes = $operationManager->getOperationIncludes($operation);

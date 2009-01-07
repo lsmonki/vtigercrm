@@ -12,6 +12,8 @@ class VtigerCRMObjectMeta{
 		private $columnDataTypeMapping;
 		private $mandatoryFields;
 		private $referenceFieldDetails;
+		private $emailFields;
+		private $fieldNameFieldIdMapping;
 		private $ownerFields;
 		private $columnFieldMapping;
 		private $baseTable;
@@ -42,6 +44,8 @@ class VtigerCRMObjectMeta{
 			$this->fieldColumnMapping = array();
 			$this->userAccessibleColumns = array();
 			$this->mandatoryFields = array();
+			$this->emailFields = array();
+			$this->fieldNameFieldIdMapping = array();
 			$this->referenceFieldDetails = array();
 			$this->columnFieldMapping = array();
 			$this->ownerFields = array();
@@ -57,6 +61,14 @@ class VtigerCRMObjectMeta{
 		private function computeAccess(){
 			
 			global $adb;
+			
+			$active = vtlib_isModuleActive($this->objectName);
+			if($active == false){
+				$this->hasAccess = false;
+				$this->hasReadAccess = false;
+				$this->hasWriteAccess = false;
+				$this->hasDeleteAccess = false;
+			}
 			
 			require('user_privileges/user_privileges_'.$this->user->id.'.php');
 			if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0){
@@ -286,7 +298,19 @@ class VtigerCRMObjectMeta{
 			return $this->columnFieldMapping;
 		}
 		
+		function getEmailFields(){
+			if(!$this->meta){
+				$this->retrieveMeta();
+			}
+			return $this->emailFields;
+		}
 		
+		function getFieldIdFromFieldName($fieldName){
+			if(!$this->meta){
+				$this->retrieveMeta();
+			}
+			return $this->fieldNameFieldIdMapping[$fieldName];
+		}
 		
 		function retrieveMeta(){
 			
@@ -392,10 +416,15 @@ class VtigerCRMObjectMeta{
 				$fieldname = $adb->query_result($result,$i,"fieldname");
 				$uitype = $adb->query_result($result,$i,"uitype");
 				$fieldtype = $adb->query_result($result,$i,"typeofdata");
+				$fieldId = $adb->query_result($result,$i,"fieldid");
 				$fieldtype = explode("~",$fieldtype);
 				$mandatory = $fieldtype[1];
 				$fieldtype = $fieldtype[0];
 				
+				if(strtolower($fieldtype) == "e"){
+					$this->emailFields[$fieldname] = $fieldname;
+				}
+				$this->fieldNameFieldIdMapping[$fieldname]=$fieldId;
 				if(strcasecmp($fieldname,'filename')===0 || strcasecmp($fieldname,'imagename')===0){
 					continue;
 				}
@@ -406,7 +435,8 @@ class VtigerCRMObjectMeta{
 				$this->columnTableMapping[$fieldcolname] = $fieldtablename;
 				$this->userAccessibleColumns[] = $fieldcolname;
 				$this->fieldColumnMapping[$fieldname] = $fieldcolname;
-				if(strcasecmp($mandatory,'M')===0){
+				//uitype 4 is module sequence number field.
+				if(strcasecmp($mandatory,'M')===0 && $uitype !=4){
 					$this->mandatoryFields[] = $fieldname;
 				}
 				if(in_array($uitype,array_keys($referenceArray))){
@@ -426,6 +456,7 @@ class VtigerCRMObjectMeta{
 					}
 				}
 			}
+			$this->emailFields = array_keys($this->emailFields);
 			$this->ownerFields = array_unique($this->ownerFields);
 		}
 		

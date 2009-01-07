@@ -117,12 +117,12 @@ if(!$orderby){
 	$orderby = true;
 	return VTQL_Parser::ORDERBY;
 }
-if((strcmp($val, "(")===0)){
-return VTQL_Parser::PARENOPEN;
-}else if((strcmp($val, ")")===0)){
-return VTQL_Parser::PARENCLOSE;
-}else if(strcmp($val, ",")===0){
+if(strcmp($val, ",")===0){
 return VTQL_Parser::COMMA;
+}else if(strcasecmp($val, "asc")===0){
+return VTQL_Parser::ASC;
+}else if(strcasecmp($val, "desc")===0){
+return VTQL_Parser::desc;
 }else{
 return VTQL_Parser::COLUMNNAME;
 }

@@ -65,10 +65,12 @@ function vtws_getUserAccessibleGroups($crmObject, $user){
 	}
 	
 	$groups = array();
-	while($nameArray = $adb->fetch_array($result)){
-		$groupId=$nameArray["groupid"];
-		$groupName=$nameArray["groupname"];
-		$groups[] = array('id'=>$groupId,'name'=>$groupName);
+	if($result != null && $result != '' && is_object($result)){
+		while($nameArray = $adb->fetch_array($result)){
+			$groupId=$nameArray["groupid"];
+			$groupName=$nameArray["groupname"];
+			$groups[] = array('id'=>$groupId,'name'=>$groupName);
+		}
 	}
 	return $groups;
 }
@@ -101,6 +103,50 @@ function getIdComponents($elementid){
 
 function getId($objId, $elemId){
 	return $objId."x".$elemId;
+}
+
+function getEmailFieldId($meta, $entityId,$fields){
+	global $adb;
+	if(sizeof($fields)>0){
+		return $meta->getFieldIdFromFieldName($fields[0]);
+	}
+	//no email field accessible in the module. since its only association pick up the field any way.
+	$query="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? and uitype=13;";
+	$result = $adb->pquery($query, array($meta->getObjectId()));
+	//pick up the first field.
+	$fieldId = $adb->query_result($result,0,'fieldid');
+	return $fieldId;
+}
+
+function vtws_getParameter($parameterArray, $paramName,$default=null){
+	
+	if (!get_magic_quotes_gpc()) {
+		$param = addslashes($parameterArray[$paramName]);
+	} else {
+		$param = $parameterArray[$paramName];
+	}
+	if(!$param){
+		$param = $default;
+	}
+	return $param;
+}
+
+function vtws_getEntityNameFields($moduleName){
+	
+	global $adb;
+	$query = "select fieldname,tablename,entityidfield from vtiger_entityname where modulename = ?";
+	$result = $adb->pquery($query, array($moduleName));
+	$rowCount = $adb->num_rows($result);
+	$nameFields = array();
+	if($rowCount > 0){
+		$fieldsname = $adb->query_result($result,0,'fieldname');
+		if(!(strpos($fieldsname,',') === false)){
+			 $nameFields = explode(',',$fieldsname);
+		}else{
+			array_push($nameFields,$fieldsname);
+		}
+	}
+	return $nameFields;	
 }
 
 ?>

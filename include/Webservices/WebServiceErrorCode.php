@@ -3,6 +3,7 @@
 	class WebServiceErrorCode {
 		
 		public static $SESSLIFEOVER = "SESSION_EXPIRED";
+		public static $REFERENCEINVALID = "REFERENCE_INVALID";
 		public static $SESSIONIDLE = "SESSION_LEFT_IDLE";
 		public static $SESSIONIDINVALID = "INVALID_SESSIONID";
 		public static $INVALIDUSERPWD = "INVALID_USER_CREDENTIALS";
