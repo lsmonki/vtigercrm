@@ -15,7 +15,7 @@
 	<table border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 		<tr>
 			<td class="layerPopupHeading" align="left" width="40%" nowrap>{$APP.DELETE_PICKLIST_VALUES} - {$FIELDLABEL}</td>
-			<td align="right" width="60%"><img src="themes/images/close.gif" align="middle" border="0" onclick="Myhide('deletediv');"></td>
+			<td align="right" width="60%"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" align="middle" border="0" onclick="Myhide('deletediv');"></td>
 		</tr>
 	</table>
 	

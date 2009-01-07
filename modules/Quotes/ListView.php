@@ -113,6 +113,7 @@ $image_path=$theme_path."images/";
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",'Quote');
 $smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);

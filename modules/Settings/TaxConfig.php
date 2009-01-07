@@ -112,6 +112,7 @@ $smarty->assign("TAX_VALUES", $tax_details);
 $smarty->assign("SH_TAX_VALUES", $sh_tax_details);
 
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("MOD", $mod_strings);

@@ -16,7 +16,7 @@
 		<td style="text-align:left;" id="Handle"><b>{$APP.LBL_WORLD_CLOCK}</b></td>
 		<td align="right">
 			<a href="javascript:;">
-				<img src="themes/images/close.gif" border="0"  onClick="fninvsh('wclock')" hspace="5" align="absmiddle">
+				<img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0"  onClick="fninvsh('wclock')" hspace="5" align="absmiddle">
 			</a>
 		</td>
 	</tr>

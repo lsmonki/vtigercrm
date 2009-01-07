@@ -82,6 +82,7 @@ if (isset($organization_logoname))
 
 
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);

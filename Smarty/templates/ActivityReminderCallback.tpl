@@ -18,7 +18,7 @@
 		<img align="top" src="themes/images/{$activitytype}s.gif"/> {$activitytype} - {$cbstatus}</b> </td>
 		<td align='right'><b><font color={$cbcolor}>{$cbdate} {$cbtime}</font></b></td>
 		<td align='right'>
-			<a style='padding-left: 10px;' href="javascript:;" onclick="ActivityReminderCallbackReset(0, '{$popupid}');fninvsh('{$popupid}');"><img src='themes/images/close.gif' align='absmiddle' border='0'></a></td>
+			<a style='padding-left: 10px;' href="javascript:;" onclick="ActivityReminderCallbackReset(0, '{$popupid}');fninvsh('{$popupid}');"><img src='{'close.gif'|@vtiger_imageurl:$THEME}' align='absmiddle' border='0'></a></td>
 	</tr>
 
 	<tr>

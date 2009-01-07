@@ -1254,11 +1254,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				{
 					$os = $col_fields[$fieldname];
 					if($os == 'Windows')
-					    $arc_icon="<img src='themes/images/fbWindowsOS.gif' hspace='3' align='absmiddle' border='0'>";
+					    $arc_icon="<img src='" . vtiger_imageurl('fbWindowsOS.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
 					elseif($os == 'Linux')
-						$arc_icon="<img src='themes/images/fbLinuxOS.gif' hspace='3' align='absmiddle' border='0'>";
+						$arc_icon="<img src='" . vtiger_imageurl('fbLinuxOS.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
 					elseif($os == 'Mac')
-						$arc_icon="<img src='themes/images/fbMacOS.gif' hspace='3' align='absmiddle' border='0'>"; 
+						$arc_icon="<img src='" . vtiger_imageurl('fbMacOS.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>"; 
 					$label_fld[]=$arc_icon.$os;					
 				}
 			}
@@ -1281,20 +1281,20 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 					$ext =substr($fld_value, $ext_pos + 1);
 					$ext = strtolower($ext);
 					if($ext == 'bin' || $ext == 'exe' || $ext == 'rpm')
-						$fileicon="<img src='themes/images/fExeBin.gif' hspace='3' align='absmiddle' border='0'>";
+						$fileicon="<img src='" . vtiger_imageurl('fExeBin.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
 					elseif($ext == 'jpg' || $ext == 'gif' || $ext == 'bmp')
-						$fileicon="<img src='themes/images/fbImageFile.gif' hspace='3' align='absmiddle' border='0'>";
+						$fileicon="<img src='" . vtiger_imageurl('fbImageFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
 					elseif($ext == 'txt' || $ext == 'doc' || $ext == 'xls')
-						$fileicon="<img src='themes/images/fbTextFile.gif' hspace='3' align='absmiddle' border='0'>";
+						$fileicon="<img src='" . vtiger_imageurl('fbTextFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
 					elseif($ext == 'zip' || $ext == 'gz' || $ext == 'rar')
-						$fileicon="<img src='themes/images/fbZipFile.gif' hspace='3' align='absmiddle'	border='0'>";
+						$fileicon="<img src='" . vtiger_imageurl('fbZipFile.gif', $theme) . "' hspace='3' align='absmiddle'	border='0'>";
 					else
-						$fileicon="<img src='themes/images/fbUnknownFile.gif' hspace='3' align='absmiddle' border='0'>";
+						$fileicon="<img src='" . vtiger_imageurl('fbUnknownFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
 				}
 				else
 				{
 					$fld_value = $col_fields['filename'];
-					$fileicon = "<img src='themes/images/fbLink.gif' alt='".$mod_strings['LBL_EXTERNAL_LNK']."' title='".$mod_strings['LBL_EXTERNAL_LNK']."' hspace='3' align='absmiddle' border='0'>";
+					$fileicon = "<img src='" . vtiger_imageurl('fbLink.gif', $theme) . "' alt='".$mod_strings['LBL_EXTERNAL_LNK']."' title='".$mod_strings['LBL_EXTERNAL_LNK']."' hspace='3' align='absmiddle' border='0'>";
 				}
 				$label_fld[] = $fileicon.$fld_value;
 			}

@@ -3746,7 +3746,7 @@ function getDuplicateRecordsArr($module)
 		
 				<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 				<tbody><tr>
-				<td rowspan='2' width='11%'><img src='themes/images/empty.jpg' ></td>
+				<td rowspan='2' width='11%'><img src='" . vtiger_imageurl('empty.jpg', $theme) . "' ></td>
 				<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>$app_strings[LBL_NO_DUPLICATE]</span></td>
 				</tr>
 				<tr>

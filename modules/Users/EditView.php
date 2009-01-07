@@ -90,7 +90,7 @@ if ($_REQUEST['isDuplicate'] != 'true' && isset($_REQUEST['return_id']))
         $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
         $RETURN_ID = $_REQUEST['return_id'];
 }
-
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $focus->mode = $mode;
 $disp_view = getView($focus->mode);

@@ -74,6 +74,7 @@ if($active_res!='None'){
 					if($cbdate == date('Y-m-d') && $cbtime > date('H:i')) $cbcolor = '';
 					else $cbcolor= '#FF1515';
 				}
+				$smarty->assign("THEME", $theme);
 				$smarty->assign("theme", $theme);
 				$smarty->assign("popupid", $popupid);
 				$smarty->assign("cbdate", $cbdate);

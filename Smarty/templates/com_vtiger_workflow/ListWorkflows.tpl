@@ -13,7 +13,7 @@
 				</td>
 			<td width="20%" align="right">
 				<a href="javascript:void;" id="new_workflow_popup_close">
-					<img border="0" align="absmiddle" src="themes/images/close.gif"/>
+					<img border="0" align="absmiddle" src="{'close.gif'|@vtiger_imageurl:$THEME}"/>
 				</a>
 			</td>
 		</tr>
@@ -98,11 +98,11 @@
 				<a href="{$module->editWorkflowUrl($workflow->id)}">
 					<img border="0" title="Edit" alt="Edit" \
 						style="cursor: pointer;" id="expressionlist_editlink_{$workflow->id}" \
-						src="themes/images/editfield.gif"/>
+						src="{'editfield.gif'|@vtiger_imageurl:$THEME}"/>
 				</a>
 				<a href="{$module->deleteWorkflowUrl($workflow->id)}">
 					<img border="0" title="Delete" alt="Delete"\
-			 			src="themes/images/delete.gif" \
+			 			src="{'delete.gif'|@vtiger_imageurl:$THEME}" \
 						style="cursor: pointer;" id="expressionlist_deletelink_{$workflow->id}"/>
 				</a>
 			</td>

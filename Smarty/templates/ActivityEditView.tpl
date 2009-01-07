@@ -926,7 +926,7 @@ var gVTModule = '{$smarty.request.module}';
         </td></tr></table>
         </div>
         </td>
-        <td valign=top><img src="themes/images/showPanelTopRight.gif"></td>
+        <td valign=top><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
         </tr>
         </table>
 <script>

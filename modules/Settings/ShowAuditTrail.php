@@ -65,6 +65,7 @@ $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Set
 $smarty->assign("MOD", $current_module_strings);
 $smarty->assign("CMOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("THEME_PATH",$theme_path);
 $smarty->assign("LIST_HEADER",$focus->getAuditTrailHeader());

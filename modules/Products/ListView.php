@@ -29,6 +29,7 @@ $image_path=$theme_path."images/";
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",'Product');
@@ -109,7 +110,7 @@ if($viewid ==0)
 
 		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 		<tbody><tr>
-		<td rowspan='2' width='11%'><img src='themes/images/denied.gif' ></td>
+		<td rowspan='2' width='11%'><img src='" .vtiger_imageurl('denied.gif', $theme) ."' ></td>
 		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span clas
 		s='genHeaderSmall'>$app_strings[LBL_PERMISSION]</span></td>
 		</tr>

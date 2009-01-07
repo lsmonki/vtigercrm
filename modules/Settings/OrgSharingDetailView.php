@@ -152,7 +152,7 @@ function getSharingRuleList($module)
 		$access_permission = array_chunk($access_permission,4);
 	return $access_permission;
 }
-
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);

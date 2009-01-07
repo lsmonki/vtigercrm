@@ -10,6 +10,7 @@ global $mod_strings,$app_strings,$theme;
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", "themes/$theme/images/");
 
 global $modulemanager_uploaddir; // Defined in modules/Settings/ModuleManager.php

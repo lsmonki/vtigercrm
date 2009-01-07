@@ -51,10 +51,10 @@
 			<td align="left">{$reportdetails.description}</td>
 			<td align="center" nowrap>
 			{if $reportdetails.customizable eq '1'}
-			<a href="javascript:;" onClick="editReport('{$reportdetails.reportid}');"><img src="themes/images/editfield.gif" align="absmiddle" title="Customize..." border="0"></a>
+			<a href="javascript:;" onClick="editReport('{$reportdetails.reportid}');"><img src="{'editfield.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" title="Customize..." border="0"></a>
 			{/if}
 			{if $reportdetails.state neq 'SAVED'}
-			&nbsp;| &nbsp;<a href="javascript:;" onClick="DeleteReport('{$reportdetails.reportid}');"><img src="themes/images/delete.gif" align="absmiddle" title="Delete..." border="0"></a>
+			&nbsp;| &nbsp;<a href="javascript:;" onClick="DeleteReport('{$reportdetails.reportid}');"><img src="{'delete.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" title="Delete..." border="0"></a>
 			{/if}
 			</td>
 			</tr>

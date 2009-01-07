@@ -24,6 +24,7 @@ $homeObj=new Homestuff;
 $smarty=new vtigerCRM_Smarty;
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 
 if(isset($_REQUEST['homestuffid']) || $_REQUEST['homestuffid']!="")
@@ -53,6 +54,7 @@ $smarty->assign("DASHDETAILS",$dashdet);
 $smarty->assign("HOME_STUFFTYPE",$stufftype);
 $smarty->assign("HOME_STUFFID",$stuffid);
 $smarty->assign("HOME_STUFF",$homestuff_values);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->display("Home/HomeBlock.tpl");
 

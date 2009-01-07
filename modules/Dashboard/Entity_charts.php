@@ -563,7 +563,7 @@ $sHTML .= "<tr>
 			<td class='small'>".$mod_strings['VIEWCHART']." :&nbsp;</td>
 			<td class='dash_row_sel'>1</td>
 			<td class='dash_row_unsel'><a class='dash_href' href='#2'>2</a></td>
-			<td class='dash_switch'><a href='#top'><img align='absmiddle' src='themes/images/dash_scroll_up.jpg' border='0'></a></td>
+			<td class='dash_switch'><a href='#top'><img align='absmiddle' src='". vtiger_imageurl('dash_scroll_up.jpg', $theme)."' border='0'></a></td>
 		</tr>
 		</table>";
 	 }	
@@ -632,7 +632,7 @@ $sHTML .= "<tr>
 			<td class='small'>".$mod_strings['VIEWCHART']." :&nbsp;</td>
 			<td class='dash_row_unsel'><a class='dash_href' href='#1'>1</a></td>
 			<td class='dash_row_sel'>2</td>
-			<td class='dash_switch'><a href='#top'><img align='absmiddle' src='themes/images/dash_scroll_up.jpg' border='0'></a></td>
+			<td class='dash_switch'><a href='#top'><img align='absmiddle' src='". vtiger_imageurl('dash_scroll_up.jpg', $theme)."' border='0'></a></td>
 		</tr>
 		</table>";
 	 }	

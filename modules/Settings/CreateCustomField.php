@@ -93,6 +93,7 @@ if(isset($fieldid) && $fieldid!='')
 }
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("FLD_MODULE", $_REQUEST['fld_module']);
 if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 {
@@ -145,7 +146,7 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 			else
 				$output .= '<td width="60%" align="left" class="layerPopupHeading">'.$mod_strings['LBL_ADD_FIELD'].'</td>';
 				
-			$output .= '<td width="40%" align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'.$image_path.'close.gif" border="0"  align="absmiddle" /></a></td>
+			$output .= '<td width="40%" align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'. vtiger_imageurl('close.gif', $theme).'" border="0"  align="absmiddle" /></a></td>
 			</tr>';
 			$output .='</table><table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
 							<tr>
@@ -193,7 +194,7 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 								$output .= '<tr id="picklist">
 									<td class="dataLabel" nowrap="nowrap" align="right" valign="top"><b>'.$mod_strings['LBL_PICK_LIST_VALUES'].'</b></td>
 									<td align="left" valign="top"><textarea name="fldPickList" rows="10" class="txtBox" '.$readonly.'>'.$fldVal.'</textarea></td>
-									<!--td style="padding-left:10px"><img src="themes/images/picklist_hint.gif"/></td-->
+									<!--td style="padding-left:10px"><img src="'. vtiger_imageurl('picklist_hint.gif', $theme) .'"/></td-->
 								</tr>';
 								break;
 								
@@ -212,7 +213,7 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 						<tr id="picklist" style="visibility:hidden;">
 							<td class="dataLabel" nowrap="nowrap" align="right" valign="top"><b>'.$mod_strings['LBL_PICK_LIST_VALUES'].'</b></td>
 							<td align="left" valign="top"><textarea name="fldPickList" rows="10" class="txtBox" '.$readonly.'>'.$fldVal.'</textarea></td>
-							<!--td style="padding-left:10px"><img src="themes/images/picklist_hint.gif"/></td-->
+							<!--td style="padding-left:10px"><img src="'. vtiger_imageurl('picklist_hint.gif', $theme).'"/></td-->
 						</tr>';
 					}
 				$output .= '	

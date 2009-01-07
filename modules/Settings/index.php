@@ -23,6 +23,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("MODULE", 'Settings');
 $smarty->assign("CATEGORY", 'Settings');
 $smarty->assign("MOD", $mod_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("IMAGES", "themes/images/");
 $smarty->assign("BLOCKS", getSettingsBlocks());

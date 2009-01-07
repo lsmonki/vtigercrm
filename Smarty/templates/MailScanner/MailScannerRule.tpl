@@ -16,7 +16,7 @@
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody>
 <tr>
-	<td valign="top"><img src="themes/images/showPanelTopLeft.gif"></td>
+	<td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
     <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 
 	<form action="index.php" method="post" id="form">
@@ -35,7 +35,7 @@
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="themes/images/mailScanner.gif" alt="{$MOD.LBL_MAIL_SCANNER}" width="48" height="48" border=0 title="{$MOD.LBL_MAIL_SCANNER}"></td>
+					<td width=50 rowspan=2 valign=top><img src="{'mailScanner.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_MAIL_SCANNER}" width="48" height="48" border=0 title="{$MOD.LBL_MAIL_SCANNER}"></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_MAIL_SCANNER}</b></td>
 				</tr>
 				<tr>
@@ -75,10 +75,10 @@
 								<strong>{$MOD.LBL_PRIORITY}</strong>
 								<span style='margin-left: 100px;'>
 								{if $NEXT_RULEID}
-<a href="index.php?module=Settings&action=MailScanner&parenttabl=Settings&mode=rulemove_down&scannername={$SCANNERINFO.scannername}&targetruleid={$NEXT_RULEID}&ruleid={$SCANNERRULE->ruleid}" title="{$MOD.LBL_MOVE} {$MOD.LBL_DOWN}"><img src="themes/images/arrow_down.gif" border=0></a>
+<a href="index.php?module=Settings&action=MailScanner&parenttabl=Settings&mode=rulemove_down&scannername={$SCANNERINFO.scannername}&targetruleid={$NEXT_RULEID}&ruleid={$SCANNERRULE->ruleid}" title="{$MOD.LBL_MOVE} {$MOD.LBL_DOWN}"><img src="{'arrow_down.gif'|@vtiger_imageurl:$THEME}" border=0></a>
 								{/if}
 								{if $PREV_RULEID}
-<a href="index.php?module=Settings&action=MailScanner&parenttabl=Settings&mode=rulemove_up&scannername={$SCANNERINFO.scannername}&targetruleid={$PREV_RULEID}&ruleid={$SCANNERRULE->ruleid}" title="{$MOD.LBL_MOVE} {$MOD.LBL_UP}"><img src="themes/images/arrow_up.gif" border=0></a>
+<a href="index.php?module=Settings&action=MailScanner&parenttabl=Settings&mode=rulemove_up&scannername={$SCANNERINFO.scannername}&targetruleid={$PREV_RULEID}&ruleid={$SCANNERRULE->ruleid}" title="{$MOD.LBL_MOVE} {$MOD.LBL_UP}"><img src="{'arrow_up.gif'|@vtiger_imageurl:$THEME}" border=0></a>
 								{/if}
 								</span>
 							</td>
@@ -155,7 +155,7 @@
 	</div>
 
 </td>
-        <td valign="top"><img src="themes/images/showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </tbody>
 </form>

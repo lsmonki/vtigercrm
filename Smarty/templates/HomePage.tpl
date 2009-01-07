@@ -51,8 +51,8 @@ function getHomeActivities(mode,view)
 								<td>
 										<table border=0 cellspacing=0 cellpadding=5>
 			<tr>
-					<td style="padding-right:5px;padding-left:5px;"><img src="themes/images/btnL3Add-Faded.gif" border=0></td>	
-					<td style="padding-right:5px"><img src="themes/images/btnL3Search-Faded.gif" border=0></td>
+					<td style="padding-right:5px;padding-left:5px;"><img src="{'btnL3Add-Faded.gif'|@vtiger_imageurl:$THEME}" border=0></td>	
+					<td style="padding-right:5px"><img src="{'btnL3Search-Faded.gif'|@vtiger_imageurl:$THEME}" border=0></td>
 			</tr>
 		</table>
 								</td>
@@ -67,7 +67,7 @@ function getHomeActivities(mode,view)
  		                                                                              {if $CHECK.Calendar eq 'yes'} 
  		                                                                                        <td style="padding-right:5px;padding-left:5px;"><a href="javascript:;" onClick='fnvshobj(this,"miniCal");getMiniCal();'><img src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$APP.LBL_CALENDAR_ALT}" title="{$APP.LBL_CALENDAR_TITLE}" border=0></a></a></td> 
  		                                                                              {else} 
- 		                                                                                        <td style="padding-right:5px;padding-left:5px;"><img src="themes/images/btnL3Calendar-Faded.gif" border=0></td> 
+ 		                                                                                        <td style="padding-right:5px;padding-left:5px;"><img src="{'btnL3Calendar-Faded.gif'|@vtiger_imageurl:$THEME}" border=0></td> 
  		                                                                              {/if} 
 									{/if}
 									 {if $WORLD_CLOCK_DISPLAY eq 'true'} 
@@ -87,9 +87,9 @@ function getHomeActivities(mode,view)
 					<td class="small">
 						<table border=0 cellspacing=0 cellpadding=5>
 							<tr>
-							<td style="padding-right:5px;padding-left:10px;"><img src="themes/images/tbarImport-Faded.gif" border="0"></td>	
-							<td style="padding-right:5px"><img src="themes/images/tbarExport-Faded.gif" border="0"></td>
-							<td style="padding-right:5px"><img src="themes/images/FindDuplicates-Faded.gif" border="0"></td>
+							<td style="padding-right:5px;padding-left:10px;"><img src="{'tbarImport-Faded.gif'|@vtiger_imageurl:$THEME}" border="0"></td>	
+							<td style="padding-right:5px"><img src="{'tbarExport-Faded.gif'|@vtiger_imageurl:$THEME}" border="0"></td>
+							<td style="padding-right:5px"><img src="{'FindDuplicates-Faded.gif'|@vtiger_imageurl:$THEME}" border="0"></td>
 							</tr>
 							</table>	
 					</td>
@@ -113,7 +113,7 @@ function getHomeActivities(mode,view)
 {* Main Contents Start Here *}
 <table width="98%" cellpadding="0" cellspacing="0" border="0" class="small showPanelBg" align="center" valign="top">
 	<tr>
-		<td align=right valign=top><img src="themes/images/showPanelTopLeft.gif"></td>
+		<td align=right valign=top><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
 		<td width="75%" align="center" class="homePageSeperator" valign="top">
 				<div id="MainMatrix">
 					{foreach key=modulename item=tabledetail from=$HOMEDETAILS}
@@ -123,7 +123,7 @@ function getHomeActivities(mode,view)
 										<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 								<tr class="headerrow">
 									<td align="left" class="homePageMatrixHdr" ><b>{$tabledetail.Title.1}</b></td>
-									<td align="right" class="homePageMatrixHdr" ><img src="themes/images/uparrow.gif" align="absmiddle" /></td>
+									<td align="right" class="homePageMatrixHdr" ><img src="{'uparrow.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" /></td>
 								</tr>
 								<tr align="left" class="winmarkModulesdef">
 									<td valign=top  colspan=2>
@@ -132,16 +132,16 @@ function getHomeActivities(mode,view)
 												{foreach item=elements from=$tabledetail.Entries}
 													<tr>
 														{if $tabledetail.Title.2 neq 'home_mytopinv' && $tabledetail.Title.2 neq 'home_mytopso' && $tabledetail.Title.2 neq 'home_mytopquote' && $tabledetail.Title.2 neq 'home_metrics' &&  $tabledetail.Title.2 neq 'home_mytoppo' &&  $tabledetail.Title.2 neq 'home_myfaq'  }
-															<td colspan="2"><img src="themes/images/bookMark.gif" align="absmiddle" />{$elements.0} 
+															<td colspan="2"><img src="{'bookMark.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />{$elements.0} 
 															 	{if $modulename eq 'Leads'}
 																 - {$elements.1}	
 																{/if}
 															</td>
 														{elseif $tabledetail.Title.2 eq 'home_metrics'}
-															<td><img src="themes/images/bookMark.gif" align="absmiddle" /> {$elements.0}</td>
+															<td><img src="{'bookMark.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" /> {$elements.0}</td>
 															<td align="absmiddle" /> {$elements.1}</td>
 														{else}	
-															<td colspan="2"><img src="themes/images/bookMark.gif" align="absmiddle" /> {$elements.1}</td>
+															<td colspan="2"><img src="{'bookMark.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" /> {$elements.1}</td>
 														{/if}
 													</tr>
 												{/foreach}
@@ -166,7 +166,7 @@ function getHomeActivities(mode,view)
 									<table width="100%" border="0" cellpadding="8" cellspacing="0" class="small">
 										<tr class="headerrow">
 											<td align="left" class="homePageMatrixHdr"><b>{$APP.LBL_HOMEPAGE_DASHBOARD}</b></td>
-											<td align="right" class="homePageMatrixHdr"><img src="themes/images/uparrow.gif" align="absmiddle" /></td>
+											<td align="right" class="homePageMatrixHdr"><img src={'uparrow.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" /></td>
 										</tr>
 										<tr align="left" class="winmarkModulesdef">	
 											<td colspan="2">
@@ -212,7 +212,7 @@ function getHomeActivities(mode,view)
 
 
 </td>
-<td align=right valign=top><img src="themes/images/showPanelTopRight.gif"></td>
+<td align=right valign=top><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
 
 </tr>
 </table>

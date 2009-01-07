@@ -237,6 +237,7 @@ imap_close($MailBox->mbox);
 $smarty = new vtigerCRM_Smarty;
 //$smarty->assign("USERID", $current_user->id);
 $smarty->assign("MOD", $mod_strings);
+$smarty->assign("THEME", $theme);
 //$smarty->assign("APP", $app_strings);
 //$smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("UNREAD_COUNT",$unread_msgs);

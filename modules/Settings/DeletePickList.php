@@ -149,7 +149,7 @@ else
 			
 			
 			$output="<table border=0 cellspacing=0 cellpadding=5 width=100%>
-					<tr><td colspan=2 align='center'><strong> ".$mod_strings['LBL_PICKLIST_TRANSFER']."\"".$fieldLabel."\"</strong></td><td align='right'><img src='themes/images/close.gif' align='middle' border='0' onclick=hide('transferdiv');></td></tr>
+					<tr><td colspan=2 align='center'><strong> ".$mod_strings['LBL_PICKLIST_TRANSFER']."\"".$fieldLabel."\"</strong></td><td align='right'><img src='". vtiger_imageurl('close.gif', $theme)."' align='middle' border='0' onclick=hide('transferdiv');></td></tr>
 					<tr><td></td><td></td><td></td></tr>
 					<tr><td class='small' align='right'><b>".$mod_strings['LBL_REPLACE_VALUE_WITH'].":</b></td><td align='left'><select style='width:180px;font-size:normal;' class='small detailedViewTextBox' id='replacePick'>$option</select></td><td></td></tr>
 					<tr><td colspan=3 align='center'><input type='button' name='replaceText' value='".$app_strings['LBL_REPLACE_LABEL']."' onClick=pickReplace('".$moduleName."','".$fieldName."'); class='crmButton small save'>&nbsp;<input type='button' value='".$app_strings['LBL_CANCEL_BUTTON_LABEL']."' name='cancel' class='crmButton small cancel' onclick=\"hide('transferdiv');\"></td></tr>
@@ -166,6 +166,7 @@ else
 		$smarty->assign("PICKVAL",$pick);
 		$smarty->assign("MOD", return_module_language($current_language,'Settings'));
 		$smarty->assign("APP",$app_strings);
+		$smarty->assign("THEME", $theme);
 		$smarty->display("Settings/DeletePickList.tpl");
 	}
 	

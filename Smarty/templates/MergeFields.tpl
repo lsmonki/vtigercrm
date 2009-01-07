@@ -138,7 +138,7 @@
 
 		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 		<tbody><tr>
-		<td rowspan='2' width='11%'><img src='themes/{$THEME}/images/denied.gif' ></td>
+		<td rowspan='2' width='11%'><img src='{'denied.gif'|@vtiger_imageurl:$THEME}' ></td>
 		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'>
 			<span class='genHeaderSmall'>{$APP.LBL_PERMISSION}</span></td>
 		</tr>

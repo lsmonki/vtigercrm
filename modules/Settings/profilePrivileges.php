@@ -49,6 +49,7 @@ $output1 ='';
 $smarty->assign("PROFILEID", $profileId);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("CMOD", $mod_strings);
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != '')
 	$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
@@ -438,15 +439,15 @@ if($mode=='view')
 			$field=array();
 			if($fieldListResult[$module_name][$j][1] == 0)
 			{
-				$visible = "<img src=themes/images/prvPrfSelectedTick.gif>";
+				$visible = "<img src='".vtiger_imageurl('prvPrfSelectedTick.gif', $theme)."'>";
 			}
 			else
 			{
-				$visible = "<img src=themes/images/no.gif>";
+				$visible = "<img src='".vtiger_imageurl('no.gif', $theme)."'>";
 			}
 			if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
 			{
-				$visible = "<img src=themes/images/no.gif>";
+				$visible = "<img src='".vtiger_imageurl('no.gif', $theme)."'>";
 			}
 			if($language_strings[$fieldListResult[$module_name][$j][0]] != '')
 				$field[]=$language_strings[$fieldListResult[$module_name][$j][0]];
@@ -636,11 +637,11 @@ function getGlobalDisplayValue($id,$actionid)
 	}
 	elseif($id == 0)
 	{
-		$value = '<img src="themes/images/prvPrfSelectedTick.gif">';
+		$value = '<img src="' . vtiger_imageurl('prvPrfSelectedTick.gif', $theme) . '">';
 	}
 	elseif($id == 1)
 	{
-		$value = '<img src="themes/images/no.gif">';
+		$value = '<img src="' . vtiger_imageurl('no.gif', $theme) . '">';
 	}
 	else
 	{
@@ -701,11 +702,11 @@ function getDisplayValue($id)
 	}
 	elseif($id == 0)
 	{
-		$value = '<img src="themes/images/prvPrfSelectedTick.gif">';
+		$value = '<img src="' . vtiger_imageurl('prvPrfSelectedTick.gif', $theme) .'">';
 	}
 	elseif($id == 1)
 	{
-		$value = '<img src="themes/images/no.gif">';
+		$value = '<img src="' . vtiger_imageurl('no.gif', $theme) .'">';
 	}
 	else
 	{

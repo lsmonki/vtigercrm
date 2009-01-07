@@ -34,7 +34,7 @@ $output ='<div id="CurrencyDeleteLay"  class="layerPopup">
 <table width="100%" border="0" cellpadding="3" cellspacing="0" class="layerHeadingULine">
 <tr>
 	<td class="layerPopupHeading"  align="left" width="60%">'.$mod_strings["LBL_DELETE_CURRENCY"].'</td>
-	<td align="right" width="40%"><img src="themes/images/close.gif" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer;" onClick="document.getElementById(\'CurrencyDeleteLay\').style.display=\'none\'";></td>
+	<td align="right" width="40%"><img src="'. vtiger_imageurl('close.gif', $theme).'" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer;" onClick="document.getElementById(\'CurrencyDeleteLay\').style.display=\'none\'";></td>
 </tr>
 <table>
 <table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 

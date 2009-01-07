@@ -42,7 +42,7 @@ $output ='<div id="roleLay" style="display:block;" class="layerPopup">
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 	<tr>
 		<td class=layerPopupHeading " align="left">'.$mod_strings["LBL_EDITLISTPRICE"].'</td>
-		<td align="right" class="small"><img src="themes/images/close.gif" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="document.getElementById(\'editlistprice\').style.display=\'none\';"></td>
+		<td align="right" class="small"><img src="'. vtiger_imageurl('close.gif', $theme) .'" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="document.getElementById(\'editlistprice\').style.display=\'none\';"></td>
 	</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 

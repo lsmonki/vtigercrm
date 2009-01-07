@@ -31,6 +31,7 @@ $smarty = new vtigerCRM_Smarty;
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("FLD_MODULE", $_REQUEST['fld_module']);
 
 $output = '';
@@ -63,7 +64,7 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 			<tr>';
 				$output .= '<td width="95%" align="left" class="layerPopupHeading">'.$mod_strings['LBL_MOVE_BLOCK_FIELD'].$_REQUEST[blockname].'</td>';
 				
-			$output .= '<td width="5%" align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="themes/images/close.gif" border="0"  align="absmiddle" /></a></td>
+			$output .= '<td width="5%" align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'. vtiger_imageurl('close.gif', $theme) .'" border="0"  align="absmiddle" /></a></td>
 			</tr>';
 			$output .='</table><table border=0 cellspacing=0 cellpadding=0 width=95% align=center> 
 							<tr>

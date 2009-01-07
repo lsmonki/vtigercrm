@@ -143,6 +143,7 @@ function customFieldMappings()
 
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("CUSTOMFIELDMAPPING",customFieldMappings());
 
 $smarty->display("CustomFieldMapping.tpl");

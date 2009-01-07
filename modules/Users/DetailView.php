@@ -118,7 +118,7 @@ $smarty->assign("CATEGORY", $category);
 if(isset($focus->imagename) && $focus->imagename!='')
 {
 	$imagestring="<div id='track1' style='margin: 4px 0pt 0pt 10px; width: 200px; background-image: url(themes/images/scaler_slider_track.gif); background-repeat: repeat-x; background-position: left center; height: 18px;'>
-	<div class='selected' id='handle1' style='width: 18px; height: 18px; position: relative; left: 145px;cursor:pointer;'><img src='themes/images/scaler_slider.gif'></div>
+	<div class='selected' id='handle1' style='width: 18px; height: 18px; position: relative; left: 145px;cursor:pointer;'><img src='" . vtiger_imageurl('scaler_slider.gif', $theme) . "'></div>
 	</div>
 <script language='JavaScript' type='text/javascript' src='include/js/slider.js'></script>
 
@@ -213,7 +213,7 @@ else
 			<table border="0" cellpadding="5" cellspacing="0" width="98%">
 			<tr>
 				<td rowspan="2" width="11%">
-				  	<img src="themes/images/denied.gif">
+				  	<img src="'. vtiger_imageurl('denied.gif', $theme).'">
 				</td>
 				<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="70%">
 					<span class="genHeaderSmall">'.$app_strings["LBL_PERMISSION"].'

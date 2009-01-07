@@ -69,7 +69,7 @@ require_once("VTWorkflowManager.inc");
 		$smarty->assign("MOD", array_merge(return_module_language($current_language,'Settings'), return_module_language($current_language,'com_vtiger_workflow')));
 		$smarty->assign("APP", $app_strings);
 		$smarty->assign("IMAGE_PATH",$image_path);
-		
+		$smarty->assign("THEME", $theme);
 		$smarty->assign("MODULE_NAME", $module->label);
 		$smarty->assign("PAGE_NAME", 'Edit Task');
 		$smarty->assign("PAGE_TITLE", 'Edit an existing task or create a one');

@@ -195,14 +195,14 @@ function sendfile_email()
 <!-- Contents -->
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 <tr>
-	<td valign=top><img src="themes/images/showPanelTopLeft.gif"></td>
+	<td valign=top><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
 	<td class="showPanelBg" valign=top width=100%>
 		<!-- PUBLIC CONTENTS STARTS-->
 		<div class="small" style="padding:10px" >
 		
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%"><tr><td>		
 		  {* Module Record numbering, used MOD_SEQ_ID instead of ID *}
-		 <span class="dvHeaderText">[ {$MOD_SEQ_ID} ] {$NAME} -  {$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="themes/images/vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="themes/images/vtbusy.gif" border="0"></span></td><td>&nbsp;</td></tr>
+		 <span class="dvHeaderText">[ {$MOD_SEQ_ID} ] {$NAME} -  {$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span></td><td>&nbsp;</td></tr>
 		 <tr height=20><td>{$UPDATEINFO}</td></tr>
 		 </table>			 
 		<br>
@@ -295,15 +295,15 @@ function sendfile_email()
 						</td>
 						<td width=30% align=center>
 									{if $privrecord neq ''}
-										<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="themes/images/b_left.gif">&nbsp;
+										<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="{'b_left.gif'|@vtiger_imageurl:$THEME}">&nbsp;
 									{else}
-										<img title="{$APP.LNK_LIST_PREVIOUS}" src="themes/images/b_left_disable.gif">
+										<img title="{$APP.LNK_LIST_PREVIOUS}" src="{'b_left_disable.gif'|@vtiger_imageurl:$THEME}">
 									{/if}
 									&nbsp;
 									{if $nextrecord neq ''}
-										<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="themes/images/b_right.gif">&nbsp;
+										<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="{'b_right.gif'|@vtiger_imageurl:$THEME}">&nbsp;
 									{else}
-										<img title="{$APP.LNK_LIST_NEXT}" src="themes/images/b_right_disable.gif">&nbsp;
+										<img title="{$APP.LNK_LIST_NEXT}" src="{'b_right_disable.gif'|@vtiger_imageurl:$THEME}">&nbsp;
 									{/if}
 									
 							</td>
@@ -368,9 +368,9 @@ function sendfile_email()
 							
 							<div style="float:left;font-weight:bold;"><div style="float:left;"><a href="javascript:showHideStatus('tbl{$header|replace:' ':''}','aid{$header|replace:' ':''}','{$IMAGE_PATH}');">
 							{if $BLOCKINITIALSTATUS[$header] eq 1}
-								<img id="aid{$header|replace:' ':''}" src="themes/images/activate.gif" style="border: 0px solid #000000;" alt="Hide" title="Hide"/>
+								<img id="aid{$header|replace:' ':''}" src="{'activate.gif'|@vtiger_imageurl:$THEME}" style="border: 0px solid #000000;" alt="Hide" title="Hide"/>
 							{else}
-							<img id="aid{$header|replace:' ':''}" src="themes/images/inactivate.gif" style="border: 0px solid #000000;" alt="Display" title="Display"/>
+							<img id="aid{$header|replace:' ':''}" src="{'inactivate.gif'|@vtiger_imageurl:$THEME}" style="border: 0px solid #000000;" alt="Display" title="Display"/>
 							{/if}
 								</a></div><b>&nbsp;
 						        	{$header}
@@ -496,15 +496,15 @@ function sendfile_email()
 						</td>
 						<td width=30% align=center>
 									{if $privrecord neq ''}
-										<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="themes/images/b_left.gif">&nbsp;
+										<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="{'b_left.gif'|@vtiger_imageurl:$THEME}">&nbsp;
 									{else}
-										<img title="{$APP.LNK_LIST_PREVIOUS}" src="themes/images/b_left_disable.gif">
+										<img title="{$APP.LNK_LIST_PREVIOUS}" src="{'b_left_disable.gif'|@vtiger_imageurl:$THEME}">
 									{/if}
 									&nbsp;
 									{if $nextrecord neq ''}
-										<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="themes/images/b_right.gif">&nbsp;
+										<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="{'b_right.gif'|@vtiger_imageurl:$THEME}">&nbsp;
 									{else}
-										<img title="{$APP.LNK_LIST_NEXT}" src="themes/images/b_right_disable.gif">&nbsp;
+										<img title="{$APP.LNK_LIST_NEXT}" src="{'b_right_disable.gif'|@vtiger_imageurl:$THEME}">&nbsp;
 									{/if}
 							</td>
 						<td width=35% align=right>
@@ -553,19 +553,19 @@ function sendfile_email()
                                 {/if}
 			{if $MODULE eq 'Contacts' || $EVENT_PERMISSION eq 'true'}	
 				<tr><td align="left" style="padding-left:10px;"> 
-			        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Events&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu"><img src="themes/images/AddEvent.gif" hspace="5" align="absmiddle"  border="0"/></a>
+			        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Events&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu"><img src="{'AddEvent.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle"  border="0"/></a>
                                 <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Events&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Event}</a>
                                 </td></tr>
 			{/if}
 	{if $TODO_PERMISSION eq 'true' && ($MODULE eq 'Accounts' || $MODULE eq 'Leads')}
                                 <tr><td align="left" style="padding-left:10px;">
-			        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu"><img src="themes/images/AddToDo.gif" hspace="5" align="absmiddle" border="0"/></a>
+			        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu"><img src="{'AddToDo.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle" border="0"/></a>
                                 <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Todo}</a>
 </td></tr>
 	{/if}
 	{if $MODULE eq 'Contacts' && $CONTACT_PERMISSION eq 'true'}
                                 <tr><td align="left" style="padding-left:10px;">
-			        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu"><img src="themes/images/AddToDo.gif" hspace="5" align="absmiddle" border="0"/></a>
+			        <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu"><img src="{'AddToDo.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle" border="0"/></a>
                                 <a href="index.php?module=Calendar&action=EditView&return_module={$MODULE}&return_action=DetailView&activity_mode=Task&return_id={$ID}&{$subst}={$ID}{$acc}&parenttab={$CATEGORY}" class="webMnu">{$APP.LBL_ADD_NEW} {$APP.Todo}</a>
 </td></tr>
 	{/if}
@@ -574,27 +574,27 @@ function sendfile_email()
 	{if $MODULE eq 'Documents'}
                                 <tr><td align="left" style="padding-left:10px;">			        
 				{if $DLD_TYPE eq 'I'}	
-					<br><a href="index.php?module=Documents&action=DownloadFile&fileid={$NOTESID}&folderid={$FOLDERID}" class="webMnu"><img src="themes/images/fbDownload.gif" hspace="5" align="absmiddle" title="{$APP.LNK_DOWNLOAD}" border="0"/></a>
+					<br><a href="index.php?module=Documents&action=DownloadFile&fileid={$NOTESID}&folderid={$FOLDERID}" class="webMnu"><img src="{'fbDownload.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle" title="{$APP.LNK_DOWNLOAD}" border="0"/></a>
                     <a href="index.php?module=Documents&action=DownloadFile&fileid={$NOTESID}&folderid={$FOLDERID}">{$MOD.LBL_DOWNLOAD_FILE}</a>
 				{elseif $DLD_TYPE eq 'E'}
-					<br><a href="{$DLD_PATH}" onclick="javascript:dldCntIncrease({$NOTESID});"><img src="themes/images/fbDownload.gif" align="absmiddle" title="{$APP.LNK_DOWNLOAD}" border="0"></a>
+					<br><a href="{$DLD_PATH}" onclick="javascript:dldCntIncrease({$NOTESID});"><img src="{'fbDownload.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" title="{$APP.LNK_DOWNLOAD}" border="0"></a>
 					<a href="{$DLD_PATH}" onclick="javascript:dldCntIncrease({$NOTESID});">{$MOD.LBL_DOWNLOAD_FILE}</a>
 				{/if}
 </td></tr>
 {if $CHECK_INTEGRITY_PERMISSION eq 'yes'}
 <tr><td align="left" style="padding-left:10px;">	
-					<br><a href="javascript:;" onClick="checkFileIntegrityDetailView({$NOTESID});"><img id="CheckIntegrity_img_id" src="themes/images/yes.gif" alt="Check integrity of this file" title="Check integrity of this file" hspace="5" align="absmiddle" border="0"/></a>
+					<br><a href="javascript:;" onClick="checkFileIntegrityDetailView({$NOTESID});"><img id="CheckIntegrity_img_id" src="{'images/yes.gif'|@vtiger_imageurl:$THEME}" alt="Check integrity of this file" title="Check integrity of this file" hspace="5" align="absmiddle" border="0"/></a>
                     <a href="javascript:;" onClick="checkFileIntegrityDetailView({$NOTESID});">{$MOD.LBL_CHECK_INTEGRITY}</a>&nbsp;
                     <input type="hidden" id="dldfilename" name="dldfilename" value="{$FILENAME}">
                     <span id="vtbusy_integrity_info" style="display:none;">
-						<img src="themes/images/vtbusy.gif" border="0"></span>
+						<img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span>
 					<span id="integrity_result" style="display:none"></span>						
 </td></tr>
 {/if}
 <tr><td align="left" style="padding-left:10px;">			        
 				{if $DLD_TYPE eq 'I'}	
 					<input type="hidden" id="dldfilename" name="dldfilename" value="{$FILENAME}">
-					<br><a href="javascript: document.DetailView.return_module.value='Documents'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='Documents'; document.DetailView.action.value='EmailFile'; document.DetailView.record.value={$NOTESID}; document.DetailView.return_id.value={$NOTESID}; sendfile_email();" class="webMnu"><img src="themes/images/attachment.gif" hspace="5" align="absmiddle" border="0"/></a>
+					<br><a href="javascript: document.DetailView.return_module.value='Documents'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='Documents'; document.DetailView.action.value='EmailFile'; document.DetailView.record.value={$NOTESID}; document.DetailView.return_id.value={$NOTESID}; sendfile_email();" class="webMnu"><img src="{'attachment.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle" border="0"/></a>
                     <a href="javascript: document.DetailView.return_module.value='Attachments'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='Documents'; document.DetailView.action.value='EmailFile'; document.DetailView.record.value={$NOTESID}; document.DetailView.return_id.value={$NOTESID}; sendfile_email();">{$MOD.LBL_EMAIL_FILE}</a>                                      
 				{/if}
 </td></tr>
@@ -719,7 +719,7 @@ getTagCloud();
 </script>
 </td>
 
-	<td align=right valign=top><img src="themes/images/showPanelTopRight.gif"></td>
+	<td align=right valign=top><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
 </tr></table>
 
 {if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts' or $MODULE eq 'Campaigns' or $MODULE eq 'Vendors'}

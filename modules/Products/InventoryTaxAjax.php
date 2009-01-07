@@ -26,7 +26,7 @@ $tax_div = '
 		   <tr>
 			<td id="tax_div_title'.$rowid.'" nowrap align="left" ><b>Set Tax for : '.$product_total.'</b></td>
 			<td>&nbsp;</td>
-			<td align="right"><img src="themes/images/close.gif" border="0" onClick="fnHidePopDiv(\'tax_div'.$rowid.'\')" style="cursor:pointer;"></td>
+			<td align="right"><img src="'. vtiger_imageurl('close.gif', $theme).'" border="0" onClick="fnHidePopDiv(\'tax_div'.$rowid.'\')" style="cursor:pointer;"></td>
 		   </tr>
 	   ';
 

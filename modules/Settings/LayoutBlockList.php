@@ -17,6 +17,7 @@ global $app_strings;
 $smarty=new vtigerCRM_Smarty;
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
+$smarty->assign("THEME", $theme);
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";

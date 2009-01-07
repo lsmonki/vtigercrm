@@ -97,6 +97,7 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("IDLIST", $idlist);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("FROM_MODULE", $pmodule);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 if($single_record && count($columnlists) > 0 && $val_cnt > 0)
 	$smarty->display("SelectEmail.tpl");

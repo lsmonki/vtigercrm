@@ -71,7 +71,7 @@ if(isPermitted("HelpDesk","Delete",$_REQUEST['record']) == 'yes')
 //Added button for Convert the ticket to FAQ
 if(isPermitted("Faq","EditView",'') == 'yes')
 	$smarty->assign("CONVERTASFAQ","permitted");
-
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 

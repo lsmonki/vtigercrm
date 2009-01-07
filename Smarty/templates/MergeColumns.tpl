@@ -104,7 +104,7 @@
 					</td>
 					<td valign="top" align="right" class="small">
 						<span>&nbsp;</span>
-						<span align="right" onClick="mergeshowhide('mergeDup')" onmouseover="this.style.cursor='pointer';"><img src="themes/images/close.gif" border="0"></span><br>
+						<span align="right" onClick="mergeshowhide('mergeDup')" onmouseover="this.style.cursor='pointer';"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0"></span><br>
 					</td>
 			   </tr>
 			   <tr><td colspan="3"></td></tr>

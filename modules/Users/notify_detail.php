@@ -46,7 +46,7 @@ $image_path="themes/images/";
     </tr>
     <tr >
       <td nowrap class="dataLabel"><?php echo $mod_strings['LBL_ACTIVE']; ?>: </td>
-      <td> <img src="yes.gif" alt="<?php echo $mod_strings['LBL_INACTIVE']; ?>" title="<?php echo $mod_strings['LBL_INACTIVE']; ?>" width="13" height="12" align="absmiddle"> 
+      <td> <img src="<?php echo vtiger_imageurl('yes.gif', $theme) ?>" alt="<?php echo $mod_strings['LBL_INACTIVE']; ?>" title="<?php echo $mod_strings['LBL_INACTIVE']; ?>" width="13" height="12" align="absmiddle"> 
         [<a href=#>Deactivate</a>]</td>
     </tr>
     <tr >

@@ -49,6 +49,7 @@ $user_list = getUserslist(false);
 $smarty->assign("CMOD", $mod_strings);
 $smarty->assign("MOD", $current_module_strings);
 $smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("USERLIST", $user_list);
 $smarty->assign("CATEGORY",$category);

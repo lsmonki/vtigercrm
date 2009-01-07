@@ -14,9 +14,9 @@
 	{assign var=label value=$ACTIVITIES.0.Title.0}
 	<table width="100%" border="0" cellpadding="0" cellspacing="0">
         	<tr>
-                <td><img src="themes/images/upcoming_left.gif" align="top"  /></td>
-                <td width="100%" background="themes/images/upcomingEvents.gif" style="background-repeat:repeat-x; "></td>
-				<td><img src="themes/images/upcoming_right.gif" align="top"  /></td>
+                <td><img src="{'upcoming_left.gif'|@vtiger_imageurl:$THEME}" align="top"  /></td>
+                <td width="100%" background="{'upcomingEvents.gif'|@vtiger_imageurl:$THEME}" style="background-repeat:repeat-x; "></td>
+				<td><img src="{'upcoming_right.gif'|@vtiger_imageurl:$THEME}" align="top"  /></td>
 		</tr>
 		<tr>
                         <td colspan="3" bgcolor="#FFFFCF" style="border-left:2px solid #A6A4A5;border-right:2px solid #A6A4A5;padding-left:10px;">

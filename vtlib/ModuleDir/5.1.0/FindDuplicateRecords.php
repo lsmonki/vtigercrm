@@ -93,6 +93,7 @@ if(isPermitted($req_module,'Delete','') == 'yes')
 $smarty->assign("DELETE",$button_del);
 
 $smarty->assign("MOD", return_module_language($current_language,$req_module));
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);

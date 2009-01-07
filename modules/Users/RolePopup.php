@@ -116,14 +116,14 @@ function indent($hrarray,$roleout,$role_det,$mask_roleid='')
 		$roleout .=  '<li >';
 		if(sizeof($value) >0 && $roledepth != 0)
 		{	
-			$roleout .= '<img src="themes/images/minus.gif" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" title="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" align="absmiddle" onClick="showhide(\''.$roleid_arr.'\',\'img_'.$roleid.'\')" style="cursor:pointer;">';
+			$roleout .= '<img src="' . vtiger_imageurl('minus.gif', $theme) . '" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" title="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" align="absmiddle" onClick="showhide(\''.$roleid_arr.'\',\'img_'.$roleid.'\')" style="cursor:pointer;">';
 		}
 		else if($roledepth != 0){
-			$roleout .= '<img src="themes/images/vtigerDevDocs.gif" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" title="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" align="absmiddle">';	
+			$roleout .= '<img src="' . vtiger_imageurl('vtigerDevDocs.gif', $theme) . '" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" title="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" align="absmiddle">';	
 		}
 		else
 		{
-			$roleout .= '<img src="themes/images/menu_root.gif" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_ROOT'].'" title="'.$app_strings['LBL_ROOT'].'" align="absmiddle">';
+			$roleout .= '<img src="' . vtiger_imageurl('menu_root.gif', $theme) .'" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_ROOT'].'" title="'.$app_strings['LBL_ROOT'].'" align="absmiddle">';
 		}
 		if($roledepth == 0 || in_array($roleid,$mask_roleid))
 		{
@@ -158,6 +158,7 @@ function indent($hrarray,$roleout,$role_det,$mask_roleid='')
 	return $roleout;
 }
 $smarty->assign("THEME",$theme_path);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);

@@ -36,7 +36,7 @@ DIV.fixedLay {
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="themes/images/showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
         <br>
 
@@ -45,7 +45,7 @@ DIV.fixedLay {
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="themes/images/shareaccess.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
+					<td width=50 rowspan=2 valign=top><img src="{'shareaccess.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_SHARING_ACCESS} </b></td>
 					<td rowspan=2 class="small" align=right>&nbsp;</td>
 				</tr>
@@ -80,9 +80,9 @@ DIV.fixedLay {
                     <td width="20%" class="colHeader small" nowrap>{$MODULELABEL}</td>
                     <td width="30%" class="listTableRow small" nowrap>
 					{if $module.1 neq 'Private' && $module.1 neq 'Hide Details'}
-						<img src="themes/images/public.gif" align="absmiddle">
+						<img src="{'public.gif'|@vtiger_imageurl:$THEME}" align="absmiddle">
 					{else}
-						<img src="themes/images/private.gif" align="absmiddle">
+						<img src="{'private.gif'|@vtiger_imageurl:$THEME}" align="absmiddle">
 					{/if}
 						{$CMOD[$module.1]}
 		    		</td>
@@ -117,7 +117,7 @@ DIV.fixedLay {
 				{if $details.0 neq ''}
 				<table width="100%" border="0" cellpadding="5" cellspacing="0" class="listTableTopButtons">
                   		<tr>
-		                    <td  style="padding-left:5px;" class="big"><img src="themes/images/arrow.jpg" width="19" height="21" align="absmiddle" />&nbsp; <b>{$mod_display}</b>&nbsp; </td>
+		                    <td  style="padding-left:5px;" class="big"><img src="{'arrow.jpg'|@vtiger_imageurl:$THEME}" width="19" height="21" align="absmiddle" />&nbsp; <b>{$mod_display}</b>&nbsp; </td>
                 		    <td align="right">
 					<input class="crmButton small save" type="button" name="Create" value="{$CMOD.LBL_ADD_PRIVILEGES_BUTTON}" onClick="callEditDiv(this,'{$modulename}','create','')">
 				    </td>
@@ -138,7 +138,7 @@ DIV.fixedLay {
                           <td class="listTableRow small">{$elements.2}</td>
                           <td class="listTableRow small">{$elements.3}</td>
                           <td align="center" class="listTableRow small">
-				<a href="javascript:void(0);" onClick="callEditDiv(this,'{$modulename}','edit','{$elements.0}')"><img src="themes/images/editfield.gif" title='edit' align="absmiddle" border=0 style="padding-top:3px;"></a>&nbsp;|<a href='javascript:confirmdelete("index.php?module=Users&action=DeleteSharingRule&shareid={$elements.0}")'><img src="themes/images/delete.gif" title='del' align="absmiddle" border=0></a></td>
+				<a href="javascript:void(0);" onClick="callEditDiv(this,'{$modulename}','edit','{$elements.0}')"><img src="{'editfield.gif'|@vtiger_imageurl:$THEME}" title='edit' align="absmiddle" border=0 style="padding-top:3px;"></a>&nbsp;|<a href='javascript:confirmdelete("index.php?module=Users&action=DeleteSharingRule&shareid={$elements.0}")'><img src="{'delete.gif'|@vtiger_imageurl:$THEME}" title='del' align="absmiddle" border=0></a></td>
                         </tr>
 
                      {/foreach} 
@@ -153,7 +153,7 @@ DIV.fixedLay {
                     <table width="100%" cellpadding="0" cellspacing="0" class="listTable"><tr><td>
 		      <table width="100%" border="0" cellpadding="5" cellspacing="0" class="listTableTopButtons">
                       <tr>
-                        <td  style="padding-left:5px;" class="big"><img src="themes/images/arrow.jpg" width="19" height="21" align="absmiddle" />&nbsp; <b>{$mod_display}</b>&nbsp; </td>
+                        <td  style="padding-left:5px;" class="big"><img src="{'arrow.jpg'|@vtiger_imageurl:$THEME}" width="19" height="21" align="absmiddle" />&nbsp; <b>{$mod_display}</b>&nbsp; </td>
                         <td align="right">
 				<input class="crmButton small save" type="button" name="Create" value="{$APP.LBL_ADD_ITEM} {$CMOD.LBL_PRIVILEGES}" onClick="callEditDiv(this,'{$modulename}','create','')">
 			</td>
@@ -195,7 +195,7 @@ DIV.fixedLay {
 		
 	</div>
 </td>
-        <td valign="top"><img src="themes/images/showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </tbody>
 </table>
@@ -220,7 +220,7 @@ DIV.fixedLay {
 <table border="5" cellpadding="0" cellspacing="0" align="center" style="vertical-align:middle;width:100%;height:100%;">
 <tbody><tr>
 		<td class="big" align="center">
-		    <img src="themes/images/plsWaitAnimated.gif">
+		    <img src="{'plsWaitAnimated.gif'|@vtiger_imageurl:$THEME}">
 		</td>
 	</tr>
 </tbody>

@@ -24,7 +24,7 @@
 				</td>
 			<td width="40%" align="right">
 				<a href="javascript:void;" id="new_task_popup_close">
-					<img border="0" align="absmiddle" src="themes/images/close.gif"/>
+					<img border="0" align="absmiddle" src="{'close.gif'|@vtiger_imageurl:$THEME}"/>
 				</a>
 			</td>
 		</tr>
@@ -162,11 +162,11 @@
 				<a href="{$module->editTaskUrl($task->id)}">
 					<img border="0" title="Edit" alt="Edit" \
 						style="cursor: pointer;" id="expressionlist_editlink_{$task->id}" \
-						src="themes/images/editfield.gif"/>
+						src="{'editfield.gif'|@vtiger_imageurl:$THEME}"/>
 				</a>
 				<a href="{$module->deleteTaskUrl($task->id)}">
 					<img border="0" title="Delete" alt="Delete"\
-			 			src="themes/images/delete.gif" \
+			 			src="{'delete.gif'|@vtiger_imageurl:$THEME}" \
 						style="cursor: pointer;" id="expressionlist_deletelink_{$task->id}"/>
 				</a>
 			</td>

@@ -12,7 +12,7 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="themes/images/showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
         <br>
 
@@ -21,7 +21,7 @@
 			<!-- DISPLAY -->
 				<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tr>
-					<td rowspan="2" valign="top" width="50"><img src="themes/images/custom.gif" alt="{$MOD.LBL_USERS}" title="{$MOD.LBL_USERS}" border="0" height="48" width="48"></td>
+					<td rowspan="2" valign="top" width="50"><img src="{'custom.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_USERS}" title="{$MOD.LBL_USERS}" border="0" height="48" width="48"></td>
 					<td class="heading2" valign="bottom"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> &gt; {$MOD.LBL_CUSTOM_FIELD_SETTINGS}</b></td>
 				</tr>
 
@@ -139,7 +139,7 @@
         </div>
 
         </td>
-        <td valign="top"><img src="themes/images/showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
         </tr>
 </tbody>
 </table>

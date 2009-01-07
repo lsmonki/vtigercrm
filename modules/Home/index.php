@@ -36,6 +36,7 @@ $smarty = new vtigerCRM_Smarty;
 $homeObj=new Homestuff;
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
+$smarty->assign("THEME", $theme);
 $_REQUEST['search_form'] = 'false';
 $_REQUEST['query'] = 'true';
 $_REQUEST['status'] = 'In Progress--Not Started';

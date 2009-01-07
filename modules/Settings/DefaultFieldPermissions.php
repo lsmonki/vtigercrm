@@ -55,7 +55,7 @@ else
 function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 {
 	global $adb;
-	global $image_path;
+	global $image_path,$theme;
 	$standCustFld = Array();		
 	for($i=0; $i<$noofrows; $i++)
 	{
@@ -71,11 +71,11 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 		
 		if($adb->query_result($fieldListResult,$i,"visible") == 0 || ($uitype == 117 && $fieldtype[1] == "M"))
 		{
-			$visible ="<img src=themes/images/prvPrfSelectedTick.gif>";
+			$visible ="<img src='" . vtiger_imageurl('prvPrfSelectedTick.gif', $theme) . "'>";
 		}
 		else
 		{
-			$visible = "<img src=themes/images/no.gif>";
+			$visible = "<img src='" . vtiger_imageurl('no.gif', $theme) . "'>";
 		}	
 		$standCustFld []= $visible;
 	}
@@ -87,6 +87,7 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 $smarty->assign("FIELD_INFO",$field_module);
 $smarty->assign("FIELD_LISTS",$allfields);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);

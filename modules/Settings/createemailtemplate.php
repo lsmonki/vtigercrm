@@ -31,6 +31,7 @@ $smarty = new vtigerCRM_smarty;
 
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign("THEME", $theme);
 $smarty->assign("THEME_PATH", $theme_path);
 $smarty->assign("UMOD", $mod_strings);
 $smarty->assign("PARENTTAB", htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));

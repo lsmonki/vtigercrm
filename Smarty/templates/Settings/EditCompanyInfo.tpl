@@ -14,7 +14,7 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="themes/images/showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 <br>
 	<form action="index.php?module=Settings&action=add2db" method="post" name="index" enctype="multipart/form-data">
@@ -26,7 +26,7 @@
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="themes/images/company.gif" width="48" height="48" border=0 ></td>
+					<td width=50 rowspan=2 valign=top><img src="{'company.gif'|@vtiger_imageurl:$THEME}" width="48" height="48" border=0 ></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_EDIT} {$MOD.LBL_COMPANY_DETAILS} </b></td>
 				</tr>
 				<tr>
@@ -134,7 +134,7 @@
 	</div>
 	</form>		
 </td>
-        <td valign="top"><img src="themes/images/showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </tbody>
 </table>

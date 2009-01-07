@@ -36,6 +36,7 @@ $image_path=$theme_path."images/";
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
 
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 

@@ -267,7 +267,7 @@ if($mode == 'edit')
     	$output .=$mod_strings[LBL_EDIT_CUSTOM_RULE].'</td>';
 else
 	$output .=$mod_strings[LBL_ADD_CUSTOM_RULE].'</td>';
-$output .= '<td align="right" class="small"><img src="themes/images/close.gif" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="hide(\'sharingRule\')";></td>
+$output .= '<td align="right" class="small"><img src="'. vtiger_imageurl('close.gif', $theme).'" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="hide(\'sharingRule\')";></td>
 
 </tr>
 </table>

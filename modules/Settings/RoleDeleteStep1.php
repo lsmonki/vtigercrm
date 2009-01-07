@@ -24,6 +24,7 @@ global $mod_strings;
 $smarty=new vtigerCRM_Smarty;
 $smarty->assign("APP", $app_strings);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("THEME", $theme);
 $smarty->assign("CMOD", $mod_strings);
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -32,7 +33,7 @@ $smarty->assign("IMAGE_PATH",$image_path);
 
 $smarty->assign("ROLEID", $delete_role_id);
 $smarty->assign("ROLENAME", $delete_role_name);
-$opt = '<a href="javascript:openPopup(\''.$delete_role_id.'\');"><img src="'.$image_path.'select.gif" border="0" align="absmiddle"></a>';
+$opt = '<a href="javascript:openPopup(\''.$delete_role_id.'\');"><img src="' . vtiger_imageurl('select.gif', $theme) . '" border="0" align="absmiddle"></a>';
 $smarty->assign("ROLEPOPUPBUTTON", $opt);
 $smarty->display("DeleteRole.tpl");
 

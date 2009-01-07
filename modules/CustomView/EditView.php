@@ -34,6 +34,7 @@ $recordid = $_REQUEST['record'];
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("CATEGORY", htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
 $smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("MODULE",$cv_module);
 $smarty->assign("CVMODULE", $cv_module);
@@ -173,7 +174,7 @@ else
 		echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
 			<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tbody><tr>
-			<td rowspan='2' width='11%'><img src='themes/images/denied.gif' ></td>
+			<td rowspan='2' width='11%'><img src='". vtiger_imageurl('denied.gif', $theme)."' ></td>
 			<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>$app_strings[LBL_PERMISSION]</span></td>
 			</tr>
 			<tr>
@@ -268,7 +269,7 @@ $smarty->display("CustomView.tpl");
 
 function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 {
-	global $oCustomView, $current_language;
+	global $oCustomView, $current_language,$theme;
 	global $app_list_strings;
 	$advfilter = array();
 	$mod_strings = return_specified_module_language($current_language,$module);

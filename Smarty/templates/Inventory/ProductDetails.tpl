@@ -167,7 +167,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 			<td class="small">
 				<input type="text" id="productName1" name="productName1" class="small" style="width:70%" value="{$PRODUCT_NAME}" readonly />
 				<input type="hidden" id="hdnProductId1" name="hdnProductId1" value="{$PRODUCT_ID}">
-				<img src="themes/images/search.gif" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}',1)" />
+				<img src="{'search.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}',1)" />
 			</td>
 		   </tr>
 		   <tr>
@@ -200,7 +200,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		<table width="100%" cellpadding="0" cellspacing="0">
 		   <tr>
 			<td align="right">
-				<input id="listPrice1" name="listPrice1" value="{$UNIT_PRICE}" type="text" class="small " style="width:70px" onBlur="calcTotal();setDiscount(this,'1'); callTaxCalc(1);calcTotal();"/>&nbsp;<img src="themes/images/pricebook.gif" onclick="priceBookPickList(this,1)">
+				<input id="listPrice1" name="listPrice1" value="{$UNIT_PRICE}" type="text" class="small " style="width:70px" onBlur="calcTotal();setDiscount(this,'1'); callTaxCalc(1);calcTotal();"/>&nbsp;<img src="{'pricebook.gif'|@vtiger_imageurl:$THEME}" onclick="priceBookPickList(this,1)">
 			</td>
 		   </tr>
 		   <tr>
@@ -211,7 +211,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 					   <tr>
 						<td id="discount_div_title1" nowrap align="left" ></td>
-						<td align="right"><img src="themes/images/close.gif" border="0" onClick="fnHidePopDiv('discount_div1')" style="cursor:pointer;"></td>
+						<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('discount_div1')" style="cursor:pointer;"></td>
 					   </tr>
 					   <tr>
 						<td align="left" class="lineOnTop"><input type="radio" name="discount1" checked onclick="setDiscount(this,1); callTaxCalc(1);calcTotal();">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
@@ -311,7 +311,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 			<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 			   <tr>
 				<td id="discount_div_title_final" nowrap align="left" ></td>
-				<td align="right"><img src="themes/images/close.gif" border="0" onClick="fnHidePopDiv('discount_div_final')" style="cursor:pointer;"></td>
+				<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('discount_div_final')" style="cursor:pointer;"></td>
 			   </tr>
 			   <tr>
 				<td align="left" class="lineOnTop"><input type="radio" name="discount_final" checked onclick="setDiscount(this,'_final'); calcGroupTax();calcTotal();">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
@@ -343,7 +343,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 					   <tr>
 						<td id="group_tax_div_title" colspan="2" nowrap align="left" ></td>
-						<td align="right"><img src="themes/images/close.gif" border="0" onClick="fnHidePopDiv('group_tax_div')" style="cursor:pointer;"></td>
+						<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('group_tax_div')" style="cursor:pointer;"></td>
 					   </tr>
 
 					{foreach item=tax_detail name=group_tax_loop key=loop_count from=$GROUP_TAXES}
@@ -392,7 +392,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 					   <tr>
 						<td id="sh_tax_div_title" colspan="2" nowrap align="left" ></td>
-						<td align="right"><img src="themes/images/close.gif" border="0" onClick="fnHidePopDiv('shipping_handling_div')" style="cursor:pointer;"></td>
+						<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('shipping_handling_div')" style="cursor:pointer;"></td>
 					   </tr>
 
 					{foreach item=tax_detail name=sh_loop key=loop_count from=$SH_TAXES}

@@ -68,6 +68,7 @@ if(isset($query_string) && $query_string != '')//preg_match("/[\w]/", $_REQUEST[
 
 			$smarty->assign("MOD", $mod_strings);
 			$smarty->assign("APP", $app_strings);
+			$smarty->assign("THEME", $theme);
 			$smarty->assign("IMAGE_PATH",$image_path);
 			$smarty->assign("MODULE",$module);
 			$smarty->assign("SEARCH_MODULE",$_REQUEST['search_module']);

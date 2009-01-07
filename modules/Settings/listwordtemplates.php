@@ -48,6 +48,7 @@ global $current_language;
 $smod_strings = return_module_language($current_language,'Settings');
 $smarty->assign("MOD", $smod_strings);
 $smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("UMOD", $mod_strings);
 $smarty->assign("PARENTTAB", htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
 $smarty->assign("IMAGE_PATH",$image_path);

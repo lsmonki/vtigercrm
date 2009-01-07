@@ -71,7 +71,7 @@ function outBar($val,$image_path,$singleUnit)
 	{
 		$scale = 1;
 	}
-        $out = '<img src=/themes/images/bl_bar.jpg height=10 width='. $scale .'%>';
+        $out = '<img src="' .vtiger_imageurl('bl_br.jpg', $theme).'" height=10 width='. $scale .'%>';
         $out .= str_pad($val, (3-strlen(strval($val)))*12 + strlen(strval($val)), "&nbsp;&nbsp;", STR_PAD_LEFT);
 
 	$log->debug("Exiting outBar method ...");

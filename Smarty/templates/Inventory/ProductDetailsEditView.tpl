@@ -177,13 +177,13 @@ function displayCoords(currObj,obj,mode,curr_row)
 	<!-- column 1 - delete link - starts -->
 	<td  class="crmTableRow small lineOnTop">
 		{if $row_no neq 1}
-			<img src="themes/images/delete.gif" border="0" onclick="deleteRow('{$MODULE}',{$row_no},'{$IMAGE_PATH}')">
+			<img src="{'delete.gif'|@vtiger_imageurl:$THEME}" border="0" onclick="deleteRow('{$MODULE}',{$row_no},'{$IMAGE_PATH}')">
 		{/if}<br/><br/>
 		{if $row_no neq 1}
-			&nbsp;<a href="javascript:moveUpDown('UP','{$MODULE}',{$row_no})" title="Move Upward"><img src="themes/images/up_layout.gif" border="0"></a>
+			&nbsp;<a href="javascript:moveUpDown('UP','{$MODULE}',{$row_no})" title="Move Upward"><img src="{'up_layout.gif'|@vtiger_imageurl:$THEME}" border="0"></a>
 		{/if}
 		{if not $smarty.foreach.outer1.last}
-			&nbsp;<a href="javascript:moveUpDown('DOWN','{$MODULE}',{$row_no})" title="Move Downward"><img src="themes/images/down_layout.gif" border="0" ></a>
+			&nbsp;<a href="javascript:moveUpDown('DOWN','{$MODULE}',{$row_no})" title="Move Downward"><img src="{'down_layout.gif'|@vtiger_imageurl:$THEME}" border="0" ></a>
 		{/if}
 		<input type="hidden" id="{$deleted}" name="{$deleted}" value="0">
 	</td>
@@ -199,7 +199,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 				<input type="text" id="{$productName}" name="{$productName}" value="{$data.$productName}" class="small" readonly />
 				<input type="hidden" id="{$hdnProductId}" name="{$hdnProductId}" value="{$data.$hdnProductId}">
 				<input type="hidden" id="{$productDescription}" name="{$productDescription}" value="{$data.$productDescription}">
-				<img src="themes/images/search.gif" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}','{$row_no}')" />
+				<img src="{'search.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}','{$row_no}')" />
 			</td>
 		   </tr>
 		   <tr>
@@ -231,7 +231,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		<table width="100%" cellpadding="0" cellspacing="0">
 		   <tr>
 			<td align="right">
-				<input id="{$listPrice}" name="{$listPrice}" value="{$data.$listPrice}" type="text" class="small " style="width:70px" onBlur="calcTotal(); setDiscount(this,'{$row_no}');callTaxCalc('{$row_no}');"/>&nbsp;<img src="themes/images/pricebook.gif" onclick="priceBookPickList(this,'{$row_no}')">
+				<input id="{$listPrice}" name="{$listPrice}" value="{$data.$listPrice}" type="text" class="small " style="width:70px" onBlur="calcTotal(); setDiscount(this,'{$row_no}');callTaxCalc('{$row_no}');"/>&nbsp;<img src="{'pricebook.gif'|@vtiger_imageurl:$THEME}" onclick="priceBookPickList(this,'{$row_no}')">
 			</td>
 		   </tr>
 		   <tr>
@@ -242,7 +242,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 					   <tr>
 						<td id="discount_div_title{$row_no}" nowrap align="left" ></td>
-						<td align="right"><img src="themes/images/close.gif" border="0" onClick="fnHidePopDiv('discount_div{$row_no}')" style="cursor:pointer;"></td>
+						<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('discount_div{$row_no}')" style="cursor:pointer;"></td>
 					   </tr>
 					   <tr>
 						<td align="left" class="lineOnTop"><input type="radio" name="discount{$row_no}" {$data.$checked_discount_zero} onclick="setDiscount(this,'{$row_no}'); callTaxCalc('{$row_no}');calcTotal();">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
@@ -274,7 +274,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 					   <tr>
 						<td id="tax_div_title{$row_no}" nowrap align="left" ><b>Set Tax for : {$data.$totalAfterDiscount}</b></td>
 						<td>&nbsp;</td>
-						<td align="right"><img src="themes/images/close.gif" border="0" onClick="fnHidePopDiv('tax_div{$row_no}')" style="cursor:pointer;"></td>
+						<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('tax_div{$row_no}')" style="cursor:pointer;"></td>
 					   </tr>
 
 					{foreach key=tax_row_no item=tax_data from=$data.taxes}
@@ -372,7 +372,7 @@ so we will get that array, parse that array and fill the details
 			<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 			   <tr>
 				<td id="discount_div_title_final" nowrap align="left" ></td>
-				<td align="right"><img src="themes/images/close.gif" border="0" onClick="fnHidePopDiv('discount_div_final')" style="cursor:pointer;"></td>
+				<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('discount_div_final')" style="cursor:pointer;"></td>
 			   </tr>
 			   <tr>
 				<td align="left" class="lineOnTop"><input type="radio" name="discount_final" checked onclick="setDiscount(this,'_final'); calcGroupTax(); calcTotal();">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
@@ -406,7 +406,7 @@ so we will get that array, parse that array and fill the details
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 					   <tr>
 						<td id="group_tax_div_title" colspan="2" nowrap align="left" ></td>
-						<td align="right"><img src="themes/images/close.gif" border="0" onClick="fnHidePopDiv('group_tax_div')" style="cursor:pointer;"></td>
+						<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('group_tax_div')" style="cursor:pointer;"></td>
 					   </tr>
 
 					{foreach item=tax_detail name=group_tax_loop key=loop_count from=$FINAL.taxes}
@@ -458,7 +458,7 @@ so we will get that array, parse that array and fill the details
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 					   <tr>
 						<td id="sh_tax_div_title" colspan="2" nowrap align="left" ></td>
-						<td align="right"><img src="themes/images/close.gif" border="0" onClick="fnHidePopDiv('shipping_handling_div')" style="cursor:pointer;"></td>
+						<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('shipping_handling_div')" style="cursor:pointer;"></td>
 					   </tr>
 
 					{foreach item=tax_detail name=sh_loop key=loop_count from=$FINAL.sh_taxes}

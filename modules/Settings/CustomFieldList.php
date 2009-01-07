@@ -16,6 +16,7 @@ global $mod_strings,$app_strings,$theme;
 $smarty=new vtigerCRM_Smarty;
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
+$smarty->assign("THEME", $theme);
 $theme_path="themes/".$theme."/";
 $image_path="themes/images/";
 $smarty->assign("IMAGE_PATH", $image_path);
@@ -105,7 +106,7 @@ function getCFListEntries($module)
 				$cf_element[]= $mapping_details['contactlabel'];
 				$cf_element[]= $mapping_details['potentiallabel'];
 			}
-			$cf_element['tool']='<img src="'.$image_path.'editfield.gif" border="0" style="cursor:pointer;" onClick="fnvshobj(this,\'createcf\');getCreateCustomFieldForm(\''.$module.'\',\''.$row["fieldid"].'\',\''.$tabid.'\',\''.$row["uitype"].'\')" alt="'.$app_strings['LBL_EDIT_BUTTON_LABEL'].'" title="'.$app_strings['LBL_EDIT_BUTTON_LABEL'].'"/>&nbsp;|&nbsp;<img style="cursor:pointer;" onClick="deleteCustomField('.$row["fieldid"].',\''.$module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')" src="'.$image_path.'delete.gif" border="0"  alt="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'" title="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'"/></a>';
+			$cf_element['tool']='<img src="' .vtiger_imageurl('editfield.gif', $theme) .'" border="0" style="cursor:pointer;" onClick="fnvshobj(this,\'createcf\');getCreateCustomFieldForm(\''.$module.'\',\''.$row["fieldid"].'\',\''.$tabid.'\',\''.$row["uitype"].'\')" alt="'.$app_strings['LBL_EDIT_BUTTON_LABEL'].'" title="'.$app_strings['LBL_EDIT_BUTTON_LABEL'].'"/>&nbsp;|&nbsp;<img style="cursor:pointer;" onClick="deleteCustomField('.$row["fieldid"].',\''.$module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')" src="'.vtiger_imageurl('delete.gif', $theme) .'" border="0"  alt="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'" title="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'"/></a>';
 
 			$cflist[] = $cf_element;
 			$count++;

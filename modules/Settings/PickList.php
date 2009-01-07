@@ -57,6 +57,7 @@ $picklist_fields = array_chunk(array_pad($picklists_entries,$value,''),3);
 $smarty->assign("MODULE",$fld_module);
 $smarty->assign("PICKLIST_VALUES",$picklist_fields);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);

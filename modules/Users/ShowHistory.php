@@ -67,6 +67,7 @@ $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Use
 $smarty->assign("CMOD", $mod_strings);
 $smarty->assign("MOD", return_module_language($current_language, "Settings"));
 $smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("LIST_HEADER",$focus->getHistoryListViewHeader());
 $smarty->assign("LIST_ENTRIES",$focus->getHistoryListViewEntries($username, $navigation_array, $sorder, $sortby));

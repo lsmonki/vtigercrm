@@ -42,6 +42,7 @@ $smarty->assign('MODULE', $currentModule);
 // TODO: Update Single Module Instance name here.
 $smarty->assign('SINGLE_MOD', $currentModule);
 $smarty->assign('CATEGORY', $category);
+$smarty->assign("THEME", $theme);
 $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
 $smarty->assign('ID', $focus->id);
 $smarty->assign('MODE', $focus->mode);

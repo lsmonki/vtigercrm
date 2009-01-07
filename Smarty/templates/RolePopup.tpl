@@ -12,7 +12,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-<style type="text/css">@import url("{$THEME}style.css");</style>
+<style type="text/css">@import url("themes/{$THEME}/style.css");</style>
 <style type="text/css">
 	a.x {ldelim}
 		color:black;

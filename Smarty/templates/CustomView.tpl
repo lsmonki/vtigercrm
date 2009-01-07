@@ -109,7 +109,7 @@ function mandatoryCheck()
 
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
  <tbody><tr>
-  <td valign="top"><img src="themes/images/showPanelTopLeft.gif"></td>
+  <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
   <td class="showPanelBg" valign="top" width="100%">
    <div class="small" style="padding: 20px;">
 	<span class="lvtHeaderText"><a class="hdrLink" href="index.php?action=ListView&module={$MODULE}&parenttab={$CATEGORY}">{$APP.$MODULE}</a> &gt;

@@ -84,6 +84,7 @@ $roleInfoArr=getRoleInformation($roleid);
 $rolename=$roleInfoArr[$roleid][0];
 $smarty->assign("ROLE_NAME",$rolename);
 $smarty->assign("ROLEID",$roleid);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("APP", $app_strings);

@@ -101,7 +101,7 @@ function massDelete()
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="themes/images/showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 <br>
 	<div align=center>
@@ -115,7 +115,7 @@ function massDelete()
     				<input name="module" type="hidden" value="Settings">
     				<input name="action" type="hidden" value="deleteemailtemplate">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="themes/images/ViewTemplate.gif" border=0></td>
+					<td width=50 rowspan=2 valign=top><img src="{'ViewTemplate.gif'|@vtiger_imageurl:$THEME}" border=0></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$UMOD.LBL_EMAIL_TEMPLATES} </b></td>
 				</tr>
 				<tr>
@@ -185,7 +185,7 @@ function massDelete()
 		
 	</div>
 </td>
-        <td valign="top"><img src="themes/images/showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </tbody>
 </table>

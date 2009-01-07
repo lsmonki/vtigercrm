@@ -12,25 +12,25 @@
 		</td>
 			<td align="right" class="homePageMatrixHdr" style="height:30px;" width=35% nowrap>
 				{if ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq "Key Metrics") && ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq "Home Page Dashboard")}
-				<a id="editlink" style='cursor:pointer;' onclick="showEditrow({$tablestuff.Stuffid},'{$tablestuff.Stufftype}')"><img src="themes/images/windowSettings.gif" border="0" alt="Edit" title="Edit" hspace="2" align="absmiddle"/></a>	
+				<a id="editlink" style='cursor:pointer;' onclick="showEditrow({$tablestuff.Stuffid},'{$tablestuff.Stufftype}')"><img src="{'windowSettings.gif'|@vtiger_imageurl:$THEME}" border="0" alt="Edit" title="Edit" hspace="2" align="absmiddle"/></a>	
 				{else}
-					<img src="themes/images/windowSettings-off.gif" border="0" alt="Edit" title="Edit" hspace="2" align="absmiddle"/>
+					<img src="{'windowSettings-off.gif'|@vtiger_imageurl:$THEME}" border="0" alt="Edit" title="Edit" hspace="2" align="absmiddle"/>
 				{/if}
 
 				{if $tablestuff.Stufftitle eq "Home Page Dashboard"}
-					<a style='cursor:pointer;' onclick="fetch_homeDB({$tablestuff.Stuffid},'{$tablestuff.Stufftype}');"><img src="themes/images/windowRefresh.gif" border="0" alt="Refresh" title="Refresh" hspace="2" align="absmiddle"/></a>
+					<a style='cursor:pointer;' onclick="fetch_homeDB({$tablestuff.Stuffid},'{$tablestuff.Stufftype}');"><img src="{'windowRefresh.gif'|@vtiger_imageurl:$THEME}" border="0" alt="Refresh" title="Refresh" hspace="2" align="absmiddle"/></a>
 				{else}
-					<a style='cursor:pointer;' onclick="loadStuff({$tablestuff.Stuffid},'{$tablestuff.Stufftype}');"><img src="themes/images/windowRefresh.gif" border="0" alt="Refresh" title="Refresh" hspace="2" align="absmiddle"/></a>
+					<a style='cursor:pointer;' onclick="loadStuff({$tablestuff.Stuffid},'{$tablestuff.Stufftype}');"><img src="{'windowRefresh.gif'|@vtiger_imageurl:$THEME}" border="0" alt="Refresh" title="Refresh" hspace="2" align="absmiddle"/></a>
 				{/if}
 				{if $tablestuff.Stufftype eq "Default"}
-					<a style='cursor:pointer;' onclick="HideDefault({$tablestuff.Stuffid}),'{$tablestuff.Stufftype}'"><img src="themes/images/windowMinMax.gif" border="0" alt="Hide" title="Hide" hspace="5" align="absmiddle"/></a>
+					<a style='cursor:pointer;' onclick="HideDefault({$tablestuff.Stuffid}),'{$tablestuff.Stufftype}'"><img src="{'windowMinMax.gif'|@vtiger_imageurl:$THEME}" border="0" alt="Hide" title="Hide" hspace="5" align="absmiddle"/></a>
 				{else}
-					<img src="themes/images/windowMinMax-off.gif" border="0" alt="Hide" title="Hide" hspace="5" align="absmiddle"/>
+					<img src="{'windowMinMax-off.gif'|@vtiger_imageurl:$THEME}" border="0" alt="Hide" title="Hide" hspace="5" align="absmiddle"/>
 				{/if}
 				{if $tablestuff.Stufftype neq "Default"}
-					<a id="deletelink" style='cursor:pointer;' onclick="DelStuff({$tablestuff.Stuffid})"><img src="themes/images/windowClose.gif" border="0" alt="Close" title="Close" hspace="5" align="absmiddle"/></a>
+					<a id="deletelink" style='cursor:pointer;' onclick="DelStuff({$tablestuff.Stuffid})"><img src="{'windowClose.gif'|@vtiger_imageurl:$THEME}" border="0" alt="Close" title="Close" hspace="5" align="absmiddle"/></a>
 				{else}
-					<img src="themes/images/windowClose-off.gif" border="0" alt="Close" title="Close" hspace="5" align="absmiddle"/>
+					<img src="{'windowClose-off.gif'|@vtiger_imageurl:$THEME}" border="0" alt="Close" title="Close" hspace="5" align="absmiddle"/>
 				{/if}
 			</td>
 		</tr>

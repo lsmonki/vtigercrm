@@ -19,7 +19,7 @@
 	</tr>
 	<tr>
 	<td style="padding-right: 5px;" rowspan="2" align="right" width="25%">
-	<img src="themes/images/tabular.gif" align="absmiddle">
+	<img src="{'tabular.gif'|@vtiger_imageurl:$THEME}" align="absmiddle">
 	</td>
 	<td style="padding-left: 5px;" align="left" height="50" valign="bottom" width="75%">
 	{if $REPORT_TYPE eq 'tabular'}
@@ -35,7 +35,7 @@
 	<tr><td colspan="2">&nbsp;</td></tr>
 	<tr>
 	<td style="padding-right: 5px;" rowspan="2" align="right" width="25%">
-	<img src="themes/images/summarize.gif" align="absmiddle">
+	<img src="{'summarize.gif'|@vtiger_imageurl:$THEME}" align="absmiddle">
 	</td>
 	<td style="padding-left: 5px;" align="left" height="50" valign="bottom" width="75%">
 	{if $REPORT_TYPE eq 'summary'}

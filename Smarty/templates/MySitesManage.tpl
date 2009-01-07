@@ -15,7 +15,7 @@
 	<td colwidth=90% align=left class=small>
 		<table border=0 cellspacing=0 cellpadding=5>
 		<tr>
-			<td align=left><a href="#" onclick="fetchContents('data');"><img src="themes/images/webmail_settings.gif" align="absmiddle" border=0 /></a></td>
+			<td align=left><a href="#" onclick="fetchContents('data');"><img src="{'webmail_settings.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" border=0 /></a></td>
 			<td class=small align=left><a href="#" onclick="fetchContents('data');">{$MOD.LBL_MY_SITES}</a></td>
 		</tr>
 		</table>

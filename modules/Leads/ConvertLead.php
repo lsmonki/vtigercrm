@@ -102,8 +102,8 @@ $convertlead = '<form name="ConvertLead" method="POST" action="index.php">
 	<div id="orgLay" style="display: block;" class="layerPopup" >
 	<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 		<tr>
-			<td class="genHeaderSmall" align="left"><IMG src="themes/images/Leads.gif">'.$mod_strings['LBL_CONVERT_LEAD'].' '.$firstname.' '.$lastname.'</td>
-			<td align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="themes/images/close.gif" align="absmiddle" border="0"></a></td>
+			<td class="genHeaderSmall" align="left"><IMG src="'. vtiger_imageurl('Leads.gif', $theme).'">'.$mod_strings['LBL_CONVERT_LEAD'].' '.$firstname.' '.$lastname.'</td>
+			<td align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'. vtiger_imageurl('close.gif', $theme).'" align="absmiddle" border="0"></a></td>
 		</tr>
 		</table>
 	

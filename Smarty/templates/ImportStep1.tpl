@@ -39,7 +39,7 @@ function validateFile(form)
 
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%" class="small">
    <tr>
-	<td valign="top"><img src="themes/images/showPanelTopLeft.gif" /></td>
+	<td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"/></td>
 	<td class="showPanelBg" valign="top" width="100%">
 
 		<!-- Import UI Starts -->
@@ -138,7 +138,7 @@ function validateFile(form)
 		</table>
 
 	</td>
-	<td valign="top"><img src="themes/images/showPanelTopRight.gif" /></td>
+	<td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}" /></td>
    </tr>
 </table>
 <br>

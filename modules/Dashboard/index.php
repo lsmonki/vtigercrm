@@ -86,8 +86,8 @@ if(isset($_REQUEST['type']) && $_REQUEST['type'] != '')
 			<td class=small>
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
-					<td style="padding-right:0px;padding-left:10px;"><img src="themes/images/btnL3Add-Faded.gif" border=0></td>	
-					 <td style="padding-right:10px"><img src="themes/images/btnL3Search-Faded.gif" border=0></td>
+					<td style="padding-right:0px;padding-left:10px;"><img src="<?php echo vtiger_imageurl('btnL3Add-Faded.gif', $theme) ?>" border=0></td>	
+					 <td style="padding-right:10px"><img src="<?php echo vtiger_imageurl('btnL3Search-Faded.gif', $theme) ?>" border=0></td>
 				</tr>
 				</table>
 	</td>
@@ -130,8 +130,8 @@ if($CHAT_DISPLAY == 'true') {
                <td class="small" align="left" width="5%">
 		<table border=0 cellspacing=0 cellpadding=5>
 			<tr>
-				<td style="padding-right:0px;padding-left:10px;"><img src="themes/images/tbarImport-Faded.gif" border="0"></td>
-                <td style="padding-right:10px"><img src="themes/images/tbarExport-Faded.gif" border="0"></td>
+				<td style="padding-right:0px;padding-left:10px;"><img src="<?php echo vtiger_imageurl('tbarImport-Faded.gif', $theme) ?>" border="0"></td>
+                <td style="padding-right:10px"><img src="<?php echo vtiger_imageurl('tbarExport-Faded.gif', $theme) ?>" border="0"></td>
 			</tr>
 		</table>	
 	</td>
@@ -156,7 +156,7 @@ if($CHAT_DISPLAY == 'true') {
 <a name="top"></a>
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
      <tr>
-        <td valign=top><img src="themes/images/showPanelTopLeft.gif"></td>
+        <td valign=top><img src="<?php echo vtiger_imageurl('showPanelTopLeft.gif', $theme) ?>"></td>
 
 	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
 
@@ -203,9 +203,9 @@ if($CHAT_DISPLAY == 'true') {
 						</td>
 					</tr>
 					<tr>
-						<td class="dash_border" width="1%"><img src="themes/images/dash_screw.gif" border="0" align="absmiddle"></td>
+						<td class="dash_border" width="1%"><img src="<?php echo vtiger_imageurl('dash_screw.gif', $theme) ?>" border="0" align="absmiddle"></td>
 						<td class="hdrNameBg small" style="height: 12px;" width="98%">&nbsp;</td>
-						<td class="dash_border" width="1%"><img src="themes/images/dash_screw.gif" border="0" align="absmiddle"></td>
+						<td class="dash_border" width="1%"><img src="<?php echo vtiger_imageurl('dash_screw.gif', $theme) ?>" border="0" align="absmiddle"></td>
 
 					</tr>
 					<tr>
@@ -266,9 +266,9 @@ if($CHAT_DISPLAY == 'true') {
 					</tr>
 
 					<tr>
-						<td class="dash_border" width="1%"><img src="themes/images/dash_screw.gif" border="0" align="absmiddle"></td>
+						<td class="dash_border" width="1%"><img src="<?php echo vtiger_imageurl('dash_screw.gif', $theme) ?>" border="0" align="absmiddle"></td>
 						<td class="dash_white" width="98%">&nbsp;</td>
-						<td class="dash_border" width="1%"><img src="themes/images/dash_screw.gif" border="0" align="absmiddle"></td>
+						<td class="dash_border" width="1%"><img src="<?php echo vtiger_imageurl('dash_screw.gif', $theme) ?>" border="0" align="absmiddle"></td>
 					</tr>
 					<tr>
 						<td colspan="3" class="dash_bottom">
@@ -311,9 +311,9 @@ if($CHAT_DISPLAY == 'true') {
 						<td colspan="3">
 							<table width="100%" border="0" cellpadding="0" cellspacing="0">
 								<tr>
-									<td width="112"><img src="themes/images/dash_btm_left.jpg" border="0" align="absmiddle"></td>
+									<td width="112"><img src="<?php echo vtiger_imageurl('dash_btm_left.jpg', $theme) ?>" border="0" align="absmiddle"></td>
 									<td width="100%" class="dash_btm">&nbsp;</td>
-									<td width="129"><img src="themes/images/dash_btm_right.jpg" border="0" align="absmiddle"></td>
+									<td width="129"><img src="<?php echo vtiger_imageurl('dash_btm_right.jpg', $theme) ?>" border="0" align="absmiddle"></td>
 								</tr>
 							</table>
 						</td>
@@ -325,7 +325,7 @@ if($CHAT_DISPLAY == 'true') {
 	</tr>
 </table>
 </td>
-<td valign=top><img src="themes/images/showPanelTopRight.gif"></td>
+<td valign=top><img src="<?php echo vtiger_imageurl('showPanelTopRight.gif', $theme) ?>"></td>
    </tr>
 </table>
 

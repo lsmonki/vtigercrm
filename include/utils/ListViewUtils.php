@@ -191,7 +191,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 						if($order_by == $col)
 						{
 							$temp_sorder = $change_sorder[$sorder];
-							$arrow = "&nbsp;<img src ='".$image_path.$arrow_gif[$sorder]."' border='0'>";
+							$arrow = "&nbsp;<img src ='".vtiger_imageurl($arrow_gif[$sorder], $theme)."' border='0'>";
 						}
 						else
 						{
@@ -403,12 +403,12 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
                                                         if($sorder == 'ASC')
                                                         {
                                                                 $sorder = "DESC";
-                                                                $arrow = "<img src ='".$image_path."arrow_down.gif' border='0'>";
+                                                                $arrow = "<img src ='themes/images/arrow_down.gif' border='0'>";
                                                          }
                                                         else
                                                         {
                                                                 $sorder = 'ASC';
-                                                                $arrow = "<img src ='".$image_path."arrow_up.gif' border='0'>";
+                                                                $arrow = "<img src ='themes/images/arrow_up.gif' border='0'>";
                                                         }
                                                 }
 												// vtlib customization: If translation is not available use the given name
@@ -851,20 +851,20 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					$ext =substr($fld_value, $ext_pos + 1);
 					$ext = strtolower($ext);
 					if($ext == 'bin' || $ext == 'exe' || $ext == 'rpm')
-						$fileicon="<img src='themes/images/fExeBin.gif' hspace='3' align='absmiddle' border='0'>";
+						$fileicon="<img src='" . vtiger_imageurl('fExeBin.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
 					elseif($ext == 'jpg' || $ext == 'gif' || $ext == 'bmp')
-						$fileicon="<img src='themes/images/fbImageFile.gif' hspace='3' align='absmiddle' border='0'>";
+						$fileicon="<img src='" . vtiger_imageurl('fbImageFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
 					elseif($ext == 'txt' || $ext == 'doc' || $ext == 'xls')
-						$fileicon="<img src='themes/images/fbTextFile.gif' hspace='3' align='absmiddle' border='0'>";
+						$fileicon="<img src='" . vtiger_imageurl('fbTextFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
 					elseif($ext == 'zip' || $ext == 'gz' || $ext == 'rar')
-						$fileicon="<img src='themes/images/fbZipFile.gif' hspace='3' align='absmiddle'	border='0'>";
+						$fileicon="<img src='" . vtiger_imageurl('fbZipFile.gif', $theme) . "' hspace='3' align='absmiddle'	border='0'>";
 					else
-						$fileicon="<img src='themes/images/fbUnknownFile.gif' hspace='3' align='absmiddle' border='0'>";
+						$fileicon="<img src='" . vtiger_imageurl('fbUnknownFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
 				}
 				elseif($downloadtype == 'E')
 				{
 					$fld_value = $value;
-					$fileicon = "<img src='themes/images/fbLink.gif' alt='".$mod_strings['LBL_EXTERNAL_LNK']."' title='".$mod_strings['LBL_EXTERNAL_LNK']."' hspace='3' align='absmiddle' border='0'>";
+					$fileicon = "<img src='" . vtiger_imageurl('fbLink.gif', $theme) . "' alt='".$mod_strings['LBL_EXTERNAL_LNK']."' title='".$mod_strings['LBL_EXTERNAL_LNK']."' hspace='3' align='absmiddle' border='0'>";
 				}
 				else
 				{
@@ -942,11 +942,11 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				{
 					$os = $adb->query_result($list_result,$i-1,'os');
 					if($os == 'Windows')
-					    $arc_icon="<img src='themes/images/fbWindowsOS.gif' hspace='3' align='absmiddle' border='0'>";
+					    $arc_icon="<img src='" . vtiger_imageurl('fbWindowsOS.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
 					elseif($os == 'Linux')
-						$arc_icon="<img src='themes/images/fbLinuxOS.gif' hspace='3' align='absmiddle' border='0'>";
+						$arc_icon="<img src='" . vtiger_imageurl('fbLinuxOS.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
 					elseif($os == 'Mac')
-						$arc_icon="<img src='themes/images/fbMacOS.gif' hspace='3' align='absmiddle' border='0'>"; 
+						$arc_icon="<img src='" . vtiger_imageurl('fbMacOS.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>"; 
 					$value=$arc_icon.$os;
 				}
 				else
@@ -1116,7 +1116,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		// Record Change Notification
 		if(method_exists($focus, 'isViewed')) {
 			if(!$focus->isViewed($entity_id)) {
-				$links_info .= " | <img src='themes/images/important1.gif' border=0>";
+				$links_info .= " | <img src='" . vtiger_imageurl('important1.gif', $theme) . "' border=0>";
 			}
 		}
 		// END

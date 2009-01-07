@@ -200,7 +200,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
 		<tr style="cursor:move;">
 			<td class="layerPopupHeading" align = "left" id="moveEvent"><?php echo $mod_strings['LBL_ADD_EVENT']?></b></td>
-				<td align=right><a href="javascript:ghide('addEvent');"><img src="themes/images/close.gif" border="0"  align="absmiddle" /></a></td>
+				<td align=right><a href="javascript:ghide('addEvent');"><img src="<?php echo  vtiger_imageurl('close.gif', $theme)  ?>" border="0"  align="absmiddle" /></a></td>
 		</tr>
 		</table>
 		
@@ -737,7 +737,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
 		<tr style="cursor:move;">
                 	<td class="lvtHeaderText" id="moveTodo" align="left"><?php echo $mod_strings['LBL_ADD_TODO'] ?></b></td>
-			<td align=right><a href="javascript:ghide('createTodo');"><img src="themes/images/close.gif" border="0"  align="absmiddle" /></a></td>
+			<td align=right><a href="javascript:ghide('createTodo');"><img src="<?php echo  vtiger_imageurl('close.gif', $theme)?>" border="0"  align="absmiddle" /></a></td>
 		</tr>
         </table>
 	<table border=0 cellspacing=0 cellpadding=5 width=95% bgcolor="#FFFFFF" >
@@ -937,7 +937,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 		<tr>
 		<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%"><?php echo $app_strings['LBL_CHANGE_OWNER']; ?></td>
 			<td style="border-bottom: 1px solid rgb(204, 204, 204);">&nbsp;</td>
-			<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('act_changeowner')"><img src="themes/images/close.gif" align="absmiddle" border="0"></a></td>
+			<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('act_changeowner')"><img src="<?php echo vtiger_imageurl('close.gif', $theme) ?>" align="absmiddle" border="0"></a></td>
 		</tr>
 		<tr>
 		        <td colspan="3">&nbsp;</td>

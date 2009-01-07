@@ -912,7 +912,7 @@ class freetag {
 		{	
 			foreach($tag_list[0] as $tag => $qty) {
 				$size = $min_font_size + ($qty - $min_qty) * 3;
-				$cloud_span[] = '<span id="tag_'.$tag_list[1][$tag].'" class="' . $span_class . '" onMouseOver=$("tagspan_'.$tag_list[1][$tag].'").style.display="inline"; onMouseOut=$("tagspan_'.$tag_list[1][$tag].'").style.display="none";><a class="tagit" href="index.php?module=Home&action=UnifiedSearch&search_module='.$module.'&query_string='. urlencode($tag) . '" style="font-size: '. $size . $font_units . '">' . htmlspecialchars(stripslashes($tag)) . '</a><span class="'. $span_class .'" id="tagspan_'.$tag_list[1][$tag].'" style="display:none;cursor:pointer;" onClick="DeleteTag('.$tag_list[1][$tag].','.$obj_id.');"><img src="themes/images/del_tag.gif"></span></span>';
+				$cloud_span[] = '<span id="tag_'.$tag_list[1][$tag].'" class="' . $span_class . '" onMouseOver=$("tagspan_'.$tag_list[1][$tag].'").style.display="inline"; onMouseOut=$("tagspan_'.$tag_list[1][$tag].'").style.display="none";><a class="tagit" href="index.php?module=Home&action=UnifiedSearch&search_module='.$module.'&query_string='. urlencode($tag) . '" style="font-size: '. $size . $font_units . '">' . htmlspecialchars(stripslashes($tag)) . '</a><span class="'. $span_class .'" id="tagspan_'.$tag_list[1][$tag].'" style="display:none;cursor:pointer;" onClick="DeleteTag('.$tag_list[1][$tag].','.$obj_id.');"><img src="' . vtiger_imageurl('del_tag.gif', $theme) . '"></span></span>';
 
 		}
 		}else

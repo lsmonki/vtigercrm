@@ -39,6 +39,7 @@ $smarty->assign('CUSTOM_MODULE', true);
 
 $smarty->assign('MOD', $mod_strings);
 $smarty->assign('APP', $app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign('MODULE', $currentModule);
 $smarty->assign('SINGLE_MOD', "CallHistory");
 $smarty->assign('CATEGORY', $category);

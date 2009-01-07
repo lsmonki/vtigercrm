@@ -98,7 +98,7 @@ function SaveRssFeeds()
 <div id="temp_alert" style="display:none"></div>
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 <tr>
-	<td valign=top align=right width=8><img src="themes/images/showPanelTopLeft.gif"></td>
+	<td valign=top align=right width=8><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
 	<td class="showPanelBg" valign="top" width="100%" align=center >	
 		
 			<!-- RSS Reader UI Starts here--><br>
@@ -160,7 +160,7 @@ function SaveRssFeeds()
 				</table>
 			<!-- RSS Reader UI ends here -->
 	</td>
-	<td valign=top align=right width=8><img src="themes/images/showPanelTopRight.gif"></td>			
+	<td valign=top align=right width=8><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>			
 	</tr>
 	</table>
 	
@@ -170,8 +170,8 @@ function SaveRssFeeds()
 	<form onSubmit="SaveRssFeeds(); return false;">
 	<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 	<tr>
-	<td class="layerPopupHeading" align="left"><img src="themes/images/rssroot.gif" width="24" height="22" align="absmiddle" />&nbsp;{$MOD.LBL_ADD_RSS_FEED}</td>
-	<td align="right"><a href="javascript:fninvsh('PopupLay');"><img src="themes/images/close.gif" border="0"  align="absmiddle" /></a></td>
+	<td class="layerPopupHeading" align="left"><img src="{'rssroot.gif'|@vtiger_imageurl:$THEME}" width="24" height="22" align="absmiddle" />&nbsp;{$MOD.LBL_ADD_RSS_FEED}</td>
+	<td align="right"><a href="javascript:fninvsh('PopupLay');"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0"  align="absmiddle" /></a></td>
 	</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 

@@ -128,7 +128,7 @@ window.onresize = setCoOrdinate;
 		<!-- Contents -->
 		<table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 		   <tr>
-			<td valign=top><img src="themes/images/showPanelTopLeft.gif"></td>
+			<td valign=top><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
 			<td class="showPanelBg" valign=top width=100%>
 			<!-- PUBLIC CONTENTS STARTS-->
 			   <div class="small" style="padding:20px" >
@@ -137,7 +137,7 @@ window.onresize = setCoOrdinate;
 				   <tr>
 					<td>
 			         {* Module Record numbering, used MOD_SEQ_ID instead of ID *}
-						<span class="lvtHeaderText"><font color="purple">[ {$MOD_SEQ_ID} ] </font>{$NAME} -  {$MOD[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="themes/images/vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="themes/images/vtbusy.gif" border="0"></span>
+						<span class="lvtHeaderText"><font color="purple">[ {$MOD_SEQ_ID} ] </font>{$NAME} -  {$MOD[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span>
 					</td>
 					<td>&nbsp;</td>
 				   </tr>
@@ -195,15 +195,15 @@ window.onresize = setCoOrdinate;
 			</td>
 			<td width=30% align=center>
 					{if $privrecord neq ''}
-						<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="themes/images/b_left.gif">&nbsp;
+						<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="{'b_left.gif'|@vtiger_imageurl:$THEME}">&nbsp;
 					{else}
-						<img title="{$APP.LNK_LIST_PREVIOUS}" src="themes/images/b_left_disable.gif">
+						<img title="{$APP.LNK_LIST_PREVIOUS}" src="{'b_left_disable.gif'|@vtiger_imageurl:$THEME}">
 					{/if}
 					&nbsp;
 					{if $nextrecord neq ''}
-						<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="themes/images/b_right.gif">&nbsp;
+						<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="{'b_right.gif'|@vtiger_imageurl:$THEME}">&nbsp;
 					{else}
-						<img title="{$APP.LNK_LIST_NEXT}" src="themes/images/b_right_disable.gif">&nbsp;
+						<img title="{$APP.LNK_LIST_NEXT}" src="{'b_right_disable.gif'|@vtiger_imageurl:$THEME}">&nbsp;
 					{/if}
 			</td>
 			<td width=35% align=right>
@@ -259,9 +259,9 @@ window.onresize = setCoOrdinate;
 							
 							<div style="float:left;font-weight:bold;"><div style="float:left;"><a href="javascript:showHideStatus('tbl{$header|replace:' ':''}','aid{$header|replace:' ':''}','{$IMAGE_PATH}');">
 							{if $BLOCKINITIALSTATUS[$header] eq 1}
-								<img id="aid{$header|replace:' ':''}" src="themes/images/activate.gif" style="border: 0px solid #000000;" alt="Hide" title="Hide"/>
+								<img id="aid{$header|replace:' ':''}" src="{'activate.gif'|@vtiger_imageurl:$THEME}" style="border: 0px solid #000000;" alt="Hide" title="Hide"/>
 							{else}
-								<img id="aid{$header|replace:' ':''}" src="themes/images/inactivate.gif" style="border: 0px solid #000000;" alt="Display" title="Display"/>
+								<img id="aid{$header|replace:' ':''}" src="{'inactivate.gif'|@vtiger_imageurl:$THEME}" style="border: 0px solid #000000;" alt="Display" title="Display"/>
 							{/if}
 								</a></div><b>&nbsp;
 						        	{$header}
@@ -343,15 +343,15 @@ window.onresize = setCoOrdinate;
 			</td>
 			<td width=30% align=center>
 					{if $privrecord neq ''}
-						<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="themes/images/b_left.gif">&nbsp;
+						<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="{'b_left.gif'|@vtiger_imageurl:$THEME}">&nbsp;
 					{else}
-						<img title="{$APP.LNK_LIST_PREVIOUS}" src="themes/images/b_left_disable.gif">
+						<img title="{$APP.LNK_LIST_PREVIOUS}" src="{'b_left_disable.gif'|@vtiger_imageurl:$THEME}">
 					{/if}
 					&nbsp;
 					{if $nextrecord neq ''}
-						<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="themes/images/b_right.gif">&nbsp;
+						<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="{'b_right.gif'|@vtiger_imageurl:$THEME}">&nbsp;
 					{else}
-						<img title="{$APP.LNK_LIST_NEXT}" src="themes/images/b_right_disable.gif">&nbsp;
+						<img title="{$APP.LNK_LIST_NEXT}" src="{'b_right_disable.gif'|@vtiger_imageurl:$THEME}">&nbsp;
 					{/if}
 			</td>
 			<td width=35% align=right>
@@ -419,7 +419,7 @@ window.onresize = setCoOrdinate;
 					<!-- PUBLIC CONTENTS STOPS-->
 					</td>
 					<td align=right valign=top>
-						<img src="themes/images/showPanelTopRight.gif">
+						<img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}">
 					</td>
 				   </tr>
 				</table>

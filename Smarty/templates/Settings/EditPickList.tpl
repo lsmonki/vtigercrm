@@ -13,7 +13,7 @@
 	<table border="0" cellpadding="5" cellspacing="0" width="100%" class="layerHeadingULine">
 		<tr>
 			<td class="layerPopupHeading" align="left" width="40%" nowrap>{$MOD.LBL_EDIT_PICKLIST} - {$FIELDLABEL}</td>
-			<td align="right" width="60%"><img src="themes/images/close.gif" align="middle" border="0" onclick="hide('editdiv');"></td>
+			<td align="right" width="60%"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" align="middle" border="0" onclick="hide('editdiv');"></td>
 		</tr>
 	</table>
 	

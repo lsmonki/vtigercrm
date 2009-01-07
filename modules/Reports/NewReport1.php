@@ -84,7 +84,7 @@ else
 
 		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 		<tbody><tr>
-		<td rowspan='2' width='11%'><img src='themes/images/denied.gif' ></td>
+		<td rowspan='2' width='11%'><img src='". vtiger_imageurl('denied.gif', $theme) ."' ></td>
 		<td style='border-bottom: 1px solid rgb(204, 204, 204);'  width='70%'><span class='genHeaderSmall'>".$mod_strings['LBL_NO_PERMISSION']." ".$primarymodule." ".$secondarymodule."</span></td>
 		</tr>
 		<tr>

@@ -19,7 +19,7 @@
                                         <table border=0 cellspacing=0 cellpadding=0 width=100%>
                                         <tr>
                                                 <td align=center>
-                                                <img src="themes/images/searching.gif" alt="{$APP.LBL_SEARCHING}"  title="{$APP.LBL_SEARCHING}">
+                                                <img src="{'searching.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_SEARCHING}"  title="{$APP.LBL_SEARCHING}">
                                                 </td>
                                         </tr>
                                         </table>
@@ -36,7 +36,7 @@
 
 <table border=0  cellspacing=0 cellpadding=0 width=98% align=center>
 
-<tr><td valign=top><img src="themes/images/showPanelTopLeft.gif"></td>
+<tr><td valign=top><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
 	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
 
 		<form name="basicSearch" action="index.php" onsubmit="return false;">
@@ -98,7 +98,7 @@
 </table>
 
 	</td>
-        <td valign="top"><img src="themes/images/showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </tbody>
 </table>

@@ -45,24 +45,24 @@ if($_REQUEST['problem'])
 		<tr><td COLSPAN="12"></td></tr>
 		<tr>
 		<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>
-		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="themes/images/blank.gif"></td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="<?php echo vtiger_imageurl('blank.gif', $theme) ?>"></td>
 		<td width="25%"class="moduleListTitle" height="25">&nbsp;<b><?php echo $mod_strings['LBL_DISPLAY_NAME']; ?></b></td>
-		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="themes/images/blank.gif"></td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="<?php echo vtiger_imageurl('blank.gif', $theme) ?>"></td>
                 <td width="30%" class="moduleListTitle">&nbsp;<b><?php echo $mod_strings['LBL_MAIL_SERVER_NAME']; ?></b></td>
-		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="themes/images/blank.gif"></td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="<?php echo vtiger_imageurl('blank.gif', $theme) ?>"></td>
 		<td width="25%" class="moduleListTitle">&nbsp;<b><?php echo $mod_strings['LBL_EMAIL_ADDRESS']; ?></b></td>
 
-		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="themes/images/blank.gif"></td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="<?php echo vtiger_imageurl('blank.gif', $theme) ?>"></td>
 		<td width="25%" class="moduleListTitle">&nbsp;<b><?php echo $mod_strings['LBL_MAIL_PROTOCOL']; ?></b></td>
 
-		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="themes/images/blank.gif"></td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="<?php echo vtiger_imageurl('blank.gif', $theme) ?>"></td>
 		<td width="25%" class="moduleListTitle">&nbsp;<b><?php echo $mod_strings['LBL_MAIL_UNAME']; ?></b></td>
 			
-		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="themes/images/blank.gif"></td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="<?php echo vtiger_imageurl('blank.gif', $theme) ?>"></td>
 		<td width="10%" class="moduleListTitle">&nbsp;<b><?php echo $mod_strings['LBL_DEFAULT']; ?></b></td>
-		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="themes/images/blank.gif"></td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="<?php echo vtiger_imageurl('blank.gif', $theme) ?>"></td>
 		<td width="10%" class="moduleListTitle">&nbsp;<b><?php echo $mod_strings['Edit']; ?></b></td>
-		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="themes/images/>blank.gif"></td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="<?php echo vtiger_imageurl('blank.gif', $theme) ?>"></td>
 		</tr>
 		<tr><td COLSPAN="12" class="blackLine"><IMG SRC="themes/images/blank.gif"></td></tr>
 <?php

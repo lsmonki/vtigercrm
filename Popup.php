@@ -39,7 +39,7 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
-$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("THEME", $theme);
 $smarty->assign("THEME_PATH",$theme_path);
 $smarty->assign("MODULE",$currentModule);
 

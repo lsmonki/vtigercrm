@@ -58,7 +58,7 @@ if(isset($_REQUEST['del_rec']))
 
 			<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tbody><tr>
-			<td rowspan='2' width='11%'><img src='themes/$theme/images/denied.gif' ></td>
+			<td rowspan='2' width='11%'><img src='". vtiger_imageurl('denied.gif', $theme) ."' ></td>
 			<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'>
 				<span class='genHeaderSmall'>$app_strings[LBL_DUP_PERMISSION] $req_module $errormsg</span></td>
 			</tr>
@@ -93,6 +93,7 @@ if(isPermitted($req_module,'Delete','') == 'yes')
 $smarty->assign("DELETE",$button_del);
 
 $smarty->assign("MOD", return_module_language($current_language,$req_module));
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);

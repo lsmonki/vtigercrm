@@ -26,7 +26,7 @@ require_once('include/logging.php');
 require_once("config.php");
 require_once('include/database/PearDatabase.php');
 require_once('modules/Calendar/CalendarCommon.php');
-global $adb;
+global $adb,$theme;
 $local_log =& LoggerManager::getLogger('index');
 $focus = new Activity();
 $activity_mode = $_REQUEST['activity_mode'];
@@ -72,7 +72,7 @@ if((isset($_REQUEST['change_status']) && $_REQUEST['change_status']) && ($_REQUE
 
 			<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tbody><tr>
-			<td rowspan='2' width='11%'><img src='themes/images/denied.gif' ></td>
+			<td rowspan='2' width='11%'><img src='<?php echo vtiger_imageurl('denied.gif', $theme). ?>' ></td>
 			<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>$app_strings[LBL_PERMISSION]</span></td>
 			</tr>
 			<tr>

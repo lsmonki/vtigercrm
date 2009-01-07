@@ -1,7 +1,7 @@
 <table width="100%" cellspacing="0" cellpadding="5" border="0" class="settingsSelUITopLine"><tbody>
 	<tr>
 		<td width="50" valign="top" rowspan="2">
-			<img width="48" height="48" border="0" src="themes/images/settingsWorkflow.png"/>
+			<img width="48" height="48" border="0" src="{'settingsWorkflow.png'|@vtiger_imageurl:$THEME}"/>
 		</td>
 		<td valign="bottom" class="heading2">
 			<b><a href="index.php?module=Settings&amp;action=index&amp;parenttab=Settings">Settings</a> > 

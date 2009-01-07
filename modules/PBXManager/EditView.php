@@ -25,6 +25,7 @@ $smarty->assign('MODULE', $currentModule);
 
 $smarty->assign('SINGLE_MOD', "CallHistory");
 $smarty->assign('CATEGORY', $category);
+$smarty->assign("THEME", $theme);
 $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
 
 $smarty->assign('CHECK', array());

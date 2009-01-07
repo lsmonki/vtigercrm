@@ -55,7 +55,7 @@ function AddressSync(Addform,id)
 {*<!-- Contents -->*}
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
    <tr>
-	<td valign=top><img src="themes/images/showPanelTopLeft.gif"></td>
+	<td valign=top><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
 
 	<td class="showPanelBg" valign=top width=100%>
 		{*<!-- PUBLIC CONTENTS STARTS-->*}
@@ -211,7 +211,7 @@ function AddressSync(Addform,id)
 			</table>
 		<div>
 	</td>
-	<td align=right valign=top><img src="themes/images/showPanelTopRight.gif"></td>
+	<td align=right valign=top><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </table>
 <!--added to fix 4600-->

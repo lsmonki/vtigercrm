@@ -133,6 +133,7 @@ $comboFieldArray = getComboArray($comboFieldNames);
 $log->info("Contact detail view");
 
 $smarty->assign("MOD", $mod_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("APP", $app_strings);
 $contact_name = $focus->lastname;
 if (getFieldVisibilityPermission($currentModule, $current_user->id,'firstname') == '0') {

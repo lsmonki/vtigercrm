@@ -69,6 +69,7 @@ $log->info("Settings Module Owners view");
 $smarty->assign("MODULE_MODE",$_REQUEST['list_module_mode']);
 $smarty->assign("USER_LIST", $user_list);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);

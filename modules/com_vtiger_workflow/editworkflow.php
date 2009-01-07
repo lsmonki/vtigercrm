@@ -41,6 +41,7 @@ require_once("VTWorkflowApplication.inc");
 		$smarty->assign("MOD", array_merge(
 			return_module_language($current_language,'Settings'),
 			return_module_language($current_language, $module->name)));
+		$smarty->assign("THEME", $theme);
 		$smarty->assign("IMAGE_PATH", $image_path);
 		$smarty->assign("MODULE_NAME", $module->label);
 		$smarty->assign("PAGE_NAME", 'Edit Workflow');

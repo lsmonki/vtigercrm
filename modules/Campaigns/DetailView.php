@@ -36,6 +36,7 @@ $image_path=$theme_path."images/";
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
