@@ -27,6 +27,7 @@ require_once('include/utils/utils.php');
 
 global $app_strings,$app_list_strings,$mod_strings,$theme,$currentModule;
 
+$module = $_REQUEST['module'];
 $focus = new Documents();
 $smarty = new vtigerCRM_Smarty();
 
@@ -48,34 +49,31 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
     $focus->name=$focus->column_fields['notes_title'];
 }
 
-/*if($focus->mode != 'edit')
+if($focus->mode != 'edit')
 {
-	if(isset($_REQUEST['contact_id']) || isset($_REQUEST['parent_id']))
+	if(isset($_REQUEST['parent_id']) && isset($_REQUEST['return_module']))
 	{
-		$focus->contactid = $_REQUEST['contact_id'];
-		$cont_id = $_REQUEST['contact_id'];
-		$par_id = $_REQUEST['parent_id'];
-		if($cont_id == $par_id)
-			$_REQUEST['parent_id'] = '';
-	}
-} */
-
+		$owner = getRecordOwnerId($_REQUEST['parent_id']);
+		if(isset($owner['Users']) && $owner['Users'] != '') {
+			$permitted_users = get_user_array('true', 'Active',$current_user->id);
+			if(!in_array($owner['Users'],$permitted_users)){
+				$owner['Users'] = $current_user->id;
+			}
+			$focus->column_fields['assigntype'] = 'U';
+			$focus->column_fields['assigned_user_id'] = $owner['Users'];
+		} elseif(isset($owner['Groups']) && $owner['Groups'] != '') {
+			$focus->column_fields['assigntype'] = 'T';
+			$focus->column_fields['assigned_user_id'] = $owner['Groups'];
+		} 
+	}   
+} 
+			
 if(isset($_REQUEST['parent_id']) && $focus->mode != 'edit')
 {
         $focus->column_fields['parent_id'] = $_REQUEST['parent_id'];
         $smarty->assign("PARENTID",$_REQUEST['parent_id']);
 }
-/*$old_id = '';
-if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
-{
-	$old_id = $_REQUEST['record'];
-	if (! empty($focus->filename) )
-	{	
-	 $old_id = $focus->id;
-	}
-	$focus->id = "";
-	$focus->mode = '';
-}*/
+
 
 $dbQuery="select filename from vtiger_notes where notesid = ?";
 $result=$adb->pquery($dbQuery,array($focus->id));

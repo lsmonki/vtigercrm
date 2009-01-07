@@ -366,7 +366,7 @@ function check_object(sel_id)
                         if(trim(select_global[i])!='')
                                 result=select_global[i]+";"+result;
                 }
-                default_togglestate();
+                default_togglestate(sel_id.name);
         }
         else
         {
@@ -381,7 +381,7 @@ function check_object(sel_id)
                                 result=select_global[i]+";"+result;
                 }
           //      getObj("selectall").checked=false
-                default_togglestate();
+                default_togglestate(sel_id.name);
         }
 
         document.getElementById("allselectedboxes").value=result;

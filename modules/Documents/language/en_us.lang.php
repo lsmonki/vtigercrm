@@ -43,12 +43,13 @@ $mod_strings = Array(
 'LBL_COLON'=>':',
 
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the vtiger_account.",
-'LBL_LIST_FILENAME'=>"File",
+'LBL_LIST_FILENAME'=>"File Name",
 
 // Added for Note(3.2-patch 3) 
 
 'LBL_FILENAME'=>'Attachment:',
-'LBL_NOTE_INFORMATION'=>'Document Information',
+'LBL_NOTE_INFORMATION'=>'Basic Information',
+'File Information'=>'File Information',
 
 // Added for 4GA
 'LBL_TOOL_FORM_TITLE'=>'Documents Tools',
@@ -123,6 +124,11 @@ $mod_strings = Array(
 'Note No' => 'Document No',
 // END
 
+// Documents module
+'LBL_EMPTY_FOLDERS' => 'Empty Folders',
+'LBL_NO_DOCUMENTS' => 'No Documents',
+'LBL_EMPTY_FOLDERS' => 'Empty Folders',
+'LBL_DESCRIPTION' => 'Description',
 );
 
 ?>

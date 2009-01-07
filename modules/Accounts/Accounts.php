@@ -359,72 +359,7 @@ class Accounts extends CRMEntity {
 		return GetRelatedList('Accounts','Emails',$focus,$query,$button,$returnset);
 	}	
 
-	/**
-	 * Function to get Account related Attachments
- 	 * @param  integer   $id      - accountid
- 	 * returns related Attachment record in array format
- 	 */
-	function get_attachments($id)
-	{
-		global $log,$current_user;
-        $log->debug("Entering get_attachments(".$id.") method ...");
-		// Armando Lscher 18.10.2005 -> visibleDescription
-		// Desc: Inserted crm2.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
-		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
-		$tab_id=getTabid('Documents');
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-            {
-				$sec_parameter=getListViewSecurityParameter('Documents');
-				//$query .= $sec_parameter;
-            }
-		$query = "SELECT vtiger_notes.title, vtiger_notes.notecontent AS description,
-			vtiger_notes.filename, vtiger_notes.notesid AS crmid,
-				'Documents      ' AS ActivityType,
-			vtiger_attachments.type AS FileType,
-				crm2.modifiedtime AS lastmodified, 
-			vtiger_seattachmentsrel.attachmentsid,
-			vtiger_users.user_name
-			FROM vtiger_notes
-			INNER JOIN vtiger_senotesrel
-				ON vtiger_senotesrel.notesid = vtiger_notes.notesid
-			INNER JOIN vtiger_crmentity
-				ON vtiger_crmentity.crmid = vtiger_senotesrel.crmid
-			INNER JOIN vtiger_crmentity crm2
-				ON crm2.crmid = vtiger_notes.notesid
-				AND crm2.deleted = 0
-			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupid = vtiger_crmentity.smownerid				
-			LEFT JOIN vtiger_seattachmentsrel
-				ON vtiger_seattachmentsrel.crmid = vtiger_notes.notesid
-			LEFT JOIN vtiger_attachments
-				ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
-			INNER JOIN vtiger_users
-				ON crm2.smownerid = vtiger_users.id
-			WHERE vtiger_crmentity.crmid = ".$id." ".$sec_parameter."
-		 UNION ALL
-			SELECT vtiger_attachments.subject AS title, vtiger_attachments.description,
-			vtiger_attachments.name AS filename,
-			vtiger_seattachmentsrel.attachmentsid AS crmid,
-				'Attachments' AS ActivityType,
-			vtiger_attachments.type AS FileType,
-				crm2.modifiedtime AS lastmodified,
-			vtiger_attachments.attachmentsid,
-			vtiger_users.user_name
-			FROM vtiger_attachments
-			INNER JOIN vtiger_seattachmentsrel
-				ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
-			INNER JOIN vtiger_crmentity
-				ON vtiger_crmentity.crmid = vtiger_seattachmentsrel.crmid
-			INNER JOIN vtiger_crmentity crm2
-				ON crm2.crmid = vtiger_attachments.attachmentsid
-			INNER JOIN vtiger_users
-				ON crm2.smcreatorid = vtiger_users.id
-			WHERE vtiger_crmentity.crmid = ".$id;
-		$log->debug("Exiting get_attachments method ...");
-		return getAttachmentsAndNotes('Accounts',$query,$id);
-	}
+	
 	/**
 	* Function to get Account related Quotes
 	* @param  integer   $id      - accountid

@@ -10,14 +10,7 @@
  * The Initial Developer of the Original Code is SugarCRM, Inc.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
- * Contributor(s): ______________________________________..
- ********************************************************************************/
-/*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/ListView.php,v 1.13 2005/03/21 18:15:04 ray Exp $
- * Description:  TODO: To be written.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
+ * Contributor(s): ______________________________________.
  ********************************************************************************/
 
 require_once('Smarty_setup.php');
@@ -43,7 +36,6 @@ else
 {
 	$category = getParentTab();	
 }	
-
 if(!$_SESSION['lvs'][$currentModule])
 {
 	unset($_SESSION['lvs']);
@@ -59,9 +51,7 @@ $viewid = $oCustomView->getViewId($currentModule);
 $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
-
 if (!isset($where)) $where = "";
-
 $url_string = ''; // assigning http url string
 
 $focus = new Documents();
@@ -70,7 +60,6 @@ $focus->initSortbyField('Documents');
 // END
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
-
 
 if($_REQUEST['errormsg'] != '')
 {
@@ -101,7 +90,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 if(isPermitted('Documents','Delete','') == 'yes')
 {
 	$smarty->assign("MASS_DELETE","yes");
-	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
+	$other_text['del'] = $app_strings['LBL_MASS_DELETE'];
 }
 
 if($viewnamedesc['viewname'] == 'All')
@@ -149,8 +138,7 @@ $hide_empty_folders = 'no';
 if(isset($where) && $where != '')
 {
         $query .= ' and '.$where;
-        $hide_empty_folders = 'yes';
- 		$_SESSION['export_where'] = $where;
+        $_SESSION['export_where'] = $where;
 }
 else
    unset($_SESSION['export_where']);
@@ -179,7 +167,7 @@ if($viewid ==0)
 	exit;
 }
 
-$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+$record_string= $app_strings['LBL_SHOWING']." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
 
 //Retreive the List View Table Header
@@ -188,7 +176,6 @@ $url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Documents",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
-
 $listview_header_search = getSearchListHeaderValues($focus,"Documents",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
@@ -202,41 +189,29 @@ if($_REQUEST['action'] == 'DocumentsAjax' && isset($_REQUEST['folderid']))
 	$request_folderid = $_REQUEST['folderid'];
 	$start[$request_folderid] = $_REQUEST['start'];
 }
-
 $focus->del_create_def_folder($focus->query);
  
 $dbQuery = "select * from vtiger_attachmentsfolder";
 $result = $adb->pquery($dbQuery,array());
 $foldercount = $adb->num_rows($result);
-if($foldercount > 0)
+$folders = Array();
+$emptyfolders = Array();
+if($foldercount > 0 )
 {
-	$folders = Array();
 	for($i=0;$i<$foldercount;$i++)
 	{
 		$query = '';
+		$displayFolder='';
 		$query = $focus->query;
 		$list_query = '';
 		$list_query = $focus->query;
 		$folder_id = $adb->query_result($result,$i,"folderid");
-		$query .= " and folderid = $folder_id";
+		$query .= " and vtiger_notes.folderid = $folder_id";
 		if($folder_id != $request_folderid)
 		{
 			$start[$folder_id] = 1;
 		}
 		
-		$temp_query = $query;
-		//$attachmentquery = "select notesid,title from vtiger_notes where folderid= ?";
-		$temp_result = $adb->pquery($temp_query,array());
-		$num_records = $adb->num_rows($temp_result);
-		for($j=0;$j<$num_records;$j++)
-		{
-			$notes_id = $adb->query_result($temp_result,$j,'notesid');
-			$title = $adb->query_result($temp_result,$j,'title');
-			if($title == '' || !isset($title))
-			{
-				$focus->del_rec_unload_file($notes_id);
-			}
-		}
 		
 		if(isset($order_by) && $order_by != '')
 		{
@@ -255,14 +230,20 @@ if($foldercount > 0)
         	$focus->additional_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 		}
 		
+		//Retreiving the no of rows
+		$count_result = $adb->query( mkCountQuery( $query));
+		$num_records = $adb->query_result($count_result,0,"count");
+		if($num_records > 0){
+			$displayFolder=true;
+		}
 		//navigation start
 		$max_entries_per_page = 5; 
-		
 		//Storing Listview session object
 		if($_SESSION['lvs'][$currentModule])
 		{
 			setSessionVar($_SESSION['lvs'][$currentModule],$num_records,$max_entries_per_page);
 		}
+		
 		//added for 4600                                                                                                                            
 		if($num_records <= $max_entries_per_page)
         	$_SESSION['lvs'][$currentModule]['start'] = 1;
@@ -296,16 +277,20 @@ if($foldercount > 0)
 		//navigation end
 		
 		$folder_details=Array();
-		$folder_details['folderid']=$adb->query_result($result,$i,"folderid");
+		$folderid = $adb->query_result($result,$i,"folderid");
+		$folder_details['folderid']=$folderid;
 		$folder_details['foldername']=$adb->query_result($result,$i,"foldername");
 		$foldername = $folder_details['foldername'];
 		$folder_details['description']=$adb->query_result($result,$i,"description");
 		$folder_files = getListViewEntries($focus,"Documents",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 		$folder_details['entries']= $folder_files;
 		$folder_details['navigation'] = getTableHeaderNavigation($navigation_array, $url_string,"Documents",$folder_id,$viewid);
-		$folders[$foldername] = $folder_details;
+		if ($displayFolder == true || $folderid == 0) {
+			$folders[$foldername] = $folder_details;
+		} else{
+			$emptyfolders[$foldername] = $folder_details;
+		}
 	}
-	//echo '<pre>';print_r($start);echo '</pre>';
 }
 else
 {
@@ -314,12 +299,12 @@ else
 
 $smarty->assign("NO_OF_FOLDERS",$foldercount);
 $smarty->assign("FOLDERS", $folders);
-$smarty->assign("HIDE_EMPTY_FOLDERS", $hide_empty_folders);
+$smarty->assign("EMPTY_FOLDERS", $emptyfolders);
+$smarty->assign("ALL_FOLDERS", array_merge($folders, $emptyfolders));
 
 //Added to select Multiple records in multiple pages
 $smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
 $smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
-//$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($folders['entries']),";"));
 
 $alphabetical = AlphabeticalSearch($currentModule,'index','notes_title','true','basic',"","","","",$viewid);
 $fieldnames = getAdvSearchfields($module);
@@ -339,5 +324,5 @@ $_SESSION['documents_listquery'] = $list_query;
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '' || $_REQUEST['mode'] == 'ajax')
 	$smarty->display("DocumentsListViewEntries.tpl");
 else	
-	$smarty->display("ListView.tpl");
+	$smarty->display("DocumentsListView.tpl");
 ?>

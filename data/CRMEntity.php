@@ -382,11 +382,6 @@ class CRMEntity
 	   $log->info("function insertIntoEntityTable ".$module.' vtiger_table name ' .$table_name);
 	  global $adb;
 	  $insertion_mode = $this->mode;
-	  if($module == 'Documents' && $fileid != '' && $insertion_mode != 'edit')
-	  {
-	  	$insertion_mode = 'edit';
-	  	$this->id = $fileid;
-	  }
 
 	  //Checkin whether an entry is already is present in the vtiger_table to update
 	  if($insertion_mode == 'edit')
@@ -539,7 +534,7 @@ class CRMEntity
 				  $fldvalue = str_replace(",","",$this->column_fields[$fieldname]);//trim($this->column_fields[$fieldname],",");
 
 			  }
-			  elseif($uitype == 4 && ($insertion_mode != 'edit'|| ($insertion_mode == 'edit' && $module == 'Documents'))) {
+			  elseif($uitype == 4 && $insertion_mode != 'edit') {
 				// This check is added to avoid mod num generation multiple times for imported records
 			  	if(!isset($this->column_fields[$fieldname]) || $this->column_fields[$fieldname] == '' || $this->column_fields[$fieldname] == getTranslatedString('MSG_AUTO_GEN_ON_SAVE'))
 					$this->column_fields[$fieldname] = $this->setModuleSeqNumber("increment",$module);
@@ -571,50 +566,16 @@ class CRMEntity
 				  }
 				  else
 				  {
-				  	 if($table_name == 'vtiger_notes')
-				  	 {
-				  	 	if($columname == 'notecontent' || $columname == 'title' || $columname == 'note_no')
-				  	 	{
-				  	 		$update .= ', '.$columname."=?";
-				  	 		array_push($update_params, $fldvalue);
-				  	 	}
-				  	 	($_REQUEST['ajxaction'] == 'DETAILVIEW') ? $check_ajax = 0 : $check_ajax = 1;
-				  	 	if($columname == 'filestatus' && (($fldvalue != 0 && $fldvalue != 1) || $check_ajax == 0))
-		  				{
-				  	 		$update .= ', '.$columname."=?";
-				  	 		array_push($update_params, $fldvalue);
-		  				}				  	 	
-				  	 }
-				  	 else
-				  	 {
-					 	$update .= ', '.$columname."=?";
+				  	 	$update .= ', '.$columname."=?";
 					 	array_push($update_params, $fldvalue);
-				  	 }
 				  }
-				  //array_push($update_params, $fldvalue);
-			  }
+			 }
 		  }
 		  else
 		  {
-		  	if($table_name == 'vtiger_notes')
-		  	{
-		  		if($columname == 'notecontent' || $columname == 'title' || $columname == 'note_no')
-		  		{
-			  		$column .= ", ".$columname;
-			  		array_push($value, $fldvalue);
-		  		}
-		  		($_REQUEST['ajxaction'] == 'DETAILVIEW') ? $check_ajax = 0 : $check_ajax = 1;
-		  		if($columname == 'filestatus' && (($fldvalue != 0 && $fldvalue != 1) || $check_ajax == 0))
-		  		{
-			  		$column .= ", ".$columname;
-			  		array_push($value, $fldvalue);
-		  		}
-		  	}
-		  	else
-		  	{
 		  		$column .= ", ".$columname;
 			  	array_push($value, $fldvalue);
-		  	}
+			 
 		  }
 
 	  }
@@ -1346,6 +1307,64 @@ $log->info("in getOldFileName  ".$notesid);
 			return false;
 	}
 	// END
+
+
+	/* Generic function to get attachments in the related list of a given module */
+	function get_attachments($id, $cur_tab_id, $rel_tab_id, $actions=false) {
+	
+		global $currentModule, $app_strings,$singlepane_view;
+		$this_module = $currentModule;
+		if(isset($_REQUEST)){ 
+			$parenttab = $_REQUEST['parenttab'];
+		}	
+		$related_module = vtlib_getModuleNameById($rel_tab_id);
+		require_once("modules/$related_module/$related_module.php");
+		$other = new $related_module();
+		  
+		// Some standard module class doesn't have required variables
+		// that are used in the query, they are defined in this generic API
+		vtlib_setup_modulevars($related_module, $other);
+		
+		$singular_modname = vtlib_toSingular($related_module);
+		$button = '';
+		if($actions) {
+			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
+			if(in_array('SELECT', $actions) && isPermitted($related_module,4, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_SELECT')." ". getTranslatedString($related_module). "' class='crmbutton small edit' type='button' onclick=\"return window.open('index.php?module=$related_module&return_module=$currentModule&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid=$id&parenttab=$parenttab','test','width=640,height=602,resizable=0,scrollbars=0');\" value='". getTranslatedString('LBL_SELECT'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
+			}
+			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_NEW'). " ". getTranslatedString($related_module) ."' class='crmbutton small create'" .
+					" onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\"' type='submit' name='button'" .
+					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
+			}
+		}
+		$button .= '</td>';
+		
+	 // To make the edit or del link actions to return back to same view.
+		if($singlepane_view == 'true') $returnset = "&return_module=$this_module&return_action=DetailView&return_id=$id";
+		else $returnset = "&return_module=$this_module&return_action=CallRelatedList&return_id=$id";
+		
+	 	$query = "select case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name," .
+				"'Documents' ActivityType,vtiger_attachments.type  FileType,crm2.modifiedtime lastmodified,
+				vtiger_seattachmentsrel.attachmentsid attachmentsid, vtiger_notes.notesid crmid,
+				vtiger_notes.notecontent description,vtiger_notes.*
+				from vtiger_notes
+				inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
+				inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_notes.notesid and vtiger_crmentity.deleted=0
+				inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_senotesrel.crmid 
+				LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid			
+				left join vtiger_seattachmentsrel  on vtiger_seattachmentsrel.crmid =vtiger_notes.notesid
+				left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
+				left join vtiger_users on vtiger_crmentity.smownerid= vtiger_users.id
+				where crm2.crmid=".$id;
+		
+		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset); 
+		
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+		return $return_value;
+	}
 
 	/**
 	 * For Record View Notification

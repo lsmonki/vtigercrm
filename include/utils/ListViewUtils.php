@@ -82,7 +82,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		{	
 			$fieldname = 'account_id';
 		}
-		if($fieldname == 'lastname' && ($module == 'Documents' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
+		if($fieldname == 'lastname' && ($module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
 		{
                   $fieldname = 'contact_id';
 		}
@@ -133,7 +133,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		}
 	}
 	//end
-
+	
 	//modified for vtiger_customview 27/5 - $app_strings change to $mod_strings
 	foreach($focus->list_fields as $name=>$tableinfo)
 	{
@@ -147,7 +147,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
                 		{
                        	 		$fieldname = 'account_id';
                 		}
-				if($fieldname == 'lastname' && ($module == 'Documents' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar') )
+				if($fieldname == 'lastname' && ($module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar') )
 				{
                                         $fieldname = 'contact_id';
 				}
@@ -166,7 +166,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 			{
 				$fieldname = 'account_id';
 			}
-			if($fieldname == 'lastname' && ($module == 'Documents' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar'))
+			if($fieldname == 'lastname' && ($module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar'))
 			{
 				$fieldname = 'contact_id';
 			}
@@ -197,17 +197,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 						{
 							$temp_sorder = 'ASC';
 						}
-						if($app_strings[$name])
-						{
-							$lbl_name = $app_strings[$name];
-						}
-						elseif($mod_strings[$name])
-						{
-							$lbl_name = $mod_strings[$name];
-						}else
-						{
-							$lbl_name = $name;
-						}
+						$lbl_name = getTranslatedString($name);
 						//added to display vtiger_currency symbol in listview header
 						if($lbl_name =='Amount')
 						{
@@ -588,7 +578,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		{
 			$fieldname = 'account_id';
 		}
-		if($fieldname == 'lastname' &&($module == 'Documents' ||$module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
+		if($fieldname == 'lastname' &&($module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
                        $fieldname = 'contact_id';
 
 		if($fieldname == 'productname' && $module != 'Products')
@@ -715,7 +705,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                 	{
                                         	$fieldname = 'account_id';
                                 	}
-					if($fieldname == 'lastname' &&($module == 'Documents' ||$module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
+					if($fieldname == 'lastname' &&($module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
         	                                $fieldname = 'contact_id';
 					if($fieldname == 'productname' && $module != 'Products')
 			                {
@@ -733,7 +723,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				{
 					$fieldname = 'account_id';
 				}
-				if($fieldname == 'lastname' && ($module == 'Documents' || $module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar'))
+				if($fieldname == 'lastname' && ($module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar'))
 				{
 					$fieldname = 'contact_id';
 				}
@@ -850,6 +840,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					$ext_pos = strrpos($fld_value, ".");
 					$ext =substr($fld_value, $ext_pos + 1);
 					$ext = strtolower($ext);
+					if($value != ''){
 					if($ext == 'bin' || $ext == 'exe' || $ext == 'rpm')
 						$fileicon="<img src='" . vtiger_imageurl('fExeBin.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
 					elseif($ext == 'jpg' || $ext == 'gif' || $ext == 'bmp')
@@ -860,11 +851,18 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						$fileicon="<img src='" . vtiger_imageurl('fbZipFile.gif', $theme) . "' hspace='3' align='absmiddle'	border='0'>";
 					else
 						$fileicon="<img src='" . vtiger_imageurl('fbUnknownFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
+					}
 				}
 				elseif($downloadtype == 'E')
 				{
-					$fld_value = $value;
-					$fileicon = "<img src='" . vtiger_imageurl('fbLink.gif', $theme) . "' alt='".$mod_strings['LBL_EXTERNAL_LNK']."' title='".$mod_strings['LBL_EXTERNAL_LNK']."' hspace='3' align='absmiddle' border='0'>";
+					if(trim($value) != '' ){
+						$fld_value = $value;
+						$fileicon = "<img src='themes/images/fbLink.gif' alt='".$mod_strings['LBL_EXTERNAL_LNK']."' title='".$mod_strings['LBL_EXTERNAL_LNK']."' hspace='3' align='absmiddle' border='0'>";
+					}
+					else{
+						$fld_value = '--';
+						$fileicon = '';
+					}
 				}
 				else
 				{
@@ -876,17 +874,19 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				$notes_id = $adb->query_result($list_result,$i-1,'crmid');
 				$folder_id = $adb->query_result($list_result,$i-1,'folderid');
 				$download_type = $adb->query_result($list_result,$i-1,'filelocationtype');
-				$file_path = $adb->query_result($list_result,$i-1,'filepath');
 				$file_status = $adb->query_result($list_result,$i-1,'filestatus');
+				$fileidQuery = "select attachmentsid from vtiger_seattachmentsrel where crmid=?";
+				$fileidres = $adb->pquery($fileidQuery,array($notes_id));
+				$fileid = $adb->query_result($fileidres,0,'attachmentsid');
 				if($file_name != '' && $file_status == 1)
 				{
-					if($download_type == 'I')
+					if($download_type == 'I' )
 					{
-						$fld_value = "<a href='index.php?module=Documents&action=DownloadFile&fileid=$notes_id&folderid=$folder_id' title='".$mod_strings["LBL_DOWNLOAD_FILE"]."'>".$fld_value."</a>";
+						$fld_value = "<a href='index.php?module=uploads&action=downloadfile&entityid=$notes_id&fileid=$fileid' title='".$mod_strings["LBL_DOWNLOAD_FILE"]."' onclick='javascript:dldCntIncrease($notes_id);'>".$fld_value."</a>";
 					}
 					elseif($download_type == 'E')
 					{
-						$fld_value = "<a href='$file_path' onclick='javascript:dldCntIncrease($notes_id);' title='".$mod_strings["LBL_DOWNLOAD_FILE"]."'>".$fld_value."</a>";
+						$fld_value = "<a target='_blank' href='$file_name' onclick='javascript:dldCntIncrease($notes_id);' title='".$mod_strings["LBL_DOWNLOAD_FILE"]."'>".$fld_value."</a>";
 					}
 					else
 					{
@@ -927,31 +927,19 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			if($fieldname == 'filetype')
 			{
 				$downloadtype = $adb->query_result($list_result,$i-1,'filelocationtype');
+				$filetype = $adb->query_result($list_result,$i-1,'filetype');
 				if($downloadtype == 'E' || $downloadtype != 'I')
 				{
 					$value = ' --';
-				}				
-			}
-			if($fieldname == 'filearchitecture')
-			{
-				$platform = $value;
-				if($platform == 'PI'){
-					$value=$app_strings['LBL_PLATFORM_INDEPENDENT'];
-				}
-				elseif($platform == 'PD')
-				{
-					$os = $adb->query_result($list_result,$i-1,'os');
-					if($os == 'Windows')
-					    $arc_icon="<img src='" . vtiger_imageurl('fbWindowsOS.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
-					elseif($os == 'Linux')
-						$arc_icon="<img src='" . vtiger_imageurl('fbLinuxOS.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
-					elseif($os == 'Mac')
-						$arc_icon="<img src='" . vtiger_imageurl('fbMacOS.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>"; 
-					$value=$arc_icon.$os;
 				}
 				else
-					$value=' --';				
-			}			
+					$value = $filetype;
+			}
+			if($fieldname == 'notecontent'){
+				$value = decode_html($value); 	
+				$value = textlength_check($value);
+				
+			}
 		}
 						//code for Documents module: end
 					
@@ -959,26 +947,19 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					{
 						$value=getRelatedTo($module,$list_result,$i-1);
 					}
-					elseif($module == 'Documents' && $name=='Related to')
-					{
-						$value = getRelatedTo($module,$list_result,$i-1);
-					}
 					//added for sorting by Contact Name ---------STARTS------------------
-                                        elseif($name=='Contact Name' && ($module == 'Documents' || $module =='SalesOrder' || $module == 'Quotes' || $module == 'PurchaseOrder'))
-                                        {
-                                                if($name == 'Contact Name')
-                                                {
-                                                        if ($module == 'Documents')
-								$contact_id = $adb->query_result($list_result,$i-1,"contact_id");
-							else
-                	                                       	$contact_id = $adb->query_result($list_result,$i-1,"contactid");
-                                                        $contact_name = getFullNameFromQResult($list_result, $i-1,"Contacts");
-                                                        $value="";
-                                                        if(($contact_name != "") && ($contact_id !='NULL'))
-                                                              $value ="<a href='index.php?module=Contacts&action=DetailView&parenttab=".$tabname."&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>";
-                                                }
+                    elseif($name=='Contact Name' && ($module =='SalesOrder' || $module == 'Quotes' || $module == 'PurchaseOrder'))
+                    {
+                            if($name == 'Contact Name')
+                            {
+                                    $contact_id = $adb->query_result($list_result,$i-1,"contactid");
+									$contact_name = getFullNameFromQResult($list_result, $i-1,"Contacts");
+                                    $value="";
+                                    if(($contact_name != "") && ($contact_id !='NULL'))
+                                          $value ="<a href='index.php?module=Contacts&action=DetailView&parenttab=".$tabname."&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>";
+                            }
 
-                                        }
+                    }
 					elseif($name == 'Product')
 					{
 						$product_id = textlength_check($adb->query_result($list_result,$i-1,"productname"));
@@ -1075,10 +1056,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				else
 					$list_header[] = $value;
 
-				if($fieldname=='filename')
-				{
-					$filename = $adb->query_result($list_result,$list_result_count,$fieldname);
-				}
 			}
 
 		}
@@ -1859,6 +1836,12 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		$value = ($temp_val != "") ? getCurrencyName($temp_val,false) : "";
 	}
+	elseif($uitype == 121){
+		$sql ="select foldername from vtiger_attachmentsfolder where folderid = ?";
+		$res = $adb->pquery($sql,array($temp_val));
+		$foldername = $adb->query_result($res,0,'foldername');
+		$value = $foldername;
+	}
 	//added for asterisk integration
 	elseif($uitype == 11 && get_use_asterisk($current_user->id) == 'true'){
 		$value = "<a href='javascript:;' onclick='startCall(&quot;$temp_val&quot;)'>".$temp_val."</a>";
@@ -2487,9 +2470,8 @@ function getListQuery($module,$where='')
                 $query .= " WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "Documents":
-		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.modifiedtime,
-			vtiger_notes.title, vtiger_notes.filename, vtiger_crmentity.smownerid,
-			vtiger_notes.*
+		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_crmentity.crmid, vtiger_crmentity.modifiedtime,
+			vtiger_crmentity.smownerid,vtiger_attachmentsfolder.*,vtiger_notes.*
 			FROM vtiger_notes
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_notes.notesid
@@ -2497,6 +2479,8 @@ function getListQuery($module,$where='')
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_attachmentsfolder 
+				ON vtiger_notes.folderid = vtiger_attachmentsfolder.folderid 
 			WHERE vtiger_crmentity.deleted = 0 ".$where;
 	        if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
             {

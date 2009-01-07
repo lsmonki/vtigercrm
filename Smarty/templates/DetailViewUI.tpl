@@ -257,11 +257,9 @@
                                                                 </td>	
 					     {elseif $keyid eq '53'} <!--Assigned To-->
                     				  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">
-                    				{if $keyoptions.0 eq 'User' && $keyadmin eq 1}
+                    				{if $keyadmin eq 1}
 			                        	<a href="{$keyseclink.0}">{$keyval}</a>         
-			                        {elseif $keyoptions.0 eq 'Group' && $keyadmin eq 1}
-                        				<a href="{$keyseclink.1}">{$keyval}</a>         
-						{else}	
+			                        {else}	
                         				{$keyval}
                     				{/if}
 					&nbsp;</span>
@@ -376,7 +374,7 @@
 					</td>
 
 				{elseif $keyid eq 69}<!-- for Image Reflection -->
-                                                  	<td align="left" width=25%">&nbsp;{$keyval}</td>
+     				<td align="left" width=25%">&nbsp;{$keyval}</td>
 				{else}									
-                                                  	<td class="dvtCellInfo" align="left" width=25%">&nbsp;{$keyval}</td>
+					<td class="dvtCellInfo" align="left" width=25%">&nbsp;{$keyval}</td>
 				{/if}

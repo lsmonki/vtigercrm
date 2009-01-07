@@ -166,34 +166,5 @@ class Faq extends CRMEntity {
 		return $list;
 	}
 
-	function get_attachments($id)
-	{
-		global $log,$current_user;
-		$log->debug("Entering get_attachments(".$id.") method ...");
-		// Desc: Inserted crm2.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
-		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
-		$tab_id=getTabid('Documents');
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3) {
-			$sec_parameter=getListViewSecurityParameter('Documents');
-		}
-		
-		$query = "select vtiger_notes.title,'Documents' ActivityType, vtiger_notes.filename,
-					crm2.modifiedtime lastmodified,
-					vtiger_notes.notesid crmid,
-					vtiger_notes.notecontent description, vtiger_users.user_name
-					from vtiger_notes
-					inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
-					inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
-					inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_notes.notesid and crm2.deleted=0
-					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupid = vtiger_crmentity.smownerid			
-					inner join vtiger_users on crm2.smownerid= vtiger_users.id
-					where vtiger_crmentity.crmid=".$id;
-		$query .= $sec_parameter;
-		$log->debug("Exiting get_attachments method ...");
-		return getAttachmentsAndNotes('Faq',$query,$id);
-	}
 }
 ?>

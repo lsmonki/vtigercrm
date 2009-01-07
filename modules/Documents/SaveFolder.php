@@ -40,8 +40,6 @@ global $adb;
 				$dbfldrname=$adb->query_result($result1,$i,'foldername');
 				if($dbfldrname == $foldername)
 					$flag = 1;
-				if($foldername == 'Default')
-					$flag = 2;
 			}
 			if($flag == 0)
 			{
@@ -56,8 +54,6 @@ global $adb;
 			}
 			elseif($flag == 1)
 				echo "DUPLICATE_FOLDERNAME";
-			elseif($flag == 2)
-				echo "CREATING_DEFAULT";
 		}
 		elseif($folderid != "")
 		{			
@@ -69,8 +65,6 @@ global $adb;
 				$dbfldrname=$adb->query_result($result1,$i,'foldername');
 				if($dbfldrname == $foldername)
 					$flag = 1;
-				if($foldername == 'Default')
-					$flag = 2;					
 			}			
 			if($flag == 0)
 			{
@@ -85,8 +79,6 @@ global $adb;
 			}
 			elseif($flag == 1)
 				echo "DUPLICATE_FOLDERNAME";
-			elseif($flag == 2)
-				echo "CREATING_DEFAULT";				
 		}
 	}
 

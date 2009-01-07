@@ -426,10 +426,19 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		if($value != '' && $value != 0)
 			$assigned_user_id = $value;
-		else {
+		else{
+			if($value=='0'){
+				if (isset($col_fields['assigned_group_info']) && $col_fields['assigned_group_info'] != '') {
+					$selected_groupname = $col_fields['assigned_group_info'];
+				} else {
+					$record = $col_fields["record_id"];
+					$module = $col_fields["record_module"];
+					$selected_groupname = getGroupName($record, $module);
+				}
+			}else
 				$assigned_user_id = $current_user->id;
 		}
-
+		
 		if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0))
 		{
 			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
@@ -1406,6 +1415,44 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
         $fieldvalue[] = getUserName($value);
         $fieldvalue[] = $value;
 	}
+	elseif($uitype == 121){
+		$editview_label[]=getTranslatedString($fieldlabel);
+		$folderid=$col_fields['folderid'];
+		$foldername_query = 'select foldername from vtiger_attachmentsfolder where folderid = ?';
+		$res = $adb->pquery($foldername_query,array($folderid));
+		$foldername = $adb->query_result($res,0,'foldername');
+		if($foldername != '' && $folderid != ''){
+			$fldr_name[$folderid]=$foldername;
+			}
+		$sql="select foldername,folderid from vtiger_attachmentsfolder order by foldername";
+		$res=$adb->pquery($sql,array());
+		for($i=0;$i<$adb->num_rows($res);$i++)
+			{
+				$fid=$adb->query_result($res,$i,"folderid");
+				$fldr_name[$fid]=$adb->query_result($res,$i,"foldername");	
+			}
+		$fieldvalue[] = $fldr_name;
+		}
+	elseif($uitype == 122){
+				if($value == 'I'){
+					$internal_selected = "selected";
+					$filename = $col_fields['filename'];
+				}
+				else{
+					$external_selected = "selected";
+					$filename = $col_fields['filename'];
+				}
+				$editview_label[] = array(getTranslatedString('Internal'),
+                                        getTranslatedString('External')
+                                        );
+                $editview_label[] = array($internal_selected,
+                                        $external_selected
+                                        );
+                $editview_label[] = array("I","E");
+                $editview_label[] = getTranslatedString('File Type');
+                $fieldvalue[] = $value;
+                $fieldvalue[] = $filename;
+	}
 	else
 	{
 		//Added condition to set the subject if click Reply All from web mail
@@ -1418,6 +1465,14 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			$rate_symbol = getCurrencySymbolandCRate($user_info['currency_id']);
 			$fieldvalue[] = convertFromDollar($value,$rate_symbol['rate']);
+		}
+		elseif($fieldname == 'fileversion'){
+			if(empty($value)){
+				$value = '';
+			}
+			else{
+				$fieldvalue[] = $value;
+			}
 		}
 		else
 			$fieldvalue[] = $value;

@@ -79,6 +79,7 @@ if($recordid == "")
 	$smarty->assign("SHOWVALUES",implode(",",$oCustomView->showvalues));
         $data_type[] = $oCustomView->data_type;
         $smarty->assign("DATATYPE",$data_type);
+        
 }
 else
 {
@@ -151,7 +152,6 @@ else
 			$smarty->assign("VALUE".$i,$advfilterlist[$i-1]["value"]);
 			$smarty->assign("AND_TEXT".$i,$and_text);
 		}
-
 		$smarty->assign("STDFILTERCOLUMNS",$stdfiltercolhtml);
 		$smarty->assign("STDCOLUMNSCOUNT",count($stdfiltercolhtml));
 		$smarty->assign("STDFILTERCRITERIA",$stdfilterhtml);

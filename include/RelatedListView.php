@@ -272,11 +272,10 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 	$noofrows = $adb->num_rows($result);
 
 	$_SESSION['documents_listquery'] = $query;
-	$header[] = $app_strings['LBL_CREATED'];
 	$header[] = $app_strings['LBL_TITLE'];
 	$header[] = $app_strings['LBL_DESCRIPTION'];
 	$header[] = $app_strings['LBL_ATTACHMENTS'];
-	$header[] = $app_strings['LBL_TYPE'];		
+	$header[] = $app_strings['LBL_ASSIGNED_TO'];		
 	$header[] = $app_strings['LBL_ACTION'];	
 	
 	if($result)
@@ -315,20 +314,6 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 					$editaction = 'upload';
 					$deleteaction = 'deleteattachments';
 				}
-				
-				if($row['createdtime'] != '0000-00-00 00:00:00')
-				{
-					$created_arr = explode(" ",getDisplayDate($createdtime));
-					$created_date = $created_arr[0];
-					$created_time = substr($created_arr[1],0,5);
-				}
-				else
-				{
-					$created_date = '';
-					$created_time = '';
-				}
-	
-				$entries[] = $created_date;
 				if($module == 'Documents')
 				{
 					$entries[] = '<a href="index.php?module='.$module.'&action=DetailView&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'&parenttab='.$_REQUEST["parenttab"].'">'.textlength_check($row['title']).'</a>';
@@ -360,31 +345,38 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 					$modulepermissionresult = $adb->pquery($modulepermissionQuery,array($prof_id));
 					$moduleviewpermission = $adb->query_result($modulepermissionresult,0,'permissions');
 					
-					$folderQuery = 'select folderid,filelocationtype,filepath,filestatus from vtiger_notes where notesid = ?';
+					$folderQuery = 'select folderid,filelocationtype,filestatus,filename from vtiger_notes where notesid = ?';
 					$folderresult = $adb->pquery($folderQuery,array($row["crmid"]));
 					$folder_id = $adb->query_result($folderresult,0,'folderid');
-					$filepath = $adb->query_result($folderresult,0,'filepath');
 					$download_type = $adb->query_result($folderresult,0,'filelocationtype');
 					$filestatus = $adb->query_result($folderresult,0,'filestatus');
+					$filename = $adb->query_result($folderresult,0,'filename');
 					
+					$fileQuery = $adb->pquery("select attachmentsid from vtiger_seattachmentsrel where crmid = ?",array($row['crmid']));
+					$fileid = $adb->query_result($fileQuery,0,'attachmentsid');
 					if($moduleviewpermission == 0)
 					{
-						if($download_type == 'I')
+						if($download_type == 'I' )
+						{
+							if($filestatus == 1 )
+								$entries[] = '<a href="index.php?module=Documents&action=DownloadFile&fileid='.$fileid.'&folderid='.$folder_id.'">'.textlength_check($attachmentname).'</a>';
+							elseif(isset($attachmentname) && $attachmentname != '')
+								$entries[] = textlength_check($attachmentname);
+							else
+								$entries[] = ' --';
+						}
+						elseif($download_type == 'E' )
 						{
 							if($filestatus == 1)
-								$entries[] = '<a href="index.php?module=Documents&action=DownloadFile&fileid='.$row["crmid"].'&folderid='.$folder_id.'">'.textlength_check($attachmentname).'</a>';
-							else
+								$entries[] = '<a target="_blank" href="'.$filename.'" onClick="javascript:dldCntIncrease('.$row['crmid'].');">'.textlength_check($attachmentname).'</a>';
+							elseif(isset($attachmentname) && $attachmentname != '')
 								$entries[] = textlength_check($attachmentname);
-						}
-						if($download_type == 'E')
-						{
-							if($filestatus == 1)
-								$entries[] = '<a href="'.$filepath.'" onClick="javascript:dldCntIncrease('.$row['crmid'].');">'.textlength_check($attachmentname).'</a>';
 							else
-								$entries[] = textlength_check($attachmentname);
+								$entries[] = ' --';
 						}
-						if(!isset($attachmentname))
-							$entries[] = ' --';
+						else{
+								$entries[] = ' --';	
+						}
 					}
 					else
 					{
@@ -396,10 +388,12 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 				}
 				else
 					$entries[]='';			
-				if($row['activitytype'] == 'Attachments')
-					$entries[] = '<a href="index.php?module=uploads&action=downloadfile&entityid='.$id.'&fileid='.$row['attachmentsid'].'">'.textlength_check($attachmentname).'</a>';
-	
-				$entries[] = $row['activitytype'];	
+				
+				$assignedToQuery = $adb->pquery('SELECT smownerid FROM vtiger_crmentity WHERE crmid = ?',array($row['crmid']));
+				$assignedTo = $adb->query_result($assignedToQuery,0,'smownerid');
+				if($assignedTo != '' ){
+					$entries[] = $assignedTo;
+				}
 				$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&return_id='.$_REQUEST["record"].'&parenttab='.$_REQUEST["parenttab"];
 	
 				if($module == 'Documents')

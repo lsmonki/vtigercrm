@@ -216,53 +216,6 @@ class PurchaseOrder extends CRMEntity {
 		return getHistory('PurchaseOrder',$query,$id);
 	}
 
-	/** Function to get the attachments associated with the Purchase Order
-	 *  This function accepts the id as arguments and execute the MySQL query using the id
-	 *  and sends the query and the id as arguments to renderRelatedAttachments() method.
-	 */
-	function get_attachments($id)
-	{
-		global $log,$current_user;
-		$tab_id=getTabid('Documents');
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-        {
-			$sec_parameter=getListViewSecurityParameter('Documents');
-        }
-		$log->debug("Entering get_attachments(".$id.") method ...");
-
-		$query = "select vtiger_notes.title, 'Documents      '  ActivityType, vtiger_notes.filename,
-		vtiger_attachments.type FileType, crm2.modifiedtime lastmodified,
-		vtiger_seattachmentsrel.attachmentsid attachmentsid, vtiger_notes.notesid crmid,
-		vtiger_notes.notecontent description, vtiger_users.user_name
-		from vtiger_notes
-			inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
-			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
-			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_notes.notesid and crm2.deleted=0
-			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupid = vtiger_crmentity.smownerid			
-			left join vtiger_seattachmentsrel  on vtiger_seattachmentsrel.crmid =vtiger_notes.notesid
-			left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
-			inner join vtiger_users on crm2.smownerid= vtiger_users.id
-		where vtiger_crmentity.crmid=".$id;
-		$query .= $sec_parameter;
-		$query .= ' union all ';
-
-		$query .= "select vtiger_attachments.subject as title ,'Attachments' as ActivityType,
-		vtiger_attachments.name as filename, vtiger_attachments.type as FileType, crm2.modifiedtime as lastmodified,
-		vtiger_attachments.attachmentsid as attachmentsid, vtiger_seattachmentsrel.attachmentsid as crmid,
-		vtiger_attachments.description, vtiger_users.user_name
-		from vtiger_attachments
-			inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
-			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_seattachmentsrel.crmid
-			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_attachments.attachmentsid
-			inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
-		where vtiger_crmentity.crmid=".$id;
-
-		$log->debug("Exiting get_attachments method ...");
-		return getAttachmentsAndNotes('PurchaseOrder',$query,$id,$sid='purchaseorderid');
-	}
 
 	/**	Function used to get the Status history of the Purchase Order
 	 *	@param $id - purchaseorder id

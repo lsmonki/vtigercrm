@@ -14,12 +14,12 @@ function UpdateAjaxSave(label,fid,fldname,fileOrFolder)
         fldVal=$('txtbox_'+label).value;
 	if(fldVal.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
         {
-                alert('The Folder name cannot be empty');
+                alert(alert_arr.FOLDERNAME_EMPTY);
                 return false;
         }
         if(fldVal.replace(/^\s+/g, '').replace(/\s+$/g, '').length>=21)
         {
-                alert('Folder name is too long. Try again!');
+                alert(alert_arr.FOLDER_NAME_TOO_LONG);
                 return false;
         }
 	if(fldVal.match(/['"\\%+?]/))
@@ -32,7 +32,7 @@ function UpdateAjaxSave(label,fid,fldname,fileOrFolder)
         else
 	{
                 var foldername = encodeURIComponent(fldVal);
-		foldername = foldername.replace(/^\s+/g, '').replace(/\s+$/g, '');
+				foldername = foldername.replace(/^\s+/g, '').replace(/\s+$/g, '');
                 foldername = foldername.replace(/&/gi,'*amp*');		
                 var url='action=DocumentsAjax&mode=ajax&file=SaveFolder&module=Documents&record='+fid+'&foldername='+fldVal+'&savemode=Save';
 	}
@@ -57,7 +57,7 @@ function UpdateAjaxSave(label,fid,fldname,fileOrFolder)
                 		        }
 					else if(item.indexOf('DUPLICATE_FOLDERNAME') > -1)
 					{
-						alert('Trying to duplicate an existing folder name. Please try again !');
+						alert(alert_arr.DUPLICATE_FOLDER_NAME);
 					}
                                         else
 					{
@@ -89,24 +89,19 @@ function AddFolder()
 {
         var fldrname=getObj('folder_name').value;
 		var fldrdesc=getObj('folder_desc').value;
-		if(fldrname == 'Default')
-		{
-			alert('Cannot create folder with that name !');
-			return false;
-		}
         if(fldrname.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
         {
-                alert('The Folder name cannot be empty');
+                alert(alert_arr.FOLDERNAME_EMPTY);
                 return false;
         }
         if(fldrname.replace(/^\s+/g, '').replace(/\s+$/g, '').length>=21)
         {
-                alert('Folder name is too long. Try again!');
+                alert(alert_arr.FOLDER_NAME_TOO_LONG);
                 return false;
         }
         if(fldrdesc.replace(/^\s+/g, '').replace(/\s+$/g, '').length>=51)
         {
-                alert('Folder description is too long. Try again!');
+                alert(alert_arr.FOLDER_DESCRIPTION_TOO_LONG);
                 return false;
         }
 	if(fldrname.match(/['"\\%+]/) || fldrdesc.match(/['"\\%+]/))
@@ -155,26 +150,21 @@ function AddFolder()
 					}
 					else if(item.indexOf('DUPLICATE_FOLDERNAME') > -1)
 					{
-						alert('Trying to duplicate an existing folder name. Please try again !');
+						alert(alert_arr.DUPLICATE_FOLDER_NAME);
 					}
-					else if(item.indexOf('CREATING_DEFAULT') > -1)
-					{
-						alert('Cannot create a folder with this name !');
-					}					
+//					else if(item.indexOf('CREATING_DEFAULT') > -1)
+//					{
+//						alert('Cannot create a folder with this name !');
+//					}					
 					else
 					{
 						getObj("ListViewContents").innerHTML = item;
-						reloadFrame();
 					}
                                 }
                         }
                 );
 }
 
-function reloadFrame()
-{
-	$('AddFile_id').src = 'index.php?module=Documents&action=DocumentsAjax&file=AddFile';
-}
 
 function DeleteFolderCheck(folderId)
 {
@@ -188,7 +178,7 @@ function DeleteFolderCheck(folderId)
                                         var item = response.responseText;
                                        	if(item.indexOf("NOT_PERMITTED") > -1)
 					{
-						alert("You are not permitted to execute this operation.");
+						alert(alert_arr.NOT_PERMITTED);
 						return false;
 					}
 					else if(item.indexOf("FAILURE") > -1)
@@ -217,20 +207,19 @@ function DeleteFolder(folderId)
                         postBody: "module=Documents&action=DocumentsAjax&mode=ajax&file=DeleteFolder&folderid="+folderId,
                         onComplete: function(response) {
                                         var item = response.responseText;
-					$('status').style.display = "none";
+										$('status').style.display = "none";
                                         if(item.indexOf("FAILURE") > -1)
                                                 alert('Error while deleting the folder.Please try again later.')
                                         else
-						$('ListViewContents').innerHTML = item;
-			reloadFrame();
-                        }
+										$('ListViewContents').innerHTML = item;
+		               }
                 }
         );
 }
 
 function MoveFile(id,foldername)
 {
-	fninvsh('folderLay');
+		fninvsh('movefolderlist');
         var select_options  =  document.getElementById('allselectedboxes').value;
         var x = select_options.split(";");
 	    var searchurl= document.getElementById('search_url').value;
@@ -320,14 +309,14 @@ function checkFileIntegrity()
                 );
 }
 
-function checkFileIntegrityDetailView(fileid)
+function checkFileIntegrityDetailView(noteid)
 {
 	$('vtbusy_integrity_info').style.display='';
 	new Ajax.Request(
             'index.php',
             {queue: {position: 'end', scope: 'command'},
              method: 'post',
-             postBody: 'module=Documents&action=DocumentsAjax&mode=ajax&file=SaveFile&act=checkFileIntegrityDetailView&file_id='+fileid,
+             postBody: 'module=Documents&action=DocumentsAjax&mode=ajax&file=SaveFile&act=checkFileIntegrityDetailView&noteid='+noteid,
              onComplete: function(response) {
              	var item = response.responseText;
 		if(item.indexOf('not_this_file') > -1)

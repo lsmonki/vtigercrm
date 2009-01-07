@@ -185,6 +185,11 @@
 				
 				/* Added for Documents module */
 				NO_SPECIAL_CHARS_DOCS:'Special characters like quotes, backslash, + symbol, % and ? are not allowed',
+				FOLDER_NAME_TOO_LONG:'Folder name is too long. Try again!',
+				FOLDERNAME_EMPTY:'The Folder name cannot be empty',
+				DUPLICATE_FOLDER_NAME:'Trying to duplicate an existing folder name. Please try again !',
+				FOLDER_DESCRIPTION_TOO_LONG:'Folder description is too long. Try again!',
+				NOT_PERMITTED:"You are not permitted to execute this operation.",		
 				
 				ALL_FILTER_CREATION_DENIED:'Cannot create CustomView using name "All", try using different ViewName',
 				OPERATION_DENIED:'You are denied to perform this operation',

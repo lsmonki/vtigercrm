@@ -23,7 +23,7 @@ global $adv_filter_options;
 $adv_filter_options = array("e"=>"".$mod_strings['equals']."",
                             "n"=>"".$mod_strings['not equal to']."",
                             "s"=>"".$mod_strings['starts with']."",
-			    "ew"=>"".$mod_strings['ends with']."",
+			    			"ew"=>"".$mod_strings['ends with']."",
                             "c"=>"".$mod_strings['contains']."",
                             "k"=>"".$mod_strings['does not contain']."",
                             "l"=>"".$mod_strings['less than']."",
@@ -899,7 +899,7 @@ class CustomView extends CRMEntity{
 						}
 					}
 
-					//Added for for assigned to sorting
+					//Added for assigned to sorting
 					if($list[1] == "smownerid")
 					{
 						$sqllist_column = "case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name";
@@ -1013,6 +1013,9 @@ class CustomView extends CRMEntity{
 								}
 								else
 									$advfiltersql[] = "vtiger_activity.eventstatus".$this->getAdvComparator($advfltrow["comparator"],trim($advfltrow["value"]),$datatype);
+							}
+							elseif($this->customviewmodule == "Documents" && $columns[1]=='folderid'){
+								$advfiltersql[] = "vtiger_attachmentsfolder.foldername".$this->getAdvComparator($advfltrow["comparator"],trim($advfltrow["value"]),$datatype);
 							}
 							else
 							{

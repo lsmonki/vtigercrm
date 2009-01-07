@@ -220,7 +220,12 @@ function export($type)
 
 		foreach ($val as $key => $value)
 		{
-			if($key != "user_name")
+			if($type == 'Documents' && $key == 'description'){
+				$value = strip_tags($value);
+				$value = str_replace('&nbsp;','',$value);
+				array_push($new_arr,$value);
+			}
+			elseif($key != "user_name")
 			{
 				// No conversions are required here. We need to send the data to csv file as it comes from database.
 				array_push($new_arr, preg_replace("/\"/","\"\"",$value));

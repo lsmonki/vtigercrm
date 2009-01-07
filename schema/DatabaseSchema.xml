@@ -768,16 +768,13 @@
 		<field name="title" type="C" size="50">
 			<notnull />
 		</field>
-		<field name="filename" type="C" size="50" />
+		<field name="filename" type="C" size="100" />
 		<field name="notecontent" type="X" />
 		<field name="folderid" type="I" size="19">
 			<default value="0" />
 			<notnull />
 		</field>        
-		<field name="filepath" type="C" size="255">
-			<default value="NULL" />
-		</field>
-		<field name="filetype" type="C" size="50">
+			<field name="filetype" type="C" size="50">
 			<default value="NULL" />
 		</field>
 		<field name="filelocationtype" type="C" size="5">
@@ -1791,7 +1788,6 @@
 		<field name="title" type="C" size="255">
 			<notnull />
 		</field>
-		<field name="filename" type="C" size="50" />
 		<field name="solution" type="X" />
 		<field name="update_log" type="X" />
 		<field name="version_id" type="I" size="11" />
@@ -3529,7 +3525,10 @@
 			<notnull />
 			<default value="0" />
 		</field>
-
+		<field name="actions" type="C" size="50">
+			<notnull />
+			<default value="" />
+		</field>
 		<index name="relatedlists_relation_id_idx">
 			<col>relation_id</col>
 		</index>

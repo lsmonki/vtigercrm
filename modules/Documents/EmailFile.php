@@ -13,16 +13,21 @@ require_once('include/database/PearDatabase.php');
 
 global $adb;
 
-$fileid = $_REQUEST['record'];
+$notesid = $_REQUEST['record'];
 
-$dbQuery = "select filename,folderid,filepath from vtiger_notes where notesid= ?";
-$result = $adb->pquery($dbQuery,array($fileid));
-
+$dbQuery = "select filename,folderid from vtiger_notes where notesid= ?";
+$result = $adb->pquery($dbQuery,array($notesid));
 $folderid = $adb->query_result($result,0,'folderid');
-$filepath = $adb->query_result($result,0,'filepath');
 $filename = $adb->query_result($result,0,'filename');
 
-$fileinattachments = $root_directory.$filepath.$fileid.'_'.$folderid.'_'.$filename;
+$fileidQuery = "select attachmentsid from vtiger_seattachmentsrel where crmid = ?";
+$fileidRes = $adb->pquery($fileidQuery,array($notesid));
+$fileid = $adb->query_result($fileidRes,0,'attachmentsid');
+
+$pathQuery = $adb->pquery("select path from vtiger_attachments where attachmentsid = ?",array($fileid));
+$filepath = $adb->query_result($pathQuery,0,'path');
+		
+$fileinattachments = $root_directory.$filepath.$fileid.'_'.$filename;
 if(!file($fileinattachments))$fileinattachments = $root_directory.$filepath.$fileid."_".$filename;
 
 $newfileinstorage = $root_directory.'/storage/'.$filename;

@@ -267,7 +267,7 @@ $app_strings = array (
 'LBL_OPEN_ACTIVITIES' => 'Open Activities',
 'LBL_HISTORY' => 'History',
 'LBL_ACTIVITY_HISTORY' => 'Activity History',
-'LBL_ATTACHMENTS' => 'Attachments',
+'LBL_ATTACHMENTS' => 'File Name',
 'LBL_ATTACHMENT' => 'Attachment',
 'LBL_TIME' => 'Time',
 'LBL_ACTION' => 'Action',
@@ -1132,12 +1132,12 @@ $app_strings = array (
 'SINGLE_Documents' => 'Document',
 'LBL_NEW_NOTE' => 'New Document',
 'Documents' => 'Documents',
-'Documents' => 'Documents',
 'Document' => 'Document',
 'LBL_NOTE' => 'Document',
 'LBL_CREATING_NEW_Documents' => 'Creating New Document',
 'LBL_PLATFORM_INDEPENDENT'=>'Platform Independent',
-'Attachments' => 'Attachments', //added for list header label in related lists
+'Attachments' => 'Documents', //added for list header label in related lists
+'Assigned To'=>'Assigned To',
 
 // Layout Editor and Ease navigation between records in Detail view
 'LNK_LIST_NEXT' => 'Next',

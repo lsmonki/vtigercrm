@@ -80,6 +80,9 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 		{
 			$fieldname = "contact_id";
 		}
+		if($fieldname == 'folderid' && $module == 'Documents'){
+			$fieldname = 'foldername';
+		}
 		array_push($field_list, $fieldname);
 		$j++;
 	}
@@ -344,7 +347,12 @@ function BasicSearch($module,$search_field,$search_string)
 		$column_name='currency_name';
 		$table_name='vtiger_currency_info';
 		$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";
-	} 
+	}
+	elseif($search_field == 'folderid' && $module == 'Documents'){
+		$column_name='foldername';
+		$table_name='vtiger_attachmentsfolder';
+		$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";	
+	}
 	else
 	{	
 		//Check added for tickets by accounts/contacts in dashboard
@@ -636,6 +644,10 @@ function getAdvSearchfields($module)
                 {
                         $fieldtablename = 'vtiger_contactdetails2';
                         $fieldcolname = 'lastname';
+                }
+                if($fieldtablename == 'vtiger_notes' && $fieldcolname == 'folderid'){
+                	$fieldtablename = 'vtiger_attachmentsfolder';
+                	$fieldcolname = 'foldername';
                 }
 		if($fieldlabel != 'Related to')
 		{

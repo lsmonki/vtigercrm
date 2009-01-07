@@ -21,18 +21,22 @@ $fileid = $_REQUEST['fileid'];
 $folderid = $_REQUEST['folderid'];
 
 $returnmodule='Documents';
-
+$noteQuery = $adb->pquery("select crmid from vtiger_seattachmentsrel where attachmentsid = ?",array($fileid));
+$noteid = $adb->query_result($noteQuery,0,'crmid');
 $dbQuery = "SELECT * FROM vtiger_notes WHERE notesid = ? and folderid= ?";
-$result = $adb->pquery($dbQuery,array($fileid,$folderid)) or die("Couldn't get file list");
+$result = $adb->pquery($dbQuery,array($noteid,$folderid)) or die("Couldn't get file list");
 if($adb->num_rows($result) == 1)
 {
 	$fileType = @$adb->query_result($result, 0, "filetype");
 	$name = @$adb->query_result($result, 0, "filename");
 	$name = html_entity_decode($name, ENT_QUOTES, $default_charset);
-	$filepath = @$adb->query_result($result, 0, "filepath");
-
-	$saved_filename = $fileid."_".$folderid."_".$name;
-	if(!file($filepath.$saved_filename))$saved_filename = $fileid."_".$name;
+	$pathQuery = $adb->pquery("select path from vtiger_attachments where attachmentsid = ?",array($fileid));
+	$filepath = $adb->query_result($pathQuery,0,'path');
+		
+	$saved_filename = $fileid."_".$name;
+	if(!$filepath.$saved_filename)
+	$saved_filename = $fileid."_".$name;
+	
 	$filesize = filesize($filepath.$saved_filename);
 	if(!fopen($filepath.$saved_filename, "r"))
 	{

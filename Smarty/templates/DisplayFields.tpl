@@ -24,6 +24,7 @@
 		{assign var="fldlabel" value="$maindata[1][0]"}
 		{assign var="fldlabel_sel" value="$maindata[1][1]"}
 		{assign var="fldlabel_combo" value="$maindata[1][2]"}
+		{assign var="fldlabel_other" value="$maindata[1][3]"}
 		{assign var="fldname" value="$maindata[2][0]"}
 		{assign var="fldvalue" value="$maindata[3][0]"}
 		{assign var="secondvalue" value="$maindata[3][1]"}
@@ -455,6 +456,10 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 					<td width="30%" align=left class="dvtCellInfo">
 						<input name="{$fldname}" type="checkbox" tabindex="{$vt_tab}" checked>
 					</td>
+				{elseif $fldname eq 'filestatus'&& $MODE eq 'create'}
+					<td width="30%" align=left class="dvtCellInfo">
+						<input name="{$fldname}" type="checkbox" tabindex="{$vt_tab}" checked>
+					</td>
 				{else}
 					<td width="30%" align=left class="dvtCellInfo">
 						<input name="{$fldname}" tabindex="{$vt_tab}" type="checkbox" {if ( $PROD_MODE eq 'create' &&  $fldname|substr:0:3 neq 'cf_') ||( $fldname|substr:0:3 neq 'cf_' && $PRICE_BOOK_MODE eq 'create' ) || $USER_MODE eq 'create'}checked{/if}>
@@ -633,27 +638,11 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 					<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small"  disabled >
 				{/if}
 			</td>
-			<td colspan="3" width="30%" align=left class="dvtCellInfo">
-				{if $MODULE neq 'Documents'}
-					<input name="{$fldname}"  type="file" value="{$secondvalue}" tabindex="{$vt_tab}" onchange="validateFilename(this)"/>
-				{else}
-					<input type="text" style="border: 1px solid rgb(186, 186, 186);" readonly name="{$fldname}" id="{$fldname}" value="{$fldvalue}" /> &nbsp;
-					<input type="hidden" name="fileid" id="fileid" value="" />
-					{if $ID eq ''}
-						{assign var=id value=0}
-					{else}
-						{assign var=id value=$ID}
-					{/if}
-					<span id="fileaddbutton">
-						<a href="javascript:;" onclick="FileAdd(this,'fileLay','EditView',{$id});"><img id="FileAdd_img_id" src="{'select.gif'|@vtiger_imageurl:$THEME}" alt="Add File..." title="Add File..." border=0></a>
-					</span>
-				{/if}
-				<!-- Start: Popup layer to add file in Documents module -->
-				<div id="fileLay" class="layerPopup" style="height:345px;width:500px;z-index:2000;display:none;">
-        			<iframe height="345" width="500" name="AddFile" id="AddFile_id"  frameborder="0" scrolling="no" src="index.php?module=Documents&action=DocumentsAjax&file=AddFile" style="margin: 0;" allowTransparency="true"></iframe>
-				</div>
-				<!-- End: Popup layer to add file in Documents module -->
-
+			
+			<td colspan="1" width="30%" align=left class="dvtCellInfo">
+				<input name="{$fldname}"  type="file" value="{$secondvalue}" tabindex="{$vt_tab}" onchange="validateFilename(this)"/>
+				<input type="hidden" name="{$fldname}_hidden" value="{$secondvalue}"/>
+				<input type="hidden" name="id" value=""/>{$fldvalue}
 			</td>
 		{elseif $uitype eq 156}
 			<td width="20%" class="dvtCellLabel" align=right>
@@ -825,6 +814,57 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 					&nbsp;{$disp_text}
 				{/foreach}
 			</td>
+		{elseif $uitype eq 121}
+		<td width="20%" class="dvtCellLabel" align=right>
+		<font color="red">*</font>{$fldlabel}
+		{if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}
+		</td>
+		<td width="30%" align=left class="dvtCellInfo">
+			<select name="{$fldname}" tabindex="{$vt_tab}" class="small">
+				{foreach item=v key=k from=$fldvalue}	 
+				<option value="{$k}">{$v}</option> 
+				{/foreach}
+			</select>
+		</td>
+		{elseif $uitype eq 122}
+			
+		  <td width=20% class="dvtCellLabel" align=right >
+				{$fldlabel_other}&nbsp;
+				<select class="small" name="{$fldname}" onchange='changeDldType(this);'>
+					{section name=combo loop=$fldlabel}
+						<option value="{$fldlabel_combo[combo]}" {$fldlabel_sel[combo]} >{$fldlabel[combo]} </option>
+					{/section}
+				</select>
+				{if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}" id="{$fldname}_mass_edit_check" class="small" >{/if}			
+			</td>
+		
+		  {assign var=check value=1}
+				{foreach key=key_one item=arr from=$fldvalue}
+					{foreach key=sel_value item=value from=$arr}
+						{if $value eq 'I'}
+							{assign var=check value=$check*0}
+						{else}
+							{assign var=check value=$check*1}
+						{/if}
+					{/foreach}
+				{/foreach}
+				
+				{if $check eq 1}
+					{assign var=internalfilename value='display:none'}
+					{assign var=externalfilename value='display:block'}
+				{else}
+					{assign var=internalfilename value='display:block'}
+					{assign var=externalfilename value='display:none'}
+				{/if}
+		  <td width="30%" align=left class="dvtCellInfo">
+		  <div id="internal"  style="{$internalfilename}" >
+		   <input type="file" name="filelocation" class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" value="{$secondvalue}">{if $secondvalue neq '' && $value neq 'E'}[{$secondvalue}]{/if}<br>
+		  </div>
+		  
+		  <div id="external" class"dvtCellLabel"  style="{$externalfilename}" >
+		  <input type="text" name="filepath" class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" value="{if $value eq 'E'}{$secondvalue}{/if}"><br>
+		  </div>
+		  </td>
 		{elseif $uitype eq 83} <!-- Handle the Tax in Inventory -->
 			{foreach item=tax key=count from=$TAX_DETAILS}
 				{if $tax.check_value eq 1}
@@ -939,15 +979,6 @@ function updateBaseCurrencyValue()
 		if (cur_ele != null && cur_ele.checked == true)
     		base_currency_ele.value = cur_ele.value;
 	{rdelim}
-{rdelim}
-
-function FileAdd(obj,Lay,return_action,crm_id)
-{ldelim}
-	fnvshobj(obj,Lay);
-	window.frames['AddFile'].document.getElementById('divHeader').innerHTML="Add file";
-	window.frames['AddFile'].document.FileAdd.return_action.value=return_action;
-	window.frames['AddFile'].document.FileAdd.crm_id.value=crm_id;
-	positionDivToCenter(Lay);
 {rdelim}
 
 </script>

@@ -2506,12 +2506,12 @@ function get_converted_html(str)
 	return str;
 }
 //To select the select all check box(if all the items are selected) when the form loads.
-function default_togglestate()
+function default_togglestate(obj_id)
 {
 	var all_state=true;
-	if (typeof(getObj("selected_id").length)=="undefined") 
+	if (typeof(getObj(obj_id).length)=="undefined") 
 	{
-		var state=getObj("selected_id").checked;
+		var state=getObj(obj_id).checked;
 		if (state == false)
 		{
 			all_state=false;
@@ -2521,9 +2521,9 @@ function default_togglestate()
 	} 
 	else
 	{
-		for (var i=0;i<(getObj("selected_id").length);i++)
+		for (var i=0;i<(getObj(obj_id).length);i++)
 		{
-			var state=getObj("selected_id")[i].checked;
+			var state=getObj(obj_id)[i].checked;
 			if (state == false)
 			{
 				all_state=false;
@@ -3494,4 +3494,13 @@ if(!tooltip){
 }
 //tooltip manager changes end
 
-
+// Added for Documents module
+function changeDldType(type){
+	if(type != null && type.value == 'I'){
+		document.getElementById('external').style.display="none";
+		document.getElementById('internal').style.display="block";
+	} else{
+		document.getElementById('external').style.display="block";
+		document.getElementById('internal').style.display="none";
+	}
+}

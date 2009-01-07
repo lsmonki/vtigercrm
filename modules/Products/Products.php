@@ -276,69 +276,7 @@ class Products extends CRMEntity {
 		return $order_by;
 	}
 
-	/**	function used to get the attachment which are related to the product
-	 *	@param int $id - product id to which we want to retrieve the attachments and notes
-         *      @return array - array which will be returned from the function getAttachmentsAndNotes
-        **/
-	function get_attachments($id)
-	{
-		global $log,$current_user;
-		$tab_id=getTabid('Documents');
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-        {
-			$sec_parameter=getListViewSecurityParameter('Documents');
-        }
-		$log->debug("Entering get_attachments(".$id.") method ...");
 
-		$query = "SELECT vtiger_notes.title, 'Documents      ' AS ActivityType,
-			vtiger_notes.filename, vtiger_attachments.type  AS FileType,
-				crm2.modifiedtime AS lastmodified,
-			vtiger_seattachmentsrel.attachmentsid AS attachmentsid,
-			vtiger_notes.notesid AS crmid, 
-			vtiger_notes.notecontent AS description,
-			vtiger_users.user_name
-			FROM vtiger_notes
-			INNER JOIN vtiger_senotesrel
-				ON vtiger_senotesrel.notesid = vtiger_notes.notesid
-			INNER JOIN vtiger_crmentity
-				ON vtiger_crmentity.crmid = vtiger_senotesrel.crmid
-			INNER JOIN vtiger_crmentity AS crm2
-				ON crm2.crmid = vtiger_notes.notesid
-				AND crm2.deleted = 0
-			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupid = vtiger_crmentity.smownerid				
-			LEFT JOIN vtiger_seattachmentsrel
-				ON vtiger_seattachmentsrel.crmid = vtiger_notes.notesid
-			LEFT JOIN vtiger_attachments
-				ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
-			INNER JOIN vtiger_users
-				ON vtiger_crmentity.smownerid = vtiger_users.id
-			WHERE vtiger_crmentity.crmid = ".$id." ".$sec_parameter."
-		UNION ALL
-			SELECT vtiger_attachments.subject AS title,
-				'Attachments' AS ActivityType,
-			vtiger_attachments.name AS filename,
-			vtiger_attachments.type AS FileType,
-				crm2.modifiedtime AS lastmodified,
-			vtiger_attachments.attachmentsid AS attachmentsid,
-			vtiger_seattachmentsrel.attachmentsid AS crmid,
-			vtiger_attachments.description, vtiger_users.user_name
-			FROM vtiger_attachments
-			INNER JOIN vtiger_seattachmentsrel
-				ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
-			INNER JOIN vtiger_crmentity
-				ON vtiger_crmentity.crmid = vtiger_seattachmentsrel.crmid
-			INNER JOIN vtiger_crmentity AS crm2
-				ON crm2.crmid = vtiger_attachments.attachmentsid
-			INNER JOIN vtiger_users
-				ON vtiger_crmentity.smcreatorid = vtiger_users.id
-			WHERE vtiger_crmentity.crmid = ".$id;	
-
-		$log->debug("Exiting get_attachments method ...");
-        	return getAttachmentsAndNotes('Products',$query,$id);
-	}
 
 	/**	function used to get the list of leads which are related to the product
 	 *	@param int $id - product id 

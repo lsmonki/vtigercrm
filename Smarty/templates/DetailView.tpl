@@ -541,7 +541,7 @@ function sendfile_email()
                 {if $MODULE eq 'Contacts' || $MODULE eq 'Accounts' || $MODULE eq 'Leads' || ($MODULE eq 'Documents' && $FILE_EXIST eq 'yes'  && ($ADMIN eq 'yes' || $FILE_STATUS eq '1'))}
                         <table width="100%" border="0" cellpadding="5" cellspacing="0">
                                 <tr><td>&nbsp;</td></tr>
-{if $TODO_PERMISSION eq 'true' || $EVENT_PERMISSION eq 'true' || $CONTACT_PERMISSION eq 'true'|| $MODULE eq 'Contacts' || ($MODULE eq 'Documents' && $FILE_EXIST eq 'yes')}                              
+{if $TODO_PERMISSION eq 'true' || $EVENT_PERMISSION eq 'true' || $CONTACT_PERMISSION eq 'true'|| $MODULE eq 'Contacts' || ($MODULE eq 'Documents' && $FILE_EXIST eq 'yes' && $FILE_STATUS eq '1')}                              
 <tr><td align="left" class="genHeaderSmall">{$APP.LBL_ACTIONS}</td></tr>
 {/if}
                                 {if $MODULE eq 'Contacts'}
@@ -571,14 +571,14 @@ function sendfile_email()
 	{/if}
 
 <!-- Start: Actions for Documents Module -->
-	{if $MODULE eq 'Documents'}
+	{if $MODULE eq 'Documents' && $FILE_STATUS eq '1'}
                                 <tr><td align="left" style="padding-left:10px;">			        
 				{if $DLD_TYPE eq 'I'}	
-					<br><a href="index.php?module=Documents&action=DownloadFile&fileid={$NOTESID}&folderid={$FOLDERID}" class="webMnu"><img src="{'fbDownload.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle" title="{$APP.LNK_DOWNLOAD}" border="0"/></a>
-                    <a href="index.php?module=Documents&action=DownloadFile&fileid={$NOTESID}&folderid={$FOLDERID}">{$MOD.LBL_DOWNLOAD_FILE}</a>
+					<br><a href="index.php?module=uploads&action=downloadfile&fileid={$FILEID}&entityid={$NOTESID}"  onclick="javascript:dldCntIncrease({$NOTESID});" class="webMnu"><img src="{'fbDownload.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle" title="{$APP.LNK_DOWNLOAD}" border="0"/></a>
+                    <a href="index.php?module=uploads&action=downloadfile&fileid={$FILEID}&entityid={$NOTESID}" onclick="javascript:dldCntIncrease({$NOTESID});">{$MOD.LBL_DOWNLOAD_FILE}</a>
 				{elseif $DLD_TYPE eq 'E'}
-					<br><a href="{$DLD_PATH}" onclick="javascript:dldCntIncrease({$NOTESID});"><img src="{'fbDownload.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" title="{$APP.LNK_DOWNLOAD}" border="0"></a>
-					<a href="{$DLD_PATH}" onclick="javascript:dldCntIncrease({$NOTESID});">{$MOD.LBL_DOWNLOAD_FILE}</a>
+					<br><a target="_blank" href="{$DLD_PATH}" onclick="javascript:dldCntIncrease({$NOTESID});"><img src="{'fbDownload.gif'|@vtiger_imageurl:$THEME}"" align="absmiddle" title="{$APP.LNK_DOWNLOAD}" border="0"></a>
+					<a target="_blank" href="{$DLD_PATH}" onclick="javascript:dldCntIncrease({$NOTESID});">{$MOD.LBL_DOWNLOAD_FILE}</a>
 				{/if}
 </td></tr>
 {if $CHECK_INTEGRITY_PERMISSION eq 'yes'}
@@ -595,7 +595,7 @@ function sendfile_email()
 				{if $DLD_TYPE eq 'I'}	
 					<input type="hidden" id="dldfilename" name="dldfilename" value="{$FILENAME}">
 					<br><a href="javascript: document.DetailView.return_module.value='Documents'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='Documents'; document.DetailView.action.value='EmailFile'; document.DetailView.record.value={$NOTESID}; document.DetailView.return_id.value={$NOTESID}; sendfile_email();" class="webMnu"><img src="{'attachment.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle" border="0"/></a>
-                    <a href="javascript: document.DetailView.return_module.value='Attachments'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='Documents'; document.DetailView.action.value='EmailFile'; document.DetailView.record.value={$NOTESID}; document.DetailView.return_id.value={$NOTESID}; sendfile_email();">{$MOD.LBL_EMAIL_FILE}</a>                                      
+                    <a href="javascript: document.DetailView.return_module.value='Documents'; document.DetailView.return_action.value='DetailView'; document.DetailView.module.value='Documents'; document.DetailView.action.value='EmailFile'; document.DetailView.record.value={$NOTESID}; document.DetailView.return_id.value={$NOTESID}; sendfile_email();">{$MOD.LBL_EMAIL_FILE}</a>                                      
 				{/if}
 </td></tr>
 <tr><td>&nbsp;</td></tr>

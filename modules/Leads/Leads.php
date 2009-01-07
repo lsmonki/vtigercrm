@@ -83,6 +83,7 @@ class Leads extends CRMEntity {
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'lastname';
 	var $default_sort_order = 'ASC';
+
 	//var $groupTable = Array('vtiger_leadgrouprelation','leadid');
 	
 	function Leads()	{
@@ -314,59 +315,6 @@ class Leads extends CRMEntity {
 	
 		$log->debug("Exiting get_history method ...");
 		return getHistory('Leads',$query,$id);
-	}
-	
-	/**
-	 * Function to get Lead related Attachments
-	 * @param  integer   $id      - leadid
-	 * returns related Attachment record in array format
-	 */
-	function get_attachments($id)
-	{
-		global $log,$current_user;
-		$tab_id=getTabid('Documents');
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-	    {
-			$sec_parameter=getListViewSecurityParameter('Documents');
-	    }
-		$log->debug("Entering get_attachments(".$id.") method ...");
-		// Armando L�scher 18.10.2005 -> �visibleDescription
-		// Desc: Inserted crm2.createdtime, vtiger_notes.notecontent description, vtiger_users.user_name
-		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
-		$query = "select vtiger_notes.title,'Documents      ' as ActivityType, vtiger_notes.filename,
-		vtiger_attachments.type as FileType,crm2.modifiedtime as lastmodified,
-		vtiger_seattachmentsrel.attachmentsid as attachmentsid, vtiger_notes.notesid as crmid,
-		vtiger_notes.notecontent as description, vtiger_users.user_name
-				from vtiger_notes
-				inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
-				inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
-				inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_notes.notesid and crm2.deleted=0
-				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupid = vtiger_crmentity.smownerid			
-				left join vtiger_seattachmentsrel  on vtiger_seattachmentsrel.crmid =vtiger_notes.notesid
-				left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
-				inner join vtiger_users on crm2.smownerid= vtiger_users.id
-				where vtiger_crmentity.crmid=".$id;
-		$query .= $sec_parameter;
-		$query .= ' union all ';
-		// Armando L�scher 18.10.2005 -> �visibleDescription
-		// Desc: Inserted crm2.createdtime, vtiger_attachments.description, vtiger_users.user_name
-		// Inserted inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
-		// Inserted order by createdtime desc
-		$query .= "select vtiger_attachments.subject AS title ,'Attachments' as ActivityType,
-		vtiger_attachments.name as filename, vtiger_attachments.type as FileType,crm2.modifiedtime as lastmodified,
-		vtiger_attachments.attachmentsid as attachmentsid, vtiger_seattachmentsrel.attachmentsid as crmid,
-		vtiger_attachments.description, vtiger_users.user_name
-				from vtiger_attachments
-				inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
-				inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_seattachmentsrel.crmid
-				inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_attachments.attachmentsid
-				inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
-				where vtiger_crmentity.crmid=".$id;
-		$log->debug("Exiting get_attachments method ...");
-		return getAttachmentsAndNotes('Leads',$query,$id);
 	}
 		
 	/**

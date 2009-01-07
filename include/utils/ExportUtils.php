@@ -143,41 +143,25 @@ function getFieldsListFromQuery($query)
 		{
 			$fields .= "";
 		}
-		elseif($tablename == 'vtiger_notes' && $columnName == 'contact_id')//Documents - contact_id
-		{
-			$fields .= " concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname) as 'Contact Name',";
-		}
-		elseif($tablename == 'vtiger_senotesrel' && $columnName == 'crmid')//Documents - Related To
-		{
-			$fields .= "case vtiger_crmentityRelatedTo.setype 
-					when 'Leads' then concat('Leads ::: ',vtiger_leaddetails.lastname,' ',vtiger_leaddetails.firstname) 
-					when 'Accounts' then concat('Accounts ::: ',vtiger_account.accountname) 
-					when 'Potentials' then concat('Potentials ::: ',vtiger_potential.potentialname) 
-					when 'Products' then concat('Products ::: ',vtiger_products.productname) 
-					when 'Invoice' then concat('Invoice ::: ',vtiger_invoice.subject) 
-					when 'PurchaseOrder' then concat('PurchaseOrder ::: ',vtiger_purchaseorder.subject) 
-					when 'Quotes' then concat('Quotes ::: ',vtiger_quotes.subject)
-					when 'SalesOrder' then concat('SalesOrder ::: ',vtiger_salesorder.subject) 
-					when 'HelpDesk' then concat('HelpDesk ::: ',vtiger_troubletickets.title)
-				     End as 'Related To',";
-		}
 		elseif($tablename == 'vtiger_attachments' && $columnName == 'filename')//Emails filename
 		{
 			$fields .= $tablename.".name as '".$fieldlabel."',";
 		}
 		//By Pavani...Handling mismatch field and table name for trouble tickets
-                elseif($tablename == 'vtiger_troubletickets' && $columnName == 'product_id')//Ticket - Product
-                {
-                         $fields .= "vtiger_products.productname as '".$fieldlabel."',";
-                }
-                elseif($tablename == 'vtiger_troubletickets' && $columnName == 'parent_id')//Ticket - Related To
-                {
-                         $fields .= "case vtiger_crmentityRelatedTo.setype
-                                        when 'Accounts' then concat('Accounts ::: ',vtiger_account.accountname)
-					when 'Contacts' then concat('Contacts ::: ',vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)
-                                     End as 'Related To',";
-                }
-
+      	elseif($tablename == 'vtiger_troubletickets' && $columnName == 'product_id')//Ticket - Product
+        {
+                 $fields .= "vtiger_products.productname as '".$fieldlabel."',";
+        }
+        elseif($tablename == 'vtiger_troubletickets' && $columnName == 'parent_id')//Ticket - Related To
+        {
+                 $fields .= "case vtiger_crmentityRelatedTo.setype
+                                when 'Accounts' then concat('Accounts ::: ',vtiger_account.accountname)
+			when 'Contacts' then concat('Contacts ::: ',vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)
+                             End as 'Related To',";
+        }
+		elseif($tablename == 'vtiger_notes' && ($columnName == 'filename' || $columnName == 'filetype' || $columnName == 'filesize' || $columnName == 'filelocationtype' || $columnName == 'filestatus' || $columnName == 'filedownloadcount' ||$columnName == 'folderid')){
+			continue;
+		}
 		else
 		{
 			$fields .= $tablename.".".$columnName. " as '" .$fieldlabel."',";

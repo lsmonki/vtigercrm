@@ -128,14 +128,6 @@
 				<input title="{$APP.LBL_ADD_NEW} {$APP.Ticket}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView';this.form.module.value='HelpDesk'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Ticket}"></td>
 			{elseif $header eq 'Campaigns'}
                                 <input alt="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Campaigns}" title="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Campaigns}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Campaigns}" LANGUAGE=javascript onclick='return window.open("index.php?module=Campaigns&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}&parenttab={$CATEGORY}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button"></td>
-			{elseif $header eq 'Attachments'}
-				<input title="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Documents}" class="crmbutton small edit" LANGUAGE="javascript" onclick='return window.open("index.php?module=Documents&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}&parenttab={$CATEGORY}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button" name="button" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Documents}">&nbsp;
-				<input title="{$APP.LBL_ADD_NEW} {$APP.Document}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView'; this.form.return_action.value='{$return_modname}'; this.form.module.value='Documents'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Document}">&nbsp;
-				<!-- Commented to remove 'Add Attachments' button in detailview 'More Information' tab -->
-				<!-- Start
-				<input type="hidden" name="fileid">
-				<input title="{$APP.LBL_ADD_NEW} {$APP.LBL_ATTACHMENT}" accessyKey="F" class="crmbutton small create" onclick="window.open('index.php?module=uploads&action=uploadsAjax&file=upload&return_action={$return_modname}&return_module={$MODULE}&return_id={$ID}','Attachments','width=500,height=370');" type="button" name="button" value="{$APP.LBL_ADD_NEW} {$APP.LBL_ATTACHMENT}"></td>
-				End -->
 			{elseif $header eq 'Quotes'}
 				<input title="{$APP.LBL_ADD_NEW} {$APP.Quote}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView';this.form.module.value='Quotes'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Quote}"></td>
 			{elseif $header eq 'Invoice'}
@@ -181,7 +173,7 @@
         </tr>
 </table>
 {assign var=check_status value=$detail}
-{if $detail ne ''}
+{if $detail ne '' && $detail.header neq ''}
 	{foreach key=header item=detail from=$detail}
 		{if $header eq 'header'}
 			<table border=0 cellspacing=1 cellpadding=3 width=100% style="background-color:#eaeaea;" class="small">

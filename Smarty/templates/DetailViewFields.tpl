@@ -117,7 +117,7 @@
 	            {if $keyseclink eq ''}
 	                {$keyval}
 	            {else}
-	                <a href="{$keyseclink}">{$keyval}</a>         
+	               	<a href="{$keyseclink}">{$keyval}</a>         
 	            {/if}
 				&nbsp;            
             </td>

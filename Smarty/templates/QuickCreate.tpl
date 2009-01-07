@@ -33,7 +33,8 @@
 				{assign var="fldlabel" value="$maindata[1][0]"}
 				{assign var="fldlabel_sel" value="$maindata[1][1]"}
                 {assign var="fldlabel_combo" value="$maindata[1][2]"}
-                {assign var="fldname" value="$maindata[2][0]"}
+                {assign var="fldlabel_other" value="$maindata[1][3]"}
+				{assign var="fldname" value="$maindata[2][0]"}
                 {assign var="fldvalue" value="$maindata[3][0]"}
                 {assign var="secondvalue" value="$maindata[3][1]"}
 				{if $uitype eq 2 }
@@ -214,6 +215,11 @@
                                         {else}
                                         	{if $fldvalue eq 1}
                                             	<td width="30%" align=left class="cellText"><input name="{$fldname}" type="checkbox"  checked></td>
+                                        	{elseif $fldname eq 'filestatus'}
+											<td width="30%" align=left class="cellText">
+											<input name="{$fldname}" type="checkbox"  checked>
+											</td>
+				
                                         	{else}
                                             	<td width="30%" align=left class="cellText"><input name="{$fldname}" type="checkbox" {if ( $QCMODULE eq 'Product' ) ||( $QCMODULE eq 'PriceBook' )}checked{/if}></td>
                                          	{/if}
@@ -369,12 +375,7 @@
 							<a href="javascript:;" onclick="FileAdd(this,'fileLay','EditView');"><img id="FileAdd_img_id" src="{'select.gif'|@vtiger_imageurl:$THEME}" alt="Add File..." title="Add File..." border=0></a>
 						{/if}
 				
-						<!-- Start: Popup layer to add a file -->
-						<div id="fileLay" class="layerPopup" style="height:345px;width:500px;z-index:2000;display:none;">
-        					<iframe height="345" width="500" name="AddFile" id="AddFile_id"  frameborder="0" scrolling="no" src="index.php?module=Documents&action=DocumentsAjax&file=AddFile" style="margin: 0;" allowTransparency="true"></iframe>
-						</div>
-						<!-- End: Popup layer to add file -->				
-			</td>
+						</td>
 						{elseif $uitype eq 30}
                                                 <td width="20%" class="cellLabel" align=right>{$fldlabel}</td>
                                                 <td colspan="3" width="30%" align=left class="cellText">
@@ -399,6 +400,21 @@
                                                         &nbsp;{$disp_text}
                                                 {/foreach}
                                                 </td>
+					          
+						 {elseif $uitype eq 121}
+							<td width="20%" class="dvtCellLabel" align=right>
+							{$fldlabel}
+							{if $MASS_EDIT eq '1'}
+							<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}
+							</td>
+							<td width="30%" align=left class="dvtCellInfo">
+								<select name="{$fldname}" tabindex="{$vt_tab}" class="small">
+									{foreach item=v key=k from=$fldvalue}	 
+									<option value="{$k}">{$v}</option> 
+									{/foreach}
+								</select>
+							</td>
+		                       
 							{elseif $uitype eq 117}<!-- for currency in users details-->	
 								<td width="20%" class="dvtCellLabel" align=right>
 									{$fldlabel}

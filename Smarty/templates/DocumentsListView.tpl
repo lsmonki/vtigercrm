@@ -122,20 +122,6 @@ function updatefOptions(sel, opSelName) {
 </script>
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script language="javascript">
-function checkgroup()
-{ldelim}
-  if($("group_checkbox").checked)
-  {ldelim}
-  document.change_ownerform_name.lead_group_owner.style.display = "block";
-  document.change_ownerform_name.lead_owner.style.display = "none";
-  {rdelim}
-  else
-  {ldelim}
-  document.change_ownerform_name.lead_owner.style.display = "block";
-  document.change_ownerform_name.lead_group_owner.style.display = "none";
-  {rdelim}    
-  
-{rdelim}
 function callSearch(searchtype)
 {ldelim}
 	for(i=1;i<=26;i++)
@@ -226,7 +212,7 @@ function alphabetic(module,url,dataid)
                                         <table border=0 cellspacing=0 cellpadding=0 width=100%>
                                         <tr>
                                                 <td align=center>
-                                                <img src="{'searching.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_SEARCHING}"  title="{$APP.LBL_SEARCHING}">
+                                                <img src="themes/images/searching.gif" alt="{$APP.LBL_SEARCHING}"  title="{$APP.LBL_SEARCHING}">
                                                 </td>
                                         </tr>
                                         </table>
@@ -242,7 +228,7 @@ function alphabetic(module,url,dataid)
 {*<!-- Contents -->*}
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
      <tr>
-        <td valign=top><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
+        <td valign=top><img src="themes/images/showPanelTopLeft.gif"></td>
 
 	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
 	 <!-- SIMPLE SEARCH -->
@@ -252,7 +238,7 @@ function alphabetic(module,url,dataid)
 	<tr>
 		<td class="searchUIName small" nowrap align="left">
 		<span class="moduleName">{$APP.LBL_SEARCH}</span><br><span class="small"><a href="#" onClick="fnhide('searchAcc');show('advSearch');updatefOptions(document.getElementById('Fields0'), 'Condition0');document.basicSearch.searchtype.value='advance';">{$APP.LBL_GO_TO} {$APP.LNK_ADVANCED_SEARCH}</a></span>
-		<!-- <img src="themes/images/basicSearchLens.gif" align="absmiddle" alt="{$APP.LNK_BASIC_SEARCH}" title="{$APP.LNK_BASIC_SEARCH}" border=0>&nbsp;&nbsp;-->
+		<!-- <img src="{$IMAGE_PATH}basicSearchLens.gif" align="absmiddle" alt="{$APP.LNK_BASIC_SEARCH}" title="{$APP.LNK_BASIC_SEARCH}" border=0>&nbsp;&nbsp;-->
 		</td>
 		<td class="small" nowrap align=right><b>{$APP.LBL_SEARCH_FOR}</b></td>
 		<td class="small"><input type="text"  class="txtBox" style="width:120px" name="search_text"></td>
@@ -266,9 +252,9 @@ function alphabetic(module,url,dataid)
                         <input type="hidden" name="searchtype" value="BasicSearch">
                         <input type="hidden" name="module" value="{$MODULE}">
                         <input type="hidden" name="parenttab" value="{$CATEGORY}">
-			<input type="hidden" name="action" value="index">
+						<input type="hidden" name="action" value="index">
                         <input type="hidden" name="query" value="true">
-			<input type="hidden" name="search_cnt">
+						<input type="hidden" name="search_cnt">
 		</td>
 		<td class="small" nowrap width=40% >
 			  <input name="submit" type="button" class="crmbutton small create" onClick="callSearch('Basic');" value=" {$APP.LBL_SEARCH_NOW_BUTTON} ">&nbsp;
@@ -336,299 +322,72 @@ function alphabetic(module,url,dataid)
 </form>
 </div>		
 {*<!-- Searching UI -->*}
-
-<div id="mergeDup" style="z-index:1;display:none;position:relative;">
+ 
+ <div id="mergeDup" style="z-index:1;display:none;position:relative;">
 	{include file="MergeColumns.tpl"}
-</div>	 
+</div>
+ 
 	   <!-- PUBLIC CONTENTS STARTS-->
-	  <div id="ListViewContents" class="small" style="width:100%;position:relative;">
-	  {if $MODULE neq "Documents"}
-			{include file="ListViewEntries.tpl"}
-	  {else}
-			{include file="DocumentsListViewEntries.tpl"}
-	  {/if}
+	  <div id="ListViewContents" class="small" style="width:100%;">
+	 		{include file="DocumentsListViewEntries.tpl"}
 	</div>
 
      </td>
-        <td valign=top><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
+        <td valign=top><img src="themes/images/showPanelTopRight.gif"></td>
    </tr>
 </table>
 
-<!-- MassEdit Feature -->
-<div id="massedit" class="layerPopup" style="display:none;width:80%;">
-<table width="100%" border="0" cellpadding="3" cellspacing="0" class="layerHeadingULine">
-<tr>
-	<td class="layerPopupHeading" align="left" width="60%">{$APP.LBL_MASSEDIT_FORM_HEADER}</td>
-	<td>&nbsp;</td>
-	<td align="right" width="40%"><img onClick="fninvsh('massedit');" title="{$APP.LBL_CLOSE}" alt="{$APP.LBL_CLOSE}" style="cursor:pointer;" src="{'close.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" border="0"></td>
-</tr>
-</table>
-<div id="massedit_form_div"></div>
-
-</div>
-<!-- END -->
-
-<div id="changeowner" class="layerPopup" style="display:none;width:325px;">
-<table width="100%" border="0" cellpadding="3" cellspacing="0" class="layerHeadingULine">
-<tr>
-	<td class="layerPopupHeading" align="left" width="60%">{$APP.LBL_CHANGE_OWNER}</td>
-	<td>&nbsp;</td>
-	<td align="right" width="40%"><img onClick="fninvsh('changeowner');" title="{$APP.LBL_CLOSE}" alt="{$APP.LBL_CLOSE}" style="cursor:pointer;" src="{'close.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" border="0"></td>
-</tr>
-</table>
-<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
-	<tr>
-		<td class=small >
-		
-			<!-- popup specific content fill in starts -->
-      <form name="change_ownerform_name">
-			<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
-				<tr>
-					<td width="50%"><b>{$APP.LBL_TRANSFER_OWNERSHIP}</b></td>
-					<td width="2%"><b>:</b></td>
-					<td width="48%">
-					<input type = "radio" id="user_checkbox"  name="user_lead_owner" {if $CHANGE_GROUP_OWNER neq ''} onclick=checkgroup(); {/if} checked>{$APP.LBL_USER}&nbsp;
-					{if $CHANGE_GROUP_OWNER neq ''}
-					<input type = "radio" id="group_checkbox" name="user_lead_owner" onclick=checkgroup(); >{$APP.LBL_GROUP}<br>
-					<select name="lead_group_owner" id="lead_group_owner" class="select" style="display:none;">  
-					{$CHANGE_GROUP_OWNER}
-					</select>
-					{/if}				
-					<select name="lead_owner" id="lead_owner" class="select">
-					{$CHANGE_OWNER}
-					</select>
-					</td>
-				</tr>
-			</table>
-			</form>
-		</td>
-	</tr>
-</table>
-<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
-	<tr>
-		<td align="center">
-				<input type="button" name="button" class="crmbutton small edit" value="{$APP.LBL_UPDATE_OWNER}" onClick="ajaxChangeStatus('owner')">
-				<input type="button" name="button" class="crmbutton small cancel" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" onClick="fninvsh('changeowner')">
-		</td>
-	</tr>
-</table>
-</div>
-
-
-{if $MODULE eq 'Leads'}
-<div id="changestatus" class="layerPopup" style="display:none;width:325px;">
-<table width="100%" border="0" cellpadding="3" cellspacing="0" class="layerHeadingULine">
-<tr>
-	<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%">{$APP.LBL_CHANGE_STATUS}</td>
-	<td>&nbsp;</td>
-	<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><img onClick="fninvsh('changestatus');" title="{$APP.LBL_CLOSE}" alt="{$APP.LBL_CLOSE}" style="cursor:pointer;" src="{'close.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" border="0"></td>
-</tr>
-</table>
-<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
-	<tr>
-		<td class=small >
-		
-			<!-- popup specific content fill in starts -->
-
-			<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
-				<tr>
-					<td width="50%"><b>{$APP.LBL_SELECT_STATUS}</b></td>
-					<td width="2%"><b>:</b></td>
-					<td width="48%">
-					<select name="lead_status" id="lead_status" class="detailedViewTextBox">
-					{$CHANGE_STATUS}
-					</select>
-					</td>
-				</tr>
-			</tr>
-			</table>
-		</td>
-	</tr>
-</table>
-<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
-	<tr>
-		<td align="center">
-			<input type="button" name="button" class="crmbutton small edit" value="{$APP.LBL_UPDATE_STATUS}" onClick="ajaxChangeStatus('status')">
-		</td>
-	</tr>
-</table>
-</div>
-{/if}
-{if $MODULE eq 'Leads' or $MODULE eq 'Contacts' or $MODULE eq 'Accounts' or $MODULE eq 'Vendors'}
-<form name="SendMail"><div id="sendmail_cont" style="z-index:100001;position:absolute;"></div></form>
-{/if}
-
 <!-- Add new Folder UI for Documents module starts -->
 <script language="JavaScript" type="text/javascript" src="modules/Documents/Documents.js"></script>
-<div id="orgLay" style="display:none;width:350px;" class="layerPopup">
+<div id="orgLay" style="display:none;width:350px;" class="layerPopup" onmouseout="fninvsh('orgLay')" onmouseover="fnvshNrm('orgLay');">
         <table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
-        <tr>
-                <td class="genHeaderSmall" nowrap align="left" width="30%" id="editfolder_info">{$MOD.LBL_ADD_NEW_FOLDER}</td>
-                <td align="right"><a href="javascript:;" onClick="closeFolderCreate();"><img src="{'close
-.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" border="0"></a></td>
-        </tr>
+	        <tr>
+				<td class="genHeaderSmall" nowrap align="left" width="30%" id="editfolder_info">{$MOD.LBL_ADD_NEW_FOLDER}
+				</td>
+				<td align="right"><a href="javascript:;" onClick="closeFolderCreate();"><img src="themes/images/close.gif" align="absmiddle" border="0"></a>
+				</td>
+	        </tr>
         </table>
         <table border=0 cellspacing=0 cellpadding=5 width=95% align=center>
         <tr>
-                <td class="small">
-                        <table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
-                        <tr>
-                                <td align="right" nowrap class="cellLabel small"><font color='red'>*</font>&nbsp;<b>{$MOD.LBL_FOLDER_NAME}
+			<td class="small">
+				<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+				<tr>
+					<td align="right" nowrap class="cellLabel small"><font color='red'>*</font>&nbsp;<b>{$MOD.LBL_FOLDER_NAME}
 </b></td>
-                                <td align="left" class="cellText small">
-                                <input id="folder_id" name="folderId" type="hidden" value=''>
-                                <input id="fldrsave_mode" name="folderId" type="hidden" value='save'>
-                                <input id="folder_name" name="folderName" class="txtBox" type="text"> &nbsp;&nbsp;Maximum 20
-                                </td>
-                        </tr>
-                        <tr>
-                                <td class="cellLabel small" align="right" nowrap><b>{$MOD.LBL_FOLDER_DESC}
-</b></td>
-                                <td class="cellText small" align="left"><input id="folder_desc" name="folderDes
-c" class="txtBox" type="text"> &nbsp;&nbsp;Maximum 50</td>
-                        </tr>
-                        </table>
-                </td>
+					<td align="left" class="cellText small">
+					<input id="folder_id" name="folderId" type="hidden" value=''>
+					<input id="fldrsave_mode" name="folderId" type="hidden" value='save'>
+					<input id="folder_name" name="folderName" class="txtBox" type="text"> &nbsp;&nbsp;Maximum 20
+					</td>
+				</tr>
+				<tr>
+					<td class="cellLabel small" align="right" nowrap><b>{$MOD.LBL_FOLDER_DESC}</b>
+					</td>
+ 					<td class="cellText small" align="left"><input id="folder_desc" name="folderDes
+c" class="txtBox" type="text"> &nbsp;&nbsp;Maximum 50
+					</td>
+				 </tr>
+				</table>
+			</td>
         </tr>
- </table>
-        <table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
+ 	</table>
+	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
         <tr>
-                <td class="small" align="center">
+			<td class="small" align="center">
                 <input name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmbutton small save" onClick="AddFolder();" type="button">&nbsp;&nbsp;
                 <input name="cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="crmbutton small cancel" onclick="closeFolderCreate();" type="button">
-                </td>
+			</td>
         </tr>
-        </table>
+	</table>
 </div>
-{if $MODULE eq 'Documents'}
+
 <!-- Add new folder UI for Documents module ends -->
-<!-- Move documents UI for Documents module starts -->
-<div style="display: none;left:193px;top:106px;width:155px;" id="folderLay" onmouseout="fninvsh('folderLay')" onmouseover="fnvshNrm('folderLay')">
-<table bgcolor="#ffffff" border="1" cellpadding="0" cellspacing="0" width="100%">
-	<tr><td align="left"><b>{$MOD.LBL_MOVE_TO} :</b></td></tr>
-	<tr>
-	<td align="left">
-	{foreach item=folder from=$ALL_FOLDERS}
-		<a href="javascript:;" onClick="MoveFile('{$folder.folderid}','{$folder.foldername}');" class="drop_down">- {$folder.foldername}</a>
-	{/foreach}
-	</td>
-	</tr>
-</table>
-</div>
-<!-- Move documents UI for Documents module ends -->
-{/if}
-<script>
-{literal}
 
-function ajaxChangeStatus(statusname)
-{
-	$("status").style.display="inline";
-	var viewid = document.getElementById('viewname').options[document.getElementById('viewname').options.selectedIndex].value;
-	var idstring = document.getElementById('idlist').value;
-	var searchurl= document.getElementById('search_url').value;
-	var tplstart='&';
-	if(gstart!='')
-	{
-		tplstart=tplstart+gstart;
-	}
-	if(statusname == 'status')
-	{
-		fninvsh('changestatus');
-		var url='&leadval='+document.getElementById('lead_status').options[document.getElementById('lead_status').options.selectedIndex].value;
-		var urlstring ="module=Users&action=updateLeadDBStatus&return_module=Leads"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring+searchurl;
-	}
-	else if(statusname == 'owner')
-	{
-		if($("user_checkbox").checked)
-		{
-		    fninvsh('changeowner');
-		    var url='&owner_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
-		    {/literal}
-		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring+searchurl;
-		    {literal}
-		} else {
-			fninvsh('changeowner');
-			var url='&owner_id='+document.getElementById('lead_group_owner').options[document.getElementById('lead_group_owner').options.selectedIndex].value;
-	      	{/literal}
-		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+tplstart+url+"&viewname="+viewid+"&idlist="+idstring+searchurl;
-        	{literal}
-    	}
-	}
-	new Ajax.Request(
-                'index.php',
-                {queue: {position: 'end', scope: 'command'},
-                        method: 'post',
-                        postBody: urlstring,
-                        onComplete: function(response) {
-                                $("status").style.display="none";
-                                result = response.responseText.split('&#&#&#');
-                                $("ListViewContents").innerHTML= result[2];
-                                if(result[1] != '')
-                                        alert(result[1]);
-				$('basicsearchcolumns').innerHTML = '';
-                        }
-                }
-        );
-	
-}
-</script>
-{/literal}
 
-{if $MODULE eq 'Contacts'}
-{literal}
-<script>
-function modifyimage(imagename)
-{
-	imgArea = getObj('dynloadarea');
-        if(!imgArea)
-        {
-                imgArea = document.createElement("div");
-                imgArea.id = 'dynloadarea';
-                imgArea.setAttribute("style","z-index:100000001;");
-                imgArea.style.position = 'absolute';
-                imgArea.innerHTML = '<img width="260" height="200" src="'+imagename+'" class="thumbnail">';
-		document.body.appendChild(imgArea);
-        }
-	PositionDialogToCenter(imgArea.id);
-}
 
-function PositionDialogToCenter(ID)
-{
-       var vpx,vpy;
-       if (self.innerHeight) // Mozilla, FF, Safari and Opera
-       {
-               vpx = self.innerWidth;
-               vpy = self.innerHeight;
-       }
-       else if (document.documentElement && document.documentElement.clientHeight) //IE
 
-       {
-               vpx = document.documentElement.clientWidth;
-               vpy = document.documentElement.clientHeight;
-       }
-       else if (document.body) // IE
-       {
-               vpx = document.body.clientWidth;
-               vpy = document.body.clientHeight;
-       }
 
-       //Calculate the length from top, left
-       dialogTop = (vpy/2 - 280/2) + document.documentElement.scrollTop;
-       dialogLeft = (vpx/2 - 280/2);
 
-       //Position the Dialog to center
-       $(ID).style.top = dialogTop+"px";
-       $(ID).style.left = dialogLeft+"px";
-       $(ID).style.display="block";
-}
-
-function removeDiv(ID){
-        var node2Rmv = getObj(ID);
-        if(node2Rmv){node2Rmv.parentNode.removeChild(node2Rmv);}
-}
-
-</script>
-{/literal}
-{/if}
 
 

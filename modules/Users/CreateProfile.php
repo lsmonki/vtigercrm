@@ -68,5 +68,4 @@ do
 	$profilelist[] = array($name,$profileid); 
 }while($temprow = $adb->fetch_array($result));
 $smarty->assign("PROFILE_LISTS", $profilelist);
-                    
 $smarty->display("CreateProfile.tpl");

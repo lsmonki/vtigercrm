@@ -468,7 +468,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		}
 		else {
 			$label_fld ["options"][] = 'User';
-			$assigned_user_id = $owner_id;
+			$assigned_user_id = $current_user->id;
 			$user_checked = "checked";
 			$team_checked = '';
 			$user_style='display:block';
@@ -496,7 +496,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			{
 				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id), $current_user->id);
 			}*/
-			$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id), $current_user->id);
+			if($owner_id != '')
+				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id), $owner_id);
+			else
+				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id), $current_user->id);
 		}
 		
 		$label_fld ["options"][] = $users_combo;
@@ -666,38 +669,47 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 					$label_fld['options'][] = $custfldval;
 				}
 			}
-			elseif($tabid == 8)
+	  else
+		{
+			$attachmentid=$adb->query_result($adb->pquery("select * from vtiger_seattachmentsrel where crmid = ?", array($col_fields['record_id'])),0,'attachmentsid');
+			if($col_fields[$fieldname] == '' && $attachmentid != '')
 			{
-				$custfldval = $col_fields[$fieldname];
+				$attachquery = "select * from vtiger_attachments where attachmentsid=?";
+				$col_fields[$fieldname] = $adb->query_result($adb->pquery($attachquery, array($attachmentid)),0,'name');
 			}
-            else
-			{
-				$attachmentid=$adb->query_result($adb->pquery("select * from vtiger_seattachmentsrel where crmid = ?", array($col_fields['record_id'])),0,'attachmentsid');
-				if($col_fields[$fieldname] == '' && $attachmentid != '')
-				{
-					$attachquery = "select * from vtiger_attachments where attachmentsid=?";
-					$col_fields[$fieldname] = $adb->query_result($adb->pquery($attachquery, array($attachmentid)),0,'name');
-				}
 
-				//This is added to strip the crmid and _ from the file name and show the original filename
-				//$org_filename = ltrim($col_fields[$fieldname],$col_fields['record_id'].'_');
-				/*Above line is not required as the filename in the database is stored as it is and doesn't have crmid attached to it.
-				This was the cause for the issue reported in ticket #4645 */
-				$org_filename = $col_fields[$fieldname];
-                                // For Backward Compatibility version < 5.0.4
-                                $filename_pos = strpos($org_filename, $col_fields['record_id'].'_');
-                                if ($filename_pos === 0) {
-	                                        $start_idx = $filename_pos+strlen($col_fields['record_id'].'_');
-	                                        $org_filename = substr($org_filename, $start_idx);
-	                                }
-	
-				if($org_filename != '')
-					$custfldval = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$col_fields['record_module'].'&fileid='.$attachmentid.'&entityid='.$col_fields['record_id'].'">'.$org_filename.'</a>';
-				else
-					$custfldval = '';
-			}
-			$label_fld[] =$custfldval;
+			//This is added to strip the crmid and _ from the file name and show the original filename
+			//$org_filename = ltrim($col_fields[$fieldname],$col_fields['record_id'].'_');
+			/*Above line is not required as the filename in the database is stored as it is and doesn't have crmid attached to it.
+			This was the cause for the issue reported in ticket #4645 */
+			$org_filename = $col_fields[$fieldname];
+        	// For Backward Compatibility version < 5.0.4
+        	$filename_pos = strpos($org_filename, $col_fields['record_id'].'_');
+       		if ($filename_pos === 0) {
+				$start_idx = $filename_pos+strlen($col_fields['record_id'].'_');
+				$org_filename = substr($org_filename, $start_idx);
+            }
+			if($org_filename != '') {
+				if($col_fields['filelocationtype'] == 'E' ){
+					if($col_fields['filestatus'] == 1 ){//&& strlen($col_fields['filename']) > 7  ){
+					$custfldval = '<a target="_blank" href ='.$col_fields['filename'].' onclick=\'javascript:dldCntIncrease('.$col_fields['record_id'].');\'>'.$col_fields[$fieldname].'</a>';
+					}
+					else{
+						$custfldval = $col_fields[$fieldname];
+					}
+				}elseif($col_fields['filelocationtype'] == 'I') {
+					if($col_fields['filestatus'] == 1){
+					$custfldval = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$col_fields['record_module'].'&fileid='.$attachmentid.'&entityid='.$col_fields['record_id'].'" onclick=\'javascript:dldCntIncrease('.$col_fields['record_id'].');\'>'.$col_fields[$fieldname].'</a>';
+					}
+					else{
+						$custfldval = $col_fields[$fieldname];
+					}
+			} else 
+				$custfldval = '';	
 		}
+		$label_fld[] =$custfldval;
+	}
+	}
 	elseif($uitype == 69)
 	{
 		$label_fld[] =getTranslatedString($fieldlabel);
@@ -1229,6 +1241,23 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] =getTranslatedString($fieldlabel);
 		$label_fld[]= $col_fields[$fieldname];
 	}
+	elseif($uitype == 121){
+		 $label_fld[] =getTranslatedString($fieldlabel);
+		 $query = "select foldername from vtiger_attachmentsfolder where folderid = ?";
+		 $result = $adb->pquery($query, array($col_fields[$fieldname]));
+		 $folder_name = $adb->query_result($result,0,"foldername");
+		 $label_fld[] = $folder_name;
+	}
+	elseif($uitype == 122){
+		if($col_fields[$fieldname] == 'I'){
+			$label_fld[]=getTranslatedString($fieldlabel);
+			$label_fld[]= $mod_strings['LBL_INTERNAL'];
+		}
+		else{
+			$label_fld[]=getTranslatedString($fieldlabel);
+			$label_fld[]= $mod_strings['LBL_EXTERNAL'];
+		}
+	}
 	else
 	{
 	 $label_fld[] =getTranslatedString($fieldlabel);
@@ -1244,32 +1273,6 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		//code for Documents module :start
 		if($tabid == 8)
 		{
-			if($fieldname == 'filearchitecture')
-			{
-				if($col_fields['filearchitecture'] == '')
-				{
-					$label_fld[] = $mod_strings['LBL_PLATFORM_INDEPENDENT'];
-				}
-				else
-				{
-					$os = $col_fields[$fieldname];
-					if($os == 'Windows')
-					    $arc_icon="<img src='" . vtiger_imageurl('fbWindowsOS.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
-					elseif($os == 'Linux')
-						$arc_icon="<img src='" . vtiger_imageurl('fbLinuxOS.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
-					elseif($os == 'Mac')
-						$arc_icon="<img src='" . vtiger_imageurl('fbMacOS.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>"; 
-					$label_fld[]=$arc_icon.$os;					
-				}
-			}
-			if($fieldname == 'filelocationtype')
-			{
-				if($col_fields[$fieldname] == 'I')
-					$label_fld[] = $mod_strings['LBL_INTERNAL'];
-				else
-					$label_fld[] = $mod_strings['LBL_EXTERNAL'];
-					
-			}
 			$downloadtype = $col_fields['filelocationtype'];
 			if($fieldname == 'filename')
 			{

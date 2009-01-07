@@ -2238,3 +2238,6 @@ a.drop_down:Hover{
 	background-color: #e8e4ee;
 }
 
+.thickborder{
+	border:3px solid #CCCCCC;
+}

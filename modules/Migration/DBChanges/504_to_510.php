@@ -19,6 +19,11 @@ $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Starts \n\n");
 
 require_once('include/events/include.inc');
 $em = new VTEventsManager($adb);
+/* For the event api */
+ExecuteQuery("create table vtiger_eventhandlers (eventhandler_id int, event_name varchar(100), handler_path varchar(400), handler_class varchar(100), cond text, is_active boolean, primary key(eventhandler_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+
+/* Added new column actions to vtiger_relatedlists which tracks the type of actions allowed for that related list */
+ExecuteQuery("alter table vtiger_relatedlists add column actions VARCHAR(50) default ''");
 
 require_once("modules/com_vtiger_workflow/include.inc");
 require_once("modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc");
@@ -162,11 +167,17 @@ for($i=0;$i<$num_usr;$i++) {
 } 
 
 $profile_sql = $adb->query("select profileid from vtiger_profile"); 
-$num_profile = $adb->num_rows($profile_sql); 
+$num_profile = $adb->num_rows($profile_sql);
+/*Duplicate merging is supported for 
+ * Accounts, Potentials, Contacts, Leads, Products, Vendors, TroubleTickets
+ */ 
+$dupSupported = array(6, 2, 4, 7, 14, 18, 13);
 for($i=0;$i<$num_profile;$i++) { 
 	$profile_id = $adb->query_result($profile_sql,$i,'profileid'); 
-	foreach($tabid AS $key=>$tab_id) { 
-		ExecuteQuery("insert into vtiger_profile2utility values($profile_id,$tab_id,10,0)"); 
+	for($j=0;$j<$noOfTabs;$j++) {
+		if (in_array($tabid[$j], $dupSupported)) {
+			ExecuteQuery("insert into vtiger_profile2utility values($profile_id,".$tabid[$j].",10,0)");
+		} 
 	} 
 } 
 
@@ -238,14 +249,33 @@ $adb->query("insert into vtiger_cvcolumnlist values('23','2','vtiger_pricebook:c
 addFieldSecurity($pb_tab_id,$pb_currency_field_id);
 
 /* Documents module */
-ExecuteQuery("alter table vtiger_notes add(folderid int(19) NOT NULL,filepath varchar(255) default NULL,filetype varchar(50) default NULL,filelocationtype varchar(5) default NULL,filedownloadcount int(19) default NULL,filestatus int(19) default NULL,filesize int(19) NOT NULL default '0',fileversion varchar(50) default NULL)");
+$documents_tab_id = getTabid('Documents');
+ExecuteQuery("delete from vtiger_cvcolumnlist where columnname like '%Notes_Contact_Name%'");
+ExecuteQuery("delete from vtiger_cvcolumnlist where columnname like '%Notes_Related_to%'");
+//ExecuteQuery("create table vtiger_notegrouprelation (notesid int(19) NOT NULL, groupname varchar(100) default NULL)");
 
-ExecuteQuery("create table vtiger_attachmentsfolder ( folderid int(19) NOT NULL,foldername varchar(200) NOT NULL default '', description varchar(250) default '', createdby int(19) NOT NULL, sequence int(19) default NULL, PRIMARY KEY  (folderid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("insert into vtiger_def_org_share values (13,$documents_tab_id,2,0)");
 
-ExecuteQuery("insert into vtiger_attachmentsfolder values (1,'Existing Notes','Contains all Notes migrated from the earlier version',1,1)");
+for($i=0;$i<4;$i++)
+{
+	ExecuteQuery("insert into vtiger_org_share_action2tab values(".$i.",$documents_tab_id)");
+}	
+
+ExecuteQuery("alter table vtiger_customview drop foreign key fk_1_vtiger_customview ");
+ExecuteQuery("update vtiger_customview set entitytype='Documents' where entitytype='Notes'");
+ExecuteQuery("update vtiger_tab set ownedby=0,name='Documents',tablabel='Documents' where tabid=$documents_tab_id");
+ExecuteQuery("update vtiger_entityname set modulename='Documents' where tabid=$documents_tab_id");
+ExecuteQuery("alter table vtiger_customview add constraint FOREIGN KEY fk_1_vtiger_customview (entitytype) REFERENCES vtiger_tab (name) ON DELETE CASCADE");
+
+$DocumentsId = getTabid('Documents');
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select', related_tabid=$documents_tab_id WHERE name='get_attachments'");
+ExecuteQuery("alter table vtiger_notes add(folderid int(19) NOT NULL,filetype varchar(50) default NULL,filelocationtype varchar(5) default NULL,filedownloadcount int(19) default NULL,filestatus int(19) default NULL,filesize int(19) NOT NULL default '0',fileversion varchar(50) default NULL)");
+
+ExecuteQuery("create table vtiger_attachmentsfolder ( folderid int(19) NOT NULL,foldername varchar(200) NOT NULL default '', description varchar(250) default '', createdby int(19) NOT NULL, sequence int(19) default NULL, PRIMARY KEY  (folderid))");
+
+ExecuteQuery("insert into vtiger_attachmentsfolder values (0,'Existing Notes','Contains all Notes migrated from the earlier version',1,1)");
 
 ExecuteQuery("alter table vtiger_senotesrel drop foreign key fk_2_vtiger_senotesrel ");
-ExecuteQuery("alter table vtiger_senotesrel add constraint FOREIGN KEY fk_2_vtiger_senotesrel (notesid) REFERENCES vtiger_notes (notesid) ON UPDATE CASCADE ON DELETE CASCADE");
 
 $notesQuery = $adb->query("select notesid from vtiger_notes");
 $noofnotes = $adb->num_rows($notesQuery);
@@ -254,50 +284,64 @@ if($noofnotes > 0)
     for($k=0;$k<$noofnotes;$k++)
     {
         $notesid = $adb->query_result($notesQuery,$k,'notesid');
-        ExecuteQuery("update vtiger_notes set folderid=1 where notesid = ".$notesid);
-    }
+        $attachmentidQuery = 'select attachmentsid from vtiger_seattachmentsrel where crmid = ?';
+        $res = $adb->pquery($attachmentidQuery,array($notesid));
+        $attachmentid = $adb->query_result($res,0,'attachmentsid');
+		if($attachmentid != ''){	
+        	 $attachmentInfoQuery = 'select * from vtiger_attachments where attachmentsid = ?';
+       		 $attachres = $adb->pquery($attachmentInfoQuery,array($attachmentid));
+        	 $filename = $adb->query_result($attachres,0,'name');
+        	 $filepath = $adb->query_result($attachres,0,'path');
+       	 	 $filetype = $adb->query_result($attachres,0,'type');
+       		 $filesize = filesize($filepath.$attachmentid."_".$filename);
+      		 ExecuteQuery("update vtiger_notes set folderid = 0,filestatus=1,filelocationtype='I',filedownloadcount=0,fileversion='',filetype='".$filetype."',filesize='".$filesize."',filename='".$filename."' where notesid = ".$notesid);
+	}
+	else{
+		ExecuteQuery("update vtiger_notes set folderid=0,filestatus=0,filelocationtype='',filedownloadcount='',fileversion='',filetype='',filesize='',filename='' where notesid = ".$notesid);
+	
+	}
+	$query ="update vtiger_crmentity set setype='Documents' where crmid = ?";
+	$adb->pquery($query,array($notesid));
+   }
 }
-$attachmentsquery = $adb->query("select * from vtiger_attachments");
-$noofattachments = $adb->num_rows($attachmentsquery);
-if($noofattachments > 0)
-{
-    for($k=0;$k<$noofattachments;$k++)
-    {
-        $attachmentid = $adb->query_result($attachmentsquery,$k,'attachmentsid');
-        $filename = $adb->query_result($attachmentsquery,$k,'name');
-        $filepath = $adb->query_result($attachmentsquery,$k,'path');
-        $filetype = $adb->query_result($attachmentsquery,$k,'type');
-        $filesize = filesize($filepath.$attachmentid."_".$filename);
-        ExecuteQuery("update vtiger_notes set filestatus=1,filelocationtype='I',filedownloadcount=0,fileversion='',filetype='".$filetype."',filesize='".$filesize."',filename='".$filename."',filepath='".$filepath."',notesid='".$attachmentid."' where notesid = ".($attachmentid-1));
-    }
-}
-
 
 $fieldid = Array();
-for($i=0;$i<7;$i++)
+for($i=0;$i<8;$i++)
 {
 	$fieldid[$i] = $adb->getUniqueID("vtiger_field");
 }
+$file_block_id = $adb->getUniqueID('vtiger_blocks');
+ExecuteQuery("insert into vtiger_blocks values($file_block_id,$documents_tab_id,'LBL_FILE_INFORMATION',2,0,0,0,0,0)");
 
-ExecuteQuery("insert into vtiger_blocks values(".$adb->getUniqueId('vtiger_blocks').",8,'LBL_FILE_INFORMATION',3,0,0,0,0,0)");
+$description_block_id_Query = 'select blockid from vtiger_blocks where tabid = '.$documents_tab_id.' and blocklabel = "" ';
+$desc_id = $adb->pquery($description_block_id_Query,array());
+$desc = $adb->query_result($desc_id,0,'blockid');
 
-ExecuteQuery("insert into vtiger_field values (8,".$fieldid[0].",'smownerid','vtiger_crmentity',1,53,'assigned_user_id','Assigned To',1,0,0,100,6,17,1,'V~M',1,NULL,'BAS')");
-ExecuteQuery("insert into vtiger_field values(8,".$fieldid[1].",'filetype','vtiger_notes',1,1,'filetype','File Type',1,0,0,100,2,85,2,'V~O',1,'','BAS')");
-ExecuteQuery("insert into vtiger_field values(8,".$fieldid[2].",'filesize','vtiger_notes',1,1,'filesize','File Size',1,0,0,100,3,85,2,'V~O',1,'','BAS')");
-ExecuteQuery("insert into vtiger_field values(8,".$fieldid[3].",'filelocationtype','vtiger_notes',1,1,'filelocationtype','Download Type',1,0,0,100,4,85,2,'V~O',1,'','BAS')");
-ExecuteQuery("insert into vtiger_field values(8,".$fieldid[4].",'fileversion','vtiger_notes',1,1,'fileversion','Version',1,0,0,100,5,85,2,'V~O',1,'','BAS')");
-ExecuteQuery("insert into vtiger_field values(8,".$fieldid[5].",'filestatus','vtiger_notes',1,56,'filestatus','Active',1,0,0,100,6,85,2,'V~O',1,'','BAS')");
-ExecuteQuery("insert into vtiger_field values(8,".$fieldid[6].",'filedownloadcount','vtiger_notes',1,1,'filedownloadcount','Download Count',1,0,0,100,11,85,2,'I~O',1,'','BAS')");
+$desc_update = 'update vtiger_blocks set blocklabel ="LBL_DESCRIPTION",show_title = 0,sequence = 3 where blockid = ?';
+$desc_block_update = $adb->pquery($desc_update,array($desc));
 
-for($i=0;$i<7;$i++)
+ExecuteQuery("update vtiger_field set sequence=1 where tabid=$documents_tab_id and columnname='title'");
+ExecuteQuery("update vtiger_field set sequence=8 where tabid=$documents_tab_id and columnname='createdtime'");
+ExecuteQuery("update vtiger_field set sequence=9 where tabid=$documents_tab_id and columnname='modifiedtime'");
+
+ExecuteQuery("update vtiger_field set sequence=1,block=$desc where tabid=$documents_tab_id and columnname='notecontent'");
+ExecuteQuery("update vtiger_field set block = $file_block_id,fieldlabel='File Name',displaytype = 2  where tabid = $documents_tab_id and columnname = 'filename'");
+
+ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[0].",'smownerid','vtiger_crmentity',1,53,'assigned_user_id','Assigned To',1,0,0,100,2,17,1,'V~O',0,3,'BAS')");
+ExecuteQuery("insert into vtiger_field values($documents_tab_id,".$fieldid[1].",'filetype','vtiger_notes',1,1,'filetype','File Type',1,0,0,100,3,$file_block_id,2,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field values($documents_tab_id,".$fieldid[2].",'filesize','vtiger_notes',1,1,'filesize','File Size',1,0,0,100,4,$file_block_id,2,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field values($documents_tab_id,".$fieldid[3].",'filelocationtype','vtiger_notes',1,122,'filelocationtype','Download Type',1,0,0,100,1,$file_block_id,1,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field values($documents_tab_id,".$fieldid[4].",'fileversion','vtiger_notes',1,1,'fileversion','Version',1,0,0,100,6,17,1,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field values($documents_tab_id,".$fieldid[5].",'filestatus','vtiger_notes',1,56,'filestatus','Active',1,0,0,100,2,$file_block_id,1,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field values($documents_tab_id,".$fieldid[6].",'filedownloadcount','vtiger_notes',1,1,'filedownloadcount','Download Count',1,0,0,100,7,$file_block_id,2,'I~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field values($documents_tab_id,".$fieldid[7].",'folderid','vtiger_notes',1,121,'folderid','Folder Name',1,0,0,100,4,17,1,'V~M',0,'2','BAS')");
+
+for($i=0;$i<count($fieldid);$i++)
 {
-	ExecuteQuery("insert into vtiger_def_org_field values(8, ".$fieldid[$i].", 0, 1)");
-	for($j=0;$j<$num_profiles;$j++)
-	{
-		$profileid = $adb->query_result($profile_list,$j,'profileid');
-		ExecuteQuery("insert into vtiger_profile2field values($profileid, 8, ".$fieldid[$i].", 0, 1)");
-	}
+	addFieldSecurity($documents_tab_id,$fieldid[$i]);
 }
+//Rename Attachments to Documents in relatedlist 
+ExecuteQuery("update vtiger_relatedlists set label='Documents' where name = 'get_attachments'");
 
 $dbQuery = "select notesid,contact_id from vtiger_notes";
 $dbresult = $adb->query($dbQuery);
@@ -318,22 +362,13 @@ ExecuteQuery("delete from vtiger_field where tabid = 8 and fieldname = 'parent_i
 
 ExecuteQuery("alter table vtiger_notes drop column contact_id");
 
-ExecuteQuery("delete from vtiger_cvcolumnlist where columnname like '%Notes_Contact_Name%'");
-ExecuteQuery("delete from vtiger_cvcolumnlist where columnname like '%Notes_Related_to%'");
-ExecuteQuery("create table vtiger_notegrouprelation (notesid int(19) NOT NULL, groupname varchar(100) default NULL)  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
-ExecuteQuery("insert into vtiger_def_org_share values (13,8,2,0)");
+$em->registerHandler('vtiger.entity.aftersave', 'modules/Documents/AttachFile.php', 'Attachfile');
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_notes:filename:filename:Documents_Filename:V' where cvid = 22 and columnindex = 3");
+custom_addCustomFilterColumn('Documents','All', 'vtiger_crmentity','smownerid','assigned_user_id','Documents_Assigned_To:V',7);
 
-for($i=0;$i<4;$i++)
-{
-	ExecuteQuery("insert into vtiger_org_share_action2tab values(".$i.",8)");
-}	
-
-ExecuteQuery("alter table vtiger_customview drop foreign key fk_1_vtiger_customview ");
-ExecuteQuery("update vtiger_customview set entitytype='Documents' where entitytype='Notes'");
-ExecuteQuery("update vtiger_tab set ownedby=0,name='Documents',tablabel='Documents' where tabid=8");
-ExecuteQuery("update vtiger_entityname set modulename='Documents' where tabid=8");
-ExecuteQuery("alter table vtiger_customview add constraint FOREIGN KEY fk_1_vtiger_customview (entitytype) REFERENCES vtiger_tab (name) ON DELETE CASCADE");
+//remove filename column from trouble ticket
+ExecuteQuery("alter table vtiger_troubletickets drop column filename");
 //End: Database changes regarding Documents module
 
 /* Home Page Customization */
@@ -540,8 +575,6 @@ function webserviceMigration(){
 require_once 'include/Webservices/Utils.php';
 webserviceMigration();
 
-/* For the event api */
-ExecuteQuery("create table vtiger_eventhandlers (eventhandler_id int, event_name varchar(100), handler_path varchar(400), handler_class varchar(100), cond text, is_active boolean, primary key(eventhandler_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 /* Adding Custom Events Migration */
 ExecuteQuery("UPDATE vtiger_field SET uitype=15,typeofdata='V~M' WHERE tabid=16 and columnname='activitytype'");
@@ -568,7 +601,8 @@ for($j=0;$j<$adb->num_rows($role_query);$j++){
 }
 
 $uniqueid = $adb->getUniqueID("vtiger_relatedlists");
-ExecuteQuery("insert into vtiger_relatedlists values($uniqueid,15,8,'get_attachments',1,'Attachments',0)");
+$faqtabid = getTabid('Faq');
+ExecuteQuery("insert into vtiger_relatedlists values($uniqueid,$faqtabid,$documents_tab_id,'get_attachments',1,'Documents',0,'add,select')");
 //CustomEvents Migration Ends
 
 /* Important column renaming to support database porting */
@@ -608,7 +642,7 @@ for($i=0; $i<$adb->num_rows($users_query); $i++){
 	ExecuteQuery("insert into vtiger_user2mergefields values ($userid,".getTabid("Products").", $field_id, 0)");
 }
 
-ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Products").",'get_products',13,'Product Bundles',0)");
+ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Products").",'get_products',13,'Product Bundles',0,'add')");
 
 /* vtmailscanner customization */
 ExecuteQuery("CREATE TABLE vtiger_mailscanner(scannerid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,scannername VARCHAR(30),
@@ -744,7 +778,7 @@ foreach($tab_field_array as $index=>$value){
 }
 
 /* Showing Emails in Vendors related list */
-ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Vendors").",".getTabid("Emails").",'get_emails',4,'Emails',0)");
+ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Vendors").",".getTabid("Emails").",'get_emails',4,'Emails',0,'add')");
 
 /* Added for module sequence number customization */
 ExecuteQuery("CREATE TABLE vtiger_modentity_num (num_id int(19) NOT NULL, semodule varchar(50) NOT NULL, prefix varchar(50) NOT NULL DEFAULT '', start_id varchar(50) NOT NULL, cur_id varchar(50) NOT NULL, active int(2) NOT NULL, PRIMARY KEY(num_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");

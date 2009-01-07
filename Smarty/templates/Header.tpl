@@ -269,11 +269,17 @@ function QCreate(qcoptions)
                                         {ldelim}
 						$("status").style.display="none";
 						$("qcform").style.display="inline";
-					        $("qcform").innerHTML = response.responseText;
-						eval($("date_calpopup").innerHTML);
-						eval($("date_calpopup23").innerHTML);
-						eval($("qcform"));
-                                        {rdelim}
+					    $("qcform").innerHTML = response.responseText;
+						{literal}
+                        // Evaluate all the script tags in the response text.
+                        var scriptTags = $("qcform").getElementsByTagName("script");
+                        for(var i = 0; i< scriptTags.length; i++){
+							var scriptTag = scriptTags[i];
+							eval(scriptTag.innerHTML);
+                        }
+                        {/literal}
+                        eval($("qcform"));
+					{rdelim}
                 {rdelim}
         );
 	{rdelim}

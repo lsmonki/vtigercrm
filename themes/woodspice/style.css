@@ -2255,6 +2255,10 @@ a.drop_down:Hover{
 	display:none;
 }
 
+.thickborder{
+	border:3px solid #CCCCCC;
+}
+
 .tooltipClass{
 	padding: 5px;
 	border: 2px solid #b69559;

@@ -67,41 +67,38 @@ $image_path=$theme_path."images/";
 $log->info("Document detail view");
 
 $smarty = new vtigerCRM_Smarty;
-$dbQuery="select filename,folderid,filepath,filelocationtype,filestatus from vtiger_notes where notesid = ?";
+$dbQuery="select filename,folderid,filelocationtype,filestatus from vtiger_notes where notesid = ?";
 $result=$adb->pquery($dbQuery,array($focus->id));
 $filename=$adb->query_result($result,0,'filename');
 $folderid=$adb->query_result($result,0,'folderid');
-$filepath=$adb->query_result($result,0,'filepath');
 $filestatus=$adb->query_result($result,0,'filestatus');
 $filelocationtype=$adb->query_result($result,0,'filelocationtype');
 
-if(is_null($filename) || $filename == '')
-{
-	$dbQuery="update vtiger_blocks set visible=1 where blockid=85";
-	$result=$adb->pquery($dbQuery,array());
-	$smarty->assign("FILE_EXIST","no");
-}
-else
-{
-	$dbQuery="update vtiger_blocks set visible=0 where blockid=85";
-	$result=$adb->pquery($dbQuery,array());	
-	$smarty->assign("FILE_EXIST","yes");
-	//$flag = 0;
-}
+$fileattach = "select attachmentsid from vtiger_seattachmentsrel where crmid = ?";
+$res = $adb->pquery($fileattach,array($focus->id));
+$fileid = $adb->query_result($res,0,'attachmentsid');
 
+if($filelocationtype == 'I'){
+	$pathQuery = $adb->pquery("select path from vtiger_attachments where attachmentsid = ?",array($fileid));
+	$filepath = $adb->query_result($pathQuery,0,'path');
+}
+else{
+	$filepath = $filename;
+}
+		
 
+$smarty->assign("FILEID",$fileid);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
-$smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
 
 $allblocks = getBlocks($currentModule,"detail_view",'',$focus->column_fields);
+$smarty->assign("BLOCKS", $allblocks);
 $flag = 0;
 foreach($allblocks as $blocks)
 {
 	foreach($blocks as $block_entries)
 	{
-		//print_r('<br>'.$block_entries['File']['value'].'<br>');
-		if($block_entries['File']['value'] != '' || isset($block_entries['File']['value']))
+		if($block_entries['File Name']['value'] != '' || isset($block_entries['File Name']['value']))
 			$flag = 1;
 	}
 }
