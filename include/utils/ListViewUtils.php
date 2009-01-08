@@ -2328,7 +2328,7 @@ function getListQuery($module,$where='')
 				ON vtiger_crmentity.smownerid = vtiger_users.id
 			LEFT JOIN vtiger_products 
 				ON vtiger_products.productid = vtiger_troubletickets.product_id 
-			WHERE vtiger_crmentity.deleted = 0 ";
+			WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 				$sec_parameter=getListViewSecurityParameter($module);
@@ -2607,7 +2607,7 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_emaildetails
 				ON vtiger_emaildetails.emailid = vtiger_activity.activityid
 			WHERE vtiger_activity.activitytype = 'Emails'
-			AND vtiger_crmentity.deleted = 0 ";
+			AND vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -2622,7 +2622,7 @@ function getListQuery($module,$where='')
 				ON vtiger_crmentity.crmid = vtiger_faq.id
 			LEFT JOIN vtiger_products
 				ON vtiger_faq.product_id = vtiger_products.productid
-			WHERE vtiger_crmentity.deleted = 0".$where;
+			WHERE vtiger_crmentity.deleted = 0 ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -2637,7 +2637,7 @@ function getListQuery($module,$where='')
 				ON vtiger_crmentity.crmid = vtiger_vendor.vendorid
 			INNER JOIN vtiger_vendorcf
 				ON vtiger_vendor.vendorid = vtiger_vendorcf.vendorid
-			WHERE vtiger_crmentity.deleted = 0";
+			WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "PriceBooks":
 		$query = "SELECT vtiger_crmentity.crmid, vtiger_pricebook.*, vtiger_currency_info.currency_name
@@ -2648,7 +2648,7 @@ function getListQuery($module,$where='')
 				ON vtiger_pricebook.pricebookid = vtiger_pricebookcf.pricebookid
 			LEFT JOIN vtiger_currency_info
 				ON vtiger_pricebook.currency_id = vtiger_currency_info.id
-			WHERE vtiger_crmentity.deleted = 0";
+			WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "Quotes":
 		//Query modified to sort by assigned to
@@ -2835,7 +2835,7 @@ function getListQuery($module,$where='')
 			include_once("modules/$module/$module.php");
 		}
 		$focus = new $module();	
-		$query = $focus->getListQuery($module);
+		$query = $focus->getListQuery($module, $where);
 		// END
 	}
 
@@ -3876,7 +3876,9 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 				$skip_id[]=$adb->query_result($result,$k,$selectfield);
 			}
 			$skipids = implode(",", constructList($skip_id,'INTEGER'));
-			$where_relquery = "and ".$table.".".$field." not in (". $skipids .")";
+			if (count($skipids) > 0) {
+				$where_relquery = "and ".$table.".".$field." not in (". $skipids .")";
+			}
 		}
 	}
 	$log->debug("Exiting getRelCheckquery method ...");

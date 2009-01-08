@@ -2003,11 +2003,10 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	$this->db->query("insert into vtiger_reportfilters values(2,'Public')");
 	$this->db->query("insert into vtiger_reportfilters values(3,'Shared')");
 	
-	}	
-		
+	}
+	
 	//Added to insert the records in vtiger_user_mergefields
-	function insertUser2mergefields($userid)
-	{
+	function insertUser2mergefields($userid){
 		global $log, $adb;
 		$log->debug("Entering insertUser2mergefields(".$userid.") method ...");
 	        $log->info("in insertUser2mergefields ".$userid);

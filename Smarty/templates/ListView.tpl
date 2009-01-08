@@ -341,7 +341,7 @@ function alphabetic(module,url,dataid)
 	{include file="MergeColumns.tpl"}
 </div>	 
 	   <!-- PUBLIC CONTENTS STARTS-->
-	  <div id="ListViewContents" class="small" style="width:100%;position:relative;">
+	  <div id="ListViewContents" class="small" style="width:100%;">
 	  {if $MODULE neq "Documents"}
 			{include file="ListViewEntries.tpl"}
 	  {else}

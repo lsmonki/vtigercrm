@@ -165,13 +165,18 @@ function ToolTipExists($fieldname,$tabid){
 		global $adb;
 		$sql = "select fieldid from vtiger_field where tabid = $tabid and fieldname = '$fieldname'";
 		$result = $adb->query($sql);
-		$fieldid = $adb->query_result($result,0,'fieldid');
+		$count = $adb->num_rows($result);
+		if($count > 0){
+			$fieldid = $adb->query_result($result,0,'fieldid');
 		
-		$sql = "select * from vtiger_quickview where fieldid = $fieldid";
-		$result = $adb->query($sql);
+			$sql = "select * from vtiger_quickview where fieldid = $fieldid";
+			$result = $adb->query($sql);
 		
-		if($adb->num_rows($result) > 0){
-			return $fieldid;
+			if($adb->num_rows($result) > 0){
+				return $fieldid;
+			}else{
+				return false;
+			}
 		}else{
 			return false;
 		}

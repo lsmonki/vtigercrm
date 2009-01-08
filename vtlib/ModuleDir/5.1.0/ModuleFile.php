@@ -70,7 +70,8 @@ class ModuleClass extends CRMEntity {
 	// For Popup window record selection
 	var $popup_fields = Array('payslipname');
 
-	var $sortby_fields = Array('payslipname', 'payslipmonth', 'smownerid', 'modifiedtime');
+	// Placeholder for sort fields - All the fields will be initialized for Sorting through initSortFields
+	var $sortby_fields = Array();
 
 	// For Alphabetical search
 	var $def_basicsearch_col = 'payslipname';

@@ -37,7 +37,6 @@
                 {/if}
                 <td align=right>
 			
-			{* vtlib customization: Hook provided to add custom related list buttons. *}
 			{$detail.CUSTOM_BUTTON}
 
 			{if $header eq 'Potentials'}
@@ -167,7 +166,7 @@
                     &nbsp;</td>
 			{elseif $header eq 'Product Bundles'}
 					{if $MODULE eq 'Products' && $IS_MEMBER eq 0}
-						<input alt="{$APP.LBL_ADD_NEW} {$APP.Product}" title="{$APP.LBL_ADD_NEW} {$APP.Product}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_ADD_NEW} {$APP.Product}" onClick="this.form.action.value='EditView'; this.form.return_action.value='{$return_modname}'; this.form.module.value='Products'; this.form.return_module.value='{$MODULE}'; this.form.return_viewname.value='{$NAME}'; this.form.return_id.value='{$ID}';" type="submit"  name="button">
+						<input alt="{$APP.LBL_ADD_NEW} {$APP.Product}" title="{$APP.LBL_ADD_NEW} {$APP.Product}" accessKey="" class="crmbutton small create" value="{$APP.LBL_ADD_NEW} {$APP.Product}" onClick="this.form.action.value='EditView'; this.form.return_action.value='{$return_modname}'; this.form.module.value='Products'; this.form.return_module.value='{$MODULE}'; this.form.return_viewname.value='{$NAME}'; this.form.return_id.value='{$ID}';" type="submit"  name="button">
 					{/if}
             {/if}
         </tr>

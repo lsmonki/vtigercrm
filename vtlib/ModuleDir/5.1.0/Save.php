@@ -22,8 +22,7 @@ if($record)$focus->id  = $record;
 
 if($_REQUEST['assigntype'] == 'U') {
 	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_user_id'];
-}
-elseif($_REQUEST['assigntype'] == 'T') {
+} elseif($_REQUEST['assigntype'] == 'T') {
 	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
 }
 

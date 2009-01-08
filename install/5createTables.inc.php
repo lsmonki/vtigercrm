@@ -1080,15 +1080,6 @@ require_once('modules/Reports/PopulateReports.php');
 // default customview population
 require_once('modules/CustomView/PopulateCustomView.php');
 
-// Register All the Events
-registerEvents($adb);
-
-// Register All the Entity Methods
-registerEntityMethods($adb);
-
-// Populate Default Workflows
-populateDefaultWorkflows($adb);
-
 // ensure required sequences are created (adodb creates them as needed, but if
 // creation occurs within a transaction we get problems
 $db->getUniqueID("vtiger_crmentity");
@@ -1099,6 +1090,15 @@ $db->getUniqueID("vtiger_freetags");
 //Insert into vtiger_currency vtiger_table
 $db->pquery("insert into vtiger_currency_info values(?,?,?,?,?,?,?,?)", array($db->getUniqueID("vtiger_currency_info"),$currency_name,$currency_code,$currency_symbol,1,'Active','-11','0'));
 
+// Register All the Events
+registerEvents($adb);
+
+// Register All the Entity Methods
+registerEntityMethods($adb);
+
+// Populate Default Workflows
+populateDefaultWorkflows($adb);
+
 // Run the performance scripts based on the database type and the vtiger version.
 require_once('modules/Migration/versions.php');
 if($adb->isMySQL()) {
@@ -1107,6 +1107,12 @@ if($adb->isMySQL()) {
 	@include_once('modules/Migration/Performance/'.$current_version.'_postgres.php');		
 }
 	
+// populate the db with seed data
+if ($db_populate) {
+	//eecho ("Populate seed data into $db_name");
+	include("install/populateSeedData.php");
+}
+
 // Register all the events here
 function registerEvents($adb) {
 	require_once('include/events/include.inc');
@@ -1154,21 +1160,4 @@ function populateDefaultWorkflows($adb) {
 	$tm->saveTask($task);
 }
 
-// populate the db with seed data
-if ($db_populate) {
-        //eecho ("Populate seed data into $db_name");
-        include("install/populateSeedData.php");
-        //eecho ("...<font color=\"00CC00\">done</font><BR><P>\n");
-}
-
-// populate forums data
-global $log, $db;
-
-//$endTime = microtime();
-//$deltaTime = microtime_diff($startTime, $endTime);
-
-
-// populate calendar data
-
-//eecho ("total time: $deltaTime seconds.\n");
 ?>

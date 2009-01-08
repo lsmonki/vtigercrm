@@ -11,13 +11,12 @@ global $current_user, $currentModule;
 require_once("modules/$currentModule/$currentModule.php");
 
 $focus = new $currentModule();
+setObjectValuesFromRequest($focus);
 
 $mode = $_REQUEST['mode'];
 $record=$_REQUEST['record'];
 if($mode) $focus->mode = $mode;
 if($record)$focus->id  = $record;
-
-setObjectValuesFromRequest($focus);
 
 $focus->save($currentModule);
 $return_id = $focus->id;
@@ -32,6 +31,5 @@ else $return_action = "DetailView";
 if($_REQUEST['return_id'] != '') $return_id = $_REQUEST['return_id'];
 
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab&start=".$_REQUEST['pagenumber'].$search);
-
 
 ?>
