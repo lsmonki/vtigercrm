@@ -31,6 +31,7 @@ $smarty->assign("THEME", $theme_path);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("MODULE",$currentModule);
+$smarty->assign("MODULELABEL",getTranslatedString($currentModule));
 $smarty->assign("IDSTRING",$idstring);
 $smarty->assign("PERPAGE",$list_max_entries_per_page);
 $smarty->display('ExportRecords.tpl');

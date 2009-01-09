@@ -1313,7 +1313,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 					}
 					$tax_str = trim($tax_str,',');
 					$rate = $user_info['conv_rate'];
-					if(getFieldVisibilityPermission('Products',$current_user->id,'unit_price') == '0') {
+					if(getFieldVisibilityPermission($module,$current_user->id,'unit_price') == '0') {
 						$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
 						if($_REQUEST['currencyid'] != null) {
 							$prod_prices = getPricesForProducts($_REQUEST['currencyid'], array($entity_id));

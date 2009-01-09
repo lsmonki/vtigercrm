@@ -128,7 +128,7 @@ class ModuleClass extends CRMEntity {
 	/**
 	 * Get list view query.
 	 */
-	function getListQuery($module) {
+	function getListQuery($module, $where='') {
 		$query = "SELECT vtiger_crmentity.*, $this->table_name.*";
 
 		// Select Custom Field Table Columns if present
@@ -146,7 +146,7 @@ class ModuleClass extends CRMEntity {
 		$query .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid";
 		$query .= " LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
 
-		$query .= "	WHERE vtiger_crmentity.deleted = 0";
+		$query .= "	WHERE vtiger_crmentity.deleted = 0 ".$where;
 		$query .= $this->getListViewSecurityParameter($module);
 		return $query;
 	}

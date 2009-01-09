@@ -226,8 +226,8 @@ $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 $listview_entries = getListViewEntries($focus,"Vendors",$list_result,$navigation_array,'','&return_module=Vendors&return_action=index','EditView','Delete',$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
 
-$smarty->assign("AVALABLE_FIELDS", getMergeFields($module,"available_fields"));
-$smarty->assign("FIELDS_TO_MERGE", getMergeFields($module,"fileds_to_merge"));
+$smarty->assign("AVALABLE_FIELDS", getMergeFields($currentModule,"available_fields"));
+$smarty->assign("FIELDS_TO_MERGE", getMergeFields($currentModule,"fileds_to_merge"));
 
 //Added to select Multiple records in multiple pages
 $smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
@@ -238,7 +238,7 @@ $smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
 $smarty->assign("VIEWID", $viewid);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Vendors","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','vendorname','true','basic',"","","","",$viewid);
-$fieldnames = getAdvSearchfields($module);
+$fieldnames = getAdvSearchfields($currentModule);
 $criteria = getcriteria_options();
 $smarty->assign("CRITERIA", $criteria);
 $smarty->assign("FIELDNAMES", $fieldnames);
@@ -247,7 +247,7 @@ $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("BUTTONS", $other_text);
 
-$check_button = Button_Check($module);
+$check_button = Button_Check($currentModule);
 $smarty->assign("CHECK", $check_button);
 
 $_SESSION['vendors_listquery'] = $list_query;

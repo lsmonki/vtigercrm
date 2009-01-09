@@ -106,5 +106,14 @@ require_once('data/Tracker.php');
 $tracFocus=new Tracker();
 $list = $tracFocus->get_recently_viewed($current_user->id);
 $smarty->assign("TRACINFO",$list);
+
+$gmail_bookmarklet = '<a href=\'javascript:(function()%7Bvar%20doc=top.document;var%20bodyElement=document.body;'.
+'doc.vtigerURL%20=%22'.$site_URL.'/%22;var%20scriptElement=document.createElement(%22script%22);'.
+'scriptElement.type=%22text/javascript%22;scriptElement.src=doc.vtigerURL+%22modules/Emails/GmailBookmarkletTrigger.js%22;'.
+'bodyElement.appendChild(scriptElement);%7D)();\'>'.
+$app_strings['LBL_GMAIL'].' '.$app_strings['LBL_BOOKMARKLET'].'</a>';
+$smarty->assign("GMAIL_BOOKMARKLET", $gmail_bookmarklet);
+
+
 $smarty->display("Header.tpl");
 ?>

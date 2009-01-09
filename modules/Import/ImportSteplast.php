@@ -101,7 +101,7 @@ if ( isset($_REQUEST['message']))
 	<table align="center" cellpadding="5" cellspacing="0" width="95%" class="mailClient importLeadUI small">
 	   <tr>
 		<td height="50" valign="middle" align="left" class="mailClientBg genHeaderSmall">
-			 <?php echo $mod_strings['LBL_MODULE_NAME']; ?> <?php echo $app_strings[$_REQUEST['modulename']]; ?> 
+			 <?php echo $mod_strings['LBL_MODULE_NAME']; ?> <?php echo getTranslatedString($_REQUEST['modulename']); ?> 
 		</td>
 	   </tr>
 	   <tr><td>&nbsp;</td></tr>
@@ -178,6 +178,7 @@ if( $_REQUEST['dup_type'] == 'manual')
 	$fld_name=$ret_arr[1];
 	
 	$smarty->assign("MODULE",$req_module);
+	$smarty->assign("MODULELABEL",getTranslatedString($req_module));
 	$smarty->assign("NUM_GROUP",$total_num_group);
 	$smarty->assign("FIELD_NAMES",$fld_name);
 	$smarty->assign("CATEGORY",$parenttab);
@@ -262,6 +263,7 @@ else
 			$smarty->assign("APP", $app_strings);
 			$smarty->assign("IMAGE_PATH",$image_path);
 			$smarty->assign("MODULE",$module_name);
+			$smarty->assign("MODULELABEL",getTranslatedString($module_name));
 			$smarty->assign("SINGLE_MOD",$module_name);
 			$smarty->assign("SHOW_MASS_SELECT",'false');
 	
