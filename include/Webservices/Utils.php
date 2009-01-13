@@ -18,7 +18,7 @@ function vtws_getUsersInTheSameGroup($id){
 		$groupUsers->getAllUsersInGroup($group);
 		$usersInGroup = $groupUsers->group_users;
 		foreach ($usersInGroup as $user) {
-	                        if($user != $id){
+		if($user != $id){
 				$allUsers[$user] = getUserName($user); 
 			}
 		}		
@@ -147,6 +147,21 @@ function vtws_getEntityNameFields($moduleName){
 		}
 	}
 	return $nameFields;	
+}
+
+/** function to get the module List to which are crm entities. 
+ *  @return Array modules list as array
+ */
+function vtws_getModuleNameList(){
+	global $adb;
+
+	$sql = "select vtiger_moduleowners.*, vtiger_tab.name from vtiger_moduleowners inner join vtiger_tab on vtiger_moduleowners.tabid = vtiger_tab.tabid order by vtiger_tab.tabsequence";
+	$res = $adb->pquery($sql, array());
+	$mod_array = Array();
+	while($row = $adb->fetchByAssoc($res)){
+		array_push($mod_array,$row['name']);
+	}
+	return $mod_array;
 }
 
 ?>
