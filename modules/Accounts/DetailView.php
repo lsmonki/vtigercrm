@@ -190,6 +190,10 @@ $smarty->assign("SinglePane_View", $singlepane_view);
 // Record Change Notification
 $focus->markAsViewed($current_user->id);
 // END
+
+include_once('vtlib/Vtiger/Link.php');
+$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>$_REQUEST['action']);
+$smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule),'DETAILVIEW', $customlink_params));
 	
 $smarty->display("DetailView.tpl");
 ?>

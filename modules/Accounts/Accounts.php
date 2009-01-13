@@ -796,6 +796,179 @@ class Accounts extends CRMEntity {
 		return $query;
 	}
 
+	/**
+	* Function to get Account hierarchy of the given Account
+	* @param  integer   $id      - accountid
+	* returns Account hierarchy in array format
+	*/
+	function getAccountHierarchy($id) {
+		global $log, $adb, $current_user;
+        $log->debug("Entering getAccountHierarchy(".$id.") method ...");
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+							
+		$tabname = getParentTab();		
+		$listview_header = Array();
+		$listview_entries = array();
+
+		foreach ($this->list_fields_name as $fieldname=>$colname) {			
+			if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0
+				|| getFieldVisibilityPermission('Accounts', $current_user->id, $colname) == '0') {
+				$listview_header[] = getTranslatedString($fieldname);
+			}
+		}
+		
+		$accounts_list = Array();
+		
+		// Get the accounts hierarchy from the top most account in the hierarch of the current account, including the current account	
+		$encountered_accounts = array($id);
+		$accounts_list = $this->__getParentAccounts($id, $accounts_list, $encountered_accounts);
+		
+		// Get the accounts hierarchy (list of child accounts) based on the current account	
+		$accounts_list = $this->__getChildAccounts($id, $accounts_list, $accounts_list[$id]['depth']);
+		
+		// Create array of all the accounts in the hierarchy
+		foreach($accounts_list as $account_id => $account_info) {
+			$account_info_data = array();
+			foreach ($this->list_fields_name as $fieldname=>$colname) {			
+				if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0
+					|| getFieldVisibilityPermission('Accounts', $current_user->id, $colname) == '0') {
+					$data = $account_info[$colname];
+					if ($colname == 'accountname') {
+						if ($account_id != $id) {
+							$data = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'&parenttab='.$tabname.'">'.$data.'</a>';
+						} else {
+							$data = '<b>'.$data.'</b>';
+						}
+						// - to show the hierarchy of the Accounts
+						$account_depth = str_repeat(" .. ", $account_info['depth'] * 2);
+						$data = $account_depth . $data;							
+					}
+					if ($colname == 'website') {
+						$data = '<a href="http://'. $data .'" target="_blank">'.$data.'</a>';
+					}
+					$account_info_data[] = $data;
+				}	
+			}									
+			$listview_entries[$account_id] = $account_info_data;	
+		}
+		
+		$account_hierarchy = array('header'=>$listview_header,'entries'=>$listview_entries);
+        $log->debug("Exiting getAccountHierarchy method ...");
+		return $account_hierarchy;
+	}	
+	
+	/**
+	* Function to Recursively get all the upper accounts of a given Account 
+	* @param  integer   $id      		- accountid
+	* @param  array   $parent_accounts   - Array of all the parent accounts
+	* returns All the parent accounts of the given accountid in array format
+	*/
+	function __getParentAccounts($id, &$parent_accounts, &$encountered_accounts) {
+		global $log, $adb;
+        $log->debug("Entering __getParentAccounts(".$id.",".$parent_accounts.") method ...");
+		
+		$query = "SELECT parentid FROM vtiger_account " .
+				" INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_account.accountid" .
+				" WHERE vtiger_crmentity.deleted = 0 and vtiger_account.accountid = ?";
+		$params = array($id);
+		
+		$res = $adb->pquery($query, $params);
+
+		if ($adb->num_rows($res) > 0 &&
+			$adb->query_result($res, 0, 'parentid') != '' && $adb->query_result($res, 0, 'parentid') != 0 &&
+			!in_array($adb->query_result($res, 0, 'parentid'),$encountered_accounts)) {
+				
+			$parentid = $adb->query_result($res, 0, 'parentid');	
+			$encountered_accounts[] = $parentid;	
+			$this->__getParentAccounts($parentid,$parent_accounts,$encountered_accounts);
+		}
+		
+		$query = "SELECT vtiger_account.*, vtiger_accountbillads.*," .
+				" CASE when (vtiger_users.user_name not like '') THEN vtiger_users.user_name ELSE vtiger_groups.groupname END as user_name " .
+				" FROM vtiger_account" .
+				" INNER JOIN vtiger_crmentity " .
+				" ON vtiger_crmentity.crmid = vtiger_account.accountid" .
+				" INNER JOIN vtiger_accountbillads" .
+				" ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid " .
+				" LEFT JOIN vtiger_groups" .
+				" ON vtiger_groups.groupid = vtiger_crmentity.smownerid" .
+				" LEFT JOIN vtiger_users" .
+				" ON vtiger_users.id = vtiger_crmentity.smownerid" .
+				" WHERE vtiger_crmentity.deleted = 0 and vtiger_account.accountid = ?";
+		$params = array($id);
+		$res = $adb->pquery($query, $params);
+		
+		$parent_account_info = array();
+		$depth = 0;
+		$immediate_parentid = $adb->query_result($res, 0, 'parentid');
+		if (isset($parent_accounts[$immediate_parentid])) {
+			$depth = $parent_accounts[$immediate_parentid]['depth'] + 1;
+		}
+		$parent_account_info['depth'] = $depth;
+		foreach($this->list_fields_name as $fieldname=>$columnname) {
+			if ($columnname == 'assigned_user_id') {
+				$parent_account_info[$columnname] = $adb->query_result($res, 0, 'user_name');				
+			} else {
+				$parent_account_info[$columnname] = $adb->query_result($res, 0, $columnname);
+			}
+		}
+		$parent_accounts[$id] = $parent_account_info;
+        $log->debug("Exiting __getParentAccounts method ...");
+		return $parent_accounts;
+	}
+	
+	/**
+	* Function to Recursively get all the child accounts of a given Account 
+	* @param  integer   $id      		- accountid
+	* @param  array   $child_accounts   - Array of all the child accounts
+	* @param  integer   $depth          - Depth at which the particular account has to be placed in the hierarchy
+	* returns All the child accounts of the given accountid in array format
+	*/
+	function __getChildAccounts($id, &$child_accounts, $depth) {
+		global $log, $adb;
+        $log->debug("Entering __getChildAccounts(".$id.",".$child_accounts.",".$depth.") method ...");
+		
+		$query = "SELECT vtiger_account.*, vtiger_accountbillads.*," .
+				" CASE when (vtiger_users.user_name not like '') THEN vtiger_users.user_name ELSE vtiger_groups.groupname END as user_name " .
+				" FROM vtiger_account" .
+				" INNER JOIN vtiger_crmentity " .
+				" ON vtiger_crmentity.crmid = vtiger_account.accountid" .
+				" INNER JOIN vtiger_accountbillads" .
+				" ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid " .
+				" LEFT JOIN vtiger_groups" .
+				" ON vtiger_groups.groupid = vtiger_crmentity.smownerid" .
+				" LEFT JOIN vtiger_users" .
+				" ON vtiger_users.id = vtiger_crmentity.smownerid" .
+				" WHERE vtiger_crmentity.deleted = 0 and parentid = ?";
+		$params = array($id);
+		$res = $adb->pquery($query, $params);
+	
+		$num_rows = $adb->num_rows($res);
+		
+		if ($num_rows > 0) {
+			$depth = $depth + 1;
+			for($i=0;$i<$num_rows;$i++) {
+				$child_acc_id = $adb->query_result($res, $i, 'accountid');
+				if(array_key_exists($child_acc_id,$child_accounts)) {
+					continue;
+				}
+				$child_account_info = array();
+				$child_account_info['depth'] = $depth;
+				foreach($this->list_fields_name as $fieldname=>$columnname) {
+					if ($columnname == 'assigned_user_id') {
+						$child_account_info[$columnname] = $adb->query_result($res, $i, 'user_name');
+					} else {
+						$child_account_info[$columnname] = $adb->query_result($res, $i, $columnname);
+					}
+				}
+				$child_accounts[$child_acc_id] = $child_account_info;
+				$this->__getChildAccounts($child_acc_id, $child_accounts, $depth);
+			}
+		}
+        $log->debug("Exiting __getChildAccounts method ...");
+		return $child_accounts;
+	}
+
 }
 
 ?>

@@ -34,7 +34,7 @@ class Vtiger_Link {
 	function initialize($valuemap) {
 		$this->linkid = $valuemap['linkid'];
 		$this->linktype=$valuemap['linktype'];
-		$this->linklabel=$valuemap['linklabel'];
+		$this->linklabel=getTranslatedString($valuemap['linklabel']);
 		$this->linkurl  =decode_html($valuemap['linkurl']);
 		$this->linkicon =decode_html($valuemap['linkicon']);
 		$this->sequence =$valuemap['sequence'];

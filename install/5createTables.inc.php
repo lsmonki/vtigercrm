@@ -1099,6 +1099,9 @@ registerEntityMethods($adb);
 // Populate Default Workflows
 populateDefaultWorkflows($adb);
 
+// Populate Links
+populateLinks();
+
 // Run the performance scripts based on the database type and the vtiger version.
 require_once('modules/Migration/versions.php');
 if($adb->isMySQL()) {
@@ -1158,6 +1161,16 @@ function populateDefaultWorkflows($adb) {
 	$task->active=true;
 	$task->methodName = "UpdateInventory";
 	$tm->saveTask($task);
+}
+
+// Function to populate Links
+function populateLinks() {
+	include_once('vtlib/Vtiger/Module.php');
+	
+	// Links for Accounts module
+	$moduleInstance = Vtiger_Module::getInstance('Accounts');
+	// Detail View Custom link
+	$moduleInstance->addLink('DETAILVIEW', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
 }
 
 ?>

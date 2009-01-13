@@ -1200,6 +1200,9 @@ $app_strings = array (
 'SHARE_FILTER'=>'Share',
 'PUBLIC_FILTER'=>'Public',
 
+// Account Hierarchy
+'LBL_ACCOUNT_HIERARCHY' => 'Account Hierarchy', 
+
 );
 
 $app_list_strings = array (

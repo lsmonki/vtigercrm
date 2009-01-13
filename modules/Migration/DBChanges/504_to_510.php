@@ -1475,6 +1475,20 @@ $sql = "create table vtiger_quickview (fieldid int(19) not null, related_fieldid
 ExecuteQuery($sql);
 //add tooltip manager ends
 
+/* Account Hierarchy */
+populateLinks();
+
+
+// Function to populate Links
+function populateLinks() {
+	include_once('vtlib/Vtiger/Module.php');
+	
+	// Links for Accounts module
+	$moduleInstance = Vtiger_Module::getInstance('Accounts');
+	// Detail View Custom link
+	$moduleInstance->addLink('DETAILVIEW', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
+}
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>
