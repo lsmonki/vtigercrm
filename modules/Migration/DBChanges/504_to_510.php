@@ -1404,7 +1404,7 @@ function moveSettingsToDatabase($adb){
 				'index.php?module=Settings&action=ListLoginHistory&parenttab=Settings',
 				'index.php?module=Settings&action=LayoutBlockList&parenttab=Settings',
 				'index.php?module=Settings&action=CustomFieldList&parenttab=Settings',
-				'index.php?module=Settings&action=PickList&parenttab=Settings',
+				'index.php?module=PickList&action=PickList&parenttab=Settings',
 				'index.php?module=Recyclebin&action=index&parenttab=Settings',
 				'index.php?module=Settings&action=ModuleManager&parenttab=Settings',
 				'index.php?module=Settings&action=listemailtemplates&parenttab=Settings',

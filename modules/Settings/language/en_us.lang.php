@@ -941,10 +941,18 @@ $mod_strings = Array(
 'ERR_ALREADY_EXISTS'=>' already exists.',
 'ERR_SPECIFY_DIFFERENT_LABEL'=>'Please specify a different Label',
 'LBL_TOOLS_TO_BE_SHOWN'=>'Tools to be shown',
-'LBL_PICKLIST_GLOBAL_DELETE'=>'Global Delete',
+'LBL_PICKLIST_GLOBAL_CHANGE'=>'Global Change',
 'LBL_PICKLIST_TRANSFER'=>'Transfering the values Of ',
 'LBL_REPLACE_VALUE_WITH'=>'Replace value with ',
 'LBL_EDIT_CUSTOM_RULE'=>'Edit Custom Privilege Rule',
+
+/*for global add/delete in picklist*/
+'DELETE_PICKLIST_VALUES'=>'Delete PickList Values',
+'EDIT_PICKLIST_VALUE'=>'Edit PickList Value',
+'ADD_PICKLIST_VALUES'=>'Add PickList Values',
+'LBL_PICKLIST_ADDINFO'=>'Type the new entries one-by-one below',
+'LBL_SELECT_ROLES'=> 'Select the Roles to which entries have to be added',
+'LBL_EXISTING_PICKLIST_VALUES'=>'Existing Picklist Values',
 
 // Added after 5.0.4 GA
 

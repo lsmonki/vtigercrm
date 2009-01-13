@@ -162,6 +162,11 @@
 
 				// Added after 5.0.4 GA
 				
+				/*For global add/delete in picklist*/
+				LBL_GIVE_PICKLIST_VALUE:'Please provide some value for the selected picklist to be replaced',
+				LBL_SELECT_ROLE:'Please select atleast one role for which the new values are to be added',
+				LBL_ADD_PICKLIST_VALUE:'Please provide atleast one new value to be added',
+
 				ALL_FILTER_CREATION_DENIED:'Cannot create CustomView using name "All", try using different ViewName',
 				MSG_RESTORE_CONFIRMATION:'Are you sure you want to restore the selected',
 
@@ -194,5 +199,16 @@
 				ALL_FILTER_CREATION_DENIED:'Cannot create CustomView using name "All", try using different ViewName',
 				OPERATION_DENIED:'You are denied to perform this operation',
 				EMAIL_CHECK_MSG: 'Disable portal access to save the email field as blank',
-				IS_PARENT : 'This Product has Sub Products, You are not allowed to choose a Parent for this Product'
+				IS_PARENT : 'This Product has Sub Products, You are not allowed to choose a Parent for this Product',
+				
+				/*global actions on picklist*/
+				PICKLIST_CANNOT_BE_EMPTY: 'Picklist value cannot be empty',
+				DUPLICATE_VALUES_FOUND: 'Duplicate Values found',
+				LBL_NO_ROLES_SELECTED: 'No roles have been selected, do you wish to continue?',
+				LBL_DUPLICATE_FOUND: 'Duplicate entries found for the value ',
+				LBL_CANNOT_HAVE_EMPTY_VALUE: 'Cannot have empty value. To delete go back and click on delete button',
+				LBL_DUPLICATE_VALUE_EXISTS: 'Duplicate value exists',
+				LBL_WANT_TO_DELETE: "This will delete the selected picklist value(s) for all roles. You sure you want to continue? ",
+				LBL_DELETE_ALL_WARNING: "You have selected all values to delete. Do you want to continue?",
+				
 			};

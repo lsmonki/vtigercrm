@@ -81,7 +81,7 @@ function vtlib_isModuleActive($module) {
 function vtlib_moduleAlwaysActive() {
 	$modules = Array (
 		'Administration', 'CustomView', 'Settings', 'Users', 'Migration', 
-		'Utilities', 'uploads', 'Import', 'System', 'com_vtiger_workflow'
+		'Utilities', 'uploads', 'Import', 'System', 'com_vtiger_workflow', 'PickList',
 	);
 	return $modules;
 }

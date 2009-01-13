@@ -42,7 +42,7 @@ $app_strings = array (
 'LBL_ALT_HOT_KEY' => 'Alt+',
 'LBL_SAVE_LABEL' => 'Save',
 'LBL_REPLACE_LABEL' => 'Replace',
-'LBL_APPLY_LABEL' => 'Apply',
+'LBL_APPLY_BUTTON_LABEL' => 'Apply',
 'LBL_SEND_MAIL_BUTTON' => 'Send Mail',
 'LBL_SAVE_BUTTON_TITLE' => 'Save [Alt+S]',
 'LBL_EDIT_BUTTON_TITLE' => 'Edit [Alt+E]',
@@ -764,8 +764,6 @@ $app_strings = array (
 'ERROR' => 'Error',
 'FIELD_TYPE_NOT_SELECTED' => 'Field Type is not selected',
 'SPECIAL_CHARACTERS_NOT_ALLOWED' => 'Special characters are not allowed in Label field',
-'PICKLIST_CANNOT_BE_EMPTY' => 'Picklist value cannot be empty',
-'DUPLICATE_VALUES_FOUND' => 'Duplicate Values found',
 'DUPLICATE_MAPPING_ACCOUNTS' => 'Duplicate mapping for accounts!!',
 'DUPLICATE_MAPPING_CONTACTS' => 'Duplicate mapping for Contacts!!',
 'DUPLICATE_MAPPING_POTENTIAL' => 'Duplicate mapping for Potential!!',
@@ -1024,7 +1022,6 @@ $app_strings = array (
 //Added for Notification
 'Dear_Admin_tasks_not_been_completed' => 'Dear Admin,<br><br> Please note that there are certain tasks in the system which have not been completed even after 24hours of their existence<br>',
 'Task_sign'=>'Thank You<br>HelpDesk Team<br>',
-'DELETE_PICKLIST_VALUES'=>'Delete PickList Values',
 //Added for PDF notification
 'LBL_PDF'=>'PDF Cannot be generated as the width exceeds the maximum limit, Kindly ',
 //Added for pdf internalization in 5.0.4
@@ -1059,6 +1056,7 @@ $app_strings = array (
 'Qty'=>'Qty',
 'Price'=>'Price',
 'Discount'=>'Discount',
+'LBL_ADD_BUTTON' => 'Add',
 
 // Added after 5.0.4 GA
 
