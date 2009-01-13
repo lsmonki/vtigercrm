@@ -202,10 +202,6 @@
 			<default value="1" />
 		</field>
 		<field name="version" type="C" size="10" />
-		<field name="enablereports" type="I" size="19">
-			<notnull />
-			<default value="0" />
-		</field>
 
 		<index name="tab_name_idx">
 			<col>name</col>

@@ -234,6 +234,9 @@ $mod_strings = Array(
 'Account No'=>'Account No',
 // END
 
+// Account Hierarchy
+'LBL_SHOW_ACCOUNT_HIERARCHY' => 'Show Account Hierarchy', 
+
 );
 
 ?>

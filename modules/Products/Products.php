@@ -955,7 +955,9 @@ class Products extends CRMEntity {
 			"Accounts" => array("vtiger_seproductsrel"=>array("productid","crmid"),"vtiger_products"=>"productid"),
 			"Contacts" => array("vtiger_seproductsrel"=>array("productid","crmid"),"vtiger_products"=>"productid"),
 			"Potentials" => array("vtiger_seproductsrel"=>array("productid","crmid"),"vtiger_products"=>"productid"),
-			"Products" => array("vtiger_products"=>array("product_id","productid"),"vtiger_products"=>"productid"),
+			"Products" => array("vtiger_products"=>array("productid","product_id"),"vtiger_products"=>"productid"),
+			"PriceBooks" => array("vtiger_pricebookproductrel"=>array("productid","pricebookid"),"vtiger_products"=>"productid"),
+			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_products"=>"productid"),
 		);
 		return $rel_tables[$secmodule];
 	}

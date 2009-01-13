@@ -185,6 +185,67 @@ class PriceBooks extends CRMEntity {
 			return false;
 		}
 	}
+	
+	/*
+	 * Function to get the primary query part of a report 
+	 * @param - $module Primary module name
+	 * returns the query string formed on fetching the related data for report for primary module
+	 */
+	function generateReportsQuery($module){
+	 			$moduletable = $this->table_name;
+	 			$moduleindex = $this->table_index;
+	 			
+	 			$query = "from $moduletable
+					inner join vtiger_crmentity on vtiger_crmentity.crmid=$moduletable.$moduleindex
+					left join vtiger_currency_info as vtiger_currency_info$module on vtiger_currency_info$module.id = $moduletable.currency_id 
+					left join vtiger_groups as vtiger_groups$module on vtiger_groups$module.groupid = vtiger_crmentity.smownerid 
+					left join vtiger_users as vtiger_users$module on vtiger_users$module.id = vtiger_crmentity.smownerid 
+					left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid 
+					left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid";
+	            return $query;
+	}
+	
+	/*
+	 * Function to get the secondary query part of a report 
+	 * @param - $module primary module name
+	 * @param - $secmodule secondary module name
+	 * returns the query string formed on fetching the related data for report for secondary module
+	 */
+	function generateReportsSecQuery($module,$secmodule){
+		$tab = getRelationTables($module,$secmodule);
+		
+		foreach($tab as $key=>$value){
+			$tables[]=$key;
+			$fields[] = $value;
+		}
+		$tabname = $tables[0];
+		$prifieldname = $fields[0][0];
+		$secfieldname = $fields[0][1];
+		$tmpname = $tabname."tmp".$secmodule;
+		$condvalue = $tables[1].".".$fields[1];
+	
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue and $tmpname.$secfieldname IN (SELECT pricebookid from vtiger_pricebook)";
+		$query .=" left join vtiger_pricebook as vtiger_pricebookPriceBooks on vtiger_pricebookPriceBooks.pricebookid=$tmpname.$secfieldname  
+				left join vtiger_crmentity as vtiger_crmentityPriceBooks on vtiger_crmentityPriceBooks.crmid=vtiger_pricebookPriceBooks.pricebookid and vtiger_crmentityPriceBooks.deleted=0 
+				left join vtiger_pricebook on vtiger_pricebook.pricebookid = vtiger_crmentityPriceBooks.crmid 
+				left join vtiger_currency_info as vtiger_currency_infoPriceBooks on vtiger_currency_infoPriceBooks.id = vtiger_pricebook.currency_id 
+				left join vtiger_users as vtiger_usersPriceBooks on vtiger_usersPriceBooks.id = vtiger_crmentityPriceBooks.smownerid
+				left join vtiger_groups as vtiger_groupsPriceBooks on vtiger_groupsPriceBooks.groupid = vtiger_crmentityPriceBooks.smownerid"; 
+
+		return $query;
+	}
+
+	/*
+	 * Function to get the relation tables for related modules 
+	 * @param - $secmodule secondary module name
+	 * returns the array with table names and fieldnames storing relations between module and this module
+	 */
+	function setRelationTables($secmodule){
+		$rel_tables = array (
+			"Products" => array("vtiger_pricebookproductrel"=>array("pricebookid","productid"),"vtiger_pricebook"=>"pricebookid"),
+		);
+		return $rel_tables[$secmodule];
+	}
 
 }
 ?>

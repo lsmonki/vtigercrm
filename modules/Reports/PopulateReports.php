@@ -130,7 +130,7 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
                              'vtiger_products:discontinued:Products_Product_Active:discontinued:V',
                              'vtiger_products:productcategory:Products_Product_Category:productcategory:V',
                              'vtiger_products:website:Products_Website:website:V',
-			     'vtiger_vendorRel:vendorname:Products_Vendor_Name:vendor_id:I',
+			     'vtiger_vendorRelProducts:vendorname:Products_Vendor_Name:vendor_id:I',
 			     'vtiger_products:mfr_part_no:Products_Mfr_PartNo:mfr_part_no:V'),
 
 		       Array('vtiger_products:productname:Products_Product_Name:productname:V',
@@ -141,14 +141,14 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
                              'vtiger_contactsubdetails:leadsource:Contacts_Lead_Source:leadsource:V'),
 
 		       Array('vtiger_quotes:subject:Quotes_Subject:subject:V',
-                             'vtiger_potentialRel:potentialname:Quotes_Potential_Name:potential_id:I',
+                             'vtiger_potentialRelQuotes:potentialname:Quotes_Potential_Name:potential_id:I',
                              'vtiger_quotes:quotestage:Quotes_Quote_Stage:quotestage:V',
                              'vtiger_contactdetailsQuotes:lastname:Quotes_Contact_Name:contact_id:V',
                              'vtiger_usersRel1:user_name:Quotes_Inventory_Manager:assigned_user_id1:I',
                              'vtiger_accountQuotes:accountname:Quotes_Account_Name:account_id:I'),
 
 		       Array('vtiger_quotes:subject:Quotes_Subject:subject:V',
-                             'vtiger_potentialRel:potentialname:Quotes_Potential_Name:potential_id:I',
+                             'vtiger_potentialRelQuotes:potentialname:Quotes_Potential_Name:potential_id:I',
                              'vtiger_quotes:quotestage:Quotes_Quote_Stage:quotestage:V',
                              'vtiger_contactdetailsQuotes:lastname:Quotes_Contact_Name:contact_id:V',	
                              'vtiger_usersRel1:user_name:Quotes_Inventory_Manager:assigned_user_id1:I',
@@ -157,7 +157,7 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
 			     'vtiger_quotes:shipping:Quotes_Shipping:shipping:V'),
 
 		       Array('vtiger_purchaseorder:subject:PurchaseOrder_Subject:subject:V',
-			     'vtiger_vendorRel:vendorname:PurchaseOrder_Vendor_Name:vendor_id:I',
+			     'vtiger_vendorRelPurchaseOrder:vendorname:PurchaseOrder_Vendor_Name:vendor_id:I',
 			     'vtiger_purchaseorder:tracking_no:PurchaseOrder_Tracking_Number:tracking_no:V',
 			     'vtiger_contactdetails:firstname:Contacts_First_Name:firstname:V',
 			     'vtiger_contactdetails:lastname:Contacts_Last_Name:lastname:V',
@@ -165,7 +165,7 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
 			     'vtiger_contactdetails:email:Contacts_Email:email:E'),
 
 		       Array('vtiger_purchaseorder:subject:PurchaseOrder_Subject:subject:V',
-			     'vtiger_vendorRel:vendorname:PurchaseOrder_Vendor_Name:vendor_id:I',
+			     'vtiger_vendorRelPurchaseOrder:vendorname:PurchaseOrder_Vendor_Name:vendor_id:I',
 			     'vtiger_purchaseorder:requisition_no:PurchaseOrder_Requisition_No:requisition_no:V',
                              'vtiger_purchaseorder:tracking_no:PurchaseOrder_Tracking_Number:tracking_no:V',
 			     'vtiger_contactdetailsPurchaseOrder:lastname:PurchaseOrder_Contact_Name:contact_id:I',

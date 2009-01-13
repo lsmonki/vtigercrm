@@ -1125,6 +1125,7 @@ $tm->saveTask($task);
 
 /* Support to track if a module is of CrmEntity type or not */
 ExecuteQuery("ALTER TABLE vtiger_tab ADD COLUMN isentitytype INT NOT NULL DEFAULT 1");
+ExecuteQuery("UPDATE vtiger_tab SET isentitytype=0 WHERE name IN ('Home','Dashboard','Rss','Reports','Portal','Users','Recyclebin')");
 
 /* Support for different languages to be stored in database instead of config file - Vtlib */
 ExecuteQuery("create table vtiger_language(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50), " .
@@ -1459,9 +1460,8 @@ addFieldSecurity(10, $fieldid, 'false');
 // END
 
 /* Reports Revamped */
-ExecuteQuery("ALTER TABLE vtiger_tab ADD COLUMN enablereports int(11) NOT NULL DEFAULT '0'");
-ExecuteQuery("UPDATE vtiger_tab SET enablereports =1 WHERE name IN (\"Dashboard\",\"Home\",\"Reports\",\"Rss\",\"Emails\",\"Users\",\"PriceBooks\",\"Portal\",\"Events\",\"Faq\",\"Webmails\",\"Recyclebin\")");
 ExecuteQuery("ALTER TABLE vtiger_report ADD COLUMN owner int(11) NOT NULL");
+ExecuteQuery("UPDATE vtiger_field INNER JOIN vtiger_field as vtiger_field1 on vtiger_field1.tabid=vtiger_field.tabid SET vtiger_field.block = vtiger_field1.block WHERE vtiger_field.fieldname='faq_answer' and vtiger_field1.fieldname='question' and vtiger_field.tabid=15");
 ExecuteQuery("ALTER TABLE vtiger_report ADD COLUMN sharingtype varchar(200) NOT NULL DEFAULT 'Private'");
 ExecuteQuery("UPDATE vtiger_report SET sharingtype='Public', owner=1 WHERE state='SAVED'");
 ExecuteQuery("Create table vtiger_reportsharing(reportid int(19) not null,shareid int(19) not null,setype varchar(200) NOT NULL)");

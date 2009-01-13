@@ -172,7 +172,7 @@ class ReportRun extends CRMEntity
 					}
 					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field == 'Products_Handler')//Products cannot be assiged to group only to handler so group is not included
 					{
-						$columnslist[$fieldcolname] = $selectedfields[0].".user_name as ".$this->primarymodule."_Handler";
+						$columnslist[$fieldcolname] = $selectedfields[0].".user_name as ".$module."_Handler";
 					}
 					elseif($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
 					{
@@ -189,6 +189,18 @@ class ReportRun extends CRMEntity
 					elseif(in_array($selectedfields[2], $this->append_currency_symbol_to_value)) {
 						$columnslist[$fieldcolname] = 'concat('.$selectedfields[0].'.currency_id,"::",'.$selectedfields[0].'.'.$selectedfields[1].') as "' . $header_label .'"';
 					}
+					elseif($selectedfields[0] == 'vtiger_notes' && ($selectedfields[1] == 'filelocationtype' || $selectedfields[1] == 'filesize' || $selectedfields[1] == 'folderid' || $selectedfields[1]=='filestatus'))//handled for product fields in Campaigns Module Reports
+					{
+						if($selectedfields[1] == 'filelocationtype'){
+							$columnslist[$fieldcolname] = "case ".$selectedfields[0].".".$selectedfields[1]." when 'I' then 'Internal' when 'E' then 'External' else '-' end as '$selectedfields[2]'";
+						} else if($selectedfields[1] == 'folderid'){
+							$columnslist[$fieldcolname] = "vtiger_attachmentsfolder.foldername as '$selectedfields[2]'";
+						} elseif($selectedfields[1] == 'filestatus'){
+							$columnslist[$fieldcolname] = "case ".$selectedfields[0].".".$selectedfields[1]." when '1' then 'yes' when '0' then 'no' else '-' end as '$selectedfields[2]'";
+						} elseif($selectedfields[1] == 'filesize'){
+							$columnslist[$fieldcolname] = "case ".$selectedfields[0].".".$selectedfields[1]." when '' then '-'else concat(".$selectedfields[0].".".$selectedfields[1]."/1024,'  ','KB') end as '$selectedfields[2]'";
+						}
+					}
 					else
 					{
 						$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1].' AS "'.$header_label.'"';
@@ -200,7 +212,6 @@ class ReportRun extends CRMEntity
 				}
 			}
 		}
-		
 		$log->info("ReportRun :: Successfully returned getQueryColumnsList".$reportid);
 		return $columnslist;		
 	}
@@ -257,6 +268,9 @@ class ReportRun extends CRMEntity
 	{
 		global $current_user,$adb;
 		$fieldname = $selectedfields[3];
+		$tmp = split("_",$selectedfields[2]);
+		$module = $tmp[0];
+		
 		if($fieldname == "parent_id" && ($this->primarymodule == "HelpDesk" || $this->primarymodule == "Products" || $this->secondarymodule == "Products" || $this->primarymodule == "Calendar" || $this->secondarymodule == "Calendar"))
 		{
 			if($this->primarymodule == "HelpDesk" && $selectedfields[0] == "vtiger_crmentityRelHelpDesk")
@@ -275,17 +289,17 @@ class ReportRun extends CRMEntity
 			
 		}elseif($fieldname == "contact_id" && strpos($selectedfields[2],"Contact_Name"))
 		{
-			if($this->primarymodule == 'PurchaseOrder' || $this->primarymodule == 'SalesOrder' || $this->primarymodule == 'Quotes' || $this->primarymodule == 'Invoice' || $this->primarymodule == 'Calendar') {
+			if(($this->primarymodule == 'PurchaseOrder' || $this->primarymodule == 'SalesOrder' || $this->primarymodule == 'Quotes' || $this->primarymodule == 'Invoice' || $this->primarymodule == 'Calendar') && $module==$this->primarymodule) {
 				if (getFieldVisibilityPermission("Contacts", $current_user->id, "firstname") == '0')
-					$querycolumn = "concat(vtiger_contactdetails".$this->primarymodule.".lastname,' ',vtiger_contactdetails".$this->primarymodule.".firstname) as ".$selectedfields[2];
+					$querycolumn = " case when vtiger_crmentity.crmid!='' then concat(vtiger_contactdetails".$this->primarymodule.".lastname,' ',vtiger_contactdetails".$this->primarymodule.".firstname) else '-' end as ".$selectedfields[2];
 				else
-					$querycolumn = "vtiger_contactdetails".$this->primarymodule.".lastname as ".$selectedfields[2];
-			}		
-			if($this->secondarymodule == 'Quotes' || $this->secondarymodule == 'Invoice') {
+					$querycolumn = " case when vtiger_crmentity.crmid!='' then vtiger_contactdetails".$this->primarymodule.".lastname else '-' end as ".$selectedfields[2];
+			}	
+			if(stristr($this->secondarymodule,$module) && ($module== 'Quotes' || $module== 'SalesOrder' || $module== 'PurchaseOrder' ||$module== 'Calendar' || $module == 'Invoice')) {
 				if (getFieldVisibilityPermission("Contacts", $current_user->id, "firstname") == '0')
-					$querycolumn = "concat(vtiger_contactdetails".$this->secondarymodule.".lastname,' ',vtiger_contactdetails".$this->secondarymodule.".firstname) as ".$selectedfields[2];
-				else
-					$querycolumn = "vtiger_contactdetails".$this->secondarymodule.".lastname as ".$selectedfields[2];
+					$querycolumn = " case when vtiger_crmentity".$module.".crmid!='' then concat(vtiger_contactdetails".$module.".lastname,' ',vtiger_contactdetails".$module.".firstname) else '-' end as ".$selectedfields[2];
+				else 
+					$querycolumn = " case when vtiger_crmentity".$module.".crmid!='' then vtiger_contactdetails".$module.".lastname else '-' end as ".$selectedfields[2];
 			}
 		}
 		else{
@@ -1555,6 +1569,16 @@ class ReportRun extends CRMEntity
 			$reportquery .= " ".$sec_parameter;
 		}
 		
+		$sec_modules = split(":",$this->secondarymodule);
+		foreach($sec_modules as $i=>$key){
+			$tab_id = getTabid($key);
+			if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+			{
+				$sec_parameter=getSecListViewSecurityParameter($key);
+				$reportquery .= " ".$sec_parameter;
+			}
+		}
+		
 		if($tab_id == 9 || $tab_id == 16)
         	$reportquery.=" group by vtiger_activity.activityid ";
 
@@ -1594,7 +1618,6 @@ class ReportRun extends CRMEntity
 		if($outputformat == "HTML")
 		{
 			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist);
-			//print_r($sSQL);
 			$result = $adb->query($sSQL);
 			$error_msg = $adb->database->ErrorMsg();
 			if(!$result && $error_msg!=''){
@@ -1656,23 +1679,33 @@ class ReportRun extends CRMEntity
 					{
 						$fld = $adb->field_name($result, $i);
 						$fld_type = $column_definitions[$i]->type;
-
-						if (in_array($fld->name, $this->convert_currency)) {
-							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
-						} elseif(in_array($fld->name, $this->append_currency_symbol_to_value)) {
-							$curid_value = explode("::", $custom_field_values[$i]);
-							$currency_id = $curid_value[0];
-							$currency_value = $curid_value[1];
-							$cur_sym_rate = getCurrencySymbolandCRate($currency_id);
-							$fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
-						}elseif ($fld->name == "PurchaseOrder_Currency" || $fld->name == "SalesOrder_Currency" 
-									|| $fld->name == "Invoice_Currency" || $fld->name == "Quotes_Currency") {
-							$fieldvalue = getCurrencyName($custom_field_values[$i]);
-						}
-						else {
-							$fieldvalue = getTranslatedString($custom_field_values[$i]);
-						}
-
+							if (in_array($fld->name, $this->convert_currency)) {
+								if($custom_field_values[$i]!='')
+									$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
+								else
+									$fieldvalue = getTranslatedString($custom_field_values[$i]);
+							} elseif(in_array($fld->name, $this->append_currency_symbol_to_value)) {
+								$curid_value = explode("::", $custom_field_values[$i]);
+								$currency_id = $curid_value[0];
+								$currency_value = $curid_value[1];
+								$cur_sym_rate = getCurrencySymbolandCRate($currency_id);
+								if($custom_field_values[$i]!='')
+									$fieldvalue = $cur_sym_rate['symbol']." ".$currency_value;
+								else
+									$fieldvalue = getTranslatedString($custom_field_values[$i]);
+							}elseif ($fld->name == "PurchaseOrder_Currency" || $fld->name == "SalesOrder_Currency" 
+										|| $fld->name == "Invoice_Currency" || $fld->name == "Quotes_Currency") {
+								if($custom_field_values[$i]!='')
+									$fieldvalue = getCurrencyName($custom_field_values[$i]);
+								else
+									$fieldvalue =getTranslatedString($custom_field_values[$i]);
+							}
+							else {
+								if($custom_field_values[$i]!='')
+									$fieldvalue = getTranslatedString($custom_field_values[$i]);
+								else
+									$fieldvalue = getTranslatedString($custom_field_values[$i]);
+							}
 						$fieldvalue = str_replace("<", "&lt;", $fieldvalue);
 						$fieldvalue = str_replace(">", "&gt;", $fieldvalue);
 

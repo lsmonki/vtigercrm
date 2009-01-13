@@ -335,6 +335,7 @@ class Invoice extends CRMEntity {
 	function setRelationTables($secmodule){
 		$rel_tables = array (
 			"Calendar" =>array("vtiger_seactivityrel"=>array("crmid","activityid"),"vtiger_invoice"=>"invoiceid"),
+			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_invoice"=>"invoiceid"),
 		);
 		return $rel_tables[$secmodule];
 	}

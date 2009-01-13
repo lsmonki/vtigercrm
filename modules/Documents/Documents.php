@@ -270,6 +270,7 @@ class Documents extends CRMEntity {
 	 			$moduleindex = $this->tab_name_index[$moduletable];
 	 				$query = "from $moduletable 
 			        inner join vtiger_crmentity on vtiger_crmentity.crmid=$moduletable.$moduleindex
+			        inner join vtiger_attachmentsfolder on vtiger_attachmentsfolder.folderid=$moduletable.folderid
 					left join vtiger_groups as vtiger_groups".$module." on vtiger_groups".$module.".groupid = vtiger_crmentity.smownerid
 		            left join vtiger_users as vtiger_users".$module." on vtiger_users".$module.".id = vtiger_crmentity.smownerid
 					left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
@@ -301,6 +302,7 @@ class Documents extends CRMEntity {
 		$query .=" left join vtiger_notes as vtiger_notesDocuments on vtiger_notesDocuments.notesid=$tmpname.$secfieldname  
 				left join vtiger_crmentity as vtiger_crmentityDocuments on vtiger_crmentityDocuments.crmid=vtiger_notesDocuments.notesid and vtiger_crmentityDocuments.deleted=0 
 				left join vtiger_notes on vtiger_notes.notesid = vtiger_crmentityDocuments.crmid 
+		        left join vtiger_attachmentsfolder on vtiger_attachmentsfolder.folderid=vtiger_notes.folderid
 				left join vtiger_groups as vtiger_groupsDocuments on vtiger_groupsDocuments.groupid = vtiger_crmentityDocuments.smownerid
 				left join vtiger_users as vtiger_usersDocuments on vtiger_usersDocuments.id = vtiger_crmentityDocuments.smownerid"; 
 

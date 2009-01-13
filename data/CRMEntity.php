@@ -1588,9 +1588,14 @@ $log->info("in getOldFileName  ".$notesid);
 		$moduleindex = $primary->table_index;
 		$modulecftable = $primary->customFieldTable[0];
 		$modulecfindex = $primary->customFieldTable[1];
-		$query = "from $moduletable
-	        inner join $modulecftable as $modulecftable on $modulecftable.$modulecfindex=$moduletable.$moduleindex   
-			inner join vtiger_crmentity on vtiger_crmentity.crmid=$moduletable.$moduleindex
+		
+		if(isset($modulecftable)){
+			$cfquery = "inner join $modulecftable as $modulecftable on $modulecftable.$modulecfindex=$moduletable.$moduleindex";
+		} else {
+			$cfquery = '';
+		}
+		$query = "from $moduletable $cfquery
+	        inner join vtiger_crmentity on vtiger_crmentity.crmid=$moduletable.$moduleindex
 			left join vtiger_groups as vtiger_groups".$module." on vtiger_groups".$module.".groupid = vtiger_crmentity.smownerid
             left join vtiger_users as vtiger_users".$module." on vtiger_users".$module.".id = vtiger_crmentity.smownerid
 			left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
@@ -1631,6 +1636,7 @@ $log->info("in getOldFileName  ".$notesid);
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
 	function generateReportsSecQuery($module,$secmodule){
+		global $adb;
 		checkFileAccess("modules/$secmodule/$secmodule.php");
 		require_once("modules/$secmodule/$secmodule.php");
 		$secondary = new $secmodule();
@@ -1652,18 +1658,23 @@ $log->info("in getOldFileName  ".$notesid);
 		$secfieldname = $fields[0][1];
 		$tmpname = $tabname."tmp";
 		$condvalue = $tables[1].".".$fields[1];
+		if(isset($modulecftable)){
+			$cfquery = " left join $modulecftable on $modulecftable.$modulecfindex=$tablename.$tableindex";
+		} else {
+			$cfquery = '';
+		}
 	
 		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT notesid from vtiger_notes)";
 		$query .=" 	left join $tablename as $tablename".$secmodule." on $tablename".$secmodule.".$tableindex = $tmpname.$secfieldname
 					left join vtiger_crmentity as vtiger_crmentity$secmodule on vtiger_crmentity$secmodule.crmid = $tablename".$secmodule.".$tableindex AND vtiger_crmentity$secmodule.deleted=0   
 					left join $tablename on $tablename.$tableindex=vtiger_crmentity$secmodule.crmid   
-					left join $modulecftable on $modulecftable.$modulecfindex=$tablename.$tableindex   
+					$cfquery   
 					left join vtiger_groups as vtiger_groups".$secmodule." on vtiger_groups".$secmodule.".groupid = vtiger_crmentity$secmodule.smownerid
 		            left join vtiger_users as vtiger_users".$secmodule." on vtiger_users".$secmodule.".id = vtiger_crmentity$secmodule.smownerid"; 
    
        $fields_query = $adb->pquery("SELECT vtiger_field.fieldname,vtiger_field.tablename,vtiger_field.fieldid from vtiger_field INNER JOIN vtiger_tab on vtiger_tab.name = ? WHERE vtiger_tab.tabid=vtiger_field.tabid AND vtiger_field.uitype IN (10)",array($secmodule));
-        
-        if($adb->num_rows($fields_query)>0){
+       
+       if($adb->num_rows($fields_query)>0){
 	        for($i=0;$i<$adb->num_rows($fields_query);$i++){
 	        	$field_name = $adb->query_result($fields_query,$i,'fieldname');
 	        	$field_id = $adb->query_result($fields_query,$i,'fieldid');

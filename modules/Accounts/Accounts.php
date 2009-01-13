@@ -758,6 +758,7 @@ class Accounts extends CRMEntity {
 			"Calendar" => array("vtiger_seactivityrel"=>array("crmid","activityid"),"vtiger_account"=>"accountid"),
 			"HelpDesk" => array("vtiger_troubletickets"=>array("parent_id","ticketid"),"vtiger_account"=>"accountid"),
 			"Products" => array("vtiger_seproductsrel"=>array("crmid","productid"),"vtiger_account"=>"accountid"),
+			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_account"=>"accountid"),
 		);
 		return $rel_tables[$secmodule];
 	}

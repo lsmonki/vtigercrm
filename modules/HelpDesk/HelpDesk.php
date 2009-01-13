@@ -706,6 +706,7 @@ case when (vtiger_users.user_name not like '') then vtiger_users.user_name else 
 	function setRelationTables($secmodule){
 		$rel_tables = array (
 			"Calendar" => array("vtiger_seactivityrel"=>array("crmid","activityid"),"vtiger_troubletickets"=>"ticketid"),
+			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_troubletickets"=>"ticketid"),
 		);
 		return $rel_tables[$secmodule];
 	}

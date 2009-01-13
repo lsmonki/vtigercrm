@@ -217,9 +217,10 @@ class Reports extends CRMEntity{
 	// Initializes the module list for listing columns for report creation.
 	function initListOfModules() {
 		global $adb,$current_user;
-		$module_restrict_list = array('Emails','Reports');
+		$restricted_modules = array('Emails','Events','Webmails');
+		$restricted_blocks = array('LBL_IMAGE_INFORMATION','LBL_COMMENTS','LBL_COMMENT_INFORMATION');
 		$this->related_lists[$module]=Array();
-		$result = $adb->pquery("select name from vtiger_tab WHERE vtiger_tab.presence != 1 AND vtiger_tab.enablereports=0 order by vtiger_tab.tabsequence ", array());
+		$result = $adb->pquery("select name from vtiger_tab WHERE vtiger_tab.presence != 1 AND vtiger_tab.isentitytype=1 and vtiger_tab.name NOT IN(".generateQuestionMarks($restricted_modules).") order by vtiger_tab.tabsequence ", array($restricted_modules));
 		if($adb->num_rows($result)>0){
 			for($i=0;$i <$adb->num_rows($result);$i++){
 				$module = $adb->query_result($result,$i,'name');
@@ -236,20 +237,22 @@ class Reports extends CRMEntity{
 					for($index = 0; $index < $noOfRows; ++$index) {
 						$blockid = $adb->query_result($res,$index,'blockid');
 						$blocklabel = $adb->query_result($res,$index,'blocklabel');
-						if($blocklabel=='LBL_COMMENTS' || (isset($this->module_list[$module]) &&in_array($blockid, $this->module_list[$module])) || isset($this->module_list[$module][getTranslatedString($blocklabel,$module)])) continue;
+						if(in_array($blocklabel,$restricted_blocks) || (isset($this->module_list[$module]) &&in_array($blockid, $this->module_list[$module])) || isset($this->module_list[$module][getTranslatedString($blocklabel,$module)])) continue;
 						else{
 							$blockid_list[] = $blockid;
 							$this->module_list[$module][getTranslatedString($blocklabel,$module)] = $blockid;
 						}
 					}
 				}
-				$rel_mod_query = $adb->pquery("SELECT vtiger_tab.name FROM vtiger_tab INNER JOIN vtiger_relatedlists on vtiger_tab.tabid=vtiger_relatedlists.related_tabid WHERE vtiger_relatedlists.tabid IN (". generateQuestionMarks($tabid) .") AND vtiger_tab.enablereports=0 AND vtiger_relatedlists.related_tabid!=0 AND vtiger_relatedlists.label!='Activity History'",array($tabid));
+				$rel_mod_query = $adb->pquery("SELECT vtiger_tab.name FROM vtiger_tab INNER JOIN vtiger_relatedlists on vtiger_tab.tabid=vtiger_relatedlists.related_tabid WHERE vtiger_relatedlists.tabid IN (". generateQuestionMarks($tabid) .") AND vtiger_tab.isentitytype=1 and vtiger_tab.name NOT IN(".generateQuestionMarks($restricted_modules).") AND vtiger_relatedlists.label!='Activity History'",array($tabid,$restricted_modules));
 				$noOfRows = $adb->num_rows($rel_mod_query);
 				$this->related_modules[$module]=Array();
 				if($noOfRows > 0){
 					for($index = 0; $index < $noOfRows; $index++) {
 						$mod_name = $adb->query_result($rel_mod_query,$index,'name');
-						$this->related_modules[$module][] = $mod_name;
+						if($mod_name!=$module){
+							$this->related_modules[$module][] = $mod_name;
+						}
 					}
 				}
 			}
@@ -545,25 +548,27 @@ class Reports extends CRMEntity{
 				$fieldtablename = "vtiger_quotes".$module;
 				$fieldcolname = "subject";
 			}
-			if($fieldname == 'product_id' && $fieldtablename == 'vtiger_troubletickets')
+			
+			$product_id_tables = array(
+				"vtiger_troubletickets"=>"vtiger_productsRel",
+				"vtiger_campaign"=>"vtiger_productsCampaigns",
+				"vtiger_products"=>"vtiger_productsProducts",
+				"vtiger_faq"=>"vtiger_productsFaq",
+				);
+			if($fieldname == 'product_id' && isset($product_id_tables[$fieldtablename]))
 			{
-				$fieldtablename = "vtiger_productsRel";
-				$fieldcolname = "productname";
-			}
-			if($fieldname == 'product_id' && $fieldtablename == 'vtiger_campaign') 
-			{
-				$fieldtablename = "vtiger_productsCampaigns";
-				$fieldcolname = "productname";
-			}
-			if($fieldname == 'product_id' && $fieldtablename == 'vtiger_products') 
-			{
-				$fieldtablename = "vtiger_productsProducts";
+				$fieldtablename = $product_id_tables[$fieldtablename];
 				$fieldcolname = "productname";
 			}
 			if($fieldname == 'campaignid' && $module=='Potentials')
 			{
 				$fieldtablename = "vtiger_campaign".$module;
 				$fieldcolname = "campaignname";
+			}
+			if($fieldname == 'currency_id' && $fieldtablename=='vtiger_pricebook')
+			{
+				$fieldtablename = "vtiger_currency_info".$module;
+				$fieldcolname = "currency_name";
 			}
 
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
