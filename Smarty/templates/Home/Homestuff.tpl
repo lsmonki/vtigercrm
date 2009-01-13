@@ -2,6 +2,7 @@
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/scriptaculous.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/unittest.js"></script>
+<script language="javascript" type="text/javascript" src="include/js/notebook.js"></script>
 {*<!--Home Page Entries  -->*}
 	<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 	<tr>
@@ -202,12 +203,19 @@
 			</div>
 		</td>	
 		<td width="22%" valign="top" style="padding:5px;">
-			<div id="upcomingActivities" style="margin: 0px;padding: 0px;">
+            <div id="upcomingActivities" style="margin: 0px;padding: 0px;">
 				{include file="upcomingActivities.tpl"}
 			</div><br>
 			<div id="pendingActivities" style="margin: 0px;padding: px;">
 				{include file="pendingActivities.tpl"}
 			</div>
+            <!-- changes for notebook -->
+			<div class="MatrixLayer" style="width:200px; overflow: auto; margin:0px;padding-left:10px;" id="notebook" ondblclick="editContents(this)" title="{$APP.LBL_NOTEBOOK_TITLE}">
+            	{include file="notebook.tpl"}
+            </div>
+			<textarea class="MatrixLayer" id='notebook_textarea' rows="18" onblur='saveContents(this)' style='display:none;width:200px;overflow:auto;height:100%;margin:0px;' title="{$APP.LBL_NOTEBOOK_SAVE_TITLE}"></textarea>
+			<br>
+			<!-- notebook changes end -->
 			{if $TAG_CLOUD_DISPLAY eq 'true'}
 				<table border=0 cellspacing=0 cellpadding=0 width=100% class="tagCloud">
 				<tr>
@@ -301,7 +309,7 @@
 			</table>
 		</form>
 	</div>
-
+	
 	<div id="taskcalAction" class="calAction" style="width:125px;" onMouseout="fninvsh('taskcalAction')" onMouseover="fnvshNrm('taskcalAction')">
 		<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF">
 			<tr>

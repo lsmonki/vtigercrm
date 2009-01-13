@@ -1244,6 +1244,10 @@ ExecuteQuery("CREATE INDEX link_tabidtype_idx ON vtiger_links(tabid,linktype)");
 /* Column added to vtiger_tab to track the version of the module */
 ExecuteQuery("ALTER TABLE vtiger_tab ADD COLUMN version VARCHAR(10)");
 
+/*adding the notebook to vtiger*/
+ExecuteQuery("create table vtiger_notebook_contents (userid int(19) not null, contents text)");
+/*notbook changes end*/
+
 /* Move Settings Page Information to Database */
 // This function moves the settings page to database
 function moveSettingsToDatabase($adb){

@@ -10,6 +10,7 @@
  ********************************************************************************/
 -->*}
 <script language="javascript" type="text/javascript" src="include/scriptaculous/scriptaculous.js"></script>
+<script language="javascript" type="text/javascript" src="include/js/notebook.js"></script>
 <script language="javascript">
 function getHomeActivities(mode,view)
 

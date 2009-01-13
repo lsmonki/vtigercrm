@@ -570,6 +570,11 @@ $app_strings = array (
 'LBL_RECORD_ID' => 'Record ID',
 'LBL_ACTION_DATE' => 'Action Date',
 'LBL_HOMEPAGE_DASHBOARD' => 'Home Page Dashboard',
+/*added for notebook integration*/
+'LBL_NOTEBOOK'=>'Notebook',
+'LBL_NOTEBOOK_TITLE'=>'Double-click to edit.',
+'LBL_NOTEBOOK_SAVE_TITLE'=>'Click anywhere else on the page to save.',
+/*notebok integration ends*/
 'LBL_NO' => 'No',
 'LBL_FOUND' => 'Found',
 'LBL_YOU_CAN_CREATE' => 'You can Create',

@@ -136,37 +136,28 @@ $smarty->assign("ACTIVITIES",$activities);
 $smarty->assign("CURRENTUSER",$user_name);
 $freetag = new freetag();
 $smarty->assign("ALL_TAG",$freetag->get_tag_cloud_html("",$current_user->id));
+$smarty->assign("NOTEBOOK_CONTENTS",getNotebookContents());
+
 $smarty->display("Home/Homestuff.tpl");
 
-	/** Function to get the Tasks assigned to the group for the currentUser 
-	 *  This function accepts no arguments
-	 * @returns  $group related tasks Array in the following format
-	 * $values = Array('Title'=>Array(0=>'image name',
-	 *				 1=>'My Group Allocation',
-	 *			 	 2=>'home_mygrp'
-	 *			 	),
-	 *		  'Header'=>Array(0=>'Entity Name',
-	 *	  			  1=>'Group Name',
-	 *				  2=>'Entity Type'	
-	 *			  	),
-	 *		  'Entries'=>Array($id=>Array(
-	 *			  			0=>$name,
-	 *						1=>$groupname,
-	 *						2=>$entityname
-	 *					       ),
-	 *				   $id1=>Array(
-         *                                               0=>$name1,
-         *                                               1=>$groupname1,
-	 *						 2=>$entityname1	
-         *                                              ),
-	 *					|
-	 *					|
-         *				   $idn=>Array(
-         *                                               0=>$namen,
-         *                                               1=>$groupnamen,
-	 *						 2=>$entitynamen		
-         *                                              )	
-	 *				  )
-	 *
-        */
+/**
+ * this function returns the notebook contents from the database
+ * if there are no contents for a given user it creates a test content
+ * @return - contents of the notebook for a user
+ */
+function getNotebookContents(){
+	global $adb, $current_user;
+	$contents = "Double-click here to edit ";
+	
+	$sql = "select * from vtiger_notebook_contents where userid=".$current_user->id;
+	$result = $adb->query($sql);
+	
+	if($adb->num_rows($result)>0){
+		$contents = $adb->query_result($result,0,"contents");
+	}else{
+		$sql = "insert into vtiger_notebook_contents values (?,?)";
+		$adb->pquery($sql, array($current_user->id, $contents));
+	}
+	return $contents;
+}
 ?>

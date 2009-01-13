@@ -6924,4 +6924,16 @@
 	</table>
 	<!-- tooltip manager ends -->
 	
+	<!-- notebook changes start -->
+	<table name="vtiger_notebook_contents">
+		<field name="userid" type="I" size="19">
+			<notnull />
+			<key />
+		</field>
+		<field name="contents" type="X">
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	<!-- notebook changes end -->
+
 </schema>
