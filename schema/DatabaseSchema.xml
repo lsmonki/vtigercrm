@@ -6464,6 +6464,22 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
+	<table name="vtiger_eventhandler_module">
+		<field name="eventhandler_module_id" type="I">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="module_name" type="C" size="100">
+		</field>
+		<field name="handler_class" type="C" size="100">
+		</field>
+		<index name="eventhandler_idx">
+			<unique />
+			<col>eventhandler_id</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>		
+	</table>
+
 	<!-- vtmailscanner -->
 	<table name="vtiger_mailscanner">
 		<field name="scannerid" type="I">

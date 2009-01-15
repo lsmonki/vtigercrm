@@ -58,6 +58,8 @@
 			$adb = $this->adb;
 			$adb->pquery("delete from vtiger_eventhandlers where handler_class=?",
 				array($className));
+			$adb->pquery("delete from vtiger_eventhandler_module where handler_class=?",
+				array($className));
 		}
 		
 		/**
@@ -79,6 +81,40 @@
 		 */
 		function triggerEvent($triggerName, $data){
 			$this->getTrigger($triggerName)->trigger($data);
+		}
+
+		/**
+		 * Set the module the handler belongs to
+		 * 
+		 * @param moduleName - The name of the module
+		 * @param handlerClass - The name of the handler class
+		 */
+		function setModuleForHandler($moduleName, $handlerClass){
+			$adb = $this->adb;
+			$result = $adb->pquery("SELECT * FROM vtiger_eventhandler_module WHERE handler_class=?",
+				array($handlerClass));
+			if($adb->num_rows($result)===0){
+				$handlerModuleId = $adb->getUniqueId('vtiger_eventhandler_module');
+				$adb->pquery("insert into vtiger_eventhandler_module
+					(eventhandler_module_id, module_name, handler_class)
+					values (?,?,?)", array($handlerModuleId, $moduleName, $handlerClass));
+			}
+		}
+
+		/**
+		 * List handler classes for a module
+		 * 
+		 * @param moduleName - The name of the module
+		 */
+		function listHandlersForModule($moduleName){
+		  $adb = $this->adb;
+		  $result = $adb->pquery('SELECT handler_class FROM vtiger_eventhandler_module WHERE module_name=?', array($moduleName));
+		  $it = new SqlResultIterator($adb, $result);
+		  $arr = array();
+		  foreach($it as $row){
+			$arr[] = $row->handler_class;
+		  }
+		  return $arr;
 		}
 		
 		/**
