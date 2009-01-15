@@ -48,8 +48,12 @@ if($fld_module == 'Events'){
 	$temp_module_strings = return_module_language($current_language, $fld_module);
 }
 $picklists_entries = getUserFldArray($fld_module,$roleid);
-$available_module_picklist = get_available_module_picklist($picklists_entries);
-$picklist_fields = array_chunk(array_pad($picklists_entries,$value,''),3);
+$available_module_picklist = array();
+$picklist_fields = array();
+if(!empty($picklists_entries)){
+	$available_module_picklist = get_available_module_picklist($picklists_entries);
+	$picklist_fields = array_chunk(array_pad($picklists_entries,$value,''),3);
+}
 
 $smarty->assign("MODULE_LISTS",getPickListModules());
 $smarty->assign("ROLE_LISTS",getrole2picklist());

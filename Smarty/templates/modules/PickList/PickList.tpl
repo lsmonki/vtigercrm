@@ -45,9 +45,8 @@
 				</td>
 				<td class="small" align="left" width="30%">
 					<select name="pickmodule" id="pickmodule" class="detailedViewTextBox" onChange="changeModule();">
-					{foreach key=tabid item=module from=$MODULE_LISTS}
+					{foreach key=modulelabel item=module from=$MODULE_LISTS}
 						{*<!-- vtlib customization: Use translation only if available -->*}
-						{assign var="modulelabel" value=$module}
 						{if $APP.$module}
 							{assign var="modulelabel" value=$APP.$module}
 						{/if}

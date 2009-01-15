@@ -210,5 +210,6 @@
 				LBL_DUPLICATE_VALUE_EXISTS: 'Duplicate value exists',
 				LBL_WANT_TO_DELETE: "This will delete the selected picklist value(s) for all roles. You sure you want to continue? ",
 				LBL_DELETE_ALL_WARNING: "You have selected all values to delete. Do you want to continue?",
+				LBL_PLEASE_CHANGE_REPLACEMENT: "please change the replacement value; it is also selected for delete",
 				
 			};

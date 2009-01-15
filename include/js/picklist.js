@@ -22,7 +22,7 @@ function changeModule(){
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'action=PickListAjax&module=PickList&directmode=ajax&file=PickList&moduleName='+module+'&roleid='+role,
+			postBody: 'action=PickListAjax&module=PickList&directmode=ajax&file=PickList&moduleName='+encodeURIComponent(module)+'&roleid='+role,
 			onComplete: function(response) {
 				$("status").style.display="none";
 				$("picklist_datas").innerHTML=response.responseText;
@@ -47,7 +47,7 @@ function assignPicklistValues(module,fieldname,fieldlabel){
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'action=PickListAjax&module=PickList&file=AssignValues&moduleName='+module+'&fieldname='+fieldname+'&fieldlabel='+fieldlabel+'&roleid='+role,
+			postBody: 'action=PickListAjax&module=PickList&file=AssignValues&moduleName='+encodeURIComponent(module)+'&fieldname='+encodeURIComponent(fieldname)+'&fieldlabel='+encodeURIComponent(fieldlabel)+'&roleid='+role,
 			onComplete: function(response) {
 				$("status").style.display="none";
 				$("actiondiv").style.display="block";
@@ -127,7 +127,7 @@ function showDeleteDiv(){
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'action=PickListAjax&module=PickList&mode=delete&file=ShowActionDivs&moduleName='+module+'&fieldname='+fieldName+'&fieldlabel='+fieldLabel,
+			postBody: 'action=PickListAjax&module=PickList&mode=delete&file=ShowActionDivs&moduleName='+encodeURIComponent(module)+'&fieldname='+encodeURIComponent(fieldName)+'&fieldlabel='+encodeURIComponent(fieldLabel),
 			onComplete: function(response) {
 				$("status").style.display="none";
 				$("actiondiv").style.display ='block';
@@ -154,7 +154,7 @@ function showAddDiv(){
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'action=PickListAjax&module=PickList&mode=add&file=ShowActionDivs&moduleName='+module+'&fieldname='+fieldName+'&fieldlabel='+fieldLabel,
+			postBody: 'action=PickListAjax&module=PickList&mode=add&file=ShowActionDivs&moduleName='+encodeURIComponent(module)+'&fieldname='+encodeURIComponent(fieldName)+'&fieldlabel='+encodeURIComponent(fieldLabel),
 			onComplete: function(response) {
 				$("status").style.display="none";
 				$("actiondiv").style.display ='block';
@@ -181,7 +181,7 @@ function showEditDiv(){
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'action=PickListAjax&module=PickList&mode=edit&file=ShowActionDivs&moduleName='+module+'&fieldname='+fieldName+'&fieldlabel='+fieldLabel,
+			postBody: 'action=PickListAjax&module=PickList&mode=edit&file=ShowActionDivs&moduleName='+encodeURIComponent(module)+'&fieldname='+encodeURIComponent(fieldName)+'&fieldlabel='+encodeURIComponent(fieldLabel),
 			onComplete: function(response) {
 				$("status").style.display="none";
 				$("actiondiv").style.display ='block';
@@ -374,13 +374,13 @@ function validateDelete(fieldname, module){
 	if(arr.length == node.length){
 		if(!confirm(alert_arr.LBL_DELETE_ALL_WARNING)){
 			return false;
-		}
-	}else{
-		//check if replacement value is not equal to any deleted value
-		for(var i=0; i<arr.length; i++){
-			if(replaceVal == arr[i]){
-				alert("please change the replacement value; it is also selected for delete");
-				return false;
+		}else{
+			//check if replacement value is not equal to any deleted value
+			for(var i=0; i<arr.length; i++){
+				if(replaceVal == arr[i]){
+					alert(alert_arr.LBL_PLEASE_CHANGE_REPLACEMENT);
+					return false;
+				}
 			}
 		}
 	}
@@ -400,7 +400,7 @@ function pickDelete(module, fieldname, arr, replaceVal){
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'action=PickListAjax&module=PickList&mode=delete&file=PickListAction&fld_module='+module+'&fieldname='+fieldname+'&values='+JSON.stringify(arr)+'&replaceVal='+replaceVal,
+			postBody: 'action=PickListAjax&module=PickList&mode=delete&file=PickListAction&fld_module='+encodeURIComponent(module)+'&fieldname='+encodeURIComponent(fieldname)+'&values='+JSON.stringify(arr)+'&replaceVal='+encodeURIComponent(replaceVal),
 			onComplete: function(response) {
 				var str = response.responseText;
 				if(str == "SUCCESS"){
@@ -556,7 +556,7 @@ function saveAssignedValues(moduleName, fieldName, roleid){
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'action=PickListAjax&module=PickList&file=SaveAssignedValues&moduleName='+moduleName+'&fieldname='+fieldName+'&roleid='+roleid+'&values='+values+'&otherRoles='+otherRoles,
+			postBody: 'action=PickListAjax&module=PickList&file=SaveAssignedValues&moduleName='+encodeURIComponent(moduleName)+'&fieldname='+encodeURIComponent(fieldName)+'&roleid='+roleid+'&values='+encodeURIComponent(values)+'&otherRoles='+encodeURIComponent(otherRoles),
 			onComplete: function(response) {
 				if(response.responseText == "SUCCESS"){
 					$("status").style.display="none";
@@ -587,7 +587,7 @@ function showPicklistEntries(moduleName){
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'action=PickListAjax&module=PickList&file=PickList&moduleName='+moduleName+'&fieldname='+fieldName+'&roleid='+roleid+'&directmode=ajax',
+			postBody: 'action=PickListAjax&module=PickList&file=PickList&moduleName='+encodeURIComponent(moduleName)+'&fieldname='+encodeURIComponent(fieldName)+'&roleid='+roleid+'&directmode=ajax',
 			onComplete: function(response) {
 				if(response.responseText){
 					$("status").style.display="none";

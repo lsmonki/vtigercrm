@@ -26,7 +26,7 @@ function getUserFldArray($fld_module,$roleid){
 	
 	$query="select vtiger_field.fieldlabel,vtiger_field.columnname,vtiger_field.fieldname, vtiger_field.uitype" .
 			" FROM vtiger_field inner join vtiger_picklist on vtiger_field.fieldname = vtiger_picklist.name" .
-			" where (displaytype in(1,5) and vtiger_field.tabid=? and vtiger_field.uitype in ('15','55','33') " .
+			" where (displaytype=1 and vtiger_field.tabid=? and vtiger_field.uitype in ('15','55','33','16') " .
 			" or (vtiger_field.tabid=? and fieldname='salutationtype' and fieldname !='vendortype')) " .
 			" and vtiger_picklist.picklistid in (select picklistid from vtiger_role2picklist where roleid = ?)" .
 			" ORDER BY vtiger_picklist.picklistid ASC";
@@ -34,6 +34,7 @@ function getUserFldArray($fld_module,$roleid){
 
 	$result = $adb->pquery($query, $params);
 	$noofrows = $adb->num_rows($result);
+
     if($noofrows > 0){
 		$fieldlist = array();
     	for($i=0; $i<$noofrows; $i++){
@@ -47,9 +48,9 @@ function getUserFldArray($fld_module,$roleid){
 			$user_fld['uitype'] = $adb->query_result($result,$i,"uitype");	
 			$user_fld['value'] = getAssignedPicklistValues($user_fld['fieldname'], $roleid, $adb); 
 			$fieldlist[] = $user_fld;
-    	}
-    }
-    return $fieldlist;
+		}
+	}
+	return $fieldlist;
 }
 
 /** 
@@ -61,11 +62,11 @@ function getPickListModules(){
 	global $adb;
 	// vtlib customization: Ignore disabled modules.
 	//$query = 'select distinct vtiger_field.fieldname,vtiger_field.tabid,tablabel,uitype from vtiger_field inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where uitype IN (15,16, 111,33) and vtiger_field.tabid != 29 order by vtiger_field.tabid ASC';
-	$query = 'select distinct vtiger_field.fieldname,vtiger_field.tabid,tablabel,uitype from vtiger_field inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where uitype IN (15,33) and vtiger_field.tabid != 29 and vtiger_tab.presence != 1 order by vtiger_field.tabid ASC';
+	$query = 'select distinct vtiger_field.fieldname,tablabel,vtiger_tab.name as tabname,uitype from vtiger_field inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where uitype IN (15,33) and vtiger_field.tabid != 29 and vtiger_tab.presence != 1 order by vtiger_field.tabid ASC';
 	// END
 	$result = $adb->pquery($query, array());
 	while($row = $adb->fetch_array($result)){
-		$modules[$row['tabid']] = $row['tablabel']; 
+		$modules[$row['tablabel']] = $row['tabname']; 
 	}
 	return $modules;
 }
