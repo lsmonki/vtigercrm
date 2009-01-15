@@ -76,7 +76,7 @@ class ImportVendors extends Vendors {
 
 	//Module Sequence Numbering	
 	function modseq_number() {
-		$this->column_fields['vendor_no'] = $this->setModuleSeqNumber('increment', 'Vendors');
+		$this->column_fields['vendor_no'] = '';
 	}
 	// END
 	

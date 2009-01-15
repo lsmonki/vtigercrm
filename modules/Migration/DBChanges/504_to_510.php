@@ -821,59 +821,59 @@ custom_addInventoryRows(
 // Add Module Number Field to UI.						
 
 $blockid = getBlockId(6,'LBL_ACCOUNT_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (6,".$adb->getUniqueID("vtiger_field").",'account_no','vtiger_account',1,'4','account_no','Account No',1,0,0,100,2,$blockid,1,'V~M',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field values (6,".$adb->getUniqueID("vtiger_field").",'account_no','vtiger_account',1,'4','account_no','Account No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_account ADD COLUMN account_no varchar(100) not null");
 
 $blockid = getBlockId(7,'LBL_LEAD_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (7,".$adb->getUniqueID("vtiger_field").",'lead_no','vtiger_leaddetails',1,'4','lead_no','Lead No',1,0,0,100,3,$blockid,1,'V~M',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field values (7,".$adb->getUniqueID("vtiger_field").",'lead_no','vtiger_leaddetails',1,'4','lead_no','Lead No',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_leaddetails ADD COLUMN lead_no varchar(100) not null");
 
 $blockid = getBlockId(4,'LBL_CONTACT_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (4,".$adb->getUniqueID("vtiger_field").",'contact_no','vtiger_contactdetails',1,'4','contact_no','Contact No',1,0,0,100,3,$blockid,1,'V~M',1,null,'BAS',0)");		
+ExecuteQuery("insert into vtiger_field values (4,".$adb->getUniqueID("vtiger_field").",'contact_no','vtiger_contactdetails',1,'4','contact_no','Contact No',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");		
 ExecuteQuery("ALTER TABLE vtiger_contactdetails ADD COLUMN contact_no varchar(100) not null");
 
 $blockid = getBlockId(2,'LBL_OPPORTUNITY_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (2,".$adb->getUniqueID("vtiger_field").",'potential_no','vtiger_potential',1,'4','potential_no','Potential No',1,0,0,100,2,$blockid,1,'V~M',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field values (2,".$adb->getUniqueID("vtiger_field").",'potential_no','vtiger_potential',1,'4','potential_no','Potential No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_potential ADD COLUMN potential_no varchar(100) not null");
 
 $blockid = getBlockId(26,'LBL_CAMPAIGN_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (26,".$adb->getUniqueID("vtiger_field").",'campaign_no','vtiger_campaign',1,'4','campaign_no','Campaign No',1,0,0,100,2,$blockid,1,'V~M',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field values (26,".$adb->getUniqueID("vtiger_field").",'campaign_no','vtiger_campaign',1,'4','campaign_no','Campaign No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_campaign ADD COLUMN campaign_no varchar(100) not null");
 
 $blockid = getBlockId(13,'LBL_TICKET_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (13,".$adb->getUniqueID("vtiger_field").",'ticket_no','vtiger_troubletickets',1,'4','ticket_no','Ticket No',1,0,0,100,1,$blockid,1,'V~M',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field values (13,".$adb->getUniqueID("vtiger_field").",'ticket_no','vtiger_troubletickets',1,'4','ticket_no','Ticket No',1,0,0,100,1,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_troubletickets ADD COLUMN ticket_no varchar(100) not null");
 
 $blockid = getBlockId(14,'LBL_PRODUCT_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (14,".$adb->getUniqueID("vtiger_field").",'product_no','vtiger_products',1,'4','product_no','Product No',1,0,0,100,2,$blockid,1,'V~M',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field values (14,".$adb->getUniqueID("vtiger_field").",'product_no','vtiger_products',1,'4','product_no','Product No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_products ADD COLUMN product_no varchar(100) not null");
 
 $blockid = getBlockId(8,'LBL_NOTE_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (8,".$adb->getUniqueID("vtiger_field").",'note_no','vtiger_notes',1,'4','note_no','Note No',1,0,0,100,7,$blockid,1,'V~M',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field values (8,".$adb->getUniqueID("vtiger_field").",'note_no','vtiger_notes',1,'4','note_no','Note No',1,0,0,100,7,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_notes ADD COLUMN note_no varchar(100) not null");
 
 $blockid = getBlockId(15,'LBL_FAQ_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (15,".$adb->getUniqueID("vtiger_field").",'faq_no','vtiger_faq',1,'4','faq_no','Faq No',1,0,0,100,2,$blockid,1,'V~M',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field values (15,".$adb->getUniqueID("vtiger_field").",'faq_no','vtiger_faq',1,'4','faq_no','Faq No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_faq ADD COLUMN faq_no varchar(100) not null");
 
 $blockid = getBlockId(18,'LBL_VENDOR_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (18,".$adb->getUniqueID("vtiger_field").",'vendor_no','vtiger_vendor',1,'4','vendor_no','Vendor No',1,0,0,100,2,$blockid,1,'V~M',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field values (18,".$adb->getUniqueID("vtiger_field").",'vendor_no','vtiger_vendor',1,'4','vendor_no','Vendor No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_vendor ADD COLUMN vendor_no varchar(100) not null");
 
 $blockid = getBlockId(19,'LBL_PRICEBOOK_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (19,".$adb->getUniqueID("vtiger_field").",'pricebook_no','vtiger_pricebook',1,'4','pricebook_no','PriceBook No',1,0,0,100,3,$blockid,1,'V~M',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field values (19,".$adb->getUniqueID("vtiger_field").",'pricebook_no','vtiger_pricebook',1,'4','pricebook_no','PriceBook No',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_pricebook ADD COLUMN pricebook_no varchar(100) not null");
 
 $blockid = getBlockId(22,'LBL_SO_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (22,".$adb->getUniqueID("vtiger_field").",'salesorder_no','vtiger_salesorder',1,'4','salesorder_no','SalesOrder No',1,0,0,100,3,$blockid,1,'V~M',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field values (22,".$adb->getUniqueID("vtiger_field").",'salesorder_no','vtiger_salesorder',1,'4','salesorder_no','SalesOrder No',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_salesorder ADD COLUMN salesorder_no varchar(100) not null");
 
 $blockid = getBlockId(21,'LBL_PO_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (21,".$adb->getUniqueID("vtiger_field").",'purchaseorder_no','vtiger_purchaseorder',1,'4','purchaseorder_no','PurchaseOrder No',1,0,0,100,2,$blockid,1,'V~M',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field values (21,".$adb->getUniqueID("vtiger_field").",'purchaseorder_no','vtiger_purchaseorder',1,'4','purchaseorder_no','PurchaseOrder No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_purchaseorder ADD COLUMN purchaseorder_no varchar(100) not null");
 
 $blockid = getBlockId(20,'LBL_QUOTE_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (20,".$adb->getUniqueID("vtiger_field").",'quote_no','vtiger_quotes',1,'4','quote_no','Quote No',1,0,0,100,3,$blockid,1,'V~M',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field values (20,".$adb->getUniqueID("vtiger_field").",'quote_no','vtiger_quotes',1,'4','quote_no','Quote No',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_quotes ADD COLUMN quote_no varchar(100) not null");
 
      
@@ -987,6 +987,7 @@ foreach ( $seq_array as $tabid=> $field_seq) {
 }
 
 ExecuteQuery("update vtiger_field set uitype = '4' where tabid = 23 and columnname = 'invoice_no' ");
+ExecuteQuery("update vtiger_field set typeofdata = 'V~O' where tabid = 23 and columnname = 'invoice_no' ");
 
 // ADD COLUMN TO SPECIFIED MODULE CUSTOM VIEW / FILTER.
 function custom_addCustomFilterColumn($module, $filtername, $tablename, $columnname, $fieldname, $displayinfo, $columnindex=0) {

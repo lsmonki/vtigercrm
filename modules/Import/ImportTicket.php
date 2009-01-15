@@ -132,7 +132,7 @@ class ImportTicket extends HelpDesk {
 
 	// Module Sequence Numbering	
 	function modseq_number() {
-		$this->column_fields['ticket_no'] = $this->setModuleSeqNumber('increment', 'HelpDesk');
+		$this->column_fields['ticket_no'] = '';
 	}
 	// END
 	

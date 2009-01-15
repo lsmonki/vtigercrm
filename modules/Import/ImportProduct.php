@@ -158,7 +158,7 @@ class ImportProduct extends Products {
 
 	//Module Sequence Numbering	
 	function modseq_number() {
-		$this->column_fields['product_no'] = $this->setModuleSeqNumber('increment', 'Products');
+		$this->column_fields['product_no'] = '';
 	}
 	// END
 }

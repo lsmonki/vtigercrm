@@ -82,7 +82,7 @@ class ImportLead extends Leads {
 
 	// Module Sequence Numbering	
 	function modseq_number() {
-		$this->column_fields['lead_no'] = $this->setModuleSeqNumber('increment', 'Leads');
+		$this->column_fields['lead_no'] = '';
 	}
 	// END
 

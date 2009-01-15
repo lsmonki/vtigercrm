@@ -206,7 +206,7 @@ class ImportAccount extends Accounts {
 
 	// Module Sequence Numbering	
 	function modseq_number() {
-		$this->column_fields['account_no'] = $this->setModuleSeqNumber('increment', 'Accounts');	
+		$this->column_fields['account_no'] = '';	
 	}
 	// END
 

@@ -267,7 +267,7 @@ class ImportOpportunity extends Potentials {
 
 	// Module Sequence Numbering	
 	function modseq_number() {
-		$this->column_fields['potential_no'] = $this->setModuleSeqNumber('increment', 'Potentials');
+		$this->column_fields['potential_no'] = '';
 	}
 	// END
 	

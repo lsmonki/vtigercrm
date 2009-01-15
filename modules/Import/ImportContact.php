@@ -153,7 +153,7 @@ class ImportContact extends Contacts {
 
 	// Module Sequence Numbering	
 	function modseq_number() {
-		$this->column_fields['contact_no'] = $this->setModuleSeqNumber('increment', 'Contacts');
+		$this->column_fields['contact_no'] = '';
 	}
 	// END
 
