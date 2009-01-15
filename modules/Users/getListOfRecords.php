@@ -7,7 +7,6 @@
  ********************************************************************************/
 session_start();
 require_once('include/CustomFieldUtil.php');
-require_once('modules/Campaigns/Campaigns.php');
 require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 
@@ -21,12 +20,19 @@ require_once($theme_path.'layout_utils.php');
 
 $iCurRecord = $_REQUEST['CurRecordId'];
 $sModule = $_REQUEST['CurModule'];
-$fields_array = array('Campaigns'=>'campaignname','Calendar'=>'subject','Potentials'=>'potentialname','Faq'=>'question','HelpDesk'=>'title','Leads'=>'lastname','Contacts'=>'lastname','Products'=>'productname','PriceBooks'=>'bookname','Vendors'=>'vendorname','Accounts'=>'accountname','PurchaseOrder'=>'subject','SalesOrder'=>'subject','Quotes'=>'subject','Invoice'=>'subject','Documents'=>'title');
-$id_array = array('Campaigns'=>'campaignid','Calendar'=>'activityid','Potentials'=>'potentialid','Faq'=>'id','HelpDesk'=>'ticketid','Leads'=>'leadid','Contacts'=>'contactid','Products'=>'productid','PriceBooks'=>'pricebookid','Vendors'=>'vendorid','Accounts'=>'accountid','PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid','Documents'=>'notesid');
-$tables_array = array('Campaigns'=>'vtiger_campaign','Calendar'=>'vtiger_activity','Potentials'=>'vtiger_potential','Faq'=>'vtiger_faq','HelpDesk'=>'vtiger_troubletickets','Leads'=>'vtiger_leaddetails','Contacts'=>'vtiger_contactdetails','Products'=>'vtiger_products','PriceBooks'=>'vtiger_pricebook','Vendors'=>'vtiger_vendor','Accounts'=>'vtiger_account','PurchaseOrder'=>'vtiger_purchaseorder','SalesOrder'=>'vtiger_salesorder','Quotes'=>'vtiger_quotes','Invoice'=>'vtiger_invoice','Documents'=>'vtiger_notes');
-if(isset($_SESSION['listEntyKeymod']))
+
+checkFileAccess("modules/$sModule/$sModule.php");
+require_once("modules/$sModule/$sModule.php");
+
+$foc_obj = new $sModule();
+
+$fields_array = array($sModule=>$foc_obj->list_link_field);
+$id_array = array($sModule=>$foc_obj->table_index);
+$tables_array = array($sModule=>$foc_obj->table_name);
+//print_r($sModule." - ".)
+if(isset($_SESSION['listEntyKeymod_'.$iCurRecord]))
 {
-	$split_temp=explode(":",$_SESSION['listEntyKeymod']);
+	$split_temp=explode(":",$_SESSION['listEntyKeymod_'.$iCurRecord]);
 	if($split_temp[0] == $sModule)
 	{	
 		$ar_allist=explode(",",$split_temp[1]);
@@ -53,9 +59,9 @@ else
 	
 $output .= '<table cellpadding="2">';				
 	
-if(isset($_SESSION['listEntyKeymod']))
+if(isset($_SESSION['listEntyKeymod_'.$iCurRecord]))
 {
-	$split_temp=explode(":",$_SESSION['listEntyKeymod']);
+	$split_temp=explode(":",$_SESSION['listEntyKeymod_'.$iCurRecord]);
 	
 	if($split_temp[0] == $sModule)
 	{	

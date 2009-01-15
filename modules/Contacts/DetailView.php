@@ -175,10 +175,10 @@ if(isset($_SESSION['contacts_listquery'])){
 	{
 		$arrayTotlist[]=$forAllCRMID['crmid'];
 	}
-	$_SESSION['listEntyKeymod'] = $module.":".implode(",",$arrayTotlist);
-	if(isset($_SESSION['listEntyKeymod']))
+	$_SESSION['listEntyKeymod_'.$focus->id] = $module.":".implode(",",$arrayTotlist);
+	if(isset($_SESSION['listEntyKeymod_'.$focus->id]))
 	{
-	$split_temp=explode(":",$_SESSION['listEntyKeymod']);
+		$split_temp=explode(":",$_SESSION['listEntyKeymod_'.$focus->id]);
 		if($split_temp[0] == $module)
 		{	
 			$smarty->assign("SESMODULE",$split_temp[0]);
