@@ -282,14 +282,14 @@ else
 		$where_relquery.= getPopupCheckquery($currentModule,$_REQUEST['task_parent_module'],$_REQUEST['task_relmod_id']);
 	}
 	if($currentModule == 'Products' && !$_REQUEST['record_id'] && ($popuptype == 'inventory_prod' || $popuptype == 'inventory_mo' || $popuptype == 'inventory_prod_po'))
-       		$where_relquery .=" and vtiger_products.discontinued <> 0 AND vtiger_products.parentid=0";
+       		$where_relquery .=" and vtiger_products.discontinued <> 0 AND (vtiger_products.productid NOT IN (SELECT crmid FROM vtiger_seproductsrel WHERE setype='Products'))";
 	elseif($currentModule == 'Products' && $_REQUEST['record_id'] && ($popuptype == 'inventory_prod' || $popuptype == 'inventory_prod_po'))
-       		$where_relquery .=" and vtiger_products.discontinued <> 0 AND vtiger_products.parentid=".$_REQUEST['record_id'];
+        	$where_relquery .=" and vtiger_products.discontinued <> 0 AND (vtiger_products.productid IN (SELECT crmid FROM vtiger_seproductsrel WHERE setype='Products' AND productid=".$_REQUEST['record_id']."))";
 	elseif($currentModule == 'Products' && $_REQUEST['return_module'] != 'Products')
        		$where_relquery .=" and vtiger_products.discontinued <> 0";
        		
-	if($_REQUEST['return_module'] == 'Products' && $_REQUEST['record_id'])
-       		$where_relquery .=" and vtiger_products.discontinued <> 0 AND vtiger_crmentity.crmid NOT IN (".$_REQUEST['record_id'].") AND vtiger_products.parentid=0";
+	if($_REQUEST['return_module'] == 'Products' && $currentModule == 'Products' && $_REQUEST['recordid'])
+       	$where_relquery .=" and vtiger_products.discontinued <> 0 AND (vtiger_crmentity.crmid NOT IN (".$_REQUEST['recordid'].") AND vtiger_crmentity.crmid NOT IN (SELECT productid FROM vtiger_seproductsrel WHERE setype='Products') AND vtiger_crmentity.crmid NOT IN (SELECT crmid FROM vtiger_seproductsrel WHERE setype='Products' AND productid=".$_REQUEST['recordid']."))";
 	$query = getListQuery($currentModule,$where_relquery);
 }
 

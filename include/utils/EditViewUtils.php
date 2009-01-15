@@ -471,21 +471,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			if(isset($_REQUEST['account_id']) && $_REQUEST['account_id'] != '')
 				$value = $_REQUEST['account_id'];	
 		}
-		if($module_name == 'Products') {
-			if($value != '') {		
-				$product_name = getProductName($value);	
-			}
-			$editview_label[]=getTranslatedString($fieldlabel);
-			$fieldvalue[]=$product_name;
-			$fieldvalue[] = $value;			
-		} else {
-			if($value != '') {		
-				$account_name = getAccountName($value);	
-			}
-			$editview_label[]=getTranslatedString($fieldlabel);
-			$fieldvalue[]=$account_name;
-			$fieldvalue[] = $value;
+		if($value != '') {		
+			$account_name = getAccountName($value);	
 		}
+		$editview_label[]=getTranslatedString($fieldlabel);
+		$fieldvalue[]=$account_name;
+		$fieldvalue[] = $value;
 	}
 	elseif($uitype == 54)
 	{
@@ -1658,18 +1649,18 @@ function getAssociatedProducts($module,$focus,$seid='')
 	if($module == 'Quotes')
 	{
 		$query="SELECT 
-					vtiger_products.productname,
- 		                        vtiger_products.productcode, 
-								vtiger_products.unit_price,									
- 		                        vtiger_products.qtyinstock, 
- 		                        vtiger_inventoryproductrel.listprice, 
- 		                        vtiger_inventoryproductrel.description AS product_description, 
- 		                        vtiger_inventoryproductrel.* 
- 	                                FROM vtiger_inventoryproductrel 
- 		                        INNER JOIN vtiger_products 
- 		                                ON vtiger_products.productid=vtiger_inventoryproductrel.productid 
- 		                        WHERE id=?
- 		                        ORDER BY sequence_no"; 
+				vtiger_products.productname,
+	            vtiger_products.productcode, 
+				vtiger_products.unit_price,									
+	            vtiger_products.qtyinstock, 
+	            vtiger_inventoryproductrel.listprice, 
+	            vtiger_inventoryproductrel.description AS product_description, 
+	            vtiger_inventoryproductrel.* 
+	                FROM vtiger_inventoryproductrel 
+	            INNER JOIN vtiger_products 
+	                    ON vtiger_products.productid=vtiger_inventoryproductrel.productid 
+	            WHERE id=?
+	            ORDER BY sequence_no"; 
 			$params = array($focus->id);
 	}
 	elseif($module == 'PurchaseOrder')
@@ -1784,7 +1775,22 @@ function getAssociatedProducts($module,$focus,$seid='')
 		{
 			$product_Detail[$i]['delRow'.$i]="Del";
 		}
-
+		$sub_prod_query = $adb->pquery("SELECT productid from vtiger_inventorysubproductrel WHERE id=? AND sequence_no=?",array($focus->id,$i));
+		$subprodid_str='';
+		$subprodname_str='';
+		
+		if($adb->num_rows($sub_prod_query)>0){
+			for($j=0;$j<$adb->num_rows($sub_prod_query);$j++){
+				$sprod_id = $adb->query_result($sub_prod_query,$j,'productid');
+				$sprod_name = getProductName($sprod_id);
+				$str_sep = "";
+				if($j>0) $str_sep = ":";
+				$subprodid_str .= $str_sep.$sprod_id;
+				$subprodname_str .= $str_sep." - ".$sprod_name;
+			}
+		}
+		$subprodname_str = str_replace(":","<br>",$subprodname_str);
+		
 		$product_Detail[$i]['hdnProductId'.$i] = $hdnProductId;
 		$product_Detail[$i]['productName'.$i]= from_html($productname);
 		/* Added to fix the issue Product Pop-up name display*/
@@ -1802,7 +1808,8 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$product_Detail[$i]['listPrice'.$i]=$listprice;
 		$product_Detail[$i]['unitPrice'.$i]=$unitprice;
 		$product_Detail[$i]['productTotal'.$i]=$productTotal;
-
+		$product_Detail[$i]['subproduct_ids'.$i]=$subprodid_str;
+		$product_Detail[$i]['subprod_names'.$i]=$subprodname_str;
 		$discount_percent=$adb->query_result($result,$i-1,'discount_percent');
 		$discount_amount=$adb->query_result($result,$i-1,'discount_amount');
 		$discountTotal = '0.00';

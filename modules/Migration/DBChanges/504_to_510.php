@@ -631,18 +631,8 @@ ExecuteQuery("alter table vtiger_attachments modify column description LONGTEXT"
 ExecuteQuery("alter table vtiger_emaildetails modify column idlists LONGTEXT");
 
 /* Product Bundles Feature */
-$field_id = $adb->getUniqueID("vtiger_field");
-ExecuteQuery("insert into vtiger_field values (14,".$field_id.",'parentid','vtiger_products',1,'51','product_id','Member Of',1,0,0,100,21,31,1,'I~O',1,null,'BAS')");
-ExecuteQuery("ALTER TABLE vtiger_products ADD COLUMN parentid int(19) DEFAULT '0'");
-addFieldSecurity(getTabid("Products"), $field_id);
-
-$users_query = $adb->pquery("SELECT id from vtiger_users",array());
-for($i=0; $i<$adb->num_rows($users_query); $i++){
-	$userid = $adb->query_result($users_query,$i,'id');
-	ExecuteQuery("insert into vtiger_user2mergefields values ($userid,".getTabid("Products").", $field_id, 0)");
-}
-
-ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Products").",'get_products',13,'Product Bundles',0,'add')");
+ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Products").",'get_products',13,'Product Bundles',0,'select')");
+ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Products").",'get_parent_products',14,'Parent Products',0,'')");
 
 /* vtmailscanner customization */
 ExecuteQuery("CREATE TABLE vtiger_mailscanner(scannerid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,scannername VARCHAR(30),
@@ -1492,6 +1482,9 @@ function populateLinks() {
 	// Detail View Custom link
 	$moduleInstance->addLink('DETAILVIEW', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
 }
+
+/* Product Bundles Revamping */
+ExecuteQuery("CREATE TABLE vtiger_inventorysubproductrel(id int(19) NOT NULL, sequence_no INT(10) NOT NULL, productid INT(19) NOT NULL)");
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 

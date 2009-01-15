@@ -1065,7 +1065,6 @@ class CustomView extends CRMEntity{
 			"potentialid"=>"vtiger_potential.potentialname",
 
 			"vtiger_account.parentid"=>"vtiger_account2.accountname",
-			"vtiger_products.parentid"=>"vtiger_products2.productname",
 			"quoteid"=>"vtiger_quotes.subject",
 			"salesorderid"=>"vtiger_salesorder.subject",
 			"campaignid"=>"vtiger_campaign.campaignname",

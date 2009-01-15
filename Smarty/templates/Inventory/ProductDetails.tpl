@@ -169,12 +169,17 @@ function displayCoords(currObj,obj,mode,curr_row)
 				<input type="hidden" id="hdnProductId1" name="hdnProductId1" value="{$PRODUCT_ID}">
 				<img src="{'search.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}',1)" />
 			</td>
+		</tr>
+		<tr>
+			<td class="small">
+				<input type="hidden" value="" id="subproduct_ids1" name="subproduct_ids1" />
+				<span id="subprod_names1" name="subprod_names1" style="color:#C0C0C0;font-style:italic;"> </span>
+			</td>
 		   </tr>
-		   <tr>
+		   <tr valign="bottom">
 			<td class="small" id="setComment">
 				<textarea id="comment1" name="comment1" class=small style="width:70%;height:40px"></textarea>
-				<br>
-				[<a href="javascript:;" onclick="getObj('comment1').value=''";>{$APP.LBL_CLEAR_COMMENT}</a>]
+				<input type="image" href="javascript:;" src="themes/images/clear_field.gif" onClick="$('{$comment}').value=''"; />
 			</td>
 		   </tr>
 		</table>

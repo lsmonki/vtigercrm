@@ -552,7 +552,6 @@ class Reports extends CRMEntity{
 			$product_id_tables = array(
 				"vtiger_troubletickets"=>"vtiger_productsRel",
 				"vtiger_campaign"=>"vtiger_productsCampaigns",
-				"vtiger_products"=>"vtiger_productsProducts",
 				"vtiger_faq"=>"vtiger_productsFaq",
 				);
 			if($fieldname == 'product_id' && isset($product_id_tables[$fieldtablename]))

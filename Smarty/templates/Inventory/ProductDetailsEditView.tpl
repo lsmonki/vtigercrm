@@ -156,6 +156,8 @@ function displayCoords(currObj,obj,mode,curr_row)
 	{assign var="qty" value="qty"|cat:$row_no}
 	{assign var="listPrice" value="listPrice"|cat:$row_no}
 	{assign var="productTotal" value="productTotal"|cat:$row_no}
+	{assign var="subproduct_ids" value="subproduct_ids"|cat:$row_no}
+	{assign var="subprod_names" value="subprod_names"|cat:$row_no}
 
 	{assign var="discount_type" value="discount_type"|cat:$row_no}
 	{assign var="discount_percent" value="discount_percent"|cat:$row_no}
@@ -202,11 +204,16 @@ function displayCoords(currObj,obj,mode,curr_row)
 				<img src="{'search.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}','{$row_no}')" />
 			</td>
 		   </tr>
+		<tr>
+			<td class="small">
+				<input type="hidden" value="{$data.$subproduct_ids}" id="{$subproduct_ids}" name="{$subproduct_ids}" />
+				<span id="{$subprod_names}" name="{$subprod_names}"  style="color:#C0C0C0;font-style:italic;">{$data.$subprod_names}</span>
+			</td>
+		   </tr>
 		   <tr>
 			<td class="small" id="setComment">
 				<textarea id="{$comment}" name="{$comment}" class=small style="width:70%;height:40px">{$data.$comment}</textarea>
-				<br>
-				[<a href="javascript:;" onclick="getObj('{$comment}').value=''";>{$APP.LBL_CLEAR_COMMENT}</a>]
+				<input type="image" href="javascript:;" src="themes/images/clear_field.gif" onClick="$('{$comment}').value=''"; />
 			</td>
 		   </tr>
 		</table>

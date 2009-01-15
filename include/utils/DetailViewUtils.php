@@ -348,29 +348,15 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	}
 	elseif($uitype == 51 || $uitype == 50 || $uitype == 73)
 	{
-		if($module=='Products'){
-			$product_id = $col_fields[$fieldname];
-			if($product_id != '')
-			{
-				$product_name = getProductName($product_id);
-			}
-			$label_fld[] = getTranslatedString($fieldlabel);
-			$label_fld[] = $product_name;
-			$label_fld["secid"] = $product_id;
-			$label_fld["link"] = "index.php?module=Products&action=DetailView&record=".$product_id;
-		}
-		else
+		$account_id = $col_fields[$fieldname];
+		if($account_id != '')
 		{
-			$account_id = $col_fields[$fieldname];
-			if($account_id != '')
-			{
-				$account_name = getAccountName($account_id);
-			}
-			$label_fld[] = getTranslatedString($fieldlabel);
-			$label_fld[] = $account_name;
-			$label_fld["secid"] = $account_id;
-			$label_fld["link"] = "index.php?module=Accounts&action=DetailView&record=".$account_id;
+			$account_name = getAccountName($account_id);
 		}
+		$label_fld[] = getTranslatedString($fieldlabel);
+		$label_fld[] = $account_name;
+		$label_fld["secid"] = $account_id;
+		$label_fld["link"] = "index.php?module=Accounts&action=DetailView&record=".$account_id;
 		//Account Name View	
 	}
 	elseif($uitype == 52 || $uitype == 77  || $uitype == 101)
@@ -1439,8 +1425,22 @@ function getDetailAssociatedProducts($module,$focus)
 	$netTotal = '0.00';
 	for($i=1;$i<=$num_rows;$i++)
 	{
+		$sub_prod_query = $adb->pquery("SELECT productid from vtiger_inventorysubproductrel WHERE id=? AND sequence_no=?",array($focus->id,$i));
+		$subprodname_str='';
+		if($adb->num_rows($sub_prod_query)>0){
+			for($j=0;$j<$adb->num_rows($sub_prod_query);$j++){
+				$sprod_id = $adb->query_result($sub_prod_query,$j,'productid');
+				$sprod_name = getProductName($sprod_id);
+				$str_sep = "";
+				if($j>0) $str_sep = ":";
+				$subprodname_str .= $str_sep." - ".$sprod_name;
+			}
+		}
+		$subprodname_str = str_replace(":","<br>",$subprodname_str);
+		
 		$productid=$adb->query_result($result,$i-1,'productid');
 		$productname=$adb->query_result($result,$i-1,'productname');
+		if($subprodname_str!='') $productname .= "<br/><span style='color:#C0C0C0;font-style:italic;'>".$subprodname_str."</span>";
 		$comment=$adb->query_result($result,$i-1,'comment');
 		$qtyinstock=$adb->query_result($result,$i-1,'qtyinstock');
 		$qty=$adb->query_result($result,$i-1,'quantity');

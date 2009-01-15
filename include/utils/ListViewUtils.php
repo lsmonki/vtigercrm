@@ -26,6 +26,7 @@ require_once('include/utils/CommonUtils.php'); //new
 require_once('user_privileges/default_module_view.php'); //new
 require_once('include/utils/UserInfoUtil.php');
 require_once 'include/utils/TooltipUtils.php';
+require_once('include/Zend/Json.php');
 
 /**This function is used to get the list view header values in a list view
 *Param $focus - module object
@@ -1131,7 +1132,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	global $log;
 	$log->debug("Entering getSearchListViewEntries(".get_class($focus).",". $module.",".$list_result.",".$navigation_array.") method ...");
 	
-	global $adb,$theme,$current_user,$list_max_entries_per_page;
+	global $adb,$app_strings,$theme,$current_user,$list_max_entries_per_page;
 	$noofrows = $adb->num_rows($list_result);
 
 	$list_header = '';
@@ -1322,6 +1323,19 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 					} else {
 						$unit_price = '';
 					}
+					$sub_products = '';
+					$sub_prod = '';
+					$sub_prod_query = $adb->pquery("SELECT vtiger_products.productid,vtiger_products.productname from vtiger_products INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_products.productid INNER JOIN vtiger_seproductsrel on vtiger_seproductsrel.crmid=vtiger_products.productid WHERE vtiger_seproductsrel.productid=? and vtiger_seproductsrel.setype='Products'",array($entity_id));
+					for($k=0;$k<$adb->num_rows($sub_prod_query);$k++){
+						//$sub_prod=array();
+						$id = $adb->query_result($sub_prod_query,$k,"productid");
+						$str_sep='';
+						if($k>0) $str_sep = ":";
+						$sub_products .= $str_sep.$id;
+						$sub_prod .= $str_sep." - ".$adb->query_result($sub_prod_query,$k,"productname");
+					}
+					
+					$sub_det = $sub_products."::".str_replace(":","<br>",$sub_prod);
 					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
 
 					$slashes_temp_val = popup_from_html(getProductName($entity_id));
@@ -1329,11 +1343,17 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 					$description=$adb->query_result($list_result,$list_result_count,'description');
 					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
 
-					if($focus->popup_type == 'inventory_prod')$value_array[$entity_id] = array($entity_id, nl2br($slashes_temp_val), $unitprice, $qty_stock,$tax_str,$row_id,$slashes_desc);
-					if($focus->popup_type == 'inventory_prod_po')$value_array[$entity_id] = array($entity_id, nl2br($slashes_temp_val), $unitprice, $tax_str,$row_id,$slashes_desc);
+					if($focus->popup_type == 'inventory_prod')$value_array[$entity_id] = array($entity_id, nl2br($slashes_temp_val), $unitprice, $qty_stock,$tax_str,$row_id,$slashes_desc,$sub_det);
+					if($focus->popup_type == 'inventory_prod_po')$value_array[$entity_id] = array($entity_id, nl2br($slashes_temp_val), $unitprice, $tax_str,$row_id,$slashes_desc,$sub_det);
 					$sub_products_link = '<a href="index.php?module=Products&action=Popup&html=Popup_picker&return_module='.$_REQUEST['return_module'].'&record_id='.$entity_id.'&form=HelpDeskEditView&select=enable&popuptype='.$focus->popup_type.'&curr_row='.$row_id.'&currencyid='.$_REQUEST['currencyid'].'" > Sub Products</a>';	
-					if($adb->query_result($list_result,$i-1,"parentid")==0)
-						$list_header[]=$sub_products_link;
+					
+					if(!isset($_REQUEST['record_id'])){
+						$sub_products_query = $adb->pquery("SELECT * from vtiger_seproductsrel WHERE productid=? AND setype='Products'",array($entity_id));
+						if($adb->num_rows($sub_products_query)>0)
+							$list_header[]=$sub_products_link;
+						else
+							$list_header[]= $app_strings['LBL_NO_SUB_PRODUCTS'];
+					}
 			}
 			$list_block[$entity_id]=$list_header;
 		}
@@ -1954,14 +1974,27 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					} else {
 						$unit_price = '';
 					}
+					$sub_products = '';
+					$sub_prod = '';
+					$sub_prod_query = $adb->pquery("SELECT vtiger_products.productid,vtiger_products.productname,vtiger_products.qtyinstock,vtiger_crmentity.description from vtiger_products INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_products.productid INNER JOIN vtiger_seproductsrel on vtiger_seproductsrel.crmid=vtiger_products.productid WHERE vtiger_seproductsrel.productid=? and vtiger_seproductsrel.setype='Products'",array($entity_id));
+					for($i=0;$i<$adb->num_rows($sub_prod_query);$i++){
+						//$sub_prod=array();
+						$id = $adb->query_result($sub_prod_query,$i,"productid");
+						$str_sep='';
+						if($i>0) $str_sep = ":";
+						$sub_products .= $str_sep.$id;
+						$sub_prod .= $str_sep." - ".$adb->query_result($sub_prod_query,$i,"productname");
+					}
+					
+					$sub_det = $sub_products."::".str_replace(":","<br>",$sub_prod);
 					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
 
 					$slashes_temp_val = popup_from_html($temp_val);
-                                        $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
+                    $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 					$description=$adb->query_result($list_result,$list_result_count,'description');
 					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
 
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'");\'>'.$temp_val.'</a>';
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$sub_det.'");\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_prod_po")
 				{
@@ -1986,13 +2019,26 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					} else {
 						$unit_price = '';
 					}
+					$sub_products = '';
+					$sub_prod = '';
+					$sub_prod_query = $adb->pquery("SELECT vtiger_products.productid,vtiger_products.productname,vtiger_products.qtyinstock,vtiger_crmentity.description from vtiger_products INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_products.productid INNER JOIN vtiger_seproductsrel on vtiger_seproductsrel.crmid=vtiger_products.productid WHERE vtiger_seproductsrel.productid=? and vtiger_seproductsrel.setype='Products'",array($entity_id));
+					for($i=0;$i<$adb->num_rows($sub_prod_query);$i++){
+						//$sub_prod=array();
+						$id = $adb->query_result($sub_prod_query,$i,"productid");
+						$str_sep='';
+						if($i>0) $str_sep = ":";
+						$sub_products .= $str_sep.$id;
+						$sub_prod .= $str_sep." - $id.".$adb->query_result($sub_prod_query,$i,"productname");
+					}
+					
+					$sub_det = $sub_products."::".str_replace(":","<br>",$sub_prod);
 
 					$slashes_temp_val = popup_from_html($temp_val);
                                         $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 					$description=$adb->query_result($list_result,$list_result_count,'product_description');
 					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
 					
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_po("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'"); \'>'.$temp_val.'</a>';
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_po("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$sub_det.'"); \'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_pb")
 				{
@@ -2461,8 +2507,6 @@ function getListQuery($module,$where='')
 				ON vtiger_products.productid = vtiger_productcf.productid
 			LEFT JOIN vtiger_vendor
 				ON vtiger_vendor.vendorid = vtiger_products.vendor_id
-			LEFT JOIN vtiger_products vtiger_products2
-				ON vtiger_products.parentid = vtiger_products2.productid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_products.handler";
 		if((isset($_REQUEST["from_dashboard"]) && $_REQUEST["from_dashboard"] == true) && (isset($_REQUEST["type"]) && $_REQUEST["type"] =="dbrd"))

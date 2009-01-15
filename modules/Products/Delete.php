@@ -31,8 +31,10 @@ $focus = new Products();
 
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);
-
-DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['record'],$_REQUEST['return_id']);
+if($_REQUEST['return_module']!="Products" || ($_REQUEST['return_module']=="Products" && !isset($_REQUEST['return_id'])))
+	DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['record'],$_REQUEST['return_id']);
+else
+	$focus->deleteProduct2ProductRelation($_REQUEST['record'],$_REQUEST['return_id'],$_REQUEST['is_parent']);
 
 if(isset($_REQUEST['activity_mode']))
 	$activitymode = '&activity_mode='.$_REQUEST['activity_mode'];

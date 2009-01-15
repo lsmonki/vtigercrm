@@ -244,11 +244,6 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 				$adb->pquery($sql, array($record));
 			}
 			
-			if($return_module == "Products")
-			{
-				$sql = "update vtiger_products set parentid = 0 where productid = ?";
-				$adb->pquery($sql, array($record));
-			}
 		} else {
 			//Backup Campaigns-Product Relation
 			$cmp_q = "select campaignid from vtiger_campaign where product_id = ?";
@@ -263,6 +258,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 				$adb->pquery("insert into vtiger_relatedlists_rb values (?,?,?,?,?,?)", $params);
 			}
 			//we have to update the product_id as null for the campaigns which are related to this product
+			delProductRelRecords($record);
 			$adb->pquery("update vtiger_campaign set product_id=0 where product_id = ?", array($record));
 			$adb->pquery("update vtiger_products set parentid = 0 where parentid = ?", array($record));
 		}
@@ -722,12 +718,8 @@ function delCalendarRelRecords($record){
 	}
 }
 
-function delProductRelRecords($record) {	
+function delProductRelRecords($record){
 	global $adb;
-
-	//Deleting Product-Product Relation.
-	$pro_q = "update vtiger_products set parentid = 0 where parentid = ?";
-	$adb->pquery($pro_q, array($record));
+	$adb->pquery("DELETE from vtiger_seproductsrel WHERE productid=? or crmid=?",array($record,$record));
 }
-
 ?>

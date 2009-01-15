@@ -473,22 +473,32 @@ function getTaxDetailsForProduct($productid, $available='all')
  */
 function deleteInventoryProductDetails($focus)
 {
-	global $log, $adb;
+	global $log, $adb,$update_product_array;
 	$log->debug("Entering into function deleteInventoryProductDetails(".$focus->id.").");
 	
-	$product_info = $adb->pquery("SELECT productid, quantity, incrementondel from vtiger_inventoryproductrel WHERE id=?",array($focus->id));
+	$product_info = $adb->pquery("SELECT productid, quantity, sequence_no, incrementondel from vtiger_inventoryproductrel WHERE id=?",array($focus->id));
 	$numrows = $adb->num_rows($product_info);
 	for($index = 0;$index <$numrows;$index++){
 		$productid = $adb->query_result($product_info,$index,'productid');
+		$sequence_no = $adb->query_result($product_info,$index,'sequence_no');
 		$qty = $adb->query_result($product_info,$index,'quantity');
 		$incrementondel = $adb->query_result($product_info,$index,'incrementondel');
 		
 		if($incrementondel){
-			$focus->update_product_array[$productid]=$qty;
+			$focus->update_product_array[$focus->id][$sequence_no][$productid]= $qty;
+			$sub_prod_query = $adb->pquery("SELECT productid from vtiger_inventorysubproductrel WHERE id=? AND sequence_no=?",array($focus->id,$sequence_no)); 
+			if($adb->num_rows($sub_prod_query)>0){
+				for($j=0;$j<$adb->num_rows($sub_prod_query);$j++){
+					$sub_prod_id = $adb->query_result($sub_prod_query,$j,"productid");
+					$focus->update_product_array[$focus->id][$sequence_no][$sub_prod_id]= $qty;
+				}
+			}
+			
 		}
 	}
-
+	$update_product_array = $focus->update_product_array;
     $adb->pquery("delete from vtiger_inventoryproductrel where id=?", array($focus->id));
+    $adb->pquery("delete from vtiger_inventorysubproductrel where id=?", array($focus->id));
     $adb->pquery("delete from vtiger_inventoryshippingrel where id=?", array($focus->id));
 
 	$log->debug("Exit from function deleteInventoryProductDetails(".$focus->id.")");
@@ -496,27 +506,41 @@ function deleteInventoryProductDetails($focus)
 
 function updateInventoryProductRel($focus)
 {
-	global $log, $adb;
+	global $log, $adb,$update_product_array;
 	$log->debug("Entering into function updateInventoryProductRel(".$focus->id.").");
 
-	if(!empty($focus->update_product_array)){
-		foreach($focus->update_product_array as $index=>$qty){
-			$qtyinstk= getPrdQtyInStck($index);
-			$upd_qty = $qtyinstk+$qty;
-			updateProductQty($index, $upd_qty);
+	if(!empty($update_product_array)){
+		foreach($update_product_array as $id=>$seq){
+			foreach($seq as $seq=>$product_info)
+			{
+				foreach($product_info as $key=>$index){
+					$updqtyinstk= getPrdQtyInStck($key);
+					$upd_qty = $updqtyinstk+$index;
+					updateProductQty($key, $upd_qty);
+				}
+			}
 		}
 	}
-
 	$adb->pquery("UPDATE vtiger_inventoryproductrel SET incrementondel=1 WHERE id=?",array($focus->id));
 	
-	$product_info = $adb->pquery("SELECT productid, quantity from vtiger_inventoryproductrel WHERE id=?",array($focus->id));
+	$product_info = $adb->pquery("SELECT productid,sequence_no, quantity from vtiger_inventoryproductrel WHERE id=?",array($focus->id));
 	$numrows = $adb->num_rows($product_info);
 	for($index = 0;$index <$numrows;$index++){
 		$productid = $adb->query_result($product_info,$index,'productid');
 		$qty = $adb->query_result($product_info,$index,'quantity');
+		$sequence_no = $adb->query_result($product_info,$index,'sequence_no');
 		$qtyinstk= getPrdQtyInStck($productid);
 		$upd_qty = $qtyinstk-$qty;
 		updateProductQty($productid, $upd_qty);
+		$sub_prod_query = $adb->pquery("SELECT productid from vtiger_inventorysubproductrel WHERE id=? AND sequence_no=?",array($focus->id,$sequence_no)); 
+		if($adb->num_rows($sub_prod_query)>0){
+			for($j=0;$j<$adb->num_rows($sub_prod_query);$j++){
+				$sub_prod_id = $adb->query_result($sub_prod_query,$j,"productid");
+				$sqtyinstk= getPrdQtyInStck($sub_prod_id);
+				$supd_qty = $sqtyinstk-$qty;
+				updateProductQty($sub_prod_id, $supd_qty);
+			}
+		}
 	}
 
 	$log->debug("Exit from function updateInventoryProductRel(".$focus->id.")");
@@ -603,8 +627,16 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 
 		$query ="insert into vtiger_inventoryproductrel(id, productid, sequence_no, quantity, listprice, comment, description) values(?,?,?,?,?,?,?)";
 		$qparams = array($focus->id,$prod_id,$prod_seq,$qty,$listprice,$comment,$description);
-		$prod_seq++;
 		$adb->pquery($query,$qparams);
+
+		$sub_prod_str = $_REQUEST['subproduct_ids'.$i];
+		$sub_prod = split(":",$sub_prod_str);
+		for($j=0;$j<count($sub_prod);$j++){
+			$query ="insert into vtiger_inventorysubproductrel(id, sequence_no, productid) values(?,?,?)";
+			$qparams = array($focus->id,$prod_seq,$sub_prod[$j]);
+			$adb->pquery($query,$qparams);
+		}
+		$prod_seq++;
 
 		if($module != 'PurchaseOrder')
 		{

@@ -637,7 +637,7 @@ function fnAddProductRow(module,image_path){
 	
 	//Product Name with Popup image to select product
 	coltwo.className = "crmTableRow small"
-	coltwo.innerHTML= '<table border="0" cellpadding="1" cellspacing="0" width="100%"><tr><td class="small"><input id="productName'+count+'" name="productName'+count+'" class="small" style="width: 70%;" value="" readonly="readonly" type="text"><input id="hdnProductId'+count+'" name="hdnProductId'+count+'" value="" type="hidden"><img src="themes/images/search.gif" style="cursor: pointer;" onclick="productPickList(this,\''+module+'\','+count+')" align="absmiddle"></td></tr><tr><td class="small" id="setComment'+count+'"><textarea id="comment'+count+'" name="comment'+count+'" class=small style="width:70%;height:40px"></textarea><br>[<a href="javascript:;" onclick="getObj(\'comment'+count+'\').value=\'\'";>'+product_labelarr.CLEAR_COMMENT+'</a>]</td></tr></tbody></table>';	
+	coltwo.innerHTML= '<table border="0" cellpadding="1" cellspacing="0" width="100%"><tr><td class="small"><input id="productName'+count+'" name="productName'+count+'" class="small" style="width: 70%;" value="" readonly="readonly" type="text"><input id="hdnProductId'+count+'" name="hdnProductId'+count+'" value="" type="hidden"><img src="themes/images/search.gif" style="cursor: pointer;" onclick="productPickList(this,\''+module+'\','+count+')" align="absmiddle"></td></tr><tr><td class="small"><input type="hidden" value="" id="subproduct_ids'+count+'" name="subproduct_ids'+count+'" /><span id="subprod_names'+count+'" name="subprod_names'+count+'" style="color:#C0C0C0;font-style:italic;"> </span></td></tr><tr><td class="small" id="setComment'+count+'"><textarea id="comment'+count+'" name="comment'+count+'" class=small style="width:70%;height:40px"></textarea><input type="image" href="javascript:;" src="themes/images/clear_field.gif" onClick="getObj(\'comment'+count+'\').value=\'\'"; /></td></tr></tbody></table>';	
 	
 	//Quantity In Stock - only for SO, Quotes and Invoice
 	if(module != "PurchaseOrder"){
@@ -994,9 +994,9 @@ function resetSHandAdjValues() {
  */
 function moveUpDown(sType,oModule,iIndex)
 {
-	var aFieldIds = Array('hidtax_row_no','productName','hdnProductId','comment','qty','listPrice','discount_type','discount_percentage','discount_amount','tax1_percentage','hidden_tax1_percentage','popup_tax_row','tax2_percentage','hidden_tax2_percentage','');
+	var aFieldIds = Array('hidtax_row_no','productName','subproduct_ids','hdnProductId','comment','qty','listPrice','discount_type','discount_percentage','discount_amount','tax1_percentage','hidden_tax1_percentage','popup_tax_row','tax2_percentage','hidden_tax2_percentage','');
 	
-	var aContentIds = Array('qtyInStock','netPrice');
+	var aContentIds = Array('qtyInStock','netPrice','subprod_names');
 	iIndex = eval(iIndex) + 1;
 	var oTable = document.getElementById('proTab');
 	iMax = oTable.rows.length;
@@ -1143,9 +1143,9 @@ function InventorySelectAll(mod,z,image_pth)
 				c = document.selectall.selected_id.value;
 				var tmp = z[c];
 				if(mod!='PurchaseOrder') {
-					set_return_inventory(tmp[0],tmp[1],tmp[2],tmp[3],tmp[4],parseInt(tmp[5]),tmp[6]);
+					set_return_inventory(tmp[0],tmp[1],tmp[2],tmp[3],tmp[4],parseInt(tmp[5]),tmp[6],tmp[7]);
 				} else {
-					set_return_inventory_po(tmp[0],tmp[1],tmp[2],tmp[3],parseInt(tmp[4]),tmp[5]);
+					set_return_inventory_po(tmp[0],tmp[1],tmp[2],tmp[3],parseInt(tmp[4]),tmp[5],tmp[6]);
 				}
 				y=1;
 			} else {
@@ -1164,15 +1164,15 @@ function InventorySelectAll(mod,z,image_pth)
 					}				
 					if(y==0) {
 						if(mod!='PurchaseOrder') {
-							set_return_inventory(tmp[0],tmp[1],tmp[2],tmp[3],tmp[4],parseInt(tmp[5]),tmp[6]);
+							set_return_inventory(tmp[0],tmp[1],tmp[2],tmp[3],tmp[4],parseInt(tmp[5]),tmp[6],tmp[7]);
 						} else {
-							set_return_inventory_po(tmp[0],tmp[1],tmp[2],tmp[3],parseInt(tmp[4]),tmp[5]);
+							set_return_inventory_po(tmp[0],tmp[1],tmp[2],tmp[3],parseInt(tmp[4]),tmp[5],tmp[6]);
 						}					
 					} else {
 						if(mod!='PurchaseOrder') {
-							set_return_inventory(tmp[0],tmp[1],tmp[2],tmp[3],tmp[4],parseInt(row_id),tmp[6]);
+							set_return_inventory(tmp[0],tmp[1],tmp[2],tmp[3],tmp[4],parseInt(row_id),tmp[6],tmp[7]);
 						} else {
-							set_return_inventory_po(tmp[0],tmp[1],tmp[2],tmp[3],parseInt(row_id),tmp[5]);
+							set_return_inventory_po(tmp[0],tmp[1],tmp[2],tmp[3],parseInt(row_id),tmp[5],tmp[6]);
 						}	
 					}
 					y=y+1;

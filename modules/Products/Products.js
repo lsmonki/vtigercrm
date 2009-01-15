@@ -71,8 +71,11 @@ function add_data_to_relatedlist(entity_id,recordid) {
         opener.document.location.href="index.php?module={RETURN_MODULE}&action=updateRelations&smodule={SMODULE}&destination_module=Products&entityid="+entity_id+"&parentid="+recordid;
 }
 
-function set_return_inventory(product_id,product_name,unitprice,qtyinstock,taxstr,row_id,desc) {
+function set_return_inventory(product_id,product_name,unitprice,qtyinstock,taxstr,row_id,desc,subprod_id) {
 	curr_row = row_id;
+	var subprod = subprod_id.split("::");
+	window.opener.document.EditView.elements["subproduct_ids"+curr_row].value = subprod[0];
+        window.opener.document.getElementById("subprod_names"+curr_row).innerHTML = subprod[1];
 
         window.opener.document.EditView.elements["productName"+curr_row].value = product_name;
         window.opener.document.EditView.elements["hdnProductId"+curr_row].value = product_id;
@@ -96,7 +99,11 @@ function set_return_inventory(product_id,product_name,unitprice,qtyinstock,taxst
 	window.opener.document.EditView.elements["qty"+curr_row].focus()
 }
 
-function set_return_inventory_po(product_id,product_name,unitprice,taxstr,curr_row,desc) {
+function set_return_inventory_po(product_id,product_name,unitprice,taxstr,curr_row,desc,subprod_id) {
+	var subprod = subprod_id.split("::");
+	window.opener.document.EditView.elements["subproduct_ids"+curr_row].value = subprod[0];
+        window.opener.document.getElementById("subprod_names"+curr_row).innerHTML = subprod[1];
+
         window.opener.document.EditView.elements["productName"+curr_row].value = product_name;
         window.opener.document.EditView.elements["hdnProductId"+curr_row].value = product_id;
 	window.opener.document.EditView.elements["listPrice"+curr_row].value = unitprice;

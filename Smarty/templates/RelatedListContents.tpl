@@ -167,6 +167,7 @@
 			{elseif $header eq 'Product Bundles'}
 					{if $MODULE eq 'Products' && $IS_MEMBER eq 0}
 						<input alt="{$APP.LBL_ADD_NEW} {$APP.Product}" title="{$APP.LBL_ADD_NEW} {$APP.Product}" accessKey="" class="crmbutton small create" value="{$APP.LBL_ADD_NEW} {$APP.Product}" onClick="this.form.action.value='EditView'; this.form.return_action.value='{$return_modname}'; this.form.module.value='Products'; this.form.return_module.value='{$MODULE}'; this.form.return_viewname.value='{$NAME}'; this.form.return_id.value='{$ID}';" type="submit"  name="button">
+						<input alt="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Products}" title="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Products}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Products}" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}&parenttab={$CATEGORY}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">
 					{/if}
             {/if}
         </tr>

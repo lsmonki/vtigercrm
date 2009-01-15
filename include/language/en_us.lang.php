@@ -1206,6 +1206,9 @@ $app_strings = array (
 // Account Hierarchy
 'LBL_ACCOUNT_HIERARCHY' => 'Account Hierarchy', 
 
+//Prod Bundles
+'LBL_NO_SUB_PRODUCTS'=>'Not a Bundle',
+
 );
 
 $app_list_strings = array (

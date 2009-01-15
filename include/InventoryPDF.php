@@ -149,11 +149,14 @@ function get_invoice_pdf()
 	$sh_tax_amount = $final_details['shtax_totalamount'];
 	$price_shipping_tax = number_format($sh_tax_amount,2,'.',',');
 
+	$prod_line = array();
+	$lines = 0;
 
 	//This is to get all prodcut details as row basis
 	for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 	{
 		$product_name[$i] = $associated_products[$i]['productName'.$i];
+		$subproduct_name[$i] = split("<br>",$associated_products[$i]['subprod_names'.$i]);
 		//$prod_description[$i] = $associated_products[$i]['productDescription'.$i];
 		$comment[$i] = $associated_products[$i]['comment'.$i];
 		$product_id[$i] = $associated_products[$i]['hdnProductId'.$i];
@@ -185,42 +188,79 @@ function get_invoice_pdf()
 			$price_salestax += $total_taxes;
 		}
 		$prod_total[$i] = number_format($producttotal,2,'.',',');
-	
 		$product_line[$j]["Product Code"] = $product_code[$i];
-		$product_name_with_comment = decode_html($product_name[$i]);
-		if ($comment[$i] != '') $product_name_with_comment .= "\n".decode_html($comment[$i]);
-		$product_line[$j]["Product Name"] = $product_name_with_comment;
 		$product_line[$j]["Qty"] = $qty[$i];
 		$product_line[$j]["Price"] = $list_price[$i];
 		$product_line[$j]["Discount"] = $discount_total[$i];
 		$product_line[$j]["Total"] = $prod_total[$i];
+
+		$lines++;
+		$product_line[$j]["Product Name"] = decode_html($product_name[$i]);
+
+		$prod_line[$j]=1;
+		for($count=0;$count<count($subproduct_name[$i]);$count++){
+			if($lines % 16!=0){
+				$product_line[$j]["Product Name"] .= "\n".decode_html($subproduct_name[$i][$count]);
+				$prod_line[$j]++;
+			}
+			else{
+				$j++;
+				$product_line[$j]["Product Name"] = decode_html($product_name[$i]);
+				$product_line[$j]["Product Name"] .= "\n".decode_html($subproduct_name[$i][$count]);
+				$prod_line[$j]=2;
+				$lines++;
+			}
+			$lines++;
+		}
+		if ($comment[$i] != ''){
+			$product_line[$j]["Product Name"] .= "\n".decode_html($comment[$i]);
+			$prod_line[$j]++;
+			$lines++;
+		}
 	}
 	$price_salestax = number_format($price_salestax,2,'.',','); 
-	//echo '<pre>Product Details ==>';print_r($product_line);echo '</pre>';
-	//echo '<pre>';print_r($associated_products);echo '</pre>';
 	
 	// ************************ END POPULATE DATA ***************************8
-	
+//print_r($lines);die;	
 	$page_num='1';
 	$pdf = new PDF( 'P', 'mm', 'A4' );
 	$pdf->Open();
-	
-	$num_pages=ceil(($num_products/$products_per_page));
 
+	//STARTS - Placement of products in pages as per the lines count
+	$lines_per_page = "16";
+	$prod_cnt=0;
+	$num_pages = ceil(($lines/$lines_per_page));
+	$tmp=0;
+	for($count=0;$count<$num_pages;$count++){
+		for($k=$tmp;$k<$j;$k++){
+			if($prod_cnt!=16){
+				$products[$count][]= $k;
+				$prod_cnt += $prod_line[$k];
+			} else {
+				$tmp=$k;
+				$prod_cnt = 0;
+				break;
+			}
+		}
+	}
+	//ENDS - Placement of products in pages as per the lines count
 
-	$current_product=0;
 	for($l=0;$l<$num_pages;$l++)
 	{
 		$line=array();
 		if($num_pages == $page_num)
 			$lastpage=1;
 	
-		while($current_product != $page_num*$products_per_page)
+		/*while($current_product != $page_num*$products_per_page)
 		{
 			$line[]=$product_line[$current_product];
 			$current_product++;
+		}/*/
+		foreach($products[$l] as $index=>$key){
+			
+			$line[] = $product_line[$key];
 		}
-	
+
 		$pdf->AddPage();
 		include("modules/Invoice/pdf_templates/header.php");
 		include("include/tcpdf/templates/body.php");
@@ -389,10 +429,13 @@ function get_po_pdf() {
 	$price_shipping_tax = number_format($sh_tax_amount,2,'.',',');
 	
 	
+	$prod_line = array();
+	$lines = 0;
 	//This is to get all prodcut details as row basis
 	for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 	{
 		$product_name[$i] = $associated_products[$i]['productName'.$i];
+		$subproduct_name[$i] = split("<br>",$associated_products[$i]['subprod_names'.$i]);
 		//$prod_description[$i] = $associated_products[$i]['productDescription'.$i];
 		$comment[$i] = $associated_products[$i]['comment'.$i];
 		$product_id[$i] = $associated_products[$i]['hdnProductId'.$i];
@@ -425,13 +468,34 @@ function get_po_pdf() {
 		}
 		$prod_total[$i] = number_format($producttotal,2,'.',',');
 		$product_line[$j]["Product Code"] = $product_code[$i];
-		$product_name_with_comment = decode_html($product_name[$i]);
-		if ($comment[$i] != '') $product_name_with_comment .= "\n".decode_html($comment[$i]);
-		$product_line[$j]["Product Name"] = $product_name_with_comment;
 		$product_line[$j]["Qty"] = $qty[$i];
 		$product_line[$j]["Price"] = $list_price[$i];
 		$product_line[$j]["Discount"] = $discount_total[$i];
 		$product_line[$j]["Total"] = $prod_total[$i];
+		
+		$lines++;
+		$product_line[$j]["Product Name"] = decode_html($product_name[$i]);
+
+		$prod_line[$j]=1;
+		for($count=0;$count<count($subproduct_name[$i]);$count++){
+			if($lines % 16!=0){
+				$product_line[$j]["Product Name"] .= "\n".decode_html($subproduct_name[$i][$count]);
+				$prod_line[$j]++;
+			}
+			else{
+				$j++;
+				$product_line[$j]["Product Name"] = decode_html($product_name[$i]);
+				$product_line[$j]["Product Name"] .= "\n".decode_html($subproduct_name[$i][$count]);
+				$prod_line[$j]=2;
+				$lines++;
+			}
+			$lines++;
+		}
+		if ($comment[$i] != ''){
+			$product_line[$j]["Product Name"] .= "\n".decode_html($comment[$i]);
+			$prod_line[$j]++;
+			$lines++;
+		}
 	}
 	$price_salestax = number_format($price_salestax,2,'.',','); 
 	//echo '<pre>Product Details ==>';print_r($product_line);echo '</pre>';
@@ -447,7 +511,25 @@ function get_po_pdf() {
 	$pdf = new PDF( 'P', 'mm', 'A4' );
 	$pdf->Open();
 	
-	$num_pages=ceil(($num_products/$products_per_page));
+//	$num_pages=ceil(($num_products/$products_per_page));
+	//STARTS - Placement of products in pages as per the lines count
+	$lines_per_page = "16";
+	$prod_cnt=0;
+	$num_pages = ceil(($lines/$lines_per_page));
+	$tmp=0;
+	for($count=0;$count<$num_pages;$count++){
+		for($k=$tmp;$k<$j;$k++){
+			if($prod_cnt!=16){
+				$products[$count][]= $k;
+				$prod_cnt += $prod_line[$k];
+			} else {
+				$tmp=$k;
+				$prod_cnt = 0;
+				break;
+			}
+		}
+	}
+	//ENDS - Placement of products in pages as per the lines count
 	
 	
 	$current_product=0;
@@ -457,10 +539,14 @@ function get_po_pdf() {
 		if($num_pages == $page_num)
 			$lastpage=1;
 	
-		while($current_product != $page_num*$products_per_page)
+		/*while($current_product != $page_num*$products_per_page)
 		{
 			$line[]=$product_line[$current_product];
 			$current_product++;
+		}/*/
+		foreach($products[$l] as $index=>$key){
+			
+			$line[] = $product_line[$key];
 		}
 	
 		$pdf->AddPage();
@@ -631,11 +717,14 @@ function get_so_pdf() {
 	$sh_tax_amount = $final_details['shtax_totalamount'];
 	$price_shipping_tax = number_format($sh_tax_amount,2,'.',',');
 	
+	$prod_line = array();
+	$lines = 0;
 	
 	//This is to get all prodcut details as row basis
 	for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 	{
 		$product_name[$i] = $associated_products[$i]['productName'.$i];
+		$subproduct_name[$i] = split("<br>",$associated_products[$i]['subprod_names'.$i]);
 		//$prod_description[$i] = $associated_products[$i]['productDescription'.$i];
 		$comment[$i] = $associated_products[$i]['comment'.$i];
 		$product_id[$i] = $associated_products[$i]['hdnProductId'.$i];
@@ -669,13 +758,34 @@ function get_so_pdf() {
 		$prod_total[$i] = number_format($producttotal,2,'.',',');
 	
 		$product_line[$j]["Product Code"] = $product_code[$i];
-		$product_name_with_comment = decode_html($product_name[$i]);
-		if ($comment[$i] != '') $product_name_with_comment .= "\n".decode_html($comment[$i]);
-		$product_line[$j]["Product Name"] = $product_name_with_comment;
 		$product_line[$j]["Qty"] = $qty[$i];
 		$product_line[$j]["Price"] = $list_price[$i];
 		$product_line[$j]["Discount"] = $discount_total[$i];
 		$product_line[$j]["Total"] = $prod_total[$i];
+
+		$lines++;
+		$product_line[$j]["Product Name"] = decode_html($product_name[$i]);
+
+		$prod_line[$j]=1;
+		for($count=0;$count<count($subproduct_name[$i]);$count++){
+			if($lines % 16!=0){
+				$product_line[$j]["Product Name"] .= "\n".decode_html($subproduct_name[$i][$count]);
+				$prod_line[$j]++;
+			}
+			else{
+				$j++;
+				$product_line[$j]["Product Name"] = decode_html($product_name[$i]);
+				$product_line[$j]["Product Name"] .= "\n".decode_html($subproduct_name[$i][$count]);
+				$prod_line[$j]=2;
+				$lines++;
+			}
+			$lines++;
+		}
+		if ($comment[$i] != ''){
+			$product_line[$j]["Product Name"] .= "\n".decode_html($comment[$i]);
+			$prod_line[$j]++;
+			$lines++;
+		}
 	}
 	$price_salestax = number_format($price_salestax,2,'.',','); 
 	//echo '<pre>Product Details ==>';print_r($product_line);echo '</pre>';
@@ -691,7 +801,25 @@ function get_so_pdf() {
 	$pdf = new PDF( 'P', 'mm', 'A4' );
 	$pdf->Open();
 	
-	$num_pages=ceil(($num_products/$products_per_page));
+//	$num_pages=ceil(($num_products/$products_per_page));
+	//STARTS - Placement of products in pages as per the lines count
+	$lines_per_page = "16";
+	$prod_cnt=0;
+	$num_pages = ceil(($lines/$lines_per_page));
+	$tmp=0;
+	for($count=0;$count<$num_pages;$count++){
+		for($k=$tmp;$k<$j;$k++){
+			if($prod_cnt!=16){
+				$products[$count][]= $k;
+				$prod_cnt += $prod_line[$k];
+			} else {
+				$tmp=$k;
+				$prod_cnt = 0;
+				break;
+			}
+		}
+	}
+	//ENDS - Placement of products in pages as per the lines count
 	
 	
 	$current_product=0;
@@ -701,10 +829,14 @@ function get_so_pdf() {
 		if($num_pages == $page_num)
 			$lastpage=1;
 	
-		while($current_product != $page_num*$products_per_page)
+		/*while($current_product != $page_num*$products_per_page)
 		{
 			$line[]=$product_line[$current_product];
 			$current_product++;
+		}/*/
+		foreach($products[$l] as $index=>$key){
+			
+			$line[] = $product_line[$key];
 		}
 	
 		$pdf->AddPage();
@@ -874,11 +1006,14 @@ function get_quote_pdf() {
 	$sh_tax_amount = $final_details['shtax_totalamount'];
 	$price_shipping_tax = number_format($sh_tax_amount,2,'.',',');
 	
+	$prod_line = array();
+	$lines = 0;
 	
 	//This is to get all prodcut details as row basis
 	for($i=1,$j=$i-1;$i<=$num_products;$i++,$j++)
 	{
 		$product_name[$i] = $associated_products[$i]['productName'.$i];
+		$subproduct_name[$i] = split("<br>",$associated_products[$i]['subprod_names'.$i]);
 		//$prod_description[$i] = $associated_products[$i]['productDescription'.$i];
 		$comment[$i] = $associated_products[$i]['comment'.$i];
 		$product_id[$i] = $associated_products[$i]['hdnProductId'.$i];
@@ -912,13 +1047,34 @@ function get_quote_pdf() {
 		$prod_total[$i] = number_format($producttotal,2,'.',',');
 	
 		$product_line[$j]["Product Code"] = $product_code[$i];
-		$product_name_with_comment = decode_html($product_name[$i]);
-		if ($comment[$i] != '') $product_name_with_comment .= "\n".decode_html($comment[$i]);
-		$product_line[$j]["Product Name"] = $product_name_with_comment;
 		$product_line[$j]["Qty"] = $qty[$i];
 		$product_line[$j]["Price"] = $list_price[$i];
 		$product_line[$j]["Discount"] = $discount_total[$i];
 		$product_line[$j]["Total"] = $prod_total[$i];
+		
+		$lines++;
+		$product_line[$j]["Product Name"] = decode_html($product_name[$i]);
+
+		$prod_line[$j]=1;
+		for($count=0;$count<count($subproduct_name[$i]);$count++){
+			if($lines % 16!=0){
+				$product_line[$j]["Product Name"] .= "\n".decode_html($subproduct_name[$i][$count]);
+				$prod_line[$j]++;
+			}
+			else{
+				$j++;
+				$product_line[$j]["Product Name"] = decode_html($product_name[$i]);
+				$product_line[$j]["Product Name"] .= "\n".decode_html($subproduct_name[$i][$count]);
+				$prod_line[$j]=2;
+				$lines++;
+			}
+			$lines++;
+		}
+		if ($comment[$i] != ''){
+			$product_line[$j]["Product Name"] .= "\n".decode_html($comment[$i]);
+			$prod_line[$j]++;
+			$lines++;
+		}
 	}
 	$price_salestax = number_format($price_salestax,2,'.',','); 
 	//echo '<pre>Product Details ==>';print_r($product_line);echo '</pre>';
@@ -934,7 +1090,25 @@ function get_quote_pdf() {
 	$pdf = new PDF( 'P', 'mm', 'A4' );
 	$pdf->Open();
 	
-	$num_pages=ceil(($num_products/$products_per_page));
+//	$num_pages=ceil(($num_products/$products_per_page));
+	//STARTS - Placement of products in pages as per the lines count
+	$lines_per_page = "16";
+	$prod_cnt=0;
+	$num_pages = ceil(($lines/$lines_per_page));
+	$tmp=0;
+	for($count=0;$count<$num_pages;$count++){
+		for($k=$tmp;$k<$j;$k++){
+			if($prod_cnt!=16){
+				$products[$count][]= $k;
+				$prod_cnt += $prod_line[$k];
+			} else {
+				$tmp=$k;
+				$prod_cnt = 0;
+				break;
+			}
+		}
+	}
+	//ENDS - Placement of products in pages as per the lines count
 	
 	
 	$current_product=0;
@@ -944,10 +1118,14 @@ function get_quote_pdf() {
 		if($num_pages == $page_num)
 			$lastpage=1;
 	
-		while($current_product != $page_num*$products_per_page)
+		/*while($current_product != $page_num*$products_per_page)
 		{
 			$line[]=$product_line[$current_product];
 			$current_product++;
+		}/*/
+		foreach($products[$l] as $index=>$key){
+			
+			$line[] = $product_line[$key];
 		}
 	
 		$pdf->AddPage();

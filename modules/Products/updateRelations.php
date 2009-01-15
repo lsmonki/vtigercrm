@@ -37,7 +37,7 @@ foreach($storearray as $id)
 	{
 		if($dest_mod == 'Documents')
 			$adb->pquery("insert into vtiger_senotesrel values (?,?)", array($forCRMRecord, $id));
-		elseif($dest_mod =='Leads' || $dest_mod =='Accounts' ||$dest_mod =='Contacts' ||$dest_mod =='Potentials')
+		elseif($dest_mod =='Leads' || $dest_mod =='Accounts' ||$dest_mod =='Contacts' ||$dest_mod =='Potentials' || $dest_mod=='Products')
 			$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($id, $forCRMRecord, $dest_mod));
 		else {						
 			checkFileAccess("modules/$currentModule/$currentModule.php");
