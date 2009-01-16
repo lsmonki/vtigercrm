@@ -60,14 +60,14 @@
 	{include file='com_vtiger_workflow/ModuleTitle.tpl'}
 	<br>
 	<form name="new_workflow" action="index.php">
-		<table class="tableHeading" width="75%" border="0" cellspacing="0" cellpadding="5">
+		<table class="tableHeading" width="100%" border="0" cellspacing="0" cellpadding="5">
 			<tr>
 				<td class="big" nowrap="">
 					<strong>{$MOD.LBL_SUMMARY}</strong>
 				</td>
 			</tr>
 		</table>
-		<table border="0" cellpadding="5" cellspacing="0" width="75%">
+		<table border="0" cellpadding="5" cellspacing="0" width="100%">
 			<tr>
 				<td class="dvtCellLabel" align=right width=25%>{$MOD.LBL_SUMMARY}</td>
 				<td class="dvtCellInfo" align="left" colspan="3"><input type="text" name="description" id="save_description" value="{$workflow->description}"></td>
@@ -78,7 +78,7 @@
 			</tr>
 		</table>
 		<br>
-		<table class="tableHeading" width="75%" border="0" cellspacing="0" cellpadding="5">
+		<table class="tableHeading" width="100%" border="0" cellspacing="0" cellpadding="5">
 			<tr>
 				<td class="big" nowrap="">
 					<strong>{$MOD.LBL_WHEN_TO_RUN_WORKFLOW}</strong>
@@ -97,14 +97,14 @@
 				<td>{$MOD.LBL_EVERYTIME_RECORD_SAVED}.</td></tr>
 		</table>
 		<br>
-		<table class="tableHeading" width="75%" border="0" cellspacing="0" cellpadding="5">
+		<table class="tableHeading" width="100%" border="0" cellspacing="0" cellpadding="5">
 			<tr>
 				<td class="big" nowrap="">
 					<strong>{$MOD.LBL_CONDITIONS}</strong>
 				</td>
 			</tr>
 		</table>
-		<table class="listTableTopButtons" width="75%" border="0" cellspacing="0" cellpadding="5">
+		<table class="listTableTopButtons" width="100%" border="0" cellspacing="0" cellpadding="5">
 			<tr>
 				<td class="small"> <span id="status_message"></span> </td>
 				<td class="small" align="right">
@@ -126,14 +126,14 @@
 		<input type="hidden" name="module" value="{$module->name}" id="some_name">
 	</form>
 {if $saveType eq "edit"}
-	<table class="tableHeading" width="75%" border="0" cellspacing="0" cellpadding="5">
+	<table class="tableHeading" width="100%" border="0" cellspacing="0" cellpadding="5">
 		<tr>
 			<td class="big" nowrap="">
 				<strong>{$MOD.LBL_TASKS}</strong>
 			</td>
 		</tr>
 	</table>
-	<table class="listTableTopButtons" width="75%" border="0" cellspacing="0" cellpadding="5">
+	<table class="listTableTopButtons" width="100%" border="0" cellspacing="0" cellpadding="5">
 		<tr>
 			<td class="small"> <span id="status_message"></span> </td>
 			<td class="small" align="right">
@@ -142,7 +142,7 @@
 			</td>
 		</tr>
 	</table>
-	<table class="listTable" width="75%" border="0" cellspacing="0" cellpadding="5" id='expressionlist'>
+	<table class="listTable" width="100%" border="0" cellspacing="0" cellpadding="5" id='expressionlist'>
 		<tr>
 			<td class="colHeader small" width="70%">
 				{$MOD.LBL_TASK}
