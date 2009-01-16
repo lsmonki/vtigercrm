@@ -160,16 +160,13 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 		}
 	}
 
-function trim(s) {
-        while (s.substring(0,1) == " ") {
-                s = s.substring(1, s.length);
-        }
-        while (s.substring(s.length-1, s.length) == ' ') {
-                s = s.substring(0,s.length-1);
-        }
-
-        return s;
+function trim(str)
+{
+	var s = str.replace(/\s+$/,'');
+	s = s.replace(/^\s+/,'');
+	return s;
 }
+
 
 function verify_data(form) {
 	var isError = false;
@@ -210,7 +207,7 @@ function verify_data(form) {
 		} else {
 	?>					
 			if(form.new_db.checked){
-				if (trim(form.db_name.value) =='') {
+				if (trim(form.new_db_name.value) =='') {
 					isError = true;
 					errorMessage += "\n database name";
 					form.db_name.focus();
@@ -327,16 +324,16 @@ function migrate(){
 					}
 					else
 					{
-						
-						if(trim(str)!='QF: ') {
+						str=trim(str.replace('QF: ',''));
+
+						if(str=='') {
 							location.href ='install.php?source_directory='+source_path+'&root_directory='+root_directory+'&file=3MigrationComplete.php';
 						}else{
-							str=str.replace('QF: ','');
-							str=str.replace(/:: /gi,'\n\n');alert('failure');
+							str=str.replace(/:: /gi,'\n\n');
 							placeAtCenter($('failedqueries'));
 							$('failedqueries').style.display = 'block';
 							$('queries').value = str;
-						} 
+						}
 						$('divId').style.display = 'none';
 						return true;
 					}
