@@ -57,11 +57,11 @@ $smarty->assign('MODE', $focus->mode);
 $smarty->assign('CHECK', Button_Check($currentModule));
 $smarty->assign('DUPLICATE', $isduplicate);
 
-if($focus->mode == 'edit') {
-	$recordName = array_values(getEntityName($currentModule, $focus->id));
+if($focus->mode == 'edit' || $isduplicate) {
+	$recordName = array_values(getEntityName($currentModule, $record));
 	$recordName = $recordName[0];
 	$smarty->assign('NAME', $recordName);
-	$smarty->assign('UPDATEINFO',updateInfo($focus->id));
+	$smarty->assign('UPDATEINFO',updateInfo($record));
 }
 
 if(isset($_REQUEST['return_module']))    $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);

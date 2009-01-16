@@ -8,7 +8,6 @@
  * All Rights Reserved.
  ************************************************************************************/
 include_once('vtlib/Vtiger/Utils.php');
-include_once('vtlib/Vtiger/Language.php');
 include_once('vtlib/Vtiger/Utils/StringTemplate.php');
 
 /**

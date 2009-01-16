@@ -25,7 +25,7 @@ function vtiger_imageurl($imagename, $themename) {
 		// Check in theme specific folder
         if(file_exists("themes/$themename/images/$imagename")) {
             $imagepath =  "themes/$themename/images/$imagename";
-		} else if(file_exists("themes/images/$imagename") {
+		} else if(file_exists("themes/images/$imagename")) {
 			// Search in common image folder
 			$imagepath = "themes/images/$imagename";
 		} else {
