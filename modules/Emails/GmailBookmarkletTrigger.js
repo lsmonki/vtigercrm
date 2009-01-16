@@ -46,9 +46,6 @@ if(navigator.userAgent.toLowerCase().indexOf("msie") == -1){
 		popUp.marginWidth="0px";
 		popUp.style.width="100%";
 		popUp.style.height="100%";
-		var threadid = top.location.hash.split("/");
-		var mailId = threadid[threadid.length-1];
-		var description = encodeURIComponent(getGmailURL()+"?fs=1&tf=1&source=atom&view=cv&search=all&shva=1&th="+mailId);
 		popUp.src = getTargetURL();
 		bookMarkletDiv.appendChild(popUp);
 		doc.body.appendChild(bookMarkletDiv);
@@ -61,6 +58,9 @@ if(navigator.userAgent.toLowerCase().indexOf("msie") == -1){
 }
 
 function getTargetURL(){
+	var threadid = top.location.hash.split("/");
+	var mailId = threadid[threadid.length-1];
+	var description = encodeURIComponent(getGmailURL()+"?fs=1&tf=1&source=atom&view=cv&search=all&shva=1&th="+mailId);
 	return doc.vtigerURL+"index.php?module=Emails&action=SaveBookmarklet&subject="+
 			encodeURIComponent(getGmailSubject())+"&description="+description+
 			"&location="+encodeURIComponent(getGmailURL());
