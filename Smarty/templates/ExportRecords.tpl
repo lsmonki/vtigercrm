@@ -29,7 +29,7 @@
 							<input type="hidden" name="id_cur_str" value="{$IDCURSTR}">
 							<table align="center" cellpadding="15" cellspacing="0" width="85%" class="mailClient importLeadUI small" border="0">
 								<tr>
-									<td colspan="2" valign="middle" align="left" class="mailClientBg  genHeaderSmall">{$APP.$MODULE} >> {$APP.LBL_EXPORT} </td>
+									<td colspan="2" valign="middle" align="left" class="mailClientBg  genHeaderSmall">{$MODULELABEL} >> {$APP.LBL_EXPORT} </td>
 									<br>
 								</tr>
 								<tr>
@@ -115,7 +115,7 @@
 								</tr>
 								<tr>
 									<td align="center" colspan="2" border=0 cellspacing=0 cellpadding=5 width=98% class="layerPopupTransport">	
-										<input type="button" name="{$APP.LBL_EXPORT}" value="{$APP.LBL_EXPORT} {$APP.$MODULE} " class="crmbutton small create" onclick="record_export('{$APP.$MODULE}','{$CATEGORY}',this.form,'{$smarty.request.idstring}')"/>&nbsp;&nbsp;
+										<input type="button" name="{$APP.LBL_EXPORT}" value="{$APP.LBL_EXPORT} {$MODULELABEL} " class="crmbutton small create" onclick="record_export('{$MODULELABEL}','{$CATEGORY}',this.form,'{$smarty.request.idstring}')"/>&nbsp;&nbsp;
                 								<input type="button" name="{$APP.LBL_CANCEL_BUTTON_LABEL}" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="crmbutton small cancel" onclick="window.history.back()" />
 									</td>
 								</tr>

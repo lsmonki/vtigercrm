@@ -2002,7 +2002,7 @@ function getQuickCreateModules()
 		$tablabel = $adb->query_result($result,$i,'tablabel');
 	
 		$tabname = $adb->query_result($result,$i,'name');
-	 	$tablabel = "SINGLE_$tabname";
+	 	$tablabel = getTranslatedString("SINGLE_$tabname", $tabname);
 	 	if(isPermitted($tabname,'EditView','') == 'yes')
 	 	{
          	$return_qcmodule[] = $tablabel;

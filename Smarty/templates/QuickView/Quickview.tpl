@@ -39,7 +39,7 @@
 						</option>
 						{foreach key=sel_value item=value from=$MODULES}
 						    <option value="{$sel_value}">
-								{$APP.$value}
+								{$value}
 							</option>
 						{/foreach}
 					</select>

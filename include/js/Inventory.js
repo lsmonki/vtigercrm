@@ -296,7 +296,7 @@ function validateInventory(module)
 		return false
 
 	//for products, vendors and pricebook modules we won't validate the product details. here return the control
-	if(module == 'Products' || module == 'Vendors' || module == 'PriceBooks')
+	if(module == 'Products' || module == 'Vendors' || module == 'PriceBooks' || module == 'Services')
 	{
 		return true;
 	}
@@ -637,8 +637,11 @@ function fnAddProductRow(module,image_path){
 	
 	//Product Name with Popup image to select product
 	coltwo.className = "crmTableRow small"
-	coltwo.innerHTML= '<table border="0" cellpadding="1" cellspacing="0" width="100%"><tr><td class="small"><input id="productName'+count+'" name="productName'+count+'" class="small" style="width: 70%;" value="" readonly="readonly" type="text"><input id="hdnProductId'+count+'" name="hdnProductId'+count+'" value="" type="hidden"><img src="themes/images/search.gif" style="cursor: pointer;" onclick="productPickList(this,\''+module+'\','+count+')" align="absmiddle"></td></tr><tr><td class="small"><input type="hidden" value="" id="subproduct_ids'+count+'" name="subproduct_ids'+count+'" /><span id="subprod_names'+count+'" name="subprod_names'+count+'" style="color:#C0C0C0;font-style:italic;"> </span></td></tr><tr><td class="small" id="setComment'+count+'"><textarea id="comment'+count+'" name="comment'+count+'" class=small style="width:70%;height:40px"></textarea><input type="image" href="javascript:;" src="themes/images/clear_field.gif" onClick="getObj(\'comment'+count+'\').value=\'\'"; /></td></tr></tbody></table>';	
-	
+	coltwo.innerHTML= '<table border="0" cellpadding="1" cellspacing="0" width="100%"><tr><td class="small"><input id="productName'+count+'" name="productName'+count+'" class="small" style="width: 70%;" value="" readonly="readonly" type="text"><input id="hdnProductId'+count+'" name="hdnProductId'+count+'" value="" type="hidden">'+
+						'<img id="searchIcon'+count+'" src="themes/images/search.gif" style="cursor: pointer;" onclick="productPickList(this,\''+module+'\','+count+')" align="absmiddle">'+
+						'</td></tr><tr><td class="small"><input type="hidden" value="" id="subproduct_ids'+count+'" name="subproduct_ids'+count+'" /><span id="subprod_names'+count+'" name="subprod_names'+count+'" style="color:#C0C0C0;font-style:italic;"> </span>'+
+						'</td></tr><tr><td class="small" id="setComment'+count+'"><textarea id="comment'+count+'" name="comment'+count+'" class=small style="width:70%;height:40px"></textarea><img src="themes/images/clear_field.gif" onClick="getObj(\'comment'+count+'\').value=\'\'"; style="cursor:pointer;" /></td></tr></tbody></table>';	
+
 	//Quantity In Stock - only for SO, Quotes and Invoice
 	if(module != "PurchaseOrder"){
 	colthree.className = "crmTableRow small"
@@ -995,8 +998,9 @@ function resetSHandAdjValues() {
 function moveUpDown(sType,oModule,iIndex)
 {
 	var aFieldIds = Array('hidtax_row_no','productName','subproduct_ids','hdnProductId','comment','qty','listPrice','discount_type','discount_percentage','discount_amount','tax1_percentage','hidden_tax1_percentage','popup_tax_row','tax2_percentage','hidden_tax2_percentage','');
-	
 	var aContentIds = Array('qtyInStock','netPrice','subprod_names');
+	var aOnClickHandlerIds = Array('searchIcon');
+	
 	iIndex = eval(iIndex) + 1;
 	var oTable = document.getElementById('proTab');
 	iMax = oTable.rows.length;
@@ -1096,6 +1100,18 @@ function moveUpDown(sType,oModule,iIndex)
 			sTemp = document.getElementById(sId).innerHTML;
 			document.getElementById(sId).innerHTML = document.getElementById(sSwapId).innerHTML;
 			document.getElementById(sSwapId).innerHTML = sTemp;
+		}
+	}
+	iMaxElement = aOnClickHandlerIds.length;
+	for(iCt=0;iCt<iMaxElement;iCt++)
+	{
+		sId = aOnClickHandlerIds[iCt] + iIndex;
+		sSwapId = aOnClickHandlerIds[iCt] + iSwapIndex;
+		if(document.getElementById(sId) && document.getElementById(sSwapId))
+		{
+			sTemp = document.getElementById(sId).onclick;
+			document.getElementById(sId).onclick = document.getElementById(sSwapId).onclick;
+			document.getElementById(sSwapId).onclick = sTemp;
 		}
 	}
 	//FindDuplicate(); 

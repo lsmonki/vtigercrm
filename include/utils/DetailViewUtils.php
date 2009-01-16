@@ -1129,7 +1129,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	{
         $label_fld[] = getTranslatedString($fieldlabel);
 		if($fieldname == 'unit_price') {
-			$rate_symbol=getCurrencySymbolandCRate(getProductBaseCurrency($col_fields['record_id']));
+			$rate_symbol=getCurrencySymbolandCRate(getProductBaseCurrency($col_fields['record_id'], $module));
 			$label_fld[]  = $col_fields[$fieldname];			
 		} else {
 			$rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
@@ -1373,7 +1373,7 @@ function getDetailAssociatedProducts($module,$focus)
 
 	<table width="100%"  border="0" align="center" cellpadding="5" cellspacing="0" class="crmTable" id="proTab">
 	   <tr valign="top">
-	   	<td colspan="'.$colspan.'" class="dvInnerHeader"><b>'.$app_strings['LBL_PRODUCT_DETAILS'].'</b></td>
+	   	<td colspan="'.$colspan.'" class="dvInnerHeader"><b>'.$app_strings['LBL_ITEM_DETAILS'].'</b></td>
 		<td class="dvInnerHeader" align="center" colspan="2"><b>'.
 			$app_strings['LBL_CURRENCY'].' : </b>'. $currencytype['currency_name']. '('. $currencytype['currency_symbol'] .')
 		</td>
@@ -1383,7 +1383,7 @@ function getDetailAssociatedProducts($module,$focus)
 	   </tr>
 	   <tr valign="top">
 		<td width=40% class="lvtCol"><font color="red">*</font>
-			<b>'.$app_strings['LBL_PRODUCT_NAME'].'</b>
+			<b>'.$app_strings['LBL_ITEM_NAME'].'</b>
 		</td>';
 
 	//Add Quantity in Stock column for SO, Quotes and Invoice
@@ -1403,21 +1403,16 @@ function getDetailAssociatedProducts($module,$focus)
 	// DG 15 Aug 2006
 	// Add "ORDER BY sequence_no" to retain add order on all inventoryproductrel items
 
-	if($module == 'Quotes')
+	if($module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Invoice')
 	{
-		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock, vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=? ORDER BY sequence_no";
-	}
-	elseif($module == 'PurchaseOrder')
-	{
-		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=? ORDER BY sequence_no";
-	}
-	elseif($module == 'SalesOrder')
-	{
-		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=? ORDER BY sequence_no";
-	}
-	elseif($module == 'Invoice')
-	{
-		$query="select vtiger_products.productname,vtiger_products.unit_price,vtiger_products.qtyinstock,vtiger_inventoryproductrel.* from vtiger_inventoryproductrel inner join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid where id=? ORDER BY sequence_no";
+		$query="select case when vtiger_products.productid != '' then vtiger_products.productname else vtiger_service.servicename end as productname," .
+				" case when vtiger_products.productid != '' then 'Products' else 'Services' end as entitytype," .
+				" case when vtiger_products.productid != '' then vtiger_products.unit_price else vtiger_service.unit_price end as unit_price," .
+				" case when vtiger_products.productid != '' then vtiger_products.qtyinstock else 'NA' end as qtyinstock, vtiger_inventoryproductrel.* " .
+				" from vtiger_inventoryproductrel" .
+				" left join vtiger_products on vtiger_products.productid=vtiger_inventoryproductrel.productid " .
+				" left join vtiger_service on vtiger_service.serviceid=vtiger_inventoryproductrel.productid " .
+				" where id=? ORDER BY sequence_no";
 	}
 
 	$result = $adb->pquery($query, array($focus->id));
@@ -1439,6 +1434,7 @@ function getDetailAssociatedProducts($module,$focus)
 		$subprodname_str = str_replace(":","<br>",$subprodname_str);
 		
 		$productid=$adb->query_result($result,$i-1,'productid');
+		$entitytype=$adb->query_result($result,$i-1,'entitytype');
 		$productname=$adb->query_result($result,$i-1,'productname');
 		if($subprodname_str!='') $productname .= "<br/><span style='color:#C0C0C0;font-style:italic;'>".$subprodname_str."</span>";
 		$comment=$adb->query_result($result,$i-1,'comment');
@@ -1494,12 +1490,18 @@ function getDetailAssociatedProducts($module,$focus)
 			$netprice = $netprice + $taxtotal;
 		}
 
-
+		$sc_image_tag = '';
+		if ($entitytype == 'Services') {
+			$sc_image_tag = '<a href="index.php?module=ServiceContracts&action=EditView&service_id='.$productid.'&return_module='.$module.'&return_id='.$focus->id.'">' .
+						'<img border="0" src="'.vtiger_imageurl('btnL3Add.gif', $theme).'" title="'. getTranslatedString('Add Service Contract').'" style="cursor: pointer;width:18px;height:18px;" align="absmiddle" />' .
+						'</a>';
+		}
+		
 		//For Product Name
 		$output .= '
 			   <tr valign="top">
 				<td class="crmTableRow small lineOnTop">
-					'.$productname.'
+					'.$productname.'&nbsp;'.$sc_image_tag.' 				
 					<br>'.$comment.'
 				</td>';
 		//Upto this added to display the Product name and comment

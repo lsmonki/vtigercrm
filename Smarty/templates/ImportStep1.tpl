@@ -61,7 +61,7 @@ function validateFile(form)
 				<br />
 				<table align="center" cellpadding="5" cellspacing="0" width="80%" class="mailClient importLeadUI small" border="0">
 				   <tr>
-					<td colspan="2" height="50" valign="middle" align="left" class="mailClientBg  genHeaderSmall">{$MOD.LBL_MODULE_NAME} {$APP.$MODULE}</td>
+					<td colspan="2" height="50" valign="middle" align="left" class="mailClientBg  genHeaderSmall">{$MOD.LBL_MODULE_NAME} {$MODULELABEL}</td>
 				   </tr>
 				   <tr >
 					<td colspan="2" align="left" valign="top" style="padding-left:40px;">

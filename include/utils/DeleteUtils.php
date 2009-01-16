@@ -225,6 +225,7 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 			$adb->pquery($sql, array($record, $return_id));		
 		}
 		break;
+	case Services:
 	case Products:
 		if($record != '' && $return_id != '')
 		{
@@ -333,6 +334,10 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id)
 		break;
 	endswitch;
 	//}
+	// Remove relationships from generic table vtiger_crmentityrel - BACKUP/RESTORE yet to be handled
+	if(!empty($return_module) && $return_module != $module) {
+		$adb->pquery("DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relcrmid=?) OR (relcrmid=? AND crmid=?)", array($record, $return_id, $record, $return_id));
+	}
 	//this is added to update the crmentity.deleted=1 when we delete from listview and not from relatedlist
 	if($return_module == $module && $return_module !='Rss' && $return_module !='Portal')
 	{	

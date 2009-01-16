@@ -403,7 +403,7 @@ class CRMEntity
   	}
 	  if($insertion_mode == 'edit')
 	  {
-		  $update = '';
+		  $update = array();
 		  $update_params = array();
 		  require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		  if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
@@ -449,12 +449,13 @@ class CRMEntity
 	  }
 	  else
 	  {
-		  $column = $this->tab_name_index[$table_name];
-		  if($column == 'id' && $table_name == 'vtiger_users')
+		  $table_index_column = $this->tab_name_index[$table_name];
+		  if($table_index_column == 'id' && $table_name == 'vtiger_users')
 		  {
 		 	$currentuser_id = $adb->getUniqueID("vtiger_users");
 			$this->id = $currentuser_id;
 		  }
+		  $column = array($table_index_column);
 		  $value = array($this->id);
 		  $sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3,4)"; 
 		  $params = array($tabid, $table_name);
@@ -469,7 +470,6 @@ class CRMEntity
 		$typeofdata=$adb->query_result($result,$i,"typeofdata");
 		$typeofdata_array = explode("~",$typeofdata);
 		$datatype = $typeofdata_array[0];
-		
 		  if(isset($this->column_fields[$fieldname]))
 		  {
 			  if($uitype == 56)
@@ -553,27 +553,15 @@ class CRMEntity
 		  	$fldvalue = $this->get_column_value($columname, $fldvalue, $fieldname, $uitype, $datatype);
 		  }
 		  
-		  if($insertion_mode == 'edit')
-		  {
-			  if($table_name != 'vtiger_ticketcomments' && $uitype != 4)
-			  {
-				  if($i == 0)
-				  {
-					  $update = $columname."=?";
-					  array_push($update_params, $fldvalue);
-				  }
-				  else
-				  {
-				  	 	$update .= ', '.$columname."=?";
-					 	array_push($update_params, $fldvalue);
-				  }
-			 }
-		  }
-		  else
-		  {
-		  		$column .= ", ".$columname;
-			  	array_push($value, $fldvalue);			 
-		  }
+		if($insertion_mode == 'edit') {
+			if($table_name != 'vtiger_ticketcomments' && $uitype != 4) {
+				array_push($update, $columname."=?");
+				array_push($update_params, $fldvalue);
+			}
+		} else {
+			array_push($column, $columname);
+			array_push($value, $fldvalue);
+		}
 
 	  }
 
@@ -644,17 +632,16 @@ class CRMEntity
 			  }
 		  }
 		  //Check done by Don. If update is empty the the query fails
-		  if(trim($update) != '')
-        	  {
-		  	$sql1 = "update $table_name set $update where ". $this->tab_name_index[$table_name] ."=?";
+		  if(count($update) > 0) {
+		  	$sql1 = "update $table_name set ". implode(",",$update) ." where ". $this->tab_name_index[$table_name] ."=?";
 			array_push($update_params, $this->id);
-		  	$adb->pquery($sql1, $update_params);
+			$adb->pquery($sql1, $update_params);
 		  }
 		  
 	  }
 	  else
 	  {
-	  	  $sql1 = "insert into $table_name($column) values(". generateQuestionMarks($value) .")";
+	  	  $sql1 = "insert into $table_name(". implode(",",$column) .") values(". generateQuestionMarks($value) .")";
 		  $adb->pquery($sql1, $value);
 	  }
 
@@ -1515,13 +1502,13 @@ $log->info("in getOldFileName  ".$notesid);
 
 		$query .= " FROM $other->table_name";
 		$query .= " INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = $other->table_name.$other->table_index";
-		$query .= " INNER JOIN vtiger_crmentityrel ON vtiger_crmentityrel.relcrmid = vtiger_crmentity.crmid";
+		$query .= " INNER JOIN vtiger_crmentityrel ON (vtiger_crmentityrel.relcrmid = vtiger_crmentity.crmid OR vtiger_crmentityrel.crmid = vtiger_crmentity.crmid)";
 		$query .= " LEFT  JOIN $this->table_name   ON $this->table_name.$this->table_index = $other->table_name.$other->table_index";
 		$query .= $more_relation;
 		$query .= " LEFT  JOIN vtiger_users        ON vtiger_users.id = vtiger_crmentity.smownerid";
 		$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupid = $other->table_name.$other->table_index";
 
-		$query .= " WHERE vtiger_crmentity.deleted = 0 AND vtiger_crmentityrel.crmid = $id";
+		$query .= " WHERE vtiger_crmentity.deleted = 0 AND (vtiger_crmentityrel.crmid = $id OR vtiger_crmentityrel.relcrmid = $id)";
 
 		$return_value = GetRelatedList($currentModule, $related_module, $other, $query, $button, $returnset);	
 

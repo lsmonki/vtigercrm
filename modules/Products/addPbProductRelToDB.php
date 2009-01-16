@@ -17,6 +17,7 @@ global $adb,$singlepane_view;
 global $log;
 $idlist = $_POST['idlist'];
 $returnmodule=$_REQUEST['return_module'];
+$returnaction=$_REQUEST['return_action'];
 $pricebook_id=$_REQUEST['pricebook_id'];
 $productid=$_REQUEST['product_id'];
 $parenttab = $_REQUEST['parenttab'];
@@ -57,10 +58,7 @@ elseif(isset($_REQUEST['product_id']) && $_REQUEST['product_id']!='')
 			$adb->pquery($query, array($id,$productid,$list_price,$currency_id));
 		}
 	}
-	if($singlepane_view == 'true')
-		header("Location: index.php?module=Products&action=DetailView&record=$productid&parenttab=$parenttab");
-	else
-		header("Location: index.php?module=Products&action=CallRelatedList&record=$productid&parenttab=$parenttab");
+	header("Location: index.php?module=$returnmodule&action=$returnaction&record=$productid&parenttab=$parenttab");
 }
 
 ?>

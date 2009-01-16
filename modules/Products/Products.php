@@ -1,74 +1,79 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
- ********************************************************************************/
-
-include_once('config.php');
-require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
-require_once('data/SugarBean.php');
+ ************************************************************************************/
 require_once('data/CRMEntity.php');
+require_once('data/SugarBean.php');
 require_once('include/utils/utils.php');
 require_once('include/RelatedListView.php');
 require_once('user_privileges/default_module_view.php');
 
 class Products extends CRMEntity {
-	var $log;
-	var $db;
-
-	 // Josh added for importing and exporting -added in patch2
-    var $unit_price;
-	var $table_name = "vtiger_products";
+	var $db, $log; // Used in class functions of CRMEntity
+	
+	var $table_name = 'vtiger_products';
 	var $table_index= 'productid';
-    var $object_name = "Product";
-    var $entity_table = "vtiger_crmentity";
+    var $column_fields = Array();
+
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
+	var $customFieldTable = Array('vtiger_productcf','productid');
+	
+	var $tab_name = Array('vtiger_crmentity','vtiger_products','vtiger_productcf');
+	
+	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_products'=>'productid','vtiger_productcf'=>'productid','vtiger_seproductsrel'=>'productid','vtiger_producttaxrel'=>'productid');
+
+
+
+	// This is the list of vtiger_fields that are in the lists.
+	var $list_fields = Array(
+		'Product Name'=>Array('products'=>'productname'),
+		'Part Number'=>Array('products'=>'productcode'),
+		'Commission Rate'=>Array('products'=>'commissionrate'),
+		'Qty/Unit'=>Array('products'=>'qty_per_unit'),
+		'Unit Price'=>Array('products'=>'unit_price')
+	);
+	var $list_fields_name = Array(
+		'Product Name'=>'productname',
+		'Part Number'=>'productcode',
+		'Commission Rate'=>'commissionrate',
+		'Qty/Unit'=>'qty_per_unit',
+		'Unit Price'=>'unit_price'
+	);
+	
+	var $list_link_field= 'productname';
+
+	var $search_fields = Array(
+		'Product Name'=>Array('products'=>'productname'),
+		'Part Number'=>Array('products'=>'productcode'),
+		'Unit Price'=>Array('products'=>'unit_price')
+	);
+	var $search_fields_name = Array(
+		'Product Name'=>'productname',
+		'Part Number'=>'productcode',
+		'Unit Price'=>'unit_price'
+	);
+	
     var $required_fields = Array(
             'productname'=>1
     );
 
-	var $tab_name = Array('vtiger_crmentity','vtiger_products','vtiger_productcf');
-	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_products'=>'productid','vtiger_productcf'=>'productid','vtiger_seproductsrel'=>'productid','vtiger_producttaxrel'=>'productid');
-	var $column_fields = Array();
+	// Placeholder for sort fields - All the fields will be initialized for Sorting through initSortFields
+	var $sortby_fields = Array();
 
-	var $sortby_fields = Array('productname','productcode','commissionrate');		  
-
-        // This is the list of vtiger_fields that are in the lists.
-        var $list_fields = Array(
-                                'Product Name'=>Array('products'=>'productname'),
-                                'Part Number'=>Array('products'=>'productcode'),
-                                'Commission Rate'=>Array('products'=>'commissionrate'),
-                                'Qty/Unit'=>Array('products'=>'qty_per_unit'),
-                                'Unit Price'=>Array('products'=>'unit_price')
-                                );
-        var $list_fields_name = Array(
-                                        'Product Name'=>'productname',
-                                        'Part Number'=>'productcode',
-                                        'Commission Rate'=>'commissionrate',
-                                        'Qty/Unit'=>'qty_per_unit',
-                                        'Unit Price'=>'unit_price'
-                                     );
-        var $list_link_field= 'productname';
-
-	var $search_fields = Array(
-                                'Product Name'=>Array('products'=>'productname'),
-                                'Part Number'=>Array('products'=>'productcode'),
-                                'Unit Price'=>Array('products'=>'unit_price')
-                                );
-        var $search_fields_name = Array(
-                                        'Product Name'=>'productname',
-                                        'Part Number'=>'productcode',
-                                        'Unit Price'=>'unit_price'
-                                     );
-	
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'productname';
 	var $default_sort_order = 'ASC';
+	
+	 // Josh added for importing and exporting -added in patch2
+    var $unit_price;
+
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function Products() {
@@ -77,6 +82,36 @@ class Products extends CRMEntity {
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Products');
 		$this->log->debug("Exiting Product method ...");
+	}
+	
+	/**	Function used to get the sort order for Product listview
+	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['PRODUCTS_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
+	 */
+	function getSortOrder()
+	{
+		global $log;
+		$log->debug("Entering getSortOrder() method ...");
+		if(isset($_REQUEST['sorder']))
+			$sorder = $_REQUEST['sorder'];
+		else
+			$sorder = (($_SESSION['PRODUCTS_SORT_ORDER'] != '')?($_SESSION['PRODUCTS_SORT_ORDER']):($this->default_sort_order));
+		$log->debug("Exiting getSortOrder() method ...");
+		return $sorder;
+	}
+
+	/**	Function used to get the order by value for Product listview
+	 *	@return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['PRODUCTS_ORDER_BY'] if this session value is empty then default order by will be returned. 
+	 */
+	function getOrderBy()
+	{
+		global $log;
+		$log->debug("Entering getOrderBy() method ...");
+		if (isset($_REQUEST['order_by']))
+			$order_by = $_REQUEST['order_by'];
+		else
+			$order_by = (($_SESSION['PRODUCTS_ORDER_BY'] != '')?($_SESSION['PRODUCTS_ORDER_BY']):($this->default_order_by));
+		$log->debug("Exiting getOrderBy method ...");
+		return $order_by;
 	}
 
 	function save_module($module)
@@ -250,36 +285,6 @@ class Products extends CRMEntity {
 
 		$log->debug("Exiting from insertIntoAttachment($id,$module) method.");
 	}
-	
-	/**	Function used to get the sort order for Product listview
-	 *	@return string	$sorder	- first check the $_REQUEST['sorder'] if request value is empty then check in the $_SESSION['PRODUCTS_SORT_ORDER'] if this session value is empty then default sort order will be returned. 
-	 */
-	function getSortOrder()
-	{
-		global $log;
-		$log->debug("Entering getSortOrder() method ...");
-		if(isset($_REQUEST['sorder']))
-			$sorder = $_REQUEST['sorder'];
-		else
-			$sorder = (($_SESSION['PRODUCTS_SORT_ORDER'] != '')?($_SESSION['PRODUCTS_SORT_ORDER']):($this->default_sort_order));
-		$log->debug("Exiting getSortOrder() method ...");
-		return $sorder;
-	}
-
-	/**	Function used to get the order by value for Product listview
-	 *	@return string	$order_by  - first check the $_REQUEST['order_by'] if request value is empty then check in the $_SESSION['PRODUCTS_ORDER_BY'] if this session value is empty then default order by will be returned. 
-	 */
-	function getOrderBy()
-	{
-		global $log;
-		$log->debug("Entering getOrderBy() method ...");
-		if (isset($_REQUEST['order_by']))
-			$order_by = $_REQUEST['order_by'];
-		else
-			$order_by = (($_SESSION['PRODUCTS_ORDER_BY'] != '')?($_SESSION['PRODUCTS_ORDER_BY']):($this->default_order_by));
-		$log->debug("Exiting getOrderBy method ...");
-		return $order_by;
-	}
 
 
 
@@ -430,8 +435,11 @@ class Products extends CRMEntity {
 		require_once('modules/HelpDesk/HelpDesk.php');
 		$focus = new HelpDesk();
 
-		$button = '';
-
+		$button = '';		
+		if(isPermitted('HelpDesk',1, '') == 'yes')
+			$button .= '<input title="'.getTranslatedString('LBL_ADD_NEW').' '.getTranslatedString('Ticket').'" accessyKey="F" class="crmbutton small create"
+				 onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.getTranslatedString('LBL_ADD_NEW').' '.getTranslatedString('Ticket').'"></td>';
+		
 		if($singlepane_view == 'true')
 			$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 		else
@@ -457,7 +465,13 @@ class Products extends CRMEntity {
 			AND vtiger_products.productid = ".$id;
 	
 		$log->debug("Exiting get_tickets method ...");
-		return GetRelatedList('Products','HelpDesk',$focus,$query,$button,$returnset);
+
+		$return_value = GetRelatedList('Products','HelpDesk',$focus,$query,$button,$returnset);
+
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+		
+		return $return_value;
 	}
 
 	/**	function used to get the list of activities which are related to the product
@@ -537,13 +551,8 @@ class Products extends CRMEntity {
 			vtiger_potential.potentialname,
 			vtiger_account.accountname,
 			vtiger_inventoryproductrel.productid,
-
-			case 
-				when (vtiger_users.user_name not like '') then vtiger_users.user_name 
-				else vtiger_groups.groupname 
-			end 
-			as user_name
-
+			case when (vtiger_users.user_name not like '') then vtiger_users.user_name 
+				else vtiger_groups.groupname end as user_name
 			FROM vtiger_quotes
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_quotes.quoteid
@@ -556,7 +565,7 @@ class Products extends CRMEntity {
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users 
-				ON vtiger_users.id=vtiger_crmentity.smownerid
+				ON vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_inventoryproductrel.productid = ".$id;
 		$log->debug("Exiting get_quotes method ...");
@@ -586,13 +595,8 @@ class Products extends CRMEntity {
 			vtiger_purchaseorder.*,
 			vtiger_products.productname,
 			vtiger_inventoryproductrel.productid,
-
-			case 
-				when (vtiger_users.user_name not like '') then vtiger_users.user_name 
-				else vtiger_groups.groupname 
-			end 
-			as user_name
-
+			case when (vtiger_users.user_name not like '') then vtiger_users.user_name 
+				else vtiger_groups.groupname end as user_name
 			FROM vtiger_purchaseorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid
@@ -603,7 +607,7 @@ class Products extends CRMEntity {
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
-				ON vtiger_users.id=vtiger_crmentity.smownerid
+				ON vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_products.productid = ".$id;
 		$log->debug("Exiting get_purchase_orders method ...");
@@ -633,13 +637,8 @@ class Products extends CRMEntity {
 			vtiger_salesorder.*,
 			vtiger_products.productname AS productname,
 			vtiger_account.accountname,
-
-			case 
-				when (vtiger_users.user_name not like '') then vtiger_users.user_name 
-				else vtiger_groups.groupname 
-			end 
-			as user_name
-
+			case when (vtiger_users.user_name not like '') then vtiger_users.user_name 
+				else vtiger_groups.groupname end as user_name
 			FROM vtiger_salesorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_salesorder.salesorderid
@@ -652,7 +651,7 @@ class Products extends CRMEntity {
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users 
-				ON vtiger_users.id=vtiger_crmentity.smownerid
+				ON vtiger_users.id = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_products.productid = ".$id;
 		$log->debug("Exiting get_salesorder method ...");
@@ -682,13 +681,8 @@ class Products extends CRMEntity {
 			vtiger_invoice.*,
 			vtiger_inventoryproductrel.quantity,
 			vtiger_account.accountname,
-
-			case 
-				when (vtiger_users.user_name not like '') then vtiger_users.user_name 
-				else vtiger_groups.groupname 
-			end 
-			as user_name
-
+			case when (vtiger_users.user_name not like '') then vtiger_users.user_name 
+				else vtiger_groups.groupname end as user_name
 			FROM vtiger_invoice
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_invoice.invoiceid
@@ -710,14 +704,25 @@ class Products extends CRMEntity {
 	 *	@param int $id - product id
 	 *	@return array - array which will be returned from the function GetRelatedList
 	 */
-	function get_product_pricebooks($id)
+	function get_product_pricebooks($id, $cur_tab_id, $rel_tab_id, $actions=false)
 	{     
-		global $log,$singlepane_view;
+		global $log,$singlepane_view,$currentModule;
 		$log->debug("Entering get_product_pricebooks(".$id.") method ...");
-		global $mod_strings;
-		require_once('modules/PriceBooks/PriceBooks.php');
-		$focus = new PriceBooks();
+		
+		$related_module = vtlib_getModuleNameById($rel_tab_id);
+		checkFileAccess("modules/$related_module/$related_module.php");
+		require_once("modules/$related_module/$related_module.php");
+		$focus = new $related_module();
+		$singular_modname = vtlib_toSingular($related_module);
+		
 		$button = '';
+		if(isPermitted($related_module,1, '') == 'yes') {
+			$button .= "<input title='".getTranslatedString('LBL_ADD_TO'). " ". getTranslatedString($related_module) ."' class='crmbutton small create'" .
+				" onclick='this.form.action.value=\"AddProductToPriceBooks\";this.form.module.value=\"$currentModule\"' type='submit' name='button'" .
+				" value='". getTranslatedString('LBL_ADD_TO'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";			
+		}
+		
+		$button .= '</td>';
 		if($singlepane_view == 'true')
 			$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 		else
@@ -735,7 +740,13 @@ class Products extends CRMEntity {
 			WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_pricebookproductrel.productid = ".$id; 
 		$log->debug("Exiting get_product_pricebooks method ...");
-		return GetRelatedList('Products','PriceBooks',$focus,$query,$button,$returnset);
+           
+		$return_value = GetRelatedList($currentModule, $related_module, $focus, $query, $button, $returnset);	
+
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+		
+		return $return_value; 
 	}
 
 	/**	function used to get the number of vendors which are related to the product

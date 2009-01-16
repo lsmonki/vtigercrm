@@ -983,7 +983,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                                 {
 							$accountname = textlength_check($adb->query_result($list_result,$i-1,"accountname"));
 							$accountid = $adb->query_result($list_result,$i-1,"accountid");
-							//$accountid = getAccountId($accountname);
 							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$accountid.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$accountname.'</a>'; 
      				                }
 						else
@@ -1354,6 +1353,39 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 						else
 							$list_header[]= $app_strings['LBL_NO_SUB_PRODUCTS'];
 					}
+			}	
+
+			if($module=='Services' && $focus->popup_type=='inventory_service')
+			{
+					global $default_charset;
+					require('user_privileges/user_privileges_'.$current_user->id.'.php');
+					$row_id = $_REQUEST['curr_row'];
+
+					//To get all the tax types and values and pass it to product details
+					$tax_str = '';
+					$tax_details = getAllTaxes();
+					for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
+					{
+						$tax_str .= $tax_details[$tax_count]['taxname'].'='.$tax_details[$tax_count]['percentage'].',';
+					}
+					$tax_str = trim($tax_str,',');
+					$rate = $user_info['conv_rate'];
+					if(getFieldVisibilityPermission($module,$current_user->id,'unit_price') == '0') {
+						$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
+						if($_REQUEST['currencyid'] != null) {
+							$prod_prices = getPricesForProducts($_REQUEST['currencyid'], array($entity_id), $module);
+							$unitprice = $prod_prices[$entity_id];
+						}
+					} else {
+						$unit_price = '';
+					}
+
+					$slashes_temp_val = popup_from_html($adb->query_result($list_result,$list_result_count,'servicename'));
+					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
+					$description=$adb->query_result($list_result,$list_result_count,'description');
+					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
+
+					$value_array[$entity_id] = array($entity_id, nl2br($slashes_temp_val), $unitprice, $tax_str,$row_id,$slashes_desc);
 			}
 			$list_block[$entity_id]=$list_header;
 		}
@@ -1512,12 +1544,12 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		{   
 			if($fieldname == 'unit_price') {
 				if($_REQUEST['currencyid'] != null 
-						&& ($popuptype == 'inventory_prod' || $popuptype == 'inventory_prod_po')) {
+						&& ($popuptype == 'inventory_prod' || $popuptype == 'inventory_prod_po' || $popuptype == 'inventory_service')) {
 					$currency_id = $_REQUEST['currencyid'];
-					$prod_prices = getPricesForProducts($currency_id, array($entity_id));
+					$prod_prices = getPricesForProducts($currency_id, array($entity_id), $module);
 					$value = $prod_prices[$entity_id];
 				} else {					
-					$currency_id = getProductBaseCurrency($entity_id);
+					$currency_id = getProductBaseCurrency($entity_id,$module);
 					$cursym_convrate = getCurrencySymbolandCRate($currency_id);
 					$value = "<font style='color:grey;'>".$cursym_convrate['symbol']."</font> ". $temp_val;
 				}
@@ -2013,10 +2045,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$tax_str = trim($tax_str,',');
 					$rate = $user_info['conv_rate'];
 					
-					if(getFieldVisibilityPermission('Products',$current_user->id,'unit_price') == '0') {
+					if(getFieldVisibilityPermission($module,$current_user->id,'unit_price') == '0') {
 						$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
 						if($_REQUEST['currencyid'] != null) {
-							$prod_prices = getPricesForProducts($_REQUEST['currencyid'], array($entity_id));
+							$prod_prices = getPricesForProducts($_REQUEST['currencyid'], array($entity_id), $module);
 							$unitprice = $prod_prices[$entity_id];
 						}
 					} else {
@@ -2037,11 +2069,41 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$sub_det = $sub_products."::".str_replace(":","<br>",$sub_prod);
 
 					$slashes_temp_val = popup_from_html($temp_val);
-                                        $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
-					$description=$adb->query_result($list_result,$list_result_count,'product_description');
+					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
+					$description=$adb->query_result($list_result,$list_result_count,'description');
 					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
 					
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_po("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$sub_det.'"); \'>'.$temp_val.'</a>';
+				}
+				elseif($popuptype == "inventory_service")
+				{
+					$row_id = $_REQUEST['curr_row'];
+
+					//To get all the tax types and values and pass it to product details
+					$tax_str = '';
+					$tax_details = getAllTaxes();
+					for($tax_count=0;$tax_count<count($tax_details);$tax_count++)
+					{
+						$tax_str .= $tax_details[$tax_count]['taxname'].'='.$tax_details[$tax_count]['percentage'].',';
+					}
+					$tax_str = trim($tax_str,',');
+					$rate = $user_info['conv_rate'];
+					if(getFieldVisibilityPermission('Services',$current_user->id,'unit_price') == '0') {
+						$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
+						if($_REQUEST['currencyid'] != null) {
+							$prod_prices = getPricesForProducts($_REQUEST['currencyid'], array($entity_id), $module);
+							$unitprice = $prod_prices[$entity_id];
+						}
+					} else {
+						$unit_price = '';
+					}
+
+					$slashes_temp_val = popup_from_html($temp_val);
+					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
+					$description=$adb->query_result($list_result,$list_result_count,'description');
+					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
+
+					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'");\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_pb")
 				{
@@ -3918,9 +3980,20 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 		$field = "notesid";
 	}
 	//end
-	if($reltable != null)
+	if($reltable != null) {
 		$query = "SELECT ".$selectfield." FROM ".$reltable." ".$condition;
-
+	} elseif($currentmodule != $returnmodule) { // If none of the above relation matches, then the relation is assumed to be stored in vtiger_crmentityrel
+		$query = "SELECT relcrmid AS relatedid FROM vtiger_crmentityrel WHERE  crmid = ? and module = ? and relmodule = ?
+					UNION SELECT crmid AS relatedid FROM vtiger_crmentityrel WHERE relcrmid = ? and relmodule = ? and module = ?";
+		array_push($params, $recordid, $returnmodule, $currentmodule, $recordid, $returnmodule, $currentmodule);
+		
+		require_once("modules/$returnmodule/$returnmodule.php");
+		$focus_obj = new $currentmodule();
+		$field = $focus_obj->table_index;
+		$table = $focus_obj->table_name;
+		$selectfield = 'relatedid';
+	}
+	
 	if($query !='')
 	{
 		$result = $adb->pquery($query, $params);
@@ -4126,7 +4199,7 @@ function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
 	//This is added to avoid the del link in Product related list for the following modules
 	$avoid_del_links = Array("PurchaseOrder","SalesOrder","Quotes","Invoice");
 
-	if($current_module == 'Products' && in_array($module,$avoid_del_links))
+	if(($current_module == 'Products' || $current_module == 'Services') && in_array($module,$avoid_del_links))
 	{
 		return '';
 	}
@@ -4160,76 +4233,33 @@ function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
 	return $del_link;
 }
 
-/**	function used to get the account id for the given input account name
- * 	@param string $account_name - account name to which we want the id
- * 	return int $accountid - accountid for the given account name will be returned
- */
-function getAccountId($account_name)
-{
-	global $log;
-	$log->info("in getAccountId ".$account_name);
-	global $adb;
-	if($account_name != '')
-	{
-		// for avoid single quotes error
-		//slashes_account_name = popup_from_html($account_name); /* Commented by Asha. Need to see if this is required as Prepared statements is used here*/
-		$sql = "select accountid from vtiger_account INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_account.accountid where vtiger_crmentity.deleted = 0 and vtiger_account.accountname=?";
-		$result = $adb->pquery($sql, array($account_name));
-		$accountid = $adb->query_result($result,0,"accountid");
+/* Function to get the Entity Id of a given Entity Name */
+function getEntityId($module, $entityName) {	
+	global $log, $adb;
+	$log->info("in getEntityId ".$entityName);
+	
+	$query = "select fieldname,tablename,entityidfield from vtiger_entityname where modulename = ?";
+	$result = $adb->pquery($query, array($module));
+	$fieldsname = $adb->query_result($result,0,'fieldname');
+	$tablename = $adb->query_result($result,0,'tablename'); 
+	$entityidfield = $adb->query_result($result,0,'entityidfield'); 
+	if(!(strpos($fieldsname,',') === false)) {
+		$fieldlists = explode(',',$fieldsname);
+		$fieldsname = "concat(";
+		$fieldsname = $fieldsname.implode(",' ',",$fieldlists);
+		$fieldsname = $fieldsname.")";
 	}
-	if($accountid !='')
-		return $accountid;
-	else
-		return 0;
-}
-
-function getContactId($contact_name)
-{
-	global $log;
-	$log->info("in getContactId ".$contact_name);
-	global $adb;
-	if($contact_name != '')
-	{
-		$sql = "select contactid from vtiger_contactdetails INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted = 0 and concat( vtiger_contactdetails.lastname, ' ', vtiger_contactdetails.firstname ) =?";
-		$result = $adb->pquery($sql, array($contact_name));
-		$contactid = $adb->query_result($result,0,"contactid");
+	
+	if($entityName != '') {
+		$sql = "select $entityidfield from $tablename INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = $tablename.$entityidfield " .
+				" WHERE vtiger_crmentity.deleted = 0 and $fieldsname=?";
+		$result = $adb->pquery($sql, array($entityName));
+		if($adb->num_rows($result) > 0) {
+			$entityId = $adb->query_result($result,0,$entityidfield);
+		}
 	}
-	if($contactid !='')
-		return $contactid;
-	else
-		return 0;
-}
-
-function getVendorId($vendor_name)
-{
-	global $log;
-	$log->info("in getVendorId ".$vendor_name);
-	global $adb;
-	if($vendor_name != '')
-	{
-		$sql = "select vendorid from vtiger_vendor INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_vendor.vendorid where vtiger_crmentity.deleted = 0 and vtiger_vendor.vendorname =?";
-		$result = $adb->pquery($sql, array($vendor_name));
-		$vendorid = $adb->query_result($result,0,"vendorid");
-	}
-	if($vendorid !='')
-		return $vendorid;
-	else
-		return 0;
-}
-
-function getProductId($product_name)
-{
-	global $log;
-	$log->info("in getProductId ".$product_name);
-	global $adb;
-	if($product_name != '')
-	{
-		$sql = "select productid from vtiger_products INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_products.productid where vtiger_crmentity.deleted = 0 and vtiger_products.productname =?";
-		$result = $adb->pquery($sql, array($product_name));
-		$productid = $adb->query_result($result,0,"productid");
-	}
-	if($productid !='')
-		return $productid;
+	if(!empty($entityId))
+		return $entityId;
 	else
 		return 0;
 }

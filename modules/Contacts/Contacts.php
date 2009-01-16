@@ -449,18 +449,35 @@ class Contacts extends CRMEntity {
 		$log->debug("Entering get_tickets(".$id.") method ...");
 		$focus = new HelpDesk();
 
-		$button = '<td valign="bottom" align="right"><input title="New Ticket" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TICKET'].'">&nbsp;</td>';
+		if(isPermitted('HelpDesk',1, '') == 'yes')
+			$button .= '<input title="'.getTranslatedString('LBL_ADD_NEW').' '.getTranslatedString('Ticket').'" accessyKey="F" class="crmbutton small create"
+				 onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.getTranslatedString('LBL_ADD_NEW').' '.getTranslatedString('Ticket').'"></td>';
 		if($singlepane_view == 'true')
 			$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 		else
 			$returnset = '&return_module=Contacts&return_action=CallRelatedList&return_id='.$id;
 
-		$query = "select case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_crmentity.crmid, vtiger_troubletickets.title, vtiger_contactdetails.contactid, vtiger_troubletickets.parent_id, vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, vtiger_troubletickets.status, vtiger_troubletickets.priority, vtiger_crmentity.smownerid from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid left join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_troubletickets.parent_id left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid where vtiger_crmentity.deleted=0 and vtiger_contactdetails.contactid=".$id;
+		$query = "select case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
+				vtiger_crmentity.crmid, vtiger_troubletickets.title, vtiger_contactdetails.contactid, vtiger_troubletickets.parent_id,  
+				vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, vtiger_troubletickets.status, vtiger_troubletickets.priority, 
+				vtiger_crmentity.smownerid, vtiger_troubletickets.ticket_no 
+				from vtiger_troubletickets inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid 
+				left join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_troubletickets.parent_id 
+				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid 
+				left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
+				where vtiger_crmentity.deleted=0 and vtiger_contactdetails.contactid=".$id;
+		
 		$log->info("Ticket Related List for Contact Displayed");
 		$log->debug("Exiting get_tickets method ...");
-		return GetRelatedList('Contacts','HelpDesk',$focus,$query,$button,$returnset);
-	}
+		
+		$return_value = GetRelatedList('Contacts','HelpDesk',$focus,$query,$button,$returnset);
 
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+		
+		return $return_value;
+	}
+		
 	  /**
 	  * Function to get Contact related Quotes
 	  * @param  integer   $id  - contactid

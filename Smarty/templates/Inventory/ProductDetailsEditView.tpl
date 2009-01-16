@@ -99,7 +99,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 	{else}
 			<td colspan="2" class="dvInnerHeader">
 	{/if}
-		<b>{$APP.LBL_PRODUCT_DETAILS}</b>
+		<b>{$APP.LBL_ITEM_DETAILS}</b>
 	</td>
 	
 	<td class="dvInnerHeader" align="center" colspan="2">
@@ -136,7 +136,7 @@ function displayCoords(currObj,obj,mode,curr_row)
    <!-- Header for the Product Details -->
    <tr valign="top">
 	<td width=5% valign="top" class="lvtCol" align="right"><b>{$APP.LBL_TOOLS}</b></td>
-	<td width=40% class="lvtCol"><font color='red'>*</font><b>{$APP.LBL_PRODUCT_NAME}</b></td>
+	<td width=40% class="lvtCol"><font color='red'>*</font><b>{$APP.LBL_ITEM_NAME}</b></td>
 	{if $MODULE neq 'PurchaseOrder'}
 		<td width=10% class="lvtCol"><b>{$APP.LBL_QTY_IN_STOCK}</b></td>
 	{/if}
@@ -158,6 +158,8 @@ function displayCoords(currObj,obj,mode,curr_row)
 	{assign var="productTotal" value="productTotal"|cat:$row_no}
 	{assign var="subproduct_ids" value="subproduct_ids"|cat:$row_no}
 	{assign var="subprod_names" value="subprod_names"|cat:$row_no}
+	{assign var="entityIdentifier" value="entityType"|cat:$row_no}
+	{assign var="entityType" value=$data.$entityIdentifier}
 
 	{assign var="discount_type" value="discount_type"|cat:$row_no}
 	{assign var="discount_percent" value="discount_percent"|cat:$row_no}
@@ -192,30 +194,34 @@ function displayCoords(currObj,obj,mode,curr_row)
 
 	<!-- column 2 - Product Name - starts -->
 	<td class="crmTableRow small lineOnTop">
-	<!-- Product Re-Ordering Feature Code Addition Starts -->
-	<input type="hidden" name="hidtax_row_no{$row_no}" id="hidtax_row_no{$row_no}" value="{$tax_row_no}"/>
-	<!-- Product Re-Ordering Feature Code Addition ends -->
+		<!-- Product Re-Ordering Feature Code Addition Starts -->
+		<input type="hidden" name="hidtax_row_no{$row_no}" id="hidtax_row_no{$row_no}" value="{$tax_row_no}"/>
+		<!-- Product Re-Ordering Feature Code Addition ends -->
 		<table width="100%"  border="0" cellspacing="0" cellpadding="1">
-		   <tr>
-			<td class="small" valign="top">
-				<input type="text" id="{$productName}" name="{$productName}" value="{$data.$productName}" class="small" readonly />
-				<input type="hidden" id="{$hdnProductId}" name="{$hdnProductId}" value="{$data.$hdnProductId}">
-				<input type="hidden" id="{$productDescription}" name="{$productDescription}" value="{$data.$productDescription}">
-				<img src="{'search.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}','{$row_no}')" />
-			</td>
-		   </tr>
-		<tr>
-			<td class="small">
-				<input type="hidden" value="{$data.$subproduct_ids}" id="{$subproduct_ids}" name="{$subproduct_ids}" />
-				<span id="{$subprod_names}" name="{$subprod_names}"  style="color:#C0C0C0;font-style:italic;">{$data.$subprod_names}</span>
-			</td>
-		   </tr>
-		   <tr>
-			<td class="small" id="setComment">
-				<textarea id="{$comment}" name="{$comment}" class=small style="width:70%;height:40px">{$data.$comment}</textarea>
-				<input type="image" href="javascript:;" src="themes/images/clear_field.gif" onClick="$('{$comment}').value=''"; />
-			</td>
-		   </tr>
+			<tr>
+				<td class="small" valign="top">
+					<input type="text" id="{$productName}" name="{$productName}" value="{$data.$productName}" class="small" style="width: 70%;" readonly />
+					<input type="hidden" id="{$hdnProductId}" name="{$hdnProductId}" value="{$data.$hdnProductId}">
+					<input type="hidden" id="{$productDescription}" name="{$productDescription}" value="{$data.$productDescription}">
+					{if $entityType eq 'Services'}
+						<img id="searchIcon{$row_no}" src="{'search.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="servicePickList(this,'{$MODULE}','{$row_no}')" />
+					{else}
+						<img id="searchIcon{$row_no}" src="{'search.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}','{$row_no}')" />
+					{/if}
+				</td>
+			</tr>
+			<tr>
+				<td class="small">
+					<input type="hidden" value="{$data.$subproduct_ids}" id="{$subproduct_ids}" name="{$subproduct_ids}" />
+					<span id="{$subprod_names}" name="{$subprod_names}"  style="color:#C0C0C0;font-style:italic;">{$data.$subprod_names}</span>
+				</td>
+			</tr>
+			<tr>
+				<td class="small" id="setComment">
+					<textarea id="{$comment}" name="{$comment}" class=small style="width:70%;height:40px">{$data.$comment}</textarea>
+					<img src="{'clear_field.gif'|@vtiger_imageurl:$THEME}" onClick="$('{$comment}').value=''"; style="cursor:pointer;" />
+				</td>
+			</tr>
 		</table>
 	</td>
 	<!-- column 2 - Product Name - ends -->
@@ -229,7 +235,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 
 	<!-- column 4 - Quantity - starts -->
 	<td class="crmTableRow small lineOnTop" valign="top">
-		<input id="{$qty}" name="{$qty}" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="settotalnoofrows(); calcTotal(); loadTaxes_Ajax('{$row_no}');{if $MODULE eq 'Invoice'}stock_alert('{$row_no}');{/if}" onChange="setDiscount(this,'{$row_no}')" value="{$data.$qty}"/><br><span id="stock_alert{$row_no}"></span>
+		<input id="{$qty}" name="{$qty}" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="settotalnoofrows(); calcTotal(); loadTaxes_Ajax('{$row_no}');{if $MODULE eq 'Invoice' && $entityType neq 'Services'} stock_alert('{$row_no}');{/if}" onChange="setDiscount(this,'{$row_no}')" value="{$data.$qty}"/><br><span id="stock_alert{$row_no}"></span>
 	</td>
 	<!-- column 4 - Quantity - ends -->
 
@@ -350,6 +356,7 @@ function displayCoords(currObj,obj,mode,curr_row)
    <tr>
 	<td colspan="3">
 			<input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_PRODUCT}" onclick="fnAddProductRow('{$MODULE}','{$IMAGE_PATH}');" />
+			<input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_SERVICE}" onclick="fnAddServiceRow('{$MODULE}','{$IMAGE_PATH}');" />
 	</td>
    </tr>
 
@@ -526,7 +533,10 @@ so we will get that array, parse that array and fill the details
 		{assign var="taxname" value=$tax_data.taxname|cat:"_percentage"|cat:$row_no}
 			<script>calcCurrentTax('{$taxname}',{$row_no},{$tax_row_no});</script>
 	{/foreach}
-		{if $MODULE eq 'Invoice'}       <script>stock_alert('{$row_no}');</script>{/if}
+	{assign var="entityIndentifier" value='entityType'|cat:$row_no}
+	{if $MODULE eq 'Invoice' && $data.$entityIndentifier neq 'Services'}
+		<script>stock_alert('{$row_no}');</script>
+	{/if}
 {/foreach}
 
 

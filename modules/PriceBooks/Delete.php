@@ -33,7 +33,8 @@ if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);
 
 //Added to delete the pricebook from Product related list
-if($_REQUEST['record'] != '' && $_REQUEST['return_id'] != '' && $_REQUEST['module'] == 'PriceBooks' && $_REQUEST['return_module'] == 'Products')
+if($_REQUEST['record'] != '' && $_REQUEST['return_id'] != '' && $_REQUEST['module'] == 'PriceBooks' 
+	&& ($_REQUEST['return_module'] == 'Products' || $_REQUEST['return_module'] == 'Services'))
 {
 	$pricebookid = $_REQUEST['record'];
 	$productid = $_REQUEST['return_id'];

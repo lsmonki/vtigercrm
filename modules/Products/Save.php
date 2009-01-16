@@ -1,60 +1,28 @@
 <?php
-/*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
- * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
- * Software distributed under the License is distributed on an  "AS IS"  basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
- * the specific language governing rights and limitations under the License.
- * The Original Code is:  SugarCRM Open Source
- * The Initial Developer of the Original Code is SugarCRM, Inc.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Contributor(s): ______________________________________.
- ********************************************************************************/
-/*********************************************************************************
- * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Products/Save.php,v 1.12 2006/02/07 07:27:23 jerrydgeorge Exp $
- * Description:  Saves an Account record and then redirects the browser to the 
- * defined return URL.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
- ********************************************************************************/
+ ************************************************************************************/
+global $current_user, $currentModule;
 
-require_once('modules/Products/Products.php');
-require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
-global $log,$current_user,$mod_strings;
+checkFileAccess("modules/$currentModule/$currentModule.php");
+require_once("modules/$currentModule/$currentModule.php");
+
+$focus = new $currentModule();
+setObjectValuesFromRequest($focus);
+
+$mode = $_REQUEST['mode'];
+$record=$_REQUEST['record'];
+if($mode) $focus->mode = $mode;
+if($record)$focus->id  = $record;
+
 $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);
 $rate = $rate_symbol['rate'];
-$focus = new Products();
-//added to fix 4600
-$search=$_REQUEST['search_url'];
-
-if(isset($_REQUEST['record']))
-{
-	$focus->id = $_REQUEST['record'];
-	$record_id=$focus->id;
-	$log->info("Record Id is present during Saving the product :->".$record_id);
-}
-if(isset($_REQUEST['mode']))
-{
-	$focus->mode = $_REQUEST['mode'];
-  	$mode=$focus->mode;
-	  $log->info("Type of 'mode' during Product Save is ".$mode);
-}
-foreach($focus->column_fields as $fieldname => $val)
-{
-	if(isset($_REQUEST[$fieldname]))
-	{
-		if(is_array($_REQUEST[$fieldname]))
-			$value = $_REQUEST[$fieldname];
-		else
-			$value = trim($_REQUEST[$fieldname]);
-		$focus->column_fields[$fieldname] = $value;
-	}
-}
 
 if($_REQUEST['imagelist'] != '')
 {
@@ -70,10 +38,6 @@ $count=0;
 $saveimage = "true";
 $image_error = "false";
 //end of code to retain the pictures from db
-
-//code added for returning back to the current view after edit from list view
-if($_REQUEST['return_viewname'] == '') $return_viewname='0';
-if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 
 if($image_error=="true") //If there is any error in the file upload then moving all the data to EditView.
 {
@@ -130,50 +94,56 @@ if($_REQUEST['assigntype'] == 'U') {
 } elseif($_REQUEST['assigntype'] == 'T') {
 	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
 }
-//Saving the product
-if($image_error=="false")
-{
-	$focus->save("Products");
-	$return_id = $focus->id;
 
-	//Checking and Sending Mail from reorder level
-	global $current_user;
-	$productname = $focus->column_fields['productname'];
-	$qty_stk = $focus->column_fields['qtyinstock'];
-	$reord = $focus->column_fields['reorderlevel'];
-	$handler = $focus->column_fields['assigned_user_id'];
-	if($qty_stk != '' && $reord != '')
-	{
-		if($qty_stk < $reord)
-		{
-			$handler_name = getUserName($handler);
-			$sender_name = getUserName($current_user->id);
-			$to_address= getUserEmail($handler);
-			$subject =  $productname.' '.$mod_strings['MSG_STOCK_LEVEL'];
-			$body = $mod_strings['MSG_DEAR'].' '.$handler_name.',<br><br>'.
+$focus->save($currentModule);
+$return_id = $focus->id;
 
-					$mod_strings['MSG_CURRENT_STOCK'].' '.$productname.' '.$mod_strings['MSG_IN_OUR_WAREHOUSE'].' '.$qty_stk.'. '.$mod_strings['MSG_PROCURE_REQUIRED_NUMBER'].' '.$reord.'.<br> '.
+$search=$_REQUEST['search_url'];
 
-					$mod_strings['MSG_SEVERITY'].'<br><br> '.
-				$mod_strings['MSG_THANKS'].'<br> '.
-				$sender_name;
-
-			include("modules/Emails/mail.php");
-			$mail_status = send_mail("Products",$to_address,$current_user->user_name,$current_user->email1,$subject,$body);
-		}
-	}
-
-	if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
-	else $return_module = "Products";
-	if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
-	else $return_action = "DetailView";
-	if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
-	if(isset($_REQUEST['activity_mode'])) $return_action .= '&activity_mode='.$_REQUEST['activity_mode'];
-
-	if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
-	header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname&start=".$_REQUEST['pagenumber'].$search);
+if($_REQUEST['parenttab'] != '')     $parenttab = $_REQUEST['parenttab'];
+if($_REQUEST['return_module'] != '') {
+	$return_module = $_REQUEST['return_module'];
+} else {
+	$return_module = $currentModule;
 }
 
+if($_REQUEST['return_action'] != '') {
+	$return_action = $_REQUEST['return_action'];
+} else {
+	$return_action = "DetailView";
+}
 
+if($_REQUEST['return_id'] != '') {
+	$return_id = $_REQUEST['return_id'];
+}
+
+//Checking and Sending Mail from reorder level
+global $current_user;
+$productname = $focus->column_fields['productname'];
+$qty_stk = $focus->column_fields['qtyinstock'];
+$reord = $focus->column_fields['reorderlevel'];
+$handler = $focus->column_fields['assigned_user_id'];
+if($qty_stk != '' && $reord != '') {
+	if($qty_stk < $reord) {
+		$handler_name = getUserName($handler);
+		$sender_name = getUserName($current_user->id);
+		$to_address= getUserEmail($handler);
+		$subject =  $productname.' '.$mod_strings['MSG_STOCK_LEVEL'];
+		$body = $mod_strings['MSG_DEAR'].' '.$handler_name.',<br><br>'.
+
+		$mod_strings['MSG_CURRENT_STOCK'].' '.$productname.' '.$mod_strings['MSG_IN_OUR_WAREHOUSE'].' '.$qty_stk.'. '.$mod_strings['MSG_PROCURE_REQUIRED_NUMBER'].' '.$reord.'.<br> '.
+
+		$mod_strings['MSG_SEVERITY'].'<br><br> '.
+		$mod_strings['MSG_THANKS'].'<br> '.
+		$sender_name;
+
+		include("modules/Emails/mail.php");
+		$mail_status = send_mail("Products",$to_address,$current_user->user_name,$current_user->email1,$subject,$body);
+	}
+}
+
+if(isset($_REQUEST['activity_mode'])) $return_action .= '&activity_mode='.$_REQUEST['activity_mode'];
+
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab&start=".$_REQUEST['pagenumber'].$search);
 
 ?>

@@ -1,12 +1,11 @@
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *
- ********************************************************************************/
+ ************************************************************************************/
 document.write("<script type='text/javascript' src='modules/Products/multifile.js'></"+"script>");
 document.write("<script type='text/javascript' src='include/js/Merge.js'></"+"script>");
 function updateListPrice(unitprice,fieldname, oSelect)
@@ -76,14 +75,13 @@ function add_data_to_relatedlist(entity_id,recordid) {
         opener.document.location.href="index.php?module={RETURN_MODULE}&action=updateRelations&smodule={SMODULE}&destination_module=Products&entityid="+entity_id+"&parentid="+recordid;
 }
 
-function set_return_inventory(product_id,product_name,unitprice,qtyinstock,taxstr,row_id,desc,subprod_id) {
-	curr_row = row_id;
+function set_return_inventory(product_id,product_name,unitprice,qtyinstock,taxstr,curr_row,desc,subprod_id) {
 	var subprod = subprod_id.split("::");
 	window.opener.document.EditView.elements["subproduct_ids"+curr_row].value = subprod[0];
-        window.opener.document.getElementById("subprod_names"+curr_row).innerHTML = subprod[1];
+	window.opener.document.getElementById("subprod_names"+curr_row).innerHTML = subprod[1];
 
-        window.opener.document.EditView.elements["productName"+curr_row].value = product_name;
-        window.opener.document.EditView.elements["hdnProductId"+curr_row].value = product_id;
+	window.opener.document.EditView.elements["productName"+curr_row].value = product_name;
+	window.opener.document.EditView.elements["hdnProductId"+curr_row].value = product_id;
 	window.opener.document.EditView.elements["listPrice"+curr_row].value = unitprice;
 	window.opener.document.EditView.elements["comment"+curr_row].value = desc;
 	//getOpenerObj("unitPrice"+curr_row).innerHTML = unitprice;
@@ -104,13 +102,9 @@ function set_return_inventory(product_id,product_name,unitprice,qtyinstock,taxst
 	window.opener.document.EditView.elements["qty"+curr_row].focus()
 }
 
-function set_return_inventory_po(product_id,product_name,unitprice,taxstr,curr_row,desc,subprod_id) {
-	var subprod = subprod_id.split("::");
-	window.opener.document.EditView.elements["subproduct_ids"+curr_row].value = subprod[0];
-        window.opener.document.getElementById("subprod_names"+curr_row).innerHTML = subprod[1];
-
-        window.opener.document.EditView.elements["productName"+curr_row].value = product_name;
-        window.opener.document.EditView.elements["hdnProductId"+curr_row].value = product_id;
+function set_return_inventory_po(product_id,product_name,unitprice,taxstr,curr_row,desc) {
+	window.opener.document.EditView.elements["productName"+curr_row].value = product_name;
+	window.opener.document.EditView.elements["hdnProductId"+curr_row].value = product_id;
 	window.opener.document.EditView.elements["listPrice"+curr_row].value = unitprice;
 	window.opener.document.EditView.elements["comment"+curr_row].value = desc;
 	//getOpenerObj("unitPrice"+curr_row).innerHTML = unitprice;

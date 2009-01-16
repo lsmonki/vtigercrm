@@ -133,6 +133,11 @@ if($focus->mode != 'edit' && $mod_seq_field != null) {
 }
 // END
 
+
+// Gather the help information associated with fields
+$smarty->assign('FIELDHELPINFO', vtlib_getFieldHelpInfo($currentModule));
+// END
+
 if($focus->mode == 'edit')
 	$smarty->display("salesEditView.tpl");
 else

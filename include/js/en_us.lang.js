@@ -95,7 +95,7 @@
                                 VALID_DISCOUNT_PERCENT:'Enter a valid Discount percentage',
                                 VALID_DISCOUNT_AMOUNT:'Enter a valid Discount Amount',
                                 SELECT_TEMPLATE_TO_MERGE:'Please select a template to merge',
-				SELECTED_MORE_THAN_ONCE:'You have selected the following product(s) more than once.',
+				SELECTED_MORE_THAN_ONCE:'You have selected the following item(s) more than once.',
 				YES:'yes',
                                 NO:'no',
                                 MAIL:'mail',

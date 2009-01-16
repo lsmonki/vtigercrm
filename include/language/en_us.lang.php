@@ -1211,6 +1211,12 @@ $app_strings = array (
 
 //Custom Fields support for Calendar
 'LBL_ACTIVITY_TYPE'=>'Activity Type',
+
+// Services model
+'LBL_ADD_SERVICE'=>'Add Service',
+'LBL_ITEM_DETAILS'=>'Item Details',
+'LBL_ITEM_NAME'=>'Item Name',
+
 );
 
 $app_list_strings = array (

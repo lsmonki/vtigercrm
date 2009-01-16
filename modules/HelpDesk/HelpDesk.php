@@ -110,7 +110,15 @@ class HelpDesk extends CRMEntity {
 
 		//Inserting into vtiger_attachments
 		$this->insertIntoAttachment($this->id,'HelpDesk');
-				
+		
+		$return_action = $_REQUEST['return_action'];
+		$for_module = $_REQUEST['return_module'];
+		$for_crmid  = $_REQUEST['return_id'];
+		if ($return_action && $for_module && $for_crmid) {
+			if ($for_module != 'Accounts' && $for_module != 'Contacts' && $for_module != 'Products') {
+				parent::save_related_module($for_module, $for_crmid, $module, $this->id);
+			}
+		}				
 	}	
 
 	/** Function to insert values in vtiger_ticketcomments  for the specified tablename and  module
@@ -626,7 +634,7 @@ case when (vtiger_users.user_name not like '') then vtiger_users.user_name else 
 		}
 		return $updatelog;
 	}
-
+	
 	/**
 	 * Move the related records of the specified list of id's to the given record.
 	 * @param String This module name

@@ -83,7 +83,7 @@
 	<input type="hidden" name="parent_id" value="{$ID}">
 	<input type="hidden" name="email_directing_module">
 	{$HIDDEN_PARENTS_LIST}
-{elseif $MODULE eq 'Products' || $MODULE eq 'Vendors' || $MODULE eq 'PriceBooks'}
+{elseif $MODULE eq 'Products' || $MODULE eq 'Vendors' || $MODULE eq 'PriceBooks' || $MODULE eq 'Services'}
 	{if $MODULE eq 'Products'}
 		<input type="hidden" name="product_id" value="{$id}">
 	{elseif $MODULE eq 'Vendors'}

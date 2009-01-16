@@ -1102,6 +1102,13 @@ populateDefaultWorkflows($adb);
 // Populate Links
 populateLinks();
 
+// Set Help Information for Fields
+setFieldHelpInfo();
+
+// Install Vtlib Compliant Modules
+installMandatoryModules();
+installOptionalModules();
+
 // Run the performance scripts based on the database type and the vtiger version.
 require_once('modules/Migration/versions.php');
 if($adb->isMySQL()) {
@@ -1171,6 +1178,95 @@ function populateLinks() {
 	$moduleInstance = Vtiger_Module::getInstance('Accounts');
 	// Detail View Custom link
 	$moduleInstance->addLink('DETAILVIEW', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
+}
+
+// Function to install Vtlib Compliant
+function installVtlibModule($packagename, $packagepath) {
+	global $log;
+	require_once('vtlib/Vtiger/Package.php');
+	require_once('vtlib/Vtiger/Module.php');
+	$Vtiger_Utils_Log = true;
+	$package = new Vtiger_Package();
+	
+	$module = $package->getModuleNameFromZip($packagepath);
+	$module_exists = false;
+	$module_dir_exists = false;
+	if($module == null) {
+		$log->fatal("$packagename Module zipfile is not valid!");
+	} else if(Vtiger_Module::getInstance($module)) {
+		$log->fatal("$module already exists!");
+		$module_exists = true;
+	} else if(is_dir("modules/$module")) {
+		$log->info("$module folder exists! It will be Overwritten");
+		$module_dir_exists = true;
+	}
+	if($module_exists == false && $module_dir_exists == false) {
+		$log->debug("$module - Installation starts here");
+		$package->import($packagepath);
+		$moduleInstance = Vtiger_Module::getInstance($module);
+		if (empty($moduleInstance)) {
+			$log->fatal("$module module installation failed!");
+		}
+	}	
+}
+
+// Function to call installation of mandatory modules
+function installMandatoryModules(){
+	
+	// Install Services Module
+	installVtlibModule('Services', 'packages/5.1.0/Services.zip');
+	addServiceRelationToExistingModules();	
+	
+	// Install ServiceContracts Module
+	installVtlibModule('ServiceContracts', 'packages/5.1.0/ServiceContracts.zip');
+}
+	
+// Function to install Vtlib Compliant - Mandatory Modules
+function installOptionalModules(){
+}
+
+function addServiceRelationToExistingModules() {
+	global $log;
+	require_once('vtlib/Vtiger/Module.php');
+	$Vtiger_Utils_Log = true;
+	
+	$moduleInstance = Vtiger_Module::getInstance('Services');
+	
+	$ttModuleInstance = Vtiger_Module::getInstance('HelpDesk');
+	$ttModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+	
+	$leadModuleInstance = Vtiger_Module::getInstance('Leads');
+	$leadModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+	
+	$accModuleInstance = Vtiger_Module::getInstance('Accounts');
+	$accModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+	
+	$conModuleInstance = Vtiger_Module::getInstance('Contacts');
+	$conModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+	
+	$potModuleInstance = Vtiger_Module::getInstance('Potentials');
+	$potModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+	
+	$pbModuleInstance = Vtiger_Module::getInstance('PriceBooks');
+	$pbModuleInstance->setRelatedList($moduleInstance,'Services',array('select'),'get_pricebook_services');
+}
+
+function setFieldHelpInfo() {
+	// Added Help Info for Hours and Days fields of HelpDesk module.
+	require_once('vtlib/Vtiger/Module.php');
+	$tt_module = Vtiger_Module::getInstance('HelpDesk');
+	$field1 = Vtiger_Field::getInstance('hours',$tt_module);
+	$field2 = Vtiger_Field::getInstance('days',$tt_module);
+	
+	$field1->setHelpInfo('This gives the estimated hours for the Ticket.'.
+				'<br>When the same ticket is added to a Service Contract,'. 
+				'based on the Tracking Unit of the Service Contract,'.
+				'Used units is updated whenever a ticket is Closed.');
+	
+	$field2->setHelpInfo('This gives the estimated days for the Ticket.'.
+				'<br>When the same ticket is added to a Service Contract,'. 
+				'based on the Tracking Unit of the Service Contract,'.
+				'Used units is updated whenever a ticket is Closed.');
 }
 
 ?>

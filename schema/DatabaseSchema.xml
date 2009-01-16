@@ -1784,6 +1784,8 @@
 		<field name="solution" type="X" />
 		<field name="update_log" type="X" />
 		<field name="version_id" type="I" size="11" />
+		<field name="hours" type="C" size="200" />
+		<field name="days" type="C" size="200" />
 
 		<index name="troubletickets_ticketid_idx">
 			<col>ticketid</col>
@@ -3629,7 +3631,6 @@
 
 <table name="vtiger_pricebookproductrel" alter="true">
 <constraint>ADD CONSTRAINT fk_1_vtiger_pricebookproductrel FOREIGN KEY (pricebookid) REFERENCES vtiger_pricebook(pricebookid) ON DELETE CASCADE</constraint>
-<constraint>ADD CONSTRAINT fk_2_vtiger_pricebookproductrel FOREIGN KEY (productid) REFERENCES vtiger_products(productid) ON DELETE CASCADE</constraint>
 <opt>Type=InnoDB</opt>
 <data>
 </data>

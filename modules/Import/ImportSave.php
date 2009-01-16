@@ -338,7 +338,7 @@ function is_record_exist($module,$focus)
 	{
 	       $auto_dup_type = $_REQUEST['auto_type'];
 	}
-	if(($module == "Leads" || $module == "Accounts" || $module == "Contacts" || $module == "Products" || $module == "HelpDesk" || $module == "Potentials" || $module == "Vendors") && $auto_dup_type == "ignore")
+	if($auto_dup_type == "ignore")
 	{
 		$sec_parameter = getSecParameterforMerge($module);
 		if($module == "Leads")
@@ -392,34 +392,21 @@ function is_record_exist($module,$focus)
 					ON vtiger_crmentity.crmid = vtiger_products.productid	
 				WHERE vtiger_crmentity.deleted = 0 ";
 		}
-		else if($module == "HelpDesk")
-		{
-			$sel_qry = "select count(*) as count from vtiger_troubletickets
-		       		INNER JOIN vtiger_crmentity
-						ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid
-				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-				LEFT JOIN vtiger_users
-					ON vtiger_crmentity.smownerid = vtiger_users.id
-				WHERE vtiger_crmentity.deleted = 0 $sec_parameter";
-		}
-		else if($module == "Potentials")
-		{
-			$sel_qry = "select count(*) as count from vtiger_potential
-		       		INNER JOIN vtiger_crmentity
-					ON vtiger_crmentity.crmid = vtiger_potential.potentialid
-				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-				LEFT JOIN vtiger_users
-					ON vtiger_users.id = vtiger_crmentity.smownerid	 
-				WHERE vtiger_crmentity.deleted = 0 $sec_parameter";
-		}
 		else if($module == "Vendors")
 		{
 			$sel_qry = "select count(*) as count from vtiger_vendor
 		       		INNER JOIN vtiger_crmentity
 					ON vtiger_crmentity.crmid = vtiger_vendor.vendorid	 
 				WHERE vtiger_crmentity.deleted = 0";
+		} else {
+			$sel_qry = "select count(*) as count from $focus->table_name
+		       			INNER JOIN vtiger_crmentity
+							ON vtiger_crmentity.crmid = $focus->table_name.$focus->table_index
+						LEFT JOIN vtiger_groups
+							ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+						LEFT JOIN vtiger_users
+							ON vtiger_crmentity.smownerid = vtiger_users.id
+						WHERE vtiger_crmentity.deleted = 0 $sec_parameter";	
 		}
 		$sel_qry .= get_where_clause($module,$focus->column_fields);
 		$result = $adb->query($sel_qry);
@@ -437,29 +424,25 @@ function is_record_exist($module,$focus)
 		return false;
 }
 //function to get the where clause for the duplicate - select query
-function get_where_clause($module,$column_fields)
-{
+function get_where_clause($module,$column_fields) {
 	global $current_user, $dup_ow_count;
 	$where_clause = "";
 	$field_values_array=getFieldValues($module);
 	$field_values=$field_values_array['fieldnames_list'];
 	$tblname_field_arr = explode(",",$field_values);
 	$uitype_arr = $field_values_array['fieldname_uitype'];
-	foreach($tblname_field_arr as $val)
-	{
+	
+	require_once("modules/$module/$module.php");
+	$focus = new $module;
+	
+	foreach($tblname_field_arr as $val) {
 		list($tbl,$col,$fld) = explode(".",$val);
 		$col_name = $tbl ."." . $col;
 		$field_value=$column_fields[$fld];
-		if($fld == 'account_id' && $column_fields['account_id'] !=''  && !is_integer($column_fields['account_id']))
-			$field_value=getAccountId($column_fields['account_id']);
-		elseif($fld == 'contact_id' && $column_fields['contact_id'] != '' && !is_integer($column_fields['contact_id']))
-			$field_value=getContactId($column_fields['contact_id']);
-		elseif($fld == 'vendor_id' && $column_fields['vendor_id'] !='' && !is_integer($column_fields['vendor_id']))
-			$field_value=getVendorId($column_fields['vendor_id']);
-		elseif($fld == 'parent_id' && $column_fields['parent_id'] !='' && !is_integer($column_fields['parent_id']))
-			$field_value=getParentId($column_fields['parent_id']);
-		elseif($fld == 'product_id' && $column_fields['product_id'] !='' && !is_integer($column_fields['product_id']))
-			$field_value=getProductId($column_fields['product_id']);
+		
+		if($fld == $focus->table_index && $column_fields[$focus->table_index] !=''  && !is_integer($column_fields[$focus->table_index])) {
+			$field_value = getEntityId($module, $column_fields[$focus->table_index]);
+		}
 		
 		if(is_uitype($uitype_arr[$fld],'_users_list_') && $field_value == '') {
 			$field_value = $current_user->id;
@@ -533,28 +516,6 @@ function overwrite_duplicate_records($module,$focus)
 			ON vtiger_crmentity.crmid = vtiger_products.productid
 			WHERE vtiger_crmentity.deleted = 0 $where order by vtiger_products.productid ASC";
 	}
-	else if($module == "HelpDesk")
-	{
-		$sel_qry = "SELECT vtiger_troubletickets.ticketid FROM vtiger_troubletickets
-			INNER JOIN vtiger_crmentity
-			ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid
-				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-				LEFT JOIN vtiger_users
-					ON vtiger_crmentity.smownerid = vtiger_users.id
-			WHERE vtiger_crmentity.deleted = 0 $where $sec_parameter order by vtiger_troubletickets.ticketid ASC";
-	}
-	else if($module == "Potentials")
-	{
-		$sel_qry = "SELECT vtiger_potential.potentialid FROM vtiger_potential
-			INNER JOIN vtiger_crmentity
-			ON vtiger_crmentity.crmid = vtiger_potential.potentialid
-				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-				LEFT JOIN vtiger_users
-					ON vtiger_users.id = vtiger_crmentity.smownerid
-			WHERE vtiger_crmentity.deleted = 0 $where $sec_parameter order by vtiger_potential.potentialid ASC";
-	}
 	else if($module == "Vendors")
 	{
 		$sel_qry = "SELECT vtiger_vendor.vendorid FROM vtiger_vendor
@@ -562,11 +523,21 @@ function overwrite_duplicate_records($module,$focus)
 			ON vtiger_crmentity.crmid = vtiger_vendor.vendorid
 			WHERE vtiger_crmentity.deleted = 0 $where order by vtiger_vendor.vendorid ASC";
 	}
+	else {
+		$sel_qry = "SELECT $focus->table_name.$focus->table_index FROM $focus->table_name
+			INNER JOIN vtiger_crmentity
+			ON vtiger_crmentity.crmid = $focus->table_name.$focus->table_index
+				LEFT JOIN vtiger_groups
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+				LEFT JOIN vtiger_users
+					ON vtiger_crmentity.smownerid = vtiger_users.id
+			WHERE vtiger_crmentity.deleted = 0 $where $sec_parameter order by $focus->table_name.$focus->table_index ASC";
+	}
 	$result = $adb->query($sel_qry);
 	$no_rows = $adb->num_rows($result);
 	// now do any special processing for ex., map account with contact and potential
-		$focus->process_special_fields();
-		$process_fields='true';
+	$focus->process_special_fields();
+	$process_fields='true';
 	$moduleObj = new $module();
 	if($no_rows > 0)
 	{

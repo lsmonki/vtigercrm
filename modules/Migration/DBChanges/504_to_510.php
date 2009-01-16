@@ -1227,6 +1227,7 @@ $inventoryTabId = $adb->query_result($inventoryTabRes, 0, 'parenttabid');
 
 ExecuteQuery("DELETE FROM vtiger_parenttabrel WHERE tabid=$productTabId AND parenttabid != $inventoryTabId");
 $adb->query("ALTER TABLE vtiger_producttaxrel DROP FOREIGN KEY fk_1_vtiger_producttaxrel");
+$adb->query("ALTER TABLE vtiger_pricebookproductrel DROP FOREIGN KEY fk_2_vtiger_pricebookproductrel");
 
 /* Vtlib Changes - Table added to store different types of links */
 ExecuteQuery("CREATE TABLE vtiger_links (linkid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
@@ -1474,6 +1475,120 @@ ExecuteQuery($sql);
 /* Account Hierarchy */
 populateLinks();
 
+/* Add Services and Service Contracts Module */
+// Added Hours and Days fields for HelpDesk module.
+require_once('vtlib/Vtiger/Module.php');
+$tt_module = Vtiger_Module::getInstance('HelpDesk');
+$tt_block = Vtiger_Block::getInstance('LBL_TICKET_INFORMATION', $tt_module);
+
+$field1 = new Vtiger_Field();
+$field1->name = 'hours';
+$field1->label = 'Hours';
+$field1->table = 'vtiger_troubletickets';
+$field1->column = 'hours';
+$field1->columntype = 'VARCHAR(200)';
+$field1->uitype = 1;
+$field1->typeofdata = 'V~O';
+$field1->helpinfo = 'This gives the estimated hours for the Ticket.'.
+			'<br>When the same ticket is added to a Service Contract,'. 
+			'based on the Tracking Unit of the Service Contract,'.
+			'Used units is updated whenever a ticket is Closed.';
+$tt_block->addField($field1);
+
+$field2 = new Vtiger_Field();
+$field2->name = 'days';
+$field2->label = 'Days';
+$field2->table = 'vtiger_troubletickets';
+$field2->column = 'days';
+$field2->columntype = 'VARCHAR(200)';
+$field2->uitype = 1;
+$field2->typeofdata = 'V~O';
+$field2->helpinfo = 'This gives the estimated days for the Ticket.'.
+			'<br>When the same ticket is added to a Service Contract,'. 
+			'based on the Tracking Unit of the Service Contract,'.
+			'Used units is updated whenever a ticket is Closed.';
+$tt_block->addField($field2);
+
+$user_result = $adb->query("select distinct(id) as userid from vtiger_users");
+$num_users = $adb->num_rows($user_result);
+for($j=0; $j<$num_users; $j++) {
+	$userid = $adb->query_result($user_result,$j,'userid');
+	ExecuteQuery("INSERT INTO vtiger_user2mergefields VALUES($userid, ".getTabid('HelpDesk').", ".$field1->id.", 0)");
+	ExecuteQuery("INSERT INTO vtiger_user2mergefields VALUES($userid, ".getTabid('HelpDesk').", ".$field2->id.", 0)");
+}
+// Adding fields ends here
+
+// Function to call installation of mandatory modules
+function installMandatoryModules(){
+	
+	// Install Services Module
+	installVtlibModule('Services', 'packages/5.1.0/Services.zip');
+	addServiceRelationToExistingModules();	
+	
+	// Install ServiceContracts Module
+	installVtlibModule('ServiceContracts', 'packages/5.1.0/ServiceContracts.zip');
+}
+	
+// Function to install Vtlib Compliant - Mandatory Modules
+function installOptionalModules(){
+}
+
+// Function to install Vtlib Compliant
+function installVtlibModule($packagename, $packagepath) {
+	global $log;
+	require_once('vtlib/Vtiger/Package.php');
+	require_once('vtlib/Vtiger/Module.php');
+	$Vtiger_Utils_Log = true;
+	$package = new Vtiger_Package();
+	
+	$module = $package->getModuleNameFromZip($packagepath);
+	$module_exists = false;
+	$module_dir_exists = false;
+	if($module == null) {
+		$log->fatal("$packagename Module zipfile is not valid!");
+	} else if(Vtiger_Module::getInstance($module)) {
+		$log->fatal("$module already exists!");
+		$module_exists = true;
+	} else if(is_dir("modules/$module")) {
+		$log->info("$module folder exists! It will be Overwritten");
+		$module_dir_exists = true;
+	}
+	if($module_exists == false && $module_dir_exists == false) {
+		$log->debug("$module - Installation starts here");
+		$package->import($packagepath);
+		$moduleInstance = Vtiger_Module::getInstance($module);
+		if (empty($moduleInstance)) {
+			$log->fatal("$module module installation failed!");
+		}
+	}	
+}
+
+// Add Servies to Related List of other Existing modules
+function addServiceRelationToExistingModules() {
+	global $log;
+	require_once('vtlib/Vtiger/Module.php');
+	$Vtiger_Utils_Log = true;
+	
+	$moduleInstance = Vtiger_Module::getInstance('Services');
+	
+	$ttModuleInstance = Vtiger_Module::getInstance('HelpDesk');
+	$ttModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+	
+	$leadModuleInstance = Vtiger_Module::getInstance('Leads');
+	$leadModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+	
+	$accModuleInstance = Vtiger_Module::getInstance('Accounts');
+	$accModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+	
+	$conModuleInstance = Vtiger_Module::getInstance('Contacts');
+	$conModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+	
+	$potModuleInstance = Vtiger_Module::getInstance('Potentials');
+	$potModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+	
+	$pbModuleInstance = Vtiger_Module::getInstance('PriceBooks');
+	$pbModuleInstance->setRelatedList($moduleInstance,'Services',array('select'),'get_pricebook_services');
+}
 
 // Function to populate Links
 function populateLinks() {

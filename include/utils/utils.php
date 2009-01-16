@@ -1473,22 +1473,20 @@ function getDBInsertDateValue($value)
   * @returns $up -- up :: Type string
   */
 
-function getUnitPrice($productid)
+function getUnitPrice($productid, $module='Products')
 {
-	global $log,$current_user;
-	$currencyid=fetchCurrency($current_user->id);
-	$rate_symbol = getCurrencySymbolandCRate($currencyid);
-	$rate = $rate_symbol['rate'];
-	$log->debug("Entering getUnitPrice(".$productid.") method ...");
-        $log->info("in getUnitPrice productid ".$productid);
-
-        global $adb;
-        $query = "select unit_price from vtiger_products where productid=?";
-        $result = $adb->pquery($query, array($productid));
-        $up = $adb->query_result($result,0,'unit_price');
-	$up = convertFromDollar($up,$rate);
+	global $log, $adb;
+	$log->debug("Entering getUnitPrice($productid,$module) method ...");
+	
+	if($module == 'Services') {
+    	$query = "select unit_price from vtiger_service where serviceid=?";
+	} else {
+    	$query = "select unit_price from vtiger_products where productid=?";		
+	}
+    $result = $adb->pquery($query, array($productid));
+    $unitpice = $adb->query_result($result,0,'unit_price');
 	$log->debug("Exiting getUnitPrice method ...");
-        return $up;
+	return $unitpice;
 }
 
 /** Function to upload product image file 

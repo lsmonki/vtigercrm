@@ -13,13 +13,15 @@
 <form name="selectall" method="POST">
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="small">
 	<tr>
-	{if $SELECT eq 'enable' && ($POPUPTYPE neq 'inventory_prod' && $POPUPTYPE neq 'inventory_prod_po')}
+	{if $SELECT eq 'enable' && ($POPUPTYPE neq 'inventory_prod' && $POPUPTYPE neq 'inventory_prod_po' && $POPUPTYPE neq 'inventory_service')}
 		<td style="padding-left:10px;" align="left"><input class="crmbutton small save" type="button" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP[$MODULE]}" onclick="if(SelectAll('{$MODULE}','{$RETURN_MODULE}')) window.close();"/></td>
-	{elseif $SELECT eq 'enable' && ($POPUPTYPE neq 'inventory_prod' || $POPUPTYPE neq 'inventory_prod_po')}
+	{elseif $SELECT eq 'enable' && ($POPUPTYPE eq 'inventory_prod' || $POPUPTYPE eq 'inventory_prod_po')}
 		{if $RECORD_ID}
 			<td style="padding-left:10px;" align="left" width=10%><input class="crmbutton small save" type="button" value="{$APP.LBL_BACK}" onclick="window.history.back();"/></td>
 		{/if}
 		<td style="padding-left:10px;" align="left"><input class="crmbutton small save" type="button" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP[$MODULE]}" onclick="if(InventorySelectAll('{$RETURN_MODULE}',z,image_pth))window.close();"/></td>
+	{elseif $SELECT eq 'enable' && $POPUPTYPE eq 'inventory_service'}
+		<td style="padding-left:10px;" align="left"><input class="crmbutton small save" type="button" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP[$MODULE]}" onclick="if(InventorySelectAllServices('{$RETURN_MODULE}',z,image_pth))window.close();"/></td>
 	{else}		
 		<td>&nbsp;</td>	
 	{/if}
@@ -44,7 +46,7 @@
 		    {foreach item=header from=$LISTHEADER}
 		        <td class="lvtCol">{$header}</td>
 		    {/foreach}
-			{if $SELECT eq 'enable' && ($POPUPTYPE neq 'inventory_prod' || $POPUPTYPE neq 'inventory_prod_po')}
+			{if $SELECT eq 'enable' && ($POPUPTYPE eq 'inventory_prod' || $POPUPTYPE eq 'inventory_prod_po')}
 				{if !$RECORD_ID}
 					<td class="lvtCol">{$APP.LBL_ACTION}</td>
 				{/if}

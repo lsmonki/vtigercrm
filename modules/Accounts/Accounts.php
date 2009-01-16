@@ -96,8 +96,8 @@ class Accounts extends CRMEntity {
 
 	/** Function to handle module specific operations when saving a entity 
 	*/
-	function save_module($module)
-	{
+	function save_module($module) {
+		
 	}
 
 
@@ -512,7 +512,9 @@ class Accounts extends CRMEntity {
 		$focus = new HelpDesk();
 		$button = '';
 
-		$button .= '<td valign="bottom" align="right"><input title="New TICKET" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TICKET'].'">&nbsp;</td>';
+		if(isPermitted('HelpDesk',1, '') == 'yes')
+			$button .= '<input title="'.getTranslatedString('LBL_ADD_NEW').' '.getTranslatedString('Ticket').'" accessyKey="F" class="crmbutton small create"
+				 onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.getTranslatedString('LBL_ADD_NEW').' '.getTranslatedString('Ticket').'"></td>';
 		if($singlepane_view == 'true')
 			$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 		else
@@ -563,7 +565,12 @@ class Accounts extends CRMEntity {
 		$query .= ") )";
 		
 		$log->debug("Exiting get_tickets method ...");
-		return GetRelatedList('Accounts','HelpDesk',$focus,$query,$button,$returnset);
+		$return_value = GetRelatedList('Accounts','HelpDesk',$focus,$query,$button,$returnset);
+
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+		
+		return $return_value;
 	}
 	/**
 	* Function to get Account related Products 

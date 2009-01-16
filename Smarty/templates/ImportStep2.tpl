@@ -241,25 +241,21 @@ function showMergeOptions(curObj, arg)
 				<br />
 				<table align="center" cellpadding="5" cellspacing="0" width="95%" class="mailClient importLeadUI small">
 				   <tr>
-					<td class="mailClientBg genHeaderSmall" height="50" valign="middle" align="left" >{$MOD.LBL_MODULE_NAME} {$APP.$MODULE}</td>
+					<td class="mailClientBg genHeaderSmall" height="50" valign="middle" align="left" >{$MOD.LBL_MODULE_NAME} {$MODULELABEL}</td>
 				   </tr>
 				   <tr>
 					<td>&nbsp;</td>
 				   </tr>
 				   <tr>
 					<td align="left"  style="padding-left:40px;">
-							<span class="genHeaderGray">{$MOD.LBL_STEP_2_4}</span>&nbsp; 
-						{assign var="MODULELABEL" value=$MODULE}
-						{if $APP.$MODULE neq ''}
-							{assign var="MODULELABEL" value=$APP.$MODULE}
-						{/if}
+							<span class="genHeaderGray">{$MOD.LBL_STEP_2_4}</span>&nbsp;
 						<span class="genHeaderSmall">{$MODULELABEL} {$MOD.LBL_LIST_MAPPING} </span>
 					</td>
 				   </tr>
 				   <tr>
 					<td align="left" style="padding-left:40px;"> 
-					   {$MOD.LBL_STEP_2_MSG} {$APP.$MODULE} {$MOD.LBL_STEP_2_MSG1} 
-					   {$MOD.LBL_STEP_2_TXT} {$APP.$MODULE}. 
+					   {$MOD.LBL_STEP_2_MSG} {$MODULELABEL} {$MOD.LBL_STEP_2_MSG1} 
+					   {$MOD.LBL_STEP_2_TXT} {$MODULELABEL}. 
 					</td>
 				   </tr>
 				   <tr>

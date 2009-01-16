@@ -157,20 +157,14 @@
 					<select class=small id="qccombo" style="width:120px"  onclick="QCreate(this);">
 						<option value="none">{$APP.LBL_QUICK_CREATE}...</option>
                         {foreach  item=detail from=$QCMODULE}
-						{* vtlib customization: Use translated string if available *}
-						{assign var="modulelabel" value=$detail.0}
-						{if $APP[$detail.0]}{assign var="modulelabel" value=$APP[$detail.0]}{/if}
-                        <option value="{$detail.1}">{$APP.NEW}&nbsp;{$modulelabel}</option>
+                        <option value="{$detail.1}">{$APP.NEW}&nbsp;{$detail.0}</option>
                         {/foreach}
 					</select>
 				{else}
 					<select class=small id="qccombo" style="width:120px"  onchange="QCreate(this);">
 						<option value="none">{$APP.LBL_QUICK_CREATE}...</option>
                         {foreach  item=detail from=$QCMODULE}
-						{* vtlib customization: Use translated string if available *}
-						{assign var="modulelabel" value=$detail.0}
-						{if $APP[$detail.0]}{assign var="modulelabel" value=$APP[$detail.0]}{/if}
-                        <option value="{$detail.1}">{$APP.NEW}&nbsp;{$modulelabel}</option>
+                        <option value="{$detail.1}">{$APP.NEW}&nbsp;{$detail.0}</option>
                         {/foreach}
 					</select>
 				{/if}	

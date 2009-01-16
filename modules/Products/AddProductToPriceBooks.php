@@ -1,31 +1,31 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
- ********************************************************************************/
+ *******************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 require_once('modules/PriceBooks/PriceBooks.php');
 require_once('include/utils/utils.php');
 require_once('include/ComboUtil.php');
 
-global $app_strings,$mod_strings,$current_language,$theme,$log;
+global $app_strings,$mod_strings,$current_language,$theme,$log,$currentModule;
 
-$current_module_strings = return_module_language($current_language, 'Products');
+$current_module_strings = return_module_language($current_language, $currentModule);
 
 $productid = $_REQUEST['return_id'];
 $parenttab = htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset);
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
-$productname = getProductName($productid);
+$productNameArr = getEntityName($currentModule, array($productid));
+$productname = $productNameArr[$productid];
 
-if(getFieldVisibilityPermission('Products',$current_user->id,'unit_price') != '0'){
+if(getFieldVisibilityPermission($currentModule,$current_user->id,'unit_price') != '0'){
 	echo "<link rel='stylesheet' type='text/css' href='themes/$theme/style.css'>";	
 	echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
 	echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
@@ -78,8 +78,7 @@ for($i=0; $i<$num_prod_rows; $i++)
 	$pbk_array[$pbkid] = $pbkid;
 }
 
-$res2 = $adb->pquery("select unit_price from vtiger_products where productid=?", array($productid));
-$pro_unit_price = $adb->query_result($res2,0,"unit_price"); 
+$pro_unit_price = getUnitPrice($productid, $currentModule); 
 $prod_price_details = getPriceDetailsForProduct($productid, $pro_unit_price);
 
 $prod_cur_price = array();
@@ -128,8 +127,6 @@ $smarty->assign("LISTHEADER", $list_header);
 $list_body ='';
 for($i=0; $i<$num_rows; $i++)
 {	
-
-	$log->info("Products :: Showing Price Books to be added in the product");
 	$entity_id = $adb->query_result($list_result,$i,"crmid");
 	if(! array_key_exists($entity_id, $pbk_array))
 	{
@@ -165,6 +162,8 @@ if($sorder !='')
 	$url_string .="&sorder=".$sorder;
 
 $smarty->assign("LISTENTITY", $list_body);
+$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
 $smarty->assign("RETURN_ID", $productid);
 $smarty->assign("CATEGORY", $parenttab);
 

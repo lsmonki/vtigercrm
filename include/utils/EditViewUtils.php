@@ -1209,7 +1209,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 71 || $uitype == 72)
 	{
 		if($col_fields['record_id'] != '' && $fieldname == 'unit_price') {
-			$rate_symbol=getCurrencySymbolandCRate(getProductBaseCurrency($col_fields['record_id']));
+			$rate_symbol=getCurrencySymbolandCRate(getProductBaseCurrency($col_fields['record_id'],$module_name));
 			$fieldvalue[] = $value;			
 		} else {
 			$currency_id = fetchCurrency($current_user->id);
@@ -1646,72 +1646,24 @@ function getAssociatedProducts($module,$focus,$seid='')
 	// DG 15 Aug 2006
 	// Add "ORDER BY sequence_no" to retain add order on all inventoryproductrel items
 	
-	if($module == 'Quotes')
+	if($module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Invoice')
 	{
 		$query="SELECT 
-				vtiger_products.productname,
-	            vtiger_products.productcode, 
-				vtiger_products.unit_price,									
-	            vtiger_products.qtyinstock, 
-	            vtiger_inventoryproductrel.listprice, 
-	            vtiger_inventoryproductrel.description AS product_description, 
-	            vtiger_inventoryproductrel.* 
-	                FROM vtiger_inventoryproductrel 
-	            INNER JOIN vtiger_products 
-	                    ON vtiger_products.productid=vtiger_inventoryproductrel.productid 
-	            WHERE id=?
-	            ORDER BY sequence_no"; 
-			$params = array($focus->id);
-	}
-	elseif($module == 'PurchaseOrder')
-	{
-		$query="SELECT 
- 		                        vtiger_products.productname, 
- 		                        vtiger_products.productcode, 
- 		                        vtiger_products.unit_price,	
- 		                        vtiger_products.qtyinstock, 
+					case when vtiger_products.productid != '' then vtiger_products.productname else vtiger_service.servicename end as productname,
+ 		            case when vtiger_products.productid != '' then vtiger_products.productcode else vtiger_service.service_no end as productcode, 
+					case when vtiger_products.productid != '' then vtiger_products.unit_price else vtiger_service.unit_price end as unit_price,									
+ 		            case when vtiger_products.productid != '' then vtiger_products.qtyinstock else 'NA' end as qtyinstock,
+ 		            case when vtiger_products.productid != '' then 'Products' else 'Services' end as entitytype,
  		                        vtiger_inventoryproductrel.listprice, 
  		                        vtiger_inventoryproductrel.description AS product_description, 
  		                        vtiger_inventoryproductrel.* 
- 		                        FROM vtiger_inventoryproductrel 
- 		                        INNER JOIN vtiger_products 
+ 	                            FROM vtiger_inventoryproductrel 
+ 		                        LEFT JOIN vtiger_products 
  		                                ON vtiger_products.productid=vtiger_inventoryproductrel.productid 
+ 		                        LEFT JOIN vtiger_service 
+ 		                                ON vtiger_service.serviceid=vtiger_inventoryproductrel.productid 
  		                        WHERE id=?
- 		                        ORDER BY sequence_no";
-			$params = array($focus->id);
-	}
-	elseif($module == 'SalesOrder')
-	{
-		$query="SELECT 
- 		                        vtiger_products.productname, 
- 		                        vtiger_products.productcode, 
- 		                        vtiger_products.unit_price,
- 		                        vtiger_products.qtyinstock, 
- 		                        vtiger_inventoryproductrel.listprice, 
- 		                        vtiger_inventoryproductrel.description AS product_description, 
- 		                        vtiger_inventoryproductrel.* 
- 		                        FROM vtiger_inventoryproductrel 
- 		                        INNER JOIN vtiger_products 
- 		                                ON vtiger_products.productid=vtiger_inventoryproductrel.productid 
- 		                        WHERE id=?
- 		                        ORDER BY sequence_no";
-			$params = array($focus->id);
-	}
-	elseif($module == 'Invoice')
-	{
-		$query="SELECT 
- 		                        vtiger_products.productname, 
- 		                        vtiger_products.productcode, 
- 		                        vtiger_products.unit_price, 
- 		                        vtiger_products.qtyinstock, 
- 		                        vtiger_inventoryproductrel.listprice, 
- 		                        vtiger_inventoryproductrel.description AS product_description, 
- 		                        vtiger_inventoryproductrel.* 
- 		                        FROM vtiger_inventoryproductrel 
- 		                        INNER JOIN vtiger_products 
- 		                                ON vtiger_products.productid=vtiger_inventoryproductrel.productid 
- 		                        WHERE id=? 
- 		                        ORDER BY sequence_no";
+ 		                        ORDER BY sequence_no"; 
 			$params = array($focus->id);
 	}
 	elseif($module == 'Potentials')
@@ -1739,12 +1691,30 @@ function getAssociatedProducts($module,$focus,$seid='')
  		                        vtiger_products.productname, 
  		                        vtiger_products.unit_price, 
  		                        vtiger_products.qtyinstock, 
- 		                        vtiger_crmentity.description AS product_description  
+ 		                        vtiger_crmentity.description AS product_description,
+ 		                        'Products' AS entitytype  
  		                        FROM vtiger_products  
  		                        INNER JOIN vtiger_crmentity 
  		                                ON vtiger_crmentity.crmid=vtiger_products.productid 
  		                        WHERE vtiger_crmentity.deleted=0 
  		                                AND productid=?";
+			$params = array($seid);
+	}
+	elseif($module == 'Services')
+	{
+		$query="SELECT 
+ 		                        vtiger_service.serviceid AS productid, 
+ 		                        'NA' AS productcode, 
+ 		                        vtiger_service.servicename AS productname, 
+ 		                        vtiger_service.unit_price AS unit_price, 
+ 		                        'NA' AS qtyinstock, 
+ 		                        vtiger_crmentity.description AS product_description, 
+ 		                       	'Services' AS entitytype
+ 								FROM vtiger_service  
+ 		                        INNER JOIN vtiger_crmentity 
+ 		                                ON vtiger_crmentity.crmid=vtiger_service.serviceid 
+ 		                        WHERE vtiger_crmentity.deleted=0 
+ 		                                AND serviceid=?";
 			$params = array($seid);
 	}
 
@@ -1761,6 +1731,10 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$qty=$adb->query_result($result,$i-1,'quantity');
 		$unitprice=$adb->query_result($result,$i-1,'unit_price');
 		$listprice=$adb->query_result($result,$i-1,'listprice');
+		$entitytype=$adb->query_result($result,$i-1,'entitytype');
+		if (!empty($entitytype)) {
+			$product_Detail[$i]['entityType'.$i]=$entitytype;
+		}
 
 		if($listprice == '')
 			$listprice = $unitprice;

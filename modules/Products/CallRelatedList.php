@@ -1,87 +1,80 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
- ********************************************************************************/
-
+ ************************************************************************************/
 require_once('Smarty_setup.php');
-require_once('modules/Products/Products.php');
-
-//Redirecting Header for single page layout
 require_once('user_privileges/default_module_view.php');
-global $singlepane_view;
-if($singlepane_view == 'true' && $_REQUEST['action'] == 'CallRelatedList' )
-{
-	header("Location:index.php?action=DetailView&module=".$_REQUEST['module']."&record=".$_REQUEST['record']."&parenttab=".$_REQUEST['parenttab']);
-}
-else
-{
-$focus = new Products();
-$currentmodule = $_REQUEST['module'];
-$RECORD = $_REQUEST['record'];
-if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) 
-{
-	$focus->retrieve_entity_info($_REQUEST['record'],"Products");
-	$focus->id = $_REQUEST['record'];
-	$focus->name=$focus->column_fields['productname'];
-	$log->debug("id is ".$focus->id);
-	$log->debug("name is ".$focus->name);
-    $product_base_currency = getProductBaseCurrency($focus->id);
-} else {
-	$product_base_currency = fetchCurrency($current_user->id);
-}
 
-global $mod_strings;
-global $app_strings,$currentModule;
-global $theme;
-$theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
+global $mod_strings, $app_strings, $currentModule, $current_user, $theme, $singlepane_view;
 
-$smarty = new vtigerCRM_Smarty;
+checkFileAccess("modules/$currentModule/$currentModule.php");
+require_once("modules/$currentModule/$currentModule.php");
 
-if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
-{
-        $focus->id = "";
-}
-if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
-	$smarty->assign("OP_MODE",$_REQUEST['mode']);
-}
-if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
-$related_array=getRelatedLists($currentModule,$focus);
-$smarty->assign("RELATEDLISTS", $related_array);
 $category = getParentTab();
-$smarty->assign("CATEGORY",$category);
+$action = $_REQUEST['action'];
+$record = $_REQUEST['record'];
+$isduplicate = $_REQUEST['isDuplicate'];
+$parenttab = $_REQUEST['parenttab'];
 
-// Module Sequence Numbering
-$mod_seq_field = getModuleSequenceField($currentModule);
-if ($mod_seq_field != null) {
-	$mod_seq_id = $focus->column_fields[$mod_seq_field['name']];
+if($singlepane_view == 'true' && $action == 'CallRelatedList') {
+	header("Location:index.php?action=DetailView&module=$currentModule&record=$record&parenttab=$parenttab");
 } else {
-	$mod_seq_id = $focus->id;
-}
-$smarty->assign('MOD_SEQ_ID', $mod_seq_id);
-// END
+	
+	$tool_buttons = Button_Check($currentModule);
 
-$smarty->assign("ID",$focus->id);
-$smarty->assign("CURRENCY_ID",$product_base_currency);
-$smarty->assign("MODULE",$currentmodule);
-$smarty->assign("UPDATEINFO",updateInfo($focus->id));
-$smarty->assign("SINGLE_MOD",$app_strings['Product']);
-$smarty->assign("MOD",$mod_strings);
-$smarty->assign("APP",$app_strings);
-$smarty->assign("THEME", $theme);
-$smarty->assign("IMAGE_PATH", $image_path);
+	$focus = new $currentModule();
+	if($record != '') {
+	    $focus->retrieve_entity_info($record, $currentModule);
+   		$focus->id = $record;
+		$product_base_currency = getProductBaseCurrency($focus->id,$currentModule);
+	} else {
+		$product_base_currency = fetchCurrency($current_user->id);
+	}
 
-$is_member = $focus->ismember_check();
-$smarty->assign("IS_MEMBER",$is_member);
+	$smarty = new vtigerCRM_Smarty;
 
-$check_button = Button_Check($module);
-$smarty->assign("CHECK", $check_button);
-$smarty->display("RelatedLists.tpl");
+	if($isduplicate == 'true') $focus->id = '';
+	if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') $smarty->assign("OP_MODE",$_REQUEST['mode']);
+	if(!$_SESSION['rlvs'][$currentModule]) unset($_SESSION['rlvs']);
+	
+	$smarty->assign('APP', $app_strings);
+	$smarty->assign('MOD', $mod_strings);
+	$smarty->assign('MODULE', $currentModule);
+	// TODO: Update Single Module Instance name here.
+	$smarty->assign('SINGLE_MOD', getTranslatedString($currentModule)); 
+	$smarty->assign('CATEGORY', $category);
+	$smarty->assign('IMAGE_PATH', "themes/$theme/images/");
+	$smarty->assign('THEME', $theme);
+	$smarty->assign('ID', $focus->id);
+	$smarty->assign('MODE', $focus->mode);
+	$smarty->assign('CHECK', $tool_buttons);
+
+	$smarty->assign('NAME', $focus->column_fields[$focus->def_detailview_recname]);
+	$smarty->assign('UPDATEINFO',updateInfo($focus->id));
+	
+	$smarty->assign("CURRENCY_ID",$product_base_currency);
+
+	$is_member = $focus->ismember_check();
+	$smarty->assign("IS_MEMBER",$is_member);
+
+	// Module Sequence Numbering
+	$mod_seq_field = getModuleSequenceField($currentModule);
+	if ($mod_seq_field != null) {
+		$mod_seq_id = $focus->column_fields[$mod_seq_field['name']];
+	} else {
+		$mod_seq_id = $focus->id;
+	}
+	$smarty->assign('MOD_SEQ_ID', $mod_seq_id);
+	// END
+
+	$related_array = getRelatedLists($currentModule, $focus);
+
+	$smarty->assign('RELATEDLISTS', $related_array);
+	$smarty->display('RelatedLists.tpl');
 }
 ?>

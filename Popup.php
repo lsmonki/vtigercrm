@@ -290,6 +290,11 @@ else
        		
 	if($_REQUEST['return_module'] == 'Products' && $currentModule == 'Products' && $_REQUEST['recordid'])
        	$where_relquery .=" and vtiger_products.discontinued <> 0 AND (vtiger_crmentity.crmid NOT IN (".$_REQUEST['recordid'].") AND vtiger_crmentity.crmid NOT IN (SELECT productid FROM vtiger_seproductsrel WHERE setype='Products') AND vtiger_crmentity.crmid NOT IN (SELECT crmid FROM vtiger_seproductsrel WHERE setype='Products' AND productid=".$_REQUEST['recordid']."))";
+	
+	if($currentModule == 'Services' && $popuptype == 'inventory_service') {
+		$where_relquery .=" and vtiger_service.discontinued <> 0";
+	}    
+	
 	$query = getListQuery($currentModule,$where_relquery);
 }
 

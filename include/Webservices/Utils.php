@@ -155,7 +155,7 @@ function vtws_getEntityNameFields($moduleName){
 function vtws_getModuleNameList(){
 	global $adb;
 
-	$sql = "select vtiger_moduleowners.*, vtiger_tab.name from vtiger_moduleowners inner join vtiger_tab on vtiger_moduleowners.tabid = vtiger_tab.tabid order by vtiger_tab.tabsequence";
+	$sql = "select name from vtiger_tab where presence=0 and isentitytype=1 order by tabsequence";
 	$res = $adb->pquery($sql, array());
 	$mod_array = Array();
 	while($row = $adb->fetchByAssoc($res)){

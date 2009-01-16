@@ -1,27 +1,35 @@
 <?php
-
+/*+********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
 global $mod_strings,$app_strings,$theme,$currentModule,$current_user;
 
 require_once('Smarty_setup.php');
-require_once("modules/$currentModule/$currentModule.php");
 require_once('include/utils/utils.php');
+
+checkFileAccess("modules/$currentModule/$currentModule.php");
+require_once("modules/$currentModule/$currentModule.php");
 
 $focus = new $currentModule();
 $focus->mode = '';
-$mode = 'mass_edit';
+
 $disp_view = getView($focus->mode);
+$idstring = $_REQUEST['idstring'];
 
 $smarty = new vtigerCRM_Smarty;
-$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));	
-$smarty->assign("IDS",$_REQUEST['idstring']);
-$smarty->assign("MASS_EDIT","1");
-$smarty->assign("MODULE",$currentModule);
-$smarty->assign("APP",$app_strings);
-
-$theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
-$smarty->assign("THEME", $theme);
-$smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign('MODULE',$currentModule);
+$smarty->assign('APP',$app_strings);
+$smarty->assign('THEME', $theme);
+$smarty->assign('IMAGE_PATH', "themes/$theme/images/");
+$smarty->assign('IDS',$idstring);
+$smarty->assign('MASS_EDIT','1');
+$smarty->assign('BLOCKS',getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'',$focus->non_mass_edit_fields));	
 
 // Field Validation Information 
 $tabid = getTabid($currentModule);

@@ -1,48 +1,44 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
- ********************************************************************************/
+ ************************************************************************************/
+global $app_strings, $mod_strings, $current_language, $currentModule, $theme;
+
 require_once('Smarty_setup.php');
-require_once('include/database/PearDatabase.php');
-require_once('include/utils/utils.php');
-require_once('modules/Products/Products.php');
 require_once('include/FormValidationUtil.php');
 
-global $app_strings;
-global $mod_strings;
-global $currentModule, $current_user;
+checkFileAccess("modules/$currentModule/$currentModule.php");
+require_once("modules/$currentModule/$currentModule.php");
 
 $encode_val=$_REQUEST['encode_val'];
 $decode_val=base64_decode($encode_val);
 
- $saveimage=isset($_REQUEST['saveimage'])?$_REQUEST['saveimage']:"false";
- $errormessage=isset($_REQUEST['error_msg'])?$_REQUEST['error_msg']:"false";
- $image_error=isset($_REQUEST['image_error'])?$_REQUEST['image_error']:"false";
- 
+$saveimage=isset($_REQUEST['saveimage'])?$_REQUEST['saveimage']:"false";
+$errormessage=isset($_REQUEST['error_msg'])?$_REQUEST['error_msg']:"false";
+$image_error=isset($_REQUEST['image_error'])?$_REQUEST['image_error']:"false";
 
-
-
-$focus = new Products();
+$focus = new $currentModule();
 $smarty = new vtigerCRM_Smarty();
+
+$category = getParentTab($currentModule);
+$record = $_REQUEST['record'];
+$isduplicate = $_REQUEST['isDuplicate'];
 
 //added to fix the issue4600
 $searchurl = getBasic_Advance_SearchURL();
 $smarty->assign("SEARCH", $searchurl);
 //4600 ends
 
-if($_REQUEST['record']!="") 
-{
-    $focus->id = $_REQUEST['record'];
-    $focus->mode = 'edit'; 	
-    $focus->retrieve_entity_info($_REQUEST['record'],"Products");
-    $focus->name=$focus->column_fields['productname'];	
-    $product_base_currency = getProductBaseCurrency($focus->id);
+if($record) {
+    $focus->id = $record;
+    $focus->mode = 'edit';
+    $focus->retrieve_entity_info($record, $currentModule);
+    $product_base_currency = getProductBaseCurrency($focus->id,$currentModule);
 } else {
 	$product_base_currency = fetchCurrency($current_user->id);
 }
@@ -60,16 +56,15 @@ if($image_error=="true")
 	}
 }
 
-
 if(isset($_REQUEST['vendorid']) && $_REQUEST['vendorid']!='')
 {
         $focus->column_fields['vendorid'] = $_REQUEST['vendorid'];
 }
 
-if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
-	$focus->id = "";
-    $focus->mode = ''; 	
-} 
+if($isduplicate == 'true') {
+	$focus->id = '';
+	$focus->mode = '';
+}
 
 //needed when creating a new product with a default vtiger_vendor name to passed 
 if (isset($_REQUEST['name']) && is_null($focus->name)) {
@@ -80,15 +75,10 @@ if (isset($_REQUEST['vendorid']) && is_null($focus->vendorid)) {
 	$focus->vendorid = $_REQUEST['vendorid'];
 }
 
-global $theme;
-$theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
-
 $disp_view = getView($focus->mode);
-if($disp_view == 'edit_view')
-	$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));
-else	
-{
+if($disp_view == 'edit_view') { 
+	$smarty->assign('BLOCKS', getBlocks($currentModule, $disp_view, $focus->mode, $focus->column_fields));
+} else {
 	$bas_block = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS');
 	$adv_block = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'ADV');
 
@@ -99,34 +89,74 @@ else
 	$smarty->assign("BLOCKS",$blocks);
 	$smarty->assign("BLOCKS_COUNT",count($blocks));
 }
-$smarty->assign("OP_MODE",$disp_view);
+	
+$smarty->assign('OP_MODE',$disp_view);
+$smarty->assign('APP', $app_strings);
+$smarty->assign('MOD', $mod_strings);
+$smarty->assign('MODULE', $currentModule);
+// TODO: Update Single Module Instance name here.
+$smarty->assign('SINGLE_MOD', getTranslatedString($currentModule));
+$smarty->assign('CATEGORY', $category);
+$smarty->assign('IMAGE_PATH', "themes/$theme/images/");
+$smarty->assign('ID', $focus->id);
+$smarty->assign('MODE', $focus->mode);
 
-$smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",'Product');
+$smarty->assign('CHECK', Button_Check($currentModule));
+$smarty->assign('DUPLICATE', $isduplicate);
 
+if($focus->mode == 'edit') {
+	$recordName = array_values(getEntityName($currentModule, $focus->id));
+	$recordName = $recordName[0];
+	$smarty->assign('NAME', $recordName);
+	$smarty->assign('UPDATEINFO',updateInfo($focus->id));
+}
 
-$smarty->assign("MOD", $mod_strings);
-$smarty->assign("APP", $app_strings);
+if(isset($_REQUEST['return_module']))    $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+if(isset($_REQUEST['return_action']))    $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if(isset($_REQUEST['return_id']))        $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+if (isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+
+// Field Validation Information 
+$tabid = getTabid($currentModule);
+$validationData = getDBValidationData($focus->tab_name,$tabid);
+$validationArray = split_validationdataArray($validationData);
+
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$validationArray['fieldname']);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$validationArray['datatype']);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$validationArray['fieldlabel']);
+
+// In case you have a date field
+$smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
+
+global $adb;
+// Module Sequence Numbering
+$mod_seq_field = getModuleSequenceField($currentModule);
+if($focus->mode != 'edit' && $mod_seq_field != null) {
+		$autostr = getTranslatedString('MSG_AUTO_GEN_ON_SAVE');
+		$mod_seq_string = $adb->pquery("SELECT prefix, cur_id from vtiger_modentity_num where semodule = ? and active=1",array($currentModule));
+        $mod_seq_prefix = $adb->query_result($mod_seq_string,0,'prefix');
+        $mod_seq_no = $adb->query_result($mod_seq_string,0,'cur_id');
+        if($adb->num_rows($mod_seq_string) == 0 || $focus->checkModuleSeqNumber($focus->table_name, $mod_seq_field['column'], $mod_seq_prefix.$mod_seq_no))
+                echo '<br><font color="#FF0000"><b>'. getTranslatedString('LBL_DUPLICATE'). ' '. getTranslatedString($mod_seq_field['label'])
+                	.' - '. getTranslatedString('LBL_CLICK') .' <a href="index.php?module=Settings&action=CustomModEntityNo&parenttab=Settings">'.getTranslatedString('LBL_HERE').'</a> '
+                	. getTranslatedString('LBL_TO_CONFIGURE'). ' '. getTranslatedString($mod_seq_field['label']) .'</b></font>';
+        else
+                $smarty->assign("MOD_SEQ_ID",$autostr);
+}
+// END
+
+// Gather the help information associated with fields
+$smarty->assign('FIELDHELPINFO', vtlib_getFieldHelpInfo($currentModule));
+// END
+
 if($focus->id != '')
 	$smarty->assign("ROWCOUNT", getImageCount($focus->id));
-if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
-else $smarty->assign("NAME", "");
 
 if(isset($cust_fld))
 {
-        $smarty->assign("CUSTOMFIELD", $cust_fld);
+	$smarty->assign("CUSTOMFIELD", $cust_fld);
 }
-$smarty->assign("ID", $focus->id);
-$category = getParentTab();
-$smarty->assign("CATEGORY",$category);
-
-$smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
-if($focus->mode == 'edit')
-{
-	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
-	$smarty->assign("MODE", $focus->mode);
-}
 
 //Tax handling (get the available taxes only) - starts
 if($focus->mode == 'edit')
@@ -171,19 +201,11 @@ $smarty->assign("TAX_DETAILS", $tax_details);
 //Tax handling - ends
 
 $unit_price = $focus->column_fields['unit_price'];
-$price_details = getPriceDetailsForProduct($productid, $unit_price, 'available');
+$price_details = getPriceDetailsForProduct($productid, $unit_price, 'available',$currentModule);
 $smarty->assign("PRICE_DETAILS", $price_details);
 
 $base_currency = 'curname' . $product_base_currency;	
 $smarty->assign("BASE_CURRENCY", $base_currency);
-
-if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
-if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
-if(isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
-if(isset($_REQUEST['activity_mode'])) $smarty->assign("ACTIVITYMODE", $_REQUEST['activity_mode']);
-if(isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
-$smarty->assign("THEME", $theme);
-$smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
 if(isset($focus->id) && $_REQUEST['isDuplicate'] != 'true')
 	$is_parent = $focus->isparent_check();
@@ -196,9 +218,6 @@ if($_REQUEST['return_module']=='Products' && isset($_REQUEST['return_action'])){
 	$smarty->assign("RETURN_NAME", $return_name);
 }
 
- $tabid = getTabid("Products");
- $validationData = getDBValidationData($focus->tab_name,$tabid);
- $data = split_validationdataArray($validationData);
 if($errormessage==2)
 {
 	$msg =$mod_strings['LBL_MAXIMUM_LIMIT_ERROR'];
@@ -229,38 +248,16 @@ if($errormessage!="")
 	$smarty->assign("ERROR_MESSAGE",$errormessage);
 }
 
-$smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
-$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
-$smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
-
 // Added to set product active when creating a new product
 $mode=$focus->mode;
 if($mode != "edit" && $_REQUEST['isDuplicate'] != "true")
-$smarty->assign("PROD_MODE", "create");
+	$smarty->assign("PROD_MODE", "create");
 
-$check_button = Button_Check($module);
-$smarty->assign("CHECK", $check_button);
-$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 
-global $adb;
-// Module Sequence Numbering
-$mod_seq_field = getModuleSequenceField($currentModule);
-if($focus->mode != 'edit' && $mod_seq_field != null) {
-		$autostr = getTranslatedString('MSG_AUTO_GEN_ON_SAVE');
-		$mod_seq_string = $adb->pquery("SELECT prefix, cur_id from vtiger_modentity_num where semodule = ? and active=1",array($currentModule));
-        $mod_seq_prefix = $adb->query_result($mod_seq_string,0,'prefix');
-        $mod_seq_no = $adb->query_result($mod_seq_string,0,'cur_id');
-        if($adb->num_rows($mod_seq_string) == 0 || $focus->checkModuleSeqNumber($focus->table_name, $mod_seq_field['column'], $mod_seq_prefix.$mod_seq_no))
-                echo '<br><font color="#FF0000"><b>'. getTranslatedString('LBL_DUPLICATE'). ' '. getTranslatedString($mod_seq_field['label'])
-                	.' - '. getTranslatedString('LBL_CLICK') .' <a href="index.php?module=Settings&action=CustomModEntityNo&parenttab=Settings">'.getTranslatedString('LBL_HERE').'</a> '
-                	. getTranslatedString('LBL_TO_CONFIGURE'). ' '. getTranslatedString($mod_seq_field['label']) .'</b></font>';
-        else
-                $smarty->assign("MOD_SEQ_ID",$autostr);
-}
-// END
-
-if($focus->mode == 'edit')
+if($focus->mode == 'edit') {
 	$smarty->display('Inventory/InventoryEditView.tpl');
-else
+} else {
 	$smarty->display('Inventory/InventoryCreateView.tpl');
+}
+
 ?>

@@ -63,6 +63,16 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
 }
+if(!empty($_REQUEST['parent_id']) && !empty($_REQUEST['return_module']))
+{
+    if ($_REQUEST['return_module'] == 'Services') {
+	    $focus->column_fields['product_id'] = $_REQUEST['parent_id'];
+	    $log->debug("Service Id from the request is ".$_REQUEST['parent_id']);
+	    $associated_prod = getAssociatedProducts("Services",$focus,$focus->column_fields['product_id']);
+		$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+		$smarty->assign("AVAILABLE_PRODUCTS", 'true');
+    }
+}
 
 // Get vtiger_vendor address if vtiger_vendorid is given
 if(isset($_REQUEST['vendor_id']) && $_REQUEST['vendor_id']!='' && $_REQUEST['record']==''){

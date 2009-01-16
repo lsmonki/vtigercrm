@@ -13,6 +13,7 @@
 -->*}
 
 <script type="text/javascript" src="include/js/Inventory.js"></script>
+<script type="text/javascript" src="modules/Services/Services.js"></script>
 <script>
 if(!e)
 	window.captureEvents(Event.MOUSEMOVE);
@@ -103,7 +104,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 	{else}
 			<td colspan="2" class="dvInnerHeader">
 	{/if}
-		<b>{$APP.LBL_PRODUCT_DETAILS}</b>
+		<b>{$APP.LBL_ITEM_DETAILS}</b>
 	</td>
 	
 	<td class="dvInnerHeader" align="center" colspan="2">
@@ -134,7 +135,7 @@ function displayCoords(currObj,obj,mode,curr_row)
    <!-- Header for the Product Details -->
    <tr valign="top">
 	<td width=5% valign="top" class="lvtCol" align="right"><b>{$APP.LBL_TOOLS}</b></td>
-	<td width=40% class="lvtCol"><font color='red'>*</font><b>{$APP.LBL_PRODUCT_NAME}</b></td>
+	<td width=40% class="lvtCol"><font color='red'>*</font><b>{$APP.LBL_ITEM_NAME}</b></td>
 	{if $MODULE neq 'PurchaseOrder'}
 		<td width=10% class="lvtCol"><b>{$APP.LBL_QTY_IN_STOCK}</b></td>
 	{/if}
@@ -167,7 +168,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 			<td class="small">
 				<input type="text" id="productName1" name="productName1" class="small" style="width:70%" value="{$PRODUCT_NAME}" readonly />
 				<input type="hidden" id="hdnProductId1" name="hdnProductId1" value="{$PRODUCT_ID}">
-				<img src="{'search.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}',1)" />
+				<img id="searchIcon1" src="{'search.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}',1)" />
 			</td>
 		</tr>
 		<tr>
@@ -179,7 +180,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		   <tr valign="bottom">
 			<td class="small" id="setComment">
 				<textarea id="comment1" name="comment1" class=small style="width:70%;height:40px"></textarea>
-				<input type="image" href="javascript:;" src="themes/images/clear_field.gif" onClick="$('{$comment}').value=''"; />
+				<img src="{'clear_field.gif'|@vtiger_imageurl:$THEME}" onClick="$('{$comment}').value=''"; style="cursor:pointer;" />
 			</td>
 		   </tr>
 		</table>
@@ -294,6 +295,8 @@ function displayCoords(currObj,obj,mode,curr_row)
    <tr>
 	<td colspan="3">
 			<input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_PRODUCT}" onclick="fnAddProductRow('{$MODULE}','{$IMAGE_PATH}');" />
+			&nbsp;&nbsp;
+			<input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_SERVICE}" onclick="fnAddServiceRow('{$MODULE}','{$IMAGE_PATH}');" />
 	</td>
    </tr>
 
