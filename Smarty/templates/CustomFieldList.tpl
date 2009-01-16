@@ -41,12 +41,22 @@ function deleteCustomField(id, fld_module, colName, uitype)
 
 function getCreateCustomFieldForm(customField,id,tabid,ui)
 {
-        var modulename = customField;
+	var modulename = customField;
+    //To handle Events and Todo's separately while adding Custom fields
+    var activitytype = '';
+    var activityobj = document.getElementsByName('activitytype');
+    if (activityobj != null) {
+    	for(var i=0; i<activityobj.length; i++) {
+    		if (activityobj[i].checked == true)
+    			activitytype = activityobj[i].value;
+    	}
+    }
+
 	new Ajax.Request(
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'module=Settings&action=SettingsAjax&file=CreateCustomField&fld_module='+customField+'&parenttab=Settings&ajax=true&fieldid='+id+'&tabid='+tabid+'&uitype='+ui,
+			postBody: 'module=Settings&action=SettingsAjax&file=CreateCustomField&fld_module='+customField+'&parenttab=Settings&ajax=true&fieldid='+id+'&tabid='+tabid+'&uitype='+ui+'&activity_type='+activitytype,
 			onComplete: function(response) {
 				$("createcf").innerHTML=response.responseText;
 				gselected_fieldtype = '';

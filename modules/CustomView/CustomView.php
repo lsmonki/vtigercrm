@@ -1913,7 +1913,11 @@ class CustomView extends CRMEntity{
 			}else
 			{
 				$lan_block_label = $current_mod_strings[$block_label];
+				if (isset($block_info[$lan_block_label]) && $block_info[$lan_block_label] != '') {
+					$block_info[$lan_block_label] = $block_info[$lan_block_label].",".$block_result['block'];
+				} else {
 				$block_info[$lan_block_label] = $block_result['block'];
+				}
 			}
 			$pre_block_label = $lan_block_label;
 		}

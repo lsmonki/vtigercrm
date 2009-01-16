@@ -1352,7 +1352,8 @@ class ReportRun extends CRMEntity
 		else if($module == "Calendar")
 		{
 			$query = "from vtiger_activity 
-				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid 
+				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid
+				left join vtiger_activitycf on vtiger_activitycf.activityid = vtiger_crmentity.crmid
 				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid 
 				left join vtiger_contactdetails as vtiger_contactdetailsCalendar on vtiger_contactdetailsCalendar.contactid= vtiger_cntactivityrel.contactid
 				left join vtiger_groups as vtiger_groupsCalendar on vtiger_groupsCalendar.groupid = vtiger_crmentity.smownerid
@@ -1821,7 +1822,6 @@ class ReportRun extends CRMEntity
 				$y=$adb->num_fields($result);
 				$noofrows = $adb->num_rows($result);
 				$custom_field_values = $adb->fetch_array($result);
-
 				$column_definitions = $adb->getFieldsDefinition($result);
 
 				do
@@ -2459,9 +2459,12 @@ class ReportRun extends CRMEntity
 			}
 			if($fieldname != 'firstname')
 			$mulselresult = $adb->query($mulsel);
+			$fieldvalues_list = array();
 			for($j=0;$j < $adb->num_rows($mulselresult);$j++)
 			{
 				$fieldvalues[] = $adb->query_result($mulselresult,$j,$fieldname);
+				if(in_array($fldvalue,$fieldvalues_list)) continue;
+					$fieldvalues[] = $fldvalue;
 			}
 			$field_count = count($fieldvalues);
 			if( $uitype == 15 && $field_count > 0 && ($fieldname == 'taskstatus' || $fieldname == 'eventstatus'))

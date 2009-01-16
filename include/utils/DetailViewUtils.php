@@ -386,7 +386,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	}
 	//added for asterisk integration
 	elseif($uitype == 11){
-		$label_fld[] = $mod_strings[$fieldlabel];
+		$label_fld[] = getTranslatedString($fieldlabel);
 		$label_fld[] = $col_fields[$fieldname];
 	}
 	//asterisk integration ends

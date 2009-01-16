@@ -282,6 +282,13 @@ $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 $smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
 
+if ($activity_mode == 'Task') {
+	$custom_fields_data = getCalendarCustomFields(getTabid('Calendar'),'edit',$focus->column_fields);
+} else {
+	$custom_fields_data = getCalendarCustomFields(getTabid('Events'),'edit',$focus->column_fields);
+}
+$smarty->assign("CUSTOM_FIELDS_DATA", $custom_fields_data);
+
 $smarty->display("ActivityEditView.tpl");
 
 ?>

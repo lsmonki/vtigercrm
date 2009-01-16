@@ -10,6 +10,7 @@
  ********************************************************************************/
 
 require_once('include/utils/CommonUtils.php');
+require_once('include/CustomFieldUtil.php');
 require_once('modules/Calendar/Activity.php');
 require_once('modules/Calendar/Calendar.php');
 require_once('modules/Calendar/CalendarCommon.php');
@@ -333,6 +334,43 @@ function getAssignedToHTML($assignedto,$toggletype)
 				</table></td>
 			</tr>
 			</table>
+			<?php  
+				$custom_fields_data = getCalendarCustomFields(getTabid('Events'),'edit');
+				$smarty=new vtigerCRM_Smarty;
+				$smarty->assign("MODULE",'Calendar');
+				$smarty->assign("MOD",$mod_strings);
+				$smarty->assign("APP",$app_strings);
+				$theme_path="themes/".$theme."/";
+				$image_path=$theme_path."images/";
+				$smarty->assign("IMAGE_PATH", $image_path);
+				if (count($custom_fields_data) > 0){ ?>
+					<hr noshade size=1>
+					<table>
+					<tr>
+						<td colspan="2">
+							<b><?php echo $app_strings['LBL_CUSTOM_INFORMATION']?></b>
+						</td>
+					</tr>
+					<tr>
+						<?php 
+							echo "<tr>";
+							for($i=0; $i<count($custom_fields_data); $i++) {
+								$maindata = $custom_fields_data[$i];
+								$smarty->assign("maindata",$maindata);
+								$smarty->assign("THEME", $theme);
+								$smarty->display('EditViewUI.tpl');
+								if (($i+1)%2 == 0) {
+									echo "</tr><tr>";
+								}
+							}							
+							if ($i% 2 != 0) {
+								echo '<td width="20%"></td><td width="30%"></td>';
+							}
+							echo "</tr>";
+						?>
+					</tr>
+					</table>
+				<?php } ?>
 
 			<!-- Alarm, Repeat, Invite starts-->
 			<br>
@@ -715,7 +753,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 	<tr><td><a href='' id="addtodo" class='drop_down'><?php echo $mod_strings['LBL_ADDTODO']?></a></td></tr>
 </table>
 </div>
-<div class="calAddEvent layerPopup" style="display:none;width:550px;left:200px;" id="createTodo" align=center>
+<div class="calAddEvent layerPopup" style="display:none;width:700px;left:200px;" id="createTodo" align=center>
 <form name="createTodo" onSubmit="task_check_form();return formValidate();" method="POST" action="index.php">
 <input type="hidden" name="return_action" value="index">
 <input type="hidden" name="return_module" value="Calendar">
@@ -828,6 +866,45 @@ function getAssignedToHTML($assignedto,$toggletype)
 		</td></tr>
 		<tr><td>&nbsp;</td></tr>
 	</table>
+	<?php  
+	$custom_fields_data = getCalendarCustomFields(getTabid('Calendar'),'edit');
+	$smarty=new vtigerCRM_Smarty;
+	$smarty->assign("MODULE",'Calendar');
+	$smarty->assign("MOD",$mod_strings);
+	$smarty->assign("APP",$app_strings);
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+	$smarty->assign("IMAGE_PATH", $image_path);
+	if (count($custom_fields_data) > 0){ ?>
+		<hr noshade size=1>
+		<table>
+		<tr>
+			<td colspan="2">
+				<b><?php echo $app_strings['LBL_CUSTOM_INFORMATION']?></b>
+			</td>
+		</tr>
+		<tr>
+			<?php 
+				echo "<tr>";
+				for($i=0; $i<count($custom_fields_data); $i++) {
+					$maindata = $custom_fields_data[$i];
+					$smarty->assign("maindata",$maindata);
+					$smarty->assign("THEME", $theme);
+					$smarty->display('EditViewUI.tpl');
+					if (($i+1)%2 == 0) {
+						echo "</tr><tr>";
+					}
+				}
+				if ($i% 2 != 0) {
+					echo '<td width="20%"></td><td width="30%"></td>';
+				}
+				echo "</tr>";
+			?>
+		</tr>
+		</table>
+		<br />
+	<?php } ?>
+				
 	<?php if((getFieldVisibilityPermission('Calendar',$current_user->id,'sendnotification') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'parent_id') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'contact_id') == '0')) { ?>
 	<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%" bgcolor="#FFFFFF">
 		<tr>

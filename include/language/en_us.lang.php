@@ -1209,6 +1209,8 @@ $app_strings = array (
 //Prod Bundles
 'LBL_NO_SUB_PRODUCTS'=>'Not a Bundle',
 
+//Custom Fields support for Calendar
+'LBL_ACTIVITY_TYPE'=>'Activity Type',
 );
 
 $app_list_strings = array (

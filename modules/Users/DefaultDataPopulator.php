@@ -152,6 +152,9 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_blocks values (".$desc_blockid.",8,'LBL_DESCRIPTION',3,0,0,0,0,0,1)");
 		//Added block for storing the Recurring Inovice Informaiton in SalesOrder
 		$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",22,'Recurring Invoice Information',2,0,0,0,0,0,1)");
+		//Added to support custom fields for Calendar
+		$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",9,'LBL_CUSTOM_INFORMATION',3,0,0,0,0,0,1)");
+		$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",16,'LBL_CUSTOM_INFORMATION',4,0,0,0,0,0,1)");
 
 		//Account Details -- START
 		//Block9
@@ -539,6 +542,8 @@ class DefaultDataPopulator extends CRMEntity {
 		 
 		 $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'description','vtiger_crmentity',1,'19','description','Description',1,0,0,100,1,43,1,'V~O',1,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'reminder_time','vtiger_activity_reminder',1,'30','reminder_time','Send Reminder',1,0,0,100,1,42,1,'I~O',1,null,'BAS',1)");
+		$this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'contactid','vtiger_cntactivityrel',1,'57','contact_id','Contact Name',1,0,0,100,1,18,1,'I~O',1,null,'BAS',1)");
+ 		
 		//Block41-43 -- End
 		//Event Details -- END
 		

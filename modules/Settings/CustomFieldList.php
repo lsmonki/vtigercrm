@@ -82,10 +82,13 @@ else
 function getCFListEntries($module)
 {
 	$tabid = getTabid($module);
+	if ($module == 'Calendar') {
+		$tabid = array(9, 16);
+	}
 	global $adb,$app_strings,$theme;
 	$theme_path="themes/".$theme."/";
 	$image_path="themes/images/";
-	$dbQuery = "select fieldid,columnname,fieldlabel,uitype,displaytype,vtiger_convertleadmapping.cfmid from vtiger_field left join vtiger_convertleadmapping on  vtiger_convertleadmapping.leadfid = vtiger_field.fieldid where tabid=? and generatedtype=2 order by sequence";
+	$dbQuery = "select fieldid,columnname,fieldlabel,uitype,displaytype,vtiger_convertleadmapping.cfmid,tabid from vtiger_field left join vtiger_convertleadmapping on  vtiger_convertleadmapping.leadfid = vtiger_field.fieldid where tabid in (". generateQuestionMarks($tabid) .") and generatedtype=2 order by sequence";
 	$result = $adb->pquery($dbQuery, array($tabid));
 	$row = $adb->fetch_array($result);
 	$count=1;
@@ -99,6 +102,7 @@ function getCFListEntries($module)
 			$cf_element['label']=$row["fieldlabel"];
 			$fld_type_name = getCustomFieldTypeName($row["uitype"]);
 			$cf_element['type']=$fld_type_name;
+			$cf_tab_id = $row["tabid"];
 			if($module == 'Leads')
 			{
 				$mapping_details = getListLeadMapping($row["cfmid"]);
@@ -106,7 +110,14 @@ function getCFListEntries($module)
 				$cf_element[]= $mapping_details['contactlabel'];
 				$cf_element[]= $mapping_details['potentiallabel'];
 			}
-			$cf_element['tool']='<img src="' .vtiger_imageurl('editfield.gif', $theme) .'" border="0" style="cursor:pointer;" onClick="fnvshobj(this,\'createcf\');getCreateCustomFieldForm(\''.$module.'\',\''.$row["fieldid"].'\',\''.$tabid.'\',\''.$row["uitype"].'\')" alt="'.$app_strings['LBL_EDIT_BUTTON_LABEL'].'" title="'.$app_strings['LBL_EDIT_BUTTON_LABEL'].'"/>&nbsp;|&nbsp;<img style="cursor:pointer;" onClick="deleteCustomField('.$row["fieldid"].',\''.$module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')" src="'.vtiger_imageurl('delete.gif', $theme) .'" border="0"  alt="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'" title="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'"/></a>';
+			if($module == 'Calendar')
+			{
+				if ($cf_tab_id == '9')
+					$cf_element['activitytype'] = $app_strings['Task'];
+				else
+					$cf_element['activitytype'] = $app_strings['Event'];
+			}
+			$cf_element['tool']='<img src="' .vtiger_imageurl('editfield.gif', $theme) .'" border="0" style="cursor:pointer;" onClick="fnvshobj(this,\'createcf\');getCreateCustomFieldForm(\''.$module.'\',\''.$row["fieldid"].'\',\''.$cf_tab_id.'\',\''.$row["uitype"].'\')" alt="'.$app_strings['LBL_EDIT_BUTTON_LABEL'].'" title="'.$app_strings['LBL_EDIT_BUTTON_LABEL'].'"/>&nbsp;|&nbsp;<img style="cursor:pointer;" onClick="deleteCustomField('.$row["fieldid"].',\''.$module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')" src="'.$image_path.'delete.gif" border="0"  alt="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'" title="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'"/></a>';
 
 			$cflist[] = $cf_element;
 			$count++;
@@ -159,7 +170,7 @@ function getCustomFieldSupportedModules()
 	global $adb;
 	// vtlib customization: Do not list disabled modules.
 	//$sql="select distinct vtiger_field.tabid,name from vtiger_field inner join vtiger_tab on vtiger_field.tabid=vtiger_tab.tabid where vtiger_field.tabid not in(9,10,16,15,8,29)";
-	$sql="select distinct vtiger_field.tabid,name from vtiger_field inner join vtiger_tab on vtiger_field.tabid=vtiger_tab.tabid where vtiger_field.tabid not in(9,10,16,15,8,29) and vtiger_tab.presence != 1";
+	$sql="select distinct vtiger_field.tabid,name from vtiger_field inner join vtiger_tab on vtiger_field.tabid=vtiger_tab.tabid where vtiger_field.tabid not in(10,16,15,8,29) and vtiger_tab.presence != 1"; // 16 is still here as we do not want duplicates for Calendar - Both 9 and 16 point to Calendar itself
 	// END
 	$result = $adb->pquery($sql, array());
 	while($moduleinfo=$adb->fetch_array($result))

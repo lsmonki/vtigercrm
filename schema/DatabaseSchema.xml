@@ -6962,4 +6962,13 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 	
+	<table name="vtiger_activitycf">
+		<field name="activityid" type="I" size="19">
+			<key />
+			<default value="0" />
+		</field>
+
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
 </schema>

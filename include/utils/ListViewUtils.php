@@ -1568,9 +1568,12 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		{
 			$value = $app_strings['yes'];
 		}
-		else
+		elseif($temp_val == 0)
 		{
 			$value = $app_strings['no'];
+		}
+		else {
+			$value = '';
 		}
 	}	
 	elseif($uitype == 57)
@@ -2575,6 +2578,8 @@ function getListQuery($module,$where='')
 		vtiger_contactdetails.contactid,
 		vtiger_account.accountid, vtiger_account.accountname
 		FROM vtiger_activity
+		LEFT JOIN vtiger_activitycf
+			ON vtiger_activitycf.activityid = vtiger_activity.activityid
 		LEFT JOIN vtiger_cntactivityrel
 			ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
 		LEFT JOIN vtiger_contactdetails

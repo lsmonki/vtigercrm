@@ -229,4 +229,48 @@ function getFldTypeandLengthValue($label,$typeofdata)
 	$log->debug("Exiting getFldTypeandLengthValue method ...");
 	return $fieldtype;
 }
+
+function getCalendarCustomFields($tabid,$mode='edit',$col_fields='') {
+	global $adb, $log, $current_user;
+	$log->debug("Entering getCalendarCustomFields($tabid, $mode, $col_fields)");
+	
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	
+	$custparams = array('vtiger_activitycf', $tabid);
+	
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
+		$custquery = "select * from vtiger_field where tablename=? AND vtiger_field.tabid=? ORDER BY fieldid";		
+	} else {
+		$profileList = getCurrentUserProfileList();
+ 		$custquery = "SELECT vtiger_field.* FROM vtiger_field" .
+ 				" INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid" .
+ 				" INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid" .
+ 				" WHERE vtiger_field.tablename=? AND vtiger_field.tabid=? AND vtiger_profile2field.visible=0" .
+ 				" AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .")" .
+ 				" ORDER BY vtiger_field.fieldid";
+ 		array_push($custparams, $profileList);		
+	}
+	$custresult = $adb->pquery($custquery, $custparams);
+	
+	$custFldArray = Array();
+	$noofrows = $adb->num_rows($custresult);
+	for($i=0; $i<$noofrows; $i++)
+	{
+		$fieldname=$adb->query_result($custresult,$i,"fieldname");
+		$fieldlabel=$adb->query_result($custresult,$i,"fieldlabel");
+		$columnName=$adb->query_result($custresult,$i,"columnname");
+		$uitype=$adb->query_result($custresult,$i,"uitype");
+		$maxlength = $adb->query_result($custresult,$i,"maximumlength");
+		$generatedtype = $adb->query_result($custresult,$i,"generatedtype");
+		$typeofdata = $adb->query_result($custresult,$i,"typeofdata");
+
+		if ($mode == 'edit')
+			$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,'Calendar',$mode, $typeofdata);
+		if ($mode == 'detail_view')
+			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
+		$custFldArray[] = $custfld;		
+	}
+	$log->debug("Exiting getCalendarCustomFields()");
+	return $custFldArray;
+}
 ?>

@@ -1065,8 +1065,11 @@ function getColumnFields($module)
 	$log->info("in getColumnFields ".$module);
 	global $adb;
 	$column_fld = Array();
-        $tabid = getTabid($module);
-	$sql = "select * from vtiger_field where tabid=?";
+    $tabid = getTabid($module);
+	if ($module == 'Calendar') {
+    	$tabid = array('9','16');
+    }
+	$sql = "select * from vtiger_field where tabid in (" . generateQuestionMarks($tabid) . ")";
         $result = $adb->pquery($sql, array($tabid));
         $noofrows = $adb->num_rows($result);
 	for($i=0; $i<$noofrows; $i++)
@@ -2316,8 +2319,10 @@ function getTableNameForField($module,$fieldname)
 	$log->debug("Entering getTableNameForField(".$module.",".$fieldname.") method ...");
 	global $adb;
 	$tabid = getTabid($module);
-
-	$sql = "select tablename from vtiger_field where tabid=? and columnname like ?";
+	if($module == 'Calendar') {
+		$tabid = array('9','16');
+	}
+	$sql = "select tablename from vtiger_field where tabid in (". generateQuestionMarks($tabid) .") and columnname like ?";
 	$res = $adb->pquery($sql, array($tabid, '%'.$fieldname.'%'));
 
 	$tablename = '';

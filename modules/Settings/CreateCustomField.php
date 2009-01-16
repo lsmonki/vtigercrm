@@ -20,6 +20,14 @@ $image_path="themes/images/";
 
 $tabid=$_REQUEST['tabid'];
 $fieldid=$_REQUEST['fieldid'];
+
+// Set the tab type only during Custom Field creation for Calendar module based on the activity type
+if ($fieldid == '' && $_REQUEST['fld_module'] == 'Calendar' && isset($_REQUEST['activity_type'])) {
+	$activitytype = $_REQUEST['activity_type'];
+	if ($activitytype == 'E') $tabid = '16';
+	if ($activitytype == 'T') $tabid = '9';
+}
+
 if(isset($_REQUEST['uitype']) && $_REQUEST['uitype'] != '')
 	$uitype=$_REQUEST['uitype'];
 else
@@ -131,8 +139,9 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 	<form action="index.php" method="post" name="addtodb" onSubmit="return validate()">
 	  <input type="hidden" name="module" value="Settings">
 	  <input type="hidden" name="fld_module" value="'.$_REQUEST['fld_module'].'">
+	  <input type="hidden" name="activity_type" value="'.$activitytype.'">
 	  <input type="hidden" name="parenttab" value="Settings">
-          <input type="hidden" name="action" value="AddCustomFieldToDB">
+      <input type="hidden" name="action" value="AddCustomFieldToDB">
 	  <input type="hidden" name="fieldid" value="'.$fieldid.'">
 	  <input type="hidden" name="column" value="'.$customfield_columnname.'">
 	  <input type="hidden" name="mode" id="cfedit_mode" value="'.$mode.'">

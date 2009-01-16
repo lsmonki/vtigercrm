@@ -173,6 +173,7 @@ function DeleteTag(id,recordid)
 						     </tr>
 						     </table>
 						     {foreach key=header item=detail from=$BLOCKS}
+							     {if $header neq $APP.LBL_CUSTOM_INFORMATION}
 						     <table border=0 cellspacing=0 cellpadding=5 width=100% class="small">
 						     	<tr>{strip}
 						     		<td colspan=4 class="tableHeading">
@@ -180,6 +181,7 @@ function DeleteTag(id,recordid)
 								</td>{/strip}
 					             	</tr>
 						     </table>
+							     {/if}
 						     {/foreach}
 						     {if $ACTIVITYDATA.activitytype neq 'Task'}	
 							 <!-- display of fields starts -->
@@ -270,6 +272,31 @@ function DeleteTag(id,recordid)
                                                                 </table>
                                                         </td></tr>
                                                      </table>
+							{if $CUSTOM_FIELDS_DATA|@count > 0}
+	                             <table border=0 cellspacing=0 cellpadding=5 width=100% >
+	                             	<tr>{strip}
+							     		<td colspan=4 class="tableHeading">
+										<b>{$APP.LBL_CUSTOM_INFORMATION}</b>
+										</td>{/strip}
+						          	</tr>
+						          	<tr>
+						          		{foreach key=index item=custom_field from=$CUSTOM_FIELDS_DATA}
+						          		{assign var=keyid value=$custom_field.2}
+						          		{assign var=keyval value=$custom_field.1}
+						          		{assign var=keyfldname value=$custom_field.0}
+						          		{assign var=keyoptions value=$custom_field.options}
+						          		<td class="cellLabel" align="right" width="20%"><b>{$keyfldname}</b></td>
+						          		{include file="DetailViewFields.tpl"}
+						          		{if ($index+1)% 2 == 0}
+						          			</tr><tr>
+						          		{/if}
+							            {/foreach}
+							        {if ($index+1)% 2 != 0}
+							        	<td width="20%"></td><td width="30%"></td>
+							        {/if}
+						            </tr>
+	                             </table>   
+                             {/if}    
 						     <br>
 					             <table border=0 cellspacing=0 cellpadding=0 width=100% align=center>
                 					 <tr>
@@ -442,7 +469,34 @@ function DeleteTag(id,recordid)
                                                                 <td class="cellInfo" align=left  nowrap width=30%>{if $LABEL.modifiedtime neq ''}{$ACTIVITYDATA.modifiedtime}{/if}</td>
                                                         </tr>
                                                      </table>
+
+							{if $CUSTOM_FIELDS_DATA|@count > 0}
+	                             <table border=0 cellspacing=0 cellpadding=5 width=100% >
+	                             	<tr>{strip}
+							     		<td colspan=4 class="tableHeading">
+										<b>{$APP.LBL_CUSTOM_INFORMATION}</b>
+										</td>{/strip}
+						          	</tr>
+						          	<tr>
+						          		{foreach key=index item=custom_field from=$CUSTOM_FIELDS_DATA}
+						          		{assign var=keyid value=$custom_field.2}
+						          		{assign var=keyval value=$custom_field.1}
+						          		{assign var=keyfldname value=$custom_field.0}
+						          		{assign var=keyoptions value=$custom_field.options}
+						          		<td class="cellLabel" align="right" width="20%"><b>{$keyfldname}</b></td>
+						          		{include file="DetailViewFields.tpl"}
+											{if ($index+1)% 2 == 0}
+												</tr><tr>
+											{/if}
+							            {/foreach}
+							        {if ($index+1)% 2 != 0}
+							        	<td width="20%"></td><td width="30%"></td>
+							        {/if}
+						            </tr>
+	                             </table>   
+                             {/if}  
 						     <br>
+
 						     {if $LABEL.sendnotification neq '' || ($LABEL.parent_id neq '') || ($LABEL.contact_id neq '') } 
 						     <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
 							<tr>

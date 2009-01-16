@@ -20,6 +20,10 @@
 					{if $MODULE eq 'Leads'}
 					&nbsp;&nbsp;<input input title="{$MOD.CUSTOMFIELDMAPPING}"  class="crmButton edit small" onclick="CustomFieldMapping();" type="button" name="ListLeadCustomFieldMapping" value="{$MOD.CUSTOMFIELDMAPPING}">
 					{/if}
+					{if $MODULE eq 'Calendar'}
+						<input type="radio" name="activitytype" value="E" checked>&nbsp;{$APP.Event}
+						<input type="radio" name="activitytype" value="T">&nbsp;{$APP.Task}
+					{/if}
 					<input type="button" value=" {$MOD.NewCustomField} " onClick="fnvshobj(this,'createcf');getCreateCustomFieldForm('{$MODULE}','','','')" class="crmButton create small"/>
 				</tr>
 				</table>
@@ -44,6 +48,9 @@
                       	<td class="colHeader small" width="5%">#</td>
                       	<td class="colHeader small" width="20%">{$MOD.FieldLabel}</td>
                       	<td class="colHeader small" width="20%">{$MOD.FieldType}</td>
+                      	{if $MODULE eq 'Calendar'}
+                      		<td class="colHeader small" width="20%">{$APP.LBL_ACTIVITY_TYPE}</td>
+                      	{/if}
                      	<td class="colHeader small" width="20%">{$MOD.LBL_CURRENCY_TOOL}</td>
 					</tr>
 					{/if}

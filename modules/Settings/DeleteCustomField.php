@@ -44,6 +44,7 @@ $delete_module_tables = Array(
 				"Quotes"=>"vtiger_quotescf",
 				"Invoice"=>"vtiger_invoicecf",
 				"Campaigns"=>"vtiger_campaignscf",
+				"Calendar"=>"vtiger_activitycf",
 			     );
 
 // vtlib customization: Hook added to allow action for custom modules too

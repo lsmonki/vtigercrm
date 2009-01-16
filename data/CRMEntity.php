@@ -397,13 +397,14 @@ class CRMEntity
 		  }	 
 	  }
 
+	$tabid= getTabid($module);
+  	if($module == 'Calendar' && $this->column_fields["activitytype"] != null && $this->column_fields["activitytype"] != 'Task') {
+    	$tabid = getTabid('Events');
+  	}
 	  if($insertion_mode == 'edit')
 	  {
 		  $update = '';
 		  $update_params = array();
-		  $tabid= getTabid($module);
-	  	  if($tabid == 9)
-	          	$tabid = array(9,16);	  
 		  require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		  if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 		  {
@@ -424,7 +425,7 @@ class CRMEntity
 			  			ON vtiger_profile2field.fieldid = vtiger_field.fieldid
 			  			INNER JOIN vtiger_def_org_field
 			  			ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
-			  			WHERE vtiger_field.tabid in (". generateQuestionMarks($tabid) .")
+			  			WHERE vtiger_field.tabid = ?
 			  			AND vtiger_profile2field.visible = 0 
 			  			AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .")
 			  			AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename=? and vtiger_field.displaytype in (1,3) group by columnname";
@@ -437,7 +438,7 @@ class CRMEntity
 			  			ON vtiger_profile2field.fieldid = vtiger_field.fieldid
 			  			INNER JOIN vtiger_def_org_field
 			  			ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
-			  			WHERE vtiger_field.tabid in (". generateQuestionMarks($tabid) .")
+			  			WHERE vtiger_field.tabid = ?
 			  			AND vtiger_profile2field.visible = 0 
 			  			AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename=? and vtiger_field.displaytype in (1,3) group by columnname";
 			  	
@@ -455,7 +456,6 @@ class CRMEntity
 			$this->id = $currentuser_id;
 		  }
 		  $value = array($this->id);
-	  	  $tabid= getTabid($module);	
 		  $sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3,4)"; 
 		  $params = array($tabid, $table_name);
 	  }

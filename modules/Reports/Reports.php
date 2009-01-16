@@ -237,10 +237,13 @@ class Reports extends CRMEntity{
 					for($index = 0; $index < $noOfRows; ++$index) {
 						$blockid = $adb->query_result($res,$index,'blockid');
 						$blocklabel = $adb->query_result($res,$index,'blocklabel');
-						if(in_array($blocklabel,$restricted_blocks) || (isset($this->module_list[$module]) &&in_array($blockid, $this->module_list[$module])) || isset($this->module_list[$module][getTranslatedString($blocklabel,$module)])) continue;
+						if((in_array($blocklabel,$restricted_blocks) || (isset($this->module_list[$module]) &&in_array($blockid, $this->module_list[$module])) || isset($this->module_list[$module][getTranslatedString($blocklabel,$module)]))&& $module !='Calendar') continue;
 						else{
 							$blockid_list[] = $blockid;
-							$this->module_list[$module][getTranslatedString($blocklabel,$module)] = $blockid;
+							if($module == 'Calendar' && $blocklabel == 'LBL_CUSTOM_INFORMATION')
+								$this->module_list[$module][getTranslatedString($blocklabel,$module)][] = $blockid;
+							else
+								$this->module_list[$module][getTranslatedString($blocklabel,$module)] = $blockid;
 						}
 					}
 				}
@@ -449,13 +452,16 @@ class Reports extends CRMEntity{
 		if(is_string($block)) $block = explode(",", $block);
 
 		$tabid = getTabid($module);
+		if ($module == 'Calendar') {
+			$tabid = array('9','16');
+		}
 		$params = array($tabid, $block);
 		
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		//Security Check 
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 		{
-			$sql = "select * from vtiger_field where vtiger_field.tabid=? and vtiger_field.block in (". generateQuestionMarks($block) .") and vtiger_field.displaytype in (1,2,3) ";
+			$sql = "select * from vtiger_field where vtiger_field.tabid in (". generateQuestionMarks($tabid) .") and vtiger_field.block in (". generateQuestionMarks($block) .") and vtiger_field.displaytype in (1,2,3) ";
 
 			//fix for Ticket #4016
 			if($module == "Calendar")
@@ -467,7 +473,7 @@ class Reports extends CRMEntity{
 		{
 			
 			$profileList = getCurrentUserProfileList();
-			$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=? and vtiger_field.block in (". generateQuestionMarks($block) .") and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+			$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid in (". generateQuestionMarks($tabid) .")  and vtiger_field.block in (". generateQuestionMarks($block) .") and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
 			if (count($profileList) > 0) {
 				$sql .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";	
 				array_push($params, $profileList);

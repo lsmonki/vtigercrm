@@ -54,8 +54,6 @@ if($activity_mode =='' || strlen($activity_mode) < 1)
 	}		
 }	
 
-
-
 if($activity_mode == 'Task')
 {
         $tab_type = 'Calendar';
@@ -100,6 +98,7 @@ if (isset($_REQUEST['accountid']) && is_null($focus->parent_id)) {
 }
 
 $act_data = getBlocks($tab_type,"detail_view",'',$focus->column_fields);
+
 foreach($act_data as $block=>$entry)
 {
 	foreach($entry as $key=>$value)
@@ -126,6 +125,7 @@ foreach($act_data as $block=>$entry)
 		}
 	}
 }
+
 //Start
 //To set user selected hour format
 if($current_user->hour_format == '')
@@ -384,6 +384,9 @@ include_once('vtlib/Vtiger/Link.php');
 $customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>$_REQUEST['action']);
 $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), 'DETAILVIEW', $customlink_params));
 // END
+
+$custom_fields_data = getCalendarCustomFields($tabid,'detail_view',$focus->column_fields);
+$smarty->assign("CUSTOM_FIELDS_DATA", $custom_fields_data);
 
 $smarty->display("ActivityDetailView.tpl");
 

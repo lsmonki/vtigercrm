@@ -18,6 +18,11 @@ global $current_user;
  $mode=$_REQUEST['mode'];
 
 $tabid = getTabid($fldmodule);
+if ($fldmodule == 'Calendar' && isset($_REQUEST['activity_type'])) {
+	$activitytype = $_REQUEST['activity_type'];
+	if ($activitytype == 'E') $tabid = '16';
+	if ($activitytype == 'T') $tabid = '9';
+}
 
 if(get_magic_quotes_gpc() == 1)
 {
@@ -26,8 +31,11 @@ if(get_magic_quotes_gpc() == 1)
 
 
 //checking if the user is trying to create a custom vtiger_field which already exists  
-$checkquery="select * from vtiger_field where tabid=? and fieldlabel=?";
-$params =  array($tabid, $fldlabel);
+$dup_check_tab_id = $tabid;
+if ($fldmodule == 'Calendar')
+	$dup_check_tab_id = array('9', '16');
+$checkquery="select * from vtiger_field where tabid in (". generateQuestionMarks($dup_check_tab_id) .") and fieldlabel=?";
+$params =  array($dup_check_tab_id, $fldlabel);
 if($mode == 'edit' && isset($_REQUEST['fieldid']) && $_REQUEST['fieldid'] != '')
 {
 	$checkquery .= " and fieldid !=?";
@@ -101,6 +109,10 @@ else
 	elseif($fldmodule == 'PriceBooks')
 	{
 		$tableName='vtiger_pricebookcf';
+	}
+	elseif($fldmodule == 'Calendar')
+	{
+		$tableName='vtiger_activitycf';
 	}
 	elseif($fldmodule != '')
 	{

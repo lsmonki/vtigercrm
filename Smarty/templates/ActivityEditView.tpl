@@ -88,6 +88,7 @@ var gVTModule = '{$smarty.request.module}';
 						     </table>
 						     <!-- included to handle the edit fields based on ui types -->
 						     {foreach key=header item=data from=$BLOCKS}
+							     {if $header neq $APP.LBL_CUSTOM_INFORMATION}
 						     <table border=0 cellspacing=0 cellpadding=0 width=100% class="small">
 						     <tr>
 							<td colspan=4 class="tableHeading">
@@ -95,6 +96,7 @@ var gVTModule = '{$smarty.request.module}';
 							</td>
 						     </tr>
 						     </table>
+							     {/if}
 						     {/foreach}
 						     {if $ACTIVITY_MODE neq 'Task'}
 							<input type="hidden" name="time_end" id="time_end">
@@ -350,6 +352,27 @@ var gVTModule = '{$smarty.request.module}';
 								</table></td>
 							</tr>
 						     </table>
+
+						     {if $CUSTOM_FIELDS_DATA|@count > 0}
+	                             <table border=0 cellspacing=0 cellpadding=5 width=100% >
+	                             	<tr>{strip}
+							     		<td colspan=4 class="tableHeading">
+										<b>{$APP.LBL_CUSTOM_INFORMATION}</b>
+										</td>{/strip}
+						          	</tr>
+						          	<tr>
+						          		{foreach key=index item=maindata from=$CUSTOM_FIELDS_DATA}
+						          			{include file="EditViewUI.tpl"}
+											{if ($index+1)% 2 == 0}
+												</tr><tr>
+											{/if}
+							            {/foreach}
+							        {if ($index+1)% 2 != 0}
+							        	<td width="20%"></td><td width="30%"></td>
+							        {/if}
+						            </tr>
+	                             </table>   
+                             {/if}
 						     <br>
 						     <table border=0 cellspacing=0 cellpadding=0 width=100% align=center>
 							<tr><td>
@@ -815,6 +838,28 @@ var gVTModule = '{$smarty.request.module}';
 						</table></td>
 					</tr>
 				</table>
+
+			     {if $CUSTOM_FIELDS_DATA|@count > 0}
+					<br><br>
+                     <table border=0 cellspacing=0 cellpadding=5 width=100% >
+                     	<tr>{strip}
+				     		<td colspan=4 class="tableHeading">
+							<b>{$APP.LBL_CUSTOM_INFORMATION}</b>
+							</td>{/strip}
+			          	</tr>
+			          	<tr>
+			          		{foreach key=index item=maindata from=$CUSTOM_FIELDS_DATA}
+			          			{include file="EditViewUI.tpl"}
+								{if ($index+1)% 2 == 0}
+									</tr><tr>
+								{/if}
+				            {/foreach}
+				        {if ($index+1)% 2 != 0}
+				        	<td width="20%"></td><td width="30%"></td>
+				        {/if}
+			            </tr>
+                     </table>   
+                 {/if}
 				<br><br>
 		{if $LABEL.sendnotification neq '' || ($LABEL.parent_id neq '') || ($LABEL.contact_id neq '') }
 		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%" bgcolor="#FFFFFF">

@@ -31,6 +31,17 @@ if(isset($_REQUEST['mode']))
 {
         $focus->mode = $_REQUEST['mode'];
 }
+foreach($focus->column_fields as $fieldname => $val)
+{
+	if(isset($_REQUEST[$fieldname]))
+	{
+		if(is_array($_REQUEST[$fieldname]))
+			$value = $_REQUEST[$fieldname];
+		else
+			$value = trim($_REQUEST[$fieldname]);
+		$focus->column_fields[$fieldname] = $value;
+	}
+}
  $focus->column_fields["subject"] = $_REQUEST["task_subject"];
  $focus->column_fields["time_start"] = $_REQUEST["task_time_start"];
  $focus->column_fields["assigned_user_id"] =  $_REQUEST["task_assigned_user_id"];

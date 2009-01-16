@@ -20,11 +20,11 @@ foreach($field_module as $fld_module=>$fld_name)
 {
 	$fieldListResult = getDefOrgFieldList($fld_module);
 	$noofrows = $adb->num_rows($fieldListResult);
-	$tab_id = getTabid($fld_module);
 	for($i=0; $i<$noofrows; $i++)
 	{
 		$fieldid =  $adb->query_result($fieldListResult,$i,"fieldid");
 		$displaytype = $adb->query_result($fieldListResult,$i,"displaytype");
+		$tab_id = $adb->query_result($fieldListResult,$i,"tabid");
 		$visible = $_REQUEST[$fieldid];
 		if($visible == 'on')
 		{

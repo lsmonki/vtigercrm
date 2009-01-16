@@ -39,8 +39,13 @@ function check4null(form)
 }
 
 function set_return(product_id, product_name) {
+	if(document.getElementById('from_link').value != '') {
+        window.opener.document.QcEditView.parent_name.value = product_name;
+        window.opener.document.QcEditView.parent_id.value = product_id;
+	} else {
         window.opener.document.EditView.parent_name.value = product_name;
         window.opener.document.EditView.parent_id.value = product_id;
+	}
 }
 function set_return_specific(product_id, product_name) {
         //getOpenerObj used for DetailView 
@@ -126,8 +131,13 @@ function set_return_inventory_po(product_id,product_name,unitprice,taxstr,curr_r
 }
 
 function set_return_product(product_id, product_name) {
+	if(document.getElementById('from_link').value != '') {
+        window.opener.document.QcEditView.parent_name.value = product_name;
+        window.opener.document.QcEditView.parent_id.value = product_id;
+	} else {
     window.opener.document.EditView.product_name.value = product_name;
     window.opener.document.EditView.product_id.value = product_id;
+	}
 }
 function getImageListBody() {
 	if (browser_ie) {

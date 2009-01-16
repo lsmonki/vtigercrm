@@ -12,8 +12,13 @@
 document.write("<script type='text/javascript' src='include/js/Merge.js'></"+"script>");
 
 function set_return(product_id, product_name) {
+	if(document.getElementById('from_link').value != '') {
+        window.opener.document.QcEditView.parent_name.value = product_name;
+        window.opener.document.QcEditView.parent_id.value = product_id;
+	} else {
         window.opener.document.EditView.parent_name.value = product_name;
         window.opener.document.EditView.parent_id.value = product_id;
+	}
 }
 function set_return_specific(product_id, product_name) {
         
@@ -63,7 +68,12 @@ function set_return_address(potential_id, potential_name, account_id, account_na
 }
 
 function set_return_todo(product_id, product_name) {
+	if(document.getElementById('from_link').value != '') {
+        window.opener.document.QcEditView.task_parent_name.value = product_name;
+        window.opener.document.QcEditView.task_parent_id.value = product_id;
+	} else {
         window.opener.document.createTodo.task_parent_name.value = product_name;
         window.opener.document.createTodo.task_parent_id.value = product_id;
+	}
 }
 

@@ -427,6 +427,8 @@ $mod_strings = Array(
 //Added after 5.0.4 GA
 'LBL_BUSY' => 'Busy',
 
+//Custom Fields support for Calendar
+'LBL_CUSTOM_INFORMATION'=>'Custom Information',
 );
 
 ?>

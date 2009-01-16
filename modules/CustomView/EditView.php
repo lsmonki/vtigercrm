@@ -320,30 +320,23 @@ function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 			$advfilter_out[$label]= $advfilter;
 		}
 	}
-	
-	$finalfield = Array();
-	foreach($advfilter_out as $header=>$value)
-	{
-		if($header == $mod_strings['LBL_TASK_INFORMATION'])
-		{
-			$newLabel = $mod_strings['LBL_CALENDAR_INFORMATION'];
-		    	$finalfield[$newLabel] = $advfilter_out[$header];
-		    	
+	// Special case handling only for Calendar moudle - Not required for other modules.
+	if($module == 'Calendar') {					
+		$finalfield = Array();
+		$finalfield1 = Array();
+		$finalfield2 = Array();
+		$newLabel = $mod_strings['LBL_CALENDAR_INFORMATION'];
+		
+		if(isset($advfilter_out[$mod_strings['LBL_TASK_INFORMATION']])) {
+		    $finalfield1 = $advfilter_out[$mod_strings['LBL_TASK_INFORMATION']];		    	    	
 		}
-		elseif($header == $mod_strings['LBL_EVENT_INFORMATION'])
-		{
-			$index = count($finalfield[$newLabel]);
-			foreach($value as $key=>$result)
-			{
-				$finalfield[$newLabel][$index]=$result;
-				$index++;
-			}
+		if(isset($advfilter_out[$mod_strings['LBL_EVENT_INFORMATION']])) {
+		    $finalfield2 = $advfilter_out[$mod_strings['LBL_EVENT_INFORMATION']];			
 		}
-		else
-		{
-			$finalfield = $advfilter_out;
+		$finalfield[$newLabel] = array_merge($finalfield1,$finalfield2);
+	    if (isset ($advfilter_out[$mod_strings['LBL_CUSTOM_INFORMATION']])) {
+	    	$finalfield[$mod_strings['LBL_CUSTOM_INFORMATION']] = $advfilter_out[$mod_strings['LBL_CUSTOM_INFORMATION']];
 		}
-
 		$advfilter_out=$finalfield;
 	}
 	return $advfilter_out;
