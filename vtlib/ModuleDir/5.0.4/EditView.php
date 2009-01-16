@@ -55,6 +55,10 @@ if($focus->mode == 'edit') {
 	$recordName = $recordName[0];
 	$smarty->assign('NAME', $recordName);
 	$smarty->assign('UPDATEINFO',updateInfo($focus->id));
+} else if($isduplicate) {
+	$recordName = array_values(getEntityName($currentModule, $record));
+	$recordName = $recordName[0];
+	$smarty->assign('NAME', $recordName);
 }
 
 if(isset($_REQUEST['return_module']))    $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);

@@ -46,12 +46,21 @@ $delete_module_tables = Array(
 				"Campaigns"=>"vtiger_campaignscf",
 			     );
 
-$dbquery = 'alter table '. mysql_real_escape_string($delete_module_tables[$fld_module]) .' drop column '. mysql_real_escape_string($colName);
+// vtlib customization: Hook added to allow action for custom modules too
+$cftablename = $delete_module_tables[$fld_module];
+if(empty($cftablename)) {
+	checkFileAccess("modules/$fld_module/$fld_module.php");
+	include_once("modules/$fld_module/$fld_module.php");
+	$focus = new $fld_module();
+	$cftablename = $focus->customFieldTable[0];
+}
+
+$dbquery = 'alter table '. $cftablename .' drop column '. mysql_real_escape_string($colName);
 $adb->pquery($dbquery, array());
 
 //To remove customfield entry from vtiger_field table
 $dbquery = 'delete from vtiger_field where tablename= ? and fieldname=?';
-$adb->pquery($dbquery, array($delete_module_tables[$fld_module], $colName));
+$adb->pquery($dbquery, array($cftablename, $colName));
 //we have to remove the entries in customview and report related tables which have this field ($colName)
 $adb->pquery("delete from vtiger_cvcolumnlist where columnname like ?", array('%'.$colName.'%'));
 $adb->pquery("delete from vtiger_cvstdfilter where columnname like ?", array('%'.$colName.'%'));

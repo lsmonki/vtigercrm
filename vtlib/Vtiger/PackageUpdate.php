@@ -229,6 +229,7 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
 		// TODO Handle field property update
 
 		if(!empty($fieldnode->helpinfo)) $fieldInstance->setHelpInfo($fieldnode->helpinfo);
+		if(!empty($fieldnode->masseditable)) $fieldInstance->setMassEditable($fieldnode->masseditable);
 	}
 
 	/**

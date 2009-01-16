@@ -225,8 +225,9 @@ else
 		}
 		else if($_REQUEST['fieldid'] == '')
 		{
-			$query = "insert into vtiger_field values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-			$qparams = array($tabid,$custfld_fieldid,$columnName,$tableName,2,$uitype,$columnName,$fldlabel,0,0,0,100,$custfld_sequece,$blockid,1,$uichekdata,1,0,'BAS',1);
+			$query = "insert into vtiger_field (tabid,fieldid,columnname,tablename,generatedtype,uitype,fieldname,fieldlabel,
+				readonly,presence,selected,maximumlength,sequence,block,displaytype,typeofdata,quickcreate,quickcreatesequence,info_type) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			$qparams = array($tabid,$custfld_fieldid,$columnName,$tableName,2,$uitype,$columnName,$fldlabel,0,0,0,100,$custfld_sequece,$blockid,1,$uichekdata,1,0,'BAS');
 			$adb->pquery($query, $qparams);
 			$adb->alterTable($tableName, $columnName." ".$type, "Add_Column");
 			

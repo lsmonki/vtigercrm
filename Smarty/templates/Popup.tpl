@@ -109,6 +109,14 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 								<input name="maintab" id="maintab" type="hidden" value="{$MAINTAB}">
 								<input type="hidden" id="relmod" name="{$mod_var_name}" value="{$mod_var_value}">
                                                                 <input type="hidden" id="relrecord_id" name="{$recid_var_name}" value="{$recid_var_value}">
+								{* vtlib customization: For uitype 10 popup during paging *}
+								{if $smarty.request.form eq 'vtlibPopupView'}
+									<input name="form"  id="popupform" type="hidden" value="{$smarty.request.form}">
+									<input name="forfield"  id="forfield" type="hidden" value="{$smarty.request.forfield}">
+									<input name="srcmodule"  id="srcmodule" type="hidden" value="{$smarty.request.srcmodule}">
+									<input name="forrecord"  id="forrecord" type="hidden" value="{$smarty.request.forrecord}">
+								{/if}
+								{* END *}
 							</td>
 							<td width="20%" class="dvtCellLabel">
 								<input type="button" name="search" value=" &nbsp;{$APP.LBL_SEARCH_NOW_BUTTON}&nbsp; " onClick="callSearch('Basic');" class="crmbutton small create">
@@ -227,6 +235,17 @@ function gethiddenelements()
         if(getObj('relrecord_id').value != '')
                 urlstring +='&'+getObj('relrecord_id').name+'='+getObj('relrecord_id').value;
 	
+	// vtlib customization: For uitype 10 popup during paging
+	if(document.getElementById('popupform'))
+		urlstring +='&form='+encodeURIComponent(getObj('popupform').value);
+	if(document.getElementById('forfield'))
+		urlstring +='&forfield='+encodeURIComponent(getObj('forfield').value);
+	if(document.getElementById('srcmodule'))
+		urlstring +='&srcmodule='+encodeURIComponent(getObj('srcmodule').value);
+	if(document.getElementById('forrecord'))
+		urlstring +='&forrecord='+encodeURIComponent(getObj('forrecord').value);
+	// END
+
 	var return_module = document.getElementById('return_module').value;
 	if(return_module != '')
 		urlstring += '&return_module='+return_module;

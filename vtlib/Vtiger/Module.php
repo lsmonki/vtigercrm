@@ -112,6 +112,16 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 	}
 
 	/**
+	 * Delete custom link of a module
+	 * @param String Type can be like 'DETAILVIEW', 'LISTVIEW' etc.. 
+ 	 * @param String Display label to lookup
+	 * @param String URL value to lookup
+	 */
+	function deleteLink($type, $label, $url=false) {
+		Vtiger_Link::deleteLink($this->id, $type, $label, $url);
+	}
+
+	/**
 	 * Get all the custom links related to this module.
 	 */
 	function getLinks() {

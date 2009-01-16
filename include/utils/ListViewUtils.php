@@ -3102,6 +3102,12 @@ function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='
         if($return_module != '')
                 $returnvalue .= '&return_module='.$return_module;
 
+	// vtlib Customization : For uitype 10 popup during paging
+	if($_REQUEST['form'] == 'vtlibPopupView') {
+		$returnvalue .= '&form=vtlibPopupView&forfield='.$_REQUEST['forfield'].'&srcmodule='.$_REQUEST['srcmodule'].'&forrecord='.$_REQUEST['forrecord'];
+	}
+	// END
+
 	for($var='A',$i =1;$i<=26;$i++,$var++)
 	// Mike Crowe Mod --------------------------------------------------------added groupid to url
 		$list .= '<td class="searchAlph" id="alpha_'.$i.'" align="center" onClick=\'alphabetic("'.$module.'","gname='.$groupid.'&query='.$query.'&search_field='.$fieldname.'&searchtype=BasicSearch&type=alpbt&search_text='.$var.$flag.$popuptypevalue.$returnvalue.$append_url.'","alpha_'.$i.'")\'>'.$var.'</td>';

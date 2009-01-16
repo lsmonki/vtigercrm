@@ -61,7 +61,7 @@ class ModuleClass extends CRMEntity {
 
 	var $popup_fields = Array('payslipname');
 
-	var $sortby_fields = Array();
+	var $sortby_fields = Array('payslipname', 'payslipmonth', 'smownerid', 'modifiedtime');
 
 	// For alphabetical search
 	var $def_basicsearch_col = 'payslipname';
@@ -116,9 +116,9 @@ class ModuleClass extends CRMEntity {
 	}
 
 	/**
-	 * Get list view query.
+	 * Get list view query (send more WHERE clause condition if required)
 	 */
-	function getListQuery($module) {
+	function getListQuery($module, $usewhere=false) {
 		$query = "SELECT vtiger_crmentity.*, $this->table_name.*";
 
 		// Select Custom Field Table Columns if present
@@ -142,6 +142,9 @@ class ModuleClass extends CRMEntity {
 		}
 		$query .= "	WHERE vtiger_crmentity.deleted = 0";
 		$query .= $this->getListViewSecurityParameter($module);
+		if($usewhere) {
+			$query .= " $usewhere ";
+		}
 		return $query;
 	}
 

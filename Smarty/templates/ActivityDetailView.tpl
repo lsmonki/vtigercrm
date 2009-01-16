@@ -566,8 +566,12 @@ function DeleteTag(id,recordid)
 						{foreach item=CUSTOMLINK from=$CUSTOM_LINKS}
 							{assign var="customlink_href" value=$CUSTOMLINK->linkurl}
 							{assign var="customlink_label" value=$CUSTOMLINK->linklabel}
+							{assign var="customlink_module" value=$CUSTOMLINK->module()}
 							{if $customlink_label eq ''}
 								{assign var="customlink_label" value=$customlink_href}
+							{else}
+								{* Pickup the translated label provided by the module *}
+								{assign var="customlink_label" value=$customlink_label|@getTranslatedString:$customlink_module}
 							{/if}
 							<a href="{$customlink_href}" class="drop_down">{$customlink_label}</a>
 						{/foreach}

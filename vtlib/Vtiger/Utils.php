@@ -25,6 +25,23 @@ class Vtiger_Utils {
 		return is_numeric($value)? intval($value) == $value : false;
 	}
 
+	/**
+	 * Implode the prefix and suffix as string for given number of times
+	 * @param String prefix to use
+	 * @param Integer Number of times 
+	 * @param String suffix to use (optional)
+	 */
+	static function implodestr($prefix, $count, $suffix=false) {
+		$strvalue = '';
+		for($index = 0; $index < $count; ++$index) {
+			$strvalue .= $prefix;
+			if($suffix && $index != ($count-1)) {
+				$strvalue .= $suffix;
+			}
+		}
+		return $strvalue;
+	}
+
 	/** 
 	 * Function to check the file access is made within web root directory. 
 	 * @param String File path to check

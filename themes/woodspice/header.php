@@ -1,52 +1,30 @@
 <?php
 
 /*********************************************************************************
-
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
-
  * ("License"); You may not use this file except in compliance with the
-
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
-
  * Software distributed under the License is distributed on an  "AS IS"  basis,
-
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
-
  * the specific language governing rights and limitations under the License.
-
  * The Original Code is:  SugarCRM Open Source
-
  * The Initial Developer of the Original Code is SugarCRM, Inc.
-
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
-
  * All Rights Reserved.
-
  * Contributor(s): ______________________________________.
-
  ********************************************************************************/
 
 /*********************************************************************************
-
  * $Header$
-
  * Description:  Contains a variety of utility functions used to display UI
-
  * components such as form headers and footers.  Intended to be modified on a per
-
  * theme basis.
-
  ********************************************************************************/
 
 require_once('Smarty_setup.php');
-
 require_once("data/Tracker.php");
-
 require_once("include/utils/utils.php");
-
 require_once("include/calculator/Calc.php");
-
-
 
 global $currentModule,$default_charset;
 global $app_strings;
@@ -70,9 +48,7 @@ $cnt = count($qc_modules);
 $smarty->assign("CNT", $cnt);
 
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-
 $smarty->assign("MODULE_NAME", $currentModule);
-
 $smarty->assign("DATE", getDisplayDate(date("Y-m-d H:i")));
 
 $smarty->assign("CURRENT_USER", $current_user->user_name);
@@ -87,8 +63,6 @@ $smarty->assign("USE_ASTERISK", get_use_asterisk($current_user->id));
 
 if (is_admin($current_user)) $smarty->assign("ADMIN_LINK", "<a href='index.php?module=Settings&action=index'>".$app_strings['LBL_SETTINGS']."</a>");
 
-
-
 $module_path="modules/".$currentModule."/";
 
 require_once('include/Menu.php');
@@ -101,11 +75,19 @@ else
 
 global $module_menu;
 
-
 require_once('data/Tracker.php');
 $tracFocus=new Tracker();
 $list = $tracFocus->get_recently_viewed($current_user->id);
 $smarty->assign("TRACINFO",$list);
+
+// Gather the custom link information to display
+include_once('vtlib/Vtiger/Link.php');
+$hdrcustomlink_params = Array('MODULE'=>$currentModule);
+$COMMONHDRLINKS = Vtiger_Link::getAllByType(Vtiger_Link::IGNORE_MODULE, Array('HEADERLINK','HEADERSCRIPT', 'HEADERCSS'), $hdrcustomlink_params);
+$smarty->assign('HEADERLINKS', $COMMONHDRLINKS['HEADERLINK']);
+$smarty->assign('HEADERSCRIPTS', $COMMONHDRLINKS['HEADERSCRIPT']);
+$smarty->assign('HEADERCSS', $COMMONHDRLINKS['HEADERCSS']);
+// END
 
 $gmail_bookmarklet = '<a href=\'javascript:(function()%7Bvar%20doc=top.document;var%20bodyElement=document.body;'.
 'doc.vtigerURL%20=%22'.$site_URL.'/%22;var%20scriptElement=document.createElement(%22script%22);'.

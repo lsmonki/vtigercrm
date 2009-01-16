@@ -408,6 +408,9 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		if(!empty($fieldnode->helpinfo)) 
 			$fieldInstance->helpinfo = $fieldnode->helpinfo;
 
+		if(!empty($fieldnode->masseditable))
+			$fieldInstance->masseditable = $fieldnode->masseditable;
+
 		if(isset($fieldnode->columntype) && !empty($fieldnode->columntype)) 
 			$fieldInstance->columntype = $fieldnode->columntype;
 

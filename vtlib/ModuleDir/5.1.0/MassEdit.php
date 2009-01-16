@@ -18,6 +18,7 @@ require_once("modules/$currentModule/$currentModule.php");
 
 $focus = new $currentModule();
 $focus->mode = '';
+$mode = 'mass_edit';
 
 $disp_view = getView($focus->mode);
 $idstring = $_REQUEST['idstring'];
@@ -29,7 +30,7 @@ $smarty->assign('THEME', $theme);
 $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
 $smarty->assign('IDS',$idstring);
 $smarty->assign('MASS_EDIT','1');
-$smarty->assign('BLOCKS',getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'',$focus->non_mass_edit_fields));	
+$smarty->assign('BLOCKS',getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));	
 
 // Field Validation Information 
 $tabid = getTabid($currentModule);

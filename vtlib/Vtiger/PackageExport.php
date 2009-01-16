@@ -316,27 +316,32 @@ class Vtiger_PackageExport {
 		$this->openNode('fields');
 		for($index = 0; $index < $fieldcount; ++$index) {
 			$this->openNode('field');
-			$fieldname = $adb->query_result($fieldresult, $index, 'fieldname');
-			$uitype = $adb->query_result($fieldresult, $index, 'uitype');
-			$fieldid = $adb->query_result($fieldresult, $index, 'fieldid');
+			$fieldresultrow = $adb->fetch_row($fieldresult);
+
+			$fieldname = $fieldresultrow['fieldname'];
+			$uitype = $fieldresultrow['uitype'];
+			$fieldid = $fieldresultrow['fieldid'];
 
 			$this->outputNode($fieldname, 'fieldname');	
 			$this->outputNode($uitype,    'uitype');
-			$this->outputNode($adb->query_result($fieldresult, $index, 'columnname'),'columnname');			
-			$this->outputNode($adb->query_result($fieldresult, $index, 'tablename'),     'tablename');
-			$this->outputNode($adb->query_result($fieldresult, $index, 'generatedtype'), 'generatedtype');
-			$this->outputNode($adb->query_result($fieldresult, $index, 'fieldlabel'),    'fieldlabel');
-			$this->outputNode($adb->query_result($fieldresult, $index, 'readonly'),      'readonly');
-			$this->outputNode($adb->query_result($fieldresult, $index, 'presence'),      'presence');
-			$this->outputNode($adb->query_result($fieldresult, $index, 'selected'),      'selected');
-			$this->outputNode($adb->query_result($fieldresult, $index, 'sequence'),      'sequence');
-			$this->outputNode($adb->query_result($fieldresult, $index, 'maximumlength'), 'maximumlength');
-			$this->outputNode($adb->query_result($fieldresult, $index, 'typeofdata'),    'typeofdata');
-			$this->outputNode($adb->query_result($fieldresult, $index, 'quickcreate'),   'quickcreate');
-			$this->outputNode($adb->query_result($fieldresult, $index, 'quickcreatesequence'),   'quickcreatesequence');
-			$this->outputNode($adb->query_result($fieldresult, $index, 'displaytype'),   'displaytype');
-			$this->outputNode($adb->query_result($fieldresult, $index, 'info_type'),     'info_type');
-			$this->outputNode('<![CDATA['.$adb->query_result($fieldresult, $index, 'helpinfo').']]>', 'helpinfo');
+			$this->outputNode($fieldresultrow['columnname'],'columnname');			
+			$this->outputNode($fieldresultrow['tablename'],     'tablename');
+			$this->outputNode($fieldresultrow['generatedtype'], 'generatedtype');
+			$this->outputNode($fieldresultrow['fieldlabel'],    'fieldlabel');
+			$this->outputNode($fieldresultrow['readonly'],      'readonly');
+			$this->outputNode($fieldresultrow['presence'],      'presence');
+			$this->outputNode($fieldresultrow['selected'],      'selected');
+			$this->outputNode($fieldresultrow['sequence'],      'sequence');
+			$this->outputNode($fieldresultrow['maximumlength'], 'maximumlength');
+			$this->outputNode($fieldresultrow['typeofdata'],    'typeofdata');
+			$this->outputNode($fieldresultrow['quickcreate'],   'quickcreate');
+			$this->outputNode($fieldresultrow['quickcreatesequence'],   'quickcreatesequence');
+			$this->outputNode($fieldresultrow['displaytype'],   'displaytype');
+			$this->outputNode($fieldresultrow['info_type'],     'info_type');
+			$this->outputNode('<![CDATA['.$fieldresultrow['helpinfo'].']]>', 'helpinfo');
+			if(isset($fieldresultrow['masseditable'])) {
+				$this->outputNode($fieldresultrow['masseditable'], 'masseditable');
+			}
 
 			// Export Entity Identifier Information
 			if($fieldname == $entity_fieldname) {

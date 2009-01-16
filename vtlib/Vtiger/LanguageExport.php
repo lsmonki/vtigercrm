@@ -48,7 +48,7 @@ class Vtiger_LanguageExport extends Vtiger_Package {
 			global $languages, $adb;
 			foreach($languages as $langkey=>$langlabel) {
 				$uniqueid = self::__getUniqueId();
-				$adb->pquery('INSERT INTO '.self::TABLENAME.'(id, name,prefix,label,lastupdated,active) VALUES(?,?,?,?,?)',
+				$adb->pquery('INSERT INTO '.self::TABLENAME.'(id,name,prefix,label,lastupdated,active) VALUES(?,?,?,?,?,?)',
 					Array($uniqueid, $langlabel,$langkey,$langlabel,date('Y-m-d H:i:s',time()), 1));
 			}
 		}

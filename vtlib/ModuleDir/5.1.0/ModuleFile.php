@@ -126,7 +126,7 @@ class ModuleClass extends CRMEntity {
 	}
 
 	/**
-	 * Get list view query.
+	 * Get list view query (send more WHERE clause condition if required)
 	 */
 	function getListQuery($module, $where='') {
 		$query = "SELECT vtiger_crmentity.*, $this->table_name.*";

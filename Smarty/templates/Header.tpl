@@ -50,7 +50,24 @@
     	<script type="text/javascript" src="include/js/asterisk.js"></script>
     {/if}
     <!-- END -->
-	
+
+	{* vtlib customization: Inclusion of custom javascript and css as registered *}
+	{if $HEADERSCRIPTS}
+		<!-- Custom Header Script -->
+		{foreach item=HEADERSCRIPT from=$HEADERSCRIPTS}
+			<script type="text/javascript" src="{$HEADERSCRIPT->linkurl}"></script>
+		{/foreach}
+		<!-- END -->
+	{/if}
+	{if $HEADERCSS}
+		<!-- Custom Header CSS -->
+		{foreach item=HDRCSS from=$HEADERCSS}
+			<link rel="stylesheet" type="text/css" href="{$HDRCSS->linkurl}"></script>
+		{/foreach}
+		<!-- END -->
+	{/if}
+	{* END *}
+
 	<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="hdrNameBg">
 	<tr>
 		<td valign=top><img src="{$IMAGEPATH}/vtiger-crm.gif" alt="vtiger CRM" title="vtiger CRM" border=0></td>
@@ -64,7 +81,37 @@
 		<td class=small nowrap>
 			<table border=0 cellspacing=0 cellpadding=0>
 			 <tr>
-			 <!-- gmailbookmarklet customization -->
+			
+			{* vtlib customization: Header links on the top panel *}
+			{if $HEADERLINKS}
+			<td style="padding-left:10px;padding-right:5px" class=small nowrap>
+				<a href="javascript:;" onmouseover="fnvshobj(this,'vtlib_headerLinksLay');" onclick="fnvshobj(this,'vtlib_headerLinksLay');">{$APP.LBL_MORE}</a> <img src="{'arrow_down.gif'|@vtiger_imageurl:$THEME}" border=0>
+				<div style="display: none; left: 193px; top: 106px;width:155px; position:absolute;" id="vtlib_headerLinksLay" 
+					onmouseout="fninvsh('vtlib_headerLinksLay')" onmouseover="fnvshNrm('vtlib_headerLinksLay')">
+					<table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
+					<tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;"><b>{$APP.LBL_MORE}</b></td></tr>
+					<tr>
+						<td>
+							{foreach item=HEADERLINK from=$HEADERLINKS}
+								{assign var="headerlink_href" value=$HEADERLINK->linkurl}
+								{assign var="headerlink_label" value=$HEADERLINK->linklabel}
+								{if $headerlink_label eq ''}
+									{assign var="headerlink_label" value=$headerlink_href}
+								{else}
+									{* Pickup the translated label provided by the module *}
+									{assign var="headerlink_label" value=$headerlink_label|@getTranslatedString:$HEADERLINK->module()}
+								{/if}
+								<a href="{$headerlink_href}" class="drop_down">{$headerlink_label}</a>
+							{/foreach}
+						</td>
+					</tr>
+					</table>
+				</div>
+			</td>
+			{/if}
+			{* END *}
+			
+			<!-- gmailbookmarklet customization -->
 			 <td style="padding-left:10px;padding-right:10px" class=small nowrap>
 				{$GMAIL_BOOKMARKLET}
 			 </td>
