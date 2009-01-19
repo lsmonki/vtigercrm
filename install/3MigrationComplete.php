@@ -69,12 +69,14 @@ if (isset($_REQUEST['source_directory'])) $source_directory = $_REQUEST['source_
 //this is to rename the installation file and folder so that no one destroys the setup
 $renamefile = uniqid(rand(), true);
 
+$file_renamed = false;
 //@rename("install.php", $renamefile."install.php.txt");
 if(!@rename("install.php", $renamefile."install.php.txt"))
 {
 	if (@copy ("install.php", $renamefile."install.php.txt"))
        	{
         	 unlink($renamefile."install.php.txt");
+			$file_renamed = true;
      	}
 	else
 	{
@@ -82,12 +84,14 @@ if(!@rename("install.php", $renamefile."install.php.txt"))
 	}
 }
 
+$dir_renamed = false;
 //@rename("install/", $renamefile."install/");
 if(!@rename("install/", $renamefile."install/"))
 {
 	if (@copy ("install/", $renamefile."install/"))
        	{
         	 unlink($renamefile."install/");
+        	 $dir_renamed = true;
      	}
 	else
 	{
@@ -106,8 +110,14 @@ $_SESSION['VTIGER_DB_VERSION']='5.1.0';
 			<hr noshade size=1>
 			<div style="width:100%;padding:10px; "align=left>
 			<ul>
-			<li>Your install.php file has been renamed to <?php echo $renamefile;?>install.php.txt.
-			<li>Your install folder too has been renamed to <?php echo $renamefile;?>install/.  
+			<?php 
+				if($file_renamed==true){
+					echo "<li>Your install.php file has been renamed to ".$renamefile."install.php.txt.";
+				}
+				if($dir_renamed==true){
+					echo "<li>Your install folder too has been renamed to ".$renamefile."install/.";
+				}  
+			?>
 			<li>Your older version is available at <?php echo $source_directory;?>.
 			<li>Your current source path is <?php echo $root_directory;?>.
 			<li>Please log in using the "admin" user name and password of your old installation.

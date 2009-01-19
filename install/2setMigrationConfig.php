@@ -243,7 +243,9 @@ function radio_checked(){
 }
 function migrate(){
 	var oDivfreeze = $('divId');
-	oDivfreeze.style.height = document.documentElement['clientHeight'] + 'px';
+	var useheight = document.body.getDimensions('height');
+	if(useheight > window.innerHeight) useheight = window.innerHeight;
+	oDivfreeze.style.height = useheight + 'px';
 	$('divId').style.display = 'block';
 	
 	var source_path = document.getElementById("source_directory").value;
@@ -581,7 +583,7 @@ function getViewPortCenter(){
 <tbody><tr>
 		<td class="big" align="center" style="font-size:20px;">
 		    <img src="include/install/images/loading.gif"><br>
-		    <font color='#575864'><strong>Migraton in Progress. Please Wait...</strong></font>
+		    <font color='#575864'><strong>Migration in Progress. Please Wait...</strong></font>
 		</td>
 	</tr>
 </tbody>

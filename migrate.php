@@ -26,7 +26,7 @@ if(is_dir($source_directory)){
 	return false;
 }
 
-require_once($source_directory."/config.inc.php");
+require_once($source_directory."config.inc.php");
 $old_db_name = $dbconfig['db_name'];
 $db_hostname = $dbconfig['db_server'].$dbconfig['db_port'];
 $db_username = $dbconfig['db_username'];
@@ -204,8 +204,10 @@ $dbname=$db_name;
 $username=$db_username;
 $passwd=$db_password;
 /* ----------------------------------------------------------Migration Starts HERE ------------------------------------------------------------------------*/
-require_once('DatabaseConnect.php');
+
+require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
+$adb = new PearDatabase($dbtype,$host,$dbname,$username,$passwd);
 require_once($source_directory.'user_privileges/CustomInvoiceNo.php');
 $versions_non_utf8 = array("50","501","502","503rc2","503","504rc");
 	ini_set("memory_limit","32M");
@@ -244,6 +246,7 @@ $versions_non_utf8 = array("50","501","502","503rc2","503","504rc");
 	//But for option 3, we have to run the queries in given 4.2.3 database ie., conn object
 	//This session variable should be used in all patch files(which contains the queries) so that based on the option selected the queries will be executed in the corresponding database. ie., in all patch files we have to assign this session object to adb and conn objects
 global $adb, $failed_queries;
+
 $failed_queries='QF: ';
 $_SESSION['adodb_current_object'] = $adb;
 	
@@ -369,8 +372,7 @@ create_tab_data_file();
 create_parenttab_data_file();
 if($completed ==true){
 	echo $failed_queries;
-	//return true; 
-	//echo 'Migration Successfully Completed';
+	return true; 
 }
 //Function used to execute the query and display the success/failure of the query
 
@@ -382,7 +384,7 @@ function ExecuteQuery($query)
 
 	//For third option migration we have to use the $conn object because the queries should be executed in 4.2.3 db
 	$status = $adb->query($query);
-	$query_count++;	
+	$query_count++;
 	if(is_object($status))
 	{
 		/*echo '
@@ -402,7 +404,6 @@ function ExecuteQuery($query)
 				<td width="5%"><font color="red"> F </font></td>
 				<td width="70%">'.$query.'</td>
 			</tr>';*/
-			echo '';
 		$failed_queries .=$query." :: ";
 		$failure_query_array[$failure_query_count++] = $query;
 		$migrationlog->debug("Query Failed ==> $query \n Error is ==> [".$adb->database->ErrorNo()."]".$adb->database->ErrorMsg());

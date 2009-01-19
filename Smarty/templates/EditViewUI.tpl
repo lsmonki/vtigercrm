@@ -24,7 +24,8 @@
 		{assign var="usefldlabel" value=$fldlabel}
 		{assign var="fldhelplink" value=""}
 		{if $FIELDHELPINFO && $FIELDHELPINFO.$fldname}
-			{assign var="fldhelplink" value="<img style='cursor:pointer' onclick='vtlib_field_help_show(this, \"$fldname\");' border=0 src="{'help_icon.gif'|@vtiger_imageurl:$THEME}">"}
+			{assign var="fldhelplinkimg" value='help_icon.gif'|@vtiger_imageurl:$THEME}
+			{assign var="fldhelplink" value="<img style='cursor:pointer' onclick='vtlib_field_help_show(this, \"$fldname\");' border=0 src='$fldhelplinkimg'>"}
 			{if $uitype neq '10'}
 				{assign var="usefldlabel" value="$fldlabel $fldhelplink"}
 			{/if}
@@ -574,7 +575,7 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 			</td>
 
 		{elseif $uitype eq 55 || $uitype eq 255} 
-			<td width="20%" class="dvtCellLabel" align=right><font color="red">{$mandatory_field}</font>{$usefldlabel} {if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}</td>
+			<td width="20%" class="dvtCellLabel" align=right><font color="red">*</font>{$usefldlabel} {if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}</td>
 				<td width="30%" align=left class="dvtCellInfo">
 			{if $fldvalue neq ''}
 			<select name="salutationtype" class="small">

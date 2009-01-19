@@ -205,16 +205,41 @@ class PearDatabase{
 	}
     }
 
+	/**
+	 * Put out the SQL timing information
+	 */
+	function logSqlTiming($startat, $endat, $sql, $params=false) {
+		global $logsqltm;
+		// Specifically for timing the SQL execution, you need to enable DEBUG in log4php.properties		
+		if($logsqltm->isDebugEnabled()){
+			$logsqltm->debug("SQL: " . $sql);
+			if($params != null && count($params) > 0) $logsqltm->debug("PARAMS: [" . implode(",", $params) . "]");
+			$logsqltm->debug("EXEC: " . ($endat - $startat) ." micros [START=$startat, END=$endat]");
+			$logsqltm->debug("");
+		}
+	}
+
     function query($sql, $dieOnError=false, $msg='')
     {
 	global $log, $default_charset;
 	//$this->println("ADODB query ".$sql);		
 	$log->debug('query being executed : '.$sql);
 	$this->checkConnection();
-	if(strtoupper($default_charset) == 'UTF-8')
+
+	global $logsqltm;
+	if(strtoupper($default_charset) == 'UTF-8') {
+
+		$sql_start_time = microtime(true);
+
+		$setnameSql = "SET NAMES utf8";
 		$this->database->Execute("SET NAMES utf8");
-		
+		$this->logSqlTiming($sql_start_time, microtime(true), $setnameSql);
+	}
+	
+	$sql_start_time = microtime(true);
 	$result = & $this->database->Execute($sql);
+	$this->logSqlTiming($sql_start_time, microtime(true), $sql);
+	
 	$this->lastmysqlrow = -1;
 	if(!$result)$this->checkError($msg.' Query Failed:' . $sql . '::', $dieOnError);
 	return $result;		
@@ -222,7 +247,7 @@ class PearDatabase{
 
 	
 	/**
-	 * Covert PreparedStatement to SQL statement
+	 * Convert PreparedStatement to SQL statement
 	 */
 	function convert2Sql($ps, $vals) {
 		if(empty($vals)) { return $ps; }
@@ -254,12 +279,16 @@ class PearDatabase{
 		global $log, $default_charset;
 		$log->debug('Prepared sql query being executed : '.$sql);
 		$this->checkConnection();
-		if(strtoupper($default_charset) == 'UTF-8')
-			$this->database->Execute("SET NAMES utf8");
-		
-		global $logsqltm;
 
-		$sql_start_time = microtime();
+		if(strtoupper($default_charset) == 'UTF-8') {
+			$sql_start_time = microtime(true);
+
+			$setnameSql = "SET NAMES utf8";
+			$this->database->Execute("SET NAMES utf8");
+			$this->logSqlTiming($sql_start_time, microtime(true), $setnameSql);
+		}
+		
+		$sql_start_time = microtime(true);
 		$params = $this->flatten_array($params);
 		if (count($params) > 0) {
 			$log->debug('Prepared sql query parameters : [' . implode(",", $params) . ']'); 
@@ -271,20 +300,8 @@ class PearDatabase{
 		} else {
 			$result = &$this->database->Execute($sql, $params);
 		}
-		$sql_end_time = microtime();
-
-		// Specifically for timing the SQL execution, you need to enable DEBUG in log4php.properties
-		if($logsqltm->isDebugEnabled()){
-			$sql_start_time = explode(" ", $sql_start_time);
-			$sql_end_time = explode(" ", $sql_end_time);
-			$sql_start_time = ((float)$sql_start_time[0] + (float)$sql_start_time[1]);
-			$sql_end_time = ((float)$sql_end_time[0] + (float)$sql_end_time[1]);
-			
-			$logsqltm->debug("SQL: " . $sql);
-			if($params != null && count($params) > 0) $logsqltm->debug("PARAMS: [" . implode(",", $params) . "]");
-			$logsqltm->debug("EXEC: " . ($sql_end_time - $sql_start_time) ." micros [START=$sql_start_time, END=$sql_end_time]");
-			$logsqltm->debug("");
-		}
+		$sql_end_time = microtime(true);
+		$this->logSqlTiming($sql_start_time, $sql_end_time, $sql, $params);
 		
 		$this->lastmysqlrow = -1;
 		if(!$result)$this->checkError($msg.' Query Failed:' . $sql . '::', $dieOnError);
