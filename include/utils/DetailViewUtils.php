@@ -1493,7 +1493,7 @@ function getDetailAssociatedProducts($module,$focus)
 		$sc_image_tag = '';
 		if ($entitytype == 'Services') {
 			$sc_image_tag = '<a href="index.php?module=ServiceContracts&action=EditView&service_id='.$productid.'&return_module='.$module.'&return_id='.$focus->id.'">' .
-						'<img border="0" src="'.vtiger_imageurl('btnL3Add.gif', $theme).'" title="'. getTranslatedString('Add Service Contract').'" style="cursor: pointer;width:18px;height:18px;" align="absmiddle" />' .
+						'<img border="0" src="'.vtiger_imageurl('handshake.png', $theme).'" title="'. getTranslatedString('Add Service Contract').'" style="cursor: pointer;" align="absmiddle" />' .
 						'</a>';
 		}
 		
