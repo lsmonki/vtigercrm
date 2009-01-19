@@ -1475,48 +1475,38 @@ ExecuteQuery($sql);
 /* Account Hierarchy */
 populateLinks();
 
+/* Product Bundles Revamping */
+ExecuteQuery("CREATE TABLE vtiger_inventorysubproductrel(id int(19) NOT NULL, sequence_no INT(10) NOT NULL, productid INT(19) NOT NULL)");
+
+/* Support for Calendar Custom Fields */
+ExecuteQuery("CREATE TABLE vtiger_activitycf(activityid INT default '0' primary key)");
+ExecuteQuery("insert into vtiger_blocks values (".$adb->getUniqueID('vtiger_blocks').",9,'LBL_CUSTOM_INFORMATION',3,0,0,0,0,0,1)");
+ExecuteQuery("insert into vtiger_blocks values (".$adb->getUniqueID('vtiger_blocks').",16,'LBL_CUSTOM_INFORMATION',4,0,0,0,0,0,1)");
+ExecuteQuery("insert into vtiger_field values (16,".$adb->getUniqueID('vtiger_field').",'contactid','vtiger_cntactivityrel',1,'57','contact_id','Contact Name',1,0,0,100,1,18,1,'I~O',1,null,'BAS',1)");
+
+/* Added new field Help Info for vtiger_field table */
+ExecuteQuery("ALTER TABLE vtiger_field ADD COLUMN helpinfo TEXT");
+
 /* Add Services and Service Contracts Module */
+
 // Added Hours and Days fields for HelpDesk module.
-require_once('vtlib/Vtiger/Module.php');
-$tt_module = Vtiger_Module::getInstance('HelpDesk');
-$tt_block = Vtiger_Block::getInstance('LBL_TICKET_INFORMATION', $tt_module);
+$helpDeskTabid = getTabid('HelpDesk');
+$ttBlockid = getBlockId($helpDeskTabid,'LBL_TICKET_INFORMATION');
 
-$field1 = new Vtiger_Field();
-$field1->name = 'hours';
-$field1->label = 'Hours';
-$field1->table = 'vtiger_troubletickets';
-$field1->column = 'hours';
-$field1->columntype = 'VARCHAR(200)';
-$field1->uitype = 1;
-$field1->typeofdata = 'V~O';
-$field1->helpinfo = 'This gives the estimated hours for the Ticket.'.
-			'<br>When the same ticket is added to a Service Contract,'. 
-			'based on the Tracking Unit of the Service Contract,'.
-			'Used units is updated whenever a ticket is Closed.';
-$tt_block->addField($field1);
+$tt_field1 = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("insert into vtiger_field values ($helpDeskTabid,$tt_field1,'hours','vtiger_troubletickets',1,'1','hours','Hours',1,0,0,100,9,$ttBlockid,1,'V~O',1,null,'BAS',1,
+		'This gives the estimated hours for the Ticket<br> When the same ticket is added to a Service Contract, based on the Tracking Unit of the Service Contract, Used units is updated whenever a ticket is Closed.')");
+addFieldSecurity($helpDeskTabid, $tt_field1);
 
-$field2 = new Vtiger_Field();
-$field2->name = 'days';
-$field2->label = 'Days';
-$field2->table = 'vtiger_troubletickets';
-$field2->column = 'days';
-$field2->columntype = 'VARCHAR(200)';
-$field2->uitype = 1;
-$field2->typeofdata = 'V~O';
-$field2->helpinfo = 'This gives the estimated days for the Ticket.'.
-			'<br>When the same ticket is added to a Service Contract,'. 
-			'based on the Tracking Unit of the Service Contract,'.
-			'Used units is updated whenever a ticket is Closed.';
-$tt_block->addField($field2);
-
-$user_result = $adb->query("select distinct(id) as userid from vtiger_users");
-$num_users = $adb->num_rows($user_result);
-for($j=0; $j<$num_users; $j++) {
-	$userid = $adb->query_result($user_result,$j,'userid');
-	ExecuteQuery("INSERT INTO vtiger_user2mergefields VALUES($userid, ".getTabid('HelpDesk').", ".$field1->id.", 0)");
-	ExecuteQuery("INSERT INTO vtiger_user2mergefields VALUES($userid, ".getTabid('HelpDesk').", ".$field2->id.", 0)");
-}
+$tt_field2 = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("insert into vtiger_field values ($helpDeskTabid,$tt_field2,'days','vtiger_troubletickets',1,'1','days','Days',1,0,0,100,10,$ttBlockid,1,'V~O',1,null,'BAS',1,
+		'This gives the estimated days for the Ticket<br> When the same ticket is added to a Service Contract, based on the Tracking Unit of the Service Contract, Used units is updated whenever a ticket is Closed.')");
+addFieldSecurity($helpDeskTabid, $tt_field2);
 // Adding fields ends here
+
+// Install Vtlib Compliant Modules
+installMandatoryModules();
+installOptionalModules();
 
 // Function to call installation of mandatory modules
 function installMandatoryModules(){
@@ -1599,15 +1589,6 @@ function populateLinks() {
 	// Detail View Custom link
 	$moduleInstance->addLink('DETAILVIEW', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
 }
-
-/* Product Bundles Revamping */
-ExecuteQuery("CREATE TABLE vtiger_inventorysubproductrel(id int(19) NOT NULL, sequence_no INT(10) NOT NULL, productid INT(19) NOT NULL)");
-
-/* Support for Calendar Custom Fields */
-ExecuteQuery("CREATE TABLE vtiger_activitycf(activityid INT default '0' primary key)");
-ExecuteQuery("insert into vtiger_blocks values (".$adb->getUniqueID('vtiger_blocks').",9,'LBL_CUSTOM_INFORMATION',3,0,0,0,0,0,1)");
-ExecuteQuery("insert into vtiger_blocks values (".$adb->getUniqueID('vtiger_blocks').",16,'LBL_CUSTOM_INFORMATION',4,0,0,0,0,0,1)");
-ExecuteQuery("insert into vtiger_field values (16,".$adb->getUniqueID('vtiger_field').",'contactid','vtiger_cntactivityrel',1,'57','contact_id','Contact Name',1,0,0,100,1,18,1,'I~O',1,null,'BAS',1)");
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 

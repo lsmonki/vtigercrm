@@ -104,14 +104,6 @@ function pushEditedValue(){
 }
 
 /**
- * this function is used to display the picklist entries for the selected role and module
- */
-function showPicklistEntries(){
-
-
-}
-
-/**
  * this function is used to show the delete div for a picklist
  */
 function showDeleteDiv(){
@@ -371,17 +363,18 @@ function validateDelete(fieldname, module){
 			}
 		}
 	}
+
+	//check if replacement value is not equal to any deleted value
+	for(var i=0; i<arr.length; i++){
+		if(replaceVal == arr[i]){
+			alert(alert_arr.LBL_PLEASE_CHANGE_REPLACEMENT);
+			return false;
+		}
+	}
+	
 	if(arr.length == node.length){
 		if(!confirm(alert_arr.LBL_DELETE_ALL_WARNING)){
 			return false;
-		}else{
-			//check if replacement value is not equal to any deleted value
-			for(var i=0; i<arr.length; i++){
-				if(replaceVal == arr[i]){
-					alert(alert_arr.LBL_PLEASE_CHANGE_REPLACEMENT);
-					return false;
-				}
-			}
 		}
 	}
 	pickDelete(module,fieldname, arr, replaceVal);
