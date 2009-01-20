@@ -102,7 +102,11 @@ function set_return_inventory(product_id,product_name,unitprice,qtyinstock,taxst
 	window.opener.document.EditView.elements["qty"+curr_row].focus()
 }
 
-function set_return_inventory_po(product_id,product_name,unitprice,taxstr,curr_row,desc) {
+function set_return_inventory_po(product_id,product_name,unitprice,taxstr,curr_row,desc,subprod_id) {
+	var subprod = subprod_id.split("::");
+	window.opener.document.EditView.elements["subproduct_ids"+curr_row].value = subprod[0];
+	window.opener.document.getElementById("subprod_names"+curr_row).innerHTML = subprod[1];
+
 	window.opener.document.EditView.elements["productName"+curr_row].value = product_name;
 	window.opener.document.EditView.elements["hdnProductId"+curr_row].value = product_id;
 	window.opener.document.EditView.elements["listPrice"+curr_row].value = unitprice;

@@ -114,9 +114,15 @@ else
 	{
 		$tableName='vtiger_activitycf';
 	}
-	elseif($fldmodule != '')
-	{
-		$tableName= 'vtiger_'.strtolower($fldmodule).'cf';
+	elseif($fldmodule != '') {
+		checkFileAccess("modules/$fldmodule/$fldmodule.php");
+		include_once("modules/$fldmodule/$fldmodule.php");
+		$focus = new $fldmodule();
+		if (isset($focus->customFieldTable)) {
+			$tableName=$focus->customFieldTable[0];
+		} else {
+			$tableName= 'vtiger_'.strtolower($fldmodule).'cf';
+		}
 	}
 	//Assigning the uitype
 	$fldlength=$_REQUEST['fldLength'];
