@@ -135,6 +135,10 @@ class VTWSEntityType{
 						case 'owner':
 							$et->type = 'Owner';
 							break;
+						case 'multipicklist':
+							$et->type = 'Select';
+							$et->values = array();
+							break;
 						default:	
 							print_r($type);
 							throw new Exception($type["name"]." is not supported yet.");
