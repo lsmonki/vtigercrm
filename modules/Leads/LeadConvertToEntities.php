@@ -355,11 +355,15 @@ else
 
 	//Saving Account - starts
 	
-		$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(?,?,?,?,?,?,?,?,?)";
-		$sql_params = array($crmid, $current_user_id, $assigned_user_id, 'Accounts', 1, $date_entered, $date_modified, 0, $row['description']);
-		$adb->pquery($sql_crmentity, $sql_params);
+	$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(?,?,?,?,?,?,?,?,?)";
+	$sql_params = array($crmid, $current_user_id, $assigned_user_id, 'Accounts', 1, $date_entered, $date_modified, 0, $row['description']);
+	$adb->pquery($sql_crmentity, $sql_params);
 	
-	
+	//Module Sequence Numbering
+	require_once('modules/Accounts/Accounts.php');
+	$acc_no_focus = new Accounts();
+	$account_no = $acc_no_focus->setModuleSeqNumber("increment",'Accounts');
+	// END
 	
 	/* Modified by Minnie to fix the convertlead issue -- START*/
 	if(isset($row["annualrevenue"]) && !empty($row["annualrevenue"])) $annualrevenue = $row["annualrevenue"];
@@ -368,9 +372,9 @@ else
 	if(isset($row["noofemployees"]) && !empty($row["noofemployees"])) $employees = $row["noofemployees"];
 	else $employees = 'null';
 	
-	$sql_insert_account = "INSERT INTO vtiger_account (accountid,accountname,industry,annualrevenue,phone,fax,rating,email1,website,employees) VALUES (?,?,?,?,?,?,?,?,?,?)";
+	$sql_insert_account = "INSERT INTO vtiger_account (account_no,accountid,accountname,industry,annualrevenue,phone,fax,rating,email1,website,employees) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 	/* Modified by Minnie -- END*/
-	$account_params = array($crmid, $accountname, $row["industry"], $annualrevenue, $row["phone"], $row["fax"], $row["rating"], $row["email"], $row["website"], $employees);
+	$account_params = array($account_no,$crmid, $accountname, $row["industry"], $annualrevenue, $row["phone"], $row["fax"], $row["rating"], $row["email"], $row["website"], $employees);
 	$adb->pquery($sql_insert_account, $account_params);
 	
 	/*if($assigned_to !="U"){
@@ -406,16 +410,6 @@ getRelatedNotesAttachments($id,$crmid); //To Convert Related Notes & Attachments
 //Retrieve the lead related products and relate them with this new account
 saveLeadRelatedProducts($id, $crmid, "Accounts");
 
-//Module Sequence Numbering
-require_once('modules/Accounts/Accounts.php');
-$acc_no_focus = new Accounts();
-$acc_no_focus->retrieve_entity_info($account_id, 'Accounts');
-$acc_no_focus->id = $account_id;
-$acc_no_focus->mode = "edit";
-$acc_no_focus->column_fields['account_no'] = $acc_no_focus->setModuleSeqNumber("increment",'Accounts');
-$acc_no_focus->save('Accounts');
-// END
-
 //Up to this, Account related data save finshed
 
 
@@ -425,15 +419,21 @@ $date_modified = $adb->formatDate(date('Y-m-d H:i:s'), true);
 //Saving Contact - starts
 $crmcontactid = $adb->getUniqueID("vtiger_crmentity");
 
-	$sql_crmentity1 = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?,?,?)";
-	$sql_params = array($crmcontactid, $current_user_id, $assigned_user_id, 'Contacts', 0, 0, $row['description'], $date_entered, $date_modified);
-	$adb->pquery($sql_crmentity1, $sql_params);
+$sql_crmentity1 = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?,?,?)";
+$sql_params = array($crmcontactid, $current_user_id, $assigned_user_id, 'Contacts', 0, 0, $row['description'], $date_entered, $date_modified);
+$adb->pquery($sql_crmentity1, $sql_params);
 
 $contact_id = $crmcontactid;
 $log->debug("contact id is ".$contact_id);
 
-$sql_insert_contact = "INSERT INTO vtiger_contactdetails (contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-$contact_params = array($contact_id, $crmid, $row["salutationtype"], $row["firstname"], $row["lastname"], $row["email"], $row["phone"], $row["mobile"], $row["designation"], $row["fax"], $row['yahooid']);
+// Module Sequence Numbering
+require_once('modules/Contacts/Contacts.php');
+$cont_no_focus = new Contacts();
+$contact_no = $cont_no_focus->setModuleSeqNumber("increment",'Contacts');
+// END
+
+$sql_insert_contact = "INSERT INTO vtiger_contactdetails (contact_no,contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+$contact_params = array($contact_no, $contact_id, $crmid, $row["salutationtype"], $row["firstname"], $row["lastname"], $row["email"], $row["phone"], $row["mobile"], $row["designation"], $row["fax"], $row['yahooid']);
 $adb->pquery($sql_insert_contact, $contact_params);
 
 /*if($assigned_to !="U"){
@@ -473,17 +473,6 @@ saveLeadRelatedCampaigns($id, $contact_id);
 
 //Up to this, Contact related data save finshed
 
-// Module Sequence Numbering
-require_once('modules/Contacts/Contacts.php');
-$cont_no_focus = new Contacts();
-$cont_no_focus->retrieve_entity_info($contact_id, 'Contacts');
-$cont_no_focus->id = $contact_id;
-$cont_no_focus->mode = "edit";
-$cont_no_focus->column_fields['contact_no'] = $cont_no_focus->setModuleSeqNumber("increment",'Contacts');
-$cont_no_focus->save('Contacts');
-// END
-
-
 //Saving Potential - starts
 if(! isset($createpotential) || ! $createpotential == "on")
 {
@@ -492,28 +481,26 @@ if(! isset($createpotential) || ! $createpotential == "on")
 	$date_entered = $adb->formatDate(date('Y-m-d H:i:s'), true);
 	$date_modified = $adb->formatDate(date('Y-m-d H:i:s'), true);
   
-
 	$oppid = $adb->getUniqueID("vtiger_crmentity");
   	
-		$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,modifiedtime,description) values(?,?,?,?,?,?,?,?,?)";
-  		$sql_params = array($oppid, $current_user_id, $assigned_user_id, 'Potentials', 0, 0, $date_entered, $date_modified, $row['description']);
-		$adb->pquery($sql_crmentity, $sql_params);
+	$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,modifiedtime,description) values(?,?,?,?,?,?,?,?,?)";
+	$sql_params = array($oppid, $current_user_id, $assigned_user_id, 'Potentials', 0, 0, $date_entered, $date_modified, $row['description']);
+	$adb->pquery($sql_crmentity, $sql_params);  	
   	
+	// Module Sequence Numbering
+	require_once('modules/Potentials/Potentials.php');
+	$pot_no_focus = new Potentials();
+	$potential_no = $pot_no_focus->setModuleSeqNumber("increment",'Potentials');
+	// END
 
 	if(!isset($potential_amount) || $potential_amount == null)
 	{
 		$potential_amount=0;
-        }
+	}
 
-	$sql_insert_opp = "INSERT INTO vtiger_potential (potentialid,accountid,potentialname,leadsource,closingdate,sales_stage,amount) VALUES (?,?,?,?,?,?,?)";
-	$opp_params = array($oppid, $crmid, $potential_name, $row['leadsource'], $close_date, $potential_sales_stage, $potential_amount);
+	$sql_insert_opp = "INSERT INTO vtiger_potential (potential_no,potentialid,accountid,potentialname,leadsource,closingdate,sales_stage,amount) VALUES (?,?,?,?,?,?,?,?)";
+	$opp_params = array($potential_no, $oppid, $crmid, $potential_name, $row['leadsource'], $close_date, $potential_sales_stage, $potential_amount);
 	$adb->pquery($sql_insert_opp, $opp_params);
-	
-	/*if($assigned_to !="U"){
-		$sql_crmentity = "insert into vtiger_potentialgrouprelation(potentialid,groupname) values(?,?)";
-		$sql_params = array($oppid,$assigned_group_name);
-		$adb->pquery($sql_crmentity, $sql_params);
-	}*/
 
 	//Getting the customfield values from leads and inserting into the respected PotentialCustomfield to which it is mapped - Jaguar
 	$col_val= getInsertValues("Potentials",$oppid);
@@ -530,17 +517,6 @@ if(! isset($createpotential) || ! $createpotential == "on")
 
 	//Retrieve the lead related products and relate them with this new potential
 	saveLeadRelatedProducts($id, $oppid, "Potentials");
-
-	// Module Sequence Numbering
-	require_once('modules/Potentials/Potentials.php');
-	$pot_no_focus = new Potentials();
-	$pot_no_focus->retrieve_entity_info($oppid, 'Potentials');
-	$pot_no_focus->id = $oppid;
-	$pot_no_focus->mode = "edit";
-	$pot_no_focus->column_fields['potential_no'] = $pot_no_focus->setModuleSeqNumber("increment",'Potentials');
-	$pot_no_focus->save('Potentials');
-	// END
-
 }
 //Saving Potential - ends
 //Up to this, Potential related data save finshed
