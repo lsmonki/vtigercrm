@@ -217,6 +217,7 @@ $mod_strings = Array(
 'LBL_SELECT_FIELDS'=>'Select Fields',
 'LBL_MEMBERS'=>'Members',
 'LBL_RELATED_FIELDS'=>'Related Fields',
+'LBL_NOT_ACTIVE'=>'One or More  module(s) selected for this report are not Active To generate the Report',
 )
 
 ?>

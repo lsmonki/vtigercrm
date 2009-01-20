@@ -19,7 +19,7 @@ if($_REQUEST['check']== 'reportCheck')
 	$reportName = $_REQUEST['reportName'];
 	$sSQL="select * from vtiger_report where reportname=?";
 	
-	$sqlresult = $adb->pquery($sSQL, array($reportName));
+	$sqlresult = $adb->pquery($sSQL, array(trim($reportName)));
 	echo $adb->num_rows($sqlresult);
 
 }

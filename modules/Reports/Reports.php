@@ -247,7 +247,7 @@ class Reports extends CRMEntity{
 						}
 					}
 				}
-				$rel_mod_query = $adb->pquery("SELECT vtiger_tab.name FROM vtiger_tab INNER JOIN vtiger_relatedlists on vtiger_tab.tabid=vtiger_relatedlists.related_tabid WHERE vtiger_relatedlists.tabid IN (". generateQuestionMarks($tabid) .") AND vtiger_tab.isentitytype=1 and vtiger_tab.name NOT IN(".generateQuestionMarks($restricted_modules).") AND vtiger_relatedlists.label!='Activity History'",array($tabid,$restricted_modules));
+				$rel_mod_query = $adb->pquery("SELECT vtiger_tab.name FROM vtiger_tab INNER JOIN vtiger_relatedlists on vtiger_tab.tabid=vtiger_relatedlists.related_tabid WHERE vtiger_relatedlists.tabid IN (". generateQuestionMarks($tabid) .") AND vtiger_tab.isentitytype=1 and vtiger_tab.name NOT IN(".generateQuestionMarks($restricted_modules).") AND vtiger_tab.presence=0 AND vtiger_relatedlists.label!='Activity History'",array($tabid,$restricted_modules));
 				$noOfRows = $adb->num_rows($rel_mod_query);
 				$this->related_modules[$module]=Array();
 				if($noOfRows > 0){
@@ -426,11 +426,13 @@ class Reports extends CRMEntity{
 			for($i=0;$i < count($secmodule) ;$i++)
 			{
 				//$this->updateModuleList($secmodule[$i]);
-				foreach($this->module_list[$secmodule[$i]] as $key=>$value)
-				{
-					$ret_module_list[$secmodule[$i]][$key] = $this->getColumnsListbyBlock($secmodule[$i],$value);
+				if($this->module_list[$secmodule[$i]]){
+					foreach($this->module_list[$secmodule[$i]] as $key=>$value)
+					{
+						$ret_module_list[$secmodule[$i]][$key] = $this->getColumnsListbyBlock($secmodule[$i],$value);
+					}
+					$this->sec_module_columnslist[$secmodule[$i]] = $ret_module_list[$secmodule[$i]];
 				}
-				$this->sec_module_columnslist[$secmodule[$i]] = $ret_module_list[$secmodule[$i]];
 			}
 		}
 		return true;
@@ -1440,7 +1442,7 @@ function getReportRelatedModules($module,$focus)
 		if(isPermitted($rel_modules,'index') == "yes")
 		{
 			$optionhtml []= $rel_modules;		
-		}	
+		}
 	}
 
 

@@ -156,7 +156,7 @@ class ReportRun extends CRMEntity
 					{
 						$columnslist[$fieldcolname] = "concat(vtiger_activity.date_start,'  ',vtiger_activity.time_start) as Calendar_Start_Date_and_Time";
 					}
-					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field != 'Products_Handler')
+					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && ($module_field != 'Products_Handler' && $module_field != 'Services_Handler'))
 					{
 						$temp_module_from_tablename = str_replace("vtiger_users","",$selectedfields[0]);
 						if($module!=$this->primarymodule){
@@ -1571,8 +1571,8 @@ class ReportRun extends CRMEntity
 		
 		$sec_modules = split(":",$this->secondarymodule);
 		foreach($sec_modules as $i=>$key){
-			$tab_id = getTabid($key);
-			if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+			$sec_tab_id = getTabid($key);
+			if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$sec_tab_id] == 3)
 			{
 				$sec_parameter=getSecListViewSecurityParameter($key);
 				$reportquery .= " ".$sec_parameter;

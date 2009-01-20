@@ -111,7 +111,13 @@
 												{if $SEC_MODULE eq $relmod}
 													<tr><td><input type='checkbox' name="secondarymodule_{$relmod}" checked value="{$relmod}" />{$APP.$relmod}</td></tr>
 												{else}
-													<tr><td><input type='checkbox' name="secondarymodule_{$relmod}" value="{$relmod}" />{$APP.$relmod}</td></tr>
+													<tr><td><input type='checkbox' name="secondarymodule_{$relmod}" value="{$relmod}" />
+														{if $APP.$relmod neq ''}
+															{$APP.$relmod}
+														{else}
+															{$relmod}
+														{/if}
+													</td></tr>
 												{/if}
 												{/foreach}
 												</table>
