@@ -329,11 +329,6 @@ if ($start_rec ==0)
 else
 	$limit_start_rec = $start_rec -1;
 	
- if( $adb->dbType == "pgsql")
-     $list_result = $adb->pquery($query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
- else
-     $list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
-
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
 //Retreive the List View Table Header
