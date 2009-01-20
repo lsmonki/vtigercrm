@@ -255,7 +255,7 @@ ExecuteQuery("delete from vtiger_cvcolumnlist where columnname like '%Notes_Cont
 ExecuteQuery("delete from vtiger_cvcolumnlist where columnname like '%Notes_Related_to%'");
 //ExecuteQuery("create table vtiger_notegrouprelation (notesid int(19) NOT NULL, groupname varchar(100) default NULL)");
 
-ExecuteQuery("insert into vtiger_def_org_share values (13,$documents_tab_id,2,0)");
+ExecuteQuery("insert into vtiger_def_org_share values (".$adb->getUniqueID('vtiger_def_org_share').",$documents_tab_id,2,0)");
 
 for($i=0;$i<4;$i++)
 {
