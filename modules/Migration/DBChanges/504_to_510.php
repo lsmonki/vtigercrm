@@ -20,8 +20,8 @@ $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Starts \n\n");
 require_once('include/events/include.inc');
 $em = new VTEventsManager($adb);
 /* For the event api */
-ExecuteQuery("create table vtiger_eventhandlers (eventhandler_id int, event_name varchar(100), handler_path varchar(400), handler_class varchar(100), cond text, is_active boolean, primary key(eventhandler_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-ExecuteQuery("CREATE TABLE vtiger_eventhandler_module(eventhandler_module_id int, module_name VARCHAR(100), handler_path VARCHAR(100), PRIMARY KEY(eventhandler_module_id))");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_eventhandlers (eventhandler_id int, event_name varchar(100), handler_path varchar(400), handler_class varchar(100), cond text, is_active boolean, primary key(eventhandler_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_eventhandler_module(eventhandler_module_id int, module_name VARCHAR(100), handler_path VARCHAR(100), PRIMARY KEY(eventhandler_module_id))");
 
 /* Added new column actions to vtiger_relatedlists which tracks the type of actions allowed for that related list */
 ExecuteQuery("alter table vtiger_relatedlists add column actions VARCHAR(50) default ''");
@@ -85,7 +85,7 @@ ExecuteQuery("UPDATE vtiger_field SET quickcreate = 0 WHERE tablename='vtiger_pr
 ExecuteQuery("UPDATE vtiger_field SET quickcreate = 0 WHERE tablename='vtiger_products' and columnname='qtyinstock'");
 
 /* Necessary DB Changes for Recycle bin feature */
-ExecuteQuery("create table vtiger_relatedlists_rb(entityid int(19), action varchar(50), rel_table varchar(200), rel_column varchar(200), ref_column varchar(200), related_crm_ids text)  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_relatedlists_rb(entityid int(19), action varchar(50), rel_table varchar(200), rel_column varchar(200), ref_column varchar(200), related_crm_ids text)  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 ExecuteQuery("insert into vtiger_tab values('30', 'Recyclebin', '0', '27', 'Recyclebin', null, null, 0, '1')");
 
@@ -107,8 +107,8 @@ ExecuteQuery("update vtiger_customview set status=0 where viewname='All'");
 ExecuteQuery("alter table vtiger_customview add column userid int(19) default '1'");
 
 /* Reminder Popup support for Calendar Events */
-ExecuteQuery("CREATE TABLE vtiger_activity_reminder_popup(reminderid int(19) NOT NULL AUTO_INCREMENT,semodule varchar(100) NOT NULL,recordid varchar(100) NOT NULL,date_start DATE,time_start varchar(100) NOT NULL,status int(2) NOT NULL, PRIMARY KEY(reminderid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-ExecuteQuery("CREATE TABLE vtiger_reminder_interval(reminder_intervalid int(19) NOT NULL AUTO_INCREMENT,reminder_interval varchar(200) NOT NULL,sortorderid int(19) NOT NULL,presence int(1) NOT NULL, PRIMARY KEY(reminder_intervalid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_activity_reminder_popup(reminderid int(19) NOT NULL AUTO_INCREMENT,semodule varchar(100) NOT NULL,recordid varchar(100) NOT NULL,date_start DATE,time_start varchar(100) NOT NULL,status int(2) NOT NULL, PRIMARY KEY(reminderid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_reminder_interval(reminder_intervalid int(19) NOT NULL AUTO_INCREMENT,reminder_interval varchar(200) NOT NULL,sortorderid int(19) NOT NULL,presence int(1) NOT NULL, PRIMARY KEY(reminder_intervalid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 ExecuteQuery("alter table vtiger_users add column reminder_interval varchar(100) NOT NULL");
 ExecuteQuery("alter table vtiger_users add column reminder_next_time varchar(100)");
 
@@ -127,7 +127,7 @@ ExecuteQuery("insert into vtiger_field values (29,".$adb->getUniqueID("vtiger_fi
 
 /* For Duplicate Records Merging feature */
 ExecuteQuery("INSERT INTO vtiger_actionmapping values(10,'DuplicatesHandling',0)");
-ExecuteQuery("CREATE TABLE vtiger_user2mergefields (userid int(11) REFERENCES vtiger_users( id ) , tabid int( 19 ) ,fieldid int( 19 ), visible int(2))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_user2mergefields (userid int(11) REFERENCES vtiger_users( id ) , tabid int( 19 ) ,fieldid int( 19 ), visible int(2))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 function insertUser2mergefields($userid, $tabid)
 {
@@ -253,7 +253,7 @@ addFieldSecurity($pb_tab_id,$pb_currency_field_id);
 $documents_tab_id = getTabid('Documents');
 ExecuteQuery("delete from vtiger_cvcolumnlist where columnname like '%Notes_Contact_Name%'");
 ExecuteQuery("delete from vtiger_cvcolumnlist where columnname like '%Notes_Related_to%'");
-//ExecuteQuery("create table vtiger_notegrouprelation (notesid int(19) NOT NULL, groupname varchar(100) default NULL)");
+//ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_notegrouprelation (notesid int(19) NOT NULL, groupname varchar(100) default NULL)");
 
 ExecuteQuery("insert into vtiger_def_org_share values (".$adb->getUniqueID('vtiger_def_org_share').",$documents_tab_id,2,0)");
 
@@ -272,7 +272,7 @@ $DocumentsId = getTabid('Documents');
 ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select', related_tabid=$documents_tab_id WHERE name='get_attachments'");
 ExecuteQuery("alter table vtiger_notes add(folderid int(19) NOT NULL,filetype varchar(50) default NULL,filelocationtype varchar(5) default NULL,filedownloadcount int(19) default NULL,filestatus int(19) default NULL,filesize int(19) NOT NULL default '0',fileversion varchar(50) default NULL)");
 
-ExecuteQuery("create table vtiger_attachmentsfolder ( folderid int(19) NOT NULL,foldername varchar(200) NOT NULL default '', description varchar(250) default '', createdby int(19) NOT NULL, sequence int(19) default NULL, PRIMARY KEY  (folderid))");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_attachmentsfolder ( folderid int(19) NOT NULL,foldername varchar(200) NOT NULL default '', description varchar(250) default '', createdby int(19) NOT NULL, sequence int(19) default NULL, PRIMARY KEY  (folderid))");
 
 ExecuteQuery("insert into vtiger_attachmentsfolder values (0,'Existing Notes','Contains all Notes migrated from the earlier version',1,1)");
 
@@ -373,12 +373,12 @@ ExecuteQuery("alter table vtiger_troubletickets drop column filename");
 //End: Database changes regarding Documents module
 
 /* Home Page Customization */
-ExecuteQuery("CREATE TABLE vtiger_homestuff (stuffid int(19) NOT NULL default '0', stuffsequence int(19) NOT NULL default '0', stufftype varchar(100) default NULL, userid int(19) NOT NULL, visible int(10) NOT NULL default '0', stufftitle varchar(100) default NULL, PRIMARY KEY  (stuffid), KEY stuff_stuffid_idx (stuffid), KEY fk_1_vtiger_homestuff (userid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-ExecuteQuery("CREATE TABLE vtiger_homedashbd (stuffid int(19) NOT NULL default 0, dashbdname varchar(100) default NULL, dashbdtype varchar(100) default NULL, PRIMARY KEY  (stuffid), KEY stuff_stuffid_idx (stuffid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-ExecuteQuery("CREATE TABLE vtiger_homedefault (stuffid int(19) NOT NULL default 0, hometype varchar(30) NOT NULL, maxentries int(19) default NULL, setype varchar(30) default NULL, PRIMARY KEY  (stuffid), KEY stuff_stuffid_idx (stuffid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-ExecuteQuery("CREATE TABLE vtiger_homemodule (stuffid int(19) NOT NULL, modulename varchar(100) default NULL, maxentries int(19) NOT NULL, customviewid int(19) NOT NULL, setype varchar(30) NOT NULL, PRIMARY KEY  (stuffid), KEY stuff_stuffid_idx (stuffid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-ExecuteQuery("CREATE TABLE vtiger_homemoduleflds (stuffid int(19) default NULL, fieldname varchar(255) default NULL, KEY stuff_stuffid_idx (stuffid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-ExecuteQuery("CREATE TABLE vtiger_homerss (stuffid int(19) NOT NULL default 0, url varchar(100) default NULL, maxentries int(19) NOT NULL, PRIMARY KEY  (stuffid), KEY stuff_stuffid_idx (stuffid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;"); 
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_homestuff (stuffid int(19) NOT NULL default '0', stuffsequence int(19) NOT NULL default '0', stufftype varchar(100) default NULL, userid int(19) NOT NULL, visible int(10) NOT NULL default '0', stufftitle varchar(100) default NULL, PRIMARY KEY  (stuffid), KEY stuff_stuffid_idx (stuffid), KEY fk_1_vtiger_homestuff (userid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_homedashbd (stuffid int(19) NOT NULL default 0, dashbdname varchar(100) default NULL, dashbdtype varchar(100) default NULL, PRIMARY KEY  (stuffid), KEY stuff_stuffid_idx (stuffid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_homedefault (stuffid int(19) NOT NULL default 0, hometype varchar(30) NOT NULL, maxentries int(19) default NULL, setype varchar(30) default NULL, PRIMARY KEY  (stuffid), KEY stuff_stuffid_idx (stuffid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_homemodule (stuffid int(19) NOT NULL, modulename varchar(100) default NULL, maxentries int(19) NOT NULL, customviewid int(19) NOT NULL, setype varchar(30) NOT NULL, PRIMARY KEY  (stuffid), KEY stuff_stuffid_idx (stuffid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_homemoduleflds (stuffid int(19) default NULL, fieldname varchar(255) default NULL, KEY stuff_stuffid_idx (stuffid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_homerss (stuffid int(19) NOT NULL default 0, url varchar(100) default NULL, maxentries int(19) NOT NULL, PRIMARY KEY  (stuffid), KEY stuff_stuffid_idx (stuffid))  ENGINE=InnoDB DEFAULT CHARSET=utf8;"); 
 
 ExecuteQuery("ALTER TABLE vtiger_homestuff ADD CONSTRAINT fk_1_vtiger_homestuff FOREIGN KEY (userid) REFERENCES vtiger_users (id) ON DELETE CASCADE");
 ExecuteQuery("ALTER TABLE vtiger_homedashbd ADD CONSTRAINT fk_1_vtiger_homedashbd FOREIGN KEY (stuffid) REFERENCES vtiger_homestuff (stuffid) ON DELETE CASCADE");
@@ -518,9 +518,9 @@ function webserviceMigration(){
 			"80"=>array("SalesOrder"),"81"=>array("Vendors"),"101"=>array("Users"),"52"=>array("Users"),
 			"357"=>array("Contacts","Accounts","Leads","Users","Vendors"),"59"=>array("Products"),
 			"66"=>array("Leads","Accounts","Potentials","HelpDesk"),"77"=>array("Users"),"68"=>array("Contacts","Accounts"));
-	ExecuteQuery("Create table vtiger_ws_fieldtype(fieldtypeid integer(19) not null auto_increment,uitype varchar(30)not null,fieldtype varchar(200) not null,PRIMARY KEY(fieldtypeid),UNIQUE KEY uitype_idx (uitype))ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-	ExecuteQuery("Create table vtiger_ws_referencetype(fieldtypeid integer(19) not null,type varchar(25) not null,PRIMARY KEY(fieldtypeid,type),  CONSTRAINT `fk_1_vtiger_referencetype` FOREIGN KEY (`fieldtypeid`) REFERENCES `vtiger_ws_fieldtype` (`fieldtypeid`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-	ExecuteQuery("Create table vtiger_ws_userauthtoken(userid integer(19) not null,token varchar(25) not null,expiretime INTEGER(19),PRIMARY KEY(userid,expiretime),UNIQUE KEY userid_idx (userid))ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+	ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_ws_fieldtype(fieldtypeid integer(19) not null auto_increment,uitype varchar(30)not null,fieldtype varchar(200) not null,PRIMARY KEY(fieldtypeid),UNIQUE KEY uitype_idx (uitype))ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+	ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_ws_referencetype(fieldtypeid integer(19) not null,type varchar(25) not null,PRIMARY KEY(fieldtypeid,type),  CONSTRAINT `fk_1_vtiger_referencetype` FOREIGN KEY (`fieldtypeid`) REFERENCES `vtiger_ws_fieldtype` (`fieldtypeid`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+	ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_ws_userauthtoken(userid integer(19) not null,token varchar(25) not null,expiretime INTEGER(19),PRIMARY KEY(userid,expiretime),UNIQUE KEY userid_idx (userid))ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	ExecuteQuery("alter table vtiger_users add column accesskey varchar(36);");
 	$fieldid = $adb->getUniqueID("vtiger_field");
 	$user_adv_block_id = getBlockId(29,'LBL_USER_ADV_OPTIONS');
@@ -636,19 +636,19 @@ ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger
 ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Products").",'get_parent_products',14,'Parent Products',0,'')");
 
 /* vtmailscanner customization */
-ExecuteQuery("CREATE TABLE vtiger_mailscanner(scannerid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,scannername VARCHAR(30),
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_mailscanner(scannerid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,scannername VARCHAR(30),
 	server VARCHAR(100),protocol VARCHAR(10),username VARCHAR(30),password VARCHAR(255),ssltype VARCHAR(10),
 sslmethod VARCHAR(30),connecturl VARCHAR(255),searchfor VARCHAR(10),markas VARCHAR(10),isvalid INT(1)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
-ExecuteQuery("CREATE TABLE vtiger_mailscanner_ids(scannerid INT, messageid TEXT,crmid INT) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_mailscanner_ids(scannerid INT, messageid TEXT,crmid INT) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
-ExecuteQuery("CREATE TABLE vtiger_mailscanner_folders(folderid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,scannerid INT,foldername VARCHAR(255),lastscan VARCHAR(30),rescan INT(1), enabled INT(1)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_mailscanner_folders(folderid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,scannerid INT,foldername VARCHAR(255),lastscan VARCHAR(30),rescan INT(1), enabled INT(1)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
-ExecuteQuery("CREATE TABLE vtiger_mailscanner_rules(ruleid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,scannerid INT,fromaddress VARCHAR(255),toaddress VARCHAR(255),subjectop VARCHAR(20),subject VARCHAR(255),bodyop VARCHAR(20),body VARCHAR(255),matchusing VARCHAR(5),sequence INT) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_mailscanner_rules(ruleid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,scannerid INT,fromaddress VARCHAR(255),toaddress VARCHAR(255),subjectop VARCHAR(20),subject VARCHAR(255),bodyop VARCHAR(20),body VARCHAR(255),matchusing VARCHAR(5),sequence INT) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
-ExecuteQuery("CREATE TABLE vtiger_mailscanner_actions(actionid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,scannerid INT,actiontype VARCHAR(10),module VARCHAR(30),lookup VARCHAR(30),sequence INT) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_mailscanner_actions(actionid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,scannerid INT,actiontype VARCHAR(10),module VARCHAR(30),lookup VARCHAR(30),sequence INT) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
-ExecuteQuery("CREATE TABLE vtiger_mailscanner_ruleactions(ruleid INT,actionid INT) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_mailscanner_ruleactions(ruleid INT,actionid INT) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 // END
 
 /* Recurring Invoice Feature */
@@ -665,10 +665,10 @@ $new_block_id = $adb->getUniqueID('vtiger_blocks');
 ExecuteQuery("INSERT INTO vtiger_blocks VALUES (".$new_block_id.",".getTabid('SalesOrder').",'Recurring Invoice Information',$new_block_seq_no,0,0,0,0,0,1)");
 
 ExecuteQuery("ALTER TABLE vtiger_salesorder ADD COLUMN enable_recurring INT default 0");
-ExecuteQuery("CREATE TABLE vtiger_invoice_recurring_info(salesorderid INT, recurring_frequency VARCHAR(200), start_period DATE, end_period DATE, last_recurring_date DATE default NULL, " .
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_invoice_recurring_info(salesorderid INT, recurring_frequency VARCHAR(200), start_period DATE, end_period DATE, last_recurring_date DATE default NULL, " .
 		"			payment_duration VARCHAR(200), invoice_status VARCHAR(200)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
-ExecuteQuery("CREATE TABLE vtiger_recurring_frequency(recurring_frequency_id INT, recurring_frequency VARCHAR(200), sortorderid INT, presence INT) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_recurring_frequency(recurring_frequency_id INT, recurring_frequency VARCHAR(200), sortorderid INT, presence INT) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 // Add default values for the recurring_frequency picklist
 ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'--None--',1,1)");
 ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Daily',2,1)");
@@ -677,7 +677,7 @@ ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID(
 ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Quarterly',5,1)");
 ExecuteQuery("INSERT INTO vtiger_recurring_frequency values(".$adb->getUniqueID('vtiger_recurring_frequency').",'Yearly',6,1)");
 
-ExecuteQuery("CREATE TABLE vtiger_payment_duration(payment_duration_id INT, payment_duration VARCHAR(200), sortorderid INT, presence INT) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_payment_duration(payment_duration_id INT, payment_duration VARCHAR(200), sortorderid INT, presence INT) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 // Add default values for the vtiger_payment_duration picklist
 ExecuteQuery("INSERT INTO vtiger_payment_duration values(".$adb->getUniqueID('vtiger_payment_duration').",'Net 30 days',1,1)");
 ExecuteQuery("INSERT INTO vtiger_payment_duration values(".$adb->getUniqueID('vtiger_payment_duration').",'Net 45 days',2,1)");
@@ -733,20 +733,20 @@ for($k=0; $k < $numrow; $k ++)
 $em->registerHandler('vtiger.entity.aftersave', 'modules/SalesOrder/RecurringInvoiceHandler.php', 'RecurringInvoiceHandler');
 
 /* Workflow Manager - com_vtiger_workflow */
-ExecuteQuery("create table com_vtiger_workflows_seq (id int(11)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS com_vtiger_workflows_seq (id int(11)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 ExecuteQuery("insert into com_vtiger_workflows_seq (id) values(1)");
-ExecuteQuery("create table com_vtiger_workflows (workflow_id int, module_name varchar(100), summary varchar(100), test varchar(400), task_id int(11), exec_date int, execution_condition varchar(50)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-ExecuteQuery('create table com_vtiger_workflow_activatedonce (entity_id int, workflow_id int);');
+ExecuteQuery("CREATE TABLE IF NOT EXISTS com_vtiger_workflows (workflow_id int, module_name varchar(100), summary varchar(100), test varchar(400), task_id int(11), exec_date int, execution_condition varchar(50)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery('CREATE TABLE IF NOT EXISTS com_vtiger_workflow_activatedonce (entity_id int, workflow_id int);');
 
-ExecuteQuery("create table com_vtiger_workflowtasks_seq (id int(11)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS com_vtiger_workflowtasks_seq (id int(11)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 ExecuteQuery("insert into com_vtiger_workflowtasks_seq (id) values(1)");
-ExecuteQuery("create table com_vtiger_workflowtasks (task_id int, workflow_id int, summary varchar(100), task text, primary key(task_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS com_vtiger_workflowtasks (task_id int, workflow_id int, summary varchar(100), task text, primary key(task_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
-ExecuteQuery("create table com_vtiger_workflowtask_queue (task_id int, entity_id int, do_after int, primary key(task_id, entity_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS com_vtiger_workflowtask_queue (task_id int, entity_id int, do_after int, primary key(task_id, entity_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
-ExecuteQuery("create table com_vtiger_workflowtasks_entitymethod_seq (id int(11)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS com_vtiger_workflowtasks_entitymethod_seq (id int(11)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 ExecuteQuery("insert into  com_vtiger_workflowtasks_entitymethod_seq (id) values(1)");
-ExecuteQuery("create table com_vtiger_workflowtasks_entitymethod (workflowtasks_entitymethod_id int, module_name varchar(100), method_name varchar(100), function_path varchar(400), function_name varchar(100), primary key(workflowtasks_entitymethod_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS com_vtiger_workflowtasks_entitymethod (workflowtasks_entitymethod_id int, module_name varchar(100), method_name varchar(100), function_path varchar(400), function_name varchar(100), primary key(workflowtasks_entitymethod_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 $em->registerHandler('vtiger.entity.aftersave', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler');
 // com_vtiger_workflow ends
@@ -772,7 +772,7 @@ foreach($tab_field_array as $index=>$value){
 ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Vendors").",".getTabid("Emails").",'get_emails',4,'Emails',0,'add')");
 
 /* Added for module sequence number customization */
-ExecuteQuery("CREATE TABLE vtiger_modentity_num (num_id int(19) NOT NULL, semodule varchar(50) NOT NULL, prefix varchar(50) NOT NULL DEFAULT '', start_id varchar(50) NOT NULL, cur_id varchar(50) NOT NULL, active int(2) NOT NULL, PRIMARY KEY(num_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_modentity_num (num_id int(19) NOT NULL, semodule varchar(50) NOT NULL, prefix varchar(50) NOT NULL DEFAULT '', start_id varchar(50) NOT NULL, cur_id varchar(50) NOT NULL, active int(2) NOT NULL, PRIMARY KEY(num_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 // Setup module sequence numbering for all modules (except Invoice).
 function custom_addInventoryRows($paramArray){
@@ -1061,23 +1061,23 @@ $sql = "insert into vtiger_field values (".getTabid('Users').",".$adb->getUnique
 ExecuteQuery($sql);
 $sql = "drop table if exists vtiger_asteriskextensions";
 ExecuteQuery($sql);
-$sql = "create table vtiger_asteriskextensions (userid varchar(30), asterisk_extension varchar(50), use_asterisk varchar(3)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+$sql = "CREATE TABLE IF NOT EXISTS vtiger_asteriskextensions (userid varchar(30), asterisk_extension varchar(50), use_asterisk varchar(3)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
 ExecuteQuery($sql);
 $sql = "drop table if exists vtiger_asterisk";
 ExecuteQuery($sql);
-$sql = "create table vtiger_asterisk (server varchar(30), port varchar(30), username varchar(50), password varchar(50)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+$sql = "CREATE TABLE IF NOT EXISTS vtiger_asterisk (server varchar(30), port varchar(30), username varchar(50), password varchar(50)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
 ExecuteQuery($sql);
 $sql = "drop table if exists vtiger_asteriskincomingcalls";
 ExecuteQuery($sql);
-$sql = "create table vtiger_asteriskincomingcalls (from_number varchar(50) not null, from_name varchar(50) not null, to_number varchar(50) not null, callertype varchar(30)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+$sql = "CREATE TABLE IF NOT EXISTS vtiger_asteriskincomingcalls (from_number varchar(50) not null, from_name varchar(50) not null, to_number varchar(50) not null, callertype varchar(30)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
 ExecuteQuery($sql);
 $sql = "drop table if exists vtiger_asteriskoutgoingcalls";
 ExecuteQuery($sql);
-$sql = "create table vtiger_asteriskoutgoingcalls (userid varchar(30) not null, from_number varchar(30) not null, to_number varchar(30) not null) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+$sql = "CREATE TABLE IF NOT EXISTS vtiger_asteriskoutgoingcalls (userid varchar(30) not null, from_number varchar(30) not null, to_number varchar(30) not null) ENGINE=InnoDB DEFAULT CHARSET=utf8";
 ExecuteQuery($sql);
 $sql = "drop table if exists vtiger_tab_name_index";
 ExecuteQuery($sql);
-$sql = "create table vtiger_tab_name_index (tabid int(19), tablename varchar(50), primaryKey varchar(50)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+$sql = "CREATE TABLE IF NOT EXISTS vtiger_tab_name_index (tabid int(19), tablename varchar(50), primaryKey varchar(50)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
 ExecuteQuery($sql);
 $tabid = getTabid('Users');
 $tab_name_index_users = array('vtiger_asteriskextensions'=>'userid');
@@ -1120,7 +1120,7 @@ ExecuteQuery("ALTER TABLE vtiger_tab ADD COLUMN isentitytype INT NOT NULL DEFAUL
 ExecuteQuery("UPDATE vtiger_tab SET isentitytype=0 WHERE name IN ('Home','Dashboard','Rss','Reports','Portal','Users','Recyclebin')");
 
 /* Support for different languages to be stored in database instead of config file - Vtlib */
-ExecuteQuery("create table vtiger_language(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50), " .
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_language(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50), " .
 		"prefix VARCHAR(10), label VARCHAR(30), lastupdated DATETIME, sequence INT, isdefault INT(1), active INT(1)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 		
 /* Register default language English. This will automatically register all the other langauges from config file */
@@ -1129,10 +1129,10 @@ $vtlanguage = new Vtiger_Language();
 $vtlanguage->register('en_us','US English','English',true,true,true);
 
 /* To store relationship between the modules in a common table */
-ExecuteQuery("CREATE TABLE vtiger_crmentityrel (crmid int(11) NOT NULL, module varchar(100) NOT NULL, relcrmid int(11) NOT NULL, relmodule varchar(100) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_crmentityrel (crmid int(11) NOT NULL, module varchar(100) NOT NULL, relcrmid int(11) NOT NULL, relmodule varchar(100) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 /* To store the field to module relationship for uitype 10 */
-ExecuteQuery("CREATE TABLE vtiger_fieldmodulerel (fieldid int(11) NOT NULL, module varchar(100) NOT NULL, relmodule varchar(100) NOT NULL,
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_fieldmodulerel (fieldid int(11) NOT NULL, module varchar(100) NOT NULL, relmodule varchar(100) NOT NULL,
   					status varchar(10) default NULL, sequence int(11) default NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 /* Making users and groups depends on vtiger_users_seq */
@@ -1230,7 +1230,7 @@ $adb->query("ALTER TABLE vtiger_producttaxrel DROP FOREIGN KEY fk_1_vtiger_produ
 $adb->query("ALTER TABLE vtiger_pricebookproductrel DROP FOREIGN KEY fk_2_vtiger_pricebookproductrel");
 
 /* Vtlib Changes - Table added to store different types of links */
-ExecuteQuery("CREATE TABLE vtiger_links (linkid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_links (linkid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     		tabid INT, linktype VARCHAR(20), linklabel VARCHAR(30), linkurl VARCHAR(255), linkicon VARCHAR(100), sequence INT)");
 ExecuteQuery("CREATE INDEX link_tabidtype_idx ON vtiger_links(tabid,linktype)");
 
@@ -1238,7 +1238,7 @@ ExecuteQuery("CREATE INDEX link_tabidtype_idx ON vtiger_links(tabid,linktype)");
 ExecuteQuery("ALTER TABLE vtiger_tab ADD COLUMN version VARCHAR(10)");
 
 /*adding the notebook to vtiger*/
-ExecuteQuery("create table vtiger_notebook_contents (userid int(19) not null, contents text)");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_notebook_contents (userid int(19) not null, contents text)");
 /*notbook changes end*/
 
 /* Move Settings Page Information to Database */
@@ -1246,8 +1246,8 @@ ExecuteQuery("create table vtiger_notebook_contents (userid int(19) not null, co
 function moveSettingsToDatabase($adb){
 	$adb->query("drop table if exists vtiger_settings_blocks");
 	$adb->query("drop table if exists vtiger_settings_field");
-	$adb->query("create table vtiger_settings_blocks (blockid int(19), label varchar(250), sequence int(19), primary key pk_vtiger_settings_blocks (blockid))");
-	$adb->query("create table vtiger_settings_field (fieldid int(19), blockid int(19), name varchar(250), iconpath text, description text, linkto text, sequence int(19), foreign key fk_vtiger_settings_fields (blockid) references vtiger_settings_blocks(blockid) on delete cascade)");
+	$adb->query("CREATE TABLE IF NOT EXISTS vtiger_settings_blocks (blockid int(19), label varchar(250), sequence int(19), primary key pk_vtiger_settings_blocks (blockid))");
+	$adb->query("CREATE TABLE IF NOT EXISTS vtiger_settings_field (fieldid int(19), blockid int(19), name varchar(250), iconpath text, description text, linkto text, sequence int(19), foreign key fk_vtiger_settings_fields (blockid) references vtiger_settings_blocks(blockid) on delete cascade)");
 	
 	//icons for all fields
 	$icons = array("ico-users.gif",
@@ -1448,8 +1448,8 @@ moveSettingsToDatabase($adb);
 
 
 /* Email status tracking*/
-ExecuteQuery("CREATE TABLE vtiger_email_access(crmid INT, mailid INT, accessdate DATE, accesstime TIME)");
-ExecuteQuery("CREATE TABLE vtiger_email_track(crmid INT, mailid INT, count INT, primary key(crmid, mailid))");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_email_access(crmid INT, mailid INT, accessdate DATE, accesstime TIME)");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_email_track(crmid INT, mailid INT, count INT, primary key(crmid, mailid))");
 
 $fieldid = $adb->getUniqueID('vtiger_field');
 ExecuteQuery("INSERT INTO vtiger_field VALUES ('10',".$fieldid.", 'count', 'vtiger_email_track', '1', '25', 'count', 'Access Count', '1', '0', '0', '100', '6', '21', '3', 'V~O', '1', NULL, 'BAS', 0)");
@@ -1461,14 +1461,14 @@ ExecuteQuery("ALTER TABLE vtiger_report ADD COLUMN owner int(11) NOT NULL");
 ExecuteQuery("UPDATE vtiger_field INNER JOIN vtiger_field as vtiger_field1 on vtiger_field1.tabid=vtiger_field.tabid SET vtiger_field.block = vtiger_field1.block WHERE vtiger_field.fieldname='faq_answer' and vtiger_field1.fieldname='question' and vtiger_field.tabid=15");
 ExecuteQuery("ALTER TABLE vtiger_report ADD COLUMN sharingtype varchar(200) NOT NULL DEFAULT 'Private'");
 ExecuteQuery("UPDATE vtiger_report SET sharingtype='Public', owner=1 WHERE state='SAVED'");
-ExecuteQuery("Create table vtiger_reportsharing(reportid int(19) not null,shareid int(19) not null,setype varchar(200) NOT NULL)");
-ExecuteQuery("Create table vtiger_reportfilters(filterid int(11) not null,name varchar(200) not null)");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_reportsharing(reportid int(19) not null,shareid int(19) not null,setype varchar(200) NOT NULL)");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_reportfilters(filterid int(11) not null,name varchar(200) not null)");
 ExecuteQuery("INSERT INTO vtiger_reportfilters values(1,'Private')");
 ExecuteQuery("INSERT INTO vtiger_reportfilters values(2,'Public')");
 ExecuteQuery("INSERT INTO vtiger_reportfilters values(3,'Shared')");
 
 /* Added for tooltip manager */
-$sql = "create table vtiger_quickview (fieldid int(19) not null, related_fieldid int(19) not null, sequence int(19) not null, view int(19) not null, foreign key(fieldid) references vtiger_field(fieldid) on delete cascade)";
+$sql = "CREATE TABLE IF NOT EXISTS vtiger_quickview (fieldid int(19) not null, related_fieldid int(19) not null, sequence int(19) not null, view int(19) not null, foreign key(fieldid) references vtiger_field(fieldid) on delete cascade)";
 ExecuteQuery($sql);
 //add tooltip manager ends
 
@@ -1476,10 +1476,10 @@ ExecuteQuery($sql);
 populateLinks();
 
 /* Product Bundles Revamping */
-ExecuteQuery("CREATE TABLE vtiger_inventorysubproductrel(id int(19) NOT NULL, sequence_no INT(10) NOT NULL, productid INT(19) NOT NULL)");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_inventorysubproductrel(id int(19) NOT NULL, sequence_no INT(10) NOT NULL, productid INT(19) NOT NULL)");
 
 /* Support for Calendar Custom Fields */
-ExecuteQuery("CREATE TABLE vtiger_activitycf(activityid INT default '0' primary key)");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_activitycf(activityid INT default '0' primary key)");
 ExecuteQuery("insert into vtiger_blocks values (".$adb->getUniqueID('vtiger_blocks').",9,'LBL_CUSTOM_INFORMATION',3,0,0,0,0,0,1)");
 ExecuteQuery("insert into vtiger_blocks values (".$adb->getUniqueID('vtiger_blocks').",16,'LBL_CUSTOM_INFORMATION',4,0,0,0,0,0,1)");
 ExecuteQuery("insert into vtiger_field values (16,".$adb->getUniqueID('vtiger_field').",'contactid','vtiger_cntactivityrel',1,'57','contact_id','Contact Name',1,0,0,100,1,18,1,'I~O',1,null,'BAS',1)");
@@ -1497,11 +1497,13 @@ $tt_field1 = $adb->getUniqueID('vtiger_field');
 ExecuteQuery("insert into vtiger_field values ($helpDeskTabid,$tt_field1,'hours','vtiger_troubletickets',1,'1','hours','Hours',1,0,0,100,9,$ttBlockid,1,'V~O',1,null,'BAS',1,
 		'This gives the estimated hours for the Ticket<br> When the same ticket is added to a Service Contract, based on the Tracking Unit of the Service Contract, Used units is updated whenever a ticket is Closed.')");
 addFieldSecurity($helpDeskTabid, $tt_field1);
+ExecuteQuery("ALTER TABLE vtiger_troubletickets ADD COLUMN hours VARCHAR(200)");
 
 $tt_field2 = $adb->getUniqueID('vtiger_field');
 ExecuteQuery("insert into vtiger_field values ($helpDeskTabid,$tt_field2,'days','vtiger_troubletickets',1,'1','days','Days',1,0,0,100,10,$ttBlockid,1,'V~O',1,null,'BAS',1,
 		'This gives the estimated days for the Ticket<br> When the same ticket is added to a Service Contract, based on the Tracking Unit of the Service Contract, Used units is updated whenever a ticket is Closed.')");
 addFieldSecurity($helpDeskTabid, $tt_field2);
+ExecuteQuery("ALTER TABLE vtiger_troubletickets ADD COLUMN days VARCHAR(200)");
 // Adding fields ends here
 
 // Install Vtlib Compliant Modules
