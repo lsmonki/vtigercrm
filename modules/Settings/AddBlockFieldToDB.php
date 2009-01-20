@@ -18,29 +18,29 @@ $mode=$_REQUEST['mode'];
 $fldlabel = trim($_REQUEST[fldLabel]);
 $tabid = getTabid($fldmodule);
 
-function InStrCount($String,$Find,$CaseSensitive = false) {
-    $i=0;
-    $x=0;
-    while (strlen($String)>=$i) {
-     	unset($substring);
-     	if ($CaseSensitive) {
-      		$Find=strtolower($Find);
-      		$String=strtolower($String);
-     	}
-     	$substring=substr($String,$i,strlen($Find));
-     	if ($substring==$Find) $x++;
-     	$i++;
-    }
-    return $x;
-}
+//function InStrCount($String,$Find,$CaseSensitive = false) {
+//    $i=0;
+//    $x=0;
+//    while (strlen($String)>=$i) {
+//     	unset($substring);
+//     	if ($CaseSensitive) {
+//      		$Find=strtolower($Find);
+//      		$String=strtolower($String);
+//     	}
+//     	$substring=substr($String,$i,strlen($Find));
+//     	if ($substring==$Find) $x++;
+//     	$i++;
+//    }
+//    return $x;
+//}
    
-if($_REQUEST[mode]=='edit')
+/*if($_REQUEST[mode]=='edit')
 {
 	
-	$dup_check_query = $adb->pquery("SELECT * from vtiger_field WHERE fieldid!=? AND fieldlabel=? AND tabid = ?",array($_REQUEST['fieldselect'],$fldlabel, $tabid));	
+	$dup_check_query = $adb->pquery("SELECT * from vtiger_field WHERE fieldid!=? AND fieldlabel=? AND tabid = ? and vtiger_field.presence in (0,2)",array($_REQUEST['fieldselect'],$fldlabel, $tabid));	
 	
 	if($adb->num_rows($dup_check_query)==0 && trim($fldlabel)!=''){
-		$res= $adb->pquery("select fieldlabel,fieldname,tabid from vtiger_field where fieldid = ?",array($_REQUEST['fieldselect']));
+		$res= $adb->pquery("select fieldlabel,fieldname,tabid from vtiger_field where fieldid = ? and vtiger_field.presence in (0,2)",array($_REQUEST['fieldselect']));
 		$row= $adb->fetch_array($res);
 		if($adb->num_rows($res)!=0)
 		{
@@ -106,30 +106,24 @@ if($_REQUEST[mode]=='edit')
 	}
 	else{
 		$dup_error = 'yes';}
-}else{
+}else{*/
 	if(isset($_REQUEST[field_assignid]))
 	{
-		//to get the sequence of the field after which the new field will add
-		$sql_seq="select * from vtiger_field where fieldid in (".generateQuestionMarks($_REQUEST[field_assignid]).")";
-		$res_seq= $adb->pquery($sql_seq,array($_REQUEST[field_assignid]));
-	    $row_seq=$adb->fetch_array($res_seq);
-		$fld_sequence=$row_seq[sequence];
-		$newfld_sequence=$fld_sequence+1;
-		$fieldselect=$_REQUEST[fieldselect];
-		//end
-		foreach($_REQUEST[field_assignid] as $field_id)
+		$blockid = $_REQUEST['blockid'];
+		$max_fieldsequence = "select max(sequence) as maxsequence from vtiger_field where block = ? ";
+		$res = $adb->pquery($max_fieldsequence,array($blockid));
+		$max_seq = $adb->query_result($res,0,'maxsequence');
+		$max_seq = $max_seq+1;	
+		foreach($_REQUEST['field_assignid'] as $field_id)
 		{
 		     if($field_id!='')
 			 {
-				$adb->pquery("update vtiger_field set sequence=sequence+1 WHERE tabid=? and block=?  AND sequence > ?",array($tabid,$_REQUEST[blockid],$fld_sequence));
-		        $adb->pquery("update vtiger_field set block=?,sequence = ? WHERE fieldid= ?",array($_REQUEST[blockid],$newfld_sequence,$field_id));
-		
-			    $fld_sequence++;
-				$newfld_sequence++;
+				$adb->pquery("update vtiger_field set block=?,sequence = ? WHERE fieldid= ?",array($blockid,$max_seq,$field_id));
+			    $max_seq++;
 			}//check if blank
 		}
 	}
-}
+//}
 
 header("Location:index.php?module=Settings&action=LayoutBlockList&fld_module=".$fldmodule."&parenttab=".$parenttab."&duplicate=".$dup_error);
 ?>

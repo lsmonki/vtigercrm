@@ -166,7 +166,7 @@ class ImportAccount extends Accounts {
 		/** Constructor which will set the importable_fields as $this->importable_fields[$key]=1 in this object where key is the fieldname in the field table
 		 */
 	function ImportAccount() {
-		
+		parent::Accounts();
 		$this->log = LoggerManager::getLogger('import_account');
 		$this->db = new PearDatabase();
 		$this->db->println("IMP ImportAccount");

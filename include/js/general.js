@@ -67,7 +67,9 @@ function getObj(n,d) {
 
       x=d.all[n];
 
- 
+	if(typeof x == 'string'){
+		x=null;
+	}
 
   for(i=0;!x&&i<d.forms.length;i++)
 
@@ -205,35 +207,34 @@ function delete_cookie( cookie_name )
 
 
 function emptyCheck(fldName,fldLabel, fldType) {
-	var currObj=getObj(fldName)
-	
-
+	var currObj = getObj(fldName);
 	if (fldType=="text") {
 		if (currObj.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) {
-
-       			alert(fldLabel+alert_arr.CANNOT_BE_EMPTY)
-
+			alert(fldLabel+alert_arr.CANNOT_BE_EMPTY)
 			currObj.focus()
-
-                	return false
-
+           	return false
 		}
-
-        	else
-            	
-		return true
-	} else {
-		if (trim(currObj.value) == '') {
-
-	                alert(fldLabel+alert_arr.CANNOT_BE_NONE)
-
-        	        return false
-
- 	       } else return true
-
+        else{
+			return true
+		}
+	} else if((fldType == "textarea")  
+		&& (typeof(FCKeditorAPI)!=='undefined' && FCKeditorAPI.GetInstance(fldName) !== 'undefined')) { 
+ 		var textObj = FCKeditorAPI.GetInstance(fldName); 
+ 		var textValue = textObj.EditorDocument.body.innerHTML; 
+ 		if (trim(textValue) == '' || trim(textValue) == '<br>') { 
+ 		   	alert(fldLabel+alert_arr.CANNOT_BE_NONE); 
+ 			return false; 
+ 			} else{ 
+ 		        	return true; 
+ 			} 
+ 	}	else{
+			if (trim(currObj.value) == '') {
+				alert(fldLabel+alert_arr.CANNOT_BE_NONE)
+        		return false
+      		} else 
+			return true
+		}
 	}
-
-}
 
 
 
@@ -281,7 +282,7 @@ function patternValidate(fldName,fldLabel,type) {
 	//Asha: Remove spaces on either side of a Email id before validating
 	if (type.toUpperCase()=="EMAIL" || type.toUpperCase() == "DATE") currObj.value = trim(currObj.value);	
 	if (!re.test(currObj.value)) {
-		alert(alert_arr.ENTER_VALID + fldLabel)
+		alert(alert_arr.ENTER_VALID + fldLabel  + " ("+type+")");
 		currObj.focus()
 		return false
 	}
@@ -849,7 +850,6 @@ function massEditFormValidate(){
 }
 
 function doformValidation(edit_type) {
-
 	//Validation for Portal User
 	if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 	{
@@ -885,19 +885,19 @@ function doformValidation(edit_type) {
 				&& getObj('enable_recurring') != null) {
 					if(getObj('enable_recurring').checked && (getObj('recurring_frequency') == null 
 						|| trim(getObj('recurring_frequency').value) == '--None--' || getObj('recurring_frequency_mass_edit_check').checked==false)) {
-						alert("Recurring frequency not provided");
+						alert(alert_arr.RECURRING_FREQUENCY_NOT_PROVIDED);
 						return false;
 					}
 					if(getObj('enable_recurring').checked == false && getObj('recurring_frequency_mass_edit_check').checked
 						&& getObj('recurring_frequency') != null && trim(getObj('recurring_frequency').value) !=  '--None--') {
-						alert("Recurring frequency is provided, but recurring is not enabled");
+						alert(alert_arr.RECURRING_FREQNECY_NOT_ENABLED);
 						return false;
 					}	
 			}
 		} else if(getObj('enable_recurring') != null && getObj('enable_recurring').checked && 
 					(getObj('recurring_frequency') == null || getObj('recurring_frequency').value == '--None--')) {
-			alert("Recurring frequency not provided");
-			return false;
+			alert(alert_arr.RECURRING_FREQUENCY_NOT_PROVIDED);
+						return false;
 		}
 	}
 	for (var i=0; i<fieldname.length; i++) {
@@ -911,10 +911,9 @@ function doformValidation(edit_type) {
 			var type=fielddatatype[i].split("~")
 				if (type[1]=="M") {
 					if (!emptyCheck(fieldname[i],fieldlabel[i],getObj(fieldname[i]).type))
-						return false
+						return false;
 				}
-
-			switch (type[0]) {
+				switch (type[0]) {
 				case "O"  : break;
 				case "V"  : break;
 				case "C"  : break;
@@ -1406,13 +1405,28 @@ function fnhide(divId)
 
 function fnLoadValues(obj1,obj2,SelTab,unSelTab,moduletype,module){
 	
-   var oform = document.forms['EditView'];
+   
+	var oform = document.forms['EditView'];
    oform.action.value='Save';	
    //global variable to check the validation calling function to avoid validating when tab change
-   gValidationCall = 'tabchange'; 	
-   if((moduletype == 'inventory' && validateInventory(module)) ||(moduletype == 'normal') && formValidate())	
-   if(formValidate())
-   {	
+   gValidationCall = 'tabchange'; 
+   	
+	/*var tabName1 = document.getElementById(obj1);
+	var tabName2 = document.getElementById(obj2);
+	var tagName1 = document.getElementById(SelTab);
+	var tagName2 = document.getElementById(unSelTab);
+	if(tabName1.className == "dvtUnSelectedCell")
+		tabName1.className = "dvtSelectedCell";
+	if(tabName2.className == "dvtSelectedCell")
+		tabName2.className = "dvtUnSelectedCell"; 
+		  
+	tagName1.style.display='block';
+	tagName2.style.display='none';*/
+	gValidationCall = 'tabchange'; 
+	
+  // if((moduletype == 'inventory' && validateInventory(module)) ||(moduletype == 'normal') && formValidate())	
+  // if(formValidate())
+  // {	
 	   var tabName1 = document.getElementById(obj1);
 
 	   var tabName2 = document.getElementById(obj2);
@@ -1431,7 +1445,8 @@ function fnLoadValues(obj1,obj2,SelTab,unSelTab,moduletype,module){
 	   tagName1.style.display='block';
 
 	   tagName2.style.display='none';
-   }
+  // }
+	
    gValidationCall = ''; 	
 }
 
@@ -1632,7 +1647,7 @@ function fnvsh(obj,Lay){
 }
 
 function fnvshobj(obj,Lay){
-    var tagName = document.getElementById(Lay);
+	var tagName = document.getElementById(Lay);
     var leftSide = findPosX(obj);
     var topSide = findPosY(obj);
     var maxW = tagName.style.width;
@@ -3210,7 +3225,7 @@ function validate_merge(module)
 	}
 	if (check_parentvar!=true)
 	{
-		alert('Select one record as parent record');
+		alert(alert_arr.Select_one_record_as_parent_record);
 		return false;
 	}
 	return true;

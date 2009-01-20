@@ -82,7 +82,7 @@ class PopulateComboValues
 				
 		global $app_list_strings,$adb;
 		global $combo_strings;
-		$comboRes = $adb->query("SELECT distinct fieldname FROM vtiger_field WHERE uitype IN ('15') OR fieldname = 'salutationtype'");
+		$comboRes = $adb->query("SELECT distinct fieldname FROM vtiger_field WHERE uitype IN ('15') OR fieldname = 'salutationtype' and vtiger_field.presence in (0,2)");
 		$noOfCombos = $adb->num_rows($comboRes);
 		for($i=0; $i<$noOfCombos; $i++)
 		{
@@ -125,7 +125,7 @@ class PopulateComboValues
 		global $app_list_strings,$adb;
 		global $combo_strings;
 		// uitype -> 16 - Non standard picklist, 115 - User status, 83 - Tax Class
-		$comboRes = $adb->query("SELECT distinct fieldname FROM vtiger_field WHERE uitype IN ('16','115','83') AND fieldname != 'hdnTaxType'");
+		$comboRes = $adb->query("SELECT distinct fieldname FROM vtiger_field WHERE uitype IN ('16','115','83') AND fieldname != 'hdnTaxType' and vtiger_field.presence in (0,2)");
 		$noOfCombos = $adb->num_rows($comboRes);
 		for($i=0; $i<$noOfCombos; $i++)
 		{

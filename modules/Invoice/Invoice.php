@@ -38,7 +38,11 @@ class Invoice extends CRMEntity {
 	var $table_index= 'invoiceid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_invoice','vtiger_invoicebillads','vtiger_invoiceshipads','vtiger_invoicecf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_invoice'=>'invoiceid','vtiger_invoicebillads'=>'invoicebilladdressid','vtiger_invoiceshipads'=>'invoiceshipaddressid','vtiger_invoicecf'=>'invoiceid');
-				
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
+	var $customFieldTable = Array('vtiger_invoicecf', 'invoiceid');			
+	
 	var $column_fields = Array();
 
 	var $update_product_array = Array();	
@@ -88,7 +92,9 @@ class Invoice extends CRMEntity {
 	var $default_sort_order = 'ASC';
 
 	//var $groupTable = Array('vtiger_invoicegrouprelation','invoiceid');
-
+	
+	var $mandatory_fields = Array('subject','createdtime' ,'modifiedtime');
+	
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function Invoice() {

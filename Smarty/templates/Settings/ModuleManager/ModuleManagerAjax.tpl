@@ -76,8 +76,9 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 			{/if}
 		</td>
 		<td class="cellText small" width="15px" align=center>
-			{if $modinfo.hassettings}<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$modulename}&parenttab=Settings"><img src="{'Settings.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle" alt="{$modulelabel} {$MOD.LBL_SETTINGS}" title="{$modulelabel} {$MOD.LBL_SETTINGS}"></a>
-			{else}&nbsp;{/if}
+			{if $modinfo.presence eq 0 && $modinfo.hassettings}<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$modulename}&parenttab=Settings"><img src="{'Settings.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle" alt="{$modulelabel} {$MOD.LBL_SETTINGS}" title="{$modulelabel} {$MOD.LBL_SETTINGS}"></a>
+			{elseif $modinfo.hassettings eq false}&nbsp;
+			{/if}
 		</td>
 	</tr>
 {/if}
@@ -149,8 +150,9 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 			{/if}
 		</td-->
 		<td class="cellText small" width="15px" align=center>
-			{if $modinfo.hassettings}<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$modulename}&parenttab=Settings"><img src="{'Settings.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle" alt="{$modulelabel} {$MOD.LBL_SETTINGS}" title="{$modulelabel} {$MOD.LBL_SETTINGS}"></a>
-			{else}&nbsp;{/if}
+			{if $modinfo.presence eq 0 && $modinfo.hassettings}<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$modulename}&parenttab=Settings"><img src="{'Settings.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle" alt="{$modulelabel} {$MOD.LBL_SETTINGS}" title="{$modulelabel} {$MOD.LBL_SETTINGS}"></a>
+			{elseif $modinfo.hassettings eq false}&nbsp;
+			{/if}
 		</td>
 	</tr>
 {/if}

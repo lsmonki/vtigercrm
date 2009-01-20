@@ -324,7 +324,7 @@ class CRMEntity
 		else
 		{
 			$profileList = getCurrentUserProfileList();
-			$perm_qry = "SELECT columnname FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid = vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid = vtiger_field.fieldid WHERE vtiger_field.tabid = ? AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) . ") AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename='vtiger_crmentity' and vtiger_field.displaytype in (1,3);";
+			$perm_qry = "SELECT columnname FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid = vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid = vtiger_field.fieldid WHERE vtiger_field.tabid = ? AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) . ") AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename='vtiger_crmentity' and vtiger_field.displaytype in (1,3) and vtiger_field.presence in (0,2);"; 
 			$perm_result = $adb->pquery($perm_qry, array($tabid, $profileList));
 			$perm_rows = $adb->num_rows($perm_result);
 			for($i=0; $i<$perm_rows; $i++)
@@ -409,9 +409,9 @@ class CRMEntity
 		  if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 		  {
 				if($module == 'Documents')
-			 		$sql = "select * from vtiger_field where tabid in (". generateQuestionMarks($tabid) .") and tablename=? and displaytype in (1,2,3) group by columnname"; 
+			 		$sql = "select * from vtiger_field where tabid in (". generateQuestionMarks($tabid) .") and tablename=? and displaytype in (1,2,3) and presence in (0,2) group by columnname"; 
 			 	else
-			 		$sql = "select * from vtiger_field where tabid in (". generateQuestionMarks($tabid) .") and tablename=? and displaytype in (1,3) group by columnname";
+			 		$sql = "select * from vtiger_field where tabid in (". generateQuestionMarks($tabid) .") and tablename=? and displaytype in (1,3) and presence in (0,2) group by columnname"; 
 				$params = array($tabid, $table_name);	
 		  }
 		  else
@@ -428,7 +428,7 @@ class CRMEntity
 			  			WHERE vtiger_field.tabid = ?
 			  			AND vtiger_profile2field.visible = 0 
 			  			AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .")
-			  			AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename=? and vtiger_field.displaytype in (1,3) group by columnname";
+			  			AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename=? and vtiger_field.displaytype in (1,3) and vtiger_field.presence in (0,2) group by columnname"; 
 			  			  
 			  	$params = array($tabid, $profileList, $table_name);
 			  } else {
@@ -440,7 +440,7 @@ class CRMEntity
 			  			ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
 			  			WHERE vtiger_field.tabid = ?
 			  			AND vtiger_profile2field.visible = 0 
-			  			AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename=? and vtiger_field.displaytype in (1,3) group by columnname";
+			  			AND vtiger_def_org_field.visible = 0 and vtiger_field.tablename=? and vtiger_field.displaytype in (1,3) and vtiger_field.presence in (0,2) group by columnname"; 
 			  	
 				$params = array($tabid, $table_name);
 			  }
@@ -457,7 +457,7 @@ class CRMEntity
 		  }
 		  $column = array($table_index_column);
 		  $value = array($this->id);
-		  $sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3,4)"; 
+		  $sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3,4) and vtiger_field.presence in (0,2)";  
 		  $params = array($tabid, $table_name);
 	  }
 
@@ -739,7 +739,7 @@ $log->info("in getOldFileName  ".$notesid);
 				". <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
 	}
     $tabid = getTabid($module);
-    $sql1 =  "select * from vtiger_field where tabid=?";
+    $sql1 =  "select * from vtiger_field where tabid=? and vtiger_field.presence in (0,2)"; 
     $result1 = $adb->pquery($sql1, array($tabid));
     $noofrows = $adb->num_rows($result1);
     for($i=0; $i<$noofrows; $i++)
@@ -987,7 +987,7 @@ $log->info("in getOldFileName  ".$notesid);
         {
                 global $adb;
 		$tabid=getTabid($module);		
-                $sql1 = "select columnname,fieldlabel from vtiger_field where generatedtype=2 and tabid=?";
+                $sql1 = "select columnname,fieldlabel from vtiger_field where generatedtype=2 and tabid=? and vtiger_field.presence in (0,2)"; 
                 $result = $adb->pquery($sql1, array($tabid));
                 $numRows = $adb->num_rows($result);
                 $sql3 = "select ";
@@ -1145,7 +1145,7 @@ $log->info("in getOldFileName  ".$notesid);
 		$colf = Array();
 		$tabid = getTabid($module);
 		$skip_uitypes = array('4'); // uitype 4 is for Mod numbers
-		$sql = "select * from vtiger_field where tabid=? and uitype not in (". generateQuestionMarks($skip_uitypes) .")";
+		$sql = "select * from vtiger_field where tabid=? and uitype not in (". generateQuestionMarks($skip_uitypes) .") and vtiger_field.presence in (0,2)"; 
 	        $result = $adb->pquery($sql, array($tabid, $skip_uitypes));
 	        $noofrows = $adb->num_rows($result);
 		for($i=0; $i<$noofrows; $i++)
@@ -1158,6 +1158,23 @@ $log->info("in getOldFileName  ".$notesid);
 				$this->importable_fields[$key]=1;
 		}
 	}
+	
+	
+	/** Function to initialize the required fields array for that particular module */
+	function initRequiredFields($module) {
+		global $adb;
+		
+		$tabid = getTabId($module);
+		$sql = "select * from vtiger_field where tabid= ? and typeofdata like '%M%' and uitype not in ('53','70') and vtiger_field.presence in (0,2)";  
+		$result = $adb->pquery($sql,array($tabid));
+        $numRows = $adb->num_rows($result);
+        for($i=0; $i < $numRows;$i++)
+        {
+        	$fieldName = $adb->query_result($result,$i,"fieldname");
+			$this->required_fields[$fieldName] = 1;
+		}
+	}
+	
 	
 	/** Function to restore a deleted record of specified module with given crmid
   	  * @param $module -- module name:: Type varchar
@@ -1200,7 +1217,7 @@ $log->info("in getOldFileName  ".$notesid);
 		}
 		$sql = "SELECT columnname FROM vtiger_field ".
 				" WHERE (fieldname not like '%\_id' OR fieldname in ('assigned_user_id'))".
-				" AND tabid in (". generateQuestionMarks($tabid) .")";
+				" AND tabid in (". generateQuestionMarks($tabid) .") and vtiger_field.presence in (0,2)";  
 		$params = array($tabid);
 		if (count($exclude_columns) > 0) {		
 			$sql .= " AND columnname NOT IN (". generateQuestionMarks($exclude_columns) .")";
@@ -1585,7 +1602,7 @@ $log->info("in getOldFileName  ".$notesid);
 			left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
             left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid";
             
-        $fields_query = $adb->pquery("SELECT vtiger_field.fieldname,vtiger_field.tablename,vtiger_field.fieldid from vtiger_field INNER JOIN vtiger_tab on vtiger_tab.name = ? WHERE vtiger_tab.tabid=vtiger_field.tabid AND vtiger_field.uitype IN (10)",array($module));
+        $fields_query = $adb->pquery("SELECT vtiger_field.fieldname,vtiger_field.tablename,vtiger_field.fieldid from vtiger_field INNER JOIN vtiger_tab on vtiger_tab.name = ? WHERE vtiger_tab.tabid=vtiger_field.tabid AND vtiger_field.uitype IN (10) and vtiger_field.presence in (0,2)",array($module));
         
         if($adb->num_rows($fields_query)>0){
 	        for($i=0;$i<$adb->num_rows($fields_query);$i++){
@@ -1656,7 +1673,7 @@ $log->info("in getOldFileName  ".$notesid);
 					left join vtiger_groups as vtiger_groups".$secmodule." on vtiger_groups".$secmodule.".groupid = vtiger_crmentity$secmodule.smownerid
 		            left join vtiger_users as vtiger_users".$secmodule." on vtiger_users".$secmodule.".id = vtiger_crmentity$secmodule.smownerid"; 
    
-       $fields_query = $adb->pquery("SELECT vtiger_field.fieldname,vtiger_field.tablename,vtiger_field.fieldid from vtiger_field INNER JOIN vtiger_tab on vtiger_tab.name = ? WHERE vtiger_tab.tabid=vtiger_field.tabid AND vtiger_field.uitype IN (10)",array($secmodule));
+       $fields_query = $adb->pquery("SELECT vtiger_field.fieldname,vtiger_field.tablename,vtiger_field.fieldid from vtiger_field INNER JOIN vtiger_tab on vtiger_tab.name = ? WHERE vtiger_tab.tabid=vtiger_field.tabid AND vtiger_field.uitype IN (10) and vtiger_field.presence in (0,2)",array($secmodule));
        
        if($adb->num_rows($fields_query)>0){
 	        for($i=0;$i<$adb->num_rows($fields_query);$i++){

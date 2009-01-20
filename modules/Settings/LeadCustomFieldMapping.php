@@ -30,7 +30,7 @@ function getAccountCustomValues($leadid,$accountid)
 {
 	global $adb;
 	$accountcf=Array();
-	$sql="select fieldid,fieldlabel,uitype,typeofdata from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Accounts'";
+	$sql="select fieldid,fieldlabel,uitype,typeofdata from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Accounts' and vtiger_field.presence in (0,2)";
 	$result = $adb->pquery($sql, array());
 	$noofrows = $adb->num_rows($result);
 	
@@ -60,7 +60,7 @@ function getContactCustomValues($leadid,$contactid)
 {	
 	global $adb;	
 	$contactcf=Array();
-	$sql="select fieldid,fieldlabel,uitype,typeofdata from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Contacts'";
+	$sql="select fieldid,fieldlabel,uitype,typeofdata from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Contacts'and vtiger_field.presence in (0,2)";
 	$result = $adb->pquery($sql, array());
 	$noofrows = $adb->num_rows($result);
 	for($i=0; $i<$noofrows; $i++)
@@ -90,7 +90,7 @@ function getPotentialCustomValues($leadid,$potentialid)
 {
 	global $adb;	
 	$potentialcf=Array();
-	$sql="select fieldid,fieldlabel,uitype,typeofdata from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Potentials'";
+	$sql="select fieldid,fieldlabel,uitype,typeofdata from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Potentials' and vtiger_field.presence in (0,2)";
 	$result = $adb->pquery($sql, array());
 	$noofrows = $adb->num_rows($result);
 	for($i=0; $i<$noofrows; $i++)
@@ -119,7 +119,7 @@ function customFieldMappings()
 {
 	global $adb;
 
-	$convert_sql="select vtiger_convertleadmapping.*,uitype,fieldlabel,typeofdata from vtiger_convertleadmapping left join vtiger_field on vtiger_field.fieldid = vtiger_convertleadmapping.leadfid";
+	$convert_sql="select vtiger_convertleadmapping.*,uitype,fieldlabel,typeofdata from vtiger_convertleadmapping left join vtiger_field on vtiger_field.fieldid = vtiger_convertleadmapping.leadfid and vtiger_field.presence in (0,2)";
 	$convert_result = $adb->pquery($convert_sql, array());
 
 	$no_rows = $adb->num_rows($convert_result);
@@ -140,12 +140,12 @@ function customFieldMappings()
 	}
 	return $leadcf;
 }
-
+$module = 'Leads';
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("CUSTOMFIELDMAPPING",customFieldMappings());
-
+$smarty->assign("MODULE",$module);
 $smarty->display("CustomFieldMapping.tpl");
 
 ?>

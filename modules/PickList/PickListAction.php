@@ -64,7 +64,7 @@ if($mode == 'add'){
 		exit;
 	}
 	
-	$qry="select tablename,columnname from vtiger_field where fieldname='$tableName'";
+	$qry="select tablename,columnname from vtiger_field where fieldname='$tableName' and presence in (0,2)";
 	$result = $adb->query($qry);
 	$num = $adb->num_rows($result);
 
@@ -121,7 +121,7 @@ if($mode == 'add'){
 		$adb->query($sql);
 		
 		//replace the value of this piclist with new one in all records
-		$qry="select tablename,columnname from vtiger_field where fieldname='$tableName'";
+		$qry="select tablename,columnname from vtiger_field where fieldname='$tableName' and presence in (0,2)";
 		$result = $adb->query($qry);
 		$num = $adb->num_rows($result);
 		if($num > 0){

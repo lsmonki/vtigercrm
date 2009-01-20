@@ -10,29 +10,33 @@
  ********************************************************************************/ *}
 <script language="JavaScript" type="text/javascript" src="include/js/customview.js"></script>
 <script language="javascript">
+{literal}
+function CustomFieldMapping()
+{
+        document.form.action="index.php?module=Settings&action=LeadCustomFieldMapping";
+        document.form.submit();
+}
+var gselected_fieldtype = '';
 function getCustomFieldList(customField)
-{ldelim}
+{
 	var modulename = customField.options[customField.options.selectedIndex].value;
 	var modulelabel = customField.options[customField.options.selectedIndex].text;
 	$('module_info').innerHTML = '{$MOD.LBL_CUSTOM_FILED_IN} "'+modulelabel+'" {$APP.LBL_MODULE}';
 	new Ajax.Request(
 		'index.php',
-		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
 			postBody: 'module=Settings&action=SettingsAjax&file=CustomFieldList&fld_module='+modulename+'&parenttab=Settings&ajax=true',
-			onComplete: function(response) {ldelim}
+			onComplete: function(response) {
 				$("cfList").innerHTML=response.responseText;
-			{rdelim}
-		{rdelim}
+			}
+		}
 	);	
-{rdelim}
+}
 
-{literal}
 function deleteCustomField(id, fld_module, colName, uitype)
 {
-	{/literal}
-        if(confirm("{$APP.ARE_YOU_SURE}"))
-        {literal}
+	  if(confirm(alert_arr.ARE_YOU_SURE))
         {
                 document.form.action="index.php?module=Settings&action=DeleteCustomField&fld_module="+fld_module+"&fld_id="+id+"&colName="+colName+"&uitype="+uitype
                 document.form.submit()
@@ -51,7 +55,6 @@ function getCreateCustomFieldForm(customField,id,tabid,ui)
     			activitytype = activityobj[i].value;
     	}
     }
-
 	new Ajax.Request(
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
@@ -65,7 +68,7 @@ function getCreateCustomFieldForm(customField,id,tabid,ui)
 	);
 
 }
-function makeFieldSelected(oField,fieldid)
+function makeFieldSelected(oField,fieldid,blockid)
 {
 	if(gselected_fieldtype != '')
 	{
@@ -73,8 +76,8 @@ function makeFieldSelected(oField,fieldid)
 	}
 	oField.className = 'customMnuSelected';	
 	gselected_fieldtype = oField.id;	
-	selFieldType(fieldid)
-	document.getElementById('selectedfieldtype').value = fieldid;
+	selFieldType(fieldid,'','',blockid)
+	document.getElementById('selectedfieldtype_'+blockid).value = fieldid;
 }
 function CustomFieldMapping()
 {
@@ -99,52 +102,30 @@ var gselected_fieldtype = '';
 			<b><font color=red>{$DUPLICATE_ERROR} </font></b>
 			{/if}
 			
-				<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
-				<tbody><tr>
-					<td rowspan="2" valign="top" width="50"><img src="{'custom.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_USERS}" title="{$MOD.LBL_USERS}" border="0" height="48" width="48"></td>
-					<td class="heading2" valign="bottom"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> &gt; {$MOD.LBL_CUSTOM_FIELD_SETTINGS}</b></td>
-				</tr>
-
-				<tr>
-					<td class="small" valign="top">{$MOD.LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS}</td>
-				</tr>
-				</tbody></table>
+				<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%" >
+					<tbody>
+						<tr align="left">
+							<td rowspan="2" valign="top" width="50"><img src="{'custom.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_USERS}" title="{$MOD.LBL_USERS}" border="0" height="48" width="48" onmouseover="tooltip.tip(this,'{$MOD.LEADS_CUSTOM_FIELD_MAPPING}');" onmouseout="tooltip.untip(true);"></td>
+							<td class="heading2" valign="bottom"><b><a href="index.php?module=Settings&action=ModuleManager&parenttab=Settings">{$MOD.VTLIB_LBL_MODULE_MANAGER}&gt;</a><a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$MODULE}&parenttab=Settings">{$MODULE}</a> &gt; {$MOD.LBL_CUSTOM_FIELD_SETTINGS}</b></td>
+						</tr>
+					</tbody>
+				</table>
 				
 				<br>
 				<table border="0" cellpadding="10" cellspacing="0" width="100%">
 				<tbody><tr>
 				<td>
-
-				<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
-				<tbody><tr>
-					{* vtlib customization: Use translation only if available *}
-					{assign var="MODULELBL" value=$MODULE}
-					{if $APP.$MODULE}{assign var="MODULELBL" value=$APP.$MODULE}{/if}
-
-					<td class="big" nowrap><strong><span id="module_info">{$MOD.LBL_CUSTOM_FILED_IN} "{$MODULELBL}" {$APP.LBL_MODULE}</span></strong> </td>
-					<td class="small" align="right">
-					{$MOD.LBL_SELECT_CF_TEXT}
-		                	<select name="pick_module" class="importBox" onChange="getCustomFieldList(this)">
-                		        {foreach key=sel_value item=value from=$MODULES}
-		                        {if $MODULE eq $sel_value}
-                	                       	{assign var = "selected_val" value="selected"}
-		                        {else}
-                        	                {assign var = "selected_val" value=""}
-                                	{/if}
-									{* vtlib customization: Use translation only if available *}
-									{assign var="modulelabel" value=$value}
-									{if $APP.$value}{assign var="modulelabel" value=$APP.$value}{/if}
-	                                <option value="{$sel_value}" {$selected_val}>{$modulelabel}</option>
-        		                {/foreach}
-			                </select>
-					</td>
-					</tr>
-				</tbody>
-				</table>
+				{if $MODULE eq 'Leads'}
 				<div id="cfList">
+                                {include file="modules/Leads/LeadsCustomEntries.tpl"}
+                </div>	
+                {/if}
+                {if $MODULE eq 'Calendar'}
+                <div id="cfList">
                                 {include file="CustomFieldEntries.tpl"}
                 </div>	
-			<table border="0" cellpadding="5" cellspacing="0" width="100%">
+                {/if}
+            <table border="0" cellpadding="5" cellspacing="0" width="100%">
 			<tr>
 
 		  	<td class="small" align="right" nowrap="nowrap"><a href="#top">{$MOD.LBL_SCROLL}</a></td>

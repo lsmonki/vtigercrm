@@ -89,12 +89,11 @@ class ImportProduct extends Products {
 	/** Constructor which will set the importable_fields as $this->importable_fields[$key]=1 in this object where key is the fieldname in the field table
 	 */
 	function ImportProduct() {
-		
+		parent::Products();
 		$this->log = LoggerManager::getLogger('import_product');
 		$this->db = new PearDatabase();
 		$this->db->println("IMP ImportProduct");
 		$this->initImportableFields("Products");
-		
 		$this->db->println($this->importable_fields);
 	}
 

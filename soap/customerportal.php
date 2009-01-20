@@ -1374,7 +1374,7 @@ function get_contact_detail($id,$block,$customerid,$sessionid)
 	{
 		$fields_list ="'description'";
 	}
-	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=4 and columnname in ($fields_list) order by sequence";
+	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=4 and columnname in ($fields_list) and vtiger_field.presence in (0,2) order by sequence";
 	$fieldres = $adb->pquery($fieldquery);
 	$nooffields = $adb->num_rows($fieldres);
 
@@ -1427,7 +1427,7 @@ function get_cf_field_details($id,$customerid,$sessionid)
 		return null;
 	global $adb;
 
-	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=4 and tablename='vtiger_contactscf'";
+	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=4 and tablename='vtiger_contactscf' and vtiger_field.presence in (0,2)";
 	$fieldres = $adb->pquery($fieldquery);
 	$nooffields = $adb->num_rows($fieldres);
 
@@ -1564,7 +1564,7 @@ function get_account_detail($id,$block,$contactid,$sessionid)
 	elseif($block =='ACCDESCINFO')
 		$fields_list ="'description'";
 		
-	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=6 and columnname in ($fields_list) order by sequence";
+	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=6 and columnname in ($fields_list) and vtiger_field.presence in (0,2) order by sequence";
 	$fieldres = $adb->pquery($fieldquery);
 	$nooffields = $adb->num_rows($fieldres);
 
@@ -1618,7 +1618,7 @@ function get_product_detail($id,$block,$customerid,$sessionid)
 	elseif($block =='PRODESCINFO')
 		$fields_list ="'description'";
 	
-	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=14 and columnname in ($fields_list) order by sequence";
+	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=14 and columnname in ($fields_list) and vtiger_field.presence in (0,2) order by sequence";
 	$fieldres = $adb->pquery($fieldquery);
 	$nooffields = $adb->num_rows($fieldres);
 
@@ -2001,7 +2001,7 @@ function get_invoice_detail($id,$block,$customerid,$sessionid)
 		
 	if($block == 'INVINFORMATION')
 		$fields_list ="'subject','invoicedate','duedate','total','createdtime','invoicestatus','salesorderid','customerno','contactid','accountid','purchaseorder','salescommission'";
-	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=23 and columnname in ($fields_list) order by sequence";
+	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=23 and columnname in ($fields_list) and vtiger_field.presence in (0,2) order by sequence";
 	$fieldres = $adb->pquery($fieldquery);
 	$nooffields = $adb->num_rows($fieldres);
 
@@ -2182,7 +2182,7 @@ function get_details($id,$block,$customerid,$sessionid)
 	{
 		$fields_list_arr = array('quote_no','subject','potentialid','quotestage','validtill','contactid','carrier','shipping','accountid','subtotal','total','taxtype','discount_percent','discount_amount');
 
-		$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=20 and columnname in (". generateQuestionMarks($fields_list_arr) .") order by sequence";
+		$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=20 and columnname in (". generateQuestionMarks($fields_list_arr) .") and vtiger_field.presence in (0,2) order by sequence";
 		$fieldparams = array($fields_list_arr);
 		$query =  "select 
 					vtiger_quotes.*,vtiger_crmentity.* 
@@ -2194,7 +2194,7 @@ function get_details($id,$block,$customerid,$sessionid)
 	else if($block == "Documents")
 	{
 		$fields_list_arr = array('notesid','title','filename','notecontent','filetype','filesize','filelocationtype','fileversion','filestatus','os','createdtime','modifiedtime');
-		$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=8 and columnname in (". generateQuestionMarks($fields_list_arr) .") order by sequence";
+		$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=8 and columnname in (". generateQuestionMarks($fields_list_arr) .") and vtiger_field.presence in (0,2) order by sequence";
 		$fieldparams = array($fields_list_arr);
 		$query =  "select 
 					vtiger_notes.*,vtiger_crmentity.* 
@@ -2206,7 +2206,7 @@ function get_details($id,$block,$customerid,$sessionid)
 	else if($block == "Tickets")
 	{
 		$fields_list_arr = array('parent_id','priority','product_id','severity','status','category','update_log','title','solution','modifiedtime','createdtime');
-		$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=13 and columnname in (". generateQuestionMarks($fields_list_arr) .") order by sequence";
+		$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=13 and columnname in (". generateQuestionMarks($fields_list_arr) .") and vtiger_field.presence in (0,2) order by sequence";
 		$fieldparams = array($fields_list_arr);	
 		$query ="select 
 					vtiger_troubletickets.*,vtiger_crmentity.modifiedtime,vtiger_crmentity.createdtime 

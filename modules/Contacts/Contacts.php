@@ -43,7 +43,11 @@ class Contacts extends CRMEntity {
 	var $table_index= 'contactid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_contactdetails','vtiger_contactaddress','vtiger_contactsubdetails','vtiger_contactscf','vtiger_customerdetails');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_contactdetails'=>'contactid','vtiger_contactaddress'=>'contactaddressid','vtiger_contactsubdetails'=>'contactsubscriptionid','vtiger_contactscf'=>'contactid','vtiger_customerdetails'=>'customerid');
-
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
+	var $customFieldTable = Array('vtiger_contactscf', 'contactid');
+	
 	var $column_fields = Array();
 	
 	var $sortby_fields = Array('lastname','firstname','title','email','phone','smownerid','accountname');
@@ -118,7 +122,11 @@ class Contacts extends CRMEntity {
 
 	// This is the list of vtiger_fields that are required
 	var $required_fields =  array("lastname"=>1);
-	
+
+	// Used when enabling/disabling the mandatory fields for the module.
+	// Refers to vtiger_field.fieldname values.
+	var $mandatory_fields = Array('assigned_user_id','lastname','createdtime' ,'modifiedtime','imagename');
+
 	//Default Fields for Email Templates -- Pavani
 	var $emailTemplate_defaultFields = array('firstname','lastname','salutation','title','email','department','phone','mobile','support_start_date','support_end_date');
 
@@ -130,6 +138,7 @@ class Contacts extends CRMEntity {
 		$this->log = LoggerManager::getLogger('contact');
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Contacts');
+		$this->initRequiredFields("Contacts"); 
 	}
 
     	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
@@ -272,12 +281,12 @@ class Contacts extends CRMEntity {
           require('user_privileges/user_privileges_'.$current_user->id.'.php');
           if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
           {
-              $sql1 = "select columnname from vtiger_field where tabid=4 and block <> 75";
+              $sql1 = "select columnname from vtiger_field where tabid=4 and block <> 75 and vtiger_field.presence in (0,2)";
 			  $params1 = array();
           }else
           {
               $profileList = getCurrentUserProfileList();
-              $sql1 = "select columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 6 and vtiger_field.block <> 75 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+              $sql1 = "select columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 6 and vtiger_field.block <> 75 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
 			  $params1 = array();
 			  if (count($profileList) > 0) {
 			  	 $sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";
@@ -730,12 +739,12 @@ function getColumnNames()
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 	{
-	 $sql1 = "select fieldlabel from vtiger_field where tabid=4 and block <> 75";
+	 $sql1 = "select fieldlabel from vtiger_field where tabid=4 and block <> 75 and vtiger_field.presence in (0,2)";
 	 $params1 = array();
 	}else
 	{
 	 $profileList = getCurrentUserProfileList();
-	 $sql1 = "select vtiger_field.fieldid,fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+	 $sql1 = "select vtiger_field.fieldid,fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
 	 $params1 = array();
 	 if (count($profileList) > 0) {
 	 	$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") group by fieldid";
@@ -819,12 +828,12 @@ function get_contactsforol($user_name)
 	
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
   {
-    $sql1 = "select tablename,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and vtiger_field.block <> 5";
+    $sql1 = "select tablename,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and vtiger_field.block <> 5 and vtiger_field.presence in (0,2)";
 	$params1 = array();
   }else
   {
     $profileList = getCurrentUserProfileList();
-    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
 	$params1 = array();
 	if (count($profileList) > 0) {
 		$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";

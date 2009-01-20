@@ -39,7 +39,10 @@ class Quotes extends CRMEntity {
 	var $table_index= 'quoteid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_quotes','vtiger_quotesbillads','vtiger_quotesshipads','vtiger_quotescf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_quotes'=>'quoteid','vtiger_quotesbillads'=>'quotebilladdressid','vtiger_quotesshipads'=>'quoteshipaddressid','vtiger_quotescf'=>'quoteid');
-	
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
+	var $customFieldTable = Array('vtiger_quotescf', 'quoteid');
 	var $entity_table = "vtiger_crmentity";
 	
 	var $billadr_table = "vtiger_quotesbillads";
@@ -101,6 +104,8 @@ class Quotes extends CRMEntity {
 	var $default_order_by = 'crmid';
 	var $default_sort_order = 'ASC';
 	//var $groupTable = Array('vtiger_quotegrouprelation','quoteid');
+	
+	var $mandatory_fields = Array('subject','createdtime' ,'modifiedtime');
 	
 	/**	Constructor which will set the column_fields in this object
 	 */

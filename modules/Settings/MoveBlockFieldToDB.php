@@ -19,7 +19,7 @@ require_once('include/database/PearDatabase.php');
 if(isset($_REQUEST[field_assignid]))
 {
 	//to get the sequence of the field after which the new field will add
-	$sql_seq="select * from vtiger_field where tabid=? and block=? order by sequence desc limit 0,1";
+	$sql_seq="select * from vtiger_field where tabid=? and block=? and vtiger_field.presence in (0,2) order by sequence desc limit 0,1";
 	$res_seq= $adb->pquery($sql_seq, array($_REQUEST[tabid],$_REQUEST[blockid]));
     $row_seq=$adb->fetch_array($res_seq);
 	$fld_sequence=$row_seq[sequence];

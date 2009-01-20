@@ -12,7 +12,7 @@
 require_once('include/CustomFieldUtil.php');
 require_once('Smarty_setup.php');
 
-global $mod_strings,$app_strings,$app_list_strings,$theme,$adb;
+global $mod_strings,$app_strings,$app_list_strings,$theme,$adb,$log;
 
 $theme_path="themes/".$theme."/";
 
@@ -20,11 +20,11 @@ require_once($theme_path.'layout_utils.php');
 
 $tabid=$_REQUEST['tabid'];
 $blockid=$_REQUEST['blockid'];
-$blockselect=$_REQUEST['blockselect'];
-$mode=$_REQUEST[mode];
+//$blockselect=$_REQUEST['blockselect'];
+$mode=$_REQUEST['mode'];
 $readonly = '';
 $smarty = new vtigerCRM_Smarty;
-if($_REQUEST[mode]=='edit')
+if($_REQUEST['mode']=='edit')
 {
 
 $sql="select blocklabel from vtiger_blocks where blockid='".$_REQUEST['blockid']."'";
@@ -36,33 +36,49 @@ include('modules/'.$_REQUEST['fld_module'].'/language/'.$_SESSION['authenticated
 $blockLabel=$mod_strings[$row["blocklabel"]];
 }
 
+$blockQuery = "select blocklabel,blockid from vtiger_blocks where tabid ='".$_REQUEST['tabid']."'";
+$block = $adb->query($blockQuery);
+//$blockrow = $adb->fetch_array($block);
+$blocknum = $adb->num_rows($block);
+
+$log->debug("blocklabel".print_r($blockrow,true));
+$log->debug("blocklabel".print_r($block,true));
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
-$smarty->assign("THEME", $theme);
 $smarty->assign("FLD_MODULE", $_REQUEST['fld_module']);
 
 $output = '';
 
 $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script language="JavaScript" type="text/javascript" src="include/js/customview.js"></script>
-	<form action="index.php" method="post" name="addtodb"> 
-	<input type="hidden" name="module" value="Settings">
-	  <input type="hidden" name="fld_module" value="'.$_REQUEST['fld_module'].'">
-	  <input type="hidden" name="parenttab" value="Settings">
-          <input type="hidden" name="action" value="AddBlockToDB">
-	  <input type="hidden" name="blockid" value="'.$_REQUEST[blockid].'">
-	   <input type="hidden" name="tabid" value="'.$_REQUEST[tabid].'">
-	    <input type="hidden" name="blockselect" value="'.$_REQUEST[blockselect].'">
-	  <input type="hidden" name="mode" id="cfedit_mode" value="'.$mode.'">
-	  <input type="hidden" name="cfcombo" id="selectedfieldtype" value="">
+			<form action="index.php" method="post" name="addtodb"> 
+			<input type="hidden" name="module" value="Settings">
+	  		<input type="hidden" name="fld_module" value="'.$_REQUEST['fld_module'].'">
+	  		<input type="hidden" name="parenttab" value="Settings">
+          	<input type="hidden" name="action" value="AddBlockToDB">
+	  		<input type="hidden" name="blockid" value="'.$_REQUEST['blockid'].'">
+	   		<input type="hidden" name="tabid" value="'.$_REQUEST['tabid'].'">
+	   		<input type="hidden" name="blockselect" value="'.$_REQUEST['blockselect'].'">
+	  		<input type="hidden" name="mode" id="cfedit_mode" value="'.$mode.'">
+	  		<input type="hidden" name="cfcombo" id="selectedfieldtype" value="">
 
 	  
-		<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
-			<tr>';
-			if($mode == 'edit')
-				$output .= '<td width="60%" align="left" class="layerPopupHeading">Edit Block</td>';
-			else
-				$output .= '<td width="95%" align="left" class="layerPopupHeading">Add Block</td>';
+			<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
+				<tr>';
+				if($mode == 'edit')
+					$output .= '<td width="60%" align="left" class="layerPopupHeading">Edit Block</td>';
+				else
+					$output .= '<td width="95%" align="left" class="layerPopupHeading">Add Block</td>';
 				
+					$output .= '<td width="5%" align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'. vtiger_imageurl('close.gif', $theme) .'" border="0"  align="absmiddle" /></a></td>
+				</tr>';
+					$output .='' .
+			'</table>' .
+			'<table border=0 cellspacing=0 cellpadding=0 width=95% align=center> 
+				<tr>
+					<td class=small >
+						<table border=0 celspacing=0 cellpadding=0 width=100% align=center bgcolor=white>
+							<tr>';
+
 			$output .= '<td width="5%" align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'. vtiger_imageurl('close.gif', $theme) .'" border="0"  align="absmiddle" /></a></td>
 			</tr>';
 			$output .='</table><table border=0 cellspacing=0 cellpadding=0 width=95% align=center> 
@@ -70,23 +86,34 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 								<td class=small >
 									<table border=0 celspacing=0 cellpadding=0 width=100% align=center bgcolor=white>
 										<tr>';
+
 				
 		
-			$output .='<td width="50%">
-					<table width="100%" border="0" cellpadding="5" cellspacing="0">
-						<tr>
-							<td class="dataLabel" nowrap="nowrap" align="right" width="30%"><b>Block name</b></td>
-							<td align="left" width="70%"><input name="blocklabel" value="'.$blockLabel.'" type="text" class="txtBox"></td>
-						</tr>';
-					
+				$output .=		'<td width="50%">
+									<table width="100%" border="0" cellpadding="5" cellspacing="0">
+										<tr>
+											<td class="dataLabel" nowrap="nowrap" align="right" width="30%"><b>Block name</b></td>
+											<td align="left" width="70%"><input name="blocklabel" value="'.$blockLabel.'" type="text" class="txtBox"></td>
+										</tr>
+										<tr>' .
+											'<td class="dataLabel" align="right" width="30%"<b>After</b></td>' .
+											'<td align="left" width="70%"><select id="blockname" name="after_blockid">' ;
+													for($i=0;$i < $blocknum;$i++){
+													$blockname = $adb->query_result($block,$i,'blocklabel');
+													$blockname = getTranslatedString($blockname, $_REQUEST['fld_module']);
+													$blockid = $adb->query_result($block,$i,'blockid');
+													$output .="<option value = '".$blockid."'>".$blockname."</option>";
+													}
 					
 				
-				$output .= '	
-		 </table>
-		</td>
-	</tr>
-	</table>
-	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
+				$output .= '					</select>
+									 		</td>' .
+									 	'</tr>' .
+									'</table>
+								</td>
+							</tr>
+						</table>
+	<table border=0 cellspacing=0 cellpadding=5 width=100% >
 			<tr>
 				<td align="center">
 					<input type="button" name="save"  value=" &nbsp; '.$app_strings['LBL_SAVE_BUTTON_LABEL'].'&nbsp; " class="crmButton small save" onclick="return check();"/>&nbsp;
@@ -95,6 +122,10 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 			</tr>
 	</table>
 		<input type="hidden" name="fieldType" id="fieldType" value="'.$selectedvalue.'">
-	</form></div>';
+			</td>' .
+		'</tr>' .
+	'</table>' .
+'</form>' .
+'</div>';
 echo $output;
 ?>

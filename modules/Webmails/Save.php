@@ -57,7 +57,7 @@ $focus->column_fields["description"]=$msgData;
 
 
 //to save the email details in vtiger_emaildetails vtiger_tables
-$fieldid = $adb->query_result($adb->pquery('select fieldid from vtiger_field where tablename="vtiger_contactdetails" and fieldname="email" and columnname="email"', array()),0,'fieldid');
+$fieldid = $adb->query_result($adb->pquery('select fieldid from vtiger_field where tablename="vtiger_contactdetails" and fieldname="email" and columnname="email" and vtiger_field.presence in (0,2)', array()),0,'fieldid');
 
 if(count($email->relationship) != 0) {
 	$focus->column_fields['parent_id']=$email->relationship["id"].'@'.$fieldid.'|';

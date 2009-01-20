@@ -20,32 +20,25 @@
 			{include file='SetMenu.tpl'}
 			<!-- DISPLAY -->
 				<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
-				<tr>
+				<tr align="left">
 					<td rowspan="2" valign="top" width="50"><img src="{'custom.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_USERS}" title="{$MOD.LBL_USERS}" border="0" height="48" width="48"></td>
-					<td class="heading2" valign="bottom"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> &gt; {$MOD.LBL_CUSTOM_FIELD_SETTINGS}</b></td>
+					<td class="heading2" valign="bottom"><b><a href="index.php?module=Settings&action=ModuleManager&parenttab=Settings">{$MOD.VTLIB_LBL_MODULE_MANAGER}&gt;</a><a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule=Leads&parenttab=Settings">{$MODULE}</a> &gt; {$MOD.LBL_CUSTOM_FIELD_SETTINGS}</b></td>
 				</tr>
 
-				<tr>
-					<td class="small" valign="top">{$MOD.LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS}</td>
+				<tr align="left">
+					<td class="small" valign="top">{$MOD.LEADS_CUSTOM_FIELD_MAPPING}</td>
 				</tr>
 				</table>
 				
 				<br>
 				<form action="index.php?module=Settings&action=SaveConvertLead" method="post" name="index">
-				<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
-				<tr>
-					<td class="big"><strong>{$MOD.LBL_EDIT_FIELD_MAPPING}</strong> </td>
-					<td class="small" align="right">&nbsp;
-					</td>
-				</tr>
-				</table>
-
 				<table class="listTableTopButtons" border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tr>
+					<td class="big" align="left"><strong>{$MOD.LBL_EDIT_FIELD_MAPPING}</strong> </td>
 					<td class="small">&nbsp;</td>
 					<td class="small" align="right">&nbsp;&nbsp;
 					<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" name="save" value=" &nbsp;{$APP.LBL_SAVE_BUTTON_LABEL}&nbsp; " class="crmButton small save" type="submit" onclick ="return validateCustomFieldAccounts();">
-                     <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" name="cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " onclick = "gotourl('index.php?action=CustomFieldList&module=Settings&fld_module=Leads&parenttab=Settings')"  class="crmButton small cancel" type="button">
+                     <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" name="cancel" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " onclick = "window.history.back()"  class="crmButton small cancel" type="button">
 				</tr>
 				</table>
 				<table class="listTable" border="0" cellpadding="5" cellspacing="0" width="100%">

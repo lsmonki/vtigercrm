@@ -17,7 +17,7 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-$module_array = getModuleNameList();
+$module_array = getModuleNameList1();
 if($_REQUEST['list_module_mode'] != '' && $_REQUEST['list_module_mode'] == 'save')
 {
 	foreach($module_array as $val)
@@ -96,7 +96,7 @@ function getModuleOwner($tabid)
 	/** Function to get the module List to which the owners can be assigned 
 	 *  It gets the module list and returns in an array 
 	 */
-function getModuleNameList()
+function getModuleNameList1()
 {
 	global $adb;
 

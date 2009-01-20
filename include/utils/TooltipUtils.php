@@ -20,7 +20,7 @@ function getFieldList($module_name, $field_name = "") {
 	if (!empty ($field_name)) {
 		$query .= " and fieldname not like '$field_name'";
 	}
-	$query.= " and columnname not like 'imagename' and uitype not in (61, 122)";
+	$query.= " and columnname not like 'imagename' and uitype not in (61, 122) and vtiger_field.presence in (0,2)";
 	$result = $adb->pquery($query, array ());
 	while ($fieldinfo = $adb->fetch_array($result)) {
 		$fields[] = array (
@@ -105,7 +105,7 @@ function getToolTipText($view,$fieldid,$value){
 	$fieldname = Array();
 	$fieldlabel = Array();		
 
-	$quickview = 'select fieldname,fieldlabel from vtiger_quickview inner join vtiger_field on vtiger_quickview.related_fieldid=vtiger_field.fieldid where vtiger_quickview.fieldid = '.$fieldid.' and view='.$view.' order by vtiger_quickview.sequence';
+	$quickview = 'select fieldname,fieldlabel from vtiger_quickview inner join vtiger_field on vtiger_quickview.related_fieldid=vtiger_field.fieldid where vtiger_quickview.fieldid = '.$fieldid.' and view='.$view.' and vtiger_field.presence in (0,2) order by vtiger_quickview.sequence';
 	$result = $adb->query($quickview);
 	$count = $adb->num_rows($result);
 	
@@ -163,7 +163,7 @@ function ToolTipExists($fieldname,$tabid){
 		return false;
 	}else{
 		global $adb;
-		$sql = "select fieldid from vtiger_field where tabid = $tabid and fieldname = '$fieldname'";
+		$sql = "select fieldid from vtiger_field where tabid = $tabid and fieldname = '$fieldname' and vtiger_field.presence in (0,2)";
 		$result = $adb->query($sql);
 		$count = $adb->num_rows($result);
 		if($count > 0){

@@ -145,7 +145,7 @@ var gVTModule = '{$smarty.request.module}';
 							</tr>
 							{/if}
 							<tr>
-								<td class="cellLabel" nowrap align="right"><b><font color="red">*</font>{$MOD.LBL_EVENTNAME}</b></td>
+								<td class="cellLabel" nowrap align="right"><b><font color="red">{$TYPEOFDATA.subject}</font>{$MOD.LBL_EVENTNAME}</b></td>
 								<td class="cellInfo" align="left"><input name="subject" type="text" class="textbox" value="{$ACTIVITYDATA.subject}" style="width:50%">&nbsp;&nbsp;&nbsp;
 								{if $LABEL.visibility neq ''}
 								{foreach key=key_one item=arr from=$ACTIVITYDATA.visibility}
@@ -161,13 +161,13 @@ var gVTModule = '{$smarty.request.module}';
 							</tr>
 							{if $LABEL.description neq ''}
 							<tr>
-                        					<td class="cellLabel" valign="top" nowrap align="right"><b>{$LABEL.description}</b></td>
+                        					<td class="cellLabel" valign="top" nowrap align="right"><b><font color="red">{$TYPEOFDATA.description}</font>{$LABEL.description}</b></td> 
 								<td class="cellInfo" align="left"><textarea style="width:100%; height : 60px;" name="description">{$ACTIVITYDATA.description}</textarea></td>
                 					</tr>
 							{/if}
 							{if $LABEL.location neq ''}
 							<tr>
-			                                        <td class="cellLabel" align="right" valign="top"><b>{$MOD.LBL_APP_LOCATION}</b></td>
+			                     <td class="cellLabel" align="right" valign="top"><b><font color="red">{$TYPEOFDATA.location}</font>{$MOD.LBL_APP_LOCATION}</b></td>
 								<td class="cellInfo" align="left"><input name="location" type="text" class="textbox" value="{$ACTIVITYDATA.location}" style="width:50%">
 							</tr>
 							{/if}
@@ -176,7 +176,7 @@ var gVTModule = '{$smarty.request.module}';
 								<td colspan=2 width=80% align="center">
 								<table border=0 cellspacing=0 cellpadding=3 width=80%>
 									<tr>
-										<td >{if $LABEL.eventstatus neq ''}<b><font color="red">*</font>{$LABEL.eventstatus}</b>{/if}</td>
+										 <td >{if $LABEL.eventstatus neq ''}<b><font color="red">{$TYPEOFDATA.eventstatus}</font>{$LABEL.eventstatus}</b>{/if}</td>                                        
                                                                                 <td >{if $LABEL.assigned_user_id != ''}<b>
 											{$LABEL.assigned_user_id}</b>
 											{/if}</td>
@@ -644,7 +644,8 @@ var gVTModule = '{$smarty.request.module}';
 						<table width="100%" cellpadding="5" cellspacing="0" border="0">
 							{if $LABEL.parent_id neq ''}	
 							<tr>
-								<td width="10%"><b>{$MOD.LBL_RELATEDTO}</b></td>
+								<!--td width="10%"><b>{$MOD.LBL_RELATEDTO}</b></td-->
+								<td width="10%"><b><font color="red">{$TYPEOFDATA.relatedto}</font>{$MOD.LBL_RELATEDTO}</b></td>
 								<td>
 									<input name="parent_id" type="hidden" value="{$secondvalue.parent_id}">
 									<input name="del_actparent_rel" type="hidden" >
@@ -686,13 +687,13 @@ var gVTModule = '{$smarty.request.module}';
 		{else}
 		<table border="0" cellpadding="5" cellspacing="0" width="100%">
 			<tr>
-                        	<td class="cellLabel" width="20%" align="right"><b><font color="red">*</font>{$MOD.LBL_TODO}</b></td>
+                        	<td class="cellLabel" width="20%" align="right"><b><font color="red">{$TYPEOFDATA.subject}</font>{$MOD.LBL_TODO}</b></td>
                         	<td class="cellInfo" width="80%" align="left"><input name="subject" value="{$ACTIVITYDATA.subject}" class="textbox" style="width: 70%;" type="text"></td>
            		</tr>
 			
 			<tr>
 				{if $LABEL.description != ''}
-				<td class="cellLabel" align="right"><b>{$LABEL.description}</b></td>
+				<td class="cellLabel" align="right"><b><font color="red">{$TYPEOFDATA.description}</font>{$LABEL.description}</b></td>
 				<td class="cellInfo" align="left"><textarea style="width: 90%; height: 60px;" name="description">{$ACTIVITYDATA.description}</textarea>
 				{/if}
 				
@@ -702,10 +703,10 @@ var gVTModule = '{$smarty.request.module}';
 					<table border="0" cellpadding="5" cellspacing="1" width="100%">
             					<tr>
 							{if $LABEL.taskstatus != ''}
-							<td class="cellLabel" width=33% align="left"><b>{$LABEL.taskstatus}</b></td>
+							<td class="cellLabel" width=33% align="left"><b><font color="red">{$TYPEOFDATA.taskstatus}</font>{$LABEL.taskstatus}</b></td>
 							{/if}
 							{if $LABEL.taskpriority != ''}
-              						<td class="cellLabel" width=33% align="left"><b>{$LABEL.taskpriority}</b></td>
+              						<td class="cellLabel" width=33% align="left"><b><font color="red">{$TYPEOFDATA.taskpriority}</font>{$LABEL.taskpriority}</b></td>
 							{/if}
               						{if $LABEL.assigned_user_id != ''}
 							<td class="cellLabel" width=34% align="left"><b>{$LABEL.assigned_user_id}</b></td>
@@ -891,7 +892,7 @@ var gVTModule = '{$smarty.request.module}';
 			{if $LABEL.sendnotification != ''}
 				{assign var='vision' value='none'}
                 	<table>
-				<tr><td>{$LABEL.sendnotification}</td>
+				<tr><td><font color="red">{$TYPEOFDATA.sendnotification}</font>{$LABEL.sendnotification}</td>
 					{if $ACTIVITYDATA.sendnotification eq 1}
                                         <td>
                                                 <input name="sendnotification" type="checkbox" checked>
@@ -911,7 +912,7 @@ var gVTModule = '{$smarty.request.module}';
            		     <table width="100%" cellpadding="5" cellspacing="0" border="0">
 			     {if $LABEL.parent_id neq ''}
                 	     <tr>
-                        	     <td><b>{$MOD.LBL_RELATEDTO}</b></td>
+                        	     <td><b><font color="red">{$TYPEOFDATA.parent_id}</font>{$MOD.LBL_RELATEDTO}</b></td>
                                      <td>
 					<input name="parent_id" type="hidden" value="{$secondvalue.parent_id}">
 					<input name="del_actparent_rel" type="hidden" >
@@ -932,7 +933,7 @@ var gVTModule = '{$smarty.request.module}';
 			     {/if}
 			     {if $LABEL.contact_id neq ''}	
 			     <tr>
-                                     <td><b>{$LABEL.contact_id}</b></td>
+                                     <td><b><font color="red">{$TYPEOFDATA.contact_id}</font>{$LABEL.contact_id}</b></td> 
 				     <td colspan="2">
 						<input name="contact_name" id = "contact_name" readonly type="text" class="calTxt" value="{$ACTIVITYDATA.contact_id}"><input name="contact_id"  type="hidden" value="{$secondvalue.contact_id}">&nbsp;
 						<input name="deletecntlist"  id="deletecntlist" type="hidden">

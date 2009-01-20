@@ -50,8 +50,10 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 {
 	global $adb;
 	$standCustFld = Array();
-	for($i=0; $i<$noofrows; $i++,$row++)
+	if(!isset($focus->mandatory_fields)) $focus->mandatory_fields = Array();
+	for($i=0; $i<$noofrows; $i++)
 	{
+		$fieldname = $adb->query_result($fieldListResult,$i,"fieldname");
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
 		$displaytype = $adb->query_result($fieldListResult,$i,"displaytype");
 		$fieldlabel = $adb->query_result($fieldListResult,$i,"fieldlabel");
@@ -59,7 +61,7 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 		$fieldtype = explode("~",$typeofdata);
                 $mandatory = '';
 		$readonly = '';
-                if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 20 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || ($displaytype != 3 && $fieldlabel == "Activity Type" && $uitype == 15) || ($uitype == 117 && $fieldtype[1] == "M"))
+                if($fieldtype[1] == 'M')
                 {
                         $mandatory = '<font color="red">*</font>';
 						$readonly = 'disabled';
@@ -74,12 +76,12 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 			if($fieldlabel == 'Activity Type')
 			{
 				$visible = "checked";
-                        	$readonly = 'disabled';
+                $readonly = 'disabled';
 			}
 			else
-			$visible = "checked";
+				$visible = "checked";
 		}
-		elseif($displaytype==3)
+		elseif($displaytype == 3)
 		{
 			$visible = "checked";
 			$readonly = 'disabled';

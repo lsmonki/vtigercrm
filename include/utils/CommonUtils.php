@@ -1152,7 +1152,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 		$display_type_check = 'vtiger_field.displaytype = 1';
 	}elseif($mode == 'mass_edit')	
 	{
-		$display_type_check = 'vtiger_field.displaytype = 1 AND vtiger_field.masseditable NOT IN (0,2)';
+		$display_type_check = 'vtiger_field.displaytype = 1 AND vtiger_field.masseditable NOT IN (0,2,3)';
 	}else
 	{
 		$display_type_check = 'vtiger_field.displaytype in (1,4)';
@@ -1168,13 +1168,13 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 	{
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == "Users" || $module == "Emails")
   		{
- 			$sql = "SELECT vtiger_field.* FROM vtiger_field WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND vtiger_field.displaytype IN (1,2,4) ORDER BY block,sequence";
+ 			$sql = "SELECT vtiger_field.* FROM vtiger_field WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND vtiger_field.displaytype IN (1,2,4) and vtiger_field.presence in (0,2) ORDER BY block,sequence";
   			$params = array($tabid, $blockid_list);
 		}
   		else
   		{
   			$profileList = getCurrentUserProfileList();
- 			$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND vtiger_field.displaytype IN (1,2,4) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+ 			$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND vtiger_field.displaytype IN (1,2,4) and vtiger_field.presence in (0,2) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
  			$params = array($tabid, $blockid_list, $profileList);
 			//Postgres 8 fixes
  			if( $adb->dbType == "pgsql")
@@ -1194,13 +1194,13 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 		{
 			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2]== 0 || $module == 'Users' || $module == "Emails")
   			{
- 				$sql = "SELECT vtiger_field.* FROM vtiger_field WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND $display_type_check AND info_type = ? ORDER BY block,sequence";
+ 				$sql = "SELECT vtiger_field.* FROM vtiger_field WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND $display_type_check AND info_type = ? and vtiger_field.presence in (0,2) ORDER BY block,sequence";
   				$params = array($tabid, $blockid_list, $info_type);
 			}
   			else
   			{
   				$profileList = getCurrentUserProfileList();
- 				$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid  WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND $display_type_check AND info_type = ? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+ 				$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid  WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list) .") AND $display_type_check AND info_type = ? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
  				$params = array($tabid, $blockid_list, $info_type, $profileList);
 				//Postgres 8 fixes
  				if( $adb->dbType == "pgsql")
@@ -1211,13 +1211,13 @@ function getBlocks($module,$disp_view,$mode,$col_fields='',$info_type='')
 		{
 			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == 'Users' || $module == "Emails")
   			{
- 				$sql = "SELECT vtiger_field.* FROM vtiger_field WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list).") AND $display_type_check  ORDER BY block,sequence";
+ 				$sql = "SELECT vtiger_field.* FROM vtiger_field WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list).") AND $display_type_check  and vtiger_field.presence in (0,2) ORDER BY block,sequence";
 				$params = array($tabid, $blockid_list);
 			}
   			else
   			{
   				$profileList = getCurrentUserProfileList();
- 				$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid  WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list).") AND $display_type_check AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList).")  GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
+ 				$sql = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid  WHERE vtiger_field.tabid=? AND vtiger_field.block IN (". generateQuestionMarks($blockid_list).") AND $display_type_check AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList).") and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid ORDER BY block,sequence";
 				$params = array($tabid, $blockid_list, $profileList);
  				//Postgres 8 fixes
  				if( $adb->dbType == "pgsql")
@@ -2039,19 +2039,18 @@ function QuickCreate($module)
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 	{
-		$quickcreate_query = "select * from vtiger_field where quickcreate=0 and tabid = ? order by quickcreatesequence";
+		$quickcreate_query = "select * from vtiger_field where quickcreate in (0,2) and tabid = ? and vtiger_field.presence in (0,2) order by quickcreatesequence";
 		$params = array($tabid);
 	}
 	else
 	{
 		$profileList = getCurrentUserProfileList();
-		$quickcreate_query = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND quickcreate=0 AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") GROUP BY vtiger_field.fieldid ORDER BY quickcreatesequence";
+		$quickcreate_query = "SELECT vtiger_field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND quickcreate in (0,2) AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid ORDER BY quickcreatesequence";
 		$params = array($tabid, $profileList);
 		//Postgres 8 fixes
 		if( $adb->dbType == "pgsql")
 			$quickcreate_query = fixPostgresQuery( $quickcreate_query, $log, 0); 
 	}
-
 	$category = getParentTab();
 	$result = $adb->pquery($quickcreate_query, $params);
 	$noofrows = $adb->num_rows($result);
@@ -2068,9 +2067,9 @@ function QuickCreate($module)
 
 		//to get validationdata
 		$fldLabel_array = Array();
-		$fldLabel_array[$fieldlabel] = $typeofdata;
+		$fldLabel_array[getTranslatedString($fieldlabel)] = $typeofdata;
 		$fieldName_array[$fieldname] = $fldLabel_array;
-		$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module);
+		$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module,'',$typeofdata);
 		$qcreate_arr[]=$custfld;
 	}
 	for ($i=0,$j=0;$i<count($qcreate_arr);$i=$i+2,$j++)
@@ -2088,7 +2087,7 @@ function QuickCreate($module)
 	}
 	$form_data['form'] = $return_data;
 	$form_data['data'] = $fieldName_array;
-	$log->debug("Exiting QuickCreate method ...");
+	$log->debug("Exiting QuickCreate method ...".print_r($form_data,true));
 	return $form_data;
 }
 
@@ -2806,7 +2805,7 @@ function getImportFieldsList($module)
 	$tabid = getTabid($module);
 
 	//Here we can add special cases for module basis, ie., if we want the fields of display type 3, we can add
-	$displaytype = " displaytype=1 ";
+	$displaytype = " displaytype=1 and vtiger_field.presence in (0,2) ";
 
 	$fieldnames = "";
 	//For module basis we can add the list of fields for Import mapping
@@ -2898,7 +2897,7 @@ function getTicketDetails($id,$whole_date)
 		 if ($cfOneField != 'ticketid')
 		 {
 			 $cfData = $adb->query_result($result,0,$cfOneField);
-			 $sql = "SELECT fieldlabel FROM vtiger_field WHERE columnname = ?";
+			 $sql = "SELECT fieldlabel FROM vtiger_field WHERE columnname = ? and vtiger_field.presence in (0,2)";
 			 $cfLabel = $adb->query_result($adb->pquery($sql,array($cfOneField)),0,'fieldlabel');
 			 $desc .= '<br><br>'.$cfLabel.' : <br>'.$cfData;
 		 }
@@ -3388,20 +3387,26 @@ function getEmailTemplateVariables(){
 				if($field=='support_start_date' || $field=='support_end_date'){
 					$tabname='vtiger_customerdetails';
 				}
-				$sql="select fieldlabel from vtiger_field where tablename=? and columnname=?";
+				$sql="select fieldlabel from vtiger_field where tablename=? and columnname=? and vtiger_field.presence in (0,2)";
 				$result=$adb->pquery($sql,array($tabname,$field));
-				$option=array(getTranslatedString($module).': '.getTranslatedString($adb->query_result($result,'fieldlbel')),"$".strtolower($module)."-".$field."$");
-				$allFields[] = $option;
+				$norows = $adb->num_rows($result);
+				if($norows > 0){
+					$option=array(getTranslatedString($module).': '.getTranslatedString($adb->query_result($result,'fieldlabel')),"$".strtolower($module)."-".$field."$");
+					$allFields[] = $option;
+				}
 			}
 		}
 		// Set the custom fields of a given module for Email templates
 			$custFields=getCustomFieldArray($module);
 			foreach($custFields as $val=>$key){
-				$sql="select fieldlabel from vtiger_field where tablename=? and columnname=? and uitype!=56";
+				$sql="select fieldlabel from vtiger_field where tablename=? and columnname=? and uitype!=56 and vtiger_field.presence in (0,2)";
 				$result=$adb->pquery($sql,array($module_cf_table[$module],$val));
-				if($adb->query_result($result,'fieldlbel') != '' and $adb->query_result($result,'fieldlbel') !=NULL){
-					$option=array(getTranslatedString($module).': '.getTranslatedString($adb->query_result($result,'fieldlbel')),"$".strtolower($module)."-".$val."$");
+				$norows = $adb->num_rows($result);
+				if($norows > 0){
+					if($adb->query_result($result,'fieldlabel') != '' and $adb->query_result($result,'fieldlabel') !=NULL){
+					$option=array(getTranslatedString($module).': '.getTranslatedString($adb->query_result($result,'fieldlabel')),"$".strtolower($module)."-".$val."$");
 					$allFields[] = $option;
+					}
 				}
 			}
 		//}
@@ -3442,7 +3447,6 @@ function checkFileAccess($filepath) {
 
 	$realfilepath = str_replace('\\', '/', $realfilepath);
 	$rootdirpath  = str_replace('\\', '/', $root_directory);
-
 	if(stripos($realfilepath, $rootdirpath) !== 0) {
 		die("Sorry! Attempt to access restricted file.");
 	}
@@ -3480,6 +3484,37 @@ function getOwnerName($id)
 	}
 	$log->debug("Exiting getOwnerName method ...");
 	return $ownername;	
+}
+
+/*This is used to get the difference of available fields with the hidden fields
+** for the admin,used when Layout Editor hides a field and the field disappears 
+** from the listview header and the popup listheader and popup searchfields
+**/
+
+function filterInactiveFields($module,$fields){
+	global $adb,$mod_strings;
+	$tabid = getTabid($module);
+	
+	$hiddenArr = array();
+	$query= 'select * from vtiger_field where tabid = ? and presence not in (0,2)';
+	$res = $adb->pquery($query,array($tabid));
+	$num_rows = $adb->num_rows($res);
+	for($i=0;$i<$num_rows;$i++){
+		$fieldLabel = getTranslatedString($adb->query_result($res, $i, "fieldlabel"));
+		$tableName = $adb->query_result($res, $i, "tablename");
+		$fieldName = $adb->query_result($res, $i, "fieldname");
+		
+		$tableName = str_replace("vtiger_","",$tableName);
+		$hiddenArr[$fieldLabel] = array($tableName=>$fieldName);
+	}
+	foreach($hiddenArr as $key => $value){
+		foreach($fields as $skey => $svalue){
+			if($skey == $key){
+				$fields = array_diff_assoc($fields, $hiddenArr);
+			}
+		}
+	}
+	return $fields;
 }
 // vtlib customization: Extended vtiger CRM utlitiy functions
 require_once('include/utils/VtlibUtils.php');

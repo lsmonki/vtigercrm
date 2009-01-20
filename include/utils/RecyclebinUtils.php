@@ -138,7 +138,7 @@ function basicRBsearch($module,$search_field,$search_string)
 		//Check ends
 		
 		$tabid = getTabid($module);
-		$qry="select vtiger_field.columnname,tablename from vtiger_field where tabid=$tabid and (fieldname='".$search_field."' or columnname='".$search_field."')";
+		$qry="select vtiger_field.columnname,tablename from vtiger_field where tabid=$tabid and (fieldname='".$search_field."' or columnname='".$search_field."') and vtiger_field.presence in (0,2)";
 		$result = $adb->query($qry);
 		$noofrows = $adb->num_rows($result);
 		if($noofrows!=0)
@@ -244,7 +244,7 @@ function getRbListViewDetails($module)
 			INNER JOIN vtiger_customview ON vtiger_customview.entitytype = vtiger_tab.name
 			INNER JOIN vtiger_cvcolumnlist ON vtiger_cvcolumnlist.columnname like concat('%:', fieldname, ':%') AND vtiger_cvcolumnlist.cvid = vtiger_customview.cvid
 			WHERE vtiger_field.tabid = ? AND vtiger_customview.viewname='All' 
-			AND fieldname IN (". generateQuestionMarks($fld_list) .") ORDER BY vtiger_cvcolumnlist.columnindex";
+			AND fieldname IN (". generateQuestionMarks($fld_list) .") and vtiger_field.presence in (0,2) ORDER BY vtiger_cvcolumnlist.columnindex";
 		$params = array($tabid, $fld_list);
 		
 		$result = $adb->pquery($query, $params);

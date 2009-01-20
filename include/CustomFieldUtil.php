@@ -93,7 +93,7 @@ function getCustomFieldArray($module)
 	global $log;
 	$log->debug("Entering getCustomFieldArray(".$module.") method ...");
 	global $adb;
-	$custquery = "select tablename,fieldname from vtiger_field where tablename=? order by tablename";
+	$custquery = "select tablename,fieldname from vtiger_field where tablename=? and vtiger_field.presence in (0,2) order by tablename";
 	$custresult = $adb->pquery($custquery, array('vtiger_'.strtolower($module).'cf'));
 	$custFldArray = Array();
 	$noofrows = $adb->num_rows($custresult);
@@ -118,7 +118,7 @@ function getCustomFieldTrans($module, $trans_array)
 	$log->debug("Entering getCustomFieldTrans(".$module.",". $trans_array.") method ...");
 	global $adb;
 	$tab_id = getTabid($module);	
-	$custquery = "select columnname,fieldlabel from vtiger_field where generatedtype=2 and tabid=?";
+	$custquery = "select columnname,fieldlabel from vtiger_field where generatedtype=2 and vtiger_field.presence in (0,2) and tabid=?";
 	$custresult = $adb->pquery($custquery, array($tab_id));
 	$custFldArray = Array();
 	$noofrows = $adb->num_rows($custresult);
@@ -144,7 +144,7 @@ function getCustomFieldData($tab,$id,$datatype)
 	global $log;
 	$log->debug("Entering getCustomFieldData(".$tab.",".$id.",".$datatype.") method ...");
 	global $adb;
-	$query = "select * from vtiger_field where tabid=? and fieldid=?";
+	$query = "select * from vtiger_field where tabid=? and fieldid=? and vtiger_field.presence in (0,2)";
 	$result = $adb->pquery($query, array($tab, $id));
 	$return_data=$adb->fetch_array($result);
 	$log->debug("Exiting getCustomFieldData method ...");

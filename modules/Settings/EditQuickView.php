@@ -28,7 +28,7 @@ $related_fields = getFieldList($module_name,$field_name);
 $fieldlist = array();
 $tabid = getTabid($module_name);
 
-$sql = "select * from vtiger_field where fieldname='$field_name' and tabid=$tabid";
+$sql = "select * from vtiger_field where fieldname='$field_name' and tabid=$tabid and vtiger_field.presence in (0,2)";
 $result = $adb->pquery($sql,array());
 $fieldid = $adb->query_result($result,0,"fieldid");
 

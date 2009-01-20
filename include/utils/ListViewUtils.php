@@ -65,6 +65,8 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 			$focus->list_fields = $oCv->list_fields;
 		}
 	}
+	//this is done to remove the hidden fields from the popup for admin -- vikas
+	$focus->list_fields = filterInactiveFields($module,$focus->list_fields);
 	//Added to reduce the no. of queries logging for non-admin user -- by Minnie-start
 	$field_list = array();
 	$j=0;
@@ -99,7 +101,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	{
 		if($module == 'Emails')
 		{
-			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = ?";
+			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = ? and vtiger_field.presence in (0,2)";
 			$params = array($tabid);
 		}
 		else
@@ -114,9 +116,9 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 				INNER JOIN vtiger_def_org_field
 					ON vtiger_def_org_field.fieldid = vtiger_field.fieldid";
 				if($module == "Calendar") {
-					$query .=" WHERE vtiger_field.tabid in (9,16)";
+					$query .=" WHERE vtiger_field.tabid in (9,16) and vtiger_field.presence in (0,2)";
 				} else {
-					$query .=" WHERE vtiger_field.tabid = ?";
+					$query .=" WHERE vtiger_field.tabid = ? and vtiger_field.presence in (0,2)";
 					array_push($params, $tabid);
 				}
 					
@@ -134,7 +136,6 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		}
 	}
 	//end
-	
 	//modified for vtiger_customview 27/5 - $app_strings change to $mod_strings
 	foreach($focus->list_fields as $name=>$tableinfo)
 	{
@@ -184,7 +185,13 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 				//Added on 14-12-2005 to avoid if and else check for every list vtiger_field for arrow image and change order
 				$change_sorder = array('ASC'=>'DESC','DESC'=>'ASC');
 				$arrow_gif = array('ASC'=>'arrow_down.gif','DESC'=>'arrow_up.gif');
-			
+				$query = " select fieldlabel,tablename from vtiger_field where tabid= ? and vtiger_field.presence in (0,2)";
+				$res = $adb->pquery($query,array($tabid));
+				$no_rows = $adb->num_rows($res);
+				for($i=0;$i < $no_rows ; $i++){
+					$tablename = $adb->query_result($res,$i,'tablename');
+					$fieldlabel[$tablename] =$adb->query_result($res,$i,'fieldlabel');
+				}
 				foreach($focus->list_fields[$name] as $tab=>$col)
 				{
 					if(in_array($col,$focus->sortby_fields))
@@ -233,7 +240,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 							$tablename = $tablenameArray[0];
 							$cf_columns = $adb->getColumnNames($tablename);
 							if (array_search($col, $cf_columns) != null) {
-								$pquery = "select fieldlabel,typeofdata from vtiger_field where tablename = ? and fieldname = ?";
+								$pquery = "select fieldlabel,typeofdata from vtiger_field where tablename = ? and fieldname = ? and vtiger_field.presence in (0,2)";
 								$cf_res = $adb->pquery($pquery, array($tablename, $col));
 								if (count($cf_res) > 0){
 									$cf_fld_label = $adb->query_result($cf_res, 0, "fieldlabel");
@@ -342,7 +349,7 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 	{
 		if($module == 'Emails')
 		{
-			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = ?";
+			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = ? and vtiger_field.presence in (0,2)";
 			$params = array($tabid);
 		}
 		else
@@ -358,7 +365,7 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 				AND vtiger_profile2field.visible=0
 				AND vtiger_def_org_field.visible=0
 				AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .")
-				AND vtiger_field.fieldname IN (". generateQuestionMarks($field_list) .")";
+				AND vtiger_field.fieldname IN (". generateQuestionMarks($field_list) .") and vtiger_field.presence in (0,2)";
 			
 			$params = array($tabid, $profileList, $field_list);
 		}
@@ -372,18 +379,21 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 	//end
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";		
+	
+	//this is done to remove the hidden fields from the popup for admin -- vikas
+	$focus->search_fields = filterInactiveFields($module,$focus->search_fields);
+	
 	foreach($focus->search_fields as $name=>$tableinfo)
 	{
 		$fieldname = $focus->search_fields_name[$name];
 		$tabid = getTabid($module);
 
 		global $current_user;
-                require('user_privileges/user_privileges_'.$current_user->id.'.php');
-
-                if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $module == 'Users')
+            require('user_privileges/user_privileges_'.$current_user->id.'.php');
+			    if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $module == 'Users')
                 {
 		
-			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
+					if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
                         {
                                 foreach($focus->search_fields[$name] as $tab=>$col)
                                 {
@@ -561,6 +571,9 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	{
 		$focus->list_fields = $selectedfields;
 	}
+	//this is done to remove the hidden fields from the popup for admin -- vikas
+	$focus->list_fields = filterInactiveFields($module,$focus->list_fields);
+	
 	//Added to reduce the no. of queries logging for non-admin user -- by minnie-start
 	$field_list = array();
 	$j=0;
@@ -595,7 +608,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	{
 		if($module == 'Emails')
 		{
-			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = ?";
+			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = ? and vtiger_field.presence in (0,2)";
 			$params = array($tabid);
 		}
 		else
@@ -610,9 +623,9 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					ON vtiger_def_org_field.fieldid = vtiger_field.fieldid";
 
 				if($module == "Calendar")
-					$query .=" WHERE vtiger_field.tabid in (9,16)";
+					$query .=" WHERE vtiger_field.tabid in (9,16) and vtiger_field.presence in (0,2)";
 				else {
-					$query .=" WHERE vtiger_field.tabid = ?";
+					$query .=" WHERE vtiger_field.tabid = ? and vtiger_field.presence in (0,2)";
 					array_push($params, $tabid);
 				}
 
@@ -635,12 +648,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	$ui_col_array=Array();
 
 	$params = array();
-	$query = "SELECT uitype, columnname, fieldname FROM vtiger_field";
+	$query = "SELECT uitype, columnname, fieldname FROM vtiger_field ";
 	
 	if($module == "Calendar")
-	        $query .=" WHERE vtiger_field.tabid in (9,16)";
+	        $query .=" WHERE vtiger_field.tabid in (9,16) and vtiger_field.presence in (0,2)";
 	else {
-	        $query .=" WHERE vtiger_field.tabid = ?";
+	        $query .=" WHERE vtiger_field.tabid = ? and vtiger_field.presence in (0,2)";
 			array_push($params, $tabid);
 	}
 	$query .=" AND fieldname IN (". generateQuestionMarks($field_list).") ";
@@ -1158,7 +1171,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	{
 		if($module == 'Emails')
 		{
-			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = ?";
+			$query  = "SELECT fieldname FROM vtiger_field WHERE tabid = ? and vtiger_field.presence in (0,2)";
 			$params = array($tabid);
 		}
 		else
@@ -1174,7 +1187,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 				AND vtiger_profile2field.visible = 0
 				AND vtiger_def_org_field.visible = 0
 				AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .")
-				AND vtiger_field.fieldname IN (". generateQuestionMarks($field_list) .")";
+				AND vtiger_field.fieldname IN (". generateQuestionMarks($field_list) .") and vtiger_field.presence in (0,2)";
 			$params = array($tabid, $profileList, $field_list);
 		}
 		
@@ -1191,7 +1204,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	$query = "SELECT uitype, columnname, fieldname
 		FROM vtiger_field
 		WHERE tabid=?
-		AND fieldname IN (". generateQuestionMarks($field_list) .")";
+		AND fieldname IN (". generateQuestionMarks($field_list) .") and vtiger_field.presence in (0,2)";
 	$result = $adb->pquery($query, array($tabid, $field_list));
 	$num_rows=$adb->num_rows($result);
 	for($i=0;$i<$num_rows;$i++)
@@ -1575,7 +1588,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		if($_SESSION['internal_mailer'] == 1)
 		{	
 			//check added for email link in user detailview
-			$querystr="SELECT fieldid FROM vtiger_field WHERE tabid=? and fieldname=?";
+			$querystr="SELECT fieldid FROM vtiger_field WHERE tabid=? and fieldname=? and vtiger_field.presence in (0,2)";
 			if($module == 'Calendar') {
 				if(getActivityType($entity_id) == 'Task') {
 					$tabid = 9;
@@ -2206,7 +2219,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 									$email_check = 3;
 							}
 						}
-						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? and uitype=13;";
+						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? and uitype=13 and vtiger_field.presence in (0,2)";
 						$queryres = $adb->pquery($querystr, array(getTabid($module)));
 						//Change this index 0 - to get the vtiger_fieldid based on email1 or email2
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
@@ -2227,7 +2240,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						}
 						else
 							$email_check = 0;
-						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? and uitype=13;";
+						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? and uitype=13 and vtiger_field.presence in (0,2)";
 						$queryres = $adb->pquery($querystr, array(getTabid($module)));
 						//Change this index 0 - to get the vtiger_fieldid based on email1 or email2
 						$fieldid = $adb->query_result($queryres,0,'fieldid');
@@ -2262,7 +2275,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 							}
 						}
 
-						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? and uitype=13;";
+						$querystr="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? and uitype=13 and vtiger_field.presence in (0,2)";
 						$queryres = $adb->pquery($querystr, array(getTabid($module)));
 						//Change this index 0 - to get the vtiger_fieldid based on email or yahooid
 						$fieldid = $adb->query_result($queryres,0,'fieldid');

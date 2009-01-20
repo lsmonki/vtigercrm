@@ -242,7 +242,7 @@ function track_email($user_name,$password,$contact_ids, $date_sent, $email_subje
 		$email->column_fields[activitytype] = 'Emails';
 		$email->plugin_save = true;
 		$email->save("Emails");
-		$query = "select fieldid from vtiger_field where fieldname = 'email' and tabid = 4";
+		$query = "select fieldid from vtiger_field where fieldname = 'email' and tabid = 4 and vtiger_field.presence in (0,2)";
 		$result = $adb->pquery($query, array());
 		$field_id = $adb->query_result($result,0,"fieldid");
 		$email->set_emails_contact_invitee_relationship($email->id,$contact_ids);
@@ -386,11 +386,11 @@ function AddContact($user_name,$first_name, $last_name, $email_address ,$account
 		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
-	    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and block <> 5";
+	    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and block <> 5 and vtiger_field.presence in (0,2)";
 			$params1 = array();
 	  	} else {
 	    	$profileList = getCurrentUserProfileList();
-	    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+	    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
 			$params1 = array();
 			if (count($profileList) > 0) {
 				$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";
@@ -451,11 +451,11 @@ function AddLead($user_name, $first_name, $last_name, $email_address ,$account_n
 		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
-	    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=7 and block <> 14";
+	    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=7 and block <> 14 and vtiger_field.presence in (0,2)";
 			$params1 = array();
 	  	} else {
 	    	$profileList = getCurrentUserProfileList();
-	    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=7 and vtiger_field.block <> 14 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+	    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=7 and vtiger_field.block <> 14 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
 	  		$params1 = array();
 			if (count($profileList) > 0) {
 				$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";

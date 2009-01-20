@@ -38,7 +38,10 @@ class PurchaseOrder extends CRMEntity {
 	var $table_index= 'purchaseorderid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_purchaseorder','vtiger_pobillads','vtiger_poshipads','vtiger_purchaseordercf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_purchaseorder'=>'purchaseorderid','vtiger_pobillads'=>'pobilladdressid','vtiger_poshipads'=>'poshipaddressid','vtiger_purchaseordercf'=>'purchaseorderid');
-	
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
+	var $customFieldTable = Array('vtiger_purchaseordercf', 'purchaseorderid');
 	var $entity_table = "vtiger_crmentity";
 	
 	var $billadr_table = "vtiger_pobillads";
@@ -82,7 +85,10 @@ class PurchaseOrder extends CRMEntity {
 				        'Order No'=>'purchaseorder_no',
 				        'Subject'=>'subject',
 				      );
-
+	// Used when enabling/disabling the mandatory fields for the module.
+	// Refers to vtiger_field.fieldname values.
+	var $mandatory_fields = Array('subject', 'vendor_id','createdtime' ,'modifiedtime');
+	
 	// This is the list of vtiger_fields that are required.
 	var $required_fields =  array("accountname"=>1);
 

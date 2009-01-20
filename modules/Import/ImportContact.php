@@ -294,13 +294,11 @@ class ImportContact extends Contacts {
 	/** Constructor which will set the importable_fields as $this->importable_fields[$key]=1 in this object where key is the fieldname in the field table
 	 */
 	function ImportContact() {
+		parent::Contacts();
 		$this->log = LoggerManager::getLogger('import_contact');
 		$this->db = new PearDatabase();
 		$this->db->println("IMP ImportContact");
 		$this->initImportableFields("Contacts");
-		//unset($this->importable_fields['account_id']);
-		//$this->importable_fields['account_name']=1;
-		
 		$this->db->println($this->importable_fields);
 	}
 

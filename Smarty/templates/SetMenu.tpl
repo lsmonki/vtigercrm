@@ -17,14 +17,14 @@
 	$this->assign("FIELDS",getSettingsFields());
 {/php}
 
-<table border=0 cellspacing=0 cellpadding=20 width=90% class="settingsUI">
+<table border=0 cellspacing=0 cellpadding=20 width="99%" class="settingsUI">
 <tr>
 <td valign=top>
 	<table border=0 cellspacing=0 cellpadding=0 width=100%>
 	<tr>
-	<td valign=top>
+	<td valign=top id="settingsSideMenu" width="10%" >
 		<!--Left Side Navigation Table-->
-		<table border=0 cellspacing=0 cellpadding=0 width=100%>
+		<table border=0 cellspacing=0 cellpadding=0 width="100%">
 			{foreach key=BLOCKID item=BLOCKLABEL from=$BLOCKS}
 				<tr>
 					<td class="settingsTabHeader" nowrap>
@@ -56,4 +56,8 @@
 		<!-- Left side navigation table ends -->
 		
 	</td>
-	<td width=90% class="small settingsSelectedUI" valign=top align=left>
+	<td width="8px" valign="top"> 
+		<img src="{'panel-left.png'|@vtiger_imageurl:$THEME}" title="Hide Menu" id="hideImage" style="display:inline;cursor:pointer;" onclick="toggleShowHide('showImage','settingsSideMenu'); toggleShowHide('showImage','hideImage');" />
+		<img src="{'panel-right.png'|@vtiger_imageurl:$THEME}" title="Show Menu" id="showImage" style="display:none;cursor:pointer;" onclick="toggleShowHide('settingsSideMenu','showImage'); toggleShowHide('hideImage','showImage');"/>
+	</td>
+	<td class="small settingsSelectedUI" valign=top align=left>

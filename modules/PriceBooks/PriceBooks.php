@@ -24,6 +24,10 @@ class PriceBooks extends CRMEntity {
 	var $table_index= 'pricebookid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_pricebook','vtiger_pricebookcf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_pricebook'=>'pricebookid','vtiger_pricebookcf'=>'pricebookid');
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
+	var $customFieldTable = Array('vtiger_pricebookcf', 'pricebookid');
 	var $column_fields = Array();
 
 	var $sortby_fields = Array('bookname');		  
@@ -33,16 +37,17 @@ class PriceBooks extends CRMEntity {
                                 'Price Book Name'=>Array('pricebook'=>'bookname'),
                                 'Active'=>Array('pricebook'=>'active')
                                 );
-        var $list_fields_name = Array(
+                                
+	var $list_fields_name = Array(
                                         'Price Book Name'=>'bookname',
                                         'Active'=>'active'
                                      );
-        var $list_link_field= 'bookname';
+	var $list_link_field= 'bookname';
 
 	var $search_fields = Array(
                                 'Price Book Name'=>Array('pricebook'=>'bookname')
                                 );
-        var $search_fields_name = Array(
+	var $search_fields_name = Array(
                                         'Price Book Name'=>'bookname',
                                      );
 
@@ -50,6 +55,8 @@ class PriceBooks extends CRMEntity {
 	var $default_order_by = 'bookname';
 	var $default_sort_order = 'ASC';
 
+	var $mandatory_fields = Array('bookname','currency_id','pricebook_no','createdtime' ,'modifiedtime');
+	
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function PriceBooks() {

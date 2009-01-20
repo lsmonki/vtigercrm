@@ -76,6 +76,10 @@ var $rel_serel_table = "vtiger_seactivityrel";
 	var $default_order_by = 'date_start';
 	var $default_sort_order = 'ASC';
 
+	// Used when enabling/disabling the mandatory fields for the module.
+	// Refers to vtiger_field.fieldname values.
+	var $mandatory_fields = Array('subject','assigned_user_id');
+	
 	/** This function will set the columnfields for Email module 
 	*/
 
@@ -519,7 +523,7 @@ function get_to_emailids($module)
 	{
 		$field_lists = $_REQUEST["field_lists"];
 		if (is_string($field_lists)) $field_lists = explode(":", $field_lists);
-		$query = 'select columnname,fieldid from vtiger_field where fieldid in('. generateQuestionMarks($field_lists) .')';
+		$query = 'select columnname,fieldid from vtiger_field where fieldid in ('. generateQuestionMarks($field_lists) .') and vtiger_field.presence in (0,2)';
 		$result = $adb->pquery($query, array($field_lists));
 		$columns = Array();
 		$idlists = '';

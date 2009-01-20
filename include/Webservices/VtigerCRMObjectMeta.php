@@ -366,7 +366,7 @@ class VtigerCRMObjectMeta{
 			if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 			  {
 	
-				 	$sql = "select * from vtiger_field where tabid in (". generateQuestionMarks(explode(',',$tabid)) .") and block in (".generateQuestionMarks($block).") and displaytype in (1,2,3,4) group by columnname"; 
+				 	$sql = "select * from vtiger_field where tabid in (". generateQuestionMarks(explode(',',$tabid)) .") and block in (".generateQuestionMarks($block).") and displaytype in (1,2,3,4) and vtiger_field.presence in (0,2) group by columnname"; 
 					$params = array(explode(',',$tabid), $block);	
 			  }
 			  else
@@ -383,7 +383,7 @@ class VtigerCRMObjectMeta{
 				  			WHERE vtiger_field.tabid in (". generateQuestionMarks($tabid) .")
 				  			AND vtiger_profile2field.visible = 0 
 				  			AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .")
-				  			AND vtiger_def_org_field.visible = 0 and vtiger_field.block in (".generateQuestionMarks($block).") and vtiger_field.displaytype in (1,2,3,4) group by columnname";
+				  			AND vtiger_def_org_field.visible = 0 and vtiger_field.block in (".generateQuestionMarks($block).") and vtiger_field.displaytype in (1,2,3,4) and vtiger_field.presence in (0,2) group by columnname";
 				  			  
 				  	$params = array(explode(',',$tabid), $profileList, $block);
 				  } else {
@@ -395,7 +395,7 @@ class VtigerCRMObjectMeta{
 				  			ON vtiger_def_org_field.fieldid = vtiger_field.fieldid
 				  			WHERE vtiger_field.tabid in (". generateQuestionMarks($tabid) .")
 				  			AND vtiger_profile2field.visible = 0 
-				  			AND vtiger_def_org_field.visible = 0 and vtiger_field.block in (".generateQuestionMarks($block).") and vtiger_field.displaytype in (1,2,3,4) group by columnname";
+				  			AND vtiger_def_org_field.visible = 0 and vtiger_field.block in (".generateQuestionMarks($block).") and vtiger_field.displaytype in (1,2,3,4) and vtiger_field.presence in (0,2) group by columnname";
 				  	
 					$params = array(explode(',',$tabid), $block);
 				  }

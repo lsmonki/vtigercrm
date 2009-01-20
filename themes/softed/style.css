@@ -652,7 +652,7 @@ a.dash_href{
 .dash_btm{
 	background-image:url(../images/dash_btm_center.jpg);
 	background-repeat:repeat-x;
-	position:top;
+	vertical-align:top;
 }
   
 /*  menu */
@@ -2001,7 +2001,7 @@ textarea {
 .emailSelected{
 	background-color:#eaeaea;
 	color:#000000;
-	font-size:bold;
+	font-weight:bold;
 }
 
 .mailClient{
@@ -2363,6 +2363,12 @@ a.drop_down:Hover{
 	display:none;
 }
 
+.colData{
+	border-right:1px solid #ddd;
+}
+.bckg{
+	background-color:#38ACEC;
+}
 .tooltipClass{
 	padding: 5px;
 	border: 2px solid #b69559;

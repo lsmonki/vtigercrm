@@ -188,6 +188,9 @@
 				/* For Multi-Currency Support */
 				MSG_CHANGE_CURRENCY_REVISE_UNIT_PRICE: 'Unit price of all the Currencies will be revised based on the selected Currency. Are you sure?',
 				
+				Select_one_record_as_parent_record : 'Select one record as parent record',
+				RECURRING_FREQUENCY_NOT_PROVIDED : 'Recurring frequency not provided',
+				RECURRING_FREQNECY_NOT_ENABLED : 'Recurring frequency is provided, but recurring is not enabled',
 				/* Added for Documents module */
 				NO_SPECIAL_CHARS_DOCS:'Special characters like quotes, backslash, + symbol, % and ? are not allowed',
 				FOLDER_NAME_TOO_LONG:'Folder name is too long. Try again!',
@@ -210,6 +213,26 @@
 				LBL_DUPLICATE_VALUE_EXISTS: 'Duplicate value exists',
 				LBL_WANT_TO_DELETE: "This will delete the selected picklist value(s) for all roles. You sure you want to continue? ",
 				LBL_DELETE_ALL_WARNING: "You have selected all values to delete. Do you want to continue?",
-				LBL_PLEASE_CHANGE_REPLACEMENT: "please change the replacement value; it is also selected for delete"
+				LBL_PLEASE_CHANGE_REPLACEMENT: "please change the replacement value; it is also selected for delete",
 				
+				/*layout Editor changes*/
+				BLOCK_NAME_CANNOT_BE_BLANK : 'Block name can not be blank',
+				ARE_YOU_SURE_YPU_WANT_TO_DELETE : 'Are you sure you want to delete ?',
+				PLEASE_MOVE_THE_FIELDS_TO_ANOTHER_BLOCK : 'Please move the fields to another block',
+				ARE_YOU_SURE_YOU_WANT_TO_DELETE_BLOCK : 'Are you sure you want to delete block?',
+				LABEL_CANNOT_NOT_EMPTY : 'Label cannot be Emtpy',
+				LBL_TYPEALERT_1 : 'Sorry, you cannot map the',
+				LBL_WITH : 'with',
+				LBL_TYPEALERT_2 : 'data type. Kindly map the same data types.',
+				LBL_LENGTHALERT : 'Sorry, you can cannot map fields with different character size. Kindly map the data with same or more character size.',
+				LBL_DECIMALALERT : 'Sorry, you can cannot map fields with different decimal places. Kindly map the data with same or more decimal places.',
+				FIELD_IS_MANDATORY : 'Mandatory Field',
+				FIELD_IS_ACTIVE : 'Field is available for use',
+				FIELD_IN_QCREATE : 'Present in Quick Create',
+				FIELD_IS_MASSEDITABLE : 'Available for Mass Edit',	
+					
+				IS_MANDATORY_FIELD : 'is Mandatory Field',
+				CLOSEDATE_CANNOT_BE_EMPTY : 'Closing Date cannot be Empty',
+				AMOUNT_CANNOT_BE_EMPTY : 'Amount cannot be Empty',
+				ARE_YOU_SURE : 'Are You Sure You want to Delete?'	
 			};

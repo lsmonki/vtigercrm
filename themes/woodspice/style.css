@@ -602,7 +602,7 @@ a:hover {
 .dash_btm{
 	background-image:url(../images/dash_btm_center.jpg);
 	background-repeat:repeat-x;
-	position:top;
+	vertical-align:top;
 }
 
 /*  menu */
@@ -1774,7 +1774,7 @@ ul {
 .colHeader{
 	background-color:#EFECD1;
 	border-left:1px solid #eaeaea;
-	border-top:1px solid #eaeaea;
+	border-top:1px solid #999a77;
 	border-right:1px solid #999a77;
 	border-bottom:1px solid #999a77;
 	font-weight:bold;
@@ -1945,7 +1945,7 @@ textarea {
 .emailSelected{
 	background-color:#eaeaea;
 	color:#000000;
-	font-size:bold;
+	font-weight:bold;
 }
 
 .mailClient{
@@ -2254,7 +2254,9 @@ a.drop_down:Hover{
 	background-color:#FFFFFF;
 	display:none;
 }
-
+.colData{
+	border-right:1px solid #999a77;
+}
 .thickborder{
 	border:3px solid #CCCCCC;
 }

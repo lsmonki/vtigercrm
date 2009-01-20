@@ -121,12 +121,11 @@ class ImportTicket extends HelpDesk {
 	/** Constructor which will set the importable_fields as $this->importable_fields[$key]=1 in this object where key is the fieldname in the field table
 	 */
 	function ImportTicket() {
-		
+		parent::HelpDesk();
 		$this->log = LoggerManager::getLogger('import_ticket');
 		$this->db = new PearDatabase();
 		$this->db->println("IMP ImportTicket");
 		$this->initImportableFields("HelpDesk");
-		
 		$this->db->println($this->importable_fields);
 	}
 

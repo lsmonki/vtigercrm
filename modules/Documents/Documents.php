@@ -38,7 +38,7 @@ class Documents extends CRMEntity {
 
 	var $tab_name = Array('vtiger_crmentity','vtiger_notes');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_notes'=>'notesid','vtiger_senotesrel'=>'notesid');
-
+	
 	var $column_fields = Array();
 
     var $sortby_fields = Array('title','modifiedtime','filename','createdtime','lastname','filedownloadcount','smownerid');		  
@@ -77,6 +77,8 @@ class Documents extends CRMEntity {
 	var $old_filename = '';
 	//var $groupTable = Array('vtiger_notegrouprelation','notesid');
 
+	var $mandatory_fields = Array('notes_title','createdtime' ,'modifiedtime','filename','filesize','filetype','filedownloadcount');
+	
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'title';
 	var $default_sort_order = 'ASC';

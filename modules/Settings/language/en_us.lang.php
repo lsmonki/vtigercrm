@@ -712,11 +712,6 @@ $mod_strings = Array(
 'LBL_ENABLE_SINGLEPANE_VIEW'=>'Enable Singlepane View',
 
 'LBL_CLEAR_DATA'=>'Clear Data',
-'LBL_LENGTHALERT'=>'Sorry, you can cannot map fields with different character size. Kindly map the data with same or more character size.',
-'LBL_DECIMALALERT'=>'Sorry, you can cannot map fields with different decimal places. Kindly map the data with same or more decimal places.',
-'LBL_TYPEALERT_1'=>'Sorry, you cannot map the',
-'LBL_WITH'=>'with',
-'LBL_TYPEALERT_2'=>'data type. Kindly map the same data types.',
 'LBL_ENABLE'=>'Enable',
 'LBL_FAQ_FIELD_ACCESS'=>'Faq Field Access',
 'LBL_ADD_TAX_BUTTON'=>'Add Tax',
@@ -1103,7 +1098,9 @@ $mod_strings = Array(
 'LBL_NEW_TASK_BUTTON_LABEL'=>'New Task',
 'LBL_TASK'=>'Task',
 // END
-
+//Added for vantage customization (Mandatory fields) -- Pavani
+'LBL_MANDATORY_FIELDS'=>'Mandatory Fields',
+'LBL_MANDATORY_FIELDS_DESCRIPTION'=>'Manage mandatory fields of all modules',
 // Module Sequence Numbering
 'LBL_CUSTOMIZE_MODENT_NUMBER'=>'Customize Record Numbering',
 'LBL_CUSTOMIZE_MODENT_NUMBER_DESCRIPTION'=>'Module Entity Number customization',
@@ -1122,7 +1119,7 @@ $mod_strings = Array(
 'ASTERISK_PASSWORD_TITLE'=>'Password for the asterisk user',
 'LBL_CANCEL_BUTTON'=>'Cancel',
 //softphone integration ends
-
+'LBL_SELECT_FIELD_TO_MOVE' => 'Select Fields to move',
 'VTLIB_LBL_SELECT_PACKAGE_FILE'=>'Select the Package File',
 'VTLIB_LBL_FILE_LOCATION'=>'File location:',
 'VTLIB_LBL_PACKAGE_FILE_HELP'=>'vtiger module is packaged as a zip file.',
@@ -1161,5 +1158,33 @@ $mod_strings = Array(
 'LBL_USERNAME_EXIST' => 'A User in the specified name Already Exists!',
 'LBL_GROUPNAME_EXIST' => 'A Group in the specified name Already Exists!',
 'LBL_ROLENAME_EXIST' => 'Role name already exists',
+
+//layout editor
+'LBL_MOVE_FIELDS_INTO' => 'Move Fields into',
+'NO_HIDDEN_FIELDS' => 'No Hidden Fields',
+'LBL_SELECT_FIELD_TO_MOVE' => 'Select Field to Move',
+'LBL_RELATED_LIST' => 'Related List',
+'LBL_ADD_BLOCK' => 'Add Block',
+'HIDDEN_FIELDS' => 'Hidden Fields',
+'DOWN'=> 'Down',
+'UP'=> 'Up',
+'RIGHT' => 'Right',
+'LEFT' => 'Left',
+'LBL_EDIT_PROPERTIES' => 'Edit Properties',
+'LBL_MANDATORY_FIELD' => 'Mandatory Field',
+'LBL_ACTIVE' => 'Active',
+'LBL_QUICK_CREATE' => 'Quick Create',
+'LBL_MASS_EDIT' => 'Mass Edit',
+'LBL_BLOCK_NAME' => 'Block name',
+'AFTER' => 'After',
+'ADD_BLOCK' => 'Add Block',
+'ARRANGE_RELATEDLIST' => 'Arrange RelatedList',
+'CUSTOMFIELD_MAPPING' => 'CustomField Mapping',
+'LBL_MAPPED_FIELDS' => 'Mapped Fields',
+'LEADS_CUSTOM_FIELD_MAPPING_DESCRIPTION' => 'Map Your Leads Customfields with Accounts,Contacts and Potentials',
+'LEADS_CUSTOM_FIELD_MAPPING'=> 'Leads CustomField Mapping',
+'LBL_CALENDER_CUSTOMFIELDS' => 'Calender Custom Fields',
+'LBL_CALENDER_CUSTOMFIELDS_DESCRIPTION' => 'You can Create Custom Fields for Calender',
+
 );
 ?>

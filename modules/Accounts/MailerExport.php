@@ -54,7 +54,7 @@ function getStdContactFlds(&$queryFields, $adb, $valueArray)
 {
   global $current_language;
   require_once('modules/Contacts/language/'.$current_language.'.lang.php');
-  $query = "SELECT fieldid, columnname, fieldlabel FROM vtiger_field WHERE tablename='vtiger_contactdetails' AND uitype='56'";
+  $query = "SELECT fieldid, columnname, fieldlabel FROM vtiger_field WHERE tablename='vtiger_contactdetails' AND uitype='56' and vtiger_field.presence in (0,2)";
 	$result = $adb->query ($query,true,"Error: "."<BR>$query");
 	for ($tmp=0; $tmp < $adb->num_rows($result); $tmp++)
 	{
@@ -83,7 +83,7 @@ if ($step == "ask")
   $smarty->assign("EXPORTWHERE",$exportWhere);
   $queryFields = Array();
 	// get the Contacts CF fields
- 	$cfquery = "SELECT columnname,fieldlabel,uitype FROM vtiger_field WHERE tablename='vtiger_contactscf'";
+ 	$cfquery = "SELECT columnname,fieldlabel,uitype FROM vtiger_field WHERE tablename='vtiger_contactscf' and vtiger_field.presence in (0,2)";
 	$result = $adb->query ($cfquery,true,"Error: "."<BR>$cfquery");
 	for ($tmp=0; $tmp < $adb->num_rows($result); $tmp++)
 	{

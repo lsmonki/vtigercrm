@@ -84,7 +84,7 @@ function getFieldLabels($checkedFields){
 	global $adb;
 	$data = array();
 	
-	$sql = "select * from vtiger_field where fieldid in ($checkedFields)";
+	$sql = "select * from vtiger_field where fieldid in ($checkedFields) and vtiger_field.presence in (0,2)";
 	$result = $adb->query($sql);
 	$count = $adb->num_rows($result);
 	

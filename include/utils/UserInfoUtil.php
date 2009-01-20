@@ -4086,8 +4086,12 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
 
 	global $adb;
 	global $current_user;
-
-
+	//check if field is active
+	$fieldActive = isFieldActive($fld_module,$fieldname);
+	if($fieldActive == '1'){
+		return '1';
+	}
+	
 	require('user_privileges/user_privileges_'.$userid.'.php');
 
 	/* Asha: Fix for ticket #4508. Users with View all and Edit all permission will also have visibility permission for all fields */
@@ -4105,10 +4109,10 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
 		$tabid = getTabid($fld_module);
 
 		if (count($profilelist) > 0) {
-			$query="SELECT vtiger_profile2field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid in (". generateQuestionMarks($profilelist) .") AND vtiger_field.fieldname= ? GROUP BY vtiger_field.fieldid";
+			$query="SELECT vtiger_profile2field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_profile2field.profileid in (". generateQuestionMarks($profilelist) .") AND vtiger_field.fieldname= ? and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
  			$params = array($tabid, $profilelist, $fieldname);
 		} else {
-			$query="SELECT vtiger_profile2field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_field.fieldname= ? GROUP BY vtiger_field.fieldid";
+			$query="SELECT vtiger_profile2field.* FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0  AND vtiger_field.fieldname= ? and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
  			$params = array($tabid, $fieldname);			
 		}
  		//Postgres 8 fixes
@@ -4276,5 +4280,22 @@ function deleteGroupReportRelations($groupId)
 	$adb->pquery($query, array($groupId));
 	$log->debug("Exiting deleteGroupReportRelations method ...");
 }
-//end					   
+//end	
+
+/** Function to check if the field is Active
+ *  @params  $modulename -- Module Name :: String Type 
+ *   		 $fieldname  -- Field Name  :: String Type	
+ */				   
+function isFieldActive($modulename,$fieldname){
+	global $adb;
+	$tabid = getTabid($modulename);
+	$fieldQuery = "Select presence from vtiger_field where fieldname = ? and tabid = ?";
+	$fieldRes = $adb->pquery($fieldQuery,array($fieldname,$tabid));
+	if ($adb->num_rows($fieldRes) > 0) {
+		$presence = $adb->query_result($fieldRes,0,'presence');
+		if ($presence == 1)
+			return '1';
+	}
+	return '0';
+}
 ?>

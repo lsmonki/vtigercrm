@@ -28,7 +28,7 @@
 <div id="theCities" class="citystyle">
 <form action="" name="frmtimezone">
 <input name="PHPSESSID" value="162c0ab587f6c555aaaa30d681b61f7c" type="hidden">
-<select name="city" size="1" class="importBox small"   id="city" style="width:125px;"  onchange="lcl(this.selectedIndex,this.options[0].selected)">
+<select name="clockcity" size="1" class="importBox small"   id="clockcity" style="width:125px;"  onchange="lcl(this.selectedIndex,this.options[0].selected)">
 <option value="0" selected="selected">Local time</option>
 <option value="4.30">Afghanistan</option>
 <option value="1">Algeria</option>

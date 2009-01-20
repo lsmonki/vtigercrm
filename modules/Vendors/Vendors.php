@@ -25,6 +25,10 @@ class Vendors extends CRMEntity {
 	var $table_index= 'vendorid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_vendor','vtiger_vendorcf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_vendor'=>'vendorid','vtiger_vendorcf'=>'vendorid');
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
+	var $customFieldTable = Array('vtiger_vendorcf', 'vendorid');
 	var $column_fields = Array();
 
         //Pavani: Assign value to entity_table
@@ -54,8 +58,13 @@ class Vendors extends CRMEntity {
                                         'Vendor Name'=>'vendorname',
                                         'Phone'=>'phone'
                                      );
-	//By Pavani..Specifying required fields for vendors
-        var $required_fields =  array('vendorname'=>1);
+	//Specifying required fields for vendors
+        var $required_fields =  array();
+		
+	// Used when enabling/disabling the mandatory fields for the module.
+	// Refers to vtiger_field.fieldname values.
+	var $mandatory_fields = Array('createdtime', 'modifiedtime', 'vendorname');
+
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'vendorname';
 	var $default_sort_order = 'ASC';
@@ -67,6 +76,7 @@ class Vendors extends CRMEntity {
 		$this->log->debug("Entering Vendors() method ...");
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Vendors');
+		$this->initRequiredFields("Vendors");
 		$this->log->debug("Exiting Vendor method ...");
 	}
 

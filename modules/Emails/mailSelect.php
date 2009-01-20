@@ -26,7 +26,7 @@ $smarty = new vtigerCRM_Smarty;
 
 $userid =  $current_user->id;
 
-$querystr = "select fieldid, fieldname, fieldlabel, columnname from vtiger_field where tabid=? and uitype=13";
+$querystr = "select fieldid, fieldname, fieldlabel, columnname from vtiger_field where tabid=? and uitype=13 and vtiger_field.presence in (0,2)";
 $res=$adb->pquery($querystr, array(getTabid($pmodule)));
 $numrows = $adb->num_rows($res);
 $returnvalue = Array();

@@ -15,15 +15,16 @@ function qcemptyCheck(fldName,fldLabel, fldType) {
 		if (currObj.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) {
 			alert(fldLabel+alert_arr.CANNOT_BE_EMPTY);
 			currObj.focus();
-			return false;
-		} else {
-			return true;
+	     	return false;
+		} else{
+       		return true;
 		}
 	} else {
 		if (trim(currObj.value) == "" ) {
-			alert(fldLabel+alert_arr.CANNOT_BE_NONE)
-			return false;
-		} else return true;
+			alert(fldLabel+alert_arr.CANNOT_BE_NONE);
+	    	return false;
+			} else
+			return true;
 	}
 
 }

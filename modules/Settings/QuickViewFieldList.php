@@ -21,7 +21,7 @@ function QuickViewFieldList(){
 		if($adb->num_rows($result)>0){
 			$tabid = $adb->query_result($result,0,"tabid");
 			
-			$query = "select * from vtiger_field where tabid = $tabid and columnname not like 'imagename' and uitype not in (61, 122)";
+			$query = "select * from vtiger_field where tabid = $tabid and columnname not like 'imagename' and uitype not in (61, 122) and vtiger_field.presence in (0,2)";
 			$result = $adb->pquery($query,array());
 			if($adb->num_rows($result)>0){
 				$fieldlist = '<select onchange="getRelatedFieldInfo(this)" class="importBox" id="pick_field" name="pick_field">';

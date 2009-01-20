@@ -27,6 +27,11 @@ class HelpDesk extends CRMEntity {
 	var $table_index= 'ticketid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_troubletickets','vtiger_ticketcf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_troubletickets'=>'ticketid','vtiger_ticketcf'=>'ticketid','vtiger_ticketcomments'=>'ticketid');
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
+	var $customFieldTable = Array('vtiger_ticketcf', 'ticketid');
+	
 	var $column_fields = Array();
 	//Pavani: Assign value to entity_table
         var $entity_table = "vtiger_crmentity";
@@ -82,10 +87,14 @@ class HelpDesk extends CRMEntity {
 		'Ticket No' => 'ticket_no',
 		'Title'=>'ticket_title',
 		);
-	
-	//By Pavani...Specify Required fields
-        var $required_fields =  array('ticket_title'=>1);
-        //Added these variables which are used as default order by and sortorder in ListView
+	//Specify Required fields
+    var $required_fields =  array();
+    
+	// Used when enabling/disabling the mandatory fields for the module.
+	// Refers to vtiger_field.fieldname values.
+	var $mandatory_fields = Array('assigned_user_id', 'createdtime', 'modifiedtime', 'ticket_title', 'update_log');
+
+     //Added these variables which are used as default order by and sortorder in ListView
         var $default_order_by = 'title';
         var $default_sort_order = 'DESC';
 
@@ -99,6 +108,7 @@ class HelpDesk extends CRMEntity {
 		$this->log->debug("Entering HelpDesk() method ...");
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('HelpDesk');
+		$this->initRequiredFields("HelpDesk");
 		$this->log->debug("Exiting HelpDesk method ...");
 	}
 
@@ -370,12 +380,12 @@ class HelpDesk extends CRMEntity {
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 		{
-			$sql1 = "select fieldlabel from vtiger_field where tabid=13 and block <> 30 and vtiger_field.uitype <> '61'";
+			$sql1 = "select fieldlabel from vtiger_field where tabid=13 and block <> 30 and vtiger_field.uitype <> '61' and vtiger_field.presence in (0,2)";
 			$params1 = array();
 		}else
 		{
 			$profileList = getCurrentUserProfileList();
-			$sql1 = "select vtiger_field.fieldid,fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=13 and vtiger_field.block <> 30 and vtiger_field.uitype <> '61' and vtiger_field.displaytype in (1,2,3,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+			$sql1 = "select vtiger_field.fieldid,fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=13 and vtiger_field.block <> 30 and vtiger_field.uitype <> '61' and vtiger_field.displaytype in (1,2,3,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
 			$params1 = array();
 			if (count($profileList) > 0) {
 				$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")  group by fieldid";

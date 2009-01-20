@@ -30,6 +30,10 @@ class Campaigns extends CRMEntity {
 
 	var $tab_name = Array('vtiger_crmentity','vtiger_campaign','vtiger_campaignscf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_campaign'=>'campaignid','vtiger_campaignscf'=>'campaignid');
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
+	var $customFieldTable = Array('vtiger_campaignscf', 'campaignid');
 	var $column_fields = Array();
 
 	var $sortby_fields = Array('campaignname','smownerid','campaigntype','productname','expectedrevenue','closingdate','campaignstatus','expectedresponse','targetaudience','expectedcost');
@@ -68,6 +72,10 @@ class Campaigns extends CRMEntity {
 			'Campaign Name'=>'campaignname',
 			'Campaign Type'=>'campaigntype',
 			);
+	// Used when enabling/disabling the mandatory fields for the module.
+	// Refers to vtiger_field.fieldname values.
+	var $mandatory_fields = Array('campaignname','createdtime' ,'modifiedtime');
+	
 	function Campaigns() 
 	{
 		$this->log =LoggerManager::getLogger('campaign');

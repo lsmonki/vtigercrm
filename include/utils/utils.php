@@ -1069,7 +1069,7 @@ function getColumnFields($module)
 	if ($module == 'Calendar') {
     	$tabid = array('9','16');
     }
-	$sql = "select * from vtiger_field where tabid in (" . generateQuestionMarks($tabid) . ")";
+	$sql = "select * from vtiger_field where tabid in (" . generateQuestionMarks($tabid) . ") and vtiger_field.presence in (0,2)";
         $result = $adb->pquery($sql, array($tabid));
         $noofrows = $adb->num_rows($result);
 	for($i=0; $i<$noofrows; $i++)
@@ -1251,7 +1251,7 @@ function insertProfile2field($profileid)
 
 	global $adb;
 	$adb->database->SetFetchMode(ADODB_FETCH_ASSOC); 
-	$fld_result = $adb->pquery("select * from vtiger_field where generatedtype=1 and displaytype in (1,2,3) and tabid != 29", array());
+	$fld_result = $adb->pquery("select * from vtiger_field where generatedtype=1 and displaytype in (1,2,3) and vtiger_field.presence in (0,2) and tabid != 29", array());
         $num_rows = $adb->num_rows($fld_result);
         for($i=0; $i<$num_rows; $i++)
         {
@@ -1272,7 +1272,7 @@ function insert_def_org_field()
 	$log->debug("Entering insert_def_org_field() method ...");
 	global $adb;
 	$adb->database->SetFetchMode(ADODB_FETCH_ASSOC); 
-	$fld_result = $adb->pquery("select * from vtiger_field where generatedtype=1 and displaytype in (1,2,3) and tabid != 29", array());
+	$fld_result = $adb->pquery("select * from vtiger_field where generatedtype=1 and displaytype in (1,2,3) and vtiger_field.presence in (0,2) and tabid != 29", array());
         $num_rows = $adb->num_rows($fld_result);
         for($i=0; $i<$num_rows; $i++)
         {
@@ -1299,7 +1299,7 @@ function getProfile2FieldList($fld_module, $profileid)
 	global $adb;
 	$tabid = getTabid($fld_module);
 	
-	$query = "select vtiger_profile2field.visible,vtiger_field.* from vtiger_profile2field inner join vtiger_field on vtiger_field.fieldid=vtiger_profile2field.fieldid where vtiger_profile2field.profileid=? and vtiger_profile2field.tabid=?";
+	$query = "select vtiger_profile2field.visible,vtiger_field.* from vtiger_profile2field inner join vtiger_field on vtiger_field.fieldid=vtiger_profile2field.fieldid where vtiger_profile2field.profileid=? and vtiger_profile2field.tabid=? and vtiger_field.presence in (0,2)";
 	$result = $adb->pquery($query, array($profileid, $tabid));
 	$log->debug("Exiting getProfile2FieldList method ...");
 	return $result;
@@ -1322,7 +1322,7 @@ function getProfile2FieldPermissionList($fld_module, $profileid)
 	global $adb;
 	$tabid = getTabid($fld_module);
 	
-	$query = "select vtiger_profile2field.visible,vtiger_field.* from vtiger_profile2field inner join vtiger_field on vtiger_field.fieldid=vtiger_profile2field.fieldid where vtiger_profile2field.profileid=? and vtiger_profile2field.tabid=?";
+	$query = "select vtiger_profile2field.visible,vtiger_field.* from vtiger_profile2field inner join vtiger_field on vtiger_field.fieldid=vtiger_profile2field.fieldid where vtiger_profile2field.profileid=? and vtiger_profile2field.tabid=? and vtiger_field.presence in (0,2)";
 	$qparams = array($profileid, $tabid);
 	$result = $adb->pquery($query, $qparams);
 	$return_data=array();
@@ -1373,7 +1373,7 @@ function getDefOrgFieldList($fld_module)
 	global $adb;
 	$tabid = getTabid($fld_module);
 	
-	$query = "select vtiger_def_org_field.visible,vtiger_field.* from vtiger_def_org_field inner join vtiger_field on vtiger_field.fieldid=vtiger_def_org_field.fieldid where vtiger_def_org_field.tabid=?";
+	$query = "select vtiger_def_org_field.visible,vtiger_field.* from vtiger_def_org_field inner join vtiger_field on vtiger_field.fieldid=vtiger_def_org_field.fieldid where vtiger_def_org_field.tabid=? and vtiger_field.presence in (0,2)";
 	$qparams = array($tabid);
 	$result = $adb->pquery($query, $qparams);
 	$log->debug("Exiting getDefOrgFieldList method ...");
@@ -2138,7 +2138,7 @@ function getEmailParentsList($module,$id)
         if($focus->column_fields['email'] == '' && $focus->column_fields['yahooid'] != '')
                 $fieldname = 'yahooid';
 
-        $res = $adb->pquery("select * from vtiger_field where tabid = ? and fieldname= ?", array(getTabid($module), $fieldname));
+        $res = $adb->pquery("select * from vtiger_field where tabid = ? and fieldname= ? and vtiger_field.presence in (0,2)", array(getTabid($module), $fieldname));
         $fieldid = $adb->query_result($res,0,'fieldid');
 
         $hidden .= '<input type="hidden" name="emailids" value="'.$id.'@'.$fieldid.'|">';
@@ -2317,10 +2317,11 @@ function getTableNameForField($module,$fieldname)
 	$log->debug("Entering getTableNameForField(".$module.",".$fieldname.") method ...");
 	global $adb;
 	$tabid = getTabid($module);
+	//Asha
 	if($module == 'Calendar') {
 		$tabid = array('9','16');
 	}
-	$sql = "select tablename from vtiger_field where tabid in (". generateQuestionMarks($tabid) .") and columnname like ?";
+	$sql = "select tablename from vtiger_field where tabid in (". generateQuestionMarks($tabid) .") and vtiger_field.presence in (0,2) and columnname like ?";
 	$res = $adb->pquery($sql, array($tabid, '%'.$fieldname.'%'));
 
 	$tablename = '';
@@ -2989,7 +2990,7 @@ function getAccessPickListValues($module)
 	$log->debug("Entering into function getAccessPickListValues($module)");
 	
 	$id = getTabid($module);
-	$query = "select fieldname,columnname,fieldid,fieldlabel,tabid,uitype from vtiger_field where tabid = ? and uitype in ('15','33','55')";
+	$query = "select fieldname,columnname,fieldid,fieldlabel,tabid,uitype from vtiger_field where tabid = ? and uitype in ('15','33','55') and vtiger_field.presence in (0,2)";
 	$result = $adb->pquery($query, array($id));
 	
 	$roleid = $current_user->roleid;
@@ -3113,7 +3114,7 @@ function getRecordValues($id_array,$module)
 	global $adb,$current_user;
 	global $app_strings;
 	$tabid=getTabid($module);	
-	$query="select fieldname,fieldlabel from vtiger_field where tabid=".$tabid." and fieldname  not in ('createdtime','modifiedtime')";
+	$query="select fieldname,fieldlabel from vtiger_field where tabid=".$tabid." and fieldname  not in ('createdtime','modifiedtime') and vtiger_field.presence in (0,2)";
 	$result=$adb->query($query);
 	$no_rows=$adb->num_rows($result);
 
@@ -3137,7 +3138,7 @@ function getRecordValues($id_array,$module)
 			}
 	}
 	$tabid=getTabid($module);	
-	$query="select fieldname,uitype,fieldlabel from vtiger_field where tabid=".$tabid." and fieldname not in ('createdtime','modifiedtime')" ;
+	$query="select fieldname,uitype,fieldlabel from vtiger_field where tabid=".$tabid." and fieldname not in ('createdtime','modifiedtime') and vtiger_field.presence in (0,2)" ;
 
 	$result=$adb->query($query);
 	$no_rows=$adb->num_rows($result);
@@ -4038,7 +4039,7 @@ function getFieldValues($module)
 	$res_val=rtrim($res_val,",");
 	if($res_val != "")
 	{
-		$fieldname_query="select fieldname,fieldlabel,uitype,tablename,columnname from vtiger_field where fieldid in (".$res_val.")";
+		$fieldname_query="select fieldname,fieldlabel,uitype,tablename,columnname from vtiger_field where fieldid in (".$res_val.") and vtiger_field.presence in (0,2)";
 		$fieldname_result = $adb->query($fieldname_query);
 		$field_num_rows = $adb->num_rows($fieldname_result);
 	}
@@ -4486,7 +4487,7 @@ function getModuleSequenceField($module) {
 	
 	if (!empty($module)) {
 		//uitype 4 points to Module Numbering Field
-		$seqColRes = $adb->pquery("SELECT fieldname, fieldlabel, columnname FROM vtiger_field WHERE uitype=? AND tabid=?", array('4', getTabid($module)));
+		$seqColRes = $adb->pquery("SELECT fieldname, fieldlabel, columnname FROM vtiger_field WHERE uitype=? AND tabid=? and vtiger_field.presence in (0,2)", array('4', getTabid($module)));
 		if($adb->num_rows($seqColRes) > 0) {
 			$fieldname = $adb->query_result($seqColRes,0,'fieldname');
 			$columnname = $adb->query_result($seqColRes,0,'columnname');
@@ -4521,7 +4522,7 @@ function getFieldsResultForMerge($tabid) {
 	$nonmergable_displaytypes = Array(4);
 	$nonmergable_uitypes = Array('70','69','4');
 	
-	$sql = "SELECT fieldid,typeofdata FROM vtiger_field WHERE tabid = ? ";
+	$sql = "SELECT fieldid,typeofdata FROM vtiger_field WHERE tabid = ? and vtiger_field.presence in (0,2)";
 	$params = array($tabid);
 
 	$where = '';

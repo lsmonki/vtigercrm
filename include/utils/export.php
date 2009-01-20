@@ -36,6 +36,7 @@ require_once('modules/Vendors/Vendors.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('modules/CustomView/CustomView.php');
 
+
 // Set the current language and the language strings, if not already set.
 setCurrentLanguage();
 
@@ -242,12 +243,12 @@ function export($type)
 }
 
 $content = export($_REQUEST['module']);
-
-header("Content-Disposition: attachment; filename={$_REQUEST['module']}.csv");
-header("Content-Type: text/csv; charset=UTF-8");
-header( "Expires: Mon, 26 Jul 1997 05:00:00 GMT" );
-header( "Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT" );
-header( "Cache-Control: post-check=0, pre-check=0", false );
+$log->fatal(htmlentities($content));
+header("Content-Disposition:attachment;filename={$_REQUEST['module']}.csv");
+header("Content-Type:text/csv;charset=UTF-8");
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT" );
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT" );
+header("Cache-Control: post-check=0, pre-check=0", false );
 header("Content-Length: ".strlen($content));
 print $content;
 

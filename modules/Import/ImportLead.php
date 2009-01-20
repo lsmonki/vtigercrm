@@ -89,12 +89,11 @@ class ImportLead extends Leads {
 	/** Constructor which will set the importable_fields as $this->importable_fields[$key]=1 in this object where key is the fieldname in the field table
 	 */
 	function ImportLead() {
-		
+		parent::Leads();
 		$this->log = LoggerManager::getLogger('import_lead');
 		$this->db = new PearDatabase();
 		$this->db->println("IMP ImportLead");
 		$this->initImportableFields("Leads");
-		
 		$this->db->println($this->importable_fields);
 	}
 

@@ -38,7 +38,10 @@ class SalesOrder extends CRMEntity {
 	var $table_index= 'salesorderid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_salesorder','vtiger_sobillads','vtiger_soshipads','vtiger_salesordercf','vtiger_invoice_recurring_info');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_salesorder'=>'salesorderid','vtiger_sobillads'=>'sobilladdressid','vtiger_soshipads'=>'soshipaddressid','vtiger_salesordercf'=>'salesorderid','vtiger_invoice_recurring_info'=>'salesorderid');
-	
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
+	var $customFieldTable = Array('vtiger_salesordercf', 'salesorderid');
 	var $entity_table = "vtiger_crmentity";
 	
 	var $billadr_table = "vtiger_sobillads";
@@ -101,6 +104,8 @@ class SalesOrder extends CRMEntity {
 	var $default_sort_order = 'ASC';
 	//var $groupTable = Array('vtiger_sogrouprelation','salesorderid');
 
+	var $mandatory_fields = Array('subject','createdtime' ,'modifiedtime');
+	
 	/** Constructor Function for SalesOrder class
 	 *  This function creates an instance of LoggerManager class using getLogger method
 	 *  creates an instance for PearDatabase class and get values for column_fields array of SalesOrder class.

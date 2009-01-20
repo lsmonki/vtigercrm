@@ -35,7 +35,7 @@ require_once('include/utils/CommonUtils.php'); //new
   * Return type is an array
   */
 
-function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module_name,$mode='')
+function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module_name,$mode='', $typeofdata=null)
 {
 	global $log,$app_strings;
 	$log->debug("Entering getOutputHtml(".$uitype.",". $fieldname.",". $fieldlabel.",". $maxlength.",". $col_fields.",".$generatedtype.",".$module_name.") method ...");
@@ -65,7 +65,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	if($uitype == '10') {
 		global $adb;
 		$fldmod_result = $adb->pquery('SELECT relmodule, status FROM vtiger_fieldmodulerel WHERE fieldid=
-			(SELECT fieldid FROM vtiger_field, vtiger_tab WHERE vtiger_field.tabid=vtiger_tab.tabid AND fieldname=? AND name=?)', 
+			(SELECT fieldid FROM vtiger_field, vtiger_tab WHERE vtiger_field.tabid=vtiger_tab.tabid AND fieldname=? AND name=? and vtiger_field.presence in (0,2))',
 			Array($fieldname, $module_name));
 
 		$entityTypes = Array();
@@ -1054,7 +1054,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 					$lead_selected = 'selected';
 				}
 				for ($j=1;$j<$nemail;$j++){
-					$querystr='select columnname from vtiger_field where fieldid=?';
+					$querystr='select columnname from vtiger_field where fieldid=? and vtiger_field.presence in (0,2)';
 					$result=$adb->pquery($querystr, array($realid[$j]));
 					$temp=$adb->query_result($result,0,'columnname');
 					$temp1=br2nl($myfocus->column_fields[$temp]);
@@ -1481,6 +1481,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	$final_arr[]=$editview_label;
 	$final_arr[]=$editview_fldname;
 	$final_arr[]=$fieldvalue;
+	$type_of_data  = explode('~',$typeofdata);
+	$final_arr[]=$type_of_data[1];
 	$log->debug("Exiting getOutputHtml method ...");
 	return $final_arr;
 }
@@ -2067,8 +2069,9 @@ function getBlockInformation($module, $result, $col_fields,$tabid,$block_label,$
 		$block = $adb->query_result($result,$i,"block");
 		$maxlength = $adb->query_result($result,$i,"maximumlength");
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");				
-
-		$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module,$mode);
+		$typeofdata = $adb->query_result($result,$i,"typeofdata");
+		
+		$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module,$mode,$typeofdata);
 		$editview_arr[$block][]=$custfld;
 		if ($mvAdd_flag == true)
 		$mvAdd_flag = false;
@@ -2083,7 +2086,8 @@ function getBlockInformation($module, $result, $col_fields,$tabid,$block_label,$
 			$block = $adb->query_result($result,$i,"block");
 			$maxlength = $adb->query_result($result,$i,"maximumlength");
 			$generatedtype = $adb->query_result($result,$i,"generatedtype");
-			$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module,$mode);			
+			$typeofdata = $adb->query_result($result,$i,"typeofdata");
+			$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module,$mode,$typeofdata);			
 			$editview_arr[$block][]=$custfld;
 		}
 	}

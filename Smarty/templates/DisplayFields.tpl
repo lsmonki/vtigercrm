@@ -13,19 +13,7 @@
 -->*}
 
 {assign var="fromlink" value=""}
-<!-- Added this file to display the fields in Create Entity page based on ui types  -->
-{foreach key=label item=subdata from=$data}
-	{if $header eq 'Product Details'}
-		<tr>
-	{else}
-		<tr style="height:25px">
-	{/if}
-	{foreach key=mainlabel item=maindata from=$subdata}
-		{include file='EditViewUI.tpl'}
-	{/foreach}
-   </tr>
-{/foreach}
-
+<script language="JavaScript" type="text/javascript" src="include/js/Inventory.js"></script>
 <script language="javascript">
 	function fnshowHide(currObj,txtObj)
 	{ldelim}
@@ -117,14 +105,17 @@ function updateBaseCurrencyValue()
 	{rdelim}
 {rdelim}
 
-function FileAdd(obj,Lay,return_action,crm_id)
-{ldelim}
-	fnvshobj(obj,Lay);
-	window.frames['AddFile'].document.getElementById('divHeader').innerHTML="Add file";
-	window.frames['AddFile'].document.FileAdd.return_action.value=return_action;
-	window.frames['AddFile'].document.FileAdd.crm_id.value=crm_id;
-	positionDivToCenter(Lay);
-{rdelim}
-
 </script>
 
+<!-- Added this file to display the fields in Create Entity page based on ui types  -->
+{foreach key=label item=subdata from=$data}
+	{if $header eq 'Product Details'}
+		<tr>
+	{else}
+		<tr style="height:25px">
+	{/if}
+	{foreach key=mainlabel item=maindata from=$subdata}
+		{include file='EditViewUI.tpl'}
+	{/foreach}
+   </tr>
+{/foreach}

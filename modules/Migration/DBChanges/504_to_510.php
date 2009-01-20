@@ -253,7 +253,6 @@ addFieldSecurity($pb_tab_id,$pb_currency_field_id);
 $documents_tab_id = getTabid('Documents');
 ExecuteQuery("delete from vtiger_cvcolumnlist where columnname like '%Notes_Contact_Name%'");
 ExecuteQuery("delete from vtiger_cvcolumnlist where columnname like '%Notes_Related_to%'");
-//ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_notegrouprelation (notesid int(19) NOT NULL, groupname varchar(100) default NULL)");
 
 ExecuteQuery("insert into vtiger_def_org_share values (".$adb->getUniqueID('vtiger_def_org_share').",$documents_tab_id,2,0)");
 
@@ -322,20 +321,20 @@ $desc_update = 'update vtiger_blocks set blocklabel ="LBL_DESCRIPTION",show_titl
 $desc_block_update = $adb->pquery($desc_update,array($desc));
 
 ExecuteQuery("update vtiger_field set sequence=1 where tabid=$documents_tab_id and columnname='title'");
-ExecuteQuery("update vtiger_field set sequence=8 where tabid=$documents_tab_id and columnname='createdtime'");
-ExecuteQuery("update vtiger_field set sequence=9 where tabid=$documents_tab_id and columnname='modifiedtime'");
+ExecuteQuery("update vtiger_field set sequence=8,quickcreate=3 where tabid=$documents_tab_id and columnname='createdtime'");
+ExecuteQuery("update vtiger_field set sequence=9,quickcreate=3 where tabid=$documents_tab_id and columnname='modifiedtime'");
 
-ExecuteQuery("update vtiger_field set sequence=1,block=$desc where tabid=$documents_tab_id and columnname='notecontent'");
-ExecuteQuery("update vtiger_field set block = $file_block_id,fieldlabel='File Name',displaytype = 2  where tabid = $documents_tab_id and columnname = 'filename'");
+ExecuteQuery("update vtiger_field set sequence=1,quickcreate=3,block=$desc where tabid=$documents_tab_id and columnname='notecontent'");
+ExecuteQuery("update vtiger_field set quickcreate=3,block = $file_block_id,fieldlabel='File Name',displaytype = 2  where tabid = $documents_tab_id and columnname = 'filename'");
 
-ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[0].",'smownerid','vtiger_crmentity',1,53,'assigned_user_id','Assigned To',1,0,0,100,2,17,1,'V~O',0,3,'BAS')");
-ExecuteQuery("insert into vtiger_field values($documents_tab_id,".$fieldid[1].",'filetype','vtiger_notes',1,1,'filetype','File Type',1,0,0,100,3,$file_block_id,2,'V~O',1,'','BAS')");
-ExecuteQuery("insert into vtiger_field values($documents_tab_id,".$fieldid[2].",'filesize','vtiger_notes',1,1,'filesize','File Size',1,0,0,100,4,$file_block_id,2,'V~O',1,'','BAS')");
-ExecuteQuery("insert into vtiger_field values($documents_tab_id,".$fieldid[3].",'filelocationtype','vtiger_notes',1,122,'filelocationtype','Download Type',1,0,0,100,1,$file_block_id,1,'V~O',1,'','BAS')");
-ExecuteQuery("insert into vtiger_field values($documents_tab_id,".$fieldid[4].",'fileversion','vtiger_notes',1,1,'fileversion','Version',1,0,0,100,6,17,1,'V~O',1,'','BAS')");
-ExecuteQuery("insert into vtiger_field values($documents_tab_id,".$fieldid[5].",'filestatus','vtiger_notes',1,56,'filestatus','Active',1,0,0,100,2,$file_block_id,1,'V~O',1,'','BAS')");
-ExecuteQuery("insert into vtiger_field values($documents_tab_id,".$fieldid[6].",'filedownloadcount','vtiger_notes',1,1,'filedownloadcount','Download Count',1,0,0,100,7,$file_block_id,2,'I~O',1,'','BAS')");
-ExecuteQuery("insert into vtiger_field values($documents_tab_id,".$fieldid[7].",'folderid','vtiger_notes',1,121,'folderid','Folder Name',1,0,0,100,4,17,1,'V~M',0,'2','BAS')");
+ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[0].",'smownerid','vtiger_crmentity',1,53,'assigned_user_id','Assigned To',1,0,0,100,2,17,1,'V~O',2,3,'BAS')");
+ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[1].",'filetype','vtiger_notes',1,1,'filetype','File Type',1,0,0,100,3,$file_block_id,2,'V~O',3,'','BAS')");
+ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[2].",'filesize','vtiger_notes',1,1,'filesize','File Size',1,0,0,100,4,$file_block_id,2,'V~O',3,'','BAS')");
+ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[3].",'filelocationtype','vtiger_notes',1,122,'filelocationtype','Download Type',1,0,0,100,1,$file_block_id,1,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[4].",'fileversion','vtiger_notes',1,1,'fileversion','Version',1,0,0,100,6,17,1,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[5].",'filestatus','vtiger_notes',1,56,'filestatus','Active',1,0,0,100,2,$file_block_id,1,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[6].",'filedownloadcount','vtiger_notes',1,1,'filedownloadcount','Download Count',1,0,0,100,7,$file_block_id,2,'I~O',3,'','BAS')");
+ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[7].",'folderid','vtiger_notes',1,121,'folderid','Folder Name',1,2,0,100,4,17,1,'V~O',2,'2','BAS')");
 
 for($i=0;$i<count($fieldid);$i++)
 {
@@ -370,6 +369,7 @@ custom_addCustomFilterColumn('Documents','All', 'vtiger_crmentity','smownerid','
 
 //remove filename column from trouble ticket
 ExecuteQuery("alter table vtiger_troubletickets drop column filename");
+ExecuteQuery("delete from vtiger_field where fieldname='filename' and tablename='vtiger_attachments'");
 //End: Database changes regarding Documents module
 
 /* Home Page Customization */
@@ -849,7 +849,7 @@ ExecuteQuery("insert into vtiger_field values (14,".$adb->getUniqueID("vtiger_fi
 ExecuteQuery("ALTER TABLE vtiger_products ADD COLUMN product_no varchar(100) not null");
 
 $blockid = getBlockId(8,'LBL_NOTE_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (8,".$adb->getUniqueID("vtiger_field").",'note_no','vtiger_notes',1,'4','note_no','Note No',1,0,0,100,7,$blockid,1,'V~O',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field values (8,".$adb->getUniqueID("vtiger_field").",'note_no','vtiger_notes',1,'4','note_no','Document No',1,0,0,100,7,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_notes ADD COLUMN note_no varchar(100) not null");
 
 $blockid = getBlockId(15,'LBL_FAQ_INFORMATION');
@@ -1258,11 +1258,10 @@ function moveSettingsToDatabase($adb){
 				"orgshar.gif",
 				"audit.gif",
 				"set-IcoLoginHistory.gif",
-				"orgshar.gif",
-				"custom.gif",
+				"vtlib_modmng.gif",
 				"picklist.gif",
 				"settingsTrash.gif",
-				"vtlib_modmng.gif",
+				"quickview.png",
 				"ViewTemplate.gif",
 				"mailmarge.gif",
 				"notification.gif",
@@ -1298,11 +1297,10 @@ function moveSettingsToDatabase($adb){
 				'LBL_FIELDS_ACCESS',
 				'LBL_AUDIT_TRAIL',
 				'LBL_LOGIN_HISTORY_DETAILS',
-				'LBL_LAYOUT_EDITOR',
-				'LBL_CUSTOM_FIELDS',
+				'VTLIB_LBL_MODULE_MANAGER',
 				'LBL_PICKLIST_EDITOR',
 				'LBL_RECYCLEBIN',
-				'VTLIB_LBL_MODULE_MANAGER',
+				'LBL_TOOLTIP_MANAGEMENT',
 				'EMAILTEMPLATES',
 				'LBL_MAIL_MERGE',
 				'NOTIFICATIONSCHEDULERS',
@@ -1333,11 +1331,10 @@ function moveSettingsToDatabase($adb){
 					'LBL_SHARING_FIELDS_DESCRIPTION', 
 					'LBL_AUDIT_DESCRIPTION', 
 					'LBL_LOGIN_HISTORY_DESCRIPTION', 
-					'LBL_LAYOUT_EDITOR_DESCRIPTION', 
-					'LBL_CUSTOM_FIELDS_DESCRIPTION', 
+					'VTLIB_LBL_MODULE_MANAGER_DESCRIPTION', 
 					'LBL_PICKLIST_DESCRIPTION', 
 					'LBL_RECYCLEBIN_DESCRIPTION',
-					'VTLIB_LBL_MODULE_MANAGER_DESCRIPTION', 
+					'LBL_TOOLTIP_MANAGEMENT_DESCRIPTION',
 					'LBL_EMAIL_TEMPLATE_DESCRIPTION', 
 					'LBL_MAIL_MERGE_DESCRIPTION', 
 					'LBL_NOTIF_SCHED_DESCRIPTION', 
@@ -1358,39 +1355,7 @@ function moveSettingsToDatabase($adb){
 					'LBL_MAIL_SCANNER_DESCRIPTION', 
 					'LBL_LIST_WORKFLOWS_DESCRIPTION');
 
-	$field_labels = array('LBL_USERS',
-					'LBL_ROLES',
-					'LBL_PROFILES', 
-					'USERGROUPLIST', 
-					'LBL_SHARING_ACCESS', 
-					'LBL_FIELDS_ACCESS', 
-					'LBL_AUDIT_TRAIL', 
-					'LBL_LOGIN_HISTORY_DETAILS', 
-					'LBL_LAYOUT_EDITOR', 
-					'LBL_CUSTOM_FIELDS', 
-					'LBL_PICKLIST_EDITOR', 
-					'LBL_RECYCLEBIN', 
-					'VTLIB_LBL_MODULE_MANAGER', 
-					'EMAILTEMPLATES', 
-					'WORDINTEGRATION', 
-					'NOTIFICATIONSCHEDULERS', 
-					'INVENTORYNOTIFICATION', 
-					'LBL_COMPANY_DETAILS', 
-					'LBL_MAIL_SERVER_SETTINGS', 
-					'LBL_BACKUP_SERVER_SETTINGS', 
-					'LBL_MODULE_OWNERS', 
-					'LBL_CURRENCY_SETTINGS', 
-					'LBL_TAX_SETTINGS', 
-					'LBL_SYSTEM_INFO', 
-					'LBL_PROXY_SETTINGS', 
-					'LBL_ANNOUNCEMENT', 
-					'LBL_DEFAULT_MODULE_VIEW', 
-					'LBL_MIGRATION', 
-					'LBL_INVENTORY_TANDC', 
-					'LBL_CUSTOMIZE_MODENT_NUMBER', 
-					'LBL_MAIL_SCANNER', 
-					'LBL_LIST_WORKFLOWS'); 
-
+	
 	$links = array('index.php?module=Administration&action=index&parenttab=Settings',
 				'index.php?module=Settings&action=listroles&parenttab=Settings',
 				'index.php?module=Settings&action=ListProfiles&parenttab=Settings',
@@ -1399,11 +1364,10 @@ function moveSettingsToDatabase($adb){
 				'index.php?module=Settings&action=DefaultFieldPermissions&parenttab=Settings',
 				'index.php?module=Settings&action=AuditTrailList&parenttab=Settings',
 				'index.php?module=Settings&action=ListLoginHistory&parenttab=Settings',
-				'index.php?module=Settings&action=LayoutBlockList&parenttab=Settings',
-				'index.php?module=Settings&action=CustomFieldList&parenttab=Settings',
+				'index.php?module=Settings&action=ModuleManager&parenttab=Settings',
 				'index.php?module=PickList&action=PickList&parenttab=Settings',
 				'index.php?module=Recyclebin&action=index&parenttab=Settings',
-				'index.php?module=Settings&action=ModuleManager&parenttab=Settings',
+				'index.php?module=Settings&action=QuickView&parenttab=Settings',
 				'index.php?module=Settings&action=listemailtemplates&parenttab=Settings',
 				'index.php?module=Settings&action=listwordtemplates&parenttab=Settings',
 				'index.php?module=Settings&action=listnotificationschedulers&parenttab=Settings',
@@ -1434,7 +1398,7 @@ function moveSettingsToDatabase($adb){
 	//insert settings fields
 	$block=1;
 	for($i=0, $seq=1; $i<$count; $i++, $seq++){
-		if($i==8 || $i==13 || $i==17){
+		if($i==8 || $i==12 || $i==16){
 			$block++;
 			$seq = 1;
 		}	
@@ -1591,6 +1555,61 @@ function populateLinks() {
 	// Detail View Custom link
 	$moduleInstance->addLink('DETAILVIEW', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
 }
+
+//layout editor changes
+$helpdesktabid = getTabid('HelpDesk');
+$invoicetabid = getTabid('Invoice');
+$salesordertabid = getTabid('SalesOrder');
+$purchaseorder = getTabid('PurchaseOrder');
+$faqtabid = getTabid('Faq');
+$quotes = getTabid('Quotes');
+$contacttabid = getTabid('Contacts');
+$campaigntabid = getTabid('Campaigns');
+$leadtabid = getTabid('Leads'); 
+$potentialtabid = getTabid('Potentials');
+$pricebooktabid = getTabid('PriceBooks');
+$producttabid = getTabid('Products');
+$vendortabid= getTabid('Vendors');
+$accounttabid = getTabid('Accounts');
+ExecuteQuery("alter table vtiger_blocks add column iscustom int default 0");
+
+ExecuteQuery("update vtiger_field set presence=2");
+ExecuteQuery("update vtiger_field set presence=0 where quickcreate=0 or fieldname='createdtime' or fieldname='modifiedtime' or typeofdata like '%M';");
+ExecuteQuery("update vtiger_field set presence=0 where fieldname='update_log' or fieldname='parent_id' and tabid=$helpdesktabid");
+ExecuteQuery("update vtiger_field set presence=0 where fieldname='potentialname'");
+ExecuteQuery("update vtiger_field set typeofdata='I~M',presence=2 where fieldname='account_id' and tabid =$potentialtabid ");
+ExecuteQuery("update vtiger_field set typeofdata='I~M',presence=2 where fieldname='account_id' and tabid =$quotes");
+ExecuteQuery("update vtiger_field set typeofdata='I~M',presence=2 where fieldname='account_id' and tabid =$salesordertabid");
+ExecuteQuery("update vtiger_field set typeofdata='I~M',presence=2 where fieldname='account_id' and tabid =$invoicetabid");
+
+ExecuteQuery("update vtiger_field set typeofdata='D~O' where fieldname='closingdate' and tabid =$potentialtabid");
+ExecuteQuery("update vtiger_field set presence=0,quickcreate=2 where fieldname='account_id' and tabid = $contacttabid");
+ExecuteQuery("update vtiger_field set presence=0,quickcreate=0 where fieldname='taxclass' and tabid=$producttabid");
+ExecuteQuery("update vtiger_field set presence = 0,quickcreate=3 where block = $new_block_id "); //for recurring invoice block the fields are always active
+ExecuteQuery("update vtiger_field set quickcreate=3 where fieldname='createdtime' or fieldname='modifiedtime'");
+ExecuteQuery("update vtiger_field set quickcreate=3 where tabid in ($invoicetabid,$salesordertabid,$purchaseorder,$quotes,$faqtabid)");
+ExecuteQuery("update vtiger_field set quickcreate=1 where fieldname in ('subject','account_id','bill_street','ship_street') and tabid= $invoicetabid");
+ExecuteQuery("update vtiger_field set quickcreate=1 where fieldname in ('subject','account_id','bill_street','ship_street','recurring_frequency','payment_duration') and tabid= $salesordertabid");
+ExecuteQuery("update vtiger_field set quickcreate=1 where fieldname in ('subject','vendor_id','bill_street','ship_street') and tabid = $purchaseorder");
+ExecuteQuery("update vtiger_field set quickcreate=1 where fieldname in ('subject','account_id','bill_street','ship_street') and tabid= $quotes");
+ExecuteQuery("update vtiger_field set quickcreate=1 where fieldname in ('faq_answer','question') and tabid = $faqtabid");
+
+ExecuteQuery("update vtiger_field set masseditable=3 where tabid = $documents_tab_id or fieldname ='createdtime' or fieldname = 'modifiedtime'");
+ExecuteQuery("update vtiger_field set quickcreate=3,typeofdata='V~O',presence=0 where uitype=4");
+ExecuteQuery("update vtiger_field set quickcreate=3 where fieldname='imagename'");
+ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('website','phone') and tabid = $accounttabid");
+ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('closingdate','campaigntype','expectedresponse','product_id','campaignstatus') and tabid = $campaigntabid");
+ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('firstname','phone','email') and tabid = $contacttabid");
+ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('firstname','phone','email') and tabid = $leadtabid ");
+ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('closingdate','sales_stage','amount','account_id') and tabid = $potentialtabid");
+ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('active') and tabid = $pricebooktabid");
+ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('discontinued','unit_price') and tabid = $producttabid");
+ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('phone','email') and tabid = $vendortabid");
+ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('ticket_title','ticketstatus') and tabid = $helpdesktabid");
+$faqbasicblock = getBlockId($faqtabid,'LBL_FAQ_INFORMATION');
+
+ExecuteQuery("update vtiger_field set block = $faqbasicblock ,sequence = 7 where fieldname = 'question' and tabid = $faqtabid");
+ExecuteQuery("update vtiger_field set block = $faqbasicblock ,sequence = 8 where fieldname = 'faq_answer' and tabid = $faqtabid");
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 

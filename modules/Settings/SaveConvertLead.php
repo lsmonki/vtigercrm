@@ -12,9 +12,10 @@
 
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
+require_once('Smarty_setup.php');
 
-	
-	$sql="select fieldid from vtiger_field, vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Leads';";	
+	$smarty=new vtigerCRM_Smarty;
+	$sql="select fieldid from vtiger_field, vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Leads' and vtiger_field.presence in (0,2)";	
 	$result = $adb->pquery($sql, array());
 	$noofrows = $adb->num_rows($result);
 	

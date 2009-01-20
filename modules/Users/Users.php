@@ -760,7 +760,7 @@ class Users {
 			$update = '';
 			$update_params = array();
 			$tabid= getTabid($module);	
-			$sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3)"; 
+			$sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3) and vtiger_field.presence in (0,2)"; 
 			$params = array($tabid, $table_name);
 		}
 		else
@@ -773,7 +773,7 @@ class Users {
 			}
 			$qparams = array($this->id);
 			$tabid= getTabid($module);	
-			$sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3,4)"; 
+			$sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3,4) and vtiger_field.presence in (0,2)"; 
 			$params = array($tabid, $table_name);
 
 			$crypt_type = $this->DEFAULT_PASSWORD_CRYPT_TYPE;
@@ -926,7 +926,7 @@ class Users {
 			$result[$table_name] = $adb->pquery("select * from ".$table_name." where ".$index."=?", array($record));
 		}
 		$tabid = getTabid($module);
-		$sql1 =  "select * from vtiger_field where tabid=?";
+		$sql1 =  "select * from vtiger_field where tabid=? and vtiger_field.presence in (0,2)";
 		$result1 = $adb->pquery($sql1, array($tabid));
 		$noofrows = $adb->num_rows($result1);
 		for($i=0; $i<$noofrows; $i++)

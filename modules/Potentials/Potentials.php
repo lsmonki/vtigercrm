@@ -43,6 +43,10 @@ class Potentials extends CRMEntity {
 
 	var $tab_name = Array('vtiger_crmentity','vtiger_potential','vtiger_potentialscf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_potential'=>'potentialid','vtiger_potentialscf'=>'potentialid');
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
+	var $customFieldTable = Array('vtiger_potentialscf', 'potentialid');
 
 	var $column_fields = Array();
 
@@ -80,12 +84,11 @@ class Potentials extends CRMEntity {
 			'Expected Close Date'=>'closingdate'
 			);
 
-	var $required_fields =  array(
-			"potentialname"=>1,
-			"account_id"=>1,
-			"closingdate"=>1,
-			"sales_stage"=>1
-			);
+	var $required_fields =  array();
+
+	// Used when enabling/disabling the mandatory fields for the module.
+	// Refers to vtiger_field.fieldname values.
+	var $mandatory_fields = Array('assigned_user_id', 'createdtime', 'modifiedtime', 'potentialname');
 
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'potentialname';
@@ -96,6 +99,7 @@ class Potentials extends CRMEntity {
 		$this->log = LoggerManager::getLogger('potential');
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Potentials');
+		$this->initRequiredFields("Potentials");
 	}
 
 	function save_module($module)

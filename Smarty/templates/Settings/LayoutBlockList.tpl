@@ -9,25 +9,22 @@
 *
  ********************************************************************************/ *}
 <script language="JavaScript" type="text/javascript" src="include/js/customview.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript">
 {literal}
 function check(){
-	var m=document.addtodb.blocklabel.value;
-	var n=m.replace(/^[\s]+/,'').replace(/[\s]+$/,'').replace(/[\s]{2,}/,' ');
-	if(n=="")
+	var blocklabel = document.getElementById('blocklabel');
+	var val = blocklabel.value;
+	var n = val.replace(/^[\s]+/,'').replace(/[\s]+$/,'').replace(/[\s]{2,}/,' ');
+	if(n == "" || val == "")
 	{
-		alert("Block name can not be blank");
+		alert(alert_arr.BLOCK_NAME_CANNOT_BE_BLANK);
 		return false;
-	}else
-	{
-		document.addtodb.submit();
 	}
 	return true;
 }
 {/literal}</script>
 <script language="javascript">
-//var test="";
-//eval("if(test==\"\")alert(\"here1\");");
 
 function getCustomFieldList(customField)
 {ldelim}
@@ -45,161 +42,126 @@ function getCustomFieldList(customField)
 	);	
 {rdelim}
 
-<!-- tanmoy on 6/09/2007--->
-function changeFieldorder(customField,what_to_do,fieldid,blockid)
+function changeFieldorder(what_to_do,fieldid,blockid,modulename)
 {ldelim}
-//alert('what_to_do'+what_to_do);
-//alert('fieldid'+fieldid);
-//alert('blockid'+blockid);
-var sel = document.getElementById("pick_module");
-sel.options[sel.selectedIndex].value;
-	var modulename = sel.options[sel.selectedIndex].value;
-	$('module_info').innerHTML = '{$MOD.LBL_CUSTOM_FILED_IN} "'+modulename+'" {$APP.LBL_MODULE}';
+	$('vtbusy_info').style.display = "block";
 	new Ajax.Request(
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
 			method: 'post',
-			postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&fld_module='+modulename+'&parenttab=Settings&what_to_do='+what_to_do+'&fieldid='+fieldid+'&blockid='+blockid+'&ajax=true',
-			//postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&fld_module='+modulename+'&parenttab=Settings&ajax=true&fieldid='+fieldid,
+			postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&sub_mode=changeOrder&fld_module='+modulename+'&parenttab=Settings&what_to_do='+what_to_do+'&fieldid='+fieldid+'&blockid='+blockid+'&ajax=true',
+			onComplete: function(response) {ldelim}
+				$("cfList").innerHTML=response.responseText;
+				$('vtbusy_info').style.display = "none";
+			{rdelim}
+		{rdelim}
+	);	
+{rdelim}
+
+
+function changeShowstatus(tabid,blockid,modulename)	
+{ldelim}
+	var display_status = $('display_status_'+blockid).value;
+	new Ajax.Request(
+		'index.php',
+		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
+			method: 'post',
+			postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&sub_mode=changeOrder&fld_module='+modulename+'&parenttab=Settings&what_to_do='+display_status+'&tabid='+tabid+'&blockid='+blockid+'&ajax=true',
 			onComplete: function(response) {ldelim}
 			$("cfList").innerHTML=response.responseText;
-			//alert('The field moved Successfully');
-			location.href='index.php?module=Settings&action=LayoutBlockList&parenttab=Settings&fld_module='+modulename;
 			{rdelim}
 		{rdelim}
 		
 	);	
 {rdelim}
 
-function changeShowstatus(customBlock,tabid,blockid,what_to_do)	
-{ldelim}
-//var display = document.getElementById("display_status");
-//var what_to_do = display.options[display.selectedIndex].value;
 
-//alert('what_to_do'+what_to_do);
-//alert('fieldid'+fieldid);
-//alert('blockid'+blockid);
-var sel = document.getElementById("pick_module");
-sel.options[sel.selectedIndex].value;
-	var modulename = sel.options[sel.selectedIndex].value;
-	$('module_info').innerHTML = '{$MOD.LBL_CUSTOM_FILED_IN} "'+modulename+'" {$APP.LBL_MODULE}';
-	new Ajax.Request(
+
+
+function changeBlockorder(what_to_do,tabid,blockid,modulename)	
+{ldelim}
+	$('vtbusy_info').style.display = "block";
+		new Ajax.Request(
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
 			method: 'post',
-			postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&fld_module='+modulename+'&parenttab=Settings&what_to_do='+what_to_do+'&tabid='+tabid+'&blockid='+blockid+'&ajax=true',
+			postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&sub_mode=changeOrder&fld_module='+modulename+'&parenttab=Settings&what_to_do='+what_to_do+'&tabid='+tabid+'&blockid='+blockid+'&ajax=true',
 			onComplete: function(response) {ldelim}
 			$("cfList").innerHTML=response.responseText;
-			//alert('The Block moved Successfully');
-			location.href='index.php?module=Settings&action=LayoutBlockList&parenttab=Settings&fld_module='+modulename;
+			$('vtbusy_info').style.display = "none";
 			{rdelim}
 		{rdelim}
 		
 	);	
-
-	
-//alert("mname="+modulename);
-{rdelim}
-
-
-
-
-function changeBlockorder(customBlock,what_to_do,tabid,blockid)	
-{ldelim}
-//alert('what_to_do'+what_to_do);
-//alert('fieldid'+fieldid);
-//alert('blockid'+blockid);
-var sel = document.getElementById("pick_module");
-sel.options[sel.selectedIndex].value;
-	var modulename = sel.options[sel.selectedIndex].value;
-	$('module_info').innerHTML = '{$MOD.LBL_CUSTOM_FILED_IN} "'+modulename+'" {$APP.LBL_MODULE}';
-	new Ajax.Request(
-		'index.php',
-		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
-			method: 'post',
-			postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&fld_module='+modulename+'&parenttab=Settings&what_to_do='+what_to_do+'&tabid='+tabid+'&blockid='+blockid+'&ajax=true',
-			onComplete: function(response) {ldelim}
-			$("cfList").innerHTML=response.responseText;
-			//alert('The Block moved Successfully');
-			location.href='index.php?module=Settings&action=LayoutBlockList&parenttab=Settings&fld_module='+modulename;
-			{rdelim}
-		{rdelim}
-		
-	);	
-
-	
-//alert("mname="+modulename);
 {rdelim}
 
 <!-- end of tanmoy on 6/09/2007-->
 
 
 {literal}
-/*function deleteCustomField(id, fld_module, colName, uitype)
+function deleteCustomField(id, fld_module, colName, uitype)
 {
-        if(confirm("Are you sure?"))
-        {
-                document.form.action="index.php?module=Settings&action=DeleteCustomField&fld_module="+fld_module+"&fld_id="+id+"&colName="+colName+"&uitype="+uitype+"&from=layouteditor";
-                document.form.submit()
-        }
-}*/
-
-function deleteCustomBlock(fld_module,blockid,tabid,blockname,no)
-{
-	if(confirm("Are you sure?"))
-	{
-		var modulename = fld_module;
-		if(no>0)
-		{  
+       if(confirm(alert_arr.ARE_YOU_SURE_YPU_WANT_TO_DELETE)){
+        $('vtbusy_info').style.display = "block";
 			new Ajax.Request(
 				'index.php',
 				{queue: {position: 'end', scope: 'command'},
 					method: 'post',
-					postBody: 'module=Settings&action=SettingsAjax&file=MoveAllField&fld_module='+fld_module+'&parenttab=Settings&ajax=true&blockid='+blockid+'&tabid='+tabid+'&blockname='+blockname,
+					postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&sub_mode=deleteCustomField&ajax=true&fld_module='+fld_module+'&fld_id='+id+'&colName='+colName+'&uitype='+uitype,
 					onComplete: function(response) {
-					$("createcf").innerHTML=response.responseText;
+					$("cfList").innerHTML=response.responseText;
 					gselected_fieldtype = '';
+					$('vtbusy_info').style.display = "none";
 					}
 				}
-			);
-		}else
-		{
-			location.href='index.php?module=Settings&action=MoveBlockFieldToDB&parenttab=Settings&fld_module='+modulename+'&deleteblockid='+blockid;
+			);		
+		}else{
+		fninvsh('editfield_'+id);
+		}
+}
+
+function deleteCustomBlock(module,blockid,no){
+
+	if(no > 0){
+		alert(alert_arr.PLEASE_MOVE_THE_FIELDS_TO_ANOTHER_BLOCK);
+		return false;
+	}else{
+		if(confirm(alert_arr.ARE_YOU_SURE_YOU_WANT_TO_DELETE_BLOCK)){
+			$('vtbusy_info').style.display = "block";
+			new Ajax.Request(
+				'index.php',
+				{queue : {position : 'end', scope: 'command'},
+				method : 'post',
+				postBody: 'module=Settings&action=SettingsAjax&fld_module='+module+'&file=LayoutBlockList&sub_mode=deleteCustomBlock&ajax=true&blockid='+blockid,
+				onComplete: function(response) {
+					$("cfList").innerHTML=response.responseText;
+					$('vtbusy_info').style.display = "none";
+					}
+				}	
+			);	
 		}
 	}
 }
 
-function getCreateCustomFieldForm(customField,blockid,tabid,ui,blockname,fieldselect,mode)
+
+function getCreateCustomBlockForm(modulename,mode)
 {
-		var modulename = customField;
-		new Ajax.Request(
-			'index.php',
-			{queue: {position: 'end', scope: 'command'},
-			method: 'post',
-			postBody: 'module=Settings&action=SettingsAjax&file=AddBlockField&fld_module='+customField+'&parenttab=Settings&ajax=true&blockid='+blockid+'&tabid='+tabid+'&uitype='+ui+'&blockname='+blockname+'&fieldselect='+fieldselect+'&mode='+mode,
-			onComplete: function(response) {
-				$("createcf").innerHTML=response.responseText;
-				gselected_fieldtype = '';
-			}
-		}
-	);
-
-}
-
-
-function getCreateCustomBlockForm(customField,blockid,tabid,blocklabel,mode)
-{
-	//alert('here1');
-	var modulename = customField;
-	new Ajax.Request(
+	var checlabel = check();
+	if(checlabel == false)
+		return false;
+	var blocklabel = document.getElementById('blocklabel');
+	var val = blocklabel.value;
+	var blockid = document.getElementById('after_blockid').value;
+	$('vtbusy_info').style.display = "block";
+			new Ajax.Request(
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'module=Settings&action=SettingsAjax&file=AddBlock&fld_module='+customField+'&parenttab=Settings&ajax=true&blockid='+blockid+'&tabid='+tabid+'&blocklabel='+blocklabel+'&mode='+mode+'&blockselect='+blockid,
+			postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&sub_mode=addBlock&fld_module='+modulename+'&parenttab=Settings&ajax=true&mode='+mode+'&blocklabel='+val+'&after_blockid='+blockid,
 			onComplete: function(response) {
-		//alert(response.responseText);
-				$("createcf").innerHTML=response.responseText;
+				$("cfList").innerHTML=response.responseText;
 				gselected_fieldtype = '';
+				$('vtbusy_info').style.display = "none";
 			}
 		}
 	);
@@ -207,8 +169,104 @@ function getCreateCustomBlockForm(customField,blockid,tabid,blocklabel,mode)
 
 }
 
+function saveFieldInfo(fieldid,module,sub_mode){
+	urlstring = '';
+	var mandatory_check = $('mandatory_check_'+fieldid);
+	var presence_check = $('presence_check_'+fieldid);
+	var quickcreate_check = $('quickcreate_check_'+fieldid);
+	var massedit_check = $('massedit_check_'+fieldid);
+	
+	if(mandatory_check != null){
+		if (mandatory_check.disabled == false) {
+			urlstring = urlstring+'&ismandatory=' + mandatory_check.checked;
+		}
+	}
+	if(presence_check != null){	
+		if (presence_check.disabled == false) {
+			urlstring = urlstring + '&isPresent=' + presence_check.checked;
+		}
+	}	
+	if(quickcreate_check != null){
+		if (quickcreate_check.disabled == false) {
+			urlstring = urlstring + '&quickcreate=' + quickcreate_check.checked;
+		}
+	}	
+	if(massedit_check != null){
+		if (massedit_check.disabled == false) {
+			urlstring = urlstring + '&massedit=' + massedit_check.checked;
+		}
+	}	
+	$('vtbusy_info').style.display = "block";
+	new Ajax.Request(
+			'index.php',
+			{queue : {position: 'end',scope:'command'},
+				method:'post',
+				postBody:'module=Settings&action=SettingsAjax&file=LayoutBlockList&sub_mode='+sub_mode+'&parenttab=Settings'+
+					'&fieldid='+fieldid+'&fld_module='+module+'&ajax=true'+urlstring,
+				onComplete: function(response) {
+					$("cfList").innerHTML=response.responseText;
+					$('vtbusy_info').style.display = "none";
+					fnvshNrm('editfield_+"fieldid"');
+				}
+			}
+	);
+}
 
-function makeFieldSelected(oField,fieldid)
+
+function enableDisableCheckBox(obj, elementName) {
+	
+	var ele = $(elementName);
+	if (obj == null || ele == null) return;
+	if (obj.checked == true) {
+		ele.checked = true;
+		ele.disabled = true;
+	} else {
+		ele.disabled = false;
+	}	
+}
+
+function showHideTextBox(obj, elementName) {
+	var ele = $(elementName);
+	if (obj == null || ele == null) return;
+	if (obj.checked == true) {
+		ele.disabled = false;
+	} else {
+		ele.disabled = true;
+	}
+}
+
+
+function getCreateCustomFieldForm(modulename,blockid,mode)
+{
+   var check = validate(blockid);
+   if(check == false)
+   return false;
+   var type = document.getElementById("fieldType_"+blockid).value;
+   var label = document.getElementById("fldLabel_"+blockid).value;
+   var fldLength = document.getElementById("fldLength_"+blockid).value;  
+   var fldDecimal = document.getElementById("fldDecimal_"+blockid).value;
+   var fldPickList = document.getElementById("fldPickList_"+blockid).value;
+   new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&sub_mode=addCustomField&fld_module='+modulename+'&ajax=true&blockid='+blockid+'&fieldType='+type+'&fldLabel='+label+'&fldLength='+fldLength+'&fldDecimal='+fldDecimal+'&fldPickList='+fldPickList,
+			onComplete: function(response) {
+				var str = response.responseText;
+				if(str == 'ERROR'){
+					alert('Label already exists. Please specify a different Label');
+					return false;
+				}else{
+					$("cfList").innerHTML=str;
+				}	
+				gselected_fieldtype = '';
+			}
+		}
+	);
+
+}
+
+function makeFieldSelected(oField,fieldid,blockid)
 {
 	if(gselected_fieldtype != '')
 	{
@@ -216,114 +274,139 @@ function makeFieldSelected(oField,fieldid)
 	}
 	oField.className = 'customMnuSelected';	
 	gselected_fieldtype = oField.id;	
-	selFieldType(fieldid)
-	document.getElementById('selectedfieldtype').value = fieldid;
-}
-function CustomFieldMapping()
-{
-        document.form.action="index.php?module=Settings&action=LeadCustomFieldMapping";
-        document.form.submit();
+	selFieldType(fieldid,'','',blockid);
+	document.getElementById('selectedfieldtype_'+blockid).value = fieldid;
 }
 
-function field_validate()
+function show_move_hiddenfields(modulename,tabid,blockid,sub_mode){
+	
+	if(sub_mode == 'showhiddenfields'){
+	var selectedfields = document.getElementById('hiddenfield_assignid_'+blockid);
+	var selectedids_str = '';
+	for(var i=0; i<selectedfields.length; i++) {
+		if (selectedfields[i].selected == true) {
+			selectedids_str = selectedids_str + selectedfields[i].value + ":";
+		}
+	}
+	}else{
+		var selectedfields = document.getElementById('movefield_assignid_'+blockid);
+		var selectedids_str = '';
+		for(var i=0; i<selectedfields.length; i++) {
+			if (selectedfields[i].selected == true) {
+				selectedids_str = selectedids_str + selectedfields[i].value + ":";
+			}
+		}
+	}
+	$('vtbusy_info').style.display = "block";
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&sub_mode='+sub_mode+'&fld_module='+modulename+'&parenttab=Settings&ajax=true&tabid='+tabid+'&blockid='+blockid+'&selected='+selectedids_str,
+			onComplete: function(response) {
+				$("cfList").innerHTML=response.responseText;
+				$('vtbusy_info').style.display = "none";
+				}
+			}
+		);
+}
+	
+function changeRelatedListorder(what_to_do,tabid,sequence,id,module)	
 {
-	var fld_label = document.getElementById('fldLabel').value;
-	if(trim(fld_label)!=''){	
-		return true;
-	}
-	else
-	{
-		alert('Label cannot be Emtpy');
-		return false;
-	}
+	$('vtbusy_info').style.display = "block";
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&sub_mode=changeRelatedInfoOrder&sequence='+sequence+'&fld_module='+module+'&parenttab=Settings&what_to_do='+what_to_do+'&tabid='+tabid+'&id='+id+'&ajax=true',
+			onComplete: function(response) {
+			$("relatedlistdiv").innerHTML=response.responseText;
+			$('vtbusy_info').style.display = "none";
+			}
+		}
+		
+	);	
+}	
+
+function callRelatedList(module){
+	$('vtbusy_info').style.display = "block";
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&sub_mode=getRelatedInfoOrder&parenttab=Settings&formodule='+module+'&ajax=true',
+			onComplete: function(response) {
+			$("relatedlistdiv").innerHTML=response.responseText;
+			fnvshNrm('relatedlistdiv');
+			$('vtbusy_info').style.display = "none";
+			}
+		}
+		
+	);
+}
+
+function showProperties(field,man,pres,quickc,massed){
+	var str='<table class="small" cellpadding="2" cellspacing="0" border="0"><tr><th>'+field+'</th></tr>';
+	if (man == 0 || man == 2)
+ 		str = str+'<tr><td>'+alert_arr.FIELD_IS_MANDATORY+'</td></tr>';
+	if (pres == 0 || pres == 2)
+ 		str = str+'<tr><td>'+alert_arr.FIELD_IS_ACTIVE+'</td></tr>';
+	if (quickc == 0 || quickc == 2)
+		str = str+'<tr><td>'+alert_arr.FIELD_IN_QCREATE+'</td></tr>';
+	if(massed == 0 || massed == 1)
+		str = str+'<tr><td>'+alert_arr.FIELD_IS_MASSEDITABLE+'</td></tr>';
+	str = str + '</table>';
+	return str;
 }
 
 var gselected_fieldtype = '';
 {/literal}
 </script>
-<div id="createcf" style="display:block;position:absolute;width:500px;"></div>
+<div id = "layoutblock">
+<div id="relatedlistdiv" style="display:none; position: absolute; width: 225px; left: 300px; top: 300px;"></div>
 <br>
+
+
+
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
-<tbody><tr>
+	<tr>
         <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
-        <br>
-
-	<div align=center>
-			{include file='SetMenu.tpl'}
-			<!-- DISPLAY -->
-			{if $MODE neq 'edit'}
-			<b><font color=red>{$DUPLICATE_ERROR} </font></b>
-			{/if}
-			
-				<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
-				<tbody><tr>
-					<td rowspan="2" valign="top" width="50"><img src="{'orgshar.gif'|@vtiger_imageurl:$THEME}" alt="Users" title="Users" border="0" height="48" width="48"></td>
-					<td class="heading2" valign="bottom"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> &gt; {$MOD.LBL_LAYOUT_EDITOR}</b></td>
-				</tr>
-
+	        <br>	
+			{assign var=entries value=$CFENTRIES}
+			<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tr>
-					<td class="small" valign="top">{$MOD.LBL_LAYOUT_EDITOR_DESCRIPTION}</td>
-				</tr>
-				</tbody></table>
-				
-				<br>
-				<table border="0" cellpadding="10" cellspacing="0" width="100%">
-				<tbody><tr>
-				<td>
-
-				<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
-				<tbody><tr>
-					{assign var="MODULELBL" value=$MODULE}
-					{if $APP.$MODULE}
-						{assign var="MODULELBL" value=$APP.$MODULE}
-					{/if}
-					<td class="big" nowrap><strong><span id="module_info">{$MOD.LBL_CUSTOM_FILED_IN} "{$MODULELBL}" {$APP.LBL_MODULE}</span></strong> </td>
-					<td class="small" align="right">
-					{$MOD.LBL_SELECT_CF_TEXT}
-		                	<select name="pick_module" class="importBox" onChange="getCustomFieldList(this)" id='pick_module'>
-                		        {foreach key=sel_value item=value from=$MODULES}
-		                        {if $MODULE eq $sel_value}
-                	                       	{assign var = "selected_val" value="selected"}
-		                        {else}
-                        	                {assign var = "selected_val" value=""}
-                                	{/if}	                                
-									{assign var="modulelabel" value=$value}
-									{if $APP.$value}
-										{assign var="modulelabel" value=$APP.$value}
-									{/if}
-	                                <option value="{$sel_value}" {$selected_val}>{$modulelabel}</option>
-        		                {/foreach}
-			                </select>
+					<td rowspan="2" valign="top" width="50"><img src="themes/images/orgshar.gif" alt="Users" title="Users" border="0" height="48" width="48"></td>
+					<td class="heading2" valign="bottom">
+						<b><a href="index.php?module=Settings&action=ModuleManager&parenttab=Settings">{$MOD.VTLIB_LBL_MODULE_MANAGER}</a> 
+						&gt;<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$MODULE}&parenttab=Settings">{if $APP.$MODULE } {$APP.$MODULE} {elseif $MOD.$MODULE} {$MOD.$MODULE} {else} {$MODULE} {/if}</a> &gt; 
+						{$MOD.LBL_LAYOUT_EDITOR}</b>
 					</td>
-					</tr>
-				</tbody>
-				</table>
-				<div id="cfList">
-                                {include file="Settings/LayoutBlockEntries.tpl"}
-                </div>	
+				</tr>
+				<tr>
+					<td class="small" valign="top">{$MOD.LBL_LAYOUT_EDITOR_DESCRIPTION}
+					</td>
+					<td align="right" width="15%"><input type="button" class="crmButton create small" onclick="callRelatedList('{$CFENTRIES.0.module}');fnvshNrm('relatedlistdiv');posLay(this,'relatedlistdiv');" alt="{$MOD.ARRANGE_RELATEDLIST}" title="{$MOD.ARRANGE_RELATEDLIST}" value="{$MOD.ARRANGE_RELATEDLIST}"/>
+					</td>
+					<td align="right" width="8%"><input type="button" class="crmButton create small" onclick="fnvshobj(this,'addblock');" alt="{$MOD.ADD_BLOCK}" title="{$MOD.ADD_BLOCK}" value="{$MOD.ADD_BLOCK}"/>
+					</td>
+					&nbsp; <img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" id="vtbusy_info" style="display:none;position:absolute;top:180px;right:100px;" border="0" />
+				</tr>
+			</table>
+				
+			<div id="cfList">
+                {include file="Settings/LayoutBlockEntries.tpl"}
+            </div>	
+                
 			<table border="0" cellpadding="5" cellspacing="0" width="100%">
-			<tr>
-
-		  	<td class="small" align="right" nowrap="nowrap"><a href="#top">{$MOD.LBL_SCROLL}</a></td>
-			</tr>
+				<tr>
+					<td class="small" align="right" nowrap="nowrap"><a href="#top">{$MOD.LBL_SCROLL}</a></td>
+				</tr>
 			</table>
-			</td>
-			</tr>
-			</table>
-		<!-- End of Display -->
-		
 		</td>
-        </tr>
-        </table>
-        </td>
-        </tr>
-        </table>
-        </div>
-
-        </td>
-        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
-        </tr>
-</tbody>
+	</tr>
 </table>
-<br>
+		<!-- End of Display for field -->
+
+
+</div>

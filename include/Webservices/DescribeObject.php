@@ -246,7 +246,7 @@
 	function vtws_getFieldLabelKey($column,$tabId){
 		
 		global $adb;
-		$sql = "select * from vtiger_field where columnname=? and tabid=?";
+		$sql = "select * from vtiger_field where columnname=? and tabid=? and vtiger_field.presence in (0,2)";
 		$result = $adb->pquery($sql,array($column,$tabId));
 		if($result != null && isset($result)){
 			if($adb->num_rows($result)>0){

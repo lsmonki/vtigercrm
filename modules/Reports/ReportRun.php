@@ -118,7 +118,7 @@ class ReportRun extends CRMEntity
 				if (stripos($selectedfields[1], 'cf_') === 0) {
 					$cf_columns = $adb->getColumnNames($tablename);
 					if (array_search($colname, $cf_columns) != null) {
-						$pquery = "select fieldlabel from vtiger_field where tablename = ? and fieldname = ?";
+						$pquery = "select fieldlabel from vtiger_field where tablename = ? and fieldname = ? and vtiger_field.presence in (0,2)";
 						$cf_res = $adb->pquery($pquery, array($tablename, $colname));
 						if (count($cf_res) > 0){
 							$cf_fld_label = $adb->query_result($cf_res, 0, "fieldlabel");
@@ -232,20 +232,20 @@ class ReportRun extends CRMEntity
 		if($module == "Calendar")
 		{
 			if (count($profileList) > 0) {
-				$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") group by vtiger_field.fieldid order by block,sequence";
+				$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") and vtiger_field.presence in (0,2) group by vtiger_field.fieldid order by block,sequence";
 				array_push($params, $profileList);
 			} else {
-				$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 group by vtiger_field.fieldid order by block,sequence";
+				$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2) group by vtiger_field.fieldid order by block,sequence";
 			}
 		}
 		else
 		{
 			array_push($params, $this->primarymodule, $this->secondarymodule);
 			if (count($profileList) > 0) {
-				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?,?)) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") group by vtiger_field.fieldid order by block,sequence";
+				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?,?)) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") and vtiger_field.presence in (0,2) group by vtiger_field.fieldid order by block,sequence";
 				array_push($params, $profileList);
 			} else {
-				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?,?)) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 group by vtiger_field.fieldid order by block,sequence";
+				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?,?)) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2) group by vtiger_field.fieldid order by block,sequence";
 			}
 		}
 		$result = $adb->pquery($query, $params);
@@ -305,7 +305,7 @@ class ReportRun extends CRMEntity
 		else{
  			if(stristr($selectedfields[0],"vtiger_crmentityRel")){
  				$module = str_replace("vtiger_crmentityRel","",$selectedfields[0]);
-				$fields_query = $adb->pquery("SELECT vtiger_field.fieldname,vtiger_field.tablename,vtiger_field.fieldid from vtiger_field INNER JOIN vtiger_tab on vtiger_tab.name = ? WHERE vtiger_tab.tabid=vtiger_field.tabid and vtiger_field.fieldname=?",array($module,$selectedfields[3]));
+				$fields_query = $adb->pquery("SELECT vtiger_field.fieldname,vtiger_field.tablename,vtiger_field.fieldid from vtiger_field INNER JOIN vtiger_tab on vtiger_tab.name = ? WHERE vtiger_tab.tabid=vtiger_field.tabid and vtiger_field.fieldname=? and vtiger_field.presence in (0,2)",array($module,$selectedfields[3]));
    			
 		        if($adb->num_rows($fields_query)>0){
 			        for($i=0;$i<$adb->num_rows($fields_query);$i++){
@@ -498,7 +498,7 @@ class ReportRun extends CRMEntity
 			$module = $field[0];
 			$fieldname = trim($field[1]);
 			$tabid = getTabId($module);
-			$field_query = $adb->pquery("SELECT tablename,columnname,typeofdata,fieldname,uitype FROM vtiger_field WHERE tabid = ? AND fieldname= ?",array($tabid,$fieldname));
+			$field_query = $adb->pquery("SELECT tablename,columnname,typeofdata,fieldname,uitype FROM vtiger_field WHERE tabid = ? AND fieldname= ? and vtiger_field.presence in (0,2)",array($tabid,$fieldname));
 			$fieldtablename = $adb->query_result($field_query,0,'tablename');
 			$fieldcolname = $adb->query_result($field_query,0,'columnname');
 			$typeofdata = $adb->query_result($field_query,0,'typeofdata'); 
@@ -2427,7 +2427,7 @@ class ReportRun extends CRMEntity
 		if($this->secondarymodule != '')
 			array_push($id,  getTabid($this->secondarymodule));
 
-		$query = 'select fieldname,columnname,fieldid,fieldlabel,tabid,uitype from vtiger_field where tabid in('. generateQuestionMarks($id) .') and uitype in (15,33,55)'; //and columnname in (?)';
+		$query = 'select fieldname,columnname,fieldid,fieldlabel,tabid,uitype from vtiger_field where tabid in('. generateQuestionMarks($id) .') and uitype in (15,33,55) and vtiger_field.presence in (0,2)'; //and columnname in (?)';
 		$result = $adb->pquery($query, $id);//,$select_column));
 		$roleid=$current_user->roleid;
 		$subrole = getRoleSubordinates($roleid);

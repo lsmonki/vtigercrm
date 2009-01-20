@@ -37,7 +37,12 @@ class Leads extends CRMEntity {
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_leaddetails'=>'leadid','vtiger_leadsubdetails'=>'leadsubscriptionid','vtiger_leadaddress'=>'leadaddressid','vtiger_leadscf'=>'leadid');
 
 	var $entity_table = "vtiger_crmentity";
-
+	
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
+	var $customFieldTable = Array('vtiger_leadscf', 'leadid');
+	
 	//construct this from database;	
 	var $column_fields = Array();
 	var $sortby_fields = Array('lastname','firstname','email','phone','company','smownerid','website');
@@ -75,8 +80,12 @@ class Leads extends CRMEntity {
 		'Company'=>'company'
 	);
 
-	var $required_fields =  array("lastname"=>1, 'company'=>1);
-	
+	var $required_fields =  array();
+
+	// Used when enabling/disabling the mandatory fields for the module.
+	// Refers to vtiger_field.fieldname values.
+	var $mandatory_fields = Array('assigned_user_id', 'lastname', 'company' ,'createdtime' ,'modifiedtime');
+
 	//Default Fields for Email Templates -- Pavani
 	var $emailTemplate_defaultFields = array('firstname','lastname','leadsource','leadstatus','rating','industry','yahooid','email','annualrevenue','designation','salutation');
 	
@@ -380,12 +389,12 @@ class Leads extends CRMEntity {
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 		{
-			$sql1 = "select fieldlabel from vtiger_field where tabid=7";
+			$sql1 = "select fieldlabel from vtiger_field where tabid=7 and vtiger_field.presence in (0,2)";
 			$params1 = array();
 		}else
 		{
 			$profileList = getCurrentUserProfileList();
-			$sql1 = "select vtiger_field.fieldid,fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=7 and vtiger_field.displaytype in (1,2,3,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+			$sql1 = "select vtiger_field.fieldid,fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=7 and vtiger_field.displaytype in (1,2,3,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
 			$params1 = array();
 			if (count($profileList) > 0) {
 				$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")  group by fieldid";

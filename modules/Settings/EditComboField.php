@@ -84,7 +84,7 @@ if($adb->num_rows($res) > 0)
 	$nonedit_fldVal .= "</div>";
 }	
 
-$query = 'select fieldlabel from vtiger_tab inner join vtiger_field on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.name=? and fieldname=?';
+$query = 'select fieldlabel from vtiger_tab inner join vtiger_field on vtiger_tab.tabid=vtiger_field.tabid where vtiger_tab.name=? and fieldname=? and vtiger_field.presence in (0,2)';
 $fieldlabel = $adb->query_result($adb->pquery($query, array($moduleName, $tableName)),0,'fieldlabel'); 
 
 if($nonedit_fldVal == '')

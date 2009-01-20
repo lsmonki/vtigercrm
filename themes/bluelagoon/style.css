@@ -607,7 +607,7 @@ a.dash_href{
 .dash_btm{
 	background-image:url(../images/dash_btm_center.jpg);
 	background-repeat:repeat-x;
-	position:top;
+	vertical-align:top;
 }
 
 /* clock */
@@ -1699,7 +1699,7 @@ ul {
 .colHeader{
 	background-color:#ddf;
 	border-left:1px solid #fff;
-	border-top:1px solid #fff;
+	border-top:1px solid #aaf;
 	border-right:1px solid #aaf;
 	border-bottom:1px solid #aaf;
 	font-weight:bold;
@@ -1871,7 +1871,7 @@ textarea {
 .emailSelected{
 	background-color:#eaeaea;
 	color:#000000;
-	font-size:bold;
+	font-weight:bold;
 }
 
 
@@ -2236,6 +2236,10 @@ a.drop_down:Hover{
 	padding: 5px;
 	border: 2px solid #b69559;
 	background-color: #e8e4ee;
+}
+
+.colData{
+	border-right:1px solid #aaf;
 }
 
 .thickborder{

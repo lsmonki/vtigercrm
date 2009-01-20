@@ -168,7 +168,7 @@ $import_object_array = Array(
 				"Potentials"=>"ImportOpportunity",
 				"Products"=>"ImportProduct",
 				"HelpDesk"=>"ImportTicket",
-                                "Vendors"=>"ImportVendors"
+                "Vendors"=>"ImportVendors"
 			    );
 
 if(isset($_REQUEST['module']) && $_REQUEST['module'] != '')
@@ -185,6 +185,8 @@ if(isset($_REQUEST['module']) && $_REQUEST['module'] != '')
 	$focus = new $object_name();
 	// vtlib customization: Call the import initializer
 	if($callInitImport) $focus->initImport($module);
+	//initialized the required fields,used to check for mandatory fields while importing
+	$focus->initRequiredFields($module);
 	// END
 }
 else
@@ -363,14 +365,13 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 	$smarty->assign("THIRDROW",$thirdrow);
 	$smarty_array[$field_count + 1] = getFieldSelect(	$focus->importable_fields,
 							$field_count,
-							$focus1->required_fields,
+							$focus->required_fields,
 							$suggest,
 							$translated_column_fields,
 							$tablename
 						   );
 
 	$pos = 0;
-
 	foreach ( $rows as $row ) 
 	{
 		
@@ -403,8 +404,6 @@ $_SESSION['import_module_object_column_fields'] = $focus->importable_fields;
 $_SESSION['import_module_field_count'] = $field_count;
 $_SESSION['import_module_object_required_fields'] = $focus1->required_fields;
 $_SESSION['import_module_translated_column_fields'] = $translated_column_fields;
-
-
 //echo '<pre>Default array ==> '; print_r($smarty_array); echo '</pre>';
 
 $smarty->assign("SELECTFIELD",$smarty_array);
@@ -449,7 +448,6 @@ function validate_import_map()
 	var required_fields = new Array();
 	var required_fields_name = new Array();
 	var seq_string = '';
-
 	<?php 
 		foreach($focus->required_fields as $name => $index)
 		{

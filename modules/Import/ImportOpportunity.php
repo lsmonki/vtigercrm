@@ -256,12 +256,12 @@ class ImportOpportunity extends Potentials {
 	/** Constructor which will set the importable_fields as $this->importable_fields[$key]=1 in this object where key is the fieldname in the field table
 	 */
 	function ImportOpportunity() {
+		parent::Potentials();
 		$this->log = LoggerManager::getLogger('import_opportunity');
 		$this->db = new PearDatabase();
 
 		$this->db->println("IMP ImportOpportunity");
 		$this->initImportableFields("Potentials");		
-		
 		$this->db->println($this->importable_fields);
 	}
 

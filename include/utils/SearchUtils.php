@@ -91,7 +91,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 	{
 		$profileList = getCurrentUserProfileList();
 		//changed to get vtiger_field.fieldname
-		$query  = "SELECT vtiger_profile2field.*,vtiger_field.fieldname FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") AND vtiger_field.fieldname IN (". generateQuestionMarks($field_list) .") GROUP BY vtiger_field.fieldid";
+		$query  = "SELECT vtiger_profile2field.*,vtiger_field.fieldname FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid WHERE vtiger_field.tabid=? AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") AND vtiger_field.fieldname IN (". generateQuestionMarks($field_list) .") and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
  		if( $adb->dbType == "pgsql")
  		    $query = fixPostgresQuery( $query, $log, 0);
 		$result = $adb->pquery($query, array($tabid, $profileList, $field_list));
@@ -105,8 +105,10 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 		if($module == 'Users' && empty($field))
 			$field = Array("last_name","email1");
 	}
-
-        //modified for vtiger_customview 27/5 - $app_strings change to $mod_strings
+	//this is used to get fields that are visible for admin --vikas
+	$focus->list_fields = filterInactiveFields($module,$focus->list_fields);
+	   
+	    //modified for vtiger_customview 27/5 - $app_strings change to $mod_strings
         foreach($focus->list_fields as $name=>$tableinfo)
         {
                 //added for vtiger_customview 27/5
@@ -537,7 +539,7 @@ function getAdvSearchfields($module)
 	{
 		$sql = "select * from vtiger_field ";
 		$sql.= " where vtiger_field.tabid in(?) and";
-		$sql.= " vtiger_field.displaytype in (1,2,3)";
+		$sql.= " vtiger_field.displaytype in (1,2,3) and vtiger_field.presence in (0,2)";
 		if($tabid == 13 || $tabid == 15)
 		{
 			$sql.= " and vtiger_field.fieldlabel != 'Add Comment'";
@@ -567,7 +569,7 @@ function getAdvSearchfields($module)
 		$profileList = getCurrentUserProfileList();
 		$sql = "select * from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid ";
 		$sql.= " where vtiger_field.tabid in(?) and";
-		$sql.= " vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+		$sql.= " vtiger_field.displaytype in (1,2,3) and vtiger_field.presence in (0,2) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
 		
 		$params = array($tabid);
 		

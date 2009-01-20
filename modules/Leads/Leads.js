@@ -12,33 +12,38 @@
 document.write("<script type='text/javascript' src='include/js/Mail.js'></"+"script>");
 document.write("<script type='text/javascript' src='include/js/Merge.js'></"+"script>");
 function verify_data(form) {
-	if(! form.createpotential.checked == true)
-	{
-        	if (form.potential_name.value == "")
-		{
-                	alert(alert_arr.OPPORTUNITYNAME_CANNOT_BE_EMPTY);
+	if(! form.createpotential.checked == true){
+        if (form.potential_name.value == ""){
+            alert(alert_arr.OPPORTUNITYNAME_CANNOT_BE_EMPTY);
 			return false;	
 		}
-		if (form.closedate.value == "")
-		{
-                	alert(alert_arr.CLOSEDATE_CANNOT_BE_EMPTY);
-			return false;	
+		if(form.closingdate_mandatory != null && form.closingdate_mandatory.value == '*'){
+			if (form.closedate.value == ""){
+	        	alert(alert_arr.CLOSEDATE_CANNOT_BE_EMPTY);
+				return false;	
+			}
 		}
-		x = dateValidate('closedate','Potential Close Date','GECD');
+		if (form.closedate.value != "" ){
+			var x = dateValidate('closedate','Potential Close Date','DATE');
+			if(!x){
+				return false;
+			}
+		}
+			
+				
+		
+		if(form.amount_mandatory.value == '*'){
+			if (form.potential_amount.value == ""){
+	            alert(alert_arr.AMOUNT_CANNOT_BE_EMPTY);
+				return false;					
+			}
+		}	
 		intval= intValidate('potential_amount','Potential Amount');
-
-		if(!x)
-		{
+		if(!intval){
 			return false;
 		}
-		if(!intval)
-		{
-			return false;
-		}
-        }
-	else
-	{	
-
+	}
+	else{	
 		return true;
 	}
 	

@@ -111,7 +111,7 @@ function getEmailFieldId($meta, $entityId,$fields){
 		return $meta->getFieldIdFromFieldName($fields[0]);
 	}
 	//no email field accessible in the module. since its only association pick up the field any way.
-	$query="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? and uitype=13;";
+	$query="SELECT fieldid,fieldlabel,columnname FROM vtiger_field WHERE tabid=? and uitype=13 and vtiger_field.presence in (0,2)";
 	$result = $adb->pquery($query, array($meta->getObjectId()));
 	//pick up the first field.
 	$fieldId = $adb->query_result($result,0,'fieldid');

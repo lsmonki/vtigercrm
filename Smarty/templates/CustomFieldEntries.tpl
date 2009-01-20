@@ -13,21 +13,18 @@
 				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="parenttab" value="Settings">
 				<input type="hidden" name="mode">
-				<table class="listTableTopButtons" border="0" cellpadding="5" cellspacing="0" width="100%">
-				<tr>
-					<td class="small">&nbsp;</td>
-					<td class="small" align="right">&nbsp;&nbsp;
-					{if $MODULE eq 'Leads'}
-					&nbsp;&nbsp;<input input title="{$MOD.CUSTOMFIELDMAPPING}"  class="crmButton edit small" onclick="CustomFieldMapping();" type="button" name="ListLeadCustomFieldMapping" value="{$MOD.CUSTOMFIELDMAPPING}">
-					{/if}
+				<table  class="listTableTopButtons" border="0" cellpadding="5" cellspacing="0" width="100%">
+					<tr>
+						<td class="big" align="left"><strong>{$MOD.LBL_MAPPED_FIELDS}</strong> </td>
 					{if $MODULE eq 'Calendar'}
-						<input type="radio" name="activitytype" value="E" checked>&nbsp;{$APP.Event}
-						<input type="radio" name="activitytype" value="T">&nbsp;{$APP.Task}
+						<td align="right"><input type="radio" name="activitytype" value="E" checked>&nbsp;{$APP.Event}
+						<input type="radio" name="activitytype" value="T">&nbsp;{$APP.Task} 
+						</td>
 					{/if}
-					<input type="button" value=" {$MOD.NewCustomField} " onClick="fnvshobj(this,'createcf');getCreateCustomFieldForm('{$MODULE}','','','')" class="crmButton create small"/>
+						<td align="right"><input type="button" value=" {$MOD.NewCustomField} " onClick="fnvshobj(this,'createcf');getCreateCustomFieldForm('{$MODULE}','','','')" class="crmButton create small"/></td>
 				</tr>
-				</table>
-
+				</table>	
+			
 				<table class="listTable" border="0" cellpadding="5" cellspacing="0" width="100%">
 					{if $MODULE eq 'Leads'}
 					<tr>
@@ -35,20 +32,20 @@
 					        <td rowspan="2" class="colHeader small" width="20%">{$MOD.FieldLabel}</td>
 					        <td rowspan="2" class="colHeader small" width="20%">{$MOD.FieldType}</td>
 							<td colspan="3" class="colHeader small" valign="top"><div align="center">{$MOD.LBL_MAPPING_OTHER_MODULES}</div></td>
-					        <td rowspan="2" class="colHeader small" width="20%">{$MOD.LBL_CURRENCY_TOOL}</td>
-				      </tr>
+							<td rowspan="2" class="colHeader small" width="20%">{$MOD.LBL_CURRENCY_TOOL}</td>
+					</tr>
 
 					<tr>
 					  <td class="colHeader small" valign="top" width="18%">{$APP.Accounts}</td>
 					  <td class="colHeader small" valign="top" width="18%">{$APP.Contacts}</td>
 					  <td class="colHeader small" valign="top" width="19%">{$APP.Potentials}</td>
-					</tr>
+					 </tr>
 					{else}
 					<tr>
                       	<td class="colHeader small" width="5%">#</td>
                       	<td class="colHeader small" width="20%">{$MOD.FieldLabel}</td>
                       	<td class="colHeader small" width="20%">{$MOD.FieldType}</td>
-                      	{if $MODULE eq 'Calendar'}
+                    	{if $MODULE eq 'Calendar'}
                       		<td class="colHeader small" width="20%">{$APP.LBL_ACTIVITY_TYPE}</td>
                       	{/if}
                      	<td class="colHeader small" width="20%">{$MOD.LBL_CURRENCY_TOOL}</td>

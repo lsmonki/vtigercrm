@@ -12,8 +12,9 @@ require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 global $current_user;
  $fldmodule=$_REQUEST['fld_module'];
- $fldlabel=$_REQUEST['fldLabel'];
- $fldType= $_REQUEST['fieldType'];
+ $blockid = $_REQUEST['blockid'];
+ $fldlabel=$_REQUEST['fldLabel_'.$blockid];
+ $fldType= $_REQUEST['fieldType_'.$blockid];
  $parenttab=$_REQUEST['parenttab'];
  $mode=$_REQUEST['mode'];
 
@@ -29,7 +30,7 @@ if(get_magic_quotes_gpc() == 1)
 	$fldlabel = stripslashes($fldlabel);
 }
 
-
+$log->fatal(print_r($_REQUEST,true));
 //checking if the user is trying to create a custom vtiger_field which already exists  
 $dup_check_tab_id = $tabid;
 if ($fldmodule == 'Calendar')
@@ -46,25 +47,25 @@ $checkresult=$adb->pquery($checkquery,$params);
 if($adb->num_rows($checkresult) > 0)
 {
 	
-	if(isset($_REQUEST['fldLength']))
+	if(isset($_REQUEST['fldLength_'.$blockid]))
 	{	
-		$fldlength=$_REQUEST['fldLength'];
+		$fldlength=$_REQUEST['fldLength_'.$blockid];
 	}
 	else
 	{
 		 $fldlength='';
 	}
-	if(isset($_REQUEST['fldDecimal']))
+	if(isset($_REQUEST['fldDecimal_'.$blockid]))
 	{
-		$flddecimal=$_REQUEST['fldDecimal'];
+		$flddecimal=$_REQUEST['fldDecimal_'.$blockid];
 	}
 	else
 	{
 		$flddecimal='';
 	}
-	if(isset($_REQUEST['fldPickList']))
+	if(isset($_REQUEST['fldPickList_'.$blockid]))
 	{
-		$fldPickList=$_REQUEST['fldPickList'];
+		$fldPickList=$_REQUEST['fldPickList_'.$blockid];
 	}
 	else
 	{
@@ -128,9 +129,9 @@ else
 	$fldlength=$_REQUEST['fldLength'];
 	$uitype='';
 	$fldPickList='';
-	if(isset($_REQUEST['fldDecimal']) && $_REQUEST['fldDecimal'] != '')
+	if(isset($_REQUEST['fldDecimal_'.$blockid]) && $_REQUEST['fldDecimal_'.$blockid] != '')
 	{
-		$decimal=$_REQUEST['fldDecimal'];
+		$decimal=$_REQUEST['fldDecimal_'.$blockid];
 	}
 	else
 	{
@@ -291,7 +292,7 @@ else
 				$qry="select picklistid from vtiger_picklist where  name=?";
 				$picklistid = $adb->query_result($adb->pquery($qry, array($columnName)), 0,'picklistid');
 				$pickArray = Array();
-				$fldPickList =  $_REQUEST['fldPickList'];
+				$fldPickList =  $_REQUEST['fldPickList_'.$blockid];
 				$pickArray = explode("\n",$fldPickList);
 				$count = count($pickArray);
 				for($i = 0; $i < $count; $i++)

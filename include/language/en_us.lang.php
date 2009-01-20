@@ -1181,6 +1181,7 @@ $app_strings = array (
 
 // For Privacy Policy
 'LNK_PRIVACY_POLICY'=>'Privacy Policy',
+'LBL_MOVE_BLOCK_FIELD' => 'Move Fields',
  
 //added for find duplicate
 'LBL_DUPLICATE_DATA_IN'=>'Duplicate ',

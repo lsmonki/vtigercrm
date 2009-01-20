@@ -341,8 +341,8 @@ function getFormValidate(divValidate)
 		if(window.document.QcEditView[curr_fieldname] != null)
 		{
 			var type=qcfielddatatype[i].split("~")
-			var input_type = window.document.QcEditView[curr_fieldname].type	
-				if (type[1]=="M") {
+			var input_type = window.document.QcEditView[curr_fieldname].type;	
+			if (type[1]=="M") {
 					if (!qcemptyCheck(curr_fieldname,qcfieldlabel[i],input_type))
 						return false
 				}

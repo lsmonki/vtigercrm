@@ -78,7 +78,7 @@ function getInsertValues($type,$type_id)
 		$contact_id_val=$adb->query_result($convert_result,$i,"contactfid");
 		$potential_id_val=$adb->query_result($convert_result,$i,"potentialfid");
 		
-		$sql_leads_column="select vtiger_field.uitype,vtiger_field.fieldid,vtiger_field.columnname from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Leads' and fieldid=?"; //getting the columnname for the customfield of the lead
+		$sql_leads_column="select vtiger_field.uitype,vtiger_field.fieldid,vtiger_field.columnname from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Leads' and fieldid=? and vtiger_field.presence in (0,2)"; //getting the columnname for the customfield of the lead
 		 $log->debug("Lead's custom vtiger_field coumn name is ".$sql_leads_column);
 
 		$lead_column_result = $adb->pquery($sql_leads_column, array($lead_id));
@@ -93,7 +93,7 @@ function getInsertValues($type,$type_id)
 			 $log->debug("Lead's custom vtiger_field value is ".$lead_value);
 		}	
 		//Query for getting the column name for Accounts/Contacts/Potentials if custom vtiger_field for lead is mappped
-		$sql_type="select vtiger_field.fieldid,vtiger_field.uitype,vtiger_field.columnname from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name="; 
+		$sql_type="select vtiger_field.fieldid,vtiger_field.uitype,vtiger_field.columnname from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_field.presence in (0,2) and vtiger_tab.name="; 
 		$params = array();
 		if($type=="Accounts")
 		{

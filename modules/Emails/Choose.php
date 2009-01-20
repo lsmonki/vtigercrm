@@ -16,15 +16,15 @@ $ids=explode(';',$idlist);
 
 if ($pmodule=='Accounts')
 {
-	$querystr="select fieldid,fieldlabel,columnname,tablename from vtiger_field where tabid=6 and uitype='13';"; 
+	$querystr="select fieldid,fieldlabel,columnname,tablename from vtiger_field where tabid=6 and uitype='13' and vtiger_field.presence in (0,2)"; 
 }
 elseif ($pmodule=='Contacts')
 {
-	$querystr="select fieldid,fieldlabel,columnname from vtiger_field where tabid=4 and uitype='13';";
+	$querystr="select fieldid,fieldlabel,columnname from vtiger_field where tabid=4 and uitype='13' and vtiger_field.presence in (0,2)";
 }
 elseif ($pmodule=='Leads')
 {
-	$querystr="select fieldid,fieldlabel,columnname from vtiger_field where tabid=7 and uitype='13';";
+	$querystr="select fieldid,fieldlabel,columnname from vtiger_field where tabid=7 and uitype='13' and vtiger_field.presence in (0,2)";
 }
 
 $result=$adb->pquery($querystr, array());

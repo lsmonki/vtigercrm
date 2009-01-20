@@ -11,45 +11,47 @@
 -->*}
 <body class=small>
 {include file='QuickCreateHidden.tpl'}
-<table border=0 align="center" cellspacing=0 cellpadding=0 width="90%" class="mailClient mailClientBg">
+<table border="0" align="center" cellspacing="0" cellpadding="0" width="90%" class="mailClient mailClientBg">
 <tr>
 <td>
-	<table border=0 cellspacing=0 cellpadding=0 width="100%" class=small>
-		<tr>
-			<td width-90% class="mailSubHeader" background="{'qcBg.gif'|@vtiger_imageurl:$THEME}"><b >{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.$QCMODULE}</b></td>
-			<td nowrap class="mailSubHeader moduleName" align=right><i>{$APP.LBL_QUICK_CREATE}</i></td>
-		</tr>
+	<table border="0" cellspacing="0" cellpadding="0" width="100%" class=small>
+	<tr>
+		<td width="90%" class="mailSubHeader" background="{'qcBg.gif'|@vtiger_imageurl:$THEME}"><b >{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.$QCMODULE}</b></td>
+		<td nowrap class="mailSubHeader moduleName" align=right><i>{$APP.LBL_QUICK_CREATE}</i></td></tr>
 	</table>
 
 	<table border=0 cellspacing=0 cellpadding=0 width="100%" class="small">
-		<tr>
-			<td>
+	<tr>
+		<td>
 		
-		<!-- quick create UI starts -->
-		<table border=0 cellspacing=0 cellpadding=5 width=100% class=small bgcolor=white >
+			<!-- quick create UI starts -->
+			<table border="0" cellspacing="0" cellpadding="5" width="100%" class="small" bgcolor="white" >
+			{assign var="fromlink" value="qcreate"}
 			{foreach item=subdata from=$QUICKCREATE}
 				<tr>
 					{foreach key=mainlabel item=maindata from=$subdata}
-						{include file='EditViewUI.tpl'}
+						{include file='EditViewUI.tpl'}										
 					{/foreach}
 				</tr>
 			{/foreach}
-		</table>	
+						
+			</table>	
 		
 		<!-- save cancel buttons -->
-		<table border=0 cellspacing=0 cellpadding=5 width=100% class=qcTransport>
-		<tr>
-			{if $MODULE eq 'Accounts'}
+		<table border="0" cellspacing="0" cellpadding="5" width="100%" class=qcTransport>
+			<tr>
+				{if $MODULE eq 'Accounts'}
 				<td width=50% align=right><input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  if(getFormValidate())AjaxDuplicateValidate('Accounts','accountname',this.form);" type="button" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" ></td>
-			{else}
+				{else}
 				<td width=50% align=right><input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}" style="width:70px" ></td>
-			{/if}
+				{/if}
 
-			<td width=50% align=left>
-				<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="hide('qcform'); $('qccombo').options.selectedIndex=0;" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
-			</td>
-		</tr>
-	</table>
+				<td width="50%" align="left">
+					<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="hide('qcform'); $('qccombo').options.selectedIndex=0;" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
+				</td>
+			</tr>
+		</table>
+
 		</td>
 	</tr>
 	</table>

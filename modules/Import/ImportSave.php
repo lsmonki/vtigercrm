@@ -143,7 +143,6 @@ foreach ($rows1 as $row)
 	p("do save before req vtiger_fields=".$do_save);
 
 	$adb->println($focus->required_fields);
-
 	foreach ($focus->required_fields as $field=>$notused) 
 	{ 
 		$fv = trim($focus->column_fields[$field]);
@@ -206,7 +205,7 @@ foreach ($rows1 as $row)
 			{
 				$_REQUEST['module']='contactdetails';
 			}
-			$dbquery="select * from vtiger_field where vtiger_tablename=?";
+			$dbquery="select * from vtiger_field where vtiger_tablename=? and vtiger_field.presence in (0,2)";
 			$custresult = $adb->pquery($dbquery, array($_REQUEST['module']));
 			if($adb->num_rows($custresult) != 0)
 			{

@@ -42,7 +42,10 @@ class Accounts extends CRMEntity {
 	var $table_index= 'accountid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_account','vtiger_accountbillads','vtiger_accountshipads','vtiger_accountscf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_account'=>'accountid','vtiger_accountbillads'=>'accountaddressid','vtiger_accountshipads'=>'accountaddressid','vtiger_accountscf'=>'accountid');
-
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
+	var $customFieldTable = Array('vtiger_accountscf', 'accountid');
 	var $entity_table = "vtiger_crmentity";
 
 	var $column_fields = Array();
@@ -54,7 +57,7 @@ class Accounts extends CRMEntity {
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
 			'Account Name'=>Array('vtiger_account'=>'accountname'),
-			'City'=>Array('vtiger_accountbillads'=>'bill_city'), 
+			'Billing City'=>Array('vtiger_accountbillads'=>'bill_city'), 
 			'Website'=>Array('vtiger_account'=>'website'),
 			'Phone'=>Array('vtiger_account'=> 'phone'),
 			'Assigned To'=>Array('vtiger_crmentity'=>'smownerid')
@@ -62,7 +65,7 @@ class Accounts extends CRMEntity {
 
 	var $list_fields_name = Array(
 			'Account Name'=>'accountname',
-			'City'=>'bill_city',
+			'Billing City'=>'bill_city',
 			'Website'=>'website',
 			'Phone'=>'phone',
 			'Assigned To'=>'assigned_user_id'
@@ -71,16 +74,20 @@ class Accounts extends CRMEntity {
 
 	var $search_fields = Array(
 			'Account Name'=>Array('vtiger_account'=>'accountname'),
-			'City'=>Array('vtiger_accountbillads'=>'bill_city'), 
+			'Billing City'=>Array('vtiger_accountbillads'=>'bill_city'), 
 			);
 
 	var $search_fields_name = Array(
 			'Account Name'=>'accountname',
-			'City'=>'bill_city',
+			'Billing City'=>'bill_city',
 			);
 	// This is the list of vtiger_fields that are required
-	var $required_fields =  array("accountname"=>1);
-
+	var $required_fields =  array();
+	
+	// Used when enabling/disabling the mandatory fields for the module.
+	// Refers to vtiger_field.fieldname values.
+	var $mandatory_fields = Array('assigned_user_id', 'createdtime', 'modifiedtime', 'accountname');
+	
 	//Default Fields for Email Templates -- Pavani
 	var $emailTemplate_defaultFields = array('accountname','account_type','industry','annualrevenue','phone','email1','rating','website','fax');
 	
@@ -92,6 +99,7 @@ class Accounts extends CRMEntity {
 		$this->log =LoggerManager::getLogger('account');
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Accounts');
+		$this->initRequiredFields("Accounts");
 	}
 
 	/** Function to handle module specific operations when saving a entity 
@@ -679,12 +687,12 @@ class Accounts extends CRMEntity {
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 		{
-			$sql1 = "SELECT fieldlabel FROM vtiger_field WHERE tabid = 6";
+			$sql1 = "SELECT fieldlabel FROM vtiger_field WHERE tabid = 6 and vtiger_field.presence in (0,2)";
 			$params1 = array();
 		}else
 		{
 			$profileList = getCurrentUserProfileList();
-			$sql1 = "select vtiger_field.fieldid,fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=6 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+			$sql1 = "select vtiger_field.fieldid,fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=6 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
 			$params1 = array();
 			if (count($profileList) > 0) {
 				$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")  group by fieldid";
@@ -818,8 +826,7 @@ class Accounts extends CRMEntity {
 		$listview_entries = array();
 
 		foreach ($this->list_fields_name as $fieldname=>$colname) {			
-			if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0
-				|| getFieldVisibilityPermission('Accounts', $current_user->id, $colname) == '0') {
+			if(getFieldVisibilityPermission('Accounts', $current_user->id, $colname) == '0') {
 				$listview_header[] = getTranslatedString($fieldname);
 			}
 		}
@@ -837,8 +844,7 @@ class Accounts extends CRMEntity {
 		foreach($accounts_list as $account_id => $account_info) {
 			$account_info_data = array();
 			foreach ($this->list_fields_name as $fieldname=>$colname) {			
-				if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0
-					|| getFieldVisibilityPermission('Accounts', $current_user->id, $colname) == '0') {
+				if(getFieldVisibilityPermission('Accounts', $current_user->id, $colname) == '0') {
 					$data = $account_info[$colname];
 					if ($colname == 'accountname') {
 						if ($account_id != $id) {

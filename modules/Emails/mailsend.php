@@ -131,7 +131,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 		for ($j=1;$j<$nemail;$j++)
 		{
 			$temp=$realid[$j];
-			$myquery='Select columnname from vtiger_field where fieldid=?';
+			$myquery='Select columnname from vtiger_field where fieldid = ? and vtiger_field.presence in (0,2)';
 			$fresult=$adb->pquery($myquery, array($temp));			
 			if ($pmodule=='Contacts')
 			{

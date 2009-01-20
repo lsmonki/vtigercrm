@@ -55,6 +55,9 @@ $smarty->assign("CFTEXTCOMBO",$cftextcombo);
 $smarty->assign("CFIMAGECOMBO",$cfimagecombo);
 if($_REQUEST['fld_module'] !='')
 	$fld_module = $_REQUEST['fld_module'];
+elseif($_REQUEST['formodule'] != ''){
+	$fld_module = $_REQUEST['formodule'];
+}	
 else
 	$fld_module = 'Leads';
 $smarty->assign("MODULE",$fld_module);
@@ -81,14 +84,14 @@ else
 	*/
 function getCFListEntries($module)
 {
+	global $adb,$app_strings,$theme,$smarty,$log;
 	$tabid = getTabid($module);
 	if ($module == 'Calendar') {
 		$tabid = array(9, 16);
 	}
-	global $adb,$app_strings,$theme;
 	$theme_path="themes/".$theme."/";
 	$image_path="themes/images/";
-	$dbQuery = "select fieldid,columnname,fieldlabel,uitype,displaytype,vtiger_convertleadmapping.cfmid,tabid from vtiger_field left join vtiger_convertleadmapping on  vtiger_convertleadmapping.leadfid = vtiger_field.fieldid where tabid in (". generateQuestionMarks($tabid) .") and generatedtype=2 order by sequence";
+	$dbQuery = "select fieldid,columnname,fieldlabel,uitype,displaytype,block,vtiger_convertleadmapping.cfmid,tabid from vtiger_field left join vtiger_convertleadmapping on  vtiger_convertleadmapping.leadfid = vtiger_field.fieldid where tabid in (". generateQuestionMarks($tabid) .") and vtiger_field.presence in (0,2) and generatedtype = 2 order by sequence";
 	$result = $adb->pquery($dbQuery, array($tabid));
 	$row = $adb->fetch_array($result);
 	$count=1;

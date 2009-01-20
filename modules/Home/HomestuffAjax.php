@@ -122,7 +122,7 @@ if(isset($_REQUEST['primecvid']) && $_REQUEST['primecvid']!="")
 					$fld_permission = getFieldVisibilityPermission($fieldmodule,$current_user->id,$fieldname);
 				}
 				if($fld_permission == 0){
-					$field_query = $adb->pquery("SELECT fieldlabel FROM vtiger_field WHERE fieldname = ? AND tablename = ?", array($fieldname,$prifldarr[0]));
+					$field_query = $adb->pquery("SELECT fieldlabel FROM vtiger_field WHERE fieldname = ? AND tablename = ? and vtiger_field.presence in (0,2)", array($fieldname,$prifldarr[0]));
 					$field_label = $adb->query_result($field_query,0,'fieldlabel');
 					if(trim($field_label) != '')
 						$html .= "<option value='".$columnname."'>".$field_label."</option>";
