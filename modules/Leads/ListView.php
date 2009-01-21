@@ -264,6 +264,11 @@ $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per
 if( $adb->dbType == "pgsql")
     $query = fixPostgresQuery( $query, $log, 0);
 
+$start_rec = $navigation_array['start'];
+$end_rec = $navigation_array['end_val']; 
+
+$_SESSION['nav_start']=$start_rec;
+$_SESSION['nav_end']=$end_rec;
 
 //limiting the query
 if ($start_rec ==0) 
@@ -319,16 +324,7 @@ if(isPermitted("Leads","Merge") == 'yes')
 //modified by rdhital
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val']; 
-//By Raju Ends
-$_SESSION['nav_start']=$start_rec;
-$_SESSION['nav_end']=$end_rec;
 
-//limiting the query
-if ($start_rec ==0) 
-	$limit_start_rec = 0;
-else
-	$limit_start_rec = $start_rec -1;
-	
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
 //Retreive the List View Table Header
