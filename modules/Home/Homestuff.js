@@ -209,25 +209,29 @@ function DelStuff(sid)
 	}
 }
 
-
-function loadAddedDiv(stuffid,stufftype)
-{
+/**
+ * this function loads the newly added div to the home page
+ * @param integer stuffid - the id of the newly created div
+ * @param string stufftype - the stuff type for the new div (for e.g. rss)
+ */
+function loadAddedDiv(stuffid,stufftype){
 	gstuffId = stuffid;
 	new Ajax.Request(
-        	   'index.php',
-		   {queue: {position: 'end', scope: 'command'},
-                    method: 'post',
-		    postBody:'module=Home&action=HomeAjax&file=NewBlock&stuffid='+stuffid+'&stufftype='+stufftype,
-		    onComplete: function(response) 
-		    {
-			var responseVal=response.responseText;
-			$('MainMatrix').innerHTML = response.responseText + $('MainMatrix').innerHTML;
-			positionDivInAccord('stuff_'+gstuffId,'');
-			initHomePage();
-			loadStuff(stuffid,stufftype);
-		    }
-                   }
-               	);
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody:'module=Home&action=HomeAjax&file=NewBlock&stuffid='+stuffid+'&stufftype='+stufftype,
+			onComplete: function(response){
+				var responseVal=response.responseText;
+				$('MainMatrix').style.display= 'none';
+				$('MainMatrix').innerHTML = response.responseText + $('MainMatrix').innerHTML;
+				positionDivInAccord('stuff_'+gstuffId,'');
+				initHomePage();
+				loadStuff(stuffid,stufftype);
+				$('MainMatrix').style.display='block';
+			}
+		}
+	);
 }
 
 /*
