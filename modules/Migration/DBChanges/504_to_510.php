@@ -1141,6 +1141,11 @@ $user_result = $adb->pquery("select max(id) as userid from vtiger_users",array()
 $inc_num = $adb->query_result($user_result,0,"userid");
 $grp_result = $adb->pquery("select groupid from vtiger_groups",array());
 $num_grps = $adb->num_rows($grp_result);
+
+// Update constraints for vtiger_group2grouprel table
+$adb->query("ALTER TABLE vtiger_group2grouprel DROP FOREIGN KEY fk_2_vtiger_group2grouprel");
+$adb->query("ALTER TABLE vtiger_group2grouprel ADD CONSTRAINT fk_2_vtiger_group2grouprel FOREIGN KEY (`groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE ON UPDATE CASCADE");
+
 for($i=$num_grps; $i>=0; $i--) {
 	$oldId = $adb->query_result($grp_result,$i,"groupid");
 	$newId = $inc_num+$oldId;

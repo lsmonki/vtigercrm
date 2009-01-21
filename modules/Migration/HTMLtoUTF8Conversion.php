@@ -66,7 +66,6 @@ convert_html2utf8_db();
 	</table>';
 */
 
-
 /**
 * Function to convert html values to its original character available in a database
 * This function can called at any time after the migration
@@ -202,6 +201,5 @@ function convert_html2utf8_db()
 	echo '<div align = "center"><br><br><b> Conversion completed.</b></div>';
 	$log->debug("HTML to UTF-8 Conversion has been completed");
 }
-
 
 ?>

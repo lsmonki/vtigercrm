@@ -1385,8 +1385,8 @@
 	</table>
 
 <table name="vtiger_group2grouprel" alter="true">
-<constraint>ADD CONSTRAINT fk_1_vtiger_group2grouprel FOREIGN KEY (containsgroupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
-<constraint>ADD CONSTRAINT fk_2_vtiger_group2grouprel FOREIGN KEY (groupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_1_vtiger_group2grouprel FOREIGN KEY (containsgroupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE ON UPDATE CASCADE</constraint>
+<constraint>ADD CONSTRAINT fk_2_vtiger_group2grouprel FOREIGN KEY (groupid) REFERENCES vtiger_groups(groupid) ON DELETE CASCADE ON UPDATE CASCADE</constraint>
 <opt>Type=InnoDB</opt>
 <data>
 </data>

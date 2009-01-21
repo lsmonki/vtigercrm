@@ -104,43 +104,33 @@ if (is_file('config_override.php'))
 	require_once('config_override.php');
 }
 
+/**
+ * Check for vtiger installed version and codebase
+ */
 require_once('vtigerversion.php');
-if(isset($_SESSION['VTIGER_DB_VERSION'])){
-	if($_SESSION['VTIGER_DB_VERSION'] != $_SESSION['vtiger_version']){
-	global $adb;
-	
-	$exists = $adb->query("show create table vtiger_version");
-	if($exists)
-	{
-		$result = $adb->query("select * from vtiger_version");
-		$dbversion = $adb->query_result($result, 0, 'current_version');
-		if($dbversion != $vtiger_current_version)
-		{
-			$_SESSION['VTIGER_DB_VERSION']= $dbversion;
-			header("Location: install.php");
-			exit();
-		}
-	
-	}
-	}
+global $adb, $vtiger_current_version;
+if(isset($_SESSION['VTIGER_DB_VERSION']) && isset($_SESSION['authenticated_user_id'])) {
+    if(version_compare($_SESSION['VTIGER_DB_VERSION'], $vtiger_current_version, '!=')) {
+        unset($_SESSION['VTIGER_DB_VERSION']);
+        header("Location: install.php");
+        exit();
+    }
+} else {
+    $exists = $adb->query("SHOW CREATE TABLE vtiger_version");
+    if($exists)
+    {
+        $result = $adb->query("SELECT * FROM vtiger_version");
+        $dbversion = $adb->query_result($result, 0, 'current_version');
+        if(version_compare($dbversion, $vtiger_current_version, '=')) {
+            $_SESSION['VTIGER_DB_VERSION']= $dbversion;
+        } else {
+            header("Location: install.php");
+            exit();
+        }   
+    }
 }
-else{
-	global $adb;
-	
-	$exists = $adb->query("show create table vtiger_version");
-	if($exists)
-	{
-		$result = $adb->query("select * from vtiger_version");
-		$dbversion = $adb->query_result($result, 0, 'current_version');
-		if($dbversion != $vtiger_current_version)
-		{
-			$_SESSION['VTIGER_DB_VERSION']= $dbversion;
-			header("Location: install.php");
-			exit();
-		}
-	
-	}
-}
+// END
+
 $default_config_values = Array( "allow_exports"=>"all","upload_maxsize"=>"3000000", "listview_max_textlength" => "40", "php_max_execution_time" => "0");
 
 set_default_config($default_config_values);

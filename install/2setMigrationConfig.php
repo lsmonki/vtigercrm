@@ -242,12 +242,19 @@ function radio_checked(){
 	}
 }
 function migrate(){
-	var oDivfreeze = $('divId');
-	var useheight = document.body.getDimensions('height');
-	if(useheight > window.innerHeight) useheight = window.innerHeight;
-	oDivfreeze.style.height = useheight + 'px';
-	$('divId').style.display = 'block';
 	
+	var ua=navigator.userAgent.toLowerCase();
+
+	if(ua.indexOf('msie')!=-1){
+		var windowHeight = document.body.clientHeight;
+		var useheight = document.body.clientHeight;
+	} else {
+		var windowHeight = window.innerHeight;
+		var useheight = document.body.innerHeight;
+	}
+	if(useheight > windowHeight) useheight = windowHeight;
+	$('divId').style.height = useheight + 'px';
+	$('divId').style.display = 'block';
 	var source_path = document.getElementById("source_directory").value;
 	<?php
 		if($cur_dir_path == true){
@@ -547,7 +554,7 @@ function getViewPortCenter(){
 		<tr>
 				<td align=center>
 					<input type="hidden" name="file" value="3MigrationComplete.php">
-					<input type="image" src="include/install/images/cwBtnMigrate.gif" id="starttbn" alt="Copy files and Migrate" border="0" title="Next" onClick=" if(verify_data(installform))migrate();">
+					<input type="image" src="include/install/images/cwBtnMigrate.gif" id="starttbn" alt="Copy files and Migrate" border="0" title="Next" onClick="if(verify_data(installform)==true){migrate();}">
 				</td>
 			</tr>
 		</table>

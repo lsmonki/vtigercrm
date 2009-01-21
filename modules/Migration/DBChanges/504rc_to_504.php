@@ -40,7 +40,11 @@ for($i=0; $i < $numrow; $i++)
 foreach($picklist_arr as $picklistname => $picklistidname)
 {
 	$result = $adb->query("select max(".$picklistidname.") as id from vtiger_".$picklistname);
-	$max_count = $adb->query_result($result,0,'id');
+	$max_count = 1;
+	if ($adb->num_rows($result) > 0) {
+		$max_count = $adb->query_result($result,0,'id');
+		if ($max_count <= 0) $max_count = 1;
+	}
 	$adb->query("drop table if exists vtiger_".$picklistname."_seq");
 	$adb->query("create table vtiger_".$picklistname."_seq (id integer(11))");
 	$adb->query("insert into vtiger_".$picklistname."_seq (id) values(".$max_count.")");
