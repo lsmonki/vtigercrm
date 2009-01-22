@@ -49,12 +49,23 @@ class Vtiger_Utils {
 	 */
 	static function checkFileAccess($filepath, $dieOnFail=true) {
 		global $root_directory;
-		$realfilepath = realpath($filepath);
+		// Set the base directory to compare with
+		$use_root_directory = $root_directory;
+  		if(empty($use_root_directory)) {
+			$use_root_directory = realpath(dirname(__FILE__).'/../../.');
+		}
 
-		$realfilepath = str_replace('\\', '/', $realfilepath);
-		$rootdirpath  = str_replace('\\', '/', $root_directory);
+  		$realfilepath = realpath($filepath);
 
-		if(stripos($realfilepath, $rootdirpath) !== 0) {
+  		/** Replace all \\ with \ first */
+  		$realfilepath = str_replace('\\\\', '\\', $realfilepath);
+  		$rootdirpath  = str_replace('\\\\', '\\', $use_root_directory);
+
+ 		/** Replace all \ with / now */
+  		$realfilepath = str_replace('\\', '/', $realfilepath);
+  		$rootdirpath  = str_replace('\\', '/', $rootdirpath);
+
+		if(stripos($realfilepath, $rootdirpath) !== 0) {			
 			if($dieOnFail) {
 				die("Sorry! Attempt to access restricted file.");
 			}
@@ -69,7 +80,9 @@ class Vtiger_Utils {
 	 * @param Boolean true to append end-of-line, false otherwise
 	 */
 	static function Log($message, $delimit=true) {
-		global $Vtiger_Utils_Log;
+		global $Vtiger_Utils_Log, $log;
+		
+		$log->debug($message);
 		if(!isset($Vtiger_Utils_Log) || $Vtiger_Utils_Log == false) return;
 
 		print_r($message);

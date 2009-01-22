@@ -71,14 +71,12 @@ class Vtiger_Filter {
 		self::log("Creating Filter $this->name ... DONE");
 
 		// Filters are role based from 5.1.0 onwards
-		if(Vtiger_Version::check('5.1.0', '>=')) {
-			if(!$this->status) {
-				if(strtoupper(trim($this->name)) == 'ALL') $this->status = '0'; // Default
-				else $this->status = '3'; // Public
-				$adb->pquery("UPDATE vtiger_customview SET status=? WHERE cvid=?", Array($this->status, $this->id));
+		if(!$this->status) {
+			if(strtoupper(trim($this->name)) == 'ALL') $this->status = '0'; // Default
+			else $this->status = '3'; // Public
+			$adb->pquery("UPDATE vtiger_customview SET status=? WHERE cvid=?", Array($this->status, $this->id));
 
-				self::log("Setting Filter $this->name to status [$this->status] ... DONE");
-			}
+			self::log("Setting Filter $this->name to status [$this->status] ... DONE");
 		}
 		// END
 		

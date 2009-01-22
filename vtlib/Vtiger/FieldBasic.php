@@ -168,9 +168,7 @@ class Vtiger_FieldBasic {
 				$this->quickcreate, $this->quicksequence, $this->info_type, $this->helpinfo));
 
 		// Set the field status for mass-edit (if set)
-		if(Vtiger_Version::check('5.1.0', '>=') && ($this->masseditable !== false)) {
-			$adb->pquery('UPDATE vtiger_field SET masseditable=? WHERE fieldid=?', Array($this->masseditable, $this->id));
-		}
+		$adb->pquery('UPDATE vtiger_field SET masseditable=? WHERE fieldid=?', Array($this->masseditable, $this->id));
 
 		Vtiger_Profile::initForField($this);
 
@@ -267,11 +265,9 @@ class Vtiger_FieldBasic {
 	 * @param Integer Masseditable value
 	 */
 	function setMassEditable($value) {
-		if(Vtiger_Version::check('5.1.0', '>=')) {
-			global $adb;
-			$adb->pquery('UPDATE vtiger_field SET masseditable=? WHERE fieldid=?', Array($value, $this->id));
-			self::log("Updated masseditable information of $this->name ... DONE");
-		}
+		global $adb;
+		$adb->pquery('UPDATE vtiger_field SET masseditable=? WHERE fieldid=?', Array($value, $this->id));
+		self::log("Updated masseditable information of $this->name ... DONE");
 	}
 
 	/**

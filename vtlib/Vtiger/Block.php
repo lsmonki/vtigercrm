@@ -42,16 +42,7 @@ class Vtiger_Block {
 		global $adb;
 
 		/** Sequence table was added from 5.1.0 */
-		if(Vtiger_Version::check('5.1.0', '>=')) {
-			$maxblockid = $adb->getUniqueID('vtiger_blocks');
-		} else {
-			$result = $adb->query("SELECT MAX(blockid) as max_blockid from vtiger_blocks");
-			$maxblockid = 0;
-			if($adb->num_rows($result)) {
-				$maxblockid = $adb->query_result($result, 0, 'max_blockid');
-				++$maxblockid;
-			}
-		}
+		$maxblockid = $adb->getUniqueID('vtiger_blocks');
 		return $maxblockid;
 	}
 

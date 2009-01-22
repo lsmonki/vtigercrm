@@ -62,9 +62,7 @@ class Vtiger_ModuleBasic {
 		$this->ownedby = $valuemap['ownedby'];
 		$this->tabsequence = $valuemap['tabsequence'];
 		
-		if(Vtiger_Version::check('5.1.0', '>=')) {
-			$this->isentitytype = $valuemap['isentitytype'];
-		}
+		$this->isentitytype = $valuemap['isentitytype'];
 
 		if($this->isentitytype) {
 			// Initialize other details too
@@ -138,11 +136,8 @@ class Vtiger_ModuleBasic {
 			modifiedtime,customized,ownedby,version) VALUES (?,?,?,?,?,?,?,?,?,?)", 
 			Array($this->id, $this->name, $this->presence, $this->tabsequence, $this->label, NULL, NULL, $customized, $this->ownedby, $this->version));
 
-		if(Vtiger_Version::check('5.1.0','>=')) {
-			$useisentitytype = $this->isentitytype? 1 : 0;
-			$adb->pquery('UPDATE vtiger_tab set isentitytype=? WHERE tabid=?',
-				Array($useisentitytype, $this->id));
-		}
+		$useisentitytype = $this->isentitytype? 1 : 0;
+		$adb->pquery('UPDATE vtiger_tab set isentitytype=? WHERE tabid=?',Array($useisentitytype, $this->id));
 
 		if($this->isentitytype) {
 			Vtiger_Profile::initForModule($this);

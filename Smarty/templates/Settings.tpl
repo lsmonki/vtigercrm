@@ -36,23 +36,23 @@
 							<td width=25% valign=top>
 							<table border=0 cellspacing=0 cellpadding=5 width=100%>
 								<tr>
-									{assign var=label value=$data.name}
+									{assign var=label value=$data.name|@getTranslatedString:'Settings'}
 									{assign var=count value=$smarty.foreach.itr.iteration}
 									<td rowspan=2 valign=top>
 										<a href="{$data.link}">
-											<img src="{$data.icon|@vtiger_imageurl:$THEME}" alt="{$MOD.$label}" width="48" height="48" border=0 title="{$MOD.$label}">
+											<img src="{$data.icon|@vtiger_imageurl:$THEME}" alt="{$label}" width="48" height="48" border=0 title="{$label}">
 										</a>
 									</td>
 									<td class=big valign=top>
 										<a href="{$data.link}">
-											{$MOD.$label}
+											{$label}
 										</a>
 									</td>
 								</tr>
 								<tr>
-									{assign var=description value=$data.description}
+									{assign var=description value=$data.description|@getTranslatedString:'Settings'}
 									<td class="small" valign=top>
-										{$MOD.$description}
+										{$description}
 									</td>
 								</tr>
 							</table>

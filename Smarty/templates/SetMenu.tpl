@@ -32,12 +32,12 @@
 					</td>
 				</tr>
 				{foreach item=data from=$FIELDS.$BLOCKID}
-					{assign var=label value=$data.name}
+					{assign var=label value=$data.name|@getTranslatedString:'Settings'}
 					{if ($smarty.request.action eq $data.action && $smarty.request.module eq $data.module) ||  $smarty.request.action eq 'DetailView' || $smarty.request.action eq 'EditView' || $smarty.request.action eq 'ListView' }
 						<tr>
 						<td class="settingsTabSelected" nowrap>
 							<a href="{$data.link}">
-								{$MOD.$label}
+								{$label}
 							</a>
 						</td>
 						</tr>
@@ -45,7 +45,7 @@
 						<tr>
 						<td class="settingsTabList" nowrap>
 							<a href="{$data.link}">
-								{$MOD.$label}
+								{$label}
 							</a>
 						</td>
 						</tr>

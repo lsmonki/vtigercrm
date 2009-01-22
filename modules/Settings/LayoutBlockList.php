@@ -798,11 +798,21 @@ if($adb->num_rows($checkresult) > 0 )
 	return $duplicate ;
 }
 else{
-			$max_fieldid = $adb->getUniqueID("vtiger_field");
-			$columnName = 'cf_'.$max_fieldid;
-			$custfld_fieldid = $max_fieldid;
+	$max_fieldid = $adb->getUniqueID("vtiger_field");
+	$columnName = 'cf_'.$max_fieldid;
+	$custfld_fieldid = $max_fieldid;
 	//Assigning the vtiger_table Name
-		
+	if($fldmodule != '') {
+		checkFileAccess("modules/$fldmodule/$fldmodule.php");
+		include_once("modules/$fldmodule/$fldmodule.php");
+		$focus = new $fldmodule();
+		if (isset($focus->customFieldTable)) {
+			$tableName=$focus->customFieldTable[0];
+		} else {
+			$tableName= 'vtiger_'.strtolower($fldmodule).'cf';
+		}
+	}
+	
 	//Assigning the uitype
 		$fldlength=$_REQUEST['fldLength'];
 		$uitype='';

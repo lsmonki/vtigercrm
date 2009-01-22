@@ -3443,10 +3443,22 @@ function getPickListValues($tablename,$roleid)
 /** Function to check the file access is made within web root directory. */
 function checkFileAccess($filepath) {
 	global $root_directory;
+	// Set the base directory to compare with
+	$use_root_directory = $root_directory;
+	if(empty($use_root_directory)) {
+		$use_root_directory = realpath(dirname(__FILE__).'/../../.');
+	}
+
 	$realfilepath = realpath($filepath);
 
+	/** Replace all \\ with \ first */
+	$realfilepath = str_replace('\\\\', '\\', $realfilepath);
+	$rootdirpath  = str_replace('\\\\', '\\', $use_root_directory);
+
+	/** Replace all \ with / now */
 	$realfilepath = str_replace('\\', '/', $realfilepath);
-	$rootdirpath  = str_replace('\\', '/', $root_directory);
+	$rootdirpath  = str_replace('\\', '/', $rootdirpath);
+	
 	if(stripos($realfilepath, $rootdirpath) !== 0) {
 		die("Sorry! Attempt to access restricted file.");
 	}

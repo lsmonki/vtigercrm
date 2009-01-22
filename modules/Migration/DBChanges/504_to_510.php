@@ -21,7 +21,7 @@ require_once('include/events/include.inc');
 $em = new VTEventsManager($adb);
 /* For the event api */
 ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_eventhandlers (eventhandler_id int, event_name varchar(100), handler_path varchar(400), handler_class varchar(100), cond text, is_active boolean, primary key(eventhandler_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_eventhandler_module(eventhandler_module_id int, module_name VARCHAR(100), handler_path VARCHAR(100), PRIMARY KEY(eventhandler_module_id))");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_eventhandler_module(eventhandler_module_id int, module_name VARCHAR(100), handler_class VARCHAR(100), PRIMARY KEY(eventhandler_module_id))");
 
 /* Added new column actions to vtiger_relatedlists which tracks the type of actions allowed for that related list */
 ExecuteQuery("alter table vtiger_relatedlists add column actions VARCHAR(50) default ''");
