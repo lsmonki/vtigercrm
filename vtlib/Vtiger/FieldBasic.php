@@ -29,7 +29,7 @@ class Vtiger_FieldBasic {
 
 	var $generatedtype = 1;
 	var	$readonly      = 1;
-	var	$presence      = 0;
+	var	$presence      = 1;
 	var	$selected      = 0;
 	var	$maximumlength = 100;
 	var	$sequence      = false;

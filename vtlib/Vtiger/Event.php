@@ -22,6 +22,8 @@ class Vtiger_Event {
 	var $classname;
 	/** Filename where class is defined */
 	var $filename;
+	/** Condition for the event */
+	var $condition;
 
 	/**
 	 * Helper function to log messages
@@ -46,15 +48,15 @@ class Vtiger_Event {
 	 * @param String Name of the Event like vtiger.entity.aftersave, vtiger.entity.beforesave
 	 * @param String Name of the Handler class (should extend VTEventHandler)
 	 * @param String File path which has Handler class definition
+	 * @param String Condition for the event to trigger (default blank)
 	 */
-	static function register($moduleInstance, $eventname, $classname, $filename) {
+	static function register($moduleInstance, $eventname, $classname, $filename, $condition='') {
 		// Security check on fileaccess, don't die if it fails
 		if(Vtiger_Utils::checkFileAccess($filename, false)) {
 			global $adb;
 			$eventsManager = new VTEventsManager($adb);
-			// TODO Update the call when API is fixed
-			// $eventsManager->registerHandler($eventname, $classname, $filename,$moduleInstance->name);
-			$eventsManager->registerHandler($eventname, $filename, $classname);
+			$eventsManager->registerHandler($eventname, $filename, $classname, $condition);
+			$eventsManager->setModuleForHandler($moduleInstance->name, $classname);
 
 			self::log("Registering Event $eventname with [$filename] $classname ... DONE");
 		}
@@ -101,15 +103,16 @@ class Vtiger_Event {
 		global $adb;
 		$events = false;
 		if(self::hasSupport()) {
-			// TODO VTEventManager should provide API to get list of registered events on module
-			$records = $adb->query("SELECT * FROM vtiger_eventhandlers"); 
-			$reccount = $adb->num_rows($records);
-			if($reccount) {
-				for($index = 0; $index < $reccount; ++$index) {
-					$event = new Vtiger_Event();
-					$event->eventname = $adb->query_result($records, $index, 'event_name');
-					$event->classname = $adb->query_result($records, $index, 'handler_class');
-					$event->filename = $adb->query_result($records, $index, 'handler_path');
+			// Get all events related to module
+			$records = $adb->pquery("SELECT * FROM vtiger_eventhandlers WHERE handler_class IN 
+				(SELECT handler_class FROM vtiger_eventhandler_module WHERE module_name=?)", Array($moduleInstance->name)); 
+			if($records) {
+				while($record = $adb->fetch_array($records)) {
+					$event = new Vtiger_Event();					
+					$event->eventname = $record['event_name'];
+					$event->classname = $record['handler_class']; 
+					$event->filename  = $record['handler_path'];
+					$event->condition = $record['condition'];
 					$events[] = $event;
 				}
 			}

@@ -499,8 +499,9 @@ class Vtiger_PackageExport {
 		foreach($events as $event) {
 			$this->openNode('event');
 			$this->outputNode($event->eventname, 'eventname');
-			$this->outputNode($event->classname, 'classname');
-			$this->outputNode($event->filename, 'filename');
+			$this->outputNode('<![CDATA['.$event->classname.']]>', 'classname');
+			$this->outputNode('<![CDATA['.$event->filename.']]>', 'filename');
+			$this->outputNode('<![CDATA['.$event->filename.']]>', 'condition');
 			$this->closeNode('event');
 		}
 		$this->closeNode('events');

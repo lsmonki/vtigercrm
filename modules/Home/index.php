@@ -61,6 +61,10 @@ if( count($home_section_order) < 1 )
 	$home_section_order = array("HDB","ALVT","PLVT","QLTQ","CVLVT","HLT","OLV","GRT","OLTSO","ILTI","MNL","OLTPO","LTFAQ");
 }
 
+// To better performance, let us prefetch the module active info earlier
+vtlib_prefetchModuleActiveInfo(); 
+// END
+
 $query="select name,tabid from vtiger_tab where tabid in(select distinct(tabid) from vtiger_field where tabid <> 29 and tabid <> 16 and tabid <>10 and tabid <> 37) order by name";
 $result=$adb->query($query);
 

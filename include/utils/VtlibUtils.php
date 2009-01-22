@@ -63,22 +63,45 @@ function vtlib_getModuleNameForSharing() {
 }
 
 /**
+ * Cache the module active information for performance
+ */
+$__cache_module_activeinfo = Array();
+
+/**
+ * Fetch module active information at one shot
+ */
+function vtlib_prefetchModuleActiveInfo() {
+	global $adb, $__cache_module_activeinfo;
+	$tabres = $adb->query("SELECT * FROM vtiger_tab");
+	if($tabres) {
+		while($tabresrow = $adb->fetch_array($tabres)) {			
+			$__cache_module_activeinfo[$tabresrow['name']] = $tabresrow['presence'];
+		}
+	}
+	return $__cache_module_activeinfo;
+}
+
+/**
  * Check if module is set active (or enabled)
  */
 function vtlib_isModuleActive($module) {
-	global $adb;
-	
+	global $adb, $__cache_module_activeinfo;
+
 	if(in_array($module, vtlib_moduleAlwaysActive())){
 		return true;
 	}
-	
-	$tabres = $adb->query("SELECT presence FROM vtiger_tab WHERE name='$module'");
+
+	if(!isset($__cache_module_activeinfo[$module])) {
+		$tabres = $adb->query("SELECT presence FROM vtiger_tab WHERE name='$module'");
+		$presence = $adb->query_result($tabres, 0, 'presence');
+		$__cache_module_activeinfo[$module] = $presence;
+	} else {
+		$presence = $__cache_module_activeinfo[$module];
+	}
 
 	$active = false;
-	if($adb->num_rows($tabres)) {
-		$presence = $adb->query_result($tabres, 0, 'presence');
-		if($presence != 1) $active = true;
-	}
+	if($presence != 1) $active = true;
+	
 	return $active;
 }
 
@@ -97,12 +120,14 @@ function vtlib_moduleAlwaysActive() {
  * Toggle the module (enable/disable)
  */
 function vtlib_toggleModuleAccess($module, $enable_disable) {
-	global $adb;
+	global $adb, $__cache_module_activeinfo;
 
 	if($enable_disable === true) $enable_disable = 0;
 	else if($enable_disable === false) $enable_disable = 1;
 
 	$adb->query("UPDATE vtiger_tab set presence = $enable_disable WHERE name = '$module'");
+
+	$__cache_module_activeinfo[$module] = $enable_disable;
 
 	create_tab_data_file();
 	create_parenttab_data_file();

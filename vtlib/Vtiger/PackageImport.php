@@ -127,12 +127,16 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 				$manifestxml_found = true;
 				$this->__parseManifestFile($unzip);
 				$modulename = $this->_modulexml->name;
-				continue; 
+
+				// Do we need to check the zip further?
+				if($this->isLanguageType()) {
+					$languagefile_found = true; // No need to search for module language file.
+					break;
+				} else {
+					continue; 
+				}
 			}
-			if($this->isLanguageType()) {
-				$languagefile_found = true; // This check is not required.
-				break;
-			}
+			// Check for module language file.
 			preg_match("/modules\/([^\/]+)\/language\/en_us.lang.php/", $filename, $matches);
 			if(count($matches) && strcmp($modulename, $matches[1]) === 0) { $languagefile_found = true; continue; }
 		}
@@ -518,8 +522,12 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	 * @access private
 	 */
 	function import_Event($modulenode, $moduleInstance, $eventnode) {
+		$event_condition = '';
+		if(!empty($eventnode->condition)) $event_condition = "$eventnode->condition";
 		Vtiger_Event::register($moduleInstance, 
-					$eventnode->eventname, $eventnode->classname, $eventnode->filename);
+			$eventnode->eventname, $eventnode->classname, $eventnode->filename,
+			$event_condition
+		);
 	}
 
 	/**
