@@ -108,7 +108,7 @@ function SaveRssFeeds()
 					
 						<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 						<tr>
-							<td width=95% align=left><img src='themes/images/rssroot.gif' align='absmiddle'/><a href="javascript:;" onClick="fnvshobj(this,'PopupLay');$('rssurl').focus();" title='{$APP.LBL_ADD_RSS_FEEDS}'>{$MOD.LBL_ADD_RSS_FEED}</a></td>
+							<td width=95% align=left><img src='{'rssroot.gif'|@vtiger_imageurl:$THEME}' align='absmiddle'/><a href="javascript:;" onClick="fnvshobj(this,'PopupLay');$('rssurl').focus();" title='{$APP.LBL_ADD_RSS_FEEDS}'>{$MOD.LBL_ADD_RSS_FEED}</a></td>
 							<td  class="componentName" nowrap>{$MOD.LBL_VTIGER_RSS_READER}</td>
 						</tr>
 						<tr>

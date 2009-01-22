@@ -70,7 +70,7 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 		</td>
 		<td class="cellText small" width="15px" align=center>
 			{if $modulename eq 'Calendar' || $modulename eq 'Home'}
-				<img src="{$IMAGE_PATH}menuDnArrow.gif" border="0" align="absmiddle">
+				<img src="{'menuDnArrow.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle">
 			{else}
 				<a href="index.php?modules=Settings&action=ModuleManagerExport&module_export={$modulename}"><img src="{'webmail_uparrow.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle" alt="{$APP.LBL_EXPORT} {$modulelabel}" title="{$APP.LBL_EXPORT} {$modulelabel}"></a>
 			{/if}
@@ -103,7 +103,7 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 		<td class="cellText small" width="15px" align=center colspan=2>&nbsp;</td>
 		<!--td class="cellText small" width="15px" align=center>
 			{if $modulename eq 'Calendar' || $modulename eq 'Home'}
-				<img src="{$IMAGE_PATH}menuDnArrow.gif" border="0" align="absmiddle">
+				<img src="{'menuDnArrow.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle">
 			{else}
 				<a href="index.php?modules=Settings&action=ModuleManagerExport&module_export={$modulename}"><img src="themes/images/webmail_uparrow.gif" border="0" align="absmiddle" alt="{$APP.LBL_EXPORT} {$modulelabel}" title="{$APP.LBL_EXPORT} {$modulelabel}"></a>
 			{/if}
@@ -144,7 +144,7 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 		<td class="cellText small" width="15px" align=center>&nbsp;</td>
 		<!--td class="cellText small" width="15px" align=center>
 			{if $modulename eq 'Calendar' || $modulename eq 'Home'}
-				<img src="{$IMAGE_PATH}menuDnArrow.gif" border="0" align="absmiddle">
+				<img src="{'menuDnArrow.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle">
 			{else}
 				<a href="index.php?modules=Settings&action=ModuleManagerExport&module_export={$modulename}"><img src="themes/images/webmail_uparrow.gif" border="0" align="absmiddle" alt="{$APP.LBL_EXPORT} {$modulelabel}" title="{$APP.LBL_EXPORT} {$modulelabel}"></a>
 			{/if}

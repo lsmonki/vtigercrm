@@ -93,7 +93,7 @@ for($j = 0; $j < $noofsalesRows; $j++)
         $sales_stage_fld.= '<OPTION value="'.$sales_stageValue.'" '.$chk_val.'>'.getTranslatedString($sales_stageValue).'</OPTION>';
 }
 function isActive($field,$mod){
-	global $adb;
+	global $adb,$theme;
 	$tabid = getTabid($mod);
 	$query = 'select * from vtiger_field where fieldname = ?  and tabid = ? and presence in (0,2)';
 	$res = $adb->pquery($query,array($field,$tabid));

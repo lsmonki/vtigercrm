@@ -147,9 +147,9 @@
 						$.each(result, function(fieldName, expression){
 							editLink = format('<img border="0" title="Edit" alt="Edit" \
 													style="cursor: pointer;" id="expressionlist_editlink_%s" \
-													src="{$IMAGE_PATH}editfield.gif"/>', fieldName);
+													src="{'editfield.gif'|@vtiger_imageurl:$THEME}"/>', fieldName);
 							deleteLink = format('<img border="0" title="Delete" alt="Delete"\
-							 					src="{$IMAGE_PATH}delete.gif" \
+							 					src="{'delete.gif'|@vtiger_imageurl:$THEME}" \
 												style="cursor: pointer;" id="expressionlist_deletelink_%s"/>', fieldName);
 							row = format('<tr class="expressionlistrow" id="expressionlistrow_%s"> \
 										<td class="listTableRow small" valign="top" nowrap="">%s</td>\
@@ -203,7 +203,7 @@
 				</td>
 			<td width="40%" align="right">
 				<a href="javascript:void;" id="editpopup_close">
-					<img border="0" align="absmiddle" src="{$IMAGE_PATH}close.gif"/>
+					<img border="0" align="absmiddle" src="{'close.gif'|@vtiger_imageurl:$THEME}"/>
 				</a>
 			</td>
 		</tr>

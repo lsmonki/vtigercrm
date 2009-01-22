@@ -264,7 +264,7 @@ function get_cal_header_tab(& $header,$viewBox,$subtab)
  */
 function get_cal_header_data(& $cal_arr,$viewBox,$subtab)
 {
-	global $mod_strings,$cal_log,$current_user,$adb;
+	global $mod_strings,$cal_log,$current_user,$adb,$theme;
 	$cal_log->debug("Entering get_cal_header_data() method...");
 	global $current_user,$app_strings;
         $date_format = $current_user->date_format;
@@ -317,7 +317,7 @@ function get_cal_header_data(& $cal_arr,$viewBox,$subtab)
 				<td>
 				<table><tr><td class='calAddButton' style='cursor:pointer;height:30px' align='center' width='15%' onMouseOver='fnAddEvent(this,\"addEventDropDown\",\"".$temp_date."\",\"".$temp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\",\"".$viewBox."\",\"".$subtab."\",\"".$eventlist."\");'>
 					".$mod_strings['LBL_ADD']."
-					<img src='". vtiger_imageurl('menuDnArrow.gif', $theme)."' ' style='padding-left: 5px;' border='0'>
+					<img src='".vtiger_imageurl('menuDnArrow.gif', $theme)."' style='padding-left: 5px;' border='0'>
 				</td></tr></table> </td>";
 			}
 			else
@@ -2000,7 +2000,7 @@ function constructEventListView(& $cal,$entry_list,$navigation_array='')
  */
 function constructTodoListView($todo_list,$cal,$subtab,$navigation_array='')
 {
-	global $mod_strings,$cal_log,$adb;
+	global $mod_strings,$cal_log,$adb,$theme;
 	$cal_log->debug("Entering constructTodoListView() method...");
         global $current_user,$app_strings;
         $date_format = $current_user->date_format;
@@ -2124,7 +2124,7 @@ function constructTodoListView($todo_list,$cal,$subtab,$navigation_array='')
 			$list_view .="<tr>
 				<td class='calAddButton' onMouseOver='fnAddEvent(this,\"addEventDropDown\",\"".$temp_date."\",\"".$endtemp_date."\",\"".$time_arr['starthour']."\",\"".$time_arr['startmin']."\",\"".$time_arr['startfmt']."\",\"".$time_arr['endhour']."\",\"".$time_arr['endmin']."\",\"".$time_arr['endfmt']."\",\"\",\"".$subtab."\",\"".$eventlist."\");'style='border: 1px solid #666666;cursor:pointer;height:30px' align='center' width='10%'>
                                         ".$mod_strings['LBL_ADD']."
-                                        <img src='" . vtiger_imageurl(' menuDnArrow.gif', $theme). "' style='padding-left: 5px;' border='0'>                                                                                                                         </td>";
+                                        <img src='".vtiger_imageurl('menuDnArrow.gif', $theme)."' style='padding-left: 5px;' border='0'>                                                                                                                         </td>";
 			}
 			else
 			{

@@ -129,7 +129,7 @@ function ShowFolders(folderid)
 								<!-- Inbox -->
 								<img src="{'folder_.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_INBOX}</b>
 								<ul style="list-style-type:none;margin-left:10px;margin-top:5px;padding:2px">
-									<li><img src="themes/{$theme}/images/folder.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="{'folder.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;&nbsp;
 										<a href="javascript:;" onClick="ShowFolders(6)" class="webMnu">{$MOD.LBL_QUAL_CONTACT}</a>&nbsp;<b></b>
 									</li>
 									<li><img src="{'mymail.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;&nbsp;

@@ -1200,7 +1200,7 @@ a.alpha:Hover{
     	z-index:1000001;
     	display:none;
     	padding:10px;
-    	background:#ffffff url(../images/layerPopUpBg.gif);
+    	background:#ffffff url(images/layerPopUpBg.gif);
 }
 
 .allMnuTable{
@@ -1297,7 +1297,7 @@ a.allMnu:Hover{
 	border-left: 1px solid #a5a5a5; 
 	border-right: 1px solid #a5a5a5; 
 	border-bottom: 1px solid #a5a5a5; 
-	background:#fefefe url(../images/layerPopupBg.gif);
+	background:#fefefe url(images/layerPopupBg.gif);
 }
 
 .calTopRight {
@@ -1677,7 +1677,7 @@ ul {
 .settingsUI {
 	text-align:left;
 	background-color:#fff;
-	background-image:url(../images/layerPopupBg.gif);
+	background-image:url(images/layerPopupBg.gif);
 	border:2px solid #aaaaaa;
 }
 
@@ -1786,7 +1786,7 @@ ul {
 
 .listTableTopButtons{
 	background-color:#efefef;
-	background-image:url(../images/layerPopupBg.gif);
+	background-image:url(images/layerPopupBg.gif);
 }
 
 /*  Buttons */
@@ -1933,7 +1933,7 @@ textarea {
 
 .mailClientBg {
 	background-color:#efefef;
-	background-image:url(../images/layerPopupBg.gif);
+	background-image:url(images/layerPopupBg.gif);
 }
 
 .mailSubHeader {
@@ -1968,7 +1968,7 @@ textarea {
 /* Layer Popup */
 .layerPopup {
 	border:3px solid #959595;
-	background:#fffff5 url(../images/layerPopupBg.gif) ;
+	background:#fffff5 url(images/layerPopupBg.gif) ;
 	position:absolute;
 }
 
@@ -1994,7 +1994,7 @@ textarea {
 
 .homePageMatrixHdr {
 	border-bottom:1px solid #d3d3d3;
-	background:#fffff5 url(../images/layerPopupBg.gif) ;
+	background:#fffff5 url(images/layerPopupBg.gif) ;
 }
 
 .reportsListTable {
@@ -2005,7 +2005,7 @@ textarea {
 }
 
 .reportGenerateTable{
-	background-image:url(../images/layerPopupBg.gif);
+	background-image:url(images/layerPopupBg.gif);
 	border-left:2px dotted #aaa;
 	border-right:2px dotted #aaa;
 	border-bottom:2px dotted #aaa;
@@ -2096,25 +2096,25 @@ a.drop_down:Hover{
 }
 
 .searchUIBasic {
-	background-image:url(../images/layerPopupBg.gif);
+	background-image:url(images/layerPopupBg.gif);
 	border:2px solid #a5a5a5;
 }
 
 .searchUIAdv1{ 
-	background-image:url(../images/layerPopupBg.gif);
+	background-image:url(images/layerPopupBg.gif);
 	border-top:2px solid #a5a5a5;
 	border-left:2px solid #a5a5a5;
 	border-right:2px solid #a5a5a5;
 }
 
 .searchUIAdv2{ 
-	background-image:url(../images/layerPopupBg.gif);
+	background-image:url(images/layerPopupBg.gif);
 	border-left:2px solid #a5a5a5;
 	border-right:2px solid #a5a5a5;
 }
 
 .searchUIAdv3{ 
-	background-image:url(../images/layerPopupBg.gif);
+	background-image:url(images/layerPopupBg.gif);
 	border-bottom:2px solid #a5a5a5;
 	border-left:2px solid #a5a5a5;
 	border-right:2px solid #a5a5a5;
@@ -2123,7 +2123,7 @@ a.drop_down:Hover{
 /* Recalculate Disabling Window */
 
 .veil{
-   	background: url(../images/layerPopupBg.gif) ;
+   	background: url(images/layerPopupBg.gif) ;
     	height: 100%;
     	width: 100%;
     	top: 0px;
@@ -2138,7 +2138,7 @@ a.drop_down:Hover{
 }
 
 .veil_new{
-   	background: url(../images/layerPopupBg.gif) ;
+   	background: url(images/layerPopupBg.gif) ;
     	height: 100%;
     	width: 100%;
     	top: 0px;

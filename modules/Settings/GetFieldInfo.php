@@ -33,7 +33,7 @@ $output  .= '<div class="layerPopup" style="position:relative; display:block">' 
 				<tr>
 					<td width="95%" align="left" class="layerPopupHeading">'.$label.'</td>
 			
-					<td width="5%" align="right"><a href="javascript:fninvsh(\'fieldInfo\');"><img src="'.$image_path.'close.gif" border="0"  align="absmiddle" /></a></td>
+					<td width="5%" align="right"><a href="javascript:fninvsh(\'fieldInfo\');"><img src="'. vtiger_imageurl('editfield.gif', $theme) .'" border="0"  align="absmiddle" /></a></td>
 				</tr>
 			</table>
 			<table border=0 cellspacing=0 cellpadding="5" width=99%> 

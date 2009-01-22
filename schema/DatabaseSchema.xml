@@ -5472,7 +5472,7 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 	<table name="vtiger_picklist">
-		<field name="picklistid" type="I" size="19">
+		<field name="picklistid" type="I" size="11">
 			<key />
 			<autoincrement />
 		</field>

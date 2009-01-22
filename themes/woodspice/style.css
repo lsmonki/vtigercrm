@@ -1220,7 +1220,7 @@ a.alpha:Hover{
     	z-index:1000001;
     	display:none;
     	padding:10px;
-    	background:#ffffff url(../images/layerPopUpBg.gif);
+    	background:#ffffff url(images/layerPopUpBg.gif);
 }
 
 
@@ -1321,7 +1321,7 @@ a.allMnu:Hover{
 	border-left: 1px solid #939271; 
 	border-right: 1px solid #939271; 
 	border-bottom: 1px solid #939271; 
-	background:#fefefe url(../images/layerPopupBg.gif);
+	background:#fefefe url(images/layerPopupBg.gif);
 }
 
 .calTopRight {
@@ -1987,7 +1987,7 @@ textarea {
 /* Layer Popup */
 .layerPopup {
 	border:3px solid #939271;
-	background:#fffff5 url(../images/layerPopupBg.gif) ;
+	background:#fffff5 url(images/layerPopupBg.gif) ;
 	position:absolute;
 }
 
@@ -2012,7 +2012,7 @@ textarea {
 
 .homePageMatrixHdr {
 	border-bottom:1px solid #d3d2c1;
-	background:#fffff5 url(../images/layerPopupBg.gif) ;
+	background:#fffff5 url(images/layerPopupBg.gif) ;
 }
 
 .reportsListTable {
@@ -2035,7 +2035,7 @@ textarea {
 }
 
 .importLeadUI{
-	background:#fffff5 url(../images/layerPopupBg.gif) ;
+	background:#fffff5 url(images/layerPopupBg.gif) ;
 }
 
 a.customMnu{

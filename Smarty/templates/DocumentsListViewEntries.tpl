@@ -59,7 +59,7 @@
 													</td>
 													<td align="right" width="10%">
 														<a onclick="fninvsh('movefolderlist')" href="javascript:void(0);">
-														<img border="0" align="absmiddle" src="themes/images/close.gif"/></a>
+														<img border="0" align="absmiddle" src="{'close.gif'|@vtiger_imageurl:$THEME}"/></a>
 													</td>
 												</tr>
 											</table>
@@ -205,7 +205,7 @@
 					<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerHeadingULine rptTable">
 						<tr style="border-top:1px solid black;">
 							<td class="genHeaderSmall">{$MOD.LBL_EMPTY_FOLDERS}</td>
-							<td align="right"><a onclick="showHideFolders('showEmptyFoldersLink', 'emptyFolders');" href="javascript:;"><img border="0" align="absmiddle" src="themes/images/close.gif"/></a>
+							<td align="right"><a onclick="showHideFolders('showEmptyFoldersLink', 'emptyFolders');" href="javascript:;"><img border="0" align="absmiddle" src="{'close.gif'|@vtiger_imageurl:$THEME}"/></a>
 						</tr>
 					</table>
 				<!-- List View's Buttons and Filters ends -->
@@ -280,7 +280,7 @@
 					</td>
 					<td align="right" width="10%">
 						<a onclick="fninvsh('emptyfolder')" href="javascript:void(0);">
-						<img border="0" align="absmiddle" src="themes/images/close.gif"/></a>
+						<img border="0" align="absmiddle" src="{'close.gif'|@vtiger_imageurl:$THEME}"/></a>
 					</td>
 				</tr>
 			</table>

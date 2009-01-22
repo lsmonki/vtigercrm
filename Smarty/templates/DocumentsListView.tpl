@@ -212,7 +212,7 @@ function alphabetic(module,url,dataid)
                                         <table border=0 cellspacing=0 cellpadding=0 width=100%>
                                         <tr>
                                                 <td align=center>
-                                                <img src="themes/images/searching.gif" alt="{$APP.LBL_SEARCHING}"  title="{$APP.LBL_SEARCHING}">
+                                                <img src="{'searching.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_SEARCHING}"  title="{$APP.LBL_SEARCHING}">
                                                 </td>
                                         </tr>
                                         </table>
@@ -228,7 +228,7 @@ function alphabetic(module,url,dataid)
 {*<!-- Contents -->*}
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
      <tr>
-        <td valign=top><img src="themes/images/showPanelTopLeft.gif"></td>
+        <td valign=top><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
 
 	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
 	 <!-- SIMPLE SEARCH -->
@@ -333,7 +333,7 @@ function alphabetic(module,url,dataid)
 	</div>
 
      </td>
-        <td valign=top><img src="themes/images/showPanelTopRight.gif"></td>
+        <td valign=top><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </table>
 
@@ -344,7 +344,7 @@ function alphabetic(module,url,dataid)
 	        <tr>
 				<td class="genHeaderSmall" nowrap align="left" width="30%" id="editfolder_info">{$MOD.LBL_ADD_NEW_FOLDER}
 				</td>
-				<td align="right"><a href="javascript:;" onClick="closeFolderCreate();"><img src="themes/images/close.gif" align="absmiddle" border="0"></a>
+				<td align="right"><a href="javascript:;" onClick="closeFolderCreate();"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" border="0"></a>
 				</td>
 	        </tr>
         </table>

@@ -24,7 +24,7 @@ require_once('modules/CustomView/CustomView.php');
 require_once('include/database/Postgres8.php');
 require_once('include/DatabaseUtil.php');
 
-global $app_strings;
+global $app_strings,$theme;
 $current_module_strings = return_module_language($current_language, 'Faq');
 
 global $currentModule;

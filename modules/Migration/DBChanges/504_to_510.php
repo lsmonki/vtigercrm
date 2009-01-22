@@ -1235,9 +1235,9 @@ $adb->query("ALTER TABLE vtiger_producttaxrel DROP FOREIGN KEY fk_1_vtiger_produ
 $adb->query("ALTER TABLE vtiger_pricebookproductrel DROP FOREIGN KEY fk_2_vtiger_pricebookproductrel");
 
 /* Vtlib Changes - Table added to store different types of links */
-ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_links (linkid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+/*ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_links (linkid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     		tabid INT, linktype VARCHAR(20), linklabel VARCHAR(30), linkurl VARCHAR(255), linkicon VARCHAR(100), sequence INT)");
-ExecuteQuery("CREATE INDEX link_tabidtype_idx ON vtiger_links(tabid,linktype)");
+ExecuteQuery("CREATE INDEX link_tabidtype_idx ON vtiger_links(tabid,linktype)");*/
 
 /* Column added to vtiger_tab to track the version of the module */
 ExecuteQuery("ALTER TABLE vtiger_tab ADD COLUMN version VARCHAR(10)");

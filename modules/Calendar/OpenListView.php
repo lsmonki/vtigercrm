@@ -237,7 +237,7 @@ function getPendingActivities($mode,$view='')
 		// Code by Jaguar Ends
 		$entries[$event['id']] = array(
 				'0' => '<a href="index.php?action=DetailView&module='.$event["module"].'&activity_mode='.$activity_type.'&record='.$event["id"].''.$return_url.'" style="'.$font_color.';">'.$event["name"].'</a>',
-				'IMAGE' => '<IMG src="'.$image_path.$event["type"].'s.gif">',
+				'IMAGE' => '<IMG src="'.vtiger_imageurl(''.$event["type"].'s.gif', $theme).'">',
 				//CHANGE : TO IMPROVE PERFORMANCE
 				/*'ACTIVITY' => $activity_fields,
 				'CONTACT_NAME' => '<a href="index.php?action=DetailView&module=Contacts&record='.$event['contactid'].''.$return_url.'" style="'.$font_color.';">'.$event['firstname'].' '.$event['lastname'].'</a>',

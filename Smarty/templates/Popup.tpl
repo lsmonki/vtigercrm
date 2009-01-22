@@ -80,7 +80,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 					<td  width=30% nowrap class="componentName" align=right>{$APP.VTIGER}</td>
 				</tr>
 			</table>
-			<div id="status" style="position:absolute;display:none;right:135px;top:15px;height:27px;white-space:nowrap;"><img src="{$IMAGE_PATH}status.gif"></div>
+			<div id="status" style="position:absolute;display:none;right:135px;top:15px;height:27px;white-space:nowrap;"><img src="{'status.gif'|@vtiger_imageurl:$THEME}"></div>
 			<table width="100%" cellpadding="5" cellspacing="0" border="0"  class="homePageMatrixHdr">
 				<tr>
 					<td style="padding:10px;" >

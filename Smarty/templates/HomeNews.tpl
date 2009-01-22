@@ -4,7 +4,7 @@
 		<td align='left'><b>{$APP.LBL_VTIGER_NEWS}</b></td>
 		<td align='right'>&nbsp;</td>
 		<td align='right'>
-			<a style='padding-left: 10px;' href="javascript:;" onclick="fninvsh('vtigerNewsPopupLay');"><img src='themes/images/close.gif' align='absmiddle' border='0'></a></td>
+			<a style='padding-left: 10px;' href="javascript:;" onclick="fninvsh('vtigerNewsPopupLay');"><img src='{'close.gif'|@vtiger_imageurl:$THEME}' align='absmiddle' border='0'></a></td>
 	</tr>
 
 	<tr>

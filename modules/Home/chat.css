@@ -75,10 +75,10 @@ td.chathead2,td.pchathead2{
 }
 
 td.chaticon{
-  background-image:url(themes/images/2tbarPrivateChat.gif);
+  background-image:url(imgs/2tbarPrivateChat.gif);
 }
 td.chattopic{ 
-  background-image:url(themes/images/2tbarPublicChat.gif);
+  background-image:url(imgs/2tbarPublicChat.gif);
   background-repeat:no-repeat;
   background-position:center left;
   padding:0px 10px 0px 30px;
@@ -113,15 +113,15 @@ td.chatbody,td.chatbody2,td.pchatbody,td.pchatbody2{
   padding:0px 5px 0px 0px;
 }
 td.chatbody,td.pchatbody{
-  background-image:url(themes/images/box_ML.gif);
+  background-image:url(imgs/box_ML.gif);
 }
 td.chatbody1,td.pchatbody1{
-  background-image:url(themes/images/box_M.gif);
+  background-image:url(imgs/box_M.gif);
   padding:5px 5px 5px 5px;
   vertical-align:top;
 }
 td.chatbody2,td.pchatbody2{
-  background-image:url(themes/images/box_MR.gif);
+  background-image:url(imgs/box_MR.gif);
 }
 
 td.chatfoot,td.chatfoot2,td.pchatfoot,td.pchatfoot2{

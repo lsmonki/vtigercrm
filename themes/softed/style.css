@@ -1267,7 +1267,7 @@ a.alpha:Hover{
     z-index:1000001;
     display:none;
     padding:10px;
-    background:#ffffff url(../images/layerPopUpBg.gif);
+    background:#ffffff url(images/layerPopUpBg.gif);
 }
 
 .allMnuTable{
@@ -1341,7 +1341,7 @@ a.allMnu:Hover{
 }
 
 .calSel{
-  	background:#FFFFFF url(../images/layerPopupBg.gif) repeat scroll 0%;
+  	background:#FFFFFF url(images/layerPopupBg.gif) repeat scroll 0%;
 	border-top: 3px solid #63A2E2;
 	border-bottom: 0px solid #ddd;
 	border-right:1px solid #DDDDDD;	
@@ -1370,7 +1370,7 @@ a.allMnu:Hover{
 	border-left: 1px solid #ddd; 
 	border-right: 1px solid #ddd; 
 	border-bottom: 1px solid #ddd; 
-	background:#fff url(../images/layerPopupBg.gif);
+	background:#fff url(images/layerPopupBg.gif);
 
 }
 .calTopRight {
@@ -1740,7 +1740,7 @@ ul {
 .settingsUI {
 	text-align:left;
 	background-color:#fff;
-	background-image:url(../images/layerPopupBg.gif);
+	background-image:url(images/layerPopupBg.gif);
 	border:2px solid #ddd;
 }
 
@@ -1855,7 +1855,7 @@ ul {
 
 .listTableTopButtons{
 	background-color:#efefff;
-	background-image:url(../images/layerPopupBg.gif);
+	background-image:url(images/layerPopupBg.gif);
 }
 
 /*  Buttons */
@@ -2000,7 +2000,7 @@ textarea {
 .emailSelected{
 	background-color:#eaeaea;
 	color:#000000;
-	font-weight:bold;
+	font-size:bold;
 }
 
 .mailClient{
@@ -2013,7 +2013,7 @@ textarea {
 .mailClientBg {
 
 	background-color:#ddd;
-	background-image:url(../images/layerPopupBg.gif) ;
+	background-image:url(images/layerPopupBg.gif) ;
 	border:2px solid #dddddd;
 }
 
@@ -2050,7 +2050,7 @@ textarea {
 /* Layer Popup */
 .layerPopup {
 	border:2px solid #ddd;
-	background:#fffff5 url(../images/layerPopupBg.gif) ;
+	background:#fffff5 url(images/layerPopupBg.gif) ;
 	position:absolute;
 }
 
@@ -2088,7 +2088,7 @@ textarea {
 }
 
 .reportGenerateTable{
-	background-image:url(../images/layerPopupBg.gif);
+	background-image:url(images/layerPopupBg.gif);
 	border-left:2px dotted #a5b5ee;
 	border-right:2px dotted #a5b5ee;
 	border-bottom:2px dotted #a5b5ee;
@@ -2178,25 +2178,25 @@ a.drop_down:Hover{
 }
 
 .searchUIBasic {
-		background-image:url(../images/layerPopupBg.gif);
+		background-image:url(images/layerPopupBg.gif);
 		border:2px solid #a5b5ee;
 }
 
 .searchUIAdv1{ 
-		background-image:url(../images/layerPopupBg.gif);
+		background-image:url(images/layerPopupBg.gif);
 		border-top:2px solid #a5b5ee;
 		border-left:2px solid #a5b5ee;
 		border-right:2px solid #a5b5ee;
 }
 
 .searchUIAdv2{ 
-		background-image:url(../images/layerPopupBg.gif);
+		background-image:url(images/layerPopupBg.gif);
 		border-left:2px solid #a5b5ee;
 		border-right:2px solid #a5b5ee;
 }
 
 .searchUIAdv3{ 
-		background-image:url(../images/layerPopupBg.gif);
+		background-image:url(images/layerPopupBg.gif);
 		border-bottom:2px solid #a5b5ee;
 		border-left:2px solid #a5b5ee;
 		border-right:2px solid #a5b5ee;
@@ -2208,7 +2208,7 @@ a.drop_down:Hover{
 /* Recalculate Disabling Window */
 
 .veil{
-   background: url(../images/layerPopupBg.gif) ;
+   background: url(images/layerPopupBg.gif) ;
     height: 100%;
     width: 100%;
     top: 0px;
@@ -2223,7 +2223,7 @@ a.drop_down:Hover{
 }
 
 .veil_new{
-   background: url(../images/layerPopupBg.gif) ;
+   background: url(images/layerPopupBg.gif) ;
     height: 100%;
     width: 100%;
     top: 0px;

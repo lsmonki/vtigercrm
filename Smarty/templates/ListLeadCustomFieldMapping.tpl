@@ -27,7 +27,7 @@
                                 <table class="leadTable" align="center" cellpadding="5" cellspacing="0" width="95%">
                                         <tr>
                                                 <td style="border-bottom: 2px dotted rgb(204, 204, 204); padding: 5px;" width="5%">
-                                                <img src="{$IMAGE_PATH}mapping.gif" align="middle" height="48" width="48">
+                                                <img src="{'mapping.gif'|@vtiger_imageurl:$THEME}" align="middle" height="48" width="48">
                                                 </td>
                                                 <td style="border-bottom: 2px dotted rgb(170, 170, 170); padding: 5px;">
                                                 <span class="genHeaderGrayBig">Mapping Lead Custom Fields</span><br>
