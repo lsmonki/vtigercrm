@@ -55,6 +55,10 @@ class Vtiger_Event {
 		if(Vtiger_Utils::checkFileAccess($filename, false)) {
 			global $adb;
 			$eventsManager = new VTEventsManager($adb);
+			if(!empty($condition)) { 
+				$condition = str_replace('(', '[', $condition); 
+				$condition = str_replace(')', ']', $condition); 
+			}
 			$eventsManager->registerHandler($eventname, $filename, $classname, $condition);
 			$eventsManager->setModuleForHandler($moduleInstance->name, $classname);
 
