@@ -237,20 +237,23 @@ if($reportid == "")
 				}
 			}
 		}
-		if($shared_entities != "")
+		$delsharesqlresult = $adb->pquery("DELETE FROM vtiger_reportsharing WHERE reportid=?", array($reportid));
+		if($delsharesqlresult != false  && $sharetype=="Shared" && $shared_entities!='')
 		{
-			$delsharesqlresult = $adb->pquery("DELETE FROM vtiger_reportsharing WHERE reportid=?", array($reportid));
-			if($delsharesqlresult != false  && $sharetype=="Shared")
+			$selectedcolumn = explode(";",$shared_entities);
+			for($i=0 ;$i< count($selectedcolumn) -1 ;$i++)
 			{
-				$selectedcolumn = explode(";",$shared_entities);
-				for($i=0 ;$i< count($selectedcolumn) -1 ;$i++)
-				{
-					$temp = split("::",$selectedcolumn[$i]);
-					$icolumnsql = "INSERT INTO vtiger_reportsharing (reportid,shareid,setype) VALUES (?,?,?)";
-					$icolumnsqlresult = $adb->pquery($icolumnsql, array($reportid,$temp[1],$temp[0]));
-				}
+				$temp = split("::",$selectedcolumn[$i]);
+				$icolumnsql = "INSERT INTO vtiger_reportsharing (reportid,shareid,setype) VALUES (?,?,?)";
+				$icolumnsqlresult = $adb->pquery($icolumnsql, array($reportid,$temp[1],$temp[0]));
 			}
 		}
+		
+		//<<<<reportmodules>>>>>>>
+		$ireportmodulesql = "UPDATE vtiger_reportmodules SET primarymodule=?,secondarymodules=? WHERE reportmodulesid=?";
+		$ireportmoduleresult = $adb->pquery($ireportmodulesql, array($pmodule, $smodule,$reportid));
+		$log->info("Reports :: Save->Successfully saved vtiger_reportmodules");
+		//<<<<reportmodules>>>>>>>
 		
 		$ireportsql = "update vtiger_report set REPORTNAME=?, DESCRIPTION=?, REPORTTYPE=?, SHARINGTYPE=? where REPORTID=?";
 		$ireportparams = array($reportname, $reportdescription, $reporttype, $sharetype, $reportid);

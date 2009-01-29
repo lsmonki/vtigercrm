@@ -34,7 +34,7 @@ $list_report_form = new vtigerCRM_Smarty;
 $list_report_form->assign("MOD", $mod_strings);
 $list_report_form->assign("APP", $app_strings);
 $list_report_form->assign("IMAGE_PATH",$image_path);
-if(isset($_REQUEST["record"]))
+if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 {
         $recordid = $_REQUEST["record"];
         $oReport = new Reports($recordid);

@@ -33,20 +33,46 @@ $image_path=$theme_path."images/";
 $list_report_form = new vtigerCRM_Smarty;
 $list_report_form->assign("MOD", $mod_strings);
 $list_report_form->assign("APP", $app_strings);
-if(isset($_REQUEST["record"]))
+if(isset($_REQUEST["record"]) && $_REQUEST["record"]!='')
 {
 	$reportid = $_REQUEST["record"];
 	$list_report_form->assign('REPORT_ID',$reportid);
 	$oReport = new Reports($reportid);
 	$primarymodule = $oReport->primodule;
-	$secondarymodule = $oReport->secmodule;
+	
+	$secondarymodule = '';
+	$secondarymodules =Array();
+	foreach($oReport->related_modules[$primarymodule] as $key=>$value){
+		if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= $_REQUEST["secondarymodule_".$value];
+		$oReport->getSecModuleColumnsList($_REQUEST["secondarymodule_".$value]);
+		if(!isPermitted($_REQUEST["secondarymodule_".$value],'index')== "yes" && !isset($_REQUEST["secondarymodule_".$value]))
+		{
+			$permission = false;
+		}
+	}
+	$secondarymodule = implode(":",$secondarymodules);
+
 	$reporttype = $oReport->reporttype;
 	$reportname  = $oReport->reportname;
 	$reportdescription  = $oReport->reportdescription;
 	$folderid  = $oReport->folderid;	
 	$ogReport = new Reports();
-        $ogReport->getPriModuleColumnsList($oReport->primodule);
+    $ogReport->getPriModuleColumnsList($oReport->primodule);
+	if($secondarymodule==''){
+		if($oReport->secmodule!=''){
+			$sec_module = split(":",$oReport->secmodule);
+			$secondarymodules =Array();
+			foreach($sec_module as $smod){
+				if(vtlib_isModuleActive($smod)){
+					$secondarymodules[] = $smod; 
+				}
+			}
+			$secondarymodule = implode(":",$secondarymodules);
+		}
         $ogReport->getSecModuleColumnsList($oReport->secmodule);
+	} else {
+        $ogReport->getSecModuleColumnsList($secondarymodule);
+	}
 }else
 {
 	$reportname = $_REQUEST["reportname"];

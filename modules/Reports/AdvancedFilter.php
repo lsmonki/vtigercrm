@@ -9,11 +9,23 @@
 *
  ********************************************************************************/
 require_once('include/Zend/Json.php');
-if(isset($_REQUEST["record"]))
+if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 {
 	$reportid = $_REQUEST["record"];
 	$oReport = new Reports($reportid);
 	$oReport->getAdvancedFilterList($reportid);
+
+	$oRep = new Reports();
+	$secondarymodule = '';
+	$secondarymodules =Array();
+	
+	foreach($oRep->related_modules[$oReport->primodule] as $key=>$value){
+		if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= $_REQUEST["secondarymodule_".$value];
+	}
+	$secondarymodule = implode(":",$secondarymodules);
+	
+	if($secondarymodule!='')
+		$oReport->secmodule = $secondarymodule;
 	
 	$BLOCK1 = getPrimaryColumns_AdvFilterHTML($oReport->primodule,$oReport->advft_column[0]);
 	$BLOCK1 .= getSecondaryColumns_AdvFilterHTML($oReport->secmodule,$oReport->advft_column[0]);
@@ -161,34 +173,36 @@ function getSecondaryColumns_AdvFilterHTML($module,$selected="")
         	for($i=0;$i < count($secmodule) ;$i++)
         	{
                 $mod_strings = return_module_language($current_language,$secmodule[$i]);
-				foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
-                {
-			if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
-			{
-                		$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
-					  foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
-					  {
-						if(isset($mod_strings[$fieldlabel]))
+                if(vtlib_isModuleActive($secmodule[$i])){
+					foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
+	                {
+						if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
 						{
-							if($selected == $field)
-							{
-								$shtml .= "<option selected value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
-							}else
-							{
-								$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
-							}
-						}else
-						{
-							if($selected == $field)
-							{
-								$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
-							}else
-							{
-								$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
-							}
+	                		  $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
+							  foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
+							  {
+								if(isset($mod_strings[$fieldlabel]))
+								{
+									if($selected == $field)
+									{
+										$shtml .= "<option selected value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+									}else
+									{
+										$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+									}
+								}else
+								{
+									if($selected == $field)
+									{
+										$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
+									}else
+									{
+										$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+									}
+								}
+							  }
 						}
-					  }
-					}
+	                }
                 }
         	}
         }

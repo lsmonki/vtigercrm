@@ -145,8 +145,11 @@ function DeleteFolder(id)
         	                method: 'post',
                 	        postBody: 'action=ReportsAjax&mode=ajax&file=DeleteReportFolder&module=Reports&record='+id,
                         	onComplete: function(response) {
-					var item = response.responseText;
-				        getObj('customizedrep').innerHTML = item;
+							var item = response.responseText;
+							if(item[0]=='<')
+						        getObj('customizedrep').innerHTML = item;
+						    else
+						    	alert(item);
                         	}
                 	}
         	);
@@ -314,7 +317,7 @@ function massDeleteReport()
                                 postBody: 'action=ReportsAjax&mode=ajax&file=Delete&module=Reports&idlist='+idstring,
                                 onComplete: function(response) {
                                         var item = response.responseText;
-                                        getObj('customizedrep').innerHTML = item;
+                                        	getObj('customizedrep').innerHTML = item;
                                 }
                         }
                 );

@@ -11,15 +11,19 @@
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 
-global $adb;
+global $adb,$mod_strings;
 
 $local_log =& LoggerManager::getLogger('index');
 $rfid = $_REQUEST['record'];
 if($rfid != "")
 {
-	$sql .= "delete from vtiger_reportfolder where folderid=?";
-	$result = $adb->pquery($sql, array($rfid));
-	if($result!=false)
+	$records_in_folder = $adb->pquery("SELECT * from vtiger_report WHERE folderid=?",array($rfid));
+	if($adb->num_rows($records_in_folder)>0){
+		echo getTranslatedString('LBL_FLDR_NOT_EMPTY',"Reports");
+	} else {
+		$sql .= "delete from vtiger_reportfolder where folderid=?";
+		$result = $adb->pquery($sql, array($rfid));
+		if($result!=false)
         {
                 $pquery = "delete from vtiger_report where folderid=?";
                 $res = $adb->pquery($pquery, array($rfid));
@@ -40,6 +44,7 @@ if($rfid != "")
                 </ul></B></font> <br>" ;
                 echo $errormessage;
         }
+	}
 }
   	
 ?>

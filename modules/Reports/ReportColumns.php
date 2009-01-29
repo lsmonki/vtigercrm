@@ -33,11 +33,24 @@ $report_column->assign("MOD", $mod_strings);
 $report_column->assign("APP", $app_strings);
 $report_column->assign("IMAGE_PATH",$image_path);
 $report_column->assign("THEME_PATH",$theme_path);
-if(isset($_REQUEST["record"]))
+if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 {
 	$recordid = $_REQUEST["record"];
 	$oReport = new Reports($recordid);
 	$BLOCK1 = getPrimaryColumnsHTML($oReport->primodule);
+	
+	$oRep = new Reports();
+	$secondarymodule = '';
+	$secondarymodules =Array();
+	
+	foreach($oRep->related_modules[$oReport->primodule] as $key=>$value){
+		if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= $_REQUEST["secondarymodule_".$value];
+	}
+	$secondarymodule = implode(":",$secondarymodules);
+	
+	if($secondarymodule!='')
+		$oReport->secmodule = $secondarymodule;
+		
 	$BLOCK1 .= getSecondaryColumnsHTML($oReport->secmodule);
 	$BLOCK2 = $oReport->getSelectedColumnsList($recordid);
 	$report_column->assign("BLOCK1",$BLOCK1);
@@ -108,19 +121,21 @@ function getSecondaryColumnsHTML($module)
 		for($i=0;$i < count($secmodule) ;$i++)
 		{
 			$mod_strings = return_module_language($current_language,$secmodule[$i]);
-			foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
-			{
-				if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
+			if(vtlib_isModuleActive($secmodule[$i])){
+				foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
 				{
-					$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
-					foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
+					if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
 					{
-						if(isset($mod_strings[$fieldlabel]))
+						$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
+						foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
 						{
-							$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
-						}else
-						{
-							$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+							if(isset($mod_strings[$fieldlabel]))
+							{
+								$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+							}else
+							{
+								$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+							}
 						}
 					}
 				}

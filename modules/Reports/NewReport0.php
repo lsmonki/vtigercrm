@@ -25,7 +25,7 @@ global $currentModule;
 global $image_path;
 global $theme;
 global $focus_list;
-
+$recordid = $_REQUEST['record'];
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -34,8 +34,71 @@ $list_report_form->assign("MOD", $mod_strings);
 $list_report_form->assign("APP", $app_strings);
 $repObj = new Reports ();
 
+if($recordid!=''){
+	$oRep = new Reports($recordid);
+	if($oRep->secmodule!=''){
+		$sec_mod = split(":",$oRep->secmodule);
+		$rel_modules = getReportRelatedModules($oRep->primodule,$oRep);
+		
+		if(!empty($sec_mod)){
+			foreach($sec_mod as $module){
+				if(!in_array($module,$rel_modules))
+					$restricted_modules[] = $module;
+				else
+					$sec_module[$module] = "1";
+			}
+		}
+	}
+	if(vtlib_isModuleActive($oRep->primodule)==false){
+		echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
+		echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 80%; position: relative; z-index: 10000000;'>
+
+		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+		<tbody><tr>
+		<td rowspan='2' width='11%'><img src='". vtiger_imageurl('denied.gif', $theme) ."' ></td>
+		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>".$mod_strings['LBL_NO_ACCESS']." : ".$oRep->primodule." </span></td>
+		</tr>
+		<tr>
+		<td class='small' align='right' nowrap='nowrap'>			   	
+		<a href='javascript:window.close();'>$app_strings[LBL_CLOSE]</a><br>								   		     </td>
+		</tr>
+		</tbody></table> 
+		</div>";
+		echo "</td></tr></table>";die;
+	}
+	if(empty($restricted_modules)){
+		header("Location: index.php?module=Reports&action=ReportsAjax&file=NewReport1&record=".$recordid);
+	}
+	else{
+		$list_report_form->assign("RELATEDMODULES",getReportRelatedModules($oRep->primodule,$oRep));
+		$list_report_form->assign("RECORDID",$recordid);
+		$list_report_form->assign("REPORTNAME",$oRep->reportname);
+		$list_report_form->assign("REPORTDESC",$oRep->reportdescription);
+		$list_report_form->assign("REP_MODULE",$oRep->primodule);
+		$list_report_form->assign("SEC_MODULE",$sec_module);
+		$list_report_form->assign("RESTRICTEDMODULES",implode(",",$restricted_modules));
+		$list_report_form->assign("BACK",'false');
+	}
+}
 if($_REQUEST['reportmodule'] != '')
 {
+	if(vtlib_isModuleActive($_REQUEST['reportmodule'])==false || isPermitted($_REQUEST['reportmodule'],'index')!= "yes"){
+		echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
+		echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 80%; position: relative; z-index: 10000000;'>
+
+		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+		<tbody><tr>
+		<td rowspan='2' width='11%'><img src='". vtiger_imageurl('denied.gif', $theme) ."' ></td>
+		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>".$mod_strings['LBL_NO_ACCESS']." : ".$_REQUEST['reportmodule']." </span></td>
+		</tr>
+		<tr>
+		<td class='small' align='right' nowrap='nowrap'>			   	
+		<a href='javascript:window.close();'>$app_strings[LBL_CLOSE]</a><br>								   		     </td>
+		</tr>
+		</tbody></table> 
+		</div>";
+		echo "</td></tr></table>";die;
+	}
 	$list_report_form->assign("RELATEDMODULES",getReportRelatedModules($_REQUEST['reportmodule'],$repObj));
 	$list_report_form->assign("REP_MODULE",$_REQUEST['reportmodule']);
 }

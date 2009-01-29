@@ -118,7 +118,7 @@ class ReportRun extends CRMEntity
 				if (stripos($selectedfields[1], 'cf_') === 0) {
 					$cf_columns = $adb->getColumnNames($tablename);
 					if (array_search($colname, $cf_columns) != null) {
-						$pquery = "select fieldlabel from vtiger_field where tablename = ? and fieldname = ? and vtiger_field.presence in (0,2)";
+						$pquery = "select fieldlabel from vtiger_field where tablename = ? and fieldname = ?";
 						$cf_res = $adb->pquery($pquery, array($tablename, $colname));
 						if (count($cf_res) > 0){
 							$cf_fld_label = $adb->query_result($cf_res, 0, "fieldlabel");
@@ -156,7 +156,7 @@ class ReportRun extends CRMEntity
 					{
 						$columnslist[$fieldcolname] = "concat(vtiger_activity.date_start,'  ',vtiger_activity.time_start) as Calendar_Start_Date_and_Time";
 					}
-					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && ($module_field != 'Products_Handler' && $module_field != 'Services_Handler'))
+					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field != 'Products_Handler')
 					{
 						$temp_module_from_tablename = str_replace("vtiger_users","",$selectedfields[0]);
 						if($module!=$this->primarymodule){
@@ -232,20 +232,20 @@ class ReportRun extends CRMEntity
 		if($module == "Calendar")
 		{
 			if (count($profileList) > 0) {
-				$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") and vtiger_field.presence in (0,2) group by vtiger_field.fieldid order by block,sequence";
+				$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") group by vtiger_field.fieldid order by block,sequence";
 				array_push($params, $profileList);
 			} else {
-				$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2) group by vtiger_field.fieldid order by block,sequence";
+				$query .= " vtiger_field.tabid in (9,16) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 group by vtiger_field.fieldid order by block,sequence";
 			}
 		}
 		else
 		{
 			array_push($params, $this->primarymodule, $this->secondarymodule);
 			if (count($profileList) > 0) {
-				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?,?)) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") and vtiger_field.presence in (0,2) group by vtiger_field.fieldid order by block,sequence";
+				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?,?)) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .") group by vtiger_field.fieldid order by block,sequence";
 				array_push($params, $profileList);
 			} else {
-				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?,?)) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2) group by vtiger_field.fieldid order by block,sequence";
+				$query .= " vtiger_field.tabid in (select tabid from vtiger_tab where vtiger_tab.name in (?,?)) and vtiger_field.displaytype in (1,2,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 group by vtiger_field.fieldid order by block,sequence";
 			}
 		}
 		$result = $adb->pquery($query, $params);
@@ -305,7 +305,7 @@ class ReportRun extends CRMEntity
 		else{
  			if(stristr($selectedfields[0],"vtiger_crmentityRel")){
  				$module = str_replace("vtiger_crmentityRel","",$selectedfields[0]);
-				$fields_query = $adb->pquery("SELECT vtiger_field.fieldname,vtiger_field.tablename,vtiger_field.fieldid from vtiger_field INNER JOIN vtiger_tab on vtiger_tab.name = ? WHERE vtiger_tab.tabid=vtiger_field.tabid and vtiger_field.fieldname=? and vtiger_field.presence in (0,2)",array($module,$selectedfields[3]));
+				$fields_query = $adb->pquery("SELECT vtiger_field.fieldname,vtiger_field.tablename,vtiger_field.fieldid from vtiger_field INNER JOIN vtiger_tab on vtiger_tab.name = ? WHERE vtiger_tab.tabid=vtiger_field.tabid and vtiger_field.fieldname=?",array($module,$selectedfields[3]));
    			
 		        if($adb->num_rows($fields_query)>0){
 			        for($i=0;$i<$adb->num_rows($fields_query);$i++){
@@ -413,6 +413,10 @@ class ReportRun extends CRMEntity
 			$temp = str_replace('$','',$value);
 			$is_field = true;
 		}
+		if($datatype=='C'){
+			$value = str_replace("yes","1",str_replace("no","0",$value));
+		}
+
 		if($is_field==true){
 			$value = $this->getFilterComparedField($temp);
 		}
@@ -498,7 +502,7 @@ class ReportRun extends CRMEntity
 			$module = $field[0];
 			$fieldname = trim($field[1]);
 			$tabid = getTabId($module);
-			$field_query = $adb->pquery("SELECT tablename,columnname,typeofdata,fieldname,uitype FROM vtiger_field WHERE tabid = ? AND fieldname= ? and vtiger_field.presence in (0,2)",array($tabid,$fieldname));
+			$field_query = $adb->pquery("SELECT tablename,columnname,typeofdata,fieldname,uitype FROM vtiger_field WHERE tabid = ? AND fieldname= ?",array($tabid,$fieldname));
 			$fieldtablename = $adb->query_result($field_query,0,'tablename');
 			$fieldcolname = $adb->query_result($field_query,0,'columnname');
 			$typeofdata = $adb->query_result($field_query,0,'typeofdata'); 
@@ -620,7 +624,6 @@ class ReportRun extends CRMEntity
 					if(strcasecmp(trim($value),"no")==0)
 						$value="0";
 				}
-				
 				$valuearray = explode(",",trim($value));
 				$datatype = (isset($selectedfields[4])) ? $selectedfields[4] : "";
 				if(isset($valuearray) && count($valuearray) > 1)
@@ -636,6 +639,17 @@ class ReportRun extends CRMEntity
                         {
 							$advorsql[] = "(case vtiger_crmentityRelHelpDesk.setype when 'Accounts' then vtiger_accountRelHelpDesk.accountname else concat(vtiger_contactdetailsRelHelpDesk.lastname,' ',vtiger_contactdetailsRelHelpDesk.firstname) end) ". $this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
                         }
+						elseif(($selectedfields[0] == "vtiger_users".$this->primarymodule || $selectedfields[0] == "vtiger_users".$this->secondarymodule) && $selectedfields[1] == 'user_name')
+						{
+							$module_from_tablename = str_replace("vtiger_users","",$selectedfields[0]);
+							if($this->primarymodule == 'Products')
+							{
+								$advorsql[] = ($selectedfields[0].".user_name ".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype));
+							}else
+							{
+								$advorsql[] = " ".$selectedfields[0].".user_name".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype)." or vtiger_groups".$module_from_tablename.".groupname ".$this->getAdvComparator($comparator,trim($valuearray[$n]),$datatype);
+							}
+						}
 						elseif($selectedfields[1] == 'status')//when you use comma seperated values.
 						{
 							if($selectedfields[2] == 'Calendar_Status')
@@ -661,6 +675,7 @@ class ReportRun extends CRMEntity
 						$advorsqls = implode(" or ",$advorsql);
 					$fieldvalue = " (".$advorsqls.") ";
 				}
+				
 				elseif(($selectedfields[0] == "vtiger_users".$this->primarymodule || $selectedfields[0] == "vtiger_users".$this->secondarymodule) && $selectedfields[1] == 'user_name')
 				{
 					$module_from_tablename = str_replace("vtiger_users","",$selectedfields[0]);
@@ -1466,12 +1481,14 @@ class ReportRun extends CRMEntity
 		}
 		
 		else {
+	 			if($module!=''){
 	 			require_once("modules/$module/$module.php");
 	 			$focus = new $module();
  						$query = $focus->generateReportsQuery($module)
 					.$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 					where vtiger_crmentity.deleted=0";
-				}
+	 			}
+			}
 		$log->info("ReportRun :: Successfully returned getReportsQuery".$module);
 		
 		return $query;
@@ -1571,8 +1588,8 @@ class ReportRun extends CRMEntity
 		
 		$sec_modules = split(":",$this->secondarymodule);
 		foreach($sec_modules as $i=>$key){
-			$sec_tab_id = getTabid($key);
-			if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$sec_tab_id] == 3)
+			$table_id = getTabid($key);
+			if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$table_id] == 3)
 			{
 				$sec_parameter=getSecListViewSecurityParameter($key);
 				$reportquery .= " ".$sec_parameter;
@@ -1640,6 +1657,7 @@ class ReportRun extends CRMEntity
 					else
 					{
 						$headerLabel = str_replace($modules," ",$this->getLstringforReportHeaders($fld->name));
+						$headerLabel = str_replace("_"," ",$this->getLstringforReportHeaders($fld->name));
 						$arrayHeaders[] = $headerLabel;
 					}
 					$header .= "<td class='rptCellLabel'>".$headerLabel."</td>";
@@ -2290,47 +2308,57 @@ class ReportRun extends CRMEntity
 		$coltotalsql .= " where vtiger_report.reportid =?";
 
 		$result = $adb->pquery($coltotalsql, array($reportid));
-
+	
 		while($coltotalrow = $adb->fetch_array($result))
 		{
 			$fieldcolname = $coltotalrow["columnname"];
-
 			if($fieldcolname != "none")
 			{
 				$fieldlist = explode(":",$fieldcolname);
 				$field_tablename = $fieldlist[1];
 				$field_columnname = $fieldlist[2];
 				$field_columnalias = $fieldlist[3];
-			if((CheckColumnPermission($field_tablename,$field_columnname,$premod) != "false") || (CheckColumnPermission($field_tablename,$field_columnname,$secmod)) != "false")
-			{
-				$field = $field_tablename.".".$field_columnname;
-				if($field_tablename == 'vtiger_products' && $field_columnname == 'unit_price') {
-					// Query needs to be rebuild to get the value in user preferred currency. [innerProduct and actual_unit_price are table and column alias.]
-					$field =  " innerProduct.actual_unit_price"; 
+				$field_permitted = false;
+				if(CheckColumnPermission($field_tablename,$field_columnname,$premod) != "false"){
+					$field_permitted = true;
+				} else {
+					$mod = split(":",$secmod);
+					foreach($mod as $key){
+						if(CheckColumnPermission($field_tablename,$field_columnname,$key) != "false"){
+							$field_permitted=true;
+						}
+					}
 				}
-				if(($field_tablename == 'vtiger_invoice' || $field_tablename == 'vtiger_quotes' || $field_tablename == 'vtiger_purchaseorder' || $field_tablename == 'vtiger_salesorder')
-						&& ($field_columnname == 'total' || $field_columnname == 'subtotal' || $field_columnname == 'discount_amount' || $field_columnname == 's_h_amount')) {
-					$field =  " $field_tablename.$field_columnname/$field_tablename.conversion_rate*". $current_user->conv_rate;
-				}
-				if($fieldlist[4] == 2)
+				if($field_permitted == true)
 				{
-					$stdfilterlist[$fieldcolname] = "sum($field) '".$field_columnalias."'";
+					$field = $field_tablename.".".$field_columnname;
+					if($field_tablename == 'vtiger_products' && $field_columnname == 'unit_price') {
+						// Query needs to be rebuild to get the value in user preferred currency. [innerProduct and actual_unit_price are table and column alias.]
+						$field =  " innerProduct.actual_unit_price"; 
+					}
+					if(($field_tablename == 'vtiger_invoice' || $field_tablename == 'vtiger_quotes' || $field_tablename == 'vtiger_purchaseorder' || $field_tablename == 'vtiger_salesorder')
+							&& ($field_columnname == 'total' || $field_columnname == 'subtotal' || $field_columnname == 'discount_amount' || $field_columnname == 's_h_amount')) {
+						$field =  " $field_tablename.$field_columnname/$field_tablename.conversion_rate*". $current_user->conv_rate;
+					}
+					if($fieldlist[4] == 2)
+					{
+						$stdfilterlist[$fieldcolname] = "sum($field) '".$field_columnalias."'";
+					}
+					if($fieldlist[4] == 3)
+					{
+						//Fixed average calculation issue due to NULL values ie., when we use avg() function, NULL values will be ignored.to avoid this we use (sum/count) to find average.
+						//$stdfilterlist[$fieldcolname] = "avg(".$fieldlist[1].".".$fieldlist[2].") '".$fieldlist[3]."'";
+						$stdfilterlist[$fieldcolname] = "(sum($field)/count(*)) '".$field_columnalias."'";
+					}
+					if($fieldlist[4] == 4)
+					{
+						$stdfilterlist[$fieldcolname] = "min($field) '".$field_columnalias."'";
+					}
+					if($fieldlist[4] == 5)
+					{
+						$stdfilterlist[$fieldcolname] = "max($field) '".$field_columnalias."'";
+					}
 				}
-				if($fieldlist[4] == 3)
-				{
-					//Fixed average calculation issue due to NULL values ie., when we use avg() function, NULL values will be ignored.to avoid this we use (sum/count) to find average.
-					//$stdfilterlist[$fieldcolname] = "avg(".$fieldlist[1].".".$fieldlist[2].") '".$fieldlist[3]."'";
-					$stdfilterlist[$fieldcolname] = "(sum($field)/count(*)) '".$field_columnalias."'";
-				}
-				if($fieldlist[4] == 4)
-				{
-					$stdfilterlist[$fieldcolname] = "min($field) '".$field_columnalias."'";
-				}
-				if($fieldlist[4] == 5)
-				{
-					$stdfilterlist[$fieldcolname] = "max($field) '".$field_columnalias."'";
-				}
-			}
 			}
 		}
 		$log->info("ReportRun :: Successfully returned getColumnsTotal".$reportid);
@@ -2409,8 +2437,9 @@ class ReportRun extends CRMEntity
         if($temp_mod_strings[$rep_header] != '')
         {
             $rep_header = $temp_mod_strings[$rep_header];
-            $rep_header .=$curr_symb;
         }
+        $rep_header .=$curr_symb;
+        	
 		return $rep_header;  
 	}
 
@@ -2427,7 +2456,7 @@ class ReportRun extends CRMEntity
 		if($this->secondarymodule != '')
 			array_push($id,  getTabid($this->secondarymodule));
 
-		$query = 'select fieldname,columnname,fieldid,fieldlabel,tabid,uitype from vtiger_field where tabid in('. generateQuestionMarks($id) .') and uitype in (15,33,55) and vtiger_field.presence in (0,2)'; //and columnname in (?)';
+		$query = 'select fieldname,columnname,fieldid,fieldlabel,tabid,uitype from vtiger_field where tabid in('. generateQuestionMarks($id) .') and uitype in (15,33,55)'; //and columnname in (?)';
 		$result = $adb->pquery($query, $id);//,$select_column));
 		$roleid=$current_user->roleid;
 		$subrole = getRoleSubordinates($roleid);

@@ -217,7 +217,10 @@ $mod_strings = Array(
 'LBL_SELECT_FIELDS'=>'Select Fields',
 'LBL_MEMBERS'=>'Members',
 'LBL_RELATED_FIELDS'=>'Related Fields',
-'LBL_NOT_ACTIVE'=>'One or More  module(s) selected for this report are not Active To generate the Report',
+'LBL_NO_ACCESS'=>' Access Denied for module(s) ',
+'LBL_NOT_ACTIVE'=>' Access Denied for module(s) ',
+'LBL_PERM_DENIED'=>' Permission Denied for Report(s): ',
+'LBL_FLDR_NOT_EMPTY'=>'Folder you are trying to delete is not Empty, Move or Delete the Reports in it.',
 )
 
 ?>

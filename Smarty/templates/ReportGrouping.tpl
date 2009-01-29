@@ -65,7 +65,7 @@
 	</select>
 	</td>
 	</tr>
-	<tr><td colspan="2" height="253">&nbsp;</td></tr>
+	<tr><td colspan="2" height="350">&nbsp;</td></tr>
 	</tbody>
 </table>
 

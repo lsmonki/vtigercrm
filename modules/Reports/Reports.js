@@ -617,7 +617,7 @@ function changeStepsback()
 }
 function editReport(id)
 {
-	var arg = 'index.php?module=Reports&action=ReportsAjax&file=NewReport1&record='+id;
+	var arg = 'index.php?module=Reports&action=ReportsAjax&file=NewReport0&record='+id;
 	fnPopupWin(arg);
 }
 function CreateReport(module)

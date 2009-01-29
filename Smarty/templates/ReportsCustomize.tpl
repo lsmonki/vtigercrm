@@ -11,6 +11,9 @@
 -->*}
 <!-- Customized Reports Table Starts Here  -->
 	<form>
+	{if $DEL_DENIED neq ""}
+	<span id="action_msg_status" class="small" align="left"><font color=red><b>{$MOD.LBL_PERM_DENIED} {$DEL_DENIED}</b> </font></span>
+	{/if}
 	<input id="folder_ids" name="folderId" type="hidden" value='{$FOLDE_IDS}'>
 	{assign var=poscount value=0}
 	{foreach item=reportfolder from=$REPT_CUSFLDR}	
@@ -32,12 +35,16 @@
 				<!-- Custom Report Group's Buttons -->
 				<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr>
 		<td  id="repposition{$poscount}" width="5%" align="right"><input name="newReportInThisModule" value="{$MOD.LBL_CREATE_REPORT}..." class="crmButton small create" onclick="gcurrepfolderid={$reportfolder.id};fnvshobj(this,'reportLay')" type="button"></td>
-		<td  width="75%" align="right">
-			<input type="button" name="Edit" value=" {$MOD.LBL_RENAME_FOLDER} " class="crmbutton small edit" onClick='EditFolder("{$reportfolder.id}","{$reportfolder.fname}","{$reportfolder.fdescription}"),fnvshobj(this,"orgLay");'>&nbsp;
-		</td>
-		<td align="right">
-			<input type="button" name="delete" value=" {$MOD.LBL_DELETE_FOLDER} " class="crmbutton small delete" onClick="DeleteFolder('{$reportfolder.id}');">
-		</td>
+			<td  width="75%" align="right">
+				{if $FLDR_DELETE eq 'yes'}
+					<input type="button" name="Edit" value=" {$MOD.LBL_RENAME_FOLDER} " class="crmbutton small edit" onClick='EditFolder("{$reportfolder.id}","{$reportfolder.fname}","{$reportfolder.fdescription}"),fnvshobj(this,"orgLay");'>&nbsp;
+				{/if}
+			</td>
+			<td align="right">
+				{if $FLDR_DELETE eq 'yes'}
+					<input type="button" name="delete" value=" {$MOD.LBL_DELETE_FOLDER} " class="crmbutton small delete" onClick="DeleteFolder('{$reportfolder.id}');">
+				{/if}
+			</td>
 		</tr>
 		</table>
 			</td>

@@ -3628,7 +3628,6 @@ function getListViewSecurityParameter($module)
 	global $log;
 	$log->debug("Entering getListViewSecurityParameter(".$module.") method ...");
 	global $adb;
-	global $current_user;
 
 	$tabid=getTabid($module);
 	global $current_user;
@@ -3637,7 +3636,6 @@ function getListViewSecurityParameter($module)
         	require('user_privileges/user_privileges_'.$current_user->id.'.php');
         	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	}
-
 	if($module == 'Leads')
 	{
 		$sec_query .= " and (vtiger_crmentity.smownerid in($current_user->id) or vtiger_crmentity.smownerid in(select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%') or vtiger_crmentity.smownerid in(select shareduserid from vtiger_tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tabid.") or (";
@@ -3814,7 +3812,8 @@ function getListViewSecurityParameter($module)
 		
 	else
 	{
-		$mobObj = new $module;
+		require_once("modules/$module/$module.php");
+		$modObj = new $module();
 		$sec_query = $modObj->getListViewSecurityParameter($module);
 		
 	}

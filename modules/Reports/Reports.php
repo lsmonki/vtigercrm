@@ -177,7 +177,7 @@ class Reports extends CRMEntity{
 		
 				<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 				<tbody><tr>
-				<td rowspan='2' width='11%'><img src='". vtiger_imageurl('denied.gif', $theme) ."' ></td>
+				<td rowspan='2' width='11%'><img src='themes/$theme/images/denied.gif' ></td>
 				<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>You are not allowed to View this Report </span></td>
 				</tr>
 				<tr>
@@ -187,6 +187,7 @@ class Reports extends CRMEntity{
 				</tbody></table> 
 				</div>";
 				echo "</td></tr></table>";
+				break;
 				
 			}
 		}
@@ -1084,34 +1085,47 @@ function getEscapedColumns($selectedfields)
 		$ssql .= " order by vtiger_selectcolumn.columnindex";
 		$result = $adb->pquery($ssql, array($reportid));
 		$permitted_fields = Array();
-
+	
+		$selected_mod = split(":",$this->secmodule);
+		array_push($selected_mod,$this->primodule);
+		
 		while($columnslistrow = $adb->fetch_array($result))
 		{
 			$fieldname ="";
 			$fieldcolname = $columnslistrow["columnname"];
-			list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
-			require('user_privileges/user_privileges_'.$current_user->id.'.php');
-			list($module,$field) = split("_",$module_field);
-			if(sizeof($permitted_fields) == 0 && $is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
-			{
-				$permitted_fields = $this->getaccesfield($module);	
+
+			$selmod_field_disabled = true;
+			foreach($selected_mod as $smod){
+				if((stripos($fieldcolname,":".$smod."_")>-1) && vtlib_isModuleActive($smod)){
+					$selmod_field_disabled = false;
+					break;
+				}
 			}
-			$querycolumns = $this->getEscapedColumns($selectedfields);
-			$fieldlabel = trim(str_replace($module," ",$module_field));
-			$mod_arr=explode('_',$fieldlabel);
-                        $mod = ($mod_arr[0] == '')?$module:$mod_arr[0];
-			$fieldlabel = trim(str_replace("_"," ",$fieldlabel));
-			//modified code to support i18n issue 
-			$mod_lbl = getTranslatedString($mod,$module); //module
-			$fld_lbl = getTranslatedString($fieldlabel,$module); //fieldlabel
-			$fieldlabel = $mod_lbl." ".$fld_lbl;
-			if(CheckFieldPermission($fieldname,$mod) != 'true')
-			{
-					$shtml .= "<option permission='no' value=\"".$fieldcolname."\" disabled = 'true'>".$fieldlabel."</option>";
-			}
-			else
-			{
-					$shtml .= "<option permission='yes' value=\"".$fieldcolname."\">".$fieldlabel."</option>";
+			if($selmod_field_disabled==false){
+				list($tablename,$colname,$module_field,$fieldname,$single) = split(":",$fieldcolname);
+				require('user_privileges/user_privileges_'.$current_user->id.'.php');
+				list($module,$field) = split("_",$module_field);
+				if(sizeof($permitted_fields) == 0 && $is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
+				{
+					$permitted_fields = $this->getaccesfield($module);	
+				}
+				$querycolumns = $this->getEscapedColumns($selectedfields);
+				$fieldlabel = trim(str_replace($module," ",$module_field));
+				$mod_arr=explode('_',$fieldlabel);
+	                        $mod = ($mod_arr[0] == '')?$module:$mod_arr[0];
+				$fieldlabel = trim(str_replace("_"," ",$fieldlabel));
+				//modified code to support i18n issue 
+				$mod_lbl = getTranslatedString($mod,$module); //module
+				$fld_lbl = getTranslatedString($fieldlabel,$module); //fieldlabel
+				$fieldlabel = $mod_lbl." ".$fld_lbl;
+				if(CheckFieldPermission($fieldname,$mod) != 'true')
+				{
+						$shtml .= "<option permission='no' value=\"".$fieldcolname."\" disabled = 'true'>".$fieldlabel."</option>";
+				}
+				else
+				{
+						$shtml .= "<option permission='yes' value=\"".$fieldcolname."\">".$fieldlabel."</option>";
+				}
 			}
 			//end
 		}
@@ -1437,11 +1451,13 @@ function getReportRelatedModules($module,$focus)
 	global $related_modules;
 	global $mod_strings;
 	$optionhtml = Array();
-	foreach($focus->related_modules[$module] as $rel_modules)
-	{
-		if(isPermitted($rel_modules,'index') == "yes")
+	if(vtlib_isModuleActive($module)){
+		foreach($focus->related_modules[$module] as $rel_modules)
 		{
-			$optionhtml []= $rel_modules;		
+			if(isPermitted($rel_modules,'index') == "yes")
+			{
+				$optionhtml []= $rel_modules;		
+			}
 		}
 	}
 

@@ -28,12 +28,24 @@ $report_group->assign("MOD", $mod_strings);
 $report_group->assign("APP", $app_strings);
 $report_group->assign("IMAGE_PATH",$image_path);
 
-if(isset($_REQUEST["record"]))
+if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 {
 	$reportid = $_REQUEST["record"];
 	$oReport = new Reports($reportid);
 	$list_array = $oReport->getSelctedSortingColumns($reportid);
 
+	$oRep = new Reports();
+	$secondarymodule = '';
+	$secondarymodules =Array();
+	
+	foreach($oRep->related_modules[$oReport->primodule] as $key=>$value){
+		if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= $_REQUEST["secondarymodule_".$value];
+	}
+	$secondarymodule = implode(":",$secondarymodules);
+	
+	if($secondarymodule!='')
+		$oReport->secmodule = $secondarymodule;
+		
 	$BLOCK1 = getPrimaryColumns_GroupingHTML($oReport->primodule,$list_array[0]);
 	$BLOCK1 .= getSecondaryColumns_GroupingHTML($oReport->secmodule,$list_array[0]);
 	$report_group->assign("BLOCK1",$BLOCK1);
@@ -116,51 +128,43 @@ function getPrimaryColumns_GroupingHTML($module,$selected="")
 	 */
 function getSecondaryColumns_GroupingHTML($module,$selected="")
 {
-        global $ogReport;
+	global $ogReport;
 	global $app_list_strings;
-        global $current_language;
-
-        if($module != "")
-        {
-        $secmodule = explode(":",$module);
-        for($i=0;$i < count($secmodule) ;$i++)
-        {
-                $mod_strings = return_module_language($current_language,$secmodule[$i]);
-		foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
-                {
-                        
-			if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
-                        {
-                        	$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
-				foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
+	global $current_language;
+	
+	if($module != "")
+	{
+		$secmodule = explode(":",$module);
+		for($i=0;$i < count($secmodule) ;$i++)
+		{
+			$mod_strings = return_module_language($current_language,$secmodule[$i]);
+			if(vtlib_isModuleActive($secmodule[$i])){
+				foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
 				{
-					if(isset($mod_strings[$fieldlabel]))
-					{
-						if($selected == $field)
+					if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key])) {
+						$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
+						foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
 						{
-							$shtml .= "<option selected value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
-						}else
-						{
-							$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
-						}
-					}else
-					{
-						if($selected == $field)
-						{
-							$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
-						}else
-						{
-							$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+							if(isset($mod_strings[$fieldlabel])) {
+								if($selected == $field) {
+									$shtml .= "<option selected value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+								} else {
+									$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+								}
+							} else {
+								if($selected == $field) {
+									$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
+								} else {
+									$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+								}
+							}
 						}
 					}
-
-
 				}
 			}
-                }
-        }
-        }
-        return $shtml;
+		}
+	}
+	return $shtml;
 }
 
 if($sortorder[0] != "Descending")

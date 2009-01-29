@@ -44,31 +44,27 @@ if($numOfRows > 0)
 
 	$ogReport = new Reports($reportid);
 	$primarymodule = $ogReport->primodule;
-	$secondarymodule = split(":",$ogReport->secmodule);
-	$secmodule_permitted = true;
-	for($i=0;$i<count($secondarymodule);$i++){
-		if(isPermitted($secondarymodule[$i],'index')!= "yes"){
-			$secmodule_permitted = false;
-			break;
+	$restrictedmodules = array();
+	if($ogReport->secmodule!='')
+		$rep_modules = split(":",$ogReport->secmodule);
+	else
+		$rep_modules = array();
+
+	array_push($rep_modules,$primarymodule);
+	$modules_permitted = true;
+	foreach($rep_modules as $mod){
+		if(isPermitted($mod,'index')!= "yes" || vtlib_isModuleActive($mod)==false){
+			$modules_permitted = false;
+			$restrictedmodules[] = $mod;
 		}
 	}
-	$modules_active=true;
-	$params = array($ogReport->primodule);
-	if(!empty($secondarymodule)){
-		$cond = ",".generateQuestionMarks($secondarymodule);
-		array_push($params,$secondarymodule);
-	}
-	$sql = "SELECT name from vtiger_tab WHERE name IN (?".$cond.") AND presence=1";
-	$module_active_query = $adb->pquery($sql,$params);
-	if($adb->num_rows($module_active_query)>0){
-		$modules_active=false;
-	}
-	$oReportRun = new ReportRun($reportid);
-	$filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
-	$sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
-	if(is_array($sshtml))$totalhtml = $oReportRun->GenerateReport("TOTALHTML",$filterlist);
-	if(isPermitted($primarymodule,'index') == "yes" && $secmodule_permitted == true && $modules_active==true)
+	
+	if(isPermitted($primarymodule,'index') == "yes" && $modules_permitted == true)
 	{
+		$oReportRun = new ReportRun($reportid);
+		$filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
+		$sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
+		if(is_array($sshtml))$totalhtml = $oReportRun->GenerateReport("TOTALHTML",$filterlist);
 		$list_report_form = new vtigerCRM_Smarty;
 		$ogReport->getSelectedStandardCriteria($reportid);
 		//commented to omit dashboards for vtiger_reports
@@ -140,7 +136,7 @@ if($numOfRows > 0)
 		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 		<tbody><tr>
 		<td rowspan='2' width='11%'><img src='". vtiger_imageurl('denied.gif', $theme) ."' ></td>
-		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>".$mod_strings['LBL_NO_PERMISSION']." ".$primarymodule." (OR) <br><br> ".$mod_strings['LBL_NOT_ACTIVE']."</span></td>
+		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>".$mod_strings['LBL_NO_ACCESS']." : ".implode(",",$restrictedmodules)." </span></td>
 		</tr>
 		<tr>
 		<td class='small' align='right' nowrap='nowrap'>			   	
