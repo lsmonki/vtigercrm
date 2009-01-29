@@ -76,7 +76,7 @@
 				{if $MODULE eq 'Products'}
 					<input alt="{$APP.LBL_SELECT_LEAD_BUTTON_LABEL}" title="{$APP.LBL_SELECT_LEAD_BUTTON_LABEL}" accessKey="" class="crmbutton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP.Leads}" LANGUAGE=javascript onclick='return window.open("index.php?module=Leads&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}&parenttab={$CATEGORY}","test","width=640,height=602,resizable=0,scrollbars=0");' type="button"  name="button">
 				{elseif $MODULE neq 'Services'}
-					<input title="{$APP.LBL_ADD_NEW} {$APP.Lead}" accessyKey="F" class="crmbutton small edit" onclick="this.form.action.value='EditView';this.form.module.value='Leads'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Lead}"></td>
+					<input title="{$APP.LBL_ADD_NEW} {$APP.Lead}" accessyKey="F" class="crmbutton small create" onclick="this.form.action.value='EditView';this.form.module.value='Leads'" type="submit" name="button" value="{$APP.LBL_ADD_NEW} {$APP.Lead}"></td>
 				{/if}
 			{elseif $header eq 'Accounts'}
 				{if $MODULE eq 'Products'}
