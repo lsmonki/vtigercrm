@@ -1492,6 +1492,10 @@ function installMandatoryModules(){
 	
 // Function to install Vtlib Compliant - Mandatory Modules
 function installOptionalModules(){
+	
+	//Install Field Formulas Module 
+	installVtlibModule('FieldFormulas', 'packages/5.1.0/FieldFormulas.zip');
+	addToSettings();
 }
 
 // Function to install Vtlib Compliant
@@ -1559,6 +1563,13 @@ function populateLinks() {
 	$moduleInstance = Vtiger_Module::getInstance('Accounts');
 	// Detail View Custom link
 	$moduleInstance->addLink('DETAILVIEW', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
+}
+
+/* Add Field Formulas Module */
+//Adding FieldFormulas to Settings
+function addToSettings() {
+	global $adb;
+	$adb->query("insert into vtiger_settings_field(fieldid, blockid, name, iconpath, description, linkto, sequence) values(34, 2, 'Field Formulas', 'modules/FieldFormulas/resources/FieldFormulas.png', 'Add custom equations to custom fields', 'index.php?module=FieldFormulas&action=index&parenttab=Settings', 7)");
 }
 
 //layout editor changes

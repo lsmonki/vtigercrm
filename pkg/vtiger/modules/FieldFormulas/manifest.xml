@@ -1,0 +1,45 @@
+<?xml version='1.0'?>
+<module>
+<exporttime>2009-01-16 16:30:54</exporttime>
+<name>FieldFormulas</name>
+<label>Field Formulas</label>
+<parent></parent>
+<type>extension</type>
+<version>1.0</version>
+<dependencies>
+<vtiger_version>5.1.0</vtiger_version>
+</dependencies>
+<tables>
+<table>
+<name>vtiger_fieldformulas</name>
+<sql><![CDATA[CREATE TABLE `vtiger_fieldformulas` (
+  `expressionid` int(11) NOT NULL default '0',
+  `modulename` varchar(100) default NULL,
+  `expression_engine` text,
+  PRIMARY KEY  (`expressionid`)
+)]]></sql>
+</table>
+</tables>
+<events>
+<event>
+<eventname>vtiger.entity.aftersave</eventname>
+<classname>RecurringInvoiceHandler</classname>
+<filename>modules/SalesOrder/RecurringInvoiceHandler.php</filename>
+</event>
+<event>
+<eventname>vtiger.entity.aftersave</eventname>
+<classname>VTWorkflowEventHandler</classname>
+<filename>modules/com_vtiger_workflow/VTEventHandler.inc</filename>
+</event>
+<event>
+<eventname>vtiger.entity.aftersave</eventname>
+<classname>Attachfile</classname>
+<filename>modules/Documents/AttachFile.php</filename>
+</event>
+<event>
+<eventname>vtiger.entity.beforesave.modifiable</eventname>
+<classname>VTFieldFormulasEventHandler</classname>
+<filename>modules/FieldFormulas/VTFieldFormulasEventHandler.inc</filename>
+</event>
+</events>
+</module>
