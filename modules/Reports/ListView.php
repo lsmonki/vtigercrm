@@ -36,10 +36,6 @@ $image_path=$theme_path."images/";
 // focus_list is the means of passing data to a ListView.
 global $focus_list;
 
-if($current_user->column_fields['is_admin']=='on')
-{
-	$fldr_del = "yes";
-}
 $list_report_form = new vtigerCRM_Smarty;
 $list_report_form->assign("MOD", $mod_strings);
 $list_report_form->assign("APP", $app_strings);
@@ -50,7 +46,6 @@ $list_report_form->assign("CATEGORY",getParentTab());
 $list_report_form->assign("MODULE",$currentModule);
 $list_report_form->assign("NEWRPT_BUTTON",$newrpt_button);
 $list_report_form->assign("NEWRPT_FLDR_BUTTON",$newrpt_fldr_button);
-$list_report_form->assign("FLDR_DELETE",$fldr_del);
 $repObj = new Reports();
 $list_report_form->assign("REPT_FLDR",$repObj->sgetRptFldr('SAVED'));
 $cusFldrDtls = Array();

@@ -36,14 +36,10 @@
 				<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr>
 		<td  id="repposition{$poscount}" width="5%" align="right"><input name="newReportInThisModule" value="{$MOD.LBL_CREATE_REPORT}..." class="crmButton small create" onclick="gcurrepfolderid={$reportfolder.id};fnvshobj(this,'reportLay')" type="button"></td>
 			<td  width="75%" align="right">
-				{if $FLDR_DELETE eq 'yes'}
 					<input type="button" name="Edit" value=" {$MOD.LBL_RENAME_FOLDER} " class="crmbutton small edit" onClick='EditFolder("{$reportfolder.id}","{$reportfolder.fname}","{$reportfolder.fdescription}"),fnvshobj(this,"orgLay");'>&nbsp;
-				{/if}
 			</td>
 			<td align="right">
-				{if $FLDR_DELETE eq 'yes'}
 					<input type="button" name="delete" value=" {$MOD.LBL_DELETE_FOLDER} " class="crmbutton small delete" onClick="DeleteFolder('{$reportfolder.id}');">
-				{/if}
 			</td>
 		</tr>
 		</table>
@@ -54,14 +50,19 @@
 		<table  border="0" cellpadding="3" cellspacing="1" width="100%">
 			<tbody>
 			<tr>
-			<td class="lvtCol" width="5%"><input type="checkbox" name="selectall" onclick='toggleSelect(this.checked,"selected_id{$reportfolder.id}")' value="checkbox" /></td>
+			<td class="lvtCol" width="5%">
+				<input type="checkbox" name="selectall" onclick='toggleSelect(this.checked,"selected_id{$reportfolder.id}")' value="checkbox" />
+			</td>
 			<td class="lvtCol" align="left" width="35%">{$MOD.LBL_REPORT_NAME}</td>
 			<td class="lvtCol" align="left" width="50%">{$MOD.LBL_DESCRIPTION}</td>
 			<td class="lvtCol" width="10%">{$MOD.LBL_TOOLS}</td>
 			</tr>
 			{foreach name=reportdtls item=reportdetails from=$reportfolder.details}
 			<tr class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
-			<td><input name="selected_id{$reportfolder.id}" value="{$reportdetails.reportid}" onclick='toggleSelectAll(this.name,"selectall")' type="checkbox"></td>
+			<td>
+				{if $reportdetails.customizable eq '1' && $reportdetails.editable eq 'true'}
+					<input name="selected_id{$reportfolder.id}" value="{$reportdetails.reportid}" onclick='toggleSelectAll(this.name,"selectall")' type="checkbox"></td>
+				{/if}
 			<td align="left"><a href="index.php?module=Reports&action=SaveAndRun&record={$reportdetails.reportid}&folderid={$reportfolder.id}">{$reportdetails.reportname}</a>
 			{if $reportdetails.sharingtype eq 'Shared'}
 				<img src="{'Meetings.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" border=0 height=12 width=12 /> 
