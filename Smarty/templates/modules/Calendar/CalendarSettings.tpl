@@ -27,7 +27,7 @@
 										<table border="0" cellspacing="0" cellpadding="10" width="100%">
 											<tr>
 												<td width="25%" valign="top">
-													{include file = 'modules/Calender/CalendarCustomFields.tpl'}
+													{include file = 'modules/Calendar/CalendarCustomFields.tpl'}
 												</td>
 												<td></td>
 												<td></td>

@@ -1146,7 +1146,7 @@ $num_grps = $adb->num_rows($grp_result);
 $adb->query("ALTER TABLE vtiger_group2grouprel DROP FOREIGN KEY fk_2_vtiger_group2grouprel");
 $adb->query("ALTER TABLE vtiger_group2grouprel ADD CONSTRAINT fk_2_vtiger_group2grouprel FOREIGN KEY (`groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE ON UPDATE CASCADE");
 
-for($i=$num_grps; $i>=0; $i--) {
+for($i=$num_grps-1; $i>0; $i--) {
 	$oldId = $adb->query_result($grp_result,$i,"groupid");
 	$newId = $inc_num+$oldId;
 	
@@ -1626,6 +1626,9 @@ $faqbasicblock = getBlockId($faqtabid,'LBL_FAQ_INFORMATION');
 
 ExecuteQuery("update vtiger_field set block = $faqbasicblock ,sequence = 7 where fieldname = 'question' and tabid = $faqtabid");
 ExecuteQuery("update vtiger_field set block = $faqbasicblock ,sequence = 8 where fieldname = 'faq_answer' and tabid = $faqtabid");
+
+/* Added support for setting a custom view as default per user basis */
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_user_module_preferences (userid int, tabid int, default_cvid int, primary key(userid, tabid), CONSTRAINT fk_1_vtiger_user_module_preferences FOREIGN KEY (userid) REFERENCES vtiger_users (id) ON DELETE CASCADE ON UPDATE CASCADE, CONSTRAINT fk_2_vtiger_user_module_preferences FOREIGN KEY (tabid) REFERENCES vtiger_tab (tabid) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
