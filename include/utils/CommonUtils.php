@@ -3528,6 +3528,29 @@ function filterInactiveFields($module,$fields){
 	}
 	return $fields;
 }
+
+/**
+ * This function is used to get the blockid of the settings block for a given label.
+ * Takes the input parameter $label - settings label
+ * This returns string type value
+ */
+
+function getSettingsBlockId($label)
+{
+	global $log;
+	$log->debug("Entering getSettingsBlockId(".$label.") method ...");
+	global $adb;
+	$blockid = '';
+	$query = "select blockid from vtiger_settings_blocks where label = ?";
+	$result = $adb->pquery($query, array($label));
+	$noofrows = $adb->num_rows($result);
+	if($noofrows == 1) {
+		$blockid = $adb->query_result($result,0,"blockid");
+	}
+	$log->debug("Exiting getSettingsBlockId method ...");
+	return $blockid;
+}
+
 // vtlib customization: Extended vtiger CRM utlitiy functions
 require_once('include/utils/VtlibUtils.php');
 // END

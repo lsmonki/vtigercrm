@@ -1396,7 +1396,7 @@ function moveSettingsToDatabase($adb){
 	//insert settings blocks
 	$count = count($blocks);
 	for($i=0; $i<$count; $i++){
-		$adb->query("insert into vtiger_settings_blocks values ($i+1, '$blocks[$i]', $i+1)");
+		$adb->query("insert into vtiger_settings_blocks values (".$adb->getUniqueID('vtiger_settings_blocks').", '$blocks[$i]', $i+1)");
 	}
 	
 	$count = count($icons);
@@ -1407,7 +1407,7 @@ function moveSettingsToDatabase($adb){
 			$block++;
 			$seq = 1;
 		}	
-		$adb->query("insert into vtiger_settings_field values ($i+1, $block, '$names[$i]', '$icons[$i]', '$description[$i]', '$links[$i]', $seq)");
+		$adb->query("insert into vtiger_settings_field values (".$adb->getUniqueID('vtiger_settings_field').", $block, '$names[$i]', '$icons[$i]', '$description[$i]', '$links[$i]', $seq)");
 	}
 }
 //move settings page to database starts
@@ -1495,7 +1495,6 @@ function installOptionalModules(){
 	
 	//Install Field Formulas Module 
 	installVtlibModule('FieldFormulas', 'packages/5.1.0/FieldFormulas.zip');
-	addToSettings();
 }
 
 // Function to install Vtlib Compliant
@@ -1524,6 +1523,10 @@ function installVtlibModule($packagename, $packagepath) {
 		$moduleInstance = Vtiger_Module::getInstance($module);
 		if (empty($moduleInstance)) {
 			$log->fatal("$module module installation failed!");
+		} else {   
+			if(file_exists("modules/$packagename/Setup.php")) {
+				require_once("modules/$packagename/Setup.php");
+			}
 		}
 	}	
 }
@@ -1563,13 +1566,6 @@ function populateLinks() {
 	$moduleInstance = Vtiger_Module::getInstance('Accounts');
 	// Detail View Custom link
 	$moduleInstance->addLink('DETAILVIEW', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
-}
-
-/* Add Field Formulas Module */
-//Adding FieldFormulas to Settings
-function addToSettings() {
-	global $adb;
-	$adb->query("insert into vtiger_settings_field(fieldid, blockid, name, iconpath, description, linkto, sequence) values(34, 2, 'Field Formulas', 'modules/FieldFormulas/resources/FieldFormulas.png', 'Add custom equations to custom fields', 'index.php?module=FieldFormulas&action=index&parenttab=Settings', 7)");
 }
 
 //layout editor changes

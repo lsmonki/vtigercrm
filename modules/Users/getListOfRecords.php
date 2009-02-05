@@ -26,10 +26,15 @@ require_once("modules/$sModule/$sModule.php");
 
 $foc_obj = new $sModule();
 
-$fields_array = array($sModule=>$foc_obj->list_link_field);
-$id_array = array($sModule=>$foc_obj->table_index);
-$tables_array = array($sModule=>$foc_obj->table_name);
-//print_r($sModule." - ".)
+$query = $adb->pquery("SELECT tablename,entityidfield, fieldname from vtiger_entityname WHERE modulename = ?",array($sModule));
+$table_name = $adb->query_result($query,0,'tablename');
+$field_name = $adb->query_result($query,0,'fieldname');
+$id_field = $adb->query_result($query,0,'entityidfield');
+$fieldname = split(",",$field_name);
+$fields_array = array($sModule=>$fieldname);
+$id_array = array($sModule=>$id_field);
+$tables_array = array($sModule=>$table_name);
+
 if(isset($_SESSION['listEntyKeymod_'.$iCurRecord]))
 {
 	$split_temp=explode(":",$_SESSION['listEntyKeymod_'.$iCurRecord]);
@@ -95,15 +100,11 @@ if(isset($_SESSION['listEntyKeymod_'.$iCurRecord]))
 		}
 		for($listi=$start;$listi<$end;$listi++)
 		{
+			$field_value = '';
 			$field_query = $adb->pquery("SELECT * from ".$tables_array[$sModule]." WHERE ".$id_array[$sModule]." = ".$ar_allist[$listi],array());
-			$field_value = $adb->query_result($field_query,0,$fields_array[$sModule]);
-			if($sModule == 'Contacts' || $sModule == 'Leads')
-			{
-				if($is_admin == false){
-					$fld_permission = getFieldVisibilityPermission($sModule,$current_user->id,'firstname');
-				}
-				if($fld_permission == 0){
-					$field_value .= " ".$adb->query_result($field_query,0,'firstname');
+			for($index = 0; $index<count($fieldname);$index++){
+				if(getFieldVisibilityPermission($sModule,$current_user->id,$fieldname[$index]) == '0'){
+					$field_value .= " ".$adb->query_result($field_query,0,$fieldname[$index]);
 				}
 			}
 			if(strlen($field_value)>50)

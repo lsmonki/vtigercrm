@@ -2285,7 +2285,7 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 		//insert settings blocks
 		$count = count($blocks);
 		for($i=0; $i<$count; $i++){
-			$adb->query("insert into vtiger_settings_blocks values ($i+1, '$blocks[$i]', $i+1)");
+			$adb->query("insert into vtiger_settings_blocks values (".$adb->getUniqueID('vtiger_settings_blocks').", '$blocks[$i]', $i+1)");
 		}
 
 		$count = count($icons);
@@ -2296,7 +2296,7 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 				$block++;
 				$seq = 1;
 			}	
-			$adb->query("insert into vtiger_settings_field values ($i+1, $block, '$names[$i]', '$icons[$i]', '$description[$i]', '$links[$i]', $seq)");
+			$adb->query("insert into vtiger_settings_field values (".$adb->getUniqueID('vtiger_settings_field').", $block, '$names[$i]', '$icons[$i]', '$description[$i]', '$links[$i]', $seq)");
 		}
 	}
 }

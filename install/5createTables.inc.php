@@ -1206,6 +1206,10 @@ function installVtlibModule($packagename, $packagepath) {
 		$moduleInstance = Vtiger_Module::getInstance($module);
 		if (empty($moduleInstance)) {
 			$log->fatal("$module module installation failed!");
+		} else {   
+			if(file_exists("modules/$packagename/Setup.php")) {
+				require_once("modules/$packagename/Setup.php");
+			}
 		}
 	}	
 }
@@ -1225,7 +1229,6 @@ function installMandatoryModules(){
 function installOptionalModules(){
 	//Install FieldFormulas module
 	installVtlibModule('FieldFormulas', 'packages/5.1.0/FieldFormulas.zip');
-	addToSettings();
 }
 
 function addServiceRelationToExistingModules() {
@@ -1270,12 +1273,6 @@ function setFieldHelpInfo() {
 				'<br>When the same ticket is added to a Service Contract,'. 
 				'based on the Tracking Unit of the Service Contract,'.
 				'Used units is updated whenever a ticket is Closed.');
-}
-
-//Adding FieldFormulas to Settings
-function addToSettings() {
-	global $db;
-	$db->query("insert into vtiger_settings_field(fieldid, blockid, name, iconpath, description, linkto, sequence) values(34, 2, 'Field Formulas', 'modules/FieldFormulas/resources/FieldFormulas.png', 'Add custom equations to custom fields', 'index.php?module=FieldFormulas&action=index&parenttab=Settings', 7)");
 }
 
 ?>
