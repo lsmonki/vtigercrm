@@ -61,7 +61,7 @@
 		}
 		
 		private function get($obj, $field){
-			if(is_array($obj)){
+			if(is_array($yes)){
 				return $obj[$field];
 			}else{
 				$func = "get".ucwords($field);

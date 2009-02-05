@@ -65,7 +65,7 @@
 		public function retrieveTask($taskId){
 			$adb = $this->adb;
 			$result = $adb->pquery("select task from com_vtiger_workflowtasks where task_id=?", array($taskId));
-			$task = html_entity_decode($adb->query_result($result,0,"task"));
+			$task = html_entity_decode($adb->query_result($result,0,"task"), ENT_QUOTES);
 			$this->requireTask(self::taskName($task));
 			return unserialize($task);
 		}

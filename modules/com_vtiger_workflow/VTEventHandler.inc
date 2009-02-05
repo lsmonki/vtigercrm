@@ -17,6 +17,7 @@
 		 */
 		function handleEvent($eventName, $entityData){
 			global $adb;
+			$isNew = $entityData->isNew();
 			$entityCache = new VTEntityCache($adb);
 			$entityData = $entityCache->forId($entityData->getId());
 			$data = $entityData->getData();
@@ -28,7 +29,7 @@
 			foreach($workflows as $workflow){
 				switch($workflow->executionCondition){
 					case VTWorkflowManager::$ON_FIRST_SAVE:{
-						if($entityData->isNew()){
+						if($isNew){
 							$doEvaluate = true;
 						}else{
 							$doEvaluate = false;

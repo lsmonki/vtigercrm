@@ -1,5 +1,5 @@
 <?php
-// $ANTLR 3.1 VTEventConditionParser.g 2008-12-15 15:37:28
+// $ANTLR 3.1 VTEventConditionParser.g 2009-01-23 20:13:11
 
       
 function VTEventConditionParserLexer_DFA9_static(){
@@ -76,19 +76,25 @@ class VTEventConditionParserLexer_DFA9 extends DFA {
 
 class VTEventConditionParserLexer extends AntlrLexer {
     static $INTEGER=8;
-    static $LETTER=9;
-    static $EOF=-1;
-    static $T__13=13;
     static $T__16=16;
-    static $STRING=6;
-    static $SYMBOL=4;
-    static $DIGIT=7;
-    static $T__14=14;
-    static $ELEMENT_ID=11;
-    static $T__15=15;
-    static $WHITESPACE=12;
     static $IN=5;
+    static $T__15=15;
+    static $SYMBOL=4;
+    static $T__14=14;
+    static $LETTER=9;
+    static $T__13=13;
+    static $WHITESPACE=12;
+    static $DIGIT=7;
     static $DOT=10;
+    static $EOF=-1;
+    static $ELEMENT_ID=11;
+    static $STRING=6;
+
+        public function reportError($e) {
+            print_r($e);
+            throw new Exception("The condition you provided is invalid");
+        }
+
 
     // delegates
     // delegators
