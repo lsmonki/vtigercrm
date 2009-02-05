@@ -27,35 +27,44 @@ $smarty->assign("APP",$app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 
-if(isset($_REQUEST['homestuffid']) || $_REQUEST['homestuffid']!="")
+if(!empty($_REQUEST['homestuffid'])){
 	$stuffid = $_REQUEST['homestuffid'];
-if(isset($_REQUEST['blockstufftype']) || $_REQUEST['blockstufftype']!="")
+}
+if(!empty($_REQUEST['blockstufftype'])){
 	$stufftype = $_REQUEST['blockstufftype'];
+}
 
-if($stufftype=='TagCloud')
-{
-	
+if($stufftype=='Tag Cloud'){
 	$freetag = new freetag();
 	$smarty->assign("ALL_TAG",$freetag->get_tag_cloud_html("",$current_user->id));
 	$smarty->display("Home/TagCloud.tpl");
-}
-else
-{	
+}elseif($stufftype == 'Notebook'){
+	$contents = $homeObj->getNoteBookContents($stuffid);
+	$smarty->assign("NOTEBOOK_CONTENTS",$contents);
+	$smarty->assign("NOTEBOOKID", $stuffid);
+	$smarty->display("Home/notebook.tpl");
+}elseif($stufftype == 'URL'){
+	$url = $homeObj->getWidgetURL($stuffid);
+	if(strpos($url, "://") === false){
+		$url = "http://".trim($url);
+	}
+	$smarty->assign("URL",$url);
+	$smarty->assign("WIDGETID", $stuffid);
+	$smarty->display("Home/HomeWidgetURL.tpl");
+}else{
 	$homestuff_values=$homeObj->getHomePageStuff($stuffid,$stufftype);
-	if($stufftype=="DashBoard")
-	{
+	if($stufftype=="DashBoard"){
 		$homeObj->getDashDetails($stuffid,'type');
 		$dashdet=$homeObj->dashdetails;
 	}
 }
-//echo '<pre>';print_r($homestuff_values);echo '</pre>';
-$smarty->assign("DASHDETAILS",$dashdet);
 
+$smarty->assign("DASHDETAILS",$dashdet);
 $smarty->assign("HOME_STUFFTYPE",$stufftype);
 $smarty->assign("HOME_STUFFID",$stuffid);
 $smarty->assign("HOME_STUFF",$homestuff_values);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
-$smarty->display("Home/HomeBlock.tpl");
 
+$smarty->display("Home/HomeBlock.tpl");
 ?>

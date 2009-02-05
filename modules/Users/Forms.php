@@ -85,7 +85,7 @@ $the_emailid = $app_strings['THE_EMAILID'];
 $email_field_is = $app_strings['EMAIL_FILED_IS'].$err_invalid_email_address;
 $other_email_field_is = $app_strings['OTHER_EMAIL_FILED_IS'].$err_invalid_email_address;
 $yahoo_email_field_is = $app_strings['YAHOO_EMAIL_FILED_IS'].$err_invalid_yahoo_email_address;
-$lbl_asterisk_details_not_set = $app_string['LBL_ASTERISK_SET_ERROR'];
+$lbl_asterisk_details_not_set = $app_strings['LBL_ASTERISK_SET_ERROR'];
 
 //check asteriskdetails start
 $checkAsteriskDetails = checkAsteriskDetails();

@@ -2244,3 +2244,37 @@ a.drop_down:Hover{
 .thickborder{
 	border:3px solid #CCCCCC;
 }
+/*classes for home page*/
+.homePageButtons{
+	padding-top: 5px;
+}
+#addWidgetDropDown{
+	position:absolute;
+	display:none;
+	border:1px solid #ddd;
+	left:0px;
+	top:0px;
+	overflow:visible;
+	z-index:5000;
+}
+
+.widgetDropDownList{
+	list-style-type: none; margin-left: 0; padding-left: 0; padding-top: 0; padding-bottom: 0; margin-top:0; margin-bottom:0;margin-right:0;
+}
+
+.twoColumnWidget{
+	padding-left:1px;
+	padding-right:1px;
+}
+
+.scrollLink{
+	padding-top: 10px;
+	padding-bottom: 10px
+}
+
+.topMarginHomepage{
+	margin-left: 10px;
+	margin-top: 10px;
+}
+
+/*home page classes end here*/

@@ -156,14 +156,17 @@ function getMetricList()
 	while($cvrow=$adb->fetch_array($result))
 	{
 		$metricslist = Array();
-
-		$metricslist['id'] = $cvrow['cvid'];
-		$metricslist['name'] = $cvrow['viewname'];
-		$metricslist['module'] = $cvrow['entitytype'];
-		$metricslist['user'] = getUserName($cvrow['userid']);
-		$metricslist['count'] = '';
-		if(isPermitted($cvrow['entitytype'],"index") == "yes")
-			$metriclists[] = $metricslist;
+		
+		if(vtlib_isModuleActive($cvrow['entitytype'])){
+			$metricslist['id'] = $cvrow['cvid'];
+			$metricslist['name'] = $cvrow['viewname'];
+			$metricslist['module'] = $cvrow['entitytype'];
+			$metricslist['user'] = getUserName($cvrow['userid']);
+			$metricslist['count'] = '';
+			if(isPermitted($cvrow['entitytype'],"index") == "yes"){
+				$metriclists[] = $metricslist;
+			}
+		}
 	}
 
 	return $metriclists;

@@ -233,10 +233,8 @@ if (isset($_SESSION["authenticated_user_id"]) && $module == 'Users' && $action =
 
 } 
 
-if($use_current_login)
-{
-
-	//Added to prevent fatal error before starting migration(5.0.4. patch ).
+if($use_current_login){
+	/*&Added to prevent fatal error before starting migration(5.0.4. patch ).
 	//Start
 	$arr=$adb->getColumnNames("vtiger_users");
 	if(!in_array("internal_mailer", $arr))
@@ -244,24 +242,20 @@ if($use_current_login)
 		$adb->pquery("alter table vtiger_users add column internal_mailer int(3) NOT NULL default '1'", array());
 		$adb->pquery("alter table vtiger_users add column tagcloud_view int(1) default 1", array());
 	}
-	//End
+	//End*/
 
 	//getting the internal_mailer flag
-	if(!isset($_SESSION['internal_mailer']))
-	{
+	if(!isset($_SESSION['internal_mailer'])){
 		$qry_res = $adb->pquery("select internal_mailer from vtiger_users where id=?", array($_SESSION["authenticated_user_id"]));
 		$_SESSION['internal_mailer'] = $adb->query_result($qry_res,0,"internal_mailer");
 	}
 	$log->debug("We have an authenticated user id: ".$_SESSION["authenticated_user_id"]);
-}
-else if(isset($action) && isset($module) && $action=="Authenticate" && $module=="Users")
-{
+}else if(isset($action) && isset($module) && $action=="Authenticate" && $module=="Users"){
 	$log->debug("We are authenticating user now");
-}
-else 
-{
-	if($_REQUEST['action'] != 'Logout' && $_REQUEST['action'] != 'Login')
+}else{
+	if($_REQUEST['action'] != 'Logout' && $_REQUEST['action'] != 'Login'){
 		$_SESSION['lastpage'] = $_SERVER['argv'];
+	}
 	$log->debug("The current user does not have a session.  Going to the login page");	
 	$action = "Login";
 	$module = "Users";

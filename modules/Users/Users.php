@@ -51,7 +51,6 @@ class Users {
 	var $error_string;
 	var $is_admin;
 	var $deleted;
-	var $homeorder;
 
 	var $tab_name = Array('vtiger_users','vtiger_attachments','vtiger_user2role','vtiger_asteriskextensions');	
 	var $tab_name_index = Array('vtiger_users'=>'id','vtiger_attachments'=>'attachmentsid','vtiger_user2role'=>'userid','vtiger_asteriskextensions'=>'userid');
@@ -117,8 +116,7 @@ class Users {
 
 	var $object_name = "User";
 	var $user_preferences;
-	var $defhomeview;
-	var $homeorder_array = array('HDB','ALVT','PLVT','QLTQ','CVLVT','HLT','OLV','GRT','OLTSO','ILTI','MNL','OLTPO','LTFAQ');
+	var $homeorder_array = array('HDB','ALVT','PLVT','QLTQ','CVLVT','HLT','OLV','GRT','OLTSO','ILTI','MNL','OLTPO','LTFAQ', 'UA', 'PA');
 
 	var $encodeFields = Array("first_name", "last_name", "description");
 
@@ -1064,42 +1062,31 @@ class Users {
 	}
 
 
-	/** gives the order in which the modules have to be displayed in the home page for the specified user id  
-  	  * @param $id -- user id:: Type integer
-  	  * @returns the customized home page order in $return_array
+	/** 
+	 * gives the order in which the modules have to be displayed in the home page for the specified user id  
+  	 * @param $id -- user id:: Type integer
+  	 * @returns the customized home page order in $return_array
  	 */
-	function getHomeStuffOrder($id)
-	{
+	function getHomeStuffOrder($id){
 		global $adb;
-		$this->homeorder_array = array('ALVT','HDB','PLVT','QLTQ','CVLVT','HLT','GRT','OLTSO','ILTI','MNL','OLTPO','LTFAQ');
+		$this->homeorder_array = array('UA', 'PA', 'ALVT','HDB','PLVT','QLTQ','CVLVT','HLT','GRT','OLTSO','ILTI','MNL','OLTPO','LTFAQ');
 		$return_array = Array();
 		$homeorder=Array();
-		if($id != '')
-		{
+		if($id != ''){
 			$qry=" select distinct(vtiger_homedefault.hometype) from vtiger_homedefault inner join vtiger_homestuff  on vtiger_homestuff.stuffid=vtiger_homedefault.stuffid where vtiger_homestuff.visible=0 and vtiger_homestuff.userid=".$id;
 			$res=$adb->query($qry);
-			for($q=0;$q<$adb->num_rows($res);$q++)
-			{
+			for($q=0;$q<$adb->num_rows($res);$q++){
 				$homeorder[]=$adb->query_result($res,$q,"hometype");
 			}
-			for($i = 0;$i < count($this->homeorder_array);$i++)
-			{
-				if(in_array($this->homeorder_array[$i],$homeorder))
-				{
+			for($i = 0;$i < count($this->homeorder_array);$i++){
+				if(in_array($this->homeorder_array[$i],$homeorder)){
 					$return_array[$this->homeorder_array[$i]] = $this->homeorder_array[$i];
-
-				}else
-				{
+				}else{
 					$return_array[$this->homeorder_array[$i]] = '';	
 				}
-
 			}
-		}
-		else
-		{
-			
-			for($i = 0;$i < count($this->homeorder_array);$i++)
-			{
+		}else{
+			for($i = 0;$i < count($this->homeorder_array);$i++){
 				$return_array[$this->homeorder_array[$i]] = $this->homeorder_array[$i];
 			}
 		}

@@ -7,20 +7,6 @@
  * All Rights Reserved.
  ********************************************************************************/-->*}
 
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="homePageMatrixHdr">
-<tbody>
-<tr>
-	<td>
-		<b>{$APP.LBL_NOTEBOOK}</b>
-	</td>
-</tr>
-<tr>
-	<td>
-		<hr>
-	</td>
-</tr>
-<tr>
-<td id="notebook_contents">{$NOTEBOOK_CONTENTS}</td>
-</tbody>
-</table>
+<iframe id="url_contents_{$WIDGETID}" style="height: 300px; overflow: none;" src="{$URL}" frameborder="0">
+</iframe>
 

@@ -477,6 +477,8 @@ $mod_strings = Array(
 'HDB'=>'Home Page Dashboard',
 'OLTPO'=>'Top Purchase Orders',
 'LTFAQ'=>'My Recent FAQs',
+'UA'=>'Upcoming Activities',
+'PA'=>'Pending Activities',
 
 //Added for 5.0 alpha
 'LBL_GROUP_NAME_ERROR'=>'Group Name already exists!',

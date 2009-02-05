@@ -65,9 +65,6 @@
 		<field name="end_hour" type="C" size="30">
 			<default value="23:00" />
 		</field>	
-		<field name="homeorder" type="C" size="255">
-			<default value="HDB,ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI,MNL,OLTPO,LTFAQ" />
-		</field>
 		<field name="activity_view" type="C" size="200">
 			<default value="Today" />
 		</field>
@@ -79,12 +76,8 @@
 			<notnull />
 			<default value="0" />
 		</field>
-		<field name="defhomeview" type="C" size="100" />
 		<field name="confirm_password" type="C" size="30" />
 
-		<field name="tagcloud_view" type="I" size="1">
-			<default value="1" />
-		</field>
 		<field name="internal_mailer" type="C" size="3">
 			<notnull />
 			<default value="1" />
@@ -6947,6 +6940,8 @@
 			<notnull />
 			<key />
 		</field>
+		<field name="notebookid" type="I" size="19">
+		</field>
 		<field name="contents" type="X">
 		</field>
 		<opt platform="mysql">Type=InnoDB</opt>
@@ -6995,4 +6990,24 @@
 		<data>
 		</data>
 	</table>
+	<!-- home page changes start -->
+	<!-- table name="vtiger_homewidget_url">
+		<field name="widgetid" type="I" size="19">
+			<key />
+		</field>
+		<field name="url" type="C" size="250">
+			<notnull />
+		</field>
+	</table-->
+	<table name="vtiger_home_layout">
+		<field name="userid" type="I" size="19">
+			<key />
+		</field>
+		<field name="layout" type="I" size="19">
+			<notnull />
+			<default value="4" />
+		</field>
+	</table>
+	
+	<!-- home page changes end -->
 </schema>

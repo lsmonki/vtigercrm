@@ -1727,24 +1727,6 @@ function mkdirs($dir, $mode = 0777, $recursive = true)
 	return FALSE;
 }
 
-/**This function returns the module name which has been set as default home view for a given user.
- * Takes no parameter, but uses the user object $current_user.
- */
-function DefHomeView()
-{
-		global $log;
-		$log->debug("Entering DefHomeView() method ...");
-		global $adb;
-		global $current_user;
-		$query="select defhomeview from vtiger_users where id = ?";
-		$result=$adb->pquery($query, array($current_user->id));
-		$defaultview=$adb->query_result($result,0,'defhomeview');
-		$log->debug("Exiting DefHomeView method ...");
-		return $defaultview;
-
-}
-
-
 /**
  * This function is used to set the Object values from the REQUEST values.
  * @param  object reference $focus - reference of the object
@@ -3054,27 +3036,23 @@ function getCvIdOfAll($module)
  ** Added to provide User based Tagcloud
  **/
 
-function getTagCloudView($id="")
-{
+function getTagCloudView($id=""){
 	global $log;
 	global $adb;
 	$log->debug("Entering in function getTagCloudView($id)");
-	if($id == '')
-	{
+	if($id == ''){
 		$tag_cloud_status =1;
-	}else
-	{
-		$query = "select tagcloud_view from vtiger_users where id=?";
-		$tag_cloud_status = $adb->query_result($adb->pquery($query, array($id)),0,'tagcloud_view');
-
+	}else{
+		$query = "select visible from vtiger_homestuff where userid=? and stufftype='Tag Cloud'";
+		$tag_cloud_status = $adb->query_result($adb->pquery($query, array($id)),0,'visible');
 	}
 
-	if($tag_cloud_status == 0)
-		$tag_cloud_view='false';
-	else
+	if($tag_cloud_status == 0){
 		$tag_cloud_view='true';
-
-
+	}else{
+		$tag_cloud_view='false';
+	}
+	
 	$log->debug("Exiting from function getTagCloudView($id)");
 	return $tag_cloud_view;
 }
@@ -3090,20 +3068,17 @@ function SaveTagCloudView($id="")
 	$log->debug("Entering in function SaveTagCloudView($id)");
 	$tag_cloud_status=$_REQUEST['tagcloudview'];
 
-	if($tag_cloud_status == "false")
-	$tag_cloud_view = 0;
-	else
-	$tag_cloud_view = 1;
+	if($tag_cloud_status == "true"){
+		$tag_cloud_view = 0;
+	}else{
+		$tag_cloud_view = 1;
+	}
 
-	if($id == '')
-	{
+	if($id == ''){
 		$tag_cloud_view =1;
-	}else
-	{
-
-		$query = "update vtiger_users set tagcloud_view = ? where id=?";
+	}else{
+		$query = "update vtiger_homestuff set visible = ? where userid=? and stufftitle='Tag Cloud'";
 		$adb->pquery($query, array($tag_cloud_view,$id));
-
 	}
 
 	$log->debug("Exiting from function SaveTagCloudView($id)");

@@ -1,20 +1,22 @@
 /*********************************************************************************
-  ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-   * ("License"); You may not use this file except in compliance with the License
-   * The Original Code is:  vtiger CRM Open Source
-   * The Initial Developer of the Original Code is vtiger.
-   * Portions created by vtiger are Copyright (C) vtiger.
-   * All Rights Reserved.
+ ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+  * ("License"); You may not use this file except in compliance with the License
+  * The Original Code is:  vtiger CRM Open Source
+  * The Initial Developer of the Original Code is vtiger.
+  * Portions created by vtiger are Copyright (C) vtiger.
+  * All Rights Reserved.
   *
- ********************************************************************************/
+********************************************************************************/
 
-function chooseType(typeName)
-{
+/**
+ * this function is used to show hide the columns in the add widget div based on the option selected
+ * @param string typeName - the selected option
+ */
+function chooseType(typeName){
 	$('vtbusy_info').style.display="inline";
 	$('stufftype_id').value=typeName;
 	$('divHeader').innerHTML="<b>Add</b>"+" "+"<b>"+typeName+"</b>";
-	if(typeName=='Module')
-	{
+	if(typeName=='Module'){
 		$('moduleNameRow').style.display="block";
 		$('moduleFilterRow').style.display="block";
 		$('modulePrimeRow').style.display="block";
@@ -23,9 +25,8 @@ function chooseType(typeName)
 		$('dashNameRow').style.display="none";
 		$('dashTypeRow').style.display="none";
 		$('StuffTitleId').style.display="block";
-	}
-	else if(typeName=='DashBoard')
-	{
+		$('homeURLField').style.display = "none";
+	}else if(typeName=='DashBoard'){
 		$('moduleNameRow').style.display="none";
 		$('moduleFilterRow').style.display="none";
 		$('modulePrimeRow').style.display="none";
@@ -34,25 +35,22 @@ function chooseType(typeName)
 		$('dashNameRow').style.display="block";
 		$('dashTypeRow').style.display="block";
 		$('StuffTitleId').style.display="block";
-
+		$('homeURLField').style.display = "none";
 		new Ajax.Request(
-       			'index.php',
-	               	{queue: {position: 'end', scope: 'command'},
-               		method: 'post',
-	                postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&dash=dashboard',
-			onComplete: function(response) 
-			{
-                       		var responseVal=response.responseText;
+			'index.php',
+			{queue: {position: 'end', scope: 'command'},
+				method: 'post',
+				postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&dash=dashboard',
+				onComplete: function(response){
+					var responseVal=response.responseText;
 					$('selDashName').innerHTML=response.responseText;
-					positionDivToCenter('PopupLay');
-					show('PopupLay');
+					show('addWidgetsDiv');
+					placeAtCenter($('addWidgetsDiv'));
 					$('vtbusy_info').style.display="none";
-                        }
-                       }
-         	);
-	}
-	else if(typeName=='RSS')
-	{
+				}
+			}
+		);
+	}else if(typeName=='RSS'){
 		$('moduleNameRow').style.display="none";
 		$('moduleFilterRow').style.display="none";
 		$('modulePrimeRow').style.display="none";
@@ -62,9 +60,8 @@ function chooseType(typeName)
 		$('dashTypeRow').style.display="none";
 		$('StuffTitleId').style.display="block";
 		$('vtbusy_info').style.display="none";
-	}
-	else if(typeName=='Default')
-	{
+		$('homeURLField').style.display = "none";
+	}else if(typeName=='Default'){
 		$('moduleNameRow').style.display="none";
 		$('moduleFilterRow').style.display="none";
 		$('modulePrimeRow').style.display="none";
@@ -73,145 +70,181 @@ function chooseType(typeName)
 		$('dashNameRow').style.display="none";
 		$('dashTypeRow').style.display="none";
 		$('StuffTitleId').style.display="none";
+		$('url_id').style.display = "none";
+	}else if(typeName == 'Notebook'){
+		$('moduleNameRow').style.display="none";
+		$('moduleFilterRow').style.display="none";
+		$('modulePrimeRow').style.display="none";
+		$('showrow').style.display="none";
+		$('rssRow').style.display="none";
+		$('dashNameRow').style.display="none";
+		$('dashTypeRow').style.display="none";
+		$('StuffTitleId').style.display="block";
+		$('vtbusy_info').style.display="none";
+		$('homeURLField').style.display = "none";
+	}else if(typeName == 'URL'){
+		$('moduleNameRow').style.display="none";
+		$('moduleFilterRow').style.display="none";
+		$('modulePrimeRow').style.display="none";
+		$('showrow').style.display="none";
+		$('rssRow').style.display="none";
+		$('dashNameRow').style.display="none";
+		$('dashTypeRow').style.display="none";
+		$('StuffTitleId').style.display="block";
+		$('vtbusy_info').style.display="none";
+		$('homeURLField').style.display = "block";
 	}
 }
-function setFilter(modName)
-{
+
+/**
+ * this function is used to set the filter list when the module name is changed
+ * @param string modName - the modula name for which you want the filter list
+ */
+function setFilter(modName){
 	var modval=modName.value;
 	document.getElementById('savebtn').disabled = true;
-	if(modval!="")
-	{
+	if(modval!=""){
 		new Ajax.Request(
        		'index.php',
-               	{queue: {position: 'end', scope: 'command'},
-               		method: 'post',
-                        postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&modname='+modval,
-			onComplete: function(response) 
-			{
-                       		var responseVal=response.responseText;
-				$('selModFilter_id').innerHTML=response.responseText;
-				setPrimaryFld(document.getElementById('selFilterid'));
+			{queue: {position: 'end', scope: 'command'},
+				method: 'post',
+				postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&modname='+modval,
+				onComplete: function(response){
+					var responseVal=response.responseText;
+					$('selModFilter_id').innerHTML=response.responseText;
+					setPrimaryFld(document.getElementById('selFilterid'));
+					show('addWidgetsDiv');
+					placeAtCenter($('addWidgetsDiv'));
+				}
 			}
-                       }
-            	);
-	}	
+		);
+	}
 }
-function setPrimaryFld(Primeval)
-{
+
+/**
+ * this function is used to set the field list when the module name is changed
+ * @param string modName - the modula name for which you want the field list
+ */
+function setPrimaryFld(Primeval){
 	primecvid=Primeval.value;
 	var fldmodule = $('selmodule_id').options[$('selmodule_id').selectedIndex].value;
 	new Ajax.Request(
-        		'index.php',
-                	{queue: {position: 'end', scope: 'command'},
-                		method: 'post',
-	                        postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&primecvid='+primecvid+'&fieldmodname='+fldmodule,
-				onComplete: function(response) 
-				{
-                        		var responseVal=response.responseText;
-					$('selModPrime_id').innerHTML=response.responseText;
-					$('selPrimeFldid').selectedIndex = 0;
-					positionDivToCenter('PopupLay');
-					show('PopupLay');
-					$('vtbusy_info').style.display="none";
-					document.getElementById('savebtn').disabled = false;
-	                        }
-                        }
-               		);
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+		method: 'post',
+		postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&primecvid='+primecvid+'&fieldmodname='+fldmodule,
+		onComplete: function(response){
+			var responseVal=response.responseText;
+			$('selModPrime_id').innerHTML=response.responseText;
+			$('selPrimeFldid').selectedIndex = 0;
+			$('vtbusy_info').style.display="none";
+			document.getElementById('savebtn').disabled = false;
+		}
+	}
+	);
 }
 
-function showEditrow(sid,stype)
-{
-		$('editRowmodrss_'+sid).className="show_tab";
+/**
+ * this function displays the div for selecting the number of rows in a widget
+ * @param string sid - the id of the widget for which the div is being displayed
+ */
+function showEditrow(sid){
+	$('editRowmodrss_'+sid).className="show_tab";
 }
-function cancelEntries(editRow)
-{
+
+/**
+ * this function is used to hide the div for selecting the number of rows in a widget
+ * @param string editRow - the id of the div
+ */
+function cancelEntries(editRow){
 	$(editRow).className="hide_tab";
 }
-/*function cancelEditDash(editdash,editdash1)
-{
-	$(editdash).className = 'hide_tab';
-	$(editdash1).className = 'hide_tab';
-}*/
-function saveEntries(selMaxName)
-{
+
+/**
+ * this function is used to save the maximum entries that a widget can display
+ * @param string selMaxName - the widget name
+ */
+function saveEntries(selMaxName){
 	sidarr=selMaxName.split("_");
 	sid=sidarr[1];
 	$('refresh_'+sid).innerHTML=$('vtbusy_homeinfo').innerHTML;
 	cancelEntries('editRowmodrss_'+sid)
 	showmax=$(selMaxName).value;
 	new Ajax.Request(
-        	'index.php',
-               	{queue: {position: 'end', scope: 'command'},
-               		method: 'post',
-	                       postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&showmaxval='+showmax+'&sid='+sid,
-			onComplete: function(response) 
-			{
-                       		var responseVal=response.responseText;
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&showmaxval='+showmax+'&sid='+sid,
+			onComplete: function(response){
+				var responseVal=response.responseText;
 				eval(response.responseText);
 				$('refresh_'+sid).innerHTML='';
-	                }
-                       }
-         	);
+			}
+		}
+	);
 }
-function saveEditDash(dashRowId)
-{
+
+/**
+ * this function is used to save the dashboard values
+ */
+function saveEditDash(dashRowId){
 	$('refresh_'+dashRowId).innerHTML=$('vtbusy_homeinfo').innerHTML;
 	cancelEntries('editRowmodrss_'+dashRowId);
 	var dashVal='';
 	var iter=0;
-	for(iter=0;iter<3;iter++)
-	{
+	for(iter=0;iter<3;iter++){
 		if($('dashradio_'+[iter]).checked)
 			dashVal=$('dashradio_'+[iter]).value;
 	}
 	did=dashRowId;
 	new Ajax.Request(
-        	'index.php',
-               	{queue: {position: 'end', scope: 'command'},
-               		method: 'post',
-	                       postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&dashVal='+dashVal+'&did='+did,
-			onComplete: function(response) 
-			{
-                       		var responseVal=response.responseText;
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&dashVal='+dashVal+'&did='+did,
+			onComplete: function(response){
+				var responseVal=response.responseText;
 				eval(response.responseText);
 				$('refresh_'+did).innerHTML='';
-	                }
-                       }
-         	);
+			}
+		}
+	);
 }
-function DelStuff(sid)
-{
-	if(confirm("Are you sure you want to delete?"))
-	{
+
+/**
+ * this function is used to delete widgets form the home page
+ * @param string sid - the stuffid of the widget
+ */
+function DelStuff(sid){
+	if(confirm("Are you sure you want to delete?")){
 		new Ajax.Request(
-        	'index.php',
-               	{queue: {position: 'end', scope: 'command'},
-               		method: 'post',
-	                       postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&homestuffid='+sid,
-			onComplete: function(response) 
-			{
-				var responseVal=response.responseText;
-				if(response.responseText.indexOf('SUCCESS') > -1)
-				{
-					var delchild = $('stuff_'+sid);
-					odeletedChild = $('MainMatrix').removeChild(delchild);
-					$('seqSettings').innerHTML= '<table cellpadding="10" cellspacing="0" border="0" width="100%" class="vtResultPop small"><tr><td align="center">Stuff deleted sucessfully.</td></tr></table>';
-					LocateObj($('seqSettings'))
-					Effect.Appear('seqSettings');
-					setTimeout(hideSeqSettings,3000);
-				}else
-				{
-					alert("Error while deleting.Please try again.")
+			'index.php',
+			{queue: {position: 'end', scope: 'command'},
+				method: 'post',
+				postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&homestuffid='+sid,
+				onComplete: function(response){
+					var responseVal=response.responseText;
+					if(response.responseText.indexOf('SUCCESS') > -1){
+						var delchild = $('stuff_'+sid);
+						odeletedChild = $('MainMatrix').removeChild(delchild);
+						$('seqSettings').innerHTML= '<table cellpadding="10" cellspacing="0" border="0" width="100%" class="vtResultPop small"><tr><td align="center">Widget deleted sucessfully.</td></tr></table>';
+						$('seqSettings').style.display = 'block';
+						$('seqSettings').style.display = 'none';
+						placeAtCenter($('seqSettings'));
+						Effect.Appear('seqSettings');
+						setTimeout(hideSeqSettings,3000);
+					}else{
+						alert("Error while deleting.Please try again.")
+					}
 				}
-	                }
-                       }
-         	);
+			}
+		);
 	}
 }
 
 /**
  * this function loads the newly added div to the home page
- * @param integer stuffid - the id of the newly created div
+ * @param string stuffid - the id of the newly created div
  * @param string stufftype - the stuff type for the new div (for e.g. rss)
  */
 function loadAddedDiv(stuffid,stufftype){
@@ -225,7 +258,7 @@ function loadAddedDiv(stuffid,stufftype){
 				var responseVal=response.responseText;
 				$('MainMatrix').style.display= 'none';
 				$('MainMatrix').innerHTML = response.responseText + $('MainMatrix').innerHTML;
-				positionDivInAccord('stuff_'+gstuffId,'');
+				positionDivInAccord('stuff_'+gstuffId,'','');
 				initHomePage();
 				loadStuff(stuffid,stufftype);
 				$('MainMatrix').style.display='block';
@@ -234,295 +267,427 @@ function loadAddedDiv(stuffid,stufftype){
 	);
 }
 
-/*
-function loadMainDiv()
-{
-	var stuffarray=new Array();
-	new Ajax.Request(
-        	   'index.php',
-		   {queue: {position: 'end', scope: 'command'},
-                    method: 'post',
-		    postBody:'module=Home&action=HomeAjax&file=MainHomeBlock',
-		    onComplete: function(response) 
-		    {
-			$('MainMatrix').innerHTML=response.responseText;
-			stuffarray=getElementsById(document,"SCRIPT","loadstuffscript");
-			for(var m=0;m<stuffarray.length;m++)
-			{
-				eval(stuffarray[m].innerHTML);
-			}
-
-			
-		    }
-                   }
-               	);
-}
-*/
-function loadStuff(stuffid,stufftype)
-{
+/**
+ * this function is used to reload a widgets' content based on its id and type
+ * @param string stuffid - the widget id
+ * @param string stufftype - the type of the widget
+ */
+function loadStuff(stuffid,stufftype){
 	$('refresh_'+stuffid).innerHTML=$('vtbusy_homeinfo').innerHTML;
 	new Ajax.Request(
-        	   'index.php',
-		   {queue: {position: 'end', scope: 'command'},
-                    method: 'post',
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
 		    postBody:'module=Home&action=HomeAjax&file=HomeBlock&homestuffid='+stuffid+'&blockstufftype='+stufftype,
-		    onComplete: function(response) 
-		    {
-			var responseVal=response.responseText;
-			$('stuffcont_'+stuffid).innerHTML=response.responseText;
-			if(stufftype=="Module")
-				$('a_'+stuffid).href = "index.php?module="+$('more_'+stuffid).value+"&action=ListView&viewname="+$('cvid_'+stuffid).value;	
-			if(stufftype=="Default" && typeof($('a_'+stuffid)) != 'undefined')
-			{
-				if($('more_'+stuffid).value != '')
-				{
-					$('a_'+stuffid).style.display = 'block';
-					$('a_'+stuffid).href = "index.php?module="+$('more_'+stuffid).value+"&action=index";
+		    onComplete: function(response){
+				var responseVal=response.responseText;
+				$('stuffcont_'+stuffid).innerHTML=response.responseText;
+				if(stufftype=="Module"){
+					$('a_'+stuffid).href = "index.php?module="+$('more_'+stuffid).value+"&action=ListView&viewname="+$('cvid_'+stuffid).value;
+				}	
+				if(stufftype=="Default" && typeof($('a_'+stuffid)) != 'undefined'){
+					if($('more_'+stuffid).value != ''){
+						$('a_'+stuffid).style.display = 'block';
+						$('a_'+stuffid).href = "index.php?module="+$('more_'+stuffid).value+"&action=index";
+					}else{
+						$('a_'+stuffid).style.display = 'none';
+					}	
 				}
-				else
-					$('a_'+stuffid).style.display = 'none';
-			}
-			if(stufftype=="RSS")
-				$('a_'+stuffid).href = $('more_'+stuffid).value;
-			if(stufftype=="DashBoard")
-				$('a_'+stuffid).href = "index.php?module=Dashboard&action=index&type="+$('more_'+stuffid).value;	
-			$('refresh_'+stuffid).innerHTML='';	
+				if(stufftype=="RSS"){
+					$('a_'+stuffid).href = $('more_'+stuffid).value;
+				}
+				if(stufftype=="DashBoard"){
+					$('a_'+stuffid).href = "index.php?module=Dashboard&action=index&type="+$('more_'+stuffid).value;
+				}	
+				$('refresh_'+stuffid).innerHTML='';	
 		    }
-                   }
-               	);
+		}
+	);
 }
-function frmValidate()
-	{
-		if(trim($('stufftitle_id').value)=="")
-		{
-			alert("Please enter Window Title");
-			$('stufftitle_id').focus();
+
+/**
+ * this function validates the form for creating a new widget
+ */
+function frmValidate(){
+	if(trim($('stufftitle_id').value)==""){
+		alert("Please enter Window Title");
+		$('stufftitle_id').focus();
+		return false;
+	}
+	if($('stufftype_id').value=="RSS"){			
+		if($('txtRss_id').value==""){
+			alert("Please enter RSS URL");
+			$('txtRss_id').focus();
 			return false;
 		}
-		if($('stufftype_id').value=="RSS")
-		{
-				
-			if($('txtRss_id').value=="")
-			{
-				alert("Please enter RSS URL");
-				$('txtRss_id').focus();
-				return false;
+	}
+	if($('stufftype_id').value=="URL"){			
+		if($('url_id').value==""){
+			alert("Please enter URL");
+			$('url_id').focus();
+			return false;
+		}
+	}
+	if($('stufftype_id').value=="Module"){
+		var selLen;
+		var fieldval=new Array();
+		var cnt=0;
+		selVal=document.Homestuff.PrimeFld;
+		for(k=0;k<selVal.options.length;k++){
+			if(selVal.options[k].selected){
+				fieldval[cnt]=selVal.options[k].value;
+				cnt= cnt+1;
 			}
 		}
-		if($('stufftype_id').value=="Module")
-		{
-			var selLen;
-			var fieldval=new Array();
-			var cnt=0;
-			selVal=document.Homestuff.PrimeFld;
-			for(k=0;k<selVal.options.length;k++)
-			{
-				if(selVal.options[k].selected)
-				{
-					fieldval[cnt]=selVal.options[k].value;
-					cnt= cnt+1;
-				}
-			}
-			if(cnt>2)
-			{
-				alert("Please select only two fields");
-				selVal.focus();
-				return false;
-			}
-			else
-			{
-				document.Homestuff.fldname.value=fieldval;
-			}
+		if(cnt>2){
+			alert("Please select only two fields");
+			selVal.focus();
+			return false;
+		}else{
+			document.Homestuff.fldname.value=fieldval;
 		}
-		var stufftype=$('stufftype_id').value;
-		var stufftitle=$('stufftitle_id').value;
-		$('stufftitle_id').value = '';
-		var selFiltername='';
-		var fldname='';
-		var selmodule='';
-		var maxentries='';
-		var txtRss='';
-		var seldashbd='';
-		var seldashtype='';
-		var seldeftype='';
-		if(stufftype=="Module")
-		{
-			selFiltername =document.Homestuff.selFiltername[document.Homestuff.selFiltername.selectedIndex].value;
-			fldname = fieldval;
-			selmodule =$('selmodule_id').value;
-			maxentries =$('maxentryid').value;
-		}
-		else if(stufftype=="RSS")
-		{
-			txtRss=$('txtRss_id').value;
-			maxentries =$('maxentryid').value;
-		}
-		else if(stufftype=="DashBoard")
-		{
-			seldashbd=$('seldashbd_id').value;
-			seldashtype=$('seldashtype_id').value;
-		}
-		else if(stufftype=="Default")
-			seldeftype=document.Homestuff.seldeftype[document.Homestuff.seldeftype.selectedIndex].value;
-		var url="stufftype="+stufftype+"&stufftitle="+stufftitle+"&selmodule="+selmodule+"&maxentries="+maxentries+"&selFiltername="+selFiltername+"&fldname="+encodeURIComponent(fldname)+"&txtRss="+txtRss+"&seldashbd="+seldashbd+"&seldashtype="+seldashtype+"&seldeftype="+seldeftype;
-		var stuffarr=new Array();
-		$('vtbusy_info').style.display="inline";	
-		new Ajax.Request(
-	           'index.php',
-		   {queue: {position: 'end', scope: 'command'},
-            		method: 'post',
+	}
+	var stufftype=$('stufftype_id').value;
+	var stufftitle=$('stufftitle_id').value;
+	$('stufftitle_id').value = '';
+	var selFiltername='';
+	var fldname='';
+	var selmodule='';
+	var maxentries='';
+	var txtRss='';
+	var seldashbd='';
+	var seldashtype='';
+	var seldeftype='';
+	var txtURL = '';
+
+	if(stufftype=="Module"){
+		selFiltername =document.Homestuff.selFiltername[document.Homestuff.selFiltername.selectedIndex].value;
+		fldname = fieldval;
+		selmodule =$('selmodule_id').value;
+		maxentries =$('maxentryid').value;
+	}else if(stufftype=="RSS"){
+		txtRss=$('txtRss_id').value;
+		maxentries =$('maxentryid').value;
+	}else if(stufftype=="URL"){
+		txtURL=$('url_id').value;
+	}else if(stufftype=="DashBoard"){
+		seldashbd=$('seldashbd_id').value;
+		seldashtype=$('seldashtype_id').value;
+	}else if(stufftype=="Default"){
+		seldeftype=document.Homestuff.seldeftype[document.Homestuff.seldeftype.selectedIndex].value;
+	}
+
+	var url="stufftype="+stufftype+"&stufftitle="+stufftitle+"&selmodule="+selmodule+"&maxentries="+maxentries+"&selFiltername="+selFiltername+"&fldname="+encodeURIComponent(fldname)+"&txtRss="+txtRss+"&seldashbd="+seldashbd+"&seldashtype="+seldashtype+"&seldeftype="+seldeftype+'&txtURL='+txtURL;
+	var stuffarr=new Array();
+	$('vtbusy_info').style.display="inline";	
+
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
 			postBody:'module=Home&action=HomeAjax&file=Homestuff&'+url,
-		        onComplete: function(response) 
-	        	{
-                 		var responseVal=response.responseText;
-				if(!response.responseText)
-				{
+			onComplete: function(response){
+				var responseVal=response.responseText;
+				if(!response.responseText){
 					alert("Unable to add homestuff! Please try again");
 					$('vtbusy_info').style.display="none";
 					$('stufftitle_id').value='';
 					$('txtRss_id').value='';
 					return false;
-				}
-				else
-				{
-					hide('PopupLay');
+				}else{
+					hide('addWidgetsDiv');
 					$('vtbusy_info').style.display="none";
 					$('stufftitle_id').value='';
 					$('txtRss_id').value='';
 					eval(response.responseText);
 				}
-		        }
-        	    }
-        	);
-}
-/*function showHideDiv(getSid,getStype)
-{
-	if(getStype=="Module" || getStype=="RSS")
-		$('editRow_'+getSid).className="hide_tab";
-	$('maincont_row_'+getSid).className=($('maincont_row_'+getSid).className=='show_tab')?"hide_tab":"show_tab";	
-	$('stuff_'+getSid).style.height= ($('stuff_'+getSid).style.height!=$('headerrow_'+getSid).style.height)?$('headerrow_'+getSid).style.height:"280px";	
-}*/
-function HideDefault(sid,stype)
-{
-		new Ajax.Request(
-	           'index.php',
-		   {queue: {position: 'end', scope: 'command'},
-            		method: 'post',
-			postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&stuffid='+sid+"&act=hide",
-		        onComplete: function(response) 
-	        	{
-				var responseVal=response.responseText;
-				if(response.responseText.indexOf('SUCCESS') > -1)
-				{
-					var delchild = $('stuff_'+sid);
-					odeletedChild = $('MainMatrix').removeChild(delchild);
-					$('seqSettings').innerHTML= '<table cellpadding="10" cellspacing="0" border="0" width="100%" class="vtResultPop small"><tr><td align="center">Stuff hidden.You can restore it from your preferences.</td></tr></table>';
-					LocateObj($('seqSettings'))
-					Effect.Appear('seqSettings');
-					setTimeout(hideSeqSettings,3000);
-				}else
-				{
-					alert("Error while hiding.Please try again.");
-				}
-		        }
-        	    }
-        	);
-}
-
-function fnRemoveWindow(){
-	var tagName = document.getElementById('addEventDropDown').style.display= 'none';
-}
-
-function fnShowWindow(){
-		var tagName = document.getElementById('addEventDropDown').style.display= 'block';
-}
-function positionDivToCenter(targetDiv)
-{
-	//Gets the browser's viewport dimension
-	getViewPortDimension();
-	//Gets the Target DIV's width & height in pixels using parseInt function
-	divWidth =(parseInt(document.getElementById(targetDiv).style.width))/2;
-	//divHeight=(parseInt(document.getElementById(targetDiv).style.height))/2;
-	//calculate horizontal and vertical locations relative to Viewport's dimensions
-	mx = parseInt(XX/2)-parseInt(divWidth);
-	//my = parseInt(YY/2)-parseInt(divHeight);
-	//Prepare the DIV and show in the center of the screen.
-	document.getElementById(targetDiv).style.left=mx+"px";
-	document.getElementById(targetDiv).style.top="150px";
-}
-
-function getViewPortDimension()
-{
-if(!document.all)
-	{
-  	XX = self.innerWidth;
-	YY = self.innerHeight;
-	}
-	else if(document.all)
-	{
-	XX = document.documentElement.clientWidth;
-	YY = document.documentElement.clientHeight;
-  
-	}
-}
-function positionDivInAccord(targetDiv,stufftitle)
-{
-	mainX = parseInt(document.getElementById("MainMatrix").style.width);
-	if(stufftitle != "Home Page Dashboard")
-		dx = mainX * 31 / 100;
-	else
-		dx = mainX * 64 / 100;
-	document.getElementById(targetDiv).style.width=dx + "%";
-}
-function hideSeqSettings()
-{
-	Effect.Fade('seqSettings');
-}
-function getElementsById(placeslides, tagName, id) {
-       var allElements = getElementsByTagName(placeslides,tagName);
-       var elemColl = new Array();
-       for (var i = 0; i< allElements.length; i++) {
-               if (allElements[i].id == id)  {
-                       elemColl[elemColl.length] = allElements[i];
-               }
-       }
-       return elemColl;
-} 
-function getElementsByTagName(ele, tagName) 
-{
-       var tagEles = [];
-       var childNodes = ele.childNodes;
-       for (var k=0;k<childNodes.length;k++) 
-	{
-               var childNode = childNodes[k];
-               if (childNode.nodeName == tagName) 
-	       {
-                       tagEles.push(childNode);
-               }
-               		temp = getElementsByTagName(childNode, tagName);
-       		        for (var g=0;g<temp.length;g++) {
-                       var ele = temp[g];
-                       tagEles.push(ele);
-               }
-       }
-       	return tagEles;
-} 
-
-function fetch_homeDB(stuffid,stufftype)
-{
-	$('refresh_'+stuffid).innerHTML=$('vtbusy_homeinfo').innerHTML;
-	new Ajax.Request(
-	'index.php',
-	{queue: {position: 'end', scope: 'command'},
-	method: 'post',
-	postBody: 'module=Dashboard&action=DashboardAjax&file=HomepageDB',
-	onComplete: function(response)
-	{
-	$('stuffcont_'+stuffid).style.display = 'none';
-	$('stuffcont_'+stuffid).innerHTML=response.responseText;
-	$('refresh_'+stuffid).innerHTML='';
-	Effect.Appear('stuffcont_'+stuffid);
-	}
-	}
+			}
+		}
 	);
 }
+
+/**
+ * this function is used to hide the default widgets
+ * @param string sid - the id of the widget
+ */
+function HideDefault(sid){
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&stuffid='+sid+"&act=hide",
+	        onComplete: function(response){
+				var responseVal=response.responseText;
+				if(response.responseText.indexOf('SUCCESS') > -1){
+					var delchild = $('stuff_'+sid);
+					odeletedChild = $('MainMatrix').removeChild(delchild);
+					$('seqSettings').innerHTML= '<table cellpadding="10" cellspacing="0" border="0" width="100%" class="vtResultPop small"><tr><td align="center">Widget hidden.You can restore it from your preferences.</td></tr></table>';
+					$('seqSettings').style.display = 'block';
+					$('seqSettings').style.display = 'none';
+					placeAtCenter($('seqSettings'));
+					Effect.Appear('seqSettings');
+					setTimeout(hideSeqSettings,3000);
+				}else{
+					alert("Error while hiding. Please try again.");
+				}
+	        }
+		}
+	);
+}
+
+
+/**
+ * this function removes the widget dropdown window
+ */
+function fnRemoveWindow(){
+	var tagName = document.getElementById('addWidgetDropDown').style.display= 'none';
+}
+
+/**
+ * this function displays the widget dropdown window
+ */
+function fnShowWindow(){
+	var tagName = document.getElementById('addWidgetDropDown').style.display= 'block';
+}
+
+/**
+ * this function is used to postion the widgets on home on page resize
+ * @param string targetDiv - the id of the target widget
+ * @param string stufftitle - the title of the target widget
+ * @param string stufftype - the type of the target widget
+ */
+function positionDivInAccord(targetDiv,stufftitle,stufftype){
+	var layout=$('homeLayout').value;
+	var widgetWidth;
+	var dashWidth;
+	
+	switch(layout){
+		case '2':
+			widgetWidth = 49;
+			dashWidth = 98.6;
+			break;
+		case '3':
+			widgetWidth = 31;
+			dashWidth = 64;
+			break;
+		case '4':
+			widgetWidth = 24;
+			dashWidth = 48.6;
+			break;
+		default:
+			widgetWidth = 24;
+			dashWidth = 48.6;
+			break;
+	}
+	
+	var mainX = parseInt(document.getElementById("MainMatrix").style.width);
+	if(stufftitle != "Home Page Dashboard" && stufftype != "DashBoard"){
+		var dx = mainX *  widgetWidth/ 100;
+	}else{
+		var dx = mainX * dashWidth / 100;
+	}
+	document.getElementById(targetDiv).style.width=dx + "%";
+}
+
+/**
+ * this function hides the seqSettings div
+ */
+function hideSeqSettings(){
+	Effect.Fade('seqSettings');
+}
+
+/**
+ * this function fetches the homepage dashboard
+ * @param string stuffid - the id of the dashboard widget
+ */
+function fetch_homeDB(stuffid){
+	$('refresh_'+stuffid).innerHTML=$('vtbusy_homeinfo').innerHTML;
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Dashboard&action=DashboardAjax&file=HomepageDB',
+			onComplete: function(response){
+				$('stuffcont_'+stuffid).style.display = 'none';
+				$('stuffcont_'+stuffid).innerHTML=response.responseText;
+				$('refresh_'+stuffid).innerHTML='';
+				Effect.Appear('stuffcont_'+stuffid);
+			}
+		}
+	);
+}
+
+/**
+ * this function initializes the homepage
+ */
+initHomePage = function(){
+	Sortable.create(
+		"MainMatrix",
+		{
+			constraint:false,tag:'div',overlap:'Horizontal',handle:'headerrow',
+			onUpdate:function(){
+				matrixarr = Sortable.serialize('MainMatrix').split("&");
+				matrixseqarr=new Array();
+				seqarr=new Array();
+				for(x=0;x<matrixarr.length;x++){
+					matrixseqarr[x]=matrixarr[x].split("=")[1];
+				}
+				BlockSorting(matrixseqarr);	
+			}
+		}
+	);
+}
+
+/**
+ * this function is used to save the sorting order of elements when they are moved around on the home page
+ * @param array matrixseqarr - the array containing the sequence of the widgets
+ */
+function BlockSorting(matrixseqarr){
+	var sequence = matrixseqarr.join("_");
+	new Ajax.Request('index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&matrixsequence='+sequence,
+			onComplete: function(response){
+				$('seqSettings').innerHTML=response.responseText;
+				$('seqSettings').style.display = 'block';
+				$('seqSettings').style.display = 'none';
+				placeAtCenter($('seqSettings'));
+				Effect.Appear('seqSettings');
+				setTimeout(hideSeqSettings,3000);
+			}
+		}
+	);
+}
+
+
+/**
+ * this function checks if the current browser is IE or not
+ */
+function isIE(){
+	return navigator.userAgent.indexOf("MSIE") !=-1;
+}
+
+/**
+ * this function accepts a node and puts it at the center of the screen
+ * @param object node - the dom object which you want to set in the center
+ */
+function placeAtCenter(node){
+	var centerPixel = getViewPortCenter()
+	node.style.position = "absolute";
+	var point = getDimension(node);
+	
+	node.style.top = centerPixel.y - point.y/2 +"px";
+	node.style.right = centerPixel.x - point.x/2 + "px";
+}
+
+/**
+ * this function accepts a node and returns its dimensions in an array
+ * @param object node - the dom object for which you want the height/width
+ */
+function getDimension(node){
+	var ht = node.offsetHeight;
+	var wdth = node.offsetWidth;
+	var nodeChildren = node.getElementsByTagName("*");
+	var noOfChildren = nodeChildren.length;
+	for(var index =0;index<noOfChildren;++index){
+		ht = Math.max(nodeChildren[index].offsetHeight, ht);
+		wdth = Math.max(nodeChildren[index].offsetWidth,wdth);
+	}
+	return {x: wdth,y: ht};
+}
+
+/**
+ * this function returns the center co-ordinates of the viewport as an array
+ */
+function getViewPortCenter(){
+	var height;
+	var width;
+	
+	if(typeof window.pageXOffset != "undefined"){
+		height = window.innerHeight/2;
+		width = window.innerWidth/2;
+		height +=window.pageYOffset;
+		width +=window.pageXOffset;
+	}else if(document.documentElement && typeof document.documentElement.scrollTop != "undefined"){
+		height = document.documentElement.clientHeight/2;
+		width = document.documentElement.clientWidth/2;
+		height += document.documentElement.scrollTop;
+		width += document.documentElement.scrollLeft;
+	}else if(document.body && typeof document.body.clientWidth != "undefined"){
+		var height = window.screen.availHeight/2;
+		var width = window.screen.availWidth/2;
+		height += document.body.clientHeight;
+		width += document.body.clientWidth;
+	}
+	return {x: width,y: height};
+}
+
+/**
+ * this function adds a notebook widget to the homepage
+ */
+function addNotebookWidget(){
+	new Ajax.Request('index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&matrixsequence='+sequence,
+			onComplete: function(response){
+				$('seqSettings').innerHTML=response.responseText;
+				$('seqSettings').style.display = 'block';
+				$('seqSettings').style.display = 'none';
+				placeAtCenter($('seqSettings'));
+				Effect.Appear('seqSettings');
+				setTimeout(hideSeqSettings,3000);
+			}
+		}
+	);
+	loadAddedDiv(stuffid,stufftype);
+}
+
+
+/**
+ * this function takes a widget id and adds scrolling property to it
+ */
+function addScrollBar(id){
+	$('stuff_'+id).style['overflowX'] = "scroll";
+	$('stuff_'+id).style['overflowY'] = "scroll";
+}
+
+/**
+ * this function will display the node passed to it in the center of the screen
+ */
+function showOptions(id){
+	var node = $(id);
+	node.style.display='block';
+	placeAtCenter(node);
+}
+
+/**
+ * this function will hide the node passed to it
+ */
+function hideOptions(id){
+	Effect.Fade(id);
+}
+
+/**
+ * this function will be used to save the layout option
+ */
+function saveLayout(){
+	$('status').show();
+	hideOptions('changeLayoutDiv');
+	var sel = $('layoutSelect');
+	var layout = sel.options[sel.selectedIndex].value;
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody:'module=Home&action=HomeAjax&file=HomestuffAjax&layout='+layout,
+			onComplete: function(response){
+				var responseVal=response.responseText;
+				window.location.href = window.location.href;
+			}
+		}
+	);
+}
+
+
