@@ -75,6 +75,11 @@ $writable_files_folders = array(
 'Smarty Cache Directory'=>'./Smarty/cache/',
 'Smarty Compile Directory'=>'./Smarty/templates_c/',
 'Email Templates Directory'=>'./modules/Emails/templates/',
+'Modules Directory'=>'./modules/',
+'Cron Modules Directory'=>'./cron/modules/',
+'Vtlib Test Directory'=>'./test/vtlib/',
+'Backup Directory'=>'./backup/',
+'Smarty Modules Directory'=>'./Smarty/templates/modules/',
 'Mail Merge Template Directory'=>'./test/wordtemplatedownload/',
 'Product Image Directory'=>'./test/product/',
 'User Image Directory'=>'./test/user/',
@@ -205,8 +210,17 @@ $array = Array(
 				<!-- Right side tabs -->
 				    <table cellspacing=0 cellpadding=2 width=95% align=center>
 				    <tr>
-				    <td align=left colspan=2><img src="include/install/images/confWizInstallCheck.gif" alt="Pre Installation Check" title="Pre Installation Check"><br>
-					  <hr noshade size=1></td></tr>
+				    <td align=left><img src="include/install/images/confWizInstallCheck.gif" alt="Pre Installation Check" title="Pre Installation Check"><br>
+					  </td>
+					<td align=right valign="middle">
+							<form action="install.php" method="post" name="form" id="form">
+							<input type="hidden" name="filename" value="<?php echo $file_name; ?>" />	
+							<input type="hidden" name="file" value="1checkSystem.php" />	
+					        <input type="image" src="include/install/images/checkagain_blue2.png" value='Refresh' alt="Refresh" border="0" title="Refresh" style="cursor:pointer;" onClick="submit();">
+							</form>
+					</td>  
+					</tr>
+					<tr><td colspan=2><hr noshade size=1></td></tr>
 				    <tr>
 				    	<td colspan=2>
 				    		<table cellpadding="0" cellspacing="1" align=right width="100%" class="level3">
@@ -228,10 +242,14 @@ $array = Array(
 								        						<td valign=top><?php echo function_exists('imap_open')?"<strong><font color=\"#46882B\">Yes</strong></font>":"<strong><font color=\"#FF0000\">No</strong></font>";?></td>
 															</tr>
 															<tr class='level1'>
+																<td valign=top >Zlib Support</td>
+								        						<td valign=top><?php echo function_exists('gzinflate')?"<strong><font color=\"#46882B\">Yes</strong></font>":"<strong><font color=\"#FF0000\">No</strong></font>";?></td>
+															</tr>
+															<tr class='level1'>
 																<td valign=top >GD graphics library
 																<td valign=top><?php
 																	if (!extension_loaded('gd')) {
-																		echo "<strong><font size=-1 color=\"#46882B\">Not configured. </strong></font>";
+																		echo "<strong><font size=-1 color=\"#FF0000\">Not configured. </strong></font>";
 																	}
 																	else {
 																		if (!function_exists('gd_info'))
@@ -343,7 +361,7 @@ $array = Array(
 					</td>
 				<td align=right>
 					<form action="install.php" method="post" name="form" id="form">
-			                <?php echo '<input type="hidden" name="file" value="'.$file_name.'" />'; ?>
+	                <?php echo '<input type="hidden" name="file" value="'.$file_name.'" />'; ?>
 					<input type="image" src="include/install/images/cwBtnNext.gif" alt="Next" border="0" title="Next" onClick="window.document.form.submit();">
 					</form>
 				    </td>

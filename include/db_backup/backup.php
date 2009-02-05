@@ -49,7 +49,10 @@ class DatabaseDump {
 		function save($database, $filename) {
 			// Connect to database
 			$db = mysql_select_db($database);
-			
+			$db_charset = mysql_fetch_assoc(mysql_query("SHOW variables LIKe'character_set_database'"));
+			if($db_charset['Value']=='utf8'){
+				mysql_query("SET NAMES 'utf8'");
+			}
 			if(empty($db)) {
 				return;
 			}

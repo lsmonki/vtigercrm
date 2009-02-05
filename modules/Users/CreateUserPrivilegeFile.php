@@ -1594,7 +1594,6 @@ function populateSharingtmptables($userid)
 function populateSharingPrivileges($enttype,$userid,$module,$pertype)
 {
 	global $adb;	
-	require('user_privileges/sharing_privileges_'.$userid.'.php');
 	$tabid=getTabid($module);
 	if($enttype=='USER')
 	{
@@ -1608,6 +1607,7 @@ function populateSharingPrivileges($enttype,$userid,$module,$pertype)
 			$table_name='vtiger_tmp_write_user_sharing_per';
 			$var_name=$module.'_share_write_permission';
 		}
+		global $$var_name;
 		$var_name_arr=$$var_name;	
 		$user_arr=Array();
 		if(sizeof($var_name_arr['ROLE']) > 0)
@@ -1656,6 +1656,7 @@ function populateSharingPrivileges($enttype,$userid,$module,$pertype)
 			$table_name='vtiger_tmp_write_group_sharing_per';
 			$var_name=$module.'_share_write_permission';
 		}
+		global $$var_name;
 		$var_name_arr=$$var_name;
 		$grp_arr=Array();
 		if(sizeof($var_name_arr['GROUP']) > 0)
@@ -1688,7 +1689,6 @@ function populateSharingPrivileges($enttype,$userid,$module,$pertype)
 function populateRelatedSharingPrivileges($enttype,$userid,$module,$relmodule,$pertype)
 {
 	global $adb;	
-	require('user_privileges/sharing_privileges_'.$userid.'.php');
 	$tabid=getTabid($module);
 	$reltabid=getTabid($relmodule);
 	//echo $module.'               '.$enttype.'                '.$pertype.'<BR>';                       
@@ -1704,6 +1704,7 @@ function populateRelatedSharingPrivileges($enttype,$userid,$module,$relmodule,$p
 			$table_name='vtiger_tmp_write_user_rel_sharing_per';
 			$var_name=$module.'_'.$relmodule.'_share_write_permission';
 		}
+		global $$var_name;
 		$var_name_arr=$$var_name;	
 		$user_arr=Array();
 		if(sizeof($var_name_arr['ROLE']) > 0)
@@ -1752,6 +1753,7 @@ function populateRelatedSharingPrivileges($enttype,$userid,$module,$relmodule,$p
 			$table_name='vtiger_tmp_write_group_rel_sharing_per';
 			$var_name=$module.'_'.$relmodule.'_share_write_permission';
 		}
+		global $$var_name;
 		$var_name_arr=$$var_name;
 		$grp_arr=Array();
 		if(sizeof($var_name_arr['GROUP']) > 0)

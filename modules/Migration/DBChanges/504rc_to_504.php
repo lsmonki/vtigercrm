@@ -340,8 +340,10 @@ ExecuteQuery("update vtiger_notificationscheduler set active=1 where scheduledno
 ExecuteQuery("alter table vtiger_users modify date_format varchar(200) default NULL");
 // Updated the sequence number of taskstatus for the ticket #5027
 ExecuteQuery("update vtiger_field set sequence = 8 where columnname = 'status' and tablename = 'vtiger_activity' and fieldname = 'taskstatus' and uitype = 111");
-$migrationlog->debug("\n\nDB Changes from 5.0.4rc to 5.0.4 -------- Ends \n\n");
 
-convert_html2utf8_db();
+global $dbname;
+include("modules/Migration/HTMLtoUTF8Conversion.php");
+
+$migrationlog->debug("\n\nDB Changes from 5.0.4rc to 5.0.4 -------- Ends \n\n");
 
 ?>
