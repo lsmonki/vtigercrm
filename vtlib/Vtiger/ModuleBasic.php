@@ -139,10 +139,8 @@ class Vtiger_ModuleBasic {
 		$useisentitytype = $this->isentitytype? 1 : 0;
 		$adb->pquery('UPDATE vtiger_tab set isentitytype=? WHERE tabid=?',Array($useisentitytype, $this->id));
 
-		//if($this->isentitytype) {
-			Vtiger_Profile::initForModule($this);
-		//}
-
+		Vtiger_Profile::initForModule($this);
+		
 		self::syncfile();
 
 		if($this->isentitytype) {

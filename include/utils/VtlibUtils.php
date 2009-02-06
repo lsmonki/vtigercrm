@@ -106,6 +106,19 @@ function vtlib_isModuleActive($module) {
 }
 
 /**
+ * Recreate user privileges files.
+ */
+function vtlib_RecreateUserPrivilegeFiles() {
+	global $adb;
+	$userres = $adb->query('SELECT id FROM vtiger_users WHERE deleted = 0');
+	if($userres && $adb->num_rows($userres)) {
+		while($userrow = $adb->fetch_array($userres)) {
+			createUserPrivilegesfile($userrow['id']);
+		}
+	}
+}
+
+/**
  * Get list module names which are always active (cannot be disabled)
  */
 function vtlib_moduleAlwaysActive() {
@@ -131,6 +144,13 @@ function vtlib_toggleModuleAccess($module, $enable_disable) {
 
 	create_tab_data_file();
 	create_parenttab_data_file();
+
+	// UserPrivilege file needs to be regenerated if module state is changed from
+	// vtiger 5.1.0 onwards
+	global $vtiger_current_version;
+	if(version_compare($vtiger_current_version, '5.1.0', '>=')) {
+		vtlib_RecreateUserPrivilegeFiles();
+	}
 }
 
 /**
@@ -207,7 +227,7 @@ function vtlib_getFieldHelpInfo($module) {
 			while($fieldrow = $adb->fetch_array($result)) {
 				$helpinfo = decode_html($fieldrow['helpinfo']);
 				if(!empty($helpinfo)) {
-					$fieldhelpinfo[$fieldrow['fieldname']] = $helpinfo;
+					$fieldhelpinfo[$fieldrow['fieldname']] = getTranslatedString($helpinfo, $module);
 				}
 			}
 		}

@@ -49,6 +49,7 @@ class Vtiger_Utils {
 	 */
 	static function checkFileAccess($filepath, $dieOnFail=true) {
 		global $root_directory;
+
 		// Set the base directory to compare with
 		$use_root_directory = $root_directory;
   		if(empty($use_root_directory)) {
@@ -65,7 +66,7 @@ class Vtiger_Utils {
   		$realfilepath = str_replace('\\', '/', $realfilepath);
   		$rootdirpath  = str_replace('\\', '/', $rootdirpath);
 
-		if(stripos($realfilepath, $rootdirpath) !== 0) {			
+		if(stripos($realfilepath, $rootdirpath) !== 0) {
 			if($dieOnFail) {
 				die("Sorry! Attempt to access restricted file.");
 			}

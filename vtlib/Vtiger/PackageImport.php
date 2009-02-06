@@ -210,14 +210,18 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 			// Unzip selectively
 			$unzip->unzipAllEx( ".",
 				Array(
-					'include' => Array('templates', "modules/$module"), // We don't need manifest.xml
-					//'exclude' => Array('manifest.xml')                // DEFAULT: excludes all not in include
+					// Include only file/folders that need to be extracted
+					'include' => Array('templates', "modules/$module", 'cron'), 
+					//'exclude' => Array('manifest.xml')  
+					// NOTE: If excludes is not given then by those not mentioned in include are ignored.
 				),
-				// Templates folder to be renamed while copying
-				Array('templates' => "Smarty/templates/modules/$module"),
-
-				// Cron folder to be renamed while copying
-				Array('cron' => "cron/modules/$module")	
+				// What files needs to be renamed?
+				Array(
+					// Templates folder
+					'templates' => "Smarty/templates/modules/$module",
+					// Cron folder
+					'cron' => "cron/modules/$module"
+				)
 			);
 
 			// If data is not yet available

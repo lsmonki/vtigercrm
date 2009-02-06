@@ -17,7 +17,13 @@ function vtlib_setvalue_from_popup(recordid,value,target_fieldname) {
 		if(domnode_id) domnode_id.value = recordid;
 		if(domnode_display) domnode_display.value = value;
 		return true;
-	} else{
+	} else if(window.opener.document.QcEditView) {
+		var domnode_id = window.opener.document.QcEditView[target_fieldname];
+		var domnode_display = window.opener.document.QcEditView[target_fieldname+'_display'];
+		if(domnode_id) domnode_id.value = recordid;
+		if(domnode_display) domnode_display.value = value;
+		return true;
+	} else {
 		return false;
 	}
 }

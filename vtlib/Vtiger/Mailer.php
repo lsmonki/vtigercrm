@@ -85,7 +85,7 @@ class Vtiger_Mailer extends PHPMailer {
 		if($adb->num_rows($result)) {
 			$this->IsHTML(true);
 			$usesubject = $adb->query_result($result, 0, 'subject');
-			$usebody = $adb->query_result($result, 0, 'body');
+			$usebody = decode_html($adb->query_result($result, 0, 'body'));
 
 			$this->Subject = $usesubject;
 			$this->Body    = $usebody;

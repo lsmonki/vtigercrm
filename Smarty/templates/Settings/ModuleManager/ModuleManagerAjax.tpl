@@ -23,19 +23,19 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 <table class="small" width="100%" cellpadding=2 cellspacing=0 border=0>
 	<tr>
 		<td class="dvtTabCache" style="width: 10px;" nowrap>&nbsp;</td>
-		<td class="dvtSelectedCell" style="width: 120px;" align="center" nowrap id="modmgr_custom_tab" 
-			onclick="vtlib_modulemanager_toggleTab('modmgr_custom','modmgr_standard','modmgr_custom_tab','modmgr_standard_tab');">
-		{$MOD.VTLIB_LBL_MODULE_MANAGER_CUSTOMMOD}</td>
-		<td class="dvtTabCache" style="width: 10px;" nowrap>&nbsp;</td>
-		<td class="dvtUnSelectedCell" style="width: 120px;" align="center" nowrap id="modmgr_standard_tab"
+		<td class="dvtSelectedCell" style="width: 120px;" align="center" nowrap id="modmgr_standard_tab"
 			onclick="vtlib_modulemanager_toggleTab('modmgr_standard','modmgr_custom','modmgr_standard_tab','modmgr_custom_tab');">
 		{$MOD.VTLIB_LBL_MODULE_MANAGER_STANDARDMOD}</td>
+		<td class="dvtTabCache" style="width: 10px;" nowrap>&nbsp;</td>
+		<td class="dvtUnSelectedCell" style="width: 120px;" align="center" nowrap id="modmgr_custom_tab" 
+			onclick="vtlib_modulemanager_toggleTab('modmgr_custom','modmgr_standard','modmgr_custom_tab','modmgr_standard_tab');">
+		{$MOD.VTLIB_LBL_MODULE_MANAGER_CUSTOMMOD}</td>
 		<td class="dvtTabCache" style="width: 10px;" nowrap>&nbsp;</td>
 	</tr>
 </table>
 
 <!-- Custom Modules -->
-<table border=0 cellspacing=0 cellpadding=3 width=100% class="listRow" id="modmgr_custom">
+<table border=0 cellspacing=0 cellpadding=3 width=100% class="listRow" id="modmgr_custom" style='display: none;'>
 <tr>
 	<td class="big tableHeading" colspan=2>&nbsp;</td>
 	<td class="big tableHeading" colspan=4 width="10%" align="right">
@@ -91,7 +91,7 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 		<td class="cellText small"><img src="{'text.gif'|@vtiger_imageurl:$THEME}" border=0"></td>
 		<td class="cellLabel small">{$langinfo.label}</td>
 		<td class="cellText small" width="15px" align=center>
-			<a href="index.php?module=Settings&action=ModuleManager&module_update=Step1&src_module={$langinfo.label}&parenttab=Settings"><img src="{'reload.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle" alt="{$MOD.LBL_UPGRADE} {$langinfo.label}" title="{$MOD.LBL_UPGRADE} {$langinfo.label}"></a>
+			<a href="index.php?module=Settings&action=ModuleManager&module_update=Step1&src_module={$langprefix}&parenttab=Settings"><img src="{'reload.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle" alt="{$MOD.LBL_UPGRADE} {$langinfo.label}" title="{$MOD.LBL_UPGRADE} {$langinfo.label}"></a>
 		</td>
 		<td class="cellText small" width="15px" align=center>
 		{if $langinfo.active eq 1}
@@ -119,7 +119,7 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 </table>
 
 <!-- Standard modules -->
-<table border=0 cellspacing=0 cellpadding=3 width=100% class="listRow" id="modmgr_standard" style="display: none;">
+<table border=0 cellspacing=0 cellpadding=3 width=100% class="listRow" id="modmgr_standard" style="">
 <tr>
 	<td class="big tableHeading" colspan=2>&nbsp;</td>
 	<td class="big tableHeading" colspan=3 width=10% align="center">&nbsp;</td>
