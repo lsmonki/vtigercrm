@@ -100,7 +100,10 @@ if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes" || $duplicat
 	echo "ERROR";
 	exit;
 }
-
+if($duplicate == 'LENGTH_ERROR'){
+	echo "LENGTH_ERROR";
+	exit;
+}
 if($_REQUEST['mode'] !='')
 	$mode = $_REQUEST['mode'];
 	
@@ -150,7 +153,9 @@ function getFieldListEntries($module)
 	$theme_path="themes/".$theme."/";
 	$image_path="themes/images/";
 	
-	$dbQuery = "select * from vtiger_blocks where tabid=? order by sequence";
+	$dbQuery = "select vtiger_blocks.*,vtiger_tab.presence as tabpresence  from vtiger_blocks" .
+				" inner join vtiger_tab on vtiger_tab.tabid = vtiger_blocks.tabid" .
+				" where vtiger_blocks.tabid=?  and vtiger_tab.presence = 0 order by sequence";
 	$result = $adb->pquery($dbQuery, array($tabid));
 	$row = $adb->fetch_array($result);
 	
@@ -178,10 +183,17 @@ function getFieldListEntries($module)
 			{
 				$smarty->assign("RELPRODUCTSECTIONID",$row["blockid"]);
 			}
-			if($row["blocklabel"] == 'LBL_COMMENTS' )
+			if($row["blocklabel"] == 'LBL_COMMENTS' || $row['blocklabel'] == 'LBL_COMMENT_INFORMATION' )
 			{
 				$smarty->assign("COMMENTSECTIONID",$row["blockid"]);
 			}
+			if($row['blocklabel'] == 'LBL_TICKET_RESOLUTION'){
+				$smarty->assign("SOLUTIONBLOCKID",$row["blockid"]);
+			}
+			if($row['blocklabel'] == ''){
+				continue;
+			}
+			$cflist[$i]['tabpresence']= $row['tabpresence'];
 			$cflist[$i]['module'] = $module;
 			$cflist[$i]['blocklabel']=getTranslatedString($row["blocklabel"], $module);
 			$cflist[$i]['blockid']=$row["blockid"];
@@ -225,7 +237,7 @@ function getFieldListEntries($module)
 					if($customfieldflag!=0)
 						$fieldlabel = $row_field['fieldlabel'];
 					else
-						$fieldlabel = getTranslatedString($row_field['fieldlabel']);
+						$fieldlabel = getTranslatedString($row_field['fieldlabel'], $module);
 					
 					$strictlyMandatory = false;
 					if(isset($focus->mandatory_fields) && (!empty($focus->mandatory_fields)) && in_array($fieldname, $focus->mandatory_fields)){
@@ -272,8 +284,13 @@ function getFieldListEntries($module)
 				$cflist[$i]['no']= 0;
 			}
 			
-			$query_fields_not_in_block = 'select fieldid,fieldlabel from vtiger_field where block != ? and tabid = ? and vtiger_field.displaytype IN (1,2,4) order by sequence';
-			$fields = $adb->pquery($query_fields_not_in_block,array($row["blockid"],$tabid));
+			$query_fields_not_in_block ='select fieldid,fieldlabel,block from vtiger_field ' .
+										'inner join vtiger_blocks on vtiger_field.block=vtiger_blocks.blockid ' .
+										'where vtiger_field.block != ? and vtiger_blocks.blocklabel not in ("LBL_TICKET_RESOLUTION","LBL_COMMENTS","LBL_COMMENT_INFORMATION") ' .
+										'AND vtiger_field.tabid = ? and vtiger_field.displaytype IN (1,2,4) order by vtiger_field.sequence';
+			
+			$params =array($row['blockid'],$tabid);
+			$fields = $adb->pquery($query_fields_not_in_block,$params);
 			$row_field= $adb->fetch_array($fields);
 			
 			if($row_field != ''){
@@ -290,7 +307,6 @@ function getFieldListEntries($module)
 				$cflist[$i]['movefieldcount'] = 0 ;	
 			}
 			
-			
 			$cflist[$i]['field']= $cf_element;
 			$cflist[$i]['hiddenfield']= $cf_hidden_element;
 			$cflist[$i]['movefield'] = $movefields;
@@ -302,7 +318,6 @@ function getFieldListEntries($module)
 			$i++;
 		} while($row = $adb->fetch_array($result));
 	}
-	//echo '<pre>';print_r($cflist);
 	return $cflist;
 }
 
@@ -543,16 +558,13 @@ function updateFieldProperties(){
 	}
 	
 	$fieldtype =  explode("~",$typeofdata);
-	$mandatory_checked = $_REQUEST['ismandatory'];
+	$mandatory_checked= $_REQUEST['ismandatory'];
 	$quickcreate_checked = $_REQUEST['quickcreate'];
 	$presence_check = $_REQUEST['isPresent'];
 	$massedit_check = $_REQUEST['massedit'];
-	$nonEditableUiTypes = array('4','70');
 	
 
 	if(isset($focus->mandatory_fields) && (!empty($focus->mandatory_fields)) && in_array($fieldname, $focus->mandatory_fields)){
-		$fieldtype[1] = 'M';
-	} elseif(in_array($uitype, $nonEditableUiTypes)) {
 		$fieldtype[1] = 'M';
 	} elseif($mandatory_checked == 'true' || $mandatory_checked == ''){
 		$fieldtype[1] = 'M';
@@ -598,10 +610,8 @@ function updateFieldProperties(){
 		$fieldname_list = '';
 	}
 		
-	$uitype_list = implode(',',$nonEditableUiTypes);
-	
-	$mandatory_query = "update vtiger_field set typeofdata=? where fieldid=? and fieldname not in (?) and uitype not in (?) AND displaytype != 2";
-	$mandatory_params = array($datatype,$fieldid,$fieldname_list,$uitype_list);
+	$mandatory_query = "update vtiger_field set typeofdata=? where fieldid=? and fieldname not in (?) AND displaytype != 2";
+	$mandatory_params = array($datatype,$fieldid,$fieldname_list);
 	$adb->pquery($mandatory_query, $mandatory_params);
 	
 	if(!empty($qcdata)){
@@ -639,7 +649,7 @@ function deleteCustomField(){
 	$tablename = $adb->query_result($res,0,'tablename');
 	$columnname = $adb->query_result($res,0,'columnname');
 	$fieldtype =  explode("~",$typeofdata);
-		
+	
 	//Deleting the CustomField from the Custom Field Table
 	$query='delete from vtiger_field where fieldid = ? and vtiger_field.presence in (0,2)';
 	$adb->pquery($query, array($id));
@@ -647,7 +657,7 @@ function deleteCustomField(){
 	//Deleting from vtiger_profile2field table
 	$query='delete from vtiger_profile2field where fieldid=?';
 	$adb->pquery($query, array($id));
-	
+
 	//Deleting from vtiger_def_org_field table
 	$query='delete from vtiger_def_org_field where fieldid=?';
 	$adb->pquery($query, array($id));
@@ -715,15 +725,23 @@ function addblock(){
 	$tabid = getTabid($fldmodule);
 	$flag = 0;
 	$dup_check_query = $adb->pquery("SELECT blocklabel from vtiger_blocks WHERE tabid = ?",array($tabid));
-		
-	for($i=0;$i<$adb->num_rows($dup_check_query);$i++){
+	$norows = $adb->num_rows($dup_check_query);
+	for($i=0;$i<$norows;$i++){
 		$blklbl = $adb->query_result($dup_check_query,$i,'blocklabel'); 
-		$blklbl = getTranslatedString($blklbl);
-		if($blklbl == $newblocklabel){
+		$blklbltran = getTranslatedString($blklbl,$fldmodule);
+		if(strtolower($blklbltran) == strtolower($newblocklabel)){
 			$flag = 1;
-			break;
+			$duplicate='yes';
+			return $duplicate;
 			}
+	}
+		$length = strlen($newblocklabel);
+		if($length > 50){
+			$flag = 1;
+			$duplicate='LENGTH_ERROR';
+			return $duplicate;
 		}
+		
 	if($flag!=1){
 		$sql_seq="select sequence from vtiger_blocks where blockid=?";
 		$res_seq= $adb->pquery($sql_seq, array($after_block));
@@ -744,10 +762,7 @@ function addblock(){
 		$params = array($tabid,$max_blockid,$newblock_sequence,$newblocklabel,$iscustom);
 		$adb->pquery($sql,$params);
 	}
-	else{
-		$duplicate='yes';
-		return $duplicate;
-	}	
+	
 }
 
 function deleteBlock(){
@@ -763,13 +778,12 @@ function addCustomField(){
 global $current_user,$log,$adb;
 
 $fldmodule=$_REQUEST['fld_module'];
-$fldlabel=$_REQUEST['fldLabel'];
+$fldlabel=trim($_REQUEST['fldLabel']);
 $fldType= $_REQUEST['fieldType'];
 $parenttab=$_REQUEST['parenttab'];
 $mode=$_REQUEST['mode'];
 $blockid = $_REQUEST['blockid'];
 
-$log->debug('addadd'.print_r($_REQUEST,true));
 $tabid = getTabid($fldmodule);
 if ($fldmodule == 'Calendar' && isset($_REQUEST['activity_type'])) {
 	$activitytype = $_REQUEST['activity_type'];
@@ -780,10 +794,6 @@ if(get_magic_quotes_gpc() == 1){
 	$fldlabel = stripslashes($fldlabel);
 }
 
-
-//checking if the user is trying to create a custom vtiger_field which already exists  
-//$checkquery="select * from vtiger_field where tabid=? and fieldlabel = ?";
-//$params =  array($tabid,$fldlabel);
 $dup_check_tab_id = $tabid;
 if ($fldmodule == 'Calendar')
 	$dup_check_tab_id = array('9', '16');
@@ -811,16 +821,15 @@ else{
 			$tableName= 'vtiger_'.strtolower($fldmodule).'cf';
 		}
 	}
-	
 	//Assigning the uitype
-		$fldlength=$_REQUEST['fldLength'];
-		$uitype='';
-		$fldPickList='';
-		if(isset($_REQUEST['fldDecimal']) && $_REQUEST['fldDecimal'] != ''){
-			$decimal=$_REQUEST['fldDecimal'];
-		}else{
-			$decimal=0;
-		}
+	$fldlength=$_REQUEST['fldLength'];
+	$uitype='';
+	$fldPickList='';
+	if(isset($_REQUEST['fldDecimal']) && $_REQUEST['fldDecimal'] != ''){
+		$decimal=$_REQUEST['fldDecimal'];
+	}else{
+		$decimal=0;
+	}
 	$type='';
 	$uichekdata='';
 	if($fldType == 'Text'){
@@ -879,24 +888,19 @@ else{
 		$type = "C(255) default () "; //adodb type
 		$uichekdata='V~O';
 	}
-	// No Decimal Pleaces Handling
-
-   	//1. add the customfield vtiger_table to the vtiger_field vtiger_table as Block4
-	//2. fetch the contents of the custom vtiger_field and show in the UI
-  
-	//$custfld_sequece=$adb->getUniqueID("vtiger_customfield_sequence");
-    	
-	//get the blockid for this custom block
-	//$blockid = getBlockId($tabid,'LBL_CUSTOM_INFORMATION');
-
-        if(is_numeric($blockid)){
+	
+	     if(is_numeric($blockid)){
 			if($_REQUEST['fieldid'] == ''){
 				$max_fieldsequence = "select max(sequence) as maxsequence from vtiger_field where block = ? ";
 				$res = $adb->pquery($max_fieldsequence,array($blockid));
 				$max_seq = $adb->query_result($res,0,'maxsequence');
-				
+				if($fldmodule == 'Quotes' || $fldmodule == 'PurchaseOrder' || $fldmodule == 'SalesOrder' || $fldmodule == 'Invoice'){
+					$quickcreate = 3;
+				}else{
+					$quickcreate = 1;
+				}
 				$query = "insert into vtiger_field (tabid,fieldid,columnname,tablename,generatedtype,uitype,fieldname,fieldlabel,readonly,presence,selected,maximumlength,sequence,block,displaytype,typeofdata,quickcreate,quickcreatesequence,info_type,masseditable) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-				$qparams = array($tabid,$custfld_fieldid,$columnName,$tableName,2,$uitype,$columnName,$fldlabel,0,2,0,100,$max_seq+1,$blockid,1,$uichekdata,1,0,'BAS',1);
+				$qparams = array($tabid,$custfld_fieldid,$columnName,$tableName,2,$uitype,$columnName,$fldlabel,0,2,0,100,$max_seq+1,$blockid,1,$uichekdata,$quickcreate,0,'BAS',1);
 				$adb->pquery($query, $qparams);
 				$adb->alterTable($tableName, $columnName." ".$type, "Add_Column");
 				//Inserting values into vtiger_profile2field vtiger_tables
@@ -1010,7 +1014,8 @@ function show_move_hiddenfields($submode){
 function getRelatedListInfo($module){
 	global $adb;
 	$tabid = getTabid($module);
-	$related_query = 'select * from vtiger_relatedlists where tabid = ? order by sequence';
+	$related_query = 'select * from vtiger_relatedlists ' .
+			'inner join vtiger_tab on vtiger_relatedlists.related_tabid = vtiger_tab.tabid and vtiger_tab.presence = 0 where vtiger_relatedlists.tabid = ? order by sequence';
 	$relinfo = $adb->pquery($related_query,array($tabid));
 	$noofrows = $adb->num_rows($relinfo);
 	for($i=0;$i<$noofrows;$i++){

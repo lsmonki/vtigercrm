@@ -587,9 +587,9 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'faq_no','vtiger_faq',1,'4','faq_no','Faq No',1,0,0,100,2,37,1,'V~O',3,null,'BAS',0)");
 		 $this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'category','vtiger_faq',1,'15','faqcategories','Category',1,2,0,100,4,37,1,'V~O',3,null,'BAS',1)");
  		$this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'status','vtiger_faq',1,'15','faqstatus','Status',1,2,0,100,3,37,1,'V~M',3,null,'BAS',1)");
-		 $this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'question','vtiger_faq',1,'20','question','Question',1,2,0,100,7,37,1,'V~M',1,null,'BAS',1)");
-		 $this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'answer','vtiger_faq',1,'20','faq_answer','Answer',1,2,0,100,8,37,1,'V~M',1,null,'BAS',1)");
-		 $this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'comments','vtiger_faqcomments',1,'19','comments','Add Comment',1,2,0,100,1,40,1,'V~O',3,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'question','vtiger_faq',1,'20','question','Question',1,2,0,100,7,37,1,'V~M',3,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'answer','vtiger_faq',1,'20','faq_answer','Answer',1,2,0,100,8,37,1,'V~M',3,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'comments','vtiger_faqcomments',1,'19','comments','Add Comment',1,2,0,100,1,38,1,'V~O',3,null,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,5,37,2,'T~O',3,null,'BAS',0)");
 		 $this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,6,37,2,'T~O',3,null,'BAS',0)");
 		
@@ -665,7 +665,7 @@ class DefaultDataPopulator extends CRMEntity {
 		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'discount_amount','vtiger_quotes',1,'1','hdnDiscountAmount','Discount Amount',1,2,0,100,14,$quotesbasicblock,3,'N~O',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'s_h_amount','vtiger_quotes',1,'1','hdnS_H_Amount','S&H Amount',1,2,0,100,14,$quotesbasicblock,3,'N~O',3,null,'BAS',1)");
 		
-		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'accountid','vtiger_quotes',1,'73','account_id','Account Name',1,2,0,100,16,$quotesbasicblock,1,'I~O',1,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'accountid','vtiger_quotes',1,'73','account_id','Account Name',1,2,0,100,16,$quotesbasicblock,1,'I~M',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,17,$quotesbasicblock,1,'V~M',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,18,$quotesbasicblock,2,'T~O',3,null,'BAS',0)");
 		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,19,$quotesbasicblock,2,'T~O',3,null,'BAS',0)");
@@ -675,8 +675,8 @@ class DefaultDataPopulator extends CRMEntity {
 		
 		 //Block 53
 		
-		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'bill_street','vtiger_quotesbillads',1,'24','bill_street','Billing Address',1,2,0,100,1,$quotesaddressblock,1,'V~M',1,null,'BAS',1)");
-		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'ship_street','vtiger_quotesshipads',1,'24','ship_street','Shipping Address',1,2,0,100,2,$quotesaddressblock,1,'V~M',1,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'bill_street','vtiger_quotesbillads',1,'24','bill_street','Billing Address',1,2,0,100,1,$quotesaddressblock,1,'V~M',3,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'ship_street','vtiger_quotesshipads',1,'24','ship_street','Shipping Address',1,2,0,100,2,$quotesaddressblock,1,'V~M',3,null,'BAS',1)");
 		
 		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'bill_city','vtiger_quotesbillads',1,'1','bill_city','Billing City',1,2,0,100,5,$quotesaddressblock,1,'V~O',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (20,".$this->db->getUniqueID("vtiger_field").",'ship_city','vtiger_quotesshipads',1,'1','ship_city','Shipping City',1,2,0,100,6,$quotesaddressblock,1,'V~O',3,null,'BAS',1)");
@@ -706,8 +706,8 @@ class DefaultDataPopulator extends CRMEntity {
 		//Purchase Order Details -- START
 		 //Block57
 		 $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'purchaseorder_no','vtiger_purchaseorder',1,'4','purchaseorder_no','PurchaseOrder No',1,0,0,100,2,$pobasicblock,1,'V~O',3,null,'BAS',0)");	
-		 $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'subject','vtiger_purchaseorder',1,'2','subject','Subject',1,0,0,100,1,$pobasicblock,1,'V~M',1,null,'BAS',1)");	
-		 $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'vendorid','vtiger_purchaseorder',1,'81','vendor_id','Vendor Name',1,0,0,100,3,$pobasicblock,1,'I~M',1,null,'BAS',1)");	
+		 $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'subject','vtiger_purchaseorder',1,'2','subject','Subject',1,0,0,100,1,$pobasicblock,1,'V~M',3,null,'BAS',1)");	
+		 $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'vendorid','vtiger_purchaseorder',1,'81','vendor_id','Vendor Name',1,0,0,100,3,$pobasicblock,1,'I~M',3,null,'BAS',1)");	
 		 $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'requisition_no','vtiger_purchaseorder',1,'1','requisition_no','Requisition No',1,2,0,100,4,$pobasicblock,1,'V~O',3,null,'BAS',1)");	
 		
 		 $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'tracking_no','vtiger_purchaseorder',1,'1','tracking_no','Tracking Number',1,2,0,100,5,$pobasicblock,1,'V~O',3,null,'BAS',1)");	
@@ -736,8 +736,8 @@ class DefaultDataPopulator extends CRMEntity {
 		
 		 //Block 59
 		
-		 $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'bill_street','vtiger_pobillads',1,'24','bill_street','Billing Address',1,2,0,100,1,$poaddressblock,1,'V~M',1,null,'BAS',1)");
-		 $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'ship_street','vtiger_poshipads',1,'24','ship_street','Shipping Address',1,2,0,100,2,$poaddressblock,1,'V~M',1,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'bill_street','vtiger_pobillads',1,'24','bill_street','Billing Address',1,2,0,100,1,$poaddressblock,1,'V~M',3,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'ship_street','vtiger_poshipads',1,'24','ship_street','Shipping Address',1,2,0,100,2,$poaddressblock,1,'V~M',3,null,'BAS',1)");
 		
 		 $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'bill_city','vtiger_pobillads',1,'1','bill_city','Billing City',1,2,0,100,5,$poaddressblock,1,'V~O',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (21,".$this->db->getUniqueID("vtiger_field").",'ship_city','vtiger_poshipads',1,'1','ship_city','Shipping City',1,2,0,100,6,$poaddressblock,1,'V~O',3,null,'BAS',1)");
@@ -766,7 +766,7 @@ class DefaultDataPopulator extends CRMEntity {
 		//Sales Order Details -- START
 		 //Block63
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'salesorder_no','vtiger_salesorder',1,'4','salesorder_no','SalesOrder No',1,0,0,100,4,$sobasicblock ,1,'V~O',3,null,'BAS',0)");	
-		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'subject','vtiger_salesorder',1,'2','subject','Subject',1,0,0,100,1,$sobasicblock ,1,'V~M',1,null,'BAS',1)");	
+		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'subject','vtiger_salesorder',1,'2','subject','Subject',1,0,0,100,1,$sobasicblock ,1,'V~M',3,null,'BAS',1)");	
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'potentialid','vtiger_salesorder',1,'76','potential_id','Potential Name',1,2,0,100,2,$sobasicblock ,1,'I~O',3,null,'BAS',1)");	
  $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'customerno','vtiger_salesorder',1,'1','customerno','Customer No',1,2,0,100,3,$sobasicblock ,1,'V~O',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'quoteid','vtiger_salesorder',1,'78','quote_id','Quote Name',1,2,0,100,5,$sobasicblock ,1,'I~O',3,null,'BAS',1)");	
@@ -789,7 +789,7 @@ class DefaultDataPopulator extends CRMEntity {
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'discount_amount','vtiger_salesorder',1,'1','hdnDiscountAmount','Discount Amount',1,0,0,100,15,$sobasicblock ,3,'N~O',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'s_h_amount','vtiger_salesorder',1,'1','hdnS_H_Amount','S&H Amount',1,2,0,100,15,$sobasicblock ,3,'N~O',3,null,'BAS',1)");
 		
-		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'accountid','vtiger_salesorder',1,'73','account_id','Account Name',1,2,0,100,16,$sobasicblock ,1,'I~O',1,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'accountid','vtiger_salesorder',1,'73','account_id','Account Name',1,2,0,100,16,$sobasicblock ,1,'I~M',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,17,$sobasicblock ,1,'V~M',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,18,$sobasicblock ,2,'T~O',3,null,'BAS',0)");
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,19,$sobasicblock ,2,'T~O',3,null,'BAS',0)");
@@ -800,8 +800,8 @@ class DefaultDataPopulator extends CRMEntity {
 		
 		 //Block 65
 		
-		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'bill_street','vtiger_sobillads',1,'24','bill_street','Billing Address',1,2,0,100,1,$soaddressblock,1,'V~M',1,null,'BAS',1)");
-		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'ship_street','vtiger_soshipads',1,'24','ship_street','Shipping Address',1,2,0,100,2,$soaddressblock,1,'V~M',1,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'bill_street','vtiger_sobillads',1,'24','bill_street','Billing Address',1,2,0,100,1,$soaddressblock,1,'V~M',3,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'ship_street','vtiger_soshipads',1,'24','ship_street','Shipping Address',1,2,0,100,2,$soaddressblock,1,'V~M',3,null,'BAS',1)");
 		
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'bill_city','vtiger_sobillads',1,'1','bill_city','Billing City',1,2,0,100,5,$soaddressblock,1,'V~O',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'ship_city','vtiger_soshipads',1,'1','ship_city','Shipping City',1,2,0,100,6,$soaddressblock,1,'V~O',3,null,'BAS',1)");
@@ -813,8 +813,8 @@ class DefaultDataPopulator extends CRMEntity {
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'ship_code','vtiger_soshipads',1,'1','ship_code','Shipping Code',1,2,0,100,10,$soaddressblock,1,'V~O',3,null,'BAS',1)");
 		
 		
-		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'bill_country','vtiger_sobillads',1,'1','bill_country','Billing Country',1,2,0,100,11,$soaddressblock,1,'V~O',3,null,'BAS',1)");
-		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'ship_country','vtiger_soshipads',1,'1','ship_country','Shipping Country',1,2,0,100,12,$soaddressblock,1,'V~O',3,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'bill_country','vtiger_sobillads',1,'1','bill_country','Billing Country',1,2,0,100,11,$soaddressblock,3,'V~O',3,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'ship_country','vtiger_soshipads',1,'1','ship_country','Shipping Country',1,2,0,100,12,$soaddressblock,3,'V~O',3,null,'BAS',1)");
 		
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'bill_pobox','vtiger_sobillads',1,'1','bill_pobox','Billing Po Box',1,2,0,100,3,$soaddressblock,1,'V~O',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'ship_pobox','vtiger_soshipads',1,'1','ship_pobox','Shipping Po Box',1,2,0,100,4,$soaddressblock,1,'V~O',3,null,'BAS',1)");
@@ -826,19 +826,19 @@ class DefaultDataPopulator extends CRMEntity {
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'terms_conditions','vtiger_salesorder',1,'19','terms_conditions','Terms & Conditions',1,2,0,100,1,$sotermsblock,1,'V~O',3,null,'ADV',1)");
 		
 		// Add fields for the Recurring Information block - Block 86
-		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'enable_recurring','vtiger_salesorder',1,'56','enable_recurring','Enable Recurring',1,2,0,100,1,$sorecurringinvoiceblock,1,'C~O',3,null,'BAS',1)");
-		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'recurring_frequency','vtiger_invoice_recurring_info',1,'16','recurring_frequency','Frequency',1,2,0,100,2,$sorecurringinvoiceblock,1,'V~O',3,null,'BAS',1)");
-		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'start_period','vtiger_invoice_recurring_info',1,'5','start_period','Start Period',1,2,0,100,3,$sorecurringinvoiceblock,1,'D~O',3,null,'BAS',1)");
-		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'end_period','vtiger_invoice_recurring_info',1,'5','end_period','End Period',1,2,0,100,4,$sorecurringinvoiceblock,1,'D~O',3,null,'BAS',1)");
-		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'payment_duration','vtiger_invoice_recurring_info',1,'16','payment_duration','Payment Duration',1,2,0,100,5,$sorecurringinvoiceblock,1,'V~O',3,null,'BAS',1)");
-		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'invoice_status','vtiger_invoice_recurring_info',1,'15','invoicestatus','Invoice Status',1,2,0,100,6,$sorecurringinvoiceblock,1,'V~M',3,null,'BAS',1)");
+		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'enable_recurring','vtiger_salesorder',1,'56','enable_recurring','Enable Recurring',1,0,0,100,1,$sorecurringinvoiceblock,1,'C~O',3,null,'BAS',1)");
+		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'recurring_frequency','vtiger_invoice_recurring_info',1,'16','recurring_frequency','Frequency',1,0,0,100,2,$sorecurringinvoiceblock,1,'V~O',3,null,'BAS',1)");
+		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'start_period','vtiger_invoice_recurring_info',1,'5','start_period','Start Period',1,0,0,100,3,$sorecurringinvoiceblock,1,'D~O',3,null,'BAS',1)");
+		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'end_period','vtiger_invoice_recurring_info',1,'5','end_period','End Period',1,0,0,100,4,$sorecurringinvoiceblock,1,'D~O',3,null,'BAS',1)");
+		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'payment_duration','vtiger_invoice_recurring_info',1,'16','payment_duration','Payment Duration',1,0,0,100,5,$sorecurringinvoiceblock,1,'V~O',3,null,'BAS',1)");
+		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'invoice_status','vtiger_invoice_recurring_info',1,'15','invoicestatus','Invoice Status',1,0,0,100,6,$sorecurringinvoiceblock,1,'V~M',3,null,'BAS',1)");
 		
 		//Sales Order Details -- END
 		
 		//Invoice Details -- START
 		 //Block69
 		
-		 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'subject','vtiger_invoice',1,'2','subject','Subject',1,0,0,100,1,$invoicebasicblock,1,'V~M',1,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'subject','vtiger_invoice',1,'2','subject','Subject',1,0,0,100,1,$invoicebasicblock,1,'V~M',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'salesorderid','vtiger_invoice',1,'80','salesorder_id','Sales Order',1,2,0,100,2,$invoicebasicblock,1,'I~O',3,null,'BAS',1)");	
 		 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'customerno','vtiger_invoice',1,'1','customerno','Customer No',1,2,0,100,3,$invoicebasicblock,1,'V~O',3,null,'BAS',1)");	
 		
@@ -862,7 +862,7 @@ class DefaultDataPopulator extends CRMEntity {
 		 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'discount_amount','vtiger_invoice',1,'1','hdnDiscountAmount','Discount Amount',1,2,0,100,13,$invoicebasicblock,3,'N~O',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'s_h_amount','vtiger_invoice',1,'1','hdnS_H_Amount','S&H Amount',1,2,0,100,14,57,3,'N~O',3,null,'BAS',1)");
 		
-		 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'accountid','vtiger_invoice',1,'73','account_id','Account Name',1,2,0,100,14,$invoicebasicblock,1,'I~O',1,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'accountid','vtiger_invoice',1,'73','account_id','Account Name',1,2,0,100,14,$invoicebasicblock,1,'I~M',3,null,'BAS',1)");
  $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'invoicestatus','vtiger_invoice',1,'15','invoicestatus','Status',1,2,0,100,15,$invoicebasicblock,1,'V~O',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,16,$invoicebasicblock,1,'V~M',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,17,$invoicebasicblock,2,'T~O',3,null,'BAS',0)");
@@ -873,8 +873,8 @@ class DefaultDataPopulator extends CRMEntity {
 		
 		 //Block 71
 		
-		 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'bill_street','vtiger_invoicebillads',1,'24','bill_street','Billing Address',1,2,0,100,1,$invoiceaddressblock,1,'V~M',1,null,'BAS',1)");
-		 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'ship_street','vtiger_invoiceshipads',1,'24','ship_street','Shipping Address',1,2,0,100,2,$invoiceaddressblock,1,'V~M',1,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'bill_street','vtiger_invoicebillads',1,'24','bill_street','Billing Address',1,2,0,100,1,$invoiceaddressblock,1,'V~M',3,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'ship_street','vtiger_invoiceshipads',1,'24','ship_street','Shipping Address',1,2,0,100,2,$invoiceaddressblock,1,'V~M',3,null,'BAS',1)");
 		
 		 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'bill_city','vtiger_invoicebillads',1,'1','bill_city','Billing City',1,2,0,100,5,$invoiceaddressblock,1,'V~O',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (23,".$this->db->getUniqueID("vtiger_field").",'ship_city','vtiger_invoiceshipads',1,'1','ship_city','Shipping City',1,2,0,100,6,$invoiceaddressblock,1,'V~O',3,null,'BAS',1)");

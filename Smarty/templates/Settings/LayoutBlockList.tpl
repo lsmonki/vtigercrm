@@ -101,7 +101,7 @@ function changeBlockorder(what_to_do,tabid,blockid,modulename)
 {literal}
 function deleteCustomField(id, fld_module, colName, uitype)
 {
-       if(confirm(alert_arr.ARE_YOU_SURE_YPU_WANT_TO_DELETE)){
+       if(confirm(alert_arr.ARE_YOU_SURE_YOU_WANT_TO_DELETE)){
         $('vtbusy_info').style.display = "block";
 			new Ajax.Request(
 				'index.php',
@@ -159,9 +159,18 @@ function getCreateCustomBlockForm(modulename,mode)
 			method: 'post',
 			postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&sub_mode=addBlock&fld_module='+modulename+'&parenttab=Settings&ajax=true&mode='+mode+'&blocklabel='+val+'&after_blockid='+blockid,
 			onComplete: function(response) {
-				$("cfList").innerHTML=response.responseText;
-				gselected_fieldtype = '';
 				$('vtbusy_info').style.display = "none";
+				var str = response.responseText;
+				if(str == 'ERROR'){
+					alert(alert_arr.LABEL_ALREADY_EXISTS);
+					return false;
+				}else if(str == 'LENGTH_ERROR'){
+					alert(alert_arr.LENGTH_OUT_OF_RANGE);
+					return false;
+				}else{
+					$("cfList").innerHTML=str;
+				}		
+				gselected_fieldtype = '';
 			}
 		}
 	);
@@ -177,24 +186,16 @@ function saveFieldInfo(fieldid,module,sub_mode){
 	var massedit_check = $('massedit_check_'+fieldid);
 	
 	if(mandatory_check != null){
-		if (mandatory_check.disabled == false) {
 			urlstring = urlstring+'&ismandatory=' + mandatory_check.checked;
-		}
 	}
 	if(presence_check != null){	
-		if (presence_check.disabled == false) {
 			urlstring = urlstring + '&isPresent=' + presence_check.checked;
-		}
 	}	
 	if(quickcreate_check != null){
-		if (quickcreate_check.disabled == false) {
 			urlstring = urlstring + '&quickcreate=' + quickcreate_check.checked;
-		}
 	}	
 	if(massedit_check != null){
-		if (massedit_check.disabled == false) {
 			urlstring = urlstring + '&massedit=' + massedit_check.checked;
-		}
 	}	
 	$('vtbusy_info').style.display = "block";
 	new Ajax.Request(
@@ -254,7 +255,7 @@ function getCreateCustomFieldForm(modulename,blockid,mode)
 			onComplete: function(response) {
 				var str = response.responseText;
 				if(str == 'ERROR'){
-					alert('Label already exists. Please specify a different Label');
+					alert(alert_arr.LABEL_ALREADY_EXISTS);
 					return false;
 				}else{
 					$("cfList").innerHTML=str;
@@ -367,13 +368,14 @@ var gselected_fieldtype = '';
 <br>
 
 
-
+{assign var=entries value=$CFENTRIES}
+			{if $CFENTRIES.0.tabpresence eq '0' }
+			
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 	<tr>
         <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 	        <br>	
-			{assign var=entries value=$CFENTRIES}
 			<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tr>
 					<td rowspan="2" valign="top" width="50"><img src="themes/images/orgshar.gif" alt="Users" title="Users" border="0" height="48" width="48"></td>
@@ -407,6 +409,23 @@ var gselected_fieldtype = '';
 	</tr>
 </table>
 		<!-- End of Display for field -->
+{else}
 
+	<link rel='stylesheet' type='text/css' href='themes/$theme/style.css'>	
+	<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>
+	<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
 
+		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+		<tbody><tr>
+		<td rowspan='2' width='11%'><img src="{'denied.gif'|@vtiger_imageurl:$THEME}" ></td>
+		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>{$APP.LBL_PERMISSION}</span></td>
+		</tr>
+		<tr>
+		<td class='small' align='right' nowrap='nowrap'>			   	
+		<a href='javascript:window.history.back();'>{$MOD.LBL_GO_BACK}</a><br>								   						     </td>
+		</tr>
+		</tbody></table> 
+		</div>
+		</td></tr></table>
+{/if}
 </div>

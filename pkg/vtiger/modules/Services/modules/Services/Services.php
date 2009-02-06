@@ -45,16 +45,16 @@ class Services extends CRMEntity {
 		'Service No'=>Array('service'=>'service_no'),
 		'Service Name'=>Array('service'=>'servicename'),
         'Commission Rate'=>Array('service'=>'commissionrate'),
-		'Qty/Unit'=>Array('service'=>'qty_per_unit'),
-		'Unit Price'=>Array('service'=>'unit_price')
+		'No of Units'=>Array('service'=>'qty_per_unit'),
+		'Price'=>Array('service'=>'unit_price')
 	);
 	var $list_fields_name = Array(
 		/* Format: Field Label => fieldname */
 		'Service No'=>'service_no',
 		'Service Name'=>'servicename',
 		'Commission Rate'=>'commissionrate',
-		'Qty/Unit'=>'qty_per_unit',
-		'Unit Price'=>'unit_price'
+		'No of Units'=>'qty_per_unit',
+		'Price'=>'unit_price'
 	);
 
 	// Make the field link to detail view 

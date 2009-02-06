@@ -73,8 +73,10 @@ $html_string = '<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=sma
                 <td class="small" align="left">	
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
-				<td style="padding-left:10px;"><a href="javascript:;" onmouseout="fninvsh(\'allMenu\');" onclick="fnvshobj(this,\'allMenu\')"><img src="'.$image_path.'btnL3AllMenu.gif" alt="'.$app_strings['LBL_ALL_MENU_ALT'].'" title="'.$app_strings['LBL_ALL_MENU_TITLE'].'" border="0"></a></td>
-				</tr>
+				<td style="padding-left:10px;"><a href="javascript:;" onmouseout="fninvsh(\'allMenu\');" onclick="fnvshobj(this,\'allMenu\')"><img src="'.$image_path.'btnL3AllMenu.gif" alt="'.$app_strings['LBL_ALL_MENU_ALT'].'" title="'.$app_strings['LBL_ALL_MENU_TITLE'].'" border="0"></a></td>';
+				if((isPermitted('Settings','index') == 'yes'))
+					$html_string .= '<td style="padding-left:10px;"><a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule=Calendar&parenttab=Settings"><img src="'.$image_path.'settingsBox.png" alt="'.$app_strings['LBL_SETTINGS'].'" title="'.$app_strings['LBL_SETTINGS'].'" border="0"></a></td>';
+				$html_string .= '</tr>
 				</table>
 	</td>			
 	</tr>

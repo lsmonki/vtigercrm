@@ -216,7 +216,7 @@
 				
 				/*layout Editor changes*/
 				BLOCK_NAME_CANNOT_BE_BLANK : 'Block name can not be blank',
-				ARE_YOU_SURE_YPU_WANT_TO_DELETE : 'Are you sure you want to delete ?',
+				ARE_YOU_SURE_YOU_WANT_TO_DELETE : 'Are you sure you want to delete ?',
 				PLEASE_MOVE_THE_FIELDS_TO_ANOTHER_BLOCK : 'Please move the fields to another block',
 				ARE_YOU_SURE_YOU_WANT_TO_DELETE_BLOCK : 'Are you sure you want to delete block?',
 				LABEL_CANNOT_NOT_EMPTY : 'Label cannot be Emtpy',
@@ -233,5 +233,7 @@
 				IS_MANDATORY_FIELD : 'is Mandatory Field',
 				CLOSEDATE_CANNOT_BE_EMPTY : 'Closing Date cannot be Empty',
 				AMOUNT_CANNOT_BE_EMPTY : 'Amount cannot be Empty',
-				ARE_YOU_SURE : 'Are You Sure You want to Delete?'	
+				ARE_YOU_SURE : 'Are You Sure You want to Delete?',
+				LABEL_ALREADY_EXISTS : 'Label already exists. Please specify a different Label',
+				LENGTH_OUT_OF_RANGE : 'Length of the Block should be less than 50 characters'	
 			};

@@ -13,7 +13,7 @@ require_once('include/ComboUtil.php');
 global $current_user;
  $fldmodule=$_REQUEST['fld_module'];
  $blockid = $_REQUEST['blockid'];
- $fldlabel=$_REQUEST['fldLabel_'.$blockid];
+ $fldlabel=trim($_REQUEST['fldLabel_'.$blockid]);
  $fldType= $_REQUEST['fieldType_'.$blockid];
  $parenttab=$_REQUEST['parenttab'];
  $mode=$_REQUEST['mode'];
@@ -126,7 +126,7 @@ else
 		}
 	}
 	//Assigning the uitype
-	$fldlength=$_REQUEST['fldLength'];
+	$fldlength=$_REQUEST['fldLength_'.$blockid];
 	$uitype='';
 	$fldPickList='';
 	if(isset($_REQUEST['fldDecimal_'.$blockid]) && $_REQUEST['fldDecimal_'.$blockid] != '')

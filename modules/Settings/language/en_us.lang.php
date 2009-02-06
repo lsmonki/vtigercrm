@@ -1156,7 +1156,7 @@ $mod_strings = Array(
 'LBL_ROLENAME_EXIST' => 'Role name already exists',
 
 //layout editor
-'LBL_MOVE_FIELDS_INTO' => 'Move Fields into',
+'LBL_MOVE_FIELDS' => 'Move Fields',
 'NO_HIDDEN_FIELDS' => 'No Hidden Fields',
 'LBL_SELECT_FIELD_TO_MOVE' => 'Select Field to Move',
 'LBL_RELATED_LIST' => 'Related List',
@@ -1179,8 +1179,8 @@ $mod_strings = Array(
 'LBL_MAPPED_FIELDS' => 'Mapped Fields',
 'LEADS_CUSTOM_FIELD_MAPPING_DESCRIPTION' => 'Map Your Leads Customfields with Accounts,Contacts and Potentials',
 'LEADS_CUSTOM_FIELD_MAPPING'=> 'Leads CustomField Mapping',
-'LBL_CALENDER_CUSTOMFIELDS' => 'Calender Custom Fields',
-'LBL_CALENDER_CUSTOMFIELDS_DESCRIPTION' => 'You can Create Custom Fields for Calender',
-
+'LBL_CALENDER_CUSTOMFIELDS' => 'Calendar Custom Fields',
+'LBL_CALENDER_CUSTOMFIELDS_DESCRIPTION' => 'You can Create Custom Fields for Calendar',
+'LBL_GO_BACK'=>'Go Back',
 );
 ?>

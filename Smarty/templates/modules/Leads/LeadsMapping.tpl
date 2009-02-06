@@ -12,7 +12,7 @@
 								
 		<table border="0" cellspacing="0" cellpadding="5" width="100%">
 			<tr>
-				<td rowspan="2" valign="top"><a href="index.php?module=Settings&action=CustomFieldList&parenttab=Settings&formodule={$MODULE}"><img border="0" src="themes/images/leadsmappping.gif" onmouseover="tooltip.tip(this,'{$MOD.LEADS_CUSTOM_FIELD_MAPPING_DESCRIPTION}');" onmouseout="tooltip.untip(true);"></a></td>
+				<td rowspan="2" valign="top"><a href="index.php?module=Settings&action=CustomFieldList&parenttab=Settings&formodule={$MODULE}"><img border="0" src="themes/images/custom.gif" onmouseover="tooltip.tip(this,'{$MOD.LEADS_CUSTOM_FIELD_MAPPING_DESCRIPTION}');" onmouseout="tooltip.untip(true);"></a></td>
 				<td class="big" valign="top"><a href="index.php?module=Settings&action=CustomFieldList&parenttab=Settings&formodule={$MODULE}" onmouseover="tooltip.tip(this,'{$MOD.LEADS_CUSTOM_FIELD_MAPPING_DESCRIPTION}');" onmouseout="tooltip.untip(true);">{$MOD.LEADS_CUSTOM_FIELD_MAPPING}</a></td>
 			</tr>
 		</table>

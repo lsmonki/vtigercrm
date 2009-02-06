@@ -57,7 +57,22 @@
 		
 	</td>
 	<td width="8px" valign="top"> 
-		<img src="{'panel-left.png'|@vtiger_imageurl:$THEME}" title="Hide Menu" id="hideImage" style="display:inline;cursor:pointer;" onclick="toggleShowHide('showImage','settingsSideMenu'); toggleShowHide('showImage','hideImage');" />
-		<img src="{'panel-right.png'|@vtiger_imageurl:$THEME}" title="Show Menu" id="showImage" style="display:none;cursor:pointer;" onclick="toggleShowHide('settingsSideMenu','showImage'); toggleShowHide('hideImage','showImage');"/>
+		<img src="{'panel-left.png'|@vtiger_imageurl:$THEME}" title="Hide Menu" id="hideImage" style="display:inline;cursor:pointer;" onclick="toggleShowHide_panel('showImage','settingsSideMenu'); toggleShowHide_panel('showImage','hideImage');" />
+		<img src="{'panel-right.png'|@vtiger_imageurl:$THEME}" title="Show Menu" id="showImage" style="display:none;cursor:pointer;" onclick="toggleShowHide_panel('settingsSideMenu','showImage'); toggleShowHide_panel('hideImage','showImage');"/>
 	</td>
 	<td class="small settingsSelectedUI" valign=top align=left>
+
+	
+<script type="text/javascript">
+	{literal}
+	function toggleShowHide_panel(showid, hideid){
+		var show_ele = document.getElementById(showid);
+		var hide_ele = document.getElementById(hideid);
+		if(show_ele != null){ 
+			show_ele.style.display = "";
+			}
+		if(hide_ele != null) 
+			hide_ele.style.display = "none";
+	}
+	{/literal}
+</script>

@@ -31,13 +31,15 @@
 						<td rowspan="2" class="colHeader small" width="5%">#</td>
 					        <td rowspan="2" class="colHeader small" width="20%">{$MOD.FieldLabel}</td>
 					        <td rowspan="2" class="colHeader small" width="20%">{$MOD.FieldType}</td>
-							<td colspan="3" class="colHeader small" valign="top"><div align="center">{$MOD.LBL_MAPPING_OTHER_MODULES}</div></td>
+							<td colspan="4" class="colHeader small" valign="top"><div align="center">{$MOD.LBL_MAPPING_OTHER_MODULES}</div></td>
 					  </tr>
 
 					<tr>
 					  <td class="colHeader small" valign="top" width="18%">{$APP.Accounts}</td>
 					  <td class="colHeader small" valign="top" width="18%">{$APP.Contacts}</td>
 					  <td class="colHeader small" valign="top" width="19%">{$APP.Potentials}</td>
+					  <td class="colHeader small" width="20%">{$MOD.LBL_CURRENCY_TOOL}</td>
+					
 					</tr>
 					{else}
 					<tr>

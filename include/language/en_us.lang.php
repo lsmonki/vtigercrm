@@ -1204,7 +1204,9 @@ $app_strings = array (
 'LBL_ADD_SERVICE'=>'Add Service',
 'LBL_ITEM_DETAILS'=>'Item Details',
 'LBL_ITEM_NAME'=>'Item Name',
-
+'LBL_SETTINGS'=>'Settings',
+'LAYOUT_EDITOR'=>'Layout Editor',
+'CUSTOMFIELD_MAPPING'=>'CustomField Mapping',
 );
 
 $app_list_strings = array (

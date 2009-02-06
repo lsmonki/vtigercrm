@@ -2273,20 +2273,19 @@ function Button_Check($module)
 {
 	global $log;
 	$log->debug("Entering Button_Check(".$module.") method ...");
-        $permit_arr = array ('EditView' => '',
-                             'index' => '',
-                             'Import' => '',
-                             'Export' => '',
-							 'Merge' => '',
-							 'DuplicatesHandling' => '' );
+	$permit_arr = array ('EditView' => '',
+						'index' => '',
+						'Import' => '',
+                      	'Export' => '',
+						'Merge' => '',
+						'DuplicatesHandling' => '' );
 
-          foreach($permit_arr as $action => $perr)
-          {
-                 $tempPer=isPermitted($module,$action,'');
-                 $permit_arr[$action] = $tempPer;
-          }
-	  $permit_arr["Calendar"] = isPermitted("Calendar","index",'');
-
+	foreach($permit_arr as $action => $perr){
+		$tempPer=isPermitted($module,$action,'');
+		$permit_arr[$action] = $tempPer;
+	}
+	$permit_arr["Calendar"] = isPermitted("Calendar","index",'');
+	$permit_arr["moduleSettings"] = isModuleSettingPermitted($module);
 	$log->debug("Exiting Button_Check method ...");
 	  return $permit_arr;
 
@@ -3524,6 +3523,23 @@ function getSettingsBlockId($label) {
 	return $blockid;
 }
 
+// Function to check if the logged in user is admin
+// and if the module is an entity module
+// and the module has a Settings.php file within it
+function isModuleSettingPermitted($module){
+	if (file_exists("modules/$module/Settings.php") &&
+		isPermitted('Settings','index','') == 'yes') {
+			global $adb;
+			$entityRes = $adb->pquery('SELECT isentitytype FROM vtiger_tab WHERE name=?', array($module));
+			if ($adb->num_rows($entityRes) > 0) {
+				$isentitytype = $adb->query_result($entityRes, 0, 'isentitytype');
+				if ($isentitytype == 1) {
+					return 'yes';
+				}
+			}
+	}
+	return 'no';
+}
 // vtlib customization: Extended vtiger CRM utlitiy functions
 require_once('include/utils/VtlibUtils.php');
 // END

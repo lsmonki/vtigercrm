@@ -682,27 +682,27 @@ ExecuteQuery("INSERT INTO vtiger_payment_duration values(".$adb->getUniqueID('vt
 // Add fields for the Recurring Information block
 $salesorder_tabid = getTabid('SalesOrder');
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'enable_recurring','vtiger_salesorder',1,'56','enable_recurring','Enable Recurring',1,0,0,100,1,$new_block_id,1,'C~O',1,null,'BAS')");
+ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'enable_recurring','vtiger_salesorder',1,'56','enable_recurring','Enable Recurring',1,0,0,100,1,$new_block_id,1,'C~O',3,null,'BAS')");
 addFieldSecurity($salesorder_tabid,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'recurring_frequency','vtiger_invoice_recurring_info',1,'16','recurring_frequency','Frequency',1,0,0,100,2,$new_block_id,1,'V~O',1,null,'BAS')");
+ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'recurring_frequency','vtiger_invoice_recurring_info',1,'16','recurring_frequency','Frequency',1,0,0,100,2,$new_block_id,1,'V~O',3,null,'BAS')");
 addFieldSecurity($salesorder_tabid,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'start_period','vtiger_invoice_recurring_info',1,'5','start_period','Start Period',1,0,0,100,3,$new_block_id,1,'D~O',1,null,'BAS')");
+ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'start_period','vtiger_invoice_recurring_info',1,'5','start_period','Start Period',1,0,0,100,3,$new_block_id,1,'D~O',3,null,'BAS')");
 addFieldSecurity($salesorder_tabid,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'end_period','vtiger_invoice_recurring_info',1,'5','end_period','End Period',1,0,0,100,4,$new_block_id,1,'D~O',1,null,'BAS')");
+ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'end_period','vtiger_invoice_recurring_info',1,'5','end_period','End Period',1,0,0,100,4,$new_block_id,1,'D~O',3,null,'BAS')");
 addFieldSecurity($salesorder_tabid,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'payment_duration','vtiger_invoice_recurring_info',1,'16','payment_duration','Payment Duration',1,0,0,100,5,$new_block_id,1,'V~O',1,null,'BAS')");
+ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'payment_duration','vtiger_invoice_recurring_info',1,'16','payment_duration','Payment Duration',1,0,0,100,5,$new_block_id,1,'V~O',3,null,'BAS')");
 addFieldSecurity($salesorder_tabid,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'invoice_status','vtiger_invoice_recurring_info',1,'15','invoicestatus','Invoice Status',1,0,0,100,6,$new_block_id,1,'V~O',1,null,'BAS')");
+ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'invoice_status','vtiger_invoice_recurring_info',1,'15','invoicestatus','Invoice Status',1,0,0,100,6,$new_block_id,1,'V~O',3,null,'BAS')");
 addFieldSecurity($salesorder_tabid,$field_id);
 
 // Add new picklist value 'AutoCreated' for Invoice Status and add the same for all the existing roles.
@@ -1462,10 +1462,9 @@ ExecuteQuery("update vtiger_field set presence = 0,quickcreate=3 where block = $
 ExecuteQuery("update vtiger_field set quickcreate=3 where fieldname='createdtime' or fieldname='modifiedtime'");
 ExecuteQuery("update vtiger_field set quickcreate=3 where tabid in ($invoicetabid,$salesordertabid,$purchaseorder,$quotes,$faqtabid)");
 ExecuteQuery("update vtiger_field set quickcreate=1 where fieldname in ('subject','account_id','bill_street','ship_street') and tabid= $invoicetabid");
-ExecuteQuery("update vtiger_field set quickcreate=1 where fieldname in ('subject','account_id','bill_street','ship_street','recurring_frequency','payment_duration') and tabid= $salesordertabid");
+ExecuteQuery("update vtiger_field set quickcreate=1 where fieldname in ('subject','account_id','bill_street','ship_street') and tabid= $salesordertabid");
 ExecuteQuery("update vtiger_field set quickcreate=1 where fieldname in ('subject','vendor_id','bill_street','ship_street') and tabid = $purchaseorder");
 ExecuteQuery("update vtiger_field set quickcreate=1 where fieldname in ('subject','account_id','bill_street','ship_street') and tabid= $quotes");
-ExecuteQuery("update vtiger_field set quickcreate=1 where fieldname in ('faq_answer','question') and tabid = $faqtabid");
 
 ExecuteQuery("update vtiger_field set masseditable=0 where tabid = $documents_tab_id or fieldname ='createdtime' or fieldname = 'modifiedtime'");
 ExecuteQuery("update vtiger_field set typeofdata='V~O',presence=0 where uitype=4");

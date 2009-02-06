@@ -13,6 +13,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 
 global $mod_strings,$app_strings,$theme;
+
 $smarty=new vtigerCRM_Smarty;
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
@@ -120,8 +121,9 @@ function getCFListEntries($module)
 				else
 					$cf_element['activitytype'] = $app_strings['Event'];
 			}
-			$cf_element['tool']='<img src="' .vtiger_imageurl('editfield.gif', $theme) .'" border="0" style="cursor:pointer;" onClick="fnvshobj(this,\'createcf\');getCreateCustomFieldForm(\''.$module.'\',\''.$row["fieldid"].'\',\''.$cf_tab_id.'\',\''.$row["uitype"].'\')" alt="'.$app_strings['LBL_EDIT_BUTTON_LABEL'].'" title="'.$app_strings['LBL_EDIT_BUTTON_LABEL'].'"/>&nbsp;|&nbsp;<img style="cursor:pointer;" onClick="deleteCustomField('.$row["fieldid"].',\''.$module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')" src="'.$image_path.'delete.gif" border="0"  alt="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'" title="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'"/></a>';
-
+			if ($module == 'Calendar') {
+				$cf_element['tool']='&nbsp;<img style="cursor:pointer;" onClick="deleteCustomField('.$row["fieldid"].',\''.$module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')" src="'.$image_path.'delete.gif" border="0"  alt="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'" title="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'"/></a>';
+			}
 			$cflist[] = $cf_element;
 			$count++;
 		}while($row = $adb->fetch_array($result));

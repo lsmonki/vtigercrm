@@ -19,7 +19,7 @@
 				<table class="listTable" border="0" cellpadding="3" cellspacing="0" width="100%">
 					
 					{foreach item=entries key=id from=$CFENTRIES name=outer}
-						{if $entries.blockid ne $RELPRODUCTSECTIONID && $entries.blocklabel neq '' && $entried.blockid ne COMMENTSECTIONID}
+						{if $entries.blockid ne $RELPRODUCTSECTIONID || $entries.blocklabel neq '' }
 							{if $smarty.foreach.outer.first neq true}
 							<tr><td><img src="{'blank.gif'|@vtiger_imageurl:$THEME}" style="width:16px;height:16px;" border="0" />&nbsp;&nbsp;</td></tr>
 							{/if}
@@ -36,9 +36,9 @@
 									{if $entries.iscustom == 1 }
 									<img style="cursor:pointer;" onClick=" deleteCustomBlock('{$MODULE}','{$entries.blockid}','{$entries.no}')" src="{'delete.gif'|@vtiger_imageurl:$THEME}" border="0"  alt="Delete" title="Delete"/>&nbsp;&nbsp;
 									{/if}
-									
+									{if $entries.blockid neq $COMMENTSECTIONID && $entries.blockid neq $SOLUTIONBLOCKID}
 									<img src="{'hidden_fields.png'|@vtiger_imageurl:$THEME}" border="0" style="cursor:pointer;"  onclick="fnvshobj(this,'hiddenfields_{$entries.blockid}');" alt="{$MOD.HIDDEN_FIELDS}" title="{$MOD.HIDDEN_FIELDS}"/>&nbsp;&nbsp;
-										
+									{/if}	
 										<div id = "hiddenfields_{$entries.blockid}" style="display:none; position:absolute; width:300px;" class="layerPopup">
 											<div style="position:relative; display:block">
 		 										<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
@@ -94,8 +94,8 @@
 											</div>
 										</div>						
 																						
-									{if $entries.hascustomtable}					  		
-									<img src="{'plus_layout.gif'|@vtiger_imageurl:$THEME}" border="0" style="cursor:pointer;"  onclick="fnvshobj(this,'addfield_{$entries.blockid}'); " alt="Add CustomField" title="Add CustomField"/>&nbsp;&nbsp;
+									{if $entries.hascustomtable && $entries.blockid neq $COMMENTSECTIONID && $entries.blockid neq $SOLUTIONBLOCKID }
+										<img src="{'plus_layout.gif'|@vtiger_imageurl:$THEME}" border="0" style="cursor:pointer;"  onclick="fnvshobj(this,'addfield_{$entries.blockid}'); " alt="Add CustomField" title="Add CustomField"/>&nbsp;&nbsp;
 									{/if}
 											<!-- for adding customfield -->
 												<div id="addfield_{$entries.blockid}" style="display:none; position:absolute; width:500px;" class="layerPopup">
@@ -195,15 +195,15 @@
 									<!-- end custom field -->
 									
 									
-									
-									<img src="{'moveinto.png'|@vtiger_imageurl:$THEME}" border="0"  style="cursor:pointer; height:16px; width:16px" onClick="fnvshobj(this,'movefields_{$entries.blockid}');"  alt="Move Fields" title="Move Fields"/>&nbsp;&nbsp;
-									
+									{if $entries.blockid neq $COMMENTSECTIONID && $entries.blockid neq $SOLUTIONBLOCKID}
+										<img src="{'moveinto.png'|@vtiger_imageurl:$THEME}" border="0"  style="cursor:pointer; height:16px; width:16px" onClick="fnvshobj(this,'movefields_{$entries.blockid}');"  alt="Move Fields" title="Move Fields"/>&nbsp;&nbsp;
+									{/if}
 									<div id = "movefields_{$entries.blockid}" style="display:none; position:absolute; width:300px;" class="layerPopup">
 											<div style="position:relative; display:block">
 		 										<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 													<tr>
 														<td width="95%" align="left"  class="layerPopupHeading">
-															{$MOD.LBL_MOVE_FIELDS_INTO} {$entries.blocklabel}
+															{$MOD.LBL_MOVE_FIELDS}
 														</td>
 														<td width="5%" align="right">
 															<a href="javascript:fninvsh('movefields_{$entries.blockid}');"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0"  align="absmiddle" /></a>
@@ -332,7 +332,7 @@
 												<tr>
 													<td valign="top" class="dvtCellInfo" align="left" width="10px">
 														<input id="quickcreate_check_{$value.fieldselect}"  type="checkbox" 
-														{if $value.quickcreate eq '0' || ($value.mandatory eq '0' || $value.mandatory eq '2')} 
+														{if $value.quickcreate eq '0'|| $value.quickcreate eq '2' && ($value.mandatory eq '0' || $value.mandatory eq '2')} 
 															checked  disabled   
 														{/if}
 														{if $value.quickcreate eq '2'}
