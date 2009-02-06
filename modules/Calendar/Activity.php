@@ -656,7 +656,7 @@ function insertIntoRecurringTable(& $recurObj)
 
 		if($remindermode == 'edit')
 		{
-			if($this->db->num_rows($result_exist) == 1)
+			if($this->db->num_rows($result_exist) > 0)
 			{
 				$query = "UPDATE ".$this->reminder_table." SET";
 				$query .=" reminder_sent = ?, reminder_time = ? WHERE activity_id =?"; 
@@ -668,7 +668,7 @@ function insertIntoRecurringTable(& $recurObj)
 				$params = array($activity_id, $reminder_time, 0, $recurid);
 			}
 		}
-		elseif(($remindermode == 'delete') && ($this->db->num_rows($result_exist) == 1))
+		elseif(($remindermode == 'delete') && ($this->db->num_rows($result_exist) > 0))
 		{
 			$query = "DELETE FROM ".$this->reminder_table." WHERE activity_id = ?";
 			$params = array($activity_id);
