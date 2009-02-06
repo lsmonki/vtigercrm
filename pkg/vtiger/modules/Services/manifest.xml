@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <module>
-<exporttime>2009-02-06 07:54:57</exporttime>
+<exporttime>2009-02-06 12:10:08</exporttime>
 <name>Services</name>
 <label>Services</label>
 <parent>Inventory</parent>
@@ -58,7 +58,7 @@
 <maximumlength>100</maximumlength>
 <typeofdata>V~M</typeofdata>
 <quickcreate>0</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreatesequence>1</quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -81,12 +81,12 @@
 <sequence>2</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
-<quickcreate>1</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreate>3</quickcreate>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
-<masseditable>1</masseditable>
+<masseditable>0</masseditable>
 </field>
 <field>
 <fieldname>discontinued</fieldname>
@@ -96,13 +96,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Service Active</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>4</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
-<quickcreate>0</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreate>2</quickcreate>
+<quickcreatesequence>3</quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -116,13 +116,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Sales Start Date</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>9</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>D~O</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -136,13 +136,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Sales End Date</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>10</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>D~O~OTH~GE~sales_start_date~Sales Start Date</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -156,13 +156,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Support Start Date</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>11</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>D~O</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -176,13 +176,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Support Expiry Date</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>12</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>D~O~OTH~GE~start_date~Start Date</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -196,13 +196,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Website</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>6</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -221,12 +221,12 @@
 <sequence>13</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>T~O</typeofdata>
-<quickcreate>1</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreate>3</quickcreate>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>2</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
-<masseditable>1</masseditable>
+<masseditable>0</masseditable>
 </field>
 <field>
 <fieldname>modifiedtime</fieldname>
@@ -241,12 +241,12 @@
 <sequence>14</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>T~O</typeofdata>
-<quickcreate>1</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreate>3</quickcreate>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>2</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
-<masseditable>1</masseditable>
+<masseditable>0</masseditable>
 </field>
 <field>
 <fieldname>service_usageunit</fieldname>
@@ -256,13 +256,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Usage Unit</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>3</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -281,13 +281,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>No of Units</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>5</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>N~O</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -301,13 +301,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Owner</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>8</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>I~O</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -321,13 +321,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Service Category</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>7</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -354,13 +354,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Price</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>1</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>N~O</typeofdata>
-<quickcreate>0</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreate>2</quickcreate>
+<quickcreatesequence>2</quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -374,13 +374,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Tax Class</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>4</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -394,13 +394,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Commission Rate</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>2</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>N~O</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>1</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -422,13 +422,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Description</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>1</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>0</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>

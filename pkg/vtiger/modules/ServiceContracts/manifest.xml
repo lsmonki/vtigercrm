@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <module>
-<exporttime>2009-02-06 07:55:28</exporttime>
+<exporttime>2009-02-06 12:10:01</exporttime>
 <name>ServiceContracts</name>
 <label>Service Contracts</label>
 <parent>Support</parent>
@@ -57,13 +57,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Assigned To</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>4</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~M</typeofdata>
-<quickcreate>0</quickcreate>
-<quickcreatesequence>1</quickcreatesequence>
+<quickcreate>2</quickcreate>
+<quickcreatesequence>2</quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -81,13 +81,13 @@
 <selected>0</selected>
 <sequence>17</sequence>
 <maximumlength>100</maximumlength>
-<typeofdata>T~O</typeofdata>
-<quickcreate>0</quickcreate>
-<quickcreatesequence>2</quickcreatesequence>
+<typeofdata>V~O</typeofdata>
+<quickcreate>3</quickcreate>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>2</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
-<masseditable>1</masseditable>
+<masseditable>0</masseditable>
 </field>
 <field>
 <fieldname>modifiedtime</fieldname>
@@ -101,13 +101,13 @@
 <selected>0</selected>
 <sequence>18</sequence>
 <maximumlength>100</maximumlength>
-<typeofdata>T~O</typeofdata>
-<quickcreate>0</quickcreate>
-<quickcreatesequence>3</quickcreatesequence>
+<typeofdata>V~O</typeofdata>
+<quickcreate>3</quickcreate>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>2</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
-<masseditable>1</masseditable>
+<masseditable>0</masseditable>
 </field>
 <field>
 <fieldname>start_date</fieldname>
@@ -117,12 +117,12 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Start Date</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>7</sequence>
 <maximumlength>100</maximumlength>
-<typeofdata>V~M</typeofdata>
-<quickcreate>0</quickcreate>
+<typeofdata>D~O</typeofdata>
+<quickcreate>2</quickcreate>
 <quickcreatesequence>4</quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
@@ -141,13 +141,13 @@
 <selected>0</selected>
 <sequence>11</sequence>
 <maximumlength>100</maximumlength>
-<typeofdata>V~O</typeofdata>
-<quickcreate>0</quickcreate>
-<quickcreatesequence>5</quickcreatesequence>
+<typeofdata>D~O</typeofdata>
+<quickcreate>3</quickcreate>
+<quickcreatesequence>0</quickcreatesequence>
 <displaytype>2</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
-<masseditable>1</masseditable>
+<masseditable>0</masseditable>
 </field>
 <field>
 <fieldname>parent_id</fieldname>
@@ -157,12 +157,12 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Related to</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>3</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
-<quickcreate>0</quickcreate>
+<quickcreate>2</quickcreate>
 <quickcreatesequence>6</quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
@@ -181,12 +181,12 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Tracking Unit</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>6</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
-<quickcreate>0</quickcreate>
+<quickcreate>2</quickcreate>
 <quickcreatesequence>7</quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
@@ -207,12 +207,12 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Total Units</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>8</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
-<quickcreate>0</quickcreate>
+<quickcreate>2</quickcreate>
 <quickcreatesequence>8</quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
@@ -227,12 +227,12 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Used Units</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>10</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
-<quickcreate>0</quickcreate>
+<quickcreate>2</quickcreate>
 <quickcreatesequence>9</quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
@@ -253,7 +253,7 @@
 <maximumlength>100</maximumlength>
 <typeofdata>V~M</typeofdata>
 <quickcreate>0</quickcreate>
-<quickcreatesequence>10</quickcreatesequence>
+<quickcreatesequence>1</quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -271,13 +271,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Due date</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>9</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>D~O</typeofdata>
-<quickcreate>1</quickcreate>
-<quickcreatesequence>11</quickcreatesequence>
+<quickcreate>2</quickcreate>
+<quickcreatesequence>5</quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -296,12 +296,12 @@
 <sequence>13</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
-<quickcreate>1</quickcreate>
-<quickcreatesequence>13</quickcreatesequence>
+<quickcreate>3</quickcreate>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>2</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
-<masseditable>1</masseditable>
+<masseditable>0</masseditable>
 </field>
 <field>
 <fieldname>actual_duration</fieldname>
@@ -316,12 +316,12 @@
 <sequence>15</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
-<quickcreate>1</quickcreate>
-<quickcreatesequence>14</quickcreatesequence>
+<quickcreate>3</quickcreate>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>2</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
-<masseditable>1</masseditable>
+<masseditable>0</masseditable>
 </field>
 <field>
 <fieldname>contract_status</fieldname>
@@ -331,13 +331,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Status</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>12</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>15</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -359,13 +359,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Priority</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>14</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>17</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -384,13 +384,13 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Type</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>5</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>18</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -414,12 +414,12 @@
 <sequence>16</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>N~O~2~2</typeofdata>
-<quickcreate>1</quickcreate>
-<quickcreatesequence>19</quickcreatesequence>
+<quickcreate>3</quickcreate>
+<quickcreatesequence>3</quickcreatesequence>
 <displaytype>2</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
-<masseditable>1</masseditable>
+<masseditable>0</masseditable>
 </field>
 <field>
 <fieldname>contract_no</fieldname>
@@ -434,12 +434,12 @@
 <sequence>2</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
-<quickcreate>1</quickcreate>
-<quickcreatesequence>20</quickcreatesequence>
+<quickcreate>3</quickcreate>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
-<masseditable>1</masseditable>
+<masseditable>0</masseditable>
 </field>
 </fields>
 </block>

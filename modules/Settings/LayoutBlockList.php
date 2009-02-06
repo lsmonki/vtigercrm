@@ -228,12 +228,12 @@ function getFieldListEntries($module)
 						$fieldlabel = getTranslatedString($row_field['fieldlabel']);
 					
 					$strictlyMandatory = false;
-					if(isset($focus->mandatory_fields) && (!empty($focus->mandatory_fields))){
-						if (in_array($uitype, $nonEditableUiTypes) || in_array($fieldname, $focus->mandatory_fields)) {
-							$strictlyMandatory = true;
-						}
-					}	
-					$visibility = getFieldInfo($fieldname,$typeofdata,$quickcreate,$massedit,$presence,$strictlyMandatory,$customfieldflag,$displaytype);
+					if(isset($focus->mandatory_fields) && (!empty($focus->mandatory_fields)) && in_array($fieldname, $focus->mandatory_fields)){
+						$strictlyMandatory = true;
+					} elseif (in_array($uitype, $nonEditableUiTypes) || $displaytype == 2) {
+						$strictlyMandatory = true;
+					}
+					$visibility = getFieldInfo($fieldname,$typeofdata,$quickcreate,$massedit,$presence,$strictlyMandatory,$customfieldflag,$displaytype,$uitype);
 					
 					if ($presence == 0 || $presence == 2) {
 						$cf_element[$count]['fieldselect']=$fieldid;
@@ -483,19 +483,20 @@ function changeFieldOrder(){
 /**
  * 
  */
-function getFieldInfo($fieldname,$typeofdata,$quickcreate,$massedit,$presence,$strictlyMandatory,$customfieldflag,$displaytype){
+function getFieldInfo($fieldname,$typeofdata,$quickcreate,$massedit,$presence,$strictlyMandatory,$customfieldflag,$displaytype,$uitype){
 	global $log;
 
 	$fieldtype =  explode("~",$typeofdata);
 		
-	if($strictlyMandatory && $quickcreate == 3){ //fields which you dont wish to show in quickcreate
-		$mandatory = '3';
-	}elseif($strictlyMandatory){//fields without which the CRM Record will be inconsistent
+	if($strictlyMandatory){//fields without which the CRM Record will be inconsistent
 		$mandatory = '0';
 	}elseif($fieldtype[1] == "M"){//fields which are made mandatory
 		$mandatory = '2';
 	}else{
 		$mandatory = '1'; //fields not mandatory
+	}
+	if ($uitype == 4 || $displaytype == 2) {
+		$mandatory = '3';
 	}
 	
 	
@@ -511,21 +512,21 @@ function getFieldInfo($fieldname,$typeofdata,$quickcreate,$massedit,$presence,$s
 
 function updateFieldProperties(){
 	
-global $adb,$smarty,$log;
-$fieldid = $_REQUEST['fieldid'];
-$req_sql = "select * from vtiger_field where fieldid = ? and fieldname not in('salutationtype') and vtiger_field.presence in (0,2)";
-$req_result = $adb->pquery($req_sql, array($fieldid));
-
-$typeofdata = $adb->query_result($req_result,0,'typeofdata');
-$tabid = $adb->query_result($req_result,0,'tabid');
-$fieldname = $adb->query_result($req_result,0,'fieldname');
-$uitype = $adb->query_result($req_result,0,'uitype');
-$oldfieldlabel = $adb->query_result($req_result,0,'fieldlabel');
-$tablename = $adb->query_result($req_result,0,'tablename');
-$columnname = $adb->query_result($req_result,0,'columnname');
-$oldquickcreate = $adb->query_result($req_result,0,'quickcreate');
-$oldmassedit = $adb->query_result($req_result,0,'masseditable');
-$oldpresence = $adb->query_result($req_result,0,'presence');
+	global $adb,$smarty,$log;
+	$fieldid = $_REQUEST['fieldid'];
+	$req_sql = "select * from vtiger_field where fieldid = ? and fieldname not in('salutationtype') and vtiger_field.presence in (0,2)";
+	$req_result = $adb->pquery($req_sql, array($fieldid));
+	
+	$typeofdata = $adb->query_result($req_result,0,'typeofdata');
+	$tabid = $adb->query_result($req_result,0,'tabid');
+	$fieldname = $adb->query_result($req_result,0,'fieldname');
+	$uitype = $adb->query_result($req_result,0,'uitype');
+	$oldfieldlabel = $adb->query_result($req_result,0,'fieldlabel');
+	$tablename = $adb->query_result($req_result,0,'tablename');
+	$columnname = $adb->query_result($req_result,0,'columnname');
+	$oldquickcreate = $adb->query_result($req_result,0,'quickcreate');
+	$oldmassedit = $adb->query_result($req_result,0,'masseditable');
+	$oldpresence = $adb->query_result($req_result,0,'presence');
 
 	if(isset($_REQUEST['fld_module'])  && $_REQUEST['fld_module']!= ''){
 		$fld_module = $_REQUEST['fld_module'];
@@ -599,12 +600,12 @@ $oldpresence = $adb->query_result($req_result,0,'presence');
 		
 	$uitype_list = implode(',',$nonEditableUiTypes);
 	
-	$mandatory_query = "update vtiger_field set typeofdata=? where fieldid=? and fieldname not in (?) and uitype not in (?)";
+	$mandatory_query = "update vtiger_field set typeofdata=? where fieldid=? and fieldname not in (?) and uitype not in (?) AND displaytype != 2";
 	$mandatory_params = array($datatype,$fieldid,$fieldname_list,$uitype_list);
 	$adb->pquery($mandatory_query, $mandatory_params);
 	
 	if(!empty($qcdata)){
-		$quickcreate_query = "update vtiger_field set quickcreate = ? ,quickcreatesequence = ? where fieldid = ? and quickcreate not in (0,3)";
+		$quickcreate_query = "update vtiger_field set quickcreate = ? ,quickcreatesequence = ? where fieldid = ? and quickcreate not in (0,3) AND displaytype != 2";
 		$quickcreate_params = array($qcdata,$maxseq+1,$fieldid);
 		$adb->pquery($quickcreate_query,$quickcreate_params);
 	}
@@ -613,7 +614,7 @@ $oldpresence = $adb->query_result($req_result,0,'presence');
 	$quickcreate_params = array($presence,$fieldid);
 	$adb->pquery($presence_query,$quickcreate_params);
 	
-	$massedit_query = "update vtiger_field set masseditable = ? where fieldid = ? and masseditable not in (0,3)";
+	$massedit_query = "update vtiger_field set masseditable = ? where fieldid = ? and masseditable not in (0,3) AND displaytype != 2";
 	$massedit_params = array($massedit,$fieldid);
 	$adb->pquery($massedit_query,$massedit_params);	
 	
@@ -622,99 +623,99 @@ $oldpresence = $adb->query_result($req_result,0,'presence');
 
 
 function deleteCustomField(){
-global $adb;
-
-$fld_module = $_REQUEST["fld_module"];
-$id = $_REQUEST["fld_id"];
-$colName = $_REQUEST["colName"];
-$uitype = $_REQUEST["uitype"];
-
-$fieldquery = 'select * from vtiger_field where fieldid = ?';
-$res = $adb->pquery($fieldquery,array($id));
-
-$typeofdata = $adb->query_result($res,0,'typeofdata');
-$fieldname = $adb->query_result($res,0,'fieldname');
-$oldfieldlabel = $adb->query_result($res,0,'fieldlabel');
-$tablename = $adb->query_result($res,0,'tablename');
-$columnname = $adb->query_result($res,0,'columnname');
-$fieldtype =  explode("~",$typeofdata);
+	global $adb;
 	
-//Deleting the CustomField from the Custom Field Table
-$query='delete from vtiger_field where fieldid = ? and vtiger_field.presence in (0,2)';
-$adb->pquery($query, array($id));
-
-//Deleting from vtiger_profile2field table
-$query='delete from vtiger_profile2field where fieldid=?';
-$adb->pquery($query, array($id));
-
-//Deleting from vtiger_def_org_field table
-$query='delete from vtiger_def_org_field where fieldid=?';
-$adb->pquery($query, array($id));
-
-if($fld_module == 'Calendar' || $fld_module == 'Events'){
-		require_once("modules/Calendar/Activity.php");
-		$focus = new Activity();
-	}else{
-		require_once("modules/$fld_module/$fld_module.php");
-		$focus = new $fld_module();
-}
-		 
-$deletecolumnname =$tablename .":". $columnname .":".$fieldname.":".$fld_module. "_" .str_replace(" ","_",$oldfieldlabel).":".$fieldtype[0];
-$column_cvstdfilter = 	$tablename .":". $columnname .":".$fieldname.":".$fld_module. "_" .str_replace(" ","_",$oldfieldlabel);
-$select_columnname = $tablename.":".$columnname .":".$fld_module. "_" . str_replace(" ","_",$oldfieldlabel).":".$fieldname.":".$fieldtype[0];
-$reportsummary_column = $tablename.":".$columnname.":".str_replace(" ","_",$oldfieldlabel);		
-
-$dbquery = 'alter table '. mysql_real_escape_string($focus->customFieldTable[0]).' drop column '. mysql_real_escape_string($colName);
-$adb->pquery($dbquery, array());
-
-//To remove customfield entry from vtiger_field table
-$dbquery = 'delete from vtiger_field where columnname= ? and fieldid=? and vtiger_field.presence in (0,2)';
-$adb->pquery($dbquery, array($colName, $id));
-//we have to remove the entries in customview and report related tables which have this field ($colName)
-$adb->pquery("delete from vtiger_cvcolumnlist where columnname = ? ", array($deletecolumnname));
-$adb->pquery("delete from vtiger_cvstdfilter where columnname = ?", array($column_cvstdfilter));
-$adb->pquery("delete from vtiger_cvadvfilter where columnname = ?", array($deletecolumnname));
-$adb->pquery("delete from vtiger_selectcolumn where columnname = ?", array($select_columnname));
-$adb->pquery("delete from vtiger_relcriteria where columnname = ?", array($select_columnname));
-$adb->pquery("delete from vtiger_reportsortcol where columnname = ?", array($select_columnname));
-$adb->pquery("delete from vtiger_reportdatefilter where datecolumnname = ?", array($column_cvstdfilter));
-$adb->pquery("delete from vtiger_reportsummary where columnname like ?", array('%'.$reportsummary_column.'%'));
-
-
-//Deleting from convert lead mapping vtiger_table- Jaguar
-if($fld_module=="Leads")
-{
-	$deletequery = 'delete from vtiger_convertleadmapping where leadfid=?';
-	$adb->pquery($deletequery, array($id));
-}elseif($fld_module=="Accounts" || $fld_module=="Contacts" || $fld_module=="Potentials")
-{
-	$map_del_id = array("Accounts"=>"accountfid","Contacts"=>"contactfid","Potentials"=>"potentialfid");
-	$map_del_q = "update vtiger_convertleadmapping set ".$map_del_id[$fld_module]."=0 where ".$map_del_id[$fld_module]."=?";
-	$adb->pquery($map_del_q, array($id));
-}
-
-//HANDLE HERE - we have to remove the table for other picklist type values which are text area and multiselect combo box 
-if($uitype == 15)
-{
-	$deltablequery = 'drop table vtiger_'.mysql_real_escape_string($colName);
-	$adb->pquery($deltablequery, array());
-}
+	$fld_module = $_REQUEST["fld_module"];
+	$id = $_REQUEST["fld_id"];
+	$colName = $_REQUEST["colName"];
+	$uitype = $_REQUEST["uitype"];
 	
+	$fieldquery = 'select * from vtiger_field where fieldid = ?';
+	$res = $adb->pquery($fieldquery,array($id));
+	
+	$typeofdata = $adb->query_result($res,0,'typeofdata');
+	$fieldname = $adb->query_result($res,0,'fieldname');
+	$oldfieldlabel = $adb->query_result($res,0,'fieldlabel');
+	$tablename = $adb->query_result($res,0,'tablename');
+	$columnname = $adb->query_result($res,0,'columnname');
+	$fieldtype =  explode("~",$typeofdata);
+		
+	//Deleting the CustomField from the Custom Field Table
+	$query='delete from vtiger_field where fieldid = ? and vtiger_field.presence in (0,2)';
+	$adb->pquery($query, array($id));
+	
+	//Deleting from vtiger_profile2field table
+	$query='delete from vtiger_profile2field where fieldid=?';
+	$adb->pquery($query, array($id));
+	
+	//Deleting from vtiger_def_org_field table
+	$query='delete from vtiger_def_org_field where fieldid=?';
+	$adb->pquery($query, array($id));
+	
+	if($fld_module == 'Calendar' || $fld_module == 'Events'){
+			require_once("modules/Calendar/Activity.php");
+			$focus = new Activity();
+		}else{
+			require_once("modules/$fld_module/$fld_module.php");
+			$focus = new $fld_module();
+	}
+			 
+	$deletecolumnname =$tablename .":". $columnname .":".$fieldname.":".$fld_module. "_" .str_replace(" ","_",$oldfieldlabel).":".$fieldtype[0];
+	$column_cvstdfilter = 	$tablename .":". $columnname .":".$fieldname.":".$fld_module. "_" .str_replace(" ","_",$oldfieldlabel);
+	$select_columnname = $tablename.":".$columnname .":".$fld_module. "_" . str_replace(" ","_",$oldfieldlabel).":".$fieldname.":".$fieldtype[0];
+	$reportsummary_column = $tablename.":".$columnname.":".str_replace(" ","_",$oldfieldlabel);		
+	
+	$dbquery = 'alter table '. mysql_real_escape_string($focus->customFieldTable[0]).' drop column '. mysql_real_escape_string($colName);
+	$adb->pquery($dbquery, array());
+	
+	//To remove customfield entry from vtiger_field table
+	$dbquery = 'delete from vtiger_field where columnname= ? and fieldid=? and vtiger_field.presence in (0,2)';
+	$adb->pquery($dbquery, array($colName, $id));
+	//we have to remove the entries in customview and report related tables which have this field ($colName)
+	$adb->pquery("delete from vtiger_cvcolumnlist where columnname = ? ", array($deletecolumnname));
+	$adb->pquery("delete from vtiger_cvstdfilter where columnname = ?", array($column_cvstdfilter));
+	$adb->pquery("delete from vtiger_cvadvfilter where columnname = ?", array($deletecolumnname));
+	$adb->pquery("delete from vtiger_selectcolumn where columnname = ?", array($select_columnname));
+	$adb->pquery("delete from vtiger_relcriteria where columnname = ?", array($select_columnname));
+	$adb->pquery("delete from vtiger_reportsortcol where columnname = ?", array($select_columnname));
+	$adb->pquery("delete from vtiger_reportdatefilter where datecolumnname = ?", array($column_cvstdfilter));
+	$adb->pquery("delete from vtiger_reportsummary where columnname like ?", array('%'.$reportsummary_column.'%'));
+	
+	
+	//Deleting from convert lead mapping vtiger_table- Jaguar
+	if($fld_module=="Leads")
+	{
+		$deletequery = 'delete from vtiger_convertleadmapping where leadfid=?';
+		$adb->pquery($deletequery, array($id));
+	}elseif($fld_module=="Accounts" || $fld_module=="Contacts" || $fld_module=="Potentials")
+	{
+		$map_del_id = array("Accounts"=>"accountfid","Contacts"=>"contactfid","Potentials"=>"potentialfid");
+		$map_del_q = "update vtiger_convertleadmapping set ".$map_del_id[$fld_module]."=0 where ".$map_del_id[$fld_module]."=?";
+		$adb->pquery($map_del_q, array($id));
+	}
+	
+	//HANDLE HERE - we have to remove the table for other picklist type values which are text area and multiselect combo box 
+	if($uitype == 15)
+	{
+		$deltablequery = 'drop table vtiger_'.mysql_real_escape_string($colName);
+		$adb->pquery($deltablequery, array());
+	}	
 }
 
 
 function addblock(){
 
-global $mod_strings,$log,$adb;
-$fldmodule=$_REQUEST['fld_module'];
-$mode=$_REQUEST['mode'];
- 
-$newblocklabel = trim($_REQUEST['blocklabel']);
-$after_block = $_REQUEST['after_blockid'];
-	
-$tabid = getTabid($fldmodule);
-$flag = 0;
-$dup_check_query = $adb->pquery("SELECT blocklabel from vtiger_blocks WHERE tabid = ?",array($tabid));	
+	global $mod_strings,$log,$adb;
+	$fldmodule=$_REQUEST['fld_module'];
+	$mode=$_REQUEST['mode'];
+	 
+	$newblocklabel = trim($_REQUEST['blocklabel']);
+	$after_block = $_REQUEST['after_blockid'];
+		
+	$tabid = getTabid($fldmodule);
+	$flag = 0;
+	$dup_check_query = $adb->pquery("SELECT blocklabel from vtiger_blocks WHERE tabid = ?",array($tabid));
+		
 	for($i=0;$i<$adb->num_rows($dup_check_query);$i++){
 		$blklbl = $adb->query_result($dup_check_query,$i,'blocklabel'); 
 		$blklbl = getTranslatedString($blklbl);
