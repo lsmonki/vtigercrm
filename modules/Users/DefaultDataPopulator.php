@@ -58,8 +58,7 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (27,'Portal',0,24,'Portal',0,1,0)");
 		$this->db->query("INSERT INTO vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) VALUES (28,'Webmails',0,25,'Webmails',0,1,1)");
 		$this->db->query("insert into vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) values (29,'Users',0,26,'Users',0,1,0)");
-		$this->db->query("insert into vtiger_tab(tabid,name,presence,tabsequence,tablabel,customized,ownedby,isentitytype) values(30,'Recyclebin',0,27,'Recyclebin',0,1,0)");
-
+		
 		// Populate the vtiger_blocks vtiger_table
 		$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",2,'LBL_OPPORTUNITY_INFORMATION',1,0,0,0,0,0,1,0)");
 		$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",2,'LBL_CUSTOM_INFORMATION',2,0,0,0,0,0,1,0)");
@@ -944,18 +943,12 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID("vtiger_field").",'reminder_interval','vtiger_users',1,'16','reminder_interval','Reminder Interval',1,0,0,100,1,$useradvanceblock,1,'V~O',1,null,'BAS',1)");
 		//user Details End
 		
-		/*asterisk integration starts here*/
-		$blockid = $this->db->getUniqueID('vtiger_blocks');
-		$this->db->query("insert into vtiger_blocks values ($blockid,29,'LBL_USER_ASTERISK_OPTIONS',6,0,0,0,0,0,1,0)");
-		$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID('vtiger_field').",'asterisk_extension','vtiger_asteriskextensions',1,1,'asterisk_extension','Asterisk Extension',1,0,0,30,1,$blockid,1,'V~O',1,NULL,'BAS',1)");
-		$this->db->query("insert into vtiger_field values (29,".$this->db->getUniqueID('vtiger_field').",'use_asterisk','vtiger_asteriskextensions',1,56,'use_asterisk','Use Asterisk',1,0,0,30,2,$blockid,1,'C~O',1,NULL,'BAS',1)");
-		
+		// Updated Phone field uitype
 		$this->db->query("update vtiger_field set uitype='11' where fieldname='mobile' and tabid=".getTabid('Leads'));
 		$this->db->query("update vtiger_field set uitype='11' where fieldname='mobile' and tabid=".getTabid('Contacts'));
 		$this->db->query("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Leads'));
 		$this->db->query("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Contacts'));
 		$this->db->query("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Accounts'));
-		/*asterisk integration ends*/
 		
 		$tab_field_array = array(
 		'Accounts'=>array('accountname'),
@@ -1961,7 +1954,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	$this->db->query("insert into vtiger_parenttabrel values (4,9,8)");
 	$this->db->query("insert into vtiger_parenttabrel values (2,8,8)");
 	$this->db->query("insert into vtiger_parenttabrel values (3,9,11)");
-	$this->db->query("insert into vtiger_parenttabrel values(7,30,4)");
 	
 	//add settings page to database starts
 	$this->addEntriesForSettings();
@@ -2155,7 +2147,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 				"set-IcoLoginHistory.gif",
 				"vtlib_modmng.gif",
 				"picklist.gif",
-				"settingsTrash.gif",
 				"quickview.png",
 				"ViewTemplate.gif",
 				"mailmarge.gif",
@@ -2193,7 +2184,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 				'LBL_LOGIN_HISTORY_DETAILS',
 				'VTLIB_LBL_MODULE_MANAGER',
 				'LBL_PICKLIST_EDITOR',
-				'LBL_RECYCLEBIN',
 				'LBL_TOOLTIP_MANAGEMENT',
 				'EMAILTEMPLATES',
 				'LBL_MAIL_MERGE',
@@ -2226,7 +2216,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 					'LBL_LOGIN_HISTORY_DESCRIPTION', 
 					'VTLIB_LBL_MODULE_MANAGER_DESCRIPTION', 
 					'LBL_PICKLIST_DESCRIPTION', 
-					'LBL_RECYCLEBIN_DESCRIPTION',
 					'LBL_TOOLTIP_MANAGEMENT_DESCRIPTION',
 					'LBL_EMAIL_TEMPLATE_DESCRIPTION', 
 					'LBL_MAIL_MERGE_DESCRIPTION', 
@@ -2257,7 +2246,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 				'index.php?module=Settings&action=ListLoginHistory&parenttab=Settings',
 				'index.php?module=Settings&action=ModuleManager&parenttab=Settings',
 				'index.php?module=PickList&action=PickList&parenttab=Settings',
-				'index.php?module=Recyclebin&action=index&parenttab=Settings',
 				'index.php?module=Settings&action=QuickView&parenttab=Settings',
 				'index.php?module=Settings&action=listemailtemplates&parenttab=Settings',
 				'index.php?module=Settings&action=listwordtemplates&parenttab=Settings',

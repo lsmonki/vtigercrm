@@ -212,15 +212,7 @@ class Documents extends CRMEntity {
 			$query .= "  WHERE ".$where_auto;
 		$log->debug("Exiting create_export_query method ...");
 		        return $query;
-	  }
-
-	/** Function to handle module specific operations when restoring an entity 
-	*/
-	function restore_module($crmid) {
-		
-		
-	}
-	
+	}	
 	
 	function del_create_def_folder($query)
 	{
@@ -319,6 +311,39 @@ class Documents extends CRMEntity {
 	function setRelationTables($secmodule){
 		$rel_tables = array();
 		return $rel_tables[$secmodule];
+	}
+	
+	// Function to unlink all the dependent entities of the given Entity by Id
+	function unlinkDependencies($module, $id) {
+		global $log;		
+		/*//Backup Documents Related Records
+		$se_q = 'SELECT crmid FROM vtiger_senotesrel WHERE notesid = ?';
+		$se_res = $this->db->pquery($se_q, array($id));
+		if ($this->db->num_rows($se_res) > 0) {
+			for($k=0;$k < $this->db->num_rows($se_res);$k++)
+			{
+				$se_id = $this->db->query_result($se_res,$k,"crmid");
+				$params = array($id, RB_RECORD_DELETED, 'vtiger_senotesrel', 'notesid', 'crmid', $se_id);
+				$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES (?,?,?,?,?,?)', $params);
+			}
+		}
+		$sql = 'DELETE FROM vtiger_senotesrel WHERE notesid = ?';
+		$this->db->pquery($sql, array($id));*/
+		
+		parent::unlinkDependencies($module, $id);
+	}
+	
+	// Function to unlink an entity with given Id from another entity
+	function unlinkRelationship($id, $return_module, $return_id) {
+		global $log;
+		if(empty($return_module) || empty($return_id)) return;
+		
+		$sql = 'DELETE FROM vtiger_senotesrel WHERE notesid = ? AND crmid = ?';
+		$this->db->pquery($sql, array($id, $return_id));
+			
+		$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
+		$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
+		$this->db->pquery($sql, $params);
 	}
 
 }

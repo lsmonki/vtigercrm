@@ -139,9 +139,9 @@ class Vtiger_ModuleBasic {
 		$useisentitytype = $this->isentitytype? 1 : 0;
 		$adb->pquery('UPDATE vtiger_tab set isentitytype=? WHERE tabid=?',Array($useisentitytype, $this->id));
 
-		if($this->isentitytype) {
+		//if($this->isentitytype) {
 			Vtiger_Profile::initForModule($this);
-		}
+		//}
 
 		self::syncfile();
 
@@ -203,11 +203,11 @@ class Vtiger_ModuleBasic {
 		if($this->isentitytype) {
 			Vtiger_Access::deleteSharing($this);
 			Vtiger_Access::deleteTools($this);
-			Vtiger_Profile::deleteForModule($this);
 			Vtiger_Filter::deleteForModule($this);
 			Vtiger_Block::deleteForModule($this);
 		}
 		$this->__delete();
+		Vtiger_Profile::deleteForModule($this);
 		Vtiger_Link::deleteAll($this->id);
 		Vtiger_Menu::detachModule($this);
 		self::syncfile();

@@ -1017,6 +1017,101 @@ function get_contactsforol($user_name)
 		);
 		return $rel_tables[$secmodule];
 	}
+	
+	// Function to unlink all the dependent entities of the given Entity by Id
+	function unlinkDependencies($module, $id) {
+		global $log;
+	
+		//Backup Contact-Trouble Tickets Relation
+		$tkt_q = 'SELECT ticketid FROM vtiger_troubletickets WHERE parent_id=?';
+		$tkt_res = $this->db->pquery($tkt_q, array($id));
+		if ($this->db->num_rows($tkt_res) > 0) {
+			$tkt_ids_list = array();
+			for($k=0;$k < $this->db->num_rows($tkt_res);$k++)
+			{
+				$tkt_ids_list[] = $this->db->query_result($tkt_res,$k,"ticketid");
+			}
+			$params = array($id, RB_RECORD_UPDATED, 'vtiger_troubletickets', 'parent_id', 'ticketid', implode(",", $tkt_ids_list));
+			$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES (?,?,?,?,?,?)', $params);
+		}	
+		//removing the relationship of contacts with Trouble Tickets
+		$this->db->pquery('UPDATE vtiger_troubletickets SET parent_id=0 WHERE parent_id=?', array($id));
+	
+		//Backup Contact-PurchaseOrder Relation
+		$po_q = 'SELECT purchaseorderid FROM vtiger_purchaseorder WHERE contactid=?';
+		$po_res = $this->db->pquery($po_q, array($id));
+		if ($this->db->num_rows($po_res) > 0) {
+			$po_ids_list = array();
+			for($k=0;$k < $this->db->num_rows($po_res);$k++)
+			{
+				$po_ids_list[] = $this->db->query_result($po_res,$k,"purchaseorderid");
+			}
+			$params = array($id, RB_RECORD_UPDATED, 'vtiger_purchaseorder', 'contactid', 'purchaseorderid', implode(",", $po_ids_list));
+			$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES (?,?,?,?,?,?)', $params);
+		}	
+		//removing the relationship of contacts with PurchaseOrder
+		$this->db->pquery('UPDATE vtiger_purchaseorder SET contactid=0 WHERE contactid=?', array($id));
+	
+		//Backup Contact-SalesOrder Relation
+		$so_q = 'SELECT salesorderid FROM vtiger_salesorder WHERE contactid=?';
+		$so_res = $this->db->pquery($so_q, array($id));
+		if ($this->db->num_rows($so_res) > 0) {
+			$so_ids_list = array();
+			for($k=0;$k < $this->db->num_rows($so_res);$k++)
+			{
+				$so_ids_list[] = $this->db->query_result($so_res,$k,"salesorderid");
+			}
+			$params = array($id, RB_RECORD_UPDATED, 'vtiger_salesorder', 'contactid', 'salesorderid', implode(",", $so_ids_list));
+			$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES (?,?,?,?,?,?)', $params);
+		}	
+		//removing the relationship of contacts with SalesOrder
+		$this->db->pquery('UPDATE vtiger_salesorder SET contactid=0 WHERE contactid=?', array($id));
+	
+		//Backup Contact-Quotes Relation
+		$quo_q = 'SELECT quoteid FROM vtiger_quotes WHERE contactid=?';
+		$quo_res = $this->db->pquery($quo_q, array($id));
+		if ($this->db->num_rows($quo_res) > 0) {
+			$quo_ids_list = array();
+			for($k=0;$k < $this->db->num_rows($quo_res);$k++)
+			{
+				$quo_ids_list[] = $this->db->query_result($quo_res,$k,"quoteid");
+			}
+			$params = array($id, RB_RECORD_UPDATED, 'vtiger_quotes', 'contactid', 'quoteid', implode(",", $quo_ids_list));
+			$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES (?,?,?,?,?,?)', $params);
+		}	
+		//removing the relationship of contacts with Quotes
+		$this->db->pquery('UPDATE vtiger_quotes SET contactid=0 WHERE contactid=?', array($id));
+		
+		parent::unlinkDependencies($module, $id);
+	}
+	
+	// Function to unlink an entity with given Id from another entity
+	function unlinkRelationship($id, $return_module, $return_id) {
+		global $log;
+		if(empty($return_module) || empty($return_id)) return;
+		
+		if($return_module == 'Accounts') {
+			$sql = 'UPDATE vtiger_contactdetails SET accountid = 0 WHERE contactid = ?';
+			$this->db->pquery($sql, array($id));
+		} elseif($return_module == 'Potentials') {
+			$sql = 'DELETE FROM vtiger_contpotentialrel WHERE contactid=? AND potentialid=?';
+			$this->db->pquery($sql, array($id, $return_id));
+		} elseif($return_module == 'Campaigns') {
+			$sql = 'DELETE FROM vtiger_campaigncontrel WHERE contactid=? AND campaignid=?';
+			$this->db->pquery($sql, array($id, $return_id));
+		} elseif($return_module == 'Products') {
+			$sql = 'DELETE FROM vtiger_seproductsrel WHERE crmid=? AND productid=?';
+			$this->db->pquery($sql, array($id, $return_id));
+		} elseif($return_module == 'Vendors') {
+			$sql = 'DELETE FROM vtiger_vendorcontactrel WHERE vendorid=? AND contactid=?';
+			$this->db->pquery($sql, array($return_id, $id));
+		} else {
+			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
+			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
+			$this->db->pquery($sql, $params);
+		}
+	}
+	
 //End
 
 }

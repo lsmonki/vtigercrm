@@ -94,10 +94,12 @@ class Vtiger_Profile {
 		foreach($profileids as $profileid) {			
 			$adb->pquery("INSERT INTO vtiger_profile2tab (profileid, tabid, permissions) VALUES (?,?,?)",
 				Array($profileid, $moduleInstance->id, 0));
-			foreach($actionids as $actionid) {
-				$adb->pquery(
-					"INSERT INTO vtiger_profile2standardpermissions (profileid, tabid, Operation, permissions) VALUES(?,?,?,?)",
-					Array($profileid, $moduleInstance->id, $actionid, 0));
+			if($moduleInstance->isentitytype) {
+				foreach($actionids as $actionid) {
+					$adb->pquery(
+						"INSERT INTO vtiger_profile2standardpermissions (profileid, tabid, Operation, permissions) VALUES(?,?,?,?)",
+						Array($profileid, $moduleInstance->id, $actionid, 0));
+				}
 			}
 		}
 		self::log("Initializing module permissions ... DONE");

@@ -953,10 +953,6 @@ $mod_strings = Array(
 
 'LBL_GENERAL_FIELDS'=>'General Fields',
 
-// For Recyclebin feature
-'LBL_RECYCLEBIN'=>'Recycle Bin',
-'LBL_RECYCLEBIN_DESCRIPTION'=>'Contains the data you have deleted',
-
 'LBL_CANCEL_BUTTON'=>'Cancel',
 
 //Added fields for Inventory Number labels

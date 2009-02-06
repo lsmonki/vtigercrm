@@ -593,6 +593,49 @@ class Potentials extends CRMEntity {
 		);
 		return $rel_tables[$secmodule];
 	}
+	
+	// Function to unlink all the dependent entities of the given Entity by Id
+	function unlinkDependencies($module, $id) {
+		global $log;
+		/*//Backup Activity-Potentials Relation
+		$act_q = "select activityid from vtiger_seactivityrel where crmid = ?";
+		$act_res = $this->db->pquery($act_q, array($id));
+		if ($this->db->num_rows($act_res) > 0) {
+			for($k=0;$k < $this->db->num_rows($act_res);$k++)
+			{
+				$act_id = $this->db->query_result($act_res,$k,"activityid");
+				$params = array($id, RB_RECORD_DELETED, 'vtiger_seactivityrel', 'crmid', 'activityid', $act_id);
+				$this->db->pquery("insert into vtiger_relatedlists_rb values (?,?,?,?,?,?)", $params);
+			}
+		}
+		$sql = 'delete from vtiger_seactivityrel where crmid = ?';
+		$this->db->pquery($sql, array($id));*/
+		
+		parent::unlinkDependencies($module, $id);
+	}
+	
+	// Function to unlink an entity with given Id from another entity
+	function unlinkRelationship($id, $return_module, $return_id) {
+		global $log;
+		if(empty($return_module) || empty($return_id)) return;
+		
+		if($return_module == 'Accounts') {
+			$this->trash($this->module_name, $id);
+		} elseif($return_module == 'Campaigns') {
+			$sql = 'UPDATE vtiger_potential SET campaignid = 0 WHERE potentialid = ?';
+			$adb->pquery($sql, array($id));
+		} elseif($return_module == 'Products') {
+			$sql = 'DELETE FROM vtiger_seproductsrel WHERE crmid=? AND productid=?';
+			$adb->pquery($sql, array($id, $return_id));
+		} elseif($return_module == 'Contacts') {
+			$sql = 'DELETE FROM vtiger_contpotentialrel WHERE potentialid=? AND contactid=?';
+			$adb->pquery($sql, array($id, $return_id));
+		} else {
+			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
+			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
+			$this->db->pquery($sql, $params);
+		}
+	}
 }
 
 ?>

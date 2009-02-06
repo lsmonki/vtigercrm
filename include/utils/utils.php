@@ -38,10 +38,8 @@
   require_once('include/utils/DetailViewUtils.php');
   require_once('include/utils/CommonUtils.php');
   require_once('include/utils/InventoryUtils.php');
-  require_once('include/utils/DeleteUtils.php');
   require_once('include/utils/SearchUtils.php');
   require_once('include/FormValidationUtil.php');
-  require_once('include/utils/RecyclebinUtils.php');
   require_once('include/DatabaseUtil.php');
  
 // Constants to be defined here
@@ -57,6 +55,11 @@ define("CV_STATUS_DEFAULT", 0);
 define("CV_STATUS_PRIVATE", 1);
 define("CV_STATUS_PENDING", 2);
 define("CV_STATUS_PUBLIC", 3);
+
+// For Restoration.
+define("RB_RECORD_DELETED", 'delete');
+define("RB_RECORD_INSERTED", 'insert');
+define("RB_RECORD_UPDATED", 'update');
 
 /** Function to return a full name
   * @param $row -- row:: Type integer
@@ -4573,6 +4576,62 @@ function getRelationTables($module,$secmodule){
 		$rel_array = array("vtiger_crmentityrel"=>array("crmid","relcrmid"),"".$primary_obj->table_name."" => "".$primary_obj->table_index."");
 	}
 	return $rel_array;
+}
+
+/**
+ * This function returns no value but handles the delete functionality of each entity.
+ * Input Parameter are $module - module name, $return_module - return module name, $focus - module object, $record - entity id, $return_id - return entity id. 
+ */
+function DeleteEntity($module,$return_module,$focus,$record,$return_id) {
+	global $log;	
+	$log->debug("Entering DeleteEntity method ($module, $return_module, $record, $return_id)");
+	
+	if ($module != $return_module && !empty($return_module) && !empty($return_id)) {
+		$focus->unlinkRelationship($record, $return_module, $return_id);
+	} else {
+		$focus->trash($module, $record);
+	}
+	$log->debug("Exiting DeleteEntity method ...");
+}
+
+/* Function to install Vtlib Compliant 
+ * @param - $packagename - Name of the module
+ * @param - $packagepath - Complete path to the zip file of the Module
+ */
+function installVtlibModule($packagename, $packagepath, $customized=false) {
+	global $log, $adb;
+	require_once('vtlib/Vtiger/Package.php');
+	require_once('vtlib/Vtiger/Module.php');
+	$Vtiger_Utils_Log = true;
+	$package = new Vtiger_Package();
+	
+	$module = $package->getModuleNameFromZip($packagepath);
+	$module_exists = false;
+	$module_dir_exists = false;
+	if($module == null) {
+		$log->fatal("$packagename Module zipfile is not valid!");
+	} else if(Vtiger_Module::getInstance($module)) {
+		$log->fatal("$module already exists!");
+		$module_exists = true;
+	} else if(is_dir("modules/$module")) {
+		$log->info("$module folder exists! It will be Overwritten");
+		$module_dir_exists = true;
+	}
+	if($module_exists == false && $module_dir_exists == false) {
+		$log->debug("$module - Installation starts here");
+		$package->import($packagepath);
+		$moduleInstance = Vtiger_Module::getInstance($module);
+		if (empty($moduleInstance)) {
+			$log->fatal("$module module installation failed!");
+		} else {			
+			if(file_exists("modules/$packagename/Setup.php")) {
+				require_once("modules/$packagename/Setup.php");
+			}
+			if (!$customized) {
+				$adb->pquery('UPDATE vtiger_tab SET customized=0 WHERE name=?', array($module));
+			}
+		}
+	}	
 }
 
 ?>

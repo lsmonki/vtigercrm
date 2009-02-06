@@ -296,8 +296,6 @@ class Calendar
 				left join vtiger_users as vtiger_usersCalendar on vtiger_usersCalendar.id = vtiger_crmentityCalendar.smownerid"; 
 		return $query;
 	}
-	
-
 }
 
 class Layout

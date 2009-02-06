@@ -15,6 +15,7 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/CommonUtils.php');
+require_once('data/CRMEntity.php');
 $idlist = $_REQUEST['idlist'];
 $viewid = $_REQUEST['viewname'];
 $returnmodule=$_REQUEST['return_module'];
@@ -32,23 +33,8 @@ foreach($storearray as $id)
 {
         if(isPermitted($returnmodule,'Delete',$id) == 'yes')
         {
-			global $current_user;
-            require_once('include/freetag/freetag.class.php');
-            $freetag=new freetag();
-            $freetag->delete_all_object_tags_for_user($current_user->id,$id);
-            $sql="update vtiger_crmentity set deleted=1 where crmid=?";
-            $result = $adb->pquery($sql, array($id));
-			
-			if($returnmodule == 'Accounts')
-				delAccRelRecords($id);
-			if($returnmodule == 'Contacts')
-				delContactRelRecords($id);
-			if($returnmodule == 'Vendors')
-				delVendorRelRecords($id);
-			if($returnmodule == 'Calendar')
-				delCalendarRelRecords($id);
- 			if($returnmodule == 'Products')
-				delProductRelRecords($id);
+			$focus = CRMEntity::getInstance($returnmodule);
+			DeleteEntity($returnmodule,$returnmodule,$focus,$id,'');
         }
         else
         {

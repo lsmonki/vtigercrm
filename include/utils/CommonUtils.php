@@ -316,14 +316,14 @@ function getCurrencyName($currencyid, $show_symbol=true)
 {
 	global $log;
 	$log->debug("Entering getCurrencyName(".$currencyid.") method ...");
-        global $adb;
-        $sql1 = "select * from vtiger_currency_info where id= ?";
-        $result = $adb->pquery($sql1, array($currencyid));
-        $currencyname = $adb->query_result($result,0,"currency_name");
-        $curr_symbol = $adb->query_result($result,0,"currency_symbol");
+    global $adb;
+    $sql1 = "select * from vtiger_currency_info where id= ?";
+    $result = $adb->pquery($sql1, array($currencyid));
+    $currencyname = $adb->query_result($result,0,"currency_name");
+    $curr_symbol = $adb->query_result($result,0,"currency_symbol");
 	$log->debug("Exiting getCurrencyName method ...");
-        if($show_symbol) return $currencyname.' : '.$curr_symbol;
-        else return $currencyname;
+	if($show_symbol) return $currencyname.' : '.$curr_symbol;
+	else return $currencyname;
 }
 
 
@@ -1288,17 +1288,17 @@ function getBlockId($tabid,$label)
 {
 	global $log;
 	$log->debug("Entering getBlockId(".$tabid.",".$label.") method ...");
-        global $adb;
-        $blockid = '';
-        $query = "select blockid from vtiger_blocks where tabid=? and blocklabel = ?";
-        $result = $adb->pquery($query, array($tabid, $label));
-        $noofrows = $adb->num_rows($result);
-        if($noofrows == 1)
-        {
-                $blockid = $adb->query_result($result,0,"blockid");
-        }
+    global $adb;
+    $blockid = '';
+    $query = "select blockid from vtiger_blocks where tabid=? and blocklabel = ?";
+    $result = $adb->pquery($query, array($tabid, $label));
+    $noofrows = $adb->num_rows($result);
+    if($noofrows == 1)
+    {
+		$blockid = $adb->query_result($result,0,"blockid");
+    }
 	$log->debug("Exiting getBlockId method ...");
-        return $blockid;
+	return $blockid;
 }
 
 /**
@@ -3506,15 +3506,13 @@ function filterInactiveFields($module,$fields){
 
 /**
  * This function is used to get the blockid of the settings block for a given label.
- * Takes the input parameter $label - settings label
- * This returns string type value
+ * @param $label - settings label
+ * @return string type value
  */
-
-function getSettingsBlockId($label)
-{
-	global $log;
+function getSettingsBlockId($label) {
+	global $log, $adb;
 	$log->debug("Entering getSettingsBlockId(".$label.") method ...");
-	global $adb;
+	
 	$blockid = '';
 	$query = "select blockid from vtiger_settings_blocks where label = ?";
 	$result = $adb->pquery($query, array($label));

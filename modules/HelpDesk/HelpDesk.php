@@ -728,6 +728,26 @@ case when (vtiger_users.user_name not like '') then vtiger_users.user_name else 
 		);
 		return $rel_tables[$secmodule];
 	}
+	
+	// Function to unlink an entity with given Id from another entity
+	function unlinkRelationship($id, $return_module, $return_id) {
+		global $log;
+		if(empty($return_module) || empty($return_id)) return;
+		
+		if($return_module == 'Contacts' || $return_module == 'Accounts') {
+			$sql = 'UPDATE vtiger_troubletickets SET parent_id=0 WHERE ticketid=?';
+			$this->db->pquery($sql, array($id));
+			$se_sql= 'DELETE FROM vtiger_seticketsrel WHERE ticketid=?';
+			$this->db->pquery($se_sql, array($id));
+		} elseif($return_module == 'Products') {
+			$sql = 'UPDATE vtiger_troubletickets SET product_id=0 WHERE ticketid=?';
+			$this->db->pquery($sql, array($id));
+		} else {
+			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
+			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
+			$this->db->pquery($sql, $params);
+		}
+	}
 
 }
 ?>

@@ -25,8 +25,8 @@ if ($adb->num_rows($seq_res) > 0) {
 $adb->pquery("INSERT INTO vtiger_settings_field(fieldid, blockid, name, iconpath, description, linkto, sequence) 
 	VALUES (?,?,?,?,?,?,?)", array($fieldid, $blockid, 'Field Formulas', 'modules/FieldFormulas/resources/FieldFormulas.png', 'Add custom equations to custom fields', 'index.php?module=FieldFormulas&action=index&parenttab=Settings', $seq));
 
-$tabid = getTabid($name);
+$tabid = getTabid('FieldFormulas');
 if(isset($tabid) && $tabid!='') {
-	$adb->pquery("delete from vtiger_profile2tab where tabid = ?", array($tabid));
+	$adb->pquery('DELETE FROM vtiger_profile2tab WHERE tabid = ?', array($tabid));
 }
 ?>

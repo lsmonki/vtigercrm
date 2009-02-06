@@ -60,8 +60,8 @@ function mergeshowhide(argg)
 
 function mergehide(argg)
 {
-    var x=document.getElementById(argg).style
-	x.display="none"
+    var x=document.getElementById(argg);
+	if (x != null) x.style.display = "none";
 }
 
  function moveMe(arg1) {

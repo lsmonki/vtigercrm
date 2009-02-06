@@ -90,6 +90,10 @@ class Services extends CRMEntity {
 	// Required Information for enabling Import feature
 	var $required_fields = Array('servicename'=>1);
 
+	// Used when enabling/disabling the mandatory fields for the module.
+	// Refers to vtiger_field.fieldname values.
+	var $mandatory_fields = Array('servicename');
+	
 	// Callback function list during Importing
 	var $special_functions = Array('set_import_assigned_user');
 
@@ -899,6 +903,14 @@ class Services extends CRMEntity {
 			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_service"=>"serviceid"),
 		);
 		return $rel_tables[$secmodule];
+	}
+	
+	// Function to unlink all the dependent entities of the given Entity by Id
+	function unlinkDependencies($module, $id) {
+		global $log;
+		$this->db->pquery('DELETE from vtiger_seproductsrel WHERE productid=? or crmid=?',array($id,$id));
+		
+		parent::unlinkDependencies($module, $id);
 	}
 }
 ?>

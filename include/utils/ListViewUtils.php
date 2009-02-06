@@ -38,7 +38,7 @@ require_once('include/Zend/Json.php');
 *Param $oCv - Custom view object
 *Returns the listview header values in an array
 */
-function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='',$relatedmodule='')
+function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='',$relatedmodule='',$skipActions=false)
 {
 	global $log, $singlepane_view;
 	$log->debug("Entering getListViewHeader(". $module.",".$sort_qry.",".$sorder.",".$order_by.",".$relatedlist.",".get_class($oCv).") method ...");
@@ -226,16 +226,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 					}
 					else
 					{
-					    if($app_strings[$name])
-						{
-							$name = $app_strings[$name];
-						}
-						elseif($mod_strings[$name])
-						{
-							$name = $mod_strings[$name];
-						}
-						elseif(stripos($col, 'cf_') === 0)
-						{
+					    if(stripos($col, 'cf_') === 0) {
 							$tablenameArray = array_keys($tableinfo,$col);
 							$tablename = $tablenameArray[0];
 							$cf_columns = $adb->getColumnNames($tablename);
@@ -255,6 +246,8 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 									
 								}
 							}
+						} else {
+							$name = getTranslatedString($name, $module);
 						}
 					}
 				}
@@ -283,7 +276,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
      }
 
 	//Added for Action - edit and delete link header in listview
-	if(isPermitted($module,"EditView","") == 'yes' || isPermitted($module,"Delete","") == 'yes')
+	if(!$skipActions && (isPermitted($module,"EditView","") == 'yes' || isPermitted($module,"Delete","") == 'yes'))
 		$list_header[] = $app_strings["LBL_ACTION"];
 
 	$log->debug("Exiting getListViewHeader method ...");
@@ -542,7 +535,7 @@ function getNavigationValues($display, $noofrows, $limit)
 */
 
 //parameter added for vtiger_customview $oCv 27/5
-function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='',$page='',$selectedfields='',$contRelatedfields='')
+function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='',$page='',$selectedfields='',$contRelatedfields='',$skipActions=false)
 {
 	global $log;
 	global $mod_strings;
@@ -832,7 +825,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						}
 					}
 						//code for Documents module: start
-		elseif($module == "Documents" && ($fieldname == 'filelocationtype' || $fieldname == 'filename' || $fieldname == 'filesize' || $fieldname == 'filestatus' || $fieldname == 'filearchitecture' || $fieldname == 'filetype'))
+		elseif($module == "Documents" && ($fieldname == 'filelocationtype' || $fieldname == 'filename' || $fieldname == 'filesize' || $fieldname == 'filestatus' || $fieldname == 'filetype'))
 		{
 			$value = $adb->query_result($list_result,$i-1,$fieldname);
 			if($fieldname == 'filelocationtype')
@@ -1094,10 +1087,10 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		{
 			if(isPermitted($module,"EditView","") == 'yes'){
 				$edit_link = getListViewEditLink($module,$entity_id,$relatedlist,$varreturnset,$list_result,$list_result_count);	
-			if(isset($_REQUEST['start']) && $_REQUEST['start'] > 1)
-				$links_info .= "<a href=\"$edit_link&start=".$_REQUEST['start']."\">".$app_strings["LNK_EDIT"]."</a> ";
-			else
-				$links_info .= "<a href=\"$edit_link\">".$app_strings["LNK_EDIT"]."</a> ";
+				if(isset($_REQUEST['start']) && $_REQUEST['start'] > 1)
+					$links_info .= "<a href=\"$edit_link&start=".$_REQUEST['start']."\">".$app_strings["LNK_EDIT"]."</a> ";
+				else
+					$links_info .= "<a href=\"$edit_link\">".$app_strings["LNK_EDIT"]."</a> ";
 			}
 		
 			
@@ -1116,7 +1109,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			}
 		}
 		// END
-		if($links_info != "")
+		if($links_info != "" && !$skipActions)
 			$list_header[] = $links_info;
 		$list_block[$entity_id] = $list_header;
 
@@ -2698,7 +2691,7 @@ function getListQuery($module,$where='')
 		}
 		//end
 
-		$query.=" WHERE vtiger_crmentity.deleted = 0 ".$where;
+		$query.=" WHERE vtiger_crmentity.deleted = 0 AND activitytype != 'Emails' ".$where;
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);

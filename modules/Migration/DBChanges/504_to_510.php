@@ -84,12 +84,8 @@ ExecuteQuery("UPDATE vtiger_field SET quickcreate = 0 WHERE tablename='vtiger_pr
 ExecuteQuery("UPDATE vtiger_field SET quickcreate = 0 WHERE tablename='vtiger_products' and columnname='unit_price'");
 ExecuteQuery("UPDATE vtiger_field SET quickcreate = 0 WHERE tablename='vtiger_products' and columnname='qtyinstock'");
 
-/* Necessary DB Changes for Recycle bin feature */
+/* Necessary DB Changes for Restoring the Related information of a Deleted Record */
 ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_relatedlists_rb(entityid int(19), action varchar(50), rel_table varchar(200), rel_column varchar(200), ref_column varchar(200), related_crm_ids text)  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-
-ExecuteQuery("insert into vtiger_tab values('30', 'Recyclebin', '0', '27', 'Recyclebin', null, null, 0, '1')");
-
-ExecuteQuery("insert into vtiger_parenttabrel values('7', '30', '4')");
 
 // Enable Search icon for all profiles by default for Recyclebin module
 $profileresult = $adb->query("select * from vtiger_profile");
@@ -1050,47 +1046,12 @@ custom_addCustomFilterColumn('Faq',    'All', 'vtiger_faq', 'faq_no', 'faq_no', 
 custom_addCustomFilterColumn('Documents',  'All', 'vtiger_notes', 'note_no', 'note_no', 'Notes_Note_No:V');
 // Sequence number customization ends
 
-/* Asterisk integration starts here*/
-$blockid = $adb->getUniqueID('vtiger_blocks');
-	
-$sql = "insert into vtiger_blocks values ($blockid,".getTabid('Users').",'LBL_USER_ASTERISK_OPTIONS',6,0,0,0,0,0,1)";
-ExecuteQuery($sql);
-$sql = "insert into vtiger_field values (".getTabid('Users').",".$adb->getUniqueID('vtiger_field').",'asterisk_extension','vtiger_asteriskextensions',1,1,'asterisk_extension','Asterisk Extension',1,0,0,30,1,$blockid,1,'V~O',1,NULL,'BAS',1)";
-ExecuteQuery($sql);
-$sql = "insert into vtiger_field values (".getTabid('Users').",".$adb->getUniqueID('vtiger_field').",'use_asterisk','vtiger_asteriskextensions',1,56,'use_asterisk','Use Asterisk',1,0,0,30,2,$blockid,1,'C~O',1,NULL,'BAS',1)";
-ExecuteQuery($sql);
-$sql = "drop table if exists vtiger_asteriskextensions";
-ExecuteQuery($sql);
-$sql = "CREATE TABLE IF NOT EXISTS vtiger_asteriskextensions (userid varchar(30), asterisk_extension varchar(50), use_asterisk varchar(3)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
-ExecuteQuery($sql);
-$sql = "drop table if exists vtiger_asterisk";
-ExecuteQuery($sql);
-$sql = "CREATE TABLE IF NOT EXISTS vtiger_asterisk (server varchar(30), port varchar(30), username varchar(50), password varchar(50)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
-ExecuteQuery($sql);
-$sql = "drop table if exists vtiger_asteriskincomingcalls";
-ExecuteQuery($sql);
-$sql = "CREATE TABLE IF NOT EXISTS vtiger_asteriskincomingcalls (from_number varchar(50) not null, from_name varchar(50) not null, to_number varchar(50) not null, callertype varchar(30)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
-ExecuteQuery($sql);
-$sql = "drop table if exists vtiger_asteriskoutgoingcalls";
-ExecuteQuery($sql);
-$sql = "CREATE TABLE IF NOT EXISTS vtiger_asteriskoutgoingcalls (userid varchar(30) not null, from_number varchar(30) not null, to_number varchar(30) not null) ENGINE=InnoDB DEFAULT CHARSET=utf8";
-ExecuteQuery($sql);
-$sql = "drop table if exists vtiger_tab_name_index";
-ExecuteQuery($sql);
-$sql = "CREATE TABLE IF NOT EXISTS vtiger_tab_name_index (tabid int(19), tablename varchar(50), primaryKey varchar(50)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
-ExecuteQuery($sql);
-$tabid = getTabid('Users');
-$tab_name_index_users = array('vtiger_asteriskextensions'=>'userid');
-foreach($tab_name_index_users as $key=>$value){
-	$sql = "insert into vtiger_tab_name_index values ($tabid, '$key', '$value')";
-	ExecuteQuery($sql);
-}
+/* Updated phone field uitype */
 ExecuteQuery("update vtiger_field set uitype='11' where fieldname='mobile' and tabid=".getTabid('Leads'));
 ExecuteQuery("update vtiger_field set uitype='11' where fieldname='mobile' and tabid=".getTabid('Contacts'));
 ExecuteQuery("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Leads'));
 ExecuteQuery("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Contacts'));
 ExecuteQuery("update vtiger_field set uitype='11' where fieldname='fax' and tabid=".getTabid('Accounts'));
-// asterisk integration ends
 
 /* Support to Configure the functionality of Updating Inventory Stock for Invoice/SalesOrder */
 ExecuteQuery("ALTER TABLE vtiger_inventoryproductrel ADD COLUMN incrementondel int(11) not null default '0'");
@@ -1265,7 +1226,6 @@ function moveSettingsToDatabase($adb){
 				"set-IcoLoginHistory.gif",
 				"vtlib_modmng.gif",
 				"picklist.gif",
-				"settingsTrash.gif",
 				"quickview.png",
 				"ViewTemplate.gif",
 				"mailmarge.gif",
@@ -1303,7 +1263,6 @@ function moveSettingsToDatabase($adb){
 				'LBL_LOGIN_HISTORY_DETAILS',
 				'VTLIB_LBL_MODULE_MANAGER',
 				'LBL_PICKLIST_EDITOR',
-				'LBL_RECYCLEBIN',
 				'LBL_TOOLTIP_MANAGEMENT',
 				'EMAILTEMPLATES',
 				'LBL_MAIL_MERGE',
@@ -1336,7 +1295,6 @@ function moveSettingsToDatabase($adb){
 					'LBL_LOGIN_HISTORY_DESCRIPTION', 
 					'VTLIB_LBL_MODULE_MANAGER_DESCRIPTION', 
 					'LBL_PICKLIST_DESCRIPTION', 
-					'LBL_RECYCLEBIN_DESCRIPTION',
 					'LBL_TOOLTIP_MANAGEMENT_DESCRIPTION',
 					'LBL_EMAIL_TEMPLATE_DESCRIPTION', 
 					'LBL_MAIL_MERGE_DESCRIPTION', 
@@ -1368,7 +1326,6 @@ function moveSettingsToDatabase($adb){
 				'index.php?module=Settings&action=ListLoginHistory&parenttab=Settings',
 				'index.php?module=Settings&action=ModuleManager&parenttab=Settings',
 				'index.php?module=PickList&action=PickList&parenttab=Settings',
-				'index.php?module=Recyclebin&action=index&parenttab=Settings',
 				'index.php?module=Settings&action=QuickView&parenttab=Settings',
 				'index.php?module=Settings&action=listemailtemplates&parenttab=Settings',
 				'index.php?module=Settings&action=listwordtemplates&parenttab=Settings',
@@ -1471,99 +1428,6 @@ addFieldSecurity($helpDeskTabid, $tt_field2);
 ExecuteQuery("ALTER TABLE vtiger_troubletickets ADD COLUMN days VARCHAR(200)");
 // Adding fields ends here
 
-// Install Vtlib Compliant Modules
-installMandatoryModules();
-installOptionalModules();
-
-// Function to call installation of mandatory modules
-function installMandatoryModules(){
-	
-	// Install Services Module
-	installVtlibModule('Services', 'packages/5.1.0/Services.zip');
-	addServiceRelationToExistingModules();	
-	
-	// Install ServiceContracts Module
-	installVtlibModule('ServiceContracts', 'packages/5.1.0/ServiceContracts.zip');
-}
-	
-// Function to install Vtlib Compliant - Mandatory Modules
-function installOptionalModules(){
-	
-	//Install Field Formulas Module 
-	installVtlibModule('FieldFormulas', 'packages/5.1.0/FieldFormulas.zip');
-}
-
-// Function to install Vtlib Compliant
-function installVtlibModule($packagename, $packagepath) {
-	global $log;
-	require_once('vtlib/Vtiger/Package.php');
-	require_once('vtlib/Vtiger/Module.php');
-	$Vtiger_Utils_Log = true;
-	$package = new Vtiger_Package();
-	
-	$module = $package->getModuleNameFromZip($packagepath);
-	$module_exists = false;
-	$module_dir_exists = false;
-	if($module == null) {
-		$log->fatal("$packagename Module zipfile is not valid!");
-	} else if(Vtiger_Module::getInstance($module)) {
-		$log->fatal("$module already exists!");
-		$module_exists = true;
-	} else if(is_dir("modules/$module")) {
-		$log->info("$module folder exists! It will be Overwritten");
-		$module_dir_exists = true;
-	}
-	if($module_exists == false && $module_dir_exists == false) {
-		$log->debug("$module - Installation starts here");
-		$package->import($packagepath);
-		$moduleInstance = Vtiger_Module::getInstance($module);
-		if (empty($moduleInstance)) {
-			$log->fatal("$module module installation failed!");
-		} else {   
-			if(file_exists("modules/$packagename/Setup.php")) {
-				require_once("modules/$packagename/Setup.php");
-			}
-		}
-	}	
-}
-
-// Add Servies to Related List of other Existing modules
-function addServiceRelationToExistingModules() {
-	global $log;
-	require_once('vtlib/Vtiger/Module.php');
-	$Vtiger_Utils_Log = true;
-	
-	$moduleInstance = Vtiger_Module::getInstance('Services');
-	
-	$ttModuleInstance = Vtiger_Module::getInstance('HelpDesk');
-	$ttModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
-	
-	$leadModuleInstance = Vtiger_Module::getInstance('Leads');
-	$leadModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
-	
-	$accModuleInstance = Vtiger_Module::getInstance('Accounts');
-	$accModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
-	
-	$conModuleInstance = Vtiger_Module::getInstance('Contacts');
-	$conModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
-	
-	$potModuleInstance = Vtiger_Module::getInstance('Potentials');
-	$potModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
-	
-	$pbModuleInstance = Vtiger_Module::getInstance('PriceBooks');
-	$pbModuleInstance->setRelatedList($moduleInstance,'Services',array('select'),'get_pricebook_services');
-}
-
-// Function to populate Links
-function populateLinks() {
-	include_once('vtlib/Vtiger/Module.php');
-	
-	// Links for Accounts module
-	$moduleInstance = Vtiger_Module::getInstance('Accounts');
-	// Detail View Custom link
-	$moduleInstance->addLink('DETAILVIEW', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
-}
-
 //layout editor changes
 $helpdesktabid = getTabid('HelpDesk');
 $invoicetabid = getTabid('Invoice');
@@ -1579,6 +1443,7 @@ $pricebooktabid = getTabid('PriceBooks');
 $producttabid = getTabid('Products');
 $vendortabid= getTabid('Vendors');
 $accounttabid = getTabid('Accounts');
+
 ExecuteQuery("alter table vtiger_blocks add column iscustom int default 0");
 
 ExecuteQuery("update vtiger_field set presence=2");
@@ -1638,7 +1503,55 @@ for($z=0;$z<$adb->num_rows($result);$z++){
 	$stuffid = $adb->getUniqueID("vtiger_homestuff");
 	$sql="insert into vtiger_homestuff values($stuffid, $sequence, 'Tag Cloud', $userid, $visible, $widgetTitle)";
 }
-/*home page changes end*/
+
+/* Install Vtlib Compliant Modules */
+installMandatoryModules();
+installOptionalModules();
+
+// Function to call installation of mandatory modules
+function installMandatoryModules(){	
+
+	if ($handle = opendir('packages/5.1.0/mandatory')) {	    
+	    
+	    while (false !== ($file = readdir($handle))) {
+	        $filename_arr = explode(".", $file);
+	        $packagename = $filename_arr[0];
+	        if (!empty($packagename)) {
+	        	$packagepath = "packages/5.1.0/mandatory/$file";
+	        	installVtlibModule($packagename, $packagepath);
+	        }
+	    }
+	    closedir($handle);
+	}
+}
+	
+// Function to install Vtlib Compliant - Mandatory Modules
+function installOptionalModules(){
+
+	if ($handle = opendir('packages/5.1.0/optional')) {	    
+	    
+	    while (false !== ($file = readdir($handle))) {
+	        $filename_arr = explode(".", $file);
+	        $packagename = $filename_arr[0];
+	        if (!empty($packagename)) {
+	        	$packagepath = "packages/5.1.0/optional/$file";
+	        	installVtlibModule($packagename, $packagepath);
+	        }
+	    }
+	    closedir($handle);
+	}
+}
+
+// Function to populate Links
+function populateLinks() {
+	include_once('vtlib/Vtiger/Module.php');
+	
+	// Links for Accounts module
+	$moduleInstance = Vtiger_Module::getInstance('Accounts');
+	// Detail View Custom link
+	$moduleInstance->addLink('DETAILVIEW', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
+}
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

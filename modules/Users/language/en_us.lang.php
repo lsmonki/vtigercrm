@@ -674,12 +674,6 @@ $mod_strings = Array(
 'Reminder Interval'=>'Reminder Interval',
 'Webservice Access Key'=>'Access Key',
 
-//for asterisk integration
-'LBL_USER_ASTERISK_OPTIONS'=>'Asterisk Configuration',
-'Asterisk Extension'=>'Asterisk Extension',
-'Use Asterisk'=>'Use Asterisk',
-//asterisk changes end
-
 //user-group fixes
 'LBL_GROUPNAME_EXIST' => 'A Group with the specified name Already Exists!',
 'LBL_PROFILENAME_EXIST' => 'A Profile with the specified name Already Exists!',

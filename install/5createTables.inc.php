@@ -228,7 +228,6 @@ function create_default_users_access() {
 		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",25,0)");
        	$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",26,0)");
        	$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",27,0)");
-		$adb->query("insert into vtiger_profile2tab values (".$profile1_id.",30,0)");
 
 		//Inserting into vtiger_profile2tab
 		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",1,0)");
@@ -254,7 +253,6 @@ function create_default_users_access() {
 		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",25,0)");
         $adb->query("insert into vtiger_profile2tab values (".$profile2_id.",26,0)");
        	$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",27,0)");
-		$adb->query("insert into vtiger_profile2tab values (".$profile2_id.",30,0)");
 
 		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",1,0)");
 		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",2,0)");
@@ -279,7 +277,6 @@ function create_default_users_access() {
 		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",25,0)");
         $adb->query("insert into vtiger_profile2tab values (".$profile3_id.",26,0)");
        	$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",27,0)");
-		$adb->query("insert into vtiger_profile2tab values (".$profile3_id.",30,0)");        
 
 		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",1,0)");
 		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",2,0)");
@@ -304,7 +301,6 @@ function create_default_users_access() {
 		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",25,0)");
 		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",26,0)");
 		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",27,0)");
-		$adb->query("insert into vtiger_profile2tab values (".$profile4_id.",30,0)"); 
 		//Inserting into vtiger_profile2standardpermissions  Adminsitrator
 		
 		$adb->query("insert into vtiger_profile2standardpermissions values (".$profile1_id.",2,0,0)");
@@ -743,7 +739,6 @@ function create_default_users_access() {
         $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",7,9,0)");
 		$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",18,5,0)");
 		$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",18,6,0)");
-		$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",30,3,0)");
 		$adb->query("insert into vtiger_profile2utility values (".$profile1_id.",7,10,0)");
         $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",6,10,0)");
         $adb->query("insert into vtiger_profile2utility values (".$profile1_id.",4,10,0)");
@@ -774,7 +769,6 @@ function create_default_users_access() {
         $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",7,9,0)");
 		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",18,5,1)");
 		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",18,6,1)");
-		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",30,3,0)");
 		$adb->query("insert into vtiger_profile2utility values (".$profile2_id.",7,10,0)");
         $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",6,10,0)");
         $adb->query("insert into vtiger_profile2utility values (".$profile2_id.",4,10,0)");
@@ -805,7 +799,6 @@ function create_default_users_access() {
         $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",7,9,0)");
 		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",18,5,1)");
 		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",18,6,1)");
-		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",30,3,0)");
 		$adb->query("insert into vtiger_profile2utility values (".$profile3_id.",7,10,0)");
         $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",6,10,0)");
         $adb->query("insert into vtiger_profile2utility values (".$profile3_id.",4,10,0)");
@@ -836,7 +829,6 @@ function create_default_users_access() {
         $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",7,9,0)");
 		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",18,5,1)");
 		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",18,6,1)");
-		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",30,3,0)");
 		$adb->query("insert into vtiger_profile2utility values (".$profile4_id.",7,10,0)");
         $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",6,10,0)");
         $adb->query("insert into vtiger_profile2utility values (".$profile4_id.",4,10,0)");
@@ -1119,81 +1111,38 @@ function populateLinks() {
 	$moduleInstance->addLink('DETAILVIEW', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
 }
 
-// Function to install Vtlib Compliant
-function installVtlibModule($packagename, $packagepath) {
-	global $log;
-	require_once('vtlib/Vtiger/Package.php');
-	require_once('vtlib/Vtiger/Module.php');
-	$Vtiger_Utils_Log = true;
-	$package = new Vtiger_Package();
-	
-	$module = $package->getModuleNameFromZip($packagepath);
-	$module_exists = false;
-	$module_dir_exists = false;
-	if($module == null) {
-		$log->fatal("$packagename Module zipfile is not valid!");
-	} else if(Vtiger_Module::getInstance($module)) {
-		$log->fatal("$module already exists!");
-		$module_exists = true;
-	} else if(is_dir("modules/$module")) {
-		$log->info("$module folder exists! It will be Overwritten");
-		$module_dir_exists = true;
-	}
-	if($module_exists == false && $module_dir_exists == false) {
-		$log->debug("$module - Installation starts here");
-		$package->import($packagepath);
-		$moduleInstance = Vtiger_Module::getInstance($module);
-		if (empty($moduleInstance)) {
-			$log->fatal("$module module installation failed!");
-		} else {   
-			if(file_exists("modules/$packagename/Setup.php")) {
-				require_once("modules/$packagename/Setup.php");
-			}
-		}
-	}	
-}
-
 // Function to call installation of mandatory modules
-function installMandatoryModules(){
-	
-	// Install Services Module
-	installVtlibModule('Services', 'packages/5.1.0/Services.zip');
-	addServiceRelationToExistingModules();	
-	
-	// Install ServiceContracts Module
-	installVtlibModule('ServiceContracts', 'packages/5.1.0/ServiceContracts.zip');
+function installMandatoryModules(){	
+
+	if ($handle = opendir('packages/5.1.0/mandatory')) {	    
+	    
+	    while (false !== ($file = readdir($handle))) {
+	        $filename_arr = explode(".", $file);
+	        $packagename = $filename_arr[0];
+	        if (!empty($packagename)) {
+	        	$packagepath = "packages/5.1.0/mandatory/$file";
+	        	installVtlibModule($packagename, $packagepath);
+	        }
+	    }
+	    closedir($handle);
+	}
 }
 	
 // Function to install Vtlib Compliant - Mandatory Modules
 function installOptionalModules(){
-	//Install FieldFormulas module
-	installVtlibModule('FieldFormulas', 'packages/5.1.0/FieldFormulas.zip');
-}
 
-function addServiceRelationToExistingModules() {
-	global $log;
-	require_once('vtlib/Vtiger/Module.php');
-	$Vtiger_Utils_Log = true;
-	
-	$moduleInstance = Vtiger_Module::getInstance('Services');
-	
-	$ttModuleInstance = Vtiger_Module::getInstance('HelpDesk');
-	$ttModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
-	
-	$leadModuleInstance = Vtiger_Module::getInstance('Leads');
-	$leadModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
-	
-	$accModuleInstance = Vtiger_Module::getInstance('Accounts');
-	$accModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
-	
-	$conModuleInstance = Vtiger_Module::getInstance('Contacts');
-	$conModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
-	
-	$potModuleInstance = Vtiger_Module::getInstance('Potentials');
-	$potModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
-	
-	$pbModuleInstance = Vtiger_Module::getInstance('PriceBooks');
-	$pbModuleInstance->setRelatedList($moduleInstance,'Services',array('select'),'get_pricebook_services');
+	if ($handle = opendir('packages/5.1.0/optional')) {	    
+	    
+	    while (false !== ($file = readdir($handle))) {
+	        $filename_arr = explode(".", $file);
+	        $packagename = $filename_arr[0];
+	        if (!empty($packagename)) {
+	        	$packagepath = "packages/5.1.0/optional/$file";
+	        	installVtlibModule($packagename, $packagepath);
+	        }
+	    }
+	    closedir($handle);
+	}
 }
 
 function setFieldHelpInfo() {

@@ -328,6 +328,24 @@ class PurchaseOrder extends CRMEntity {
 		return $rel_tables[$secmodule];
 	}
 	
+	// Function to unlink an entity with given Id from another entity
+	function unlinkRelationship($id, $return_module, $return_id) {
+		global $log;
+		if(empty($return_module) || empty($return_id)) return;
+		
+		if($return_module == 'Vendors') {
+			$sql_req ='UPDATE vtiger_crmentity SET deleted = 1 WHERE crmid= ?';
+			$this->db->pquery($sql_req, array($id));
+		} elseif($return_module == 'Contacts') {
+			$sql_req ='UPDATE vtiger_purchaseorder SET contactid=0 WHERE purchaseorderid = ?';
+			$this->db->pquery($sql_req, array($id));
+		} else {
+			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
+			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
+			$this->db->pquery($sql, $params);
+		}
+	}
+	
 }
 
 ?>

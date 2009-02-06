@@ -429,6 +429,14 @@ class vtigerRSS extends CRMEntity
 
 	}
 
+	// Function to delete an entity with given Id
+	function trash($module, $id) {
+		global $log, $adb;
+		
+		$del_query = 'DELETE FROM vtiger_rss WHERE rssid=?';
+		$adb->pquery($del_query, array($id));
+	}
+
 }
 
 /** Function to get the rsstitle for the given rssid  

@@ -52,5 +52,3 @@ function editContents(node, notebookid) {
 	
 	notebook.focus();
 }
-
-            

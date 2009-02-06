@@ -345,6 +345,23 @@ class Invoice extends CRMEntity {
 		);
 		return $rel_tables[$secmodule];
 	}
+	
+	// Function to unlink an entity with given Id from another entity
+	function unlinkRelationship($id, $return_module, $return_id) {
+		global $log;
+		if(empty($return_module) || empty($return_id)) return;
+		
+		if($return_module == 'Accounts') {
+			$this->trash('Invoice',$id);
+		} elseif($return_module=='SalesOrder') {
+			$relation_query = 'UPDATE vtiger_invoice set salesorderid=0 where invoiceid=?';
+			$this->db->pquery($relation_query, array($id));
+		} else {
+			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
+			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
+			$this->db->pquery($sql, $params);
+		}
+	}
 
 }
 

@@ -10,9 +10,5 @@
   PRIMARY KEY  (`expressionid`)
 )]]></sql>
 		</table>
-		<table>
-			<name>vtiger_settings_field</name>
-			<sql><![CDATA[insert into vtiger_settings_field values(34, 2, 'LBL_FIELD_FORMULAS', 'FieldFormulas.png', 'LBL_FIELDFORMULAS_DESCRIPTION', 'index.php?module=FieldFormulas&action=index&parenttab=Settings', 7)]]></sql>
-		</table>
 	</tables>
 </schema>

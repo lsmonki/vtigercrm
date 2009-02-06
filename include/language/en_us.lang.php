@@ -1073,14 +1073,6 @@ $app_strings = array (
 'Current Date'=>'Current Date',
 'Current Time'=>'Current Time',
 
-//Added for Recyclebin feature
-'Recyclebin'=>'Recycle Bin',
-'LBL_EMPTY_MODULE'=>'No records found to Restore in module',
-'LBL_MASS_RESTORE'=>'Restore',
-'LBL_EMPTY_RECYCLEBIN'=>'Empty Recycle Bin',
-'LNK_RESTORE'=>'restore',
-'LBL_NO_PERMITTED_MODULES'=>'No permitted modules available',
-
 //Added for Role based Custom filters
 'LBL_PUBLIC'=>'Public',
 'LBL_PENDING'=>'Pending',
@@ -1242,7 +1234,6 @@ $app_list_strings = array (
     'Portal' => 'My Sites',
 	
 	// Added after 5.0.4 GA
-	'Recyclebin' => 'Recycle Bin',
     'Documents' => 'Documents',
   ),
   'opportunity_relationship_type_default_key' => 'Primary Decision Maker',

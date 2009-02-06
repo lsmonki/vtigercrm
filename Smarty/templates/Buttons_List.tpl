@@ -15,9 +15,6 @@
 <tr><td style="height:2px"></td></tr>
 <tr>
 	{assign var="action" value="ListView"}
-	{if $MODULE eq 'Recyclebin'}
-		{assign var="action" value="index"}
-	{/if}	
 	{assign var="MODULELABEL" value=$MODULE}
 	{if $APP[$MODULE]}
 		{assign var="MODULELABEL" value=$APP[$MODULE]}
@@ -36,7 +33,7 @@
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
 					{if $CHECK.EditView eq 'yes' && $MODULE neq 'Emails' && $MODULE neq 'Webmails'}
-			        		{if $MODULE eq 'Calendar' || $MODULE eq 'Recyclebin'}
+			        		{if $MODULE eq 'Calendar'}
 		                      	        	<td style="padding-right:0px;padding-left:10px;"><img src="{'btnL3Add-Faded.gif'|@vtiger_imageurl:$THEME}" border=0></td>
                 	   			 {else}
 	                        		       	<td style="padding-right:0px;padding-left:10px;"><a href="index.php?module={$MODULE}&action=EditView&return_action=DetailView&parenttab={$CATEGORY}"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.$SINGLE_MOD}..." title="{$APP.LBL_CREATE_BUTTON_LABEL} {$APP.$SINGLE_MOD}..." border=0></a></td>

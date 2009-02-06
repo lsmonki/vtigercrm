@@ -260,7 +260,7 @@ function massDelete(module)
                        	        	$("ListViewContents").innerHTML= result[2];
 	                       	        if(result[1] != '')
                                        		alert(result[1]);
-						$('basicsearchcolumns').innerHTML = '';
+									$('basicsearchcolumns').innerHTML = '';
 	                        }
        			 }
 		);

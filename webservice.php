@@ -15,7 +15,6 @@
 	require_once("include/Webservices/WebServiceError.php");
 	require_once 'include/utils/CommonUtils.php';
 	require_once 'include/utils/utils.php';
-	require_once("include/utils/DeleteUtils.php");
 	require_once 'include/utils/UserInfoUtil.php';
 	require_once 'include/Webservices/ModuleTypes.php';
 	require_once 'include/utils/VtlibUtils.php';

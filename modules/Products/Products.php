@@ -1036,5 +1036,49 @@ class Products extends CRMEntity {
 		}
 	}
 	
+	// Function to unlink all the dependent entities of the given Entity by Id
+	function unlinkDependencies($module, $id) {
+		global $log;
+		//Backup Campaigns-Product Relation
+		$cmp_q = 'SELECT campaignid FROM vtiger_campaign WHERE product_id = ?';
+		$cmp_res = $this->db->pquery($cmp_q, array($id));
+		if ($this->db->num_rows($cmp_res) > 0) {
+			$cmp_ids_list = array();
+			for($k=0;$k < $this->db->num_rows($cmp_res);$k++)
+			{
+				$cmp_ids_list[] = $this->db->query_result($cmp_res,$k,"campaignid");
+			}
+			$params = array($id, RB_RECORD_UPDATED, 'vtiger_campaign', 'product_id', 'campaignid', implode(",", $cmp_ids_list));
+			$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES (?,?,?,?,?,?)', $params);
+		}
+		//we have to update the product_id as null for the campaigns which are related to this product
+		$this->db->pquery('UPDATE vtiger_campaign SET product_id=0 WHERE product_id = ?', array($id));
+		
+		$this->db->pquery('DELETE from vtiger_seproductsrel WHERE productid=? or crmid=?',array($id,$id));
+		
+		parent::unlinkDependencies($module, $id);
+	}
+	
+	// Function to unlink an entity with given Id from another entity
+	function unlinkRelationship($id, $return_module, $return_id) {
+		global $log;
+		if(empty($return_module) || empty($return_id)) return;
+		
+		if($return_module == 'Calendar') {
+			$sql = 'DELETE FROM vtiger_seactivityrel WHERE crmid = ? AND activityid = ?';
+			$this->db->pquery($sql, array($id, $return_id));
+		} elseif($return_module == 'Leads' || $return_module == 'Accounts' || $return_module == 'Contacts' || $return_module == 'Potentials') {
+			$sql = 'DELETE FROM vtiger_seproductsrel WHERE productid = ? AND crmid = ?';
+			$this->db->pquery($sql, array($id, $return_id));
+		} elseif($return_module == 'Vendors') {
+			$sql = 'UPDATE vtiger_products SET vendor_id = 0 WHERE productid = ?';
+			$this->db->pquery($sql, array($id));
+		} else {
+			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
+			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
+			$this->db->pquery($sql, $params);
+		}
+	}
+	
 }
 ?>

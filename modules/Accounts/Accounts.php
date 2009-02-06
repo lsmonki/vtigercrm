@@ -692,7 +692,7 @@ class Accounts extends CRMEntity {
 		}else
 		{
 			$profileList = getCurrentUserProfileList();
-			$sql1 = "select vtiger_field.fieldid,fieldlabel from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=6 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
+			$sql1 = "select vtiger_field.fieldid,fieldlabel from vtiger_field INNER JOIN vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=6 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
 			$params1 = array();
 			if (count($profileList) > 0) {
 				$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")  group by fieldid";
@@ -980,6 +980,96 @@ class Accounts extends CRMEntity {
 		}
         $log->debug("Exiting __getChildAccounts method ...");
 		return $child_accounts;
+	}
+	
+	// Function to unlink the dependent records of the given record by id
+	function unlinkDependencies($module, $id) {
+		global $log;
+		
+		//Deleting Account related Potentials.
+		$pot_q = 'SELECT vtiger_crmentity.crmid FROM vtiger_crmentity 
+			INNER JOIN vtiger_potential ON vtiger_crmentity.crmid=vtiger_potential.potentialid  
+			INNER JOIN vtiger_account ON vtiger_account.accountid=vtiger_potential.accountid 
+			WHERE vtiger_crmentity.deleted=0 AND vtiger_potential.accountid=?';		
+		$pot_res = $this->db->pquery($pot_q, array($id));
+		$pot_ids_list = array();
+		for($k=0;$k < $this->db->num_rows($pot_res);$k++)
+		{
+			$pot_id = $this->db->query_result($pot_res,$k,"crmid");
+			$pot_ids_list[] = $pot_id;
+			$sql = 'UPDATE vtiger_crmentity SET deleted = 1 WHERE crmid = ?';
+			$this->db->pquery($sql, array($pot_id));
+		}
+		//Backup deleted Account related Potentials.
+		$params = array($id, RB_RECORD_UPDATED, 'vtiger_crmentity', 'deleted', 'crmid', implode(",", $pot_ids_list));
+		$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES(?,?,?,?,?,?)', $params);
+		
+		//Deleting Account related Quotes.
+		$quo_q = 'SELECT vtiger_crmentity.crmid FROM vtiger_crmentity 
+			INNER JOIN vtiger_quotes ON vtiger_crmentity.crmid=vtiger_quotes.quoteid 
+			INNER JOIN vtiger_account ON vtiger_account.accountid=vtiger_quotes.accountid 
+			WHERE vtiger_crmentity.deleted=0 AND vtiger_quotes.accountid=?';
+		$quo_res = $this->db->pquery($quo_q, array($id));
+		$quo_ids_list = array();
+		for($k=0;$k < $this->db->num_rows($quo_res);$k++)
+		{
+			$quo_id = $this->db->query_result($quo_res,$k,"crmid");
+			$quo_ids_list[] = $quo_id;
+			$sql = 'UPDATE vtiger_crmentity SET deleted = 1 WHERE crmid = ?';
+			$this->db->pquery($sql, array($quo_id));
+		}
+		//Backup deleted Account related Quotes.
+		$params = array($id, RB_RECORD_UPDATED, 'vtiger_crmentity', 'deleted', 'crmid', implode(",", $quo_ids_list));
+		$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES(?,?,?,?,?,?)', $params);
+		
+		//Backup Contact-Account Relation
+		$con_q = 'SELECT contactid FROM vtiger_contactdetails WHERE accountid = ?';
+		$con_res = $this->db->pquery($con_q, array($id));
+		if ($this->db->num_rows($con_res) > 0) {
+			$con_ids_list = array();
+			for($k=0;$k < $this->db->num_rows($con_res);$k++)
+			{
+				$con_ids_list[] = $this->db->query_result($con_res,$k,"contactid");
+			}
+			$params = array($id, RB_RECORD_UPDATED, 'vtiger_contactdetails', 'accountid', 'contactid', implode(",", $con_ids_list));
+			$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES(?,?,?,?,?,?)', $params);
+		}
+		//Deleting Contact-Account Relation.
+		$con_q = 'UPDATE vtiger_contactdetails SET accountid = 0 WHERE accountid = ?';
+		$this->db->pquery($con_q, array($id));
+	
+		//Backup Trouble Tickets-Account Relation
+		$tkt_q = 'SELECT ticketid FROM vtiger_troubletickets WHERE parent_id = ?';
+		$tkt_res = $this->db->pquery($tkt_q, array($id));
+		if ($this->db->num_rows($tkt_res) > 0) {
+			$tkt_ids_list = array();
+			for($k=0;$k < $this->db->num_rows($tkt_res);$k++)
+			{
+				$tkt_ids_list[] = $this->db->query_result($tkt_res,$k,"ticketid");
+			}
+			$params = array($id, RB_RECORD_UPDATED, 'vtiger_troubletickets', 'parent_id', 'ticketid', implode(",", $tkt_ids_list));
+			$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES(?,?,?,?,?,?)', $params);
+		}
+		//Deleting Trouble Tickets-Account Relation.
+		$tt_q = 'UPDATE vtiger_troubletickets SET parent_id = 0 WHERE parent_id = ?';
+		$this->db->pquery($tt_q, array($id));
+	    
+		parent::unlinkDependencies($module, $id);
+	}
+	
+	// Function to unlink an entity with given Id from another entity 
+	function unlinkRelationship($id, $return_module, $return_id) {
+		global $log;
+		if(empty($return_module) || empty($return_id)) return;		
+		
+		if($return_module == 'Products') {
+			$sql = 'DELETE FROM vtiger_seproductsrel WHERE crmid=? AND productid=?';
+			$this->db->pquery($sql, array($id, $return_id));
+		} else {
+			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
+			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
+			$this->db->pquery($sql, $params);
+		}
 	}
 
 }

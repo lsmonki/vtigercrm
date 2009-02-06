@@ -41,6 +41,16 @@ class CRMEntity
 
   var $ownedby;
    
+	static function getInstance($module) {
+		$modName = $module;
+		if ($module == 'Calendar') {
+			$modName = 'Activity';
+		}
+		require_once("modules/$module/$modName.php");
+		$focus = new $modName();
+		return $focus;		
+	}
+	
 	
   function saveentity($module,$fileid='')
   {
@@ -910,13 +920,11 @@ $log->info("in getOldFileName  ".$notesid);
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	*/
-	function mark_deleted($id)
-	{
+	function mark_deleted($id) {
 		$date_var = date('Y-m-d H:i:s');
 		$query = "UPDATE vtiger_crmentity set deleted=1,modifiedtime=? where crmid=?";
 		$this->db->pquery($query, array($this->db->formatDate($date_var, true),$id), true,"Error marking record deleted: ");
 	}
-
 
 	function retrieve_by_string_fields($fields_array, $encode=true) 
 	{ 
@@ -1175,30 +1183,121 @@ $log->info("in getOldFileName  ".$notesid);
 		}
 	}
 	
+	/** Function to delete an entity with given Id */
+	function trash($module, $id) {
+		global $log, $current_user;
+		
+		$this->mark_deleted($id);
+		$this->unlinkDependencies($module, $id);
+		
+		require_once('include/freetag/freetag.class.php');
+		$freetag=new freetag();
+		$freetag->delete_all_object_tags_for_user($current_user->id,$id);
+		
+		$sql_recentviewed ='DELETE FROM vtiger_tracker WHERE user_id = ? AND item_id = ?';
+        $this->db->pquery($sql_recentviewed, array($current_user->id, $id));
+	}
+	
+	
+	/** Function to unlink all the dependent entities of the given Entity by Id */
+	function unlinkDependencies($module, $id) {
+		global $log;
+		
+		$fieldRes = $this->db->pquery('SELECT tabid, tablename, columnname FROM vtiger_field WHERE fieldid IN (
+			SELECT fieldid FROM vtiger_fieldmodulerel WHERE relmodule=?)', array($module));
+		$numOfFields = $this->db->num_rows($fieldRes);
+		for ($i=0; $i<$numOfFields; $i++) {
+			$tabId = $this->db->query_result($fieldRes, $i, 'tabid');
+			$tableName = $this->db->query_result($fieldRes, $i, 'tablename');
+			$columnName = $this->db->query_result($fieldRes, $i, 'columnname');
+			
+			$relatedModule = vtlib_getModuleNameById($tabId);
+			checkFileAccess("modules/$relatedModule/$relatedModule.php");
+			require_once("modules/$relatedModule/$relatedModule.php");
+			$focusObj = new $relatedModule();
+			
+			//Backup Field Relations for the deleted entity
+			$relQuery = "SELECT $focusObj->table_index FROM $tableName WHERE $columnName=?";
+			$relResult = $this->db->pquery($relQuery, array($id));
+			$numOfRelRecords = $this->db->num_rows($relResult);
+			if ($numOfRelRecords > 0) {
+				$recordIdsList = array();
+				for($k=0;$k < $numOfRelRecords;$k++)
+				{
+					$recordIdsList[] = $this->db->query_result($relResult,$k,$focusObj->table_index);
+				}
+				$params = array($id, RB_RECORD_UPDATED, $tableName, $columnName, $focusObj->table_index, implode(",", $recordIdsList));
+				$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES (?,?,?,?,?,?)', $params);
+			}
+			
+			$query = "UPDATE $tableName SET $columnName=0 WHERE $columnName=?";
+			$params = array($id);
+			$this->db->pquery($query, $params);
+		}
+	}
+	
+	/** Function to unlink an entity with given Id from another entity */
+	function unlinkRelationship($id, $return_module, $return_id) {
+		global $log;
+		
+		$query = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
+		$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
+		$this->db->pquery($query, $params);
+	}
 	
 	/** Function to restore a deleted record of specified module with given crmid
   	  * @param $module -- module name:: Type varchar
   	  * @param $entity_ids -- list of crmids :: Array
  	 */
-	function restore($module, $entity_ids)
-	{
-		global $current_user, $adb;
+	function restore($module, $id) {
+		global $current_user;
 	
 		$this->db->println("TRANS restore starts $module");
 		$this->db->startTransaction();		
 	
-		foreach($entity_ids as $crmid) {
-			$adb->pquery("update vtiger_crmentity set deleted=0 where crmid = ?", array($crmid));
-			//Restore related entities/records
-			restore_related_records($crmid, $module);
-			//Calling the Module specific restore code
-			$this->restore_module($crmid);
-			//Clean up the the backup data also after restoring
-			$adb->pquery("delete from vtiger_relatedlists_rb where entityid = ?", array($crmid));
-		}		
+		$this->db->pquery('UPDATE vtiger_crmentity SET deleted=0 WHERE crmid = ?', array($id));
+		//Restore related entities/records
+		$this->restoreRelatedRecords($module,$id);
 		
 		$this->db->completeTransaction();
 	    $this->db->println("TRANS restore ends");
+	}
+
+	/** Function to restore all the related records of a given record by id */
+	function restoreRelatedRecords($module,$record) {
+		
+		$result = $this->db->pquery('SELECT * FROM vtiger_relatedlists_rb WHERE entityid = ?', array($record));
+		$numRows = $this->db->num_rows($result);
+		for($i=0; $i < $numRows;$i++)
+		{
+			$action = $this->db->query_result($result,$i,"action");
+			$rel_table = $this->db->query_result($result,$i,"rel_table");
+			$rel_column = $this->db->query_result($result,$i,"rel_column");
+			$ref_column = $this->db->query_result($result,$i,"ref_column");
+			$related_crm_ids = $this->db->query_result($result,$i,"related_crm_ids");
+			
+			if(strtoupper($action) == RB_RECORD_UPDATED) {
+				$related_ids = explode(",", $related_crm_ids);
+				if($rel_table == 'vtiger_crmentity' && $rel_column == 'deleted') {
+					$sql = "UPDATE $rel_table set $rel_column = 0 WHERE $ref_column IN (". generateQuestionMarks($related_ids) . ")";
+					$this->db->pquery($sql, array($related_ids));
+				} else {
+					$sql = "UPDATE $rel_table set $rel_column = ? WHERE $rel_column = 0 AND $ref_column IN (". generateQuestionMarks($related_ids) . ")";
+					$this->db->pquery($sql, array($record, $related_ids));			
+				}
+			} elseif (strtoupper($action) == RB_RECORD_DELETED) {
+				if ($rel_table == 'vtiger_seproductrel') {
+					$sql = "INSERT INTO $rel_table($rel_column, $ref_column, 'setype') VALUES (?,?,?)";
+					$this->db->pquery($sql, array($record, $related_crm_ids, $module));
+				} else {
+					$sql = "INSERT INTO $rel_table($rel_column, $ref_column) VALUES (?,?)";
+					$this->db->pquery($sql, array($record, $related_crm_ids));
+				}
+			}
+		}		
+		
+		//Clean up the the backup data also after restoring
+		$this->db->pquery('DELETE FROM vtiger_relatedlists_rb WHERE entityid = ?', array($record));		
 	}
 
 	/** 

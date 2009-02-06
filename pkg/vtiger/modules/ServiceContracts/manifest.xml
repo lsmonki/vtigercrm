@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <module>
-<exporttime>2009-01-16 12:47:28</exporttime>
+<exporttime>2009-02-06 07:55:28</exporttime>
 <name>ServiceContracts</name>
 <label>Service Contracts</label>
 <parent>Support</parent>
@@ -251,7 +251,7 @@
 <selected>0</selected>
 <sequence>1</sequence>
 <maximumlength>100</maximumlength>
-<typeofdata>V~O</typeofdata>
+<typeofdata>V~M</typeofdata>
 <quickcreate>0</quickcreate>
 <quickcreatesequence>10</quickcreatesequence>
 <displaytype>1</displaytype>
@@ -513,13 +513,13 @@
 <events>
 <event>
 <eventname>vtiger.entity.beforesave</eventname>
-<classname>ServiceContractsHandler</classname>
-<filename>modules/ServiceContracts/ServiceContractsHandler.php</filename>
+<classname><![CDATA[ServiceContractsHandler]]></classname>
+<filename><![CDATA[modules/ServiceContracts/ServiceContractsHandler.php]]></filename>
 </event>
 <event>
 <eventname>vtiger.entity.aftersave</eventname>
-<classname>ServiceContractsHandler</classname>
-<filename>modules/ServiceContracts/ServiceContractsHandler.php</filename>
+<classname><![CDATA[ServiceContractsHandler]]></classname>
+<filename><![CDATA[modules/ServiceContracts/ServiceContractsHandler.php]]></filename>
 </event>
 </events>
 <actions>

@@ -542,24 +542,22 @@ $oldpresence = $adb->query_result($req_result,0,'presence');
 	}
 	
 	$fieldtype =  explode("~",$typeofdata);
-	$mandatory_checked= $_REQUEST['ismandatory'];
+	$mandatory_checked = $_REQUEST['ismandatory'];
 	$quickcreate_checked = $_REQUEST['quickcreate'];
 	$presence_check = $_REQUEST['isPresent'];
 	$massedit_check = $_REQUEST['massedit'];
 	$nonEditableUiTypes = array('4','70');
 	
 
-	if(isset($focus->mandatory_fields) && (!empty($focus->mandatory_fields))){
-		if(in_array($fieldname, $focus->mandatory_fields) || in_array($uitype, $nonEditableUiTypes)){
-			$fieldtype[1] = 'M';
-		}else{	
-		if($mandatory_checked == 'true' || $mandatory_checked == ''){
-			$fieldtype[1] = 'M';
-		}else{
-			$fieldtype[1] = 'O';
-		}
+	if(isset($focus->mandatory_fields) && (!empty($focus->mandatory_fields)) && in_array($fieldname, $focus->mandatory_fields)){
+		$fieldtype[1] = 'M';
+	} elseif(in_array($uitype, $nonEditableUiTypes)) {
+		$fieldtype[1] = 'M';
+	} elseif($mandatory_checked == 'true' || $mandatory_checked == ''){
+		$fieldtype[1] = 'M';
+	} else{
+		$fieldtype[1] = 'O';
 	}
-	}	
 	$datatype = implode('~', $fieldtype);
 	$maxseq = '';
 	if($oldquickcreate != 3){

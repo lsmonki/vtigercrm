@@ -511,6 +511,18 @@ var $rel_serel_table = "vtiger_seactivityrel";
 		$this->db->pquery($query, array($user_id, $email_id), true,"Error setting email to user relationship: "."<BR>$query");
 		$log->debug("Exiting set_emails_user_invitee_relationship method ...");
 	}
+	
+	// Function to unlink an entity with given Id from another entity
+	function unlinkRelationship($id, $return_module, $return_id) {
+		global $log;
+		
+		$sql='DELETE FROM vtiger_seactivityrel WHERE activityid=?';
+		$this->db->pquery($sql, array($id));
+			
+		$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
+		$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
+		$this->db->pquery($sql, $params);
+	}
 }
 /** Function to get the emailids for the given ids form the request parameters 
  *  It returns an array which contains the mailids and the parentidlists

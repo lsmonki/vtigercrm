@@ -82,6 +82,10 @@ class ServiceContracts extends CRMEntity {
 	// Required Information for enabling Import feature
 	var $required_fields = Array ('assigned_user_id'=>1);
 
+	// Used when enabling/disabling the mandatory fields for the module.
+	// Refers to vtiger_field.fieldname values.
+	var $mandatory_fields = Array('subject','assigned_user_id');
+	
 	// Callback function list during Importing
 	var $special_functions = Array('set_import_assigned_user');
 

@@ -363,6 +363,32 @@ class SalesOrder extends CRMEntity {
 		return $rel_tables[$secmodule];
 	}
 	
+	// Function to unlink an entity with given Id from another entity
+	function unlinkRelationship($id, $return_module, $return_id) {
+		global $log;
+		if(empty($return_module) || empty($return_id)) return;
+		
+		if($return_module == 'Accounts') {
+			$this->trash('SalesOrder',$id);
+		}
+		elseif($return_module == 'Quotes') {
+			$relation_query = 'UPDATE vtiger_salesorder SET quoteid=0 WHERE salesorderid=?';
+			$this->db->pquery($relation_query, array($id));
+		}
+		elseif($return_module == 'Potentials') {
+			$relation_query = 'UPDATE vtiger_salesorder SET potentialid=0 WHERE salesorderid=?';
+			$this->db->pquery($relation_query, array($id));
+		}
+		elseif($return_module == 'Contacts') {
+			$relation_query = 'UPDATE vtiger_salesorder SET contactid=0 WHERE salesorderid=?';
+			$this->db->pquery($relation_query, array($id));
+		} else {
+			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
+			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
+			$this->db->pquery($sql, $params);
+		}
+	}
+	
 }
 
 ?>

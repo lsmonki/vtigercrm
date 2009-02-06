@@ -168,7 +168,6 @@
 				LBL_ADD_PICKLIST_VALUE:'Please provide atleast one new value to be added',
 
 				ALL_FILTER_CREATION_DENIED:'Cannot create CustomView using name "All", try using different ViewName',
-				MSG_RESTORE_CONFIRMATION:'Are you sure you want to restore the selected',
 
                 /* For Duplicate merging feature */
 				SAME_GROUPS: 'You have to select the records in the same groups for merging',

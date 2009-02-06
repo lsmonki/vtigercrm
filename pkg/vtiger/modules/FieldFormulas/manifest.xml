@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <module>
-<exporttime>2009-01-16 16:30:54</exporttime>
+<exporttime>2009-02-06 07:57:42</exporttime>
 <name>FieldFormulas</name>
 <label>Field Formulas</label>
 <parent></parent>
@@ -22,24 +22,9 @@
 </tables>
 <events>
 <event>
-<eventname>vtiger.entity.aftersave</eventname>
-<classname>RecurringInvoiceHandler</classname>
-<filename>modules/SalesOrder/RecurringInvoiceHandler.php</filename>
-</event>
-<event>
-<eventname>vtiger.entity.aftersave</eventname>
-<classname>VTWorkflowEventHandler</classname>
-<filename>modules/com_vtiger_workflow/VTEventHandler.inc</filename>
-</event>
-<event>
-<eventname>vtiger.entity.aftersave</eventname>
-<classname>Attachfile</classname>
-<filename>modules/Documents/AttachFile.php</filename>
-</event>
-<event>
 <eventname>vtiger.entity.beforesave.modifiable</eventname>
-<classname>VTFieldFormulasEventHandler</classname>
-<filename>modules/FieldFormulas/VTFieldFormulasEventHandler.inc</filename>
+<classname><![CDATA[VTFieldFormulasEventHandler]]></classname>
+<filename><![CDATA[modules/FieldFormulas/VTFieldFormulasEventHandler.inc]]></filename>
 </event>
 </events>
 </module>
