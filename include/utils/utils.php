@@ -4336,7 +4336,7 @@ function get_tab_name_index($adb, $module){
  */
 function get_use_asterisk($id){
 	global $adb;
-	if(vtlib_isModuleActive('PBXManager')) return 'false';
+	if(!vtlib_isModuleActive('PBXManager')) return 'false';
 	$sql = "select * from vtiger_asteriskextensions where userid = ?";
 	$result = $adb->pquery($sql, array($id));
 	if($adb->num_rows($result)>0){

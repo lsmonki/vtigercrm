@@ -1468,8 +1468,8 @@ ExecuteQuery("update vtiger_field set quickcreate=1 where fieldname in ('subject
 ExecuteQuery("update vtiger_field set quickcreate=1 where fieldname in ('faq_answer','question') and tabid = $faqtabid");
 
 ExecuteQuery("update vtiger_field set masseditable=0 where tabid = $documents_tab_id or fieldname ='createdtime' or fieldname = 'modifiedtime'");
-ExecuteQuery("update vtiger_field set typeofdata='V~O' where uitype=4");
-ExecuteQuery("update vtiger_field set quickcreate=3,presence=0,masseditable=0 where uitype=4 OR displaytype=2");
+ExecuteQuery("update vtiger_field set typeofdata='V~O',presence=0 where uitype=4");
+ExecuteQuery("update vtiger_field set quickcreate=3,masseditable=0 where uitype=4 AND displaytype=2");
 ExecuteQuery("update vtiger_field set quickcreate=3 where fieldname='imagename'");
 ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('website','phone') and tabid = $accounttabid");
 ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('closingdate','campaigntype','expectedresponse','product_id','campaignstatus') and tabid = $campaigntabid");

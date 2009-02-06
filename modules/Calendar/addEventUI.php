@@ -260,6 +260,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 							<br><?php }else{
 								?><input name="assigned_user_id" value="<?php echo $current_user->id ?>" type="hidden">
 							<?php } ?>
+
 								<?php if(getFieldVisibilityPermission('Events',$current_user->id,'sendnotification') == '0') { ?>
 							<input type="checkbox" name="sendnotification" >&nbsp;<?php echo $mod_strings['LBL_SENDNOTIFICATION'] ?>
 							<?php } ?>
@@ -542,13 +543,13 @@ function getAssignedToHTML($assignedto,$toggletype)
 								<td>
 									<?php echo $mod_strings['LBL_REPEATEVENT']; ?>
 								</td>
-								<td><select name="repeat_frequency">
+								<td><select name="repeat_frequency" class="small">
 								<?php for($i=1;$i<=14;$i++) { ?>
 									<option value="<?php echo $i ?>"><?php echo $i ?></option>	
 								<?php } ?>	
 								</select></td>
 								<td>
-									<select name="recurringtype" onChange="rptoptDisp(this)">
+									<select name="recurringtype" onChange="rptoptDisp(this)" class="small">
 										<option value="Daily"><?php echo $mod_strings['LBL_DAYS']; ?></option>
 										<option value="Weekly"><?php echo $mod_strings['LBL_WEEKS']; ?></option>
 										<option value="Monthly"><?php echo $mod_strings['LBL_MONTHS']; ?></option>

@@ -18,6 +18,7 @@ require_once("modules/$currentModule/$currentModule.php");
 
 $focus = new $currentModule();
 $focus->mode = '';
+$mode = 'mass_edit';
 
 $disp_view = getView($focus->mode);
 $idstring = $_REQUEST['idstring'];

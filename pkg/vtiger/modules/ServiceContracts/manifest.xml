@@ -137,7 +137,7 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>End Date</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>11</sequence>
 <maximumlength>100</maximumlength>
@@ -291,7 +291,7 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Planned Duration</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>13</sequence>
 <maximumlength>100</maximumlength>
@@ -311,7 +311,7 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Actual Duration</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>15</sequence>
 <maximumlength>100</maximumlength>
@@ -409,7 +409,7 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Progress</fieldlabel>
 <readonly>1</readonly>
-<presence>0</presence>
+<presence>2</presence>
 <selected>0</selected>
 <sequence>16</sequence>
 <maximumlength>100</maximumlength>
