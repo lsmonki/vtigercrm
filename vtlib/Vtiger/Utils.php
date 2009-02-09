@@ -106,15 +106,15 @@ class Vtiger_Utils {
 	 * Check if table is present in database
 	 * @param String tablename to check
 	 */
-	static function CheckTable($tablename) {
+	static function CheckTable($tablename) {		
 		global $adb;
 		$old_dieOnError = $adb->dieOnError;
 		$adb->dieOnError = false;
 
-		$tablecheck = $adb->query("select count(*) as count from $tablename");
+		$tablecheck = $adb->query("SELECT 1 FROM $tablename LIMIT 1");
 
 		$tablePresent = true;
-		if(empty($tablecheck) || $adb->num_rows($tablecheck) <= 0)
+		if(empty($tablecheck))
 			$tablePresent = false;
 
 		$adb->dieOnError = $old_dieOnError;

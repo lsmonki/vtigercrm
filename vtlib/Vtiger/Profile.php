@@ -94,6 +94,7 @@ class Vtiger_Profile {
 		foreach($profileids as $profileid) {			
 			$adb->pquery("INSERT INTO vtiger_profile2tab (profileid, tabid, permissions) VALUES (?,?,?)",
 				Array($profileid, $moduleInstance->id, 0));
+
 			if($moduleInstance->isentitytype) {
 				foreach($actionids as $actionid) {
 					$adb->pquery(

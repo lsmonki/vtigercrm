@@ -301,7 +301,7 @@
 <generatedtype>1</generatedtype>
 <fieldlabel>Owner</fieldlabel>
 <readonly>1</readonly>
-<presence>2</presence>
+<presence>0</presence>
 <selected>0</selected>
 <sequence>8</sequence>
 <maximumlength>100</maximumlength>
