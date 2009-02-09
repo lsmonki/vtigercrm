@@ -1,7 +1,7 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-	<td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+	<td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
 	<td valign="top" width="100%">
 	<div align=center>
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
@@ -12,10 +12,15 @@
 		
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 		<tr>
-			<td class="small" align=right width="100%">
+			<td class="small" align="left" nowrap>
+				<strong>
+					{$MOD.LBL_TOOLTIP_HELP_TEXT}
+				</strong>
+			</td>
+			<td class="small" align="right" width="100%">
 				<input title="save" class="crmButton small save" type="button" name="save" onClick="doSaveTooltipInfo();" value="{$APP.LBL_SAVE_BUTTON_LABEL}">
 			</td>
-			<td class="small" align=right>
+			<td class="small" align="right">
 				<input title="back" class="crmButton small cancel" type="button" name="Back" onClick="window.history.back();" value="Back">
 			</td>
 		</tr>
@@ -52,7 +57,7 @@
 		</div>
 	</td>
 	<td valign="top">
-		<img src="{$IMAGE_PATH}showPanelTopRight.gif">
+		<img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}">
 	</td>
 	</tr>
 </tbody>

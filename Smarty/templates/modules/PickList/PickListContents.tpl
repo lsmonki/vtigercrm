@@ -12,7 +12,10 @@
 <div id="pickListContents">
 <table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
-    <td class="cellText" width="40%">
+	<td class="big" width="20%" nowrap>
+		<strong>{$MOD.LBL_SELECT_PICKLIST}</strong>&nbsp;&nbsp;
+	</td>
+	<td class="cellText" width="40%">
 		<select name="avail_picklists" id="allpick" class="small detailedViewTextBox" style="font-weight: normal;">
 			{foreach key=fld_nam item=fld_lbl from=$ALL_LISTS}
 				<option value="{$fld_nam}">{$fld_lbl}</option>
@@ -35,10 +38,8 @@
 <tr>
 	<td  width="40%">
 		<strong>
-			{$MOD.LBL_PICKLIST_AVAIL} {$MODULELABEL} for
+			{$MOD.LBL_PICKLIST_AVAIL} {$MODULELABEL} for &nbsp;
 		</strong>
-	</td>
-	<td style="text-align: left" width="60%">
 		<select name="pickrole" id="pickid" class="detailedViewTextBox" onChange="showPicklistEntries('{$MODULE}' );" style="width : auto;">
 			{foreach key=roleid item=role from=$ROLE_LISTS}
 				{if $SEL_ROLEID eq $roleid}

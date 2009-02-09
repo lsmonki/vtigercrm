@@ -916,6 +916,7 @@ $mod_strings = Array(
 'LBL_TOOLTIP_MANAGEMENT'=>'Tooltip Management',
 'LBL_TOOLTIP_MANAGEMENT_DESCRIPTION'=>'Manage the tooltip information from here',
 'LBL_FIELDS_IN'=>'Fields in',
+'LBL_TOOLTIP_HELP_TEXT'=>'Select the fields that you would like to be displayed as tooltip',
 
 //Added for Role Labels
 'LBL_ADD_ROLE'=>'Add Role',
@@ -948,6 +949,7 @@ $mod_strings = Array(
 'LBL_PICKLIST_ADDINFO'=>'Type the new entries one-by-one below',
 'LBL_SELECT_ROLES'=> 'Select the Roles to which entries have to be added',
 'LBL_EXISTING_PICKLIST_VALUES'=>'Existing Picklist Values',
+'LBL_SELECT_PICKLIST'=>'Select picklist',
 
 // Added after 5.0.4 GA
 

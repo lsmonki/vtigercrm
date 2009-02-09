@@ -1,7 +1,7 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-	<td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+	<td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
 	<td valign="top" width="100%">
 	<div align=center>
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
@@ -31,7 +31,7 @@
 								<table cellpadding="0" cellspacing="0">
 								<tr>
 									<td>
-										<img src={$IMAGES}prvPrfSelectedTick.gif>
+										<img src="{'prvPrfSelectedTick.gif'|@vtiger_imageurl:$THEME}">
 										&nbsp;
 									</td>
 									<td>
@@ -57,7 +57,7 @@
 		</div>
 	</td>
 	<td valign="top">
-		<img src="{$IMAGE_PATH}showPanelTopRight.gif">
+		<img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}">
 	</td>
 	</tr>
 </tbody>

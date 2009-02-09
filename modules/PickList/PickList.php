@@ -16,12 +16,12 @@ require_once 'modules/PickList/PickListUtils.php';
 
 global $app_strings, $app_list_strings, $current_language, $currentModule, $theme;
 
+$modules = getPickListModules();
 if(!empty($_REQUEST['moduleName'])){
 	$fld_module = $_REQUEST['moduleName'];
 }else{
-	$fld_module = "Contacts";
-//	echo "FAILURE: No module selected ";
-//	die;
+	$module = array_keys($modules);
+	$fld_module = $module[0];
 }
 
 if(!empty($_REQUEST['roleid'])){
@@ -55,7 +55,7 @@ if(!empty($picklists_entries)){
 	$picklist_fields = array_chunk(array_pad($picklists_entries,$value,''),3);
 }
 
-$smarty->assign("MODULE_LISTS",getPickListModules());
+$smarty->assign("MODULE_LISTS",$modules);
 $smarty->assign("ROLE_LISTS",getrole2picklist());
 $smarty->assign("ALL_LISTS",$available_module_picklist);
 
