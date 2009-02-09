@@ -112,7 +112,7 @@ function getNewLeads($maxval,$calCnt)
 
 		$entries[$lead_fields['LEAD_ID']]=$value;
 	}
-	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
+	$values=Array('ModuleName'=>'Leads','Title'=>$title,'Header'=>$header,'Entries'=>$entries);
 	$log->debug("Exiting getNewLeads method ...");
 	if (($display_empty_home_blocks && count($entries) == 0 ) || (count($entries)>0))
 		return $values;

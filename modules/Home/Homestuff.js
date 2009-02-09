@@ -25,7 +25,7 @@ function chooseType(typeName){
 		$('dashNameRow').style.display="none";
 		$('dashTypeRow').style.display="none";
 		$('StuffTitleId').style.display="block";
-		$('homeURLField').style.display = "none";
+		//$('homeURLField').style.display = "none";
 	}else if(typeName=='DashBoard'){
 		$('moduleNameRow').style.display="none";
 		$('moduleFilterRow').style.display="none";
@@ -35,7 +35,7 @@ function chooseType(typeName){
 		$('dashNameRow').style.display="block";
 		$('dashTypeRow').style.display="block";
 		$('StuffTitleId').style.display="block";
-		$('homeURLField').style.display = "none";
+		//$('homeURLField').style.display = "none";
 		new Ajax.Request(
 			'index.php',
 			{queue: {position: 'end', scope: 'command'},
@@ -60,7 +60,7 @@ function chooseType(typeName){
 		$('dashTypeRow').style.display="none";
 		$('StuffTitleId').style.display="block";
 		$('vtbusy_info').style.display="none";
-		$('homeURLField').style.display = "none";
+		//$('homeURLField').style.display = "none";
 	}else if(typeName=='Default'){
 		$('moduleNameRow').style.display="none";
 		$('moduleFilterRow').style.display="none";
@@ -81,8 +81,9 @@ function chooseType(typeName){
 		$('dashTypeRow').style.display="none";
 		$('StuffTitleId').style.display="block";
 		$('vtbusy_info').style.display="none";
-		$('homeURLField').style.display = "none";
-	}else if(typeName == 'URL'){
+		//$('homeURLField').style.display = "none";
+	}
+	/*else if(typeName == 'URL'){
 		$('moduleNameRow').style.display="none";
 		$('moduleFilterRow').style.display="none";
 		$('modulePrimeRow').style.display="none";
@@ -92,8 +93,8 @@ function chooseType(typeName){
 		$('dashTypeRow').style.display="none";
 		$('StuffTitleId').style.display="block";
 		$('vtbusy_info').style.display="none";
-		$('homeURLField').style.display = "block";
-	}
+		//$('homeURLField').style.display = "block";
+	}*/
 }
 
 /**
@@ -258,7 +259,7 @@ function loadAddedDiv(stuffid,stufftype){
 				var responseVal=response.responseText;
 				$('MainMatrix').style.display= 'none';
 				$('MainMatrix').innerHTML = response.responseText + $('MainMatrix').innerHTML;
-				positionDivInAccord('stuff_'+gstuffId,'','');
+				positionDivInAccord('stuff_'+gstuffId,'',stufftype);
 				initHomePage();
 				loadStuff(stuffid,stufftype);
 				$('MainMatrix').style.display='block';
@@ -321,13 +322,13 @@ function frmValidate(){
 			return false;
 		}
 	}
-	if($('stufftype_id').value=="URL"){			
+	/*if($('stufftype_id').value=="URL"){			
 		if($('url_id').value==""){
 			alert("Please enter URL");
 			$('url_id').focus();
 			return false;
 		}
-	}
+	}*/
 	if($('stufftype_id').value=="Module"){
 		var selLen;
 		var fieldval=new Array();
@@ -358,7 +359,7 @@ function frmValidate(){
 	var seldashbd='';
 	var seldashtype='';
 	var seldeftype='';
-	var txtURL = '';
+	//var txtURL = '';
 
 	if(stufftype=="Module"){
 		selFiltername =document.Homestuff.selFiltername[document.Homestuff.selFiltername.selectedIndex].value;
@@ -368,16 +369,16 @@ function frmValidate(){
 	}else if(stufftype=="RSS"){
 		txtRss=$('txtRss_id').value;
 		maxentries =$('maxentryid').value;
-	}else if(stufftype=="URL"){
+	}/*else if(stufftype=="URL"){
 		txtURL=$('url_id').value;
-	}else if(stufftype=="DashBoard"){
+	}*/else if(stufftype=="DashBoard"){
 		seldashbd=$('seldashbd_id').value;
 		seldashtype=$('seldashtype_id').value;
 	}else if(stufftype=="Default"){
 		seldeftype=document.Homestuff.seldeftype[document.Homestuff.seldeftype.selectedIndex].value;
 	}
 
-	var url="stufftype="+stufftype+"&stufftitle="+stufftitle+"&selmodule="+selmodule+"&maxentries="+maxentries+"&selFiltername="+selFiltername+"&fldname="+encodeURIComponent(fldname)+"&txtRss="+txtRss+"&seldashbd="+seldashbd+"&seldashtype="+seldashtype+"&seldeftype="+seldeftype+'&txtURL='+txtURL;
+	var url="stufftype="+stufftype+"&stufftitle="+stufftitle+"&selmodule="+selmodule+"&maxentries="+maxentries+"&selFiltername="+selFiltername+"&fldname="+encodeURIComponent(fldname)+"&txtRss="+txtRss+"&seldashbd="+seldashbd+"&seldashtype="+seldashtype+"&seldeftype="+seldeftype;//+'&txtURL='+txtURL;
 	var stuffarr=new Array();
 	$('vtbusy_info').style.display="inline";	
 
@@ -479,7 +480,6 @@ function positionDivInAccord(targetDiv,stufftitle,stufftype){
 			dashWidth = 48.6;
 			break;
 	}
-	
 	var mainX = parseInt(document.getElementById("MainMatrix").style.width);
 	if(stufftitle != "Home Page Dashboard" && stufftype != "DashBoard"){
 		var dx = mainX *  widgetWidth/ 100;

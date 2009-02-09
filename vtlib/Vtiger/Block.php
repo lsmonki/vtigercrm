@@ -57,7 +57,7 @@ class Vtiger_Block {
 		if($adb->num_rows($result)) {
 			$maxseq = $adb->query_result($result, 0, 'max_sequence');
 		}
-		return ++$blockseq;
+		return ++$maxseq;
 	}
 
 	/**

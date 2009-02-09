@@ -123,6 +123,7 @@
 					<input type="text" name="stufftitle" id="stufftitle_id" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" style="width:57%">
 				</td>
 			</tr>
+			{*<!--
 			<tr id="homeURLField" style="display:block;">
 				<td class="dvtCellLabel"  width="110" align="right">
 					{$MOD.LBL_URL}
@@ -132,6 +133,7 @@
 					<input type="text" name="url" id="url_id" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" style="width:57%">
 				</td>
 			</tr>
+			-->*}
 			<tr id="showrow">
 				<td class="dvtCellLabel"  width="110" align="right">{$MOD.LBL_HOME_SHOW}</td>
 				<td class="dvtCellInfo" width="300" colspan="2">
@@ -218,11 +220,11 @@
 		</td>
 	</tr>
 	<tr id="numberOfColumns">
-		<td class="dvtCellLabel" align="right" valign="top">
+		<td class="dvtCellLabel" align="right">
 			{$MOD.LBL_NUMBER_OF_COLUMNS}
 		</td>
 		<td class="dvtCellLabel">
-			<select id="layoutSelect">
+			<select id="layoutSelect" class="small">
 				<option value="2">
 					{$MOD.LBL_TWO_COLUMN}
 				</option>

@@ -1046,6 +1046,25 @@ custom_addCustomFilterColumn('Faq',    'All', 'vtiger_faq', 'faq_no', 'faq_no', 
 custom_addCustomFilterColumn('Documents',  'All', 'vtiger_notes', 'note_no', 'note_no', 'Notes_Note_No:V');
 // Sequence number customization ends
 
+/*asterisk related changes*/
+$sql = "drop table if exists vtiger_asteriskextensions";
+ExecuteQuery($sql);
+$sql = "create table vtiger_asteriskextensions (userid varchar(30), asterisk_extension varchar(50), use_asterisk varchar(3)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+ExecuteQuery($sql);
+$sql = "drop table if exists vtiger_asterisk";
+ExecuteQuery($sql);
+$sql = "create table vtiger_asterisk (server varchar(30), port varchar(30), username varchar(50), password varchar(50)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+ExecuteQuery($sql);
+$sql = "drop table if exists vtiger_asteriskincomingcalls";
+ExecuteQuery($sql);
+$sql = "create table vtiger_asteriskincomingcalls (from_number varchar(50) not null, from_name varchar(50) not null, to_number varchar(50) not null, callertype varchar(30)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+ExecuteQuery($sql);
+$sql = "drop table if exists vtiger_asteriskoutgoingcalls";
+ExecuteQuery($sql);
+$sql = "create table vtiger_asteriskoutgoingcalls (userid varchar(30) not null, from_number varchar(30) not null, to_number varchar(30) not null) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+ExecuteQuery($sql);
+
+/*asterisk changes end here*/
 /* Updated phone field uitype */
 ExecuteQuery("update vtiger_field set uitype='11' where fieldname='mobile' and tabid=".getTabid('Leads'));
 ExecuteQuery("update vtiger_field set uitype='11' where fieldname='mobile' and tabid=".getTabid('Contacts'));
@@ -1204,7 +1223,7 @@ ExecuteQuery("CREATE INDEX link_tabidtype_idx ON vtiger_links(tabid,linktype)");
 ExecuteQuery("ALTER TABLE vtiger_tab ADD COLUMN version VARCHAR(10)");
 
 /*adding the notebook to vtiger*/
-ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_notebook_contents (userid int(19) not null, contents text)");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_notebook_contents (userid int(19) not null, notebookid int(19), contents text)");
 /*notbook changes end*/
 
 /* Move Settings Page Information to Database */
@@ -1495,13 +1514,15 @@ ExecuteQuery("alter table vtiger_users drop column defhomeview");
 ExecuteQuery("create table vtiger_home_layout (userid int(19), layout int(19))");
 $widgetTitle = "Tag Cloud";
 $visible = 0;
-$sequence = $i+1;
 $sql = "select id from vtiger_users";
 $result = $adb->query($sql);
 for($z=0;$z<$adb->num_rows($result);$z++){
 	$userid = $adb->query_result($result, $z, "id");
+	
+	$sequence = $adb->query_result($adb->query("select max(stuffsequence)+1 as seq from vtiger_homestuff where userid=$userid"), 0, "seq");
 	$stuffid = $adb->getUniqueID("vtiger_homestuff");
-	$sql="insert into vtiger_homestuff values($stuffid, $sequence, 'Tag Cloud', $userid, $visible, $widgetTitle)";
+	$sql="insert into vtiger_homestuff values($stuffid, $sequence, 'Tag Cloud', $userid, $visible, '$widgetTitle')";
+	$adb->query($sql);
 }
 
 /* Install Vtlib Compliant Modules */

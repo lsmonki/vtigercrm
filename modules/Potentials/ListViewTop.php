@@ -76,7 +76,7 @@ function getTopPotentials($maxval,$calCnt)
 			$value[]=convertFromDollar($adb->query_result($list_result,$i,'amount'),$rate);
 			$entries[$potentialid]=$value;
 		}
-	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
+	$values=Array('ModuleName'=>'Potentials','Title'=>$title,'Header'=>$header,'Entries'=>$entries);
 
 	if ( ($display_empty_home_blocks && count($open_potentials_list) == 0 ) || (count($open_potentials_list)>0) )
 	{

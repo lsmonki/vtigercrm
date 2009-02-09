@@ -92,7 +92,7 @@ function getTopAccounts($maxval,$calCnt)
 		$value[]=convertFromDollar($account['amount'],$rate);
 		$entries[$account['accountid']]=$value;	
 	}
-	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
+	$values=Array('ModuleName'=>'Accounts','Title'=>$title,'Header'=>$header,'Entries'=>$entries);
 	$log->debug("Exiting getTopAccounts method ...");
 	if (($display_empty_home_blocks && count($entries) == 0 ) || (count($entries)>0))
 		return $values;

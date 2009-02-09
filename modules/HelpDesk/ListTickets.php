@@ -74,13 +74,12 @@ function getMyTickets($maxval,$calCnt)
 			$value[]=$parent_name;
 			$entries[$ticketid]=$value;
 		}
-		$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
+		$values=Array('ModuleName'=>'HelpDesk','Title'=>$title,'Header'=>$header,'Entries'=>$entries);
 		if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )	
 		{
 			$log->debug("Exiting getMyTickets method ...");
 			return $values;
 		}
-		$log->debug("Exiting getMyTickets method ...");
 	}
 	$log->debug("Exiting getMyTickets method ...");
 }
