@@ -351,7 +351,7 @@
 													<td valign="top" class="dvtCellInfo" align="left" width="10px">
 														<input id="massedit_check_{$value.fieldselect}"  type="checkbox" 
 														{if $value.massedit eq '0'}
-															checked disabled 
+															disabled 
 														{/if}
 														{if $value.massedit eq '1'} 
 															checked

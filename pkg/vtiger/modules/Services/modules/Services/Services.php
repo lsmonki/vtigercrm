@@ -66,13 +66,13 @@ class Services extends CRMEntity {
 		// tablename should not have prefix 'vtiger_'
 		'Service No'=>Array('service'=>'service_no'),
 		'Service Name'=>Array('service'=>'servicename'),
-		'Unit Price'=>Array('service'=>'unit_price')
+		'Price'=>Array('service'=>'unit_price')
 	);
 	var $search_fields_name = Array(
 		/* Format: Field Label => fieldname */
 		'Service No'=>'service_no',
 		'Service Name'=>'servicename',
-		'Unit Price'=>'unit_price'
+		'Price'=>'unit_price'
 	);
 	
 	// For Popup window record selection

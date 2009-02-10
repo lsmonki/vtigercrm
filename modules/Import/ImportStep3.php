@@ -106,7 +106,7 @@ $import_object_array = Array(
 				"Potentials"=>"ImportOpportunity",
 				"Products"=>"ImportProduct",
 				"HelpDesk"=>"ImportTicket",
-                                "Vendors"=>"ImportVendors"
+                "Vendors"=>"ImportVendors"
 			    );
 
 if(isset($_REQUEST['module']) && $_REQUEST['module'] != '')
@@ -258,7 +258,7 @@ $adb->println($datarows);
 
 $error = '';
 $focus = new $current_bean_type();
-
+$focus->initRequiredFields($module);
 
 // SAVE MAPPING IF REQUESTED
 if(isset($_REQUEST['save_map']) && $_REQUEST['save_map'] == 'on' && isset($_REQUEST['save_map_as']) && $_REQUEST['save_map_as'] != '')

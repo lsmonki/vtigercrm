@@ -419,7 +419,7 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'title','vtiger_troubletickets',1,'22','ticket_title','Title',1,0,0,100,1,25,1,'V~M',0,1,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'description','vtiger_crmentity',1,'19','description','Description',1,2,0,100,1,28,1,'V~O',2,2,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'solution','vtiger_troubletickets',1,'19','solution','Solution',1,2,0,100,1,29,1,'V~O',3,null,'BAS',1)");
- 		$this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'comments','vtiger_ticketcomments',1,'19','comments','Add Comment',1,2,0,100,1,30,1,'V~O',3,null,'BAS',1)");
+ 		$this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'comments','vtiger_ticketcomments',1,'19','comments','Add Comment',1,2,0,100,1,30,1,'V~O',3,null,'BAS',0)");
 
 		//Block25-30 -- End
 		//Ticket Details -- END
@@ -589,7 +589,7 @@ class DefaultDataPopulator extends CRMEntity {
  		$this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'status','vtiger_faq',1,'15','faqstatus','Status',1,2,0,100,3,37,1,'V~M',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'question','vtiger_faq',1,'20','question','Question',1,2,0,100,7,37,1,'V~M',3,null,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'answer','vtiger_faq',1,'20','faq_answer','Answer',1,2,0,100,8,37,1,'V~M',3,null,'BAS',1)");
-		 $this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'comments','vtiger_faqcomments',1,'19','comments','Add Comment',1,2,0,100,1,38,1,'V~O',3,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'comments','vtiger_faqcomments',1,'19','comments','Add Comment',1,2,0,100,1,38,1,'V~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,5,37,2,'T~O',3,null,'BAS',0)");
 		 $this->db->query("insert into vtiger_field values (15,".$this->db->getUniqueID("vtiger_field").",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,6,37,2,'T~O',3,null,'BAS',0)");
 		
