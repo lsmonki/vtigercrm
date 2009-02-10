@@ -1507,10 +1507,15 @@ ExecuteQuery("update vtiger_field set block = $faqbasicblock ,sequence = 8 where
 ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_user_module_preferences (userid int, tabid int, default_cvid int, primary key(userid, tabid), CONSTRAINT fk_1_vtiger_user_module_preferences FOREIGN KEY (userid) REFERENCES vtiger_users (id) ON DELETE CASCADE ON UPDATE CASCADE, CONSTRAINT fk_2_vtiger_user_module_preferences FOREIGN KEY (tabid) REFERENCES vtiger_tab (tabid) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 /* home page related changes */
-ExecuteQuery("alter table vtiger_users drop column homeorder");
-ExecuteQuery("alter table vtiger_users drop column tagcloud_view");
-ExecuteQuery("alter table vtiger_users drop column defhomeview");
-//ExecuteQuery("create table vtiger_homewidget_url (widgetid int(19), url varchar(250))");
+if(columnExists("homeorder", "vtiger_users")){
+	ExecuteQuery("alter table vtiger_users drop column homeorder");
+}
+if(columnExists("tagcloud_view", "vtiger_users")){
+	ExecuteQuery("alter table vtiger_users drop column tagcloud_view");
+}
+if(columnExists("defhomeview", "vtiger_users")){
+	ExecuteQuery("alter table vtiger_users drop column defhomeview");
+}
 ExecuteQuery("create table vtiger_home_layout (userid int(19), layout int(19))");
 $widgetTitle = "Tag Cloud";
 $visible = 0;

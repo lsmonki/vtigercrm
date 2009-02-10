@@ -4637,4 +4637,21 @@ function installVtlibModule($packagename, $packagepath, $customized=false) {
 	}	
 }
 
+/**
+ * this function checks if a given column exists in a given table or not
+ * @param string $columnName - the columnname
+ * @param string $tableName - the tablename
+ * @return boolean $status - true if column exists; false otherwise
+ */
+function columnExists($columnName, $tableName){
+	global $adb;
+	$columnNames = array();
+	$columnNames = $adb->getColumnNames($tableName);
+	
+	if(in_array($columnName, $columnNames)){
+		return true;
+	}else{
+		return false;
+	}
+}
 ?>
