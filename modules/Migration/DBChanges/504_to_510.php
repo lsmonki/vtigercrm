@@ -1532,7 +1532,7 @@ for($z=0;$z<$adb->num_rows($result);$z++){
 
 /* Install Vtlib Compliant Modules */
 installMandatoryModules();
-installOptionalModules();
+require_once('include/utils/installVtlibSelectedModules.php');
 
 // Function to call installation of mandatory modules
 function installMandatoryModules(){	
@@ -1551,23 +1551,6 @@ function installMandatoryModules(){
 	}
 }
 	
-// Function to install Vtlib Compliant - Mandatory Modules
-function installOptionalModules(){
-
-	if ($handle = opendir('packages/5.1.0/optional')) {	    
-	    
-	    while (false !== ($file = readdir($handle))) {
-	        $filename_arr = explode(".", $file);
-	        $packagename = $filename_arr[0];
-	        if (!empty($packagename)) {
-	        	$packagepath = "packages/5.1.0/optional/$file";
-	        	installVtlibModule($packagename, $packagepath);
-	        }
-	    }
-	    closedir($handle);
-	}
-}
-
 // Function to populate Links
 function populateLinks() {
 	include_once('vtlib/Vtiger/Module.php');

@@ -26,7 +26,7 @@ if(is_dir($source_directory)){
 	echo "NO_SOURCE_DIR";
 	return false;
 }
-
+$selected_modules = $_REQUEST['selected_modules'];
 require_once($source_directory."config.inc.php");
 $old_db_name = $dbconfig['db_name'];
 $db_hostname = $dbconfig['db_server'].$dbconfig['db_port'];
@@ -84,8 +84,7 @@ if($db_type)
 				$dbdump = new DatabaseDump($db_hostname.$db_port, $db_username, $db_password);
 				$dumpfile = 'backup/'.$backup_DBFileName;
 				$dbdump->save($old_db_name, $dumpfile) ;
-			
-				if(isset($_REQUEST['check_createdb']) && $_REQUEST['check_createdb'] == 'on') {
+				if(isset($_REQUEST['check_createdb']) && $_REQUEST['check_createdb'] == 'On') {
 					$root_user = $_REQUEST['root_user'];
 					$root_password = $_REQUEST['root_password'];
 		
@@ -180,7 +179,7 @@ elseif($db_creation_failed)
 }
 elseif(!$old_db_exist_status)
 {
-	$error_msg = 'ERR - The Database "'.$db_name.'" is not found. Provide the correct database name';
+	$error_msg = 'ERR - The Database "'.$old_db_name.'" is not found. Provide the correct database name';
 }
 elseif(!$db_exist_status)
 {
@@ -253,7 +252,7 @@ if(file_exists($source_directory.'user_privileges/CustomInvoiceNo.php'))
 	//This session variable should be used in all patch files(which contains the queries) so that based on the option selected the queries will be executed in the corresponding database. ie., in all patch files we have to assign this session object to adb and conn objects
 global $adb, $failed_queries,$dbname;
 
-$failed_queries='QF: ';
+$failed_queries='';
 $_SESSION['adodb_current_object'] = $adb;
 	
 	for($patch_count=0;$patch_count<count($temp);$patch_count++)

@@ -24,11 +24,11 @@
 
 if(isset($_REQUEST['install'])){
 	$form_name = 'installform';
-	$file_name = '2setConfig.php';
+	$file_name = '4setConfig.php';
 }
 elseif(isset($_REQUEST['migrate'])){
 	$form_name = 'migrateform';
-	$file_name = '2setMigrationConfig.php';
+	$file_name = '4setMigrationConfig.php';
 }
 
 
@@ -95,7 +95,7 @@ elseif(isset($_REQUEST['migrate'])){
 										<br>
 							<form action="install.php" method="post" name="form" id="form">
 							<input type="hidden" name="filename" value="<?php echo $file_name?>" />	
-							<input type="hidden" name="file" value="1checkSystem.php" />	
+							<input type="hidden" name="file" value="2checkSystem.php" />	
 					        <input type="image" src="include/install/images/cwBtnNext.gif" value='Agree' alt="Agree" border="0" title="migrate" style="cursor:pointer;" onClick="window.document.form.submit();">
 							</form>
 						</td>

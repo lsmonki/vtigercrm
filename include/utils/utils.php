@@ -4637,6 +4637,25 @@ function installVtlibModule($packagename, $packagepath, $customized=false) {
 	}	
 }
 
+
+// Function to install Vtlib Compliant - Optional Modules
+function installOptionalModules($selected_modules){
+
+	$selected_modules = split(":",$selected_modules);
+	if ($handle = opendir('packages/5.1.0/optional')) {	    
+	    
+	    while (false !== ($file = readdir($handle))) {
+	        $filename_arr = explode(".", $file);
+	        $packagename = $filename_arr[0];
+	        if (!empty($packagename) && in_array($packagename,$selected_modules)) {
+	        	$packagepath = "packages/5.1.0/optional/$file";
+	        	installVtlibModule($packagename, $packagepath);
+	        }
+	    }
+	    closedir($handle);
+	}
+}
+
 /**
  * this function checks if a given column exists in a given table or not
  * @param string $columnName - the columnname
