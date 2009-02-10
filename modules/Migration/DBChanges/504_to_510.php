@@ -1126,7 +1126,7 @@ $num_grps = $adb->num_rows($grp_result);
 $adb->query("ALTER TABLE vtiger_group2grouprel DROP FOREIGN KEY fk_2_vtiger_group2grouprel");
 $adb->query("ALTER TABLE vtiger_group2grouprel ADD CONSTRAINT fk_2_vtiger_group2grouprel FOREIGN KEY (`groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE ON UPDATE CASCADE");
 
-for($i=$num_grps-1; $i>0; $i--) {
+for($i=$num_grps-1; $i>=0; $i--) {
 	$oldId = $adb->query_result($grp_result,$i,"groupid");
 	$newId = $inc_num+$oldId;
 	
