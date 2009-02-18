@@ -26,6 +26,7 @@
 		<!--Left Side Navigation Table-->
 		<table border=0 cellspacing=0 cellpadding=0 width="100%">
 			{foreach key=BLOCKID item=BLOCKLABEL from=$BLOCKS}
+				{if $BLOCKLABEL neq 'LBL_MODULE_MANAGER'}
 				<tr>
 					<td class="settingsTabHeader" nowrap>
 						{$MOD.$BLOCKLABEL}
@@ -51,6 +52,7 @@
 						</tr>
 					{/if}
 				{/foreach}
+				{/if}
 			{/foreach}
 		</table>
 		<!-- Left side navigation table ends -->

@@ -1860,7 +1860,9 @@ function OpenCompose(id,mode)
 			break; 
 		case 'Documents':
             url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+id+'';
-			break; 			
+			break;
+		case 'print':
+			url = 'index.php?module=Emails&action=EmailsAjax&file=PrintEmail&record='+id+'&print=true'; 	 			
 	}
 	openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
 }

@@ -41,6 +41,7 @@
   require_once('include/utils/SearchUtils.php');
   require_once('include/FormValidationUtil.php');
   require_once('include/DatabaseUtil.php');
+require_once("include/events/SqlResultIterator.inc");
  
 // Constants to be defined here
 
@@ -4451,7 +4452,7 @@ function getSettingsBlocks(){
  */
 function getSettingsFields(){
 	global $adb;
-	$sql = "select * from vtiger_settings_field order by blockid,sequence";
+	$sql = "select * from vtiger_settings_field where blockid!=".getSettingsBlockId('LBL_MODULE_MANAGER')." order by blockid,sequence";
 	$result = $adb->query($sql);
 	$count = $adb->num_rows($result);
 	$fields = array();
@@ -4467,6 +4468,15 @@ function getSettingsFields(){
 			$name = $adb->query_result($result, $i, "name");
 	
 			$fields[$blockid][] = array("icon"=>$iconpath, "description"=>$description, "link"=>$linkto, "name"=>$name, "action"=>$action, "module"=>$module);
+		}
+		
+		//add blanks for 4-column layout
+		foreach($fields as $blockid=>&$field){
+			if(count($field)>0 && count($field)<4){
+				for($i=count($field);$i<4;$i++){
+					$field[$i] = array(); 
+				}
+			}
 		}
 	}
 	return $fields;
@@ -4672,5 +4682,22 @@ function columnExists($columnName, $tableName){
 	}else{
 		return false;
 	}
+}
+
+/* To get modules list for which work flow and field formulas is permitted*/
+function com_vtGetModules($adb) {
+	$sql="select distinct vtiger_field.tabid, name 
+		from vtiger_field 
+		inner join vtiger_tab 
+			on vtiger_field.tabid=vtiger_tab.tabid 
+		where vtiger_field.tabid not in(9,10,16,15,8,29) and vtiger_tab.presence = 0 and vtiger_tab.isentitytype=1";
+	$it = new SqlResultIterator($adb, $adb->query($sql));
+	$modules = array();
+	foreach($it as $row) {
+		if(isPermitted($row->name,'index') == "yes") {
+			$modules[$row->name] = getTranslatedString($row->name);
+		}
+	}
+	return $modules;
 }
 ?>

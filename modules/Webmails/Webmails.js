@@ -85,7 +85,9 @@ function load_webmail(mid) {
 		$("qualify_button").appendChild(Builder.node('input',{type: 'hidden',name: 'hide'}));
         $("download_attach_button").removeChild($("download_attach_button").firstChild);
         $("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: ' Download Attachments ', className: 'buttonok', onclick: 'displayAttachments('+mid+')'}));
-
+		
+		$("print_email_button").removeChild($("print_email_button").firstChild);
+		$("print_email_button").appendChild(Builder.node('input',{type: 'button', name: 'print', value: ' Print ',className: 'buttonok', onclick: 'OpenComposer('+mid+',\'print\')'}));
         //$("full_view").removeChild($("full_view").firstChild);
       //  $("full_view").appendChild(Builder.node('a',{href: 'javascript:;', onclick: 'OpenComposer('+mid+',\'full_view\')'},'Full Email View'));
 	makeSelected(node.id)
@@ -119,6 +121,9 @@ function OpenComposer(id,mode)
                 case 'full_view':
                         url = 'index.php?module=Webmails&action=DetailView&record='+id+'&mailid='+id+'&mailbox='+mailbox;
                         break;
+				case 'print':
+						url = 'index.php?module=Emails&action=EmailsAjax&file=PrintEmail&record='+id+'&mailbox='+mailbox+'&print=true';
+						break;
                 }
         openPopUp('xComposeEmail',this,url,'createemailWin',830,662,'menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes');
 }

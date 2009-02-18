@@ -12,7 +12,7 @@
 			from vtiger_field 
 			inner join vtiger_tab 
 				on vtiger_field.tabid=vtiger_tab.tabid 
-			where vtiger_field.tabid not in(9,10,16,15,8,29)";
+			where vtiger_field.tabid not in(9,10,16,15,8,29) and vtiger_tab.isentitytype=1 and vtiger_tab.presence = 0 ";
 		$it = new SqlResultIterator($adb, $adb->query($sql));
 		$modules = array();
 		foreach($it as $row){

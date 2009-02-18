@@ -94,6 +94,10 @@ class DatabaseDump {
 				// hence we will need to remove the new lines
 				$table_create_sql = str_replace("\n","",$table_create_sql);
 
+				// Our parser used for reading the dump file is very basic
+				// hence we will need to remove the new lines
+				$table_create_sql = str_replace("\n","",$table_create_sql);
+
 				// Write table create statement 
 				$this->writeln("");
 				$this->writeln("--");

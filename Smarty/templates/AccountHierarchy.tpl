@@ -15,10 +15,17 @@
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 
-<body class="small" marginwidth=0 marginheight=0 leftmargin=0 topmargin=0 bottommargin=0 rightmargin=0>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="mailClient mailClientBg">
-	<tr>
-		<td>
+{include file='Buttons_List1.tpl'}
+		</td>
+	</tr>
+</table>
+
+{*<!-- Contents -->*}
+<table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
+     <tr>
+        <td valign=top><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
+
+	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
 			<table width="100%" border="0" cellpadding="5" cellspacing="0">
 				<tr>
 					<td class="moduleName" style="padding-left:10px;">{$APP.LBL_ACCOUNT_HIERARCHY}</td>
@@ -47,8 +54,8 @@
 				{/if}
 			{/foreach}
 			</div>
-			
-		</td>
-	</tr>	
+
+     </td>
+        <td valign=top><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
+   </tr>
 </table>
-</body>

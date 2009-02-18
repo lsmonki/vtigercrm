@@ -13,7 +13,7 @@ require_once('include/utils/utils.php');
 global $adb;
 
 $fieldid = $adb->getUniqueID('vtiger_settings_field');
-$blockid = getSettingsBlockId('LBL_STUDIO');
+$blockid = getSettingsBlockId('LBL_MODULE_MANAGER');
 
 $seq_res = $adb->query("SELECT max(sequence) AS max_seq FROM vtiger_settings_field");
 $seq = 1;

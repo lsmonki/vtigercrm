@@ -235,5 +235,6 @@
 				AMOUNT_CANNOT_BE_EMPTY : 'Amount cannot be Empty',
 				ARE_YOU_SURE : 'Are You Sure You want to Delete?',
 				LABEL_ALREADY_EXISTS : 'Label already exists. Please specify a different Label',
-				LENGTH_OUT_OF_RANGE : 'Length of the Block should be less than 50 characters'	
+				LENGTH_OUT_OF_RANGE : 'Length of the Block should be less than 50 characters',
+				NOT_A_VALID_POTENTIAL_NAME : 'please insert a proper Potential Name'	
 			};

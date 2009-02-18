@@ -117,12 +117,12 @@ var gselected_fieldtype = '';
 				<td>
 				{if $MODULE eq 'Leads'}
 				<div id="cfList">
-                                {include file="modules/Leads/LeadsCustomEntries.tpl"}
+                                {include file="'Leads'|@vtlib_getModuleTemplate:'LeadsCustomEntries.tpl'}
                 </div>	
                 {/if}
                 {if $MODULE eq 'Calendar'}
                 <div id="cfList">
-                                {include file="CustomFieldEntries.tpl"}
+                                {include file="'Calendar'|@vtlib_getModuleTemplate:'CustomFieldEntries.tpl'}
                 </div>	
                 {/if}
             <table border="0" cellpadding="5" cellspacing="0" width="100%">

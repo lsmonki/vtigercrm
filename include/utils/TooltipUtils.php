@@ -250,4 +250,36 @@ function processResult($result, $descObj){
 	}
 	return $result;
 }
+
+
+/**
+ * this function returns the fields for a given module in a select dropdown format
+ * @param string $module - the module name
+ * @return the fields in a select dropdown if fields exist else a blank value
+ */
+function QuickViewFieldList($module){
+	global $adb, $app_strings;
+	
+	$tabid = getTabid($module);
+	
+	$query = "select * from vtiger_field where tabid = $tabid and columnname not like 'imagename' and uitype not in (61, 122) and vtiger_field.presence in (0,2)";
+	$result = $adb->pquery($query,array());
+	if($adb->num_rows($result)>0){
+		$fieldlist = '<select onchange="getRelatedFieldInfo(this)" class="importBox" id="pick_field" name="pick_field">';
+		$fieldlist.= 	'<option value="" disabled="true" selected>'
+							.$app_strings['LBL_SELECT'].' Field
+						</option>';
+		while($fieldsinfo=$adb->fetch_array($result)){
+			$fieldlabel = $fieldsinfo['fieldlabel'];
+			$fieldname = $fieldsinfo['fieldname'];
+			$fieldlist.= "<option value='$fieldname'>$fieldlabel</option>";
+		}
+		$fieldlist.= '</select>';
+		return $fieldlist;
+	}else{
+		return '';
+	}
+}
+
+
 ?>

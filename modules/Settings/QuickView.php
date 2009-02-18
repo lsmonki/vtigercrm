@@ -16,21 +16,23 @@ $smarty->assign("THEME", $theme);
 $module_array=moduleList();
 $smarty->assign("MODULES",$module_array);
 
-if($_REQUEST['fld_module'] !=''){
-	$fld_module = $_REQUEST['fld_module'];
+if(!empty($_REQUEST['formodule'])){
+	$fld_module = $_REQUEST['formodule'];
 }
 else{
-	$fld_module = 'Accounts';
+	echo "NO MODULES SELECTED";
+	exit;
 }
 $smarty->assign("MODULE",$fld_module);
 
-$field_array = getFieldList($fld_module);
-$smarty->assign("FIELDS",$field_array);
+$fieldsDropDown = QuickViewFieldList($fld_module);
+$smarty->assign("FIELDS",$fieldsDropDown);
 
 if($_REQUEST['mode'] != ''){
 	$mode = $_REQUEST['mode'];
 }
 $smarty->assign("MODE", $mode);
+$smarty->assign("FORMODULE", $fld_module);
 
 $smarty->display('QuickView/Quickview.tpl');
 

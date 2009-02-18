@@ -74,9 +74,9 @@ if($_REQUEST['mode'] !='')
 $smarty->assign("MODE", $mode);
 
 if($_REQUEST['ajax'] != 'true')
-	$smarty->display('CustomFieldList.tpl');	
+	$smarty->display(vtlib_getModuleTemplate('Calendar','CustomFieldList.tpl'));	
 else
-	$smarty->display('CustomFieldEntries.tpl');
+	$smarty->display(vtlib_getModuleTemplate('Calendar','CustomFieldEntries.tpl'));
 
 	/**
 	* Function to get customfield entries

@@ -14,9 +14,8 @@ global $app_strings, $default_charset, $currentModule, $current_user, $theme;
 $smarty = new vtigerCRM_Smarty;
 if (!isset($where)) $where = "";
 
-if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab']){
-$parent_tab=htmlspecialchars($_REQUEST['parenttab'], ENT_QUOTES, $default_charset);
-$smarty->assign("CATEGORY",$parent_tab);}
+$parent_tab=getParentTab();
+$smarty->assign("CATEGORY",$parent_tab);
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -24,8 +23,14 @@ $image_path=$theme_path."images/";
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("THEME", $theme);
-$smarty->assign("THEME_PATH",$theme_path);
+$smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
+
+$check_button = Button_Check($currentModule); 
+$check_button['Import'] = 'no'; 
+$check_button['Export'] = 'no';
+$check_button['moduleSettings'] = 'no';
+$smarty->assign("CHECK", $check_button);
 
 require_once("modules/$currentModule/$currentModule.php");
 $focus = new $currentModule();

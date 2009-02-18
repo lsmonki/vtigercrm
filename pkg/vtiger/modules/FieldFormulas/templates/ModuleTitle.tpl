@@ -4,8 +4,9 @@
 			<img width="48" height="48" border="0" src="modules/FieldFormulas/resources/FieldFormulas.png"/>
 		</td>
 		<td valign="bottom" class="heading2">
-			<b><a href="index.php?module=Rss&amp;action=index&amp;parenttab=Tools">Tools</a> > 
-				<a href="index.php?module=FieldFormulas&amp;action=index&amp;parenttab=Tools">{$PAGE_NAME} </b>
+			<b><a href="index.php?module=Settings&action=ModuleManager&parenttab=Settings">Module Manager</a> > 
+			<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$FORMODULE}&parenttab=Settings">{$FORMODULE}</a> > 
+				{$PAGE_NAME}
 		</td>
 	</tr>
 	<tr>

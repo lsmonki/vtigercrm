@@ -23,6 +23,7 @@
 		<td>
 		<table border=0 cellspacing=0 cellpadding=0 width=100%>
 			{foreach key=BLOCKID item=BLOCKLABEL from=$BLOCKS}
+				{if $BLOCKLABEL neq 'LBL_MODULE_MANAGER'}
 				<tr>
 					<td class="settingsTabHeader">
 						{$MOD.$BLOCKLABEL}
@@ -34,6 +35,9 @@
 						<tr>
 						{foreach item=data from=$FIELDS.$BLOCKID name=itr}
 							<td width=25% valign=top>
+							{if $data.name eq ''}
+								&nbsp;
+							{else}							
 							<table border=0 cellspacing=0 cellpadding=5 width=100%>
 								<tr>
 									{assign var=label value=$data.name|@getTranslatedString:'Settings'}
@@ -56,6 +60,7 @@
 									</td>
 								</tr>
 							</table>
+							{/if}
 							</td>
 						{if $count mod $NUMBER_OF_COLUMNS eq 0}
 							</tr><tr>
@@ -64,6 +69,7 @@
 						</table>
 					</td>
 					</tr>
+				{/if}
 			{/foreach}
 		</table>
 		</td>

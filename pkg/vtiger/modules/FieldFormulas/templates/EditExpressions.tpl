@@ -27,20 +27,11 @@
 <!-- DISPLAY -->
 <div id="view">
 	{include file='modules/FieldFormulas/ModuleTitle.tpl'}
+	<input type="hidden" id="pick_module" name="pick_module" value={$FORMODULE} />
 	<table class="tableHeading" width="100%" border="0" cellspacing="0" cellpadding="5" align="center">
 		<tr>
 			<td class="big" nowrap="">
 				<strong><span id="module_info"></span></strong>
-			</td>
-			<td class="small" align="right">
-				{$MOD.LBL_SELECT_CF_TEXT}
-				<select class="importBox" name="pick_module" id='pick_module'>
-{foreach  key=NAME item=LABEL from=$MODULES}
-					<option value="{$NAME}" >
-						{$LABEL}
-					</option>
-{/foreach}
-				</select>
 			</td>
 		</tr>
 	</table>

@@ -253,6 +253,16 @@ a:hover {
 	font-weight:bold;
 }
 
+.dvtSelectedCellBottom {
+	border-left:2px solid #aaaaaa;
+	border-bottom:2px solid #aaaaaa;
+	border-right:2px solid #aaaaaa;
+	padding-left:20px;
+	padding-right:20px;
+	background-color:white;
+	font-weight:bold;
+}
+
 .dvtUnSelectedCell {
 	border-left:2px solid #aaaaaa;
 	border-top:2px solid #aaaaaa;
@@ -266,6 +276,10 @@ a:hover {
 
 .dvtTabCache {
 	border-bottom:2px solid #aaaaaa;
+}
+
+.dvtTabCacheBottom {
+	border-top:2px solid #aaaaaa;
 }
 
 .dvtContentSpace {

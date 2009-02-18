@@ -12,7 +12,11 @@
 		<tbody>
 			<tr>
 				<td rowspan="2" valign="top" width="50"><img src="{'quickview.png'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_USERS}" title="{$MOD.LBL_USERS}" border="0" height="48" width="48"></td>
-				<td class="heading2" valign="bottom"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> &gt; {$MOD.LBL_TOOLTIP_MANAGEMENT}</b></td>
+				<td class="heading2" valign="bottom">
+				
+				<b><a href="index.php?module=Settings&action=ModuleManager&parenttab=Settings">Module Manager</a> > 
+			<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$FORMODULE}&parenttab=Settings">{$FORMODULE}</a> > 
+				{$MOD.LBL_TOOLTIP_MANAGEMENT}			
 			</tr>
 	
 			<tr>
@@ -22,38 +26,18 @@
 		</table>
 		
 		<br>
+		<input type="hidden" id="pick_module" value="{$MODULE}">
 		<table border="0" cellpadding="10" cellspacing="0" width="100%">
 		<tbody>
 			<tr>
-			<td>
-	
-			<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
-			<tbody><tr>
-				<td width='20%'>
-					<strong><span id="module_info">{$APP.LBL_SELECT} {$APP.LBL_MODULE}: </span></strong>
-				</td>
-				<td id='module_pick_list'>
-					<select name="pick_module" id="pick_module" class="importBox" onChange="getFieldInfo(this)">
-						<option value="" disabled="true" selected>
-							{$APP.LBL_SELECT} {$APP.LBL_MODULE}
-						</option>
-						{foreach key=sel_value item=value from=$MODULES}
-						    <option value="{$sel_value}">
-								{$value}
-							</option>
-						{/foreach}
-					</select>
-				</td>
-				</tr>
-			</tbody>
-			</table>
-			
+			<td>	
 			<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 			<tbody><tr>
 				<td width='20%'>
 					<strong><span id="field_info">{$APP.LBL_SELECT} Field: </span></strong>
 				</td>
 				<td id='pick_field_list'>
+					{$FIELDS}
 				</td>
 				</tr>
 			</tbody>

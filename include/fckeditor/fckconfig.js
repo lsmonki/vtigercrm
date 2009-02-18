@@ -77,16 +77,14 @@ FCKConfig.FloatingPanelsZIndex = 10000 ;
 
 FCKConfig.ToolbarSets["Default"] = [
 	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
-	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
-	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-	['NewPage','Preview','About'],
-	'/',
+	['OrderedList','UnorderedList','-','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Link','Unlink','Anchor'],
-	['OrderedList','UnorderedList','-','Outdent','Indent'],
-	['Table','Rule','Smiley','SpecialChar','PageBreak','UniversalKey'],
-	['TextColor','BGColor'],
-	['Source'],
+	['Source','-','NewPage','Preview','Templates'],
+	'/',
+	['Cut','Copy','Paste','PasteText','PasteWord','-','Print'], //,'SpellCheck'],
+	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+	['Table','Rule','SpecialChar','PageBreak','TextColor','BGColor'], //,'Smiley','UniversalKey'],
 	'/',
 	['Style','FontFormat','FontName','FontSize']
 ] ;

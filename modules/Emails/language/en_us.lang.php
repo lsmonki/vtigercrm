@@ -176,6 +176,7 @@ or an update!',
 'Activity Type'=>'Activity Type',
 'LBL_MAILSELECT_INFO'=>'has the following Email IDs associated.Please Select the Email IDs to which,the mail should be sent',
 'LBL_NO_RECORDS' => 'No Records Found',
+'LBL_PRINT_EMAIL'=> 'Print',
 
 );
 

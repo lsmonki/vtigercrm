@@ -2168,7 +2168,8 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 				"settingsWorkflow.png");
 
 		//labels for blocks
-		$blocks = array('LBL_USER_MANAGEMENT',
+		$blocks = array('LBL_MODULE_MANAGER',
+				'LBL_USER_MANAGEMENT',
 				'LBL_STUDIO', 
 				'LBL_COMMUNICATION_TEMPLATES', 
 				'LBL_OTHER_SETTINGS');
@@ -2203,6 +2204,37 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 				'LBL_CUSTOMIZE_MODENT_NUMBER',
 				'LBL_MAIL_SCANNER',
 				'LBL_LIST_WORKFLOWS',);
+
+
+		$name_blocks = array('LBL_USERS'=>'LBL_USER_MANAGEMENT',
+				'LBL_ROLES'=>'LBL_USER_MANAGEMENT',
+				'LBL_PROFILES'=>'LBL_USER_MANAGEMENT',
+				'USERGROUPLIST'=>'LBL_USER_MANAGEMENT',
+				'LBL_SHARING_ACCESS'=>'LBL_USER_MANAGEMENT',
+				'LBL_FIELDS_ACCESS'=>'LBL_USER_MANAGEMENT',
+				'LBL_AUDIT_TRAIL'=>'LBL_USER_MANAGEMENT',
+				'LBL_LOGIN_HISTORY_DETAILS'=>'LBL_USER_MANAGEMENT',
+				'VTLIB_LBL_MODULE_MANAGER'=>'LBL_STUDIO',
+				'LBL_PICKLIST_EDITOR'=>'LBL_STUDIO',
+				'LBL_TOOLTIP_MANAGEMENT'=>'LBL_MODULE_MANAGER',
+				'EMAILTEMPLATES'=>'LBL_COMMUNICATION_TEMPLATES',
+				'LBL_MAIL_MERGE'=>'LBL_COMMUNICATION_TEMPLATES',
+				'NOTIFICATIONSCHEDULERS'=>'LBL_COMMUNICATION_TEMPLATES',
+				'INVENTORYNOTIFICATION'=>'LBL_COMMUNICATION_TEMPLATES',
+				'LBL_COMPANY_DETAILS'=>'LBL_COMMUNICATION_TEMPLATES',
+				'LBL_MAIL_SERVER_SETTINGS'=>'LBL_OTHER_SETTINGS',
+				'LBL_BACKUP_SERVER_SETTINGS'=>'LBL_OTHER_SETTINGS',
+				'LBL_ASSIGN_MODULE_OWNERS'=>'LBL_OTHER_SETTINGS',
+				'LBL_CURRENCY_SETTINGS'=>'LBL_OTHER_SETTINGS',
+				'LBL_TAX_SETTINGS'=>'LBL_OTHER_SETTINGS',
+				'LBL_SYSTEM_INFO'=>'LBL_OTHER_SETTINGS',
+				'LBL_PROXY_SETTINGS'=>'LBL_OTHER_SETTINGS',
+				'LBL_ANNOUNCEMENT'=>'LBL_OTHER_SETTINGS',
+				'LBL_DEFAULT_MODULE_VIEW'=>'LBL_OTHER_SETTINGS',
+				'INVENTORYTERMSANDCONDITIONS'=>'LBL_OTHER_SETTINGS',
+				'LBL_CUSTOMIZE_MODENT_NUMBER'=>'LBL_OTHER_SETTINGS',
+				'LBL_MAIL_SCANNER'=>'LBL_OTHER_SETTINGS',
+				'LBL_LIST_WORKFLOWS'=>'LBL_OTHER_SETTINGS',);
 
 
 		//description for fields
@@ -2274,13 +2306,11 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 
 		$count = count($icons);
 		//insert settings fields
-		$block=1;
 		for($i=0, $seq=1; $i<$count; $i++, $seq++){
 			if($i==8 || $i==12 || $i==18){
-				$block++;
 				$seq = 1;
 			}	
-			$adb->query("insert into vtiger_settings_field values (".$adb->getUniqueID('vtiger_settings_field').", $block, '$names[$i]', '$icons[$i]', '$description[$i]', '$links[$i]', $seq)");
+			$adb->query("insert into vtiger_settings_field values (".$adb->getUniqueID('vtiger_settings_field').", ".getSettingsBlockId($name_blocks[$names[$i]]).", '$names[$i]', '$icons[$i]', '$description[$i]', '$links[$i]', $seq)");
 		}
 	}
 }

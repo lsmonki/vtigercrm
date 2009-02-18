@@ -63,9 +63,9 @@ function showHideStatus(sId,anchorImgId,sImagePath)
 		eval(document.getElementById(anchorImgId)).title = 'Hide';
 	}
 }
-function setCoOrdinate()
+function setCoOrdinate(elemId)
 {
-	oBtnObj = eval(document.getElementById('jumpBtnId'));
+	oBtnObj = document.getElementById(elemId);
 	var tagName = document.getElementById('lstRecordLayout');
 	leftpos  = 0;
 	toppos = 0;
@@ -104,7 +104,7 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 				else
 					tagName.style.left= leftSide + 388 + 'px';
 				
-				setCoOrdinate();
+				setCoOrdinate(obj.id);
 				
 				tagName.style.display = 'block';
 				tagName.style.visibility = "visible";
@@ -137,37 +137,60 @@ window.onresize = setCoOrdinate;
 				   <tr>
 					<td>
 			         {* Module Record numbering, used MOD_SEQ_ID instead of ID *}
-						<span class="lvtHeaderText"><font color="purple">[ {$MOD_SEQ_ID} ] </font>{$NAME} -  {$MOD[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span>
+						<span class="lvtHeaderText"><font color="purple">[ {$MOD_SEQ_ID} ] </font>{$NAME} -  {$MOD[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;&nbsp;<span class="small">{$UPDATEINFO}</span>&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span>
 					</td>
-					<td>&nbsp;</td>
-				   </tr>
-				   <tr height=20>
-					<td>{$UPDATEINFO}</td>
 				   </tr>
 				</table>
-
-				<hr noshade size=1>
-		
+				<br>
+						
 				<!-- Entity and More information tabs -->
 				<table border=0 cellspacing=0 cellpadding=0 width=95% align=center>
 				   <tr>
-					<td>
+					<td>						
+   						<form action="index.php" method="post" name="DetailView" id="form">
+						{include file='DetailViewHidden.tpl'}
 						<table border=0 cellspacing=0 cellpadding=3 width=100% class="small">
 						   <tr>
-							<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-							<td class="dvtSelectedCell" align=center nowrap>{$MOD[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</td>	
-							<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-							{if $SinglePane_View eq 'false'}
+								<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
+								
+								<td class="dvtSelectedCell" align=center nowrap>{$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</td>	
+								<td class="dvtTabCache" style="width:10px">&nbsp;</td>
+								{if $SinglePane_View eq 'false'}
 								<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">{$APP.LBL_MORE} {$APP.LBL_INFORMATION}</a></td>
-							{/if}
-							<td class="dvtTabCache" style="width:100%">&nbsp;</td>
-						   </tr>
+								{/if}
+								<td class="dvtTabCache" align="right" style="width:100%">
+									{if $EDIT_DUPLICATE eq 'permitted'}
+									<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
+									{/if}
+									{if $EDIT_DUPLICATE eq 'permitted' && $MODULE neq 'Documents'}
+									<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
+									{/if}
+									{if $DELETE eq 'permitted'}
+									<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; {if $MODULE eq 'Accounts'} return confirm('{$APP.NTC_ACCOUNT_DELETE_CONFIRMATION}') {else} return confirm('{$APP.NTC_DELETE_CONFIRMATION}') {/if}" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+									{/if}
+								
+									{if $privrecord neq ''}
+									<img align="absmiddle" title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="{'rec_prev.gif'|@vtiger_imageurl:$THEME}">&nbsp;
+									{else}
+									<img align="absmiddle" title="{$APP.LNK_LIST_PREVIOUS}" src="{'rec_prev_disabled.gif'|@vtiger_imageurl:$THEME}">
+									{/if}							
+									{if $privrecord neq '' || $nextrecord neq ''}
+									<img align="absmiddle" title="{$APP.LBL_JUMP_BTN}" accessKey="{$APP.LBL_JUMP_BTN}" onclick="var obj = this;var lhref = getListOfRecords(obj, '{$MODULE}',{$ID},'{$CATEGORY}');" name="jumpBtnIdTop" id="jumpBtnIdTop" src="{'rec_jump.gif'|@vtiger_imageurl:$THEME}">&nbsp;
+									{/if}
+									{if $nextrecord neq ''}
+									<img align="absmiddle" title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="{'rec_next.gif'|@vtiger_imageurl:$THEME}">&nbsp;
+									{else}
+									<img align="absmiddle" title="{$APP.LNK_LIST_NEXT}" src="{'rec_next_disabled.gif'|@vtiger_imageurl:$THEME}">&nbsp;
+									{/if}
+								</td>
+							</tr>
 						</table>
+						</form>
 					</td>
 				   </tr>
 				   <tr>
 					<td valign=top align=left >
-						<table border=0 cellspacing=0 cellpadding=3 width=100% class="dvtContentSpace">
+						<table border=0 cellspacing=0 cellpadding=3 width=100% class="dvtContentSpace" style="border-bottom:0px;">
 						   <tr>
 
 							<td align=left style="padding:10px;">
@@ -180,66 +203,6 @@ window.onresize = setCoOrdinate;
 
 
 <!-- The following table is used to display the buttons -->
-   <form action="index.php" method="post" name="DetailView" id="form">
-					{include file='DetailViewHidden.tpl'}
-<table border=0 cellspacing=0 cellpadding=0 width=100%>
-   {strip}
-   <tr>
-	<td  colspan=4 style="padding:5px">
-		<table border=0 cellspacing=0 cellpadding=0 width=100%>
-                   <tr>
-            <td width=35%>
-				{if $EDIT_DUPLICATE eq 'permitted'}
-				<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">&nbsp;
-				{/if}
-			</td>
-			<td width=30% align=center>
-					{if $privrecord neq ''}
-						<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="{'b_left.gif'|@vtiger_imageurl:$THEME}">&nbsp;
-					{else}
-						<img title="{$APP.LNK_LIST_PREVIOUS}" src="{'b_left_disable.gif'|@vtiger_imageurl:$THEME}">
-					{/if}
-					&nbsp;
-					{if $nextrecord neq ''}
-						<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="{'b_right.gif'|@vtiger_imageurl:$THEME}">&nbsp;
-					{else}
-						<img title="{$APP.LNK_LIST_NEXT}" src="{'b_right_disable.gif'|@vtiger_imageurl:$THEME}">&nbsp;
-					{/if}
-			</td>
-			<td width=35% align=right>
-					{if $privrecord neq '' || $nextrecord neq ''}
-						<input title="{$APP.LBL_JUMP_BTN}" accessKey="{$APP.LBL_JUMP_BTN}" class="crmbutton small create" onclick="location.href='javascript:getListOfRecords(this, \'{$MODULE}\',{$ID},\'{$CATEGORY}\');'" type="button" name="jumpBtnId" id="jumpBtnId" value="{$APP.LBL_JUMP_BTN}">
-					{/if}
-				{if $EDIT_DUPLICATE eq 'permitted'}
-				<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
-				{/if}
-				{if $DELETE eq 'permitted'}
-				<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; {if $MODULE eq 'Vendors'} return confirm('{$APP.NTC_VENDOR_DELETE_CONFIRMATION}')" {else} return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" {/if} type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
-				{/if}
-			</td>
-                   </tr>
-                </table>
-		<!-- Commented the buttons in DetailView because these buttons have been given as links
-		{if $MODULE eq 'Quotes' || $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
-			{if $CREATEPDF eq 'permitted'}
-				<input title="Export To PDF" accessKey="Alt+e" class="small" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}'; this.form.module.value='{$MODULE}'; {if $MODULE eq 'SalesOrder'} this.form.action.value='CreateSOPDF'" {else} this.form.action.value='CreatePDF'" {/if} type="submit" name="Export To PDF" value="{$APP.LBL_EXPORT_TO_PDF}">&nbsp;
-			{/if}
-		{/if}
-		{if $MODULE eq 'Quotes'}
-			{if $CONVERTSALESORDER eq 'permitted'}
-				<input title="{$APP.LBL_CONVERTSO_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERTSO_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView'; this.form.convertmode.value='quotetoso';this.form.module.value='SalesOrder'; this.form.action.value='EditView'" type="submit" name="Convert To SalesOrder" value="{$APP.LBL_CONVERTSO_BUTTON_LABEL}">&nbsp;
-			{/if}
-		{/if}
-		{if $MODULE eq 'Potentials' || $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder'}
-			{if $CONVERTINVOICE eq 'permitted'}
-				<input title="{$APP.LBL_CONVERTINVOICE_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERTINVOICE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.convertmode.value='{$CONVERTMODE}';this.form.module.value='Invoice'; this.form.action.value='EditView'" type="submit" name="Convert To Invoice" value="{$APP.LBL_CONVERTINVOICE_BUTTON_LABEL}">&nbsp;
-			{/if}
-		{/if}
-		-->
-	</td>
-   </tr>
-   {/strip}
-</table>
 <!-- Button displayed - finished-->
 							 {include_php file="./include/DetailViewBlockStatus.php"}
 
@@ -329,68 +292,7 @@ window.onresize = setCoOrdinate;
 								<table border=0 cellspacing=0 cellpadding=0 width=100%>
 			                			   <tr>
 									<td style="padding:10px;border-right:1px dashed #CCCCCC;" width="80%">
-			{if $SinglePane_View eq 'false'}
-<table border=0 cellspacing=0 cellpadding=0 width=100%>
-   {strip}
-   <tr>
-	<td  colspan=4 style="padding:5px">
-		<table border=0 cellspacing=0 cellpadding=0 width=100%>
-                   <tr>
-            <td width=35%>
-				{if $EDIT_DUPLICATE eq 'permitted'}
-				<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">&nbsp;
-				{/if}
-			</td>
-			<td width=30% align=center>
-					{if $privrecord neq ''}
-						<img title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="{'b_left.gif'|@vtiger_imageurl:$THEME}">&nbsp;
-					{else}
-						<img title="{$APP.LNK_LIST_PREVIOUS}" src="{'b_left_disable.gif'|@vtiger_imageurl:$THEME}">
-					{/if}
-					&nbsp;
-					{if $nextrecord neq ''}
-						<img title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="{'b_right.gif'|@vtiger_imageurl:$THEME}">&nbsp;
-					{else}
-						<img title="{$APP.LNK_LIST_NEXT}" src="{'b_right_disable.gif'|@vtiger_imageurl:$THEME}">&nbsp;
-					{/if}
-			</td>
-			<td width=35% align=right>
-					{if $privrecord neq '' || $nextrecord neq ''}
-						<input title="{$APP.LBL_JUMP_BTN}" accessKey="{$APP.LBL_JUMP_BTN}" class="crmbutton small create" onclick="location.href='javascript:getListOfRecords(this, \'{$MODULE}\',{$ID},\'{$CATEGORY}\');'" type="button" name="jumpBtnId" id="jumpBtnId" value="{$APP.LBL_JUMP_BTN}">
-					{/if}
-				{if $EDIT_DUPLICATE eq 'permitted'}
-				<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
-				{/if}
-				{if $DELETE eq 'permitted'}
-				<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; {if $MODULE eq 'Vendors'} return confirm('{$APP.NTC_VENDOR_DELETE_CONFIRMATION}')" {else} return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" {/if} type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
-				{/if}
-			</td>
-                   </tr>
-                </table>
 
-		<!-- Commented the buttons in DetailView because these buttons have been given as links
-		{if $MODULE eq 'Quotes' || $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
-			{if $CREATEPDF eq 'permitted'}
-				<input title="Export To PDF" accessKey="Alt+e" class="small" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}'; this.form.module.value='{$MODULE}'; {if $MODULE eq 'SalesOrder'} this.form.action.value='CreateSOPDF'" {else} this.form.action.value='CreatePDF'" {/if} type="submit" name="Export To PDF" value="{$APP.LBL_EXPORT_TO_PDF}">&nbsp;
-			{/if}
-		{/if}
-		{if $MODULE eq 'Quotes'}
-			{if $CONVERTSALESORDER eq 'permitted'}
-				<input title="{$APP.LBL_CONVERTSO_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERTSO_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView'; this.form.convertmode.value='quotetoso';this.form.module.value='SalesOrder'; this.form.action.value='EditView'" type="submit" name="Convert To SalesOrder" value="{$APP.LBL_CONVERTSO_BUTTON_LABEL}">&nbsp;
-			{/if}
-		{/if}
-		{if $MODULE eq 'Potentials' || $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder'}
-			{if $CONVERTINVOICE eq 'permitted'}
-				<input title="{$APP.LBL_CONVERTINVOICE_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERTINVOICE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.convertmode.value='{$CONVERTMODE}';this.form.module.value='Invoice'; this.form.action.value='EditView'" type="submit" name="Convert To Invoice" value="{$APP.LBL_CONVERTINVOICE_BUTTON_LABEL}">&nbsp;
-			{/if}
-		{/if}
-		-->
-	</td>
-   </tr>
-   {/strip}
-</table>
-{/if}
-</form>
 		<table border=0 cellspacing=0 cellpadding=0 width=100%>
 		  <tr>
 			<td style="border-right:1px dashed #CCCCCC;" width="100%">
@@ -399,7 +301,6 @@ window.onresize = setCoOrdinate;
 			{/if}
 		</td></tr></table>
 </td></tr></table>
-<!-- Button displayed - finished-->
 									<!-- Inventory Actions - ends -->	
 									<td width=22% valign=top style="padding:10px;">
 										<!-- right side InventoryActions -->
@@ -412,9 +313,53 @@ window.onresize = setCoOrdinate;
 										</div>
 									</td>
 								   </tr>
+								   
 								</table>
 							</td>
 						   </tr>
+						    <tr>
+					<td>						
+   						<form action="index.php" method="post" name="DetailView1" id="form2">
+						{include file='DetailViewHidden.tpl'}
+						<table border=0 cellspacing=0 cellpadding=3 width=100% class="small">
+						   <tr>
+								<td class="dvtTabCacheBottom" style="width:10px" nowrap>&nbsp;</td>
+								
+								<td class="dvtSelectedCellBottom" align=center nowrap>{$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</td>	
+								<td class="dvtTabCacheBottom" style="width:10px">&nbsp;</td>
+								{if $SinglePane_View eq 'false'}
+								<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">{$APP.LBL_MORE} {$APP.LBL_INFORMATION}</a></td>
+								{/if}
+								<td class="dvtTabCacheBottom" align="right" style="width:100%">
+									{if $EDIT_DUPLICATE eq 'permitted'}
+									<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
+									{/if}
+									{if $EDIT_DUPLICATE eq 'permitted' && $MODULE neq 'Documents'}
+									<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
+									{/if}
+									{if $DELETE eq 'permitted'}
+									<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; {if $MODULE eq 'Accounts'} return confirm('{$APP.NTC_ACCOUNT_DELETE_CONFIRMATION}') {else} return confirm('{$APP.NTC_DELETE_CONFIRMATION}') {/if}" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+									{/if}
+								
+									{if $privrecord neq ''}
+									<img align="absmiddle" title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="{'rec_prev.gif'|@vtiger_imageurl:$THEME}">&nbsp;
+									{else}
+									<img align="absmiddle" title="{$APP.LNK_LIST_PREVIOUS}" src="{'rec_prev_disabled.gif'|@vtiger_imageurl:$THEME}">
+									{/if}							
+									{if $privrecord neq '' || $nextrecord neq ''}
+									<img align="absmiddle" title="{$APP.LBL_JUMP_BTN}" accessKey="{$APP.LBL_JUMP_BTN}" onclick="var obj = this;var lhref = getListOfRecords(obj, '{$MODULE}',{$ID},'{$CATEGORY}');" name="jumpBtnIdBottom" id="jumpBtnIdBottom" src="{'rec_jump.gif'|@vtiger_imageurl:$THEME}">&nbsp;
+									{/if}
+									{if $nextrecord neq ''}
+									<img align="absmiddle" title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="{'rec_next.gif'|@vtiger_imageurl:$THEME}">&nbsp;
+									{else}
+									<img align="absmiddle" title="{$APP.LNK_LIST_NEXT}" src="{'rec_next_disabled.gif'|@vtiger_imageurl:$THEME}">&nbsp;
+									{/if}
+								</td>
+							</tr>
+						</table>
+						</form>
+					</td>
+				   </tr>
 						</table>
 					<!-- PUBLIC CONTENTS STOPS-->
 					</td>

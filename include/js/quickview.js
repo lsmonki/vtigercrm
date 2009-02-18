@@ -9,36 +9,10 @@
  ********************************************************************************/
 
 /**
- * this function takes a module name and returns the fields associated with it
- */
-function getFieldInfo(id){
-	var modulename = id.options[id.options.selectedIndex].value;
-	new Ajax.Request(
-		'index.php',
-		{queue: {position: 'end', scope: 'command'},
-			method: 'post',
-			postBody: 'module=Settings&action=SettingsAjax&file=QuickViewFieldList&fld_module='+modulename+'&parenttab=Settings&ajax=true',
-			onComplete: function(response) {
-				if(response.responseText == false){
-					alert("Some error in module selection ");
-				}else{
-					fieldlist = response.responseText;
-					$('pick_field_list').innerHTML = fieldlist;
-				}
-			}
-		}
-	);
-	//clear out the blank field
-	var node = document.getElementById('fieldList');
-	node.innerHTML = "";
-}
-
-/**
  * this function takes a fieldname and returns the fields related to it
  */
 function getRelatedFieldInfo(id){
-	var selectElement = $('pick_module');
-	var modulename = selectElement.options[selectElement.options.selectedIndex].value;
+	var modulename = $('pick_module').value;
 
 	var fieldname = id.options[id.options.selectedIndex].value;
 	new Ajax.Request(

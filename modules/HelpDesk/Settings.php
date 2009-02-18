@@ -8,19 +8,7 @@
 * All Rights Reserved.
 *
 ********************************************************************************/
-require_once('Smarty_setup.php');
 
-global $mod_strings,$app_strings,$theme;
-$smarty = new vtigerCRM_Smarty;
-
-$module = $_REQUEST['formodule'];
-
-$smarty->assign("MOD",$mod_strings);
-$smarty->assign("APP",$app_strings);
-$smarty->assign("IMAGE_PATH", "themes/$theme/images/");
-$smarty->assign('MODULE',$module);
-$smarty->assign('MODULE_LBL',getTranslatedString($module));
-
-$smarty->display(vtlib_getModuleTemplate('Vtiger','Settings.tpl'));
+include('modules/Vtiger/Settings.php');
 
 ?>
