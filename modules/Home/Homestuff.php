@@ -16,10 +16,11 @@ if(!empty($_REQUEST['stufftype'])){
 } 
 
 if(!empty($_REQUEST['stufftitle'])){
-	if(strlen($_REQUEST['stufftitle'])>20){
-		$oHomestuff->stufftitle=substr($_REQUEST['stufftitle'],0,20)."...";
+	if(strlen($_REQUEST['stufftitle'])>100){
+		$temp_str = substr($_REQUEST['stufftitle'],0,97)."...";
+		$oHomestuff->stufftitle= htmlentities($temp_str);
 	}else{
-		$oHomestuff->stufftitle=$_REQUEST['stufftitle'];
+		$oHomestuff->stufftitle=htmlentities($_REQUEST['stufftitle']);
 	}
 }
 

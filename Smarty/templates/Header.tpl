@@ -282,56 +282,45 @@ function fetch_calc()
 </script>
 
 <script>
-
-function QCreate(qcoptions)
-{ldelim}
-	var module = qcoptions.options[qcoptions.options.selectedIndex].value;
-	if(module != 'none')
-	{ldelim}
-	$("status").style.display="inline";
-	if(module == 'Events')
-	{ldelim}
-		module = 'Calendar';
-		var urlstr = '&activity_mode=Events';
-	{rdelim}
-	else if(module == 'Calendar')
-	{ldelim}
-		module = 'Calendar';
-		var urlstr = '&activity_mode=Task';
-	{rdelim}
-	else
-		var urlstr = '';
-	new Ajax.Request(
-                'index.php',
-                {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
-                        method: 'post',
-                        postBody: 'module='+module+'&action='+module+'Ajax&file=QuickCreate'+urlstr,
-                        onComplete: function(response)
-                                        {ldelim}
-						$("status").style.display="none";
-						$("qcform").style.display="inline";
-					    $("qcform").innerHTML = response.responseText;
-						{literal}
-                        // Evaluate all the script tags in the response text.
-                        var scriptTags = $("qcform").getElementsByTagName("script");
-                        for(var i = 0; i< scriptTags.length; i++){
-							var scriptTag = scriptTags[i];
-							eval(scriptTag.innerHTML);
-                        }
-                        {/literal}
-                        eval($("qcform"));
-					{rdelim}
-                {rdelim}
-        );
-	{rdelim}
-	else
-		hide('qcform');
-{rdelim}
-
-</script>
-
 {literal}
-<SCRIPT>
+function QCreate(qcoptions){
+	var module = qcoptions.options[qcoptions.options.selectedIndex].value;
+	if(module != 'none'){
+		$("status").style.display="inline";
+		if(module == 'Events'){
+			module = 'Calendar';
+			var urlstr = '&activity_mode=Events';
+		}else if(module == 'Calendar'){
+			module = 'Calendar';
+			var urlstr = '&activity_mode=Task';
+		}else{
+			var urlstr = '';
+		}
+		new Ajax.Request(
+			'index.php',
+				{queue: {position: 'end', scope: 'command'},
+				method: 'post',
+				postBody: 'module='+module+'&action='+module+'Ajax&file=QuickCreate'+urlstr,
+				onComplete: function(response){
+					$("status").style.display="none";
+					$("qcform").style.display="inline";
+					$("qcform").innerHTML = response.responseText;
+					// Evaluate all the script tags in the response text.
+					var scriptTags = $("qcform").getElementsByTagName("script");
+					for(var i = 0; i< scriptTags.length; i++){
+						var scriptTag = scriptTags[i];
+						eval(scriptTag.innerHTML);
+					}
+                    eval($("qcform"));
+                    posLay(qcoptions, "qcform");
+				}
+			}
+		);
+	}else{
+		hide('qcform');
+	}
+}
+
 function getFormValidate(divValidate)
 {
   var st = document.getElementById('qcvalidate');

@@ -3539,7 +3539,7 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	}
 	else
 	{
-		$output .= '<img src="' . vtiger_imageurl('star_disabledt.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
+		$output .= '<img src="' . vtiger_imageurl('start_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
 		$output .= '<img src="' . vtiger_imageurl('previous_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
 	}
 	for ($i=$navigation_array['first'];$i<=$navigation_array['end'];$i++){

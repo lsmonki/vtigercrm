@@ -13,32 +13,6 @@
  */
 
 /**
- * this function returns the notebook contents from the database
- * if there are no contents for a given user it creates a test content
- * @return - contents of the notebook for a user
- */
-function getNotebookContents(){
-	global $adb, $current_user;
-	$contents = "Double-click here to edit ";
-	
-	$sql = "select * from vtiger_notebook_contents where userid=".$current_user->id;
-	$result = $adb->query($sql);
-	
-	if($adb->num_rows($result)>0){
-		$cont = $adb->query_result($result,0,"contents");
-		if(empty($cont)){
-			$cont = $contents;
-			$sql = "update vtiger_notebook_contents set contents=$contents where userid=".$current_user->id;
-			$result = $adb->query($sql);
-		}else{
-			$contents = $cont;
-		}
-	}
-	return $contents;
-}
-
-
-/**
  * function to get upcoming activities for today
  * @param integer $maxval - the maximum number of records to display
  * @param integer $calCnt - returns the count query if this is set

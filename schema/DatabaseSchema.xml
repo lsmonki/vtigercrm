@@ -6938,9 +6938,9 @@
 	<table name="vtiger_notebook_contents">
 		<field name="userid" type="I" size="19">
 			<notnull />
-			<key />
 		</field>
 		<field name="notebookid" type="I" size="19">
+			<notnull />
 		</field>
 		<field name="contents" type="X">
 		</field>

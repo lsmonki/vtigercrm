@@ -357,7 +357,7 @@ function loadDashBoard(oSelect)
 			{
 				$("dashChart").innerHTML=response.responseText;
 				$("dashChart").style.display='none';
-				Effect.Appear("dashChart");
+				setTimeout('Effect.Appear("dashChart")', 500);
 				var dashst = document.getElementById('dash_script');
 				eval(dashst.innerHTML);
 				$("dashTitle_div").innerHTML = oCombo.options[oCombo.selectedIndex].text;

@@ -128,7 +128,7 @@ class Homestuff{
 					}
 				}
 			}elseif($stufftype == 'DashBoard'){
-				if(!vtlib_isModuleActive('DashBoard')){
+				if(!vtlib_isModuleActive('Dashboard')){
 					continue;
 				}
 			}elseif(!empty($stufftype) && $stufftype=='RSS'){
@@ -137,9 +137,9 @@ class Homestuff{
 				}
 			}
 			
-			$stufftitle=$adb->query_result($resultstuff,$i,'stufftitle');
-			if(strlen($stufftitle)>20){
-				$stuff_title=substr($stufftitle,0,20)."...";
+			$stufftitle=decode_html($adb->query_result($resultstuff,$i,'stufftitle'));
+			if(strlen($stufftitle)>100){
+				$stuff_title=substr($stufftitle,0,97)."...";
 			}else{
 				$stuff_title = $stufftitle;
 			}
@@ -199,7 +199,7 @@ class Homestuff{
 			$details=$this->getModuleFilters($sid);
 		}else if($stuffType=="RSS"){
 			$details=$this->getRssDetails($sid);
-		}else if($stuffType=="DashBoard" && vtlib_isModuleActive("DashBoard")){
+		}else if($stuffType=="DashBoard" && vtlib_isModuleActive("Dashboard")){
 			$details=$this->getDashDetails($sid);
 		}else if($stuffType=="Default"){
 			$details=$this->getDefaultDetails($sid,'');

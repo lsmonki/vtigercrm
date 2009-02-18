@@ -330,51 +330,48 @@ function getValuesforColumns($column_name,$search_string,$criteria='cts')
 *Returns the where conditions for list query in string format
 */
 
-function BasicSearch($module,$search_field,$search_string)
-{
-	 global $log,$mod_strings,$current_user;
-         $log->debug("Entering BasicSearch(".$module.",".$search_field.",".$search_string.") method ...");
+function BasicSearch($module,$search_field,$search_string){
+	global $log,$mod_strings,$current_user;
+	$log->debug("Entering BasicSearch(".$module.",".$search_field.",".$search_string.") method ...");
 	global $adb;
 	$search_string = ltrim(rtrim(mysql_real_escape_string($search_string)));
 	global $column_array,$table_col_array;
-	if($search_field =='crmid')
-	{
+	if($search_field =='crmid'){
 		$column_name='crmid';
 		$table_name='vtiger_crmentity';
 		$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";
-	} 
-	elseif($search_field =='currency_id' && ($module == 'PriceBooks' || $module == 'PurchaseOrder' || $module == 'SalesOrder' ||
-												$module == 'Invoice' || $module == 'Quotes'))
-	{
+	}elseif($search_field =='currency_id' && ($module == 'PriceBooks' || $module == 'PurchaseOrder' || $module == 'SalesOrder' || $module == 'Invoice' || $module == 'Quotes')){
 		$column_name='currency_name';
 		$table_name='vtiger_currency_info';
 		$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";
-	}
-	elseif($search_field == 'folderid' && $module == 'Documents'){
+	}elseif($search_field == 'folderid' && $module == 'Documents'){
 		$column_name='foldername';
 		$table_name='vtiger_attachmentsfolder';
 		$where="$table_name.$column_name like '". formatForSqlLike($search_string) ."'";	
-	}
-	else
-	{	
+	}else{
 		//Check added for tickets by accounts/contacts in dashboard
 		$search_field_first = $search_field;
-		if($module=='HelpDesk' && ($search_field == 'contactid' || $search_field == 'account_id'))
-		{
-			$search_field = "parent_id";
+		if($module=='HelpDesk'){
+			if($search_field == 'contactid'){
+				$where = "(vtiger_contactdetails.contact_no like '". formatForSqlLike($search_string) ."')";
+				return $where;
+			}elseif($search_field == 'account_id'){
+				$search_field = "parent_id";
+			}
 		}
 		//Check ends
 
 		//Added to search contact name by lastname
-		if(($module == "Calendar" || $module == "Invoice" || $module == "Documents" || $module == "SalesOrder" || $module== "PurchaseOrder") && ($search_field == "contact_id"))
-		{
+		if(($module == "Calendar" || $module == "Invoice" || $module == "Documents" || $module == "SalesOrder" || $module== "PurchaseOrder") && ($search_field == "contact_id")){
 			$module = 'Contacts';
 			$search_field = 'lastname';
 		}
-		if($search_field == "accountname" && $module != "Accounts")
+		if($search_field == "accountname" && $module != "Accounts"){
 			$search_field = "account_id";
-		if($search_field == 'productname' && $module == 'Campaigns')
+		}
+		if($search_field == 'productname' && $module == 'Campaigns'){
 			$search_field = "product_id";
+		}
 		
 		$qry="select vtiger_field.columnname,tablename from vtiger_tab inner join vtiger_field on vtiger_field.tabid=vtiger_tab.tabid where vtiger_tab.name=? and (fieldname=? or columnname=?)";
 		$result = $adb->pquery($qry, array($module, $search_field, $search_field));

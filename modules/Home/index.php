@@ -56,7 +56,7 @@ $allow_dashbd='no';
 if(isPermitted('Rss','DetailView') == 'yes' && vtlib_isModuleActive('Rss')){
 	$allow_rss='yes';
 }	
-if(isPermitted('Dashboard','DetailView') == 'yes' && vtlib_isModuleActive('DashBoard')){
+if(isPermitted('Dashboard','DetailView') == 'yes' && vtlib_isModuleActive('Dashboard')){
 	$allow_dashbd='yes';
 }
 

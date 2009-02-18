@@ -33,6 +33,11 @@ function saveContents(node, notebookid) {
 					temp.style.display = 'block';
 					temp.innerHTML = contents;
 					$('notebook_'+notebookid).style.display = 'block';
+					
+					var notebook_dbl_click_message = $('notebook_dbl_click_message');
+					var notebook_save_message = $('notebook_save_message');
+					notebook_dbl_click_message.style.display = 'block';
+					notebook_save_message.style.display = 'none';
 				}
 			}
 		}
@@ -45,10 +50,14 @@ function saveContents(node, notebookid) {
 function editContents(node, notebookid) {
 	var notebook = $('notebook_textarea_'+notebookid);
 	var contents = $('notebook_contents_'+notebookid);
+	var notebook_dbl_click_message = $('notebook_dbl_click_message');
+	var notebook_save_message = $('notebook_save_message');
 	
 	notebook.value = contents.innerHTML;
 	node.style.display = 'none';
 	notebook.style.display = 'block';
+	notebook_dbl_click_message.style.display = 'none';
+	notebook_save_message.style.display = 'block';
 	
 	notebook.focus();
 }
