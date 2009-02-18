@@ -341,6 +341,12 @@ ExecuteQuery("alter table vtiger_users modify date_format varchar(200) default N
 // Updated the sequence number of taskstatus for the ticket #5027
 ExecuteQuery("update vtiger_field set sequence = 8 where columnname = 'status' and tablename = 'vtiger_activity' and fieldname = 'taskstatus' and uitype = 111");
 
+$arr=$adb->getColumnNames("vtiger_users");
+if(!in_array("internal_mailer", $arr))
+{
+	$adb->pquery("alter table vtiger_users add column internal_mailer int(3) NOT NULL default '1'", array());
+}
+
 global $dbname;
 include("modules/Migration/HTMLtoUTF8Conversion.php");
 

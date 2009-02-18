@@ -31,12 +31,17 @@ require_once("modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc");
 require_once("modules/com_vtiger_workflow/VTEntityMethodManager.inc");
 $emm = new VTEntityMethodManager($adb);
 
-/* Update the block id in sequence table, to the current highest value of block id used. */
+/* Update the profileid, block id in sequence table, to the current highest value of block id used. */
 $tmp = $adb->getUniqueId('vtiger_blocks');
 $max_block_id_query = $adb->query("SELECT MAX(blockid) AS max_blockid FROM vtiger_blocks");
 $max_block_id = $adb->query_result($max_block_id_query,0,"max_blockid");
 
-ExecuteQuery("UPDATE vtiger_blocks_seq SET id=".($max_block_id+1));
+$tmp = $adb->getUniqueId('vtiger_profile');
+$max_profile_id_query = $adb->query("SELECT MAX(profileid) AS max_profileid FROM vtiger_profile");
+$max_profile_id = $adb->query_result($max_profile_id_query,0,"max_profileid");
+
+ExecuteQuery("UPDATE vtiger_blocks_seq SET id=".($max_block_id));
+ExecuteQuery("UPDATE vtiger_profile_seq SET id=".($max_profile_id));
 
 /* Migration queries to cleanup ui type 15, 16, 111 - 
  * 15 for Standard picklist types,
