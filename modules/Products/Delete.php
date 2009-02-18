@@ -26,7 +26,7 @@ $url = getBasic_Advance_SearchURL();
 
 if(!isset($record))
 	die(getTranslatedString('ERR_DELETE_RECORD'));
-if($return_module!="Products" || ($return_module=="Products" && !isset($return_id)))
+if($return_module!="Products" || ($return_module=="Products" && empty($return_id)))
 	DeleteEntity($currentModule, $return_module, $focus, $record, $return_id);
 else
 	$focus->deleteProduct2ProductRelation($record, $return_id, $_REQUEST['is_parent']);
