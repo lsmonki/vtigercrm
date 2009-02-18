@@ -36,7 +36,7 @@ $tmp = $adb->getUniqueId('vtiger_blocks');
 $max_block_id_query = $adb->query("SELECT MAX(blockid) AS max_blockid FROM vtiger_blocks");
 $max_block_id = $adb->query_result($max_block_id_query,0,"max_blockid");
 
-ExecuteQuery("UPDATE vtiger_blocks_seq SET id=".$max_block_id);
+ExecuteQuery("UPDATE vtiger_blocks_seq SET id=".($max_block_id+1));
 
 /* Migration queries to cleanup ui type 15, 16, 111 - 
  * 15 for Standard picklist types,
@@ -273,32 +273,58 @@ ExecuteQuery("insert into vtiger_attachmentsfolder values (0,'Existing Notes','C
 
 ExecuteQuery("alter table vtiger_senotesrel drop foreign key fk_2_vtiger_senotesrel ");
 
+
 $notesQuery = $adb->query("select notesid from vtiger_notes");
 $noofnotes = $adb->num_rows($notesQuery);
 if($noofnotes > 0)
 {
     for($k=0;$k<$noofnotes;$k++)
     {
-        $notesid = $adb->query_result($notesQuery,$k,'notesid');
-        $attachmentidQuery = 'select attachmentsid from vtiger_seattachmentsrel where crmid = ?';
-        $res = $adb->pquery($attachmentidQuery,array($notesid));
-        $attachmentid = $adb->query_result($res,0,'attachmentsid');
-		if($attachmentid != ''){	
-        	 $attachmentInfoQuery = 'select * from vtiger_attachments where attachmentsid = ?';
-       		 $attachres = $adb->pquery($attachmentInfoQuery,array($attachmentid));
-        	 $filename = $adb->query_result($attachres,0,'name');
-        	 $filepath = $adb->query_result($attachres,0,'path');
-       	 	 $filetype = $adb->query_result($attachres,0,'type');
-       		 $filesize = filesize($filepath.$attachmentid."_".$filename);
-      		 ExecuteQuery("update vtiger_notes set folderid = 0,filestatus=1,filelocationtype='I',filedownloadcount=0,fileversion='',filetype='".$filetype."',filesize='".$filesize."',filename='".$filename."' where notesid = ".$notesid);
-	}
-	else{
-		ExecuteQuery("update vtiger_notes set folderid=0,filestatus=0,filelocationtype='',filedownloadcount='',fileversion='',filetype='',filesize='',filename='' where notesid = ".$notesid);
-	
-	}
 	$query ="update vtiger_crmentity set setype='Documents' where crmid = ?";
 	$adb->pquery($query,array($notesid));
    }
+}
+
+$attachmentidQuery = 'select attachmentsid,crmid from vtiger_seattachmentsrel';
+$res = $adb->pquery($attachmentidQuery,array());
+if($adb->num_rows($res)>0){
+	for($index=0;$index<$adb->num_rows($res);$index++){
+		$attachmentid = $adb->query_result($res,$index,'attachmentsid');
+		$crmid = $adb->query_result($res,$index,'crmid');
+		if($attachmentid != ''){	
+			 $attachmentInfoQuery = 'select * from vtiger_attachments where attachmentsid = ?';
+			 $attachres = $adb->pquery($attachmentInfoQuery,array($attachmentid));
+			 $filename = $adb->query_result($attachres,0,'name');
+			 $attch_sub = $adb->query_result($attachres,0,'subject');
+			 $description = $adb->query_result($attachres,0,'description');
+			 $filepath = $adb->query_result($attachres,0,'path');
+		 	 $filetype = $adb->query_result($attachres,0,'type');
+			 $filesize = filesize($filepath.$attachmentid."_".$filename);
+			 $noteid_query = $adb->pquery("SELECT notesid FROM vtiger_notes WHERE notesid = ?",array($crmid));
+			 if($adb->num_rows($noteid_query)>0) {
+			 	$notesid = $adb->query_result($noteid_query,0,"notesid");
+			 	ExecuteQuery("update vtiger_notes set folderid = 0,filestatus=1,filelocationtype='I',filedownloadcount=0,fileversion='',filetype='".$filetype."',filesize='".$filesize."',filename='".$filename."' where notesid = ".$notesid);
+			 } else {
+				require_once("modules/Documents/Documents.php");
+
+			 	$notes_obj = new Documents();
+			 	if($attch_sub == '') $attch_sub = $filename;
+			 	$notes_obj->column_fields['notes_title'] = decode_html($attch_sub);
+			 	$notes_obj->column_fields['filename'] = decode_html($filename);
+			 	$notes_obj->column_fields['notecontent'] = decode_html($description);
+			 	$notes_obj->column_fields['assigned_user_id'] = 1;
+			 	$notes_obj->save("Documents");
+			 	$notesid = $notes_obj->id;
+		 		
+		 		ExecuteQuery("Update vtiger_notes set filedownloadcount=0, filestatus=1, fileversion='', filesize = $filesize, filetype = '$filetype' , filelocationtype = 'I' where notesid = $notesid");
+					ExecuteQuery("INSERT INTO vtiger_senotesrel VALUES($crmid,$notesid)");
+				ExecuteQuery("INSERT INTO vtiger_seattachmentsrel VALUES($notesid,$attachmentid)");
+			 }
+		}
+		else{
+			ExecuteQuery("update vtiger_notes set folderid=0, filestatus=1,filelocationtype='',filedownloadcount='',fileversion='',filetype='',filesize='',filename='' where notesid = ".$notesid);
+		}
+	}
 }
 
 $fieldid = Array();
@@ -348,8 +374,10 @@ if($noofrecords > 0)
     {
         $contactid = $adb->query_result($dbresult,$i,'contact_id');
         $notesid = $adb->query_result($dbresult,$i,'notesid');
-        if($contactid != 0)
-            ExecuteQuery("insert into vtiger_senotesrel values (".$contactid.",".$notesid.")");
+		$dup_check = $adb->pquery("SELECT * from vtiger_senotesrel WHERE  crmid = ? AND notesid = ?",array($contactid,$notesid));
+		if($contactid != 0 && $adb->num_rows($dup_check)==0){
+           ExecuteQuery("insert into vtiger_senotesrel values (".$contactid.",".$notesid.")");
+		}
     }
 }
 

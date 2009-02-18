@@ -89,6 +89,10 @@ class DatabaseDump {
 				$table_create_rs = mysql_query("SHOW CREATE TABLE `$table`");
 				$table_create_rows = mysql_fetch_array($table_create_rs);
 				$table_create_sql = $table_create_rows[1];
+				
+				// Our parser used for reading the dump file is very basic
+				// hence we will need to remove the new lines
+				$table_create_sql = str_replace("\n","",$table_create_sql);
 
 				// Write table create statement 
 				$this->writeln("");

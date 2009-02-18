@@ -2,7 +2,6 @@
 require_once('include/logging.php');
 require_once('include/db_backup/backup.php');
 include_once('adodb/adodb.inc.php');
-require_once('include/utils/utils.php');
 
 $log =& LoggerManager::getLogger('PLATFORM');
 $completed = false;
@@ -78,8 +77,10 @@ if($db_type)
 		if(@$olddb_conn->Connect($db_hostname, $db_username, $db_password, $old_db_name))
 		{
 			$old_db_exist_status = true;
+			
 			if(authenticate_user($user_name,$user_pwd)==true){
 				$is_admin = true;
+
 				$backup_DBFileName = $old_db_name."_".date("Ymd_His").".sql";
 				$dbdump = new DatabaseDump($db_hostname.$db_port, $db_username, $db_password);
 				$dumpfile = 'backup/'.$backup_DBFileName;
@@ -89,26 +90,20 @@ if($db_type)
 					$root_password = $_REQUEST['root_password'];
 		
 					// drop the current database if it exists
-					$dropdb_conn = &NewADOConnection($db_type);
-					if(@$dropdb_conn->Connect($db_hostname, $root_user, $root_password, $db_name)) {
-						$query = "drop database ".$db_name;
-						$dropdb_conn->Execute($query);
-						$dropdb_conn->Close();
-					}
-
 					// create the new database
 					$db_creation_failed = true;
 					$createdb_conn = &NewADOConnection($db_type);
 					if(@$createdb_conn->Connect($db_hostname, $root_user, $root_password)) {
-						$query = "create database ".$db_name;
+						mysql_query("drop database IF EXISTS ".$db_name);
+						$create_query = "create database ".$db_name;
 						// TODO: MySQL version less than 4.1.2 does not suppot UTF-8, a check here is required for it.
 						if($create_utf8_db == 'true') { 
 							if($db_type=='mysql')
-								$query .= " default character set utf8 default collate utf8_general_ci"; 
+								$create_query .= " default character set utf8 default collate utf8_general_ci"; 
 							$db_utf8_support = true;
 						}
 						
-						if($createdb_conn->Execute($query)) {
+						if($createdb_conn->Execute($create_query)) {
 							$db_creation_failed = false;
 						}
 						$createdb_conn->Close();
@@ -122,13 +117,17 @@ if($db_type)
 							// Check if the database that we are going to use supports UTF-8
 							$db_utf8_support = check_db_utf8_support($conn);
 						}
-						$query = implode('',file($dumpfile));
-						$query = html_2_utf8($query);
-						$queries=explode(";",$query);
-						for($i=0;$i<sizeof($queries);$i++){
-							$queries[$i] = utf8_2_html($queries[$i]);
-							$db_conn->Execute($queries[$i]);
-						}
+				 		$filecontents = file_get_contents($dumpfile); 		
+				 		$lines = split("\n", $filecontents);
+						foreach($lines as $line) {
+				 			$line = trim($line);
+				 			if(empty($line)) continue;
+				 			if(stripos($line, '--') === 0) {
+				 				// Ignore comments
+				 			} else {
+								$db_conn->Execute($line);
+				 			}
+				 		}
 						$db_conn->Close();
 		 			}
 				} else {
@@ -152,12 +151,11 @@ if($db_type)
 				echo 'NOT_VALID_USER';
 				return false;
 			}
+			$olddb_conn->Close();
 		}			
-		$olddb_conn->Close();
 	}
 	$conn->Close();
 }
-
 // Update vtiger charset to use
 $vt_charset = ($db_utf8_support)? "UTF-8" : "ISO-8859-1";
 
@@ -205,8 +203,63 @@ $host=$db_hostname;
 $dbname=$db_name;
 $username=$db_username;
 $passwd=$db_password;
-/* ----------------------------------------------------------Migration Starts HERE ------------------------------------------------------------------------*/
 
+/* open template configuration file read only */
+$templateFilename = 'config.template.php';
+$templateHandle = fopen($templateFilename, "r");
+if($templateHandle) {
+	/* open include configuration file write only */
+	$includeFilename = 'config.inc.php';
+	$includeHandle = fopen($includeFilename, "w");
+	if($includeHandle) {
+		while (!feof($templateHandle)) {
+		$buffer = fgets($templateHandle);
+
+		/* replace _DBC_ variable */
+		$buffer = str_replace( "_DBC_SERVER_", $dbconfig['db_server'], $buffer);
+		$buffer = str_replace( ":_DBC_PORT_", $dbconfig['db_port'], $buffer);
+		$buffer = str_replace( "_DBC_USER_", $db_username, $buffer);
+		$buffer = str_replace( "_DBC_PASS_", $db_password, $buffer);
+		$buffer = str_replace( "_DBC_NAME_", $db_name, $buffer);
+		$buffer = str_replace( "_DBC_TYPE_", $db_type, $buffer);
+
+		$buffer = str_replace( "_SITE_URL_", $site_URL, $buffer);
+
+		/* replace dir variable */
+		$buffer = str_replace( "_VT_ROOTDIR_", $root_directory, $buffer);
+		$buffer = str_replace( "_VT_CACHEDIR_", $cache_dir, $buffer);
+		$buffer = str_replace( "_VT_TMPDIR_", $cache_dir."images/", $buffer);
+		$buffer = str_replace( "_VT_UPLOADDIR_", $cache_dir."upload/", $buffer);
+		$buffer = str_replace( "_DB_STAT_", "true", $buffer);
+
+			/* replace charset variable */
+			$buffer = str_replace( "_VT_CHARSET_", $vt_charset, $buffer);
+
+		/* replace master currency variable */
+		$buffer = str_replace( "_MASTER_CURRENCY_", $currency_name, $buffer);
+
+		/* replace the application unique key variable */
+		$buffer = str_replace( "_VT_APP_UNIQKEY_", md5($root_directory), $buffer);
+		/* replace support email variable */
+		$buffer = str_replace( "_USER_SUPPORT_EMAIL_", $admin_email, $buffer);
+
+		fwrite($includeHandle, $buffer);
+		}
+
+	fclose($includeHandle);
+	}
+
+fclose($templateHandle);
+}
+  
+if (!($templateHandle && $includeHandle)) {
+	echo "FAILURE: Writing to config file. check permissions. ";
+	return false;
+}
+//CONFIG FILE CREATION ENDS
+/* ----------------------------------------------------------Migration Starts HERE ------------------------------------------------------------------------*/
+require_once('config.inc.php');
+require_once('include/utils/utils.php');
 require_once('include/database/PearDatabase.php');
 $adb = new PearDatabase($dbtype,$host,$dbname,$username,$passwd);
 
@@ -287,59 +340,6 @@ $_SESSION['adodb_current_object'] = $adb;
 		ExecuteQuery("insert into vtiger_version (id, old_version, current_version) values ('', '$versions[$source_version]', '$vtiger_current_version');");
 		$completed = true;
 	}
-
-/* open template configuration file read only */
-$templateFilename = 'config.template.php';
-$templateHandle = fopen($templateFilename, "r");
-if($templateHandle) {
-	/* open include configuration file write only */
-	$includeFilename = 'config.inc.php';
-	$includeHandle = fopen($includeFilename, "w");
-	if($includeHandle) {
-		while (!feof($templateHandle)) {
-		$buffer = fgets($templateHandle);
-
-		/* replace _DBC_ variable */
-		$buffer = str_replace( "_DBC_SERVER_", $dbconfig['db_server'], $buffer);
-		$buffer = str_replace( ":_DBC_PORT_", $dbconfig['db_port'], $buffer);
-		$buffer = str_replace( "_DBC_USER_", $db_username, $buffer);
-		$buffer = str_replace( "_DBC_PASS_", $db_password, $buffer);
-		$buffer = str_replace( "_DBC_NAME_", $db_name, $buffer);
-		$buffer = str_replace( "_DBC_TYPE_", $db_type, $buffer);
-
-		$buffer = str_replace( "_SITE_URL_", $site_URL, $buffer);
-
-		/* replace dir variable */
-		$buffer = str_replace( "_VT_ROOTDIR_", $root_directory, $buffer);
-		$buffer = str_replace( "_VT_CACHEDIR_", $cache_dir, $buffer);
-		$buffer = str_replace( "_VT_TMPDIR_", $cache_dir."images/", $buffer);
-		$buffer = str_replace( "_VT_UPLOADDIR_", $cache_dir."upload/", $buffer);
-		$buffer = str_replace( "_DB_STAT_", "true", $buffer);
-
-			/* replace charset variable */
-			$buffer = str_replace( "_VT_CHARSET_", $vt_charset, $buffer);
-
-		/* replace master currency variable */
-		$buffer = str_replace( "_MASTER_CURRENCY_", $currency_name, $buffer);
-
-		/* replace the application unique key variable */
-		$buffer = str_replace( "_VT_APP_UNIQKEY_", md5($root_directory), $buffer);
-		/* replace support email variable */
-		$buffer = str_replace( "_USER_SUPPORT_EMAIL_", $admin_email, $buffer);
-
-		fwrite($includeHandle, $buffer);
-		}
-
-	fclose($includeHandle);
-	}
-
-fclose($templateHandle);
-}
-  
-if (!($templateHandle && $includeHandle)) {
-	echo "FAILURE: Writing to config file. check permissions. ";
-	return false;
-}
 
 create_tab_data_file();
 create_parenttab_data_file();
