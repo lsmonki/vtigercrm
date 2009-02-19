@@ -8,27 +8,36 @@
  * All Rights Reserved.
  ************************************************************************************/
 
-require_once('include/utils/utils.php');
-require_once('vtlib/Vtiger/Module.php');
+/**
+ * ServicesSetup Class is used handle the pre and post installation setup for the module
+ */
+
+class ServicesSetup {
 	
-$moduleInstance = Vtiger_Module::getInstance('Services');
-
-$ttModuleInstance = Vtiger_Module::getInstance('HelpDesk');
-$ttModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
-
-$leadModuleInstance = Vtiger_Module::getInstance('Leads');
-$leadModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
-
-$accModuleInstance = Vtiger_Module::getInstance('Accounts');
-$accModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
-
-$conModuleInstance = Vtiger_Module::getInstance('Contacts');
-$conModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
-
-$potModuleInstance = Vtiger_Module::getInstance('Potentials');
-$potModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
-
-$pbModuleInstance = Vtiger_Module::getInstance('PriceBooks');
-$pbModuleInstance->setRelatedList($moduleInstance,'Services',array('select'),'get_pricebook_services');
-
+	function postInstall() {
+		require_once('include/utils/utils.php');
+		require_once('vtlib/Vtiger/Module.php');
+			
+		$moduleInstance = Vtiger_Module::getInstance('Services');
+		$moduleInstance->disallowSharing();
+		
+		$ttModuleInstance = Vtiger_Module::getInstance('HelpDesk');
+		$ttModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+		
+		$leadModuleInstance = Vtiger_Module::getInstance('Leads');
+		$leadModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+		
+		$accModuleInstance = Vtiger_Module::getInstance('Accounts');
+		$accModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+		
+		$conModuleInstance = Vtiger_Module::getInstance('Contacts');
+		$conModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+		
+		$potModuleInstance = Vtiger_Module::getInstance('Potentials');
+		$potModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+		
+		$pbModuleInstance = Vtiger_Module::getInstance('PriceBooks');
+		$pbModuleInstance->setRelatedList($moduleInstance,'Services',array('select'),'get_pricebook_services');
+	}
+}
 ?>

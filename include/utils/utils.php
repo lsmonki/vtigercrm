@@ -4626,19 +4626,24 @@ function installVtlibModule($packagename, $packagepath, $customized=false) {
 	} else if(Vtiger_Module::getInstance($module)) {
 		$log->fatal("$module already exists!");
 		$module_exists = true;
-	} else if(is_dir("modules/$module")) {
-		$log->info("$module folder exists! It will be Overwritten");
-		$module_dir_exists = true;
-	}
-	if($module_exists == false && $module_dir_exists == false) {
+	} 
+	if($module_exists == false) {
 		$log->debug("$module - Installation starts here");
-		$package->import($packagepath);
+		$package->import($packagepath, true);
 		$moduleInstance = Vtiger_Module::getInstance($module);
 		if (empty($moduleInstance)) {
 			$log->fatal("$module module installation failed!");
-		} else {			
+		} else {
 			if(file_exists("modules/$packagename/Setup.php")) {
-				require_once("modules/$packagename/Setup.php");
+				require_once("modules/$packagename/Setup.php");			
+				$setupClass = $module.'Setup';
+				if (class_exists($setupClass)) {
+					$setupObj = new $setupClass();
+					if(method_exists($setupObj, 'postInstall')) {
+						$log->debug("SETUP CLASS exists for $module - Method exists postInstall");
+						$setupObj->postInstall();
+					}
+				}
 			}
 			if (!$customized) {
 				$adb->pquery('UPDATE vtiger_tab SET customized=0 WHERE name=?', array($module));
@@ -4646,7 +4651,6 @@ function installVtlibModule($packagename, $packagepath, $customized=false) {
 		}
 	}	
 }
-
 
 // Function to install Vtlib Compliant - Optional Modules
 function installOptionalModules($selected_modules){

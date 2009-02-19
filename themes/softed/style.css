@@ -313,6 +313,19 @@ a:hover {
 	line-height:20px;
 }
 
+.dvtSelectedCellBottom {
+	border-left:1px solid #e0dddd;
+	border-bottom:1px solid #e0dddd;
+	border-top:0px solid #e0dddd;
+	border-right:1px solid #e0dddd;
+	padding-left:20px;
+	padding-right:20px;
+	background:#ffffff url(images/tab.gif) bottom repeat-x; 
+	font-weight:bold;
+	color: black;
+	line-height:20px;
+}
+
 .dvtUnSelectedCell {
 	border-left:1px solid #dedede;
 	border-top:1px solid #e0dddd;
@@ -327,6 +340,10 @@ a:hover {
 
 .dvtTabCache {
 	border-bottom:1px solid #dedede;
+}
+
+.dvtTabCacheBottom {
+	border-top:1px solid #dedede;
 }
 
 .dvtTabCacheBottom {

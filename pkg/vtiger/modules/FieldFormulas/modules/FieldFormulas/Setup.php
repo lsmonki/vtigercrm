@@ -8,25 +8,34 @@
  * All Rights Reserved.
  ************************************************************************************/
 
-require_once('include/utils/utils.php');
+/**
+ * FieldFormulasSetup Class is used handle the pre and post installation setup for the module
+ */
 
-global $adb;
-
-$fieldid = $adb->getUniqueID('vtiger_settings_field');
-$blockid = getSettingsBlockId('LBL_MODULE_MANAGER');
-
-$seq_res = $adb->query("SELECT max(sequence) AS max_seq FROM vtiger_settings_field");
-$seq = 1;
-if ($adb->num_rows($seq_res) > 0) {
-	$cur_seq = $adb->query_result($seq_res, 0, 'max_seq');
-	if ($cur_seq != null)	$seq = $cur_seq + 1;
-}
-
-$adb->pquery("INSERT INTO vtiger_settings_field(fieldid, blockid, name, iconpath, description, linkto, sequence) 
-	VALUES (?,?,?,?,?,?,?)", array($fieldid, $blockid, 'Field Formulas', 'modules/FieldFormulas/resources/FieldFormulas.png', 'Add custom equations to custom fields', 'index.php?module=FieldFormulas&action=index&parenttab=Settings', $seq));
-
-$tabid = getTabid('FieldFormulas');
-if(isset($tabid) && $tabid!='') {
-	$adb->pquery('DELETE FROM vtiger_profile2tab WHERE tabid = ?', array($tabid));
+class FieldFormulasSetup {
+	
+	function postInstall() {
+		require_once('include/utils/utils.php');
+		
+		global $adb;
+		
+		$fieldid = $adb->getUniqueID('vtiger_settings_field');
+		$blockid = getSettingsBlockId('LBL_MODULE_MANAGER');
+		
+		$seq_res = $adb->query("SELECT max(sequence) AS max_seq FROM vtiger_settings_field");
+		$seq = 1;
+		if ($adb->num_rows($seq_res) > 0) {
+			$cur_seq = $adb->query_result($seq_res, 0, 'max_seq');
+			if ($cur_seq != null)	$seq = $cur_seq + 1;
+		}
+		
+		$adb->pquery("INSERT INTO vtiger_settings_field(fieldid, blockid, name, iconpath, description, linkto, sequence) 
+			VALUES (?,?,?,?,?,?,?)", array($fieldid, $blockid, 'Field Formulas', 'modules/FieldFormulas/resources/FieldFormulas.png', 'Add custom equations to custom fields', 'index.php?module=FieldFormulas&action=index&parenttab=Settings', $seq));
+		
+		$tabid = getTabid('FieldFormulas');
+		if(isset($tabid) && $tabid!='') {
+			$adb->pquery('DELETE FROM vtiger_profile2tab WHERE tabid = ?', array($tabid));
+		}
+	}
 }
 ?>

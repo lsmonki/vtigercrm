@@ -24,7 +24,7 @@ function vtEditExpressions($adb, $appStrings, $current_language, $image_path, $f
 }
 	
 $modules = vtGetModules($adb);
-if(vtlib_isModuleActive('FieldFormulas') && in_array($_REQUEST['formodule'],$modules)) {
+if(vtlib_isModuleActive('FieldFormulas') && in_array(getTranslatedString($_REQUEST['formodule']),$modules)) {
 	vtEditExpressions($adb, $app_strings, $current_language, $image_path, $_REQUEST['formodule']);
 } else {
 	echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";

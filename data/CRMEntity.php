@@ -28,18 +28,7 @@ require_once('include/utils/UserInfoUtil.php');
 
 class CRMEntity
 {
-  /**
-   * This method implements a generic insert and update logic for any SugarBean
-   * This method only works for subclasses that implement the same variable names.
-   * This method uses the presence of an id vtiger_field that is not null to signify and update.
-   * The id vtiger_field should not be set otherwise.
-   * todo - Add support for vtiger_field type validation and encoding of parameters.
-   * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-   * All Rights Reserved.
-   * Contributor(s): ______________________________________..
-   */
-
-  var $ownedby;
+  	var $ownedby;
    
 	static function getInstance($module) {
 		$modName = $module;
@@ -50,61 +39,68 @@ class CRMEntity
 		$focus = new $modName();
 		return $focus;		
 	}
-	
-	
-  function saveentity($module,$fileid='')
-  {
-	global $current_user, $adb;//$adb added by raju for mass mailing
-	$insertion_mode = $this->mode;
 
-	$this->db->println("TRANS saveentity starts $module");
-	$this->db->startTransaction();
-	
-
-	foreach($this->tab_name as $table_name)
+	/**
+   	* This method implements a generic insert and update logic for any SugarBean
+   	* This method only works for subclasses that implement the same variable names.
+   	* This method uses the presence of an id vtiger_field that is not null to signify and update.
+   	* The id vtiger_field should not be set otherwise.
+   	* todo - Add support for vtiger_field type validation and encoding of parameters.
+   	* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+   	* All Rights Reserved.
+   	* Contributor(s): ______________________________________..
+   	*/	
+	function saveentity($module,$fileid='')
 	{
-			
-		if($table_name == "vtiger_crmentity")
-		{
-			$this->insertIntoCrmEntity($module,$fileid);
-		}
-		else
-		{
-			$this->insertIntoEntityTable($table_name, $module,$fileid);			
-		}
-	}
+		global $current_user, $adb;//$adb added by raju for mass mailing
+		$insertion_mode = $this->mode;
 	
-	//Calling the Module specific save code
-	$this->save_module($module);
-
-	$assigntype=$_REQUEST['assigntype'];
-	if($module != "Calendar")
-          $this->whomToSendMail($module,$this ->mode,$assigntype);
+		$this->db->println("TRANS saveentity starts $module");
+		$this->db->startTransaction();
+		
 	
-	$this->db->completeTransaction();
-	$this->db->println("TRANS saveentity ends");
-
-	// vtlib customization: Hook provide to enable generic module relation.
-	if($_REQUEST['return_action'] == 'CallRelatedList') {
-		$for_module = $_REQUEST['return_module'];
-		$for_crmid  = $_REQUEST['return_id'];
-
-		require_once("modules/$for_module/$for_module.php");
-		$on_focus = new $for_module();
-		// Do conditional check && call only for Custom Module at present
-		// TOOD: $on_focus->IsCustomModule is not required if save_related_module function
-		// is used for core modules as well.
-		if($on_focus->IsCustomModule && method_exists($on_focus, 'save_related_module')) {
-			$with_module = $module;
-			$with_crmid = $this->id;
-			$on_focus->save_related_module(
-				$for_module, $for_crmid, $with_module, $with_crmid);
+		foreach($this->tab_name as $table_name)
+		{
+				
+			if($table_name == "vtiger_crmentity")
+			{
+				$this->insertIntoCrmEntity($module,$fileid);
+			}
+			else
+			{
+				$this->insertIntoEntityTable($table_name, $module,$fileid);			
+			}
 		}
-	}
+		
+		//Calling the Module specific save code
+		$this->save_module($module);
+	
+		$assigntype=$_REQUEST['assigntype'];
+		if($module != "Calendar")
+	          $this->whomToSendMail($module,$this ->mode,$assigntype);
+		
+		$this->db->completeTransaction();
+		$this->db->println("TRANS saveentity ends");
+	
+		// vtlib customization: Hook provide to enable generic module relation.
+		if($_REQUEST['return_action'] == 'CallRelatedList') {
+			$for_module = $_REQUEST['return_module'];
+			$for_crmid  = $_REQUEST['return_id'];
+	
+			require_once("modules/$for_module/$for_module.php");
+			$on_focus = new $for_module();
+			// Do conditional check && call only for Custom Module at present
+			// TOOD: $on_focus->IsCustomModule is not required if save_related_module function
+			// is used for core modules as well.
+			if($on_focus->IsCustomModule && method_exists($on_focus, 'save_related_module')) {
+				$with_module = $module;
+				$with_crmid = $this->id;
+				$on_focus->save_related_module(
+					$for_module, $for_crmid, $with_module, $with_crmid);
+			}
+		}
 	// END
-  }
-
-
+	}
 	
 	function insertIntoAttachment1($id,$module,$filedata,$filename,$filesize,$filetype,$user_id)
 	{

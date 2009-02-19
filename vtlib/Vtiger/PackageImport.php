@@ -110,7 +110,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	 * Check if zipfile is a valid package
 	 * @access private
 	 */
-	function checkzip($zipfile) {
+	function checkZip($zipfile) {
 		$unzip = new Vtiger_Unzip($zipfile);
 		$filelist = $unzip->getList();
 
@@ -119,6 +119,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		$vtigerversion_found = false;
 
 		$modulename = null;
+		$language_modulename = null;
 
 		foreach($filelist as $filename=>$fileinfo) {
 			$matches = Array();
@@ -136,9 +137,14 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 					continue; 
 				}
 			}
-			// Check for module language file.
+			// Check for language file.
 			preg_match("/modules\/([^\/]+)\/language\/en_us.lang.php/", $filename, $matches);
-			if(count($matches) && strcmp($modulename, $matches[1]) === 0) { $languagefile_found = true; continue; }
+			if(count($matches)) { $language_modulename = $matches[1]; continue; }
+		}
+
+		// Verify module language file.
+		if(!empty($language_modulename) && $language_modulename == $modulename) { 
+			$languagefile_found = true; 
 		}
 
 		if(!empty($this->_modulexml) && 
@@ -254,6 +260,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	 * Import Module from zip file
 	 * @param String Zip file name
 	 * @param Boolean True for overwriting existing module
+	 *
+	 * @todo overwrite feature is not functionally currently.
 	 */
 	function import($zipfile, $overwrite=false) {
 		$module = $this->initImport($zipfile, $overwrite);

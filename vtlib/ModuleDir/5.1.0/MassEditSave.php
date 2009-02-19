@@ -39,15 +39,22 @@ if(isset($idlist)) {
 		$focus->id = $recordid;		
 		foreach($focus->column_fields as $fieldname => $val)
 		{    	
-			if(isset($_REQUEST[$fieldname."_mass_edit_check"]))
-			{
-				if(is_array($_REQUEST[$fieldname]))
-					$value = $_REQUEST[$fieldname];
-				else
-					$value = trim($_REQUEST[$fieldname]);
+			if(isset($_REQUEST[$fieldname."_mass_edit_check"])) {
+				if($fieldname == 'assigned_user_id'){
+					if($_REQUEST['assigntype'] == 'U')  {
+						$value = $_REQUEST['assigned_user_id'];
+					} elseif($_REQUEST['assigntype'] == 'T') {
+						$value = $_REQUEST['assigned_group_id'];
+					}
+				} else {
+					if(is_array($_REQUEST[$fieldname]))
+						$value = $_REQUEST[$fieldname];
+					else
+						$value = trim($_REQUEST[$fieldname]);
+				}
 				$focus->column_fields[$fieldname] = $value;
 			}
-			else{
+			else {
 				$focus->column_fields[$fieldname] = decode_html($focus->column_fields[$fieldname]);
 			}
 		}
