@@ -84,6 +84,21 @@ if(!@rename("install.php", $renamefile."install.php.txt"))
 	}
 }
 
+$mig_file_renamed = false;
+//@rename("migrate.php", $renamefile."migrate.php.txt");
+if(!@rename("migrate.php", $renamefile."migrate.php.txt"))
+{
+	if (@copy ("migrate.php", $renamefile."migrate.php.txt"))
+       	{
+        	 unlink($renamefile."migrate.php.txt");
+ 			$mig_file_renamed = true;
+     	}
+	else
+	{
+		echo "<b><font color='red'>We strongly suggest you to rename the migrate.php file.</font></b>";
+	}
+}
+
 $dir_renamed = false;
 //@rename("install/", $renamefile."install/");
 if(!@rename("install/", $renamefile."install/"))
@@ -116,6 +131,9 @@ $_SESSION['VTIGER_DB_VERSION']='5.1.0';
 				}
 				if($dir_renamed==true){
 					echo "<li>Your install folder too has been renamed to ".$renamefile."install/.";
+				}  
+				if($mig_file_renamed==true){
+					echo "<li>Your migrate.php file has been renamed to ".$renamefile."migrate.php.txt.";
 				}  
 			?>
 			<li>Your older version is available at <?php echo $source_directory;?>.

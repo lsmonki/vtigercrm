@@ -85,7 +85,7 @@ if($saveimage=="true")
 	$log->debug("Assign the Image name to the vtiger_field name ");
 }
 
-if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != '')
+if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != '' && $_REQUEST['return_id'] != $focus->id)
 	$focus->parentid = $_REQUEST['return_id'];
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module']!='')
 	$focus->return_module = $_REQUEST['return_module'];

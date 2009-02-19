@@ -114,12 +114,14 @@ function showhidediv()
 //this is to rename the installation file and folder so that no one destroys the setup
 $renamefile = uniqid(rand(), true);
 
+$ins_file_renamed = false;
 //@rename("install.php", $renamefile."install.php.txt");
 if(!@rename("install.php", $renamefile."install.php.txt"))
 {
 	if (@copy ("install.php", $renamefile."install.php.txt"))
        	{
         	 unlink($renamefile."install.php.txt");
+ 			 $ins_file_renamed = true;
      	}
 	else
 	{
@@ -127,12 +129,29 @@ if(!@rename("install.php", $renamefile."install.php.txt"))
 	}
 }
 
+$mig_file_renamed = false;
+//@rename("migrate.php", $renamefile."migrate.php.txt");
+if(!@rename("migrate.php", $renamefile."migrate.php.txt"))
+{
+	if (@copy ("migrate.php", $renamefile."migrate.php.txt"))
+       	{
+        	 unlink($renamefile."migrate.php.txt");
+ 			$mig_file_renamed = true;
+     	}
+	else
+	{
+		echo "<b><font color='red'>We strongly suggest you to rename the migrate.php file.</font></b>";
+	}
+}
+
+$ins_dir_renamed = false;
 //@rename("install/", $renamefile."install/");
 if(!@rename("install/", $renamefile."install/"))
 {
 	if (@copy ("install/", $renamefile."install/"))
        	{
         	 unlink($renamefile."install/");
+ 			 $ins_dir_renamed = true;
      	}
 	else
 	{
@@ -159,10 +178,17 @@ if(isset($application_unique_key) && !empty($application_unique_key)) {
 			<hr noshade size=1>
 			<div style="width:100%;padding:10px; "align=left>
 			<ul>
-			<li>Your install.php file has been renamed to <?php echo $renamefile;?>install.php.txt.
-			<li>Your install folder too has been renamed to <?php echo $renamefile;?>install/.  
-			<li>Please log in using the "admin" user name and the password you entered in step 2.
-			<li>Do not forget to set the outgoing emailserver, setup accessible from Settings-&gt;Outgoing Server
+			<?php if($ins_file_renamed==true){ ?>
+			<li>Your install.php file has been renamed to <?php echo $renamefile;?>install.php.txt.</li>
+			<?php }?>
+			<?php if($mig_file_renamed==true){ ?>
+			<li>Your migrate.php file has been renamed to <?php echo $renamefile;?>migrate.php.txt.</li>
+			<?php }?>
+			<?php if($ins_dir_renamed==true){ ?>
+			<li>Your install folder too has been renamed to <?php echo $renamefile;?>install/. </li> 
+			<?php }?>
+			<li>Please log in using the "admin" user name and the password you entered in step 2.</li>
+			<li>Do not forget to set the outgoing emailserver, setup accessible from Settings-&gt;Outgoing Server</li>
 			</ul>
 			<ul>
 			<li>Rename htaccess.txt file to .htaccess to control public file access. &nbsp;

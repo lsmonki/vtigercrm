@@ -31,6 +31,7 @@ if($singlepane_view == 'true' && $action == 'CallRelatedList') {
 	if($record != '') {
 	    $focus->retrieve_entity_info($record, $currentModule);
    		$focus->id = $record;
+   		$focus->name=$focus->column_fields['productname'];
 		$product_base_currency = getProductBaseCurrency($focus->id,$currentModule);
 	} else {
 		$product_base_currency = fetchCurrency($current_user->id);
@@ -54,7 +55,7 @@ if($singlepane_view == 'true' && $action == 'CallRelatedList') {
 	$smarty->assign('MODE', $focus->mode);
 	$smarty->assign('CHECK', $tool_buttons);
 
-	$smarty->assign('NAME', $focus->column_fields[$focus->def_detailview_recname]);
+	$smarty->assign('NAME', $focus->name);
 	$smarty->assign('UPDATEINFO',updateInfo($focus->id));
 	
 	$smarty->assign("CURRENCY_ID",$product_base_currency);

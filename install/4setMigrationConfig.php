@@ -345,6 +345,7 @@ function migrate(){
 					else
 					{
 						str=trim(str);
+						
 						if(str=='') {
 							location.href ='install.php?source_directory='+source_path+'&root_directory='+root_directory+'&file=5MigrationComplete.php';
 						}else{
@@ -365,7 +366,7 @@ function migrate(){
 function redirect(){
 	var source_path = document.getElementById("source_directory").value;
 	var root_directory =  document.getElementById("root_directory").value;
-	location.href ='install.php?source_directory='+source_path+'&root_directory='+root_directory+'&file=3MigrationComplete.php';
+	location.href ='install.php?source_directory='+source_path+'&root_directory='+root_directory+'&file=5MigrationComplete.php';
 	
 }
 function placeAtCenter(node){

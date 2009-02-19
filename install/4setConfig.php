@@ -325,20 +325,20 @@ function verify_data(form) {
 	<br><br><br>
 	<!-- Table for cfgwiz starts -->
 
-	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<table border=0 cellspacing=0 cellpadding=0 width=85% align=center>
 	<tr>
 		<td class="cwHeadBg" align=left><img src="include/install/images/configwizard.gif" alt="Configuration Wizard" hspace="20" title="Configuration Wizard"></td>
 		<td class="cwHeadBg1" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
 		<td class="cwHeadBg1" width=2%></td>
 	</tr>
 	</table>
-	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<table border=0 cellspacing=0 cellpadding=0 width=85% align=center>
 	<tr>
 		<td background="include/install/images/topInnerShadow.gif" align=left><img src="include/install/images/topInnerShadow.gif" ></td>
 
 	</tr>
 	</table>
-	<table border=0 cellspacing=0 cellpadding=10 width=80% align=center>
+	<table border=0 cellspacing=0 cellpadding=10 width=85% align=center>
 	<tr>
 		<td class="small" bgcolor="#4572BE" align=center>
 			<!-- Master display -->
@@ -357,7 +357,7 @@ function verify_data(form) {
 					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Finish</div></td></tr>
 					</table>
 				</td -->
-				<td width=80% valign=top class="cwContentDisplay" align=left>
+				<td width=90% valign=top class="cwContentDisplay" align=left>
 				<!-- Right side tabs -->
 				    <form action="install.php" method="post" name="installform" id="form" name="setConfig" id="form">
 				    <table border=0 cellspacing=0 cellpadding=10 width=100%>
@@ -519,18 +519,18 @@ function verify_data(form) {
 	</td>
 	</tr>
 	</table>
-	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<table border=0 cellspacing=0 cellpadding=0 width=85% align=center>
 	<tr>
 
 		<td background="include/install/images/bottomGradient.gif"><img src="include/install/images/bottomGradient.gif"></td>
 	</tr>
 	</table>
-	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<table border=0 cellspacing=0 cellpadding=0 width=85% align=center>
 	<tr>
 		<td align=center><img src="include/install/images/bottomShadow.jpg"></td>
 	</tr>
 	</table>	
-	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<table border=0 cellspacing=0 cellpadding=0 width=85% align=center>
 
       	<tr>
         	<td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td>

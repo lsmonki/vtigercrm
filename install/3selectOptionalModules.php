@@ -187,6 +187,8 @@ function ModuleSelected(module){
 			selected_modules = selected_modules.replace(module+":","")
 		} else if(selected_modules.indexOf(":"+module)>-1){
 			selected_modules = selected_modules.replace(":"+module,"")
+		} else {
+			selected_modules = selected_modules.replace(module,"")
 		}
 	}
 	document.getElementById('selected_modules').value = selected_modules;
