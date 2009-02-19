@@ -351,7 +351,7 @@ class Invoice extends CRMEntity {
 		global $log;
 		if(empty($return_module) || empty($return_id)) return;
 		
-		if($return_module == 'Accounts') {
+		if($return_module == 'Accounts' || $return_module == 'Contacts') {
 			$this->trash('Invoice',$id);
 		} elseif($return_module=='SalesOrder') {
 			$relation_query = 'UPDATE vtiger_invoice set salesorderid=0 where invoiceid=?';

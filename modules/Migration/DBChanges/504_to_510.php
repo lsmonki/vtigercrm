@@ -1591,6 +1591,9 @@ for($z=0;$z<$adb->num_rows($result);$z++){
 	$adb->query($sql);
 }
 
+/* Add Invoices to the related list of Contacts */
+ExecuteQuery("INSERT INTO vtiger_relatedlists VALUES(".$adb->getUniqueID('vtiger_relatedlists').",". getTabid('Contacts').",".getTabid('Invoice').",'get_invoices',12,'Invoice',0, 'add')");
+
 /* Install Vtlib Compliant Modules */
 installMandatoryModules();
 require_once('include/utils/installVtlibSelectedModules.php');

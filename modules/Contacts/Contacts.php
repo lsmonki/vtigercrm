@@ -675,6 +675,53 @@ class Contacts extends CRMEntity {
 		return GetRelatedList('Contacts','Campaigns',$focus,$query,$button,$returnset);
 
 	}
+	
+	/**
+	* Function to get Contact related Invoices 
+	* @param  integer   $id      - contactid
+	* returns related Invoices record in array format
+	*/
+	function get_invoices($id)
+	{
+		global $log, $singlepane_view;
+		$log->debug("Entering get_invoices(".$id.") method ...");
+		global $app_strings;
+		require_once('modules/Invoice/Invoice.php');
+
+		$focus = new Invoice();
+
+		$button = '';
+		if(isPermitted("Invoice",1,"") == 'yes')
+		{
+			$button .= '<input title="'.$app_strings['LBL_NEW_INVOICE_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_INVOICE_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Invoice\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_INVOICE_BUTTON'].'">&nbsp;</td>';
+		}
+		if($singlepane_view == 'true')
+			$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module=Contacts&return_action=CallRelatedList&return_id='.$id;
+
+		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
+			vtiger_crmentity.*,
+			vtiger_invoice.*,
+			vtiger_contactdetails.lastname,vtiger_contactdetails.firstname,
+			vtiger_salesorder.subject AS salessubject
+			FROM vtiger_invoice
+			INNER JOIN vtiger_crmentity
+				ON vtiger_crmentity.crmid = vtiger_invoice.invoiceid
+			LEFT OUTER JOIN vtiger_contactdetails
+				ON vtiger_contactdetails.contactid = vtiger_invoice.contactid
+			LEFT OUTER JOIN vtiger_salesorder
+				ON vtiger_salesorder.salesorderid = vtiger_invoice.salesorderid
+			LEFT JOIN vtiger_groups
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_users
+				ON vtiger_crmentity.smownerid = vtiger_users.id
+			WHERE vtiger_crmentity.deleted = 0
+			AND vtiger_contactdetails.contactid = ".$id;
+		$log->debug("Exiting get_invoices method ...");
+		return GetRelatedList('Contacts','Invoice',$focus,$query,$button,$returnset);
+	}
+	
 	/** Function to export the contact records in CSV Format
 	* @param reference variable - where condition is passed when the query is executed
 	* Returns Export Contacts Query.
