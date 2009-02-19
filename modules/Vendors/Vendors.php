@@ -373,8 +373,8 @@ class Vendors extends CRMEntity {
 		global $log;
 		//Deleting Vendor related PO.
 		$po_q = 'SELECT vtiger_crmentity.crmid FROM vtiger_crmentity 
-			INNDER JOIN vtiger_purchaseorder ON vtiger_crmentity.crmid=vtiger_purchaseorder.purchaseorderid 
-			INNDER JOIN vtiger_vendor ON vtiger_vendor.vendorid=vtiger_purchaseorder.vendorid 
+			INNER JOIN vtiger_purchaseorder ON vtiger_crmentity.crmid=vtiger_purchaseorder.purchaseorderid 
+			INNER JOIN vtiger_vendor ON vtiger_vendor.vendorid=vtiger_purchaseorder.vendorid 
 			WHERE vtiger_crmentity.deleted=0 AND vtiger_purchaseorder.vendorid=?';
 		$po_res = $this->db->pquery($po_q, array($id));
 		$po_ids_list = array();

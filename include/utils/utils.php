@@ -3118,7 +3118,7 @@ function getRecordValues($id_array,$module)
 	global $adb,$current_user;
 	global $app_strings;
 	$tabid=getTabid($module);	
-	$query="select fieldname,fieldlabel from vtiger_field where tabid=".$tabid." and fieldname  not in ('createdtime','modifiedtime') and vtiger_field.presence in (0,2)";
+	$query="select fieldname,fieldlabel from vtiger_field where tabid=".$tabid." and fieldname  not in ('createdtime','modifiedtime') and vtiger_field.presence in (0,2) and uitype not in('4')";
 	$result=$adb->query($query);
 	$no_rows=$adb->num_rows($result);
 
@@ -3142,7 +3142,7 @@ function getRecordValues($id_array,$module)
 			}
 	}
 	$tabid=getTabid($module);	
-	$query="select fieldname,uitype,fieldlabel from vtiger_field where tabid=".$tabid." and fieldname not in ('createdtime','modifiedtime') and vtiger_field.presence in (0,2)" ;
+	$query="select fieldname,uitype,fieldlabel from vtiger_field where tabid=".$tabid." and fieldname not in ('createdtime','modifiedtime') and vtiger_field.presence in (0,2) and uitype not in('4')" ;
 
 	$result=$adb->query($query);
 	$no_rows=$adb->num_rows($result);
