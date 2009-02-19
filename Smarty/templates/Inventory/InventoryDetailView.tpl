@@ -112,8 +112,6 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 		}
 	);
 }
-
-window.onresize = setCoOrdinate;
 {/literal}
 
 </script>

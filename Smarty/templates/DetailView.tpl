@@ -62,15 +62,13 @@ function showHideStatus(sId,anchorImgId,sImagePath)
 <!-- End Of Code modified by SAKTI on 10th Apr, 2008 -->
 
 <!-- Start of code added by SAKTI on 16th Jun, 2008 -->
-function setCoOrdinate(elemId)
-{
+function setCoOrdinate(elemId){
 	oBtnObj = document.getElementById(elemId);
 	var tagName = document.getElementById('lstRecordLayout');
 	leftpos  = 0;
 	toppos = 0;
 	aTag = oBtnObj;
-	do 
-	{					  
+	do{					  
 	  leftpos  += aTag.offsetLeft;
 	  toppos += aTag.offsetTop;
 	} while(aTag = aTag.offsetParent);
@@ -95,15 +93,14 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 				var topSide = findPosY(obj);
 				var maxW = tagName.style.width;
 				var widthM = maxW.substring(0,maxW.length-2);
-				var getVal = eval(leftSide) + eval(widthM);
+				var getVal = parseInt(leftSide) + parseInt(widthM);
 				if(getVal  > document.body.clientWidth ){
-					leftSide = eval(leftSide) - eval(widthM);
+					leftSide = parseInt(leftSide) - parseInt(widthM);
 					tagName.style.left = leftSide + 230 + 'px';
-					tagName.style.top = top + 20 + 'px';
-					
+					tagName.style.top = topSide + 20 + 'px';
+				}else{
+					tagName.style.left = leftSide + 230 + 'px';
 				}
-				else
-					tagName.style.left = leftSide + 230 + 'px';
 				setCoOrdinate(obj.id);
 				
 				tagName.style.display = 'block';
@@ -112,8 +109,6 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 		}
 	);
 }
-
-window.onresize = setCoOrdinate;
 <!-- End of code added by SAKTI on 16th Jun, 2008 -->
 {/literal}
 function tagvalidate()

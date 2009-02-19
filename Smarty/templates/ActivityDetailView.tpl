@@ -81,8 +81,6 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 		}
 	);
 }
-
-window.onresize = setCoOrdinate;
 {/literal}
 function DeleteTag(id,recordid)
 {ldelim}

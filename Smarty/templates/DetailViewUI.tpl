@@ -255,16 +255,16 @@
                                                            <a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">{$APP.LBL_CANCEL_BUTTON_LABEL}</a>
                                                                         </div>
                                                                 </td>	
-					     {elseif $keyid eq '53'} <!--Assigned To-->
-                    				  <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">
-                    				{if $keyadmin eq 1}
-			                        	<a href="{$keyseclink.0}">{$keyval}</a>         
-			                        {else}	
-                        				{$keyval}
-                    				{/if}
-					&nbsp;</span>
-                    				<div id="editarea_{$label}" style="display:none;">
-			                   	<input type="hidden" id="hdtxt_{$label}" value="{$keyval}"></input>
+						{elseif $keyid eq '53'} <!--Assigned To-->
+							<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}">&nbsp;<span id="dtlview_{$label}">
+							{if $keyadmin eq 1}
+								<a href="{$keyseclink.0}">{$keyval}</a>         
+							{else}	
+								{$keyval}
+							{/if}
+							&nbsp;</span>
+							<div id="editarea_{$label}" style="display:none;">
+							<input type="hidden" id="hdtxt_{$label}" value="{$keyval}"></input>
 						{if $keyoptions.0 eq 'User'}
 							<input name="assigntype" id="assigntype" checked="checked" value="U" onclick="toggleAssignType(this.value),setSelectValue('{$label}');" type="radio">&nbsp;{$APP.LBL_USER}
 							{if $keyoptions.2 neq ''}

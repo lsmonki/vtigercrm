@@ -14,7 +14,7 @@ function _defPopup(){
 	var parentDiv = document.getElementById('notificationDiv');
 	parentDiv.appendChild(popupDiv);
 	popupDiv.id = randomID;
-	popupDiv.class="lvtCol fixedLay1";
+	popupDiv.className = "lvtCol fixedLay1";
 	popupDiv.style.float="right"; 
 	popupDiv.style.paddingRight="5px";
 	popupDiv.style.overflow="hidden";
@@ -41,7 +41,7 @@ function _defPopup(){
 			remainOnScreen = time * 1000;
 		}
 		popupDiv.innerHTML = node; 
-		popupDiv.style.display = "block" 
+		popupDiv.style.display = "block";
 		popupDiv.style.display = "";
 		var dimension = getDimension(popupDiv);
 		maxheight = dimension.y;
