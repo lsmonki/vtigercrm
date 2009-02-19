@@ -347,12 +347,17 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 			</td>
 
 		{elseif $uitype eq 85}
-                        <td width="20%" class="dvtCellLabel" align=right>
-                                <font color="red">{$mandatory_field}</font>{$usefldlabel} {if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}
-                        </td>
-                        <td width="30%" align=left class="dvtCellInfo">
-                                <img src="{'skype.gif'|@vtiger_imageurl:$THEME}" alt="Skype" title="Skype" LANGUAGE=javascript align="absmiddle"></img><input type="text" tabindex="{$vt_tab}" name="{$fldname}" style="border:1px solid #bababa;" size="27" onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" value="{$fldvalue}">
-                        </td>
+            <td width="20%" class="dvtCellLabel" align=right>
+                <font color="red">{$mandatory_field}</font>
+                {$usefldlabel}
+                {if $MASS_EDIT eq '1'}
+                	<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >
+                {/if}
+            </td>
+            <td width="30%" align=left class="dvtCellInfo">
+				<img src="{'skype.gif'|@vtiger_imageurl:$THEME}" alt="Skype" title="Skype" LANGUAGE=javascript align="absmiddle"></img>
+				<input class='detailedViewTextBox' type="text" tabindex="{$vt_tab}" name="{$fldname}" style="border:1px solid #bababa;" size="27" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" value="{$fldvalue}">
+            </td>
 
 		{elseif $uitype eq 71 || $uitype eq 72}
 			<td width="20%" class="dvtCellLabel" align=right>

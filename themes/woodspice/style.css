@@ -2093,7 +2093,7 @@ a.customMnuSelected{
     overflow-x:hidden;
     overflow-y:hidden;
     background-color:#F6F4E7;
-	margin-top: 1px; /* added */
+	margin-top: 0px; /* added */
 }
 
 a.drop_down{
