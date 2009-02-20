@@ -1,46 +1,39 @@
 <?php
 	
 	function vtws_delete($id,$user){
-
-		$ids = getIdComponents($id);
-		$elemTypeId = $ids[0];
-		$elemid = $ids[1];
+		global $log,$adb;
+		$webserviceObject = VtigerWebserviceObject::fromId($adb,$id);
+		$handlerPath = $webserviceObject->getHandlerPath();
+		$handlerClass = $webserviceObject->getHandlerClass();
 		
-		if(!$elemTypeId || !$elemid){
-			return new WebServiceError(WebServiceErrorCode::$INVALIDID,"Id specified is incorrect");
-		}
+		require_once $handlerPath;
 		
-		$crmObject = new VtigerCRMObject($elemTypeId, true);
+		$handler = new $handlerClass($webserviceObject,$user,$adb,$log);
+		$meta = $handler->getMeta();
+		$entityName = $meta->getObjectEntityName($id);
 		
-		$seType = $crmObject->getSEType($elemid);
 		$types = vtws_listtypes($user);
-		if(!in_array($seType,$types['types'])){
-			return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied");
-		}
-		if($crmObject->getModuleName() != $seType){
-			return new WebServiceError(WebServiceErrorCode::$INVALIDID,"Id specified is incorrect");
+		if(!in_array($entityName,$types['types'])){
+			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied");
 		}
 		
-		$meta = new VtigerCRMObjectMeta($crmObject,$user);
-		$meta->retrieveMeta();
-		
-		if(!$meta->hasAccess()){
-			return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to access object type is denied");
-		}else if(!$meta->hasWriteAccess()){
-			return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to write is denied");
-		}else if(!$meta->hasPermission(VtigerCRMObjectMeta::$DELETE,$elemid)){
-			return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to delete given object is denied");
+		if($entityName !== $webserviceObject->getEntityName()){
+			throw new WebServiceException(WebServiceErrorCode::$INVALIDID,"Id specified is incorrect");
 		}
 		
-		if(!$crmObject->exists($elemid)){
-			return new WebServiceError(WebServiceErrorCode::$RECORDNOTFOUND,"Record you are trying to access is not found");
+		if(!$meta->hasPermission(EntityMeta::$DELETE,$id)){
+			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to read given object is denied");
 		}
 		
-		$error = $crmObject->delete($elemid);
-		if(!$error){
-			return new WebServiceError(WebServiceErrorCode::$DATABASEQUERYERROR,"Database error while performing required operation");
+		$idComponents = vtws_getIdComponents($id);
+		if(!$meta->exists($idComponents[1])){
+			throw new WebServiceException(WebServiceErrorCode::$RECORDNOTFOUND,"Record you are trying to access is not found");
 		}
-		return array("status"=>"successful");
+		
+		if($meta->hasWriteAccess()!==true){
+			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to write is denied");
+		}
+		return $handler->delete($id);
 	}
 	
 ?>

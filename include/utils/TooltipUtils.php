@@ -1,4 +1,6 @@
 <?php
+require_once 'include/Webservices/WebserviceEntityOperation.php';
+require_once 'include/Webservices/EntityMeta.php';
 require_once 'include/Webservices/DescribeObject.php';
 require_once 'include/Webservices/VtigerCRMObject.php';
 require_once 'include/Webservices/VtigerCRMObjectMeta.php';

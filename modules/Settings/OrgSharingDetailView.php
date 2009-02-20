@@ -80,15 +80,16 @@ $custom_access['Invoice'] = getSharingRuleList('Invoice');
 //Document Sharing
 $custom_access['Documents'] = getSharingRuleList('Documents');
 
-// vtlib customization: Hook added to allow custom sharing rules for other modules 
-// for which sharing access is enabled.
-$vtlib_modules = vtlib_getModuleNameForSharing();
-for($idx = 0; $idx < count($vtlib_modules); ++$idx) {
-	$module_name = $vtlib_modules[$idx];
-	$custom_access[$module_name] = getSharingRuleList($module_name);
+// Look up for modules for which sharing access is enabled.
+// NOTE: Accounts and Contacts has been couple, so we need to elimiate Contacts also
+$othermodules = getSharingModuleList(Array('Contacts'));
+if(!empty($othermodules)) {
+	foreach($othermodules as $moduleresname) {
+		if(!isset($custom_access[$moduleresname])) {
+			$custom_access[$moduleresname] = getSharingRuleList($moduleresname);
+		}
+	}
 }
-// END
-
 
 $smarty->assign("MODSHARING", $custom_access);
 

@@ -2001,7 +2001,7 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	$this->insertUser2mergefields(1);
     $this->insertUser2mergefields(2);
 	$this->db->query("update vtiger_user2mergefields set visible=1 where fieldid in(1,38,40,65,104,106,111,152,156,255)");
-	$this->addFieldTypeInformation();
+	$this->initWebservices();
 
 	/**
 	 * Setup module sequence numbering.
@@ -2067,9 +2067,223 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 		$log->debug("Exiting insertUser2mergefields method ...");
 	}
 	
-	function addFieldTypeInformation(){
+	function initWebservices(){
+		$this->vtws_addEntityInfo();
+		$this->vtws_addOperationInfo();
+		$this->vtws_addFieldTypeInformation();
+	}
+	
+	function vtws_addOperationInfo(){
+		$operationMeta = array(
+			"login"=>array(
+				"include"=>array(
+					"include/Webservices/Login.php"
+				),
+				"handler"=>"vtws_login",
+				"params"=>array(
+					"username"=>"String",
+					"accessKey"=>"String"
+				),
+				"prelogin"=>1,
+				"type"=>"POST"
+			),
+			"retrieve"=>array(
+				"include"=>array(
+					"include/Webservices/Retrieve.php"
+				),
+				"handler"=>"vtws_retrieve",
+				"params"=>array(
+					"id"=>"String"
+				),
+				"prelogin"=>0,
+				"type"=>"GET"
+			),
+			"create"=>array(
+				"include"=>array(
+					"include/Webservices/Create.php"
+				),
+				"handler"=>"vtws_create",
+				"params"=>array(
+					"elementType"=>"String",
+					"element"=>"encoded"
+				),
+				"prelogin"=>0,
+				"type"=>"POST"
+			),
+			"update"=>array(
+				"include"=>array(
+					"include/Webservices/Update.php"
+				),
+				"handler"=>"vtws_update",
+				"params"=>array(
+					"element"=>"encoded"
+				),
+				"prelogin"=>0,
+				"type"=>"POST"
+			),
+			"delete"=>array(
+				"include"=>array(
+					"include/Webservices/Delete.php"
+				),
+				"handler"=>"vtws_delete",
+				"params"=>array(
+					"id"=>"String"
+				),
+				"prelogin"=>0,
+				"type"=>"POST"
+			),
+			"sync"=>array(
+				"include"=>array(
+					"include/Webservices/GetUpdates.php"
+				),
+				"handler"=>"vtws_sync",
+				"params"=>array(
+					"modifiedTime"=>"DateTime",
+					"elementType"=>"String"
+				),
+				"prelogin"=>0,
+				"type"=>"GET"
+			),
+			"query"=>array(
+				"include"=>array(
+					"include/Webservices/Query.php"
+				),
+				"handler"=>"vtws_query",
+				"params"=>array(
+					"query"=>"String"
+				),
+				"prelogin"=>0,
+				"type"=>"GET"
+			),
+			"logout"=>array(
+				"include"=>array(
+					"include/Webservices/Logout.php"
+				),
+				"handler"=>"vtws_logout",
+				"params"=>array(
+					"sessionName"=>"String"
+				),
+				"prelogin"=>0,
+				"type"=>"POST"
+			),
+			"listtypes"=>array(
+				"include"=>array(
+					"include/Webservices/ModuleTypes.php"
+				),
+				"handler"=>"vtws_listtypes",
+				"params"=>array(),
+				"prelogin"=>0,
+				"type"=>"GET"
+			),
+			"getchallenge"=>array(
+				"include"=>array(
+					"include/Webservices/AuthToken.php"
+				),
+				"handler"=>"vtws_getchallenge",
+				"params"=>array(
+					"username"=>"String"
+				),
+				"prelogin"=>1,
+				"type"=>"GET"
+			),
+			"describe"=>array(
+				"include"=>array(
+					"include/Webservices/DescribeObject.php"
+				),
+				"handler"=>"vtws_describe",
+				"params"=>array(
+					"elementType"=>"String"
+				),
+				"prelogin"=>0,
+				"type"=>"GET"
+			),
+			"extendsession"=>array(
+				"include"=>array(
+					"include/Webservices/ExtendSession.php"
+				),
+				"handler"=>"vtws_extendSession",
+				'params'=>array(),
+				"prelogin"=>1,
+				"type"=>"POST"
+			)
+		);
+		$createOperationQuery = "insert into vtiger_ws_operation(operationid,name,handler_path,handler_method,type,prelogin) 
+			values (?,?,?,?,?,?);";
+		$createOperationParamsQuery = "insert into vtiger_ws_operation_parameters(operationid,name,type,sequence) 
+			values (?,?,?,?);";
+		foreach ($operationMeta as $operationName => $operationDetails) {
+			$operationId = $this->db->getUniqueID("vtiger_ws_operation");
+			$result = $this->db->pquery($createOperationQuery,array($operationId,$operationName,$operationDetails['include'],
+				$operationDetails['handler'],$operationDetails['type'],$operationDetails['prelogin']));
+			$params = $operationDetails['params'];
+			$sequence = 1;
+			foreach ($params as $paramName => $paramType) {
+				$result = $this->db->pquery($createOperationParamsQuery,array($operationId,$paramName,$paramType,$sequence++));
+			}
+		}
+	}
+	
+	function vtws_addEntityInfo(){
+		require_once 'include/Webservices/Utils.php';
+		$names = vtws_getModuleNameList();
+		$moduleHandler = array('file'=>'include/Webservices/VtigerModuleOperation.php',
+			'class'=>'VtigerModuleOperation');
+		
+		foreach ($names as $tab){
+			if(in_array($tab,array('Rss','Webmails','Recyclebin'))){
+				continue;
+			}
+			$entityId = $this->db->getUniqueID("vtiger_ws_entity");
+			$this->db->pquery('insert into vtiger_ws_entity(id,name,handler_path,handler_class,ismodule) values (?,?,?,?,?)',
+				array($entityId,$tab,$moduleHandler['file'],$moduleHandler['class'],1));
+		}
+		
+		$entityId = $this->db->getUniqueID("vtiger_ws_entity");
+		$this->db->pquery('insert into vtiger_ws_entity(id,name,handler_path,handler_class,ismodule) values (?,?,?,?,?)',
+			array($entityId,'Events',$moduleHandler['file'],$moduleHandler['class'],1));
+		
+		
+		$entityId = $this->db->getUniqueID("vtiger_ws_entity");
+		$this->db->pquery('insert into vtiger_ws_entity(id,name,handler_path,handler_class,ismodule) values (?,?,?,?,?)',
+			array($entityId,'Users',$moduleHandler['file'],$moduleHandler['class'],1));
+		
+		$groupHandler = array('file'=>'include/Webservices/VtigerActorOperation.php',
+			'class'=>'VtigerActorOperation');
+		$entityId = $this->db->getUniqueID("vtiger_ws_entity");
+		$this->db->pquery('insert into vtiger_ws_entity(id,name,handler_path,handler_class,ismodule) values (?,?,?,?,?)',
+			array($entityId,'Groups',$groupHandler['file'],$groupHandler['class'],0));
+		
+		require_once("include/Webservices/WebServiceError.php");
+		require_once 'include/Webservices/VtigerWebserviceObject.php';
+		$webserviceObject = VtigerWebserviceObject::fromName($this->db,'Groups');
+		$this->db->pquery("insert into vtiger_ws_entity_tables(webservice_entity_id,table_name) values 
+			(?,?)",array($webserviceObject->getEntityId(),'vtiger_groups'));
+		
+		$currencyHandler = array('file'=>'include/Webservices/VtigerActorOperation.php',
+			'class'=>'VtigerActorOperation');
+		$entityId = $this->db->getUniqueID("vtiger_ws_entity");
+		$this->db->pquery('insert into vtiger_ws_entity(id,name,handler_path,handler_class,ismodule) values (?,?,?,?,?)',
+			array($entityId,'Currency',$currencyHandler['file'],$currencyHandler['class'],0));
+		
+		$webserviceObject = VtigerWebserviceObject::fromName($this->db,'Currency');
+		$this->db->pquery("insert into vtiger_ws_entity_tables(webservice_entity_id,table_name) values (?,?)",
+			array($webserviceObject->getEntityId(),'vtiger_currency_info'));
+		
+		$documentFoldersHandler = array('file'=>'include/Webservices/VtigerActorOperation.php',
+				'class'=>'VtigerActorOperation');
+		$entityId = $this->db->getUniqueID("vtiger_ws_entity");
+		$this->db->pquery('insert into vtiger_ws_entity(id,name,handler_path,handler_class,ismodule) values (?,?,?,?,?)',
+				array($entityId,'DocumentFolders',$documentFoldersHandler['file'],$documentFoldersHandler['class'],0));
+		$webserviceObject = VtigerWebserviceObject::fromName($this->db,'DocumentFolders');
+		$this->db->pquery("insert into vtiger_ws_entity_tables(webservice_entity_id,table_name) values (?,?)",
+			array($webserviceObject->getEntityId(),'vtiger_attachmentsfolder'));
+		
+	}
+	
+	function vtws_addFieldTypeInformation(){
 		$fieldTypeInfo = array('picklist'=>array(15,16),'text'=>array(19,20,21,24),'autogenerated'=>array(3),'phone'=>array(11),
-						'multipicklist'=>array(33),'url'=>array(17),'skype'=>array(85),'boolean'=>array(56,156),'owner'=>array(53));
+			'multipicklist'=>array(33),'url'=>array(17),'skype'=>array(85),'boolean'=>array(56,156),'owner'=>array(53),
+			'file'=>array(61));
 		
 		foreach($fieldTypeInfo as $type=>$uitypes){
 			foreach($uitypes as $uitype){
@@ -2080,15 +2294,16 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 			}
 		}
 		
-		$this->addReferenceTypeInformation();
+		$this->vtws_addReferenceTypeInformation();
 	}
 	
-	function addReferenceTypeInformation(){
-		$referenceMapping = array("50"=>array("Accounts"),"51"=>array("Accounts"),"57"=>array("Contacts"),"58"=>array("Campaigns"),
-			"73"=>array("Accounts"),"75"=>array("Vendors"),"76"=>array("Potentials"),"78"=>array("Quotes"),
-			"80"=>array("SalesOrder"),"81"=>array("Vendors"),"101"=>array("Users"),"52"=>array("Users"),
+	function vtws_addReferenceTypeInformation(){
+		$referenceMapping = array("50"=>array("Accounts"),"51"=>array("Accounts"),"57"=>array("Contacts"),
+			"58"=>array("Campaigns"),"73"=>array("Accounts"),"75"=>array("Vendors"),"76"=>array("Potentials"),
+			"78"=>array("Quotes"),"80"=>array("SalesOrder"),"81"=>array("Vendors"),"101"=>array("Users"),"52"=>array("Users"),
 			"357"=>array("Contacts","Accounts","Leads","Users","Vendors"),"59"=>array("Products"),
-			"66"=>array("Leads","Accounts","Potentials","HelpDesk"),"77"=>array("Users"),"68"=>array("Contacts","Accounts"));
+			"66"=>array("Leads","Accounts","Potentials","HelpDesk"),"77"=>array("Users"),"68"=>array("Contacts","Accounts"),
+			"117"=>array('Currency'),"116"=>array('Currency'),'121'=>array('DocumentFolders'));
 		
 		foreach($referenceMapping as $uitype=>$referenceArray){
 			$success = true;
@@ -2111,6 +2326,23 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 			if(!$success){
 				echo "Migration Query Failed";
 			}
+		}
+		
+		$success = true;
+		$fieldTypeId = $this->db->getUniqueID("vtiger_ws_entity_fieldtype");
+		$result = $this->db->pquery("insert into vtiger_ws_entity_fieldtype(fieldtypeid,table_name,field_name,fieldtype) values(?,?,?,?);",
+			array($fieldTypeId,'vtiger_attachmentsfolder','createdby',"reference"));
+		if(!is_object($result)){
+			echo "failed fo init<br>";
+			$success=false;
+		}
+		$result = $this->db->pquery("insert into vtiger_ws_entity_referencetype(fieldtypeid,type) values(?,?)",array($fieldTypeId,'Users'));
+		if(!is_object($result)){
+			echo "failed for: Users, fieldtypeid: $fieldTypeId";
+			$success=false;
+		}
+		if(!$success){
+			echo "Migration Query Failed";
 		}
 		
 	}

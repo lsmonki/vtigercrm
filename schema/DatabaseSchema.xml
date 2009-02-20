@@ -6376,7 +6376,7 @@
 		<data>
 		</data>
 	</table>
-	
+	<!-- Webservices -->
 	<table name="vtiger_ws_fieldtype">
 		<field name="fieldtypeid" type="I" size="19">
 			<key />
@@ -6431,9 +6431,136 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
-
+	
+	<table name="vtiger_ws_entity">
+		<field name="id" type="I" size="11">
+			<key />
+			<notnull />
+			<autoincrement />
+		</field>
+		<field name="name" type="C" size="25">
+			<notnull />
+			<unique />
+		</field>
+		<field name="handler_path" type="C" size="255">
+			<notnull />
+		</field>
+		<field name="handler_class" type="C" size="64">
+			<notnull />
+		</field>
+		<field name="ismodule" type="I" size="3">
+			<notnull />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="vtiger_ws_entity_tables">
+		<field name="webservice_entity_id" type="I" size="11">
+			<key />
+			<notnull />
+		</field>
+		<field name="table_name" type="C" size="255">
+			<notnull />
+			<key />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="vtiger_ws_entity_tables" alter="true">
+		<constraint>ADD CONSTRAINT `fk_1_vtiger_ws_actor_tables` FOREIGN KEY (`webservice_entity_id`) REFERENCES `vtiger_ws_entity` (`id`) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+	
+	<table name="vtiger_ws_entity_fieldtype">
+		<field name="fieldtypeid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="table_name" type="C" size="255">
+			<notnull />
+		</field>
+		<field name="field_name" type="C" size="255">
+			<notnull />
+		</field>
+		<field name="fieldtype" type="C" size="200">
+			<notnull />
+		</field>
+		<index name="vtiger_idx_1_tablename_fieldname">
+			<unique />
+			<col>table_name</col>
+			<col>field_name</col>
+		</index>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="vtiger_ws_entity_referencetype">
+		<field name="fieldtypeid" type="I" size="19">
+			<key />
+			<notnull />
+		</field>
+		<field name="type" type="C" size="25">
+			<key />
+			<notnull />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="vtiger_ws_entity_referencetype" alter="true">
+		<constraint>ADD CONSTRAINT `vtiger_fk_1_actors_referencetype` FOREIGN KEY (`fieldtypeid`) REFERENCES `vtiger_ws_entity_fieldtype` (`fieldtypeid`) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+	
+	<table name="vtiger_ws_operation">
+		<field name="operationid" type="I" size="11">
+			<key />
+			<notnull />
+			<autoincrement />
+		</field>
+		<field name="name" type="C" size="128">
+			<notnull />
+			<unique />
+		</field>
+		<field name="handler_path" type="C" size="255">
+			<notnull />
+		</field>
+		<field name="handler_method" type="C" size="64">
+			<notnull />
+		</field>
+		<field name="type" type="C" size="8">
+			<notnull />
+		</field>
+		<field name="prelogin" type="I" size="3">
+			<notnull />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="vtiger_ws_operation_parameters">
+		<field name="operationid" type="I" size="11">
+			<key />
+			<notnull />
+			<autoincrement />
+		</field>
+		<field name="name" type="C" size="128">
+			<key />
+			<notnull />
+		</field>
+		<field name="type" type="C" size="64">
+			<notnull />
+		</field>
+		<field name="sequence" type="I" size="11">
+			<notnull />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	<!-- END -->
+	
 	<table name="vtiger_eventhandlers">
-	    <field name="eventhandler_id" type="I" >
+		<field name="eventhandler_id" type="I" >
 			<key />
 			<autoincrement />
 		</field>

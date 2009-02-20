@@ -1,11 +1,11 @@
 <?php
 	require_once("include/Webservices/WebServiceErrorCode.php");
-	class WebServiceError{
+	class WebServiceException extends Exception {
 		
 		public $code;
 		public $message;
 		
-		function WebServiceError($errCode,$msg){
+		function WebServiceException($errCode,$msg){
 			$this->code = $errCode;
 			$this->message = $msg;
 		}

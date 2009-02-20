@@ -16,7 +16,7 @@ class VtigerCRMObject{
 			$this->moduleId = $this->getObjectTypeId($this->moduleName);
 		}
 		$this->instance = null;
-		
+		$this->getInstance();
 	}
 	
 	public function getModuleName(){
@@ -35,10 +35,16 @@ class VtigerCRMObject{
 	}
 	
 	public function getObjectId(){
+		if($this->instance==null){
+			$this->getInstance();
+		}
 		return $this->instance->id;
 	}
 	
 	public function setObjectId($id){
+		if($this->instance==null){
+			$this->getInstance();
+		}
 		$this->instance->id = $id;
 	}
 	
@@ -64,13 +70,16 @@ class VtigerCRMObject{
 	
 	private function getModuleClassInstance($moduleName){
 		$this->includeModule($moduleName);
-		if($moduleName == "Calendar"){
+		if($moduleName == "Calendar" || $moduleName == "Events"){
 			$moduleName = "Activity";
 		}
 		return new $moduleName();
 	}
 	
 	function includeModule($moduleName){
+		if($moduleName == "Events"){
+			$moduleName = "Calendar";
+		}
 		if($moduleName == "Calendar"){
 			require_once("modules/".$moduleName."/Activity.php");
 		}else{
@@ -105,7 +114,6 @@ class VtigerCRMObject{
 		global $adb;
 		
 		$error = false;
-		
 		foreach($element as $k=>$v){
 			$this->instance->column_fields[$k] = $v;
 		}
@@ -146,14 +154,6 @@ class VtigerCRMObject{
 	
 	public function getFields(){
 		return $this->instance->column_fields;
-	}
-	
-	function getIdComponents($objectId){
-		return explode("x",$objectId);
-	}
-	
-	function getIdFromComponents($objectTypeId, $databaseId){
-		return $objectTypeId."x".$databaseId;
 	}
 	
 	function exists($id){

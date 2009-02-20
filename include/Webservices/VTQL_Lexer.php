@@ -122,7 +122,7 @@ return VTQL_Parser::COMMA;
 }else if(strcasecmp($val, "asc")===0){
 return VTQL_Parser::ASC;
 }else if(strcasecmp($val, "desc")===0){
-return VTQL_Parser::desc;
+return VTQL_Parser::DESC;
 }else{
 return VTQL_Parser::COLUMNNAME;
 }

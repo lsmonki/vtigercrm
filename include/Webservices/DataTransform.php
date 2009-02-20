@@ -8,13 +8,23 @@
 		function sanitizeDataWithColumn($row,$meta){
 			
 			$newRow = array();
-			$columnfield = $meta->getColumnFieldMapping();
-			
+			if(isset($row['count(*)'])){
+				return DataTransform::sanitizeDataWithCountColumn($row,$meta);
+			}
+			$fieldColumn = $meta->getFieldColumnMapping();
+			$columnField = array_flip($fieldColumn);
 			foreach($row as $col=>$val){
-				$newRow[$columnfield[$col]] = $val;
+				$newRow[$columnField[$col]] = $val;
 			}
 			$newRow = DataTransform::sanitizeData($newRow,$meta,true);
-			
+			return $newRow;
+		}
+		
+		function sanitizeDataWithCountColumn($row,$meta){
+			$newRow = array();
+			foreach($row as $col=>$val){
+				$newRow['count'] = $val;
+			}
 			return $newRow;
 		}
 		
@@ -30,20 +40,16 @@
 			$newRow = DataTransform::sanitizeReferences($newRow,$meta);
 			$newRow = DataTransform::sanitizeOwnerFields($newRow,$meta,$t);
 			$newRow = DataTransform::sanitizeFields($newRow,$meta);
-			
 			return $newRow;
 		}
 		
-		function getUsersWebserviceId(){
-			return 29;
-		}
-		
 		function sanitizeForInsert($row,$meta){
+			global $adb;
 			$associatedToUser = false;
-			if(strtolower($meta->getObjectName()) == "emails"){
+			if(strtolower($meta->getEntityName()) == "emails"){
 				if(isset($row['parent_id'])){
-					$components = getIdComponents($row['parent_id']);
-					if($components[0] == DataTransform::getUsersWebserviceId()){
+					$components = vtws_getIdComponents($row['parent_id']);
+					if($components[0] == VtigerWebserviceObject::fromName($adb,'Users')){
 						$associatedToUser = true;
 					}
 				}
@@ -51,25 +57,18 @@
 			$references = $meta->getReferenceFieldDetails();
 			foreach($references as $field=>$typeList){
 				if(strpos($row[$field],'x')!==false){
-					$row[$field] = getIdComponents($row[$field]);
+					$row[$field] = vtws_getIdComponents($row[$field]);
 					$row[$field] = $row[$field][1];
 				}
 			}
 			$ownerFields = $meta->getOwnerFields();
 			foreach($ownerFields as $index=>$field){
 				if(isset($row[$field]) && $row[$field]!=null){
-					$groupId = vtws_getGroupIdFromWebserviceGroupId($row[$field]);
-					if($groupId !== null){
-						$_REQUEST['assigntype'] = 'T';
-						$_REQUEST['assigned_group_id'] = $groupId;//fetchGroupName($groupId);
-						$row[$field] = 0;
-					}else {
-						$ownerDetails = getIdComponents($row[$field]);
-						$row[$field] = $ownerDetails[1];
-					}
+					$ownerDetails = vtws_getIdComponents($row[$field]);
+					$row[$field] = $ownerDetails[1];
 				}
 			}
-			if(strtolower($meta->getObjectName()) == "emails"){
+			if(strtolower($meta->getEntityName()) == "emails"){
 				if(isset($row['parent_id'])){
 					if($associatedToUser === true){
 						$_REQUEST['module'] = 'Emails';
@@ -84,6 +83,9 @@
 			}
 			if($row["id"]){
 				unset($row["id"]);
+			}
+			if(isset($row[$meta->getObectIndexColumn()])){
+				unset($row[$meta->getObectIndexColumn()]);
 			}
 			return $row;
 			
@@ -117,41 +119,52 @@
 			
 			if(isset($row['id'])){
 				if(strpos($row['id'],'x')===false){
-					$row['id'] = getId($meta->getObjectId(),$row['id']);
+					$row['id'] = vtws_getId($meta->getEntityId(),$row['id']);
 				}
 			}
 			
 			if(isset($row[$recordString])){
-				$row['id'] = getId($meta->getObjectId(),$row[$recordString]);
+				$row['id'] = vtws_getId($meta->getEntityId(),$row[$recordString]);
 				unset($row[$recordString]);
 			}
 			
 			if(!isset($row['id'])){
 				if($row[$meta->getObectIndexColumn()] ){
-					$row['id'] = getId($meta->getObjectId(),$row[$meta->getObectIndexColumn()]);
+					$row['id'] = vtws_getId($meta->getEntityId(),$row[$meta->getObectIndexColumn()]);
 				}else{
 					//TODO Handle this.
 					//echo 'error id noy set' ;
 				}
 			}else if(isset($row[$meta->getObectIndexColumn()]) && strcmp($meta->getObectIndexColumn(),"id")!==0){
-				unset($row[$meta->getObectIndexColumn()]);			
+				unset($row[$meta->getObectIndexColumn()]);
 			}
 			
 			return $row;
 		}
 		
 		function sanitizeReferences($row,$meta){
-			
+			global $adb,$log;
 			$references = $meta->getReferenceFieldDetails();
 			foreach($references as $field=>$typeList){
 				if($row[$field]){
-					$type = getSalesEntityType($row[$field]);
-					if(($type == null || $type == "" || !isset($type)) && in_array("Users",$typeList)){
-						$type = "Users";
+					$found = false;
+					foreach ($typeList as $entity) {
+						$webserviceObject = VtigerWebserviceObject::fromName($adb,$entity);
+						$handlerPath = $webserviceObject->getHandlerPath();
+						$handlerClass = $webserviceObject->getHandlerClass();
+						
+						require_once $handlerPath;
+						
+						$handler = new $handlerClass($webserviceObject,$meta->getUser(),$adb,$log);
+						$entityMeta = $handler->getMeta();
+						if($entityMeta->exists($row[$field])){
+							$row[$field] = vtws_getId($webserviceObject->getEntityId(),$row[$field]);
+							$found = true;
+							break;
+						}
 					}
-					if(in_array($type,$typeList)){
-						$object = new VtigerCRMObject($type);
-						$row[$field] = getId($object->getModuleId(),$row[$field]);
+					if($found !== true){
+						//$row[$field] = null;
 					}
 				//0 is the default for most of the reference fields, so handle the case and return null instead as its the 
 				//only valid value, which is not a reference Id.
@@ -163,25 +176,13 @@
 		}
 		
 		function sanitizeOwnerFields($row,$meta,$t=null){
+			global $adb;
 			$ownerFields = $meta->getOwnerFields();
 			foreach($ownerFields as $index=>$field){
 				if(isset($row[$field]) && $row[$field]!=null){
-					if($row[$field]==0){
-						$recordId = $row[DataTransform::$recordString];
-						if(!isset($recordId)){
-							if(isset($row[$meta->getObectIndexColumn()])){
-								$recordId = $row[$meta->getObectIndexColumn()];
-							}else{
-								$recordId = $row['id'];
-							}
-						}
-						$groupId = getRecordOwnerId($recordId);
-						$groupId = $groupId['Groups'];
-						$row[$field] = vtws_getIdForGroup($groupId);
-					}else{
-						$object = new VtigerCRMObject("Users");
-						$row[$field] = getId($object->getModuleId(),$row[$field]);
-					}
+					$ownerType = vtws_getOwnerType($row[$field]);
+					$webserviceObject = VtigerWebserviceObject::fromName($adb,$ownerType);
+					$row[$field] = vtws_getId($webserviceObject->getEntityId(),$row[$field]);
 				}
 			}
 			return $row;

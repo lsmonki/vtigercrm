@@ -6,12 +6,12 @@
 			$sessionManager = new SessionManager();
 			$sessionManager->set("authenticatedUserId", $userId);
 			$crmObject = new VtigerCRMObject("Users");
-			$userId = getId($crmObject->getModuleId(),$userId);
+			$userId = vtws_getId($crmObject->getModuleId(),$userId);
 			$vtigerVersion = vtws_getVtigerVersion();
 			$resp = array("sessionId"=>$sessionManager->getSessionId(),"userId"=>$userId,"version"=>$API_VERSION,"vtigerVersion"=>$vtigerVersion);
 			return $resp;
 		}else{
-			return new WebServiceError(WebServiceErrorCode::$AUTHFAILURE,"Authencation Failed");
+			throw new WebServiceException(WebServiceErrorCode::$AUTHFAILURE,"Authencation Failed");
 		}
 	}
 ?>

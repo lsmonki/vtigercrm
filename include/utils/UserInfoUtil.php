@@ -4224,7 +4224,7 @@ function getPermittedModuleNames()
 	{
 		foreach($tab_seq_array as $tabid=>$seq_value)
 		{
-			if($seq_value ==0 && $profileTabsPermission[$tabid] == 0)
+			if($seq_value === 0 && $profileTabsPermission[$tabid] === 0)
 			{
 				$permittedModules[]=getTabModuleName($tabid);
 			}
@@ -4237,7 +4237,7 @@ function getPermittedModuleNames()
 	{
 		foreach($tab_seq_array as $tabid=>$seq_value)
 		{
-			if($seq_value ==0)
+			if($seq_value === 0)
 			{
 				$permittedModules[]=getTabModuleName($tabid);
 			}
@@ -4277,22 +4277,26 @@ function RecalculateSharingRules()
   * @returns Array:: Type array
   *
   */
-function getSharingModuleList()
+function getSharingModuleList($eliminateModules=false)
 {
 	global $log;
 	
-	$sharingModuleArray=Array('Accounts',
-				 'Leads',
-				 'Contacts',
-				 'Potentials',
-				 'HelpDesk',
-				 'Emails',
-				 'Campaigns',
-				 'Quotes',
-				 'PurchaseOrder',
-				 'SalesOrder',
-				 'Invoice',
-				 'Documents');
+	$sharingModuleArray = Array();
+
+	global $adb;
+	if(empty($eliminateModules)) $eliminateModules = Array();
+
+	// Module that needs to be eliminated explicitly
+	if(!in_array('Calendar', $eliminateModules)) $eliminateModules[] = 'Calendar';
+	if(!in_array('Events', $eliminateModules)) $eliminateModules[] = 'Events';
+	
+	$query = "SELECT name FROM vtiger_tab WHERE ownedby = 0 AND isentitytype = 1";	
+	$query .= " AND name NOT IN('" . implode("','", $eliminateModules) . "')";
+
+	$result = $adb->query($query);
+	while($resrow = $adb->fetch_array($result)) {
+		$sharingModuleArray[] = $resrow['name'];
+	}
 
 	return $sharingModuleArray;					
 }

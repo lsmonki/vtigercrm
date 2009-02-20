@@ -2,82 +2,73 @@
 	
 	function vtws_update($element,$user){
 		
-		$ids = getIdComponents($element["id"]);
-		$elemTypeId = $ids[0];
-		$elemid = $ids[1];
+		global $log,$adb;
+		$idList = vtws_getIdComponents($element['id']);
+		$webserviceObject = VtigerWebserviceObject::fromId($adb,$idList[0]);
+		$handlerPath = $webserviceObject->getHandlerPath();
+		$handlerClass = $webserviceObject->getHandlerClass();
 		
-		if(!$elemTypeId || !$elemid){
-			return new WebServiceError(WebServiceErrorCode::$INVALIDID,"Id specified is incorrect");
-		}
+		require_once $handlerPath;
 		
-		$crmObject = new VtigerCRMObject($elemTypeId, true);
+		$handler = new $handlerClass($webserviceObject,$user,$adb,$log);
+		$meta = $handler->getMeta();
+		$entityName = $meta->getObjectEntityName($element['id']);
 		
-		$seType = $crmObject->getSEType($elemid);
 		$types = vtws_listtypes($user);
-		if(!in_array($seType,$types['types'])){
-			return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied");
-		}
-		if($crmObject->getModuleName() != $seType){
-			return new WebServiceError(WebServiceErrorCode::$INVALIDID,"Id specified is incorrect");
+		if(!in_array($entityName,$types['types'])){
+			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied");
 		}
 		
-		$meta = new VtigerCRMObjectMeta($crmObject,$user);
-		$meta->retrieveMeta();
+		if($entityName !== $webserviceObject->getEntityName()){
+			throw new WebServiceException(WebServiceErrorCode::$INVALIDID,"Id specified is incorrect");
+		}
 		
-		if(!$meta->hasAccess()){
-			return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to access object type is denied");
+		if(!$meta->hasPermission(EntityMeta::$UPDATE,$element['id'])){
+			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to read given object is denied");
 		}
-		if(!$meta->hasWriteAccess()){
-			return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to write is denied");
+		
+		if(!$meta->exists($idList[1])){
+			throw new WebServiceException(WebServiceErrorCode::$RECORDNOTFOUND,"Record you are trying to access is not found");
 		}
-		if(!$meta->hasPermission(VtigerCRMObjectMeta::$UPDATE,$elemid)){
-			return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to update given object is denied");
+		
+		if($meta->hasWriteAccess()!==true){
+			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to write is denied");
 		}
 		
 		$referenceFields = $meta->getReferenceFieldDetails();
 		foreach($referenceFields as $fieldName=>$details){
 			if(isset($element[$fieldName]) && strlen($element[$fieldName]) > 0){
-				$ids = getIdComponents($element[$fieldName]);
+				$ids = vtws_getIdComponents($element[$fieldName]);
 				$elemTypeId = $ids[0];
 				$elemId = $ids[1];
-				$referenceObject = new VtigerCRMObject($elemTypeId,true);
-				if(!in_array($referenceObject->getModuleName(),$details)){
-					return new WebServiceError(WebServiceErrorCode::$REFERENCEINVALID,
+				$referenceObject = VtigerWebserviceObject::fromId($adb,$elemTypeId);
+				if(!in_array($referenceObject->getEntityName(),$details)){
+					throw new WebServiceException(WebServiceErrorCode::$REFERENCEINVALID,
 						"Invalid reference specified for $fieldName");
 				}
-				$referenceMeta = new VtigerCRMObjectMeta($referenceObject,$user);
-				if(!$referenceMeta->hasAccess()){
-					return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,
-						"Permission to access reference type is denied");
-				}else if($element[$fieldName] !== NULL){
-					unset($element[$fieldName]);
+				if(!in_array($referenceObject->getEntityName(),$types['types'])){
+					throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,
+						"Permission to access reference type is denied ".$referenceObject->getEntityName());
+				}
+			}else if($element[$fieldName] !== NULL){
+				unset($element[$fieldName]);
+			}
+		}
+		
+		if(!$meta->hasMandatoryFields($element)){
+			throw new WebServiceException(WebServiceErrorCode::$MANDFIELDSMISSING,"Mandatory fields not specified");
+		}
+		$ownerFields = $meta->getOwnerFields();
+		if(is_array($ownerFields) && sizeof($ownerFields) >0){
+			foreach($ownerFields as $ownerField){
+				if(isset($element[$ownerField]) && $element[$ownerField]!==null && 
+					!$meta->hasAssignPrivilege($element[$ownerField])){
+					throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED, "Cannot assign record to the given user");
 				}
 			}
 		}
 		
-		if(!$crmObject->exists($elemid)){
-			return new WebServiceError(WebServiceErrorCode::$RECORDNOTFOUND,"Record you are trying to access is not found");
-		}
-		
-		$element = DataTransform::sanitizeForInsert($element,$meta);
-		if(!$meta->hasAssignPrivilege($element["assigned_user_id"])){
-			return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED, "Cannot assign record to the given user");
-		}
-		
-		$crmObject->setObjectId($elemid);
-		$error = $crmObject->update($element);
-		if(!$error){
-			return new WebServiceError(WebServiceErrorCode::$DATABASEQUERYERROR,"Database error while performing required operation");
-		}
-		
-		$id = $crmObject->getObjectId();
-		
-		$error = $crmObject->read($id);
-		if(!$error){
-			return new WebServiceError(WebServiceErrorCode::$DATABASEQUERYERROR,"Database error while performing required operation");
-		}
-		
-		return DataTransform::filterAndSanitize($crmObject->getFields(),$meta);
+		return $handler->update($element);
 	}
 	
 ?>

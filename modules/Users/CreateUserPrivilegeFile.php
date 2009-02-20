@@ -362,17 +362,14 @@ if($handle)
 			$newbuf .= "\$Invoice_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($inv_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($inv_share_read_per['GROUP']).");\n\n";	
 			$newbuf .= "\$Invoice_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($inv_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($inv_share_write_per['GROUP']).");\n\n";
 	
-			//Constructing Documents Sharing Rules
-			$hd_share_per_array=getUserModuleSharingObjects("Documents",$userid,$def_org_share,$current_user_roles,$parent_roles,$current_user_groups);
-			$hd_share_read_per=$hd_share_per_array['read'];
-			$hd_share_write_per=$hd_share_per_array['write'];
-			$newbuf .= "\$Documents_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($hd_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($hd_share_read_per['GROUP']).");\n\n";	
-			$newbuf .= "\$Documents_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($hd_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($hd_share_write_per['GROUP']).");\n\n";
+			// Writing Sharing Rules For Custom Modules.
+			// TODO: We are ignoring rules that has already been calculated above, it is good to add GENERIC logic here.
+			$custom_modules = getSharingModuleList(
+				Array('Leads', 'Accounts', 'Contacts', 'Potentials', 'HelpDesk', 
+				'Emails', 'Campaigns','Quotes', 'PurchaseOrder', 'SalesOrder', 'Invoice'));
 
-			// vtlib customization: Writing Sharing Rules For Custom Modules.
-			$vtlib_modules = vtlib_getModuleNameForSharing();
-			for($idx = 0; $idx < count($vtlib_modules); ++$idx) {
-				$module_name = $vtlib_modules[$idx];
+			for($idx = 0; $idx < count($custom_modules); ++$idx) {
+				$module_name = $custom_modules[$idx];
 				$mod_share_perm_array = getUserModuleSharingObjects($module_name,$userid,
 					$def_org_share,$current_user_roles,$parent_roles,$current_user_groups);
 
@@ -396,7 +393,6 @@ if($handle)
 		}
 	}
 }
-
 
 /** Gives an array which contains the information for what all roles, groups and user data is to be shared with the spcified user for the specified module 
 
@@ -1554,20 +1550,20 @@ function populateSharingtmptables($userid)
 		$adb->pquery($query, array($userid));
 	}
 
-	//Populating Values into the tmp sharing tables
-	$sharingArray=Array('Leads','Accounts','Contacts','Potentials','HelpDesk','Emails','Campaigns','Quotes','PurchaseOrder','SalesOrder','Invoice','Documents');
-
-	// vtlib customization: Add custom modules to sharing access as well.
-	$vtlib_modules = vtlib_getModuleNameForSharing();
-	$sharingArray = array_merge($sharingArray, $vtlib_modules);
-	// END
-
+	// Look up for modules for which sharing access is enabled.
+	$sharingArray = Array('Emails');
+	$otherModules = getSharingModuleList();
+	$sharingArray = array_merge($sharingArray, $otherModules);
+	
 	foreach($sharingArray as $module)
 	{
-		populateSharingPrivileges('USER',$userid,$module,'read');
-		populateSharingPrivileges('USER',$userid,$module,'write');
-		populateSharingPrivileges('GROUP',$userid,$module,'read');
-		populateSharingPrivileges('GROUP',$userid,$module,'write');
+		$module_sharing_read_permvar    = $module.'_share_read_permission';
+		$module_sharing_write_permvar   = $module.'_share_write_permission';
+
+		populateSharingPrivileges('USER',$userid,$module,'read',   $$module_sharing_read_permvar );
+		populateSharingPrivileges('USER',$userid,$module,'write',  $$module_sharing_write_permvar );
+		populateSharingPrivileges('GROUP',$userid,$module,'read',  $$module_sharing_read_permvar );
+		populateSharingPrivileges('GROUP',$userid,$module,'write', $$module_sharing_write_permvar );
 	}
 	//Populating Values into the temp related sharing tables
 	foreach($related_module_share as $rel_tab_id => $tabid_arr)
@@ -1576,11 +1572,14 @@ function populateSharingtmptables($userid)
 		foreach($tabid_arr as $taid)
 		{
 			$tab_name=getTabname($taid);
-			populateRelatedSharingPrivileges('USER',$userid,$tab_name,$rel_tab_name,'read');
-                	populateRelatedSharingPrivileges('USER',$userid,$tab_name,$rel_tab_name,'write');
-                	populateRelatedSharingPrivileges('GROUP',$userid,$tab_name,$rel_tab_name,'read');
-                	populateRelatedSharingPrivileges('GROUP',$userid,$tab_name,$rel_tab_name,'write');
-			
+
+			$relmodule_sharing_read_permvar    = $tab_name.'_'.$rel_tab_name.'_share_read_permission';
+			$relmodule_sharing_write_permvar   = $tab_name.'_'.$rel_tab_name.'_share_write_permission';
+
+			populateRelatedSharingPrivileges('USER',$userid,$tab_name,$rel_tab_name,'read', $$relmodule_sharing_read_permvar);
+           	populateRelatedSharingPrivileges('USER',$userid,$tab_name,$rel_tab_name,'write', $$relmodule_sharing_write_permvar);
+           	populateRelatedSharingPrivileges('GROUP',$userid,$tab_name,$rel_tab_name,'read', $$relmodule_sharing_read_permvar);
+           	populateRelatedSharingPrivileges('GROUP',$userid,$tab_name,$rel_tab_name,'write', $$relmodule_sharing_write_permvar);			
 		}	
 	}			 
 }
@@ -1590,11 +1589,17 @@ function populateSharingtmptables($userid)
   * @param $enttype -- can have the value of User or Group:: Type varchar
   * @param $module -- module name:: Type varchar
   * @param $pertype -- can have the value of read or write:: Type varchar
+  * @param $var_name_arr - Variable to use instead of including the sharing access again
  */
-function populateSharingPrivileges($enttype,$userid,$module,$pertype)
+function populateSharingPrivileges($enttype,$userid,$module,$pertype, $var_name_arr=false)
 {
 	global $adb;	
 	$tabid=getTabid($module);
+
+	if(!$var_name_arr) {
+		require('user_privileges/sharing_privileges_'.$userid.'.php');
+	}
+
 	if($enttype=='USER')
 	{
 		if($pertype =='read')
@@ -1607,8 +1612,8 @@ function populateSharingPrivileges($enttype,$userid,$module,$pertype)
 			$table_name='vtiger_tmp_write_user_sharing_per';
 			$var_name=$module.'_share_write_permission';
 		}
-		global $$var_name;
-		$var_name_arr=$$var_name;	
+		// Lookup for the variable if not set through function argument		
+		if(!$var_name_arr) $var_name_arr=$$var_name;	
 		$user_arr=Array();
 		if(sizeof($var_name_arr['ROLE']) > 0)
 		{
@@ -1656,8 +1661,8 @@ function populateSharingPrivileges($enttype,$userid,$module,$pertype)
 			$table_name='vtiger_tmp_write_group_sharing_per';
 			$var_name=$module.'_share_write_permission';
 		}
-		global $$var_name;
-		$var_name_arr=$$var_name;
+		// Lookup for the variable if not set through function argument
+		if(!$var_name_arr) $var_name_arr=$$var_name;
 		$grp_arr=Array();
 		if(sizeof($var_name_arr['GROUP']) > 0)
 		{
@@ -1684,14 +1689,19 @@ function populateSharingPrivileges($enttype,$userid,$module,$pertype)
   * @param $module -- module name:: Type varchar
   * @param $relmodule -- related module name:: Type varchar
   * @param $pertype -- can have the value of read or write:: Type varchar
+  * @param $var_name_arr - Variable to use instead of including the sharing access again
  */
 
-function populateRelatedSharingPrivileges($enttype,$userid,$module,$relmodule,$pertype)
+function populateRelatedSharingPrivileges($enttype,$userid,$module,$relmodule,$pertype, $var_name_arr=false)
 {
 	global $adb;	
 	$tabid=getTabid($module);
 	$reltabid=getTabid($relmodule);
-	//echo $module.'               '.$enttype.'                '.$pertype.'<BR>';                       
+
+	if(!$var_name_arr) {
+		require('user_privileges/sharing_privileges_'.$userid.'.php');
+	}
+
 	if($enttype=='USER')
 	{
 		if($pertype =='read')
@@ -1704,8 +1714,8 @@ function populateRelatedSharingPrivileges($enttype,$userid,$module,$relmodule,$p
 			$table_name='vtiger_tmp_write_user_rel_sharing_per';
 			$var_name=$module.'_'.$relmodule.'_share_write_permission';
 		}
-		global $$var_name;
-		$var_name_arr=$$var_name;	
+		// Lookup for the variable if not set through function argument
+		if(!$var_name_arr) $var_name_arr=$$var_name;	
 		$user_arr=Array();
 		if(sizeof($var_name_arr['ROLE']) > 0)
 		{
@@ -1753,8 +1763,8 @@ function populateRelatedSharingPrivileges($enttype,$userid,$module,$relmodule,$p
 			$table_name='vtiger_tmp_write_group_rel_sharing_per';
 			$var_name=$module.'_'.$relmodule.'_share_write_permission';
 		}
-		global $$var_name;
-		$var_name_arr=$$var_name;
+		// Lookup for the variable if not set through function argument
+		if(!$var_name_arr) $var_name_arr=$$var_name;
 		$grp_arr=Array();
 		if(sizeof($var_name_arr['GROUP']) > 0)
 		{

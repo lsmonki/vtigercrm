@@ -2,48 +2,40 @@
 	
 	function vtws_retrieve($id, $user){
 		
-		$ids = getIdComponents($id);
-		$elemTypeId = $ids[0];
-		$elemid = $ids[1];
+		global $log,$adb;
 		
-		if(!$elemTypeId || !$elemid){
-			return new WebServiceError(WebServiceErrorCode::$INVALIDID,"Id specified is incorrect");
-		}
+		$webserviceObject = VtigerWebserviceObject::fromId($adb,$id);
+		$handlerPath = $webserviceObject->getHandlerPath();
+		$handlerClass = $webserviceObject->getHandlerClass();
 		
-		$crmObject = new VtigerCRMObject($elemTypeId, true);
+		require_once $handlerPath;
 		
-		$seType = $crmObject->getSEType($elemid);
+		$handler = new $handlerClass($webserviceObject,$user,$adb,$log);
+		$meta = $handler->getMeta();
+		$entityName = $meta->getObjectEntityName($id);
+		
 		$types = vtws_listtypes($user);
-		if(!in_array($seType,$types['types'])){
-			return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied");
+		if(!in_array($entityName,$types['types'])){
+			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied");
 		}
-		if($crmObject->getModuleName() != $seType){
-			return new WebServiceError(WebServiceErrorCode::$INVALIDID,"Id specified is incorrect");
-		}
-		
-		$meta = new VtigerCRMObjectMeta($crmObject,$user);
-		$meta->retrieveMeta();
-		
-		if(!$meta->hasAccess()){
-			return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to access object type is denied");
-		}
-		if(!$meta->hasReadAccess()){
-			return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to read is denied");
-		}
-		if(!$meta->hasPermission(VtigerCRMObjectMeta::$RETRIEVE,$elemid)){
-			return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to read given object is denied");
+		if($meta->hasReadAccess()!==true){
+			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to write is denied");
 		}
 		
-		if(!$crmObject->exists($elemid)){
-			return new WebServiceError(WebServiceErrorCode::$RECORDNOTFOUND,"Record you are trying to access is not found");
+		if($entityName !== $webserviceObject->getEntityName()){
+			throw new WebServiceException(WebServiceErrorCode::$INVALIDID,"Id specified is incorrect");
 		}
 		
-		$error = $crmObject->read($elemid);
-		if(!$error){
-			return new WebServiceError(WebServiceErrorCode::$DATABASEQUERYERROR,"Database error while performing required operation");
+		if(!$meta->hasPermission(EntityMeta::$RETRIEVE,$id)){
+			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to read given object is denied");
 		}
 		
-		return DataTransform::filterAndSanitize($crmObject->getFields(),$meta);
+		$idComponents = vtws_getIdComponents($id);
+		if(!$meta->exists($idComponents[1])){
+			throw new WebServiceException(WebServiceErrorCode::$RECORDNOTFOUND,"Record you are trying to access is not found");
+		}
+		
+		return $handler->retrieve($id);
 		
 	}
 	

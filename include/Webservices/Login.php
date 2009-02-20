@@ -7,17 +7,17 @@
 		
 		$token = vtws_getActiveToken($userId);
 		if($token == null){
-			return new WebServiceError(WebServiceErrorCode::$INVALIDTOKEN,"Specified token is invalid or expired");
+			throw new WebServiceException(WebServiceErrorCode::$INVALIDTOKEN,"Specified token is invalid or expired");
 		}
 		
 		$accessKey = vtws_getUserAccessKey($userId);
 		if($accessKey == null){
-			return new WebServiceError(WebServiceErrorCode::$ACCESSKEYUNDEFINED,"Access key for the user is undefined");
+			throw new WebServiceException(WebServiceErrorCode::$ACCESSKEYUNDEFINED,"Access key for the user is undefined");
 		}
 		
 		$accessCrypt = md5($token.$accessKey);
 		if(strcmp($accessCrypt,$pwd)!==0){
-			return new WebServiceError(WebServiceErrorCode::$INVALIDUSERPWD,"Invalid username or password");
+			throw new WebServiceException(WebServiceErrorCode::$INVALIDUSERPWD,"Invalid username or password");
 		}
 		$user = $user->retrieveCurrentUserInfoFromFile($userId);
 		return $user;

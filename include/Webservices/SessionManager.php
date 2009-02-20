@@ -13,7 +13,7 @@
 		private $maxLife ;  
 		private $idleLife ;
 		//Note: the url lookup part of http_session will have String null or this be used as id instead of ignoring it.
-        //private $sessionName = "sessionName";
+		//private $sessionName = "sessionName";
 		private $sessionVar = "__SessionExists";
 		private $error ;
 		
@@ -24,8 +24,6 @@
 			$now = time();
 			$this->maxLife = $now + $maxWebServiceSessionLifeSpan;
 			$this->idleLife = $now + $maxWebServiceSessionIdleTime;
-			
-			$this->error = null;
 			
 			HTTP_Session::useCookies(false); //disable cookie usage. may this could be moved out constructor?
 			// only first invocation of following method, which is setExpire 
@@ -41,24 +39,24 @@
 			$valid = true;
 			// expired
 			if (HTTP_Session::isExpired()) {
-			    $valid = false;
+				$valid = false;
 				HTTP_Session::destroy();
-				$this->error = new WebServiceError(WebServiceErrorCode::$SESSLIFEOVER,"Session has life span over please login again");
+				throw new WebServiceException(WebServiceErrorCode::$SESSLIFEOVER,"Session has life span over please login again");
 			}
 			
 			// idled
 			if (HTTP_Session::isIdle()) {
-			    $valid = false;
-			    HTTP_Session::destroy();
-			    $this->error = new WebServiceError(WebServiceErrorCode::$SESSIONIDLE,"Session has been invalidated to due lack activity");
+				$valid = false;
+				HTTP_Session::destroy();
+				throw new WebServiceException(WebServiceErrorCode::$SESSIONIDLE,"Session has been invalidated to due lack activity");
 			}
 			//echo "<br>is new: ", HTTP_Session::isNew();
 			//invalid sessionId provided.
 			//echo "<br>get: ",$this->get($this->sessionVar);
 			if(!$this->get($this->sessionVar) && !HTTP_Session::isNew()){
 				$valid = false;
-			    HTTP_Session::destroy();
-			    $this->error = new WebServiceError(WebServiceErrorCode::$SESSIONIDINVALID,"Session Identifier provided is Invalid");
+				HTTP_Session::destroy();
+				throw new WebServiceException(WebServiceErrorCode::$SESSIONIDINVALID,"Session Identifier provided is Invalid");
 			}
 			
 			return $valid;
@@ -84,7 +82,7 @@
 			}else{
 				if(!$this->get($this->sessionVar)){
 					HTTP_Session::destroy();
-			    	$this->error = new WebServiceError(WebServiceErrorCode::$SESSIONIDINVALID,"Session Identifier provided is Invalid");
+					throw new WebServiceException(WebServiceErrorCode::$SESSIONIDINVALID,"Session Identifier provided is Invalid");
 					$newSID = null;
 				}
 			}

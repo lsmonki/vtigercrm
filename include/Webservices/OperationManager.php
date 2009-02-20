@@ -6,176 +6,29 @@
 	
 	class OperationManager{
 		private $format;
-		private $formatsData=array("json"=>array(
-													"includePath"=>"include/Zend/Json.php",
-													"class"=>"Zend_Json",
-													"encodeMethod"=>"encode",
-													"decodeMethod"=>"decode",
-													"postCreate"=>"setBuiltIn"
-												)
-								);
-		private $operationData = array(
-										"create"=>array(
-														"elementType"=>"String",
-														"element"=>"encoded"
-													),
-										"update"=>array(
-														"element"=>"encoded"
-													),
-										"login"=>array(
-														"username"=>"String",
-														"accessKey"=>"String"
-													),
-										"retrieve"=>array(
-														"id"=>"String"
-													),
-										"delete"=>array(
-														"id"=>"String"
-													),
-										"sync"=>array(
-														"modifiedTime"=>"DateTime",
-														"elementType"=>"String"
-													),
-										"query"=>array(
-														"query"=>"String"
-													),
-										"logout"=>array(
-														"sessionName"=>"String"
-													),
-										"listtypes"=>array(
-													),
-										"getchallenge"=>array(
-														"username"=>"String"
-													),
-										"describe"=>array(
-														"elementType"=>"String"
-													),
-										"extendsession"=>array(
-													)	
-									);
-		private $operationParameter = array(
-											"create"=>array(
-															"elementType",
-															"element"
-														),
-											"update"=>array(
-															"element"
-														),
-											"login"=>array(
-															"username","accessKey"
-														),
-											"retrieve"=>array(
-															"id"
-														),
-											"delete"=>array(
-															"id"
-														),
-											"sync"=>array(
-															"modifiedTime",
-															"elementType"
-														),
-											"query"=>array(
-															"query"
-														),
-											"logout"=>array(
-															"sessionName"
-														),
-											"listtypes"=>array(
-														),
-											"getchallenge"=>array(
-															"username"
-														),
-											"describe"=>array(
-															"elementType"
-														),
-											"extendsession"=>array(
-														)
-										);
-		
-		private $operationMeta = array(
-										"login"=>array(
-														"includes"=>array(
-																		"include/Webservices/Login.php"
-																	)
-													),
-										"retrieve"=>array(
-															"includes"=>array(
-																				"include/Webservices/Retrieve.php"
-																			)
-													),
-										"create"=>array(
-															"includes"=>array(
-																				"include/Webservices/Create.php"
-																			)
-													),
-										"update"=>array(
-															"includes"=>array(
-																				"include/Webservices/Update.php"
-																			)
-													),
-										"delete"=>array(
-															"includes"=>array(
-																				"include/Webservices/Delete.php"
-																			)
-													),
-										"sync"=>array(
-														"includes"=>array(
-																			"include/Webservices/GetUpdates.php"
-																		)
-													),
-										"query"=>array(
-														"includes"=>array(
-																			"include/Webservices/Query.php"
-																		)
-													),
-										"logout"=>array(
-														"includes"=>array(
-																			"include/Webservices/Logout.php"
-																		)
-													),
-										"listtypes"=>array(
-														"includes"=>array(
-																			"include/Webservices/ModuleTypes.php"
-																		)
-													),
-										"getchallenge"=>array(
-														"includes"=>array(
-																			"include/Webservices/AuthToken.php"
-																		)
-													),
-										"describe"=>array(
-														"includes"=>array(
-																			"include/Webservices/DescribeObject.php"
-																		)
-													),
-										"extendsession"=>array(
-														"includes"=>array(
-																			"include/Webservices/ExtendSession.php"
-																		)
-													)
-													
-									);
-		private $operationHandle = array(
-										"login"=>"vtws_login",
-										"getchallenge"=>"vtws_getchallenge",
-										"listtypes"=>"vtws_listtypes",
-										"describe"=>"vtws_describe",
-										"create"=>"vtws_create",
-										"update"=>"vtws_update",
-										"retrieve"=>"vtws_retrieve",
-										"delete"=>"vtws_delete",
-										"query"=>"vtws_query",
-										"sync"=>"vtws_sync",
-										"logout"=>"vtws_logout",
-										"extendsession"=>"vtws_extendSession"
-									);
-
-		private $preLoginOperations = array("getchallenge","login","extendsession");
+		private $formatsData=array(
+			"json"=>array(
+				"includePath"=>"include/Zend/Json.php",
+				"class"=>"Zend_Json",
+				"encodeMethod"=>"encode",
+				"decodeMethod"=>"decode",
+				"postCreate"=>"setBuiltIn"
+			)
+		);
+		private $operationMeta = null;
 		private $formatObjects ;
 		private $inParamProcess ;
 		private $sessionManager;
+		private $pearDB;
+		private $operationName;
+		private $type;
+		private $handlerPath;
+		private $handlerMethod;
+		private $preLogin;
+		private $operationId;
+		private $operationParams;
 		
-		function OperationManager($format, $sessionManager){
+		function OperationManager($adb,$operationName,$format, $sessionManager){
 			
 			$this->format = strtolower($format);
 			$this->sessionManager = $sessionManager;
@@ -191,25 +44,75 @@
 				}
 			}
 			
+			$this->pearDB = $adb;
+			$this->operationName = $operation;
 			$this->inParamProcess = array();
 			$this->inParamProcess["encoded"] = &$this->formatObjects[$this->format]["decode"];
-			//$this->inParamProcess["id"] = array(&$this,"validateId");
+			$this->fillOperationDetails($operationName);
 		}
 		
-		function sanitizeOperation($operationName, $input){
-			if($this->operationData[$operationName]){
-				return $this->sanitizeInputForType($input, $this->operationData[$operationName],$this->operationParameter[$operationName]);
+		function isPreLoginOperation(){
+			return $this->preLogin == 1;
+		}
+		
+		private function fillOperationDetails($operationName){
+			$sql = "select * from vtiger_ws_operation where name=?";
+			$result = $this->pearDB->pquery($sql,array($operationName));
+			if($result){
+				$rowCount = $this->pearDB->num_rows($result);
+				if($rowCount > 0){
+					$row = $this->pearDB->query_result_rowdata($result,0);
+					$this->type = $row['type'];
+					$this->handlerMethod = $row['handler_method'];
+					$this->handlerPath = $row['handler_path'];
+					$this->preLogin = $row['prelogin'];
+					$this->operationName = $row['name'];
+					$this->operationId = $row['operationid'];
+					$this->fillOperationParameters();
+					return;
+				}
 			}
-			return false;
+			throw new WebServiceException(WebServiceErrorCode::$UNKNOWNOPERATION,"Unknown operation requested");
 		}
 		
-		function sanitizeInputForType($input, $mapping,$ordering){
+		private function fillOperationParameters(){
+			$sql = "select * from vtiger_ws_operation_parameters where operationid=? order by sequence";
+			$result = $this->pearDB->pquery($sql,array($this->operationId));
+			$this->operationParams = array();
+			if($result){
+				$rowCount = $this->pearDB->num_rows($result);
+				if($rowCount > 0){
+					for ($i=0;$i<$rowCount;++$i){
+						$row = $this->pearDB->query_result_rowdata($result,$i);
+						array_push($this->operationParams,array($row['name']=>$row['type']));
+					}
+				}
+			}
+		}
+		
+		public function getOperationInput(){
+			$type = strtolower($this->type);
+			switch($type){
+				case 'get': $input = &$_GET;
+					return $input;
+				case 'post': $input = &$_POST;
+					return $input;
+				default: $input = &$_REQUEST;
+					return $input;
+			}
+		}
+		
+		function sanitizeOperation($input){
+			return $this->sanitizeInputForType($input);
+		}
+		
+		function sanitizeInputForType($input){
 			
 			$sanitizedInput = array();
-			
-			foreach($ordering as $ind=>$columnName){
-				$type = $mapping[$columnName];
-				$sanitizedInput[$columnName] = $this->handleType($type,vtws_getParameter($input,$columnName));
+			foreach($this->operationParams as $ind=>$columnDetails){
+				foreach ($columnDetails as $columnName => $type) {
+					$sanitizedInput[$columnName] = $this->handleType($type,vtws_getParameter($input,$columnName));;
+				}
 			}
 			return $sanitizedInput;
 		}
@@ -217,7 +120,6 @@
 		function handleType($type,$value){
 			$result;
 			$value = stripslashes($value);
-			
 			if($this->inParamProcess[$type]){
 				$result = call_user_func($this->inParamProcess[$type],$value);
 			}else{
@@ -226,36 +128,32 @@
 			return $result;
 		}
 		
-		function runOperation($operation, $params,$user){
+		function runOperation($params,$user){
 			global $app_strings,$API_VERSION;
 			try{
 				$app_strings = return_application_language($default_language);
-				
-				$operation = strtolower($operation);
-				
-				if(!isset($this->operationHandle[$operation]) || $this->operationHandle[$operation] ==null){
-					return new WebServiceError(WebServiceErrorCode::$UNKNOWNOPERATION,"Unknown operation requested");
-				}
-				
-				if(!in_array($operation,$this->preLoginOperations)){
+				$operation = strtolower($this->operationName);
+				if(!$this->preLogin){
 					$params[] = $user;
-					return call_user_func_array($this->operationHandle[$operation],$params);
+					return call_user_func_array($this->handlerMethod,$params);
 				}else{
-					
-					$userDetails = call_user_func_array($this->operationHandle[$operation],$params);
-					if(is_a($userDetails,"WebServiceError") || is_array($userDetails)){
+					$userDetails = call_user_func_array($this->handlerMethod,$params);
+					if(is_array($userDetails)){
 						return $userDetails;
 					}else{
 						$this->sessionManager->set("authenticatedUserId", $userDetails->id);
-						$crmObject = new VtigerCRMObject("Users");
-						$userId = getId($crmObject->getModuleId(),$userDetails->id);
+						global $adb;
+						$webserviceObject = VtigerWebserviceObject::fromName($adb,"Users");
+						$userId = vtws_getId($webserviceObject->getEntityId(),$userDetails->id);
 						$vtigerVersion = vtws_getVtigerVersion();
 						$resp = array("sessionName"=>$this->sessionManager->getSessionId(),"userId"=>$userId,"version"=>$API_VERSION,"vtigerVersion"=>$vtigerVersion);
 						return $resp;
 					}
 				}
+			}catch(WebServiceException $e){
+				throw $e;
 			}catch(Exception $e){
-				return new WebServiceError(WebServiceErrorCode::$INTERNALERROR,"Unknown Error while processing request");
+				throw new WebServiceException(WebServiceErrorCode::$INTERNALERROR,"Unknown Error while processing request");
 			}
 		}
 		
@@ -263,15 +161,10 @@
 			return call_user_func($this->formatObjects[$this->format]["encode"],$param);
 		}
 		
-		function getOperationIncludes($operation){
+		function getOperationIncludes(){
 			$includes = array();
-			$operationData = $this->operationMeta[$operation];
-			$includes = (!is_array($operationData["includes"]))? $includes: $operationData["includes"];
+			array_push($includes,$this->handlerPath);
 			return $includes;
-		}
-		
-		function getPreLoginOperations(){
-			return $this->preLoginOperations;
 		}
 		
 	}

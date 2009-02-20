@@ -12,7 +12,7 @@
 		
 		$setypeArray = array();
 		$setypeData = array();
-		$setypeMeta = array();
+		$setypeHandler = array();
 		$setypeNoAccessArray = array();
 		
 		if(!isset($elementType) || $elementType=='' || $elementType==null){
@@ -31,16 +31,24 @@
 		
 		do{
 			if($arre){
-				if((strpos($arre["setype"]," ")===FALSE || strpos($arre["setype"]," ")==="")){
-					if((array_search($arre["setype"],$ignoreModules) === FALSE || 
-							array_search($arre["setype"],$ignoreModules) === "")){
-						$setypeArray[$arre["crmid"]] = $arre["setype"];
-						
-						if(!$setypeData[$arre["setype"]]){
-							$setypeData[$arre["setype"]] = new VtigerCRMObject($arre["setype"],false);
+				if(strpos($arre["setype"]," ")===FALSE){
+					if($arre["setype"] == 'Calendar'){
+						$seType = vtws_getCalendarEntityType($arre['crmid']);
+					}else{
+						$seType = $arre["setype"];
+					}
+					if(array_search($seType,$ignoreModules) === FALSE){
+						$setypeArray[$arre["crmid"]] = $seType;
+						if(!$setypeData[$seType]){
+							$webserviceObject = VtigerWebserviceObject::fromName($adb,$seType);
+							$handlerPath = $webserviceObject->getHandlerPath();
+							$handlerClass = $webserviceObject->getHandlerClass();
 							
-							$setypeMeta[$arre["setype"]] = new VtigerCRMObjectMeta($setypeData[$arre["setype"]],$user);
-							$setypeMeta[$arre["setype"]]->retrieveMeta();
+							require_once $handlerPath;
+							
+							$setypeHandler[$seType] = new $handlerClass($webserviceObject,$user,$adb,$log);
+							$meta = $setypeHandler[$seType]->getMeta();
+							$setypeData[$seType] = new VtigerCRMObject(getTabId($meta->getEntityName()),true);
 						}
 					}
 				}
@@ -55,18 +63,28 @@
 		
 		foreach($setypeArray as $key=>$val){
 			
-			$meta = $setypeMeta[$val];
+			$handler = $setypeHandler[$val];
+			$meta = $handler->getMeta();
 			
-			if(!$meta->hasAccess() || !$meta->hasWriteAccess() || !$meta->hasPermission(VtigerCRMObjectMeta::$RETRIEVE,$key)){
+			if(!$meta->hasAccess() || !$meta->hasWriteAccess() || !$meta->hasPermission(EntityMeta::$RETRIEVE,$key)){
 				if(!$setypeNoAccessArray[$val]){
 					$setypeNoAccessArray[] = $val;
 				}
 				continue;
 			}
-			
-			$setypeData[$val]->read($key);
-			
-			$output["updated"][] = DataTransform::filterAndSanitize($setypeData[$val]->getFields(),$meta);
+			try{
+				$error = $setypeData[$val]->read($key);
+				if(!$error){
+					//Ignore records whose fetch results in an error.
+					continue;
+				}
+				$output["updated"][] = DataTransform::filterAndSanitize($setypeData[$val]->getFields(),$meta);;
+			}catch(WebServiceException $e){
+				//ignore records the user doesn't have access to.
+				continue;
+			}catch(Exception $e){
+				throw new WebServiceException(WebServiceErrorCode::$INTERNALERROR,"Unknown Error while processing request");
+			}
 		}
 		
 		$setypeArray = array();
@@ -83,15 +101,24 @@
 		
 		do{
 			if($arre){
-				if((strpos($arre["setype"]," ")===FALSE || strpos($arre["setype"]," ")==="")){
-					if((array_search($arre["setype"],$ignoreModules) === FALSE || 
-							array_search($arre["setype"],$ignoreModules) === "")){
-						$setypeArray[$arre["crmid"]] = $arre["setype"];
-						if(!$setypeData[$arre["setype"]]){
-							$setypeData[$arre["setype"]] = new VtigerCRMObject($arre["setype"],false);
+				if(strpos($arre["setype"]," ")===FALSE){
+					if($arre["setype"] == 'Calendar'){
+						$seType = vtws_getCalendarEntityType($arre['crmid']);
+					}else{
+						$seType = $arre["setype"];
+					}
+					if(array_search($seType,$ignoreModules) === FALSE){
+						$setypeArray[$arre["crmid"]] = $seType;
+						if(!$setypeData[$seType]){
+							$webserviceObject = VtigerWebserviceObject::fromName($adb,$seType);
+							$handlerPath = $webserviceObject->getHandlerPath();
+							$handlerClass = $webserviceObject->getHandlerClass();
 							
-							$setypeMeta[$arre["setype"]] = new VtigerCRMObjectMeta($setypeData[$arre["setype"]],$user);
-							$setypeMeta[$arre["setype"]]->retrieveMeta();
+							require_once $handlerPath;
+							
+							$setypeHandler[$seType] = new $handlerClass($webserviceObject,$user,$adb,$log);
+							$meta = $setypeHandler[$seType]->getMeta();
+							$setypeData[$seType] = new VtigerCRMObject(getTabId($meta->getEntityName()),true);
 						}
 					}
 				}
@@ -103,7 +130,8 @@
 		$output["deleted"] = array();
 		
 		foreach($setypeArray as $key=>$val){
-			$meta = $setypeMeta[$val];
+			$handler = $setypeHandler[$val];
+			$meta = $handler->getMeta();
 			
 			if(!$meta->hasAccess() || !$meta->hasWriteAccess() /*|| !$meta->hasPermission(VtigerCRMObjectMeta::$RETRIEVE,$key)*/){
 				if(!$setypeNoAccessArray[$val]){
@@ -112,7 +140,7 @@
 				continue;
 			}
 			
-			$output["deleted"][] = getId($meta->getObjectId(), $key);
+			$output["deleted"][] = vtws_getId($meta->getEntityId(), $key);
 		}
 		
 		$q= "select max(modifiedtime) as modifiedtime from vtiger_crmentity where modifiedtime >? and smownerid=?";
@@ -143,7 +171,7 @@
 		$adb->completeTransaction();
 		
 		if($error){
-			return new WebServiceError(WebServiceErrorCode::$DATABASEQUERYERROR,"Database error while performing required operation");
+			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,"Database error while performing required operation");
 		}
 		
 		return $output;

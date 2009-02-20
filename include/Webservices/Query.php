@@ -3,46 +3,26 @@
 	
 	function vtws_query($q,$user){
 		
-		global $adb;
+		global $log,$adb;
+		$webserviceObject = VtigerWebserviceObject::fromQuery($adb,$q);
+		$handlerPath = $webserviceObject->getHandlerPath();
+		$handlerClass = $webserviceObject->getHandlerClass();
 		
-		$parser = new Parser($user, $q);
-		$error = $parser->parse();
+		require_once $handlerPath;
 		
-		if($error){
-			return $parser->getError();
+		$handler = new $handlerClass($webserviceObject,$user,$adb,$log);
+		$meta = $handler->getMeta();
+		
+		$types = vtws_listtypes($user);
+		if(!in_array($webserviceObject->getEntityName(),$types['types'])){
+			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied");
 		}
 		
-		$mysql_query = $parser->getSql();
-		$meta = $parser->getObjectMetaData();
-		if(!$meta->hasAccess()){
-			return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to access object type is denied");
-		}
 		if(!$meta->hasReadAccess()){
-			return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to read is denied");
+			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to read is denied");
 		}
 		
-		$adb->startTransaction();
-		$result = $adb->pquery($mysql_query, array());
-		$error = $adb->hasFailedTransaction();
-		$adb->completeTransaction();
-		
-		if($error){
-			return new WebServiceError(WebServiceErrorCode::$DATABASEQUERYERROR,"Database error while performing required operation");
-		}
-		
-		$noofrows = $adb->num_rows($result);
-		$output = array();
-		for($i=0; $i<$noofrows; $i++){
-			$row = $adb->fetchByAssoc($result,$i);
-			if(!$meta->hasPermission(VtigerCRMObjectMeta::$RETRIEVE,$row["crmid"])){
-				continue;
-			}
-			$output[] = DataTransform::sanitizeDataWithColumn($row,$meta);
-		}
-		
-		return $output;
-		
-		
+		return $handler->query($q);
 	}
 	
 ?>
