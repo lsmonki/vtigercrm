@@ -48,7 +48,7 @@ class Documents extends CRMEntity {
 
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
-				'Title'=>Array('notes'=>'notes_title'),
+				'Title'=>Array('notes'=>'title'),
 				'File Name'=>Array('notes'=>'filename'),
 				'Assigned To' => Array('crmentity'=>'smownerid'),
 				'Folder Name' => Array('attachmentsfolder'=>'foldername')

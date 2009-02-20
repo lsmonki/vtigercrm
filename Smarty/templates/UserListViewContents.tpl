@@ -42,11 +42,17 @@
 	<td class="colHeader small" valign=top>{$LIST_HEADER.4}</td>
 </tr>
 	{foreach name=userlist item=listvalues key=userid from=$LIST_ENTRIES}
+		{assign var=flag value=0}
 <tr>
 	<td class="listTableRow small" valign=top>{$smarty.foreach.userlist.iteration}</td>
 	<td class="listTableRow small" nowrap valign=top><a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record={$userid}"><img src="{'editfield.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_EDIT_BUTTON}" title="{$APP.LBL_EDIT_BUTTON}" border="0"></a>
-	{if $userid neq 1  && $userid neq $CURRENT_USERID}	
-	<img src="{'delete.gif'|@vtiger_imageurl:$THEME}" onclick="deleteUser(this,'{$userid}')" border="0"  alt="{$APP.LBL_DELETE_BUTTON}" title="{$APP.LBL_DELETE_BUTTON}" style="cursor:pointer;"/>
+	{foreach item=name key=id from=$USERNODELETE}
+		{if $userid eq $id || $userid eq $CURRENT_USERID}
+			{assign var=flag value=1}
+		{/if}
+	{/foreach}
+	{if $flag eq 0}
+		<img src="{'delete.gif'|@vtiger_imageurl:$THEME}" onclick="deleteUser(this,'{$userid}')" border="0"  alt="{$APP.LBL_DELETE_BUTTON}" title="{$APP.LBL_DELETE_BUTTON}" style="cursor:pointer;"/>
 	{/if}
 	<a href="index.php?action=EditView&return_action=ListView&return_module=Users&module=Users&parenttab=Settings&record={$userid}&isDuplicate=true"><img src="{'settingsActBtnDuplicate.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_DUPLICATE_BUTTON}" title="{$APP.LBL_DUPLICATE_BUTTON}" border="0"></a>
 </td>

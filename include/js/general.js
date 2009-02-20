@@ -3371,8 +3371,8 @@ function dldCntIncrease(fileid)
              postBody: 'action=DocumentsAjax&mode=ajax&file=SaveFile&module=Documents&file_id='+fileid+"&act=updateDldCnt",
              onComplete: function(response) {
                 }
-                }
-                );
+    		}
+  		);
 }
 //End Documents Module
 

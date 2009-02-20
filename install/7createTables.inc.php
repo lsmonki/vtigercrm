@@ -851,7 +851,228 @@ function create_default_users_access() {
         insertProfile2field($profile3_id);	
         insertProfile2field($profile4_id);
 
-		insert_def_org_field();	
+		
+		$user = new Users();
+        $user->column_fields["last_name"] = 'user';
+        $user->column_fields["user_name"] = 'portaluser';
+        $user->column_fields["is_admin"] = 'off';
+        $user->column_fields["status"] = 'Active'; 
+        $user->column_fields["user_password"] = 'portal'; 
+        $user->column_fields["tz"] = 'Europe/Berlin';
+        $user->column_fields["holidays"] = 'de,en_uk,fr,it,us,';
+        $user->column_fields["workdays"] = '0,1,2,3,4,5,6,';
+        $user->column_fields["weekstart"] = '1';
+        $user->column_fields["namedays"] = '';
+        $user->column_fields["reminder_interval"] = '1 Minute';
+        $user->column_fields["reminder_next_time"] = date('Y-m-d H:i');
+        $user->column_fields["currency_id"] = 1;
+		$user->column_fields["date_format"] = 'yyyy-mm-dd';
+		$user->column_fields["hour_format"] = '24';
+		$user->column_fields["start_hour"] = '08:00';
+		$user->column_fields["end_hour"] = '23:00';
+		$user->column_fields["imagename"] = '';
+		$user->column_fields["internal_mailer"] = '1';
+        $user->column_fields["activity_view"] = 'This Week';	
+		$user->column_fields["lead_view"] = 'Today';
+		$std_email ="portaluser@vtigeruser.com";
+        //to get the role id for standard_user	
+		
+		$portal_roleid = $adb->getUniqueID("vtiger_role");
+		$adb->query("insert into vtiger_role values('H".$portal_roleid."','Portal Role','H".$role1_id."::H".$role2_id."::H".$portal_roleid."',1)");
+		
+		$role_query = "SELECT roleid FROM vtiger_role WHERE rolename='Portal Role'";
+		$adb->database->SetFetchMode(ADODB_FETCH_ASSOC);
+		$role_result = $adb->query($role_query);
+		$role_id = $adb->query_result($role_result,0,"roleid");
+		$user->column_fields["roleid"] = $role_id;
+        
+	    $user->save('Users');
+		$portaluserid = $user->id;
+		
+		//ending  creation of portaluser	
+		
+		//creating a role
+		$portal_profile = $adb->getUniqueID("vtiger_profile");
+        $adb->query("insert into vtiger_role2profile values ('H".$portal_roleid."',".$portal_profile.")");
+        $adb->query("insert into vtiger_profile values ('".$portal_profile."','Portal Profile','Profile for Customer Portal')");
+		
+		$adb->query("insert into vtiger_profile2globalpermissions values ('".$portal_profile."',1,1)");
+		$adb->query("insert into vtiger_profile2globalpermissions values ('".$portal_profile."',2,1)");
+		
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",1,1)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",2,1)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",3,1)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",4,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",6,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",7,1)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",8,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",9,1)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",10,1)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",13,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",14,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",15,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",16,1)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",18,1)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",19,1)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",20,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",21,1)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",22,1)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",23,0)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",24,1)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",25,1)");
+       	$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",26,1)");
+       	$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",27,1)");
+		$adb->query("insert into vtiger_profile2tab values (".$portal_profile.",30,1)");
+		
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",2,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",2,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",2,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",2,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",2,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",4,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",4,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",4,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",4,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",4,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",6,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",6,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",6,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",6,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",6,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",7,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",7,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",7,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",7,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",7,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",8,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",8,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",8,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",8,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",8,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",9,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",9,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",9,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",9,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",9,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",13,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",13,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",13,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",13,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",13,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",14,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",14,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",14,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",14,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",14,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",15,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",15,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",15,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",15,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",15,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",16,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",16,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",16,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",16,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",16,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",18,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",18,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",18,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",18,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",18,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",19,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",19,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",19,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",19,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",19,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",20,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",20,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",20,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",20,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",20,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",21,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",21,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",21,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",21,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",21,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",22,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",22,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",22,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",22,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",22,4,0)");
+
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",23,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",23,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",23,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",23,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",23,4,0)");
+
+        $adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",26,0,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",26,1,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",26,2,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",26,3,0)");
+		$adb->query("insert into vtiger_profile2standardpermissions values (".$portal_profile.",26,4,0)");
+		
+		 $adb->query("insert into vtiger_profile2utility values (".$portal_profile.",2,5,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$portal_profile.",2,6,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$portal_profile.",4,5,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$portal_profile.",4,6,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$portal_profile.",6,5,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$portal_profile.",6,6,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$portal_profile.",7,5,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$portal_profile.",7,6,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$portal_profile.",8,6,0)");
+       	$adb->query("insert into vtiger_profile2utility values (".$portal_profile.",7,8,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$portal_profile.",6,8,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$portal_profile.",4,8,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$portal_profile.",13,5,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$portal_profile.",13,6,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$portal_profile.",13,8,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$portal_profile.",14,5,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$portal_profile.",14,6,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$portal_profile.",7,9,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$portal_profile.",18,5,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$portal_profile.",18,6,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$portal_profile.",30,3,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$portal_profile.",7,10,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$portal_profile.",6,10,0)");
+        $adb->query("insert into vtiger_profile2utility values (".$portal_profile.",4,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$portal_profile.",2,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$portal_profile.",13,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$portal_profile.",14,10,0)");
+		$adb->query("insert into vtiger_profile2utility values (".$portal_profile.",18,10,0)");
+		
+		createUserPrivilegesfile($portaluserid);
+		createUserSharingPrivilegesfile($portaluserid);
+		insertProfile2field($portal_profile);
+		
+		insert_def_org_field();
+		
+		$field_disable_table = array('vtiger_contactdetails','vtiger_products','vtiger_faqcomments','vtiger_service','vtiger_products','vtiger_ticketcomments');
+		$column_name = array('imagename','imagename','comments','taxclass','taxclass','comments');
+		
+		$result= $adb->pquery('select fieldid from vtiger_field where tablename in ('. generateQuestionMarks($field_disable_table) .') and columnname in ('. generateQuestionMarks($column_name) .')',array($field_disable_table,$column_name));						
+		$norows = $adb->num_rows($result);
+		if($norows > 0){
+			for($i=0;$i<$norows;$i++){
+				$fieldid = $adb->query_result($result,$i,'fieldid');
+				$disble_field_profile = $adb->pquery("update vtiger_profile2field set visible = 1 where profileid = ? and fieldid = ?",array($portal_profile,$fieldid));
+				
+			}
+		}
 }
 
 //$startTime = microtime();

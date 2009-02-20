@@ -4184,6 +4184,23 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
 	}
 }
 
+/** Function to check permission to access the column for a given user 
+ * @param $userid -- User Id :: Type integer
+ * @param $tablename -- tablename :: Type String
+ * @param $columnname -- columnname :: Type String
+ * @param $module -- Module Name :: Type varchar
+ */
+function getColumnVisibilityPermission($userid,$columnname, $module)
+{
+	global $adb,$log;
+	$log->debug("in function getcolumnvisibilitypermission $columnname -$userid");
+	$tabid = getTabid($module);
+	$res = $adb->pquery("select fieldname from vtiger_field where tabid=? and columnname=? and vtiger_field.presence in (0,2)", array($tabid, $columnname));
+	$fieldname = $adb->query_result($res, 0, 'fieldname');
+	
+	return getFieldVisibilityPermission($module,$userid,$fieldname);
+}	
+
 /** Function to get the vtiger_field access module array 
   * @returns The vtiger_field Access module Array :: Type Array
   *

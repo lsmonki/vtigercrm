@@ -217,7 +217,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 							else
 								$name = "<a href='index.php?module=".$relatedmodule."&action=CallRelatedList&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."&parenttab=".$tabname."' class='listFormHeaderLinks'>".$lbl_name."".$arrow."</a>";
 						elseif($module == 'Users' && $name == 'User Name')
-							$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"parenttab=".$tabname."&order_by=".$col."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".$mod_strings['LBL_LIST_USER_NAME_ROLE']."".$arrow."</a>";
+							$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"parenttab=".$tabname."&order_by=".$col."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".getTranslatedString('LBL_LIST_USER_NAME_ROLE',$module)."".$arrow."</a>";
 						elseif($relatedlist == "global")
 						        $name = $lbl_name;
 						else
@@ -831,9 +831,9 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			if($fieldname == 'filelocationtype')
 			{
 				if($value == 'I')
-					$value = $mod_strings['LBL_INTERNAL'];
+					$value = getTranslatedString('LBL_INTERNAL',$module);
 				elseif($value == 'E')
-					$value = $mod_strings['LBL_EXTERNAL'];
+					$value = getTranslatedString('LBL_EXTERNAL',$module);
 				else
 					$value = ' --';
 			}
@@ -842,7 +842,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				$downloadtype = $adb->query_result($list_result,$i-1,'filelocationtype');
 				if($downloadtype == 'I')
 				{
-					//$file_value = $mod_strings['LBL_INTERNAL'];
 					$fld_value = $value;
 					$ext_pos = strrpos($fld_value, ".");
 					$ext =substr($fld_value, $ext_pos + 1);
@@ -864,7 +863,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				{
 					if(trim($value) != '' ){
 						$fld_value = $value;
-						$fileicon = "<img src='" . vtiger_imageurl('fbLink.gif', $theme) . "' alt='".$mod_strings['LBL_EXTERNAL_LNK']."' title='".$mod_strings['LBL_EXTERNAL_LNK']."' hspace='3' align='absmiddle' border='0'>";
+						$fileicon = "<img src='" . vtiger_imageurl('fbLink.gif', $theme) . "' alt='".getTranslatedString('LBL_EXTERNAL_LNK',$module)."' title='".getTranslatedString('LBL_EXTERNAL_LNK',$module)."' hspace='3' align='absmiddle' border='0'>";
 					}
 					else{
 						$fld_value = '--';
@@ -889,11 +888,11 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				{
 					if($download_type == 'I' )
 					{
-						$fld_value = "<a href='index.php?module=uploads&action=downloadfile&entityid=$notes_id&fileid=$fileid' title='".$mod_strings["LBL_DOWNLOAD_FILE"]."' onclick='javascript:dldCntIncrease($notes_id);'>".$fld_value."</a>";
+						$fld_value = "<a href='index.php?module=uploads&action=downloadfile&entityid=$notes_id&fileid=$fileid' title='".getTranslatedString("LBL_DOWNLOAD_FILE",$module)."' onclick='javascript:dldCntIncrease($notes_id);'>".$fld_value."</a>";
 					}
 					elseif($download_type == 'E')
 					{
-						$fld_value = "<a target='_blank' href='$file_name' onclick='javascript:dldCntIncrease($notes_id);' title='".$mod_strings["LBL_DOWNLOAD_FILE"]."'>".$fld_value."</a>";
+						$fld_value = "<a target='_blank' href='$file_name' onclick='javascript:dldCntIncrease($notes_id);' title='".getTranslatedString("LBL_DOWNLOAD_FILE",$module)."'>".$fld_value."</a>";
 					}
 					else
 					{
@@ -925,9 +924,9 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			{
 				$filestatus = $value;
 				if($filestatus == 1)
-					$value=$app_strings['yes'];
+					$value=getTranslatedString('yes',$module);
 				elseif($filestatus == 0)
-					$value=$app_strings['no'];
+					$value=getTranslatedString('no',$module);
 				else
 					$value=' --';				
 			}

@@ -1207,6 +1207,12 @@ $app_strings = array (
 'LBL_SETTINGS'=>'Settings',
 'LAYOUT_EDITOR'=>'Layout Editor',
 'CUSTOMFIELD_MAPPING'=>'CustomField Mapping',
+'ADD_PORTAL'=>'Add To Portal',
+'LBL_ADDRESS_INFORMATION'=>'Address Information',
+'LBL_FILE_INTEGRITY_CHECK'=>'Check integrity of this file',
+'LBL_TERMS_INFORMATION'=>'Terms & Conditions',
+'LBL_INVOICE_INFORMATION'=>'Invoice Information',
+
 );
 
 $app_list_strings = array (

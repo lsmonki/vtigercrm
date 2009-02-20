@@ -760,7 +760,7 @@
 		<field name="title" type="C" size="50">
 			<notnull />
 		</field>
-		<field name="filename" type="C" size="100" />
+		<field name="filename" type="C" size="200" />
 		<field name="notecontent" type="X" />
 		<field name="folderid" type="I" size="19">
 			<default value="0" />
@@ -7137,4 +7137,13 @@
 	</table>
 	
 	<!-- home page changes end -->
+	<table name="vtiger_notescf">
+		<field name="notesid" type="I" size="19">
+			<key />
+			<default value="0" />
+		</field>
+
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
 </schema>

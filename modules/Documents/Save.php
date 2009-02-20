@@ -26,14 +26,15 @@ require_once('include/logging.php');
 require_once('include/upload_file.php');
 global $root_directory;
 $local_log =& LoggerManager::getLogger('index');
-
+global $currentModule;
 $focus = new Documents();
 //added to fix 4600
 setObjectValuesFromRequest($focus);
 $search=$_REQUEST['search_url'];
+
 if($_REQUEST['filelocationtype'] == 'I' ){
 	if($_FILES['filelocation']['name'] != ''){
-		$errCode=$_FILES['filename']['error'];
+		$errCode=$_FILES['filelocation']['error'];
 			if($errCode == 0){
 				foreach($_FILES as $fileindex => $files)
 				{
@@ -81,8 +82,8 @@ if($_REQUEST['assigntype'] == 'U')  {
 	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
 }
 //Save the Document
-$focus->save("Documents");
-$focus->insertIntoAttachment($focus->id,'Documents');
+$focus->save($currentModule);
+$focus->insertIntoAttachment($focus->id,$currentModule);	
 $return_id = $focus->id;
 $note_id = $return_id;
 
