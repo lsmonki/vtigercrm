@@ -334,10 +334,12 @@ function create_session($user_name, $password,$version)
        	global $log,$adb;
 	require_once('modules/Users/Users.php');
 	include('vtigerversion.php');
-	if($version != $vtiger_current_version)
-	{
+
+	/* Make 5.0.4 plugins compatible with 5.1.0 */
+	if(version_compare($version,'5.0.4', '>=') === 1) {
 		return array("VERSION",'00');
 	}
+		
 	$return_access = array("FALSES",'00');
 	
 	$objuser = new Users();

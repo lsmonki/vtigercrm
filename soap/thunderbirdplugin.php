@@ -505,11 +505,13 @@ function create_session($user_name, $password,$version)
   global $adb,$log;
   $return_access = 'FALSES';
   include('vtigerversion.php');
-  if($version != $vtiger_current_version)
-  {
-	  return "VERSION";
-  }
-  require_once('modules/Users/Users.php');
+ 
+	/* Make 5.0.4 plugins compatible with 5.1.0 */
+	if(version_compare($version,'5.0.4', '>=') === 1) {
+		return array("VERSION",'00');
+	}
+
+  	require_once('modules/Users/Users.php');
 	$objuser = new Users();
 	if($password != "" && $user_name != '')
 	{
