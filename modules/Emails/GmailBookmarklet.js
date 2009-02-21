@@ -65,7 +65,7 @@ function init(){
 			if(res.success){
 				var result = getResult(res);
 				this.userId=result.userId;
-				this.sessionId=result.sessionId;
+				this.sessionId=result.sessionName;
 			}
 		}
 		

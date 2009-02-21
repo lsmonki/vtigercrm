@@ -5,10 +5,10 @@
 			$userId = $_SESSION["authenticated_user_id"];
 			$sessionManager = new SessionManager();
 			$sessionManager->set("authenticatedUserId", $userId);
-			$crmObject = new VtigerCRMObject("Users");
-			$userId = vtws_getId($crmObject->getModuleId(),$userId);
+			$crmObject = VtigerWebserviceObject::fromName($adb,"Users");
+			$userId = vtws_getId($crmObject->getEntityId(),$userId);
 			$vtigerVersion = vtws_getVtigerVersion();
-			$resp = array("sessionId"=>$sessionManager->getSessionId(),"userId"=>$userId,"version"=>$API_VERSION,"vtigerVersion"=>$vtigerVersion);
+			$resp = array("sessionName"=>$sessionManager->getSessionId(),"userId"=>$userId,"version"=>$API_VERSION,"vtigerVersion"=>$vtigerVersion);
 			return $resp;
 		}else{
 			throw new WebServiceException(WebServiceErrorCode::$AUTHFAILURE,"Authencation Failed");

@@ -1,6 +1,9 @@
 <?php
 require_once 'include/Webservices/Utils.php';
 require_once("include/Zend/Json.php");
+require_once 'include/Webservices/WebserviceField.php';
+require_once 'include/Webservices/EntityMeta.php';
+require_once 'include/Webservices/VtigerWebserviceObject.php';
 require_once("include/Webservices/VtigerCRMObject.php");
 require_once("include/Webservices/VtigerCRMObjectMeta.php");
 require_once("include/Webservices/WebServiceError.php");
@@ -29,20 +32,24 @@ Zend_Json::$useBuiltinEncoderDecoder = true;
 $json = new Zend_Json();
 
 $elementType = $_REQUEST['module'];
-$crmObject = new VtigerCRMObject($elementType);
+
+global $log,$adb;
+$webserviceObject = VtigerWebserviceObject::fromName($adb,$elementType);
+$handlerPath = $webserviceObject->getHandlerPath();
+$handlerClass = $webserviceObject->getHandlerClass();
+
+require_once $handlerPath;
+
+$handler = new $handlerClass($webserviceObject,$current_user,$adb,$log);
+$meta = $handler->getMeta();
+$meta->retrieveMeta();
 
 $types = vtws_listtypes($current_user);
 if(!in_array($elementType,$types['types'])){
-	return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied");
+	throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied");
 }
 
-$meta = new VtigerCRMObjectMeta($crmObject,$current_user);
-if(!$meta->hasAccess()){
-	return new WebServiceError(WebServiceErrorCode::$ACCESSDENIED,"Permission to access object type is denied");
-}
-$fieldColumnMapping = $meta->getFieldColumnMapping();
-$column = $fieldColumnMapping['parent_id'];
-$wsFieldDetails = vtws_getField($column,$meta,$current_user);
+$wsFieldDetails = $handler->getField('parent_id');
 
 $moduleEntityNameDetails = array();
 foreach ($wsFieldDetails['type']['refersTo'] as $type) {
