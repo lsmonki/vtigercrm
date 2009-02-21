@@ -6221,6 +6221,7 @@
 		<field name="folderid" type="I" size="19">
 			<key />
 			<notnull />
+			<autoincrement />
 		</field>
 		<field name="foldername" type="C" size="200">
 			<notnull />

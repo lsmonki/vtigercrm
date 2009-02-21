@@ -92,7 +92,7 @@ class Documents extends CRMEntity {
 
 	function save_module($module)
 	{
-		
+		global $log,$adb;
 		$insertion_mode = $this->mode;
 		if(isset($this->parentid) && $this->parentid != '')
 			$relid =  $this->parentid;		
@@ -101,18 +101,49 @@ class Documents extends CRMEntity {
 		{
 			$this->insertintonotesrel($relid,$this->id);
 		}
-		/*if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
-		{
-			$this->insertIntoEntityTable('vtiger_senotesrel', $module);
-		}
-		elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
-		{
-			$this->deleteRelation('vtiger_senotesrel');
-		}*/
-
-
+		$fieldname = $this->getFileTypeFieldName();
+		if($_REQUEST[$fieldname."_locationtype"] == 'I' ){
+				if($_FILES[$fieldname]['name'] != ''){
+					$errCode=$_FILES[$fieldname]['error'];
+						if($errCode == 0){
+							foreach($_FILES as $fileindex => $files)
+							{
+								if($files['name'] != '' && $files['size'] > 0){
+									$filename = $_FILES[$fieldname]['name'];
+									$filename = from_html(preg_replace('/\s+/', '_', $filename));
+									$filetype = $_FILES[$fieldname]['type'];
+									$filesize = $_FILES[$fieldname]['size'];
+									$filelocationtype = 'I';
+								}
+							}
+					
+						}
+				}elseif($this->mode == 'edit') {
+					$fileres = $adb->pquery("select filetype, filesize,filename,filedownloadcount,filelocationtype from vtiger_notes where notesid=?", array($this->id));
+					if ($adb->num_rows($fileres) > 0) {
+						$filename = $adb->query_result($fileres, 0, 'filename');
+						$filetype = $adb->query_result($fileres, 0, 'filetype');
+						$filesize = $adb->query_result($fileres, 0, 'filesize');
+						$filedownloadcount = $adb->query_result($fileres, 0, 'filedownloadcount');
+						$filelocationtype = $_REQUEST[$fieldname."_locationtype"];
+					}
+				}
+			} 
+			else{
+				//$this->column_fields['filelocationtype'] = 'E';
+				$filelocationtype = 'E';
+				$filename = $_REQUEST[$fieldname];
+				if(!(stripos($filename,'http://') === 0) && $filename != '') {
+					$filename = 'http://'.$filename;
+				}
+				$filetype = '';
+				$filesize = '';
+				$filedownloadcount = '';
+			}
+			$query = "Update vtiger_notes set filename = ? ,filesize = ?, filetype = ? , filelocationtype = ? , filedownloadcount = ? where notesid = ?";
+	 		$re=$adb->pquery($query,array($filename,$filesize,$filetype,$filelocationtype,$filedownloadcount,$this->id));
 		//Inserting into attachments table
-		//$this->insertIntoAttachment($this->id,'Notes');
+		$this->insertIntoAttachment($this->id,'Documents');
 				
 	}
 
@@ -346,5 +377,17 @@ class Documents extends CRMEntity {
 		$this->db->pquery($sql, $params);
 	}
 
-}
+
+// Function to get fieldname for uitype 27 assuming that documents have only one file type field
+
+	function getFileTypeFieldName(){
+		global $adb,$log;
+		$query = 'SELECT fieldname from vtiger_field where tabid = ? and uitype = ?';
+		$tabid = getTabid('Documents');
+		$res = $adb->pquery($query,array($tabid,27));
+		$fieldname = $adb->query_result($res,0,'fieldname');
+		return $fieldname;
+		
+	} 
+}	
 ?>

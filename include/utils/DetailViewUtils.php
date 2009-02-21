@@ -1227,14 +1227,14 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] =getTranslatedString($fieldlabel);
 		$label_fld[]= $col_fields[$fieldname];
 	}
-	elseif($uitype == 121){
+	elseif($uitype == 26){
 		 $label_fld[] =getTranslatedString($fieldlabel);
 		 $query = "select foldername from vtiger_attachmentsfolder where folderid = ?";
 		 $result = $adb->pquery($query, array($col_fields[$fieldname]));
 		 $folder_name = $adb->query_result($result,0,"foldername");
 		 $label_fld[] = $folder_name;
 	}
-	elseif($uitype == 122){
+	elseif($uitype == 27){
 		if($col_fields[$fieldname] == 'I'){
 			$label_fld[]=getTranslatedString($fieldlabel);
 			$label_fld[]= $mod_strings['LBL_INTERNAL'];

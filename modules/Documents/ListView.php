@@ -285,7 +285,7 @@ if($foldercount > 0 )
 		$folder_files = getListViewEntries($focus,"Documents",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 		$folder_details['entries']= $folder_files;
 		$folder_details['navigation'] = getTableHeaderNavigation($navigation_array, $url_string,"Documents",$folder_id,$viewid);
-		if ($displayFolder == true || $folderid == 0) {
+		if ($displayFolder == true || $folderid == 1) {
 			$folders[$foldername] = $folder_details;
 		} else{
 			$emptyfolders[$foldername] = $folder_details;

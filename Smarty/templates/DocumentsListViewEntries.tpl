@@ -51,7 +51,7 @@
             					<td style="padding-right:5px">
             						<input type="button" name="move" value="{$MOD.LBL_MOVE}" class="crmbutton small edit" onClick="fnvshNrm('movefolderlist'); posLay(this,'movefolderlist');" title="{$MOD.LBL_MOVE_DOCUMENTS}">
 	            					<div style="display:none;position:absolute;width:150px;" id="movefolderlist" >
-										<div class="layerPopup thickborder" style="display:block;position:relative;width:150px;" onmouseout="fninvsh('movefolderlist')" onmouseover="fnvshNrm('movefolderlist');">
+										<div class="layerPopup thickborder" style="display:block;position:relative;width:150px;">
 											<table  class="layerHeadingULine" border="0" cellpadding="5" cellspacing="0" width="100%">
 												<tr>
 													<td class="genHeaderSmall" align="left" width="90%">
@@ -149,7 +149,7 @@
 		                     	{$folder.navigation}
 							</td> <!-- $IS_ADMIN eq "on" -->
 							<td class="mailSubHeader" align="right" width="28%">
-								{if $folder.folderid neq '0' && $IS_ADMIN eq "on"}
+								{if $folder.folderid neq '1' && $IS_ADMIN eq "on"}
 								<input type="button" name="delete" value=" {$MOD.LBL_DELETE_FOLDER} " class="crmbutton small delete" onClick="DeleteFolderCheck('{$folder.folderid}');">
 								{else}
 								&nbsp;
@@ -272,7 +272,7 @@
 		
 		
 		<!-- Move documents UI for Documents module ends -->
-		<div class="layerPopup thickborder" style="display:none;position:absolute; left:193px;top:106px;width:155px;" id="emptyfolder" onmouseout="fninvsh('emptyfolder')" onmouseover="fnvshNrm('emptyfolder');">
+		<div class="layerPopup thickborder" style="display:none;position:absolute; left:193px;top:106px;width:155px;" id="emptyfolder">
 			<table  class="layerHeadingULine" border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tr>
 					<td class="genHeaderSmall" align="left">

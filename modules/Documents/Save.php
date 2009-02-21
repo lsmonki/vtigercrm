@@ -32,42 +32,6 @@ $focus = new Documents();
 setObjectValuesFromRequest($focus);
 $search=$_REQUEST['search_url'];
 
-if($_REQUEST['filelocationtype'] == 'I' ){
-	if($_FILES['filelocation']['name'] != ''){
-		$errCode=$_FILES['filelocation']['error'];
-			if($errCode == 0){
-				foreach($_FILES as $fileindex => $files)
-				{
-					if($files['name'] != '' && $files['size'] > 0){
-						$filename = $_FILES['filelocation']['name'];
-						$filename = preg_replace('/\s+/', '_', $filename);
-						$focus->column_fields['filename'] = from_html($filename);
-						$focus->column_fields['filetype'] = $_FILES['filelocation']['type'];
-						$focus->column_fields['filesize'] = $_FILES['filelocation']['size'];
-						
-					}
-				}
-		
-			}
-	} elseif($focus->mode == 'edit') {
-		$fileres = $adb->pquery("select filetype, filesize,filename,filedownloadcount from vtiger_notes where notesid=?", array($focus->id));
-		if ($adb->num_rows($fileres) > 0) {
-			$focus->column_fields['filename'] = $adb->query_result($fileres, 0, 'filename');
-			$focus->column_fields['filetype'] = $adb->query_result($fileres, 0, 'filetype');
-			$focus->column_fields['filesize'] = $adb->query_result($fileres, 0, 'filesize');
-			$focus->column_fields['filedownloadcount'] = $adb->query_result($fileres, 0, 'filedownloadcount');
-			
-		}
-	}
-} 
-else{
-	$focus->column_fields['filename']= $_REQUEST['filepath'];
-	$filelocation = $_REQUEST['filepath'];
-	if(!(stripos($filelocation,'http://') === 0) && $filelocation != '') {
-		$filelocation = 'http://'.$filelocation;
-	}
-	$focus->column_fields['filename']= $filelocation;
-}
 
 if(isset($_REQUEST['notecontent']) && $_REQUEST['notecontent'] != "")
 	$_REQUEST['notecontent'] = fck_from_html($_REQUEST['notecontent']);
@@ -82,8 +46,9 @@ if($_REQUEST['assigntype'] == 'U')  {
 	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
 }
 //Save the Document
+
 $focus->save($currentModule);
-$focus->insertIntoAttachment($focus->id,$currentModule);	
+
 $return_id = $focus->id;
 $note_id = $return_id;
 

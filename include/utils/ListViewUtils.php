@@ -1896,7 +1896,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		$value = ($temp_val != "") ? getCurrencyName($temp_val,false) : "";
 	}
-	elseif($uitype == 121){
+	elseif($uitype == 26){
 		$sql ="select foldername from vtiger_attachmentsfolder where folderid = ?";
 		$res = $adb->pquery($sql,array($temp_val));
 		$foldername = $adb->query_result($res,0,'foldername');

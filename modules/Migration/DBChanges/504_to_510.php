@@ -272,7 +272,7 @@ $DocumentsId = getTabid('Documents');
 ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select', related_tabid=$documents_tab_id WHERE name='get_attachments'");
 ExecuteQuery("alter table vtiger_notes add(folderid int(19) NOT NULL,filetype varchar(50) default NULL,filelocationtype varchar(5) default NULL,filedownloadcount int(19) default NULL,filestatus int(19) default NULL,filesize int(19) NOT NULL default '0',fileversion varchar(50) default NULL)");
 
-ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_attachmentsfolder ( folderid int(19) NOT NULL,foldername varchar(200) NOT NULL default '', description varchar(250) default '', createdby int(19) NOT NULL, sequence int(19) default NULL, PRIMARY KEY  (folderid))");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_attachmentsfolder ( folderid int(19) AUTO_INCREMENT NOT NULL,foldername varchar(200) NOT NULL default '', description varchar(250) default '', createdby int(19) NOT NULL, sequence int(19) default NULL, PRIMARY KEY  (folderid))");
 
 ExecuteQuery("insert into vtiger_attachmentsfolder values (0,'Existing Notes','Contains all Notes migrated from the earlier version',1,1)");
 
@@ -364,11 +364,11 @@ ExecuteQuery("update vtiger_field set quickcreate=3,block = $file_block_id,field
 ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[0].",'smownerid','vtiger_crmentity',1,53,'assigned_user_id','Assigned To',1,0,0,100,2,17,1,'V~O',0,3,'BAS')");
 ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[1].",'filetype','vtiger_notes',1,1,'filetype','File Type',1,2,0,100,3,$file_block_id,2,'V~O',3,'','BAS')");
 ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[2].",'filesize','vtiger_notes',1,1,'filesize','File Size',1,2,0,100,4,$file_block_id,2,'V~O',3,'','BAS')");
-ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[3].",'filelocationtype','vtiger_notes',1,122,'filelocationtype','Download Type',1,0,0,100,1,$file_block_id,1,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[3].",'filelocationtype','vtiger_notes',1,27,'filelocationtype','Download Type',1,0,0,100,1,$file_block_id,1,'V~O',1,'','BAS')");
 ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[4].",'fileversion','vtiger_notes',1,1,'fileversion','Version',1,2,0,100,6,17,1,'V~O',1,'','BAS')");
 ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[5].",'filestatus','vtiger_notes',1,56,'filestatus','Active',1,2,0,100,2,$file_block_id,1,'V~O',1,'','BAS')");
 ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[6].",'filedownloadcount','vtiger_notes',1,1,'filedownloadcount','Download Count',1,2,0,100,7,$file_block_id,2,'I~O',3,'','BAS')");
-ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[7].",'folderid','vtiger_notes',1,121,'folderid','Folder Name',1,2,0,100,4,17,1,'V~O',2,'2','BAS')");
+ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[7].",'folderid','vtiger_notes',1,26,'folderid','Folder Name',1,2,0,100,4,17,1,'V~O',2,'2','BAS')");
 
 for($i=0;$i<count($fieldid);$i++)
 {

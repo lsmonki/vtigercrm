@@ -831,7 +831,7 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 					&nbsp;{$disp_text}
 				{/foreach}
 			</td>
-		{elseif $uitype eq 121}
+		{elseif $uitype eq 26}
 		<td width="20%" class="dvtCellLabel" align=right>
 		<font color="red">{$mandatory_field}</font>{$fldlabel}
 		{if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}
@@ -843,10 +843,10 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 				{/foreach}
 			</select>
 		</td>
-		{elseif $uitype eq 122}
+		{elseif $uitype eq 27}
 			<td width=20% class="dvtCellLabel" align=right >
 				{$fldlabel_other}&nbsp;
-				<select class="small" name="{$fldname}" onchange='changeDldType(this);'>
+				<select class="small" name="{$fldname}_locationtype" onchange='changeDldType(this);'>
 					{section name=combo loop=$fldlabel}
 						<option value="{$fldlabel_combo[combo]}" {$fldlabel_sel[combo]} >{$fldlabel[combo]} </option>
 					{/section}
@@ -874,11 +874,11 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 				{/if}
 		  <td width="30%" align=left class="dvtCellInfo">
 		  <div id="internal"  style="{$internalfilename}" >
-		   <input type="file" name="filelocation" class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" value="{$secondvalue}">{if $secondvalue neq '' && $value neq 'E'}[{$secondvalue}]{/if}<br>
+		   <input type="file" name="{$fldname}" class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" value="{$secondvalue}">{if $secondvalue neq '' && $value neq 'E'}[{$secondvalue}]{/if}<br>
 		  </div>
 		  
 		  <div id="external" class"dvtCellLabel"  style="{$externalfilename}" >
-		  <input type="text" name="filepath" class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" value="{if $value eq 'E'}{$secondvalue}{/if}"><br>
+		  <input type="text" name="{$fldname}" class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" value="{if $value eq 'E'}{$secondvalue}{/if}"><br>
 		  </div>
 		  </td>
 		{elseif $uitype eq 83} <!-- Handle the Tax in Inventory -->

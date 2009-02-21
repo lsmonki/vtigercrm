@@ -390,7 +390,7 @@ function sendfile_email()
 				  
 			<!-- right side relevant info -->
 			<!-- Action links for Event & Todo START-by Minnie -->
-			{if $MODULE eq 'Potentials' || $MODULE eq 'HelpDesk' || $MODULE eq 'Contacts' || $MODULE eq 'Accounts' || $MODULE eq 'Leads' || ($MODULE eq 'Documents' && $FILE_EXIST eq 'yes'  && ($ADMIN eq 'yes' || $FILE_STATUS eq '1'))}
+			{if $MODULE eq 'Potentials' || $MODULE eq 'HelpDesk' || $MODULE eq 'Contacts' || $MODULE eq 'Accounts' || $MODULE eq 'Leads' || ($MODULE eq 'Documents' && ($ADMIN eq 'yes' || $FILE_STATUS eq '1'))}
   			<table width="100%" border="0" cellpadding="5" cellspacing="0">
 				<tr><td>&nbsp;</td></tr>				
 								
@@ -414,7 +414,7 @@ function sendfile_email()
 					</td>
 				</tr>
 						{/if}
-				{elseif $TODO_PERMISSION eq 'true' || $EVENT_PERMISSION eq 'true' || $CONTACT_PERMISSION eq 'true'|| $MODULE eq 'Contacts' || ($MODULE eq 'Documents' && $FILE_EXIST eq 'yes' && $FILE_STATUS eq '1')}                              
+				{elseif $TODO_PERMISSION eq 'true' || $EVENT_PERMISSION eq 'true' || $CONTACT_PERMISSION eq 'true'|| $MODULE eq 'Contacts' || ($MODULE eq 'Documents')}                              
 				<tr><td align="left" class="genHeaderSmall">{$APP.LBL_ACTIONS}</td></tr>
 						
 					{if $MODULE eq 'Contacts'}
@@ -477,12 +477,12 @@ function sendfile_email()
 					{/if}
 					
 					<!-- Start: Actions for Documents Module -->
-					{if $MODULE eq 'Documents' && $FILE_STATUS eq '1'}
+					{if $MODULE eq 'Documents'}
 		                                <tr><td align="left" style="padding-left:10px;">			        
-						{if $DLD_TYPE eq 'I'}	
+						{if $DLD_TYPE eq 'I' && $FILE_STATUS eq '1'}	
 							<br><a href="index.php?module=uploads&action=downloadfile&fileid={$FILEID}&entityid={$NOTESID}"  onclick="javascript:dldCntIncrease({$NOTESID});" class="webMnu"><img src="{'fbDownload.gif'|@vtiger_imageurl:$THEME}" hspace="5" align="absmiddle" title="{$APP.LNK_DOWNLOAD}" border="0"/></a>
 		                    <a href="index.php?module=uploads&action=downloadfile&fileid={$FILEID}&entityid={$NOTESID}" onclick="javascript:dldCntIncrease({$NOTESID});">{$MOD.LBL_DOWNLOAD_FILE}</a>
-						{elseif $DLD_TYPE eq 'E'}
+						{elseif $DLD_TYPE eq 'E' && $FILE_STATUS eq '1'}
 							<br><a target="_blank" href="{$DLD_PATH}" onclick="javascript:dldCntIncrease({$NOTESID});"><img src="{'fbDownload.gif'|@vtiger_imageurl:$THEME}"" align="absmiddle" title="{$APP.LNK_DOWNLOAD}" border="0"></a>
 							<a target="_blank" href="{$DLD_PATH}" onclick="javascript:dldCntIncrease({$NOTESID});">{$MOD.LBL_DOWNLOAD_FILE}</a>
 						{/if}

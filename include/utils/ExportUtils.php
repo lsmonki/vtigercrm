@@ -139,7 +139,7 @@ function getFieldsListFromQuery($query)
 		{
 			$fields .= "";
 		}
-		elseif($tablename == 'vtiger_attachments' && $columnName == 'filename')//Emails filename
+		elseif($tablename == 'vtiger_attachments' && $columnName == 'name')//Emails filename
 		{
 			$fields .= $tablename.".name as '".$fieldlabel."',";
 		}

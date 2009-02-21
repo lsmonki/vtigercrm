@@ -339,7 +339,7 @@ function alphabetic(module,url,dataid)
 
 <!-- Add new Folder UI for Documents module starts -->
 <script language="JavaScript" type="text/javascript" src="modules/Documents/Documents.js"></script>
-<div id="orgLay" style="display:none;width:350px;" class="layerPopup" onmouseout="fninvsh('orgLay')" onmouseover="fnvshNrm('orgLay');">
+<div id="orgLay" style="display:none;width:350px;" class="layerPopup" >
         <table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 	        <tr>
 				<td class="genHeaderSmall" nowrap align="left" width="30%" id="editfolder_info">{$MOD.LBL_ADD_NEW_FOLDER}

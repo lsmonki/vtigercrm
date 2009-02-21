@@ -1406,7 +1406,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
         $fieldvalue[] = getUserName($value);
         $fieldvalue[] = $value;
 	}
-	elseif($uitype == 121){
+	elseif($uitype == 26){
 		$editview_label[]=getTranslatedString($fieldlabel);
 		$folderid=$col_fields['folderid'];
 		$foldername_query = 'select foldername from vtiger_attachmentsfolder where folderid = ?';
@@ -1424,7 +1424,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			}
 		$fieldvalue[] = $fldr_name;
 		}
-	elseif($uitype == 122){
+	elseif($uitype == 27){
 				if($value == 'I'){
 					$internal_selected = "selected";
 					$filename = $col_fields['filename'];

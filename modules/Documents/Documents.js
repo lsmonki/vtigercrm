@@ -336,7 +336,7 @@ function checkFileIntegrityDetailView(noteid)
                 else if(item.indexOf('lost_integrity') > -1)
 		{
 					$('vtbusy_integrity_info').style.display='none';
-					$('integrity_result').innerHTML='<br><br>&nbsp;&nbsp;&nbsp;<font style=color:red>This file lost integrity. It will no more be available for download!</font>';
+					$('integrity_result').innerHTML='<br><br>&nbsp;&nbsp;&nbsp;<font style=color:red>This Documents is not available. It will be marked as Inactive</font>';
 					$('integrity_result').style.display='';	
 					setTimeout(hideresult,6000);	
 		}

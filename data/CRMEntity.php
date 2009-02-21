@@ -414,10 +414,7 @@ class CRMEntity
 		  require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		  if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 		  {
-				if($module == 'Documents')
-			 		$sql = "select * from vtiger_field where tabid in (". generateQuestionMarks($tabid) .") and tablename=? and displaytype in (1,2,3) and presence in (0,2) group by columnname"; 
-			 	else
-			 		$sql = "select * from vtiger_field where tabid in (". generateQuestionMarks($tabid) .") and tablename=? and displaytype in (1,3) and presence in (0,2) group by columnname"; 
+				$sql = "select * from vtiger_field where tabid in (". generateQuestionMarks($tabid) .") and tablename=? and displaytype in (1,3) and presence in (0,2) group by columnname"; 
 				$params = array($tabid, $table_name);	
 		  }
 		  else
