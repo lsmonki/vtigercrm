@@ -127,9 +127,9 @@ switch($currentModule)
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','subject','true','basic',$popuptype,"","",$url);
 		break;
 	case 'Products':
-		require_once("modules/$currentModule/Products.php");
-		$focus = new Products();
-		$smarty->assign("SINGLE_MOD",'Product');
+		require_once("modules/$currentModule/$currentModule.php");
+		$focus = new $currentModule();
+		$smarty->assign("SINGLE_MOD",getTranslatedString('SINGLE_'.$currentModule));
 		if(isset($_REQUEST['curr_row']))
 		{
 			$curr_row = $_REQUEST['curr_row'];
@@ -212,6 +212,14 @@ switch($currentModule)
 		$alphabetical = AlphabeticalSearch($currentModule,'Popup','notes_title','true','basic',$popuptype,"","",$url);
 		break;
 
+	// Special case handling (for curr_row value) for Services module
+	case 'Services':
+		if(isset($_REQUEST['curr_row']))
+		{
+			$curr_row = $_REQUEST['curr_row'];
+			$smarty->assign("CURR_ROW", $curr_row);
+			$url_string .="&curr_row=".$_REQUEST['curr_row'];
+		}
 	// vtlib customization: Generic hook for Popup selection
 	default:
 		require_once("modules/$currentModule/$currentModule.php");

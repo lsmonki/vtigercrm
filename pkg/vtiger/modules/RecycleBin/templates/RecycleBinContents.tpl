@@ -116,7 +116,7 @@
 		</tr>
 	</table>
 </td></tr>		
-<tr><td>
+<!--tr><td>
 		<br>
 		<table width=100% border=0 cellspacing=0 cellpadding=0>
 			<tr><td class="small"><font size=5 color="red">*</font></td><td class="small">Has to be restored manually before restoring the record</td></tr>
@@ -130,7 +130,7 @@
 <td>
 
 </td>
-</tr>
+</tr-->
    </table>
 
 

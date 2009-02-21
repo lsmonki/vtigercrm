@@ -10,6 +10,7 @@
 
 $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Products',
+'SINGLE_Products'=>'Product',
 'LBL_LIST_PRODUCT_NAME'=>'Product Name',
 'LBL_TOOL_FORM_TITLE'=>'Product Tools',
 'LBL_SEARCH_FORM_TITLE'=>'Product Search',
