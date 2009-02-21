@@ -300,7 +300,7 @@ class VtigerCRMObjectMeta extends EntityMeta {
 	
 	function retrieveMeta(){
 		
-		global $current_language,$theme,$current_user;
+		global $current_language,$theme,$current_user,$default_language;
 		
 		$current_user = $this->user;
 		$theme = $this->user->theme;

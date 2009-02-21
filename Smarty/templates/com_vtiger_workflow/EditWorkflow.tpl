@@ -1,3 +1,4 @@
+{include file='com_vtiger_workflow/Header.tpl'}
 <script src="modules/{$module->name}/resources/jquery-1.2.6.js" type="text/javascript" charset="utf-8"></script>
 <script src="modules/{$module->name}/resources/functional.js" type="text/javascript" charset="utf-8"></script>
 <script src="modules/{$module->name}/resources/json2.js" type="text/javascript" charset="utf-8"></script>
@@ -23,7 +24,7 @@
 				{$MOD.LBL_CREATE_TASK}
 				</td>
 			<td width="40%" align="right">
-				<a href="javascript:void;" id="new_task_popup_close">
+				<a href="javascript:void(0);" id="new_task_popup_close">
 					<img border="0" align="absmiddle" src="{'close.gif'|@vtiger_imageurl:$THEME}"/>
 				</a>
 			</td>
@@ -35,8 +36,8 @@
 		{$MOD.LBL_CREATE_TASK_OF_TYPE} 
 		<select name="task_type">
 	{foreach item=taskType from=$taskTypes}
-			<option>
-				{$taskType}
+			<option value='{$taskType}'>
+				{$MOD.$taskType}
 			</option>
 	{/foreach}
 		</select>
@@ -104,6 +105,10 @@
 				</td>
 			</tr>
 		</table>
+		<div id="workflow_loading" style="display:none">
+		  <h4><red>Loading </red><img src="themes/images/vtbusy.gif"</h4>
+		</div>
+
 		<table class="listTableTopButtons" width="100%" border="0" cellspacing="0" cellpadding="5">
 			<tr>
 				<td class="small"> <span id="status_message"></span> </td>
@@ -176,3 +181,4 @@
 {/if}
 </div>
 <div id="dump" style="display:None;"></div>
+{include file='com_vtiger_workflow/Footer.tpl'}

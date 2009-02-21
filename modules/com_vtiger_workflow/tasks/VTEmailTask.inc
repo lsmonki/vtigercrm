@@ -6,13 +6,16 @@ class VTEmailTask extends VTTask{
 		return array("subject", "content", "recepient");
 	}
 	public function doTask($entity){
-		$to_email = $this->recepient;
 		global $adb;
+
 		$result = $adb->query("select email1, email2 from vtiger_users where id=1");
 		$from_email = $adb->query_result($result,0,'email1');
 		
 		$entityCache = new VTEntityCache($adb);
 		$entityCache->put($entity);
+
+		$et = new VTSimpleTemplate($this->recepient);
+		$to_email = $et->render($entityCache, $entity->getId());
 		
 		$st = new VTSimpleTemplate($this->subject);
 		$subject = $st->render($entityCache, $entity->getId());

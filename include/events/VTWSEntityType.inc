@@ -8,6 +8,10 @@ require_once("include/Webservices/WebServiceError.php");
 require_once 'include/utils/utils.php';
 require_once 'include/Webservices/ModuleTypes.php';
 require_once('include/Webservices/DescribeObject.php');
+require_once 'include/Webservices/WebserviceField.php';
+require_once 'include/Webservices/EntityMeta.php';
+require_once 'include/Webservices/VtigerWebserviceObject.php';
+
 /*
  * An implementation of VTEntityType that uses the webservices api to reflect on vtiger's types.
  */
@@ -138,6 +142,16 @@ class VTWSEntityType{
 						case 'multipicklist':
 							$et->type = 'Select';
 							$et->values = array();
+							break;
+						case 'skype':
+							$et->type = 'Skype';
+							break;
+						case 'password':
+							$et->type = 'Password';
+							break;
+						case 'decimal':
+							$et->type = 'Number';
+							$et->format = 'Decimal';
 							break;
 						default:	
 							print_r($type);

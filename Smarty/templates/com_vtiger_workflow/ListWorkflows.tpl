@@ -1,10 +1,10 @@
+{include file='com_vtiger_workflow/Header.tpl'}
 <script src="modules/{$module->name}/resources/jquery-1.2.6.js" type="text/javascript" charset="utf-8"></script>
 <script src="modules/{$module->name}/resources/functional.js" type="text/javascript" charset="utf-8"></script>
 <script src="modules/{$module->name}/resources/workflowlistscript.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 	fn.addStylesheet('modules/{$module->name}/resources/style.css');
 </script>
-
 <div id="new_workflow_popup" class="layerPopup" style="display:none;">
 	<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerHeadingULine">
 		<tr>
@@ -12,7 +12,7 @@
 				Create Workflow
 				</td>
 			<td width="20%" align="right">
-				<a href="javascript:void;" id="new_workflow_popup_close">
+				<a href="javascript:void(0);" id="new_workflow_popup_close">
 					<img border="0" align="absmiddle" src="{'close.gif'|@vtiger_imageurl:$THEME}"/>
 				</a>
 			</td>
@@ -50,8 +50,8 @@
 				<strong><span id="module_info"></span></strong>
 			</td>
 			<td class="small" align="right">
-				<b>{$MOD.LBL_SELECT_MODULE}: </b>
 				<form action="index.php" method="get" accept-charset="utf-8" id="filter_modules">
+					<b>{$MOD.LBL_SELECT_MODULE}: </b>
 					<select class="importBox" name="list_module" id='pick_module'>
 						<option value="All">All</a>
 							<option value="All">-----------------------------</a>
@@ -110,3 +110,5 @@
 {/foreach}
 	</table>
 </div>
+{include file='com_vtiger_workflow/Footer.tpl'}
+

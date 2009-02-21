@@ -2,6 +2,48 @@ function editworkflowscript($, conditions){
 	var vtinst = new VtigerWebservices("webservice.php");
 	var desc = null;
 
+//The following was copied from Homestuuf.js
+	/**
+	 * this function returns the center co-ordinates of the viewport as an array
+	 */
+	function getViewPortCenter(){
+	var height;
+	var width;
+
+	if(typeof window.pageXOffset != "undefined"){
+		height = window.innerHeight/2;
+		width = window.innerWidth/2;
+		height +=window.pageYOffset;
+		width +=window.pageXOffset;
+	}else if(document.documentElement && typeof document.documentElement.scrollTop != "undefined"){
+		height = document.documentElement.clientHeight/2;
+		width = document.documentElement.clientWidth/2;
+		height += document.documentElement.scrollTop;
+		width += document.documentElement.scrollLeft;
+	}else if(document.body && typeof document.body.clientWidth != "undefined"){
+		var height = window.screen.availHeight/2;
+		var width = window.screen.availWidth/2;
+		height += document.body.clientHeight;
+		width += document.body.clientWidth;
+	}
+	return {x: width,y: height};
+	}
+
+
+  /**
+ * this function accepts a node and puts it at the center of the screen
+ * @param object node - the dom object which you want to set in the center
+ */
+function placeAtCenter(node){
+  var centerPixel = getViewPortCenter();
+	node.style.position = "absolute";
+	var point = getDimension(node);
+
+	node.style.top = centerPixel.y - point.y/2 +"px";
+	node.style.right = centerPixel.x - point.x/2 + "px";
+}
+//The previous bit was copied from Homestuff.js
+
 	function id(v){
 		return v;
 	}
@@ -132,9 +174,22 @@ function editworkflowscript($, conditions){
 		el.css({position: 'absolute'});
 		el.width("400px");
 		el.height("110px");
-		positionDivToCenter(el.attr('id'));
+		placeAtCenter(el.get(0));
 	}
 
+	function PageLoadingPopup(){
+		function show(){
+			$('#workflow_loading').css('display', 'block');
+			//center($('#workflow_loading'));
+		}
+		function close(){
+			$('#workflow_loading').css('display', 'none');
+		}
+		return {
+			show:show, close:close
+		};
+	}
+	pageLoadingPopup = PageLoadingPopup();
 
 
 	function NewTaskPopup(){
@@ -235,21 +290,9 @@ function editworkflowscript($, conditions){
 		defaultValue(opType.name)(opType, condno);
 	}
 
-	function testConditionsRemovable(){
-		var count  = $("#save_conditions").children().size();
-		if(count==1){
-			$("#save_conditions").find('.remove-link').css('display', 'none');
-		}else{
-			$("#save_conditions").find('.remove-link').css('display', 'inline');
-		}
-	}
 
 	function removeCondition(condno){
-		var count  = $("#save_conditions").children().size();
-		if(count>1){
-			$(format("#save_condition_%s", condno)).remove();
-			testConditionsRemovable();
-		}
+	  $(format("#save_condition_%s", condno)).remove();
 	}
 
 
@@ -295,6 +338,7 @@ function editworkflowscript($, conditions){
 	}
 
 	$(document).ready(function(){
+		pageLoadingPopup.show();
 		vtinst.extendSession(handleError(function(result){
 			getDescribeObjects(moduleName, handleError(function(modules){
 				var parent = modules[moduleName];
@@ -390,13 +434,10 @@ function editworkflowscript($, conditions){
 						$(format("#save_condition_%s_value", condno)).attr("value", text);
 						condno+=1;
 					});
-				}else{
-					addCondition(condno++);
 				}
-				testConditionsRemovable();
+
 				$("#save_conditions_add").bind("click", function(){
 					addCondition(condno++);
-					testConditionsRemovable();
 				});
 
 				$("#save_submit").bind("click", function(){
@@ -405,12 +446,17 @@ function editworkflowscript($, conditions){
 						var fieldname = $(this).children(".fieldname").attr("value");
 						var operation = $(this).children(".operation").attr("value");
 						var value = fn.htmlentities($(this).children(".value").attr("value"));
-						condition = {fieldname:fieldname, operation:operation, value:value};
+						var condition = {fieldname:fieldname, operation:operation, value:value};
 						conditions[i]=condition;
 					});
-					out = JSON.stringify(conditions);
+					if(conditions.length==0){
+					  var out = "";
+					}else{
+					  var out = JSON.stringify(conditions);
+					}
 					$("#save_conditions_json").attr("value", out);
 				});
+				pageLoadingPopup.close();
 			}));
 		}));
 	});

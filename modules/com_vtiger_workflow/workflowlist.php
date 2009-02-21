@@ -33,7 +33,7 @@
 		
 		$listModule = $request["list_module"];
 		$smarty->assign("listModule", $listModule);
-		if($listModule==null || $listModule=="ALL"){
+		if($listModule==null || strtolower($listModule)=="all"){
 			$smarty->assign("workflows", $wfs->getWorkflows());
 		}else{
 			$smarty->assign("workflows", $wfs->getWorkflowsForModule($listModule));

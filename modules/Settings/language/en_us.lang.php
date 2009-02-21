@@ -1075,8 +1075,8 @@ $mod_strings = Array(
 'LBL_MARK_MESSAGE_AS'=>'Mark message as',
 
 //Added for the workflow module
-'LBL_LIST_WORKFLOWS'=>'List Workflows',
-'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'List the Workflows defined for vtiger',
+'LBL_LIST_WORKFLOWS'=>'Workflows',
+'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Create and edit workflows for vtiger',
 'LBL_TASK_TITLE'=>'Task Title',
 'LBL_PARENT_WORKFLOW'=>'Parent Workflow',
 'MSG_EXECUTE_TASK_DELAY'=>'Execute the task after some delay',

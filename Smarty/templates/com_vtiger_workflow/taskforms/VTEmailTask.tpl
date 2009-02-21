@@ -158,15 +158,15 @@ function VTEmailTask($){
 					}
 				});
 				
-				/*var select = $('#task-emailfields');
+				var select = $('#task-emailfields');
 				$.each(mailFields, function(i, v){
 					select.append('<option class="task-emailfields_option" value="'+v+'">' + fieldLabels[v] + '</option>');
 				});
 				$('.task-emailfields_option').click(function(){
 					var input = $($('#save_recepient').get());
 					var value = '$'+$(this).attr('value');
-					input.attr("value", input.attr("value")+'; '+value);
-				});*/
+					input.attr("value", input.attr("value")+','+value);
+				});
 			}));
 		}));
 	});
@@ -178,7 +178,7 @@ vtEmailTask = VTEmailTask(jQuery)
 </script>
 <table>
 	<tr><td>Recepient:</td>
-		<td><input type="text" name="recepient" value="{$task->recepient}" id="save_recepient" class="form_input"> <!--select id="task-emailfields"></select--></td></tr>
+		<td><input type="text" name="recepient" value="{$task->recepient}" id="save_recepient" class="form_input"> <select id="task-emailfields"></select></td></tr>
 	<tr><td>Subject:</td>
 		<td><input type="text" name="subject" value="{$task->subject}" id="save_subject" class="form_input"></td></tr>
 </table>

@@ -7,6 +7,9 @@ require_once("include/Webservices/DataTransform.php");
 require_once("include/Webservices/WebServiceError.php");
 require_once 'include/Webservices/ModuleTypes.php';
 require_once('include/Webservices/Create.php');
+require_once 'include/Webservices/WebserviceField.php';
+require_once 'include/Webservices/EntityMeta.php';
+require_once 'include/Webservices/VtigerWebserviceObject.php';
 
 require_once("modules/Users/Users.php");
 
@@ -32,9 +35,9 @@ class VTCreateTodoTask extends VTTask{
 		}
 		if($userId===0){
 			$groupId = getRecordOwnerId($entityData->getId());
-			$userId = "GROUPx$groupId";
+			$userId = vtws_getWebserviceEntityId('Groups', $groupId);
 		}else{
-			$userId = getTabid('Users')."x".$userId;
+			$userId = vtws_getWebserviceEntityId('Users', $userId);
 		}
 		$baseDate = $entityData->get($this->datefield);
 		preg_match('/\d\d\d\d-\d\d-\d\d/', $baseDate, $match);
@@ -55,7 +58,7 @@ class VTCreateTodoTask extends VTTask{
 			'eventstatus'=>''
 		);
 		$moduleName = $entityData->getModuleName();
-		$id = getTabid($moduleName).'x'.$entityData->getId();
+		$id = vtws_getWebserviceEntityId($moduleName, $entityData->getId());
 		if($moduleName=='Contacts'){
 			$fields['contact_id'] = $id;
 		}else if(in_array($moduleName, 

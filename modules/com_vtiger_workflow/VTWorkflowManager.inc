@@ -103,7 +103,13 @@
 		}
 		
 		function evaluate($entityCache, $id){
-			return $this->conditionStrategy->evaluate($this->test, $entityCache, $id);
+			if($this->test==""){
+				return true;
+			}else{
+				$cs = $this->conditionStrategy;
+				return $cs->evaluate($this->test, 
+									 $entityCache, $id);
+			}
 		}
 		
 		function executionConditionAsLabel($label=null){

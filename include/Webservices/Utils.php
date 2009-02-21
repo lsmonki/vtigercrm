@@ -248,4 +248,13 @@ function vtws_getCalendarEntityType($id){
 	return $seType;
 }
 
+/***
+ * Get the webservice reference Id given the entity's id and it's type name
+ */
+function vtws_getWebserviceEntityId($entityName, $id){
+	global $adb;
+ 
+	$webserviceObject = VtigerWebserviceObject::fromName($adb,$entityName);
+	return $webserviceObject->getEntityId().'x'.$id;
+}
 ?>

@@ -1,8 +1,8 @@
 function edittaskscript($){
-	
+
 	function NumberBox(element){
-		elementId = element.attr("id");
-		boxId = '#'+elementId+'-number-box';
+		var elementId = element.attr("id");
+		var boxId = '#'+elementId+'-number-box';
 		var str = "";
 		for(var i = 1; i <= 30; i++){
 			str += '<a href="#'+i+'" class="box_cel">'+i+'</a> ';
@@ -15,23 +15,23 @@ function edittaskscript($){
 			var pos = element.position();
 			$(boxId).css('display', 'block');
 			$(boxId).css({
-				position: 'fixed',
-				top: (pos.top+40)+'px',
-				left: (pos.left)+'px'
+				position: 'absolute',
+				top: (pos.top+40)+'px'
+				//left: (pos.left)+'px'
 			});
 		});
-		
+
 		element.blur(function(){
-			setTimeout(function(){$(boxId).css('display', 'none');},50);
+			setTimeout(function(){$(boxId).css('display', 'none');},500);
 		});
-		
+
 		$('.box_cel').click(function(){
 			element.attr('value', $(this).text());
-		})
+		});
 	}
-	
-	
-	
+
+
+
     $(document).ready(function(){
 		NumberBox($('#select_date_days'));
         //UI to set the date for executing the task.
@@ -41,6 +41,6 @@ function edittaskscript($){
     	    }else{
     	        $('#select_date').css('display', 'none');
     	    }
-    	}); 
+    	});
     });
 }
