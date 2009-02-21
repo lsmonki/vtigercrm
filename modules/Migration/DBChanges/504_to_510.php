@@ -1891,7 +1891,7 @@ function createCustomerPortalUser() {
     //to get the role id for standard_user	
 	
 	$portal_roleid = $adb->getUniqueID("vtiger_role");
-	$adb->query("insert into vtiger_role values('H".$portal_roleid."','Portal Profile','H1::H2::H".$portal_roleid."',1)");
+	$adb->query("insert into vtiger_role values('H".$portal_roleid."','Portal Role','H1::H2::H".$portal_roleid."',1)");
 	
 	$role_query = "SELECT roleid FROM vtiger_role WHERE rolename='Portal Role'";
 	$adb->database->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -2075,12 +2075,12 @@ function createCustomerPortalUser() {
 	$field_disable_table = array('vtiger_contactdetails','vtiger_products','vtiger_faqcomments','vtiger_service','vtiger_products','vtiger_ticketcomments');
 	$column_name = array('imagename','imagename','comments','taxclass','taxclass','comments');
 		
-	$result= $adb->pquery('SELECT fieldid FROM vtiger_field WHERE tablename IN ('. generateQuestionMarks($field_disable_table) .') AND columnname IN ('. generateQuestionMarks($column_name) .')',array());						
+	$result= $adb->pquery("SELECT fieldid FROM vtiger_field WHERE tablename IN (". generateQuestionMarks($field_disable_table) .") AND columnname IN (". generateQuestionMarks($column_name) .")",array($field_disable_table,$column_name));						
 	$norows = $adb->num_rows($result);
 	if($norows > 0){
-		for($i=0;i<$norows;$i++){
+		for($i=0;$i<$norows;$i++){
 			$fieldid = $adb->query_result($result,$i,'fieldid');
-			$disble_field_profile = $adb->pquery("UPDATE vtiger_profile2field SET visible = 1 WHERE profileid = ? AND fieldid = ?",array($portal_profile,$fieldid));
+			ExecuteQuery("UPDATE vtiger_profile2field SET visible = 1 WHERE profileid = $portal_profile AND fieldid = $fieldid");
 			
 		}
 	}
