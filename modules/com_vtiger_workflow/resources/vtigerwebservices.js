@@ -126,7 +126,7 @@ function vtigerwebservicesproto(){
 			var status = response['success'];
 			var result = response['result'];
 			if(status==true){
-				self.sessionId = result['sessionId'];
+				self.sessionId = result['sessionName'];
 				self.userId = result['userId'];
 				callback(true, result);
 			}else{
