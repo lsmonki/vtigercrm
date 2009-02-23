@@ -35,7 +35,11 @@ for($i=0; $i<count($skip_modules); $i++) {
 	if ($tab_id != null && $tab_id != '') $skip_tab_ids[] = $tab_id;
 }
 
-$sql = 'SELECT tabid, name FROM vtiger_tab WHERE presence=0 AND isentitytype=1 AND tabid NOT IN ('. generateQuestionMarks($skip_tab_ids) .') ORDER BY name';
+$sql = 'SELECT tabid, name FROM vtiger_tab WHERE presence=0 AND isentitytype=1 ';
+if (count($skip_tab_ids) > 0) {
+	$sql .= ' AND tabid NOT IN ('. generateQuestionMarks($skip_tab_ids) .')';
+}
+$sql .= ' ORDER BY name';
 $result =$adb->pquery($sql, array($skip_tab_ids));
 $noofrows = $adb->num_rows($result);
 
