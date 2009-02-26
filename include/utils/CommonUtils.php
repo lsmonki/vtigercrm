@@ -2228,7 +2228,7 @@ function getGroupslist()
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	
 	//Commented to avoid security check for groups
-	/*if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
+	if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
 	{
 		$result=get_current_user_access_groups($module);
 	}
@@ -2248,8 +2248,7 @@ function getGroupslist()
 		{
 			$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id), $current_user->id);
 		}
-	}*/
-	$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id), $current_user->id);
+	}
 	if(count($groups_combo) > 0) {
 		foreach($groups_combo as $groupid=>$value)  
 		{ 

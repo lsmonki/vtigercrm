@@ -256,41 +256,26 @@ function get_group_array($add_blank=true, $status="Active", $assigned_user="",$p
 		$params = array();		
 		
 		if($private == 'private'){
-			//To get users list
-				
-			$user_query = "select id as id,user_name as user_name from vtiger_users where id=? and status='Active' union select vtiger_user2role.userid as id,vtiger_users.user_name as user_name from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like ? and status='Active' union select shareduserid as id,vtiger_users.user_name as user_name from vtiger_tmp_write_user_sharing_per inner join vtiger_users on vtiger_users.id=vtiger_tmp_write_user_sharing_per.shareduserid where status='Active' and vtiger_tmp_write_user_sharing_per.userid=? and vtiger_tmp_write_user_sharing_per.tabid=?";	
-			$user_params = array($current_user->id, $current_user_parent_role_seq."::%", $current_user->id, getTabid($module));	
-					
-			if (!empty($assigned_user)) {
-				$user_query .= " OR id=?";
-				array_push($user_params, $assigned_user);
-			}
-			$user_result = $db->pquery($user_query, $user_params, true, "Error filling in user array: ");
-			while($row = $db->fetchByAssoc($user_result)) {
-				$user_array[$row['id']] = $row['id'];
-			}
-				
-			$group_ids = array();
-			$usr_res = $db->pquery("select distinct groupid from vtiger_users2group where userid in(".generateQuestionMarks($user_array).")",array($user_array));
-			$num_grps = $db->num_rows($usr_res);
-					
+			
 			$query .= " WHERE groupid=?";			
 			$params = array( $current_user->id);
-			if ($num_grps > 0) {
-				for($i=0; $i<$num_grps; $i++) {
-					$group_ids[] = $db->query_result($usr_res, $i, 'groupid');
-				}
-				$query .= " OR groupid in (".generateQuestionMarks($group_ids).")";
-				array_push($params, $group_ids);
+			
+			if(count($current_user_groups) != 0) {
+				$query .= " OR vtiger_groups.groupid in (".generateQuestionMarks($current_user_groups).")";
+				array_push($params, $current_user_groups);
 			}
-		
 			$log->debug("Sharing is Private. Only the current user should be listed");
 			$query .= " union select vtiger_group2role.groupid as groupid,vtiger_groups.groupname as groupname from vtiger_group2role inner join vtiger_groups on vtiger_groups.groupid=vtiger_group2role.groupid inner join vtiger_role on vtiger_role.roleid=vtiger_group2role.roleid where vtiger_role.parentrole like ?";
 			array_push($params, $current_user_parent_role_seq."::%");
+			
+			if(count($current_user_groups) != 0) {
+				$query .= " union select vtiger_groups.groupid as groupid,vtiger_groups.groupname as groupname from vtiger_groups inner join vtiger_group2rs on vtiger_groups.groupid=vtiger_group2rs.groupid where vtiger_group2rs.roleandsubid in (".generateQuestionMarks($parent_roles).")";
+				array_push($params, $parent_roles);
+			}
 					
-			$query .= " union select sharedgroupid as groupid,vtiger_groups.groupname as groupname from vtiger_tmp_write_group_sharing_per inner join vtiger_groups on vtiger_groups.groupid=vtiger_tmp_write_group_sharing_per.sharedgroupid where vtiger_tmp_write_group_sharing_per.sharedgroupid=?";
+			$query .= " union select sharedgroupid as groupid,vtiger_groups.groupname as groupname from vtiger_tmp_write_group_sharing_per inner join vtiger_groups on vtiger_groups.groupid=vtiger_tmp_write_group_sharing_per.sharedgroupid where vtiger_tmp_write_group_sharing_per.userid=?";
 			array_push($params, $current_user->id);
-
+			
 			$query .= " and vtiger_tmp_write_group_sharing_per.tabid=?";
 			array_push($params,  getTabid($module));
 		}		

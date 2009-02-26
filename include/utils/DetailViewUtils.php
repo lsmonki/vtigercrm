@@ -473,19 +473,14 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 		if($noof_group_rows!=0)
 		{
-			//Commented to avoid security for groups
-			/*if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
+			if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module)] == 3 or $defaultOrgSharingPermission[getTabid($module)] == 0))
 			{
 				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id,'private'), $current_user->id);
 			}
 			else
 			{
 				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id), $current_user->id);
-			}*/
-			if($owner_id != '')
-				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id), $owner_id);
-			else
-				$groups_combo = get_select_options_array(get_group_array(FALSE, "Active", $current_user->id), $current_user->id);
+			}
 		}
 		
 		$label_fld ["options"][] = $users_combo;
