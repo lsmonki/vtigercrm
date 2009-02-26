@@ -52,19 +52,19 @@ class Vtiger_Utils {
 
 		// Set the base directory to compare with
 		$use_root_directory = $root_directory;
-  		if(empty($use_root_directory)) {
+		if(empty($use_root_directory)) {
 			$use_root_directory = realpath(dirname(__FILE__).'/../../.');
 		}
 
-  		$realfilepath = realpath($filepath);
+		$realfilepath = realpath($filepath);
 
-  		/** Replace all \\ with \ first */
-  		$realfilepath = str_replace('\\\\', '\\', $realfilepath);
-  		$rootdirpath  = str_replace('\\\\', '\\', $use_root_directory);
+		/** Replace all \\ with \ first */
+		$realfilepath = str_replace('\\\\', '\\', $realfilepath);
+		$rootdirpath  = str_replace('\\\\', '\\', $use_root_directory);
 
- 		/** Replace all \ with / now */
-  		$realfilepath = str_replace('\\', '/', $realfilepath);
-  		$rootdirpath  = str_replace('\\', '/', $rootdirpath);
+		/** Replace all \ with / now */
+		$realfilepath = str_replace('\\', '/', $realfilepath);
+		$rootdirpath  = str_replace('\\', '/', $rootdirpath);
 
 		if(stripos($realfilepath, $rootdirpath) !== 0) {
 			if($dieOnFail) {
@@ -106,7 +106,7 @@ class Vtiger_Utils {
 	 * Check if table is present in database
 	 * @param String tablename to check
 	 */
-	static function CheckTable($tablename) {		
+	static function CheckTable($tablename) {
 		global $adb;
 		$old_dieOnError = $adb->dieOnError;
 		$adb->dieOnError = false;
@@ -184,10 +184,6 @@ class Vtiger_Utils {
 
 		$create_table = $adb->query("SHOW CREATE TABLE $tablename");
 		$sql = decode_html($adb->query_result($create_table, 0, 1));
-		$lastIndex = strripos($sql, ')');
-		if($lastIndex !== false) {
-			$sql = substr($sql, 0, $lastIndex+1);
-		}
 		return $sql;
 	}
 

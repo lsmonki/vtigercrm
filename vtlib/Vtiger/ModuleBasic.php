@@ -15,6 +15,7 @@ include_once('vtlib/Vtiger/Profile.php');
 include_once('vtlib/Vtiger/Menu.php');
 include_once('vtlib/Vtiger/Link.php');
 include_once('vtlib/Vtiger/Event.php');
+include_once('vtlib/Vtiger/Webservice.php');
 include_once('vtlib/Vtiger/Version.php');
 
 /**

@@ -307,6 +307,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		$this->import_Actions($this->_modulexml, $moduleInstance);
 		$this->import_RelatedLists($this->_modulexml, $moduleInstance);
 		$this->import_CustomLinks($this->_modulexml, $moduleInstance);
+
+		$moduleInstance->initWebservice();
 	}
 
 	/**

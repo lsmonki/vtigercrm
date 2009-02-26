@@ -129,6 +129,13 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 	}
 
 	/**
+	 * Initialize webservice setup for this module instance.
+	 */
+	function initWebservice() {
+		Vtiger_Webservice::initialize($this);
+	}
+
+	/**
 	 * Get instance by id or name
 	 * @param mixed id or name of the module
 	 */

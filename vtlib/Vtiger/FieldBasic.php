@@ -141,7 +141,7 @@ class Vtiger_FieldBasic {
 			$this->sequence = $this->__getNextSequence();
 		}
 
-		if($this->quickcreate) {
+		if($this->quickcreate != 1) { // If enabled for display
 			if(!$this->quicksequence) {
 				$this->quicksequence = $this->__getNextQuickCreateSequence();
 			}
