@@ -109,11 +109,13 @@ class Calendar
 			case 'month':
 				$monthview_days = $this->date_time->daysinmonth;
 				$firstday_of_month = $this->date_time->getThismonthDaysbyIndex(0);
-                                $num_of_prev_days = $firstday_of_month->dayofweek;
-				for($i=0;$i<42;$i++)
-                                {
-					$layout = new Layout('day',$this->date_time->getThismonthDaysbyIndex($i-$num_of_prev_days));
+				$num_of_prev_days = $firstday_of_month->dayofweek;
+				for($i=-$num_of_prev_days-1;$i<42;$i++){
+					$layout = new Layout('day',$this->date_time->getThismonthDaysbyIndex($i));
 					$this->month_array[$layout->start_time->get_formatted_date()] = $layout;
+					if($i==0){
+						continue;
+					}
 					array_push($this->slices,  $layout->start_time->get_formatted_date());
 				}
 				break;

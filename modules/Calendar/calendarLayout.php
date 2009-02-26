@@ -117,79 +117,72 @@ EOQ;
  * Function creates HTML to display small(mini) Calendar 
  * @param array   $cal    - collection of objects and strings
  */
-function get_mini_calendar(& $cal)
-{
-	global $current_user,$adb,$cal_log,$mod_strings, $theme;
+function get_mini_calendar(& $cal){
+	global $current_user,$adb,$cal_log,$mod_strings;
 	$category = getParentTab();
 	$cal_log->debug('Entering get_mini_calendar() method...');
 	$count = 0;
 	//To decide number of rows(weeks) in a month
 	if ($cal['calendar']->month_array[$cal['calendar']->slices[35]]->start_time->month != $cal['calendar']->date_time->month) {
-                $rows = 5;
-        } else {
-                $rows = 6;
-        }
+		$rows = 5;
+	} else {
+		$rows = 6;
+	}
 	$minical = "";
 	$minical .= "<table class='mailClient ' bgcolor='white' border='0' cellpadding='2' cellspacing='0' width='98%'>
-                        <tr>
-				<td class='calHdr'>&nbsp;</td>
-				<td style='padding:5px' colspan='6' class='calHdr' align='center'>".get_previous_cal($cal)."&nbsp;";
-				$minical .= "<a style='text-decoration: none;' href='index.php?module=Calendar&action=index&view=".$cal['view']."".$cal['calendar']->date_time->get_date_str()."&parenttab=".$category."'><b>".display_date($cal['view'],$cal['calendar']->date_time)."</b></a>&nbsp;".get_next_cal($cal)."</td>";
-				$minical .= "<td class='calHdr' align='right'><a href='javascript:ghide(\"miniCal\");'><img src='". vtiger_imageurl('close.gif', $theme). "' align='right' border='0'></a>
-	                     </td></tr>";
+				<tr>
+					<td class='calHdr'>&nbsp;</td>
+					<td style='padding:5px' colspan='6' class='calHdr' align='center'>".get_previous_cal($cal)."&nbsp;";
+					$minical .= "<a style='text-decoration: none;' href='index.php?module=Calendar&action=index&view=".$cal['view']."".$cal['calendar']->date_time->get_date_str()."&parenttab=".$category."'><b>".display_date($cal['view'],$cal['calendar']->date_time)."</b></a>&nbsp;".get_next_cal($cal)."</td>";
+					$minical .= "<td class='calHdr' align='right'><a href='javascript:ghide(\"miniCal\");'><img src='". vtiger_imageurl('close.gif', $theme). "' align='right' border='0'></a>
+				</td></tr>";
 	$minical .= "<tr class='hdrNameBg'>";
 	//To display days in week 
 	$minical .= '<th width="12%">'.$mod_strings['LBL_WEEK'].'</th>';
-	for ($i = 0; $i < 7; $i ++)
-        {
-                $weekdays_row = $cal['calendar']->month_array[$cal['calendar']->slices[$i]];
-                $weekday = $weekdays_row->start_time->getdayofWeek_inshort();
-                $minical .= '<th width="12%">'.$weekday.'</th>';
-        }
+	for ($i = 0; $i < 7; $i ++){
+		$weekday = $mod_strings['cal_weekdays_short'][$i];
+		$minical .= '<th width="12%">'.$weekday.'</th>';
+	}
 	$minical .= "</tr>";	
 	$event_class = '';
 	$class = '';
-	for ($i = 0; $i < $rows; $i ++)
-        {
-                $minical .= "<tr>";
-                for ($j = 0; $j < 7; $j ++)
-                {
+	for ($i = 0; $i < $rows; $i++){
+		$minical .= "<tr>";
+		
+		//calculate blank days for first week
+		for ($j = 0; $j < 7; $j ++){
 			$cal['slice'] = $cal['calendar']->month_array[$cal['calendar']->slices[$count]];
 			$class = dateCheck($cal['slice']->start_time->get_formatted_date());
-			if($count%7 == 0)
+			if($j == 0){
 				$minical .= "<td style='text-align:center' ><a href='index.php?module=Calendar&action=index&view=week".$cal['slice']->start_time->get_date_str()."&parenttab=".$category."'>".$cal['slice']->start_time->week."</td>";
-			//To differentiate day having events from other days
-			if(count($cal['slice']->activities) != 0 && ($cal['slice']->start_time->get_formatted_date() == $cal['slice']->activities[0]->start_time->get_formatted_date()))
-			{
-					$event_class = 'class="eventDay"';
 			}
-			else
-			{
-                       		$event_class = '';
-                        }
+			
+			//To differentiate day having events from other days
+			if(count($cal['slice']->activities) != 0 && ($cal['slice']->start_time->get_formatted_date() == $cal['slice']->activities[0]->start_time->get_formatted_date())){
+				$event_class = 'class="eventDay"';
+			}else{
+				$event_class = '';
+			}
 			//To differentiate current day from other days
-			if($class != '' )
+			if($class != '' ){
 				$class = 'class="'.$class.'"';
-			else
+			}else{
 				$class = $event_class;
+			}
 			
 			//To display month dates
-                        if ($cal['slice']->start_time->getMonth() == $cal['calendar']->date_time->getMonth())
-                        {
+			if ($cal['slice']->start_time->getMonth() == $cal['calendar']->date_time->getMonth()){
 				$minical .= "<td ".$class." style='text-align:center' >";
 				$minical .= "<a href='index.php?module=Calendar&action=index&view=".$cal['slice']->getView()."".$cal['slice']->start_time->get_date_str()."&parenttab=".$category."'>";
 				$minical .= $cal['slice']->start_time->get_Date()."</a></td>";
-                        }
-			else
-			{
+			}else{
 				$minical .= "<td style='text-align:center' ></td>";
 			}
-                        $count++;
-                }
-                $minical .= '</tr>';
+			$count++;
+		}
+		$minical .= '</tr>';
 	}
-	
-        $minical .= "</table>";
+	$minical .= "</table>";
 	echo $minical;
 	$cal_log->debug("Exiting get_mini_calendar() method...");
 }
