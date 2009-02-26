@@ -403,9 +403,11 @@ $em->registerHandler('vtiger.entity.aftersave', 'modules/Documents/AttachFile.ph
 ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_notes:filename:filename:Documents_Filename:V' where cvid = 22 and columnindex = 3");
 custom_addCustomFilterColumn('Documents','All', 'vtiger_crmentity','smownerid','assigned_user_id','Documents_Assigned_To:V',7);
 
+ExecuteQuery("UPDATE vtiger_field SET columnname='name' WHERE fieldname='filename' AND tablename='vtiger_attachments' AND tabid=".getTabid('Emails'));
+
 //remove filename column from trouble ticket
 ExecuteQuery("alter table vtiger_troubletickets drop column filename");
-ExecuteQuery("delete from vtiger_field where fieldname='filename' and tablename='vtiger_attachments'");
+ExecuteQuery("delete from vtiger_field where fieldname='filename' and tablename='vtiger_attachments' AND tabid=".getTabid('HelpDesk'));
 //End: Database changes regarding Documents module
 
 /* Home Page Customization */
