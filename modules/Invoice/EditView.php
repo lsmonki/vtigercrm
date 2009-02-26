@@ -30,8 +30,6 @@ require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
-//Addded for Custom Invoice Number
-require_once('user_privileges/CustomInvoiceNo.php');
 
 global $app_strings,$mod_strings,$currentModule,$log,$current_user;
 
