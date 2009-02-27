@@ -143,7 +143,7 @@
 						{$APP.LBL_NO} {$APP.ACTIVITIES} {$APP.LBL_FOUND} !
 					{else}
 						{* vtlib customization: Use translation string only if available *}
-						{$APP.LBL_NO} {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}s{else}{$MODULE_CREATE}{/if} {$APP.LBL_FOUND} !
+						{$APP.LBL_NO} {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}{else}{$MODULE_CREATE}{/if} {$APP.LBL_FOUND} !
 					{/if}
 					</span></td>
 				</tr>
