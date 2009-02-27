@@ -6460,7 +6460,7 @@
 			<key />
 			<notnull />
 		</field>
-		<field name="table_name" type="C" size="255">
+		<field name="table_name" type="C" size="50">
 			<notnull />
 			<key />
 		</field>
@@ -6479,10 +6479,10 @@
 			<key />
 			<autoincrement />
 		</field>
-		<field name="table_name" type="C" size="255">
+		<field name="table_name" type="C" size="50">
 			<notnull />
 		</field>
-		<field name="field_name" type="C" size="255">
+		<field name="field_name" type="C" size="50">
 			<notnull />
 		</field>
 		<field name="fieldtype" type="C" size="200">

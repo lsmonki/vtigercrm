@@ -1585,7 +1585,7 @@ function webserviceMigration(){
 			"80"=>array("SalesOrder"),"81"=>array("Vendors"),"101"=>array("Users"),"52"=>array("Users"),
 			"357"=>array("Contacts","Accounts","Leads","Users","Vendors"),"59"=>array("Products"),
 			"66"=>array("Leads","Accounts","Potentials","HelpDesk"),"77"=>array("Users"),"68"=>array("Contacts","Accounts"),
-			"117"=>array('Currency'),"116"=>array('Currency'),'121'=>array('DocumentFolders'));
+			"117"=>array('Currency'),"116"=>array('Currency'),'26'=>array('DocumentFolders'));
 	ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_ws_fieldtype(fieldtypeid integer(19) not null auto_increment,uitype varchar(30)not null,fieldtype varchar(200) not null,PRIMARY KEY(fieldtypeid),UNIQUE KEY uitype_idx (uitype)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_ws_referencetype(fieldtypeid integer(19) not null,type varchar(25) not null,PRIMARY KEY(fieldtypeid,type),  CONSTRAINT `fk_1_vtiger_referencetype` FOREIGN KEY (`fieldtypeid`) REFERENCES `vtiger_ws_fieldtype` (`fieldtypeid`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_ws_userauthtoken(userid integer(19) not null,token varchar(25) not null,expiretime INTEGER(19),PRIMARY KEY(userid,expiretime),UNIQUE KEY userid_idx (userid)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
@@ -1665,8 +1665,8 @@ function webserviceMigration(){
 	$entityId = $adb->getUniqueID("vtiger_ws_entity");
 	$adb->pquery('insert into vtiger_ws_entity(id,name,handler_path,handler_class,ismodule) values (?,?,?,?,?)',
 			array($entityId,'Groups',$groupHandler['file'],$groupHandler['class'],0));
-	ExecuteQuery("CREATE TABLE IF NOT EXISTS `vtiger_ws_entity_tables` (`webservice_entity_id` int(11) NOT NULL ,`table_name` varchar(255) NOT NULL , PRIMARY KEY  (`webservice_entity_id`,`table_name`), CONSTRAINT `fk_1_vtiger_ws_actor_tables` FOREIGN KEY (`webservice_entity_id`) REFERENCES `vtiger_ws_entity` (`id`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8");
-	ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_ws_entity_fieldtype(fieldtypeid integer(19) not null auto_increment,table_name varchar(255) not null,field_name varchar(255) not null,fieldtype varchar(200) not null,PRIMARY KEY(fieldtypeid),UNIQUE KEY vtiger_idx_1_tablename_fieldname (table_name,field_name)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+	ExecuteQuery("CREATE TABLE IF NOT EXISTS `vtiger_ws_entity_tables` (`webservice_entity_id` int(11) NOT NULL ,`table_name` varchar(50) NOT NULL , PRIMARY KEY  (`webservice_entity_id`,`table_name`), CONSTRAINT `fk_1_vtiger_ws_actor_tables` FOREIGN KEY (`webservice_entity_id`) REFERENCES `vtiger_ws_entity` (`id`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+	ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_ws_entity_fieldtype(fieldtypeid integer(19) not null auto_increment,table_name varchar(50) not null,field_name varchar(50) not null,fieldtype varchar(200) not null,PRIMARY KEY(fieldtypeid),UNIQUE KEY vtiger_idx_1_tablename_fieldname (table_name,field_name)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_ws_entity_referencetype(fieldtypeid integer(19) not null,type varchar(25) not null,PRIMARY KEY(fieldtypeid,type),  CONSTRAINT `vtiger_fk_1_actors_referencetype` FOREIGN KEY (`fieldtypeid`) REFERENCES `vtiger_ws_entity_fieldtype` (`fieldtypeid`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	require_once("include/Webservices/WebServiceError.php");
 	require_once 'include/Webservices/VtigerWebserviceObject.php';
