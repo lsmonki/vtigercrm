@@ -197,7 +197,7 @@ class Vtiger_MailBox {
 	 * Mark the message in the mailbox.
 	 */
 	function markMessage($messageid) {
-		$markas = $this->_scannerinfo->_markas;
+		$markas = $this->_scannerinfo->markas;
 		if($this->_imap && $markas) {
 			if(strtoupper($markas) == 'SEEN') $markas = "\\Seen";
 			imap_setflag_full($this->_imap, '1', $markas);
