@@ -291,11 +291,13 @@ function init(){
 		if(busyElem==null){
 			busyElem = doc.createElement('div');
 			busyElem.id = busyElementId;
-			busyElem.innerHTML="Working ...";
+			busyElem.innerHTML="Working...";
 			busyElem.style.position="absolute";
 			busyElem.style.top="5px";
 			busyElem.style.right="5px";
-			busyElem.style.color="red";
+			busyElem.style.color="white";
+			busyElem.style.backgroundColor="#D75235";
+			busyElem.style.padding="2px";
 			bookMarkletDiv.appendChild(busyElem);
 		}else{
 			busyElem.style.display="block";
@@ -374,9 +376,6 @@ function init(){
 				var elem = doc.getElementById("__vtigerAccountSearchList___");
 				elem.style.display="";
 				
-				var adjacentElem = getSiblingByTagName(elem,"tr");
-				adjacentElem.style.display="";
-				
 				var accountName = doc.getElementById("__searchaccount__").value;
 				if(accountName.length < 1){
 					alert("Please enter the search critiria");
@@ -394,15 +393,12 @@ function init(){
 					if(responseElem == null){
 						var sibling = doc.createElement("tr");
 						var td = doc.createElement("td");
-						td.colSpan = "2";
-						td.align="center";
-						str = "<span class=\"tiny\">"+
-								"Click on the link to select</span><div id=\"__vtigerAccountSearchResponse___\" "+
+						td.colSpan = "3";
+						str = "<div id=\"__vtigerAccountSearchResponse___\" "+
 								"style=\"width: 100%;overflow: auto;\"> </div>";
 						td.innerHTML = str;
 						sibling.appendChild(td);
-						var adjacentElem = getSiblingByTagName(elem,"tr");
-						elem.parentNode.insertBefore(sibling,adjacentElem);
+						elem.parentNode.appendChild(sibling);
 					}
 					onReady("__vtigerAccountSearchResponse___",function(){
 						displaySearchResult(moduleName,response,accountName);
@@ -466,16 +462,17 @@ function init(){
 		var queryResponse = JSON.parse(response.responseText);
 		if(queryResponse.success == true){
 			var queryResult = client.getResult(queryResponse);
-			var str ="";
+			var str ="<ul class='searchResult'>";
 			if(queryResult.length > 0){
 				each(queryResult, function(i, row){
 					var entityName = getEntityName(moduleName,row);
-					str+="<a id=\""+row['id']+"\" class='small searchLinks'>"+
-						entityName+"</a>";
+					str+="<li><a id=\""+row['id']+"\" class='small searchLinks'>"+
+						entityName+"</a></li>";
 				});
 			}else{
-				str +="No Record Match \""+accountName+"\"";
+				str +="<li>No Record Match \""+accountName+"\"</li>";
 			}
+			str += "</ul>";
 			var elem = doc.getElementById("__vtigerAccountSearchResponse___");
 			elem.style.height="120px";
 			elem.innerHTML = str;
@@ -486,8 +483,6 @@ function init(){
 					setAccountId(elem.id,entityName);
 					var wrap = doc.getElementById("__vtigerAccountSearchList___");
 					wrap.style.display="none";
-					var sibling = getSiblingByTagName(wrap,"tr");
-					sibling.style.display="none";
 					doc.getElementById('__searchaccount__').value='';
 				}
 			});

@@ -289,6 +289,8 @@ if ($activity_mode == 'Task') {
 }
 $smarty->assign("CUSTOM_FIELDS_DATA", $custom_fields_data);
 
+$smarty->assign("REPEAT_LIMIT_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+
 $smarty->display("ActivityEditView.tpl");
 
 ?>

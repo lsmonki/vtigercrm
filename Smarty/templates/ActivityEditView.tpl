@@ -550,7 +550,7 @@ var gVTModule = '{$smarty.request.module}';
 													<input type="checkbox" name="recurringcheck" onClick="showhide('repeatOptions')">
 													{/if}
 													</td>
-													<td colspan=2>{$MOD.LBL_ENABLE_REPEAT}<td>
+													<td>{$MOD.LBL_ENABLE_REPEAT}<td>
 												</tr>
 												<tr>
 													<td colspan=2>
@@ -574,6 +574,15 @@ var gVTModule = '{$smarty.request.module}';
 												<option value="Monthly" {if $ACTIVITYDATA.eventrecurringtype eq 'Monthly'} selected {/if}>{$MOD.LBL_MONTHS}</option>
 													<option value="Yearly" {if $ACTIVITYDATA.eventrecurringtype eq 'Yearly'} selected {/if}>{$MOD.LBL_YEAR}</option>
 													</select>
+													<!-- Repeat Feature Enhanced -->
+													<b>{$MOD.LBL_UNTIL}</b> <input type="text" name="calendar_repeat_limit_date" id="calendar_repeat_limit_date" class="textbox" style="width:90px" value="" ></td><td width=100% align="left"><img border=0 src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$MOD.LBL_SET_DATE}..." title="{$MOD.LBL_SET_DATE}..." id="jscal_trigger_calendar_repeat_limit_date">
+													{literal}
+														<script type="text/javascript">
+														Calendar.setup ({inputField : "calendar_repeat_limit_date", ifFormat : {/literal}
+"{$REPEAT_LIMIT_DATEFORMAT}"
+{literal}, showsTime : false, button : "jscal_trigger_calendar_repeat_limit_date", singleClick : true, step : 1})</script>
+													{/literal}
+													<!-- END -->
 													</td>
 												</tr>
 												</table>

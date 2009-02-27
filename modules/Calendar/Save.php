@@ -266,6 +266,11 @@ if(isset($_REQUEST['viewOption']) && $_REQUEST['viewOption']!='')
 if(isset($_REQUEST['subtab']) && $_REQUEST['subtab']!='') 
 	$subtab=$_REQUEST['subtab'];
 
+if($_REQUEST['recurringcheck']) { 
+	include_once dirname(__FILE__) . '/RepeatEvents.php';
+	Calendar_RepeatEvents::repeat($focus);
+}
+
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') 
 	$return_viewname='0';

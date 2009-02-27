@@ -15,23 +15,21 @@ if(navigator.userAgent.toLowerCase().indexOf("msie") == -1){
 		bookMarkletDiv.style.height="450px";
 		bookMarkletDiv.style.zIndex="100000";
 		bookMarkletDiv.innerHTML="&nbsp;";
-		
-		var img = doc.createElement("span");
-		img.innerHTML = '<img src="'+doc.vtigerURL+'themes/images/vtiger.jpg" alt="vtiger CRM"'+
-								' title="vtiger CRM" border="0" style="height: 36px;">';
-		bookMarkletDiv.appendChild(img);
+		bookMarkletDiv.style.overflow = 'hidden';
+		bookMarkletDiv.style.fontSize = '11px';
+		bookMarkletDiv.style.fontFamily = 'Arial, sans-serif';
 		
 		var closeMe = doc.createElement("span");
 		closeMe.style.position="absolute";
-		closeMe.style.top="10px";
-		closeMe.style.right="20px";
-		closeMe.style.color="blue";
+		closeMe.style.top="5px";
+		closeMe.style.right="5px";
+		closeMe.style.color="#0070BA";
 		closeMe.style.textDecoration="underline";
 		closeMe.style.width="100%";
 		closeMe.style.textAlign="right";
-		closeMe.style.fontSize="15px";
 		closeMe.style.cursor="pointer";
-		closeMe.innerHTML = "Close Window";
+		closeMe.innerHTML = "<img src='"+ doc.vtigerURL + "themes/images/close.gif' title='Close Window' " +
+				"alt='Close Window' border=0>";
 		closeMe.onclick = function(){
 			window.removeMe();
 		}

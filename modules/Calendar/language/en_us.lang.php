@@ -429,6 +429,11 @@ $mod_strings = Array(
 
 //Custom Fields support for Calendar
 'LBL_CUSTOM_INFORMATION'=>'Custom Information',
+
+// Repeat Event support for Calendar
+'LBL_UNTIL' => 'Until',
+'LBL_SET_DATE'=>'Set Date',
+
 );
 
 ?>
