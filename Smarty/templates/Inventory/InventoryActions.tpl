@@ -222,7 +222,6 @@
 <script>
 function sendpdf_submit()
 {
-	document.DetailView.submit();
 {/literal}
 	{if $MODULE eq 'Invoice'}
 {literal}

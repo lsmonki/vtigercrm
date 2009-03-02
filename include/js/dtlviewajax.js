@@ -248,25 +248,22 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
                         method: 'post',
                         postBody: data,
                         onComplete: function(response) {
-                  				if(response.responseText.indexOf(":#:FAILURE")>-1)
-                  				{
-                  					alert(alert_arr.ERROR_WHILE_EDITING);
-                  				}
-                  				else if(response.responseText.indexOf(":#:SUCCESS")>-1)
-						{
-							//For HD & FAQ - comments, we should empty the field value
-							if((module == "HelpDesk" || module == "Faq") && fieldName == "comments")
-							{
-								getObj(dtlView).innerHTML = "";
-								getObj("comments").value = "";
-								getObj("comments_div").innerHTML = response.responseText.replace(":#:SUCCESS","");
+							if(response.responseText.indexOf(":#:FAILURE")>-1) {
+	          					alert(alert_arr.ERROR_WHILE_EDITING);
+	          				}
+	          				else if(response.responseText.indexOf(":#:SUCCESS")>-1) {
+								//For HD & FAQ - comments, we should empty the field value
+								if((module == "HelpDesk" || module == "Faq") && fieldName == "comments") {
+									var comments = response.responseText.replace(":#:SUCCESS","");
+									if(getObj("comments_div") != null) getObj("comments_div").innerHTML = comments;
+									if(getObj(dtlView) != null) getObj(dtlView).innerHTML = "";
+									if(getObj("comments") != null) getObj("comments").value = "";
+								}
+	           					$("vtbusy_info").style.display="none";
 							}
-
-                  					$("vtbusy_info").style.display="none";
 						}
-                        }
                 }
-            );
+	);
 	tagValue = get_converted_html(tagValue);
 	if(uitype == '13' || uitype == '104')
 	{

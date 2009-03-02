@@ -145,9 +145,7 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 				<table border=0 cellspacing=0 cellpadding=0 width=95% align=center>
 				   <tr>
 					<td>						
-   						<form action="index.php" method="post" name="DetailView" id="form">
-						{include file='DetailViewHidden.tpl'}
-						<table border=0 cellspacing=0 cellpadding=3 width=100% class="small">
+   						<table border=0 cellspacing=0 cellpadding=3 width=100% class="small">
 						   <tr>
 								<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
 								
@@ -158,13 +156,13 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 								{/if}
 								<td class="dvtTabCache" align="right" style="width:100%">
 									{if $EDIT_DUPLICATE eq 'permitted'}
-									<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
+									<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='DetailView'; DetailView.return_id.value='{$ID}';DetailView.module.value='{$MODULE}'; submitFormForAction('DetailView','EditView');" type="button" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
 									{/if}
 									{if $EDIT_DUPLICATE eq 'permitted' && $MODULE neq 'Documents'}
-									<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
+									<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='DetailView'; DetailView.isDuplicate.value='true';DetailView.module.value='{$MODULE}'; submitFormForAction('DetailView','EditView');" type="button" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
 									{/if}
 									{if $DELETE eq 'permitted'}
-									<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; {if $MODULE eq 'Accounts'} return confirm('{$APP.NTC_ACCOUNT_DELETE_CONFIRMATION}') {else} return confirm('{$APP.NTC_DELETE_CONFIRMATION}') {/if}" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+									<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='index'; {if $MODULE eq 'Accounts'} var confirmMsg = '{$APP.NTC_ACCOUNT_DELETE_CONFIRMATION}' {else} var confirmMsg = '{$APP.NTC_DELETE_CONFIRMATION}' {/if}; submitFormForActionWithConfirmation('DetailView', 'Delete', confirmMsg);" type="button" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
 									{/if}
 								
 									{if $privrecord neq ''}
@@ -183,7 +181,6 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 								</td>
 							</tr>
 						</table>
-						</form>
 					</td>
 				   </tr>
 				   <tr>
@@ -193,6 +190,9 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 
 							<td align=left style="padding:10px;">
 							<!-- content cache -->
+								<form action="index.php" method="post" name="DetailView" id="form">
+								{include file='DetailViewHidden.tpl'}
+						
 								<!-- Entity informations display - starts -->	
 								<table border=0 cellspacing=0 cellpadding=0 width=100%>
 			                			   <tr>
@@ -284,7 +284,7 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 
 										<!-- Product Details informations -->
 										{$ASSOCIATED_PRODUCTS}
-
+										</form>
 									</td>
 <!-- The following table is used to display the buttons -->
 								<table border=0 cellspacing=0 cellpadding=0 width=100%>
@@ -317,9 +317,7 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 						   </tr>
 						    <tr>
 					<td>						
-   						<form action="index.php" method="post" name="DetailView1" id="form2">
-						{include file='DetailViewHidden.tpl'}
-						<table border=0 cellspacing=0 cellpadding=3 width=100% class="small">
+   						<table border=0 cellspacing=0 cellpadding=3 width=100% class="small">
 						   <tr>
 								<td class="dvtTabCacheBottom" style="width:10px" nowrap>&nbsp;</td>
 								
@@ -330,13 +328,13 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 								{/if}
 								<td class="dvtTabCacheBottom" align="right" style="width:100%">
 									{if $EDIT_DUPLICATE eq 'permitted'}
-									<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
+									<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='DetailView'; DetailView.return_id.value='{$ID}';DetailView.module.value='{$MODULE}'; submitFormForAction('DetailView','EditView');" type="button" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
 									{/if}
 									{if $EDIT_DUPLICATE eq 'permitted' && $MODULE neq 'Documents'}
-									<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
+									<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='DetailView'; DetailView.isDuplicate.value='true';DetailView.module.value='{$MODULE}'; submitFormForAction('DetailView','EditView');" type="button" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
 									{/if}
 									{if $DELETE eq 'permitted'}
-									<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; {if $MODULE eq 'Accounts'} return confirm('{$APP.NTC_ACCOUNT_DELETE_CONFIRMATION}') {else} return confirm('{$APP.NTC_DELETE_CONFIRMATION}') {/if}" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+									<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='index'; {if $MODULE eq 'Accounts'} var confirmMsg = '{$APP.NTC_ACCOUNT_DELETE_CONFIRMATION}' {else} var confirmMsg = '{$APP.NTC_DELETE_CONFIRMATION}' {/if}; submitFormForActionWithConfirmation('DetailView', 'Delete', confirmMsg);" type="button" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
 									{/if}
 								
 									{if $privrecord neq ''}
@@ -355,7 +353,6 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 								</td>
 							</tr>
 						</table>
-						</form>
 					</td>
 				   </tr>
 						</table>

@@ -104,11 +104,9 @@ function DeleteTag(id,recordid)
 <div id="lstRecordLayout" class="layerPopup" style="display:none;width:325px;height:300px;"></div> <!-- Code added by SAKTI on 17th Jun, 2008 -->
 
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
-<form action="index.php" method="post" name="DetailView" id="form">
 <tr><td>&nbsp;</td>
 	<td>
                 <table cellpadding="0" cellspacing="5" border="0">
-			{include file='DetailViewHidden.tpl'}
 		</table>	
 
 <!-- Contents -->
@@ -123,15 +121,15 @@ function DeleteTag(id,recordid)
 				</td>
 				<td align="right">		
 					{if $EDIT_DUPLICATE eq 'permitted'}
-					<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
+					<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='DetailView'; DetailView.return_id.value='{$ID}';DetailView.module.value='{$MODULE}'; submitFormForAction('DetailView','EditView');" type="button" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
 					{/if}
 					
 					{if $EDIT_DUPLICATE eq 'permitted'}
-					<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
+					<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='DetailView'; DetailView.isDuplicate.value='true';DetailView.module.value='{$MODULE}'; submitFormForAction('DetailView','EditView');" type="button" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
                     {/if}
                     
                     {if $DELETE eq 'permitted'}
-					<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; {if $VIEWTYPE eq 'calendar'} this.form.return_action.value='index'; {else} this.form.return_action.value='ListView'; {/if}  this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+					<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="DetailView.return_module.value='{$MODULE}'; {if $VIEWTYPE eq 'calendar'} DetailView.return_action.value='index'; {else} DetailView.return_action.value='ListView'; {/if}  submitFormForActionWithConfirmation('DetailView', 'Delete', '{$APP.NTC_DELETE_CONFIRMATION}');" type="button" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
 					{/if}
 					
 					{if $privrecord neq ''}
@@ -160,7 +158,9 @@ function DeleteTag(id,recordid)
 		<td valign=top align=left >
                            <table border=0 cellspacing=0 cellpadding=3 width=100%>
 				<tr>
-					<td align=left>
+					<td align=left>					
+					<form action="index.php" method="post" name="DetailView" id="form">
+					{include file='DetailViewHidden.tpl'}
 					<!-- content cache -->
 					
 					<table border=0 cellspacing=0 cellpadding=0 width=100%>
@@ -556,8 +556,8 @@ function DeleteTag(id,recordid)
 					   </tr>
                 </table>
 		{/if}
-		</form>
 	</table>
+	</form>
 	</td>
 	<td width=22% valign=top style="border-left:2px dashed #cccccc;padding:13px">
 						<!-- right side relevant info -->
@@ -622,19 +622,17 @@ function DeleteTag(id,recordid)
 	</td>
 </tr>
 <tr>
-	<form action="index.php" method="post" name="DetailView" id="form2">
-	{include file='DetailViewHidden.tpl'}
 	<td align="right" style="border-top:1px dotted #cccccc">		
 		{if $EDIT_DUPLICATE eq 'permitted'}
-		<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
+		<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='DetailView'; DetailView.return_id.value='{$ID}';DetailView.module.value='{$MODULE}'; submitFormForAction('DetailView','EditView');" type="button" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
 		{/if}
 		
 		{if $EDIT_DUPLICATE eq 'permitted'}
-		<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
+		<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='DetailView'; DetailView.isDuplicate.value='true';DetailView.module.value='{$MODULE}'; submitFormForAction('DetailView','EditView');" type="button" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
         {/if}
         
         {if $DELETE eq 'permitted'}
-		<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; {if $VIEWTYPE eq 'calendar'} this.form.return_action.value='index'; {else} this.form.return_action.value='ListView'; {/if}  this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+		<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="DetailView.return_module.value='{$MODULE}'; {if $VIEWTYPE eq 'calendar'} DetailView.return_action.value='index'; {else} DetailView.return_action.value='ListView'; {/if} submitFormForActionWithConfirmation('DetailView', 'Delete', '{$APP.NTC_DELETE_CONFIRMATION}');" type="button" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
 		{/if}
 		
 		{if $privrecord neq ''}
@@ -653,7 +651,6 @@ function DeleteTag(id,recordid)
 		<img align="absmiddle" title="{$APP.LNK_LIST_NEXT}" src="{'rec_next_disabled.gif'|@vtiger_imageurl:$THEME}">&nbsp;
 		{/if}
 	</td>
-	</form>
 </tr>
 </table>
 

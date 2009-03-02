@@ -1435,13 +1435,13 @@ $helpDeskTabid = getTabid('HelpDesk');
 $ttBlockid = getBlockId($helpDeskTabid,'LBL_TICKET_INFORMATION');
 
 $tt_field1 = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values ($helpDeskTabid,$tt_field1,'hours','vtiger_troubletickets',1,'1','hours','Hours',1,0,0,100,9,$ttBlockid,1,'V~O',1,null,'BAS',1,
+ExecuteQuery("insert into vtiger_field values ($helpDeskTabid,$tt_field1,'hours','vtiger_troubletickets',1,'1','hours','Hours',1,0,0,100,9,$ttBlockid,1,'I~O',1,null,'BAS',1,
 		'This gives the estimated hours for the Ticket<br> When the same ticket is added to a Service Contract, based on the Tracking Unit of the Service Contract, Used units is updated whenever a ticket is Closed.')");
 addFieldSecurity($helpDeskTabid, $tt_field1);
 ExecuteQuery("ALTER TABLE vtiger_troubletickets ADD COLUMN hours VARCHAR(200)");
 
 $tt_field2 = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values ($helpDeskTabid,$tt_field2,'days','vtiger_troubletickets',1,'1','days','Days',1,0,0,100,10,$ttBlockid,1,'V~O',1,null,'BAS',1,
+ExecuteQuery("insert into vtiger_field values ($helpDeskTabid,$tt_field2,'days','vtiger_troubletickets',1,'1','days','Days',1,0,0,100,10,$ttBlockid,1,'I~O',1,null,'BAS',1,
 		'This gives the estimated days for the Ticket<br> When the same ticket is added to a Service Contract, based on the Tracking Unit of the Service Contract, Used units is updated whenever a ticket is Closed.')");
 addFieldSecurity($helpDeskTabid, $tt_field2);
 ExecuteQuery("ALTER TABLE vtiger_troubletickets ADD COLUMN days VARCHAR(200)");

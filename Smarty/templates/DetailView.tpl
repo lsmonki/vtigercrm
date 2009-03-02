@@ -206,8 +206,6 @@ function sendfile_email()
 		<table border=0 cellspacing=0 cellpadding=0 width=95% align=center>
 		<tr>
 			<td>
-				<form action="index.php" method="post" name="DetailView" id="form1">
-				{include file='DetailViewHidden.tpl'}	  
 				<table border=0 cellspacing=0 cellpadding=3 width=100% class="small">
 				<tr>
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
@@ -219,13 +217,13 @@ function sendfile_email()
 					{/if}
 					<td class="dvtTabCache" align="right" style="width:100%">
 						{if $EDIT_DUPLICATE eq 'permitted'}
-						<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
+						<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='DetailView'; DetailView.return_id.value='{$ID}';DetailView.module.value='{$MODULE}';submitFormForAction('DetailView','EditView');" type="button" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
 						{/if}
 						{if $EDIT_DUPLICATE eq 'permitted' && $MODULE neq 'Documents'}
-						<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
+						<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='DetailView'; DetailView.isDuplicate.value='true';DetailView.module.value='{$MODULE}'; submitFormForAction('DetailView','EditView');" type="button" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
 						{/if}
 						{if $DELETE eq 'permitted'}
-						<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; {if $MODULE eq 'Accounts'} return confirm('{$APP.NTC_ACCOUNT_DELETE_CONFIRMATION}') {else} return confirm('{$APP.NTC_DELETE_CONFIRMATION}') {/if}" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+						<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='index'; {if $MODULE eq 'Accounts'} var confirmMsg = '{$APP.NTC_ACCOUNT_DELETE_CONFIRMATION}' {else} var confirmMsg = '{$APP.NTC_DELETE_CONFIRMATION}' {/if}; submitFormForActionWithConfirmation('DetailView', 'Delete', confirmMsg);" type="button" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
 						{/if}
 					
 						{if $privrecord neq ''}
@@ -244,7 +242,6 @@ function sendfile_email()
 					</td>
 				</tr>
 				</table>
-				</form>
 			</td>
 		</tr>
 		<tr>
@@ -254,6 +251,8 @@ function sendfile_email()
 
 					<td align=left>
 					<!-- content cache -->
+						<form action="index.php" method="post" name="DetailView" id="form">
+						{include file='DetailViewHidden.tpl'}				
 					
 				<table border=0 cellspacing=0 cellpadding=0 width=100%>
                 <tr>
@@ -339,7 +338,7 @@ function sendfile_email()
 							   {assign var=keyaccess value=$data.notaccess}
 							   {assign var=keycntimage value=$data.cntimage}
 							   {assign var=keyadmin value=$data.isadmin}
-							   
+							   {assign var=display_type value=$data.displaytype}
 							   
 							   
                            {if $label ne ''}
@@ -350,18 +349,10 @@ function sendfile_email()
 				{else}
 					<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label}</td>
 				{/if}
-				{if $MODULE eq 'Documents' && $EDIT_PERMISSION eq 'yes' && $header eq 'File Information'}
-					{if $keyfldname eq 'filestatus' && $ADMIN eq 'yes'}
-						{include file="DetailViewUI.tpl"}
-					{else}
-						{include file="DetailViewFields.tpl"}
-					{/if}
+				{if $EDIT_PERMISSION eq 'yes' && $display_type neq '2'}
+					{include file="DetailViewUI.tpl"}
 				{else}
-					{if $EDIT_PERMISSION eq 'yes'}
-						{include file="DetailViewUI.tpl"}
-					{else}
-						{include file="DetailViewFields.tpl"}
-					{/if}
+					{include file="DetailViewFields.tpl"}
 				{/if}
 			   {/if}
                                    {/foreach}
@@ -385,6 +376,7 @@ function sendfile_email()
 				{include file= 'RelatedListNew.tpl'}
 			{/if}
 		</table>
+		</form>
 		</td>
 		<td width=22% valign=top style="border-left:1px dashed #cccccc;padding:13px">
 				  
@@ -600,8 +592,6 @@ function sendfile_email()
 </tr>
 	<tr>
 		<td>			
-			<form action="index.php" method="post" name="DetailView2" id="form2">
-			{include file='DetailViewHidden.tpl'}
 			<table border=0 cellspacing=0 cellpadding=3 width=100% class="small">
 				<tr>
 					<td class="dvtTabCacheBottom" style="width:10px" nowrap>&nbsp;</td>
@@ -614,13 +604,13 @@ function sendfile_email()
 					<td class="dvtTabCacheBottom" align="right" style="width:100%">
 						&nbsp;
 						{if $EDIT_DUPLICATE eq 'permitted'}
-						<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
+						<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='DetailView'; DetailView.return_id.value='{$ID}';DetailView.module.value='{$MODULE}';submitFormForAction('DetailView','EditView');" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
 						{/if}
 						{if $EDIT_DUPLICATE eq 'permitted' && $MODULE neq 'Documents'}
-								<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
+								<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='DetailView'; DetailView.isDuplicate.value='true';DetailView.module.value='{$MODULE}'; submitFormForAction('DetailView','EditView');" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
 						{/if}
 						{if $DELETE eq 'permitted'}
-								<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; {if $MODULE eq 'Accounts'} return confirm('{$APP.NTC_ACCOUNT_DELETE_CONFIRMATION}') {else} return confirm('{$APP.NTC_DELETE_CONFIRMATION}') {/if}" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+								<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='index'; {if $MODULE eq 'Accounts'} var confirmMsg = '{$APP.NTC_ACCOUNT_DELETE_CONFIRMATION}' {else} var confirmMsg = '{$APP.NTC_DELETE_CONFIRMATION}' {/if}; submitFormForActionWithConfirmation('DetailView', 'Delete', confirmMsg);" type="button" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
 						{/if}
 					
 						{if $privrecord neq ''}
@@ -639,7 +629,6 @@ function sendfile_email()
 					</td>
 				</tr>
 			</table>
-			</form>
 		</td>
 	</tr>
 </table>

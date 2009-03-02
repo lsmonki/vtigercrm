@@ -43,57 +43,43 @@ function showSelect()
                 oselect_array[i].style.display = 'block';
         }
 }
+
 function getObj(n,d) {
 
-  var p,i,x; 
+	var p,i,x; 
 
-  if(!d)
-
-      d=document;
-
+	if(!d) {
+		d=document;
+	}
    
-   if(n != undefined)
-   {
-	   if((p=n.indexOf("?"))>0&&parent.frames.length) {
-
-		   d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);
-
-	   }
-   }
-
-
-
-  if(!(x=d[n])&&d.all)
-
-      x=d.all[n];
-
-	if(typeof x == 'string'){
-		x=null;
+	if(n != undefined) {
+		if((p=n.indexOf("?"))>0&&parent.frames.length) {
+			d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);
+		}
 	}
 
-  for(i=0;!x&&i<d.forms.length;i++)
+	if(d.getElementById) {
+		x=d.getElementById(n);
+	}
 
-      x=d.forms[i][n];
+	for(i=0;!x && i<d.forms.length;i++) {
+		x=d.forms[i][n];
+	} 
 
- 
+	for(i=0; !x && d.layers && i<d.layers.length;i++) {
+		x=getObj(n,d.layers[i].document);
+	}   
 
-  for(i=0;!x&&d.layers&&i<d.layers.length;i++)
+	if(!x && !(x=d[n]) && d.all) {
+		x=d.all[n];
+	}
 
-      x=getObj(n,d.layers[i].document);
-
- 
-
-  if(!x && d.getElementById)
-
-      x=d.getElementById(n);
-
-
-
-  return x;
-
-}
-
+	if(typeof x == 'string') {
+		x=null;
+	}
 	
+	return x;
+}
 
 function getOpenerObj(n) {
 
@@ -3520,4 +3506,19 @@ function changeDldType(type){
 		document.getElementById('external').style.display="block";
 		document.getElementById('internal').style.display="none";
 	}
+}
+
+function submitFormForActionWithConfirmation(formName, action, confirmationMsg) {
+	if (confirm(confirmationMsg)) {
+		return submitFormForAction(formName, action);
+	}
+	return false;
+}
+
+function submitFormForAction(formName, action) {
+	var form = document.forms[formName];
+	if (!form) return false;
+	form.action.value = action;
+	form.submit();
+	return true;
 }

@@ -1767,10 +1767,11 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 		$block = $adb->query_result($result,$i,"block");
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");
 		$tabid = $adb->query_result($result,$i,"tabid");
+		$displaytype = $adb->query_result($result,$i,'displaytype');
 		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid,$module);
 		if(is_array($custfld))
 		{
-			$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"notaccess"=>$custfld["notaccess"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname,"fldid"=>$fieldid));
+			$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"notaccess"=>$custfld["notaccess"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname,"fldid"=>$fieldid,"displaytype"=>$displaytype));
 		}
 		$i++;
 		if($i<$noofrows)
@@ -1785,11 +1786,11 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 			$block = $adb->query_result($result,$i,"block");
 			$generatedtype = $adb->query_result($result,$i,"generatedtype");
 			$tabid = $adb->query_result($result,$i,"tabid");
-
+			$displaytype = $adb->query_result($result,$i,'displaytype');
 			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid,$module);
 			if(is_array($custfld))
 			{
-				$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"notaccess"=>$custfld["notaccess"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname,"fldid"=>$fieldid));
+				$label_data[$block][] = array($custfld[0]=>array("value"=>$custfld[1],"ui"=>$custfld[2],"options"=>$custfld["options"],"secid"=>$custfld["secid"],"link"=>$custfld["link"],"cursymb"=>$custfld["cursymb"],"salut"=>$custfld["salut"],"notaccess"=>$custfld["notaccess"],"cntimage"=>$custfld["cntimage"],"isadmin"=>$custfld["isadmin"],"tablename"=>$fieldtablename,"fldname"=>$fieldname,"fldid"=>$fieldid,"displaytype"=>$displaytype));
 			}
 		}
 	}
