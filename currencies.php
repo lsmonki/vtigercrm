@@ -54,6 +54,7 @@ $currencies = array(
 	'Iceland, Krona'=>array('ISK','kr'),
 	'India, Rupees'=>array('INR','₨'),
 	'Indonesia, Rupiahs'=>array('IDR','Rp'),
+	'Iran, Rials'=>array('IRR','﷼'),	
 	'Ireland, Euro'=>array('EUR','€'),
 	'Isle of Man, Pounds'=>array('IMP','£'),
 	'Israel, New Shekels'=>array('ILS','₪'),
@@ -88,6 +89,7 @@ $currencies = array(
 	'Nigeria, Nairas'=>array('NGN','₦'),
 	'North Korea, Won'=>array('KPW','₩'),
 	'Norway, Krone'=>array('NOK','kr'),
+	'Oman, Rials'=>array('OMR','﷼'),	
 	'Pakistan, Rupees'=>array('PKR','₨'),
 	'Panama, Balboa'=>array('PAB','B/.'),
 	'Paraguay, Guarani'=>array('PYG','Gs'),
@@ -97,6 +99,7 @@ $currencies = array(
 	'Romania, New Lei'=>array('RON','lei'),
 	'Russia, Rubles'=>array('RUB','руб'),
 	'Saint Helena, Pounds'=>array('SHP','£'),
+	'Saudi Arabia, Riyals'=>array('SAR','﷼'),	
 	'Serbia, Dinars'=>array('RSD','Дин.'),
 	'Seychelles, Rupees'=>array('SCR','₨'),
 	'Singapore, Dollars'=>array('SGD','$'),
@@ -117,6 +120,7 @@ $currencies = array(
 	'Turkey, New Lira'=>array('TRY','YTL'),
 	'Turkey, Liras'=>array('TRL','₤'),
 	'Tuvalu, Dollars'=>array('TVD','$'),
+	'Ukraine, Hryvnia'=>array('UAH','₴'),	
 	'United Kingdom, Pounds'=>array('GBP','£'),
 	'USA, Dollars' => array('USD' ,'$'),
 	'Uruguay, Pesos'=>array('UYU','$U'),
@@ -126,12 +130,14 @@ $currencies = array(
 	'Vietnam, Dong'=>array('VND','₫'),
 	'Zimbabwe Dollars'=>array('ZWD','Z$')
 	);	
-/*Oman, Rials
-Iran, Rials
-Saudi Arabia, Riyals	
-Ukraine, Hryvnia
-China, Yuan Renminbi
-Afghanistan, Afghanis
-Cambodia, Riels 
+/*
+	'China, Yuan Renminbi'=>array('SAR','﷼'),	
+	'Afghanistan, Afghanis'=>array('SAR','﷼'),	
+	'Cambodia, Riels'=>array('SAR','﷼'),	
+
+
+
+
+ 
 */
 ?>
