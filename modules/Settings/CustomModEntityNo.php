@@ -30,6 +30,7 @@ $module_array=getCRMSupportedModules();
 
 $mode = $_REQUEST['mode'];
 if(in_array($selectedModule, $module_array)) {
+	checkFileAccess("modules/$selectedModule/$selectedModule.php");
 	require_once("modules/$selectedModule/$selectedModule.php");
 	$focus = new $selectedModule();
 }
@@ -38,9 +39,9 @@ if($mode == 'UPDATESETTINGS') {
 
 		$status = $focus->setModuleSeqNumber('configure', $selectedModule, $recprefix, $recnumber);
 		if($status === false) {
-			$STATUSMSG = "<font color='red'>UPDATE FAILED</font> $recprefix$recnum IN USE";
+			$STATUSMSG = "<font color='red'>".$mod_strings['LBL_UPDATE']." ".$mod_strings['LBL_FAILED']."</font> $recprefix$recnum ".$mod_strings['LBL_IN_USE'];
 		} else {
-			$STATUSMSG = "<font color='green'>UPDATE DONE.</font>";
+			$STATUSMSG = "<font color='green'>".$mod_strings['LBL_UPDATE']." ".$mod_strings['LBL_DONE']."</font>";
 		}
 	}
 } else {
@@ -71,8 +72,7 @@ else $smarty->display('Settings/CustomModEntityNo.tpl');
 function getCRMSupportedModules()
 {
 	global $adb;
-	$sql="select tabid,name from vtiger_tab where name not in(
-		'Dashboard','Home','Rss','Webmails','Users','Events','Portal','Reports','Emails','Calendar','Recyclebin') order by name";
+	$sql="select tabid,name from vtiger_tab where isentitytype = 1 and tabid in(select distinct tabid from vtiger_field where uitype='4')";
 	$result = $adb->query($sql);
 	while($moduleinfo=$adb->fetch_array($result))
 	{

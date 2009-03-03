@@ -1184,5 +1184,13 @@ $mod_strings = Array(
 'LBL_CALENDER_CUSTOMFIELDS' => 'Calendar Custom Fields',
 'LBL_CALENDER_CUSTOMFIELDS_DESCRIPTION' => 'You can Create Custom Fields for Calendar',
 'LBL_GO_BACK'=>'Go Back',
+
+//Added fix for: 5418
+'LBL_USE_PREFIX' => 'Use Prefix',
+'LBL_START_SEQ' => 'Start Sequence',
+'LBL_MODULE_NUMBERING' => 'Module Numbering',
+'LBL_FAILED' => 'Failed',
+'LBL_DONE' => 'Done',
+'LBL_IN_USE' => 'IN USE'
 );
 ?>

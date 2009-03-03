@@ -13,18 +13,18 @@
 
 <tr>
 	<td colspan=2 nowrap class="small cellLabel">
-		<strong>{$SELMODULE} Module Numbering</strong> {$STATUSMSG}
+		<strong>{$SELMODULE|@getTranslatedString} {$MOD.LBL_MODULE_NUMBERING}</strong> {$STATUSMSG}
 	</td>
 </tr>
 
 <tr>
-	<td width="20%" nowrap class="small cellLabel"><strong>Use Prefix</strong></td>
+	<td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_USE_PREFIX}</strong></td>
     <td width="80%" class="small cellText">
 	<input type="text" name="recprefix" class="small" style="width:30%" value="{$MODNUM_PREFIX}"  />
 	</td>
 </tr>
 <tr>
-	<td width="20%" nowrap class="small cellLabel"><strong>Start Sequence <font color='red'>*</font></strong></td>
+	<td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_START_SEQ}<font color='red'>*</font></strong></td>
 	<td width="80%" class="small cellText">
 	<input type="text" name="recnumber" class="small" style="width:30%" value="{$MODNUM}"  />
 	</td>
