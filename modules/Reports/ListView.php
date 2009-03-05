@@ -40,6 +40,7 @@ $list_report_form = new vtigerCRM_Smarty;
 $list_report_form->assign("MOD", $mod_strings);
 $list_report_form->assign("APP", $app_strings);
 $list_report_form->assign("APPLIST", $app_list_strings);
+$list_report_form->assign("THEME", $theme);
 $list_report_form->assign("IMAGE_PATH", $image_path);
 
 $list_report_form->assign("CATEGORY",getParentTab());

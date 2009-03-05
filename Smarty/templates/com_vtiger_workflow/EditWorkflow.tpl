@@ -106,7 +106,7 @@
 			</tr>
 		</table>
 		<div id="workflow_loading" style="display:none">
-		  <h4><red>Loading </red><img src="themes/images/vtbusy.gif"</h4>
+		  <h4><red>Loading </red><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}"</h4>
 		</div>
 
 		<table class="listTableTopButtons" width="100%" border="0" cellspacing="0" cellpadding="5">

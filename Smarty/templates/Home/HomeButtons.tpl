@@ -29,24 +29,24 @@
 	
 {if $CHECK.Calendar eq 'yes' && $CALENDAR_ACTIVE eq 'yes'}
 	<td>
-		<img width="27" height="27" src="{$IMAGE_PATH}btnL3Calendar.gif" alt="{$APP.LBL_CALENDAR_ALT}" title="{$APP.LBL_CALENDAR_TITLE}" border=0  onClick='fnvshobj(this,"miniCal");getMiniCal();'/>
+		<img width="27" height="27" src="{'btnL3Calendar.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_CALENDAR_ALT}" title="{$APP.LBL_CALENDAR_TITLE}" border=0  onClick='fnvshobj(this,"miniCal");getMiniCal();'/>
 	</td>
 {/if}
 	<td>
-		<img width="27" height="27" src="{$IMAGE_PATH}btnL3Clock.gif" alt="{$APP.LBL_CLOCK_ALT}" title="{$APP.LBL_CLOCK_TITLE}" border=0 onClick="fnvshobj(this,'wclock');">
+		<img width="27" height="27" src="{'btnL3Clock.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_CLOCK_ALT}" title="{$APP.LBL_CLOCK_TITLE}" border=0 onClick="fnvshobj(this,'wclock');">
 	</td>
 	<td>
-		<img width="27" height="27" src="{$IMAGE_PATH}btnL3Calc.gif" alt="{$APP.LBL_CALCULATOR_ALT}" title="{$APP.LBL_CALCULATOR_TITLE}" border=0 onClick="fnvshobj(this,'calculator_cont');fetch_calc();">
+		<img width="27" height="27" src="{'btnL3Calc.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_CALCULATOR_ALT}" title="{$APP.LBL_CALCULATOR_TITLE}" border=0 onClick="fnvshobj(this,'calculator_cont');fetch_calc();">
 	</td>
 	<td>
-		<img width="27" height="27" src="{$IMAGE_PATH}tbarChat.gif" alt="{$APP.LBL_CHAT_ALT}" title="{$APP.LBL_CHAT_TITLE}" border=0  onClick='return window.open("index.php?module=Home&action=vtchat","Chat","width=600,height=450,resizable=1,scrollbars=1");'>
+		<img width="27" height="27" src="{'tbarChat.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_CHAT_ALT}" title="{$APP.LBL_CHAT_TITLE}" border=0  onClick='return window.open("index.php?module=Home&action=vtchat","Chat","width=600,height=450,resizable=1,scrollbars=1");'>
 	</td>	
 	<td>
-		<img width="27" height="27" src="{$IMAGE_PATH}btnL3Tracker.gif" alt="{$APP.LBL_LAST_VIEWED}" title="{$APP.LBL_LAST_VIEWED}" border="0" onClick="fnvshobj(this,'tracker');">
+		<img width="27" height="27" src="{'btnL3Tracker.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_LAST_VIEWED}" title="{$APP.LBL_LAST_VIEWED}" border="0" onClick="fnvshobj(this,'tracker');">
 	</td>
 
 	<td>
-		<img width="27" height="27" src="{$IMAGE_PATH}btnL3AllMenu.gif" alt="{$APP.LBL_ALL_MENU_ALT}" title="{$APP.LBL_ALL_MENU_TITLE}" border="0" onmouseout="fninvsh('allMenu');" onClick="$('allMenu').style.display='block'; $('allMenu').style.visibility='visible';placeAtCenter($('allMenu'))">
+		<img width="27" height="27" src="{'btnL3AllMenu.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_ALL_MENU_ALT}" title="{$APP.LBL_ALL_MENU_TITLE}" border="0" onmouseout="fninvsh('allMenu');" onClick="$('allMenu').style.display='block'; $('allMenu').style.visibility='visible';placeAtCenter($('allMenu'))">
 	</td>
 	
 	<td align='left'>
@@ -55,7 +55,7 @@
 	
 	<td width="100%" align="center">
 		<div id="vtbusy_info" style="display: none;">
-			<img src="{$IMAGE_PATH}status.gif" border="0" />
+			<img src="{'status.gif'|@vtiger_imageurl:$THEME}" border="0" />
 		</div>
 	</td>
 </tr>

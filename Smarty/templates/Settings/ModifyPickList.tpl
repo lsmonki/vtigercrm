@@ -15,7 +15,7 @@
 		<table border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 			<tr>
 				<td class="layerPopupHeading" align="left" width="40%" nowrap>{$MOD.DELETE_PICKLIST_VALUES} - {$FIELDLABEL}</td>
-				<td align="right" width="60%"><img src="{$IMAGE_PATH}close.gif" align="middle" border="0" onclick="Myhide('deletediv');"></td>
+				<td align="right" width="60%"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" align="middle" border="0" onclick="Myhide('deletediv');"></td>
 			</tr>
 		</table>
 	
@@ -55,7 +55,7 @@
 		<table border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 			<tr>
 				<td class="layerPopupHeading" align="left" width="40%" nowrap>{$MOD.EDIT_PICKLIST_VALUE} - {$FIELDLABEL}</td>
-				<td align="right" width="60%"><img src="{$IMAGE_PATH}close.gif" align="middle" border="0" onclick="Myhide('modifydiv');"></td>
+				<td align="right" width="60%"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" align="middle" border="0" onclick="Myhide('modifydiv');"></td>
 			</tr>
 		</table>
 	
@@ -108,7 +108,7 @@
 		<table border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 			<tr>
 				<td class="layerPopupHeading" align="left" width="40%" nowrap>{$MOD.ADD_PICKLIST_VALUES} - {$FIELDLABEL}</td>
-				<td align="right" width="60%"><img src="{$IMAGE_PATH}close.gif" align="middle" border="0" onclick="Myhide('adddiv');"></td>
+				<td align="right" width="60%"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" align="middle" border="0" onclick="Myhide('adddiv');"></td>
 			</tr>
 		</table>
 	

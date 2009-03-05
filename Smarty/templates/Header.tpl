@@ -70,7 +70,7 @@
 
 	<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="hdrNameBg">
 	<tr>
-		<td valign=top><img src="{$IMAGEPATH}/vtiger-crm.gif" alt="vtiger CRM" title="vtiger CRM" border=0></td>
+		<td valign=top><img src="{'vtiger-crm.gif'|@vtiger_imageurl:$THEME}" alt="vtiger CRM" title="vtiger CRM" border=0></td>
 		<td width=100% align=center>
 		{if $APP.$MODULE_NAME eq 'Dashboards'}
 		<marquee id="rss" direction="left" scrolldelay="10" scrollamount="3" behavior="scroll" class="marStyle" onMouseOver="javascript:stop();" onMouseOut="javascript:start();">&nbsp;{$ANNOUNCEMENT|escape}</marquee>
@@ -530,7 +530,7 @@ function getFormValidate(divValidate)
 {/foreach}
 
 
-<div id="status" style="position:absolute;display:none;left:930px;top:95px;height:27px;white-space:nowrap;"><img src="{$IMAGEPATH}status.gif"></div>
+<div id="status" style="position:absolute;display:none;left:930px;top:95px;height:27px;white-space:nowrap;"><img src="{'status.gif'|@vtiger_imageurl:$THEME}"></div>
 <script>
 function openwin()
 {ldelim}

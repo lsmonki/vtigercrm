@@ -177,7 +177,7 @@ class Reports extends CRMEntity{
 		
 				<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 				<tbody><tr>
-				<td rowspan='2' width='11%'><img src='themes/$theme/images/denied.gif' ></td>
+				<td rowspan='2' width='11%'><img src='". vtiger_imageurl('denied.gif', $theme) ."' ></td>
 				<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>You are not allowed to View this Report </span></td>
 				</tr>
 				<tr>

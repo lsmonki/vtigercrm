@@ -250,10 +250,10 @@ class vtigerRSS extends CRMEntity
 					<td class=\"rssPgTitle\">";
 				if($rssrow[starred] == 1)
 				{
-					$shtml .= "<img src=\"".$image_path."starred.gif\" align=\"absmiddle\">";
+					$shtml .= "<img src=\"". vtiger_imageurl('starred.gif', $theme) ."\" align=\"absmiddle\">";
 				}else
 				{
-					$shtml .= "<img src=\"".$image_path."unstarred.gif\" align=\"absmiddle\">";
+					$shtml .= "<img src=\"". vtiger_imageurl('unstarred.gif', $theme) ."\" align=\"absmiddle\">";
 				}		
 				$shtml .= "<a href=\"".$this->rss_object[link]."\">  ".$rssrow[rsstitle]."</a>
 					</td>

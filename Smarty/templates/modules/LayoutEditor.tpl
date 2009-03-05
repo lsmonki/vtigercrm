@@ -13,7 +13,7 @@
 			<!-- for layouteditor link -->
 			<table border="0" cellspacing="0" cellpadding="5" width="100%">
 				<tr>
-					<td rowspan="2" valign="top"><a href="index.php?module=Settings&action=LayoutBlockList&parenttab=Settings&formodule={$MODULE}"><img border="0" src="themes/images/orgshar.gif" onmouseover="tooltip.tip(this,'{$MOD.LBL_LAYOUT_EDITOR_DESCRIPTION}');" onmouseout="tooltip.untip(true);"></a></td>
+					<td rowspan="2" valign="top"><a href="index.php?module=Settings&action=LayoutBlockList&parenttab=Settings&formodule={$MODULE}"><img border="0" src="{'orgshar.gif'|@vtiger_imageurl:$THEME}" onmouseover="tooltip.tip(this,'{$MOD.LBL_LAYOUT_EDITOR_DESCRIPTION}');" onmouseout="tooltip.untip(true);"></a></td>
 					<td class="big" valign="top"><a href="index.php?module=Settings&action=LayoutBlockList&parenttab=Settings&formodule={$MODULE}" onmouseover="tooltip.tip(this,'{$MOD.LBL_LAYOUT_EDITOR_DESCRIPTION}');" onmouseout="tooltip.untip(true);">{$MOD.LBL_LAYOUT_EDITOR}</a></td>
 				</tr>
 			</table>

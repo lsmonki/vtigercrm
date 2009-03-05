@@ -20,7 +20,7 @@
 						<td width="95%" colspan="2">
 							{$MOD.LBL_RELATED_LIST}
 						</td>
-						<td width="5%" align="right"><img src="themes/images/close.gif" border="0"  align="absmiddle" onclick="fninvsh('relatedlistdiv');"/>
+						<td width="5%" align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0"  align="absmiddle" onclick="fninvsh('relatedlistdiv');"/>
 						</td>
 					</tr>
 					{foreach item=related from=$RELATEDLIST name=relinfo}

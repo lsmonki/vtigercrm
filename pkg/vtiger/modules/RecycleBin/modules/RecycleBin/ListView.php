@@ -179,7 +179,7 @@ $smarty->assign("MODULE_DATA",$rb_listview_header);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("CATEGORY",$category);
-$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("THEME",$theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", return_module_language($current_language,$select_module));

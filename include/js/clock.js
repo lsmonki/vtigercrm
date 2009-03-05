@@ -74,7 +74,7 @@ dsp2.left=xpos-55+"px";
 dsp3.top=y+55+"px";
 dsp3.left=xpos-60+"px";
 
-dsp5.backgroundImage="url(themes/" + theme + "/images/clock_bg.gif)"
+dsp5.backgroundImage="url(themes/images/clock_bg.gif)"
 dsp5.backgroundRepeat="no-repeat"
 dsp5.backgroundPosition="4px 38px"
 
