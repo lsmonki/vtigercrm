@@ -740,213 +740,218 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                 		}
 
 			}
-			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '')
-			{
-
-				if($fieldname == '')
-				{
+			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '') {
+				if($fieldname == '') {
 					$table_name = '';
 					$column_name = '';
-					foreach($tableinfo as $tablename=>$colname)
-					{
+					foreach($tableinfo as $tablename=>$colname) {
 						$table_name=$tablename;
 						$column_name = $colname;
 					}
 					$value = $adb->query_result($list_result,$i-1,$colname);
 				}
-				else
-				{
-					if(($module == 'Calendar' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice' || $module == 'Leads' || $module == 'Contacts') && (($fieldname=='parent_id') || ($name=='Contact Name') || ($name=='Close') || ($fieldname == 'firstname')))
-					{
-						if ($fieldname=='parent_id') {
-							$value=getRelatedTo($module,$list_result,$i-1);
-						}
-						if($name=='Contact Name')
-						{
-							$contact_id = $adb->query_result($list_result,$i-1,"contactid");
-							$contact_name = getFullNameFromQResult($list_result,$i-1,"Contacts");
-							$value="";
-							//Added to get the contactname for activities custom view - t=2190
-							if($contact_id != '' && $contact_name == '')
-							{
-								$contact_name = getContactName($contact_id);
-							}
-
-							if(($contact_name != "") && ($contact_id !='NULL'))
-							{
-							
-								// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-								$value =  "<a href='index.php?module=Contacts&action=DetailView&parenttab=".$tabname."&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
-							}
-						}
-
-						if($fieldname == "firstname")
-						{
-							$first_name = textlength_check($adb->query_result($list_result,$i-1,"firstname"));
-							
-							$value = '<a href="index.php?action=DetailView&module='.$module.'&parenttab='.$tabname.'&record='.$entity_id.'">'.$first_name.'</a>';
-
-						}
-
-						if ($name == 'Close')
-						{														
-							$status = $adb->query_result($list_result,$i-1,"status");
-							$activityid = $adb->query_result($list_result,$i-1,"activityid");
-							$activitytype = $adb->query_result($list_result,$i-1,"activitytype");
-							if ($activitytype != 'Task' && $activitytype != 'Emails') {
-								$eventstatus = $adb->query_result($list_result,$i-1,"eventstatus");
-								if(isset($eventstatus)) {
-									$status = $eventstatus;
+				else {
+					if($module == 'Calendar') {
+						$act_id = $adb->query_result($list_result,$i-1,"activityid");
+						
+						$cal_sql = "select activitytype from vtiger_activity where activityid=?";
+						$cal_res = $adb->pquery($cal_sql,array($act_id));
+						if($adb->num_rows($cal_res)>=0)
+							$activitytype = $adb->query_result($cal_res,0,"activitytype");
+					}
+					if(($module == 'Calendar' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice' || $module == 'Leads' || $module == 'Contacts') && (($fieldname=='parent_id') || ($name=='Contact Name') || ($name=='Close') || ($fieldname == 'firstname'))) {
+						if($module == 'Calendar'){
+							if($activitytype == 'Task' ) {
+								if(getFieldVisibilityPermission('Calendar',$current_user->id,$fieldname) == '0'){
+									$has_permission = 'yes';
+								} else {
+									$has_permission = 'no';
+								}
+							} else {
+								if(getFieldVisibilityPermission('Events',$current_user->id,$fieldname) == '0'){
+									$has_permission = 'yes';
+								} else {
+									$has_permission = 'no';
 								}
 							}
-							if($status =='Deferred' || $status == 'Completed' || $status == 'Held' || $status == '')
-							{
+						}
+						if($module != 'Calendar' || ($module == 'Calendar' && $has_permission == 'yes')) {
+							if ($fieldname=='parent_id') {
+								$value=getRelatedTo($module,$list_result,$i-1);
+							}
+							if($name=='Contact Name') {
+								$contact_id = $adb->query_result($list_result,$i-1,"contactid");
+								$contact_name = getFullNameFromQResult($list_result,$i-1,"Contacts");
 								$value="";
+								//Added to get the contactname for activities custom view - t=2190
+								if($contact_id != '' && $contact_name == '') {
+									$contact_name = getContactName($contact_id);
+								}
+								if(($contact_name != "") && ($contact_id !='NULL')) {
+									// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+									$value =  "<a href='index.php?module=Contacts&action=DetailView&parenttab=".$tabname."&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+								}
+							}
+							if($fieldname == "firstname") {
+								$first_name = textlength_check($adb->query_result($list_result,$i-1,"firstname"));
+								
+								$value = '<a href="index.php?action=DetailView&module='.$module.'&parenttab='.$tabname.'&record='.$entity_id.'">'.$first_name.'</a>';
+							}
+							if ($name == 'Close') {														
+								$status = $adb->query_result($list_result,$i-1,"status");
+								$activityid = $adb->query_result($list_result,$i-1,"activityid");
+								$activitytype = $adb->query_result($list_result,$i-1,"activitytype");
+								if ($activitytype != 'Task' && $activitytype != 'Emails') {
+									$eventstatus = $adb->query_result($list_result,$i-1,"eventstatus");
+									if(isset($eventstatus)) {
+										$status = $eventstatus;
+									}
+								}
+								if($status =='Deferred' || $status == 'Completed' || $status == 'Held' || $status == '') {
+									$value="";
+								} else {	
+									if($activitytype=='Task')
+										$evt_status='&status=Completed';
+									else
+										$evt_status='&eventstatus=Held';
+									if(isPermitted("Calendar",'EditView',$activityid) == 'yes') {
+										if ($returnset == '') {
+											$returnset = '&return_module=Calendar&return_action=ListView&return_id='.$activityid.'&return_viewname='.$oCv->setdefaultviewid;
+										} 
+										// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+										$value = "<a href='index.php?action=Save&module=Calendar&record=".$activityid."&parenttab=".$tabname."&change_status=true".$returnset.$evt_status."&start=".$navigation_array['current']."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+									} else {
+											$value = "";
+									}
+								}
+							}
+						} else {
+							$value = "";
+						}
+					}
+					//code for Documents module: start
+					elseif($module == "Documents" && ($fieldname == 'filelocationtype' || $fieldname == 'filename' || $fieldname == 'filesize' || $fieldname == 'filestatus' || $fieldname == 'filetype'))
+					{
+						$value = $adb->query_result($list_result,$i-1,$fieldname);
+						if($fieldname == 'filelocationtype')
+						{
+							if($value == 'I')
+								$value = getTranslatedString('LBL_INTERNAL',$module);
+							elseif($value == 'E')
+								$value = getTranslatedString('LBL_EXTERNAL',$module);
+							else
+								$value = ' --';
+						}
+						if($fieldname == 'filename')
+						{
+							$downloadtype = $adb->query_result($list_result,$i-1,'filelocationtype');
+							if($downloadtype == 'I')
+							{
+								$fld_value = $value;
+								$ext_pos = strrpos($fld_value, ".");
+								$ext =substr($fld_value, $ext_pos + 1);
+								$ext = strtolower($ext);
+								if($value != ''){
+								if($ext == 'bin' || $ext == 'exe' || $ext == 'rpm')
+									$fileicon="<img src='" . vtiger_imageurl('fExeBin.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
+								elseif($ext == 'jpg' || $ext == 'gif' || $ext == 'bmp')
+									$fileicon="<img src='" . vtiger_imageurl('fbImageFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
+								elseif($ext == 'txt' || $ext == 'doc' || $ext == 'xls')
+									$fileicon="<img src='" . vtiger_imageurl('fbTextFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
+								elseif($ext == 'zip' || $ext == 'gz' || $ext == 'rar')
+									$fileicon="<img src='" . vtiger_imageurl('fbZipFile.gif', $theme) . "' hspace='3' align='absmiddle'	border='0'>";
+								else
+									$fileicon="<img src='" . vtiger_imageurl('fbUnknownFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
+								}
+							}
+							elseif($downloadtype == 'E')
+							{
+								if(trim($value) != '' ){
+									$fld_value = $value;
+									$fileicon = "<img src='" . vtiger_imageurl('fbLink.gif', $theme) . "' alt='".getTranslatedString('LBL_EXTERNAL_LNK',$module)."' title='".getTranslatedString('LBL_EXTERNAL_LNK',$module)."' hspace='3' align='absmiddle' border='0'>";
+								}
+								else{
+									$fld_value = '--';
+									$fileicon = '';
+								}
+							}
+							else
+							{
+								$fld_value = ' --';
+								$fileicon = '';
+							}
+			
+							$file_name = $adb->query_result($list_result,$i-1,'filename');
+							$notes_id = $adb->query_result($list_result,$i-1,'crmid');
+							$folder_id = $adb->query_result($list_result,$i-1,'folderid');
+							$download_type = $adb->query_result($list_result,$i-1,'filelocationtype');
+							$file_status = $adb->query_result($list_result,$i-1,'filestatus');
+							$fileidQuery = "select attachmentsid from vtiger_seattachmentsrel where crmid=?";
+							$fileidres = $adb->pquery($fileidQuery,array($notes_id));
+							$fileid = $adb->query_result($fileidres,0,'attachmentsid');
+							if($file_name != '' && $file_status == 1)
+							{
+								if($download_type == 'I' )
+								{
+									$fld_value = "<a href='index.php?module=uploads&action=downloadfile&entityid=$notes_id&fileid=$fileid' title='".getTranslatedString("LBL_DOWNLOAD_FILE",$module)."' onclick='javascript:dldCntIncrease($notes_id);'>".$fld_value."</a>";
+								}
+								elseif($download_type == 'E')
+								{
+									$fld_value = "<a target='_blank' href='$file_name' onclick='javascript:dldCntIncrease($notes_id);' title='".getTranslatedString("LBL_DOWNLOAD_FILE",$module)."'>".$fld_value."</a>";
+								}
+								else
+								{
+									$fld_value = ' --';
+								}
+							}
+											
+							$value = $fileicon.$fld_value;
+						}
+						if($fieldname == 'filesize')
+						{
+							$downloadtype = $adb->query_result($list_result,$i-1,'filelocationtype');
+							if($downloadtype == 'I')
+							{
+								$filesize = $value;
+								if($filesize < 1024)
+									$value=$filesize.' B';
+								elseif($filesize > 1024 && $filesize < 1048576)
+									$value=round($filesize/1024,2).' KB';
+								else if($filesize > 1048576)
+									$value=round($filesize/(1024*1024),2).' MB';
 							}
 							else
 							{	
-								if($activitytype=='Task')
-									$evt_status='&status=Completed';
-								else
-									$evt_status='&eventstatus=Held';
-								if(isPermitted("Calendar",'EditView',$activityid) == 'yes')
-								{
-									if ($returnset == '') {
-										$returnset = '&return_module=Calendar&return_action=ListView&return_id='.$activityid.'&return_viewname='.$oCv->setdefaultviewid;
-									} 
-									// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-									$value = "<a href='index.php?action=Save&module=Calendar&record=".$activityid."&parenttab=".$tabname."&change_status=true".$returnset.$evt_status."&start=".$navigation_array['current']."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
-								}
-								else
-								{
-									$value = "";
-								}
+								$value = ' --';
 							}
+						}			
+						if($fieldname == 'filestatus')
+						{
+							$filestatus = $value;
+							if($filestatus == 1)
+								$value=getTranslatedString('yes',$module);
+							elseif($filestatus == 0)
+								$value=getTranslatedString('no',$module);
+							else
+								$value=' --';				
+						}
+						if($fieldname == 'filetype')
+						{
+							$downloadtype = $adb->query_result($list_result,$i-1,'filelocationtype');
+							$filetype = $adb->query_result($list_result,$i-1,'filetype');
+							if($downloadtype == 'E' || $downloadtype != 'I')
+							{
+								$value = ' --';
+							}
+							else
+								$value = $filetype;
+						}
+						if($fieldname == 'notecontent'){
+							$value = decode_html($value); 	
+							$value = textlength_check($value);
+							
 						}
 					}
-						//code for Documents module: start
-		elseif($module == "Documents" && ($fieldname == 'filelocationtype' || $fieldname == 'filename' || $fieldname == 'filesize' || $fieldname == 'filestatus' || $fieldname == 'filetype'))
-		{
-			$value = $adb->query_result($list_result,$i-1,$fieldname);
-			if($fieldname == 'filelocationtype')
-			{
-				if($value == 'I')
-					$value = getTranslatedString('LBL_INTERNAL',$module);
-				elseif($value == 'E')
-					$value = getTranslatedString('LBL_EXTERNAL',$module);
-				else
-					$value = ' --';
-			}
-			if($fieldname == 'filename')
-			{
-				$downloadtype = $adb->query_result($list_result,$i-1,'filelocationtype');
-				if($downloadtype == 'I')
-				{
-					$fld_value = $value;
-					$ext_pos = strrpos($fld_value, ".");
-					$ext =substr($fld_value, $ext_pos + 1);
-					$ext = strtolower($ext);
-					if($value != ''){
-					if($ext == 'bin' || $ext == 'exe' || $ext == 'rpm')
-						$fileicon="<img src='" . vtiger_imageurl('fExeBin.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
-					elseif($ext == 'jpg' || $ext == 'gif' || $ext == 'bmp')
-						$fileicon="<img src='" . vtiger_imageurl('fbImageFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
-					elseif($ext == 'txt' || $ext == 'doc' || $ext == 'xls')
-						$fileicon="<img src='" . vtiger_imageurl('fbTextFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
-					elseif($ext == 'zip' || $ext == 'gz' || $ext == 'rar')
-						$fileicon="<img src='" . vtiger_imageurl('fbZipFile.gif', $theme) . "' hspace='3' align='absmiddle'	border='0'>";
-					else
-						$fileicon="<img src='" . vtiger_imageurl('fbUnknownFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
-					}
-				}
-				elseif($downloadtype == 'E')
-				{
-					if(trim($value) != '' ){
-						$fld_value = $value;
-						$fileicon = "<img src='" . vtiger_imageurl('fbLink.gif', $theme) . "' alt='".getTranslatedString('LBL_EXTERNAL_LNK',$module)."' title='".getTranslatedString('LBL_EXTERNAL_LNK',$module)."' hspace='3' align='absmiddle' border='0'>";
-					}
-					else{
-						$fld_value = '--';
-						$fileicon = '';
-					}
-				}
-				else
-				{
-					$fld_value = ' --';
-					$fileicon = '';
-				}
-
-				$file_name = $adb->query_result($list_result,$i-1,'filename');
-				$notes_id = $adb->query_result($list_result,$i-1,'crmid');
-				$folder_id = $adb->query_result($list_result,$i-1,'folderid');
-				$download_type = $adb->query_result($list_result,$i-1,'filelocationtype');
-				$file_status = $adb->query_result($list_result,$i-1,'filestatus');
-				$fileidQuery = "select attachmentsid from vtiger_seattachmentsrel where crmid=?";
-				$fileidres = $adb->pquery($fileidQuery,array($notes_id));
-				$fileid = $adb->query_result($fileidres,0,'attachmentsid');
-				if($file_name != '' && $file_status == 1)
-				{
-					if($download_type == 'I' )
-					{
-						$fld_value = "<a href='index.php?module=uploads&action=downloadfile&entityid=$notes_id&fileid=$fileid' title='".getTranslatedString("LBL_DOWNLOAD_FILE",$module)."' onclick='javascript:dldCntIncrease($notes_id);'>".$fld_value."</a>";
-					}
-					elseif($download_type == 'E')
-					{
-						$fld_value = "<a target='_blank' href='$file_name' onclick='javascript:dldCntIncrease($notes_id);' title='".getTranslatedString("LBL_DOWNLOAD_FILE",$module)."'>".$fld_value."</a>";
-					}
-					else
-					{
-						$fld_value = ' --';
-					}
-				}
-								
-				$value = $fileicon.$fld_value;
-			}
-			if($fieldname == 'filesize')
-			{
-				$downloadtype = $adb->query_result($list_result,$i-1,'filelocationtype');
-				if($downloadtype == 'I')
-				{
-					$filesize = $value;
-					if($filesize < 1024)
-						$value=$filesize.' B';
-					elseif($filesize > 1024 && $filesize < 1048576)
-						$value=round($filesize/1024,2).' KB';
-					else if($filesize > 1048576)
-						$value=round($filesize/(1024*1024),2).' MB';
-				}
-				else
-				{	
-					$value = ' --';
-				}
-			}			
-			if($fieldname == 'filestatus')
-			{
-				$filestatus = $value;
-				if($filestatus == 1)
-					$value=getTranslatedString('yes',$module);
-				elseif($filestatus == 0)
-					$value=getTranslatedString('no',$module);
-				else
-					$value=' --';				
-			}
-			if($fieldname == 'filetype')
-			{
-				$downloadtype = $adb->query_result($list_result,$i-1,'filelocationtype');
-				$filetype = $adb->query_result($list_result,$i-1,'filetype');
-				if($downloadtype == 'E' || $downloadtype != 'I')
-				{
-					$value = ' --';
-				}
-				else
-					$value = $filetype;
-			}
-			if($fieldname == 'notecontent'){
-				$value = decode_html($value); 	
-				$value = textlength_check($value);
-				
-			}
-		}
 						//code for Documents module: end
 					
 					elseif($module == "Products" && $name == "Related to")
@@ -1034,9 +1039,23 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							else
 								$value = '';
 						}
-					}
-					else
-					{
+					} elseif($module == 'Calendar' && ($fieldname!='taskstatus' && $fieldname!='eventstatus')) {
+						if($activitytype == 'Task' ) {
+							if(getFieldVisibilityPermission('Calendar',$current_user->id,$fieldname) == '0'){
+								$list_result_count = $i-1;
+								$value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
+							} else {
+								$value = '';
+							}
+						} else {
+							if(getFieldVisibilityPermission('Events',$current_user->id,$fieldname) == '0'){
+								$list_result_count = $i-1;
+								$value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
+							} else {
+								$value = '';
+							}
+						} 
+					} else {
 						$list_result_count = $i-1;
 						$value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
 					}
