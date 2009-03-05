@@ -56,7 +56,7 @@ else
 $list_query = getListQuery("Users");
 
 	$userid = array(); 
-	$userid_Query = "SELECT id,user_name FROM vtiger_users WHERE user_name IN ('admin','portaluser')";
+	$userid_Query = "SELECT id,user_name FROM vtiger_users WHERE user_name IN ('admin')";
 	$users = $adb->pquery($userid_Query,array());
 	$norows = $adb->num_rows($users);
 	if($norows  > 0){
