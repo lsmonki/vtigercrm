@@ -200,7 +200,7 @@ class Vtiger_MailBox {
 		$markas = $this->_scannerinfo->markas;
 		if($this->_imap && $markas) {
 			if(strtoupper($markas) == 'SEEN') $markas = "\\Seen";
-			imap_setflag_full($this->_imap, '1', $markas);
+			imap_setflag_full($this->_imap, $messageid, $markas);
 		}
 	}
 	
