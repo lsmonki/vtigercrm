@@ -63,6 +63,6 @@ if($focus->id != '')
 	$adb->pquery($sql1, array($answer, $focus->id));
 }
 
-header("Location:index.php?module=Faq&action=EditView&record=$focus->id&return_module=Faq&return_action=DetailView&return_id=$focus->id");
+header("Location:index.php?module=Faq&action=DetailView&record=$focus->id&return_module=Faq&return_action=DetailView&return_id=$focus->id");
 
 ?>
