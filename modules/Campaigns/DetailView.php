@@ -84,29 +84,6 @@ if($singlepane_view == 'true')
 {
 	$related_array = getRelatedLists($currentModule,$focus);
 	$smarty->assign("RELATEDLISTS", $related_array);
-
-	require_once('modules/CustomView/CustomView.php');
-	
-	/* To get Contacts CustomView -START */
-	$chtml = "<select id='cont_cv_list'><option value='None'>-- ".$mod_strings['Select One']." --</option>";
-	$oCustomView = new CustomView('Contacts');
-	$viewid = $oCustomView->getViewId('Contacts');
-	$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid, false);
-	$chtml .= $customviewcombo_html;
-	$chtml .= "</select>";
-	$smarty->assign("CONTCVCOMBO",$chtml);
-	/* To get Contacts CustomView -END */
-	
-	/* To get Leads CustomView -START */
-	$lhtml = "<select id='lead_cv_list'><option value='None'>-- ".$mod_strings['Select One']." --</option>";
-	$oCustomView = new CustomView('Leads');
-	$viewid = $oCustomView->getViewId('Leads');
-	$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid, false);
-	$lhtml .= $customviewcombo_html;
-	$lhtml .= "</select>";
-	$smarty->assign("LEADCVCOMBO",$lhtml);
-	/* To get Leads CustomView -END */
-
 }
 
 $smarty->assign("SinglePane_View", $singlepane_view);

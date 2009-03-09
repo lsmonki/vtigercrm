@@ -102,7 +102,7 @@ $other_text = '
 	';
 
 	//we should not display the Add to PriceBook button if there is no services to associate
-	if($num_rows != $num_prod_rows)
+	if($num_rows != $num_prod_rows && $num_rows > 0)
 	        $other_text .='<input class="crmbutton small save" type="submit" value="'.$mod_strings[LBL_ADD_PRICEBOOK_BUTTON_LABEL].'" onclick="return addtopricebook()"/>';
 
 $other_text .='&nbsp;<input title="'.$app_strings[LBL_CANCEL_BUTTON_TITLE].'" accessKey="'.$app_strings[LBL_CANCEL_BUTTON_KEY].'" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="'.$app_strings[LBL_CANCEL_BUTTON_LABEL].'"></td>';

@@ -132,19 +132,54 @@ class Campaigns extends CRMEntity {
 	 * @param  integer   $id      - campaignid
 	 * returns related Contacts record in array format
 	 */
-	function get_contacts($id)
-	{
-		global $log, $singlepane_view;
+	function get_contacts($id, $cur_tab_id, $rel_tab_id, $actions=false) {
+		global $log, $singlepane_view,$currentModule;
 		$log->debug("Entering get_contacts(".$id.") method ...");
-		global $mod_strings;
+		$this_module = $currentModule;
 
-		$focus = new Contacts();
-		$button = '';
-
+        $related_module = vtlib_getModuleNameById($rel_tab_id);
+		require_once("modules/$related_module/$related_module.php");
+		$other = new $related_module();
+        vtlib_setup_modulevars($related_module, $other);		
+		$singular_modname = vtlib_toSingular($related_module);
+		
+		$parenttab = getParentTab();
+		
 		if($singlepane_view == 'true')
-			$returnset = '&return_module=Campaigns&return_action=DetailView&return_id='.$id;
+			$returnset = '&return_module='.$this_module.'&return_action=DetailView&return_id='.$id;
 		else
-			$returnset = '&return_module=Campaigns&return_action=CallRelatedList&return_id='.$id;
+			$returnset = '&return_module='.$this_module.'&return_action=CallRelatedList&return_id='.$id;
+		
+		$button = '';
+		
+		// Send mail button for selected Leads
+		$button .= "<input title='".getTranslatedString('LBL_SEND_MAIL_BUTTON')."' class='crmbutton small edit' value='".getTranslatedString('LBL_SEND_MAIL_BUTTON')."' type='button' name='button' onclick='rel_eMail(\"$this_module\",this,\"$related_module\")'>";
+		$button .= '&nbsp;&nbsp;&nbsp;&nbsp';
+		
+		/* To get Leads CustomView -START */
+		require_once('modules/CustomView/CustomView.php');
+		$lhtml = "<select id='cont_cv_list' class='small'><option value='None'>-- ".getTranslatedString('Select One')." --</option>";
+		$oCustomView = new CustomView($related_module);
+		$viewid = $oCustomView->getViewId($related_module);
+		$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid, false);
+		$lhtml .= $customviewcombo_html;
+		$lhtml .= "</select>";
+		/* To get Leads CustomView -END */
+		
+		$button .= $lhtml."<input title='".getTranslatedString('LBL_LOAD_LIST',$this_module)."' class='crmbutton small edit' value='".getTranslatedString('LBL_LOAD_LIST',$this_module)."' type='button' name='button' onclick='loadCvList(\"$related_module\",\"$id\")'>";
+		$button .= '&nbsp;&nbsp;&nbsp;&nbsp';
+		
+		if($actions) {
+			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
+			if(in_array('SELECT', $actions) && isPermitted($related_module,4, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_SELECT')." ". getTranslatedString($related_module). "' class='crmbutton small edit' type='button' onclick=\"return window.open('index.php?module=$related_module&return_module=$currentModule&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid=$id&parenttab=$parenttab','test','width=640,height=602,resizable=0,scrollbars=0');\" value='". getTranslatedString('LBL_SELECT'). " " . getTranslatedString($related_module) ."'>&nbsp;";
+			}
+			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_ADD_NEW'). " ". getTranslatedString($singular_modname) ."' class='crmbutton small create'" .
+					" onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\"' type='submit' name='button'" .
+					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
+			}
+		}
 
 		$query = "SELECT vtiger_contactdetails.accountid, vtiger_account.accountname, 
 					CASE when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name , 
@@ -158,9 +193,14 @@ class Campaigns extends CRMEntity {
 					LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id 
 					LEFT JOIN vtiger_account ON vtiger_account.accountid = vtiger_contactdetails.accountid 
 					WHERE vtiger_campaigncontrel.campaignid = ".$id." AND vtiger_crmentity.deleted=0";
+					
+		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset); 
 		
-		$log->debug("Exiting get_contacts method ...");
-		return GetRelatedList('Campaigns','Contacts',$focus,$query,$button,$returnset);
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+		
+		$log->debug("Exiting get_contacts method ...");		
+		return $return_value;
 	}
 
 	/**
@@ -168,19 +208,54 @@ class Campaigns extends CRMEntity {
 	 * @param  integer   $id      - campaignid
 	 * returns related Leads record in array format
 	 */
-	function get_leads($id)
-	{
-		global $log, $singlepane_view;
+	function get_leads($id, $cur_tab_id, $rel_tab_id, $actions=false) {
+		global $log, $singlepane_view, $currentModule;
         $log->debug("Entering get_leads(".$id.") method ...");
-        global $mod_strings;
+		$this_module = $currentModule;
 
-        $focus = new Leads();
-        $button = '';
-        
+        $related_module = vtlib_getModuleNameById($rel_tab_id);
+		require_once("modules/$related_module/$related_module.php");
+		$other = new $related_module();
+        vtlib_setup_modulevars($related_module, $other);		
+		$singular_modname = vtlib_toSingular($related_module);
+		
+		$parenttab = getParentTab();
+		
 		if($singlepane_view == 'true')
-			$returnset = '&return_module=Campaigns&return_action=DetailView&return_id='.$id;
+			$returnset = '&return_module='.$this_module.'&return_action=DetailView&return_id='.$id;
 		else
-			$returnset = '&return_module=Campaigns&return_action=CallRelatedList&return_id='.$id;
+			$returnset = '&return_module='.$this_module.'&return_action=CallRelatedList&return_id='.$id;
+		
+		$button = '';
+		
+		// Send mail button for selected Leads
+		$button .= "<input title='".getTranslatedString('LBL_SEND_MAIL_BUTTON')."' class='crmbutton small edit' value='".getTranslatedString('LBL_SEND_MAIL_BUTTON')."' type='button' name='button' onclick='rel_eMail(\"$this_module\",this,\"$related_module\")'>";
+		$button .= '&nbsp;&nbsp;&nbsp;&nbsp';
+		
+		/* To get Leads CustomView -START */
+		require_once('modules/CustomView/CustomView.php');
+		$lhtml = "<select id='lead_cv_list' class='small'><option value='None'>-- ".getTranslatedString('Select One')." --</option>";
+		$oCustomView = new CustomView($related_module);
+		$viewid = $oCustomView->getViewId($related_module);
+		$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid, false);
+		$lhtml .= $customviewcombo_html;
+		$lhtml .= "</select>";
+		/* To get Leads CustomView -END */
+		
+		$button .= $lhtml."<input title='".getTranslatedString('LBL_LOAD_LIST',$this_module)."' class='crmbutton small edit' value='".getTranslatedString('LBL_LOAD_LIST',$this_module)."' type='button' name='button' onclick='loadCvList(\"$related_module\",\"$id\")'>";
+		$button .= '&nbsp;&nbsp;&nbsp;&nbsp';
+		
+		if($actions) {
+			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
+			if(in_array('SELECT', $actions) && isPermitted($related_module,4, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_SELECT')." ". getTranslatedString($related_module). "' class='crmbutton small edit' type='button' onclick=\"return window.open('index.php?module=$related_module&return_module=$currentModule&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid=$id&parenttab=$parenttab','test','width=640,height=602,resizable=0,scrollbars=0');\" value='". getTranslatedString('LBL_SELECT'). " " . getTranslatedString($related_module) ."'>&nbsp;";
+			}
+			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_ADD_NEW'). " ". getTranslatedString($singular_modname) ."' class='crmbutton small create'" .
+					" onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\"' type='submit' name='button'" .
+					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
+			}
+		} 
 
 		$query = "SELECT vtiger_leaddetails.*, vtiger_crmentity.crmid,vtiger_leadaddress.phone,vtiger_leadsubdetails.website, 
 					CASE when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name, 
@@ -193,8 +268,13 @@ class Campaigns extends CRMEntity {
 					LEFT JOIN vtiger_groups ON vtiger_groups.groupid=vtiger_crmentity.smownerid
 					WHERE vtiger_crmentity.deleted=0 AND vtiger_campaignleadrel.campaignid = ".$id;
 					
-		$log->debug("Exiting get_leads method ...");
-		return GetRelatedList('Campaigns','Leads',$focus,$query,$button,$returnset);
+		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset); 
+		
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+		
+		$log->debug("Exiting get_leads method ...");		
+		return $return_value;
 	}
 
 	/**
@@ -202,19 +282,37 @@ class Campaigns extends CRMEntity {
 	 * @param  integer   $id      - campaignid
 	 * returns related potentials record in array format
 	 */
-	function get_opportunities($id)
-	{
-		global $log, $singlepane_view;
+	function get_opportunities($id, $cur_tab_id, $rel_tab_id, $actions=false) {
+		global $log, $singlepane_view,$currentModule,$current_user;
 		$log->debug("Entering get_opportunities(".$id.") method ...");
-		global $mod_strings;
+		$this_module = $currentModule;
 
-		$focus = new Potentials();
-
-		$button = '';
+        $related_module = vtlib_getModuleNameById($rel_tab_id);
+		require_once("modules/$related_module/$related_module.php");
+		$other = new $related_module();
+        vtlib_setup_modulevars($related_module, $other);		
+		$singular_modname = vtlib_toSingular($related_module);
+		
+		$parenttab = getParentTab();
+		
 		if($singlepane_view == 'true')
-			$returnset = '&return_module=Campaigns&return_action=DetailView&return_id='.$id;
+			$returnset = '&return_module='.$this_module.'&return_action=DetailView&return_id='.$id;
 		else
-			$returnset = '&return_module=Campaigns&return_action=CallRelatedList&return_id='.$id;
+			$returnset = '&return_module='.$this_module.'&return_action=CallRelatedList&return_id='.$id;
+		
+		$button = '';
+				
+		if($actions && getFieldVisibilityPermission($related_module,$current_user->id,'campaignid') == '0') {
+			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
+			if(in_array('SELECT', $actions) && isPermitted($related_module,4, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_SELECT')." ". getTranslatedString($related_module). "' class='crmbutton small edit' type='button' onclick=\"return window.open('index.php?module=$related_module&return_module=$currentModule&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid=$id&parenttab=$parenttab','test','width=640,height=602,resizable=0,scrollbars=0');\" value='". getTranslatedString('LBL_SELECT'). " " . getTranslatedString($related_module) ."'>&nbsp;";
+			}
+			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_ADD_NEW'). " ". getTranslatedString($singular_modname) ."' class='crmbutton small create'" .
+					" onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\"' type='submit' name='button'" .
+					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
+			}
+		} 
 
 		$query = "SELECT CASE when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
 					vtiger_potential.accountid, vtiger_account.accountname, vtiger_potential.potentialid, vtiger_potential.potentialname,  
@@ -226,11 +324,14 @@ class Campaigns extends CRMEntity {
 					LEFT JOIN vtiger_users ON vtiger_users.id=vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_account ON vtiger_account.accountid = vtiger_potential.accountid
 					WHERE vtiger_campaign.campaignid = ".$id." AND vtiger_crmentity.deleted=0";
+					
+		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset); 
 		
-		//if($this->column_fields['account_id'] != 0)
-		$log->debug("Exiting get_opportunities method ...");
-		return GetRelatedList('Campaigns','Potentials',$focus,$query,$button,$returnset);
-
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+		
+		$log->debug("Exiting get_opportunities method ...");		
+		return $return_value;
 	}
 
 	/**
@@ -238,22 +339,36 @@ class Campaigns extends CRMEntity {
 	 * @param  integer   $id      - campaignid
 	 * returns related activities record in array format
 	 */
-	function get_activities($id)
-	{
-		global $log, $singlepane_view;
+	function get_activities($id, $cur_tab_id, $rel_tab_id, $actions=false) {
+		global $log, $singlepane_view,$currentModule,$current_user;
 		$log->debug("Entering get_activities(".$id.") method ...");
-		global $app_strings;
+		$this_module = $currentModule;
 
-		require_once('modules/Calendar/Activity.php');
-
-		$focus = new Activity();
-
-		$button = '';
-
+        $related_module = vtlib_getModuleNameById($rel_tab_id);
+		require_once("modules/$related_module/Activity.php");
+		$other = new Activity();
+        vtlib_setup_modulevars($related_module, $other);		
+		$singular_modname = vtlib_toSingular($related_module);
+		
+		$parenttab = getParentTab();
+		
 		if($singlepane_view == 'true')
-			$returnset = '&return_module=Campaigns&return_action=DetailView&return_id='.$id;
+			$returnset = '&return_module='.$this_module.'&return_action=DetailView&return_id='.$id;
 		else
-			$returnset = '&return_module=Campaigns&return_action=CallRelatedList&return_id='.$id;
+			$returnset = '&return_module='.$this_module.'&return_action=CallRelatedList&return_id='.$id;
+		
+		$button = '';
+				
+		$button .= '<input type="hidden" name="activity_mode">';
+				
+		if($actions) {
+			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
+			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_NEW'). " ". getTranslatedString('LBL_TODO', $related_module) ."' class='crmbutton small create'" .
+					" onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\";this.form.return_module.value=\"$this_module\";this.form.activity_mode.value=\"Task\";' type='submit' name='button'" .
+					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString('LBL_TODO', $related_module) ."'>&nbsp;";
+			}
+		}
 
 		$query = "SELECT vtiger_contactdetails.lastname,
 			vtiger_contactdetails.firstname,
@@ -283,8 +398,14 @@ class Campaigns extends CRMEntity {
 			AND vtiger_crmentity.deleted = 0
 			AND (activitytype = 'Task'
 				OR activitytype !='Emails')";
-		$log->debug("Exiting get_activities method ...");
-		return GetRelatedList('Campaigns','Calendar',$focus,$query,$button,$returnset);
+					
+		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset); 
+		
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+		
+		$log->debug("Exiting get_activities method ...");		
+		return $return_value;
 	
 	}
 	

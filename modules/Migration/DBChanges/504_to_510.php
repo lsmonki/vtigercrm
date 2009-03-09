@@ -26,6 +26,83 @@ ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_eventhandler_module(eventhandler
 /* Added new column actions to vtiger_relatedlists which tracks the type of actions allowed for that related list */
 ExecuteQuery("alter table vtiger_relatedlists add column actions VARCHAR(50) default ''");
 
+$accounts_tab_id = getTabid('Accounts');
+$contacts_tab_id = getTabid('Contacts');
+$notes_tab_id = getTabid('Documents');
+$products_tab_id = getTabid('Products');
+$leads_tab_id = getTabid('Leads');
+$campaigns_tab_id = getTabid('Campaigns');
+$potentials_tab_id = getTabid('Potentials');
+$emails_tab_id = getTabid('Emails');
+$calendar_tab_id = getTabid('Calendar');
+$helpdesk_tab_id = getTabid('HelpDesk');
+$quotes_tab_id = getTabid('Quotes');
+$so_tab_id = getTabid('SalesOrder');
+$po_tab_id = getTabid('PurchaseOrder');
+$invoice_tab_id = getTabid('Invoice');
+$pb_tab_id = getTabid('PriceBooks');
+$vendors_tab_id = getTabid('Vendors');
+
+// Accounts related lists
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add' WHERE tabid=$accounts_tab_id");
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select' WHERE tabid=$accounts_tab_id AND related_tabid=$notes_tab_id");
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='select' WHERE tabid=$accounts_tab_id AND related_tabid=$products_tab_id");
+
+// Leads related lists
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select' WHERE tabid=$leads_tab_idAND related_tabid=$notes_tab_id");
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add' WHERE tabid=$leads_tab_id AND related_tabid IN ($calendar_tab_id,$emails_tab_id)");
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='select' WHERE tabid=$leads_tab_id AND related_tabid IN ($products_tab_id,$campaigns_tab_id)");
+
+// Contacts related list
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add' WHERE tabid=$contacts_tab_id");
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select' WHERE tabid=$contacts_tab_id AND related_tabid=$notes_tab_id");
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='select' WHERE tabid=$contacts_tab_id AND related_tabid IN ($products_tab_id,$campaigns_tab_id)");
+
+// Potentials related list
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add' WHERE tabid=$potentials_tab_id AND related_tabid IN ($calendar_tab_id,$quotes_tab_id,$so_tab_id)");;
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select' WHERE tabid=$potentials_tab_id AND related_tabid=$notes_tab_id");
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='select' WHERE tabid=$potentials_tab_id AND related_tabid IN ($products_tab_id,$contacts_tab_id)");
+
+// Products related list
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add' WHERE tabid=$products_tab_id AND related_tabid IN ($helpdesk_tab_id,$quotes_tab_id,$so_tab_id,$po_tab_id,$invoice_tab_id,$pb_tab_id)");;
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select' WHERE tabid=$products_tab_id AND related_tabid=$notes_tab_id");
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='select' WHERE tabid=$products_tab_id AND related_tabid IN ($accounts_tab_id,$contacts_tab_id,$leads_tab_id,$potentials_tab_id)");
+
+// Emails related lists
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='select,bulkmail' WHERE tabid=$emails_tab_id AND related_tabid=$contacts_tab_id");
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select' WHERE tabid=$emails_tab_id AND related_tabid=$notes_tab_id");
+
+// Trouble Tickets related lists
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select' WHERE tabid=$helpdesk_tab_id AND related_tabid IN ($notes_tab_id,$calendar_tab_id)");
+
+// Products related lists
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='select' WHERE tabid=$pb_tab_id AND related_tabid IN ($products_tab_id)");
+
+// Vendors related lists
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add' WHERE tabid=$vendors_tab_id AND related_tabid IN ($emails_tab_id,$po_tab_id)");;
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select' WHERE tabid=$vendors_tab_id AND related_tabid=$products_tab_id");
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='select' WHERE tabid=$vendors_tab_id AND related_tabid IN ($contacts_tab_id)");
+
+// Quotes related lists
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select' WHERE tabid=$quotes_tab_id AND related_tabid IN ($notes_tab_id)");
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add' WHERE tabid=$quotes_tab_id AND related_tabid IN ($calendar_tab_id)");
+
+// PO related lists
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select' WHERE tabid=$po_tab_id AND related_tabid IN ($notes_tab_id)");
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add' WHERE tabid=$po_tab_id AND related_tabid IN ($calendar_tab_id)");
+
+// SO related lists
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select' WHERE tabid=$so_tab_id AND related_tabid IN ($notes_tab_id)");
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add' WHERE tabid=$so_tab_id AND related_tabid IN ($calendar_tab_id)");
+
+// Invoices related lists
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select' WHERE tabid=$invoice_tab_id AND related_tabid IN ($notes_tab_id)");
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add' WHERE tabid=$invoice_tab_id AND related_tabid IN ($calendar_tab_id)");
+
+// Campaigns related lists
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select' WHERE tabid=$campaigns_tab_id AND related_tabid IN ($contacts_tab_id,$leads_tab_id)");
+ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add' WHERE tabid=$campaigns_tab_id AND related_tabid IN ($calendar_tab_id,$potentials_tab_id)");
+
 require_once("modules/com_vtiger_workflow/include.inc");
 require_once("modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc");
 require_once("modules/com_vtiger_workflow/VTEntityMethodManager.inc");
@@ -268,7 +345,6 @@ ExecuteQuery("update vtiger_tab set ownedby=0,name='Documents',tablabel='Documen
 ExecuteQuery("update vtiger_entityname set modulename='Documents' where tabid=$documents_tab_id");
 ExecuteQuery("alter table vtiger_customview add constraint FOREIGN KEY fk_1_vtiger_customview (entitytype) REFERENCES vtiger_tab (name) ON DELETE CASCADE");
 
-$DocumentsId = getTabid('Documents');
 ExecuteQuery("UPDATE vtiger_relatedlists SET actions='add,select', related_tabid=$documents_tab_id WHERE name='get_attachments'");
 ExecuteQuery("alter table vtiger_notes add(folderid int(19) NOT NULL,filetype varchar(50) default NULL,filelocationtype varchar(5) default NULL,filedownloadcount int(19) default NULL,filestatus int(19) default NULL,filesize int(19) NOT NULL default '0',fileversion varchar(50) default NULL)");
 
@@ -600,7 +676,7 @@ ExecuteQuery("alter table vtiger_attachments modify column description LONGTEXT"
 ExecuteQuery("alter table vtiger_emaildetails modify column idlists LONGTEXT");
 
 /* Product Bundles Feature */
-ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Products").",'get_products',13,'Product Bundles',0,'select')");
+ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Products").",'get_products',13,'Product Bundles',0,'add,select')");
 ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Products").",'get_parent_products',14,'Parent Products',0,'')");
 
 /* vtmailscanner customization */

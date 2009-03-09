@@ -2976,10 +2976,11 @@ function getUItype($module,$columnname)
 
 }
 
+// This function looks like not used anymore. May have to be removed
 function is_emailId($entity_id)
 {
 	global $log,$adb;
-	$log->debug("Entering is_EmailId(".$module.",".$entity_id.") method");
+	$log->debug("Entering is_EmailId(".$entity_id.") method");
 
 	$module = getSalesEntityType($entity_id);
 	if($module == 'Contacts')
@@ -2988,12 +2989,11 @@ function is_emailId($entity_id)
 		$result = $adb->pquery($sql, array($entity_id));
 		$email1 = $adb->query_result($result,0,"email");
 		$email2 = $adb->query_result($result,0,"yahooid");
-		if(($email1 != "" || $email2 != "") || ($email1 != "" && $email2 != ""))
-		{
+		if($email1 != "" || $email2 != "") {
 			$check_mailids = "true";
-		}
-		else
+		} else {
 			$check_mailids = "false";
+		}
 	}
 	elseif($module == 'Leads')
 	{
@@ -3001,12 +3001,11 @@ function is_emailId($entity_id)
 		$result = $adb->pquery($sql, array($entity_id));
 		$email1 = $adb->query_result($result,0,"email");
 		$email2 = $adb->query_result($result,0,"yahooid");
-		if(($email1 != "" || $email2 != "") || ($email1 != "" && $email2 != ""))
-		{
+		if($email1 != "" || $email2 != "") {
 			$check_mailids = "true";
-		}
-		else
+		} else {
 			$check_mailids = "false";
+		}
 	}
 	$log->debug("Exiting is_EmailId() method ...");
 	return $check_mailids;

@@ -134,57 +134,74 @@ class PriceBooks extends CRMEntity {
 	 *	@param int $id - pricebook id
          *      @return array - return an array which will be returned from the function getPriceBookRelatedProducts
         **/
-	function get_pricebook_products($id, $cur_tab_id, $rel_tab_id, $actions=false)
-	{
-		global $log,$singlepane_view;
+	function get_pricebook_products($id, $cur_tab_id, $rel_tab_id, $actions=false) {
+		global $log, $singlepane_view,$currentModule,$current_user;
 		$log->debug("Entering get_pricebook_products(".$id.") method ...");
-		global $app_strings;
-		
-		$related_module = vtlib_getModuleNameById($rel_tab_id);
-		checkFileAccess("modules/$related_module/$related_module.php");
+		$this_module = $currentModule;
+
+        $related_module = vtlib_getModuleNameById($rel_tab_id);
 		require_once("modules/$related_module/$related_module.php");
-		$focus = new $related_module();
-
-		$button = '';
-
+		$other = new $related_module();
+        vtlib_setup_modulevars($related_module, $other);		
+		$singular_modname = vtlib_toSingular($related_module);
+		
+		$parenttab = getParentTab();
+		
 		if($singlepane_view == 'true')
-			$returnset = '&return_module=PriceBooks&return_action=DetailView&return_id='.$id;
+			$returnset = '&return_module='.$this_module.'&return_action=DetailView&return_id='.$id;
 		else
-			$returnset = '&return_module=PriceBooks&return_action=CallRelatedList&return_id='.$id;
-
+			$returnset = '&return_module='.$this_module.'&return_action=CallRelatedList&return_id='.$id;
+		
+		$button = '';
+		
+		if($actions) {
+			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
+			if(in_array('SELECT', $actions) && isPermitted($related_module,4, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_SELECT')." ". getTranslatedString($related_module). "' class='crmbutton small edit' type='submit' name='button' onclick=\"this.form.action.value='AddProductsToPriceBook';this.form.module.value='$related_module';this.form.return_module.value='$currentModule';this.form.return_action.value='PriceBookDetailView'\" value='". getTranslatedString('LBL_SELECT'). " " . getTranslatedString($related_module) ."'>&nbsp;";
+			}
+		}
+		
 		$query = 'select vtiger_products.productid, vtiger_products.productname, vtiger_products.productcode, vtiger_products.commissionrate, vtiger_products.qty_per_unit, vtiger_products.unit_price, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,vtiger_pricebookproductrel.listprice from vtiger_products inner join vtiger_pricebookproductrel on vtiger_products.productid = vtiger_pricebookproductrel.productid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_products.productid inner join vtiger_pricebook on vtiger_pricebook.pricebookid = vtiger_pricebookproductrel.pricebookid  where vtiger_pricebook.pricebookid = '.$id.' and vtiger_crmentity.deleted = 0'; 
+		
+		$return_value = getPriceBookRelatedProducts($query,$this,$returnset);
+
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+		
 		$log->debug("Exiting get_pricebook_products method ...");
-		return getPriceBookRelatedProducts($query,$this,$returnset);
+		return $return_value; 
 	}	
 
 	/**	function used to get the services which are related to the pricebook
 	 *	@param int $id - pricebook id
          *      @return array - return an array which will be returned from the function getPriceBookRelatedServices
         **/
-	function get_pricebook_services($id, $cur_tab_id, $rel_tab_id, $actions=false)
-	{
-		global $log,$singlepane_view,$currentModule;
+	function get_pricebook_services($id, $cur_tab_id, $rel_tab_id, $actions=false) {
+		global $log, $singlepane_view,$currentModule,$current_user;
 		$log->debug("Entering get_pricebook_services(".$id.") method ...");
-		
-		$related_module = vtlib_getModuleNameById($rel_tab_id);
-		checkFileAccess("modules/$related_module/$related_module.php");
+		$this_module = $currentModule;
+
+        $related_module = vtlib_getModuleNameById($rel_tab_id);
 		require_once("modules/$related_module/$related_module.php");
-		$focus = new $related_module();
+		$other = new $related_module();
+        vtlib_setup_modulevars($related_module, $other);		
+		$singular_modname = vtlib_toSingular($related_module);
+		
+		$parenttab = getParentTab();
+		
+		if($singlepane_view == 'true')
+			$returnset = '&return_module='.$this_module.'&return_action=DetailView&return_id='.$id;
+		else
+			$returnset = '&return_module='.$this_module.'&return_action=CallRelatedList&return_id='.$id;
 		
 		$button = '';
+		
 		if($actions) {
 			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
 			if(in_array('SELECT', $actions) && isPermitted($related_module,4, '') == 'yes') {
 				$button .= "<input title='".getTranslatedString('LBL_SELECT')." ". getTranslatedString($related_module). "' class='crmbutton small edit' type='submit' name='button' onclick=\"this.form.action.value='AddServicesToPriceBook';this.form.module.value='$related_module';this.form.return_module.value='$currentModule';this.form.return_action.value='PriceBookDetailView'\" value='". getTranslatedString('LBL_SELECT'). " " . getTranslatedString($related_module) ."'>&nbsp;";
 			}
 		}
-				
-		$button .= '</td>';
-		
-		if($singlepane_view == 'true')
-			$returnset = '&return_module=PriceBooks&return_action=DetailView&return_id='.$id;
-		else
-			$returnset = '&return_module=PriceBooks&return_action=CallRelatedList&return_id='.$id;
 
 		$query = 'select vtiger_service.serviceid, vtiger_service.servicename, vtiger_service.commissionrate,  
 			vtiger_service.qty_per_unit, vtiger_service.unit_price, vtiger_crmentity.crmid, vtiger_crmentity.smownerid,  
@@ -194,12 +211,12 @@ class PriceBooks extends CRMEntity {
 			inner join vtiger_pricebook on vtiger_pricebook.pricebookid = vtiger_pricebookproductrel.pricebookid
 			where vtiger_pricebook.pricebookid = '.$id.' and vtiger_crmentity.deleted = 0';
 		
-		$return_value = $focus->getPriceBookRelatedServices($query,$this,$returnset);
+		$return_value = $other->getPriceBookRelatedServices($query,$this,$returnset);
 
 		if($return_value == null) $return_value = Array();
 		$return_value['CUSTOM_BUTTON'] = $button;
 		
-		$log->debug("Exiting get_pricebook_products method ...");
+		$log->debug("Exiting get_pricebook_services method ...");
 		return $return_value; 
 	}
 

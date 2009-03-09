@@ -138,7 +138,9 @@ if(isset($_REQUEST['start'])) { $start = $_REQUEST['start']; }
 else { $start = $_SESSION['lvs'][$currentModule]['start']; }
 // Total records is less than a page now.
 if($recordCount <= $list_max_entries_per_page) $start = 1;
+
 // Save in session
+if(empty($start)) $start = 1; // Reset to proper state
 $_SESSION['lvs'][$currentModule]['start'] = $start;
 
 $navigation_array = getNavigationValues($start, $recordCount, $list_max_entries_per_page);

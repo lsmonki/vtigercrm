@@ -51,7 +51,7 @@ $smarty->assign('SINGLE_MOD', getTranslatedString('SINGLE_'.$currentModule));
 $smarty->assign('CATEGORY', $category);
 $smarty->assign('BUTTONS', $list_buttons);
 $smarty->assign('CHECK', $tool_buttons);
-$smarty->assign("THEME", $theme);
+$smarty->assign('THEME', $theme);
 $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
 
 $smarty->assign('CHANGE_OWNER', getUserslist());
@@ -138,7 +138,9 @@ if(isset($_REQUEST['start'])) { $start = $_REQUEST['start']; }
 else { $start = $_SESSION['lvs'][$currentModule]['start']; }
 // Total records is less than a page now.
 if($recordCount <= $list_max_entries_per_page) $start = 1;
+
 // Save in session
+if(empty($start)) $start = 1; // Reset to proper state
 $_SESSION['lvs'][$currentModule]['start'] = $start;
 
 $navigation_array = getNavigationValues($start, $recordCount, $list_max_entries_per_page);

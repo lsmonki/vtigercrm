@@ -69,7 +69,7 @@ $smarty->assign('MOD_SEQ_ID', $mod_seq_id);
 
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
-$smarty->assign("ACCOUNTID",$focus->column_fields['account_id']);
+//$smarty->assign("ACCOUNTID",$focus->column_fields['account_id']);
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");

@@ -127,7 +127,7 @@ function loadCvList(type,id)
 			</tr>
 			<tr>
 				<td valign=top align=left >
-		                	<table border=0 cellspacing=0 cellpadding=3 width=100% class="dvtContentSpace">
+		                	<table border=0 cellspacing=0 cellpadding=3 width=100% class="dvtContentSpace" style="border-bottom:0;">
 						<tr>
 							<td align=left>
 							<!-- content cache -->

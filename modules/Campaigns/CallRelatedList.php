@@ -53,8 +53,6 @@ if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
 }
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 $related_array=getRelatedLists($currentModule,$focus);
-//Added for multi select check box for contacts and leads in Campaigns related lists..
-//Alter the $related_array and check the selected item on previous page.
 
 // vtlib customization: Related module could be disabled, check it
 if(isset($related_array)) {
@@ -66,14 +64,15 @@ if(isset($related_array)) {
                 $rel_check_split=explode(";",$rel_checked);
                 if (is_array($mod_val))
                 {
-                        $mod_val["checked"]=array();
-                        foreach($mod_val['entries'] as $key=>$val)
-                        {
-                                if(in_array($key,$rel_check_split))
-                                        $related_array[$mod_key]["checked"][$key] = 'checked';
-                                else
-                                        $related_array[$mod_key]["checked"][$key] = '';
-                        }
+                	$mod_val["checked"]=array();
+                    if (isset($mod_val['entries'])) {
+	                	foreach($mod_val['entries'] as $key=>$val) {
+							if(in_array($key,$rel_check_split))
+								$related_array[$mod_key]["checked"][$key] = 'checked';
+							else
+								$related_array[$mod_key]["checked"][$key] = '';
+	                	}
+                 	}
                 }
         }
 	}
@@ -82,26 +81,6 @@ if(isset($related_array)) {
 $smarty->assign("RELATEDLISTS", $related_array);
 
 require_once('modules/CustomView/CustomView.php');
-
-/* To get Contacts CustomView -START */
-$chtml = "<select id='cont_cv_list'><option value='None'>-- ".$mod_strings['Select One']." --</option>";
-$oCustomView = new CustomView('Contacts');
-$viewid = $oCustomView->getViewId('Contacts');
-$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid, false);
-$chtml .= $customviewcombo_html;
-$chtml .= "</select>";
-$smarty->assign("CONTCVCOMBO",$chtml);
-/* To get Contacts CustomView -END */
-
-/* To get Leads CustomView -START */
-$lhtml = "<select id='lead_cv_list'><option value='None'>-- ".$mod_strings['Select One']." --</option>";
-$oCustomView = new CustomView('Leads');
-$viewid = $oCustomView->getViewId('Leads');
-$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid, false);
-$lhtml .= $customviewcombo_html;
-$lhtml .= "</select>";
-$smarty->assign("LEADCVCOMBO",$lhtml);
-/* To get Leads CustomView -END */
 
 // Module Sequence Numbering
 $mod_seq_field = getModuleSequenceField($currentModule);

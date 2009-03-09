@@ -105,8 +105,6 @@ $smarty->assign("IMAGE_PATH", $image_path);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
-$smarty->assign("MAIL_CHECK", is_emailId($RECORD));
-$smarty->assign("PERMIT",$permit);
 $smarty->display("RelatedLists.tpl");
 }
 ?>

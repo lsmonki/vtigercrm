@@ -302,22 +302,44 @@ var $rel_serel_table = "vtiger_seactivityrel";
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	*/
-	function get_contacts($id)
-	{
-		global $log,$adb;
+	function get_contacts($id, $cur_tab_id, $rel_tab_id, $actions=false) {
+		global $log, $singlepane_view,$currentModule,$current_user;
 		$log->debug("Entering get_contacts(".$id.") method ...");
-		global $mod_strings;
-		global $app_strings;
+		$this_module = $currentModule;
 
-		$focus = new Contacts();
-
+        $related_module = vtlib_getModuleNameById($rel_tab_id);
+		require_once("modules/$related_module/$related_module.php");
+		$other = new $related_module();
+        vtlib_setup_modulevars($related_module, $other);		
+		$singular_modname = vtlib_toSingular($related_module);
+		
+		$parenttab = getParentTab();
+		
+		$returnset = '&return_module='.$this_module.'&return_action=DetailView&return_id='.$id;
+		
 		$button = '';
-		$returnset = '&return_module=Emails&return_action=CallRelatedList&return_id='.$id;
-
+				
+		if($actions) {
+			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
+			if(in_array('SELECT', $actions) && isPermitted($related_module,4, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_SELECT')." ". getTranslatedString($related_module). "' class='crmbutton small edit' type='button' onclick=\"return window.open('index.php?module=$related_module&return_module=$currentModule&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid=$id&parenttab=$parenttab','test','width=640,height=602,resizable=0,scrollbars=0');\" value='". getTranslatedString('LBL_SELECT'). " " . getTranslatedString($related_module) ."'>&nbsp;";
+			}
+			if(in_array('BULKMAIL', $actions) && isPermitted($related_module,1, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_BULK_MAILS')."' class='crmbutton small create'" .
+					" onclick='this.form.action.value=\"sendmail\";this.form.module.value=\"$this_module\"' type='submit' name='button'" .
+					" value='". getTranslatedString('LBL_BULK_MAILS')."'>";
+			}
+		}
+				
 		$query = 'select vtiger_contactdetails.accountid, vtiger_contactdetails.contactid, vtiger_contactdetails.firstname,vtiger_contactdetails.lastname, vtiger_contactdetails.department, vtiger_contactdetails.title, vtiger_contactdetails.email, vtiger_contactdetails.phone, vtiger_contactdetails.emailoptout, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_contactdetails inner join vtiger_cntactivityrel on vtiger_cntactivityrel.contactid=vtiger_contactdetails.contactid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid where vtiger_cntactivityrel.activityid='.$adb->quote($id).' and vtiger_crmentity.deleted=0';
-		$log->info("Contact Related List for Email is Displayed");
-		$log->debug("Exiting get_contacts method ...");
-		return GetRelatedList('Emails','Contacts',$focus,$query,$button,$returnset);
+				
+		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset); 
+		
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+		
+		$log->debug("Exiting get_contacts method ...");		
+		return $return_value;
 	}
 	
 	/** Returns the column name that needs to be sorted
@@ -374,6 +396,14 @@ var $rel_serel_table = "vtiger_seactivityrel";
 
 		$id = $_REQUEST['record'];
 
+		$button = '<input title="'.getTranslatedString('LBL_BULK_MAILS').'" accessykey="F" class="crmbutton small create" 
+				onclick="this.form.action.value=\"sendmail\";this.form.return_action.value=\"DetailView\";this.form.module.value=\"Emails\";this.form.return_module.value=\"Emails\";" 
+				name="button" value="'.getTranslatedString('LBL_BULK_MAILS').'" type="submit">&nbsp;
+				<input title="'.getTranslatedString('LBL_BULK_MAILS').'" accesskey="" tabindex="2" class="crmbutton small edit" 
+				value="'.getTranslatedString('LBL_SELECT_USER_BUTTON_LABEL').'" name="Button" language="javascript" 
+				onclick=\"return window.open("index.php?module=Users&return_module=Emails&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=true&return_id='.$id.'&recordid='.$id.'","test","width=640,height=520,resizable=0,scrollbars=0");\"
+				type="button">';                  
+
 		$query = 'SELECT vtiger_users.id, vtiger_users.first_name,vtiger_users.last_name, vtiger_users.user_name, vtiger_users.email1, vtiger_users.email2, vtiger_users.yahoo_id, vtiger_users.phone_home, vtiger_users.phone_work, vtiger_users.phone_mobile, vtiger_users.phone_other, vtiger_users.phone_fax from vtiger_users inner join vtiger_salesmanactivityrel on vtiger_salesmanactivityrel.smid=vtiger_users.id and vtiger_salesmanactivityrel.activityid=?';
 		$result=$adb->pquery($query, array($id));   
 
@@ -419,7 +449,11 @@ var $rel_serel_table = "vtiger_seactivityrel";
 
 		if($entries_list != '')
 			$return_data = array("header"=>$header, "entries"=>$entries);
-		$log->debug("Exiting get_users method ...");
+		
+		if($return_data == null) $return_data = Array();
+		$return_data['CUSTOM_BUTTON'] = $button;
+		
+		$log->debug("Exiting get_users method ..."); 
 		return $return_data;
 	}
 
