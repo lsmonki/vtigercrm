@@ -168,8 +168,25 @@ $activemode = "";
 if($activity_mode != '') 
 	$activemode = "&activity_mode=".$activity_mode;
 
-function getRequestData()
+function getRequestData($return_id)
 {
+	global $adb;
+	$cont_qry = "select * from vtiger_cntactivityrel where activityid=?";
+	$cont_res = $adb->pquery($cont_qry, array($return_id));
+	$noofrows = $adb->num_rows($cont_res);
+	$cont_id = array();
+	if($noofrows > 0) {
+		for($i=0; $i<$noofrows; $i++) {
+			$cont_id[] = $adb->query_result($cont_res,$i,"contactid");
+		}
+	}
+	$cont_name = '';
+	foreach($cont_id as $key=>$id) {
+		if($id != '') {	
+			$cont_name .= getContactName($id).', ';
+		}
+	}
+	$cont_name  = trim($cont_name,', ');
 	$mail_data = Array();
 	$mail_data['user_id'] = $_REQUEST['assigned_user_id'];
 	$mail_data['subject'] = $_REQUEST['subject'];
@@ -177,7 +194,7 @@ function getRequestData()
 	$mail_data['activity_mode'] = $_REQUEST['activity_mode'];
 	$mail_data['taskpriority'] = $_REQUEST['taskpriority'];
 	$mail_data['relatedto'] = $_REQUEST['parent_name'];
-	$mail_data['contact_name'] = $_REQUEST['contact_name'];
+	$mail_data['contact_name'] = $cont_name;
 	$mail_data['description'] = $_REQUEST['description'];
 	$mail_data['assingn_type'] = $_REQUEST['assigntype'];
 	$mail_data['group_name'] = getGroupName($_REQUEST['assigned_group_id']);
@@ -190,19 +207,6 @@ function getRequestData()
 	$mail_data['end_date_time']=getDisplayDate($_REQUEST['due_date'])." ".$end_hour;
 	$mail_data['location']=$_REQUEST['location'];
 	return $mail_data;
-}
-//Added code to send mail to the assigned to user about the details of the vtiger_activity if sendnotification = on and assigned to user
-if($_REQUEST['sendnotification'] == 'on')
-{
-	$mail_contents = getRequestData();
-	getEventNotification($_REQUEST['activity_mode'],$_REQUEST['subject'],$mail_contents);
-}
-
-//code added to send mail to the vtiger_invitees
-if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
-{
-	$mail_contents = getRequestData();
-        sendInvitation($_REQUEST['inviteesid'],$_REQUEST['activity_mode'],$_REQUEST['subject'],$mail_contents);
 }
 
 if(isset($_REQUEST['contactidlist']) && $_REQUEST['contactidlist'] != '')
@@ -224,6 +228,20 @@ if(isset($_REQUEST['contactidlist']) && $_REQUEST['contactidlist'] != '')
 			}
 		}
 	}
+}
+
+//Added code to send mail to the assigned to user about the details of the vtiger_activity if sendnotification = on and assigned to user
+if($_REQUEST['sendnotification'] == 'on')
+{
+	$mail_contents = getRequestData($return_id);
+	getEventNotification($_REQUEST['activity_mode'],$_REQUEST['subject'],$mail_contents);
+}
+
+//code added to send mail to the vtiger_invitees
+if(isset($_REQUEST['inviteesid']) && $_REQUEST['inviteesid']!='')
+{
+	$mail_contents = getRequestData($return_id);
+        sendInvitation($_REQUEST['inviteesid'],$_REQUEST['activity_mode'],$_REQUEST['subject'],$mail_contents);
 }
 
 //to delete contact account relation while editing event

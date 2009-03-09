@@ -97,6 +97,7 @@ $mod_strings = Array(
 'LBL_SUBJECT'=>'Subject:',
 'LBL_APP_DESCRIPTION' => 'Description',
 'LBL_CONTACT'=>'Contact:',
+'LBL_CONTACT_LIST'=>'Contact List:',
 
 'LBL_APP_IGNORE_TIME2' => '(i.e. the appointment takes place<br />at no particular time on these day(s) )',
 
