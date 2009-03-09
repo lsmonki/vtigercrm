@@ -143,7 +143,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 <body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 <style>
 	.hide_tab{display:none;}
-	.show_tab{}
+	.show_div{}
 </style>
 <script language="JavaScript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script type="text/javascript" language="Javascript">
@@ -151,9 +151,9 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 		var sourceTag = document.getElementById('check_createdb').checked;
 		if(sourceTag){
 			document.getElementById('dbbackup').style.display = 'none';
-			document.getElementById('root_user').className = 'show_tab';
-			document.getElementById('root_pass').className = 'show_tab';
-			document.getElementById('create_db_config').className = 'show_tab';
+			document.getElementById('root_user').className = 'show_div';
+			document.getElementById('root_pass').className = 'show_div';
+			document.getElementById('create_db_config').className = 'show_div';
 			document.getElementById('root_user_txtbox').focus();
 		}
 		else{
@@ -539,7 +539,6 @@ function getViewPortCenter(){
 						       <input class="small" name="check_createdb" type="checkbox" id="check_createdb" onClick="fnShow_Hide()" />
 					       <?php } ?>
 					       &nbsp;Create Database (will drop the database if exists)</td>
-					</tr>
 				<?php
 					} else {
 				?>					
@@ -557,10 +556,10 @@ function getViewPortCenter(){
 						       <input class="small" name="check_createdb" type="checkbox" id="check_createdb" disabled onClick="fnShow_Hide()" />
 					       <?php } ?>
 					       &nbsp;Create Database (will drop the database if exists)</td>
-					</tr>
 				<?php
 					}
 				?>					
+			</tr>
 			<tr id="root_user" class="hide_tab">
 				<td nowrap width="25%">Root Username<sup><font color="red">*</font></sup></td>
 				<td align="left"><input class="small" name="root_user" id="root_user_txtbox" value="<?php echo $root_user;?>" type="text"></td>

@@ -187,7 +187,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 <body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 <style>
 	.hide_tab{display:none;}
-	.show_tab{}
+	.show_div{}
 </style>
 
 <script type="text/javascript" language="Javascript">
@@ -195,9 +195,9 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	function fnShow_Hide(){
 		var sourceTag = document.getElementById('check_createdb').checked;
 		if(sourceTag){
-			document.getElementById('root_user').className = 'show_tab';
-			document.getElementById('root_pass').className = 'show_tab';
-			document.getElementById('create_db_config').className = 'show_tab';
+			document.getElementById('root_user').className = 'show_div';
+			document.getElementById('root_pass').className = 'show_div';
+			document.getElementById('create_db_config').className = 'show_div';
 			document.getElementById('root_user_txtbox').focus();
 		}
 		else{
