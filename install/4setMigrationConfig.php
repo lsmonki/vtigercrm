@@ -137,7 +137,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>vtiger CRM 5 - Configuration Wizard - System Configuration</title>
 	<link href="include/install/install.css" rel="stylesheet" type="text/css">
-	<link href="include/install/install.css" rel="stylesheet" type="text/css">
+	<link href="themes/softed/style.css" rel="stylesheet" type="text/css">
 </head>
 
 <body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
@@ -150,12 +150,14 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	function fnShow_Hide(){
 		var sourceTag = document.getElementById('check_createdb').checked;
 		if(sourceTag){
+			document.getElementById('dbbackup').style.display = 'none';
 			document.getElementById('root_user').className = 'show_tab';
 			document.getElementById('root_pass').className = 'show_tab';
 			document.getElementById('create_db_config').className = 'show_tab';
 			document.getElementById('root_user_txtbox').focus();
 		}
 		else{
+			document.getElementById('dbbackup').style.display = 'block';
 			document.getElementById('root_user').className = 'hide_tab';
 			document.getElementById('root_pass').className = 'hide_tab';
 			document.getElementById('create_db_config').className = 'hide_tab';
@@ -252,20 +254,32 @@ function migrate(){
 		var useheight = document.body.clientHeight;
 	} else {
 		var windowHeight = window.innerHeight;
-		var useheight = document.body.innerHeight;
+		var useheight = document.body.getHeight();
 	}
-	if(useheight > windowHeight) useheight = windowHeight;
-	$('divId').style.height = useheight + 'px';
+
+	$('divId').style.height = windowHeight + 'px';
 	$('divId').style.display = 'block';
+	if(useheight > windowHeight) {
+		$('Appender').style.height = (useheight - windowHeight) + 'px';
+		$('Appender').style.display = 'block';
+		$('Appender').style.top = windowHeight+'px';
+	}
 	var source_path = document.getElementById("source_directory").value;
 	<?php
 		if($cur_dir_path == true){
 	?>					
 			var db_name = document.getElementById("db_name").value;
-			if(document.getElementById("check_createdb").checked==true)
+			if(document.getElementById("check_createdb").checked==true){
 				var check_createdb =  'On';
-			else
+				var check_dbbackup =  'On';
+			} else {
 				var check_createdb =  'Off';
+				if(document.getElementById("check_dbbackup").checked==true){
+					var check_dbbackup = 'On';
+				} else {
+					var check_dbbackup = 'Off';
+				}
+			}
 			var root_user =  document.getElementById("root_user_txtbox").value;
 			var root_password =  document.getElementById("root_password").value;
 			var create_utf8_db =  document.getElementById("create_utf8_db").value;
@@ -278,10 +292,18 @@ function migrate(){
 			else
 				var db_name = document.getElementById("new_db_name").value;
 
-			if(document.getElementById("check_createdb").checked==true)
+			if(document.getElementById("check_createdb").checked==true){
 				var check_createdb =  'On';
-			else
+				var check_dbbackup =  'On';
+			} else {
 				var check_createdb =  'Off';
+				if(document.getElementById("check_dbbackup").checked==true){
+					var check_dbbackup = 'On';
+				} else {
+					var check_dbbackup = 'Off';
+				}
+			}
+
 			var root_user =  document.getElementById("root_user_txtbox").value;
 			var root_password =  document.getElementById("root_password").value;
 			var create_utf8_db =  document.getElementById("create_utf8_db").value;
@@ -298,7 +320,7 @@ function migrate(){
 	var user_pwd = document.getElementById("password").value;
 	var site_URL =  document.getElementById("site_url").value;
 	var root_directory =  document.getElementById("root_directory").value;
-	url = '&old_version='+old_version+'&check_createdb='+check_createdb+'&root_user='+root_user+'&root_password='+root_password+'&create_utf8_db='+create_utf8_db+'&root_directory='+root_directory+'&site_URL='+site_URL+'&selected_modules='+selected_modules;
+	url = '&old_version='+old_version+'&check_createdb='+check_createdb+'&check_dbbackup='+check_dbbackup+'&root_user='+root_user+'&root_password='+root_password+'&create_utf8_db='+create_utf8_db+'&root_directory='+root_directory+'&site_URL='+site_URL+'&selected_modules='+selected_modules;
 	new Ajax.Request(
 		'migrate.php',
 		{queue: {position: 'end', scope: 'command'},
@@ -459,12 +481,12 @@ function getViewPortCenter(){
 					<?php
 						if($cur_dir_path == true){
 					?>					
-					<input class="dataInput" type="text" name="source_directory" id="source_directory" value="<?php if (isset($source_directory)) echo "$source_directory"; ?>" size="40" /> 
+					<input  class="small" type="text" name="source_directory" id="source_directory" value="<?php if (isset($source_directory)) echo "$source_directory"; ?>" size="40" /> 
 					<?php
 						} else {
 							echo $root_directory;
 					?>					
-					<input class="dataInput" type="hidden" name="source_directory" id="source_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" size="40" /> 
+					<input  class="small" type="hidden" name="source_directory" id="source_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" size="40" /> 
 					<?php
 						}
 					?>					
@@ -473,7 +495,7 @@ function getViewPortCenter(){
 			<tr>
 				<td width = 25% >Previous Installation Version<sup><font color=red>*</font></sup></td>
 				<td align="left">
-					<select name='old_version' id='old_version'>
+					<select class="small" name='old_version' id='old_version'>
 						<?php
 							if(!isset($_SESSION['VTIGER_DB_VERSION'])){ 
 								echo "<option value='' selected>--SELECT--</option>";
@@ -494,11 +516,11 @@ function getViewPortCenter(){
 			</tr>
 			<tr>
 				<td width = 25% >Admin Username<sup><font color=red>*</font></sup></td>
-				<td align="left"><input class="dataInput" type="text" name="user_name" id="user_name" value="<?php if (isset($user_name)) echo "$user_name"; ?>" size="40" /> </td>
+				<td align="left"><input class="small" type="text" name="user_name" id="user_name" value="<?php if (isset($user_name)) echo "$user_name"; ?>" size="40" /> </td>
 			</tr>
 			<tr>
 				<td width = 25%>Admin Password<sup><font color=red></font></sup></td>
-				<td align="left"><input class="dataInput" type="password" name="password" id="password" value="" size="40" /> </td>
+				<td align="left"><input class="small" type="password" name="password" id="password" value="" size="40" /> </td>
 			</tr>
 		</table>
 		<br>
@@ -509,12 +531,12 @@ function getViewPortCenter(){
 				?>					
 					<tr>
 		               <td nowrap width=25%>New Database Name<sup><font color=red>*</font></sup></td>
-		               <td align="left" nowrap><input type="text" class="dataInput" name="db_name" id="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />&nbsp;
+		               <td align="left" nowrap><input type="text" class="small" name="db_name" id="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />&nbsp;
 				       <?php if($check_createdb == 'on')
 					       {?>
-					       <input name="check_createdb" type="checkbox" id="check_createdb" checked onClick="fnShow_Hide()"/>
+					       <input class="small" name="check_createdb" type="checkbox" id="check_createdb" checked onClick="fnShow_Hide()"/>
 					       <?php }else{?>
-						       <input name="check_createdb" type="checkbox" id="check_createdb" onClick="fnShow_Hide()" />
+						       <input class="small" name="check_createdb" type="checkbox" id="check_createdb" onClick="fnShow_Hide()" />
 					       <?php } ?>
 					       &nbsp;Create Database (will drop the database if exists)</td>
 					</tr>
@@ -522,17 +544,17 @@ function getViewPortCenter(){
 					} else {
 				?>					
 					<tr>
-						<td nowrap width = 25%><input type='radio' value='E' onchange='radio_checked();' name='database' checked /> Upgrade Existing Database</td>
+						<td nowrap width = 25%><input class="small" type='radio' value='E' onchange='radio_checked();' name='database' checked /> Upgrade Existing Database</td>
 		               	<td align="left"><input type="hidden" class="dataInput" name="existing_db_name" id="existing_db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" /><?php  echo "$db_name"; ?></td>
 					</tr>
 					<tr>
-						<td nowrap width = 25%><input type='radio' value='C' onchange='radio_checked();' id='new_db' name='database'/>Use Other Database</td>
+						<td nowrap width = 25%><input class="small" type='radio' value='C' onchange='radio_checked();' id='new_db' name='database'/>Use Other Database</td>
 		               <td align="left"><input type="text" class="dataInput" name="new_db_name" id="new_db_name" value="" disabled />&nbsp;
 				       <?php if($check_createdb == 'on')
 					       {?>
-					       <input disabled name="check_createdb" type="checkbox" id="check_createdb" disabled checked onClick="fnShow_Hide()"/>
+					       <input class="small" disabled name="check_createdb" type="checkbox" id="check_createdb" disabled checked onClick="fnShow_Hide()"/>
 					       <?php }else{?>
-						       <input name="check_createdb" type="checkbox" id="check_createdb" disabled onClick="fnShow_Hide()" />
+						       <input class="small" name="check_createdb" type="checkbox" id="check_createdb" disabled onClick="fnShow_Hide()" />
 					       <?php } ?>
 					       &nbsp;Create Database (will drop the database if exists)</td>
 					</tr>
@@ -541,21 +563,33 @@ function getViewPortCenter(){
 				?>					
 			<tr id="root_user" class="hide_tab">
 				<td nowrap width="25%">Root Username<sup><font color="red">*</font></sup></td>
-				<td align="left"><input class="dataInput" name="root_user" id="root_user_txtbox" value="<?php echo $root_user;?>" type="text"></td>
+				<td align="left"><input class="small" name="root_user" id="root_user_txtbox" value="<?php echo $root_user;?>" type="text"></td>
 			</tr>
 			<tr id="root_pass" class="hide_tab">
 				<td nowrap width="25%">Root Password</td>
-				<td align="left"><input class="dataInput" name="root_password" id="root_password" value="<?php echo $root_password;?>" type="password"></td>
+				<td align="left"><input class="small" name="root_password" id="root_password" value="<?php echo $root_password;?>" type="password"></td>
 			</tr>
 			<tr id="create_db_config" class="hide_tab">
 				<td nowrap width="25%">UTF-8 Support</td>
-				<td align="left"><input name="create_utf8_db" type="checkbox" id="create_utf8_db" <?php if($create_utf8_db == 'true') echo "checked"; ?> /> DEFAULT CHARACTER SET utf8, DEFAULT COLLATE utf8_general_ci</td>
+				<td align="left"><input class="small" name="create_utf8_db" type="checkbox" id="create_utf8_db" <?php if($create_utf8_db == 'true') echo "checked"; ?> /> DEFAULT CHARACTER SET utf8, DEFAULT COLLATE utf8_general_ci</td>
 			</tr>
 			<input name="site_url" type="hidden" id="site_url" value = '<?php echo $web_root; ?>' />
 			<input name="selected_modules" type="hidden" id="selected_modules" value = '<?php echo $mod_for_ins; ?>' />
 			<input class="dataInput" type="hidden" name="root_directory" id="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" size="40" /> 
 		</table>
-			
+		<div id="dbbackup" style="display:block">
+			<br>
+			<table width="95%" cellpadding="2"  cellspacing="1" border="0" align=center class='level3'><tbody>
+				<tr><td colspan=2><strong>Enable Database Backup</strong> (Let the Migration Wizard backup your existing database before upgrading.)<hr size="1" noshade=""/></td></tr>
+						<tr>
+			               <!-- td nowrap width=25%>Enable Database Backup</td -->
+			               <td align="left" colspan=2 nowrap>
+						       <input name="check_dbbackup" type="checkbox" id="check_dbbackup" checked />
+								&nbsp;&nbsp; We recommend you to backup the database manually and disable this option for faster migration. 
+						   </td>
+						</tr>
+			</table>
+		</div>
 			<br>
 			
 		  <!-- User Verification -->
@@ -602,11 +636,20 @@ function getViewPortCenter(){
     	</table>
 <script>fnShow_Hide();</script>
 <div id="divId" class="veil_new" style="position:absolute;width:100%;display:none;top:0px;left:0px;background-color:#FFFFFF;filter: alpha(Opacity=75);opacity:0.75;border: solid 1px gray;">
-<table border="5" cellpadding="0" cellspacing="0" align="center" style="vertical-align:middle;width:100%;height:900px;">
+<table border="5" cellpadding="0" cellspacing="0" align="center" style="vertical-align:middle;width:100%;height:100%;">
 <tbody><tr>
 		<td class="big" align="center" style="font-size:20px;">
 		    <img src="include/install/images/loading.gif"><br>
 		    <font color='#575864'><strong>Migration in Progress...</strong></font>
+		</td>
+	</tr>
+</tbody>
+</table>
+</div>
+<div id="Appender" class="veil_new" style="position:absolute;width:100%;display:none;left:0px;background-color:#FFFFFF;filter: alpha(Opacity=75);opacity:0.75;border: solid 1px gray;">
+<table border="0" cellpadding="0" cellspacing="0" align="center" style="vertical-align:middle;width:100%;">
+<tbody><tr>
+		<td class="big" align="center" style="font-size:20px;">
 		</td>
 	</tr>
 </tbody>

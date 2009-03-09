@@ -81,10 +81,12 @@ if($db_type)
 			if(authenticate_user($user_name,$user_pwd)==true){
 				$is_admin = true;
 
-				$backup_DBFileName = $old_db_name."_".date("Ymd_His").".sql";
-				$dbdump = new DatabaseDump($db_hostname.$db_port, $db_username, $db_password);
-				$dumpfile = 'backup/'.$backup_DBFileName;
-				$dbdump->save($old_db_name, $dumpfile) ;
+				if(isset($_REQUEST['check_dbbackup']) && $_REQUEST['check_dbbackup'] == 'On'){
+					$backup_DBFileName = $old_db_name."_".date("Ymd_His").".sql";
+					$dbdump = new DatabaseDump($db_hostname.$db_port, $db_username, $db_password);
+					$dumpfile = 'backup/'.$backup_DBFileName;
+					$dbdump->save($old_db_name, $dumpfile) ;
+				}
 				if(isset($_REQUEST['check_createdb']) && $_REQUEST['check_createdb'] == 'On') {
 					$root_user = $_REQUEST['root_user'];
 					$root_password = $_REQUEST['root_password'];
@@ -142,10 +144,10 @@ if($db_type)
 		 			}
 					
 				}
-					//@copy($source_directory."tabdata.php", $root_directory."tabdata.php");
-					//@copy($source_directory."parent_tabdata.php", $root_directory."parent_tabdata.php");
+				if($source_directory!=$_REQUEST['root_directory']){
 					@get_files_from_folder($source_directory."user_privileges/",$_REQUEST['root_directory']."user_privileges/");	
-					@get_files_from_folder($source_directory."storage/",$_REQUEST['root_directory']."storage/");	
+					@get_files_from_folder($source_directory."storage/",$_REQUEST['root_directory']."storage/");
+				}	
 			}
 			else{
 				echo 'NOT_VALID_USER';
@@ -271,13 +273,7 @@ if(file_exists($source_directory.'user_privileges/CustomInvoiceNo.php'))
 	$versions_non_utf8 = array("50","501","502","503rc2","503","504rc");
 	$php_max_execution_time = 600;
 	set_time_limit($php_max_execution_time);
-	/*	require_once($source_directory.'vtigerversion.php');
-		$source_version = $vtiger_current_version;
-		$source_version = str_replace(".","",$source_version);
-		$source_version = str_replace(" ","",$source_version);
-		$source_version = strtolower($source_version);
-	*/
-	
+
 	include("modules/Migration/versions.php");
 	$migrationlog =& LoggerManager::getLogger('MIGRATION');
 	
@@ -422,25 +418,6 @@ function get_files_from_folder($source, $dest) {
 		}
 	}
 	@closedir($handle);
-}
-
-
-function html_2_utf8 ($data)
-{
-	return preg_replace("/\\&\\#([0-9]{3,10})\\;/e", 'utf8_replaceEntity("\\1")', $data);
-}
-
-function utf8_2_html ($data)
-{
-	return preg_replace("/\\&\\#([0-9]{3,10})\\#/e", 'replaceEntity("\\1")', $data);
-}
-
-function utf8_replaceEntity($data){
- 	return "&#$data#";
-}
-
-function replaceEntity($data){
- 	return "&#$data;";
 }
 
 ?>

@@ -65,6 +65,7 @@ if(isset($_REQUEST['filename'])){
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>vtiger CRM 5 - Configuration Wizard - Installation Check</title>
 	<link href="include/install/install.css" rel="stylesheet" type="text/css">
+	<link href="themes/softed/style.css" rel="stylesheet" type="text/css">
 </head>
 
 <body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
@@ -117,8 +118,8 @@ if(isset($_REQUEST['filename'])){
 										foreach($opt_modules as $index=>$value) {
 									?>
 											<tr class='level1'>
-				        						<td width= "5%" valign=top align="right"><input type="checkbox" id="<?php echo $value; ?>" name="<?php echo $value; ?>" value="<?php echo $value; ?>" onChange='ModuleSelected("<?php echo $value; ?>");'></td>
-												<td valign=top ><i><?php echo $value; ?> </i></td>
+				        						<td class='small' width= "5%" valign=top align="right"><input type="checkbox" id="<?php echo $value; ?>" name="<?php echo $value; ?>" value="<?php echo $value; ?>" checked onChange='ModuleSelected("<?php echo $value; ?>");'></td>
+												<td class='small' valign=top ><?php echo $value; ?> </td>
 											</tr>
 									<?php
 										}
@@ -137,7 +138,7 @@ if(isset($_REQUEST['filename'])){
 					</td>
 				<td align=right>
 					<form action="install.php" method="post" name="form" id="form">
-					<input type="hidden" value="<?php if(isset($selected_modules)) echo $selected_modules; else echo '';?>" id='selected_modules' name='selected_modules' />  
+					<input type="hidden" value="<?php echo implode(":",$opt_modules)?>" id='selected_modules' name='selected_modules' />  
 	                <?php echo '<input type="hidden" name="file" value="'.$file_name.'" />'; ?>
 					<input type="image" src="include/install/images/cwBtnNext.gif" alt="Next" border="0" title="Next" onClick="submit();">
 					</form>
@@ -171,7 +172,7 @@ if(isset($_REQUEST['filename'])){
     	</table>
     	
 <script language="javascript">
-var selected_modules = '';
+var selected_modules = '<?php echo implode(":",$opt_modules)?>';
 
 function ModuleSelected(module){
 	if(document.getElementById(module).checked == true){

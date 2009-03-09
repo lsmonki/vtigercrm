@@ -69,6 +69,8 @@ $writable_files_folders = array(
 'Installation File'=>'./install.php',
 'Parent Tabdata File'=>'./parent_tabdata.php',
 'Cache Directory'=>'./cache/',
+'Image Cache Directory'=>'./cache/images/',
+'Import Cache Directory'=>'./cache/import/',
 'Storage Directory'=>'./storage/',
 'Install Directory'=>'./install/',
 'User Privileges Directory'=>'./user_privileges/',
@@ -172,6 +174,32 @@ $array = Array(
 
 }';
 
+$directive_recommended = array(
+	'safe_mode'=>'Off',
+	'display_errors'=>'On',
+	'file_uploads'=>'On',
+	'register_globals'=>'On',
+	'output_buffering'=>'On',
+	'max_execution_time'=>'600',
+	'memory_limit'=>'32',
+	'error_reporting'=>'E_WARNING & ~E_NOTICE',
+	'allow_call_time_pass_reference'=>'On',
+	'log_errors'=>'Off',
+	'short_open_tag'=>'On'
+);
+$directive_array = array();
+if(ini_get('safe_mode') == '1' || stripos(ini_get('safe_mode'),'On') > -1) $directive_array['safe_mode'] = 'On';
+if(ini_get('display_errors') != '1' || stripos(ini_get('display_errors'),'Off') > -1) $directive_array['display_errors'] = 'Off';
+if(ini_get('file_uploads') != '1' || stripos(ini_get('file_uploads'),'Off') > -1) $directive_array['file_uploads'] = 'Off';
+if(ini_get('register_globals') == '1' || stripos(ini_get('register_globals'),'On') > -1) $directive_array['register_globals'] = 'On';
+if(ini_get(('output_buffering') < '4096' && ini_get('output_buffering') != '0') || stripos(ini_get('output_buffering'),'Off') > -1) $directive_array['output_buffering'] = 'Off';
+if(ini_get('max_execution_time') < 600) $directive_array['max_execution_time'] = ini_get('max_execution_time');
+if(ini_get('memory_limit') < 32) $directive_array['memory_limit'] = ini_get('memory_limit');
+if(ini_get('error_reporting') != '2') $directive_array['error_reporting'] = 'NOT RECOMMENDED';
+if(ini_get('allow_call_time_pass_reference') != '1' || stripos(ini_get('allow_call_time_pass_reference'),'Off') > -1) $directive_array['allow_call_time_pass_reference'] = 'Off';
+if(ini_get('log_errors') == '1' || stripos(ini_get('log_errors'),'On') > -1) $directive_array['log_errors'] = 'On';
+if(ini_get('short_open_tag') != '1' || stripos(ini_get('short_open_tag'),'Off') > -1) $directive_array['short_open_tag'] = 'Off';
+
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -180,6 +208,7 @@ $array = Array(
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>vtiger CRM 5 - Configuration Wizard - Installation Check</title>
 	<link href="include/install/install.css" rel="stylesheet" type="text/css">
+	<link href="themes/softed/style.css" rel="stylesheet" type="text/css">
 </head>
 
 <body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
@@ -230,9 +259,11 @@ $array = Array(
 				    				<hr size="1" noshade=""/>
 				    			</td>
 				    			</tr>
-				    			<tr >
+				    			<tr>
 								    <td width=50%  valign=top >
-										<table cellpadding="5" cellspacing="1" align=right width="100%" border="0" class="level1">
+									<table align=right width="100%" border="0">
+										<tr><td  valign=top align=left width=100%>
+											<table cellpadding="5" cellspacing="1" align=right width="100%" border="0" class="level1">
 															<tr class='level1'>
 																<td valign=top >PHP version >= 5.0</td>
 																<td  valign=top><?php $php_version = phpversion(); echo (str_replace(".", "", $php_version) < "430") ? "<strong><font color=\"Red\">No.</strong></font>" : "<strong><font color=\"#46882B\">$php_version</strong></font>"; ?></td>
@@ -271,6 +302,35 @@ $array = Array(
 																</td>
 															</tr>
 									</table>  
+									</td></tr>
+									<tr><td class="small" colspan=2><br></td></tr>
+									<tr><td class="small" colspan=2><strong>Recommended PHP Settings:</strong></td></tr>
+									<?php 
+										
+										if(!empty($directive_array)){					
+									?>
+									<tr><td align=left width=100%>
+							   	   		<!-- Recommended Settings -->
+										<table cellpadding="5" cellspacing="1"  width="100%" border="0" class="level1">
+										    <tr> <td valign=top ><strong>Directive</strong> </td><td><strong>Recommended</strong></td><td nowrap><strong>PHP.ini value</strong></td></tr>
+										    <?php
+										    	foreach($directive_array as $index=>$value){
+										    ?>
+										    <tr> 
+										    	<td valign=top ><?php echo $index; ?></td>
+										    	<td><?php echo $directive_recommended[$index]; ?></td>
+										    	<td><strong><font color = red><?php echo $value; ?></font></strong></td></tr>
+										    <?php
+												}
+										    ?>
+										</table>
+									</td></tr>
+									<?php
+										} else {
+											echo "<tr><td class='small' colspan=2>Your PHP directives have the Recommended values.</td>";
+										}
+									?>
+									</table>
 								    </td>
 									<td align=left width=50% valign=top>
 										<table cellpadding="5" cellspacing="1" align=right width="100%" border="0" class="level1">
@@ -295,62 +355,6 @@ $array = Array(
 								<br>
 							</td>
 						</tr>
-		    			<tr>
-			    			<td colspan=2 style="font-size:13;">
-			    				<strong>PHP Configuration Check :</strong>
-			    				<hr size="1" noshade=""/>
-			    			</td>
-		    			</tr>
-		    			<tr>
-							<?php 
-								$directive_recommended = array(
-									'safe_mode'=>'Off',
-									'display_errors'=>'On',
-									'file_uploads'=>'On',
-									'register_globals'=>'On',
-									'output_buffering'=>'Off',
-									'max_execution_time'=>'600',
-									'memory_limit'=>'32',
-									'error_reporting'=>'E_WARNING & ~E_NOTICE',
-									'allow_call_time_pass_reference'=>'On',
-									'log_errors'=>'Off',
-									'short_open_tag'=>'On'
-								);
-								$directive_array = array();
-								if(ini_get('safe_mode') == '1') $directive_array['safe_mode'] = 'On';
-								if(ini_get('display_errors') != '1') $directive_array['display_errors'] = 'Off';
-								if(ini_get('file_uploads') != '1') $directive_array['file_uploads'] = 'Off';
-								if(ini_get('register_globals') == '1') $directive_array['register_globals'] = 'On';
-								if(ini_get('output_buffering') != '4096') $directive_array['output_buffering'] = 'Off';
-								if(ini_get('max_execution_time') < 600) $directive_array['max_execution_time'] = ini_get('max_execution_time');
-								if(ini_get('memory_limit') < 32) $directive_array['memory_limit'] = ini_get('memory_limit');
-								if(ini_get('error_reporting') != '2') $directive_array['error_reporting'] = 'NOT RECOMMENDED';
-								if(ini_get('allow_call_time_pass_reference') != '1') $directive_array['allow_call_time_pass_reference'] = 'Off';
-								if(ini_get('log_errors') == '1') $directive_array['log_errors'] = 'On';
-								if(ini_get('short_open_tag') != '1') $directive_array['short_open_tag'] = 'Off';
-								
-								if(!empty($directive_array)){					
-							?>
-							<td align=left colspan=2 width=100%>
-					   	   		<!-- Recommended Settings -->
-								<table cellpadding="5" cellspacing="1"  width="100%" border="0" class="level1">
-								    <tr> <td valign=top ><strong>Directive</strong> </td><td><strong>Recommended</strong></td><td nowrap><strong>PHP.ini value</strong></td></tr>
-								    <?php
-								    	foreach($directive_array as $index=>$value){
-								    ?>
-								    <tr> 
-								    	<td valign=top ><?php echo $index; ?></td>
-								    	<td><?php echo $directive_recommended[$index]; ?></td>
-								    	<td><strong><font color = red><?php echo $value; ?></font></strong></td></tr>
-								    <?php
-										}
-								    ?>
-								</table>
-							</td>
-							<?php
-								}
-							?>
-						</tr>
 					</table>
 				</td>
 			</tr>
@@ -363,7 +367,7 @@ $array = Array(
 					<form action="install.php" method="post" name="form" id="form">
 	                <input type="hidden" name="filename" value="<?php echo $file_name?>" />	
 					<?php echo '<input type="hidden" name="file" value="3selectOptionalModules.php" />'; ?>
-					<input type="image" src="include/install/images/cwBtnNext.gif" alt="Next" border="0" title="Next" onClick="submit();">
+					<input type="image" src="include/install/images/cwBtnNext.gif" alt="Next" border="0" title="Next" onClick="return isPermitted();">
 					</form>
 				    </td>
 			</tr>
@@ -393,5 +397,20 @@ $array = Array(
         	<td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td>
       	</tr>
     	</table>
+    	  	
+<script language="javascript">
+
+function isPermitted(){
+<?php
+	if(!empty($failed_permissions)) {
+		echo "alert('Provide Read/Write access to the files and directories listed to Proceed');";
+		echo "return false;";
+	} else {
+		echo "return true;";
+	}
+?>
+}
+</script>
+    	
 </body>
 </html>	

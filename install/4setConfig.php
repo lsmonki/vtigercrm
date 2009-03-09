@@ -181,6 +181,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>vtiger CRM 5 - Configuration Wizard - System Configuration</title>
 	<link href="include/install/install.css" rel="stylesheet" type="text/css">
+	<link href="themes/softed/style.css" rel="stylesheet" type="text/css">
 </head>
 
 <body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
@@ -344,20 +345,7 @@ function verify_data(form) {
 			<!-- Master display -->
 			<table border=0 cellspacing=0 cellpadding=0 width=97%>
 			<tr>
-				<!-- td width=20% valign=top>
-
-				<!-- Left side tabs --\>
-					<table border=0 cellspacing=0 cellpadding=10 width=100%>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Welcome</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Installation Check</div></td></tr>
-					<tr><td class="small cwSelectedTab" align=right><div align="left"><b>System Configuration</b></div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Confirm Settings</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Config File Creation</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Database Generation</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Finish</div></td></tr>
-					</table>
-				</td -->
-				<td width=90% valign=top class="cwContentDisplay" align=left>
+					<td width=90% valign=top class="cwContentDisplay" align=left>
 				<!-- Right side tabs -->
 				    <form action="install.php" method="post" name="installform" id="form" name="setConfig" id="form">
 				    <table border=0 cellspacing=0 cellpadding=10 width=100%>
@@ -377,7 +365,7 @@ function verify_data(form) {
 			<?php list($db_type, $label) = each($db_options); ?>
 			<input type="hidden" name="db_type" value="<?php echo $db_type ?>"><?php echo $label ?>
 		<?php else : ?>
-			<select length=40 name="db_type">
+			<select class="small" length=40 name="db_type">
 			<?php foreach($db_options as $db_option_type => $label) : ?>
 				<option value="<?php echo $db_option_type ?>" <?php if(isset($db_type) && $db_type == $db_option_type) { echo "SELECTED"; } ?>><?php echo $label ?></option>
 			<?php endforeach; ?>
@@ -387,43 +375,43 @@ function verify_data(form) {
             </tr>
 			<tr>
                <td width="25%" nowrap >Host Name <sup><font color=red>*</font></sup></td>
-               <td width="75%" align="left"><input type="text" class="dataInput" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" />
+               <td width="75%" align="left"><input type="text" class="small" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" />
 			   &nbsp;<a href="http://www.vtiger.com/products/crm/help/5.1.0/vtiger_CRM_Database_Hostname.pdf" target="_blank">More...</a></td>
               </tr>
               <tr>
                <td nowrap>User Name <sup><font color=red>*</font></sup></td>
-               <td align="left"><input type="text" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" /></td>
+               <td align="left"><input type="text" class="small" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" /></td>
               </tr>
               <tr>
                <td nowrap>Password</td>
-               <td align="left"><input type="password" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" /></td>
+               <td align="left"><input type="password" class="small" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" /></td>
               </tr>
               <tr>
                <td nowrap>Database Name <sup><font color=red>*</font></sup></td>
-               <td align="left" width='30%'><input type="text" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />&nbsp;
+               <td align="left" width='30%'><input type="text" class="small" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />&nbsp;
 		      </tr>
 		      <tr>
 		      <td colspan=2> 
 		      	<?php if($check_createdb == 'on')
 			       {?>
-			       <input name="check_createdb" type="checkbox" id="check_createdb" checked onClick="fnShow_Hide()"/> 
+			       <input class="small" name="check_createdb" type="checkbox" id="check_createdb" checked onClick="fnShow_Hide()"/> 
 			       <?php }else{?>
-				       <input name="check_createdb" type="checkbox" id="check_createdb" onClick="fnShow_Hide()"/> 
+				       <input class="small" name="check_createdb" type="checkbox" id="check_createdb" onClick="fnShow_Hide()"/> 
 			       <?php } ?>
 			       &nbsp;Create Database ( Will drop if the database if exists)</td>
               </td>
               </tr>
 	      <tr id="root_user" class="hide_tab">
 			   <td nowrap="nowrap" width="20%">Root Username<sup><font color="red">*</font></sup></td>
-			   <td align="left" width="30%"><input class="dataInput" name="root_user" id="root_user_txtbox" value="<?php echo $root_user;?>" type="text"></td>
+			   <td align="left" width="30%"><input class="small" name="root_user" id="root_user_txtbox" value="<?php echo $root_user;?>" type="text"></td>
  	      </tr>
 	      <tr id="root_pass" class="hide_tab">
 			   <td nowrap="nowrap" width="20%">Root Password</td>
-			   <td align="left" width="30%"><input class="dataInput" name="root_password" value="<?php echo $root_password;?>" type="password"></td>
+			   <td align="left" width="30%"><input class="small" name="root_password" value="<?php echo $root_password;?>" type="password"></td>
 		  </tr>
           <tr id="create_db_config" class="hide_tab">
 			   <td nowrap="nowrap">UTF-8 Support</td>
-			   <td align="left" colspan=3><input name="create_utf8_db" type="checkbox" id="create_utf8_db" <?php if($create_utf8_db == 'true') echo "checked"; ?> /> <!-- DEFAULT CHARACTER SET utf8, DEFAULT COLLATE utf8_general_ci --></td>
+			   <td align="left" colspan=3><input class="small" type="checkbox" id="create_utf8_db" name="create_utf8_db" <?php if($create_utf8_db == 'true') echo "checked"; ?> /> <!-- DEFAULT CHARACTER SET utf8, DEFAULT COLLATE utf8_general_ci --></td>
 	      </tr>
               </table>
 			<br>
@@ -436,7 +424,7 @@ function verify_data(form) {
             </tr>
 			<tr>
 				<td width="20%" >URL <sup><font color=red>*</font></sup></td>
-				<td width="80%" align="left"><input class="dataInput" type="text" name="site_URL"
+				<td width="80%" align="left"><input class="small" type="text" name="site_URL"
 				value="<?php if (isset($site_URL)) echo $site_URL; ?>" size="40" />
 				</td>
 			</tr>
@@ -444,7 +432,7 @@ function verify_data(form) {
 				<td nowrap width=20% >Currency Name<sup><font color=red>*</font></sup></td>
 				<td width=80% align="left">
 					<!-- input class="dataInput" type="text" name="currency_name" value="< ?php if (isset($currency_name)) echo "$currency_name"; ?>" -->
-					<select id='currency_name' name='currency_name''>
+					<select class="small" id='currency_name' name='currency_name''>
 						<?php
 							foreach($currencies as $index=>$value){
 								if(isset($currency_name)){
@@ -480,18 +468,18 @@ function verify_data(form) {
 			</tr>
 			<tr>
 				<td nowrap width=20% >Username</td>
-				<td width=40% align="left"><i>admin</i></td>
-				<td width=40% align="left"><i>standarduser</i></td>
+				<td width=40% align="left">admin</td>
+				<td width=40% align="left">standarduser</td>
 			</tr>
 			<tr>
 				<td nowrap>Password<sup><font color=red>*</font></sup></td>
-				<td align="left"><input class="dataInput" size=15 type="password" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin"; ?>"></td>
-				<td align="left"><input class="dataInput" size=15 type="password" name="standarduser_password" value="<?php if (isset($stand_password)) echo "$stand_password"; else echo "standarduser"; ?>"></td>
+				<td align="left"><input class="small" size=15 type="password" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin"; ?>"></td>
+				<td align="left"><input class="small" size=15 type="password" name="standarduser_password" value="<?php if (isset($stand_password)) echo "$stand_password"; else echo "standarduser"; ?>"></td>
 			</tr>
 			<tr>
 				<td nowrap>Email<sup><font color=red>*</font></sup></td>
-				<td align="left"><input class="dataInput" size=15 type="text" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>"></td>
-				<td align="left"><input class="dataInput" size=15 type="text" name="standarduser_email" value="<?php if (isset($stand_email)) echo "$stand_email"; ?>"></td>
+				<td align="left"><input class="small" size=15 type="text" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>"></td>
+				<td align="left"><input class="small" size=15 type="text" name="standarduser_email" value="<?php if (isset($stand_email)) echo "$stand_email"; ?>"></td>
 			</tr>
 			</table>
 	
