@@ -244,6 +244,8 @@ if($focus->mode != 'edit' && $mod_seq_field != null) {
                 	. getTranslatedString('LBL_TO_CONFIGURE'). ' '. getTranslatedString($mod_seq_field['label']) .'</b></font>';
         else
                 $smarty->assign("MOD_SEQ_ID",$autostr);
+} else {
+	$smarty->assign("MOD_SEQ_ID", $focus->column_fields[$mod_seq_field['name']]);
 }
 // END
 
