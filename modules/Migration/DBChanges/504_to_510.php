@@ -111,14 +111,17 @@ $emm = new VTEntityMethodManager($adb);
 /* Update the profileid, block id in sequence table, to the current highest value of block id used. */
 $tmp = $adb->getUniqueId('vtiger_blocks');
 $max_block_id_query = $adb->query("SELECT MAX(blockid) AS max_blockid FROM vtiger_blocks");
-$max_block_id = $adb->query_result($max_block_id_query,0,"max_blockid");
+if($adb->num_rows($max_block_id_query)>0){
+	$max_block_id = $adb->query_result($max_block_id_query,0,"max_blockid");
+	ExecuteQuery("UPDATE vtiger_blocks_seq SET id=".($max_block_id));
+}
 
 $tmp = $adb->getUniqueId('vtiger_profile');
 $max_profile_id_query = $adb->query("SELECT MAX(profileid) AS max_profileid FROM vtiger_profile");
-$max_profile_id = $adb->query_result($max_profile_id_query,0,"max_profileid");
-
-ExecuteQuery("UPDATE vtiger_blocks_seq SET id=".($max_block_id));
-ExecuteQuery("UPDATE vtiger_profile_seq SET id=".($max_profile_id));
+if($adb->num_rows($max_profile_id_query)>0){
+	$max_profile_id = $adb->query_result($max_profile_id_query,0,"max_profileid");
+	ExecuteQuery("UPDATE vtiger_profile_seq SET id=".($max_profile_id));
+}
 
 /* Migration queries to cleanup ui type 15, 16, 111 - 
  * 15 for Standard picklist types,
@@ -154,9 +157,12 @@ function addFieldSecurity($tabid, $fieldid, $allow_merge=true) {
 
 /* Add Total column in default customview of Purchase Order */
 $res = $adb->query("select cvid from vtiger_customview where viewname='All' and entitytype='PurchaseOrder'");
-$po_cvid = $adb->query_result($res, 0, 'cvid');
-$adb->query("update vtiger_cvcolumnlist set columnindex = 5 where columnindex = 4 and cvid = $po_cvid");
-$adb->query("insert into vtiger_cvcolumnlist values ($po_cvid, 4, 'vtiger_purchaseorder:total:hdnGrandTotal:PurchaseOrder_Total:V')");
+
+if($adb->num_rows($res)>0){
+	$po_cvid = $adb->query_result($res, 0, 'cvid');
+	$adb->query("update vtiger_cvcolumnlist set columnindex = 5 where columnindex = 4 and cvid = $po_cvid");
+	$adb->query("insert into vtiger_cvcolumnlist values ($po_cvid, 4, 'vtiger_purchaseorder:total:hdnGrandTotal:PurchaseOrder_Total:V')");
+}
                         
 
 
@@ -375,38 +381,40 @@ if($adb->num_rows($res)>0){
 		if($attachmentid != ''){	
 			 $attachmentInfoQuery = 'select * from vtiger_attachments where attachmentsid = ?';
 			 $attachres = $adb->pquery($attachmentInfoQuery,array($attachmentid));
-			 $filename = $adb->query_result($attachres,0,'name');
-			 $attch_sub = $adb->query_result($attachres,0,'subject');
-			 $description = $adb->query_result($attachres,0,'description');
-			 $filepath = $adb->query_result($attachres,0,'path');
-		 	 $filetype = $adb->query_result($attachres,0,'type');
-		 	 if(file_exists($filepath.$attachmentid."_".$filename)) {
-			 	$filesize = filesize($filepath.$attachmentid."_".$filename);
-			 	$filestatus = "1";
-		 	 } else { 
-			 	$filesize = "0";
-			 	$filestatus = "0";
-		 	 }	
-			 
-			 $noteid_query = $adb->pquery("SELECT notesid FROM vtiger_notes WHERE notesid = ?",array($crmid));
-			 if($adb->num_rows($noteid_query)>0) {
-			 	$notesid = $adb->query_result($noteid_query,0,"notesid");
-			 	ExecuteQuery("update vtiger_notes set folderid = 0,filestatus='$filestatus',filelocationtype='I',filedownloadcount=0,fileversion='',filetype='".$filetype."',filesize='".$filesize."',filename='".$filename."' where notesid = ".$notesid);
-			 } else {
-				require_once("modules/Documents/Documents.php");
-
-			 	$notes_obj = new Documents();
-			 	if($attch_sub == '') $attch_sub = $filename;
-			 	$notes_obj->column_fields['notes_title'] = decode_html($attch_sub);
-			 	$notes_obj->column_fields['filename'] = decode_html($filename);
-			 	$notes_obj->column_fields['notecontent'] = decode_html($description);
-			 	$notes_obj->column_fields['assigned_user_id'] = 1;
-			 	$notes_obj->save("Documents");
-			 	$notesid = $notes_obj->id;
-		 		
-		 		ExecuteQuery("Update vtiger_notes set filedownloadcount=0, filestatus='$filestatus', fileversion='', filesize = '$filesize', filetype = '$filetype' , filelocationtype = 'I' where notesid = $notesid");
-				ExecuteQuery("INSERT INTO vtiger_senotesrel VALUES($crmid,$notesid)");
-				ExecuteQuery("INSERT INTO vtiger_seattachmentsrel VALUES($notesid,$attachmentid)");
+			 if($adb->num_rows($attachres)>0){
+				 $filename = $adb->query_result($attachres,0,'name');
+				 $attch_sub = $adb->query_result($attachres,0,'subject');
+				 $description = $adb->query_result($attachres,0,'description');
+				 $filepath = $adb->query_result($attachres,0,'path');
+			 	 $filetype = $adb->query_result($attachres,0,'type');
+			 	 if(file_exists($filepath.$attachmentid."_".$filename)) {
+				 	$filesize = filesize($filepath.$attachmentid."_".$filename);
+				 	$filestatus = "1";
+			 	 } else { 
+				 	$filesize = "0";
+				 	$filestatus = "0";
+			 	 }	
+				 
+				 $noteid_query = $adb->pquery("SELECT notesid FROM vtiger_notes WHERE notesid = ?",array($crmid));
+				 if($adb->num_rows($noteid_query)>0) {
+				 	$notesid = $adb->query_result($noteid_query,0,"notesid");
+				 	ExecuteQuery("update vtiger_notes set folderid = 0,filestatus='$filestatus',filelocationtype='I',filedownloadcount=0,fileversion='',filetype='".$filetype."',filesize='".$filesize."',filename='".$filename."' where notesid = ".$notesid);
+				 } else {
+					require_once("modules/Documents/Documents.php");
+	
+				 	$notes_obj = new Documents();
+				 	if($attch_sub == '') $attch_sub = $filename;
+				 	$notes_obj->column_fields['notes_title'] = decode_html($attch_sub);
+				 	$notes_obj->column_fields['filename'] = decode_html($filename);
+				 	$notes_obj->column_fields['notecontent'] = decode_html($description);
+				 	$notes_obj->column_fields['assigned_user_id'] = 1;
+				 	$notes_obj->save("Documents");
+				 	$notesid = $notes_obj->id;
+			 		
+			 		ExecuteQuery("Update vtiger_notes set filedownloadcount=0, filestatus='$filestatus', fileversion='', filesize = '$filesize', filetype = '$filetype' , filelocationtype = 'I' where notesid = $notesid");
+					ExecuteQuery("INSERT INTO vtiger_senotesrel VALUES($crmid,$notesid)");
+					ExecuteQuery("INSERT INTO vtiger_seattachmentsrel VALUES($notesid,$attachmentid)");
+				 }
 			 }
 		}
 		else{
@@ -425,10 +433,11 @@ ExecuteQuery("insert into vtiger_blocks values($file_block_id,$documents_tab_id,
 
 $description_block_id_Query = 'select blockid from vtiger_blocks where tabid = '.$documents_tab_id.' and blocklabel = "" ';
 $desc_id = $adb->pquery($description_block_id_Query,array());
-$desc = $adb->query_result($desc_id,0,'blockid');
-
-$desc_update = 'update vtiger_blocks set blocklabel ="LBL_DESCRIPTION",show_title = 0,sequence = 3 where blockid = ?';
-$desc_block_update = $adb->pquery($desc_update,array($desc));
+if($adb->num_rows($desc_id)>0){
+	$desc = $adb->query_result($desc_id,0,'blockid');
+	$desc_update = 'update vtiger_blocks set blocklabel ="LBL_DESCRIPTION",show_title = 0,sequence = 3 where blockid = ?';
+	$desc_block_update = $adb->pquery($desc_update,array($desc));
+}
 
 ExecuteQuery("update vtiger_field set sequence=1 where tabid=$documents_tab_id and columnname='title'");
 ExecuteQuery("update vtiger_field set sequence=8,quickcreate=3 where tabid=$documents_tab_id and columnname='createdtime'");
@@ -755,22 +764,24 @@ addFieldSecurity($salesorder_tabid,$field_id);
 
 // Add new picklist value 'AutoCreated' for Invoice Status and add the same for all the existing roles.
 $picklistRes = $adb->query("SELECT picklistid FROM vtiger_picklist WHERE name='invoicestatus'");
-$picklistid = $adb->query_result($picklistRes,0,'picklistid');
+if($adb->num_rows($picklistRes)>0){
+	$picklistid = $adb->query_result($picklistRes,0,'picklistid');
 
-$picklist_valueid = $adb->getUniqueID('vtiger_picklistvalues');
-$id = $adb->getUniqueID('vtiger_invoicestatus');
-
-ExecuteQuery("insert into vtiger_invoicestatus values($id, 'AutoCreated', 1, $picklist_valueid)");
-
-//Default entries for role2picklist relation has been inserted..
-$sql="select roleid from vtiger_role";
-$role_result = $adb->pquery($sql, array());
-$numrow = $adb->num_rows($role_result);
-for($k=0; $k < $numrow; $k ++)
-{
-	$roleid = $adb->query_result($role_result,$k,'roleid');
-	$params = array($roleid, $picklist_valueid, $picklistid, $id-1);
-	$adb->pquery("insert into vtiger_role2picklist values(?,?,?,?)", $params);
+	$picklist_valueid = $adb->getUniqueID('vtiger_picklistvalues');
+	$id = $adb->getUniqueID('vtiger_invoicestatus');
+	
+	ExecuteQuery("insert into vtiger_invoicestatus values($id, 'AutoCreated', 1, $picklist_valueid)");
+	
+	//Default entries for role2picklist relation has been inserted..
+	$sql="select roleid from vtiger_role";
+	$role_result = $adb->pquery($sql, array());
+	$numrow = $adb->num_rows($role_result);
+	for($k=0; $k < $numrow; $k ++)
+	{
+		$roleid = $adb->query_result($role_result,$k,'roleid');
+		$params = array($roleid, $picklist_valueid, $picklistid, $id-1);
+		$adb->pquery("insert into vtiger_role2picklist values(?,?,?,?)", $params);
+	}
 }
 
 // Add Event handler for Recurring Invoice
@@ -942,11 +953,13 @@ function custom_updateModSeqNumber($module, $tablename, $colname, $reccol) {
 	for($i=0;$i<$rowcount;$i++)
 	{
 		$modres= $adb->query("select prefix, cur_id from vtiger_modentity_num where semodule='$module' and active=1");
-		$prefix=$adb->query_result($modres,0,'prefix');
-		$cur_id=$adb->query_result($modres,0,'cur_id');
-		$recid = $adb->query_result($result,$i,$reccol);
-		ExecuteQuery("UPDATE $tablename set $colname='".$prefix.$cur_id."' where $reccol=".$recid);
-		ExecuteQuery("UPDATE vtiger_modentity_num set cur_id='".($cur_id+1)."' where semodule='$module' and active=1");
+		if($adb->num_rows($modres)>0){
+			$prefix=$adb->query_result($modres,0,'prefix');
+			$cur_id=$adb->query_result($modres,0,'cur_id');
+			$recid = $adb->query_result($result,$i,$reccol);
+			ExecuteQuery("UPDATE $tablename set $colname='".$prefix.$cur_id."' where $reccol=".$recid);
+			ExecuteQuery("UPDATE vtiger_modentity_num set cur_id='".($cur_id+1)."' where semodule='$module' and active=1");
+		}
 	}
 }
 
@@ -1166,7 +1179,6 @@ ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_fieldmodulerel (fieldid int(11) 
 /* Making users and groups depends on vtiger_users_seq */
 
 $user_result = $adb->pquery("select max(id) as userid from vtiger_users",array());
-$inc_num = $adb->query_result($user_result,0,"userid");
 $grp_result = $adb->pquery("select groupid from vtiger_groups",array());
 $num_grps = $adb->num_rows($grp_result);
 
@@ -1176,24 +1188,27 @@ $adb->query("ALTER TABLE vtiger_group2grouprel ADD CONSTRAINT fk_2_vtiger_group2
 
 for($i=$num_grps-1; $i>=0; $i--) {
 	$oldId = $adb->query_result($grp_result,$i,"groupid");
-	$newId = $inc_num+$oldId;
-	
-	//Added just to increment users_seq table
-	$adb->getUniqueId("vtiger_users");
-	
-	ExecuteQuery("UPDATE vtiger_groups set groupid = $newId where groupid = $oldId");
-	ExecuteQuery("UPDATE vtiger_users2group set groupid = $newId where groupid = $oldId");
-	ExecuteQuery("UPDATE vtiger_group2grouprel set groupid = $newId where groupid = $oldId");
-	ExecuteQuery("UPDATE vtiger_group2role set groupid = $newId where groupid = $oldId");
-	ExecuteQuery("UPDATE vtiger_group2rs set groupid = $newId where groupid = $oldId");
-	ExecuteQuery("UPDATE vtiger_datashare_grp2grp set share_groupid = $newId where share_groupid = $oldId");
-	ExecuteQuery("UPDATE vtiger_datashare_grp2grp set to_groupid = $newId where to_groupid = $oldId");
-	ExecuteQuery("UPDATE vtiger_datashare_grp2role set share_groupid = $newId where share_groupid = $oldId");
-	ExecuteQuery("UPDATE vtiger_datashare_grp2rs set share_groupid = $newId where share_groupid = $oldId");
-	ExecuteQuery("UPDATE vtiger_datashare_role2group set to_groupid = $newId where to_groupid = $oldId");
-	ExecuteQuery("UPDATE vtiger_datashare_rs2grp set to_groupid = $newId where to_groupid = $oldId");
-	ExecuteQuery("UPDATE vtiger_tmp_read_group_sharing_per set sharedgroupid = $newId where sharedgroupid = $oldId");
-	ExecuteQuery("UPDATE vtiger_tmp_write_group_sharing_per set sharedgroupid = $newId where sharedgroupid = $oldId");
+	if($adb->num_rows($user_result)>0){
+		$inc_num = $adb->query_result($user_result,0,"userid");
+		$newId = $inc_num+$oldId;
+		
+		//Added just to increment users_seq table
+		$adb->getUniqueId("vtiger_users");
+		
+		ExecuteQuery("UPDATE vtiger_groups set groupid = $newId where groupid = $oldId");
+		ExecuteQuery("UPDATE vtiger_users2group set groupid = $newId where groupid = $oldId");
+		ExecuteQuery("UPDATE vtiger_group2grouprel set groupid = $newId where groupid = $oldId");
+		ExecuteQuery("UPDATE vtiger_group2role set groupid = $newId where groupid = $oldId");
+		ExecuteQuery("UPDATE vtiger_group2rs set groupid = $newId where groupid = $oldId");
+		ExecuteQuery("UPDATE vtiger_datashare_grp2grp set share_groupid = $newId where share_groupid = $oldId");
+		ExecuteQuery("UPDATE vtiger_datashare_grp2grp set to_groupid = $newId where to_groupid = $oldId");
+		ExecuteQuery("UPDATE vtiger_datashare_grp2role set share_groupid = $newId where share_groupid = $oldId");
+		ExecuteQuery("UPDATE vtiger_datashare_grp2rs set share_groupid = $newId where share_groupid = $oldId");
+		ExecuteQuery("UPDATE vtiger_datashare_role2group set to_groupid = $newId where to_groupid = $oldId");
+		ExecuteQuery("UPDATE vtiger_datashare_rs2grp set to_groupid = $newId where to_groupid = $oldId");
+		ExecuteQuery("UPDATE vtiger_tmp_read_group_sharing_per set sharedgroupid = $newId where sharedgroupid = $oldId");
+		ExecuteQuery("UPDATE vtiger_tmp_write_group_sharing_per set sharedgroupid = $newId where sharedgroupid = $oldId");
+	}
 }
 
 $sql_result = $adb->query("select crmid,setype from vtiger_crmentity where smownerid=0 order by setype");
@@ -1218,14 +1233,20 @@ for($i=0; $i<$num_rows; $i++) {
 	if(array_key_exists($setype, $groupTables_array)) {
 		$groupid_sql = "select groupid from vtiger_groups where groupname in (select groupname from ".$groupTables_array[$setype][0]." where ".$groupTables_array[$setype][1]. " = ".$crmid.")";
 		$groupid_res = $adb->query($groupid_sql);
-		$groupid = $adb->query_result($groupid_res, 0, 'groupid');
+		if($adb->num_rows($groupid_res)>0){
+			$groupid = $adb->query_result($groupid_res, 0, 'groupid');
+		}
 	}
 	else {
 		$sql1_res = $adb->query("select crmid as entityid from vtiger_seattachmentsrel where attachmentsid = ".$crmid);
-		$se_recordid = $adb->query_result($sql1_res, 0, 'entityid');
+		if($adb->num_rows($sql1_res)>0){
+			$se_recordid = $adb->query_result($sql1_res, 0, 'entityid');
+		}
 		
 		$groupid_res = $adb->query("select smownerid from vtiger_crmentity where crmid = ".$se_recordid);
-		$groupid = $adb->query_result($groupid_res, 0, 'smownerid');
+		if($adb->num_rows($groupid_res)>0){
+			$groupid = $adb->query_result($groupid_res, 0, 'smownerid');
+		}
 	}
 	if(isset($groupid) && $groupid != '')
 	ExecuteQuery("update vtiger_crmentity set smownerid = $groupid where crmid = $crmid");
@@ -1256,9 +1277,11 @@ ExecuteQuery("UPDATE vtiger_field set fieldname='description', columnname='descr
 $productTabId = getTabid('Products');
 
 $inventoryTabRes = $adb->query("SELECT parenttabid FROM vtiger_parenttab WHERE parenttab_label='Inventory'");
-$inventoryTabId = $adb->query_result($inventoryTabRes, 0, 'parenttabid');
+if($adb->num_rows($inventoryTabRes)>0){
+	$inventoryTabId = $adb->query_result($inventoryTabRes, 0, 'parenttabid');
+	ExecuteQuery("DELETE FROM vtiger_parenttabrel WHERE tabid=$productTabId AND parenttabid != $inventoryTabId");
+}
 
-ExecuteQuery("DELETE FROM vtiger_parenttabrel WHERE tabid=$productTabId AND parenttabid != $inventoryTabId");
 $adb->query("ALTER TABLE vtiger_producttaxrel DROP FOREIGN KEY fk_1_vtiger_producttaxrel");
 $adb->query("ALTER TABLE vtiger_pricebookproductrel DROP FOREIGN KEY fk_2_vtiger_pricebookproductrel");
 
@@ -1600,11 +1623,13 @@ $sql = "select id from vtiger_users";
 $result = $adb->query($sql);
 for($z=0;$z<$adb->num_rows($result);$z++){
 	$userid = $adb->query_result($result, $z, "id");
-	
-	$sequence = $adb->query_result($adb->query("select max(stuffsequence)+1 as seq from vtiger_homestuff where userid=$userid"), 0, "seq");
-	$stuffid = $adb->getUniqueID("vtiger_homestuff");
-	$sql="insert into vtiger_homestuff values($stuffid, $sequence, 'Tag Cloud', $userid, $visible, '$widgetTitle')";
-	$adb->query($sql);
+	$home_query = $adb->query("select max(stuffsequence)+1 as seq from vtiger_homestuff where userid=$userid");
+	if($adb->num_rows($home_query)>0){
+		$sequence = $adb->query_result($home_query, 0, "seq");
+		$stuffid = $adb->getUniqueID("vtiger_homestuff");
+		$sql="insert into vtiger_homestuff values($stuffid, $sequence, 'Tag Cloud', $userid, $visible, '$widgetTitle')";
+		$adb->query($sql);
+	}
 }
 
 /* Add Invoices to the related list of Contacts */
