@@ -1060,7 +1060,7 @@ class CustomView extends CRMEntity{
 			$fieldname = "contactid";
 		
 		$contactid = "vtiger_contactdetails.lastname";						
-		if ($currentModule != "Contacts" && $currentModule != "Leads" && getFieldVisibilityPermission("Contacts", $current_user->id, 'firstname') == '0') {
+		if ($currentModule != "Contacts" && $currentModule != "Leads" && getFieldVisibilityPermission("Contacts", $current_user->id, 'firstname') == '0' && $currentModule != 'Campaigns') {
 			$contactid = "concat(vtiger_contactdetails.lastname,' ',vtiger_contactdetails.firstname)";			
 		}
 		$change_table_field = Array(
