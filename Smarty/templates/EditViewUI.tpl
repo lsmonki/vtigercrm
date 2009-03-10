@@ -586,20 +586,27 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 			</td>
 
 		{elseif $uitype eq 55 || $uitype eq 255} 
-			{if $uitype eq 55}
-				<td width="20%" class="dvtCellLabel" align=right>{$usefldlabel} {if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}</td>
-			{elseif $uitype eq 255}	
-				<td width="20%" class="dvtCellLabel" align=right><font color="red">{$mandatory_field}</font>{$usefldlabel} {if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}</td>
+			<td width="20%" class="dvtCellLabel" align=right>
+			{if $MASS_EDIT eq '1' && $fldvalue neq ''}
+				{$APP.Salutation}<input type="checkbox" name="salutationtype_mass_edit_check" id="salutationtype_mass_edit_check" class="small" ><br />
 			{/if}
+			{if $uitype eq 55}
+				{$usefldlabel}{if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}
+			{elseif $uitype eq 255}
+				<font color="red">{$mandatory_field}</font>{$usefldlabel}{if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}
+			{/if}
+			</td>
+			
 			<td width="30%" align=left class="dvtCellInfo">
 			{if $fldvalue neq ''}
 			<select name="salutationtype" class="small">
 				{foreach item=arr from=$fldvalue}
-						<option value="{$arr[1]}" {$arr[2]}>
-                                                	{$arr[0]}
-                                                </option>
+				<option value="{$arr[1]}" {$arr[2]}>
+				{$arr[0]}
+				</option>
 				{/foreach}
 			</select>
+			{if $MASS_EDIT eq '1'}<br />{/if}
 			{/if}
 			<input type="text" name="{$fldname}" tabindex="{$vt_tab}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" style="width:58%;" value= "{$secondvalue}" >
 			</td>
