@@ -190,7 +190,7 @@ function DeleteTag(id,recordid)
 								{if $LABEL.visibility neq ''}
 								{assign var=vblty value=$ACTIVITYDATA.visibility}
 								<td class="cellLabel" width="20%" align="right"><b>{$LABEL.visibility}</b></td>
-                                                                <td class="cellInfo" width="30%" align="left" >{$MOD.$vblty}</td>
+                                                                <td class="cellInfo" width="30%" align="left" >{$vblty}</td>
 								{/if}
 							 </tr>
 							 <tr>
