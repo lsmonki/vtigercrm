@@ -33,6 +33,10 @@ if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
 	//started
 	$value = $_REQUEST['accountname'];
 	$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname =? and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
+	$id = $_REQUEST['record'];
+	if(isset($id) && $id !='') {
+		$query .= " and vtiger_account.accountid != $id";
+	}
 	$result = $adb->pquery($query, array($value));
         if($adb->num_rows($result) > 0)
 	{

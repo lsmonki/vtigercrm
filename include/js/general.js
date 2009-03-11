@@ -2072,12 +2072,13 @@ function getCalendarPopup(imageid,fieldid,dateformat)
 function AjaxDuplicateValidate(module,fieldname,oform)
 {
       var fieldvalue = encodeURIComponent(getObj(fieldname).value);
+      var recordid = getObj('record').value;
 	if(fieldvalue == '')
 	{
 		alert(alert_arr.ACCOUNTNAME_CANNOT_EMPTY);
 		return false;	
 	}
-      var url = "module="+module+"&action="+module+"Ajax&file=Save&"+fieldname+"="+fieldvalue+"&dup_check=true";
+      var url = "module="+module+"&action="+module+"Ajax&file=Save&"+fieldname+"="+fieldvalue+"&dup_check=true&record="+recordid;
       new Ajax.Request(
                             'index.php',
                               {queue: {position: 'end', scope: 'command'},
