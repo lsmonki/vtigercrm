@@ -13,12 +13,13 @@ require_once('include/utils/UserInfoUtil.php');
 global $adb;
 $del_id =  $_REQUEST['delete_group_id'];
 $transfer_group_id = $_REQUEST['transfer_group_id'];
+$assignType = $_REQUEST['assigntype'];
 
-if($transferType == 'T')
+if($assignType == 'T')
 {
 	$transferId = $_REQUEST['transfer_group_id'];
 }
-elseif($transferType == 'U')
+elseif($assignType == 'U')
 {
 	$transferId = $_REQUEST['transfer_user_id'];
 }	
