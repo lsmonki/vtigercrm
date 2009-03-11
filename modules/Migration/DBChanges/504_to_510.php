@@ -1248,7 +1248,10 @@ for($i=0; $i<$num_rows; $i++) {
 			$groupid = $adb->query_result($groupid_res, 0, 'smownerid');
 		}
 	}
-	if(isset($groupid) && $groupid != '')
+	// Case when due to some data inconsistency, smownerid is set to 0 but there is not group relation for it stored
+	if(empty($groupid)) {
+		$groupid = 1;
+	}
 	ExecuteQuery("update vtiger_crmentity set smownerid = $groupid where crmid = $crmid");
 }
 
