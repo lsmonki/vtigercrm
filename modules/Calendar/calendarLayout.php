@@ -2164,7 +2164,7 @@ function constructTodoListView($todo_list,$cal,$subtab,$navigation_array='')
 			<tr>
 				<td rowspan='2' width='25%'>
 					<img src='" . vtiger_imageurl('empty.jpg', $theme). "' height='60' width='61'></td>
-				<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='75%'><span class='genHeaderSmall'>".$app_strings['LBL_NO']." ".$app_strings['Todo']."s ".$app_strings['LBL_FOUND']." !</span></td>
+				<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='75%'><span class='genHeaderSmall'>".$app_strings['LBL_NO']." ".$app_strings['Todos']." ".$app_strings['LBL_FOUND']." !</span></td>
 			</tr>
 			<tr>";
 		//checking permission for Create/Edit Operation

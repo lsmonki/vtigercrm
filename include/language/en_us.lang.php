@@ -1213,6 +1213,9 @@ $app_strings = array (
 'LBL_TERMS_INFORMATION'=>'Terms & Conditions',
 'LBL_INVOICE_INFORMATION'=>'Invoice Information',
 
+//To handle plurals of module names
+'Todos' => 'Todos',
+
 );
 
 $app_list_strings = array (
