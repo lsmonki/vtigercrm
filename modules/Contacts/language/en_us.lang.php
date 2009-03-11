@@ -241,7 +241,7 @@ $mod_strings = Array(
 // Added after 5.0.4 GA
 
 // Module Sequence Numbering
-'Contact No' => 'Contact No',
+'Contact Id' => 'Contact Id',
 // END
 
 );

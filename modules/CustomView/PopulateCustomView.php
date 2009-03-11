@@ -202,7 +202,7 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lead_no:lead_no:Leads_Lead_No:V',
                          'vtiger_accountbillads:bill_city:bill_city:Accounts_City:V',
                          'vtiger_crmentity:smownerid:assigned_user_id:Accounts_Assigned_To:V'),
 
-		   Array('vtiger_contactdetails:contact_no:contact_no:Contacts_Contact_No:V',
+		   Array('vtiger_contactdetails:contact_no:contact_no:Contacts_Contact_Id:V',
 		   			'vtiger_contactdetails:firstname:firstname:Contacts_First_Name:V',
                          'vtiger_contactdetails:lastname:lastname:Contacts_Last_Name:V',
                          'vtiger_contactdetails:title:title:Contacts_Title:V',

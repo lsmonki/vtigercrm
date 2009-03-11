@@ -884,7 +884,7 @@ ExecuteQuery("insert into vtiger_field values (7,".$adb->getUniqueID("vtiger_fie
 ExecuteQuery("ALTER TABLE vtiger_leaddetails ADD COLUMN lead_no varchar(100) not null");
 
 $blockid = getBlockId(4,'LBL_CONTACT_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (4,".$adb->getUniqueID("vtiger_field").",'contact_no','vtiger_contactdetails',1,'4','contact_no','Contact No',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");		
+ExecuteQuery("insert into vtiger_field values (4,".$adb->getUniqueID("vtiger_field").",'contact_no','vtiger_contactdetails',1,'4','contact_no','Contact Id',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");		
 ExecuteQuery("ALTER TABLE vtiger_contactdetails ADD COLUMN contact_no varchar(100) not null");
 
 $blockid = getBlockId(2,'LBL_OPPORTUNITY_INFORMATION');
@@ -1082,7 +1082,7 @@ function custom_removeCustomFilterColumn($module, $filtername, $tablename, $colu
 custom_addCustomFilterColumn('Leads',      'All', 'vtiger_leaddetails',    'lead_no',      'lead_no',      'Leads_Lead_No:V');
 custom_addCustomFilterColumn('Accounts',   'All', 'vtiger_account',        'account_no',   'account_no',   'Accounts_Account_No:V');
 custom_addCustomFilterColumn('Campaigns',  'All', 'vtiger_campaign',       'campaign_no',  'campaign_no',  'Campaigns_Campaign_No:V');
-custom_addCustomFilterColumn('Contacts',   'All', 'vtiger_contactdetails', 'contact_no',   'contact_no',   'Contacts_Contact_No:V');
+custom_addCustomFilterColumn('Contacts',   'All', 'vtiger_contactdetails', 'contact_no',   'contact_no',   'Contacts_Contact_Id:V');
 custom_addCustomFilterColumn('Potentials', 'All', 'vtiger_potential',      'potential_no', 'potential_no', 'Potentials_Potential_No:V');
 
 custom_removeCustomFilterColumn('HelpDesk', 'All', 'vtiger_crmentity',      'crmid',     '',          'HelpDesk_Ticket_ID');
