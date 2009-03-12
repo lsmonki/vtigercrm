@@ -135,8 +135,17 @@ function vtlib_moduleAlwaysActive() {
 function vtlib_toggleModuleAccess($module, $enable_disable) {
 	global $adb, $__cache_module_activeinfo;
 
-	if($enable_disable === true) $enable_disable = 0;
-	else if($enable_disable === false) $enable_disable = 1;
+	include_once('vtlib/Vtiger/Module.php');
+
+	$event_type = false;
+
+	if($enable_disable === true) {
+		$enable_disable = 0;
+		$event_type = Vtiger_Module::EVENT_MODULE_ENABLED;
+	} else if($enable_disable === false) {
+		$enable_disable = 1;
+		$event_type = Vtiger_Module::EVENT_MODULE_DISABLED;
+	}
 
 	$adb->query("UPDATE vtiger_tab set presence = $enable_disable WHERE name = '$module'");
 
@@ -151,6 +160,8 @@ function vtlib_toggleModuleAccess($module, $enable_disable) {
 	if(version_compare($vtiger_current_version, '5.1.0', '>=')) {
 		vtlib_RecreateUserPrivilegeFiles();
 	}
+
+	Vtiger_Module::fireEvent($module, $event_type);
 }
 
 /**
@@ -221,8 +232,7 @@ function vtlib_getFieldHelpInfo($module) {
 	global $adb;
 	$fieldhelpinfo = Array();
 	if(in_array('helpinfo', $adb->getColumnNames('vtiger_field'))) {
-		$result = $adb->pquery('SELECT fieldname,helpinfo FROM vtiger_field '.
-			'WHERE tabid = (SELECT tabid FROM vtiger_tab WHERE name =?)', Array($module));
+		$result = $adb->pquery('SELECT fieldname,helpinfo FROM vtiger_field WHERE tabid=?', Array(getTabid($module)));
 		if($result && $adb->num_rows($result)) {
 			while($fieldrow = $adb->fetch_array($result)) {
 				$helpinfo = decode_html($fieldrow['helpinfo']);

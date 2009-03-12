@@ -33,7 +33,10 @@ class Vtiger_Webservice {
 		if(Vtiger_Version::check('5.1.0', '>=')) {
 			if($moduleInstance->isentitytype) {
 				// TODO: Enable support when webservice API support is added.
-				self::log("Initializing webservices support ...DONE");
+				if(function_exists('vtws_addDefaultModuleTypeEntity')) { 
+					vtws_addDefaultModuleTypeEntity($moduleInstance->name);
+					self::log("Initializing webservices support ...DONE");
+				}
 			}
 		}
 	}

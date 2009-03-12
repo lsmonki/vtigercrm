@@ -43,6 +43,14 @@ class Vtiger_ModuleBasic {
 	var $customtable=false;
 	var $grouptable = false;
 
+	const EVENT_MODULE_ENABLED     = 'module.enabled';
+	const EVENT_MODULE_DISABLED    = 'module.disabled';
+	const EVENT_MODULE_POSTINSTALL = 'module.postinstall';
+	const EVENT_MODULE_PREUNINSTALL= 'module.preuninstall';
+	const EVENT_MODULE_PREUPDATE   = 'module.preupdate';
+	const EVENT_MODULE_POSTUPDATE  = 'module.postupdate';
+
+
 	/**
 	 * Constructor
 	 */
@@ -164,6 +172,9 @@ class Vtiger_ModuleBasic {
 	 * @access private
 	 */
 	function __delete() {
+		Vtiger_Module::fireEvent($this->name, 
+			Vtiger_Module::EVENT_MODULE_PREUNINSTALL);
+
 		global $adb;
 		if($this->isentitytype) {		
 			$this->unsetEntityIdentifier();

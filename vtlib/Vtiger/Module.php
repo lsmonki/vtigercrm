@@ -156,5 +156,37 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 		}
 		return $instance;
 	}
+
+	/**
+	 * Get instance of the module class.
+	 * @param String Module name
+	 */
+	static function getClassInstance($modulename) {
+		if($modulename == 'Calendar') $modulename = 'Activity';
+
+		$instance = false;
+		$filepath = "modules/$modulename/$modulename.php";
+		if(Vtiger_Utils::checkFileAccess($filepath, false)) {
+			include_once($filepath);
+			if(class_exists($modulename)) {
+				$instance = new $modulename();
+			}
+		}
+		return $instance;
+	}
+
+	/**
+	 * Fire the event for the module (if vtlib_handler is defined)
+	 */
+	static function fireEvent($modulename, $event_type) {
+		$instance = self::getClassInstance((string)$modulename);
+		if($instance) {
+			if(method_exists($instance, 'vtlib_handler')) {
+				self::log("Invoking vtlib_handler for $event_type ...START");
+				$instance->vtlib_handler($modulename, $event_type);
+				self::log("Invoking vtlib_handler for $event_type ...DONE");
+			}
+		}
+	}
 }
 ?>
