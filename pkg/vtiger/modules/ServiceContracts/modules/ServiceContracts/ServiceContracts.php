@@ -93,8 +93,8 @@ class ServiceContracts extends CRMEntity {
 	var $default_sort_order='ASC';
 
 	function __construct() {
-		global $log, $currentModule;
-		$this->column_fields = getColumnFields($currentModule);
+		global $log;
+		$this->column_fields = getColumnFields('ServiceContracts');
 		$this->db = new PearDatabase();
 		$this->log = $log;
 	}
@@ -338,8 +338,7 @@ class ServiceContracts extends CRMEntity {
 					" GROUP BY $select_cols HAVING COUNT(*)>1";	
 		} else {
 			$sub_query = "SELECT $table_cols $from_clause $where_clause GROUP BY $table_cols HAVING COUNT(*)>1";
-		}	
-		
+		}
 		
 		$query = $select_clause . $from_clause .
 					" LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=" . $this->table_name .".".$this->table_index .
@@ -349,6 +348,43 @@ class ServiceContracts extends CRMEntity {
 					
 		return $query;		
 	}
+
+ 	/**
+	* Invoked when special actions are performed on the module.
+	* @param String Module name
+	* @param String Event Type
+	*/	
+	function vtlib_handler($moduleName, $eventType) {
+ 					
+		require_once('include/utils/utils.php');			
+		global $adb;
+ 		
+ 		if($eventType == 'module.postinstall') {
+			require_once('vtlib/Vtiger/Module.php');
+			
+			// Initialize module sequence for the module
+			$adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?)",array($adb->getUniqueId("vtiger_modentity_num"),$moduleName,'SERCON',1,1,1));
+			
+			// Mark the module as Standard module
+			$adb->pquery('UPDATE vtiger_tab SET customized=0 WHERE name=?', array($moduleName));
+			
+		} else if($eventType == 'module.disabled') {
+			$adb->query("UPDATE vtiger_eventhandlers SET is_active=0 WHERE event_name IN ('vtiger.entity.beforesave','vtiger.entity.aftersave') " .
+					" AND handler_class='ServiceContractsHandler'");
+
+		} else if($eventType == 'module.enabled') {
+			$adb->query("UPDATE vtiger_eventhandlers SET is_active=1 WHERE event_name IN ('vtiger.entity.beforesave','vtiger.entity.aftersave') " .
+					" AND handler_class='ServiceContractsHandler'");
+
+		} else if($eventType == 'module.preuninstall') {
+		// TODO Handle actions when this module is about to be deleted.
+		} else if($eventType == 'module.preupdate') {
+		// TODO Handle actions before this module is updated.
+		} else if($eventType == 'module.postupdate') {
+		// TODO Handle actions after this module is updated.
+		}
+ 	}
+
 	/** 
 	 * Handle saving related module information.
 	 * NOTE: This function has been added to CRMEntity (base class).

@@ -301,7 +301,6 @@
 		<field name="block" type="I" size="19" />
 		<field name="displaytype" type="I" size="19" />
 		<field name="typeofdata" type="C" size="100" />
-		<field name="typeofdata" type="C" size="100" />
 		<field name="quickcreate" type="I" size="10">
 			<notnull />
 			<default value="1" />

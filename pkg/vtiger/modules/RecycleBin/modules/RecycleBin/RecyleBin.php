@@ -8,33 +8,19 @@
  * All Rights Reserved.
  *******************************************************************************/
  
-class CustomerPortal {
+class RecycleBin {
  	
  	/**
 	* Invoked when special actions are performed on the module.
 	* @param String Module name
 	* @param String Event Type
 	*/
-	function vtlib_handler($moduleName, $eventType) {
+ 	function vtlib_handler($moduleName, $eventType) {
  					
 		require_once('include/utils/utils.php');			
 		global $adb;
  		
  		if($eventType == 'module.postinstall') {			
-			$portalmodules = array("Accounts","Contacts","HelpDesk","Invoice","Quotes","Documents","Faq","Services","Products");
-			$i=0;
-			foreach($portalmodules as $modules) {
-				++$i;
-				$tabid = getTabid($modules);	
-				$adb->query("INSERT INTO vtiger_customerportal_tabs (tabid,visible,sequence) VALUES ($tabid,1,$i)");
-			}
-			for($j = 0; $j< count($portalmodules); $j++) {
-			 	$tabid = getTabid($portalmodules[$j]);	
-				$adb->query("INSERT INTO vtiger_customerportal_prefs(tabid,prefkey,prefvalue) VALUES ($tabid,'showrelatedinfo',1)");
-			}
-			
-			$adb->query("INSERT INTO vtiger_customerportal_prefs(tabid,prefkey,prefvalue) VALUES (0,'userid',1)");
-			
 			// Mark the module as Standard module
 			$adb->pquery('UPDATE vtiger_tab SET customized=0 WHERE name=?', array($moduleName));
 			

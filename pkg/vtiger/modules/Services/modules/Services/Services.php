@@ -105,8 +105,8 @@ class Services extends CRMEntity {
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function __construct() {
-		global $log, $currentModule;
-		$this->column_fields = getColumnFields($currentModule);
+		global $log;
+		$this->column_fields = getColumnFields('Services');
 		$this->db = new PearDatabase();
 		$this->log = $log;
 	}
@@ -1003,5 +1003,58 @@ class Services extends CRMEntity {
 		
 		parent::unlinkDependencies($module, $id);
 	}
+
+ 	/**
+	* Invoked when special actions are performed on the module.
+	* @param String Module name
+	* @param String Event Type
+	*/	
+	function vtlib_handler($moduleName, $eventType) {
+ 					
+		require_once('include/utils/utils.php');			
+		global $adb;
+ 		
+ 		if($eventType == 'module.postinstall') {
+			require_once('vtlib/Vtiger/Module.php');
+				
+			$moduleInstance = Vtiger_Module::getInstance($moduleName);
+			$moduleInstance->disallowSharing();
+			
+			$ttModuleInstance = Vtiger_Module::getInstance('HelpDesk');
+			$ttModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+			
+			$leadModuleInstance = Vtiger_Module::getInstance('Leads');
+			$leadModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+			
+			$accModuleInstance = Vtiger_Module::getInstance('Accounts');
+			$accModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+			
+			$conModuleInstance = Vtiger_Module::getInstance('Contacts');
+			$conModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+			
+			$potModuleInstance = Vtiger_Module::getInstance('Potentials');
+			$potModuleInstance->setRelatedList($moduleInstance,'Services',array('select'));
+			
+			$pbModuleInstance = Vtiger_Module::getInstance('PriceBooks');
+			$pbModuleInstance->setRelatedList($moduleInstance,'Services',array('select'),'get_pricebook_services');
+
+			// Initialize module sequence for the module
+			$adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?)",array($adb->getUniqueId("vtiger_modentity_num"),$moduleName,'SER',1,1,1));
+			
+			// Mark the module as Standard module
+			$adb->pquery('UPDATE vtiger_tab SET customized=0 WHERE name=?', array($moduleName));
+			
+		} else if($eventType == 'module.disabled') {
+		// TODO Handle actions when this module is disabled.
+		} else if($eventType == 'module.enabled') {
+		// TODO Handle actions when this module is enabled.
+		} else if($eventType == 'module.preuninstall') {
+		// TODO Handle actions when this module is about to be deleted.
+		} else if($eventType == 'module.preupdate') {
+		// TODO Handle actions before this module is updated.
+		} else if($eventType == 'module.postupdate') {
+		// TODO Handle actions after this module is updated.
+		}
+ 	}
 }
 ?>

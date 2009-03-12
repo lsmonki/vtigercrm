@@ -65,8 +65,8 @@ class PBXManager extends CRMEntity {
 	var $default_sort_order='DESC';
 
 	function PBXManager() {
-		global $log, $currentModule;
-		$this->column_fields = getColumnFields($currentModule);
+		global $log;
+		$this->column_fields = getColumnFields('PBXManager');
 		$this->db = new PearDatabase();
 		$this->log = $log;
 	}
@@ -358,7 +358,48 @@ class PBXManager extends CRMEntity {
 		$adb->query("INSERT INTO vtiger_crmentityrel(crmid, module, relcrmid, relmodule)
 		   	VALUES($crmid, '$module', $with_crmid, '$with_module')");
 	}
-	
+
+ 	/**
+	* Invoked when special actions are performed on the module.
+	* @param String Module name
+	* @param String Event Type
+	*/	
+	function vtlib_handler($moduleName, $eventType) {
+ 					
+		require_once('include/utils/utils.php');			
+		global $adb;
+ 		
+ 		if($eventType == 'module.postinstall') {		
+			// Add a block and 2 fields for Users module
+			$blockid = $adb->getUniqueID('vtiger_blocks');
+			$adb->query("insert into vtiger_blocks(blockid,tabid,blocklabel,sequence,show_title,visible,create_view,edit_view,detail_view,display_status)" .
+					" values ($blockid,29,'Asterisk Configuration',6,0,0,0,0,0,1)");
+			
+			$adb->query("insert into vtiger_field(tabid,fieldid,columnname,tablename,generatedtype,uitype,fieldname,fieldlabel,readonly," .
+					" presence,selected,maximumlength,sequence,block,displaytype,typeofdata,quickcreate,quickcreatesequence,info_type) " .
+					" values (29,".$adb->getUniqueID('vtiger_field').",'asterisk_extension','vtiger_asteriskextensions',1,1,'asterisk_extension'," .
+					" 'Asterisk Extension',1,0,0,30,1,$blockid,1,'V~O',1,NULL,'BAS')");
+			
+			$adb->query("insert into vtiger_field(tabid,fieldid,columnname,tablename,generatedtype,uitype,fieldname,fieldlabel,readonly," .
+					" presence,selected,maximumlength,sequence,block,displaytype,typeofdata,quickcreate,quickcreatesequence,info_type) " .
+					" values (29,".$adb->getUniqueID('vtiger_field').",'use_asterisk','vtiger_asteriskextensions',1,56,'use_asterisk'," .
+					"' Use Asterisk',1,0,0,30,2,$blockid,1,'C~O',1,NULL,'BAS')");
+				
+			// Mark the module as Standard module
+			$adb->pquery('UPDATE vtiger_tab SET customized=0 WHERE name=?', array($moduleName));
+			
+		} else if($eventType == 'module.disabled') {
+		// TODO Handle actions when this module is disabled.
+		} else if($eventType == 'module.enabled') {
+		// TODO Handle actions when this module is enabled.
+		} else if($eventType == 'module.preuninstall') {
+		// TODO Handle actions when this module is about to be deleted.
+		} else if($eventType == 'module.preupdate') {
+		// TODO Handle actions before this module is updated.
+		} else if($eventType == 'module.postupdate') {
+		// TODO Handle actions after this module is updated.
+		}
+ 	}
 }
 
 ?>

@@ -4618,21 +4618,6 @@ function installVtlibModule($packagename, $packagepath, $customized=false) {
 		$moduleInstance = Vtiger_Module::getInstance($module);
 		if (empty($moduleInstance)) {
 			$log->fatal("$module module installation failed!");
-		} else {
-			if(file_exists("modules/$packagename/Setup.php")) {
-				require_once("modules/$packagename/Setup.php");			
-				$setupClass = $module.'Setup';
-				if (class_exists($setupClass)) {
-					$setupObj = new $setupClass();
-					if(method_exists($setupObj, 'postInstall')) {
-						$log->debug("SETUP CLASS exists for $module - Method exists postInstall");
-						$setupObj->postInstall();
-					}
-				}
-			}
-			if (!$customized) {
-				$adb->pquery('UPDATE vtiger_tab SET customized=0 WHERE name=?', array($module));
-			}
 		}
 	}	
 }
