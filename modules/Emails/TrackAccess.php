@@ -34,9 +34,9 @@ $count = $adb->query_result($result,0,'count');
 
 $result = $adb->pquery("select * from vtiger_email_track where crmid=? and mailid=?", array($crmid, $mailid));
 if($adb->num_rows($result)>0){
-	$adb->pquery("update vtiger_email_track set count=? where crmid=? and mailid=?", array($count, $crmid, $mailid));
+	$adb->pquery("update vtiger_email_track set access_count=? where crmid=? and mailid=?", array($count, $crmid, $mailid));
 } else {
-	$adb->pquery("insert into vtiger_email_track(crmid,mailid,count) values(?,?,?)", array($crmid, $mailid, 1));
+	$adb->pquery("insert into vtiger_email_track(crmid,mailid,access_count) values(?,?,?)", array($crmid, $mailid, 1));
 }
 
 ?>

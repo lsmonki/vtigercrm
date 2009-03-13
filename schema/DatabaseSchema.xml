@@ -7004,7 +7004,7 @@
 	<table name="vtiger_email_track">
 		<field name="crmid" type="I" />
 		<field name="mailid" type="I" />
-		<field name="count" type="I" />
+		<field name="access_count" type="I" />
 		<opt platform="mysql">Type=InnoDB</opt>
 		<index name="link_tabidtype_idx">
 			<col>crmid</col>

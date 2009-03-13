@@ -1492,10 +1492,10 @@ moveSettingsToDatabase($adb);
 
 /* Email status tracking*/
 ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_email_access(crmid INT, mailid INT, accessdate DATE, accesstime TIME)");
-ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_email_track(crmid INT, mailid INT, count INT, primary key(crmid, mailid))");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_email_track(crmid INT, mailid INT, access_count INT, primary key(crmid, mailid))");
 
 $fieldid = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("INSERT INTO vtiger_field VALUES ('10',".$fieldid.", 'count', 'vtiger_email_track', '1', '25', 'count', 'Access Count', '1', '0', '0', '100', '6', '21', '3', 'V~O', '1', NULL, 'BAS', 0)");
+ExecuteQuery("INSERT INTO vtiger_field VALUES ('10',".$fieldid.", 'access_count', 'vtiger_email_track', '1', '25', 'access_count', 'Access Count', '1', '0', '0', '100', '6', '21', '3', 'V~O', '1', NULL, 'BAS', 0)");
 addFieldSecurity(10, $fieldid, 'false');
 // END
 

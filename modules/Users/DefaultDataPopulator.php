@@ -511,7 +511,7 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (10,".$this->db->getUniqueID("vtiger_field").",'time_start','vtiger_activity',1,'2','time_start','Time Start',1,0,0,100,9,23,1,'T~O',1,null,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (10,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,10,22,1,'T~O',3,null,'BAS',0)");
 	 	$this->db->query("insert into vtiger_field values (10,".$this->db->getUniqueID("vtiger_field").",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,11,21,2,'T~O',3,null,'BAS',0)");
-	 	$this->db->query("INSERT INTO vtiger_field VALUES (10,".$this->db->getUniqueID("vtiger_field").", 'count', 'vtiger_email_track', '1', '25', 'count', 'Access Count', '1', '0', '0', '100', '6', '21', '3', 'V~O', '1', NULL, 'BAS', 0)");
+	 	$this->db->query("INSERT INTO vtiger_field VALUES (10,".$this->db->getUniqueID("vtiger_field").", 'access_count', 'vtiger_email_track', '1', '25', 'access_count', 'Access Count', '1', '0', '0', '100', '6', '21', '3', 'V~O', '1', NULL, 'BAS', 0)");
 
 		//Block21 -- End
 		//Email Details -- END

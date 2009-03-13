@@ -1931,8 +1931,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		$contactid=$_REQUEST['record'];
 		$emailid=$adb->query_result($list_result,$list_result_count,"activityid");
-		$result = $adb->query("select count from vtiger_email_track where crmid=$contactid and mailid=$emailid");
-		$value=$adb->query_result($result,0,"count");
+		$result = $adb->query("select access_count from vtiger_email_track where crmid=$contactid and mailid=$emailid");
+		$value=$adb->query_result($result,0,"access_count");
 		if(!$value) {
 			$value = 0;
 		}
