@@ -168,6 +168,11 @@ foreach($import_modules_array as $module_name => $object_name)
 		//commented to remove navigation buttons from import list view
 		//$smarty->assign("NAVIGATION", $navigationOutput);
 		$smarty->assign("HIDE_CUSTOM_LINKS", 1);//Added to hide the CustomView links in imported records ListView
+		
+		// Remove all the links for the list view header as they do not work in this page.
+    	for($i=0;$i<count($listview_header);$i++) {
+    		$listview_header[$i] = strip_tags($listview_header[$i]);
+    	}
 		$smarty->assign("LISTHEADER", $listview_header);
 		$smarty->assign("LISTENTITY", $listview_entries);
         

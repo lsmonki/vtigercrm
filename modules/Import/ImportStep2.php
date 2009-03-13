@@ -238,7 +238,7 @@ $field_map = $outlook_contacts_field_map;
 
 $mapping_file = new ImportMap();
 $saved_map_lists = $mapping_file->getSavedMappingsList($_REQUEST['return_module']);
-$map_list_combo = '<select name="source" id="saved_source" disabled onchange="getImportSavedMap(this)">';
+$map_list_combo = '<select class="small" name="source" id="saved_source" disabled onchange="getImportSavedMap(this)">';
 $map_list_combo .= '<OPTION value="-1" selected>--Select--</OPTION>';
 if(is_array($saved_map_lists))
 {
