@@ -170,7 +170,7 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		return $this->hasDeleteAccess;
 	}
 	
-	function hasPermission($operation,$id){
+	function hasPermission($operation,$webserviceId){
 		
 		$idComponents = vtws_getIdComponents($webserviceId);
 		$id=$idComponents[1];

@@ -43,7 +43,7 @@ class VtigerWebserviceObject{
 	}
 	
 	static function fromQuery($adb,$query){
-		$moduleRegex = "/from\s+([^\s;]+)/";
+		$moduleRegex = "/[fF][rR][Oo][Mm]\s+([^\s;]+)/";
 		$matches = array();
 		$found = preg_match($moduleRegex,$query,$matches);
 		if($found === 1){

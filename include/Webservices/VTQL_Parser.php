@@ -96,12 +96,12 @@ class VTQL_ParseryyStackEntry
 // code external to the class is included here
 
 // declare_class is output here
-#line 452 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 454 "e:\workspace\parsergenerator\VTQL_parser.y"
 class VTQL_Parser#line 102 "e:\workspace\parsergenerator\VTQL_parser.php"
 {
 /* First off, code is included which follows the "include_class" declaration
 ** in the input file. */
-#line 193 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 195 "e:\workspace\parsergenerator\VTQL_parser.y"
 
 /*
 add this rule to add parenthesis support.
@@ -278,7 +278,7 @@ function buildSelectStmt($sqlDump){
 		require('user_privileges/user_privileges_'.$this->user->id.'.php');
 		require('user_privileges/sharing_privileges_'.$this->user->id.'.php');
 		if($profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && 
-				$defaultOrgSharingPermission[$meta->getEntityId()] == 3){
+				$defaultOrgSharingPermission[$meta->getTabId()] == 3){
 			$this->query = $this->query." and (vtiger_crmentity.smownerid in({$this->user->id}) or ".
 					"vtiger_crmentity.smownerid in(select vtiger_user2role.userid from vtiger_user2role".
 					" inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid ".
@@ -286,7 +286,7 @@ function buildSelectStmt($sqlDump){
 					"where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%') or ".
 					"vtiger_crmentity.smownerid in(".
 						"select shareduserid from vtiger_tmp_read_user_sharing_per ".
-						"where userid=".$this->user->id." and tabid=".$meta->getEntityId()."))";
+						"where userid=".$this->user->id." and tabid=".$meta->getTabId()."))";
 		}
 	}
 	if($sqlDump['orderby']){
@@ -1040,7 +1040,7 @@ static public $yy_action = array(
             }
             /* Here code is inserted which will execute if the parser
             ** stack ever overflows */
-#line 463 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 465 "e:\workspace\parsergenerator\VTQL_parser.y"
 
 	throw new WebServiceException(WebServiceErrorCode::$QUERYSYNTAX, "Parser stack overflow");
 #line 1052 "e:\workspace\parsergenerator\VTQL_parser.php"
@@ -1239,76 +1239,78 @@ $this->out['where_condition']['column_values'][sizeof($this->out['where_conditio
 #line 82 "e:\workspace\parsergenerator\VTQL_parser.y"
     function yy_r17(){
 $length = sizeof($this->out['where_condition']['column_values']);
-if(strcasecmp($this->out['where_condition']['column_operators'][$length-1],"in")===0 && $length !==0 && !$this->out['columnDone']){
-if(!is_array($this->out['where_condition']['column_values'][$length - 1])){
-$prev = $this->out['where_condition']['column_values'][$length - 1];
-$this->out['where_condition']['column_values'][$length - 1] = array();
-$this->out['where_condition']['column_values'][$length - 1][] = $prev; 
+$pos = $length - 1;
+if($pos < 0){
+$pos = 0;
 }
-$this->out['where_condition']['column_values'][$length - 1][] = $this->yystack[$this->yyidx + 0]->minor;
+if(strcasecmp($this->out['where_condition']['column_operators'][$pos],"in")===0){
+if(!is_array($this->out['where_condition']['column_values'][$pos])){
+$this->out['where_condition']['column_values'][$pos] = array(); 
+}
+$this->out['where_condition']['column_values'][$pos][] = $this->yystack[$this->yyidx + 0]->minor;
 }else{
 $this->out['columnDone'] = false;
 $this->out['where_condition']['column_values'][] = $this->yystack[$this->yyidx + 0]->minor;
 }
     }
-#line 1260 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 98 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 1262 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 100 "e:\workspace\parsergenerator\VTQL_parser.y"
     function yy_r20(){
 $this->out['where_condition']['column_operators'][] = '=';
     }
-#line 1265 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 101 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 1267 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 103 "e:\workspace\parsergenerator\VTQL_parser.y"
     function yy_r21(){
 $this->out['where_condition']['column_operators'][] = '<';
     }
-#line 1270 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 104 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 1272 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 106 "e:\workspace\parsergenerator\VTQL_parser.y"
     function yy_r22(){
 $this->out['where_condition']['column_operators'][] = '>';
     }
-#line 1275 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 107 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 1277 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 109 "e:\workspace\parsergenerator\VTQL_parser.y"
     function yy_r23(){
 $this->out['where_condition']['column_operators'][] = '<=';
     }
-#line 1280 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 110 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 1282 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 112 "e:\workspace\parsergenerator\VTQL_parser.y"
     function yy_r24(){
 $this->out['where_condition']['column_operators'][] = '>=';
     }
-#line 1285 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 113 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 1287 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 115 "e:\workspace\parsergenerator\VTQL_parser.y"
     function yy_r25(){
 $this->out['where_condition']['column_operators'][] = '!=';
     }
-#line 1290 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 116 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 1292 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 118 "e:\workspace\parsergenerator\VTQL_parser.y"
     function yy_r26(){
 $this->out['where_condition']['column_operators'][] = 'IN';
     }
-#line 1295 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 119 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 1297 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 121 "e:\workspace\parsergenerator\VTQL_parser.y"
     function yy_r27(){
 $this->out['where_condition']['column_operators'][] = 'LIKE';
     }
-#line 1300 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 125 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 1302 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 127 "e:\workspace\parsergenerator\VTQL_parser.y"
     function yy_r31(){
 $this->out['orderby'][] = $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 1305 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 135 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 1307 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 137 "e:\workspace\parsergenerator\VTQL_parser.y"
     function yy_r39(){
 $this->out['limit'][] = $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 1310 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 138 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 1312 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 140 "e:\workspace\parsergenerator\VTQL_parser.y"
     function yy_r40(){
 $this->out['limit'][] = $this->yystack[$this->yyidx + -2]->minor;
 $this->out['limit'][] = $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 1316 "e:\workspace\parsergenerator\VTQL_parser.php"
-#line 142 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 1318 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 144 "e:\workspace\parsergenerator\VTQL_parser.y"
     function yy_r41(){
 global $adb;
 if(!$this->out['meta']){
@@ -1335,7 +1337,7 @@ $tables = $this->getTables($this->out, $columns);
 if(sizeof($tables)===0){
 $tables[] = $module->table_name;
 }
-if(!in_array("vtiger_crmentity",$tables) && $module != "Users"){
+if(!in_array("vtiger_crmentity",$tables) && $this->out['moduleName'] != "Users"){
 array_push($tables,"vtiger_crmentity");
 }
 $firstTable = $module->table_name;
@@ -1360,7 +1362,7 @@ break;
 }
 */
     }
-#line 1369 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 1371 "e:\workspace\parsergenerator\VTQL_parser.php"
 
     /**
      * placeholder for the left hand side in a reduce operation.
@@ -1461,12 +1463,12 @@ break;
         }
         /* Here code is inserted which will be executed whenever the
         ** parser fails */
-#line 457 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 459 "e:\workspace\parsergenerator\VTQL_parser.y"
 
 	if(!$this->syntax_error){
 		throw new WebServiceException(WebServiceErrorCode::$QUERYSYNTAX, "Parsing failed");
 	}
-#line 1476 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 1478 "e:\workspace\parsergenerator\VTQL_parser.php"
     }
 
     /**
@@ -1478,7 +1480,7 @@ break;
      */
     function yy_syntax_error($yymajor, $TOKEN)
     {
-#line 467 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 469 "e:\workspace\parsergenerator\VTQL_parser.y"
 
 	$synMsg = "Syntax Error on line " . $this->lex->linenum . ": token '" .$this->lex->value."' ";
 	$expect = array();
@@ -1489,7 +1491,7 @@ break;
 		. '), expected one of: ' . implode(',', $expect));
 	
 	throw new WebServiceException(WebServiceErrorCode::$QUERYSYNTAX, $synMsg);
-#line 1500 "e:\workspace\parsergenerator\VTQL_parser.php"
+#line 1502 "e:\workspace\parsergenerator\VTQL_parser.php"
     }
 
     /**
@@ -1507,10 +1509,10 @@ break;
         }
         /* Here code is inserted which will be executed whenever the
         ** parser accepts */
-#line 453 "e:\workspace\parsergenerator\VTQL_parser.y"
+#line 455 "e:\workspace\parsergenerator\VTQL_parser.y"
 
 		$this->success = true;
-	#line 1522 "e:\workspace\parsergenerator\VTQL_parser.php"
+	#line 1524 "e:\workspace\parsergenerator\VTQL_parser.php"
     }
 
     /**

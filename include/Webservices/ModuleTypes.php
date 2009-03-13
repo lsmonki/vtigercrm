@@ -32,7 +32,14 @@
 			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
 											"An Database error occured while performing the operation");
 		}
-		return array("types"=>array_merge($accessibleModules,$accessibleEntities));
+		$informationArray = array();
+		foreach ($accessibleModules as $module) {
+			$informationArray[$module] = array('isEntity'=>true);
+		}
+		foreach ($accessibleEntities as $entity) {
+			$informationArray[$entity] = array('isEntity'=>false);
+		}
+		return array("types"=>array_merge($accessibleModules,$accessibleEntities),'information'=>$informationArray);
 	}
 
 ?>
