@@ -677,11 +677,10 @@ class Potentials extends CRMEntity {
 		$tmpname = $tabname."tmp".$secmodule;
 		$condvalue = $tables[1].".".$fields[1];
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT potentialid from vtiger_potential)";
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT potentialid from vtiger_potential INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_potential.potentialid)";
 		
-		$query .= " left join vtiger_potential as vtiger_potentialPotentials on vtiger_potentialPotentials.potentialid=$tmpname.$secfieldname 
-		left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potentialPotentials.potentialid and vtiger_crmentityPotentials.deleted=0
-		left join vtiger_potential on vtiger_potential.potentialid = vtiger_crmentityPotentials.crmid 
+		$query .= " left join vtiger_potential on vtiger_potential.potentialid=$tmpname.$secfieldname 
+		left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid and vtiger_crmentityPotentials.deleted=0
 		left join vtiger_account as vtiger_accountPotentials on vtiger_potential.accountid = vtiger_accountPotentials.accountid
 		left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
 		left join vtiger_groups vtiger_groupsPotentials on vtiger_groupsPotentials.groupid = vtiger_crmentityPotentials.smownerid

@@ -1179,8 +1179,8 @@ class Products extends CRMEntity {
 		$tmpname = $tabname."tmp".$secmodule;
 		$condvalue = $tables[1].".".$fields[1];
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT productid from vtiger_products)";
-		$query .= " left join vtiger_products as vtiger_productsRelProducts  on vtiger_productsRelProducts.productid = $tmpname.$secfieldname
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT productid from vtiger_products INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_products.productid)";
+		$query .= " left join vtiger_products on vtiger_products.productid = $tmpname.$secfieldname
 			LEFT JOIN (
 				SELECT vtiger_products.productid, 
 						(CASE WHEN (vtiger_products.currency_id = " . $current_user->currency_id . " ) THEN vtiger_products.unit_price
@@ -1191,9 +1191,8 @@ class Products extends CRMEntity {
 				LEFT JOIN vtiger_currency_info ON vtiger_products.currency_id = vtiger_currency_info.id
 				LEFT JOIN vtiger_productcurrencyrel ON vtiger_products.productid = vtiger_productcurrencyrel.productid
 				AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . "
-			) AS innerProduct ON innerProduct.productid = vtiger_productsRelProducts.productid
-			left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_productsRelProducts.productid and vtiger_crmentityProducts.deleted=0
-			left join vtiger_products on vtiger_products.productid = vtiger_crmentityProducts.crmid
+			) AS innerProduct ON innerProduct.productid = vtiger_products.productid
+			left join vtiger_crmentity as vtiger_crmentityProducts on vtiger_crmentityProducts.crmid=vtiger_products.productid and vtiger_crmentityProducts.deleted=0
 			left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid
 			left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_products.handler
 			left join vtiger_vendor as vtiger_vendorRelProducts on vtiger_vendorRelProducts.vendorid = vtiger_products.vendor_id

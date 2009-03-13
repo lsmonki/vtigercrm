@@ -353,10 +353,9 @@ class SalesOrder extends CRMEntity {
 		$secfieldname = $fields[0][1];
 		$tmpname = $tabname."tmp".$secmodule;
 		$condvalue = $tables[1].".".$fields[1];
-	    $query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT salesorderid from vtiger_salesorder)";
-		$query .= " left join vtiger_salesorder as vtiger_salesorderSalesOrder on vtiger_salesorderSalesOrder.salesorderid = $tmpname.$secfieldname
-			left join vtiger_crmentity as vtiger_crmentitySalesOrder on vtiger_crmentitySalesOrder.crmid=vtiger_salesorderSalesOrder.salesorderid and vtiger_crmentitySalesOrder.deleted=0
-			left join vtiger_salesorder on vtiger_salesorder.salesorderid = vtiger_crmentitySalesOrder.crmid
+	    $query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT salesorderid from vtiger_salesorder INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_salesorder.salesorderid)";
+		$query .= " left join vtiger_salesorder on vtiger_salesorder.salesorderid = $tmpname.$secfieldname
+			left join vtiger_crmentity as vtiger_crmentitySalesOrder on vtiger_crmentitySalesOrder.crmid=vtiger_salesorder.salesorderid and vtiger_crmentitySalesOrder.deleted=0
 			left join vtiger_salesordercf on vtiger_salesorder.salesorderid = vtiger_salesordercf.salesorderid 
 			left join vtiger_sobillads on vtiger_salesorder.salesorderid=vtiger_sobillads.sobilladdressid
 			left join vtiger_soshipads on vtiger_salesorder.salesorderid=vtiger_soshipads.soshipaddressid

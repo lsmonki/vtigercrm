@@ -297,10 +297,9 @@ class PriceBooks extends CRMEntity {
 		$tmpname = $tabname."tmp".$secmodule;
 		$condvalue = $tables[1].".".$fields[1];
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue and $tmpname.$secfieldname IN (SELECT pricebookid from vtiger_pricebook)";
-		$query .=" left join vtiger_pricebook as vtiger_pricebookPriceBooks on vtiger_pricebookPriceBooks.pricebookid=$tmpname.$secfieldname  
-				left join vtiger_crmentity as vtiger_crmentityPriceBooks on vtiger_crmentityPriceBooks.crmid=vtiger_pricebookPriceBooks.pricebookid and vtiger_crmentityPriceBooks.deleted=0 
-				left join vtiger_pricebook on vtiger_pricebook.pricebookid = vtiger_crmentityPriceBooks.crmid 
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue and $tmpname.$secfieldname IN (SELECT pricebookid from vtiger_pricebook INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_pricebook.pricebookid)";
+		$query .=" left join vtiger_pricebook on vtiger_pricebook.pricebookid=$tmpname.$secfieldname  
+				left join vtiger_crmentity as vtiger_crmentityPriceBooks on vtiger_crmentityPriceBooks.crmid=vtiger_pricebook.pricebookid and vtiger_crmentityPriceBooks.deleted=0 
 				left join vtiger_currency_info as vtiger_currency_infoPriceBooks on vtiger_currency_infoPriceBooks.id = vtiger_pricebook.currency_id 
 				left join vtiger_users as vtiger_usersPriceBooks on vtiger_usersPriceBooks.id = vtiger_crmentityPriceBooks.smownerid
 				left join vtiger_groups as vtiger_groupsPriceBooks on vtiger_groupsPriceBooks.groupid = vtiger_crmentityPriceBooks.smownerid"; 
@@ -316,6 +315,7 @@ class PriceBooks extends CRMEntity {
 	function setRelationTables($secmodule){
 		$rel_tables = array (
 			"Products" => array("vtiger_pricebookproductrel"=>array("pricebookid","productid"),"vtiger_pricebook"=>"pricebookid"),
+			"Services" => array("vtiger_pricebookproductrel"=>array("pricebookid","productid"),"vtiger_pricebook"=>"pricebookid"),
 		);
 		return $rel_tables[$secmodule];
 	}

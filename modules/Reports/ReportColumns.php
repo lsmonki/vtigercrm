@@ -79,7 +79,7 @@ function getPrimaryColumnsHTML($module)
 	global $app_list_strings;
 	global $app_strings;
 	global $current_language;
-
+	$id_added=false;
 	$mod_strings = return_module_language($current_language,$module);
 	foreach($ogReport->module_list[$module] as $key=>$value)
 	{
@@ -87,6 +87,10 @@ function getPrimaryColumnsHTML($module)
 		{
 			
 			$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
+			if($id_added==false){
+				$shtml .= "<option value=\"vtiger_crmentity:crmid:".$module."_ID:crmid:I\">".getTranslatedString(getTranslatedString($module).' ID')."</option>";
+				$id_added=true;
+			}
 			foreach($ogReport->pri_module_columnslist[$module][$key] as $field=>$fieldlabel)
 			{
 				if(isset($mod_strings[$fieldlabel]))

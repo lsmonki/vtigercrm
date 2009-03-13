@@ -358,10 +358,9 @@ class Quotes extends CRMEntity {
 		$tmpname = $tabname."tmp".$secmodule;
 		$condvalue = $tables[1].".".$fields[1];
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue and $tmpname.$secfieldname IN (SELECT quoteid from vtiger_quotes)";
-		$query .= " left join vtiger_quotes as  vtiger_quotesQuotes on vtiger_quotesQuotes.quoteid = $tmpname.$secfieldname
-			left join vtiger_crmentity as vtiger_crmentityQuotes on vtiger_crmentityQuotes.crmid=vtiger_quotesQuotes.quoteid and vtiger_crmentityQuotes.deleted=0
-			left join vtiger_quotes on vtiger_quotes.quoteid = vtiger_crmentityQuotes.crmid
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue and $tmpname.$secfieldname IN (SELECT quoteid from vtiger_quotes INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_quotes.quoteid)";
+		$query .= " left join vtiger_quotes on vtiger_quotes.quoteid = $tmpname.$secfieldname
+			left join vtiger_crmentity as vtiger_crmentityQuotes on vtiger_crmentityQuotes.crmid=vtiger_quotes.quoteid and vtiger_crmentityQuotes.deleted=0
 			left join vtiger_quotescf on vtiger_quotes.quoteid = vtiger_quotescf.quoteid
 			left join vtiger_quotesbillads on vtiger_quotes.quoteid=vtiger_quotesbillads.quotebilladdressid
 			left join vtiger_quotesshipads on vtiger_quotes.quoteid=vtiger_quotesshipads.quoteshipaddressid

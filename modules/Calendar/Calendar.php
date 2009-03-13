@@ -275,10 +275,9 @@ class Calendar
 		$tmpname = $tabname."tmp".$secmodule;
 		$condvalue = $tables[1].".".$fields[1];
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT activityid from vtiger_activity)";
-		$query .=" left join vtiger_activity as vtiger_activityCalendar on vtiger_activityCalendar.activityid=$tmpname.$secfieldname  
-				left join vtiger_crmentity as vtiger_crmentityCalendar on vtiger_crmentityCalendar.crmid=vtiger_activityCalendar.activityid and vtiger_crmentityCalendar.deleted=0 
-				left join vtiger_activity on vtiger_activity.activityid = vtiger_crmentityCalendar.crmid 
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT activityid from vtiger_activity INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_activity.activityid)";
+		$query .=" left join vtiger_activity on vtiger_activity.activityid = $tmpname.$secfieldname 
+				left join vtiger_crmentity as vtiger_crmentityCalendar on vtiger_crmentityCalendar.crmid=vtiger_activity.activityid and vtiger_crmentityCalendar.deleted=0 
 				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid 
 				left join vtiger_contactdetails as vtiger_contactdetailsCalendar on vtiger_contactdetailsCalendar.contactid= vtiger_cntactivityrel.contactid
 				left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid

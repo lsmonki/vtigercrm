@@ -1660,6 +1660,10 @@ class ReportRun extends CRMEntity
 						$headerLabel = str_replace("_"," ",$this->getLstringforReportHeaders($fld->name));
 						$arrayHeaders[] = $headerLabel;
 					}
+					$mod_name = split(' ',$headerLabel);
+					if($mod_name[0]!='')
+						$module = getTranslatedString($mod_name[0]);
+					$headerLabel = str_replace($mod_name[0],$module,$headerLabel);
 					$header .= "<td class='rptCellLabel'>".$headerLabel."</td>";
 				}
 

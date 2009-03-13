@@ -23,9 +23,9 @@
 	</td>
 	<td style="padding-left: 5px;" align="left" height="50" valign="bottom" width="75%">
 	{if $REPORT_TYPE eq 'tabular'}
-	<input checked type="radio" name="reportType" value="tabular" onclick="hideTabs()">
+	<input checked type="radio" name="reportType" id="reportType" value="tabular" onChange="hideTabs()">
 	{else}
-	<input type="radio" name="reportType" value="tabular" onclick="hideTabs()">
+	<input type="radio" name="reportType" id="reportType" value="tabular" onChange="hideTabs()">
 	{/if}
 	<b> {$MOD.LBL_TABULAR_FORMAT}</b></td>
 	</tr><tr><td style="padding-left: 25px;" align="left" valign="top" width="75%">

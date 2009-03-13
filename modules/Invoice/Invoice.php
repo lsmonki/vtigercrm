@@ -339,10 +339,9 @@ class Invoice extends CRMEntity {
 		$tmpname = $tabname."tmp".$secmodule;
 		$condvalue = $tables[1].".".$fields[1];
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT invoiceid from vtiger_invoice)";
-		$query .= " left join vtiger_invoice as vtiger_invoiceInvoice on vtiger_invoiceInvoice.invoiceid = $tmpname.$secfieldname
-			left join vtiger_crmentity as vtiger_crmentityInvoice on vtiger_crmentityInvoice.crmid=vtiger_invoiceInvoice.invoiceid and vtiger_crmentityInvoice.deleted=0
-			left join vtiger_invoice on vtiger_invoice.invoiceid = vtiger_crmentityInvoice.crmid
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT invoiceid from vtiger_invoice INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_invoice.invoiceid)";
+		$query .= " left join vtiger_invoice on vtiger_invoice.invoiceid = $tmpname.$secfieldname
+			left join vtiger_crmentity as vtiger_crmentityInvoice on vtiger_crmentityInvoice.crmid=vtiger_invoice.invoiceid and vtiger_crmentityInvoice.deleted=0
 			left join vtiger_invoicecf on vtiger_invoice.invoiceid = vtiger_invoicecf.invoiceid 
 			left join vtiger_salesorder as vtiger_salesorderInvoice on vtiger_salesorderInvoice.salesorderid=vtiger_invoice.salesorderid
 			left join vtiger_invoicebillads on vtiger_invoice.invoiceid=vtiger_invoicebillads.invoicebilladdressid

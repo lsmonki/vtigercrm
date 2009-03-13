@@ -725,10 +725,9 @@ case when (vtiger_users.user_name not like '') then vtiger_users.user_name else 
 		$tmpname = $tabname."tmp".$secmodule;
 		$condvalue = $tables[1].".".$fields[1];
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT ticketid from vtiger_troubletickets)";
-		$query .=" left join vtiger_troubletickets as vtiger_troubleticketsHelpDesk on vtiger_troubleticketsHelpDesk.ticketid=$tmpname.$secfieldname  
-				left join vtiger_crmentity as vtiger_crmentityHelpDesk on vtiger_crmentityHelpDesk.crmid=vtiger_troubleticketsHelpDesk.ticketid and vtiger_crmentityHelpDesk.deleted=0 
-				left join vtiger_troubletickets on vtiger_troubletickets.ticketid = vtiger_crmentityHelpDesk.crmid 
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT ticketid from vtiger_troubletickets INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_troubletickets.ticketid)";
+		$query .=" left join vtiger_troubletickets on vtiger_troubletickets.ticketid = $tmpname.$secfieldname 
+				left join vtiger_crmentity as vtiger_crmentityHelpDesk on vtiger_crmentityHelpDesk.crmid=vtiger_troubletickets.ticketid and vtiger_crmentityHelpDesk.deleted=0 
 				left join vtiger_ticketcf on vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid
 				left join vtiger_crmentity as vtiger_crmentityRelHelpDesk on vtiger_crmentityRelHelpDesk.crmid = vtiger_troubletickets.parent_id
 				left join vtiger_account as vtiger_accountRelHelpDesk on vtiger_accountRelHelpDesk.accountid=vtiger_crmentityRelHelpDesk.crmid 

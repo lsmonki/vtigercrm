@@ -428,10 +428,9 @@ class Campaigns extends CRMEntity {
 		$tmpname = $tabname."tmp".$secmodule;
 		$condvalue = $tables[1].".".$fields[1];
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT campaignid from vtiger_campaign)";
-		$query .=" left join vtiger_campaign as vtiger_campaignCampaigns on vtiger_campaignCampaigns.campaignid=$tmpname.$secfieldname  
-				left join vtiger_crmentity as vtiger_crmentityCampaigns on vtiger_crmentityCampaigns.crmid=vtiger_campaignCampaigns.campaignid and vtiger_crmentityCampaigns.deleted=0 
-				left join vtiger_campaign on vtiger_campaign.campaignid = vtiger_crmentityCampaigns.crmid 
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT campaignid from vtiger_campaign INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_campaign.campaignid)";
+		$query .=" left join vtiger_campaign on vtiger_campaign.campaignid = $tmpname.$secfieldname 
+				left join vtiger_crmentity as vtiger_crmentityCampaigns on vtiger_crmentityCampaigns.crmid=vtiger_campaign.campaignid and vtiger_crmentityCampaigns.deleted=0 
 				left join vtiger_products as vtiger_productsCampaigns on vtiger_campaign.product_id = vtiger_productsCampaigns.productid 
 				left join vtiger_campaignscf on vtiger_campaignscf.campaignid = vtiger_crmentityCampaigns.crmid 
 				left join vtiger_groups as vtiger_groupsCampaigns on vtiger_groupsCampaigns.groupid = vtiger_crmentityCampaigns.smownerid

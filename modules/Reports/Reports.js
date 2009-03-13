@@ -376,8 +376,8 @@ function disableMove()
 
 function hideTabs()
 {
-	var objreportType = getObj('reportType');
-	if(objreportType[0].checked == true)
+	var objreportType = document.getElementById('reportType');
+	if(objreportType.value == 'tabular')
 	{
 		divarray = new Array('step1','step2','step4','step5');
 	}

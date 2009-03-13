@@ -427,10 +427,9 @@ class Vendors extends CRMEntity {
 		$tmpname = $tabname."tmp".$secmodule;
 		$condvalue = $tables[1].".".$fields[1];
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue and $tmpname.$secfieldname IN (SELECT vendorid from vtiger_vendor)";
-		$query .=" left join vtiger_vendor as vtiger_vendorVendors on vtiger_vendorVendors.vendorid=$tmpname.$secfieldname  
-				left join vtiger_crmentity as vtiger_crmentityVendors on vtiger_crmentityVendors.crmid=vtiger_vendorVendors.vendorid and vtiger_crmentityVendors.deleted=0 
-				left join vtiger_vendor on vtiger_vendor.vendorid = vtiger_crmentityVendors.crmid 
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue and $tmpname.$secfieldname IN (SELECT vendorid from vtiger_vendor INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_vendor.vendorid)";
+		$query .=" left join vtiger_vendor on vtiger_vendor.vendorid=$tmpname.$secfieldname  
+				left join vtiger_crmentity as vtiger_crmentityVendors on vtiger_crmentityVendors.crmid=vtiger_vendor.vendorid and vtiger_crmentityVendors.deleted=0 
 				left join vtiger_vendorcf on vtiger_vendorcf.vendorid = vtiger_crmentityVendors.crmid 
 				left join vtiger_users as vtiger_usersVendors on vtiger_usersVendors.id = vtiger_crmentityVendors.smownerid"; 
 

@@ -1755,10 +1755,9 @@ $log->info("in getOldFileName  ".$notesid);
 			$cfquery = '';
 		}
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT notesid from vtiger_notes)";
-		$query .=" 	left join $tablename as $tablename".$secmodule." on $tablename".$secmodule.".$tableindex = $tmpname.$secfieldname
-					left join vtiger_crmentity as vtiger_crmentity$secmodule on vtiger_crmentity$secmodule.crmid = $tablename".$secmodule.".$tableindex AND vtiger_crmentity$secmodule.deleted=0   
-					left join $tablename on $tablename.$tableindex=vtiger_crmentity$secmodule.crmid   
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT $tableindex from $tablename INNER JOIN vtigr_crmentity ON vtiger_crmentity.crmid=$tablename.$tableindex AND vtiger.crmentity.deleted=0)";
+		$query .=" 	left join $tablename on $tablename.$tableindex=$tmpname.$secfieldname   
+					left join vtiger_crmentity as vtiger_crmentity$secmodule on vtiger_crmentity$secmodule.crmid = $tablename.$tableindex AND vtiger_crmentity$secmodule.deleted=0   
 					$cfquery   
 					left join vtiger_groups as vtiger_groups".$secmodule." on vtiger_groups".$secmodule.".groupid = vtiger_crmentity$secmodule.smownerid
 		            left join vtiger_users as vtiger_users".$secmodule." on vtiger_users".$secmodule.".id = vtiger_crmentity$secmodule.smownerid"; 

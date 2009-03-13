@@ -958,8 +958,8 @@ class Services extends CRMEntity {
 		$tmpname = $tabname."tmp".$secmodule;
 		$condvalue = $tables[1].".".$fields[1];
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT serviceid from vtiger_service)";
-		$query .= " left join vtiger_service as vtiger_servicesRelServices  on vtiger_servicesRelServices.serviceid = $tmpname.$secfieldname
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT serviceid from vtiger_service INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid= vtiger_service.serviceid AND vtiger_crmentity.deleted=0)";
+		$query .= " left join vtiger_service on vtiger_service.serviceid = $tmpname.$secfieldname
 			LEFT JOIN (
 				SELECT vtiger_service.serviceid, 
 						(CASE WHEN (vtiger_service.currency_id = " . $current_user->currency_id . " ) THEN vtiger_service.unit_price
@@ -970,9 +970,8 @@ class Services extends CRMEntity {
 				LEFT JOIN vtiger_currency_info ON vtiger_service.currency_id = vtiger_currency_info.id
 				LEFT JOIN vtiger_productcurrencyrel ON vtiger_service.serviceid = vtiger_productcurrencyrel.productid
 				AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . "
-			) AS innerService ON innerService.serviceid = vtiger_servicesRelServices.serviceid
-			left join vtiger_crmentity as vtiger_crmentityServices on vtiger_crmentityServices.crmid=vtiger_servicesRelServices.serviceid and vtiger_crmentityServices.deleted=0
-			left join vtiger_service on vtiger_service.serviceid = vtiger_crmentityServices.crmid
+			) AS innerService ON innerService.serviceid = vtiger_service.serviceid
+			left join vtiger_crmentity as vtiger_crmentityServices on vtiger_crmentityServices.crmid=vtiger_service.serviceid and vtiger_crmentityServices.deleted=0
 			left join vtiger_servicecf on vtiger_service.serviceid = vtiger_servicecf.serviceid
 			left join vtiger_users as vtiger_usersServices on vtiger_usersServices.id = vtiger_service.handler
 			left join vtiger_groups as vtiger_groupsServices on vtiger_groupsServices.groupid = vtiger_service.handler";

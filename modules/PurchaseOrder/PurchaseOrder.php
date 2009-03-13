@@ -322,10 +322,9 @@ class PurchaseOrder extends CRMEntity {
 		$tmpname = $tabname."tmp".$secmodule;
 		$condvalue = $tables[1].".".$fields[1];
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue and $tmpname.$secfieldname IN (SELECT purchaseorderid from vtiger_purchaseorder)";
-		$query .= " left join vtiger_purchaseorder as vtiger_purchaseorderPurchaseOrder  on vtiger_purchaseorderPurchaseOrder.purchaseorderid = $tmpname.$secfieldname
-			left join vtiger_crmentity as vtiger_crmentityPurchaseOrder on vtiger_crmentityPurchaseOrder.crmid=vtiger_purchaseorderPurchaseOrder.purchaseorderid and vtiger_crmentityPurchaseOrder.deleted=0
-			left join vtiger_purchaseorder on vtiger_purchaseorder.purchaseorderid = vtiger_crmentityPurchaseOrder.crmid
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue and $tmpname.$secfieldname IN (SELECT purchaseorderid from vtiger_purchaseorder INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_purchaseorder.purchaseorderid)";
+		$query .= " left join vtiger_purchaseorder on vtiger_purchaseorder.purchaseorderid = $tmpname.$secfieldname
+			left join vtiger_crmentity as vtiger_crmentityPurchaseOrder on vtiger_crmentityPurchaseOrder.crmid=vtiger_purchaseorder.purchaseorderid and vtiger_crmentityPurchaseOrder.deleted=0
 			left join vtiger_purchaseordercf on vtiger_purchaseorder.purchaseorderid = vtiger_purchaseordercf.purchaseorderid  
 			left join vtiger_pobillads on vtiger_purchaseorder.purchaseorderid=vtiger_pobillads.pobilladdressid
 			left join vtiger_poshipads on vtiger_purchaseorder.purchaseorderid=vtiger_poshipads.poshipaddressid

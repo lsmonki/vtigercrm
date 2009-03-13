@@ -955,10 +955,9 @@ class Accounts extends CRMEntity {
 		$tmpname = $tabname."tmp".$secmodule;
 		$condvalue = $tables[1].".".$fields[1];
 		
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue and $tmpname.$secfieldname IN (SELECT accountid from vtiger_account)";
-			$query .= " left join vtiger_account as vtiger_accountAccount on vtiger_accountAccount.accountid=$tmpname.$secfieldname 
-			left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_accountAccount.accountid and vtiger_crmentityAccounts.deleted=0
-			left join vtiger_account on vtiger_account.accountid = vtiger_crmentityAccounts.crmid
+		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue and $tmpname.$secfieldname IN (SELECT accountid from vtiger_account INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_account.accountid AND vtiger_crmentity.deleted=0)";
+			$query .= " left join vtiger_account on vtiger_account.accountid = $tmpname.$secfieldname
+			left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_account.accountid and vtiger_crmentityAccounts.deleted=0
 			left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
 			left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 			left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid
