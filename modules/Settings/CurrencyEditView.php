@@ -14,14 +14,15 @@ global $mod_strings,$app_strings,$adb,$theme,$default_charset;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $smarty=new vtigerCRM_Smarty;
+
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
 	$tempid = $_REQUEST['record'];
+    $currency = '';
 	
 	// Get all the currencies
     $sql = "select * from vtiger_currency_info where deleted=0";
     $result = $adb->pquery($sql, array());
-    
     // Check if the current currency status has to be disabled for the 
 	$sql1 = "select * from vtiger_users where currency_id=?";
 	$result1 = $adb->pquery($sql1, array($tempid));
@@ -42,6 +43,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 			$smarty->assign("CURRENCY_SYMBOL",$currencyResult['currency_symbol']);
 			$smarty->assign("CONVERSION_RATE",$currencyResult['conversion_rate']);
 			$smarty->assign("CURRENCY_STATUS",$currencyResult['currency_status']);
+			$currency = $currencyResult['currency_name'];
 			if($currencyResult['currency_status'] == 'Active')
 				$smarty->assign("ACTSELECT","selected");	
 			else
@@ -55,9 +57,29 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 	$smarty->assign("ID",$tempid);
 }
 
+$currencies_query = $adb->pquery("SELECT currency_name from vtiger_currency_info",array());
+for($index = 0;$index<$adb->num_rows($currencies_query);$index++){
+	$currencies_listed[] = $adb->query_result($currencies_query,$index,'currency_name');  
+}
+
+$currencies_query = $adb->pquery("SELECT currency_name,currency_code,currency_symbol from vtiger_currencies",array());
+for($index = 0;$index<$adb->num_rows($currencies_query);$index++){
+	$currencyname = $adb->query_result($currencies_query,$index,'currency_name');  
+	$currencycode = $adb->query_result($currencies_query,$index,'currency_code');  
+	$currencysymbol = $adb->query_result($currencies_query,$index,'currency_symbol');  
+	$currencies[$currencyname] = array($currencycode,$currencysymbol);
+}
+
+$currencies_not_listed = array();
+foreach($currencies as $key=>$value){
+	if(!in_array($key,$currencies_listed) || $key==$currency)
+		$currencies_not_listed[$key] = $value;
+}
+
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("THEME", $theme);
+$smarty->assign("CURRENCIES", $currencies_not_listed);
 $smarty->assign("PARENTTAB",htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
 $smarty->assign("MASTER_CURRENCY",$currency_name);
 $smarty->assign("IMAGE_PATH",$image_path);

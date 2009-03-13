@@ -2014,6 +2014,11 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	$this->db->query("insert into vtiger_reportfilters values(2,'Public')");
 	$this->db->query("insert into vtiger_reportfilters values(3,'Shared')");
 	
+		require_once('currencies.php');
+		foreach($currencies as $key=>$value){
+			$this->db->query("insert into vtiger_currencies values(".$this->db->getUniqueID("vtiger_currencies").",'$key','".$value[0]."','".$value[1]."')");
+		}
+	
 	}
 	
 	//Added to insert the records in vtiger_user_mergefields

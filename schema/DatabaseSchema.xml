@@ -7146,4 +7146,16 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 	
+	<table name="vtiger_currencies">
+		<field name="currencyid" type="I" size="19">
+			<key />
+			<autoincrement />
+		</field>
+		<field name="currency_name" type="C" size="200" />
+		<field name="currency_code" type="C" size="50" />
+		<field name="currency_symbol" type="C" size="11" />
+
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
 </schema>

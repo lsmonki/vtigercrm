@@ -97,36 +97,46 @@
 					
 			<table border=0 cellspacing=0 cellpadding=0 width=100% class="listRow">
 			<tr>
-			<td class="small" valign=top >
-			<table width="100%"  border="0" cellspacing="0" cellpadding="5">
-			  <tr>
-                            <td width="20%" nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_CURRENCY_NAME}</strong></td>
-                            <td width="80%" class="small cellText"><input type="text" class="detailedViewTextBox small" value="{$CURRENCY_NAME}" name="currency_name"></td>
-                          </tr>
-                          <tr valign="top">
-                            <td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_CURRENCY_CODE}</strong></td>
-                            <td class="small cellText"><input type="text" class="detailedViewTextBox small" value="{$CURRENCY_CODE}" name="currency_code"></td>
-                          </tr>
-                          <tr valign="top">
-                            <td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_CURRENCY_SYMBOL}</strong></td>
-                            <td class="small cellText"><input type="text" class="detailedViewTextBox small" value="{$CURRENCY_SYMBOL}" name="currency_symbol"></td>
-                          </tr>
-                          <tr valign="top">
-                            <td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_CURRENCY_CRATE}</strong><br>({$MOD.LBL_BASE_CURRENCY}{$MASTER_CURRENCY})</td>
-
-                            <td class="small cellText"><input type="text" class="detailedViewTextBox small" value="{$CONVERSION_RATE}" name="conversion_rate"></td>
-                          </tr>
-                          <tr>
-                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_CURRENCY_STATUS}</strong></td>
-                            <td class="small cellText">
-                            	<input type="hidden" value="{$CURRENCY_STATUS}" id="old_currency_status" />
-								<select name="currency_status" {$STATUS_DISABLE} class="importBox">
+				<td class="small" valign=top >
+				<table width="100%"  border="0" cellspacing="0" cellpadding="5">
+				<tr>
+					<td width="20%" nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_CURRENCY_NAME}</strong></td>
+					<td width="80%" class="small cellText">
+						<!-- input type="hidden" class="detailedViewTextBox small" value="" name="currency_name" -->
+						<select name="currency_name" id="currency_name" class="importBox" onChange='updateSymbolAndCode();'>
+					{foreach key=header item=currency from=$CURRENCIES}
+			        	        {if $header eq $CURRENCY_NAME}
+			        	        	<option value="{$header}" selected'>{$header}</option>
+			        	        {else}
+			        	        	<option value="{$header}" >{$header}</option>
+			        	        {/if}
+   					{/foreach}
+ 						</select>
+ 					</td>
+				</tr>
+				<tr valign="top">
+					<td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_CURRENCY_CODE}</strong></td>
+ 					<td class="small cellText"><input type="text" readonly class="detailedViewTextBox small" value="{$CURRENCY_CODE}" name="currency_code" id="currency_code"></td>
+				</tr>
+				<tr valign="top">
+					<td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_CURRENCY_SYMBOL}</strong></td>
+					<td class="small cellText"><input type="text" readonly class="detailedViewTextBox small" value="{$CURRENCY_SYMBOL}" name="currency_symbol" id="currency_symbol"></td>
+				</tr>
+				<tr valign="top">
+					<td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_CURRENCY_CRATE}</strong><br>({$MOD.LBL_BASE_CURRENCY}{$MASTER_CURRENCY})</td>
+					<td class="small cellText"><input type="text" class="detailedViewTextBox small" value="{$CONVERSION_RATE}" name="conversion_rate"></td>
+				</tr>
+				<tr>
+					<td nowrap class="small cellLabel"><strong>{$MOD.LBL_CURRENCY_STATUS}</strong></td>
+					<td class="small cellText">
+						<input type="hidden" value="{$CURRENCY_STATUS}" id="old_currency_status" />
+							<select name="currency_status" {$STATUS_DISABLE} class="importBox">
 									<option value="Active"  {$ACTSELECT}>{$MOD.LBL_ACTIVE}</option>
 				        	        <option value="Inactive" {$INACTSELECT}>{$MOD.LBL_INACTIVE}</option>
-              	                </select>
-			    </td>
-                          </tr>	
-                        </table>
+							</select>
+					</td>
+				</tr>	
+                       </table>
 						
 						</td>
 					  </tr>
@@ -182,5 +192,18 @@
 				return true;
 			}
         }
+updateSymbolAndCode();
+function updateSymbolAndCode(){
+selected_curr = document.getElementById('currency_name').value;
+
+{/literal}
+	{foreach key=header item=curr from=$CURRENCIES}
+		if(selected_curr == '{$header}'){ldelim}
+			getObj('currency_code').value = '{$curr.0}';
+			getObj('currency_symbol').value = '{$curr.1}';
+		{rdelim}
+	{/foreach}
+{literal}
+}
 </script>
 {/literal}

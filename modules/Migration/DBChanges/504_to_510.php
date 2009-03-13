@@ -1963,10 +1963,16 @@ function webserviceMigration(){
 	
 }
 
+ExecuteQuery("ALTER TABLE vtiger_notes MODIFY filename varchar(200)");	
 
-	
-	ExecuteQuery("ALTER TABLE vtiger_notes MODIFY filename varchar(200)");	
-	
+include_once('currencies.php');
+
+ExecuteQuery("CREATE TABLE vtiger_currencies(currencyid INTEGER(19),currency_name varchar(200),currency_code varchar(50),currency_symbol varchar(11))");
+foreach($currencies as $key=>$value){
+	ExecuteQuery("insert into vtiger_currencies values(".$adb->getUniqueID("vtiger_currencies").",'$key','".$value[0]."','".$value[1]."')");
+}
+ExecuteQuery("UPDATE vtiger_currency_info LEFT JOIN vtiger_currencies as currencies on vtiger_currency_info.currency_code = currencies.currency_code SET vtiger_currency_info.currency_name = currencies.currency_name");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>
