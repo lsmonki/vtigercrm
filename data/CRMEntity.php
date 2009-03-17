@@ -473,6 +473,11 @@ class CRMEntity
 		$typeofdata=$adb->query_result($result,$i,"typeofdata");
 		$typeofdata_array = explode("~",$typeofdata);
 		$datatype = $typeofdata_array[0];
+
+		if($uitype == 4 && $insertion_mode != 'edit') {
+			$this->column_fields[$fieldname] = $this->setModuleSeqNumber("increment",$module);
+			$fldvalue = $this->column_fields[$fieldname];
+		}
 		  if(isset($this->column_fields[$fieldname]))
 		  {
 			  if($uitype == 56)
@@ -536,10 +541,6 @@ class CRMEntity
 				  //strip out the spaces and commas in numbers if given ie., in amounts there may be ,
 				  $fldvalue = str_replace(",","",$this->column_fields[$fieldname]);//trim($this->column_fields[$fieldname],",");
 
-			  }
-			  elseif($uitype == 4 && $insertion_mode != 'edit') {
-				$this->column_fields[$fieldname] = $this->setModuleSeqNumber("increment",$module);
-				$fldvalue = $this->column_fields[$fieldname];
 			  }
 			  else
 			  {
