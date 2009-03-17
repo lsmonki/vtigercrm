@@ -1105,7 +1105,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		{
 			if(isPermitted($module,"EditView","") == 'yes'){
 				$edit_link = getListViewEditLink($module,$entity_id,$relatedlist,$varreturnset,$list_result,$list_result_count);	
-				if(isset($_REQUEST['start']) && $_REQUEST['start'] > 1)
+				if(isset($_REQUEST['start']) && $_REQUEST['start'] > 1 && $module != 'Emails')
 					$links_info .= "<a href=\"$edit_link&start=".$_REQUEST['start']."\">".$app_strings["LNK_EDIT"]."</a> ";
 				else
 					$links_info .= "<a href=\"$edit_link\">".$app_strings["LNK_EDIT"]."</a> ";
