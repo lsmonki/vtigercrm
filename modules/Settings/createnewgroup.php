@@ -68,7 +68,7 @@ foreach($roleDetails as $roleId=>$roleInfo)
 
 		$roleName=$roleInfo[0];
 		$roleIdStr .= "'".$roleId."'";
-		$roleNameStr .= "'".escape_single_quotes(decode_html($roleName))."'"; 
+		$roleNameStr .= "'".addslashes(decode_html($roleName))."'"; 
 	}
 	
 	$i++;	
@@ -105,7 +105,7 @@ foreach($grpDetails as $grpId=>$grpName)
 		}
 
 		$grpIdStr .= "'".$grpId."'";
-		$grpNameStr .= "'".escape_single_quotes(decode_html($grpName))."'";
+		$grpNameStr .= "'".addslashes(decode_html($grpName))."'";
 	
 	$m++;
 	}	
