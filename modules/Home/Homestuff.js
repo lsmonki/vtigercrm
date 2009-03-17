@@ -284,12 +284,17 @@ function loadStuff(stuffid,stufftype){
 				var responseVal=response.responseText;
 				$('stuffcont_'+stuffid).innerHTML=response.responseText;
 				if(stufftype=="Module"){
-					$('a_'+stuffid).href = "index.php?module="+$('more_'+stuffid).value+"&action=ListView&viewname="+$('cvid_'+stuffid).value;
+					if($('a_'+stuffid).href =="#")
+						$('a_'+stuffid).href = "index.php?module="+$('more_'+stuffid).value+"&action=ListView&viewname="+$('cvid_'+stuffid).value;
 				}	
 				if(stufftype=="Default" && typeof($('a_'+stuffid)) != 'undefined'){
 					if($('more_'+stuffid).value != ''){
 						$('a_'+stuffid).style.display = 'block';
-						$('a_'+stuffid).href = "index.php?module="+$('more_'+stuffid).value+"&action=index";
+						var url = "index.php?module="+$('more_'+stuffid).value+"&action=index";
+						if($('search_qry_'+stuffid)!=''){
+							url += $('search_qry_'+stuffid).value;
+						} 
+						$('a_'+stuffid).href = url;
 					}else{
 						$('a_'+stuffid).style.display = 'none';
 					}	

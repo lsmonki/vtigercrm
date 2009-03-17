@@ -132,7 +132,9 @@ function getTopQuotes($maxval,$calCnt)
 		$entries[$crmid] = Array($valuearray[1],$valuearray[3]);	
 	}
 
-	$values=Array('ModuleName'=>'Quotes','Title'=>$title,'Header'=>$header,'Entries'=>$entries);
+	$search_qry = "&query=true&Fields0=vtiger_crmentity.smownerid&Condition0=is&Srch_value0=".$current_user->column_fields['user_name']."&Fields1=vtiger_quotes.validtill&Condition1=grteq&Srch_value1=".$date_var."&Fields2=vtiger_quotes.quotestage&Condition2=isn&Srch_value2=Rejected&Fields3=vtiger_quotes.quotestage&Condition3=isn&Srch_value3=Accepted&searchtype=advance&search_cnt=4&matchtype=all";
+	
+	$values=Array('ModuleName'=>'Quotes','Title'=>$title,'Header'=>$header,'Entries'=>$entries,'search_qry'=>$search_qry);
 
 	if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )
 		return $values;

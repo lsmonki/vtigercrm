@@ -112,7 +112,10 @@ function getNewLeads($maxval,$calCnt)
 
 		$entries[$lead_fields['LEAD_ID']]=$value;
 	}
-	$values=Array('ModuleName'=>'Leads','Title'=>$title,'Header'=>$header,'Entries'=>$entries);
+	
+	$search_qry = "&query=true&Fields0=vtiger_leaddetails.leadstatus&Condition0=isn&Srch_value0=Lost+Lead&Fields1=vtiger_leaddetails.leadstatus&Condition1=isn&Srch_value1=Junk+Lead&Fields2=vtiger_crmentity.smownerid&Condition2=is&Srch_value2=".$current_user->column_fields['user_name']."&Fields3=vtiger_crmentity.createdtime&Condition3=grteq&Srch_value3=".$start_date."&searchtype=advance&search_cnt=4&matchtype=all";
+
+	$values=Array('ModuleName'=>'Leads','Title'=>$title,'Header'=>$header,'Entries'=>$entries,'search_qry'=>$search_qry);
 	$log->debug("Exiting getNewLeads method ...");
 	if (($display_empty_home_blocks && count($entries) == 0 ) || (count($entries)>0))
 		return $values;

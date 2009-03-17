@@ -76,7 +76,10 @@ function getTopPotentials($maxval,$calCnt)
 			$value[]=convertFromDollar($adb->query_result($list_result,$i,'amount'),$rate);
 			$entries[$potentialid]=$value;
 		}
-	$values=Array('ModuleName'=>'Potentials','Title'=>$title,'Header'=>$header,'Entries'=>$entries);
+	
+	$search_qry = "&query=true&Fields0=vtiger_crmentity.smownerid&Condition0=is&Srch_value0=".$current_user->column_fields['user_name']."&Fields1=vtiger_potential.sales_stage&Condition1=dcts&Srch_value1=closed&searchtype=advance&search_cnt=2&matchtype=all";
+			
+	$values=Array('ModuleName'=>'Potentials','Title'=>$title,'Header'=>$header,'Entries'=>$entries,'search_qry'=>$search_qry);
 
 	if ( ($display_empty_home_blocks && count($open_potentials_list) == 0 ) || (count($open_potentials_list)>0) )
 	{

@@ -74,7 +74,10 @@ function getMyTickets($maxval,$calCnt)
 			$value[]=$parent_name;
 			$entries[$ticketid]=$value;
 		}
-		$values=Array('ModuleName'=>'HelpDesk','Title'=>$title,'Header'=>$header,'Entries'=>$entries);
+		
+		$search_qry = "&query=true&Fields0=vtiger_troubletickets.status&Condition0=isn&Srch_value0=closed&Fields1=vtiger_crmentity.smownerid&Condition1=is&Srch_value1=".$current_user->column_fields['user_name']."&searchtype=advance&search_cnt=2&matchtype=all";
+		
+		$values=Array('ModuleName'=>'HelpDesk','Title'=>$title,'Header'=>$header,'Entries'=>$entries,'search_qry'=>$search_qry);
 		if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )	
 		{
 			$log->debug("Exiting getMyTickets method ...");

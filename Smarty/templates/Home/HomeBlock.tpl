@@ -119,3 +119,4 @@
 	</table>		
 
 {/if}
+<input id='search_qry_{$HOME_STUFFID}' name='search_qry_{$HOME_STUFFID}' type='hidden' value='{$HOME_STUFF.Details.search_qry}' />
