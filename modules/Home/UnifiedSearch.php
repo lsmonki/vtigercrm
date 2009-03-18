@@ -203,13 +203,17 @@ function getTagWhere($search_val,$current_user_id){
 	$freetag_obj = new freetag();
 	$crmid_array = $freetag_obj->get_objects_with_tag_all($search_val,$current_user_id);
 
-	$where = '';
+	$where = " vtiger_crmentity.crmid IN (";
 	if(count($crmid_array) > 0){
-		$where = " vtiger_crmentity.crmid IN (";
 		foreach($crmid_array as $index => $crmid){
 			$where .= $crmid.',';
 		}
 		$where = trim($where,',').')';
+	} 
+	//If there are no records has the search tag we need to add the condition like crmid is none. If dont add condition at all search will return all the values. 
+	// Fix for #5571
+	else {
+		$where .= '0)';
 	}
 	return $where;
 }
