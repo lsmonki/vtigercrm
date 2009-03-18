@@ -866,7 +866,12 @@ foreach($modseq as $modname => $prefix) {
 	);
 }
 // Setup module sequence for Invoice
-require_once('user_privileges/CustomInvoiceNo.php'); 
+@include_once('user_privileges/CustomInvoiceNo.php');
+// We need to move the existing information of Custom numbering to database
+// but in case the previous setting is not available...we are defaulting
+if(!isset($inv_str)) $inv_str = 'INV';
+if(!isset($inv_no)) $inv_no = '1'; 
+
 custom_addInventoryRows(
 		array(
 			array('semodule'=>'Invoice', 'active'=>'1','prefix'=>decode_html($inv_str),'startid'=>'1','curid'=>$inv_no)
