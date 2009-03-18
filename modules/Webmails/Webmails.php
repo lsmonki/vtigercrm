@@ -711,6 +711,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 	function load_mail($attach_tab)
 	{
 		// parse the message
+		global $default_charset;
 		$ref_contenu_message =  @imap_headerinfo($this->mbox, $this->mailid);
 		$struct_msg = @imap_fetchstructure($this->mbox, $this->mailid);
 		$mail = $this->mbox;

@@ -32,7 +32,7 @@ if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mail
 $MailBox = new MailBox($mailbox);
 $mail = $MailBox->mbox;
 $email = new Webmails($MailBox->mbox, $_REQUEST["mailid"]);
-$subject = $email->subject;
+$subject = imap_utf8($email->subject);
 $date = $email->date;
 $array_tab = Array();
 $email->loadMail($array_tab);
