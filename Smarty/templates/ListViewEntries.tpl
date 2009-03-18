@@ -46,6 +46,9 @@
                          <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
                     {elseif $button_check eq 'mailer_exp'}
                          <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return mailer_export()"/>
+                    {* Mass Edit handles Change Owner for other module except Calendar *}
+                    {elseif $button_check eq 'c_owner' && $MODULE eq 'Calendar'}
+                    	<input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
 					{/if}
                 {/foreach}
                 </td>
@@ -219,6 +222,9 @@
                                              <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
                                         {elseif $button_check eq 'mailer_exp'}
                                              <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return mailer_export()"/>
+                                        {* Mass Edit handles Change Owner for other module except Calendar *}
+                                        {elseif $button_check eq 'c_owner' && $MODULE eq 'Calendar'}
+											<input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
 										{/if}
 
                                  {/foreach}
