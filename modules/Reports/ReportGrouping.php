@@ -84,6 +84,7 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 function getPrimaryColumns_GroupingHTML($module,$selected="")
 {
         global $ogReport, $app_list_strings, $current_language;
+		$id_added=false;
 
         $mod_strings = return_module_language($current_language,$module);
 
@@ -91,30 +92,34 @@ function getPrimaryColumns_GroupingHTML($module,$selected="")
         {
             if(isset($ogReport->pri_module_columnslist[$module][$key]))
             {
-		$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
-		foreach($ogReport->pri_module_columnslist[$module][$key] as $field=>$fieldlabel)
-		{
-			if(isset($mod_strings[$fieldlabel]))
-			{
-				if($selected == $field)
-				{
-					$shtml .= "<option selected value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
-				}else
-				{
-					$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+				$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
+				if($id_added==false){
+					$shtml .= "<option value=\"vtiger_crmentity:crmid:".$module."_ID:crmid:I\">".getTranslatedString(getTranslatedString($module).' ID')."</option>";
+					$id_added=true;
 				}
-			}else
-			{
-				if($selected == $field)
+				foreach($ogReport->pri_module_columnslist[$module][$key] as $field=>$fieldlabel)
 				{
-					$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
-				}else
-				{
-					$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+					if(isset($mod_strings[$fieldlabel]))
+					{
+						if($selected == $field)
+						{
+							$shtml .= "<option selected value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+						}else
+						{
+							$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+						}
+					}else
+					{
+						if($selected == $field)
+						{
+							$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
+						}else
+						{
+							$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+						}
+		
+					}
 				}
-
-			}
-		}
            }
         }
         return $shtml;
