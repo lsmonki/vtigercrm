@@ -40,7 +40,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 			$smarty->assign("STATUS_DISABLE",$disable_currency);
 			$smarty->assign("CURRENCY_NAME",$currencyResult['currency_name']);
 			$smarty->assign("CURRENCY_CODE",$currencyResult['currency_code']);
-			$smarty->assign("CURRENCY_SYMBOL",$currencyResult['currency_symbol']);
+			$smarty->assign("CURRENCY_SYMBOL",decode_html($currencyResult['currency_symbol']));
 			$smarty->assign("CONVERSION_RATE",$currencyResult['conversion_rate']);
 			$smarty->assign("CURRENCY_STATUS",$currencyResult['currency_status']);
 			$currency = $currencyResult['currency_name'];
@@ -66,7 +66,7 @@ $currencies_query = $adb->pquery("SELECT currency_name,currency_code,currency_sy
 for($index = 0;$index<$adb->num_rows($currencies_query);$index++){
 	$currencyname = $adb->query_result($currencies_query,$index,'currency_name');  
 	$currencycode = $adb->query_result($currencies_query,$index,'currency_code');  
-	$currencysymbol = $adb->query_result($currencies_query,$index,'currency_symbol');  
+	$currencysymbol = decode_html($adb->query_result($currencies_query,$index,'currency_symbol'));  
 	$currencies[$currencyname] = array($currencycode,$currencysymbol);
 }
 
