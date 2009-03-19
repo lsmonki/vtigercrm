@@ -157,7 +157,8 @@ function getCreateCustomBlockForm(modulename,mode)
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&sub_mode=addBlock&fld_module='+modulename+'&parenttab=Settings&ajax=true&mode='+mode+'&blocklabel='+val+'&after_blockid='+blockid,
+			postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&sub_mode=addBlock&fld_module='+modulename+'&parenttab=Settings&ajax=true&mode='+mode+'&blocklabel='+
+			encodeURIComponent(val)+'&after_blockid='+blockid,
 			onComplete: function(response) {
 				$('vtbusy_info').style.display = "none";
 				var str = response.responseText;
