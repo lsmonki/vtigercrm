@@ -2369,6 +2369,7 @@ function getAllParenttabmoduleslist()
 	
 	if($is_admin){
 		$resultant_array['Settings'][] = Array('Settings','Settings');
+		$resultant_array['Settings'][] = Array('Settings',getTranslatedString('VTLIB_LBL_MODULE_MANAGER', 'Settings'), 'ModuleManager');
 	}			
 	return $resultant_array;
 }

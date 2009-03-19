@@ -225,11 +225,17 @@
 	   					{if $APP[$modules.1]}
 	   						{assign var="modulelabel" value=$APP[$modules.1]}
 	   					{/if}
-				
+	   					
+	   					{* Use Custom module action if specified *}
+						{assign var="moduleaction" value="index"}
+	   					{if isset($modules[2])}
+	   						{assign var="moduleaction" value=$modules[2]}
+	   					{/if}		
+	   									
 						{if $modules.0 eq $MODULE_NAME}
-							<td class="level2SelTab" nowrap><a href="index.php?module={$modules.0}&action=index&parenttab={$maintabs}">{$modulelabel}</a></td>
+							<td class="level2SelTab" nowrap><a href="index.php?module={$modules.0}&action={$moduleaction}&parenttab={$maintabs}">{$modulelabel}</a></td>
 						{else}
-							<td class="level2UnSelTab" nowrap> <a href="index.php?module={$modules.0}&action=index&parenttab={$maintabs}">{$modulelabel}</a> </td>
+							<td class="level2UnSelTab" nowrap> <a href="index.php?module={$modules.0}&action={$moduleaction}&parenttab={$maintabs}">{$modulelabel}</a> </td>
 						{/if}	
 					{/foreach}
 				{/if}
@@ -523,7 +529,13 @@ function getFormValidate(divValidate)
 			{assign var="modulelabel" value=$APP[$modules.1]}
 		{/if}
 		
-		<tr><td><a href="index.php?module={$modules.0}&action=index&parenttab={$parenttab}" class="drop_down">{$modulelabel}</a></td></tr>
+		{* Use Custom module action if specified *}
+		{assign var="moduleaction" value="index"}
+	   	{if isset($modules[2])}
+	   		{assign var="moduleaction" value=$modules[2]}
+	   	{/if}
+		
+		<tr><td><a href="index.php?module={$modules.0}&action={$moduleaction}&parenttab={$parenttab}" class="drop_down">{$modulelabel}</a></td></tr>
 		{/foreach}
 	</table>
 </div>
