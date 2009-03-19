@@ -21,7 +21,7 @@
 				<input title="save" class="crmButton small save" type="button" name="save" onClick="doSaveTooltipInfo();" value="{$APP.LBL_SAVE_BUTTON_LABEL}">
 			</td>
 			<td class="small" align="right">
-				<input title="back" class="crmButton small cancel" type="button" name="Back" onClick="window.history.back();" value="Back">
+				<input title="back" class="crmButton small cancel" type="button" name="Back" onClick="window.history.back();" value="{$APP.LBL_BACK}">
 			</td>
 		</tr>
 		</table>

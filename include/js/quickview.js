@@ -22,7 +22,7 @@ function getRelatedFieldInfo(id){
 			postBody: 'module=Settings&action=SettingsAjax&file=EditQuickView&field_name='+fieldname+'&module_name='+modulename+'&parenttab=Settings&ajax=true',
 			onComplete: function(response) {
 				if(response.responseText == false){
-					alert("Some error in field selection ");
+					alert(alert_arr.ERR_FIELD_SELECTION);
 				}else{
 					var related_fields = response.responseText;
 					$('fieldList').innerHTML = related_fields;
@@ -43,7 +43,7 @@ function saveTooltipInformation(fieldid, checkedFields){
 			postBody: 'module=Settings&action=SettingsAjax&file=SaveTooltipInformation&fieldid='+fieldid+'&checkedFields='+checkedFields+'&parenttab=Settings&ajax=true',
 			onComplete: function(response) {
 				if(response.responseText == "FAILURE"){
-					alert("Some error in field selection ");
+					alert(alert_arr.ERR_FIELD_SELECTION);
 					return false;
 				}else{
 					//success

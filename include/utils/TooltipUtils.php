@@ -28,7 +28,7 @@ function getFieldList($module_name, $field_name = "") {
 	$result = $adb->pquery($query, array ());
 	while ($fieldinfo = $adb->fetch_array($result)) {
 		$fields[] = array (
-			"fieldlabel" => $fieldinfo['fieldlabel'],
+			"fieldlabel" => getTranslatedString($fieldinfo['fieldlabel'], $module_name),
 			"fieldname" => $fieldinfo['fieldname'],
 			"fieldid" => $fieldinfo['fieldid']
 		);
@@ -240,12 +240,12 @@ function processResult($result, $descObj){
 			$value = $result[0][$name];
 			list($info, $id) = explode("x",$value);
 			$result[0][$name] = getOwnerName($id);
-		}elseif($field['type']['name'] == 'currency'){
+		}/*elseif($field['type']['name'] == 'currency'){
 			$name = $field['name'];
 			$value = $result[0][$name];
 			list($currency, $id) = explode("x",$value);
 			$result[0][$name] = getCurrencyName($id);
-		}elseif($field['type']['name'] == 'boolean'){
+		}*/elseif($field['type']['name'] == 'boolean'){
 			$name = $field['name'];
 			if($result[0][$name] == 1){
 				$result[0][$name] = "on";
@@ -264,7 +264,7 @@ function processResult($result, $descObj){
  * @return the fields in a select dropdown if fields exist else a blank value
  */
 function QuickViewFieldList($module){
-	global $adb, $app_strings;
+	global $adb, $app_strings,$mod_strings;
 	
 	$tabid = getTabid($module);
 	
@@ -273,12 +273,12 @@ function QuickViewFieldList($module){
 	if($adb->num_rows($result)>0){
 		$fieldlist = '<select onchange="getRelatedFieldInfo(this)" class="importBox" id="pick_field" name="pick_field">';
 		$fieldlist.= 	'<option value="" disabled="true" selected>'
-							.$app_strings['LBL_SELECT'].' Field
+							.$app_strings['LBL_SELECT'].' '. $mod_strings['LBL_FIELD'].'
 						</option>';
 		while($fieldsinfo=$adb->fetch_array($result)){
 			$fieldlabel = $fieldsinfo['fieldlabel'];
 			$fieldname = $fieldsinfo['fieldname'];
-			$fieldlist.= "<option value='$fieldname'>$fieldlabel</option>";
+			$fieldlist.= "<option value='$fieldname'>".getTranslatedString($fieldlabel, $module)."</option>";
 		}
 		$fieldlist.= '</select>';
 		return $fieldlist;
