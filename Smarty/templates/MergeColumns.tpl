@@ -134,7 +134,7 @@
 				<tr>
 					<td colspan="3" align="center">
 					<input type="submit" name="save&merge" value="{$APP.LBL_SAVE_MERGE_BUTTON_TITLE}" class="crmbutton small edit" onClick="return formSelectColumnString()"/>
-					<input type="button" name="cancel" value="Cancel" class="crmbutton small cancel" type="button" onClick="mergeshowhide('mergeDup');">
+					<input type="button" name="cancel" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" class="crmbutton small cancel" type="button" onClick="mergeshowhide('mergeDup');">
 					</td>
 				</tr>
 		</tbody>

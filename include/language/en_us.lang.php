@@ -1102,6 +1102,8 @@ $app_strings = array (
 'LBL_MERGE_SELECT'=>'SelectRecords (max: 3)',
 'DuplicatesHandling' => 'DuplicatesHandling',
 'LBL_DESC_FOR_MERGE_FIELDS' => 'The primary record will be retained after the merge. You can select the column to retain the values. The other record will be deleted but the related information will be merged.',
+'LBL_DUPLICATE_MERGING' => 'Duplicate Merging',
+'LBL_SELECT_TO_ENABLE_MERGING' => 'Select this option to enable and set duplicate merging criteria',
 
 // Local Backup Feature
 'LBL_BACKEDUPSUCCESSFULLY_TO_FILE' => 'Backed Up Successfully To File',//BACKUP
@@ -1181,6 +1183,8 @@ $app_strings = array (
 'LBL_FIELDLISTS'=> 'List Of Fields',
 'LBL_RECORD'=>'Record #',
 'LBL_DUP_PERMISSION' => 'You are not permitted to delete ',
+'recordid' => 'recordid',
+'Entity Type' => 'Entity Type',
 
 // gmailbookmarklet customization
 'LBL_GMAIL'=>'Gmail',

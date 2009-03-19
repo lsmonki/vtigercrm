@@ -95,13 +95,8 @@
 				{foreach item=fld_array key=label from=$data}
 			<tr class="IvtColdata" onmouseover="this.className='lvtColDataHover';" onmouseout="this.className='lvtColData';" bgcolor="white">
 						
-						{if $FIELD_ARRAY[$cnt] eq 'lastname' || $FIELD_ARRAY[$cnt] eq 'accountname' || $FIELD_ARRAY[$cnt] eq 'company' || $FIELD_ARRAY[$cnt] eq 'productname'} 
-						<td ><b>{$label}<font color="red">*</font></b>
+						<td ><b>{$label|@getTranslatedString:$MODULE}</b>
 						</td>
-						{else}
-						<td ><b>{$label}</b>
-						</td>
-						{/if}
 						{foreach item=fld_value key=cnt2 from=$fld_array}
 							{if $fld_value.disp_value neq ''}
 								{if $cnt2 eq 0}

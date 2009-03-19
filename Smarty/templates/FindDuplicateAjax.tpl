@@ -2,7 +2,7 @@
 <table width='100%' border='0' cellpadding='5' cellspacing='0'>
 	<tr>
 		<td class='dvtCellLabel big' align='left'>
-			<b>{$MOD.LBL_DUPLICATE_DATA_IN} {$MOD.LBL_MODULE_NAME}</b>
+			<b>{$APP.LBL_DUPLICATE_DATA_IN} {$MOD.LBL_MODULE_NAME}</b>
 		</td>
 	</tr>
 </table>
@@ -27,9 +27,9 @@
 	<td class="lvtCol" width="40px">
 		<input type="checkbox" name="CheckAll" onclick='selectAllDel(this.checked,"del");' >
 	</td>
-	{foreach key=key item=field_val_ues from=$FIELD_NAMES}
+	{foreach key=key item=field_values from=$FIELD_NAMES}
 		<td class="lvtCol big"> 
-			<b>{$key}</b>
+			<b>{$key|@getTranslatedString:$MODULE}</b>
 		</td>
 	{/foreach}
 	<td class="lvtCol big" cellpadding="3">

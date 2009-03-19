@@ -4383,7 +4383,7 @@ function getMergeFields($module,$str){
 			{
 				if($is_admin == 'true' || (in_array($field_id,$permitted_org_list)))
 				{
-					$field="<option value=\"".$field_id."\">".$data[0]."</option>";
+					$field="<option value=\"".$field_id."\">".getTranslatedString($data[0],$module)."</option>";
 					$fields.=$field;
 						break;
 				}
