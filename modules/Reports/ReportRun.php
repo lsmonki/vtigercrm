@@ -1660,10 +1660,12 @@ class ReportRun extends CRMEntity
 						$headerLabel = str_replace("_"," ",$this->getLstringforReportHeaders($fld->name));
 						$arrayHeaders[] = $headerLabel;
 					}
-					$mod_name = split(' ',$headerLabel);
+					$mod_name = split(' ',$headerLabel,2);
 					if($mod_name[0]!='')
 						$module = getTranslatedString($mod_name[0]);
-					$headerLabel = str_replace($mod_name[0],$module,$headerLabel);
+					$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
+					if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString($headerLabel_tmp);
+					else $headerLabel = $headerLabel_tmp;
 					$header .= "<td class='rptCellLabel'>".$headerLabel."</td>";
 				}
 
@@ -1867,6 +1869,14 @@ class ReportRun extends CRMEntity
 						else {
 							$fieldvalue = getTranslatedString($custom_field_values[$i]);
 						}
+						$headerLabel = str_replace("_"," ",$fld->name);
+						$mod_name = split('_',$headerLabel,2);
+						if($mod_name[0]!='')
+							$module = getTranslatedString($mod_name[0]);
+						$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
+						if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString($headerLabel_tmp);
+						else $headerLabel = $headerLabel_tmp;
+						
 					
 						$fieldvalue = str_replace("<", "&lt;", $fieldvalue);
 						$fieldvalue = str_replace(">", "&gt;", $fieldvalue);
@@ -1910,9 +1920,9 @@ class ReportRun extends CRMEntity
 							$fieldvalue = getDisplayDate($fieldvalue);
 						}
 						if(array_key_exists($this->getLstringforReportHeaders($fld->name), $arraylists))
-							$arraylists[str_replace("_"," ",$fld->name)] = $fieldvalue;
+							$arraylists[$headerLabel] = $fieldvalue;
 						else	
-							$arraylists[str_replace($modules," ",$this->getLstringforReportHeaders($fld->name))] = $fieldvalue;
+							$arraylists[$headerLabel] = $fieldvalue;
 					}
 					$arr_val[] = $arraylists;
 					set_time_limit($php_max_execution_time);
@@ -1937,7 +1947,16 @@ class ReportRun extends CRMEntity
 					foreach($this->totallist as $key=>$value)
 					{
 						$fieldlist = explode(":",$key);
-						$totclmnflds[str_replace($escapedchars," ",$fieldlist[3])] = str_replace($escapedchars," ",$fieldlist[3]);
+						$mod_query = $adb->pquery("SELECT distinct(tabid) as tabid from vtiger_field where tablename = ?",array($fieldlist[1]));
+						if($adb->num_rows($mod_query)>0){
+							$module_name = getTabName($adb->query_result($mod_query,0,'tabid'));
+							if($module_name){
+								$field = getTranslatedString(str_replace($escapedchars," ",$fieldlist[3]),$module_name);
+							} else {
+								$field = getTranslatedString(str_replace($escapedchars," ",$fieldlist[3]));
+							}
+						}
+						$totclmnflds[str_replace($escapedchars," ",$fieldlist[3])] = $field;
 					}
 
 					for($i =0;$i<$y;$i++)
@@ -2044,6 +2063,12 @@ class ReportRun extends CRMEntity
 						$headerLabel = str_replace($modules," ",$this->getLstringforReportHeaders($fld->name));
 						$arrayHeaders[] = $headerLabel;	
 					}	
+					$mod_name = split(' ',$headerLabel,2);
+					if($mod_name[0]!='')
+						$module = getTranslatedString($mod_name[0]);
+					$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
+					if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString($headerLabel_tmp);
+					else $headerLabel = $headerLabel_tmp;
 					$header .= "<th>".$headerLabel."</th>";
 				}
 				$noofrows = $adb->num_rows($result);
