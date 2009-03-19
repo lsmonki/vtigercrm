@@ -2081,7 +2081,7 @@ function getCalendarPopup(imageid,fieldid,dateformat)
 
 function AjaxDuplicateValidate(module,fieldname,oform)
 {
-      var fieldvalue = encodeURIComponent(getObj(fieldname).value);
+      var fieldvalue = encodeURIComponent(trim(getObj(fieldname).value));
       var recordid = getObj('record').value;
 	if(fieldvalue == '')
 	{
