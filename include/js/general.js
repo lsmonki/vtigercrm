@@ -1102,6 +1102,16 @@ function doformValidation(edit_type) {
                chkdate.setHours(hourval)
 		if(!comparestartdate(chkdate)) return false;
 	 }//end
+	 
+	 // We need to enforce fileupload for internal type
+	 if(gVTModule == 'Documents') {
+	 	if(getObj('filelocationtype').value == 'I') {
+			if(getObj('filename_hidden').value == '') {
+				alert(alert_arr.LBL_PLEASE_SELECT_FILE_TO_UPLOAD);
+				return false;				
+			}
+		}
+	 }
 
 	return true
 }
@@ -2510,32 +2520,22 @@ function get_converted_html(str)
 	return str;
 }
 //To select the select all check box(if all the items are selected) when the form loads.
-function default_togglestate(obj_id)
+function default_togglestate(obj_id,elementId)
 {
 	var all_state=true;
-	if (typeof(getObj(obj_id).length)=="undefined") 
-	{
-		var state=getObj(obj_id).checked;
+	var groupElements = document.getElementsByName(obj_id);
+	for (var i=0;i<groupElements.length;i++) {
+		var state=groupElements[i].checked;
 		if (state == false)
 		{
 			all_state=false;
-		}
-
-
-	} 
-	else
-	{
-		for (var i=0;i<(getObj(obj_id).length);i++)
-		{
-			var state=getObj(obj_id)[i].checked;
-			if (state == false)
-			{
-				all_state=false;
-				break;
-			}
+			break;
 		}
 	}
-	getObj("selectall").checked=all_state;
+	if(typeof elementId=='undefined'){
+		elementId = 'selectall';
+	}
+	getObj(elementId).checked=all_state;
 
 }
 
@@ -2594,43 +2594,28 @@ function rel_check_object(sel_id,module)
 
 //Function to select all the items in the current page for Campaigns related list:.
 function rel_toggleSelect(state,relCheckName,module) {
-        if (getObj(relCheckName)) {
-                if (typeof(getObj(relCheckName).length)=="undefined") {
-                        getObj(relCheckName).checked=state
-                } else
-                {
-                        for (var i=0;i<getObj(relCheckName).length;i++)
-                        {
-                                getObj(relCheckName)[i].checked=state
-                                        rel_check_object(getObj(relCheckName)[i],module)
-                        }
-                }
+	var obj = document.getElementsByName(relCheckName);
+	if (obj) {
+        for (var i=0;i<obj.length;i++) {
+            obj[i].checked=state;
+			rel_check_object(obj[i],module);
         }
+	}
 }
 //To select the select all check box(if all the items are selected) when the form loads for Campaigns related list:.
 function rel_default_togglestate(module)
 {
-	var all_state=true;
-	if(getObj(module+"_selected_id"))
-	{
-		if (typeof(getObj(module+"_selected_id").length)=="undefined")
-		{		     
-			var state=getObj(module+"_selected_id").checked;
-			if (state == false)
-				all_state=false;
-
+	var all_state=true;	
+	var groupElements = document.getElementsByName(module+"_selected_id");
+	for (var i=0;i<groupElements.length;i++) {
+		var state=groupElements[i].checked;
+		if (state == false)
+		{
+			all_state=false;
+			break;
 		}
-		else{
-
-			for (var i=0;i<(getObj(module+"_selected_id").length);i++)
-			{
-				var state=getObj(module+"_selected_id")[i].checked;
-				if (state == false)
-					all_state=false;
-			}
-		}
-		getObj(module+"_selectall").checked=all_state;
 	}
+	getObj(module+"_selectall").checked=all_state;
 }
 //To clear all the checked items in all the pages for Campaigns related list:
 function clear_checked_all(module)
@@ -2639,32 +2624,24 @@ function clear_checked_all(module)
 	if(cookie_val != null)
 		delete_cookie(module+"_all");
 	//Uncheck all the boxes in current page..
-	if (typeof(getObj(module+"_selected_id").length)=="undefined")
-		getObj(module+"_selected_id").checked=false;
-	else{
-
-		for (var i=0;i<getObj(module+"_selected_id").length;i++)
-		{
-			getObj(module+"_selected_id")[i].checked=false;
+	var obj = document.getElementsByName(module+"_selected_id");
+	if (obj) {
+		for (var i=0;i<obj.length;i++) {
+			obj[i].checked=false;
 		}
 	}
 	getObj(module+"_selectall").checked=false;
 
 }
-
-function toggleSelect_ListView(state,relCheckName) {
-        if (getObj(relCheckName)) {
-                if (typeof(getObj(relCheckName).length)=="undefined") {
-                        getObj(relCheckName).checked=state;
-                        check_object(getObj(relCheckName))
-                } else {
-                        for (var i=0;i<getObj(relCheckName).length;i++)
-                        {
-                                getObj(relCheckName)[i].checked=state
-                                check_object(getObj(relCheckName)[i])
-                        }
-                }
+//groupParentElementId is added as there are multiple groups in Documents listview.
+function toggleSelect_ListView(state,relCheckName,groupParentElementId) {
+    var obj = document.getElementsByName(relCheckName);
+	if (obj) {
+        for (var i=0;i<obj.length;i++) {
+          	obj[i].checked=state
+            check_object(obj[i],groupParentElementId)
         }
+    }
 }
 function gotourl(url)
 {
@@ -3497,17 +3474,6 @@ if(!tooltip){
 	var tooltip = ToolTipManager();
 }
 //tooltip manager changes end
-
-// Added for Documents module
-function changeDldType(type){
-	if(type != null && type.value == 'I'){
-		document.getElementById('external').style.display="none";
-		document.getElementById('internal').style.display="block";
-	} else{
-		document.getElementById('external').style.display="block";
-		document.getElementById('internal').style.display="none";
-	}
-}
 
 function submitFormForActionWithConfirmation(formName, action, confirmationMsg) {
 	if (confirm(confirmationMsg)) {

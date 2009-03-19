@@ -691,6 +691,41 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] =$custfldval;
 	}
 	}
+	elseif($uitype==28){
+		$label_fld[] =getTranslatedString($fieldlabel);
+		$attachmentid=$adb->query_result($adb->pquery("select * from vtiger_seattachmentsrel where crmid = ?", array($col_fields['record_id'])),0,'attachmentsid');
+		if($col_fields[$fieldname] == '' && $attachmentid != '')
+		{
+			$attachquery = "select * from vtiger_attachments where attachmentsid=?";
+			$col_fields[$fieldname] = $adb->query_result($adb->pquery($attachquery, array($attachmentid)),0,'name');
+		}
+		$org_filename = $col_fields[$fieldname];
+    	// For Backward Compatibility version < 5.0.4
+    	$filename_pos = strpos($org_filename, $col_fields['record_id'].'_');
+   		if ($filename_pos === 0) {
+			$start_idx = $filename_pos+strlen($col_fields['record_id'].'_');
+			$org_filename = substr($org_filename, $start_idx);
+        }
+		if($org_filename != '') {
+			if($col_fields['filelocationtype'] == 'E' ){
+					if($col_fields['filestatus'] == 1 ){//&& strlen($col_fields['filename']) > 7  ){
+					$custfldval = '<a target="_blank" href ='.$col_fields['filename'].' onclick=\'javascript:dldCntIncrease('.$col_fields['record_id'].');\'>'.$col_fields[$fieldname].'</a>';
+					}
+					else{
+						$custfldval = $col_fields[$fieldname];
+					}
+				}elseif($col_fields['filelocationtype'] == 'I') {
+					if($col_fields['filestatus'] == 1){
+					$custfldval = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$col_fields['record_module'].'&fileid='.$attachmentid.'&entityid='.$col_fields['record_id'].'" onclick=\'javascript:dldCntIncrease('.$col_fields['record_id'].');\'>'.$col_fields[$fieldname].'</a>';
+					}
+					else{
+						$custfldval = $col_fields[$fieldname];
+					}
+			} else 
+				$custfldval = '';
+		}
+	$label_fld[] =$custfldval;
+	}
 	elseif($uitype == 69)
 	{
 		$label_fld[] =getTranslatedString($fieldlabel);

@@ -339,7 +339,7 @@ function getListViewEntries_js(module,url)
 }
 //for multiselect check box in list view:
 
-function check_object(sel_id)
+function check_object(sel_id,groupParentElementId)
 {
         var select_global=new Array();
         var selected=trim(document.getElementById("allselectedboxes").value);
@@ -348,7 +348,7 @@ function check_object(sel_id)
         var id= sel_id.value;
         var duplicate=select_global.indexOf(id);
         var size=select_global.length-1;
-        var result="";
+		var result="";
         //alert("size: "+size);
         //alert("Box_value: "+box_value);
         //alert("Duplicate: "+duplicate);
@@ -366,7 +366,7 @@ function check_object(sel_id)
                         if(trim(select_global[i])!='')
                                 result=select_global[i]+";"+result;
                 }
-                default_togglestate(sel_id.name);
+                default_togglestate(sel_id.name,groupParentElementId);
         }
         else
         {
@@ -381,7 +381,7 @@ function check_object(sel_id)
                                 result=select_global[i]+";"+result;
                 }
           //      getObj("selectall").checked=false
-                default_togglestate(sel_id.name);
+                default_togglestate(sel_id.name,groupParentElementId);
         }
 
         document.getElementById("allselectedboxes").value=result;

@@ -135,6 +135,7 @@
 				<!-- List View's Buttons and Filters ends -->
 				{foreach item=folder from=$FOLDERS}
 				<!-- folder division starts -->
+				{assign var=foldercount value=$FOLDERS|@count}
 				<div id='{$folder.folderid}'>
 					<table class="reportsListTable" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">		
 						<tr>
@@ -142,19 +143,12 @@
 								<b>{$folder.foldername}</b>
 								&nbsp;&nbsp;
 								{if $folder.description neq ''}
-							 	<font color='grey'>[<i>{$folder.description}</i>]</font>
+							 	<font class="copy">[<i>{$folder.description}</i>]</font>
 							 	{/if}                         
-		                 	</td>   
-							<td class="mailSubHeader" width="28%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		                     	{$folder.navigation}
+		                 	</td>
+		                 	<td class="mailSubHeader" width="60%" align="left">
+		                     	{$folder.record_count}&nbsp;&nbsp;&nbsp;&nbsp;{$folder.navigation}
 							</td> <!-- $IS_ADMIN eq "on" -->
-							<td class="mailSubHeader" align="right" width="28%">
-								{if $folder.folderid neq '1' && $IS_ADMIN eq "on"}
-								<input type="button" name="delete" value=" {$MOD.LBL_DELETE_FOLDER} " class="crmbutton small delete" onClick="DeleteFolderCheck('{$folder.folderid}');">
-								{else}
-								&nbsp;
-								{/if}
-							</td>
 						</tr>
 						<tr>
 							<td colspan="3" >			
@@ -164,28 +158,55 @@
 										<!-- Table Headers -->
 										{assign var="header_count" value=$LISTHEADER|@count}
 										<tr>
-		            						<td class="colHeader small" width="10px"><input type="checkbox"  name="selectall" onClick='toggleSelect_ListView(this.checked,"selected_id{$folder.folderid}");'></td>
+		            						<td class="lvtCol" width="10px"><input type="checkbox"  name="selectall{$folder.folderid}" onClick='toggleSelect_ListView(this.checked,"selected_id{$folder.folderid}","selectall{$folder.folderid}");'></td>
 											{foreach name="listviewforeach" item=header from=$LISTHEADER}
-											<td class="colHeader small">{$header}</td>
+											<td class="lvtCol">{$header}</td>
 											{/foreach}
 										</tr>
 										<!-- Table Contents -->
 										{foreach item=entity key=entity_id from=$folder.entries}
 										<tr class="lvtColData" bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'" id="row_{$entity_id}">
-											<td width="2%"><input type="checkbox" name="selected_id{$folder.folderid}" id="{$entity_id}" value= '{$entity_id}' onClick='check_object(this)'></td>
+											<td width="2%"><input type="checkbox" name="selected_id{$folder.folderid}" id="{$entity_id}" value= '{$entity_id}' onClick='check_object(this,"selectall{$folder.folderid}")'></td>
 											{foreach item=recordid key=record_id from=$entity}				
-											{foreach item=data from=$recordid}
-											<td>{$data}</td>
-								        	{/foreach}
+												{foreach item=data from=$recordid}
+													<td>{$data}</td>
+									        	{/foreach}
 								        	{/foreach}
 										</tr>
 										<!-- If there are no entries for a folder -->
 										{foreachelse}
-										<tr>
-											<td align="center" colspan="{$header_count}+1">
-												{$MOD.LBL_NO_DOCUMENTS}
-											</td>
-										</tr>
+											{if $foldercount eq 1}
+												<tr>
+													<td align="center" style="background-color:#efefef;height:340px" colspan="{$header_count+1}">
+														<div style="border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 45%; position: relative;">
+															{assign var=vowel_conf value='LBL_A'}
+															{assign var=MODULE_CREATE value=$SINGLE_MOD}
+															<table border="0" cellpadding="5" cellspacing="0" width="98%">
+																<tr>
+																	<td rowspan="2" width="25%"><img src="{'empty.jpg'|@vtiger_imageurl:$THEME}" height="60" width="61"></td>
+																	<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">
+																	{* vtlib customization: Use translation string only if available *}
+																	{$APP.LBL_NO} {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}{else}{$MODULE_CREATE}{/if} {$APP.LBL_FOUND} !
+																		</span>
+																	</td>
+																</tr>
+																<tr>
+																	<td class="small" align="left" nowrap="nowrap">{$APP.LBL_YOU_CAN_CREATE} {$APP.$vowel_conf}
+																		{* vtlib customization: Use translation string only if available *}
+									 									{if $APP.$MODULE_CREATE}
+									 										{$APP.$MODULE_CREATE}
+									 									{else}
+									 										{$MODULE_CREATE}
+									 									{/if}
+									 									{$APP.LBL_NOW}. {$APP.LBL_CLICK_THE_LINK}:<br>
+									 									&nbsp;&nbsp;-<a href="index.php?module={$MODULE}&action=EditView&return_action=DetailView&parenttab={$CATEGORY}">{$APP.LBL_CREATE} {$APP.$vowel_conf} {$MOD.$MODULE_CREATE}
+																	</td>
+																</tr>
+															</table>
+														</div>	 
+													</td>
+												</tr>
+											{/if}
 										{/foreach}
 					 				</table>
 								</div> 
@@ -240,7 +261,7 @@
 											<!-- Table Headers -->
 											{assign var="header_count" value=$LISTHEADER|@count}
 											<tr>
-			            						<td class="colHeader small" width="10px"><input type="checkbox"  name="selectall" onClick='toggleSelect_ListView(this.checked,"selected_id{$ALL_FOLDERS.folderid}");'></td>
+			            						<td class="colHeader small" width="10px"><input type="checkbox"  name="selectall{$folder.folderid}" onClick='toggleSelect_ListView(this.checked,"selected_id{$folder.folderid}","selectall{$folder.folderid}");'></td>
 												{foreach name="listviewforeach" item=header from=$LISTHEADER}
 												<td class="colHeader small">{$header}</td>
 												{/foreach}
@@ -288,7 +309,9 @@
 			{foreach item=folder from=$EMPTY_FOLDERS}
 				<tr onmouseout="this.className='lvtColData'" onmouseover="this.className='lvtColDataHover'">
 					<td>{$folder.foldername}</td>
+					{if $IS_ADMIN eq "on"}
 					<td align=right><a href="javascript:;" onclick="DeleteFolderCheck({$folder.folderid});" >del</a></td>
+					{/if}
 				</tr>
 			{/foreach}
 			</table>

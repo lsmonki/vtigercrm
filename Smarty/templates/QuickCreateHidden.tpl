@@ -25,4 +25,3 @@
 	<input type="hidden" name="record" value="">
 	<input type="hidden" name="action" value="Save">
 	<input type="hidden" name="module" value="{$MODULE}">
-	<input type="hidden" name="assigned_user_id" value="{$USERID}">

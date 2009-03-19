@@ -74,7 +74,7 @@ class Campaigns extends CRMEntity {
 			);
 	// Used when enabling/disabling the mandatory fields for the module.
 	// Refers to vtiger_field.fieldname values.
-	var $mandatory_fields = Array('campaignname','createdtime' ,'modifiedtime');
+	var $mandatory_fields = Array('campaignname','createdtime' ,'modifiedtime','assigned_user_id');
 	
 	function Campaigns() 
 	{

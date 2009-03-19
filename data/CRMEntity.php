@@ -542,6 +542,23 @@ class CRMEntity
 				  $fldvalue = str_replace(",","",$this->column_fields[$fieldname]);//trim($this->column_fields[$fieldname],",");
 
 			  }
+				elseif($uitype == 26) {
+					if(empty($this->column_fields[$fieldname])) {
+						$fldvalue = 1; //the documents will stored in default folder
+					}else {
+						$fldvalue = $this->column_fields[$fieldname];
+					}	
+			  }
+			  elseif($uitype == 28){
+			  		$fileQuery = $adb->pquery("SELECT filename from vtiger_notes WHERE notesid = ?",array($this->id));
+			  		$fldvalue = null;
+			  		if(isset($fileQuery)){
+						$rowCount = $adb->num_rows($fileQuery);
+						if($rowCount > 0){
+							$fldvalue = $adb->query_result($fileQuery,0,'filename');
+						}
+					}
+			  }
 			  else
 			  {
 				  $fldvalue = $this->column_fields[$fieldname]; 

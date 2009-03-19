@@ -1065,10 +1065,6 @@ function registerEvents($adb) {
 	
 	// Workflow manager
 	$em->registerHandler('vtiger.entity.aftersave', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler');
-	
-	//Document Handler -saves File information
-	$em->registerHandler('vtiger.entity.aftersave', 'modules/Documents/AttachFile.php', 'Attachfile');
-		
 }
 
 // Register all the entity methods here

@@ -38,7 +38,7 @@ $smarty->assign("SEARCH", $searchurl);
 
 if($_REQUEST['upload_error'] == true)
 {
-	echo '<br><b><font color="red"> The selected file has no data or a invalid file.</font></b><br>';
+	echo '<br><b><font color="red"> '.$mod_strings['FILE_HAS_NO_DATA'].'.</font></b><br>';
 }
 
 if(isset($_REQUEST['record']) && $_REQUEST['record'] !='') 

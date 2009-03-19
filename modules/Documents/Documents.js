@@ -52,7 +52,7 @@ function UpdateAjaxSave(label,fid,fldname,fileOrFolder)
 					$('status').style.display="none";
 					if(item.indexOf("Failure") > -1 )
 		                        {
-                		                $("lblError").innerHTML="<table cellpadding=0 cellspacing=0 border=0 width=100%><tr><td class=small bgcolor=red><font color=white size=2><b>Unable to update! Please try it again.</b></font></td></tr></table>";
+                		                $("lblError").innerHTML="<table cellpadding=0 cellspacing=0 border=0 width=100%><tr><td class=small bgcolor=red><font color=white size=2><b>"+alert_arr.LBL_UNABLE_TO_UPDATE+"</b></font></td></tr></table>";
 		                                setTimeout(hidelblError,3000);
                 		        }
 					else if(item.indexOf('DUPLICATE_FOLDERNAME') > -1)
@@ -136,26 +136,17 @@ function AddFolder()
                                 method: 'post',
                                 postBody: 'action=DocumentsAjax&mode=ajax&file=SaveFolder&module=Documents'+url,
                                 onComplete: function(response) {
-                                        var item = response.responseText;
+					var item = response.responseText;
 					$('status').style.display = 'none';
-					if(item.indexOf('NOT_PERMITTED') > -1)
-                                        {
-                                           $('lblError').innerHTML = "<table cellpadding=0 cellspacing=0 border=0 width=100%><tr><td class=small bgcolor=red><font color=white size=2><b>You are not permitted to do this operation.</b></font></td></tr></table>";
-                                                setTimeOutFn();
-                                        }
-					else if(item.indexOf('Failure') > -1)
+					if(item.indexOf('Failure') > -1)
 					{
-						$('lblError').innerHTML = "<table cellpadding=0 cellspacing=0 border=0 width=100%><tr><td class=small bgcolor=red><font color=white size=2><b>Unable to add Folder. Please try again.</b></font></td></tr></table>";
+						$('lblError').innerHTML = "<table cellpadding=0 cellspacing=0 border=0 width=100%><tr><td class=small bgcolor=red><font color=white size=2><b>"+alert_arr.LBL_UNABLE_TO_ADD_FOLDER+"</b></font></td></tr></table>";
 						setTimeOutFn();	
 					}
 					else if(item.indexOf('DUPLICATE_FOLDERNAME') > -1)
 					{
 						alert(alert_arr.DUPLICATE_FOLDER_NAME);
 					}
-//					else if(item.indexOf('CREATING_DEFAULT') > -1)
-//					{
-//						alert('Cannot create a folder with this name !');
-//					}					
 					else
 					{
 						getObj("ListViewContents").innerHTML = item;
@@ -175,23 +166,21 @@ function DeleteFolderCheck(folderId)
                         method: 'post',
                         postBody: "module=Documents&action=DocumentsAjax&mode=ajax&file=DeleteFolder&deletechk=true&folderid="+folderId,
                         onComplete: function(response) {
-                                        var item = response.responseText;
-                                       	if(item.indexOf("NOT_PERMITTED") > -1)
-					{
-						alert(alert_arr.NOT_PERMITTED);
-						return false;
-					}
-					else if(item.indexOf("FAILURE") > -1)
-                                        {
-                                                alert('Folder should be empty to remove it!')
-                                        }
-					else
-                                        {
-                                                if(confirm("Are you sure you want to delete the folder?"))
-                                                {
-                                                        DeleteFolder(gtempfolderId)                            
-                                                }
-                                        }
+                        var item = response.responseText;
+                       	if(item.indexOf("NOT_PERMITTED") > -1) {
+							alert(alert_arr.NOT_PERMITTED);
+							return false;
+						}
+						else if(item.indexOf("FAILURE") > -1)
+                        {
+                                alert(alert_arr.LBL_FOLDER_SHOULD_BE_EMPTY);
+                        }
+						else {
+                            if(confirm(alert_arr.LBL_ARE_YOU_SURE_YOU_WANT_TO_DELETE_FOLDER))
+                            {
+                                DeleteFolder(gtempfolderId);                            
+                            }
+                            }
                         }
                 }
         );
@@ -209,9 +198,9 @@ function DeleteFolder(folderId)
                                         var item = response.responseText;
 										$('status').style.display = "none";
                                         if(item.indexOf("FAILURE") > -1)
-                                                alert('Error while deleting the folder.Please try again later.')
+                                 			alert(alert_arr.LBL_ERROR_WHILE_DELETING_FOLDER);
                                         else
-										$('ListViewContents').innerHTML = item;
+											$('ListViewContents').innerHTML = item;
 		               }
                 }
         );
@@ -237,11 +226,9 @@ function MoveFile(id,foldername)
             return false;
         }
 
-       // var alert_str = alert_arr.MOVE + count +alert_arr.RECORDS;        
-
-	if(idstring != '')
+    if(idstring != '')
 	{
-		if(confirm("Are you sure you want to move the file(s) to '"+foldername+"' folder ?"))
+		if(confirm(alert_arr.LBL_ARE_YOU_SURE_TO_MOVE_TO + foldername + alert_arr.LBL_FOLDER))
         	{
 			$('status').style.display = "block";
 			new Ajax.Request(
@@ -253,23 +240,22 @@ function MoveFile(id,foldername)
 						var item = response.responseText;
 						$('status').style.display = "none";
 						if(item.indexOf("NOT_PERMITTED") > -1 )                                                                     							{
-							$("lblError").innerHTML="<table cellpadding=0 cellspacing=0 border=0 width=100%><tr><td class=small bgcolor=red><font color=white size=2><b>You are not permitted to execute this operation.</b></font></td></tr></table>";
+							$("lblError").innerHTML="<table cellpadding=0 cellspacing=0 border=0 width=100%><tr><td class=small bgcolor=red><font color=white size=2><b>"+alert_arr.NOT_PERMITTED+"</b></font></td></tr></table>";
 							setTimeout(hidelblError,3000);
 						}
 						else
-                                	        	getObj('ListViewContents').innerHTML = item;
-                	                }
+							getObj('ListViewContents').innerHTML = item;
+           				}
 
-                        	}
-	                );
-		}else
-		{
+					}
+			);
+		}else{
 			return false;
 		}
 			
 	}else
 	{
-		alert('Please select atleast one File');
+		alert(alert_arr.LBL_SELECT_ONE_FILE);
 		return false;
 	}
 }
@@ -287,27 +273,6 @@ function dldCntIncrease(fileid)
                 );
 }
 
-function checkFileIntegrity()
-{
-	new Ajax.Request(
-            'index.php',
-            {queue: {position: 'end', scope: 'command'},
-             method: 'post',
-             postBody: 'module=Documents&action=DocumentsAjax&mode=ajax&file=SaveFile&act=checkFileIntegrity&file_id=',
-             onComplete: function(response) {
-             	var item = response.responseText;
-                if(item.indexOf('some_files') > -1)
-		{
-                	alert('Some files lost integrity. They have been set to inactive !');
-		}
-                else if(item.indexOf('no_files') > -1)
-		{
-                	alert('All active files are available for download');
-		}
-                }
-                }
-                );
-}
 
 function checkFileIntegrityDetailView(noteid)
 {
@@ -319,30 +284,30 @@ function checkFileIntegrityDetailView(noteid)
              postBody: 'module=Documents&action=DocumentsAjax&mode=ajax&file=SaveFile&act=checkFileIntegrityDetailView&noteid='+noteid,
              onComplete: function(response) {
              	var item = response.responseText;
-		if(item.indexOf('not_this_file') > -1)
-		{
-					$('vtbusy_integrity_info').style.display='none';
-					$('integrity_result').innerHTML='<br><br>&nbsp;&nbsp;&nbsp;<font style=color:green>File available for download</font>';
-					$('integrity_result').style.display='';
-					setTimeout(hideresult,4000);
+				if(item.indexOf('file_available') > -1)
+				{
+							$('vtbusy_integrity_info').style.display='none';
+							$('integrity_result').innerHTML='<br><br>&nbsp;&nbsp;&nbsp;<font style=color:green>'+alert_arr.LBL_FILE_CAN_BE_DOWNLOAD+'</font>';
+							$('integrity_result').style.display='';
+							setTimeout(hideresult,4000);
+				}
+				else if(item.indexOf('file_not_available') > -1)
+				{
+							$('vtbusy_integrity_info').style.display='none';
+							$('integrity_result').innerHTML='<br><br>&nbsp;&nbsp;&nbsp;<font style=color:red>'+alert_arr.LBL_DOCUMENT_NOT_AVAILABLE+'</font>';
+							$('integrity_result').style.display='';	
+							setTimeout(hideresult,6000);	
+				}
+				else if(item.indexOf('lost_integrity') > -1)
+				{
+							$('vtbusy_integrity_info').style.display='none';
+							$('integrity_result').innerHTML='<br><br>&nbsp;&nbsp;&nbsp;<font style=color:red>'+alert_arr.LBL_DOCUMENT_LOST_INTEGRITY+'</font>';
+							$('integrity_result').style.display='';	
+							setTimeout(hideresult,6000);	
+				}
+			}
 		}
-                else if(item.indexOf('file_not_available') > -1)
-		{
-					$('vtbusy_integrity_info').style.display='none';
-					$('integrity_result').innerHTML='<br><br>&nbsp;&nbsp;&nbsp;<font style=color:red>This file lost integrity. Not available for download!</font>';
-					$('integrity_result').style.display='';	
-					setTimeout(hideresult,6000);	
-		}
-                else if(item.indexOf('lost_integrity') > -1)
-		{
-					$('vtbusy_integrity_info').style.display='none';
-					$('integrity_result').innerHTML='<br><br>&nbsp;&nbsp;&nbsp;<font style=color:red>This Documents is not available. It will be marked as Inactive</font>';
-					$('integrity_result').style.display='';	
-					setTimeout(hideresult,6000);	
-		}
-                }
-                }
-                );
+	);
 }
 
 function hideresult()
@@ -350,4 +315,8 @@ function hideresult()
 	$('integrity_result').style.display = 'none';
 }
 
+function add_data_to_relatedlist(entity_id,recordid) {
+
+        opener.document.location.href="index.php?module={RETURN_MODULE}&action=updateRelations&smodule={SMODULE}&destination_module=Products&entityid="+entity_id+"&parentid="+recordid;
+}
 

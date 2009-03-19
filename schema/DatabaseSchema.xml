@@ -762,7 +762,7 @@
 		<field name="filename" type="C" size="200" />
 		<field name="notecontent" type="X" />
 		<field name="folderid" type="I" size="19">
-			<default value="0" />
+			<default value="1" />
 			<notnull />
 		</field>        
 			<field name="filetype" type="C" size="50">

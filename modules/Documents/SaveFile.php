@@ -41,7 +41,7 @@ if(isset($_REQUEST['act']) && $_REQUEST['act'] == 'checkFileIntegrityDetailView'
 		$fileidQuery = "select attachmentsid from vtiger_seattachmentsrel where crmid = ? ";
 		$result = $adb->pquery($dbQuery,array($_REQUEST['noteid']));
 		$fileidResult = $adb->pquery($fileidQuery,array($_REQUEST['noteid']));	
-		$activeToinactive_count = 0;
+		//$activeToinactive_count = 0;
 		
 		$file_status = $adb->query_result($result,0,"filestatus");
 		$download_type = $adb->query_result($result,0,"filelocationtype");
@@ -61,20 +61,22 @@ if(isset($_REQUEST['act']) && $_REQUEST['act'] == 'checkFileIntegrityDetailView'
 		}
 		else
 			$saved_filename = '';
+			
+			
 		if(!fopen($filepath.$saved_filename, "r"))
 		{
-			$activeToinactive_count = 1;			
 			if($file_status == 1)
 			{
-				$dbQuery1 = "update vtiger_notes set filestatus=0 where notesid= ?";
+				$dbQuery1 = "update vtiger_notes set filestatus = 0 where notesid= ?";
 				$result1 = $adb->pquery($dbQuery1,array($notesid));
 				echo "lost_integrity";
 			}
 			else 
 				echo "file_not_available";	
+		}else {
+			echo "file_available";
 		}
-		if($activeToinactive_count == 0)
-			echo 'not_this_file';
+		
 }
 
 

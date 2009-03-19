@@ -1674,16 +1674,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	//End
 	elseif($uitype == 61)
 	{
-		if($module == 'Documents')
-		{
-			$value = $temp_val;
-		}
-		else
-		{
 			$attachmentid=$adb->query_result($adb->pquery("SELECT * FROM vtiger_seattachmentsrel WHERE crmid = ?", array($entity_id)),0,'attachmentsid');
 			$value = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$module.'&fileid='.$attachmentid.'&filename='.$temp_val.'">'.$temp_val.'</a>';
-		}
-
 	}
 	elseif($uitype == 62)
 	{
@@ -1998,11 +1990,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					}
 					else
 						$value = '<a href="javascript:window.close();" onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'","'.$module.'");\'>'.$temp_val.'</a>';
-					
-					if($colname == 'title' && $module == 'Documents')
-					{
-						$value = $temp_val;
-					}						
 				}
 				elseif($popuptype == "formname_specific")
 				{

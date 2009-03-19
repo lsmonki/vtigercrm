@@ -77,7 +77,7 @@ class Documents extends CRMEntity {
 	var $old_filename = '';
 	//var $groupTable = Array('vtiger_notegrouprelation','notesid');
 
-	var $mandatory_fields = Array('notes_title','createdtime' ,'modifiedtime','filename','filesize','filetype','filedownloadcount');
+	var $mandatory_fields = Array('notes_title','createdtime' ,'modifiedtime','filename','filesize','filetype','filedownloadcount','assigned_user_id');
 	
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'title';
@@ -92,7 +92,7 @@ class Documents extends CRMEntity {
 
 	function save_module($module)
 	{
-		global $log,$adb;
+		global $log,$adb,$upload_badext;
 		$insertion_mode = $this->mode;
 		if(isset($this->parentid) && $this->parentid != '')
 			$relid =  $this->parentid;		
@@ -101,50 +101,61 @@ class Documents extends CRMEntity {
 		{
 			$this->insertintonotesrel($relid,$this->id);
 		}
-		$fieldname = $this->getFileTypeFieldName();
-		if($_REQUEST[$fieldname."_locationtype"] == 'I' ){
-				if($_FILES[$fieldname]['name'] != ''){
-					$errCode=$_FILES[$fieldname]['error'];
-						if($errCode == 0){
-							foreach($_FILES as $fileindex => $files)
-							{
-								if($files['name'] != '' && $files['size'] > 0){
-									$filename = $_FILES[$fieldname]['name'];
-									$filename = from_html(preg_replace('/\s+/', '_', $filename));
-									$filetype = $_FILES[$fieldname]['type'];
-									$filesize = $_FILES[$fieldname]['size'];
-									$filelocationtype = 'I';
+		$filetype_fieldname = $this->getFileTypeFieldName();
+		$filename_fieldname = $this->getFile_FieldName();
+		if($this->column_fields[$filetype_fieldname] == 'I' ){
+			if($_FILES[$filename_fieldname]['name'] != ''){
+				$errCode=$_FILES[$filename_fieldname]['error'];
+					if($errCode == 0){
+						foreach($_FILES as $fileindex => $files)
+						{
+							if($files['name'] != '' && $files['size'] > 0){
+								$filename = $_FILES[$filename_fieldname]['name'];
+								$filename = from_html(preg_replace('/\s+/', '_', $filename));
+								$filetype = $_FILES[$filename_fieldname]['type'];
+								$filesize = $_FILES[$filename_fieldname]['size'];
+								$filelocationtype = 'I';
+								$binFile = preg_replace('/\s+/', '_', $filename);//replace space with _ in filename
+								$ext_pos = strrpos($binFile, ".");
+								$ext = substr($binFile, $ext_pos + 1);
+								if (in_array(strtolower($ext), $upload_badext)) {
+									$binFile .= ".txt";
 								}
+								$filename = ltrim(basename(" ".$binFile)); //allowed filename like UTF-8 characters 
 							}
-					
 						}
-				}elseif($this->mode == 'edit') {
-					$fileres = $adb->pquery("select filetype, filesize,filename,filedownloadcount,filelocationtype from vtiger_notes where notesid=?", array($this->id));
-					if ($adb->num_rows($fileres) > 0) {
-						$filename = $adb->query_result($fileres, 0, 'filename');
-						$filetype = $adb->query_result($fileres, 0, 'filetype');
-						$filesize = $adb->query_result($fileres, 0, 'filesize');
-						$filedownloadcount = $adb->query_result($fileres, 0, 'filedownloadcount');
-						$filelocationtype = $_REQUEST[$fieldname."_locationtype"];
-					}
-				}
-			} 
-			else{
-				//$this->column_fields['filelocationtype'] = 'E';
-				$filelocationtype = 'E';
-				$filename = $_REQUEST[$fieldname];
-				if(!(stripos($filename,'http://') === 0) && $filename != '') {
-					$filename = 'http://'.$filename;
-				}
-				$filetype = '';
-				$filesize = '';
-				$filedownloadcount = '';
-			}
-			$query = "Update vtiger_notes set filename = ? ,filesize = ?, filetype = ? , filelocationtype = ? , filedownloadcount = ? where notesid = ?";
-	 		$re=$adb->pquery($query,array($filename,$filesize,$filetype,$filelocationtype,$filedownloadcount,$this->id));
-		//Inserting into attachments table
-		$this->insertIntoAttachment($this->id,'Documents');
 				
+					}
+			}elseif($this->mode == 'edit') {
+				$fileres = $adb->pquery("select filetype, filesize,filename,filedownloadcount,filelocationtype from vtiger_notes where notesid=?", array($this->id));
+				if ($adb->num_rows($fileres) > 0) {
+					$filename = $adb->query_result($fileres, 0, 'filename');
+					$filetype = $adb->query_result($fileres, 0, 'filetype');
+					$filesize = $adb->query_result($fileres, 0, 'filesize');
+					$filedownloadcount = $adb->query_result($fileres, 0, 'filedownloadcount');
+					$filelocationtype = $adb->query_result($fileres, 0, 'filelocationtype');
+				}
+			}
+		} else{
+			$filelocationtype = 'E';
+			$filename = $this->column_fields[$filename_fieldname];//$_REQUEST[$filename_fieldname];
+			if(!(stripos($filename,'http://') === 0) && $filename != null) {
+				$filename = 'http://'.$filename;
+			}
+			$filetype = '';
+			$filesize = null;
+			$filedownloadcount = null;
+		}
+		$query = "UPDATE vtiger_notes SET filename = ? ,filesize = ?, filetype = ? , filelocationtype = ? , filedownloadcount = ? WHERE notesid = ?";
+ 		$re=$adb->pquery($query,array($filename,$filesize,$filetype,$filelocationtype,$filedownloadcount,$this->id));
+		//Inserting into attachments table
+		if($filelocationtype == 'I') {
+			$this->insertIntoAttachment($this->id,'Documents');
+		}else{
+			$query = "delete from vtiger_seattachmentsrel where crmid = ?";
+			$qparams = array($this->id);
+			$adb->pquery($query, $qparams);
+		}	
 	}
 
 
@@ -227,20 +238,22 @@ class Documents extends CRMEntity {
 				;
 	
 				$where_auto=" vtiger_crmentity.deleted=0"; 
-				
+				if($where != "")
+					$query .= "  WHERE ($where) AND ".$where_auto;
+				else
+					$query .= "  WHERE ".$where_auto;
+					
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 		//we should add security check when the user has Private Access
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[2] == 3)
+		$tabid = getTabid("Documents");
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tabid] == 3)
 		{
 			//Added security check to get the permitted records only
 			$query = $query." ".getListViewSecurityParameter("Documents");
 		}
 
-		if($where != "")
-			$query .= "  WHERE ($where) AND ".$where_auto;
-		else
-			$query .= "  WHERE ".$where_auto;
+		
 		$log->debug("Exiting create_export_query method ...");
 		        return $query;
 	}	
@@ -383,10 +396,35 @@ class Documents extends CRMEntity {
 		global $adb,$log;
 		$query = 'SELECT fieldname from vtiger_field where tabid = ? and uitype = ?';
 		$tabid = getTabid('Documents');
-		$res = $adb->pquery($query,array($tabid,27));
-		$fieldname = $adb->query_result($res,0,'fieldname');
+		$filetype_uitype = 27;
+		$res = $adb->pquery($query,array($tabid,$filetype_uitype));
+		$fieldname = null;
+		if(isset($res)){
+			$rowCount = $adb->num_rows($res);
+			if($rowCount > 0){
+				$fieldname = $adb->query_result($res,0,'fieldname');
+			}
+		}
 		return $fieldname;
 		
 	} 
+	
+//	Function to get fieldname for uitype 28 assuming that doc has only one file upload type
+	
+	function getFile_FieldName(){
+		global $adb,$log;
+		$query = 'SELECT fieldname from vtiger_field where tabid = ? and uitype = ?';
+		$tabid = getTabid('Documents');
+		$filename_uitype = 28;
+		$res = $adb->pquery($query,array($tabid,$filename_uitype));
+		$fieldname = null;
+		if(isset($res)){
+			$rowCount = $adb->num_rows($res);
+			if($rowCount > 0){
+				$fieldname = $adb->query_result($res,0,'fieldname');
+			}
+		}
+		return $fieldname;
+	}
 }	
 ?>

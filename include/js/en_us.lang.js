@@ -236,5 +236,19 @@
 				ARE_YOU_SURE : 'Are You Sure You want to Delete?',
 				LABEL_ALREADY_EXISTS : 'Label already exists. Please specify a different Label',
 				LENGTH_OUT_OF_RANGE : 'Length of the Block should be less than 50 characters',
-				NOT_A_VALID_POTENTIAL_NAME : 'please insert a proper Potential Name'	
+				NOT_A_VALID_POTENTIAL_NAME : 'Please insert a proper Potential Name',
+				LBL_SELECT_ONE_FILE : 'Please select atleast one File',
+				LBL_UNABLE_TO_ADD_FOLDER : 'Unable to add Folder. Please try again.',
+				LBL_ARE_YOU_SURE_YOU_WANT_TO_DELETE_FOLDER : 'Are you sure you want to delete the folder?',
+				LBL_ERROR_WHILE_DELETING_FOLDER : 'Error while deleting the folder.Please try again later.',
+				LBL_FILE_CAN_BE_DOWNLOAD : 'File is available for download',
+				LBL_DOCUMENT_LOST_INTEGRITY:'This Documents is not available. It will be marked as Inactive',
+				LBL_DOCUMENT_NOT_AVAILABLE : 'This Document is not available for Download',
+				LBL_FOLDER_SHOULD_BE_EMPTY : 'Folder should be empty to remove it!',
+				
+				LBL_PLEASE_SELECT_FILE_TO_UPLOAD : 'Please select the file to upload.',
+				LBL_ARE_YOU_SURE_TO_MOVE_TO : 'Are you sure you want to move the file(s) to ',
+				LBL_FOLDER : ' folder',
+				LBL_UNABLE_TO_UPDATE : 'Unable to update! Please try it again.'
+								
 			};

@@ -167,9 +167,6 @@ if($viewid ==0)
 	exit;
 }
 
-$record_string= $app_strings['LBL_SHOWING']." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
-
-
 //Retreive the List View Table Header
 if($viewid !='')
 $url_string .="&viewname=".$viewid;
@@ -229,7 +226,6 @@ if($foldercount > 0 )
         	$list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
         	$focus->additional_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 		}
-		
 		//Retreiving the no of rows
 		$count_result = $adb->query( mkCountQuery( $query));
 		$num_records = $adb->query_result($count_result,0,"count");
@@ -257,6 +253,7 @@ if($foldercount > 0 )
 
 		// Setting the record count string
 		//modified by rdhital
+		
 		$start_rec = $navigation_array['start'];
 		$end_rec = $navigation_array['end_val']; 
 		
@@ -273,6 +270,8 @@ if($foldercount > 0 )
      		$list_result = $adb->pquery($query. " OFFSET $limit_start_rec LIMIT $max_entries_per_page",array());
  		else
      		$list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $max_entries_per_page",array());
+     	
+     	$record_string= $app_strings['LBL_SHOWING']." " .$start_rec." - ".$end_rec." " .$app_strings['LBL_LIST_OF'] ." ".$num_records;
      		
 		//navigation end
 		
@@ -285,6 +284,7 @@ if($foldercount > 0 )
 		$folder_files = getListViewEntries($focus,"Documents",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 		$folder_details['entries']= $folder_files;
 		$folder_details['navigation'] = getTableHeaderNavigation($navigation_array, $url_string,"Documents",$folder_id,$viewid);
+		$folder_details['record_count']=$record_string;
 		if ($displayFolder == true || $folderid == 1) {
 			$folders[$foldername] = $folder_details;
 		} else{

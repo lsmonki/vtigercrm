@@ -851,43 +851,88 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 			</select>
 		</td>
 		{elseif $uitype eq 27}
-			<td width=20% class="dvtCellLabel" align=right >
-				{$fldlabel_other}&nbsp;
-				<select class="small" name="{$fldname}_locationtype" onchange='changeDldType(this);'>
-					{section name=combo loop=$fldlabel}
-						<option value="{$fldlabel_combo[combo]}" {$fldlabel_sel[combo]} >{$fldlabel[combo]} </option>
-					{/section}
-				</select>
-				{if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}" id="{$fldname}_mass_edit_check" class="small" >{/if}			
-			</td>
-		
-		  {assign var=check value=1}
-				{foreach key=key_one item=arr from=$fldvalue}
-					{foreach key=sel_value item=value from=$arr}
-						{if $value eq 'I'}
-							{assign var=check value=$check*0}
-						{else}
-							{assign var=check value=$check*1}
-						{/if}
-					{/foreach}
-				{/foreach}
+		<td width="20%" class="dvtCellLabel" align="right" >
+			<font color="red">{$mandatory_field}</font>{$fldlabel_other}&nbsp;
+			{if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}" id="{$fldname}_mass_edit_check" class="small" >{/if}			
+		</td>
+		<td width="30%" align=left class="dvtCellInfo">
+			<select class="small" name="{$fldname}" onchange="changeDldType((this.value=='I')? 'file': 'text');">
+				{section name=combo loop=$fldlabel}
+					<option value="{$fldlabel_combo[combo]}" {$fldlabel_sel[combo]} >{$fldlabel[combo]} </option>
+				{/section}
+			</select>
+			<script>
+				function vtiger_{$fldname}Init(){ldelim}
+					var d = document.getElementsByName('{$fldname}')[0];
+					var type = (d.value=='I')? 'file': 'text';
+
+					changeDldType(type, true);
+				{rdelim}
+				if(typeof window.onload =='function'){ldelim}
+					var oldOnLoad = window.onload;
+					document.body.onload = function(){ldelim}
+						vtiger_{$fldname}Init();
+						oldOnLoad();
+					{rdelim}
+				{rdelim}else{ldelim}
+					window.onload = function(){ldelim}
+						vtiger_{$fldname}Init();
+					{rdelim}
+				{rdelim}
 				
-				{if $check eq 1}
-					{assign var=internalfilename value='display:none'}
-					{assign var=externalfilename value='display:block'}
-				{else}
-					{assign var=internalfilename value='display:block'}
-					{assign var=externalfilename value='display:none'}
+			</script>
+		</td>
+		{elseif $uitype eq 28}
+		<td width="20%" class="dvtCellLabel" align=right>
+			<font color="red">{$mandatory_field}</font>{$usefldlabel}
+			{if $MASS_EDIT eq '1'}
+				<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small"  disabled >
+			{/if}
+		</td>
+
+		<td colspan="1" width="30%" align="left" class="dvtCellInfo">
+		<script type="text/javascript">
+			function changeDldType(type, onInit){ldelim}
+				var fieldname = '{$fldname}';
+				if(!onInit){ldelim}
+					var dh = getObj('{$fldname}_hidden');
+					if(dh) dh.value = '';
+				{rdelim}
+				var d = document.getElementsByName(fieldname);
+				var v1 = d[0];
+				var v2 = d[1];
+				var text = v1.type =="text"? v1: v2;
+				var file = v1.type =="file"? v1: v2;
+				var filename = document.getElementById(fieldname+'_value');
+				{literal}
+				if(type == 'file'){
+					file.style.display = '';
+					text.style.display = 'none';
+					text.value = '';
+					filename.style.display = '';
+				}else{
+					file.style.display = 'none';
+					text.style.display = '';
+					file.value = '';
+					filename.style.display = 'none';
+					filename.innerHTML="";
+				}
+				{/literal}
+			{rdelim}
+		</script>
+		<div>
+			<input name="{$fldname}"  type="file" value="{$secondvalue}" tabindex="{$vt_tab}" onchange="validateFilename(this)" style="display: none;"/>
+			<input type="hidden" name="{$fldname}_hidden" value="{$secondvalue}"/>
+			<input type="hidden" name="id" value=""/>
+			<input type="text" name="{$fldname}" class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" value="{$secondvalue}" /><br>
+			<span id="{$fldname}_value" style="display:none;">
+				{if $secondvalue neq ''}
+					[{$secondvalue}]
 				{/if}
-		  <td width="30%" align=left class="dvtCellInfo">
-		  <div id="internal"  style="{$internalfilename}" >
-		   <input type="file" name="{$fldname}" class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" value="{$secondvalue}">{if $secondvalue neq '' && $value neq 'E'}[{$secondvalue}]{/if}<br>
-		  </div>
-		  
-		  <div id="external" class"dvtCellLabel"  style="{$externalfilename}" >
-		  <input type="text" name="{$fldname}" class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" value="{if $value eq 'E'}{$secondvalue}{/if}"><br>
-		  </div>
-		  </td>
+			</span>
+		</div>	
+		</td>
+		
 		{elseif $uitype eq 83} <!-- Handle the Tax in Inventory -->
 			{foreach item=tax key=count from=$TAX_DETAILS}
 				{if $tax.check_value eq 1}
