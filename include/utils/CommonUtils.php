@@ -3528,14 +3528,8 @@ function getSettingsBlockId($label) {
 function isModuleSettingPermitted($module){
 	if (file_exists("modules/$module/Settings.php") &&
 		isPermitted('Settings','index','') == 'yes') {
-			global $adb;
-			$entityRes = $adb->pquery('SELECT isentitytype FROM vtiger_tab WHERE name=?', array($module));
-			if ($adb->num_rows($entityRes) > 0) {
-				$isentitytype = $adb->query_result($entityRes, 0, 'isentitytype');
-				if ($isentitytype == 1) {
-					return 'yes';
-				}
-			}
+			
+			return 'yes';
 	}
 	return 'no';
 }
