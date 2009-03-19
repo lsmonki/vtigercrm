@@ -167,8 +167,6 @@
 				LBL_SELECT_ROLE:'Please select atleast one role for which the new values are to be added',
 				LBL_ADD_PICKLIST_VALUE:'Please provide atleast one new value to be added',
 
-				ALL_FILTER_CREATION_DENIED:'Cannot create CustomView using name "All", try using different ViewName',
-
                 /* For Duplicate merging feature */
 				SAME_GROUPS: 'You have to select the records in the same groups for merging',
 				ATLEAST_TWO: 'Select atleast two records for merging',
