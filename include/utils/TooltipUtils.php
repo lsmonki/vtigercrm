@@ -197,8 +197,10 @@ function getToolTipValue($value,$fieldid,$module,$id){
 	$descObject = vtws_describe($module,$current_user);
 	$id = getTabid($module)."x".$id;
 	$sql = "select * from $module where id=$id;";
-	$result = vtws_query($sql, $current_user);	
-	
+	$result = vtws_query($sql, $current_user);
+	if(empty($result)){
+		return $value;
+	}	
 	$result = processResult($result, $descObject);
 	
 	$text = getToolTipText($viewid, $fieldid, $result);
