@@ -332,13 +332,13 @@ function showMergeOptions(curObj, arg)
 					   		{if $DUPLICATESHANDLING eq 'DuplicatesHandling'}
 					   			<input id="merge_check" type="checkbox" onclick="showMergeOptions(this, 'importMergeDup')"/>
 								<span class="genHeaderGray">{$MOD.LBL_STEP_3_4} </span>
-								<span class="genHeaderSmall">Duplicate Merging </span>
-								<span>(Select this option to enable and set duplicate merging criteria)</span> 
+								<span class="genHeaderSmall">{$APP.LBL_DUPLICATE_MERGING} </span>
+								<span>({$APP.LBL_SELECT_TO_ENABLE_MERGING})</span> 
 							{else}	
 					   			<input id="merge_check" type="checkbox" disabled="true" onclick="mergeshowhide(this, 'importMergeDup')"/>
 								<span class="genHeaderGray">{$MOD.LBL_STEP_3_4} </span>
-								<span class="genHeaderSmall">Duplicate Merging </span>
-								<span style="color:red;">(Access denied to perform this operation)</span>
+								<span class="genHeaderSmall">{$APP.LBL_DUPLICATE_MERGING} </span>
+								<span style="color:red;">({$APP.LBL_PERMISSION})</span>
 					   		{/if}
 							</td>
 					   	</tr>
