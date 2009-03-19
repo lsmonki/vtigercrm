@@ -177,7 +177,7 @@ var profile_err_msg='{$MOD.LBL_ENTER_PROFILE}';
 function rolevalidate()
 {ldelim}
     var profilename = document.getElementById('pobox').value;
-    profilename = profilename.replace(/ /gi,'',profilename);
+    profilename = trim(profilename);
     if(profilename != '')
 	dup_validation(profilename);
     else
