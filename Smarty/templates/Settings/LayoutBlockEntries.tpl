@@ -272,7 +272,7 @@
 								 	{/if}
 								<td width="30%" id="colourButton" >&nbsp;
 							 	<span onmouseover="tooltip.tip(this, showProperties('{$value.label}',{$value.mandatory},{$value.presence},{$value.quickcreate},{$value.massedit}));" onmouseout="tooltip.untip(false);" >{$value.label}</span>
-							 		{if $value.mandatory eq '0' || $value.mandatory eq '2'}
+							 		{if $value.fieldtype eq 'M'}
 							 			<font color='red'> *</font>
 							 		{/if}
 							 	</td>
@@ -294,20 +294,20 @@
 											<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">												
 												<tr>
 													<td valign="top" class="dvtCellInfo" align="left" width="10px">
-														<input id="mandatory_check_{$value.fieldselect}"  type="checkbox" 
-														{if $value.mandatory eq '0' } 
+														<input id="mandatory_check_{$value.fieldselect}"  type="checkbox"
+														{if $value.fieldtype neq 'M' && $value.mandatory eq '0'}
+															 disabled
+														{elseif $value.mandatory eq '0' && $value.fieldtype eq 'M'} 
 															checked  disabled 
-														{/if}
-														{if $value.mandatory eq '3' } 
+														{elseif $value.mandatory eq '3' } 
 															disabled 
-														{/if}
-														{if $value.mandatory eq '2'}
+														{elseif $value.mandatory eq '2'}
 														 	checked 
 														{/if}
 														 onclick = "{if $value.presence neq '0'} enableDisableCheckBox(this,presence_check_{$value.fieldselect}); {/if}
 														 			{if $value.quickcreate neq '0' && $value.quickcreate neq '3'} enableDisableCheckBox(this,quickcreate_check_{$value.fieldselect}); {/if}">
 													</td>
-													<td valign="top" class="dvtCellInfo" align="left">	
+													<td valign="top" class="dvtCellInfo" align="left">
 														&nbsp;{$MOD.LBL_MANDATORY_FIELD}
 													</td>
 												</tr>

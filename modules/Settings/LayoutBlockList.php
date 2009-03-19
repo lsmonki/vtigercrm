@@ -522,6 +522,7 @@ function getFieldInfo($fieldname,$typeofdata,$quickcreate,$massedit,$presence,$s
 	$visibility['massedit']		= $massedit;
 	$visibility['displaytype']	= $displaytype;
 	$visibility['customfieldflag'] = $customfieldflag;
+	$visibility['fieldtype'] = $fieldtype[1];
 	return $visibility; 	
  }
 
