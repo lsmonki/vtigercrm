@@ -128,7 +128,6 @@ $mod_strings = Array(
 'LBL_EMPTY_FOLDERS' => 'Empty Folders',
 'LBL_VIEW_EMPTY_FOLDERS' => 'View Empty Folders',
 'LBL_NO_DOCUMENTS' => 'No Documents',
-'LBL_EMPTY_FOLDERS' => 'Empty Folders',
 'LBL_DESCRIPTION' => 'Description',
 'FILE_HAS_NO_DATA'=>'The selected file has no data or a invalid file',
 
