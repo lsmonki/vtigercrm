@@ -2607,6 +2607,8 @@ function rel_default_togglestate(module)
 {
 	var all_state=true;	
 	var groupElements = document.getElementsByName(module+"_selected_id");
+	if(typeof(groupElements) == 'undefined') return;
+	
 	for (var i=0;i<groupElements.length;i++) {
 		var state=groupElements[i].checked;
 		if (state == false)
@@ -2615,7 +2617,9 @@ function rel_default_togglestate(module)
 			break;
 		}
 	}
-	getObj(module+"_selectall").checked=all_state;
+	if(getObj(module+"_selectall")) {
+		getObj(module+"_selectall").checked=all_state;
+	}
 }
 //To clear all the checked items in all the pages for Campaigns related list:
 function clear_checked_all(module)
