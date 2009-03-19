@@ -93,52 +93,49 @@ function br2nl_vt($str)
 */
 function export($type)
 {
-        global $log,$list_max_entries_per_page;
-        $log->debug("Entering export(".$type.") method ...");
-        global $adb;
+    global $log,$list_max_entries_per_page;
+    $log->debug("Entering export(".$type.") method ...");
+    global $adb;
 
-        $focus = 0;
-        $content = '';
+    $focus = 0;
+    $content = '';
 
-        if ($type != "")
-		{
-			// vtlib customization: Hook to dynamically include required module file.
-			// TODO: Make security check if the file access is within vtigercrm directory
-			// Refer to the logic in setting $currentModule in index.php
-			require_once("modules/$type/$type.php");
-			// END
+    if ($type != "")
+	{
+		// vtlib customization: Hook to dynamically include required module file.
+		// TODO: Make security check if the file access is within vtigercrm directory
+		// Refer to the logic in setting $currentModule in index.php
+		require_once("modules/$type/$type.php");
+		// END
 
-			$focus = new $type;
-        }
-        $log = LoggerManager::getLogger('export_'.$type);
-        $db = new PearDatabase();
+		$focus = new $type;
+    }
+    $log = LoggerManager::getLogger('export_'.$type);
+    $db = new PearDatabase();
 
 	$oCustomView = new CustomView("$type");
 	$viewid = $oCustomView->getViewId("$type");
 	$sorder = $focus->getSortOrder();
 	$order_by = $focus->getOrderBy();
 
-        $search_type = $_REQUEST['search_type'];
-        $export_data = $_REQUEST['export_data'];
+    $search_type = $_REQUEST['search_type'];
+    $export_data = $_REQUEST['export_data'];
 	
 	if(isset($_SESSION['export_where']) && $_SESSION['export_where']!='' && $search_type == 'includesearch')
-                $where =$_SESSION['export_where'];
+		$where =$_SESSION['export_where'];
 
 	$query = $focus->create_export_query($where);
 	$stdfiltersql = $oCustomView->getCVStdFilterSQL($viewid);
 	$advfiltersql = $oCustomView->getCVAdvFilterSQL($viewid);
-	if(isset($stdfiltersql) && $stdfiltersql != '')
-	{
+	if(isset($stdfiltersql) && $stdfiltersql != '') {
 		$query .= ' and '.$stdfiltersql;
 	}
-	if(isset($advfiltersql) && $advfiltersql != '')
-	{
+	if(isset($advfiltersql) && $advfiltersql != '') {
 		$query .= ' and '.$advfiltersql;
 	}
 	$params = array();
 
-	if(($search_type == 'withoutsearch' || $search_type == 'includesearch') && $export_data == 'selecteddata')
-	{
+	if(($search_type == 'withoutsearch' || $search_type == 'includesearch') && $export_data == 'selecteddata') {
 		$idstring = explode(";", $_REQUEST['idstring']);
 		if($type == 'Accounts' && count($idstring) > 0) {
 			$query .= ' and vtiger_account.accountid in ('. generateQuestionMarks($idstring) .')';
@@ -174,8 +171,7 @@ function export($type)
 		}
 	}
 	
-	if(isset($order_by) && $order_by != '')
-	{
+	if(isset($order_by) && $order_by != '') {
 		if($order_by == 'smownerid')
 		{
 			$query .= ' ORDER BY user_name '.$sorder;
@@ -198,17 +194,22 @@ function export($type)
 		}
 	}
 	
-	if(isset($_SESSION['nav_start']) && $_SESSION['nav_start']!='' && $export_data == 'currentpage')
-	{
+	if(isset($_SESSION['nav_start']) && $_SESSION['nav_start']!='' && $export_data == 'currentpage') {
 		$start_rec = $_SESSION['nav_start'];
 		$limit_start_rec = ($start_rec == 0) ? 0 : ($start_rec - 1);
 		$query .= ' LIMIT '.$limit_start_rec.','.$list_max_entries_per_page;
 	}
 
-        $result = $adb->pquery($query, $params, true, "Error exporting $type: "."<BR>$query");
-        $fields_array = $adb->getFieldsArray($result);
+    $result = $adb->pquery($query, $params, true, "Error exporting $type: "."<BR>$query");
+    $fields_array = $adb->getFieldsArray($result);
 	$fields_array = array_diff($fields_array,array("user_name"));
-	$header = implode("\",\"",array_values($fields_array));
+	
+	// Translated the field names based on the language used.
+	$translated_fields_array = array();
+	for($i=0; $i<count($fields_array); $i++) {
+		$translated_fields_array[$i] = getTranslatedString($fields_array[$i],$type);
+	}
+	$header = implode("\",\"",array_values($translated_fields_array));
 	$header = "\"" .$header;
 	$header .= "\"\r\n";
 	$content .= $header;
