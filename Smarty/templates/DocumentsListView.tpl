@@ -353,19 +353,17 @@ function alphabetic(module,url,dataid)
 			<td class="small">
 				<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
 				<tr>
-					<td align="right" nowrap class="cellLabel small"><font color='red'>*</font>&nbsp;<b>{$MOD.LBL_FOLDER_NAME}
-</b></td>
+					<td align="right" nowrap class="cellLabel small"><font color='red'>*</font>&nbsp;<b>{$MOD.LBL_FOLDER_NAME}</b></td>
 					<td align="left" class="cellText small">
 					<input id="folder_id" name="folderId" type="hidden" value=''>
 					<input id="fldrsave_mode" name="folderId" type="hidden" value='save'>
-					<input id="folder_name" name="folderName" class="txtBox" type="text"> &nbsp;&nbsp;Maximum 20
+					<input id="folder_name" name="folderName" class="txtBox" type="text"> &nbsp;&nbsp;{$MOD.LBL_MAXIMUM_20}
 					</td>
 				</tr>
 				<tr>
 					<td class="cellLabel small" align="right" nowrap><b>{$MOD.LBL_FOLDER_DESC}</b>
 					</td>
- 					<td class="cellText small" align="left"><input id="folder_desc" name="folderDes
-c" class="txtBox" type="text"> &nbsp;&nbsp;Maximum 50
+ 					<td class="cellText small" align="left"><input id="folder_desc" name="folderDesc" class="txtBox" type="text"> &nbsp;&nbsp;{$MOD.LBL_MAXIMUM_50}
 					</td>
 				 </tr>
 				</table>

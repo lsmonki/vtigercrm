@@ -1128,6 +1128,7 @@ $app_strings = array (
 'LBL_PLATFORM_INDEPENDENT'=>'Platform Independent',
 'Attachments' => 'Documents', //added for list header label in related lists
 'Assigned To'=>'Assigned To',
+'LBL_HIDE'=>'Hide',
 
 // Layout Editor and Ease navigation between records in Detail view
 'LNK_LIST_NEXT' => 'Next',

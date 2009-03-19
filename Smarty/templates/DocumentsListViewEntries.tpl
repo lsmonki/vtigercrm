@@ -51,11 +51,11 @@
             					<td style="padding-right:5px">
             						<input type="button" name="move" value="{$MOD.LBL_MOVE}" class="crmbutton small edit" onClick="fnvshNrm('movefolderlist'); posLay(this,'movefolderlist');" title="{$MOD.LBL_MOVE_DOCUMENTS}">
 	            					<div style="display:none;position:absolute;width:150px;" id="movefolderlist" >
-										<div class="layerPopup thickborder" style="display:block;position:relative;width:150px;">
+										<div class="layerPopup thickborder" style="display:block;position:relative;width:250px;">
 											<table  class="layerHeadingULine" border="0" cellpadding="5" cellspacing="0" width="100%">
 												<tr>
 													<td class="genHeaderSmall" align="left" width="90%">
-														{$MOD.LBL_MOVE_TO} :
+														{$MOD.LBL_MOVE_TO}
 													</td>
 													<td align="right" width="10%">
 														<a onclick="fninvsh('movefolderlist')" href="javascript:void(0);">
@@ -63,15 +63,17 @@
 													</td>
 												</tr>
 											</table>
-											<table class="drop_down"  border="0" cellpadding="5" cellspacing="0" width="100%">
+											<div style='padding: 10px;'>
+											<table class="drop_down"  border="0" cellpadding="5" cellspacing="1" width="100%">
 												{foreach item=folder from=$ALL_FOLDERS}
-												<tr onmouseout="this.className='lvtColData'" onmouseover="this.className='lvtColDataHover'">
+												<tr class='lvtColData' onmouseout="this.className='lvtColData'" onmouseover="this.className='lvtColDataHover'">
 													<td align="left">	
 														<a href="javascript:;" onClick="MoveFile('{$folder.folderid}','{$folder.foldername}');" > {$folder.foldername}</a>
 													</td>
 												</tr>
 												{/foreach}
 											</table>
+											</div>
 										</div>
 								</div>
             					
@@ -81,7 +83,7 @@
             					<td style="padding-right:5px"><input type="button" name="add" value="{$MOD.LBL_ADD_NEW_FOLDER}" class="crmbutton small edit" onClick="fnvshobj(this,'orgLay');" title="{$MOD.LBL_ADD_NEW_FOLDER}"></td>
       							{if $EMPTY_FOLDERS|@count gt 0}
       							<td>      								
-									<input type="button" name="show" value="{$MOD.LBL_EMPTY_FOLDERS}" class="crmbutton small cancel" onClick="fnvshobj(this,'emptyfolder');" title="{$MOD.LBL_EMPTY_FOLDERS}">				
+									<input type="button" name="show" value="{$MOD.LBL_VIEW_EMPTY_FOLDERS}" class="crmbutton small cancel" onClick="fnvshobj(this,'emptyfolder');" title="{$MOD.LBL_VIEW_EMPTY_FOLDERS}">				
 								</td>
 								{/if}
 							</tr>
@@ -222,11 +224,11 @@
 				
 				<!-- this div not been used -->
 				<br>
-				<div id="emptyFolders" style="display:none;">
+				<div id="emptyFoldersListview" style="display:none;">
 					<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerHeadingULine rptTable">
 						<tr style="border-top:1px solid black;">
 							<td class="genHeaderSmall">{$MOD.LBL_EMPTY_FOLDERS}</td>
-							<td align="right"><a onclick="showHideFolders('showEmptyFoldersLink', 'emptyFolders');" href="javascript:;"><img border="0" align="absmiddle" src="{'close.gif'|@vtiger_imageurl:$THEME}"/></a>
+							<td align="right"><a onclick="showHideFolders('showEmptyFoldersLink', 'emptyFoldersListview');" href="javascript:;"><img border="0" align="absmiddle" src="{'close.gif'|@vtiger_imageurl:$THEME}"/></a>
 						</tr>
 					</table>
 				<!-- List View's Buttons and Filters ends -->
@@ -293,18 +295,19 @@
 		
 		
 		<!-- Move documents UI for Documents module ends -->
-		<div class="layerPopup thickborder" style="display:none;position:absolute; left:193px;top:106px;width:155px;" id="emptyfolder">
+		<div class="layerPopup thickborder" style="display:none;position:absolute; left:193px;top:106px;width:250px;" id="emptyfolder">
 			<table  class="layerHeadingULine" border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tr>
 					<td class="genHeaderSmall" align="left">
-						{$MOD.LBL_EMPTY_FOLDERS} :
+						{$MOD.LBL_EMPTY_FOLDERS} 
 					</td>
-					<td align="right" width="10%">
+					<td align="right" width="40%">
 						<a onclick="fninvsh('emptyfolder')" href="javascript:void(0);">
 						<img border="0" align="absmiddle" src="{'close.gif'|@vtiger_imageurl:$THEME}"/></a>
 					</td>
 				</tr>
 			</table>
+			<div style='padding: 10px;'>
 			<table class="drop_down"  border=0 cellpadding=5 cellspacing=0 width=100%>
 			{foreach item=folder from=$EMPTY_FOLDERS}
 				<tr onmouseout="this.className='lvtColData'" onmouseover="this.className='lvtColDataHover'">
@@ -315,6 +318,7 @@
 				</tr>
 			{/foreach}
 			</table>
+			</div>
 		</div>
 	
 </form>	
