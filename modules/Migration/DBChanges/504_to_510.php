@@ -807,10 +807,10 @@ $em->registerHandler('vtiger.entity.aftersave', 'modules/com_vtiger_workflow/VTE
 ExecuteQuery("ALTER TABLE vtiger_field ADD COLUMN masseditable int(11) NOT NULL DEFAULT '1'");
 $tab_field_array = array(
 	'Accounts'=>array('accountname'),
-	'Contacts'=>array('imagename'),
+	'Contacts'=>array('imagename','portal'),
 	'Products'=>array('imagename','product_id'),
 	'Invoice'=>array('invoice_no','salesorder_id'),
-	'SalesOrder'=>array('quote_id','salesorder_no'),
+	'SalesOrder'=>array('quote_id','salesorder_no','enable_recurring','recurring_frequency','start_period','end_period','payment_duration','invoicestatus'),
 	'PurchaseOrder'=>array('purchaseorder_no'),
 	'Quotes'=>array('quote_no'),
 	'HelpDesk'=>array('filename'),

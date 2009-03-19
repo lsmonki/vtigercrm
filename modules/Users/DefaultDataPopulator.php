@@ -315,7 +315,7 @@ class DefaultDataPopulator extends CRMEntity {
 
 		//Block6 - Begin Customer Portal
 
-		$this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'portal','vtiger_customerdetails',1,'56','portal','Portal User',1,2,0,100,1,6,1,'C~O',1,null,'ADV',1)");
+		$this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'portal','vtiger_customerdetails',1,'56','portal','Portal User',1,2,0,100,1,6,1,'C~O',1,null,'ADV',0)");
 		$this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'support_start_date','vtiger_customerdetails',1,'5','support_start_date','Support Start Date',1,2,0,100,2,6,1,'D~O',1,null,'ADV',1)");
 		$this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'support_end_date','vtiger_customerdetails',1,'5','support_end_date','Support End Date',1,2,0,100,3,6,1,'D~O~OTH~GE~support_start_date~Support Start Date',1,null,'ADV',1)");
 
@@ -826,12 +826,12 @@ class DefaultDataPopulator extends CRMEntity {
 		 $this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID("vtiger_field").",'terms_conditions','vtiger_salesorder',1,'19','terms_conditions','Terms & Conditions',1,2,0,100,1,$sotermsblock,1,'V~O',3,null,'ADV',1)");
 		
 		// Add fields for the Recurring Information block - Block 86
-		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'enable_recurring','vtiger_salesorder',1,'56','enable_recurring','Enable Recurring',1,0,0,100,1,$sorecurringinvoiceblock,1,'C~O',3,null,'BAS',1)");
-		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'recurring_frequency','vtiger_invoice_recurring_info',1,'16','recurring_frequency','Frequency',1,0,0,100,2,$sorecurringinvoiceblock,1,'V~O',3,null,'BAS',1)");
-		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'start_period','vtiger_invoice_recurring_info',1,'5','start_period','Start Period',1,0,0,100,3,$sorecurringinvoiceblock,1,'D~O',3,null,'BAS',1)");
-		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'end_period','vtiger_invoice_recurring_info',1,'5','end_period','End Period',1,0,0,100,4,$sorecurringinvoiceblock,1,'D~O',3,null,'BAS',1)");
-		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'payment_duration','vtiger_invoice_recurring_info',1,'16','payment_duration','Payment Duration',1,0,0,100,5,$sorecurringinvoiceblock,1,'V~O',3,null,'BAS',1)");
-		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'invoice_status','vtiger_invoice_recurring_info',1,'15','invoicestatus','Invoice Status',1,0,0,100,6,$sorecurringinvoiceblock,1,'V~M',3,null,'BAS',1)");
+		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'enable_recurring','vtiger_salesorder',1,'56','enable_recurring','Enable Recurring',1,0,0,100,1,$sorecurringinvoiceblock,1,'C~O',3,null,'BAS',0)");
+		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'recurring_frequency','vtiger_invoice_recurring_info',1,'16','recurring_frequency','Frequency',1,0,0,100,2,$sorecurringinvoiceblock,1,'V~O',3,null,'BAS',0)");
+		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'start_period','vtiger_invoice_recurring_info',1,'5','start_period','Start Period',1,0,0,100,3,$sorecurringinvoiceblock,1,'D~O',3,null,'BAS',0)");
+		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'end_period','vtiger_invoice_recurring_info',1,'5','end_period','End Period',1,0,0,100,4,$sorecurringinvoiceblock,1,'D~O',3,null,'BAS',0)");
+		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'payment_duration','vtiger_invoice_recurring_info',1,'16','payment_duration','Payment Duration',1,0,0,100,5,$sorecurringinvoiceblock,1,'V~O',3,null,'BAS',0)");
+		$this->db->query("insert into vtiger_field values (22,".$this->db->getUniqueID('vtiger_field').",'invoice_status','vtiger_invoice_recurring_info',1,'15','invoicestatus','Invoice Status',1,0,0,100,6,$sorecurringinvoiceblock,1,'V~M',3,null,'BAS',0)");
 		
 		//Sales Order Details -- END
 		
