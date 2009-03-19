@@ -32,33 +32,35 @@ if(isset($idlist)) {
 		$recordid = $recordids[$index];
 		if($recordid == '') continue;
 
-		// Save each module record with update value.
-		$focus = new $currentModule();
-		$focus->retrieve_entity_info($recordid, $currentModule);
-		$focus->mode = 'edit';		
-		$focus->id = $recordid;		
-		foreach($focus->column_fields as $fieldname => $val)
-		{    	
-			if(isset($_REQUEST[$fieldname."_mass_edit_check"])) {
-				if($fieldname == 'assigned_user_id'){
-					if($_REQUEST['assigntype'] == 'U')  {
-						$value = $_REQUEST['assigned_user_id'];
-					} elseif($_REQUEST['assigntype'] == 'T') {
-						$value = $_REQUEST['assigned_group_id'];
+		if(isPermitted($currentModule,'EditView',$recordid) == 'yes') {
+			// Save each module record with update value.
+			$focus = new $currentModule();
+			$focus->retrieve_entity_info($recordid, $currentModule);
+			$focus->mode = 'edit';		
+			$focus->id = $recordid;		
+			foreach($focus->column_fields as $fieldname => $val)
+			{    	
+				if(isset($_REQUEST[$fieldname."_mass_edit_check"])) {
+					if($fieldname == 'assigned_user_id'){
+						if($_REQUEST['assigntype'] == 'U')  {
+							$value = $_REQUEST['assigned_user_id'];
+						} elseif($_REQUEST['assigntype'] == 'T') {
+							$value = $_REQUEST['assigned_group_id'];
+						}
+					} else {
+						if(is_array($_REQUEST[$fieldname]))
+							$value = $_REQUEST[$fieldname];
+						else
+							$value = trim($_REQUEST[$fieldname]);
 					}
-				} else {
-					if(is_array($_REQUEST[$fieldname]))
-						$value = $_REQUEST[$fieldname];
-					else
-						$value = trim($_REQUEST[$fieldname]);
+					$focus->column_fields[$fieldname] = $value;
 				}
-				$focus->column_fields[$fieldname] = $value;
+				else {
+					$focus->column_fields[$fieldname] = decode_html($focus->column_fields[$fieldname]);
+				}
 			}
-			else {
-				$focus->column_fields[$fieldname] = decode_html($focus->column_fields[$fieldname]);
-			}
+	   		$focus->save($currentModule);
 		}
-   		$focus->save($currentModule);
 	}
 }
 

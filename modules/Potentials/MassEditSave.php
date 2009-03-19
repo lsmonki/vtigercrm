@@ -30,7 +30,7 @@ if(isset($idlist)) {
 	for($index = 0; $index < count($recordids); ++$index) {
 		$recordid = $recordids[$index];
 		if($recordid == '') continue;
-		if(isPermitted($tabname,'EditView',$recordid) == 'yes') {
+		if(isPermitted($currentModule,'EditView',$recordid) == 'yes') {
 
 			// Save each module record with update value.
 			$focus = new $currentModule();
