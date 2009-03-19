@@ -79,7 +79,9 @@ $num_rows = $adb->num_rows($list_result);
 $record_string= "Total No of Service Available : ".$num_rows;
 
 //Retreiving the array of already releated services
-$sql1 = "select productid as serviceid from vtiger_pricebookproductrel where pricebookid=?";
+$sql1 = "select productid as serviceid from vtiger_pricebookproductrel 
+		 INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_pricebookproductrel.productid 
+		 WHERE vtiger_crmentity.setype='Services' AND vtiger_crmentity.deleted=0 AND pricebookid=?";
 $res1 = $adb->pquery($sql1, array($pricebook_id));
 $num_prod_rows = $adb->num_rows($res1);
 $prod_array = Array();
