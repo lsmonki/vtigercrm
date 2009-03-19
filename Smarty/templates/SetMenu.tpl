@@ -33,8 +33,9 @@
 								</td>
 							</tr>
 		{foreach item=data from=$FIELDS.$BLOCKID}
-			{assign var=label value=$data.name|@getTranslatedString:'Settings'}
-			{if ($smarty.request.action eq $data.action && $smarty.request.module eq $data.module) ||  $smarty.request.action eq 'DetailView' || $smarty.request.action eq 'EditView' || $smarty.request.action eq 'ListView' }
+			{if $data.link neq ''}
+				{assign var=label value=$data.name|@getTranslatedString:'Settings'}
+				{if ($smarty.request.action eq $data.action && $smarty.request.module eq $data.module)}
 							<tr>
 								<td class="settingsTabSelected" nowrap>
 									<a href="{$data.link}">
@@ -42,7 +43,7 @@
 									</a>
 								</td>
 							</tr>
-			{else}
+				{else}
 							<tr>
 								<td class="settingsTabList" nowrap>
 									<a href="{$data.link}">
@@ -50,6 +51,7 @@
 									</a>
 								</td>
 							</tr>
+				{/if}
 			{/if}
 		{/foreach}
 	{/if}
