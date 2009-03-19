@@ -668,7 +668,7 @@ var gVTModule = '{$smarty.request.module}';
 									<div id="eventrelatedto" align="left">
 										<input name="parent_name" readonly type="text" class="calTxt small" value="{$ACTIVITYDATA.parent_id}">
 										<input type="button" name="selectparent" class="crmButton small edit" value="{$APP.LBL_SELECT_BUTTON_LABEL}" onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
-										<input type='button' value='del' class="crmButton small edit" onclick="document.EditView.del_actparent_rel.value=document.EditView.parent_id.value;document.EditView.parent_id.value='';document.EditView.parent_name.value='';">
+										<input type='button' value='{$APP.LNK_DELETE}' class="crmButton small edit" onclick="document.EditView.del_actparent_rel.value=document.EditView.parent_id.value;document.EditView.parent_id.value='';document.EditView.parent_name.value='';">
 									</div>
 								</td>
 							</tr>
@@ -683,7 +683,7 @@ var gVTModule = '{$smarty.request.module}';
 									</select>  	 
 	
 									<input type="button" onclick="selectContact('true','general',document.EditView);" class="crmButton small edit" name="selectcnt" value="{$APP.LBL_SELECT_CONTACT_BUTTON_LABEL}">
-									<input type='button' value='del' class="crmButton small edit" onclick='removeActContacts();'>
+									<input type='button' value='{$APP.LNK_DELETE}' class="crmButton small edit" onclick='removeActContacts();'>
 							
 								</td>
 							</tr>
@@ -935,7 +935,7 @@ var gVTModule = '{$smarty.request.module}';
                               	        <div id="taskrelatedto" align="left">
 						<input name="parent_name" readonly type="text" class="calTxt small" value="{$ACTIVITYDATA.parent_id}">
 						<input type="button" name="selectparent" class="crmButton small edit" value="{$APP.LBL_SELECT}" onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
-						<input type='button' value='del' class="crmButton small edit" onclick="document.EditView.del_actparent_rel.value=document.EditView.parent_id.value;document.EditView.parent_id.value='';document.EditView.parent_name.value='';">
+						<input type='button' value='{$APP.LNK_DELETE}' class="crmButton small edit" onclick="document.EditView.del_actparent_rel.value=document.EditView.parent_id.value;document.EditView.parent_id.value='';document.EditView.parent_name.value='';">
 					 </div>
                                      </td>
 			     </tr>
@@ -947,7 +947,7 @@ var gVTModule = '{$smarty.request.module}';
 						<input name="contact_name" id = "contact_name" readonly type="text" class="calTxt" value="{$ACTIVITYDATA.contact_id}"><input name="contact_id"  type="hidden" value="{$secondvalue.contact_id}">&nbsp;
 						<input name="deletecntlist"  id="deletecntlist" type="hidden">
 						<input type="button" onclick="selectContact('false','task',document.EditView);" class="crmButton small edit" name="selectcnt" value="{$APP.LBL_SELECT}&nbsp;{$APP.SINGLE_Contacts}">
-						<input type='button' value='del' class="crmButton small edit" onclick='document.EditView.deletecntlist.value =document.EditView.contact_id.value;document.EditView.contact_name.value = "";document.EditView.contact_id.value="";'>
+						<input type='button' value='{$APP.LNK_DELETE}' class="crmButton small edit" onclick='document.EditView.deletecntlist.value =document.EditView.contact_id.value;document.EditView.contact_name.value = "";document.EditView.contact_id.value="";'>
 				     </td>
                              </tr>
 			     {/if}

@@ -651,7 +651,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 								<div id="eventrelatedto" align="left">
 								<input type="text" readonly="readonly" class="calTxt small" value="" name="parent_name">&nbsp;
 							<input type="button" name="selectparent" class="crmButton small edit" value="<?php echo $mod_strings['LBL_SELECT']; ?>" onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
-							<input type='button' value='del' class="crmButton small edit" onclick="document.EditView.del_actparent_rel.value=document.EditView.parent_id.value;document.EditView.parent_id.value='';document.EditView.parent_name.value='';">
+							<input type='button' value='<?php echo $app_strings['LNK_DELETE']; ?>' class="crmButton small edit" onclick="document.EditView.del_actparent_rel.value=document.EditView.parent_id.value;document.EditView.parent_id.value='';document.EditView.parent_name.value='';">
 								</div>
 							</td>
 						</tr>
@@ -664,7 +664,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 								<select name="contactlist" size="5" style="height: 85px;width:150px;"  id="parentid" class="small" multiple>
 								</select>
 								<input type="button" onclick="selectContact('true','general',document.EditView);" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT_CONTACT'] ; ?>">
-								<input type='button' value='del' class="crmButton small edit" onclick='removeActContacts();'>
+								<input type='button' value='<?php echo $app_strings['LNK_DELETE']; ?>' class="crmButton small edit" onclick='removeActContacts();'>
 								
 							</td>
 						</tr>
@@ -755,7 +755,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 	{
 		$eventlist = $adb->query_result($Res,$i,'activitytype');
 ?>		
-	<tr><td><a href='' id="add<?php echo strtolower($eventlist);?>" class='drop_down'><?php echo $eventlist?></a></td></tr>
+	<tr><td><a href='' id="add<?php echo strtolower($eventlist);?>" class='drop_down'><?php echo getTranslatedString($eventlist,'Calendar')?></a></td></tr>
 <?php
 	}
 ?>
@@ -969,7 +969,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 					<div id="taskrelatedto" align="left">
 					<input name="task_parent_name" readonly type="text" class="calTxt small" value="">
 					<input type="button" name="selectparent" class="crmButton small edit" value="<?php echo $mod_strings['LBL_SELECT']; ?>" onclick="return window.open('index.php?module='+document.createTodo.task_parent_type.value+'&action=Popup&maintab=Calendar','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
-					<input type='button' value='del' class="crmButton small edit" onclick="document.createTodo.del_actparent_rel.value=document.createTodo.task_parent_id.value;document.createTodo.task_parent_id.value='';document.createTodo.task_parent_name.value='';">
+					<input type='button' value='<?php echo $app_strings['LNK_DELETE']; ?>' class="crmButton small edit" onclick="document.createTodo.del_actparent_rel.value=document.createTodo.task_parent_id.value;document.createTodo.task_parent_id.value='';document.createTodo.task_parent_name.value='';">
 					</div>
 				</td>
 			</tr>
@@ -981,7 +981,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 				<input name="task_contact_name" id="contact_name" readonly type="text" class="calTxt" value=""><input name="task_contact_id" id="contact_id" type="hidden" value="">&nbsp;
 				<input name="deletecntlist"  id="deletecntlist" type="hidden">
 				<input type="button" onclick="selectContact('false','task',document.createTodo);" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT']." ". $mod_strings['LBL_LIST_CONTACT'] ; ?>">
-				<input type='button' value='del' class="crmButton small edit" onclick='document.createTodo.deletecntlist.value=document.createTodo.task_contact_name.value;document.createTodo.task_contact_name.value="";document.createTodo.task_contact_id.value="";'>
+				<input type='button' value='<?php echo $app_strings['LNK_DELETE']; ?>' class="crmButton small edit" onclick='document.createTodo.deletecntlist.value=document.createTodo.task_contact_name.value;document.createTodo.task_contact_name.value="";document.createTodo.task_contact_id.value="";'>
 			</td>
 			  </tr>
 			<?php } ?>
