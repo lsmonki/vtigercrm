@@ -1308,7 +1308,7 @@ function moveSettingsToDatabase($adb){
 	$adb->query("drop table if exists vtiger_settings_blocks");
 	$adb->query("drop table if exists vtiger_settings_field");
 	$adb->query("CREATE TABLE IF NOT EXISTS vtiger_settings_blocks (blockid int(19), label varchar(250), sequence int(19), primary key pk_vtiger_settings_blocks (blockid))");
-	$adb->query("CREATE TABLE IF NOT EXISTS vtiger_settings_field (fieldid int(19), blockid int(19), name varchar(250), iconpath text, description text, linkto text, sequence int(19), foreign key fk_vtiger_settings_fields (blockid) references vtiger_settings_blocks(blockid) on delete cascade)");
+	$adb->query("CREATE TABLE IF NOT EXISTS vtiger_settings_field (fieldid int(19), blockid int(19), name varchar(250), iconpath text, description text, linkto text, sequence int(19), active int(19) default 0,foreign key fk_vtiger_settings_fields (blockid) references vtiger_settings_blocks(blockid) on delete cascade)");
 	
 	//icons for all fields
 	$icons = array("ico-users.gif",
@@ -1483,8 +1483,10 @@ function moveSettingsToDatabase($adb){
 		if($i==8 || $i==12 || $i==18) {
 			$seq = 1;
 		}	
-		$adb->query("insert into vtiger_settings_field values (".$adb->getUniqueID('vtiger_settings_field').", ".getSettingsBlockId($name_blocks[$names[$i]]).", '$names[$i]', '$icons[$i]', '$description[$i]', '$links[$i]', $seq)");
+		$adb->query("insert into vtiger_settings_field (fieldid, blockid, name, iconpath, description, linkto, sequence) values (".$adb->getUniqueID('vtiger_settings_field').", ".getSettingsBlockId($name_blocks[$names[$i]]).", '$names[$i]', '$icons[$i]', '$description[$i]', '$links[$i]', $seq)");
 	}
+	//hide the system details tab for now
+	$adb->query("update vtiger_settings_field set active=1 where name='LBL_SYSTEM_INFO'");
 }
 //move settings page to database starts
 moveSettingsToDatabase($adb);

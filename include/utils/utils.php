@@ -4437,7 +4437,7 @@ function getSettingsBlocks(){
  */
 function getSettingsFields(){
 	global $adb;
-	$sql = "select * from vtiger_settings_field where blockid!=".getSettingsBlockId('LBL_MODULE_MANAGER')." order by blockid,sequence";
+	$sql = "select * from vtiger_settings_field where blockid!=".getSettingsBlockId('LBL_MODULE_MANAGER')." and active=0 order by blockid,sequence";
 	$result = $adb->query($sql);
 	$count = $adb->num_rows($result);
 	$fields = array();

@@ -6981,6 +6981,9 @@
 		</field>
 		<field name="sequence" type="I" size="19">
 		</field>
+		<field name="active" type="I" size="19">
+			<default value="0"/>
+		</field>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>		
 

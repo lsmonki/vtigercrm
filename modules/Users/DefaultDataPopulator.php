@@ -2527,8 +2527,11 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 			if($i==8 || $i==12 || $i==18){
 				$seq = 1;
 			}	
-			$adb->query("insert into vtiger_settings_field values (".$adb->getUniqueID('vtiger_settings_field').", ".getSettingsBlockId($name_blocks[$names[$i]]).", '$names[$i]', '$icons[$i]', '$description[$i]', '$links[$i]', $seq)");
+			$adb->query("insert into vtiger_settings_field (fieldid, blockid, name, iconpath, description, linkto, sequence) values (".$adb->getUniqueID('vtiger_settings_field').", ".getSettingsBlockId($name_blocks[$names[$i]]).", '$names[$i]', '$icons[$i]', '$description[$i]', '$links[$i]', $seq)");
 		}
+		
+		//hide the system details tab for now
+		$adb->query("update vtiger_settings_field set active=1 where name='LBL_SYSTEM_INFO'");
 	}
 }
 ?>
