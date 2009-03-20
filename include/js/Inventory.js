@@ -309,7 +309,7 @@ function validateInventory(module)
 
 	if(max_row_count == 0)
 	{
-		alert(alert_arr.NO_PRODUCT_SELECTED);
+		alert(alert_arr.NO_LINE_ITEM_SELECTED);
 		return false;
 	}
 
@@ -319,12 +319,12 @@ function validateInventory(module)
 		if(document.getElementById("deleted"+i).value == 1)
 			continue;
 
-		if (!emptyCheck("productName"+i,"Product","text")) return false
+		if (!emptyCheck("productName"+i,alert_arr.LINE_ITEM,"text")) return false
 		if (!emptyCheck("qty"+i,"Qty","text")) return false
 		if (!numValidate("qty"+i,"Qty","any")) return false
 		if (!numConstComp("qty"+i,"Qty","G","0")) return false
-		if (!emptyCheck("listPrice"+i,"List Price","text")) return false
-		if (!numValidate("listPrice"+i,"List Price","any")) return false           
+		if (!emptyCheck("listPrice"+i,alert_arr.LIST_PRICE,"text")) return false
+		if (!numValidate("listPrice"+i,alert_arr.LIST_PRICE,"any")) return false           
 	}
 
 	//Product - Discount validation - not allow negative values

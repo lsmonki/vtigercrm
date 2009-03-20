@@ -250,5 +250,10 @@
 				LBL_UNABLE_TO_UPDATE : 'Unable to update! Please try it again.',
 				
 				/* Tooltip management */
-				ERR_FIELD_SELECTION : 'Some error in field selection'	
+				ERR_FIELD_SELECTION : 'Some error in field selection',
+				
+				/* Inventory validation strings */
+				NO_LINE_ITEM_SELECTED : 'No line item is selected. Please select at least one line item.',
+				LINE_ITEM : 'Line item',
+				LIST_PRICE: 'List Price'
 			};
