@@ -2465,7 +2465,8 @@ function validateImageFile($file_details)
 	$file_type_details = explode("/",$file_details['type']);
 	$filetype = $file_type_details['1'];
 
-	if (($filetype == "jpeg" ) || ($filetype == "png") || ($filetype == "jpg" ) || ($filetype == "pjpeg" ) || ($filetype == "x-png") || ($filetype == "gif") )
+	if(!empty($filetype)) $filetype = strtolower($filetype);
+	if (($filetype == "jpeg" ) || ($filetype == "png") || ($filetype == "jpg" ) || ($filetype == "pjpeg" ) || ($filetype == "x-png") || ($filetype == "gif") || ($filetype == 'bmp') )
 	{
 		$saveimage = 'true';
 	}
