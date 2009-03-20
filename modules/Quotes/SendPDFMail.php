@@ -13,10 +13,12 @@
 include('include/InventoryPDF.php');
 $pdf=get_quote_pdf();
 
-$pdf->Output('storage/Quote.pdf','F'); //added file name to make it work in IE, also forces the download giving the user the option to save
+$filenameid = $_REQUEST['record'];
+if(empty($filenameid)) $filenameid = time();
+$outputfilename = "storage/Quote_$filenameid.pdf";
+$pdf->Output($outputfilename,'F'); //added file name to make it work in IE, also forces the download giving the user the option to save
 
 // Added to fix annoying bug that includes HTML in your PDF
-//echo "<script>openPopUp('xComposeEmail',this,iurl,'createemailWin',830,662,opts);</script>";
 echo "<script>window.history.back();</script>";
 exit();
 ?>

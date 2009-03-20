@@ -30,7 +30,7 @@ $filepath = $adb->query_result($pathQuery,0,'path');
 $fileinattachments = $root_directory.$filepath.$fileid.'_'.$filename;
 if(!file($fileinattachments))$fileinattachments = $root_directory.$filepath.$fileid."_".$filename;
 
-$newfileinstorage = $root_directory.'/storage/'.$filename;
+$newfileinstorage = $root_directory."/storage/$fileid-".$filename;
 
 copy($fileinattachments,$newfileinstorage);
 

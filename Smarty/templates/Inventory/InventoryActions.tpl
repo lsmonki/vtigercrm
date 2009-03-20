@@ -218,27 +218,23 @@
 
 
 </table>
+
 {literal}
-<script>
+<script type='text/javascript'>
 function sendpdf_submit()
 {
+	// Submit the form to get the attachment ready for submission
+	document.DetailView.submit();
 {/literal}
+
 	{if $MODULE eq 'Invoice'}
-{literal}
-	OpenCompose('','Invoice');
-{/literal}
+		OpenCompose('{$ID}','Invoice');
 	{elseif $MODULE eq 'Quotes'}
-{literal}
-	OpenCompose('','Quote');
-{/literal}
+		OpenCompose('{$ID}','Quote');
 	{elseif $MODULE eq 'PurchaseOrder'}
-{literal}
-	OpenCompose('','PurchaseOrder');
-{/literal}
+		OpenCompose('{$ID}','PurchaseOrder');
 	{elseif $MODULE eq 'SalesOrder'}
-{literal}
-	OpenCompose('','SalesOrder');
-{/literal}
+		OpenCompose('{$ID}','SalesOrder');
 	{/if}
 {literal}
 }

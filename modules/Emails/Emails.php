@@ -654,7 +654,8 @@ function pdfAttach($obj,$module,$file_name,$id)
 	$upload_file_path = decideFilePath();
 
 	//Copy the file from temporary directory into storage directory for upload
-	$status = copy("storage/".$file_name,$upload_file_path.$current_id."_".$file_name);
+	$source_file_path = "storage/".$file_name;
+	$status = copy($source_file_path, $upload_file_path.$current_id."_".$file_name);
 	//Check wheather the copy process is completed successfully or not. if failed no need to put entry in attachment table
 	if($status)
 	{
@@ -668,6 +669,9 @@ function pdfAttach($obj,$module,$file_name,$id)
 
 		$query3='insert into vtiger_seattachmentsrel values(?,?)';
 		$adb->pquery($query3, array($id, $current_id));
+		
+		// Delete the file that was copied 
+		unlink($source_file_path);
 
 		return true;
 	}

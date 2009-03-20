@@ -483,7 +483,7 @@ function sendfile_email()
 							<tr><td align="left" style="padding-left:10px;">	
 							<br><a href="javascript:;" onClick="checkFileIntegrityDetailView({$NOTESID});"><img id="CheckIntegrity_img_id" src="{'yes.gif'|@vtiger_imageurl:$THEME}" alt="Check integrity of this file" title="Check integrity of this file" hspace="5" align="absmiddle" border="0"/></a>
 		                    <a href="javascript:;" onClick="checkFileIntegrityDetailView({$NOTESID});">{$MOD.LBL_CHECK_INTEGRITY}</a>&nbsp;
-		                    <input type="hidden" id="dldfilename" name="dldfilename" value="{$FILENAME}">
+		                    <input type="hidden" id="dldfilename" name="dldfilename" value="{$FILEID}-{$FILENAME}">
 		                    <span id="vtbusy_integrity_info" style="display:none;">
 								<img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span>
 							<span id="integrity_result" style="display:none"></span>						

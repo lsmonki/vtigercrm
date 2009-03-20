@@ -1843,16 +1843,16 @@ function OpenCompose(id,mode)
 			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id+'&forward=true';
 			break;
 		case 'Invoice':
-            url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+mode+'.pdf';
+            url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+mode+'_'+id+'.pdf';
 			break;
 		case 'PurchaseOrder':
-            url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+mode+'.pdf';
+            url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+mode+'_'+id+'.pdf';
 			break;
 		case 'SalesOrder':
-            url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+mode+'.pdf';
+            url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+mode+'_'+id+'.pdf';
 			break;
 		case 'Quote':
-            url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+mode+'.pdf';
+            url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+mode+'_'+id+'.pdf';
 			break; 
 		case 'Documents':
             url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+id+'';
