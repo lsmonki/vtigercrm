@@ -247,7 +247,7 @@
 				LBL_PLEASE_SELECT_FILE_TO_UPLOAD : 'Please select the file to upload.',
 				LBL_ARE_YOU_SURE_TO_MOVE_TO : 'Are you sure you want to move the file(s) to ',
 				LBL_FOLDER : ' folder',
-				LBL_UNABLE_TO_UPDATE : 'Unable to update! Please try it again.'
+				LBL_UNABLE_TO_UPDATE : 'Unable to update! Please try it again.',
 				
 				/* Tooltip management */
 				ERR_FIELD_SELECTION : 'Some error in field selection'	
