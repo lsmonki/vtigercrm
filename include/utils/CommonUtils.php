@@ -464,10 +464,9 @@ function getAccountName($account_id)
 	$log->info("in getAccountName ".$account_id);
 
 	global $adb;
-	if($account_id != '')
-	{
+	if($account_id != ''){
 		$sql = "select accountname from vtiger_account where accountid=?";
-        	$result = $adb->pquery($sql, array($account_id));
+        $result = $adb->pquery($sql, array($account_id));
 		$accountname = $adb->query_result($result,0,"accountname");
 	}
 	$log->debug("Exiting getAccountName method ...");
@@ -3532,6 +3531,31 @@ function isModuleSettingPermitted($module){
 			return 'yes';
 	}
 	return 'no';
+}
+
+/**
+ * this function returns the entity field name for a given module; for e.g. for Contacts module it return concat(lastname, ' ', firstname)
+ * @param string $module - the module name
+ * @return string $fieldsname - the entity field name for the module
+ */
+function getEntityField($module){
+	global $adb;
+	$data = array();	
+	if(!empty($module)){
+		 $query = "select fieldname,tablename,entityidfield from vtiger_entityname where modulename = ?";
+		 $result = $adb->pquery($query, array($module));
+		 $fieldsname = $adb->query_result($result,0,'fieldname');
+		 $tablename = $adb->query_result($result,0,'tablename'); 
+		 $entityidfield = $adb->query_result($result,0,'entityidfield'); 
+		 if(!(strpos($fieldsname,',') === false)){
+			 $fieldlists = explode(',',$fieldsname);
+			 $fieldsname = "concat(";
+			 $fieldsname = $fieldsname.implode(",' ',",$fieldlists);
+			 $fieldsname = $fieldsname.")";
+		 }
+	}
+	$data = array("tablename"=>$tablename, "fieldname"=>$fieldsname);
+	return $data;
 }
 // vtlib customization: Extended vtiger CRM utlitiy functions
 require_once('include/utils/VtlibUtils.php');

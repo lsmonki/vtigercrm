@@ -378,7 +378,7 @@ class Contacts extends CRMEntity {
 			}
 		} 
 
-		$query ='select case when (vtiger_users.user_name not like "") then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_contactdetails.accountid, vtiger_contactdetails.contactid , vtiger_potential.potentialid, vtiger_potential.potentialname, vtiger_potential.potentialtype, vtiger_potential.sales_stage, vtiger_potential.amount, vtiger_potential.closingdate, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_account.accountname from vtiger_contactdetails inner join vtiger_contpotentialrel on vtiger_contpotentialrel.contactid=vtiger_contactdetails.contactid left join vtiger_potential on vtiger_potential.potentialid = vtiger_contpotentialrel.potentialid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_potential.potentialid left join vtiger_account on vtiger_account.accountid=vtiger_contactdetails.accountid left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_contactdetails.contactid ='.$id.' and vtiger_contactdetails.accountid = vtiger_potential.accountid and vtiger_crmentity.deleted=0';
+		$query ='select case when (vtiger_users.user_name not like "") then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_contactdetails.accountid, vtiger_contactdetails.contactid , vtiger_potential.potentialid, vtiger_potential.potentialname, vtiger_potential.potentialtype, vtiger_potential.sales_stage, vtiger_potential.amount, vtiger_potential.closingdate, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_account.accountname from vtiger_contactdetails inner join vtiger_contpotentialrel on vtiger_contpotentialrel.contactid=vtiger_contactdetails.contactid left join vtiger_potential on vtiger_potential.potentialid = vtiger_contpotentialrel.potentialid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_potential.potentialid left join vtiger_account on vtiger_account.accountid=vtiger_contactdetails.accountid left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid where vtiger_contactdetails.contactid ='.$id.' and (vtiger_contactdetails.accountid = vtiger_potential.related_to or vtiger_contactdetails.contactid=vtiger_potential.related_to) and vtiger_crmentity.deleted=0';
 					
 		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset); 
 		
@@ -1241,7 +1241,7 @@ function get_contactsforol($user_name)
 	 */
 	function setRelationTables($secmodule){
 		$rel_tables = array (
-			"Potentials" => array("vtiger_potential"=>array("accountid","potentialid"),"vtiger_contactdetails"=>"accountid"),
+			"Potentials" => array("vtiger_potential"=>array("related_to","potentialid"),"vtiger_contactdetails"=>"contactid"),
 			"Calendar" => array("vtiger_cntactivityrel"=>array("contactid","activityid"),"vtiger_contactdetails"=>"contactid"),
 			"HelpDesk" => array("vtiger_troubletickets"=>array("parent_id","ticketid"),"vtiger_contactdetails"=>"contactid"),
 			"Quotes" => array("vtiger_quotes"=>array("contactid","quoteid"),"vtiger_contactdetails"=>"contactid"),
@@ -1258,6 +1258,24 @@ function get_contactsforol($user_name)
 	function unlinkDependencies($module, $id) {
 		global $log;
 	
+		//Deleting Contact related Potentials.
+		$pot_q = 'SELECT vtiger_crmentity.crmid FROM vtiger_crmentity 
+			INNER JOIN vtiger_potential ON vtiger_crmentity.crmid=vtiger_potential.potentialid  
+			LEFT JOIN vtiger_account ON vtiger_account.accountid=vtiger_potential.related_to 
+			WHERE vtiger_crmentity.deleted=0 AND vtiger_potential.related_to=?';		
+		$pot_res = $this->db->pquery($pot_q, array($id));
+		$pot_ids_list = array();
+		for($k=0;$k < $this->db->num_rows($pot_res);$k++)
+		{
+			$pot_id = $this->db->query_result($pot_res,$k,"crmid");
+			$pot_ids_list[] = $pot_id;
+			$sql = 'UPDATE vtiger_crmentity SET deleted = 1 WHERE crmid = ?';
+			$this->db->pquery($sql, array($pot_id));
+		}
+		//Backup deleted Contact related Potentials.
+		$params = array($id, RB_RECORD_UPDATED, 'vtiger_crmentity', 'deleted', 'crmid', implode(",", $pot_ids_list));
+		$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES(?,?,?,?,?,?)', $params);
+		
 		//Backup Contact-Trouble Tickets Relation
 		$tkt_q = 'SELECT ticketid FROM vtiger_troubletickets WHERE parent_id=?';
 		$tkt_res = $this->db->pquery($tkt_q, array($id));

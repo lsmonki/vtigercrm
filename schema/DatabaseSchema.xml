@@ -812,7 +812,7 @@
 			<notnull />
 			<unique />
 		</field>
-		<field name="accountid" type="I" size="19" />
+		<field name="related_to" type="I" size="19" />
 		<field name="potentialname" type="C" size="120">
 			<notnull />
 		</field>

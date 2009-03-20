@@ -243,7 +243,7 @@ class Accounts extends CRMEntity {
 			}
 		} 
 
-		$query = "SELECT vtiger_potential.potentialid, vtiger_potential.accountid,
+		$query = "SELECT vtiger_potential.potentialid, vtiger_potential.related_to,
 			vtiger_potential.potentialname, vtiger_potential.sales_stage,
 			vtiger_potential.potentialtype, vtiger_potential.amount,
 			vtiger_potential.closingdate, vtiger_potential.potentialtype, vtiger_account.accountname,
@@ -252,13 +252,13 @@ class Accounts extends CRMEntity {
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_potential.potentialid
 			LEFT JOIN vtiger_account
-				ON vtiger_account.accountid = vtiger_potential.accountid
+				ON vtiger_account.accountid = vtiger_potential.related_to
 			LEFT JOIN vtiger_users
 				ON vtiger_crmentity.smownerid = vtiger_users.id
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			WHERE vtiger_crmentity.deleted = 0
-			AND vtiger_potential.accountid = ".$id;
+			AND vtiger_potential.related_to = ".$id;
 					
 		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset); 
 		
@@ -924,7 +924,7 @@ class Accounts extends CRMEntity {
 	function setRelationTables($secmodule){
 		$rel_tables =  array (
 			"Contacts" => array("vtiger_contactdetails"=>array("accountid","contactid"),"vtiger_account"=>"accountid"),
-			"Potentials" => array("vtiger_potential"=>array("accountid","potentialid"),"vtiger_account"=>"accountid"),
+			"Potentials" => array("vtiger_potential"=>array("related_to","potentialid"),"vtiger_account"=>"accountid"),
 			"Quotes" => array("vtiger_quotes"=>array("accountid","quoteid"),"vtiger_account"=>"accountid"),
 			"SalesOrder" => array("vtiger_salesorder"=>array("accountid","salesorderid"),"vtiger_account"=>"accountid"),
 			"Invoice" => array("vtiger_invoice"=>array("accountid","invoiceid"),"vtiger_account"=>"accountid"),
@@ -1146,8 +1146,8 @@ class Accounts extends CRMEntity {
 		//Deleting Account related Potentials.
 		$pot_q = 'SELECT vtiger_crmentity.crmid FROM vtiger_crmentity 
 			INNER JOIN vtiger_potential ON vtiger_crmentity.crmid=vtiger_potential.potentialid  
-			INNER JOIN vtiger_account ON vtiger_account.accountid=vtiger_potential.accountid 
-			WHERE vtiger_crmentity.deleted=0 AND vtiger_potential.accountid=?';		
+			LEFT JOIN vtiger_account ON vtiger_account.accountid=vtiger_potential.related_to 
+			WHERE vtiger_crmentity.deleted=0 AND vtiger_potential.related_to=?';		
 		$pot_res = $this->db->pquery($pot_q, array($id));
 		$pot_ids_list = array();
 		for($k=0;$k < $this->db->num_rows($pot_res);$k++)

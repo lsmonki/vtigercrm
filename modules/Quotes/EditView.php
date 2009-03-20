@@ -43,38 +43,47 @@ $currencyid=fetchCurrency($current_user->id);
 $rate_symbol = getCurrencySymbolandCRate($currencyid);
 $rate = $rate_symbol['rate'];
 
-if(isset($_REQUEST['record']) && $_REQUEST['record'] != '') 
-{
+if(isset($_REQUEST['record']) && $_REQUEST['record'] != ''){
     $focus->id = $_REQUEST['record'];
     $focus->mode = 'edit'; 
     $log->debug("Mode is Edit. Quoteid is ".$focus->id);
     $focus->retrieve_entity_info($_REQUEST['record'],"Quotes");		
     $focus->name=$focus->column_fields['subject']; 
 }
+
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$smarty->assign("DUPLICATE_FROM", $focus->id);
-        $QUOTE_associated_prod = getAssociatedProducts("Quotes",$focus);
+	$QUOTE_associated_prod = getAssociatedProducts("Quotes",$focus);
 	$log->debug("Mode is Duplicate. Quoteid to be duplicated is ".$focus->id);
 	$focus->id = "";
     	$focus->mode = ''; 	
 }
-if(isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] !='')
-{
+
+if(isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] !=''){
 	$focus->column_fields['potential_id'] = $_REQUEST['potential_id'];
-	$_REQUEST['account_id'] = get_account_info($focus->column_fields['potential_id']);
+	$relatedInfo = getRelatedInfo($_REQUEST['potential_id']);
+	if(!empty($relatedInfo)){
+		$setype = $relatedInfo["setype"];
+		$relID = $relatedInfo["relID"];
+	}
+	if($setype == 'Accounts'){
+		$_REQUEST['account_id'] = $relID;
+	}elseif($setype == 'Contacts'){
+		$_REQUEST['contact_id'] = $relID;
+	}
 	$log->debug("Quotes EditView: Potential Id from the request is ".$_REQUEST['potential_id']);
 	$associated_prod = getAssociatedProducts("Potentials",$focus,$focus->column_fields['potential_id']);
 }
-if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
-{
+
+if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !=''){
     $focus->column_fields['product_id'] = $_REQUEST['product_id'];
     $log->debug("Product Id from the request is ".$_REQUEST['product_id']);
     $associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
 	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$smarty->assign("AVAILABLE_PRODUCTS", 'true');
 }
-if(!empty($_REQUEST['parent_id']) && !empty($_REQUEST['return_module']))
-{
+
+if(!empty($_REQUEST['parent_id']) && !empty($_REQUEST['return_module'])){
     if ($_REQUEST['return_module'] == 'Services') {
 	    $focus->column_fields['product_id'] = $_REQUEST['parent_id'];
 	    $log->debug("Service Id from the request is ".$_REQUEST['parent_id']);
@@ -120,7 +129,6 @@ else
 {
 	$bas_block = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'BAS');
 	$adv_block = getBlocks($currentModule,$disp_view,$mode,$focus->column_fields,'ADV');
-	
 	$blocks['basicTab'] = $bas_block;
 	if(is_array($adv_block ))
 		$blocks['moreTab'] = $adv_block;
@@ -129,7 +137,6 @@ else
 	$smarty->assign("BLOCKS_COUNT",count($blocks));
 }
 $smarty->assign("OP_MODE",$disp_view);
-
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",'Quote');
 $category = getParentTab();
@@ -185,7 +192,6 @@ else
 {
 	$smarty->assign("ROWCOUNT", '1');
 }
-
 
 if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
 else $smarty->assign("RETURN_MODULE","Quotes");

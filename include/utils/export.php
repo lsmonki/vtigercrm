@@ -87,12 +87,12 @@ function br2nl_vt($str)
 	return $str;
 }
 
-/**This function exports all the data for a given module
+/**
+ * This function exports all the data for a given module
  * Param $type - module name
  * Return type text
-*/
-function export($type)
-{
+ */
+function export($type){
     global $log,$list_max_entries_per_page;
     $log->debug("Entering export(".$type.") method ...");
     global $adb;
@@ -100,8 +100,7 @@ function export($type)
     $focus = 0;
     $content = '';
 
-    if ($type != "")
-	{
+    if ($type != ""){
 		// vtlib customization: Hook to dynamically include required module file.
 		// TODO: Make security check if the file access is within vtigercrm directory
 		// Refer to the logic in setting $currentModule in index.php
@@ -121,13 +120,14 @@ function export($type)
     $search_type = $_REQUEST['search_type'];
     $export_data = $_REQUEST['export_data'];
 	
-	if(isset($_SESSION['export_where']) && $_SESSION['export_where']!='' && $search_type == 'includesearch')
+	if(isset($_SESSION['export_where']) && $_SESSION['export_where']!='' && $search_type == 'includesearch'){
 		$where =$_SESSION['export_where'];
+	}
 
 	$query = $focus->create_export_query($where);
 	$stdfiltersql = $oCustomView->getCVStdFilterSQL($viewid);
 	$advfiltersql = $oCustomView->getCVAdvFilterSQL($viewid);
-	if(isset($stdfiltersql) && $stdfiltersql != '') {
+	if(isset($stdfiltersql) && $stdfiltersql != ''){
 		$query .= ' and '.$stdfiltersql;
 	}
 	if(isset($advfiltersql) && $advfiltersql != '') {
@@ -135,7 +135,7 @@ function export($type)
 	}
 	$params = array();
 
-	if(($search_type == 'withoutsearch' || $search_type == 'includesearch') && $export_data == 'selecteddata') {
+	if(($search_type == 'withoutsearch' || $search_type == 'includesearch') && $export_data == 'selecteddata'){
 		$idstring = explode(";", $_REQUEST['idstring']);
 		if($type == 'Accounts' && count($idstring) > 0) {
 			$query .= ' and vtiger_account.accountid in ('. generateQuestionMarks($idstring) .')';
@@ -171,35 +171,28 @@ function export($type)
 		}
 	}
 	
-	if(isset($order_by) && $order_by != '') {
-		if($order_by == 'smownerid')
-		{
+	if(isset($order_by) && $order_by != ''){
+		if($order_by == 'smownerid'){
 			$query .= ' ORDER BY user_name '.$sorder;
-		}
-		elseif($order_by == 'lastname' && $type == 'Documents')
-		{
+		}elseif($order_by == 'lastname' && $type == 'Documents'){
 			$query .= ' ORDER BY vtiger_contactdetails.lastname  '. $sorder;
-		}
-		elseif($order_by == 'crmid' && $type == 'HelpDesk')
-		{
+		}elseif($order_by == 'crmid' && $type == 'HelpDesk'){
 			$query .= ' ORDER BY vtiger_troubletickets.ticketid  '. $sorder;
-		}
-		else
-		{
+		}else{
 			$tablename = getTableNameForField($type,$order_by);
 			$tablename = (($tablename != '')?($tablename."."):'');
-			if( $adb->dbType == "pgsql")
+			if( $adb->dbType == "pgsql"){
 				$query .= ' GROUP BY '.$tablename.$order_by;
+			}
 			$query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 		}
 	}
 	
-	if(isset($_SESSION['nav_start']) && $_SESSION['nav_start']!='' && $export_data == 'currentpage') {
+	if(isset($_SESSION['nav_start']) && $_SESSION['nav_start']!='' && $export_data == 'currentpage'){
 		$start_rec = $_SESSION['nav_start'];
 		$limit_start_rec = ($start_rec == 0) ? 0 : ($start_rec - 1);
 		$query .= ' LIMIT '.$limit_start_rec.','.$list_max_entries_per_page;
 	}
-
     $result = $adb->pquery($query, $params, true, "Error exporting $type: "."<BR>$query");
     $fields_array = $adb->getFieldsArray($result);
 	$fields_array = array_diff($fields_array,array("user_name"));
@@ -216,19 +209,29 @@ function export($type)
 
 	$column_list = implode(",",array_values($fields_array));
 
-        while($val = $adb->fetchByAssoc($result, -1, false))
-	{
+    while($val = $adb->fetchByAssoc($result, -1, false)){
 		$new_arr = array();
-
-		foreach ($val as $key => $value)
-		{
+		foreach ($val as $key => $value){
 			if($type == 'Documents' && $key == 'description'){
 				$value = strip_tags($value);
 				$value = str_replace('&nbsp;','',$value);
 				array_push($new_arr,$value);
-			}
-			elseif($key != "user_name")
-			{
+			}elseif($type == 'Potentials' && $key == 'related to'){
+				//have to handle uitype 10
+				if(!empty($value)) {
+					$parent_module = getSalesEntityType($value);			
+					$displayValueArray = getEntityName($parent_module, $value);
+					if(!empty($displayValueArray)){
+						foreach($displayValueArray as $k=>$v){
+							$displayValue = $v;
+						}
+					}
+					$value = $parent_module."::::".$displayValue;
+				} else {
+					$value = '';
+				}
+				array_push($new_arr,$value);
+			}elseif($key != "user_name"){
 				// No conversions are required here. We need to send the data to csv file as it comes from database.
 				array_push($new_arr, preg_replace("/\"/","\"\"",$value));
 			}	
@@ -240,7 +243,6 @@ function export($type)
 	}
 	$log->debug("Exiting export method ...");
 	return $content;
-	
 }
 
 $content = export($_REQUEST['module']);

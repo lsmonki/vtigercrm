@@ -37,17 +37,20 @@ $searchurl = getBasic_Advance_SearchURL();
 $smarty->assign("SEARCH", $searchurl);
 //4600 ends
 
-if(isset($_REQUEST['record']) && $_REQUEST['record'] != '') 
-{
+if(isset($_REQUEST['record']) && $_REQUEST['record'] != ''){
     $focus->id = $_REQUEST['record'];
     $focus->mode = 'edit'; 	
     $focus->retrieve_entity_info($_REQUEST['record'],"Potentials");
     $focus->name=$focus->column_fields['potentialname'];	
 }
-if(isset($_REQUEST['account_id']))
-{
-        $focus->column_fields['account_id'] = $_REQUEST['account_id'];
+
+//adding support for uitype 10
+if(!empty($_REQUEST['contact_id'])){
+	$focus->column_fields['related_to'] = $_REQUEST['contact_id'];
+}elseif(!empty($_REQUEST['account_id'])){
+	$focus->column_fields['related_to'] = $_REQUEST['account_id'];
 }
+
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = ''; 	
@@ -67,13 +70,12 @@ $smarty->assign("CATEGORY",$category);
 //needed when creating a new opportunity with a default vtiger_account value passed in
 if (isset($_REQUEST['accountname']) && is_null($focus->accountname)) {
 	$focus->accountname = $_REQUEST['accountname'];
-	
 }
-if (isset($_REQUEST['accountid']) && is_null($focus->accountid)) {
-	$focus->accountid = $_REQUEST['accountid'];
+if (isset($_REQUEST['accountid']) && is_null($focus->related_to)) {
+	$focus->related_to = $_REQUEST['accountid'];
 }
-if (isset($_REQUEST['contactid']) && is_null($focus->contactid)) {
-	$focus->contactid = $_REQUEST['contactid'];
+if (isset($_REQUEST['contactid']) && is_null($focus->related_to)) {
+	$focus->related_to = $_REQUEST['contactid'];
 }
 
 global $theme;

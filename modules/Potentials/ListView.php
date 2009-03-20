@@ -181,7 +181,6 @@ if(isset($order_by) && $order_by != '')
 
                 $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
         }
-
 }
 if($viewid ==0)
 {

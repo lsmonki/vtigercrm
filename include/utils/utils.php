@@ -1682,9 +1682,9 @@ function get_account_info($parent_id)
 	global $log;
 	$log->debug("Entering get_account_info(".$parent_id.") method ...");
         global $adb;
-        $query = "select accountid from vtiger_potential where potentialid=?";
+        $query = "select related_to from vtiger_potential where potentialid=?";
         $result = $adb->pquery($query, array($parent_id));
-        $accountid=$adb->query_result($result,0,'accountid');
+        $accountid=$adb->query_result($result,0,'related_to');
 	$log->debug("Exiting get_account_info method ...");
         return $accountid;
 }
@@ -2357,9 +2357,9 @@ function getPotentialsRelatedAccounts($record_id)
 	global $log;
 	$log->debug("Entering getPotentialsRelatedAccounts(".$record_id.") method ...");
 	global $adb;
-	$query="select accountid from vtiger_potential where potentialid=?";
+	$query="select related_to from vtiger_potential where potentialid=?";
 	$result=$adb->pquery($query, array($record_id));
-	$accountid=$adb->query_result($result,0,'accountid');
+	$accountid=$adb->query_result($result,0,'related_to');
 	$log->debug("Exiting getPotentialsRelatedAccounts method ...");
 	return $accountid;
 }
@@ -3219,8 +3219,9 @@ function getRecordValues($id_array,$module)
 					if($campaign_name != '')
 						$value_pair['disp_value']=$campaign_name;
 					else $value_pair['disp_value']='';
-				}
-				else
+				}elseif($ui_type == 10){
+					$value_pair['disp_value'] = getRecordInfoFromID($field_values[$j][$fld_name]);
+				}else
 					$value_pair['disp_value']=$field_values[$j][$fld_name];
 				$value_pair['org_value'] = $field_values[$j][$fld_name];
 
@@ -3871,6 +3872,11 @@ function getDuplicateRecordsArr($module)
 					$result[$col_arr[$k]]=$product_name;
 				else $result[$col_arr[$k]]='';
 			}
+			/*uitype 10 handling*/
+			if($ui_type[$fld_arr[$k]] == 10){
+				$result[$col_arr[$k]] = getRecordInfoFromID($result[$col_arr[$k]]);
+			}
+			
 			$fld_values[$grp][$ii][$fld_labl_arr[$k]] = $result[$col_arr[$k]];
 			
 		}
@@ -4673,5 +4679,46 @@ function com_vtGetModules($adb) {
 		}
 	}
 	return $modules;
+}
+
+/**
+ * this function accepts a potential id returns the module name and entity value for the related field
+ * @param integer $id - the potential id
+ * @return array $data - the related module name and field value
+ */
+function getRelatedInfo($id){
+	global $adb;
+	$data = array();
+	$sql = "select related_to from vtiger_potential where potentialid=?";
+	$result = $adb->pquery($sql, array($id));
+	if($adb->num_rows($result)>0){
+		$relID = $adb->query_result($result, 0, "related_to");
+		$sql = "select setype from vtiger_crmentity where crmid=?";
+		$result = $adb->pquery($sql, array($relID));
+		if($adb->num_rows($result)>0){
+			$setype = $adb->query_result($result, 0, "setype");
+		}
+		$data = array("setype"=>$setype, "relID"=>$relID);
+	}
+	return $data;
+}
+
+/**
+ * this function accepts an ID and returns the entity value for that id
+ * @param integer $id - the crmid of the record
+ * @return string $data - the entity name for the id
+ */
+function getRecordInfoFromID($id){
+	global $adb;
+	$data = array();
+	$sql = "select setype from vtiger_crmentity where crmid=?";
+	$result = $adb->pquery($sql, array($id));
+	if($adb->num_rows($result)>0){
+		$setype = $adb->query_result($result, 0, "setype");
+		$data = getEntityName($setype, $id);
+	}
+	$data = array_values($data);
+	$data = $data[0];
+	return $data;
 }
 ?>

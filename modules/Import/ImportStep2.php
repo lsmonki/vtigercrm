@@ -253,38 +253,27 @@ $map_list_combo .= "&nbsp;&nbsp;&nbsp;<span id='delete_mapping' style='visibilit
 $smarty->assign("SAVED_MAP_LISTS",$map_list_combo);
 
 
-if ( count($mapping_arr) > 0)
-{
+if ( count($mapping_arr) > 0){
 	$field_map = &$mapping_arr;
-}
-else if ($_REQUEST['source'] == 'other')
-{
-	if ($_REQUEST['module'] == 'Contacts')
-	{
+}else if ($_REQUEST['source'] == 'other'){
+	if ($_REQUEST['module'] == 'Contacts'){
 		$field_map = $outlook_contacts_field_map;
-	} 
-	else if ($_REQUEST['module'] == 'Accounts')
-	{
+	}else if ($_REQUEST['module'] == 'Accounts'){
 		$field_map = $outlook_accounts_field_map;
-	}
-	else if ($_REQUEST['module'] == 'Potentials')
-	{
+	}else if ($_REQUEST['module'] == 'Potentials'){
 		$field_map = $salesforce_opportunities_field_map;
 	}
 } 
 
-
 $add_one = 1;
 $start_at = 0;
 
-if($has_header)
-{
+if($has_header){
 	$add_one = 0;
 	$start_at = 1;
 } 
 
-for($row_count = $start_at; $row_count < count($rows); $row_count++ )
-{
+for($row_count = $start_at; $row_count < count($rows); $row_count++){
 	$smarty->assign("ROWCOUNT", $row_count + $add_one);
 }
 
@@ -294,64 +283,40 @@ $list_string_key .= "_import_fields";
 //Now we are getting the import fields from DB instead of hard coded array $mod_list_strings
 $translated_column_fields = getImportFieldsList($_REQUEST['module']);//$mod_list_strings[$list_string_key];
 
-// adding custom vtiger_fields translations
-//getCustomFieldTrans($_REQUEST['module'],&$translated_column_fields);
-
 $cnt=1;
-for($field_count = 0; $field_count < $ret_field_count; $field_count++)
-{
+for($field_count = 0; $field_count < $ret_field_count; $field_count++){
 
 	$smarty->assign("COLCOUNT", $field_count + 1);
 	$suggest = "";
 
-	/*
-	if ($has_header && isset( $field_map[$firstrow[$field_count]] ) )
-	{
-		$suggest = $field_map[$firstrow[$field_count]];	
-	}
-	else if (isset($field_map[$field_count]))
-	{
-		$suggest = $field_map[$field_count];	
-	}
-	*/
-
-	if($_REQUEST['module']=='Accounts')
-	{
+	if($_REQUEST['module']=='Accounts'){
 		$tablename='account';
 		$focus1=new Accounts();
 	}
-	if($_REQUEST['module']=='Contacts')
-	{
+	if($_REQUEST['module']=='Contacts'){
 		$tablename='contactdetails';
 		$focus1=new Contacts();
  	}
-	if($_REQUEST['module']=='Leads')
- 	{
+	if($_REQUEST['module']=='Leads'){
 		$tablename='leaddetails';
 		$focus1=new Leads();
 	}
-	if($_REQUEST['module']=='Potentials')
- 	{
+	if($_REQUEST['module']=='Potentials'){
 		$tablename='potential';
 		$focus1=new Potentials();
 	}
-	if($_REQUEST['module']=='Products')
- 	{
+	if($_REQUEST['module']=='Products'){
  		$tablename='products';
  		$focus1=new Products();
  	}
-	//Pavani: checking for HelpDesk and Vendors
-        if($_REQUEST['module']=='HelpDesk')
-        {
-                $tablename='troubletickets';
-                $focus1=new HelpDesk();
-        }
-	if($_REQUEST['module']=='Vendors')
-	{
+    if($_REQUEST['module']=='HelpDesk'){
+            $tablename='troubletickets';
+            $focus1=new HelpDesk();
+    }
+	if($_REQUEST['module']=='Vendors'){
 		$tablename='Vendors';
 		$focus1=new Vendors();
 	}
-	//end checking
 
 	// vtlib customization: Hook to provide generic import for other modules
 	if($_REQUEST['module']) {
@@ -372,19 +337,10 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 						   );
 
 	$pos = 0;
-	foreach ( $rows as $row ) 
-	{
-		
-		if( isset($row[$field_count]) && $row[$field_count] != '')
-		{
+	foreach($rows as $row ){
+		if( isset($row[$field_count]) && $row[$field_count] != ''){
 			$smarty->assign("CELL",htmlspecialchars($row[$field_count]));
-//			$smarty->parse("main.table.row.cell");
-		} 
-		else
-		{
-//			$smarty->parse("main.table.row.cellempty");
 		}
-
 		$cnt++;
 	}
 }
@@ -404,31 +360,27 @@ $_SESSION['import_module_object_column_fields'] = $focus->importable_fields;
 $_SESSION['import_module_field_count'] = $field_count;
 $_SESSION['import_module_object_required_fields'] = $focus1->required_fields;
 $_SESSION['import_module_translated_column_fields'] = $translated_column_fields;
-//echo '<pre>Default array ==> '; print_r($smarty_array); echo '</pre>';
 
 $smarty->assign("SELECTFIELD",$smarty_array);
 $smarty->assign("ROW", $row);
 
 $module_key = "LBL_".strtoupper($_REQUEST['module'])."_NOTE_";
 
-for ($i = 1;isset($mod_strings[$module_key.$i]);$i++)
-{
+for ($i = 1;isset($mod_strings[$module_key.$i]);$i++){
 	$smarty->assign("NOTETEXT", $mod_strings[$module_key.$i]);
 }
 
-if($has_header)
-{
+if($has_header){
 	$smarty->assign("HAS_HEADER", 'on');
-} 
-else
-{
+}else{
 	$smarty->assign("HAS_HEADER", 'off');
 }
 
 $smarty->assign("AVALABLE_FIELDS", getMergeFields($module,"available_fields"));
 $smarty->assign("FIELDS_TO_MERGE", getMergeFields($module,"fileds_to_merge"));
-if(isPermitted($module,'DuplicatesHandling','') == 'yes')
+if(isPermitted($module,'DuplicatesHandling','') == 'yes'){
 	$smarty->assign("DUPLICATESHANDLING", 'DuplicatesHandling');
+}
 
 $smarty->assign("MODULE", htmlspecialchars($_REQUEST['module'],ENT_QUOTES,$default_charset));
 $smarty->assign("MODULELABEL", getTranslatedString($_REQUEST['module']));

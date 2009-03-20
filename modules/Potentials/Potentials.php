@@ -55,7 +55,7 @@ class Potentials extends CRMEntity {
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
 			'Potential'=>Array('potential'=>'potentialname'),
-			'Account Name'=>Array('account'=>'accountname'),	  			
+			'Related to'=>Array('potential'=>'related_to'),	  			
 			'Sales Stage'=>Array('potential'=>'sales_stage'),
 			'Amount'=>Array('potential'=>'amount'),
 			'Expected Close Date'=>Array('potential'=>'closingdate'),
@@ -64,7 +64,7 @@ class Potentials extends CRMEntity {
 
 	var $list_fields_name = Array(
 			'Potential'=>'potentialname',
-			'Account Name'=>'account_id',	  			
+			'Related to'=>'related_to',	  			
 			'Sales Stage'=>'sales_stage',	  			
 			'Amount'=>'amount',
 			'Expected Close Date'=>'closingdate',
@@ -74,13 +74,13 @@ class Potentials extends CRMEntity {
 
 	var $search_fields = Array(
 			'Potential'=>Array('potential'=>'potentialname'),
-			'Account Name'=>Array('potential'=>'account_id'),
+			'Related To'=>Array('potential'=>'related_to'),
 			'Expected Close Date'=>Array('potential'=>'closedate')
 			);
 
 	var $search_fields_name = Array(
 			'Potential'=>'potentialname',
-			'Account Name'=>'account_id',
+			'Related To'=>'related_to',
 			'Expected Close Date'=>'closingdate'
 			);
 
@@ -88,7 +88,7 @@ class Potentials extends CRMEntity {
 
 	// Used when enabling/disabling the mandatory fields for the module.
 	// Refers to vtiger_field.fieldname values.
-	var $mandatory_fields = Array('assigned_user_id', 'createdtime', 'modifiedtime', 'potentialname');
+	var $mandatory_fields = Array('assigned_user_id', 'createdtime', 'modifiedtime', 'potentialname', 'related_to');
 
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'potentialname';
@@ -155,7 +155,7 @@ class Potentials extends CRMEntity {
 		if($account_required)
 		{
 			$query = "SELECT vtiger_potential.potentialid,  vtiger_potential.potentialname, vtiger_potential.dateclosed FROM vtiger_potential, vtiger_account ";
-			$where_auto = "account.accountid = vtiger_potential.accountid AND vtiger_crmentity.deleted=0 ";
+			$where_auto = "account.accountid = vtiger_potential.related_to AND vtiger_crmentity.deleted=0 ";
 		}
 		else
 		{
@@ -201,15 +201,15 @@ class Potentials extends CRMEntity {
 		//To get the Permitted fields query and the permitted fields list
 		$sql = getPermittedFieldsQuery("Potentials", "detail_view");
 		$fields_list = getFieldsListFromQuery($sql);
-
+		
 		$query = "SELECT $fields_list, vtiger_groups.groupname as 'Assigned To Group',case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
 				FROM vtiger_potential 
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid 
 				LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
-				LEFT JOIN vtiger_account on vtiger_potential.accountid=vtiger_account.accountid  
+				LEFT JOIN vtiger_account on vtiger_potential.related_to=vtiger_account.accountid
 				LEFT JOIN vtiger_potentialscf on vtiger_potentialscf.potentialid=vtiger_potential.potentialid 
-	                        LEFT JOIN vtiger_groups
-                        	        ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+                LEFT JOIN vtiger_groups
+        	        ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_campaign
 					ON vtiger_campaign.campaignid = vtiger_potential.campaignid";
 
@@ -261,7 +261,7 @@ class Potentials extends CRMEntity {
 		
 		$button = '';
 				
-		$accountid = $this->column_fields['account_id'];
+		$accountid = $this->column_fields['related_to'];
 		$search_string = "&fromPotential=true&acc_id=$accountid";
 		
 		if($actions) {
@@ -337,7 +337,7 @@ class Potentials extends CRMEntity {
 			}
 		}
 
-		$query = "SELECT vtiger_activity.*,vtiger_seactivityrel.*, vtiger_contactdetails.lastname,vtiger_contactdetails.firstname, 
+		$query = "SELECT vtiger_activity.activityid as 'tmp_activity_id',vtiger_activity.*,vtiger_seactivityrel.*, vtiger_contactdetails.lastname,vtiger_contactdetails.firstname, 
 					vtiger_cntactivityrel.*, vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime,  
 					case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,  
 					vtiger_recurringevents.recurringtype from vtiger_activity 
@@ -681,7 +681,8 @@ class Potentials extends CRMEntity {
 		
 		$query .= " left join vtiger_potential on vtiger_potential.potentialid=$tmpname.$secfieldname 
 		left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid and vtiger_crmentityPotentials.deleted=0
-		left join vtiger_account as vtiger_accountPotentials on vtiger_potential.accountid = vtiger_accountPotentials.accountid
+		left join vtiger_account as vtiger_accountPotentials on vtiger_potential.related_to = vtiger_accountPotentials.accountid
+		left join vtiger_contactdetails as vtiger_contactdetailsPotentials on vtiger_potential.related_to = vtiger_contactdetailsPotentials.contactid
 		left join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
 		left join vtiger_groups vtiger_groupsPotentials on vtiger_groupsPotentials.groupid = vtiger_crmentityPotentials.smownerid
 		left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentityPotentials.smownerid
@@ -697,7 +698,7 @@ class Potentials extends CRMEntity {
 	function setRelationTables($secmodule){
 		$rel_tables = array (
 			"Calendar" => array("vtiger_seactivityrel"=>array("crmid","activityid"),"vtiger_potential"=>"potentialid"),
-			"Contacts" => array("vtiger_contactdetails"=>array("accountid","contactid"),"vtiger_potential"=>"accountid"),
+			"Contacts" => array("vtiger_contactdetails"=>array("contactid","contactid"),"vtiger_potential"=>"related_to"),
 			"Products" => array("vtiger_seproductsrel"=>array("crmid","productid"),"vtiger_potential"=>"potentialid"),
 			"Quotes" => array("vtiger_quotes"=>array("potentialid","quoteid"),"vtiger_potential"=>"potentialid"),
 			"SalesOrder" => array("vtiger_salesorder"=>array("potentialid","salesorderid"),"vtiger_potential"=>"potentialid"),

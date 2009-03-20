@@ -200,6 +200,8 @@ class ReportRun extends CRMEntity
 						} elseif($selectedfields[1] == 'filesize'){
 							$columnslist[$fieldcolname] = "case ".$selectedfields[0].".".$selectedfields[1]." when '' then '-'else concat(".$selectedfields[0].".".$selectedfields[1]."/1024,'  ','KB') end as '$selectedfields[2]'";
 						}
+					}elseif($selectedfields[0] == 'vtiger_potential' && $selectedfields[1] == 'related_to'){
+						$columnslist[$fieldcolname] = "case when vtiger_accountPotentials.accountid is not NULL then vtiger_accountPotentials.accountname else concat(vtiger_contactdetailsPotentials.lastname, ' ', vtiger_contactdetailsPotentials.firstname) end as '$selectedfields[2]'";
 					}
 					else
 					{
@@ -1307,8 +1309,9 @@ class ReportRun extends CRMEntity
 		{
 			$query = "from vtiger_potential 
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid 
-				inner join vtiger_account as vtiger_accountPotentials on vtiger_potential.accountid = vtiger_accountPotentials.accountid 
 				inner join vtiger_potentialscf on vtiger_potentialscf.potentialid = vtiger_potential.potentialid
+				left join vtiger_account as vtiger_accountPotentials on vtiger_potential.related_to = vtiger_accountPotentials.accountid
+				left join vtiger_contactdetails as vtiger_contactdetailsPotentials on vtiger_potential.related_to = vtiger_contactdetailsPotentials.contactid 
 				left join vtiger_campaign as vtiger_campaignPotentials on vtiger_potential.campaignid = vtiger_campaignPotentials.campaignid
 				left join vtiger_groups vtiger_groupsPotentials on vtiger_groupsPotentials.groupid = vtiger_crmentity.smownerid
 				left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentity.smownerid  

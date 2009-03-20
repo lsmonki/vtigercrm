@@ -42,6 +42,7 @@
 		{* vtlib customization *}
 		{if $uitype eq '10'}
 			<td width=20% class="dvtCellLabel" align=right>
+			<font color="red">{$mandatory_field}</font>
 			{$fldlabel.displaylabel} 
 
 			{if count($fldlabel.options) eq 1}

@@ -315,14 +315,14 @@ class Campaigns extends CRMEntity {
 		} 
 
 		$query = "SELECT CASE when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
-					vtiger_potential.accountid, vtiger_account.accountname, vtiger_potential.potentialid, vtiger_potential.potentialname,  
+					vtiger_potential.related_to, vtiger_account.accountname, vtiger_potential.potentialid, vtiger_potential.potentialname,  
 					vtiger_potential.potentialtype, vtiger_potential.sales_stage, vtiger_potential.amount, vtiger_potential.closingdate,  
 					vtiger_crmentity.crmid, vtiger_crmentity.smownerid FROM vtiger_campaign  
 					INNER JOIN vtiger_potential ON vtiger_campaign.campaignid = vtiger_potential.campaignid  
 					INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_potential.potentialid 
 					LEFT JOIN vtiger_groups ON vtiger_groups.groupid=vtiger_crmentity.smownerid
 					LEFT JOIN vtiger_users ON vtiger_users.id=vtiger_crmentity.smownerid
-					LEFT JOIN vtiger_account ON vtiger_account.accountid = vtiger_potential.accountid
+					LEFT JOIN vtiger_account ON vtiger_account.accountid = vtiger_potential.related_to
 					WHERE vtiger_campaign.campaignid = ".$id." AND vtiger_crmentity.deleted=0";
 					
 		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset); 

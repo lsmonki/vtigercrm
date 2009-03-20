@@ -223,7 +223,7 @@ for($i = 0; $i < $company_name_count; $i++)
 	$amount = array("10000", "25000", "50000", "75000"); 
 	$key = array_rand($amount);
 	$opp->column_fields["amount"] = $amount[$key];
-	$opp->column_fields["account_id"] = $account->id;
+	$opp->column_fields["related_to"] = $account->id;
 
 	//$opp->saveentity("Potentials");
 	$opp->save("Potentials");

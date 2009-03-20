@@ -1650,6 +1650,16 @@ webserviceMigration();
 installMandatoryModules();
 require_once('include/utils/installVtlibSelectedModules.php');
 
+/*adding B2C model support*/
+ExecuteQuery("alter table vtiger_potential change accountid related_to int(19)");
+$sql = "select fieldid from vtiger_field where tabid=? and columnname=?";
+$result = $adb->pquery($sql, array(getTabid('Potentials'), 'accountid'));
+$fieldid = $adb->query_result($result,0,"fieldid");
+ExecuteQuery("update vtiger_field set uitype='10', typeofdata='V~M', columnname='related_to', fieldname='related_to',fieldlabel='Related To', presence=0 where fieldid=$fieldid");
+ExecuteQuery("insert into vtiger_fieldmodulerel (fieldid, module, relmodule, status, sequence) values ($fieldid, 'Potentials', 'Accounts', NULL, 0), ($fieldid, 'Potentials', 'Contacts', NULL, 1)");
+
+ExecuteQuery("update vtiger_cvcolumnlist set columnname='vtiger_potential:related_to:related_to:Potentials_Related_To:V' where columnname='vtiger_account:accountname:accountname:Potentials_Account_Name:V'");
+
 // Function to call installation of mandatory modules
 function installMandatoryModules(){	
 

@@ -351,7 +351,11 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("vtiger_field").",'potentialname','vtiger_potential',1,'2','potentialname','Potential Name',1,0,0,100,1,1,1,'V~M',0,1,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("vtiger_field").",'potential_no','vtiger_potential',1,'4','potential_no','Potential No',1,0,0,100,2,1,1,'V~O',3,null,'BAS',0)");	
 		$this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("vtiger_field").",'amount','vtiger_potential',1,71,'amount','Amount',1,2,0,100,4,1,1,'N~O',2,5,'BAS',1)");	
-		$this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("vtiger_field").",'accountid','vtiger_potential',1,'50','account_id','Account Name',1,2,0,100,3,1,1,'I~M',0,2,'BAS',1)");	
+		//changed for b2c model
+		$fieldid = $this->db->getUniqueID("vtiger_field");
+		$this->db->query("insert into vtiger_field values (2,$fieldid,'related_to','vtiger_potential',1,'10','related_to','Related To',1,0,0,100,3,1,1,'V~M',0,2,'BAS',1)");
+		$this->db->query("insert into vtiger_fieldmodulerel (fieldid, module, relmodule, status, sequence) values ($fieldid, 'Potentials', 'Accounts', NULL, 0), ($fieldid, 'Potentials', 'Contacts', NULL, 1)");
+		//b2c model changes end
 		$this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("vtiger_field").",'closingdate','vtiger_potential',1,'23','closingdate','Expected Close Date',1,2,0,100,7,1,1,'D~M',2,3,'BAS',1)");	
 		$this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("vtiger_field").",'potentialtype','vtiger_potential',1,'15','opportunity_type','Type',1,2,0,100,6,1,1,'V~O',1,null,'BAS',1)");	
 		$this->db->query("insert into vtiger_field values (2,".$this->db->getUniqueID("vtiger_field").",'nextstep','vtiger_potential',1,'1','nextstep','Next Step',1,2,0,100,9,1,1,'V~O',1,null,'BAS',1)");

@@ -623,21 +623,13 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$editview_label[]=getTranslatedString($fieldlabel);
 		$fieldvalue[] = $value;	
 	}
-	elseif($uitype == 57)
-	{
-
-		if($value != '')
-		{
+	elseif($uitype == 57){
+		if($value != ''){
 			$contact_name = getContactName($value);
-		}
-		elseif(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id'] != '')
-		{
-			if($_REQUEST['module'] == 'Contacts' && $fieldname = 'contact_id')
-			{
+		}elseif(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id'] != ''){
+			if($_REQUEST['module'] == 'Contacts' && $fieldname = 'contact_id'){
 				$contact_name = '';	
-			}
-			else
-			{
+			}else{
 				$value = $_REQUEST['contact_id'];
 				$contact_name = getContactName($value);		
 			}

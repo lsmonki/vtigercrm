@@ -127,47 +127,42 @@ class UsersLastImport extends SugarBean
 				AND vtiger_users_last_import.deleted=0
 				AND vtiger_crmentity.deleted=0
 				AND vtiger_users.status='Active'";
-		} 
-		else if ($this->bean_type == 'Potentials')
-		{
-		
-			$query = "SELECT distinct
-                                vtiger_account.accountid accountid,
-                                vtiger_account.accountname accountname,
-                                vtiger_users.user_name user_name,
-			vtiger_crmentity.crmid, smownerid,
-			vtiger_potential.*
-                               FROM vtiger_potential 
-			       inner join vtiger_account on vtiger_account.accountid=vtiger_potential.accountid 
-			       inner join  vtiger_crmentity on vtiger_crmentity.crmid=vtiger_potential.potentialid 
-			       left join vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id 
-			       left join vtiger_users_last_import on vtiger_users_last_import.assigned_user_id=vtiger_users.id 
-			       where vtiger_users_last_import.assigned_user_id='{$current_user->id}'
-				AND vtiger_users_last_import.bean_type='Potentials'
-				AND vtiger_users_last_import.bean_id=vtiger_crmentity.crmid
-				AND vtiger_users_last_import.deleted=0
-				AND vtiger_crmentity.deleted=0 
-				AND vtiger_users.status='Active'";
-
-		}
-		else if($this->bean_type == 'Leads')
-		{
+		}else if ($this->bean_type == 'Potentials'){
+			$query = "SELECT distinct vtiger_account.accountid accountid, vtiger_account.accountname accountname,
+						vtiger_users.user_name user_name, vtiger_crmentity.crmid, smownerid,
+						vtiger_potential.* 
+						FROM vtiger_potential 
+						inner join  vtiger_crmentity
+							on vtiger_crmentity.crmid=vtiger_potential.potentialid 
+						left join vtiger_account
+							on vtiger_account.accountid=vtiger_potential.related_to 
+						left join vtiger_users
+							ON vtiger_crmentity.smownerid=vtiger_users.id 
+						left join vtiger_users_last_import
+							on vtiger_users_last_import.assigned_user_id=vtiger_users.id 
+						where vtiger_users_last_import.assigned_user_id='{$current_user->id}'
+							AND vtiger_users_last_import.bean_type='Potentials'
+							AND vtiger_users_last_import.bean_id=vtiger_crmentity.crmid
+							AND vtiger_users_last_import.deleted=0
+							AND vtiger_crmentity.deleted=0 
+							AND vtiger_users.status='Active'";
+		}else if($this->bean_type == 'Leads'){
 			$query = "SELECT distinct vtiger_leaddetails.*, vtiger_crmentity.crmid, vtiger_leadaddress.phone,vtiger_leadsubdetails.website,
-                                vtiger_users.user_name user_name,
-				smownerid 
-				FROM vtiger_leaddetails 
-				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid 
-				inner join vtiger_leadaddress on vtiger_crmentity.crmid=vtiger_leadaddress.leadaddressid 
-				inner join vtiger_leadsubdetails on vtiger_crmentity.crmid=vtiger_leadsubdetails.leadsubscriptionid 
-				left join vtiger_users_last_import on vtiger_users_last_import.bean_id=vtiger_crmentity.crmid			       	
-				left join vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
-				WHERE 
-				vtiger_users_last_import.assigned_user_id=
-					'{$current_user->id}'
-				AND vtiger_users_last_import.bean_type='Leads'
-				AND vtiger_users_last_import.deleted=0
-				AND vtiger_crmentity.deleted=0
-				AND vtiger_users.status='Active'";
+						vtiger_users.user_name user_name,
+						smownerid 
+						FROM vtiger_leaddetails 
+						inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid 
+						inner join vtiger_leadaddress on vtiger_crmentity.crmid=vtiger_leadaddress.leadaddressid 
+						inner join vtiger_leadsubdetails on vtiger_crmentity.crmid=vtiger_leadsubdetails.leadsubscriptionid 
+						left join vtiger_users_last_import on vtiger_users_last_import.bean_id=vtiger_crmentity.crmid			       	
+						left join vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
+						WHERE 
+						vtiger_users_last_import.assigned_user_id=
+							'{$current_user->id}'
+						AND vtiger_users_last_import.bean_type='Leads'
+						AND vtiger_users_last_import.deleted=0
+						AND vtiger_crmentity.deleted=0
+						AND vtiger_users.status='Active'";
 		}
 		
 		//Pavani: Query to retrieve trouble tickets, vendors data from database

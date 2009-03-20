@@ -546,7 +546,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	$noofrows = $adb->num_rows($list_result);
 	$list_block = Array();
 	global $theme;
-	$evt_status;
+	$evt_status = '';
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	//getting the vtiger_fieldtable entries from database
@@ -800,6 +800,9 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							if ($name == 'Close') {														
 								$status = $adb->query_result($list_result,$i-1,"status");
 								$activityid = $adb->query_result($list_result,$i-1,"activityid");
+								if(empty($activityid)){
+									$activityid = $adb->query_result($list_result, $i-1, "tmp_activity_id");
+								}
 								$activitytype = $adb->query_result($list_result,$i-1,"activitytype");
 								if ($activitytype != 'Task' && $activitytype != 'Emails') {
 									$eventstatus = $adb->query_result($list_result,$i-1,"eventstatus");
@@ -2518,7 +2521,7 @@ function getListQuery($module,$where='')
 		//Query modified to sort by assigned to
 		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
 			vtiger_account.accountname,
-			vtiger_potential.accountid, vtiger_potential.potentialname,
+			vtiger_potential.related_to, vtiger_potential.potentialname,
 			vtiger_potential.sales_stage, vtiger_potential.amount,
 			vtiger_potential.currency, vtiger_potential.closingdate,
 			vtiger_potential.typeofrevenue,
@@ -2526,10 +2529,12 @@ function getListQuery($module,$where='')
 			FROM vtiger_potential
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_potential.potentialid
-			INNER JOIN vtiger_account
-				ON vtiger_potential.accountid = vtiger_account.accountid
 			INNER JOIN vtiger_potentialscf
 				ON vtiger_potentialscf.potentialid = vtiger_potential.potentialid
+			LEFT JOIN vtiger_account
+				ON vtiger_potential.related_to = vtiger_account.accountid
+			LEFT JOIN vtiger_contactdetails
+				ON vtiger_potential.related_to = vtiger_contactdetails.contactid
 			LEFT JOIN vtiger_campaign
 				ON vtiger_campaign.campaignid = vtiger_potential.campaignid
 			LEFT JOIN vtiger_groups
@@ -3625,11 +3630,12 @@ function getPopupCheckquery($current_module,$relmodule,$relmod_recordid)
 				$condition = "and vtiger_contactdetails.contactid= ".$contact_id;
 			else
 			{
-				$query = "select accountid from vtiger_potential where potentialid=?";
+				$query = "select related_to from vtiger_potential where potentialid=?";
 				$result = $adb->pquery($query, array($relmod_recordid));
-				$acc_id = $adb->query_result($result,0,"accountid");
-				if($acc_id != '')
+				$acc_id = $adb->query_result($result,0,"related_to");
+				if($acc_id != ''){
 					$condition = "and vtiger_contactdetails.accountid= ".$acc_id;
+				}
 			}
 		}
 		elseif($relmodule == "Quotes")
@@ -3752,7 +3758,7 @@ function getPopupCheckquery($current_module,$relmodule,$relmod_recordid)
 	{
 		if($relmodule == 'Accounts')
 		{
-			$pot_query = "select vtiger_crmentity.crmid,vtiger_account.accountid,vtiger_potential.potentialid from vtiger_potential inner join vtiger_account on vtiger_account.accountid=vtiger_potential.accountid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_potential.accountid=?";
+			$pot_query = "select vtiger_crmentity.crmid,vtiger_account.accountid,vtiger_potential.potentialid from vtiger_potential inner join vtiger_account on vtiger_account.accountid=vtiger_potential.related_to inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_potential.related_to=?";
 			$pot_result = $result = $adb->pquery($pot_query, array($relmod_recordid));
 			$rows = $adb->num_rows($pot_result);
 			$potids_comma = "";	
@@ -4392,4 +4398,33 @@ function getMergeFields($module,$str){
 	return $fields;
 }
 
+	
+/**
+ * this function accepts a modulename and a fieldname and returns the first related module for it
+ * it expects the uitype of the field to be 10
+ * @param string $module - the modulename
+ * @param string $fieldname - the field name
+ * @return string $data - the first related module
+ */
+function getFirstModule($module, $fieldname){
+	global $adb;
+	$sql = "select fieldid, uitype from vtiger_field where tabid=? and fieldname=?";
+	$result = $adb->pquery($sql, array(getTabid($module), $fieldname));
+	
+	if($adb->num_rows($result)>0){
+		$uitype = $adb->query_result($result, 0, "uitype");
+		
+		if($uitype == 10){
+			$fieldid = $adb->query_result($result, 0, "fieldid");
+			$sql = "select * from vtiger_fieldmodulerel where fieldid=?";
+			$result = $adb->pquery($sql, array($fieldid));
+			$count = $adb->num_rows($result);
+			
+			if($count > 0){
+				$data = $adb->query_result($result, 0, "relmodule");
+			}
+		}
+	}
+	return $data;
+}
 ?>

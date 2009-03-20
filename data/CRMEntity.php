@@ -1241,9 +1241,6 @@ $log->info("in getOldFileName  ".$notesid);
 				$this->db->pquery('INSERT INTO vtiger_relatedlists_rb VALUES (?,?,?,?,?,?)', $params);
 			}
 			
-			$query = "UPDATE $tableName SET $columnName=0 WHERE $columnName=?";
-			$params = array($id);
-			$this->db->pquery($query, $params);
 		}
 	}
 	
