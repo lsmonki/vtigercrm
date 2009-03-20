@@ -2634,8 +2634,9 @@ function clear_checked_all(module)
 			obj[i].checked=false;
 		}
 	}
-	getObj(module+"_selectall").checked=false;
-
+	if(getObj(module+"_selectall")) {
+		getObj(module+"_selectall").checked=false;
+	}
 }
 //groupParentElementId is added as there are multiple groups in Documents listview.
 function toggleSelect_ListView(state,relCheckName,groupParentElementId) {
