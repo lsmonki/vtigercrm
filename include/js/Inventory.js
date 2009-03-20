@@ -746,13 +746,16 @@ function setDiscount(currObj,curr_row)
 		//This is to calculate the final discount
 		if(curr_row == '_final')
 		{
-			discount_amount = eval(document.getElementById("netTotal").innerHTML)*eval(document.getElementById("discount_percentage"+curr_row).value)/eval(100);
+			var discount_percentage_final_value = document.getElementById("discount_percentage"+curr_row).value;
+			if(discount_percentage_final_value == '') discount_percentage_final_value = 0;
+			discount_amount = eval(document.getElementById("netTotal").innerHTML)*eval(discount_percentage_final_value)/eval(100);
 		}
 		else//This is to calculate the product discount
 		{
-			discount_amount = eval(document.getElementById("productTotal"+curr_row).innerHTML)*eval(document.getElementById("discount_percentage"+curr_row).value)/eval(100);
+			var discount_percentage_value = document.getElementById("discount_percentage"+curr_row).value;
+			if(discount_percentage_value == '') discount_percentage_value = 0;
+			discount_amount = eval(document.getElementById("productTotal"+curr_row).innerHTML)*eval(discount_percentage_value)/eval(100);
 		}
-
 		//Rounded the decimal part of discount amount to two digits
 		document.getElementById("discountTotal"+curr_row).innerHTML = roundValue(discount_amount.toString());
 	}
@@ -762,7 +765,9 @@ function setDiscount(currObj,curr_row)
 		document.getElementById("discount_percentage"+curr_row).style.visibility = 'hidden';
 		document.getElementById("discount_amount"+curr_row).style.visibility = 'visible';
 		//Rounded the decimal part of discount amount to two digits
-		document.getElementById("discountTotal"+curr_row).innerHTML = roundValue(document.getElementById("discount_amount"+curr_row).value.toString());
+		var discount_amount_value = document.getElementById("discount_amount"+curr_row).value.toString();
+		if(discount_amount_value == '') discount_amount_value = 0;
+		document.getElementById("discountTotal"+curr_row).innerHTML = roundValue(discount_amount_value);
 	}
 
 }
@@ -813,12 +818,21 @@ function calcCurrentTax(tax_name, curr_row, tax_row)
 function calcGroupTax()
 {
 	var group_tax_count = document.getElementById("group_tax_count").value;
-	var net_total_after_discount = eval(document.getElementById("netTotal").innerHTML)-eval(document.getElementById("discountTotal_final").innerHTML);
+	
+	var netTotal_value = document.getElementById("netTotal").innerHTML;
+	if(netTotal_value == '') netTotal_value = 0;
+	
+	var discountTotal_final_value = document.getElementById("discountTotal_final").innerHTML;
+	if(discountTotal_final_value == '') discountTotal_final_value = 0;
+	
+	var net_total_after_discount = eval(netTotal_value)-eval(discountTotal_final_value);
 	var group_tax_total = 0.00, tax_amount=0.00;
 
 	for(var i=1;i<=group_tax_count;i++)
 	{
-		tax_amount = eval(net_total_after_discount)*eval(document.getElementById("group_tax_percentage"+i).value)/eval(100);
+		var group_tax_percentage = document.getElementById("group_tax_percentage"+i).value;
+		if(group_tax_percentage == '') group_tax_percentage = '0';		
+		tax_amount = eval(net_total_after_discount)*eval(group_tax_percentage)/eval(100);
 		document.getElementById("group_tax_amount"+i).value = tax_amount;
 		group_tax_total = eval(group_tax_total) + eval(tax_amount);
 	}
@@ -836,7 +850,9 @@ function calcSHTax()
 	for(var i=1;i<=sh_tax_count;i++)
 	{
 		if(sh_charge == '') sh_charge = '0';
-		tax_amount = eval(sh_charge)*eval(document.getElementById("sh_tax_percentage"+i).value)/eval(100);
+		var sh_tax_percentage = document.getElementById("sh_tax_percentage"+i).value;
+		if(sh_tax_percentage == '') sh_tax_percentage = '0'; 
+		tax_amount = eval(sh_charge)*eval(sh_tax_percentage)/eval(100);
 		//Rounded the decimal part of S&H Tax amount to two digits
 		document.getElementById("sh_tax_amount"+i).value = roundValue(tax_amount.toString());
 		sh_tax_total = eval(sh_tax_total) + eval(tax_amount);
