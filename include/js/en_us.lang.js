@@ -264,5 +264,20 @@
 				LBL_QUALIFY_EMAIL : 'Qualify', 
 				LBL_FORWARD_EMAIL : 'Forward', 
 				LBL_REPLY_TO_SENDER : 'Reply To Sender', 
-				LBL_REPLY_TO_ALL : 'Reply To All' 	
+				LBL_REPLY_TO_ALL : 'Reply To All',
+				
+				LBL_WIDGET_HIDDEN : 'Widget Hidden',
+				LBL_RESTORE_FROM_PREFERENCES : 'You can restore it from your preferences',
+				ERR_HIDING : 'Error while hiding',
+				MSG_TRY_AGAIN : 'Please try again',
+				
+				MSG_ENABLE_SINGLEPANE_VIEW : 'Singlepane View Enabled',
+				MSG_DISABLE_SINGLEPANE_VIEW : 'Singlepane View Disabled',
+				
+				MSG_FTP_BACKUP_DISABLED : 'FTP Backup Disabled',
+				MSG_LOCAL_BACKUP_DISABLED : 'Local Backup Disabled',
+				MSG_FTP_BACKUP_ENABLED : 'FTP Backup Enabled',
+				MSG_LOCAL_BACKUP_ENABLED : 'Local Backup Enabled',
+				MSG_CONFIRM_PATH : 'confirm with the Path details',
+				MSG_CONFIRM_FTP_DETAILS : 'confirm with the FTP details'
 			};

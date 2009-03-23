@@ -108,7 +108,7 @@ function viewenabled(ochkbox)
 	if(ochkbox.checked == true)
 	{
 	     var status='enabled';
-	$('view_info').innerHTML = 'Singlepane View Enabled';
+	$('view_info').innerHTML = alert_arr.MSG_ENABLE_SINGLEPANE_VIEW;
 	     $('view_info').style.display = 'block';		
 		
 			
@@ -116,7 +116,7 @@ function viewenabled(ochkbox)
 	else
 	{
 	    var status = 'disabled';	
-	     $('view_info').innerHTML = 'Singlepane View Disabled';
+	     $('view_info').innerHTML = alert_arr.MSG_DISABLE_SINGLEPANE_VIEW;
 	     $('view_info').style.display = 'block';		
 	
 	}

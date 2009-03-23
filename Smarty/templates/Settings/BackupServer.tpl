@@ -226,7 +226,7 @@ function backupenabled(ochkbox)
         {
                 $('bckcontents').style.display='block';
                 var status='enabled';
-                $('view_info').innerHTML = 'FTP Backup Enabled, confirm with the FTP details';
+                $('view_info').innerHTML = alert_arr.MSG_FTP_BACKUP_ENABLED+', ' + alert_arr.MSG_CONFIRM_FTP_DETAILS;
                 $('view_info').style.display = 'block';
 				$("ftp_buttons").style.display="block";
 
@@ -250,7 +250,7 @@ function backupenabled(ochkbox)
 	{
 		$('bckcontents').style.display='none';
                 var status = 'disabled';
-                $('view_info').innerHTML = 'FTP Backup Disabled';
+                $('view_info').innerHTML = alert_arr.MSG_FTP_BACKUP_DISABLED;
                 $('view_info').style.display = 'block';
 				$("ftp_buttons").style.display="none";
       }
@@ -294,7 +294,7 @@ function localbackupenabled(ochkbox)
 				$('localbackup_buttons').style.display='block';
 				$('localbackup_fields').style.display='block';
                 var status='enabled';
-                $('view_info').innerHTML = 'Local Backup Enabled, confirm with the Path details';
+                $('view_info').innerHTML = alert_arr.MSG_LOCAL_BACKUP_ENABLED+', '+alert_arr.MSG_CONFIRM_PATH;
                 $('view_info').style.display = 'block';
                 new Ajax.Request('index.php',
                 	{queue: {position: 'end', scope: 'command'},
@@ -315,7 +315,7 @@ function localbackupenabled(ochkbox)
 				$('localbackup_buttons').style.display='none';
 				$('localbackup_fields').style.display='none';
                 var status = 'disabled';
-                $('view_info').innerHTML = 'Local Backup Disabled';
+                $('view_info').innerHTML = alert_arr.MSG_LOCAL_BACKUP_DISABLED;
                 $('view_info').style.display = 'block';
         }
 	new Ajax.Request('index.php',

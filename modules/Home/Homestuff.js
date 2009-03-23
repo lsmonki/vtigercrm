@@ -427,14 +427,14 @@ function HideDefault(sid){
 				if(response.responseText.indexOf('SUCCESS') > -1){
 					var delchild = $('stuff_'+sid);
 					odeletedChild = $('MainMatrix').removeChild(delchild);
-					$('seqSettings').innerHTML= '<table cellpadding="10" cellspacing="0" border="0" width="100%" class="vtResultPop small"><tr><td align="center">Widget hidden.You can restore it from your preferences.</td></tr></table>';
+					$('seqSettings').innerHTML= '<table cellpadding="10" cellspacing="0" border="0" width="100%" class="vtResultPop small"><tr><td align="center">'+alert_arr.LBL_WIDGET_HIDDEN+'.'+alert_arr.LBL_RESTORE_FROM_PREFERENCES+'.</td></tr></table>';
 					$('seqSettings').style.display = 'block';
 					$('seqSettings').style.display = 'none';
 					placeAtCenter($('seqSettings'));
 					Effect.Appear('seqSettings');
 					setTimeout(hideSeqSettings,3000);
 				}else{
-					alert("Error while hiding. Please try again.");
+					alert(alert_arr.ERR_HIDING + '.'+ alert_arr.MSG_TRY_AGAIN + '.');
 				}
 	        }
 		}
