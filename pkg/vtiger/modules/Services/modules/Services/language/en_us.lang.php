@@ -51,7 +51,6 @@ $mod_strings = Array(
 'LBL_SUPPORT_START_DATE'=>'Support Start Date',
 'LBL_SUPPORT_EXPIRY_DATE'=>'Support Expiry Date',
 
-//Added for 4GA
 'Commission Rate'=>'Commission Rate (%)',
 'Unit Price'=>'Unit Price',
 'Support Start Date'=>'Support Start Date',
@@ -85,7 +84,6 @@ $mod_strings = Array(
 'Service Name'=>'Service Name',
 'Active'=>'Active',
 
-//Added for 4.2 Release -- CustomView
 'LBL_ALL'=>'All',
 'LBL_PRICEBOOK_SEARCH_FORM_TITLE'=>'PriceBook Search',
 'LBL_PRICEBOOK_TITLE'=>'Price Books',
@@ -99,6 +97,8 @@ $mod_strings = Array(
 'LBL_ADD_SERVICE_PRICEBOOKS'=>'Add Service to PriceBooks',
 'LBL_ADD_SERVICES_PRICEBOOK'=>'Add Services to PriceBook',
 'LBL_SERVICE_PRICES'=>'Service Prices',
+
+'Services'=>'Services',
 );
 
 ?>

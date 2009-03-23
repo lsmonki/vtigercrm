@@ -22,10 +22,8 @@
 {foreach key=header item=detail from=$RELATEDLISTS}
 
 {assign var=rel_mod value=$header}
-{assign var="HEADERLABEL" value=$header}
-{if $APP.$header neq ''}
-	{assign var="HEADERLABEL" value=$APP.$header}
-{/if}
+{assign var="HEADERLABEL" value=$header|@getTranslatedString:$rel_mod}
+
 <table border=0 cellspacing=0 cellpadding=0 width=100% class="small" style="border-bottom:1px solid #999999;padding:5px;">
 	<tr>
 		<td  valign=bottom><b>{$HEADERLABEL}</b> 

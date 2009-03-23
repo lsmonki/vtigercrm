@@ -51,7 +51,7 @@ if(isset($idlist)) {
 					$focus->column_fields[$fieldname] = decode_html($focus->column_fields[$fieldname]);
 				}
 			}
-	   		$focus->save($currentModule);
+			$focus->save($currentModule);
 		}
 	}
 }

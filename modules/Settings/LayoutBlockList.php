@@ -1022,7 +1022,9 @@ function getRelatedListInfo($module){
 	for($i=0;$i<$noofrows;$i++){
 	$res[$i]['name'] = $adb->query_result($relinfo,$i,'name');
 	$res[$i]['sequence'] = $adb->query_result($relinfo,$i,'sequence');
-	$res[$i]['label'] = $adb->query_result($relinfo,$i,'label');
+	$label = $adb->query_result($relinfo,$i,'label');
+	$relatedModule = getTabname($adb->query_result($relinfo,$i,'related_tabid'));
+	$res[$i]['label'] = getTranslatedString($label,$relatedModule);
 	$res[$i]['presence'] = $adb->query_result($relinfo,$i,'presence');
 	$res[$i]['tabid'] = $tabid;
 	$res[$i]['id'] = $adb->query_result($relinfo,$i,'relation_id');
