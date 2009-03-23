@@ -255,5 +255,14 @@
 				/* Inventory validation strings */
 				NO_LINE_ITEM_SELECTED : 'No line item is selected. Please select at least one line item.',
 				LINE_ITEM : 'Line item',
-				LIST_PRICE: 'List Price'
+				LIST_PRICE: 'List Price',
+				
+				/* Webmails */
+				LBL_PRINT_EMAIL : 'Print', 
+				LBL_DELETE_EMAIL : 'Delete', 
+				LBL_DOWNLOAD_ATTACHMENTS : 'Download Attachments', 
+				LBL_QUALIFY_EMAIL : 'Qualify', 
+				LBL_FORWARD_EMAIL : 'Forward', 
+				LBL_REPLY_TO_SENDER : 'Reply To Sender', 
+				LBL_REPLY_TO_ALL : 'Reply To All' 	
 			};

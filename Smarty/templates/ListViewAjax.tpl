@@ -16,9 +16,9 @@
 					<span style="float:left">{$ACCOUNT} &gt; {$MAILBOX}
 					{if $NUM_EMAILS neq 0}
                                                  {if $NUM_EMAILS neq 1}
-                                                        ({$NUM_EMAILS} Messages)
+                                                        ({$NUM_EMAILS} {$MOD.LBL_MESSAGES})
                                                  {else}
-                                                        ({$NUM_EMAILS} Message)
+                                                        ({$NUM_EMAILS} {$MOD.LBL_MESSAGE})
                                                  {/if}
                                          {/if}
 					</span> <span style="float:right">{$NAVIGATION}</span>	

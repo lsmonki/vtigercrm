@@ -62,7 +62,7 @@ else
                                                 <tr><td align="left" width="100%">&nbsp;<b><?php echo $mod_strings['LBL_SUBJECT'];?></b><?php echo $subject;?></td></tr>
 	<tr><td align="left" width="100%">&nbsp;<b><?php echo $mod_strings['LBL_DATE'];?></b><?php echo substr($date,0,25);?>
         <?php if(!$_REQUEST['fullview']) {?>
-        <span style="float:right"  colspan="2"><a href="javascript:;" onclick="OpenComposer('<?php echo $mailid;?>','full_view')"> Full Email View</a></span>
+        <span style="float:right"  colspan="2"><a href="javascript:;" onclick="OpenComposer('<?php echo $mailid;?>','full_view')"><?php echo $mod_strings['LBL_FULL_EMAIL_VIEW'] ?></a></span>
         <?php } ?>
 	</td>
 	</tr>
