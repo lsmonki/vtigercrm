@@ -3604,7 +3604,7 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	else
 	{
 		$output .= '<img src="' . vtiger_imageurl('next_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
-		$output .= '<img src="' . vtiger_imageurl('previous_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
+		$output .= '<img src="' . vtiger_imageurl('end_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
 	}
 	if($module != 'Documents')
 		$output .= '</td>';
