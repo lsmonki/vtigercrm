@@ -1976,7 +1976,7 @@ class ReportRun extends CRMEntity
 						$fld_name_2 = $this->secondarymodule . "_" . trim($value);
 						if(in_array($fld_name_1,$this->convert_currency) || in_array($fld_name_1,$this->append_currency_symbol_to_value)
 								|| in_array($fld_name_2,$this->convert_currency) || in_array($fld_name_2,$this->append_currency_symbol_to_value)) {
-							$col_header .= " (in ".$current_user->currency_symbol.")";
+							$col_header .= " (".$app_strings['LBL_IN']." ".$current_user->currency_symbol.")";
 							$convert_price = true;
 						} else{
 							$convert_price = false;
@@ -2254,7 +2254,7 @@ class ReportRun extends CRMEntity
 						$fld_name_2 = $this->secondarymodule . "_" . trim($value);
 						if(in_array($fld_name_1,$this->convert_currency) || in_array($fld_name_1,$this->append_currency_symbol_to_value)
 								|| in_array($fld_name_2,$this->convert_currency) || in_array($fld_name_2,$this->append_currency_symbol_to_value)) {
-							$col_header .= " (in ".$current_user->currency_symbol.")";
+							$col_header .= " (".$app_strings['LBL_IN']." ".$current_user->currency_symbol.")";
 							$convert_price = true;
 						} else {
 							$convert_price = false;
@@ -2455,7 +2455,7 @@ class ReportRun extends CRMEntity
 	 **/ 
 	function getLstringforReportHeaders($fldname)
 	{
-		global $modules,$current_language,$current_user;
+		global $modules,$current_language,$current_user,$app_strings;
 		$rep_header = ltrim(str_replace($modules," ",$fldname));
 		$rep_header_temp = ereg_replace(" ","_",$rep_header);
 		$rep_module = ereg_replace('_'.$rep_header_temp,"",$fldname);
@@ -2464,7 +2464,7 @@ class ReportRun extends CRMEntity
 		$rep_header = decode_html($rep_header);		
 		$curr_symb = "";
 		if(in_array($fldname, $this->convert_currency)) {
-        	$curr_symb = " (in ".$current_user->currency_symbol.")";
+        	$curr_symb = " (".$app_strings['LBL_IN']." ".$current_user->currency_symbol.")";
 		}
         if($temp_mod_strings[$rep_header] != '')
         {

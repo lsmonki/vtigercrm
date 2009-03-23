@@ -209,7 +209,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 						//added to display vtiger_currency symbol in listview header
 						if($lbl_name =='Amount')
 						{
-							$lbl_name .=' (in '.$user_info['currency_symbol'].')';
+							$lbl_name .=' ('.$app_strings['LBL_IN'].' '.$user_info['currency_symbol'].')';
 						}
 						if($relatedlist !='' && $relatedlist != 'global')
 							if($singlepane_view == 'true')	
@@ -255,7 +255,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 																	//added to display vtiger_currency symbol in related listview header
 		if($name =='Amount' && $relatedlist !='' )
 		{
-			$name .=' (in '.$user_info['currency_symbol'].')';
+			$name .=' ('.$app_strings['LBL_IN'].' '.$user_info['currency_symbol'].')';
 		}
 		
 		if($module == "Calendar" && $name == $app_strings['Close'])
