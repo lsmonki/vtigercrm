@@ -181,7 +181,7 @@ elseif($activity_mode == 'Events')
 	$rem_days = 0;
 	$rem_hrs = 0;
 	$rem_min = 0;
-	if($focus->column_fields['reminder_time'] != null)
+	if(!empty($focus->column_fields['reminder_time']))
 	{
 		$data['set_reminder'] = $mod_strings['LBL_YES'];
 		$data['reminder_str'] = $finaldata['reminder_time'];
