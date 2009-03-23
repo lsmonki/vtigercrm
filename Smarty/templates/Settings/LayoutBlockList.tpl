@@ -14,9 +14,8 @@
 {literal}
 function check(){
 	var blocklabel = document.getElementById('blocklabel');
-	var val = blocklabel.value;
-	var n = val.replace(/^[\s]+/,'').replace(/[\s]+$/,'').replace(/[\s]{2,}/,' ');
-	if(n == "" || val == "")
+	var val = trim(blocklabel.value);
+	if(val == "")
 	{
 		alert(alert_arr.BLOCK_NAME_CANNOT_BE_BLANK);
 		return false;
@@ -150,7 +149,7 @@ function getCreateCustomBlockForm(modulename,mode)
 	if(checlabel == false)
 		return false;
 	var blocklabel = document.getElementById('blocklabel');
-	var val = blocklabel.value;
+	var val = trim(blocklabel.value);
 	var blockid = document.getElementById('after_blockid').value;
 	$('vtbusy_info').style.display = "block";
 			new Ajax.Request(
