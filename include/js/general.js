@@ -1044,7 +1044,12 @@ function doformValidation(edit_type) {
                         {
                                 var image_arr = new Array();
                                 image_arr = (getObj('imagename').value).split(".");
-                                var image_ext = image_arr[1].toLowerCase();
+								var image_arr_last_index = image_arr.length - 1;
+								if(image_arr_last_index < 0) {
+									alert(alert_arr.LBL_WRONG_IMAGE_TYPE);
+                                    return false;
+								}
+                                var image_ext = image_arr[image_arr_last_index].toLowerCase();
                                 if(image_ext ==  "jpeg" || image_ext ==  "png" || image_ext ==  "jpg" || image_ext ==  "pjpeg" || image_ext ==  "x-png" || image_ext ==  "gif")
                                 {
                                         return true;
