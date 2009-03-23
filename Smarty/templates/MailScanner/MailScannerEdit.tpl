@@ -128,8 +128,8 @@
 									{assign var="novalidatecert_type" value="checked='true'"}
 								{/if}
 
-								<input type="radio" name="mailboxinfo_sslmethod" class="small" value="validate-cert" {$validatecert_type}> {$MOD.LBL_VALIDATE} {$MOD.LBL_SSL} {$MOD.LBL_CERTIFICATE}
-								<input type="radio" name="mailboxinfo_sslmethod" class="small" value="novalidate-cert" {$novalidatecert_type}> {$MOD.LBL_DO} {$MOD.LBL_NOT} {$MOD.LBL_SSL} {$MOD.LBL_CERTIFICATE}
+								<input type="radio" name="mailboxinfo_sslmethod" class="small" value="validate-cert" {$validatecert_type}> {$MOD.LBL_VAL_SSL_CERT}
+								<input type="radio" name="mailboxinfo_sslmethod" class="small" value="novalidate-cert" {$novalidatecert_type}> {$MOD.LBL_DONOT_VAL_SSL_CERT}
 							</td>
                         </tr>
 						<tr>
