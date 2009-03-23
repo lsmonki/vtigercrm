@@ -350,19 +350,19 @@ function dateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 	
 	if (dd<1 || dd>31 || mm<1 || mm>12 || yyyy<1 || yyyy<1000) {
 		alert(alert_arr.ENTER_VALID+fldLabel)
-		getObj(dateFldName).focus()
+		try { getObj(dateFldName).focus() } catch(error) { }
 		return false
 	}
 	
 	if ((mm==2) && (dd>29)) {//checking of no. of days in february month
 		alert(alert_arr.ENTER_VALID+fldLabel)
-		getObj(dateFldName).focus()
+		try { getObj(dateFldName).focus() } catch(error) { }
 		return false
 	}
 	
 	if ((mm==2) && (dd>28) && ((yyyy%4)!=0)) {//leap year checking
 		alert(alert_arr.ENTER_VALID+fldLabel)
-		getObj(dateFldName).focus()
+		try { getObj(dateFldName).focus() } catch(error) { }
 		return false
 	}
 
@@ -373,7 +373,7 @@ function dateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 		case 9 : 
 		case 11 :	if (dd>30) {
 						alert(alert_arr.ENTER_VALID+fldLabel)
-						getObj(dateFldName).focus()
+						try { getObj(dateFldName).focus() } catch(error) { }
 						return false
 					}	
 	}
@@ -388,7 +388,7 @@ function dateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 	
 	if (hourval>23 || minval>59) {
 		alert(alert_arr.ENTER_VALID+fldLabel)
-		currObj.focus()
+		try { currObj.focus() } catch(error) { }
 		return false
 	}
 	
@@ -403,7 +403,7 @@ function dateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 	
 	if (type!="OTH") {
 		if (!compareDates(chkdate,fldLabel,currdate,"current date & time",type)) {
-			getObj(dateFldName).focus()
+			try { getObj(dateFldName).focus() } catch(error) { }
 			return false
 		} else return true;
 	} else return true;
@@ -450,7 +450,7 @@ function dateTimeComparison(dateFldName1,timeFldName1,fldLabel1,dateFldName2,tim
 	
 	if (type!="OTH") {
 		if (!compareDates(date1,fldLabel1,date2,fldLabel2,type)) {
-			getObj(dateFldName1).focus()
+			try { getObj(dateFldName1).focus() } catch(error) { }
 			return false
 		} else return true;
 	} else return true;
@@ -469,19 +469,19 @@ function dateValidate(fldName,fldLabel,type) {
 	
 	if (dd<1 || dd>31 || mm<1 || mm>12 || yyyy<1 || yyyy<1000) {
 		alert(alert_arr.ENTER_VALID+fldLabel)
-		getObj(fldName).focus()
+		try { getObj(fldName).focus() } catch(error) { }
 		return false
 	}
 	
 	if ((mm==2) && (dd>29)) {//checking of no. of days in february month
 		alert(alert_arr.ENTER_VALID+fldLabel)
-		getObj(fldName).focus()
+		try { getObj(fldName).focus() } catch(error) { }
 		return false
 	}
 	
 	if ((mm==2) && (dd>28) && ((yyyy%4)!=0)) {//leap year checking
 		alert(alert_arr.ENTER_VALID+fldLabel)
-		getObj(fldName).focus()
+		try { getObj(fldName).focus() } catch(error) { }
 		return false
 	}
 
@@ -492,7 +492,7 @@ function dateValidate(fldName,fldLabel,type) {
 		case 9 : 
 		case 11 :	if (dd>30) {
 						alert(alert_arr.ENTER_VALID+fldLabel)
-						getObj(fldName).focus()
+						try { getObj(fldName).focus() } catch(error) { }
 						return false
 					}	
 	}
@@ -506,7 +506,7 @@ function dateValidate(fldName,fldLabel,type) {
 	
 	if (type!="OTH") {
 		if (!compareDates(chkdate,fldLabel,currdate,"current date",type)) {
-			getObj(fldName).focus()
+			try { getObj(fldName).focus() } catch(error) { }
 			return false
 		} else return true;
 	} else return true;
@@ -540,7 +540,7 @@ function dateComparison(fldName1,fldLabel1,fldName2,fldLabel2,type) {
 	
 	if (type!="OTH") {
 		if (!compareDates(date1,fldLabel1,date2,fldLabel2,type)) {
-			getObj(fldName1).focus()
+			try { getObj(fldName1).focus() } catch(error) { }
 			return false
 		} else return true;
 	} else return true
@@ -557,7 +557,7 @@ function timeValidate(fldName,fldLabel,type) {
 	
 	if (hourval>23 || minval>59) {
 		alert(alert_arr.ENTER_VALID+fldLabel)
-		currObj.focus()
+		try { currObj.focus() } catch(error) { }
 		return false
 	}
 	
@@ -569,7 +569,7 @@ function timeValidate(fldName,fldLabel,type) {
 	
 	if (type!="OTH") {
 		if (!compareDates(chktime,fldLabel1,currtime,"current time",type)) {
-			getObj(fldName).focus()
+			try { getObj(fldName).focus() } catch(error) { }
 			return false
 		} else return true;
 	} else return true
@@ -622,7 +622,7 @@ function timeComparison(fldName1,fldLabel1,fldName2,fldLabel2,type) {
 	time2.setMinutes(min2)
 	if (type!="OTH") {	
 		if (!compareDates(time1,fldLabel1,time2,fldLabel2,type)) {
-			getObj(fldName1).focus()
+			try { getObj(fldName1).focus() } catch(error) { }
 			return false
 		} else return true;
 	} else return true;
@@ -658,7 +658,7 @@ function numValidate(fldName,fldLabel,format,neg) {
        }
               if (invalid==true) {
            alert(alert_arr.INVALID+fldLabel)
-           getObj(fldName).focus()
+           try { getObj(fldName).focus() } catch(error) { }
            return false
        } else return true
    } else {
@@ -673,7 +673,7 @@ function numValidate(fldName,fldLabel,format,neg) {
                    if(isNaN(val))
                    {
                         alert(alert_arr.INVALID+fldLabel)
-                        getObj(fldName).focus()
+                        try { getObj(fldName).focus() } catch(error) { }
                         return false
                    }
                    else if(splitval[0] > 100 || len > 3 || (splitval[0] >= 100 && splitval[1] > 0))
@@ -706,13 +706,13 @@ function numValidate(fldName,fldLabel,format,neg) {
 	if(dotcount>1)
 	{
        		alert(alert_arr.INVALID+fldLabel)
-		getObj(fldName).focus()
+		try { getObj(fldName).focus() } catch(error) { }
 		return false;
 	}
 
 	if (!re.test(val)) {
        alert(alert_arr.INVALID+fldLabel)
-       getObj(fldName).focus()
+       try { getObj(fldName).focus() } catch(error) { }
        return false
    } else return true
 }
@@ -723,7 +723,7 @@ function intValidate(fldName,fldLabel) {
 	if (isNaN(val) || (val.indexOf(".")!=-1 && fldName != 'potential_amount' && fldName != 'list_price')) 
 	{
 		alert(alert_arr.INVALID+fldLabel)
-		getObj(fldName).focus()
+		try { getObj(fldName).focus() } catch(error) { }
 		return false
 	} 
         else if((fldName != 'employees' || fldName != 'noofemployees') && (val < -2147483648 || val > 2147483647))
@@ -781,7 +781,7 @@ function numConstComp(fldName,fldLabel,type,constval) {
 	}
 	
 	if (ret==false) {
-		getObj(fldName).focus()
+		try { getObj(fldName).focus() } catch(error) { }
 		return false
 	} else return true;
 }
@@ -1012,7 +1012,7 @@ function doformValidation(edit_type) {
 				var datevalue =getObj(datefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
                         	if (!dateValidate(fieldname[i],fieldlabel[i],currdatechk))
 				{
-		        	        getObj(datefield).focus()
+		        	        try { getObj(datefield).focus() } catch(error) { }
                         		return false
 				}
 				else
@@ -1027,7 +1027,7 @@ function doformValidation(edit_type) {
         				datecheck.setDate(dd)
                 			if (!compareDates(datecheck,datelabel,now,"Current Date","L"))
 					{
-		                	        getObj(datefield).focus()
+		                	        try { getObj(datefield).focus() } catch(error) { }
                 			        return false
                 			}
 				}
