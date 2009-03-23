@@ -4313,7 +4313,8 @@ function getParentId($parent_name)
 function decode_html($str)
 {
 	global $default_charset;
-	if($_REQUEST['action'] == 'Popup')
+	// Direct Popup action or Ajax Popup action should be treated the same.
+	if($_REQUEST['action'] == 'Popup' || $_REQUEST['file'] == 'Popup')
 		return html_entity_decode($str);
 	else
 		return html_entity_decode($str,ENT_QUOTES,$default_charset);
