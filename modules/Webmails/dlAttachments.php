@@ -16,7 +16,7 @@ require_once('include/utils/utils.php');
 require_once('modules/Webmails/Webmails.php');
 require_once('modules/Webmails/MailBox.php');
 
-global $MailBox;
+global $MailBox, $mod_strings;
 $MailBox = new MailBox($_REQUEST["mailbox"]);
 
 $mailid=$_REQUEST["mailid"];
@@ -29,12 +29,12 @@ echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=".$email->c
 echo '<script src="modules/Webmails/Webmails.js" type="text/javascript"></script>';
 echo "<table class='small' width='100%' cellspacing='1' cellpadding='0' border='0' style='font-size:18px'>";
 if(count($email->attname) <= 0)
-	echo "<tr align='center'><td nowrap>No files to download</td></tr>";
+	echo "<tr align='center'><td nowrap>".$mod_strings['LBL_NO_ATTACHMENTS']."</td></tr>";
 else{
 	for($i=0;$i<count($email->attname);$i++){
         	$attachment_links .= "&nbsp;&nbsp;&nbsp;&nbsp;".$email->anchor_arr[$i].$email->attname[$i]."</a></br>";
 	}
-	echo "<tr><td><table class='small' width='100%' cellspacing='1' cellpadding='0' border='0' style='font-size:13px'><tr><td width='90%'>There are ".count($email->attname)." attachment(s) to choose from:</td></tr>";
+	echo "<tr><td><table class='small' width='100%' cellspacing='1' cellpadding='0' border='0' style='font-size:13px'><tr><td width='90%'>".$mod_strings['LBL_THERE_ARE']." ".count($email->attname)." ".$mod_strings['LBL_ATTACHMENTS_TO_CHOOSE'].":</td></tr>";
 	echo "<tr><td width='100%'>".$attachment_links."</div></td></tr>";
 	echo "</td></tr></table>";
 }
