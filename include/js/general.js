@@ -2754,6 +2754,9 @@ var ActivityReminder_popup_onscreen = 2 * 1000; // Milli Seconds (should be less
 var ActivityReminder_callback_win_uniqueids = new Object();
 
 function ActivityReminderCallback() { 
+	if(typeof(Ajax) == 'undefined') {
+		return;
+	}		
 	if(ActivityReminder_regcallback_timer) {
 		window.clearTimeout(ActivityReminder_regcallback_timer);
 		ActivityReminder_regcallback_timer = null;
