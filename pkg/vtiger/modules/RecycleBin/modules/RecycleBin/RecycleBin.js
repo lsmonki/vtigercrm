@@ -130,26 +130,25 @@ function restore(entityid,select_module)
 	}
 }
 
-/*
 function getListViewEntries_js(module,url)
 {
-	$("status").style.display="inline";
-	var selectedmodule = $('select_module').options[$('select_module').selectedIndex].value 
-	urlstring = '&selected_module='+selectedmodule;
-        new Ajax.Request(
-        	'index.php',
-                {queue: {position: 'end', scope: 'command'},
-                	method: 'post',
-                        postBody:"module="+module+"&action="+module+"Ajax&file=index&mode=ajax&ajax=true&"+url+urlstring,
-						onComplete: function(response) {
-                        	$("status").style.display="none";
-                            $("modules_datas").innerHTML= response.responseText;
-							$("search_ajax").innerHTML = '';
-                  		}
-                }
-        );
-}*/
-
+	$("status").show();
+	var selected_module = $("select_module").value;
+	var urlstring = "&selected_module=" + selected_module;
+	new Ajax.Request(
+		'index.php',
+		{ queue: { position: 'end', scope: 'command' },
+			method: 'post',
+			postBody : "module=RecycleBin&action=RecycleBinAjax&file=ListView&mode=ajax&ajax=true&"+url+urlstring,
+			onComplete: function(response) {
+				$("status").hide();
+            	if($("modules_datas")) {
+            		$("modules_datas").innerHTML = response.responseText;
+            	}
+            }
+        }
+	);
+}
 
 function alphabetic(module,url,dataid)
 {
