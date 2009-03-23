@@ -1189,6 +1189,9 @@ $mod_strings = Array(
 'LBL_MODULE_NUMBERING' => 'Module Numbering',
 'LBL_FAILED' => 'Failed',
 'LBL_DONE' => 'Done',
-'LBL_IN_USE' => 'IN USE'
+'LBL_IN_USE' => 'IN USE',
+
+//Added for: 5473
+'LBL_SHARING_ACCESS_HELPNOTE' => 'After making modifications, press Recalculate button to apply the changes.',
 );
 ?>

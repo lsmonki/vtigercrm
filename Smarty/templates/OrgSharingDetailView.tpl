@@ -55,6 +55,9 @@ DIV.fixedLay {
 				</table>
 
 				<br>
+				<div class='helpmessagebox' style='margin-bottom: 4px;'>
+					<b style='color: red;'>{$APP.NOTE}</b> {$MOD.LBL_SHARING_ACCESS_HELPNOTE}
+				</div>				
 			  	<!-- GLOBAL ACCESS MODULE -->
 		  		<div id="globaldiv">
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
