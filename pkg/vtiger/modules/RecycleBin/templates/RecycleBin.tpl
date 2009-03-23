@@ -102,3 +102,20 @@
 </tbody>
 </table>
 
+<div style="display: none;" class="veil_new small" id="rb_empty_conf_id">
+	<table cellspacing="0" cellpadding="18" border="0" class="options small">
+	<tbody>
+		<tr>
+			<td nowrap="" align="center" style="color: rgb(255, 255, 255); font-size: 15px;">
+				<b>{$MOD.MSG_EMPTY_RB_CONFIRMATION}</b>
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				<input type="button" onclick="return emptyRecyclebin('rb_empty_conf_id');" value="{$APP.LBL_YES}"/>  
+				<input type="button" onclick="$('rb_empty_conf_id').style.display='none';" value="{$APP.LBL_NO}"/>
+			</td>
+		</tr>
+	</tbody>
+	</table>
+</div>

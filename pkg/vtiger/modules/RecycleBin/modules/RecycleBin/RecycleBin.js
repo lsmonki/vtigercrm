@@ -179,18 +179,11 @@ function alphabetic(module,url,dataid)
 
 function callEmptyRecyclebin() {
 	document.getElementById('rb_empty_conf_id').style.display = 'block';
-	var oFreezeLayer = document.createElement("DIV");
-	oFreezeLayer.id = "rb_freeze";
-	oFreezeLayer.className = "small veil";
-
-	if (browser_ie) oFreezeLayer.style.height = (document.body.offsetHeight + (document.body.scrollHeight - document.body.offsetHeight)) + "px";
-	else if (browser_nn4 || browser_nn6) oFreezeLayer.style.height = document.body.offsetHeight + "px";
-
-	oFreezeLayer.style.width = "100%";
-	document.body.appendChild(oFreezeLayer);
 }
 
 function emptyRecyclebin(id) {
+	if($(id)) $(id).hide();
+	VtigerJS_DialogBox.progress();
 	new Ajax.Request(
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
@@ -199,10 +192,9 @@ function emptyRecyclebin(id) {
 			onComplete: function(response) {
                 $("status").style.display="none";
                	$("modules_datas").innerHTML= response.responseText;
-				$("search_ajax").innerHTML = '';
-				document.body.removeChild($('rb_freeze'));
+				$("search_ajax").innerHTML = '';				
+				VtigerJS_DialogBox.hideprogress();
 			}
 		}
-	);
-	$(id).style.display = 'none';
+	);	
 }
