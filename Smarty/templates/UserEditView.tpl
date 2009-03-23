@@ -92,7 +92,7 @@ function check_duplicate()
 	<tr><td align="left">
 		<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
 		<tr>
-			<td rowspan="2"><img src="{'ico-users.gif'|@vtiger_imageurl:$THEME}" align="absmiddle"></td>
+			<td rowspan="2" width="50"><img src="{'ico-users.gif'|@vtiger_imageurl:$THEME}" align="absmiddle"></td>
 			<td>	
 				<span class="lvtHeaderText">
 				{if $PARENTTAB neq ''}	
