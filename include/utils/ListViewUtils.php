@@ -1968,6 +1968,9 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 							else
 								$cntct_focus->column_fields[$xyz[$i]] = '';
 						}
+						// For ToDo creation the underlying form is not named as EditView
+						$form = !empty($_REQUEST['form']) ? $_REQUEST['form'] : '';
+						if(!empty($form)) $form = htmlspecialchars($form,ENT_QUOTES,$default_charset);
 						$value = '<a href="javascript:window.close();" onclick=\'set_return_contact_address("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.popup_decode_html($cntct_focus->column_fields['mailingstreet']).'", "'.popup_decode_html($cntct_focus->column_fields['otherstreet']).'", "'.popup_decode_html($cntct_focus->column_fields['mailingcity']).'", "'.popup_decode_html($cntct_focus->column_fields['othercity']).'", "'.popup_decode_html($cntct_focus->column_fields['mailingstate']).'", "'.popup_decode_html($cntct_focus->column_fields['otherstate']).'", "'.popup_decode_html($cntct_focus->column_fields['mailingzip']).'", "'.popup_decode_html($cntct_focus->column_fields['otherzip']).'", "'.popup_decode_html($cntct_focus->column_fields['mailingcountry']).'", "'.popup_decode_html($cntct_focus->column_fields['othercountry']).'","'.popup_decode_html($cntct_focus->column_fields['mailingpobox']).'", "'.popup_decode_html($cntct_focus->column_fields['otherpobox']).'","'.$form.'");\'>'.$temp_val.'</a>';
 					}					
 

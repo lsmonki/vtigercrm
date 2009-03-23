@@ -209,8 +209,11 @@ function searchMapLocation(addressType)
 }
 
 function set_return_contact_address(contact_id,contact_name, mailingstreet, otherstreet, mailingcity, othercity, mailingstate, otherstate, mailingcode, othercode, mailingcountry, othercountry,mailingpobox,otherpobox,formName) {
-		//var otherwindow = ;
 		if (formName == null || formName == '') formName = 'EditView';
+		else {
+			// In case formName is specified but does not exists then revert to EditView form
+			if(window.opener.document.forms[formName] == null) formName = 'EditView';
+		}
 		var form = window.opener.document.forms[formName];
 		form.contact_name.value = contact_name;
         form.contact_id.value = contact_id;
