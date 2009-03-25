@@ -249,6 +249,8 @@
 				LBL_FOLDER : ' folder',
 				LBL_UNABLE_TO_UPDATE : 'Unable to update! Please try it again.',
 				
+				LBL_IMAGE_DELETED : 'Image Deleted',
+				
 				/* Tooltip management */
 				ERR_FIELD_SELECTION : 'Some error in field selection',
 				
