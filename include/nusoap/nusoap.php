@@ -3954,7 +3954,18 @@ class soap_server extends nusoap_base {
 			} else {
 				$this->setError("Neither _SERVER nor HTTP_SERVER_VARS is available");
 			}
-			$soapaction = "http://$SERVER_NAME$SCRIPT_NAME/$name";
+			// Fix for http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/5303
+			if (isset($_SERVER)) {
+				$SERVER_PORT = $_SERVER['SERVER_PORT'];
+				$HTTPS = $_SERVER['HTTPS'];
+    		} elseif (isset($HTTP_SERVER_VARS)) {
+				$SERVER_PORT = $HTTP_SERVER_VARS['SERVER_PORT'];
+				$HTTPS = $HTTP_SERVER_VARS['HTTPS'];
+    		} 
+    		if ($SERVER_PORT == 80) { $SERVER_PORT = ''; } else { $SERVER_PORT = ':' . $SERVER_PORT; }
+    		if ($HTTPS == '1' || $HTTPS == 'on') { $SCHEME = 'https'; } else { $SCHEME = 'http'; }
+
+    		$soapaction = "$SCHEME://$SERVER_NAME$SERVER_PORT$SCRIPT_NAME/$name";
 		}
 		if(false == $style) {
 			$style = "rpc";
