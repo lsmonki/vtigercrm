@@ -136,6 +136,7 @@ $smarty->assign("LISTHEADER", $list_header);
 $new_prod_array = array();
 $unit_price_array=array();
 $field_name_array=array();
+$entity_id_array =array();
 for($i=0; $i<$num_rows; $i++)
 {	
 	$entity_id = $adb->query_result($list_result,$i,"crmid");
@@ -143,6 +144,7 @@ for($i=0; $i<$num_rows; $i++)
 	{
 		$new_prod_array[] = $entity_id;
 	}
+	$entity_id_array[$entity_id] = $i;
 }
 $prod_price_list = getPricesForProducts($currency_id, $new_prod_array);
 
@@ -159,10 +161,10 @@ for($i=0; $i<count($new_prod_array); $i++)
 	$field_name_array[]="'".$field_name."'";
 
 	$list_body .= '<td><INPUT type=checkbox NAME="selected_id" id="check_'.$entity_id.'" value= '.$entity_id.' onClick=\'toggleSelectAll(this.name,"selectall");updateListPrice("'.$unit_price.'","'.$field_name.'",this)\'></td>';
-	$list_body .= '<td>'.$adb->query_result($list_result,$i,"productname").'</td>';
-		
+	$list_body .= '<td>'.$adb->query_result($list_result,$entity_id_array[$entity_id],"productname").'</td>';
+	
 	if(getFieldVisibilityPermission('Products', $current_user->id, 'productcode') == '0')
-		$list_body .= '<td>'.$adb->query_result($list_result,$i,"productcode").'</td>';
+		$list_body .= '<td>'.$adb->query_result($list_result,$entity_id_array[$entity_id],"productcode").'</td>';
 	if(getFieldVisibilityPermission('Products', $current_user->id, 'unit_price') == '0')
 		$list_body .= '<td>'.$unit_price.'</td>';
 		
