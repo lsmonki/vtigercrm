@@ -47,7 +47,7 @@ class vt_DateTime
                 }
                 else if ( isset( $timearr['ts']))
                 {
-                        $this->setDateTime($time['ts']);
+                        $this->setDateTime($timearr['ts']);
                 }
 		else
 		{
@@ -378,6 +378,11 @@ class vt_DateTime
                 {
                         die("year was not set");
                 }
+                
+                // Fix for http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/5467
+                if(empty($hour) && $hour !== 0) $hour = 0;
+                // END
+                
                 $this->ts = mktime($hour,$minute,$second,$month,$day,$year);
                 $this->setDateTime($this->ts);
 	}
