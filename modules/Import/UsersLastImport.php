@@ -63,14 +63,14 @@ class UsersLastImport extends SugarBean
 		$this->db = new PearDatabase();
 	}
 
-	/**	function used to delete ie., update the deleted as 1 in vtiger_users_last_import table
+	/**	function used to delete the old entries for this user 
 	 *	@param int $user_id - user id to whom's last imported records to delete
 	 *	@return void
 	 */
 	function mark_deleted_by_user_id($user_id)
         {
-                $query = "UPDATE $this->table_name set deleted=1 where assigned_user_id=?";
-                $this->db->pquery($query,array($user_id),true,"Error marking last imported vtiger_accounts deleted: ");
+                $query = "DELETE FROM $this->table_name  where assigned_user_id=?";
+                $this->db->pquery($query,array($user_id),true,"Error deleting last imported records: ");
         }
 
 	/**	function used to get the list query of the imported records
