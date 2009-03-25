@@ -2552,7 +2552,10 @@ function getMergedDescription($description,$id,$parent_type)
 				foreach($fields["contacts"] as $columnname)
 				{
 					$token_data = '$contacts-'.$columnname.'$';
-					$description = str_replace($token_data,$adb->query_result($result,0,$columnname),$description);
+					$token_value = $adb->query_result($result,0,$columnname);
+					// Fix for #5417
+					if($columnname == 'salutation') $token_value = getTranslatedString($token_value, 'Contacts');					 
+					$description = str_replace($token_data,$token_value,$description);
 				}
 			}
 			break;
@@ -2560,18 +2563,21 @@ function getMergedDescription($description,$id,$parent_type)
 			if(is_array($fields["leads"]))
 			{
 				//Checking for salutation type and checking the table column to be queried
-				$key = array_search('salutationtype',$fields["contacts"]);
+				$key = array_search('salutationtype',$fields["leads"]);
 				if(isset($key) && $key !='')
 				{
-					$fields["contacts"][$key]='salutation';
+					$fields["leads"][$key]='salutation';
 				}
 				$columnfields = implode(',',$fields["leads"]);
 				$query = "select $columnfields from vtiger_leaddetails inner join vtiger_leadscf where vtiger_leaddetails.leadid=? and vtiger_leadscf.leadid=?";
 				$result = $adb->pquery($query, array($id,$id));
 				foreach($fields["leads"] as $columnname)
 				{
-					$token_data = '$leads-'.$columnname.'$';
-					$description = str_replace($token_data,$adb->query_result($result,0,$columnname),$description);
+					$token_data = '$leads-'.$columnname.'$';					
+					$token_value = $adb->query_result($result,0,$columnname);
+					// Fix for #5417
+					if($columnname == 'salutation') $token_value = getTranslatedString($token_value, 'Leads');					 
+					$description = str_replace($token_data,$token_value,$description);
 				}
 			}
 			break;
