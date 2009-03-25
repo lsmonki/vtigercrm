@@ -15,7 +15,7 @@ function verify_data(form) {
 	var myRegxp = new RegExp("^-");
 	var checkPotentialName = myRegxp.test(form.potential_name.value);
 	if(! form.createpotential.checked == true){
-        if (form.potential_name.value == ""){
+        if (trim(form.potential_name.value) == ""){
             alert(alert_arr.OPPORTUNITYNAME_CANNOT_BE_EMPTY);
 			return false;	
 		}
