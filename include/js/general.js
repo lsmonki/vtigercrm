@@ -3565,15 +3565,16 @@ VtigerJS_DialogBox = {
 			prgnode.className = 'veil_new';
 			prgnode.style.position = 'absolute';
 			prgnode.style.width = '100%';
-			prgnode.style.display = 'none';
 			prgnode.style.top = '0';
 			prgnode.style.left = '0';
+			prgnode.style.display = 'block';
+			
+			document.body.appendChild(prgnode);	
 			
 			prgnode.innerHTML = 
 			'<table border="5" cellpadding="0" cellspacing="0" align="center" style="vertical-align:middle;width:100%;height:100%;">' +
 			'<tr><td class="big" align="center"><img src="'+ imgurl + '"></td></tr></table>';
-			
-			document.body.appendChild(prgnode);			
+								
 		}
 		if(prgnode) prgnode.style.display = 'block';			
 	},

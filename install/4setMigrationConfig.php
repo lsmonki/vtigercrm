@@ -136,8 +136,13 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>vtiger CRM 5 - Configuration Wizard - System Configuration</title>
+
+    <link rel='stylesheet' type='text/css' href='themes/softed/style.css'></link>
+    <script type="text/javascript" src="include/js/en_us.lang.js"></script>
+    <script type="text/javascript" src="include/scriptaculous/prototype.js"></script>
+    <script type="text/javascript" src="include/js/general.js"></script>
+
 	<link href="include/install/install.css" rel="stylesheet" type="text/css">
-	<link href="themes/softed/style.css" rel="stylesheet" type="text/css">
 </head>
 
 <body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
@@ -145,7 +150,6 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	.hide_tab{display:none;}
 	.show_div{}
 </style>
-<script language="JavaScript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script type="text/javascript" language="Javascript">
 	function fnShow_Hide(){
 		var sourceTag = document.getElementById('check_createdb').checked;
@@ -163,14 +167,6 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 			document.getElementById('create_db_config').className = 'hide_tab';
 		}
 	}
-
-function trim(str)
-{
-	var s = str.replace(/\s+$/,'');
-	s = s.replace(/^\s+/,'');
-	return s;
-}
-
 
 function verify_data(form) {
 	var isError = false;
@@ -246,24 +242,8 @@ function radio_checked(){
 	}
 }
 function migrate(){
+	VtigerJS_DialogBox.progress('include/install/images/loading.gif');
 	
-	var ua=navigator.userAgent.toLowerCase();
-
-	if(ua.indexOf('msie')!=-1){
-		var windowHeight = document.body.clientHeight;
-		var useheight = document.body.clientHeight;
-	} else {
-		var windowHeight = window.innerHeight;
-		var useheight = document.body.getHeight();
-	}
-
-	$('divId').style.height = windowHeight + 'px';
-	$('divId').style.display = 'block';
-	if(useheight > windowHeight) {
-		$('Appender').style.height = (useheight - windowHeight) + 'px';
-		$('Appender').style.display = 'block';
-		$('Appender').style.top = windowHeight+'px';
-	}
 	var source_path = document.getElementById("source_directory").value;
 	<?php
 		if($cur_dir_path == true){
@@ -327,41 +307,36 @@ function migrate(){
 			method: 'post',
 			postBody: 'source_path='+source_path+'&db_name='+db_name+'&user_name='+user_name+'&user_pwd='+user_pwd+url,
 			onComplete: function(response) {
+					VtigerJS_DialogBox.hideprogress();
+					
  					var str = response.responseText
  					str = trim(str);
 					if(str.indexOf('NO_CONFIG_FILE') > -1){
 						alert("The Source you have specified doesn't have a config file. \n Please provide a proper Source.'");
-						$('divId').style.display = 'none';
 						return false;
 					}
 					else if(str.indexOf('NO_USER_PRIV_DIR') > -1){
 						alert("The Source specified doesn't have a user privileges directory. \n Please provide a proper Source.'");
-						$('divId').style.display = 'none';
 						return false;
 					}
 					else if(str.indexOf('NO_SOURCE_DIR') > -1){
 						alert("The Source specified doesn't seem to be existing. \n Please provide a proper Source.'");
-						$('divId').style.display = 'none';
 						return false;
 					}
 					else if(str.indexOf('NO_STORAGE_DIR') > -1){
 						alert("The Source specified doesn't have a Storage directory. \n Please provide a proper Source.'");
-						$('divId').style.display = 'none';
 						return false;
 					}
 					else if(str.indexOf('NOT_VALID_USER') > -1){
 						alert("Not a valid user. Provide an Admin user login details'");
-						$('divId').style.display = 'none';
 						return false;
 					}
 					else if(str.substring(0,2) == 'ERR'){
 						alert(str);
-						$('divId').style.display = 'none';
 						return false;
 					}
 					else if(str.substring(0,6) == 'FAILURE'){
 						alert(str);
-						$('divId').style.display = 'none';
 						return false;
 					}
 					else
@@ -376,7 +351,6 @@ function migrate(){
 							$('failedqueries').style.display = 'block';
 							$('queries').value = str;
 						}
-						$('divId').style.display = 'none';
 						return true;
 					}
 			}
@@ -634,35 +608,15 @@ function getViewPortCenter(){
       	</tr>
     	</table>
 <script>fnShow_Hide();</script>
-<div id="divId" class="veil_new" style="position:absolute;width:100%;display:none;top:0px;left:0px;background-color:#FFFFFF;filter: alpha(Opacity=75);opacity:0.75;border: solid 1px gray;">
-<table border="5" cellpadding="0" cellspacing="0" align="center" style="vertical-align:middle;width:100%;height:100%;">
-<tbody><tr>
-		<td class="big" align="center" style="font-size:20px;">
-		    <img src="include/install/images/loading.gif"><br>
-		    <font color='#575864'><strong>Migration in Progress...</strong></font>
-		</td>
-	</tr>
-</tbody>
-</table>
-</div>
-<div id="Appender" class="veil_new" style="position:absolute;width:100%;display:none;left:0px;background-color:#FFFFFF;filter: alpha(Opacity=75);opacity:0.75;border: solid 1px gray;">
-<table border="0" cellpadding="0" cellspacing="0" align="center" style="vertical-align:middle;width:100%;">
-<tbody><tr>
-		<td class="big" align="center" style="font-size:20px;">
-		</td>
-	</tr>
-</tbody>
-</table>
-</div>
-<div id="failedqueries" class="veil_new" align="center" style="vertical-align:middle;position:absolute;width:80%;height:70%;display:none;top:0px;left:150px;background-color:#FFFFFF;">
-<table border="5" cellpadding="0" cellspacing="0" align="center" style="width:100%;height:100%;font-size:12px;">
+<div id="failedqueries" class="" align="center" style="vertical-align:middle;position:absolute;width:80%;height:70%;display:none;top:0px;left:150px;background-color:#FFFFFF;">
+<table border="5" cellpadding="0" cellspacing="0" align="center" style="width:100%;height:100%;font-size:10px;">
 <tbody>
 <th>
 Queries Failed:
 </th>
 <tr>
 		<td class="big" align="center" >
-		    <textarea rows=20 cols=100 id='queries' name='queries' value=''></textarea>
+		    <textarea class=small rows=20 cols=100 id='queries' name='queries' value=''></textarea>
 		</td>
 	</tr>
 	<tr>
@@ -673,5 +627,10 @@ Queries Failed:
 </tbody>
 </table>
 </div>
+
+<!-- To prefetch the images for blocking the screen -->
+<img style="display: none;" src="include/install/images/loading.gif">
+<img style="display: none;" src="themes/softed/images/layerPopupBg.gif">
+<!-- END -->
 </body>
 </html>

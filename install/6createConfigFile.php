@@ -132,6 +132,12 @@ $cache_dir = 'cache/';
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>vtiger CRM 5 - Configuration Wizard - Config File Creation</title>
+
+    <link rel='stylesheet' type='text/css' href='themes/softed/style.css'></link>
+    <script type="text/javascript" src="include/js/en_us.lang.js"></script>
+    <script type="text/javascript" src="include/scriptaculous/prototype.js"></script>
+    <script type="text/javascript" src="include/js/general.js"></script>
+
 	<link href="include/install/install.css" rel="stylesheet" type="text/css">
 </head>
 
@@ -472,7 +478,7 @@ $cache_dir = 'cache/';
 				 <input type="hidden" class="dataInput" name="currency_code" value="<?php if (isset($currency_code)) echo "$currency_code"; ?>" />
 				 <input type="hidden" class="dataInput" name="currency_symbol" value="<?php if (isset($currency_symbol)) echo "$currency_symbol"; ?>" />
 				 <input type="hidden" name="selected_modules" id="selected_modules" value="<?php if (isset($mod_for_ins)) echo $mod_for_ins; else echo '';?>" />
-				 <input  type="image" name="next" value="Next" id="next_btn" src="include/install/images/cwBtnNext.gif" onClick="window.location=('install.php');createtablejs();" />
+				 <input  type="image" name="next" value="Next" id="next_btn" src="include/install/images/cwBtnNext.gif" onClick="createtablejs();window.location=('install.php');" />
 				 </form>
 					
 				</td>
@@ -487,16 +493,6 @@ $cache_dir = 'cache/';
 	</td>
 	</tr>
 	</table>
-	<div id="divId" class="veil_new" style="position:absolute;width:100%;display:none;top:0px;left:0px;background-color:#FFFFFF;filter: alpha(Opacity=75);opacity:0.75;border: solid 1px gray;">
-	<table border="5" cellpadding="0" cellspacing="0" align="center" style="vertical-align:middle;width:100%;height:900px;">
-	<tbody><tr>
-			<td class="big" align="center" style="font-size:20px;">
-			    <img src="include/install/images/loading.gif"><br>
-			</td>
-		</tr>
-	</tbody>
-	</table>
-	</div>
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
 
@@ -514,7 +510,7 @@ $cache_dir = 'cache/';
         	<td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td>
       	</tr>
     	</table>	
-	<script>
+    <script type="text/javascript">
 	function createtablejs()
 	{
 		//document.getElementById('dbcreate_tab').innerHTML = '<div align="left"><b>Database Generation</b></div>';
@@ -522,10 +518,17 @@ $cache_dir = 'cache/';
 		//document.getElementById('configfile_tab').innerHTML = '<div align="left">Config File Creation</div>';
 		//document.getElementById('dbcreate_tab').className = 'small cwSelectedTab';
 		oImg = document.getElementById('title_img').style.display = 'none';
-		oImg = document.getElementById('divId').style.display = 'block';
+		//oImg = document.getElementById('divId').style.display = 'block';
 		document.getElementById("next_btn").style.display = 'none';
 		window.document.title = 'vtiger CRM 5 - Configuration Wizard - Database Generation ...';
+		VtigerJS_DialogBox.progress('include/install/images/loading.gif');
 	}
 	</script>
+	
+	<!-- To prefetch the images for blocking the screen -->
+	<img style="display: none;" src="include/install/images/loading.gif">
+    <img style="display: none;" src="themes/softed/images/layerPopupBg.gif">
+	<!-- END -->
+	
 </body>
 </html>

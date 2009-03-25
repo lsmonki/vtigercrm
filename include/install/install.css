@@ -179,3 +179,8 @@ table
 	width:90%;
 }
 
+.veil, .veil_new { 
+	Filter: Alpha(opacity = 50);
+	-moz-opacity: 0.5;
+	opacity: 0.5; 
+}
