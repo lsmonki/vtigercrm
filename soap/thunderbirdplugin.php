@@ -655,6 +655,10 @@ function CheckLeadViewPerm($user_name)
 		return "denied";
 	}
 }
+/* Begin the HTTP listener service and exit. */ 
+if (!isset($HTTP_RAW_POST_DATA)){
+	$HTTP_RAW_POST_DATA = file_get_contents('php://input');
+}
 $server->service($HTTP_RAW_POST_DATA);
 exit();
 ?>
