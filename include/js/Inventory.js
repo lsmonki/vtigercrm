@@ -66,9 +66,16 @@ function settotalnoofrows() {
 
 function productPickList(currObj,module, row_no) {
 	var trObj=currObj.parentNode.parentNode
-	var rowId=row_no;//parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
+	
+	var rowId = row_no;
+	var currentRowId = parseInt(currObj.id.match(/([0-9]+)$/)[1]);
+	
+	// If we have mismatching rowId and currentRowId, it is due swapping of rows
+	if(rowId != currentRowId) {
+		rowId = currentRowId;
+	}
+	
 	var currencyid = document.getElementById("inventory_currency").value;
-
 	popuptype = 'inventory_prod';
 	if(module == 'PurchaseOrder')
 		popuptype = 'inventory_prod_po';
