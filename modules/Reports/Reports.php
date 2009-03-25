@@ -1124,7 +1124,7 @@ function getEscapedColumns($selectedfields)
 				$mod_lbl = getTranslatedString($mod,$module); //module
 				$fld_lbl = getTranslatedString($fieldlabel,$module); //fieldlabel
 				$fieldlabel = $mod_lbl." ".$fld_lbl;
-				if(CheckFieldPermission($fieldname,$mod) != 'true')
+				if(CheckFieldPermission($fieldname,$mod) != 'true' && $colname!="crmid")
 				{
 						$shtml .= "<option permission='no' value=\"".$fieldcolname."\" disabled = 'true'>".$fieldlabel."</option>";
 				}

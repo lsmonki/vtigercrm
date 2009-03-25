@@ -105,7 +105,7 @@ class ReportRun extends CRMEntity
 			$fld_lbl_str = implode(" ",$fld_arr);
 			$fld_lbl = getTranslatedString($fld_lbl_str); //fieldlabel
 			$fieldlabel = $mod_lbl." ".$fld_lbl;
-			if(CheckFieldPermission($fieldname,$mod) != 'true')
+			if(CheckFieldPermission($fieldname,$mod) != 'true' && $colname!="crmid")
 			{
 				continue;
 			}
