@@ -105,33 +105,37 @@
 										<tr class='small' height='5%'><td colspan="2">{if $RESTRICTEDMODULES neq ''} <div class='dvtCellInfo' style='margin-left: 10px;'>{$MOD.LBL_NOT_ACTIVE}<font color="red"><b> {$RESTRICTEDMODULES} </b></font> </div>{/if}</td>
 										</tr>
 										<tr valign=top  height="70%">
-											<td style="padding-right: 5px;" align="right" nowrap width="25%"><b>{$MOD.LBL_NEW_REP0_HDR2}</b></td>
-											<td style="padding-left: 5px; " align="left" width="75%">
-												<!--select name="secondarymodule" class="txtBox">
-												<option value="">--None--</option -->
-												<table class="small">
-												{foreach item=relmod from=$RELATEDMODULES}
-												{if $SEC_MODULE.$relmod eq 1}
-													<tr valign='top'><td><input type='checkbox' name="secondarymodule_{$relmod}" checked value="{$relmod}" />
-														{if $APP.$relmod neq ''}
-															{$APP.$relmod}
+											{if $RELATEDMODULES|@count > 0}
+												<td style="padding-right: 5px;" align="right" nowrap width="25%"><b>{$MOD.LBL_NEW_REP0_HDR2}</b></td>
+												<td style="padding-left: 5px; " align="left" width="75%">
+													<!--select name="secondarymodule" class="txtBox">
+													<option value="">--None--</option -->
+													<table class="small">
+													{foreach item=relmod from=$RELATEDMODULES}
+														{if $SEC_MODULE.$relmod eq 1}
+															<tr valign='top'><td><input type='checkbox' name="secondarymodule_{$relmod}" checked value="{$relmod}" />
+																{if $APP.$relmod neq ''}
+																	{$APP.$relmod}
+																{else}
+																	{$relmod}
+																{/if}
+															</td></tr>
 														{else}
-															{$relmod}
+															<tr valign='top'><td><input type='checkbox' name="secondarymodule_{$relmod}" value="{$relmod}" />
+																{if $APP.$relmod neq ''}
+																	{$APP.$relmod}
+																{else}
+																	{$relmod}
+																{/if}
+															</td></tr>
 														{/if}
-													</td></tr>
-												{else}
-													<tr valign='top'><td><input type='checkbox' name="secondarymodule_{$relmod}" value="{$relmod}" />
-														{if $APP.$relmod neq ''}
-															{$APP.$relmod}
-														{else}
-															{$relmod}
-														{/if}
-													</td></tr>
-												{/if}
-												{/foreach}
-												</table>
-												<!--/select-->
-											</td>
+													{/foreach}
+													</table>
+													<!--/select-->
+												</td>
+											{else}
+												<td style="padding-right: 5px;" align="left" nowrap width="25%"><b>{$MOD.NO_REL_MODULES}</b></td>
+											{/if}
 										</tr>
 										<tr><td colspan="2" height="300">&nbsp;</td></tr> 
 									</table>
