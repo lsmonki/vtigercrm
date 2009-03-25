@@ -969,12 +969,16 @@ class CustomView extends CRMEntity{
 				$startdate = $datearray[0];
 				$enddate = $datearray[1];
 			}
-			if($startdate != "" && $enddate != "")
-			{
+			if($startdate != "" && $enddate != "") {
 				$columns = explode(":",$filtercolumn);
-				$stdfiltersql = $columns[0].".".$columns[1]." between '".$startdate." 00:00:00' and '".$enddate." 23:59:00'";
+				// Fix for http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/5423
+				if ($columns[1] != 'birthday') {
+					$stdfiltersql = $columns[0].".".$columns[1]." between '".$startdate." 00:00:00' and '".$enddate." 23:59:00'";
+				} else { 
+					$stdfiltersql = "DATE_FORMAT(".$columns[0].".".$columns[1].", '%m%d') between DATE_FORMAT('".$startdate."', '%m%d') and DATE_FORMAT('".$enddate."', '%m%d')";
+				}
 			}
-		}
+        }
 		return $stdfiltersql;
 	}
 	/** to get the customview AdvancedFilter Query for the given customview Id  
