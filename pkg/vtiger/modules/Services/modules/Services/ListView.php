@@ -25,7 +25,7 @@ $tool_buttons = Button_Check($currentModule);
 $list_buttons = Array();
 
 if(isPermitted($currentModule,'Delete','') == 'yes') $list_buttons['del'] = $app_strings[LBL_MASS_DELETE];
-if(isPermitted($currentModule,'Edit','') == 'yes') {
+if(isPermitted($currentModule,'EditView','') == 'yes') {
 	$list_buttons['mass_edit'] = $app_strings[LBL_MASS_EDIT];
 	// Mass Edit could be used to change the owner as well!
 	//$list_buttons['c_owner'] = $app_strings[LBL_CHANGE_OWNER];	
