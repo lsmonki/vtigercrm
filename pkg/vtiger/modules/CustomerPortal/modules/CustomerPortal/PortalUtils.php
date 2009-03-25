@@ -12,7 +12,7 @@
  
 /* Function to get a list of modules that is supporting Customer Portal
  */
-function getPortalModuleinfo(){
+function cp_getPortalModuleinfo(){
  	global $adb;
 	
 	$query = $adb->query("SELECT vtiger_customerportal_tabs.*,vtiger_tab.name from vtiger_customerportal_tabs INNER JOIN vtiger_tab ON vtiger_customerportal_tabs.tabid = vtiger_tab.tabid and vtiger_tab.presence = 0 ORDER BY vtiger_customerportal_tabs.sequence");
@@ -29,7 +29,7 @@ function getPortalModuleinfo(){
 /* Function is used to change the order of modules in Customer portal
  * 
  */
-function changeTabOrder($tabid,$move) {
+function cp_changeTabOrder($tabid,$move) {
  	global $adb,$log;
  	$log->fatal("$tabid,$move");
  	if($move == 'Down'){
@@ -57,10 +57,10 @@ function changeTabOrder($tabid,$move) {
  	
 }
 
-/* Function to obtain related info for Customer Portal(contacts can see other contacts info ar not)
+/* Function to obtain related info for Customer Portal(contacts can see other contacts info or not)
  */ 
  
-function getrelatedinfo() {
+function cp_getContactsViewInfo() {
 	global $adb;
 	$relatedinfo = $adb->query("SELECT vtiger_customerportal_prefs.*,vtiger_tab.name FROM vtiger_customerportal_prefs INNER JOIN vtiger_tab ON vtiger_tab.tabid = vtiger_customerportal_prefs.tabid  WHERE prefkey = 'showrelatedinfo' AND vtiger_tab.presence = 0");
 	$norows = $adb->num_rows($relatedinfo);
@@ -73,7 +73,7 @@ function getrelatedinfo() {
 
 /* Function to show/hide the tabs(modules) in Customer Portal
  */
-function changeModuleVisibility($tabid,$status) {
+function cp_changeModuleVisibility($tabid,$status) {
 	global $adb,$log;
 	if($status == 'module_disable'){
 		$updatevisibility = $adb->query("UPDATE vtiger_customerportal_tabs SET visible = 0 WHERE tabid = $tabid");
@@ -84,7 +84,7 @@ function changeModuleVisibility($tabid,$status) {
 
 /* Function to save Advanced info fro Customer Portal
  */
-function saveAdvancedSettings($input) {
+function cp_saveAdvancedSettings($input) {
 	global $adb;
 	
 	$portalmodules = array("Accounts","Contacts","HelpDesk","Invoice","Quotes","Documents","Faq","Services","Products");
@@ -107,7 +107,7 @@ function saveAdvancedSettings($input) {
 /*	It gives you a list of users
  * 
  */
-function getUsers(){
+function cp_getUsers(){
 	global $adb;
 	$res = $adb->query("SELECT id,user_name from vtiger_users");
 	$norows = $adb->num_rows($res);
@@ -120,7 +120,7 @@ function getUsers(){
 
 /* Function to get the customer portal user id 
  */
-function getCurrentUser() {
+function cp_getCurrentUser() {
 	global $adb;
 	$res = $adb->query("SELECT prefvalue FROM vtiger_customerportal_prefs WHERE prefkey = 'userid' AND tabid = 0");
 	$userid = $adb->query_result($res,0,'prefvalue');

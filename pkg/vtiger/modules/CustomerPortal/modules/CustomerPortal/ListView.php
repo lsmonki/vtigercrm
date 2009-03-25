@@ -45,18 +45,18 @@ if($sub_mode == 'movemodules'){
 	$tabid = $_REQUEST['tabid'];
 	$move = $_REQUEST['move'];
 	if($tabid != ''){
-		changeTabOrder($tabid,$move);
+		cp_changeTabOrder($tabid,$move);
 	}
 }elseif($sub_mode == 'enable_disable') {
 	$tabid = $_REQUEST['tabid'];
 	$status =$_REQUEST['status'];
 	if($status != '' && $tabid != ''){
-		changeModuleVisibility($tabid,$status);
+		cp_changeModuleVisibility($tabid,$status);
 	} 
 }
 $category = getParentTab();
 $smarty = new vtigerCRM_Smarty();
-$portalmodules = getPortalModuleinfo();
+$portalmodules = cp_getPortalModuleinfo();
 
 $smarty->assign('PORTALMODULES',$portalmodules); 
 $smarty->assign("THEME", $theme);

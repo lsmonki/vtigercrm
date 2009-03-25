@@ -37,7 +37,7 @@ if(!$is_admin) {
 
 $mode = $_REQUEST['mode'];
 if($mode !='' && $mode == 'save') {
-	saveAdvancedSettings($_REQUEST);
+	cp_saveAdvancedSettings($_REQUEST);
 }
 $category = getParentTab();
 $smarty = new vtigerCRM_Smarty();
@@ -49,9 +49,9 @@ $smarty->assign('CATEGORY', $category);
 $smarty->assign('BUTTONS', $list_buttons);
 $smarty->assign('CHECK', $tool_buttons);
 $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
-$smarty->assign('MODULE_VIEWALL',getrelatedinfo());
+$smarty->assign('MODULE_VIEWALL',cp_getContactsViewInfo());
 
-$smarty->assign('USERS', getUsers());
-$smarty->assign('USERID',getCurrentUser());
+$smarty->assign('USERS', cp_getUsers());
+$smarty->assign('USERID',cp_getCurrentUser());
 $smarty->display(vtlib_getModuleTemplate($currentModule,'AdvancedSettings.tpl'));
 ?>
