@@ -1295,7 +1295,8 @@ class Users {
 		global $adb;
 		if($prev_reminder_interval != $this->column_fields['reminder_interval'] ){
 			$set_reminder_next = date('Y-m-d H:i');
-			$adb->pquery("UPDATE vtiger_users SET reminder_next_time=? WHERE id=?",array($set_reminder_next, $this->id));
+			// NOTE date_entered has CURRENT_TIMESTAMP constraint, so we need to reset when updating the table
+			$adb->pquery("UPDATE vtiger_users SET reminder_next_time=?, date_entered=? WHERE id=?",array($set_reminder_next, $this->column_fields['date_entered'], $this->id));
 		}
 	}
 

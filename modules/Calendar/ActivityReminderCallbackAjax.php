@@ -30,9 +30,17 @@ $active = $adb->pquery("select * from vtiger_users where id=?",array($current_us
 $active_res = $adb->query_result($active,0,'reminder_interval');
 if($active_res!='None'){
 	$reminder_next=$adb->query_result($active,0,"reminder_next_time");
-	$ar_temp = strtotime($reminder_next);
-	$cur_date = mktime(date('H'),date('i'),0,date('m'),date('d'),date('Y'));
-	if($ar_temp <= $cur_date)
+	$lastlogin_time =$adb->query_result($active,0,"date_entered");
+	if(empty($reminder_next)) {
+		$reminder_next = date('Y-m-d H:i');
+	}
+	if(strtotime($lastlogin_time) > strtotime($reminder_next)) {
+		$reminder_next = $lastlogin_time;
+	}
+	$reminder_next_time = strtotime($reminder_next);
+	$cur_time = mktime(date('H'),date('i'),0,date('m'),date('d'),date('Y'));
+
+	if($reminder_next_time <= $cur_time)
 	{
 		$cb_time=$adb->query_result($active,0,"reminder_interval");
 		$cb_time = ConvertToMinutes($cb_time);
@@ -92,10 +100,16 @@ if($active_res!='None'){
 				$adb->query($mark_reminder_as_read);
 			}
 		}
-		$reminder_next = date('Y-m-d H:i', strtotime("+$cb_time minutes", $cb_mktime));;
-		$adb->pquery("UPDATE vtiger_users set reminder_next_time=? where id=?",array($reminder_next, $current_user->id));
-		$reminder_interval = (strtotime($ar_temp) - strtotime($cur_time))/60;
-		echo "<script type='text/javascript'>if(typeof(ActivityReminderRegisterCallback) != 'undefined') ActivityReminderRegisterCallback(".$reminder_interval.");</script>";
+		$reminder_next = date('Y-m-d H:i', strtotime("+$cb_time minutes", $cur_time));
+		// NOTE date_entered has CURRENT_TIMESTAMP constraint, so we need to reset when updating the table 
+		$adb->pquery("UPDATE vtiger_users set reminder_next_time=?, date_entered=? where id=?",array($reminder_next, $lastlogin_time, $current_user->id));
+		$reminder_interval_reset = (strtotime($reminder_next) - $cur_time) * 1000;
+		
+		// NOTE (Overcome Browser's issue): If required comment out the following line if condition below. 
+		// To make popup work fine when interval is set to 1 minute, we need decrement the timeout
+		// if($reminder_interval_reset / 1000 == 60) $reminder_interval_reset = (40 * 1000);
+		
+		echo "<script type='text/javascript' id='_vtiger_activityreminder_callback_interval_'>$reminder_interval_reset</script>";
 	}
 }
 }

@@ -2769,6 +2769,7 @@ function ActivityReminderCallback() {
 function ActivityReminderCallbackProcess(message) {
 	ActivityReminder_callback = document.getElementById("ActivityRemindercallback");
 	if(ActivityReminder_callback == null) return;
+	ActivityReminder_callback.style.display = 'block';
 	
 	var winuniqueid = 'ActivityReminder_callback_win_' + (new Date()).getTime();
 	if(ActivityReminder_callback_win_uniqueids[winuniqueid]) {
@@ -2783,6 +2784,23 @@ function ActivityReminderCallbackProcess(message) {
 	ActivityReminder_callback_win.innerHTML = message; 
 	ActivityReminder_callback_win.style.height = "0px"; 
 	ActivityReminder_callback_win.style.display = ""; 
+	
+	var ActivityReminder_Newdelay_response_node = '_vtiger_activityreminder_callback_interval_';
+	if($(ActivityReminder_Newdelay_response_node)) {
+		var ActivityReminder_Newdelay_response_value = parseInt($(ActivityReminder_Newdelay_response_node).innerHTML);
+		if(ActivityReminder_Newdelay_response_value > 0) {		
+			ActivityReminder_callback_delay = ActivityReminder_Newdelay_response_value;
+		}
+		// We don't need the no any longer, it will be sent from server for next Popup
+		$(ActivityReminder_Newdelay_response_node).remove();		
+	}
+	if(message == '' || trim(message).indexOf('<script') == 0) {
+		// We got only new dealay value but no popup information, let us remove the callback win created
+		$(ActivityReminder_callback_win.id).remove();
+		ActivityReminder_callback_win = false;
+		message = '';
+	}
+			
 	if(message != "") ActivityReminderCallbackRollout(ActivityReminder_popup_maxheight, ActivityReminder_callback_win); 
 	else { ActivityReminderCallbackReset(0, ActivityReminder_callback_win); }
 }
@@ -2790,9 +2808,9 @@ function ActivityReminderCallbackRollout(z, ActivityReminder_callback_win) {
 	ActivityReminder_callback_win = $(ActivityReminder_callback_win);
 
 	if (ActivityReminder_timer) { window.clearTimeout(ActivityReminder_timer); } 
-	if (parseInt(ActivityReminder_callback_win.style.height) < z) { 
+	if (ActivityReminder_callback_win && parseInt(ActivityReminder_callback_win.style.height) < z) { 
 		ActivityReminder_callback_win.style.height = parseInt(ActivityReminder_callback_win.style.height) + ActivityReminder_progressive_height + "px"; 
-		ActivityReminder_timer = setTimeout("ActivityReminderCallbackRollout(" + z + ",'" + ActivityReminder_callback_win.id + "')", 1); 
+		ActivityReminder_timer = setTimeout("ActivityReminderCallbackRollout(" + z + ",'" + ActivityReminder_callback_win.id + "')", 1);
 	} else { 
 		ActivityReminder_callback_win.style.height = z + "px"; 
 		if(ActivityReminder_autohide) ActivityReminder_timer = setTimeout("ActivityReminderCallbackRollin(1,'" + ActivityReminder_callback_win.id + "')", ActivityReminder_popup_onscreen);

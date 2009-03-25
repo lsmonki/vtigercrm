@@ -1082,7 +1082,8 @@ for($i=0;$i<6;$i++)
         $event_ids[] = $event->id;
 
 }
-
+// Turn-off Popup reminders for demo events
+$adb->query("UPDATE vtiger_activity_reminder_popup set status = 1");
 
 $adb->pquery("update vtiger_crmentity set smcreatorid=?", array($assigned_user_id));
 
