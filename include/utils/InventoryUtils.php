@@ -77,46 +77,9 @@ function updateStk($product_id,$qty,$mode,$ext_prod_arr,$module)
 	$qtyinstk= getPrdQtyInStck($product_id);
 	$log->debug("Prd Qty in Stock ".$qtyinstk);
 	
-	/*if($mode == 'edit')
-	{
-		if(array_key_exists($product_id,$ext_prod_arr))
-		{
-			$old_qty = $ext_prod_arr[$product_id];
-			if($old_qty > $qty)
-			{
-				$diff_qty = $old_qty - $qty;
-				$upd_qty = $qtyinstk+$diff_qty;
-				if($module == 'Invoice')
-				{
-					updateProductQty($product_id, $upd_qty);
-					sendPrdStckMail($product_id,$upd_qty,$prod_name,'','',$module);
-				}
-				else
-					sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module);
-			}
-			elseif($old_qty < $qty)
-			{
-				$diff_qty = $qty - $old_qty;
-				$upd_qty = $qtyinstk-$diff_qty;
-					sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module);
-			}
-		}
-		else
-		{
-				sendPrdStckMail($product_id,$upd_qty,$prod_name,'','',$module);
-		}
-	}
-	else
-	{
-			$upd_qty = $qtyinstk-$qty;
-			if($module == 'Invoice')
-			{
-				updateProductQty($product_id, $upd_qty);
-				sendPrdStckMail($product_id,$upd_qty,$prod_name,'','',$module);
-			}
-			else*/
-				sendPrdStckMail($product_id,$qty,$prod_name,$qtyinstk,$qty,$module);
-	//}
+	$upd_qty = $qtyinstk-$qty;
+	sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module);
+	
 	$log->debug("Exiting updateStk method ...");
 }
 
