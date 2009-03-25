@@ -1,6 +1,7 @@
 <?php
 class VtigerModuleOperation extends WebserviceEntityOperation {
 	private $tabId;
+	protected $isEntity = true;
 	
 	public function VtigerModuleOperation($webserviceObject,$user,$adb,$log){
 		parent::__construct($webserviceObject,$user,$adb,$log);
@@ -121,7 +122,7 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
 		$fields = $this->getModuleFields();
 		return array("label"=>$label,"name"=>$elementType,"createable"=>$createable,"updateable"=>$updateable,
 				"deleteable"=>$deleteable,"retrieveable"=>$retrieveable,"fields"=>$fields,
-				"idPrefix"=>$this->meta->getEntityId());
+				"idPrefix"=>$this->meta->getEntityId(),'isEntity'=>$this->isEntity,'name'=>$this->meta->getNameFields());
 	}
 	
 	function getModuleFields(){

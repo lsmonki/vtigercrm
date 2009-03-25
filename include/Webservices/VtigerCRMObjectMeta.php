@@ -390,15 +390,7 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		$id=$idComponents[1];
 		
 		$seType = null;
-		$sql = "select * from vtiger_crmentity where crmid=? and deleted=0";
-		$result = $adb->pquery($sql , array($id));
-		if($result != null && isset($result)){
-			if($adb->num_rows($result)>0){
-				$seType = $adb->query_result($result,0,"setype");
-			}
-		}
-		
-		if($seType === null){
+		if($this->objectName == 'Users'){
 			$sql = "select user_name from vtiger_users where id=? and deleted=0";
 			$result = $adb->pquery($sql , array($id));
 			if($result != null && isset($result)){
@@ -406,9 +398,19 @@ class VtigerCRMObjectMeta extends EntityMeta {
 					$seType = 'Users';
 				}
 			}
-		}elseif($seType == "Calendar"){
-			$seType = vtws_getCalendarEntityType($id);
+		}else{
+			$sql = "select * from vtiger_crmentity where crmid=? and deleted=0";
+			$result = $adb->pquery($sql , array($id));
+			if($result != null && isset($result)){
+				if($adb->num_rows($result)>0){
+					$seType = $adb->query_result($result,0,"setype");
+					if($seType == "Calendar"){
+						$seType = vtws_getCalendarEntityType($id);
+					}
+				}
+			}
 		}
+		
 		return $seType;
 	}
 	
@@ -416,7 +418,12 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		global $adb;
 		
 		$exists = false;
-		$sql = "select * from vtiger_crmentity where crmid=? and deleted=0";
+		$sql = '';
+		if($this->objectName == 'Users'){
+			$sql = 'select * from vtiger_users where id=? and deleted=0';
+		}else{
+			$sql = "select * from vtiger_crmentity where crmid=? and deleted=0";
+		}
 		$result = $adb->pquery($sql , array($recordId));
 		if($result != null && isset($result)){
 			if($adb->num_rows($result)>0){
@@ -424,6 +431,30 @@ class VtigerCRMObjectMeta extends EntityMeta {
 			}
 		}
 		return $exists;
+	}
+	
+	public function getNameFields(){
+		global $adb;
+		
+		$query = "select fieldname,tablename,entityidfield from vtiger_entityname where tabid = ?";
+		$result = $adb->pquery($query, array($this->getTabId()));
+		$fieldNames = '';
+		if($result){
+			$rowCount = $adb->num_rows($result);
+			if($rowCount > 0){
+				$fieldNames = $adb->query_result($result,0,'fieldname');
+			}
+		}
+		return $fieldNames;
+	}
+	
+	public function getName($webserviceId){
+		
+		$idComponents = vtws_getIdComponents($webserviceId);
+		$id=$idComponents[1];
+		
+		$nameList = getEntityName($this->objectName,array($id));
+		return $nameList[$id];
 	}
 	
 }

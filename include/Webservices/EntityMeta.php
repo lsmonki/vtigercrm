@@ -148,5 +148,7 @@ abstract class EntityMeta{
 	abstract function getEntityId();
 	abstract function exists($recordId);
 	abstract function getObjectEntityName($webserviceId);
+	abstract public function getNameFields();
+	abstract public function getName($webserviceId);
 }
 ?>

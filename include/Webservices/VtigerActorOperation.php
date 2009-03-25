@@ -3,6 +3,8 @@ require_once 'include/Webservices/VtigerCRMActorMeta.php';
 class VtigerActorOperation extends WebserviceEntityOperation {
 	private $entityTableName;
 	private $moduleFields;
+	private $isEntity = false;
+	
 	public function VtigerActorOperation($webserviceObject,$user,$adb,$log){
 		parent::__construct($webserviceObject,$user,$adb,$log);
 		$this->entityTableName = $this->getActorTables();
@@ -137,7 +139,7 @@ class VtigerActorOperation extends WebserviceEntityOperation {
 		$fields = $this->getModuleFields();
 		return array("label"=>$label,"name"=>$elementType,"createable"=>$createable,"updateable"=>$updateable,
 				"deleteable"=>$deleteable,"retrieveable"=>$retrieveable,"fields"=>$fields,
-				"idPrefix"=>$this->meta->getEntityId());
+				"idPrefix"=>$this->meta->getEntityId(),'isEntity'=>$this->isEntity);
 	}
 	
 	function getModuleFields(){

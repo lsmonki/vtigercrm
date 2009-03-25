@@ -1,5 +1,20 @@
 <?php
 
+require_once('include/database/PearDatabase.php');
+require_once("modules/Users/Users.php");
+require_once 'include/Webservices/WebserviceField.php';
+require_once 'include/Webservices/EntityMeta.php';
+require_once 'include/Webservices/VtigerWebserviceObject.php';
+require_once("include/Webservices/VtigerCRMObject.php");
+require_once("include/Webservices/VtigerCRMObjectMeta.php");
+require_once("include/Webservices/DataTransform.php");
+require_once("include/Webservices/WebServiceError.php");
+require_once 'include/utils/utils.php';
+require_once 'include/utils/UserInfoUtil.php';
+require_once 'include/Webservices/ModuleTypes.php';
+require_once 'include/utils/VtlibUtils.php';
+require_once 'include/Webservices/WebserviceEntityOperation.php';
+
 /* Function to return all the users in the groups that this user is part of.
  * @param $id - id of the user
  * returns Array:UserIds userid of all the users in the groups that this user is part of.
@@ -257,4 +272,59 @@ function vtws_getWebserviceEntityId($entityName, $id){
 	$webserviceObject = VtigerWebserviceObject::fromName($adb,$entityName);
 	return $webserviceObject->getEntityId().'x'.$id;
 }
+
+function vtws_addDefaultModuleTypeEntity($moduleName){
+	global $adb;
+	$isModule = 1;
+	$moduleHandler = array('file'=>'include/Webservices/VtigerModuleOperation.php',
+		'class'=>'VtigerModuleOperation');
+	return vtws_addModuleTypeWebserviceEntity($moduleName,$moduleHandler['file'],$moduleHandler['class'],$isModule);
+}
+
+function vtws_addModuleTypeWebserviceEntity($moduleName,$filePath,$className){
+	global $adb;
+	$isModule=1;
+	$entityId = $adb->getUniqueID("vtiger_ws_entity");
+	$adb->pquery('insert into vtiger_ws_entity(id,name,handler_path,handler_class,ismodule) values (?,?,?,?,?)',
+		array($entityId,$moduleName,$filePath,$className,$isModule));
+}
+
+function vtws_addDefaultActorTypeEntity($actorName,$actorNameDetails){
+	$actorHandler = array('file'=>'include/Webservices/VtigerActorOperation.php',
+		'class'=>'VtigerActorOperation');
+	vtws_addActorTypeWebserviceEntity($actorName,$actorHandler['file'],$actorHandler['class'],
+		$actorNameDetails);
+}
+
+function vtws_addActorTypeWebserviceEntity($moduleName,$filePath,$className,$actorNameDetails){
+	global $adb;
+	$isModule=0;
+	$entityId = $adb->getUniqueID("vtiger_ws_entity");
+	$adb->pquery('insert into vtiger_ws_entity(id,name,handler_path,handler_class,ismodule) values (?,?,?,?,?)',
+		array($entityId,$moduleName,$filePath,$className,$isModule));
+	vtws_addActorTypeName($entityId,$actorNameDetails['fieldNames'],$actorNameDetails['indexField'],
+		$actorNameDetails['tableName']);
+}
+
+function vtws_addActorTypeName($entityId,$fieldNames,$indexColumn,$tableName){
+	global $adb;
+	$adb->pquery('insert into vtiger_ws_entity_name(entity_id,name_fields,index_field,table_name) values (?,?,?,?)',
+		array($entityId,$fieldNames,$indexColumn,$tableName));
+}
+
+function vtws_getName($id,$user){
+	global $log,$adb;
+	
+	$webserviceObject = VtigerWebserviceObject::fromId($adb,$id);
+	$handlerPath = $webserviceObject->getHandlerPath();
+	$handlerClass = $webserviceObject->getHandlerClass();
+	
+	require_once $handlerPath;
+	
+	$handler = new $handlerClass($webserviceObject,$user,$adb,$log);
+	$meta = $handler->getMeta();
+	return $meta->getName($id);
+}
+
+
 ?>

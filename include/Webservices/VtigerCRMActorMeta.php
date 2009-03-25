@@ -237,5 +237,54 @@ class VtigerCRMActorMeta extends EntityMeta {
 		}
 		return $exists;
 	}
+	
+	public function getNameFields(){
+		$query = "select name_fields from vtiger_ws_entity_name where entity_id = ?";
+		$result = $this->pearDB->pquery($query, array($this->getTabId()));
+		$fieldNames = '';
+		if($result){
+			$rowCount = $this->pearDB->num_rows($result);
+			if($rowCount > 0){
+				$fieldNames = $this->pearDB->query_result($result,0,'fieldname');
+			}
+		}
+		return $fieldNames;
+	}
+	
+	public function getName($webserviceId){
+		
+		$idComponents = vtws_getIdComponents($webserviceId);
+		$entityId = $idComponents[0];
+		$id=$idComponents[1];
+		
+		$query = "select * from vtiger_ws_entity_name where entity_id = ?";
+		$result = $this->pearDB->pquery($query, array($entityId));
+		if(is_object($result)){
+			$rowCount = $this->pearDB->num_rows($result);
+			if($rowCount > 0){
+				$nameFields = $this->pearDB->query_result($result,0,'name_fields');
+				$tableName = $this->pearDB->query_result($result,0,'table_name'); 
+				$indexField = $this->pearDB->query_result($result,0,'index_field'); 
+				if(!(strpos($nameFields,',') === false)) {
+					$fieldList = explode(',',$nameFields);
+					$nameFields = "concat(";
+					$nameFields = $nameFields.implode(",' ',",$fieldList);
+					$nameFields = $nameFields.")";
+				}
+				
+				$query1 = "select $nameFields as entityname from $tableName where $indexField =?"; 
+				$params1 = array($id);
+				$result = $this->pearDB->pquery($query1, $params1);
+				if(is_object($result)){
+					$rowCount = $this->pearDB->num_rows($result);
+					if($rowCount > 0){
+						return $this->pearDB->query_result($result,0,'entityname');
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
 }
 ?>

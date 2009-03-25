@@ -6557,6 +6557,22 @@
 		</field>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+	
+	<table name="vtiger_ws_entity_name">
+		<field name="entity_id" type="I" size="11">
+			<key />
+		</field>
+		<field name="name_fields" type="C" size="50">
+			<notnull />
+		</field>
+		<field name="index_field" type="C" size="50">
+			<notnull />
+		</field>
+		<field name="table_name" type="C" size="50">
+			<notnull />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
 	<!-- END -->
 	
 	<table name="vtiger_eventhandlers">

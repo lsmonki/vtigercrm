@@ -32,13 +32,21 @@
 			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
 											"An Database error occured while performing the operation");
 		}
+		global $current_language;
+		$oldCurrentLanguage = $current_language;
 		$informationArray = array();
 		foreach ($accessibleModules as $module) {
-			$informationArray[$module] = array('isEntity'=>true);
+			$vtigerModule = ($module == 'Events')? 'Calendar':$module;
+			$informationArray[$module] = array('isEntity'=>true,'label'=>getTranslatedString($module,$vtigerModule),
+				'singular'=>getTranslatedString('SINGLE_'.$module,$vtigerModule));
 		}
+		global $default_language;
+		require_once 'include/Webservices/language/'.$default_language.'.lang.php';
 		foreach ($accessibleEntities as $entity) {
-			$informationArray[$entity] = array('isEntity'=>false);
+			$informationArray[$entity] = array('isEntity'=>false,'label'=>$app_strings[$entity],
+				'singular'=>$app_strings['SINGLE_'.$entity]);
 		}
+		$current_language = $oldCurrentLanguage;
 		return array("types"=>array_merge($accessibleModules,$accessibleEntities),'information'=>$informationArray);
 	}
 
