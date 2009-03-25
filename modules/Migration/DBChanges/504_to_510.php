@@ -1998,6 +1998,8 @@ foreach($currencies as $key=>$value){
 } 
 ExecuteQuery("UPDATE vtiger_currency_info LEFT JOIN vtiger_currencies as currencies on vtiger_currency_info.currency_code = currencies.currency_code SET vtiger_currency_info.currency_name = currencies.currency_name");
  	
+Executequery("UPDATE vtiger_products set handler = 1 WHERE handler = 0");
+	
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>
