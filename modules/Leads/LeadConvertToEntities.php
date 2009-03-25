@@ -498,7 +498,7 @@ if(! isset($createpotential) || ! $createpotential == "on")
 		$potential_amount=0;
 	}
 
-	$sql_insert_opp = "INSERT INTO vtiger_potential (potential_no,potentialid,accountid,potentialname,leadsource,closingdate,sales_stage,amount) VALUES (?,?,?,?,?,?,?,?)";
+	$sql_insert_opp = "INSERT INTO vtiger_potential (potential_no,potentialid,related_to,potentialname,leadsource,closingdate,sales_stage,amount) VALUES (?,?,?,?,?,?,?,?)";
 	$opp_params = array($potential_no, $oppid, $crmid, $potential_name, $row['leadsource'], $close_date, $potential_sales_stage, $potential_amount);
 	$adb->pquery($sql_insert_opp, $opp_params);
 
