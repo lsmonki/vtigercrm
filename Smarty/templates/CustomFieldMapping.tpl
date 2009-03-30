@@ -31,7 +31,7 @@
 				</table>
 				
 				<br>
-				<form action="index.php?module=Settings&action=SaveConvertLead" method="post" name="index">
+				<form action="index.php?module=Settings&action=SaveConvertLead" method="post" name="index" onsubmit="VtigerJS_DialogBox.block();">
 				<table class="listTableTopButtons" border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tr>
 					<td class="big" align="left"><strong>{$MOD.LBL_EDIT_FIELD_MAPPING}</strong> </td>

@@ -22,7 +22,7 @@
 			{include file='SetMenu.tpl'}
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-				<form id="form" name="roleView" action="index.php" method="post">
+				<form id="form" name="roleView" action="index.php" method="post" onsubmit="VtigerJS_DialogBox.block();">
 				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="action" value="createrole">
 				<input type="hidden" name="parenttab" value="Settings">

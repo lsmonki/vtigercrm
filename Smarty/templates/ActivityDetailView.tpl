@@ -159,7 +159,7 @@ function DeleteTag(id,recordid)
                            <table border=0 cellspacing=0 cellpadding=3 width=100%>
 				<tr>
 					<td align=left>					
-					<form action="index.php" method="post" name="DetailView" id="form">
+					<form action="index.php" method="post" name="DetailView" id="form" onsubmit="VtigerJS_DialogBox.block();">
 					{include file='DetailViewHidden.tpl'}
 					<!-- content cache -->
 					

@@ -29,7 +29,7 @@
 	
 	
 <table class="small reportGenHdr mailClient mailClientBg" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
-	<form name="NewReport" action="index.php" method="POST">
+	<form name="NewReport" action="index.php" method="POST" onsubmit="VtigerJS_DialogBox.block();">
     <input type="hidden" name="booleanoperator" value="5"/>
     <input type="hidden" name="record" value="{$REPORTID}"/>
     <input type="hidden" name="reload" value=""/>    

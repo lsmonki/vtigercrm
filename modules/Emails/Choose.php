@@ -31,7 +31,7 @@ $result=$adb->pquery($querystr, array());
 $numrows = $adb->num_rows($result);
 
 ?>
-<form name="choosemails" action="post">
+<form name="choosemails" action="post" onsubmit="VtigerJS_DialogBox.block();">
 <input type="hidden" name="emailids" value="">
 <h4>The following emails are available for the selected record. Please choose the ones you would like to use.</h4>
 <div align="center">

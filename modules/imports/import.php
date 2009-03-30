@@ -103,7 +103,7 @@ if ($HTTP_POST_VARS['submit'])
           <html>
              <body>
 
-             <form method="post" action="index.php?module=imports&action=result&filename=<?=$filename?>">
+             <form method="post" action="index.php?module=imports&action=result&filename=<?=$filename?>" onsubmit="VtigerJS_DialogBox.block();">
              <table border="0" cellpadding="2" cellspacing="2">
              <tr> 
              <td nowrap>

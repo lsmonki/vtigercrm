@@ -22,7 +22,7 @@
 			{include file='SetMenu.tpl'}
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-				<form action="index.php" method="post" name="new" id="form">
+				<form action="index.php" method="post" name="new" id="form" onsubmit="VtigerJS_DialogBox.block();">
 				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="action" value="createnewgroup">
 				<input type="hidden" name="mode" value="create">

@@ -91,7 +91,7 @@
 	setObjects();		
 </script>	
 
-<form enctype="multipart/form-data" name="mergeDuplicates" method="post" action="index.php?module={$MODULE}&action=FindDuplicateRecords">
+<form enctype="multipart/form-data" name="mergeDuplicates" method="post" action="index.php?module={$MODULE}&action=FindDuplicateRecords" onsubmit="VtigerJS_DialogBox.block();">
 	<input type="hidden" name="module" value="{$MODULE}">
 	<input type="hidden" name="parenttab" value="{$CATEGORY}">
 	<input type="hidden" name="action" value="FindDuplicateRecords">

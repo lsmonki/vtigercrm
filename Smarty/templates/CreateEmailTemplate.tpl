@@ -78,7 +78,9 @@
 			{include file='SetMenu.tpl'}
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-				<form action="index.php" method="post" name="templatecreate" onsubmit="return check4null(templatecreate);">  
+				{literal}
+				<form action="index.php" method="post" name="templatecreate" onsubmit="if(check4null(templatecreate)) { VtigerJS_DialogBox.block(); } else { return false; }">
+				{/literal}
 				<input type="hidden" name="action">
 				<input type="hidden" name="mode" value="{$EMODE}">
 				<input type="hidden" name="module" value="Settings">

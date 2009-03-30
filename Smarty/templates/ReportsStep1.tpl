@@ -25,7 +25,7 @@
 <table width="100%"  border="0" cellspacing="0" cellpadding="0" class="mailClient mailClientBg">
 <tr>
 	<td>
-		<form name="NewReport" method="POST" ENCTYPE="multipart/form-data" action="index.php" style="margin:0px">
+		<form name="NewReport" method="POST" ENCTYPE="multipart/form-data" action="index.php" style="margin:0px" onsubmit="VtigerJS_DialogBox.block();">
 		<input type="hidden" name='modulesString' value=''/>
 		<input type="hidden" name='primarymodule' value="{$PRI_MODULE}"/>
 		<input type="hidden" name='secondarymodule' value="{$SEC_MODULE}"/>

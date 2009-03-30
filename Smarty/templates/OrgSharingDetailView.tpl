@@ -61,7 +61,7 @@ DIV.fixedLay {
 			  	<!-- GLOBAL ACCESS MODULE -->
 		  		<div id="globaldiv">
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
-				<form action="index.php" method="post" name="new" id="orgSharingform">
+				<form action="index.php" method="post" name="new" id="orgSharingform" onsubmit="VtigerJS_DialogBox.block();">
 				<input type="hidden" name="module" value="Users">
 				<input type="hidden" name="action" value="OrgSharingEditView">
 				<input type="hidden" name="parenttab" value="Settings">

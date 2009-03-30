@@ -24,7 +24,7 @@ $delete_user_name = getUserName($delete_user_id);
 
 $output='';
 $output ='<div id="DeleteLay" class="layerPopup">
-<form name="newProfileForm" action="index.php">
+<form name="newProfileForm" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="DeleteUser">
 <input type="hidden" name="delete_user_id" value="'.$delete_user_id.'">	

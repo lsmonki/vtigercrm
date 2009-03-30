@@ -17,7 +17,7 @@
         <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 <br>
-<form action="index.php" method="post" name="tandc">
+<form action="index.php" method="post" name="tandc" onsubmit="VtigerJS_DialogBox.block();">
 <input type="hidden" name="module" value="Settings">
 <input type="hidden" name="action">
 <input type="hidden" name="inv_terms_mode">

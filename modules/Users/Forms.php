@@ -200,6 +200,7 @@ function verify_data(form) {
 	}else
 	{
 	//	$('user_status').disabled = false;
+		VtigerJS_DialogBox.block();
 		form.submit();
 	}
 }

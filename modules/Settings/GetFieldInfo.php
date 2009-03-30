@@ -22,7 +22,7 @@ $label = getTranslatedString($_REQUEST['label']);
 require_once($theme_path.'layout_utils.php');
 
 $output  .= '<div class="layerPopup" style="position:relative; display:block">' .
-		'	<form action="index.php" method="post" name="fieldinfoform"> 
+		'	<form action="index.php" method="post" name="fieldinfoform" onsubmit="VtigerJS_DialogBox.block();"> 
 			<input type="hidden" name="module" value="Settings">
 	  		<input type="hidden" name="action" value="SettingsAjax">
 	  		<input type="hidden" name="fld_module" value="'.$_REQUEST['fld_module'].'">

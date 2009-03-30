@@ -102,7 +102,7 @@ function updateModEntityNoSetting(button, form) {
 		</tr>
 		</table>				
 		<br>
-		<form method="POST" action="javascript:;">
+		<form method="POST" action="javascript:;" onsubmit="VtigerJS_DialogBox.block();">
 		<table border="0" cellpadding="10" cellspacing="0" width="100%">
 		<tr>
 			<td>

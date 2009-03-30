@@ -33,6 +33,9 @@ function check_duplicate()
 {ldelim}
 	var user_name = window.document.EditView.user_name.value;
 	var status = CharValidation(user_name,'name');
+	
+	VtigerJS_DialogBox.block();
+	
         if(status)
 	{ldelim}
 	new Ajax.Request(
@@ -41,14 +44,16 @@ function check_duplicate()
                         method: 'post',
                         postBody: 'module=Users&action=UsersAjax&file=Save&ajax=true&dup_check=true&userName='+user_name,
                         onComplete: function(response) {ldelim}
-				if(response.responseText.indexOf('SUCCESS') > -1)
-				{ldelim}
-				//	$('user_status').disabled = false;
-			                document.EditView.submit();
-				{rdelim}
-       				else
-			                alert(response.responseText);
-                        {rdelim}
+							if(response.responseText.indexOf('SUCCESS') > -1)
+							{ldelim}
+							//	$('user_status').disabled = false;
+						                document.EditView.submit();
+							{rdelim}
+			       				else {ldelim}
+			       						VtigerJS_DialogBox.unblock();
+						                alert(response.responseText);
+						        {rdelim}
+			            {rdelim}
                 {rdelim}
         );
 	{rdelim}
@@ -70,7 +75,7 @@ function check_duplicate()
 		{include file='SetMenu.tpl'}
 	{/if}
 
-		<form name="EditView" method="POST" action="index.php" ENCTYPE="multipart/form-data">
+		<form name="EditView" method="POST" action="index.php" ENCTYPE="multipart/form-data" onsubmit="VtigerJS_DialogBox.block();">
 		<input type="hidden" name="module" value="Users">
 		<input type="hidden" name="record" value="{$ID}">
 		<input type="hidden" name="mode" value="{$MODE}">

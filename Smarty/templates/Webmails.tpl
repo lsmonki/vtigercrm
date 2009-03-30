@@ -148,7 +148,7 @@
 							<!--div added to show info while moving mails-->
 							<div id="show_msg" class="layerPopup" align="center" style="padding: 5px;font-weight:bold;width: 400px;display:none;z-index:10000"></div>
 							<!-- Table to display the mails list -	Starts -->
-							<form name="massdelete" method="post">
+							<form name="massdelete" method="post" onsubmit="VtigerJS_DialogBox.block();">
 							<table cellspacing="1" cellpadding="3" border="0" width="100%" id="message_table">
 							   <tr>
 								<th class='tableHeadBg'><input type="checkbox" name="select_all" value="checkbox"  onclick="toggleSelect(this.checked,'selected_id');"/></th>

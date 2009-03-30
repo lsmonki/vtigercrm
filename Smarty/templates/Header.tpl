@@ -67,6 +67,10 @@
 		<!-- END -->
 	{/if}
 	{* END *}
+	
+	{* PREFECTHING IMAGE FOR BLOCKING SCREEN USING VtigerJS_DialogBox API *}
+    <img src="{'layerPopupBg.gif'|@vtiger_imageurl:$THEME}" style="display: none;"/>
+    {* END *}
 
 	<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="hdrNameBg">
 	<tr>
@@ -176,7 +180,7 @@
 	<td align=right style="padding-right:10px" >
 		<table border=0 cellspacing=0 cellpadding=0 id="search" style="border:1px solid #999999;background-color:white">
 		   <tr>
-			<form name="UnifiedSearch" method="post" action="index.php" style="margin:0px">
+			<form name="UnifiedSearch" method="post" action="index.php" style="margin:0px" onsubmit="VtigerJS_DialogBox.block();">
 			<td style="height:19px;background-color:#ffffef" >
 				<input type="hidden" name="action" value="UnifiedSearch" style="margin:0px">
 				<input type="hidden" name="module" value="Home" style="margin:0px">

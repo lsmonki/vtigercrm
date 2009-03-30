@@ -21,6 +21,7 @@ function dup_validation()
 		var reminstr = '&mode='+mode+'&groupName='+groupname+'&groupid='+groupid;
 	else
 		var reminstr = '&groupName='+groupname;
+	VtigerJS_DialogBox.block();
 	//var status = CharValidation(groupname,'namespace');
 	//if(status)
 	//{ldelim}
@@ -32,8 +33,10 @@ function dup_validation()
 			onComplete: function(response) {ldelim}
 				if(response.responseText.indexOf('SUCCESS') >-1)
 					document.newGroupForm.submit();
-				else
+				else {ldelim}
+					VtigerJS_DialogBox.unblock();
 					alert(response.responseText);
+				{rdelim}
 			{rdelim}
 		{rdelim}
 		);
@@ -168,7 +171,9 @@ function validate()
 		{include file='SetMenu.tpl'}
 		<!-- DISPLAY -->
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-		<form name="newGroupForm" action="index.php" method="post" onSubmit="return validate()">
+		{literal}
+		<form name="newGroupForm" action="index.php" method="post" onSubmit="if(validate()) { VtigerJS_DialogBox.block();} else { return false; }">
+		{/literal}
 		<input type="hidden" name="module" value="Users">
 		<input type="hidden" name="action" value="SaveGroup">
 		<input type="hidden" name="mode" value="{$MODE}">

@@ -18,7 +18,7 @@
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 <br>
 	<div align=center>
-	<form action="index.php" method="post" name="company">
+	<form action="index.php" method="post" name="company" onsubmit="VtigerJS_DialogBox.block();">
     	<input type="hidden" name="module" value="Settings">
     	<input type="hidden" name="parenttab" value="Settings">
 	<input type="hidden" name="action">

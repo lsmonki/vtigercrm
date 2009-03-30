@@ -27,7 +27,7 @@ $delete_currencyname = $adb->query_result($result,0,"currency_name");
 
 $output='';
 $output ='<div id="CurrencyDeleteLay"  class="layerPopup">
-<form name="newCurrencyForm" action="index.php" style="margin="0">
+<form name="newCurrencyForm" action="index.php" style="margin="0" onsubmit="VtigerJS_DialogBox.block();">
 <input type="hidden" name="module" value="Settings">
 <input type="hidden" name="action" value="CurrencyDelete">
 <input type="hidden" name="delete_currency_id" value="'.$delete_currency_id.'">	

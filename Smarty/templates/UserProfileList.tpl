@@ -17,7 +17,7 @@
 <tbody><tr>
         <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
-<form action="index.php" method="post" name="new" id="form">
+<form action="index.php" method="post" name="new" id="form" onsubmit="VtigerJS_DialogBox.block();">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="mode" value="create">
 <input type="hidden" name="action" value="CreateProfile">

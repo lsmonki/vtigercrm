@@ -33,7 +33,7 @@
 	<div id="global_list_{$MODULE}" style="display:block">
 {/if}
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
-     <form name="massdelete" method="POST">
+     <form name="massdelete" method="POST" onsubmit="VtigerJS_DialogBox.block();">
      <input name="idlist" type="hidden">
      <input name="change_owner" type="hidden">
      <input name="change_status" type="hidden">

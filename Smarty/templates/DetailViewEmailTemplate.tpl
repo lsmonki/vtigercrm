@@ -22,7 +22,7 @@
 
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-		    		<form method="post" action="index.php" name="etemplatedetailview">  
+		    		<form method="post" action="index.php" name="etemplatedetailview" onsubmit="VtigerJS_DialogBox.block();">  
 				<input type="hidden" name="action" value="editemailtemplate">
 				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="templatename" value="{$TEMPLATENAME}">

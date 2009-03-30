@@ -190,7 +190,7 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 
 							<td align=left style="padding:10px;">
 							<!-- content cache -->
-								<form action="index.php" method="post" name="DetailView" id="form">
+								<form action="index.php" method="post" name="DetailView" id="form" onsubmit="VtigerJS_DialogBox.block();">
 								{include file='DetailViewHidden.tpl'}
 						
 								<!-- Entity informations display - starts -->	

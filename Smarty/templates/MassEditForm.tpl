@@ -14,7 +14,7 @@
 	<tr>
 		<td class=small >		
 			<!-- popup specific content fill in starts -->
-	      <form name="EditView" id="massedit_form" action="index.php">
+	      <form name="EditView" id="massedit_form" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 				<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
 				<script type="text/javascript" src="jscalendar/calendar.js"></script>
 				<script type="text/javascript" src="jscalendar/lang/calendar-{$CALENDAR_LANG}.js"></script>

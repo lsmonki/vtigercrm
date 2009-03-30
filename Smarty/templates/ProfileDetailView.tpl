@@ -80,7 +80,7 @@ function UpdateProfile()
 	<div align=center>
 			{include file='SetMenu.tpl'}
 			
-				<form  method="post" name="new" id="form">
+				<form  method="post" name="new" id="form" onsubmit="VtigerJS_DialogBox.block();">
 			        <input type="hidden" name="module" value="Settings">
 			        <input type="hidden" name="action" value="profilePrivileges">
 			        <input type="hidden" name="parenttab" value="Settings">

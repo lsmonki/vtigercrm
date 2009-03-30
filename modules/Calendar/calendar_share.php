@@ -26,7 +26,7 @@ require_once('modules/Calendar/CalendarCommon.php');
 		</td>
 	</tr>
 	</table>
-<form name="SharingForm" method="post" action="index.php">
+<form name="SharingForm" method="post" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 <input type="hidden" name="module" value="Calendar">
 <input type="hidden" name="action" value="updateCalendarSharing">
 <input type="hidden" name="view" value="<?php echo $_REQUEST['view'] ?>">

@@ -23,7 +23,7 @@
 
 			<!-- DISPLAY -->
 			<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-			<form action="index.php">
+			<form action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 			<input type="hidden" name="module" value="Settings">
 			<input type="hidden" name="action" value="CurrencyEditView">
 			<input type="hidden" name="parenttab" value="{$PARENTTAB}">

@@ -127,7 +127,7 @@ $qcreate_get_noofrows=$adb->num_rows($qcreate_get_result);
 
 $fieldName_array = Array();//for validation
 
-$qcreate_form.='<form name="EditView" onSubmit="return formValidate()" method="POST" action="index.php">';
+$qcreate_form.='<form name="EditView" onSubmit="if(formValidate()){VtigerJS_DialogBox.block();} else {return false;}" method="POST" action="index.php">';
 $qcreate_form.='<input type="hidden" name="module" value="Contacts">';
 $qcreate_form.='<input type="hidden" name="record" value="">';
 $qcreate_form.='<input type="hidden" name="assigned_user_id" value="'.$user_id.'">';

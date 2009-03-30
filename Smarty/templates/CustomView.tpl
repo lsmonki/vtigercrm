@@ -15,7 +15,9 @@
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <script type="text/javascript" src="modules/CustomView/CustomView.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
-<form enctype="multipart/form-data" name="CustomView" method="POST" action="index.php" onsubmit="return mandatoryCheck();">
+{literal}
+<form enctype="multipart/form-data" name="CustomView" method="POST" action="index.php" onsubmit="if(mandatoryCheck()){VtigerJS_DialogBox.block();} else{ return false; }">
+{/literal}
 <input type="hidden" name="module" value="CustomView">
 <input type="hidden" name="action" value="Save">
 <input type="hidden" name="parenttab" value="{$CATEGORY}">

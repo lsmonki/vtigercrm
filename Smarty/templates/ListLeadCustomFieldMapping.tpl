@@ -23,7 +23,7 @@
                         <tr><td>&nbsp;</td></tr>
                         <tr>
                                 </td>
-                                <form action="index.php?module=Settings&action=LeadCustomFieldMapping&parenttab=Settings" method="post" name="index">
+                                <form action="index.php?module=Settings&action=LeadCustomFieldMapping&parenttab=Settings" method="post" name="index" onsubmit="VtigerJS_DialogBox.block();">
                                 <table class="leadTable" align="center" cellpadding="5" cellspacing="0" width="95%">
                                         <tr>
                                                 <td style="border-bottom: 2px dotted rgb(204, 204, 204); padding: 5px;" width="5%">

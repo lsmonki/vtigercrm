@@ -5,7 +5,7 @@
 	<td valign="top" width="100%">
 	<div align=center>
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-			<form action="index.php" method="post" name="new" id="form">
+			<form action="index.php" method="post" name="new" id="form" onsubmit="VtigerJS_DialogBox.block();">
 			<input type="hidden" id="fieldid" name="fieldid" value="{$FIELDID}">
 			<input type="hidden" name="" value="">
 		</table>

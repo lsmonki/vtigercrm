@@ -30,7 +30,7 @@
 					<td valign=top class="small">{$MOD.LBL_BACKUP_SERVER_DESC} </td>
 				</tr>
 				</table>
-				<form action="index.php" method="post" name="tandd">
+				<form action="index.php" method="post" name="tandd" onsubmit="VtigerJS_DialogBox.block();">
 				<input type="hidden" name="server_type" value="local_backup">
 				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="action" value="index">

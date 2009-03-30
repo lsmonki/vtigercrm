@@ -58,7 +58,7 @@ function goBack1()
 if(isset($_REQUEST['change_status']) && $_REQUEST['change_status']=='true')
 {
    ?>
-<form name="setLeadStatus" method="post">
+<form name="setLeadStatus" method="post" onsubmit="VtigerJS_DialogBox.block();">
   <?php
 		echo get_module_title($mod_strings['LBL_MODULE_NAME'], "Leads : Change Status", true); 
 	?>

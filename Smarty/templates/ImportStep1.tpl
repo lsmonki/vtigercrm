@@ -46,7 +46,7 @@ function validateFile(form)
 		<table  cellpadding="0" cellspacing="0" width="100%" border=0>
 		   <tr>
 			<td width="75%" valign=top>
-				<form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
+				<form enctype="multipart/form-data" name="Import" method="POST" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 				<input type="hidden" name="module" value="{$MODULE}">
 				<input type="hidden" name="step" value="1">
 				<input type="hidden" name="source" value="{$SOURCE}">

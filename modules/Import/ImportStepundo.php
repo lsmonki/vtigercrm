@@ -114,7 +114,7 @@ if(method_exists($undo_focus, 'undo_import')) {
 			</tr>
 			<tr>
 				<td align="right" class="reportCreateBottom" >
-					<form name="Import" method="POST" action="index.php">
+					<form name="Import" method="POST" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 					<input type="hidden" name="module" value="<?php echo $_REQUEST['module']; ?>">
 					<input type="hidden" name="action" value="Import">
 					<input type="hidden" name="step" value="1">

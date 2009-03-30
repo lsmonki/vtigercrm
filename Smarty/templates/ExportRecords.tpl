@@ -22,7 +22,7 @@
    			<table  cellpadding="0" cellspacing="0" width="100%" border=0>
     				<tr>
  					<td width="50%" valign=top>
-						<form  name="Export_Records"  method="POST">
+						<form  name="Export_Records"  method="POST" onsubmit="VtigerJS_DialogBox.block();">
 							<input type="hidden" name="module" value="{$MODULE}">
 							<input type="hidden" name="action" value="Export">
 							<input type="hidden" name="idstring" value="{$IDSTRING}">

@@ -140,7 +140,7 @@ for($i=0;$i<count($cftextcombo);$i++)
 
 }
 $output .= '<div id="customfield" style="display:block;" class="layerPopup"><script language="JavaScript" type="text/javascript" src="include/js/customview.js"></script>
-			<form action="index.php" method="post" name="addtodb" onSubmit="return validate('.$blockid.')">
+			<form action="index.php" method="post" name="addtodb" onSubmit="if(validate('.$blockid.')) {VtigerJS_DialogBox.block();}else{return false;}">
 	  		<input type="hidden" name="module" value="Settings">
 	  		<input type="hidden" name="fld_module" value="'.$_REQUEST['fld_module'].'">
 	  		<input type="hidden" name="activity_type" value="'.$activitytype.'">

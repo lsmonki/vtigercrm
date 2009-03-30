@@ -27,7 +27,9 @@
 <script type="text/javascript" src="modules/Products/multifile.js"></script>
 </head>
 <body marginheight="0" marginwidth="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
-<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php" onSubmit="return email_validate(this.form,'');">
+{literal}
+<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php" onSubmit="if(email_validate(this.form,'')) { VtigerJS_DialogBox.block();} else { return false; }">
+{/literal}
 <input type="hidden" name="send_mail" >
 <input type="hidden" name="contact_id" value="{$CONTACT_ID}">
 <input type="hidden" name="user_id" value="{$USER_ID}">

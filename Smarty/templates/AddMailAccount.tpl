@@ -20,7 +20,7 @@
                         <span class="lvtHeaderText">{$MOD.LBL_MY_MAIL_SERVER_DET}</span> <br>
                         <hr noshade="noshade" size="1"><br>
 
-  		<form action="index.php" method="post" name="EditView" id="form">
+  		<form action="index.php" method="post" name="EditView" id="form" onsubmit="VtigerJS_DialogBox.block();">
 			<input type="hidden" name="module" value="Users">
 		  	<input type="hidden" name="action">
   			<input type="hidden" name="server_type" value="email">

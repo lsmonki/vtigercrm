@@ -31,7 +31,7 @@ if($_REQUEST['problem'])
 
 ?>
 
-            <form action="index.php" name="massdelete">
+            <form action="index.php" name="massdelete" onsubmit="VtigerJS_DialogBox.block();">
              <input type="hidden" name="module" value="Settings">
              <input type="hidden" name="action" value="">
              <input type="hidden" name="idlist">

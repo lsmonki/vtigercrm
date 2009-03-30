@@ -26,7 +26,7 @@ $image_path="themes/images/";
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $app_strings['LBL_CHARSET']; ?>">
 </head>
 <body>
-<form method="post" action="index.php?module=Users&action=listnotificationschedulers" name="">
+<form method="post" action="index.php?module=Users&action=listnotificationschedulers" name="" onsubmit="VtigerJS_DialogBox.block();">
 	<TABLE WIDTH="100%" CELLPADDING=0 CELLSPACING=0 BORDER=0>
           <TR> 
 	    <TD ALIGN=LEFT CLASS="moduleTitle hline" NOWRAP><?php echo $mod_strings['LBL_NOTIFICATION_EMAIL_INFO']; ?>: 

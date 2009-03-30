@@ -21,7 +21,7 @@
 			{include file="SetMenu.tpl"}
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-				<form action="index.php" method="post" name="def_org_share" id="form">
+				<form action="index.php" method="post" name="def_org_share" id="form" onsubmit="VtigerJS_DialogBox.block();">
 				<input type="hidden" name="module" value="Users">
 				<input type="hidden" name="action" value="SaveOrgSharing">
 				<input type="hidden" name="parenttab" value="Settings">

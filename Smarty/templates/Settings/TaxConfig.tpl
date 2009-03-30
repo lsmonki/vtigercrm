@@ -69,7 +69,7 @@
    <tr>
 	<td style="border-right:1px dotted #CCCCCC;" valign="top">
 		<!-- if EDIT_MODE is true then Textbox will be displayed else the value will be displayed-->
-		<form name="{$formname}" method="POST" action="index.php">
+		<form name="{$formname}" method="POST" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 		<input type="hidden" name="module" value="Settings">
 		<input type="hidden" name="action" value="">
 		<input type="hidden" name="parenttab" value="Settings">

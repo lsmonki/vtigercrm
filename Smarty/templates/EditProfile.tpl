@@ -30,7 +30,7 @@
 	<div align=center>
 			{include file='SetMenu.tpl'}
 				<!-- DISPLAY -->
-				<form action="index.php" method="post" name="profileform" id="form">
+				<form action="index.php" method="post" name="profileform" id="form" onsubmit="VtigerJS_DialogBox.block();">
 				<input type="hidden" name="module" value="Users">		
 				<input type="hidden" name="parenttab" value="Settings">
 				<input type="hidden" name="action" value="{$ACTION}">		

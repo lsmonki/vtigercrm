@@ -19,8 +19,10 @@
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 	<br>
 	<div align=center>
-				{include file='SetMenu.tpl'}
-				<form action="index.php" method="post" name="profileform" id="form" onSubmit="return rolevalidate();">
+				{include file='SetMenu.tpl'}				
+				{literal}
+				<form action="index.php" method="post" name="profileform" id="form" onSubmit="if(rolevalidate()) { VtigerJS_DialogBox.block();return true;}else{return false;}">
+				{/literal}
                                 <input type="hidden" name="module" value="Settings">
                                 <input type="hidden" name="mode" value="{$MODE}">
                                 <input type="hidden" name="action" value="profilePrivileges">

@@ -19,7 +19,7 @@
 <body>
 {if $EDIT_DUPLICATE eq 'permitted'}
 
-<form name="merge" method="POST" action="index.php" id="form" onsubmit="return validate_merge('{$MODULENAME}');">
+<form name="merge" method="POST" action="index.php" id="form" onsubmit="if(validate_merge('{$MODULENAME}')){ldelim}VtigerJS_DialogBox.block(); return true;{rdelim} else {ldelim} return false; {rdelim};">
 	<input type=hidden name="module" value="{$MODULENAME}">
 	
 	<input type=hidden name="return_module" value="{$MODULENAME}">

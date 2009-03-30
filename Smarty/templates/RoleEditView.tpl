@@ -67,7 +67,9 @@ function validate()
 			{include file='SetMenu.tpl'}
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-				<form name="newRoleForm" action="index.php" method="post" onSubmit="return validate()">
+				{literal}
+				<form name="newRoleForm" action="index.php" method="post" onSubmit="if(validate()) { VtigerJS_DialogBox.block();} else { return false;} ">
+				{/literal}
 				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="action" value="SaveRole">
 				<input type="hidden" name="parenttab" value="Settings">

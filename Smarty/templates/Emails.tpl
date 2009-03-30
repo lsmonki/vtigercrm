@@ -82,7 +82,7 @@ function ShowFolders(folderid)
 				<tr>
 					<td class="mailClientBg" width="7">&nbsp;</td>
 					<td class="mailClientBg">
-					<form name="massdelete" method="POST">
+					<form name="massdelete" method="POST" onsubmit="VtigerJS_DialogBox.block();">
 						<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 							<!-- Compose, Settings and Name image -->
 							<tr>

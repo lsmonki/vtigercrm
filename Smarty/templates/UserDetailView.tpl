@@ -32,7 +32,7 @@
 				<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td class="padTab" align="left">
-						<form name="DetailView" method="POST" action="index.php" ENCTYPE="multipart/form-data" id="form" style="margin:0px">
+						<form name="DetailView" method="POST" action="index.php" ENCTYPE="multipart/form-data" id="form" style="margin:0px" onsubmit="VtigerJS_DialogBox.block();">
 							<input type="hidden" name="module" value="Users" style="margin:0px">
 							<input type="hidden" name="record" id="userid" value="{$ID}" style="margin:0px">
 							<input type="hidden" name="isDuplicate" value=false style="margin:0px">

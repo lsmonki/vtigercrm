@@ -104,7 +104,7 @@ function isActive($field,$mod){
 		return false;
 }
 
-$convertlead = '<form name="ConvertLead" method="POST" action="index.php">
+$convertlead = '<form name="ConvertLead" method="POST" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 	<input type="hidden" name="module" value="Leads">
 	<input type="hidden" name="record" value="'.$id.'">
 	<input type="hidden" name="action">

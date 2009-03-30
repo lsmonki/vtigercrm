@@ -88,7 +88,7 @@ function passemail()
 }
 </script>
 
-<form name="choosemails" method="post">
+<form name="choosemails" method="post" onsubmit="VtigerJS_DialogBox.block();">
 <h4>The following emails are available for the selected record. Please choose the ones you would like to use.</h4>
 <div align="center">
    <table cellpadding="0" cellspacing="0" border="0">

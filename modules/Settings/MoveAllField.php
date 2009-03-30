@@ -49,7 +49,7 @@ while($row_field = $adb->fetch_array($res))
 
 
 $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script language="JavaScript" type="text/javascript" src="include/js/customview.js"></script>
-	<form action="index.php" method="post" name="addtodb">
+	<form action="index.php" method="post" name="addtodb" onsubmit="VtigerJS_DialogBox.block();">
 	  <input type="hidden" name="module" value="Settings">
 	  <input type="hidden" name="fld_module" value="'.$_REQUEST['fld_module'].'">
 	  <input type="hidden" name="parenttab" value="Settings">

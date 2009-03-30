@@ -73,7 +73,7 @@ $theme_path="themes/".$theme."/";
         </script>
 </head>
 <BODY marginheight="0" marginwidth="0" leftmargin="0" rightmargin="0" bottommargin="0" topmargin="0">
-<FORM METHOD="post" action="index.php?module=uploads&action=add2db&return_module=<?php echo $_REQUEST['return_module']?>" enctype="multipart/form-data" style="margin:0px;">
+<FORM METHOD="post" onsubmit="VtigerJS_DialogBox.block();" action="index.php?module=uploads&action=add2db&return_module=<?php echo $_REQUEST['return_module']?>" enctype="multipart/form-data" style="margin:0px;">
 <?php
 	$ret_module = ($_REQUEST['return_module'] != "")?$_REQUEST['return_module']:$_SESSION['return_mod'];
 	$ret_action = ($_REQUEST['return_action'] != "")?$_REQUEST['return_action']:$_SESSION['return_act'];

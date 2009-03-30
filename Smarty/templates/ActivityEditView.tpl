@@ -24,7 +24,9 @@ var gVTModule = '{$smarty.request.module}';
 </script>
 
 {*<!-- Contents -->*}
-<form name="EditView" method="POST" action="index.php" {if $ACTIVITY_MODE neq 'Task'} onsubmit="return check_form();" {else} onsubmit="maintask_check_form();return formValidate();" {/if} >
+<form name="EditView" method="POST" action="index.php" 
+	{if $ACTIVITY_MODE neq 'Task'} onsubmit="if(check_form()){ldelim} VtigerJS_DialogBox.block(); {rdelim} else {ldelim} return false; {rdelim}" 
+	{else} onsubmit="maintask_check_form();if(formValidate()) {ldelim} VtigerJS_DialogBox.block(); {rdelim} else {ldelim} return false; {rdelim}" {/if} >
 <input type="hidden" name="time_start" id="time_start">
 <input type="hidden" name="view" value="{$view}">
 <input type="hidden" name="hour" value="{$hour}">

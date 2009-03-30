@@ -76,7 +76,7 @@ function massDelete()
 
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-	               		<form  name="massdelete" method="POST">
+	               		<form  name="massdelete" method="POST" onsubmit="VtigerJS_DialogBox.block();">
 	    			<input name="idlist" type="hidden">
     				<input name="module" type="hidden" value="Settings">
     				<input name="parenttab" type="hidden" value="Settings">

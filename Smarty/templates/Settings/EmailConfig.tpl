@@ -18,10 +18,12 @@
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 <br>
 	{if $EMAILCONFIG_MODE neq 'edit'}	
-	<form action="index.php" method="post" name="MailServer" id="form">
+	<form action="index.php" method="post" name="MailServer" id="form" onsubmit="VtigerJS_DialogBox.block();">
 	<input type="hidden" name="emailconfig_mode">
 	{else}
-	<form action="index.php" method="post" name="MailServer" id="form" onsubmit="return validate_mail_server(MailServer);">
+	{literal}
+	<form action="index.php" method="post" name="MailServer" id="form" onsubmit="if(validate_mail_server(MailServer)){ VtigerJS_DialogBox.block(); return true; } else { return false; }">
+	{/literal}
 	<input type="hidden" name="server_type" value="email">
 	{/if}
 	<input type="hidden" name="module" value="Settings">

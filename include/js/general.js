@@ -2093,6 +2093,8 @@ function AjaxDuplicateValidate(module,fieldname,oform)
 		alert(alert_arr.ACCOUNTNAME_CANNOT_EMPTY);
 		return false;	
 	}
+	VtigerJS_DialogBox.block();
+	
       var url = "module="+module+"&action="+module+"Ajax&file=Save&"+fieldname+"="+fieldvalue+"&dup_check=true&record="+recordid;
       new Ajax.Request(
                             'index.php',
@@ -2106,6 +2108,7 @@ function AjaxDuplicateValidate(module,fieldname,oform)
                                                       oform.submit();
                                               }else
                                               {
+													  VtigerJS_DialogBox.unblock();
                                                       alert(str);
                                               }
                                       }
@@ -3615,6 +3618,7 @@ VtigerJS_DialogBox = {
 			olayer = document.createElement("div"); 
 			olayer.id = olayerid;
 			olayer.className = "small veil"; 
+			olayer.style.zIndex = (new Date()).getTime();
 			if (browser_ie) { 
 				olayer.style.height = document.body.offsetHeight + (document.body.scrollHeight - document.body.offsetHeight) + "px"; 
 			} else if (browser_nn4 || browser_nn6) { olayer.style.height = document.body.offsetHeight + "px"; } 
@@ -3629,6 +3633,14 @@ VtigerJS_DialogBox = {
 	},
 	_removebyid : function(id) {
 		if($(id)) $(id).remove();
+	},
+	unblock : function() {
+		VtigerJS_DialogBox._olayer(false);
+	},
+	block : function(opacity) {
+		if(typeof(opactiy)=='undefined') opacity = '0.3';
+		var olayernode = VtigerJS_DialogBox._olayer(true);
+		olayernode.style.opacity = opacity;
 	},
 	hideprogress : function() {
 		VtigerJS_DialogBox._olayer(false);

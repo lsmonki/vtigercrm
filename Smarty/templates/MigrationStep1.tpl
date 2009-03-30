@@ -13,7 +13,7 @@
 
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 
-<form name="Migration" method="POST" action="index.php" enctype="multipart/form-data">
+<form name="Migration" method="POST" action="index.php" enctype="multipart/form-data" onsubmit="VtigerJS_DialogBox.block();">
 <input type="hidden" name="module" value="Migration">
 <input type="hidden" name="action" value="MigrationCheck">
 <input type="hidden" name="migration_option" value="">

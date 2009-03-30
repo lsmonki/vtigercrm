@@ -128,7 +128,7 @@ if ( isset($_REQUEST['message']))
 	     <td class="reportCreateBottom" >
 		 <table width="100%" border="0" cellpadding="5" cellspacing="0" >
            <tr>
-             <td align="right" valign="top"><form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
+             <td align="right" valign="top"><form enctype="multipart/form-data" name="Import" method="POST" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
                  <input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
                  <input type="hidden" name="action" id="import_action" value="Import">
                  <input type="hidden" name="step" value="1">

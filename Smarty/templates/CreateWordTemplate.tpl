@@ -22,7 +22,7 @@
 
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-				<form action="index.php?module=Settings&action=savewordtemplate" method="post" enctype="multipart/form-data">
+				<form action="index.php?module=Settings&action=savewordtemplate" method="post" enctype="multipart/form-data" onsubmit="VtigerJS_DialogBox.block();">
 				<input type="hidden" name="return_module" value="Settings">
 				<input type="hidden" name="parenttab" value="{$PARENTTAB}">
 				<input type="hidden" name="MAX_FILE_SIZE" value="{$MAX_FILE_SIZE}">

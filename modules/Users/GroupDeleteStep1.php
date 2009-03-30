@@ -24,7 +24,7 @@ $delete_group_name = fetchGroupName($delete_group_id);
 
 $output='';
 $output ='<div id="DeleteLay" class="layerPopup" style="width:400px;">
-<form name="deleteGroupForm" action="index.php">
+<form name="deleteGroupForm" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="DeleteGroup">
 <input type="hidden" name="delete_group_id" value="'.$delete_group_id.'">	

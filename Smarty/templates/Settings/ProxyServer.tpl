@@ -20,7 +20,7 @@
 			{include file="SetMenu.tpl"}
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-				<form action="index.php" method="post" name="tandc">
+				<form action="index.php" method="post" name="tandc" onsubmit="VtigerJS_DialogBox.block();">
 				<input type="hidden" name="server_type" value="proxy">
 				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="action" value="index">

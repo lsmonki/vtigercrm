@@ -13,7 +13,7 @@
 &#&#&#{$ERROR}&#&#&#
 {/if}
 <script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
-<form name="massdelete" method="POST" id="massdelete">
+<form name="massdelete" method="POST" id="massdelete" onsubmit="VtigerJS_DialogBox.block();">
      <input name='search_url' id="search_url" type='hidden' value='{$SEARCH_URL}'>
      <input name="idlist" id="idlist" type="hidden">
      <input name="change_owner" type="hidden">

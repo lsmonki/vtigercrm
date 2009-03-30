@@ -27,7 +27,9 @@ function openPopup(del_roleid){ldelim}
 
 	{include file='SetMenu.tpl'}
 
-<form name="newProfileForm" action="index.php" onsubmit="return roleDeleteValidate()">
+{literal}
+<form name="newProfileForm" action="index.php" onsubmit="if(roleDeleteValidate()) { VtigerJS_DialogBox.block();} else { return false; }">
+{/literal}
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="DeleteRole">
 <input type="hidden" name="delete_role_id" value="{$ROLEID}">	
