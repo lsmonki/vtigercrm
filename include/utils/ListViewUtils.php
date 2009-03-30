@@ -4345,11 +4345,15 @@ function popup_decode_html($str)
 function textlength_check($field_val)
 {
 	global $listview_max_textlength;
-	$temp_val = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val);
+	if($listview_max_textlength) {
+		$temp_val = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val);
         if(strlen($field_val) > $listview_max_textlength)
         {
-		$temp_val = substr(preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val),0,$listview_max_textlength).'...';
+			$temp_val = substr(preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val),0,$listview_max_textlength).'...';
         }
+	} else {
+		$temp_val = $field_val;
+	}
 	return $temp_val;
 }
 
