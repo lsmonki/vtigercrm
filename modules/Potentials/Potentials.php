@@ -736,13 +736,13 @@ class Potentials extends CRMEntity {
 			$this->trash($this->module_name, $id);
 		} elseif($return_module == 'Campaigns') {
 			$sql = 'UPDATE vtiger_potential SET campaignid = 0 WHERE potentialid = ?';
-			$adb->pquery($sql, array($id));
+			$this->db->pquery($sql, array($id));
 		} elseif($return_module == 'Products') {
 			$sql = 'DELETE FROM vtiger_seproductsrel WHERE crmid=? AND productid=?';
-			$adb->pquery($sql, array($id, $return_id));
+			$this->db->pquery($sql, array($id, $return_id));
 		} elseif($return_module == 'Contacts') {
 			$sql = 'DELETE FROM vtiger_contpotentialrel WHERE potentialid=? AND contactid=?';
-			$adb->pquery($sql, array($id, $return_id));
+			$this->db->pquery($sql, array($id, $return_id));
 		} else {
 			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
 			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
