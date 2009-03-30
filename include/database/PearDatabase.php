@@ -219,6 +219,21 @@ class PearDatabase{
 		}
 	}
 
+	/**
+	 * Execute SET NAMES UTF-8 on the connection based on configuration.
+	 */	
+	function executeSetNamesUTF8SQL() {
+		global $default_charset;
+		if(strtoupper($default_charset) == 'UTF-8') {
+	
+			$sql_start_time = microtime(true);
+	
+			$setnameSql = "SET NAMES utf8";
+			$this->database->Execute($setnameSql);
+			$this->logSqlTiming($sql_start_time, microtime(true), $setnameSql);
+		}	
+	}
+
     function query($sql, $dieOnError=false, $msg='')
     {
 	global $log, $default_charset;
@@ -226,15 +241,7 @@ class PearDatabase{
 	$log->debug('query being executed : '.$sql);
 	$this->checkConnection();
 
-	global $logsqltm;
-	if(strtoupper($default_charset) == 'UTF-8') {
-
-		$sql_start_time = microtime(true);
-
-		$setnameSql = "SET NAMES utf8";
-		$this->database->Execute("SET NAMES utf8");
-		$this->logSqlTiming($sql_start_time, microtime(true), $setnameSql);
-	}
+	$this->executeSetNamesUTF8SQL();
 	
 	$sql_start_time = microtime(true);
 	$result = & $this->database->Execute($sql);
@@ -280,14 +287,8 @@ class PearDatabase{
 		$log->debug('Prepared sql query being executed : '.$sql);
 		$this->checkConnection();
 
-		if(strtoupper($default_charset) == 'UTF-8') {
-			$sql_start_time = microtime(true);
-
-			$setnameSql = "SET NAMES utf8";
-			$this->database->Execute("SET NAMES utf8");
-			$this->logSqlTiming($sql_start_time, microtime(true), $setnameSql);
-		}
-		
+		$this->executeSetNamesUTF8SQL();
+				
 		$sql_start_time = microtime(true);
 		$params = $this->flatten_array($params);
 		if (count($params) > 0) {
@@ -339,7 +340,12 @@ class PearDatabase{
     {
 	$this->println("updateBlob t=".$tablename." c=".$colname." id=".$id);
 	$this->checkConnection();
+	$this->executeSetNamesUTF8SQL();
+	
+	$sql_start_time = microtime(true);
 	$result = $this->database->UpdateBlob($tablename, $colname, $data, $id);
+	$this->logSqlTiming($sql_start_time, microtime(true), "Update Blob $tablename, $colname, $id");
+	
 	$this->println("updateBlob t=".$tablename." c=".$colname." id=".$id." status=".$result);
 	return $result;
     }
@@ -348,7 +354,12 @@ class PearDatabase{
     {
 	$this->println("updateBlobFile t=".$tablename." c=".$colname." id=".$id." f=".$filename);
 	$this->checkConnection();
+	$this->executeSetNamesUTF8SQL();
+
+	$sql_start_time = microtime(true);
 	$result = $this->database->UpdateBlobFile($tablename, $colname, $filename, $id);
+	$this->logSqlTiming($sql_start_time, microtime(true), "Update Blob $tablename, $colname, $id");
+	
 	$this->println("updateBlobFile t=".$tablename." c=".$colname." id=".$id." f=".$filename." status=".$result);
 	return $result;
     }
@@ -359,7 +370,13 @@ class PearDatabase{
 	//$this->println("ADODB limitQuery sql=".$sql." st=".$start." co=".$count);
 	$log->debug(' limitQuery sql = '.$sql .' st = '.$start .' co = '.$count);
 	$this->checkConnection();
+	
+	$this->executeSetNamesUTF8SQL();
+	
+	$sql_start_time = microtime(true);
 	$result =& $this->database->SelectLimit($sql,$count,$start);
+	$this->logSqlTiming($sql_start_time, microtime(true), "$sql LIMIT $count, $start");
+	
 	if(!$result) $this->checkError($msg.' Limit Query Failed:' . $sql . '::', $dieOnError);
 	return $result;		
     }
@@ -368,7 +385,13 @@ class PearDatabase{
     {
 	$this->println("ADODB getOne sql=".$sql);
 	$this->checkConnection();
+	
+	$this->executeSetNamesUTF8SQL();
+	
+	$sql_start_time = microtime(true);
 	$result =& $this->database->GetOne($sql);
+	$this->logSqlTiming($sql_start_time, microtime(true), "$sql GetONE");
+	
 	if(!$result) $this->checkError($msg.' Get one Query Failed:' . $sql . '::', $dieOnError);
 	return $result;		
     }
