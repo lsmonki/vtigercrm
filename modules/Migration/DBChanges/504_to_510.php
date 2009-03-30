@@ -1973,7 +1973,8 @@ function webserviceMigration(){
 }
 	ExecuteQuery("ALTER TABLE vtiger_notes MODIFY filename varchar(200)");	
 
-
+$todoid = getTabid('Calendar');
+$eventid = getTabid('Events');
 // Assigned To field should always come in quickcreate otherwise smownerid will not be filled
 Executequery("UPDATE vtiger_field set quickcreate = 0,quickcreatesequence = 4 WHERE fieldname = 'assigned_user_id' AND tabid = $accounttabid");
 Executequery("UPDATE vtiger_field set quickcreate = 0,quickcreatesequence = 6 WHERE fieldname = 'assigned_user_id' AND tabid = $leadtabid");
@@ -1983,6 +1984,8 @@ Executequery("UPDATE vtiger_field set quickcreate = 0,quickcreatesequence = 7 WH
 Executequery("UPDATE vtiger_field set quickcreate = 0,quickcreatesequence = 4 WHERE fieldname = 'assigned_user_id' AND tabid = $helpdesktabid");
 Executequery("UPDATE vtiger_field set quickcreatesequence = 3 WHERE fieldname = 'ticketpriorities' AND tabid = $helpdesktabid");
 Executequery("UPDATE vtiger_field set quickcreatesequence = 2 WHERE fieldname = 'ticketstatus' AND tabid = $helpdesktabid");
+Executequery("UPDATE vtiger_field set quickcreate = 0,quickcreatesequence = 4 WHERE fieldname ='assigned_user_id' AND tabid = $todoid");
+Executequery("UPDATE vtiger_field set quickcreate = 0,quickcreatesequence = 6 WHERE fieldname ='assigned_user_id' AND tabid = $eventid");
 
 
 include_once('currencies.php'); 

@@ -407,7 +407,7 @@ class DefaultDataPopulator extends CRMEntity {
 		//Block25 -- Start
 
 		$this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'ticket_no','vtiger_troubletickets',1,'4','ticket_no','Ticket No',1,0,0,100,13,25,1,'V~O',3,null,'BAS',0)");
-		$this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,4,25,1,'V~M',1,null,'BAS',1)");
+		$this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,4,25,1,'V~M',0,4,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'parent_id','vtiger_troubletickets',1,'68','parent_id','Related To',1,0,0,100,2,25,1,'I~O',1,null,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'priority','vtiger_troubletickets',1,'15','ticketpriorities','Priority',1,2,0,100,6,25,1,'V~O',2,3,'BAS',1)");
 		$this->db->query("insert into vtiger_field values (13,".$this->db->getUniqueID("vtiger_field").",'product_id','vtiger_troubletickets',1,'59','product_id','Product Name',1,2,0,100,5,25,1,'I~O',1,null,'BAS',1)");
@@ -523,7 +523,7 @@ class DefaultDataPopulator extends CRMEntity {
 		//Task Details --START
 		//Block19 -- Start
 		$this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("vtiger_field").",'subject','vtiger_activity',1,'2','subject','Subject',1,0,0,100,1,19,1,'V~M',0,1,'BAS',1)");
- 		$this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,2,19,1,'V~M',1,null,'BAS',1)");
+ 		$this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,2,19,1,'V~M',0,4,'BAS',1)");
  		$this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("vtiger_field").",'date_start','vtiger_activity',1,'6','date_start','Start Date & Time',1,0,0,100,3,19,1,'DT~M~time_start',0,2,'BAS',1)");
  		$this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("vtiger_field").",'time_start','vtiger_activity',1,'2','time_start','Time Start',1,0,0,100,4,19,3,'T~O',1,null,'BAS',1)");
  		$this->db->query("insert into vtiger_field values (9,".$this->db->getUniqueID("vtiger_field").",'time_end','vtiger_activity',1,'2','time_end','End Time',1,0,0,100,4,19,3,'T~O',1,null,'BAS',1)");
@@ -556,7 +556,7 @@ class DefaultDataPopulator extends CRMEntity {
 		//Event Details --START
 		//Block41-43-- Start
 		 $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'subject','vtiger_activity',1,'2','subject','Subject',1,0,0,100,1,41,1,'V~M',0,1,'BAS',1)");
-		 $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,2,41,1,'V~M',1,null,'BAS',1)");
+		 $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,2,41,1,'V~M',0,6,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'date_start','vtiger_activity',1,'6','date_start','Start Date & Time',1,0,0,100,3,41,1,'DT~M~time_start',0,2,'BAS',1)");
 		 $this->db->query("insert into vtiger_field values (16,".$this->db->getUniqueID("vtiger_field").",'time_start','vtiger_activity',1,'2','time_start','Time Start',1,0,0,100,4,41,3,'T~M',1,null,'BAS',1)");
 		

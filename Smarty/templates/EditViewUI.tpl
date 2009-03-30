@@ -488,11 +488,18 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 
 				<input name="{$fldname}" tabindex="{$vt_tab}" id="jscal_field_{$fldname}" type="text" style="border:1px solid #bababa;" size="11" maxlength="10" value="{$date_val}">
 				<img src="{'btnL3Calendar.gif'|@vtiger_imageurl:$THEME}" id="jscal_trigger_{$fldname}">
-
+				
 				{if $uitype eq 6}
 					<input name="time_start" tabindex="{$vt_tab}" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}">
 				{/if}
-
+				
+				{if $uitype eq 6 && $QCMODULE eq 'Event'}
+					<input name="dateFormat" type="hidden" value="{$dateFormat}">
+				{/if}
+				{if $uitype eq 23 && $QCMODULE eq 'Event'}
+					<input name="time_end" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}">
+				{/if}
+				
 				{foreach key=date_format item=date_str from=$secondvalue}
 					{assign var=dateFormat value="$date_format"}
 					{assign var=dateStr value="$date_str"}
