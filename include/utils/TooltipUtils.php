@@ -1,13 +1,7 @@
 <?php
-require_once 'include/Webservices/WebserviceField.php';
-require_once 'include/Webservices/VtigerWebserviceObject.php';
-require_once 'include/Webservices/WebserviceEntityOperation.php';
-require_once 'include/Webservices/EntityMeta.php';
+
 require_once 'include/Webservices/DescribeObject.php';
-require_once 'include/Webservices/VtigerCRMObject.php';
-require_once 'include/Webservices/VtigerCRMObjectMeta.php';
-require_once 'include/Webservices/WebServiceError.php';
-require_once 'include/Webservices/DataTransform.php';
+require_once 'include/Webservices/Utils.php';
 require_once 'include/Webservices/Query.php';
 require_once 'include/utils/CommonUtils.php';
 require_once 'include/Webservices/ModuleTypes.php';
@@ -201,7 +195,7 @@ function getToolTipValue($value,$fieldid,$module,$id){
 	if(empty($result)){
 		return $value;
 	}	
-	$result = processResult($result, $descObject);
+	$result = vttooltip_processResult($result, $descObject);
 	
 	$text = getToolTipText($viewid, $fieldid, $result);
 	
@@ -226,26 +220,22 @@ function getToolTipValue($value,$fieldid,$module,$id){
  * @param array $descObj - the webservices describe object
  * @return array $result - the processes webservices result object
  */
-function processResult($result, $descObj){
+function vttooltip_processResult($result, $descObj){
 	foreach($descObj['fields'] as $field){
 		if($field['type']['name'] == 'reference'){
 			$name = $field['name'];
 			$value = $result[0][$name];
-			list($tabid, $crmid) = explode("x",$value);
-			$module = $field['type']['refersTo'][0];
-			$value = getEntityName($module, array($crmid));
-			$result[0][$name] = $value[$crmid];
+			if(!empty($value)){
+				$result[0][$name] = vtws_getName($value,$current_user);
+			}else{
+				$result[0][$name] = '';
+			}
 		}elseif($field['type']['name'] == 'owner'){
 			$name = $field['name'];
 			$value = $result[0][$name];
 			list($info, $id) = explode("x",$value);
 			$result[0][$name] = getOwnerName($id);
-		}/*elseif($field['type']['name'] == 'currency'){
-			$name = $field['name'];
-			$value = $result[0][$name];
-			list($currency, $id) = explode("x",$value);
-			$result[0][$name] = getCurrencyName($id);
-		}*/elseif($field['type']['name'] == 'boolean'){
+		}elseif($field['type']['name'] == 'boolean'){
 			$name = $field['name'];
 			if($result[0][$name] == 1){
 				$result[0][$name] = "on";
