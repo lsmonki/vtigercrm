@@ -301,7 +301,12 @@ else
 	
 	if($currentModule == 'Services' && $popuptype == 'inventory_service') {
 		$where_relquery .=" and vtiger_service.discontinued <> 0";
-	}    
+	}
+	 
+	if($currentModule == 'Accounts' && $_REQUEST['recordid']!=''){
+		$where_relquery .=" and vtiger_account.accountid!=".$_REQUEST['recordid'];
+		$smarty->assign("RECORDID",$_REQUEST['recordid']);
+	}
 	
 	$query = getListQuery($currentModule,$where_relquery);
 }

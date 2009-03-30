@@ -806,7 +806,7 @@ $em->registerHandler('vtiger.entity.aftersave', 'modules/com_vtiger_workflow/VTE
 /* Mass Edit Feature */
 ExecuteQuery("ALTER TABLE vtiger_field ADD COLUMN masseditable int(11) NOT NULL DEFAULT '1'");
 $tab_field_array = array(
-	'Accounts'=>array('accountname'),
+	'Accounts'=>array('accountname','account_id'),
 	'Contacts'=>array('imagename','portal'),
 	'Products'=>array('imagename','product_id'),
 	'Invoice'=>array('invoice_no','salesorder_id'),

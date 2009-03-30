@@ -4002,7 +4002,7 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 	//end
 	if($reltable != null) {
 		$query = "SELECT ".$selectfield." FROM ".$reltable." ".$condition;
-	} elseif($currentmodule != $returnmodule) { // If none of the above relation matches, then the relation is assumed to be stored in vtiger_crmentityrel
+	} elseif($currentmodule != $returnmodule && $returnmodule!="") { // If none of the above relation matches, then the relation is assumed to be stored in vtiger_crmentityrel
 		$query = "SELECT relcrmid AS relatedid FROM vtiger_crmentityrel WHERE  crmid = ? and module = ? and relmodule = ?
 					UNION SELECT crmid AS relatedid FROM vtiger_crmentityrel WHERE relcrmid = ? and relmodule = ? and module = ?";
 		array_push($params, $recordid, $returnmodule, $currentmodule, $recordid, $returnmodule, $currentmodule);
