@@ -45,7 +45,7 @@
 							<table border=0 cellspacing=0 cellpadding=0>
 								<tr>
                         		{if $MASS_DELETE eq 'yes'}
-            					<td style="padding-right:5px"><input type="button" name="delete" value="{$APP.LBL_DELETE}" class="crmbutton small delete" onClick="return massDelete('{$MODULE}');"></td>
+            						<td style="padding-right:5px"><input type="button" name="delete" value="{$APP.LBL_DELETE}" class="crmbutton small delete" onClick="return massDelete('{$MODULE}');"></td>
                         		{/if}
                         		{if $IS_ADMIN eq 'on'}
             					<td style="padding-right:5px">
@@ -80,7 +80,9 @@
             					
             					</td>
             					{/if}
-            					<td style="padding-right:5px"><input type="button" name="add" value="{$MOD.LBL_ADD_NEW_FOLDER}" class="crmbutton small edit" onClick="fnvshobj(this,'orgLay');" title="{$MOD.LBL_ADD_NEW_FOLDER}"></td>
+            					{if $CHECK.EditView eq 'yes'}
+            						<td style="padding-right:5px"><input type="button" name="add" value="{$MOD.LBL_ADD_NEW_FOLDER}" class="crmbutton small edit" onClick="fnvshobj(this,'orgLay');" title="{$MOD.LBL_ADD_NEW_FOLDER}"></td>
+      							{/if}
       							{if $EMPTY_FOLDERS|@count gt 0}
       							<td>      								
 									<input type="button" name="show" value="{$MOD.LBL_VIEW_EMPTY_FOLDERS}" class="crmbutton small cancel" onClick="fnvshobj(this,'emptyfolder');" title="{$MOD.LBL_VIEW_EMPTY_FOLDERS}">				
@@ -183,28 +185,54 @@
 														<div style="border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 45%; position: relative;">
 															{assign var=vowel_conf value='LBL_A'}
 															{assign var=MODULE_CREATE value=$SINGLE_MOD}
-															<table border="0" cellpadding="5" cellspacing="0" width="98%">
-																<tr>
-																	<td rowspan="2" width="25%"><img src="{'empty.jpg'|@vtiger_imageurl:$THEME}" height="60" width="61"></td>
-																	<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">
-																	{* vtlib customization: Use translation string only if available *}
-																	{$APP.LBL_NO} {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}{else}{$MODULE_CREATE}{/if} {$APP.LBL_FOUND} !
-																		</span>
-																	</td>
-																</tr>
-																<tr>
-																	<td class="small" align="left" nowrap="nowrap">{$APP.LBL_YOU_CAN_CREATE} {$APP.$vowel_conf}
+															{if $CHECK.EditView eq 'yes'}
+																<table border="0" cellpadding="5" cellspacing="0" width="98%">
+																	<tr>
+																		<td rowspan="2" width="25%"><img src="{'empty.jpg'|@vtiger_imageurl:$THEME}" height="60" width="61"></td>
+																		<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">
 																		{* vtlib customization: Use translation string only if available *}
-									 									{if $APP.$MODULE_CREATE}
-									 										{$APP.$MODULE_CREATE}
-									 									{else}
-									 										{$MODULE_CREATE}
-									 									{/if}
-									 									{$APP.LBL_NOW}. {$APP.LBL_CLICK_THE_LINK}:<br>
-									 									&nbsp;&nbsp;-<a href="index.php?module={$MODULE}&action=EditView&return_action=DetailView&parenttab={$CATEGORY}">{$APP.LBL_CREATE} {$APP.$vowel_conf} {$MOD.$MODULE_CREATE}
-																	</td>
+																		{$APP.LBL_NO} {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}{else}{$MODULE_CREATE}{/if} {$APP.LBL_FOUND} !
+																			</span>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td class="small" align="left" nowrap="nowrap">{$APP.LBL_YOU_CAN_CREATE} {$APP.$vowel_conf}
+																			{* vtlib customization: Use translation string only if available *}
+									 										{if $APP.$MODULE_CREATE}
+									 											{$APP.$MODULE_CREATE}
+									 										{else}
+									 											{$MODULE_CREATE}
+									 										{/if}
+									 										{$APP.LBL_NOW}. {$APP.LBL_CLICK_THE_LINK}:<br>
+									 										&nbsp;&nbsp;-<a href="index.php?module={$MODULE}&action=EditView&return_action=DetailView&parenttab={$CATEGORY}">{$APP.LBL_CREATE} {$APP.$vowel_conf} {$MOD.$MODULE_CREATE}
+																		</td>
+																	</tr>
+																</table>
+															{else}
+																<table border="0" cellpadding="5" cellspacing="0" width="98%">
+																<tr>
+																<td rowspan="2" width="25%"><img src="{'denied.gif'|@vtiger_imageurl:$THEME}"></td>
+																<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">
+																{if $MODULE_CREATE eq 'SalesOrder' || $MODULE_CREATE eq 'PurchaseOrder' || $MODULE_CREATE eq 'Invoice' || $MODULE_CREATE eq 'Quotes'}
+																	{$APP.LBL_NO} {$APP.$MODULE_CREATE} {$APP.LBL_FOUND} !</span></td>
+																{else}
+																	{* vtlib customization: Use translation string only if available *}
+																	{$APP.LBL_NO} {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}{else}{$MODULE_CREATE}{/if} {$APP.LBL_FOUND} !</span></td>
+																{/if}
 																</tr>
-															</table>
+																<tr>
+																<td class="small" align="left" nowrap="nowrap">{$APP.LBL_YOU_ARE_NOT_ALLOWED_TO_CREATE} {$APP.$vowel_conf}
+																{if $MODULE_CREATE eq 'SalesOrder' || $MODULE_CREATE eq 'PurchaseOrder' || $MODULE_CREATE eq 'Invoice' || $MODULE_CREATE eq 'Quotes'}
+																	 {$MOD.$MODULE_CREATE}
+																{else}
+																	 {* vtlib customization: Use translation string only if available *}
+																	 {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}{else}{$MODULE_CREATE}{/if}
+																{/if}
+																<br>
+																</td>
+																</tr>
+																</table>
+																{/if}	
 														</div>	 
 													</td>
 												</tr>
