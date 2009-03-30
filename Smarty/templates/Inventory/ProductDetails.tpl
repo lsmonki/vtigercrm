@@ -117,7 +117,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 			{else}
 				{assign var=currency_selected value=""}
 			{/if}
-			<OPTION value="{$currency_details.curid}" {$currency_selected}>{$currency_details.currencylabel} ({$currency_details.currencysymbol})</OPTION>
+			<OPTION value="{$currency_details.curid}" {$currency_selected}>{$currency_details.currencylabel|@getTranslatedCurrencyString} ({$currency_details.currencysymbol})</OPTION>
 		{/foreach}
 		</select>
 	</td>

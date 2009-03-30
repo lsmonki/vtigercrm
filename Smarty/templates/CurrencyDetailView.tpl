@@ -42,9 +42,9 @@
 				
 					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 					<tr>
-						<td class="big"><strong>{$MOD.LBL_SETTINGS} {$APP.LBL_FOR} &quot;{$CURRENCY_NAME}&quot;  </strong></td>
+						<td class="big"><strong>{$MOD.LBL_SETTINGS} {$APP.LBL_FOR} &quot;{$CURRENCY_NAME|@getTranslatedCurrencyString}&quot;  </strong></td>
 						<td class="small" align=right>
-							<input type="submit" class="crmButton small edit" value="Edit" onclick="this.form.action.value='CurrencyEditView'; this.form.parentab.value='Settings'; this.form.record.value='{$ID}'">
+							<input type="submit" class="crmButton small edit" value="Edit" onclick="this.form.action.value='CurrencyEditView'; this.form.parenttab.value='Settings'; this.form.record.value='{$ID}'">
 						</td>
 					</tr>
 					</table>
@@ -55,7 +55,7 @@
 			<table width="100%"  border="0" cellspacing="0" cellpadding="5">
                           <tr>
                             <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_CURRENCY_NAME}</strong></td>
-                            <td width="80%" class="small cellText"><strong>{$CURRENCY_NAME}</strong></td>
+                            <td width="80%" class="small cellText"><strong>{$CURRENCY_NAME|@getTranslatedCurrencyString}</strong></td>
                           </tr>
                           <tr valign="top">
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_CURRENCY_CODE}</strong></td>
@@ -66,7 +66,7 @@
                             <td class="small cellText">{$CURRENCY_SYMBOL}</td>
                           </tr>
                           <tr valign="top">
-                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_CURRENCY_CRATE}</strong><br>({$MOD.LBL_BASE_CURRENCY}{$MASTER_CURRENCY})</td>
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_CURRENCY_CRATE}</strong><br>({$MOD.LBL_BASE_CURRENCY}{$MASTER_CURRENCY|@getTranslatedCurrencyString})</td>
 
                             <td class="small cellText">{$CONVERSION_RATE}</td>
                           </tr>

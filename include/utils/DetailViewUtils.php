@@ -1405,7 +1405,7 @@ function getDetailAssociatedProducts($module,$focus)
 	   <tr valign="top">
 	   	<td colspan="'.$colspan.'" class="dvInnerHeader"><b>'.$app_strings['LBL_ITEM_DETAILS'].'</b></td>
 		<td class="dvInnerHeader" align="center" colspan="2"><b>'.
-			$app_strings['LBL_CURRENCY'].' : </b>'. $currencytype['currency_name']. '('. $currencytype['currency_symbol'] .')
+			$app_strings['LBL_CURRENCY'].' : </b>'. getTranslatedCurrencyString($currencytype['currency_name']). ' ('. $currencytype['currency_symbol'] .')
 		</td>
 		<td class="dvInnerHeader" align="center" colspan="2"><b>'.
 			$app_strings['LBL_TAX_MODE'].' : </b>'.$app_strings[$taxtype].'

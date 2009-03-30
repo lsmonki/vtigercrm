@@ -510,6 +510,7 @@ else
 $log->debug('current_language is: '.$current_language);
 
 //set module and application string arrays based upon selected language
+$app_currency_strings = return_app_currency_strings_language($current_language);
 $app_strings = return_application_language($current_language);
 $app_list_strings = return_app_list_strings_language($current_language);
 $mod_strings = return_module_language($current_language, $currentModule);

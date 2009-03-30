@@ -322,8 +322,9 @@ function getCurrencyName($currencyid, $show_symbol=true)
     $currencyname = $adb->query_result($result,0,"currency_name");
     $curr_symbol = $adb->query_result($result,0,"currency_symbol");
 	$log->debug("Exiting getCurrencyName method ...");
-	if($show_symbol) return $currencyname.' : '.$curr_symbol;
+	if($show_symbol) return getTranslatedCurrencyString($currencyname).' : '.$curr_symbol;
 	else return $currencyname;
+	// NOTE: Without symbol the value could be used for filtering/lookup hence avoiding the translation
 }
 
 
@@ -2778,6 +2779,19 @@ function getTranslatedString($str,$module='')
 	$trans_str = ($app_strings[$str] != '')?$app_strings[$str]:(($temp_mod_strings[$str] != '')?$temp_mod_strings[$str]:$str);
 	$log->debug("function getTranslatedString($str) - translated to ($trans_str)");
 	return $trans_str;
+}
+
+/**
+ * Get translated currency name string.
+ * @param String $str - input currency name
+ * @return String $str - translated currency name
+ */
+function getTranslatedCurrencyString($str) {
+	global $app_currency_strings;
+	if(isset($app_currency_strings) && isset($app_currency_strings[$str])) {
+		return $app_currency_strings[$str];
+	}
+	return $str;
 }
 
 /**	function used to get the list of importable fields

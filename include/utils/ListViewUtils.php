@@ -1908,6 +1908,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 117)
 	{
+		// NOTE: Without symbol the value could be used for filtering/lookup hence avoiding the translation
 		$value = ($temp_val != "") ? getCurrencyName($temp_val,false) : "";
 	}
 	elseif($uitype == 26){

@@ -61,7 +61,7 @@
 								<tr>
 									{*if $price.check_value eq 1*}
 									<td class="dvtCellLabel" width="40%">
-										{$price.currencylabel} ({$price.currencysymbol})
+										{$price.currencylabel|@getTranslatedCurrencyString} ({$price.currencysymbol})
 									</td>
 									<td class="dvtCellInfo" width="60%" colspan="2">
 										{$price.curvalue}
@@ -152,7 +152,7 @@
                     							   <select id="txtbox_{$label}" name="{$keyfldname}">
 									{foreach item=arr key=uivalueid from=$keyoptions}
 									{foreach key=sel_value item=value from=$arr}
-										<option value="{$uivalueid}" {$value}>{$sel_value}</option>	
+										<option value="{$uivalueid}" {$value}>{$sel_value|@getTranslatedCurrencyString}</option>	
 									{/foreach}
 									{/foreach}
                     							   </select>

@@ -43,7 +43,7 @@ $output ='<div id="CurrencyDeleteLay"  class="layerPopup">
 			<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
 				<tr>
 					<td width="50%" class="cellLabel small"><b>'.$mod_strings['LBL_CURRDEL'].'</b></td>
-					<td width="50%" class="cellText small"><b>'.$delete_currencyname.'</b></td>
+					<td width="50%" class="cellText small"><b>'.getTranslatedCurrencyString($delete_currencyname).'</b></td>
 				</tr>
 				<tr>
 					<td class="cellLabel small"><b>'.$mod_strings['LBL_TRANSCURR'].'</b></td>
@@ -61,7 +61,7 @@ $output ='<div id="CurrencyDeleteLay"  class="layerPopup">
 							$currencyid=$temprow["id"];
 							if($delete_currency_id 	!= $currencyid)
 							{	 
-								$output.='<option value="'.$currencyid.'">'.$currencyname.'</option>';
+								$output.='<option value="'.$currencyid.'">'.getTranslatedCurrencyString($currencyname).'</option>';
 							}	
 						 }while($temprow = $adb->fetch_array($result));
 				

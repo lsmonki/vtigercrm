@@ -386,6 +386,37 @@ function return_app_list_strings_language($language)
 	return $return_value;
 }
 
+/**
+ * Retrieve the app_currency_strings for the required language.
+ */
+function return_app_currency_strings_language($language) {
+	global $log;
+	$log->debug("Entering return_app_currency_strings_language(".$language.") method ...");
+	global $app_currency_strings, $default_language, $log, $translation_string_prefix;
+	// Backup the value first
+	$temp_app_currency_strings = $app_currency_strings;
+	@include("include/language/$language.lang.php");
+	if(!isset($app_currency_strings))
+	{
+		$log->warn("Unable to find the application language file for language: ".$language);
+		require("include/language/$default_language.lang.php");
+		$language_used = $default_language;
+	}
+	if(!isset($app_currency_strings))
+	{
+		$log->fatal("Unable to load the application language file for the selected language($language) or the default language($default_language)");
+		$log->debug("Exiting return_app_currency_strings_language method ...");
+		return null;
+	}
+	$return_value = $app_currency_strings;
+	
+	// Restore the value back
+	$app_currency_strings = $temp_app_currency_strings;
+
+	$log->debug("Exiting return_app_currency_strings_language method ...");
+	return $return_value;
+}
+
 /** This function retrieves an application language file and returns the array of strings included.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.

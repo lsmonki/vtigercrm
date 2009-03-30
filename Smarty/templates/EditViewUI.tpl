@@ -415,7 +415,7 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 								{/if}
 								
 								<td align="right" class="dvtCellLabel">
-									{$price.currencylabel} ({$price.currencysymbol})
+									{$price.currencylabel|@getTranslatedCurrencyString} ({$price.currencysymbol})
 									<input type="checkbox" name="cur_{$price.curid}_check" id="cur_{$price.curid}_check" class="small" onclick="fnenableDisable(this,'{$price.curid}'); updateCurrencyValue(this,'{$price.curname}','{$BASE_CURRENCY}','{$price.conversionrate}');" {$check_value}>
 								</td>
 								<td class="dvtCellInfo" align="left">
@@ -780,7 +780,7 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 
 				{foreach item=arr key=uivalueid from=$fldvalue}
 					{foreach key=sel_value item=value from=$arr}
-						<option value="{$uivalueid}" {$value}>{$sel_value}</option>
+						<option value="{$uivalueid}" {$value}>{$sel_value|@getTranslatedCurrencyString}</option>
 						<!-- code added to pass Currency field value, if Disabled for nonadmin -->
 						{if $value eq 'selected' && $secondvalue neq 1}
 							{assign var="curr_stat" value="$uivalueid"}

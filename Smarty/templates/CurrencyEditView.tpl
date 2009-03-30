@@ -49,7 +49,7 @@
 					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 					<tr>
 						{if $ID neq ''}
-							<td class="big"><strong>{$MOD.LBL_SETTINGS} {$APP.LBL_FOR} &quot;{$CURRENCY_NAME}&quot;  </strong></td>
+							<td class="big"><strong>{$MOD.LBL_SETTINGS} {$APP.LBL_FOR} &quot;{$CURRENCY_NAME|@getTranslatedCurrencyString}&quot;  </strong></td>
 						{else}
 							<td class="big"><strong>&quot;{$MOD.LBL_NEW_CURRENCY}&quot;  </strong></td>
 						{/if}
@@ -68,14 +68,14 @@
 											<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
 												<tr>
 													<td width="50%" class="cellLabel small"><b>{$MOD.LBL_CURRENT_CURRENCY}</b></td>
-													<td width="50%" class="cellText small"><b>{$CURRENCY_NAME}</b></td>
+													<td width="50%" class="cellText small"><b>{$CURRENCY_NAME|@getTranslatedCurrencyString}</b></td>
 												</tr>
 												<tr>
 													<td class="cellLabel small"><b>{$MOD.LBL_TRANSCURR}</b></td>
 													<td class="cellText small">
 														<select class="select small" name="transfer_currency_id" id="transfer_currency_id">';
 														 {foreach key=cur_id item=cur_name from=$OTHER_CURRENCIES}
-															 <option value="{$cur_id}">{$cur_name}</option>
+															 <option value="{$cur_id}">{$cur_name|@getTranslatedCurrencyString}</option>
 														 {/foreach}
 													</td>
 												</tr>
@@ -103,12 +103,12 @@
 					<td width="20%" nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_CURRENCY_NAME}</strong></td>
 					<td width="80%" class="small cellText">
 						<!-- input type="hidden" class="detailedViewTextBox small" value="" name="currency_name" -->
-						<select name="currency_name" id="currency_name" class="importBox" onChange='updateSymbolAndCode();'>
+						<select name="currency_name" id="currency_name" class="small" onChange='updateSymbolAndCode();'>
 					{foreach key=header item=currency from=$CURRENCIES}
 			        	        {if $header eq $CURRENCY_NAME}
-			        	        	<option value="{$header}" selected'>{$header}</option>
+			        	        	<option value="{$header}" selected'>{$header|@getTranslatedCurrencyString}</option>
 			        	        {else}
-			        	        	<option value="{$header}" >{$header}</option>
+			        	        	<option value="{$header}" >{$header|@getTranslatedCurrencyString}</option>
 			        	        {/if}
    					{/foreach}
  						</select>
@@ -123,7 +123,7 @@
 					<td class="small cellText"><input type="text" readonly class="detailedViewTextBox small" value="{$CURRENCY_SYMBOL}" name="currency_symbol" id="currency_symbol"></td>
 				</tr>
 				<tr valign="top">
-					<td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_CURRENCY_CRATE}</strong><br>({$MOD.LBL_BASE_CURRENCY}{$MASTER_CURRENCY})</td>
+					<td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_CURRENCY_CRATE}</strong><br>({$MOD.LBL_BASE_CURRENCY}{$MASTER_CURRENCY|@getTranslatedCurrencyString})</td>
 					<td class="small cellText"><input type="text" class="detailedViewTextBox small" value="{$CONVERSION_RATE}" name="conversion_rate"></td>
 				</tr>
 				<tr>
