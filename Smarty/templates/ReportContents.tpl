@@ -48,9 +48,17 @@
 				<tr class="lvtColData" onmouseover="this.className='lvtColDataHover'" onmouseout="this.className='lvtColData'" bgcolor="white">
 				<td>{$smarty.foreach.reportdtls.iteration}</td>
 				{if $MOD[$reportdetails.reportname] neq ''}
-					<td><a href="index.php?module=Reports&action=SaveAndRun&record={$reportdetails.reportid}&folderid={$reportfolder.id}">{$MOD[$reportdetails.reportname]}</a></td>
+					<td><a href="index.php?module=Reports&action=SaveAndRun&record={$reportdetails.reportid}&folderid={$reportfolder.id}">{$MOD[$reportdetails.reportname]}</a>
+					{if $reportdetails.sharingtype eq 'Shared'}
+						<img src="{'Meetings.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" border=0 height=12 width=12 /> 
+					{/if}
+					</td>
 				{else}
-					<td><a href="index.php?module=Reports&action=SaveAndRun&record={$reportdetails.reportid}&folderid={$reportfolder.id}">{$reportdetails.reportname}</a></td>
+					<td><a href="index.php?module=Reports&action=SaveAndRun&record={$reportdetails.reportid}&folderid={$reportfolder.id}">{$reportdetails.reportname}</a>
+					{if $reportdetails.sharingtype eq 'Shared'}
+						<img src="{'Meetings.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" border=0 height=12 width=12 /> 
+					{/if}
+					</td>
 				{/if}
 				{if $MOD[$reportdetails.description] neq ''}
 					<td>{$MOD[$reportdetails.description]}</td>
