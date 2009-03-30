@@ -290,8 +290,8 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
                 	        secEmail.value = tagValue;
 		}
 	}else if(uitype == '11'){
-		if(use_asterisk == true){
-			getObj(dtlView).innerHTML = "<a href=\"javascript:;\" onclick=\"startCall("+tagValue+")\">"+tagValue+"</a>";
+		if(typeof(use_asterisk) != 'undefined' && use_asterisk == true){
+			getObj(dtlView).innerHTML = "<a href=\"javascript:;\" onclick=\"startCall('"+tagValue+"')\">"+tagValue+"</a>";
 		}else{
 			getObj(dtlView).innerHTML = tagValue;
 		}

@@ -48,6 +48,9 @@
     <!-- asterisk Integration -->
     {if $USE_ASTERISK eq 'true'}
     	<script type="text/javascript" src="include/js/asterisk.js"></script>
+    	<script type="text/javascript">
+    	if(typeof(use_asterisk) == 'undefined') use_asterisk = true;
+    	</script>
     {/if}
     <!-- END -->
 
