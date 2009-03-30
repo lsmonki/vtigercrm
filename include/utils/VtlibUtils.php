@@ -304,7 +304,8 @@ function __vtlib_get_modulevar_value($module, $varname) {
 				'IsCustomModule'=>false,
 				'table_name' => 'vtiger_potential',
 				'table_index'=> 'potentialid',
-				'related_tables' => Array ('vtiger_account' => Array('accountid')),
+				// NOTE: UIType 10 is being used instead of direct relationship from 5.1.0 
+				//'related_tables' => Array ('vtiger_account' => Array('accountid')),
 				'popup_fields'=> Array('potentialname'),
 			),
 			'Quotes' =>
