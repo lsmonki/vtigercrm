@@ -145,7 +145,10 @@ if($db_type)
 					
 				}
 				if($source_directory!=$_REQUEST['root_directory']){
-					@get_files_from_folder($source_directory."user_privileges/",$_REQUEST['root_directory']."user_privileges/");	
+					@get_files_from_folder($source_directory."user_privileges/",$_REQUEST['root_directory']."user_privileges/",
+						// Force copy these files. 
+						Array($source_directory."user_privileges/default_module_view.php") 
+					);	
 					@get_files_from_folder($source_directory."storage/",$_REQUEST['root_directory']."storage/");
 				}	
 			}
@@ -402,11 +405,13 @@ function authenticate_user($user_name,$user_password){
 	return true;
 }
 
-function get_files_from_folder($source, $dest) {
+function get_files_from_folder($source, $dest, $forcecopy=false) {
+	if(!$forcecopy) $forcecopy = Array();
+	
 	if ($handle = opendir($source)) {
 		while (false != ($file = readdir($handle))) {
 			if (is_file($source.$file)) {
-				if(!file_exists($dest.$file)){
+				if(!file_exists($dest.$file) || in_array($source.$file, $forcecopy)){
 					$file_handle = fopen($dest.$file,'w');
 					fclose($file_handle);
 					copy($source.$file, $dest.$file);
