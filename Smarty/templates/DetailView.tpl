@@ -251,15 +251,18 @@ function sendfile_email()
 
 					<td align=left>
 					<!-- content cache -->
-						<form action="index.php" method="post" name="DetailView" id="form">
-						{include file='DetailViewHidden.tpl'}				
+										
 					
 				<table border=0 cellspacing=0 cellpadding=0 width=100%>
                 <tr>
 					<td style="padding:5px">
 					<!-- Command Buttons -->
 				  	<table border=0 cellspacing=0 cellpadding=0 width=100%>
-							 
+							 <!-- NOTE: We should avoid form-inside-form condition, which could happen when
+								Singlepane view is enabled. -->
+							 <form action="index.php" method="post" name="DetailView" id="form">
+							{include file='DetailViewHidden.tpl'}
+						
 							  <!-- Start of File Include by SAKTI on 10th Apr, 2008 -->
 							 {include_php file="./include/DetailViewBlockStatus.php"}
 							 <!-- Start of File Include by SAKTI on 10th Apr, 2008 -->
@@ -365,18 +368,22 @@ function sendfile_email()
 					   </tr>
 		<tr>                                                                                                               <td style="padding:10px">
 			{/foreach}
-                    {*-- End of Blocks--*} 
+                    {*-- End of Blocks--*}			   
 			</td>
                 </tr>
 		<!-- Inventory - Product Details informations -->
 		   <tr>
 			{$ASSOCIATED_PRODUCTS}
-		   </tr>			
+		   </tr>
+			
+			</form>	
+			<!-- End the form related to detail view -->			
+
 			{if $SinglePane_View eq 'true' && $IS_REL_LIST eq 'true'}
 				{include file= 'RelatedListNew.tpl'}
 			{/if}
 		</table>
-		</form>
+		
 		</td>
 		<td width=22% valign=top style="border-left:1px dashed #cccccc;padding:13px">
 				  
