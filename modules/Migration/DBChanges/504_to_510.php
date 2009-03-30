@@ -360,17 +360,7 @@ ExecuteQuery("insert into vtiger_attachmentsfolder values (1,'Existing Notes','C
 
 ExecuteQuery("alter table vtiger_senotesrel drop foreign key fk_2_vtiger_senotesrel ");
 
-
-$notesQuery = $adb->query("select notesid from vtiger_notes");
-$noofnotes = $adb->num_rows($notesQuery);
-if($noofnotes > 0)
-{
-    for($k=0;$k<$noofnotes;$k++)
-    {
-	$query ="update vtiger_crmentity set setype='Documents' where crmid = ?";
-	$adb->pquery($query,array($notesid));
-   }
-}
+ExecuteQuery("UPDATE vtiger_crmentity SET setype='Documents' WHERE setype='Notes'");
 
 $attachmentidQuery = 'select vtiger_seattachmentsrel.attachmentsid as attachmentid, vtiger_seattachmentsrel.crmid as id from vtiger_seattachmentsrel INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_seattachmentsrel.crmid WHERE vtiger_crmentity.deleted = 0';
 $res = $adb->pquery($attachmentidQuery,array());
