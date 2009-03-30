@@ -549,7 +549,7 @@
 <relatedmodule>HelpDesk</relatedmodule>
 </relatedlist>
 <relatedlist>
-<function>get_related_list</function>
+<function>get_attachments</function>
 <label>Documents</label>
 <sequence>2</sequence>
 <presence>0</presence>
