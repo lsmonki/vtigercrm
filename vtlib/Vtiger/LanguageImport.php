@@ -116,8 +116,11 @@ class Vtiger_LanguageImport extends Vtiger_LanguageExport {
 				}
 
 				if($dounzip) {					
-					$unzip->unzip($filename, $filename);
-					self::log("Copying file $filename ... DONE");
+					if($unzip->unzip($filename, $filename) !== false) {
+						self::log("Copying file $filename ... DONE");
+					} else {
+						self::log("Copying file $filename ... FAILED");
+					}
 				} else {
 					self::log("Copying file $filename ... SKIPPED");
 				}
