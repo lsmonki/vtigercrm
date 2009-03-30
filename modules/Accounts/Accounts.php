@@ -795,7 +795,7 @@ class Accounts extends CRMEntity {
 		$sql = getPermittedFieldsQuery("Accounts", "detail_view");
 		$fields_list = getFieldsListFromQuery($sql);
 
-		$query = "SELECT $fields_list, vtiger_groups.groupname as 'Assigned To Group',case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name 
+		$query = "SELECT $fields_list,case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name 
 	       			FROM ".$this->entity_table."
 				INNER JOIN vtiger_account
 					ON vtiger_account.accountid = vtiger_crmentity.crmid

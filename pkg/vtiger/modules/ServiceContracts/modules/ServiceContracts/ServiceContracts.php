@@ -215,7 +215,7 @@ class ServiceContracts extends CRMEntity {
 		
 		$fields_list = getFieldsListFromQuery($sql);
 
-		$query = "SELECT $fields_list, vtiger_groups.groupname as 'Assigned To Group', vtiger_users.user_name AS user_name 
+		$query = "SELECT $fields_list, vtiger_users.user_name AS user_name 
 					FROM vtiger_crmentity INNER JOIN $this->table_name ON vtiger_crmentity.crmid=$this->table_name.$this->table_index";
 
 		if(!empty($this->customFieldTable)) {
@@ -257,14 +257,14 @@ class ServiceContracts extends CRMEntity {
 	 */
 	function create_import_query($module) {
 		global $current_user;
-		$query = "SELECT vtiger_crmentity.crmid, vtiger_users.user_name, $this->table_name.* FROM $this->table_name
+		$query = "SELECT vtiger_crmentity.crmid, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name, $this->table_name.* FROM $this->table_name
 			INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = $this->table_name.$this->table_index
 			LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=vtiger_crmentity.crmid
 			LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
+			LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			WHERE vtiger_users_last_import.assigned_user_id='$current_user->id'
 			AND vtiger_users_last_import.bean_type='$module'
-			AND vtiger_users_last_import.deleted=0
-			AND vtiger_users.status = 'Active'";
+			AND vtiger_users_last_import.deleted=0";
 		return $query;
 	}
 
@@ -294,7 +294,7 @@ class ServiceContracts extends CRMEntity {
 		$record_user = $this->column_fields["assigned_user_id"];
 		
 		if($record_user != $current_user->id){
-			$sqlresult = $adb->pquery("select id from vtiger_users where id = ?", array($record_user));
+			$sqlresult = $adb->pquery("select id from vtiger_users where id = ? union select groupid as id from vtiger_groups where groupid = ?", array($record_user, $record_user));
 			if($this->db->num_rows($sqlresult)!= 1) {
 				$this->column_fields["assigned_user_id"] = $current_user->id;
 			} else {			

@@ -99,11 +99,12 @@ class UsersLastImport extends SugarBean
 			vtiger_contactdetails.email,
 			vtiger_users.id as assigned_user_id,
 				smownerid,
-                                vtiger_users.user_name as user_name
+                                case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name
 				FROM vtiger_contactdetails
 				left join vtiger_users_last_import on vtiger_users_last_import.bean_id=vtiger_contactdetails.contactid
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid  
 				LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id 
+				LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_account  ON vtiger_account.accountid=vtiger_contactdetails.accountid 
 				WHERE vtiger_users_last_import.assigned_user_id= '{$current_user->id}'  
 				AND vtiger_users_last_import.bean_type='Contacts' 
@@ -113,23 +114,23 @@ class UsersLastImport extends SugarBean
 		else if ($this->bean_type == 'Accounts')
 		{
 				$query = "SELECT distinct vtiger_account.*, vtiger_accountbillads.bill_city,
-                                vtiger_users.user_name user_name,
+                                case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
 				crmid, smownerid 
 				FROM vtiger_account
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid
 				inner join vtiger_accountbillads on vtiger_crmentity.crmid=vtiger_accountbillads.accountaddressid
 				left join vtiger_users_last_import on vtiger_users_last_import.bean_id=vtiger_crmentity.crmid
 			       	left join vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
+			    LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				WHERE 
 			vtiger_users_last_import.assigned_user_id=
 					'{$current_user->id}'
 				AND vtiger_users_last_import.bean_type='Accounts'
 				AND vtiger_users_last_import.deleted=0
-				AND vtiger_crmentity.deleted=0
-				AND vtiger_users.status='Active'";
+				AND vtiger_crmentity.deleted=0";
 		}else if ($this->bean_type == 'Potentials'){
 			$query = "SELECT distinct vtiger_account.accountid accountid, vtiger_account.accountname accountname,
-						vtiger_users.user_name user_name, vtiger_crmentity.crmid, smownerid,
+						case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name, vtiger_crmentity.crmid, smownerid,
 						vtiger_potential.* 
 						FROM vtiger_potential 
 						inner join  vtiger_crmentity
@@ -138,17 +139,18 @@ class UsersLastImport extends SugarBean
 							on vtiger_account.accountid=vtiger_potential.related_to 
 						left join vtiger_users
 							ON vtiger_crmentity.smownerid=vtiger_users.id 
+						LEFT JOIN vtiger_groups 
+							ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 						left join vtiger_users_last_import
-							on vtiger_users_last_import.assigned_user_id=vtiger_users.id 
+							on vtiger_users_last_import.bean_id=vtiger_crmentity.crmid 
 						where vtiger_users_last_import.assigned_user_id='{$current_user->id}'
 							AND vtiger_users_last_import.bean_type='Potentials'
 							AND vtiger_users_last_import.bean_id=vtiger_crmentity.crmid
 							AND vtiger_users_last_import.deleted=0
-							AND vtiger_crmentity.deleted=0 
-							AND vtiger_users.status='Active'";
+							AND vtiger_crmentity.deleted=0";
 		}else if($this->bean_type == 'Leads'){
 			$query = "SELECT distinct vtiger_leaddetails.*, vtiger_crmentity.crmid, vtiger_leadaddress.phone,vtiger_leadsubdetails.website,
-						vtiger_users.user_name user_name,
+						case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
 						smownerid 
 						FROM vtiger_leaddetails 
 						inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid 
@@ -156,50 +158,50 @@ class UsersLastImport extends SugarBean
 						inner join vtiger_leadsubdetails on vtiger_crmentity.crmid=vtiger_leadsubdetails.leadsubscriptionid 
 						left join vtiger_users_last_import on vtiger_users_last_import.bean_id=vtiger_crmentity.crmid			       	
 						left join vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
+						LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 						WHERE 
 						vtiger_users_last_import.assigned_user_id=
 							'{$current_user->id}'
 						AND vtiger_users_last_import.bean_type='Leads'
 						AND vtiger_users_last_import.deleted=0
-						AND vtiger_crmentity.deleted=0
-						AND vtiger_users.status='Active'";
+						AND vtiger_crmentity.deleted=0";
 		}
 		
 		//Pavani: Query to retrieve trouble tickets, vendors data from database
                 else if($this->bean_type == 'HelpDesk')
                 {
                         $query = "SELECT distinct vtiger_troubletickets.*, vtiger_crmentity.crmid,
-                                vtiger_users.user_name user_name,
+                                case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
                                 smownerid
                                 FROM vtiger_troubletickets
                                 inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_troubletickets.ticketid
                                 left join vtiger_users_last_import on vtiger_users_last_import.bean_id=vtiger_crmentity.crmid
                                 left join vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
+                                LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
                                 WHERE
                                 vtiger_users_last_import.assigned_user_id=
                                         '{$current_user->id}'
                                 AND vtiger_users_last_import.bean_type='HelpDesk'
                                 AND vtiger_users_last_import.deleted=0
-                                AND vtiger_crmentity.deleted=0
-                                AND vtiger_users.status='Active'";
+                                AND vtiger_crmentity.deleted=0";
                 }
 		
 		else if($this->bean_type == 'Vendors')
                 {
                         $query = "SELECT distinct vtiger_vendor.*, vtiger_crmentity.crmid,
-                                vtiger_users.user_name user_name,
+                                case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,
                                 smownerid
                                 FROM vtiger_vendor
                                 inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_vendor.vendorid
                                 left join vtiger_users_last_import on vtiger_users_last_import.bean_id=vtiger_crmentity.crmid
                                 left join vtiger_users ON vtiger_crmentity.smownerid=vtiger_users.id
+                                LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
                                 WHERE
                                 vtiger_users_last_import.assigned_user_id=
                                         '{$current_user->id}'
                                 AND vtiger_users_last_import.bean_type='Vendors'
                                 AND vtiger_users_last_import.deleted=0
-                                AND vtiger_crmentity.deleted=0
-                                AND vtiger_users.status='Active'";
+                                AND vtiger_crmentity.deleted=0";
                 }
                 //pavani...end
 
@@ -221,8 +223,7 @@ class UsersLastImport extends SugarBean
 				vtiger_users_last_import.assigned_user_id= '{$current_user->id}'
 				AND vtiger_users_last_import.bean_type='Products'
 				AND vtiger_users_last_import.deleted=0
-				AND vtiger_crmentity.deleted = 0 
-				AND vtiger_users.status='Active'";
+				AND vtiger_crmentity.deleted = 0";
 
 		}
 		// vtlib customization: Hook for getting the query from the module class itself.

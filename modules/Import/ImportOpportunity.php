@@ -41,11 +41,48 @@ class ImportOpportunity extends Potentials {
 
 	// This is the list of the functions to run when importing
 	var $special_functions =  array(
+						"assign_user",
 						"add_related_to",
 						"map_campaign_source",
 						"modseq_number",
 				       );
 
+/**	function used to set the assigned_user_id value in the column_fields when we map the username during import
+ */
+function assign_user()
+{
+	global $current_user;
+	$ass_user = $this->column_fields["assigned_user_id"];
+	$this->db->println("assign_user ".$ass_user." cur_user=".$current_user->id);
+	
+	if( $ass_user != $current_user->id)
+	{
+		$this->db->println("searching and assigning ".$ass_user);
+
+		//$result = $this->db->query("select id from vtiger_users where user_name = '".$ass_user."'");
+		$result = $this->db->pquery("select id from vtiger_users where id = ? union select groupid as id from vtiger_groups where groupid = ?", array($ass_user, $ass_user));
+		if($this->db->num_rows($result)!=1)
+		{
+			$this->db->println("not exact records setting current userid");
+			$this->column_fields["assigned_user_id"] = $current_user->id;
+		}
+		else
+		{
+		
+			$row = $this->db->fetchByAssoc($result, -1, false);
+			if (isset($row['id']) && $row['id'] != -1)
+                	{
+				$this->db->println("setting id as ".$row['id']);
+				$this->column_fields["assigned_user_id"] = $row['id'];
+			}
+			else
+			{
+				$this->db->println("setting current userid");
+				$this->column_fields["assigned_user_id"] = $current_user->id;
+			}
+		}
+	}
+}				   
 	/**
 	 * this function is used to create the related to field for the potential
 	 */
@@ -74,7 +111,7 @@ class ImportOpportunity extends Potentials {
 		}
 				
 		require_once "modules/$module/$module.php";
-		$focus = new $module();
+		$focus1 = new $module();
 
 		$query = '';
 		if($module == 'Accounts'){
@@ -90,30 +127,25 @@ class ImportOpportunity extends Potentials {
 		$result = $adb->pquery($query, array($value));
 		if($adb->num_rows($result)>0){
 			//record found
-			$focus->id = $adb->query_result($result, 0, $focus->table_index);
+			$focus1->id = $adb->query_result($result, 0, $focus1->table_index);
 		}else{
 			//record not found; create it
 			if($module == 'Accounts'){
-		        $focus->column_fields['accountname'] = $value;
-		        $focus->column_fields['assigned_user_id'] = $current_user->id;
-		        $focus->column_fields['modified_user_id'] = $current_user->id;
+		        $focus1->column_fields['accountname'] = $value;
 			}else if($module == 'Contacts'){
-		        $focus->column_fields['lastname'] = $value;
-		        $focus->column_fields['assigned_user_id'] = $current_user->id;
-		        $focus->column_fields['modified_user_id'] = $current_user->id;
+		        $focus1->column_fields['lastname'] = $value;
 			}
-			$focus->save($module);
-		}
-		// avoid duplicate mappings:
-		if (!isset($imported_ids[$focus->id])){
+	        $focus1->column_fields['assigned_user_id'] = $current_user->id;
+	        $focus1->column_fields['modified_user_id'] = $current_user->id;
+			$focus1->save($module);
     		$last_import = new UsersLastImport();
     		$last_import->assigned_user_id = $current_user->id;
     		$last_import->bean_type = $module;
-    		$last_import->bean_id = $focus->id;
+    		$last_import->bean_id = $focus1->id;
     		$last_import->save();
-			$imported_ids[$focus->id] = 1;
+			$imported_ids[$focus1->id] = 1;
 		}
-		$this->column_fields["related_to"] = $focus->id;
+		$this->column_fields["related_to"] = $focus1->id;
     }	
 
 	/**     function used to map with existing Campaign Source if the potential is map with an campaign during import

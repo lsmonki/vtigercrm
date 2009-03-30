@@ -56,7 +56,7 @@ class ImportLead extends Leads {
 			$this->db->println("searching and assigning ".$ass_user);
 
 			//$result = $this->db->query("select id from vtiger_users where user_name = '".$ass_user."'");
-			$result = $this->db->pquery("select id from vtiger_users where id = ?", array($ass_user));
+			$result = $this->db->pquery("select id from vtiger_users where id = ? union select groupid as id from vtiger_groups where groupid = ?", array($ass_user, $ass_user));
 			if($this->db->num_rows($result)!=1)
 			{
 				$this->db->println("not exact records setting current userid");

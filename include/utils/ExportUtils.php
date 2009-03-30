@@ -92,7 +92,7 @@ function getFieldsListFromQuery($query)
 		//HANDLE HERE - Mismatch fieldname-tablename in field table, in future we have to avoid these if elses
 		if($columnName == 'smownerid')//for all assigned to user name
 		{
-			$fields .= "vtiger_users.user_name as '".$fieldlabel."',";
+			$fields .= "case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as '".$fieldlabel."',";
 		}
 		elseif($tablename == 'vtiger_account' && $columnName == 'parentid')//Account - Member Of
 		{
