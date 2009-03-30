@@ -73,7 +73,7 @@ if($adb->num_rows($result) >= 1)
 
 	        $activity_time = strtotime(date("$date_start $time_start"))/60;
 
-		if (($activity_time - $curr_time) > 0 && ($activity_time - $curr_time) == $reminder_time)
+		if (($activity_time - $curr_time) > 0 && ($activity_time - $curr_time) <= $reminder_time)
 		{
 			$log->debug(" InSide  REMINDER");
 			$query_user="SELECT vtiger_users.email1,vtiger_salesmanactivityrel.smid FROM vtiger_salesmanactivityrel inner join vtiger_users on vtiger_users.id=vtiger_salesmanactivityrel.smid where vtiger_salesmanactivityrel.activityid =? and vtiger_users.deleted=0"; 
