@@ -146,7 +146,7 @@
 										{/if}
 													{if $BKP_SERVER_MODE neq 'edit'}
 														<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmButton small edit" onclick="this.form.action.value='BackupServerConfig';this.form.bkp_server_mode.value='edit'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">&nbsp;
-														<input title="{$MOD.LBL_CLEAR_DATA}" accessKey="{$MOD.LBL_CLEAR_DATA}" class="crmButton small cancel" onclick="document.tandc.enable_backup.checked=false;clearBackupServer(this);" type="button" name="Clear" value="{$MOD.LBL_CLEAR_DATA}">
+														<input title="{$MOD.LBL_CLEAR_DATA}" accessKey="{$MOD.LBL_CLEAR_DATA}" class="crmButton small cancel" onclick="document.tandc.enable_ftp_backup.checked=false;clearBackupServer(this);" type="button" name="Clear" value="{$MOD.LBL_CLEAR_DATA}">
 													{else}
 														<input title="{$APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmButton small save" type="submit" name="button" value="{$APP.LBL_SAVE_BUTTON_LABEL}" onclick="this.form.action.value='Save'; return validate('FTP')">&nbsp;&nbsp;
 													    <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmButton small cancel" onclick="backupenable_check()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
@@ -277,8 +277,8 @@ function backupenable_check()
                         onComplete: function(response) {
                                 if(response.responseText.indexOf('FAILURE') > -1)
                                 {
-                                        document.tandc.enable_backup.checked = false;
-                                        backupenabled(document.tandc.enable_backup);
+                                        document.forms['tandc'].enable_ftp_backup.checked = false;
+                                        backupenabled(document.tandc.enable_ftp_backup);
                                         window.history.back();
                                 }
                         }
