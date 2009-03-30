@@ -1872,6 +1872,7 @@ class ReportRun extends CRMEntity
 						else {
 							$fieldvalue = getTranslatedString($custom_field_values[$i]);
 						}
+						$append_cur = str_replace($fld->name,"",decode_html($this->getLstringforReportHeaders($fld->name)));
 						$headerLabel = str_replace("_"," ",$fld->name);
 						$mod_name = split('_',$headerLabel,2);
 						if($mod_name[0]!='')
@@ -1879,7 +1880,7 @@ class ReportRun extends CRMEntity
 						$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
 						if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString($headerLabel_tmp);
 						else $headerLabel = $headerLabel_tmp;
-						
+						if(trim($append_cur)!="") $headerLabel .= $append_cur;
 					
 						$fieldvalue = str_replace("<", "&lt;", $fieldvalue);
 						$fieldvalue = str_replace(">", "&gt;", $fieldvalue);
