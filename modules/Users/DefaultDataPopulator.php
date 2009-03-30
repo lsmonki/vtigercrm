@@ -300,7 +300,7 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'department','vtiger_contactdetails',1,'1','department','Department',1,2,0,100,12,4,1,'V~O',1,null,'ADV',1)");
 		$this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'birthday','vtiger_contactsubdetails',1,'5','birthday','Birthdate',1,2,0,100,16,4,1,'V~O',1,null,'ADV',1)");
 		$this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'email','vtiger_contactdetails',1,'13','email','Email',1,2,0,100,15,4,1,'E~O',2,5,'BAS',1)");
-		$this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'reportsto','vtiger_contactdetails',1,'57','contact_id','Reports To',1,2,0,100,18,4,1,'V~O',1,null,'ADV',1)");
+		$this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'reportsto','vtiger_contactdetails',1,'57','contact_id','Reports To',1,2,0,100,18,4,1,'V~O',1,null,'ADV',0)");
 		$this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'assistant','vtiger_contactsubdetails',1,'1','assistant','Assistant',1,2,0,100,17,4,1,'V~O',1,null,'ADV',1)");
 		$this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'yahooid','vtiger_contactdetails',1,'13','yahooid','Yahoo Id',1,2,0,100,20,4,1,'E~O',1,null,'ADV',1)");
 		$this->db->query("insert into vtiger_field values (4,".$this->db->getUniqueID("vtiger_field").",'assistantphone','vtiger_contactsubdetails',1,'11','assistantphone','Assistant Phone',1,2,0,100,19,4,1,'V~O',1,null,'ADV',1)");

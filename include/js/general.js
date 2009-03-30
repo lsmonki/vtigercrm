@@ -2123,6 +2123,7 @@ check->to check select options enable or disable
 
 function selectContact(check,type,frmName)
 {
+	var record = document.getElementsByName("record")[0].value;
         if($("single_accountid"))
         {
 		var potential_id = '';
@@ -2209,7 +2210,7 @@ function selectContact(check,type,frmName)
 	}
         else
         {
-                window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+                window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&recordid="+record,"test","width=640,height=602,resizable=0,scrollbars=0");
         }
 }
 //to get Select Potential Popup

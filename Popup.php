@@ -303,8 +303,19 @@ else
 		$where_relquery .=" and vtiger_service.discontinued <> 0";
 	}
 	 
+	//Avoiding Current Record to show up in the popups When editing.
 	if($currentModule == 'Accounts' && $_REQUEST['recordid']!=''){
 		$where_relquery .=" and vtiger_account.accountid!=".$_REQUEST['recordid'];
+		$smarty->assign("RECORDID",$_REQUEST['recordid']);
+	}
+	
+	if($currentModule == 'Contacts' && $_REQUEST['recordid']!=''){
+		$where_relquery .=" and vtiger_contactdetails.contactid!=".$_REQUEST['recordid'];
+		$smarty->assign("RECORDID",$_REQUEST['recordid']);
+	}
+	
+	if($currentModule == 'Users' && $_REQUEST['recordid']!=''){
+		$where_relquery .=" and vtiger_users.id!=".$_REQUEST['recordid'];
 		$smarty->assign("RECORDID",$_REQUEST['recordid']);
 	}
 	
