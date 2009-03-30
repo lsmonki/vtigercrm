@@ -602,9 +602,9 @@ case when (vtiger_users.user_name not like '') then vtiger_users.user_name else 
 		{
 			$updatelog = "Ticket created. Assigned to ";
 
-			if($assigned_group_name != '' && $assigntype == 'T')
+			if(!empty($assigned_group_name) && $assigntype == 'T')
 			{
-				$updatelog .= " group ".$assigned_group_name;
+				$updatelog .= " group ".(is_array($assigned_group_name)? $assigned_group_name[0] : $assigned_group_name);
 			}
 			elseif($focus->column_fields['assigned_user_id'] != '')
 			{
