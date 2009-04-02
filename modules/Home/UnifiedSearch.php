@@ -179,6 +179,13 @@ function getUnifiedWhere($listquery,$module,$search_val){
 	for($i=0;$i<$noofrows;$i++){
 		$columnname = $adb->query_result($result,$i,'columnname');
 		$tablename = $adb->query_result($result,$i,'tablename');
+		
+		// Search / Lookup customization
+		if($module == 'Contacts' && $columnname == 'accountid') {
+			$columnname = "accountname";
+			$tablename = "vtiger_account";
+		}
+		// END
 
 		//Before form the where condition, check whether the table for the field has been added in the listview query
 		if(strstr($listquery,$tablename)){
