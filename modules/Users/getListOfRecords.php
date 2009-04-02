@@ -102,8 +102,18 @@ if(isset($_SESSION['listEntyKeymod_'.$iCurRecord]))
 		{
 			$field_value = '';
 			$field_query = $adb->pquery("SELECT * from ".$tables_array[$sModule]." WHERE ".$id_array[$sModule]." = ".$ar_allist[$listi],array());
-			for($index = 0; $index<count($fieldname);$index++){
-				if(getFieldVisibilityPermission($sModule,$current_user->id,$fieldname[$index]) == '0'){
+			for($index = 0; $index<count($fieldname);$index++){				
+				$checkForFieldAccess = $fieldname[$index];
+				
+				// Handling case where fieldname in vtiger_entityname mismatches fieldname in vtiger_field 				
+				if($sModule == 'HelpDesk' && $checkForFieldAccess == 'title') {
+					$checkForFieldAccess = 'ticket_title';	
+				} else if($sModule == 'Documents' && $checkForFieldAccess == 'title') {
+					$checkForFieldAccess = 'notes_title';	
+				}
+				// END
+				
+				if(getFieldVisibilityPermission($sModule,$current_user->id, $checkForFieldAccess) == '0'){
 					$field_value .= " ".$adb->query_result($field_query,0,$fieldname[$index]);
 				}
 			}
