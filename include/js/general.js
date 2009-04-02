@@ -2821,6 +2821,9 @@ function ActivityReminderPostponeCallback(cbmodule, cbrecord) {
 function ActivityReminderPostponeCallbackProcess(message) {
 	ActivityReminderProgressIndicator(false);
 }
+function ActivityReminderRemovePopupDOM(id) {
+	if($(id)) $(id).parentNode.remove();
+}
 /* END */
 
 /* ActivityReminder Customization: Pool Callback */
