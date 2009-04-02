@@ -2173,27 +2173,44 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				}
 				elseif($popuptype == "specific_potential_account_address")
 				{
-					$acntid = $adb->query_result($list_result,$list_result_count,"accountid");
-					require_once('modules/Accounts/Accounts.php');
-					$acct_focus = new Accounts();
-					$acct_focus->retrieve_entity_info($acntid,"Accounts");
-					$account_name = getAccountName($acntid);
-
-					$slashes_account_name = popup_from_html($account_name);
-					$slashes_account_name = htmlspecialchars($slashes_account_name,ENT_QUOTES,$default_charset);
-
 					$slashes_temp_val = popup_from_html($temp_val);
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
-					$xyz=array('bill_street','bill_city','bill_code','bill_pobox','bill_country','bill_state','ship_street','ship_city','ship_code','ship_pobox','ship_country','ship_state');
-					for($i=0;$i<12;$i++){
-						if (getFieldVisibilityPermission($module, $current_user->id,$xyz[$i]) == '0'){
-							$acct_focus->column_fields[$xyz[$i]] = $acct_focus->column_fields[$xyz[$i]];
+					
+					// For B2C support, Potential was enabled to be linked to Contacts also.
+					// Hence we need case handling for it.
+					$relatedid = $adb->query_result($list_result,$list_result_count,"related_to");
+					$relatedentity = getSalesEntityType($relatedid);
+					if($relatedentity == 'Accounts') {
+						require_once('modules/Accounts/Accounts.php');
+						$acct_focus = new Accounts();
+						$acct_focus->retrieve_entity_info($relatedid,"Accounts");
+						$account_name = getAccountName($relatedid);
+	
+						$slashes_account_name = popup_from_html($account_name);
+						$slashes_account_name = htmlspecialchars($slashes_account_name,ENT_QUOTES,$default_charset);
+	
+						$xyz=array('bill_street','bill_city','bill_code','bill_pobox','bill_country','bill_state','ship_street','ship_city','ship_code','ship_pobox','ship_country','ship_state');
+						for($i=0;$i<12;$i++){
+							if (getFieldVisibilityPermission('Accounts', $current_user->id,$xyz[$i]) == '0'){
+								$acct_focus->column_fields[$xyz[$i]] = $acct_focus->column_fields[$xyz[$i]];
+							}
+							else
+								$acct_focus->column_fields[$xyz[$i]] = '';
 						}
-						else
-							$acct_focus->column_fields[$xyz[$i]] = '';
+						$value = '<a href="javascript:window.close();" onclick=\'set_return_address("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$relatedid.'", "'.nl2br(decode_html($slashes_account_name)).'", "'.popup_decode_html($acct_focus->column_fields['bill_street']).'", "'.popup_decode_html($acct_focus->column_fields['ship_street']).'", "'.popup_decode_html($acct_focus->column_fields['bill_city']).'", "'.popup_decode_html($acct_focus->column_fields['ship_city']).'", "'.popup_decode_html($acct_focus->column_fields['bill_state']).'", "'.popup_decode_html($acct_focus->column_fields['ship_state']).'", "'.popup_decode_html($acct_focus->column_fields['bill_code']).'", "'.popup_decode_html($acct_focus->column_fields['ship_code']).'", "'.popup_decode_html($acct_focus->column_fields['bill_country']).'", "'.popup_decode_html($acct_focus->column_fields['ship_country']).'","'.popup_decode_html($acct_focus->column_fields['bill_pobox']).'", "'.popup_decode_html($acct_focus->column_fields['ship_pobox']).'");\'>'.$temp_val.'</a>';
+					} else if($relatedentity == 'Contacts') {
+						
+						require_once('modules/Contacts/Contacts.php');
+						$contact_name = getContactName($relatedid);
+	
+						$slashes_contact_name = popup_from_html($contact_name);
+						$slashes_contact_name = htmlspecialchars($slashes_contact_name,ENT_QUOTES,$default_charset);
+						
+						$value = '<a href="javascript:window.close();" onclick=\'set_return_contact("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$relatedid.'", "'.nl2br(decode_html($slashes_contact_name)).'");\'>'.$temp_val.'</a>';
+						
+					} else {
+						$value = $tmp_val;
 					}
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_address("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$acntid.'", "'.nl2br(decode_html($slashes_account_name)).'", "'.popup_decode_html($acct_focus->column_fields['bill_street']).'", "'.popup_decode_html($acct_focus->column_fields['ship_street']).'", "'.popup_decode_html($acct_focus->column_fields['bill_city']).'", "'.popup_decode_html($acct_focus->column_fields['ship_city']).'", "'.popup_decode_html($acct_focus->column_fields['bill_state']).'", "'.popup_decode_html($acct_focus->column_fields['ship_state']).'", "'.popup_decode_html($acct_focus->column_fields['bill_code']).'", "'.popup_decode_html($acct_focus->column_fields['ship_code']).'", "'.popup_decode_html($acct_focus->column_fields['bill_country']).'", "'.popup_decode_html($acct_focus->column_fields['ship_country']).'","'.popup_decode_html($acct_focus->column_fields['bill_pobox']).'", "'.popup_decode_html($acct_focus->column_fields['ship_pobox']).'");\'>'.$temp_val.'</a>';
-
 				}
 				//added by rdhital/Raju for better emails 
 				elseif($popuptype == "set_return_emails")

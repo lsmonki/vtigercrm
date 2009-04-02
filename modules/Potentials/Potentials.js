@@ -66,7 +66,17 @@ function set_return_address(potential_id, potential_name, account_id, account_na
         if(typeof(window.opener.document.EditView.ship_pobox) != 'undefined')
                 window.opener.document.EditView.ship_pobox.value = ship_pobox;
 }
+function set_return_contact(potential_id, potential_name, contact_id, contact_name) {
 
+	if(typeof(window.opener.document.EditView.potential_name) != 'undefined')
+                window.opener.document.EditView.potential_name.value = potential_name;
+        if(typeof(window.opener.document.EditView.potential_id) != 'undefined')
+                window.opener.document.EditView.potential_id.value = potential_id;
+	if(typeof(window.opener.document.EditView.contact_name) != 'undefined')
+                window.opener.document.EditView.contact_name.value = contact_name;
+        if(typeof(window.opener.document.EditView.contact_id) != 'undefined')
+                window.opener.document.EditView.contact_id.value = contact_id;
+}
 function set_return_todo(product_id, product_name) {
 	if(document.getElementById('from_link').value != '') {
         window.opener.document.QcEditView.task_parent_name.value = product_name;
