@@ -71,6 +71,8 @@ if ($allow_exports=='none' || ( $allow_exports=='admin' && ! is_admin($current_u
 		alert("<?php echo $app_strings['NOT_PERMITTED_TO_EXPORT']?>");
 		window.location="index.php?module=<?php echo $_REQUEST['module'] ?>&action=index";
 	</script>
+	
+	<?php exit; ?>
 <?php
 }
 

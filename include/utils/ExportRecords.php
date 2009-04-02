@@ -12,7 +12,7 @@ require_once('include/database/PearDatabase.php');
 require_once('data/CRMEntity.php');
 require_once('Smarty_setup.php');
 require_once('include/utils/utils.php');
-global $app_strings,$mod_strings, $list_max_entries_per_page, $currentModule, $theme, $current_language;
+global $app_strings,$mod_strings, $list_max_entries_per_page, $currentModule, $theme, $current_language, $current_user;
 
 $smarty = new vtigerCRM_Smarty();
 $category = getParentTab();
@@ -34,7 +34,12 @@ $smarty->assign("MODULE",$currentModule);
 $smarty->assign("MODULELABEL",getTranslatedString($currentModule));
 $smarty->assign("IDSTRING",$idstring);
 $smarty->assign("PERPAGE",$list_max_entries_per_page);
-$smarty->display('ExportRecords.tpl');
+
+if(!is_admin($current_user) && (isPermitted($currentModule, 'Export') != 'yes')) {	
+	$smarty->display(vtlib_getModuleTemplate('Vtiger','OperationNotPermitted.tpl'));	
+} else {
+	$smarty->display('ExportRecords.tpl');
+}
 
 
 ?>
