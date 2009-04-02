@@ -1190,6 +1190,7 @@ $mod_strings = Array(
 'LBL_FAILED' => 'Failed',
 'LBL_DONE' => 'Done',
 'LBL_IN_USE' => 'IN USE',
+'LBL_MODULE_NUMBERING_FIX_MISSING' => 'Update Missing Record Sequence Now',
 
 //Added for: 5473
 'LBL_SHARING_ACCESS_HELPNOTE' => 'After making modifications, press Recalculate button to apply the changes.',

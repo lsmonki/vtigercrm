@@ -77,6 +77,42 @@ function updateModEntityNoSetting(button, form) {
         }
     );
 }
+function updateModEntityExisting(button, form) {
+	var module = form.selmodule.value;
+	var recprefix = form.recprefix.value;
+    var recnumber = form.recnumber.value;
+	var mode = 'UPDATEBULKEXISTING';
+
+	if(recnumber == '') {
+		alert("Start sequence cannot be empty!");
+		return;
+	}
+
+	if(recnumber.match(/[^0-9]+/) != null) {
+		alert("Start sequence should be numeric.");
+		return;
+	}
+
+	VtigerJS_DialogBox.progress();
+	button.disabled = true;
+
+	new Ajax.Request(
+    	'index.php',
+        {queue: {position: 'end', scope: 'command'},
+        	method: 'post',
+            postBody: 'module=Settings&action=SettingsAjax&file=CustomModEntityNo&ajax=true' + 
+					'&selmodule=' + encodeURIComponent(module) +
+					'&mode=' + encodeURIComponent(mode),
+
+            onComplete: function(response) {
+				VtigerJS_DialogBox.hideprogress();
+
+				var restext = response.responseText;
+				$('customentity_infodiv').innerHTML = restext;
+            }
+        }
+    );
+}
 </script>
 {/literal}
 

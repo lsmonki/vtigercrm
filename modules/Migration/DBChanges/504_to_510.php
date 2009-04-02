@@ -933,48 +933,6 @@ for($i = 0; $i<$num_fields; $i++)
 	addFieldSecurity($tab_id, $fld_id, false);
 }
 
-
-// Update Existing Module Record Numbers.
-function custom_updateModSeqNumber($module, $tablename, $colname, $reccol) {
-	global $adb;
-
-	if($tablename == '' || $colname == '') return;
-
-	$result = $adb->query("select * from $tablename");
-	$rowcount = $adb->num_rows($result);
-	for($i=0;$i<$rowcount;$i++)
-	{
-		$modres= $adb->query("select prefix, cur_id from vtiger_modentity_num where semodule='$module' and active=1");
-		if($adb->num_rows($modres)>0){
-			$prefix=$adb->query_result($modres,0,'prefix');
-			$cur_id=$adb->query_result($modres,0,'cur_id');
-			$recid = $adb->query_result($result,$i,$reccol);
-			ExecuteQuery("UPDATE $tablename set $colname='".$prefix.$cur_id."' where $reccol=".$recid);
-			ExecuteQuery("UPDATE vtiger_modentity_num set cur_id='".($cur_id+1)."' where semodule='$module' and active=1");
-		}
-	}
-}
-
-$upmodrecs = array(
-	array('Leads',       'vtiger_leaddetails',    'lead_no',      'leadid'),
-	array('Accounts',    'vtiger_account',        'account_no',   'accountid'),
-	array('Campaigns',   'vtiger_campaign',       'campaign_no',  'campaignid'),
-	array('Contacts',    'vtiger_contactdetails', 'contact_no',   'contactid'),
-	array('Potentials',  'vtiger_potential',      'potential_no', 'potentialid'),
-	array('HelpDesk',    'vtiger_troubletickets', 'ticket_no',    'ticketid'),
-	array('Quotes',      'vtiger_quotes',         'quote_no',     'quoteid'),
-	array('SalesOrder',  'vtiger_salesorder',     'salesorder_no','salesorderid'),
-	array('PurchaseOrder','vtiger_purchaseorder', 'purchaseorder_no','purchaseorderid'),
-	array('Products',    'vtiger_products',       'product_no',   'productid'),
-	array('Vendors',     'vtiger_vendor',         'vendor_no',    'vendorid'),
-	array('PriceBooks',  'vtiger_pricebook',      'pricebook_no', 'pricebookid'),
-	array('Faq',         'vtiger_faq',            'faq_no',       'id'),
-	array('Documents',   'vtiger_notes',          'note_no',      'notesid')
-);
-for($index = 0; $index < count($upmodrecs); ++$index) {
-	custom_updateModSeqNumber($upmodrecs[$index][0], $upmodrecs[$index][1], $upmodrecs[$index][2], $upmodrecs[$index][3]);
-}
-
 // Rearrange Fields on UI.
 $seq_array = array(
 		6 => array( 

@@ -1416,6 +1416,53 @@ $log->info("in getOldFileName  ".$notesid);
 	}
 	// END
 
+	function updateMissingSeqNumber($module) {		
+		global $log, $adb;
+		$log->debug("Entered updateMissingSeqNumber function");
+		
+		vtlib_setup_modulevars($module, $this);
+		
+		$tabid = getTabid($module);
+		$fieldinfo = $adb->pquery("SELECT * FROM vtiger_field WHERE tabid = ? AND uitype = 4", Array($tabid));
+		
+		$returninfo = Array();
+		
+		if($fieldinfo && $adb->num_rows($fieldinfo)) {
+			// TODO: We assume the following for module sequencing field
+			// 1. There will be only field per module
+			// 2. This field is linked to module base table column
+			$fld_table = $adb->query_result($fieldinfo, 0, 'tablename');
+			$fld_column = $adb->query_result($fieldinfo, 0, 'columnname');
+			
+			if($fld_table == $this->table_name) {
+				$records = $adb->query("SELECT $this->table_index AS recordid FROM $this->table_name " .
+					"WHERE $fld_column = '' OR $fld_column is NULL");
+				
+				if($records && $adb->num_rows($records)) {
+					$returninfo['totalrecords'] = $adb->num_rows($records);
+					$returninfo['updatedrecords'] = 0;
+					
+					$modseqinfo = $this->getModuleSeqInfo($module);
+					$prefix = $modseqinfo[0];
+					$cur_id = $modseqinfo[1];
+					
+					$old_cur_id = $cur_id;
+					while($recordinfo = $adb->fetch_array($records)) {	
+						$value = "$prefix"."$cur_id";
+						$adb->pquery("UPDATE $fld_table SET $fld_column = ? WHERE $this->table_index = ?", Array($value, $recordinfo['recordid']));
+						$cur_id += 1;
+						$returninfo['updatedrecords'] = $returninfo['updatedrecords'] + 1;
+					}
+					if($old_cur_id != $cur_id) {
+						$adb->pquery("UPDATE vtiger_modentity_num set cur_id=? where semodule=? and active=1", Array($cur_id, $module));
+					}
+				}
+			} else {
+				$log->fatal("Updating Missing Sequence Number FAILED! REASON: Field table and module table mismatching.");
+			}
+		}
+		return $returninfo;
+	}
 
 	/* Generic function to get attachments in the related list of a given module */
 	function get_attachments($id, $cur_tab_id, $rel_tab_id, $actions=false) {

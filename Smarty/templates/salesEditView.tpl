@@ -64,8 +64,10 @@ function AddressSync(Addform,id)
 			{assign var="SINGLE_MOD_LABEL" value=$SINGLE_MOD}
 			{if $APP.$SINGLE_MOD} {assign var="SINGLE_MOD_LABEL" value=$APP.SINGLE_MOD} {/if}
 				
-			{if $OP_MODE eq 'edit_view'}  				
-				<span class="lvtHeaderText"><font color="purple">[ {$MOD_SEQ_ID} ] </font>{$NAME} - {$APP.LBL_EDITING} {$SINGLE_MOD_LABEL} {$APP.LBL_INFORMATION}</span> <br>
+			{if $OP_MODE eq 'edit_view'} 
+				{assign var="USE_ID_VALUE" value=$MOD_SEQ_ID}
+		  		{if $USE_ID_VALUE eq ''} {assign var="USE_ID_VALUE" value=$ID} {/if}			
+				<span class="lvtHeaderText"><font color="purple">[ {$USE_ID_VALUE} ] </font>{$NAME} - {$APP.LBL_EDITING} {$SINGLE_MOD_LABEL} {$APP.LBL_INFORMATION}</span> <br>
 				{$UPDATEINFO}	 
 			{/if}
 			{if $OP_MODE eq 'create_view'}

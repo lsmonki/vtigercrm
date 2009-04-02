@@ -44,6 +44,23 @@ if($mode == 'UPDATESETTINGS') {
 			$STATUSMSG = "<font color='green'>".$mod_strings['LBL_UPDATE']." ".$mod_strings['LBL_DONE']."</font>";
 		}
 	}
+} else if($mode == 'UPDATEBULKEXISTING') {
+	if(isset($focus)) {
+		$resultinfo = $focus->updateMissingSeqNumber($selectedModule);
+		
+		if(!empty($resultinfo)) {
+			$usefontcolor = 'green';
+			if($resultinfo['totalrecords'] != $resultinfo['updatedrecords']) $usefontcolor = 'red';
+			
+			$STATUSMSG = "<font color='$usefontcolor'>" . 
+				$mod_strings['LBL_TOTAL'] . $resultinfo['totalrecords'] . ", " . 
+				$mod_strings['LBL_UPDATE'] . ' ' . $mod_strings['LBL_DONE'] . ':' . $resultinfo['updatedrecords'] . 
+				"</font>";
+		}		
+		$seqinfo = $focus->getModuleSeqInfo($selectedModule);
+		$recprefix = $seqinfo[0];
+		$recnumber = $seqinfo[1];
+	}
 } else {
 	if(isset($focus)) {
 		$seqinfo = $focus->getModuleSeqInfo($selectedModule);
@@ -72,7 +89,7 @@ else $smarty->display('Settings/CustomModEntityNo.tpl');
 function getCRMSupportedModules()
 {
 	global $adb;
-	$sql="select tabid,name from vtiger_tab where isentitytype = 1 and tabid in(select distinct tabid from vtiger_field where uitype='4')";
+	$sql="select tabid,name from vtiger_tab where isentitytype = 1 and presence = 0 and tabid in(select distinct tabid from vtiger_field where uitype='4')";
 	$result = $adb->query($sql);
 	while($moduleinfo=$adb->fetch_array($result))
 	{
