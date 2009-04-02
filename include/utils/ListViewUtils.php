@@ -327,6 +327,13 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 	{
 		$pass_url .="&parent_module=Accounts&relmod_id=".$_REQUEST['acc_id'];
 	}
+	
+	// vtlib Customization : For uitype 10 popup during paging
+	if($_REQUEST['form'] == 'vtlibPopupView') {
+		$pass_url .= '&form=vtlibPopupView&forfield='.$_REQUEST['forfield'].'&srcmodule='.$_REQUEST['srcmodule'].'&forrecord='.$_REQUEST['forrecord'];
+	}
+	// END
+	
 	//Added to reduce the no. of queries logging for non-admin user -- by Minnie-start
 	$field_list = array();
 	$j=0;
