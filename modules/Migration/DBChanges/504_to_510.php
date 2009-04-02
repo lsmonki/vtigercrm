@@ -1127,38 +1127,60 @@ ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_fieldmodulerel (fieldid int(11) 
   					status varchar(10) default NULL, sequence int(11) default NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 /* Making users and groups depends on vtiger_users_seq */
+$max_grp_id = $adb->query("SELECT MAX(groupid) as maxid from vtiger_groups");
+$maxid = $adb->query_result($max_grp_id,0,"maxid");
 
-$user_result = $adb->pquery("select max(id) as userid from vtiger_users",array());
-$grp_result = $adb->pquery("select groupid from vtiger_groups",array());
+$user_result = $adb->query("select max(id) as userid from vtiger_users");
+$inc_num = $adb->query_result($user_result,0,"userid");
+
+$adb->getUniqueId("vtiger_users");//Creates vtiger_users_seq table if not exists.
+$seq_id = $inc_num+$maxid;
+$adb->pquery("UPDATE vtiger_users_seq SET id=?",array($seq_id));
+
+$tab_info = array(
+	"vtiger_group2grouprel"=>array("fk_2_vtiger_group2grouprel","(groupid)","vtiger_groups(groupid)"),
+	"vtiger_users2group"=>array("fk_1_vtiger_users2group","(groupid)","vtiger_groups(groupid)"),
+	"vtiger_group2role"=>array("fk_1_vtiger_group2role","(groupid)","vtiger_groups(groupid)"),
+	"vtiger_group2rs"=>array("fk_1_vtiger_group2rs","(groupid)","vtiger_groups(groupid)"),
+	"vtiger_datashare_grp2grp"=>array("fk_2_vtiger_datashare_grp2grp","(share_groupid)","vtiger_groups(groupid)"),
+	"vtiger_datashare_grp2grp"=>array("fk_3_vtiger_datashare_grp2grp","(to_groupid)","vtiger_groups(groupid)"),
+	"vtiger_datashare_grp2role"=>array("fk_2_vtiger_datashare_grp2role","(share_groupid)","vtiger_groups(groupid)"),
+	"vtiger_datashare_role2group"=>array("fk_2_vtiger_datashare_role2group","(to_groupid)","vtiger_groups(groupid)"),
+	"vtiger_datashare_grp2rs"=>array("fk_2_vtiger_datashare_grp2rs","(share_groupid)","vtiger_groups(groupid)"),
+	"vtiger_datashare_rs2grp"=>array("fk_2_vtiger_datashare_rs2grp","(to_groupid)","vtiger_groups(groupid)"),
+	"vtiger_tmp_read_group_sharing_per"=>array("fk_1_vtiger_tmp_read_group_sharing_per","(sharedgroupid)","vtiger_groups(groupid)"),
+	"vtiger_tmp_write_group_sharing_per"=>array("fk_1_vtiger_tmp_write_group_sharing_per","(sharedgroupid)","vtiger_groups(groupid)"),
+);
+$drop_key_array = array("vtiger_group2grouprel","vtiger_datashare_grp2grp");
+
+foreach($tab_info as $table=>$value){
+	//Update constraints for vtiger_group2grouprel table
+	if(in_array($table,$drop_key_array)){
+		ExecuteQuery("ALTER TABLE $table DROP FOREIGN KEY ".$value[0]);
+	}
+	ExecuteQuery("ALTER TABLE $table ADD CONSTRAINT ".$value[0]." FOREIGN KEY ".$value[1]." REFERENCES ".$value[2]." ON DELETE CASCADE ON UPDATE CASCADE");
+}
+
+$grp_result = $adb->query("select groupid from vtiger_groups ORDER BY groupid ASC");
 $num_grps = $adb->num_rows($grp_result);
-
-// Update constraints for vtiger_group2grouprel table
-$adb->query("ALTER TABLE vtiger_group2grouprel DROP FOREIGN KEY fk_2_vtiger_group2grouprel");
-$adb->query("ALTER TABLE vtiger_group2grouprel ADD CONSTRAINT fk_2_vtiger_group2grouprel FOREIGN KEY (`groupid`) REFERENCES `vtiger_groups` (`groupid`) ON DELETE CASCADE ON UPDATE CASCADE");
 
 for($i=$num_grps-1; $i>=0; $i--) {
 	$oldId = $adb->query_result($grp_result,$i,"groupid");
-	if($adb->num_rows($user_result)>0){
-		$inc_num = $adb->query_result($user_result,0,"userid");
-		$newId = $inc_num+$oldId;
-		
-		//Added just to increment users_seq table
-		$adb->getUniqueId("vtiger_users");
-		
-		ExecuteQuery("UPDATE vtiger_groups set groupid = $newId where groupid = $oldId");
-		ExecuteQuery("UPDATE vtiger_users2group set groupid = $newId where groupid = $oldId");
-		ExecuteQuery("UPDATE vtiger_group2grouprel set groupid = $newId where groupid = $oldId");
-		ExecuteQuery("UPDATE vtiger_group2role set groupid = $newId where groupid = $oldId");
-		ExecuteQuery("UPDATE vtiger_group2rs set groupid = $newId where groupid = $oldId");
-		ExecuteQuery("UPDATE vtiger_datashare_grp2grp set share_groupid = $newId where share_groupid = $oldId");
-		ExecuteQuery("UPDATE vtiger_datashare_grp2grp set to_groupid = $newId where to_groupid = $oldId");
-		ExecuteQuery("UPDATE vtiger_datashare_grp2role set share_groupid = $newId where share_groupid = $oldId");
-		ExecuteQuery("UPDATE vtiger_datashare_grp2rs set share_groupid = $newId where share_groupid = $oldId");
-		ExecuteQuery("UPDATE vtiger_datashare_role2group set to_groupid = $newId where to_groupid = $oldId");
-		ExecuteQuery("UPDATE vtiger_datashare_rs2grp set to_groupid = $newId where to_groupid = $oldId");
-		ExecuteQuery("UPDATE vtiger_tmp_read_group_sharing_per set sharedgroupid = $newId where sharedgroupid = $oldId");
-		ExecuteQuery("UPDATE vtiger_tmp_write_group_sharing_per set sharedgroupid = $newId where sharedgroupid = $oldId");
-	}
+	$newId = $adb->getUniqueId("vtiger_users");
+	
+	ExecuteQuery("UPDATE vtiger_groups set groupid = $newId where groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_users2group set groupid = $newId where groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_group2grouprel set groupid = $newId where groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_group2role set groupid = $newId where groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_group2rs set groupid = $newId where groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_datashare_grp2grp set share_groupid = $newId where share_groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_datashare_grp2grp set to_groupid = $newId where to_groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_datashare_grp2role set share_groupid = $newId where share_groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_datashare_grp2rs set share_groupid = $newId where share_groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_datashare_role2group set to_groupid = $newId where to_groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_datashare_rs2grp set to_groupid = $newId where to_groupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_tmp_read_group_sharing_per set sharedgroupid = $newId where sharedgroupid = $oldId");
+	ExecuteQuery("UPDATE vtiger_tmp_write_group_sharing_per set sharedgroupid = $newId where sharedgroupid = $oldId");
 }
 
 $sql_result = $adb->query("select crmid,setype from vtiger_crmentity where smownerid=0 order by setype");
@@ -1205,17 +1227,6 @@ for($i=0; $i<$num_rows; $i++) {
 	ExecuteQuery("update vtiger_crmentity set smownerid = $groupid where crmid = $crmid");
 }
 
-ExecuteQuery("DROP TABLE vtiger_leadgrouprelation");
-ExecuteQuery("DROP TABLE vtiger_accountgrouprelation");
-ExecuteQuery("DROP TABLE vtiger_contactgrouprelation");
-ExecuteQuery("DROP TABLE vtiger_potentialgrouprelation");
-ExecuteQuery("DROP TABLE vtiger_quotegrouprelation");
-ExecuteQuery("DROP TABLE vtiger_sogrouprelation");
-ExecuteQuery("DROP TABLE vtiger_invoicegrouprelation");
-ExecuteQuery("DROP TABLE vtiger_pogrouprelation");
-ExecuteQuery("DROP TABLE vtiger_ticketgrouprelation");
-ExecuteQuery("DROP TABLE vtiger_campaigngrouprelation");
-ExecuteQuery("DROP TABLE vtiger_activitygrouprelation");
 // user-group ends
 
 /* Product Comment was Missing in Inventory PDF's - Fixed this by eliminating column product_description from vtiger_products
