@@ -18,9 +18,13 @@ if(!empty($_REQUEST['stufftype'])){
 if(!empty($_REQUEST['stufftitle'])){
 	if(strlen($_REQUEST['stufftitle'])>100){
 		$temp_str = substr($_REQUEST['stufftitle'],0,97)."...";
-		$oHomestuff->stufftitle= htmlentities($temp_str);
+		$oHomestuff->stufftitle= $temp_str;
 	}else{
-		$oHomestuff->stufftitle=htmlentities($_REQUEST['stufftitle']);
+		$oHomestuff->stufftitle=$_REQUEST['stufftitle'];
+	}
+	// Remove HTML/PHP tags from the input
+	if(isset($oHomestuff->stufftitle)) {
+		$oHomestuff->stufftitle = strip_tags($oHomestuff->stufftitle);
 	}
 }
 

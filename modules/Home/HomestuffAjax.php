@@ -123,18 +123,18 @@ if(!empty($_REQUEST['showmaxval']) && !empty($_REQUEST['sid'])){
 	$sid=$_REQUEST['sid'];
 	$maxval=$_REQUEST['showmaxval'];
 	global $adb;
-	$query="select stufftype from vtiger_homestuff where stuffid=".$sid;
-	$res=$adb->query($query);
+	$query="select stufftype from vtiger_homestuff where stuffid=?";
+	$res=$adb->pquery($query, array($sid));
 	$stufftypename=$adb->query_result($res,0,"stufftype");
 	if($stufftypename=="Module"){
-		$qry="update vtiger_homemodule set maxentries=".$maxval." where stuffid=".$sid;
-		$result=$adb->query($qry);
+		$qry="update vtiger_homemodule set maxentries=? where stuffid=?";
+		$result=$adb->pquery($qry, array($maxval, $sid));
 	}else if($stufftypename=="RSS"){
-		$qry="update vtiger_homerss set maxentries=".$maxval." where stuffid=".$sid;
-		$result=$adb->query($qry);
+		$qry="update vtiger_homerss set maxentries=? where stuffid=?";
+		$result=$adb->pquery($qry, array($maxval, $sid));
 	}else if($stufftypename=="Default"){
-		$qry="update vtiger_homedefault set maxentries=".$maxval." where stuffid=".$sid;
-		$result=$adb->query($qry);
+		$qry="update vtiger_homedefault set maxentries=? where stuffid=?";
+		$result=$adb->pquery($qry, array($maxval, $sid));
 	}
 	echo "loadStuff(".$sid.",'".$stufftypename."')";
 }
@@ -142,16 +142,16 @@ if(!empty($_REQUEST['showmaxval']) && !empty($_REQUEST['sid'])){
 if(!empty($_REQUEST['dashVal'])){
 	$did=$_REQUEST['did'];
 	global $adb;
-	$qry="update vtiger_homedashbd set dashbdtype='".$_REQUEST['dashVal']."' where stuffid=".$did;	
-	$res=$adb->query($qry);
+	$qry="update vtiger_homedashbd set dashbdtype=? where stuffid=?";	
+	$res=$adb->pquery($qry, array($_REQUEST['dashVal'], $did));
 	echo "loadStuff(".$did.",'DashBoard')";
 }
 
 if(!empty($_REQUEST['homestuffid'])){
 	$sid=$_REQUEST['homestuffid'];
 	global $adb;
-	$query="delete from vtiger_homestuff where stuffid=".$sid;
-	$result=$adb->query($query);
+	$query="delete from vtiger_homestuff where stuffid=?";
+	$result=$adb->pquery($query, array($sid));
 	echo "SUCCESS";
 }
 
@@ -160,8 +160,8 @@ if(!empty($_REQUEST['matrixsequence'])){
 	global $adb;
 	$sequence = explode('_',$_REQUEST['matrixsequence']);
 	for($i=count($sequence)-1, $seq=0;$i>=0;$i--, $seq++){
-		$query = 'update vtiger_homestuff set stuffsequence='.$seq.' where stuffid='.$sequence[$i];
-		$result = $adb->query($query);
+		$query = 'update vtiger_homestuff set stuffsequence=? where stuffid=?';
+		$result = $adb->pquery($query, array($seq, $sequence[$i]));
 	}
 	echo "<table cellpadding='10' cellspacing='0' border='0' width='100%' class='vtResultPop small'><tr><td align='center'>Layout Saved</td></tr></table>";
 }
@@ -170,8 +170,8 @@ if(!empty($_REQUEST['matrixsequence'])){
 if(isset($_REQUEST['act']) && $_REQUEST['act'] =="hide"){
 	$stuffid=$_REQUEST['stuffid'];
 	global $adb,$current_user;
-	$qry="update vtiger_homestuff set visible=1 where stuffid=".$stuffid;
-	$res=$adb->query($qry);
+	$qry="update vtiger_homestuff set visible=1 where stuffid=?";
+	$res=$adb->pquery($qry, array($stuffid));
 	echo "SUCCESS";
 }
 
@@ -179,8 +179,8 @@ if(isset($_REQUEST['act']) && $_REQUEST['act'] =="hide"){
 if(!empty($_REQUEST['layout'])){
 	global $adb, $current_user;
 	
-	$sql = "delete from vtiger_home_layout where userid=".$current_user->id;
-	$result = $adb->query($sql);
+	$sql = "delete from vtiger_home_layout where userid=?";
+	$result = $adb->pquery($sql, array($current_user->id));
 	
 	$sql = "insert into vtiger_home_layout values (?, ?)";
 	$result = $adb->pquery($sql, array($current_user->id, $_REQUEST['layout']));

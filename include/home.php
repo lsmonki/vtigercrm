@@ -40,50 +40,57 @@ class Homestuff{
 		if($this->defaulttitle != ""){
 			$this->stufftitle = $this->defaulttitle;
 		}
-		$query="insert into vtiger_homestuff values($stuffid,$sequence,'".$this->stufftype."',".$current_user->id.",0,'".$this->stufftitle."')"; 
-		$result=$adb->query($query);
+		$query="insert into vtiger_homestuff(stuffid, stuffsequence, stufftype, userid, visible, stufftitle) values(?, ?, ?, ?, ?, ?)";
+		$params= array($stuffid,$sequence,$this->stufftype,$current_user->id,0,$this->stufftitle); 
+		$result=$adb->pquery($query, $params);
 		if(!$result){
 			return false;
 		}
 		
 		if($this->stufftype=="Module"){
 			$fieldarray=explode(",",$this->fieldvalue);
-			$querymod="insert into vtiger_homemodule values($stuffid,'".$this->selmodule."',".$this->maxentries.",".$this->selFiltername.",'".$this->selmodule."')";
-			$result=$adb->query($querymod);
+			$querymod="insert into vtiger_homemodule(stuffid, modulename, maxentries, customviewid, setype) values(?, ?, ?, ?, ?)";
+			$params = array($stuffid,$this->selmodule,$this->maxentries,$this->selFiltername,$this->selmodule);
+			$result=$adb->pquery($querymod, $params);
 			if(!$result){
 				return false;
 			}
 			
 			for($q=0;$q<sizeof($fieldarray);$q++){
-				$queryfld="insert into vtiger_homemoduleflds values($stuffid,'".$fieldarray[$q]."')";
-				$result=$adb->query($queryfld);
+				$queryfld="insert into vtiger_homemoduleflds values(? ,?);";
+				$params = array($stuffid,$fieldarray[$q]);
+				$result=$adb->pquery($queryfld, $params);
 			}
 			
 			if(!$result){
 				return false;
 			}
 		}else if($this->stufftype=="RSS"){
-			$queryrss="insert into vtiger_homerss values($stuffid,'".$this->txtRss."',".$this->maxentries.")";
-			$resultrss=$adb->query($queryrss);
+			$queryrss="insert into vtiger_homerss values(?,?,?)";
+			$params = array($stuffid,$this->txtRss,$this->maxentries);
+			$resultrss=$adb->pquery($queryrss, $params);
 			if(!$resultrss){
 				return false;
 			}		
 		}else if($this->stufftype=="DashBoard"){
-			$querydb="insert into vtiger_homedashbd values($stuffid,'".$this->seldashbd."','".$this->seldashtype."')";
-			$resultdb=$adb->query($querydb);
+			$querydb="insert into vtiger_homedashbd values(?,?,?)";
+			$params = array($stuffid,$this->seldashbd,$this->seldashtype);
+			$resultdb=$adb->pquery($querydb, $params);
 			if(!$resultdb){
 				return false;
 			}		
 		}else if($this->stufftype=="Default"){
-			$querydef="insert into vtiger_homedefault values($stuffid,'".$this->defaultvalue."')";
-	       	$resultdef=$adb->query($querydef);
+			$querydef="insert into vtiger_homedefault values(?, ?)";
+			$params = array($stuffid,$this->defaultvalue);
+	       	$resultdef=$adb->pquery($querydef, $params);
 			if(!$resultdef){
 				return false;
 			}		
 		}else if($this->stufftype=='Notebook'){
 			$userid = $current_user->id;
-			$query="insert into vtiger_notebook_contents values($userid,$stuffid,'')";
-	       	$result=$adb->query($query);
+			$query="insert into vtiger_notebook_contents values(?,?,?)";
+			$params= array($userid,$stuffid,'');
+	       	$result=$adb->pquery($query, $params);
 			if(!$result){
 				return false;
 			}
