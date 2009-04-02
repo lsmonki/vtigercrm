@@ -483,6 +483,17 @@ function vtlib_getModuleTemplate($module, $templateName) {
 }
 
 /**
+ * Check if give path is writeable.
+ */
+function vtlib_isWriteable($path) {
+	if(is_dir($path)) {
+		return vtlib_isDirWriteable($path);
+	} else {
+		return is_writable($path);
+	}
+}
+
+/**
  * Check if given directory is writeable.
  * NOTE: The check is made by trying to create a random file in the directory.
  */

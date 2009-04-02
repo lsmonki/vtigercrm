@@ -90,8 +90,10 @@ $writable_files_folders = array(
 'Logs Directory'=>'./logs/',
 'Webmail Attachments Directory'=>'./modules/Webmails/tmp/'); 
 
+require_once('include/utils/VtlibUtils.php');
+
 foreach($writable_files_folders as $index=>$value){
-if(!is_writable($value)){
+if(!vtlib_isWriteable($value)){
 	$failed_permissions[$index]=$value;	
 }
 }
