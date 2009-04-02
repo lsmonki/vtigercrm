@@ -1000,20 +1000,29 @@ class Accounts extends CRMEntity {
 		// Create array of all the accounts in the hierarchy
 		foreach($accounts_list as $account_id => $account_info) {
 			$account_info_data = array();
-			foreach ($this->list_fields_name as $fieldname=>$colname) {			
-				if(getFieldVisibilityPermission('Accounts', $current_user->id, $colname) == '0') {
+			
+			$hasRecordViewAccess = (is_admin($current_user)) || (isPermitted('Accounts', 'DetailView', $account_id) == 'yes');
+			
+			foreach ($this->list_fields_name as $fieldname=>$colname) {
+				// Permission to view account is restricted, avoid showing field values (except account name)
+				if(!$hasRecordViewAccess && $colname != 'accountname') {
+					$account_info_data[] = '';
+				} else if(getFieldVisibilityPermission('Accounts', $current_user->id, $colname) == '0') {
 					$data = $account_info[$colname];
 					if ($colname == 'accountname') {
 						if ($account_id != $id) {
-							$data = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'&parenttab='.$tabname.'">'.$data.'</a>';
+							if($hasRecordViewAccess) {
+								$data = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'&parenttab='.$tabname.'">'.$data.'</a>';
+							} else {
+								$data = '<i>'.$data.'</i>';
+							}
 						} else {
 							$data = '<b>'.$data.'</b>';
 						}
 						// - to show the hierarchy of the Accounts
 						$account_depth = str_repeat(" .. ", $account_info['depth'] * 2);
 						$data = $account_depth . $data;							
-					}
-					if ($colname == 'website') {
+					} else if ($colname == 'website') {
 						$data = '<a href="http://'. $data .'" target="_blank">'.$data.'</a>';
 					}
 					$account_info_data[] = $data;
