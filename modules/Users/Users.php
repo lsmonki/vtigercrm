@@ -1143,7 +1143,12 @@ class Users {
 
 		$s6=$adb->getUniqueID("vtiger_homestuff");
 		$visibility=$this->getDefaultHomeModuleVisibility('HLT',$inVal);
-		$sql="insert into vtiger_homestuff values(".$s6.",6,'Default',".$uid.",".$visibility.",'Top Issue Logs')";
+		$sql="insert into vtiger_homestuff values(".$s6.",6,'Default',".$uid.",".$visibility.",'Top Trouble Tickets')";
+		$res=$adb->query($sql);
+		
+		$s7=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('UA',$inVal);
+		$sql="insert into vtiger_homestuff values(".$s7.",7,'Default',".$uid.",".$visibility.",'Upcoming Activities')";
 		$res=$adb->query($sql);
 
 		$s8=$adb->getUniqueID("vtiger_homestuff");
@@ -1165,19 +1170,23 @@ class Users {
 
 		$s11=$adb->getUniqueID("vtiger_homestuff");
 		$visibility=$this->getDefaultHomeModuleVisibility('MNL',$inVal);
-		$sql="insert into vtiger_homestuff values(".$s11.",11,'Default',".$uid.",".$visibility.",'My Top Leads')";
+		$sql="insert into vtiger_homestuff values(".$s11.",11,'Default',".$uid.",".$visibility.",'My New Leads')";
 		$res=$adb->query($sql);
 
 		$s12=$adb->getUniqueID("vtiger_homestuff");
 		$visibility=$this->getDefaultHomeModuleVisibility('OLTPO',$inVal);
 		$sql="insert into vtiger_homestuff values(".$s12.",12,'Default',".$uid.",".$visibility.",'Top Purchase Orders')";
 		$res=$adb->query($sql);
+		
+		$s13=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('PA',$inVal);
+		$sql="insert into vtiger_homestuff values(".$s13.",13,'Default',".$uid.",".$visibility.",'Pending Activities')";
+		$res=$adb->query($sql);
 
 		$s14=$adb->getUniqueID("vtiger_homestuff");
 		$visibility=$this->getDefaultHomeModuleVisibility('LTFAQ',$inVal);
 		$sql="insert into vtiger_homestuff values(".$s14.",14,'Default',".$uid.",".$visibility.",'My Recent FAQs')";
 		$res=$adb->query($sql);
-
 
 		$sql="insert into vtiger_homedefault values(".$s1.",'ALVT',5,'Accounts')";
 		$adb->query($sql);
@@ -1198,22 +1207,26 @@ class Users {
 		$sql="insert into vtiger_homedefault values(".$s6.",'HLT',5,'HelpDesk')";
 		$adb->query($sql);
 
+		$sql="insert into vtiger_homedefault values(".$s7.",'UA',5,'Calendar')";
+		$adb->pquery($sql,array());
+	
 		$sql="insert into vtiger_homedefault values(".$s8.",'GRT',5,'NULL')";
 		$adb->query($sql);
 
 		$sql="insert into vtiger_homedefault values(".$s9.",'OLTSO',5,'SalesOrder')";
 		$adb->query($sql);
 
-
 		$sql="insert into vtiger_homedefault values(".$s10.",'ILTI',5,'Invoice')";
 		$adb->query($sql);
-
 
 		$sql="insert into vtiger_homedefault values(".$s11.",'MNL',5,'Leads')";
 		$adb->query($sql);
 
 		$sql="insert into vtiger_homedefault values(".$s12.",'OLTPO',5,'PurchaseOrder')";
 		$adb->query($sql);
+		
+		$sql="insert into vtiger_homedefault values(".$s13.",'PA',5,'Calendar')";
+		$adb->pquery($sql,array());
 
 		$sql="insert into vtiger_homedefault values(".$s14.",'LTFAQ',5,'Faq')";
 		$adb->query($sql);	
