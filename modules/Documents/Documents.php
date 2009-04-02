@@ -426,5 +426,32 @@ class Documents extends CRMEntity {
 		}
 		return $fieldname;
 	}
+	
+	/**
+	 * Check the existence of folder by folderid
+	 */
+	function isFolderPresent($folderid) {
+		global $adb;
+		$result = $adb->pquery("SELECT folderid FROM vtiger_attachmentsfolder WHERE folderid = ?", array($folderid));
+		if(!empty($result) && $adb->num_rows($result) > 0) return true;
+		return false;
+	}
+	
+	/**
+	 * Customizing the restore procedure.
+	 */
+	function restore($modulename, $id) {
+		parent::restore($modulename, $id);
+		
+		global $adb;
+		$fresult = $adb->pquery("SELECT folderid FROM vtiger_notes WHERE notesid = ?", array($id));
+		if(!empty($fresult) && $adb->num_rows($fresult)) {
+			$folderid = $adb->query_result($fresult, 0, 'folderid');
+			if(!$this->isFolderPresent($folderid)) {
+				// Re-link to default folder
+				$adb->pquery("UPDATE vtiger_notes set folderid = 1 WHERE notesid = ?", array($id));
+			}
+		}
+	}	
 }	
 ?>
