@@ -292,7 +292,7 @@ class Vtiger_MailScannerAction {
 
 		foreach($mailrecord->_attachments as $filename=>$filecontent) {
 			$attachid = $adb->getUniqueId('vtiger_crmentity');
-			$desription = $filename;
+			$description = $filename;
 			$usetime = $adb->formatDate($date_var, true);
 
 			$adb->pquery("INSERT INTO vtiger_crmentity(crmid, smcreatorid, smownerid, 
