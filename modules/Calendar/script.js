@@ -637,11 +637,13 @@ function fnRedirect() {
 	if(OptionData == 'listview')
 	{
 		document.EventViewOption.action.value = "index";
+		VtigerJS_DialogBox.block();
 		window.document.EventViewOption.submit();
 	}
 	if(OptionData == 'hourview')
 	{
 		document.EventViewOption.action.value = "index";
+		VtigerJS_DialogBox.block();
 		window.document.EventViewOption.submit();
 	}
 }

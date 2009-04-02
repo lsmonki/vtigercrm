@@ -43,7 +43,7 @@ function calendar_layout(& $param_arr,$viewBox='',$subtab='')
 	else
 	{
 		// User Select Customization
-		$onlyForUserParam = "onlyforuser=" . getSelectedUserId();
+		$onlyForUserParam = "onlyforuser=" . calendarview_getSelectedUserId();
 		// END
 
 		//To differentiate selected subtab from unselected one - Starts
@@ -324,7 +324,7 @@ function get_cal_header_data(& $cal_arr,$viewBox,$subtab)
 	$view_options = getEventViewOption($cal_arr,$viewBox);
 
 	// User Select Customization
-	$view_options .= getUserSelectOptions( getSelectedUserId() );
+	$view_options .= calendarview_getUserSelectOptions( calendarview_getSelectedUserId() );
 	// END
 
 	$headerdata .=$view_options."</td></tr></table>
@@ -334,43 +334,6 @@ function get_cal_header_data(& $cal_arr,$viewBox,$subtab)
 	echo $headerdata;	
 	$cal_log->debug("Exiting get_cal_header_data() method...");
 }
-
-// User Select Customization
-/**
- * Function returns the id of the User selected by current user in the picklist of the ListView or Calendar view of Current User
- * return String -  Id of the user that the current user has selected
- */
-function getSelectedUserId() {
-	global $current_user;
-	$only_for_user = $_REQUEST['onlyforuser'];
-	if($only_for_user == '') $only_for_user = $current_user->id;
-	return $only_for_user;
-}
-
-/**
- * Function returns the data of the user selected by current user in the picklist of the ListView or Calendar view of Current User
- * @param $useridInUse - The Id of the user that the Current User has selected in dropdown picklist in Calendar modules listview or Calendar View
- * return string - The array of the events for the user that the current user has selected
- */
-function getUserSelectOptions($useridInUse) {
-	global $adb, $app_strings;
-	$users = $adb->query("SELECT * FROM vtiger_users WHERE status = 'Active'");
-	$userscount = $adb->num_rows($users);
-
-	$userSelectdata = "<span style='padding-left: 10px; padding-right: 10px;'><b>" . $app_strings['LBL_SELECT_USER_BUTTON_LABEL'] . " : </b>";
-    $userSelectdata .="<select class='small' onchange='fnRedirect();' name='onlyforuser'>";
-	$userSelectdata .= "<option value='ALL'>" . $app_strings['COMBO_ALL'] . "</option>";
-	for($index = 0; $index < $userscount; ++$index) {
-		$userid = $adb->query_result($users, $index, 'id');
-		$username = $adb->query_result($users, $index, 'user_name');
-		$userselect = '';
-		if($userid == $useridInUse) $userselect = "selected='true'";
-		$userSelectdata .= "<option value='$userid' $userselect>$username</option>";
-	}
-	$userSelectdata .= "</select></span>";
-	return $userSelectdata;
-}
-// END
 
 /**
  * Function creates HTML select statement to display View selection box
@@ -451,7 +414,7 @@ function get_previous_cal(& $cal,$viewBox='',$subtab='')
 	}
 	else
 	{
-		$link = "<a href='index.php?action=index&module=Calendar&view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('prev')."&viewOption=".$viewBox."&subtab=".$subtab."&parenttab=".$category."'><img src='".$cal['IMAGE_PATH']."cal_prev_nav.gif' border='0' align='absmiddle' /></a>";
+		$link = "<a href='index.php?action=index&module=Calendar&view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('prev')."&viewOption=".$viewBox."&subtab=".$subtab."&parenttab=".$category."&onlyforuser=".calendarview_getSelectedUserId()."' onclick='VtigerJS_DialogBox.block();return true;'><img src='".$cal['IMAGE_PATH']."cal_prev_nav.gif' border='0' align='absmiddle' /></a>";
 	}
 	$cal_log->debug("Exiting get_previous_cal() method...");
 	return $link;
@@ -471,11 +434,11 @@ function get_next_cal(& $cal,$viewBox='',$subtab='')
 	$cal_log->debug("Entering get_next_cal() method...");
 	if(isset($cal['size']) && $cal['size'] == 'small')
 	{
-		$link = "<a href='javascript:getMiniCal(\"view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('next')."&parenttab=".$category."\")' ><img src='". vtiger_imageurl('small_right.gif', $theme)."' border='0' align='absmiddle' /></a>";
+		$link = "<a href='javascript:getMiniCal(\"view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('next')."&parenttab=".$category."\")'  ><img src='". vtiger_imageurl('small_right.gif', $theme)."' border='0' align='absmiddle' /></a>";
 	}
 	else
 	{
-		$link = "<a href='index.php?action=index&module=Calendar&view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('next')."&viewOption=".$viewBox."&subtab=".$subtab."&parenttab=".$category."'><img src='".$cal['IMAGE_PATH']."cal_next_nav.gif' border='0' align='absmiddle' /></a>";
+		$link = "<a href='index.php?action=index&module=Calendar&view=".$cal['calendar']->view."".$cal['calendar']->get_datechange_info('next')."&viewOption=".$viewBox."&subtab=".$subtab."&parenttab=".$category."&onlyforuser=".calendarview_getSelectedUserId()."' onclick='VtigerJS_DialogBox.block();return true;'><img src='".$cal['IMAGE_PATH']."cal_next_nav.gif' border='0' align='absmiddle' /></a>";
 	}
 	$cal_log->debug("Exiting get_next_cal() method...");
 	return $link;
@@ -1122,9 +1085,9 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			$account_name = $act[$i]->accountname;
 			$eventstatus = $act[$i]->eventstatus;
 			$color = $act[$i]->color;
-			$image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
+			$image = vtiger_imageurl($act[$i]->image_name, $theme);
 			if($act[$i]->recurring)
-				$recurring = '<img src="'.$cal['IMAGE_PATH'].''.$act[$i]->recurring.'" align="middle" border="0"></img>';
+				$recurring = '<img src="'.$image.''.$act[$i]->recurring.'" align="middle" border="0"></img>';
 			else
 				$recurring = '&nbsp;';
 			$height = $rowspan * 75;
@@ -1223,10 +1186,10 @@ function getweekEventLayer(& $cal,$slice)
 			$eventstatus = $act[$i]->eventstatus;
 			$user = $act[$i]->owner;
 			$priority = $act[$i]->priority;
-                        $image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
+                        $image =  vtiger_imageurl($act[$i]->image_name, $theme);
 			$idShared = "normal"; if($act[$i]->shared) $idShared = "shared";
 			if($act[$i]->recurring)
-				$recurring = '<img src="'.$cal['IMAGE_PATH'].''.$act[$i]->recurring.'" align="middle" border="0"></img>';
+				$recurring = '<img src="'.$image.''.$act[$i]->recurring.'" align="middle" border="0"></img>';
 			else
 				$recurring = '&nbsp;';
                         $color = $act[$i]->color;
@@ -1324,7 +1287,7 @@ function getmonthEventLayer(& $cal,$slice)
 						$start_hour = timeString($act[$i]->start_time,$format);
                         $end_hour = timeString($act[$i]->end_time,$format);
                         $account_name = $act[$i]->accountname;
-                        $image = $cal['IMAGE_PATH'].''.$act[$i]->image_name;
+                        $image = vtiger_imageurl($act[$i]->image_name, $theme);
 						$color = $act[$i]->color;
 						//Added for User Based Customview for Calendar Module
 						$visibility_query=$adb->pquery('SELECT visibility from vtiger_activity where activityid=?',array($id));
@@ -1411,12 +1374,9 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 			AND (vtiger_activity.activitytype not in ('Emails','Task')) $and ";
 	$list_query = $query." AND vtiger_crmentity.smownerid = "  . $current_user->id;
 
-	// User Select Customization
-	$only_for_user = getSelectedUserId();
-	if($only_for_user != 'ALL') {
-		$query .= " AND vtiger_crmentity.smownerid = "  . $only_for_user;
-		$count_qry .= " AND vtiger_crmentity.smownerid = "  . $only_for_user;
-	}
+	// User Select Customization: Changes should made also in (Appointment::readAppointment)
+	$query .= calendarview_getSelectedUserFilterQuerySuffix();
+	$count_query .= calendarview_getSelectedUserFilterQuerySuffix();
 	// END
 
 	$params = $info_params = array($start_date, $end_date, $start_date, $end_date, $start_date, $end_date, $start_date, $end_date);
@@ -1648,7 +1608,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 	$list_query = $query;
 
 	// User Select Customization
-	/*$only_for_user = getSelectedUserId();
+	/*$only_for_user = calendarview_getSelectedUserId();
 	if($only_for_user != 'ALL') {
 		$query .= " AND vtiger_crmentity.smownerid = "  . $only_for_user;
 		$count_qry .= " AND vtiger_crmentity.smownerid = "  . $only_for_user;
@@ -2196,6 +2156,9 @@ function constructTodoListView($todo_list,$cal,$subtab,$navigation_array='')
 function getCalendarViewSecurityParameter()
 {
 		global $current_user;
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+        require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+        
 		require_once('modules/Calendar/CalendarCommon.php');
 		$shared_ids = getSharedCalendarId($current_user->id);
 		if(isset($shared_ids) && $shared_ids != '')

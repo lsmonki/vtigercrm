@@ -435,6 +435,8 @@ $mod_strings = Array(
 'LBL_UNTIL' => 'Until',
 'LBL_SET_DATE'=>'Set Date',
 
+'LBL_MINE' =>'Mine',
+
 );
 
 ?>

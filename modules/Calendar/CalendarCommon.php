@@ -538,4 +538,73 @@ function getActivityMailInfo($return_id,$status,$activity_type)
 
 }
 
+// User Select Customization
+/**
+ * Function returns the id of the User selected by current user in the picklist of the ListView or Calendar view of Current User
+ * return String -  Id of the user that the current user has selected
+ */
+function calendarview_getSelectedUserId() {
+	global $current_user, $default_charset;
+	$only_for_user = htmlspecialchars(strip_tags($_REQUEST['onlyforuser']),ENT_QUOTES,$default_charset);
+	if($only_for_user == '') $only_for_user = $current_user->id;
+	return $only_for_user;
+}
+
+function calendarview_getSelectedUserFilterQuerySuffix() {	
+	global $current_user;
+	$only_for_user = calendarview_getSelectedUserId();
+	$qcondition = '';
+	if(!empty($only_for_user)) {
+		if($only_for_user != 'ALL') {
+			// For logged in user include the group records also.
+			if($only_for_user == $current_user->id) {
+				$user_group_ids = fetchUserGroupids($current_user->id);
+				// User does not belong to any group? Let us reset to non-existent group
+				if(!empty($user_group_ids)) $user_group_ids .= ',';
+				else $user_group_ids = '';
+				$user_group_ids .= $current_user->id;	
+				$qcondition = " AND vtiger_crmentity.smownerid IN (" . $user_group_ids .")";
+			} else {
+				$qcondition = " AND vtiger_crmentity.smownerid = "  . $only_for_user;
+			}
+		} 
+	}
+	return $qcondition;
+}
+
+/**
+ * Function returns the data of the user selected by current user in the picklist of the ListView or Calendar view of Current User
+ * @param $useridInUse - The Id of the user that the Current User has selected in dropdown picklist in Calendar modules listview or Calendar View
+ * return string - The array of the events for the user that the current user has selected
+ */
+function calendarview_getUserSelectOptions($useridInUse) {
+	global $adb, $app_strings, $current_user, $mod_strings;
+	$users = $adb->query("SELECT id,user_name FROM vtiger_users WHERE status = 'Active' and deleted = 0");
+	$userscount = $adb->num_rows($users);
+
+	$userSelectdata = "<span style='padding-left: 10px; padding-right: 10px;'><b>" . $app_strings['LBL_LIST_OF'] . " : </b>";
+    $userSelectdata .="<select class='small' onchange='fnRedirect();' name='onlyforuser'>";
+    
+    // Providing All option for administrators only
+    if(is_admin($current_user)) {
+		$userSelectdata .= "<option value='ALL'>" . $app_strings['COMBO_ALL'] . "</option>";
+    } 
+    
+	$userSelectdata .= "<option value='$current_user->id'".(($current_user->id == $useridInUse)? "selected='true'":"").">".$mod_strings['LBL_MINE']."</option>";	
+	
+	for($index = 0; $index < $userscount; ++$index) {
+		$userid = $adb->query_result($users, $index, 'id');
+		if($userid == $current_user->id) {
+			continue; // We have already taken care of listing at first.
+		}		
+		$username = $adb->query_result($users, $index, 'user_name');
+		$userselect = '';
+		if($userid == $useridInUse) $userselect = "selected='true'";
+		$userSelectdata .= "<option value='$userid' $userselect>$username</option>";
+	}
+	$userSelectdata .= "</select></span>";
+	return $userSelectdata;
+}
+// END
+
 ?>
