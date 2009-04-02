@@ -12,7 +12,7 @@
 
 -->*}
 <script language="JavaScript" type="text/javascript" src="include/js/search.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 {include file='Buttons_List.tpl'}
                                 <div id="searchingUI" style="display:none;">

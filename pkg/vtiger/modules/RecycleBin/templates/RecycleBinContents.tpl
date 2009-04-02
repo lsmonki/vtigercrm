@@ -20,6 +20,7 @@
 	<!-- Buttons -->
     		<td style="padding-right:20px" nowrap>
 				<input type="hidden" name="idlist" id="idlist">
+				<input type="hidden" id="allselectedboxes" name="allselectedboxes">
 				<input type="hidden" name="selected_module" id="selected_module" value="{$SELECTED_MODULE}">
 		        <input class="crmbutton small edit" type="button" onclick ="massRestore();" value="{$MOD.LBL_MASS_RESTORE}">
 		        {if $IS_ADMIN eq 'true'}
@@ -55,7 +56,7 @@
 	<table border=0 cellspacing=1 cellpadding=3 width=100% class="lvt small">
 	<!-- Table Headers -->
 	<tr>
-          <td class="lvtCol" width=2%><input type="checkbox" onclick='toggleSelect(this.checked,"selected_id")'  name="selectall" ></td>
+          <td class="lvtCol" width=2%><input type="checkbox" onclick='toggleSelect_ListView(this.checked,"selected_id")'  name="selectall" ></td>
 	{foreach key=mod_data item=moddata from=$MODULE_DATA name="listviewforeach"}
         	<td class="lvtCol" >{$moddata}</td>
 	{/foreach}
@@ -63,7 +64,7 @@
 	</tr>
 	{foreach key=entity_id item=lvdata from=$lvEntries}
 	<tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'" id="row_{$entity_id}">
-        <td  width=2%><input type="checkbox" name="selected_id"  onclick='toggleSelectAll(this.name,"selectall")' value="{$entity_id}"></td>
+        <td  width=2%><input type="checkbox" name="selected_id"  onclick='check_object(this)' value="{$entity_id}"></td>
 		{foreach item=data from=$lvdata}
         <td >{$data}</td>
 		{/foreach}

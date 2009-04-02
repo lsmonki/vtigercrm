@@ -2544,8 +2544,9 @@ function default_togglestate(obj_id,elementId)
 	if(typeof elementId=='undefined'){
 		elementId = 'selectall';
 	}
-	getObj(elementId).checked=all_state;
-
+	if(getObj(elementId)) {
+		getObj(elementId).checked=all_state;
+	}
 }
 
 //for select  multiple check box in multiple pages for Campaigns related list:
@@ -2652,8 +2653,11 @@ function toggleSelect_ListView(state,relCheckName,groupParentElementId) {
     var obj = document.getElementsByName(relCheckName);
 	if (obj) {
         for (var i=0;i<obj.length;i++) {
-          	obj[i].checked=state
-            check_object(obj[i],groupParentElementId)
+          	obj[i].checked=state;
+			if(typeof(check_object) == 'function') {
+				// This function is defined in ListView.js (check for existence)
+				check_object(obj[i],groupParentElementId);
+			}
         }
     }
 }
