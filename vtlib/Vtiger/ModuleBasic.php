@@ -73,7 +73,7 @@ class Vtiger_ModuleBasic {
 		
 		$this->isentitytype = $valuemap['isentitytype'];
 
-		if($this->isentitytype) {
+		if($this->isentitytype || $this->name == 'Users') {
 			// Initialize other details too
 			$this->initialize2();
 		}
