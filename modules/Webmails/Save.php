@@ -70,6 +70,7 @@ if(count($email->relationship) != 0) {
 	$contact_focus = new Contacts();	
 	$contact_focus->column_fields['lastname'] =$email->fromname; 
 	$contact_focus->column_fields['email'] = $email->from;
+	$contact_focus->column_fields["assigned_user_id"]=$current_user->id;
 	$contact_focus->save("Contacts");
 	$focus->column_fields['parent_id']=$contact_focus->id.'@'.$fieldid.'|';
 
