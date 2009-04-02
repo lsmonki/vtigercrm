@@ -1540,6 +1540,8 @@ function getConvertSoToInvoice($focus,$so_focus,$soid)
 	$focus->column_fields['ship_pobox'] = $so_focus->column_fields['ship_pobox'];
 	$focus->column_fields['description'] = $so_focus->column_fields['description'];
 	$focus->column_fields['terms_conditions'] = $so_focus->column_fields['terms_conditions'];
+    $focus->column_fields['currency_id'] = $so_focus->column_fields['currency_id'];
+    $focus->column_fields['conversion_rate'] = $so_focus->column_fields['conversion_rate'];
 
 	$log->debug("Exiting getConvertSoToInvoice method ...");
 	return $focus;
@@ -1583,6 +1585,8 @@ function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
 	$focus->column_fields['ship_pobox'] = $quote_focus->column_fields['ship_pobox'];
 	$focus->column_fields['description'] = $quote_focus->column_fields['description'];
 	$focus->column_fields['terms_conditions'] = $quote_focus->column_fields['terms_conditions'];
+    $focus->column_fields['currency_id'] = $quote_focus->column_fields['currency_id'];
+    $focus->column_fields['conversion_rate'] = $quote_focus->column_fields['conversion_rate'];
 
 	$log->debug("Exiting getConvertQuoteToInvoice method ...");
 	return $focus;
@@ -1629,6 +1633,8 @@ function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
         $focus->column_fields['ship_pobox'] = $quote_focus->column_fields['ship_pobox'];
 		$focus->column_fields['description'] = $quote_focus->column_fields['description'];
         $focus->column_fields['terms_conditions'] = $quote_focus->column_fields['terms_conditions'];
+        $focus->column_fields['currency_id'] = $quote_focus->column_fields['currency_id'];
+        $focus->column_fields['conversion_rate'] = $quote_focus->column_fields['conversion_rate'];
 
 	$log->debug("Exiting getConvertQuoteToSoObject method ...");
         return $focus;
