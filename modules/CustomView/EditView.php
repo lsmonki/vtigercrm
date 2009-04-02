@@ -366,18 +366,22 @@ function getStdFilterHTML($module,$selected="")
 			{
 				$value = 'Start Date';
 			}
+			$use_module_label =  getTranslatedString($module, $module);
+			if(isset($app_list_strings['moduleList'][$module])) {
+				$use_module_label = $app_list_strings['moduleList'][$module];
+			}
 			if(isset($mod_strings[$value]))
 			{
 				if($key == $selected)
 				{
 
 					$filter['value'] = $key;
-					$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$mod_strings[$value];
+					$filter['text'] = $use_module_label." - ".getTranslatedString($value);
 					$filter['selected'] = "selected";
 				}else
 				{
 						$filter['value'] = $key;
-						$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$mod_strings[$value];
+						$filter['text'] = $use_module_label." - ".getTranslatedString($value);
 						$filter['selected'] ="";
 				}
 			}
@@ -386,12 +390,13 @@ function getStdFilterHTML($module,$selected="")
 				if($key == $selected)
 				{
 					$filter['value'] = $key;
-					$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$value;
+					
+					$filter['text'] = $use_module_label." - ".$value;
 					$filter['selected'] = 'selected';
 				}else
 				{
 					$filter['value'] = $key;
-					$filter['text'] = $app_list_strings['moduleList'][$module]." - ".$value;
+					$filter['text'] = $use_module_label." - ".$value;
 					$filter['selected'] ='';
 				}
 			}

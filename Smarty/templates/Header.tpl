@@ -228,10 +228,7 @@
 			{foreach key=maintabs item=details from=$QUICKACCESS}
 				{if $maintabs eq $CATEGORY}
 					{foreach  key=number item=modules from=$details}
-						{assign var="modulelabel" value=$modules[1]}
-	   					{if $APP[$modules.1]}
-	   						{assign var="modulelabel" value=$APP[$modules.1]}
-	   					{/if}
+						{assign var="modulelabel" value=$modules[1]|@getTranslatedString:$modules[0]}
 	   					
 	   					{* Use Custom module action if specified *}
 						{assign var="moduleaction" value="index"}
@@ -500,7 +497,7 @@ function getFormValidate(divValidate)
 {/literal}
 
 {* Quick Access Functionality *}
-<div id="allMenu" onmouseout="fninvsh('allMenu');" onMouseOver="fnvshNrm('allMenu');" style="width:550px;z-index: 10000001;display:none;">
+<div id="allMenu" onmouseout="fninvsh('allMenu');" onMouseOver="fnvshNrm('allMenu');" style="width:650px;z-index: 10000001;display:none;">
 	<table border=0 cellpadding="5" cellspacing="0" class="allMnuTable" >
 	<tr>
 		<td valign="top">
@@ -514,10 +511,7 @@ function getFormValidate(divValidate)
 			{if $loopvalue eq '0'}
 				</td><td valign="top">
 			{/if}
-			{assign var="modulelabel" value=$modules[1]}
-   			{if $APP[$modules.1]}
-   				{assign var="modulelabel" value=$APP[$modules.1]}
-   			{/if}
+			{assign var="modulelabel" value=$modules[1]|@getTranslatedString:$modules[0]}
 			<a href="index.php?module={$modules.0}&action=index&parenttab={$parenttab}" class="allMnu">{$modulelabel}</a>
 			{/foreach}
 		{/foreach}
@@ -531,10 +525,7 @@ function getFormValidate(divValidate)
 <div class="drop_mnu" id="{$parenttab}_sub" onmouseout="fnHideDrop('{$parenttab}_sub')" onmouseover="fnShowDrop('{$parenttab}_sub')">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0">
 		{foreach name=modulelist item=modules from=$details}
-		{assign var="modulelabel" value=$modules[1]}
-		{if $APP[$modules.1]}
-			{assign var="modulelabel" value=$APP[$modules.1]}
-		{/if}
+		{assign var="modulelabel" value=$modules[1]|@getTranslatedString:$modules[0]}
 		
 		{* Use Custom module action if specified *}
 		{assign var="moduleaction" value="index"}

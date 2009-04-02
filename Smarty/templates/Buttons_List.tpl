@@ -15,10 +15,7 @@
 <tr><td style="height:2px"></td></tr>
 <tr>
 	{assign var="action" value="ListView"}
-	{assign var="MODULELABEL" value=$MODULE}
-	{if $APP[$MODULE]}
-		{assign var="MODULELABEL" value=$APP[$MODULE]}
-	{/if}	
+	{assign var="MODULELABEL" value=$MODULE|@getTranslatedString:$MODULE}	
 	<td style="padding-left:10px;padding-right:50px" class="moduleName" nowrap>{$APP.$CATEGORY} > <a class="hdrLink" href="index.php?action={$action}&module={$MODULE}&parenttab={$CATEGORY}">{$MODULELABEL}</a></td>
 	<td width=100% nowrap>
 	

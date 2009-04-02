@@ -35,11 +35,11 @@ $smarty->assign("THEME",$theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("ACTIVITY_MODE", $_REQUEST['activity_mode']);
 if($module == 'Calendar')
-	$smarty->assign("QCMODULE", 'Todo');
+	$smarty->assign("QCMODULE", getTranslatedString('Todo', 'Calendar'));
 elseif($module == "HelpDesk")
-	$smarty->assign("QCMODULE", 'Ticket');
+	$smarty->assign("QCMODULE", getTranslatedString('Ticket', 'HelpDesk'));
 else
-	$smarty->assign("QCMODULE",rtrim($module,'s'));
+	$smarty->assign("QCMODULE",getTranslatedString("SINGLE_".$currentModule, $currentModule));
 $smarty->assign("USERID",$current_user->id);
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
