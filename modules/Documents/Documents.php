@@ -135,6 +135,12 @@ class Documents extends CRMEntity {
 					$filedownloadcount = $adb->query_result($fileres, 0, 'filedownloadcount');
 					$filelocationtype = $adb->query_result($fileres, 0, 'filelocationtype');
 				}
+			}elseif($this->column_fields[$filename_fieldname]) {
+				$filename = $this->column_fields[$filename_fieldname];
+				$filesize = $this->column_fields['filesize'];
+				$filetype = $this->column_fields['filetype'];
+				$filelocationtype = $this->column_fields[$filetype_fieldname];
+				$filedownloadcount = 0;
 			}
 		} else{
 			$filelocationtype = 'E';
