@@ -311,7 +311,7 @@ function migrate(){
 					
  					var str = response.responseText
  					str = trim(str);
-					if(str.indexOf('NO_CONFIG_FILE') > -1){
+ 					if(str.indexOf('NO_CONFIG_FILE') > -1){
 						alert("The Source you have specified doesn't have a config file. \n Please provide a proper Source.'");
 						return false;
 					}
@@ -331,11 +331,11 @@ function migrate(){
 						alert("Not a valid user. Provide an Admin user login details'");
 						return false;
 					}
-					else if(str.substring(0,2) == 'ERR'){
+					else if(str.indexOf('ERR -') > -1){
 						alert(str);
 						return false;
 					}
-					else if(str.substring(0,6) == 'FAILURE'){
+					else if(str.indexOf('FAILURE -') > -1){
 						alert(str);
 						return false;
 					}
