@@ -486,7 +486,7 @@ function positionDivInAccord(targetDiv,stufftitle,stufftype){
 			break;
 	}
 	var mainX = parseInt(document.getElementById("MainMatrix").style.width);
-	if(stufftitle != "Home Page Dashboard" && stufftype != "DashBoard"){
+	if(stufftitle != vtdashboard_defaultDashbaordWidgetTitle && stufftype != "DashBoard"){
 		var dx = mainX *  widgetWidth/ 100;
 	}else{
 		var dx = mainX * dashWidth / 100;

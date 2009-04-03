@@ -144,14 +144,16 @@ class Homestuff{
 				}
 			}
 			
-			$stufftitle=decode_html($adb->query_result($resultstuff,$i,'stufftitle'));
+			$nontrans_stufftitle = $adb->query_result($resultstuff,$i,'stufftitle');
+			$trans_stufftitle = getTranslatedString($nontrans_stufftitle);
+			$stufftitle=decode_html($trans_stufftitle);
 			if(strlen($stufftitle)>100){
 				$stuff_title=substr($stufftitle,0,97)."...";
 			}else{
 				$stuff_title = $stufftitle;
 			}
 			
-			if($stufftype == 'Default' && $stufftitle != 'Home Page Dashboard' && $stufftitle != 'Tag Cloud'){
+			if($stufftype == 'Default' && $nontrans_stufftitle != 'Home Page Dashboard' && $nontrans_stufftitle != 'Tag Cloud'){
 				if($modulename != 'NULL'){
 					if(isPermitted($modulename,'index') == "yes"){
 						$count_entries = $this->getDefaultDetails($stuffid,'calculateCnt');

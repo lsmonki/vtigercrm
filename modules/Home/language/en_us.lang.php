@@ -98,6 +98,27 @@ $mod_strings = Array(
 'LBL_THREE_COLUMN'=>'Three Columns',
 'LBL_FOUR_COLUMN'=>'Four Columns',
 // END
+
+// Default home page widget's title
+'Top Accounts'=>'Top Accounts',
+'Top Potentials'=>'Top Potentials',
+'Top Quotes'=>'Top Quotes',
+'Top Trouble Tickets'=>'Top Trouble Tickets',
+'Top Invoices'=>'Top Invoices',
+'Top Sales Orders'=>'Top Sales Orders',
+'Top Purchase Orders'=>'Top Purchase Orders',
+'My New Leads'=>'My New Leads',
+'Key Metrics'=>'Key Metrics',
+'My Group Allocation'=>'My Group Allocation',
+'My Recent FAQs'=>'My Recent FAQs',
+'Upcoming Activities'=>'Upcoming Activities',
+'Pending Activities'=>'Pending Activities',
+'Home Page Dashboard'=>'Home Page Dashboard',
+'Tag Cloud'=>'Tag Cloud',
+
+'MSG_NO_FILTERS' => 'No Filters Available',
+'MSG_NO_FIELDS' => 'No Fields Available',
+
 );
 
 ?>

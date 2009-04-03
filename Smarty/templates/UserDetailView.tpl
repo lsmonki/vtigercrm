@@ -157,7 +157,7 @@
 									<div style="float: none; display: none;" id="home_comp">	
 									<table border="0" cellpadding="5" cellspacing="0" width="100%">
 									{foreach item=homeitems key=values from=$HOMEORDER}
-										<tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.$values}</td>
+										<tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.$values|@getTranslatedString:'Home'}</td>
 											{if $homeitems neq ''}
 												<td class="dvtCellInfo" align="center" width="5%">
 												<img src="{'prvPrfSelectedTick.gif'|@vtiger_imageurl:$THEME}" alt="{$UMOD.LBL_SHOWN}" title="{$UMOD.LBL_SHOWN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_SHOWN}</td> 		

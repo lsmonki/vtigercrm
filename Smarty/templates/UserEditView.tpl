@@ -180,7 +180,7 @@ function check_duplicate()
 			    	</table>
 			    	<table border="0" cellpadding="5" cellspacing="0" width="100%">
 				{foreach item=homeitems key=values from=$HOMEORDER}
-					<tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.$values}</td>
+					<tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.$values|@getTranslatedString:'Home'}</td>
 					    {if $homeitems neq ''}
 					    	<td class="dvtCellInfo" align="center" width="5%">
 					   	<input name="{$values}" value="{$values}" checked type="radio"></td><td class="dvtCellInfo" align="left" width="20%">{$UMOD.LBL_SHOW}</td> 		

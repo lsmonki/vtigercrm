@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ********************************************************************************/
 	
-global $adb,$current_user;
+global $adb,$current_user, $mod_strings;
 require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
 $modval=trim($_REQUEST['modname']);
@@ -27,7 +27,7 @@ if(!empty($modval)){
 	$result = $adb->pquery($ssql, $sparams);
 	
 	if($adb->num_rows($result)==0){
-	  echo "No Filters available";
+	  echo $mod_strings['MSG_NO_FILTERS'];
 	  die;
 	}else{
 		$html = '<select id=selFilterid name=selFiltername onchange=setPrimaryFld(this) class="detailedViewTextBox" onfocus="this.className=\'detailedViewTextBoxOn\'" onblur="this.className=\'detailedViewTextBox\'"  style="width:60%">';
@@ -92,7 +92,7 @@ if(!empty($_REQUEST['primecvid'])){
 	global $current_language,$app_strings;
 	$fieldmod_strings = return_module_language($current_language, $fieldmodule);
 	if($adb->num_rows($result)==0){
-	  echo "No Fields available";
+	  echo $mod_strings['MSG_NO_FIELDS'];
 	  die;
 	}else{
 		$html = '<select id=selPrimeFldid name=PrimeFld multiple class="detailedViewTextBox" onfocus="this.className=\'detailedViewTextBoxOn\'" onblur="this.className=\'detailedViewTextBox\'" style="width:60%">';
@@ -110,7 +110,7 @@ if(!empty($_REQUEST['primecvid'])){
 					$field_query = $adb->pquery("SELECT fieldlabel FROM vtiger_field WHERE fieldname = ? AND tablename = ? and vtiger_field.presence in (0,2)", array($fieldname,$prifldarr[0]));
 					$field_label = $adb->query_result($field_query,0,'fieldlabel');
 					if(trim($field_label) != '')
-						$html .= "<option value='".$columnname."'>".$field_label."</option>";
+						$html .= "<option value='".$columnname."'>".getTranslatedString($field_label, $fieldmodule)."</option>";
 				}
 			}
 		}

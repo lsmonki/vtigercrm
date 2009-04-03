@@ -149,10 +149,7 @@
 				<td width="300" class="dvtCellInfo" colspan="2">
 					<select name="selmodule" id="selmodule_id" onchange="setFilter(this)" class="detailedViewTextBox" onfocus="this.className='detailedViewTextBoxOn'" onblur="this.className='detailedViewTextBox'" style="width:60%">
 						{foreach item=arr from=$MODULE_NAME}
-							{assign var="MODULE_LABEL" value=$arr.1}
-							{if $APP[$arr.1] neq ''}		
-								{assign var="MODULE_LABEL" value=$APP[$arr.1]}
-							{/if}
+							{assign var="MODULE_LABEL" value=$arr.1|getTranslatedString:$arr.1}
 							<option value="{$arr.1}">{$MODULE_LABEL}</option>
 						{/foreach}
 					</select>

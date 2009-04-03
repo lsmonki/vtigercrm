@@ -34,7 +34,7 @@
 				{include file="Home/MainHomeBlock.tpl"}
 				<script>
 					{*<!-- load contents for the widget-->*}
-					{if $tablestuff.Stufftype eq 'Default' && $tablestuff.Stufftitle eq 'Home Page Dashboard'}
+					{if $tablestuff.Stufftype eq 'Default' && $tablestuff.Stufftitle eq 'Home Page Dashboard'|@getTranslatedString:'Home'}
 						fetch_homeDB({$tablestuff.Stuffid});
 					{else}
 						loadStuff({$tablestuff.Stuffid},'{$tablestuff.Stufftype}');
