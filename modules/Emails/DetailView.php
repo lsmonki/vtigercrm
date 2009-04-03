@@ -26,6 +26,7 @@ require_once('modules/Emails/Emails.php');
 require_once('include/upload_file.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
+require_once("include/Zend/Json.php");
 
 global $log;
 global $app_strings;
@@ -33,24 +34,31 @@ global $mod_strings;
 global $currentModule;
 
 $focus = new Emails();
+$json = new Zend_Json();
+
+function vt_suppressHTMLTags($string){
+	return preg_replace(array('/</', '/>/', '/"/'), array('&lt;', '&gt;', '&quot;'), $string);
+}
 
 $smarty = new vtigerCRM_Smarty;
 if(isset($_REQUEST['record'])) 
 {
-	global $adb;
+	global $adb,$default_charset;
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
 	$log->info("Entity info successfully retrieved for DetailView.");
 	$focus->id = $_REQUEST['record'];
 	$query = 'select email_flag,from_email,to_email,cc_email,bcc_email from vtiger_emaildetails where emailid = ?';
 	$result = $adb->pquery($query, array($focus->id));
-    	$smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
-	$to_email = ereg_replace('###',', ',$adb->query_result($result,0,'to_email'));
-	$smarty->assign('TO_MAIL',to_html($to_email));	
-	$smarty->assign('CC_MAIL',to_html(ereg_replace('###',', ',$adb->query_result($result,0,'cc_email'))));	
-    	$smarty->assign('BCC_MAIL',to_html(ereg_replace('###',', ',$adb->query_result($result,0,'bcc_email'))));	
-    	$smarty->assign('EMAIL_FLAG',$adb->query_result($result,0,'email_flag'));	
+	$smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
+	$to_email = $json->decode($adb->query_result($result,0,'to_email'));
+	$cc_email = $json->decode($adb->query_result($result,0,'cc_email'));
+	$smarty->assign('TO_MAIL',vt_suppressHTMLTags(@implode(',',$to_email)));	
+	$smarty->assign('CC_MAIL',vt_suppressHTMLTags(@implode(',',$cc_email)));	
+    $bcc_email = $json->decode($adb->query_result($result,0,'bcc_email'));	
+	$smarty->assign('BCC_MAIL',vt_suppressHTMLTags(@implode(',',$bcc_email)));	
+	$smarty->assign('EMAIL_FLAG',$adb->query_result($result,0,'email_flag'));	
 	if($focus->column_fields['name'] != '')
-	        $focus->name = $focus->column_fields['name'];		
+		$focus->name = $focus->column_fields['name'];		
 	else
 		$focus->name = $focus->column_fields['subject'];
 }

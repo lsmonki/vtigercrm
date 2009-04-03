@@ -1956,6 +1956,48 @@ foreach($currencies as $key=>$value){
 ExecuteQuery("UPDATE vtiger_currency_info LEFT JOIN vtiger_currencies as currencies on vtiger_currency_info.currency_code = currencies.currency_code SET vtiger_currency_info.currency_name = currencies.currency_name");
  	
 Executequery("UPDATE vtiger_products set handler = 1 WHERE handler = 0");
+
+//Emails fields 
+$email_Tabid = getTabid('Emails');
+$blockid = $adb->getUniqueID('vtiger_blocks');
+$adb->query("INSERT INTO vtiger_field values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'from_email','vtiger_emaildetails',1,12,'from_email','From',1,2,0,100,1,$blockid,3,'V~M',3,NULL,'BAS',0,NULL)");
+$adb->query("INSERT INTO vtiger_field values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'to_email','vtiger_emaildetails',1,8,'saved_toid','To',1,2,0,100,2,$blockid,1,'V~M',3,NULL,'BAS',0,NULL)");
+$adb->query("INSERT INTO vtiger_field values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'cc_email','vtiger_emaildetails',1,8,'ccmail','CC',1,2,0,1000,3,$blockid,1,'V~O',3,NULL,'BAS',0,NULL)");		
+$adb->query("INSERT INTO vtiger_field values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'bcc_email','vtiger_emaildetails',1,8,'bccmail','BCC' ,1,2,0,1000,4,$blockid,1,'V~O',3,NULL,'BAS',0,NULL)");
+$adb->query("INSERT INTO vtiger_field values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'idlists','vtiger_emaildetails',1,1,'parent_id','Parent ID' ,1,2,0,1000,5,$blockid,3,'V~O',3,NULL,'BAS',0,NULL)");		
+$adb->query("INSERT INTO vtiger_field values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'email_flag','vtiger_emaildetails',1,16,'email_flag','Email Flag' ,1,2,0,1000,6,$blockid,3,'V~O',3,NULL,'BAS',0,NULL)");		
+
+require_once('include/Zend/Json.php');
+$json = new Zend_Json();
+
+$result = $adb->query("SELECT * FROM vtiger_emaildetails");
+$rows = $adb->num_rows($result);
+for($i=0 ; $i<$rows ;$i++) {
+	$emailid = $adb->query_result($result,$i,'emailid');
+	$to = $adb->query_result($result,$i,'to_email');
+	$cc = $adb->query_result($result,$i,'cc_email');
+	$bcc = $adb->query_result($result,$i,'bcc_email');
+	
+	$to = ereg_replace("###",",",$to);
+	$to = str_replace('&amp;lt;','<',$to);
+	$to = str_replace('&amp;gt;','>',$to);
+	$to = explode(',',$to);
+	$to_json = $json->encode($to);
+	
+	$cc = str_replace('&amp;lt;','<',$cc);
+	$cc = str_replace('&amp;gt;','>',$cc);
+	$cc = ereg_replace("###",",",$cc);
+	$cc = explode(',',$cc);
+	$cc_json = $json->encode($cc);
+	
+	$bcc = str_replace('&amp;lt;','<',$bcc);
+	$bcc = str_replace('&amp;gt;','>',$bcc);
+	$bcc = ereg_replace("###",",",$bcc);
+	$bcc = explode(',',$bcc);
+	$bcc_json = $json->encode($bcc);
+	
+	Executequery("UPDATE vtiger_emaildetails set to_email = '$to_json', cc_email= '$cc_json', bcc_email= '$bcc_json' WHERE emailid = $emailid");
+}
 	
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 

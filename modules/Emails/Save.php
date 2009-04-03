@@ -20,6 +20,8 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
+ require_once("include/Zend/Json.php");
+ 
  //check for mail server configuration thro ajax
 if(isset($_REQUEST['server_check']) && $_REQUEST['server_check'] == 'true')
 {
@@ -62,8 +64,13 @@ $focus = new Emails();
 global $current_user,$mod_strings,$app_strings;
 if(isset($_REQUEST['description']) && $_REQUEST['description'] !='')
 	$_REQUEST['description'] = fck_from_html($_REQUEST['description']);
-setObjectValuesFromRequest($focus);
 
+$all_to_ids = $_REQUEST["hidden_toid"];
+$all_to_ids .= $_REQUEST["saved_toid"];
+$_REQUEST["saved_toid"] = $all_to_ids;
+//we always save the email with "save" status and when it is sent it is marked as SENT
+$_REQUEST['email_flag'] = 'SAVED';
+setObjectValuesFromRequest($focus);
 //Check if the file is exist or not.
 //$file_name = '';
 if(isset($_REQUEST['filename_hidden'])) {
@@ -150,40 +157,7 @@ $focus->column_fields["assigned_user_id"]=$current_user->id;
 $focus->column_fields["activitytype"]="Emails";
 $focus->column_fields["date_start"]= date(getNewDisplayDate());//This will be converted to db date format in save
 $focus->save("Emails");
-
-//saving the email details in vtiger_emaildetails vtiger_table
-$qry = 'select email1 from vtiger_users where id = ?';
-$res = $adb->pquery($qry, array($current_user->id));
-$user_email = $adb->query_result($res,0,"email1");
 $return_id = $focus->id;
-$email_id = $return_id;
-$query = 'select emailid from vtiger_emaildetails where emailid = ?';
-$result = $adb->pquery($query, array($email_id));
-
-if(isset($_REQUEST["hidden_toid"]) && $_REQUEST["hidden_toid"]!='')
-	$all_to_ids = ereg_replace(",","###",$_REQUEST["hidden_toid"]);
-if(isset($_REQUEST["saved_toid"]) && $_REQUEST["saved_toid"]!='')
-	$all_to_ids .= ereg_replace(",","###",$_REQUEST["saved_toid"]);
-
-
-//added to save < as $lt; and > as &gt; in the database so as to retrive the emailID
-$all_to_ids = str_replace('<','&lt;',$all_to_ids);
-$all_to_ids = str_replace('>','&gt;',$all_to_ids);
-	
-$all_cc_ids = ereg_replace(",","###",$_REQUEST["ccmail"]);
-$all_bcc_ids = ereg_replace(",","###",$_REQUEST["bccmail"]);
-$userid = $current_user->id;
-
-if($adb->num_rows($result) > 0)
-{
-	$query = "update vtiger_emaildetails set to_email=?, cc_email=?, bcc_email=?, idlists=?, email_flag='SAVED' where emailid = ?";
-	$qparams = array($all_to_ids, $all_cc_ids, $all_bcc_ids, $_REQUEST["parent_id"], $email_id);
-}else
-{
-	$query = 'insert into vtiger_emaildetails values (?,?,?,?,?,?,?,?)';
-	$qparams = array($email_id, $user_email, $all_to_ids, $all_cc_ids, $all_bcc_ids, "", $_REQUEST["parent_id"], 'SAVED');
-}
-$adb->pquery($query, $qparams);
 
 require_once("modules/Emails/mail.php");
 if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && $_REQUEST['parent_id'] != '') 
@@ -233,6 +207,7 @@ if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && $_REQUEST['parent_
 	}
 
 }
+
 $focus->retrieve_entity_info($return_id,"Emails");
 
 //this is to receive the data from the Select Users button

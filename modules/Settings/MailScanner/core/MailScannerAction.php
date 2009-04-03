@@ -256,18 +256,20 @@ class Vtiger_MailScannerAction {
 		$focus->column_fields['description'] = $mailrecord->getBodyHTML();
 		$focus->column_fields['assigned_user_id'] = $linkfocus->column_fields['assigned_user_id'];
 		$focus->column_fields["date_start"]= date('Y-m-d', $mailrecord->_date);
-		$focus->save('Emails');
-
+		
 		$emailid = $focus->id;
 		$from=$mailrecord->_from[0];
 		$to = $mailrecord->_to[0];
 		$cc = (!empty($mailrecord->_cc))? implode(',', $mailrecord->_cc) : '';
 		$bcc= (!empty($mailrecord->_bcc))? implode(',', $mailrecord->_bcc) : '';
 		$flag=''; // 'SENT'/'SAVED'
+		//emails field were restructured and to,bcc and cc field are JSON arrays
+		$focus->column_fields['from_email'] = $from;
+		$focus->column_fields['saved_toid'] = $to;
+		$focus->column_fields['ccmail'] = $cc;
+		$focus->column_fields['bccmail'] = $bcc;  
+		$focus->save('Emails');
 
-		$adb->pquery('INSERT INTO vtiger_emaildetails (emailid, from_email, to_email, cc_email, bcc_email, email_flag) VALUES(?,?,?,?,?,?)', 
-			Array($emailid, $from, $to, $cc, $bcc, $flag));
-		
 		$this->log("Created [$focus->id]: $mailrecord->_subject linked it to " . $linkfocus->id);
 
 		// TODO: Handle attachments of the mail (inline/file)

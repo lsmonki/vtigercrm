@@ -969,6 +969,17 @@ class DefaultDataPopulator extends CRMEntity {
 			$this->db->pquery("UPDATE vtiger_field SET masseditable=0 WHERE tabid=? AND fieldname IN (".generateQuestionMarks($value).")",array($tabid,$value));
 		}
 		
+		//Emails field added here
+		$email_Tabid = getTabid('Emails');
+		$blockid = $this->db->getUniqueID('vtiger_blocks');
+		$this->db->query("INSERT INTO vtiger_field values($email_Tabid,".$this->db->getUniqueID("vtiger_field").",'from_email','vtiger_emaildetails',1,12,'from_email','From',1,2,0,100,1,$blockid,3,'V~M',3,NULL,'BAS',0)");
+		$this->db->query("INSERT INTO vtiger_field values($email_Tabid,".$this->db->getUniqueID("vtiger_field").",'to_email','vtiger_emaildetails',1,8,'saved_toid','To',1,2,0,100,2,$blockid,1,'V~M',3,NULL,'BAS',0)");
+		$this->db->query("INSERT INTO vtiger_field values($email_Tabid,".$this->db->getUniqueID("vtiger_field").",'cc_email','vtiger_emaildetails',1,8,'ccmail','CC',1,2,0,1000,3,$blockid,1,'V~O',3,NULL,'BAS',0)");		
+		$this->db->query("INSERT INTO vtiger_field values($email_Tabid,".$this->db->getUniqueID("vtiger_field").",'bcc_email','vtiger_emaildetails',1,8,'bccmail','BCC' ,1,2,0,1000,4,$blockid,1,'V~O',3,NULL,'BAS',0)");
+		$this->db->query("INSERT INTO vtiger_field values($email_Tabid,".$this->db->getUniqueID("vtiger_field").",'idlists','vtiger_emaildetails',1,1,'parent_id','Parent ID' ,1,2,0,1000,5,$blockid,3,'V~O',3,NULL,'BAS',0)");		
+		$this->db->query("INSERT INTO vtiger_field values($email_Tabid,".$this->db->getUniqueID("vtiger_field").",'email_flag','vtiger_emaildetails',1,16,'email_flag','Email Flag' ,1,2,0,1000,6,$blockid,3,'V~O',3,NULL,'BAS',0)");		
+		//Emails fields ends		
+		
 		//The Entity Name for the modules are maintained in this table
 		$this->db->query("insert into vtiger_entityname values(7,'Leads','vtiger_leaddetails','lastname,firstname','leadid','leadid')");
 		$this->db->query("insert into vtiger_entityname values(6,'Accounts','vtiger_account','accountname','accountid','account_id')");

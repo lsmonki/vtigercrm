@@ -1470,12 +1470,12 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	//Ends
 	$field_val = $adb->query_result($list_result,$list_result_count,$colname);
-	if(stristr($field_val, "<a href") === false){
+	if(stristr(html_entity_decode($field_val), "<a href") === false){
 		$temp_val = textlength_check($field_val);
 	}else{
-		$temp_val = html_entity_decode($field_val);
+			
+		$temp_val = html_entity_decode($field_val,ENT_QUOTES);
 	}
-
 	// vtlib customization: New uitype to handle relation between modules
 	if($uitype == '10'){
 		$parent_id = $field_val;

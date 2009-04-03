@@ -84,19 +84,26 @@
 		</span>
 	</td>
    </tr>
-   <tr>
-	<td class="mailSubHeader" style="padding: 5px;" align="right">{$MOD.LBL_CC}</td>
+	<tr>
+	{if 'ccmail'|@emails_checkFieldVisiblityPermission eq '0'}   
+   	<td class="mailSubHeader" style="padding: 5px;" align="right">{$MOD.LBL_CC}</td>
 	<td class="cellText" style="padding: 5px;">
 		<input name="ccmail" id ="cc_name" class="txtBox" type="text" value="{$CC_MAIL}" style="width:99%">&nbsp;
-	</td>	
-	<td valign="top" class="cellLabel" rowspan="4"><div id="attach_cont" class="addEventInnerBox" style="overflow:auto;height:110px;width:100%;position:relative;left:0px;top:0px;"></div>
-   </tr>
-   <tr>
+	</td>
+	{else}
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	{/if}
+   <td valign="top" class="cellLabel" rowspan="4"><div id="attach_cont" class="addEventInnerBox" style="overflow:auto;height:100px;width:100%;position:relative;left:0px;top:0px;"></div>
+   	</tr>
+   {if 'bccmail'|@emails_checkFieldVisiblityPermission eq '0'}   
+   	<tr>
 	<td class="mailSubHeader" style="padding: 5px;" align="right">{$MOD.LBL_BCC}</td>
 	<td class="cellText" style="padding: 5px;">
 		<input name="bccmail" id="bcc_name" class="txtBox" type="text" value="{$BCC_MAIL}" style="width:99%">&nbsp;
 	</td>
-   </tr>
+   	</tr>
+   	{/if}
 	{elseif $elements.2.0 eq 'subject'}
    <tr>
 	<td class="mailSubHeader" style="padding: 5px;" align="right" nowrap><font color="red">*</font>{$elements.1.0}  :</td>
@@ -136,8 +143,8 @@
 
 		{if $WEBMAIL eq 'true'}
 		{foreach item="attach_files" from=$webmail_attachments}
-                        <tr ><td width="90%">{$attach_files}</td></tr>
-                {/foreach}	
+                <tr ><td width="90%">{$attach_files}</td></tr>
+        {/foreach}	
 		{/if}
 		</table>	
 		</div>	
@@ -196,49 +203,45 @@ function email_validate(oform,mode)
 	if(oform.parent_name.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{
 		//alert('No recipients were specified');
-				alert(no_rcpts_err_msg);
+		alert(no_rcpts_err_msg);
 		return false;
 	}
-	if(document.EditView.ccmail.value.length >= 1)
-	{
-		var str = document.EditView.ccmail.value;
-                arr = new Array();
-                arr = str.split(",");
-                var tmp;
-
-                for(var i=0; i<=arr.length-1; i++)
-                {
-                        tmp = arr[i];
-                        if(tmp.match('<') && tmp.match('>')) {
-                                if(!findAngleBracket(arr[i])) {
-                                        alert(cc_err_msg+": "+arr[i]);
-                                        return false;
-                                }
-                        }
-			//Changes made to fix tickets #4633, # 5111 to accomodate all possible email formats
-			else if(trim(arr[i]) != "" && !/^[a-zA-Z0-9]+([\_\-\.]*[a-zA-Z0-9]+[\_\-]?)*@[a-zA-Z0-9]+([\_\-]?[a-zA-Z0-9]+)*\.+([\_\-]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/.test(trim(arr[i])))
-                        {
-                                alert(cc_err_msg+": "+arr[i]);
-                                return false;
-                        }
-                }
-
-	}
-	
-	if(document.EditView.bccmail.value.length >= 1)
-	{
-		var str = document.EditView.bccmail.value;
-		arr = new Array();
-		arr = str.split(",");
-		for(var i=0; i<=arr.length-1; i++)
-		{
-			if(trim(arr[i]) != "" && !/^[a-zA-Z0-9]+([_\.\-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([_\-]?[a-zA-Z0-9]+)*\.[a-zA-Z0-9]+(\.?[a-zA-Z0-9]+)*$/.test(trim(arr[i])))
-			{
-				alert(bcc_err_msg+": "+arr[i]);
-				return false;	
+	if(document.EditView.ccmail != null){
+		if(document.EditView.ccmail.value.length >= 1){
+			var str = document.EditView.ccmail.value;
+            arr = new Array();
+            arr = str.split(",");
+            var tmp;
+	    	for(var i=0; i<=arr.length-1; i++){
+	            tmp = arr[i];
+	            if(tmp.match('<') && tmp.match('>')) {
+                    if(!findAngleBracket(arr[i])) {
+                        alert(cc_err_msg+": "+arr[i]);
+                        return false;
+                    }
+            	}
+				//Changes made to fix tickets #4633, # 5111 to accomodate all possible email formats
+				else if(trim(arr[i]) != "" && !/^[a-zA-Z0-9]+([\_\-\.]*[a-zA-Z0-9]+[\_\-]?)*@[a-zA-Z0-9]+([\_\-]?[a-zA-Z0-9]+)*\.+([\_\-]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/.test(trim(arr[i])))
+	            {
+	                    alert(cc_err_msg+": "+arr[i]);
+	                    return false;
+	            }
 			}
-		}	
-	}
+		}
+	}	
+	if(document.EditView.bccmail != null){
+		if(document.EditView.bccmail.value.length >= 1){
+			var str = document.EditView.bccmail.value;
+			arr = new Array();
+			arr = str.split(",");
+			for(var i=0; i<=arr.length-1; i++){
+				if(trim(arr[i]) != "" && !/^[a-zA-Z0-9]+([_\.\-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([_\-]?[a-zA-Z0-9]+)*\.[a-zA-Z0-9]+(\.?[a-zA-Z0-9]+)*$/.test(trim(arr[i]))){
+					alert(bcc_err_msg+": "+arr[i]);
+					return false;	
+				}
+			}	
+		}
+	}	
 	if(oform.subject.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{
 		if(email_sub = prompt('You did not specify a subject from this email. If you would like to provide one, please type it now','(no-Subject)'))

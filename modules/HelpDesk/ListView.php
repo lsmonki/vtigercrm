@@ -88,7 +88,6 @@ $edit_permit = $oCustomView->isPermittedCustomView($viewid,'EditView',$currentMo
 $delete_permit = $oCustomView->isPermittedCustomView($viewid,'Delete',$currentModule);
 $smarty->assign("CV_EDIT_PERMIT",$edit_permit);
 $smarty->assign("CV_DELETE_PERMIT",$delete_permit);
-
 //<<<<<customview>>>>>
 $smarty->assign("CHANGE_OWNER",getUserslist());
 $smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
@@ -312,9 +311,7 @@ $smarty->assign("RECORD_COUNTS", $record_string);
 
 $check_button = Button_Check($currentModule);
 $smarty->assign("CHECK", $check_button);
-
 $_SESSION['helpdesk_listquery'] = $list_query;
-
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");
 else	

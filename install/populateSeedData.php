@@ -915,12 +915,11 @@ for($i=0;$i<5;$i++)
 	$email->column_fields["semodule"] = 'Tasks';
 	$email->column_fields["activitytype"] = 'Emails';
 	$email->column_fields["description"] = $body_array[$i];	
+	$email->column_fields["saved_toid"] = $to_array[$i];
+	$focus->column_fields['ccmail'] = $cc_array[$i];
+	$focus->column_fields['bccmail'] = $bcc_array[$i];
 	$email->save("Emails");
 	$email_ids[] = $email->id;
-	
-	$query = "insert into vtiger_emaildetails(emailid,from_email,to_email,cc_email,bcc_email) values (?,?,?,?,?)";
-	$qparams = array($email->id, $from_array[$i], $to_array[$i], $cc_array[$i], $bcc_array[$i]);
-	$res = $adb->pquery($query, $qparams);
 }
 
 

@@ -16,15 +16,21 @@ require_once('include/utils/UserInfoUtil.php');
 require_once('include/FormValidationUtil.php');
 require_once('modules/Webmails/MailBox.php');
 require_once('modules/Webmails/Webmails.php');
+require_once("include/Zend/Json.php");
 
 global $mod_strings;
 global $app_strings, $theme;
 
 $focus = new Emails();
 $smarty = new vtigerCRM_Smarty();
+$json = new Zend_Json();
 $smarty->assign('MOD',$mod_strings);
 $smarty->assign('THEME',$theme);
-	
+
+function vt_suppressHTMLTags($string){
+	return preg_replace(array('/</', '/>/', '/"/'), array('&lt;', '&gt;', '&quot;'), $string);
+}
+
 if(isset($_REQUEST['record']) && $_REQUEST['record'] !='' && $_REQUEST['mailbox'] == '') 
 {
 	$focus->id = $_REQUEST['record'];
@@ -32,20 +38,16 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='' && $_REQUEST['mailbox'
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
 
 	$focus->name=$focus->column_fields['name'];	
-	if(isset($_REQUEST['print']))
+	if(isset($_REQUEST['print']) && $_REQUEST['print'] !='')
 	{ 
 		$query = 'select idlists,from_email,to_email,cc_email,bcc_email from vtiger_emaildetails where emailid =?';
 		$result = $adb->pquery($query, array($focus->id));
 		$smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
-		$to_email = ereg_replace('###',',',$adb->query_result($result,0,'to_email'));
-		$smarty->assign('TO_MAIL',trim($to_email,",").",");
-		$cc_add = trim(ereg_replace('###',',',$adb->query_result($result,0,'cc_email')),",");
-		if($cc_add != '')
-			$cc_add .= ','; 	
+		$to_email = vt_suppressHTMLTags(implode(',',$json->decode($adb->query_result($result,0,'to_email'))));
+		$smarty->assign('TO_MAIL',$to_email);
+		$cc_add = vt_suppressHTMLTags(implode(',',$json->decode($adb->query_result($result,0,'cc_email'))));
 		$smarty->assign('CC_MAIL',$cc_add);
-		$bcc_add = trim(ereg_replace('###',',',$adb->query_result($result,0,'bcc_email')),",");
-		if($bcc_add != '')
-			$bcc_add .= ',';	
+		$bcc_add = vt_suppressHTMLTags(implode(',',$json->decode($adb->query_result($result,0,'bcc_email'))));
 		$smarty->assign('BCC_MAIL',$bcc_add);	
 		$smarty->assign('SUBJECT',$focus->column_fields['subject']);	
 		$smarty->assign('DESCRIPTION',$focus->column_fields['description']);

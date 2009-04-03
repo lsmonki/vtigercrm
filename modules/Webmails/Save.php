@@ -17,6 +17,7 @@ require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/CommonUtils.php');
 require_once('modules/Webmails/MailParse.php');
 require_once('modules/Webmails/MailBox.php');
+require_once("include/Zend/Json.php");
 global $current_user;
 
 $local_log =& LoggerManager::getLogger('index');
@@ -132,12 +133,13 @@ function view_part_detail($mail,$mailid,$part_no, &$transfer, &$msg_charset, &$c
 $_REQUEST['parent_id'] = $focus->column_fields['parent_id'];
 $focus->save("Emails");
 
+$json = new Zend_Json();
 //saving in vtiger_emaildetails vtiger_table
 $id_lists = $focus->column_fields['parent_id'].'@'.$fieldid;
 $all_to_ids = $email->from;
-//added to save < as $lt; and > as &gt; in the database so as to retrive the emailID
-$all_to_ids = str_replace('<','&lt;',$all_to_ids);
-$all_to_ids = str_replace('>','&gt;',$all_to_ids);
+if(!empty($all_to_ids)) {
+	$all_to_ids = $json->encode(explode(',',$all_to_ids));
+}
 $query = 'insert into vtiger_emaildetails values (?,?,?,?,?,?,?,?)';
 $adb->pquery($query, array($focus->id, "", $all_to_ids, "", "", "", $id_lists,"WEBMAIL"));
 $query = 'insert into vtiger_seactivityrel values (?,?)';

@@ -25,6 +25,7 @@ require_once('include/logging.php');
 require_once('data/Tracker.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
+require_once("include/Zend/Json.php");
 
 class CRMEntity
 {
@@ -550,15 +551,30 @@ class CRMEntity
 					}	
 			  }
 			  elseif($uitype == 28){
-			  		$fileQuery = $adb->pquery("SELECT filename from vtiger_notes WHERE notesid = ?",array($this->id));
-			  		$fldvalue = null;
-			  		if(isset($fileQuery)){
-						$rowCount = $adb->num_rows($fileQuery);
-						if($rowCount > 0){
-							$fldvalue = $adb->query_result($fileQuery,0,'filename');
+			  		if($this->column_fields[$fieldname] == null){
+				  		$fileQuery = $adb->pquery("SELECT filename from vtiger_notes WHERE notesid = ?",array($this->id));
+				  		$fldvalue = null;
+				  		if(isset($fileQuery)){
+							$rowCount = $adb->num_rows($fileQuery);
+							if($rowCount > 0){
+								$fldvalue = $adb->query_result($fileQuery,0,'filename');
+							}
 						}
-					}
-			  }
+			  		}else {
+			  			$fldvalue = $this->column_fields[$fieldname];
+			  		}	
+			  }elseif($uitype == 8) {
+				$ids = explode(',',$this->column_fields[$fieldname]);
+				$json = new Zend_Json();
+				$fldvalue = $json->encode($ids);
+			}elseif($uitype == 12) {
+			  	$query = "SELECT email1 FROM vtiger_users WHERE id = ?";
+			  	$res = $adb->pquery($query,array($current_user->id));
+			  	$rows = $adb->num_rows($res);
+			  	if($rows > 0) {
+			  		$fldvalue = $adb->query_result($res,0,'email1');
+				}
+			}
 			  else
 			  {
 				  $fldvalue = $this->column_fields[$fieldname]; 

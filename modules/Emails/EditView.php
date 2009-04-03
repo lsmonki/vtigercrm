@@ -26,6 +26,7 @@ require_once('modules/Emails/Emails.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/FormValidationUtil.php');
+require_once("include/Zend/Json.php");
 
 global $log;
 global $app_strings;
@@ -36,6 +37,7 @@ global $currentModule;
 
 $focus = new Emails();
 $smarty = new vtigerCRM_Smarty();
+$json = new Zend_Json();
 
 if($_REQUEST['upload_error'] == true)
 {
@@ -61,33 +63,24 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
 	$focus->id = $_REQUEST['record'];
 	$focus->mode = 'edit';
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
-	if(isset($_REQUEST['forward']) && $_REQUEST['forward'] != '')
-	{
-		$att_id_list = '';//used in getBlockInformation funtion as global variable to get the attachment id list for forwarding mail with attachment 
-		$focus->mode = '';
-	}
-	else
-	{
-		$query = 'select idlists,from_email,to_email,cc_email,bcc_email from vtiger_emaildetails where emailid =?';
-		$result = $adb->pquery($query, array($focus->id));
-		$smarty->assign('FROM_MAIL',$adb->query_result($result,0,'from_email'));	
-		$to_email = ereg_replace('###',',',$adb->query_result($result,0,'to_email'));
-		$smarty->assign('TO_MAIL',trim($to_email,",").",");
-		$cc_add = trim(ereg_replace('###',',',$adb->query_result($result,0,'cc_email')),",");
-		if($cc_add != '')
-			$cc_add .= ','; 	
-		$smarty->assign('CC_MAIL',$cc_add);
-		$bcc_add = trim(ereg_replace('###',',',$adb->query_result($result,0,'bcc_email')),",");
-		if($bcc_add != '')
-			$bcc_add .= ',';	
-		$smarty->assign('BCC_MAIL',$bcc_add);	
-		$smarty->assign('IDLISTS',ereg_replace('###',',',$adb->query_result($result,0,'idlists')));	
-	}
-    $log->info("Entity info successfully retrieved for EditView.");
-	$focus->name=$focus->column_fields['name'];		
+	$query = 'select idlists,from_email,to_email,cc_email,bcc_email from vtiger_emaildetails where emailid =?';
+	$result = $adb->pquery($query, array($focus->id));
+	$from_email = $adb->query_result($result,0,'from_email');
+	$smarty->assign('FROM_MAIL',$from_email);	
+	$to_email = implode(',',$json->decode($adb->query_result($result,0,'to_email')));
+	$smarty->assign('TO_MAIL',$to_email);
+	$cc_add = implode(',',$json->decode($adb->query_result($result,0,'cc_email')));
+	$smarty->assign('CC_MAIL',$cc_add);
+	$bcc_add = implode(',',$json->decode($adb->query_result($result,0,'bcc_email')));
+	$smarty->assign('BCC_MAIL',$bcc_add);
+	$idlist = $adb->query_result($result,0,'idlists');
+	$smarty->assign('IDLISTS',$idlist);
+	$log->info("Entity info successfully retrieved for EditView.");
+	$focus->name=$focus->column_fields['name'];
 }
 elseif(isset($_REQUEST['sendmail']) && $_REQUEST['sendmail'] !='')
 {
+	
 	$mailids = get_to_emailids($_REQUEST['pmodule']);
 	if($mailids['mailds'] != '')
 		$to_add = trim($mailids['mailds'],",").",";
@@ -136,7 +129,6 @@ if($_REQUEST["internal_mailer"] == "true") {
 	}
 
 	$smarty->assign('TO_MAIL',trim($email1,",").",");
-	//$smarty->assign('BCC_MAIL',$current_user->email1);
 }
 
 //handled for replying emails
@@ -147,22 +139,11 @@ if($_REQUEST['reply'] == "true")
 		$result = $adb->pquery($query, array($fromadd));
 		$from_mail = $adb->query_result($result,0,'from_email');	
 		$smarty->assign('TO_MAIL',trim($from_mail,",").',');
-		$cc_add = trim(ereg_replace('###',',',$adb->query_result($result,0,'cc_email')),",");
-		if($cc_add != '')
-			$cc_add .= ',';
+		$cc_add = implode(',',$json->decode($adb->query_result($result,0,'cc_email')));
 		$smarty->assign('CC_MAIL',$cc_add);
-		$bcc_add = trim(ereg_replace('###',',',$adb->query_result($result,0,'bcc_email')),",");
-		if($bcc_add != '')
-			$bcc_add .= ',';
+		$bcc_add = implode(',',$json->decode($adb->query_result($result,0,'bcc_email')));
 		$smarty->assign('BCC_MAIL',$bcc_add);
 		$smarty->assign('IDLISTS',ereg_replace('###',',',$adb->query_result($result,0,'idlists')));	
-}
-
-
-//Added to set the cc when click reply all
-if(isset($_REQUEST['msg_cc']) && $_REQUEST['msg_cc'] != '')
-{
-        $smarty->assign("MAIL_MSG_CC", $_REQUEST['msg_cc']);
 }
 
 // Webmails
@@ -228,8 +209,6 @@ if(isset($_REQUEST["mailid"]) && $_REQUEST["mailid"] != "") {
 			$smarty->assign('SUBJECT',"RE: ".$webmail->subject);
 
 	} elseif($_REQUEST["forward"] == "true" ) {
-		//$smarty->assign('TO_MAIL',$webmail->reply_to[0]);	
-		//$smarty->assign('BCC_MAIL',$webmail->to[0]);
 		//added for attachment handling
 		$attachment_links = Array();
 		for($i=0;$i<count($webmail->attname);$i++){
@@ -314,7 +293,6 @@ else $smarty->assign("RETURN_ACTION",'index');
 if(isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
 if (isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
 
-
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
@@ -338,8 +316,9 @@ else
 if($ret_error == 1) {
 	require_once('modules/Webmails/MailBox.php');
 	$smarty->assign("RET_ERROR",$ret_error);
-	if($ret_parentid != '')
+	if($ret_parentid != ''){
 		$smarty->assign("IDLISTS",$ret_parentid);
+	}
 	if($ret_toadd != '')
                 $smarty->assign("TO_MAIL",$ret_toadd);
 	$ret_toadd = '';
@@ -360,5 +339,7 @@ $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
 $smarty->display("ComposeEmail.tpl");
+
+
 ?>
 
