@@ -1052,6 +1052,8 @@ $mod_strings = Array(
 'LBL_ENDS'=>'Ends',
 'LBL_BODY'=>'Body',
 
+'LBL_NOT'=>'Not',
+
 'LBL_ALL' => 'All',
 'LBL_ANY'=>'Any',
 'LBL_CONDITION'=>'Condition',
