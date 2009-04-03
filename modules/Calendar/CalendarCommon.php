@@ -551,7 +551,7 @@ function calendarview_getSelectedUserId() {
 }
 
 function calendarview_getSelectedUserFilterQuerySuffix() {	
-	global $current_user;
+	global $current_user, $adb;
 	$only_for_user = calendarview_getSelectedUserId();
 	$qcondition = '';
 	if(!empty($only_for_user)) {
@@ -565,7 +565,7 @@ function calendarview_getSelectedUserFilterQuerySuffix() {
 				$user_group_ids .= $current_user->id;	
 				$qcondition = " AND vtiger_crmentity.smownerid IN (" . $user_group_ids .")";
 			} else {
-				$qcondition = " AND vtiger_crmentity.smownerid = "  . $only_for_user;
+				$qcondition = " AND vtiger_crmentity.smownerid = "  . $adb->sql_escape_string($only_for_user);
 			}
 		} 
 	}

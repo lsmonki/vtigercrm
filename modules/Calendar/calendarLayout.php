@@ -1375,8 +1375,9 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	$list_query = $query." AND vtiger_crmentity.smownerid = "  . $current_user->id;
 
 	// User Select Customization: Changes should made also in (Appointment::readAppointment)
-	$query .= calendarview_getSelectedUserFilterQuerySuffix();
-	$count_query .= calendarview_getSelectedUserFilterQuerySuffix();
+	$query_filter_prefix = calendarview_getSelectedUserFilterQuerySuffix();
+	$query .= $query_filter_prefix;
+	$count_query .= $query_filter_prefix;
 	// END
 
 	$params = $info_params = array($start_date, $end_date, $start_date, $end_date, $start_date, $end_date, $start_date, $end_date);
