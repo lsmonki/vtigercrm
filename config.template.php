@@ -33,6 +33,7 @@ $PORTAL_URL = 'http://vtiger.com/customerportal';
 // helpdesk support email id and support name (Example: 'support@vtiger.com' and 'vtiger support')
 $HELPDESK_SUPPORT_EMAIL_ID = '_USER_SUPPORT_EMAIL_';
 $HELPDESK_SUPPORT_NAME = 'your-support name';
+$HELPDESK_SUPPORT_EMAIL_REPLY_ID = $HELPDESK_SUPPORT_EMAIL_ID;
 
 /* database configuration
       db_server
