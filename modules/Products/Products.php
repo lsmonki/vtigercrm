@@ -1183,9 +1183,8 @@ class Products extends CRMEntity {
 		$query .= " left join vtiger_products on vtiger_products.productid = $tmpname.$secfieldname
 			LEFT JOIN (
 				SELECT vtiger_products.productid, 
-						(CASE WHEN (vtiger_products.currency_id = " . $current_user->currency_id . " ) THEN vtiger_products.unit_price
-							WHEN (vtiger_productcurrencyrel.actual_price IS NOT NULL) THEN vtiger_productcurrencyrel.actual_price
-							ELSE (vtiger_products.unit_price / vtiger_currency_info.conversion_rate) * ". $current_user->conv_rate . " END
+						(CASE WHEN (vtiger_products.currency_id = 1 ) THEN vtiger_products.unit_price
+							ELSE (vtiger_products.unit_price / vtiger_currency_info.conversion_rate) END
 						) AS actual_unit_price
 				FROM vtiger_products
 				LEFT JOIN vtiger_currency_info ON vtiger_products.currency_id = vtiger_currency_info.id

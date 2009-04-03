@@ -36,7 +36,7 @@ class ReportRun extends CRMEntity
 	var $convert_currency = array('Potentials_Amount', 'Accounts_Annual_Revenue', 'Leads_Annual_Revenue', 'Campaigns_Budget_Cost', 
 									'Campaigns_Actual_Cost', 'Campaigns_Expected_Revenue', 'Campaigns_Actual_ROI', 'Campaigns_Expected_ROI');
 	//var $add_currency_sym_in_headers = array('Amount', 'Unit_Price', 'Total', 'Sub_Total', 'S&H_Amount', 'Discount_Amount', 'Adjustment');
-	var $append_currency_symbol_to_value = array('Products_Unit_Price', 
+	var $append_currency_symbol_to_value = array('Products_Unit_Price','Services_Price', 
 						'Invoice_Total', 'Invoice_Sub_Total', 'Invoice_S&H_Amount', 'Invoice_Discount_Amount', 'Invoice_Adjustment', 
 						'Quotes_Total', 'Quotes_Sub_Total', 'Quotes_S&H_Amount', 'Quotes_Discount_Amount', 'Quotes_Adjustment', 
 						'SalesOrder_Total', 'SalesOrder_Sub_Total', 'SalesOrder_S&H_Amount', 'SalesOrder_Discount_Amount', 'SalesOrder_Adjustment', 
@@ -1336,9 +1336,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_potential as vtiger_potentialRelProducts on vtiger_potentialRelProducts.potentialid = vtiger_seproductsrel.crmid 
 				LEFT JOIN (
 						SELECT vtiger_products.productid, 
-								(CASE WHEN (vtiger_products.currency_id = " . $current_user->currency_id . " ) THEN vtiger_products.unit_price
-									WHEN (vtiger_productcurrencyrel.actual_price IS NOT NULL) THEN vtiger_productcurrencyrel.actual_price
-									ELSE (vtiger_products.unit_price / vtiger_currency_info.conversion_rate) * ". $current_user->conv_rate . " END
+								(CASE WHEN (vtiger_products.currency_id = 1 ) THEN vtiger_products.unit_price
+									ELSE (vtiger_products.unit_price / vtiger_currency_info.conversion_rate) END
 								) AS actual_unit_price
 						FROM vtiger_products
 						LEFT JOIN vtiger_currency_info ON vtiger_products.currency_id = vtiger_currency_info.id
@@ -1706,7 +1705,11 @@ class ReportRun extends CRMEntity
 					{
 						$fld = $adb->field_name($result, $i);
 						$fld_type = $column_definitions[$i]->type;
-							if (in_array($fld->name, $this->convert_currency)) {
+						if($fld->table!='' && $fld->name!=''){
+							$uitype_result = $adb->pquery("SELECT uitype from vtiger_field WHERE tablename = ? AND fieldlabel=?",array($fld->table,$fld->name));
+							$uitype_value = $adb->query_result($uitype_result,0,"uitype");
+						}
+						if (in_array($fld->name, $this->convert_currency) || $uitype_value==71) {
 								if($custom_field_values[$i]!='')
 									$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
 								else
@@ -1947,11 +1950,11 @@ class ReportRun extends CRMEntity
 					$custom_field_values = $adb->fetch_array($result);
 
 					$coltotalhtml .= "<table align='center' width='60%' cellpadding='3' cellspacing='0' border='0' class='rptTable'><tr><td class='rptCellLabel'>".$mod_strings[Totals]."</td><td class='rptCellLabel'>".$mod_strings[SUM]."</td><td class='rptCellLabel'>".$mod_strings[AVG]."</td><td class='rptCellLabel'>".$mod_strings[MIN]."</td><td class='rptCellLabel'>".$mod_strings[MAX]."</td></tr>";
-
 					foreach($this->totallist as $key=>$value)
 					{
 						$fieldlist = explode(":",$key);
 						$mod_query = $adb->pquery("SELECT distinct(tabid) as tabid from vtiger_field where tablename = ?",array($fieldlist[1]));
+						$uitype_result = $adb->pquery("SELECT uitype from vtiger_field WHERE tablename = ? AND columnname=?",array($fieldlist[1],$fieldlist[2]));
 						if($adb->num_rows($mod_query)>0){
 							$module_name = getTabName($adb->query_result($mod_query,0,'tabid'));
 							if($module_name){
@@ -1960,9 +1963,9 @@ class ReportRun extends CRMEntity
 								$field = getTranslatedString(str_replace($escapedchars," ",$fieldlist[3]));
 							}
 						}
+						$uitype_arr[str_replace($escapedchars," ",$fieldlist[3])] = $adb->query_result($uitype_result,0,"uitype");
 						$totclmnflds[str_replace($escapedchars," ",$fieldlist[3])] = $field;
 					}
-
 					for($i =0;$i<$y;$i++)
 					{
 						$fld = $adb->field_name($result, $i);
@@ -1975,7 +1978,7 @@ class ReportRun extends CRMEntity
 						$col_header = getTranslatedString(trim(str_replace($modules," ",$value)));
 						$fld_name_1 = $this->primarymodule . "_" . trim($value);
 						$fld_name_2 = $this->secondarymodule . "_" . trim($value);
-						if(in_array($fld_name_1,$this->convert_currency) || in_array($fld_name_1,$this->append_currency_symbol_to_value)
+						if($uitype_arr[$value]==71 || in_array($fld_name_1,$this->convert_currency) || in_array($fld_name_1,$this->append_currency_symbol_to_value)
 								|| in_array($fld_name_2,$this->convert_currency) || in_array($fld_name_2,$this->append_currency_symbol_to_value)) {
 							$col_header .= " (".$app_strings['LBL_IN']." ".$current_user->currency_symbol.")";
 							$convert_price = true;
@@ -2369,9 +2372,13 @@ class ReportRun extends CRMEntity
 						// Query needs to be rebuild to get the value in user preferred currency. [innerProduct and actual_unit_price are table and column alias.]
 						$field =  " innerProduct.actual_unit_price"; 
 					}
+					if($field_tablename == 'vtiger_service' && $field_columnname == 'unit_price') {
+						// Query needs to be rebuild to get the value in user preferred currency. [innerProduct and actual_unit_price are table and column alias.]
+						$field =  " innerService.actual_unit_price"; 
+					}
 					if(($field_tablename == 'vtiger_invoice' || $field_tablename == 'vtiger_quotes' || $field_tablename == 'vtiger_purchaseorder' || $field_tablename == 'vtiger_salesorder')
 							&& ($field_columnname == 'total' || $field_columnname == 'subtotal' || $field_columnname == 'discount_amount' || $field_columnname == 's_h_amount')) {
-						$field =  " $field_tablename.$field_columnname/$field_tablename.conversion_rate*". $current_user->conv_rate;
+						$field =  " $field_tablename.$field_columnname/$field_tablename.conversion_rate ";
 					}
 					if($fieldlist[4] == 2)
 					{

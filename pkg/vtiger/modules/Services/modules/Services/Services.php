@@ -939,6 +939,35 @@ class Services extends CRMEntity {
 	}
 
 	/*
+	 * Function to get the primary query part of a report 
+	 * @param - $module primary module name
+	 * returns the query string formed on fetching the related data for report for secondary module
+	 */
+	function generateReportsQuery($module){
+		global $current_user;
+			$query = "from vtiger_service 
+				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_service.serviceid 
+				left join vtiger_servicecf on vtiger_service.serviceid = vtiger_servicecf.serviceid 
+				left join vtiger_users as vtiger_usersServices on vtiger_usersServices.id = vtiger_service.handler 
+				left join vtiger_seproductsrel on vtiger_seproductsrel.productid= vtiger_service.serviceid 
+				left join vtiger_crmentity as vtiger_crmentityRelServices on vtiger_crmentityRelServices.crmid = vtiger_seproductsrel.crmid and vtiger_crmentityRelServices.deleted = 0   
+				left join vtiger_account as vtiger_accountRelServices on vtiger_accountRelServices.accountid=vtiger_seproductsrel.crmid
+				left join vtiger_leaddetails as vtiger_leaddetailsRelServices on vtiger_leaddetailsRelServices.leadid = vtiger_seproductsrel.crmid
+				left join vtiger_potential as vtiger_potentialRelServices on vtiger_potentialRelServices.potentialid = vtiger_seproductsrel.crmid 
+				LEFT JOIN (
+					SELECT vtiger_service.serviceid, 
+							(CASE WHEN (vtiger_service.currency_id = 1 ) THEN vtiger_service.unit_price
+								ELSE (vtiger_service.unit_price / vtiger_currency_info.conversion_rate) END
+							) AS actual_unit_price
+					FROM vtiger_service
+					LEFT JOIN vtiger_currency_info ON vtiger_service.currency_id = vtiger_currency_info.id
+					LEFT JOIN vtiger_productcurrencyrel ON vtiger_service.serviceid = vtiger_productcurrencyrel.productid
+					AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . "
+				) AS innerService ON innerService.serviceid = vtiger_service.serviceid";
+			return $query;	
+	}
+	
+	/*
 	 * Function to get the secondary query part of a report 
 	 * @param - $module primary module name
 	 * @param - $secmodule secondary module name
