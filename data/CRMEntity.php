@@ -1170,6 +1170,14 @@ $log->info("in getOldFileName  ".$notesid);
 	}
 	
 	/**
+	 * Function invoked during export of module record value.
+	 */
+	function transform_export_value($key, $value) {
+		// NOTE: The sub-class can override this function as required.
+		return $value;
+	}
+	
+	/**
 	* Function to initialize the importable fields array, based on the User's accessibility to the fields
 	*/
 	function initImportableFields($module) {		

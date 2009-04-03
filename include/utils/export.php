@@ -234,7 +234,9 @@ function export($type){
 				}
 				array_push($new_arr,$value);
 			}elseif($key != "user_name"){
-				// No conversions are required here. We need to send the data to csv file as it comes from database.
+				// Let us provide the module to transform the value before we save it to CSV file
+				$value = $focus->transform_export_value($key, $value);
+				
 				array_push($new_arr, preg_replace("/\"/","\"\"",$value));
 			}	
 		}
@@ -248,7 +250,7 @@ function export($type){
 }
 
 $content = export($_REQUEST['module']);
-$log->fatal(htmlentities($content));
+
 header("Content-Disposition:attachment;filename={$_REQUEST['module']}.csv");
 header("Content-Type:text/csv;charset=UTF-8");
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT" );

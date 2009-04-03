@@ -283,6 +283,13 @@ class ModuleClass extends CRMEntity {
 		}
 		return $count;
 	}
+	
+	/**
+	 * Transform the value while exporting
+	 */
+	function transform_export_value($key, $value) {
+		return parent::transform_export_value($key, $value);
+	}
 
 	/**
 	 * Function which will set the assigned user id for import record.
