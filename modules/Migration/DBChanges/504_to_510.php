@@ -24,7 +24,9 @@ ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_eventhandlers (eventhandler_id i
 ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_eventhandler_module(eventhandler_module_id int, module_name VARCHAR(100), handler_class VARCHAR(100), PRIMARY KEY(eventhandler_module_id))");
 
 /* Added new column actions to vtiger_relatedlists which tracks the type of actions allowed for that related list */
-ExecuteQuery("alter table vtiger_relatedlists add column actions VARCHAR(50) default ''");
+if(!in_array('actions', $adb->getColumnNames('vtiger_relatedlists'))) {
+	ExecuteQuery("alter table vtiger_relatedlists add column actions VARCHAR(50) default ''");
+}
 
 $accounts_tab_id = getTabid('Accounts');
 $contacts_tab_id = getTabid('Contacts');
@@ -207,7 +209,7 @@ ExecuteQuery("INSERT INTO vtiger_reminder_interval values(".$adb->getUniqueId("v
 ExecuteQuery("UPDATE vtiger_users SET reminder_interval='5 Minutes', reminder_next_time='".date('Y-m-d H:i')."'");
 $user_adv_block_id = $adb->getUniqueID('vtiger_blocks');
 ExecuteQuery("insert into vtiger_blocks values (".$user_adv_block_id.",29,'LBL_USER_ADV_OPTIONS',5,0,0,0,0,0)"); //Added a New Block User Image Info in Users Module
-ExecuteQuery("insert into vtiger_field values (29,".$adb->getUniqueID("vtiger_field").",'reminder_interval','vtiger_users',1,'16','reminder_interval','Reminder Interval',1,0,0,100,1,$user_adv_block_id,1,'V~O',1,null,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values (29,".$adb->getUniqueID("vtiger_field").",'reminder_interval','vtiger_users',1,'16','reminder_interval','Reminder Interval',1,0,0,100,1,$user_adv_block_id,1,'V~O',1,null,'BAS')");
 
 /* For Duplicate Records Merging feature */
 ExecuteQuery("INSERT INTO vtiger_actionmapping values(10,'DuplicatesHandling',0)");
@@ -286,41 +288,41 @@ ExecuteQuery("alter table vtiger_quotes drop column currency");
 ExecuteQuery("alter table vtiger_quotes add column currency_id int(19) not null default '1'");
 ExecuteQuery("alter table vtiger_quotes add column conversion_rate decimal(10,3) not null default '1.000'");
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values(20,$field_id,'currency_id','vtiger_quotes','1','117','currency_id','Currency','1','0','1','100','21','51','3','I~O','1',null,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values(20,$field_id,'currency_id','vtiger_quotes','1','117','currency_id','Currency','1','0','1','100','21','51','3','I~O','1',null,'BAS')");
 addFieldSecurity(20,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values(20,$field_id,'conversion_rate','vtiger_quotes','1','1','conversion_rate','Conversion Rate','1','0','1','100','22','51','3','N~O','1',null,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values(20,$field_id,'conversion_rate','vtiger_quotes','1','1','conversion_rate','Conversion Rate','1','0','1','100','22','51','3','N~O','1',null,'BAS')");
 addFieldSecurity(20,$field_id);
 
 ExecuteQuery("alter table vtiger_purchaseorder add column currency_id int(19) not null default '1'");
 ExecuteQuery("alter table vtiger_purchaseorder add column conversion_rate decimal(10,3) not null default '1.000'");
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values(21,$field_id,'currency_id','vtiger_purchaseorder','1','117','currency_id','Currency','1','0','1','100','18','57','3','I~O','1',null,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values(21,$field_id,'currency_id','vtiger_purchaseorder','1','117','currency_id','Currency','1','0','1','100','18','57','3','I~O','1',null,'BAS')");
 addFieldSecurity(21,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values(21,$field_id,'conversion_rate','vtiger_purchaseorder','1','1','conversion_rate','Conversion Rate','1','0','1','100','19','57','3','N~O','1',null,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values(21,$field_id,'conversion_rate','vtiger_purchaseorder','1','1','conversion_rate','Conversion Rate','1','0','1','100','19','57','3','N~O','1',null,'BAS')");
 addFieldSecurity(21,$field_id);
 
 ExecuteQuery("alter table vtiger_salesorder add column currency_id int(19) not null default '1'");
 ExecuteQuery("alter table vtiger_salesorder add column conversion_rate decimal(10,3) not null default '1.000'");
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values(22,$field_id,'currency_id','vtiger_salesorder','1','117','currency_id','Currency','1','0','1','100','19','63','3','I~O','1',null,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values(22,$field_id,'currency_id','vtiger_salesorder','1','117','currency_id','Currency','1','0','1','100','19','63','3','I~O','1',null,'BAS')");
 addFieldSecurity(22,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values(22,$field_id,'conversion_rate','vtiger_salesorder','1','1','conversion_rate','Conversion Rate','1','0','1','100','20','63','3','N~O','1',null,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values(22,$field_id,'conversion_rate','vtiger_salesorder','1','1','conversion_rate','Conversion Rate','1','0','1','100','20','63','3','N~O','1',null,'BAS')");
 addFieldSecurity(22,$field_id);
 
 ExecuteQuery("alter table vtiger_invoice add column currency_id int(19) not null default '1'");
 ExecuteQuery("alter table vtiger_invoice add column conversion_rate decimal(10,3) not null default '1.000'");
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values(23,$field_id,'currency_id','vtiger_invoice','1','117','currency_id','Currency','1','0','1','100','18','69','3','I~O','1',null,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values(23,$field_id,'currency_id','vtiger_invoice','1','117','currency_id','Currency','1','0','1','100','18','69','3','I~O','1',null,'BAS')");
 addFieldSecurity(23,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values(23,$field_id,'conversion_rate','vtiger_invoice','1','1','conversion_rate','Conversion Rate','1','0','1','100','19','69','3','N~O','1',null,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values(23,$field_id,'conversion_rate','vtiger_invoice','1','1','conversion_rate','Conversion Rate','1','0','1','100','19','69','3','N~O','1',null,'BAS')");
 addFieldSecurity(23,$field_id);
 
 // Update Price Book related tables
@@ -329,7 +331,7 @@ ExecuteQuery("alter table vtiger_pricebook add column currency_id int(19) not nu
 ExecuteQuery("alter table vtiger_pricebookproductrel add column usedcurrency int(11) not null default '1'");
 $pb_currency_field_id = $adb->getUniqueID('vtiger_field');
 $pb_tab_id = getTabid('PriceBooks');
-$adb->query("insert into vtiger_field values($pb_tab_id,$pb_currency_field_id,'currency_id','vtiger_pricebook','1','117','currency_id','Currency','1','0','0','100','5','48','1','I~M','0','3','BAS')");
+$adb->query("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values($pb_tab_id,$pb_currency_field_id,'currency_id','vtiger_pricebook','1','117','currency_id','Currency','1','0','0','100','5','48','1','I~M','0','3','BAS')");
 $adb->query("insert into vtiger_cvcolumnlist values('23','2','vtiger_pricebook:currency_id:currency_id:PriceBooks_Currency:I')");
 addFieldSecurity($pb_tab_id,$pb_currency_field_id);
 
@@ -435,14 +437,14 @@ ExecuteQuery("update vtiger_field set sequence=9,quickcreate=3 where tabid=$docu
 ExecuteQuery("update vtiger_field set sequence=1,quickcreate=1,presence=2,block=$desc where tabid=$documents_tab_id and columnname='notecontent'");
 ExecuteQuery("update vtiger_field set sequence = 3,quickcreate=3,block = $file_block_id,fieldlabel='File Name',displaytype = 1,uitype=28  where tabid = $documents_tab_id and columnname = 'filename'");
 
-ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[0].",'smownerid','vtiger_crmentity',1,53,'assigned_user_id','Assigned To',1,0,0,100,2,17,1,'V~M',0,3,'BAS')");
-ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[1].",'filetype','vtiger_notes',1,1,'filetype','File Type',1,2,0,100,5,$file_block_id,2,'V~O',3,'','BAS')");
-ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[2].",'filesize','vtiger_notes',1,1,'filesize','File Size',1,2,0,100,4,$file_block_id,2,'V~O',3,'','BAS')");
-ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[3].",'filelocationtype','vtiger_notes',1,27,'filelocationtype','Download Type',1,0,0,100,1,$file_block_id,1,'V~O',1,'','BAS')");
-ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[4].",'fileversion','vtiger_notes',1,1,'fileversion','Version',1,2,0,100,6,17,1,'V~O',1,'','BAS')");
-ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[5].",'filestatus','vtiger_notes',1,56,'filestatus','Active',1,2,0,100,2,$file_block_id,1,'V~O',1,'','BAS')");
-ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[6].",'filedownloadcount','vtiger_notes',1,1,'filedownloadcount','Download Count',1,2,0,100,6,$file_block_id,2,'I~O',3,'','BAS')");
-ExecuteQuery("insert into vtiger_field values ($documents_tab_id,".$fieldid[7].",'folderid','vtiger_notes',1,26,'folderid','Folder Name',1,2,0,100,4,17,1,'V~O',2,'2','BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values ($documents_tab_id,".$fieldid[0].",'smownerid','vtiger_crmentity',1,53,'assigned_user_id','Assigned To',1,0,0,100,2,17,1,'V~M',0,3,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values ($documents_tab_id,".$fieldid[1].",'filetype','vtiger_notes',1,1,'filetype','File Type',1,2,0,100,5,$file_block_id,2,'V~O',3,'','BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values ($documents_tab_id,".$fieldid[2].",'filesize','vtiger_notes',1,1,'filesize','File Size',1,2,0,100,4,$file_block_id,2,'V~O',3,'','BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values ($documents_tab_id,".$fieldid[3].",'filelocationtype','vtiger_notes',1,27,'filelocationtype','Download Type',1,0,0,100,1,$file_block_id,1,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values ($documents_tab_id,".$fieldid[4].",'fileversion','vtiger_notes',1,1,'fileversion','Version',1,2,0,100,6,17,1,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values ($documents_tab_id,".$fieldid[5].",'filestatus','vtiger_notes',1,56,'filestatus','Active',1,2,0,100,2,$file_block_id,1,'V~O',1,'','BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values ($documents_tab_id,".$fieldid[6].",'filedownloadcount','vtiger_notes',1,1,'filedownloadcount','Download Count',1,2,0,100,6,$file_block_id,2,'I~O',3,'','BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values ($documents_tab_id,".$fieldid[7].",'folderid','vtiger_notes',1,26,'folderid','Folder Name',1,2,0,100,4,17,1,'V~O',2,'2','BAS')");
 
 for($i=0;$i<count($fieldid);$i++)
 {
@@ -726,27 +728,27 @@ ExecuteQuery("INSERT INTO vtiger_payment_duration values(".$adb->getUniqueID('vt
 // Add fields for the Recurring Information block
 $salesorder_tabid = getTabid('SalesOrder');
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'enable_recurring','vtiger_salesorder',1,'56','enable_recurring','Enable Recurring',1,0,0,100,1,$new_block_id,1,'C~O',3,null,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values($salesorder_tabid,$field_id,'enable_recurring','vtiger_salesorder',1,'56','enable_recurring','Enable Recurring',1,0,0,100,1,$new_block_id,1,'C~O',3,null,'BAS')");
 addFieldSecurity($salesorder_tabid,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'recurring_frequency','vtiger_invoice_recurring_info',1,'16','recurring_frequency','Frequency',1,0,0,100,2,$new_block_id,1,'V~O',3,null,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values($salesorder_tabid,$field_id,'recurring_frequency','vtiger_invoice_recurring_info',1,'16','recurring_frequency','Frequency',1,0,0,100,2,$new_block_id,1,'V~O',3,null,'BAS')");
 addFieldSecurity($salesorder_tabid,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'start_period','vtiger_invoice_recurring_info',1,'5','start_period','Start Period',1,0,0,100,3,$new_block_id,1,'D~O',3,null,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values($salesorder_tabid,$field_id,'start_period','vtiger_invoice_recurring_info',1,'5','start_period','Start Period',1,0,0,100,3,$new_block_id,1,'D~O',3,null,'BAS')");
 addFieldSecurity($salesorder_tabid,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'end_period','vtiger_invoice_recurring_info',1,'5','end_period','End Period',1,0,0,100,4,$new_block_id,1,'D~O',3,null,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values($salesorder_tabid,$field_id,'end_period','vtiger_invoice_recurring_info',1,'5','end_period','End Period',1,0,0,100,4,$new_block_id,1,'D~O',3,null,'BAS')");
 addFieldSecurity($salesorder_tabid,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'payment_duration','vtiger_invoice_recurring_info',1,'16','payment_duration','Payment Duration',1,0,0,100,5,$new_block_id,1,'V~O',3,null,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values($salesorder_tabid,$field_id,'payment_duration','vtiger_invoice_recurring_info',1,'16','payment_duration','Payment Duration',1,0,0,100,5,$new_block_id,1,'V~O',3,null,'BAS')");
 addFieldSecurity($salesorder_tabid,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values($salesorder_tabid,$field_id,'invoice_status','vtiger_invoice_recurring_info',1,'15','invoicestatus','Invoice Status',1,0,0,100,6,$new_block_id,1,'V~O',3,null,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values($salesorder_tabid,$field_id,'invoice_status','vtiger_invoice_recurring_info',1,'15','invoicestatus','Invoice Status',1,0,0,100,6,$new_block_id,1,'V~O',3,null,'BAS')");
 addFieldSecurity($salesorder_tabid,$field_id);
 
 // Add new picklist value 'AutoCreated' for Invoice Status and add the same for all the existing roles.
@@ -868,59 +870,59 @@ custom_addInventoryRows(
 // Add Module Number Field to UI.						
 
 $blockid = getBlockId(6,'LBL_ACCOUNT_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (6,".$adb->getUniqueID("vtiger_field").",'account_no','vtiger_account',1,'4','account_no','Account No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable) values (6,".$adb->getUniqueID("vtiger_field").",'account_no','vtiger_account',1,'4','account_no','Account No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_account ADD COLUMN account_no varchar(100) not null");
 
 $blockid = getBlockId(7,'LBL_LEAD_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (7,".$adb->getUniqueID("vtiger_field").",'lead_no','vtiger_leaddetails',1,'4','lead_no','Lead No',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable) values (7,".$adb->getUniqueID("vtiger_field").",'lead_no','vtiger_leaddetails',1,'4','lead_no','Lead No',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_leaddetails ADD COLUMN lead_no varchar(100) not null");
 
 $blockid = getBlockId(4,'LBL_CONTACT_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (4,".$adb->getUniqueID("vtiger_field").",'contact_no','vtiger_contactdetails',1,'4','contact_no','Contact Id',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");		
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable) values (4,".$adb->getUniqueID("vtiger_field").",'contact_no','vtiger_contactdetails',1,'4','contact_no','Contact Id',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");		
 ExecuteQuery("ALTER TABLE vtiger_contactdetails ADD COLUMN contact_no varchar(100) not null");
 
 $blockid = getBlockId(2,'LBL_OPPORTUNITY_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (2,".$adb->getUniqueID("vtiger_field").",'potential_no','vtiger_potential',1,'4','potential_no','Potential No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable) values (2,".$adb->getUniqueID("vtiger_field").",'potential_no','vtiger_potential',1,'4','potential_no','Potential No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_potential ADD COLUMN potential_no varchar(100) not null");
 
 $blockid = getBlockId(26,'LBL_CAMPAIGN_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (26,".$adb->getUniqueID("vtiger_field").",'campaign_no','vtiger_campaign',1,'4','campaign_no','Campaign No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable) values (26,".$adb->getUniqueID("vtiger_field").",'campaign_no','vtiger_campaign',1,'4','campaign_no','Campaign No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_campaign ADD COLUMN campaign_no varchar(100) not null");
 
 $blockid = getBlockId(13,'LBL_TICKET_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (13,".$adb->getUniqueID("vtiger_field").",'ticket_no','vtiger_troubletickets',1,'4','ticket_no','Ticket No',1,0,0,100,1,$blockid,1,'V~O',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable) values (13,".$adb->getUniqueID("vtiger_field").",'ticket_no','vtiger_troubletickets',1,'4','ticket_no','Ticket No',1,0,0,100,1,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_troubletickets ADD COLUMN ticket_no varchar(100) not null");
 
 $blockid = getBlockId(14,'LBL_PRODUCT_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (14,".$adb->getUniqueID("vtiger_field").",'product_no','vtiger_products',1,'4','product_no','Product No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable) values (14,".$adb->getUniqueID("vtiger_field").",'product_no','vtiger_products',1,'4','product_no','Product No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_products ADD COLUMN product_no varchar(100) not null");
 
 $blockid = getBlockId(8,'LBL_NOTE_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (8,".$adb->getUniqueID("vtiger_field").",'note_no','vtiger_notes',1,'4','note_no','Document No',1,0,0,100,7,$blockid,1,'V~O',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable) values (8,".$adb->getUniqueID("vtiger_field").",'note_no','vtiger_notes',1,'4','note_no','Document No',1,0,0,100,7,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_notes ADD COLUMN note_no varchar(100) not null");
 
 $blockid = getBlockId(15,'LBL_FAQ_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (15,".$adb->getUniqueID("vtiger_field").",'faq_no','vtiger_faq',1,'4','faq_no','Faq No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable) values (15,".$adb->getUniqueID("vtiger_field").",'faq_no','vtiger_faq',1,'4','faq_no','Faq No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_faq ADD COLUMN faq_no varchar(100) not null");
 
 $blockid = getBlockId(18,'LBL_VENDOR_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (18,".$adb->getUniqueID("vtiger_field").",'vendor_no','vtiger_vendor',1,'4','vendor_no','Vendor No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable) values (18,".$adb->getUniqueID("vtiger_field").",'vendor_no','vtiger_vendor',1,'4','vendor_no','Vendor No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_vendor ADD COLUMN vendor_no varchar(100) not null");
 
 $blockid = getBlockId(19,'LBL_PRICEBOOK_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (19,".$adb->getUniqueID("vtiger_field").",'pricebook_no','vtiger_pricebook',1,'4','pricebook_no','PriceBook No',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable) values (19,".$adb->getUniqueID("vtiger_field").",'pricebook_no','vtiger_pricebook',1,'4','pricebook_no','PriceBook No',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_pricebook ADD COLUMN pricebook_no varchar(100) not null");
 
 $blockid = getBlockId(22,'LBL_SO_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (22,".$adb->getUniqueID("vtiger_field").",'salesorder_no','vtiger_salesorder',1,'4','salesorder_no','SalesOrder No',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable) values (22,".$adb->getUniqueID("vtiger_field").",'salesorder_no','vtiger_salesorder',1,'4','salesorder_no','SalesOrder No',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_salesorder ADD COLUMN salesorder_no varchar(100) not null");
 
 $blockid = getBlockId(21,'LBL_PO_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (21,".$adb->getUniqueID("vtiger_field").",'purchaseorder_no','vtiger_purchaseorder',1,'4','purchaseorder_no','PurchaseOrder No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable) values (21,".$adb->getUniqueID("vtiger_field").",'purchaseorder_no','vtiger_purchaseorder',1,'4','purchaseorder_no','PurchaseOrder No',1,0,0,100,2,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_purchaseorder ADD COLUMN purchaseorder_no varchar(100) not null");
 
 $blockid = getBlockId(20,'LBL_QUOTE_INFORMATION');
-ExecuteQuery("insert into vtiger_field values (20,".$adb->getUniqueID("vtiger_field").",'quote_no','vtiger_quotes',1,'4','quote_no','Quote No',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable) values (20,".$adb->getUniqueID("vtiger_field").",'quote_no','vtiger_quotes',1,'4','quote_no','Quote No',1,0,0,100,3,$blockid,1,'V~O',1,null,'BAS',0)");
 ExecuteQuery("ALTER TABLE vtiger_quotes ADD COLUMN quote_no varchar(100) not null");
 
      
@@ -1213,11 +1215,11 @@ for($i=0; $i<$num_rows; $i++) {
 		$sql1_res = $adb->query("select crmid as entityid from vtiger_seattachmentsrel where attachmentsid = ".$crmid);
 		if($adb->num_rows($sql1_res)>0){
 			$se_recordid = $adb->query_result($sql1_res, 0, 'entityid');
-		}
 		
-		$groupid_res = $adb->query("select smownerid from vtiger_crmentity where crmid = ".$se_recordid);
-		if($adb->num_rows($groupid_res)>0){
-			$groupid = $adb->query_result($groupid_res, 0, 'smownerid');
+			$groupid_res = $adb->query("select smownerid from vtiger_crmentity where crmid = ".$se_recordid);
+			if($adb->num_rows($groupid_res)>0){
+				$groupid = $adb->query_result($groupid_res, 0, 'smownerid');
+			}
 		}
 	}
 	// Case when due to some data inconsistency, smownerid is set to 0 but there is not group relation for it stored
@@ -1255,7 +1257,9 @@ $adb->query("ALTER TABLE vtiger_pricebookproductrel DROP FOREIGN KEY fk_2_vtiger
 ExecuteQuery("CREATE INDEX link_tabidtype_idx ON vtiger_links(tabid,linktype)");*/
 
 /* Column added to vtiger_tab to track the version of the module */
-ExecuteQuery("ALTER TABLE vtiger_tab ADD COLUMN version VARCHAR(10)");
+if(!in_array('version', $adb->getColumnNames('vtiger_tab'))) {
+	ExecuteQuery("ALTER TABLE vtiger_tab ADD COLUMN version VARCHAR(10)");
+}
 
 /*adding the notebook to vtiger*/
 ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_notebook_contents (userid int(19) not null, notebookid int(19), contents text)");
@@ -1458,7 +1462,7 @@ ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_email_access(crmid INT, mailid I
 ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_email_track(crmid INT, mailid INT, access_count INT, primary key(crmid, mailid))");
 
 $fieldid = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("INSERT INTO vtiger_field VALUES ('10',".$fieldid.", 'access_count', 'vtiger_email_track', '1', '25', 'access_count', 'Access Count', '1', '0', '0', '100', '6', '21', '3', 'V~O', '1', NULL, 'BAS', 0)");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable) VALUES ('10',".$fieldid.", 'access_count', 'vtiger_email_track', '1', '25', 'access_count', 'Access Count', '1', '0', '0', '100', '6', '21', '3', 'V~O', '1', NULL, 'BAS', 0)");
 addFieldSecurity(10, $fieldid, 'false');
 // END
 
@@ -1488,10 +1492,12 @@ ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_inventorysubproductrel(id int(19
 ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_activitycf(activityid INT default '0' primary key)");
 ExecuteQuery("insert into vtiger_blocks values (".$adb->getUniqueID('vtiger_blocks').",9,'LBL_CUSTOM_INFORMATION',3,0,0,0,0,0,1)");
 ExecuteQuery("insert into vtiger_blocks values (".$adb->getUniqueID('vtiger_blocks').",16,'LBL_CUSTOM_INFORMATION',4,0,0,0,0,0,1)");
-ExecuteQuery("insert into vtiger_field values (16,".$adb->getUniqueID('vtiger_field').",'contactid','vtiger_cntactivityrel',1,'57','contact_id','Contact Name',1,0,0,100,1,19,1,'I~O',1,null,'BAS',1)");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable) values (16,".$adb->getUniqueID('vtiger_field').",'contactid','vtiger_cntactivityrel',1,'57','contact_id','Contact Name',1,0,0,100,1,19,1,'I~O',1,null,'BAS',1)");
 
 /* Added new field Help Info for vtiger_field table */
-ExecuteQuery("ALTER TABLE vtiger_field ADD COLUMN helpinfo TEXT");
+if(!in_array('helpinfo', $adb->getColumnNames('vtiger_field'))) {
+	ExecuteQuery("ALTER TABLE vtiger_field ADD COLUMN helpinfo TEXT");
+}
 
 /* Add Services and Service Contracts Module */
 
@@ -1500,13 +1506,13 @@ $helpDeskTabid = getTabid('HelpDesk');
 $ttBlockid = getBlockId($helpDeskTabid,'LBL_TICKET_INFORMATION');
 
 $tt_field1 = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values ($helpDeskTabid,$tt_field1,'hours','vtiger_troubletickets',1,'1','hours','Hours',1,0,0,100,9,$ttBlockid,1,'I~O',1,null,'BAS',1,
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable, helpinfo) values ($helpDeskTabid,$tt_field1,'hours','vtiger_troubletickets',1,'1','hours','Hours',1,0,0,100,9,$ttBlockid,1,'I~O',1,null,'BAS',1,
 		'This gives the estimated hours for the Ticket<br> When the same ticket is added to a Service Contract, based on the Tracking Unit of the Service Contract, Used units is updated whenever a ticket is Closed.')");
 addFieldSecurity($helpDeskTabid, $tt_field1);
 ExecuteQuery("ALTER TABLE vtiger_troubletickets ADD COLUMN hours VARCHAR(200)");
 
 $tt_field2 = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field values ($helpDeskTabid,$tt_field2,'days','vtiger_troubletickets',1,'1','days','Days',1,0,0,100,10,$ttBlockid,1,'I~O',1,null,'BAS',1,
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable, helpinfo) values ($helpDeskTabid,$tt_field2,'days','vtiger_troubletickets',1,'1','days','Days',1,0,0,100,10,$ttBlockid,1,'I~O',1,null,'BAS',1,
 		'This gives the estimated days for the Ticket<br> When the same ticket is added to a Service Contract, based on the Tracking Unit of the Service Contract, Used units is updated whenever a ticket is Closed.')");
 addFieldSecurity($helpDeskTabid, $tt_field2);
 ExecuteQuery("ALTER TABLE vtiger_troubletickets ADD COLUMN days VARCHAR(200)");
@@ -1667,7 +1673,7 @@ function webserviceMigration(){
 	$fieldid = $adb->getUniqueID("vtiger_field");
 	$usersTabId = getTabid("Users");
 	$user_adv_block_id = getBlockId($usersTabId,'LBL_USER_ADV_OPTIONS');
-	ExecuteQuery("insert into vtiger_field values($usersTabId,$fieldid,'accesskey','vtiger_users',1,3,'accesskey','Webservice Access Key',1,0,0,100,2,$user_adv_block_id,2,'V~O',1,null,'BAS',0,'Webservice Access Key');");
+	ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable, helpinfo) values($usersTabId,$fieldid,'accesskey','vtiger_users',1,3,'accesskey','Webservice Access Key',1,0,0,100,2,$user_adv_block_id,2,'V~O',1,null,'BAS',0,'Webservice Access Key');");
 	
 	foreach($referenceMapping as $uitype=>$referenceArray){
 		$success = true;
@@ -1972,12 +1978,12 @@ Executequery("UPDATE vtiger_products set handler = 1 WHERE handler = 0");
 //Emails fields 
 $email_Tabid = getTabid('Emails');
 $blockid = $adb->getUniqueID('vtiger_blocks');
-$adb->query("INSERT INTO vtiger_field values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'from_email','vtiger_emaildetails',1,12,'from_email','From',1,2,0,100,1,$blockid,3,'V~M',3,NULL,'BAS',0,NULL)");
-$adb->query("INSERT INTO vtiger_field values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'to_email','vtiger_emaildetails',1,8,'saved_toid','To',1,2,0,100,2,$blockid,1,'V~M',3,NULL,'BAS',0,NULL)");
-$adb->query("INSERT INTO vtiger_field values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'cc_email','vtiger_emaildetails',1,8,'ccmail','CC',1,2,0,1000,3,$blockid,1,'V~O',3,NULL,'BAS',0,NULL)");		
-$adb->query("INSERT INTO vtiger_field values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'bcc_email','vtiger_emaildetails',1,8,'bccmail','BCC' ,1,2,0,1000,4,$blockid,1,'V~O',3,NULL,'BAS',0,NULL)");
-$adb->query("INSERT INTO vtiger_field values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'idlists','vtiger_emaildetails',1,1,'parent_id','Parent ID' ,1,2,0,1000,5,$blockid,3,'V~O',3,NULL,'BAS',0,NULL)");		
-$adb->query("INSERT INTO vtiger_field values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'email_flag','vtiger_emaildetails',1,16,'email_flag','Email Flag' ,1,2,0,1000,6,$blockid,3,'V~O',3,NULL,'BAS',0,NULL)");		
+$adb->query("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable, helpinfo) values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'from_email','vtiger_emaildetails',1,12,'from_email','From',1,2,0,100,1,$blockid,3,'V~M',3,NULL,'BAS',0,NULL)");
+$adb->query("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable, helpinfo) values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'to_email','vtiger_emaildetails',1,8,'saved_toid','To',1,2,0,100,2,$blockid,1,'V~M',3,NULL,'BAS',0,NULL)");
+$adb->query("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable, helpinfo) values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'cc_email','vtiger_emaildetails',1,8,'ccmail','CC',1,2,0,1000,3,$blockid,1,'V~O',3,NULL,'BAS',0,NULL)");		
+$adb->query("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable, helpinfo) values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'bcc_email','vtiger_emaildetails',1,8,'bccmail','BCC' ,1,2,0,1000,4,$blockid,1,'V~O',3,NULL,'BAS',0,NULL)");
+$adb->query("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable, helpinfo) values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'idlists','vtiger_emaildetails',1,1,'parent_id','Parent ID' ,1,2,0,1000,5,$blockid,3,'V~O',3,NULL,'BAS',0,NULL)");		
+$adb->query("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable, helpinfo) values($email_Tabid,".$adb->getUniqueID("vtiger_field").",'email_flag','vtiger_emaildetails',1,16,'email_flag','Email Flag' ,1,2,0,1000,6,$blockid,3,'V~O',3,NULL,'BAS',0,NULL)");		
 
 require_once('include/Zend/Json.php');
 $json = new Zend_Json();
