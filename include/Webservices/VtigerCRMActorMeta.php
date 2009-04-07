@@ -240,12 +240,12 @@ class VtigerCRMActorMeta extends EntityMeta {
 	
 	public function getNameFields(){
 		$query = "select name_fields from vtiger_ws_entity_name where entity_id = ?";
-		$result = $this->pearDB->pquery($query, array($this->getTabId()));
+		$result = $this->pearDB->pquery($query, array($this->objectId));
 		$fieldNames = '';
 		if($result){
 			$rowCount = $this->pearDB->num_rows($result);
 			if($rowCount > 0){
-				$fieldNames = $this->pearDB->query_result($result,0,'fieldname');
+				$fieldNames = $this->pearDB->query_result($result,0,'name_fields');
 			}
 		}
 		return $fieldNames;

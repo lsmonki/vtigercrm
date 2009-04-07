@@ -122,7 +122,7 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
 		$fields = $this->getModuleFields();
 		return array("label"=>$label,"name"=>$elementType,"createable"=>$createable,"updateable"=>$updateable,
 				"deleteable"=>$deleteable,"retrieveable"=>$retrieveable,"fields"=>$fields,
-				"idPrefix"=>$this->meta->getEntityId(),'isEntity'=>$this->isEntity,'name'=>$this->meta->getNameFields());
+				"idPrefix"=>$this->meta->getEntityId(),'isEntity'=>$this->isEntity,'labelFields'=>$this->meta->getNameFields());
 	}
 	
 	function getModuleFields(){
