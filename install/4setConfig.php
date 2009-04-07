@@ -104,7 +104,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	elseif (isset($dbconfig['db_name']) && $dbconfig['db_name']!='_DBC_NAME_')
 	$db_name = $dbconfig['db_name'];
 	else
-	$db_name = 'vtigercrm510';
+	$db_name = 'vtigercrm510VB2';
 
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 	if (isset($_REQUEST['host_name'])) $host_name = $_REQUEST['host_name'];
