@@ -1648,9 +1648,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			$sql="SELECT * FROM vtiger_contactdetails WHERE contactid=?";		
 			$result=$adb->pquery($sql, array($temp_val));
-			$name=getFullNameFromQResult($result,0,"Contacts");
-
-			$value= '<a href=index.php?module=Contacts&action=DetailView&record='.$temp_val.'>'.$name.'</a>';
+			$value = '';
+			if($adb->num_rows($result)) {
+				$name=getFullNameFromQResult($result,0,"Contacts");
+				$value= '<a href=index.php?module=Contacts&action=DetailView&record='.$temp_val.'>'.$name.'</a>';
+			}
 		}
 		else
 			$value='';
