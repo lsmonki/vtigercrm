@@ -60,6 +60,9 @@ function getObj(n,d) {
 
 	if(d.getElementById) {
 		x=d.getElementById(n);
+		// IE7 was returning form element with name = n (if there was multiple instance)
+		// But not firefox, so we are making a double check
+		if(x && x.id != n) x = false;
 	}
 
 	for(i=0;!x && i<d.forms.length;i++) {
