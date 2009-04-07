@@ -324,12 +324,11 @@
 {literal}
 var Imagid_array = new Array('img_2','img_4','img_6','img_7','img_8','img_9','img_10','img_13','img_14','img_18','img_19','img_20','img_21','img_22','img_23','img_26')
 function fnToggleVIew(obj){
-	var tagStyle = document.getElementById(obj).className;
-	if(tagStyle == 'hideTable' ){
-		document.getElementById(obj).className = 'showTable';
+	if($(obj).hasClassName('hideTable')) {
+		$(obj).removeClassName('hideTable');
+	} else {
+		$(obj).addClassName('hideTable');
 	}
-	else
-		document.getElementById(obj).className = 'hideTable';
 }
 function invokeview_all()
 {

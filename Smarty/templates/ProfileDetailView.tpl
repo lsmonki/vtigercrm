@@ -396,11 +396,11 @@ function UpdateProfile()
 <script language="javascript" type="text/javascript">
 {literal}
 function fnToggleVIew(obj){
-	var tagStyle = document.getElementById(obj).className;
-	if(tagStyle == 'hideTable')
-		document.getElementById(obj).className = 'showTable';
-	else
-		document.getElementById(obj).className = 'hideTable';
+	if($(obj).hasClassName('hideTable')) {
+		$(obj).removeClassName('hideTable');
+	} else {
+		$(obj).addClassName('hideTable');
+	}
 }
 {/literal}
 {literal}
