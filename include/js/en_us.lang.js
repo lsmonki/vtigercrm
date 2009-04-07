@@ -35,7 +35,7 @@
                                 EXCEEDS_MAX:' exceeds the maximum limit ',
                                 OUT_OF_RANGE:' is out of range',
                                 SHOULDNOTBE_EQUAL:' should not be equal to ',
-                                PORTAL_PROVIDE_EMAILID:'Portal user should provide email Id for portal login',
+                                PORTAL_PROVIDE_EMAILID:'Please provide valid Email Id to enable Portal User',
                                 ADD_CONFIRMATION:'Are you sure you want to add the selected ',
                                 ACCOUNTNAME_CANNOT_EMPTY:'AccountName Cannot be Empty',
                                 CANT_SELECT_CONTACTS:"You can\'t select related contacts from Lead",
