@@ -75,6 +75,9 @@ function webforms_returnError($e,$moduleName){
 }
 
 function getExceptionArray($e){
+	if(is_array($e)){
+		return $e;
+	}
 	return array('code'=>$e->code,'message'=>$e->message);
 }
 
@@ -112,12 +115,20 @@ function webforms_returnSuccess($element,$moduleName){
 }
 
 function webforms_init(){
-	global $defaultUserName,$defaultUserAccessKey,$defaultOwner,$adb;
+	global $defaultUserName,$defaultUserAccessKey,$defaultOwner,$adb,$enableAppKeyValidation,$application_unique_key;
 	try{
 		$active = vtlib_isModuleActive('Webforms');
 		if($active === false){
 			webforms_returnError(array('code'=>"WEBFORMS_DISABLED",'message'=>'Webforms module is disabled'),'Webforms');
 		}
+		
+		if($enableAppKeyValidation ==true){
+			if($application_unique_key !== $_REQUEST['appKey']){
+				webforms_returnError(array('code'=>"WEBFORMS_INVALID_APPKEY",'message'=>'AppKey provided is invalid'),null);
+				return ;
+			}
+		}
+		
 		$module = $_REQUEST['moduleName'];
 		$challengeResult = vtws_getchallenge($defaultUserName);
 		$challengeToken = $challengeResult['token'];
@@ -127,8 +138,7 @@ function webforms_init(){
 		$assignedUser = new Users();
 		$ownerId = $assignedUser->retrieve_user_id($defaultOwner);
 		$userData = webforms_getUserData(vtws_getId(VtigerWebserviceObject::fromName($adb,"Users")->getEntityId(),$ownerId),$fields,$_REQUEST);
-		global $log;
-		$log->fatal(var_export($userData,true));
+		
 		if($userData === null){
 			webforms_returnError(array('code'=>"WEBFORMS_INVALID_DATA",'message'=>'data provided is invalid'),$module);
 			return ;

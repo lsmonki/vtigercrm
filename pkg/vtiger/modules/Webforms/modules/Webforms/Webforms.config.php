@@ -1,7 +1,8 @@
 <?php
 
+$enableAppKeyValidation = true;
 $defaultUserName = 'admin';
-$defaultUserAccessKey = 'HQdvokz3701TPtfn';
+$defaultUserAccessKey = 'iFOdqrI8lS5UhNTa';
 
 $defaultOwner = 'standarduser';
 $successURL = '';
