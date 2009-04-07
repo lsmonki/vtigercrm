@@ -470,11 +470,10 @@ class HelpDesk extends CRMEntity {
 
 				if($adb->query_result($result,$i,'ownertype') == 'user')
 					$list .= getUserName($adb->query_result($result,$i,'ownerid'));
-				elseif($adb->query_result($result,$i,'ownertype') == 'customer')
-					$list .= 'customer';					
-				else
-					$list .= $this->getCustomerName($ticketid);
-
+				elseif($adb->query_result($result,$i,'ownertype') == 'customer') {
+					$contactid = $adb->query_result($result,$i,'ownerid');
+					$list .= getContactName($contactid);
+				}
 				$list .= ' on '.$adb->query_result($result,$i,'createdtime').' &nbsp;';
 
 				$list .= '</font></div>';

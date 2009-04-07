@@ -18,6 +18,10 @@ require_once('modules/HelpDesk/language/en_us.lang.php');
 require_once('include/utils/CommonUtils.php');
 require_once('include/utils/VtlibUtils.php');
 
+/** Configure language for server response translation */
+global $default_language, $current_language;
+if(!isset($current_language)) $current_language = $default_language;
+
 $log = &LoggerManager::getLogger('customerportal');
 
 error_reporting(0);
@@ -252,12 +256,6 @@ $server->register(
 	$NAMESPACE);
 	
 $server->register(
-	'get_image_url',
-	array('id'=>'xsd:string','module'=>'xsd:string','contactid'=>'xsd:string'),
-	array('return'=>'tns:field_details_array'),
-	$NAMESPACE);
-
-$server->register(
 	'get_list_values',
 	array('id'=>'xsd:string','block'=>'xsd:string','sessionid'=>'xsd:string','only_mine'=>'xsd:string'),
 	array('return'=>'tns:field_datalist_array'),
@@ -305,11 +303,19 @@ $server->register(
 	array('return'=>'tns:field_details_array'),
 	$NAMESPACE);
 	
-	$server->register(
+$server->register(
 	'updateCount',
 	array('id'=>'xsd:string'),
 	array('return'=>'xsd:string'),
 	$NAMESPACE);
+	
+//to get the Services list for the entire account of a contact	
+$server->register(
+	'get_service_list_values',
+	array('id'=>'xsd:string','module'=>'xsd:string','sessionid'=>'xsd:string','only_mine'=>'xsd:string'),
+	array('return'=>'tns:field_details_array'),
+	$NAMESPACE);	
+	
 /**	function used to get the list of ticket comments
 	@param array $input_array - array which contains the following parameters
  	=>	int $id - customer id
@@ -320,7 +326,7 @@ $server->register(
 function get_ticket_comments($input_array)
 {
 	global $adb,$log;
-	$adb->println("INPUT ARRAY for the function get_ticket_comments");
+	$adb->println("Entering customer portal function get_ticket_comments");
 	$adb->println($input_array);
 	
 	$userid = getPortalUserid();
@@ -355,7 +361,7 @@ function get_ticket_comments($input_array)
 function get_combo_values($input_array)
 {
 	global $adb,$log;
-	$adb->println("INPUT ARRAY for the function get_combo_values");
+	$adb->println("Entering customer portal function get_combo_values");
 	$adb->println($input_array);
 	$id = $input_array['id'];
 	$sessionid = $input_array['sessionid'];
@@ -406,14 +412,6 @@ function get_combo_values($input_array)
 		$output['ticketcategories']['ticketcategories'][$i] = $adb->query_result($result3,$i,"ticketcategories");
 	}
 	
-	//Added to get the modules list
-	$sql2 = "select vtiger_moduleowners.*, vtiger_tab.name from vtiger_moduleowners inner join vtiger_tab on vtiger_moduleowners.tabid = vtiger_tab.tabid order by vtiger_tab.tabsequence";
-	$result4 = $adb->pquery($sql2, array());
-	for($i=0;$i<$adb->num_rows($result4);$i++)
-	{
-		$output['moduleslist']['moduleslist'][$i] = $adb->query_result($result4,$i,"name");
-	}
-	
 	$servicequery = "SELECT vtiger_servicecontracts.* from vtiger_servicecontracts inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_servicecontracts.servicecontractsid and vtiger_crmentity.deleted = 0";
 	$serviceResult = $adb->pquery($servicequery,array());
 	
@@ -423,7 +421,6 @@ function get_combo_values($input_array)
 		$query = 'SELECT * FROM vtiger_tab WHERE tabid = ? AND presence = 0';
 		$res = $adb->pquery($query,array($tabid));
 		$norows = $adb->num_rows($res);
-		$log->fatal($norows);
 		if($norows > 0){
 			$check = true;
 		}
@@ -450,7 +447,7 @@ function get_combo_values($input_array)
 function get_KBase_details($input_array)
 {
 	global $adb,$log;
-	$adb->println("INPUT ARRAY for the function get_KBase_details");
+	$adb->println("Entering customer portal function get_KBase_details");
 	$adb->println($input_array);
 
 	$id = $input_array['id'];
@@ -460,15 +457,6 @@ function get_KBase_details($input_array)
 		return null;
 		
 	$userid = getPortalUserid();
-	$profileid = implode(',',getUserProfile($userid));
-	$tabid = getTabid('Faq');
-	$query = 'SELECT vtiger_profile2field.visible,vtiger_field.fieldname FROM vtiger_profile2field INNER JOIN vtiger_field ON vtiger_field.fieldid = vtiger_profile2field.fieldid WHERE vtiger_field.tabid = ? AND vtiger_profile2field.profileid in (?) AND vtiger_field.presence in (0,2)';
-	$res = $adb->pquery($query,array($tabid,$profileid));
-	$norows = $adb->num_rows($res);
-	for($i = 0; $i <$norows; $i++ ){
-		$fieldname = $adb->query_result($res,$i,'fieldname');
-		$per[$fieldname] = $adb->query_result($res,$i,'visible');
-	}
 	$result['faqcategory'] = array();
 	$result['product'] = array();
 	$result['faq'] = array();
@@ -488,11 +476,6 @@ function get_KBase_details($input_array)
 			$result['faqcategory'][$j] = $faqcategory;
 		}
 	
-	$log->fatal($result['faqcategory']);
-//	$product_permission_Query = 'SELECT presence from vtiger_tab where tabid = ?';
-//	$proTabid = getTabid('Products');
-//	$res = $adb->pquery($product_permission_Query,array($proTabid));
-//	$per = $adb->query_result($res,0,'presence');
 	$check = false;
 	$check = checkModuleActive('Products');
 	
@@ -508,7 +491,6 @@ function get_KBase_details($input_array)
 			$result['product'][$i]['productname'] = $productname;
 		}
 	}
-	$log->fatal($result['product']);
 	$faq_query = "select vtiger_faq.*, vtiger_crmentity.createdtime, vtiger_crmentity.modifiedtime from vtiger_faq " .
 				"inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_faq.id " .
 				"where vtiger_crmentity.deleted=0 and vtiger_faq.status='Published' order by vtiger_crmentity.modifiedtime DESC";
@@ -543,7 +525,6 @@ function get_KBase_details($input_array)
 			}
 		}
 	}
-	$log->fatal($result['faq']);
 	$adb->println($result);	
 	return $result;
 }
@@ -559,7 +540,7 @@ function get_KBase_details($input_array)
 function save_faq_comment($input_array)
 {
 	global $adb;
-	$adb->println("INPUT ARRAY for the function save_faq_comment");
+	$adb->println("Entering customer portal function save_faq_comment");
 	$adb->println($input_array);
 
 	//foreach($input_array as $fieldname => $fieldvalue)$input_array[$fieldname] = mysql_real_escape_string($fieldvalue);
@@ -602,11 +583,12 @@ function get_tickets_list($input_array) {
 	require_once('include/utils/UserInfoUtil.php');
 	
 	global $adb,$log;
-	$show_all = show_all('HelpDesk');
 	global $current_user;
 	require_once('modules/Users/Users.php');
+	$log->debug("Entering customer portal function get_ticket_list");
 	$user = new Users();
 	$userid = getPortalUserid();
+	$show_all = show_all('HelpDesk');
 	$current_user = $user->retrieve_entity_info($userid, 'Users');
 	$id = $input_array['id'];
 	$only_mine = $input_array['onlymine'];
@@ -706,7 +688,8 @@ function get_tickets_list($input_array) {
 			$output[1]['data'][$j][$i]['fielddata'] = $fieldvalue;
 			$i++;
 		}
-	}	
+	}
+	$log->debug("Exiting customer portal function get_ticket_list");	
 	return $output;	 
 }
 
@@ -728,7 +711,7 @@ function get_tickets_list($input_array) {
 function create_ticket($input_array)
 {
 	global $adb,$log;
-	$adb->println("INPUT ARRAY for the function create_ticket");
+	$adb->println("Inside customer portal function create_ticket");
 	$adb->println($input_array);
 	//foreach($input_array as $fieldname => $fieldvalue)$input_array[$fieldname] = mysql_real_escape_string($fieldvalue);
 
@@ -779,7 +762,7 @@ function create_ticket($input_array)
 	$from_email = $contact_email;
 
 	//send mail to assigned to user
-	$to_email = getUserEmailId('id',$user_id);
+	$to_email = getUserEmailId('id',$userid);
 	$adb->println("Send mail to the user who is the owner of the module about the portal ticket");
 	$mail_status = send_mail('HelpDesk',$to_email,'',$from_email,$subject,$contents);
 
@@ -820,7 +803,7 @@ function create_ticket($input_array)
 function update_ticket_comment($input_array)
 {
 	global $adb,$mod_strings;
-	$adb->println("INPUT ARRAY for the function update_ticket_comment");
+	$adb->println("Inside customer portal function update_ticket_comment");
 	$adb->println($input_array);
 
 	//foreach($input_array as $fieldname => $fieldvalue)$input_array[$fieldname] = mysql_real_escape_string($fieldvalue);
@@ -882,7 +865,7 @@ function update_ticket_comment($input_array)
 function close_current_ticket($input_array)
 {
 	global $adb,$mod_strings;
-	$adb->println("INPUT ARRAY for the function close_current_ticket");
+	$adb->println("Inside customer portal function close_current_ticket");
 	$adb->println($input_array);
 
 	//foreach($input_array as $fieldname => $fieldvalue)$input_array[$fieldname] = mysql_real_escape_string($fieldvalue);
@@ -911,7 +894,7 @@ function close_current_ticket($input_array)
 function authenticate_user($username,$password,$version,$login = 'true')
 {
 	global $adb,$log;
-	$adb->println("Inside the function authenticate_user($username, $password, $login).");
+	$adb->println("Inside customer portal function authenticate_user($username, $password, $login).");
 	include('vtigerversion.php');
   	if(version_compare($version,$vtiger_current_version,'==') == 0){
   		 $list[0] = "NOT COMPATIBLE";
@@ -966,8 +949,8 @@ function authenticate_user($username,$password,$version,$login = 'true')
  */
 function change_password($input_array)
 {
-	global $adb;
-	$adb->println("INPUT ARRAY for the function change_password");
+	global $adb,$log;
+	$log->debug("Entering customer portal function change_password");
 	$adb->println($input_array);
 
 	$id = (int) $input_array['id'];
@@ -982,7 +965,7 @@ function change_password($input_array)
 	$result = $adb->pquery($sql, array($password, $id, $username));
 
 	$list = authenticate_user($username,$password,'false');
-
+	$log->debug("Exiting customer portal function change_password");
 	return $list;
 }
 
@@ -995,7 +978,8 @@ function change_password($input_array)
  */
 function update_login_details($input_array)
 {
-	global $adb;
+	global $adb,$log;
+	$log->debug("Entering customer portal function update_login_details");
 	$adb->println("INPUT ARRAY for the function update_login_details");
 	$adb->println($input_array);
 
@@ -1023,6 +1007,7 @@ function update_login_details($input_array)
 		$sql = "update vtiger_portalinfo set logout_time=?, last_login_time=? where id=?";	
 		$result = $adb->pquery($sql, array($current_time, $last_login, $id));
 	}
+	$log->debug("Exiting customer portal function update_login_details");
 }
 
 /**	function used to send mail to the customer when he forgot the password and want to retrieve the password
@@ -1031,7 +1016,8 @@ function update_login_details($input_array)
  */
 function send_mail_for_password($mailid)
 {
-	global $adb,$mod_strings;
+	global $adb,$mod_strings,$log;
+	$log->debug("Entering customer portal function send_mail_for_password");
 	$adb->println("Inside the function send_mail_for_password($mailid).");
 
 	//$mailid = mysql_real_escape_string($input_array['email']);
@@ -1100,7 +1086,7 @@ function send_mail_for_password($mailid)
 	}
 
 	$adb->println("Exit from send_mail_for_password. $ret_msg");
-
+	$log->debug("Exiting customer portal function send_mail_for_password");
 	return $ret_msg;
 }
 
@@ -1113,7 +1099,8 @@ function send_mail_for_password($mailid)
  */
 function get_ticket_creator($input_array)
 {
-	global $adb;
+	global $adb,$log;
+	$log->debug("Entering customer portal function get_ticket_creator");
 	$adb->println("INPUT ARRAY for the function get_ticket_creator");
 	$adb->println($input_array);
 
@@ -1126,7 +1113,7 @@ function get_ticket_creator($input_array)
 
 	$res = $adb->pquery("select smcreatorid from vtiger_crmentity where crmid=?", array($ticketid));
 	$creator = $adb->query_result($res,0,'smcreatorid');
-
+	$log->debug("Exiting customer portal function get_ticket_creator");
 	return $creator;
 }
 
@@ -1140,6 +1127,7 @@ function get_ticket_creator($input_array)
 function get_picklists($input_array)
 {
 	global $adb, $log;
+	$log->debug("Entering customer portal function get_picklists");
 	$adb->println("INPUT ARRAY for the function get_picklists");
 	$adb->println($input_array);
 
@@ -1169,7 +1157,7 @@ function get_picklists($input_array)
 	}
 
 	$adb->println($picklist_array);
-	$log->debug("Exit from function get_picklists($picklist_name)");
+	$log->debug("Exiting customer portal function get_picklists($picklist_name)");
 	return $picklist_array;
 }
 
@@ -1183,6 +1171,7 @@ function get_picklists($input_array)
 function get_ticket_attachments($input_array)
 {
 	global $adb,$log;
+	$log->debug("Entering customer portal function get_ticket_attachments");
 	$adb->println("INPUT ARRAY for the function get_ticket_attachments");
 	$adb->println($input_array);
 	
@@ -1190,7 +1179,6 @@ function get_ticket_attachments($input_array)
 	if($check == false){
 		return array("#MODULE INACTIVE#");
 	}
-	$log->fatal($check);
 	$id = $input_array['id'];
 	$sessionid = $input_array['sessionid'];
 	$ticketid = $input_array['ticketid'];
@@ -1204,25 +1192,25 @@ function get_ticket_attachments($input_array)
 	if(!validateSession($id,$sessionid))
 		return null;
 
-	$query = "select vtiger_troubletickets.ticketid, vtiger_attachments.* from vtiger_troubletickets " .
+	$query = "select vtiger_troubletickets.ticketid, vtiger_attachments.*,vtiger_notes.filename,vtiger_notes.filelocationtype from vtiger_troubletickets " .
 		"left join vtiger_senotesrel on vtiger_senotesrel.crmid=vtiger_troubletickets.ticketid " .
-		"inner join vtiger_notes on vtiger_notes.notesid=vtiger_senotesrel.notesid " .
+		"left join vtiger_notes on vtiger_notes.notesid=vtiger_senotesrel.notesid " .
 		"inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_notes.notesid " .
-		"inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_notes.notesid " .
-		"inner join vtiger_attachments on vtiger_attachments.attachmentsid = vtiger_seattachmentsrel.attachmentsid " .
+		"left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_notes.notesid " .
+		"left join vtiger_attachments on vtiger_attachments.attachmentsid = vtiger_seattachmentsrel.attachmentsid " .
 		"and vtiger_crmentity.deleted = 0 where vtiger_troubletickets.ticketid =?";
 		
 	$res = $adb->pquery($query, array($ticketid));
 	$noofrows = $adb->num_rows($res);
 	for($i=0;$i<$noofrows;$i++)
 	{
-		$filename = $adb->query_result($res,$i,'name');
+		$filename = $adb->query_result($res,$i,'filename');
 		$filepath = $adb->query_result($res,$i,'path');
 
 		$fileid = $adb->query_result($res,$i,'attachmentsid');
 		$filesize = filesize($filepath.$fileid."_".$filename);
 		$filetype = $adb->query_result($res,$i,'type');
-
+		$filelocationtype = $adb->query_result($res,$i,'filelocationtype');
 		//Now we will not pass the file content to CP, when the customer click on the link we will retrieve
 		//$filecontents = base64_encode(file_get_contents($filepath.$fileid."_".$filename));//fread(fopen($filepath.$filename, "r"), $filesize));
 
@@ -1230,9 +1218,9 @@ function get_ticket_attachments($input_array)
 		$output[$i]['filename'] = $filename;
 		$output[$i]['filetype'] = $filetype;
 		$output[$i]['filesize'] = $filesize;
-		//$output[$i]['filecontents'] = $filecontents;
+		$output[$i]['filelocationtype'] = $filelocationtype;
 	}
-
+	$log->debug("Exiting customer portal function get_ticket_attachments");
 	return $output;
 }
 
@@ -1247,26 +1235,30 @@ function get_ticket_attachments($input_array)
 function get_filecontent($input_array)
 {
 	global $adb,$log;
+	$log->debug("Entering customer portal function get_filecontent");
 	$adb->println("INPUT ARRAY for the function get_filecontent");
 	$adb->println($input_array);
 	$id = $input_array['id'];
 	$sessionid = $input_array['sessionid'];
 	$fileid = $input_array['fileid'];
 	$filename = $input_array['filename'];
-	
+	$ticketid = $input_array['ticketid'];
 	if(!validateSession($id,$sessionid))
 		return null;
 
-	$query = "select vtiger_attachments.path from vtiger_troubletickets 
-		inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid = vtiger_troubletickets.ticketid 
-		inner join vtiger_attachments on vtiger_attachments.attachmentsid = vtiger_seattachmentsrel.attachmentsid 
-		where vtiger_attachments.attachmentsid= ? and vtiger_attachments.name=?";
-	$res = $adb->pquery($query, array($fileid, $filename));
+	$query = 'SELECT vtiger_attachments.path FROM vtiger_attachments 
+			INNER JOIN vtiger_seattachmentsrel ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid 
+			INNER JOIN vtiger_notes ON vtiger_notes.notesid = vtiger_seattachmentsrel.crmid 
+			INNER JOIN vtiger_senotesrel ON vtiger_senotesrel.notesid = vtiger_notes.notesid 
+			INNER JOIN vtiger_troubletickets ON vtiger_troubletickets.ticketid = vtiger_senotesrel.crmid 
+			WHERE vtiger_troubletickets.ticketid = ? AND vtiger_attachments.name = ? AND vtiger_attachments.attachmentsid = ?';
+	$res = $adb->pquery($query, array($ticketid, $filename,$fileid));
 	if($adb->num_rows($res)>0)
 	{
 		$filenamewithpath = $adb->query_result($res,0,'path').$fileid."_".$filename;
 		$filecontents[$fileid] = base64_encode(file_get_contents($filenamewithpath));
 	}
+	$log->debug("Exiting customer portal function get_filecontent ");
 	return $filecontents;
 }
 
@@ -1285,7 +1277,7 @@ function add_ticket_attachment($input_array)
 {
 	global $adb,$log;
 	global $root_directory, $upload_badext;
-	
+	$log->debug("Entering customer portal function add_ticket_attachment");
 	$adb->println("INPUT ARRAY for the function add_ticket_attachment");
 	$adb->println($input_array);
 	$id = $input_array['id'];
@@ -1355,6 +1347,7 @@ function add_ticket_attachment($input_array)
 	
 	$tic_doc = 'insert into vtiger_senotesrel values(?,?)';
 	$res = $adb->pquery($tic_doc,array($ticketid,$focus->id));
+	$log->debug("Exiting customer portal function add_ticket_attachment");
 }
 
 /**	Function used to validate the session
@@ -1407,94 +1400,15 @@ function getServerSessionId($id)
  **/
 function unsetServerSessionId($id)
 {
-	global $adb;
+	global $adb,$log;
+	$log->debug("Entering customer portal function unsetServerSessionId");
 	$adb->println("Inside the function unsetServerSessionId");
 
 	$id = (int) $id;
 
 	$adb->query("delete from vtiger_soapservice where type='customer' and id=$id");
-
+	$log->debug("Exiting customer portal function unsetServerSessionId");
 	return;
-}
-
-
-/**	function used to get the Contact CustomField Information
- *	@param int $id - contact id
- *	return string $message - contact informations will be returned from :contactdetails table
- */
-function get_cf_field_details($id,$customerid,$sessionid)
-{
-	$isPermitted = check_permission($customerid,'Contacts',$id);
-	if($isPermitted == false) {
-		return array("#NOT AUTHORIZED#");
-	}
-	if(!validateSession($customerid,$sessionid))
-		return null;
-	global $adb;
-
-	$fieldquery = "select fieldname, columnname, fieldlabel from vtiger_field where tabid=4 and tablename='vtiger_contactscf' and vtiger_field.presence in (0,2)";
-	$fieldres = $adb->pquery($fieldquery);
-	$nooffields = $adb->num_rows($fieldres);
-
-	$query = "
-	  select vtiger_contactscf.* from vtiger_contactdetails 
-   		inner join vtiger_contactscf on vtiger_contactscf.contactid = vtiger_contactdetails.contactid
-		inner join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid 
-		inner join vtiger_contactsubdetails on vtiger_contactsubdetails.contactsubscriptionid=vtiger_contactdetails.contactid 
-		inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid 
-		where vtiger_contactscf.contactid=".$id;
-
-   	$adb->println($query);
-	$res = $adb->pquery($query);
-	$output[0]['CUSTOMINFO'][0]['customfield']['fieldlabel'] =0;
-	for($i=0;$i<$nooffields;$i++)
-	{
-		$output[0]['CUSTOMINFO'][0]['customfield']['fieldlabel'] ='1';
-		$fieldname = $adb->query_result($fieldres,$i,'columnname');
-		$output[0]['CUSTOMINFO'][$i]['fieldlabel'] = $adb->query_result($fieldres,$i,'fieldlabel');
-		$output[0]['CUSTOMINFO'][$i]['fieldvalue'] = $adb->query_result($res,0,$fieldname);
-	}
-	
-	return $output;
-}
-
-/**	function used to get the Assign_To Values
- *	@param int $id - id,modulename
- *	return string $message - Assigned To name returned
- */
-function get_ownername($id,$modulename)
-{
-	global $adb,$log;
-	$log->debug("Entering Function get_ownername..");
-	
- 	$assignres = $adb->pquery("select * from vtiger_crmentity where crmid=".$id);
-	$ownerid=$adb->query_result($assignres,0,'smownerid');
-	
-	$query='select groupname from vtiger_groups where groupid ='.$ownerid;
-	$assigngroupres = $adb->pquery($query, 0, 'groupname');
-	if($assigngroupres != '' && $modulename != '')
-	{
-		$groupname[0]['groupname'][0]['fieldlabel']='groupname';
-		$groupname[0]['groupname'][0]['fieldvalue']=$assigngroupres;
-		$groupname[0]['assigninfo'][0]['fieldlabel']='Group Name';
-		$groupname[0]['assigninfo'][0]['fieldvalue']=$assigngroupres;
-	}
-	else if(($assigngroupres == '' || !isset($assigngroupres)) && $ownerid != '')
-	{
-		$query='select * from vtiger_users where id ='.$ownerid;
-		$assignuserres = $adb->pquery($query);
-		$groupname[0]['groupname'][0]['fieldlabel']='username';
-		$groupname[0]['groupname'][0]['fieldvalue']=$adb->query_result($assignuserres,0,'user_name');
-		$groupname[0]['assigninfo'][0]['fieldlabel']='First Name';
-		$groupname[0]['assigninfo'][0]['fieldvalue']=$adb->query_result($assignuserres,0,'first_name');
-		$groupname[0]['assigninfo'][1]['fieldlabel']='Last Name';
-		$groupname[0]['assigninfo'][1]['fieldvalue']=$adb->query_result($assignuserres,0,'last_name');
-		$groupname[0]['assigninfo'][2]['fieldlabel']='Email';
-		$groupname[0]['assigninfo'][2]['fieldvalue']=$adb->query_result($assignuserres,0,'email1');
-		$groupname[0]['assigninfo'][3]['fieldlabel']='Office Phone';
-		$groupname[0]['assigninfo'][3]['fieldvalue']=$adb->query_result($assignuserres,0,'phone_work');
-	}
-	return $groupname;	 
 }
 
 
@@ -1504,10 +1418,12 @@ function get_ownername($id,$modulename)
  */
 function get_account_name($accountid)
 {
-	 global $adb;
-	 $res = $adb->pquery("select * from vtiger_account where accountid=".$accountid);
+	 global $adb,$log;
+	 $log->debug("Entering customer portal function get_account_name");
+ 	 $res = $adb->pquery("select * from vtiger_account where accountid=".$accountid);
 	 $accountname=$adb->query_result($res,0,'accountname');
-	 return $accountname;	 
+	 $log->debug("Exiting customer portal function get_account_name");
+ 	 return $accountname;	 
 }
 
 /** function used to get the Contact name
@@ -1516,8 +1432,9 @@ function get_account_name($accountid)
  */
 function get_contact_name($contactid)
 {
-	global $adb;
-	$contact_name = '';
+	global $adb,$log;
+	$log->debug("Entering customer portal function get_contact_name");
+ 	$contact_name = '';
 	if($contactid != '')
 	{
         	$sql = "select * from vtiger_contactdetails where contactid=?";
@@ -1527,7 +1444,8 @@ function get_contact_name($contactid)
         	$contact_name = $firstname." ".$lastname;
         	return $contact_name;
 	}
-
+	$log->debug("Exiting customer portal function get_contact_name");
+ 	return false;
 }
 
 /**     function used to get the Account id
@@ -1537,10 +1455,12 @@ function get_contact_name($contactid)
 
 function get_check_account_id($id)
 {
-	 global $adb;
-	 $res = $adb->pquery("select * from vtiger_contactdetails where contactid=".$id);
+	 global $adb,$log;
+	 $log->debug("Entering customer portal function get_check_account_id");
+ 	 $res = $adb->pquery("select * from vtiger_contactdetails where contactid=".$id);
 	 $accountid=$adb->query_result($res,0,'accountid');
-	 return $accountid;
+	 $log->debug("Entering customer portal function get_check_account_id");
+ 	 return $accountid;
 }
 
 
@@ -1551,48 +1471,14 @@ function get_check_account_id($id)
 
 function get_vendor_name($vendorid)
 {
- 	global $adb;
+ 	global $adb,$log;
+ 	$log->debug("Entering customer portal function get_vendor_name");
  	$res = $adb->pquery("select * from vtiger_vendor where vendorid=".$vendorid);
  	$name=$adb->query_result($res,0,'vendorname');
+ 	$log->debug("Exiting customer portal function get_vendor_name");
  	return $name;	 
 }
 
-/**	function used to get the Image url
- *	@param int $id - id
- *	return string $url - Image url returned
- */
-
-function get_image_url($id,$module,$customerid)
-{	
-	global $adb, $log;
-	global $site_URL;
-	
-	$isPermitted = check_permission($customerid,$module,$id);
-	if($isPermitted == false) {
-		return array("#NOT AUTHORIZED#");
-	}
-	
-	$query ='select vtiger_attachments.*,vtiger_seattachmentsrel.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid =vtiger_attachments.attachmentsid where vtiger_seattachmentsrel.crmid ='.$id; 
-	$res = $adb->pquery($query);
-	$noofdata = $adb->num_rows($res);
-	for($i=0;$i<$noofdata;$i++)
-	{
- 		$filename=$adb->query_result($res,$i,'name');
- 		$path=$adb->query_result($res,$i,'path');
- 		$attachmentid=$adb->query_result($res,$i,'attachmentsid');
-        	$url[0][$module][$i]['fieldlabel']="Image $i";
-        	$url[0][$module][$i]['fieldvalue']=$site_URL.'/'.$path.$attachmentid.'_'.$filename;
-	}
-
-	if($noofdata == '')
-	{	
-        	$url[0][$module][0]['fieldlabel']="Image $i";
-        	$url[0][$module][0]['fieldvalue']='';
-	}
-	$adb->println($url);	
-
- return $url;	 
-}
 
 /**	function used to get the Quotes/Invoice List
  *	@param int $id - id -Contactid
@@ -1605,7 +1491,7 @@ function get_list_values($id,$module,$sessionid,$only_mine='true')
 	require_once('include/utils/UserInfoUtil.php');
 	require_once('modules/Users/Users.php');
 	global $adb,$log,$current_user;
-	$log->fatal("in function get_list_values $id - $module - $sessionid - $only_mine");
+	$log->debug("Entering customer portal function get_list_values");
 	$check = checkModuleActive($module);
 	if($check == false){
 		return array("#MODULE INACTIVE#");
@@ -1684,16 +1570,7 @@ function get_list_values($id,$module,$sessionid,$only_mine='true')
 				"where vtiger_crmentity.deleted = 0 and  vtiger_senotesrel.crmid in (".generateQuestionMarks($entity_ids_list).")"; 
 		$params = array($entity_ids_list);
 		$fields_list['Related To'] = 'entityid';
-	}
-	else if ($module == 'Services'){
-		$query = "select vtiger_service.*,vtiger_crmentity.*,vtiger_crmentityrel.crmid as entityid,'' as setype from vtiger_service " .
-				 "inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_service.serviceid " .
-				 "left join vtiger_crmentityrel on vtiger_crmentityrel.relcrmid=vtiger_service.serviceid " .
-				 "where vtiger_crmentity.deleted = 0 and vtiger_crmentityrel.crmid in (".generateQuestionMarks($entity_ids_list).")";
-		$params = array($entity_ids_list);
-		$fields_list['Related To'] = 'entityid';
-	}
-	else if ($module == 'Contacts'){
+	}else if ($module == 'Contacts'){
 		$query = "select vtiger_contactdetails.*,vtiger_crmentity.smownerid from vtiger_contactdetails  
 				 inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid
 				 where vtiger_crmentity.deleted = 0 and contactid IN (".generateQuestionMarks($entity_ids_list).")";	
@@ -1812,6 +1689,7 @@ function get_list_values($id,$module,$sessionid,$only_mine='true')
 			$i++;
 		}
 	}
+	$log->debug("Exiting customer portal function get_list_values");
 return $output;	 
 	
 }
@@ -1825,7 +1703,7 @@ function get_filecontent_detail($id,$folderid,$module,$customerid,$sessionid)
 {
 	global $adb,$log;
 	global $site_URL;
-	$log->debug("in function get_filecontent_detail $id,$folderid,$module,$customerid,$sessionid");	
+	$log->debug("Entering customer portal function get_filecontent_detail ");	
 	$isPermitted = check_permission($customerid,$module,$id);
 	if($isPermitted == false) {
 		return array("#NOT AUTHORIZED#");
@@ -1877,6 +1755,7 @@ function get_filecontent_detail($id,$folderid,$module,$customerid,$sessionid)
 	$output[0]['filetype'] = $filetype;
 	$output[0]['filesize'] = $filesize;
 	$output[0]['filecontents']=base64_encode(file_get_contents($filenamewithpath));
+	$log->debug("Exiting customer portal function get_filecontent_detail ");	
 	return $output;
 }
 
@@ -1884,10 +1763,12 @@ function get_filecontent_detail($id,$folderid,$module,$customerid,$sessionid)
  * 
  */
 function updateCount($id){
-	global $adb;
+	global $adb,$log;
+	$log->debug("Entering customer portal function updateCount");
 	$query="SELECT * FROM vtiger_notes WHERE notesid ='$id'";
 	$res = $adb->pquery($query);
 	$downloadcount = $adb->query_result($res, 0, "filedownloadcount");
+	$log->debug("Entering customer portal function updateCount");
 	return updateDownloadCount($downloadcount,$id);
 	
 }
@@ -1897,9 +1778,11 @@ function updateCount($id){
  */
  function updateDownloadCount($downloadcount,$id){
  	global $adb,$log;
- 	$updateDownloadCount = "UPDATE vtiger_notes SET filedownloadcount = ? WHERE notesid = ?";
+ 	$log->debug("Entering customer portal function updateDownloadCount");
+	$updateDownloadCount = "UPDATE vtiger_notes SET filedownloadcount = ? WHERE notesid = ?";
  	$countres = $adb->pquery($updateDownloadCount,array($downloadcount+1,$id));
- 	return true;
+ 	$log->debug("Entering customer portal function updateDownloadCount");
+	return true;
  }
  
 /**	function used to get the Quotes/Invoice pdf
@@ -1912,7 +1795,7 @@ function get_pdf($id,$block,$customerid,$sessionid)
 	global $adb;
 	global $current_user,$log,$default_language;
 	global $currentModule,$mod_strings,$app_strings,$app_list_strings;
-			
+	$log->debug("Entering customer portal function get_pdf");
 	$isPermitted = check_permission($customerid,$block,$id);
 	if($isPermitted == false) {
 		return array("#NOT AUTHORIZED#");
@@ -1952,7 +1835,7 @@ function get_pdf($id,$block,$customerid,$sessionid)
 	{
 		$filecontents = "failure";
 	}
-
+	$log->debug("Exiting customer portal function get_pdf");
 	return $filecontents;	 
 }
 
@@ -1963,18 +1846,26 @@ function get_pdf($id,$block,$customerid,$sessionid)
 
 function get_salesorder_name($id)
 {
- 	global $adb;
- 	$res = $adb->pquery(" select * from vtiger_salesorder where salesorderid=".$id);
+ 	global $adb,$log;
+ 	$log->debug("Entering customer portal function get_salesorder_name");
+	$res = $adb->pquery(" select * from vtiger_salesorder where salesorderid=".$id);
  	$name=$adb->query_result($res,0,'subject');
- 	return $name;	 
+ 	$log->debug("Exiting customer portal function get_salesorder_name");
+	return $name;	 
 }
 
 function get_invoice_detail($id,$module,$customerid,$sessionid)
 {
-
-	global $adb,$site_URL,$log;
-	$log->debug("in the function get_invoice_details $id - $module - $customerid - $sessionid");
+	require_once('include/utils/UserInfoUtil.php');
+	require_once('modules/Users/Users.php');
 	require_once('include/utils/utils.php');	
+	
+	global $adb,$site_URL,$log,$current_user;
+	$log->debug("Entering customer portal function get_invoice_details $id - $module - $customerid - $sessionid");
+	$user = new Users();
+	$userid = getPortalUserid();
+	$current_user = $user->retrieve_entity_info($userid, 'Users');
+	
 	$isPermitted = check_permission($customerid,$module,$id);
 	if($isPermitted == false) {
 		return array("#NOT AUTHORIZED#");
@@ -1982,18 +1873,9 @@ function get_invoice_detail($id,$module,$customerid,$sessionid)
 	
 	if(!validateSession($customerid,$sessionid))
 		return null; 
-		
-	$fieldquery = "SELECT fieldname, columnname, fieldlabel,block,uitype FROM vtiger_field " .
-					"LEFT JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid " .
-					"LEFT JOIN vtiger_profile ON vtiger_profile.profileid=vtiger_profile2field.profileid " .
-					"LEFT JOIN vtiger_role2profile ON vtiger_role2profile.profileid = vtiger_profile.profileid " .
-					"LEFT JOIN vtiger_role ON vtiger_role.roleid = vtiger_role2profile.roleid " .
-					"LEFT JOIN vtiger_user2role ON vtiger_role.roleid = vtiger_user2role.roleid " .
-					"LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_user2role.userid " .
-					"WHERE vtiger_users.user_name = 'portaluser' AND vtiger_field.tabid=".$tabid = getTabid($module)."  " .
-					"AND vtiger_field.presence IN (0,2) AND vtiger_profile2field.visible = 0 " .
-					"AND vtiger_field.displaytype IN (1,2,4) ORDER BY vtiger_field.block,vtiger_field.sequence";
-	$fieldres = $adb->pquery($fieldquery);
+	
+	$fieldquery = "SELECT fieldname, columnname, fieldlabel,block,uitype FROM vtiger_field WHERE tabid = ? AND displaytype in (1,2,4) ORDER BY block,sequence";
+	$fieldres = $adb->pquery($fieldquery,array(getTabid($module)));
 	$nooffields = $adb->num_rows($fieldres);
 	$query = "select 
 		vtiger_invoice.*,vtiger_crmentity.* ,vtiger_invoicebillads.*,vtiger_invoiceshipads.*,vtiger_invoicecf.*  
@@ -2017,6 +1899,11 @@ function get_invoice_detail($id,$module,$customerid,$sessionid)
 		$blocknameQuery = "select blocklabel from vtiger_blocks where blockid = ?";
 		$blockPquery = $adb->pquery($blocknameQuery,array($blockid));
 		$blocklabel = $adb->query_result($blockPquery,0,'blocklabel');
+		
+		$fieldper = getFieldVisibilityPermission($module,$current_user->id,$fieldname);
+			if($fieldper == '1'){
+				continue;
+			}
 		
 		$fieldvalue = $adb->query_result($res,0,$fieldname);
 		if($fieldname == 'subject' && $fieldvalue !='')
@@ -2048,10 +1935,11 @@ function get_invoice_detail($id,$module,$customerid,$sessionid)
 		$output[0][$module][$i]['fieldvalue'] = $fieldvalue;
 		$output[0][$module][$i]['blockname'] = getTranslatedString($blocklabel,$module);
 	}
+	$log->debug("Entering customer portal function get_invoice_detail ..");
    return $output;
 }
 
-/* Function to get contactid's accountproduct details'
+/* Function to get contactid's and account's product details'
  * 
 */
 function get_product_list_values($id,$modulename,$sessionid,$only_mine='true')
@@ -2060,7 +1948,7 @@ function get_product_list_values($id,$modulename,$sessionid,$only_mine='true')
 	require_once('include/utils/UserInfoUtil.php');
 	require_once('modules/Users/Users.php');
 	global $current_user,$adb,$log;
-	
+	$log->debug("Entering customer portal function get_product_list_values ..");
 	$check = checkModuleActive($modulename);
 	if($check == false){
 		return array("#MODULE INACTIVE#");
@@ -2193,12 +2081,18 @@ function get_product_list_values($id,$modulename,$sessionid,$only_mine='true')
  */
 function get_details($id,$module,$customerid,$sessionid)
 {
-	global $adb,$log,$current_language,$default_language;
+	global $adb,$log,$current_language,$default_language,$current_user;
 	require_once('include/utils/utils.php');
+	require_once('include/utils/UserInfoUtil.php');
+	require_once('modules/Users/Users.php');
+	$log->debug("Entering customer portal function get_details ..");
+	
+	$user = new Users();
+	$userid = getPortalUserid();
+	$current_user = $user->retrieve_entity_info($userid, 'Users');
+	
 	$current_language = $default_language;
-	$log->fatal("Entering get_details($id,$module,$customerid,$sessionid) function..");
 	$isPermitted = check_permission($customerid,$module,$id);
-	$log->fatal($isPermitted);
 	if($isPermitted == false) {
 		return array("#NOT AUTHORIZED#");
 	}
@@ -2290,19 +2184,8 @@ function get_details($id,$module,$customerid,$sessionid)
 				"WHERE vtiger_products.productid = (". generateQuestionMarks($id) .") AND vtiger_crmentity.deleted = 0";
 	}
 	$params = array($id);
-	$fieldquery = "SELECT fieldname, columnname, fieldlabel,block,uitype FROM vtiger_field " .
-					"LEFT JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid " .
-					"LEFT JOIN vtiger_profile ON vtiger_profile.profileid=vtiger_profile2field.profileid " .
-					"LEFT JOIN vtiger_role2profile ON vtiger_role2profile.profileid = vtiger_profile.profileid " .
-					"LEFT JOIN vtiger_role ON vtiger_role.roleid = vtiger_role2profile.roleid " .
-					"LEFT JOIN vtiger_user2role ON vtiger_role.roleid = vtiger_user2role.roleid " .
-					"LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_user2role.userid " .
-					"INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid " .
-					"INNER JOIN vtiger_customerportal_prefs ON vtiger_customerportal_prefs.prefvalue = vtiger_users.id " .
-					"WHERE vtiger_customerportal_prefs.prefkey = 'userid' AND vtiger_field.tabid=".$tabid = getTabid($module)."  " .
-					"AND vtiger_field.presence IN (0,2) AND vtiger_profile2field.visible = 0 AND vtiger_def_org_field.visible = 0 " .
-					"AND vtiger_field.displaytype IN (1,2,4) ORDER BY vtiger_field.block,vtiger_field.sequence";
-	$fieldres = $adb->pquery($fieldquery,array());
+	$fieldquery = "SELECT fieldname, columnname, fieldlabel,block,uitype FROM vtiger_field WHERE tabid = ? AND displaytype in (1,2,4) ORDER BY block,sequence";
+	$fieldres = $adb->pquery($fieldquery,array(getTabid($module)));
 	$nooffields = $adb->num_rows($fieldres);
 	$res = $adb->pquery($query,$params);
 	for($i=0;$i<$nooffields;$i++)
@@ -2312,8 +2195,8 @@ function get_details($id,$module,$customerid,$sessionid)
 		$fieldid = $adb->query_result($fieldres,$i,'fieldid');
 		$blockid = $adb->query_result($fieldres,$i,'block');
 		$uitype = $adb->query_result($fieldres,$i,'uitype');
-				
-		$blocknameQuery = "select blocklabel from vtiger_blocks where blockid = ?";
+		
+		$blocknameQuery = "select blocklabel from vtiger_blocks where blockid = ? ";
 		$blockPquery = $adb->pquery($blocknameQuery,array($blockid));
 		$blocklabel = $adb->query_result($blockPquery,0,'blocklabel');
 		$blockname = getTranslatedString($blocklabel,$module);
@@ -2323,6 +2206,11 @@ function get_details($id,$module,$customerid,$sessionid)
 		if($uitype == 83){ //for taxclass in products and services
 			continue;
 		}
+		$fieldper = getFieldVisibilityPermission($module,$current_user->id,$fieldname);
+			if($fieldper == '1'){
+				continue;
+			}		
+		
 		$fieldlabel = getTranslatedString($adb->query_result($fieldres,$i,'fieldlabel'));
 		$fieldvalue = $adb->query_result($res,0,$columnname);
 		
@@ -2441,6 +2329,7 @@ function get_details($id,$module,$customerid,$sessionid)
 			}
 		}
 	}
+	$log->debug("Existing customer portal function get_details ..");
 	return $output;
 }
 /* Function to check the permission if the customer can see the recorde details
@@ -2450,6 +2339,7 @@ function get_details($id,$module,$customerid,$sessionid)
  */
 function check_permission($customerid, $module, $entityid) {
 	global $adb,$log;
+		$log->debug("Entering customer portal function check_permission ..");
 		$show_all= show_all($module);
 		$allowed_contacts_and_accounts = array();
 		$check = checkModuleActive($module);
@@ -2579,11 +2469,40 @@ function check_permission($customerid, $module, $entityid) {
 								break;		
 							
 			case 'Services'	:	$query = "SELECT vtiger_service.serviceid FROM vtiger_service
-											INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_service.serviceid AND vtiger_crmentity.deleted = 0
-											LEFT JOIN vtiger_crmentityrel ON vtiger_crmentityrel.relcrmid = vtiger_service.serviceid
-											WHERE vtiger_crmentityrel.crmid IN (". generateQuestionMarks($allowed_contacts_and_accounts) .")
-											AND vtiger_service.serviceid= ?";			
-								$res = $adb->pquery($query, array($allowed_contacts_and_accounts, $entityid));
+											INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_service.serviceid AND vtiger_crmentity.deleted = 0 
+											LEFT JOIN vtiger_crmentityrel ON (vtiger_crmentityrel.relcrmid=vtiger_service.serviceid OR vtiger_crmentityrel.crmid=vtiger_service.serviceid)  
+											WHERE (vtiger_crmentityrel.crmid IN (". generateQuestionMarks($allowed_contacts_and_accounts) .")  OR " .
+				 							"(vtiger_crmentityrel.relcrmid IN (".generateQuestionMarks($allowed_contacts_and_accounts).") AND vtiger_crmentityrel.module = 'Services')) 
+											AND vtiger_service.serviceid = ?";			
+								$res = $adb->pquery($query, array($allowed_contacts_and_accounts,$allowed_contacts_and_accounts, $entityid));
+								if ($adb->num_rows($res) > 0) {
+									return true;
+								}
+								
+								$query = "SELECT vtiger_inventoryproductrel.productid, vtiger_inventoryproductrel.id
+											FROM vtiger_inventoryproductrel   
+											INNER JOIN vtiger_crmentity 
+											ON vtiger_inventoryproductrel.productid=vtiger_crmentity.crmid 					
+											LEFT JOIN vtiger_quotes
+											ON vtiger_inventoryproductrel.id = vtiger_quotes.quoteid 													
+											WHERE vtiger_crmentity.deleted=0 
+											AND (vtiger_quotes.contactid IN (". generateQuestionMarks($allowed_contacts_and_accounts).") or vtiger_quotes.accountid IN (".generateQuestionMarks($allowed_contacts_and_accounts)."))
+											AND vtiger_inventoryproductrel.productid = ?";
+								$res = $adb->pquery($query, array($allowed_contacts_and_accounts, $allowed_contacts_and_accounts, $entityid));
+								if ($adb->num_rows($res) > 0) {
+									return true;
+								}
+								
+								$query = "SELECT vtiger_inventoryproductrel.productid, vtiger_inventoryproductrel.id
+										FROM vtiger_inventoryproductrel   
+										INNER JOIN vtiger_crmentity 
+										ON vtiger_inventoryproductrel.productid=vtiger_crmentity.crmid 					
+										LEFT JOIN vtiger_invoice
+										ON vtiger_inventoryproductrel.id = vtiger_invoice.invoiceid 													
+										WHERE vtiger_crmentity.deleted=0 
+											AND (vtiger_invoice.contactid IN (". generateQuestionMarks($allowed_contacts_and_accounts).") or vtiger_invoice.accountid IN (".generateQuestionMarks($allowed_contacts_and_accounts)."))
+											AND vtiger_inventoryproductrel.productid = ?";
+								$res = $adb->pquery($query, array($allowed_contacts_and_accounts, $allowed_contacts_and_accounts, $entityid));
 								if ($adb->num_rows($res) > 0) {
 									return true;
 								}
@@ -2601,6 +2520,7 @@ function check_permission($customerid, $module, $entityid) {
 														
 		}
 	return false;
+	$log->debug("Exiting customerportal function check_permission ..");
 }
 
 /* Function to get related Documents for faq
@@ -2611,6 +2531,7 @@ function check_permission($customerid, $module, $entityid) {
 function get_documents($id,$module,$customerid,$sessionid)
 {
 	global $adb,$log;	
+	$log->debug("Entering customer portal function get_documents ..");
 	$check = checkModuleActive($module);
 	if($check == false){
 		return array("#MODULE INACTIVE#");
@@ -2662,21 +2583,170 @@ function get_documents($id,$module,$customerid,$sessionid)
 					$i++;
 					}
 				}
-		$log->debug("Exiting get_faq_document ..".print_r($output,true));
+	$log->debug("Exiting customerportal function  get_faq_document ..");
 	return $output;
 }
+
+
+/* Function to get contactid's and account's product details'
+ * 
+*/
+function get_service_list_values($id,$modulename,$sessionid,$only_mine='true')
+{
+	require_once('modules/Services/Services.php');
+	require_once('include/utils/UserInfoUtil.php');
+	require_once('modules/Users/Users.php');
+	global $current_user,$adb,$log;
+	$log->debug("Entering customer portal Function get_service_list_values");
+	$check = checkModuleActive($modulename);
+	if($check == false){
+		return array("#MODULE INACTIVE#");
+	}
+	$user = new Users();
+	$userid = getPortalUserid();
+	$current_user = $user->retrieve_entity_info($userid, 'Users');
+	$entity_ids_list = array();
+		$show_all=show_all($modulename);
+		
+		if(!validateSession($id,$sessionid))
+			return null; 
+		
+		if($only_mine == 'true' || $show_all == 'false') 
+		{
+			array_push($entity_ids_list,$id);
+		} 
+		else 
+		{
+				$contactquery = "SELECT contactid, accountid FROM vtiger_contactdetails " .
+				" INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid" .
+				" AND vtiger_crmentity.deleted = 0 " .
+				" WHERE (accountid = (SELECT accountid FROM vtiger_contactdetails WHERE contactid = ?)  AND accountid != 0) OR contactid = ?";
+				$contactres = $adb->pquery($contactquery, array($id,$id));
+				$no_of_cont = $adb->num_rows($contactres);
+				for($i=0;$i<$no_of_cont;$i++)
+				{
+					$cont_id = $adb->query_result($contactres,$i,'contactid');
+					$acc_id = $adb->query_result($contactres,$i,'accountid');
+					if(!in_array($cont_id, $entity_ids_list))
+						$entity_ids_list[] = $cont_id;
+					if(!in_array($acc_id, $entity_ids_list) && $acc_id != '0')
+						$entity_ids_list[] = $acc_id;
+				}
+	}
+	
+	$focus = new Services();
+	$fields = filterInactiveFields('Services',$focus->list_fields);
+	foreach ($fields as $fieldlabel => $values){
+		foreach($values as $table => $fieldname){
+			$fields_list[$fieldlabel] = $fieldname;
+		}
+	}
+	$fields_list['Related To'] = 'entityid';
+	$query = array();
+	$params = array();
+	
+	$query[] = "select vtiger_service.*," .
+				"case when vtiger_crmentityrel.crmid != vtiger_service.serviceid then vtiger_crmentityrel.crmid else vtiger_crmentityrel.relcrmid end as entityid, " .
+				 "'' as setype from vtiger_service " .
+				 "inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_service.serviceid " .
+				 "left join vtiger_crmentityrel on (vtiger_crmentityrel.relcrmid=vtiger_service.serviceid or vtiger_crmentityrel.crmid=vtiger_service.serviceid) " .
+				 "where vtiger_crmentity.deleted = 0 and " .
+				 "( vtiger_crmentityrel.crmid in (".generateQuestionMarks($entity_ids_list).") OR " .
+				 "(vtiger_crmentityrel.relcrmid in (".generateQuestionMarks($entity_ids_list).") AND vtiger_crmentityrel.module = 'Services')" .
+				 ")";
+				 
+	$params[] = array($entity_ids_list, $entity_ids_list);
+							
+	$checkQuotes = checkModuleActive('Quotes');
+	if($checkQuotes == true){
+		$query[] = "select distinct vtiger_service.*,  
+					case when vtiger_quotes.contactid is not null then vtiger_quotes.contactid else vtiger_quotes.accountid end as entityid,
+					case when vtiger_quotes.contactid is not null then 'Contacts' else 'Accounts' end as setype
+					from vtiger_quotes INNER join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_quotes.quoteid 
+					left join vtiger_inventoryproductrel on vtiger_inventoryproductrel.id=vtiger_quotes.quoteid 
+					left join vtiger_service on vtiger_service.serviceid = vtiger_inventoryproductrel.productid 
+					where vtiger_inventoryproductrel.productid = vtiger_service.serviceid AND vtiger_crmentity.deleted=0 and (accountid in  (". generateQuestionMarks($entity_ids_list) .") or contactid in (". generateQuestionMarks($entity_ids_list) ."))";		
+		$params[] = array($entity_ids_list,$entity_ids_list);
+	}
+	$checkInvoices = checkModuleActive('Invoice');
+	if($checkInvoices == true){
+		$query[] = "select distinct vtiger_service.*,  
+					case when vtiger_invoice.contactid !=0 then vtiger_invoice.contactid else vtiger_invoice.accountid end as entityid,
+					case when vtiger_invoice.contactid !=0 then 'Contacts' else 'Accounts' end as setype
+					from vtiger_invoice 
+					INNER join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_invoice.invoiceid 
+					left join vtiger_inventoryproductrel on vtiger_inventoryproductrel.id=vtiger_invoice.invoiceid
+					left join vtiger_service on vtiger_service.serviceid = vtiger_inventoryproductrel.productid 
+					where vtiger_inventoryproductrel.productid = vtiger_service.serviceid AND vtiger_crmentity.deleted=0 and (accountid in (". generateQuestionMarks($entity_ids_list) .") or contactid in  (". generateQuestionMarks($entity_ids_list) ."))";
+		$params[] = array($entity_ids_list,$entity_ids_list);
+	}
+		for($k=0;$k<count($query);$k++)
+		{
+			$res[$k] = $adb->pquery($query[$k],$params[$k]);
+			$noofdata[$k] = $adb->num_rows($res[$k]);			
+			if($noofdata[$k] == 0)
+   				$output[$k][$modulename]['data'] = '';
+			for( $j= 0;$j < $noofdata[$k]; $j++)
+			{
+				$i=0;
+				foreach($fields_list as $fieldlabel=> $fieldname) {
+					$fieldper = getFieldVisibilityPermission('Services',$current_user->id,$fieldname);
+					if($fieldper == '1' && $fieldname != 'entityid'){
+						continue;
+					}
+					$output[$k][$modulename]['head'][0][$i]['fielddata'] = $fieldlabel; 
+					$fieldvalue = $adb->query_result($res[$k],$j,$fieldname);
+					$fieldid = $adb->query_result($res[$k],$j,'serviceid');
+					
+					if($fieldname == 'entityid') {
+						$crmid = $fieldvalue; 
+						$module = $adb->query_result($res[$k],$j,'setype');
+						if($module == ''){
+							$module = $adb->query_result($adb->query("SELECT setype FROM vtiger_crmentity WHERE crmid = $crmid"),0,'setype');
+						}
+						if ($crmid != '' && $module != '') {
+							$fieldvalues = getEntityName($module, array($crmid));
+							if($module == 'Contacts')
+							$fieldvalue = '<a href="index.php?module=Contacts&action=index&id='.$crmid.'">'.$fieldvalues[$crmid].'</a>';
+							elseif($module == 'Accounts')
+							$fieldvalue = '<a href="index.php?module=Accounts&action=index&id='.$crmid.'">'.$fieldvalues[$crmid].'</a>';
+						} else {
+							$fieldvalue = '';
+						}
+					}	
+
+					if($fieldname == 'servicename')
+						$fieldvalue = '<a href="index.php?module=Services&action=index&id='.$fieldid.'">'.$fieldvalue.'</a>';
+					
+					if($fieldname == 'unit_price'){
+						$currencyid = $adb->query_result($res[$k],$j,'currency_id');
+						$curr = getCurrencySymbolandCRate($currencyid);
+						$value = "(".$curr['symbol'].")".$fieldvalue;
+						$fieldvalue = $value;
+				}
+					$output[$k][$modulename]['data'][$j][$i]['fielddata'] = $fieldvalue;
+					$i++;
+				}
+			}
+		}
+ 	$log->debug("Exiting customerportal function get_product_list_values.....");
+ 	return $output;	
+}
+
 
 /* Function to get the list of modules allowed for customer portal
  */
 function get_modules()
 {
-	global $adb;
+	global $adb,$log;
+	$log->debug("Entering customer portal Function get_modules");
 	$query = $adb->query("SELECT * FROM vtiger_customerportal_tabs INNER JOIN vtiger_tab ON vtiger_tab.tabid = vtiger_customerportal_tabs.tabid WHERE vtiger_tab.presence = 0 AND vtiger_customerportal_tabs.visible = 1 ORDER BY sequence");
 	$norows = $adb->num_rows($query);
 	for($i = 0;$i < $norows;$i++) {
 		$tabid = $adb->query_result($query,$i,'tabid');
 		$module[$i] = vtlib_getModuleNameById($tabid);
 	} 
+	$log->debug("Exiting customerportal function get_modules");
 	return $module;
 }
 
@@ -2684,7 +2754,8 @@ function get_modules()
  */
 function show_all($module){
 	
-	global $adb;
+	global $adb,$log;
+	$log->debug("Entering customer portal Function show_all");
 	$tabid = getTabid($module);
 	if($module=='Tickets'){
 		$tabid = getTabid('HelpDesk');
@@ -2700,12 +2771,14 @@ function show_all($module){
 	}else {
 		return 'false';
 	}
+	$log->debug("Exiting customerportal function show_all");
 }
 
 /* Function to get ServiceContracts information in the tickets module if the ticket is related to ServiceContracts 
  */
 function getRelatedServiceContracts($crmid){
 	global $adb,$log;
+	$log->debug("Entering customer portal function getRelatedServiceContracts");
 	$module = 'ServicesContracts';
 	$check = checkModuleActive($module);
 	if($check == false){
@@ -2727,31 +2800,34 @@ function getRelatedServiceContracts($crmid){
 	} else {
 		return null;
 	}
+	$log->debug("Exiting customerportal function getRelatedServiceContracts");
 }
 
 
 function getPortalUserid() {
 	global $adb,$log;
+	$log->debug("Entering customer portal function getPortalUserid");
 	$res = $adb->query("SELECT prefvalue FROM vtiger_customerportal_prefs WHERE prefkey = 'userid' AND tabid = 0");
 	$norows = $adb->num_rows($res);
 	if($norows > 0) {
 		$userid = $adb->query_result($res,0,'prefvalue');
 		return $userid;
 	}
-	return false; 
+	return false;
+ 	$log->debug("Exiting customerportal function getPortalUserid");
 }
 
 function checkModuleActive($module){
 	global $adb,$log;
 	$modulesAllowed = get_modules();
 	foreach($modulesAllowed as $key => $value){
-		$log->fatal("$value - $module");
 		if(strcmp($module,$value) == 0){
 			return true;
 		}
 	}
 	return false;
 }
+
 /* Begin the HTTP listener service and exit. */ 
 if (!isset($HTTP_RAW_POST_DATA)){
 	$HTTP_RAW_POST_DATA = file_get_contents('php://input');

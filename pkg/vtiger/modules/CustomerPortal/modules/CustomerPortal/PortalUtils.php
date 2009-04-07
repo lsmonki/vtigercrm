@@ -57,7 +57,7 @@ function cp_changeTabOrder($tabid,$move) {
  	
 }
 
-/* Function to obtain related info for Customer Portal(contacts can see other contacts info or not)
+/* Function to obtain related info for Customer Portal(contacts can see other contacts info ar not)
  */ 
  
 function cp_getContactsViewInfo() {

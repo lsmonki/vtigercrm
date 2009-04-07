@@ -18,7 +18,7 @@ class CustomerPortal {
 	function vtlib_handler($moduleName, $eventType) {
  					
 		require_once('include/utils/utils.php');			
-		global $adb;
+		global $adb,$mod_strings;
  		
  		if($eventType == 'module.postinstall') {			
 			$portalmodules = array("Accounts","Contacts","HelpDesk","Invoice","Quotes","Documents","Faq","Services","Products");
@@ -37,6 +37,18 @@ class CustomerPortal {
 			
 			// Mark the module as Standard module
 			$adb->pquery('UPDATE vtiger_tab SET customized=0 WHERE name=?', array($moduleName));
+			
+			$fieldid = $adb->getUniqueID('vtiger_settings_field');
+			$blockid = getSettingsBlockId('LBL_OTHER_SETTINGS');
+			$seq_res = $adb->query("SELECT max(sequence) AS max_seq FROM vtiger_settings_field WHERE blockid = $blockid");
+			if ($adb->num_rows($seq_res) > 0) {
+				$cur_seq = $adb->query_result($seq_res, 0, 'max_seq');
+				if ($cur_seq != null)	$seq = $cur_seq + 1;
+			}
+			
+			$adb->pquery('INSERT INTO vtiger_settings_field(fieldid, blockid, name, iconpath, description, linkto, sequence) 
+				VALUES (?,?,?,?,?,?,?)', array($fieldid, $blockid, 'LBL_CUSTOMER_PORTAL', 'modules/FieldFormulas/resources/FieldFormulas.png', 'PORTAL_EXTENSION_DESCRIPTION', 'index.php?module=CustomerPortal&action=index&parenttab=Settings', $seq));
+					
 			
 		} else if($eventType == 'module.disabled') {
 		// TODO Handle actions when this module is disabled.

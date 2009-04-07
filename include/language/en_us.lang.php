@@ -1212,14 +1212,10 @@ $app_strings = array (
 'LAYOUT_EDITOR'=>'Layout Editor',
 'CUSTOMFIELD_MAPPING'=>'CustomField Mapping',
 'ADD_PORTAL'=>'Add To Portal',
-'LBL_ADDRESS_INFORMATION'=>'Address Information',
 'LBL_FILE_INTEGRITY_CHECK'=>'Check integrity of this file',
-'LBL_TERMS_INFORMATION'=>'Terms & Conditions',
-'LBL_INVOICE_INFORMATION'=>'Invoice Information',
 
 //To handle plurals of module names
 'Todos' => 'Todos',
-
 );
 
 $app_list_strings = array (

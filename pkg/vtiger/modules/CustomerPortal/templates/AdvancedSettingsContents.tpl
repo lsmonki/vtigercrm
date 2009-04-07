@@ -65,8 +65,7 @@
 
 <tr>
 	<td colspan=2 align=center>
-		<input class="crmbutton small save" type="Submit" title="{$APP.LBL_SAVE_BUTTON_TITLE}" value="Save" alt="Save" >
-		<input class="crmbutton small cancel" type="button" title="{$APP.LBL_CANCEL_BUTTON_TITLE}" value="{$APP.LBL_CANCEL_BUTTON_LABEL}"  onclick="window.history.back();">				
+		<input class="crmbutton small save" type="Submit" title="{$APP.LBL_SAVE_BUTTON_TITLE}" value="Save" alt="Save" onclick=VtigerJS_DialogBox.block();>
 	</td>
 </tr>
 
