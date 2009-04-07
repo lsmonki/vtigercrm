@@ -770,8 +770,8 @@ function create_ticket($input_array)
 
 	$ticket->save("HelpDesk");
     
-	$subject = '[From Portal][ Ticket ID : '.$ticket->id.' ] '.$title;
-	$contents = ' Ticket ID : '.$ticket->id.'<br> Ticket Title : '.$title.'<br><br>'.$description;
+	$subject = "[From Portal] " .$ticket->column_fields['ticket_no']." [ Ticket ID : $ticket->id ] ".$title;
+	$contents = ' Ticket No : '.$ticket->column_fields['ticket_no']. '<br> Ticket ID : '.$ticket->id.'<br> Ticket Title : '.$title.'<br><br>'.$description;
 
 	//get the contact email id who creates the ticket from portal and use this email as from email id in email
 	$result = $adb->pquery("select email from vtiger_contactdetails where contactid=?", array($parent_id));

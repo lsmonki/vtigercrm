@@ -70,8 +70,8 @@ if($_REQUEST['mode'] == 'edit')
 else
 	$reply = '';
 
-$subject = '[ '.$mod_strings['LBL_TICKET_ID'].' : '.$focus->id.' ] '.$reply.$_REQUEST['ticket_title'];
-$bodysubject = $mod_strings['LBL_TICKET_ID'].' : '.$focus->id.'<br> '.$mod_strings['LBL_SUBJECT'].$_REQUEST['ticket_title'];
+$subject = $focus->column_fields['ticket_no'] . ' [ '.$mod_strings['LBL_TICKET_ID'].' : '.$focus->id.' ] '.$reply.$_REQUEST['ticket_title'];
+$bodysubject = $mod_strings['Ticket No'] .":<br>" . $focus->column_fields['ticket_no'] . "<br>" . $mod_strings['LBL_TICKET_ID'].' : '.$focus->id.'<br> '.$mod_strings['LBL_SUBJECT'].$_REQUEST['ticket_title'];
 
 $emailoptout = 0;
 

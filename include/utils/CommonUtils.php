@@ -2086,10 +2086,12 @@ function sendNotificationToOwner($module,$focus)
 
 	$ownername = getUserName($focus->column_fields['assigned_user_id']);
 	$ownermailid = getUserEmailId('id',$focus->column_fields['assigned_user_id']);
+	$recseqnumber = '';
 
 	if($module == 'Contacts')
 	{
 		$objectname = $focus->column_fields['lastname'].' '.$focus->column_fields['firstname'];
+		$recseqnumber=$focus->column_fields['contact_no'];
 		$mod_name = 'Contact';
 		$object_column_fields = array(
 						'lastname'=>'Last Name',
@@ -2102,6 +2104,7 @@ function sendNotificationToOwner($module,$focus)
 	if($module == 'Accounts')
 	{
 		$objectname = $focus->column_fields['accountname'];
+		$recseqnumber=$focus->column_fields['account_no'];
 		$mod_name = 'Account';
 		$object_column_fields = array(
 						'accountname'=>'Account Name',
@@ -2114,6 +2117,7 @@ function sendNotificationToOwner($module,$focus)
 	if($module == 'Potentials')
 	{
 		$objectname = $focus->column_fields['potentialname'];
+		$recseqnumber=$focus->column_fields['potential_no'];
 		$mod_name = 'Potential';
 		$object_column_fields = array(
 						'potentialname'=>'Potential Name',
@@ -2127,15 +2131,17 @@ function sendNotificationToOwner($module,$focus)
 	if($module == "Accounts" || $module == "Potentials" || $module == "Contacts")
 	{
 		$description = $app_strings['MSG_DEAR'].' '.$ownername.',<br><br>';
-
+		
+		if(!empty($recseqnumber)) $recseqnumber = "[$recseqnumber]";
+		
 		if($focus->mode == 'edit')
 		{
-			$subject = $app_strings['MSG_REGARDING'].' '.$mod_name.' '.$app_strings['MSG_UPDATION'].' '.$objectname;
+			$subject = $app_strings['MSG_REGARDING'].' '.$mod_name.' '.$app_strings['MSG_UPDATION']." $recseqnumber ".$objectname;
 			$description .= $app_strings['MSG_THE'].' '.$mod_name.' '.$app_strings['MSG_HAS_BEEN_UPDATED'].'.';
 		}
 		else
 		{
-			$subject = $app_strings['MSG_REGARDING'].' '.$mod_name.' '.$app_strings['MSG_ASSIGNMENT'].' '.$objectname;
+			$subject = $app_strings['MSG_REGARDING'].' '.$mod_name.' '.$app_strings['MSG_ASSIGNMENT']." $recseqnumber ".$objectname;
 		        $description .= $app_strings['MSG_THE'].' '.$mod_name.' '.$app_strings['MSG_HAS_BEEN_ASSIGNED_TO_YOU'].'.';
 		}
 		$description .= '<br>'.$app_strings['MSG_THE'].' '.$mod_name.' '.$app_strings['MSG_DETAILS_ARE'].':<br><br>';
