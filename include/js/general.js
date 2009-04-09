@@ -3630,6 +3630,8 @@ VtigerJS_DialogBox = {
 			olayer.id = olayerid;
 			olayer.className = "small veil"; 
 			olayer.style.zIndex = (new Date()).getTime();
+			// In case zIndex goes to negative side!
+			if(olayer.style.zIndex < 0) olayer.style.zIndex *= -1; 
 			if (browser_ie) { 
 				olayer.style.height = document.body.offsetHeight + (document.body.scrollHeight - document.body.offsetHeight) + "px"; 
 			} else if (browser_nn4 || browser_nn6) { olayer.style.height = document.body.offsetHeight + "px"; } 
