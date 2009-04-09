@@ -6629,7 +6629,7 @@
 		<field name="scannername" type="C" size="30"></field>
 		<field name="server" type="C" size="100"></field>
 		<field name="protocol" type="C" size="10"></field>
-		<field name="username" type="C" size="30"></field>
+		<field name="username" type="C" size="255"></field>
 		<field name="password" type="C" size="255"></field>
 		<field name="ssltype" type="C" size="10"></field>
 		<field name="sslmethod" type="C" size="30"></field>

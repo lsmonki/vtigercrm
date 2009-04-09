@@ -679,7 +679,7 @@ ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger
 
 /* vtmailscanner customization */
 ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_mailscanner(scannerid INT AUTO_INCREMENT NOT NULL PRIMARY KEY,scannername VARCHAR(30),
-	server VARCHAR(100),protocol VARCHAR(10),username VARCHAR(30),password VARCHAR(255),ssltype VARCHAR(10),
+	server VARCHAR(100),protocol VARCHAR(10),username VARCHAR(255),password VARCHAR(255),ssltype VARCHAR(10),
 sslmethod VARCHAR(30),connecturl VARCHAR(255),searchfor VARCHAR(10),markas VARCHAR(10),isvalid INT(1)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_mailscanner_ids(scannerid INT, messageid TEXT,crmid INT) ENGINE=InnoDB DEFAULT CHARSET=utf8;");

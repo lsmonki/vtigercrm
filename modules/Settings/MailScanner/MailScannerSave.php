@@ -13,16 +13,16 @@ require_once('modules/Settings/MailScanner/core/MailScannerInfo.php');
 require_once('modules/Settings/MailScanner/core/MailBox.php');
 
 $newscannerinfo = new Vtiger_MailScannerInfo(false, false);
-$newscannerinfo->scannername = $_REQUEST['mailboxinfo_scannername'];
-$newscannerinfo->server     = $_REQUEST['mailboxinfo_server'];
-$newscannerinfo->protocol   = $_REQUEST['mailboxinfo_protocol'];
-$newscannerinfo->username   = $_REQUEST['mailboxinfo_username'];
-$newscannerinfo->password   = $_REQUEST['mailboxinfo_password'];
-$newscannerinfo->ssltype    = $_REQUEST['mailboxinfo_ssltype'];
-$newscannerinfo->sslmethod  = $_REQUEST['mailboxinfo_sslmethod'];
-$newscannerinfo->server     = $_REQUEST['mailboxinfo_server'];
-$newscannerinfo->searchfor  = $_REQUEST['mailboxinfo_searchfor'];
-$newscannerinfo->markas     = $_REQUEST['mailboxinfo_markas'];
+$newscannerinfo->scannername = trim($_REQUEST['mailboxinfo_scannername']);
+$newscannerinfo->server     = trim($_REQUEST['mailboxinfo_server']);
+$newscannerinfo->protocol   = trim($_REQUEST['mailboxinfo_protocol']);
+$newscannerinfo->username   = trim($_REQUEST['mailboxinfo_username']);
+$newscannerinfo->password   = trim($_REQUEST['mailboxinfo_password']);
+$newscannerinfo->ssltype    = trim($_REQUEST['mailboxinfo_ssltype']);
+$newscannerinfo->sslmethod  = trim($_REQUEST['mailboxinfo_sslmethod']);
+$newscannerinfo->server     = trim($_REQUEST['mailboxinfo_server']);
+$newscannerinfo->searchfor  = trim($_REQUEST['mailboxinfo_searchfor']);
+$newscannerinfo->markas     = trim($_REQUEST['mailboxinfo_markas']);
 $newscannerinfo->isvalid    =($_REQUEST['mailboxinfo_enable'] == 'true')? true : false;
 
 // Rescan all folders on next run?
