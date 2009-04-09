@@ -188,7 +188,7 @@ function calcTotal() {
 // Function to Calculate the Total for a particular product in an Inventory
 function calcProductTotal(rowId) {	
 		
-		if(document.getElementById('deleted'+rowId).value == 0)
+		if(document.getElementById('deleted'+rowId) && document.getElementById('deleted'+rowId).value == 0)
 		{
 			
 			var total=eval(getObj("qty"+rowId).value*getObj("listPrice"+rowId).value);
@@ -775,6 +775,10 @@ function setDiscount(currObj,curr_row)
 		var discount_amount_value = document.getElementById("discount_amount"+curr_row).value.toString();
 		if(discount_amount_value == '') discount_amount_value = 0;
 		document.getElementById("discountTotal"+curr_row).innerHTML = roundValue(discount_amount_value);
+	}
+	// Update product total as discount would have changed.
+	if(curr_row != '_final') {
+		calcProductTotal(curr_row);
 	}
 
 }
