@@ -365,6 +365,9 @@ class ServiceContracts extends CRMEntity {
 			// Initialize module sequence for the module
 			$adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?)",array($adb->getUniqueId("vtiger_modentity_num"),$moduleName,'SERCON',1,1,1));
 			
+			// Make the picklist value 'Complete' for status as non-editable
+			$adb->query("UPDATE vtiger_contract_status SET presence=0 WHERE contract_status='Complete'");
+			
 			// Mark the module as Standard module
 			$adb->pquery('UPDATE vtiger_tab SET customized=0 WHERE name=?', array($moduleName));
 			

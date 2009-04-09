@@ -89,23 +89,25 @@ class ServiceContractsHandler extends VTEventHandler {
 				
 				// Calculate the Planned Duration based on Due date and Start date. (in days)
 				if(!empty($data['due_date']) && !empty($data['start_date'])) {
-					array_push($updateCols, 'planned_duration=?');
-					array_push($updateParams, intval((strtotime($data['due_date']) - strtotime($data['start_date']))/86400+1) . ' Days');
+					array_push($updateCols, "planned_duration= CONCAT(TO_DAYS(due_date)-TO_DAYS(start_date)+1, ' Days')");
 				}
 				// Update the End date if the status is Complete or if the Used Units reaches/exceeds Total Units
-				if(empty($data['end_date']) && ($data['contract_status'] == 'Complete' || $data['used_units'] >= $data['total_units'])) {
-					$end_date_set_now = true;
+				if(empty($data['end_date']) && ($data['contract_status'] == 'Complete' || 
+					(!empty($data['used_units']) && !empty($data['total_units']) && $data['used_units'] >= $data['total_units']))) {
+					$data['end_date'] = date('Y-m-d');
 					array_push($updateCols, 'end_date=?');
 					array_push($updateParams, date('Y-m-d'));
+				} elseif ($data['contract_status'] != 'Complete' && (empty($data['used_units']) || empty($data['total_units']) ||
+					(!empty($data['used_units']) && !empty($data['total_units']) && $data['used_units'] < $data['total_units']))) {
+					$data['end_date'] = null;
+					array_push($updateCols, 'end_date=?');
+					array_push($updateParams, null);					
 				}
 				// Calculate the Actual Duration based on End date and Start date. (in days)
-				if((!empty($data['end_date'])|| $end_date_set_now) && !empty($data['start_date'])) {
-					$end_date = $data['end_date'];
-					if ($end_date_set_now) {
-						$end_date = getDisplayDate(date('Y-m-h'));
-					}
-					array_push($updateCols, 'actual_duration=?');
-					array_push($updateParams, intval((strtotime($end_date) - strtotime($data['start_date']))/86400+1) . ' Days');
+				if(!empty($data['end_date']) && !empty($data['start_date'])) {
+					array_push($updateCols, "actual_duration= CONCAT(TO_DAYS(end_date)-TO_DAYS(start_date)+1, ' Days')");
+				} else {
+					array_push($updateCols, "actual_duration= ''");					
 				}
 				// Update the Progress based on Used Units and Total Units (in percentage)
 				if(!empty($data['used_units']) && !empty($data['total_units'])) {
