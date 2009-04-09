@@ -12,6 +12,7 @@
 require_once('modules/Emails/Emails.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 require_once('modules/Users/Users.php');
+require_once('modules/Documents/Documents.php');
 
 /**
  * Mail Scanner Action
@@ -304,8 +305,23 @@ class Vtiger_MailScannerAction {
 
 			$issaved = $this->__SaveAttachmentFile($attachid, $filename, $filecontent);
 			if($issaved) {
+				// Create document record
+				$document = new Documents();
+				$document->column_fields['notes_title']      = $filename;
+				$document->column_fields['filename']         = $filename;
+				$document->column_fields['filestatus']       = 1;
+				$document->column_fields['filelocationtype'] = 'I';
+				$document->column_fields['folderid']         = 1; // Default Folder 
+				$document->column_fields['assigned_user_id'] = $userid;
+				$document->save('Documents');
+				
+				// Link file attached to document
 				$adb->pquery("INSERT INTO vtiger_seattachmentsrel(crmid, attachmentsid) VALUES(?,?)", 
-					Array($basefocus->id, $attachid));
+					Array($document->id, $attachid));
+				
+				// Link document to base record
+				$adb->pquery("INSERT INTO vtiger_senotesrel(crmid, notesid) VALUES(?,?)", 
+					Array($basefocus->id, $document->id));				
 			}
 		}	
 	}
