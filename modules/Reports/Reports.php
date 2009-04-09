@@ -588,7 +588,7 @@ class Reports extends CRMEntity{
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
 			$optionvalue = $fieldtablename.":".$fieldcolname.":".$module."_".$fieldlabel1.":".$fieldname.":".$fieldtypeofdata;
-			$this->adv_rel_fields[$fieldtypeofdata][] = '$'.$module.'#'.$fieldname.'$'."::".getTranslatedString($module)." ".$fieldlabel;
+			$this->adv_rel_fields[$fieldtypeofdata][] = '$'.$module.'#'.$fieldname.'$'."::".getTranslatedString($module,$module)." ".$fieldlabel;
 			//added to escape attachments fields in Reports as we have multiple attachments
                         if($module != 'HelpDesk' || $fieldname !='filename')
 				$module_columnlist[$optionvalue] = $fieldlabel;
@@ -1372,11 +1372,11 @@ function getEscapedColumns($selectedfields)
 					}
 					if(isset($_REQUEST["record"]) && $_REQUEST["record"] != '')
 					{
-						$options['label'][] = getTranslatedString($columntototalrow['tablabel']).' -'.getTranslatedString($columntototalrow['fieldlabel']);
+						$options['label'][] = getTranslatedString($columntototalrow['tablabel'],$columntototalrow['tablabel']).' -'.getTranslatedString($columntototalrow['fieldlabel'],$columntototalrow['tablabel']);
 					}	
 
 					$columntototalrow['fieldlabel'] = str_replace(" ","_",$columntototalrow['fieldlabel']);
-					$options []= getTranslatedString($columntototalrow['tablabel']).' - '.getTranslatedString($columntototalrow['fieldlabel']);
+					$options []= getTranslatedString($columntototalrow['tablabel'],$columntototalrow['tablabel']).' - '.getTranslatedString($columntototalrow['fieldlabel'],$columntototalrow['tablabel']);
 					if($selectedcolumn1[2] == "cb:".$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel']."_SUM:2")
 					{
 						$options []=  '<input checked name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_SUM:2" type="checkbox" value="">';					    
@@ -1409,7 +1409,7 @@ function getEscapedColumns($selectedfields)
 					}
 				}else
 				{
-					$options []= getTranslatedString($columntototalrow['tablabel']).' - '.getTranslatedString($columntototalrow['fieldlabel']);
+					$options []= getTranslatedString($columntototalrow['tablabel'],$columntototalrow['tablabel']).' - '.getTranslatedString($columntototalrow['fieldlabel'],$columntototalrow['tablabel']);
 					$options []= '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_SUM:2" type="checkbox" value="">';
 					$options []= '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_AVG:3" type="checkbox" value="" >';
 					$options []= '<input name="cb:'.$columntototalrow['tablename'].':'.$columntototalrow['columnname'].':'.$columntototalrow['fieldlabel'].'_MIN:4"type="checkbox" value="" >';

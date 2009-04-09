@@ -70,7 +70,7 @@ class ReportRun extends CRMEntity
 	{
 		global $adb;
 		global $modules;
-		global $log,$current_user;
+		global $log,$current_user,$current_language;
 		$ssql = "select vtiger_selectcolumn.* from vtiger_report inner join vtiger_selectquery on vtiger_selectquery.queryid = vtiger_report.queryid";
 		$ssql .= " left join vtiger_selectcolumn on vtiger_selectcolumn.queryid = vtiger_selectquery.queryid";
 		$ssql .= " where vtiger_report.reportid = ?";
@@ -100,10 +100,10 @@ class ReportRun extends CRMEntity
 			$fieldlabel = trim(str_replace("_"," ",$fieldlabel));
 			//modified code to support i18n issue
 			$fld_arr = explode(" ",$fieldlabel);
-			$mod_lbl = getTranslatedString($fld_arr[0]); //module
+			$mod_lbl = getTranslatedString($fld_arr[0],$module); //module
 			array_shift($fld_arr);
 			$fld_lbl_str = implode(" ",$fld_arr);
-			$fld_lbl = getTranslatedString($fld_lbl_str); //fieldlabel
+			$fld_lbl = getTranslatedString($fld_lbl_str,$module); //fieldlabel
 			$fieldlabel = $mod_lbl." ".$fld_lbl;
 			if(CheckFieldPermission($fieldname,$mod) != 'true' && $colname!="crmid")
 			{
@@ -1664,7 +1664,7 @@ class ReportRun extends CRMEntity
 					}
 					$mod_name = split(' ',$headerLabel,2);
 					if($mod_name[0]!='')
-						$module = getTranslatedString($mod_name[0]);
+						$module = getTranslatedString($mod_name[0],$mod_name[0]);
 					$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
 					if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString($headerLabel_tmp);
 					else $headerLabel = $headerLabel_tmp;
@@ -1879,7 +1879,7 @@ class ReportRun extends CRMEntity
 						$headerLabel = str_replace("_"," ",$fld->name);
 						$mod_name = split('_',$headerLabel,2);
 						if($mod_name[0]!='')
-							$module = getTranslatedString($mod_name[0]);
+							$module = getTranslatedString($mod_name[0],$mod_name[0]);
 						$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
 						if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString($headerLabel_tmp);
 						else $headerLabel = $headerLabel_tmp;
@@ -1957,11 +1957,13 @@ class ReportRun extends CRMEntity
 						$uitype_result = $adb->pquery("SELECT uitype from vtiger_field WHERE tablename = ? AND columnname=?",array($fieldlist[1],$fieldlist[2]));
 						if($adb->num_rows($mod_query)>0){
 							$module_name = getTabName($adb->query_result($mod_query,0,'tabid'));
+							$fieldlabel = trim(str_replace($escapedchars," ",$fieldlist[3]));
+							$fieldlabel = str_replace("_", " ", $fieldlabel);
 							if($module_name){
-								$field = getTranslatedString(str_replace($escapedchars," ",$fieldlist[3]),$module_name);
+								$field = getTranslatedString($fieldlabel,$module_name);
 							} else {
-								$field = getTranslatedString(str_replace($escapedchars," ",$fieldlist[3]));
-							}
+								$field = getTranslatedString($fieldlabel);
+							}							
 						}
 						$uitype_arr[str_replace($escapedchars," ",$fieldlist[3])] = $adb->query_result($uitype_result,0,"uitype");
 						$totclmnflds[str_replace($escapedchars," ",$fieldlist[3])] = $field;
@@ -1975,7 +1977,7 @@ class ReportRun extends CRMEntity
 					foreach($totclmnflds as $key=>$value)
 					{
 						$coltotalhtml .= '<tr class="rptGrpHead" valign=top>'; 
-						$col_header = getTranslatedString(trim(str_replace($modules," ",$value)));
+						$col_header = trim(str_replace($modules," ",$value));
 						$fld_name_1 = $this->primarymodule . "_" . trim($value);
 						$fld_name_2 = $this->secondarymodule . "_" . trim($value);
 						if($uitype_arr[$value]==71 || in_array($fld_name_1,$this->convert_currency) || in_array($fld_name_1,$this->append_currency_symbol_to_value)

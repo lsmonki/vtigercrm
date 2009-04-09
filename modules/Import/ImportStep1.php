@@ -88,7 +88,7 @@ $smarty->assign("HEADER", $app_strings['LBL_IMPORT']." ". $mod_strings['LBL_MODU
 $smarty->assign("HAS_HEADER_CHECKED"," CHECKED");
 
 $smarty->assign("MODULE", $_REQUEST['module']);
-$smarty->assign("MODULELABEL", getTranslatedString($_REQUEST['module']));
+$smarty->assign("MODULELABEL", getTranslatedString($_REQUEST['module'],$_REQUEST['module']));
 $smarty->assign("SOURCE", $_REQUEST['source']);
 
 //we have set this as default. upto 4.2.3 we have Outlook, Act, SF formats. but now CUSTOM is enough to import

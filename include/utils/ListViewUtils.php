@@ -205,7 +205,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 						{
 							$temp_sorder = 'ASC';
 						}
-						$lbl_name = getTranslatedString($name);
+						$lbl_name = getTranslatedString($name, $module);
 						//added to display vtiger_currency symbol in listview header
 						if($lbl_name =='Amount')
 						{
@@ -413,16 +413,14 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
                                                         }
                                                 }
 												// vtlib customization: If translation is not available use the given name
-												$tr_name = $app_strings[$name];
-												if(!$tr_name) $tr_name = $name;
+												$tr_name = getTranslatedString($name, $module);
 												$name = "<a href='javascript:;' onClick=\"getListViewSorted_js('".$module."','".$sort_qry.$pass_url."&order_by=".$col."&sorder=".$sorder."')\" class='listFormHeaderLinks'>".$tr_name."&nbsp;".$arrow."</a>";
 												// END
                                                 $arrow = '';
                                         }
                                         else {
 												// vtlib customization: If translation is not available use the given name
-												$tr_name = $app_strings[$name];
-												if(!$tr_name) $tr_name = $name;
+												$tr_name = getTranslatedString($name, $module);
 												$name = $tr_name;
 												// END
 										}

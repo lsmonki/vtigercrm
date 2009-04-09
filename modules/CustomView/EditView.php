@@ -37,7 +37,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("MODULE",$cv_module);
-$smarty->assign("MODULELABEL",getTranslatedString($cv_module));
+$smarty->assign("MODULELABEL",getTranslatedString($cv_module,$cv_module));
 $smarty->assign("CVMODULE", $cv_module);
 $smarty->assign("CUSTOMVIEWID",$recordid);
 $smarty->assign("DATEFORMAT",$current_user->date_format);

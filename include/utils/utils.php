@@ -471,12 +471,11 @@ function return_module_language($language, $module)
 	global $log;
 	$log->debug("Entering return_module_language(".$language.",". $module.") method ...");
 	global $mod_strings, $default_language, $log, $currentModule, $translation_string_prefix;
+	static $cachedModuleStrings = array();
 
-	if($currentModule == $module && isset($mod_strings) && $mod_strings != null)
-	{
-		// We should have already loaded the array.  return the current one.
+	if(!empty($cachedModuleStrings[$module])) {
 		$log->debug("Exiting return_module_language method ...");
-		return $mod_strings;
+		return $cachedModuleStrings[$module];
 	}
 
 	$temp_mod_strings = $mod_strings;
@@ -510,6 +509,7 @@ function return_module_language($language, $module)
 	$mod_strings = $temp_mod_strings;
 
 	$log->debug("Exiting return_module_language method ...");
+	$cachedModuleStrings[$module] = $return_value;
 	return $return_value;
 }
 

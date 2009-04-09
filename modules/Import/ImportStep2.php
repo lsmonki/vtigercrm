@@ -383,7 +383,7 @@ if(isPermitted($module,'DuplicatesHandling','') == 'yes'){
 }
 
 $smarty->assign("MODULE", htmlspecialchars($_REQUEST['module'],ENT_QUOTES,$default_charset));
-$smarty->assign("MODULELABEL", getTranslatedString($_REQUEST['module']));
+$smarty->assign("MODULELABEL", getTranslatedString($_REQUEST['module'],$_REQUEST['module']));
 $smarty->assign('CATEGORY' , htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
 @$_SESSION['import_parenttab'] = $_REQUEST['parenttab'];
 $smarty->assign("JAVASCRIPT2", get_readonly_js() );
