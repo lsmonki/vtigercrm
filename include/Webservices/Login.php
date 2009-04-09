@@ -20,8 +20,10 @@
 			throw new WebServiceException(WebServiceErrorCode::$INVALIDUSERPWD,"Invalid username or password");
 		}
 		$user = $user->retrieveCurrentUserInfoFromFile($userId);
-		return $user;
-		
+		if($user->status != 'Inactive'){
+			return $user;
+		}
+		throw new WebServiceException(WebServiceErrorCode::$AUTHREQUIRED,'Given user is inactive');
 	}
 	
 	function vtws_getActiveToken($userId){
