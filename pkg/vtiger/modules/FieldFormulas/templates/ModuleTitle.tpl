@@ -5,12 +5,12 @@
 		</td>
 		<td valign="bottom" class="heading2">
 			<b><a href="index.php?module=Settings&action=ModuleManager&parenttab=Settings">Module Manager</a> > 
-			<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$FORMODULE}&parenttab=Settings">{$FORMODULE}</a> > 
-				{$PAGE_NAME}
+			<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$FORMODULE}&parenttab=Settings">{$FORMODULE|@getTranslatedString:$MOD}</a> > 
+				{$MOD.$PAGE_NAME}
 		</td>
 	</tr>
 	<tr>
-		<td valign="top" class="small">{$PAGE_TITLE} </td>
+		<td valign="top" class="small">{$MOD.$PAGE_DESC} </td>
 	</tr>
 </tbody></table>
 <br><br>

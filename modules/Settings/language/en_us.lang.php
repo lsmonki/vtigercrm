@@ -1199,6 +1199,10 @@ $mod_strings = Array(
 
 //for customer portal extension module
 'PORTAL_EXTENSION_DESCRIPTION'=>'Allows you to Configure Customer Portal Plugin',
-'LBL_CUSTOMER_PORTAL'=> 'Customer Portal'
+'LBL_CUSTOMER_PORTAL'=> 'Customer Portal',
+
+//FieldFormulas
+'LBL_FIELDFORMULAS' => 'Field Formulas',
+'LBL_FIELDFORMULAS_DESCRIPTION' => 'Add custom equations to custom fields',
 );
 ?>

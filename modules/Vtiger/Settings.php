@@ -37,12 +37,12 @@ if(!is_admin($current_user)) {
 	if(vtlib_isModuleActive('FieldFormulas')) {
 		$modules = com_vtGetModules($adb);
 		if(in_array(getTranslatedString($module),$modules)) {
-			$sql_result = $adb->pquery("select * from vtiger_settings_field where name = ? and active=0",array('Field Formulas'));
+			$sql_result = $adb->pquery("select * from vtiger_settings_field where name = ? and active=0",array('LBL_FIELDFORMULAS'));
 			if($adb->num_rows($sql_result) > 0) {
 				$menu_array['FieldFormulas']['location'] = $adb->query_result($sql_result, 0, 'linkto').'&formodule='.$module;
 				$menu_array['FieldFormulas']['image_src'] = $adb->query_result($sql_result, 0, 'iconpath');
-				$menu_array['FieldFormulas']['desc'] = $adb->query_result($sql_result, 0, 'description');
-				$menu_array['FieldFormulas']['label'] = $adb->query_result($sql_result, 0, 'name');
+				$menu_array['FieldFormulas']['desc'] = getTranslatedString($adb->query_result($sql_result, 0, 'description'));
+				$menu_array['FieldFormulas']['label'] = getTranslatedString($adb->query_result($sql_result, 0, 'name'));
 			}
 		}
 	}

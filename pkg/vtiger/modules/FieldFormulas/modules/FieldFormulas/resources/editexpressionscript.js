@@ -97,12 +97,12 @@ function editexpressionscript($){
 						if(parsed.status=='success'){
 							$("#expressionlistrow_"+fieldName).remove();
 							addFieldExpression(moduleName, fieldName, expression);
+							close();
 						}else{
 							errorDialog('save failed because '+parsed.message);
 						}
 					});
-				close();
-			});
+							});
 
 			$('#editpopup_cancel').bind('click', close);
 
@@ -207,7 +207,6 @@ function editexpressionscript($){
     function toExec(){
 		ep = editpopup();
 		function setModule(moduleName){
-			$('#module_info').text(format('Custom Fields in "%s" Module',moduleName));
 			$.get('index.php', {
 					module:'FieldFormulas',
 					action:'FieldFormulasAjax',
@@ -227,7 +226,7 @@ function editexpressionscript($){
 					    $('#new_field_expression').attr('disabled', true);
 						$('#new_field_expression').attr('class', 'searchBtn');
 						$('#new_field_expression').unbind('click');
-						$('#status_message').html(custom_alert_arr.NEED_TO_ADD_A + ' <a href="index.php?module=Settings&action=LayoutBlockList&parenttab=Settings&formodule='+moduleName+'" target="_blank"> ' + custom_alert_arr.CUSTOM_FIELD +'</a>');
+						$('#status_message').html(strings.NEED_TO_ADD_A + ' <a href="index.php?module=Settings&action=LayoutBlockList&parenttab=Settings&formodule='+moduleName+'" target="_blank"> ' + strings.CUSTOM_FIELD +'</a>');
 					}
 
 			jsonget('getexpressionlistjson',

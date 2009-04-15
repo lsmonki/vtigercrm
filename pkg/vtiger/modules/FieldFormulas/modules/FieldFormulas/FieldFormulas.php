@@ -32,7 +32,7 @@ class FieldFormulas {
 			}
 			
 			$adb->pquery('INSERT INTO vtiger_settings_field(fieldid, blockid, name, iconpath, description, linkto, sequence) 
-				VALUES (?,?,?,?,?,?,?)', array($fieldid, $blockid, 'Field Formulas', 'modules/FieldFormulas/resources/FieldFormulas.png', 'Add custom equations to custom fields', 'index.php?module=FieldFormulas&action=index&parenttab=Settings', $seq));
+				VALUES (?,?,?,?,?,?,?)', array($fieldid, $blockid, 'LBL_FIELDFORMULAS', 'modules/FieldFormulas/resources/FieldFormulas.png', 'LBL_FIELDFORMULAS_DESCRIPTION', 'index.php?module=FieldFormulas&action=index&parenttab=Settings', $seq));
 			
 			$tabid = getTabid('FieldFormulas');
 			if(isset($tabid) && $tabid!='') {

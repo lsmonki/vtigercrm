@@ -21,6 +21,7 @@
 				"SYMBOL" => array('[a-zA-Z][\w]*', '_processtoken_symbol'),
 				"ESCAPED_SYMBOL" => array('?:`([^`]+)`', '_processtoken_symbol'),
 				"STRING" => array('?:"((?:\\\\"|[^"])+)"', 'stripcslashes'), 
+				"FLOAT" => array('\d+[.]\d+', 'floatval'),
 				"INTEGER" => array('\d+', 'intval'),
 				'OPERATOR' => array('[+]|[-]|[*]|>=|<=|[<]|[>]|==|\/', '_processtoken_symbol'),
 				'OPEN_BRACKET' => array('[(]', '_processtoken_symbol'),

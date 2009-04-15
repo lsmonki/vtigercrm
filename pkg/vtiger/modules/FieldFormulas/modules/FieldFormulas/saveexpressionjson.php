@@ -14,7 +14,7 @@
 			$mem->save($me);
 			echo Zend_Json::encode(array('status'=>'success'));
 		}else{
-			echo Zend_Json::encode(array('status'=>'fail', 'message'=>$mem->message));
+			echo Zend_Json::encode(array('status'=>'fail', 'message'=>$me->message));
 		}
 	}
 	vtSaveExpressionJson($adb, $_GET);

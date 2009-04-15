@@ -36,19 +36,30 @@
 		
 		
 		function expressionFields($moduleName){
-			return $this->fieldNames(
-				"select * from vtiger_field 
-				where tabid in (select tabid from vtiger_tab 
-								where name=? and generatedtype=2) and presence in(0,2)",
-				$moduleName);
+			global $current_user;
+			$result = vtws_describe($moduleName, $current_user);
+			$fields = $result['fields'];
+			$arr = array();
+			foreach($fields as $field){
+				//Use the field name to figure out the custom field
+				if(preg_match('/cf_\d+/', $field['name']) &&
+					 in_array($field['type']['name'], array('text', 'string', 
+																									'integer', 'double'))){
+					$arr[$field['name']] = $field['label'];
+				}
+			}
+			return $arr;
 		}
 		
 		function fields($moduleName){
-			return $this->fieldNames(
-				"select * from vtiger_field 
-				where tabid in (select tabid from vtiger_tab 
-								where name=?) and presence in(0,2)", 
-				$moduleName);
+			global $current_user;
+			$result = vtws_describe($moduleName, $current_user);
+			$fields = $result['fields'];
+			$arr = array();
+			foreach($fields as $field){
+				$arr[$field['name']] = $field['label'];
+			}
+			return $arr;
 		}
 		
 		function expressionFunctions(){
@@ -78,8 +89,13 @@
 		}
 		
 		function add($fieldName, $expression){
-			$this->expressionEngine->loadExpressions(array($fieldName=>$expression));
-			$this->state='savable';
+			try{
+				$this->expressionEngine->loadExpressions(array($fieldName=>$expression));
+				$this->state='savable';
+			}catch(VTExpressionException $e){
+				$this->state='error';
+				$this->message=$e->getMessage();
+			}
 		}
 		
 		function remove($fieldName){

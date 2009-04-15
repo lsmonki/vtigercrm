@@ -75,6 +75,8 @@
 					return $token->value;
 				case "INTEGER":
 					return $token->value;
+				case "FLOAT":
+					return $token->value;
 				case "SYMBOL":
 					return $token->value;
 				case "OPEN_BRACKET":
