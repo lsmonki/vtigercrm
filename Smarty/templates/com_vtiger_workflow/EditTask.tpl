@@ -1,13 +1,22 @@
 {include file='com_vtiger_workflow/Header.tpl'}
 <script src="modules/{$module->name}/resources/jquery-1.2.6.js" type="text/javascript" charset="utf-8"></script>
+<script src="modules/{$module->name}/resources/jquery.timepicker.js" type="text/javascript" charset="utf-8"></script>
 <script src="modules/{$module->name}/resources/functional.js" type="text/javascript" charset="utf-8"></script>
 <script src="modules/{$module->name}/resources/json2.js" type="text/javascript" charset="utf-8"></script>
+<script src="modules/{$module->name}/resources/fieldvalidator.js" type="text/javascript" charset="utf-8"></script>
 <script src="modules/{$module->name}/resources/edittaskscript.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 	jQuery.noConflict();
 	fn.addStylesheet('modules/{$module->name}/resources/style.css');
+	var returnUrl = '{$returnUrl}';
+	var validator;
 	edittaskscript(jQuery);
 </script>
+
+<!--Error message box popup-->
+{include file='com_vtiger_workflow/ErrorMessageBox.tpl'}
+<!--Done popups-->
+
 {include file='SetMenu.tpl'}
 <div id="view">
 	{include file='com_vtiger_workflow/ModuleTitle.tpl'}
@@ -18,16 +27,16 @@
 			</td>
 		</tr>
 	</table>
-	<form name="new_task">
+	<form name="new_task" id="new_task_form">
 		<table border="0" cellpadding="5" cellspacing="0" width="75%">
 			<tr>
-				<td class="dvtCellLabel" align=right width=25%>{$MOD.LBL_TASK_TITLE}</td>
+				<td class="dvtCellLabel" align=right width=25%><b>*</b>{$MOD.LBL_TASK_TITLE}</td>
 				<td class="dvtCellInfo" align="left" colspan="3"><input type="text" name="summary" value="{$task->summary}" id="save_summary"></td>
 			</tr>
 			<tr>
 				<td class="dvtCellLabel" align=right width=25%>{$MOD.LBL_PARENT_WORKFLOW}</td>
 				<td class="dvtCellInfo" align="left" colspan="3">
-					{$workflow->id} {$workflow->description}
+					 {$workflow->description}
 					<input type="hidden" name="workflow_id" value="{$workflow->id}" id="save_workflow_id">
 				</td>
 			</tr>
@@ -74,7 +83,14 @@
 		<input type="hidden" name="action" value="savetask" id="save_action">
 		<input type="hidden" name="module" value="{$module->name}" id="save_module">
 		<input type="hidden" name="return_url" value="{$returnUrl}" id="save_return_url">
-		<p><input type="submit" name="save" value="{$APP.LBL_SAVE_BUTTON_LABEL}" id="save"></p>
+		<p>
+			<input type="submit" name="save" 
+						 title="Save [Alt+S]" accesskey="S" class="crmButton small save" 
+						 value="{$APP.LBL_SAVE_BUTTON_LABEL}" id="save">
+			<input type="button" id="edittask_cancel_button"
+						 title="Cancel [Alt+X]" accesskey="X" class="crmbutton small cancel"
+						 value="{$APP.LBL_CANCEL_BUTTON_LABEL}">
+		</p>
 	</form>
 </div>
 {include file='com_vtiger_workflow/Footer.tpl'}

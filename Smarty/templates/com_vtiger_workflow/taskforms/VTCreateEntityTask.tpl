@@ -1,8 +1,3 @@
-<script src="resources/jquery-1.2.6.js" type="text/javascript" charset="utf-8"></script>
-<script src="resources/functional.js" type="text/javascript" charset="utf-8"></script>
-<script src="resources/json2.js" type="text/javascript" charset="utf-8"></script>
-
-
 <script type="text/javascript" charset="utf-8">
 {literal}
 	function editexpressionscript($){

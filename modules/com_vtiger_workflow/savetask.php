@@ -2,12 +2,21 @@
 require_once("Smarty_setup.php");
 require_once("include/utils/CommonUtils.php");
 require_once("include/events/SqlResultIterator.inc");
-
 require_once("VTTaskManager.inc");
+require_once("VTWorkflowUtils.php");
+require_once("VTWorkflowApplication.inc");
+
 	function vtSaveTask($adb, $request){
-		global $log;
-		$log->fatal(print_r($request, true));
-		
+	$util = new VTWorkflowUtils();
+		$module = new VTWorkflowApplication("savetask");
+		$mod = return_module_language($current_language, $module->name);
+
+		if(!$util->checkAdminAccess()){
+			$errorUrl = $module->errorPageUrl($mod['LBL_ERROR_NOT_ADMIN']);
+			$util->redirectTo($errorUrl, $mod['LBL_ERROR_NOT_ADMIN']);
+			return;
+		}
+
 		$tm = new VTTaskManager($adb);
 		if(isset($request["task_id"])){
 			$task = $tm->retrieveTask($request["task_id"]);

@@ -4,6 +4,7 @@
 <script src="modules/{$module->name}/resources/json2.js" type="text/javascript" charset="utf-8"></script>
 <script src="modules/{$module->name}/resources/vtigerwebservices.js" type="text/javascript" charset="utf-8"></script>
 <script src="modules/{$module->name}/resources/parallelexecuter.js" type="text/javascript" charset="utf-8"></script>
+<script src="modules/{$module->name}/resources/fieldvalidator.js" type="text/javascript" charset="utf-8"></script>
 <script src="modules/{$module->name}/resources/editworkflowscript.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 	jQuery.noConflict();
@@ -17,6 +18,41 @@
 	editworkflowscript(jQuery, conditions);
 </script>
 
+<!-- A pop to create a new template -->
+<div id="new_template_popup" class='layerPopup' style="display:none;">
+	<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerHeadingULine">
+		<tr>
+			<td width="60%" align="left" class="layerPopupHeading">
+				{$MOD.LBL_CREATE_TEMPLATE}
+				</td>
+			<td width="40%" align="right">
+				<a href="javascript:void(0);" id="new_template_popup_close">
+					<img border="0" align="absmiddle" src="{'close.gif'|@vtiger_imageurl:$THEME}"/>
+				</a>
+			</td>
+		</tr>
+	</table>
+
+	<form action="index.php" method="get" accept-charset="utf-8">
+	<div class="popup_content">
+		Title:<input type="text" name="title">
+		<input type="hidden" name="module_name" value="{$workflow->moduleName}">
+		<input type="hidden" name="save_type" value="new" id="save_type_new">
+		<input type="hidden" name="module" value="{$module->name}" id="save_module">
+		<input type="hidden" name="action" value="savetemplate" id="save_action">
+		<input type="hidden" name="return_url" value="{$newTaskReturnUrl}" id="save_return_url">
+		<input type="hidden" name="workflow_id" value="{$workflow->id}">
+	</div>
+	<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerPopupTransport">
+		<tr><td align="center">
+			<input type="submit" class="crmButton small save" value="{$APP.LBL_CREATE_BUTTON_LABEL}" name="save" id='new_template_popup_save'/> 
+			<input type="button" class="crmButton small cancel" value="{$APP.LBL_CANCEL_BUTTON_LABEL} " name="cancel" id='new_template_popup_cancel'/>
+		</td></tr>
+	</table>
+	</form>
+</div>
+
+<!-- A popup to create a new task-->
 <div id="new_task_popup" class='layerPopup' style="display:none;">
 	<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerHeadingULine">
 		<tr>
@@ -56,11 +92,22 @@
 	</table>
 	</form>
 </div>
+<!--Error message box popup-->
+{include file='com_vtiger_workflow/ErrorMessageBox.tpl'}
+<!--Done popups-->
+
 {include file='SetMenu.tpl'}
 <div id="view">
 	{include file='com_vtiger_workflow/ModuleTitle.tpl'}
 	<br>
-	<form name="new_workflow" action="index.php">
+
+	<br>
+{if $saveType eq "edit"}
+<input type="button" class="crmButton create small" 
+							 value="{$MOD.LBL_NEW_TEMPLATE}" id="new_template"/>	
+	<br><br>
+{/if}
+	<form name="edit_workflow_form" action="index.php" id="edit_workflow_form">
 		<table class="tableHeading" width="100%" border="0" cellspacing="0" cellpadding="5">
 			<tr>
 				<td class="big" nowrap="">
@@ -70,7 +117,7 @@
 		</table>
 		<table border="0" cellpadding="5" cellspacing="0" width="100%">
 			<tr>
-				<td class="dvtCellLabel" align=right width=25%>{$MOD.LBL_SUMMARY}</td>
+				<td class="dvtCellLabel" align=right width=25%><b>*</b>{$MOD.LBL_SUMMARY}</td>
 				<td class="dvtCellInfo" align="left" colspan="3"><input type="text" name="description" id="save_description" value="{$workflow->description}"></td>
 			</tr>
 			<tr>
@@ -106,7 +153,7 @@
 			</tr>
 		</table>
 		<div id="workflow_loading" style="display:none">
-		  <h4><red>Loading </red><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}"</h4>
+		  <h4><b>Loading</b><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}"</h4>
 		</div>
 
 		<table class="listTableTopButtons" width="100%" border="0" cellspacing="0" cellpadding="5">
@@ -123,7 +170,7 @@
 		<p><input type="submit" id="save_submit" value="Save" class="crmButton small save"></p>
 		<input type="hidden" name="module_name" value="{$workflow->moduleName}" id="save_modulename">
 		<input type="hidden" name="save_type" value="{$saveType}" id="save_savetype">
-{if $saveType eq "edit"}
+		{if $saveType eq "edit"}
 		<input type="hidden" name="workflow_id" value="{$workflow->id}">
 {/if}
 		<input type="hidden" name="conditions" value="" id="save_conditions_json"/>

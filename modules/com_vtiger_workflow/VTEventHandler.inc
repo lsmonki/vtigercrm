@@ -4,6 +4,22 @@
 	require_once('VTTaskManager.inc');
 	require_once('VTTaskQueue.inc');
 	require_once('VTEntityCache.inc');
+
+require_once 'include/Webservices/Utils.php';
+require_once("modules/Users/Users.php");
+require_once("include/Webservices/VtigerCRMObject.php");
+require_once("include/Webservices/VtigerCRMObjectMeta.php");
+require_once("include/Webservices/DataTransform.php");
+require_once("include/Webservices/WebServiceError.php");
+require_once 'include/utils/utils.php';
+require_once 'include/Webservices/ModuleTypes.php';
+require_once('include/Webservices/Retrieve.php');
+require_once('include/Webservices/Update.php');
+require_once 'include/Webservices/WebserviceField.php';
+require_once 'include/Webservices/EntityMeta.php';
+require_once 'include/Webservices/VtigerWebserviceObject.php';
+require_once('VTWorkflowUtils.php');
+
 	/*
 	* VTEventHandler 
 	*/
@@ -16,10 +32,15 @@
 		 * @param $entityData A VTEntityData object representing the entity.
 		 */
 		function handleEvent($eventName, $entityData){
+			$util = new VTWorkflowUtils();
+			$user = $util->adminUser();
 			global $adb;
 			$isNew = $entityData->isNew();
-			$entityCache = new VTEntityCache($adb);
-			$entityData = $entityCache->forId($entityData->getId());
+			$entityCache = new VTEntityCache($user);
+			$wsModuleName = $util->toWSModuleName($entityData);
+			$wsId = vtws_getWebserviceEntityId($wsModuleName, 
+											   $entityData->getId());
+			$entityData = $entityCache->forId($wsId);
 			$data = $entityData->getData();
 			$wfs = new VTWorkflowManager($adb);
 			$workflows = $wfs->getWorkflowsForModule($entityData->getModuleName());
@@ -75,6 +96,7 @@
 					}
 				}
 			}
+			$util->revertUser();
 		}
 	}
 ?>

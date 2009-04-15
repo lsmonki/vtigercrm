@@ -3469,6 +3469,19 @@ function dldCntIncrease(fileid)
 //asterisk integration :: starts
 
 /**
+ * this function accepts a node and puts it at the center of the screen
+ * @param object node - the dom object which you want to set in the center
+ */
+function placeAtCenter(node){
+	var centerPixel = getViewPortCenter();
+	node.style.position = "absolute";
+	var point = getDimension(node);
+
+	node.style.top = centerPixel.y - point.y/2 +"px";
+	node.style.right = centerPixel.x - point.x/2 + "px";
+}
+
+/**
  * this function gets the dimension of a node
  * @param node - the node whose dimension you want
  * @return height and width in array format
@@ -3483,6 +3496,32 @@ function getDimension(node){
 		wdth = Math.max(nodeChildren[index].offsetWidth,wdth);
 	}
 	return {x: wdth,y: ht};
+}
+
+/**
+ * this function returns the center co-ordinates of the viewport as an array
+ */
+function getViewPortCenter(){
+	var height;
+	var width;
+
+	if(typeof window.pageXOffset != "undefined"){
+		height = window.innerHeight/2;
+		width = window.innerWidth/2;
+		height +=window.pageYOffset;
+		width +=window.pageXOffset;
+	}else if(document.documentElement && typeof document.documentElement.scrollTop != "undefined"){
+		height = document.documentElement.clientHeight/2;
+		width = document.documentElement.clientWidth/2;
+		height += document.documentElement.scrollTop;
+		width += document.documentElement.scrollLeft;
+	}else if(document.body && typeof document.body.clientWidth != "undefined"){
+		height = window.screen.availHeight/2;
+		width = window.screen.availWidth/2;
+		height += document.body.clientHeight;
+		width += document.body.clientWidth;
+	}
+	return {x: width,y: height};
 }
 
 /**

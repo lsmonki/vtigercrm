@@ -63,18 +63,31 @@
 			return $workflows;
 		}
 		
+		/**
+		 * Retrieve a workflow from the database
+		 *
+		 * Returns null if the workflow doesn't exist.
+		 *
+		 * @param The id of the workflow
+		 * @return A workflow object.
+		 */
 		function retrieve($id){
 			$adb=$this->adb;
 			$workflow=new Workflow();
 			$result = $adb->pquery("select workflow_id, module_name, summary, test, execution_condition 
 									from com_vtiger_workflows where workflow_id=?", 
 						array($id));
-			$workflow->id = $adb->query_result($result,0,"workflow_id");
-			$workflow->moduleName = $adb->query_result($result,0,"module_name");
-			$workflow->description = $adb->query_result($result,0,"summary");
-			$workflow->test = html_entity_decode($adb->query_result($result,0,"test"));
-			$workflow->executionCondition = $adb->query_result($result,0,'execution_condition');
-			return $workflow;
+			if($adb->num_rows($result)){
+				$data = $adb->raw_query_result_rowdata($result, 0);
+				$workflow->id = $data["workflow_id"];
+				$workflow->moduleName = $data["module_name"];
+				$workflow->description = $data["summary"];
+				$workflow->test = $data["test"];
+				$workflow->executionCondition = $data['execution_condition'];
+				return $workflow;
+			}else{
+				return null;
+			}
 		}
 		
 		function delete($id){
@@ -91,8 +104,49 @@
 			
 		}
 		
-		function getEntityCache(){
-			return new VTEntityCache($this->adb);
+
+		/**
+		 * Export a workflow as a json encoded string
+		 *
+		 * @param $workflow The workflow instance to export.
+		 */
+		public function serializeWorkflow($workflow){
+			$exp = array();
+			$exp['moduleName'] = $workflow->moduleName;
+			$exp['description'] = $workflow->description;
+			$exp['test'] = $workflow->test;
+			$exp['executionCondition'] = $workflow->executionCondition;
+			$exp['tasks'] = array();
+			$tm = new VTTaskManager($this->adb);
+			$tasks = $tm->getTasksForWorkflow($workflow->id);
+			foreach($tasks as $task){
+				unset($task->id);
+				unset($task->workflowId);
+				$exp['tasks'][] = serialize($task);
+			}
+			return  Zend_Json::encode($exp);
+		}
+
+		/**
+		 * Import a json encoded string as a workflow object
+		 * 
+		 * @return The Workflow instance representing the imported workflow.
+		 */
+		public function deserializeWorkflow($str){
+			$data =  Zend_Json::decode($str);
+			$workflow = $this->newWorkflow($data['moduleName']);
+			$workflow->description = $data['description'];
+			$workflow->test = $data['test'];
+			$workflow->executionCondition = $data['executionCondition'];
+			$this->save($workflow);
+			$tm = new VTTaskManager($this->adb);
+			$tasks = $data['tasks'];
+			foreach($tasks as $taskStr){
+				$task = $tm->unserializeTask($taskStr);
+				$task->workflowId = $workflow->id;
+				$tm->saveTask($task);
+			}
+			return $workflow;
 		}
 		
 	}

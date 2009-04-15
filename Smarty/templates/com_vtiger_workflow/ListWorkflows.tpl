@@ -1,10 +1,12 @@
 {include file='com_vtiger_workflow/Header.tpl'}
 <script src="modules/{$module->name}/resources/jquery-1.2.6.js" type="text/javascript" charset="utf-8"></script>
+<script src="modules/{$module->name}/resources/json2.js" type="text/javascript" charset="utf-8"></script>
 <script src="modules/{$module->name}/resources/functional.js" type="text/javascript" charset="utf-8"></script>
 <script src="modules/{$module->name}/resources/workflowlistscript.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 	fn.addStylesheet('modules/{$module->name}/resources/style.css');
 </script>
+<!--New workflow popup-->
 <div id="new_workflow_popup" class="layerPopup" style="display:none;">
 	<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerHeadingULine">
 		<tr>
@@ -18,16 +20,37 @@
 			</td>
 		</tr>
 	</table>
-	<form action="index.php" method="get" accept-charset="utf-8">
+	
+	<form action="index.php" method="post" accept-charset="utf-8">
 		<div class="popup_content">
-			Create a workflow for  
-			<select name="module_name">
+			<table width="100%">
+				<tr>
+					<td><input type="radio" name="source" value="from_module" 
+										 checked="true" class="workflow_creation_mode">
+						{$MOD.LBL_FOR_MODULE}</td>
+					<td><input type="radio" name="source" value="from_template" 
+										 class="workflow_creation_mode">
+						{$MOD.LBL_FROM_TEMPLATE}</td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<td>{$MOD.LBL_CREATE_WORKFLOW_FOR}</td>
+					<td>
+						<select name="module_name" id="module_list">
 {foreach item=moduleName from=$moduleNames}
-				<option>
-					{$moduleName}
-				</option>
+							<option>
+								{$moduleName}
+							</option>
 {/foreach}
-			</select>
+						</select>
+					</td>
+				</tr>
+				<tr id="template_select_field" style="display:none;">
+					<td>{$MOD.LBL_CHOOSE_A_TEMPLATE}</td>
+					<td><select id="template_list" name="template_id"></select></td>
+				</tr>
+			</table>
 			<input type="hidden" name="save_type" value="new" id="save_type_new">
 			<input type="hidden" name="module" value="{$module->name}" id="save_module">
 			<input type="hidden" name="action" value="editworkflow" id="save_action">
@@ -40,6 +63,7 @@
 	</table>
 	</form>
 </div>
+<!--Done Popups-->
 
 {include file='SetMenu.tpl'}
 <div id="view">
@@ -74,7 +98,7 @@
 			<td class="small"> <span id="status_message"></span> </td>
 			<td class="small" align="right">
 				<input type="button" class="crmButton create small" 
-					value="New Workflow" id='new_workflow'/>
+					value="{$MOD.LBL_NEW_WORKFLOW}" id='new_workflow'/>
 			</td>
 		</tr>
 	</table>

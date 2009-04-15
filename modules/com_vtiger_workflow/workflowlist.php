@@ -6,6 +6,7 @@
 	
 	require_once("VTWorkflowManager.inc");
 	require_once("VTWorkflowApplication.inc");
+require_once("VTWorkflowUtils.php");
 	
 	function vtGetModules($adb){
 		$sql="select distinct vtiger_field.tabid, name 
@@ -26,6 +27,15 @@
 		$image_path = "themes/$theme/images/";
 		
 		$module = new VTWorkflowApplication("workflowlist");
+		$util = new VTWorkflowUtils();
+		$mod = return_module_language($current_language, $module->name);
+		
+		if(!$util->checkAdminAccess()){
+			$errorUrl = $module->errorPageUrl($mod['LBL_ERROR_NOT_ADMIN']);
+			$util->redirectTo($errorUrl, $mod['LBL_ERROR_NOT_ADMIN']);
+			return;
+		}
+
 		$smarty = new vtigerCRM_Smarty();
 		$wfs = new VTWorkflowManager($adb);
 		$smarty->assign("moduleNames", vtGetModules($adb));
@@ -39,7 +49,9 @@
 			$smarty->assign("workflows", $wfs->getWorkflowsForModule($listModule));
 		}
 		
-		$smarty->assign("MOD", return_module_language($current_language, 'Settings'));
+		$smarty->assign("MOD",array_merge(
+			return_module_language($current_language,'Settings'),
+			return_module_language($current_language, $module->name)));
 		$smarty->assign("APP", $app_strings);
 		$smarty->assign("THEME", $theme);
 		$smarty->assign("IMAGE_PATH",$image_path);

@@ -32,7 +32,10 @@ function edittaskscript($){
 
 
 
-    $(document).ready(function(){
+	$(document).ready(function(){
+		validator = new VTFieldValidator($('#new_task_form'));
+		validator.mandatoryFields = ['summary'];
+		$('.time_field').timepicker();
 		NumberBox($('#select_date_days'));
         //UI to set the date for executing the task.
     	$('#check_select_date').click(function(){
@@ -42,5 +45,8 @@ function edittaskscript($){
     	        $('#select_date').css('display', 'none');
     	    }
     	});
+			$('#edittask_cancel_button').click(function(){
+				window.location=returnUrl;
+			});
     });
 }

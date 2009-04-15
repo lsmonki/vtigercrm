@@ -5,13 +5,23 @@
 	
 	require_once("VTTaskManager.inc");
 	require_once("VTWorkflowApplication.inc");
+require_once("VTWorkflowUtils.php");
 
 	
 	function vtDisplayTaskList($adb, $requestUrl, $current_language){
 		global $theme, $app_strings;
 		$image_path = "themes/$theme/images/";
 		
-		$module = new VTWorkflowApplication();
+		$util = new VTWorkflowUtils();
+		$module = new VTWorkflowApplication("tasklist");
+		$mod = return_module_language($current_language, $module->name);
+	
+		if(!$util->checkAdminAccess()){
+			$errorUrl = $module->errorPageUrl($mod['LBL_ERROR_NOT_ADMIN']);
+			$util->redirectTo($errorUrl, $mod['LBL_ERROR_NOT_ADMIN']);
+			return;
+		}
+
 		$smarty = new vtigerCRM_Smarty();
 		$tm = new VTTaskManager($adb);
 		$smarty->assign("tasks", $tm->getTasks());

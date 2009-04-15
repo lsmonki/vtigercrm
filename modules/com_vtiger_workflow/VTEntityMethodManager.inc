@@ -20,8 +20,9 @@ class VTEntityMethodManager{
 		$moduleName = get_class($entityData->focus);
 		$result = $adb->pquery("select function_path, function_name from com_vtiger_workflowtasks_entitymethod where module_name=? and method_name=?", array($moduleName, $methodName));
 		if($adb->num_rows($result)!=0){
-			$functionPath = $adb->query_result($result, 0, 'function_path');
-			$functionName = $adb->query_result($result, 0, 'function_name');
+			$data = $adb->raw_query_result_rowdata($result, 0);
+			$functionPath = $data['function_path'];
+			$functionName = $data['function_name'];
 			require_once($functionPath);
 			$functionName($entityData);
 		}

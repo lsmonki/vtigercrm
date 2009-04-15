@@ -1,48 +1,7 @@
 function editworkflowscript($, conditions){
 	var vtinst = new VtigerWebservices("webservice.php");
+	var fieldValidator;
 	var desc = null;
-
-//The following was copied from Homestuuf.js
-	/**
-	 * this function returns the center co-ordinates of the viewport as an array
-	 */
-	function getViewPortCenter(){
-	var height;
-	var width;
-
-	if(typeof window.pageXOffset != "undefined"){
-		height = window.innerHeight/2;
-		width = window.innerWidth/2;
-		height +=window.pageYOffset;
-		width +=window.pageXOffset;
-	}else if(document.documentElement && typeof document.documentElement.scrollTop != "undefined"){
-		height = document.documentElement.clientHeight/2;
-		width = document.documentElement.clientWidth/2;
-		height += document.documentElement.scrollTop;
-		width += document.documentElement.scrollLeft;
-	}else if(document.body && typeof document.body.clientWidth != "undefined"){
-		var height = window.screen.availHeight/2;
-		var width = window.screen.availWidth/2;
-		height += document.body.clientHeight;
-		width += document.body.clientWidth;
-	}
-	return {x: width,y: height};
-	}
-
-
-  /**
- * this function accepts a node and puts it at the center of the screen
- * @param object node - the dom object which you want to set in the center
- */
-function placeAtCenter(node){
-  var centerPixel = getViewPortCenter();
-	node.style.position = "absolute";
-	var point = getDimension(node);
-
-	node.style.top = centerPixel.y - point.y/2 +"px";
-	node.style.right = centerPixel.x - point.x/2 + "px";
-}
-//The previous bit was copied from Homestuff.js
 
 	function id(v){
 		return v;
@@ -177,6 +136,7 @@ function placeAtCenter(node){
 		placeAtCenter(el.get(0));
 	}
 
+
 	function PageLoadingPopup(){
 		function show(){
 			$('#workflow_loading').css('display', 'block');
@@ -189,8 +149,25 @@ function placeAtCenter(node){
 			show:show, close:close
 		};
 	}
-	pageLoadingPopup = PageLoadingPopup();
+	var pageLoadingPopup = PageLoadingPopup();
 
+	function NewTemplatePopup(){
+		function close(){
+			$('#new_template_popup').css('display', 'none');
+		}
+
+		function show(module){
+			$('#new_template_popup').css('display', 'block');
+			center($('#new_template_popup'));
+		}
+
+		$('#new_template_popup_close').click(close);
+		$('#new_template_popup_cancel').click(close);
+		return {
+			close:close,show:show
+		};
+	}
+	var newTemplatePopup = NewTemplatePopup();
 
 	function NewTaskPopup(){
 		function close(){
@@ -212,13 +189,15 @@ function placeAtCenter(node){
 	var operations = function(){
 		var op = {
 			string:["is", "contains", "does not contain", "starts with", "ends with"],
-			number:["equal to", "less than", "greater than", "does not equal", "less than or equal to", "greater than or equal to"],
+			number:["equal to", "less than", "greater than", "does not equal",
+							"less than or equal to", "greater than or equal to"],
 			value:['is']
 		};
 		var mapping = [
 			['string', ['string', 'text', 'url', 'email', 'phone']],
 			['number', ['integer', 'double']],
-			['value', ['reference', 'picklist', 'multipicklist', 'datetime', 'time', 'date', 'boolean']]
+			['value', ['reference', 'picklist', 'multipicklist', 'datetime',
+								 'time', 'date', 'boolean']]
 		];
 
 
@@ -241,17 +220,20 @@ function placeAtCenter(node){
 				map(function (e){return '<option value="'+e.value+'">'+e.label+'</option>';},
 					opType['picklistValues'])
 			);
-			value.replaceWith('<select id="save_condition_'+condno+'_value" class="value">'+options+'</select>');
+			value.replaceWith('<select id="save_condition_'+condno+'_value" class="value">'+
+												options+'</select>');
 		}
 
 		function forInteger(opType, condno){
 			var value = $(format("#save_condition_%s_value", condno));
-			value.replaceWith(format('<input type="text" id="save_condition_%s_value" value="0" class="value">', condno));
+			value.replaceWith(format('<input type="text" id="save_condition_%s_value" '+
+															 'value="0" class="value">', condno));
 		}
 		var functions = {
 			string:function(opType, condno){
 				var value = $(format("#save_condition_%s_value", condno));
-				value.replaceWith(format('<input type="text" id="save_condition_%s_value" value="" class="value">', condno));
+				value.replaceWith(format('<input type="text" id="save_condition_%s_value" '+
+																 'value="" class="value">', condno));
 			},
 			'boolean': function(opType, condno){
 				var value = $("#save_condition_"+condno+"_value");
@@ -295,26 +277,32 @@ function placeAtCenter(node){
 	  $(format("#save_condition_%s", condno)).remove();
 	}
 
+	//Convert user type into reference for consistency in describe objects
+	//This is done inplace
+	function referencify(desc){
+	  var fields = desc['fields'];
+	  for(var i=0; i<fields.length; i++){
+		var field = fields[i];
+		var type = field['type'];
+		if(type['name']=='owner'){
+		  type['name']='reference';
+		  type['refersTo']=['Users'];
+		}
+	  }
+	  return desc;
+	}
 
 	function getDescribeObjects(moduleName, callback){
 		vtinst.describeObject(moduleName, handleError(function(result){
-			var parent = result;
+			var parent = referencify(result);
 			var fields = parent['fields'];
 			var referenceFields = filter(function(e){return e['type']['name']=='reference';}, fields);
 			var referenceFieldModules =
-				map(
-					function(e){
-						return filter(
-							function(f){
-								return f!='Users';
-							},
-							e['type']['refersTo']
-						);
-					},
+				map(function(e){ return e['type']['refersTo'];},
 					referenceFields
 				);
 			function union(a, b){
-				newfields = filter(function(e){return !contains(a, e);}, b);
+				var newfields = filter(function(e){return !contains(a, e);}, b);
 				return a.concat(newfields);
 			}
 			var relatedModules = reduceR(union, referenceFieldModules, [parent['name']]);
@@ -325,12 +313,12 @@ function placeAtCenter(node){
 					var firstFailure = failures[0];
 					callback(false, firstFailure[1]);
 				}else{
-					var moduleDescriptions = map(function(e){return e[1];}, parameters);
-					var modules = dict(map(function(e){return [e['name'], e];}, moduleDescriptions));
+				  var moduleDescriptions = map(function(e){return e[1];}, parameters);
+					var modules = dict(map(function(e){return [e['name'], referencify(e)];}, moduleDescriptions));
 					callback(true, modules);
 				}
 			}
-			p = parallelExecuter(executer, relatedModules.length);
+			var p = parallelExecuter(executer, relatedModules.length);
 			$.each(relatedModules, function(i, v){
 				p(function(callback){vtinst.describeObject(v, callback);});
 			});
@@ -338,19 +326,23 @@ function placeAtCenter(node){
 	}
 
 	$(document).ready(function(){
+		fieldValidator = new VTFieldValidator($('#edit_workflow_form'));
+		fieldValidator.mandatoryFields = ["description"];
 		pageLoadingPopup.show();
 		vtinst.extendSession(handleError(function(result){
 			getDescribeObjects(moduleName, handleError(function(modules){
 				var parent = modules[moduleName];
 				function filteredFields(fields){
 					return filter(
-					  function(e){return !contains(['autogenerated', 'reference', 'owner','multipicklist'], e.type.name);},
+					  function(e){return !contains(['autogenerated', 'reference', 'owner',
+																					'multipicklist'], e.type.name);},
 						fields
 					);
 				}
 				;
-				var parentFields = map(function(e){return[e['name'],e['label']];}, filteredFields(parent['fields']));
-				var referenceFieldTypes = filter(function(e){return e['type']['name']=='reference' && !contains(e['type']['refersTo'], 'Users');}, parent['fields']);
+				var parentFields = map(function(e){return[e['name'],e['label']];},
+															 filteredFields(parent['fields']));
+				var referenceFieldTypes = filter(function(e){return e['type']['name']=='reference';}, parent['fields']);
 				var moduleFieldTypes = {};
 				$.each(modules, function(k, v){
 					moduleFieldTypes[k] = dict(map(function(e){return [e['name'], e['type']];},
@@ -417,10 +409,16 @@ function placeAtCenter(node){
 					});
 				}
 
-				newTaskPopup = NewTaskPopup();
+				var newTaskPopup = NewTaskPopup();
 				$("#new_task").click(function(){
 					newTaskPopup.show();
 				});
+
+				var newTemplatePopup = NewTemplatePopup();
+				$("#new_template").click(function(){
+					newTemplatePopup.show();
+				});
+
 				var condno=0;
 				if(conditions){
 					$.each(conditions, function(i, condition){
@@ -445,7 +443,7 @@ function placeAtCenter(node){
 					$("#save_conditions").children().each(function(i){
 						var fieldname = $(this).children(".fieldname").attr("value");
 						var operation = $(this).children(".operation").attr("value");
-						var value = fn.htmlentities($(this).children(".value").attr("value"));
+						var value = $(this).children(".value").attr("value");
 						var condition = {fieldname:fieldname, operation:operation, value:value};
 						conditions[i]=condition;
 					});

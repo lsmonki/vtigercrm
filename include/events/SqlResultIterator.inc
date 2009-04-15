@@ -21,7 +21,8 @@
 		
 		public function current(){
 			$adb = $this->adb;
-			return new SqlResultIteratorRow($adb, $this->pos, $this->result);
+			$data = $adb->raw_query_result_rowdata($this->result, $this->pos);
+			return new SqlResultIteratorRow($data);
 		}
 		
 		public function key(){
@@ -64,19 +65,12 @@
 	}
 	
 	class SqlResultIteratorRow{
-		function __construct($adb, $row, $result){
-			$this->adb = $adb;
-			$this->row = $row;
-			$this->result = $result;
+		function __construct($data){
+			$this->data = $data;
 		}
 		
 		function get($column){
-			$adb = $this->adb;
-			$val = $adb->query_result($this->result,$this->row,$column);
-			if(is_string($val)){
-				$val = html_entity_decode($val, ENT_QUOTES);
-			}
-			return $val;
+			return $this->data[$column];
 		}
 		
 		function __get($column){

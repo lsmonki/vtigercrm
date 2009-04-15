@@ -51,7 +51,7 @@
 			$task = new $taskClass();
 			$task->workflowId=$workflowId;
 			$task->summary = "";
-			$task->active=false; 
+			$task->active=true; 
 			return $task;
 		}
 		
@@ -65,9 +65,9 @@
 		public function retrieveTask($taskId){
 			$adb = $this->adb;
 			$result = $adb->pquery("select task from com_vtiger_workflowtasks where task_id=?", array($taskId));
-			$task = html_entity_decode($adb->query_result($result,0,"task"), ENT_QUOTES);
-			$this->requireTask(self::taskName($task));
-			return unserialize($task);
+			$data = $adb->raw_query_result_rowdata($result, 0);
+			$task = $data["task"];
+			return $this->unserializeTask($task);
 		}
 		
 		
@@ -81,6 +81,16 @@
 				array($workflowId));
 			return $this->getTasksForResult($result);
 		}
+
+
+		/**
+		 * 
+		 */
+		public function unserializeTask($str){
+			$this->requireTask(self::taskName($str));
+			return unserialize($str);
+
+		}
 		/**
 		 *
 		 */
@@ -92,7 +102,8 @@
 		
 		
 		function getTaskTypes(){
-			return array("VTEmailTask", "VTEntityMethodTask", "VTCreateTodoTask");
+			return array("VTEmailTask", "VTEntityMethodTask", "VTCreateTodoTask", 
+									 "VTCreateEventTask");
 		}
 		
 		private function getTasksForResult($result){

@@ -4,9 +4,18 @@ require_once("include/events/SqlResultIterator.inc");
 require_once("include/Zend/Json.php");
 require_once("VTWorkflowApplication.inc");
 require_once("VTWorkflowManager.inc");
-
+require_once("VTWorkflowUtils.php");
 	function vtDeleteWorkflow($adb, $request){
-		$module = new VTWorkflowApplication("saveworkflow");
+		$util = new VTWorkflowUtils();
+		$module = new VTWorkflowApplication("deleteworkflow");
+		$mod = return_module_language($current_language, $module->name);
+
+		if(!$util->checkAdminAccess()){
+			$errorUrl = $module->errorPageUrl($mod['LBL_ERROR_NOT_ADMIN']);
+			$util->redirectTo($errorUrl, $mod['LBL_ERROR_NOT_ADMIN']);
+			return;
+		}
+
 		$wm = new VTWorkflowManager($adb);
 		$wm->delete($request['workflow_id']);
 		

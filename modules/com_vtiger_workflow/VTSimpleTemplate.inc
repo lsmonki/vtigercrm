@@ -20,12 +20,16 @@ class VTSimpleTemplate{
 		}else{
 			list($full, $referenceField, $referenceModule, $fieldname) = $matches;
 			$referenceId = $this->parent->get($referenceField);
-			$entity = $this->cache->forId($referenceId);
-			if($entity->getModuleName()==$referenceModule){
-				$data = $entity->getData();
-				$result = $data[$fieldname];
+			if($referenceId==null){
+				$result="";
 			}else{
-				$result = "";
+				$entity = $this->cache->forId($referenceId);
+				if($entity->getModuleName()==$referenceModule){
+					$data = $entity->getData();
+					$result = $data[$fieldname];
+				}else{
+					$result = "";
+				}
 			}
 		}
 		return $result;

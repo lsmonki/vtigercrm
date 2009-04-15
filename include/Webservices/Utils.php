@@ -268,7 +268,6 @@ function vtws_getCalendarEntityType($id){
  */
 function vtws_getWebserviceEntityId($entityName, $id){
 	global $adb;
- 
 	$webserviceObject = VtigerWebserviceObject::fromName($adb,$entityName);
 	return $webserviceObject->getEntityId().'x'.$id;
 }

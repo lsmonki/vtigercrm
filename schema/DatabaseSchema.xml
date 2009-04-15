@@ -6788,7 +6788,7 @@
 	<table name="com_vtiger_workflowtask_queue">
 	    <field name="task_id" type="I" >
 		</field>
-		<field name="entity_id" type="I" >
+		<field name="entity_id" type="C" size="100" >
 		</field>
 		<field name="do_after" type="I" >
 		</field>
@@ -6818,6 +6818,20 @@
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+	<table name="com_vtiger_workflowtemplates">
+		<field name="template_id" type="I" >
+			<key />
+			<autoincrement />
+		</field>
+		<field name="module_name" type="C" size="100" >
+		</field>
+		<field name="title" type="C" size="400" >
+		</field>
+		<field name="template" type="X">
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>	
     <!-- com_vtiger_workflow ends-->
 	
 	<!--  asterisk integration starts -->

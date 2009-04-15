@@ -12,7 +12,7 @@
 		 * @param $entityId The id of the entity to load.
 		 * @return The new entity data object.
 		 */
-		function fromEntityId($adb, $entityId){
+		static function fromEntityId($adb, $entityId){
 			$obj = new VTEntityData();
 			$obj->entityId = $entityId;
 			$result = $adb->pquery("select setype from vtiger_crmentity where crmid=?", array($entityId));
@@ -40,7 +40,7 @@
 		 * @param $crmEntity The CRMEntity instance.
 		 * @return The new entity data object.
 		 */
-		function fromCRMEntity($crmEntity){
+		static function fromCRMEntity($crmEntity){
 			$obj = new VTEntityData();
 			$obj->focus = $crmEntity;
 			$obj->isNew = !(isset($crmEntity->id) && $crmEntity->id != null);

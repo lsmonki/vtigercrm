@@ -8,12 +8,22 @@ require_once("include/events/VTWSEntityType.inc");
 require_once("VTWorkflowApplication.inc");
 require_once("VTTaskManager.inc");
 require_once("VTWorkflowManager.inc");
-
+require_once("VTWorkflowUtils.php");
 	function vtTaskEdit($adb, $request, $current_language, $app_strings){
 		global $theme;
+		$util = new VTWorkflowUtils();
 		$image_path = "themes/$theme/images/";
-		
+
 		$module = new VTWorkflowApplication('edittask');
+
+		$mod = return_module_language($current_language, $module->name);		
+
+		if(!$util->checkAdminAccess()){
+			$errorUrl = $module->errorPageUrl($mod['LBL_ERROR_NOT_ADMIN']);
+			$util->redirectTo($errorUrl, $mod['LBL_ERROR_NOT_ADMIN']);
+			return;
+		}
+
 		$smarty = new vtigerCRM_Smarty();
 		$tm = new VTTaskManager($adb);
 		$smarty->assign('edit',isset($request["task_id"]));
@@ -25,9 +35,21 @@ require_once("VTWorkflowManager.inc");
 			$taskClass = $request["task_type"];
 			$task = $tm->createTask($taskClass, $workflowId);
 		}
+
+		if($task==null){
+			$errorUrl = $module->errorPageUrl($mod['LBL_ERROR_NO_TASK']);
+			$util->redirectTo($errorUrl, $mod['LBL_ERROR_NO_TASK']);
+			return;
+		}
 		
 		$wm = new VTWorkflowManager($adb);
 		$workflow = $wm->retrieve($workflowId);
+		if($workflow==null){
+			$errorUrl = $module->errorPageUrl($mod['LBL_ERROR_NO_WORKFLOW']);
+			$util->redirectTo($errorUrl, $mod['LBL_ERROR_NO_WORKFLOW']);
+			return;
+		}
+
 		
 		$smarty->assign("workflow", $workflow);
 		$smarty->assign("returnUrl", $request["return_url"]);
@@ -62,19 +84,20 @@ require_once("VTWorkflowManager.inc");
 			}else{
 				$direction = 'after';
 			}
-			$smarty->assign('trigger', array('days'=>$days, 'direction'=>$direction, 'field'=>$trigger['field']));
+			$smarty->assign('trigger', array('days'=>$days, 'direction'=>$direction, 
+			  'field'=>$trigger['field']));
 		}
 		
 		
 		$smarty->assign("MOD", array_merge(
-			return_module_language($current_language,'Settings'), 
-			return_module_language($current_language, $module->name)));
+			 return_module_language($current_language,'Settings'), 
+			 return_module_language($current_language, $module->name)));
 		$smarty->assign("APP", $app_strings);
 		$smarty->assign("IMAGE_PATH",$image_path);
 		$smarty->assign("THEME", $theme);
 		$smarty->assign("MODULE_NAME", $module->label);
-		$smarty->assign("PAGE_NAME", 'Edit Task');
-		$smarty->assign("PAGE_TITLE", 'Edit an existing task or create a one');
+		$smarty->assign("PAGE_NAME", $mod['LBL_EDIT_TASK']);
+		$smarty->assign("PAGE_TITLE", $mod['LBL_EDIT_TASK_TITLE']);
 		
 		$smarty->assign("module", $module);
 		

@@ -672,6 +672,28 @@ class PearDatabase{
 		return $rowdata;
 	}
 
+	/**
+	 * Get an array representing a row in the result set
+	 * Unlike it's non raw siblings this method will not escape 
+	 * html entities in return strings.
+	 *
+	 * The case of all the field names is converted to lower case.
+	 * as with the other methods.
+	 *
+	 * @param &$result The query result to fetch from.
+	 * @param $row The row number to fetch. It's default value is 0
+	 *
+	 */
+	function raw_query_result_rowdata(&$result, $row=0) {
+		if (!is_object($result))
+                throw new Exception("result is not an object");
+		$result->Move($row);
+		$rowdata = $this->change_key_case($result->FetchRow());
+		return $rowdata;
+	}
+
+
+
     function getAffectedRowCount(&$result)
     {
 	global $log;

@@ -786,11 +786,17 @@ ExecuteQuery("CREATE TABLE IF NOT EXISTS com_vtiger_workflowtasks_seq (id int(11
 ExecuteQuery("insert into com_vtiger_workflowtasks_seq (id) values(1)");
 ExecuteQuery("CREATE TABLE IF NOT EXISTS com_vtiger_workflowtasks (task_id int, workflow_id int, summary varchar(100), task text, primary key(task_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
-ExecuteQuery("CREATE TABLE IF NOT EXISTS com_vtiger_workflowtask_queue (task_id int, entity_id int, do_after int, primary key(task_id, entity_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("CREATE TABLE IF NOT EXISTS com_vtiger_workflowtask_queue (task_id int, entity_id varchar(100), do_after int, primary key(task_id, entity_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 ExecuteQuery("CREATE TABLE IF NOT EXISTS com_vtiger_workflowtasks_entitymethod_seq (id int(11)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 ExecuteQuery("insert into  com_vtiger_workflowtasks_entitymethod_seq (id) values(1)");
 ExecuteQuery("CREATE TABLE IF NOT EXISTS com_vtiger_workflowtasks_entitymethod (workflowtasks_entitymethod_id int, module_name varchar(100), method_name varchar(100), function_path varchar(400), function_name varchar(100), primary key(workflowtasks_entitymethod_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+
+ExecuteQuery("CREATE TABLE com_vtiger_workflowtemplates (
+  template_id int(11) NOT NULL default '0',
+  module_name varchar(100) default NULL,
+  title varchar(400) default NULL,
+  template text, PRIMARY KEY  (template_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8;"); 
 
 $em->registerHandler('vtiger.entity.aftersave', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler');
 // com_vtiger_workflow ends

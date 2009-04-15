@@ -5,8 +5,19 @@ require_once("include/events/SqlResultIterator.inc");
 require_once("include/Zend/Json.php");
 require_once("VTWorkflowApplication.inc");
 require_once("VTWorkflowManager.inc");
+require_once("VTWorkflowUtils.php");
+
 	function vtWorkflowSave($adb, $request){
+		$util = new VTWorkflowUtils();
 		$module = new VTWorkflowApplication("saveworkflow");
+		$mod = return_module_language($current_language, $module->name);
+
+		if(!$util->checkAdminAccess()){
+			$errorUrl = $module->errorPageUrl($mod['LBL_ERROR_NOT_ADMIN']);
+			$util->redirectTo($errorUrl, $mod['LBL_ERROR_NOT_ADMIN']);
+			return;
+		}
+
 		$description = $request["description"];
 		$moduleName = $request["module_name"];
 		$conditions = $request["conditions"];
