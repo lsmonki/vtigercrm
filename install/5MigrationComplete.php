@@ -33,18 +33,19 @@ if (isset($_REQUEST['source_directory'])) $source_directory = $_REQUEST['source_
 
 <body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 
-	<br><br><br>
+	<br>
 	<!-- Table for cfgwiz starts -->
 
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
 		<td class="cwHeadBg" align=left><img src="include/install/images/configwizard.gif" alt="Configuration Wizard" hspace="20" title="Configuration Wizard"></td>
-		<td class="cwHeadBg" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
+		<td class="cwHeadBg1" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
+		<td class="cwHeadBg1" width=2%></td>
 	</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
-		<td background="include/install/images/topInnerShadow.gif" align=left><img src="include/install/images/topInnerShadow.gif" ></td>
+		<td background="include/install/images/topInnerShadow.gif" align=left><img height="10" src="include/install/images/topInnerShadow.gif" ></td>
 
 	</tr>
 	</table>

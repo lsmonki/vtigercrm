@@ -417,57 +417,57 @@ function getViewPortCenter(){
 <br>
 	<!-- Table for cfgwiz starts -->
 
-	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<table border=0 cellspacing=0 cellpadding=0 width=85% align=center>
 	<tr>
 		<td class="cwHeadBg" align=left><img src="include/install/images/configwizard.gif" alt="Configuration Wizard" hspace="20" title="Configuration Wizard"></td>
 		<td class="cwHeadBg1" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
 		<td class="cwHeadBg1" width=2%></td>
 	</tr>
 	</table>
-	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<table border=0 cellspacing=0 cellpadding=0 width=85% align=center>
 	<tr>
-		<td background="include/install/images/topInnerShadow.gif" align=left><img src="include/install/images/topInnerShadow.gif" ></td>
+		<td background="include/install/images/topInnerShadow.gif" align=left><img height="10" src="include/install/images/topInnerShadow.gif" ></td>
 
 	</tr>
 	</table>
-	<table border=0 cellspacing=0 cellpadding=10 width=80% align=center>
-	<tr>
+	<table border=0 cellspacing=0 cellpadding=10 width=85% align=center>
+	<tr valign="top">
 		<td class="small" bgcolor="#4572BE" align=center>
 			<!-- Master display -->
-			<table border=0 cellspacing=0 cellpadding=0 width=97%>
+			<table border=0 cellspacing=0 cellpadding=10 width=97%>
 			<tr>
-				<td width=80% valign=top class="cwContentDisplay" colspan=2 align=left>
+				<td width=80% valign=top class="cwContentDisplay" align=left>
 				<!-- Right side tabs -->
 				    <form action="javascript: void(0); " method="post" name="installform" id="form" name="setConfig" id="form">
 				    <input name="action" type="hidden" value='' />
-				    <table border=0 cellspacing=0 cellpadding=10 width=100%>
-				    <tr><td class=small align=left><img src="include/install/images/confWizSysConfig.gif" alt="System Configuration" title="System Configuration"><br>
+				    <table border=0 cellspacing=0 cellpadding=5 width=100%>
+				    <tr><td colspan=2 class=small align=left><img src="include/install/images/confWizSysConfig.gif" alt="System Configuration" title="System Configuration"><br>
 					  <hr noshade size=1></td></tr>
-				    <tr>
-		<td align=left class="small" colspan=2 style="padding-left:10px">
-		<table width="95%" cellpadding="2" align=center border="0" cellspacing="1" class="level3"><tbody>
+				    <tr valign="top">
+		<td width="50%" align=left class="small" style="padding-left:5px">
+		<table width="100%" cellpadding="4" align=center border="0" cellspacing="0" class="level3"><tbody>
 			<tr>
 				<td colspan=2><strong>Previous Installation Information</strong><hr size="1" noshade=""/></td>
 			</tr>
 			<tr>
-				<td  nowrap width = 25%>Previous Installation Path<sup><font color=red>*</font></sup></td>
+				<td  nowrap width = 35%>Previous Installation Path<sup><font color=red>*</font></sup></td>
 				<td align="left">
 					<?php
 						if($cur_dir_path == true){
 					?>					
-					<input  class="small" type="text" name="source_directory" id="source_directory" value="<?php if (isset($source_directory)) echo "$source_directory"; ?>" size="40" /> 
+					<input  class="small" type="text" name="source_directory" id="source_directory" value="<?php if (isset($source_directory)) echo "$source_directory"; ?>" size="50" /> 
 					<?php
 						} else {
 							echo $root_directory;
 					?>					
-					<input  class="small" type="hidden" name="source_directory" id="source_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" size="40" /> 
+					<input  class="small" type="hidden" name="source_directory" id="source_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" size="50" /> 
 					<?php
 						}
 					?>					
 				</td>
 			</tr>
 			<tr>
-				<td width = 25% >Previous Installation Version<sup><font color=red>*</font></sup></td>
+				<td width = 35% >Previous Installation Version<sup><font color=red>*</font></sup></td>
 				<td align="left">
 					<select class="small" name='old_version' id='old_version'>
 						<?php
@@ -489,27 +489,34 @@ function getViewPortCenter(){
 				</td>
 			</tr>
 			<tr>
-				<td width = 25% >Admin Username<sup><font color=red>*</font></sup></td>
-				<td align="left"><input class="small" type="text" name="user_name" id="user_name" value="<?php if (isset($user_name)) echo "$user_name"; ?>" size="40" /> </td>
+				<td width = 35% >Admin Username<sup><font color=red>*</font></sup></td>
+				<td align="left"><input class="small" type="text" name="user_name" id="user_name" value="<?php if (isset($user_name)) echo "$user_name"; ?>" size="50" /> </td>
 			</tr>
 			<tr>
-				<td width = 25%>Admin Password<sup><font color=red></font></sup></td>
-				<td align="left"><input class="small" type="password" name="password" id="password" value="" size="40" /> </td>
+				<td width = 35%>Admin Password<sup><font color=red></font></sup></td>
+				<td align="left"><input class="small" type="password" name="password" id="password" value="" size="50" /> </td>
 			</tr>
 		</table>
-		<br>
-		<table width="95%" cellpadding="2"  cellspacing="1" border="0" align=center class='level3'><tbody>
+		</td>
+		<td width="50%" align=left class="small" style="padding-left:5px">
+		<table width="100%" cellpadding="1"  cellspacing="0" border="0" align=center class='level3'><tbody>
 			<tr><td colspan=2><strong>Database Configuration</strong><hr size="1" noshade=""/></td></tr>
 				<?php
 					if($cur_dir_path == true){
 				?>					
 					<tr>
-		               <td nowrap width=25%>New Database Name<sup><font color=red>*</font></sup></td>
+		               <td nowrap width=35%>New Database Name<sup><font color=red>*</font></sup></td>
 		               <td align="left" nowrap><input type="text" class="small" name="db_name" id="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />&nbsp;
 				       <?php if($check_createdb == 'on')
 					       {?>
+		            </tr>
+		            <tr>
+		            	<td colspan=2>  
 					       <input class="small" name="check_createdb" type="checkbox" id="check_createdb" checked onClick="fnShow_Hide()"/>
 					       <?php }else{?>
+		            </tr>
+		            <tr>
+		            	<td colspan=2>  
 						       <input class="small" name="check_createdb" type="checkbox" id="check_createdb" onClick="fnShow_Hide()" />
 					       <?php } ?>
 					       &nbsp;Create Database (will drop the database if exists)</td>
@@ -517,12 +524,15 @@ function getViewPortCenter(){
 					} else {
 				?>					
 					<tr>
-						<td nowrap width = 25%><input class="small" type='radio' value='E' onchange='radio_checked();' name='database' checked /> Upgrade Existing Database</td>
+						<td nowrap width = 35%><input class="small" type='radio' value='E' onchange='radio_checked();' name='database' checked /> Upgrade Existing Database</td>
 		               	<td align="left"><input type="hidden" class="dataInput" name="existing_db_name" id="existing_db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" /><?php  echo "$db_name"; ?></td>
 					</tr>
 					<tr>
-						<td nowrap width = 25%><input class="small" type='radio' value='C' onchange='radio_checked();' id='new_db' name='database'/>Use Other Database</td>
-		               <td align="left"><input type="text" class="dataInput" name="new_db_name" id="new_db_name" value="" disabled />&nbsp;
+						<td nowrap width = 35%><input class="small" type='radio' value='C' onchange='radio_checked();' id='new_db' name='database'/>Use Other Database</td>
+		                <td align="left"><input type="text" class="dataInput" name="new_db_name" id="new_db_name" value="" disabled /></td>
+		            </tr>
+		            <tr>
+		            	<td colspan=2>  
 				       <?php if($check_createdb == 'on')
 					       {?>
 					       <input class="small" disabled name="check_createdb" type="checkbox" id="check_createdb" disabled checked onClick="fnShow_Hide()"/>
@@ -535,16 +545,16 @@ function getViewPortCenter(){
 				?>					
 			</tr>
 			<tr id="root_user" class="hide_tab">
-				<td nowrap width="25%">Root Username<sup><font color="red">*</font></sup></td>
+				<td nowrap width="35%">Root Username<sup><font color="red">*</font></sup></td>
 				<td align="left"><input class="small" name="root_user" id="root_user_txtbox" value="<?php echo $root_user;?>" type="text"></td>
 			</tr>
 			<tr id="root_pass" class="hide_tab">
-				<td nowrap width="25%">Root Password</td>
+				<td nowrap width="35%">Root Password</td>
 				<td align="left"><input class="small" name="root_password" id="root_password" value="<?php echo $root_password;?>" type="password"></td>
 			</tr>
 			<tr id="create_db_config" class="hide_tab">
-				<td nowrap width="25%">UTF-8 Support</td>
-				<td align="left"><input class="small" name="create_utf8_db" type="checkbox" id="create_utf8_db" <?php if($create_utf8_db == 'true') echo "checked"; ?> /> DEFAULT CHARACTER SET utf8, DEFAULT COLLATE utf8_general_ci</td>
+				<td nowrap width="35%">UTF-8 Support</td>
+				<td align="left"><input class="small" name="create_utf8_db" type="checkbox" id="create_utf8_db" <?php if($create_utf8_db == 'true') echo "checked"; ?> /></td>
 			</tr>
 			<input name="site_url" type="hidden" id="site_url" value = '<?php echo $web_root; ?>' />
 			<input name="selected_modules" type="hidden" id="selected_modules" value = '<?php echo $mod_for_ins; ?>' />
@@ -552,19 +562,18 @@ function getViewPortCenter(){
 		</table>
 		<div id="dbbackup" style="display:block">
 			<br>
-			<table width="95%" cellpadding="2"  cellspacing="1" border="0" align=center class='level3'><tbody>
-				<tr><td colspan=2><strong>Enable Database Backup</strong> (Let the Migration Wizard backup your existing database before upgrading.)<hr size="1" noshade=""/></td></tr>
-						<tr>
+			<table width="100%" cellpadding="1"  cellspacing="0" border="0" align=center class='level3'><tbody>
+				<tr><td colspan=2><strong>Backup Database</strong> (Take backup of database before migration)<hr size="1" noshade=""/></td></tr>
+						<tr valign=top>
 			               <!-- td nowrap width=25%>Enable Database Backup</td -->
-			               <td align="left" colspan=2 nowrap>
-						       <input name="check_dbbackup" type="checkbox" id="check_dbbackup" checked />
-								&nbsp;&nbsp; We recommend you to backup the database manually and disable this option for faster migration. 
+			               <td align="left">
+						       <input name="check_dbbackup" type="checkbox" id="check_dbbackup" />
+						   </td><td class='small'>
+								We recommend you to backup the database manually <br>and disable this option if you experience timeout.
 						   </td>
 						</tr>
 			</table>
 		</div>
-			<br>
-			
 		  <!-- User Verification -->
 		<!-- System Configuration -->
 		</td>
@@ -572,7 +581,7 @@ function getViewPortCenter(){
 		</table>
 		<input type="hidden" name="file" value="5MigrationComplete.php">
 		</form>
-		<table width="95%" cellpadding="10"  cellspacing="1" border="0" align=center><tbody>
+		<table width="100%" cellpadding="5"  cellspacing="1" border="0" align=center><tbody>
 		<tr>
 				<td align=left >
 					<input type="image" src="include/install/images/cwBtnBack.gif" alt="Back" border="0" title="Back" onClick="window.history.back();">
@@ -590,18 +599,18 @@ function getViewPortCenter(){
 	</td>
 	</tr>
 	</table>
-	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<table border=0 cellspacing=0 cellpadding=0 width=85% align=center>
 	<tr>
 
 		<td background="include/install/images/bottomGradient.gif"><img src="include/install/images/bottomGradient.gif"></td>
 	</tr>
 	</table>
-	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<table border=0 cellspacing=0 cellpadding=0 width=85% align=center>
 	<tr>
 		<td align=center><img src="include/install/images/bottomShadow.jpg"></td>
 	</tr>
 	</table>
-	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
+	<table border=0 cellspacing=0 cellpadding=0 width=85% align=center>
 
       	<tr>
         	<td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td>

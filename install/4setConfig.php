@@ -323,7 +323,7 @@ function verify_data(form) {
 // end hiding contents from old browsers  -->
 </script>
 
-	<br><br><br>
+	<br>
 	<!-- Table for cfgwiz starts -->
 
 	<table border=0 cellspacing=0 cellpadding=0 width=85% align=center>
@@ -335,7 +335,7 @@ function verify_data(form) {
 	</table>
 	<table border=0 cellspacing=0 cellpadding=0 width=85% align=center>
 	<tr>
-		<td background="include/install/images/topInnerShadow.gif" align=left><img src="include/install/images/topInnerShadow.gif" ></td>
+		<td background="include/install/images/topInnerShadow.gif" align=left><img height="10" src="include/install/images/topInnerShadow.gif" ></td>
 
 	</tr>
 	</table>

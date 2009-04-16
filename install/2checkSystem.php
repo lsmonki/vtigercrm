@@ -227,7 +227,7 @@ if(ini_get('short_open_tag') != '1' || stripos(ini_get('short_open_tag'),'Off') 
 	</table>
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
-		<td background="include/install/images/topInnerShadow.gif" colspan=2 align=left><img src="include/install/images/topInnerShadow.gif" ></td>
+		<td background="include/install/images/topInnerShadow.gif" colspan=2 align=left><img height="10" src="include/install/images/topInnerShadow.gif" ></td>
 
 	</tr>
 	</table>
@@ -255,12 +255,6 @@ if(ini_get('short_open_tag') != '1' || stripos(ini_get('short_open_tag'),'Off') 
 				    <tr>
 				    	<td colspan=2>
 				    		<table cellpadding="0" cellspacing="1" align=right width="100%" class="level3">
-				    			<tr>
-				    			<td colspan=2 style="font-size:13;">
-				    				<strong>Pre-Installation Check :</strong>
-				    				<hr size="1" noshade=""/>
-				    			</td>
-				    			</tr>
 				    			<tr>
 								    <td width=50%  valign=top >
 									<table align=right width="100%" border="0">

@@ -25,10 +25,12 @@
 if(isset($_REQUEST['install'])){
 	$form_name = 'installform';
 	$file_name = '4setConfig.php';
+	$source_file = 'licenceAgreement.html';
 }
 elseif(isset($_REQUEST['migrate'])){
 	$form_name = 'migrateform';
 	$file_name = '4setMigrationConfig.php';
+	$source_file = 'migrationInstructions.html';
 }
 
 
@@ -56,7 +58,7 @@ elseif(isset($_REQUEST['migrate'])){
 	</table>
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
-		<td background="include/install/images/topInnerShadow.gif" colspan=2 align=left><img src="include/install/images/topInnerShadow.gif" ></td>
+		<td background="include/install/images/topInnerShadow.gif" colspan=2 align=left><img height="10" src="include/install/images/topInnerShadow.gif" ></td>
 
 	</tr>
 	</table>
@@ -76,7 +78,7 @@ elseif(isset($_REQUEST['migrate'])){
 						    <table cellspacing=0 cellpadding=10 width=90% align=center class='level3'>
 								<tr>
 									<td align=center>
-										<iframe class='licence' frameborder=0 src='licenceAgreement.html' marginwidth=20 scrolling='auto'>
+										<iframe class='licence' frameborder=0 src='<?php echo $source_file ?>' marginwidth=20 scrolling='auto'>
 										</iframe>
 									</td>
 								</tr>

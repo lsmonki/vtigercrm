@@ -73,7 +73,7 @@ foreach($pieces as $val)
 	</table>
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
-		<td background="include/install/images/topInnerShadow.gif" align=left><img src="include/install/images/topInnerShadow.gif" ></td>
+		<td background="include/install/images/topInnerShadow.gif" align=left><img height="10" src="include/install/images/topInnerShadow.gif" ></td>
 
 	</tr>
 	</table>
