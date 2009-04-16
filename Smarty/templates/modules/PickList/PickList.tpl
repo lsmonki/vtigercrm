@@ -21,7 +21,7 @@
 <tbody><tr>
 	<td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
 	<td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
-<br>
+	<br>
 	<div align=center>
 		{include file='SetMenu.tpl'}
 		<!-- DISPLAY -->
@@ -40,7 +40,7 @@
 			<td valign=top>
 			<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 			<tr>
-				<td class="big" width="20%" nowrap>
+				<td class="small" width="20%" nowrap>
 					<strong>{$MOD.LBL_SELECT_MODULE}</strong>&nbsp;&nbsp;
 				</td>
 				<td class="small" align="left" width="30%">
@@ -86,8 +86,6 @@
 		</table>
 	</div>
 	</td>
-    <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}">
-    </td>
 </tr>
 </tbody>
 </table>

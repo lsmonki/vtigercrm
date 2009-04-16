@@ -19,9 +19,8 @@ $mod_strings = array(
 	'LBL_SELECT_ROLES'=>'Select roles',
 	'LBL_NON_EDITABLE_PICKLIST_ENTRIES'=>'Non-editable values',
 	'EDIT_PICKLIST_VALUE'=>'Edit picklist values',
-	'LBL_EDIT_HERE'=>'Edit: ',
+	'LBL_EDIT_HERE'=>'Replace with: ',
 	'LBL_SELECT_TO_EDIT'=>'Select a value to edit: ',
-	'LBL_PUSH'=>'Push',
 	'DELETE_PICKLIST_VALUES'=>'Delete picklist values',
 	'LBL_REPLACE_WITH'=>'Replace with: ',
 	'ASSIGN_PICKLIST_VALUES'=>'Assign Picklist Values',
@@ -30,5 +29,6 @@ $mod_strings = array(
 	'LBL_ADD_TO_OTHER_ROLES'=>'Add to other roles',
 	'LBL_OK_BUTTON_LABEL'=>'Ok',
 	'LBL_SELECT_ROLES'=>'Select roles',
+	'LBL_DISPLAYED_VALUES'=>'All accessible values for the role are shown below',
 );
 ?>

@@ -35,6 +35,9 @@
 					{foreach item=pick_val from=$PICKVAL}
 						<option value="{$pick_val}">{$pick_val}</option>
 					{/foreach}
+					{foreach item=nonedit from=$NONEDITPICKLIST}
+						<option value="{$nonedit}">{$nonedit}</option>
+					{/foreach}
 				</select>
 			</td>
 		</tr>
@@ -50,11 +53,12 @@
 			<td colspan=3>
 				<table border=0 cellspacing=0 cellpadding=0 width=100%>
 					<tr><td><b>{$MOD.LBL_NON_EDITABLE_PICKLIST_ENTRIES} :</b></td></tr>
+					<tr><td>
+					<select id="nonEditablePicklistVal" name="nonEditablePicklistVal" multiple="multiple" wrap size="5" style="width: 100%">
 					{foreach item=nonedit from=$NONEDITPICKLIST}
-						<tr><td>
-							<b>{$nonedit}</b>
-						</td></tr>							
+						<option value="{$nonedit}" disabled>{$nonedit}</option>							
 					{/foreach}
+					</select>
 				</table>
 			</td>
 		</tr>	

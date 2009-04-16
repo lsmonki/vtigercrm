@@ -148,6 +148,9 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
                                                 {$arr[0]}
                                         </option>
 					{/if}
+				{foreachelse}
+					<option value=""></option>
+					<option value="" style='color: #777777' disabled>{$APP.LBL_NONE}</option>
 				{/foreach}
 			   </select>
 			</td>

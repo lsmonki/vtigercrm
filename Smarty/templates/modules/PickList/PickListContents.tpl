@@ -36,9 +36,9 @@
 {/if}
 <table class="tableHeading" border="0" cellpadding="7" cellspacing="0" width="100%">
 <tr>
-	<td  width="40%">
+	<td width="40%">
 		<strong>
-			{$MOD.LBL_PICKLIST_AVAIL} {$MODULELABEL} for &nbsp;
+			{$MOD.LBL_PICKLIST_AVAIL} {$MODULELABEL} {$MOD.LBL_FOR} &nbsp;
 		</strong>
 		<select name="pickrole" id="pickid" class="detailedViewTextBox" onChange="showPicklistEntries('{$MODULE}' );" style="width : auto;">
 			{foreach key=roleid item=role from=$ROLE_LISTS}
@@ -49,6 +49,11 @@
 				{/if}
 			{/foreach}
 		</select>
+	</td>
+</tr>
+<tr>
+	<td class="small">
+		<font color="red">* {$MOD_PICKLIST.LBL_DISPLAYED_VALUES}</font>
 	</td>
 </tr>
 </table>

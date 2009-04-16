@@ -64,8 +64,9 @@ function assignPicklistValues(module,fieldname,fieldlabel){
 function selectForEdit(){
 	var node = document.getElementById('edit_availPickList');
 	if(node.selectedIndex >=0){
-		var value = node.options[node.selectedIndex].value;
+		var value = node.options[node.selectedIndex].text;
 		document.getElementById('replaceVal').value = value;
+		$('replaceVal').focus();
 	}
 }
 
@@ -73,8 +74,18 @@ function selectForEdit(){
  * this function checks if the edited value already exists; 
  * if not it pushes the edited value back to the picklist
  */
-function pushEditedValue(){
+function pushEditedValue(e){
 	var node = document.getElementById('edit_availPickList');
+	if(typeof e.keyCode != 'undefined'){
+		var keyCode = e.keyCode;
+		//check if escape key is being pressed:: if yes then substitue the original value
+		if(keyCode == 27){
+			node.options[node.selectedIndex].text = node.options[node.selectedIndex].value;
+			$('replaceVal').value = node.options[node.selectedIndex].value;
+			return;
+		}
+	}
+	
 	var newVal = trim(document.getElementById('replaceVal').value);
 	for(var i=0;i<node.length;i++){
 		if(node[i].text.toLowerCase() == newVal.toLowerCase() && node.options[node.selectedIndex].text.toLowerCase() != newVal.toLowerCase()){
@@ -94,10 +105,6 @@ function pushEditedValue(){
 		}
 	}
 	
-	if(trim(newVal) == ''){
-		alert(alert_arr.LBL_CANNOT_HAVE_EMPTY_VALUE);
-		return false;
-	}
 	if(node.selectedIndex >=0){
 		node.options[node.selectedIndex].text = newVal;
 	}
@@ -300,9 +307,14 @@ function pickAdd(module, fieldname){
 function validateEdit(fieldname, module){
 	var newVal = Array();
 	var oldVal = Array();
+	
 	var node = document.getElementById('edit_availPickList');
 	for(var i=0;i<node.length;i++){
 		newVal[i] = node[i].text;
+		if(trim(newVal[i]) == ''){
+			alert(alert_arr.LBL_CANNOT_HAVE_EMPTY_VALUE);
+			return false;
+		}
 		oldVal[i] = node[i].value;
 	}
 	pickReplace(module, fieldname, JSON.stringify(newVal), JSON.stringify(oldVal));
@@ -342,12 +354,16 @@ function pickReplace(module, fieldname, newVal, oldVal){
  * @param string module - the name of the module
  */
 function validateDelete(fieldname, module){
-	if(!confirm(alert_arr.LBL_WANT_TO_DELETE)){
+	var node = $('replace_picklistval');
+	var replaceVal = node.options[node.selectedIndex].value;
+	if(trim(replaceVal) == ''){
+		alert(alert_arr.LBL_BLANK_REPLACEMENT);
 		return false;
 	}
 	
-	var node = $('replace_picklistval');
-	var replaceVal = node.options[node.selectedIndex].value;
+	if(!confirm(alert_arr.LBL_WANT_TO_DELETE)){
+		return false;
+	}
 	
 	node = document.getElementById('delete_availPickList');
 	var arr = new Array();
@@ -372,10 +388,15 @@ function validateDelete(fieldname, module){
 		}
 	}
 	
-	if(arr.length == node.length){
-		if(!confirm(alert_arr.LBL_DELETE_ALL_WARNING)){
-			return false;
-		}
+	var nonEditableLength = 0;
+	var nonEditable = $('nonEditablePicklistVal');
+	if(typeof nonEditable != 'undefined'){
+		nonEditableLength = nonEditable.options.length;
+	}
+	
+	if(arr.length == (node.length+nonEditableLength)){
+		alert(alert_arr.LBL_DELETE_ALL_WARNING);
+		return false;
 	}
 	pickDelete(module,fieldname, arr, replaceVal);
 }
@@ -525,6 +546,10 @@ function moveDown(){
  */
 function saveAssignedValues(moduleName, fieldName, roleid){
 	var node = document.getElementById('selectedColumns');
+	if(node.length == 0){
+		alert(alert_arr.LBL_DELETE_ALL_WARNING);
+		return false;
+	}
 	var arr = new Array();
 	for(var i=0;i<node.length;i++){
 		arr[i] = node[i].value;
@@ -554,7 +579,7 @@ function saveAssignedValues(moduleName, fieldName, roleid){
 				if(response.responseText == "SUCCESS"){
 					$("status").style.display="none";
 					$("actiondiv").style.display="none";
-					showPicklistEntries(moduleName);
+					showPicklistEntries();
 				}else{
 					alert(response.responseText);
 				}
@@ -568,11 +593,11 @@ function saveAssignedValues(moduleName, fieldName, roleid){
  * it accepts the module name as parameter while retrieves other values from DOM
  * @param string module - the module name 
  */
-function showPicklistEntries(moduleName){
-	var node = $('allpick');
-	var fieldName = node.options[node.selectedIndex].value;
+function showPicklistEntries(){
+	var moduleNode = $('pickmodule');
+	var moduleName = moduleNode.options[moduleNode.selectedIndex].value;
 	
-	node = $('pickid');
+	var node = $('pickid');
 	var roleid = node.options[node.selectedIndex].value;
 	
 	$("status").style.display="inline";
@@ -580,7 +605,7 @@ function showPicklistEntries(moduleName){
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'action=PickListAjax&module=PickList&file=PickList&moduleName='+encodeURIComponent(moduleName)+'&fieldname='+encodeURIComponent(fieldName)+'&roleid='+roleid+'&directmode=ajax',
+			postBody: 'action=PickListAjax&module=PickList&file=PickList&moduleName='+encodeURIComponent(moduleName)+'&roleid='+roleid+'&directmode=ajax',
 			onComplete: function(response) {
 				if(response.responseText){
 					$("status").style.display="none";

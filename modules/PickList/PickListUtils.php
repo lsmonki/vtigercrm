@@ -28,11 +28,9 @@ function getUserFldArray($fld_module,$roleid){
 			" FROM vtiger_field inner join vtiger_picklist on vtiger_field.fieldname = vtiger_picklist.name" .
 			" where (displaytype=1 and vtiger_field.tabid=? and vtiger_field.uitype in ('15','55','33','16') " .
 			" or (vtiger_field.tabid=? and fieldname='salutationtype' and fieldname !='vendortype')) " .
-			" and vtiger_picklist.picklistid in (select picklistid from vtiger_role2picklist where roleid = ?)" .
 			" and vtiger_field.presence in (0,2) ORDER BY vtiger_picklist.picklistid ASC";
-	$params = array($tabid,$tabid,$roleid);
 
-	$result = $adb->pquery($query, $params);
+	$result = $adb->pquery($query, array($tabid, $tabid));
 	$noofrows = $adb->num_rows($result);
 
     if($noofrows > 0){
@@ -177,15 +175,23 @@ function getNonEditablePicklistValues($fieldName, $lang, $adb){
  */
 function getAssignedPicklistValues($tableName, $roleid, $adb){
 	$var = array();
+	$sub = getSubordinateRoleAndUsers($roleid);
+	$subRoles = array($roleid);
+	$subRoles = array_merge($subRoles, array_keys($sub));
+	
 	$sql = "select * from vtiger_picklist where name = '$tableName'";
 	$result = $adb->query($sql);
 	if($adb->num_rows($result)>0){
 		$picklistid = $adb->query_result($result, 0, "picklistid");
 	}
 	
-	$sql = "select * from vtiger_role2picklist where picklistid = $picklistid and roleid = '$roleid' order by sortid";
-	$result = $adb->query($sql);
+	foreach($subRoles as $role){
+		$params[] = $role;
+	}
+	$sql = "select distinct picklistvalueid from vtiger_role2picklist where picklistid = $picklistid and roleid in (".generateQuestionMarks($params).") order by sortid";
+	$result = $adb->pquery($sql, $params);
 	$count = $adb->num_rows($result);
+	
 	for($i=0;$i<$count;$i++){
 		$picklistvalueid = $adb->query_result($result, $i, "picklistvalueid");
 		

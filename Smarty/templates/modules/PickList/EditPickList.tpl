@@ -48,8 +48,7 @@
 		<tr>
 			<td>
 				<b>{$MOD.LBL_EDIT_HERE}</b>&nbsp;
-				<input type="text" id="replaceVal" class="small" />
-				<input type="button" name="edit_here" id="edit_here" value="{$MOD.LBL_PUSH}" onclick="pushEditedValue()" class="crmButton small edit"/>
+				<input type="text" id="replaceVal" class="small" style="width: 60%" onkeyup="pushEditedValue(event)"/>
 			</td>
 		</tr>
 		<tr>

@@ -206,10 +206,10 @@
 				DUPLICATE_VALUES_FOUND: 'Duplicate Values found',
 				LBL_NO_ROLES_SELECTED: 'No roles have been selected, do you wish to continue?',
 				LBL_DUPLICATE_FOUND: 'Duplicate entries found for the value ',
-				LBL_CANNOT_HAVE_EMPTY_VALUE: 'Cannot have empty value. To delete go back and click on delete button',
+				LBL_CANNOT_HAVE_EMPTY_VALUE: 'Cannot replace with blank value, to remove the value use Delete option.',
 				LBL_DUPLICATE_VALUE_EXISTS: 'Duplicate value exists',
 				LBL_WANT_TO_DELETE: "This will delete the selected picklist value(s) for all roles. You sure you want to continue? ",
-				LBL_DELETE_ALL_WARNING: "You have selected all values to delete. Do you want to continue?",
+				LBL_DELETE_ALL_WARNING: "Must have atleast one value for the picklist",
 				LBL_PLEASE_CHANGE_REPLACEMENT: "please change the replacement value; it is also selected for delete",
 				
 				/*layout Editor changes*/
@@ -248,6 +248,7 @@
 				LBL_ARE_YOU_SURE_TO_MOVE_TO : 'Are you sure you want to move the file(s) to ',
 				LBL_FOLDER : ' folder',
 				LBL_UNABLE_TO_UPDATE : 'Unable to update! Please try it again.',
+				LBL_BLANK_REPLACEMENT: "Cannot select blank value for replacement",
 				
 				LBL_IMAGE_DELETED : 'Image Deleted',
 				
