@@ -34,7 +34,7 @@
 	<table class="tableHeading" width="100%" border="0" cellspacing="0" cellpadding="5" align="center">
 		<tr>
 			<td class="big" nowrap="">
-				<strong><span id="module_info">{$MOD.LBL_MODULE_INFO} "{$FORMODULE|@getTranslatedString:$MOD}"</span></strong>
+				<strong><span id="module_info">{$MOD.LBL_MODULE_INFO} "{$FORMODULE|@getTranslatedString:$MODULE}"</span></strong>
 			</td>
 		</tr>
 	</table>
@@ -43,7 +43,7 @@
 			<td class="small"> <span id="status_message"></span> </td>
 			<td class="small" align="right">
 				<input type="button" class="crmButton create small" 
-					value="{'LBL_NEW_FIELD_EXPRESSION_BUTTON'|@getTranslatedString:$MOD}" id='new_field_expression'/>
+					value="{'LBL_NEW_FIELD_EXPRESSION_BUTTON'|@getTranslatedString:$MODULE}" id='new_field_expression'/>
 			</td>
 		</tr>
 	</table>
@@ -51,7 +51,7 @@
 		<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerHeadingULine">
 			<tr>
 				<td width="60%" align="left" class="layerPopupHeading">
-					{'LBL_EDIT_EXPRESSION'|@getTranslatedString:$MOD}
+					{'LBL_EDIT_EXPRESSION'|@getTranslatedString:$MODULE}
 					</td>
 				<td width="40%" align="right">
 					<a href="javascript:void(0);" id="editpopup_close">
@@ -64,21 +64,21 @@
 			<tr>
 				<td>
 					<p>
-						{'LBL_FIELD'|@getTranslatedString:$MOD}: 
+						{'LBL_FIELD'|@getTranslatedString:$MODULE}: 
 						<select id='editpopup_field' class='small'>
 	
 							<option></option>
 	
 						</select>
 					</p>
-					<p>{'LBL_EXPRESSION'|@getTranslatedString:$MOD}:</p>
+					<p>{'LBL_EXPRESSION'|@getTranslatedString:$MODULE}:</p>
 					<textarea name="Name" rows="8" cols="40" id='editpopup_expression'></textarea>
 				</td>
 				<td width="50%">
 					<table width="50%" border="0" cellspacing="0" cellpadding="5" align="center">
 						<tr>
 							<td class="datalabel" nowrap="nowrap" align="right">
-								<b>{'LBL_FIELDS'|@getTranslatedString:$MOD}: </b>
+								<b>{'LBL_FIELDS'|@getTranslatedString:$MODULE}: </b>
 							</td>
 							<td align="left">
 								<select id='editpopup_fieldnames' class='small'></select>
@@ -86,7 +86,7 @@
 						</tr>
 						<tr>
 							<td class="datalabel" nowrap="nowrap" align="right">
-								<b>{'LBL_FUNCTIONS'|@getTranslatedString:$MOD}: </b>
+								<b>{'LBL_FUNCTIONS'|@getTranslatedString:$MODULE}: </b>
 							</td>
 							<td align="left">
 								<select id='editpopup_functions' class='small'></select>
@@ -106,13 +106,13 @@
 	<table class="listTable" width="100%" border="0" cellspacing="0" cellpadding="5" id='expressionlist'>
 		<tr>
 			<td class="colHeader small" width="20%">
-				{'LBL_FIELD'|@getTranslatedString:$MOD}				
+				{'LBL_FIELD'|@getTranslatedString:$MODULE}				
 			</td>
 			<td class="colHeader small" width="65">
-				{'LBL_EXPRESSION'|@getTranslatedString:$MOD}
+				{'LBL_EXPRESSION'|@getTranslatedString:$MODULE}
 			</td>
 			<td class="colHeader small" width="15%">
-				{'LBL_SETTINGS'|@getTranslatedString:$MOD}
+				{'LBL_SETTINGS'|@getTranslatedString:$MODULE}
 			</td>
 		</tr>
 	</table>
