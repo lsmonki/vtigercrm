@@ -1909,7 +1909,7 @@ function get_invoice_detail($id,$module,$customerid,$sessionid)
 		if($fieldname == 'subject' && $fieldvalue !='')
 		{
 			$fieldid = $adb->query_result($res,0,'invoiceid');
-			$fieldlabel = "(Download PDF)  ".$fieldlabel;
+			//$fieldlabel = "(Download PDF)  ".$fieldlabel;
 			$fieldvalue = '<a href="index.php?downloadfile=true&module=Invoice&action=index&id='.$fieldid.'">'.$fieldvalue.'</a>';
 		}
 		if( $fieldname == 'salesorderid' || $fieldname == 'contactid' || $fieldname == 'accountid' || $fieldname == 'potentialid')
@@ -2214,11 +2214,6 @@ function get_details($id,$module,$customerid,$sessionid)
 		$fieldlabel = getTranslatedString($adb->query_result($fieldres,$i,'fieldlabel'));
 		$fieldvalue = $adb->query_result($res,0,$columnname);
 		
-		if($fieldname == 'unit_price'){
-			$currencyid = $adb->query_result($res,0,'currency_id');
-			$curr = getCurrencySymbolandCRate($currencyid);
-			$fieldlabel .= "(".$curr['symbol'].")";
-		}
 		$output[0][$module][$i]['fieldlabel'] = $fieldlabel ;
 		$output[0][$module][$i]['blockname'] = $blockname;
 		
@@ -2242,7 +2237,7 @@ function get_details($id,$module,$customerid,$sessionid)
 		if($module=='Quotes' && $fieldname == 'subject' && $fieldvalue !='')
 		{
 			$fieldid = $adb->query_result($res,0,'quoteid');
-			$output[0][$module][$i]['fieldlabel']= "(Download PDF)  ".$adb->query_result($fieldres,$i,'fieldlabel');
+			//$output[0][$module][$i]['fieldlabel']= "(Download PDF)  ".$adb->query_result($fieldres,$i,'fieldlabel');
 			$fieldvalue = '<a href="index.php?downloadfile=true&module=Quotes&action=index&id='.$fieldid.'">'.$fieldvalue.'</a>';
 		}
 		if($module == 'Documents')
@@ -2310,6 +2305,12 @@ function get_details($id,$module,$customerid,$sessionid)
 			}else{
 				$fieldvalue = $status; 
 			}
+		}
+		if($fieldname == 'unit_price'){
+			$currencyid = $adb->query_result($res,0,'currency_id');
+			$curr = getCurrencySymbolandCRate($currencyid);
+			$value = "(".$curr['symbol'].")".$fieldvalue;
+			$fieldvalue = $value;
 		}		
 		$output[0][$module][$i]['fieldvalue'] = $fieldvalue;
 	}
