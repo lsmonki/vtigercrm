@@ -9,25 +9,7 @@
   *
  ********************************************************************************/
 -->*}
-<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js">
-{literal}
-function toggleModule(tabid, action) {
-var data = "module={$MODULE}&action={$MODULE}Ajax&file=ListView&tabid='+tabid+'&sub_mode=enable_disable&status='+encodeURIComponent(action)"; 
-new Ajax.Request(
-		'index.php',
-        {queue: {position: 'end', scope: 'command'},
-        	method: 'post',
-            postBody: data,
-            onComplete: function(response) {
-				//$('status').hide();
-				// Reload the page to apply the effect of module setting
-				window.location.href = 'index.php?module={$MODULE}&action=index';
-			}
-		}
-	);
-}
-{/literal}
-</script>
+<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 {include file='Buttons_List.tpl'}
 
 <table border=0 cellspacing=0 cellpadding=0 width="98%" align=center>

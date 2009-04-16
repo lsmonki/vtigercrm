@@ -9,32 +9,13 @@
   *
  ********************************************************************************/
 -->*}
-<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js">
-
-{literal}
-function toggleModule(tabid, action) {
-var data = "module={$MODULE}&action={$MODULE}Ajax&file=ListView&tabid='+tabid+'&sub_mode=enable_disable&status='+encodeURIComponent(action)"; 
-new Ajax.Request(
-		'index.php',
-        {queue: {position: 'end', scope: 'command'},
-        	method: 'post',
-            postBody: data,
-            onComplete: function(response) {
-				//$('status').hide();
-				// Reload the page to apply the effect of module setting
-				window.location.href = "index.php?module={$MODULE}&action=index";
-			}
-		}
-	);
-}
-{/literal}
-</script>
+<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
 
 <table border=0 cellspacing=0 cellpadding=5 width="350px" align="" class="dvtContentSpace">
 <tr>
-	<td class="colHeader small">Module</td>
-	<td class="colHeader small">Sequence</td>
-	<td class="colHeader small">Visible</td>
+	<td class="colHeader small">{$MOD.Module}</td>
+	<td class="colHeader small">{$MOD.Sequence}</td>
+	<td class="colHeader small">{$MOD.Visible}</td>
 </tr>					
 {foreach item=module from=$PORTALMODULES name=pname}
 <tr onmouseover="this.className='prvPrfHoverOn'" onmouseout="this.className='prvPrfHoverOff'">

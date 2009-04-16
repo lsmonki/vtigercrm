@@ -13,6 +13,10 @@ $mod_strings = Array (
 'SELECT_USERS'=>'Select the Users',				
 'LBL_DISABLE'=>'Disable',
 'LBL_ENABLE' =>'Enable',
+'Module' => 'Module',
+'Sequence' =>'Sequence',
+'Visible'=>'Visible'
+
 );
 
 ?>
