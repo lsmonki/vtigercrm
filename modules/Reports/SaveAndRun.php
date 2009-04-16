@@ -52,11 +52,14 @@ if($numOfRows > 0)
 
 	array_push($rep_modules,$primarymodule);
 	$modules_permitted = true;
+	$modules_export_permitted = true;
 	foreach($rep_modules as $mod){
 		if(isPermitted($mod,'index')!= "yes" || vtlib_isModuleActive($mod)==false){
 			$modules_permitted = false;
 			$restrictedmodules[] = $mod;
 		}
+		if(isPermitted("$mod",'Export','')!='yes')
+			$modules_export_permitted = false;
 	}
 	
 	if(isPermitted($primarymodule,'index') == "yes" && $modules_permitted == true)
@@ -107,6 +110,11 @@ if($numOfRows > 0)
 		$list_report_form->assign("FOLDERID", $folderid);
 		$list_report_form->assign("DATEFORMAT",$current_user->date_format);
 		$list_report_form->assign("JS_DATEFORMAT",parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+		if($modules_export_permitted==true){
+			$list_report_form->assign("EXPORT_PERMITTED","YES");
+		} else {
+			$list_report_form->assign("EXPORT_PERMITTED","NO");
+		}
 		$rep_in_fldr = $ogReport->sgetRptsforFldr($folderid);
 		for($i=0;$i<count($rep_in_fldr);$i++){
 			$rep_id = $rep_in_fldr[$i]['reportid'];
