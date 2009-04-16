@@ -200,7 +200,12 @@ function emptyCheck(fldName,fldLabel, fldType) {
 	if (fldType=="text") {
 		if (currObj.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) {
 			alert(fldLabel+alert_arr.CANNOT_BE_EMPTY)
-			currObj.focus()
+			try {
+				currObj.focus()	
+			} catch(error) {
+				// Fix for IE: If element or its wrapper around it is hidden, setting focus will fail
+				// So using the try { } catch(error) { }
+			}
            	return false
 		}
         else{
@@ -272,7 +277,12 @@ function patternValidate(fldName,fldLabel,type) {
 	if (type.toUpperCase()=="EMAIL" || type.toUpperCase() == "DATE") currObj.value = trim(currObj.value);	
 	if (!re.test(currObj.value)) {
 		alert(alert_arr.ENTER_VALID + fldLabel  + " ("+type+")");
-		currObj.focus()
+		try {
+			currObj.focus()	
+		} catch(error) {
+			// Fix for IE: If element or its wrapper around it is hidden, setting focus will fail
+			// So using the try { } catch(error) { }
+		}
 		return false
 	}
 	else return true
@@ -2381,7 +2391,12 @@ function upload_filter(fldName, filter)
 		if(valid_extn.indexOf(type[type.length-1]) == -1)
 		{
 			alert(alert_arr.PLS_SELECT_VALID_FILE+valid_extn)
-			currObj.focus();
+			try {
+				currObj.focus()	
+			} catch(error) {
+				// Fix for IE: If element or its wrapper around it is hidden, setting focus will fail
+				// So using the try { } catch(error) { }
+			}
 		 	return false;
 		}
 	}	
@@ -3674,8 +3689,18 @@ VtigerJS_DialogBox = {
 			if (browser_ie) { 
 				olayer.style.height = document.body.offsetHeight + (document.body.scrollHeight - document.body.offsetHeight) + "px"; 
 			} else if (browser_nn4 || browser_nn6) { olayer.style.height = document.body.offsetHeight + "px"; } 
-			olayer.style.width = "100%";		
+			olayer.style.width = "100%";
 			document.body.appendChild(olayer);
+			
+			var closeimg = document.createElement("img");
+			closeimg.src = 'themes/images/close.gif';
+			closeimg.alt = 'X';
+			closeimg.style.right= '10px';
+			closeimg.style.top  = '5px';
+			closeimg.style.position = 'absolute';
+			closeimg.style.cursor = 'pointer';
+			closeimg.onclick = VtigerJS_DialogBox.unblock;
+			olayer.appendChild(closeimg);
 		} 
 		if(olayer) {
 			if(toggle) olayer.style.display = "block";
