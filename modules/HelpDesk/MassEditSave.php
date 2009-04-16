@@ -59,6 +59,10 @@ if(isset($idlist)) {
 					$focus->column_fields[$fieldname] = decode_html($focus->column_fields[$fieldname]);
 				}
 			}
+			// Avoiding comment update on ticket
+			$focus->column_fields['comments'] = '';
+			$_REQUEST['comments'] = ''; 
+			// END
 			$focus->save($currentModule);
 		}
 	}
