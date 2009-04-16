@@ -5,7 +5,7 @@
 		</td>
 		<td valign="bottom" class="heading2">
 			<b><a href="index.php?module=Settings&action=ModuleManager&parenttab=Settings">Module Manager</a> > 
-			<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$FORMODULE}&parenttab=Settings">{$FORMODULE|@getTranslatedString:$MOD}</a> > 
+			<a href="index.php?module=Settings&action=ModuleManager&module_settings=true&formodule={$FORMODULE}&parenttab=Settings">{$FORMODULE|@getTranslatedString:$MODULE}</a> > 
 				{$MOD.$PAGE_NAME}
 		</td>
 	</tr>
