@@ -71,7 +71,21 @@
 		 * @return The module name.
 		 */
 		function getModuleName(){
-			return get_class($this->focus);
+			$className =  get_class($this->focus);
+			$importModuleMapping = Array(
+				"ImportLead"=>"Leads",
+				"ImportAccount"=>"Accounts",
+				"ImportContact"=>"Contacts",
+				"ImportOpportunity"=>"Potentials",
+				"ImportProduct"=>"Products",
+				"ImportTicket"=>"HelpDesk",
+				"ImportVendors"=>"Vendors"
+			);
+			$moduleName = $className;
+			if(array_key_exists($className, $importModuleMapping)){
+				$moduleName = $importModuleMapping[$className];
+			}
+			return $moduleName;
 		}
 		
 		function get($fieldName){
