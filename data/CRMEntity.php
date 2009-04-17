@@ -1339,7 +1339,7 @@ $log->info("in getOldFileName  ".$notesid);
 		global $adb, $log;
 		$log->debug("Entering function initSortByField ($module)");
 		// Define the columnname's and uitype's which needs to be excluded
-		$exclude_columns = Array ('parent_id','quoteid','vendorid');
+		$exclude_columns = Array ('parent_id','quoteid','vendorid','access_count');
 		$exclude_uitypes = Array ();
 		
 		$tabid = getTabId($module);
