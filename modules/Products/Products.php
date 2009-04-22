@@ -1239,8 +1239,8 @@ class Products extends CRMEntity {
 	
 	function insertIntoseProductsRel($record_id,$parentid,$return_module){
 		global $adb;
-		$query = $adb->pquery("SELECT * from vtiger_seproductsrel WHERE crmid=? and productid=?",array($record_id,$parentid));
-		if($adb->num_rows($query)==0){
+		$query = $adb->pquery("SELECT * from vtiger_seproductsrel WHERE crmid=? and productid=? AND setype='Products'",array($record_id,$parentid));
+		if($adb->num_rows($query)==0 && $return_module=='Products'){
 			$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)",array($record_id,$parentid,$return_module));
 		}
 	}
