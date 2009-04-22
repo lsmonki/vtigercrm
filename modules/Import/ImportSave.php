@@ -173,6 +173,10 @@ foreach ($rows1 as $row)
 		} 
 	}
 
+	if ( ! isset($focus->column_fields["assigned_user_id"]) || $focus->column_fields["assigned_user_id"]==='' || $focus->column_fields["assigned_user_id"]===NULL) {
+		$focus->column_fields["assigned_user_id"] = $my_userid;
+	}	
+
 	//added for duplicate handling
 	if(is_record_exist($module,$focus))
 	{
