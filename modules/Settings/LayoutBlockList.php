@@ -754,10 +754,7 @@ function addblock(){
 		$sql_up="update vtiger_blocks set sequence=sequence+1 where tabid=? and sequence > ?";
 		$adb->pquery($sql_up, array($tabid,$block_sequence));
 		
-		$sql='select max(blockid) as max_id from vtiger_blocks';
-		$res=$adb->query($sql);
-		$row=$adb->fetch_array($res);
-		$max_blockid=$row['max_id']+1;
+		$max_blockid=$adb->getUniqueID('vtiger_blocks');
 		$iscustom = 1;
 		$sql="INSERT INTO vtiger_blocks (tabid, blockid, sequence, blocklabel,iscustom) values (?,?,?,?,?)";	
 		$params = array($tabid,$max_blockid,$newblock_sequence,$newblocklabel,$iscustom);
