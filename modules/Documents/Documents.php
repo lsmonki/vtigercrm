@@ -149,7 +149,7 @@ class Documents extends CRMEntity {
 				$filename = 'http://'.$filename;
 			}
 			$filetype = '';
-			$filesize = null;
+			$filesize = 0;
 			$filedownloadcount = null;
 		}
 		$query = "UPDATE vtiger_notes SET filename = ? ,filesize = ?, filetype = ? , filelocationtype = ? , filedownloadcount = ? WHERE notesid = ?";
