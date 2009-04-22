@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("include/utils/CommonUtils.php");
 require_once("include/events/SqlResultIterator.inc");
 require_once("include/Zend/Json.php");
