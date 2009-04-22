@@ -8,8 +8,8 @@
   *
  ********************************************************************************/
 
-function splitValues() {
-        var picklistObj=getObj("fldPickList")
+function splitValues(object) {
+        var picklistObj=object;
         var pickListContent=picklistObj.value
         var pickListAry=new Array()
         var i=0;
@@ -47,7 +47,7 @@ function validate(blockid) {
 		}
 		lengthLayer=document.getElementById("lengthdetails_"+blockid)
         decimalLayer=document.getElementById("decimaldetails_"+blockid)
-        pickListLayer=document.getElementById("picklist_"+blockid)
+        var pickListLayer=document.getElementById("fldPickList_"+blockid);
         var fldlbl = document.getElementById("fldLabel_"+blockid);
         var str = fldlbl.value;
 		if (!emptyCheck("fldLabel_"+blockid,"Label","text"))
@@ -95,10 +95,10 @@ function validate(blockid) {
         if ( lengthObj != null && lengthObj.style.visibility == "visible" && !numConstComp('fldLength_'+blockid,"Length","LE",nummaxlength))
                 return false
 		var picklistObj=document.getElementById("fldPickList_"+blockid)
-        if (pickListLayer != null && pickListLayer.style.visibility=="visible") {
-                if (emptyCheck("fldPickList_"+blockid,"Picklist values"))        {
-                        var pickListAry=new Array();
-                        pickListAry=splitValues();
+        if (pickListLayer != null && getObj("picklistdetails_"+blockid).style.visibility!="none") {
+                var pickListAry=new Array();
+                pickListAry=splitValues(pickListLayer);
+				if (emptyCheck("fldPickList_"+blockid,"Picklist values"))        {
 
                         //Empty Check validation
                         for (i=0;i<pickListAry.length;i++) {
@@ -112,7 +112,7 @@ function validate(blockid) {
                         //Duplicate Values' Validation
                         for (i=0;i<pickListAry.length;i++) {
                    			for (j=i+1;j<pickListAry.length;j++) {
-                 				if (pickListAry[i].toUpperCase()==pickListAry[j].toUpperCase()) {
+                 				if (trim(pickListAry[i].toUpperCase())== trim(pickListAry[j].toUpperCase())) {
                   					alert(alert_arr.DUPLICATE_VALUES_FOUND)
                  						picklistObj.focus();
                         					return false
