@@ -1,4 +1,4 @@
-<?
+<?php
 	require_once("Smarty_setup.php");
 	require_once("include/utils/CommonUtils.php");
 	require_once("include/events/SqlResultIterator.inc");

@@ -36,8 +36,12 @@ foreach($storearray as $id)
 	{
 		if($dest_mod == 'Documents')
 			$adb->pquery("insert into vtiger_senotesrel values (?,?)", array($forCRMRecord, $id));
-		elseif($dest_mod =='Leads' || $dest_mod =='Accounts' ||$dest_mod =='Contacts' ||$dest_mod =='Potentials' || $dest_mod=='Products')
-			$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($id, $forCRMRecord, $dest_mod));
+		elseif($dest_mod =='Leads' || $dest_mod =='Accounts' ||$dest_mod =='Contacts' ||$dest_mod =='Potentials' || $dest_mod=='Products'){
+			$query = $adb->pquery("SELECT * from vtiger_seproductsrel WHERE crmid=? and productid=?",array($forCRMRecord,$id));
+			if($adb->num_rows($query)==0){
+				$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($id, $forCRMRecord, $dest_mod));
+			}
+		}
 		else {						
 			checkFileAccess("modules/$currentModule/$currentModule.php");
 			require_once("modules/$currentModule/$currentModule.php");

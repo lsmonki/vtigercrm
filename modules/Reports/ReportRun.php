@@ -156,7 +156,7 @@ class ReportRun extends CRMEntity
 					{
 						$columnslist[$fieldcolname] = "concat(vtiger_activity.date_start,'  ',vtiger_activity.time_start) as Calendar_Start_Date_and_Time";
 					}
-					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field != 'Products_Handler')
+					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field != 'Products_Handler' && $module_field!='Services_Owner')
 					{
 						$temp_module_from_tablename = str_replace("vtiger_users","",$selectedfields[0]);
 						if($module!=$this->primarymodule){
