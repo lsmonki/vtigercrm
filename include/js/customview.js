@@ -95,7 +95,7 @@ function validate(blockid) {
         if ( lengthObj != null && lengthObj.style.visibility == "visible" && !numConstComp('fldLength_'+blockid,"Length","LE",nummaxlength))
                 return false
 		var picklistObj=document.getElementById("fldPickList_"+blockid)
-        if (pickListLayer != null && getObj("picklistdetails_"+blockid).style.visibility!="none") {
+        if (pickListLayer != null && getObj("picklistdetails_"+blockid).style.visibility=="visible") {
                 var pickListAry=new Array();
                 pickListAry=splitValues(pickListLayer);
 				if (emptyCheck("fldPickList_"+blockid,"Picklist values"))        {
