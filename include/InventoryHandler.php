@@ -10,7 +10,7 @@
 
 function handleInventoryProductRel($entity){
 	require_once("include/utils/InventoryUtils.php");
-	updateInventoryProductRel($entity->focus);
+	updateInventoryProductRel($entity);
 }
 
 ?>
