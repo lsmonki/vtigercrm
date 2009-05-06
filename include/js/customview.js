@@ -123,7 +123,7 @@ function validate(blockid) {
                         return true
                 } else return false
         }
-		
+		return true;
 }
 var fieldValueArr=new Array('Text','Number','Percent','Currency','Date','Email','Phone','Picklist','URL','Checkbox','TextArea','MultiSelectCombo','Skype');
 var fieldTypeArr=new Array('text','number','percent','currency','date','email','phone','picklist','url','checkbox','textarea','multiselectcombo','skype');
