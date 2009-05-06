@@ -169,79 +169,9 @@ function createInvoice($salesorder_id) {
 	foreach($invoice_so_fields as $invoice_field => $so_field) {
 		$focus->column_fields[$invoice_field] = $so_focus->column_fields[$so_field];
 	}	
-	
+	$focus->_salesorderid = $salesorder_id; 
+	$focus->_recurring_mode = 'recurringinvoice_from_so'; 	
 	$focus->save("Invoice");
-	
-	// Add the products for the Invoice
-	$query1 = "SELECT * FROM vtiger_inventoryproductrel WHERE id=?";
-	$res = $adb->pquery($query1, array($salesorder_id));
-	$no_of_products = $adb->num_rows($res);
-	$fieldsList = $adb->getFieldsArray($res);
-	for($j=0; $j<$no_of_products; $j++) {
-		$row = $adb->query_result_rowdata($res, $j);
-		$col_value = array();
-		for($k=0; $k<count($fieldsList); $k++) {
-			$col_value[$fieldsList[$k]] = $row[$fieldsList[$k]];
-		}
-		if(count($col_value) > 0) {
-			$col_value['id'] = $focus->id;
-			$columns = array_keys($col_value);
-			$values = array_values($col_value);
-			$query2 = "INSERT INTO vtiger_inventoryproductrel(". implode(",",$columns) .") VALUES (". generateQuestionMarks($values) .")";
-			$adb->pquery($query2, array($values));
-			$prod_id = $col_value['productid'];	
-			$qty = $col_value['quantity'];	
-			updateStk($prod_id,$qty,'',array(),'Invoice');
-		}
-	}
-	
-	// Add the Shipping taxes for the Invoice
-	$query3 = "SELECT * FROM vtiger_inventoryshippingrel WHERE id=?";
-	$res = $adb->pquery($query3, array($salesorder_id));
-	$no_of_shippingtax = $adb->num_rows($res);
-	$fieldsList = $adb->getFieldsArray($res);
-	for($j=0; $j<$no_of_shippingtax; $j++) {
-		$row = $adb->query_result_rowdata($res, $j);
-		$col_value = array();
-		for($k=0; $k<count($fieldsList); $k++) {
-			$col_value[$fieldsList[$k]] = $row[$fieldsList[$k]];
-		}
-		if(count($col_value) > 0) {
-			$col_value['id'] = $focus->id;
-			$columns = array_keys($col_value);
-			$values = array_values($col_value);
-			$query4 = "INSERT INTO vtiger_inventoryshippingrel(". implode(",",$columns) .") VALUES (". generateQuestionMarks($values) .")";
-			$adb->pquery($query4, array($values));
-		}
-	}
-	
-	//Update the netprice (subtotal), taxtype, discount, S&H charge, adjustment and total for the Invoice
-	
-	$updatequery  = " UPDATE vtiger_invoice SET ";
-	$updateparams = array();
-	// Remaining column values to be updated -> column name to field name mapping
-	$invoice_column_field = Array (
-		'adjustment' => 'txtAdjustment',
-		'subtotal' => 'hdnSubTotal', 
-		'total' => 'hdnGrandTotal', 
-		'taxtype' => 'hdnTaxType',
-		'discount_percent' => 'hdnDiscountPercent',
-		'discount_amount' => 'hdnDiscountAmount',
-		's_h_amount' => 'hdnS_H_Amount',
-	);
-	$updatecols = array();
-	foreach($invoice_column_field as $col => $field) {
-		$updatecols[] = "$col=?";
-		$updateparams[] = $focus->column_fields[$field];
-	}
-	if (count($updatecols) > 0) {
-		$updatequery .= implode(",", $updatecols);
-		
-		$updatequery .= " WHERE invoiceid=?";
-		array_push($updateparams, $focus->id);
-		
-		$adb->pquery($updatequery, $updateparams);
-	}
 }
 
 

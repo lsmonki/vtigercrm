@@ -94,6 +94,8 @@ class Invoice extends CRMEntity {
 	//var $groupTable = Array('vtiger_invoicegrouprelation','invoiceid');
 	
 	var $mandatory_fields = Array('subject','createdtime' ,'modifiedtime');
+	var $_salesorderid;
+	var $_recurring_mode;
 	
 	/**	Constructor which will set the column_fields in this object
 	 */
@@ -129,6 +131,10 @@ class Invoice extends CRMEntity {
 			}
 		}
 		
+		if(isset($this->_recurring_mode) && $this->_recurring_mode == 'recurringinvoice_from_so' && isset($this->_salesorderid) && $this->_salesorderid!='') {
+			$this->createRecurringInvoiceFromSO();
+		}
+
 		// Update the currency id and the conversion rate for the invoice
 		$update_query = "update vtiger_invoice set currency_id=?, conversion_rate=? where invoiceid=?";
 		$update_params = array($this->column_fields['currency_id'], $this->column_fields['conversion_rate'], $this->id); 
@@ -381,6 +387,84 @@ class Invoice extends CRMEntity {
 			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
 			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
 			$this->db->pquery($sql, $params);
+		}
+	}
+
+	/*
+	 * Function to get the relations of salesorder to invoice for recurring invoice procedure 
+	 * @param - $salesorder_id Salesorder ID
+	 */
+	function createRecurringInvoiceFromSO(){
+		global $adb;
+		$salesorder_id = $this->_salesorderid;
+		$query1 = "SELECT * FROM vtiger_inventoryproductrel WHERE id=?";
+		$res = $adb->pquery($query1, array($salesorder_id));
+		$no_of_products = $adb->num_rows($res);
+		$fieldsList = $adb->getFieldsArray($res);
+		for($j=0; $j<$no_of_products; $j++) {
+			$row = $adb->query_result_rowdata($res, $j);
+			$col_value = array();
+			for($k=0; $k<count($fieldsList); $k++) {
+				$col_value[$fieldsList[$k]] = $row[$fieldsList[$k]];
+			}
+			if(count($col_value) > 0) {
+				$col_value['id'] = $this->id;
+				$columns = array_keys($col_value);
+				$values = array_values($col_value);
+				$query2 = "INSERT INTO vtiger_inventoryproductrel(". implode(",",$columns) .") VALUES (". generateQuestionMarks($values) .")";
+				$adb->pquery($query2, array($values));
+				$prod_id = $col_value['productid'];	
+				$qty = $col_value['quantity'];	
+				updateStk($prod_id,$qty,'',array(),'Invoice');
+			}
+		}
+		
+		// Add the Shipping taxes for the Invoice
+		$query3 = "SELECT * FROM vtiger_inventoryshippingrel WHERE id=?";
+		$res = $adb->pquery($query3, array($salesorder_id));
+		$no_of_shippingtax = $adb->num_rows($res);
+		$fieldsList = $adb->getFieldsArray($res);
+		for($j=0; $j<$no_of_shippingtax; $j++) {
+			$row = $adb->query_result_rowdata($res, $j);
+			$col_value = array();
+			for($k=0; $k<count($fieldsList); $k++) {
+				$col_value[$fieldsList[$k]] = $row[$fieldsList[$k]];
+			}
+			if(count($col_value) > 0) {
+				$col_value['id'] = $this->id;
+				$columns = array_keys($col_value);
+				$values = array_values($col_value);
+				$query4 = "INSERT INTO vtiger_inventoryshippingrel(". implode(",",$columns) .") VALUES (". generateQuestionMarks($values) .")";
+				$adb->pquery($query4, array($values));
+			}
+		}
+		
+		//Update the netprice (subtotal), taxtype, discount, S&H charge, adjustment and total for the Invoice
+		
+		$updatequery  = " UPDATE vtiger_invoice SET ";
+		$updateparams = array();
+		// Remaining column values to be updated -> column name to field name mapping
+		$invoice_column_field = Array (
+			'adjustment' => 'txtAdjustment',
+			'subtotal' => 'hdnSubTotal', 
+			'total' => 'hdnGrandTotal', 
+			'taxtype' => 'hdnTaxType',
+			'discount_percent' => 'hdnDiscountPercent',
+			'discount_amount' => 'hdnDiscountAmount',
+			's_h_amount' => 'hdnS_H_Amount',
+		);
+		$updatecols = array();
+		foreach($invoice_column_field as $col => $field) {
+			$updatecols[] = "$col=?";
+			$updateparams[] = $this->column_fields[$field];
+		}
+		if (count($updatecols) > 0) {
+			$updatequery .= implode(",", $updatecols);
+			
+			$updatequery .= " WHERE invoiceid=?";
+			array_push($updateparams, $this->id);
+			
+			$adb->pquery($updatequery, $updateparams);
 		}
 	}
 
