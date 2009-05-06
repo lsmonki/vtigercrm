@@ -6036,6 +6036,10 @@
 			<notnull />
 			<default value="0" />
 		</field>
+		<field name="lineitem_id" type="I" size="11">
+			<key />
+			<autoincrement />
+		</field>
 
 		<index name="inventoryproductrel_id_idx">
 			<col>id</col>

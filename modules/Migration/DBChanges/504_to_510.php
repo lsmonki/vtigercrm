@@ -2090,6 +2090,8 @@ function updateReportColumns($table){
 }
 //ENDS
 
+ExecuteQuery("ALTER TABLE vtiger_inventoryproductrel ADD COLUMN lineitem_id int(19) AUTO_INCREMENT ADD PRIMARY KEY (lineitem_id)");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>
