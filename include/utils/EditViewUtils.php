@@ -1625,13 +1625,17 @@ function getAssociatedProducts($module,$focus,$seid='')
 		{
 			$product_Detail[$i]['delRow'.$i]="Del";
 		}
-		$sub_prod_query = $adb->pquery("SELECT productid from vtiger_inventorysubproductrel WHERE id=? AND sequence_no=?",array($focus->id,$i));
+		if(!isset($focus->mode) && $seid!=''){
+			$sub_prod_query = $adb->pquery("SELECT crmid as prod_id from vtiger_seproductsrel WHERE productid=? AND setype='Products'",array($seid));
+		} else {
+			$sub_prod_query = $adb->pquery("SELECT productid as prod_id from vtiger_inventorysubproductrel WHERE id=? AND sequence_no=?",array($focus->id,$i));
+		}
 		$subprodid_str='';
 		$subprodname_str='';
 		
 		if($adb->num_rows($sub_prod_query)>0){
 			for($j=0;$j<$adb->num_rows($sub_prod_query);$j++){
-				$sprod_id = $adb->query_result($sub_prod_query,$j,'productid');
+				$sprod_id = $adb->query_result($sub_prod_query,$j,'prod_id');
 				$sprod_name = getProductName($sprod_id);
 				$str_sep = "";
 				if($j>0) $str_sep = ":";
@@ -1639,6 +1643,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 				$subprodname_str .= $str_sep." - ".$sprod_name;
 			}
 		}
+
 		$subprodname_str = str_replace(":","<br>",$subprodname_str);
 		
 		$product_Detail[$i]['hdnProductId'.$i] = $hdnProductId;
