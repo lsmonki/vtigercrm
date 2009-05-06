@@ -2023,6 +2023,8 @@ for($i=0 ; $i<$rows ;$i++) {
 	Executequery("UPDATE vtiger_emaildetails set to_email = '$to_json', cc_email= '$cc_json', bcc_email= '$bcc_json' WHERE emailid = $emailid");
 }
 	
+ExecuteQuery("UPDATE vtiger_field SET presence=0 WHERE tablename='vtiger_leaddetails' AND columnname='company'");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

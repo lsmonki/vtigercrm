@@ -19,6 +19,16 @@
 <script type="text/javascript" src="jscalendar/lang/calendar-{$CALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 
+<!-- overriding the pre-defined #company to avoid clash with vtiger_field in the view -->
+{literal}
+<style type='text/css'>
+#company {
+	width: 90%;
+	height: auto;
+}
+</style>
+{/literal}
+
 <script type="text/javascript">
 var gVTModule = '{$smarty.request.module}';
 function sensex_info()

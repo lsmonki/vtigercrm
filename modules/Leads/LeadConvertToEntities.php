@@ -349,7 +349,9 @@ $acc_res = $adb->pquery($acc_query, array($accountname));
 $acc_rows = $adb->num_rows($acc_res);
 if($acc_rows != 0)
         $crmid = $adb->query_result($acc_res,0,"accountid");
-else
+else if($accountname==''){
+	$crmid='';
+} else
 {
 	$crmid = $adb->getUniqueID("vtiger_crmentity");
 
@@ -497,9 +499,15 @@ if(! isset($createpotential) || ! $createpotential == "on")
 	{
 		$potential_amount=0;
 	}
-
+	
+	if($crmid!=''){
+		$related_to = $crmid;
+	} else {
+		$related_to = $crmcontactid;
+	}
+	
 	$sql_insert_opp = "INSERT INTO vtiger_potential (potential_no,potentialid,related_to,potentialname,leadsource,closingdate,sales_stage,amount) VALUES (?,?,?,?,?,?,?,?)";
-	$opp_params = array($potential_no, $oppid, $crmid, $potential_name, $row['leadsource'], $close_date, $potential_sales_stage, $potential_amount);
+	$opp_params = array($potential_no, $oppid, $related_to, $potential_name, $row['leadsource'], $close_date, $potential_sales_stage, $potential_amount);
 	$adb->pquery($sql_insert_opp, $opp_params);
 
 	//Getting the customfield values from leads and inserting into the respected PotentialCustomfield to which it is mapped - Jaguar
@@ -532,6 +540,10 @@ $adb->pquery($sql_update_converted, array($id));
 //updating the campaign-lead relation --Minnie
 $sql_update_campleadrel = "delete from vtiger_campaignleadrel where leadid=?";
 $adb->pquery($sql_update_campleadrel, array($id));
-header("Location: index.php?action=DetailView&module=Accounts&record=$crmid&parenttab=$category");
+if($crmid!=''){
+	header("Location: index.php?action=DetailView&module=Accounts&record=$crmid&parenttab=$category");
+} else {
+	header("Location: index.php?action=DetailView&module=Contacts&record=$crmcontactid&parenttab=$category");
+}
 
 ?>
