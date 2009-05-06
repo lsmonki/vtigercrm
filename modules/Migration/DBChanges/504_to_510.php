@@ -1476,7 +1476,7 @@ addFieldSecurity(10, $fieldid, 'false');
 ExecuteQuery("ALTER TABLE vtiger_report ADD COLUMN owner int(11) NOT NULL");
 ExecuteQuery("UPDATE vtiger_field INNER JOIN vtiger_field as vtiger_field1 on vtiger_field1.tabid=vtiger_field.tabid SET vtiger_field.block = vtiger_field1.block WHERE vtiger_field.fieldname='faq_answer' and vtiger_field1.fieldname='question' and vtiger_field.tabid=15");
 ExecuteQuery("ALTER TABLE vtiger_report ADD COLUMN sharingtype varchar(200) NOT NULL DEFAULT 'Private'");
-ExecuteQuery("UPDATE vtiger_report SET sharingtype='Public', owner=1 WHERE state='SAVED'");
+ExecuteQuery("UPDATE vtiger_report SET sharingtype='Public', owner=1");
 ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_reportsharing(reportid int(19) not null,shareid int(19) not null,setype varchar(200) NOT NULL)");
 ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_reportfilters(filterid int(11) not null,name varchar(200) not null)");
 ExecuteQuery("INSERT INTO vtiger_reportfilters values(1,'Private')");
@@ -2022,8 +2022,73 @@ for($i=0 ; $i<$rows ;$i++) {
 	
 	Executequery("UPDATE vtiger_emaildetails set to_email = '$to_json', cc_email= '$cc_json', bcc_email= '$bcc_json' WHERE emailid = $emailid");
 }
-	
+
 ExecuteQuery("UPDATE vtiger_field SET presence=0 WHERE tablename='vtiger_leaddetails' AND columnname='company'");
+
+//Reports Migration Handling for Older reports - STARTS
+
+updateReportColumns("vtiger_selectcolumn");
+updateReportColumns("vtiger_relcriteria");
+
+function updateReportColumns($table){
+	global $adb;
+	$report_update_array = array(
+		"vtiger_campaign"=>"(vtiger_reportmodules.primarymodule='Potentials' OR vtiger_reportmodules.secondarymodules = 'Potentials') AND $table.columnname LIKE '%vtiger_campaign%'",
+		"vtiger_vendorRel"=>"$table.columnname LIKE '%vtiger_vendorRel%'",
+		"vtiger_potentialRel"=>"$table.columnname LIKE '%vtiger_potentialRel%'",
+	);
+	
+	foreach($report_update_array as $key=>$where){
+		$query = "SELECT vtiger_report.reportid as reportid,$table.columnname AS columnname FROM vtiger_report INNER JOIN $table ON $table.queryid = vtiger_report.reportid INNER JOIN vtiger_reportmodules ON vtiger_reportmodules.reportmodulesid = vtiger_report.reportid WHERE $where";
+		$result = $adb->query($query);
+		if($adb->num_rows($result) > 0){
+			for($i=0;$i<$adb->num_rows($result);$i++){
+				$reportid = $adb->query_result($result,$i,"reportid");
+				$colname = $adb->query_result($result,$i,"columnname");
+				$column_array = split(":",$colname);
+				$column = split("_",$column_array[2]);
+				$mod_name = $column[0];
+				$newcolname = str_replace("$key",$key."$mod_name",$colname);
+				ExecuteQuery("UPDATE $table SET columnname = '".$newcolname."' WHERE queryid = ".$reportid." AND columnname = '".$colname."'");
+			}
+		}
+	}
+	$query = "SELECT vtiger_reportmodules.primarymodule as primarymodule, vtiger_report.reportid as reportid,$table.columnname AS columnname FROM vtiger_report INNER JOIN $table ON $table.queryid = vtiger_report.reportid INNER JOIN vtiger_reportmodules ON vtiger_reportmodules.reportmodulesid = vtiger_report.reportid WHERE $table.columnname LIKE 'vtiger_products%:products_description:%'";
+	$result = $adb->query($query);
+	if($adb->num_rows($result) > 0){
+		for($i=0;$i<$adb->num_rows($result);$i++){
+			$pri_module = $adb->query_result($result,$i,"reportid");
+			$reportid = $adb->query_result($result,$i,"reportid");
+			$colname = $adb->query_result($result,$i,"columnname");
+			$column_array = split(":",$colname);
+			if($pri_module!="Products"){
+				$column_array[0]='vtiger_crmentityProducts';
+				$column_array[1]='description';
+			} else {
+				$column_array[0]='vtiger_crmentity';
+				$column_array[1]='description';
+			}
+			$newcolname = $column_array[0].":".$column_array[1].":".$column_array[2].":".$column_array[3].":".$column_array[4];
+			ExecuteQuery("UPDATE $table SET columnname = '".$newcolname."' WHERE queryid = ".$reportid." AND columnname = '".$colname."'");
+		}
+	}
+	$query = "SELECT vtiger_reportmodules.primarymodule as primarymodule, vtiger_report.reportid as reportid,$table.columnname AS columnname FROM vtiger_report INNER JOIN $table ON $table.queryid = vtiger_report.reportid INNER JOIN vtiger_reportmodules ON vtiger_reportmodules.reportmodulesid = vtiger_report.reportid WHERE $table.columnname LIKE 'vtiger_accountPotentials%:accountname:%:account_id:%'";
+	$result = $adb->query($query);
+	if($adb->num_rows($result) > 0){
+		for($i=0;$i<$adb->num_rows($result);$i++){
+			$reportid = $adb->query_result($result,$i,"reportid");
+			$colname = $adb->query_result($result,$i,"columnname");
+			$column_array = split(":",$colname);
+			$column_array[0]='vtiger_potential';
+			$column_array[1]='related_to';
+			$column_array[2]='Potentials_Related_To';
+			$column_array[3]='related_to';
+			$newcolname = $column_array[0].":".$column_array[1].":".$column_array[2].":".$column_array[3].":".$column_array[4];
+			ExecuteQuery("UPDATE $table SET columnname = '".$newcolname."' WHERE queryid = ".$reportid." AND columnname = '".$colname."'");
+		}
+	}
+}
+//ENDS
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 

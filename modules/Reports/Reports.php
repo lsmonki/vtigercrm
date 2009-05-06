@@ -21,6 +21,7 @@ global $log;
 
 global $report_modules;
 global $related_modules;
+global $old_related_modules;
 
 $adv_filter_options = array("e"=>"equals",
 		            "n"=>"not equal to",
@@ -37,8 +38,7 @@ $adv_filter_options = array("e"=>"equals",
 //$report_modules = Array('Faq','Rss','Portal','Recyclebin','Emails','Reports','Dashboard','Home','Activities'
 	//	       );
 
-/*$related_modules = Array('Leads'=>Array(),
-			 'Accounts'=>Array('Potentials','Contacts','Products','Quotes','Invoice'),
+$old_related_modules = Array('Accounts'=>Array('Potentials','Contacts','Products','Quotes','Invoice'),
 			 'Contacts'=>Array('Accounts','Potentials','Quotes','PurchaseOrder'),
 			 'Potentials'=>Array('Accounts','Contacts','Quotes'),
 			 'Calendar'=>Array('Leads','Accounts','Contacts','Potentials'),
@@ -46,11 +46,10 @@ $adv_filter_options = array("e"=>"equals",
 			 'HelpDesk'=>Array('Products'),
 			 'Quotes'=>Array('Accounts','Contacts','Potentials'),
 			 'PurchaseOrder'=>Array('Contacts'),
-			 'SalesOrder'=>Array(),
 			 'Invoice'=>Array('Accounts'),
-			 'Campaigns'=>Array('Products')
+			 'Campaigns'=>Array('Products'),
 			);
-*/
+
 $related_modules =Array();
 
 class Reports extends CRMEntity{
@@ -220,7 +219,7 @@ class Reports extends CRMEntity{
 
 	// Initializes the module list for listing columns for report creation.
 	function initListOfModules() {
-		global $adb,$current_user;
+		global $adb,$current_user,$old_related_modules;
 		$restricted_modules = array('Emails','Events','Webmails');
 		$restricted_blocks = array('LBL_IMAGE_INFORMATION','LBL_COMMENTS','LBL_COMMENT_INFORMATION');
 		$this->related_lists[$module]=Array();
@@ -260,6 +259,18 @@ class Reports extends CRMEntity{
 						if($mod_name!=$module){
 							$this->related_modules[$module][] = $mod_name;
 						}
+					}
+				}
+				if(isset($old_related_modules[$module])){
+					$rel_mod = array();
+					foreach($old_related_modules[$module] as $key=>$name){
+						if(vtlib_isModuleActive($name) && isPermitted($name,'index','')){
+							$rel_mod[] = $name;
+						}
+					}
+					if(!empty($rel_mod)){
+						$this->related_modules[$module] = array_merge($this->related_modules[$module],$rel_mod);	
+						$this->related_modules[$module] = array_unique($this->related_modules[$module]);
 					}
 				}
 			}

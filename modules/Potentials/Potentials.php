@@ -675,9 +675,15 @@ class Potentials extends CRMEntity {
 		$prifieldname = $fields[0][0];
 		$secfieldname = $fields[0][1];
 		$tmpname = $tabname."tmp".$secmodule;
-		$condvalue = $tables[1].".".$fields[1];
+		$condition = "";
+		if(!empty($tables[1]) && !empty($fields[1])){
+			$condvalue = $tables[1].".".$fields[1];
+		} else {
+			$condvalue = $tabname.".".$prifieldname;
+		}
+		$condition = "$tmpname.$prifieldname = $condvalue  and";
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT potentialid from vtiger_potential INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_potential.potentialid)";
+		$query = " left join $tabname as $tmpname on $condition $tmpname.$secfieldname IN (SELECT potentialid from vtiger_potential INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_potential.potentialid)";
 		
 		$query .= " left join vtiger_potential on vtiger_potential.potentialid=$tmpname.$secfieldname 
 		left join vtiger_crmentity as vtiger_crmentityPotentials on vtiger_crmentityPotentials.crmid=vtiger_potential.potentialid and vtiger_crmentityPotentials.deleted=0
@@ -698,11 +704,12 @@ class Potentials extends CRMEntity {
 	function setRelationTables($secmodule){
 		$rel_tables = array (
 			"Calendar" => array("vtiger_seactivityrel"=>array("crmid","activityid"),"vtiger_potential"=>"potentialid"),
-			"Contacts" => array("vtiger_contactdetails"=>array("contactid","contactid"),"vtiger_potential"=>"related_to"),
+			"Contacts" => array("vtiger_potential"=>array("potentialid","related_to"),),
 			"Products" => array("vtiger_seproductsrel"=>array("crmid","productid"),"vtiger_potential"=>"potentialid"),
 			"Quotes" => array("vtiger_quotes"=>array("potentialid","quoteid"),"vtiger_potential"=>"potentialid"),
 			"SalesOrder" => array("vtiger_salesorder"=>array("potentialid","salesorderid"),"vtiger_potential"=>"potentialid"),
 			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_potential"=>"potentialid"),
+			"Accounts" => array("vtiger_potential"=>array("potentialid","related_to")),
 		);
 		return $rel_tables[$secmodule];
 	}

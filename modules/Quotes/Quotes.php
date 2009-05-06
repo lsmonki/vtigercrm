@@ -356,9 +356,15 @@ class Quotes extends CRMEntity {
 		$prifieldname = $fields[0][0];
 		$secfieldname = $fields[0][1];
 		$tmpname = $tabname."tmp".$secmodule;
-		$condvalue = $tables[1].".".$fields[1];
+		$condition = "";
+		if(!empty($tables[1]) && !empty($fields[1])){
+			$condvalue = $tables[1].".".$fields[1];
+		} else {
+			$condvalue = $tabname.".".$prifieldname;
+		}
+		$condition = "$tmpname.$prifieldname = $condvalue  and";
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue and $tmpname.$secfieldname IN (SELECT quoteid from vtiger_quotes INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_quotes.quoteid)";
+		$query = " left join $tabname as $tmpname on $condition $tmpname.$secfieldname IN (SELECT quoteid from vtiger_quotes INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_quotes.quoteid)";
 		$query .= " left join vtiger_quotes on vtiger_quotes.quoteid = $tmpname.$secfieldname
 			left join vtiger_crmentity as vtiger_crmentityQuotes on vtiger_crmentityQuotes.crmid=vtiger_quotes.quoteid and vtiger_crmentityQuotes.deleted=0
 			left join vtiger_quotescf on vtiger_quotes.quoteid = vtiger_quotescf.quoteid
@@ -384,6 +390,9 @@ class Quotes extends CRMEntity {
 			"SalesOrder" =>array("vtiger_salesorder"=>array("quoteid","salesorderid"),"vtiger_quotes"=>"quoteid"),
 			"Calendar" =>array("vtiger_seactivityrel"=>array("crmid","activityid"),"vtiger_quotes"=>"quoteid"),
 			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_quotes"=>"quoteid"),
+			"Accounts" => array("vtiger_quotes"=>array("quoteid","accountid")),
+			"Contacts" => array("vtiger_quotes"=>array("quoteid","contactid")),
+			"Potentials" => array("vtiger_quotes"=>array("quoteid","potentialid")),
 		);
 		return $rel_tables[$secmodule];
 	}

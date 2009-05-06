@@ -1329,11 +1329,6 @@ class ReportRun extends CRMEntity
 				left join vtiger_productcf on vtiger_products.productid = vtiger_productcf.productid 
 				left join vtiger_users as vtiger_usersProducts on vtiger_usersProducts.id = vtiger_products.handler 
 				left join vtiger_vendor as vtiger_vendorRelProducts on vtiger_vendorRelProducts.vendorid = vtiger_products.vendor_id 
-				left join vtiger_seproductsrel on vtiger_seproductsrel.productid= vtiger_products.productid and vtiger_seproductsrel.setype IN (".$secondary_module.")	
-				left join vtiger_crmentity as vtiger_crmentityRelProducts on vtiger_crmentityRelProducts.crmid = vtiger_seproductsrel.crmid and vtiger_crmentityRelProducts.deleted = 0   
-				left join vtiger_account as vtiger_accountRelProducts on vtiger_accountRelProducts.accountid=vtiger_seproductsrel.crmid
-				left join vtiger_leaddetails as vtiger_leaddetailsRelProducts on vtiger_leaddetailsRelProducts.leadid = vtiger_seproductsrel.crmid
-				left join vtiger_potential as vtiger_potentialRelProducts on vtiger_potentialRelProducts.potentialid = vtiger_seproductsrel.crmid 
 				LEFT JOIN (
 						SELECT vtiger_products.productid, 
 								(CASE WHEN (vtiger_products.currency_id = 1 ) THEN vtiger_products.unit_price

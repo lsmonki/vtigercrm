@@ -1217,9 +1217,15 @@ function get_contactsforol($user_name)
 		$prifieldname = $fields[0][0];
 		$secfieldname = $fields[0][1];
 		$tmpname = $tabname."tmp".$secmodule;
-		$condvalue = $tables[1].".".$fields[1];
+		$condition = "";
+		if(!empty($tables[1]) && !empty($fields[1])){
+			$condvalue = $tables[1].".".$fields[1];
+		} else {
+			$condvalue = $tabname.".".$prifieldname;
+		}
+		$condition = "$tmpname.$prifieldname = $condvalue  and";
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT contactid from vtiger_contactdetails INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_contactdetails.contactid)";
+		$query = " left join $tabname as $tmpname on $condition $tmpname.$secfieldname IN (SELECT contactid from vtiger_contactdetails INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_contactdetails.contactid)";
 		$query .= " left join vtiger_contactdetails on vtiger_contactdetails.contactid = $tmpname.$secfieldname 
 			left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetails.contactid  and vtiger_crmentityContacts.deleted=0
 			left join vtiger_contactdetails as vtiger_contactdetailsContacts on vtiger_contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
@@ -1250,6 +1256,7 @@ function get_contactsforol($user_name)
 			"Products" => array("vtiger_seproductsrel"=>array("crmid","productid"),"vtiger_contactdetails"=>"contactid"),
 			"Campaigns" => array("vtiger_campaigncontrel"=>array("contactid","campaignid"),"vtiger_contactdetails"=>"contactid"),
 			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_contactdetails"=>"contactid"),
+			"Accounts" => array("vtiger_contactdetails"=>array("contactid","accountid")),
 		);
 		return $rel_tables[$secmodule];
 	}

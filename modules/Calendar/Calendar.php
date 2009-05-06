@@ -252,6 +252,9 @@ class Calendar
 	function setRelationTables($secmodule){
 		$rel_tables = array (
 			"Contacts" => array("vtiger_cntactivityrel"=>array("activityid","contactid"),"vtiger_activity"=>"activityid"),
+			"Leads" => array("vtiger_seactivityrel"=>array("activityid","crmid"),"vtiger_activity"=>"activityid"),
+			"Accounts" => array("vtiger_seactivityrel"=>array("activityid","crmid"),"vtiger_activity"=>"activityid"),
+			"Potentials" => array("vtiger_seactivityrel"=>array("activityid","crmid"),"vtiger_activity"=>"activityid"),
 		);
 		return $rel_tables[$secmodule];
 	}
@@ -273,9 +276,15 @@ class Calendar
 		$prifieldname = $fields[0][0];
 		$secfieldname = $fields[0][1];
 		$tmpname = $tabname."tmp".$secmodule;
-		$condvalue = $tables[1].".".$fields[1];
+		$condition = "";
+		if(!empty($tables[1]) && !empty($fields[1])){
+			$condvalue = $tables[1].".".$fields[1];
+		} else {
+			$condvalue = $tabname.".".$prifieldname;
+		}
+		$condition = "$tmpname.$prifieldname = $condvalue  and";
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT activityid from vtiger_activity INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_activity.activityid)";
+		$query = " left join $tabname as $tmpname on $condition $tmpname.$secfieldname IN (SELECT activityid from vtiger_activity INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_activity.activityid)";
 		$query .=" left join vtiger_activity on vtiger_activity.activityid = $tmpname.$secfieldname 
 				left join vtiger_crmentity as vtiger_crmentityCalendar on vtiger_crmentityCalendar.crmid=vtiger_activity.activityid and vtiger_crmentityCalendar.deleted=0 
 				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid 

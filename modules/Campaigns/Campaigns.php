@@ -426,9 +426,15 @@ class Campaigns extends CRMEntity {
 		$prifieldname = $fields[0][0];
 		$secfieldname = $fields[0][1];
 		$tmpname = $tabname."tmp".$secmodule;
-		$condvalue = $tables[1].".".$fields[1];
+		$condition = "";
+		if(!empty($tables[1]) && !empty($fields[1])){
+			$condvalue = $tables[1].".".$fields[1];
+		} else {
+			$condvalue = $tabname.".".$prifieldname;
+		}
+		$condition = "$tmpname.$prifieldname = $condvalue  and";
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT campaignid from vtiger_campaign INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_campaign.campaignid)";
+		$query = " left join $tabname as $tmpname on $condition $tmpname.$secfieldname IN (SELECT campaignid from vtiger_campaign INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_campaign.campaignid)";
 		$query .=" left join vtiger_campaign on vtiger_campaign.campaignid = $tmpname.$secfieldname 
 				left join vtiger_crmentity as vtiger_crmentityCampaigns on vtiger_crmentityCampaigns.crmid=vtiger_campaign.campaignid and vtiger_crmentityCampaigns.deleted=0 
 				left join vtiger_products as vtiger_productsCampaigns on vtiger_campaign.product_id = vtiger_productsCampaigns.productid 
@@ -450,6 +456,7 @@ class Campaigns extends CRMEntity {
 			"Leads" => array("vtiger_campaignleadrel"=>array("campaignid","leadid"),"vtiger_campaign"=>"campaignid"),
 			"Potentials" => array("vtiger_potential"=>array("campaignid","potentialid"),"vtiger_campaign"=>"campaignid"),
 			"Calendar" => array("vtiger_seactivityrel"=>array("crmid","activityid"),"vtiger_campaign"=>"campaignid"),
+			"Products" => array("vtiger_campaign"=>array("campaignid","product_id")),
 		);
 		return $rel_tables[$secmodule];
 	}

@@ -1834,14 +1834,18 @@ $log->info("in getOldFileName  ".$notesid);
 		$prifieldname = $fields[0][0];
 		$secfieldname = $fields[0][1];
 		$tmpname = $tabname."tmp";
-		$condvalue = $tables[1].".".$fields[1];
+		$condition = "";
+		if(!empty($tables[1]) && !empty($fields[1])){
+			$condvalue = $tables[1].".".$fields[1];
+			$condition = "$tmpname.$prifieldname = $condvalue  and";
+		}
 		if(isset($modulecftable)){
 			$cfquery = " left join $modulecftable on $modulecftable.$modulecfindex=$tablename.$tableindex";
 		} else {
 			$cfquery = '';
 		}
 	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT $tableindex from $tablename INNER JOIN vtigr_crmentity ON vtiger_crmentity.crmid=$tablename.$tableindex AND vtiger.crmentity.deleted=0)";
+		$query = " left join $tabname as $tmpname on $condition $tmpname.$secfieldname IN (SELECT $tableindex from $tablename INNER JOIN vtigr_crmentity ON vtiger_crmentity.crmid=$tablename.$tableindex AND vtiger.crmentity.deleted=0)";
 		$query .=" 	left join $tablename on $tablename.$tableindex=$tmpname.$secfieldname   
 					left join vtiger_crmentity as vtiger_crmentity$secmodule on vtiger_crmentity$secmodule.crmid = $tablename.$tableindex AND vtiger_crmentity$secmodule.deleted=0   
 					$cfquery   
