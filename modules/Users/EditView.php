@@ -113,7 +113,9 @@ if(isset($_REQUEST['record']) && $_REQUEST['isDuplicate'] != 'true')
 
 $smarty->assign("HOMEORDER",$focus->getHomeStuffOrder($focus->id));
 //Added to provide User based Tagcloud
-$smarty->assign("TAGCLOUDVIEW",getTagCloudView($focus->id));
+if($mode == 'create') $smarty->assign("TAGCLOUDVIEW","true"); // While creating user select tag cloud by default 
+else $smarty->assign("TAGCLOUDVIEW",getTagCloudView($focus->id));
+
 $smarty->assign("DUPLICATE",$_REQUEST['isDuplicate']);
 $smarty->assign("USER_MODE",$mode);
 $smarty->assign('PARENTTAB',htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));

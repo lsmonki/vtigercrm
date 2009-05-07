@@ -3102,7 +3102,7 @@ function SaveTagCloudView($id="")
 	if($id == ''){
 		$tag_cloud_view =1;
 	}else{
-		$query = "update vtiger_homestuff set visible = ? where userid=? and stufftitle='Tag Cloud'";
+		$query = "update vtiger_homestuff set visible = ? where userid=? and stufftype='Tag Cloud'";
 		$adb->pquery($query, array($tag_cloud_view,$id));
 	}
 

@@ -560,6 +560,11 @@ for($i=0;$i<$adb->num_rows($query);$i++)
 	$s14=$adb->getUniqueID("vtiger_homestuff");
 	$sql="insert into vtiger_homestuff values(".$s14.",14,'Default',".$userid.",1,'My Recent FAQs')";
 	$res=$adb->pquery($sql,array());
+	
+	// Non-Default Home Page widget (no entry is requried in vtiger_homedefault below)
+	$tc = $adb->getUniqueID("vtiger_homestuff");
+	$sql="insert into vtiger_homestuff values($tc, 15, 'Tag Cloud', $userid, 0, 'Tag Cloud')";
+	$adb->query($sql);
 
 	$sql="insert into vtiger_homedefault values(".$s1.",'ALVT',5,'Accounts')";
 	$adb->pquery($sql,array());
@@ -1595,20 +1600,6 @@ if(columnExists("defhomeview", "vtiger_users")){
 	ExecuteQuery("alter table vtiger_users drop column defhomeview");
 }
 ExecuteQuery("create table vtiger_home_layout (userid int(19), layout int(19))");
-$widgetTitle = "Tag Cloud";
-$visible = 0;
-$sql = "select id from vtiger_users";
-$result = $adb->query($sql);
-for($z=0;$z<$adb->num_rows($result);$z++){
-	$userid = $adb->query_result($result, $z, "id");
-	$home_query = $adb->query("select max(stuffsequence)+1 as seq from vtiger_homestuff where userid=$userid");
-	if($adb->num_rows($home_query)>0){
-		$sequence = $adb->query_result($home_query, 0, "seq");
-		$stuffid = $adb->getUniqueID("vtiger_homestuff");
-		$sql="insert into vtiger_homestuff values($stuffid, $sequence, 'Tag Cloud', $userid, $visible, '$widgetTitle')";
-		$adb->query($sql);
-	}
-}
 
 /* Add Invoices to the related list of Contacts */
 ExecuteQuery("INSERT INTO vtiger_relatedlists VALUES(".$adb->getUniqueID('vtiger_relatedlists').",". getTabid('Contacts').",".getTabid('Invoice').",'get_invoices',12,'Invoice',0, 'add')");

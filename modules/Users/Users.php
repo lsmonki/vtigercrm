@@ -1187,6 +1187,12 @@ class Users {
 		$visibility=$this->getDefaultHomeModuleVisibility('LTFAQ',$inVal);
 		$sql="insert into vtiger_homestuff values(".$s14.",14,'Default',".$uid.",".$visibility.",'My Recent FAQs')";
 		$res=$adb->query($sql);
+		
+		// Non-Default Home Page widget (no entry is requried in vtiger_homedefault below)
+		$tc = $adb->getUniqueID("vtiger_homestuff");
+		$visibility=0;
+		$sql="insert into vtiger_homestuff values($tc, 15, 'Tag Cloud', $uid, $visibility, 'Tag Cloud')";
+		$adb->query($sql);
 
 		$sql="insert into vtiger_homedefault values(".$s1.",'ALVT',5,'Accounts')";
 		$adb->query($sql);
