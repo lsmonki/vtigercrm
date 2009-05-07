@@ -126,6 +126,78 @@ class Vtiger_MailRecord {
 		}
 		return $emails;
 	}
+	
+	/**
+	 * Helper function to convert the encoding of input to target charset.
+	 */
+	static function __convert_encoding($input, $to, $from = false) {
+		if(function_exists('mb_convert_encoding')) {
+			if(!$from) $from = mb_detect_encoding($input);
+
+			if(strtolower(trim($to)) == strtolower(trim($from))) {				
+				return $input;
+			} else {
+				return mb_convert_encoding($input, $to, $from);
+			}
+		}
+		return $input;
+	}
+	
+	/**
+	 * MIME decode function to parse IMAP header or mail information
+	 */
+	static function __mime_decode($input, &$words=null, $targetEncoding='UTF-8') {
+		if(is_null($words)) $words = array();
+		$returnvalue = $input;
+		
+		if(preg_match_all('/=\?([^\?]+)\?([^\?]+)\?([^\?]+)\?=/', $input, $matches)) {
+			$totalmatches = count($matches[0]);
+			
+			for($index = 0; $index < $totalmatches; ++$index) {
+				$charset = $matches[1][$index];
+				$encoding= strtoupper($matches[2][$index]); // B - base64 or Q - quoted printable
+				$data    = $matches[3][$index];
+				
+				if($encoding == 'B') {
+					$decodevalue = base64_decode($data);
+				} else if($encoding == 'Q') {
+					$decodevalue = quoted_printable_decode($data);
+				}
+				$value = self::__convert_encoding($decodevalue, $targetEncoding, $charset);				
+				array_push($words, $value);				
+			}
+		}
+		if(!empty($words)) {
+			$returnvalue = implode('', $words);
+		}
+		return $returnvalue;
+	}
+	
+	/**
+	 * MIME encode function to prepare input to target charset supported by normal IMAP clients.
+	 */
+	static function __mime_encode($input, $encoding='Q', $charset='iso-8859-1') {
+		$returnvalue = $input;		
+		$encoded = false;
+		
+		if(strtoupper($encoding) == 'B' ) {
+			$returnvalue = self::__convert_encoding($input, $charset);
+			$returnvalue = base64_encode($returnvalue);
+			$encoded = true;
+		} else {
+			$returnvalue = self::__convert_encoding($input, $charset);
+			if(function_exists('imap_qprint')) {
+				$returnvalue = imap_qprint($returnvalue);
+				$encoded = true;
+			} else {
+				// TODO: Handle case when imap_qprint is not available.
+			}
+		}
+		if($encoded) {
+			$returnvalue = "=?$charset?$encoding?$returnvalue?=";
+		}
+		return $returnvalue;
+	}
 
 	/**
 	 * Parse header of the email.
@@ -146,7 +218,7 @@ class Vtiger_MailRecord {
 
 		$this->_date = $mailheader->udate;
 
-		$this->_subject = imap_utf8($mailheader->subject);
+		$this->_subject = self::__mime_decode($mailheader->subject);
 		if(!$this->_subject) $this->_subject = 'Untitled';
 	}
 	// Modified: http://in2.php.net/manual/en/function.imap-fetchstructure.php#85685
