@@ -281,11 +281,15 @@ function vtws_addDefaultModuleTypeEntity($moduleName){
 }
 
 function vtws_addModuleTypeWebserviceEntity($moduleName,$filePath,$className){
-	global $adb;
-	$isModule=1;
-	$entityId = $adb->getUniqueID("vtiger_ws_entity");
-	$adb->pquery('insert into vtiger_ws_entity(id,name,handler_path,handler_class,ismodule) values (?,?,?,?,?)',
-		array($entityId,$moduleName,$filePath,$className,$isModule));
+	global $adb;	
+	$checkres = $adb->pquery('SELECT id FROM vtiger_ws_entity WHERE name=? AND handler_path=? AND handler_class=?',
+		array($moduleName, $filePath, $className));
+	if($checkres && $adb->num_rows($checkres) == 0) {
+		$isModule=1;
+		$entityId = $adb->getUniqueID("vtiger_ws_entity");
+		$adb->pquery('insert into vtiger_ws_entity(id,name,handler_path,handler_class,ismodule) values (?,?,?,?,?)',
+			array($entityId,$moduleName,$filePath,$className,$isModule));
+	}
 }
 
 function vtws_addDefaultActorTypeEntity($actorName,$actorNameDetails){
