@@ -1608,13 +1608,22 @@ $log->info("in getOldFileName  ".$notesid);
 		global $adb;
 		if(!is_array($with_crmid)) $with_crmid = Array($with_crmid);
 		foreach($with_crmid as $relcrmid) {
-			$checkpresence = $adb->pquery("SELECT crmid FROM vtiger_crmentityrel WHERE 
-				crmid = ? AND module = ? AND relcrmid = ? AND relmodule = ?", Array($crmid, $module, $relcrmid, $with_module));
-			// Relation already exists? No need to add again
-			if($checkpresence && $adb->num_rows($checkpresence)) continue;
+			
+			if($with_module == 'Documents') {	
+				$checkpresence = $adb->pquery("SELECT crmid FROM vtiger_senotesrel WHERE crmid = ? AND notesid = ?", Array($crmid, $relcrmid));
+				// Relation already exists? No need to add again
+				if($checkpresence && $adb->num_rows($checkpresence)) continue;
+							
+				$adb->pquery("INSERT INTO vtiger_senotesrel(crmid, notesid) VALUES(?,?)", array($crmid, $relcrmid));				
+			} else {
+				$checkpresence = $adb->pquery("SELECT crmid FROM vtiger_crmentityrel WHERE 
+					crmid = ? AND module = ? AND relcrmid = ? AND relmodule = ?", Array($crmid, $module, $relcrmid, $with_module));
+				// Relation already exists? No need to add again
+				if($checkpresence && $adb->num_rows($checkpresence)) continue;
 
-			$adb->pquery("INSERT INTO vtiger_crmentityrel(crmid, module, relcrmid, relmodule) VALUES(?,?,?,?)", 
-				Array($crmid, $module, $relcrmid, $with_module));
+				$adb->pquery("INSERT INTO vtiger_crmentityrel(crmid, module, relcrmid, relmodule) VALUES(?,?,?,?)", 
+					Array($crmid, $module, $relcrmid, $with_module));
+			}
 		}
 	}
 
@@ -1629,8 +1638,14 @@ $log->info("in getOldFileName  ".$notesid);
 		global $adb;
 		if(!is_array($with_crmid)) $with_crmid = Array($with_crmid);
 		foreach($with_crmid as $relcrmid) {
-			$adb->pquery("DELETE FROM vtiger_crmentityrel WHERE crmid=? AND module=? AND relcrmid=? AND relmodule=?",
-				Array($crmid, $module, $relcrmid, $with_module));
+			
+			if($with_module == 'Documents') {
+				$adb->pquery("DELETE FROM vtiger_senotesrel WHERE crmid=? AND notesid=?",
+					Array($crmid, $relcrmid));
+			} else {
+				$adb->pquery("DELETE FROM vtiger_crmentityrel WHERE crmid=? AND module=? AND relcrmid=? AND relmodule=?",
+					Array($crmid, $module, $relcrmid, $with_module));	
+			}
 		}
 	}
 
