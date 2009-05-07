@@ -289,12 +289,14 @@ class Vtiger_MailRecord {
 	    }
 
 	    // TEXT
-    	elseif ($p->type==0 && $data) {
+    	elseif ($p->type==0 && $data) {    		
+    		$this->_charset = $params['charset'];  // assume all parts are same charset
+    		$data = self::__convert_encoding($data, 'UTF-8', $this->_charset);
+    		
         	// Messages may be split in different parts because of inline attachments,
 	        // so append parts together with blank row.
     	    if (strtolower($p->subtype)=='plain') $this->_plainmessage .= trim($data) ."\n\n";
-	        else $this->_htmlmessage .= $data ."<br><br>";
-			$this->_charset = $params['charset'];  // assume all parts are same charset
+	        else $this->_htmlmessage .= $data ."<br><br>";			
 		}
 
 	    // EMBEDDED MESSAGE
