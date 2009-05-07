@@ -26,12 +26,12 @@
 	</tr>
 
 	<tr>
-		<td colspan='3' align='left'><b>{$cbsubject}</b><a style='padding: 2px;' href='index.php?action=DetailView&module={$cbmodule}&record={$cbrecord}'>[More...]</a></td>
+		<td colspan='3' align='left'><b>{$cbsubject}</b><a style='padding: 2px;' href='index.php?action=DetailView&module={$cbmodule}&record={$cbrecord}'>[{$APP.LBL_MORE}...]</a></td>
 	</tr>
 
 	<tr>
 		<td align='center'> 
-			<a style='padding: 0 5px 0 5px;' href='javascript:;' onclick="ActivityReminderPostponeCallback('{$cbmodule}','{$cbrecord}');ActivityReminderRemovePopupDOM('{$popupid}');"><b>Postpone</b></a> 
+			<a style='padding: 0 5px 0 5px;' href='javascript:;' onclick="ActivityReminderPostponeCallback('{$cbmodule}','{$cbrecord}','{$cbreminderid}');ActivityReminderRemovePopupDOM('{$popupid}');"><b>{$APP.LBL_POSTPONE}</b></a> 
 		</td>
 	</tr>
 </table>

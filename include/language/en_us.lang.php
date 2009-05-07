@@ -1216,6 +1216,10 @@ $app_strings = array (
 
 //To handle plurals of module names
 'Todos' => 'Todos',
+
+// For Popup reminder
+'LBL_POSTPONE'=>'Postpone',
+
 );
 
 $app_list_strings = array (

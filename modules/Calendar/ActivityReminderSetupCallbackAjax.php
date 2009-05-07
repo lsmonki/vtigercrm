@@ -19,43 +19,27 @@ global $currentModule,$image_path,$theme,$adb, $current_user;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
-require_once('modules/Leads/Leads.php');
-require_once('modules/Contacts/Contacts.php');
-
 $log = LoggerManager::getLogger('Activity_Reminder');
-$smarty = new vtigerCRM_Smarty;
 
+$cbaction = $_REQUEST['cbaction'];
 $cbmodule = $_REQUEST['cbmodule'];
 $cbrecord = $_REQUEST['cbrecord'];
-$cbaction = $_REQUEST['cbaction'];
 
 if($cbaction == 'POSTPONE') {
 	if(isset($cbmodule) && isset($cbrecord)) {
-
-		//$cbincr = $_REQUEST['cbincr'];
-
-		$reminderidres = $adb->pquery("SELECT * FROM vtiger_activity_reminder_popup WHERE semodule = ? and recordid = ?",array(mysql_real_escape_string($cbmodule),mysql_real_escape_string($cbrecord)));
-	
-		$reminderid = null;
-		if($adb->num_rows($reminderidres) > 0) {
-			$reminderid = $adb->query_result($reminderidres, 0, "reminderid");
-		}
-
-		if(isset($reminderid) )//&& isset($cbincr) && $cbincr != '') 
-		{
-			$reminder_query = "UPDATE vtiger_activity_reminder_popup set status = 0 WHERE reminderid = $reminderid";
-			$adb->query($reminder_query);
+		$reminderid = $_REQUEST['cbreminderid'];
+		if(!empty($reminderid) ) {
+			$reminder_query = "UPDATE vtiger_activity_reminder_popup set status = 0 WHERE reminderid = ? AND semodule = ? AND recordid = ?";
+			$adb->pquery($reminder_query, array($reminderid, $cbmodule, $cbrecord));
 			echo ":#:SUCCESS";
 		} else {
 			echo ":#:FAILURE";			
-		}
-		
+		}		
 	}
 }
 

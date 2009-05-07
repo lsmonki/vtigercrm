@@ -2829,14 +2829,14 @@ function ActivityReminderSetupCallbackSaveProcess(message) {
 	$('ActivityReminder_callbacksetupdiv_lay').style.display='none';
 }
 
-function ActivityReminderPostponeCallback(cbmodule, cbrecord) { 
+function ActivityReminderPostponeCallback(cbmodule, cbrecord, cbreminderid) { 
 	if(cbmodule && cbrecord) {
 
 		ActivityReminderProgressIndicator(true);
 		new Ajax.Request("index.php", 
 			{ queue:{position:"end", scope:"command"}, method:"post", 
 				postBody:"module=Calendar&action=CalendarAjax&ajax=true&file=ActivityReminderSetupCallbackAjax&cbaction=POSTPONE&cbmodule="+ 
-				encodeURIComponent(cbmodule) + "&cbrecord=" + encodeURIComponent(cbrecord), 
+				encodeURIComponent(cbmodule) + "&cbrecord=" + encodeURIComponent(cbrecord) + "&cbreminderid=" + encodeURIComponent(cbreminderid), 
 				onComplete:function (response) {ActivityReminderPostponeCallbackProcess(response.responseText);}}); 
 	}
 }

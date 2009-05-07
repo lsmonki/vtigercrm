@@ -65,13 +65,24 @@ if($active_res!='None'){
 				$cbrecord = $adb->query_result($result, $index, "recordid");
 				$cbmodule = $adb->query_result($result, $index, "semodule");
  
-				$focus = new Activity(); 
-				$focus->retrieve_entity_info($cbrecord,$cbmodule);
-
-				$cbsubject = $focus->column_fields['subject'];
-				$cbactivitytype   = $focus->column_fields['activitytype'];
-				$cbdate   = $focus->column_fields["date_start"];
-				$cbtime   = $focus->column_fields["time_start"];
+				$focus = CRMEntity::getInstance($cbmodule);
+								
+				if($cbmodule == 'Calendar') {
+					$focus->retrieve_entity_info($cbrecord,$cbmodule);
+					
+					$cbsubject = $focus->column_fields['subject'];
+					$cbactivitytype   = $focus->column_fields['activitytype'];
+					$cbdate   = $focus->column_fields["date_start"];
+					$cbtime   = $focus->column_fields["time_start"];
+				} else {
+					// For non-calendar records.
+					$cbsubject      = array_values(getEntityName($cbmodule, $cbrecord));
+					$cbsubject      = $cbsubject[0];
+					$cbactivitytype = getTranslatedString($cbmodule, $cbmodule);
+					$cbdate         = $adb->query_result($result, $index, 'date_start');
+					$cbtime         = $adb->query_result($result, $index, 'time_start');				
+				}
+				
 				if($cbactivitytype=='Task')
 					$cbstatus   = $focus->column_fields["taskstatus"];
 				else
@@ -83,8 +94,9 @@ if($active_res!='None'){
 					else $cbcolor= '#FF1515';
 				}
 				$smarty->assign("THEME", $theme);
-				$smarty->assign("theme", $theme);
 				$smarty->assign("popupid", $popupid);
+				$smarty->assign("APP", $app_strings);
+				$smarty->assign("cbreminderid", $reminderid);
 				$smarty->assign("cbdate", $cbdate);
 				$smarty->assign("cbtime", $cbtime);
 				$smarty->assign("cbsubject", $cbsubject);
