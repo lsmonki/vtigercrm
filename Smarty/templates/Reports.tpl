@@ -145,8 +145,8 @@ function DeleteFolder(id)
         	                method: 'post',
                 	        postBody: 'action=ReportsAjax&mode=ajax&file=DeleteReportFolder&module=Reports&record='+id,
                         	onComplete: function(response) {
-							var item = response.responseText;
-							if(item[0]=='<')
+							var item = trim(response.responseText);
+							if(item.charAt(0)=='<')
 						        getObj('customizedrep').innerHTML = item;
 						    else
 						    	alert(item);
