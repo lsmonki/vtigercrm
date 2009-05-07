@@ -2844,7 +2844,7 @@ function ActivityReminderPostponeCallbackProcess(message) {
 	ActivityReminderProgressIndicator(false);
 }
 function ActivityReminderRemovePopupDOM(id) {
-	if($(id)) $(id).parentNode.remove();
+	if($(id)) $(id).remove();
 }
 /* END */
 
