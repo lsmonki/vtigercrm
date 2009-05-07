@@ -1123,7 +1123,8 @@ class Users {
 		$res=$adb->query($sql);
 
 		$s2=$adb->getUniqueID("vtiger_homestuff");
-		$sql="insert into vtiger_homestuff values(".$s2.",2,'Default',".$uid.",0,'Home Page Dashboard')";
+		$visibility=$this->getDefaultHomeModuleVisibility('HDB',$inVal);
+		$sql="insert into vtiger_homestuff values(".$s2.",2,'Default',".$uid.",$visibility,'Home Page Dashboard')";
 		$res=$adb->query($sql);
 
 		$s3=$adb->getUniqueID("vtiger_homestuff");
