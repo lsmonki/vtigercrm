@@ -428,13 +428,13 @@ if($adb->num_rows($desc_id)>0){
 	$desc = $adb->query_result($desc_id,0,'blockid');
 	$desc_update = 'update vtiger_blocks set blocklabel ="LBL_DESCRIPTION",show_title = 0,sequence = 3 where blockid = ?';
 	$desc_block_update = $adb->pquery($desc_update,array($desc));
+	ExecuteQuery("update vtiger_field set sequence=1,quickcreate=1,presence=2,block=$desc where tabid=$documents_tab_id and columnname='notecontent'");	
 }
 
 ExecuteQuery("update vtiger_field set sequence=1 where tabid=$documents_tab_id and columnname='title'");
 ExecuteQuery("update vtiger_field set sequence=8,quickcreate=3 where tabid=$documents_tab_id and columnname='createdtime'");
 ExecuteQuery("update vtiger_field set sequence=9,quickcreate=3 where tabid=$documents_tab_id and columnname='modifiedtime'");
 
-ExecuteQuery("update vtiger_field set sequence=1,quickcreate=1,presence=2,block=$desc where tabid=$documents_tab_id and columnname='notecontent'");
 ExecuteQuery("update vtiger_field set sequence = 3,quickcreate=3,block = $file_block_id,fieldlabel='File Name',displaytype = 1,uitype=28  where tabid = $documents_tab_id and columnname = 'filename'");
 
 ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values ($documents_tab_id,".$fieldid[0].",'smownerid','vtiger_crmentity',1,53,'assigned_user_id','Assigned To',1,0,0,100,2,17,1,'V~M',0,3,'BAS')");
