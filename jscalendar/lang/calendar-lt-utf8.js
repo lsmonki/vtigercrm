@@ -101,14 +101,23 @@ Calendar._TT["NEXT_YEAR"] = "Kiti metai (laikykite, jei norite meniu)";
 Calendar._TT["SEL_DATE"] = "Pasirinkite datą";
 Calendar._TT["DRAG_TO_MOVE"] = "Tempkite";
 Calendar._TT["PART_TODAY"] = " (šiandien)";
-Calendar._TT["MON_FIRST"] = "Pirma savaitės diena - pirmadienis";
-Calendar._TT["SUN_FIRST"] = "Pirma savaitės diena - sekmadienis";
-Calendar._TT["CLOSE"] = "Uždaryti";
+
+// the following is to inform that "%s" is to be the first day of week
+// %s will be replaced with the day name.
+Calendar._TT["DAY_FIRST"] = "Display %s first";
+
+// This may be locale-dependent.  It specifies the week-end days, as an array
+// of comma-separated numbers.  The numbers are from 0 to 6: 0 means Sunday, 1
+// means Monday, etc.
+Calendar._TT["WEEKEND"] = "0,6";
+
+Calendar._TT["CLOSE"] = "U=daryti";
 Calendar._TT["TODAY"] = "Šiandien";
-Calendar._TT["TIME_PART"] = "Spustelkite arba tempkite jei norite pakeisti";
+Calendar._TT["TIME_PART"] = "(Shift-)Spustelti arba tempti norint pakeisti reikšmę";
 
 // date formats
 Calendar._TT["DEF_DATE_FORMAT"] = "%Y-%m-%d";
 Calendar._TT["TT_DATE_FORMAT"] = "%A, %Y-%m-%d";
 
 Calendar._TT["WK"] = "sav";
+Calendar._TT["TIME"] = "Laikas:";
