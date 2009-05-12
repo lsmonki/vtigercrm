@@ -1220,6 +1220,11 @@ $app_strings = array (
 // For Popup reminder
 'LBL_POSTPONE'=>'Postpone',
 
+// Unified Search extended support
+'LBL_SELECT_MODULES_FOR_SEARCH' => 'Select modules to search in',
+'LBL_SELECT_ALL' => 'Select All', 
+'LBL_UNSELECT_ALL' => 'UnSelect All',
+
 );
 
 $app_list_strings = array (

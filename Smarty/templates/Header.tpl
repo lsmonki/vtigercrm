@@ -185,9 +185,11 @@
 		   <tr>
 			<form name="UnifiedSearch" method="post" action="index.php" style="margin:0px" onsubmit="VtigerJS_DialogBox.block();">
 			<td style="height:19px;background-color:#ffffef" >
+				<a href='javascript:void(0);' onclick="UnifiedSearch_SelectModuleForm(this);"><img src="{'settings_top.gif'|@vtiger_imageurl:$THEME}" align='absmiddle' border=0></a>
 				<input type="hidden" name="action" value="UnifiedSearch" style="margin:0px">
 				<input type="hidden" name="module" value="Home" style="margin:0px">
 				<input type="hidden" name="parenttab" value="{$CATEGORY}" style="margin:0px">
+				<input type="hidden" name="search_onlyin" value="" style="margin:0px">
 				<input type="text" name="query_string" value="{$QUERY_STRING}" class="searchBox" onFocus="this.value=''" >
 			</td>
 			<td style="background-color:#cccccc">
@@ -254,6 +256,53 @@
 	{include file="Clock.tpl"}
 
 <div id="qcform" style="position:absolute;width:700px;top:80px;left:450px;z-index:100000;"></div>
+
+<!-- Unified Search module selection feature -->
+<div id="UnifiedSearch_moduleformwrapper" style="position:absolute;width:400px;z-index:100002;display:none;"></div>
+<script type='text/javascript'>
+{literal}
+function UnifiedSearch_SelectModuleForm(obj) {
+	if($('UnifiedSearch_moduleform')) {
+		// If we have loaded the form already.
+		UnifiedSearch_SelectModuleFormCallback(obj);
+	} else {
+		$('status').show();
+		new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Home&action=HomeAjax&file=UnifiedSearchModules&ajax=true',
+			onComplete: function(response) {
+				$('status').hide();
+				$('UnifiedSearch_moduleformwrapper').innerHTML = response.responseText;
+				UnifiedSearch_SelectModuleFormCallback(obj);
+			}
+		});
+	}
+}
+function UnifiedSearch_SelectModuleFormCallback(obj) {
+	fnvshobj(obj, 'UnifiedSearch_moduleformwrapper');
+}
+function UnifiedSearch_SelectModuleToggle(flag) {
+	Form.getElements($('UnifiedSearch_moduleform')).each(
+		function(element) {
+			if(element.type == 'checkbox') {
+				element.checked = flag;
+			}
+		}
+	);
+}
+function UnifiedSearch_SelectModuleCancel() {
+	$('UnifiedSearch_moduleformwrapper').hide();
+}
+function UnifiedSearch_SelectModuleSave() {
+	var UnifiedSearch_form = document.forms.UnifiedSearch;
+	UnifiedSearch_form.search_onlyin.value = Form.serialize($('UnifiedSearch_moduleform')).replace(/search_onlyin=/g, '').replace(/&/g,',');
+	UnifiedSearch_SelectModuleCancel();
+}
+{/literal}
+</script>
+<!-- End -->
 
 <script>
 var gVTModule = '{$smarty.request.module}';
