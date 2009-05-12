@@ -105,7 +105,7 @@ if($numOfRows > 0)
 		
 		$list_report_form->assign("REPORTNAME", htmlentities($ogReport->reportname));
 		if(is_array($sshtml))$list_report_form->assign("REPORTHTML", $sshtml);
-		else $list_report_form->assign("ERROR_MSG", $sshtml);
+		else $list_report_form->assign("ERROR_MSG", getTranslatedString('LBL_REPORT_GENERATION_FAILED', $currentModule) . "<br>" . $sshtml);
 		$list_report_form->assign("REPORTTOTHTML", $totalhtml);
 		$list_report_form->assign("FOLDERID", $folderid);
 		$list_report_form->assign("DATEFORMAT",$current_user->date_format);

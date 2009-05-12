@@ -222,6 +222,7 @@ $mod_strings = Array(
 'LBL_PERM_DENIED'=>' Permission Denied for Report(s): ',
 'LBL_FLDR_NOT_EMPTY'=>'Folder you are trying to delete is not Empty, Move or Delete the Reports in it.',
 'NO_REL_MODULES'=>'No Related Modules for the Selected Module',
+'LBL_REPORT_GENERATION_FAILED'=>'Report generation failed!',
 )
 
 ?>
