@@ -1287,7 +1287,7 @@ function calDuedatetime(type)
                         document.EditView.followup_startmin.value = min;
                 }
         }
-	if(type == 'call')
+	if(type == 'Call')
         {
                 if(fmt == 'pm')
                 {
