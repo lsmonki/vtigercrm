@@ -15,6 +15,9 @@ function getRelatedFieldInfo(id){
 	var modulename = $('pick_module').value;
 
 	var fieldname = id.options[id.options.selectedIndex].value;
+	
+	if(trim(fieldname) == '') return false;
+	
 	new Ajax.Request(
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
