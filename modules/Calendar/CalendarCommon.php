@@ -422,9 +422,16 @@ function getEventNotification($mode,$subject,$desc)
 	}
 	if($desc['assingn_type'] == "T")
 	{
+		$groupid  = '';
 		$groupname=$desc['group_name'];
-		$resultqry=$adb->pquery("select groupid from vtiger_groups where groupname=?", array($groupname));
-		$groupid=$adb->query_result($resultqry,0,"groupid");
+		// getGroupName API was changed to return array of two elements!
+		if(is_array($groupname) && !empty($groupname)) {
+			$groupid = $groupname[1];
+			$groupname = $groupname[0];
+		} else {
+			$resultqry=$adb->pquery("select groupid from vtiger_groups where groupname=?", array($groupname));
+			$groupid=$adb->query_result($resultqry,0,"groupid");
+		}
 		require_once('include/utils/GetGroupUsers.php');
 		$getGroupObj=new GetGroupUsers();
 		$getGroupObj->getAllUsersInGroup($groupid);
