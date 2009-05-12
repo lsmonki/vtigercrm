@@ -84,7 +84,7 @@ function SaveRssFeeds()
 				                GetRssFeedList(response.responseText);
 				                getrssfolders();
 				                $('rssurl').value = '';
-				                Effect.Puff('PopupLay');
+				                $('PopupLay').hide();
         				}
                                 }
                         }
