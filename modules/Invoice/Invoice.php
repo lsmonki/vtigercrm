@@ -408,6 +408,7 @@ class Invoice extends CRMEntity {
 		$res = $adb->pquery($query1, array($salesorder_id));
 		$no_of_products = $adb->num_rows($res);
 		$fieldsList = $adb->getFieldsArray($res);
+		$update_stock = array();
 		for($j=0; $j<$no_of_products; $j++) {
 			$row = $adb->query_result_rowdata($res, $j);
 			$col_value = array();
@@ -424,6 +425,29 @@ class Invoice extends CRMEntity {
 				$adb->pquery($query2, array($values));
 				$prod_id = $col_value['productid'];	
 				$qty = $col_value['quantity'];	
+				$update_stock[$col_value['sequence_no']] = $qty;
+				updateStk($prod_id,$qty,'',array(),'Invoice');
+			}
+		}
+		
+		$query1 = "SELECT * FROM vtiger_inventorysubproductrel WHERE id=?";
+		$res = $adb->pquery($query1, array($salesorder_id));
+		$no_of_products = $adb->num_rows($res);
+		$fieldsList = $adb->getFieldsArray($res);
+		for($j=0; $j<$no_of_products; $j++) {
+			$row = $adb->query_result_rowdata($res, $j);
+			$col_value = array();
+			for($k=0; $k<count($fieldsList); $k++) {
+					$col_value[$fieldsList[$k]] = $row[$fieldsList[$k]];
+			}
+			if(count($col_value) > 0) {
+				$col_value['id'] = $this->id;
+				$columns = array_keys($col_value);
+				$values = array_values($col_value);
+				$query2 = "INSERT INTO vtiger_inventorysubproductrel(". implode(",",$columns) .") VALUES (". generateQuestionMarks($values) .")";
+				$adb->pquery($query2, array($values));
+				$prod_id = $col_value['productid'];	
+				$qty = $update_stock[$col_value['sequence_no']];	
 				updateStk($prod_id,$qty,'',array(),'Invoice');
 			}
 		}
