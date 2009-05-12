@@ -57,6 +57,12 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 	}
 	// END
 
+	// Fix: Return immediately if Outgoing server not configured
+    if(empty($mail->Host)) {
+		return 0;
+    }
+    // END
+    
 	$mail_status = MailSend($mail);
 
 	if($mail_status != 1)
