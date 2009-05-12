@@ -2165,7 +2165,7 @@ function sendNotificationToOwner($module,$focus)
 //Function to send notification to the users of a group
 function sendNotificationToGroups($groupid,$crmid,$module)
 {
-       global $adb,$app_strings;
+       global $adb,$app_strings,$current_user;
        $returnEntity=Array();
        $returnEntity=getEntityName($module,Array($crmid));
        $mycrmid=$groupid;
