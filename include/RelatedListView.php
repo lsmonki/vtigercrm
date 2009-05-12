@@ -320,7 +320,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 				if((getFieldVisibilityPermission('Documents', $current_user->id, 'notecontent') == '0') || $row['activitytype'] == 'Documents')
 				{
 					$row['description'] = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$row['description']);
-					if(strlen($row['description']) > $listview_max_textlength)
+					if($listview_max_textlength && (strlen($row['description']) > $listview_max_textlength))
 					{
 						$row['description'] = substr($row['description'],0,$listview_max_textlength).'...';
 					}

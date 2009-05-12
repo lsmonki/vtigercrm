@@ -1889,7 +1889,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				foreach($value_arr as $ind => $val)
 				{
 					$notaccess = '<font color="red">'.$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
-					if(!(strlen(preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$string_temp)) > $listview_max_textlength))
+					if(!$listview_max_textlength || !(strlen(preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$string_temp)) > $listview_max_textlength))
 					{
 						$value_temp1 = (in_array(trim($val),$picklistarr))?$val:$notaccess; 
 						if($str_c!=0)

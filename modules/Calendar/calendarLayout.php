@@ -1066,7 +1066,7 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			$arrow_img_name = 'event'.$cal['calendar']->day_slice[$slice]->start_time->hour.'_'.$i;
 			$subject = $act[$i]->subject;
 			$id = $act[$i]->record;
-			if(strlen($subject)>$listview_max_textlength)
+			if($listview_max_textlength && (strlen($subject)>$listview_max_textlength))
 				$subject = substr($subject,0,$listview_max_textlength)."...";
 			$format = $cal['calendar']->hour_format;
 			$duration_hour = $act[$i]->duration_hour;
@@ -1177,7 +1177,7 @@ function getweekEventLayer(& $cal,$slice)
 			/* fix given by dartagnanlaf END --integrated by Minnie */
 			$id = $act[$i]->record;
                         $subject = $act[$i]->subject;
-			if(strlen($subject)>$listview_max_textlength)
+			if($listview_max_textlength && (strlen($subject)>$listview_max_textlength))
 				$subject = substr($subject,0,$listview_max_textlength)."...";
 			$format = $cal['calendar']->hour_format;
 			$start_hour = timeString($act[$i]->start_time,$format);
@@ -1487,7 +1487,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 				
 
 		}
-                if(strlen($subject)>$listview_max_textlength)
+                if($listview_max_textlength && (strlen($subject)>$listview_max_textlength))
 	                $subject = substr($subject,0,$listview_max_textlength)."...";
 		if($contact_id != '')
 		{
