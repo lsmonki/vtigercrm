@@ -20,6 +20,8 @@
 // TODO: deprecate connection.php file
 //require_once("connection.php");
 
+@include_once('config.db.php');
+global $dbconfig;
 // TODO: introduce MySQL port as parameters to use non-default value 3306
 //$sock_path=":" .$mysql_port;
 $hostname = $_SERVER['SERVER_NAME'];
@@ -78,25 +80,27 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 
 	if (isset($_REQUEST['db_username']))
 	$db_username = $_REQUEST['db_username'];
-	elseif (isset($dbconfig['db_username']))
+	elseif (isset($dbconfig['db_username']) && $dbconfig['db_username']!='_DBC_USER_')
 	$db_username = $dbconfig['db_username'];
 
 	if (isset($_REQUEST['db_hostname']))
-	$db_hostname = $_REQUEST['db_hostname'];
-	elseif (isset($dbconfig['db_hostname']))
-	$db_hostname = $dbconfig['db_hostname'];
-	else
+		$db_hostname = $_REQUEST['db_hostname'];
+	elseif (isset($dbconfig['db_server']) && $dbconfig['db_server']!='_DBC_SERVER_'){
+		$db_hostname = $dbconfig['db_server'];
+		if(isset($dbconfig['db_port']) && $dbconfig['db_port']!='_DBC_PORT_')
+			$db_hostname .= ":".$dbconfig['db_port'];
+	} else
 	$db_hostname = 'localhost';
 	
 
 	if (isset($_REQUEST['db_password']))
 	$db_password = $_REQUEST['db_password'];
-	elseif (isset($dbconfig['db_password']))
+	elseif (isset($dbconfig['db_password']) && $dbconfig['db_password']!='_DBC_PASS_')
 	$db_password = $dbconfig['db_password'];
 
 	if (isset($_REQUEST['db_type']))
 	$db_type = $_REQUEST['db_type'];
-	elseif (isset($dbconfig['db_type']))
+	elseif (isset($dbconfig['db_type']) && $dbconfig['db_type']!='_DBC_TYPE_')
 	$db_type = $dbconfig['db_type'];
 
 	if (isset($_REQUEST['db_name']))
