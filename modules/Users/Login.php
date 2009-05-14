@@ -74,10 +74,10 @@ if(isset($_SESSION["login_error"]))
 }
 
 ?>
-<!--Added to display the footer in the login page by Dina--!>
+<!--Added to display the footer in the login page by Dina-->
 <style type="text/css">@import url("themes/<?php echo $theme; ?>/style.css");</style>
 <script type="text/javascript" language="JavaScript">
-<!-- Begin
+<!-- Begin -->
 function set_focus() {
 	if (document.DetailView.user_name.value != '') {
 		document.DetailView.user_password.focus();
@@ -85,7 +85,7 @@ function set_focus() {
 	}
 	else document.DetailView.user_name.focus();
 }
-//  End -->
+<!-- End -->
 </script>
 
 

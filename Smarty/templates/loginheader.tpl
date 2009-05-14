@@ -21,4 +21,4 @@
 <title>{$APP.LBL_BROWSER_TITLE}</title>
 <style type="text/css">@import url("include/style.css");</style>
 </head>
-<body style="padding:0; margin:0;">
+<body onload=set_focus() style="padding:0; margin:0;">
