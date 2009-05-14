@@ -60,10 +60,10 @@
 	<td class="listTableRow small" valign=top>{$listvalues.5}&nbsp;</td>
 	<td class="listTableRow small" valign=top>{$listvalues.7}&nbsp;</td>
 	<td class="listTableRow small" valign=top>{$listvalues.6}&nbsp;</td>
-	{if $listvalues.4 eq 'Active'}
-	<td class="listTableRow small active" valign=top>{$APP[$listvalues.4]}</td>
+	{if $listvalues.4|@strip_tags|@trim eq 'Active'}
+	<td class="listTableRow small active" valign=top>{$APP.Active}</td>
 	{else}
-	<td class="listTableRow small inactive" valign=top>{$APP[$listvalues.4]}</td>
+	<td class="listTableRow small inactive" valign=top>{$APP.Inactive}</td>
 	{/if}	
 
 </tr>

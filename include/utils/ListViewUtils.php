@@ -1075,6 +1075,11 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					$value = getToolTipValue($value, $field_id, $module,$entity_id);
 				}
 				//tooltip changes end
+				
+				// vtlib customization: For listview javascript triggers
+				$value = "$value <span type='vtlib_metainfo' vtrecordid='{$entity_id}' vtfieldname='{$fieldname}' vtmodule='$module' style='display:none;'></span>";
+				// END
+				
 				if($module == "Calendar" && $name == $app_strings['Close'])
 				{
 					if(isPermitted("Calendar","EditView") == 'yes')

@@ -173,7 +173,9 @@
 											<td width="2%"><input type="checkbox" name="selected_id{$folder.folderid}" id="{$entity_id}" value= '{$entity_id}' onClick='check_object(this,"selectall{$folder.folderid}")'></td>
 											{foreach item=recordid key=record_id from=$entity}				
 												{foreach item=data from=$recordid}
-													<td>{$data}</td>
+													{* vtlib customization: Trigger events on listview cell *}
+													<td onmouseover="vtlib_listview.trigger('cell.onmouseover', $(this))" onmouseout="vtlib_listview.trigger('cell.onmouseout', $(this))">{$data}</td>
+													{* END *}
 									        	{/foreach}
 								        	{/foreach}
 										</tr>

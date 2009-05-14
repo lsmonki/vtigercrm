@@ -74,7 +74,9 @@
                                         <td><input name="{$rel_mod}_selected_id" id="{$header}" value="{$header}" onclick="rel_check_object(this,'{$rel_mod}');" toggleselectall(this.name,="" selectall="" )="" type="checkbox"  {$check_status.checked.$header}></td>
                                 {/if}
 				{foreach key=header item=listfields from=$detail}
-	                                 <td>{$listfields}</td>
+									 {* vtlib customization: Trigger events on listview cell *}
+	                                 <td onmouseover="vtlib_listview.trigger('cell.onmouseover', $(this))" onmouseout="vtlib_listview.trigger('cell.onmouseout', $(this))">{$listfields}</td>
+	                                 {* END *}
 				{/foreach}
 				</tr>
 			{/foreach}

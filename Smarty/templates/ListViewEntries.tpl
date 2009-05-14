@@ -118,8 +118,10 @@
 			{foreach item=entity key=entity_id from=$LISTENTITY}
 			<tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'" id="row_{$entity_id}">
 			<td width="2%"><input type="checkbox" NAME="selected_id" id="{$entity_id}" value= '{$entity_id}' onClick="check_object(this)"></td>
-			{foreach item=data from=$entity}	
-			<td>{$data}</td>
+			{foreach item=data from=$entity}
+			{* vtlib customization: Trigger events on listview cell *}	
+			<td onmouseover="vtlib_listview.trigger('cell.onmouseover', $(this))" onmouseout="vtlib_listview.trigger('cell.onmouseout', $(this))">{$data}</td>
+			{* END *}
 	        {/foreach}
 			</tr>
 			{foreachelse}
