@@ -471,6 +471,7 @@ class CRMEntity
 		$fieldname=$adb->query_result($result,$i,"fieldname");
 		$columname=$adb->query_result($result,$i,"columnname");
 		$uitype=$adb->query_result($result,$i,"uitype");
+		$generatedtype=$adb->query_result($result,$i,"generatedtype");
 		$typeofdata=$adb->query_result($result,$i,"typeofdata");
 		$typeofdata_array = explode("~",$typeofdata);
 		$datatype = $typeofdata_array[0];
@@ -574,13 +575,15 @@ class CRMEntity
 			  	if($rows > 0) {
 			  		$fldvalue = $adb->query_result($res,0,'email1');
 				}
+			}elseif($uitype == 71 && $generatedtype == 2) { // Convert currency to base currency value before saving for custom fields of type currency
+				$currency_id = $current_user->currency_id;
+				$curSymCrate = getCurrencySymbolandCRate($currency_id);
+				$fldvalue = convertToDollar($this->column_fields[$fieldname], $curSymCrate['rate']);
+			} else {
+				$fldvalue = $this->column_fields[$fieldname]; 
 			}
-			  else
-			  {
-				  $fldvalue = $this->column_fields[$fieldname]; 
-			  }
-			  if($uitype != 33)
-				  $fldvalue = from_html($fldvalue,($insertion_mode == 'edit')?true:false);
+			if($uitype != 33)
+				$fldvalue = from_html($fldvalue,($insertion_mode == 'edit')?true:false);
 		  }
 		  else
 		  {
