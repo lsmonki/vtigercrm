@@ -27,20 +27,26 @@
 		<img width="27" height="27" onClick='fnAddWindow(this,"addWidgetDropDown");' onMouseOut='fnRemoveWindow();' src="{'btnL3Add.gif'|@vtiger_imageurl:$THEME}" border="0" title="{$MOD.LBL_HOME_ADDWINDOW}" alt"{$MOD.LBL_HOME_ADDWINDOW}" style="cursor:pointer;">
 	</td>
 	
-{if $CHECK.Calendar eq 'yes' && $CALENDAR_ACTIVE eq 'yes'}
+{if $CHECK.Calendar eq 'yes' && $CALENDAR_ACTIVE eq 'yes' && $CALENDAR_DISPLAY eq 'true'}
 	<td>
 		<img width="27" height="27" src="{'btnL3Calendar.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_CALENDAR_ALT}" title="{$APP.LBL_CALENDAR_TITLE}" border=0  onClick='fnvshobj(this,"miniCal");getMiniCal();'/>
 	</td>
 {/if}
+{if $WORLD_CLOCK_DISPLAY eq 'true' }
 	<td>
 		<img width="27" height="27" src="{'btnL3Clock.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_CLOCK_ALT}" title="{$APP.LBL_CLOCK_TITLE}" border=0 onClick="fnvshobj(this,'wclock');">
 	</td>
+{/if}
+{if $CALCULATOR_DISPLAY eq 'true' }
 	<td>
 		<img width="27" height="27" src="{'btnL3Calc.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_CALCULATOR_ALT}" title="{$APP.LBL_CALCULATOR_TITLE}" border=0 onClick="fnvshobj(this,'calculator_cont');fetch_calc();">
 	</td>
+{/if}
+{if $CHAT_DISPLAY eq 'true' }
 	<td>
 		<img width="27" height="27" src="{'tbarChat.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_CHAT_ALT}" title="{$APP.LBL_CHAT_TITLE}" border=0  onClick='return window.open("index.php?module=Home&action=vtchat","Chat","width=600,height=450,resizable=1,scrollbars=1");'>
 	</td>	
+{/if}
 	<td>
 		<img width="27" height="27" src="{'btnL3Tracker.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_LAST_VIEWED}" title="{$APP.LBL_LAST_VIEWED}" border="0" onClick="fnvshobj(this,'tracker');">
 	</td>
