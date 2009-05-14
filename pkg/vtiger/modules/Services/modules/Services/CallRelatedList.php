@@ -41,6 +41,9 @@ if($singlepane_view == 'true' && $action == 'CallRelatedList') {
 	if($isduplicate == 'true') $focus->id = '';
 	if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') $smarty->assign("OP_MODE",$_REQUEST['mode']);
 	if(!$_SESSION['rlvs'][$currentModule]) unset($_SESSION['rlvs']);
+
+	// Identify this module as custom module.
+	$smarty->assign('CUSTOM_MODULE', true);
 	
 	$smarty->assign('APP', $app_strings);
 	$smarty->assign('MOD', $mod_strings);
