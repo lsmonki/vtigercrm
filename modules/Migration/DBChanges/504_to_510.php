@@ -1557,7 +1557,6 @@ ExecuteQuery("update vtiger_field set typeofdata='I~M',presence=2 where fieldnam
 ExecuteQuery("update vtiger_field set typeofdata='I~M',presence=2 where fieldname='account_id' and tabid =$salesordertabid");
 ExecuteQuery("update vtiger_field set typeofdata='I~M',presence=2 where fieldname='account_id' and tabid =$invoicetabid");
 
-ExecuteQuery("update vtiger_field set typeofdata='D~O' where fieldname='closingdate' and tabid =$potentialtabid");
 ExecuteQuery("update vtiger_field set presence=0,quickcreate=2 where fieldname='account_id' and tabid = $contacttabid");
 ExecuteQuery("update vtiger_field set presence=0,quickcreate=0 where fieldname='taxclass' and tabid=$producttabid");
 ExecuteQuery("update vtiger_field set presence = 0,quickcreate=3 where block = $new_block_id "); //for recurring invoice block the fields are always active
@@ -2082,6 +2081,8 @@ function updateReportColumns($table){
 //ENDS
 
 ExecuteQuery("ALTER TABLE vtiger_inventoryproductrel ADD COLUMN lineitem_id int(19) AUTO_INCREMENT UNIQUE");
+
+ExecuteQuery("update vtiger_field set typeofdata='V~M' where fieldname='sales_stage' and tabid =$potentialtabid");
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
