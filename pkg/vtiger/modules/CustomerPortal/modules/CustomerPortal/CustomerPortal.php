@@ -21,7 +21,7 @@ class CustomerPortal {
 		global $adb,$mod_strings;
  		
  		if($eventType == 'module.postinstall') {			
-			$portalmodules = array("Accounts","Contacts","HelpDesk","Invoice","Quotes","Documents","Faq","Services","Products");
+			$portalmodules = array("HelpDesk","Faq","Invoice","Quotes","Products","Services","Documents","Contacts","Accounts",);
 			$i=0;
 			foreach($portalmodules as $modules) {
 				++$i;
