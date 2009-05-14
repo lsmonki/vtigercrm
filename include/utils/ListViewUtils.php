@@ -590,13 +590,13 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		{
 			$fieldname = 'account_id';
 		}
-		if($fieldname == 'lastname' &&($module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
-                       $fieldname = 'contact_id';
+		if($fieldname == 'lastname' &&($module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar'))
+			$fieldname = 'contact_id';
 
 		if($fieldname == 'productname' && $module != 'Products')
-                {
-                         $fieldname = 'product_id';
-                }
+		{
+			 $fieldname = 'product_id';
+		}
 
 		array_push($field_list, $fieldname);
 		$j++;
@@ -620,20 +620,20 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				INNER JOIN vtiger_def_org_field
 					ON vtiger_def_org_field.fieldid = vtiger_field.fieldid";
 
-				if($module == "Calendar")
-					$query .=" WHERE vtiger_field.tabid in (9,16) and vtiger_field.presence in (0,2)";
-				else {
-					$query .=" WHERE vtiger_field.tabid = ? and vtiger_field.presence in (0,2)";
-					array_push($params, $tabid);
-				}
+			if($module == "Calendar")
+				$query .=" WHERE vtiger_field.tabid in (9,16) and vtiger_field.presence in (0,2)";
+			else {
+				$query .=" WHERE vtiger_field.tabid = ? and vtiger_field.presence in (0,2)";
+				array_push($params, $tabid);
+			}
 
-		        $query .=" AND vtiger_profile2field.visible = 0
-							AND vtiger_profile2field.visible = 0
-							AND vtiger_def_org_field.visible = 0
-							AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .")
-							AND vtiger_field.fieldname IN (". generateQuestionMarks($field_list) .")";
+			$query .=" AND vtiger_profile2field.visible = 0
+					AND vtiger_profile2field.visible = 0
+					AND vtiger_def_org_field.visible = 0
+					AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .")
+					AND vtiger_field.fieldname IN (". generateQuestionMarks($field_list) .")";
 							
-				array_push($params, $profileList, $field_list);
+			array_push($params, $profileList, $field_list);
 		}
 
 		$result = $adb->pquery($query, $params);
@@ -649,12 +649,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	$query = "SELECT uitype, columnname, fieldname FROM vtiger_field ";
 	
 	if($module == "Calendar")
-	        $query .=" WHERE vtiger_field.tabid in (9,16) and vtiger_field.presence in (0,2)";
+		$query .=" WHERE vtiger_field.tabid in (9,16) and vtiger_field.presence in (0,2)";
 	else {
-	        $query .=" WHERE vtiger_field.tabid = ? and vtiger_field.presence in (0,2)";
-			array_push($params, $tabid);
+		$query .=" WHERE vtiger_field.tabid = ? and vtiger_field.presence in (0,2)";
+		array_push($params, $tabid);
 	}
-	$query .=" AND fieldname IN (". generateQuestionMarks($field_list).") ";
+	$query .= " AND fieldname IN (". generateQuestionMarks($field_list).") ";
 	array_push($params, $field_list);
 	
 	$result = $adb->pquery($query, $params);

@@ -80,7 +80,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	{
 		global $current_user;
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-        	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+        require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 		$tab_id=getTabid($relatedmodule);
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3){
     		$sec_parameter=getListViewSecurityParameter($relatedmodule);
@@ -179,15 +179,15 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	$end_rec = $navigation_array['end_val'];
 
 	//limiting the query
-	if ($start_rec ==0) 
+	if($start_rec == 0)
 		$limit_start_rec = 0;
 	else
 		$limit_start_rec = $start_rec -1;
 
-	if( $adb->dbType == "pgsql")
- 	    $list_result = $adb->pquery($query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
- 	else
- 	    $list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());	
+	if($adb->dbType == "pgsql")
+		$list_result = $adb->pquery($query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
+	else
+		$list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
 	//Retreive the List View Table Header
 	if($noofrows == 0)
@@ -327,7 +327,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 					$entries[] = nl2br($row['description']); 
 				}
 				else
-					$entries[]=" <font color ='red' >" .$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
+					$entries[] = " <font color ='red' >" .$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
 	
 				$attachmentname = $row['filename'];//explode('_',$row['filename'],2);
 	
@@ -406,7 +406,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 		}
 	}
 
-	if($entries_list !='')
+	if($entries_list != '')
 		$return_data = array('header'=>$header,'entries'=>$entries_list);
 	$log->debug("Exiting getAttachmentsAndNotes method ...");
 	return $return_data;
@@ -439,16 +439,15 @@ function getHistory($parentmodule,$query,$id)
 	$rel_tab_id = getTabid("Calendar");
 
 	global $current_user;
-        require('user_privileges/user_privileges_'.$current_user->id.'.php');
-        require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-        $tab_id=getTabid('Calendar');
-       if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-       {
-       		$sec_parameter=getListViewSecurityParameter('Calendar');
-                $query .= ' '.$sec_parameter;
-
-        }
-        $query.= ' '."ORDER BY vtiger_activity.date_start DESC,vtiger_activity.time_start DESC";
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	$tab_id = getTabid('Calendar');
+	if($is_admin == false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+	{
+		$sec_parameter=getListViewSecurityParameter('Calendar');
+		$query .= ' '.$sec_parameter;
+	}
+	$query.= ' '."ORDER BY vtiger_activity.date_start DESC,vtiger_activity.time_start DESC";
 	$result=$adb->query($query);
 	$noofrows = $adb->num_rows($result);
 
@@ -468,7 +467,7 @@ function getHistory($parentmodule,$query,$id)
 		$header[] = $app_strings['LBL_STATUS'];
 		$header[] = $app_strings['LBL_ASSIGNED_TO'];
 
-		$i=1;
+		$i = 1;
 		while($row = $adb->fetch_array($result))
 		{
 			$entries = Array();
@@ -487,8 +486,8 @@ function getHistory($parentmodule,$query,$id)
 				$status = $app_strings[$status]; 
 			}
 	
-	            	$typeofactivity = $row['activitytype'];
- 	            	$typeofactivity = $app_strings[$typeofactivity];
+			$typeofactivity = $row['activitytype'];
+			$typeofactivity = $app_strings[$typeofactivity];
 			$entries[] = $typeofactivity;
 
 			$activity = '<a href="index.php?module=Calendar&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.$_REQUEST['record'].'&parenttab='.$_REQUEST['parenttab'].'">'.$row['subject'].'</a></td>';
@@ -497,21 +496,20 @@ function getHistory($parentmodule,$query,$id)
 			$parentname = getRelatedTo('Calendar',$result,$i-1);
 			$entries[] = $parentname;
 			
-		       $entries[] = getDisplayDate($row['date_start'])."   ".$row['time_start'];
- 	               $entries[] = getDisplayDate($row['due_date'])."   ".$row['time_end'];         
-		
+			$entries[] = getDisplayDate($row['date_start'])."   ".$row['time_start'];
+			$entries[] = getDisplayDate($row['due_date'])."   ".$row['time_end'];
+
 			//$entries[] = nl2br($row['description']);
 
 			$entries[] = $status;
 
-			if($row['user_name']==NULL && $row['groupname']!=NULL)
+			if($row['user_name'] == null && $row['groupname'] != null)
 			{
 				$entries[] = $row['groupname'];
 			}
 			else
 			{
- 				$entries[] = $row['user_name'];
-				
+ 				$entries[] = $row['user_name'];				
 			}
 			
 			$i++;
@@ -604,6 +602,7 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 		return $return_data; 
 	}
 }
+
 function CheckFieldPermission($fieldname,$module)
 {
 	global $current_user,$adb;
