@@ -118,7 +118,7 @@ EOQ;
  * @param array   $cal    - collection of objects and strings
  */
 function get_mini_calendar(& $cal){
-	global $current_user,$adb,$cal_log,$mod_strings;
+	global $current_user,$adb,$cal_log,$mod_strings,$theme;
 	$category = getParentTab();
 	$cal_log->debug('Entering get_mini_calendar() method...');
 	$count = 0;
@@ -405,7 +405,7 @@ function getEventViewOption(& $cal,$viewBox)
  */
 function get_previous_cal(& $cal,$viewBox='',$subtab='')
 {
-	global $mod_strings,$cal_log;
+	global $mod_strings,$cal_log,$theme;
 	$category = getParentTab();
 	$cal_log->debug("Entering get_previous_cal() method...");
 	if(isset($cal['size']) && $cal['size'] == 'small')
@@ -429,7 +429,7 @@ function get_previous_cal(& $cal,$viewBox='',$subtab='')
  */
 function get_next_cal(& $cal,$viewBox='',$subtab='')
 {
-	global $mod_strings,$cal_log;
+	global $mod_strings,$cal_log,$theme;
 	$category = getParentTab();
 	$cal_log->debug("Entering get_next_cal() method...");
 	if(isset($cal['size']) && $cal['size'] == 'small')
@@ -563,7 +563,7 @@ function getHourView(& $view)
  */
 function getEventListView(& $cal,$mode='')
 {
-	global $cal_log;
+	global $cal_log,$theme;
 	$list_view = "";
         $cal_log->debug("Entering getEventListView() method...");
 	if($cal['calendar']->view == 'day')
@@ -634,7 +634,7 @@ function getEventListView(& $cal,$mode='')
  */
 function getTodosListView($cal, $check='',$subtab='')
 {
-	global $cal_log;
+	global $cal_log,$theme;
 	$list_view = "";
         $cal_log->debug("Entering getTodosListView() method...");
 	if($cal['calendar']->view == 'day')
@@ -766,7 +766,7 @@ function getDayViewLayout(& $cal)
  */
 function getWeekViewLayout(& $cal)
 {
-	global $current_user,$app_strings,$cal_log;
+	global $current_user,$app_strings,$cal_log,$theme;
 	$category = getParentTab();
 	$cal_log->debug("Entering getWeekViewLayout() method...");
         $date_format = $current_user->date_format;
@@ -852,7 +852,7 @@ function getWeekViewLayout(& $cal)
  */
 function getMonthViewLayout(& $cal)
 {
-	global $current_user,$app_strings,$cal_log;
+	global $current_user,$app_strings,$cal_log,$theme;
 	$category = getParentTab();
 	$cal_log->debug("Entering getMonthViewLayout() method...");
 	$date_format = $current_user->date_format;
@@ -1049,7 +1049,7 @@ function getYearViewLayout(& $cal)
  */
 function getdayEventLayer(& $cal,$slice,$rows)
 {
-	global $mod_strings,$cal_log,$listview_max_textlength,$adb,$current_user;
+	global $mod_strings,$cal_log,$listview_max_textlength,$adb,$current_user,$theme;
 	$category = getParentTab();
 	$cal_log->debug("Entering getdayEventLayer() method...");
 	$eventlayer = '';
@@ -1162,7 +1162,7 @@ function getdayEventLayer(& $cal,$slice,$rows)
  */
 function getweekEventLayer(& $cal,$slice)
 {
-	global $mod_strings,$cal_log,$listview_max_textlength,$adb,$current_user;
+	global $mod_strings,$cal_log,$listview_max_textlength,$adb,$current_user,$theme;
 	$category = getParentTab();
 	$cal_log->debug("Entering getweekEventLayer() method...");
         $eventlayer = '';
@@ -1257,7 +1257,7 @@ function getweekEventLayer(& $cal,$slice)
  */
 function getmonthEventLayer(& $cal,$slice)
 {
-	global $mod_strings,$cal_log,$adb,$current_user;
+	global $mod_strings,$cal_log,$adb,$current_user,$theme;
 	$category = getParentTab();
 	$cal_log->debug("Entering getmonthEventLayer() method...");
 	$eventlayer = '';
@@ -1333,7 +1333,7 @@ function getmonthEventLayer(& $cal,$slice)
  */
 function getEventList(& $calendar,$start_date,$end_date,$info='')
 {
-	global $log;
+	global $log,$theme;
 	$Entries = Array();
 	$category = getParentTab();
 	global $adb,$current_user,$mod_strings,$app_strings,$cal_log,$listview_max_textlength,$list_max_entries_per_page;
@@ -1572,7 +1572,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
  */
 function getTodoList(& $calendar,$start_date,$end_date,$info='')
 {
-	global $log,$app_strings;
+	global $log,$app_strings,$theme;
         $Entries = Array();
 	$category = getParentTab();
 	global $adb,$current_user,$mod_strings,$cal_log,$list_max_entries_per_page;
@@ -1820,7 +1820,7 @@ function getTodoInfo(& $cal, $mode)
  */
 function constructEventListView(& $cal,$entry_list,$navigation_array='')
 {
-	global $mod_strings,$app_strings,$adb,$cal_log,$current_user;
+	global $mod_strings,$app_strings,$adb,$cal_log,$current_user,$theme;
 	$cal_log->debug("Entering constructEventListView() method...");
 	$format = $cal['calendar']->hour_format;
 	$date_format = $current_user->date_format;
