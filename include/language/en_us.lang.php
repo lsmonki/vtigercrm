@@ -604,6 +604,7 @@ $app_strings = array (
 'VTIGER' => 'vtiger',
 'LBL_DIRECT_AMOUNT_DISCOUNT' => 'Direct Amount Discount',
 'LBL_NO_DISCOUNT_FOR_THIS_PRODUCT' => 'No Discount for this Product',
+'LBL_NO_DISCOUNT_FOR_THIS_LINE_ITEM'=> 'No Discount for this line item',
 'LBL_TOTAL_TAX_AMOUNT' => 'Total Tax Amount',
 'LBL_FINAL_DISCOUNT_AMOUNT' => 'Final Discount Amount',
 'LBL_SHIPPING_AND_HANDLING_CHARGE' => 'Shipping & Handling Charge',

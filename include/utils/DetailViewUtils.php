@@ -1495,7 +1495,7 @@ function getDetailAssociatedProducts($module,$focus)
 		}
 		else
 		{
-			$discount_info_message = $app_strings['LBL_NO_DISCOUNT_FOR_THIS_PRODUCT'];
+			$discount_info_message = $app_strings['LBL_NO_DISCOUNT_FOR_THIS_LINE_ITEM'];
 		}
 		//Product wise Discount calculation - ends 
 
