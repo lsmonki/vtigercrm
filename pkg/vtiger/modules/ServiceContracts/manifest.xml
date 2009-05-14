@@ -454,11 +454,11 @@
 <setmetrics>false</setmetrics>
 <fields>
 <field>
-<fieldname>subject</fieldname>
+<fieldname>contract_no</fieldname>
 <columnindex>0</columnindex>
 </field>
 <field>
-<fieldname>contract_no</fieldname>
+<fieldname>subject</fieldname>
 <columnindex>1</columnindex>
 </field>
 <field>
