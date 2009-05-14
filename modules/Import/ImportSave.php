@@ -106,7 +106,7 @@ foreach ($rows1 as $row)
 			{
 				//Here we are assigning the user id in column fields, so in function assign_user (ImportLead.php and ImportProduct.php files) we should use the id instead of user name when query the user
 				//or we can use $focus->column_fields['smownerid'] = $users_groups_list[$row[$field_count]];
-				$focus->column_fields[$field] = $users_groups_list[$row[$field_count]];	
+				$focus->column_fields[$field] = $users_groups_list[trim($row[$field_count])];	
 				p("setting my_userid=$my_userid for user=".$row[$field_count]);
 			}
 			else
