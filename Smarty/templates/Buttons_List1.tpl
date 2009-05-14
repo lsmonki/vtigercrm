@@ -71,9 +71,9 @@
 								{/if}
  		                               {/if} 
 					{/if}
-					<!--{if $WORLD_CLOCK_DISPLAY eq 'true'}--> 
+					{if $WORLD_CLOCK_DISPLAY eq 'true'} 
  		                                                <td style="padding-right:0px"><a href="javascript:;"><img src="{$IMAGE_PATH}btnL3Clock.gif" alt="{$APP.LBL_CLOCK_ALT}" title="{$APP.LBL_CLOCK_TITLE}" border=0 onClick="fnvshobj(this,'wclock');"></a></a></td> 
- 		                                        <!--{/if}--> 
+ 		                                        {/if} 
  		                                        {if $CALCULATOR_DISPLAY eq 'true'} 
  		                                                <td style="padding-right:0px"><a href="#"><img src="{$IMAGE_PATH}btnL3Calc.gif" alt="{$APP.LBL_CALCULATOR_ALT}" title="{$APP.LBL_CALCULATOR_TITLE}" border=0 onClick="fnvshobj(this,'calculator_cont');fetch_calc();"></a></td> 
  		                                        {/if} 

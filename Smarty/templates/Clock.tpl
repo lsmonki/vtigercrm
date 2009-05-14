@@ -10,6 +10,8 @@
  ********************************************************************************/
 -->*}
 
+{if $WORLD_CLOCK_DISPLAY eq 'true'}
+
 <div id="wclock" style="z-index:10000001;" class="layerPopup">
 	<table class="mailClientBg" align="center" border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tr style="cursor:move;" >
@@ -163,3 +165,5 @@
 	var theRoot   = document.getElementById("wclock");
 	Drag.init(theHandle, theRoot);
 </script>
+
+{/if}
