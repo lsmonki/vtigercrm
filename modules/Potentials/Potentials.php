@@ -750,6 +750,13 @@ class Potentials extends CRMEntity {
 		} elseif($return_module == 'Contacts') {
 			$sql = 'DELETE FROM vtiger_contpotentialrel WHERE potentialid=? AND contactid=?';
 			$this->db->pquery($sql, array($id, $return_id));
+			
+			// Potential directly linked with Contact (not through Account - vtiger_contpotentialrel)
+			$directRelCheck = $this->db->pquery('SELECT related_to FROM vtiger_potential WHERE potentialid=? AND related_to=?', array($id, $return_id));
+			if($this->db->num_rows($directRelCheck)) {
+				$this->trash($this->module_name, $id);
+			}
+			
 		} else {
 			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
 			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
