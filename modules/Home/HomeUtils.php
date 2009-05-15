@@ -62,6 +62,9 @@ function homepage_getUpcomingActivities($maxval,$calCnt){
 		}
 	}
 	$values = getActivityEntries($open_activity_list);
+	$values['ModuleName'] = 'Calendar';
+	$values['search_qry'] = "&action=ListView&from_homepage=upcoming_activities";
+	
 	return $values;
 }
 
@@ -170,6 +173,9 @@ function homepage_getPendingActivities($maxval,$calCnt){
 		}
 	
 	$values = getActivityEntries($open_activity_list);
+	$values['ModuleName'] = 'Calendar';
+	$values['search_qry'] = "&action=ListView&from_homepage=pending_activities";
+	
 	return $values;
 }
 
