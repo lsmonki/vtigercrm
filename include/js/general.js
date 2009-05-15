@@ -2229,18 +2229,40 @@ function selectContact(check,type,frmName)
 //to get Select Potential Popup
 function selectPotential()
 {
-	var record_id= document.EditView.account_id.value;
+	// To support both B2B and B2C model
+	var record_id = '';
+	var parent_module = '';
+	var acc_element = document.EditView.account_id;
+	var cnt_element = document.EditView.contact_id;
+	if (acc_element != null) {
+		record_id= acc_element.value;
+		parent_module = 'Accounts';
+	} else if (cnt_element != null) {
+		record_id= cnt_element.value;
+		parent_module = 'Contacts';
+	} 
 	if(record_id != '')
-		window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView&relmod_id="+record_id+"&parent_module=Accounts","test","width=640,height=602,resizable=0,scrollbars=0");
+		window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView&relmod_id="+record_id+"&parent_module="+parent_module,"test","width=640,height=602,resizable=0,scrollbars=0");
 	else
 		window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
 }
 //to select Quote Popup
 function selectQuote()
 {
-	var record_id= document.EditView.account_id.value;
-        if(record_id != '')
-		window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&relmod_id="+record_id+"&parent_module=Accounts","test","width=640,height=602,resizable=0,scrollbars=0");
+	// To support both B2B and B2C model
+	var record_id = '';
+	var parent_module = '';
+	var acc_element = document.EditView.account_id;
+	var cnt_element = document.EditView.contact_id;
+	if (acc_element != null) {
+		record_id= acc_element.value;
+		parent_module = 'Accounts';
+	} else if (cnt_element != null) {
+		record_id= cnt_element.value;
+		parent_module = 'Contacts';
+	} 
+	if(record_id != '')
+		window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&relmod_id="+record_id+"&parent_module="+parent_module,"test","width=640,height=602,resizable=0,scrollbars=0");
 
 	else
 		window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
@@ -2248,9 +2270,20 @@ function selectQuote()
 //to get select SalesOrder Popup
 function selectSalesOrder()
 {
-	var record_id= document.EditView.account_id.value;
-        if(record_id != '')
-		window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&relmod_id="+record_id+"&parent_module=Accounts","test","width=640,height=602,resizable=0,scrollbars=0");
+	// To support both B2B and B2C model
+	var record_id = '';
+	var parent_module = '';
+	var acc_element = document.EditView.account_id;
+	var cnt_element = document.EditView.contact_id;
+	if (acc_element != null) {
+		record_id= acc_element.value;
+		parent_module = 'Accounts';
+	} else if (cnt_element != null) {
+		record_id= cnt_element.value;
+		parent_module = 'Contacts';
+	} 
+	if(record_id != '')
+		window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&relmod_id="+record_id+"&parent_module="+parent_module,"test","width=640,height=602,resizable=0,scrollbars=0");
 	else
 		window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
 }

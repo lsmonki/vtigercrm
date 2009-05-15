@@ -2221,7 +2221,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 						$value = '<a href="javascript:window.close();" onclick=\'set_return_contact("'.$entity_id.'", "'.nl2br(decode_html($slashes_temp_val)).'", "'.$relatedid.'", "'.nl2br(decode_html($slashes_contact_name)).'");\'>'.$temp_val.'</a>';
 						
 					} else {
-						$value = $tmp_val;
+						$value = $temp_val;
 					}
 				}
 				//added by rdhital/Raju for better emails 
@@ -3648,7 +3648,7 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 function getPopupCheckquery($current_module,$relmodule,$relmod_recordid)
 {
 	global $log,$adb;
-	$log->debug("Entering getPopupCheckquery(".$currentmodule.",".$relmodule.",".$relmod_recordid.") method ...");
+	$log->debug("Entering getPopupCheckquery(".$current_module.",".$relmodule.",".$relmod_recordid.") method ...");
 	if($current_module == "Contacts")	
 	{
 		if($relmodule == "Accounts" && $relmod_recordid != '')
@@ -3789,9 +3789,13 @@ function getPopupCheckquery($current_module,$relmodule,$relmod_recordid)
 	}
 	elseif($current_module == "Potentials")
 	{
-		if($relmodule == 'Accounts')
+		if($relmodule == 'Accounts' || $relmodule == 'Contacts')
 		{
-			$pot_query = "select vtiger_crmentity.crmid,vtiger_account.accountid,vtiger_potential.potentialid from vtiger_potential inner join vtiger_account on vtiger_account.accountid=vtiger_potential.related_to inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_potential.related_to=?";
+			if($relmodule == 'Contacts') {
+				$pot_query = "select vtiger_crmentity.crmid,vtiger_contactdetails.contactid,vtiger_potential.potentialid from vtiger_potential inner join vtiger_contactdetails on vtiger_contactdetails.contactid=vtiger_potential.related_to inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid where vtiger_crmentity.deleted=0 and vtiger_potential.related_to=?";
+			} else {
+				$pot_query = "select vtiger_crmentity.crmid,vtiger_account.accountid,vtiger_potential.potentialid from vtiger_potential inner join vtiger_account on vtiger_account.accountid=vtiger_potential.related_to inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_potential.related_to=?";	
+			}
 			$pot_result = $result = $adb->pquery($pot_query, array($relmod_recordid));
 			$rows = $adb->num_rows($pot_result);
 			$potids_comma = "";	
