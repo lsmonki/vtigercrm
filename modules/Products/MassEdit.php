@@ -30,6 +30,7 @@ $smarty->assign('IMAGE_PATH', "themes/$theme/images/");
 $smarty->assign('IDS',$idstring);
 $smarty->assign('MASS_EDIT','1');
 $smarty->assign('BLOCKS',getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));	
+$smarty->assign("CATEGORY",getParentTab());
 
 // Field Validation Information 
 $tabid = getTabid($currentModule);

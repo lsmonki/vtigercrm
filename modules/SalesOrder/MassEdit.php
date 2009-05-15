@@ -17,6 +17,7 @@ $smarty->assign("IDS",$_REQUEST['idstring']);
 $smarty->assign("MASS_EDIT","1");
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("APP",$app_strings);
+$smarty->assign("CATEGORY",getParentTab());
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";

@@ -47,27 +47,28 @@ function massedit_initOnChangeHandlers() {
 	}
 }
 
-function mass_edit(obj,divid,module) {
+function mass_edit(obj,divid,module,parenttab) {
 	var select_options = document.getElementById('allselectedboxes').value;
 	var x = select_options.split(';');
 	var count = x.length;
 	
 	if(count > 1) {
 		idstring=select_options;
-		mass_edit_formload(idstring,module);
+		mass_edit_formload(idstring,module,parenttab);
 	} else {
 		alert(alert_arr.SELECT);
 		return false;
 	}
 	fnvshobj(obj, divid);
 }
-function mass_edit_formload(idstring,module) {
+function mass_edit_formload(idstring,module,parenttab) {
+	if(typeof(parenttab) == 'undefined') parenttab = '';
 	$("status").style.display="inline";
 	new Ajax.Request(
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 	    	method: 'post',
-			postBody:"module="+encodeURIComponent(module)+"&action="+encodeURIComponent(module+'Ajax')+"&file=MassEdit&mode=ajax&idstring="+idstring,
+			postBody:"module="+encodeURIComponent(module)+"&action="+encodeURIComponent(module+'Ajax')+"&parenttab="+encodeURIComponent(parenttab)+"&file=MassEdit&mode=ajax&idstring="+idstring,
 				onComplete: function(response) {
                 	$("status").style.display="none";
                	    var result = response.responseText;

@@ -68,5 +68,6 @@ if(isset($idlist)) {
 	}
 }
 
-header("Location: index.php?module=$return_module&action=$return_action$rstart");
+$parenttab = getParentTab();
+header("Location: index.php?module=$return_module&action=$return_action&parenttab=$parenttab$rstart");
 ?>
