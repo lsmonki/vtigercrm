@@ -587,7 +587,7 @@ function GetContacts($username,$session)
 				"otherstate" => decode_html($contact["otherstate"]),
 				"otherzip" => decode_html($contact["otherzip"]),
 				"othercountry" => decode_html($contact["othercountry"]),
-				"description" => "",
+				"description" => decode_html($contact["description"]),
 				"category" => "",        
 			  );
 	}
@@ -766,6 +766,9 @@ function UpdateContacts($username,$session,$cntdtls)
 			$contact->column_fields[othercountry]= in_array('othercountry',$permitted_lists) ? $cntrow["othercountry"] : "";    	
 			$contact->column_fields[assigned_user_id]= in_array('assigned_user_id',$permitted_lists) ? $user_id : "";   
 			$contact->column_fields[description]= in_array('description',$permitted_lists) ? $cntrow["description"] : "";
+			//changing date format to current user date format
+			$contact->column_fields['support_start_date'] = getDisplayDate($contact->column_fields['support_start_date']);
+			$contact->column_fields['support_end_date'] = getDisplayDate($contact->column_fields['support_end_date']);
 			$contact->id = $cntrow["id"];
 			$contact->mode = "edit";
 			$contact->save("Contacts");	
