@@ -313,15 +313,19 @@
 												</tr>
 												<tr>
 													<td valign="top" class="dvtCellInfo" align="left" width="10px">
-														<input id="presence_check_{$value.fieldselect}"  type="checkbox" 
-														{if $value.presence eq '0' || $value.mandatory eq '0' || $value.quickcreate eq '0' || $value.mandatory eq '2'} 
-															checked  disabled   
-														{/if}
-														{if $value.presence eq '2'} 
-														 	checked
-														 {/if}
-														  {if $value.presence eq '3'}
-															disabled
+														<input id="presence_check_{$value.fieldselect}"  type="checkbox"
+														{if $value.displaytype eq '2'}
+															checked disabled
+														{else}  
+															{if $value.presence eq '0' || $value.mandatory eq '0' || $value.quickcreate eq '0' || $value.mandatory eq '2'} 
+																checked  disabled   
+															{/if}
+															{if $value.presence eq '2'} 
+														 		checked
+														 	{/if}
+														  	{if $value.presence eq '3'}
+																disabled
+															{/if}
 														{/if}
 														 >
 													</td>
