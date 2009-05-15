@@ -1134,8 +1134,9 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		{
 			$displ_date = getDisplayDate($col_fields[$fieldname]);
 		}
-	
-		$label_fld[] = $displ_date.'&nbsp;'.$start_time;
+		if(empty($start_time)) $label_fld[] = $displ_date;  
+		else $label_fld[] = $displ_date.' '.$start_time;
+		
 	}
 	elseif($uitype == 5 || $uitype == 23 || $uitype == 70)
 	{
@@ -1153,7 +1154,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		{
 			$display_val = getDisplayDate($cur_date_val);
 		}
-		$label_fld[] = $display_val.'&nbsp;'.$end_time;
+		if(empty($end_time)) $label_fld[] = $display_val;
+		else $label_fld[] = $display_val . ' ' . $end_time;
 	}
 	elseif($uitype == 71 || $uitype == 72)
 	{
