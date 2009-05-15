@@ -123,7 +123,7 @@ $smarty->assign("CATEGORY",$category);
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
-if($viewid != "0")
+if($viewid != 0)
 {
 	$listquery = getListQuery("Documents");
 	$query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Documents");
@@ -285,12 +285,14 @@ if($foldercount > 0 )
 		$folder_details['entries']= $folder_files;
 		$folder_details['navigation'] = getTableHeaderNavigation($navigation_array, $url_string,"Documents",$folder_id,$viewid);
 		$folder_details['record_count']=$record_string;
-		if ($displayFolder == true || $folderid == 1) {
+		if ($displayFolder == true) {
 			$folders[$foldername] = $folder_details;
 		} else{
 			$emptyfolders[$foldername] = $folder_details;
 		}
+		if ($folderid == 1) $default_folder_details = $folder_details;
 	}
+	if (count($folders) == 0) $folders[$default_folder_details['foldername']] = $default_folder_details;
 }
 else
 {
