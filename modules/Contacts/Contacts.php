@@ -1064,12 +1064,12 @@ function get_contactsforol($user_name)
 	
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
   {
-    $sql1 = "select tablename,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and vtiger_field.block <> 5 and vtiger_field.presence in (0,2)";
+    $sql1 = "select tablename,columnname from vtiger_field where tabid=4 and vtiger_field.presence in (0,2)";
 	$params1 = array();
   }else
   {
     $profileList = getCurrentUserProfileList();
-    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
+    $sql1 = "select tablename,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
 	$params1 = array();
 	if (count($profileList) > 0) {
 		$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";
@@ -1096,8 +1096,9 @@ function get_contactsforol($user_name)
 	
 	$log->debug("Entering get_contactsforol(".$user_name.") method ...");
 	$query = "select vtiger_contactdetails.contactid as id, ".implode(',',$column_table_lists)." from vtiger_contactdetails 
-						inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid 
-						inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid 
+						inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid
+						inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
+						left join vtiger_customerdetails on vtiger_customerdetails.customerid=vtiger_contactdetails.contactid 
 						left join vtiger_account on vtiger_account.accountid=vtiger_contactdetails.accountid 
 						left join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid 
 						left join vtiger_contactsubdetails on vtiger_contactsubdetails.contactsubscriptionid = vtiger_contactdetails.contactid

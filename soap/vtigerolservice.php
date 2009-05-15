@@ -617,11 +617,11 @@ function AddContacts($username,$session,$cntdtls)
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
-    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and block <> 5 and vtiger_field.presence in (0,2)";
+    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and vtiger_field.presence in (0,2)";
 		$params1 = array();
   	} else {
     	$profileList = getCurrentUserProfileList();
-    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
+    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
   		$params1 = array();
 		if (count($profileList) > 0) {
 			$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";
@@ -705,11 +705,11 @@ function UpdateContacts($username,$session,$cntdtls)
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
-    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and block <> 5 and vtiger_field.presence in (0,2)";
+    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and vtiger_field.presence in (0,2)";
   		$params1 = array();
 	} else {
     	$profileList = getCurrentUserProfileList();
-    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
+    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
   		$params1 = array();
 		if (count($profileList) > 0) {
 			$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";
@@ -766,12 +766,13 @@ function UpdateContacts($username,$session,$cntdtls)
 			$contact->column_fields[othercountry]= in_array('othercountry',$permitted_lists) ? $cntrow["othercountry"] : "";    	
 			$contact->column_fields[assigned_user_id]= in_array('assigned_user_id',$permitted_lists) ? $user_id : "";   
 			$contact->column_fields[description]= in_array('description',$permitted_lists) ? $cntrow["description"] : "";
-			//changing date format to current user date format
-			$contact->column_fields['support_start_date'] = getDisplayDate($contact->column_fields['support_start_date']);
-			$contact->column_fields['support_end_date'] = getDisplayDate($contact->column_fields['support_end_date']);
 			$contact->id = $cntrow["id"];
 			$contact->mode = "edit";
+			//saving date information in 'yyyy-mm-dd' format and displaying it in user's date format
+			$user_old_date_format = $current_user->date_format;
+			$current_user->date_format = 'yyyy-mm-dd';
 			$contact->save("Contacts");	
+			$current_user->date_format = $user_old_date_format;
 		}	
 	}	
 	$contact = $contact;
