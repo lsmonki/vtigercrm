@@ -190,7 +190,7 @@ class PHPMailer
      *  work with the win32 version.
      *  @var int
      */
-    var $Timeout      = 10;
+    var $Timeout      = 60; // Fix for http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/5389
 
     /**
      *  Sets SMTP class debugging on or off.
