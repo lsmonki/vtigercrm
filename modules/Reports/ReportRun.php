@@ -714,9 +714,9 @@ class ReportRun extends CRMEntity
 						$fieldvalue = "concat(vtiger_contactdetails". $this->primarymodule .".lastname,' ',vtiger_contactdetails". $this->primarymodule .".firstname)".$this->getAdvComparator($comparator,trim($value),$datatype);
 					if($this->secondarymodule == 'Quotes' || $this->secondarymodule == 'Invoice')
 						$fieldvalue = "concat(vtiger_contactdetails". $this->secondarymodule .".lastname,' ',vtiger_contactdetails". $this->secondarymodule .".firstname)".$this->getAdvComparator($comparator,trim($value),$datatype);
-				}
-				else
-				{
+				} elseif($comparator == 'e' && (trim($valuearray[$n]) == "NULL" || trim($valuearray[$n]) == '')) {
+					$fieldvalue = "(".$selectedfields[0].".".$selectedfields[1]." IS NULL OR ".$selectedfields[0].".".$selectedfields[1]." = '')";
+				} else {
 					$fieldvalue = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($value),$datatype);
 				}
 				if(isset($advfilterlist[$fieldcolname]))

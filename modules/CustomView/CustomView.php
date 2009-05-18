@@ -1148,9 +1148,11 @@ class CustomView extends CRMEntity{
 				}
 				else
 					$value = " vtiger_activity.eventstatus ".$this->getAdvComparator($comparator,$value,$datatype);
-			} 
-			else
+			} elseif ($comparator == 'e' && (trim($value) == "NULL" || trim($value) == '')) {				
+				$value = '('.$tablename.".".$fieldname.' IS NULL OR '.$tablename.".".$fieldname.' = \'\')';
+			} else {
 				$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$value,$datatype);
+			}
 			//end
 		}
 		return $value;
