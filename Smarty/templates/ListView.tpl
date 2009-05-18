@@ -17,7 +17,6 @@
 <script language="JavaScript" type="text/javascript" src="include/js/search.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/Merge.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/dtlviewajax.js"></script>
-
 <script language="javascript" type="text/javascript">
 var typeofdata = new Array();
 typeofdata['E'] = ['is','isn','bwt','ewt','cts','dcts'];

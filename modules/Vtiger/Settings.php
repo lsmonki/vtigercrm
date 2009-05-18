@@ -47,14 +47,15 @@ if(!is_admin($current_user)) {
 		}
 	}
 	
-	$sql_result = $adb->pquery("select * from vtiger_settings_field where name = ? and active=0",array('LBL_TOOLTIP_MANAGEMENT'));
-	if($adb->num_rows($sql_result) > 0) {
-		$menu_array['Tooltip']['location'] = $adb->query_result($sql_result, 0, 'linkto').'&formodule='.$module;
-		$menu_array['Tooltip']['image_src'] = vtiger_imageurl($adb->query_result($sql_result, 0, 'iconpath'), $theme);
-		$menu_array['Tooltip']['desc'] = $mod_strings[$adb->query_result($sql_result, 0, 'description')];
-		$menu_array['Tooltip']['label'] = $mod_strings[$adb->query_result($sql_result, 0, 'name')];
+	if(vtlib_isModuleActive('Tooltip')){
+		$sql_result = $adb->pquery("select * from vtiger_settings_field where name = ? and active=0",array('LBL_TOOLTIP_MANAGEMENT'));
+		if($adb->num_rows($sql_result) > 0) {
+			$menu_array['Tooltip']['location'] = $adb->query_result($sql_result, 0, 'linkto').'&formodule='.$module;
+			$menu_array['Tooltip']['image_src'] = vtiger_imageurl($adb->query_result($sql_result, 0, 'iconpath'), $theme);
+			$menu_array['Tooltip']['desc'] = getTranslatedString($adb->query_result($sql_result, 0, 'description'),'Tooltip');
+			$menu_array['Tooltip']['label'] = getTranslatedString($adb->query_result($sql_result, 0, 'name'),'Tooltip');
+		}
 	}
-	
 	//add blanks for 3-column layout
 	$count = count($menu_array)%3;
 	if($count>0) {

@@ -33,13 +33,16 @@ if(vtlib_isModuleActive('FieldFormulas')) {
 			}
 }
 
-$sql_result = $adb->pquery("select * from vtiger_settings_field where name = ? and active=0",array('LBL_TOOLTIP_MANAGEMENT'));
-if($adb->num_rows($sql_result) > 0) {
-	$menu_array['Tooltip']['location'] = $adb->query_result($sql_result, 0, 'linkto').'&formodule='.$module;
-	$menu_array['Tooltip']['image_src'] = vtiger_imageurl($adb->query_result($sql_result, 0, 'iconpath'), $theme);
-	$menu_array['Tooltip']['desc'] = $mod_strings[$adb->query_result($sql_result, 0, 'description')];
-	$menu_array['Tooltip']['label'] = $mod_strings[$adb->query_result($sql_result, 0, 'name')];
-}
+if(vtlib_isModuleActive('Tooltip')){
+		$sql_result = $adb->pquery("select * from vtiger_settings_field where name = ? and active=0",array('LBL_TOOLTIP_MANAGEMENT'));
+		if($adb->num_rows($sql_result) > 0) {
+			$menu_array['Tooltip']['location'] = $adb->query_result($sql_result, 0, 'linkto').'&formodule='.$module;
+			$menu_array['Tooltip']['image_src'] = vtiger_imageurl($adb->query_result($sql_result, 0, 'iconpath'), $theme);
+			$menu_array['Tooltip']['desc'] = getTranslatedString($adb->query_result($sql_result, 0, 'description'),'Tooltip');
+			$menu_array['Tooltip']['label'] = getTranslatedString($adb->query_result($sql_result, 0, 'name'),'Tooltip');
+		}
+	}
+
 
 $menu_array['LeadsMapping']['location'] = 'index.php?module=Settings&action=CustomFieldList&parenttab=Settings&formodule='.$module;
 $menu_array['LeadsMapping']['image_src'] = vtiger_imageurl('custom.gif', $theme);

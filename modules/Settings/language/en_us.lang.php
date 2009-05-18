@@ -912,13 +912,6 @@ $mod_strings = Array(
 'LBL_PROXY_AUTHENTICATION_REQUIRED'=>'Proxy Authentication Required',
 'LBL_ENABLE_FTP' => 'You must have FTP support enabled in php',
 
-//labels for tooltip management
-'LBL_TOOLTIP_MANAGEMENT'=>'Tooltip Management',
-'LBL_TOOLTIP_MANAGEMENT_DESCRIPTION'=>'Manage the tooltip information from here',
-'LBL_FIELDS_IN'=>'Fields in',
-'LBL_TOOLTIP_HELP_TEXT'=>'Select the fields that you would like to be displayed as tooltip',
-'LBL_FIELD'=>'Field',
-
 //Added for Role Labels
 'LBL_ADD_ROLE'=>'Add Role',
 'LBL_EDIT_ROLE'=>'Edit Role',

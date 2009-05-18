@@ -1,4 +1,13 @@
 <?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+* 
+ ********************************************************************************/
 /**
  * Created on 09-Oct-08
  * this file saves the tooltip information
@@ -28,8 +37,8 @@ function SaveTooltipInformation($fieldid, $sequence, $view=1){
 			$checkedFields = explode(",",$_REQUEST['checkedFields']);
 			//add to vtiger_quickview table
 			foreach($checkedFields as $checkedField){
-				$query = "insert into vtiger_quickview values ($fieldid, $checkedField, $sequence, $view)";
-				$adb->pquery($query,array());
+				$query = "insert into vtiger_quickview (fieldid,related_fieldid,sequence,currentview) values (?,?,?,?)";
+				$adb->pquery($query,array($fieldid, $checkedField, $sequence, $view));
 				$sequence++;
 			}
 		}
@@ -46,8 +55,8 @@ function SaveTooltipInformation($fieldid, $sequence, $view=1){
 function deleteOldInfo($fieldid, $view=1){
 	global $adb;
 	//remove from the table
-	$query = "delete from vtiger_quickview where fieldid = $fieldid and view = $view";
-	$adb->pquery($query,array());
+	$query = "delete from vtiger_quickview where fieldid = ? and currentview = ?";
+	$adb->pquery($query,array($fieldid,$view));
 }
 
 /**
@@ -60,7 +69,6 @@ function getDetailViewForTooltip($fieldid, $checkedFields){
 	require_once('Smarty_setup.php');
 	global $app_strings;
 	$labels = array();
-	$checkedFields = implode(",",$checkedFields);
 	if(!empty($checkedFields)){
 		$labels = getFieldLabels($checkedFields);
 	}
@@ -71,7 +79,7 @@ function getDetailViewForTooltip($fieldid, $checkedFields){
 	$smarty->assign("LABELS", $labels);
 	$smarty->assign("COUNT", count($labels));
 	
-	$data = $smarty->fetch("QuickView/DetailQuickView.tpl");
+	$data = $smarty->fetch("modules/Tooltip/DetailQuickView.tpl");
 	return $data;
 }
 
@@ -84,10 +92,9 @@ function getFieldLabels($checkedFields){
 	global $adb;
 	$data = array();
 	
-	$sql = "select * from vtiger_field where fieldid in ($checkedFields) and vtiger_field.presence in (0,2)";
-	$result = $adb->query($sql);
+	$sql = "select * from vtiger_field where fieldid in (".generateQuestionMarks($checkedFields).") and vtiger_field.presence in (0,2)";
+	$result = $adb->pquery($sql,array($checkedFields));
 	$count = $adb->num_rows($result);
-	
 	for($i=0;$i<$count;$i++){
 		$data[] = $adb->query_result($result, $i, "fieldlabel");
 	}

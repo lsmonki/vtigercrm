@@ -7073,31 +7073,6 @@
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
-	<!-- tooltip manager starts -->
-	<table name="vtiger_quickview">
-		<field name="fieldid" type="I" size="19">
-			<notnull />
-		</field>
-		<field name="related_fieldid" type="I" size="19">
-			<notnull />
-		</field>
-		<field name="sequence" type="I" size="19">
-			<notnull />
-		</field>
-		<field name="view" type="I" int="19">
-			<notnull />
-		</field>
-		<opt platform="mysql">Type=InnoDB</opt>
-	</table>		
-
-	<table name="vtiger_quickview" alter="true">
-		<constraint>ADD CONSTRAINT fk_1_vtiger_quickview FOREIGN KEY (fieldid) REFERENCES vtiger_field(fieldid) ON DELETE CASCADE</constraint>
-		<opt>Type=InnoDB</opt>
-		<data>
-		</data>
-	</table>
-	<!-- tooltip manager ends -->
-	
 	<!-- notebook changes start -->
 	<table name="vtiger_notebook_contents">
 		<field name="userid" type="I" size="19">

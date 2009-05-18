@@ -27,9 +27,10 @@
 						<table border=0 cellspacing=0 cellpadding=0 width="100%">
 {foreach key=BLOCKID item=BLOCKLABEL from=$BLOCKS}
 	{if $BLOCKLABEL neq 'LBL_MODULE_MANAGER'}
-							<tr>
+	{assign var=blocklabel value=$BLOCKLABEL|@getTranslatedString:'Settings'}
+										<tr>
 								<td class="settingsTabHeader" nowrap>
-									{$MOD.$BLOCKLABEL}
+									{$blocklabel}
 								</td>
 							</tr>
 		{foreach item=data from=$FIELDS.$BLOCKID}

@@ -15,14 +15,11 @@ function getRelatedFieldInfo(id){
 	var modulename = $('pick_module').value;
 
 	var fieldname = id.options[id.options.selectedIndex].value;
-	
-	if(trim(fieldname) == '') return false;
-	
 	new Ajax.Request(
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'module=Settings&action=SettingsAjax&file=EditQuickView&field_name='+fieldname+'&module_name='+modulename+'&parenttab=Settings&ajax=true',
+			postBody: 'module=Tooltip&action=TooltipAjax&file=EditQuickView&field_name='+fieldname+'&module_name='+modulename+'&parenttab=Settings&ajax=true',
 			onComplete: function(response) {
 				if(response.responseText == false){
 					alert(alert_arr.ERR_FIELD_SELECTION);
@@ -43,7 +40,7 @@ function saveTooltipInformation(fieldid, checkedFields){
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'module=Settings&action=SettingsAjax&file=SaveTooltipInformation&fieldid='+fieldid+'&checkedFields='+checkedFields+'&parenttab=Settings&ajax=true',
+			postBody: 'module=Tooltip&action=TooltipAjax&file=SaveTooltipInformation&fieldid='+fieldid+'&checkedFields='+checkedFields+'&parenttab=Settings&ajax=true',
 			onComplete: function(response) {
 				if(response.responseText == "FAILURE"){
 					alert(alert_arr.ERR_FIELD_SELECTION);

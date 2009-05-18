@@ -25,7 +25,6 @@ require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
 require_once('user_privileges/default_module_view.php'); //new
 require_once('include/utils/UserInfoUtil.php');
-require_once 'include/utils/TooltipUtils.php';
 require_once('include/Zend/Json.php');
 
 /**This function is used to get the list view header values in a list view
@@ -1068,13 +1067,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						$value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
 					}
 				}
-				//added for tooltip manager
-				$field_id = ToolTipExists($fieldname,$tabid);
-				
-				if($field_id !== false){
-					$value = getToolTipValue($value, $field_id, $module,$entity_id);
-				}
-				//tooltip changes end
 				
 				// vtlib customization: For listview javascript triggers
 				$value = "$value <span type='vtlib_metainfo' vtrecordid='{$entity_id}' vtfieldname='{$fieldname}' vtmodule='$module' style='display:none;'></span>";

@@ -1295,7 +1295,6 @@ function moveSettingsToDatabase($adb){
 				"set-IcoLoginHistory.gif",
 				"vtlib_modmng.gif",
 				"picklist.gif",
-				"quickview.png",
 				"ViewTemplate.gif",
 				"mailmarge.gif",
 				"notification.gif",
@@ -1333,7 +1332,6 @@ function moveSettingsToDatabase($adb){
 				'LBL_LOGIN_HISTORY_DETAILS',
 				'VTLIB_LBL_MODULE_MANAGER',
 				'LBL_PICKLIST_EDITOR',
-				'LBL_TOOLTIP_MANAGEMENT',
 				'EMAILTEMPLATES',
 				'LBL_MAIL_MERGE',
 				'NOTIFICATIONSCHEDULERS',
@@ -1363,7 +1361,6 @@ function moveSettingsToDatabase($adb){
 				'LBL_LOGIN_HISTORY_DETAILS'=>'LBL_USER_MANAGEMENT',
 				'VTLIB_LBL_MODULE_MANAGER'=>'LBL_STUDIO',
 				'LBL_PICKLIST_EDITOR'=>'LBL_STUDIO',
-				'LBL_TOOLTIP_MANAGEMENT'=>'LBL_MODULE_MANAGER',
 				'EMAILTEMPLATES'=>'LBL_COMMUNICATION_TEMPLATES',
 				'LBL_MAIL_MERGE'=>'LBL_COMMUNICATION_TEMPLATES',
 				'NOTIFICATIONSCHEDULERS'=>'LBL_COMMUNICATION_TEMPLATES',
@@ -1394,7 +1391,6 @@ function moveSettingsToDatabase($adb){
 					'LBL_LOGIN_HISTORY_DESCRIPTION', 
 					'VTLIB_LBL_MODULE_MANAGER_DESCRIPTION', 
 					'LBL_PICKLIST_DESCRIPTION', 
-					'LBL_TOOLTIP_MANAGEMENT_DESCRIPTION',
 					'LBL_EMAIL_TEMPLATE_DESCRIPTION', 
 					'LBL_MAIL_MERGE_DESCRIPTION', 
 					'LBL_NOTIF_SCHED_DESCRIPTION', 
@@ -1425,7 +1421,6 @@ function moveSettingsToDatabase($adb){
 				'index.php?module=Settings&action=ListLoginHistory&parenttab=Settings',
 				'index.php?module=Settings&action=ModuleManager&parenttab=Settings',
 				'index.php?module=PickList&action=PickList&parenttab=Settings',
-				'index.php?module=Settings&action=QuickView&parenttab=Settings',
 				'index.php?module=Settings&action=listemailtemplates&parenttab=Settings',
 				'index.php?module=Settings&action=listwordtemplates&parenttab=Settings',
 				'index.php?module=Settings&action=listnotificationschedulers&parenttab=Settings',
@@ -1487,11 +1482,6 @@ ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_reportfilters(filterid int(11) n
 ExecuteQuery("INSERT INTO vtiger_reportfilters values(1,'Private')");
 ExecuteQuery("INSERT INTO vtiger_reportfilters values(2,'Public')");
 ExecuteQuery("INSERT INTO vtiger_reportfilters values(3,'Shared')");
-
-/* Added for tooltip manager */
-$sql = "CREATE TABLE IF NOT EXISTS vtiger_quickview (fieldid int(19) not null, related_fieldid int(19) not null, sequence int(19) not null, view int(19) not null, foreign key(fieldid) references vtiger_field(fieldid) on delete cascade)";
-ExecuteQuery($sql);
-//add tooltip manager ends
 
 /* Account Hierarchy */
 populateLinks();
