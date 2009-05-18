@@ -206,6 +206,9 @@ function email_validate(oform,mode)
 		alert(no_rcpts_err_msg);
 		return false;
 	}
+	//Changes made to fix tickets #4633, # 5111 to accomodate all possible email formats
+	var email_regex = /^[a-zA-Z0-9]+([\_\-\.]*[a-zA-Z0-9]+[\_\-]?)*@[a-zA-Z0-9]+([\_\-]?[a-zA-Z0-9]+)*\.+([\_\-]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/;
+	
 	if(document.EditView.ccmail != null){
 		if(document.EditView.ccmail.value.length >= 1){
 			var str = document.EditView.ccmail.value;
@@ -220,8 +223,7 @@ function email_validate(oform,mode)
                         return false;
                     }
             	}
-				//Changes made to fix tickets #4633, # 5111 to accomodate all possible email formats
-				else if(trim(arr[i]) != "" && !/^[a-zA-Z0-9]+([\_\-\.]*[a-zA-Z0-9]+[\_\-]?)*@[a-zA-Z0-9]+([\_\-]?[a-zA-Z0-9]+)*\.+([\_\-]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/.test(trim(arr[i])))
+				else if(trim(arr[i]) != "" && !(email_regex.test(trim(arr[i]))))
 	            {
 	                    alert(cc_err_msg+": "+arr[i]);
 	                    return false;
@@ -234,8 +236,16 @@ function email_validate(oform,mode)
 			var str = document.EditView.bccmail.value;
 			arr = new Array();
 			arr = str.split(",");
+			var tmp;
 			for(var i=0; i<=arr.length-1; i++){
-				if(trim(arr[i]) != "" && !/^[a-zA-Z0-9]+([_\.\-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([_\-]?[a-zA-Z0-9]+)*\.[a-zA-Z0-9]+(\.?[a-zA-Z0-9]+)*$/.test(trim(arr[i]))){
+				tmp = arr[i];
+				if(tmp.match('<') && tmp.match('>')) {
+                    if(!findAngleBracket(arr[i])) {
+                        alert(bcc_err_msg+": "+arr[i]);
+                        return false;
+                    }
+            	} 
+            	else if(trim(arr[i]) != "" && !(email_regex.test(trim(arr[i])))){
 					alert(bcc_err_msg+": "+arr[i]);
 					return false;	
 				}
