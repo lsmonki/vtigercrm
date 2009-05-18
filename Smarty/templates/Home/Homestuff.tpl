@@ -9,7 +9,6 @@
   *
  ********************************************************************************/
 -->*}
-<script language="javascript" type="text/javascript" src="modules/Home/homeajax.js"></script>
 <script language="javascript" type="text/javascript" src="modules/Home/Homestuff.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/scriptaculous.js"></script>
