@@ -164,10 +164,11 @@ function deletePriceBookProductRel(id,pbid)
                 }
 	);
 }
-function verify_data(form)
+function verify_data()
 {
 	var returnValue = true;
-        if(form.list_price.value != '' && form.list_price.value != 0)
+	var list_price = $('list_price');
+        if(list_price.value != '' && list_price.value != 0)
         {
                  intval= intValidate('list_price','EditListPrice');
 
@@ -179,7 +180,7 @@ function verify_data(form)
         }
         else
         {
-		if(form.list_price.value == '')
+		if(list_price.value == '')
 		{
 			alert(alert_arr.LISTPRICE_CANNOT_BE_EMPTY);
 			returnValue = false;
