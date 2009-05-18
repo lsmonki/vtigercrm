@@ -234,10 +234,7 @@ function getFieldListEntries($module)
 					$uitype = $row_field['uitype'];
 					$fld_type_name = getCustomFieldTypeName($row_field['uitype']);
 					
-					if($customfieldflag!=0)
-						$fieldlabel = $row_field['fieldlabel'];
-					else
-						$fieldlabel = getTranslatedString($row_field['fieldlabel'], $module);
+					$fieldlabel = getTranslatedString($row_field['fieldlabel'], $module);
 					
 					$strictlyMandatory = false;
 					if(isset($focus->mandatory_fields) && (!empty($focus->mandatory_fields)) && in_array($fieldname, $focus->mandatory_fields)){
@@ -298,7 +295,7 @@ function getFieldListEntries($module)
 				$movefieldcount = 0;
 				do{
 					$movefields[$movefieldcount]['fieldid'] =  $row_field['fieldid'];
-					$movefields[$movefieldcount]['fieldlabel'] =  getTranslatedString($row_field['fieldlabel']);
+					$movefields[$movefieldcount]['fieldlabel'] =  getTranslatedString($row_field['fieldlabel'], $module);
 					$movefieldcount++;
 				}while($row_field = $adb->fetch_array($fields));
 				$cflist[$i]['movefieldcount'] = $movefieldcount;
