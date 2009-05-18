@@ -556,7 +556,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 										<option value="Yearly"><?php echo $mod_strings['LBL_YEAR']; ?></option>
 									</select>
 									<!-- Limit for Repeating Event -->
-									<b><?php echo $mod_strings['LBL_UNTIL']; ?>:</b> <input type="text" name="calendar_repeat_limit_date" id="calendar_repeat_limit_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td width=100% align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="<?php echo $mod_strings['LBL_SET_DATE']?>" title="<?php echo $mod_strings['LBL_SET_DATE']?>" id="jscal_trigger_calendar_repeat_limit_date">
+									<b><?php echo $mod_strings['LBL_UNTIL']; ?>:</b> <input type="text" name="calendar_repeat_limit_date" id="calendar_repeat_limit_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="<?php echo $mod_strings['LBL_SET_DATE']?>" title="<?php echo $mod_strings['LBL_SET_DATE']?>" id="jscal_trigger_calendar_repeat_limit_date">
 									<script type="text/javascript">
 									Calendar.setup ({
 										inputField : "calendar_repeat_limit_date", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_calendar_repeat_limit_date", singleClick : true, step : 1
