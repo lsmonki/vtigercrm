@@ -273,14 +273,14 @@ function findAngleBracket(mailadd)
         var lt = 0;
         var ret = '';
         for(i=0;i<strlen;i++){
-                if(mailadd[i] == '<' && gt == 0){
+                if(mailadd.charAt(i) == '<' && gt == 0){
                         lt = 1;
                 }
-                if(mailadd[i] == '>' && lt == 1){
+                if(mailadd.charAt(i) == '>' && lt == 1){
                         gt = 1;
                 }
-                if(mailadd[i] != '<' && lt == 1 && gt == 0)
-                        ret = ret + mailadd[i];
+                if(mailadd.charAt(i) != '<' && lt == 1 && gt == 0)
+                        ret = ret + mailadd.charAt(i);
 
         }
         if(/^[a-z0-9]([a-z0-9_\-\.]*)@([a-z0-9_\-\.]*)(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/.test(ret)){
