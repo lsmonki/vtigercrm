@@ -1356,7 +1356,9 @@ function get_contactsforol($user_name)
 		}	
 		//removing the relationship of contacts with Quotes
 		$this->db->pquery('UPDATE vtiger_quotes SET contactid=0 WHERE contactid=?', array($id));
-		
+		//remove the portal info the contact
+		$this->db->pquery('DELETE FROM vtiger_portalinfo WHERE id = ?', array($id));
+		$this->db->pquery('UPDATE vtiger_customerdetails SET portal=0,support_start_date=NULL,support_end_date=NULl WHERE customerid=?', array($id));
 		parent::unlinkDependencies($module, $id);
 	}
 	

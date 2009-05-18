@@ -904,10 +904,10 @@ function authenticate_user($username,$password,$version,$login = 'true')
 	$password = mysql_real_escape_string($password);
 
 	$current_date = date("Y-m-d");
-	$sql = "select id, user_name, user_password,last_login_time, support_start_date, support_end_date from vtiger_portalinfo inner join vtiger_customerdetails on vtiger_portalinfo.id=vtiger_customerdetails.customerid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_portalinfo.id where vtiger_crmentity.deleted=0 and user_name=? and user_password = ? and isactive=1 and vtiger_customerdetails.support_end_date >= ?";
+	$sql = "select id, user_name, user_password,last_login_time, support_start_date, support_end_date from vtiger_portalinfo inner join vtiger_customerdetails on vtiger_portalinfo.id=vtiger_customerdetails.customerid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_portalinfo.id where vtiger_crmentity.deleted=0 and user_name=? and user_password = ? and isactive=1 and vtiger_customerdetails.portal=1 and vtiger_customerdetails.support_end_date >= ?";
 	$result = $adb->pquery($sql, array($username, $password, $current_date));
-	$err[0]['err1'] = "There may more than one user with this details. Please contact your admin.";
-	$err[1]['err1'] = "INVALID USERNAME OR PASSWORD";
+	$err[0]['err1'] = "MORE_THAN_ONE_USER";
+	$err[1]['err1'] = "INVALID_USERNAME_OR_PASSWORD";
 
 	$num_rows = $adb->num_rows($result);
 
@@ -957,14 +957,18 @@ function change_password($input_array)
 	$sessionid = $input_array['sessionid'];
 	$username = $input_array['username'];
 	$password = $input_array['password'];
-
+	$version = $input_array['version'];
+	
 	if(!validateSession($id,$sessionid))
 		return null;
 
+	$list = authenticate_user($username,$password,$version ,'false');
+	if(!empty($list[0]['id'])){
+		return array('MORE_THAN_ONE_USER');
+	}
 	$sql = "update vtiger_portalinfo set user_password=? where id=? and user_name=?";
 	$result = $adb->pquery($sql, array($password, $id, $username));
 
-	$list = authenticate_user($username,$password,'false');
 	$log->debug("Exiting customer portal function change_password");
 	return $list;
 }
@@ -1022,7 +1026,7 @@ function send_mail_for_password($mailid)
 
 	//$mailid = mysql_real_escape_string($input_array['email']);
 
-	$sql = "select * from vtiger_portalinfo  where user_name=?";
+	$sql = "select * from vtiger_portalinfo  where user_name = ? ";
 	$res = $adb->pquery($sql, array($mailid));
 	$user_name = $adb->query_result($res,0,'user_name');
 	$password = $adb->query_result($res,0,'user_password');
