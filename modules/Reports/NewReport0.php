@@ -39,13 +39,12 @@ if($recordid!=''){
 	if($oRep->secmodule!=''){
 		$sec_mod = split(":",$oRep->secmodule);
 		$rel_modules = getReportRelatedModules($oRep->primodule,$oRep);
-		
 		if(!empty($sec_mod)){
 			foreach($sec_mod as $module){
 				if(!in_array($module,$rel_modules))
 					$restricted_modules[] = $module;
 				else
-					$sec_module[$module] = "1";
+					$sec_module[$module] = 1;
 			}
 		}
 	}
@@ -66,19 +65,21 @@ if($recordid!=''){
 		</div>";
 		echo "</td></tr></table>";die;
 	}
-	if(empty($restricted_modules)){
-		header("Location: index.php?module=Reports&action=ReportsAjax&file=NewReport1&record=".$recordid);
-	}
-	else{
-		$list_report_form->assign("RELATEDMODULES",getReportRelatedModules($oRep->primodule,$oRep));
-		$list_report_form->assign("RECORDID",$recordid);
-		$list_report_form->assign("REPORTNAME",$oRep->reportname);
-		$list_report_form->assign("REPORTDESC",$oRep->reportdescription);
-		$list_report_form->assign("REP_MODULE",$oRep->primodule);
+	$list_report_form->assign("RELATEDMODULES",getReportRelatedModules($oRep->primodule,$oRep));
+	$list_report_form->assign("RECORDID",$recordid);
+	$list_report_form->assign("REPORTNAME",$oRep->reportname);
+	$list_report_form->assign("REPORTDESC",$oRep->reportdescription);
+	$list_report_form->assign("REP_MODULE",$oRep->primodule);
+	if(!isset($_REQUEST['secondarymodule'])){
 		$list_report_form->assign("SEC_MODULE",$sec_module);
-		$list_report_form->assign("RESTRICTEDMODULES",implode(",",$restricted_modules));
-		$list_report_form->assign("BACK",'false');
 	}
+	if(!empty($restricted_modules)){
+		$restrictedmod = implode(",",$restricted_modules);
+	} else {
+		$restrictedmod = '';
+	}
+	$list_report_form->assign("RESTRICTEDMODULES",$restrictedmod);
+	$list_report_form->assign("BACK",'false');
 }
 if($_REQUEST['reportmodule'] != '')
 {
@@ -108,7 +109,12 @@ if($_REQUEST['reportName'] !='')
 	$list_report_form->assign("REPORTNAME",$_REQUEST['reportName']);
 	$list_report_form->assign("REPORTDESC",$_REQUEST['reportDesc']);
 	$list_report_form->assign("REP_MODULE",$_REQUEST['primarymodule']);
-	$list_report_form->assign("SEC_MODULE",$_REQUEST['secondarymodule']);
+	$sec_mod = split(":",$_REQUEST['secondarymodule']);
+	$sec_module = array();
+	foreach($sec_mod as $module){
+				$sec_module[$module] = 1;
+	}
+	$list_report_form->assign("SEC_MODULE",$sec_module);
 	$list_report_form->assign("BACK_WALK",'true');
 		
 }

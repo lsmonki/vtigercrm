@@ -9,7 +9,7 @@
   *
  ********************************************************************************/
 -->*}
-<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="100%">
+<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" height='500' width="100%">
 	<tbody><tr>
 	<td colspan="2">
 	<span class="genHeaderGray">{$MOD.LBL_SPECIFY_GROUPING}</span><br>
@@ -65,7 +65,7 @@
 	</select>
 	</td>
 	</tr>
-	<tr><td colspan="2" height="350">&nbsp;</td></tr>
+	<tr><td colspan="2" height="305">&nbsp;</td></tr>
 	</tbody>
 </table>
 

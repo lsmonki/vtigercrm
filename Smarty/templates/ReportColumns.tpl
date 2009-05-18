@@ -12,7 +12,7 @@
 <script>
 var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
 </script>
-<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0"  valign="top" height="600" width="100%">
+<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0"  valign="top" height="500" width="100%">
 	<tbody><tr>
 	<td colspan="4">
 	<span class="genHeaderGray">{$MOD.LBL_SELECT_COLUMNS}</span><br>
@@ -60,6 +60,6 @@ var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
 	</table> 
 	</td>
 	</tr> 
-	<tr><td colspan="4" height="163"></td></tr>
+	<tr><td colspan="4" height="215"></td></tr>
 	</tbody>
 </table>

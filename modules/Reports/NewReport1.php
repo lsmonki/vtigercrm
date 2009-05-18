@@ -58,21 +58,8 @@ if(isset($_REQUEST["record"]) && $_REQUEST["record"]!='')
 	$folderid  = $oReport->folderid;	
 	$ogReport = new Reports();
     $ogReport->getPriModuleColumnsList($oReport->primodule);
-	if($secondarymodule==''){
-		if($oReport->secmodule!=''){
-			$sec_module = split(":",$oReport->secmodule);
-			$secondarymodules =Array();
-			foreach($sec_module as $smod){
-				if(vtlib_isModuleActive($smod)){
-					$secondarymodules[] = $smod; 
-				}
-			}
-			$secondarymodule = implode(":",$secondarymodules);
-		}
-        $ogReport->getSecModuleColumnsList($oReport->secmodule);
-	} else {
-        $ogReport->getSecModuleColumnsList($secondarymodule);
-	}
+    $ogReport->getSecModuleColumnsList($oReport->secmodule);
+	$list_report_form->assign('BACK_WALK','true');
 }else
 {
 	$reportname = $_REQUEST["reportname"];

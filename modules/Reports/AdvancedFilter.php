@@ -80,10 +80,6 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 
 	$rel_fields = getRelatedFieldColumns();
 	$report_std_filter->assign("REL_FIELDS",Zend_Json::encode($rel_fields));
-	$visiblecriteria=getVisibleCriteria($recordid);
-	$report_std_filter->assign("VISIBLECRITERIA", $visiblecriteria);
-	$member = getShareInfo($recordid);
-	$report_std_filter->assign("MEMBER", $member);
 } else
 {
 	$primarymodule = $_REQUEST["primarymodule"];
@@ -102,9 +98,6 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 	$report_std_filter->assign("BLOCK5", $BLOCK1);
 	
 	$report_std_filter->assign("REL_FIELDS",Zend_Json::encode($rel_fields));
-
-	$visiblecriteria=getVisibleCriteria();
-	$report_std_filter->assign("VISIBLECRITERIA", $visiblecriteria);
 }
 
 /** Function to get primary columns for an advanced filter
@@ -262,85 +255,6 @@ function getAdvCriteriaHTML($selected="")
 	 }
 	
     return $shtml;
-}
-
-/** Function to get visible criteria for a report
- *  This function accepts The reportid as an argument
- *  It returns a array of selected option of sharing along with other options
- */
-function getVisibleCriteria($recordid='')
-{
-	global $mod_strings; 
-	global $app_strings;
-	global $adb,$current_user;
-	//print_r("i am here");die;
-	$filter = array();
-	
-	if($recordid!='')
-	{
-		$result = $adb->pquery("select sharingtype from vtiger_report where reportid=?",array($recordid));
-		$selcriteria=$adb->query_result($result,0,"sharingtype");
-	}
-	
-	$filter_result = $adb->query("select * from vtiger_reportfilters");
-	$numrows = $adb->num_rows($filter_result);
-	for($j=0;$j<$numrows;$j++)
-	{
-		$filter_id = $adb->query_result($filter_result,$j,"filterid");
-		$filtername = $adb->query_result($filter_result,$j,"name");
-		$name=str_replace(' ','_',$filtername);
-		if($filtername == 'Private')
-		{
-			$FilterKey='Private';
-			$FilterValue=getTranslatedString('PRIVATE_FILTER');
-		}elseif($filtername=='Shared')
-		{
-			$FilterKey='Shared';
-			$FilterValue=getTranslatedString('SHARE_FILTER');
-		}else{
-			$FilterKey='Public';
-			$FilterValue=getTranslatedString('PUBLIC_FILTER');
-		}
-		if($FilterKey == $selcriteria)
-		{
-			$shtml['value'] = $FilterKey;
-			$shtml['text'] = $FilterValue;
-			$shtml['selected'] = "selected";
-		}else
-		{
-			$shtml['value'] = $FilterKey;
-			$shtml['text'] = $FilterValue;
-			$shtml['selected'] = "";
-		}
-		$filter[] = $shtml;
-	}		
-	return $filter;
-}
-
-function getShareInfo($recordid=''){
-	global $adb;
-	$member_query = $adb->pquery("SELECT vtiger_reportsharing.setype,vtiger_users.id,vtiger_users.user_name FROM vtiger_reportsharing INNER JOIN vtiger_users on vtiger_users.id = vtiger_reportsharing.shareid WHERE vtiger_reportsharing.setype='users' AND vtiger_reportsharing.reportid = ?",array($recordid));
-	$noofrows = $adb->num_rows($member_query);
-	if($noofrows > 0){
-		for($i=0;$i<$noofrows;$i++){
-			$userid = $adb->query_result($member_query,$i,'id');
-			$username = $adb->query_result($member_query,$i,'user_name');
-			$setype = $adb->query_result($member_query,$i,'setype');
-			$member_data[] = Array('id'=>$setype."::".$userid,'name'=>$setype."::".$username);
-		}
-	}
-	
-	$member_query = $adb->pquery("SELECT vtiger_reportsharing.setype,vtiger_groups.groupid,vtiger_groups.groupname FROM vtiger_reportsharing INNER JOIN vtiger_groups on vtiger_groups.groupid = vtiger_reportsharing.shareid WHERE vtiger_reportsharing.setype='groups' AND vtiger_reportsharing.reportid = ?",array($recordid));
-	$noofrows = $adb->num_rows($member_query);
-	if($noofrows > 0){
-		for($i=0;$i<$noofrows;$i++){
-			$grpid = $adb->query_result($member_query,$i,'groupid');
-			$grpname = $adb->query_result($member_query,$i,'groupname');
-			$setype = $adb->query_result($member_query,$i,'setype');
-			$member_data[] = Array('id'=>$setype."::".$grpid,'name'=>$setype."::".$grpname);
-		}
-	}
-	return $member_data;
 }
 
 ?>

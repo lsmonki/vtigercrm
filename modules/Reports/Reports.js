@@ -383,11 +383,11 @@ function hideTabs()
 	
 	if(objreportType.value == 'tabular')
 	{
-		divarray = new Array('step1','step2','step4','step5');
+		divarray = new Array('step1','step2','step4','step5','step6');
 	}
 	else
 	{
-		divarray = new Array('step1','step2','step3','step4','step5');
+		divarray = new Array('step1','step2','step3','step4','step5','step6');
 	}
 }
         
@@ -509,33 +509,29 @@ function changeSteps1()
 		if(! dateComparison("startdate",'Start Date',"enddate",'End Date','LE'))	
 			return false;
 		}	
-		saveAndRunReport();
 
-	}else
-	{
-		for(i = 0; i < divarray.length ;i++)
-		{
-			if(getObj(divarray[i]).style.display != 'none')
-			{
-				if(i == 1 && selectedColumnsObj.options.length == 0)
-				{
+	} if (getObj('step6').style.display != 'none') {
+		saveAndRunReport();
+	} else {
+		for (i = 0; i < divarray.length; i++) {
+			if (getObj(divarray[i]).style.display != 'none') {
+				if (i == 1 && selectedColumnsObj.options.length == 0) {
 					alert(alert_arr.COLUMNS_CANNOT_BE_EMPTY);
 					return false;
-				}	
-				if(divarray[i] == 'step4')
-				{
-					document.getElementById("next").value = finish_text;	
+				}
+				if (divarray[i] == 'step5') {
+					document.getElementById("next").value = finish_text;
 				}
 				hide(divarray[i]);
-				show(divarray[i+1]);
-				tableid = divarray[i]+'label';
-				newtableid = divarray[i+1]+'label';
-				getObj(tableid).className = 'settingsTabList'; 
+				show(divarray[i + 1]);
+				tableid = divarray[i] + 'label';
+				newtableid = divarray[i + 1] + 'label';
+				getObj(tableid).className = 'settingsTabList';
 				getObj(newtableid).className = 'settingsTabSelected';
 				document.getElementById('back_rep').disabled = false;
 				break;
 			}
-
+			
 		}
 	}
 }
@@ -630,7 +626,7 @@ function CreateReport(module)
 	fnPopupWin(arg);
 }
 function fnPopupWin(winName){
-	window.open(winName, "ReportWindow","width=900px,height=750px,scrollbars=yes");
+	window.open(winName, "ReportWindow","width=790px,height=630px,scrollbars=yes");
 }
 function re_dateValidate(fldval,fldLabel,type) {
 	if(re_patternValidate(fldval,fldLabel,"DATE")==false)

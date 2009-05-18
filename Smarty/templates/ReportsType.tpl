@@ -9,7 +9,7 @@
   *
  ********************************************************************************/
 -->*}
-<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" height="600" valign="top" width="100%">
+<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" height="500" valign="top" width="100%">
 	<tbody><tr>
 	<td colspan="2">
 	<span class="genHeaderGray"> {$MOD.LBL_REPORT_TYPE} </span><br>
@@ -48,6 +48,6 @@
 	 {$MOD.LBL_SUMMARY_REPORT_VIEW_DATA_WITH_SUBTOTALS}
 	</td>
 	</tr>
-	<tr><td colspan="2" height="215">&nbsp;</td></tr>
+	<tr><td colspan="2" height="235">&nbsp;</td></tr>
 	</tbody>
 </table>

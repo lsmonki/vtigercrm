@@ -36,48 +36,6 @@ $report_std_filter->assign("IMAGE_PATH",$image_path);
 $report_std_filter->assign("DATEFORMAT",$current_user->date_format);
 $report_std_filter->assign("JS_DATEFORMAT",parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
-$roleid = $current_user->column_fields['roleid'];
-$user_array = getRoleAndSubordinateUsers($roleid);
-$userIdStr = "";
-$userNameStr = "";
-$m=0;
-foreach($user_array as $userid=>$username){
-	
-	if($userid!=$current_user->id){
-		if($m!=0){
-			$userIdStr .= ",";
-			$userNameStr .= ",";
-		}
-		$userIdStr .="'".$userid."'"; 
-		$userNameStr .="'".escape_single_quotes(decode_html($username))."'";
-		$m++;
-	}
-}
-
-require_once('include/utils/GetUserGroups.php');
-$userGroups = new GetUserGroups();
-$userGroups->getAllUserGroups($current_user->id);
-$user_groups = $userGroups->user_groups;
-$groupIdStr = "";
-$groupNameStr = "";
-$l=0;
-foreach($user_groups as $i=>$grpid){
-	$grp_details = getGroupDetails($grpid);
-	if($l!=0){
-		$groupIdStr .= ",";
-		$groupNameStr .= ",";
-	}
-	$groupIdStr .= "'".$grp_details[0]."'";
-	$groupNameStr .= "'".escape_single_quotes(decode_html($grp_details[1]))."'";
-	$l++;
-}
-
-$report_std_filter->assign("GROUPNAMESTR", $groupNameStr);
-$report_std_filter->assign("USERNAMESTR", $userNameStr);
-$report_std_filter->assign("GROUPIDSTR", $groupIdStr);
-$report_std_filter->assign("USERIDSTR", $userIdStr);
-
-
 include("modules/Reports/StandardFilter.php");
 include("modules/Reports/AdvancedFilter.php");
 

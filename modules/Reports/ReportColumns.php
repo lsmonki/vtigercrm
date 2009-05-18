@@ -48,10 +48,8 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 	}
 	$secondarymodule = implode(":",$secondarymodules);
 	
-	if($secondarymodule!='')
-		$oReport->secmodule = $secondarymodule;
-		
-	$BLOCK1 .= getSecondaryColumnsHTML($oReport->secmodule);
+	$oReport->secmodule = $secondarymodule;
+	$BLOCK1 .= getSecondaryColumnsHTML($oReport->secmodule);	
 	$BLOCK2 = $oReport->getSelectedColumnsList($recordid);
 	$report_column->assign("BLOCK1",$BLOCK1);
 	$report_column->assign("BLOCK2",$BLOCK2);

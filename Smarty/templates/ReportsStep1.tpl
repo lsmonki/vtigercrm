@@ -59,6 +59,7 @@
 							<tr><td id="step3label" class="settingsTabList" style="padding-left:10px;">5. {$MOD.LBL_SPECIFY_GROUPING}</td></tr>
 							<tr><td id="step4label" class="settingsTabList" style="padding-left:10px;">6. {$MOD.LBL_CALCULATIONS}</td></tr>
 							<tr><td id="step5label" class="settingsTabList" style="padding-left:10px;">7. {$MOD.LBL_FILTERS} </td></tr>
+							<tr><td id="step6label" class="settingsTabList" style="padding-left:10px;">8. {$MOD.LBL_SHARING} </td></tr>
 						</table>
 					</td>
 					<td width="75%" valign="top" bgcolor=white>
@@ -112,6 +113,16 @@
 							<tbody><tr>
 							<td colspan="2">
 									{php}include("modules/Reports/ReportFilters.php");{/php}
+							</td></tr>
+							</tbody>
+						</table>
+						</div>	
+						
+						<div id="step6" style="display:none;">
+						<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="100%">
+							<tbody><tr>
+							<td colspan="2">
+									{php}include("modules/Reports/ReportSharing.php");{/php}
 							</td></tr>
 							</tbody>
 						</table>

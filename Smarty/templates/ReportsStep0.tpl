@@ -53,12 +53,13 @@
 									<tr><td class="settingsTabList" style="padding-left:10px;">5. {$MOD.LBL_SPECIFY_GROUPING}</td></tr>
 									<tr><td class="settingsTabList" style="padding-left:10px;">6. {$MOD.LBL_CALCULATIONS}</td></tr>
 									<tr><td class="settingsTabList" style="padding-left:10px;">7. {$MOD.LBL_FILTERS} </td></tr>
+									<tr><td class="settingsTabList" style="padding-left:10px;">8. {$MOD.LBL_SHARING} </td></tr>
 								</table>
 							</td>
 							<td width="75%" valign="top"  bgcolor=white >
 								<!-- STEP 1 -->
 								<div id="step1" style="display:block;">
-									<table width="100%" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF" height="600" class="small">
+									<table width="100%" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF" height="500" class="small">
 										<tr>
 											<td colspan="2">
 												<span class="genHeaderGray">{$MOD.LBL_REPORT_DETAILS}</span><br>
@@ -88,14 +89,14 @@
 											<td align="left" style="padding-left:5px;"><textarea name="reportdes" class="txtBox" rows="5">{$REPORTDESC}</textarea></td>
 										</tr>
 										<tr> 
-							 	                        <td colspan="2" height="355">&nbsp;</td> 
+							 	                        <td colspan="2" height="310">&nbsp;</td> 
 										</tr>
 										
 									</table>
 								</div>
 								<!-- STEP 2 -->
 								<div id="step2" style="display:none;">
-									<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" height="600" width="100%">
+									<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" height="500" width="100%">
 										<tr height='10%'>
 										<td colspan="2">
 											<span class="genHeaderGray">{$MOD.LBL_RELATIVE_MODULE}</span><br>
@@ -137,7 +138,7 @@
 												<td style="padding-right: 5px;" align="left" nowrap width="25%"><b>{$MOD.NO_REL_MODULES}</b></td>
 											{/if}
 										</tr>
-										<tr><td colspan="2" height="300">&nbsp;</td></tr> 
+										<tr><td colspan="2" height="350">&nbsp;</td></tr> 
 									</table>
 							</div>
 						</td>
