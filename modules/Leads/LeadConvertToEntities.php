@@ -520,8 +520,10 @@ if(! isset($createpotential) || ! $createpotential == "on")
 	$sql_insert_potentialcustomfield = "INSERT INTO vtiger_potentialscf (". implode(",",$insert_columns) .") VALUES (".$insert_val_str.")";
 	$adb->pquery($sql_insert_potentialcustomfield, $insert_values);
 
-	$sql_insert2contpotentialrel ="insert into vtiger_contpotentialrel values(?,?)";
-    $adb->pquery($sql_insert2contpotentialrel, array($contact_id, $oppid));
+	if($contact_id!=$related_to){
+		$sql_insert2contpotentialrel ="insert into vtiger_contpotentialrel values(?,?)";
+    	$adb->pquery($sql_insert2contpotentialrel, array($contact_id, $oppid));
+	}
 
 	//Retrieve the lead related products and relate them with this new potential
 	saveLeadRelatedProducts($id, $oppid, "Potentials");
