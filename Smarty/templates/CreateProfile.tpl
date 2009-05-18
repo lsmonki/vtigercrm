@@ -127,7 +127,7 @@
 					<tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;" height="75">&nbsp;</td></tr>
 					<tr>
 						<td colspan="2" align="right">
-						<input type="button" value=" {$APP.LNK_LIST_NEXT} &rsaquo; " title="{$APP.LNK_LIST_NEXT}" name="Next" class="crmButton small" onClick="return rolevalidate();"/>&nbsp;&nbsp;
+						<input type="button" value=" {$APP.LNK_LIST_NEXT} &rsaquo; " title="{$APP.LNK_LIST_NEXT}" name="Next" class="crmButton small create" onClick="return rolevalidate();"/>&nbsp;&nbsp;
 						<input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " title="{$APP.LBL_CANCEL_BUTTON_TITLE}" name="Cancel" onClick="window.history.back();" class="crmButton small cancel"/>
 						</td>
 					</tr>
