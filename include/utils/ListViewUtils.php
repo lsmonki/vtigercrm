@@ -2049,7 +2049,9 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$slashes_temp_val = popup_from_html($temp_val);
                     $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 					$description=decode_html_force($adb->query_result($list_result,$list_result_count,'description'));
-					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
+					$slashes_desc = addslashes(htmlspecialchars($description,ENT_QUOTES,$default_charset));
+					
+					$slashes_desc = str_replace(array("\r","\n"),array('\r','\n'), $slashes_desc);
 
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$sub_det.'");\'>'.$temp_val.'</a>';
 				}
@@ -2095,6 +2097,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$description=$adb->query_result($list_result,$list_result_count,'description');
 					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
 					
+					$slashes_desc = str_replace(array("\r","\n"),array('\r','\n'), $slashes_desc);
+					
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_po("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$sub_det.'"); \'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_service")
@@ -2124,6 +2128,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 					$description=decode_html_force($adb->query_result($list_result,$list_result_count,'description'));
 					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
+					
+					$slashes_desc = str_replace(array("\r","\n"),array('\r','\n'), $slashes_desc);
 
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'");\'>'.$temp_val.'</a>';
 				}
