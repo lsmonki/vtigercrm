@@ -29,7 +29,7 @@ else
 
 $adb->println("\n\nMail Sending Process has been started.");
 //This function call is used to send mail to the assigned to user. In this mail CC and BCC addresses will be added.
-if($REQUEST['assigntype' == 'T'] && $_REQUEST['assigned_group_id']!='')
+if($_REQUEST['assigntype' == 'T'] && $_REQUEST['assigned_group_id']!='')
 {
 	$grp_obj = new GetGroupUsers();
 	$grp_obj->getAllUsersInGroup($_REQUEST['assigned_group_id']);
@@ -157,6 +157,12 @@ for ($i=0;$i<(count($myids)-1);$i++)
                                 $myfocus = new Vendors();
                                 $myfocus->retrieve_entity_info($mycrmid,"Vendors");
                         }
+            else {
+            	// vtlib customization: Enabling mail send from other modules
+            	$myfocus = CRMEntity::getInstance($pmodule);
+            	$myfocus->retrieve_entity_info($mycrmid, $pmodule);
+            	// END
+            }
 			$fldname=$adb->query_result($fresult,0,"columnname");
 			$emailadd=br2nl($myfocus->column_fields[$fldname]);
 

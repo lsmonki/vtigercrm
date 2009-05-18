@@ -36,6 +36,8 @@ class CRMEntity
 		if ($module == 'Calendar') {
 			$modName = 'Activity';
 		}
+		// File access security check
+		checkFileAccess("modules/$module/$modName.php");
 		require_once("modules/$module/$modName.php");
 		$focus = new $modName();
 		return $focus;		

@@ -123,6 +123,15 @@ if($_REQUEST["internal_mailer"] == "true") {
 			$q = "select $fieldname from $tablename where accountid=?";
 		elseif ($type == "Vendors")
 			$q = "select $fieldname from $tablename where vendorid=?";
+		else {
+			// vtlib customization: Support for email-type custom field for other modules. 
+			$module_focus = CRMEntity::getInstance($type);
+			vtlib_setup_modulevars($type, $module_focus);
+			if(!empty($module_focus->customFieldTable)) {
+				$q = "select $fieldname from " . $module_focus->customFieldTable[0] . " where " . $module_focus->customFieldTable[1]. "= ?";
+			}
+			// END
+		}
 		$email1 = $adb->query_result($adb->pquery($q, array($rec_id)),0,$fieldname);
 	} elseif ($rec_type == "email_addy") {
 		$email1 = $_REQUEST["email_addy"];
