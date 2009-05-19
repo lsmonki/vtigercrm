@@ -707,42 +707,32 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			$fieldname = $focus->list_fields_name[$name];
 
 			//added for vtiger_customview 27/5
-			if($oCv)
-			{
-				if(isset($oCv->list_fields_name))
-				{
+			if($oCv) {
+				if(isset($oCv->list_fields_name)) {
 					$fieldname = $oCv->list_fields_name[$name];
-					if($fieldname == 'accountname' && $module != 'Accounts')
-                                	{
-                                        	$fieldname = 'account_id';
-                                	}
-					if($fieldname == 'lastname' &&($module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' ))
-        	                                $fieldname = 'contact_id';
-					if($fieldname == 'productname' && $module != 'Products')
-			                {
-                        			 $fieldname = 'product_id';
-                			}
-
-				}else
-				{
+					if($fieldname == 'accountname' && $module != 'Accounts') {
+						$fieldname = 'account_id';
+					}
+					if($fieldname == 'lastname' &&($module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'||$module == 'Calendar' )) {
+						$fieldname = 'contact_id';
+					}
+					if($fieldname == 'productname' && $module != 'Products') {
+						$fieldname = 'product_id';
+					}
+				} else {
 					$fieldname = $focus->list_fields_name[$name];
 				}
-			}else
-			{
+			} else {
 				$fieldname = $focus->list_fields_name[$name];
-				if($fieldname == 'accountname' && $module != 'Accounts')
-				{
+				if($fieldname == 'accountname' && $module != 'Accounts') {
 					$fieldname = 'account_id';
 				}
-				if($fieldname == 'lastname' && ($module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar'))
-				{
+				if($fieldname == 'lastname' && ($module == 'SalesOrder'|| $module == 'PurchaseOrder' || $module == 'Invoice' || $module == 'Quotes'|| $module == 'Calendar')) {
 					$fieldname = 'contact_id';
 				}
-				if($fieldname == 'productname' && $module != 'Products')
-	                	{
-        	                	 $fieldname = 'product_id';
-                		}
-
+				if($fieldname == 'productname' && $module != 'Products') {
+					$fieldname = 'product_id';
+				}
 			}
 			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '') {
 				if($fieldname == '') {
@@ -762,8 +752,8 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						$cal_res = $adb->pquery($cal_sql,array($act_id));
 						if($adb->num_rows($cal_res)>=0)
 							$activitytype = $adb->query_result($cal_res,0,"activitytype");
-					}
-					if(($module == 'Calendar' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice' || $module == 'Leads' || $module == 'Contacts') && (($fieldname=='parent_id') || ($name=='Contact Name') || ($name=='Close') || ($fieldname == 'firstname'))) {
+					}					
+					if(($module == 'Calendar' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice' || $module == 'Leads' || $module == 'Contacts') && (($fieldname=='parent_id') || ($name=='Contact Name') || ($name=='Close') || ($fieldname == 'firstname'))) {
 						if($module == 'Calendar'){
 							if($activitytype == 'Task' ) {
 								if(getFieldVisibilityPermission('Calendar',$current_user->id,$fieldname) == '0'){
@@ -832,16 +822,13 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 									}
 								}
 							}
+					
 						} else {
 							$value = "";
 						}
-					}
-					//code for Documents module: start
-					elseif($module == "Documents" && ($fieldname == 'filelocationtype' || $fieldname == 'filename' || $fieldname == 'filesize' || $fieldname == 'filestatus' || $fieldname == 'filetype'))
-					{
+					} elseif($module == "Documents" && ($fieldname == 'filelocationtype' || $fieldname == 'filename' || $fieldname == 'filesize' || $fieldname == 'filestatus' || $fieldname == 'filetype')) {
 						$value = $adb->query_result($list_result,$i-1,$fieldname);
-						if($fieldname == 'filelocationtype')
-						{
+						if($fieldname == 'filelocationtype') {
 							if($value == 'I')
 								$value = getTranslatedString('LBL_INTERNAL',$module);
 							elseif($value == 'E')
@@ -849,11 +836,9 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							else
 								$value = ' --';
 						}
-						if($fieldname == 'filename')
-						{
+						if($fieldname == 'filename') {
 							$downloadtype = $adb->query_result($list_result,$i-1,'filelocationtype');
-							if($downloadtype == 'I')
-							{
+							if($downloadtype == 'I') {
 								$fld_value = $value;
 								$ext_pos = strrpos($fld_value, ".");
 								$ext =substr($fld_value, $ext_pos + 1);
@@ -870,20 +855,16 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 								else
 									$fileicon="<img src='" . vtiger_imageurl('fbUnknownFile.gif', $theme) . "' hspace='3' align='absmiddle' border='0'>";
 								}
-							}
-							elseif($downloadtype == 'E')
-							{
-								if(trim($value) != '' ){
+							} elseif($downloadtype == 'E') {
+								if(trim($value) != '' ) {
 									$fld_value = $value;
 									$fileicon = "<img src='" . vtiger_imageurl('fbLink.gif', $theme) . "' alt='".getTranslatedString('LBL_EXTERNAL_LNK',$module)."' title='".getTranslatedString('LBL_EXTERNAL_LNK',$module)."' hspace='3' align='absmiddle' border='0'>";
 								}
-								else{
+								else {
 									$fld_value = '--';
 									$fileicon = '';
 								}
-							}
-							else
-							{
+							} else {
 								$fld_value = ' --';
 								$fileicon = '';
 							}
@@ -896,29 +877,20 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							$fileidQuery = "select attachmentsid from vtiger_seattachmentsrel where crmid=?";
 							$fileidres = $adb->pquery($fileidQuery,array($notes_id));
 							$fileid = $adb->query_result($fileidres,0,'attachmentsid');
-							if($file_name != '' && $file_status == 1)
-							{
-								if($download_type == 'I' )
-								{
+							if($file_name != '' && $file_status == 1) {
+								if($download_type == 'I' ) {
 									$fld_value = "<a href='index.php?module=uploads&action=downloadfile&entityid=$notes_id&fileid=$fileid' title='".getTranslatedString("LBL_DOWNLOAD_FILE",$module)."' onclick='javascript:dldCntIncrease($notes_id);'>".$fld_value."</a>";
-								}
-								elseif($download_type == 'E')
-								{
+								} elseif($download_type == 'E') {
 									$fld_value = "<a target='_blank' href='$file_name' onclick='javascript:dldCntIncrease($notes_id);' title='".getTranslatedString("LBL_DOWNLOAD_FILE",$module)."'>".$fld_value."</a>";
-								}
-								else
-								{
+								} else {
 									$fld_value = ' --';
 								}
-							}
-											
+							}											
 							$value = $fileicon.$fld_value;
 						}
-						if($fieldname == 'filesize')
-						{
+						if($fieldname == 'filesize') {
 							$downloadtype = $adb->query_result($list_result,$i-1,'filelocationtype');
-							if($downloadtype == 'I')
-							{
+							if($downloadtype == 'I') {
 								$filesize = $value;
 								if($filesize < 1024)
 									$value=$filesize.' B';
@@ -926,14 +898,11 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 									$value=round($filesize/1024,2).' KB';
 								else if($filesize > 1048576)
 									$value=round($filesize/(1024*1024),2).' MB';
-							}
-							else
-							{	
+							} else {	
 								$value = ' --';
 							}
 						}			
-						if($fieldname == 'filestatus')
-						{
+						if($fieldname == 'filestatus') {
 							$filestatus = $value;
 							if($filestatus == 1)
 								$value=getTranslatedString('yes',$module);
@@ -942,77 +911,51 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							else
 								$value=' --';				
 						}
-						if($fieldname == 'filetype')
-						{
+						if($fieldname == 'filetype') {
 							$downloadtype = $adb->query_result($list_result,$i-1,'filelocationtype');
 							$filetype = $adb->query_result($list_result,$i-1,'filetype');
-							if($downloadtype == 'E' || $downloadtype != 'I')
-							{
+							if($downloadtype == 'E' || $downloadtype != 'I') {
 								$value = ' --';
-							}
-							else
+							} else
 								$value = $filetype;
 						}
-						if($fieldname == 'notecontent'){
+						if($fieldname == 'notecontent') {
 							$value = decode_html($value); 	
-							$value = textlength_check($value);
-							
+							$value = textlength_check($value);							
 						}
-					}
-						//code for Documents module: end
-					
-					elseif($module == "Products" && $name == "Related to")
-					{
+					} elseif($module == "Products" && $name == "Related to") {
 						$value=getRelatedTo($module,$list_result,$i-1);
-					}
-					//added for sorting by Contact Name ---------STARTS------------------
-                    elseif($name=='Contact Name' && ($module =='SalesOrder' || $module == 'Quotes' || $module == 'PurchaseOrder'))
-                    {
-                            if($name == 'Contact Name')
-                            {
-                                    $contact_id = $adb->query_result($list_result,$i-1,"contactid");
-									$contact_name = getFullNameFromQResult($list_result, $i-1,"Contacts");
-                                    $value="";
-                                    if(($contact_name != "") && ($contact_id !='NULL'))
-                                          $value ="<a href='index.php?module=Contacts&action=DetailView&parenttab=".$tabname."&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>";
-                            }
-
-                    }
-					elseif($name == 'Product')
-					{
+					} elseif($name=='Contact Name' && ($module =='SalesOrder' || $module == 'Quotes' || $module == 'PurchaseOrder')) {
+                        if($name == 'Contact Name') {
+                            $contact_id = $adb->query_result($list_result,$i-1,"contactid");
+							$contact_name = getFullNameFromQResult($list_result, $i-1,"Contacts");
+                            $value="";
+                            if(($contact_name != "") && ($contact_id !='NULL'))
+                                  $value ="<a href='index.php?module=Contacts&action=DetailView&parenttab=".$tabname."&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>";
+                        }
+                    } elseif($name == 'Product') {
 						$product_id = textlength_check($adb->query_result($list_result,$i-1,"productname"));
 						$value =  $product_id;	
-					}
-                                        //----------------------ENDS----------------------
-					elseif($name=='Account Name')
-					{
-					
+					} elseif($name=='Account Name') {					
 						//modified for vtiger_customview 27/5
-						if($module == 'Accounts')
-						{
+						if($module == 'Accounts') {
 							$account_id = $adb->query_result($list_result,$i-1,"crmid");
 							//$account_name = getAccountName($account_id);
 							$account_name = textlength_check($adb->query_result($list_result,$i-1,"accountname"));
 							// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
 							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
-						}
-						elseif($module == 'Potentials' || $module == 'Contacts' || $module == 'Invoice' || $module == 'SalesOrder' || $module == 'Quotes')//Potential,Contacts,Invoice,SalesOrder & Quotes  records   sort by Account Name
-                                                {
+						} elseif($module == 'Potentials' || $module == 'Contacts' || $module == 'Invoice' || $module == 'SalesOrder' || $module == 'Quotes') { //Potential,Contacts,Invoice,SalesOrder & Quotes  records   sort by Account Name
 							$accountname = textlength_check($adb->query_result($list_result,$i-1,"accountname"));
 							$accountid = $adb->query_result($list_result,$i-1,"accountid");
 							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$accountid.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$accountname.'</a>'; 
-     				                }
-						else
-						{
+						} else {
 							$account_id = $adb->query_result($list_result,$i-1,"accountid");
 							$account_name = getAccountName($account_id);
 							$acc_name = textlength_check($account_name);
 							// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
 							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'&parenttab='.$tabname.'" style="'.$P_FONT_COLOR.'">'.$acc_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 						}
-					}
-					elseif(( $module == 'HelpDesk' || $module == 'PriceBook' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'Faq') && $name == 'Product Name')
-					{
+					} elseif(( $module == 'HelpDesk' || $module == 'PriceBook' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'Faq') && $name == 'Product Name') {
 						if($module == 'HelpDesk' || $module == 'Faq')
 							$product_id = $adb->query_result($list_result,$i-1,"product_id");
 						else
@@ -1024,20 +967,15 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							$product_name = '';
 
 						$value = '<a href="index.php?module=Products&action=DetailView&parenttab='.$tabname.'&record='.$product_id.'">'.textlength_check($product_name).'</a>';
-					}
-					elseif(($module == 'Quotes' && $name == 'Potential Name') || ($module == 'SalesOrder' && $name == 'Potential Name'))
-					{
+					} elseif(($module == 'Quotes' && $name == 'Potential Name') || ($module == 'SalesOrder' && $name == 'Potential Name')) {
 						$potential_id = $adb->query_result($list_result,$i-1,"potentialid");
 						$potential_name = getPotentialName($potential_id);
 						$value = '<a href="index.php?module=Potentials&action=DetailView&parenttab='.$tabname.'&record='.$potential_id.'">'.textlength_check($potential_name).'</a>';
-					}
-					elseif($module =='Emails' && $relatedlist != '' && ($name=='Subject' || $name=='Date Sent'))
-					{
+					} elseif($module =='Emails' && $relatedlist != '' && ($name=='Subject' || $name=='Date Sent')) {
 						$list_result_count = $i-1;
 						$tmp_value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
 						$value = '<a href="javascript:;" onClick="ShowEmail(\''.$entity_id.'\');">'.textlength_check($tmp_value).'</a>';
-						if($name == 'Date Sent')
-						{
+						if($name == 'Date Sent') {
 							$sql="select email_flag from vtiger_emaildetails where emailid=?";
 							$result=$adb->pquery($sql, array($entity_id));
 							$email_flag=$adb->query_result($result,0,"email_flag");
@@ -1534,7 +1472,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		$temp_val = decode_html($adb->query_result($list_result,$list_result_count,$colname));
 		if(($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1) && $temp_val != '')
 		{	
-			$temp_acttype = $adb->query_result($list_result,$list_result_count,'type');
+			$temp_acttype = $adb->query_result($list_result,$list_result_count,'activitytype');
 			if(($temp_acttype == 'Meeting' || $temp_acttype == 'Call') && $fieldname =="taskstatus")
 				$temptable = "eventstatus";
 			else
@@ -1556,7 +1494,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				$res_val=$adb->pquery($pick_query,array($roleids));
 				$num_val = $adb->num_rows($res_val);
 			}
-			if($num_val > 0)
+			if($num_val > 0 || ($temp_acttype == 'Task' && $fieldname == 'activitytype'))
 				$temp_val = $temp_val;
 			else
 				$temp_val = "<font color='red'>".$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
