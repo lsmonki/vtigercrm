@@ -282,5 +282,7 @@
 				MSG_FTP_BACKUP_ENABLED : 'FTP Backup Enabled',
 				MSG_LOCAL_BACKUP_ENABLED : 'Local Backup Enabled',
 				MSG_CONFIRM_PATH : 'confirm with the Path details',
-				MSG_CONFIRM_FTP_DETAILS : 'confirm with the FTP details'
+				MSG_CONFIRM_FTP_DETAILS : 'confirm with the FTP details',
+				
+				START_PERIOD_END_PERIOD_CANNOT_BE_EMPTY : 'Start period or End period cannot be empty'
 			};

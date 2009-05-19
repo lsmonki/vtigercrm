@@ -745,7 +745,7 @@ ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, g
 addFieldSecurity($salesorder_tabid,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');
-ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values($salesorder_tabid,$field_id,'end_period','vtiger_invoice_recurring_info',1,'5','end_period','End Period',1,0,0,100,4,$new_block_id,1,'D~O',3,null,'BAS')");
+ExecuteQuery("insert into vtiger_field (tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type) values($salesorder_tabid,$field_id,'end_period','vtiger_invoice_recurring_info',1,'5','end_period','End Period',1,0,0,100,4,$new_block_id,1,'D~O~OTH~G~start_period~Start Period',3,null,'BAS')");
 addFieldSecurity($salesorder_tabid,$field_id);
 
 $field_id = $adb->getUniqueID('vtiger_field');

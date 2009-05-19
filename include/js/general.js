@@ -893,10 +893,17 @@ function doformValidation(edit_type) {
 						return false;
 					}	
 			}
-		} else if(getObj('enable_recurring') != null && getObj('enable_recurring').checked && 
-					(getObj('recurring_frequency') == null || getObj('recurring_frequency').value == '--None--')) {
-			alert(alert_arr.RECURRING_FREQUENCY_NOT_PROVIDED);
-						return false;
+		} else if(getObj('enable_recurring') != null && getObj('enable_recurring').checked) {
+			if(getObj('recurring_frequency') == null || getObj('recurring_frequency').value == '--None--') {
+				alert(alert_arr.RECURRING_FREQUENCY_NOT_PROVIDED);
+				return false;
+			}
+			var start_period = getObj('start_period');
+			var end_period = getObj('end_period');
+			if (trim(start_period.value) == '' || trim(end_period.value) == '') {
+				alert(alert_arr.START_PERIOD_END_PERIOD_CANNOT_BE_EMPTY);
+        		return false
+      		}
 		}
 	}
 	for (var i=0; i<fieldname.length; i++) {
