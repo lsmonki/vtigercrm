@@ -326,48 +326,34 @@ function AddMessageToContact($username,$session,$contactid,$msgdtls)
 	
 	foreach($msgdtls as $msgdtl)
 	{
-    if(isset($msgdtl))
-    {    
-        $email = new Emails();
-        //$log->debug($msgdtls['contactid']);
-	$email_body = str_replace("'", "''", $msgdtl['body']);
-	$email_body = str_replace('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">'," ", $email_body);
-        $email_subject = str_replace("'", "''",$msgdtl['subject']);
-        $date_sent = getDisplayDate($msgdtl['datesent']);
-        
-        $email->column_fields[subject] = $email_subject;
-        $email->column_fields[assigned_user_id] = $user_id;
-        $email->column_fields[date_start] = $date_sent;
-        $email->column_fields[description]  = $email_body;
-        $email->column_fields[activitytype] = 'Emails'; 
-        $email->plugin_save = true; 
-        $email->save("Emails");
-	$query = "select fieldid from vtiger_field where fieldname = 'email' and tabid = 4 and vtiger_field.presence in (0,2)";
-	$result = $adb->pquery($query, array());
-	$field_id = $adb->query_result($result,0,"fieldid");
-        $email->set_emails_contact_invitee_relationship($email->id,$contactid);
-        $email->set_emails_se_invitee_relationship($email->id,$contactid);
-	$email->set_emails_user_invitee_relationship($email->id,$user_id);
-        $sql = "select email from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted =0 and vtiger_contactdetails.contactid=?";
-        $result = $adb->pquery($sql, array($contactid));
-        $camodulerow = $adb->fetch_array($result);
-        if(isset($camodulerow))
-        {
-            $emailid = $camodulerow["email"];
-
-	    //added to save < as $lt; and > as &gt; in the database so as to retrive the emailID
-	    $user_emailid = str_replace('<','&lt;',$user_emailid);
-	    $user_emailid = str_replace('>','&gt;',$user_emailid);
-			$query = 'insert into vtiger_emaildetails values (?,?,?,?,?,?,?,?)';
-            $params = array($email->id, $emailid, $user_emailid, "", "", "", $user_id.'@-1|'.$contactid.'@'.$field_id.'|', "OUTLOOK");
-			$adb->pquery($query, $params);
-        }
-        return $email->id;
-		}
-		else
-		{
-			return "";
-		}
+	    if(isset($msgdtl))
+	    {    
+	        $email = new Emails();
+	        //$log->debug($msgdtls['contactid']);
+			$email_body = str_replace("'", "''", $msgdtl['body']);
+			$email_body = str_replace('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">'," ", $email_body);
+	        $email_subject = str_replace("'", "''",$msgdtl['subject']);
+	        $date_sent = getDisplayDate($msgdtl['datesent']);
+	        
+	        $email->column_fields[subject] = $email_subject;
+	        $email->column_fields[assigned_user_id] = $user_id;
+	        $email->column_fields[date_start] = $date_sent;
+	        $email->column_fields[description]  = $email_body;
+	        $email->column_fields[activitytype] = 'Emails'; 
+	        $email->column_fields[email_flag] = 'SENT';
+	        $email->plugin_save = true; 
+	       	$email->save("Emails");
+			$query = "select fieldid from vtiger_field where fieldname = 'email' and tabid = 4 and vtiger_field.presence in (0,2)";
+			$result = $adb->pquery($query, array());
+			$field_id = $adb->query_result($result,0,"fieldid");
+	        $email->set_emails_contact_invitee_relationship($email->id,$contactid);
+	        $email->set_emails_se_invitee_relationship($email->id,$contactid);
+			$email->set_emails_user_invitee_relationship($email->id,$user_id);
+	        
+	        return $email->id;
+		}else{
+				return "";
+			}
 	}
 }
 
