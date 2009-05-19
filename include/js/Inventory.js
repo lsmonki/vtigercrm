@@ -1016,6 +1016,8 @@ function resetSHandAdjValues() {
 	var adjustment = document.getElementById('adjustment');
 	if (adjustment != null) adjustment.value = '0';
 	
+	var final_discount = document.getElementById('discount_amount_final');
+	if (final_discount != null) final_discount.value = '0';	
 }
 // End
 
