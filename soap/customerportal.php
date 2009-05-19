@@ -1602,12 +1602,22 @@ function get_list_values($id,$module,$sessionid,$only_mine='true')
 					$filename = $fieldid.'_Quotes.pdf';
 					$fieldvalue = '<a href="index.php?&module=Quotes&action=index&id='.$fieldid.'">'.$fieldvalue.'</a>';
 				}
+				if($fieldname == 'total'){
+					$sym = getCurrencySymbol($res,$j,'currency_id');
+					$fieldvalue = $sym.$fieldvalue;
+				}
 			}
-			if($module == 'Invoice' && $fieldname =='subject') 
+			if($module == 'Invoice') 
 			{
-				$fieldid = $adb->query_result($res,$j,'invoiceid');
-				$filename = $fieldid.'_Invoice.pdf';
-				$fieldvalue = '<a href="index.php?&module=Invoice&action=index&status=true&id='.$fieldid.'">'.$fieldvalue.'</a>';
+				if($fieldname =='subject'){
+					$fieldid = $adb->query_result($res,$j,'invoiceid');
+					$filename = $fieldid.'_Invoice.pdf';
+					$fieldvalue = '<a href="index.php?&module=Invoice&action=index&status=true&id='.$fieldid.'">'.$fieldvalue.'</a>';
+				}
+				if($fieldname == 'total'){
+					$sym = getCurrencySymbol($res,$j,'currency_id');
+					$fieldvalue = $sym.$fieldvalue;
+				}
 			}
 			if($module == 'Documents') 
 			{
@@ -1657,10 +1667,8 @@ function get_list_values($id,$module,$sessionid,$only_mine='true')
 					}
 				}
 				if($fieldname == 'unit_price'){
-					$currencyid = $adb->query_result($res,$j,'currency_id');
-					$curr = getCurrencySymbolandCRate($currencyid);
-					$value = "(".$curr['symbol'].")".$fieldvalue;
-					$fieldvalue = $value;
+					$sym = getCurrencySymbol($res,$j,'currency_id');
+					$fieldvalue = $sym.$fieldvalue;
 				}
 				
 			}
@@ -1932,6 +1940,10 @@ function get_invoice_detail($id,$module,$customerid,$sessionid)
 				$fieldvalue = '';
 			}
 		}
+		if($fieldname == 'total'){
+			$sym = getCurrencySymbol($res,0,'currency_id');
+			$fieldvalue = $sym.$fieldvalue;
+		}
 		if($fieldname == 'smownerid'){
 			$fieldvalue = getOwnerName($fieldvalue);
 		}
@@ -2065,10 +2077,8 @@ function get_product_list_values($id,$modulename,$sessionid,$only_mine='true')
 						$fieldvalue = '<a href="index.php?module=Products&action=index&productid='.$fieldid.'">'.$fieldvalue.'</a>';
 					
 					if($fieldname == 'unit_price'){
-						$currencyid = $adb->query_result($res[$k],$j,'currency_id');
-						$curr = getCurrencySymbolandCRate($currencyid);
-						$value = "(".$curr['symbol'].")".$fieldvalue;
-						$fieldvalue = $value;
+						$sym = getCurrencySymbol($res[$k],$j,'currency_id');
+						$fieldvalue = $sym.$fieldvalue;
 				}
 					$output[$k][$modulename]['data'][$j][$i]['fielddata'] = $fieldvalue;
 					$i++;
@@ -2238,11 +2248,16 @@ function get_details($id,$module,$customerid,$sessionid)
 			}
 		}
 		
-		if($module=='Quotes' && $fieldname == 'subject' && $fieldvalue !='')
+		if($module=='Quotes')
 		{
-			$fieldid = $adb->query_result($res,0,'quoteid');
-			//$output[0][$module][$i]['fieldlabel']= "(Download PDF)  ".$adb->query_result($fieldres,$i,'fieldlabel');
-			$fieldvalue = '<a href="index.php?downloadfile=true&module=Quotes&action=index&id='.$fieldid.'">'.$fieldvalue.'</a>';
+			if($fieldname == 'subject' && $fieldvalue !=''){
+				$fieldid = $adb->query_result($res,0,'quoteid');
+				$fieldvalue = '<a href="index.php?downloadfile=true&module=Quotes&action=index&id='.$fieldid.'">'.$fieldvalue.'</a>';
+			}
+			if($fieldname == 'total'){
+				$sym = getCurrencySymbol($res,0,'currency_id');
+				$fieldvalue = $sym.$fieldvalue;
+			}
 		}
 		if($module == 'Documents')
 		{
@@ -2311,10 +2326,8 @@ function get_details($id,$module,$customerid,$sessionid)
 			}
 		}
 		if($fieldname == 'unit_price'){
-			$currencyid = $adb->query_result($res,0,'currency_id');
-			$curr = getCurrencySymbolandCRate($currencyid);
-			$value = "(".$curr['symbol'].")".$fieldvalue;
-			$fieldvalue = $value;
+			$sym = getCurrencySymbol($res,0,'currency_id');
+			$fieldvalue = $sym.$fieldvalue;
 		}		
 		$output[0][$module][$i]['fieldvalue'] = $fieldvalue;
 	}
@@ -2724,10 +2737,8 @@ function get_service_list_values($id,$modulename,$sessionid,$only_mine='true')
 						$fieldvalue = '<a href="index.php?module=Services&action=index&id='.$fieldid.'">'.$fieldvalue.'</a>';
 					
 					if($fieldname == 'unit_price'){
-						$currencyid = $adb->query_result($res[$k],$j,'currency_id');
-						$curr = getCurrencySymbolandCRate($currencyid);
-						$value = "(".$curr['symbol'].")".$fieldvalue;
-						$fieldvalue = $value;
+						$sym = getCurrencySymbol($res[$k],$j,'currency_id');
+						$fieldvalue = $sym.$fieldvalue;
 				}
 					$output[$k][$modulename]['data'][$j][$i]['fielddata'] = $fieldvalue;
 					$i++;
@@ -2832,7 +2843,20 @@ function checkModuleActive($module){
 	}
 	return false;
 }
-
+/**
+ *  Function that gives the Currency Symbol
+ * @params $result $adb object - resultset
+ * $column String column name 
+ * Return $value - Currency Symbol
+ */
+function getCurrencySymbol($result,$i,$column){
+	global $adb;
+	$currencyid = $adb->query_result($result,$i,$column);
+	$curr = getCurrencySymbolandCRate($currencyid);
+	$value = "(".$curr['symbol'].")";
+	return $value;
+	
+}
 /* Begin the HTTP listener service and exit. */ 
 if (!isset($HTTP_RAW_POST_DATA)){
 	$HTTP_RAW_POST_DATA = file_get_contents('php://input');
