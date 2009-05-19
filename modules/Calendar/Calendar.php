@@ -254,27 +254,8 @@ class Calendar
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
 	function generateReportsSecQuery($module,$secmodule){
-		$tab = getRelationTables($module,$secmodule);
-		
-		foreach($tab as $key=>$value){
-			$tables[]=$key;
-			$fields[] = $value;
-		}
-		$tabname = $tables[0];
-		$prifieldname = $fields[0][0];
-		$secfieldname = $fields[0][1];
-		$tmpname = $tabname."tmp".$secmodule;
-		$condition = "";
-		if(!empty($tables[1]) && !empty($fields[1])){
-			$condvalue = $tables[1].".".$fields[1];
-		} else {
-			$condvalue = $tabname.".".$prifieldname;
-		}
-		$condition = "$tmpname.$prifieldname = $condvalue  and";
-	
-		$query = " left join $tabname as $tmpname on $condition $tmpname.$secfieldname IN (SELECT activityid from vtiger_activity INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_activity.activityid)";
-		$query .=" left join vtiger_activity on vtiger_activity.activityid = $tmpname.$secfieldname 
-				left join vtiger_crmentity as vtiger_crmentityCalendar on vtiger_crmentityCalendar.crmid=vtiger_activity.activityid and vtiger_crmentityCalendar.deleted=0 
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_activity","activityid");
+		$query .=" left join vtiger_crmentity as vtiger_crmentityCalendar on vtiger_crmentityCalendar.crmid=vtiger_activity.activityid and vtiger_crmentityCalendar.deleted=0 
 				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid 
 				left join vtiger_contactdetails as vtiger_contactdetailsCalendar on vtiger_contactdetailsCalendar.contactid= vtiger_cntactivityrel.contactid
 				left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid
@@ -292,6 +273,45 @@ class Calendar
 				left join vtiger_campaign as vtiger_campaignRelCalendar on vtiger_campaignRelCalendar.campaignid = vtiger_crmentityRelCalendar.crmid
 				left join vtiger_groups as vtiger_groupsCalendar on vtiger_groupsCalendar.groupid = vtiger_crmentityCalendar.smownerid
 				left join vtiger_users as vtiger_usersCalendar on vtiger_usersCalendar.id = vtiger_crmentityCalendar.smownerid"; 
+		return $query;
+	}
+	/*
+	 * Function to get the relation query part of a report
+	 * @param - $module primary module name
+	 * @param - $secmodule secondary module name
+	 * returns the query string formed on relating the primary module and secondary module
+	 */
+	function getRelationQuery($module,$secmodule,$table_name,$column_name){
+		$tab = getRelationTables($module,$secmodule);
+		
+		foreach($tab as $key=>$value){
+			$tables[]=$key;
+			$fields[] = $value;
+		}
+		$tabname = $tables[0];
+		$prifieldname = $fields[0][0];
+		$secfieldname = $fields[0][1];
+		$tmpname = $tabname."tmp".$secmodule;
+		$condition = "";
+		if(!empty($tables[1]) && !empty($fields[1])){
+			$condvalue = $tables[1].".".$fields[1];
+		} else {
+			$condvalue = $tabname.".".$prifieldname;
+		}
+		$condition = " $tmpname.$prifieldname = $condvalue ";
+		$entity_check_query = " $tmpname.$secfieldname IN (SELECT crmid FROM vtiger_crmentity WHERE vtiger_crmentity.deleted=0 AND vtiger_crmentity.setype='$secmodule')";
+		$condition_secmod_table = " $table_name.$column_name = $tmpname.$secfieldname ";
+		if($tabname=='vtiger_crmentityrel'){
+			$condition = " ($condition OR $tmpname.$secfieldname = $condvalue)  and";
+			$entity_check_query = "($entity_check_query OR $tmpname.$prifieldname IN (SELECT crmid FROM vtiger_crmentity WHERE vtiger_crmentity.deleted=0 AND vtiger_crmentity.setype='$secmodule')) ";
+			$condition_secmod_table = "$condition_secmod_table OR $table_name.$column_name = $tmpname.$prifieldname ";
+		} else {
+			$condition .= " and ";
+		}
+		
+		$query = " left join $tabname as $tmpname on $condition  $entity_check_query";
+		$query .= " LEFT JOIN $table_name ON $condition_secmod_table";
+		
 		return $query;
 	}
 }

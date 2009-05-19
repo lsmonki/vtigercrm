@@ -1943,6 +1943,46 @@ $log->info("in getOldFileName  ".$notesid);
         }
         $sec_query .= " vtiger_groups$module.groupid in(select vtiger_tmp_read_group_sharing_per.sharedgroupid from vtiger_tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid."))) ";	
 	}
+	
+	/*
+	 * Function to get the relation query part of a report
+	 * @param - $module primary module name
+	 * @param - $secmodule secondary module name
+	 * returns the query string formed on relating the primary module and secondary module
+	 */
+	function getRelationQuery($module,$secmodule,$table_name,$column_name){
+		$tab = getRelationTables($module,$secmodule);
+		
+		foreach($tab as $key=>$value){
+			$tables[]=$key;
+			$fields[] = $value;
+		}
+		$tabname = $tables[0];
+		$prifieldname = $fields[0][0];
+		$secfieldname = $fields[0][1];
+		$tmpname = $tabname."tmp".$secmodule;
+		$condition = "";
+		if(!empty($tables[1]) && !empty($fields[1])){
+			$condvalue = $tables[1].".".$fields[1];
+		} else {
+			$condvalue = $tabname.".".$prifieldname;
+		}
+		$condition = " $tmpname.$prifieldname = $condvalue ";
+		$entity_check_query = " $tmpname.$secfieldname IN (SELECT crmid FROM vtiger_crmentity WHERE vtiger_crmentity.deleted=0 AND vtiger_crmentity.setype='$secmodule')";
+		$condition_secmod_table = " $table_name.$column_name = $tmpname.$secfieldname ";
+		if($tabname=='vtiger_crmentityrel'){
+			$condition = " ($condition OR $tmpname.$secfieldname = $condvalue)  and";
+			$entity_check_query = "($entity_check_query OR $tmpname.$prifieldname IN (SELECT crmid FROM vtiger_crmentity WHERE vtiger_crmentity.deleted=0 AND vtiger_crmentity.setype='$secmodule')) ";
+			$condition_secmod_table = "$condition_secmod_table OR $table_name.$column_name = $tmpname.$prifieldname ";
+		} else {
+			$condition .= " and ";
+		}
+		
+		$query = " left join $tabname as $tmpname on $condition  $entity_check_query";
+		$query .= " LEFT JOIN $table_name ON $condition_secmod_table";
+		
+		return $query;
+	}
 	/** END **/
 }
 ?>

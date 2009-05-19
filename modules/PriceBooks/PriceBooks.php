@@ -285,27 +285,8 @@ class PriceBooks extends CRMEntity {
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
 	function generateReportsSecQuery($module,$secmodule){
-		$tab = getRelationTables($module,$secmodule);
-		
-		foreach($tab as $key=>$value){
-			$tables[]=$key;
-			$fields[] = $value;
-		}
-		$tabname = $tables[0];
-		$prifieldname = $fields[0][0];
-		$secfieldname = $fields[0][1];
-		$tmpname = $tabname."tmp".$secmodule;
-		$condition = "";
-		if(!empty($tables[1]) && !empty($fields[1])){
-			$condvalue = $tables[1].".".$fields[1];
-		} else {
-			$condvalue = $tabname.".".$prifieldname;
-		}
-		$condition = "$tmpname.$prifieldname = $condvalue  and";
-	
-		$query = " left join $tabname as $tmpname on $condition $tmpname.$secfieldname IN (SELECT pricebookid from vtiger_pricebook INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_pricebook.pricebookid)";
-		$query .=" left join vtiger_pricebook on vtiger_pricebook.pricebookid=$tmpname.$secfieldname  
-				left join vtiger_crmentity as vtiger_crmentityPriceBooks on vtiger_crmentityPriceBooks.crmid=vtiger_pricebook.pricebookid and vtiger_crmentityPriceBooks.deleted=0 
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_pricebook","pricebookid");
+		$query .=" left join vtiger_crmentity as vtiger_crmentityPriceBooks on vtiger_crmentityPriceBooks.crmid=vtiger_pricebook.pricebookid and vtiger_crmentityPriceBooks.deleted=0 
 				left join vtiger_currency_info as vtiger_currency_infoPriceBooks on vtiger_currency_infoPriceBooks.id = vtiger_pricebook.currency_id 
 				left join vtiger_users as vtiger_usersPriceBooks on vtiger_usersPriceBooks.id = vtiger_crmentityPriceBooks.smownerid
 				left join vtiger_groups as vtiger_groupsPriceBooks on vtiger_groupsPriceBooks.groupid = vtiger_crmentityPriceBooks.smownerid"; 

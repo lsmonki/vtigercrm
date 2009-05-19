@@ -273,16 +273,12 @@ class ReportRun extends CRMEntity
 		$tmp = split("_",$selectedfields[2]);
 		$module = $tmp[0];
 		
-		if($fieldname == "parent_id" && ($this->primarymodule == "HelpDesk" || $this->primarymodule == "Products" || $this->secondarymodule == "Products" || $this->primarymodule == "Calendar" || $this->secondarymodule == "Calendar"))
+		if($fieldname == "parent_id" && ($this->primarymodule == "HelpDesk"))// || $this->primarymodule == "Products" || $this->secondarymodule == "Products" || $this->primarymodule == "Calendar" || $this->secondarymodule == "Calendar"))
 		{
 			if($this->primarymodule == "HelpDesk" && $selectedfields[0] == "vtiger_crmentityRelHelpDesk")
 			{
 				$querycolumn = "case vtiger_crmentityRelHelpDesk.setype when 'Accounts' then vtiger_accountRelHelpDesk.accountname when 'Contacts' then concat(vtiger_contactdetailsRelHelpDesk.lastname,' ',vtiger_contactdetailsRelHelpDesk.firstname) End"." '".$selectedfields[2]."', vtiger_crmentityRelHelpDesk.setype 'Entity_type'";
 				return $querycolumn;
-			}
-			if($this->primarymodule == "Products" || $this->secondarymodule == "Products")
-			{
-				$querycolumn = "case vtiger_crmentityRelProducts.setype when 'Accounts' then vtiger_accountRelProducts.accountname when 'Leads' then vtiger_leaddetailsRelProducts.lastname when 'Potentials' then vtiger_potentialRelProducts.potentialname End"." '".$selectedfields[2]."', vtiger_crmentityRelProducts.setype 'Entity_type'";
 			}
 			if($this->primarymodule == "Calendar" || $this->secondarymodule == "Calendar")
 			{
@@ -1593,8 +1589,8 @@ class ReportRun extends CRMEntity
 			}
 		}
 		
-		if($tab_id == 9 || $tab_id == 16)
-        	$reportquery.=" group by vtiger_activity.activityid ";
+		//if($tab_id == 9 || $tab_id == 16)
+        	//$reportquery.=" group by vtiger_activity.activityid ";
 
 		if(trim($groupsquery) != "")
 		{
@@ -1943,32 +1939,30 @@ class ReportRun extends CRMEntity
 					$result = $adb->query($sSQL);
 					$y=$adb->num_fields($result);
 					$custom_field_values = $adb->fetch_array($result);
-
 					$coltotalhtml .= "<table align='center' width='60%' cellpadding='3' cellspacing='0' border='0' class='rptTable'><tr><td class='rptCellLabel'>".$mod_strings[Totals]."</td><td class='rptCellLabel'>".$mod_strings[SUM]."</td><td class='rptCellLabel'>".$mod_strings[AVG]."</td><td class='rptCellLabel'>".$mod_strings[MIN]."</td><td class='rptCellLabel'>".$mod_strings[MAX]."</td></tr>";
 					foreach($this->totallist as $key=>$value)
 					{
 						$fieldlist = explode(":",$key);
-						$mod_query = $adb->pquery("SELECT distinct(tabid) as tabid from vtiger_field where tablename = ?",array($fieldlist[1]));
-						$uitype_result = $adb->pquery("SELECT uitype from vtiger_field WHERE tablename = ? AND columnname=?",array($fieldlist[1],$fieldlist[2]));
+						$mod_query = $adb->pquery("SELECT distinct(tabid) as tabid, uitype as uitype from vtiger_field where tablename = ? and columnname=?",array($fieldlist[1],$fieldlist[2]));
 						if($adb->num_rows($mod_query)>0){
 							$module_name = getTabName($adb->query_result($mod_query,0,'tabid'));
 							$fieldlabel = trim(str_replace($escapedchars," ",$fieldlist[3]));
 							$fieldlabel = str_replace("_", " ", $fieldlabel);
 							if($module_name){
-								$field = getTranslatedString($fieldlabel,$module_name);
+								$field = getTranslatedString($module_name)." ".getTranslatedString($fieldlabel,$module_name);
 							} else {
-								$field = getTranslatedString($fieldlabel);
+								$field = getTranslatedString($module_name)." ".getTranslatedString($fieldlabel);
 							}							
 						}
-						$uitype_arr[str_replace($escapedchars," ",$fieldlist[3])] = $adb->query_result($uitype_result,0,"uitype");
-						$totclmnflds[str_replace($escapedchars," ",$fieldlist[3])] = $field;
+						$uitype_arr[str_replace($escapedchars," ",$module_name."_".$fieldlist[3])] = $adb->query_result($mod_query,0,"uitype");
+						$totclmnflds[str_replace($escapedchars," ",$module_name."_".$fieldlist[3])] = $field;
 					}
 					for($i =0;$i<$y;$i++)
 					{
 						$fld = $adb->field_name($result, $i);
 						$keyhdr[$fld->name] = $custom_field_values[$i];
-
 					}
+
 					foreach($totclmnflds as $key=>$value)
 					{
 						$coltotalhtml .= '<tr class="rptGrpHead" valign=top>'; 
@@ -1983,8 +1977,8 @@ class ReportRun extends CRMEntity
 							$convert_price = false;
 						}
 						$coltotalhtml .= '<td class="rptData">'. $col_header .'</td>';
-						
-						$arraykey = trim($value).'_SUM';
+						$value = trim($key);
+						$arraykey = $value.'_SUM';
 						if(isset($keyhdr[$arraykey]))
 						{
 							if($convert_price)
@@ -1997,7 +1991,7 @@ class ReportRun extends CRMEntity
 							$coltotalhtml .= '<td class="rptTotal">&nbsp;</td>';
 						}
 
-						$arraykey = trim($value).'_AVG';
+						$arraykey = $value.'_AVG';
 						if(isset($keyhdr[$arraykey]))
 						{
 							if($convert_price)
@@ -2010,7 +2004,7 @@ class ReportRun extends CRMEntity
 							$coltotalhtml .= '<td class="rptTotal">&nbsp;</td>';
 						}
 
-						$arraykey = trim($value).'_MIN';
+						$arraykey = $value.'_MIN';
 						if(isset($keyhdr[$arraykey]))
 						{
 							if($convert_price)
@@ -2023,7 +2017,7 @@ class ReportRun extends CRMEntity
 							$coltotalhtml .= '<td class="rptTotal">&nbsp;</td>';
 						}
 
-						$arraykey = trim($value).'_MAX';
+						$arraykey = $value.'_MAX';
 						if(isset($keyhdr[$arraykey]))
 						{							
 							if($convert_price)
@@ -2350,7 +2344,19 @@ class ReportRun extends CRMEntity
 				$fieldlist = explode(":",$fieldcolname);
 				$field_tablename = $fieldlist[1];
 				$field_columnname = $fieldlist[2];
-				$field_columnalias = $fieldlist[3];
+				
+				$mod_query = $adb->pquery("SELECT distinct(tabid) as tabid from vtiger_field where tablename = ? and columnname=?",array($fieldlist[1],$fieldlist[2]));
+				if($adb->num_rows($mod_query)>0){
+					$module_name = getTabName($adb->query_result($mod_query,0,'tabid'));
+					$fieldlabel = trim($fieldlist[3]);
+					if($module_name){
+						$field_columnalias = $module_name."_".$fieldlist[3];
+					} else {
+						$field_columnalias = $module_name."_".$fieldlist[3];
+					}							
+				}
+				
+				//$field_columnalias = $fieldlist[3];
 				$field_permitted = false;
 				if(CheckColumnPermission($field_tablename,$field_columnname,$premod) != "false"){
 					$field_permitted = true;

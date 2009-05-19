@@ -310,27 +310,9 @@ class PurchaseOrder extends CRMEntity {
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
 	function generateReportsSecQuery($module,$secmodule){
-		$tab = getRelationTables($module,$secmodule);
-		
-		foreach($tab as $key=>$value){
-			$tables[]=$key;
-			$fields[] = $value;
-		}
-		$tabname = $tables[0];
-		$prifieldname = $fields[0][0];
-		$secfieldname = $fields[0][1];
-		$tmpname = $tabname."tmp".$secmodule;
-		$condition = "";
-		if(!empty($tables[1]) && !empty($fields[1])){
-			$condvalue = $tables[1].".".$fields[1];
-		} else {
-			$condvalue = $tabname.".".$prifieldname;
-		}
-		$condition = "$tmpname.$prifieldname = $condvalue  and";
-	
-		$query = " left join $tabname as $tmpname on $condition $tmpname.$secfieldname IN (SELECT purchaseorderid from vtiger_purchaseorder INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_purchaseorder.purchaseorderid)";
-		$query .= " left join vtiger_purchaseorder on vtiger_purchaseorder.purchaseorderid = $tmpname.$secfieldname
-			left join vtiger_crmentity as vtiger_crmentityPurchaseOrder on vtiger_crmentityPurchaseOrder.crmid=vtiger_purchaseorder.purchaseorderid and vtiger_crmentityPurchaseOrder.deleted=0
+		$qry = " left join  on vtiger_purchaseorder. = "; 
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_purchaseorder","purchaseorderid");
+		$query .= " left join vtiger_crmentity as vtiger_crmentityPurchaseOrder on vtiger_crmentityPurchaseOrder.crmid=vtiger_purchaseorder.purchaseorderid and vtiger_crmentityPurchaseOrder.deleted=0
 			left join vtiger_purchaseordercf on vtiger_purchaseorder.purchaseorderid = vtiger_purchaseordercf.purchaseorderid  
 			left join vtiger_pobillads on vtiger_purchaseorder.purchaseorderid=vtiger_pobillads.pobilladdressid
 			left join vtiger_poshipads on vtiger_purchaseorder.purchaseorderid=vtiger_poshipads.poshipaddressid

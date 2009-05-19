@@ -712,27 +712,9 @@ case when (vtiger_users.user_name not like '') then vtiger_users.user_name else 
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
 	function generateReportsSecQuery($module,$secmodule){
-		$tab = getRelationTables($module,$secmodule);
-		
-		foreach($tab as $key=>$value){
-			$tables[]=$key;
-			$fields[] = $value;
-		}
-		$tabname = $tables[0];
-		$prifieldname = $fields[0][0];
-		$secfieldname = $fields[0][1];
-		$tmpname = $tabname."tmp".$secmodule;
-		$condition = "";
-		if(!empty($tables[1]) && !empty($fields[1])){
-			$condvalue = $tables[1].".".$fields[1];
-		} else {
-			$condvalue = $tabname.".".$prifieldname;
-		}
-		$condition = "$tmpname.$prifieldname = $condvalue  and";
-	
-		$query = " left join $tabname as $tmpname on $condition $tmpname.$secfieldname IN (SELECT ticketid from vtiger_troubletickets INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_troubletickets.ticketid)";
-		$query .=" left join vtiger_troubletickets on vtiger_troubletickets.ticketid = $tmpname.$secfieldname 
-				left join vtiger_crmentity as vtiger_crmentityHelpDesk on vtiger_crmentityHelpDesk.crmid=vtiger_troubletickets.ticketid and vtiger_crmentityHelpDesk.deleted=0 
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_troubletickets","ticketid");
+
+		$query .=" left join vtiger_crmentity as vtiger_crmentityHelpDesk on vtiger_crmentityHelpDesk.crmid=vtiger_troubletickets.ticketid and vtiger_crmentityHelpDesk.deleted=0 
 				left join vtiger_ticketcf on vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid
 				left join vtiger_crmentity as vtiger_crmentityRelHelpDesk on vtiger_crmentityRelHelpDesk.crmid = vtiger_troubletickets.parent_id
 				left join vtiger_account as vtiger_accountRelHelpDesk on vtiger_accountRelHelpDesk.accountid=vtiger_crmentityRelHelpDesk.crmid 
@@ -754,6 +736,7 @@ case when (vtiger_users.user_name not like '') then vtiger_users.user_name else 
 			"Calendar" => array("vtiger_seactivityrel"=>array("crmid","activityid"),"vtiger_troubletickets"=>"ticketid"),
 			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_troubletickets"=>"ticketid"),
 			"Products" => array("vtiger_troubletickets"=>array("ticketid","product_id")),
+			"Services" => array("vtiger_crmentityrel"=>array("crmid","relcrmid"),"vtiger_troubletickets"=>"ticketid"),
 		);
 		return $rel_tables[$secmodule];
 	}

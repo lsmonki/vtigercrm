@@ -983,21 +983,8 @@ class Services extends CRMEntity {
 	 */
 	function generateReportsSecQuery($module,$secmodule){
 		global $current_user;
-		$tab = getRelationTables($module,$secmodule);
-		
-		foreach($tab as $key=>$value){
-			$tables[]=$key;
-			$fields[] = $value;
-		}
-		$tabname = $tables[0];
-		$prifieldname = $fields[0][0];
-		$secfieldname = $fields[0][1];
-		$tmpname = $tabname."tmp".$secmodule;
-		$condvalue = $tables[1].".".$fields[1];
-	
-		$query = " left join $tabname as $tmpname on $tmpname.$prifieldname = $condvalue  and $tmpname.$secfieldname IN (SELECT serviceid from vtiger_service INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid= vtiger_service.serviceid AND vtiger_crmentity.deleted=0)";
-		$query .= " left join vtiger_service on vtiger_service.serviceid = $tmpname.$secfieldname
-			LEFT JOIN (
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_service","serviceid");
+		$query .= " LEFT JOIN (
 				SELECT vtiger_service.serviceid, 
 						(CASE WHEN (vtiger_service.currency_id = " . $current_user->currency_id . " ) THEN vtiger_service.unit_price
 							WHEN (vtiger_productcurrencyrel.actual_price IS NOT NULL) THEN vtiger_productcurrencyrel.actual_price

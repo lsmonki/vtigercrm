@@ -346,27 +346,8 @@ class Quotes extends CRMEntity {
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
 	function generateReportsSecQuery($module,$secmodule){
-		$tab = getRelationTables($module,$secmodule);
-		
-		foreach($tab as $key=>$value){
-			$tables[]=$key;
-			$fields[] = $value;
-		}
-		$tabname = $tables[0];
-		$prifieldname = $fields[0][0];
-		$secfieldname = $fields[0][1];
-		$tmpname = $tabname."tmp".$secmodule;
-		$condition = "";
-		if(!empty($tables[1]) && !empty($fields[1])){
-			$condvalue = $tables[1].".".$fields[1];
-		} else {
-			$condvalue = $tabname.".".$prifieldname;
-		}
-		$condition = "$tmpname.$prifieldname = $condvalue  and";
-	
-		$query = " left join $tabname as $tmpname on $condition $tmpname.$secfieldname IN (SELECT quoteid from vtiger_quotes INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_quotes.quoteid)";
-		$query .= " left join vtiger_quotes on vtiger_quotes.quoteid = $tmpname.$secfieldname
-			left join vtiger_crmentity as vtiger_crmentityQuotes on vtiger_crmentityQuotes.crmid=vtiger_quotes.quoteid and vtiger_crmentityQuotes.deleted=0
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_quotes","quoteid");
+		$query .= " left join vtiger_crmentity as vtiger_crmentityQuotes on vtiger_crmentityQuotes.crmid=vtiger_quotes.quoteid and vtiger_crmentityQuotes.deleted=0
 			left join vtiger_quotescf on vtiger_quotes.quoteid = vtiger_quotescf.quoteid
 			left join vtiger_quotesbillads on vtiger_quotes.quoteid=vtiger_quotesbillads.quotebilladdressid
 			left join vtiger_quotesshipads on vtiger_quotes.quoteid=vtiger_quotesshipads.quoteshipaddressid

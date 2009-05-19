@@ -932,6 +932,7 @@ class Accounts extends CRMEntity {
 			"HelpDesk" => array("vtiger_troubletickets"=>array("parent_id","ticketid"),"vtiger_account"=>"accountid"),
 			"Products" => array("vtiger_seproductsrel"=>array("crmid","productid"),"vtiger_account"=>"accountid"),
 			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_account"=>"accountid"),
+			"Services" => array("vtiger_crmentityrel"=>array("crmid","relcrmid"),"vtiger_account"=>"accountid"),
 		);
 		return $rel_tables[$secmodule];
 	}
@@ -943,27 +944,8 @@ class Accounts extends CRMEntity {
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
 	function generateReportsSecQuery($module,$secmodule){
-		$tab = getRelationTables($module,$secmodule);
-		
-		foreach($tab as $key=>$value){
-			$tables[]=$key;
-			$fields[] = $value;
-		}
-		$tabname = $tables[0];
-		$prifieldname = $fields[0][0];
-		$secfieldname = $fields[0][1];
-		$tmpname = $tabname."tmp".$secmodule;
-		$condition = "";
-		if(!empty($tables[1]) && !empty($fields[1])){
-			$condvalue = $tables[1].".".$fields[1];
-		} else {
-			$condvalue = $tabname.".".$prifieldname;
-		}
-		$condition = "$tmpname.$prifieldname = $condvalue  and";
-		
-		$query = " left join $tabname as $tmpname on $condition $tmpname.$secfieldname IN (SELECT accountid from vtiger_account INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_account.accountid AND vtiger_crmentity.deleted=0)";
-			$query .= " left join vtiger_account on vtiger_account.accountid = $tmpname.$secfieldname
-			left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_account.accountid and vtiger_crmentityAccounts.deleted=0
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_account","accountid");
+		$query .= " left join vtiger_crmentity as vtiger_crmentityAccounts on vtiger_crmentityAccounts.crmid=vtiger_account.accountid and vtiger_crmentityAccounts.deleted=0
 			left join vtiger_accountbillads on vtiger_account.accountid=vtiger_accountbillads.accountaddressid
 			left join vtiger_accountshipads on vtiger_account.accountid=vtiger_accountshipads.accountaddressid
 			left join vtiger_accountscf on vtiger_account.accountid = vtiger_accountscf.accountid

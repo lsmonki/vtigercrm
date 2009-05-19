@@ -1221,27 +1221,8 @@ function get_contactsforol($user_name)
 	 * returns the query string formed on fetching the related data for report for secondary module
 	 */
 	function generateReportsSecQuery($module,$secmodule){
-		$tab = getRelationTables($module,$secmodule);
-		
-		foreach($tab as $key=>$value){
-			$tables[]=$key;
-			$fields[] = $value;
-		}
-		$tabname = $tables[0];
-		$prifieldname = $fields[0][0];
-		$secfieldname = $fields[0][1];
-		$tmpname = $tabname."tmp".$secmodule;
-		$condition = "";
-		if(!empty($tables[1]) && !empty($fields[1])){
-			$condvalue = $tables[1].".".$fields[1];
-		} else {
-			$condvalue = $tabname.".".$prifieldname;
-		}
-		$condition = "$tmpname.$prifieldname = $condvalue  and";
-	
-		$query = " left join $tabname as $tmpname on $condition $tmpname.$secfieldname IN (SELECT contactid from vtiger_contactdetails INNER JOIN vtiger_crmentity ON vtiger_crmentity.deleted=0 AND vtiger_crmentity.crmid=vtiger_contactdetails.contactid)";
-		$query .= " left join vtiger_contactdetails on vtiger_contactdetails.contactid = $tmpname.$secfieldname 
-			left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetails.contactid  and vtiger_crmentityContacts.deleted=0
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_contactdetails","contactid");
+		$query .= " left join vtiger_crmentity as vtiger_crmentityContacts on vtiger_crmentityContacts.crmid = vtiger_contactdetails.contactid  and vtiger_crmentityContacts.deleted=0
 			left join vtiger_contactdetails as vtiger_contactdetailsContacts on vtiger_contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
 			left join vtiger_contactaddress on vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
 			left join vtiger_customerdetails on vtiger_customerdetails.customerid = vtiger_contactdetails.contactid
@@ -1271,6 +1252,8 @@ function get_contactsforol($user_name)
 			"Campaigns" => array("vtiger_campaigncontrel"=>array("contactid","campaignid"),"vtiger_contactdetails"=>"contactid"),
 			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_contactdetails"=>"contactid"),
 			"Accounts" => array("vtiger_contactdetails"=>array("contactid","accountid")),
+			"Services" => array("vtiger_crmentityrel"=>array("crmid","relcrmid"),"vtiger_contactdetails"=>"contactid"),
+			"Invoice" => array("vtiger_invoice"=>array("contactid","invoiceid"),"vtiger_contactdetails"=>"contactid"),
 		);
 		return $rel_tables[$secmodule];
 	}
