@@ -284,9 +284,9 @@ function loadStuff(stuffid,stufftype){
 				var responseVal=response.responseText;
 				$('stuffcont_'+stuffid).innerHTML=response.responseText;
 				if(stufftype=="Module"){
-					if($('a_'+stuffid).href =="#")
+					if($('more_'+stuffid).value != null && $('more_'+stuffid).value != '')
 						$('a_'+stuffid).href = "index.php?module="+$('more_'+stuffid).value+"&action=ListView&viewname="+$('cvid_'+stuffid).value;
-				}	
+				}
 				if(stufftype=="Default" && typeof($('a_'+stuffid)) != 'undefined'){
 					if($('more_'+stuffid).value != ''){
 						$('a_'+stuffid).style.display = 'block';
