@@ -59,6 +59,7 @@ class DatabaseDump {
 			$this->file_open($filename);
 
 			// Write some information regarding database dump and the time first.	
+			$this->writeln("SET NAMES 'utf8';");
 			$this->writeln("-- $database database dump");
 			$this->writeln("-- Date: " . date("D, M j, G:i:s T Y"));
 			$this->writeln("-- ----------------------------------");
