@@ -103,7 +103,7 @@ if($numOfRows > 0)
 		$list_report_form->assign("REPORTID", $reportid);
 		$list_report_form->assign("IS_EDITABLE", $ogReport->is_editable);
 		
-		$list_report_form->assign("REPORTNAME", htmlentities($ogReport->reportname));
+		$list_report_form->assign("REPORTNAME", htmlspecialchars($ogReport->reportname,ENT_QUOTES,$default_charset));
 		if(is_array($sshtml))$list_report_form->assign("REPORTHTML", $sshtml);
 		else $list_report_form->assign("ERROR_MSG", getTranslatedString('LBL_REPORT_GENERATION_FAILED', $currentModule) . "<br>" . $sshtml);
 		$list_report_form->assign("REPORTTOTHTML", $totalhtml);
