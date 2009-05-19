@@ -107,34 +107,22 @@ class Calendar
 				}
 				break;
 			case 'month':
-				$monthview_days = $this->date_time->daysinmonth;
-				$firstday_of_month = $this->date_time->getThismonthDaysbyIndex(0);
-				$num_of_prev_days = $firstday_of_month->dayofweek;
-				for($i=-$num_of_prev_days-1;$i<42;$i++){
-					$layout = new Layout('day',$this->date_time->getThismonthDaysbyIndex($i));
-					$this->month_array[$layout->start_time->get_formatted_date()] = $layout;
-					if($i==0){
-						continue;
-					}
-					array_push($this->slices,  $layout->start_time->get_formatted_date());
-				}
+				$arr = getCalendarDaysInMonth($this->date_time);
+				$this->month_array = $arr["month_array"];
+				$this->slices = $arr["slices"];
+				$this->date_time = $arr["date_time"];
 				break;
 			case 'year':
 				$this->month_day_slices = Array();
-				for($i=0;$i<12;$i++)
-				{
+				for($i=0;$i<12;$i++){
+					$currMonth = $this->date_time->getThisyearMonthsbyIndex($i);
 					$layout = new Layout('month',$this->date_time->getThisyearMonthsbyIndex($i));
 					$this->year_array[$layout->start_time->z_month] = $layout;
-					$daysinmonth = $this->year_array[$layout->start_time->z_month]->start_time->daysinmonth;
-					$firstday_of_month = $this->year_array[$layout->start_time->z_month]->start_time->getThismonthDaysbyIndex(0);
-					$noof_prevdays = $firstday_of_month->dayofweek;
-					$year_monthdays = Array();
-					for($m=0;$m<42;$m++)
-                                        {
-                                                $mday_list = new Layout('day',$this->year_array[$layout->start_time->z_month]->start_time->getThismonthDaysbyIndex($m-$noof_prevdays));
-						$year_monthdays[] = $mday_list->start_time->get_formatted_date(); 
-                                        }
-					$this->month_day_slices[$i] = $year_monthdays;
+					
+					$arr = getCalendarDaysInMonth($currMonth);
+					$slices = $arr["slices"];
+					
+					$this->month_day_slices[$i] = $slices;
 					array_push($this->slices,  $layout->start_time->z_month);
 				}
 				break;
@@ -342,5 +330,32 @@ class Layout
 	{
 		return $this->view;
 	}
+}
+
+/**
+ * this function returns the days in a month in an array format
+ * @param object $date_time - the date time object for the current month
+ * @return array $result - the array containing current months days information
+ */
+function getCalendarDaysInMonth($date_time){
+	global $current_user;
+	$month_array = array();
+	$slices = array();
+	$monthview_days = $date_time->daysinmonth;
+	
+	$firstday_of_month = $date_time->getThisMonthsDayByIndex(0);
+	$fdom = $firstday_of_month;
+	
+	$num_of_prev_days = ($fdom->dayofweek+1)%7-1;
+	for($i=-$num_of_prev_days;$i<42;$i++){
+		$pd = $date_time->getThisMonthsDayByIndex($i);
+		
+		$layout = new Layout('day', $pd);
+		$month_array[$layout->start_time->get_formatted_date()] = $layout;
+		array_push($slices,  $layout->start_time->get_formatted_date());
+	}
+	
+	$result = array("month_array"=>$month_array, "slices"=>$slices, "date_time"=>$date_time);
+	return $result;
 }
 ?>
