@@ -113,13 +113,19 @@ if($cvmodule != "") {
 			$log->info("CustomView :: Save :: vtiger_customview created successfully");
 						
 			if($setdefault == 1) {
-				$sql_result = $adb->pquery("select * from vtiger_user_module_preferences where userid = ? and tabid = ?",array($current_user->id, $cv_tabid));
+				$sql_result = $adb->pquery("SELECT * FROM vtiger_user_module_preferences WHERE userid = ? and tabid = ?",array($current_user->id, $cv_tabid));
 				if($adb->num_rows($sql_result) > 0) {
 					$updatedefaultsql = "UPDATE vtiger_user_module_preferences SET default_cvid = ? WHERE userid = ? and tabid = ?";
 					$updatedefaultresult = $adb->pquery($updatedefaultsql, array($genCVid, $current_user->id, $cv_tabid));
 				} else {
 					$insertdefaultsql = "INSERT INTO vtiger_user_module_preferences(userid, tabid, default_cvid) values (?,?,?)";
 					$insertdefaultresult = $adb->pquery($insertdefaultsql, array($userid, $cv_tabid, $genCVid));
+				}
+			} else {
+				$sql_result = $adb->pquery("SELECT * FROM vtiger_user_module_preferences WHERE userid = ? and tabid = ?",array($current_user->id, $cv_tabid));
+				if($adb->num_rows($sql_result) > 0) {
+					$deletedefaultsql = "DELETE FROM vtiger_user_module_preferences WHERE userid = ? and tabid = ?";
+					$deletedefaultresult = $adb->pquery($deletedefaultsql, array($current_user->id, $cv_tabid));
 				}
 			}
 			
@@ -172,13 +178,19 @@ if($cvmodule != "") {
 			$log->info("CustomView :: Save :: vtiger_customview upated successfully".$cvid);
 			
 			if($setdefault == 1) {
-				$sql_result = $adb->pquery("select * from vtiger_user_module_preferences where userid = ? and tabid = ?",array($current_user->id, $cv_tabid));
+				$sql_result = $adb->pquery("SELECT * FROM vtiger_user_module_preferences WHERE userid = ? and tabid = ?",array($current_user->id, $cv_tabid));
 				if($adb->num_rows($sql_result) > 0) {
 					$updatedefaultsql = "UPDATE vtiger_user_module_preferences SET default_cvid = ? WHERE userid = ? and tabid = ?";
 					$updatedefaultresult = $adb->pquery($updatedefaultsql, array($cvid, $current_user->id, $cv_tabid));
 				} else {
 					$insertdefaultsql = "INSERT INTO vtiger_user_module_preferences(userid, tabid, default_cvid) values (?,?,?)";
 					$insertdefaultresult = $adb->pquery($insertdefaultsql, array($userid, $cv_tabid, $cvid));
+				}
+			} else {
+				$sql_result = $adb->pquery("SELECT * FROM vtiger_user_module_preferences WHERE userid = ? and tabid = ?",array($current_user->id, $cv_tabid));
+				if($adb->num_rows($sql_result) > 0) {
+					$deletedefaultsql = "DELETE FROM vtiger_user_module_preferences WHERE userid = ? and tabid = ?";
+					$deletedefaultresult = $adb->pquery($deletedefaultsql, array($current_user->id, $cv_tabid));
 				}
 			}
 			$log->info("CustomView :: Save :: setdefault upated successfully".$cvid);
