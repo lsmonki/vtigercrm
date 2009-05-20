@@ -1217,7 +1217,8 @@ $app_strings = array (
 
 //To handle plurals of module names
 'Todos' => 'Todos',
-
+'LBL_FIELD_FOR_COMPARISION' => 'Field for Comparision',
+'LBL_DONE' => ' Done ',
 // For Popup reminder
 'LBL_POSTPONE'=>'Postpone',
 

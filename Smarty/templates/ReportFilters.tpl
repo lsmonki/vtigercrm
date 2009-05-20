@@ -105,8 +105,8 @@
 			</select>
 			</td>
 			<td class="dvtCellLabel"><input name="fval1" id="fval1" class="repBox" type="text" value="{$VALUE1}">
-			<img height=20 width=20 style="cursor: pointer;" title="Fields for Comparision" alt="Fields for Comparision" src='themes/images/terms.gif' onClick="placeAtCenterOfDiv(adv_filter_div,show_val1);showHideSelectDiv('show_val1');"/>
-			<input type="image" align="absmiddle" style="cursor: pointer;" onclick="$('fval1').value='';return false;" language="javascript" title="Clear" alt="Clear" src="themes/images/clear_field.gif"/>
+			<img height=20 width=20 style="cursor: pointer;" title="{$APP.LBL_FIELD_FOR_COMPARISION}" alt="{$APP.LBL_FIELD_FOR_COMPARISION}" src='themes/images/terms.gif' onClick="placeAtCenterOfDiv(adv_filter_div,show_val1);showHideSelectDiv('show_val1');"/>
+			<input type="image" align="absmiddle" style="cursor: pointer;" onclick="$('fval1').value='';return false;" language="javascript" title="{$APP.LBL_CLEAR}" alt="{$APP.LBL_CLEAR}" src="themes/images/clear_field.gif"/>
 			</td>
 			<td class="dvtCellLabel">{$MOD.LBL_AND}</td>
 			</tr>
@@ -124,8 +124,8 @@
 			</select>
 			</td>
 			<td class="dvtCellInfo"><input name="fval2" id="fval2" class="repBox" type="text" value="{$VALUE2}">
-			<img height=20 width=20 style="cursor: pointer;" title="Fields for Comparision" alt="Fields for Comparision" src='themes/images/terms.gif' onClick="placeAtCenterOfDiv(adv_filter_div,show_val2);showHideSelectDiv('show_val2');"/>
-			<input type="image" align="absmiddle" style="cursor: pointer;" onclick="$('fval2').value='';return false;" language="javascript" title="Clear" alt="Clear" src="themes/images/clear_field.gif"/>
+			<img height=20 width=20 style="cursor: pointer;" title="{$APP.LBL_FIELD_FOR_COMPARISION}" alt="{$APP.LBL_FIELD_FOR_COMPARISION}" src='themes/images/terms.gif' onClick="placeAtCenterOfDiv(adv_filter_div,show_val2);showHideSelectDiv('show_val2');"/>
+			<input type="image" align="absmiddle" style="cursor: pointer;" onclick="$('fval2').value='';return false;" language="javascript" title="{$APP.LBL_CLEAR}" alt="{$APP.LBL_CLEAR}" src="themes/images/clear_field.gif"/>
 			</td>
 			<td class="dvtCellInfo">{$MOD.LBL_AND}</td>
 			</tr>
@@ -143,8 +143,8 @@
 			</select>
 			</td>
 			<td class="dvtCellLabel"><input name="fval3" id="fval3" class="repBox" type="text" value="{$VALUE3}">
-			<img height=20 width=20 style="cursor: pointer;" title="Fields for Comparision" alt="Fields for Comparision" src='themes/images/terms.gif' onClick="placeAtCenterOfDiv(adv_filter_div,show_val3);showHideSelectDiv('show_val3');"/>
-			<input type="image" align="absmiddle" style="cursor: pointer;" onclick="$('fval3').value='';return false;" language="javascript" title="Clear" alt="Clear" src="themes/images/clear_field.gif"/>
+			<img height=20 width=20 style="cursor: pointer;" title="{$APP.LBL_FIELD_FOR_COMPARISION}" alt="{$APP.LBL_FIELD_FOR_COMPARISION}" src='themes/images/terms.gif' onClick="placeAtCenterOfDiv(adv_filter_div,show_val3);showHideSelectDiv('show_val3');"/>
+			<input type="image" align="absmiddle" style="cursor: pointer;" onclick="$('fval3').value='';return false;" language="javascript" title="{$APP.LBL_CLEAR}" alt="{$APP.LBL_CLEAR}" src="themes/images/clear_field.gif"/>
 			</td>
 			<td class="dvtCellLabel">{$MOD.LBL_AND}</td>
 			</tr>
@@ -162,8 +162,8 @@
 			</select>
 			</td>
 			<td class="dvtCellInfo"><input name="fval4" id="fval4" class="repBox" type="text" value="{$VALUE4}">
-			<img height=20 width=20 style="cursor: pointer;" title="Fields for Comparision" alt="Fields for Comparision" src='themes/images/terms.gif' onClick="placeAtCenterOfDiv(adv_filter_div,show_val4);showHideSelectDiv('show_val4');"/>
-			<input type="image" align="absmiddle" style="cursor: pointer;" onclick="$('fval4').value='';return false;" language="javascript" title="Clear" alt="Clear" src="themes/images/clear_field.gif"/>
+			<img height=20 width=20 style="cursor: pointer;" title="{$APP.LBL_FIELD_FOR_COMPARISION}" alt="{$APP.LBL_FIELD_FOR_COMPARISION}" src='themes/images/terms.gif' onClick="placeAtCenterOfDiv(adv_filter_div,show_val4);showHideSelectDiv('show_val4');"/>
+			<input type="image" align="absmiddle" style="cursor: pointer;" onclick="$('fval4').value='';return false;" language="javascript" title="{$APP.LBL_CLEAR}" alt="{$APP.LBL_CLEAR}" src="themes/images/clear_field.gif"/>
 			</td>
 			<td class="dvtCellInfo">{$MOD.LBL_AND}</td>
 			</tr>
@@ -182,7 +182,7 @@
 			</td>
 			<td class="dvtCellLabel"><input name="fval5" id="fval5" class="repBox" type="text" value="{$VALUE5}">
 				<img height=20 width=20 style="cursor: pointer;" title="Fields for Comparision" alt="Fields for Comparision" src='themes/images//terms.gif' onClick="placeAtCenterOfDiv(adv_filter_div,show_val5);showHideSelectDiv('show_val5');"/>
-				<input type="image" align="absmiddle" style="cursor: pointer;" onclick="$('fval5').value='';return false;" language="javascript" title="Clear" alt="Clear" src="themes/images/clear_field.gif"/</td>
+				<input type="image" align="absmiddle" style="cursor: pointer;" onclick="$('fval5').value='';return false;" language="javascript" title="{$APP.LBL_CLEAR}" alt="{$APP.LBL_CLEAR}" src="themes/images/clear_field.gif"/</td>
 			<td class="dvtCellLabel">&nbsp;</td>
 			</tr>
 		</tbody>
@@ -198,7 +198,7 @@
 							<table width="100%" cellspacing="0" cellpadding="0" border="0" class="layerHeadingULine">
 							<tbody><tr background="themes/images/qcBg.gif" class="mailSubHeader">
 								<td width=90% class="genHeaderSmall"><b>{$MOD.LBL_SELECT_FIELDS}</b></td>
-								<td align=right> <img border="0" align="absmiddle" src="themes/images/close.gif" style="cursor: pointer;" alt="Close" title="Close" onclick="showHideSelectDiv('show_val1');"/></td
+								<td align=right> <img border="0" align="absmiddle" src="themes/images/close.gif" style="cursor: pointer;" alt="{$APP.LBL_CLOSE}" title="{$APP.LBL_CLOSE}" onclick="showHideSelectDiv('show_val1');"/></td
 							</tbody></table>
 						
 							<table width="100%" cellspacing="0" cellpadding="0" border="0" class="small">
@@ -219,7 +219,7 @@
 								<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerPopupTransport">
 								<tbody><tr>
 									<td width="50%" align="center">
-										<input type="button" style="width: 70px;" value="  Done  " name="button" onclick="showHideSelectDiv('show_val1');" class="crmbutton small create" accesskey="X" title="Cancel [Alt+X]"/>
+										<input type="button" style="width: 70px;" value="{$APP.LBL_DONE}" name="button" onclick="showHideSelectDiv('show_val1');" class="crmbutton small create" accesskey="X" title="{$APP.LBL_DONE}"/>
 									</td>
 								</tr>
 								</tbody></table>
@@ -238,7 +238,7 @@
 							<table width="100%" cellspacing="0" cellpadding="0" border="0" class="layerHeadingULine">
 							<tbody><tr background="themes/images/qcBg.gif" class="mailSubHeader">
 								<td width=90% class="genHeaderSmall"><b>{$MOD.LBL_SELECT_FIELDS}</b></td>
-								<td align=right> <img border="0" align="absmiddle" src="themes/images/close.gif" style="cursor: pointer;" alt="Close" title="Close" onclick="showHideSelectDiv('show_val2');"/></td
+								<td align=right> <img border="0" align="absmiddle" src="themes/images/close.gif" style="cursor: pointer;" alt="{$APP.LBL_CLOSE}" title="{$APP.LBL_CLOSE}" onclick="showHideSelectDiv('show_val2');"/></td
 							</tbody></table>
 						
 							<table width="100%" cellspacing="0" cellpadding="0" border="0" class="small">
@@ -259,7 +259,7 @@
 								<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerPopupTransport">
 								<tbody><tr>
 									<td width="50%" align="center">
-										<input type="button" style="width: 70px;" value="  Done  " name="button" onclick="showHideSelectDiv('show_val2');" class="crmbutton small create" accesskey="X" title="Cancel [Alt+X]"/>
+										<input type="button" style="width: 70px;" value="{$APP.LBL_DONE}" name="button" onclick="showHideSelectDiv('show_val2');" class="crmbutton small create" accesskey="X" title="{$APP.LBL_DONE}"/>
 									</td>
 								</tr>
 								</tbody></table>
@@ -278,7 +278,7 @@
 							<table width="100%" cellspacing="0" cellpadding="0" border="0" class="layerHeadingULine">
 							<tbody><tr background="themes/images/qcBg.gif" class="mailSubHeader">
 								<td width=90% class="genHeaderSmall"><b>{$MOD.LBL_SELECT_FIELDS}</b></td>
-								<td align=right> <img border="0" align="absmiddle" src="themes/images/close.gif" style="cursor: pointer;" alt="Close" title="Close" onclick="showHideSelectDiv('show_val3');"/></td
+								<td align=right> <img border="0" align="absmiddle" src="themes/images/close.gif" style="cursor: pointer;" alt="{$APP.LBL_CLOSE}" title="{$APP.LBL_CLOSE}" onclick="showHideSelectDiv('show_val3');"/></td
 							</tbody></table>
 						
 							<table width="100%" cellspacing="0" cellpadding="0" border="0" class="small">
@@ -299,7 +299,7 @@
 								<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerPopupTransport">
 								<tbody><tr>
 									<td width="50%" align="center">
-										<input type="button" style="width: 70px;" value="  Done  " name="button" onclick="showHideSelectDiv('show_val3');" class="crmbutton small create" accesskey="X" title="Cancel [Alt+X]"/>
+										<input type="button" style="width: 70px;" value="{$APP.LBL_DONE}" name="button" onclick="showHideSelectDiv('show_val3');" class="crmbutton small create" accesskey="X" title="{$APP.LBL_DONE}"/>
 									</td>
 								</tr>
 								</tbody></table>
@@ -318,7 +318,7 @@
 							<table width="100%" cellspacing="0" cellpadding="0" border="0" class="layerHeadingULine">
 							<tbody><tr background="themes/images/qcBg.gif" class="mailSubHeader">
 								<td width=90% class="genHeaderSmall"><b>{$MOD.LBL_SELECT_FIELDS}</b></td>
-								<td align=right> <img border="0" align="absmiddle" src="themes/images/close.gif" style="cursor: pointer;" alt="Close" title="Close" onclick="showHideSelectDiv('show_val4');"/></td
+								<td align=right> <img border="0" align="absmiddle" src="themes/images/close.gif" style="cursor: pointer;" alt="{$APP.LBL_CLOSE}" title="{$APP.LBL_CLOSE}" onclick="showHideSelectDiv('show_val4');"/></td
 							</tbody></table>
 						
 							<table width="100%" cellspacing="0" cellpadding="0" border="0" class="small">
@@ -339,7 +339,7 @@
 								<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerPopupTransport">
 								<tbody><tr>
 									<td width="50%" align="center">
-										<input type="button" style="width: 70px;" value="  Done  " name="button" onclick="showHideSelectDiv('show_val4');" class="crmbutton small create" accesskey="X" title="Cancel [Alt+X]"/>
+										<input type="button" style="width: 70px;" value="{$APP.LBL_DONE}" name="button" onclick="showHideSelectDiv('show_val4');" class="crmbutton small create" accesskey="X" title="{$APP.LBL_DONE}"/>
 									</td>
 								</tr>
 								</tbody></table>
@@ -358,7 +358,7 @@
 							<table width="100%" cellspacing="0" cellpadding="0" border="0" class="layerHeadingULine">
 							<tbody><tr background="themes/images/qcBg.gif" class="mailSubHeader">
 								<td width=90% class="genHeaderSmall"><b>{$MOD.LBL_SELECT_FIELDS}</b></td>
-								<td align=right> <img border="0" align="absmiddle" src="themes/images/close.gif" style="cursor: pointer;" alt="Close" title="Close" onclick="showHideSelectDiv('show_val5');"/></td
+								<td align=right> <img border="0" align="absmiddle" src="themes/images/close.gif" style="cursor: pointer;" alt="{$APP.LBL_CLOSE}" title="{$APP.LBL_CLOSE}" onclick="showHideSelectDiv('show_val5');"/></td
 							</tbody></table>
 						
 							<table width="100%" cellspacing="0" cellpadding="0" border="0" class="small">
@@ -379,7 +379,7 @@
 								<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerPopupTransport">
 								<tbody><tr>
 									<td width="50%" align="center">
-										<input type="button" style="width: 70px;" value="  Done  " name="button" onclick="showHideSelectDiv('show_val5');" class="crmbutton small create" accesskey="X" title="Cancel [Alt+X]"/>
+										<input type="button" style="width: 70px;" value="{$APP.LBL_DONE}" name="button" onclick="showHideSelectDiv('show_val5');" class="crmbutton small create" accesskey="X" title="{$APP.LBL_DONE}"/>
 									</td>
 								</tr>
 								</tbody></table>
