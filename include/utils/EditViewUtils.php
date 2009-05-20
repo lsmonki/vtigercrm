@@ -58,9 +58,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	$ui_type[]= $uitype;
 	$editview_fldname[] = $fieldname;
 
-	/*if($generatedtype == 2)
-		$mod_strings[$fieldlabel] = $fieldlabel;*/
-
 	// vtlib customization: Related type field
 	if($uitype == '10') {
 		global $adb;
@@ -88,7 +85,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$value='';
 		}
 
-		$editview_label[] = Array('options'=>$entityTypes, 'selected'=>$valueType, 'displaylabel'=>getTranslatedString($fieldlabel));
+		$editview_label[] = Array('options'=>$entityTypes, 'selected'=>$valueType, 'displaylabel'=>getTranslatedString($fieldlabel, $module_name));
 		$fieldvalue[] = Array('displayvalue'=>$displayValue,'entityid'=>$parent_id);
 
 	} // END
@@ -121,7 +118,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			$disp_value = getDisplayDate($value);
 		}
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
 		if($uitype == 6)
 		{
@@ -163,7 +160,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 16) {
 		require_once 'modules/PickList/PickListUtils.php';
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		
 		$fieldname = mysql_real_escape_string($fieldname);
 		$pick_query="select $fieldname from vtiger_$fieldname order by sortorderid";
@@ -223,17 +220,17 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$options[] =  array($app_strings['LBL_NOT_ACCESSIBLE'],$value,'selected');
 			}
 		}
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue [] = $options;
 	}
 	elseif($uitype == 17)
 	{
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue [] = $value;
 	}
 	elseif($uitype == 85) //added for Skype by Minnie
 	{
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue [] = $value;
 	}elseif($uitype == 19 || $uitype == 20)
 	{
@@ -252,22 +249,22 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$value=getTermsandConditions();
 		}
 
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue [] = $value;
 	}
 	elseif($uitype == 21 || $uitype == 24)
 	{
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue [] = $value;
 	}
 	elseif($uitype == 22)
 	{
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue[] = $value;
 	}
 	elseif($uitype == 52 || $uitype == 77)
 	{
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		global $current_user;
 		if($value != '')
 		{
@@ -300,7 +297,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 53)     
 	{  
 		global $noof_group_rows;
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		//Security Checks
 		if($fieldlabel == 'Assigned To' && $is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid($module_name)] == 3 or $defaultOrgSharingPermission[getTabid($module_name)] == 0))
 		{
@@ -360,14 +357,14 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		if($value != '') {		
 			$account_name = getAccountName($value);	
 		}
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue[]=$account_name;
 		$fieldvalue[] = $value;
 	}
 	elseif($uitype == 54)
 	{
 		$options = array();
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$pick_query="select * from vtiger_groups";
 		$pickListResult = $adb->pquery($pick_query, array());
 		$noofpickrows = $adb->num_rows($pickListResult);
@@ -418,7 +415,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			}
 			$fieldvalue [] = $options;
 		}
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue[] = $value;
 	}elseif($uitype == 59){
 		if($_REQUEST['module'] == 'HelpDesk')
@@ -433,13 +430,13 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{		
 			$product_name = getProductName($value);	
 		}
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue[]=$product_name;
 		$fieldvalue[]=$value;
 	}
 	elseif($uitype == 63)
 	{
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		if($value=='')
 			$value=1;
 		$options = array();
@@ -466,19 +463,19 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 64)
 	{
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
 		$fieldvalue[] = $value;
 	}
 	elseif($uitype == 156)
 	{
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue[] = $value;	
 		$fieldvalue[] = $is_admin;
 	}
 	elseif($uitype == 56)
 	{
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue[] = $value;	
 	}
 	elseif($uitype == 57){
@@ -496,7 +493,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		//Checking for contacts duplicate
 
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue[] = $contact_name;
 		$fieldvalue[] = $value;
 	}
@@ -521,7 +518,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			}
 
 		}
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue[]=$campaign_name;
 		$fieldvalue[] = $value;
 	}
@@ -575,7 +572,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			if($value != '')
 				$fieldvalue[] = $value;
 		}
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 	}
 	elseif($uitype == 28){
 		if($col_fields['record_id'] != '')
@@ -596,11 +593,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			if($value != '')
 				$fieldvalue[] = $value;
 				
-		$editview_label[]=getTranslatedString($fieldlabel);		
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);		
 	}
 	elseif($uitype == 69)
   	{
-  		$editview_label[]=getTranslatedString($fieldlabel);
+  		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
  		if( $col_fields['record_id'] != "") 
   		{
  		    //This query is for Products only
@@ -1086,7 +1083,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$fieldvalue[] = convertFromDollar($value,$rate);
 		}
         $currency = $rate_symbol['symbol'];
-		$editview_label[]=getTranslatedString($fieldlabel).': ('.$currency.')';		
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name).': ('.$currency.')';		
 	}
 	elseif($uitype == 75 || $uitype ==81)
 	{
@@ -1104,7 +1101,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			$pop_type = 'specific_vendor_address';
 		}
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue[] = $vendor_name;
 		$fieldvalue[] = $value;
 	}
@@ -1119,7 +1116,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$value = $_REQUEST['potental_id'];
 			$potential_name = getPotentialName($value);
 		}		 	
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue[] = $potential_name;
 		$fieldvalue[] = $value;
 	}
@@ -1134,7 +1131,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$value = $_REQUEST['quote_id'];
 			$potential_name = getQuoteName($value);
 		}		 	
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue[] = $quote_name;
 		$fieldvalue[] = $value;
 	}
@@ -1149,7 +1146,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$value = $_REQUEST['purchaseorder_id'];
 			$purchaseorder_name = getPoName($value);
 		}		 	
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue[] = $purchaseorder_name;
 		$fieldvalue[] = $value;
 	}
@@ -1164,7 +1161,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$value = $_REQUEST['salesorder_id'];
 			$salesorder_name = getSoName($value);
 		}		 	
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue[] = $salesorder_name;
 		$fieldvalue[] = $value;
 	}
@@ -1178,7 +1175,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$rem_days = floor($col_fields[$fieldname]/(24*60));
 		$rem_hrs = floor(($col_fields[$fieldname]-$rem_days*24*60)/60);
 		$rem_min = ($col_fields[$fieldname]-$rem_days*24*60)%60;
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$day_options = getReminderSelectOption(0,31,'remdays',$rem_days);
 		$hr_options = getReminderSelectOption(0,23,'remhrs',$rem_hrs);
 		$min_options = getReminderSelectOption(1,59,'remmin',$rem_min);
@@ -1188,7 +1185,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 115)
 	{
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$pick_query="select * from vtiger_" . mysql_real_escape_string($fieldname);
 		$pickListResult = $adb->pquery($pick_query, array());
 		$noofpickrows = $adb->num_rows($pickListResult);
@@ -1216,7 +1213,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 116 || $uitype == 117)
 	{
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$pick_query="select * from vtiger_currency_info where currency_status = 'Active' and deleted=0";
 		$pickListResult = $adb->pquery($pick_query, array());
 		$noofpickrows = $adb->num_rows($pickListResult);
@@ -1244,14 +1241,14 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype ==98)
 	{
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$fieldvalue[]=$value;
         	$fieldvalue[]=getRoleName($value);
 		$fieldvalue[]=$is_admin;
 	}
 	elseif($uitype == 105)
 	{
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		 if( isset( $col_fields['record_id']) && $col_fields['record_id'] != '') {
 			$query = "select vtiger_attachments.path, vtiger_attachments.name from vtiger_contactdetails left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_contactdetails.contactid inner join vtiger_attachments on vtiger_attachments.attachmentsid=vtiger_seattachmentsrel.attachmentsid where vtiger_contactdetails.imagename=vtiger_attachments.name and contactid=?";
 			$result_image = $adb->pquery($query, array($col_fields['record_id']));
@@ -1270,12 +1267,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$fieldvalue[] = '';
 	}elseif($uitype == 101)
 	{
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
         $fieldvalue[] = getUserName($value);
         $fieldvalue[] = $value;
 	}
 	elseif($uitype == 26){
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		$folderid=$col_fields['folderid'];
 		$foldername_query = 'select foldername from vtiger_attachmentsfolder where folderid = ?';
 		$res = $adb->pquery($foldername_query,array($folderid));
@@ -1308,7 +1305,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                                         $external_selected
                                         );
                 $editview_label[] = array("I","E");
-                $editview_label[] = getTranslatedString($fieldlabel);
+                $editview_label[] = getTranslatedString($fieldlabel, $module_name);
                 $fieldvalue[] = $value;
                 $fieldvalue[] = $filename;
 	}
@@ -1319,7 +1316,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			$value = $_REQUEST['mg_subject'];
 		}
-		$editview_label[]=getTranslatedString($fieldlabel);
+		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		if($uitype == 1 && ($fieldname=='expectedrevenue' || $fieldname=='budgetcost' || $fieldname=='actualcost' || $fieldname=='expectedroi' || $fieldname=='actualroi' ) && ($module_name=='Campaigns'))
 		{
 			$rate_symbol = getCurrencySymbolandCRate($user_info['currency_id']);
