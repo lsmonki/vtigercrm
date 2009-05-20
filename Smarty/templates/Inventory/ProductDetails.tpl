@@ -28,7 +28,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		var curr_productid = document.getElementById("hdnProductId"+curr_row).value;
 		if(curr_productid == '')
 		{ldelim}
-			alert("{$APP.PLEASE_SELECT_PRODUCT}");
+			alert("{$APP.PLEASE_SELECT_LINE_ITEM}");
 			return false;
 		{rdelim}
 
@@ -167,7 +167,8 @@ function displayCoords(currObj,obj,mode,curr_row)
 		   <tr>
 			<td class="small">
 				<input type="text" id="productName1" name="productName1" class="small" style="width:70%" value="{$PRODUCT_NAME}" readonly />
-				<input type="hidden" id="hdnProductId1" name="hdnProductId1" value="{$PRODUCT_ID}">
+				<input type="hidden" id="hdnProductId1" name="hdnProductId1" value="{$PRODUCT_ID}" />
+				<input type="hidden" id="lineItemType1" name="lineItemType1" value="Products" />
 				<img id="searchIcon1" src="{'search.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}',1)" />
 			</td>
 		</tr>

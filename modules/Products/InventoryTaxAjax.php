@@ -9,9 +9,8 @@
  *
  ********************************************************************************/
 
-global $theme;
+global $theme, $mod_strings;
 $theme_path="themes/".$theme."/";
-
 
 $productid = $_REQUEST['productid'];
 $rowid = $_REQUEST['curr_row'];
@@ -24,7 +23,7 @@ $associated_tax_count = count($tax_details);
 $tax_div = '
 		<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small" id="tax_table'.$rowid.'">
 		   <tr>
-			<td id="tax_div_title'.$rowid.'" nowrap align="left" ><b>Set Tax for : '.$product_total.'</b></td>
+			<td id="tax_div_title'.$rowid.'" nowrap align="left" ><b>'.$app_strings['LABEL_SET_TAX_FOR'].' : '.$product_total.'</b></td>
 			<td>&nbsp;</td>
 			<td align="right"><img src="'. vtiger_imageurl('close.gif', $theme).'" border="0" onClick="fnHidePopDiv(\'tax_div'.$rowid.'\')" style="cursor:pointer;"></td>
 		   </tr>
@@ -60,7 +59,7 @@ $tax_div .= '</table>';
 
 if($associated_tax_count == 0)
 {
-	$tax_div .= '<div align="left" class="lineOnTop" width="100%">No taxes associated with this product.</div>';
+	$tax_div .= '<div align="left" class="lineOnTop" width="100%">'.$mod_strings['LBL_NO_TAXES_ASSOCIATED'].'.</div>';
 }
 
 $tax_div .= '<input type="hidden" id="hdnTaxTotal'.$rowid.'" name="hdnTaxTotal'.$rowid.'" value="'.$net_tax_total.'">';

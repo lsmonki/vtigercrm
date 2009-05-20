@@ -214,6 +214,8 @@ $mod_strings = Array(
 // Module Sequence Numbering
 'Product No' => 'Product No',
 // END
+
+'LBL_NO_TAXES_ASSOCIATED'=>'No taxes associated with this product',
 );
 
 ?>

@@ -28,7 +28,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		var curr_productid = document.getElementById("hdnProductId"+curr_row).value;
 		if(curr_productid == '')
 		{ldelim}
-			alert("{$APP.PLEASE_SELECT_PRODUCT}");
+			alert("{$APP.PLEASE_SELECT_LINE_ITEM}");
 			return false;
 		{rdelim}
 		var curr_quantity = document.getElementById("qty"+curr_row).value;
@@ -201,7 +201,8 @@ function displayCoords(currObj,obj,mode,curr_row)
 			<tr>
 				<td class="small" valign="top">
 					<input type="text" id="{$productName}" name="{$productName}" value="{$data.$productName}" class="small" style="width: 70%;" readonly />
-					<input type="hidden" id="{$hdnProductId}" name="{$hdnProductId}" value="{$data.$hdnProductId}">
+					<input type="hidden" id="{$hdnProductId}" name="{$hdnProductId}" value="{$data.$hdnProductId}" />
+					<input type="hidden" id="lineItemType{$row_no}" name="lineItemType{$row_no}" value="{$entityType}" />
 					<input type="hidden" id="{$productDescription}" name="{$productDescription}" value="{$data.$productDescription}">
 					{if $entityType eq 'Services'}
 						<img id="searchIcon{$row_no}" src="{'search.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="servicePickList(this,'{$MODULE}','{$row_no}')" />
