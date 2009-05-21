@@ -15,7 +15,12 @@
 function chooseType(typeName){
 	$('vtbusy_info').style.display="inline";
 	$('stufftype_id').value=typeName;
-	$('divHeader').innerHTML="<b>Add</b>"+" "+"<b>"+typeName+"</b>";
+	
+	var typeLabel = typeName;
+	if(alert_arr[typeName] != null && alert_arr[typeName] != "" && alert_arr[typeName] != 'undefined'){
+		typeLabel = alert_arr[typeName];
+	}
+	$('divHeader').innerHTML="<b>"+alert_arr.LBL_ADD+typeLabel+"</b>";
 	if(typeName=='Module'){
 		$('moduleNameRow').style.display="block";
 		$('moduleFilterRow').style.display="block";
