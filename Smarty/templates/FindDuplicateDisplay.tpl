@@ -11,37 +11,49 @@
  ********************************************************************************/
 
 -->*}
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="themes/{$THEME}/style.css">
-	<link REL="SHORTCUT ICON" HREF="themes/images/vtigercrm_icon.ico">	
-	<style type="text/css">@import url("themes/{$THEME}/style.css");</style>
-</head>
-<script language="JAVASCRIPT" type="text/javascript" src="include/js/smoothscroll.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
-<script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
-<script src="include/scriptaculous/prototype.js" type="text/javascript"></script>
-<script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-<tr>
-	{if $VIEW eq true}
-		<td>
-			{include file='Buttons_List.tpl'}
-		</td>
-	{else}
-		<td>
-			&nbsp;
-		</td>
-	{/if}
+
+{* If we duplicate merge is within same module show the headers ... *}
+{if $MODULE eq $smarty.request.module}
+
+{include file='Buttons_List.tpl'}
+				<div id="searchingUI" style="display:none;">
+    				<table border=0 cellspacing=0 cellpadding=0 width=100%>
+    					<tr>
+    						<td align=center>
+        						<img src="{'searching.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_SEARCHING}"  title="{$APP.LBL_SEARCHING}">
+        					</td>
+    					</tr>
+    				</table>
+				</div>
+    		</td>
+		</tr>
+	</table>
+</td>
 </tr>
-
-<tr><td>
-<div id="duplicate_ajax">
-
-{include file='FindDuplicateAjax.tpl'}
-</div>
-<div id="current_action" style="display:none">{$smarty.request.action}</div>
-</td></tr>
 </table>
-</html>
 
+{/if}
+
+{*<!-- Contents -->*}
+
+{if $MODULE eq $smarty.request.module}
+<table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
+     <tr>
+        <td valign=top><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
+
+		<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
+{/if}
+			
+			{* Common Output: Within module Duplicate Search or Post Import Duplicate Search *}		
+			<div id="duplicate_ajax" style='margin: 0 10px;'>
+				{include file='FindDuplicateAjax.tpl'}
+			</div>
+			<div id="current_action" style="display:none">{$smarty.request.action}</div>
+			{* END *}
+			
+{if $MODULE eq $smarty.request.module}
+     	</td>
+        <td valign=top><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
+   </tr>
+</table>
+{/if}

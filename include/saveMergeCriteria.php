@@ -15,36 +15,19 @@ global $current_user,$currentModule;
 global $adb;
 
 $tabid=getTabid($currentModule);
-$selected_col_string = rtrim($_REQUEST['selectedColumnsString'],",");
-$merge_criteria_cols = explode(',',$selected_col_string);
-$sql_user="SELECT distinct(userid) from vtiger_user2mergefields where tabid=?";
-$result_user=$adb->pquery($sql_user,array($tabid));
-$num_users=$adb->num_rows($result_user);
-$user = "false";
-for($i=0; $i<$num_users;$i++) {
-	if($adb->query_result($result_user,$i,"userid") == $current_user->id) {
-		$user = "true";
-	}
-}
-if($selected_col_string != "") {
-	if($user == "true") {
-		$sql="UPDATE vtiger_user2mergefields SET visible=2 WHERE userid=? and tabid=?";
-		$adb->pquery($sql,array($current_user->id,$tabid));
-		
-		$sql1="UPDATE vtiger_user2mergefields SET visible=1 WHERE fieldid IN(". generateQuestionMarks($merge_criteria_cols) .") AND userid=?";
-		$adb->pquery($sql1,array($merge_criteria_cols,$current_user->id));
-	}
-	else {
-		$fld_result = getFieldsResultForMerge($tabid);
-		if ($fld_result != null) {
-	    	$num_rows = $adb->num_rows($fld_result);
-	    	for($i=0; $i<$num_rows; $i++) {
-	    		$field_id = $adb->query_result($fld_result,$i,'fieldid');
-				$params = array($current_user->id, $tabid, $field_id, 2);
-	    		$adb->pquery("insert into vtiger_user2mergefields values (?,?,?,?)", $params);
-			}
-			$sql1="UPDATE vtiger_user2mergefields SET visible=1 WHERE fieldid IN(". generateQuestionMarks($merge_criteria_cols) .") AND userid=?";
-			$adb->pquery($sql1,array($merge_criteria_cols,$current_user->id));
+
+if(!empty($_REQUEST['selectedColumnsString'])) {
+	$selected_col_string = rtrim($_REQUEST['selectedColumnsString'],",");
+	$merge_criteria_cols = explode(',',$selected_col_string);
+
+	if(!empty($merge_criteria_cols)) {
+		// Drop all the existing merge field selections
+		$adb->pquery("DELETE FROM vtiger_user2mergefields WHERE tabid=? AND userid=?", array($tabid, $current_user->id));
+	
+		// Update the new merge field selections
+		foreach($merge_criteria_cols as $merge_fieldid) {
+			$adb->pquery("INSERT INTO vtiger_user2mergefields (userid, tabid, fieldid, visible) VALUES (?,?,?,?)", 
+			array($current_user->id, $tabid, $merge_fieldid, 1));
 		}
 	}
 }

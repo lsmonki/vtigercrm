@@ -4330,32 +4330,16 @@ function textlength_check($field_val)
 function getMergeFields($module,$str){
 	global $adb,$current_user;
 	$tabid = getTabid($module);
-	$sql="select distinct(userid) from vtiger_user2mergefields where tabid=?";
-	$sql_result=$adb->pquery($sql,array($tabid));
-	$num_rows=$adb->num_rows($sql_result);
-	for($i=0; $i<$num_rows;$i++)
-	{
-		if($adb->query_result($sql_result,$i,"userid") == $current_user->id)
-		{
-			$user_id=$current_user->id;
-			break;
-		}
-		$user_id=0;
-	}
 	if($str == "available_fields"){
-		$sql="select * from vtiger_user2mergefields where tabid=? and userid=?";
-	}
-	else{ //if($str == fileds_to_merge)
-		$sql="select * from vtiger_user2mergefields where tabid=? and userid=? and visible=1";
-	}
-	$result = $adb->pquery($sql, array($tabid,$user_id));
-	$num_rows=$adb->num_rows($result);
-	if($str == "available_fields" && $num_rows == 0) {
 		$result = getFieldsResultForMerge($tabid);
-		if ($result != null) {
-			$num_rows=$adb->num_rows($result);
-		}
 	}
+	else { //if($str == fileds_to_merge)
+		$sql="select * from vtiger_user2mergefields where tabid=? and userid=? and visible=1";
+		$result = $adb->pquery($sql, array($tabid,$current_user->id));
+	}
+	
+	$num_rows=$adb->num_rows($result);
+	
 	$sql_profile="select profileid from vtiger_role2profile where roleid=(select roleid from vtiger_user2role where userid=?)";
 	$result_profile=$adb->pquery($sql_profile,array($current_user->id));
 	$permitted_list = getProfile2FieldPermissionList($module,$adb->query_result($result_profile,0,"profileid"));

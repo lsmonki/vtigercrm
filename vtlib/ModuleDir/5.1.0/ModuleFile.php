@@ -340,8 +340,12 @@ class ModuleClass extends CRMEntity {
 					
 		if (isset($select_cols) && trim($select_cols) != '') {
 			$sub_query = "SELECT $select_cols FROM  $this->table_name AS t " .
-				" INNER JOIN vtiger_crmentity AS crm ON crm.crmid = t.".$this->table_index.
-					" GROUP BY $select_cols HAVING COUNT(*)>1";	
+				" INNER JOIN vtiger_crmentity AS crm ON crm.crmid = t.".$this->table_index;
+			// Consider custom table join as well.
+			if(isset($this->customFieldTable)) {
+				$sub_query .= " LEFT JOIN ".$this->customFieldTable[0]." tcf ON tcf.".$this->customFieldTable[1]." = t.$this->table_index";
+			}
+			$sub_query .= " WHERE crm.deleted=0 GROUP BY $select_cols HAVING COUNT(*)>1";	
 		} else {
 			$sub_query = "SELECT $table_cols $from_clause $where_clause GROUP BY $table_cols HAVING COUNT(*)>1";
 		}	

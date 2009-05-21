@@ -1,7 +1,6 @@
-
-<table width='100%' border='0' cellpadding='5' cellspacing='0'>
+<table width='100%' border='0' cellpadding='5' cellspacing='0' class='tableHeading'>
 	<tr>
-		<td class='dvtCellLabel big' align='left'>
+		<td class='big' align='left'>
 			<b>{$APP.LBL_DUPLICATE_DATA_IN} {$MOD.LBL_MODULE_NAME}</b>
 		</td>
 	</tr>

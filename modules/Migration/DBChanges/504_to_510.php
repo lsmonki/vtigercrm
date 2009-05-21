@@ -136,7 +136,7 @@ ExecuteQuery("update vtiger_field set uitype=16 where fieldname in " .
 		" and uitype = '15'");
 
 /* Function to add Field Security for newly added fields */
-function addFieldSecurity($tabid, $fieldid, $allow_merge=true) {
+function addFieldSecurity($tabid, $fieldid, $allow_merge=false) {
 	global $adb;
 	ExecuteQuery("INSERT INTO vtiger_def_org_field (tabid, fieldid, visible, readonly) VALUES ($tabid, $fieldid, 0, 1)");
 

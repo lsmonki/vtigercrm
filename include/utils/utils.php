@@ -3300,35 +3300,24 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 			$ret_arr = get_special_on_clause($table_cols);
 			$select_clause = $ret_arr['sel_clause'];
 			$on_clause = $ret_arr['on_clause'];
-			$nquery="select vtiger_contactdetails.contactid as recordid,
-					vtiger_users_last_import.deleted,$table_cols FROM vtiger_contactdetails
-					INNER JOIN vtiger_crmentity
-						ON vtiger_crmentity.crmid=vtiger_contactdetails.contactid
-					INNER JOIN vtiger_contactaddress
-						ON vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
-					INNER JOIN vtiger_contactsubdetails
-						ON vtiger_contactaddress.contactaddressid = vtiger_contactsubdetails.contactsubscriptionid
-					LEFT JOIN vtiger_users_last_import
-						ON vtiger_users_last_import.bean_id=vtiger_contactdetails.contactid
-					LEFT JOIN vtiger_account
-						ON vtiger_account.accountid=vtiger_contactdetails.accountid
-					LEFT JOIN vtiger_customerdetails
-						ON vtiger_customerdetails.customerid=vtiger_contactdetails.contactid
-					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-					LEFT JOIN vtiger_users
-						ON vtiger_users.id = vtiger_crmentity.smownerid
+			$nquery="select vtiger_contactdetails.contactid as recordid,vtiger_users_last_import.deleted,$table_cols 
+					FROM vtiger_contactdetails
+					INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_contactdetails.contactid
+					INNER JOIN vtiger_contactaddress ON vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
+					INNER JOIN vtiger_contactsubdetails ON vtiger_contactaddress.contactaddressid = vtiger_contactsubdetails.contactsubscriptionid
+					LEFT JOIN vtiger_contactscf ON vtiger_contactscf.contactid = vtiger_contactdetails.contactid 
+					LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=vtiger_contactdetails.contactid
+					LEFT JOIN vtiger_account ON vtiger_account.accountid=vtiger_contactdetails.accountid
+					LEFT JOIN vtiger_customerdetails ON vtiger_customerdetails.customerid=vtiger_contactdetails.contactid
+					LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+					LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
 					INNER JOIN (select $select_clause from vtiger_contactdetails t
-							INNER JOIN vtiger_crmentity crm
-								ON crm.crmid=t.contactid
-							INNER JOIN vtiger_contactaddress addr
-								ON t.contactid = addr.contactaddressid
-							INNER JOIN vtiger_contactsubdetails subd
-								ON addr.contactaddressid = subd.contactsubscriptionid
-    						LEFT JOIN vtiger_account acc
-		                        ON acc.accountid=t.accountid
-							LEFT JOIN vtiger_customerdetails custd
-						ON custd.customerid=t.contactid
+							INNER JOIN vtiger_crmentity crm ON crm.crmid=t.contactid
+							INNER JOIN vtiger_contactaddress addr ON t.contactid = addr.contactaddressid
+							INNER JOIN vtiger_contactsubdetails subd ON addr.contactaddressid = subd.contactsubscriptionid
+							LEFT JOIN vtiger_contactscf tcf ON t.contactid = tcf.contactid 
+    						LEFT JOIN vtiger_account acc ON acc.accountid=t.accountid
+							LEFT JOIN vtiger_customerdetails custd ON custd.customerid=t.contactid
 							WHERE crm.deleted=0 group by $select_clause  HAVING COUNT(*)>1) as temp
 						ON ".get_on_clause($field_values,$ui_type_arr,$module)."
 					WHERE vtiger_crmentity.deleted=0 $sec_parameter ORDER BY $table_cols,vtiger_contactdetails.contactid ASC";
@@ -3340,28 +3329,20 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 			$ret_arr = get_special_on_clause($field_values);
 			$select_clause = $ret_arr['sel_clause'];
 			$on_clause = $ret_arr['on_clause'];	
-			$nquery="SELECT vtiger_account.accountid AS recordid,
-				vtiger_users_last_import.deleted,".$table_cols."
+			$nquery="SELECT vtiger_account.accountid AS recordid,vtiger_users_last_import.deleted,".$table_cols."
 				FROM vtiger_account
-				INNER JOIN vtiger_crmentity
-					ON vtiger_crmentity.crmid=vtiger_account.accountid
-				INNER JOIN vtiger_accountbillads
-					ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
-				INNER JOIN vtiger_accountshipads
-					ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
-				LEFT JOIN vtiger_users_last_import
-                    ON vtiger_users_last_import.bean_id=vtiger_account.accountid
-				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-				LEFT JOIN vtiger_users
-					ON vtiger_users.id = vtiger_crmentity.smownerid
+				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_account.accountid
+				INNER JOIN vtiger_accountbillads ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
+				INNER JOIN vtiger_accountshipads ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
+				LEFT JOIN vtiger_accountscf ON vtiger_account.accountid=vtiger_accountscf.accountid 
+				LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=vtiger_account.accountid
+				LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+				LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
 				INNER JOIN (select $select_clause from vtiger_account t
-							INNER JOIN vtiger_crmentity crm
-								ON crm.crmid=t.accountid
-							INNER JOIN vtiger_accountbillads badd
-								ON t.accountid = badd.accountaddressid
-							INNER JOIN vtiger_accountshipads sadd
-								ON t.accountid = sadd.accountaddressid
+							INNER JOIN vtiger_crmentity crm ON crm.crmid=t.accountid
+							INNER JOIN vtiger_accountbillads badd ON t.accountid = badd.accountaddressid
+							INNER JOIN vtiger_accountshipads sadd ON t.accountid = sadd.accountaddressid
+							LEFT JOIN vtiger_accountscf tcf ON t.accountid = tcf.accountid
 							WHERE crm.deleted=0 group by $select_clause HAVING COUNT(*)>1) as temp 
 					ON ".get_on_clause($field_values,$ui_type_arr,$module)."
 				WHERE vtiger_crmentity.deleted=0 $sec_parameter ORDER BY $table_cols,vtiger_account.accountid ASC";
@@ -3372,27 +3353,20 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 			$ret_arr = get_special_on_clause($field_values);
 			$select_clause = $ret_arr['sel_clause'];
 			$on_clause = $ret_arr['on_clause'];
-			$nquery="select vtiger_leaddetails.leadid as recordid, 
-					vtiger_users_last_import.deleted,$table_cols FROM vtiger_leaddetails 
-					INNER JOIN vtiger_crmentity 
-						ON vtiger_crmentity.crmid=vtiger_leaddetails.leadid 
-					INNER JOIN vtiger_leadsubdetails 
-						ON vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid 
-					INNER JOIN vtiger_leadaddress 
-						ON vtiger_leadaddress.leadaddressid = vtiger_leadsubdetails.leadsubscriptionid 
-					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-					LEFT JOIN vtiger_users
-						ON vtiger_users.id = vtiger_crmentity.smownerid
-					LEFT JOIN vtiger_users_last_import 
-						ON vtiger_users_last_import.bean_id=vtiger_leaddetails.leadid 
+			$nquery="select vtiger_leaddetails.leadid as recordid, vtiger_users_last_import.deleted,$table_cols 
+					FROM vtiger_leaddetails 
+					INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_leaddetails.leadid 
+					INNER JOIN vtiger_leadsubdetails ON vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid 
+					INNER JOIN vtiger_leadaddress ON vtiger_leadaddress.leadaddressid = vtiger_leadsubdetails.leadsubscriptionid
+					LEFT JOIN vtiger_leadscf ON vtiger_leadscf.leadid=vtiger_leaddetails.leadid 
+					LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+					LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
+					LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=vtiger_leaddetails.leadid 
 					INNER JOIN (select $select_clause from vtiger_leaddetails t 
-							INNER JOIN vtiger_crmentity crm 
-								ON crm.crmid=t.leadid 
-							INNER JOIN vtiger_leadsubdetails subd
-								ON subd.leadsubscriptionid = t.leadid 
-							INNER JOIN vtiger_leadaddress addr 
-								ON addr.leadaddressid = subd.leadsubscriptionid 
+							INNER JOIN vtiger_crmentity crm ON crm.crmid=t.leadid 
+							INNER JOIN vtiger_leadsubdetails subd ON subd.leadsubscriptionid = t.leadid 
+							INNER JOIN vtiger_leadaddress addr ON addr.leadaddressid = subd.leadsubscriptionid
+							LEFT JOIN vtiger_leadscf tcf ON tcf.leadid=t.leadid 
 							WHERE crm.deleted=0 and t.converted = 0 group by $select_clause HAVING COUNT(*)>1) as temp 
 						ON ".get_on_clause($field_values,$ui_type_arr,$module)." 
 				WHERE vtiger_crmentity.deleted=0 AND vtiger_leaddetails.converted = 0 $sec_parameter ORDER BY $table_cols,vtiger_leaddetails.leadid ASC";
@@ -3404,16 +3378,14 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 			$select_clause = $ret_arr['sel_clause'];
 			$on_clause = $ret_arr['on_clause'];
 			
-			$nquery="SELECT vtiger_products.productid AS recordid,
-				vtiger_users_last_import.deleted,".$table_cols."
+			$nquery="SELECT vtiger_products.productid AS recordid,vtiger_users_last_import.deleted,".$table_cols."
 				FROM vtiger_products
-				INNER JOIN vtiger_crmentity
-					ON vtiger_crmentity.crmid=vtiger_products.productid
-				LEFT JOIN vtiger_users_last_import
-					ON vtiger_users_last_import.bean_id=vtiger_products.productid
+				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_products.productid
+				LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=vtiger_products.productid
+				LEFT JOIN vtiger_productcf ON vtiger_productcf.productid = vtiger_products.productid
 				INNER JOIN (select $select_clause from vtiger_products t
-						INNER JOIN vtiger_crmentity crm
-						ON crm.crmid=t.productid
+						INNER JOIN vtiger_crmentity crm ON crm.crmid=t.productid
+						LEFT JOIN vtiger_productcf tcf ON tcf.productid=t.productid
 						WHERE crm.deleted=0 group by $select_clause HAVING COUNT(*)>1) as temp
 					ON ".get_on_clause($field_values,$ui_type_arr,$module)."
 				WHERE vtiger_crmentity.deleted=0 ORDER BY $table_cols,vtiger_products.productid ASC";
@@ -3424,32 +3396,22 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 			$ret_arr = get_special_on_clause($field_values);
 			$select_clause = $ret_arr['sel_clause'];
 			$on_clause = $ret_arr['on_clause'];
-			$nquery="SELECT vtiger_troubletickets.ticketid AS recordid,
-				vtiger_users_last_import.deleted,".$table_cols."
+			$nquery="SELECT vtiger_troubletickets.ticketid AS recordid,vtiger_users_last_import.deleted,".$table_cols."
 				FROM vtiger_troubletickets
-				INNER JOIN vtiger_crmentity
-					ON vtiger_crmentity.crmid=vtiger_troubletickets.ticketid
-				LEFT JOIN vtiger_account 
-					ON vtiger_account.accountid = vtiger_troubletickets.parent_id 
-				LEFT JOIN vtiger_contactdetails 
-					ON vtiger_contactdetails.contactid = vtiger_troubletickets.parent_id
-				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-				LEFT JOIN vtiger_users
-					ON vtiger_crmentity.smownerid = vtiger_users.id
-				LEFT JOIN vtiger_users_last_import
-					ON vtiger_users_last_import.bean_id=vtiger_troubletickets.ticketid
-				LEFT JOIN vtiger_attachments
-					ON vtiger_attachments.attachmentsid=vtiger_crmentity.crmid
-				LEFT JOIN vtiger_ticketcomments
-					ON vtiger_ticketcomments.ticketid = vtiger_crmentity.crmid
+				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_troubletickets.ticketid
+				LEFT JOIN vtiger_account ON vtiger_account.accountid = vtiger_troubletickets.parent_id 
+				LEFT JOIN vtiger_contactdetails ON vtiger_contactdetails.contactid = vtiger_troubletickets.parent_id
+				LEFT JOIN vtiger_ticketcf ON vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid
+				LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+				LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid = vtiger_users.id
+				LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=vtiger_troubletickets.ticketid
+				LEFT JOIN vtiger_attachments ON vtiger_attachments.attachmentsid=vtiger_crmentity.crmid
+				LEFT JOIN vtiger_ticketcomments ON vtiger_ticketcomments.ticketid = vtiger_crmentity.crmid				
 				INNER JOIN (select $select_clause from vtiger_troubletickets t
-						INNER JOIN vtiger_crmentity crm
-						ON crm.crmid=t.ticketid
-						LEFT JOIN vtiger_account acc
-							ON acc.accountid = t.parent_id 
-						LEFT JOIN vtiger_contactdetails contd
-							ON contd.contactid = t.parent_id
+						INNER JOIN vtiger_crmentity crm ON crm.crmid=t.ticketid
+						LEFT JOIN vtiger_account acc ON acc.accountid = t.parent_id 
+						LEFT JOIN vtiger_contactdetails contd ON contd.contactid = t.parent_id
+						LEFT JOIN vtiger_ticketcf tcf ON tcf.ticketid = t.ticketid
 						WHERE crm.deleted=0 group by $select_clause HAVING COUNT(*)>1) as temp
 					ON ".get_on_clause($field_values,$ui_type_arr,$module)."
 				WHERE vtiger_crmentity.deleted=0". $sec_parameter ." ORDER BY $table_cols,vtiger_troubletickets.ticketid ASC";
@@ -3462,18 +3424,15 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 			$on_clause = $ret_arr['on_clause'];
 			$nquery="SELECT vtiger_potential.potentialid AS recordid,
 				vtiger_users_last_import.deleted,".$table_cols."
-				FROM vtiger_potential
-				INNER JOIN vtiger_crmentity
-					ON vtiger_crmentity.crmid=vtiger_potential.potentialid
-				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-				LEFT JOIN vtiger_users
-					ON vtiger_users.id = vtiger_crmentity.smownerid
-				LEFT JOIN vtiger_users_last_import
-					ON vtiger_users_last_import.bean_id=vtiger_potential.potentialid
+				FROM vtiger_potential 
+				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_potential.potentialid
+				LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+				LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
+				LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=vtiger_potential.potentialid
+				LEFT JOIN vtiger_potentialscf ON vtiger_potentialscf.potentialid = vtiger_potential.potentialid 
 				INNER JOIN (select $select_clause from vtiger_potential t
-						INNER JOIN vtiger_crmentity crm
-						ON crm.crmid=t.potentialid
+						INNER JOIN vtiger_crmentity crm ON crm.crmid=t.potentialid
+						LEFT JOIN vtiger_potentialscf tcf ON tcf.potentialid=t.potentialid
 						WHERE crm.deleted=0 group by $select_clause HAVING COUNT(*)>1) as temp
 					ON ".get_on_clause($field_values,$ui_type_arr,$module)."
 				WHERE vtiger_crmentity.deleted=0 $sec_parameter ORDER BY $table_cols,vtiger_potential.potentialid ASC";
@@ -3487,13 +3446,12 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 			$nquery="SELECT vtiger_vendor.vendorid AS recordid,
 				vtiger_users_last_import.deleted,".$table_cols."
 				FROM vtiger_vendor
-				INNER JOIN vtiger_crmentity
-					ON vtiger_crmentity.crmid=vtiger_vendor.vendorid
-				LEFT JOIN vtiger_users_last_import
-					ON vtiger_users_last_import.bean_id=vtiger_vendor.vendorid
+				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_vendor.vendorid
+				LEFT JOIN vtiger_vendorcf ON vtiger_vendorcf.vendorid=vtiger_vendor.vendorid
+				LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=vtiger_vendor.vendorid				
 				INNER JOIN (select $select_clause from vtiger_vendor t
-						INNER JOIN vtiger_crmentity crm
-						ON crm.crmid=t.vendorid
+						INNER JOIN vtiger_crmentity crm ON crm.crmid=t.vendorid
+						LEFT JOIN vtiger_vendorcf tcf ON tcf.vendorid=t.vendorid
 						WHERE crm.deleted=0 group by $select_clause HAVING COUNT(*)>1) as temp
 					ON ".get_on_clause($field_values,$ui_type_arr,$module)."
 				WHERE vtiger_crmentity.deleted=0 ORDER BY $table_cols,vtiger_vendor.vendorid ASC";
@@ -3514,42 +3472,29 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 	{
 		
 		if($module == 'Contacts')
-		{			
+		{	
 			$nquery = "SELECT vtiger_contactdetails.contactid AS recordid,
 					vtiger_users_last_import.deleted,".$table_cols."
 					FROM vtiger_contactdetails
-					INNER JOIN vtiger_crmentity
-						ON vtiger_crmentity.crmid=vtiger_contactdetails.contactid
-					INNER JOIN vtiger_contactaddress
-						ON vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
-					INNER JOIN vtiger_contactsubdetails
-						ON vtiger_contactaddress.contactaddressid = vtiger_contactsubdetails.contactsubscriptionid
-					LEFT JOIN vtiger_users_last_import
-						ON vtiger_users_last_import.bean_id=vtiger_contactdetails.contactid
-					LEFT JOIN vtiger_account
-						ON vtiger_account.accountid=vtiger_contactdetails.accountid
-					LEFT JOIN vtiger_customerdetails
-						ON vtiger_customerdetails.customerid=vtiger_contactdetails.contactid
-					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-					LEFT JOIN vtiger_users
-						ON vtiger_users.id = vtiger_crmentity.smownerid
+					INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_contactdetails.contactid
+					INNER JOIN vtiger_contactaddress ON vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
+					INNER JOIN vtiger_contactsubdetails ON vtiger_contactaddress.contactaddressid = vtiger_contactsubdetails.contactsubscriptionid
+					LEFT JOIN vtiger_contactscf ON vtiger_contactscf.contactid = vtiger_contactdetails.contactid
+					LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=vtiger_contactdetails.contactid
+					LEFT JOIN vtiger_account ON vtiger_account.accountid=vtiger_contactdetails.accountid
+					LEFT JOIN vtiger_customerdetails ON vtiger_customerdetails.customerid=vtiger_contactdetails.contactid
+					LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+					LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
 					INNER JOIN (SELECT $table_cols
 							FROM vtiger_contactdetails
-							INNER JOIN vtiger_crmentity
-								ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
-							INNER JOIN vtiger_contactaddress
-								ON vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
-							INNER JOIN vtiger_contactsubdetails
-								ON vtiger_contactaddress.contactaddressid = vtiger_contactsubdetails.contactsubscriptionid
-							LEFT JOIN vtiger_account
-								ON vtiger_account.accountid=vtiger_contactdetails.accountid
-							LEFT JOIN vtiger_customerdetails
-								ON vtiger_customerdetails.customerid=vtiger_contactdetails.contactid
-					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-					LEFT JOIN vtiger_users
-						ON vtiger_users.id = vtiger_crmentity.smownerid
+							INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
+							INNER JOIN vtiger_contactaddress ON vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid
+							INNER JOIN vtiger_contactsubdetails ON vtiger_contactaddress.contactaddressid = vtiger_contactsubdetails.contactsubscriptionid
+							LEFT JOIN vtiger_contactscf ON vtiger_contactscf.contactid = vtiger_contactdetails.contactid
+							LEFT JOIN vtiger_account ON vtiger_account.accountid=vtiger_contactdetails.accountid
+							LEFT JOIN vtiger_customerdetails ON vtiger_customerdetails.customerid=vtiger_contactdetails.contactid
+							LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+							LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
 							WHERE vtiger_crmentity.deleted=0 $sec_parameter
 							GROUP BY ".$table_cols." HAVING COUNT(*)>1) as temp
 						ON ".get_on_clause($field_values,$ui_type_arr,$module) ."
@@ -3561,30 +3506,21 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 			$nquery="SELECT vtiger_account.accountid AS recordid,
 				vtiger_users_last_import.deleted,".$table_cols."
 				FROM vtiger_account
-				INNER JOIN vtiger_crmentity
-					ON vtiger_crmentity.crmid=vtiger_account.accountid
-				INNER JOIN vtiger_accountbillads
-					ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
-				INNER JOIN vtiger_accountshipads
-					ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
-				LEFT JOIN vtiger_users_last_import
-					ON vtiger_users_last_import.bean_id=vtiger_account.accountid
-				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-				LEFT JOIN vtiger_users
-					ON vtiger_users.id = vtiger_crmentity.smownerid
+				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_account.accountid
+				INNER JOIN vtiger_accountbillads ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
+				INNER JOIN vtiger_accountshipads ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
+				LEFT JOIN vtiger_accountscf ON vtiger_account.accountid=vtiger_accountscf.accountid
+				LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=vtiger_account.accountid
+				LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+				LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
 				INNER JOIN (SELECT $table_cols
 					FROM vtiger_account
-					INNER JOIN vtiger_crmentity
-						ON vtiger_crmentity.crmid = vtiger_account.accountid
-					INNER JOIN vtiger_accountbillads
-					ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
-					INNER JOIN vtiger_accountshipads
-						ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid 
-					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-					LEFT JOIN vtiger_users
-						ON vtiger_users.id = vtiger_crmentity.smownerid
+					INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_account.accountid
+					INNER JOIN vtiger_accountbillads ON vtiger_account.accountid = vtiger_accountbillads.accountaddressid
+					INNER JOIN vtiger_accountshipads ON vtiger_account.accountid = vtiger_accountshipads.accountaddressid
+					LEFT JOIN vtiger_accountscf ON vtiger_account.accountid=vtiger_accountscf.accountid 
+					LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+					LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
 					WHERE vtiger_crmentity.deleted=0 $sec_parameter
 					GROUP BY ".$table_cols." HAVING COUNT(*)>1) as temp
 				ON ".get_on_clause($field_values,$ui_type_arr,$module) ."
@@ -3592,31 +3528,23 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 		}
 		else if($module == 'Leads')
 		{
-			$nquery = "SELECT vtiger_leaddetails.leadid AS recordid, vtiger_users_last_import.deleted,
-					$table_cols FROM vtiger_leaddetails 
-					INNER JOIN vtiger_crmentity 
-						ON vtiger_crmentity.crmid=vtiger_leaddetails.leadid 
-					INNER JOIN vtiger_leadsubdetails 
-						ON vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid 
-					INNER JOIN vtiger_leadaddress 
-						ON vtiger_leadaddress.leadaddressid = vtiger_leadsubdetails.leadsubscriptionid 
-					LEFT JOIN vtiger_groups
-						ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-					LEFT JOIN vtiger_users
-						ON vtiger_users.id = vtiger_crmentity.smownerid
-					LEFT JOIN vtiger_users_last_import 
-						ON vtiger_users_last_import.bean_id=vtiger_leaddetails.leadid 
+			$nquery = "SELECT vtiger_leaddetails.leadid AS recordid, vtiger_users_last_import.deleted,$table_cols 
+					FROM vtiger_leaddetails 
+					INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_leaddetails.leadid 
+					INNER JOIN vtiger_leadsubdetails ON vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid 
+					INNER JOIN vtiger_leadaddress ON vtiger_leadaddress.leadaddressid = vtiger_leadsubdetails.leadsubscriptionid 
+					LEFT JOIN vtiger_leadscf ON vtiger_leadscf.leadid=vtiger_leaddetails.leadid
+					LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+					LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
+					LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=vtiger_leaddetails.leadid 
 					INNER JOIN (SELECT $table_cols 
 							FROM vtiger_leaddetails 
 							INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_leaddetails.leadid 
-							INNER JOIN vtiger_leadsubdetails 
-								ON vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid 
-							INNER JOIN vtiger_leadaddress 
-								ON vtiger_leadaddress.leadaddressid = vtiger_leadsubdetails.leadsubscriptionid 
-							LEFT JOIN vtiger_groups
-								ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-							LEFT JOIN vtiger_users
-								ON vtiger_users.id = vtiger_crmentity.smownerid
+							INNER JOIN vtiger_leadsubdetails ON vtiger_leadsubdetails.leadsubscriptionid = vtiger_leaddetails.leadid 
+							INNER JOIN vtiger_leadaddress ON vtiger_leadaddress.leadaddressid = vtiger_leadsubdetails.leadsubscriptionid
+							LEFT JOIN vtiger_leadscf ON vtiger_leadscf.leadid=vtiger_leaddetails.leadid 
+							LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+							LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
 							WHERE vtiger_crmentity.deleted=0 AND vtiger_leaddetails.converted = 0 $sec_parameter
 							GROUP BY $table_cols HAVING COUNT(*)>1) as temp 
 					ON ".get_on_clause($field_values,$ui_type_arr,$module) ."
@@ -3628,14 +3556,14 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 			$nquery = "SELECT vtiger_products.productid AS recordid,
 				vtiger_users_last_import.deleted,".$table_cols."
 				FROM vtiger_products
-				INNER JOIN vtiger_crmentity
-					ON vtiger_crmentity.crmid=vtiger_products.productid
-				LEFT JOIN vtiger_users_last_import
-					ON vtiger_users_last_import.bean_id=vtiger_products.productid
-					INNER JOIN (SELECT $table_cols
+				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_products.productid
+				LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=vtiger_products.productid
+				LEFT JOIN vtiger_productcf ON vtiger_productcf.productid = vtiger_products.productid
+				INNER JOIN (SELECT $table_cols
 							FROM vtiger_products
-							INNER JOIN vtiger_crmentity
-								ON vtiger_crmentity.crmid = vtiger_products.productid WHERE vtiger_crmentity.deleted=0
+							INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_products.productid
+							LEFT JOIN vtiger_productcf ON vtiger_productcf.productid = vtiger_products.productid 
+							WHERE vtiger_crmentity.deleted=0
 							GROUP BY ".$table_cols." HAVING COUNT(*)>1) as temp
 				ON ".get_on_clause($field_values,$ui_type_arr,$module) ."
                                 WHERE vtiger_crmentity.deleted=0  ORDER BY $table_cols,vtiger_products.productid ASC";
@@ -3645,31 +3573,21 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 			$nquery = "SELECT vtiger_troubletickets.ticketid AS recordid,
 				vtiger_users_last_import.deleted,".$table_cols."
 				FROM vtiger_troubletickets
-				Inner JOIN vtiger_crmentity
-					ON vtiger_crmentity.crmid=vtiger_troubletickets.ticketid
-				LEFT JOIN vtiger_users_last_import
-					ON vtiger_users_last_import.bean_id=vtiger_troubletickets.ticketid
-				LEFT JOIN vtiger_attachments
-					ON vtiger_attachments.attachmentsid=vtiger_crmentity.crmid
-				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-				LEFT JOIN vtiger_contactdetails 
-					ON vtiger_contactdetails.contactid = vtiger_troubletickets.parent_id
-				LEFT JOIN vtiger_ticketcomments
-								ON vtiger_ticketcomments.ticketid = vtiger_crmentity.crmid
+				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_troubletickets.ticketid
+				LEFT JOIN vtiger_ticketcf ON vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid
+				LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=vtiger_troubletickets.ticketid
+				LEFT JOIN vtiger_attachments ON vtiger_attachments.attachmentsid=vtiger_crmentity.crmid
+				LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+				LEFT JOIN vtiger_contactdetails ON vtiger_contactdetails.contactid = vtiger_troubletickets.parent_id
+				LEFT JOIN vtiger_ticketcomments ON vtiger_ticketcomments.ticketid = vtiger_crmentity.crmid
 				INNER JOIN (SELECT $table_cols FROM vtiger_troubletickets
-							INNER JOIN vtiger_crmentity
-								ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid 
-							LEFT JOIN vtiger_attachments
-								ON vtiger_attachments.attachmentsid=vtiger_crmentity.crmid
-							LEFT JOIN vtiger_contactdetails 
-								ON vtiger_contactdetails.contactid = vtiger_troubletickets.parent_id
-							LEFT JOIN vtiger_ticketcomments
-								ON vtiger_ticketcomments.ticketid = vtiger_crmentity.crmid
-							LEFT JOIN vtiger_groups
-								ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-							LEFT JOIN vtiger_contactdetails contd
-								ON contd.contactid = vtiger_troubletickets.parent_id
+							INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid
+							LEFT JOIN vtiger_ticketcf ON vtiger_ticketcf.ticketid = vtiger_troubletickets.ticketid 
+							LEFT JOIN vtiger_attachments ON vtiger_attachments.attachmentsid=vtiger_crmentity.crmid
+							LEFT JOIN vtiger_contactdetails ON vtiger_contactdetails.contactid = vtiger_troubletickets.parent_id
+							LEFT JOIN vtiger_ticketcomments ON vtiger_ticketcomments.ticketid = vtiger_crmentity.crmid
+							LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+							LEFT JOIN vtiger_contactdetails contd ON contd.contactid = vtiger_troubletickets.parent_id
 				WHERE vtiger_crmentity.deleted=0 $sec_parameter
 							GROUP BY ".$table_cols." HAVING COUNT(*)>1) as temp
 				ON ".get_on_clause($field_values,$ui_type_arr,$module) ."
@@ -3680,22 +3598,17 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 			$nquery = "SELECT vtiger_potential.potentialid AS recordid,
 				vtiger_users_last_import.deleted,".$table_cols."
 				FROM vtiger_potential
-				Inner JOIN vtiger_crmentity
-					ON vtiger_crmentity.crmid=vtiger_potential.potentialid
-				LEFT JOIN vtiger_users_last_import
-					ON vtiger_users_last_import.bean_id=vtiger_potential.potentialid
-				LEFT JOIN vtiger_groups
-					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-				LEFT JOIN vtiger_users
-					ON vtiger_users.id = vtiger_crmentity.smownerid
-					INNER JOIN (SELECT $table_cols
+				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_potential.potentialid
+				LEFT JOIN vtiger_potentialscf ON vtiger_potentialscf.potentialid = vtiger_potential.potentialid
+				LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=vtiger_potential.potentialid
+				LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+				LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
+				INNER JOIN (SELECT $table_cols
 							FROM vtiger_potential
-							INNER JOIN vtiger_crmentity
-								ON vtiger_crmentity.crmid = vtiger_potential.potentialid 
-							LEFT JOIN vtiger_groups
-								ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-							LEFT JOIN vtiger_users
-								ON vtiger_users.id = vtiger_crmentity.smownerid	
+							INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_potential.potentialid
+							LEFT JOIN vtiger_potentialscf ON vtiger_potentialscf.potentialid = vtiger_potential.potentialid 
+							LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+							LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid	
 							WHERE vtiger_crmentity.deleted=0 $sec_parameter
 							GROUP BY ".$table_cols." HAVING COUNT(*)>1) as temp
 				ON ".get_on_clause($field_values,$ui_type_arr,$module) ."
@@ -3706,14 +3619,14 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 			$nquery = "SELECT vtiger_vendor.vendorid AS recordid,
 				vtiger_users_last_import.deleted,".$table_cols."
 				FROM vtiger_vendor
-				Inner JOIN vtiger_crmentity
-					ON vtiger_crmentity.crmid=vtiger_vendor.vendorid
-					LEFT JOIN vtiger_users_last_import
-					ON vtiger_users_last_import.bean_id=vtiger_vendor.vendorid
-					INNER JOIN (SELECT $table_cols
+				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid=vtiger_vendor.vendorid
+				LEFT JOIN vtiger_vendorcf ON vtiger_vendorcf.vendorid=vtiger_vendor.vendorid
+				LEFT JOIN vtiger_users_last_import ON vtiger_users_last_import.bean_id=vtiger_vendor.vendorid
+				INNER JOIN (SELECT $table_cols
 							FROM vtiger_vendor
-							INNER JOIN vtiger_crmentity
-								ON vtiger_crmentity.crmid = vtiger_vendor.vendorid WHERE vtiger_crmentity.deleted=0
+							INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_vendor.vendorid
+							LEFT JOIN vtiger_vendorcf ON vtiger_vendorcf.vendorid=vtiger_vendor.vendorid 
+							WHERE vtiger_crmentity.deleted=0
 							GROUP BY ".$table_cols." HAVING COUNT(*)>1) as temp
 				ON ".get_on_clause($field_values,$ui_type_arr,$module) ."
                                 WHERE vtiger_crmentity.deleted=0  ORDER BY $table_cols,vtiger_vendor.vendorid ASC";
@@ -3966,7 +3879,9 @@ function get_special_on_clause($field_list)
 			$tbl_alias = "custd";
 		else if($tbl_name == 'vtiger_contactdetails' && spl_chk == 'HelpDesk')
 			$tbl_alias = "contd";
-		else 
+		else if(stripos($tbl_name, 'cf') === (strlen($tbl_name) - strlen('cf'))) 
+			$tbl_alias = "tcf"; // Custom Field Table Prefix to use in subqueries
+		else
 			$tbl_alias = "t";
 			
 		$sel_clause .= $tbl_alias.".".$col_name.",";	
@@ -4038,37 +3953,17 @@ function getFieldValues($module)
 	//In future if we want to change a id mapping to name or other string then we can add that elements in this array.
 	//$fld_table_arr = Array("vtiger_contactdetails.account_id"=>"vtiger_account.accountname");
 	//$special_fld_arr = Array("account_id"=>"accountname");
+	
 	$fld_table_arr = Array();
 	$special_fld_arr = Array();
-	$tabid=getTabid($module);
-	$sql="select distinct(userid) from vtiger_user2mergefields where tabid=?";
-	$sql_result=$adb->pquery($sql,array($tabid));
-	$num_rows=$adb->num_rows($sql_result);
-	for($i=0; $i<$num_rows;$i++)
-	{
-		if($adb->query_result($sql_result,$i,"userid") == $current_user->id)
-		{
-			$user_id=$current_user->id;
-			break;
-		}
-		$user_id=0;
-	}
-	$query="select fieldid from vtiger_user2mergefields where tabid=? and userid=? and visible=?";
-	$result= $adb->pquery($query,array($tabid,$user_id,1));
-	$num_rows=$adb->num_rows($result);
-	for($i=0; $i<$num_rows;$i++)
-	{
-		$field_id = $adb->query_result($result,$i,"fieldid");
-		$res_val.=$field_id.",";
-				
-	}
-	$res_val=rtrim($res_val,",");
-	if($res_val != "")
-	{
-		$fieldname_query="select fieldname,fieldlabel,uitype,tablename,columnname from vtiger_field where fieldid in (".$res_val.") and vtiger_field.presence in (0,2)";
-		$fieldname_result = $adb->query($fieldname_query);
-		$field_num_rows = $adb->num_rows($fieldname_result);
-	}
+	$tabid = getTabid($module);
+	
+	$fieldname_query="select fieldname,fieldlabel,uitype,tablename,columnname from vtiger_field where fieldid in 
+			(select fieldid from vtiger_user2mergefields WHERE tabid=? AND userid=? AND visible = ?) and vtiger_field.presence in (0,2)";
+	$fieldname_result = $adb->pquery($fieldname_query, array($tabid, $current_user->id, 1));
+	
+	$field_num_rows = $adb->num_rows($fieldname_result);
+	
 	$fld_arr = array();
 	$col_arr = array();
 	for($j=0;$j< $field_num_rows;$j ++)
@@ -4100,8 +3995,7 @@ function getFieldValues($module)
 	$field_values_array["columnnames_array"]=$col_arr;
 	$field_values_array['fieldlabels_array']=$fld_labl_arr;
 	$field_values_array['fieldname_uitype']=$uitype;
-
-	//echo "<pre>";print_r($field_values_array);echo "</pre>";
+	
 	return $field_values_array;	
 }
 

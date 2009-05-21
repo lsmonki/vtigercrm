@@ -1992,7 +1992,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	
 	$this->insertUser2mergefields(0);
 	$this->insertUser2mergefields(1);
-    $this->insertUser2mergefields(2);
 	$this->db->query("update vtiger_user2mergefields set visible=1 where fieldid in(1,38,40,65,104,106,111,152,156,255)");
 	$this->initWebservices();
 
@@ -2054,11 +2053,9 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 					$field_id = $this->db->query_result($fld_result,$j,'fieldid');
 					$data_type = explode("~",$this->db->query_result($fld_result,$j,'typeofdata')); 
 					if($data_type[1] == 'M') { 
-						$visible = 1; 
-					} else { 
-						$visible = 2; 
-					} 
-					$this->db->query("insert into vtiger_user2mergefields values ($userid, $tab_id, $field_id, $visible)");
+						$visible = 1;
+						$this->db->query("insert into vtiger_user2mergefields values ($userid, $tab_id, $field_id, $visible)"); 
+					} 				
 				}
 	        }
 		}

@@ -6205,6 +6205,10 @@
 		<field name="tabid" type="I" size="19" />
 		<field name="fieldid" type="I" size="19" />
 		<field name="visible" type="I" size="2" />
+		<index name="userid_tabid_idx">
+			<col>userid</col>
+			<col>tabid</col>
+		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
