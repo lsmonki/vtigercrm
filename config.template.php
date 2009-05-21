@@ -188,6 +188,9 @@ $cache_tab_perms = true;
 //Option to hide empty home blocks if no entries.
 $display_empty_home_blocks = false;
 
+//Disable Stat Tracking of vtiger CRM instance
+$disable_stats_tracking = false;
+
 // Generating Unique Application Key
 $application_unique_key = '_VT_APP_UNIQKEY_';
 

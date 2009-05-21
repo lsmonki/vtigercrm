@@ -762,8 +762,13 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 		// Status tracking
 		$statimage = '';
 		if($currentModule == 'Users' && empty($current_user->id)) {
-			$statimage = "<img src='http://stats.vtiger.com/stats.php?uid=$application_unique_key&v=$vtiger_current_version&type=U' 
+			global $disable_stats_tracking;
+			if(isset($disable_stats_tracking) && !empty($disable_stats_tracking)) {
+				$statimage = "";
+			} else {
+				$statimage = "<img src='http://stats.vtiger.com/stats.php?uid=$application_unique_key&v=$vtiger_current_version&type=U' 
 				alt='|' title='' border=0 width='1px' height='1px'>";
+			}
 		}
 		// END
 		echo "<script language = 'JavaScript' type='text/javascript' src = 'include/js/popup.js'></script>";

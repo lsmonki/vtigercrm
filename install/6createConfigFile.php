@@ -433,6 +433,9 @@ $cache_dir = 'cache/';
  	
  	$config .= "//Option to hide empty home blocks if no entries.\n";
  	$config .= "\$display_empty_home_blocks = false;\n\n";
+ 	
+ 	$config .= "//Disable Stat Tracking of vtiger CRM instance.\n";  
+	$config .= "\$disable_stats_tracking = false;\n\n";
 
  	$config .= "// Generating Unique Application Key\n";
  	$config .= "\$application_unique_key = '".md5(time() + rand(1,9999999) + md5($root_directory)) ."';\n\n";

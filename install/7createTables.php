@@ -165,9 +165,14 @@ if(!@rename("install/", $renamefile."install/"))
 // Status tracking
 $statimage = '';
 @include_once('config.inc.php');
+global $disable_stats_tracking;
 if(isset($application_unique_key) && !empty($application_unique_key)) {
-	$statimage = "<img src='http://stats.vtiger.com/stats.php?uid=$application_unique_key&v=$vtiger_current_version&type=I' 
+	if(isset($disable_stats_tracking) && !empty($disable_stats_tracking)) {
+		$statimage = "";
+	} else {
+		$statimage = "<img src='http://stats.vtiger.com/stats.php?uid=$application_unique_key&v=$vtiger_current_version&type=I' 
 		alt='|' title='' border=0 width='1px' height='1px'>";
+	}
 }
 // END
 
