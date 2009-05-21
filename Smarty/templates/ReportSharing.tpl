@@ -48,7 +48,7 @@
 							<tr>
 								<td align="right" class="dvtCellLabel" width="50%">{$MOD.SELECT_FILTER_TYPE} :</td>
 								<td class="dvtCellInfo" width="50%" align="left">
-									<select name="stdtypeFilter" id="stdtypeFilter" class="select" onchange='toggleAssignType(this.options[this.selectedIndex].value );'>
+									<select name="stdtypeFilter" id="stdtypeFilter" class="small" onchange='toggleAssignType(this.options[this.selectedIndex].value );'>
 										{foreach item=visible from=$VISIBLECRITERIA}
 											<option {$visible.selected} value={$visible.value}>{$visible.text}</option>
 										{/foreach}

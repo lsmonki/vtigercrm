@@ -1150,7 +1150,7 @@ class ReportRun extends CRMEntity
 				$selectedfields = explode(":",$fieldcolname);
 				if($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
 					$selectedfields[0] = "vtiger_crmentity";	
-				$sqlvalue = $selectedfields[0].".".$selectedfields[1]." ".$sortorder;
+				$sqlvalue = $selectedfields[2]." ".$sortorder;//.".".$selectedfields[1]." ".$sortorder;
 				$grouplist[$fieldcolname] = $sqlvalue;
 				$fieldlabel = trim(str_replace($module," ",$selectedfields[2]));
 				$mod_arr=explode('_',$fieldlabel);
