@@ -86,6 +86,9 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
     		$sec_parameter=getListViewSecurityParameter($relatedmodule);
         	$query .= ' '.$sec_parameter;
     	}
+	}		
+	if($relatedmodule == 'Leads') {
+		$query .= " AND vtiger_leaddetails.converted = 0";
 	}
 	
 
