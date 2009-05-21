@@ -51,7 +51,7 @@ if(isset($_REQUEST["record"]) && $_REQUEST["record"]!='')
 		}
 	}
 	$secondarymodule = implode(":",$secondarymodules);
-
+	$oReport->secmodule = $secondarymodule;
 	$reporttype = $oReport->reporttype;
 	$reportname  = $oReport->reportname;
 	$reportdescription  = $oReport->reportdescription;
