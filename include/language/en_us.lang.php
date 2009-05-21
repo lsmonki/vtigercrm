@@ -1217,8 +1217,7 @@ $app_strings = array (
 
 //To handle plurals of module names
 'Todos' => 'Todos',
-'LBL_FIELD_FOR_COMPARISION' => 'Field for Comparision',
-'LBL_DONE' => ' Done ',
+
 // For Popup reminder
 'LBL_POSTPONE'=>'Postpone',
 
@@ -1226,7 +1225,10 @@ $app_strings = array (
 'LBL_SELECT_MODULES_FOR_SEARCH' => 'Select modules to search in',
 'LBL_SELECT_ALL' => 'Select All', 
 'LBL_UNSELECT_ALL' => 'UnSelect All',
+'LBL_FIELD_FOR_COMPARISION' => 'Field for Comparision',
+'LBL_DONE' => ' Done ',
 
+'LBL_NO_MODULES_TO_SELECT' => 'Operation Denied. No Modules to act on.',
 );
 
 $app_list_strings = array (
