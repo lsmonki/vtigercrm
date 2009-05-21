@@ -299,8 +299,8 @@ if($end >= $totalnoofrows)
 	$module = 'Import';//$_REQUEST['module'];
 	$action = 'ImportSteplast';
 	//exit;
-	$imported_records = $ii - $skip_required_count;
-	if($imported_records == $ii)
+	$imported_records = $totalnoofrows - $skip_required_count;
+	if($imported_records == $totalnoofrows)
 		$skip_required_count = 0;
 	 if($dup_check_type == "auto")
 	 {
@@ -313,7 +313,7 @@ if($end >= $totalnoofrows)
 	 else
 		 $dup_info = "";
 
-	 $message= urlencode("<b>".$mod_strings['LBL_SUCCESS']."</b>"."<br><br>" .$mod_strings['LBL_SUCCESS_1']."  $count" ."<br><br>" .$mod_strings['LBL_SKIPPED_1']."  $skip_required_count <br><br>".$dup_info );
+	 $message= urlencode("<b>".$mod_strings['LBL_SUCCESS']."</b>"."<br><br>" .$mod_strings['LBL_SUCCESS_1']."  $imported_records" ."<br><br>" .$mod_strings['LBL_SKIPPED_1']."  $skip_required_count <br><br>".$dup_info );
 }
 else
 {
