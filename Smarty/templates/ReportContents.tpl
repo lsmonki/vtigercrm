@@ -66,12 +66,12 @@
 					<td>{$reportdetails.description}</td>
 				{/if}
 				<td align="center" nowrap>
-				{if $reportdetails.customizable eq '1'}
-				<a href="javascript:;" onClick="editReport('{$reportdetails.reportid}');"><img src="{'editfield.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" title="{$MOD.LBL_CUSTOMIZE_BUTTON}..." border="0"></a>
-				{/if}
-				{if $reportdetails.state neq 'SAVED'}
-				&nbsp;| &nbsp;<a href="javascript:;" onclick="DeleteReport('{$reportdetails.reportid}');"><img src="{'delete.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" title="{$MOD.LBL_DELETE}..." border="0"></a>
-				{/if}
+					{if $reportdetails.customizable eq '1' && $reportdetails.editable eq 'true'}
+						<a href="javascript:;" onClick="editReport('{$reportdetails.reportid}');"><img src="{'editfield.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" title="{$MOD.LBL_CUSTOMIZE_BUTTON}..." border="0"></a>
+					{/if}
+					{if $reportdetails.state neq 'SAVED' && $reportdetails.editable eq 'true'}
+						&nbsp;| &nbsp;<a href="javascript:;" onclick="DeleteReport('{$reportdetails.reportid}');"><img src="{'delete.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" title="{$MOD.LBL_DELETE}..." border="0"></a>
+					{/if}
 				</td>
 				</tr>
 			{/foreach}
