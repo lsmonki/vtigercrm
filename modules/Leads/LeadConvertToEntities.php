@@ -40,10 +40,6 @@ $rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
 $rate = $rate_symbol['rate'];
 if($potential_amount != '')
         $potential_amount = convertToDollar($potential_amount,$rate);
-	
-$check_unit = explode("-",$potential_name);
-if($check_unit[1] == "")
-        $potential_name = $check_unit[0];
 
 //Retrieve info from all the vtiger_tables related to leads
 $focus = new Leads();
@@ -342,141 +338,142 @@ function saveLeadRelatedCampaigns($leadid, $relatedid)
 	}
 	$log->debug("Exit from function saveLeadRelatedCampaigns.");
 }
-
-/*Code integrated to avoid duplicate Account creation during ConvertLead Operation  START-- by Bharathi*/
-$acc_query = "select vtiger_account.accountid from vtiger_account left join vtiger_crmentity on vtiger_account.accountid = vtiger_crmentity.crmid where vtiger_crmentity.deleted=0 and vtiger_account.accountname = ?";
-$acc_res = $adb->pquery($acc_query, array($accountname));
-$acc_rows = $adb->num_rows($acc_res);
-if($acc_rows != 0)
-        $crmid = $adb->query_result($acc_res,0,"accountid");
-else if($accountname==''){
-	$crmid='';
-} else
-{
-	$crmid = $adb->getUniqueID("vtiger_crmentity");
-
-	//Saving Account - starts
+$crmid ='';
+if(vtlib_isModuleActive('Accounts') && isPermitted("Accounts","EditView") =='yes'){
+	/*Code integrated to avoid duplicate Account creation during ConvertLead Operation  START-- by Bharathi*/
+	$acc_query = "select vtiger_account.accountid from vtiger_account left join vtiger_crmentity on vtiger_account.accountid = vtiger_crmentity.crmid where vtiger_crmentity.deleted=0 and vtiger_account.accountname = ?";
+	$acc_res = $adb->pquery($acc_query, array($accountname));
+	$acc_rows = $adb->num_rows($acc_res);
+	if($acc_rows != 0)
+		$crmid = $adb->query_result($acc_res,0,"accountid");
+	else if($accountname==''){
+		$crmid='';
+	} else
+	{
+		$crmid = $adb->getUniqueID("vtiger_crmentity");
 	
-	$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(?,?,?,?,?,?,?,?,?)";
-	$sql_params = array($crmid, $current_user_id, $assigned_user_id, 'Accounts', 1, $date_entered, $date_modified, 0, $row['description']);
-	$adb->pquery($sql_crmentity, $sql_params);
-	
-	//Module Sequence Numbering
-	require_once('modules/Accounts/Accounts.php');
-	$acc_no_focus = new Accounts();
-	$account_no = $acc_no_focus->setModuleSeqNumber("increment",'Accounts');
-	// END
-	
-	/* Modified by Minnie to fix the convertlead issue -- START*/
-	if(isset($row["annualrevenue"]) && !empty($row["annualrevenue"])) $annualrevenue = $row["annualrevenue"];
-	else $annualrevenue = 'null';
-	
-	if(isset($row["noofemployees"]) && !empty($row["noofemployees"])) $employees = $row["noofemployees"];
-	else $employees = 'null';
-	
-	$sql_insert_account = "INSERT INTO vtiger_account (account_no,accountid,accountname,industry,annualrevenue,phone,fax,rating,email1,website,employees) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-	/* Modified by Minnie -- END*/
-	$account_params = array($account_no,$crmid, $accountname, $row["industry"], $annualrevenue, $row["phone"], $row["fax"], $row["rating"], $row["email"], $row["website"], $employees);
-	$adb->pquery($sql_insert_account, $account_params);
-	
-	/*if($assigned_to !="U"){
-		$sql_crmentity = "insert into vtiger_accountgrouprelation(accountid,groupname) values(?,?)";
-		$sql_params = array($crmid,$assigned_group_name);
+		//Saving Account - starts
+		
+		$sql_crmentity = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(?,?,?,?,?,?,?,?,?)";
+		$sql_params = array($crmid, $current_user_id, $assigned_user_id, 'Accounts', 1, $date_entered, $date_modified, 0, $row['description']);
 		$adb->pquery($sql_crmentity, $sql_params);
-	}*/
+		
+		//Module Sequence Numbering
+		require_once('modules/Accounts/Accounts.php');
+		$acc_no_focus = new Accounts();
+		$account_no = $acc_no_focus->setModuleSeqNumber("increment",'Accounts');
+		// END
+		
+		/* Modified by Minnie to fix the convertlead issue -- START*/
+		if(isset($row["annualrevenue"]) && !empty($row["annualrevenue"])) $annualrevenue = $row["annualrevenue"];
+		else $annualrevenue = 'null';
+		
+		if(isset($row["noofemployees"]) && !empty($row["noofemployees"])) $employees = $row["noofemployees"];
+		else $employees = 'null';
+		
+		$sql_insert_account = "INSERT INTO vtiger_account (account_no,accountid,accountname,industry,annualrevenue,phone,fax,rating,email1,website,employees) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+		/* Modified by Minnie -- END*/
+		$account_params = array($account_no,$crmid, $accountname, $row["industry"], $annualrevenue, $row["phone"], $row["fax"], $row["rating"], $row["email"], $row["website"], $employees);
+		$adb->pquery($sql_insert_account, $account_params);
+		
+		/*if($assigned_to !="U"){
+			$sql_crmentity = "insert into vtiger_accountgrouprelation(accountid,groupname) values(?,?)";
+			$sql_params = array($crmid,$assigned_group_name);
+			$adb->pquery($sql_crmentity, $sql_params);
+		}*/
+		
+		$sql_insert_accountbillads = "INSERT INTO vtiger_accountbillads (accountaddressid,bill_city,bill_code,bill_country,bill_state,bill_street,bill_pobox) VALUES (?,?,?,?,?,?,?)";
+		$billads_params = array($crmid, $row["city"], $row["code"], $row["country"], $row["state"], $row["lane"], $row["pobox"]);
+		$adb->pquery($sql_insert_accountbillads, $billads_params);
 	
-	$sql_insert_accountbillads = "INSERT INTO vtiger_accountbillads (accountaddressid,bill_city,bill_code,bill_country,bill_state,bill_street,bill_pobox) VALUES (?,?,?,?,?,?,?)";
-	$billads_params = array($crmid, $row["city"], $row["code"], $row["country"], $row["state"], $row["lane"], $row["pobox"]);
-	$adb->pquery($sql_insert_accountbillads, $billads_params);
-
-	$sql_insert_accountshipads = "INSERT INTO vtiger_accountshipads (accountaddressid,ship_city,ship_code,ship_country,ship_pobox,ship_state,ship_street) VALUES (?,?,?,?,?,?,?)";
-	$shipads_params = array($crmid, $row["city"], $row["code"], $row["country"], $row["pobox"], $row["state"], $row["lane"]);
-	$adb->pquery($sql_insert_accountshipads, $shipads_params);
-
-	//Getting the custom vtiger_field values from leads and inserting into Accounts if the vtiger_field is mapped - Jaguar
-	$col_val= getInsertValues("Accounts",$crmid);
-	$insert_columns = $col_val['columns'];
-	$insert_columns[] = "accountid";
-	$insert_values = $col_val['values'];
-	$insert_values[] = $crmid;
-	$insert_val_str = generateQuestionMarks($insert_values);
-	$sql_insert_accountcustomfield = "INSERT INTO vtiger_accountscf (". implode(",",$insert_columns) .") VALUES (".$insert_val_str.")";
-	$adb->pquery($sql_insert_accountcustomfield, $insert_values);
-	//Saving Account - ends
+		$sql_insert_accountshipads = "INSERT INTO vtiger_accountshipads (accountaddressid,ship_city,ship_code,ship_country,ship_pobox,ship_state,ship_street) VALUES (?,?,?,?,?,?,?)";
+		$shipads_params = array($crmid, $row["city"], $row["code"], $row["country"], $row["pobox"], $row["state"], $row["lane"]);
+		$adb->pquery($sql_insert_accountshipads, $shipads_params);
+	
+		//Getting the custom vtiger_field values from leads and inserting into Accounts if the vtiger_field is mapped - Jaguar
+		$col_val= getInsertValues("Accounts",$crmid);
+		$insert_columns = $col_val['columns'];
+		$insert_columns[] = "accountid";
+		$insert_values = $col_val['values'];
+		$insert_values[] = $crmid;
+		$insert_val_str = generateQuestionMarks($insert_values);
+		$sql_insert_accountcustomfield = "INSERT INTO vtiger_accountscf (". implode(",",$insert_columns) .") VALUES (".$insert_val_str.")";
+		$adb->pquery($sql_insert_accountcustomfield, $insert_values);
+			//Saving Account - ends
+	}
+	/*Code integrated to avoid duplicate Account creation during ConvertLead Operation  END-- by Bharathi*/
+	
+	$account_id=$crmid;
+	getRelatedNotesAttachments($id,$crmid); //To Convert Related Notes & Attachments -Jaguar
+	
+	//Retrieve the lead related products and relate them with this new account
+	saveLeadRelatedProducts($id, $crmid, "Accounts");
 }
-/*Code integrated to avoid duplicate Account creation during ConvertLead Operation  END-- by Bharathi*/
-
-$account_id=$crmid;
-getRelatedNotesAttachments($id,$crmid); //To Convert Related Notes & Attachments -Jaguar
-
-//Retrieve the lead related products and relate them with this new account
-saveLeadRelatedProducts($id, $crmid, "Accounts");
-
 //Up to this, Account related data save finshed
 
-
-$date_entered = $adb->formatDate(date('Y-m-d H:i:s'), true);
-$date_modified = $adb->formatDate(date('Y-m-d H:i:s'), true);
-
-//Saving Contact - starts
-$crmcontactid = $adb->getUniqueID("vtiger_crmentity");
-
-$sql_crmentity1 = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?,?,?)";
-$sql_params = array($crmcontactid, $current_user_id, $assigned_user_id, 'Contacts', 0, 0, $row['description'], $date_entered, $date_modified);
-$adb->pquery($sql_crmentity1, $sql_params);
-
-$contact_id = $crmcontactid;
-$log->debug("contact id is ".$contact_id);
-
-// Module Sequence Numbering
-require_once('modules/Contacts/Contacts.php');
-$cont_no_focus = new Contacts();
-$contact_no = $cont_no_focus->setModuleSeqNumber("increment",'Contacts');
-// END
-
-$sql_insert_contact = "INSERT INTO vtiger_contactdetails (contact_no,contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
-$contact_params = array($contact_no, $contact_id, $crmid, $row["salutationtype"], $row["firstname"], $row["lastname"], $row["email"], $row["phone"], $row["mobile"], $row["designation"], $row["fax"], $row['yahooid']);
-$adb->pquery($sql_insert_contact, $contact_params);
-
-/*if($assigned_to !="U"){
-	$sql_crmentity = "insert into vtiger_contactgrouprelation(contactid,groupname) values(?,?)";
-	$sql_params = array($contact_id,$assigned_group_name);
-	$adb->pquery($sql_crmentity, $sql_params);
-}*/
-$sql_insert_contactsubdetails = "INSERT INTO vtiger_contactsubdetails (contactsubscriptionid,homephone,otherphone,leadsource) VALUES (?,?,?,?)";
-$c_subd_params = array($contact_id, '', '', $row['leadsource']);
-$adb->pquery($sql_insert_contactsubdetails, $c_subd_params);
-
-$sql_insert_contactaddress = "INSERT INTO vtiger_contactaddress (contactaddressid,mailingcity,mailingstreet,mailingstate,mailingcountry,mailingpobox,mailingzip) VALUES (?,?,?,?,?,?,?)";
-$c_addr_params = array($contact_id, $row["city"], $row["lane"], $row['state'], $row["country"], $row["pobox"], $row['code']);
-$adb->pquery($sql_insert_contactaddress, $c_addr_params);
-
-$sql_insert_customerdetails = "INSERT INTO vtiger_customerdetails (customerid) VALUES (?)";
-$adb->pquery($sql_insert_customerdetails, array($contact_id));
-
-//Getting the customfield values from leads and inserting into the respected ContactCustomfield to which it is mapped - Jaguar
-$col_val= getInsertValues("Contacts",$contact_id);
-$insert_columns = $col_val['columns'];
-$insert_columns[] = "contactid";
-$insert_values = $col_val['values'];
-$insert_values[] = $contact_id;
-$insert_val_str = generateQuestionMarks($insert_values);
-$sql_insert_contactcustomfield = "INSERT INTO vtiger_contactscf (". implode(",",$insert_columns) .") VALUES (".$insert_val_str.")";
-$adb->pquery($sql_insert_contactcustomfield, $insert_values);
-//Saving Contact - ends
-
-getRelatedActivities($account_id,$contact_id); //To convert relates Activites  and Email -Jaguar
-
-//Retrieve the lead related products and relate them with this new contact
-saveLeadRelatedProducts($id, $contact_id, "Contacts");
-
-//Retrieve the lead related Campaigns and relate them with this new contact --Minnie
-saveLeadRelatedCampaigns($id, $contact_id);
-
+if(vtlib_isModuleActive('Contacts') && isPermitted("Contacts","EditView") =='yes'){
+	$date_entered = $adb->formatDate(date('Y-m-d H:i:s'), true);
+	$date_modified = $adb->formatDate(date('Y-m-d H:i:s'), true);
+	
+	//Saving Contact - starts
+	$crmcontactid = $adb->getUniqueID("vtiger_crmentity");
+	
+	$sql_crmentity1 = "insert into vtiger_crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?,?,?)";
+	$sql_params = array($crmcontactid, $current_user_id, $assigned_user_id, 'Contacts', 0, 0, $row['description'], $date_entered, $date_modified);
+	$adb->pquery($sql_crmentity1, $sql_params);
+	
+	$contact_id = $crmcontactid;
+	$log->debug("contact id is ".$contact_id);
+	
+	// Module Sequence Numbering
+	require_once('modules/Contacts/Contacts.php');
+	$cont_no_focus = new Contacts();
+	$contact_no = $cont_no_focus->setModuleSeqNumber("increment",'Contacts');
+	// END
+	
+	$sql_insert_contact = "INSERT INTO vtiger_contactdetails (contact_no,contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+	$contact_params = array($contact_no, $contact_id, $crmid, $row["salutationtype"], $row["firstname"], $row["lastname"], $row["email"], $row["phone"], $row["mobile"], $row["designation"], $row["fax"], $row['yahooid']);
+	$adb->pquery($sql_insert_contact, $contact_params);
+	
+	/*if($assigned_to !="U"){
+		$sql_crmentity = "insert into vtiger_contactgrouprelation(contactid,groupname) values(?,?)";
+		$sql_params = array($contact_id,$assigned_group_name);
+		$adb->pquery($sql_crmentity, $sql_params);
+	}*/
+	$sql_insert_contactsubdetails = "INSERT INTO vtiger_contactsubdetails (contactsubscriptionid,homephone,otherphone,leadsource) VALUES (?,?,?,?)";
+	$c_subd_params = array($contact_id, '', '', $row['leadsource']);
+	$adb->pquery($sql_insert_contactsubdetails, $c_subd_params);
+	
+	$sql_insert_contactaddress = "INSERT INTO vtiger_contactaddress (contactaddressid,mailingcity,mailingstreet,mailingstate,mailingcountry,mailingpobox,mailingzip) VALUES (?,?,?,?,?,?,?)";
+	$c_addr_params = array($contact_id, $row["city"], $row["lane"], $row['state'], $row["country"], $row["pobox"], $row['code']);
+	$adb->pquery($sql_insert_contactaddress, $c_addr_params);
+	
+	$sql_insert_customerdetails = "INSERT INTO vtiger_customerdetails (customerid) VALUES (?)";
+	$adb->pquery($sql_insert_customerdetails, array($contact_id));
+	
+	//Getting the customfield values from leads and inserting into the respected ContactCustomfield to which it is mapped - Jaguar
+	$col_val= getInsertValues("Contacts",$contact_id);
+	$insert_columns = $col_val['columns'];
+	$insert_columns[] = "contactid";
+	$insert_values = $col_val['values'];
+	$insert_values[] = $contact_id;
+	$insert_val_str = generateQuestionMarks($insert_values);
+	$sql_insert_contactcustomfield = "INSERT INTO vtiger_contactscf (". implode(",",$insert_columns) .") VALUES (".$insert_val_str.")";
+	$adb->pquery($sql_insert_contactcustomfield, $insert_values);
+	//Saving Contact - ends
+	
+	getRelatedActivities($account_id,$contact_id); //To convert relates Activites  and Email -Jaguar
+	
+	//Retrieve the lead related products and relate them with this new contact
+	saveLeadRelatedProducts($id, $contact_id, "Contacts");
+	
+	//Retrieve the lead related Campaigns and relate them with this new contact --Minnie
+	saveLeadRelatedCampaigns($id, $contact_id);
+}
 //Up to this, Contact related data save finshed
 
 //Saving Potential - starts
-if(! isset($createpotential) || ! $createpotential == "on")
+if((! isset($createpotential) || ! $createpotential == "on") && (!empty($potential_name)) && isPermitted("Potentials","EditView") =='yes' && ($crmid != '' || $crmcontactid != '') && vtlib_isModuleActive('Potentials'))
 {
 	$log->info("createpotential is not set");
 
@@ -520,11 +517,10 @@ if(! isset($createpotential) || ! $createpotential == "on")
 	$sql_insert_potentialcustomfield = "INSERT INTO vtiger_potentialscf (". implode(",",$insert_columns) .") VALUES (".$insert_val_str.")";
 	$adb->pquery($sql_insert_potentialcustomfield, $insert_values);
 
-	if($contact_id!=$related_to){
+	if($crmid != '' && $contact_id != ''){
 		$sql_insert2contpotentialrel ="insert into vtiger_contpotentialrel values(?,?)";
     	$adb->pquery($sql_insert2contpotentialrel, array($contact_id, $oppid));
 	}
-
 	//Retrieve the lead related products and relate them with this new potential
 	saveLeadRelatedProducts($id, $oppid, "Potentials");
 }
@@ -537,15 +533,34 @@ $sql_delete_tracker= "DELETE from vtiger_tracker where item_id=?";
 $adb->pquery($sql_delete_tracker, array($id));
 $category = getParentTab();
 //Updating the deleted status
-$sql_update_converted = "UPDATE vtiger_leaddetails SET converted = 1 where leadid=?";
-$adb->pquery($sql_update_converted, array($id)); 
-//updating the campaign-lead relation --Minnie
-$sql_update_campleadrel = "delete from vtiger_campaignleadrel where leadid=?";
-$adb->pquery($sql_update_campleadrel, array($id));
+if($crmid != '' || $crmcontactid != ''){
+	$sql_update_converted = "UPDATE vtiger_leaddetails SET converted = 1 where leadid=?";
+	$adb->pquery($sql_update_converted, array($id)); 
+	//updating the campaign-lead relation --Minnie
+	$sql_update_campleadrel = "delete from vtiger_campaignleadrel where leadid=?";
+	$adb->pquery($sql_update_campleadrel, array($id));
+}
 if($crmid!=''){
 	header("Location: index.php?action=DetailView&module=Accounts&record=$crmid&parenttab=$category");
-} else {
+} elseif($crmcontactid != '') {
 	header("Location: index.php?action=DetailView&module=Contacts&record=$crmcontactid&parenttab=$category");
+}else{
+		echo "<link rel='stylesheet' type='text/css' href='themes/$theme/style.css'>";	
+	echo "<table border='0' cellpadding='5' cellspacing='0' width='100%' height='450px'><tr><td align='center'>";
+	echo "<div style='border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 55%; position: relative; z-index: 10000000;'>
+
+		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
+		<tbody><tr>
+		<td rowspan='2' width='11%'><img src='". vtiger_imageurl('denied.gif', $theme) . "' ></td>
+		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>$currentModule $app_strings[CANNOT_CONVERT]</span></td>
+		</tr>
+		<tr>
+		<td class='small' align='right' nowrap='nowrap'>			   	
+		<a href='javascript:window.history.back();'>$app_strings[LBL_GO_BACK]</a><br>								   						     </td>
+		</tr>
+		</tbody></table> 
+		</div>";
+	echo "</td></tr></table>";
 }
 
 ?>

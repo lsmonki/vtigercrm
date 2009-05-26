@@ -12,17 +12,12 @@
 document.write("<script type='text/javascript' src='include/js/Mail.js'></"+"script>");
 document.write("<script type='text/javascript' src='include/js/Merge.js'></"+"script>");
 function verify_data(form) {
-	var myRegxp = new RegExp("^-");
-	var checkPotentialName = myRegxp.test(form.potential_name.value);
 	if(! form.createpotential.checked == true){
         if (trim(form.potential_name.value) == ""){
             alert(alert_arr.OPPORTUNITYNAME_CANNOT_BE_EMPTY);
 			return false;	
 		}
-		if(checkPotentialName == true){
-			alert(alert_arr.NOT_A_VALID_POTENTIAL_NAME);
-			return false;
-		}
+		
 		if(form.closingdate_mandatory != null && form.closingdate_mandatory.value == '*'){
 			if (form.closedate.value == ""){
 	        	alert(alert_arr.CLOSEDATE_CANNOT_BE_EMPTY);

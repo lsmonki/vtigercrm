@@ -1564,7 +1564,7 @@ ExecuteQuery("update vtiger_field set quickcreate=3 where fieldname='imagename'"
 ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('website','phone') and tabid = $accounttabid");
 ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('closingdate','campaigntype','expectedresponse','product_id','campaignstatus') and tabid = $campaigntabid");
 ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('firstname','phone','email') and tabid = $contacttabid");
-ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('firstname','phone','email') and tabid = $leadtabid ");
+ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('firstname','phone','email','company') and tabid = $leadtabid ");
 ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('closingdate','sales_stage','amount','account_id') and tabid = $potentialtabid");
 ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('active') and tabid = $pricebooktabid");
 ExecuteQuery("update vtiger_field set quickcreate=2,presence=2 where fieldname in('discontinued','unit_price') and tabid = $producttabid");
@@ -2002,8 +2002,6 @@ for($i=0 ; $i<$rows ;$i++) {
 	
 	Executequery("UPDATE vtiger_emaildetails set to_email = '$to_json', cc_email= '$cc_json', bcc_email= '$bcc_json' WHERE emailid = $emailid");
 }
-
-ExecuteQuery("UPDATE vtiger_field SET presence=0 WHERE tablename='vtiger_leaddetails' AND columnname='company'");
 
 //Reports Migration Handling for Older reports - STARTS
 

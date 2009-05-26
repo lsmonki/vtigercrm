@@ -1229,6 +1229,8 @@ $app_strings = array (
 'LBL_DONE' => ' Done ',
 
 'LBL_NO_MODULES_TO_SELECT' => 'Operation Denied. No Modules to act on.',
+
+'CANNOT_CONVERT' => 'Cannot be Converted'
 );
 
 $app_list_strings = array (

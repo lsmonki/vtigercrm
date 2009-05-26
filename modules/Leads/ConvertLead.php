@@ -30,6 +30,11 @@ $sql = "SELECT firstname, lastname, company, smownerid from vtiger_leaddetails i
 $result = $adb->pquery($sql, array($id));
 $row = $adb->fetch_array($result);
 
+//if company field is not present
+if(getFieldVisibilityPermission('Leads',$current_user->id,'company') == '1'){
+	$row["company"] = '';
+}
+
 $firstname = $row["firstname"];
 $lastname = $row["lastname"];
 $company = $row["company"];
@@ -103,6 +108,35 @@ function isActive($field,$mod){
 	}else
 		return false;
 }
+$userselected = '';
+$groupselected = '';
+$userdisplay = 'none';
+$groupdisplay = 'none';
+$private = '';
+if($userid != ''){
+	global $adb;
+	$query = "SELECT * from vtiger_users WHERE id = ?";
+	$res = $adb->pquery($query,array($userid));
+	$rows = $adb->num_rows($res);
+	if($rows > 0){
+		$userselected = 'checked';
+		$userdisplay= 'block';		
+	}else{
+		$groupselected = 'checked';
+		$groupdisplay= 'block';
+	}
+}
+
+if($current_user->id != 1){
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+		$Acc_tabid= getTabid('Accounts');
+		$con_tabid = getTabid('Contacts');
+		if($defaultOrgSharingPermission[$Acc_tabid] === 0 || $defaultOrgSharingPermission[$Acc_tabid] == 3){
+			$private = 'private';
+		}elseif($defaultOrgSharingPermission[$con_tabid] === 0 || $defaultOrgSharingPermission[$con_tabid] == 3){
+			$private = 'private';
+		}
+}
 
 $convertlead = '<form name="ConvertLead" method="POST" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 	<input type="hidden" name="module" value="Leads">
@@ -129,21 +163,24 @@ $convertlead = '<form name="ConvertLead" method="POST" action="index.php" onsubm
                 <tr>
 						<td align="right" class="dvtCellLabel" width="50%">'.$app_strings['LBL_ASSIGNED_TO'].'</td>
                        	<td class="dvtCellInfo" width="50%">
-						<input type="radio" name="assigntype" value="U" onclick="toggleAssignType(this.value)" checked=""/>&nbsp;'.$app_strings['LBL_USER'].'
-						<input type="radio" name="assigntype" value="T" onclick="toggleAssignType(this.value)"/>&nbsp;'.$app_strings['LBL_GROUP'].'
-						<span id="assign_user" style="display:block">
-                       		<select name="assigned_user_id" class="detailedViewTextBox">'.get_select_options_with_id(get_user_array(false), $userid).'</select>
+						<input type="radio" name="assigntype" value="U" onclick="toggleAssignType(this.value)" '.$userselected.' />&nbsp;'.$app_strings['LBL_USER'].'
+						<input type="radio" name="assigntype" value="T" onclick="toggleAssignType(this.value)" '.$groupselected.' />&nbsp;'.$app_strings['LBL_GROUP'].'
+						<span id="assign_user" style="display:'.$userdisplay.'">
+                       		<select name="assigned_user_id" class="detailedViewTextBox">'.get_select_options_with_id(get_user_array(false,"Active", $userid,$private),$userid).'</select>
 						</span>
-						<span id="assign_team" style="display:none">
-                       		<select name="assigned_group_id" class="detailedViewTextBox">'.get_select_options_with_id(get_group_array(false), $groupid).'</select>
+						<span id="assign_team" style="display:'.$groupdisplay.'">
+                       		<select name="assigned_group_id" class="detailedViewTextBox">'.get_select_options_with_id(get_group_array(false,"Active", $userid,$private),$userid).'</select>
 						</span>
 						</td>
-				</tr>
-				<tr>
-					<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_ACCOUNT_NAME'].'</td>
-					<td class="dvtCellInfo"><input type="text" name="account_name" class="detailedViewTextBox" value="'.$company.'" readonly="readonly"></td>
-			</tr>';
-
+				</tr>';
+				
+			if(vtlib_isModuleActive('Accounts') && (isPermitted('Accounts','EditView')== 'yes')){
+				$convertlead .= '<tr>
+									<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_ACCOUNT_NAME'].'</td>
+									<td class="dvtCellInfo"><input type="text" name="account_name" class="detailedViewTextBox" value="'.$company.'" readonly="readonly"></td>
+								</tr>';
+			}
+if(vtlib_isModuleActive('Potentials') && (isPermitted('Potentials','EditView')== 'yes')){			
 // An array which as module => fields mapping, to check for field permissions
 $fields_list = array( 'Potentials'=> array('potentialname', 'closingdate', 'amount', 'sales_stage'));
 $fields_permission = array();
@@ -165,8 +202,6 @@ foreach($fields_list as $mod=>$fields){
 	}
 }
 
-if(isPermitted("Potentials",'EditView') == 'yes')
-{
 $convertlead .='<tr>
 			<td align="right" class="dvtCellLabel">'.$mod_strings['LBL_DO_NOT_CREATE_NEW_POTENTIAL'].'</td>
 			<td class="dvtCellInfo"><input type="checkbox" name="createpotential" onClick="fnSlide2(\'ch\',\'cc\')"></td>
@@ -217,6 +252,7 @@ $convertlead .='<tr>
 				</div>
 			</td>
 		</tr>';
+
 }
 $convertlead .='</table>
 			</td>

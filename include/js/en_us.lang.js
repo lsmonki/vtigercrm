@@ -234,7 +234,6 @@
 				ARE_YOU_SURE : 'Are You Sure You want to Delete?',
 				LABEL_ALREADY_EXISTS : 'Label already exists. Please specify a different Label',
 				LENGTH_OUT_OF_RANGE : 'Length of the Block should be less than 50 characters',
-				NOT_A_VALID_POTENTIAL_NAME : 'Please insert a proper Potential Name',
 				LBL_SELECT_ONE_FILE : 'Please select atleast one File',
 				LBL_UNABLE_TO_ADD_FOLDER : 'Unable to add Folder. Please try again.',
 				LBL_ARE_YOU_SURE_YOU_WANT_TO_DELETE_FOLDER : 'Are you sure you want to delete the folder?',
@@ -290,5 +289,5 @@
 				DashBoard: 'DashBoard',
 				RSS: 'RSS',
 				Default: 'Default',
-				Notebook: 'Notebook',
+				Notebook: 'Notebook'
 			};
