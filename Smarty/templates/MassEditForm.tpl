@@ -16,9 +16,12 @@
 			<!-- popup specific content fill in starts -->
 	      <form name="EditView" id="massedit_form" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 				<input id="idstring" value="{$IDS}" type="hidden" />
-				<table border=0 cellspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+				<table border=0 cellspacing=0 cellpadding=0 width=100% align=center bgcolor=white>
 				<tr>
-					<td  colspan=4 valign="top"><b>Select fields to be updated and give the new value</b><br>
+					<td colspan=4 valign="top">
+						<div style='padding: 5px 0;'>
+							<span class="helpmessagebox">{$APP.LBL_SELECT_FIELDS_TO_UDPATE_WITH_NEW_VALUE}</span>
+						</div>
 						<!-- Hidden Fields -->
 						{include file='EditViewHidden.tpl'}
 						<input type="hidden" name="massedit_recordids">
@@ -35,11 +38,11 @@
 									
 									{foreach key=header name=block item=data from=$BLOCKS}
 									    {if $smarty.foreach.block.index eq 0}
-										    <td style="width: 100px;" nowrap class="dvtSelectedCell" id="tab{$smarty.foreach.block.index}" onclick="massedit_togglediv({$smarty.foreach.block.index},{$BLOCKS|@count});">
+										    <td nowrap class="dvtSelectedCell" id="tab{$smarty.foreach.block.index}" onclick="massedit_togglediv({$smarty.foreach.block.index},{$BLOCKS|@count});">
 										     <b>{$header}</b>
 										    </td>
 									    {else}
-										    <td style="width: 100px;" nowrap class="dvtUnSelectedCell" id="tab{$smarty.foreach.block.index}" onclick="massedit_togglediv({$smarty.foreach.block.index},{$BLOCKS|@count});">
+										    <td nowrap class="dvtUnSelectedCell" id="tab{$smarty.foreach.block.index}" onclick="massedit_togglediv({$smarty.foreach.block.index},{$BLOCKS|@count});">
 										     <b>{$header}</b>
 										    </td>
 									    {/if}
@@ -55,13 +58,13 @@
 							{foreach key=header name=block item=data from=$BLOCKS}
 							    {if $smarty.foreach.block.index eq 0}
 								    <div id="massedit_div{$smarty.foreach.block.index}" style='display:block;'>
-									<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+									<table border=0 cellspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
 										{include file="DisplayFields.tpl"}
 									</table>
 									</div>
 							    {else}
 								    <div id="massedit_div{$smarty.foreach.block.index}" style='display:none;'>
-									<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+									<table border=0 cellspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
 										{include file="DisplayFields.tpl"}
 									</table>
 									</div>

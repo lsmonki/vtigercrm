@@ -161,14 +161,14 @@
 			{/foreach}
 			<td style="padding-left:10px" nowrap>
 				{if $CNT eq 1}
-					<select class=small id="qccombo" style="width:120px"  onclick="QCreate(this);">
+					<select class=small id="qccombo" style="width:110px"  onclick="QCreate(this);">
 						<option value="none">{$APP.LBL_QUICK_CREATE}...</option>
                         {foreach  item=detail from=$QCMODULE}
                         <option value="{$detail.1}">{$APP.NEW}&nbsp;{$detail.0}</option>
                         {/foreach}
 					</select>
 				{else}
-					<select class=small id="qccombo" style="width:120px"  onchange="QCreate(this);">
+					<select class=small id="qccombo" style="width:110px"  onchange="QCreate(this);">
 						<option value="none">{$APP.LBL_QUICK_CREATE}...</option>
                         {foreach  item=detail from=$QCMODULE}
                         <option value="{$detail.1}">{$APP.NEW}&nbsp;{$detail.0}</option>
@@ -180,12 +180,12 @@
 
 		</table>
 	</td>
-	<td align=right style="padding-right:10px" >
+	<td align=left style="padding-right:10px" nowrap >
 		<table border=0 cellspacing=0 cellpadding=0 id="search" style="border:1px solid #999999;background-color:white">
 		   <tr>
 			<form name="UnifiedSearch" method="post" action="index.php" style="margin:0px" onsubmit="VtigerJS_DialogBox.block();">
-			<td style="height:19px;background-color:#ffffef" >
-				<a href='javascript:void(0);' onclick="UnifiedSearch_SelectModuleForm(this);"><img src="{'settings_top.gif'|@vtiger_imageurl:$THEME}" align='absmiddle' border=0></a>
+			<td style="height:19px;background-color:#ffffef" nowrap>
+				<a href='javascript:void(0);' onclick="UnifiedSearch_SelectModuleForm(this);"><img src="{'settings_top.gif'|@vtiger_imageurl:$THEME}" align='left' border=0></a>
 				<input type="hidden" name="action" value="UnifiedSearch" style="margin:0px">
 				<input type="hidden" name="module" value="Home" style="margin:0px">
 				<input type="hidden" name="parenttab" value="{$CATEGORY}" style="margin:0px">

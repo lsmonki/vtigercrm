@@ -1243,7 +1243,13 @@ $app_strings = array (
 'CANNOT_CONVERT' => 'Cannot be Converted',
 
 // For note link on the detailview
-'LBL_ADD_NOTE'=>'Add Note'
+'LBL_ADD_NOTE'=>'Add Note',
+
+// For Layout Editor 
+'LBL_UNHIDE_FIELDS'=>'Unhide Fields',
+
+// For Mass Edit
+'LBL_SELECT_FIELDS_TO_UDPATE_WITH_NEW_VALUE'=>'Select fields to be updated and provide the new value.',
 );
 
 $app_list_strings = array (

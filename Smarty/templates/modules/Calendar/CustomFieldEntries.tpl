@@ -15,9 +15,9 @@
 				<input type="hidden" name="mode">
 				<table  class="listTableTopButtons" border="0" cellpadding="5" cellspacing="0" width="100%">
 					<tr>
-						<td class="big" align="left"><strong>{$MOD.LBL_MAPPED_FIELDS}</strong> </td>
+						<td class="big" align="left" nowrap="nowrap"><strong>{$MOD.LBL_MAPPED_FIELDS}</strong> </td>
 					{if $MODULE eq 'Calendar'}
-						<td align="right"><input type="radio" name="activitytype" value="E" checked>&nbsp;{$APP.Event}
+						<td align="right" width="80%"><input type="radio" name="activitytype" value="E" checked>&nbsp;{$APP.Event}
 						<input type="radio" name="activitytype" value="T">&nbsp;{$APP.Task} 
 						</td>
 					{/if}

@@ -51,13 +51,13 @@
 														</td>
 													</tr>
 												</table>
-												<table border="0" cellspacing="0" cellpadding="0" width="95%" align="center">
+												<table border="0" cellspacing="0" cellpadding="0" width="95%">
 													<tr>
 														<td class=small >
 															<table border="0" celspacing="0" cellpadding="0" width="100%" align="center" bgcolor="white">
 																<tr>
-																	<td>	
-																		<table>
+																	<td align="center">	
+																		<table border="0" cellspacing="0" cellpadding="0" width="100%">
 																			<tr>
 																				<td>{if $entries.hidden_count neq '0' || $entries.hidden_count neq null}
 																					{$APP.LBL_SELECT_FIELD_TO_MOVE}
@@ -86,7 +86,7 @@
 												<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 													<tr>
 														<td align="center">
-															<input type="button" name="save" value="{$APP.LBL_ASSIGN_BUTTON_LABEL}" class="crmButton small save" onclick ="show_move_hiddenfields('{$MODULE}','{$entries.tabid}','{$entries.blockid}','showhiddenfields');"/>
+															<input type="button" name="save" value="{$APP.LBL_UNHIDE_FIELDS}" class="crmButton small save" onclick ="show_move_hiddenfields('{$MODULE}','{$entries.tabid}','{$entries.blockid}','showhiddenfields');"/>
 															<input type="button" name="cancel" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" class="crmButton small cancel" onclick="fninvsh('hiddenfields_{$entries.blockid}');" />
 														</td>
 													</tr>
@@ -210,19 +210,18 @@
 														</td>
 													</tr>
 												</table>
-												<table border="0" cellspacing="0" cellpadding="0" width="95%" align="center">
+												<table border="0" cellspacing="0" cellpadding="0" width="95%">
 													<tr>
-														<td class=small >
-															<table border="0" celspacing="0" cellpadding="0" width="100%" align="center" bgcolor="white">
+														<td class=small align="left" >
+															<table border="0" cellspacing="0" cellpadding="0" width="100%" bgcolor="white">
 																<tr>
 																	<td>	
-																		<table>
+																		<table border="0" cellspacing="5" cellpadding="0" width="100%" align="left" class=small>
 																			<tr>
-																				<td>{$MOD.LBL_SELECT_FIELD_TO_MOVE}
-																				</td>
+																				<td>{$MOD.LBL_SELECT_FIELD_TO_MOVE}</td>
 																			</tr>
 																			<tr>
-																				<td><select class="small"  id="movefield_assignid_{$entries.blockid}" style="width:225px" size="10" multiple>
+																				<td><select class="small" id="movefield_assignid_{$entries.blockid}" style="width:225px" size="10" multiple>
 																					{foreach name=inner item=value from=$entries.movefield}	
 																						<option value="{$value.fieldid}">{$value.fieldlabel}</option>
 																					{/foreach}
@@ -239,7 +238,7 @@
 												<table border="0" cellspacing="0" cellpadding="5" width="100%" class="layerPopupTransport">
 													<tr>
 														<td align="center">
-															<input type="button" name="save" value="{$APP.LBL_ASSIGN_BUTTON_LABEL}" class="crmButton small save" onclick ="show_move_hiddenfields('{$MODULE}','{$entries.tabid}','{$entries.blockid}','movehiddenfields');"/>
+															<input type="button" name="save" value="{$APP.LBL_APPLY_BUTTON_LABEL}" class="crmButton small save" onclick ="show_move_hiddenfields('{$MODULE}','{$entries.tabid}','{$entries.blockid}','movehiddenfields');"/>
 															<input type="button" name="cancel" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" class="crmButton small cancel" onclick="fninvsh('movefields_{$entries.blockid}');" />
 														</td>
 													</tr>

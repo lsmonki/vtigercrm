@@ -14,7 +14,7 @@
 <table border=0 cellspacing=0 cellpadding=5 width="50%" class="small homePageButtons">
 <tr style="cursor: pointer;">
 	<td style="padding-left:10px;padding-right:50px" width=10% class="moduleName" nowrap>
-		{$APP.$CATEGORY}&gt; 
+		{$APP.$CATEGORY}&nbsp;&gt; 
 		<a class="hdrLink" href="index.php?action=index&module={$MODULE}">
 			{$APP.$MODULE}
 		</a>
@@ -68,7 +68,7 @@
 </table>
 
 {*<!--button related stuff -->*}
-<form name="Homestuff" id="formStuff">
+<form name="Homestuff" id="formStuff" style="display: inline;">
 	<input type="hidden" name="action" value="homestuff">
 	<input type="hidden" name="module" value="Home">
 	<div id='addWidgetDropDown' style='background-color: #fff; display:none;' onmouseover='fnShowWindow()' onmouseout='fnRemoveWindow()'>

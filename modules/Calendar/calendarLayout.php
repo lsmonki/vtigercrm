@@ -301,7 +301,7 @@ function get_cal_header_data(& $cal_arr,$viewBox,$subtab)
 	$headerdata = "";
 	$headerdata .="
 			<div style='display: block;' id='mnuTab'>
-			<form name='EventViewOption' method='POST' action='index.php'>
+			<form name='EventViewOption' method='POST' action='index.php' style='display: inline;'>
 			<table align='center' border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tr><td colspan='3'>&nbsp;</td></tr>";
 			if(isPermitted("Calendar","EditView") == "yes")
