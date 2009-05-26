@@ -149,6 +149,24 @@ class ModuleClass extends CRMEntity {
 		$query .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid";
 		$query .= " LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
 
+		$linkedModulesQuery = $this->db->pquery("SELECT distinct fieldname, columnname, relmodule FROM vtiger_field" .
+				" INNER JOIN vtiger_fieldmodulerel ON vtiger_fieldmodulerel.fieldid = vtiger_field.fieldid" .
+				" WHERE uitype='10' AND vtiger_fieldmodulerel.module=?", array($module));
+		$linkedFieldsCount = $this->db->num_rows($linkedModulesQuery);
+		
+		for($i=0; $i<$linkedFieldsCount; $i++) {
+			$related_module = $this->db->query_result($linkedModulesQuery, $i, 'relmodule');
+			$fieldname = $this->db->query_result($linkedModulesQuery, $i, 'fieldname');
+			$columnname = $this->db->query_result($linkedModulesQuery, $i, 'columnname');
+			
+			checkFileAccess("modules/$related_module/$related_module.php");
+			require_once("modules/$related_module/$related_module.php");
+			$other = new $related_module();
+			vtlib_setup_modulevars($related_module, $other);
+			
+			$query .= " LEFT JOIN $other->table_name ON $other->table_name.$other->table_index = $this->table_name.$columnname";
+		}
+
 		$query .= "	WHERE vtiger_crmentity.deleted = 0 ".$where;
 		$query .= $this->getListViewSecurityParameter($module);
 		return $query;
@@ -224,6 +242,24 @@ class ModuleClass extends CRMEntity {
 
 		$query .= " LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
 		$query .= " LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid = vtiger_users.id and vtiger_users.status='Active'";
+		
+		$linkedModulesQuery = $this->db->pquery("SELECT distinct fieldname, columnname, relmodule FROM vtiger_field" .
+				" INNER JOIN vtiger_fieldmodulerel ON vtiger_fieldmodulerel.fieldid = vtiger_field.fieldid" .
+				" WHERE uitype='10' AND vtiger_fieldmodulerel.module=?", array($thismodule));
+		$linkedFieldsCount = $this->db->num_rows($linkedModulesQuery);
+
+		for($i=0; $i<$linkedFieldsCount; $i++) {
+			$related_module = $this->db->query_result($linkedModulesQuery, $i, 'relmodule');
+			$fieldname = $this->db->query_result($linkedModulesQuery, $i, 'fieldname');
+			$columnname = $this->db->query_result($linkedModulesQuery, $i, 'columnname');
+			
+			checkFileAccess("modules/$related_module/$related_module.php");
+			require_once("modules/$related_module/$related_module.php");
+			$other = new $related_module();
+			vtlib_setup_modulevars($related_module, $other);
+			
+			$query .= " LEFT JOIN $other->table_name ON $other->table_name.$other->table_index = $this->table_name.$columnname";
+		}
 
 		$where_auto = " vtiger_crmentity.deleted=0";
 
@@ -401,5 +437,12 @@ class ModuleClass extends CRMEntity {
 	 * You can override the behavior by re-defining it here.
 	 */
 	//function get_related_list($id, $cur_tab_id, $rel_tab_id, $actions=false) { }
+
+	/**
+	 * Handle getting dependents list information.
+	 * NOTE: This function has been added to CRMEntity (base class).
+	 * You can override the behavior by re-defining it here.
+	 */
+	//function get_dependents_list($id, $cur_tab_id, $rel_tab_id, $actions=false) { }
 }
 ?>

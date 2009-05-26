@@ -1275,11 +1275,29 @@ $log->info("in getOldFileName  ".$notesid);
 	
 	/** Function to unlink an entity with given Id from another entity */
 	function unlinkRelationship($id, $return_module, $return_id) {
-		global $log;
+		global $log, $currentModule;
 		
 		$query = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
 		$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
 		$this->db->pquery($query, $params);
+		
+		$fieldRes = $this->db->pquery('SELECT tabid, tablename, columnname FROM vtiger_field WHERE fieldid IN (
+			SELECT fieldid FROM vtiger_fieldmodulerel WHERE module=? AND relmodule=?)', array($currentModule, $return_module));
+		$numOfFields = $this->db->num_rows($fieldRes);
+		for ($i=0; $i<$numOfFields; $i++) {
+			$tabId = $this->db->query_result($fieldRes, $i, 'tabid');
+			$tableName = $this->db->query_result($fieldRes, $i, 'tablename');
+			$columnName = $this->db->query_result($fieldRes, $i, 'columnname');
+			
+			$relatedModule = vtlib_getModuleNameById($tabId);
+			checkFileAccess("modules/$relatedModule/$relatedModule.php");
+			require_once("modules/$relatedModule/$relatedModule.php");
+			$focusObj = new $relatedModule();
+			
+			$updateQuery = "UPDATE $tableName SET $columnName=0 WHERE $columnName=? AND $focusObj->table_index=?";
+			$updateParams = array($return_id, $id);
+			$this->db->pquery($updateQuery, $updateParams);			
+		}
 	}
 	
 	/** Function to restore a deleted record of specified module with given crmid
@@ -1719,7 +1737,7 @@ $log->info("in getOldFileName  ".$notesid);
 		$query .= " LEFT  JOIN $this->table_name   ON $this->table_name.$this->table_index = $other->table_name.$other->table_index";
 		$query .= $more_relation;
 		$query .= " LEFT  JOIN vtiger_users        ON vtiger_users.id = vtiger_crmentity.smownerid";
-		$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupid = $other->table_name.$other->table_index";
+		$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
 
 		$query .= " WHERE vtiger_crmentity.deleted = 0 AND (vtiger_crmentityrel.crmid = $id OR vtiger_crmentityrel.relcrmid = $id)";
 
@@ -1740,7 +1758,7 @@ $log->info("in getOldFileName  ".$notesid);
 	 */
 	function get_dependents_list($id, $cur_tab_id, $rel_tab_id, $actions=false) {
 
-		global $currentModule, $app_strings, $singlepane_view, $adb;
+		global $currentModule, $app_strings, $singlepane_view, $current_user;
 
 		if(isset($_REQUEST)) $parenttab = $_REQUEST['parenttab'];
 
@@ -1764,19 +1782,20 @@ $log->info("in getOldFileName  ".$notesid);
 		else $returnset = "&return_module=$currentModule&return_action=CallRelatedList&return_id=$id";
 
 		$return_value = null;
-		$dependentFieldSql = $adb->pquery("SELECT * FROM vtiger_field WHERE uitype='10' AND" .
+		$dependentFieldSql = $this->db->pquery("SELECT tabid, fieldname, columnname FROM vtiger_field WHERE uitype='10' AND" .
 				" fieldid IN (SELECT fieldid FROM vtiger_fieldmodulerel WHERE relmodule=? AND module=?)", array($currentModule, $related_module));
+		$numOfFields = $this->db->num_rows($dependentFieldSql);
 		
-		if($adb->num_rows($dependentFieldSql) > 0) {
-		
-			$dependentColumn = $adb->query_result($dependentFieldSql, 0, 'columnname');			
-			
+		if($numOfFields > 0) {		
+			$dependentColumn = $this->db->query_result($dependentFieldSql, 0, 'columnname');
+			$dependentField = $this->db->query_result($dependentFieldSql, 0, 'fieldname');			
 		
 			$button .= '<input type="hidden" name="'.$dependentColumn.'" id="'.$dependentColumn.'" value="'.$id.'">';			
 			$button .= '<input type="hidden" name="'.$dependentColumn.'_type" id="'.$dependentColumn.'_type" value="'.$currentModule.'">';			
 			if($actions) {
 				if(is_string($actions)) $actions = explode(',', strtoupper($actions));
-				if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
+				if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes' 
+						&& getFieldVisibilityPermission($related_module,$current_user->id,$dependentField) == '0') {
 					$button .= "<input title='".getTranslatedString('LBL_ADD_NEW'). " ". getTranslatedString($singular_modname) ."' class='crmbutton small create'" .
 						" onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\"' type='submit' name='button'" .
 						" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
@@ -1804,7 +1823,7 @@ $log->info("in getOldFileName  ".$notesid);
 			$query .= " INNER  JOIN $this->table_name   ON $this->table_name.$this->table_index = $other->table_name.$dependentColumn";
 			$query .= $more_relation;
 			$query .= " LEFT  JOIN vtiger_users        ON vtiger_users.id = vtiger_crmentity.smownerid";
-			$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupid = $other->table_name.$other->table_index";
+			$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
 	
 			$query .= " WHERE vtiger_crmentity.deleted = 0 AND $this->table_name.$this->table_index = $id";
 	

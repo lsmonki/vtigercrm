@@ -2783,7 +2783,7 @@ function getTranslatedString($str,$module='')
 {
 	global $app_strings, $mod_strings, $log,$current_language;
 	$temp_mod_strings = ($module != '' )?return_module_language($current_language,$module):$mod_strings;
-	$trans_str = ($app_strings[$str] != '')?$app_strings[$str]:(($temp_mod_strings[$str] != '')?$temp_mod_strings[$str]:$str);
+	$trans_str = ($temp_mod_strings[$str] != '')?$temp_mod_strings[$str]:(($app_strings[$str] != '')?$app_strings[$str]:$str);
 	$log->debug("function getTranslatedString($str) - translated to ($trans_str)");
 	return $trans_str;
 }
