@@ -106,9 +106,9 @@
 						<select name="currency_name" id="currency_name" class="small" onChange='updateSymbolAndCode();'>
 					{foreach key=header item=currency from=$CURRENCIES}
 			        	        {if $header eq $CURRENCY_NAME}
-			        	        	<option value="{$header}" selected'>{$header|@getTranslatedCurrencyString}</option>
+			        	        	<option value="{$header}" selected>{$header|@getTranslatedCurrencyString}({$currency.1})</option>
 			        	        {else}
-			        	        	<option value="{$header}" >{$header|@getTranslatedCurrencyString}</option>
+			        	        	<option value="{$header}" >{$header|@getTranslatedCurrencyString}({$currency.1})</option>
 			        	        {/if}
    					{/foreach}
  						</select>
