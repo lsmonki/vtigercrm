@@ -1681,13 +1681,10 @@ $log->info("in getOldFileName  ".$notesid);
 
 		global $currentModule, $app_strings, $singlepane_view;
 
-		if(isset($_REQUEST)) $parenttab = $_REQUEST['parenttab'];
+		$parenttab = getParentTab();
 
 		$related_module = vtlib_getModuleNameById($rel_tab_id);
-
-		checkFileAccess("modules/$related_module/$related_module.php");
-		require_once("modules/$related_module/$related_module.php");
-		$other = new $related_module();
+		$other = CRMEntity::getInstance($related_module);
 		
 		// Some standard module class doesn't have required variables
 		// that are used in the query, they are defined in this generic API
@@ -1760,13 +1757,10 @@ $log->info("in getOldFileName  ".$notesid);
 
 		global $currentModule, $app_strings, $singlepane_view, $current_user;
 
-		if(isset($_REQUEST)) $parenttab = $_REQUEST['parenttab'];
+		$parenttab = getParentTab();
 
 		$related_module = vtlib_getModuleNameById($rel_tab_id);
-
-		checkFileAccess("modules/$related_module/$related_module.php");
-		require_once("modules/$related_module/$related_module.php");
-		$other = new $related_module();
+		$other = CRMEntity::getInstance($related_module);
 		
 		// Some standard module class doesn't have required variables
 		// that are used in the query, they are defined in this generic API
