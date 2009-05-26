@@ -1103,9 +1103,28 @@ function populateLinks() {
 	include_once('vtlib/Vtiger/Module.php');
 	
 	// Links for Accounts module
-	$moduleInstance = Vtiger_Module::getInstance('Accounts');
+	$accountInstance = Vtiger_Module::getInstance('Accounts');
 	// Detail View Custom link
-	$moduleInstance->addLink('DETAILVIEW', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
+	$accountInstance->addLink(
+		'DETAILVIEWBASIC', 'LBL_ADD_NOTE', 
+		'index.php?module=Documents&action=EditView&return_module=$MODULE$&return_action=DetailView&return_id=$RECORD$&parent_id=$RECORD$',
+		'themes/images/bookMark.gif'
+	);
+	$accountInstance->addLink('DETAILVIEWBASIC', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
+	
+	$leadInstance = Vtiger_Module::getInstance('Leads');
+	$leadInstance->addLink(
+		'DETAILVIEWBASIC', 'LBL_ADD_NOTE', 
+		'index.php?module=Documents&action=EditView&return_module=$MODULE$&return_action=DetailView&return_id=$RECORD$&parent_id=$RECORD$',
+		'themes/images/bookMark.gif'
+	);
+	
+	$contactInstance = Vtiger_Module::getInstance('Contacts');
+	$contactInstance->addLink(
+		'DETAILVIEWBASIC', 'LBL_ADD_NOTE', 
+		'index.php?module=Documents&action=EditView&return_module=$MODULE$&return_action=DetailView&return_id=$RECORD$&parent_id=$RECORD$',
+		'themes/images/bookMark.gif'
+	);
 }
 
 // Function to call installation of mandatory modules

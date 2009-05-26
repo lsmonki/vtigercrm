@@ -1638,7 +1638,26 @@ function populateLinks() {
 	// Links for Accounts module
 	$moduleInstance = Vtiger_Module::getInstance('Accounts');
 	// Detail View Custom link
-	$moduleInstance->addLink('DETAILVIEW', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
+	$moduleInstance->addLink(
+		'DETAILVIEWBASIC', 'LBL_ADD_NOTE', 
+		'index.php?module=Documents&action=EditView&return_module=$MODULE$&return_action=DetailView&return_id=$RECORD$&parent_id=$RECORD$',
+		'themes/images/bookMark.gif'
+	);
+	$moduleInstance->addLink('DETAILVIEWBASIC', 'LBL_SHOW_ACCOUNT_HIERARCHY', 'index.php?module=Accounts&action=AccountHierarchy&accountid=$RECORD$');
+	
+	$moduleInstance2 = Vtiger_Module::getInstance('Leads');
+	$moduleInstance2->addLink(
+		'DETAILVIEWBASIC', 'LBL_ADD_NOTE', 
+		'index.php?module=Documents&action=EditView&return_module=$MODULE$&return_action=DetailView&return_id=$RECORD$&parent_id=$RECORD$',
+		'themes/images/bookMark.gif'
+	);
+	
+	$moduleInstance3 = Vtiger_Module::getInstance('Contacts');
+	$moduleInstance3->addLink(
+		'DETAILVIEWBASIC', 'LBL_ADD_NOTE', 
+		'index.php?module=Documents&action=EditView&return_module=$MODULE$&return_action=DetailView&return_id=$RECORD$&parent_id=$RECORD$',
+		'themes/images/bookMark.gif'
+	);
 }
 
 /* For Webservices Support */

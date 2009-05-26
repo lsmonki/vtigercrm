@@ -1240,7 +1240,10 @@ $app_strings = array (
 
 'LBL_NO_MODULES_TO_SELECT' => 'Operation Denied. No Modules to act on.',
 
-'CANNOT_CONVERT' => 'Cannot be Converted'
+'CANNOT_CONVERT' => 'Cannot be Converted',
+
+// For note link on the detailview
+'LBL_ADD_NOTE'=>'Add Note'
 );
 
 $app_list_strings = array (
