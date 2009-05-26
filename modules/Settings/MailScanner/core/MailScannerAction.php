@@ -201,6 +201,7 @@ class Vtiger_MailScannerAction {
 		$ticket = new HelpDesk();
 		$ticket->column_fields['ticket_title'] = $usetitle;
 		$ticket->column_fields['description'] = $description;
+		$ticket->column_fields['ticketstatus'] = 'Open';
 		$ticket->column_fields['assigned_user_id'] = $current_user->id;
 		if($linktoid) $ticket->column_fields['parent_id'] = $linktoid;
 		$ticket->save('HelpDesk');
