@@ -381,12 +381,10 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld ["options"] = $users_combo;
 
 	}
-	//added for asterisk integration
 	elseif($uitype == 11){
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
 		$label_fld[] = $col_fields[$fieldname];
 	}
-	//asterisk integration ends
 	elseif($uitype == 53)
 	{
 		global $noof_group_rows, $adb;

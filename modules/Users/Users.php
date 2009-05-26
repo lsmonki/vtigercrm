@@ -91,7 +91,8 @@ class Users {
 	'address_state' =>'',
 	'address_postalcode' =>'',
 	'address_country' =>'',
-	
+	'asterisk_extension'=>'',
+	'use_asterisk'=>'',
 );
 	var $table_name = "vtiger_users";
 	var $table_index= 'id';
@@ -706,11 +707,6 @@ class Users {
 				$this->insertIntoEntityTable($table_name, $module);			
 			}
 		}
-		if(vtlib_isModuleActive('PBXManager')) {
-			$this->db->query('INSERT INTO vtiger_asteriskextensions ' .
-					' VALUES('.$this->id.',"'.$this->column_fields['asterisk_extension'].'","'.$this->column_fields['use_asterisk'].'")');
-		}
-		
 		require_once('modules/Users/CreateUserPrivilegeFile.php');
 		createUserPrivilegesfile($this->id);
 		if($insertion_mode != 'edit'){

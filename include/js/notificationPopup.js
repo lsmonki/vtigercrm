@@ -14,11 +14,12 @@ function _defPopup(){
 	var parentDiv = document.getElementById('notificationDiv');
 	parentDiv.appendChild(popupDiv);
 	popupDiv.id = randomID;
-	popupDiv.className = "lvtCol fixedLay1";
+	popupDiv.className = "lvtCol";
 	popupDiv.style.float="right"; 
 	popupDiv.style.paddingRight="5px";
 	popupDiv.style.overflow="hidden";
 	popupDiv.style.right="0px";
+	popupDiv.style.bottom="0px";
 	popupDiv.style.borderColor="rgb(141, 141, 141)";
 	popupDiv.style.borderTop="1px black solid";
 	popupDiv.style.borderBottom="1px black solid";
@@ -37,6 +38,7 @@ function _defPopup(){
 	 * @param time - the time for which it is displayed
 	 */
 	function CreatePopup(node, time){
+		parentDiv.style.display = "block";
 		if(time != undefined && time != ""){
 			remainOnScreen = time * 1000;
 		}
@@ -92,6 +94,7 @@ function _defPopup(){
 		popupDiv.innerHTML = "";
 		popupDiv.style.height = "0px"; 
 		popupDiv.style.display = "none";
+		parentDiv.style.display = "none";
 	}
 	
 	return {

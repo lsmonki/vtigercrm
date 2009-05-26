@@ -1,5 +1,5 @@
 /**
- * this file will polls the vtiger_asteriskincomingcalls table
+ * this file will poll the vtiger_asteriskincomingcalls table
  * for any incoming calls
  *
  * the variable ASTERISK_POLLTIME  denotes the number of milli-seconds after which the crm gets polled
@@ -8,9 +8,9 @@
 function _defAsteriskTimer(){
 	var asteriskTimer = null;
 	var ASTERISK_POLLTIME = 3000;	//vtigercrm polls the asterisk server for incoming calls after every 3 seconds for now
-	var ASTERISK_INCOMING_DIV_TIMEOUT = 15;	//the incoming call div is present for 10 seconds
+	var ASTERISK_INCOMING_DIV_TIMEOUT = 15;	//the incoming call div is present for this number of seconds
 	function AsteriskCallback() {
-		var url = "module=Users&action=UsersAjax&file=TraceIncomingCall";
+		var url = "module=PBXManager&action=PBXManagerAjax&file=TraceIncomingCall&mode=ajax&ajax=true";
 		new Ajax.Request(
 			'index.php',
 			{
@@ -18,8 +18,8 @@ function _defAsteriskTimer(){
 				method: 'post',
 				postBody:url,
 				onComplete: function(response){
-					popupText = response.responseText;
-					if(popupText != 'failure'){
+					popupText = trim(response.responseText);
+					if(popupText != '' && popupText != 'failure'){
 						var div = popupText;
 						Popup_vtiger = _defPopup();
 						Popup_vtiger.content = div;

@@ -19,12 +19,14 @@ function savePBXDetails(){
 		$port = $_REQUEST['qport'];
 		$username = $_REQUEST['qusername'];
 		$password = $_REQUEST['qpassword'];
+		$version = $_REQUEST['version'];
 		
 		$sql = "delete from vtiger_asterisk";
 		$adb->query($sql);	//delete older records (if any)
 		
-		$sql = "insert into vtiger_asterisk values ('$server','$port', '$username', '$password')";
-		$adb->query($sql);
+		$sql = "insert into vtiger_asterisk (server, port, username, password, version) values (?,?,?,?,?)";
+		$params = array($server,$port, $username, $password, $version);
+		$adb->pquery($sql, $params);
 	}
 }
 ?>

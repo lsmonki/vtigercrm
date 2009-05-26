@@ -31,7 +31,7 @@
 				{include file='SetMenu.tpl'}
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 					<tr>
-						<td width=50 rowspan=3 valign=top><img src="{'call.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_SOFTPHONE_SERVER_SETTINGS}" width="48" height="38" border=0 title="{$MOD.LBL_SOFTPHONE_SERVER_SETTINGS}"></td>
+						<td width=50 rowspan=3 valign=top><img src="{'Call.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_SOFTPHONE_SERVER_SETTINGS}" width="48" height="38" border=0 title="{$MOD.LBL_SOFTPHONE_SERVER_SETTINGS}"></td>
 						<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_SOFTPHONE_SERVER_SETTINGS}</b></td>
 					</tr>
 					<tr>
@@ -54,7 +54,7 @@
 								<table border=0 cellspacing=0 cellpadding=5 width=100%>
 									<tr>
 										<td id='asterisk' class="big" height="20px;" width="75%">
-											<strong>Asterisk Configuration</strong>
+											<strong>{$MOD.ASTERISK_CONFIGURATION}</strong>
 										</td>
 										<!-- for now only asterisk is there :: later we can add a dropdown here and add settings for all -->
 									</tr>
@@ -93,6 +93,15 @@
 										</td>
 									</tr>
 									<tr>
+										<td width="20%" nowrap class="small cellLabel"><strong>{$MOD.ASTERISK_VERSION}</strong></td>
+                						<td width="80%" class="small cellText">
+                							<select name="asterisk_version" id="asterisk_version" title="{$MOD.ASTERISK_VERSION_TITLE}">
+                								<option value="1.4">1.4</option>
+                								<option value="1.6">1.6</option>
+                							</select>
+										</td>
+									</tr>
+									<tr>
 										<td width="20%" nowrap colspan="2" align ="center">
 											<input type="button" name="update" class="crmbutton small create" value="{$MOD.LBL_UPDATE_BUTTON}" onclick="validatefn1('asterisk');" />
 											<input type="button" name="cancel" class="crmbutton small cancel" value="{$MOD.LBL_CANCEL_BUTTON}"  onClick="window.history.back();"/>
@@ -126,6 +135,7 @@ function setSoftphoneDetails(module){
 	var asterisk_port = document.getElementById("asterisk_port").value;
 	var asterisk_username = document.getElementById("asterisk_username").value;
 	var asterisk_password = document.getElementById("asterisk_password").value;
+	var asterisk_version = $('asterisk_version').value;
 	
 	if(asterisk_port == ""){
 		//port not specified :: so set default
@@ -136,7 +146,7 @@ function setSoftphoneDetails(module){
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'module=PBXManager&action=PBXManagerAjax&file=UpdatePBXDetails&ajax=true&qserver='+asterisk_server_ip+'&qport='+asterisk_port+'&qusername='+asterisk_username+'&qpassword='+asterisk_password+'&semodule='+module,
+			postBody: 'module=PBXManager&action=PBXManagerAjax&file=UpdatePBXDetails&ajax=true&qserver='+asterisk_server_ip+'&qport='+asterisk_port+'&qusername='+asterisk_username+'&qpassword='+asterisk_password+'&semodule='+module+'&version='+asterisk_version,
 			onComplete: function(response) {
 				if((response.responseText != '')){
 					alert(response.responseText);

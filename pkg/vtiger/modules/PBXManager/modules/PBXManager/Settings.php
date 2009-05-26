@@ -34,11 +34,14 @@ if($adb->num_rows($result) > 0){
 	$asterisk_port = $adb->query_result($result, 0, 'port');
 	$asterisk_username = $adb->query_result($result, 0, 'username');
 	$asterisk_password = $adb->query_result($result, 0, 'password');
+	$asterisk_version = $adb->query_result($result, 0, 'version');
 }
+
 $smarty->assign("ASTERISK_SERVER_IP", $asterisk_server_ip);
 $smarty->assign("ASTERISK_PORT", $asterisk_port);
 $smarty->assign("ASTERISK_USERNAME", $asterisk_username);
 $smarty->assign("ASTERISK_PASSWORD", $asterisk_password);
+$smarty->assign("ASTERISK_VERSION", $asterisk_version);
 
 $smarty->display(vtlib_getModuleTemplate('PBXManager', 'Settings.tpl'));
 ?>

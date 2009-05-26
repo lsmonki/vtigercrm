@@ -1,9 +1,10 @@
 <?xml version='1.0'?>
 <module>
-<exporttime>2009-02-05 07:20:10</exporttime>
+<exporttime></exporttime>
 <name>PBXManager</name>
 <label>PBXManager</label>
 <parent>Tools</parent>
+<version>1.1</version>
 <dependencies>
 <vtiger_version>5.1.0</vtiger_version>
 </dependencies>
@@ -16,7 +17,7 @@
   `callto` varchar(255) default NULL,
   `timeofcall` varchar(255) default NULL,
   `status` varchar(255) default NULL
-)]]></sql>
+) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
 </table>
 </tables>
 <blocks>
@@ -37,7 +38,7 @@
 <maximumlength>100</maximumlength>
 <typeofdata>V~M</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>1</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -61,7 +62,7 @@
 <maximumlength>100</maximumlength>
 <typeofdata>V~M</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>2</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -81,7 +82,7 @@
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>3</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -101,7 +102,7 @@
 <maximumlength>100</maximumlength>
 <typeofdata>V~O</typeofdata>
 <quickcreate>1</quickcreate>
-<quickcreatesequence>4</quickcreatesequence>
+<quickcreatesequence></quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -242,6 +243,14 @@
 </action>
 <action>
 <name><![CDATA[Merge]]></name>
+<status>enabled</status>
+</action>
+<action>
+<name><![CDATA[index]]></name>
+<status>enabled</status>
+</action>
+<action>
+<name><![CDATA[Popup]]></name>
 <status>enabled</status>
 </action>
 </actions>

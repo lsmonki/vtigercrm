@@ -1162,6 +1162,16 @@ $app_strings = array (
 'LBL_OUTGOING_CALL'=>'Outgoing Call',
 'LBL_OPERATION_NOT_SUPPORTED'=>'This Operation is currently not supported',
 'LBL_ASTERISK_SET_ERROR'=>'Asterisk server details are not set. Set them first.',
+'LBL_CREATE_LEAD'=>'Create Lead',
+'LBL_CREATE_CONTACT'=>'Create Contact',
+'LBL_CREATE_ACCOUNT'=>'Create Account',
+'LBL_CREATE_TICKET'=>'Create Tickets',
+'LBL_INCOMING_CALL'=>'Incoming Call',
+'LBL_CALLER_INFORMATION'=>'Caller Information',
+'LBL_CALLER_NUMBER'=>'Number :',
+'LBL_CALLER_NAME'=>'Name :',
+'LBL_INFORMATION_VTIGER'=>'Information from Vtiger',
+
 //asterisk integration ends
 
 // Module Sequence Numbering

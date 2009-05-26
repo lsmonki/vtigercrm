@@ -1110,6 +1110,9 @@ $mod_strings = Array(
 'ASTERISK_USERNAME_TITLE'=>'The asterisk username (generally the admin username)',
 'ASTERISK_PASSWORD_TITLE'=>'Password for the asterisk user',
 'LBL_CANCEL_BUTTON'=>'Cancel',
+'ASTERISK_VERSION' => 'Asterisk Version',
+'ASTERISK_VERSION_TITLE'=>'Select your Asterisk version here; leave it as 1.4 if not sure',
+'ASTERISK_CONFIGURATION'=>'Asterisk Configuration',
 //softphone integration ends
 'LBL_SELECT_FIELD_TO_MOVE' => 'Select Fields to move',
 'VTLIB_LBL_SELECT_PACKAGE_FILE'=>'Select the Package File',

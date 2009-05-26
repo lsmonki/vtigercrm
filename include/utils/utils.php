@@ -4151,9 +4151,10 @@ function getCallerName($from) {
 		$caller = "<a href='index.php?module=$module&action=DetailView&record=$callerID'>$callerName</a>$callerModule";
 	}else{
 		$caller = $caller."<br>
-						<a target='_blank' href='index.php?module=Leads&action=EditView&phone=$from'>Create Lead</a><br>
-						<a target='_blank' href='index.php?module=Contacts&action=EditView&phone=$from'>Create Contact</a><br>
-						<a target='_blank' href='index.php?module=Accounts&action=EditView&phone=$from'>Create Account</a>";
+						<a target='_blank' href='index.php?module=Leads&action=EditView&phone=$from'>".getTranslatedString('LBL_CREATE_LEAD')."</a><br>
+						<a target='_blank' href='index.php?module=Contacts&action=EditView&phone=$from'>".getTranslatedString('LBL_CREATE_CONTACT')."</a><br>
+						<a target='_blank' href='index.php?module=Accounts&action=EditView&phone=$from'>".getTranslatedString('LBL_CREATE_ACCOUNT')."</a><br>
+						<a target='_blank' href='index.php?module=HelpDesk&action=EditView'>".getTranslatedString('LBL_CREATE_TICKET')."</a>";
 	}
 	return $caller;
 }
@@ -4181,7 +4182,7 @@ function getCallerInfo($number){
 		
 		$id = searchPhoneNumber($number, $phones, $result, 1);
 
-		if($id){
+		if($id !== false){
 			$callerName = $adb->query_result($result, $id, "name");
 			$callerID = $adb->query_result($result,$id,$info['id']);
 			$data = array("name"=>$callerName, "module"=>$module, "id"=>$callerID);
@@ -4209,7 +4210,7 @@ function searchPhoneNumber($record, $fields, $result, $flag=0){
 				$number = getStrippedNumber($number);
 			}
 			if($number == $record){
-				return $i;			
+				return $i;
 			}
 		}
 	}
@@ -4332,11 +4333,11 @@ function addToCallHistory($userExtension, $callfrom, $callto, $status, $adb){
 		if(empty($callerName)){
 			$callerName = "Unknown";
 		}else{
-			$callerName = "<a href='index.php?module=".$callerName[module]."&action=DetailView&record=".$callerName[id].">'".$callerName[name]."</a>";
+			$callerName = "<a href='index.php?module=".$callerName[module]."&action=DetailView&record=".$callerName[id]."'>".$callerName[name]."</a>";
 		}
 	}
 	
-	$sql = "insert into vtiger_pbxmanager values (?,?,?,?,?)";
+	$sql = "insert into vtiger_pbxmanager (pbxmanagerid,callfrom,callto,timeofcall,status)values (?,?,?,?,?)";
 	$params = array($crmID, $callerName, $receiver, $timeOfCall, $status);
 	$adb->pquery($sql, $params);
 }

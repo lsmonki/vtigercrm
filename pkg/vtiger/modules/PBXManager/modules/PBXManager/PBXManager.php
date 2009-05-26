@@ -365,26 +365,25 @@ class PBXManager extends CRMEntity {
 	* @param String Event Type
 	*/	
 	function vtlib_handler($moduleName, $eventType) {
- 					
 		require_once('include/utils/utils.php');			
 		global $adb;
- 		
+ 		$tabid = getTabid("Users");
  		if($eventType == 'module.postinstall') {		
 			// Add a block and 2 fields for Users module
 			$blockid = $adb->getUniqueID('vtiger_blocks');
 			$adb->query("insert into vtiger_blocks(blockid,tabid,blocklabel,sequence,show_title,visible,create_view,edit_view,detail_view,display_status)" .
-					" values ($blockid,29,'Asterisk Configuration',6,0,0,0,0,0,1)");
+					" values ($blockid,$tabid,'Asterisk Configuration',6,0,0,0,0,0,1)");
 			
 			$adb->query("insert into vtiger_field(tabid,fieldid,columnname,tablename,generatedtype,uitype,fieldname,fieldlabel,readonly," .
 					" presence,selected,maximumlength,sequence,block,displaytype,typeofdata,quickcreate,quickcreatesequence,info_type) " .
-					" values (29,".$adb->getUniqueID('vtiger_field').",'asterisk_extension','vtiger_asteriskextensions',1,1,'asterisk_extension'," .
+					" values ($tabid,".$adb->getUniqueID('vtiger_field').",'asterisk_extension','vtiger_asteriskextensions',1,1,'asterisk_extension'," .
 					" 'Asterisk Extension',1,0,0,30,1,$blockid,1,'V~O',1,NULL,'BAS')");
 			
 			$adb->query("insert into vtiger_field(tabid,fieldid,columnname,tablename,generatedtype,uitype,fieldname,fieldlabel,readonly," .
 					" presence,selected,maximumlength,sequence,block,displaytype,typeofdata,quickcreate,quickcreatesequence,info_type) " .
-					" values (29,".$adb->getUniqueID('vtiger_field').",'use_asterisk','vtiger_asteriskextensions',1,56,'use_asterisk'," .
-					"' Use Asterisk',1,0,0,30,2,$blockid,1,'C~O',1,NULL,'BAS')");
-				
+					" values ($tabid,".$adb->getUniqueID('vtiger_field').",'use_asterisk','vtiger_asteriskextensions',1,56,'use_asterisk'," .
+					"' Receive Incoming Calls',1,0,0,30,2,$blockid,1,'C~O',1,NULL,'BAS')");
+			
 			// Mark the module as Standard module
 			$adb->pquery('UPDATE vtiger_tab SET customized=0 WHERE name=?', array($moduleName));
 			

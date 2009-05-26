@@ -3584,7 +3584,7 @@ function getViewPortCenter(){
  * then it calls the number
  * @param number - the number to be called
  */
-function startCall(number){
+function startCall(number, recordid){
 	div = document.getElementById('OutgoingCall').innerHTML;					
 	outgoingPopup = _defPopup();
 	outgoingPopup.content = div;
@@ -3595,7 +3595,7 @@ function startCall(number){
 		'index.php',
 		{	queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'action=UsersAjax&mode=ajax&file=StartCall&module=Users&number='+number,
+			postBody: 'action=PBXManagerAjax&mode=ajax&file=StartCall&ajax=true&module=PBXManager&number='+number+'&recordid='+recordid,
 			onComplete: function(response) {
 							if(response.responseText == ''){
 								//successfully called
