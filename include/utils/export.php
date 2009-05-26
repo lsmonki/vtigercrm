@@ -35,7 +35,7 @@ require_once('modules/HelpDesk/HelpDesk.php');
 require_once('modules/Vendors/Vendors.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('modules/CustomView/CustomView.php');
-
+require_once 'modules/PickList/PickListUtils.php';
 
 // Set the current language and the language strings, if not already set.
 setCurrentLanguage();
@@ -195,9 +195,12 @@ function export($type){
 		$limit_start_rec = ($start_rec == 0) ? 0 : ($start_rec - 1);
 		$query .= ' LIMIT '.$limit_start_rec.','.$list_max_entries_per_page;
 	}
+	
     $result = $adb->pquery($query, $params, true, "Error exporting $type: "."<BR>$query");
     $fields_array = $adb->getFieldsArray($result);
-	$fields_array = array_diff($fields_array,array("user_name"));
+    $fields_array = array_diff($fields_array,array("user_name"));
+	
+	$__processor = new ExportUtils($type, $fields_array);
 	
 	// Translated the field names based on the language used.
 	$translated_fields_array = array();
@@ -213,6 +216,7 @@ function export($type){
 
     while($val = $adb->fetchByAssoc($result, -1, false)){
 		$new_arr = array();
+		$val = $__processor->sanitizeValues($val);
 		foreach ($val as $key => $value){
 			if($type == 'Documents' && $key == 'description'){
 				$value = strip_tags($value);
@@ -260,4 +264,81 @@ header("Content-Length: ".strlen($content));
 print $content;
 
 exit;
+
+/**
+ * this class will provide utility functions to process the export data.
+ * this is to make sure that the data is sanitized before sending for export
+ */
+class ExportUtils{
+	var $fieldsArr = array();
+	var $picklistValues = array();
+	
+	function ExportUtils($module, $fields_array){
+		self::__init($module, $fields_array);
+	}
+	
+	
+	function __init($module, $fields_array){
+		$infoArr = self::getInformationArray($module);
+		
+		//attach extra fields related information to the fields_array; this will be useful for processing the export data
+		foreach($infoArr as $fieldname=>$fieldinfo){
+			if(in_array($fieldinfo["fieldlabel"], $fields_array)){
+				$this->fieldsArr[$fieldname] = $fieldinfo;
+			}
+		}
+	}
+	
+	/**
+	 * this function takes in an array of values for an user and sanitizes it for export
+	 * @param array $arr - the array of values
+	 */
+	function sanitizeValues($arr){
+		global $current_user, $adb;
+		$roleid = fetchUserRole($current_user->id);
+		
+		foreach($arr as $fieldlabel=>&$value){
+			$fieldInfo = $this->fieldsArr[$fieldlabel];
+			
+			$uitype = $fieldInfo['uitype'];
+			$fieldname = $fieldInfo['fieldname'];
+			if($uitype == 15 || $uitype == 16 || $uitype == 33){
+				//picklists
+				if(empty($this->picklistValues[$fieldname])){
+					$this->picklistValues[$fieldname] = getAssignedPicklistValues($fieldname, $roleid, $adb);
+				}
+				$value = trim($value);
+				if(!empty($this->picklistValues[$fieldname]) && !in_array($value, $this->picklistValues[$fieldname]) && !empty($value)){
+					$value = getTranslatedString("LBL_NOT_ACCESSIBLE");
+				}
+			}
+		}
+		return $arr;
+	}
+	
+	/**
+	 * this function takes in a module name and returns the field information for it
+	 */
+	function getInformationArray($module){
+		require_once 'include/utils/utils.php';
+		global $adb;
+		$tabid = getTabid($module);
+		
+		$result = $adb->pquery("select * from vtiger_field where tabid=?", array($tabid));
+		$count = $adb->num_rows($result);
+		$arr = array();
+		$data = array();
+		
+		for($i=0;$i<$count;$i++){
+			$arr['uitype'] = $adb->query_result($result, $i, "uitype");
+			$arr['fieldname'] = $adb->query_result($result, $i, "fieldname");
+			$arr['columnname'] = $adb->query_result($result, $i, "columnname");
+			$arr['tablename'] = $adb->query_result($result, $i, "tablename");
+			$arr['fieldlabel'] = $adb->query_result($result, $i, "fieldlabel");
+			$fieldlabel = strtolower($arr['fieldlabel']);
+			$data[$fieldlabel] = $arr;
+		}
+		return $data;
+	}
+}
 ?>
