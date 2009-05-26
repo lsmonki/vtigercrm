@@ -50,6 +50,7 @@ For Windows
 
 23. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL).
 
+24. htmlpurifier is used under GNU LGPL (v2.1+) from http://htmlpurifier.org/
 
 For Linux
 
@@ -96,7 +97,9 @@ For Linux
 
 23. PHP Class mimetype under BSD License from http://www.phpclasses.org/browse/package/834.html
 
-24. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL)
+24. htmlpurifier is used under GNU LGPL (v2.1+) from http://htmlpurifier.org/
+
+25. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL)
 
 The licenses of the Open Source components are reproduced in full below.
 

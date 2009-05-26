@@ -515,4 +515,35 @@ function vtlib_isDirWriteable($dirpath) {
 	return false;
 }
 
+/** HTML Purifier global instance */
+$__htmlpurifier_instance = false;
+/**
+ * Purify (Cleanup) malicious snippets of code from the input
+ *
+ * @param String $value
+ * @param Boolean $ignore Skip cleaning of the input
+ * @return String
+ */
+function vtlib_purify($input, $ignore=false) {
+	global $__htmlpurifier_instance, $root_directory, $default_charset;
+	
+	$value = $input;
+	if(!$ignore) {
+		// Initialize the instance if it has not yet done
+		if($__htmlpurifier_instance == false) {
+			include_once ('include/htmlpurifier/library/HTMLPurifier.auto.php');
+
+			$config = HTMLPurifier_Config::createDefault();
+	    	$config->set('Core', 'Encoding', $default_charset);
+	    	$config->set('Cache', 'SerializerPath', "$root_directory/test/vtlib");
+	    		    	
+			$__htmlpurifier_instance = new HTMLPurifier();
+		}
+		if($__htmlpurifier_instance) {
+			$value = $__htmlpurifier_instance->purify($input);
+		}
+	}
+	return $value;
+}
+
 ?>
