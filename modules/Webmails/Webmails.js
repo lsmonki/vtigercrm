@@ -7,7 +7,7 @@
    * All Rights Reserved.
   *
  ********************************************************************************/
-function load_webmail(mid) {
+function load_webmail(mid,hasAttachment) {
         var node = $("row_"+mid);
 	preview_id = mid;
 	if(typeof($('fnt_subject_'+mid)) != "undefined" && $('fnt_subject_'+mid).color=="green")
@@ -83,8 +83,13 @@ function load_webmail(mid) {
         	$("qualify_button").appendChild(Builder.node('input',{type: 'button', name: 'Qualify2', value: alert_arr.LBL_QUALIFY_EMAIL, className: 'buttonok', onclick: 'showRelationships('+mid+')'}));
 	else
 		$("qualify_button").appendChild(Builder.node('input',{type: 'hidden',name: 'hide'}));
-        $("download_attach_button").removeChild($("download_attach_button").firstChild);
-        $("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: alert_arr.LBL_DOWNLOAD_ATTACHMENTS, className: 'buttonok', onclick: 'displayAttachments('+mid+')'}));
+		
+	$("download_attach_button").removeChild($("download_attach_button").firstChild);
+	if(hasAttachment == 'yes'){
+		$("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: alert_arr.LBL_DOWNLOAD_ATTACHMENTS, className: 'buttonok', onclick: 'displayAttachments('+mid+')'}));
+	}else{
+		$("download_attach_button").appendChild(Builder.node('input',{type: 'hidden', name: 'download', value: alert_arr.LBL_DOWNLOAD_ATTACHMENTS, className: 'buttonok', onclick: 'displayAttachments('+mid+')'}));
+	}
 		
 		$("print_email_button").removeChild($("print_email_button").firstChild);
 		$("print_email_button").appendChild(Builder.node('input',{type: 'button', name: 'print', value: alert_arr.LBL_PRINT_EMAIL,className: 'buttonok', onclick: 'OpenComposer('+mid+',\'print\')'}));

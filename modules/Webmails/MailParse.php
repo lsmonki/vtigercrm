@@ -50,8 +50,11 @@ function show_msg($mails,$start_message)
 
 	}
 
-
-
+		//enable-diable download attachment button
+		if($msg_ob->has_attachments){
+			$enableDownlaodAttachment = 'yes';
+		}else
+			$enableDownlaodAttachment = 'no';	
 
         // Attachment Icons
         if($msg_ob->has_attachments)
@@ -98,15 +101,15 @@ function show_msg($mails,$start_message)
 
 	if ($mails[$start_message]->deleted)
 	{
-		$listview_entries[$num][] = '<td nowrap align="left" style="cursor:pointer;" id="deleted_subject_'.$num.'" onclick="load_webmail(\''.$num.'\');"><s><a href="javascript:;" >'.substr($mails[$start_message]->subject,0,40).'</a></s></td>';
-		$listview_entries[$num][] = '<td nowrap align="left" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\');" nowrap id="deleted_date_'.$num.'"><s>'.substr($mails[$start_message]->date,0,25).'</s></td>';
-		$listview_entries[$num][] = '<td nowrap align="left" id="deleted_from_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\');"><s>'.substr($from,0,20).'</s></td>';
+		$listview_entries[$num][] = '<td nowrap align="left" style="cursor:pointer;" id="deleted_subject_'.$num.'" onclick="load_webmail(\''.$num.'\', \''.$enableDownlaodAttachment.'\'); "><s><a href="javascript:;" >'.substr($mails[$start_message]->subject,0,40).'</a></s></td>';
+		$listview_entries[$num][] = '<td nowrap align="left" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\', \''.$enableDownlaodAttachment.'\');" nowrap id="deleted_date_'.$num.'"><s>'.substr($mails[$start_message]->date,0,25).'</s></td>';
+		$listview_entries[$num][] = '<td nowrap align="left" id="deleted_from_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\', \''.$enableDownlaodAttachment.'\');"><s>'.substr($from,0,20).'</s></td>';
 	}
 	elseif(!$mails[$start_message]->seen || $mails[$start_message]->recent)
 	{
-		$listview_entries[$num][] = '<td nowrap align="left" onclick="load_webmail(\''.$num.'\');" style="cursor:pointer;" ><a href="javascript:;" id="ndeleted_subject_'.$num.'"><font id="fnt_subject_'.$num.'" color="green">'.substr($mails[$start_message]->subject,0,40).'</font></a></td>';
-		$listview_entries[$num][] = '<td nowrap align="left" nowrap id="ndeleted_date_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\');" ><font id="fnt_date_'.$num.'" color="green">'.substr($mails[$start_message]->date,0,25).' &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</font></td>';
-		$listview_entries[$num][] = '<td  nowrap align="left" id="ndeleted_from_'.$num.'"><font id="fnt_from_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\');" >'.substr($from,0,20).'</font></td>';
+		$listview_entries[$num][] = '<td nowrap align="left" onclick="load_webmail(\''.$num.'\', \''.$enableDownlaodAttachment.'\');" style="cursor:pointer;" ><a href="javascript:;" id="ndeleted_subject_'.$num.'"><font id="fnt_subject_'.$num.'" color="green">'.substr($mails[$start_message]->subject,0,40).'</font></a></td>';
+		$listview_entries[$num][] = '<td nowrap align="left" nowrap id="ndeleted_date_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\', \''.$enableDownlaodAttachment.'\');" ><font id="fnt_date_'.$num.'" color="green">'.substr($mails[$start_message]->date,0,25).' &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</font></td>';
+		$listview_entries[$num][] = '<td  nowrap align="left" id="ndeleted_from_'.$num.'"><font id="fnt_from_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\', \''.$enableDownlaodAttachment.'\');" >'.substr($from,0,20).'</font></td>';
 	}
 	else
 	{
@@ -131,9 +134,9 @@ function show_msg($mails,$start_message)
 		//Option 2 - Ends
 		//Added to shown the original UTF-8 characters - Mickie - 30-11-06 - Ends
 
-		$listview_entries[$num][] = '<td nowrap align="left" onclick="load_webmail(\''.$num.'\');" style="cursor:pointer;" ><a href="javascript:;" id="ndeleted_subject_'.$num.'">'.substr($mails[$start_message]->subject,0,40).'</a></td>';
-		$listview_entries[$num][] = '<td npwrap align="left" nowrap id="ndeleted_date_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\');" >'.substr($mails[$start_message]->date,0,25).'</td>';
-		$listview_entries[$num][] = '<td nowrap align="left" id="ndeleted_from_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\');" >'.substr($from,0,20).'</td>';
+		$listview_entries[$num][] = '<td nowrap align="left" onclick="load_webmail(\''.$num.'\', \''.$enableDownlaodAttachment.'\');" style="cursor:pointer;" ><a href="javascript:;" id="ndeleted_subject_'.$num.'">'.substr($mails[$start_message]->subject,0,40).'</a></td>';
+		$listview_entries[$num][] = '<td npwrap align="left" nowrap id="ndeleted_date_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\', \''.$enableDownlaodAttachment.'\');" >'.substr($mails[$start_message]->date,0,25).'</td>';
+		$listview_entries[$num][] = '<td nowrap align="left" id="ndeleted_from_'.$num.'" style="cursor:pointer;" onClick="load_webmail(\''.$num.'\', \''.$enableDownlaodAttachment.'\');" >'.substr($from,0,20).'</td>';
 	}
 
 
