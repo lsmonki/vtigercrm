@@ -1,7 +1,11 @@
 <?php
 require_once('modules/com_vtiger_workflow/VTEntityCache.inc');
 require_once('modules/com_vtiger_workflow/VTWorkflowUtils.php');
+require_once('modules/com_vtiger_workflow/VTSimpleTemplate.inc');
+require_once('modules/Emails/mail.php');
 class VTEmailTask extends VTTask{
+	// Sending email takes more time, this should be handled via queue all the time.
+	public $executeImmediately = false; 
 
 	public function getFieldNames(){
 		return array("subject", "content", "recepient");
@@ -10,10 +14,12 @@ class VTEmailTask extends VTTask{
 		global $adb, $current_user;
 		$util = new VTWorkflowUtils();
 
-		$result = $adb->query("select email1, email2 from vtiger_users where id=1");
+		$result = $adb->query("select user_name, email1, email2 from vtiger_users where id=1");
 		$from_email = $adb->query_result($result,0,'email1');
+		$from_name  = $adb->query_result($result,0,'user_name');
 
 		$admin = $util->adminUser();
+		$module = $entity->getModuleName();
 
 		$entityCache = new VTEntityCache($admin);
 

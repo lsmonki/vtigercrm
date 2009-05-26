@@ -24,7 +24,7 @@
 			<td width="100%" valign="top" style="padding: 10px;" class="showPanelBg">
 	
 	
-	<form action="index.php" method="get" accept-charset="utf-8">
+	<form action="index.php" method="get" accept-charset="utf-8" onsubmit="VtigerJS_DialogBox.block();">
 		<p>
 			Create task
 			<select name="task_type">

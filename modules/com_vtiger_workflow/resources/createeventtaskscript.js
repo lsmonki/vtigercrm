@@ -93,7 +93,12 @@ function VTCreateTodoTask($){
 				var fields = result['fields'];
 				var fieldsMap = index(fields, 'name');
 				fillPicklist('event_status', fieldsMap['eventstatus'], eventStatus);
+				$('#event_status_busyicon').hide();
+				$('#event_status').show();
+				
 				fillPicklist('event_type', fieldsMap['activitytype'], eventType);
+				$('#event_type_busyicon').hide();
+				$('#event_type').show();
 			}));
 		});
 	}));

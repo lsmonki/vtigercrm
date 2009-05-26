@@ -32,16 +32,12 @@ require_once("VTWorkflowApplication.inc");
 		}else if($request["active"]=="false"){
 			$task->active=false;
 		}
-		global $log;
-		$log->fatal("Hello");
 		if(isset($request['check_select_date'])){
 			$trigger = array(
 				'days'=>($request['select_date_direction']=='after'?1:-1)*(int)$request['select_date_days'],
 				'field'=>$request['select_date_field']
 				); 
 			$task->trigger=$trigger;
-			global $log;
-			$log->fatal($trigger);
 		}
 		
 		$fieldNames = $task->getFieldNames();

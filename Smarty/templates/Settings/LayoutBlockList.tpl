@@ -247,12 +247,14 @@ function getCreateCustomFieldForm(modulename,blockid,mode)
    var fldLength = document.getElementById("fldLength_"+blockid).value;  
    var fldDecimal = document.getElementById("fldDecimal_"+blockid).value;
    var fldPickList = document.getElementById("fldPickList_"+blockid).value;
+   VtigerJS_DialogBox.block();
    new Ajax.Request(
 		'index.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
 			postBody: 'module=Settings&action=SettingsAjax&file=LayoutBlockList&sub_mode=addCustomField&fld_module='+modulename+'&ajax=true&blockid='+blockid+'&fieldType='+type+'&fldLabel='+label+'&fldLength='+fldLength+'&fldDecimal='+fldDecimal+'&fldPickList='+fldPickList,
 			onComplete: function(response) {
+				VtigerJS_DialogBox.unblock();
 				var str = response.responseText;
 				if(str == 'ERROR'){
 					alert(alert_arr.LABEL_ALREADY_EXISTS);

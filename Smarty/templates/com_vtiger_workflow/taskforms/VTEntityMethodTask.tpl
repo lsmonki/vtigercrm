@@ -22,12 +22,13 @@ var methodName = '{$task->methodName}';
 		
 		$(document).ready(function(){
 			jsonget('entitymethodjson', {module_name:moduleName}, function(result){
+				$('#method_name_select_busyicon').hide();
 				if(result.length==0){
-					$('#method_name_select').css("display", "none");
-					$('#message_text').css("display", "inline");
-				}else{
-					$('#method_name_select').css("display", "inline");
-					$('#message_text').css("display", "none");
+					$('#method_name_select').hide();
+					$('#message_text').show();
+				}else{					
+					$('#method_name_select').show();
+					$('#message_text').hide();
 					$.each(result, function(i, v){
 						var optionText = '<option value="'+v+'" '+(v==methodName?'selected':'')+'>'+v+'</option>';
 						$('#method_name_select').append(optionText);
@@ -40,7 +41,13 @@ var methodName = '{$task->methodName}';
 entityMethodScript(jQuery);
 </script>
 
-
-<span>Method Name</span> : 
-<select name="methodName" id="method_name_select"></select>
-<sspan id="message_text">No method is available for this module.</sspan>
+<table border="0" cellpadding="5" cellspacing="0" width="100%" class="small">
+	<tr valign="top">
+		<td class='dvtCellLabel' align="right" width=15% nowrap="nowrap"><b>Method Name: </b></td>
+		<td class='dvtCellInfo'>
+			<span id="method_name_select_busyicon"><b>{$MOD.LBL_LOADING}</b><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span>
+			<select name="methodName" id="method_name_select" class="small" style="display: none;"></select>
+			<span id="message_text" style="display: none;">No method is available for this module.</sspan>
+		</td>
+	</tr>
+</table> 

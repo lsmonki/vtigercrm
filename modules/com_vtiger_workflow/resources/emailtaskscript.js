@@ -190,6 +190,8 @@ function VTEmailTask($){
 		vtinst.extendSession(handleError(function(result){
 			getDescribeObjects(moduleName, handleError(function(modules){
 				fillSelectBox('task-fieldnames', modules, moduleName);
+				$('#task-fieldnames-busyicon').hide();
+				$('#task-fieldnames').show();
 				$('#task-fieldnames').change(function(){
 					var textarea = $('#save_content').get(0);
 					var value = '$'+$(this).attr('value');
@@ -198,6 +200,8 @@ function VTEmailTask($){
 
 				fillSelectBox('task-emailfields', modules, moduleName,
 										 function(e){return e['type']['name']=='email';});
+				$('#task-emailfields-busyicon').hide();
+				$('#task-emailfields').show();
 				$('.task-emailfields_option').click(function(){
 					var input = $($('#save_recepient').get());
 					var value = '$'+$(this).attr('value');

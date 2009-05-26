@@ -5,7 +5,7 @@ function edittaskscript($){
 		var boxId = '#'+elementId+'-number-box';
 		var str = "";
 		for(var i = 1; i <= 30; i++){
-			str += '<a href="#'+i+'" class="box_cel">'+i+'</a> ';
+			str += '<a href="#'+i+'" class="box_cel">'+(i < 10? ("0"+i) : i)+'</a> ';
 			if(!(i % 5)){
 				str+="<br>";
 			}
@@ -16,8 +16,7 @@ function edittaskscript($){
 			$(boxId).css('display', 'block');
 			$(boxId).css({
 				position: 'absolute',
-				top: (pos.top+40)+'px'
-				//left: (pos.left)+'px'
+				top: (pos.top+25)+'px'
 			});
 		});
 
@@ -26,7 +25,7 @@ function edittaskscript($){
 		});
 
 		$('.box_cel').click(function(){
-			element.attr('value', $(this).text());
+			element.attr('value', parseInt($(this).text()));
 		});
 	}
 

@@ -11,36 +11,34 @@
 	<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerHeadingULine">
 		<tr>
 			<td width="80%" align="left" class="layerPopupHeading">
-				Create Workflow
+				{$MOD.LBL_CREATE_WORKFLOW}
 				</td>
 			<td width="20%" align="right">
 				<a href="javascript:void(0);" id="new_workflow_popup_close">
-					<img border="0" align="absmiddle" src="{'close.gif'|@vtiger_imageurl:$THEME}"/>
+					<img border="0" align="middle" src="{'close.gif'|@vtiger_imageurl:$THEME}"/>
 				</a>
 			</td>
 		</tr>
 	</table>
 	
-	<form action="index.php" method="post" accept-charset="utf-8">
+	<form action="index.php" method="post" accept-charset="utf-8" onsubmit="VtigerJS_DialogBox.block();">
 		<div class="popup_content">
-			<table width="100%">
+			<table width="100%" cellpadding="0" cellspacing="0" border="0">
 				<tr>
-					<td><input type="radio" name="source" value="from_module" 
-										 checked="true" class="workflow_creation_mode">
+					<td><input type="radio" name="source" value="from_module" checked="true" class="workflow_creation_mode">
 						{$MOD.LBL_FOR_MODULE}</td>
-					<td><input type="radio" name="source" value="from_template" 
-										 class="workflow_creation_mode">
+					<td><input type="radio" name="source" value="from_template" class="workflow_creation_mode">
 						{$MOD.LBL_FROM_TEMPLATE}</td>
 				</tr>
 			</table>
-			<table>
+			<table width="100%" cellpadding="5" cellspacing="0" border="0">
 				<tr>
-					<td>{$MOD.LBL_CREATE_WORKFLOW_FOR}</td>
+					<td width='10%' nowrap="nowrap">{$MOD.LBL_CREATE_WORKFLOW_FOR}</td>
 					<td>
-						<select name="module_name" id="module_list">
+						<select name="module_name" id="module_list" class="small">
 {foreach item=moduleName from=$moduleNames}
-							<option>
-								{$moduleName}
+							<option value="{$moduleName}" {if $moduleName eq $listModule}selected="selected"{/if}>
+								{$moduleName|@getTranslatedString:$moduleName}
 							</option>
 {/foreach}
 						</select>
@@ -48,7 +46,11 @@
 				</tr>
 				<tr id="template_select_field" style="display:none;">
 					<td>{$MOD.LBL_CHOOSE_A_TEMPLATE}</td>
-					<td><select id="template_list" name="template_id"></select></td>
+					<td>
+						<span id="template_list_busyicon"><b>{$MOD.LBL_LOADING}</b><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span>
+						<span id="template_list_foundnone" style='display:none;'><b>{$MOD.LBL_NO_TEMPLATES}</b></span>
+						<select id="template_list" name="template_id" class="small"></select>						
+					</td>
 				</tr>
 			</table>
 			<input type="hidden" name="save_type" value="new" id="save_type_new">
@@ -70,18 +72,18 @@
 	{include file='com_vtiger_workflow/ModuleTitle.tpl'}
 	<table class="tableHeading" width="100%" border="0" cellspacing="0" cellpadding="5">
 		<tr>
-			<td class="big" nowrap="">
+			<td class="big" nowrap="nowrap">
 				<strong><span id="module_info"></span></strong>
 			</td>
 			<td class="small" align="right">
-				<form action="index.php" method="get" accept-charset="utf-8" id="filter_modules">
+				<form action="index.php" method="get" accept-charset="utf-8" id="filter_modules" onsubmit="VtigerJS_DialogBox.block();" style="display: inline;">
 					<b>{$MOD.LBL_SELECT_MODULE}: </b>
 					<select class="importBox" name="list_module" id='pick_module'>
-						<option value="All">All</a>
-							<option value="All">-----------------------------</a>
+						<option value="All">{$APP.LBL_ALL}</a>
+							<option value="All" disabled="disabled" >-----------------------------</a>
 {foreach  item=moduleName from=$moduleNames}
-						<option value="{$moduleName}" {if $moduleName eq $listModule}selected{/if}>
-							{$moduleName}
+						<option value="{$moduleName}" {if $moduleName eq $listModule}selected="selected"{/if}>
+							{$moduleName|@getTranslatedString:$moduleName}
 						</option>
 {/foreach}
 					</select>
@@ -92,7 +94,7 @@
 			</td>
 		</tr>
 	</table>
-			
+
 	<table class="listTableTopButtons" width="100%" border="0" cellspacing="0" cellpadding="5">
 		<tr>
 			<td class="small"> <span id="status_message"></span> </td>
@@ -116,18 +118,18 @@
 		</tr>
 {foreach item=workflow from=$workflows}
 		<tr>
-			<td>{$workflow->moduleName}</td>
-			<td>{$workflow->description}</td>
-			<td>
+			<td class="listTableRow small">{$workflow->moduleName|@getTranslatedString:$workflow->moduleName}</td>
+			<td class="listTableRow small">{$workflow->description|@to_html}</td>
+			<td class="listTableRow small">
 				<a href="{$module->editWorkflowUrl($workflow->id)}">
 					<img border="0" title="Edit" alt="Edit" \
 						style="cursor: pointer;" id="expressionlist_editlink_{$workflow->id}" \
 						src="{'editfield.gif'|@vtiger_imageurl:$THEME}"/>
 				</a>
-				<a href="{$module->deleteWorkflowUrl($workflow->id)}">
+				<a href="{$module->deleteWorkflowUrl($workflow->id)}" onclick="return confirm('{$APP.SURE_TO_DELETE}');">
 					<img border="0" title="Delete" alt="Delete"\
 			 			src="{'delete.gif'|@vtiger_imageurl:$THEME}" \
-						style="cursor: pointer;" id="expressionlist_deletelink_{$workflow->id}"/>
+						style="cursor: pointer;" id="expressionlist_deletelink_{$workflow->id}" />
 				</a>
 			</td>
 		</tr>

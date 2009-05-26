@@ -20,7 +20,7 @@ function workflowlistscript($){
 	function center(el){
 		el.css({position: 'absolute'});
 		el.width("400px");
-		el.height("110px");
+		el.height("165px");
 		placeAtCenter(el.get(0));
 	}
 
@@ -47,14 +47,23 @@ function workflowlistscript($){
 	function updateTemplateList(){
 		var moduleSelect = $('#module_list');
 		var currentModule = moduleSelect.attr('value');
+		
+		$('#template_list').hide();
+		$('#template_list_foundnone').hide();
+		$('#template_list_busyicon').show();
+		
 		function fillTemplateList(templates){
 			var templateSelect = $('#template_list');
 			templateSelect.empty();
+			
 			$.each(templates, function(i, v){
 				templateSelect.append('<option value="'+v['id']+'">'+
 											v['title']+'</option>');
 			});
-
+			if(templateSelect.children().length > 0) { templateSelect.show(); } 
+			else { $('#template_list_foundnone').show(); }
+			$('#template_list_busyicon').hide();
+			
 		}
 		if(templatesForModule[currentModule]==null){
 
@@ -73,6 +82,7 @@ function workflowlistscript($){
 		var newWorkflowPopup = NewWorkflowPopup();
 		$("#new_workflow").click(newWorkflowPopup.show);
 		$("#pick_module").change(function(){
+			VtigerJS_DialogBox.block();
 			$("#filter_modules").submit();
 		});
 
@@ -99,6 +109,15 @@ function workflowlistscript($){
 			$('#module_list').attr('value', filterModule);
 			$('#module_list').change();
 		}
+		
+		$('#new_workflow_popup_save').click(function() {
+			if(workflowCreationMode == 'from_template') {
+				// No templates selected?
+				if($('#template_list').attr('value') == '') {
+					return false;
+				}
+			}
+		});
 	});
 }
 workflowlistscript(jQuery);

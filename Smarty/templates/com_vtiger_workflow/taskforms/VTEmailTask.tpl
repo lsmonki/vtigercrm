@@ -4,18 +4,32 @@ var moduleName = '{$entityName}';
 </script>
 <script src="modules/com_vtiger_workflow/resources/emailtaskscript.js" type="text/javascript" charset="utf-8"></script>
 
-<table>
-	<tr><td><b>*</b>Recepient:</td>
-		<td><input type="text" name="recepient" value="{$task->recepient}" id="save_recepient" class="form_input"> <select id="task-emailfields"></select></td></tr>
-	<tr><td><b>*</b>Subject:</td>
-		<td><input type="text" name="subject" value="{$task->subject}" id="save_subject" class="form_input"></td></tr>
+<table border="0" cellpadding="5" cellspacing="0" width="100%" class="small">
+	<tr valign="top">
+		<td class='dvtCellLabel' align="right" width=15% nowrap="nowrap"><b><font color=red>*</font> Recepient</b></td>
+		<td class='dvtCellInfo'><input type="text" name="recepient" value="{$task->recepient}" id="save_recepient" class="form_input">
+			<span id="task-emailfields-busyicon"><b>{$MOD.LBL_LOADING}</b><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span>
+			<select id="task-emailfields" class="small" style="display: none;"><option value=''>{$MOD.LBL_SELECT_OPTION_DOTDOTDOT}</option></select></td>
+	</tr>
+	<tr valign="top">
+		<td class='dvtCellLabel' align="right" width=15% nowrap="nowrap"><b><font color=red>*</font> Subject</b></td>
+		<td class='dvtCellInfo'><input type="text" name="subject" value="{$task->subject}" id="save_subject" class="form_input"></td>
+	</tr>
+</table>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%" class="small">
+	<tr>
+		<td style='padding-top: 10px;'>
+			<span id="task-fieldnames-busyicon"><b>{$MOD.LBL_LOADING}</b><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span>
+			<select id='task-fieldnames' class="small" style="display: none;"><option value=''>{$MOD.LBL_SELECT_OPTION_DOTDOTDOT}</option></select>
+		</td>
+		<td align="right" style='padding-top: 10px;'>
+			<span class="helpmessagebox" style="font-style: italic;">{$MOD.LBL_WORKFLOW_NOTE_CRON_CONFIG}</span>
+		</td> 
+	</tr>
 </table>
 <p>
-<select id='task-fieldnames'></select>
+	<textarea name="content" rows="15" cols="40" id="save_content" class='detailedViewTextBox'>{$task->content}</textarea>
 </p>
-<p>
-	<textarea name="content" rows="15" cols="40" id="save_content">{$task->content}</textarea>
-</p>
-
 
 

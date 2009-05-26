@@ -65,10 +65,12 @@ function getDBValidationData($tablearray,$tabid='')
   }
   $result = $adb->pquery($sql, $params);
   $noofrows = $adb->num_rows($result);
+  $fieldModuleName = getTabModuleName($tabid);
   $fieldName_array = Array();
   for($i=0;$i<$noofrows;$i++)
   {
-    $fieldlabel = getTranslatedString($adb->query_result($result,$i,'fieldlabel'));
+	// Translate label with reference to module language string
+    $fieldlabel = getTranslatedString($adb->query_result($result,$i,'fieldlabel'), $fieldModuleName);
     $fieldname = $adb->query_result($result,$i,'fieldname');
     $typeofdata = $adb->query_result($result,$i,'typeofdata');
    //echo '<br> '.$fieldlabel.'....'.$fieldname.'....'.$typeofdata;

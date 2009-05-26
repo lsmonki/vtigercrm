@@ -11,6 +11,7 @@ function MessageBoxPopup(){
 	}
 
 	function show(module){
+		if(typeof('VtigerJS_DialogBox') != 'undefined') VtigerJS_DialogBox.unblock();
 		jQuery('#error_message_box').css('display', 'block');
 		center(jQuery('#error_message_box'));
 	}

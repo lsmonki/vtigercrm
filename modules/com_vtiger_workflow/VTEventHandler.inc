@@ -81,18 +81,19 @@ require_once('VTWorkflowUtils.php');
 				if($doEvaluate && $workflow->evaluate($entityCache, $entityData->getId())){
 					$tasks = $tm->getTasksForWorkflow($workflow->id);
 					foreach($tasks as $task){
-						$trigger = $task->trigger;
-						if($trigger != null){
-							$delay = strtotime($data[$trigger['field']])+$trigger['days']*86400;
-						}else{
-							$delay = 0;
+						if($task->active) {
+							$trigger = $task->trigger;
+							if($trigger != null){
+								$delay = strtotime($data[$trigger['field']])+$trigger['days']*86400;
+							}else{
+								$delay = 0;
+							}
+							if($task->executeImmediately==true){
+								$task->doTask($entityData);
+							}else{
+								$taskQueue->queueTask($task->id, $entityData->getId(), $delay);
+							}
 						}
-						if($task->executeImmediately==true){
-							$task->doTask($entityData);
-						}else{
-							$taskQueue->queueTask($task->id, $entityData->getId(), $delay);
-						}
-						
 					}
 				}
 			}

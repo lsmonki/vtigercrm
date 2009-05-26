@@ -30,7 +30,7 @@
 
 .value{
 	display: inline-block;
-	width: 100px;
+	width: 120px;
 }
 
 .operation{
@@ -50,15 +50,24 @@
 
 .box{
 	background-color: white;
+	border: 1px solid black;
 }
 
 .box_cel{
 	display: inline-block;
 	width: 2em;
 	height:2em;
+	margin: 5px;
 }
 
 .row_selected{
 		color:white;
 		background-color:black;
+}
+
+/* similar to .small class defined themes/softed/style.css */ 
+.fieldname, .operation, .value, .form_input, .time_field, .timepicker {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
 }

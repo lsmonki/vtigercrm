@@ -46,12 +46,16 @@ function VTCreateTodoTask($){
 					status.append('<option value="'+v['value']+'">'+v['label']+'</option>');
 				});
 				status.attr('value', taskStatus);
+				$('#task_status_busyicon').hide();
+				$('#task_status').show();
+				
 				var priority = $('#task_priority');
 				$.each(taskPriorityValues, function(i, v){
 					priority.append('<option value="'+v['value']+'">'+v['label']+'</option>');
 				});
 				priority.attr('value', taskPriority);
-
+				$('#task_priority_busyicon').hide();
+				$('#task_priority').show();
 			}));
 		});
 	}));
