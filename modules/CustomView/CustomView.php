@@ -1780,14 +1780,31 @@ class CustomView extends CRMEntity{
 			$modules_list = array('Calendar', 'Events');
 		}
 
-		$Sql = "select distinct block,vtiger_field.tabid,name,blocklabel from vtiger_field inner join vtiger_blocks on vtiger_blocks.blockid=vtiger_field.block inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where displaytype != 3 and vtiger_field.block not in(40,75,35,30,54,60,66,72) and vtiger_tab.name in (". generateQuestionMarks($modules_list) .") and vtiger_field.presence in (0,2) order by block";
+		// Tabid mapped to the list of block labels to be skipped for that tab.
+		$skipBlocksList = array(
+			getTabid('Contacts') => array('LBL_IMAGE_INFORMATION'),
+			getTabid('HelpDesk') => array('LBL_COMMENTS'),
+			getTabid('Products') => array('LBL_IMAGE_INFORMATION'),
+			getTabid('Faq') => array('LBL_COMMENT_INFORMATION'),
+			getTabid('Quotes') => array('LBL_RELATED_PRODUCTS'),
+			getTabid('PurchaseOrder') => array('LBL_RELATED_PRODUCTS'),
+			getTabid('SalesOrder') => array('LBL_RELATED_PRODUCTS'),
+			getTabid('Invoice') => array('LBL_RELATED_PRODUCTS')		
+		);
+		
+		$Sql = "select distinct block,vtiger_field.tabid,name,blocklabel from vtiger_field inner join vtiger_blocks on vtiger_blocks.blockid=vtiger_field.block inner join vtiger_tab on vtiger_tab.tabid=vtiger_field.tabid where displaytype != 3 and vtiger_tab.name in (". generateQuestionMarks($modules_list) .") and vtiger_field.presence in (0,2) order by block";
 		$result = $adb->pquery($Sql, array($modules_list));
 		if($module == "Calendar','Events")
 			$module = "Calendar";
 
+		$pre_block_label = '';
 		while($block_result = $adb->fetch_array($result))
 		{
 			$block_label = $block_result['blocklabel'];
+			$tabid = $block_result['tabid'];
+			// Skip certain blocks of certain modules
+			if(array_key_exists($tabid, $skipBlocksList) && in_array($block_label, $skipBlocksList[$tabid])) continue;
+			
 			if (trim($block_label) == '')
 			{
 				$block_info[$pre_block_label] = $block_info[$pre_block_label].",".$block_result['block'];
