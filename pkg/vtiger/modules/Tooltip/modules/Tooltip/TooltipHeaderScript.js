@@ -13,7 +13,9 @@ var TOOLTIP = {
 	
 	_status : { },
 	
-	show : function(node, module, fieldname, recordid) {
+	_mouseOverTimeOut : 500,
+	
+		show : function(node, module, fieldname, recordid) {
 		if(TOOLTIP._status[module][recordid][fieldname]) {
 			if(TOOLTIP._cache[module][fieldname][recordid]) {
 				var tooltipdata = TOOLTIP._cache[module][fieldname][recordid];
@@ -45,11 +47,11 @@ var TOOLTIP = {
 		var node = evtparams['domnode'];
 		if(evtparams['event'] == 'cell.onmouseover' ) {
 			TOOLTIP._setStatus(module, fieldname, recordid, true);
-			__VT_TIMER = setTimeout(function(){TOOLTIP._showForField(node, module, fieldname,recordid)},400);
+			_VT__TOOLTIP__TIMER = setTimeout(function(){TOOLTIP._showForField(node, module, fieldname,recordid)},TOOLTIP._mouseOverTimeOut);
 		} else if(evtparams['event'] == 'cell.onmouseout' ) {
 			TOOLTIP._setStatus(module, fieldname, recordid, false);
 			TOOLTIP.hide(node, recordid, fieldname);
-			clearTimeout(__VT_TIMER);
+			clearTimeout(_VT__TOOLTIP__TIMER);
 		}
 	},
 	
