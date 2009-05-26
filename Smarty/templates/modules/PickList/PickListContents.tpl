@@ -18,7 +18,7 @@
 	<td class="cellText" width="40%">
 		<select name="avail_picklists" id="allpick" class="small detailedViewTextBox" style="font-weight: normal;">
 			{foreach key=fld_nam item=fld_lbl from=$ALL_LISTS}
-				<option value="{$fld_nam}">{$fld_lbl}</option>
+				<option value="{$fld_nam}">{$fld_lbl|getTranslatedString:$MODULE}</option>
 			{/foreach}
 		</select>
 	</td>
