@@ -367,7 +367,6 @@ function LoginToVtiger($user_name,$password,$version)
 	if(version_compare($version,'5.0.4', '>=') === 1) {
 		return array("VERSION",'00');
 	}
-	
 	$return_access = array("FALSES",'00');
 	
 	$objuser = new Users();
@@ -514,6 +513,10 @@ function GetContacts($username,$session)
 	$query = $seed_contact->get_contactsforol($username);
 	$result = $adb->query($query);
 
+	$outputcount = 0;
+	$outputxml = '';
+    /** we are directly returning XML */
+    $returnAsXML = true;
 	while($contact = $adb->fetch_array($result))
 	{
 		if($contact["birthdate"] == "0000-00-00")
@@ -543,44 +546,54 @@ function GetContacts($username,$session)
 				}
 			}
 		}
-
-		$output_list[] = Array(
-				"id" => $contact["id"],
-				"title" => decode_html($contact["salutation"]),
-				"firstname" => decode_html($contact["firstname"]),
-				"middlename" => decode_html(trim($middlename)),
-				"lastname" => decode_html(trim($contact["lastname"])),
-				"birthdate" => $contact["birthday"],
-				"emailaddress" => decode_html($contact["email"]),
-				"jobtitle" => decode_html($contact["title"]),
-				"department" => decode_html($contact["department"]),
-				"accountname" => decode_html($contact["accountname"]),  
-				"officephone" => decode_html($contact["phone"]),
-				"homephone" => decode_html($contact["homephone"]),
-				"otherphone" => decode_html($contact["otherphone"]), 
-				"fax" => decode_html($contact["fax"]),
-				"mobile" => decode_html($contact["mobile"]),
-				"asstname" => decode_html($contact["assistant"]),
-				"asstphone" => decode_html($contact["assistantphone"]),             
-				"reportsto" => decode_html($contact["reports_to_name"]),
-				"mailingstreet" => decode_html($contact["mailingstreet"]),
-				"mailingcity" => decode_html($contact["mailingcity"]),
-				"mailingstate" => decode_html($contact["mailingstate"]),
-				"mailingzip" => decode_html($contact["mailingzip"]),
-				"mailingcountry" => decode_html($contact["mailingcountry"]),              
-				"otherstreet" => decode_html($contact["otherstreet"]),
-				"othercity" => decode_html($contact["othercity"]),
-				"otherstate" => decode_html($contact["otherstate"]),
-				"otherzip" => decode_html($contact["otherzip"]),
-				"othercountry" => decode_html($contact["othercountry"]),
-				"description" => decode_html($contact["description"]),
-				"category" => "",        
-			  );
+	    $outputxml .= __GetContactSOAPNode($contact);
+	 	$outputcount++;
 	}
-
 	//to remove an erroneous compiler warning
 	$seed_contact = $seed_contact;
-	return $output_list;
+
+	global $server;
+	$server->methodreturnisliteralxml = true;
+	$output = "<return xsi:type='SOAP-ENC:Array' SOAP-ENC:arrayType='tns:contactdetail[$outputcount]'>$outputxml</return>";
+	return $output;
+	 
+}
+
+function __GetContactSOAPNode($contact) {
+	global $server;
+	$nodestring = "<item xsi:type='tns:contactdetail'>
+<id xsi:type='xsd:string'>"         . $contact[id] . "</id>
+<title xsi:type='xsd:string'>"      . $contact[saluation] . "</title>
+<firstname xsi:type='xsd:string'>"  . $contact[firstname] ."</firstname>
+<middlename xsi:type='xsd:string'>" . trim($contact[middlename]) . "</middlename>
+<lastname xsi:type='xsd:string'>"   . trim($contact[lastname])  ."</lastname>
+<birthdate xsi:nil='true' xsi:type='xsd:string'>" .$contact[birthdate]. "</birthdate>
+<emailaddress xsi:type='xsd:string'>" .trim($contact[email]) . "</emailaddress>
+<jobtitle xsi:type='xsd:string'>"     .$contact[title] ."</jobtitle>
+<department xsi:type='xsd:string'>"   .$contact[department] ."</department>
+<accountname xsi:type='xsd:string'>"  .$contact[accountname] ."</accountname>
+<officephone xsi:type='xsd:string'>"  .$contact[phone]."</officephone>
+<homephone xsi:type='xsd:string'>"    .$contact[homephone]."</homephone>
+<otherphone xsi:type='xsd:string'>"   .$contact[otherphone]."</otherphone>
+<fax xsi:type='xsd:string'>"          .$contact[fax]."</fax>
+<mobile xsi:type='xsd:string'>"       .$contact[mobile]."</mobile>
+<asstname xsi:type='xsd:stringi'>"    .$contact[assistant]."</asstname>
+<asstphone xsi:type='xsd:string'>"    .$contact[assistantphone]."</asstphone>
+<reportsto xsi:type='xsd:string'>"    .$contact[reports_to_name]."</reportsto>
+<mailingstreet xsi:type='xsd:string'>".$contact[mailingstreet]."</mailingstreet>
+<mailingcity xsi:type='xsd:string'>"  .$contact[mailingcity]."</mailingcity>
+<mailingstate xsi:type='xsd:string'>" .$contact[mailingstate]."</mailingstate>
+<mailingzip xsi:type='xsd:string'>"   .$contact[mailingzip]."</mailingzip>
+<mailingcountry xsi:type='xsd:string'>".$contact[mailingcountry]."</mailingcountry>
+<otherstreet xsi:type='xsd:string'>"   .$contact[otherstreet]."</otherstreet>
+<othercity xsi:type='xsd:string'>"     .$contact[othercity]."</othercity>
+<otherstate xsi:type='xsd:string'>"    .$contact[otherstate]."</otherstate>
+<otherzip xsi:type='xsd:string'>".$contact[otherzip]."</otherzip>
+<othercountry xsi:type='xsd:string'>".$contact[othercountry]."</othercountry>
+<description xsi:type='xsd:string'>".$contact[description]."</description>
+<category xsi:type='xsd:string'></category>
+</item>";
+	return $nodestring;
 }
 
 function AddContacts($username,$session,$cntdtls)
