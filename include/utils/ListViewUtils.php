@@ -177,7 +177,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
                 	}
 
 		}
-		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '')
+		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '' || ($name=='Close' && $module=='Calendar'))
 		{
 			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
 			{
@@ -701,7 +701,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				$P_FONT_COLOR = "";
 		}
 		//end: Armando Lüscher 05.07.2005 -> §priority
-
 		foreach($focus->list_fields as $name=>$tableinfo)
 		{
 			$fieldname = $focus->list_fields_name[$name];
@@ -734,7 +733,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					$fieldname = 'product_id';
 				}
 			}
-			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '') {
+			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || in_array($fieldname,$field) || $fieldname == '' || ($name=='Close' && $module=='Calendar')) {
 				if($fieldname == '') {
 					$table_name = '';
 					$column_name = '';
@@ -755,6 +754,13 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					}					
 					if(($module == 'Calendar' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice' || $module == 'Leads' || $module == 'Contacts') && (($fieldname=='parent_id') || ($name=='Contact Name') || ($name=='Close') || ($fieldname == 'firstname'))) {
 						if($module == 'Calendar'){
+							if($fieldname=='status'){
+								if($activitytype == 'Task'){
+									$fieldname='taskstatus';
+								} else {
+									$fieldname='eventstatus';
+								}
+							}
 							if($activitytype == 'Task' ) {
 								if(getFieldVisibilityPermission('Calendar',$current_user->id,$fieldname) == '0'){
 									$has_permission = 'yes';
@@ -791,6 +797,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 								
 								$value = '<a href="index.php?action=DetailView&module='.$module.'&parenttab='.$tabname.'&record='.$entity_id.'">'.$first_name.'</a>';
 							}
+							
 							if ($name == 'Close') {														
 								$status = $adb->query_result($list_result,$i-1,"status");
 								$activityid = $adb->query_result($list_result,$i-1,"activityid");
