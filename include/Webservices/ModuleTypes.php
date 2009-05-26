@@ -2,9 +2,10 @@
 	
 	function vtws_listtypes($user){
 		try{
-			global $adb,$log,$current_user;
+			global $adb,$log;
+			
+			vtws_preserveGlobal('current_user',$user);
 			//get All the modules the current user is permitted to Access.
-			$current_user = $user;
 			$allModuleNames = getPermittedModuleNames();
 			if(array_search('Calendar',$allModuleNames) !== false){
 				array_push($allModuleNames,'Events');
@@ -30,23 +31,32 @@
 			throw $exception;
 		}catch(Exception $exception){
 			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,
-											"An Database error occured while performing the operation");
+				"An Database error occured while performing the operation");
 		}
-		global $current_language;
-		$oldCurrentLanguage = $current_language;
+		
+		$default_language = VTWS_PreserveGlobal::getGlobal('default_language');
+		$current_language = vtws_preserveGlobal('current_language',$default_language);
+		
+		$appStrings = return_application_language($current_language);
+		$appListString = return_app_list_strings_language($current_language);
+		vtws_preserveGlobal('app_strings',$appStrings);
+		vtws_preserveGlobal('app_list_strings',$appListString);
+		
 		$informationArray = array();
 		foreach ($accessibleModules as $module) {
 			$vtigerModule = ($module == 'Events')? 'Calendar':$module;
 			$informationArray[$module] = array('isEntity'=>true,'label'=>getTranslatedString($module,$vtigerModule),
 				'singular'=>getTranslatedString('SINGLE_'.$module,$vtigerModule));
 		}
-		global $default_language;
-		require_once 'include/Webservices/language/'.$default_language.'.lang.php';
+		
 		foreach ($accessibleEntities as $entity) {
-			$informationArray[$entity] = array('isEntity'=>false,'label'=>$app_strings[$entity],
-				'singular'=>$app_strings['SINGLE_'.$entity]);
+			$label = (isset($appStrings[$entity]))? $appStrings[$entity]:$entity;
+			$singular = (isset($appStrings['SINGLE_'.$entity]))? $appStrings['SINGLE_'.$entity]:$entity;
+			$informationArray[$entity] = array('isEntity'=>false,'label'=>$label,
+				'singular'=>$singular);
 		}
-		$current_language = $oldCurrentLanguage;
+		
+		VTWS_PreserveGlobal::flush();
 		return array("types"=>array_merge($accessibleModules,$accessibleEntities),'information'=>$informationArray);
 	}
 

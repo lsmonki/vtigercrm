@@ -17,7 +17,9 @@
 			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to perform the operation is denied");
 		}
 		
-		return $handler->describe($elementType);
+		$entity = $handler->describe($elementType);
+		VTWS_PreserveGlobal::flush();
+		return $entity;
 	}
 	
 ?>

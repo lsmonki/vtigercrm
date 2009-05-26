@@ -108,7 +108,7 @@
 		}
 		
 		function sanitizeFields($row,$meta){
-			
+			$default_charset = VTWS_PreserveGlobal::getGlobal('default_charset');
 			$recordString = DataTransform::$recordString;
 			
 			$recordModuleString = DataTransform::$recordModuleString;
@@ -139,6 +139,9 @@
 				unset($row[$meta->getObectIndexColumn()]);
 			}
 			
+			foreach ($row as $field => $value) {
+				$row[$field] = html_entity_decode($value, ENT_QUOTES, $default_charset);
+			}
 			return $row;
 		}
 		

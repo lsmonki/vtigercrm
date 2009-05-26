@@ -99,12 +99,19 @@ class VtigerCRMObject{
 		
 	}
 	
+	private function getTabName(){
+		if($this->moduleName == 'Events'){
+			return 'Calendar';
+		}
+		return $this->moduleName;
+	}
+	
 	public function read($id){
 		global $adb;
 		
 		$error = false;
 		$adb->startTransaction();
-		$this->instance->retrieve_entity_info($id,$this->moduleName);
+		$this->instance->retrieve_entity_info($id,$this->getTabName());
 		$error = $adb->hasFailedTransaction();
 		$adb->completeTransaction();
 		return !$error;
@@ -119,7 +126,7 @@ class VtigerCRMObject{
 		}
 		
 		$adb->startTransaction();
-		$this->instance->Save($this->moduleName);
+		$this->instance->Save($this->getTabName());
 		$error = $adb->hasFailedTransaction();
 		$adb->completeTransaction();
 		return !$error;
@@ -136,7 +143,7 @@ class VtigerCRMObject{
 		
 		$adb->startTransaction();
 		$this->instance->mode = "edit";
-		$this->instance->Save($this->moduleName);
+		$this->instance->Save($this->getTabName());
 		$error = $adb->hasFailedTransaction();
 		$adb->completeTransaction();
 		return !$error;
@@ -146,7 +153,7 @@ class VtigerCRMObject{
 		global $adb;
 		$error = false;
 		$adb->startTransaction();
-		DeleteEntity($this->moduleName, $this->moduleName, $this->instance, $id,$returnid);
+		DeleteEntity($this->getTabName(), $this->getTabName(), $this->instance, $id,$returnid);
 		$error = $adb->hasFailedTransaction();
 		$adb->completeTransaction();
 		return !$error;

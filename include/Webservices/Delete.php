@@ -33,7 +33,9 @@
 		if($meta->hasWriteAccess()!==true){
 			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to write is denied");
 		}
-		return $handler->delete($id);
+		$entity = $handler->delete($id);
+		VTWS_PreserveGlobal::flush();
+		return $entity;
 	}
 	
 ?>

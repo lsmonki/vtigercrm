@@ -1673,7 +1673,7 @@ function webserviceMigration(){
 			"80"=>array("SalesOrder"),"81"=>array("Vendors"),"101"=>array("Users"),"52"=>array("Users"),
 			"357"=>array("Contacts","Accounts","Leads","Users","Vendors"),"59"=>array("Products"),
 			"66"=>array("Leads","Accounts","Potentials","HelpDesk"),"77"=>array("Users"),"68"=>array("Contacts","Accounts"),
-			"117"=>array('Currency'),"116"=>array('Currency'),'26'=>array('DocumentFolders'));
+			"117"=>array('Currency'),"116"=>array('Currency'),'26'=>array('DocumentFolders'),'10'=>array());
 	ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_ws_fieldtype(fieldtypeid integer(19) not null auto_increment,uitype varchar(30)not null,fieldtype varchar(200) not null,PRIMARY KEY(fieldtypeid),UNIQUE KEY uitype_idx (uitype)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_ws_referencetype(fieldtypeid integer(19) not null,type varchar(25) not null,PRIMARY KEY(fieldtypeid,type),  CONSTRAINT `fk_1_vtiger_referencetype` FOREIGN KEY (`fieldtypeid`) REFERENCES `vtiger_ws_fieldtype` (`fieldtypeid`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_ws_userauthtoken(userid integer(19) not null,token varchar(25) not null,expiretime INTEGER(19),PRIMARY KEY(userid,expiretime),UNIQUE KEY userid_idx (userid)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");

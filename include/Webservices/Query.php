@@ -22,7 +22,9 @@
 			throw new WebServiceException(WebServiceErrorCode::$ACCESSDENIED,"Permission to read is denied");
 		}
 		
-		return $handler->query($q);
+		$result = $handler->query($q);
+		VTWS_PreserveGlobal::flush();
+		return $result;
 	}
 	
 ?>

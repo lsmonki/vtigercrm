@@ -40,9 +40,8 @@
 			}
 		}
 		
-		if(!$meta->hasMandatoryFields($element)){
-			throw new WebServiceException(WebServiceErrorCode::$MANDFIELDSMISSING,"Mandatory fields not specified");
-		}
+		$meta->hasMandatoryFields($element);
+		
 		$ownerFields = $meta->getOwnerFields();
 		if(is_array($ownerFields) && sizeof($ownerFields) >0){
 			foreach($ownerFields as $ownerField){
@@ -52,7 +51,8 @@
 				}
 			}
 		}
-		return $handler->create($elementType,$element);
-		
+		$entity = $handler->create($elementType,$element);
+		VTWS_PreserveGlobal::flush();
+		return $entity;
 	}
 ?>

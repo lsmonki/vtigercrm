@@ -111,9 +111,9 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
 	}
 	
 	public function describe($elementType){
-		global $app_strings,$current_user;
+		$app_strings = VTWS_PreserveGlobal::getGlobal('app_strings');
+		$current_user = vtws_preserveGlobal('current_user',$this->user);;
 		
-		$current_user = $this->user;
 		$label = (isset($app_strings[$elementType]))? $app_strings[$elementType]:$elementType;
 		$createable = (strcasecmp(isPermitted($elementType,EntityMeta::$CREATE),'yes')===0)? true:false;
 		$updateable = (strcasecmp(isPermitted($elementType,EntityMeta::$UPDATE),'yes')===0)? true:false;
@@ -138,7 +138,7 @@ class VtigerModuleOperation extends WebserviceEntityOperation {
 	}
 	
 	function getDescribeFieldArray($webserviceField){
-		global $default_language;
+		$default_language = VTWS_PreserveGlobal::getGlobal('default_language');
 		
 		require 'modules/'.$this->meta->getTabName()."/language/$default_language.lang.php";
 		$fieldLabel = $webserviceField->getFieldLabelKey();

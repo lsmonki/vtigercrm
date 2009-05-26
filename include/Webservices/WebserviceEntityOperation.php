@@ -98,6 +98,7 @@ abstract class WebserviceEntityOperation{
 	
 	function getPickListOptions($fieldName){
 		
+		$default_charset = VTWS_PreserveGlobal::getGlobal('default_charset');
 		$options = array();
 		$sql = "select * from vtiger_picklist where name=?";
 		$result = $this->pearDB->pquery($sql,array($fieldName));
@@ -108,16 +109,19 @@ abstract class WebserviceEntityOperation{
 			$numRows = $this->pearDB->num_rows($result);
 			for($i=0;$i<$numRows;++$i){
 				$elem = array();
-				$elem["label"] = $this->pearDB->query_result($result,$i,$fieldName);
-				$elem["value"] = $this->pearDB->query_result($result,$i,$fieldName);
+				$picklistValue = $this->pearDB->query_result($result,$i,$fieldName);
+				$picklistValue = html_entity_decode($picklistValue, ENT_QUOTES, $default_charset);
+				$elem["label"] = getTranslatedString($picklistValue,$this->getMeta()->getTabName());
+				$elem["value"] = $picklistValue;
 				array_push($options,$elem);
 			}
 		}else{
 			$details = getPickListValues($fieldName,$this->user->roleid);
 			for($i=0;$i<sizeof($details);++$i){
 				$elem = array();
-				$elem["label"] = $details[$i];
-				$elem["value"] = $details[$i];
+				$picklistValue = html_entity_decode($details[$i], ENT_QUOTES, $default_charset);
+				$elem["label"] = getTranslatedString($picklistValue,$this->getMeta()->getTabName());
+				$elem["value"] = $picklistValue;
 				array_push($options,$elem);
 			}
 		}

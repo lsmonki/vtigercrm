@@ -128,9 +128,9 @@ class VtigerActorOperation extends WebserviceEntityOperation {
 	}
 	
 	public function describe($elementType){
-		global $app_strings,$current_user;
 		
-		$current_user = $this->user;
+		$app_strings = VTWS_PreserveGlobal::getGlobal('app_strings');
+		$current_user = vtws_preserveGlobal('current_user',$this->user);;
 		$label = (isset($app_strings[$elementType]))? $app_strings[$elementType]:$elementType;
 		$createable = $this->meta->hasWriteAccess();
 		$updateable = $this->meta->hasWriteAccess();
@@ -143,8 +143,7 @@ class VtigerActorOperation extends WebserviceEntityOperation {
 	}
 	
 	function getModuleFields(){
-		global $app_strings;
-		
+		$app_strings = VTWS_PreserveGlobal::getGlobal('app_strings');
 		if($this->moduleFields === null){
 			$fields = array();
 			$moduleFields = $this->meta->getModuleFields();
@@ -159,8 +158,7 @@ class VtigerActorOperation extends WebserviceEntityOperation {
 	}
 	
 	function getDescribeFieldArray($webserviceField){
-		global $app_strings;
-		
+		$app_strings = VTWS_PreserveGlobal::getGlobal('app_strings');
 		$fieldLabel = $webserviceField->getFieldLabelKey();
 		if(isset($app_strings[$fieldLabel])){
 			$fieldLabel = $app_strings[$fieldLabel];

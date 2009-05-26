@@ -174,6 +174,7 @@
 			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,"Database error while performing required operation");
 		}
 		
+		VTWS_PreserveGlobal::flush();
 		return $output;
 	}
 	

@@ -129,9 +129,8 @@
 		}
 		
 		function runOperation($params,$user){
-			global $app_strings,$API_VERSION;
+			global $API_VERSION;
 			try{
-				$app_strings = return_application_language($default_language);
 				$operation = strtolower($this->operationName);
 				if(!$this->preLogin){
 					$params[] = $user;
@@ -155,6 +154,7 @@
 			}catch(Exception $e){
 				throw new WebServiceException(WebServiceErrorCode::$INTERNALERROR,"Unknown Error while processing request");
 			}
+			
 		}
 		
 		function encode($param){

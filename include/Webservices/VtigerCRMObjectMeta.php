@@ -300,15 +300,11 @@ class VtigerCRMObjectMeta extends EntityMeta {
 	
 	function retrieveMeta(){
 		
-		global $current_language,$theme,$current_user,$default_language;
+		$current_user = vtws_preserveGlobal('current_user',$this->user);
+		$theme = vtws_preserveGlobal('theme',$this->user->theme);
+		$default_language = VTWS_PreserveGlobal::getGlobal('default_language');
+		$current_language = vtws_preserveGlobal('current_language',$default_language);
 		
-		$current_user = $this->user;
-		$theme = $this->user->theme;
-		$current_language = $default_language;
-		//requie should happen here as it depends on state os of global vars to work
-		require_once('modules/CustomView/CustomView.php');
-		
-		//$this->objectId = getObjectId($this->objectName);
 		$this->computeAccess();
 		
 		$cv = new CustomView();
@@ -422,7 +418,7 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		if($this->objectName == 'Users'){
 			$sql = 'select * from vtiger_users where id=? and deleted=0';
 		}else{
-			$sql = "select * from vtiger_crmentity where crmid=? and deleted=0";
+			$sql = "select * from vtiger_crmentity where crmid=? and deleted=0 and setype='".$this->getTabName()."'";
 		}
 		$result = $adb->pquery($sql , array($recordId));
 		if($result != null && isset($result)){
@@ -453,7 +449,7 @@ class VtigerCRMObjectMeta extends EntityMeta {
 		$idComponents = vtws_getIdComponents($webserviceId);
 		$id=$idComponents[1];
 		
-		$nameList = getEntityName($this->objectName,array($id));
+		$nameList = getEntityName($this->getTabName(),array($id));
 		return $nameList[$id];
 	}
 	

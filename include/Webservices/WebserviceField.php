@@ -25,6 +25,8 @@ class WebserviceField{
 	private $referenceList;
 	private $defaultValuePresent;
 	
+	private $genericUIType = 10;
+	
 	private function WebserviceField($adb,$row){
 		$this->uitype = $row['uitype'];
 		$this->blockId = $row['block'];
@@ -195,12 +197,28 @@ class WebserviceField{
 			}
 			$fieldTypeData = WebserviceField::$fieldTypeMapping[$this->getUIType()];
 			$referenceTypes = array();
-			$sql = "select * from vtiger_ws_referencetype where fieldtypeid=?";
-			$result = $this->pearDB->pquery($sql,array($fieldTypeData['fieldtypeid']));
+			if($this->getUIType() != $this->genericUIType){
+				$sql = "select * from vtiger_ws_referencetype where fieldtypeid=?";
+				$params = array($fieldTypeData['fieldtypeid']);
+			}else{
+				$sql = 'select relmodule as type from vtiger_fieldmodulerel where fieldid=?';
+				$params = array($this->getFieldId());
+			}
+			$result = $this->pearDB->pquery($sql,$params);
 			$numRows = $this->pearDB->num_rows($result);
 			for($i=0;$i<$numRows;++$i){
 				array_push($referenceTypes,$this->pearDB->query_result($result,$i,"type"));
 			}
+			
+			//to handle hardcoding done for Calendar module todo activities.
+			if($this->tabid == 9 && $this->fieldName =='parent_id'){
+				$referenceTypes[] = 'Invoice';
+				$referenceTypes[] = 'Quotes';
+				$referenceTypes[] = 'PurchaseOrder';
+				$referenceTypes[] = 'SalesOrder';
+				$referenceTypes[] = 'Campaigns';
+			}
+			
 			$referenceList[$this->getUIType()] = $referenceTypes;
 			$this->referenceList = $referenceTypes;
 			return $referenceTypes;

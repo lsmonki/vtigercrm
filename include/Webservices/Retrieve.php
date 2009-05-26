@@ -34,8 +34,9 @@
 			throw new WebServiceException(WebServiceErrorCode::$RECORDNOTFOUND,"Record you are trying to access is not found");
 		}
 		
-		return $handler->retrieve($id);
-		
+		$entity = $handler->retrieve($id);
+		VTWS_PreserveGlobal::flush();
+		return $entity;
 	}
 	
 ?>

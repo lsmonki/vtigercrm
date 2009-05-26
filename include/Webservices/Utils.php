@@ -14,6 +14,7 @@ require_once 'include/utils/UserInfoUtil.php';
 require_once 'include/Webservices/ModuleTypes.php';
 require_once 'include/utils/VtlibUtils.php';
 require_once 'include/Webservices/WebserviceEntityOperation.php';
+require_once 'include/Webservices/PreserveGlobal.php';
 
 /* Function to return all the users in the groups that this user is part of.
  * @param $id - id of the user
@@ -292,14 +293,19 @@ function vtws_addModuleTypeWebserviceEntity($moduleName,$filePath,$className){
 	}
 }
 
-function vtws_addDefaultActorTypeEntity($actorName,$actorNameDetails){
+function vtws_addDefaultActorTypeEntity($actorName,$actorNameDetails,$withName = true){
 	$actorHandler = array('file'=>'include/Webservices/VtigerActorOperation.php',
 		'class'=>'VtigerActorOperation');
-	vtws_addActorTypeWebserviceEntity($actorName,$actorHandler['file'],$actorHandler['class'],
-		$actorNameDetails);
+	if($withName == true){
+		vtws_addActorTypeWebserviceEntityWithName($actorName,$actorHandler['file'],$actorHandler['class'],
+			$actorNameDetails);
+	}else{
+		vtws_addActorTypeWebserviceEntityWithoutName($actorName,$actorHandler['file'],$actorHandler['class'],
+			$actorNameDetails);
+	}
 }
 
-function vtws_addActorTypeWebserviceEntity($moduleName,$filePath,$className,$actorNameDetails){
+function vtws_addActorTypeWebserviceEntityWithName($moduleName,$filePath,$className,$actorNameDetails){
 	global $adb;
 	$isModule=0;
 	$entityId = $adb->getUniqueID("vtiger_ws_entity");
@@ -307,6 +313,14 @@ function vtws_addActorTypeWebserviceEntity($moduleName,$filePath,$className,$act
 		array($entityId,$moduleName,$filePath,$className,$isModule));
 	vtws_addActorTypeName($entityId,$actorNameDetails['fieldNames'],$actorNameDetails['indexField'],
 		$actorNameDetails['tableName']);
+}
+
+function vtws_addActorTypeWebserviceEntityWithoutName($moduleName,$filePath,$className,$actorNameDetails){
+	global $adb;
+	$isModule=0;
+	$entityId = $adb->getUniqueID("vtiger_ws_entity");
+	$adb->pquery('insert into vtiger_ws_entity(id,name,handler_path,handler_class,ismodule) values (?,?,?,?,?)',
+		array($entityId,$moduleName,$filePath,$className,$isModule));
 }
 
 function vtws_addActorTypeName($entityId,$fieldNames,$indexColumn,$tableName){
@@ -329,5 +343,8 @@ function vtws_getName($id,$user){
 	return $meta->getName($id);
 }
 
+function vtws_preserveGlobal($name,$value){
+	return VTWS_PreserveGlobal::preserveGlobal($name,$value);
+}
 
 ?>
