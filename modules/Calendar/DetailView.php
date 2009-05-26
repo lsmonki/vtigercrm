@@ -132,8 +132,8 @@ if($current_user->hour_format == '')
 	$format = 'am/pm';
 else
 	$format = $current_user->hour_format;
-list($stdate,$sttime) = split('&nbsp;',$finaldata['date_start']);
-list($enddate,$endtime) = split('&nbsp;',$finaldata['due_date']);
+list($stdate,$sttime) = split(' ',$finaldata['date_start']);
+list($enddate,$endtime) = split(' ',$finaldata['due_date']);
 $time_arr = getaddEventPopupTime($sttime,$endtime,$format);
 $data['starthr'] = $time_arr['starthour'];
 $data['startmin'] = $time_arr['startmin'];
