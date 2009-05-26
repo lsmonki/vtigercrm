@@ -26,6 +26,7 @@ require_once('modules/Emails/Emails.php');
 require_once('include/upload_file.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
+require_once('include/utils/CommonUtils.php');
 require_once("include/Zend/Json.php");
 
 global $log;
@@ -35,10 +36,6 @@ global $currentModule;
 
 $focus = new Emails();
 $json = new Zend_Json();
-
-function vt_suppressHTMLTags($string){
-	return preg_replace(array('/</', '/>/', '/"/'), array('&lt;', '&gt;', '&quot;'), $string);
-}
 
 $smarty = new vtigerCRM_Smarty;
 if(isset($_REQUEST['record'])) 

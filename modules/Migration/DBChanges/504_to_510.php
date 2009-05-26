@@ -2075,6 +2075,8 @@ ExecuteQuery("ALTER TABLE vtiger_inventoryproductrel ADD COLUMN lineitem_id int(
 
 ExecuteQuery("update vtiger_field set typeofdata='V~M' where fieldname='sales_stage' and tabid =$potentialtabid");
 
+ExecuteQuery("update vtiger_cvcolumnlist set columnname ='vtiger_emaildetails:to_email:saved_toid:Emails_To:V' where columnname ='vtiger_crmentity:smownerid:assigned_user_id:Emails_Sender:V'");
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>

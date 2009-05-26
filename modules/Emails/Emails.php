@@ -71,7 +71,7 @@ var $rel_serel_table = "vtiger_seactivityrel";
 
 	var $column_fields = Array();
 
-	var $sortby_fields = Array('subject','date_start','smownerid');
+	var $sortby_fields = Array('subject','date_start','saved_toid');
 
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'date_start';

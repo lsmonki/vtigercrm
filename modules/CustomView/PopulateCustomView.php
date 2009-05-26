@@ -298,7 +298,7 @@ $cvcolumns = Array(Array('vtiger_leaddetails:lead_no:lead_no:Leads_Lead_No:V',
                          'vtiger_crmentity:smownerid:assigned_user_id:Calendar_Assigned_To:V'),
 
 		   Array('vtiger_activity:subject:subject:Emails_Subject:V',
-       			 'vtiger_crmentity:smownerid:assigned_user_id:Emails_Sender:V',
+       			 'vtiger_emaildetails:to_email:saved_toid:Emails_To:V',
                  	 'vtiger_activity:date_start:date_start:Emails_Date_Sent:D'),
 		
 		   Array('vtiger_invoice:invoice_no:invoice_no:Invoice_Invoice_No:V',

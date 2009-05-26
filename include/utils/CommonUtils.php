@@ -3589,4 +3589,7 @@ function getEntityField($module){
 require_once('include/utils/VtlibUtils.php');
 // END
 
+function vt_suppressHTMLTags($string){
+	return preg_replace(array('/</', '/>/', '/"/'), array('&lt;', '&gt;', '&quot;'), $string);
+}
 ?>

@@ -971,7 +971,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						$potential_id = $adb->query_result($list_result,$i-1,"potentialid");
 						$potential_name = getPotentialName($potential_id);
 						$value = '<a href="index.php?module=Potentials&action=DetailView&parenttab='.$tabname.'&record='.$potential_id.'">'.textlength_check($potential_name).'</a>';
-					} elseif($module =='Emails' && $relatedlist != '' && ($name=='Subject' || $name=='Date Sent')) {
+					} elseif($module =='Emails' && $relatedlist != '' && ($name=='Subject' || $name=='Date Sent' || $name == 'To')) {
 						$list_result_count = $i-1;
 						$tmp_value = getValue($ui_col_array,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
 						$value = '<a href="javascript:;" onClick="ShowEmail(\''.$entity_id.'\');">'.textlength_check($tmp_value).'</a>';
@@ -1403,11 +1403,12 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	//Ends
 	$field_val = $adb->query_result($list_result,$list_result_count,$colname);
-	if(stristr(html_entity_decode($field_val), "<a href") === false){
+	if(stristr(html_entity_decode($field_val), "<a href") === false && $uitype != 8){
 		$temp_val = textlength_check($field_val);
-	}else{
-			
+	}elseif($uitype != 8){
 		$temp_val = html_entity_decode($field_val,ENT_QUOTES);
+	}else{
+		$temp_val = $field_val;
 	}
 	// vtlib customization: New uitype to handle relation between modules
 	if($uitype == '10'){
@@ -1873,6 +1874,12 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		$value=$adb->query_result($result,0,"access_count");
 		if(!$value) {
 			$value = 0;
+		}
+	}elseif($uitype == 8){
+		if(!empty($temp_val)){
+			$temp_val = html_entity_decode($temp_val,ENT_QUOTES,$default_charset);
+			$json = new Zend_Json();
+			$value = vt_suppressHTMLTags(implode(',',$json->decode($temp_val)));
 		}
 	}
 	//end email status tracking

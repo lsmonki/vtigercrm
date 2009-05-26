@@ -567,6 +567,7 @@ class CRMEntity
 			  			$fldvalue = $this->column_fields[$fieldname];
 			  		}	
 			  }elseif($uitype == 8) {
+			  	$this->column_fields[$fieldname] = rtrim($this->column_fields[$fieldname],',');
 				$ids = explode(',',$this->column_fields[$fieldname]);
 				$json = new Zend_Json();
 				$fldvalue = $json->encode($ids);
@@ -584,7 +585,7 @@ class CRMEntity
 			} else {
 				$fldvalue = $this->column_fields[$fieldname]; 
 			}
-			if($uitype != 33)
+			if($uitype != 33 && $uitype !=8)
 				$fldvalue = from_html($fldvalue,($insertion_mode == 'edit')?true:false);
 		  }
 		  else
