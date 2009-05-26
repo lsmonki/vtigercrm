@@ -35,23 +35,17 @@ if($record) {
 	$service_base_currency = fetchCurrency($current_user->id);
 }
 
-if(isset($_REQUEST['vendorid']) && $_REQUEST['vendorid']!='')
-{
-        $focus->column_fields['vendorid'] = $_REQUEST['vendorid'];
-}
-
 if($isduplicate == 'true') {
 	$focus->id = '';
 	$focus->mode = '';
+}
+if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
+	setObjectValuesFromRequest($focus);
 }
 
 //needed when creating a new service with a default vtiger_vendor name to passed 
 if (isset($_REQUEST['name']) && is_null($focus->name)) {
 	$focus->name = $_REQUEST['name'];
-	
-}
-if (isset($_REQUEST['vendorid']) && is_null($focus->vendorid)) {
-	$focus->vendorid = $_REQUEST['vendorid'];
 }
 
 $disp_view = getView($focus->mode);

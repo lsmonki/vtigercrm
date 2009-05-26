@@ -50,6 +50,9 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 	$focus->id = "";
     	$focus->mode = ''; 	
 } 
+if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
+	setObjectValuesFromRequest($focus);
+}
 
 global $theme;
 $theme_path="themes/".$theme."/";

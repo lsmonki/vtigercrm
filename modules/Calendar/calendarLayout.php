@@ -1186,7 +1186,7 @@ function getweekEventLayer(& $cal,$slice)
 			$eventstatus = $act[$i]->eventstatus;
 			$user = $act[$i]->owner;
 			$priority = $act[$i]->priority;
-                        $image =  vtiger_imageurl($act[$i]->image_name, $theme);
+			$image =  vtiger_imageurl($act[$i]->image_name, $theme);
 			$idShared = "normal"; if($act[$i]->shared) $idShared = "shared";
 			if($act[$i]->recurring)
 				$recurring = '<img src="'.$image.''.$act[$i]->recurring.'" align="middle" border="0"></img>';

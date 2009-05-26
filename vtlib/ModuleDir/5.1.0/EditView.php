@@ -35,6 +35,9 @@ if($isduplicate == 'true') {
 	$focus->id = '';
 	$focus->mode = '';
 }
+if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
+	setObjectValuesFromRequest($focus);
+}
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view') 

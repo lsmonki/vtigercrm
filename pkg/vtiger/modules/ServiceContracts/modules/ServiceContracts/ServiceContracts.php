@@ -365,6 +365,14 @@ class ServiceContracts extends CRMEntity {
  		
  		if($eventType == 'module.postinstall') {
 			require_once('vtlib/Vtiger/Module.php');
+				
+			$moduleInstance = Vtiger_Module::getInstance($moduleName);
+			
+			$accModuleInstance = Vtiger_Module::getInstance('Accounts');
+			$accModuleInstance->setRelatedList($moduleInstance,'Service Contracts',array('add'),'get_dependents_list');
+			
+			$conModuleInstance = Vtiger_Module::getInstance('Contacts');
+			$conModuleInstance->setRelatedList($moduleInstance,'Service Contracts',array('add'),'get_dependents_list');
 			
 			// Initialize module sequence for the module
 			$adb->pquery("INSERT into vtiger_modentity_num values(?,?,?,?,?,?)",array($adb->getUniqueId("vtiger_modentity_num"),$moduleName,'SERCON',1,1,1));

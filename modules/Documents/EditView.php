@@ -66,14 +66,14 @@ if($focus->mode != 'edit')
 			$focus->column_fields['assigned_user_id'] = $owner['Groups'];
 		} 
 	}   
-} 
-			
-if(isset($_REQUEST['parent_id']) && $focus->mode != 'edit')
-{
-        $focus->column_fields['parent_id'] = $_REQUEST['parent_id'];
-        $smarty->assign("PARENTID",$_REQUEST['parent_id']);
 }
-
+if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
+	setObjectValuesFromRequest($focus);
+}
+			
+if(isset($_REQUEST['parent_id']) && $focus->mode != 'edit') {
+	$smarty->assign("PARENTID",$_REQUEST['parent_id']);
+}
 
 $dbQuery="select filename from vtiger_notes where notesid = ?";
 $result=$adb->pquery($dbQuery,array($focus->id));

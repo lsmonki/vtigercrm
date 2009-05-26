@@ -10,13 +10,17 @@
 
 $mod_strings = Array (
 'Service Contracts' => 'Service Contracts',
+'ServiceContracts' => 'Service Contracts',
 'SINGLE_ServiceContracts' => 'Service Contract',
 'LBL_SERVICE_CONTRACT_INFORMATION' => 'Service Contract Information',
 'LBL_CUSTOM_INFORMATION' => 'Custom Information',
+
+'Contract No' => 'Contract No',
 'Assigned To' => 'Assigned To',
 'Created Time' => 'Created Time',
 'Modified Time' => 'Modified Time',
 'Start Date' => 'Start Date',
+'Due Date' => 'Due Date',
 'End Date' => 'End Date',
 'Related to' => 'Related to',
 'Tracking Unit' => 'Tracking Unit',
@@ -24,6 +28,31 @@ $mod_strings = Array (
 'Used Units' => 'Used Units',
 'Subject' => 'Subject',
 'Progress'=> 'Progress (in %)',
+'Type' => 'Type',
+'Planned Duration' => 'Planned Duration (in Days)',
+'Actual Duration' => 'Actual Duration (in Days)',
+'Status' => 'Status',
+'Priority' => 'Priority',
+
+'Undefined' => 'Undefined',
+'In Planning' => 'In Planning',
+'In Progress' => 'In Progress',
+'On Hold' => 'On Hold',
+'Complete' => 'Complete',
+'Archived' => 'Archived',
+
+'Support' => 'Support',
+'Services' => 'Services',
+'Administrative' => 'Administrative',
+
+'Low'=>'Low',
+'Normal'=>'Normal',
+'High'=>'High',
+
+'None'=>'None',
+'Hours'=>'Hours',
+'Days'=>'Days',
+'Incidents'=>'Incidents',
 
 );
 

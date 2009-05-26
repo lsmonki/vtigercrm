@@ -56,14 +56,12 @@ if($image_error=="true")
 	}
 }
 
-if(isset($_REQUEST['vendorid']) && $_REQUEST['vendorid']!='')
-{
-        $focus->column_fields['vendorid'] = $_REQUEST['vendorid'];
-}
-
 if($isduplicate == 'true') {
 	$focus->id = '';
 	$focus->mode = '';
+}
+if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
+	setObjectValuesFromRequest($focus);
 }
 
 //needed when creating a new product with a default vtiger_vendor name to passed 

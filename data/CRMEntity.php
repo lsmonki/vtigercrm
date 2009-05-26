@@ -1732,6 +1732,91 @@ $log->info("in getOldFileName  ".$notesid);
 	}
 
 	/**
+	 * Default (generic) function to handle the dependents list for the module.
+	 * NOTE: UI type '10' is used to stored the references to other modules for a given record. 
+	 * These dependent records can be retrieved through this function. 
+	 * For eg: A trouble ticket can be related to an Account or a Contact. 
+	 * From a given Contact/Account if we need to fetch all such dependent trouble tickets, get_dependents_list function can be used.
+	 */
+	function get_dependents_list($id, $cur_tab_id, $rel_tab_id, $actions=false) {
+
+		global $currentModule, $app_strings, $singlepane_view, $adb;
+
+		if(isset($_REQUEST)) $parenttab = $_REQUEST['parenttab'];
+
+		$related_module = vtlib_getModuleNameById($rel_tab_id);
+
+		checkFileAccess("modules/$related_module/$related_module.php");
+		require_once("modules/$related_module/$related_module.php");
+		$other = new $related_module();
+		
+		// Some standard module class doesn't have required variables
+		// that are used in the query, they are defined in this generic API
+		vtlib_setup_modulevars($currentModule, $this);
+		vtlib_setup_modulevars($related_module, $other);
+
+		$singular_modname = vtlib_toSingular($related_module);
+
+		$button = '';
+
+		// To make the edit or del link actions to return back to same view.
+		if($singlepane_view == 'true') $returnset = "&return_module=$currentModule&return_action=DetailView&return_id=$id";
+		else $returnset = "&return_module=$currentModule&return_action=CallRelatedList&return_id=$id";
+
+		$return_value = null;
+		$dependentFieldSql = $adb->pquery("SELECT * FROM vtiger_field WHERE uitype='10' AND" .
+				" fieldid IN (SELECT fieldid FROM vtiger_fieldmodulerel WHERE relmodule=? AND module=?)", array($currentModule, $related_module));
+		
+		if($adb->num_rows($dependentFieldSql) > 0) {
+		
+			$dependentColumn = $adb->query_result($dependentFieldSql, 0, 'columnname');			
+			
+		
+			$button .= '<input type="hidden" name="'.$dependentColumn.'" id="'.$dependentColumn.'" value="'.$id.'">';			
+			$button .= '<input type="hidden" name="'.$dependentColumn.'_type" id="'.$dependentColumn.'_type" value="'.$currentModule.'">';			
+			if($actions) {
+				if(is_string($actions)) $actions = explode(',', strtoupper($actions));
+				if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
+					$button .= "<input title='".getTranslatedString('LBL_ADD_NEW'). " ". getTranslatedString($singular_modname) ."' class='crmbutton small create'" .
+						" onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\"' type='submit' name='button'" .
+						" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString($singular_modname) ."'>&nbsp;";
+				}
+			}
+			
+			$query = "SELECT vtiger_crmentity.*, $other->table_name.*";
+	
+			$query .= ", CASE WHEN (vtiger_users.user_name NOT LIKE '') THEN vtiger_users.user_name ELSE vtiger_groups.groupname END AS user_name";
+			
+			$more_relation = '';
+			if(!empty($other->related_tables)) {
+				foreach($other->related_tables as $tname=>$relmap) {
+					$query .= ", $tname.*";
+	
+					// Setup the default JOIN conditions if not specified
+					if(empty($relmap[1])) $relmap[1] = $other->table_name;
+					if(empty($relmap[2])) $relmap[2] = $relmap[0];
+					$more_relation .= " LEFT JOIN $tname ON $tname.$relmap[0] = $relmap[1].$relmap[2]";
+				}
+			}
+	
+			$query .= " FROM $other->table_name";
+			$query .= " INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = $other->table_name.$other->table_index";
+			$query .= " INNER  JOIN $this->table_name   ON $this->table_name.$this->table_index = $other->table_name.$dependentColumn";
+			$query .= $more_relation;
+			$query .= " LEFT  JOIN vtiger_users        ON vtiger_users.id = vtiger_crmentity.smownerid";
+			$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupid = $other->table_name.$other->table_index";
+	
+			$query .= " WHERE vtiger_crmentity.deleted = 0 AND $this->table_name.$this->table_index = $id";
+	
+			$return_value = GetRelatedList($currentModule, $related_module, $other, $query, $button, $returnset);
+		}
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+		
+		return $return_value;
+	}
+
+	/**
 	 * Move the related records of the specified list of id's to the given record.
 	 * @param String This module name
 	 * @param Array List of Entity Id's from which related records need to be transfered 

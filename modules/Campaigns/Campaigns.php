@@ -83,14 +83,12 @@ class Campaigns extends CRMEntity {
 		$this->column_fields = getColumnFields('Campaigns');
 	}
 
-
 	/** Function to handle module specific operations when saving a entity 
 	*/
 	function save_module($module)
 	{
 	}
 
-	
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
 	/**
 	 * Function to get sort order

@@ -146,6 +146,9 @@ if (isset ($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 	$focus->mode = '';
 }
+if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
+	setObjectValuesFromRequest($focus);
+}
 
 if (isset ($_REQUEST['potential_id']) && $_REQUEST['potential_id'] != '') {
 	$focus->column_fields['potential_id'] = $_REQUEST['potential_id'];

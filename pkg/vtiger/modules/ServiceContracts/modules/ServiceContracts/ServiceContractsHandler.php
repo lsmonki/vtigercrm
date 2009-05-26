@@ -89,7 +89,7 @@ class ServiceContractsHandler extends VTEventHandler {
 				
 				// Calculate the Planned Duration based on Due date and Start date. (in days)
 				if(!empty($data['due_date']) && !empty($data['start_date'])) {
-					array_push($updateCols, "planned_duration= CONCAT(TO_DAYS(due_date)-TO_DAYS(start_date)+1, ' Days')");
+					array_push($updateCols, "planned_duration= (TO_DAYS(due_date)-TO_DAYS(start_date)+1)");
 				}
 				// Update the End date if the status is Complete or if the Used Units reaches/exceeds Total Units
 				if(empty($data['end_date']) && ($data['contract_status'] == 'Complete' || 
@@ -105,7 +105,7 @@ class ServiceContractsHandler extends VTEventHandler {
 				}
 				// Calculate the Actual Duration based on End date and Start date. (in days)
 				if(!empty($data['end_date']) && !empty($data['start_date'])) {
-					array_push($updateCols, "actual_duration= CONCAT(TO_DAYS(end_date)-TO_DAYS(start_date)+1, ' Days')");
+					array_push($updateCols, "actual_duration= (TO_DAYS(end_date)-TO_DAYS(start_date)+1)");
 				} else {
 					array_push($updateCols, "actual_duration= ''");					
 				}
