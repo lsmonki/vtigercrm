@@ -203,11 +203,11 @@ function displayCoords(currObj,obj,mode,curr_row)
 					<input type="text" id="{$productName}" name="{$productName}" value="{$data.$productName}" class="small" style="width: 70%;" readonly />
 					<input type="hidden" id="{$hdnProductId}" name="{$hdnProductId}" value="{$data.$hdnProductId}" />
 					<input type="hidden" id="lineItemType{$row_no}" name="lineItemType{$row_no}" value="{$entityType}" />
-					<input type="hidden" id="{$productDescription}" name="{$productDescription}" value="{$data.$productDescription}">
+					&nbsp;
 					{if $entityType eq 'Services'}
-						<img id="searchIcon{$row_no}" src="{'search.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="servicePickList(this,'{$MODULE}','{$row_no}')" />
+						<img id="searchIcon{$row_no}" title="Services" src="{'services.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="servicePickList(this,'{$MODULE}','{$row_no}')" />
 					{else}
-						<img id="searchIcon{$row_no}" src="{'search.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}','{$row_no}')" />
+						<img id="searchIcon{$row_no}" title="Products" src="{'products.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}','{$row_no}')" />
 					{/if}
 				</td>
 			</tr>
