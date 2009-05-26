@@ -12,7 +12,6 @@
 
 -->*}
 <script>
-var z={$LISTENTITYACTION};
 var image_pth = '{$IMAGE_PATH}';
 
 function showAllRecords()
@@ -49,6 +48,7 @@ function redirectWhenNoRelatedRecordsFound()
 <link rel="stylesheet" type="text/css" href="{$THEME_PATH}style.css">
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/Inventory.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/json.js"></script>
 <!-- vtlib customization: Javascript hook -->
 <script language="JavaScript" type="text/javascript" src="include/js/vtlib.js"></script>
 <!-- END -->
@@ -89,29 +89,29 @@ function set_focus() {ldelim}
 					<td style="padding:10px;" >
 						<form name="basicSearch" action="index.php" onsubmit="return false;">
 						<table width="100%" cellpadding="5" cellspacing="0">
-						{if !$RECORD_ID}
 						<tr>
 							<td width="20%" class="dvtCellLabel"><img src="{'basicSearchLens.gif'|@vtiger_imageurl:$THEME}"></td>
 							<td width="30%" class="dvtCellLabel"><input type="text" name="search_text" id="search_txt" class="txtBox"> </td>
 							<td width="30%" class="dvtCellLabel"><b>{$APP.LBL_IN}</b>&nbsp;
 								<select name ="search_field" class="txtBox">
 											 {html_options  options=$SEARCHLISTHEADER }
-											</select>
+								</select>
 								<input type="hidden" name="searchtype" value="BasicSearch">
-										<input type="hidden" name="module" value="{$MODULE}">
+								<input type="hidden" name="module" value="{$MODULE}">
 								<input type="hidden" name="action" value="Popup">
-											<input type="hidden" name="query" value="true">
+								<input type="hidden" name="query" value="true">
 								<input type="hidden" name="select_enable" id="select_enable" value="{$SELECT}">
 								<input type="hidden" name="curr_row" id="curr_row" value="{$CURR_ROW}">
 								<input type="hidden" name="fldname_pb" value="{$FIELDNAME}">
 								<input type="hidden" name="productid_pb" value="{$PRODUCTID}">
 								<input name="popuptype" id="popup_type" type="hidden" value="{$POPUPTYPE}">
 								<input name="recordid" id="recordid" type="hidden" value="{$RECORDID}">
+								<input name="record_id" id="record_id" type="hidden" value="{$RECORD_ID}">
 								<input name="return_module" id="return_module" type="hidden" value="{$RETURN_MODULE}">
 								<input name="from_link" id="from_link" type="hidden" value="{$smarty.request.fromlink.value}">
 								<input name="maintab" id="maintab" type="hidden" value="{$MAINTAB}">
 								<input type="hidden" id="relmod" name="{$mod_var_name}" value="{$mod_var_value}">
-                                                                <input type="hidden" id="relrecord_id" name="{$recid_var_name}" value="{$recid_var_value}">
+                                <input type="hidden" id="relrecord_id" name="{$recid_var_name}" value="{$recid_var_value}">
 								{* vtlib customization: For uitype 10 popup during paging *}
 								{if $smarty.request.form eq 'vtlibPopupView'}
 									<input name="form"  id="popupform" type="hidden" value="{$smarty.request.form}">
@@ -125,7 +125,6 @@ function set_focus() {ldelim}
 								<input type="button" name="search" value=" &nbsp;{$APP.LBL_SEARCH_NOW_BUTTON}&nbsp; " onClick="callSearch('Basic');" class="crmbutton small create">
 							</td>
 						</tr>
-						{/if}
 						 <tr>
 							<td colspan="4" align="center">
 								<table width="100%" class="small">
@@ -180,6 +179,9 @@ function callSearch(searchtype)
 	urlstring += '&maintab='+act_tab;
 	urlstring = urlstring +'&query=true&file=Popup&module={$MODULE}&action={$MODULE}Ajax&ajax=true&search=true';
 	urlstring +=gethiddenelements();
+	record_id = document.basicSearch.record_id.value;
+	if(record_id!='')
+		urlstring += '&record_id='+record_id;
 	$("status").style.display="inline";
 	new Ajax.Request(
 		'index.php',
@@ -206,6 +208,9 @@ function alphabetic(module,url,dataid)
     gPopupAlphaSearchUrl = '&'+url;	
     var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true&search=true&"+url;
     urlstring +=gethiddenelements();
+	record_id = document.basicSearch.record_id.value;
+	if(record_id!='')
+		urlstring += '&record_id='+record_id;
     $("status").style.display="inline";
     new Ajax.Request(
                 'index.php',
@@ -258,17 +263,25 @@ function gethiddenelements()
 function getListViewEntries_js(module,url)
 {ldelim}
 	gstart="&"+url;
+
 	popuptype = document.getElementById('popup_type').value;
         var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true&"+url;
     	urlstring +=gethiddenelements();
-	search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
-	search_txt_val=document.basicSearch.search_text.value;
-    	if(search_txt_val != '')
-		urlstring += '&query=true&search_field='+search_fld_val+'&searchtype=BasicSearch&search_text='+search_txt_val;
+	
+	{if !RECORD_ID}
+		search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
+		search_txt_val=document.basicSearch.search_text.value;
+		if(search_txt_val != '')
+			urlstring += '&query=true&search_field='+search_fld_val+'&searchtype=BasicSearch&search_text='+search_txt_val;
+	{/if}
 	if(gPopupAlphaSearchUrl != '')
 		urlstring += gPopupAlphaSearchUrl;	
 	else
 		urlstring += '&popuptype='+popuptype;	
+	
+	record_id = document.basicSearch.record_id.value;
+	if(record_id!='')
+		urlstring += '&record_id='+record_id;
 
 	urlstring += (gsorder !='') ? gsorder : '';
 	new Ajax.Request(
@@ -287,7 +300,11 @@ function getListViewSorted_js(module,url)
 {ldelim}
 	gsorder=url;
         var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true"+url;
+	record_id = document.basicSearch.record_id.value;
+	if(record_id!='')
+		urlstring += '&record_id='+record_id;
 	urlstring += (gstart !='') ? gstart : '';
+
 	new Ajax.Request(
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},

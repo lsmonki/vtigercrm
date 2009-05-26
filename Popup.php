@@ -328,12 +328,10 @@ if($currentModule == 'Products' && $_REQUEST['record_id'] && ($popuptype == 'inv
 	$smarty->assign("PRODUCT_NAME", $product_name);
 	$smarty->assign("RECORD_ID", $_REQUEST['record_id']);
 }
-else
-{
-	$listview_header_search=getSearchListHeaderValues($focus,"$currentModule",$url_string,$sorder,$order_by);
-	$smarty->assign("SEARCHLISTHEADER", $listview_header_search);
-	$smarty->assign("ALPHABETICAL", $alphabetical);
-}			
+$listview_header_search=getSearchListHeaderValues($focus,"$currentModule",$url_string,$sorder,$order_by);
+$smarty->assign("SEARCHLISTHEADER", $listview_header_search);
+$smarty->assign("ALPHABETICAL", $alphabetical);
+
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	list($where, $ustring) = split("#@@#",getWhereCondition($currentModule));
@@ -404,10 +402,7 @@ $smarty->assign("LISTHEADER", $listview_header);
 $smarty->assign("HEADERCOUNT",count($listview_header)+1);
 
 $listview_entries = getSearchListViewEntries($focus,"$currentModule",$list_result,$navigation_array,$form); 
-$smarty->assign("LISTENTITY", $listview_entries[0]);
-
-require_once('include/Zend/Json.php');
-$smarty->assign("LISTENTITYACTION", Zend_Json::encode($listview_entries[1]));
+$smarty->assign("LISTENTITY", $listview_entries);
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,$currentModule,"Popup");
 $smarty->assign("NAVIGATION", $navigationOutput);

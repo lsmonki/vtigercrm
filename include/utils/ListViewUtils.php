@@ -1316,8 +1316,6 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 					$description=$adb->query_result($list_result,$list_result_count,'description');
 					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
 
-					if($focus->popup_type == 'inventory_prod')$value_array[$entity_id] = array($entity_id, nl2br($slashes_temp_val), $unitprice, $qty_stock,$tax_str,$row_id,$slashes_desc,$sub_det);
-					if($focus->popup_type == 'inventory_prod_po')$value_array[$entity_id] = array($entity_id, nl2br($slashes_temp_val), $unitprice, $tax_str,$row_id,$slashes_desc,$sub_det);
 					$sub_products_link = '<a href="index.php?module=Products&action=Popup&html=Popup_picker&return_module='.$_REQUEST['return_module'].'&record_id='.$entity_id.'&form=HelpDeskEditView&select=enable&popuptype='.$focus->popup_type.'&curr_row='.$row_id.'&currencyid='.$_REQUEST['currencyid'].'" > Sub Products</a>';	
 					
 					if(!isset($_REQUEST['record_id'])){
@@ -1358,14 +1356,11 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
 					$description=$adb->query_result($list_result,$list_result_count,'description');
 					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
-
-					$value_array[$entity_id] = array($entity_id, nl2br($slashes_temp_val), $unitprice, $tax_str,$row_id,$slashes_desc);
 			}
 			$list_block[$entity_id]=$list_header;
 		}
 	}
-	$list[0]=$list_block;
-	$list[1]=$value_array;
+	$list = $list_block;
 	$log->debug("Exiting getSearchListViewEntries method ...");
 	return $list;
 }
@@ -2004,8 +1999,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$slashes_desc = addslashes(htmlspecialchars($description,ENT_QUOTES,$default_charset));
 					
 					$slashes_desc = str_replace(array("\r","\n"),array('\r','\n'), $slashes_desc);
-
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$sub_det.'");\'>'.$temp_val.'</a>';
+					$tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(nl2br($slashes_temp_val))."","unitprice" => "$unitprice", "qtyinstk"=>"$qty_stock","taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"$slashes_desc","subprod_ids"=>"$sub_det");
+					require_once('include/Zend/Json.php');
+					$prod_arr = Zend_Json::encode($tmp_arr);
+					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$sub_det.'");\' vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_prod_po")
 				{
@@ -2050,8 +2047,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
 					
 					$slashes_desc = str_replace(array("\r","\n"),array('\r','\n'), $slashes_desc);
+					$tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(nl2br($slashes_temp_val))."","unitprice" => "$unitprice", "taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"$slashes_desc","subprod_ids"=>"$sub_det");
+					require_once('include/Zend/Json.php');
+					$prod_arr = Zend_Json::encode($tmp_arr);
 					
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_po("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$sub_det.'"); \'>'.$temp_val.'</a>';
+					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory_po("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$sub_det.'"); \'  vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_service")
 				{
@@ -2082,8 +2082,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
 					
 					$slashes_desc = str_replace(array("\r","\n"),array('\r','\n'), $slashes_desc);
+					$tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(nl2br($slashes_temp_val))."","unitprice" => "$unitprice","taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"$slashes_desc");
+					require_once('include/Zend/Json.php');
+					$prod_arr = Zend_Json::encode($tmp_arr);
 
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'");\'>'.$temp_val.'</a>';
+					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory("'.$entity_id.'", "'.nl2br($slashes_temp_val).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'");\'  vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_pb")
 				{
