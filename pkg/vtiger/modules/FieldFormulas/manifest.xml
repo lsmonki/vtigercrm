@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <module>
-<exporttime>2009-02-06 07:57:42</exporttime>
+<exporttime>2009-05-25 05:57:50</exporttime>
 <name>FieldFormulas</name>
 <label>Field Formulas</label>
 <parent></parent>
@@ -17,7 +17,7 @@
   `modulename` varchar(100) default NULL,
   `expression_engine` text,
   PRIMARY KEY  (`expressionid`)
-)]]></sql>
+) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
 </table>
 </tables>
 <events>
@@ -25,6 +25,7 @@
 <eventname>vtiger.entity.beforesave.modifiable</eventname>
 <classname><![CDATA[VTFieldFormulasEventHandler]]></classname>
 <filename><![CDATA[modules/FieldFormulas/VTFieldFormulasEventHandler.inc]]></filename>
+<condition><![CDATA[]]></condition>
 </event>
 </events>
 </module>
