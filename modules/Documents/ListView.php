@@ -233,7 +233,7 @@ if($foldercount > 0 )
 			$displayFolder=true;
 		}
 		//navigation start
-		$max_entries_per_page = 5; 
+		$max_entries_per_page = $list_max_entries_per_page; 
 		//Storing Listview session object
 		if($_SESSION['lvs'][$currentModule])
 		{

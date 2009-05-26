@@ -351,7 +351,7 @@ function alphabetic(module,url,dataid)
         <table border=0 cellspacing=0 cellpadding=5 width=95% align=center>
         <tr>
 			<td class="small">
-				<table border=0 celspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
+				<table border=0 cellspacing=0 cellpadding=5 width=100% align=center bgcolor=white>
 				<tr>
 					<td align="right" nowrap class="cellLabel small"><font color='red'>*</font>&nbsp;<b>{$MOD.LBL_FOLDER_NAME}</b></td>
 					<td align="left" class="cellText small">

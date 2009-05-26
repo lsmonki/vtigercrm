@@ -84,8 +84,8 @@
             						<td style="padding-right:5px"><input type="button" name="add" value="{$MOD.LBL_ADD_NEW_FOLDER}" class="crmbutton small edit" onClick="fnvshobj(this,'orgLay');" title="{$MOD.LBL_ADD_NEW_FOLDER}"></td>
       							{/if}
       							{if $EMPTY_FOLDERS|@count gt 0}
-      							<td>      								
-									<input type="button" name="show" value="{$MOD.LBL_VIEW_EMPTY_FOLDERS}" class="crmbutton small cancel" onClick="fnvshobj(this,'emptyfolder');" title="{$MOD.LBL_VIEW_EMPTY_FOLDERS}">				
+      							<td> 
+      								<input type="button" name="show" value="{$MOD.LBL_VIEW_EMPTY_FOLDERS}" class="crmbutton small cancel" onClick="fnvshobj(this,'emptyfolder');" title="{$MOD.LBL_VIEW_EMPTY_FOLDERS}">
 								</td>
 								{/if}
 							</tr>
@@ -135,11 +135,12 @@
 						</td>	
 					</tr>
 				</table> 
-				<br>
+				
 				<!-- List View's Buttons and Filters ends -->
 				{foreach item=folder from=$FOLDERS}
 				<!-- folder division starts -->
 				{assign var=foldercount value=$FOLDERS|@count}
+				<br>
 				<div id='{$folder.folderid}'>
 					<table class="reportsListTable" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">		
 						<tr>
@@ -248,73 +249,8 @@
 					</table>
 				</div>
 				<!-- folder division ends -->
-				<br>			
 				{/foreach} 
 				<!-- $FOLDERS ends -->
-				
-				<!-- this div not been used -->
-				<br>
-				<div id="emptyFoldersListview" style="display:none;">
-					<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerHeadingULine rptTable">
-						<tr style="border-top:1px solid black;">
-							<td class="genHeaderSmall">{$MOD.LBL_EMPTY_FOLDERS}</td>
-							<td align="right"><a onclick="showHideFolders('showEmptyFoldersLink', 'emptyFoldersListview');" href="javascript:;"><img border="0" align="absmiddle" src="{'close.gif'|@vtiger_imageurl:$THEME}"/></a>
-						</tr>
-					</table>
-				<!-- List View's Buttons and Filters ends -->
-					{foreach item=folder from=$EMPTY_FOLDERS}
-					<!-- folder division starts -->
-						<div id='{$folder.folderid}'>
-						<table class="reportsListTable" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">		
-							<tr>
-								<td class="mailSubHeader">
-									<b>{$folder.foldername}</b>
-									&nbsp;&nbsp;&nbsp;
-									{if $folder.description neq ''}
-								 	<font color='grey'>[<i>{$folder.description}</i>]</font>
-								 	{/if}                         
-			                 	</td>   
-								<td class="mailSubHeader">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			                     	{$folder.navigation}
-								</td>
-								<td class="mailSubHeader" align="right">
-									{if $IS_ADMIN eq "on"}
-									<input type="button" name="delete" value=" {$MOD.LBL_DELETE_FOLDER} " class="crmbutton small delete" onClick="DeleteFolderCheck('{$folder.folderid}');">
-									{else}
-									&nbsp;
-									{/if}
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3">			
-									<div id="FileList_{$folder.folderid}">
-						 				<!-- File list table for a folder starts -->
-										<table border=0 cellspacing=1 cellpadding=3 width=100%>
-											<!-- Table Headers -->
-											{assign var="header_count" value=$LISTHEADER|@count}
-											<tr>
-			            						<td class="colHeader small" width="10px"><input type="checkbox"  name="selectall{$folder.folderid}" onClick='toggleSelect_ListView(this.checked,"selected_id{$folder.folderid}","selectall{$folder.folderid}");'></td>
-												{foreach name="listviewforeach" item=header from=$LISTHEADER}
-												<td class="colHeader small">{$header}</td>
-												{/foreach}
-											</tr>
-											<tr>
-												<td align="center" colspan="{$header_count}+1">
-													{$MOD.LBL_NO_DOCUMENTS}
-												</td>
-											</tr>
-						 				</table>
-									</div> 
-								<!-- File list table for a folder ends -->
-								</td>
-							</tr>
-						</table>
-					</div>
-					<!-- folder division ends -->
-					<br>			
-					{/foreach} 
-					<!-- $FOLDERS ends -->
-				</div>
 			</td>
 			{/if}
 		<!-- conditional statement for $NO_FOLDERS ends -->
@@ -342,9 +278,13 @@
 			{foreach item=folder from=$EMPTY_FOLDERS}
 				<tr onmouseout="this.className='lvtColData'" onmouseover="this.className='lvtColDataHover'">
 					<td>{$folder.foldername}</td>
-					{if $IS_ADMIN eq "on"}
-					<td align=right><a href="javascript:;" onclick="DeleteFolderCheck({$folder.folderid});" >del</a></td>
-					{/if}
+					<td align=right>
+						{if $IS_ADMIN eq "on" && $folder.folderid neq "1"}
+							<a href="javascript:;" onclick="DeleteFolderCheck({$folder.folderid});"><img border="0" src="{'delete.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;"/></a>
+						{else}
+							&nbsp;
+						{/if}
+					</td>					
 				</tr>
 			{/foreach}
 			</table>

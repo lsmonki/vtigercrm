@@ -40,13 +40,15 @@ else
 		else
 		{
 			header("Location: index.php?action=DocumentsAjax&file=ListView&mode=ajax&module=Documents");
+			exit;
 		}
 	}
 	else
 	{
-		$sql="delete from vtiger_attachmentsfolder where folderid= ?";
+		$sql="delete from vtiger_attachmentsfolder where (folderid=? and folderid != 1)";
 		$adb->pquery($sql,array($folderId));
 		header("Location: index.php?action=DocumentsAjax&file=ListView&mode=ajax&module=Documents");
+		exit;
 	}
 }
 ?>
