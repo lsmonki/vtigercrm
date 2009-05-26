@@ -60,9 +60,12 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
         opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_module="+mod+"&entityid="+entity_id+"&parentid="+recordid+"&return_module={$RETURN_MODULE}&return_action={$RETURN_ACTION}&parenttab={$CATEGORY}";
 {rdelim}
 
+function set_focus() {ldelim}
+	$('search_txt').focus();
+{rdelim}
 </script>
 
-<body class="small" marginwidth=0 marginheight=0 leftmargin=0 topmargin=0 bottommargin=0 rightmargin=0>
+<body  onload=set_focus() class="small" marginwidth=0 marginheight=0 leftmargin=0 topmargin=0 bottommargin=0 rightmargin=0>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="mailClient mailClientBg">
 	<tr>
 		<td>
@@ -89,7 +92,7 @@ function add_data_to_relatedlist(entity_id,recordid,mod) {ldelim}
 						{if !$RECORD_ID}
 						<tr>
 							<td width="20%" class="dvtCellLabel"><img src="{'basicSearchLens.gif'|@vtiger_imageurl:$THEME}"></td>
-							<td width="30%" class="dvtCellLabel"><input type="text" name="search_text" class="txtBox"> </td>
+							<td width="30%" class="dvtCellLabel"><input type="text" name="search_text" id="search_txt" class="txtBox"> </td>
 							<td width="30%" class="dvtCellLabel"><b>{$APP.LBL_IN}</b>&nbsp;
 								<select name ="search_field" class="txtBox">
 											 {html_options  options=$SEARCHLISTHEADER }
