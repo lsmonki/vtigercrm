@@ -192,18 +192,14 @@
 				return true;
 			}
         }
+{/literal}
+var currency_array = {$CURRENCIES_ARRAY}
+{literal}
 updateSymbolAndCode();
 function updateSymbolAndCode(){
-selected_curr = document.getElementById('currency_name').value;
-
-{/literal}
-	{foreach key=header item=curr from=$CURRENCIES}
-		if(selected_curr == '{$header}'){ldelim}
-			getObj('currency_code').value = '{$curr.0}';
-			getObj('currency_symbol').value = '{$curr.1}';
-		{rdelim}
-	{/foreach}
-{literal}
+	selected_curr = document.getElementById('currency_name').value;
+	getObj('currency_code').value = currency_array[selected_curr][0];
+	getObj('currency_symbol').value = currency_array[selected_curr][1];
 }
 </script>
 {/literal}

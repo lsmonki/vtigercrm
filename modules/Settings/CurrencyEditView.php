@@ -57,15 +57,15 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 	$smarty->assign("ID",$tempid);
 }
 
-$currencies_query = $adb->pquery("SELECT currency_name from vtiger_currency_info",array());
+$currencies_query = $adb->pquery("SELECT currency_name from vtiger_currency_info WHERE deleted=0",array());
 for($index = 0;$index<$adb->num_rows($currencies_query);$index++){
-	$currencies_listed[] = $adb->query_result($currencies_query,$index,'currency_name');  
+	$currencies_listed[] = decode_html($adb->query_result($currencies_query,$index,'currency_name'));  
 }
 
 $currencies_query = $adb->pquery("SELECT currency_name,currency_code,currency_symbol from vtiger_currencies",array());
 for($index = 0;$index<$adb->num_rows($currencies_query);$index++){
-	$currencyname = $adb->query_result($currencies_query,$index,'currency_name');  
-	$currencycode = $adb->query_result($currencies_query,$index,'currency_code');  
+	$currencyname = decode_html($adb->query_result($currencies_query,$index,'currency_name'));  
+	$currencycode = decode_html($adb->query_result($currencies_query,$index,'currency_code'));  
 	$currencysymbol = decode_html($adb->query_result($currencies_query,$index,'currency_symbol'));  
 	$currencies[$currencyname] = array($currencycode,$currencysymbol);
 }
@@ -75,6 +75,9 @@ foreach($currencies as $key=>$value){
 	if(!in_array($key,$currencies_listed) || $key==$currency)
 		$currencies_not_listed[$key] = $value;
 }
+
+require_once('include/Zend/Json.php');
+$smarty->assign("CURRENCIES_ARRAY", Zend_Json::encode($currencies_not_listed));
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
