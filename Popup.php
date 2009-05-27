@@ -395,7 +395,18 @@ if(isset($_REQUEST['select']) && $_REQUEST['select'] == 'enable')
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != '')
 	$url_string .='&return_module='.$_REQUEST['return_module'];
 
-
+if($popuptype == 'set_return_emails'){
+	$tabid = getTabid($currentModule);
+	$mail_arr = getMailFields($tabid); 
+	
+	if(!empty($mail_arr)){
+		$tablename = str_replace("vtiger_","",$mail_arr['tablename']);
+		$fieldname = $mail_arr['fieldname'];
+		$fieldlabel = $mail_arr['fieldlabel'];
+		$focus->search_fields[$fieldlabel] = Array($tablename=>$fieldname);
+		$focus->search_fields_name[$fieldlabel] = $fieldname;
+	}
+}
 
 $listview_header = getSearchListViewHeader($focus,"$currentModule",$url_string,$sorder,$order_by);
 $smarty->assign("LISTHEADER", $listview_header);

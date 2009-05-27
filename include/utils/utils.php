@@ -4647,4 +4647,23 @@ function getRecordInfoFromID($id){
 	$data = $data[0];
 	return $data;
 }
+
+/**
+ * this function accepts an tabiD and returns the tablename, fieldname and fieldlabel for email field
+ * @param integer $tabid - the tabid of current module
+ * @return string $fields - the array of mail field's tablename, fieldname and fieldlabel
+ */
+function getMailFields($tabid){
+	global $adb;
+	$fields = array();
+	$result = $adb->pquery("SELECT tablename,fieldlabel,fieldname FROM vtiger_field WHERE tabid=? AND uitype IN (13,104)", array($tabid));
+	if($adb->num_rows($result)>0){
+		$tablename = $adb->query_result($result, 0, "tablename");
+		$fieldname = $adb->query_result($result, 0, "fieldname");
+		$fieldlabel = $adb->query_result($result, 0, "fieldlabel");
+		$fields = array("tablename"=>$tablename,"fieldname"=>$fieldname,"fieldlabel"=>$fieldlabel);
+	}
+	return $fields;
+}
+
 ?>

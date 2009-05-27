@@ -1558,11 +1558,14 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$queryres = $adb->pquery($querystr, array($tabid, $fieldname));
 			//Change this index 0 - to get the vtiger_fieldid based on email1 or email2
 			$fieldid = $adb->query_result($queryres,0,'fieldid');
-			$value = '<a href="javascript:InternalMailer('.$entity_id.','.$fieldid.',\''.$fieldname.'\',\''.$module.'\',\'record_id\');">'.$temp_val.'</a>';
+			if(empty($popuptype)){
+				$value = '<a href="javascript:InternalMailer('.$entity_id.','.$fieldid.',\''.$fieldname.'\',\''.$module.'\',\'record_id\');">'.$temp_val.'</a>';
+			} else {
+				$value = $temp_val;
+			}
 		}
 		else
 			$value = '<a href="mailto:'.$field_val.'">'.$temp_val.'</a>';
-
         }
 	elseif($uitype == 56)
 	{
