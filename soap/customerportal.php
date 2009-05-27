@@ -2335,15 +2335,17 @@ function get_details($id,$module,$customerid,$sessionid)
 	if($module == 'HelpDesk'){
 		$ticketid = $adb->query_result($res,0,'ticketid');
 		$sc_info = getRelatedServiceContracts($ticketid);
-		if ($sc_info != null) {
+		if (!empty($sc_info)) {
 			$modulename = 'ServiceContracts';
 			$blocklable = getTranslatedString('LBL_SERVICE_CONTRACT_INFORMATION',$modulename);
 			$j=$i;
-			foreach ($sc_info as $label => $value) {
-				$output[0][$module][$j]['fieldlabel']= getTranslatedString($label,$module);
-				$output[0][$module][$j]['fieldvalue']= $value;
-				$output[0][$module][$j]['blockname'] = $blocklable;
-				$j++;
+			for($k=0;$k<count($sc_info);$k++){
+				foreach ($sc_info[$k] as $label => $value) {
+					$output[0][$module][$j]['fieldlabel']= getTranslatedString($label,$modulename);
+					$output[0][$module][$j]['fieldvalue']= $value;
+					$output[0][$module][$j]['blockname'] = $blocklable;
+					$j++;
+				}
 			}
 		}
 	}
@@ -2795,27 +2797,25 @@ function show_all($module){
 function getRelatedServiceContracts($crmid){
 	global $adb,$log;
 	$log->debug("Entering customer portal function getRelatedServiceContracts");
-	$module = 'ServicesContracts';
-	$check = checkModuleActive($module);
-	if($check == false){
-		return false;
+	$module = 'ServiceContracts';
+	$sc_info = array(); 
+	if(vtlib_isModuleActive($module) !== true){
+		return $sc_info;
 	}
 	$query = "SELECT * FROM vtiger_servicecontracts " .
 			"INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_servicecontracts.servicecontractsid AND vtiger_crmentity.deleted = 0 " .
 			"LEFT JOIN vtiger_crmentityrel ON vtiger_crmentityrel.crmid = vtiger_servicecontracts.servicecontractsid " .
 			"WHERE (vtiger_crmentityrel.relcrmid = ? and vtiger_crmentityrel.module= 'ServiceContracts')";
 	
-		$res = $adb->pquery($query,array($crmid));
-	if($adb->num_rows($res) > 0) {
-		$sc_info = array();
-		$sc_info['Subject'] = $adb->query_result($res,0,'subject');
-		$sc_info['Used Units'] = $adb->query_result($res,0,'used_units');
-		$sc_info['Total Units'] = $adb->query_result($res,0,'total_units');
-		$sc_info['Available Units'] = $adb->query_result($res,0,'total_units')- $adb->query_result($res,0,'used_units');
-		return $sc_info;		
-	} else {
-		return null;
+	$res = $adb->pquery($query,array($crmid));
+	$rows = $adb->num_rows($res);
+	for($i=0;$i<$rows;$i++){
+		$sc_info[$i]['Subject'] = $adb->query_result($res,$i,'subject');
+		$sc_info[$i]['Used Units'] = $adb->query_result($res,$i,'used_units');
+		$sc_info[$i]['Total Units'] = $adb->query_result($res,$i,'total_units');
+		$sc_info[$i]['Available Units'] = $adb->query_result($res,$i,'total_units')- $adb->query_result($res,$i,'used_units');
 	}
+	return $sc_info;		
 	$log->debug("Exiting customerportal function getRelatedServiceContracts");
 }
 
