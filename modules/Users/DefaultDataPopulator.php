@@ -2531,6 +2531,15 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 			$adb->query("insert into vtiger_settings_field (fieldid, blockid, name, iconpath, description, linkto, sequence) values (".$adb->getUniqueID('vtiger_settings_field').", ".getSettingsBlockId($name_blocks[$names[$i]]).", '$names[$i]', '$icons[$i]', '$description[$i]', '$links[$i]', $seq)");
 		}
 		
+		// for Workflow in settings page of every module
+		$module_manager_id = getSettingsBlockId('LBL_MODULE_MANAGER');
+		$result = $adb->pquery("SELECT max(sequence) AS maxseq FROM vtiger_settings_field WHERE blockid = ?",array($module_manager_id));
+		$maxseq = $adb->query_result($result,0,'maxseq');
+		if($maxseq < 0 || $maxseq == NULL){
+			$maxseq=1;
+		}
+		$adb->pquery("INSERT INTO vtiger_settings_field (fieldid, blockid, name, iconpath, description, linkto, sequence) VALUES (?,?,?,?,?,?,?)",array($adb->getUniqueID('vtiger_settings_field'), $module_manager_id, 'LBL_WORKFLOW_LIST', 'settingsWorkflow.png', 'LBL_AVAILABLE_WORKLIST_LIST', 'index.php?module=com_vtiger_workflow&action=workflowlist', $maxseq));
+		
 		//hide the system details tab for now
 		$adb->query("update vtiger_settings_field set active=1 where name='LBL_SYSTEM_INFO'");
 	}

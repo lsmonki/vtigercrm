@@ -9,12 +9,13 @@ require_once("VTWorkflowApplication.inc");
 require_once("VTWorkflowUtils.php");
 
 function vtGetModules($adb){
+	$modules_not_supported = array('Documents','Calendar','Emails','Faq','Events','PBXManager','Users'); 
 	$sql="select distinct vtiger_field.tabid, name
 			from vtiger_field 
 			inner join vtiger_tab 
 				on vtiger_field.tabid=vtiger_tab.tabid 
-			where vtiger_field.tabid not in(9,10,16,15,8,29) and vtiger_tab.isentitytype=1 and vtiger_tab.presence = 0 ";
-	$it = new SqlResultIterator($adb, $adb->query($sql));
+			where vtiger_tab.name not in(".generateQuestionMarks($modules_not_supported).") and vtiger_tab.isentitytype=1 and vtiger_tab.presence = 0 ";
+	$it = new SqlResultIterator($adb, $adb->pquery($sql,array($modules_not_supported)));
 	$modules = array();
 	foreach($it as $row){
 		$modules[] = $row->name;

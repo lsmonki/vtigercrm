@@ -50,6 +50,15 @@ $menu_array['LeadsMapping']['desc'] = getTranslatedString('LEADS_CUSTOM_FIELD_MA
 $menu_array['LeadsMapping']['label'] = getTranslatedString('LEADS_CUSTOM_FIELD_MAPPING');
 
 
+	$sql_result = $adb->pquery("SELECT * FROM vtiger_settings_field WHERE name = ? AND active=0",array('LBL_WORKFLOW_LIST'));
+		if($adb->num_rows($sql_result) > 0) {
+			$menu_array['Workflow']['location'] = $adb->query_result($sql_result, 0, 'linkto').'&list_module='.$module;
+			$menu_array['Workflow']['image_src'] = vtiger_imageurl($adb->query_result($sql_result, 0, 'iconpath'), $theme);
+			$menu_array['Workflow']['desc'] = getTranslatedString($adb->query_result($sql_result, 0, 'description'),'com_vtiger_workflow');
+			$menu_array['Workflow']['label'] = getTranslatedString($adb->query_result($sql_result, 0, 'name'),'com_vtiger_workflow');
+		}
+	
+
 //add blanks for 3-column layout
 $count = count($menu_array)%3;
 if($count>0) {

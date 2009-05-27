@@ -2096,6 +2096,16 @@ ExecuteQuery("update vtiger_field set typeofdata='V~M' where fieldname='sales_st
 
 ExecuteQuery("update vtiger_cvcolumnlist set columnname ='vtiger_emaildetails:to_email:saved_toid:Emails_To:V' where columnname ='vtiger_crmentity:smownerid:assigned_user_id:Emails_Sender:V'");
 
+// for Workflow in settings page of every module
+	$module_manager_id = getSettingsBlockId('LBL_MODULE_MANAGER');
+	$result = $adb->pquery("SELECT max(sequence) AS maxseq FROM vtiger_settings_field WHERE blockid = ?",array($module_manager_id));
+	$maxseq = $adb->query_result($result,0,'maxseq');
+	if($maxseq < 0 || $maxseq == NULL){
+		$maxseq=1;
+	}
+	$adb->pquery("INSERT INTO vtiger_settings_field (fieldid, blockid, name, iconpath, description, linkto, sequence) VALUES (?,?,?,?,?,?,?)",array($adb->getUniqueID('vtiger_settings_field'), $module_manager_id, 'LBL_WORKFLOW_LIST', 'settingsWorkflow.png', 'LBL_AVAILABLE_WORKLIST_LIST', 'index.php?module=com_vtiger_workflow&action=workflowlist', $maxseq));
+	
+
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
 
 ?>
