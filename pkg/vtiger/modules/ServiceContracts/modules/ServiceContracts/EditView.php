@@ -44,6 +44,20 @@ if(!empty($_REQUEST['service_id'])) {
 	$serviceObj->retrieve_entity_info($_REQUEST['service_id'], 'Services');
 	$focus->column_fields['tracking_unit'] = $serviceObj->column_fields['service_usageunit'];	
 }
+if(!empty($_REQUEST['return_id']) && !empty($_REQUEST['return_module'])) {
+	$invModule = $_REQUEST['return_module'];
+	checkFileAccess("modules/$invModule/$invModule.php");
+	require_once("modules/$invModule/$invModule.php");
+	$inventoryObj = new $invModule();
+	$inventoryObj->retrieve_entity_info($_REQUEST['return_id'], $invModule);
+	if(!empty($inventoryObj->column_fields['account_id'])) {
+		$focus->column_fields['parent_id_type'] = 'Accounts';
+		$focus->column_fields['parent_id'] = $inventoryObj->column_fields['account_id'];
+	} else if(!empty($inventoryObj->column_fields['contact_id'])) {
+		$focus->column_fields['parent_id_type'] = 'Contacts';
+		$focus->column_fields['parent_id'] = $inventoryObj->column_fields['contact_id'];		
+	}
+}
 
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view') 
