@@ -12,6 +12,7 @@ require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Emails/Emails.php');
 require_once('include/utils/utils.php');
+require_once('include/utils/CommonUtils.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/FormValidationUtil.php');
 require_once('modules/Webmails/MailBox.php');
@@ -26,10 +27,6 @@ $smarty = new vtigerCRM_Smarty();
 $json = new Zend_Json();
 $smarty->assign('MOD',$mod_strings);
 $smarty->assign('THEME',$theme);
-
-function vt_suppressHTMLTags($string){
-	return preg_replace(array('/</', '/>/', '/"/'), array('&lt;', '&gt;', '&quot;'), $string);
-}
 
 if(isset($_REQUEST['record']) && $_REQUEST['record'] !='' && $_REQUEST['mailbox'] == '') 
 {
