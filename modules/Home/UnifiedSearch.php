@@ -36,8 +36,10 @@ $query_string = trim($_REQUEST['query_string']);
 if(isset($query_string) && $query_string != ''){
 	// Was the search limited by user for specific modules?
 	$search_onlyin = $_REQUEST['search_onlyin'];
-	if(!empty($search_onlyin)) {
+	if(!empty($search_onlyin) && $search_onlyin != '--USESELECTED--') {
 		$search_onlyin = explode(',', $search_onlyin);
+	} else if($search_onlyin == '--USESELECTED--') {
+		$search_onlyin = $_SESSION['__UnifiedSearch_SelectedModules__'];
 	} else {
 		$search_onlyin = array();
 	}

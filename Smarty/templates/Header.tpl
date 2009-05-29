@@ -189,7 +189,7 @@
 				<input type="hidden" name="action" value="UnifiedSearch" style="margin:0px">
 				<input type="hidden" name="module" value="Home" style="margin:0px">
 				<input type="hidden" name="parenttab" value="{$CATEGORY}" style="margin:0px">
-				<input type="hidden" name="search_onlyin" value="" style="margin:0px">
+				<input type="hidden" name="search_onlyin" value="--USESELECTED--" style="margin:0px">
 				<input type="text" name="query_string" value="{$QUERY_STRING}" class="searchBox" onFocus="this.value=''" >
 			</td>
 			<td style="background-color:#cccccc">
