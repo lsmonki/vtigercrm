@@ -94,6 +94,11 @@
 			// hide original input and append new replacement inputs
 			//$(this).attr('type','hidden').after(output);
 			$(this).after(output);
+			
+			// Initialize the default value
+			if(v == '') {
+				$(this).val( h + ':' + m + p );
+			}
 		});
 
 		$('select.timepicker').change(function(){

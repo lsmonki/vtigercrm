@@ -96,13 +96,13 @@ class VTCreateEventTask extends VTTask{
 
 	static function conv12to24hour($timeStr){
 		$arr = array();
-		preg_match('/(\d\d):(\d\d)(am|pm)/', $timeStr, $arr);
+		preg_match('/(\d{1,2}):(\d{1,2})(am|pm)/', $timeStr, $arr);
 		if($arr[3]=='am'){
 			$hours = ((int)$arr[1]) % 12;
 		}else{
 			$hours = ((int)$arr[1]) % 12 + 12;
 		}
-		return str_pad($hours, 2, '0', STR_PAD_LEFT).':'.$arr[2];
+		return str_pad($hours, 2, '0', STR_PAD_LEFT).':'.str_pad($arr[2], 2, '0', STR_PAD_LEFT);
 	}
 }
 ?>
