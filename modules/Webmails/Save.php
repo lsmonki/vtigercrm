@@ -19,7 +19,6 @@ require_once('modules/Webmails/MailParse.php');
 require_once('modules/Webmails/MailBox.php');
 require_once('modules/Documents/Documents.php');
 require_once('modules/Settings/MailScanner/core/MailAttachmentMIME.php');
-require_once("include/Zend/Json.php");
 global $current_user;
 
 $local_log =& LoggerManager::getLogger('index');
@@ -50,9 +49,21 @@ $focus->column_fields["activitytype"]="Emails";
 
 $ddate = date("Y-m-d");
 $dtime = date("h:m");
-$focus->column_fields["assigned_user_id"]=$current_user->id;
-$focus->column_fields["date_start"]=$ddate;
-$focus->column_fields["time_start"]=$dtime;
+$focus->column_fields["assigned_user_id"] = $current_user->id;
+$focus->column_fields["date_start"] = $ddate;
+$focus->column_fields["time_start"] = $dtime;
+//Set the flag as SENT to show up the sent date
+$focus->column_fields["email_flag"] = "SENT";
+
+//Save the To field information in vtiger_emaildetails
+$all_to_ids = $email->to;
+$focus->column_fields["saved_toid"] = implode(',',$all_to_ids);
+
+//store the sent date in 'yyyy-mm-dd' format
+$user_old_date_format = $current_user->date_format;
+$current_user->date_format = 'yyyy-mm-dd';
+				
+			
 
 //$tmpBody = preg_replace(array('/<br(.*?)>/i',"/&gt;/i","/&lt;/i","/&nbsp;/i","/&amp/i","/&copy;/i","/<style(.*?)>(.*?)<\/style>/i","/\{(.*?)\}/i","/BODY/i"),array("\r",">","<"," ","&","(c)","","",""),$msgData);
 //$focus->column_fields["description"]=strip_tags($tmpBody);
@@ -148,6 +159,10 @@ function add_attachment_to_contact($cid,$email,$emailid) {
 	    }
 	}
 }
+//Display the sent date in logged in user date format
+$current_user->date_format = $user_old_date_format;
+
+	
 function view_part_detail($mail,$mailid,$part_no, &$transfer, &$msg_charset, &$charset)
 {
         $text = imap_fetchbody($mail,$mailid,$part_no);
@@ -163,13 +178,6 @@ function view_part_detail($mail,$mailid,$part_no, &$transfer, &$msg_charset, &$c
 $_REQUEST['parent_id'] = $focus->column_fields['parent_id'];
 
 
-$json = new Zend_Json();
-//saving in vtiger_emaildetails vtiger_table
-$id_lists = $focus->column_fields['parent_id'].'@'.$fieldid;
-$all_to_ids = $email->from;
-if(!empty($all_to_ids)) {
-	$all_to_ids = $json->encode(explode(',',$all_to_ids));
-}
 $return_id = $_REQUEST["mailid"];
 $return_module='Webmails';
 $return_action='ListView';
