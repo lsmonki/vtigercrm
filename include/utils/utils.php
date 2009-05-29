@@ -4168,6 +4168,9 @@ function getCallerName($from) {
  */
 function getCallerInfo($number){
 	global $adb, $log;
+	if(empty($number)){
+		return false;
+	}
 	$caller = "Unknown Number (Unknown)"; //declare caller as unknown in beginning
 	
 	$name['Contacts'] = array('name'=>"concat(firstname,' ',lastname)", 'table'=>'vtiger_contactdetails', 'field'=>"phone,mobile,fax", 'id'=>'contactid');
@@ -4209,7 +4212,7 @@ function searchPhoneNumber($record, $fields, $result, $flag=0){
 			if($flag == 1){
 				$number = getStrippedNumber($number);
 			}
-			if($number == $record){
+			if($number === $record){
 				return $i;
 			}
 		}
