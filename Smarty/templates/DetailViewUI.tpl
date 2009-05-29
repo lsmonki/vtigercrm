@@ -256,7 +256,7 @@
                                                                         </div>
                                                                 </td>	
 						{elseif $keyid eq '53'} <!--Assigned To-->
-							<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}">&nbsp;<span id="dtlview_{$label}">
+							<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">
 							{if $keyadmin eq 1}
 								<a href="{$keyseclink.0}">{$keyval}</a>         
 							{else}	
