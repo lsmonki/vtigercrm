@@ -301,7 +301,8 @@ function get_cal_header_data(& $cal_arr,$viewBox,$subtab)
 	$headerdata = "";
 	$headerdata .="
 			<div style='display: block;' id='mnuTab'>
-			<form name='EventViewOption' method='POST' action='index.php' style='display: inline;'>
+			<form name='EventViewOption' method='POST' action='index.php'>
+			<input type='hidden' id='complete_view' name='complete_view' value='' />
 			<table align='center' border='0' cellpadding='5' cellspacing='0' width='98%'>
 			<tr><td colspan='3'>&nbsp;</td></tr>";
 			if(isPermitted("Calendar","EditView") == "yes")
@@ -709,11 +710,22 @@ function getDayViewLayout(& $cal)
 	$day_start_hour = $cal['calendar']->day_start_hour;
 	$day_end_hour = $cal['calendar']->day_end_hour;
 	$format = $cal['calendar']->hour_format;
+	$show_complete_view = false;
+	if(!empty($_REQUEST['complete_view'])){
+		$show_complete_view =true;
+	}
 	$dayview_layout = '';
 	$dayview_layout .= '<!-- Day view layout starts here --> <table border="0" cellpadding="10" cellspacing="0" width="100%">';
 	$dayview_layout .= '<tr>
-				<td id="mainContent" style="border-top: 1px solid rgb(204, 204, 204);">
+					<td id="mainContent" style="border-top: 1px solid rgb(204, 204, 204);">
 					<table border="0" cellpadding="5" cellspacing="0" width="100%">';
+	if(!empty($show_complete_view)) {
+		$dayview_layout .= '<tr><td width=12% class="lvtCol" bgcolor="blue" valign=top><img onClick="document.EventViewOption.complete_view.value=0;fnRedirect();" src="'.vtiger_imageurl('activate.gif', $theme).'" border="0"></td><td class="dvtCellInfo">&nbsp;</td><td class="dvtCellInfo">&nbsp;</td></tr>';
+		$day_start_hour = 0;
+		$day_end_hour = 23;
+	} else {
+		$dayview_layout .= '<tr><td width=12% class="lvtCol" bgcolor="blue" valign=top><img onClick="document.EventViewOption.complete_view.value=1;fnRedirect();" src="'.vtiger_imageurl('inactivate.gif', $theme).'" border="0"></td><td class="dvtCellInfo">&nbsp;</td><td class="dvtCellInfo">&nbsp;</td></tr>';
+	}
 	for($j=0;$j<24;$j++)
 	{
 		$slice = $cal['calendar']->slices[$j];
@@ -773,17 +785,24 @@ function getWeekViewLayout(& $cal)
 	$day_start_hour = $cal['calendar']->day_start_hour;
 	$day_end_hour = $cal['calendar']->day_end_hour;
 	$format = $cal['calendar']->hour_format;
+	$show_complete_view = false;
+	if(!empty($_REQUEST['complete_view'])){
+		$show_complete_view =true;
+	}
 	$weekview_layout = '';
-        $weekview_layout .= '<table border="0" cellpadding="10" cellspacing="0" width="98%" class="calDayHour" style="background-color: #dadada">';
+    $weekview_layout .= '<table border="0" cellpadding="10" cellspacing="0" width="98%" class="calDayHour" style="background-color: #dadada">';
 	for ($col=0;$col<=7;$col++)
-        {
-        	if($col==0)
-                {
-                	$weekview_layout .= '<tr>';
-                	$weekview_layout .= '<td width=12% class="lvtCol" bgcolor="blue" valign=top>&nbsp;</td>';
-		}
-		else
-		{
+    {
+    	if($col==0) {
+            	$weekview_layout .= '<tr>';
+            	if(!empty($show_complete_view)) {
+            		$weekview_layout .= '<td width=12% class="lvtCol" bgcolor="blue" valign=top><img onClick="document.EventViewOption.complete_view.value=0;fnRedirect();" src="'.vtiger_imageurl('activate.gif', $theme).'" border="0"></td>';
+					$day_start_hour = 0;
+					$day_end_hour = 23;
+            	} else {
+            		$weekview_layout .= '<td width=12% class="lvtCol" bgcolor="blue" valign=top><img onClick="document.EventViewOption.complete_view.value=1;fnRedirect();" src="'.vtiger_imageurl('inactivate.gif', $theme).'" border="0"></td>';
+            	}
+		} else {
 			//To display Days in Week
 			$cal['slice'] = $cal['calendar']->week_array[$cal['calendar']->slices[$col-1]];
 			$date = $cal['calendar']->date_time->getThisweekDaysbyIndex($col-1);
