@@ -333,6 +333,7 @@ $log->info($php_info);
 						<input type="hidden" class="dataInput" name="root_password" value="<?php if (isset($root_password)) echo "$root_password"; ?>" />
 						<input type="hidden" class="dataInput" name="create_utf8_db" value="<?php if (isset($create_utf8_db)) echo "$create_utf8_db"; ?>" />
 						<input type="hidden" class="dataInput" name="vt_charset" value="<?php if (isset($vt_charset)) echo "$vt_charset"; ?>" />
+						<input type="hidden" name="selected_modules" id="selected_modules" value="<?php if (isset($mod_for_ins)) echo $mod_for_ins; else echo '';?>" />
 						<input type="image" name="Change" value="Change" title="Change" src="include/install/images/cwBtnChange.gif"/>
 					</form>
 					</td>
