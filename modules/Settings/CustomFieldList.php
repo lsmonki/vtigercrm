@@ -65,7 +65,7 @@ $smarty->assign("MODULE",$fld_module);
 $smarty->assign("CFENTRIES",getCFListEntries($fld_module));
 if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 {
-	$error=$mod_strings['ERR_CUSTOM_FIELD_WITH_NAME']. $_REQUEST["fldlabel"] .$mod_strings['ERR_ALREADY_EXISTS'] . ' ' .$mod_strings['ERR_SPECIFY_DIFFERENT_LABEL'];
+	$error=getTranslatedString('ERR_CUSTOM_FIELD_WITH_NAME',$fld_module). $_REQUEST["fldlabel"] .getTranslatedString('ERR_ALREADY_EXISTS',$fld_module) . ' ' .getTranslatedString('ERR_SPECIFY_DIFFERENT_LABEL',$fld_module);
 	$smarty->assign("DUPLICATE_ERROR", $error);
 }
 
@@ -103,7 +103,7 @@ function getCFListEntries($module)
 		{
 			$cf_element=Array();
 			$cf_element['no']=$count;
-			$cf_element['label']=$row["fieldlabel"];
+			$cf_element['label']=getTranslatedString($row["fieldlabel"],$module);
 			$fld_type_name = getCustomFieldTypeName($row["uitype"]);
 			$cf_element['type']=$fld_type_name;
 			$cf_tab_id = $row["tabid"];
@@ -117,9 +117,9 @@ function getCFListEntries($module)
 			if($module == 'Calendar')
 			{
 				if ($cf_tab_id == '9')
-					$cf_element['activitytype'] = $app_strings['Task'];
+					$cf_element['activitytype'] = getTranslatedString('Task',$module);
 				else
-					$cf_element['activitytype'] = $app_strings['Event'];
+					$cf_element['activitytype'] = getTranslatedString('Event',$module);
 			}
 			if ($module == 'Calendar') {
 				$cf_element['tool']='&nbsp;<img style="cursor:pointer;" onClick="deleteCustomField('.$row["fieldid"].',\''.$module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')" src="'. vtiger_imageurl('delete.gif', $theme) .'" border="0"  alt="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'" title="'.$app_strings['LBL_DELETE_BUTTON_LABEL'].'"/></a>';
@@ -153,16 +153,16 @@ function getListLeadMapping($cfid)
 		$sql2="select fieldlabel from vtiger_field where fieldid =?";
 		$result2 = $adb->pquery($sql2, array($accountid));
 		$accountfield = $adb->query_result($result2,0,'fieldlabel');
-		$label['accountlabel'] = $accountfield;
+		$label['accountlabel'] = getTranslatedString($accountfield,'Accounts');
 		
 		$sql3="select fieldlabel from vtiger_field where fieldid =?";
 		$result3 = $adb->pquery($sql3, array($contactid));
 		$contactfield = $adb->query_result($result3,0,'fieldlabel');
-		$label['contactlabel'] = $contactfield;
+		$label['contactlabel'] = getTranslatedString($contactfield,'Contacts');
 		$sql4="select fieldlabel from vtiger_field where fieldid =?";
 		$result4 = $adb->pquery($sql4, array($potentialid));
 		$potentialfield = $adb->query_result($result4,0,'fieldlabel');
-		$label['potentiallabel'] = $potentialfield;
+		$label['potentiallabel'] = getTranslatedString($potentialfield,'Potentials');
 	}
 	return $label;
 }
