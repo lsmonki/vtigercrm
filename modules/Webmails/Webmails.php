@@ -343,7 +343,7 @@ class Webmails extends CRMEntity {
 
 					if (strtoupper($parts[$i]->disposition) == "ATTACHMENT")
 					{
-						$filedata = $this->mail_fetchpart($partstring);
+						$filedata = imap_fetchbody($this->mbox, $this->mailid, $partstring);
 						$attachment[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>$filedata,"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
 					}
 				} 
