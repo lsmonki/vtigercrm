@@ -949,66 +949,6 @@ for($i = 0; $i<$num_fields; $i++)
 	addFieldSecurity($tab_id, $fld_id, false);
 }
 
-// Rearrange Fields on UI.
-$seq_array = array(
-		6 => array( 
-				'phone' => 4, 'website' => 3, 'fax' => 6, 'tickersymbol' => 5, 'otherphone' => 8, 'parentid' => 7, 'email1' => 10,
-				'employees' => 9, 'email2' => 11, 'ownership' => 12, 'rating' => 14, 'industry' => 13, 'siccode' => 16,
-				'account_type' => 15, 'annualrevenue' => 18
-			  ),
-		7 => array(
-				'phone' => 5, 'lastname' => 4, 'mobile' => 7, 'company' => 6, 'fax' => 9, 'designation' => 8, 'email' => 11, 'leadsource' => 10,
-				'website' => 13, 'industry' =>12, 'leadstatus' => 15, 'annualrevenue' => 14, 'rating' => 17, 'noofemployees' => 16, 'smownerid' => 19,
-				'yahooid' => 18, 'createdtime' => 21, 'modifiedtime' => 20
-			),
-		4 => array(
-				'phone' => 5, 'lastname' => 4, 'mobile' => 7, 'accountid' => 6, 'homephone' => 9, 'leadsource' => 8, 'otherphone' => 11, 'title' => 10,
-				'fax' => 13, 'department' => 12, 'birthday' => 16, 'email' => 15, 'reportsto' => 18,
-				'assistant' => 17, 'yahooid' => 20, 'assistantphone' => 19, 'donotcall' => 22, 'emailoptout' => 21, 'smownerid' => 24,
-				'reference' => 23, 'notify_owner' => 26, 'createdtime' => 25, 'modifiedtime' => 27
-			),
-		2 => array(
-				'amount' => 4, 'accountid' => 3, 'closingdate' => 7, 'potentialtype' => 6, 'nextstep' => 9,
-				'leadsource' => 8, 'sales_stage' => 11, 'smownerid' => 10, 'probability'  => 13,
-				'campaignid' => 12, 'createdtime' => 15, 'modifiedtime' => 14
-			),
-		26 => array(
-				'campaigntype' => 5, 'product_id' => 6, 'campaignstatus' => 4, 'closingdate' => 8, 'smownerid' => 3, 'numsent' => 12,
-				'sponsor' => 9, 'targetaudience' => 7, 'targetsize' => 10, 'createdtime' => 11, 'modifiedtime' => 13
-			),
-		13 => array (
-				'smownerid' => 4, 'parent_id' => 2, 'priority' => 6, 'product_id' => 5, 'severity' => 8, 'status' => 7,
-				'category' => 10, 'update_log' => 10, 'createdtime' => 9, 'modifiedtime' => 12, 'filename' => 11
-			),
-		14 => array (
-				'productcode' => 4, 'discontinued'  => 3, 'manufacturer' => 6, 'productcategory' => 6, 'sales_start_date' => 5,  'sales_end_date' => 8,
-				'start_date' => 7, 'expiry_date' => 10, 'website' => 14, 'vendor_id' => 13, 'mfr_part_no' => 16, 'vendor_part_no' => 15, 'serialno' => 18, 
-				'productsheet' => 17, 'glacct' => 20, 'createdtime' => 19, 'modifiedtime' => 21
-			),
-		15 => array (
-				'category' => 4
-			),
-		18 => array (
-				'phone' => 4, 'email' => 3, 'website' => 6, 'glacct' => 5, 'category' => 8, 'createdtime' => 7
-			),
-		19 => array (
-				'active' => 2
-			),
-		20 => array (
-				'quotestage' => 4, 'validtill' => 5
-			),
-		22 => array (
-				'customerno' => 4,'quoteid' => 5, 'purchaseorder' => 6, 'contactid' => 7
-			)
-	);
-
-foreach ( $seq_array as $tabid=> $field_seq) {
-	foreach ($field_seq as $field=>$seq) {
-		ExecuteQuery("update vtiger_field set sequence = $seq where tabid = $tabid and columnname = '". $field ."'");
-
-	}
-}
-
 ExecuteQuery("update vtiger_field set uitype = '4' where tabid = 23 and columnname = 'invoice_no' ");
 ExecuteQuery("update vtiger_field set typeofdata = 'V~O' where tabid = 23 and columnname = 'invoice_no' ");
 
