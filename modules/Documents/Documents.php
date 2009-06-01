@@ -144,9 +144,11 @@ class Documents extends CRMEntity {
 			}
 		} else{
 			$filelocationtype = 'E';
-			$filename = $this->column_fields[$filename_fieldname];//$_REQUEST[$filename_fieldname];
-			if(!(stripos($filename,'http://') === 0) && $filename != null) {
-				$filename = 'http://'.$filename;
+			$filename = $this->column_fields[$filename_fieldname];
+			// If filename does not has the protocol prefix, default it to http://
+			// Protocol prefix could be like (https://, smb://, file://, \\, smb:\\,...) 
+			if(!empty($filename) && !preg_match('/^\w{1,5}:\/\/|^\w{0,3}:?\\\\\\\\/', trim($filename), $match)) {
+				$filename = "http://$filename";
 			}
 			$filetype = '';
 			$filesize = 0;
