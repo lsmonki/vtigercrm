@@ -180,7 +180,7 @@
 
 		</table>
 	</td>
-	<td align=left style="padding-right:10px" nowrap >
+	<td align=right style="padding-right:10px" nowrap >
 		<table border=0 cellspacing=0 cellpadding=0 id="search" style="border:1px solid #999999;background-color:white">
 		   <tr>
 			<form name="UnifiedSearch" method="post" action="index.php" style="margin:0px" onsubmit="VtigerJS_DialogBox.block();">
