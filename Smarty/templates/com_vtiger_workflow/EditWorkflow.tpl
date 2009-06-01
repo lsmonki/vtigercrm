@@ -78,7 +78,7 @@
 		<select name="task_type" class="small">
 	{foreach item=taskType from=$taskTypes}
 			<option value='{$taskType}'>
-				{$taskType|@getTranslatedString:$module}
+				{$taskType|@getTranslatedString:$module->name}
 			</option>
 	{/foreach}
 		</select>
