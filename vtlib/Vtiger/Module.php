@@ -183,7 +183,7 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 		if($instance) {
 			if(method_exists($instance, 'vtlib_handler')) {
 				self::log("Invoking vtlib_handler for $event_type ...START");
-				$instance->vtlib_handler($modulename, $event_type);
+				$instance->vtlib_handler((string)$modulename, (string)$event_type);
 				self::log("Invoking vtlib_handler for $event_type ...DONE");
 			}
 		}
