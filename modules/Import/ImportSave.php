@@ -172,7 +172,7 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 				}
 			}
 		}
-
+		
 		if ( ! isset($focus->column_fields["assigned_user_id"]) || $focus->column_fields["assigned_user_id"]==='' || $focus->column_fields["assigned_user_id"]===NULL) {
 			$focus->column_fields["assigned_user_id"] = $my_userid;
 		}
@@ -198,20 +198,34 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 				//MWC
 				$focus->column_fields["assigned_user_id"] = $my_userid;
 			}
-
+			
+			//handle uitype 10
+			foreach($focus->importable_fields as $fieldname=>$uitype){
+				$uitype = $focus->importable_fields[$fieldname];
+				if($uitype == 10){
+					//added to handle security permissions for related modules :: for e.g. Accounts/Contacts in Potentials
+					if(method_exists($focus, "add_related_to")){
+						if(!$focus->add_related_to($module, $fieldname)){
+							if(array_key_exists($fieldname, $focus->required_fields)){
+								$do_save = 0;
+								$skip_required_count++;
+								continue 2;
+							}
+						}
+					}
+				}
+			}
+			
 			// now do any special processing for ex., map account with contact and potential
-			if($process_fields == 'false')
-			$focus->process_special_fields();
-
+			if($process_fields == 'false'){
+				$focus->process_special_fields();
+			}
+			
 			$focus->save($module);
-			//$focus->saveentity($module);
 			$return_id = $focus->id;
 
-			if(count($resCustFldArray)>0)
-			{
-
-				if($_REQUEST['module'] == 'Contacts')
-				{
+			if(count($resCustFldArray)>0){
+				if($_REQUEST['module'] == 'Contacts'){
 					$_REQUEST['module']='contactdetails';
 				}
 				$dbquery="select * from vtiger_field where vtiger_tablename=? and vtiger_field.presence in (0,2)";

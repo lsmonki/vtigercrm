@@ -14,7 +14,7 @@
  ********************************************************************************/
 
 if (substr(phpversion(), 0, 1) == "5") {
-        ini_set("zend.ze1_compatibility_mode", "1");
+	ini_set("zend.ze1_compatibility_mode", "1");
 }
 
 require_once('config.php');
@@ -48,12 +48,12 @@ $current_user = new Users();
 
 if(isset($_SESSION['authenticated_user_id']))
 {
-        $result = $current_user->retrieve_entity_info($_SESSION['authenticated_user_id'],"Users");
-        if($result == null)
-        {
+	$result = $current_user->retrieve_entity_info($_SESSION['authenticated_user_id'],"Users");
+	if($result == null)
+	{
 		session_destroy();
 		header("Location: index.php?action=Login&module=Users");
-        }
+	}
 
 }
 
@@ -66,21 +66,21 @@ if(isPermitted($_REQUEST['module'],"Export") == "no")
 if ($allow_exports=='none' || ( $allow_exports=='admin' && ! is_admin($current_user) ) )
 {
 
-?>
-	<script language=javascript>
+	?>
+<script language=javascript>
 		alert("<?php echo $app_strings['NOT_PERMITTED_TO_EXPORT']?>");
 		window.location="index.php?module=<?php echo $_REQUEST['module'] ?>&action=index";
 	</script>
 	
 	<?php exit; ?>
-<?php
+	<?php
 }
 
-/**Function convert line breaks to space in description during export 
+/**Function convert line breaks to space in description during export
  * Pram $str - text
  * retrun type string
-*/
-function br2nl_vt($str) 
+ */
+function br2nl_vt($str)
 {
 	global $log;
 	$log->debug("Entering br2nl_vt(".$str.") method ...");
@@ -95,14 +95,14 @@ function br2nl_vt($str)
  * Return type text
  */
 function export($type){
-    global $log,$list_max_entries_per_page;
-    $log->debug("Entering export(".$type.") method ...");
-    global $adb;
+	global $log,$list_max_entries_per_page;
+	$log->debug("Entering export(".$type.") method ...");
+	global $adb;
 
-    $focus = 0;
-    $content = '';
+	$focus = 0;
+	$content = '';
 
-    if ($type != ""){
+	if ($type != ""){
 		// vtlib customization: Hook to dynamically include required module file.
 		// TODO: Make security check if the file access is within vtigercrm directory
 		// Refer to the logic in setting $currentModule in index.php
@@ -110,18 +110,18 @@ function export($type){
 		// END
 
 		$focus = new $type;
-    }
-    $log = LoggerManager::getLogger('export_'.$type);
-    $db = new PearDatabase();
+	}
+	$log = LoggerManager::getLogger('export_'.$type);
+	$db = new PearDatabase();
 
 	$oCustomView = new CustomView("$type");
 	$viewid = $oCustomView->getViewId("$type");
 	$sorder = $focus->getSortOrder();
 	$order_by = $focus->getOrderBy();
 
-    $search_type = $_REQUEST['search_type'];
-    $export_data = $_REQUEST['export_data'];
-	
+	$search_type = $_REQUEST['search_type'];
+	$export_data = $_REQUEST['export_data'];
+
 	if(isset($_SESSION['export_where']) && $_SESSION['export_where']!='' && $search_type == 'includesearch'){
 		$where =$_SESSION['export_where'];
 	}
@@ -195,11 +195,11 @@ function export($type){
 		$limit_start_rec = ($start_rec == 0) ? 0 : ($start_rec - 1);
 		$query .= ' LIMIT '.$limit_start_rec.','.$list_max_entries_per_page;
 	}
-	
-    $result = $adb->pquery($query, $params, true, "Error exporting $type: "."<BR>$query");
-    $fields_array = $adb->getFieldsArray($result);
-    $fields_array = array_diff($fields_array,array("user_name"));
-	
+
+	$result = $adb->pquery($query, $params, true, "Error exporting $type: "."<BR>$query");
+	$fields_array = $adb->getFieldsArray($result);
+	$fields_array = array_diff($fields_array,array("user_name"));
+
 	$__processor = new ExportUtils($type, $fields_array);
 	
 	// Translated the field names based on the language used.
@@ -214,7 +214,7 @@ function export($type){
 
 	$column_list = implode(",",array_values($fields_array));
 
-    while($val = $adb->fetchByAssoc($result, -1, false)){
+	while($val = $adb->fetchByAssoc($result, -1, false)){
 		$new_arr = array();
 		$val = $__processor->sanitizeValues($val);
 		foreach ($val as $key => $value){
@@ -222,27 +222,12 @@ function export($type){
 				$value = strip_tags($value);
 				$value = str_replace('&nbsp;','',$value);
 				array_push($new_arr,$value);
-			}elseif($type == 'Potentials' && $key == 'related to'){
-				//have to handle uitype 10
-				if(!empty($value)) {
-					$parent_module = getSalesEntityType($value);			
-					$displayValueArray = getEntityName($parent_module, $value);
-					if(!empty($displayValueArray)){
-						foreach($displayValueArray as $k=>$v){
-							$displayValue = $v;
-						}
-					}
-					$value = $parent_module."::::".$displayValue;
-				} else {
-					$value = '';
-				}
-				array_push($new_arr,$value);
 			}elseif($key != "user_name"){
 				// Let us provide the module to transform the value before we save it to CSV file
 				$value = $focus->transform_export_value($key, $value);
 				
 				array_push($new_arr, preg_replace("/\"/","\"\"",$value));
-			}	
+			}
 		}
 		$line = implode("\",\"",$new_arr);
 		$line = "\"" .$line;
@@ -310,6 +295,25 @@ class ExportUtils{
 				$value = trim($value);
 				if(!empty($this->picklistValues[$fieldname]) && !in_array($value, $this->picklistValues[$fieldname]) && !empty($value)){
 					$value = getTranslatedString("LBL_NOT_ACCESSIBLE");
+				}
+			}elseif($uitype == 10){
+				//have to handle uitype 10
+				$value = trim($value);
+				if(!empty($value)) {
+					$parent_module = getSalesEntityType($value);
+					$displayValueArray = getEntityName($parent_module, $value);
+					if(!empty($displayValueArray)){
+						foreach($displayValueArray as $k=>$v){
+							$displayValue = $v;
+						}
+					}
+					if(!empty($parent_module) && !empty($displayValue)){
+						$value = $parent_module."::::".$displayValue;
+					}else{
+						$value = "";
+					}
+				} else {
+					$value = '';
 				}
 			}
 		}

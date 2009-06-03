@@ -293,6 +293,7 @@ if(($START+$RECORDCOUNT) > $totalnoofrows){
 	$RECORDCOUNT = $totalnoofrows - $START;
 }
 
+$focus->initImportableFields($module);
 if($totalnoofrows > $RECORDCOUNT && $START < $totalnoofrows){
 	$rows1 = Array();
 	for($j=$START;$j<$START+$RECORDCOUNT;$j++){

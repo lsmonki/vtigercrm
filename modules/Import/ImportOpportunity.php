@@ -42,11 +42,9 @@ class ImportOpportunity extends Potentials {
 	// This is the list of the functions to run when importing
 	var $special_functions =  array(
 						"assign_user",
-						"add_related_to",
 						"map_campaign_source",
 						"modseq_number",
 				       );
-
 /**	function used to set the assigned_user_id value in the column_fields when we map the username during import
  */
 function assign_user()
@@ -82,72 +80,7 @@ function assign_user()
 			}
 		}
 	}
-}				   
-	/**
-	 * this function is used to create the related to field for the potential
-	 */
-	function add_related_to(){
-		global $adb, $imported_ids, $current_user;
-		
-		$related_to = $this->column_fields['related_to'];
-
-		if(empty($related_to)){
-			return;
-		}
-		
-		//check if the field has module information; if not exit
-		if(!strpos($related_to, "::::")){
-			$module = getFirstModule('Potentials', 'related_to');
-			echo "er";
-		}else{
-			//check the module of the field
-			$arr = array();
-			$arr = explode("::::", $related_to);
-			$module = $arr[0];
-			$value = $arr[1];
-			if(empty($module)){
-				$module = getFirstModule();
-			}
-		}
-				
-		require_once "modules/$module/$module.php";
-		$focus1 = new $module();
-
-		$query = '';
-		if($module == 'Accounts'){
-			$query = "select vtiger_crmentity.deleted, vtiger_account.* 
-						from vtiger_account, vtiger_crmentity 
-						WHERE accountname=? and vtiger_crmentity.crmid=vtiger_account.accountid and vtiger_crmentity.deleted=0";
-		}elseif($module == 'Contacts'){
-			$query = "select vtiger_crmentity.deleted, vtiger_contactdetails.* 
-						from vtiger_contactdetails inner join vtiger_crmentity 
-						on vtiger_crmentity.crmid=vtiger_contactdetails.contactid  
-						WHERE concat(lastname, ' ', firstname)=? and vtiger_crmentity.deleted=0";
-		}
-		$result = $adb->pquery($query, array($value));
-		if($adb->num_rows($result)>0){
-			//record found
-			$focus1->id = $adb->query_result($result, 0, $focus1->table_index);
-		}else{
-			//record not found; create it
-			if($module == 'Accounts'){
-		        $focus1->column_fields['accountname'] = $value;
-			}else if($module == 'Contacts'){
-		        $focus1->column_fields['lastname'] = $value;
-			}
-	        $focus1->column_fields['assigned_user_id'] = $current_user->id;
-	        $focus1->column_fields['modified_user_id'] = $current_user->id;
-			$focus1->save($module);
-    		$last_import = new UsersLastImport();
-    		$last_import->assigned_user_id = $current_user->id;
-    		$last_import->bean_type = $module;
-    		$last_import->bean_id = $focus1->id;
-    		$last_import->save();
-			$imported_ids[$focus1->id] = 1;
-		}
-		$this->column_fields["related_to"] = $focus1->id;
-    }	
-
+}
 	/**     function used to map with existing Campaign Source if the potential is map with an campaign during import
          */
 	function map_campaign_source(){
