@@ -4309,7 +4309,7 @@ function getSharingModuleList($eliminateModules=false)
 	if(!in_array('Calendar', $eliminateModules)) $eliminateModules[] = 'Calendar';
 	if(!in_array('Events', $eliminateModules)) $eliminateModules[] = 'Events';
 	
-	$query = "SELECT name FROM vtiger_tab WHERE ownedby = 0 AND isentitytype = 1";	
+	$query = "SELECT name FROM vtiger_tab WHERE presence=0 AND ownedby = 0 AND isentitytype = 1";	
 	$query .= " AND name NOT IN('" . implode("','", $eliminateModules) . "')";
 
 	$result = $adb->query($query);
