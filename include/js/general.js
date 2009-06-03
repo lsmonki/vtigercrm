@@ -902,7 +902,7 @@ function doformValidation(edit_type) {
 			var end_period = getObj('end_period');
 			if (trim(start_period.value) == '' || trim(end_period.value) == '') {
 				alert(alert_arr.START_PERIOD_END_PERIOD_CANNOT_BE_EMPTY);
-        		return false
+        		return false;
       		}
 		}
 	}
@@ -948,12 +948,16 @@ function doformValidation(edit_type) {
 						if(typeof(type[2])=="undefined") var currdatechk="OTH"
 						else var currdatechk=type[2]
 
-							if (!dateValidate(fieldname[i],fieldlabel[i],currdatechk))
+						if (!dateValidate(fieldname[i],fieldlabel[i],currdatechk))
+							return false
+						if (type[3]) {
+							if(gVTModule == 'SalesOrder' && fieldname[i] == 'end_period' 
+								&& (getObj('enable_recurring') == null || getObj('enable_recurring').checked == false)) {
+								continue;
+							}							
+							if (!dateComparison(fieldname[i],fieldlabel[i],type[4],type[5],type[3]))
 								return false
-									if (type[3]) {
-										if (!dateComparison(fieldname[i],fieldlabel[i],type[4],type[5],type[3]))
-											return false
-									}
+						}
 					}	
 				break;
 				case "T"  :
