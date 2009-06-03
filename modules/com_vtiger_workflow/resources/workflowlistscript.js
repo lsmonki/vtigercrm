@@ -20,7 +20,7 @@ function workflowlistscript($){
 	function center(el){
 		el.css({position: 'absolute'});
 		el.width("400px");
-		el.height("165px");
+		el.height("175px");
 		placeAtCenter(el.get(0));
 	}
 
@@ -67,9 +67,8 @@ function workflowlistscript($){
 		}
 		if(templatesForModule[currentModule]==null){
 
-			jsonget('templatesformodulejson',
-																				 {module_name:currentModule},
-																				 function(templates){
+			jsonget('templatesformodulejson',{module_name:currentModule},
+			function(templates){
 				templatesForModule[currentModule] = templates;
 				fillTemplateList(templatesForModule[currentModule]);
 			});
@@ -92,9 +91,9 @@ function workflowlistscript($){
 			workflowCreationMode = el.attr('value');
 			if(workflowCreationMode=='from_template'){
 				updateTemplateList();
-				$('#template_select_field').css('display', null);
+				$('#template_select_field').show();
 			}else{
-				$('#template_select_field').css('display', 'none');
+				$('#template_select_field').hide();
 			}
 
 		});

@@ -36,8 +36,8 @@
 	<form action="index.php" method="get" accept-charset="utf-8" onsubmit="VtigerJS_DialogBox.block();">
 	<div class="popup_content">
 		<table width="100%" cellspacing="0" cellpadding="5" border="0" class="small">
-		<tr>
-			<td><font color="red">*</font> {$APP.LBL_TITLE}</td>
+		<tr align="left">
+			<td width="40px" nowrap="nowrap"><font color="red">*</font> {$APP.LBL_TITLE}</td>
 			<td><input type="text" name="title" class='detailedViewTextBox'></td>
 		</tr>
 		</table> 
@@ -47,13 +47,14 @@
 		<input type="hidden" name="action" value="savetemplate" id="save_action">
 		<input type="hidden" name="return_url" value="{$newTaskReturnUrl}" id="save_return_url">
 		<input type="hidden" name="workflow_id" value="{$workflow->id}">
-	</div>
-	<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerPopupTransport">
+		
+		<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerPopupTransport">
 		<tr><td align="center">
 			<input type="submit" class="crmButton small save" value="{$APP.LBL_CREATE_BUTTON_LABEL}" name="save" id='new_template_popup_save'/> 
 			<input type="button" class="crmButton small cancel" value="{$APP.LBL_CANCEL_BUTTON_LABEL} " name="cancel" id='new_template_popup_cancel'/>
 		</td></tr>
-	</table>
+		</table>
+	</div>	
 	</form>
 </div>
 

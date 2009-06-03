@@ -213,7 +213,7 @@ function VTEmailTask($){
 										 function(e){return e['type']['name']=='email';});
 					$('#task-emailfields-busyicon').hide();
 					$('#task-emailfields').show();
-					$('.task-emailfields_option').click(function(){
+					$('#task-emailfields').change(function(){
 						var input = $($('#save_recepient').get());
 						var value = '$'+$(this).attr('value');
 						input.attr("value", input.attr("value")+','+value);

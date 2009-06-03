@@ -24,7 +24,7 @@
 	<form action="index.php" method="post" accept-charset="utf-8" onsubmit="VtigerJS_DialogBox.block();">
 		<div class="popup_content">
 			<table width="100%" cellpadding="0" cellspacing="0" border="0">
-				<tr>
+				<tr align="left">
 					<td><input type="radio" name="source" value="from_module" checked="true" class="workflow_creation_mode">
 						{$MOD.LBL_FOR_MODULE}</td>
 					<td><input type="radio" name="source" value="from_template" class="workflow_creation_mode">
@@ -32,7 +32,7 @@
 				</tr>
 			</table>
 			<table width="100%" cellpadding="5" cellspacing="0" border="0">
-				<tr>
+				<tr align="left">
 					<td width='10%' nowrap="nowrap">{$MOD.LBL_CREATE_WORKFLOW_FOR}</td>
 					<td>
 						<select name="module_name" id="module_list" class="small">
@@ -44,7 +44,7 @@
 						</select>
 					</td>
 				</tr>
-				<tr id="template_select_field" style="display:none;">
+				<tr align="left" id="template_select_field" style="display:none;">
 					<td>{$MOD.LBL_CHOOSE_A_TEMPLATE}</td>
 					<td>
 						<span id="template_list_busyicon"><b>{$MOD.LBL_LOADING}</b><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span>
@@ -56,13 +56,13 @@
 			<input type="hidden" name="save_type" value="new" id="save_type_new">
 			<input type="hidden" name="module" value="{$module->name}" id="save_module">
 			<input type="hidden" name="action" value="editworkflow" id="save_action">
+			<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerPopupTransport">
+				<tr><td align="center">
+					<input type="submit" class="crmButton small save" value="{$APP.LBL_CREATE_BUTTON_LABEL}" name="save" id='new_workflow_popup_save'/> 
+					<input type="button" class="crmButton small cancel" value="{$APP.LBL_CANCEL_BUTTON_LABEL} " name="cancel" id='new_workflow_popup_cancel'/>
+				</td></tr>
+			</table>
 		</div>
-	<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerPopupTransport">
-		<tr><td align="center">
-			<input type="submit" class="crmButton small save" value="{$APP.LBL_CREATE_BUTTON_LABEL}" name="save" id='new_workflow_popup_save'/> 
-			<input type="button" class="crmButton small cancel" value="{$APP.LBL_CANCEL_BUTTON_LABEL} " name="cancel" id='new_workflow_popup_cancel'/>
-		</td></tr>
-	</table>
 	</form>
 </div>
 <!--Done Popups-->
