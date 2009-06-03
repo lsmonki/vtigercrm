@@ -408,7 +408,7 @@ function update_selected_checkbox()
 }
 
 //Function to Set the status as Approve/Deny for Public access by Admin
-function ChangeCustomViewStatus(viewid,now_status,changed_status,module,label)
+function ChangeCustomViewStatus(viewid,now_status,changed_status,module,parenttab)
 {
 	$('status').style.display = 'block';
 	new Ajax.Request(
@@ -425,7 +425,7 @@ function ChangeCustomViewStatus(viewid,now_status,changed_status,module,label)
 							var values = responseVal.split(':#:');
 							var module_name = values[2];
 							var customview_ele = $('viewname');
-							showDefaultCustomView(customview_ele, module_name);
+							showDefaultCustomView(customview_ele, module_name, parenttab);
 						} else {
 							$('ListViewContents').innerHTML = responseVal;
 						}
