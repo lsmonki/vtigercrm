@@ -473,9 +473,18 @@ if($use_current_login)
 		else
 			$auditrecord = $record;	
 
-		$date_var = $adb->formatDate(date('Y-m-d H:i:s'), true);
-		if ($action != 'chat')
-		{	
+		/* Skip audit trial log for special request types */
+		$skip_auditing = false;
+		if($action == 'chat') { 
+			$skip_auditing = true;		
+		} else if(($action == 'ActivityReminderCallbackAjax' || $_REQUEST['file'] == 'ActivityReminderCallbackAjax') && $module == 'Calendar') {
+			$skip_auditing = true;
+		} else if(($action == 'TraceIncomingCall' || $_REQUEST['file'] == 'TraceIncomingCall') && $module == 'PBXManager') {
+			$skip_auditing = true;
+		}
+		/* END */
+		if (!$skip_auditing) {
+			$date_var = $adb->formatDate(date('Y-m-d H:i:s'), true);
 			$query = "insert into vtiger_audit_trial values(?,?,?,?,?,?)";
 			$qparams = array($adb->getUniqueID('vtiger_audit_trial'), $current_user->id, $module, $action, $auditrecord, $date_var);
 			$adb->pquery($query, $qparams);

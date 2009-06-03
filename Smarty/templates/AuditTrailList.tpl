@@ -69,7 +69,7 @@
                         <tr valign="top">
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_USER_AUDIT}</strong></td>
                             <td class="small cellText">
-				<select name="user_list" id="user_list">
+				<select name="user_list" id="user_list" class="small">
 					{$USERLIST}
 				</select>	
 			    </td>
