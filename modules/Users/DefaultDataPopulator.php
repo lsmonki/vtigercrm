@@ -78,7 +78,7 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",7,'LBL_DESCRIPTION_INFORMATION',4,0,0,0,0,0,1,0)");
 		$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",8,'LBL_NOTE_INFORMATION',1,0,0,0,0,0,1,0)");
 		$fileblockid = $this->db->getUniqueID('vtiger_blocks');
-		$this->db->query("insert into vtiger_blocks values (".$fileblockid.",8,'LBL_FILE_INFORMATION',2,1,0,0,0,0,1,0)");
+		$this->db->query("insert into vtiger_blocks values (".$fileblockid.",8,'LBL_FILE_INFORMATION',3,1,0,0,0,0,1,0)");
 		$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",9,'LBL_TASK_INFORMATION',1,0,0,0,0,0,1,0)");
 		$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",9,'',2,1,0,0,0,0,1,0)");
 		$this->db->query("insert into vtiger_blocks values (".$this->db->getUniqueID('vtiger_blocks').",10,'LBL_EMAIL_INFORMATION',1,0,0,0,0,0,1,0)");
@@ -179,7 +179,7 @@ class DefaultDataPopulator extends CRMEntity {
 		$this->db->query("insert into vtiger_blocks values (".$useradvanceblock .",29,'LBL_USER_ADV_OPTIONS',5,0,0,0,0,0,1,0)"); //Added a New Block User Image Info in Users Module
 		//Added block 'File Information' to Documents module
 		$desc_blockid = $this->db->getUniqueID('vtiger_blocks');
-		$this->db->query("insert into vtiger_blocks values (".$desc_blockid.",8,'LBL_DESCRIPTION',3,0,0,0,0,0,1,0)");
+		$this->db->query("insert into vtiger_blocks values (".$desc_blockid.",8,'LBL_DESCRIPTION',2,0,0,0,0,0,1,0)");
 		//Added block for storing the Recurring Inovice Informaiton in SalesOrder
 		$sorecurringinvoiceblock = $this->db->getUniqueID('vtiger_blocks');
 		$this->db->query("insert into vtiger_blocks values (".$sorecurringinvoiceblock.",22,'Recurring Invoice Information',2,0,0,0,0,0,1,0)");
@@ -483,20 +483,20 @@ class DefaultDataPopulator extends CRMEntity {
 		//Block17 -- Start
 		
 		$this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'title','vtiger_notes',1,'2','notes_title','Title',1,0,0,100,1,17,1,'V~M',0,1,'BAS',0)");
-		$this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,8,17,2,'T~O',3,null,'BAS',0)");
-		$this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,9,17,2,'T~O',3,null,'BAS',0)");
+		$this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'createdtime','vtiger_crmentity',1,'70','createdtime','Created Time',1,0,0,100,5,17,2,'T~O',3,null,'BAS',0)");
+		$this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'modifiedtime','vtiger_crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,6,17,2,'T~O',3,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'filename','vtiger_notes',1,'28','filename','File Name',1,2,0,100,3,".$fileblockid.",1,'V~O',3,null,'BAS',0)");
-		$this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,2,17,1,'V~M',0,3,'BAS',0)");
+		$this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'smownerid','vtiger_crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,4,17,1,'V~M',0,3,'BAS',0)");
 		$this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'notecontent','vtiger_notes',1,'19','notecontent','Note',1,2,0,100,1,$desc_blockid,1,'V~O',1,null,'BAS',0)");
 		$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'filetype','vtiger_notes',1,1,'filetype','File Type',1,2,0,100,5,".$fileblockid.",2,'V~O',3,'','BAS',0)");
 		$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'filesize','vtiger_notes',1,1,'filesize','File Size',1,2,0,100,4,".$fileblockid.",2,'V~O',3,'','BAS',0)");
 		$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'filelocationtype','vtiger_notes',1,27,'filelocationtype','Download Type',1,0,0,100,1,".$fileblockid.",1,'V~O',1,'','BAS',0)");
-		$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'fileversion','vtiger_notes',1,1,'fileversion','Version',1,2,0,100,6,17,1,'V~O',1,'','BAS',0)");
+		$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'fileversion','vtiger_notes',1,1,'fileversion','Version',1,2,0,100,6,$fileblockid,1,'V~O',1,'','BAS',0)");
 		$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'filestatus','vtiger_notes',1,56,'filestatus','Active',1,2,0,100,2,".$fileblockid.",1,'V~O',1,'','BAS',0)");
-		$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'filedownloadcount','vtiger_notes',1,1,'filedownloadcount','Download Count',1,2,0,100,6,".$fileblockid.",2,'I~O',3,'','BAS',0)");
-		$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'folderid','vtiger_notes',1,26,'folderid','Folder Name',1,2,0,100,4,17,1,'V~O',2,2,'BAS',0)");
+		$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'filedownloadcount','vtiger_notes',1,1,'filedownloadcount','Download Count',1,2,0,100,7,".$fileblockid.",2,'I~O',3,'','BAS',0)");
+		$this->db->query("insert into vtiger_field values(8,".$this->db->getUniqueID("vtiger_field").",'folderid','vtiger_notes',1,26,'folderid','Folder Name',1,2,0,100,2,17,1,'V~O',2,2,'BAS',0)");
 		
-		$this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'note_no','vtiger_notes',1,'4','note_no','Document No',1,0,0,100,10,17,1,'V~0',3,null,'BAS',0)");
+		$this->db->query("insert into vtiger_field values (8,".$this->db->getUniqueID("vtiger_field").",'note_no','vtiger_notes',1,'4','note_no','Document No',1,0,0,100,3,17,1,'V~0',3,null,'BAS',0)");
 		
 		//Block17 -- End
 		//Documents Details -- END
