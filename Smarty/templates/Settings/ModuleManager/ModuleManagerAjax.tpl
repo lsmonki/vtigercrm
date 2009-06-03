@@ -135,11 +135,11 @@ function vtlib_modulemanager_toggleTab(shownode, hidenode, highlighttab, dehighl
 		<!--td class="cellLabel small" width="20px">&nbsp;</td -->
 		<td class="cellLabel small" colspan=2>{$modulelabel}</td>
 		<td class="cellText small" width="15px" align=center>
-		{if $modinfo.presence eq 0}
-			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_disable');"><img src="{'enabled.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE} {$modulelabel}" title="{$MOD.LBL_DISABLE} {$modulelabel}"></a>
-		{else}
-			<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_enable');"><img src="{'disabled.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE} {$modulelabel}" title="{$MOD.LBL_ENABLE} {$modulelabel}"></a>
-		{/if}
+			{if $modinfo.presence eq 0}
+				<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_disable');"><img src="{'enabled.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle" alt="{$MOD.LBL_DISABLE} {$modulelabel}" title="{$MOD.LBL_DISABLE} {$modulelabel}"></a>
+			{else}
+				<a href="javascript:void(0);" onclick="vtlib_toggleModule('{$modulename}', 'module_enable');"><img src="{'disabled.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle" alt="{$MOD.LBL_ENABLE} {$modulelabel}" title="{$MOD.LBL_ENABLE} {$modulelabel}"></a>
+			{/if}
 		</td>
 		<td class="cellText small" width="15px" align=center>&nbsp;</td>
 		<!--td class="cellText small" width="15px" align=center>

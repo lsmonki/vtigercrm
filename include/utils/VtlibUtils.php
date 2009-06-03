@@ -172,15 +172,16 @@ function vtlib_getToggleModuleInfo() {
 
 	$modinfo = Array();
 
-	$sqlresult = $adb->query("SELECT name, presence, customized FROM vtiger_tab WHERE name NOT IN ('Users') AND presence IN (0,1) ORDER BY name");
+	$sqlresult = $adb->query("SELECT name, presence, customized, isentitytype FROM vtiger_tab WHERE name NOT IN ('Users') AND presence IN (0,1) ORDER BY name");
 	$num_rows  = $adb->num_rows($sqlresult);
 	for($idx = 0; $idx < $num_rows; ++$idx) {
 		$module = $adb->query_result($sqlresult, $idx, 'name');
 		$presence=$adb->query_result($sqlresult, $idx, 'presence');
 		$customized=$adb->query_result($sqlresult, $idx, 'customized');
+		$isentitytype=$adb->query_result($sqlresult, $idx, 'isentitytype');
 		$hassettings=file_exists("modules/$module/Settings.php");
 
-		$modinfo[$module] = Array( 'customized'=>$customized, 'presence'=>$presence, 'hassettings'=>$hassettings );
+		$modinfo[$module] = Array( 'customized'=>$customized, 'presence'=>$presence, 'hassettings'=>$hassettings, 'isentitytype' => $isentitytype );
 	}
 	return $modinfo;
 }
