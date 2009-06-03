@@ -384,7 +384,7 @@ if(isset($action) && isset($module))
 			ereg("^MassEditSave", $action))
 			$skipFooters=true;
 		//skip footers for all these invocations as they are mostly popups
-		if(ereg("^downloadfile", $action) || ereg("^fieldtypes",$action) || ereg("^mailmergedownloadfile",$action)|| ereg("^get_img",$action) || ereg("^MergeFieldLeads", $action) || ereg("^MergeFieldContacts", $action ) || ereg("^MergeFieldAccounts", $action ) || ereg("^MergeFieldProducts", $action ) || ereg("^MergeFieldHelpDesk", $action ) || ereg("^MergeFieldPotentials", $action ) || ereg("^MergeFieldVendors", $action ))
+		if(ereg("^downloadfile", $action) || ereg("^fieldtypes",$action) || ereg("^mailmergedownloadfile",$action)|| ereg("^get_img",$action) || ereg("^MergeFieldLeads", $action) || ereg("^MergeFieldContacts", $action ) || ereg("^MergeFieldAccounts", $action ) || ereg("^MergeFieldProducts", $action ) || ereg("^MergeFieldHelpDesk", $action ) || ereg("^MergeFieldPotentials", $action ) || ereg("^MergeFieldVendors", $action ) || ereg("^dlAttachments", $action ))
 		{
 			$viewAttachment = true;
 		}

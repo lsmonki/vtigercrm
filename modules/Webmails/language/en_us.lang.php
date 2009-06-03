@@ -174,7 +174,8 @@ $mod_strings = Array(
 
 'LBL_NO_ATTACHMENTS'=>'No files to download', 
 'LBL_THERE_ARE'=>'There are ', 
-'LBL_ATTACHMENTS_TO_CHOOSE'=>' attachment(s) to choose from', 
+'LBL_ATTACHMENTS_TO_CHOOSE'=>' attachment(s) to choose from',
+'LBL_ATTACHMENTS'=>'Attachments', 
 
 );
 ?>

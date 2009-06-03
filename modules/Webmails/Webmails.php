@@ -660,7 +660,7 @@ function link_att(&$mail, $attach_tab, &$display_part_no,$ev)
 			$att_name = $this->convertLang2Html($att_name);
 			if(!preg_match("/unknown/",$att_name)){	
 				$link .= ($ct+1).'. <a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">' . $att_name . '</a>&nbsp;&nbsp;' . $tmp['mime'] . '&nbsp;&nbsp;' . $tmp['size'] . '<br/>';
-				$this->anchor_arr[$ct] = ($ct+1).'. <a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">';
+				$this->anchor_arr[$ct] = '<a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">';
 				$this->att_details[$ct]['name'] = $att_name;
 				$this->att_details[$ct]['size'] = $tmp['size'];
 				$this->att_details[$ct]['type'] = $tmp['mime'];
