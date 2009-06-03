@@ -1962,7 +1962,7 @@ for($i=0 ; $i<$rows ;$i++) {
 	$bcc = explode(',',$bcc);
 	$bcc_json = $json->encode($bcc);
 	
-	Executequery("UPDATE vtiger_emaildetails set to_email = '$to_json', cc_email= '$cc_json', bcc_email= '$bcc_json' WHERE emailid = $emailid");
+	$adb->pquery("UPDATE vtiger_emaildetails set to_email = ?, cc_email= ?, bcc_email= ? WHERE emailid = ?",array($to_json,$cc_json,$bcc_json,$emailid));
 }
 
 //Reports Migration Handling for Older reports - STARTS
