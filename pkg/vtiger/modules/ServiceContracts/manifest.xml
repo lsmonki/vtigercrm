@@ -14,7 +14,7 @@
   `servicecontractsid` int(11) default NULL,
   `start_date` varchar(100) default NULL,
   `end_date` varchar(100) default NULL,
-  `parent_id` int(11) default NULL,
+  `sc_related_to` int(11) default NULL,
   `tracking_unit` varchar(100) default NULL,
   `total_units` varchar(100) default NULL,
   `used_units` varchar(100) default NULL,
@@ -150,9 +150,9 @@
 <masseditable>0</masseditable>
 </field>
 <field>
-<fieldname>parent_id</fieldname>
+<fieldname>sc_related_to</fieldname>
 <uitype>10</uitype>
-<columnname>parent_id</columnname>
+<columnname>sc_related_to</columnname>
 <tablename>vtiger_servicecontracts</tablename>
 <generatedtype>1</generatedtype>
 <fieldlabel>Related to</fieldlabel>
@@ -462,7 +462,7 @@
 <columnindex>1</columnindex>
 </field>
 <field>
-<fieldname>parent_id</fieldname>
+<fieldname>sc_related_to</fieldname>
 <columnindex>2</columnindex>
 </field>
 <field>
