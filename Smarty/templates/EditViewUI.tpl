@@ -909,21 +909,30 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 					var dh = getObj('{$fldname}_hidden');
 					if(dh) dh.value = '';
 				{rdelim}
-				var d = document.getElementsByName(fieldname);
-				var v1 = d[0];
-				var v2 = d[1];
+				
+				var v1 = document.getElementById(fieldname+'_E__');
+				var v2 = document.getElementById(fieldname+'_I__');
+				
 				var text = v1.type =="text"? v1: v2;
 				var file = v1.type =="file"? v1: v2;
 				var filename = document.getElementById(fieldname+'_value');
 				{literal}
 				if(type == 'file'){
+					// Avoid sending two form parameters with same key to server
+					file.name = fieldname;
+					text.name = '_' + fieldname;
+					
 					file.style.display = '';
-					text.style.display = 'none';
+					text.style.display = 'none';	
 					text.value = '';
 					filename.style.display = '';
 				}else{
+					// Avoid sending two form parameters with same key to server
+					text.name = fieldname;
+					file.name = '_' + fieldname;
+					
 					file.style.display = 'none';
-					text.style.display = '';
+					text.style.display = '';		
 					file.value = '';
 					filename.style.display = 'none';
 					filename.innerHTML="";
@@ -932,10 +941,10 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 			{rdelim}
 		</script>
 		<div>
-			<input name="{$fldname}"  type="file" value="{$secondvalue}" tabindex="{$vt_tab}" onchange="validateFilename(this)" style="display: none;"/>
+			<input name="{$fldname}" id="{$fldname}_I__" type="file" value="{$secondvalue}" tabindex="{$vt_tab}" onchange="validateFilename(this)" style="display: none;"/>
 			<input type="hidden" name="{$fldname}_hidden" value="{$secondvalue}"/>
 			<input type="hidden" name="id" value=""/>
-			<input type="text" name="{$fldname}" class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" value="{$secondvalue}" /><br>
+			<input type="text" id="{$fldname}_E__" name="{$fldname}" class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" value="{$secondvalue}" /><br>
 			<span id="{$fldname}_value" style="display:none;">
 				{if $secondvalue neq ''}
 					[{$secondvalue}]
