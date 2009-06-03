@@ -60,7 +60,7 @@
 	{foreach item=elements from=$row}
 	{if $elements.2.0 eq 'parent_id'}
    <tr>
-	<td class="mailSubHeader" align="right"><b>{$MOD.LBL_TO}</b></td>
+	<td class="mailSubHeader" align="right"><font color="red">*</font><b>{$MOD.LBL_TO}</b></td>
 	<td class="cellText" style="padding: 5px;">
  		<input name="{$elements.2.0}" id="{$elements.2.0}" type="hidden" value="{$IDLISTS}">
 		<input type="hidden" name="saved_toid" value="{$TO_MAIL}">
