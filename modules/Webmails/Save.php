@@ -47,13 +47,13 @@ while ($tmp = array_pop($content['attachtab'])){
 $focus->column_fields['subject']=$subject;
 $focus->column_fields["activitytype"]="Emails";
 
-$ddate = date("Y-m-d");
+$ddate = date("Y-m-d",strtotime($date));
 $dtime = date("h:m");
 $focus->column_fields["assigned_user_id"] = $current_user->id;
 $focus->column_fields["date_start"] = $ddate;
 $focus->column_fields["time_start"] = $dtime;
-//Set the flag as SENT to show up the sent date
-$focus->column_fields["email_flag"] = "SENT";
+//Set the flag as 'Webmails' to show up the sent date
+$focus->column_fields["email_flag"] = "WEBMAIL";
 
 //Save the To field information in vtiger_emaildetails
 $all_to_ids = $email->to;
