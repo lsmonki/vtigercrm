@@ -67,36 +67,35 @@ if($no_of_salesorder > 0) {
 			$sm = date("m", strtotime($start_period));
 			$sd = date("d", strtotime($start_period));
 			$last_recurring_date = date('Y-m-d', strtotime($sy.'-'.$sm.'-'.($sd-1))); // Set last recurring date to a day before the start period.
-		}		
-		$y = date("Y", strtotime($last_recurring_date));
-		$m = date("m", strtotime($last_recurring_date));
-		$d = date("d", strtotime($last_recurring_date));
+		}
+		list($y, $m, $d) = explode('-', $last_recurring_date);
+		
 		if (strtolower($recurring_frequency) == 'daily') {
-			$next_recurring_date= date('Y-m-d', strtotime($y.'-'.$m.'-'.($d+1)));
+			$next_recurring_date = date('Y-m-d', strtotime("+1 day", mktime(0, 0, 0, $m, $d, $y)));
 			if(strtotime($next_recurring_date) > strtotime($end_period) || strtotime($next_recurring_date) > strtotime(date('Y-m-d'))) {
 				continue;
 			}
 		}
 		if (strtolower($recurring_frequency) == 'weekly') {
-			$next_recurring_date= date('Y-m-d', strtotime($y.'-'.$m.'-'.($d+7)));
+			$next_recurring_date = date('Y-m-d', strtotime("+1 week", mktime(0, 0, 0, $m, $d, $y)));
 			if(strtotime($next_recurring_date) > strtotime($end_period) || strtotime($next_recurring_date) > strtotime(date('Y-m-d'))) {
 				continue;
 			}			
 		}
 		if (strtolower($recurring_frequency) == 'monthly') {
-			$next_recurring_date= date('Y-m-d', strtotime($y.'-'.($m+1).'-'.$d));
+			$next_recurring_date = date('Y-m-d', strtotime("+1 month", mktime(0, 0, 0, $m, $d, $y)));
 			if(strtotime($next_recurring_date) > strtotime($end_period) || strtotime($next_recurring_date) > strtotime(date('Y-m-d'))) {
 				continue;
 			}			
 		}
 		if (strtolower($recurring_frequency) == 'quarterly') {
-			$next_recurring_date= date('Y-m-d', strtotime($y.'-'.($m+3).'-'.$d));
+			$next_recurring_date = date('Y-m-d', strtotime("+3 month", mktime(0, 0, 0, $m, $d, $y)));
 			if(strtotime($next_recurring_date) > strtotime($end_period) || strtotime($next_recurring_date) > strtotime(date('Y-m-d'))) {
 				continue;
 			}			
 		}
 		if (strtolower($recurring_frequency) == 'yearly') {
-			$next_recurring_date= date('Y-m-d', strtotime(($y+1).'-'.$m.'-'.$d));
+			$next_recurring_date = date('Y-m-d', strtotime("+1 year", mktime(0, 0, 0, $m, $d, $y)));
 			if(strtotime($next_recurring_date) > strtotime($end_period) || strtotime($next_recurring_date) > strtotime(date('Y-m-d'))) {
 				continue;
 			}			
