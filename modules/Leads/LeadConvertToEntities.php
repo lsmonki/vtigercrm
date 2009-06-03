@@ -193,8 +193,6 @@ function getInsertValues($type,$type_id)
 								}
 								//end
 							}
-
-
 						}
 					}
 
@@ -214,10 +212,10 @@ function getInsertValues($type,$type_id)
  *	@param integer $id - leadid
  *	@param integer $accountid -  related entity id (accountid)
  */
-function getRelatedNotesAttachments($id,$accountid)
+function getRelatedNotesAttachments($id,$related_id)
 {
 	global $adb,$log,$id;
-	$log->debug("Entering getRelatedNotesAttachments(".$id.",".$accountid.") method ...");
+	$log->debug("Entering getRelatedNotesAttachments(".$id.",".$related_id.") method ...");
 	
 	$sql_lead_notes	="select * from vtiger_senotesrel where crmid=?";
 	$lead_notes_result = $adb->pquery($sql_lead_notes, array($id));
@@ -227,30 +225,24 @@ function getRelatedNotesAttachments($id,$accountid)
 	{
 
 		$lead_related_note_id=$adb->query_result($lead_notes_result,$i,"notesid");
-		 $log->debug("Lead related note id ".$lead_related_note_id);
-		$sql_delete_lead_notes="delete from vtiger_senotesrel where crmid=?";
-		$adb->pquery($sql_delete_lead_notes, array($id));
+		$log->debug("Lead related note id ".$lead_related_note_id);
 
-		$sql_insert_account_notes="insert into vtiger_senotesrel(crmid,notesid) values (?,?)";
-		$adb->pquery($sql_insert_account_notes, array($accountid, $lead_related_note_id));
+		$sql_insert_notes="insert into vtiger_senotesrel(crmid,notesid) values (?,?)";
+		$adb->pquery($sql_insert_notes, array($related_id, $lead_related_note_id));
 	}
 
 	$sql_lead_attachment="select * from vtiger_seattachmentsrel where crmid=?";
-        $lead_attachment_result = $adb->pquery($sql_lead_attachment, array($id));
-        $noofrows = $adb->num_rows($lead_attachment_result);
+    $lead_attachment_result = $adb->pquery($sql_lead_attachment, array($id));
+    $noofrows = $adb->num_rows($lead_attachment_result);
 
-        for($i=0;$i<$noofrows;$i++)
-        {
-						
-                $lead_related_attachment_id=$adb->query_result($lead_attachment_result,$i,"attachmentsid");
-		 		$log->debug("Lead related attachment id ".$lead_related_attachment_id);
+    for($i=0;$i<$noofrows;$i++)
+    {
+        $lead_related_attachment_id=$adb->query_result($lead_attachment_result,$i,"attachmentsid");
+ 		$log->debug("Lead related attachment id ".$lead_related_attachment_id);
 
-                $sql_delete_lead_attachment="delete from vtiger_seattachmentsrel where crmid=?";
-                $adb->pquery($sql_delete_lead_attachment, array($id));
-
-                $sql_insert_account_attachment="insert into vtiger_seattachmentsrel(crmid,attachmentsid) values (?,?)";                        
-                $adb->pquery($sql_insert_account_attachment, array($accountid, $lead_related_attachment_id));
-        }
+        $sql_insert_attachment="insert into vtiger_seattachmentsrel(crmid,attachmentsid) values (?,?)";                        
+        $adb->pquery($sql_insert_attachment, array($related_id, $lead_related_attachment_id));
+    }
 	$log->debug("Exiting getRelatedNotesAttachments method ...");
 	
 }
@@ -265,35 +257,34 @@ function getRelatedActivities($accountid,$contact_id)
 	$log->debug("Entering getRelatedActivities(".$accountid.",".$contact_id.") method ...");
 	$sql_lead_activity="select * from vtiger_seactivityrel where crmid=?";
 	$lead_activity_result = $adb->pquery($sql_lead_activity, array($id));
-        $noofrows = $adb->num_rows($lead_activity_result);
-        for($i=0;$i<$noofrows;$i++)
-        {
-
-                $lead_related_activity_id=$adb->query_result($lead_activity_result,$i,"activityid");
-		 $log->debug("Lead related vtiger_activity id ".$lead_related_activity_id);
+    $noofrows = $adb->num_rows($lead_activity_result);
+    for($i=0;$i<$noofrows;$i++)
+    {
+        $lead_related_activity_id=$adb->query_result($lead_activity_result,$i,"activityid");
+		$log->debug("Lead related vtiger_activity id ".$lead_related_activity_id);
 
 		$sql_type_email="select setype from vtiger_crmentity where crmid=?";
 		$type_email_result = $adb->pquery($sql_type_email, array($lead_related_activity_id));
-                $type=$adb->query_result($type_email_result,0,"setype");
+        $type=$adb->query_result($type_email_result,0,"setype");
 		$log->debug("type of vtiger_activity id ".$type);
 
-                $sql_delete_lead_activity="delete from vtiger_seactivityrel where crmid=?";
-                $adb->pquery($sql_delete_lead_activity, array($id));
+	    $sql_delete_lead_activity="delete from vtiger_seactivityrel where crmid=?";
+	    $adb->pquery($sql_delete_lead_activity, array($id));
 
 		if($type != "Emails")
 		{
             $sql_insert_account_activity="insert into vtiger_seactivityrel(crmid,activityid) values (?,?)";
 	        $adb->pquery($sql_insert_account_activity, array($accountid, $lead_related_activity_id));
 
-			$sql_insert_account_activity="insert into vtiger_cntactivityrel(contactid,activityid) values (?,?)";
-            $adb->pquery($sql_insert_account_activity, array($contact_id, $lead_related_activity_id));
+			$sql_insert_contact_activity="insert into vtiger_cntactivityrel(contactid,activityid) values (?,?)";
+            $adb->pquery($sql_insert_contact_activity, array($contact_id, $lead_related_activity_id));
 		}
 		else
 		{
-			 $sql_insert_account_activity="insert into vtiger_seactivityrel(crmid,activityid) values (?,?)";                                                                                     
-			 $adb->pquery($sql_insert_account_activity, array($contact_id, $lead_related_activity_id));
+			 $sql_insert_contact_activity="insert into vtiger_seactivityrel(crmid,activityid) values (?,?)";                                                                                     
+			 $adb->pquery($sql_insert_contact_activity, array($contact_id, $lead_related_activity_id));
 		}
-        }
+    }
 	$log->debug("Exiting getRelatedActivities method ...");
 
 }
@@ -344,9 +335,14 @@ if(vtlib_isModuleActive('Accounts') && isPermitted("Accounts","EditView") =='yes
 	$acc_query = "select vtiger_account.accountid from vtiger_account left join vtiger_crmentity on vtiger_account.accountid = vtiger_crmentity.crmid where vtiger_crmentity.deleted=0 and vtiger_account.accountname = ?";
 	$acc_res = $adb->pquery($acc_query, array($accountname));
 	$acc_rows = $adb->num_rows($acc_res);
-	if($acc_rows != 0)
+	if($acc_rows != 0){
 		$crmid = $adb->query_result($acc_res,0,"accountid");
-	else if($accountname==''){
+	
+		//Retrieve the lead related products and relate them with this new account
+		getRelatedNotesAttachments($id,$crmid); 
+		saveLeadRelatedProducts($id, $crmid, "Accounts");
+		saveLeadRelations($id, $crmid, "Accounts");
+	} else if($accountname==''){
 		$crmid='';
 	} else
 	{
@@ -399,15 +395,13 @@ if(vtlib_isModuleActive('Accounts') && isPermitted("Accounts","EditView") =='yes
 		$insert_val_str = generateQuestionMarks($insert_values);
 		$sql_insert_accountcustomfield = "INSERT INTO vtiger_accountscf (". implode(",",$insert_columns) .") VALUES (".$insert_val_str.")";
 		$adb->pquery($sql_insert_accountcustomfield, $insert_values);
-			//Saving Account - ends
+		//Saving Account - ends
+			
+		getRelatedNotesAttachments($id,$crmid); 
+		//Retrieve the lead related products and relate them with this new account
+		saveLeadRelatedProducts($id, $crmid, "Accounts");
+		saveLeadRelations($id, $crmid, "Accounts");
 	}
-	/*Code integrated to avoid duplicate Account creation during ConvertLead Operation  END-- by Bharathi*/
-	
-	$account_id=$crmid;
-	getRelatedNotesAttachments($id,$crmid); //To Convert Related Notes & Attachments -Jaguar
-	
-	//Retrieve the lead related products and relate them with this new account
-	saveLeadRelatedProducts($id, $crmid, "Accounts");
 }
 //Up to this, Account related data save finshed
 
@@ -462,14 +456,17 @@ if(vtlib_isModuleActive('Contacts') && isPermitted("Contacts","EditView") =='yes
 	$adb->pquery($sql_insert_contactcustomfield, $insert_values);
 	//Saving Contact - ends
 	
-	getRelatedActivities($account_id,$contact_id); //To convert relates Activites  and Email -Jaguar
+	getRelatedActivities($crmid,$contact_id); //To convert relates Activites  and Email -Jaguar
+	getRelatedNotesAttachments($id,$contact_id); 
 	
 	//Retrieve the lead related products and relate them with this new contact
 	saveLeadRelatedProducts($id, $contact_id, "Contacts");
+	saveLeadRelations($id, $contact_id, "Contacts");
 	
 	//Retrieve the lead related Campaigns and relate them with this new contact --Minnie
 	saveLeadRelatedCampaigns($id, $contact_id);
 }
+	
 //Up to this, Contact related data save finshed
 
 //Saving Potential - starts
@@ -523,6 +520,7 @@ if((! isset($createpotential) || ! $createpotential == "on") && (!empty($potenti
 	}
 	//Retrieve the lead related products and relate them with this new potential
 	saveLeadRelatedProducts($id, $oppid, "Potentials");
+	saveLeadRelations($id, $oppid, "Potentials");
 }
 //Saving Potential - ends
 //Up to this, Potential related data save finshed
@@ -561,6 +559,36 @@ if($crmid!=''){
 		</tbody></table> 
 		</div>";
 	echo "</td></tr></table>";
+}
+
+/**	Function used to save the lead related services with other entities Account, Contact and Potential
+ *	$leadid - leadid
+ *	$relatedid - related entity id (accountid/contactid/potentialid)
+ *	$setype - related module(Accounts/Contacts/Potentials)
+ */
+function saveLeadRelations($leadid, $relatedid, $setype)
+{
+	global $adb, $log;
+	$log->debug("Entering into function saveLeadRelatedProducts($leadid, $relatedid)");
+
+	$result = $adb->pquery("select * from vtiger_crmentityrel where crmid=?", array($leadid));
+	$noofproducts = $adb->num_rows($result);
+	for($i = 0; $i < $noofproducts; $i++)
+	{
+		$recordid = $adb->query_result($result,$i,'relcrmid');
+		$recordmodule = $adb->query_result($result,$i,'relmodule');
+		$adb->pquery("insert into vtiger_crmentityrel values(?,?,?,?)", array($relatedid, $setype, $recordid, $recordmodule));
+	}
+	$result = $adb->pquery("select * from vtiger_crmentityrel where relcrmid=?", array($leadid));
+	$noofproducts = $adb->num_rows($result);
+	for($i = 0; $i < $noofproducts; $i++)
+	{
+		$recordid = $adb->query_result($result,$i,'crmid');
+		$recordmodule = $adb->query_result($result,$i,'module');
+		$adb->pquery("insert into vtiger_crmentityrel values(?,?,?,?)", array($relatedid, $setype, $recordid, $recordmodule));
+	}
+
+	$log->debug("Exit from function saveLeadRelatedProducts.");
 }
 
 ?>
