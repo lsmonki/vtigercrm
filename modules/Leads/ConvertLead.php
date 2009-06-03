@@ -207,24 +207,24 @@ $convertlead .='<tr>
 			<td class="dvtCellInfo"><input type="checkbox" name="createpotential" onClick="fnSlide2(\'ch\',\'cc\')"></td>
 		</tr>
 		<tr>
-			<td colspan="2" id="ch" height="100" style="padding:0px;" >
-				<div style="display:block;" id="cc"  >
+			<td colspan="2" id="ch" height="100px" style="padding:0px;" >
+				<div style="display: block;" id="cc"  >
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" >';
 					if($fields_permission['potentialname']=='0') {
 						
-						$convertlead .= '<tr>.
-							<input type="hidden" name="potentialname_mandatory" id="potentialname_mandatory" value='.$mandatory['potentialname'].' />.
+						$convertlead .= '<tr>							
 							<td align="right" class="dvtCellLabel" width="53%"><font color="red">'.$mandatory['potentialname'].'</font>'.$mod_strings['LBL_POTENTIAL_NAME'].'</td>
 							<td class="dvtCellInfo" width="47%">
 							<input name="potential_name" class="detailedViewTextBox" value="'.$potentialname.'" tabindex="3">
-                                                        </td>
+							<input type="hidden" name="potentialname_mandatory" id="potentialname_mandatory" value='.$mandatory['potentialname'].' />
+							</td>
 						</tr>';
 					}
 					if($fields_permission['closingdate']=='0') {
 					$convertlead .= '<tr>
-							<input type="hidden" name="closingdate_mandatory" id="closingdate_mandatory" value='.$mandatory['closingdate'].' />.
 							<td align="right" class="dvtCellLabel"><font color="red">'.$mandatory['closingdate'].'</font>'.$mod_strings['LBL_POTENTIAL_CLOSE_DATE'].'</td>
 							<td class="dvtCellInfo">
+								<input type="hidden" name="closingdate_mandatory" id="closingdate_mandatory" value='.$mandatory['closingdate'].' />
 								<input name="closedate" style="border: 1px solid rgb(186, 186, 186);" id="jscal_field_closedate" type="text" tabindex="4" size="10" maxlength="10" value="'.$focus->closedate.'">
 								<img src="themes/'.$theme.'/images/btnL3Calendar.gif" id="jscal_trigger_closedate" >
 								<font size=1><em old="(yyyy-mm-dd)">('.$current_user->date_format.')</em></font>
@@ -236,16 +236,18 @@ $convertlead .='<tr>
 					}
 					if($fields_permission['amount']=='0') {
 						$convertlead .= '<tr>
-							<input type="hidden" name="amount_mandatory" id="amount_mandatory" value='.$mandatory['amount'].' />.
 							<td align="right" class="dvtCellLabel"><font color="red">'.$mandatory['amount'].'</font>'.$mod_strings['LBL_POTENTIAL_AMOUNT'].'</td>
-							<td class="dvtCellInfo"><input type="text" name="potential_amount" class="detailedViewTextBox">'.$potential_amount.'</td>
+							<td class="dvtCellInfo">
+								<input type="hidden" name="amount_mandatory" id="amount_mandatory" value='.$mandatory['amount'].' />
+								<input type="text" name="potential_amount" class="detailedViewTextBox">'.$potential_amount.'</td>							
 						</tr>';
 					}
 					if($fields_permission['sales_stage']=='0') {	
 						$convertlead .='<tr>
-							<input type="hidden" name="salesstage_mandatory" id="salesstage_mandatory" value='.$mandatory['sales_stage'].' />.
 							<td align="right" class="dvtCellLabel"><font color="red">'.$mandatory['sales_stage'].'</font>'.$mod_strings['LBL_POTENTIAL_SALES_STAGE'].'</td>
-							<td class="dvtCellInfo"><select name="potential_sales_stage" class="detailedViewTextBox">'.$sales_stage_fld.'</select></td>
+							<td class="dvtCellInfo">
+								<input type="hidden" name="salesstage_mandatory" id="salesstage_mandatory" value='.$mandatory['sales_stage'].' />
+								<select name="potential_sales_stage" class="detailedViewTextBox">'.$sales_stage_fld.'</select></td>
 						</tr>';
 					}
 					$convertlead .='</table>
