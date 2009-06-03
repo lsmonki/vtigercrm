@@ -54,5 +54,13 @@ else
 
 $adb->pquery($sql, $params);
 
-header("Location:index.php?module=Webmails&action=index&mailbox=INBOX&parenttab=My Home Page");
+$return_module = vtlib_purify($_REQUEST['return_module']);
+if(empty($return_module)) $return_module = 'Webmails';
+else $return_module = htmlspecialchars($return_module, ENT_QUOTES, $default_charset);
+
+$return_action = vtlib_purify($_REQUEST['return_action']);
+if(empty($return_action)) $return_action = 'index';
+else $return_action = htmlspecialchars($return_action, ENT_QUOTES, $default_charset);
+
+header("Location:index.php?module=$return_module&action=$return_action&mailbox=INBOX&parenttab=My Home Page");
 ?>

@@ -26,8 +26,8 @@
   			<input type="hidden" name="server_type" value="email">
 			<input type="hidden" name="record" value="{$ID}">
 		        <input type="hidden" name="edit" value="{$EDIT}">
-			<input type="hidden" name="return_module" value="Settings">
-			<input type="hidden" name="return_action" value="index">
+			<input type="hidden" name="return_module" value="{$RETURN_MODULE}">
+			<input type="hidden" name="return_action" value="{$RETURN_ACTION}">
 			<input type="hidden" name="changepassword" value="">
 </tr>	
 		

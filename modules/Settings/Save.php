@@ -140,8 +140,12 @@ if($server_type != 'ftp_backup' && $server_type != 'proxy' && $server_type != 'l
 	}
 	$error_str = getMailErrorString($mail_status_str);
 	$action = 'EmailConfig';
-	if($mail_status != 1)
-		$action = 'EmailConfig&emailconfig_mode=edit&server_name='.$_REQUEST['server'].'&server_user='.$_REQUEST['server_username'].'&auth_check='.$_REQUEST['smtp_auth'];
+	if($mail_status != 1) {
+		$action = 'EmailConfig&emailconfig_mode=edit&server_name='.
+			vtlib_purify($_REQUEST['server']).'&server_user='.
+			vtlib_purify($_REQUEST['server_username']).'&auth_check='.
+			vtlib_purify($_REQUEST['smtp_auth']);
+	}
 	else{
 		if($db_update)
         	{

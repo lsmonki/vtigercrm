@@ -97,8 +97,17 @@ if($count > 0)
 else
 	$field = '<input name="server_password" value="" class="detailedViewTextBox" onfocus="this.className=\'detailedViewTextBoxOn\'" onblur="this.className=\'detailedViewTextBox\'" type="password">';
 $smarty->assign('CHANGE_PW_BUTTON',$field);	
-$smarty->assign("RETURN_MODULE","Settings");
-$smarty->assign("RETURN_ACTION","index");
+
+$return_module = vtlib_purify($_REQUEST['return_module']);
+if(empty($return_module)) $return_module = 'Settings';
+else $return_module = htmlspecialchars($return_module, ENT_QUOTES, $default_charset);
+
+$return_action = vtlib_purify($_REQUEST['return_action']);
+if(empty($return_action)) $return_action = 'index';
+else $return_action = htmlspecialchars($return_action, ENT_QUOTES, $default_charset);
+
+$smarty->assign("RETURN_MODULE",$return_module);
+$smarty->assign("RETURN_ACTION",$return_action);
 $smarty->assign("JAVASCRIPT", get_validate_record_js());
 $smarty->assign("USERID", $current_user->id);
 
