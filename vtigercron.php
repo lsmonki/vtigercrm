@@ -9,6 +9,10 @@
  *
  ********************************************************************************/
 
+/** Load the configuration file common to cron tasks. */
+require_once('cron/config.cron.php');
+global $VTIGER_CRON_CONFIGURATION;
+
 /** 
  * To make sure we can work with command line and direct browser invocation.
  */
@@ -24,6 +28,9 @@ if($argv) {
 			$_REQUEST[$keyval[0]] = $keyval[1];
 		}
 	}
+	
+	/* If app_key is not set, pick the value from cron configuration */
+	if(empty($_REQUEST['app_key'])) $_REQUEST['app_key'] = $VTIGER_CRON_CONFIGURATION['app_key'];
 }
 
 /** All service invocation needs have valid app_key parameter sent */

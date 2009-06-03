@@ -14,4 +14,4 @@ set PHP_EXE="C:\Program Files\vtigercrm5\php\php.exe"
 
 cd /D %VTIGERCRM_ROOTDIR%
 
-%PHP_EXE% -f vtigercron.php service="RecurringInvoice" app_key="YOUR_APP_KEY_HERE"
+%PHP_EXE% -f vtigercron.php service="RecurringInvoice"
