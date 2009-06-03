@@ -1512,17 +1512,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		if($temp_val != '')
 		{   
-			if($fieldname == 'unit_price') {
-				if($_REQUEST['currencyid'] != null 
-						&& ($popuptype == 'inventory_prod' || $popuptype == 'inventory_prod_po' || $popuptype == 'inventory_service')) {
-					$currency_id = $_REQUEST['currencyid'];
-					$prod_prices = getPricesForProducts($currency_id, array($entity_id), $module);
-					$value = $prod_prices[$entity_id];
-				} else {					
-					$currency_id = getProductBaseCurrency($entity_id,$module);
-					$cursym_convrate = getCurrencySymbolandCRate($currency_id);
-					$value = "<font style='color:grey;'>".$cursym_convrate['symbol']."</font> ". $temp_val;
-				}
+			if($fieldname == 'unit_price') {			
+				$currency_id = getProductBaseCurrency($entity_id,$module);
+				$cursym_convrate = getCurrencySymbolandCRate($currency_id);
+				$value = "<font style='color:grey;'>".$cursym_convrate['symbol']."</font> ". $temp_val;
 			} else {
 				$rate = $user_info['conv_rate'];
 				//changes made to remove vtiger_currency symbol infront of each vtiger_potential amount

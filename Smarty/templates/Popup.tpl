@@ -119,6 +119,9 @@ function set_focus() {ldelim}
 									<input name="srcmodule"  id="srcmodule" type="hidden" value="{$smarty.request.srcmodule}">
 									<input name="forrecord"  id="forrecord" type="hidden" value="{$smarty.request.forrecord}">
 								{/if}
+								{if $smarty.request.currencyid neq ''}
+									<input type="hidden" name="curr_row" id="currencyid" value="{$smarty.request.currencyid}">
+								{/if}
 								{* END *}
 							</td>
 							<td width="20%" class="dvtCellLabel">
@@ -240,8 +243,8 @@ function gethiddenelements()
 		urlstring +='&recordid='+getObj('recordid').value;
 	if(getObj('relmod').value != '')
                 urlstring +='&'+getObj('relmod').name+'='+getObj('relmod').value;
-        if(getObj('relrecord_id').value != '')
-                urlstring +='&'+getObj('relrecord_id').name+'='+getObj('relrecord_id').value;
+    if(getObj('relrecord_id').value != '')
+            urlstring +='&'+getObj('relrecord_id').name+'='+getObj('relrecord_id').value;
 	
 	// vtlib customization: For uitype 10 popup during paging
 	if(document.getElementById('popupform'))
@@ -253,6 +256,9 @@ function gethiddenelements()
 	if(document.getElementById('forrecord'))
 		urlstring +='&forrecord='+encodeURIComponent(getObj('forrecord').value);
 	// END
+		
+	if(document.getElementById('currencyid').value != '')
+		urlstring +='&currencyid='+document.getElementById('currencyid').value;
 
 	var return_module = document.getElementById('return_module').value;
 	if(return_module != '')
