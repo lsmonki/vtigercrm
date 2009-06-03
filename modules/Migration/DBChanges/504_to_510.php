@@ -762,6 +762,12 @@ if($adb->num_rows($picklistRes)>0){
 	$picklistid = $adb->query_result($picklistRes,0,'picklistid');
 
 	$picklist_valueid = $adb->getUniqueID('vtiger_picklistvalues');
+	$max_seq_id_qry = $adb->pquery("SELECT max(inovicestatusid) as maxid from vtiger_invoicestatus",array());
+	if($adb->num_rows($max_seq_id_qry)>0) {
+		$tmp = $adb->getUniqueID('vtiger_invoicestatus');
+		$max_seq_id = $adb->query_result($max_seq_id_qry,0,'maxid');
+		$adb->pquery("UPDATE vtiger_invoicestatus_seq SET id=?",array($max_seq_id));
+	}
 	$id = $adb->getUniqueID('vtiger_invoicestatus');
 	
 	ExecuteQuery("insert into vtiger_invoicestatus values($id, 'AutoCreated', 1, $picklist_valueid)");

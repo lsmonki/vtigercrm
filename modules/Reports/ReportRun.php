@@ -1105,9 +1105,9 @@ class ReportRun extends CRMEntity
 
 		$sreportsortsql = "select vtiger_reportsortcol.* from vtiger_report";
 		$sreportsortsql .= " inner join vtiger_reportsortcol on vtiger_report.reportid = vtiger_reportsortcol.reportid";
-		$sreportsortsql .= " where vtiger_report.reportid =? order by vtiger_reportsortcol.sortcolid";
+		$sreportsortsql .= " where vtiger_report.reportid =? AND vtiger_reportsortcol.columnname IN (SELECT columnname from vtiger_selectcolumn WHERE queryid=?) order by vtiger_reportsortcol.sortcolid";
 
-		$result = $adb->pquery($sreportsortsql, array($reportid));
+		$result = $adb->pquery($sreportsortsql, array($reportid,$reportid));
 
 		while($reportsortrow = $adb->fetch_array($result))
 		{

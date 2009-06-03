@@ -605,14 +605,6 @@ ExecuteQuery("update vtiger_field set uitype=255 where tabid in (7,4) and column
 
 //We need to remove the field team from quotes. To avoid data loss, we need to create a new custom field and to move the team field values into the newly created sutom field.	
 
-//Getting the biggest custom field name
-$query="select max(fieldname) as maxfieldname from vtiger_field where fieldname like 'cf_%'";
-$result = $adb->query($query);
-$max_cf_name=$adb->query_result($result,0,'maxfieldname');
-//Forming New custom field by incrementing the biggest custom field name
-$splitted=explode("_",$max_cf_name);
-$new_cf_name=$splitted[0]."_".($splitted[1]+1);
-
 //Getting block id for custom information
 $blockid = $adb->query_result($adb->query("select blockid from vtiger_blocks where tabid=20 and blocklabel = 'LBL_CUSTOM_INFORMATION'"),0,'blockid');
 
@@ -623,7 +615,9 @@ $seq = $adb->query_result($adb->query("select max(sequence) as seq from vtiger_f
 ExecuteQuery("delete from vtiger_field where tabid=20 and fieldname = 'team' and columnname='team'");
 //Creating new Custom field for quotes module and populating security entries.
 
+//Getting the biggest custom field name and id
 $newfieldid=$adb->getUniqueID("vtiger_field");
+$new_cf_name = 'cf_'.$newfieldid;
 $query="insert into vtiger_field values(20,".$newfieldid.",'".$new_cf_name."','vtiger_quotescf',2,1,'".$new_cf_name."','Team',0,0,0,100,".($seq+1).",".$blockid.",1,'V~O~LE~30',1,0,'BAS')";
 $result = $adb->query($query);
 
