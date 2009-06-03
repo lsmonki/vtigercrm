@@ -82,8 +82,14 @@ if(count($email->relationship) != 0) {
 }else {
 	//if relationship is not available create a contact and relate the email to the contact
 	require_once('modules/Contacts/Contacts.php');
-	$contact_focus = new Contacts();	
-	$contact_focus->column_fields['lastname'] =$email->fromname; 
+	$contact_focus = new Contacts();
+	//Populate the lastname as emailid if email doesn't have from name 
+	if($email->fromname){
+		$contact_focus->column_fields['lastname'] =$email->fromname;
+	}else{
+		$contact_focus->column_fields['lastname'] =$email->from;
+	}
+	
 	$contact_focus->column_fields['email'] = $email->from;
 	$contact_focus->column_fields["assigned_user_id"]=$current_user->id;
 	$contact_focus->save("Contacts");
