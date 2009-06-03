@@ -369,12 +369,12 @@ function validateDelete(fieldname, module){
 	var arr = new Array();
 	for(var i=0;i<node.length;i++){
 		if(node.selectedIndex == -1){
-			alert("no values to delete");
+			alert(alert_arr.LBL_NO_VALUES_TO_DELETE);
 			return false;
 		}else{
 			for(var j=0, k=0; j<node.length; j++){
 				if(node.options[j].selected == true){
-					arr[k++] = node.options[j].value;
+					arr[k++] = encodeURIComponent(node.options[j].value);
 				}
 			}
 		}
