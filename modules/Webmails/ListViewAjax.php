@@ -105,6 +105,9 @@ if (is_array($overview))
 		$from_list = str_replace(">","",$from);
 		$cc = str_replace("<",":",$hdr->ccaddress);
 		$cc_list = str_replace(">","",$cc);
+		
+		$cc_list = addslashes($cc_list);
+		
 		/*$js_array .= "webmail2[".$val->msgno."] = new Array();";
 		$js_array .= "webmail2[".$val->msgno."]['from'] = '".addslashes($from_list)."';";
 		$js_array .= "webmail2[".$val->msgno."]['to'] = '".addslashes($to_list)."';";

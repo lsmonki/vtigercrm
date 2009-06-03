@@ -300,7 +300,7 @@ if (is_array($overview))
 		webmail[<?php echo $val->msgno;?>]["subject"]="<?php echo addslashes($val->subject);?>";
 		webmail[<?php echo $val->msgno;?>]["date"]="<?php echo addslashes($val->date);?>";
 
-		webmail[<?php echo $val->msgno;?>]["cc"]="<?php echo $cc_list;?>";
+		webmail[<?php echo $val->msgno;?>]["cc"]="<?php echo addslashes($cc_list); ?>";
 
 	<?php
 	}
