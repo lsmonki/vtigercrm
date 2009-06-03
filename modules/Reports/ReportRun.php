@@ -1635,7 +1635,11 @@ class ReportRun extends CRMEntity
 					$mod_name = split(' ',$headerLabel,2);
 					if($mod_name[0]!='')
 						$module = getTranslatedString($mod_name[0],$mod_name[0]);
-					$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
+					if(!empty($this->secondarymodule)){
+						$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
+					} else {
+						$headerLabel_tmp = getTranslatedString($mod_name[1],$mod_name[0]);
+					}
 					if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString($headerLabel_tmp);
 					else $headerLabel = $headerLabel_tmp;
 					$header .= "<td class='rptCellLabel'>".$headerLabel."</td>";
