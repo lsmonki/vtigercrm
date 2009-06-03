@@ -72,13 +72,15 @@ $selectcolumns = Array(Array('vtiger_contactdetails:firstname:Contacts_First_Nam
 		       Array('vtiger_leaddetails:firstname:Leads_First_Name:firstname:V',
 			     'vtiger_leaddetails:lastname:Leads_Last_Name:lastname:V',
 			     'vtiger_leaddetails:company:Leads_Company:company:V',
-			     'vtiger_leaddetails:email:Leads_Email:email:E'),
+			     'vtiger_leaddetails:email:Leads_Email:email:E',
+			     'vtiger_leaddetails:leadsource:Leads_Lead_Source:leadsource:V'),
 
 		       Array('vtiger_leaddetails:firstname:Leads_First_Name:firstname:V',
                              'vtiger_leaddetails:lastname:Leads_Last_Name:lastname:V',
                              'vtiger_leaddetails:company:Leads_Company:company:V',
                              'vtiger_leaddetails:email:Leads_Email:email:E',
-			     'vtiger_leaddetails:leadsource:Leads_Lead_Source:leadsource:V'),
+			     'vtiger_leaddetails:leadsource:Leads_Lead_Source:leadsource:V',
+			     'vtiger_leaddetails:leadstatus:Leads_Lead_Status:leadstatus:V'),
 
 		       Array('vtiger_potential:potentialname:Potentials_Potential_Name:potentialname:V',
                              'vtiger_potential:amount:Potentials_Amount:amount:N',

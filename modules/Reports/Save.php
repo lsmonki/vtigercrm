@@ -27,7 +27,16 @@ $sort_order2 = $_REQUEST["Sort2"];
 $sort_by3 = $_REQUEST["Group3"];
 $sort_order3 = $_REQUEST["Sort3"];
 //<<<<<<<reportsortcol>>>>>>>>>
-
+$selectedcolumns = explode(";",$selectedcolumnstring);
+if(!in_array($sort_by1,$selectedcolumns)){
+	$selectedcolumns[] = $sort_by1;
+}
+if(!in_array($sort_by2,$selectedcolumns)){
+	$selectedcolumns[] = $sort_by2;
+}
+if(!in_array($sort_by3,$selectedcolumns)){
+	$selectedcolumns[] = $sort_by3;
+}
 //<<<<<<<reportmodules>>>>>>>>>
 $pmodule = $_REQUEST["primarymodule"];
 $smodule = $_REQUEST["secondarymodule"];
@@ -104,13 +113,14 @@ if($reportid == "")
 		if($iquerysqlresult!=false)
 		{
 			//<<<<step2 vtiger_selectcolumn>>>>>>>>
-			if($selectedcolumnstring != "")
+			if(!empty($selectedcolumns))
 			{
-				$selectedcolumns = explode(";",$selectedcolumnstring);
-				for($i=0 ;$i< count($selectedcolumns) -1 ;$i++)
+				for($i=0 ;$i<count($selectedcolumns);$i++)
 				{
-					$icolumnsql = "insert into vtiger_selectcolumn (QUERYID,COLUMNINDEX,COLUMNNAME) values (?,?,?)";
-					$icolumnsqlresult = $adb->pquery($icolumnsql, array($genQueryId,$i,$selectedcolumns[$i]));
+					if(!empty($selectedcolumns[$i])){
+						$icolumnsql = "insert into vtiger_selectcolumn (QUERYID,COLUMNINDEX,COLUMNNAME) values (?,?,?)";
+						$icolumnsqlresult = $adb->pquery($icolumnsql, array($genQueryId,$i,$selectedcolumns[$i]));
+					}
 				}
 			}
 			if($shared_entities != "")
@@ -223,17 +233,18 @@ if($reportid == "")
 {
 	if($reportid != "")
 	{
-		if($selectedcolumnstring != "")
+		if(!empty($selectedcolumns))
 		{
 			$idelcolumnsql = "delete from vtiger_selectcolumn where queryid=?";
 			$idelcolumnsqlresult = $adb->pquery($idelcolumnsql, array($reportid));
 			if($idelcolumnsqlresult != false)
 			{
-				$selectedcolumns = explode(";",$selectedcolumnstring);
-				for($i=0 ;$i< count($selectedcolumns) -1 ;$i++)
+				for($i=0 ;$i<count($selectedcolumns);$i++)
 				{
-					$icolumnsql = "insert into vtiger_selectcolumn (QUERYID,COLUMNINDEX,COLUMNNAME) values (?,?,?)";
-					$icolumnsqlresult = $adb->pquery($icolumnsql, array($reportid, $i, $selectedcolumns[$i]));
+					if(!empty($selectedcolumns[$i])){
+						$icolumnsql = "insert into vtiger_selectcolumn (QUERYID,COLUMNINDEX,COLUMNNAME) values (?,?,?)";
+						$icolumnsqlresult = $adb->pquery($icolumnsql, array($reportid,$i,$selectedcolumns[$i]));
+					}
 				}
 			}
 		}

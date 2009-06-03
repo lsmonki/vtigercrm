@@ -1571,7 +1571,7 @@ class ReportRun extends CRMEntity
 		//if($tab_id == 9 || $tab_id == 16)
         	//$reportquery.=" group by vtiger_activity.activityid ";
 
-		if(trim($groupsquery) != "")
+		if(trim($groupsquery) != "" && empty($type))
 		{
 			$reportquery .= " order by ".$groupsquery;
 		}
