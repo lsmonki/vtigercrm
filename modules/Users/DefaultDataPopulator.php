@@ -1263,9 +1263,7 @@ class DefaultDataPopulator extends CRMEntity {
 	$folderid = $this->db->getUniqueID("vtiger_attachmentsfolder");
 	$this->db->query("insert into vtiger_attachmentsfolder values(".$folderid.",'Default','This is a Default Folder',1,1)");	
 	
-	$folderid = $this->db->getUniqueID("vtiger_attachmentsfolder");
-	$this->db->query("insert into vtiger_attachmentsfolder values(".$folderid.",'Asterisk','Contains all Asterisk Recordings',1,2)");	
-		
+			
 		//Inserting Inventory Notifications
 	$invoice_body = 'Dear {HANDLER},
 

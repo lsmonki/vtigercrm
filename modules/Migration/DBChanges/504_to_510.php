@@ -359,9 +359,6 @@ ExecuteQuery("alter table vtiger_notes add(folderid int(19) DEFAULT 1,filetype v
 ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_attachmentsfolder ( folderid int(19) AUTO_INCREMENT NOT NULL,foldername varchar(200) NOT NULL default '', description varchar(250) default '', createdby int(19) NOT NULL, sequence int(19) default NULL, PRIMARY KEY  (folderid)) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 ExecuteQuery("insert into vtiger_attachmentsfolder values (1,'Existing Notes','Contains all Notes migrated from the earlier version',1,1)");
-//asterisk  changes :: added folder to store call records
-ExecuteQuery("insert into vtiger_attachmentsfolder values (2,'Asterisk','Contains all Asterisk Recordings',1,2)");
-//asterisk changes end
 
 ExecuteQuery("alter table vtiger_senotesrel drop foreign key fk_2_vtiger_senotesrel ");
 
