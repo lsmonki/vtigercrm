@@ -14,7 +14,7 @@
 			<td align="right" class="homePageMatrixHdr" style="height:30px;" width=35% nowrap>
 
 {*<!-- the edit button for widgets :: don't show for key metrics and dasboard widget -->*}
-{if ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $keymetrics_title) && ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $homepagedashboard_title) && ($tablestuff.Stufftype neq "Tag Cloud")}
+{if ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $keymetrics_title) && ($tablestuff.Stufftype neq "Default" || $tablestuff.Stufftitle neq $homepagedashboard_title) && ($tablestuff.Stufftype neq "Tag Cloud") && ($tablestuff.Stufftype neq "Notebook")}
 				<a id="editlink" style='cursor:pointer;' onclick="showEditrow({$tablestuff.Stuffid})">
 					<img src="{'windowSettings.gif'|@vtiger_imageurl:$THEME}" border="0" alt="Edit" title="Edit" hspace="2" align="absmiddle"/>
 				</a>	
