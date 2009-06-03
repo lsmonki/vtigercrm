@@ -39,7 +39,7 @@
 				<b>{$MOD.LBL_SELECT_MODULE} : </b> 
 				<select id="select_module" onChange="changeModule(this);" class="small">
 				{foreach key=mod_name item=module from=$MODULE_NAME}
-				{assign var="modulelabel" value=$module|getTranslatedString:mod_name}
+				{assign var="modulelabel" value=$module|@getTranslatedString:$module}
 				{if $module eq $SELECTED_MODULE}
 	                	<option value="{$module}" selected>{$modulelabel}</option>
 				{else}
