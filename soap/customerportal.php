@@ -732,9 +732,6 @@ function create_ticket($input_array)
 	if(!validateSession($id,$sessionid))
 		return null;
 
-        $seed_ticket = new HelpDesk();
-        $output_list = Array();
-   
 	$ticket = new HelpDesk();
 	
     $ticket->column_fields[ticket_title] = $title;
@@ -864,25 +861,27 @@ function update_ticket_comment($input_array)
  */
 function close_current_ticket($input_array)
 {
-	global $adb,$mod_strings;
+	global $adb,$mod_strings,$log,$current_user;
+	require_once('modules/HelpDesk/HelpDesk.php');
 	$adb->println("Inside customer portal function close_current_ticket");
 	$adb->println($input_array);
 
 	//foreach($input_array as $fieldname => $fieldvalue)$input_array[$fieldname] = mysql_real_escape_string($fieldvalue);
-
+	$userid = getPortalUserid();
+	$current_user->id = $userid;
 	$id = $input_array['id'];
 	$sessionid = $input_array['sessionid'];
 	$ticketid = (int) $input_array['ticketid'];
 
 	if(!validateSession($id,$sessionid))
 		return null;
-
-	$sql = "update vtiger_troubletickets set status=? where ticketid=?";
-	$result = $adb->pquery($sql, array($mod_strings['LBL_STATUS_CLOSED'], $ticketid));
-	if($result)
-		return "<br><b>".$mod_strings['LBL_STATUS_UPDATE']." "."'".$mod_strings['LBL_STATUS_CLOSED']."'"."."."</b>";
-	else
-		return "<br><b>".$mod_strings['LBL_COULDNOT_CLOSED']." ".$mod_strings['LBL_STATUS_CLOSED']."."."</br>";
+	$focus = new HelpDesk();
+	$focus->id = $ticketid;
+	$focus->retrieve_entity_info($focus->id,'HelpDesk');
+	$focus->mode = 'edit';
+	$focus->column_fields['ticketstatus'] ='Closed';
+	$focus->save("HelpDesk");
+	return "closed";
 }
 
 /**	function used to authenticate whether the customer has access or not
