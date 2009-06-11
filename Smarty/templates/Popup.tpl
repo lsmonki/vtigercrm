@@ -257,7 +257,7 @@ function gethiddenelements()
 		urlstring +='&forrecord='+encodeURIComponent(getObj('forrecord').value);
 	// END
 		
-	if(document.getElementById('currencyid').value != '')
+	if(document.getElementById('currencyid') != null && document.getElementById('currencyid').value != '')
 		urlstring +='&currencyid='+document.getElementById('currencyid').value;
 
 	var return_module = document.getElementById('return_module').value;
