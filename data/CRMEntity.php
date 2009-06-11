@@ -1944,30 +1944,8 @@ $log->info("in getOldFileName  ".$notesid);
 		$tableindex = $secondary->table_index;
 		$modulecftable = $secondary->customFieldTable[0];
 		$modulecfindex = $secondary->customFieldTable[1];
-	 	$tab = getRelationTables($module,$secmodule);
-		
-		foreach($tab as $key=>$value){
-			$tables[]=$key;
-			$fields[] = $value;
-		}
-		$tabname = $tables[0];
-		$prifieldname = $fields[0][0];
-		$secfieldname = $fields[0][1];
-		$tmpname = $tabname."tmp";
-		$condition = "";
-		if(!empty($tables[1]) && !empty($fields[1])){
-			$condvalue = $tables[1].".".$fields[1];
-			$condition = "$tmpname.$prifieldname = $condvalue  and";
-		}
-		if(isset($modulecftable)){
-			$cfquery = " left join $modulecftable on $modulecftable.$modulecfindex=$tablename.$tableindex";
-		} else {
-			$cfquery = '';
-		}
-	
-		$query = " left join $tabname as $tmpname on $condition $tmpname.$secfieldname IN (SELECT $tableindex from $tablename INNER JOIN vtigr_crmentity ON vtiger_crmentity.crmid=$tablename.$tableindex AND vtiger.crmentity.deleted=0)";
-		$query .=" 	left join $tablename on $tablename.$tableindex=$tmpname.$secfieldname   
-					left join vtiger_crmentity as vtiger_crmentity$secmodule on vtiger_crmentity$secmodule.crmid = $tablename.$tableindex AND vtiger_crmentity$secmodule.deleted=0   
+		$query = $this->getRelationQuery($module,$secmodule,"$tablename","$tableindex");
+		$query .=" 	left join vtiger_crmentity as vtiger_crmentity$secmodule on vtiger_crmentity$secmodule.crmid = $tablename.$tableindex AND vtiger_crmentity$secmodule.deleted=0   
 					$cfquery   
 					left join vtiger_groups as vtiger_groups".$secmodule." on vtiger_groups".$secmodule.".groupid = vtiger_crmentity$secmodule.smownerid
 		            left join vtiger_users as vtiger_users".$secmodule." on vtiger_users".$secmodule.".id = vtiger_crmentity$secmodule.smownerid"; 
@@ -2067,19 +2045,19 @@ $log->info("in getOldFileName  ".$notesid);
 		} else {
 			$condvalue = $tabname.".".$prifieldname;
 		}
-		$condition = " $tmpname.$prifieldname = $condvalue ";
-		$entity_check_query = " $tmpname.$secfieldname IN (SELECT crmid FROM vtiger_crmentity WHERE vtiger_crmentity.deleted=0 AND vtiger_crmentity.setype='$secmodule')";
-		$condition_secmod_table = " $table_name.$column_name = $tmpname.$secfieldname ";
+		$condition = " {$tmpname}.{$prifieldname} = {$condvalue} ";
+		$entity_check_query = " {$tmpname}.{$secfieldname} IN (SELECT crmid FROM vtiger_crmentity WHERE vtiger_crmentity.deleted=0 AND vtiger_crmentity.setype='{$secmodule}')";
+		$condition_secmod_table = " {$table_name}.{$column_name} = {$tmpname}.{$secfieldname} ";
 		if($tabname=='vtiger_crmentityrel'){
-			$condition = " ($condition OR $tmpname.$secfieldname = $condvalue)  and";
-			$entity_check_query = "($entity_check_query OR $tmpname.$prifieldname IN (SELECT crmid FROM vtiger_crmentity WHERE vtiger_crmentity.deleted=0 AND vtiger_crmentity.setype='$secmodule')) ";
-			$condition_secmod_table = "$condition_secmod_table OR $table_name.$column_name = $tmpname.$prifieldname ";
+			$condition = " ($condition OR {$tmpname}.{$secfieldname} = $condvalue)  and";
+			$entity_check_query = "({$entity_check_query} OR {$tmpname}.{$prifieldname} IN (SELECT crmid FROM vtiger_crmentity WHERE vtiger_crmentity.deleted=0 AND vtiger_crmentity.setype='{$secmodule}')) ";
+			$condition_secmod_table = "({$condition_secmod_table} OR {$table_name}.{$column_name} = {$tmpname}.{$prifieldname})";
 		} else {
 			$condition .= " and ";
 		}
-		
-		$query = " left join $tabname as $tmpname on $condition  $entity_check_query";
-		$query .= " LEFT JOIN $table_name ON $condition_secmod_table";
+
+		$query = " left join {$tabname} as {$tmpname} on {$condition}  {$entity_check_query}";
+		$query .= " LEFT JOIN {$table_name} ON {$condition_secmod_table}";
 		
 		return $query;
 	}

@@ -1242,7 +1242,6 @@ function get_contactsforol($user_name)
 	 */
 	function setRelationTables($secmodule){
 		$rel_tables = array (
-			"Potentials" => array("vtiger_potential"=>array("related_to","potentialid"),"vtiger_contactdetails"=>"contactid"),
 			"Calendar" => array("vtiger_cntactivityrel"=>array("contactid","activityid"),"vtiger_contactdetails"=>"contactid"),
 			"HelpDesk" => array("vtiger_troubletickets"=>array("parent_id","ticketid"),"vtiger_contactdetails"=>"contactid"),
 			"Quotes" => array("vtiger_quotes"=>array("contactid","quoteid"),"vtiger_contactdetails"=>"contactid"),
@@ -1252,7 +1251,6 @@ function get_contactsforol($user_name)
 			"Campaigns" => array("vtiger_campaigncontrel"=>array("contactid","campaignid"),"vtiger_contactdetails"=>"contactid"),
 			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_contactdetails"=>"contactid"),
 			"Accounts" => array("vtiger_contactdetails"=>array("contactid","accountid")),
-			"Services" => array("vtiger_crmentityrel"=>array("crmid","relcrmid"),"vtiger_contactdetails"=>"contactid"),
 			"Invoice" => array("vtiger_invoice"=>array("contactid","invoiceid"),"vtiger_contactdetails"=>"contactid"),
 		);
 		return $rel_tables[$secmodule];

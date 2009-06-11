@@ -1212,8 +1212,8 @@ class ReportRun extends CRMEntity
 		if($secmodule!=''){
 			$secondarymodule = explode(":",$secmodule);
 			foreach($secondarymodule as $key=>$value) {
-					require_once("modules/$value/$value.php");
-					$foc = new $value();
+					require_once("data/CRMEntity.php");
+					$foc = CRMEntity::getInstance($value);
 					$query .= $foc->generateReportsSecQuery($module,$value);
 			}
 		}

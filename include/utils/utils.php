@@ -4492,16 +4492,26 @@ function getFieldsResultForMerge($tabid) {
  * return Array $rel_array tables and fields to be compared are sent
  * */
 function getRelationTables($module,$secmodule){
-	require_once("modules/$module/$module.php");
-	$primary_obj = new $module();
+	global $adb;
+	require_once("data/CRMEntity.php");
+	$primary_obj = CRMEntity::getInstance($module);
+	$secondary_obj = CRMEntity::getInstance($secmodule);
 	
-	require_once("modules/$secmodule/$secmodule.php");
-	$secondary_obj = new $secmodule();
-	
-	if(method_exists($primary_obj,setRelationTables)){
-		$reltables = $primary_obj->setRelationTables($secmodule);	
-	} else {
-		$reltables = '';
+	$ui10_query = $adb->pquery("SELECT vtiger_field.tablename AS tablename, vtiger_field.columnname AS columnname FROM vtiger_field INNER JOIN vtiger_fieldmodulerel ON vtiger_fieldmodulerel.fieldid = vtiger_field.fieldid WHERE (vtiger_fieldmodulerel.module=? AND vtiger_fieldmodulerel.relmodule=?) OR (vtiger_fieldmodulerel.module=? AND vtiger_fieldmodulerel.relmodule=?)",array($module,$secmodule,$secmodule,$module));
+	if($adb->num_rows($ui10_query)>0){
+		$ui10_tablename = $adb->query_result($ui10_query,0,'tablename');
+		$ui10_columnname = $adb->query_result($ui10_query,0,'columnname');
+		if($primary_obj->table_name != $ui10_tablename){
+			$reltables = array($ui10_tablename=>array("$ui10_columnname","".$secondary_obj->table_index.""),"".$primary_obj->table_name."" => "".$primary_obj->table_index."");
+		} else {
+			$reltables = array($ui10_tablename=>array("$ui10_columnname","".$primary_obj->table_index.""));
+		}
+	}else {
+		if(method_exists($primary_obj,setRelationTables)){
+			$reltables = $primary_obj->setRelationTables($secmodule);	
+		} else {
+			$reltables = '';
+		}
 	}
 	if(is_array($reltables) && !empty($reltables)){
 		$rel_array = $reltables;

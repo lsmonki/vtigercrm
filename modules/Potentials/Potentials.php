@@ -684,13 +684,11 @@ class Potentials extends CRMEntity {
 	function setRelationTables($secmodule){
 		$rel_tables = array (
 			"Calendar" => array("vtiger_seactivityrel"=>array("crmid","activityid"),"vtiger_potential"=>"potentialid"),
-			"Contacts" => array("vtiger_potential"=>array("potentialid","related_to"),),
 			"Products" => array("vtiger_seproductsrel"=>array("crmid","productid"),"vtiger_potential"=>"potentialid"),
 			"Quotes" => array("vtiger_quotes"=>array("potentialid","quoteid"),"vtiger_potential"=>"potentialid"),
 			"SalesOrder" => array("vtiger_salesorder"=>array("potentialid","salesorderid"),"vtiger_potential"=>"potentialid"),
 			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_potential"=>"potentialid"),
 			"Accounts" => array("vtiger_potential"=>array("potentialid","related_to")),
-			"Services" => array("vtiger_crmentityrel"=>array("crmid","relcrmid"),"vtiger_potential"=>"potentialid"),
 		);
 		return $rel_tables[$secmodule];
 	}

@@ -31,10 +31,9 @@
 			<table width="100%" cellspacing="0" cellpadding="0" border="0" class="small">
 				<tbody>
 					<tr>
-				    	<td nowrap="" align="center" id="mi" style="width: 100px;" class="dvtSelectedCell"><!--onclick="fnLoadRepValues('mi','pi','mnuTab2','mnuTab')"-->
+				    	<td nowrap="" align="center" id="mi" style="width: 100px;" colspan="2" class="detailedViewHeader"><!--onclick="fnLoadRepValues('mi','pi','mnuTab2','mnuTab')"-->
 				     	<b>{$MOD.LBL_SHARING}</b>
 				    	</td>
-						<td nowrap="" style="width: 55%;" class="dvtTabCache"> </td>
 					</tr>
 				</tbody>
 			</table>		

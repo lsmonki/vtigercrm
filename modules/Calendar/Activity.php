@@ -884,5 +884,51 @@ function insertIntoRecurringTable(& $recurObj)
 		$adb->pquery($sql, array($this->id));
 		return true;
 	}
+
+	/*
+	 * Function to get the relation tables for related modules 
+	 * @param - $secmodule secondary module name
+	 * returns the array with table names and fieldnames storing relations between module and this module
+	 */
+	function setRelationTables($secmodule){
+		$rel_tables = array (
+			"Contacts" => array("vtiger_cntactivityrel"=>array("activityid","contactid"),"vtiger_activity"=>"activityid"),
+			"Leads" => array("vtiger_seactivityrel"=>array("activityid","crmid"),"vtiger_activity"=>"activityid"),
+			"Accounts" => array("vtiger_seactivityrel"=>array("activityid","crmid"),"vtiger_activity"=>"activityid"),
+			"Potentials" => array("vtiger_seactivityrel"=>array("activityid","crmid"),"vtiger_activity"=>"activityid"),
+		);
+		return $rel_tables[$secmodule];
+	}
+	
+	/*
+	 * Function to get the secondary query part of a report 
+	 * @param - $module primary module name
+	 * @param - $secmodule secondary module name
+	 * returns the query string formed on fetching the related data for report for secondary module
+	 */
+	function generateReportsSecQuery($module,$secmodule){
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_activity","activityid");
+		$query .=" left join vtiger_crmentity as vtiger_crmentityCalendar on vtiger_crmentityCalendar.crmid=vtiger_activity.activityid and vtiger_crmentityCalendar.deleted=0 
+				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid 
+				left join vtiger_contactdetails as vtiger_contactdetailsCalendar on vtiger_contactdetailsCalendar.contactid= vtiger_cntactivityrel.contactid
+				left join vtiger_activitycf on vtiger_activitycf.activityid = vtiger_crmentity.crmid
+				left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid
+				left join vtiger_activity_reminder on vtiger_activity_reminder.activity_id = vtiger_activity.activityid
+				left join vtiger_recurringevents on vtiger_recurringevents.activityid = vtiger_activity.activityid
+				left join vtiger_crmentity as vtiger_crmentityRelCalendar on vtiger_crmentityRelCalendar.crmid = vtiger_seactivityrel.crmid and vtiger_crmentityRelCalendar.deleted=0
+				left join vtiger_account as vtiger_accountRelCalendar on vtiger_accountRelCalendar.accountid=vtiger_crmentityRelCalendar.crmid
+				left join vtiger_leaddetails as vtiger_leaddetailsRelCalendar on vtiger_leaddetailsRelCalendar.leadid = vtiger_crmentityRelCalendar.crmid
+				left join vtiger_potential as vtiger_potentialRelCalendar on vtiger_potentialRelCalendar.potentialid = vtiger_crmentityRelCalendar.crmid
+				left join vtiger_quotes as vtiger_quotesRelCalendar on vtiger_quotesRelCalendar.quoteid = vtiger_crmentityRelCalendar.crmid
+				left join vtiger_purchaseorder as vtiger_purchaseorderRelCalendar on vtiger_purchaseorderRelCalendar.purchaseorderid = vtiger_crmentityRelCalendar.crmid
+				left join vtiger_invoice as vtiger_invoiceRelCalendar on vtiger_invoiceRelCalendar.invoiceid = vtiger_crmentityRelCalendar.crmid
+				left join vtiger_salesorder as vtiger_salesorderRelCalendar on vtiger_salesorderRelCalendar.salesorderid = vtiger_crmentityRelCalendar.crmid
+				left join vtiger_troubletickets as vtiger_troubleticketsRelCalendar on vtiger_troubleticketsRelCalendar.ticketid = vtiger_crmentityRelCalendar.crmid
+				left join vtiger_campaign as vtiger_campaignRelCalendar on vtiger_campaignRelCalendar.campaignid = vtiger_crmentityRelCalendar.crmid
+				left join vtiger_groups as vtiger_groupsCalendar on vtiger_groupsCalendar.groupid = vtiger_crmentityCalendar.smownerid
+				left join vtiger_users as vtiger_usersCalendar on vtiger_usersCalendar.id = vtiger_crmentityCalendar.smownerid"; 
+		return $query;
+	}
+	
 }
 ?>
