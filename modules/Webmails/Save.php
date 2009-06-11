@@ -101,7 +101,7 @@ if(count($email->relationship) != 0) {
 
 function add_attachment_to_contact($cid,$email,$emailid) {
 	// add vtiger_attachments to contact
-	global $adb,$current_user;
+	global $adb,$current_user,$default_charset;
 	for($j=0;$j<2;$j++) {
 	    if($j==0)
 	    	$attachments=$email->downloadAttachments();
@@ -115,6 +115,22 @@ function add_attachment_to_contact($cid,$email,$emailid) {
 			$date_var = $adb->formatDate(date('Y-m-d H:i:s'), true);	
 	
 			$filename = ereg_replace("[ ()-]+", "_",$attachments[$i]["filename"]);
+			preg_match_all('/=\?([^\?]+)\?([^\?]+)\?([^\?]+)\?=/', $filename, $matches);
+			$totalmatches = count($matches[0]);
+			
+			for($index = 0; $index < $totalmatches; ++$index) {
+				$charset = $matches[1][$index];
+				$encoding= strtoupper($matches[2][$index]);
+				$data    = $matches[3][$index];
+				
+				if($encoding == 'B') {
+					$filename = base64_decode($data);
+				} else if($encoding == 'Q') {
+					$filename = quoted_printable_decode($data);
+				}
+				$filename = iconv(str_replace('_','-',$charset),$default_charset,$filename);
+			}
+			
 			$saveasfile = $upload_filepath.'/'.$current_id.'_'.$filename;
 	        $filetype = MailAttachmentMIME::detect($saveasfile);
 			$filesize = $attachments[$i]["filesize"];
@@ -133,6 +149,8 @@ function add_attachment_to_contact($cid,$email,$emailid) {
 					$document = new Documents();
 					$document->column_fields['notes_title']      = $filename;
 					$document->column_fields['filename']         = $filename;
+					$document->column_fields['filesize']		 = $filesize;
+					$document->column_fields['filetype']		 = $filetype;
 					$document->column_fields['filestatus']       = 1;
 					$document->column_fields['filelocationtype'] = 'I';
 					$document->column_fields['folderid']         = 1; // Default Folder 
