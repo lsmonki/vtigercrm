@@ -49,6 +49,7 @@
 	</table>
 	<br>
 	<div id='editpopup' class='layerPopup' style='display:none;' >
+		<div id='editpopup_draghandle' style='cursor: move;'>
 		<table width="100%" cellspacing="0" cellpadding="5" border="0" class="layerHeadingULine">
 			<tr>
 				<td width="60%" align="left" class="layerPopupHeading">
@@ -61,6 +62,7 @@
 				</td>
 			</tr>
 		</table>
+		</div>
 		<table width="100%" bgcolor="white" align="center" border="0" cellspacing="0" cellpadding="5">
 			<tr>
 				<td class='dvtCellLabel' align="right">

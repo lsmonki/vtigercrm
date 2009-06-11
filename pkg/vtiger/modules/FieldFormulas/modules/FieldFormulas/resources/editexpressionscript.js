@@ -65,7 +65,7 @@ function editexpressionscript($){
 					<td class="listTableRow small" valign="top" nowrap="">%s</td>\
 					<td class="listTableRow small" valign="top" nowrap="">%s</td>\
 					<td class="listTableRow small" valign="top" nowrap="">%s | %s</td>\
-				</tr>', fieldName, fieldLabel, expression, editLink, deleteLink);
+				</tr>', fieldName, fieldLabel, expression.replace("\n","<BR/>"), editLink, deleteLink);
 		$('#expressionlist').append(row);
 		$(format('#expressionlist_deletelink_%s', fieldName)).click(function(){
 			if(confirm(strings.LBL_DELETE_EXPRESSION_CONFIRM)) {
@@ -246,6 +246,7 @@ function editexpressionscript($){
 
 	$(document).ready(
 	    function(){
+	    	Drag.init(document.getElementById('editpopup_draghandle'), document.getElementById('editpopup'));
 			toExec();
 		}
     );
