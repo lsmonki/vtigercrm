@@ -62,7 +62,7 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 		if(empty($label)) $label = $moduleInstance->name;
 
 		// Allow ADD action of other module records (default)
-		if(!$actions) $actions = Array('ADD');
+		if($actions === false) $actions = Array('ADD');
 
 		$useactions_text = $actions;
 		if(is_array($actions)) $useactions_text = implode(',', $actions);
