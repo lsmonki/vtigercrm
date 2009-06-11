@@ -1603,7 +1603,14 @@ class ReportRun extends CRMEntity
 		global $modules,$app_strings;
 		global $mod_strings,$current_language;
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-
+		$modules_selected = array();
+		$modules_selected[] = $this->primarymodule;
+		if(!empty($this->secondarymodule)){
+			$sec_modules = split(":",$this->secondarymodule);
+			for($i=0;$i<count($sec_modules);$i++){
+				$modules_selected[] = $sec_modules[$i];
+			}
+		}
 		if($outputformat == "HTML")
 		{
 			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist);
@@ -1632,16 +1639,29 @@ class ReportRun extends CRMEntity
 						$headerLabel = str_replace("_"," ",$this->getLstringforReportHeaders($fld->name));
 						$arrayHeaders[] = $headerLabel;
 					}
+					/*STRING TRANSLATION starts */
 					$mod_name = split(' ',$headerLabel,2);
-					if($mod_name[0]!='')
+					$module ='';
+					if(in_array($mod_name[0],$modules_selected)){
 						$module = getTranslatedString($mod_name[0],$mod_name[0]);
+					}
+					
 					if(!empty($this->secondarymodule)){
-						$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
+						if($module!=''){
+							$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
+						} else {
+							$headerLabel_tmp = getTranslatedString($mod_name[0]." ".$mod_name[1]);
+						}
 					} else {
-						$headerLabel_tmp = getTranslatedString($mod_name[1],$mod_name[0]);
+						if($module!=''){
+							$headerLabel_tmp = getTranslatedString($mod_name[1],$mod_name[0]);
+						} else {
+							$headerLabel_tmp = getTranslatedString($mod_name[0]." ".$mod_name[1]);
+						}
 					}
 					if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString($headerLabel_tmp);
 					else $headerLabel = $headerLabel_tmp;
+					/*STRING TRANSLATION ends */
 					$header .= "<td class='rptCellLabel'>".$headerLabel."</td>";
 				}
 
@@ -1851,12 +1871,28 @@ class ReportRun extends CRMEntity
 						}
 						$append_cur = str_replace($fld->name,"",decode_html($this->getLstringforReportHeaders($fld->name)));
 						$headerLabel = str_replace("_"," ",$fld->name);
-						$mod_name = split('_',$headerLabel,2);
-						if($mod_name[0]!='')
+						/*STRING TRANSLATION starts */
+						$mod_name = split(' ',$headerLabel,2);
+						$module ='';
+						if(in_array($mod_name[0],$modules_selected))
 							$module = getTranslatedString($mod_name[0],$mod_name[0]);
-						$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
+						
+						if(!empty($this->secondarymodule)){
+							if($module!=''){
+								$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
+							} else {
+								$headerLabel_tmp = getTranslatedString($mod_name[0]." ".$mod_name[1]);
+							}
+						} else {
+							if($module!=''){
+								$headerLabel_tmp = getTranslatedString($mod_name[1],$mod_name[0]);
+							} else {
+								$headerLabel_tmp = getTranslatedString($mod_name[0]." ".$mod_name[1]);
+							}
+						}
 						if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString($headerLabel_tmp);
 						else $headerLabel = $headerLabel_tmp;
+						/*STRING TRANSLATION starts */
 						if(trim($append_cur)!="") $headerLabel .= $append_cur;
 					
 						$fieldvalue = str_replace("<", "&lt;", $fieldvalue);
@@ -2044,12 +2080,29 @@ class ReportRun extends CRMEntity
 						$headerLabel = str_replace($modules," ",$this->getLstringforReportHeaders($fld->name));
 						$arrayHeaders[] = $headerLabel;	
 					}	
+					/*STRING TRANSLATION starts */
 					$mod_name = split(' ',$headerLabel,2);
-					if($mod_name[0]!='')
-						$module = getTranslatedString($mod_name[0]);
-					$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
+					$module ='';
+					if(in_array($mod_name[0],$modules_selected)){
+						$module = getTranslatedString($mod_name[0],$mod_name[0]);
+					}
+					
+					if(!empty($this->secondarymodule)){
+						if($module!=''){
+							$headerLabel_tmp = $module." ".getTranslatedString($mod_name[1],$mod_name[0]);
+						} else {
+							$headerLabel_tmp = getTranslatedString($mod_name[0]." ".$mod_name[1]);
+						}
+					} else {
+						if($module!=''){
+							$headerLabel_tmp = getTranslatedString($mod_name[1],$mod_name[0]);
+						} else {
+							$headerLabel_tmp = getTranslatedString($mod_name[0]." ".$mod_name[1]);
+						}
+					}
 					if($headerLabel == $headerLabel_tmp) $headerLabel = getTranslatedString($headerLabel_tmp);
 					else $headerLabel = $headerLabel_tmp;
+					/*STRING TRANSLATION ends */
 					$header .= "<th>".$headerLabel."</th>";
 				}
 				$noofrows = $adb->num_rows($result);
