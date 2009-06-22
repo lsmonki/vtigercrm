@@ -44,8 +44,8 @@ if($_REQUEST['record'] != '' && $_REQUEST['return_id'] != '' && $_REQUEST['modul
 if($_REQUEST['module'] == $_REQUEST['return_module'])
 	$focus->mark_deleted($_REQUEST['record']);
 
-if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
+$parenttab = getParentTab();
 
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']."&parenttab=".$parenttab.$url);
+header("Location: index.php?module=".vtlib_purify($_REQUEST['return_module'])."&action=".vtlib_purify($_REQUEST['return_action'])."&record=".vtlib_purify($_REQUEST['return_id'])."&parenttab=$parenttab$url");
 
 ?>

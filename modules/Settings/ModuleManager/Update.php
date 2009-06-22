@@ -1,6 +1,14 @@
 <?php
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
 
-$module_update_step = $_REQUEST['module_update'];
+$module_update_step = vtlib_purify($_REQUEST['module_update']);
 
 require_once('Smarty_setup.php');
 require_once('vtlib/Vtiger/Package.php');
@@ -20,7 +28,8 @@ $target_modulename = $_REQUEST['target_modulename'];
 if($module_update_step == 'Step2') {
 	if(!is_dir($modulemanager_uploaddir)) mkdir($modulemanager_uploaddir);
 	$uploadfile = "usermodule_". time() . ".zip";
-	$uploadfilename = "$modulemanager_uploaddir/$uploadfile";
+	$uploadfilename = "$modulemanager_uploaddir/$uploadfile";	
+	checkFileAccess($modulemanager_uploaddir);
 
 	if(!move_uploaded_file($_FILES['module_zipfile']['tmp_name'], $uploadfilename)) {
 		$smarty->assign("MODULEUPDATE_FAILED", "true");
@@ -72,6 +81,7 @@ if($module_update_step == 'Step2') {
 } else if($module_update_step == 'Step3') {
 	$uploadfile = $_REQUEST['module_import_file'];
 	$uploadfilename = "$modulemanager_uploaddir/$uploadfile";
+	checkFileAccess($uploadfilename);
 
 	//$overwritedir = ($_REQUEST['module_dir_overwrite'] == 'true')? true : false;
 	$overwritedir = false; // Disallowing overwrites through Module Manager UI

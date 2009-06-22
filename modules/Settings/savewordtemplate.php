@@ -1,17 +1,13 @@
 <?php
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-* 
  ********************************************************************************/
 
-
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 $uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
@@ -31,7 +27,7 @@ $binFile =  preg_replace('/\s+/', '_', $file);
                 $binFile .= ".txt";
         }
 $_FILES["binFile"]["name"] = $binFile;
-$strDescription = $_REQUEST['txtDescription'];
+$strDescription = vtlib_purify($_REQUEST['txtDescription']);
 // Vulnerability fix ends
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
@@ -62,55 +58,37 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 	    }		    
 	    
  		$data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
-		//$data = addslashes(fread(fopen($uploaddir.$binFile, "r"), $filesize));
-	        //$textDesc = $_REQUEST['txtDescription'];	
-	//    $fileid = create_guid();
 		$date_entered = date('Y-m-d H:i:s');
-		//Retreiving the return module and setting the parent type
 		
-		$ret_module = $_REQUEST['return_module'];
-		//$ret_module = $_REQUEST['target_module'];
+		//Retreiving the return module and setting the parent type		
+		$ret_module = vtlib_purify($_REQUEST['return_module']);
 		$parent_type = '';		
-		if($_REQUEST['return_module'] == 'Leads')
-		{
+		if($_REQUEST['return_module'] == 'Leads') {
 			$parent_type = 'Lead';
-		}
-		elseif($_REQUEST['return_module'] == 'Accounts')
-		{
+		} elseif($_REQUEST['return_module'] == 'Accounts') {
 			$parent_type = 'Account';
-		}
-		elseif($_REQUEST['return_module'] == 'Contacts')
-		{
+		} elseif($_REQUEST['return_module'] == 'Contacts') {
 			$parent_type = 'Contact';
-		}
-		elseif($_REQUEST['return_module'] == 'HelpDesk')
-		{
+		} elseif($_REQUEST['return_module'] == 'HelpDesk') {
 			$parent_type = 'HelpDesk';
 		}
 	 
 		$genQueryId = $adb->getUniqueID("vtiger_wordtemplates");
-		if($genQueryId != '')
-		{
-			if($result!=false && $savefile=="true")
-			{
-				$module = $_REQUEST['target_module'];
+		if($genQueryId != '') {
+			if($result!=false && $savefile=="true") {
+				$module = vtlib_purify($_REQUEST['target_module']);
 				$sql = "INSERT INTO vtiger_wordtemplates ";
 				$sql .= "(templateid,module,date_entered,parent_type,data,description,filename,filesize,filetype) values (?,?,?,?,?,?,?,?,?)";
 				$params = array($genQueryId, $module, $adb->formatDate($date_entered, true), $parent_type, $adb->getEmptyBlob(false), $strDescription, $filename, $filesize, $filetype);
 				$result = $adb->pquery($sql, $params);
 
-				$result = $adb->updateBlob('vtiger_wordtemplates','data'," filename='". mysql_real_escape_string($filename) ."'",$data);
+				$result = $adb->updateBlob('vtiger_wordtemplates','data'," filename='". $adb->sql_escape_string($filename) ."'",$data);
 			   	deleteFile($uploaddir,$filename);
 			   	header("Location: index.php?action=listwordtemplates&module=Settings&parenttab=Settings");	
-			}
-		   	elseif($savefile=="false")
-	                {
-				$module = $_REQUEST['target_module'];
+			} elseif($savefile=="false") {
+				$module = vtlib_purify($_REQUEST['target_module']);
 			   	header("Location: index.php?action=upload&module=Settings&parenttab=Settings&flag=".$error_flag."&description=".$strDescription."&tempModule=".$module);	
-				   
-			}  			   
-			else
-			{
+			} else {
 				include('themes/'.$theme.'/header.php');
 				$errormessage = "<font color='red'><B>Error Message<ul>
 				<li><font color='red'>Invalid file OR</font>
@@ -125,7 +103,7 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 	//Added for Invaild file path 
 	else
         {
-		$module = $_REQUEST['target_module'];
+		$module = vtlib_purify($_REQUEST['target_module']);
 	   	header("Location: index.php?action=upload&module=Settings&parenttab=Settings&flag=2&description=".$strDescription."&tempModule=".$module);	
 
         }

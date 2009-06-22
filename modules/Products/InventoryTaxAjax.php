@@ -1,20 +1,19 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *
- ********************************************************************************/
+ *********************************************************************************/
 
 global $theme, $mod_strings;
 $theme_path="themes/".$theme."/";
 
-$productid = $_REQUEST['productid'];
-$rowid = $_REQUEST['curr_row'];
-$product_total = $_REQUEST['productTotal'];
+$productid = vtlib_purify($_REQUEST['productid']);
+$rowid = vtlib_purify($_REQUEST['curr_row']);
+$product_total = vtlib_purify($_REQUEST['productTotal']);
 
 $tax_details = getTaxDetailsForProduct($productid,'all');//we should pass available instead of all if we want to display only the available taxes.
 $associated_tax_count = count($tax_details);
@@ -65,6 +64,5 @@ if($associated_tax_count == 0)
 $tax_div .= '<input type="hidden" id="hdnTaxTotal'.$rowid.'" name="hdnTaxTotal'.$rowid.'" value="'.$net_tax_total.'">';
 
 echo $tax_div;
-
 
 ?>

@@ -64,7 +64,7 @@
                             <td width="20%" nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_SERVER_ADDRESS} </strong></td>
                             <td width="80%" class="small cellText">
 				{if $smarty.request.server neq ''}
-				<input type="text" class="detailedViewTextBox small" value="{$smarty.request.server}" name="server"></strong>
+				<input type="text" class="detailedViewTextBox small" value="{$smarty.request.server|@vtlib_purify}" name="server"></strong>
 				{else}
 				<input type="text" class="detailedViewTextBox small" value="{$PROXYSERVER}" name="server"></strong>
 				{/if}
@@ -74,7 +74,7 @@
                             <td width="20%" nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_PROXY_PORT} </strong></td>
                             <td width="80%" class="small cellText">
 				{if $smarty.request.port neq ''}
-                                <input type="text" class="detailedViewTextBox small" value="{$smarty.request.port}" name="port"></strong>
+                                <input type="text" class="detailedViewTextBox small" value="{$smarty.request.port|@vtlib_purify}" name="port"></strong>
 				{else}
                                 <input type="text" class="detailedViewTextBox small" value="{$PROXYPORT}" name="port"></strong>
 				{/if}
@@ -85,7 +85,7 @@
                             <td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_USERNAME}</strong></td>
                             <td class="small cellText">
 				{if $smarty.request.server_username neq ''}
-				<input type="text" class="detailedViewTextBox small" value="{$smarty.request.server_username}" name="server_username">
+				<input type="text" class="detailedViewTextBox small" value="{$smarty.request.server_username|@vtlib_purify}" name="server_username">
 				{else}
 				<input type="text" class="detailedViewTextBox small" value="{$PROXYUSER}" name="server_username">
 				{/if}

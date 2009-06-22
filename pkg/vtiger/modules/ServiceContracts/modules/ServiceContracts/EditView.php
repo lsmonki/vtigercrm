@@ -11,15 +11,12 @@ global $app_strings, $mod_strings, $current_language, $currentModule, $theme;
 
 require_once('Smarty_setup.php');
 
-checkFileAccess("modules/$currentModule/$currentModule.php");
-require_once("modules/$currentModule/$currentModule.php");
-
-$focus = new $currentModule();
+$focus = CRMEntity::getInstance($currentModule);
 $smarty = new vtigerCRM_Smarty();
 
 $category = getParentTab($currentModule);
 $record = $_REQUEST['record'];
-$isduplicate = $_REQUEST['isDuplicate'];
+$isduplicate = vtlib_purify($_REQUEST['isDuplicate']);
 
 //added to fix the issue4600
 $searchurl = getBasic_Advance_SearchURL();
@@ -39,7 +36,7 @@ if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
 	setObjectValuesFromRequest($focus);
 }
 if(!empty($_REQUEST['service_id'])) {
-	require_once("modules/Services/Services.php");
+	require_once('modules/Services/Services.php');
 	$serviceObj = new Services();
 	$serviceObj->retrieve_entity_info($_REQUEST['service_id'], 'Services');
 	$focus->column_fields['tracking_unit'] = $serviceObj->column_fields['service_usageunit'];	
@@ -87,10 +84,10 @@ if($focus->mode == 'edit' || $isduplicate) {
 	$smarty->assign('UPDATEINFO',updateInfo($record));
 }
 
-if(isset($_REQUEST['return_module']))    $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
-if(isset($_REQUEST['return_action']))    $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
-if(isset($_REQUEST['return_id']))        $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
-if (isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+if(isset($_REQUEST['return_module']))    $smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
+if(isset($_REQUEST['return_action']))    $smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
+if(isset($_REQUEST['return_id']))        $smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
+if (isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", vtlib_purify($_REQUEST['return_viewname']));
 
 // Field Validation Information 
 $tabid = getTabid($currentModule);

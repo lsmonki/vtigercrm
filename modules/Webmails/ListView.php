@@ -1,39 +1,29 @@
 <?php
-/*********************************************************************************
- ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-  * ("License"); You may not use this file except in compliance with the License
-  * The Initial Developer of the Original Code is FOSS Labs.
-  * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
-  * Portions created by vtiger are Copyright (C) vtiger.
-  * All Rights Reserved.
-  *
-  ********************************************************************************/
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Initial Developer of the Original Code is FOSS Labs.
+ * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
 
-// figure out which page we are on and what mailbox we want to view
-//if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != ""){$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
-if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "")
-{
-	$mailbox=$_REQUEST["mailbox"];
-}
-else
-{
+if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {
+	$mailbox=vtlib_purify($_REQUEST["mailbox"]);
+} else {
 	$mailbox="INBOX";
 }
 
-if($_REQUEST["start"] && $_REQUEST["start"] != "")
-{
-	$start=$_REQUEST["start"];
-}
-else
-{
+if($_REQUEST["start"] && $_REQUEST["start"] != "") {
+	$start=vtlib_purify($_REQUEST["start"]);
+} else {
 	$start="1";
 }
-$show_hidden=$_REQUEST["show_hidden"];
+$show_hidden=vtlib_purify($_REQUEST["show_hidden"]);
 
 global $current_user;
 //checking the imap support in php
-if(!function_exists('imap_open'))
-{
+if(!function_exists('imap_open')) {
 	echo "<strong>".$mod_strings['LBL_ENABLE_IMAP_SUPPORT']."</strong>";
 	exit();
 }
@@ -269,7 +259,7 @@ $overview=$elist["overview"];
 // these are mainly used in the preview window and could be ajaxified/
 // during the preview window load instead.
 var msgCount = "<?php echo $numEmails;?>";
-var start = "<?php echo $_REQUEST['start'];?>";
+var start = "<?php echo vtlib_purify($_REQUEST['start']);?>";
 var gselected_mail = '';
 var showQualify = "<?php echo $show_qualify;?>";
 <?php
@@ -320,7 +310,7 @@ if(($numEmails) <= 0)
 else {
 
 	if(isset($_REQUEST["search"]) && trim($_REQUEST["search_input"]) != '') {
-		$searchstring = $_REQUEST["search_type"].' "'.$_REQUEST["search_input"].'"';
+		$searchstring = vtlib_purify($_REQUEST["search_type"]).' "'.vtlib_purify($_REQUEST["search_input"]).'"';
 		//echo $searchstring."<br>";
 		$searchlist = Array();
 		$searchlist = imap_search($MailBox->mbox,$searchstring);
@@ -430,7 +420,7 @@ if (is_array($list)) {
 imap_close($MailBox->mbox);
 
 $smarty = new vtigerCRM_Smarty;
-$smarty->assign("SEARCH_VALUE",$_REQUEST['search_input']);
+$smarty->assign("SEARCH_VALUE",vtlib_purify($_REQUEST['search_input']));
 $smarty->assign("USERID", $current_user->id);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);

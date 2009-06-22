@@ -1,11 +1,11 @@
 <?php
-/*********************************************************************************
- ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-  * ("License"); You may not use this file except in compliance with the License
-  * The Original Code is:  vtiger CRM Open Source
-  * The Initial Developer of the Original Code is vtiger.
-  * Portions created by vtiger are Copyright (C) vtiger.
-  * All Rights Reserved.
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
  *******************************************************************************/
 
 /**
@@ -20,8 +20,7 @@
  */
 function homepage_getUpcomingActivities($maxval,$calCnt){
 	require_once("data/Tracker.php");
-	require_once("include/utils/utils.php");
-	require_once('include/utils/CommonUtils.php');
+	require_once('include/utils/utils.php');
 	
 	global $adb;
 	global $current_user;
@@ -188,8 +187,8 @@ function homepage_getPendingActivities($maxval,$calCnt){
 function getNumberOfColumns(){
 	global $current_user, $adb;
 	
-	$sql = "select * from vtiger_home_layout where userid=".$current_user->id;
-	$result = $adb->query($sql);
+	$sql = "select * from vtiger_home_layout where userid=?";
+	$result = $adb->pquery($sql, array($current_user->id));
 	
 	if($adb->num_rows($result)>0){
 		$data = $adb->query_result($result,0,"layout");

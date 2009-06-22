@@ -23,7 +23,7 @@ if(isset($_REQUEST["record"]))
 	$adb->pquery($query, array());
 	$query = 'update vtiger_rss set starred=1 where rssid =?'; 
 	$adb->pquery($query, array($_REQUEST["record"]));
-	echo $_REQUEST["record"];
+	echo vtlib_purify($_REQUEST["record"]);
 }
 elseif(isset($_REQUEST["rssurl"]))
 {

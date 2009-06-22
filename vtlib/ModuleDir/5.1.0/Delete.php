@@ -8,25 +8,19 @@
  * All Rights Reserved.
  ************************************************************************************/
 global $currentModule;
+$focus = CRMEntity::getInstance($currentModule);
 
-checkFileAccess("modules/$currentModule/$currentModule.php");
-require_once("modules/$currentModule/$currentModule.php");
-
-$focus = new $currentModule();
-
-$record = $_REQUEST['record'];
-$module = $_REQUEST['module'];
-$return_module = $_REQUEST['return_module'];
-$return_action = $_REQUEST['return_action'];
-$parenttab = $_REQUEST['parenttab'];
-$return_id = $_REQUEST['return_id'];
+$record = vtlib_purify($_REQUEST['record']);
+$module = vtlib_purify($_REQUEST['module']);
+$return_module = vtlib_purify($_REQUEST['return_module']);
+$return_action = vtlib_purify($_REQUEST['return_action']);
+$return_id = vtlib_purify($_REQUEST['return_id']);
+$parenttab = getParentTab();
 
 //Added to fix 4600
 $url = getBasic_Advance_SearchURL();
 
 DeleteEntity($currentModule, $return_module, $focus, $record, $return_id);
-
-if($_REQUEST['parenttab']) $parenttab = $_REQUEST['parenttab'];
 
 header("Location: index.php?module=$return_module&action=$return_action&record=$return_id&parenttab=$parenttab&relmodule=$module".$url);
 

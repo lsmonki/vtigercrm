@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-  ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-   * ("License"); You may not use this file except in compliance with the License
-   * The Original Code is:  vtiger CRM Open Source
-   * The Initial Developer of the Original Code is vtiger.
-   * Portions created by vtiger are Copyright (C) vtiger.
-   * All Rights Reserved.
-  *
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
  ********************************************************************************/
 
 require_once('include/utils/utils.php');
@@ -20,8 +19,8 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-$recprefix = $_REQUEST['recprefix'];
-$recnumber = $_REQUEST['recnumber'];
+$recprefix = vtlib_purify($_REQUEST['recprefix']);
+$recnumber = vtlib_purify($_REQUEST['recnumber']);
 
 $module_array=getCRMSupportedModules();
 if(count($module_array) <= 0) {
@@ -42,14 +41,12 @@ if(count($module_array) <= 0) {
 
 $modulesList = array_keys($module_array);
 
-$selectedModule = $_REQUEST['selmodule'];
+$selectedModule = vtlib_purify($_REQUEST['selmodule']);
 if($selectedModule == '') $selectedModule = $modulesList[0];
 
 $mode = $_REQUEST['mode'];
 if(in_array($selectedModule, $module_array)) {
-	checkFileAccess("modules/$selectedModule/$selectedModule.php");
-	require_once("modules/$selectedModule/$selectedModule.php");
-	$focus = new $selectedModule();
+	$focus = CRMEntity::getInstance($selectedModule);
 }
 if($mode == 'UPDATESETTINGS') {
 	if(isset($focus)) {

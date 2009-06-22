@@ -24,7 +24,6 @@ require_once('include/utils/utils.php');
 require_once('include/logging.php');
 require_once("modules/Potentials/Charts.php");
 require_once("modules/Dashboard/Forms.php");
-require_once('include/ComboUtil.php');
 global $app_list_strings, $current_language, $tmp_dir, $currentModule, $action, $current_user, $theme;
 $current_module_strings = return_module_language($current_language, 'Dashboard');
 

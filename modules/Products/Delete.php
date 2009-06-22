@@ -8,18 +8,14 @@
  * All Rights Reserved.
  ************************************************************************************/
 global $currentModule;
+$focus = CRMEntity::getInstance($currentModule);
 
-checkFileAccess("modules/$currentModule/$currentModule.php");
-require_once("modules/$currentModule/$currentModule.php");
-
-$focus = new $currentModule();
-
-$record = $_REQUEST['record'];
-$module = $_REQUEST['module'];
-$return_module = $_REQUEST['return_module'];
-$return_action = $_REQUEST['return_action'];
-$parenttab = $_REQUEST['parenttab'];
-$return_id = $_REQUEST['return_id'];
+$record = vtlib_purify($_REQUEST['record']);
+$module = vtlib_purify($_REQUEST['module']);
+$return_module = vtlib_purify($_REQUEST['return_module']);
+$return_action = vtlib_purify($_REQUEST['return_action']);
+$parenttab = getParentTab();
+$return_id = vtlib_purify($_REQUEST['return_id']);
 
 //Added to fix 4600
 $url = getBasic_Advance_SearchURL();
@@ -31,10 +27,10 @@ if($return_module!="Products" || ($return_module=="Products" && empty($return_id
 else
 	$focus->deleteProduct2ProductRelation($record, $return_id, $_REQUEST['is_parent']);
 
-if($_REQUEST['parenttab']) $parenttab = $_REQUEST['parenttab'];
+$parenttab = getParentTab();
 
 if(isset($_REQUEST['activity_mode']))
-	$url .= '&activity_mode='.$_REQUEST['activity_mode'];
+	$url .= '&activity_mode='.vtlib_purify($_REQUEST['activity_mode']);
 
 header("Location: index.php?module=$return_module&action=$return_action&record=$return_id&parenttab=$parenttab&relmodule=$module".$url);
 

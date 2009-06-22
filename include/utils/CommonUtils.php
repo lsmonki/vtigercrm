@@ -828,14 +828,14 @@ function getURLstring($focus)
 		if(isset($_REQUEST[$fldname]) && $_REQUEST[$fldname] != '')
 		{
 			if($qry == '')
-			$qry = "&".$fldname."=".$_REQUEST[$fldname];
+			$qry = "&".$fldname."=".vtlib_purify($_REQUEST[$fldname]);
 			else
-			$qry .="&".$fldname."=".$_REQUEST[$fldname];
+			$qry .="&".$fldname."=".vtlib_purify($_REQUEST[$fldname]);
 		}
 	}
 	if(isset($_REQUEST['current_user_only']) && $_REQUEST['current_user_only'] !='')
 	{
-		$qry .="&current_user_only=".$_REQUEST['current_user_only'];
+		$qry .="&current_user_only=".vtlib_purify($_REQUEST['current_user_only']);
 	}
 	if(isset($_REQUEST['advanced']) && $_REQUEST['advanced'] =='true')
 	{
@@ -1402,23 +1402,18 @@ function getParentTabFromModule($module)
  * Takes no parameter but gets the vtiger_parenttab value from form request
  * This returns value string type 
  */
-
-function getParentTab()
-{
+function getParentTab() {
     global $log, $default_charset;	
     $log->debug("Entering getParentTab() method ...");
-    if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] !='')
-    {
-     	       $log->debug("Exiting getParentTab method ...");
-               return htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset); //BUGFIX  " Cross-Site-Scripting "
-    }
-    else
-    {
+    if(!empty($_REQUEST['parenttab'])) {
 		$log->debug("Exiting getParentTab method ...");
-                return getParentTabFromModule($_REQUEST['module']);
+		return vtlib_purify($_REQUEST['parenttab']);
+    } else {
+		$log->debug("Exiting getParentTab method ...");
+		return getParentTabFromModule($_REQUEST['module']);
     }
-
 }
+
 /**
  * This function is used to get the days in between the current time and the modified time of an entity .
  * Takes the input parameter as $id - crmid  it will calculate the number of days in between the
@@ -1494,14 +1489,14 @@ function getProductImages($id)
 
 function SaveImage($_FILES,$module,$id,$mode)
 {
-	global $log;
+	global $log, $root_directory;
 	$log->debug("Entering SaveImage(".$_FILES.",".$module.",".$id.",".$mode.") method ...");
 	global $adb;
 	$uploaddir = $root_directory."test/".$module."/" ;//set this to which location you need to give the contact image
 	$log->info("The Location to Save the Contact Image is ".$uploaddir);
 	$file_path_name = $_FILES['imagename']['name'];
 	if (isset($_REQUEST['imagename_hidden'])) {
-		$file_name = $_REQUEST['imagename_hidden'];
+		$file_name = vtlib_purify($_REQUEST['imagename_hidden']);
 	} else {
 		//allowed filename like UTF-8 Character 
 		$file_name = ltrim(basename(" ".$file_path_name)); // basename($file_path_name);
@@ -3252,25 +3247,25 @@ function getBasic_Advance_SearchURL()
 	$url = '';
 	if($_REQUEST['searchtype'] == 'BasicSearch')
 	{
-		$url .= (isset($_REQUEST['query']))?'&query='.$_REQUEST['query']:'';
-		$url .= (isset($_REQUEST['search_field']))?'&search_field='.$_REQUEST['search_field']:'';
-		$url .= (isset($_REQUEST['search_text']))?'&search_text='.to_html($_REQUEST['search_text']):'';
-		$url .= (isset($_REQUEST['searchtype']))?'&searchtype='.$_REQUEST['searchtype']:'';
-		$url .= (isset($_REQUEST['type']))?'&type='.$_REQUEST['type']:'';
+		$url .= (isset($_REQUEST['query']))?'&query='.vtlib_purify($_REQUEST['query']):'';
+		$url .= (isset($_REQUEST['search_field']))?'&search_field='.vtlib_purify($_REQUEST['search_field']):'';
+		$url .= (isset($_REQUEST['search_text']))?'&search_text='.to_html(vtlib_purify($_REQUEST['search_text'])):'';
+		$url .= (isset($_REQUEST['searchtype']))?'&searchtype='.vtlib_purify($_REQUEST['searchtype']):'';
+		$url .= (isset($_REQUEST['type']))?'&type='.vtlib_purify($_REQUEST['type']):'';
 	}
 	if ($_REQUEST['searchtype'] == 'advance')
 	{
-		$url .= (isset($_REQUEST['query']))?'&query='.$_REQUEST['query']:'';
+		$url .= (isset($_REQUEST['query']))?'&query='.vtlib_purify($_REQUEST['query']):'';
 		$count=$_REQUEST['search_cnt'];
 		for($i=0;$i<$count;$i++)
 		{
-			$url .= (isset($_REQUEST['Fields'.$i]))?'&Fields'.$i.'='.stripslashes(str_replace("'","",$_REQUEST['Fields'.$i])):'';
-			$url .= (isset($_REQUEST['Condition'.$i]))?'&Condition'.$i.'='.$_REQUEST['Condition'.$i]:'';
-			$url .= (isset($_REQUEST['Srch_value'.$i]))?'&Srch_value'.$i.'='.to_html($_REQUEST['Srch_value'.$i]):'';
+			$url .= (isset($_REQUEST['Fields'.$i]))?'&Fields'.$i.'='.stripslashes(str_replace("'","",vtlib_purify($_REQUEST['Fields'.$i]))):'';
+			$url .= (isset($_REQUEST['Condition'.$i]))?'&Condition'.$i.'='.vtlib_purify($_REQUEST['Condition'.$i]):'';
+			$url .= (isset($_REQUEST['Srch_value'.$i]))?'&Srch_value'.$i.'='.to_html(vtlib_purify($_REQUEST['Srch_value'.$i])):'';
 		}
-		$url .= (isset($_REQUEST['searchtype']))?'&searchtype='.$_REQUEST['searchtype']:'';
-		$url .= (isset($_REQUEST['search_cnt']))?'&search_cnt='.$_REQUEST['search_cnt']:'';
-		$url .= (isset($_REQUEST['matchtype']))?'&matchtype='.$_REQUEST['matchtype']:'';
+		$url .= (isset($_REQUEST['searchtype']))?'&searchtype='.vtlib_purify($_REQUEST['searchtype']):'';
+		$url .= (isset($_REQUEST['search_cnt']))?'&search_cnt='.vtlib_purify($_REQUEST['search_cnt']):'';
+		$url .= (isset($_REQUEST['matchtype']))?'&matchtype='.vtlib_purify($_REQUEST['matchtype']):'';
 	}
 	return $url;
 

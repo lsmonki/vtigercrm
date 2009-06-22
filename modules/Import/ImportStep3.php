@@ -27,7 +27,6 @@ require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportOpportunity.php');
 require_once('modules/Import/ImportProduct.php');
 require_once('modules/Import/ImportMap.php');
-//Pavani: Import this file to Support Imports for Trouble tickets and vendors
 require_once('modules/Import/ImportTicket.php');
 require_once('modules/Import/ImportVendors.php');
 require_once('modules/Import/UsersLastImport.php');
@@ -91,7 +90,7 @@ if(isset( $_REQUEST['has_header']) && $_REQUEST['has_header'] == 'on'){
 }
 
 if($_REQUEST['modulename'] != ''){
-	$_REQUEST['module'] = $_REQUEST['modulename'];
+	$_REQUEST['module'] = vtlib_purify($_REQUEST['modulename']);
 }
 
 $import_object_array = Array(
@@ -109,6 +108,7 @@ if(isset($_REQUEST['module']) && $_REQUEST['module'] != ''){
 	// vtlib customization: Hook added to enable import for un-mapped modules
 	$module = $_REQUEST['module'];	
 	if($current_bean_type == null) {
+		checkFileAccess("modules/$module/$module.php");
 		require_once("modules/$module/$module.php");
 		$current_bean_type = $module;
 		$callInitImport = true;		
@@ -170,9 +170,9 @@ $max_lines = -1;
 $ret_value = 0;
 
 if(isset($_REQUEST['tmp_file'])) { 
-	$_SESSION['tmp_file'] = $_REQUEST['tmp_file']; 
+	$_SESSION['tmp_file'] = vtlib_purify($_REQUEST['tmp_file']); 
 } else { 
-	$_REQUEST['tmp_file'] = $_SESSION['tmp_file']; 
+	$_REQUEST['tmp_file'] = vtlib_purify($_SESSION['tmp_file']); 
 } 
 // End 
 
@@ -264,13 +264,13 @@ if($xrows != ''){
 	$datarows = $xrows;
 }
 if($_REQUEST['skipped_record_count'] != ''){
-	$skipped_record_count = $_REQUEST['skipped_record_count'];
+	$skipped_record_count = vtlib_purify($_REQUEST['skipped_record_count']);
 }else{
 	$_REQUEST['skipped_record_count'] = 0;
 }
 
 if($_REQUEST['noofrows'] != ''){
-	$totalnoofrows = $_REQUEST['noofrows'];
+	$totalnoofrows = vtlib_purify($_REQUEST['noofrows']);
 }else{
 	$totalnoofrows = count($datarows);
 }
@@ -278,15 +278,15 @@ if($_REQUEST['noofrows'] != ''){
 $loopcount = ($totalnoofrows/$RECORDCOUNT)+1;
 
 if($_REQUEST['startval'] != ''){
-	$START = $_REQUEST['startval'];
+	$START = vtlib_purify($_REQUEST['startval']);
 }else{
-	$START = $_SESSION['startval'];
+	$START = vtlib_purify($_SESSION['startval']);
 }
 
 if($_REQUEST['recordcount'] != ''){
-	$RECORDCOUNT = $_REQUEST['recordcount'];
+	$RECORDCOUNT = vtlib_purify($_REQUEST['recordcount']);
 }else{
-	$RECORDCOUNT = $_SESSION['recordcount'];
+	$RECORDCOUNT = vtlib_purify($_SESSION['recordcount']);
 }
 
 if(($START+$RECORDCOUNT) > $totalnoofrows){
@@ -300,15 +300,15 @@ if($totalnoofrows > $RECORDCOUNT && $START < $totalnoofrows){
 		$rows1[] = $datarows[$j];
 	}
 
-	$res = InsertImportRecords($datarows,$rows1,$focus,$ret_field_count,$col_pos_to_field,$START,$RECORDCOUNT,$_REQUEST['module'],$totalnoofrows,$skipped_record_count);
+	$res = InsertImportRecords($datarows,$rows1,$focus,$ret_field_count,$col_pos_to_field,$START,$RECORDCOUNT,vtlib_purify($_REQUEST['module']),$totalnoofrows,$skipped_record_count);
 	if($START != 0){
 		echo '<b>'.$res.'</b>';
 	}
 	
-	$count = $_REQUEST['count'];
+	$count = vtlib_purify($_REQUEST['count']);
 }else{
 	if($START == 0){
-		$res = InsertImportRecords($datarows,$datarows,$focus,$ret_field_count,$col_pos_to_field,$START,$totalnoofrows,$_REQUEST['module'],$totalnoofrows,$skipped_record_count);
+		$res = InsertImportRecords($datarows,$datarows,$focus,$ret_field_count,$col_pos_to_field,$START,$totalnoofrows,vtlib_purify($_REQUEST['module']),$totalnoofrows,$skipped_record_count);
 	}
 }
 

@@ -11,19 +11,18 @@
 
 global $currentModule, $rstart;
 
-checkFileAccess("modules/$currentModule/$currentModule.php");
-require_once("modules/$currentModule/$currentModule.php");
+$focus = CRMEntity::getInstance($currentModule);
 
-$idlist= $_REQUEST['massedit_recordids'];
-$viewid = $_REQUEST['viewname'];
-$return_module = $_REQUEST['massedit_module'];
+$idlist= vtlib_purify($_REQUEST['massedit_recordids']);
+$viewid = vtlib_purify($_REQUEST['viewname']);
+$return_module = vtlib_purify($_REQUEST['massedit_module']);
 $return_action = 'index';
 
 //Added to fix 4600
 $url = getBasic_Advance_SearchURL();
 
 if(isset($_REQUEST['start']) && $_REQUEST['start']!=''){
-	$rstart = "&start=".$_REQUEST['start'];
+	$rstart = "&start=".vtlib_purify($_REQUEST['start']);
 }
 
 if(isset($idlist)) {
@@ -33,7 +32,6 @@ if(isset($idlist)) {
 		if($recordid == '') continue;
 		if(isPermitted($currentModule,'EditView',$recordid) == 'yes') {
 			// Save each module record with update value.
-			$focus = new $currentModule();
 			$focus->retrieve_entity_info($recordid, $currentModule);
 			$focus->mode = 'edit';		
 			$focus->id = $recordid;		

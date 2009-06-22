@@ -124,7 +124,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
 		$label_fld[] = $col_fields[$fieldname];
 		
-		$fieldname = mysql_real_escape_string($fieldname);
+		$fieldname = $adb->sql_escape_string($fieldname);
 		$pick_query="select $fieldname from vtiger_$fieldname order by sortorderid";
 		$params = array();
 		$pickListResult = $adb->pquery($pick_query, $params);
@@ -222,7 +222,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] = getTranslatedString($fieldlabel, $module);
 		$label_fld[] = getTranslatedString($col_fields[$fieldname]);
 
-		$pick_query="select * from vtiger_" . mysql_real_escape_string($fieldname);
+		$pick_query="select * from vtiger_" . $adb->sql_escape_string($fieldname);
 		$pickListResult = $adb->pquery($pick_query, array());
 		$noofpickrows = $adb->num_rows($pickListResult);
 		$options = array();

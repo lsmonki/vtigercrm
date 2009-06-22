@@ -9,7 +9,6 @@
   *
  ********************************************************************************/
 require_once ('include/utils/utils.php');
-require_once ('include/utils/CommonUtils.php');
 require_once ('Smarty_setup.php');
 global $app_strings;
 global $mod_strings;

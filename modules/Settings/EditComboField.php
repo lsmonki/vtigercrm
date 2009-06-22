@@ -1,32 +1,29 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
+
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-global $mod_strings;
+global $mod_strings, $adb;
 global $app_strings;
 global $app_list_strings, $current_language;
 
-$tableName=$_REQUEST["fieldname"];
-$moduleName=$_REQUEST["fld_module"];
-$uitype=$_REQUEST["uitype"];
+$tableName=vtlib_purify($_REQUEST["fieldname"]);
+$tableName = $adb->sql_escape_string($tableName);
+$moduleName=vtlib_purify($_REQUEST["fld_module"]);
+$uitype=vtlib_purify($_REQUEST["uitype"]);
 
-if(isset($_REQUEST['parentroleid']) && $_REQUEST['parentroleid']  != '')
-{
-	$roleid = $_REQUEST['parentroleid'];
+if(isset($_REQUEST['parentroleid']) && $_REQUEST['parentroleid']  != '') {
+	$roleid = vtlib_purify($_REQUEST['parentroleid']);
+} else {
+	$roleid = vtlib_purify($_REQUEST["roleid"]);
 }
-else
-{
-	$roleid=$_REQUEST["roleid"];
-}
-
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -60,7 +57,7 @@ if(isset($_REQUEST['parentroleid']) && $_REQUEST['parentroleid']!= '')
 	echo '<script>window.opener.document.getElementById("picklist_values").value = document.getElementById("picklist").value;</script>';
 
 	echo '<script>window.close();</script>';
-	$roleid = $_REQUEST['parentroleid'];
+	$roleid = vtlib_purify($_REQUEST['parentroleid']);
 	die;
 }
 

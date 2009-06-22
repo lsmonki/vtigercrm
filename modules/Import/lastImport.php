@@ -74,13 +74,9 @@ $smarty->assign("IMP", $import_mod_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 
-$smarty->assign("MODULE", $_REQUEST['req_mod']);
-$smarty->assign("SINGLE_MOD", $_REQUEST['modulename']);
-$smarty->assign("CATEGORY", $_SESSION['import_parenttab']);
-
-//@session_unregister("import_parenttab");
-
-//$smarty->display("Buttons_List1.tpl");
+$smarty->assign("MODULE", vtlib_purify($_REQUEST['req_mod']));
+$smarty->assign("SINGLE_MOD", vtlib_purify($_REQUEST['modulename']));
+$smarty->assign("CATEGORY", vtlib_purify($_SESSION['import_parenttab']));
 
 global $limit;
 global $list_max_entries_per_page;
@@ -169,17 +165,14 @@ foreach($import_modules_array as $module_name => $object_name)
 		$smarty->assign("SHOW_MASS_SELECT",'false');
 
 		//Retreiving the start value from request
-		if($module_name == $_REQUEST['nav_module'] && isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-		{
-			$start = $_REQUEST['start'];
-		}
-		else
-		{
+		if($module_name == $_REQUEST['nav_module'] && isset($_REQUEST['start']) && $_REQUEST['start'] != '') {
+			$start = vtlib_purify($_REQUEST['start']);
+		} else {
 			$start = 1;
 		}
 
-		$info_message='&recordcount='.$_REQUEST['recordcount'].'&noofrows='.$_REQUEST['noofrows'].'&message='.$_REQUEST['message'].'&skipped_record_count='.$_REQUEST['skipped_record_count'];
-		$url_string = '&modulename='.$_REQUEST['modulename'].'&nav_module='.$module_name.$info_message;
+		$info_message='&recordcount='.vtlib_purify($_REQUEST['recordcount']).'&noofrows='.vtlib_purify($_REQUEST['noofrows']).'&message='.vtlib_purify($_REQUEST['message']).'&skipped_record_count='.vtlib_purify($_REQUEST['skipped_record_count']);
+		$url_string = '&modulename='.vtlib_purify($_REQUEST['modulename']).'&nav_module='.$module_name.$info_message;
 		$viewid = '';
 
 		//Retreive the Navigation array
@@ -204,7 +197,7 @@ foreach($import_modules_array as $module_name => $object_name)
 		echo '<link rel="stylesheet" type="text/css" href="'.$theme_path.'/style.css">';
 		echo '<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>';
 		echo '<script language="JavaScript" type="text/javascript" src="include/js/' . $_SESSION['authenticated_user_language'] . '.lang.js?' . $_SESSION['vtiger_version'] . '"></script>';
-		echo '<script language="JavaScript" type="text/javascript" src="modules/'. $_REQUEST['req_mod'] . '/' . $_REQUEST['req_mod'] . '.js"></script>';
+		echo '<script language="JavaScript" type="text/javascript" src="modules/'. vtlib_purify($_REQUEST['req_mod']) . '/' . vtlib_purify($_REQUEST['req_mod']) . '.js"></script>';
 		echo '<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>';
 		
 		$smarty->display("ListViewEntries.tpl");

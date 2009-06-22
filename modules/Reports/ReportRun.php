@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 global $calpath;
 global $app_strings,$mod_strings;
@@ -295,8 +294,7 @@ class ReportRun extends CRMEntity
 					        $querycolumn = " case vtiger_crmentityRel$module.setype";
 					        for($j=0;$j<$adb->num_rows($ui10_modules_query);$j++){
 					        	$rel_mod = $adb->query_result($ui10_modules_query,$j,'relmodule');
-					        	require_once("modules/$rel_mod/$rel_mod.php");
-					        	$rel_obj = new $rel_mod();
+					        	$rel_obj = CRMEntity::getInstance($rel_mod);
 					        	vtlib_setup_modulevars($rel_mod, $rel_obj);
 								
 								$rel_tab_name = $rel_obj->table_name;
@@ -1212,7 +1210,6 @@ class ReportRun extends CRMEntity
 		if($secmodule!=''){
 			$secondarymodule = explode(":",$secmodule);
 			foreach($secondarymodule as $key=>$value) {
-					require_once("data/CRMEntity.php");
 					$foc = CRMEntity::getInstance($value);
 					$query .= $foc->generateReportsSecQuery($module,$value);
 			}
@@ -1454,11 +1451,10 @@ class ReportRun extends CRMEntity
 		
 		else {
 	 			if($module!=''){
-	 			require_once("modules/$module/$module.php");
-	 			$focus = new $module();
- 						$query = $focus->generateReportsQuery($module)
-					.$this->getRelatedModulesQuery($module,$this->secondarymodule)."
-					where vtiger_crmentity.deleted=0";
+	 				$focus = CRMEntity::getInstance($module);
+					$query = $focus->generateReportsQuery($module)
+								.$this->getRelatedModulesQuery($module,$this->secondarymodule)
+								." WHERE vtiger_crmentity.deleted=0";
 	 			}
 			}
 		$log->info("ReportRun :: Successfully returned getReportsQuery".$module);
@@ -2566,13 +2562,12 @@ class ReportRun extends CRMEntity
 				$mulsel="select distinct $fieldname from vtiger_$fieldname inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$fieldname.picklist_valueid where roleid ='".$roleid."' and picklistid in (select picklistid from vtiger_$fieldname) order by sortid asc";
 			}
 			if($fieldname != 'firstname')
-			$mulselresult = $adb->query($mulsel);
-			$fieldvalues_list = array();
+				$mulselresult = $adb->query($mulsel);
 			for($j=0;$j < $adb->num_rows($mulselresult);$j++)
 			{
-				$fieldvalues[] = $adb->query_result($mulselresult,$j,$fieldname);
-				if(in_array($fldvalue,$fieldvalues_list)) continue;
-					$fieldvalues[] = $fldvalue;
+				$fldvalue = $adb->query_result($mulselresult,$j,$fieldname);
+				if(in_array($fldvalue,$fieldvalues)) continue;
+				$fieldvalues[] = $fldvalue;
 			}
 			$field_count = count($fieldvalues);
 			if( $uitype == 15 && $field_count > 0 && ($fieldname == 'taskstatus' || $fieldname == 'eventstatus'))

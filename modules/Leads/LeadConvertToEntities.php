@@ -1,34 +1,35 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
 require_once('modules/Leads/Leads.php');
 require_once('include/ComboUtil.php');
 //Getting the Parameters from the ConvertLead Form
-$id = $_REQUEST["record"];
+$id = vtlib_purify($_REQUEST["record"]);
 
-$module = $_REQUEST["module"];
+$module = vtlib_purify($_REQUEST["module"]);
 $createpotential = $_REQUEST["createpotential"];
 $potential_name = $_REQUEST["potential_name"];
 $close_date = getDBInsertDateValue($_REQUEST["closedate"]);
 $current_user_id = $_REQUEST["current_user_id"];
 $assigned_to = $_REQUEST["assigntype"];
+
 if($assigned_to == "U")
-$assigned_user_id = $_REQUEST["assigned_user_id"];
+	$assigned_user_id = $_REQUEST["assigned_user_id"];
 else
-$assigned_user_id = $_REQUEST["assigned_group_id"];
+	$assigned_user_id = $_REQUEST["assigned_group_id"];
+
 $accountname = $_REQUEST['account_name'];
 $potential_amount = $_REQUEST['potential_amount'];
 $potential_sales_stage = $_REQUEST['potential_sales_stage'];
-//print_r($assigned_user_id);die;
+
 global $log,$current_user;
 require('user_privileges/user_privileges_'.$current_user->id.'.php');
 if($assigned_to == "U")
@@ -39,7 +40,7 @@ else
 $rate_symbol=getCurrencySymbolandCRate($user_info['currency_id']);
 $rate = $rate_symbol['rate'];
 if($potential_amount != '')
-        $potential_amount = convertToDollar($potential_amount,$rate);
+	$potential_amount = convertToDollar($potential_amount,$rate);
 
 //Retrieve info from all the vtiger_tables related to leads
 $focus = new Leads();

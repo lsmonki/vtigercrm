@@ -252,8 +252,8 @@ function getProductTaxPercentage($type,$productid,$default='')
 			FROM vtiger_inventorytaxinfo
 			INNER JOIN vtiger_producttaxrel
 				ON vtiger_inventorytaxinfo.taxid = vtiger_producttaxrel.taxid
-			WHERE vtiger_producttaxrel.productid = $productid
-			AND vtiger_inventorytaxinfo.taxname = ?", array($type));
+			WHERE vtiger_producttaxrel.productid = ?
+			AND vtiger_inventorytaxinfo.taxname = ?", array($productid, $type));
 	$taxpercentage = $adb->query_result($res,0,'taxpercentage');
 
 	//This is to retrive the default configured value if the taxpercentage related to product is empty
@@ -636,7 +636,7 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 				$tax_val = $all_available_taxes[$tax_count]['percentage'];
 				$request_tax_name = $tax_name."_group_percentage";
 				if(isset($_REQUEST[$request_tax_name]))
-                                        $tax_val =$_REQUEST[$request_tax_name];
+					$tax_val =$_REQUEST[$request_tax_name];
 				$updatequery .= " $tax_name = ?,";
 				array_push($updateparams,$tax_val);
 			}

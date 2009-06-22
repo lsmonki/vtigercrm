@@ -89,7 +89,7 @@ function getUserEmailId($name,$val)
 	{
 		//$sql = "select email1, email2, yahoo_id from vtiger_users where ".$name." = '".$val."'";
 		//done to resolve the PHP5 specific behaviour
-		$sql = "SELECT email1, email2, yahoo_id from vtiger_users WHERE status='Active' AND ". mysql_real_escape_string($name)." = ?";
+		$sql = "SELECT email1, email2, yahoo_id from vtiger_users WHERE status='Active' AND ". $adb->sql_escape_string($name)." = ?";
 		$res = $adb->pquery($sql, array($val));
 		$email = $adb->query_result($res,0,'email1');
 		if($email == '')

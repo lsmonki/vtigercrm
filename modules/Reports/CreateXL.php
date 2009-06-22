@@ -32,7 +32,7 @@ $header->set_size(12);
 $header->set_color('blue');
 
 # Write out the data
-$reportid = $_REQUEST["record"];
+$reportid = vtlib_purify($_REQUEST["record"]);
 $oReport = new Reports($reportid);
 $filtercolumn = $_REQUEST['stdDateFilterField'];
 $filter = $_REQUEST['stdDateFilter'];

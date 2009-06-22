@@ -1,21 +1,18 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
-require_once('include/database/PearDatabase.php');
+
 require_once('Smarty_setup.php');
 require_once('modules/Services/Services.php');
 require_once('include/utils/utils.php');
-require_once('include/utils/utils.php');
-require_once('include/ComboUtil.php');
 
-global $app_strings,$mod_strings,$current_language,$theme,$log,$current_user,$default_charset;
+global $app_strings,$mod_strings,$current_language,$theme,$log,$current_user,$default_charset,$adb;
 $current_module_strings = return_module_language($current_language, 'Services');
 
 $pricebook_id = $_REQUEST['pricebook_id'];
@@ -56,12 +53,13 @@ $smarty->assign("IMAGE_PATH",$image_path);
 
 $focus = new Services();
 
-if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+if (isset($_REQUEST['order_by'])) 
+	$order_by = $adb->sql_escape_string($_REQUEST['order_by']);
 
 $url_string = ''; // assigning http url string
 $sorder = 'ASC';  // Default sort order
 if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-$sorder = $_REQUEST['sorder'];
+	$sorder = $adb->sql_escape_string($_REQUEST['sorder']);
 
 
 //Retreive the list of Services 
@@ -183,7 +181,5 @@ $smarty->assign("LISTENTITY", $list_body);
 $smarty->assign("CATEGORY", $parenttab);
 
 $smarty->display("AddProductsToPriceBook.tpl");
-
-
 
 ?>

@@ -1,22 +1,20 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 global $adb;
 $profilename = from_html(decode_html($_REQUEST['profile_name']));
 $description= from_html(decode_html($_REQUEST['profile_description']));
-$def_module = $_REQUEST['selected_module'];
-$def_tab = $_REQUEST['selected_tab'];
+$def_module = vtlib_purify($_REQUEST['selected_module']);
+$def_tab = vtlib_purify($_REQUEST['selected_tab']);
 $profile_id = $adb->getUniqueID("vtiger_profile");
 //Inserting values into Profile Table
 $sql1 = "insert into vtiger_profile(profileid, profilename, description) values(?,?,?)";
@@ -189,7 +187,7 @@ foreach($modArr as $fld_module => $fld_label)
         $adb->pquery($sql11, array($profileid, $tab_id, $fieldid, $visible_value,1));
 	}
 }
-	$loc = "Location: index.php?action=ListProfiles&module=Settings&mode=view&parenttab=Settings&profileid=".$profileid."&selected_tab=".$def_tab."&selected_module=".$def_module;
+	$loc = "Location: index.php?action=ListProfiles&module=Settings&mode=view&parenttab=Settings&profileid=".vtlib_purify($profileid)."&selected_tab=".vtlib_purify($def_tab)."&selected_module=".vtlib_purify($def_module);
 	header($loc);
 
 

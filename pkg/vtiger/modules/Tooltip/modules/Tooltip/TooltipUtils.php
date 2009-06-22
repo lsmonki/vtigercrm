@@ -1,13 +1,13 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-* 
  ********************************************************************************/
+
 require_once 'include/Webservices/DescribeObject.php';
 require_once 'include/Webservices/Utils.php';
 require_once 'include/Webservices/Query.php';
@@ -166,8 +166,8 @@ function ToolTipExists($fieldname,$tabid){
 		if($count > 0){
 			$fieldid = $adb->query_result($result,0,'fieldid');
 		
-			$sql = "select * from vtiger_quickview where fieldid = $fieldid";
-			$result = $adb->query($sql);
+			$sql = "select * from vtiger_quickview where fieldid = ?";
+			$result = $adb->pquery($sql, array($fieldid));
 		
 			if($adb->num_rows($result) > 0){
 				return $fieldid;

@@ -22,11 +22,8 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Emails/Emails.php');
 require_once('include/upload_file.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-require_once('include/utils/CommonUtils.php');
 require_once("include/Zend/Json.php");
 
 global $log;
@@ -34,7 +31,7 @@ global $app_strings;
 global $mod_strings;
 global $currentModule;
 
-$focus = new Emails();
+$focus = CRMEntity::getInstance($currentModule);
 $json = new Zend_Json();
 
 $smarty = new vtigerCRM_Smarty;
@@ -123,9 +120,9 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
-if (isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
-if (isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
-if (isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+if (isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
+if (isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
+if (isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $category = getParentTab();

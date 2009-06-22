@@ -13,7 +13,6 @@ require_once("data/Tracker.php");
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Reports/Reports.php');
-require_once('include/database/PearDatabase.php');
 
 global $app_strings, $app_list_strings, $mod_strings;
 $current_module_strings = return_module_language($current_language, 'Reports');
@@ -30,7 +29,7 @@ $report_group->assign("IMAGE_PATH",$image_path);
 
 if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 {
-	$reportid = $_REQUEST["record"];
+	$reportid = vtlib_purify($_REQUEST["record"]);
 	$oReport = new Reports($reportid);
 	$list_array = $oReport->getSelctedSortingColumns($reportid);
 
@@ -39,7 +38,7 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 	$secondarymodules =Array();
 	
 	foreach($oRep->related_modules[$oReport->primodule] as $key=>$value){
-		if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= $_REQUEST["secondarymodule_".$value];
+		if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= vtlib_purify($_REQUEST["secondarymodule_".$value]);
 	}
 	$secondarymodule = implode(":",$secondarymodules);
 	
@@ -62,7 +61,7 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 
 }else
 {
-	$primarymodule = $_REQUEST["primarymodule"];
+	$primarymodule = vtlib_purify($_REQUEST["primarymodule"]);
 	$BLOCK1 = getPrimaryColumns_GroupingHTML($primarymodule);
 	$ogReport =  new Reports();
 	foreach($ogReport->related_modules[$primarymodule] as $key=>$value){

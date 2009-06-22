@@ -30,7 +30,7 @@ $local_log =& LoggerManager::getLogger('index');
 $focus = new Faq();
 
 //added to fix 4600
-$search=$_REQUEST['search_url'];
+$search=vtlib_purify($_REQUEST['search_url']);
 
 setObjectValuesFromRequest($focus);
 
@@ -42,13 +42,13 @@ if($_REQUEST['assigntype'] == 'U')  {
 $focus->save("Faq");
 $return_id = $focus->id;
 
-if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
+if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = vtlib_purify($_REQUEST['return_module']);
 else $return_module = "Faq";
-if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
+if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = vtlib_purify($_REQUEST['return_action']);
 else $return_action = "DetailView";
-if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
+if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = vtlib_purify($_REQUEST['return_id']);
 
 $local_log->debug("Saved record with id of ".$return_id);
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&start=".$_REQUEST['pagenumber'].$search);
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&start=".vtlib_purify($_REQUEST['pagenumber']).$search);
 ?>

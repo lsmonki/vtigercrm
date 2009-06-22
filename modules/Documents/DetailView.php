@@ -1,35 +1,22 @@
 <?php
-/*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the
- * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
- * Software distributed under the License is distributed on an  "AS IS"  basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
- * the specific language governing rights and limitations under the License.
- * The Original Code is:  SugarCRM Open Source
- * The Initial Developer of the Original Code is SugarCRM, Inc.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Contributor(s): ______________________________________..
- ********************************************************************************/
-/*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/DetailView.php,v 1.11 2005/03/17 11:21:40 ray Exp $
- * Description:  TODO: To be written.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('data/Tracker.php');
 require_once('Smarty_setup.php');
-require_once('modules/Documents/Documents.php');
 require_once('include/upload_file.php');
 require_once('include/utils/utils.php');
 global $app_strings;
 global $mod_strings;
 global $currentModule;
 
-$focus = new Documents();
+$focus = CRMEntity::getInstance($currentModule);
 
 if(isset($_REQUEST['record'])) {
    $focus->retrieve_entity_info($_REQUEST['record'],"Documents");
@@ -114,9 +101,9 @@ else $smarty->assign("NAME", "");
 
 $smarty->assign("FILENAME", $filename);
 
-if (isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
-if (isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
-if (isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+if (isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
+if (isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
+if (isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
 
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
@@ -170,7 +157,7 @@ $smarty->assign("FILE_STATUS",$filestatus);
  $smarty->assign("DLD_PATH",$filepath);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST['record']));
 
 if(isset($_SESSION['documents_listquery'])){
 	$arrayTotlist = array();
@@ -192,7 +179,7 @@ if(isset($_SESSION['documents_listquery'])){
 			
 			for($listi=0;$listi<count($ar_allist);$listi++)
 			{
-				if($ar_allist[$listi]==$_REQUEST[record])
+				if($ar_allist[$listi]==$_REQUEST['record'])
 				{
 					if($listi-1>=0)
 					{

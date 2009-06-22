@@ -1,13 +1,12 @@
 <?php
-/*********************************************************************************
- ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-  * ("License"); You may not use this file except in compliance with the License
-  * The Initial Developer of the Original Code is FOSS Labs.
-  * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
-  * Portions created by vtiger are Copyright (C) vtiger.
-  * All Rights Reserved.
-  *
-  ********************************************************************************/
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Initial Developer of the Original Code is FOSS Labs.
+ * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
 
 global $current_user;
 require_once('include/utils/utils.php');
@@ -17,10 +16,10 @@ require_once('modules/Webmails/MailBox.php');
 global $mod_strings;
 
 if(!isset($_SESSION["authenticated_user_id"]) || $_SESSION["authenticated_user_id"] != $current_user->id) {echo "ajax failed";flush();exit();}
-$mailid=$_REQUEST["mailid"];
+$mailid=vtlib_purify($_REQUEST["mailid"]);
 if(isset($_REQUEST["mailbox"]) && $_REQUEST["mailbox"] != "")
 {
-	$mailbox=$_REQUEST["mailbox"];
+	$mailbox=vtlib_purify($_REQUEST["mailbox"]);
 }
 else
 {
@@ -51,7 +50,7 @@ else
 ?>
 <script src="modules/Webmails/Webmails.js" type="text/javascript"></script>
 <script src="include/js/general.js" type="text/javascript"></script>
-<link rel="stylesheet" type="text/css" href="themes/<?php echo $_REQUEST['theme'];?>/webmail.css">
+<link rel="stylesheet" type="text/css" href="themes/<?php echo vtlib_purify($_REQUEST['theme']);?>/webmail.css">
 <!-- Table to display the Header details (From, To, Subject and date) - Starts -->
 					
                                         <table <?php echo $class_str;?> width="100%" border="0" cellpadding="0" cellspacing="0">

@@ -13,7 +13,6 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 
-
 /**	function used to get the top 5 recent FAQs from Listview query
  *	@return array $values - array with the title, header and entries like  Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries) where as listview_header and listview_entries are arrays of header and entity values which are returned from function getListViewHeader and getListViewEntries
  */
@@ -23,8 +22,6 @@ function getMyFaq($maxval,$calCnt)
 	require_once('modules/Faq/Faq.php');
 	require_once('include/logging.php');
 	require_once('include/ListView/ListView.php');
-	require_once('include/database/PearDatabase.php');
-	require_once('include/ComboUtil.php');
 	require_once('include/utils/utils.php');
 	require_once('modules/CustomView/CustomView.php');
 
@@ -72,7 +69,7 @@ function getMyFaq($maxval,$calCnt)
 	//Retreiving the start value from request
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 	{
-		$start = $_REQUEST['start'];
+		$start = vtlib_purify($_REQUEST['start']);
 	}
 	else
 	{
@@ -132,5 +129,3 @@ function getMyFaq($maxval,$calCnt)
 		return $values;
 }
 ?>
-
-

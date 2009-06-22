@@ -162,16 +162,9 @@ $return_id = $focus->id;
 require_once("modules/Emails/mail.php");
 if(isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'] && $_REQUEST['parent_id'] != '') 
 {
-	/* commented out to avoid the duplicate mail when replying mails from webmail module
-	if($_REQUEST['parent_id'] == '' || (isset($_REQUEST['att_module']) && $_REQUEST['att_module'] == 'Webmails'))
-	{
-		$from_arr = explode('@',$_REQUEST['from_add']);
-		$user_mail_status = send_mail('Emails',$current_user->column_fields['email1'],$from_arr[0],$_REQUEST['from_add'],$_REQUEST['subject'],$_REQUEST['description'],'','','all',$focus->id);
-	}
-	else*/
-		$user_mail_status = send_mail('Emails',$current_user->column_fields['email1'],$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$_REQUEST['ccmail'],$_REQUEST['bccmail'],'all',$focus->id);
+	$user_mail_status = send_mail('Emails',$current_user->column_fields['email1'],$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$_REQUEST['ccmail'],$_REQUEST['bccmail'],'all',$focus->id);
 		
-//if block added to fix the issue #3759
+	//if block added to fix the issue #3759
 	if($user_mail_status != 1){
 		$query  = "select crmid,attachmentsid from vtiger_seattachmentsrel where crmid=?";
 		$result = $adb->pquery($query, array($email_id));
@@ -222,20 +215,20 @@ else
 }
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") 
-	$return_module = $_REQUEST['return_module'];
+	$return_module = vtlib_purify($_REQUEST['return_module']);
 else 
 	$return_module = "Emails";
 
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") 
-	$return_action = $_REQUEST['return_action'];
+	$return_action = vtlib_purify($_REQUEST['return_action']);
 else 
 	$return_action = "DetailView";
 
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") 
-	$return_id = $_REQUEST['return_id'];
+	$return_id = vtlib_purify($_REQUEST['return_id']);
 
 if(isset($_REQUEST['filename']) && $_REQUEST['filename'] != "") 
-	$filename = $_REQUEST['filename'];
+	$filename = vtlib_purify($_REQUEST['filename']);
 
 $local_log->debug("Saved record with id of ".$return_id);
 
@@ -253,7 +246,7 @@ if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'mailbox')
 	header("Location: index.php?module=$return_module&action=index");
 else {
 	if($_REQUEST['return_viewname'] == '') $return_viewname='0';
-	if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+	if($_REQUEST['return_viewname'] != '')$return_viewname=vtlib_purify($_REQUEST['return_viewname']);
 	//Added for 4600
 	$inputs="<script>window.opener.location.href=window.opener.location.href;window.self.close();</script>";
 	echo $inputs;

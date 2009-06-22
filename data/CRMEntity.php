@@ -33,12 +33,15 @@ class CRMEntity
    
 	static function getInstance($module) {
 		$modName = $module;
-		if ($module == 'Calendar') {
+		if ($module == 'Calendar' || $module == 'Events') {
+			$module = 'Calendar';
 			$modName = 'Activity';
 		}
 		// File access security check
-		checkFileAccess("modules/$module/$modName.php");
-		require_once("modules/$module/$modName.php");
+		if(!class_exists($modName)) {
+			checkFileAccess("modules/$module/$modName.php");
+			require_once("modules/$module/$modName.php");
+		}
 		$focus = new $modName();
 		return $focus;		
 	}
@@ -78,7 +81,7 @@ class CRMEntity
 		//Calling the Module specific save code
 		$this->save_module($module);
 	
-		$assigntype=$_REQUEST['assigntype'];
+		$assigntype=vtlib_purify($_REQUEST['assigntype']);
 		if($module != "Calendar")
 	          $this->whomToSendMail($module,$this ->mode,$assigntype);
 		
@@ -87,11 +90,10 @@ class CRMEntity
 	
 		// vtlib customization: Hook provide to enable generic module relation.
 		if($_REQUEST['return_action'] == 'CallRelatedList') {
-			$for_module = $_REQUEST['return_module'];
-			$for_crmid  = $_REQUEST['return_id'];
+			$for_module = vtlib_purify($_REQUEST['return_module']);
+			$for_crmid  = vtlib_purify($_REQUEST['return_id']);
 	
-			require_once("modules/$for_module/$for_module.php");
-			$on_focus = new $for_module();
+			$on_focus = CRMEntity::getInstance($for_module);
 			// Do conditional check && call only for Custom Module at present
 			// TOOD: $on_focus->IsCustomModule is not required if save_related_module function
 			// is used for core modules as well.
@@ -701,7 +703,7 @@ function whomToSendMail($module,$insertion_mode,$assigntype)
 		}
        	elseif($assigntype=='T')
        	{
-			$groupid=$_REQUEST['assigned_group_id'];
+			$groupid=vtlib_purify($_REQUEST['assigned_group_id']);
 			sendNotificationToGroups($groupid,$this->id,$module);
        	}
    	}
@@ -1001,24 +1003,21 @@ $log->info("in getOldFileName  ".$notesid);
 	}
 
 	/**
-         * Function to check if the custom vtiger_field vtiger_table exists
-         * return true or false
-         */
-        function checkIfCustomTableExists($tablename)
-        {
-                $query = "select * from ". mysql_real_escape_string($tablename);
-                $result = $this->db->pquery($query, array());
-                $testrow = $this->db->num_fields($result);
-                if($testrow > 1)
-                {
-                        $exists=true;
-                }
-                else
-                {
-                        $exists=false;
-                }
-                return $exists;
+     * Function to check if the custom vtiger_field vtiger_table exists
+     * return true or false
+     */
+	function checkIfCustomTableExists($tablename) {
+        global $adb;
+        $query = "select * from ". $adb->sql_escape_string($tablename);
+        $result = $this->db->pquery($query, array());
+        $testrow = $this->db->num_fields($result);
+        if($testrow > 1) {
+			$exists=true;
+        } else {
+			$exists=false;
         }
+        return $exists;
+ 	}
 
 	/**
 	 * function to construct the query to fetch the custom vtiger_fields
@@ -1082,47 +1081,6 @@ $log->info("in getOldFileName  ".$notesid);
 		$tracker = new Tracker();
 		$tracker->track_view($user_id, $current_module, $id, '');
 	}
-
-	/*function insertIntoGroupTable($module)
-	{
-		global $log;
-
-		if($module == 'Events')
-		{
-			$module = 'Calendar';
-		}
-		if($this->mode=='edit')
-		{
-						
-		  	//to disable the update of groupentity relation in ajax edit for the fields except assigned_user_id field
-			if(($_REQUEST['ajxaction'] != 'DETAILVIEW' && $_REQUEST['action'] != 'MassEditSave') || ($_REQUEST['ajxaction'] == 'DETAILVIEW' && $_REQUEST['fldName'] == 'assigned_user_id') || ($_REQUEST['action'] == 'MassEditSave' && isset($_REQUEST['assigned_user_id_mass_edit_check'])))
-		  	{	  
-			  	if($_REQUEST['assigntype'] == 'T')
-			  	{
-					$groupname = $_REQUEST['assigned_group_id'];
-
-					updateModuleGroupRelation($module,$this->id,$groupname);
-
-			  	}
-				else
-				{
-					updateModuleGroupRelation($module,$this->id,'');
-
-				}
-
-		  	}
-      		}
-		else
-		{
-			$groupname = $_REQUEST['assigned_group_id'];
-		 	if($_REQUEST['assigntype'] == 'T')
-		  	{
-			  	insertIntoGroupRelation($module,$this->id,$groupname);
-		  	}
-		  
-		}			
-
-	}*/
 	
 	/**
 	* Function to get the column value of a field when the field value is empty ''
@@ -1254,9 +1212,7 @@ $log->info("in getOldFileName  ".$notesid);
 			$columnName = $this->db->query_result($fieldRes, $i, 'columnname');
 			
 			$relatedModule = vtlib_getModuleNameById($tabId);
-			checkFileAccess("modules/$relatedModule/$relatedModule.php");
-			require_once("modules/$relatedModule/$relatedModule.php");
-			$focusObj = new $relatedModule();
+			$focusObj = CRMEntity::getInstance($relatedModule);
 			
 			//Backup Field Relations for the deleted entity
 			$relQuery = "SELECT $focusObj->table_index FROM $tableName WHERE $columnName=?";
@@ -1292,9 +1248,7 @@ $log->info("in getOldFileName  ".$notesid);
 			$columnName = $this->db->query_result($fieldRes, $i, 'columnname');
 			
 			$relatedModule = vtlib_getModuleNameById($tabId);
-			checkFileAccess("modules/$relatedModule/$relatedModule.php");
-			require_once("modules/$relatedModule/$relatedModule.php");
-			$focusObj = new $relatedModule();
+			$focusObj = CRMEntity::getInstance($relatedModule);
 			
 			$updateQuery = "UPDATE $tableName SET $columnName=0 WHERE $columnName=? AND $focusObj->table_index=?";
 			$updateParams = array($return_id, $id);
@@ -1452,9 +1406,9 @@ $log->info("in getOldFileName  ".$notesid);
 	function checkModuleSeqNumber($table, $column, $no)
 	{
 		global $adb;
-		$result=$adb->pquery("select ".mysql_real_escape_string($column). 
-			" from ".mysql_real_escape_string($table). 
-			" where ".mysql_real_escape_string($column)." = ?", array($no));
+		$result=$adb->pquery("select ".$adb->sql_escape_string($column). 
+			" from ".$adb->sql_escape_string($table). 
+			" where ".$adb->sql_escape_string($column)." = ?", array($no));
 	
 		$num_rows = $adb->num_rows($result);
 	
@@ -1518,12 +1472,10 @@ $log->info("in getOldFileName  ".$notesid);
 	
 		global $currentModule, $app_strings,$singlepane_view;
 		$this_module = $currentModule;
-		if(isset($_REQUEST)){ 
-			$parenttab = $_REQUEST['parenttab'];
-		}	
+		$parenttab = getParentTab();
+		
 		$related_module = vtlib_getModuleNameById($rel_tab_id);
-		require_once("modules/$related_module/$related_module.php");
-		$other = new $related_module();
+		$other = CRMEntity::getInstance($related_module);
 		  
 		// Some standard module class doesn't have required variables
 		// that are used in the query, they are defined in this generic API
@@ -1876,9 +1828,7 @@ $log->info("in getOldFileName  ".$notesid);
 	 */
 	function generateReportsQuery($module){
 		global $adb;
-		checkFileAccess("modules/$module/$module.php");
-		require_once("modules/$module/$module.php");
-		$primary = new $module();
+		$primary = CRMEntity::getInstance($module);
 
 		vtlib_setup_modulevars($module, $primary);
 		$moduletable = $primary->table_name;
@@ -1911,8 +1861,7 @@ $log->info("in getOldFileName  ".$notesid);
 			        $query.= " left join vtiger_crmentity as vtiger_crmentityRel$module on vtiger_crmentityRel$module.crmid = $tab_name.$field_name and vtiger_crmentityRel$module.deleted=0";
 			        for($j=0;$j<$adb->num_rows($ui10_modules_query);$j++){
 			        	$rel_mod = $adb->query_result($ui10_modules_query,$j,'relmodule');
-			        	require_once("modules/$rel_mod/$rel_mod.php");
-			        	$rel_obj = new $rel_mod();
+			        	$rel_obj = CRMEntity::getInstance($rel_mod);
 			        	vtlib_setup_modulevars($rel_mod, $rel_obj);
 						
 						$rel_tab_name = $rel_obj->table_name;
@@ -1934,9 +1883,7 @@ $log->info("in getOldFileName  ".$notesid);
 	 */
 	function generateReportsSecQuery($module,$secmodule){
 		global $adb;
-		checkFileAccess("modules/$secmodule/$secmodule.php");
-		require_once("modules/$secmodule/$secmodule.php");
-		$secondary = new $secmodule();
+		$secondary = CRMEntity::getInstance($secmodule);
 
 		vtlib_setup_modulevars($secmodule, $secondary);
 	 	
@@ -1963,8 +1910,7 @@ $log->info("in getOldFileName  ".$notesid);
 			        $query.= " left join vtiger_crmentity as vtiger_crmentityRel$secmodule on vtiger_crmentityRel$secmodule.crmid = $tab_name.$field_name and vtiger_crmentityRel$secmodule.deleted=0";
 			        for($j=0;$j<$adb->num_rows($ui10_modules_query);$j++){
 			        	$rel_mod = $adb->query_result($ui10_modules_query,$j,'relmodule');
-			        	require_once("modules/$rel_mod/$rel_mod.php");
-			        	$rel_obj = new $rel_mod();
+			        	$rel_obj = CRMEntity::getInstance($rel_mod);
 			        	vtlib_setup_modulevars($rel_mod, $rel_obj);
 						
 						$rel_tab_name = $rel_obj->table_name;
@@ -2064,7 +2010,7 @@ $log->info("in getOldFileName  ".$notesid);
 	/** END **/
 	
 	/**
-	 * this function handles the import for uitype 10 fieldtype
+	 * This function handles the import for uitype 10 fieldtype
 	 * @param string $module - the current module name
 	 * @param string fieldname - the related to field name
 	 */

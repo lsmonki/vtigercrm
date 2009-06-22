@@ -69,22 +69,7 @@ class VtigerCRMObject{
 	}
 	
 	private function getModuleClassInstance($moduleName){
-		$this->includeModule($moduleName);
-		if($moduleName == "Calendar" || $moduleName == "Events"){
-			$moduleName = "Activity";
-		}
-		return new $moduleName();
-	}
-	
-	function includeModule($moduleName){
-		if($moduleName == "Events"){
-			$moduleName = "Calendar";
-		}
-		if($moduleName == "Calendar"){
-			require_once("modules/".$moduleName."/Activity.php");
-		}else{
-			require_once("modules/".$moduleName."/".$moduleName.".php");
-		}
+		return CRMEntity::getInstance($moduleName);
 	}
 	
 	private function getObjectTypeName($moduleId){

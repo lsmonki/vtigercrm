@@ -131,7 +131,7 @@ $recordCount= $adb->query_result($countQuery,0,'count');
 
 // Set paging start value.
 $start = 1;
-if(isset($_REQUEST['start'])) { $start = $_REQUEST['start']; } 
+if(isset($_REQUEST['start'])) { $start = vtlib_purify($_REQUEST['start']); } 
 else { $start = $_SESSION['lvs'][$currentModule]['start']; }
 // Total records is less than a page now.
 if($recordCount <= $list_max_entries_per_page) $start = 1;
@@ -183,7 +183,7 @@ $_SESSION[$currentModule.'_listquery'] = $list_query;
 
 if($_REQUEST['errormsg'] != '')
 {
-        $errormsg = $_REQUEST['errormsg'];
+        $errormsg = vtlib_purify($_REQUEST['errormsg']);
         $smarty->assign("ERROR","The User does not have permission to delete ".$errormsg." ".$currentModule);
 }else
 {
@@ -206,8 +206,8 @@ $smarty->assign("AVALABLE_FIELDS", getMergeFields($currentModule,"available_fiel
 $smarty->assign("FIELDS_TO_MERGE", getMergeFields($currentModule,"fileds_to_merge"));
 
 //Added to select Multiple records in multiple pages
-$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
-$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
+$smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
 $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')

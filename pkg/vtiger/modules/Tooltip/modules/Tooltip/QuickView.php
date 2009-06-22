@@ -9,7 +9,6 @@
 * 
  ********************************************************************************/
 require_once 'Smarty_setup.php';
-require_once 'include/database/PearDatabase.php';
 require_once 'include/utils/utils.php';
 require_once 'modules/Tooltip/TooltipUtils.php';
 
@@ -23,7 +22,7 @@ $module_array=moduleList();
 $smarty->assign("MODULES",$module_array);
 
 if(!empty($_REQUEST['formodule'])){
-	$fld_module = $_REQUEST['formodule'];
+	$fld_module = vtlib_purify($_REQUEST['formodule']);
 }
 else{
 	echo "NO MODULES SELECTED";

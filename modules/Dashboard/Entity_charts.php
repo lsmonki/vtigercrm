@@ -1,16 +1,13 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 require_once('include/utils/utils.php');
-require_once('include/database/PearDatabase.php');
-require_once('include/utils/CommonUtils.php');
 include("modules/Dashboard/horizontal_bargraph.php");
 include("modules/Dashboard/vertical_bargraph.php");
 include_once("modules/Dashboard/pie_graph.php");
@@ -55,8 +52,6 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 	global $adb,$current_user,$mod_strings, $default_charset;
 	global $days,$date_array,$period_type;
 
-	//$where= " and vtiger_crmentity.smownerid=".$user_id." and vtiger_crmentity.createdtime between '".$date_start."' and '".$end_date."'" ;
-	$query.=$where;
 	if($added_qry!="")
 		$query.=$added_qry;
 

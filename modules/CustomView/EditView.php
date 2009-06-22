@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 require_once('data/Tracker.php');
 
@@ -27,12 +26,12 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once('modules/CustomView/CustomView.php');
 
-$cv_module = $_REQUEST['module'];
+$cv_module = vtlib_purify($_REQUEST['module']);
 
-$recordid = $_REQUEST['record'];
+$recordid = vtlib_purify($_REQUEST['record']);
 
 $smarty->assign("MOD", $mod_strings);
-$smarty->assign("CATEGORY", htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
+$smarty->assign("CATEGORY", getParentTab());
 $smarty->assign("APP", $app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
@@ -85,7 +84,7 @@ if($recordid == "")
 else
 {
 	$oCustomView = new CustomView($cv_module);
-	$now_action = $_REQUEST['action'];
+	$now_action = vtlib_purify($_REQUEST['action']);
 	if($oCustomView->isPermittedCustomView($recordid,$now_action,$oCustomView->customviewmodule) == 'yes')
 	{
 		$customviewdtls = $oCustomView->getCustomViewByCvid($recordid);
@@ -205,68 +204,6 @@ $smarty->assign("ACT", $act);
 $smarty->assign("RETURN_ACTION", $return_action);
 
 $smarty->display("CustomView.tpl");
-
-/** to get the custom columns for the given module and columnlist  
-  * @param $module (modulename):: type String 
-  * @param $columnslist (Module columns list):: type Array 
-  * @param $selected (selected or not):: type String (Optional)
-  * @returns  $advfilter_out array in the following format 
-  *	$advfilter_out = Array ('BLOCK1 NAME'=>
-  * 					Array(0=>
-  *						Array('value'=>$tablename:$colname:$fieldname:$fieldlabel:$typeofdata,
-  *						      'text'=>$fieldlabel,
-  *					      	      'selected'=><selected or ''>),
-  *			      		      1=>
-  *						Array('value'=>$tablename1:$colname1:$fieldname1:$fieldlabel1:$typeofdata1,
-  *						      'text'=>$fieldlabel1,
-  *					      	      'selected'=><selected or ''>)
-  *					      ),
-  *								|
-  *								|
-  *					      n=>
-  *						Array('value'=>$tablenamen:$colnamen:$fieldnamen:$fieldlabeln:$typeofdatan,
-  *						      'text'=>$fieldlabeln,
-  *					      	      'selected'=><selected or ''>)
-  *					      ), 
-  *				'BLOCK2 NAME'=>
-  * 					Array(0=>
-  *						Array('value'=>$tablename:$colname:$fieldname:$fieldlabel:$typeofdata,
-  *						      'text'=>$fieldlabel,
-  *					      	      'selected'=><selected or ''>),
-  *			      		      1=>
-  *						Array('value'=>$tablename1:$colname1:$fieldname1:$fieldlabel1:$typeofdata1,
-  *						      'text'=>$fieldlabel1,
-  *					      	      'selected'=><selected or ''>)
-  *					      )
-  *								|
-  *								|
-  *					      n=>
-  *						Array('value'=>$tablenamen:$colnamen:$fieldnamen:$fieldlabeln:$typeofdatan,
-  *						      'text'=>$fieldlabeln,
-  *					      	      'selected'=><selected or ''>)
-  *					      ), 
-  *
-  *					||
-  *					||
-  *				'BLOCK_N NAME'=>
-  * 					Array(0=>
-  *						Array('value'=>$tablename:$colname:$fieldname:$fieldlabel:$typeofdata,
-  *						      'text'=>$fieldlabel,
-  *					      	      'selected'=><selected or ''>),
-  *			      		      1=>
-  *						Array('value'=>$tablename1:$colname1:$fieldname1:$fieldlabel1:$typeofdata1,
-  *						      'text'=>$fieldlabel1,
-  *					      	      'selected'=><selected or ''>)
-  *					      )
-  *								|
-  *								|
-  *					      n=>
-  *						Array('value'=>$tablenamen:$colnamen:$fieldnamen:$fieldlabeln:$typeofdatan,
-  *						      'text'=>$fieldlabeln,
-  *					      	      'selected'=><selected or ''>)
-  *					      ), 
-  *
-  */
 
 function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 {

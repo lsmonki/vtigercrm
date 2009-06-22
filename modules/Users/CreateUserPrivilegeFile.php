@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
 require_once('config.php');
@@ -24,6 +23,7 @@ require_once('include/utils/GetGroupUsers.php');
 
 function createUserPrivilegesfile($userid)
 {
+	global $root_directory;
 	$handle=@fopen($root_directory.'user_privileges/user_privileges_'.$userid.'.php',"w+");
 
 	if($handle)
@@ -110,7 +110,7 @@ function createUserPrivilegesfile($userid)
  */
 function createUserSharingPrivilegesfile($userid)
 {
-	global $adb;
+	global $adb, $root_directory;
 	require('user_privileges/user_privileges_'.$userid.'.php');
 	$handle=@fopen($root_directory.'user_privileges/sharing_privileges_'.$userid.'.php',"w+");
 	
@@ -1370,31 +1370,25 @@ function constructSingleStringKeyAndValueArray($var)
   * @param $var -- input array:: Type array
   * @returns $code -- contains the whole array in a single string:: Type array 
  */
-function constructSingleStringKeyValueArray($var)
-{
-
-        $size = sizeof($var);
-        $i=1;
-        if (is_array($var))
-        {
-                $code = 'array(';
-                foreach ($var as $key => $value)
-                {
-        //fix for signatue quote(') issue
-        $value=mysql_real_escape_string($value);    
-	            if($i<$size)
-                        {
-                                $code .= "'".$key."'=>'".$value."',";
-                        }
-                        else
-                        {
-                                $code .= "'".$key."'=>'".$value."'";
-                        }
-                        $i++;
-                }
-                $code .= ')';
-                return $code;
-        }
+function constructSingleStringKeyValueArray($var) {
+	global $adb;
+    $size = sizeof($var);
+    $i=1;
+    if (is_array($var)) {
+		$code = 'array(';
+		foreach ($var as $key => $value) {
+		    //fix for signatue quote(') issue
+		    $value=$adb->sql_escape_string($value);    
+			if($i<$size) {
+				$code .= "'".$key."'=>'".$value."',";
+			} else {
+				$code .= "'".$key."'=>'".$value."'";
+			}
+			$i++;
+		}
+	    $code .= ')';
+	    return $code;
+    }
 }
 
 

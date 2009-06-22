@@ -8,7 +8,6 @@
  * All Rights Reserved.
  ************************************************************************************/
 include_once('config.inc.php');
-include_once('include/database/PearDatabase.php');
 include_once('include/utils/utils.php');
 
 /**
@@ -99,7 +98,8 @@ class Vtiger_Utils {
 	 */
 	static function SQLEscape($value) {
 		if($value == null) return $value;
-		return mysql_real_escape_string($value);
+		global $adb;
+		return $adb->sql_escape_string($value);
 	}
 
 	/**
@@ -111,6 +111,7 @@ class Vtiger_Utils {
 		$old_dieOnError = $adb->dieOnError;
 		$adb->dieOnError = false;
 
+		$tablename = Vtiger_Utils::SQLEscape($tablename);
 		$tablecheck = $adb->query("SELECT 1 FROM $tablename LIMIT 1");
 
 		$tablePresent = true;

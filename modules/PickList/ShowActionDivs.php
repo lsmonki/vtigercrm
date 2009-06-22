@@ -1,13 +1,12 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *
- ********************************************************************************/
+ *********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
 require_once 'modules/PickList/PickListUtils.php';
@@ -20,9 +19,9 @@ $image_path=$theme_path."images/";
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("IMAGE_PATH",$image_path);
 
-$fieldName=$_REQUEST["fieldname"];
-$fieldLabel =$_REQUEST["fieldlabel"];
-$moduleName=$_REQUEST["moduleName"];
+$fieldName=vtlib_purify($_REQUEST["fieldname"]);
+$fieldLabel =vtlib_purify($_REQUEST["fieldlabel"]);
+$moduleName=vtlib_purify($_REQUEST["moduleName"]);
 $mode=$_REQUEST["mode"];
 
 if($moduleName == 'Events'){

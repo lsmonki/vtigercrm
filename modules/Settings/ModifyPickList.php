@@ -1,15 +1,13 @@
 <?php
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
- 
+
 	require_once('include/database/PearDatabase.php');
 	require_once('Smarty_setup.php');
 	global $mod_strings;
@@ -22,19 +20,19 @@
 	$smarty = new vtigerCRM_Smarty;
 	$smarty->assign("IMAGE_PATH",$image_path);
 
-	$fieldName=$_REQUEST["fieldname"];
-	$fieldLabel =$_REQUEST["fieldlabel"];
-	$moduleName=$_REQUEST["fld_module"];
-	$uitype=$_REQUEST["uitype"];
-	$mode=$_REQUEST["mode"];
+	$fieldName=vtlib_purify($_REQUEST["fieldname"]);
+	$fieldLabel =vtlib_purify($_REQUEST["fieldlabel"]);
+	$moduleName=vtlib_purify($_REQUEST["fld_module"]);
+	$uitype=vtlib_purify($_REQUEST["uitype"]);
+	$mode=vtlib_purify($_REQUEST["mode"]);
 	
 	if($moduleName == 'Events')
 		$temp_module_strings = return_module_language($current_language, 'Calendar');
 	else
 		$temp_module_strings = return_module_language($current_language, $moduleName);
 
-	$sql = "select picklistid from vtiger_picklist where name='$fieldName'";
-	$result = $adb->query($sql);
+	$sql = "select picklistid from vtiger_picklist where name=?";
+	$result = $adb->pquery($sql, array($fieldName));
 	$picklistid = $adb->query_result($result,0,"picklistid");
 	
 	if($mode == 'addnew')
@@ -45,7 +43,7 @@
 		$newPicklist = explode(",",$newValues);
 		$roleIds = explode(":",$selectedRoles);
 		
-		$tableName = $fieldName;
+		$tableName = $adb->sql_escape_string($fieldName);
 		foreach($newPicklist as $key => $val)
 		{	
 			$val = urldecode($val);		
@@ -141,6 +139,7 @@
 	}
 	if(isset($fieldName))
 	{
+		$fieldName = $adb->sql_escape_string($fieldName);
 		$sql="select $fieldName from vtiger_$fieldName where presence=1 and $fieldName <> '--None--'";
 		$res = $adb->query($sql);
 		$RowCount = $adb->num_rows($res);
@@ -239,7 +238,5 @@
 		$smarty->assign("APP",$app_strings);
 		$smarty->display("Settings/ModifyPickList.tpl");
 	}
-	
-
 
 ?>

@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
@@ -1447,7 +1446,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 	$count_res = $adb->pquery($count_qry, $params);
 	$total_rec_count = $adb->num_rows($count_res);
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-		$start = $_REQUEST['start'];
+		$start = vtlib_purify($_REQUEST['start']);
 	else
 		$start = 1;
 	$navigation_array = getNavigationValues($start, $total_rec_count, $list_max_entries_per_page);
@@ -1682,7 +1681,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
         $total_rec_count = $adb->query_result($count_res,0,'count');
 	$group_cond .= " ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')     
-		$start = $_REQUEST['start'];
+		$start = vtlib_purify($_REQUEST['start']);
 	else 
 		$start = 1;
 	$navigation_array = getNavigationValues($start, $total_rec_count, $list_max_entries_per_page);

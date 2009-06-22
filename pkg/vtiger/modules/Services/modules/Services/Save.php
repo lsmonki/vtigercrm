@@ -33,27 +33,27 @@ if($_REQUEST['assigntype'] == 'U') {
 $focus->save($currentModule);
 $return_id = $focus->id;
 
-$search=$_REQUEST['search_url'];
+$search = vtlib_purify($_REQUEST['search_url']);
 
-if($_REQUEST['parenttab'] != '')     $parenttab = $_REQUEST['parenttab'];
+$parenttab = getParentTab();
 if($_REQUEST['return_module'] != '') {
-	$return_module = $_REQUEST['return_module'];
+	$return_module = vtlib_purify($_REQUEST['return_module']);
 } else {
 	$return_module = $currentModule;
 }
 
 if($_REQUEST['return_action'] != '') {
-	$return_action = $_REQUEST['return_action'];
+	$return_action = vtlib_purify($_REQUEST['return_action']);
 } else {
 	$return_action = "DetailView";
 }
 
 if($_REQUEST['return_id'] != '') {
-	$return_id = $_REQUEST['return_id'];
+	$return_id = vtlib_purify($_REQUEST['return_id']);
 }
 
-if(isset($_REQUEST['activity_mode'])) $return_action .= '&activity_mode='.$_REQUEST['activity_mode'];
+if(isset($_REQUEST['activity_mode'])) $return_action .= '&activity_mode='.vtlib_purify($_REQUEST['activity_mode']);
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab&start=".$_REQUEST['pagenumber'].$search);
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab&start=".vtlib_purify($_REQUEST['pagenumber']).$search);
 
 ?>

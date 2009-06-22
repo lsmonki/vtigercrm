@@ -1,5 +1,5 @@
 <?php
-/*********************************************************************************
+/*+********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
  * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
@@ -18,8 +18,6 @@ function getTopInvoice($maxval,$calCnt)
 	require_once('modules/Invoice/Invoice.php');
 	require_once('include/logging.php');
 	require_once('include/ListView/ListView.php');
-	require_once('include/database/PearDatabase.php');
-	require_once('include/ComboUtil.php');
 	require_once('include/utils/utils.php');
 	require_once('modules/CustomView/CustomView.php');
 
@@ -65,13 +63,9 @@ function getTopInvoice($maxval,$calCnt)
 	   return $noofrows;
 
 	//Retreiving the start value from request
-	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-	{
-		$start = $_REQUEST['start'];
-	}
-	else
-	{
-
+	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '') {
+		$start = vtlib_purify($_REQUEST['start']);
+	} else {
 		$start = 1;
 	}
 

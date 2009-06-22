@@ -108,19 +108,19 @@ function set_focus() {ldelim}
 								<input name="recordid" id="recordid" type="hidden" value="{$RECORDID}">
 								<input name="record_id" id="record_id" type="hidden" value="{$RECORD_ID}">
 								<input name="return_module" id="return_module" type="hidden" value="{$RETURN_MODULE}">
-								<input name="from_link" id="from_link" type="hidden" value="{$smarty.request.fromlink.value}">
+								<input name="from_link" id="from_link" type="hidden" value="{$smarty.request.fromlink.value|@vtlib_purify}">
 								<input name="maintab" id="maintab" type="hidden" value="{$MAINTAB}">
 								<input type="hidden" id="relmod" name="{$mod_var_name}" value="{$mod_var_value}">
                                 <input type="hidden" id="relrecord_id" name="{$recid_var_name}" value="{$recid_var_value}">
 								{* vtlib customization: For uitype 10 popup during paging *}
 								{if $smarty.request.form eq 'vtlibPopupView'}
-									<input name="form"  id="popupform" type="hidden" value="{$smarty.request.form}">
-									<input name="forfield"  id="forfield" type="hidden" value="{$smarty.request.forfield}">
-									<input name="srcmodule"  id="srcmodule" type="hidden" value="{$smarty.request.srcmodule}">
-									<input name="forrecord"  id="forrecord" type="hidden" value="{$smarty.request.forrecord}">
+									<input name="form"  id="popupform" type="hidden" value="{$smarty.request.form|@vtlib_purify}">
+									<input name="forfield"  id="forfield" type="hidden" value="{$smarty.request.forfield|@vtlib_purify}">
+									<input name="srcmodule"  id="srcmodule" type="hidden" value="{$smarty.request.srcmodule|@vtlib_purify}">
+									<input name="forrecord"  id="forrecord" type="hidden" value="{$smarty.request.forrecord|@vtlib_purify}">
 								{/if}
 								{if $smarty.request.currencyid neq ''}
-									<input type="hidden" name="curr_row" id="currencyid" value="{$smarty.request.currencyid}">
+									<input type="hidden" name="curr_row" id="currencyid" value="{$smarty.request.currencyid|@vtlib_purify}">
 								{/if}
 								{* END *}
 							</td>

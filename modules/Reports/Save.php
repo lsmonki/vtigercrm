@@ -1,31 +1,30 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 require_once('modules/Reports/Reports.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 global $adb;
 global $log,$current_user;
-$reportid = $_REQUEST["record"];
+$reportid = vtlib_purify($_REQUEST["record"]);
 
 //<<<<<<<selectcolumn>>>>>>>>>
-$selectedcolumnstring = $_REQUEST["selectedColumnsString"];
+$selectedcolumnstring = vtlib_purify($_REQUEST["selectedColumnsString"]);
 //<<<<<<<selectcolumn>>>>>>>>>
 
 //<<<<<<<reportsortcol>>>>>>>>>
-$sort_by1 = $_REQUEST["Group1"];
-$sort_order1 = $_REQUEST["Sort1"];
-$sort_by2 = $_REQUEST["Group2"];
-$sort_order2 = $_REQUEST["Sort2"];
-$sort_by3 = $_REQUEST["Group3"];
-$sort_order3 = $_REQUEST["Sort3"];
+$sort_by1 = vtlib_purify($_REQUEST["Group1"]);
+$sort_order1 = vtlib_purify($_REQUEST["Sort1"]);
+$sort_by2 = vtlib_purify($_REQUEST["Group2"]);
+$sort_order2 = vtlib_purify($_REQUEST["Sort2"]);
+$sort_by3 = vtlib_purify($_REQUEST["Group3"]);
+$sort_order3 = vtlib_purify($_REQUEST["Sort3"]);
 //<<<<<<<reportsortcol>>>>>>>>>
 $selectedcolumns = explode(";",$selectedcolumnstring);
 if(!in_array($sort_by1,$selectedcolumns)){
@@ -38,27 +37,27 @@ if(!in_array($sort_by3,$selectedcolumns)){
 	$selectedcolumns[] = $sort_by3;
 }
 //<<<<<<<reportmodules>>>>>>>>>
-$pmodule = $_REQUEST["primarymodule"];
-$smodule = $_REQUEST["secondarymodule"];
+$pmodule = vtlib_purify($_REQUEST["primarymodule"]);
+$smodule = vtlib_purify($_REQUEST["secondarymodule"]);
 //<<<<<<<reportmodules>>>>>>>>>
 
 //<<<<<<<report>>>>>>>>>
-$reportname = $_REQUEST["reportName"];
-$reportdescription = $_REQUEST["reportDesc"];
-$reporttype = $_REQUEST["reportType"];
-$folderid = $_REQUEST["folder"];
+$reportname = vtlib_purify($_REQUEST["reportName"]);
+$reportdescription = vtlib_purify($_REQUEST["reportDesc"]);
+$reporttype = vtlib_purify($_REQUEST["reportType"]);
+$folderid = vtlib_purify($_REQUEST["folder"]);
 //<<<<<<<report>>>>>>>>>
 
 //<<<<<<<standarfilters>>>>>>>>>
-$stdDateFilterField = $_REQUEST["stdDateFilterField"];
-$stdDateFilter = $_REQUEST["stdDateFilter"];
+$stdDateFilterField = vtlib_purify($_REQUEST["stdDateFilterField"]);
+$stdDateFilter = vtlib_purify($_REQUEST["stdDateFilter"]);
 $startdate = getDBInsertDateValue($_REQUEST["startdate"]);
 $enddate = getDBInsertDateValue($_REQUEST["enddate"]);
 //<<<<<<<standardfilters>>>>>>>>>
 
 //<<<<<<<shared entities>>>>>>>>>
-$sharetype = $_REQUEST["stdtypeFilter"];
-$shared_entities = $_REQUEST["selectedColumnsStr"];
+$sharetype = vtlib_purify($_REQUEST["stdtypeFilter"]);
+$shared_entities = vtlib_purify($_REQUEST["selectedColumnsStr"]);
 //<<<<<<<shared entities>>>>>>>>>
 
 //<<<<<<<columnstototal>>>>>>>>>>

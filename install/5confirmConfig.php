@@ -16,7 +16,7 @@
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/3confirmConfig.php,v 1.14 2005/04/25 09:41:26 samk Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
-require_once('currencies.php');
+require_once('modules/Utilities/Currencies.php');
 require_once('include/logging.php');
 $log =& LoggerManager::getLogger('PLATFORM');
 

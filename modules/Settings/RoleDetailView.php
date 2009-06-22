@@ -1,17 +1,13 @@
 <?php
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
-
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 
@@ -19,13 +15,12 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
-
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
 $smarty = new vtigerCRM_Smarty;
-$roleid= $_REQUEST['roleid'];
+$roleid= vtlib_purify($_REQUEST['roleid']);
 
 /** gives the role info, role profile info and role user info details in an array  for the specified role id
   * @param $roleid -- role id:: Type integer
@@ -68,8 +63,8 @@ function getStdOutput($roleid)
 
 if(isset($_REQUEST['roleid']) && $_REQUEST['roleid'] != '')
 {	
-	$roleid= $_REQUEST['roleid'];
-	$mode = $_REQUEST['mode'];
+	$roleid= vtlib_purify($_REQUEST['roleid']);
+	$mode = vtlib_purify($_REQUEST['mode']);
 	$roleInfo=getRoleInformation($roleid);
 	$thisRoleDet=$roleInfo[$roleid];
 	$rolename = $thisRoleDet[0]; 
@@ -90,9 +85,7 @@ $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
 $smarty->assign("ROLEINFO",getStdOutput($roleid));
-$smarty->assign("PARENTNAME",$parentname);            
-
+$smarty->assign("PARENTNAME",$parentname);
 
 $smarty->display("RoleDetailView.tpl");
-
 ?>

@@ -7,7 +7,6 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-require_once('data/CRMEntity.php');
 require_once('data/SugarBean.php');
 require_once('include/utils/utils.php');
 require_once('include/RelatedListView.php');
@@ -95,7 +94,7 @@ class Products extends CRMEntity {
 		global $log;
 		$log->debug("Entering getSortOrder() method ...");
 		if(isset($_REQUEST['sorder']))
-			$sorder = $_REQUEST['sorder'];
+			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
 		else
 			$sorder = (($_SESSION['PRODUCTS_SORT_ORDER'] != '')?($_SESSION['PRODUCTS_SORT_ORDER']):($this->default_sort_order));
 		$log->debug("Exiting getSortOrder() method ...");
@@ -110,7 +109,7 @@ class Products extends CRMEntity {
 		global $log;
 		$log->debug("Entering getOrderBy() method ...");
 		if (isset($_REQUEST['order_by']))
-			$order_by = $_REQUEST['order_by'];
+			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else
 			$order_by = (($_SESSION['PRODUCTS_ORDER_BY'] != '')?($_SESSION['PRODUCTS_ORDER_BY']):($this->default_order_by));
 		$log->debug("Exiting getOrderBy method ...");
@@ -264,7 +263,7 @@ class Products extends CRMEntity {
 			if($files['name'] != '' && $files['size'] > 0)
 			{       
 			      if($_REQUEST[$fileindex.'_hidden'] != '')	
-				      $files['original_name'] = $_REQUEST[$fileindex.'_hidden'];
+				      $files['original_name'] = vtlib_purify($_REQUEST[$fileindex.'_hidden']);
 			      else
 				      $files['original_name'] = stripslashes($files['name']);
 			      $files['original_name'] = str_replace('"','',$files['original_name']);

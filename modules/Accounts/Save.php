@@ -23,21 +23,22 @@
 
 require_once('modules/Accounts/Accounts.php');
 require_once('include/logging.php');
-//require_once('database/DatabaseConnection.php');
 require_once('include/database/PearDatabase.php');
 
 //added to fix 4600
-$search=$_REQUEST['search_url'];
+$search=vtlib_purify($_REQUEST['search_url']);
 if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
 {
 	//started
 	$value = $_REQUEST['accountname'];
 	$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname =? and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
+	$params = array($value);
 	$id = $_REQUEST['record'];
 	if(isset($id) && $id !='') {
-		$query .= " and vtiger_account.accountid != $id";
+		$query .= " and vtiger_account.accountid != ?";
+		array_push($params, $id);
 	}
-	$result = $adb->pquery($query, array($value));
+	$result = $adb->pquery($query, $params);
         if($adb->num_rows($result) > 0)
 	{
 		echo $mod_strings['LBL_ACCOUNT_EXIST'];
@@ -49,8 +50,6 @@ if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
 	die;
 }
 //Ended
-
-
 
 $local_log =& LoggerManager::getLogger('index');
 global $log;
@@ -69,8 +68,6 @@ if(isset($_REQUEST['mode']))
 {
 	$focus->mode = $_REQUEST['mode'];
 }
-
-//$focus->retrieve($_REQUEST['record']);
 
 foreach($focus->column_fields as $fieldname => $val)
 {
@@ -97,20 +94,6 @@ if($_REQUEST['assigntype'] == 'U')  {
 	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
 }
 
-//echo '<BR>';
-//print_r($focus->column_fields);
-//echo '<BR>';
-
-/* foreach($focus->additional_column_fields as $field)
-{
-	if(isset($_REQUEST[$field]))
-	{
-		$value = $_REQUEST[$field];
-		$focus->$field = $value;
-		
-	}
-}*/
-
 //When changing the Account Address Information  it should also change the related contact address - dina
 if($focus->mode == 'edit' && $_REQUEST['address_change'] == 'yes')
 {
@@ -123,32 +106,27 @@ if($focus->mode == 'edit' && $_REQUEST['address_change'] == 'yes')
 }
 //Changing account address - Ends
 
-//$focus->saveentity("Accounts");
 $focus->save("Accounts");
-//echo '<BR>';
-//echo $focus->id;
 $return_id = $focus->id;
-//save_customfields($focus->id);
 
-if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
-if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
+$parenttab = getParentTab();
+if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = vtlib_purify($_REQUEST['return_module']);
 else $return_module = "Accounts";
-if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
+if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = vtlib_purify($_REQUEST['return_action']);
 else $return_action = "DetailView";
-if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
+if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = vtlib_purify($_REQUEST['return_id']);
 
 $local_log->debug("Saved record with id of ".$return_id);
 
-
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
-if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+if($_REQUEST['return_viewname'] != '')$return_viewname=vtlib_purify($_REQUEST['return_viewname']);
 
 //Send notification mail to the assigned to owner about the vtiger_account creation
 if($focus->column_fields['notify_owner'] == 1 || $focus->column_fields['notify_owner'] == 'on')
 	$status = sendNotificationToOwner('Accounts',$focus);
 
-header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname&start=".$_REQUEST['pagenumber'].$search);
+header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname&start=".vtlib_purify($_REQUEST['pagenumber']).$search);
 /** Function to save Accounts custom field info into database
 * @param integer $entity_id - accountid
 */
@@ -160,12 +138,6 @@ function save_customfields($entity_id)
 	global $adb;
 	$dbquery = "SELECT * FROM customfields WHERE module = 'Accounts'";
 	$result = $adb->pquery($dbquery, array());
-        /*
-	$result = mysql_query($dbquery);
-	$custquery = "SELECT * FROM vtiger_accountcf WHERE vtiger_accountid = '".$entity_id."'";
-        $cust_result = mysql_query($custquery);
-	if(mysql_num_rows($result) != 0)
-        */
 	
 	$custquery = "SELECT * FROM vtiger_accountcf WHERE vtiger_accountid = ?";
     $cust_result = $adb->pquery($custquery, array($entity_id));
@@ -241,21 +213,5 @@ function save_customfields($entity_id)
 		
 	}
 	$log->debug("Exiting save_customfields method ...");
-	// commented by srini - PATCH for saving vtiger_accounts
-	/*else
-	{
-          //if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && mysql_num_rows($cust_result) !=0)
-                  if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
-		{
-			//Update Block
-		}
-		else
-		{
-			//Insert Block
-			$query = "INSERT INTO vtiger_accountcf (".$columns.") VALUES(".$values.")";
-                        $adb->query($query);
-			//mysql_query($query);
-		}
-	}*/	
 }
 ?>

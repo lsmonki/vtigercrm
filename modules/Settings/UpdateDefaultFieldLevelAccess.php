@@ -1,19 +1,16 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 global $adb;
-
 
 $field_module=getFieldModuleAccessArray();
 foreach($field_module as $fld_module=>$fld_name)
@@ -25,7 +22,7 @@ foreach($field_module as $fld_module=>$fld_name)
 		$fieldid =  $adb->query_result($fieldListResult,$i,"fieldid");
 		$displaytype = $adb->query_result($fieldListResult,$i,"displaytype");
 		$tab_id = $adb->query_result($fieldListResult,$i,"tabid");
-		$visible = $_REQUEST[$fieldid];
+		$visible = vtlib_purify($_REQUEST[$fieldid]);
 		if($visible == 'on')
 		{
 			$visible_value = 0;
@@ -50,7 +47,7 @@ foreach($field_module as $fld_module=>$fld_name)
 
 	}
 }
-$loc = "Location: index.php?action=DefaultFieldPermissions&module=Settings&parenttab=Settings&fld_module=".$_REQUEST['fld_module'];
+$loc = "Location: index.php?action=DefaultFieldPermissions&module=Settings&parenttab=Settings&fld_module=".vtlib_purify($_REQUEST['fld_module']);
 header($loc);
 
 ?>

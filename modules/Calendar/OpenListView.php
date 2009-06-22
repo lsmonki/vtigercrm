@@ -28,9 +28,8 @@
 function getPendingActivities($mode,$view=''){
 	global $log;
 	$log->debug("Entering getPendingActivities() method ...");
-	require_once("data/Tracker.php");
-	require_once("include/utils/utils.php");
-	require_once('include/utils/CommonUtils.php'); //new
+	require_once('data/Tracker.php');
+	require_once('include/utils/utils.php');
 	require_once('user_privileges/default_module_view.php');
 	
 	global $currentModule;
@@ -52,7 +51,7 @@ function getPendingActivities($mode,$view=''){
 	if($_REQUEST['activity_view']==''){
 		$activity_view='today';
 	}else{
-		$activity_view=$_REQUEST['activity_view'];
+		$activity_view=vtlib_purify($_REQUEST['activity_view']);
 	}
 
 	$today = date("Y-m-d", time());

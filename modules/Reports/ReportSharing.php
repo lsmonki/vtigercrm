@@ -14,7 +14,6 @@ require_once("data/Tracker.php");
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Reports/Reports.php');
-require_once('include/database/PearDatabase.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -73,7 +72,7 @@ foreach($user_groups as $i=>$grpid){
 }
 if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 {
-	$reportid = $_REQUEST["record"];
+	$reportid = vtlib_purify($_REQUEST["record"]);
 	$visiblecriteria=getVisibleCriteria($recordid);
 	$report_std_filter->assign("VISIBLECRITERIA", $visiblecriteria);
 	$member = getShareInfo($recordid);

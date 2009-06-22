@@ -10,8 +10,6 @@
 *
  ********************************************************************************/
 
-
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 global $mod_strings, $app_strings;

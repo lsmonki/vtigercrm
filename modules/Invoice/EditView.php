@@ -1,5 +1,4 @@
 <?php
-
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
  * ("License"); You may not use this file except in compliance with the 
@@ -23,18 +22,15 @@
 
 require_once ('Smarty_setup.php');
 require_once ('data/Tracker.php');
-require_once ('modules/Invoice/Invoice.php');
 require_once ('modules/Quotes/Quotes.php');
 require_once ('modules/SalesOrder/SalesOrder.php');
 require_once ('modules/Potentials/Potentials.php');
 require_once ('include/CustomFieldUtil.php');
-require_once ('include/ComboUtil.php');
 require_once ('include/utils/utils.php');
-require_once ('include/FormValidationUtil.php');
 
 global $app_strings, $mod_strings, $currentModule, $log, $current_user;
 
-$focus = new Invoice();
+$focus = CRMEntity::getInstance($currentModule);
 $smarty = new vtigerCRM_Smarty();
 //added to fix the issue4600
 $searchurl = getBasic_Advance_SearchURL();
@@ -61,7 +57,7 @@ if (isset ($_REQUEST['record']) && $_REQUEST['record'] != '') {
 		$txtTax = (($quote_focus->column_fields['txtTax'] != '') ? $quote_focus->column_fields['txtTax'] : '0.000');
 		$txtAdj = (($quote_focus->column_fields['txtAdjustment'] != '') ? $quote_focus->column_fields['txtAdjustment'] : '0.000');
 
-		$smarty->assign("CONVERT_MODE", $_REQUEST['convertmode']);
+		$smarty->assign("CONVERT_MODE", vtlib_purify($_REQUEST['convertmode']));
 		$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 		$smarty->assign("MODE", $quote_focus->mode);
 		$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -86,7 +82,7 @@ if (isset ($_REQUEST['record']) && $_REQUEST['record'] != '') {
 		$txtTax = (($so_focus->column_fields['txtTax'] != '') ? $so_focus->column_fields['txtTax'] : '0.000');
 		$txtAdj = (($so_focus->column_fields['txtAdjustment'] != '') ? $so_focus->column_fields['txtAdjustment'] : '0.000');
 
-		$smarty->assign("CONVERT_MODE", $_REQUEST['convertmode']);
+		$smarty->assign("CONVERT_MODE", vtlib_purify($_REQUEST['convertmode']));
 		$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 		$smarty->assign("MODE", $so_focus->mode);
 		$smarty->assign("AVAILABLE_PRODUCTS", 'true');
@@ -122,19 +118,6 @@ if (isset ($_REQUEST['record']) && $_REQUEST['record'] != '') {
 		// Reset the value w.r.t SalesOrder Selected
 		$currencyid = $so_focus->column_fields['currency_id'];
 		$rate = $so_focus->column_fields['conversion_rate'];
-
-		/*
-		//Added to display the SO's associated products -- when we select SO in Edit Invoice page
-		if(isset($_REQUEST['salesorder_id']) && $_REQUEST['salesorder_id'] !='')
-		{
-			$associated_prod = getAssociatedProducts("SalesOrder",$so_focus,$focus->column_fields['salesorder_id']);
-		}
-		
-		$smarty->assign("SALESORDER_ID", $focus->column_fields['salesorder_id']);
-		$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
-		$smarty->assign("MODE", $so_focus->mode);
-		$smarty->assign("AVAILABLE_PRODUCTS", 'true');
-		*/
 	} else {
 		$focus->id = $_REQUEST['record'];
 		$focus->mode = 'edit';
@@ -243,12 +226,6 @@ if (isset ($_REQUEST['account_id']) && $_REQUEST['account_id'] != '' && ($_REQUE
 global $theme;
 $theme_path = "themes/" . $theme . "/";
 $image_path = $theme_path . "images/";
-//retreiving the combo values array
-$comboFieldNames = Array (
-	'accounttype' => 'account_type_dom',
-	'industry' => 'industry_dom'
-);
-$comboFieldArray = getComboArray($comboFieldNames);
 
 $disp_view = getView($focus->mode);
 $mode = $focus->mode;
@@ -314,9 +291,9 @@ elseif ((isset ($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') || (i
 
 	//this is to display the Product Details in first row when we create new PO from Product relatedlist
 	if ($_REQUEST['return_module'] == 'Products') {
-		$smarty->assign("PRODUCT_ID", $_REQUEST['product_id']);
+		$smarty->assign("PRODUCT_ID", vtlib_purify($_REQUEST['product_id']));
 		$smarty->assign("PRODUCT_NAME", getProductName($_REQUEST['product_id']));
-		$smarty->assign("UNIT_PRICE", $_REQUEST['product_id']);
+		$smarty->assign("UNIT_PRICE", vtlib_purify($_REQUEST['product_id']));
 		$smarty->assign("QTY_IN_STOCK", getPrdQtyInStck($_REQUEST['product_id']));
 		$smarty->assign("VAT_TAX", getProductTaxPercentage("VAT", $_REQUEST['product_id']));
 		$smarty->assign("SALES_TAX", getProductTaxPercentage("Sales", $_REQUEST['product_id']));
@@ -331,17 +308,17 @@ if (isset ($cust_fld)) {
 $smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 
 if (isset ($_REQUEST['return_module']))
-	$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+	$smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
 else
 	$smarty->assign("RETURN_MODULE", "Invoice");
 if (isset ($_REQUEST['return_action']))
-	$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+	$smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
 else
 	$smarty->assign("RETURN_ACTION", "index");
 if (isset ($_REQUEST['return_id']))
-	$smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+	$smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
 if (isset ($_REQUEST['return_viewname']))
-	$smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+	$smarty->assign("RETURN_VIEWNAME", vtlib_purify($_REQUEST['return_viewname']));
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=" . session_id() . $GLOBALS['request_string']);
@@ -402,7 +379,7 @@ if ($focus->mode == 'edit' || $_REQUEST['isDuplicate'] == 'true') {
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
-$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
+$smarty->assign("DUPLICATE",vtlib_purify($_REQUEST['isDuplicate']));
 if ($focus->mode == 'edit')
 	$smarty->display("Inventory/InventoryEditView.tpl");
 else

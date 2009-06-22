@@ -134,7 +134,7 @@ $recordCount= $adb->query_result($countQuery,0,'count');
 
 // Set paging start value.
 $start = 1;
-if(isset($_REQUEST['start'])) { $start = $_REQUEST['start']; } 
+if(isset($_REQUEST['start'])) { $start = vtlib_purify($_REQUEST['start']); } 
 else { $start = $_SESSION['lvs'][$currentModule]['start']; }
 // Total records is less than a page now.
 if($recordCount <= $list_max_entries_per_page) $start = 1;

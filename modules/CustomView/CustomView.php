@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 global $calpath;
 global $app_strings,$mod_strings;
@@ -14,8 +13,6 @@ global $app_list_strings;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-require_once('include/database/PearDatabase.php');
-require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 
 global $adv_filter_options;
@@ -76,7 +73,7 @@ class CustomView extends CRMEntity{
 	function getViewId($module)
 	{
 		global $adb,$current_user;
-		$now_action = $_REQUEST['action'];
+		$now_action = vtlib_purify($_REQUEST['action']);
 		if(isset($_REQUEST['viewname']) == false) {
 			if (isset($_SESSION['lvs'][$module]["viewname"]) && $_SESSION['lvs'][$module]["viewname"]!='') {
 				$viewid = $_SESSION['lvs'][$module]["viewname"];
@@ -103,7 +100,7 @@ class CustomView extends CRMEntity{
 			}
 		}
 		else {
-			$viewname = $_REQUEST['viewname'];
+			$viewname = vtlib_purify($_REQUEST['viewname']);
 			if((is_string($viewname) && strtolower($viewname) == 'all') || $viewname == 0) {
         		$viewid = $this->getViewIdByName('All', $module);
 			} else { 
@@ -1173,7 +1170,7 @@ class CustomView extends CRMEntity{
 
 		$adv_chk_value = $value;
 		$value = '(';
-		$sql = "select distinct(setype) from vtiger_crmentity where crmid in (select ". mysql_real_escape_string($fieldname)." from ". mysql_real_escape_string($tablename).")";
+		$sql = "select distinct(setype) from vtiger_crmentity where crmid in (select ". $adb->sql_escape_string($fieldname)." from ". $adb->sql_escape_string($tablename).")";
 		$res=$adb->pquery($sql, array());
 		for($s=0;$s<$adb->num_rows($res);$s++)
 		{
@@ -1307,7 +1304,7 @@ class CustomView extends CRMEntity{
 	
 		global $adb, $default_charset;
 		$value=html_entity_decode(trim($value),ENT_QUOTES,$default_charset);
-		$value = mysql_real_escape_string($value);
+		$value = $adb->sql_escape_string($value);
 		if($comparator == "e")
 		{
 			if(trim($value) == "NULL")

@@ -18,8 +18,6 @@ require_once("data/Tracker.php");
 require_once('modules/Quotes/Quotes.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
-require_once('include/database/PearDatabase.php');
-require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 
@@ -50,7 +48,7 @@ if(!$_SESSION['lvs'][$currentModule])
 
 if($_REQUEST['errormsg'] != '')
 {
-        $errormsg = $_REQUEST['errormsg'];
+        $errormsg = vtlib_purify($_REQUEST['errormsg']);
         $smarty->assign("ERROR","The User does not have permission to Change/Delete ".$errormsg." ".$currentModule);
 }else
 {
@@ -205,8 +203,8 @@ $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
 //Added to select Multiple records in multiple pages
-$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
-$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
+$smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
 $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Quotes","index",$viewid);

@@ -1,15 +1,15 @@
 <html>
 <body>
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
+
 require_once('include/database/PearDatabase.php');
 global $default_charset;
 
@@ -30,16 +30,13 @@ $filename= $randomfilename . "_word.doc";
 
 $filesize=$temparray['filesize'];
 $wordtemplatedownloadpath =$_SERVER['DOCUMENT_ROOT'] ."/test/wordtemplatedownload/";
-
-//echo '<br> file name and size is ..'.$filename .'...'.$filesize;
+checkFileAccess($wordtemplatedownloadpath);
 $handle = fopen($wordtemplatedownloadpath .$filename,"wb") ;
-//chmod("/home/mickie/test/".$fileContent,0755);
 fwrite($handle,base64_decode($fileContent),$filesize);
 fclose($handle);
 
 
-$query = "SELECT * FROM " .$_REQUEST["module"] ." where id = ?";
-//echo $query;
+$query = "SELECT * FROM " .$adb->sql_escape_string($_REQUEST["module"]) ." WHERE id = ?";
 $result = $adb->pquery($query, array($_REQUEST['record']));
 
 $y=$adb->num_fields($result);

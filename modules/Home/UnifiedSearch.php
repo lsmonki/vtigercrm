@@ -48,10 +48,6 @@ if(isset($query_string) && $query_string != ''){
 	// END
 	
 	$object_array = getSearchModules($search_onlyin);
-	
-	foreach($object_array as $curr_module=>$curr_object){
-		require_once("modules/$curr_module/$curr_object.php");
-	}
 
 	global $adb;
 	global $current_user;
@@ -65,9 +61,8 @@ if(isset($query_string) && $query_string != ''){
 	getSearchModulesComboList($search_module);
 
 	foreach($object_array as $module => $object_name){
+		$focus = CRMEntity::getInstance($module);
 		if(isPermitted($module,"index") == "yes"){
-			$focus = new $object_name();
-
 			$smarty = new vtigerCRM_Smarty;
 
 			require_once("modules/$module/language/".$current_language.".lang.php");
@@ -79,7 +74,7 @@ if(isset($query_string) && $query_string != ''){
 			$smarty->assign("THEME", $theme);
 			$smarty->assign("IMAGE_PATH",$image_path);
 			$smarty->assign("MODULE",$module);
-			$smarty->assign("SEARCH_MODULE",$_REQUEST['search_module']);
+			$smarty->assign("SEARCH_MODULE",vtlib_purify($_REQUEST['search_module']));
 			$smarty->assign("SINGLE_MOD",$module);
 
 	
@@ -176,7 +171,7 @@ function getUnifiedWhere($listquery,$module,$search_val){
 	global $adb, $current_user;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		
-	$search_val = mysql_real_escape_string($search_val);
+	$search_val = $adb->sql_escape_string($search_val);
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0){
 		$query = "SELECT columnname, tablename FROM vtiger_field WHERE tabid = ? and vtiger_field.presence in (0,2)";
 		$qparams = array(getTabid($module));
@@ -318,7 +313,7 @@ function getSearchModules($filter = array()){
 	while($module_result = $adb->fetch_array($result)){
 		$modulename = $module_result['name'];
 		// Do we need to filter the module selection?
-		if(!empty($filter) && !in_array($modulename, $filter)) {
+		if(!empty($filter) && is_array($filter) && !in_array($modulename, $filter)) {
 			continue;
 		}
 		// END

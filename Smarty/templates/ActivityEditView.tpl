@@ -20,7 +20,7 @@
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <script type="text/javascript" src="modules/{$MODULE}/Calendar.js"></script>
 <script type="text/javascript">
-var gVTModule = '{$smarty.request.module}';
+var gVTModule = '{$smarty.request.module|@vtlib_purify}';
 </script>
 
 {*<!-- Contents -->*}

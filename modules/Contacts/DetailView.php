@@ -22,9 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Contacts/Contacts.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
@@ -33,7 +31,7 @@ global $mod_strings;
 global $app_strings;
 global $currentModule, $singlepane_view;
 
-$focus = new Contacts();
+$focus = CRMEntity::getInstance($currentModule);
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
         //Display the error message
@@ -148,7 +146,7 @@ $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST['record']));
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 $smarty->assign("USE_ASTERISK", get_use_asterisk($current_user->id));
 
@@ -186,7 +184,7 @@ if(isset($_SESSION['contacts_listquery'])){
 			
 			for($listi=0;$listi<count($ar_allist);$listi++)
 			{
-				if($ar_allist[$listi]==$_REQUEST[record])
+				if($ar_allist[$listi]==$_REQUEST['record'])
 				{
 					if($listi-1>=0)
 					{
@@ -211,9 +209,8 @@ $focus->markAsViewed($current_user->id);
 // END
 
 include_once('vtlib/Vtiger/Link.php');
-$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>$_REQUEST['action']);
+$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>vtlib_purify($_REQUEST['action']));
 $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), Array('DETAILVIEWBASIC','DETAILVIEW'), $customlink_params));
 
 $smarty->display("DetailView.tpl");
 ?>
-

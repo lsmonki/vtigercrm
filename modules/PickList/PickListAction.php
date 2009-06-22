@@ -1,14 +1,12 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *
- ********************************************************************************/
-require_once 'include/database/PearDatabase.php';
+ *********************************************************************************/
 require_once 'include/utils/utils.php';
 require_once 'modules/PickList/PickListUtils.php';
 require_once "include/Zend/Json.php";
@@ -17,6 +15,7 @@ global $adb, $current_user;
 
 $moduleName = $_REQUEST['fld_module'];
 $tableName = $_REQUEST['fieldname'];
+$tableName = $adb->sql_escape_string($tableName);
 $mode = trim($_REQUEST['mode']);
 if(empty($mode)){
 	echo "action mode is empty";
@@ -31,8 +30,8 @@ if($mode == 'add'){
 	$roles = Zend_Json::decode($selectedRoles);
 	$count = count($arr);
 	
-	$sql = "select picklistid from vtiger_picklist where name='$tableName'";
-	$result = $adb->query($sql);
+	$sql = "select picklistid from vtiger_picklist where name=?";
+	$result = $adb->pquery($sql, array($tableName));
 	$picklistid = $adb->query_result($result,0,"picklistid");
 	
 	for($i=0; $i<$count;$i++){
@@ -64,8 +63,8 @@ if($mode == 'add'){
 		exit;
 	}
 	
-	$qry="select tablename,columnname from vtiger_field where fieldname='$tableName' and presence in (0,2)";
-	$result = $adb->query($qry);
+	$qry="select tablename,columnname from vtiger_field where fieldname=? and presence in (0,2)";
+	$result = $adb->pquery($qry, array($tableName));
 	$num = $adb->num_rows($result);
 
 	for($i=0; $i<count($newValues);$i++){
@@ -73,8 +72,8 @@ if($mode == 'add'){
 		$oldVal = $oldValues[$i];
 		
 		if($newVal != $oldVal){
-			$sql = "update vtiger_$tableName set $tableName='$newVal' where $tableName='$oldVal'";
-			$adb->query($sql);
+			$sql = "UPDATE vtiger_$tableName SET $tableName=? WHERE $tableName=?";
+			$adb->pquery($sql, array($newVal, $oldVal));
 			
 			//replace the value of this piclist with new one in all records
 			if($num > 0){
@@ -82,8 +81,8 @@ if($mode == 'add'){
 					$table_name = $adb->query_result($result,$n,'tablename');
 					$columnName = $adb->query_result($result,$n,'columnname');
 					
-					$sql = "update $table_name set $columnName='$newVal' where $columnName='$oldVal'";
-					$adb->query($sql);
+					$sql = "update $table_name set $columnName=? where $columnName=?";
+					$adb->pquery($sql, array($newVal, $oldVal));
 				}
 			}
 		}
@@ -93,44 +92,44 @@ if($mode == 'add'){
 	$values = Zend_Json::decode($_REQUEST['values']);
 	$replaceVal = $_REQUEST['replaceVal'];
 	if(!empty($replaceVal)){
-		$sql = "select * from vtiger_$tableName where $tableName='$replaceVal'";
-		$result = $adb->query($sql);
+		$sql = "select * from vtiger_$tableName where $tableName=?";
+		$result = $adb->pquery($sql, array($replaceVal));
 		$replacePicklistID = $adb->query_result($result, 0, "picklist_valueid");
 	}
 	
 	for($i=0;$i<count($values);$i++){
-		$sql = "select * from vtiger_$tableName where $tableName='$values[$i]'";
-		$result = $adb->query($sql);
+		$sql = "select * from vtiger_$tableName where $tableName=?";
+		$result = $adb->pquery($sql, array($values[$i]));
 		$origPicklistID = $adb->query_result($result, 0, "picklist_valueid");
 			
 		//give permissions for the new picklist
 		if(!empty($replaceVal)){
-			$sql = "select * from vtiger_role2picklist where picklistvalueid=$replacePicklistID";
-			$result = $adb->query($sql);
+			$sql = "select * from vtiger_role2picklist where picklistvalueid=?";
+			$result = $adb->pquery($sql, array($replacePicklistID));
 			$count = $adb->num_rows($result);
 			
 			if($count == 0){
-				$sql = "update vtiger_role2picklist set picklistvalueid=$replacePicklistID where picklistvalueid=$origPicklistID";
-				$adb->query($sql);
+				$sql = "update vtiger_role2picklist set picklistvalueid=? where picklistvalueid=?";
+				$adb->pquery($sql, array($replacePicklistID, $origPicklistID));
 			}
 		}
 		
-		$sql = "delete from vtiger_$tableName where $tableName='$values[$i]'";
-		$adb->query($sql);
-		$sql = "delete from vtiger_role2picklist where picklistvalueid=".$origPicklistID;
-		$adb->query($sql);
+		$sql = "delete from vtiger_$tableName where $tableName=?";
+		$adb->pquery($sql, array($values[$i]));
+		$sql = "delete from vtiger_role2picklist where picklistvalueid=?";
+		$adb->pquery($sql, array($origPicklistID));
 		
 		//replace the value of this piclist with new one in all records
-		$qry="select tablename,columnname from vtiger_field where fieldname='$tableName' and presence in (0,2)";
-		$result = $adb->query($qry);
+		$qry="select tablename,columnname from vtiger_field where fieldname=? and presence in (0,2)";
+		$result = $adb->pquery($qry, array($tableName));
 		$num = $adb->num_rows($result);
 		if($num > 0){
 			for($n=0;$n<$num;$n++){
 				$table_name = $adb->query_result($result,$n,'tablename');
 				$columnName = $adb->query_result($result,$n,'columnname');
 				
-				$sql = "update $table_name set $columnName='$replaceVal' where $columnName='$values[$i]'";
-				$adb->query($sql);
+				$sql = "update $table_name set $columnName=? where $columnName=?";
+				$adb->pquery($sql, array($replaceVal, $values[$i]));
 			}
 		}
 	}

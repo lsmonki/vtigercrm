@@ -39,7 +39,7 @@ $current_dir = pathinfo(dirname(__FILE__));
 $current_dir = $current_dir['dirname']."/";
 $cache_dir = "cache/";
 
-require_once('currencies.php');
+require_once('modules/Utilities/Currencies.php');
 
 if (is_file("config.php") && is_file("config.inc.php")) {
 	require_once("config.inc.php");

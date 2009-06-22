@@ -1,31 +1,25 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
-
 require_once('Smarty_setup.php');
-require_once('modules/Emails/Emails.php');
 require_once('include/utils/utils.php');
 
-$focus = new Emails();
-$currentmodule = $_REQUEST['module'];
-$RECORD = $_REQUEST['record'];
+$currentmodule = vtlib_purify($_REQUEST['module']);
+$focus = CRMEntity::getInstance($currentmodule);
+$RECORD = vtlib_purify($_REQUEST['record']);
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
-    $focus->retrieve_entity_info($_REQUEST['record'],"Emails");
-    $focus->id = $_REQUEST['record'];
+    $focus->retrieve_entity_info($RECORD,$currentmodule);
+    $focus->id = $RECORD;
     $focus->name=$focus->column_fields['subject'];
-
-$log->debug("id is ".$focus->id);
-
-$log->debug("name is ".$focus->name);
-
+	$log->debug("id is ".$focus->id);
+	$log->debug("name is ".$focus->name);
 }
 
 global $mod_strings;
@@ -42,7 +36,7 @@ $related_array=getRelatedLists($currentModule,$focus);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
-        $smarty->assign("OP_MODE",$_REQUEST['mode']);
+        $smarty->assign("OP_MODE",vtlib_purify($_REQUEST['mode']));
 }
 $smarty->assign("id",$focus->id);
 $smarty->assign("RELATEDLISTS", $related_array);

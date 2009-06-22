@@ -1,15 +1,12 @@
 <?php
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
-
 
 require_once('include/database/PearDatabase.php');
 require_once('include/database/Postgres8.php');
@@ -185,44 +182,28 @@ function Search($module)
 	global $log,$default_charset;
         $log->debug("Entering Search(".$module.") method ...");
 	$url_string='';	
-	if(isset($_REQUEST['search_field']) && $_REQUEST['search_field'] !="")
-        {
-                $search_column=$_REQUEST['search_field'];
-        }
-        if(isset($_REQUEST['search_text']) && $_REQUEST['search_text']!="")
-        {
+	if(isset($_REQUEST['search_field']) && $_REQUEST['search_field'] !="") {
+		$search_column=vtlib_purify($_REQUEST['search_field']);
+	}
+	if(isset($_REQUEST['search_text']) && $_REQUEST['search_text']!="") {
 		// search other characters like "|, ?, ?" by jagi
-
-		$search_string = $_REQUEST['search_text'];
-		
+		$search_string = $_REQUEST['search_text'];		
 		$stringConvert = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$search_string) : $search_string;
-
 		$search_string=trim($stringConvert);
-
-        }
-        if(isset($_REQUEST['searchtype']) && $_REQUEST['searchtype']!="")
-        {
-
-
-                $search_type=$_REQUEST['searchtype'];
-
-                if($search_type == "BasicSearch")
-                {
-                        $where=BasicSearch($module,$search_column,$search_string);
-                }
-                else if ($search_type == "AdvanceSearch")
-                {
-                }
-                else //Global Search
-                {
+	}
+	if(isset($_REQUEST['searchtype']) && $_REQUEST['searchtype']!="") {
+        $search_type=vtlib_purify($_REQUEST['searchtype']);
+    	if($search_type == "BasicSearch") {
+            $where=BasicSearch($module,$search_column,$search_string);
+    	} else if ($search_type == "AdvanceSearch") {
+    	} else { //Global Search
 		}
 		$url_string = "&search_field=".$search_column."&search_text=".urlencode($search_string)."&searchtype=BasicSearch";
 		if(isset($_REQUEST['type']) && $_REQUEST['type'] != '')
-			$url_string .= "&type=".$_REQUEST['type'];
-		return $where."#@@#".$url_string;
+			$url_string .= "&type=".vtlib_purify($_REQUEST['type']);
 		$log->debug("Exiting Search method ...");
-        }
-
+		return $where."#@@#".$url_string;
+	}
 }
 
 /**This function is used to get user_id's for a given user_name during search
@@ -334,7 +315,7 @@ function BasicSearch($module,$search_field,$search_string){
 	global $log,$mod_strings,$current_user;
 	$log->debug("Entering BasicSearch(".$module.",".$search_field.",".$search_string.") method ...");
 	global $adb;
-	$search_string = ltrim(rtrim(mysql_real_escape_string($search_string)));
+	$search_string = ltrim(rtrim($adb->sql_escape_string($search_string)));
 	global $column_array,$table_col_array;
 	if($search_field =='crmid'){
 		$column_name='crmid';
@@ -827,7 +808,7 @@ function getSearch_criteria($criteria,$searchstring,$searchfield)
 
 function getWhereCondition($currentModule)
 {
-	global $log,$default_charset;
+	global $log,$default_charset,$adb;
 	global $column_array,$table_col_array,$mod_strings,$current_user;
 
         $log->debug("Entering getWhereCondition(".$currentModule.") method ...");
@@ -837,7 +818,7 @@ function getWhereCondition($currentModule)
 		$adv_string='';
 		$url_string='';
 		if(isset($_REQUEST['search_cnt']))
-		$tot_no_criteria = $_REQUEST['search_cnt'];
+		$tot_no_criteria = vtlib_purify($_REQUEST['search_cnt']);
 		if($_REQUEST['matchtype'] == 'all')
 			$matchtype = "and";
 		else
@@ -857,7 +838,7 @@ function getWhereCondition($currentModule)
 			$srch_val = $_REQUEST[$search_value];
 			$srch_val = function_exists(iconv) ? @iconv("UTF-8",$default_charset,$srch_val) : $srch_val;
 			$url_string .="&Fields".$i."=".$tab_col."&Condition".$i."=".$srch_cond."&Srch_value".$i."=".urlencode($srch_val);
-			$srch_val = mysql_real_escape_string($srch_val);
+			$srch_val = $adb->sql_escape_string($srch_val);
 			list($tab_name,$column_name) = split("[.]",$tab_col);
 			$uitype=getUItype($currentModule,$column_name);
 			//added to allow  search in check box type fields(ex: product active. it will contain 0 or 1) using yes or no instead of 0 or 1
@@ -945,7 +926,7 @@ function getWhereCondition($currentModule)
 				$adv_string .= " ".getSearch_criteria($srch_cond,$srch_val,$tab_col)." ".$matchtype;	
 			}
 		}
-		$where="(".$adv_string.")#@@#".$url_string."&searchtype=advance&search_cnt=".$tot_no_criteria."&matchtype=".$_REQUEST['matchtype'];
+		$where="(".$adv_string.")#@@#".$url_string."&searchtype=advance&search_cnt=".$tot_no_criteria."&matchtype=".vtlib_purify($_REQUEST['matchtype']);
 	}
 	elseif($_REQUEST['type']=='dbrd')
 	{
@@ -976,11 +957,11 @@ function getdashboardcondition()
 	if (isset($_REQUEST['sales_stage'])) $sales_stage = $_REQUEST['sales_stage'];
 	if (isset($_REQUEST['closingdate_start'])) $date_closed_start = $_REQUEST['closingdate_start'];
 	if (isset($_REQUEST['closingdate_end'])) $date_closed_end = $_REQUEST['closingdate_end'];
-	if(isset($_REQUEST['owner'])) $owner = $_REQUEST['owner'];
-	if(isset($_REQUEST['campaignid'])) $campaign = $_REQUEST['campaignid'];
-	if(isset($_REQUEST['quoteid'])) $quote = $_REQUEST['quoteid'];
-	if(isset($_REQUEST['invoiceid'])) $invoice = $_REQUEST['invoiceid'];
-	if(isset($_REQUEST['purchaseorderid'])) $po = $_REQUEST['purchaseorderid'];
+	if(isset($_REQUEST['owner'])) $owner = vtlib_purify($_REQUEST['owner']);
+	if(isset($_REQUEST['campaignid'])) $campaign = vtlib_purify($_REQUEST['campaignid']);
+	if(isset($_REQUEST['quoteid'])) $quote = vtlib_purify($_REQUEST['quoteid']);
+	if(isset($_REQUEST['invoiceid'])) $invoice = vtlib_purify($_REQUEST['invoiceid']);
+	if(isset($_REQUEST['purchaseorderid'])) $po = vtlib_purify($_REQUEST['purchaseorderid']);
 
 	if(isset($date_closed_start) && $date_closed_start != "" && isset($date_closed_end) && $date_closed_end != "")
 	{
@@ -1032,10 +1013,10 @@ function getdashboardcondition()
 		$url_string .= "&purchaseorderid=".$po;
 	}
 	if(isset($_REQUEST['from_homepagedb']) && $_REQUEST['from_homepagedb'] != '') {
-		$url_string .= "&from_homepagedb=".$_REQUEST['from_homepagedb'];
+		$url_string .= "&from_homepagedb=".vtlib_purify($_REQUEST['from_homepagedb']);
 	}
 	if(isset($_REQUEST['type']) && $_REQUEST['type'] != '') {
-		$url_string .= "&type=".$_REQUEST['type'];
+		$url_string .= "&type=".vtlib_purify($_REQUEST['type']);
 	}
 	
 	$where = "";

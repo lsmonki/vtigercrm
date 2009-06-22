@@ -18,14 +18,10 @@
 			$result = $adb->pquery("select setype from vtiger_crmentity where crmid=?", array($entityId));
 			$setype =  $adb->query_result($result,0,"setype");
 			$obj->moduleName = $setype;
-			$moduleName = $setype;
-			if(strtolower($setype)==='calendar'){
-				$setype = 'Activity';
-			}
-			require_once("modules/".$moduleName."/".$setype.".php");
-			$focus = new $setype();
 			
-			
+			require_once('data/CRMEntity.php');
+			$focus = CRMEntity::getInstance($setype);
+						
 			$focus->retrieve_entity_info($entityId, $setype);
 			$focus->id = $entityId;
 			$obj->isNew = false;

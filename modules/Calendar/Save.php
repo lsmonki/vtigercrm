@@ -29,10 +29,10 @@ require_once('modules/Calendar/CalendarCommon.php');
 global $adb,$theme;
 $local_log =& LoggerManager::getLogger('index');
 $focus = new Activity();
-$activity_mode = $_REQUEST['activity_mode'];
+$activity_mode = vtlib_purify($_REQUEST['activity_mode']);
 $tab_type = 'Calendar';
 //added to fix 4600
-$search=$_REQUEST['search_url'];
+$search=vtlib_purify($_REQUEST['search_url']);
 
 $focus->column_fields["activitytype"] = 'Task';
 if(isset($_REQUEST['record']))
@@ -154,15 +154,15 @@ else
 }
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") 
-	$return_module = $_REQUEST['return_module'];
+	$return_module = vtlib_purify($_REQUEST['return_module']);
 else 
 	$return_module = "Calendar";
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") 
-	$return_action = $_REQUEST['return_action'];
+	$return_action = vtlib_purify($_REQUEST['return_action']);
 else 
 	$return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") 
-	$return_id = $_REQUEST['return_id'];
+	$return_id = vtlib_purify($_REQUEST['return_id']);
 
 $activemode = "";
 if($activity_mode != '') 
@@ -205,7 +205,7 @@ function getRequestData($return_id)
 		$end_hour = $value['endhour'] .':'.$value['endmin'].''.$value['endfmt'];
 	$mail_data['st_date_time'] = getDisplayDate($_REQUEST['date_start'])." ".$start_hour;
 	$mail_data['end_date_time']=getDisplayDate($_REQUEST['due_date'])." ".$end_hour;
-	$mail_data['location']=$_REQUEST['location'];
+	$mail_data['location']=vtlib_purify($_REQUEST['location']);
 	return $mail_data;
 }
 
@@ -270,19 +270,19 @@ if(isset($_REQUEST['del_actparent_rel']) && $_REQUEST['del_actparent_rel'] != ''
 }
 
 if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
-	$view=$_REQUEST['view'];
+	$view=vtlib_purify($_REQUEST['view']);
 if(isset($_REQUEST['hour']) && $_REQUEST['hour']!='')
-	$hour=$_REQUEST['hour'];
+	$hour=vtlib_purify($_REQUEST['hour']);
 if(isset($_REQUEST['day']) && $_REQUEST['day']!='')
-	$day=$_REQUEST['day'];
+	$day=vtlib_purify($_REQUEST['day']);
 if(isset($_REQUEST['month']) && $_REQUEST['month']!='')
-	$month=$_REQUEST['month'];
+	$month=vtlib_purify($_REQUEST['month']);
 if(isset($_REQUEST['year']) && $_REQUEST['year']!='') 
-	$year=$_REQUEST['year'];
+	$year=vtlib_purify($_REQUEST['year']);
 if(isset($_REQUEST['viewOption']) && $_REQUEST['viewOption']!='') 
-	$viewOption=$_REQUEST['viewOption'];
+	$viewOption=vtlib_purify($_REQUEST['viewOption']);
 if(isset($_REQUEST['subtab']) && $_REQUEST['subtab']!='') 
-	$subtab=$_REQUEST['subtab'];
+	$subtab=vtlib_purify($_REQUEST['subtab']);
 
 if($_REQUEST['recurringcheck']) { 
 	include_once dirname(__FILE__) . '/RepeatEvents.php';
@@ -293,13 +293,14 @@ if($_REQUEST['recurringcheck']) {
 if($_REQUEST['return_viewname'] == '') 
 	$return_viewname='0';
 if($_REQUEST['return_viewname'] != '')
-	$return_viewname=$_REQUEST['return_viewname'];
-if($_REQUEST['parenttab'] != '')
-	$parenttab=$_REQUEST['parenttab'];
+	$return_viewname=vtlib_purify($_REQUEST['return_viewname']);
+
+$parenttab=getParentTab();
+
 if($_REQUEST['start'] !='')
-	$page='&start='.$_REQUEST['start'];
+	$page='&start='.vtlib_purify($_REQUEST['start']);
 if($_REQUEST['maintab'] == 'Calendar')
 	header("Location: index.php?action=".$return_action."&module=".$return_module."&view=".$view."&hour=".$hour."&day=".$day."&month=".$month."&year=".$year."&record=".$return_id."&viewOption=".$viewOption."&subtab=".$subtab."&parenttab=$parenttab");
 else
-	header("Location: index.php?action=$return_action&module=$return_module$view$hour$day$month$year&record=$return_id$activemode&viewname=$return_viewname$page&parenttab=$parenttab&start=".$_REQUEST['pagenumber'].$search);
+	header("Location: index.php?action=$return_action&module=$return_module$view$hour$day$month$year&record=$return_id$activemode&viewname=$return_viewname$page&parenttab=$parenttab&start=".vtlib_purify($_REQUEST['pagenumber']).$search);
 ?>

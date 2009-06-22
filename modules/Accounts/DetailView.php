@@ -22,9 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Accounts/Accounts.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 global $mod_strings;
@@ -32,7 +30,7 @@ global $app_strings;
 global $app_list_strings;
 global $log, $currentModule, $singlepane_view;
 
-$focus = new Accounts();
+$focus = CRMEntity::getInstance($currentModule);
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],"Accounts");
     $focus->id = $_REQUEST['record'];	
@@ -131,7 +129,7 @@ $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST['record']));
 
 if(isset($_SESSION['accounts_listquery'])){
 	$arrayTotlist = array();
@@ -154,7 +152,7 @@ if(isset($_SESSION['accounts_listquery'])){
 			
 			for($listi=0;$listi<count($ar_allist);$listi++)
 			{
-				if($ar_allist[$listi]==$_REQUEST[record])
+				if($ar_allist[$listi]==$_REQUEST['record'])
 				{
 					if($listi-1>=0)
 					{
@@ -192,7 +190,7 @@ $focus->markAsViewed($current_user->id);
 // END
 
 include_once('vtlib/Vtiger/Link.php');
-$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>$_REQUEST['action']);
+$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>vtlib_purify($_REQUEST['action']));
 $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), Array('DETAILVIEWBASIC','DETAILVIEW'), $customlink_params));
 	
 $smarty->display("DetailView.tpl");

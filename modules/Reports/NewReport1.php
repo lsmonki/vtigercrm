@@ -35,7 +35,7 @@ $list_report_form->assign("MOD", $mod_strings);
 $list_report_form->assign("APP", $app_strings);
 if(isset($_REQUEST["record"]) && $_REQUEST["record"]!='')
 {
-	$reportid = $_REQUEST["record"];
+	$reportid = vtlib_purify($_REQUEST["record"]);
 	$list_report_form->assign('REPORT_ID',$reportid);
 	$oReport = new Reports($reportid);
 	$primarymodule = $oReport->primodule;
@@ -62,11 +62,11 @@ if(isset($_REQUEST["record"]) && $_REQUEST["record"]!='')
 	$list_report_form->assign('BACK_WALK','true');
 }else
 {
-	$reportname = $_REQUEST["reportname"];
-	$reportdescription = $_REQUEST["reportdes"];
-	$folderid = $_REQUEST["reportfolder"];
+	$reportname = vtlib_purify($_REQUEST["reportname"]);
+	$reportdescription = vtlib_purify($_REQUEST["reportdes"]);
+	$folderid = vtlib_purify($_REQUEST["reportfolder"]);
 	$ogReport = new Reports();
-	$primarymodule = $_REQUEST["primarymodule"];
+	$primarymodule = vtlib_purify($_REQUEST["primarymodule"]);
 	$secondarymodule = '';
 	$secondarymodules =Array();
 	foreach($ogReport->related_modules[$primarymodule] as $key=>$value){

@@ -7,18 +7,16 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  *******************************************************************************/
-require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 require_once('modules/PriceBooks/PriceBooks.php');
 require_once('include/utils/utils.php');
-require_once('include/ComboUtil.php');
 
 global $app_strings,$mod_strings,$current_language,$theme,$log,$currentModule;
 
 $current_module_strings = return_module_language($current_language, $currentModule);
 
 $productid = $_REQUEST['return_id'];
-$parenttab = htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset);
+$parenttab = getParentTab();
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
@@ -162,13 +160,11 @@ if($sorder !='')
 	$url_string .="&sorder=".$sorder;
 
 $smarty->assign("LISTENTITY", $list_body);
-$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
-$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+$smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
+$smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
 $smarty->assign("RETURN_ID", $productid);
 $smarty->assign("CATEGORY", $parenttab);
 
 $smarty->display("AddProductToPriceBooks.tpl");
-
-
 
 ?>

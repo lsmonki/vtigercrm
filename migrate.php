@@ -265,7 +265,6 @@ if (!($templateHandle && $includeHandle)) {
 /* ----------------------------------------------------------Migration Starts HERE ------------------------------------------------------------------------*/
 require_once('config.inc.php');
 require_once('include/utils/utils.php');
-require_once('include/database/PearDatabase.php');
 $adb = new PearDatabase($dbtype,$host,$dbname,$username,$passwd);
 
 $query = " ALTER DATABASE ".$dbname." DEFAULT CHARACTER SET utf8";

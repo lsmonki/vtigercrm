@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
  
 require_once('include/CustomFieldUtil.php');
@@ -18,12 +17,12 @@ global $mod_strings,$app_strings,$app_list_strings,$theme,$adb,$log;
 $theme_path="themes/".$theme."/";
 $image_path="themes/images/";
 
-$tabid=$_REQUEST['tabid'];
-$fieldid=$_REQUEST['fieldid'];
+$tabid=vtlib_purify($_REQUEST['tabid']);
+$fieldid=vtlib_purify($_REQUEST['fieldid']);
 
 // Set the tab type only during Custom Field creation for Calendar module based on the activity type
 if ($fieldid == '' && $_REQUEST['fld_module'] == 'Calendar' && isset($_REQUEST['activity_type'])) {
-	$activitytype = $_REQUEST['activity_type'];
+	$activitytype = vtlib_purify($_REQUEST['activity_type']);
 	if ($activitytype == 'E') $tabid = '16';
 	if ($activitytype == 'T') $tabid = '9';
 }
@@ -31,7 +30,7 @@ if ($fieldid == '' && $_REQUEST['fld_module'] == 'Calendar' && isset($_REQUEST['
  $blockid = getBlockId($tabid,'LBL_CUSTOM_INFORMATION');
 
 if(isset($_REQUEST['uitype']) && $_REQUEST['uitype'] != '')
-	$uitype=$_REQUEST['uitype'];
+	$uitype=vtlib_purify($_REQUEST['uitype']);
 else
 	$uitype=1;
 
@@ -91,7 +90,7 @@ if(isset($fieldid) && $fieldid!='')
 	$readonly = "readonly";
 	if($fieldtype == '7' || $fieldtype == '11')
 	{
-		$query = "select * from vtiger_". mysql_real_escape_string($customfield_columnname);
+		$query = "select * from vtiger_". $adb->sql_escape_string($customfield_columnname);
 		$result = $adb->pquery($query, array());
 		$fldVal='';
 		while($row = $adb->fetch_array($result))
@@ -106,15 +105,15 @@ if(isset($fieldid) && $fieldid!='')
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("THEME", $theme);
-$smarty->assign("FLD_MODULE", $_REQUEST['fld_module']);
+$smarty->assign("FLD_MODULE", vtlib_purify($_REQUEST['fld_module']));
 if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 {
 	$error=$mod_strings['ERR_CUSTOM_FIELD_WITH_NAME']. $_REQUEST["fldlabel"] .$mod_strings['ERR_ALREADY_EXISTS'] . ' ' .$mod_strings['ERR_SPECIFY_DIFFERENT_LABEL'];
 	$smarty->assign("DUPLICATE_ERROR", $error);
-	$customfield_fieldlabel=$_REQUEST["fldlabel"];
-	$fieldlength=$_REQUEST["fldlength"];
-	$decimalvalue=$_REQUEST["flddecimal"];
-	$fldVal = $_REQUEST["fldPickList"];
+	$customfield_fieldlabel=vtlib_purify($_REQUEST["fldlabel"]);
+	$fieldlength=vtlib_purify($_REQUEST["fldlength"]);
+	$decimalvalue=vtlib_purify($_REQUEST["flddecimal"]);
+	$fldVal = vtlib_purify($_REQUEST["fldPickList"]);
 	$selectedvalue = $typeVal[$_REQUEST["fldType"]];
 }
 elseif($fieldid == '')
@@ -142,7 +141,7 @@ for($i=0;$i<count($cftextcombo);$i++)
 $output .= '<div id="customfield" style="display:block;" class="layerPopup"><script language="JavaScript" type="text/javascript" src="include/js/customview.js"></script>
 			<form action="index.php" method="post" name="addtodb" onSubmit="if(validate('.$blockid.')) {VtigerJS_DialogBox.block();}else{return false;}">
 	  		<input type="hidden" name="module" value="Settings">
-	  		<input type="hidden" name="fld_module" value="'.$_REQUEST['fld_module'].'">
+	  		<input type="hidden" name="fld_module" value="'.vtlib_purify($_REQUEST['fld_module']).'">
 	  		<input type="hidden" name="activity_type" value="'.$activitytype.'">
 	  		<input type="hidden" name="parenttab" value="Settings">
       		<input type="hidden" name="action" value="AddCustomFieldToDB">
@@ -182,39 +181,7 @@ $output .= '<div id="customfield" style="display:block;" class="layerPopup"><scr
 							<td class="dataLabel" nowrap="nowrap" align="right" width="30%"><b>'.$mod_strings['LBL_LABEL'].' </b></td>
 							<td align="left" width="70%"><input name="fldLabel_'.$blockid.'" id ="fldLabel_'.$blockid.'" value="'.$customfield_fieldlabel.'" type="text" class="txtBox"></td>
 						</tr>';
-					if($mode == 'edit')
-					{
-						/*switch($uitype)
-						{
-							case 1:
-								$output .= '<tr id="lengthdetails_'.$blockid.'">
-									<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_LENGTH'].'</b></td>
-									<td align="left"><input type="text" name="fldLength'.$blockid.'" value="'.$fieldlength.'" '.$readonly.' class="txtBox"></td>
-								</tr>';
-								break;
-							case 71:
-							case 7:
-								$output .= '<tr id="lengthdetails">
-									<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_LENGTH'].'</b></td>
-									<td align="left"><input type="text" name="fldLength_'.$blockid.'" value="'.$fieldlength.'" '.$readonly.' class="txtBox"></td>
-								</tr>';
-								$output .= '<tr id="decimaldetails">
-									<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_DECIMAL_PLACES'].'</b></td>
-									<td align="left"><input type="text" name="fldDecimal_'.$blockid.'" value="'.$decimalvalue.'" '.$readonly.' class="txtBox"></td>
-								</tr>';
-								break;
-							case 33:
-							case 15:
-								$output .= '<tr id="picklist">
-									<td class="dataLabel" nowrap="nowrap" align="right" valign="top"><b>'.$mod_strings['LBL_PICK_LIST_VALUES'].'</b></td>
-									<td align="left" valign="top"><textarea name="fldPickList_'.$blockid.'" rows="10" class="txtBox" '.$readonly.'>'.$fldVal.'</textarea></td>
-								</tr>';
-								break;
-								
-						}*/
-					}
-					else
-					{
+					if($mode != 'edit') {
 						$output .= '<tr id="lengthdetails_'.$blockid.'">
 							<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_LENGTH'].'</b></td>
 							<td align="left"><input type="text" name="fldLength_'.$blockid.'" id= ="fldLength_'.$blockid.'" value="'.$fieldlength.'" '.$readonly.' class="txtBox"></td>

@@ -1,13 +1,12 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *
- ********************************************************************************/
+ *********************************************************************************/
 
 /**
  * this file will be used to store the functions to be used in the picklist module
@@ -103,7 +102,7 @@ function get_available_module_picklist($picklist_details){
  */
 function getAllPickListValues($fieldName){
 	global $adb;
-	$sql = "select * from vtiger_$fieldName";
+	$sql = 'SELECT * FROM vtiger_'.$adb->sql_escape_string($fieldName);
 	$result = $adb->query($sql);
 	$count = $adb->num_rows($result);
 	
@@ -124,6 +123,7 @@ function getAllPickListValues($fieldName){
  */
 function getEditablePicklistValues($fieldName, $lang, $adb){
 	$values = array();
+	$fieldName = $adb->sql_escape_string($fieldName);
 	$sql="select $fieldName from vtiger_$fieldName where presence=1 and $fieldName <> '--None--'";
 	$res = $adb->query($sql);
 	$RowCount = $adb->num_rows($res);
@@ -149,6 +149,7 @@ function getEditablePicklistValues($fieldName, $lang, $adb){
  */
 function getNonEditablePicklistValues($fieldName, $lang, $adb){
 	$values = array();
+	$fieldName = $adb->sql_escape_string($fieldName);
 	$sql = "select $fieldName from vtiger_$fieldName where presence=0";
 	$result = $adb->query($sql);
 	$count = $adb->num_rows($result);
@@ -179,8 +180,8 @@ function getAssignedPicklistValues($tableName, $roleid, $adb){
 	$subRoles = array($roleid);
 	$subRoles = array_merge($subRoles, array_keys($sub));
 	
-	$sql = "select * from vtiger_picklist where name = '$tableName'";
-	$result = $adb->query($sql);
+	$sql = 'SELECT * FROM vtiger_picklist WHERE name = ?';
+	$result = $adb->pquery($sql, array($tableName));
 	if($adb->num_rows($result)>0){
 		$picklistid = $adb->query_result($result, 0, "picklistid");
 	}
@@ -188,15 +189,15 @@ function getAssignedPicklistValues($tableName, $roleid, $adb){
 	foreach($subRoles as $role){
 		$params[] = $role;
 	}
-	$sql = "select distinct picklistvalueid from vtiger_role2picklist where picklistid = $picklistid and roleid in (".generateQuestionMarks($params).") order by sortid";
-	$result = $adb->pquery($sql, $params);
+	$sql = "select distinct picklistvalueid from vtiger_role2picklist where picklistid = ? and roleid in (".generateQuestionMarks($params).") order by sortid";
+	$result = $adb->pquery($sql, array($picklistid, $params));
 	$count = $adb->num_rows($result);
 	
 	for($i=0;$i<$count;$i++){
 		$picklistvalueid = $adb->query_result($result, $i, "picklistvalueid");
-		
-		$sql = "select * from vtiger_$tableName where picklist_valueid=".$picklistvalueid;
-		$res = $adb->query($sql);
+		$tableName = $adb->sql_escape_string($tableName);
+		$sql = "select * from vtiger_$tableName where picklist_valueid=?";
+		$res = $adb->pquery($sql, array($picklistvalueid));
 		if($adb->num_rows($res)>0){
 			$arr[] = $adb->query_result($res, 0, $tableName);
 		}

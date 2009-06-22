@@ -20,7 +20,6 @@
 $new_tables = 0;
 
 require_once('config.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/logging.php');
 require_once('modules/Leads/Leads.php');
 require_once('modules/Contacts/Contacts.php');

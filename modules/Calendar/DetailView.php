@@ -22,9 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Calendar/Activity.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('modules/Calendar/calendarLayout.php');
 include_once 'modules/Calendar/header.php';
@@ -34,9 +32,10 @@ if( $_SESSION['mail_send_error']!="")
 	echo '<b><font color=red>'. $mod_strings{"LBL_NOTIFICATION_ERROR"}.'</font></b><br>';
 }
 session_unregister('mail_send_error');
-$focus = new Activity();
+
+$focus = CRMEntity::getInstance($currentModule);
 $smarty =  new vtigerCRM_Smarty();
-$activity_mode = $_REQUEST['activity_mode'];
+$activity_mode = vtlib_purify($_REQUEST['activity_mode']);
 //If activity_mode == null
 
 if($activity_mode =='' || strlen($activity_mode) < 1)
@@ -300,11 +299,11 @@ else
 $smarty->assign("NAME", "");
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 if (isset($_REQUEST['return_module'])) 
-$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+$smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
 if (isset($_REQUEST['return_action'])) 
-$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+$smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
 if (isset($_REQUEST['return_id'])) 
-$smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+$smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string'].'&activity_mode='.$activity_mode);
@@ -312,10 +311,10 @@ $smarty->assign("ID", $focus->id);
 $smarty->assign("NAME", $focus->name);
 $smarty->assign("BLOCKS", $act_data);
 $smarty->assign("LABEL", $fldlabel);
-$smarty->assign("VIEWTYPE", $_REQUEST['viewtype']);
+$smarty->assign("VIEWTYPE", vtlib_purify($_REQUEST['viewtype']));
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("ACTIVITYDATA", $data);
-$smarty->assign("ID", $_REQUEST['record']);
+$smarty->assign("ID", vtlib_purify($_REQUEST['record']));
 
 //get Description Information
 if(isPermitted("Calendar","EditView",$_REQUEST['record']) == 'yes')
@@ -336,7 +335,7 @@ $smarty->assign("CHECK", $check_button);
  $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data2['fieldlabel']);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST['record']));
 
 if(isset($_SESSION['activity_listquery'])){
 	$arrayTotlist = array();
@@ -359,7 +358,7 @@ if(isset($_SESSION['activity_listquery'])){
 			
 			for($listi=0;$listi<count($ar_allist);$listi++)
 			{
-				if($ar_allist[$listi]==$_REQUEST[record])
+				if($ar_allist[$listi]==$_REQUEST['record'])
 				{
 					if($listi-1>=0)
 					{
@@ -381,7 +380,7 @@ if(isset($_SESSION['activity_listquery'])){
 
 // Gather the custom link information to display
 include_once('vtlib/Vtiger/Link.php');
-$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>$_REQUEST['action']);
+$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>vtlib_purify($_REQUEST['action']));
 $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), 'DETAILVIEW', $customlink_params));
 // END
 

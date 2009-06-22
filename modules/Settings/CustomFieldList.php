@@ -1,13 +1,13 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
+
 require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
@@ -55,9 +55,9 @@ $smarty->assign("MODULES",$module_array);
 $smarty->assign("CFTEXTCOMBO",$cftextcombo);
 $smarty->assign("CFIMAGECOMBO",$cfimagecombo);
 if($_REQUEST['fld_module'] !='')
-	$fld_module = $_REQUEST['fld_module'];
+	$fld_module = vtlib_purify($_REQUEST['fld_module']);
 elseif($_REQUEST['formodule'] != ''){
-	$fld_module = $_REQUEST['formodule'];
+	$fld_module = vtlib_purify($_REQUEST['formodule']);
 }	
 else
 	$fld_module = 'Leads';
@@ -65,12 +65,12 @@ $smarty->assign("MODULE",$fld_module);
 $smarty->assign("CFENTRIES",getCFListEntries($fld_module));
 if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 {
-	$error=getTranslatedString('ERR_CUSTOM_FIELD_WITH_NAME',$fld_module). $_REQUEST["fldlabel"] .getTranslatedString('ERR_ALREADY_EXISTS',$fld_module) . ' ' .getTranslatedString('ERR_SPECIFY_DIFFERENT_LABEL',$fld_module);
+	$error=getTranslatedString('ERR_CUSTOM_FIELD_WITH_NAME',$fld_module). vtlib_purify($_REQUEST["fldlabel"]) .getTranslatedString('ERR_ALREADY_EXISTS',$fld_module) . ' ' .getTranslatedString('ERR_SPECIFY_DIFFERENT_LABEL',$fld_module);
 	$smarty->assign("DUPLICATE_ERROR", $error);
 }
 
 if($_REQUEST['mode'] !='')
-	$mode = $_REQUEST['mode'];
+	$mode = vtlib_purify($_REQUEST['mode']);
 $smarty->assign("MODE", $mode);
 
 if($_REQUEST['ajax'] != 'true')

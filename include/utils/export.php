@@ -13,10 +13,6 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 
-if (substr(phpversion(), 0, 1) == "5") {
-	ini_set("zend.ze1_compatibility_mode", "1");
-}
-
 require_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
@@ -66,20 +62,20 @@ if(isPermitted($_REQUEST['module'],"Export") == "no")
 if ($allow_exports=='none' || ( $allow_exports=='admin' && ! is_admin($current_user) ) )
 {
 
-	?>
-<script language=javascript>
+?>
+	<script language='text/javascript'>
 		alert("<?php echo $app_strings['NOT_PERMITTED_TO_EXPORT']?>");
-		window.location="index.php?module=<?php echo $_REQUEST['module'] ?>&action=index";
+		window.location="index.php?module=<?php echo vtlib_purify($_REQUEST['module']) ?>&action=index";
 	</script>
 	
 	<?php exit; ?>
-	<?php
+<?php
 }
 
 /**Function convert line breaks to space in description during export
  * Pram $str - text
  * retrun type string
- */
+*/
 function br2nl_vt($str)
 {
 	global $log;
@@ -95,33 +91,29 @@ function br2nl_vt($str)
  * Return type text
  */
 function export($type){
-	global $log,$list_max_entries_per_page;
-	$log->debug("Entering export(".$type.") method ...");
-	global $adb;
+    global $log,$list_max_entries_per_page;
+    $log->debug("Entering export(".$type.") method ...");
+    global $adb;
 
-	$focus = 0;
-	$content = '';
+    $focus = 0;
+    $content = '';
 
-	if ($type != ""){
+    if ($type != ""){
 		// vtlib customization: Hook to dynamically include required module file.
-		// TODO: Make security check if the file access is within vtigercrm directory
 		// Refer to the logic in setting $currentModule in index.php
-		require_once("modules/$type/$type.php");
-		// END
-
-		$focus = new $type;
-	}
-	$log = LoggerManager::getLogger('export_'.$type);
-	$db = new PearDatabase();
+		$focus = CRMEntity::getInstance($type);
+    }
+    $log = LoggerManager::getLogger('export_'.$type);
+    $db = new PearDatabase();
 
 	$oCustomView = new CustomView("$type");
 	$viewid = $oCustomView->getViewId("$type");
 	$sorder = $focus->getSortOrder();
 	$order_by = $focus->getOrderBy();
 
-	$search_type = $_REQUEST['search_type'];
-	$export_data = $_REQUEST['export_data'];
-
+    $search_type = $_REQUEST['search_type'];
+    $export_data = $_REQUEST['export_data'];
+	
 	if(isset($_SESSION['export_where']) && $_SESSION['export_where']!='' && $search_type == 'includesearch'){
 		$where =$_SESSION['export_where'];
 	}
@@ -195,11 +187,11 @@ function export($type){
 		$limit_start_rec = ($start_rec == 0) ? 0 : ($start_rec - 1);
 		$query .= ' LIMIT '.$limit_start_rec.','.$list_max_entries_per_page;
 	}
-
-	$result = $adb->pquery($query, $params, true, "Error exporting $type: "."<BR>$query");
-	$fields_array = $adb->getFieldsArray($result);
-	$fields_array = array_diff($fields_array,array("user_name"));
-
+	
+    $result = $adb->pquery($query, $params, true, "Error exporting $type: "."<BR>$query");
+    $fields_array = $adb->getFieldsArray($result);
+    $fields_array = array_diff($fields_array,array("user_name"));
+	
 	$__processor = new ExportUtils($type, $fields_array);
 	
 	// Translated the field names based on the language used.
@@ -214,7 +206,7 @@ function export($type){
 
 	$column_list = implode(",",array_values($fields_array));
 
-	while($val = $adb->fetchByAssoc($result, -1, false)){
+    while($val = $adb->fetchByAssoc($result, -1, false)){
 		$new_arr = array();
 		$val = $__processor->sanitizeValues($val);
 		foreach ($val as $key => $value){

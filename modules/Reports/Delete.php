@@ -43,7 +43,7 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist']!= '')
 		header("Location: index.php?action=ReportsAjax&file=ListView&mode=ajax&module=Reports");
 }elseif(isset($_REQUEST['record']) && $_REQUEST['record']!= '')
 {
-	$id = $_REQUEST["record"];
+	$id = vtlib_purify($_REQUEST["record"]);
 	DeleteReport($id);	
 	header("Location: index.php?action=ReportsAjax&file=ListView&mode=ajaxdelete&module=Reports");
 }

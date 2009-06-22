@@ -1,12 +1,12 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-* ("License"); You may not use this file except in compliance with the License
-* The Original Code is:  vtiger CRM Open Source
-* The Initial Developer of the Original Code is vtiger.
-* Portions created by vtiger are Copyright (C) vtiger.
-* All Rights Reserved.
-********************************************************************************/
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
 
 require_once('data/CRMEntity.php');
 require_once('data/Tracker.php');
@@ -75,7 +75,7 @@ class PBXManager extends CRMEntity {
 		global $currentModule;
 
 		$sortorder = $this->default_sort_order;
-		if($_REQUEST['sorder']) $sortorder = $_REQUEST['sorder'];
+		if($_REQUEST['sorder']) $sortorder = $this->db->sql_escape_string($_REQUEST['sorder']);
 		else if($_SESSION[$currentModule.'_Sort_Order']) 
 			$sortorder = $_SESSION[$currentModule.'_Sort_Order'];
 
@@ -85,7 +85,7 @@ class PBXManager extends CRMEntity {
 	function getOrderBy() {
 		global $currentModule;
 		$orderby = $this->default_order_by;
-		if($_REQUEST['order_by']) $orderby = $_REQUEST['order_by'];
+		if($_REQUEST['order_by']) $orderby = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else if($_SESSION[$currentModule.'_Order_By'])
 			$orderby = $_SESSION[$currentModule.'_Order_By'];
 		return $orderby;
@@ -283,81 +283,18 @@ class PBXManager extends CRMEntity {
 	}
 
 	/**
-	 * Default (generic) function to handle the related list for the module.
-	 * NOTE: Vtiger_Module::setRelatedList sets reference to this function in vtiger_relatedlists table
-	 * if function name is not explicitly specified.
+	 * Handle getting related list information.
+	 * NOTE: This function has been added to CRMEntity (base class).
+	 * You can override the behavior by re-defining it here.
 	 */
-	function get_related_list($id, $cur_tab_id, $rel_tab_id) {
+	//function get_related_list($id, $cur_tab_id, $rel_tab_id, $actions=false) { }
 
-		global $currentModule, $app_strings;
-		$this_module = $currentModule; //vtlib_getModuleNameById($cur_tab_id);
-
-		$related_module = vtlib_getModuleNameById($rel_tab_id);
-
-		require_once("modules/$related_module/$related_module.php");
-		$other = new $related_module();
-		
-		// Some standard module class doesn't have required variables
-		// that are used in the query, they are defined in this generic API
-		vtlib_setup_modulevars($related_module, $other);
-
-		$singular_modname = vtlib_toSingular($related_module);
-
-		$button = '';
-		if(isPermitted($related_module,1, '') == 'yes') {
-			$button .= "<input title='New $related_module' class='crmbutton small edit' onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\"' type='submit' name='button' value='$app_strings[LBL_ADD_NEW] $singular_modname'>&nbsp;</td>";
-		}
-
-		// To make the edit or del link actions to return back to same view.
-		if($singlepane_view == 'true') $returnset = "&return_module=$this_module&return_action=DetailView&return_id=$id";
-		else $returnset = "&return_module=$this_module&return_action=CallRelatedList&return_id=$id";
-
-		$query = "SELECT vtiger_crmentity.*, $other->table_name.*";
-
-		
-			$query .= ", CASE WHEN (vtiger_users.user_name NOT LIKE '') THEN vtiger_users.user_name ELSE vtiger_groups.groupname END AS user_name";
-		
-
-		$more_relation = '';
-		if(!empty($other->related_tables)) {
-			foreach($other->related_tables as $tname=>$relmap) {
-				$query .= ", $tname.*";
-
-				// Setup the default JOIN conditions if not specified
-				if(empty($relmap[1])) $relmap[1] = $other->table_name;
-				if(empty($relmap[2])) $relmap[2] = $relmap[0];
-				$more_relation .= " LEFT JOIN $tname ON $tname.$relmap[0] = $relmap[1].$relmap[2]";
-			}
-		}
-
-		$query .= " FROM $other->table_name";
-		$query .= " INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = $other->table_name.$other->table_index";
-		$query .= " INNER JOIN vtiger_crmentityrel ON vtiger_crmentityrel.relcrmid = vtiger_crmentity.crmid";
-		$query .= " LEFT  JOIN $this->table_name   ON $this->table_name.$this->table_index = $other->table_name.$other->table_index";
-		$query .= $more_relation;
-		$query .= " LEFT  JOIN vtiger_users        ON vtiger_users.id = vtiger_crmentity.smownerid";
-
-		
-			$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
-		
-		$query .= " WHERE vtiger_crmentity.deleted = 0 AND vtiger_crmentityrel.crmid = $id";
-
-		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset);	
-
-		if($return_value == null) $return_value = Array();
-		$return_value['CUSTOM_BUTTON'] = $button;
-		
-		return $return_value;
-	}
-
-	/**
-	 * Save the related module record information. Triggerd from CRMEntity->saveentity method.
+	/** 
+	 * Handle saving related module information.
+	 * NOTE: This function has been added to CRMEntity (base class).
+	 * You can override the behavior by re-defining it here.
 	 */
-	function save_related_module($module, $crmid, $with_module, $with_crmid) {
-		global $adb;
-		$adb->query("INSERT INTO vtiger_crmentityrel(crmid, module, relcrmid, relmodule)
-		   	VALUES($crmid, '$module', $with_crmid, '$with_module')");
-	}
+	// function save_related_module($module, $crmid, $with_module, $with_crmid) { }
 
  	/**
 	* Invoked when special actions are performed on the module.

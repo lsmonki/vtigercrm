@@ -1,22 +1,21 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
-$fld_module=$_REQUEST["fld_module"];
-$tableName=$_REQUEST["table_name"];
-$fldPickList =  $_REQUEST['listarea'];
-$roleid =  $_REQUEST['roleid'];
+$fld_module=vtlib_purify($_REQUEST["fld_module"]);
+$tableName=vtlib_purify($_REQUEST["table_name"]);
+$fldPickList =  vtlib_purify($_REQUEST['listarea']);
+$roleid =  vtlib_purify($_REQUEST['roleid']);
 //changed by dingjianting on 2006-10-1 for picklist editor
 $fldPickList = utf8RawUrlDecode($fldPickList); 
-$uitype = $_REQUEST['uitype'];
+$uitype = vtlib_purify($_REQUEST['uitype']);
 global $adb, $default_charset;
 
 $sql = "select picklistid from vtiger_picklist where name=?";

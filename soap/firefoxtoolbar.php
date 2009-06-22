@@ -838,7 +838,7 @@ function GetPicklistValues($username,$sessionid,$tablename)
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 	{
-		$query = "select " . mysql_real_escape_string($tablename) . " from vtiger_". mysql_real_escape_string($tablename);		
+		$query = "select " . $adb->sql_escape_string($tablename) . " from vtiger_". $adb->sql_escape_string($tablename);		
 			$result1 = $adb->query($query);
 		for($i=0;$i<$adb->num_rows($result1);$i++)
 		{
@@ -847,7 +847,7 @@ function GetPicklistValues($username,$sessionid,$tablename)
 	}
 	else if((isPermitted("HelpDesk","EditView") == "yes") && (CheckFieldPermission($tablename,'HelpDesk') == 'true'))
 	{
-		$query = "select " .mysql_real_escape_string($tablename) . " from vtiger_". mysql_real_escape_string($tablename) ." inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_". mysql_real_escape_string($tablename) .".picklist_valueid where roleid=? and picklistid in (select picklistid from vtiger_". mysql_real_escape_string($tablename)." ) order by sortid";	
+		$query = "select " .$adb->sql_escape_string($tablename) . " from vtiger_". $adb->sql_escape_string($tablename) ." inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_". $adb->sql_escape_string($tablename) .".picklist_valueid where roleid=? and picklistid in (select picklistid from vtiger_". $adb->sql_escape_string($tablename)." ) order by sortid";	
 		$result1 = $adb->pquery($query, array($roleid));
 		for($i=0;$i<$adb->num_rows($result1);$i++)
 		{

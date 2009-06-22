@@ -60,8 +60,7 @@ $ret_value = $last_import->undo($current_user->id);
 
 // vtlib customization: Invoke undo import function of the module.
 $module = $_REQUEST['module'];
-require_once("modules/$module/$module.php");
-$undo_focus = new $module();
+$undo_focus = CRMEntity::getInstance($module);
 if(method_exists($undo_focus, 'undo_import')) {
 	$ret_value += $undo_focus->undo_import($module, $current_user->id);
 }
@@ -79,7 +78,7 @@ if(method_exists($undo_focus, 'undo_import')) {
 		<tr><td>&nbsp;</td></tr>
 		<tr>
 				<td align="left"  style="padding-left:40px;">
-				<?php 	$req_module = $_REQUEST['module'];   
+				<?php 	$req_module = vtlib_purify($_REQUEST['module']);   
 					if($req_module == 'Contacts' || $req_module == 'Accounts' || $req_module == 'Leads' || $req_module == 'Products' || $req_module == 'HelpDesk' || $req_module == 'Potentials' || $req_module == 'Vendors')
                                 	{ ?>
 					<span class="genHeaderGray"><?php echo $mod_strings['LBL_STEP_4_4']; ?></span>&nbsp;
@@ -115,12 +114,12 @@ if(method_exists($undo_focus, 'undo_import')) {
 			<tr>
 				<td align="right" class="reportCreateBottom" >
 					<form name="Import" method="POST" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
-					<input type="hidden" name="module" value="<?php echo $_REQUEST['module']; ?>">
+					<input type="hidden" name="module" value="<?php echo vtlib_purify($_REQUEST['module']); ?>">
 					<input type="hidden" name="action" value="Import">
 					<input type="hidden" name="step" value="1">
-					<input type="hidden" name="return_module" value="<?php echo $_REQUEST['module'] ?>">
-					<input type="hidden" name="return_id" value="<?php echo $_REQUEST['RETURN_ID'] ?>">
-					<input type="hidden" name="return_action" value="<?php echo $_REQUEST['RETURN_ACTION'] ?>">	
+					<input type="hidden" name="return_module" value="<?php echo vtlib_purify($_REQUEST['module']) ?>">
+					<input type="hidden" name="return_id" value="<?php echo vtlib_purify($_REQUEST['RETURN_ID']) ?>">
+					<input type="hidden" name="return_action" value="<?php echo vtlib_purify($_REQUEST['RETURN_ACTION']) ?>">	
 					<input type="hidden" name="parenttab" value="<?php echo $parenttab ?>">
 					<input title="<?php echo $mod_strings['LBL_TRY_AGAIN'] ?>" accessKey="" class="crmbutton small save" type="submit" name="button" value="  <?php echo $mod_strings['LBL_TRY_AGAIN'] ?>  ">
 					</form>

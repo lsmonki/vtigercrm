@@ -30,7 +30,7 @@
 {/literal}
 
 <script type="text/javascript">
-var gVTModule = '{$smarty.request.module}';
+var gVTModule = '{$smarty.request.module|@vtlib_purify}';
 function sensex_info()
 {ldelim}
         var Ticker = $('tickersymbol').value;

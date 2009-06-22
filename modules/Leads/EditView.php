@@ -14,16 +14,12 @@
  ********************************************************************************/
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Leads/Leads.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
-require_once('include/FormValidationUtil.php');
 
 global $mod_strings,$app_strings,$theme,$currentModule,$current_user;
 
-$focus = new Leads();
+$focus = CRMEntity::getInstance($currentModule);
 $smarty = new vtigerCRM_Smarty;
 //added to fix the issue4600
 $searchurl = getBasic_Advance_SearchURL();
@@ -82,19 +78,19 @@ if($focus->mode == 'edit')
 }		
 
 if(isset($_REQUEST['campaignid']))
-$smarty->assign("campaignid",$_REQUEST['campaignid']);
+$smarty->assign("campaignid",vtlib_purify($_REQUEST['campaignid']));
 if (isset($_REQUEST['return_module'])) 
-$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+$smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
 else 
 $smarty->assign("RETURN_MODULE","Leads");
 if (isset($_REQUEST['return_action'])) 
-$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+$smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
 else 
 $smarty->assign("RETURN_ACTION","index");
 if (isset($_REQUEST['return_id'])) 
-$smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+$smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
 if (isset($_REQUEST['return_viewname'])) 
-$smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+$smarty->assign("RETURN_VIEWNAME", vtlib_purify($_REQUEST['return_viewname']));
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id());
 $smarty->assign("ID", $focus->id);
@@ -116,7 +112,7 @@ $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
-$smarty->assign("DUPLICATE",$_REQUEST['isDuplicate']);
+$smarty->assign("DUPLICATE",vtlib_purify($_REQUEST['isDuplicate']));
 
 global $adb;
 // Module Sequence Numbering
@@ -141,6 +137,5 @@ if($focus->mode == 'edit')
 $smarty->display("salesEditView.tpl");
 else
 $smarty->display("CreateView.tpl");
-
 
 ?>

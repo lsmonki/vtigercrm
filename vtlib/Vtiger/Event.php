@@ -76,9 +76,7 @@ class Vtiger_Event {
 			$result = $adb->fetch_array($checkres, 0);
 			if($result['deleted'] == '0') {
 				$module = $result['setype'];
-				require_once("modules/$module/$module.php");
-				// TODO Special case handling to be done for calendar.
-				$moduleInstance = new $module();
+				$moduleInstance = CRMEntity::getInstance($module);
 				$moduleInstance->retrieve_entity_info($result['crmid'], $module);
 				$moduleInstance->id = $result['crmid'];
 

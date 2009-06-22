@@ -19,7 +19,6 @@ global $currentModule,$image_path,$theme,$adb, $current_user;
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('themes/'.$theme.'/layout_utils.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('modules/Calendar/Activity.php');
 
@@ -108,8 +107,8 @@ if($active_res!='None'){
 				$smarty->assign("activitytype", $cbactivitytype);
 				$smarty->display("ActivityReminderCallback.tpl");
 
-				$mark_reminder_as_read = "UPDATE vtiger_activity_reminder_popup set status = 1 where reminderid = $reminderid";
-				$adb->query($mark_reminder_as_read);
+				$mark_reminder_as_read = "UPDATE vtiger_activity_reminder_popup set status = 1 where reminderid = ?";
+				$adb->pquery($mark_reminder_as_read, array($reminderid));
 			}
 		}
 		$reminder_next = date('Y-m-d H:i', strtotime("+$cb_time minutes", $cur_time));

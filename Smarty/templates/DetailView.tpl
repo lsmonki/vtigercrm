@@ -26,7 +26,7 @@
 <div id="convertleaddiv" style="display:block;position:absolute;left:225px;top:150px;"></div>
 <script>
 {literal}
-var gVTModule = '{$smarty.request.module}';
+var gVTModule = '{$smarty.request.module|@vtlib_purify}';
 function callConvertLeadDiv(id)
 {
         new Ajax.Request(

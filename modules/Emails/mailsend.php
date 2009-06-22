@@ -1,6 +1,6 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
@@ -15,11 +15,11 @@ global $adb;
 global $current_user;
 
 //set the return module and return action and set the return id based on return module and record
-$returnmodule = $_REQUEST['return_module'];
-$returnaction = $_REQUEST['return_action'];
+$returnmodule = vtlib_purify($_REQUEST['return_module']);
+$returnaction = vtlib_purify($_REQUEST['return_action']);
 if((($returnmodule != 'Emails') || ($returnmodule == 'Emails' && $_REQUEST['record'] == '')) && $_REQUEST['return_id'] != '')
 {
-	$returnid = $_REQUEST['return_id'];
+	$returnid = vtlib_purify($_REQUEST['return_id']);
 }
 else
 {
@@ -206,7 +206,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 //Added to redirect the page to Emails/EditView if there is an error in mail sending
 if($errorheader1 == 1 || $errorheader2 == 1)
 {
-	$returnset = 'return_module='.$returnmodule.'&return_action='.$returnaction.'&return_id='.$_REQUEST['return_id'];
+	$returnset = 'return_module='.$returnmodule.'&return_action='.$returnaction.'&return_id='.vtlib_purify($_REQUEST['return_id']);
 	$returnmodule = 'Emails';
 	$returnaction = 'EditView';
 	//This condition is added to set the record(email) id when we click on send mail button after returning mail error
@@ -236,6 +236,4 @@ if(isset($_REQUEST['popupaction']) && $_REQUEST['popupaction'] != '')
 	//$inputs="<script>window.self.close();</script>";
 	echo $inputs;
 }
-//header("Location:index.php?module=$returnmodule&action=$returnaction&record=$returnid&$returnset&$mail_error_str");
-
 ?>

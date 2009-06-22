@@ -22,14 +22,12 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/SalesOrder/SalesOrder.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 global $mod_strings,$app_strings,$theme,$currentModule,$singlepane_view;
 
-$focus = new SalesOrder();
+$focus = CRMEntity::getInstance($currentModule);
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],"SalesOrder");
@@ -63,7 +61,7 @@ $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->colu
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
-$smarty->assign("ID", $_REQUEST['record']);
+$smarty->assign("ID", vtlib_purify($_REQUEST['record']));
 
 // Module Sequence Numbering
 $mod_seq_field = getModuleSequenceField($currentModule);
@@ -108,7 +106,7 @@ $smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
-$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST['record']));
 
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
@@ -140,7 +138,7 @@ if(isset($_SESSION['salesorder_listquery'])){
 			
 			for($listi=0;$listi<count($ar_allist);$listi++)
 			{
-				if($ar_allist[$listi]==$_REQUEST[record])
+				if($ar_allist[$listi]==$_REQUEST['record'])
 				{
 					if($listi-1>=0)
 					{

@@ -21,9 +21,7 @@
  ********************************************************************************/
 include_once('config.php');
 require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
-require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 require_once('modules/Potentials/Potentials.php');
 require_once('modules/Calendar/Activity.php');
@@ -151,7 +149,7 @@ class Contacts extends CRMEntity {
 		global $log;
                 $log->debug("Entering getSortOrder() method ...");
 		if(isset($_REQUEST['sorder'])) 
-			$sorder = $_REQUEST['sorder'];
+			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
 		else
 			$sorder = (($_SESSION['CONTACTS_SORT_ORDER'] != '')?($_SESSION['CONTACTS_SORT_ORDER']):($this->default_sort_order));
 		$log->debug("Exiting getSortOrder method ...");
@@ -166,7 +164,7 @@ class Contacts extends CRMEntity {
 		global $log;
 	        $log->debug("Entering getOrderBy() method ...");
 		if (isset($_REQUEST['order_by'])) 
-			$order_by = $_REQUEST['order_by'];
+			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else
 			$order_by = (($_SESSION['CONTACTS_ORDER_BY'] != '')?($_SESSION['CONTACTS_ORDER_BY']):($this->default_order_by));
 		$log->debug("Exiting getOrderBy method ...");
@@ -1146,7 +1144,7 @@ function get_contactsforol($user_name)
 		{
 			if($files['name'] != '' && $files['size'] > 0)
 			{
-				$files['original_name'] = $_REQUEST[$fileindex.'_hidden'];
+				$files['original_name'] = vtlib_purify($_REQUEST[$fileindex.'_hidden']);
 				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
 			}
 		}

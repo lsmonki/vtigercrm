@@ -9,13 +9,12 @@
  *
  ********************************************************************************/
 
-
 global $adb;
 global $log;
-$return_id = $_REQUEST['return_id'];
-$record = $_REQUEST['record'];
-$return_module = $_REQUEST['return_module'];
-$return_action = $_REQUEST['return_action'];
+$return_id = vtlib_purify($_REQUEST['return_id']);
+$record = vtlib_purify($_REQUEST['record']);
+$return_module = vtlib_purify($_REQUEST['return_module']);
+$return_action = vtlib_purify($_REQUEST['return_action']);
 
 if($return_action !='' && $return_module == "PriceBooks" && $return_action == "CallRelatedList")
 {

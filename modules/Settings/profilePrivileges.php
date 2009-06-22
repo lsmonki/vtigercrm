@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
 require_once('include/utils/UserInfoUtil.php');
@@ -19,28 +18,28 @@ global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-$profileId=$_REQUEST['profileid'];
+$profileId=vtlib_purify($_REQUEST['profileid']);
 $profileName='';
 $profileDescription='';
 
-$parentProfileId=$_REQUEST['parentprofile'];
+$parentProfileId=vtlib_purify($_REQUEST['parentprofile']);
 if($_REQUEST['mode'] =='create' && $_REQUEST['radiobutton'] != 'baseprofile')
 	$parentProfileId = '';
 
 
 $smarty = new vtigerCRM_Smarty;
 if(isset($_REQUEST['selected_tab']) && $_REQUEST['selected_tab']!='')
-	$smarty->assign("SELECTED_TAB", $_REQUEST['selected_tab']);
+	$smarty->assign("SELECTED_TAB", vtlib_purify($_REQUEST['selected_tab']));
 else
 	$smarty->assign("SELECTED_TAB", "global_privileges");
 
 if(isset($_REQUEST['selected_module']) && $_REQUEST['selected_module']!='')
-	$smarty->assign("SELECTED_MODULE", $_REQUEST['selected_module']);
+	$smarty->assign("SELECTED_MODULE", vtlib_purify($_REQUEST['selected_module']));
 else
 	$smarty->assign("SELECTED_MODULE", "field_Leads");
 
 $smarty->assign("PARENTPROFILEID", $parentProfileId);
-$smarty->assign("RADIOBUTTON", $_REQUEST['radiobutton']);
+$smarty->assign("RADIOBUTTON", vtlib_purify($_REQUEST['radiobutton']));
 
 $secondaryModule='';
 $mode='';
@@ -52,7 +51,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("CMOD", $mod_strings);
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != '')
-	$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+	$smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
 
 
 if(isset($_REQUEST['profile_name']) && $_REQUEST['profile_name'] != '' && $_REQUEST['mode'] == 'create')
@@ -71,7 +70,7 @@ else
 
 if(isset($_REQUEST['profile_description']) && $_REQUEST['profile_description'] != '' && $_REQUEST['mode'] == 'create')
 	
-	$profileDescription = $_REQUEST['profile_description'];
+	$profileDescription = vtlib_purify($_REQUEST['profile_description']);
 else
 {
 	if($profileId != null)
@@ -83,7 +82,7 @@ else
 $smarty->assign("PROFILE_DESCRIPTION", $profileDescription);
 
 if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != '')
-	$smarty->assign("MODE",$_REQUEST['mode']);
+	$smarty->assign("MODE",vtlib_purify($_REQUEST['mode']));
 
 
 //Initially setting the secondary selected vtiger_tab

@@ -24,12 +24,12 @@
 global $app_strings;
 global $mod_strings;
 global $currentModule;
-global $theme;
+global $theme, $adb;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 global $current_language,$default_charset;
 
-$category = htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset);
+$category = getParentTab();
 
 //Function added to convert line breaks to space in description during export
 function br2nl_int($str) {
@@ -43,16 +43,16 @@ else
   $exportWhere = stripslashes(htmlspecialchars_decode($_POST['exportwhere']));
 
 if (isset($_GET['step']))
-  $step = $_GET['step'];
+  $step = vtlib_purify($_GET['step']);
 else
-  $step = $_POST['step'];
+  $step = vtlib_purify($_POST['step']);
   
-$export_type = $_POST['export_type'];
+$export_type = vtlib_purify($_POST['export_type']);
 
 
 function getStdContactFlds(&$queryFields, $adb, $valueArray)
 {
-  global $current_language;
+  global $current_language, $mod_strings;
   require_once('modules/Contacts/language/'.$current_language.'.lang.php');
   $query = "SELECT fieldid, columnname, fieldlabel FROM vtiger_field WHERE tablename='vtiger_contactdetails' AND uitype='56' and vtiger_field.presence in (0,2)";
 	$result = $adb->query ($query,true,"Error: "."<BR>$query");
@@ -146,37 +146,14 @@ else
   $exquery = Array();
   $fields = explode(",",$_POST['fieldlist']);  
   $types = explode(",",$_POST['typelist']);  
-  $escapxportWhere = mysql_real_escape_string($exportWhere);
+  $escapxportWhere = $adb->sql_escape_string($exportWhere);
   if (($export_type == "email") || ($export_type == "emailplus") )
   {
 	  
      $where = "";
-
-     /*foreach ($fields as $myField)
-     {
-       $myType = each($types);
-       if (strlen($_POST[$myField]) > 0)
-       {
-         // type 1 should use a LIKE search
-         if ($myType['value'] == 1)
-         {
-           $equals = " LIKE '";
-           $postfix = "%'";
-          }
-          else
-          {
-            $equals = " = '";
-            $postfix = "'";
-          }
-           // is customer field
-         if (substr($myField,0,3) == 'cf_')
-           $where .= " AND contactscf.".$myField.$equals.$_POST[$myField].$postfix;
-          else
-           $where .= " AND contactdetails.".$myField.$equals.$_POST[$myField].$postfix;
-        }     
-     }*/
-     	 if(count($fields) > 0)
-		 $where .= getExpWhereClause($fields,$types);
+     
+	if(count($fields) > 0)
+		$where .= getExpWhereClause($fields,$types);
 	 $exquery[0] = "SELECT crmentity.crmid, contactdetails.contactid,
 	   contactdetails.salutation, contactdetails.firstname,
 	   contactdetails.lastname, contactdetails.email  FROM vtiger_account
@@ -317,6 +294,7 @@ else
 
 function getExpWhereClause($fields,$types)
 {
+	global $adb;
 	$where_cond = "";
 
 	foreach ($fields as $myField)
@@ -337,9 +315,9 @@ function getExpWhereClause($fields,$types)
 			}
 			// is customer field
 			if (substr($myField,0,3) == 'cf_')
-				$where_cond .= " AND contactscf.".$myField.$equals.$_POST[$myField].$postfix;
+				$where_cond .= " AND contactscf.".$myField.$equals.$adb->sql_escape_string($_POST[$myField]).$postfix;
 			else
-				$where_cond .= " AND contactdetails.".$myField.$equals.$_POST[$myField].$postfix;
+				$where_cond .= " AND contactdetails.".$myField.$equals.$adb->sql_escape_string($_POST[$myField]).$postfix;
 		}
 	}
 	return $where_cond;

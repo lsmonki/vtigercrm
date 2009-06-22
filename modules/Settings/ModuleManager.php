@@ -1,4 +1,12 @@
 <?php
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
 
 include_once('vtlib/Vtiger/Utils.php');
 
@@ -23,6 +31,7 @@ else{
 	} else if($_REQUEST['module_import_cancel'] == 'true') {
 		$uploadfile = $_REQUEST['module_import_file'];
 		$uploadfilename = "$modulemanager_uploaddir/$uploadfile";
+		checkFileAccess($uploadfilename);
 		if(file_exists($uploadfilename)) unlink($uploadfilename);
 	}
 	
@@ -64,7 +73,7 @@ else{
 	$smarty->assign("TOGGLE_LANGINFO", vtlib_getToggleLanguageInfo());
 	
 	if($_REQUEST['mode'] !='') $mode = $_REQUEST['mode'];
-	$smarty->assign("MODE", $mode);
+	$smarty->assign("MODE", vtlib_purify($mode));
 	
 	if($_REQUEST['ajax'] != 'true')	$smarty->display('Settings/ModuleManager/ModuleManager.tpl');	
 	else $smarty->display('Settings/ModuleManager/ModuleManagerAjax.tpl');

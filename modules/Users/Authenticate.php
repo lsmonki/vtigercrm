@@ -31,7 +31,7 @@ $focus = new Users();
 
 // Add in defensive code here.
 $focus->column_fields["user_name"] = to_html($_REQUEST['user_name']);
-$user_password = htmlspecialchars($_REQUEST['user_password'],ENT_QUOTES,$default_charset); //BUGFIX  " Cross-Site-Scripting "
+$user_password = vtlib_purify($_REQUEST['user_password']);
 
 $focus->load_user($user_password);
 

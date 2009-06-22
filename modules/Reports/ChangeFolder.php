@@ -11,7 +11,7 @@
 
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
-$folderid = $_REQUEST['folderid'];
+$folderid = vtlib_purify($_REQUEST['folderid']);
 
 if(isset($_REQUEST['idlist']) && $_REQUEST['idlist']!= '')
 {
@@ -24,7 +24,7 @@ if(isset($_REQUEST['idlist']) && $_REQUEST['idlist']!= '')
 	header("Location: index.php?action=ReportsAjax&file=ListView&mode=ajaxdelete&module=Reports");
 }elseif(isset($_REQUEST['record']) && $_REQUEST['record']!= '')
 {
-	$id = $_REQUEST["record"];
+	$id = vtlib_purify($_REQUEST["record"]);
 	ChangeFolder($id,$folderid);	
 	header("Location: index.php?action=ReportsAjax&file=ListView&mode=ajaxdelete&module=Reports");
 }

@@ -1,22 +1,21 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
 require_once($root_directory."include/database/PearDatabase.php");
 global $mod_strings,$adb;
-$server=$_REQUEST['server'];
-$port=$_REQUEST['port'];
-$server_username=$_REQUEST['server_username'];
-$server_password=$_REQUEST['server_password'];
-$server_type = $_REQUEST['server_type'];
-$server_path = $_REQUEST['server_path'];
+$server=vtlib_purify($_REQUEST['server']);
+$port=vtlib_purify($_REQUEST['port']);
+$server_username=vtlib_purify($_REQUEST['server_username']);
+$server_password=vtlib_purify($_REQUEST['server_password']);
+$server_type = vtlib_purify($_REQUEST['server_type']);
+$server_path = vtlib_purify($_REQUEST['server_path']);
 $db_update = true;
 if($_REQUEST['smtp_auth'] == 'on' || $_REQUEST['smtp_auth'] == 1)
 	$smtp_auth = 'true';

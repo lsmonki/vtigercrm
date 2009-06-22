@@ -305,7 +305,7 @@ function UnifiedSearch_SelectModuleSave() {
 <!-- End -->
 
 <script>
-var gVTModule = '{$smarty.request.module}';
+var gVTModule = '{$smarty.request.module|@vtlib_purify}';
 function fetch_clock()
 {ldelim}
 	new Ajax.Request(

@@ -1,13 +1,12 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *
-********************************************************************************/
+ *********************************************************************************/
 
 //5.0.4 to 5.1.0 database changes
 
@@ -1904,7 +1903,7 @@ Executequery("UPDATE vtiger_field set quickcreate = 0,quickcreatesequence = 4 WH
 Executequery("UPDATE vtiger_field set quickcreate = 0,quickcreatesequence = 6 WHERE fieldname ='assigned_user_id' AND tabid = $eventid");
 
 
-include_once('currencies.php'); 
+include_once('modules/Utilities/Currencies.php'); 
 	 	 
 ExecuteQuery("CREATE TABLE vtiger_currencies(currencyid INTEGER(19),currency_name varchar(200),currency_code varchar(50),currency_symbol varchar(11)) ENGINE=InnoDB DEFAULT CHARSET=utf8;"); 
 foreach($currencies as $key=>$value){ 

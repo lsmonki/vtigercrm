@@ -162,7 +162,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		require_once 'modules/PickList/PickListUtils.php';
 		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
 		
-		$fieldname = mysql_real_escape_string($fieldname);
+		$fieldname = $adb->sql_escape_string($fieldname);
 		$pick_query="select $fieldname from vtiger_$fieldname order by sortorderid";
 		$params = array();		
 		$pickListResult = $adb->pquery($pick_query, $params);
@@ -925,7 +925,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 					$temp1=br2nl($myfocus->column_fields[$temp]);
 
 					//Modified to display the entities in red which don't have email id
-					if(strlen($temp_parent_name) > 150)
+					if(!empty($temp_parent_name) && strlen($temp_parent_name) > 150)
 					{
 						$parent_name .= '<br>';
 						$temp_parent_name = '';
@@ -1186,7 +1186,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 115)
 	{
 		$editview_label[]=getTranslatedString($fieldlabel, $module_name);
-		$pick_query="select * from vtiger_" . mysql_real_escape_string($fieldname);
+		$pick_query="select * from vtiger_" . $adb->sql_escape_string($fieldname);
 		$pickListResult = $adb->pquery($pick_query, array());
 		$noofpickrows = $adb->num_rows($pickListResult);
 

@@ -32,9 +32,8 @@ $check_button['Export'] = 'no';
 $check_button['moduleSettings'] = 'no';
 $smarty->assign("CHECK", $check_button);
 
-require_once("modules/$currentModule/$currentModule.php");
-$focus = new $currentModule();
-$accountid = $_REQUEST['accountid'];
+$focus = CRMEntity::getInstance($currentModule);
+$accountid = vtlib_purify($_REQUEST['accountid']);
 if (!empty($accountid)) {
 	$hierarchy = $focus->getAccountHierarchy($accountid);
 }
@@ -42,4 +41,3 @@ $smarty->assign("ACCOUNT_HIERARCHY",$hierarchy);
 $smarty->display("AccountHierarchy.tpl");
 	
 ?>
-

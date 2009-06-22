@@ -290,7 +290,7 @@ function PutLink($URL,$txt)
 
 }//end of class
 */
-$reportid = $_REQUEST["record"];
+$reportid = vtlib_purify($_REQUEST["record"]);
 $oReport = new Reports($reportid);
 //Code given by Csar Rodrguez for Rwport Filter
 $filtercolumn = $_REQUEST["stdDateFilterField"];

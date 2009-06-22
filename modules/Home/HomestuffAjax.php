@@ -86,9 +86,9 @@ if(!empty($dash)){
 
 if(!empty($_REQUEST['primecvid'])){
 	$cvid=$_REQUEST['primecvid'];
-	$fieldmodule = $_REQUEST['fieldmodname'];
-	$queryprime="select cvid,columnname from vtiger_cvcolumnlist where columnname not like '%::%' and cvid=".$cvid;
-	$result=$adb->pquery($queryprime,array());
+	$fieldmodule = vtlib_purify($_REQUEST['fieldmodname']);
+	$queryprime="select cvid,columnname from vtiger_cvcolumnlist where columnname not like '%::%' and cvid=?";
+	$result=$adb->pquery($queryprime,array($cvid));
 	global $current_language,$app_strings;
 	$fieldmod_strings = return_module_language($current_language, $fieldmodule);
 	if($adb->num_rows($result)==0){

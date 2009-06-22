@@ -1,17 +1,15 @@
 <?php
-/*********************************************************************************
- ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-  * ("License"); You may not use this file except in compliance with the License
-  * The Initial Developer of the Original Code is FOSS Labs.
-  * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
-  * Portions created by vtiger are Copyright (C) vtiger.
-  * All Rights Reserved.
-  *
-  ********************************************************************************/
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
 
 include_once('config.php');
 require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 class MailBox {
@@ -177,7 +175,7 @@ class MailBox {
 			{
 				global $current_user,$mod_strings;
 				$this->db->println("CONNECTION ERROR - Could not be connected to the server using imap_open function through the connection strings $connectString and $connectString1");
-				echo "<br>&nbsp;<b>".$mod_strings['LBL_MAIL_CONNECT_ERROR']."<a href='index.php?module=Users&action=AddMailAccount&return_module=Webmails&return_action=index&record=".$current_user->id."'> ".$mod_strings['LBL_HERE']."</a>. ".$mod_strings['LBL_PLEASE']." <a href='index.php?module=Emails&action=index&parenttab=".$_REQUEST['parenttab']."'>".$mod_strings['LBL_CLICK_HERE']."</a>".$mod_strings['LBL_GOTO_EMAILS_MODULE']." </b>";
+				echo "<br>&nbsp;<b>".$mod_strings['LBL_MAIL_CONNECT_ERROR']."<a href='index.php?module=Users&action=AddMailAccount&return_module=Webmails&return_action=index&record=".$current_user->id."'> ".$mod_strings['LBL_HERE']."</a>. ".$mod_strings['LBL_PLEASE']." <a href='index.php?module=Emails&action=index&parenttab=".vtlib_purify($_REQUEST['parenttab'])."'>".$mod_strings['LBL_CLICK_HERE']."</a>".$mod_strings['LBL_GOTO_EMAILS_MODULE']." </b>";
 				exit;
 			}
 		}

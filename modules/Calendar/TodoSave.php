@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 require_once('modules/Calendar/Activity.php');
 require_once('modules/Calendar/CalendarCommon.php');
@@ -16,7 +15,7 @@ require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
 $focus = new Activity();
-$activity_mode = $_REQUEST['activity_mode'];
+$activity_mode = vtlib_purify($_REQUEST['activity_mode']);
 if($activity_mode == 'Task')
 {
         $tab_type = 'Calendar';
@@ -85,6 +84,5 @@ function getRequestedToData()
 	return $mail_data;
 }
 
-
- header("Location: index.php?action=index&module=Calendar&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&viewOption=".$_REQUEST['viewOption']."&subtab=todo&parenttab=".$_REQUEST['parenttab']);
+ header("Location: index.php?action=index&module=Calendar&view=".vtlib_purify($_REQUEST['view'])."&hour=".vtlib_purify($_REQUEST['hour'])."&day=".vtlib_purify($_REQUEST['day'])."&month=".vtlib_purify($_REQUEST['month'])."&year=".vtlib_purify($_REQUEST['year'])."&viewOption=".vtlib_purify($_REQUEST['viewOption'])."&subtab=todo&parenttab=".getParentTab());
 ?>

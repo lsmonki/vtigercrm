@@ -1,19 +1,18 @@
 <?PHP
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-* ("License"); You may not use this file except in compliance with the License
-* The Original Code is:  vtiger CRM Open Source
-* The Initial Developer of the Original Code is vtiger.
-* Portions created by vtiger are Copyright (C) vtiger.
-* All Rights Reserved.
-*
-********************************************************************************/
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
 require_once('Smarty_setup.php');
 
 global $mod_strings,$app_strings,$theme;
 $smarty = new vtigerCRM_Smarty;
 
-$module = $_REQUEST['formodule'];
+$module = vtlib_purify($_REQUEST['formodule']);
 
 $menu_array = Array();
 
@@ -38,6 +37,5 @@ $smarty->assign('MODULE_LBL',getTranslatedString($module));
 $smarty->assign('MENU_ARRAY', $menu_array);
 
 $smarty->display(vtlib_getModuleTemplate('Vtiger','Settings.tpl'));
-
 
 ?>

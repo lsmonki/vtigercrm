@@ -21,16 +21,14 @@
  ********************************************************************************/
 
 require_once('Smarty_setup.php');
-require_once('modules/Faq/Faq.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 global $mod_strings;
 global $app_strings;
 global $currentModule;
 
-$focus = new Faq();
+$focus = CRMEntity::getInstance($currentModule);
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) 
 {
@@ -76,7 +74,7 @@ if ($mod_seq_field != null) {
 $smarty->assign('MOD_SEQ_ID', $mod_seq_id);
 // END
 
-$smarty->assign("ID", $_REQUEST['record']);
+$smarty->assign("ID", vtlib_purify($_REQUEST['record']));
 if(isPermitted("Faq","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
@@ -97,7 +95,7 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 //Added to display the Faq comments information
 $smarty->assign("COMMENT_BLOCK",$focus->getFAQComments($_REQUEST['record']));
-$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST['record']));
 
 if(isset($_SESSION['faq_listquery'])){
 	$arrayTotlist = array();
@@ -119,7 +117,7 @@ if(isset($_SESSION['faq_listquery'])){
 			
 			for($listi=0;$listi<count($ar_allist);$listi++)
 			{
-				if($ar_allist[$listi]==$_REQUEST[record])
+				if($ar_allist[$listi]==$_REQUEST['record'])
 				{
 					if($listi-1>=0)
 					{

@@ -11,11 +11,11 @@ require_once('include/database/PearDatabase.php');
 @include_once('user_privileges/default_module_view.php');
 
 global $adb, $singlepane_view, $currentModule;
-$idlist = $_REQUEST['idlist'];
-$dest_mod = $_REQUEST['destination_module'];
-$parenttab = $_REQUEST['parenttab'];
+$idlist = vtlib_purify($_REQUEST['idlist']);
+$dest_mod = vtlib_purify($_REQUEST['destination_module']);
+$parenttab = getParentTab();
 
-$forCRMRecord = $_REQUEST['parentid'];
+$forCRMRecord = vtlib_purify($_REQUEST['parentid']);
 $mode = $_REQUEST['mode'];
 
 if($singlepane_view == 'true')
@@ -30,18 +30,14 @@ if(!empty($_REQUEST['idlist'])) {
 } else if(!empty($_REQUEST['entityid'])){
 	$storearray = array($_REQUEST['entityid']);
 }
+$focus = CRMEntity::getInstance($currentModule);
 foreach($storearray as $id)
 {
 	if($id != '')
 	{
 		if($dest_mod == 'Documents')
 			$adb->pquery("insert into vtiger_senotesrel values (?,?)", array($forCRMRecord, $id));
-		/*elseif($dest_mod =='Leads' || $dest_mod =='Accounts' ||$dest_mod =='Contacts' ||$dest_mod =='Potentials')
-			$adb->pquery("insert into vtiger_seproductsrel values (?,?,?)", array($id, $forCRMRecord, $dest_mod));*/
-		else {						
-			checkFileAccess("modules/$currentModule/$currentModule.php");
-			require_once("modules/$currentModule/$currentModule.php");
-			$focus = new $currentModule();
+		else {
 			$focus->save_related_module($currentModule, $forCRMRecord, $dest_mod, $id);
 		}
 	}

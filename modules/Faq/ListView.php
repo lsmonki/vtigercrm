@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
 global $theme;
@@ -15,25 +14,23 @@ $image_path=$theme_path."images/";
 global $mod_strings;
 
 require_once('modules/Faq/Faq.php');
-require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 require_once('include/utils/utils.php');
 require_once('include/ListView/ListView.php');
 require_once('modules/Faq/Faq.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('include/database/Postgres8.php');
-require_once('include/DatabaseUtil.php');
 
 global $app_strings,$theme;
 $current_module_strings = return_module_language($current_language, 'Faq');
 
-global $currentModule;
+global $currentModule, $adb;
 
 require_once($theme_path.'layout_utils.php');
 
 if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
 {
-	$category = $_REQUEST['category'];
+	$category = vtlib_purify($_REQUEST['category']);
 }
 else
 {
@@ -59,7 +56,7 @@ if(!$_SESSION['lvs'][$currentModule])
 
 if($_REQUEST['errormsg'] != '')
 {
-        $errormsg = $_REQUEST['errormsg'];
+        $errormsg = vtlib_purify($_REQUEST['errormsg']);
         $smarty->assign("ERROR","The User does not have permission to delete ".$errormsg." ".$currentModule);
 }else
 {
@@ -86,12 +83,12 @@ $smarty->assign("CV_DELETE_PERMIT",$delete_permit);
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 if($_REQUEST['order_by'] != '')
-	$order_by = $_REQUEST['order_by'];
+	$order_by = $adb->sql_escape_string($_REQUEST['order_by']);
 else
 	$order_by = (($_SESSION['FAQ_ORDER_BY'] != '')?($_SESSION['FAQ_ORDER_BY']):($focus->default_order_by));
 
 if($_REQUEST['sorder'] != '')
-	$sorder = $_REQUEST['sorder'];
+	$sorder = $adb->sql_escape_string($_REQUEST['sorder']);
 else
 	$sorder = (($_SESSION['FAQ_SORT_ORDER'] != '')?($_SESSION['FAQ_SORT_ORDER']):($focus->default_sort_order));
 
@@ -252,8 +249,8 @@ $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
 //Added to select Multiple records in multiple pages
-$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
-$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
+$smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
 $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Faq","index",$viewid);

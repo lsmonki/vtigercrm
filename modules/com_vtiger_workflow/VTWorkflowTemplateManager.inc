@@ -1,4 +1,13 @@
 <?php
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
+
 class VTWorkflowTemplateManager{
 	public function __construct($adb){
 		$this->adb = $adb;
@@ -133,6 +142,7 @@ class VTWorkflowTemplateManager{
 	 * @return The string dump of the templates.
 	 */
 	public function dumpAllTemplates(){
+		$adb = $this->adb;
 		$result = $adb->query("select * from com_vtiger_workflowtemplates");
 		$it = new SqlResultIterator($adb, $result);
 		$arr = array();

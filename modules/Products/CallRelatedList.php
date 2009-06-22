@@ -12,25 +12,18 @@ require_once('user_privileges/default_module_view.php');
 
 global $mod_strings, $app_strings, $currentModule, $current_user, $theme, $singlepane_view;
 
-checkFileAccess("modules/$currentModule/$currentModule.php");
-require_once("modules/$currentModule/$currentModule.php");
-
 $category = getParentTab();
-$action = $_REQUEST['action'];
-$record = $_REQUEST['record'];
-$isduplicate = $_REQUEST['isDuplicate'];
-$parenttab = $_REQUEST['parenttab'];
+$action = vtlib_purify($_REQUEST['action']);
+$record = vtlib_purify($_REQUEST['record']);
+$isduplicate = vtlib_purify($_REQUEST['isDuplicate']);
 
 if($singlepane_view == 'true' && $action == 'CallRelatedList') {
-	header("Location:index.php?action=DetailView&module=$currentModule&record=$record&parenttab=$parenttab");
+	header("Location:index.php?action=DetailView&module=$currentModule&record=$record&parenttab=$category");
 } else {
-	
-	$tool_buttons = Button_Check($currentModule);
-
-	$focus = new $currentModule();
-	if($record != '') {
-	    $focus->retrieve_entity_info($record, $currentModule);
-   		$focus->id = $record;
+	$focus = CRMEntity::getInstance($currentModule);
+	if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
+	    $focus->retrieve_entity_info($record,$currentModule);
+	    $focus->id = $record;
    		$focus->name=$focus->column_fields['productname'];
 		$product_base_currency = getProductBaseCurrency($focus->id,$currentModule);
 	} else {
@@ -40,7 +33,7 @@ if($singlepane_view == 'true' && $action == 'CallRelatedList') {
 	$smarty = new vtigerCRM_Smarty;
 
 	if($isduplicate == 'true') $focus->id = '';
-	if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') $smarty->assign("OP_MODE",$_REQUEST['mode']);
+	if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') $smarty->assign("OP_MODE",vtlib_purify($_REQUEST['mode']));
 	if(!$_SESSION['rlvs'][$currentModule]) unset($_SESSION['rlvs']);
 	
 	$smarty->assign('APP', $app_strings);

@@ -1,30 +1,23 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 global $log;
 $db = new PearDatabase();
-	$log->debug("the foldername is ".$folderName);
-$folderName = $_REQUEST["foldername"];
+$folderName = vtlib_purify($_REQUEST["foldername"]);
 $templateName = from_html($_REQUEST["templatename"]);
-	  $log->debug("the templatename is ".$templateName);
-$templateid = $_REQUEST["templateid"];
-	  $log->debug("the templateid is ".$templateid);
+$templateid = vtlib_purify($_REQUEST["templateid"]);
 $description = from_html($_REQUEST["description"]);
-	  $log->debug("the description is ".$description);
 $subject = from_html($_REQUEST["subject"]);
-	  $log->debug("the subject is ".$subject);  
 $body = fck_from_html($_REQUEST["body"]);
-	  $log->debug("the body is ".$body);  
+
 if(isset($templateid) && $templateid !='')
 {
 	$log->info("the templateid is set");  

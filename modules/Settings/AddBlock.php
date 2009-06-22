@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
  
 require_once('include/CustomFieldUtil.php');
@@ -18,46 +17,43 @@ $theme_path="themes/".$theme."/";
 
 require_once($theme_path.'layout_utils.php');
 
-$tabid=$_REQUEST['tabid'];
-$blockid=$_REQUEST['blockid'];
-//$blockselect=$_REQUEST['blockselect'];
-$mode=$_REQUEST['mode'];
+$tabid=vtlib_purify($_REQUEST['tabid']);
+$blockid=vtlib_purify($_REQUEST['blockid']);
+$mode=vtlib_purify($_REQUEST['mode']);
 $readonly = '';
 $smarty = new vtigerCRM_Smarty;
 if($_REQUEST['mode']=='edit')
 {
 
-$sql="select blocklabel from vtiger_blocks where blockid='".$_REQUEST['blockid']."'";
-$res= $adb->query($sql);
+$sql='SELECT blocklabel FROM vtiger_blocks WHERE blockid = ?';
+$res= $adb->pquery($sql, array($_REQUEST['blockid']));
 $row= $adb->fetch_array($res);
 
+checkFileAccess('modules/'.$_REQUEST['fld_module'].'/language/'.$_SESSION['authenticated_user_language'].'.lang.php');
 include('modules/'.$_REQUEST['fld_module'].'/language/'.$_SESSION['authenticated_user_language'].'.lang.php');
 
 $blockLabel=$mod_strings[$row["blocklabel"]];
 }
 
-$blockQuery = "select blocklabel,blockid from vtiger_blocks where tabid ='".$_REQUEST['tabid']."'";
-$block = $adb->query($blockQuery);
-//$blockrow = $adb->fetch_array($block);
+$blockQuery = 'SELECT blocklabel,blockid FROM vtiger_blocks WHERE tabid = ?';
+$block = $adb->pquery($blockQuery, array($_REQUEST['tabid']));
 $blocknum = $adb->num_rows($block);
 
-$log->debug("blocklabel".print_r($blockrow,true));
-$log->debug("blocklabel".print_r($block,true));
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
-$smarty->assign("FLD_MODULE", $_REQUEST['fld_module']);
+$smarty->assign("FLD_MODULE", vtlib_purify($_REQUEST['fld_module']));
 
 $output = '';
 
 $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script language="JavaScript" type="text/javascript" src="include/js/customview.js"></script>
 			<form action="index.php" method="post" name="addtodb" onsubmit="VtigerJS_DialogBox.block();"> 
 			<input type="hidden" name="module" value="Settings">
-	  		<input type="hidden" name="fld_module" value="'.$_REQUEST['fld_module'].'">
+	  		<input type="hidden" name="fld_module" value="'.vtlib_purify($_REQUEST['fld_module']).'">
 	  		<input type="hidden" name="parenttab" value="Settings">
           	<input type="hidden" name="action" value="AddBlockToDB">
-	  		<input type="hidden" name="blockid" value="'.$_REQUEST['blockid'].'">
-	   		<input type="hidden" name="tabid" value="'.$_REQUEST['tabid'].'">
-	   		<input type="hidden" name="blockselect" value="'.$_REQUEST['blockselect'].'">
+	  		<input type="hidden" name="blockid" value="'.vtlib_purify($_REQUEST['blockid']).'">
+	   		<input type="hidden" name="tabid" value="'.vtlib_purify($_REQUEST['tabid']).'">
+	   		<input type="hidden" name="blockselect" value="'.vtlib_purify($_REQUEST['blockselect']).'">
 	  		<input type="hidden" name="mode" id="cfedit_mode" value="'.$mode.'">
 	  		<input type="hidden" name="cfcombo" id="selectedfieldtype" value="">
 

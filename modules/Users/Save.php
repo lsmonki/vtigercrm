@@ -171,13 +171,13 @@ createUserPrivilegesfile($focus->id);
 createUserSharingPrivilegesfile($focus->id);
 
 }
-if(isset($_POST['return_module']) && $_POST['return_module'] != "") $return_module = $_POST['return_module'];
+if(isset($_POST['return_module']) && $_POST['return_module'] != "") $return_module = vtlib_purify($_REQUEST['return_module']);
 else $return_module = "Users";
-if(isset($_POST['return_action']) && $_POST['return_action'] != "") $return_action = $_POST['return_action'];
+if(isset($_POST['return_action']) && $_POST['return_action'] != "") $return_action = vtlib_purify($_REQUEST['return_action']);
 else $return_action = "DetailView";
-if(isset($_POST['return_id']) && $_POST['return_id'] != "") $return_id = $_POST['return_id'];
-if(isset($_REQUEST['activity_mode']))   $activitymode = '&activity_mode='.$_REQUEST['activity_mode'];
-if(isset($_POST['parenttab'])) $parenttab = $_POST['parenttab'];
+if(isset($_POST['return_id']) && $_POST['return_id'] != "") $return_id = vtlib_purify($_REQUEST['return_id']);
+if(isset($_REQUEST['activity_mode']))   $activitymode = '&activity_mode='.vtlib_purify($_REQUEST['activity_mode']);
+if(isset($_POST['parenttab'])) $parenttab = getParentTab();
 
 $log->debug("Saved record with id of ".$return_id);
 
@@ -205,10 +205,10 @@ if($_REQUEST['mode'] == 'create') {
 		$error_str = getMailErrorString($mail_status_str);
 	}
 }
-$location = "Location: index.php?action=$return_action&module=$return_module&record=$return_id";
+$location = "Location: index.php?action=".vtlib_purify($return_action)."&module=".vtlib_purify($return_module)."&record=".vtlib_purify($return_id);
 
 if($_REQUEST['modechk'] != 'prefview') {
-	$location .= "&parenttab=$parenttab";
+	$location .= "&parenttab=".vtlib_purify($parenttab);
 }
 
 if ($error_str != '') {	

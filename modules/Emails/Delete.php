@@ -17,12 +17,11 @@
  * Description:  TODO: To be written.
  ********************************************************************************/
 
-require_once('modules/Emails/Emails.php');
+global $currentModule;
+$focus = CRMEntity::getInstance($currentModule);
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('email_delete');
-
-$focus = new Emails();
 
 if(!isset($_REQUEST['record']))
 	die("A record number must be specified to delete the email.");
@@ -31,7 +30,7 @@ DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['re
 
 //code added for returning back to the current view after delete from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
-if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+if($_REQUEST['return_viewname'] != '')$return_viewname=vtlib_purify($_REQUEST['return_viewname']);
 
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']."&viewname=".$return_viewname."&relmodule=".$_REQUEST['module']."&parenttab=".$_REQUEST['parenttab']);
+header("Location: index.php?module=".vtlib_purify($_REQUEST['return_module'])."&action=".vtlib_purify($_REQUEST['return_action'])."&record=".vtlib_purify($_REQUEST['return_id'])."&viewname=".$return_viewname."&relmodule=".vtlib_purify($_REQUEST['module'])."&parenttab=".getParentTab());
 ?>

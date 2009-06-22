@@ -31,7 +31,7 @@ function getDBValidationData($tablearray,$tabid='')
   $numValues = count($tablearray);
   global $adb,$mod_strings;
 
-  if($tabid!='') $tab_con = ' and tabid='. mysql_real_escape_string($tabid);
+  if($tabid!='') $tab_con = ' and tabid='. $adb->sql_escape_string($tabid);
 	
   for($i=0;$i<$numValues;$i++)
   {

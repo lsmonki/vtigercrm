@@ -1,7 +1,6 @@
 <?php
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
@@ -14,7 +13,6 @@ require_once('data/Tracker.php');
 require_once('modules/Settings/AuditTrail.php');
 require_once('modules/Users/Users.php');
 require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 global $app_strings;
@@ -40,17 +38,15 @@ $smarty = new vtigerCRM_Smarty;
 
 $category = getParenttab();
 
-$userid = $_REQUEST['userid'];
+$userid = vtlib_purify($_REQUEST['userid']);
 $qry = "select * from vtiger_audit_trial where userid = ? ";
 $qry_result = $adb->pquery($qry, array($userid));
 $no_of_rows = $adb->num_rows($qry_result);
 
 //Retreiving the start value from request
-if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-{
-        $start = $_REQUEST['start'];
-}
-else
+if(isset($_REQUEST['start']) && $_REQUEST['start'] != '') {
+	$start = vtlib_purify($_REQUEST['start']);
+} else
 	$start=1;
 
 //Retreive the Navigation array
@@ -74,7 +70,6 @@ $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("USERID", $userid);
 $smarty->assign("CATEGORY",$category);
-
 
 if($_REQUEST['ajax'] !='')
 	$smarty->display("ShowAuditTrailContents.tpl");

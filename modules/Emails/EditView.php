@@ -22,10 +22,8 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Emails/Emails.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
-require_once('include/FormValidationUtil.php');
 require_once("include/Zend/Json.php");
 
 global $log;
@@ -35,7 +33,7 @@ global $mod_strings;
 global $current_user;
 global $currentModule;
 
-$focus = new Emails();
+$focus = CRMEntity::getInstance($currentModule);
 $smarty = new vtigerCRM_Smarty();
 $json = new Zend_Json();
 
@@ -52,10 +50,10 @@ if($_REQUEST['mail_error'] != '')
 }
 //added to select the module in combobox of compose-popup
 if(isset($_REQUEST['par_module']) && $_REQUEST['par_module']!=''){
-	$smarty->assign('select_module',$_REQUEST['par_module']);
+	$smarty->assign('select_module',vtlib_purify($_REQUEST['par_module']));
 }
 elseif(isset($_REQUEST['pmodule']) && $_REQUEST['pmodule']!='') {
-	$smarty->assign('select_module',$_REQUEST['pmodule']);	
+	$smarty->assign('select_module',vtlib_purify($_REQUEST['pmodule']));	
 }
 
 if(isset($_REQUEST['record']) && $_REQUEST['record'] !='') 
@@ -295,19 +293,19 @@ if($focus->mode == 'edit')
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
-if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
 else $smarty->assign("RETURN_MODULE",'Emails');
-if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
 else $smarty->assign("RETURN_ACTION",'index');
-if(isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
-if (isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+if(isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
+if (isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", vtlib_purify($_REQUEST['return_viewname']));
 
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $focus->id);
-$smarty->assign("ENTITY_ID", $_REQUEST["record"]);
-$smarty->assign("ENTITY_TYPE",$_REQUEST["email_directing_module"]);
+$smarty->assign("ENTITY_ID", vtlib_purify($_REQUEST["record"]));
+$smarty->assign("ENTITY_TYPE",vtlib_purify($_REQUEST["email_directing_module"]));
 $smarty->assign("OLD_ID", $old_id );
 //Display the FCKEditor or not? -- configure $FCKEDITOR_DISPLAY in config.php 
 $smarty->assign("FCKEDITOR_DISPLAY",$FCKEDITOR_DISPLAY);
@@ -349,6 +347,4 @@ $smarty->assign("CHECK", $check_button);
 
 $smarty->display("ComposeEmail.tpl");
 
-
 ?>
-

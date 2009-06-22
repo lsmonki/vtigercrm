@@ -13,7 +13,6 @@ require_once("data/Tracker.php");
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Reports/Reports.php');
-require_once('include/database/PearDatabase.php');
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
@@ -35,7 +34,7 @@ $report_column->assign("IMAGE_PATH",$image_path);
 $report_column->assign("THEME_PATH",$theme_path);
 if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 {
-	$recordid = $_REQUEST["record"];
+	$recordid = vtlib_purify($_REQUEST["record"]);
 	$oReport = new Reports($recordid);
 	$BLOCK1 = getPrimaryColumnsHTML($oReport->primodule);
 	
@@ -55,7 +54,7 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 	$report_column->assign("BLOCK2",$BLOCK2);
 }else
 {
-	$primarymodule = $_REQUEST["primarymodule"];
+	$primarymodule = vtlib_purify($_REQUEST["primarymodule"]);
 	$BLOCK1 = getPrimaryColumnsHTML($primarymodule);
 	$ogReport = new Reports();
 	foreach($ogReport->related_modules[$primarymodule] as $key=>$value){

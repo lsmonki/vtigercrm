@@ -115,7 +115,7 @@ class Services extends CRMEntity {
 		global $currentModule;
 
 		$sortorder = $this->default_sort_order;
-		if($_REQUEST['sorder']) $sortorder = $_REQUEST['sorder'];
+		if($_REQUEST['sorder']) $sortorder = $this->db->sql_escape_string($_REQUEST['sorder']);
 		else if($_SESSION[$currentModule.'_Sort_Order']) 
 			$sortorder = $_SESSION[$currentModule.'_Sort_Order'];
 
@@ -123,8 +123,10 @@ class Services extends CRMEntity {
 	}
 
 	function getOrderBy() {
+		global $currentModule;
+		
 		$orderby = $this->default_order_by;
-		if($_REQUEST['order_by']) $orderby = $_REQUEST['order_by'];
+		if($_REQUEST['order_by']) $orderby = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else if($_SESSION[$currentModule.'_Order_By'])
 			$orderby = $_SESSION[$currentModule.'_Order_By'];
 		return $orderby;

@@ -60,7 +60,7 @@ $max_lines = 3;
 $delimiter = ',';
 if (isset($_REQUEST['delimiter']))
 {
-	$delimiter = $_REQUEST['delimiter'];
+	$delimiter = vtlib_purify($_REQUEST['delimiter']);
 }
 
 $has_header = 0;
@@ -146,13 +146,13 @@ $ret_field_count = $ret_value['field_count'];
 $smarty =  new vtigerCRM_Smarty;
 
 $smarty->assign("TMP_FILE", $tmp_file_name );
-$smarty->assign("SOURCE", $_REQUEST['source'] );
+$smarty->assign("SOURCE", vtlib_purify($_REQUEST['source']));
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 
-if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
-if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
+if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
 
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
@@ -177,6 +177,7 @@ if(isset($_REQUEST['module']) && $_REQUEST['module'] != '')
 	// vtlib customization: Hook added to enable import for un-mapped modules
 	$module = $_REQUEST['module'];	
 	if($object_name == null) {
+		checkFileAccess("modules/$module/$module.php");
 		require_once("modules/$module/$module.php");
 		$object_name = $module;
 		$callInitImport = true;		
@@ -320,7 +321,7 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++){
 
 	// vtlib customization: Hook to provide generic import for other modules
 	if($_REQUEST['module']) {
-		$focus1 = new $_REQUEST['module'];
+		$focus1 = CRMEntity::getInstance($_REQUEST['module']);
 		$tablename = $focus->table_name;
 	}
 	// END
@@ -382,10 +383,11 @@ if(isPermitted($module,'DuplicatesHandling','') == 'yes'){
 	$smarty->assign("DUPLICATESHANDLING", 'DuplicatesHandling');
 }
 
-$smarty->assign("MODULE", htmlspecialchars($_REQUEST['module'],ENT_QUOTES,$default_charset));
+$smarty->assign("MODULE", vtlib_purify($_REQUEST['module']));
 $smarty->assign("MODULELABEL", getTranslatedString($_REQUEST['module'],$_REQUEST['module']));
-$smarty->assign('CATEGORY' , htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
-@$_SESSION['import_parenttab'] = $_REQUEST['parenttab'];
+$parenttab = getParentTab();
+$smarty->assign('CATEGORY' , $parenttab);
+$_SESSION['import_parenttab'] = $parenttab;
 $smarty->assign("JAVASCRIPT2", get_readonly_js() );
 
 $smarty->display('ImportStep2.tpl');

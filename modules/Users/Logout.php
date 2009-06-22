@@ -119,46 +119,11 @@ if($enable_local_backup == 'true' && is_admin($current_user) == true)
 
 $local_log =& LoggerManager::getLogger('Logout');
 
-//Calendar Logout
-//include('modules/Calendar/logout.php');
-
 // clear out the autthenticating flag
 session_destroy();
 
 define("IN_LOGIN", true);
-	
-// define('IN_PHPBB', true);
-// include($phpbb_root_path . 'extension.inc');
-// include($phpbb_root_path . 'common.'.$phpEx);
 
-//
-// Set page ID for session management
-//
-//$userdata = session_pagestart($user_ip, PAGE_LOGIN);
-//init_userprefs($userdata);
-//
-// End session management
-//
-
-// session id check
-/*
-if (!empty($HTTP_POST_VARS['sid']) || !empty($HTTP_GET_VARS['sid']))
-{
-        $sid = (!empty($HTTP_POST_VARS['sid'])) ? $HTTP_POST_VARS['sid'] : $HTTP_GET_VARS['sid'];
-}
-else
-{
-        $sid = '';
-}
-if( $userdata['session_logged_in'] )
-	{
-		if( $userdata['session_logged_in'] )
-		{
-			session_end($userdata['session_id'], $userdata['user_id']);
-		}
-
-	}
-*/
 // go to the login screen.
 header("Location: index.php?action=Login&module=Users");
 ?>

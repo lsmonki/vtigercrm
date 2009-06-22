@@ -1,7 +1,6 @@
 <?php
-/*********************************************************************************
-
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
@@ -110,7 +109,7 @@ $recordCount= $adb->query_result($countQuery,0,'count');
 // Set paging start value.
 $start = 1;
 if(isset($_REQUEST['start'])) {
-	$start = $_REQUEST['start'];
+	$start = vtlib_purify($_REQUEST['start']);
 } elseif(!empty($_SESSION['lvs'][$currentModule]['start'])) {
 	$start = $_SESSION['lvs'][$currentModule]['start'];
 }

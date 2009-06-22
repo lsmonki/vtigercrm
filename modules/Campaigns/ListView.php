@@ -1,24 +1,20 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 require_once('modules/Campaigns/Campaigns.php');
-require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
-require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('include/database/Postgres8.php');
-require_once('include/DatabaseUtil.php');
 
 global $app_strings,$mod_strings,$current_language;
 $current_module_strings = return_module_language($current_language, 'Campaigns');
@@ -47,7 +43,7 @@ if(!$_SESSION['lvs'][$currentModule])
 
 if($_REQUEST['errormsg'] != '')
 {
-        $errormsg = $_REQUEST['errormsg'];
+        $errormsg = vtlib_purify($_REQUEST['errormsg']);
         $smarty->assign("ERROR","The User does not have permission to Change/Delete ".$errormsg." ".$currentModule);
 }else
 {
@@ -260,8 +256,8 @@ $listview_entries = getListViewEntries($focus,"Campaigns",$list_result,$navigati
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 //Added to select Multiple records in multiple pages
-$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
-$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
+$smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
 $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Campaigns","index",$viewid);

@@ -1,14 +1,12 @@
 <?php
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-* ("License"); You may not use this file except in compliance with the License
-* The Original Code is:  vtiger CRM Open Source
-* The Initial Developer of the Original Code is vtiger.
-* Portions created by vtiger are Copyright (C) vtiger.
-* All Rights Reserved.
-*
-********************************************************************************/
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
 require_once('Smarty_setup.php');
 require_once("include/utils/utils.php");
 require_once("modules/com_vtiger_workflow/VTWorkflowUtils.php");
@@ -25,7 +23,7 @@ global $current_user;
 if(!is_admin($current_user)) {	
 	$smarty->display(vtlib_getModuleTemplate('Vtiger','OperationNotPermitted.tpl'));	
 } else {
-	$module = $_REQUEST['formodule'];
+	$module = vtlib_purify($_REQUEST['formodule']);
 
 	$menu_array = Array();
 	
@@ -42,8 +40,8 @@ if(!is_admin($current_user)) {
 			if($adb->num_rows($sql_result) > 0) {
 				$menu_array['FieldFormulas']['location'] = $adb->query_result($sql_result, 0, 'linkto').'&formodule='.$module;
 				$menu_array['FieldFormulas']['image_src'] = $adb->query_result($sql_result, 0, 'iconpath');
-				$menu_array['FieldFormulas']['desc'] = getTranslatedString($adb->query_result($sql_result, 0, 'description'));
-				$menu_array['FieldFormulas']['label'] = getTranslatedString($adb->query_result($sql_result, 0, 'name'));
+				$menu_array['FieldFormulas']['desc'] = getTranslatedString($adb->query_result($sql_result, 0, 'description'),'FieldFormulas');
+				$menu_array['FieldFormulas']['label'] = getTranslatedString($adb->query_result($sql_result, 0, 'name'),'FieldFormulas');
 			}
 		}
 	}

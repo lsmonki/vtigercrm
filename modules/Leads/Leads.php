@@ -15,14 +15,11 @@
 
 include_once('config.php');
 require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
-require_once('data/CRMEntity.php');
 require_once('modules/Calendar/Activity.php');
 require_once('modules/Campaigns/Campaigns.php');
 require_once('modules/Documents/Documents.php');
 require_once('modules/Emails/Emails.php');
-require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
@@ -119,7 +116,7 @@ class Leads extends CRMEntity {
 		global $log;
 		$log->debug("Entering getSortOrder() method ...");
 		if(isset($_REQUEST['sorder'])) 
-			$sorder = $_REQUEST['sorder'];
+			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
 		else
 			$sorder = (($_SESSION['LEADS_SORT_ORDER'] != '')?($_SESSION['LEADS_SORT_ORDER']):($this->default_sort_order));
 
@@ -136,7 +133,7 @@ class Leads extends CRMEntity {
 		global $log;
 		$log->debug("Entering getOrderBy() method ...");
 		if (isset($_REQUEST['order_by'])) 
-			$order_by = $_REQUEST['order_by'];
+			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else
 			$order_by = (($_SESSION['LEADS_ORDER_BY'] != '')?($_SESSION['LEADS_ORDER_BY']):($this->default_order_by));
 

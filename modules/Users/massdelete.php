@@ -1,25 +1,20 @@
 <?php
-
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
-
 
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/CommonUtils.php');
-require_once('data/CRMEntity.php');
-$idlist = $_REQUEST['idlist'];
-$viewid = $_REQUEST['viewname'];
-$returnmodule=$_REQUEST['return_module'];
-$return_action = $_REQUEST['return_action'];
+$idlist = vtlib_purify($_REQUEST['idlist']);
+$viewid = vtlib_purify($_REQUEST['viewname']);
+$returnmodule = vtlib_purify($_REQUEST['return_module']);
+$return_action = vtlib_purify($_REQUEST['return_action']);
 $rstart='';
 //Added to fix 4600
 $url = getBasic_Advance_SearchURL();
@@ -51,17 +46,17 @@ if(count($ids_list) > 0) {
 
 if(isset($_REQUEST['smodule']) && ($_REQUEST['smodule']!=''))
 {
-	$smod = "&smodule=".$_REQUEST['smodule'];
+	$smod = "&smodule=".vtlib_purify($_REQUEST['smodule']);
 }
 if(isset($_REQUEST['start']) && ($_REQUEST['start']!=''))
 {
-	$rstart = "&start=".$_REQUEST['start'];
+	$rstart = "&start=".vtlib_purify($_REQUEST['start']);
 }
 if($returnmodule == 'Emails')
 {
 	if(isset($_REQUEST['folderid']) && $_REQUEST['folderid'] != '')
 	{
-		$folderid = $_REQUEST['folderid'];
+		$folderid = vtlib_purify($_REQUEST['folderid']);
 	}else
 	{
 		$folderid = 1;
@@ -70,8 +65,8 @@ if($returnmodule == 'Emails')
 }
 elseif($return_action == 'ActivityAjax')
 {
-	$subtab = $_REQUEST['subtab'];
-	header("Location: index.php?module=".$returnmodule."&action=".$return_action."".$rstart."&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&type=".$_REQUEST['type']."&viewOption=".$_REQUEST['viewOption']."&subtab=".$subtab.$url);
+	$subtab = vtlib_purify($_REQUEST['subtab']);
+	header("Location: index.php?module=".$returnmodule."&action=".$return_action."".$rstart."&view=".vtlib_purify($_REQUEST['view'])."&hour=".vtlib_purify($_REQUEST['hour'])."&day=".vtlib_purify($_REQUEST['day'])."&month=".vtlib_purify($_REQUEST['month'])."&year=".vtlib_purify($_REQUEST['year'])."&type=".vtlib_purify($_REQUEST['type'])."&viewOption=".vtlib_purify($_REQUEST['viewOption'])."&subtab=".$subtab.$url);
 }
 			
 elseif($returnmodule!='Faq')
@@ -83,4 +78,3 @@ else
 	header("Location: index.php?module=".$returnmodule."&action=".$returnmodule."Ajax&ajax=delete".$rstart."&file=ListView&errormsg=".$errormsg.$url);
 }
 ?>
-

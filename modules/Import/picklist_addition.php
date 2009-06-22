@@ -1,18 +1,18 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-********************************************************************************/
+ *******************************************************************************/
 
 global $adb;
 $tabid = getTabid($_REQUEST['module']);
 
 //First we have to collect all available picklist and their values from the corresponding picklist tables
-$picklist_result = $adb->query("select fieldname from vtiger_field where uitype in ('15') and tabid=$tabid and vtiger_field.presence in (0,2)");
+$picklist_result = $adb->pquery("select fieldname from vtiger_field where uitype in ('15') and tabid=? and vtiger_field.presence in (0,2)", array($tabid));
 $no_of_picklists = $adb->num_rows($picklist_result);
 for($i=0;$i<$no_of_picklists;$i++)
 {
@@ -50,9 +50,7 @@ foreach($field_to_pos as $fieldname => $ind)
 foreach($csv_picklist_values as $fieldname => $temp_array)
 {
 	$tablename = "vtiger_$fieldname";
-	//Get the sortorderid, so that it will be used in insert
-	//$sortorderid = $adb->query_result($adb->query("select max(sortorderid) as sortorderid from $tablename"), 0, 'sortorderid');
-
+	
 	foreach($temp_array as $ind => $picklist_value)
 	{
 		$pick_val = strtolower($picklist_value);	

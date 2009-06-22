@@ -48,7 +48,7 @@
 			<div id="duplicate_ajax" style='margin: 0 10px;'>
 				{include file='FindDuplicateAjax.tpl'}
 			</div>
-			<div id="current_action" style="display:none">{$smarty.request.action}</div>
+			<div id="current_action" style="display:none">{$smarty.request.action|@vtlib_purify}</div>
 			{* END *}
 			
 {if $MODULE eq $smarty.request.module}

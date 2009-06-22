@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 global $current_user,$mod_strings,$app_strings;
 global $theme;
@@ -29,14 +28,14 @@ require_once('modules/Calendar/CalendarCommon.php');
 <form name="SharingForm" method="post" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 <input type="hidden" name="module" value="Calendar">
 <input type="hidden" name="action" value="updateCalendarSharing">
-<input type="hidden" name="view" value="<?php echo $_REQUEST['view'] ?>">
-<input type="hidden" name="hour" value="<?php echo $_REQUEST['hour'] ?>">
-<input type="hidden" name="day" value="<?php echo $_REQUEST['day'] ?>">
-<input type="hidden" name="month" value="<?php echo $_REQUEST['month'] ?>">
-<input type="hidden" name="year" value="<?php echo $_REQUEST['year'] ?>">
-<input type="hidden" name="viewOption" value="<?php echo $_REQUEST['viewOption'] ?>">
-<input type="hidden" name="subtab" value="<?php echo $_REQUEST['subtab'] ?>">
-<input type="hidden" name="parenttab" value="<?php echo $_REQUEST['parenttab'] ?>">
+<input type="hidden" name="view" value="<?php echo vtlib_purify($_REQUEST['view']) ?>">
+<input type="hidden" name="hour" value="<?php echo vtlib_purify($_REQUEST['hour']) ?>">
+<input type="hidden" name="day" value="<?php echo vtlib_purify($_REQUEST['day']) ?>">
+<input type="hidden" name="month" value="<?php echo vtlib_purify($_REQUEST['month']) ?>">
+<input type="hidden" name="year" value="<?php echo vtlib_purify($_REQUEST['year']) ?>">
+<input type="hidden" name="viewOption" value="<?php echo vtlib_purify($_REQUEST['viewOption']) ?>">
+<input type="hidden" name="subtab" value="<?php echo vtlib_purify($_REQUEST['subtab']) ?>">
+<input type="hidden" name="parenttab" value="<?php echo vtlib_purify($_REQUEST['parenttab']) ?>">
 <input type="hidden" name="current_userid" value="<?php echo $current_user->id ?>" >
 <input type="hidden" name="shar_userid" id="shar_userid" >
 

@@ -23,10 +23,6 @@ require_once('modules/Import/UsersLastImport.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 
-// Get _dom arrays from Database
-$comboFieldNames = Array('salutationtype'=>'salutation_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
-
 // Contact is used to store customer information.
 class ImportContact extends Contacts {
 	// these are vtiger_fields that may be set on import

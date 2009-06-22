@@ -8,8 +8,6 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ********************************************************************************/
-require_once('include/database/PearDatabase.php');
-require_once('data/CRMEntity.php');
 require_once('modules/Accounts/Accounts.php');
 require_once('modules/Contacts/Contacts.php');
 require_once('include/utils/utils.php');

@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
 global $mod_strings;
@@ -17,19 +16,19 @@ $image_path=$theme_path."images/";
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module']=="PriceBooks")
 {
-	$pricebook_id = $_REQUEST['pricebook_id'];
-	$product_id = $_REQUEST['record'];
-	$listprice = $_REQUEST['listprice'];
+	$pricebook_id = vtlib_purify($_REQUEST['pricebook_id']);
+	$product_id = vtlib_purify($_REQUEST['record']);
+	$listprice = vtlib_purify($_REQUEST['listprice']);
 	$return_action = "CallRelatedList";
-	$return_id = $_REQUEST['pricebook_id'];
+	$return_id = vtlib_purify($_REQUEST['pricebook_id']);
 }
 else
 {
-	$product_id = $_REQUEST['record'];
-	$pricebook_id = $_REQUEST['pricebook_id'];
+	$product_id = vtlib_purify($_REQUEST['record']);
+	$pricebook_id = vtlib_purify($_REQUEST['pricebook_id']);
 	$listprice = getListPrice($product_id,$pricebook_id);
 	$return_action = "CallRelatedList";
-	$return_id = $_REQUEST['pricebook_id'];
+	$return_id = vtlib_purify($_REQUEST['pricebook_id']);
 }
 $output='';
 $output ='<div id="roleLay" style="display:block;" class="layerPopup">

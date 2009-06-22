@@ -11,7 +11,7 @@
 require_once('include/Zend/Json.php');
 if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 {
-	$reportid = $_REQUEST["record"];
+	$reportid = vtlib_purify($_REQUEST["record"]);
 	$oReport = new Reports($reportid);
 	$oReport->getAdvancedFilterList($reportid);
 

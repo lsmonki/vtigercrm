@@ -11,11 +11,11 @@ require_once('include/database/PearDatabase.php');
 @include_once('user_privileges/default_module_view.php');
 
 global $adb, $singlepane_view, $currentModule;
-$idlist            = $_REQUEST['idlist'];
-$destinationModule = $_REQUEST['destination_module'];
-$parenttab         = $_REQUEST['parenttab'];
+$idlist            = vtlib_purify($_REQUEST['idlist']);
+$destinationModule = vtlib_purify($_REQUEST['destination_module']);
+$parenttab         = getParentTab();
 
-$forCRMRecord = $_REQUEST['parentid'];
+$forCRMRecord = vtlib_purify($_REQUEST['parentid']);
 $mode = $_REQUEST['mode'];
 
 if($singlepane_view == 'true')
@@ -23,9 +23,7 @@ if($singlepane_view == 'true')
 else
 	$action = "CallRelatedList";
 
-checkFileAccess("modules/$currentModule/$currentModule.php");
-require_once("modules/$currentModule/$currentModule.php");
-$focus = new $currentModule();
+$focus = CRMEntity::getInstance($currentModule);
 
 if($mode == 'delete') {
 	// Split the string of ids

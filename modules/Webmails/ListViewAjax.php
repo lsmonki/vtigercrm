@@ -1,34 +1,25 @@
 <?php
-/*********************************************************************************
- ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-  * ("License"); You may not use this file except in compliance with the License
-  * The Initial Developer of the Original Code is FOSS Labs.
-  * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
-  * Portions created by vtiger are Copyright (C) vtiger.
-  * All Rights Reserved.
-  *
-  ********************************************************************************/
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Initial Developer of the Original Code is FOSS Labs.
+ * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
 
-// figure out which page we are on and what mailbox we want to view
-//if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != ""){$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
-if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "")
-{
+if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {
 	$mailbox=$_REQUEST["mailbox"];
-}
-else
-{
+} else {
 	$mailbox="INBOX";
 }
 
-if($_REQUEST["start"] && $_REQUEST["start"] != "")
-{
-	$start=$_REQUEST["start"];
-}
-else
-{
+if($_REQUEST["start"] && $_REQUEST["start"] != "") {
+	$start=vtlib_purify($_REQUEST["start"]);
+} else {
 	$start="1";
 }
-$show_hidden=$_REQUEST["show_hidden"];
+$show_hidden=vtlib_purify($_REQUEST["show_hidden"]);
 
 global $current_user;
 
@@ -64,7 +55,6 @@ $elist = $MailBox->mailList;
 $numEmails = $elist["count"];
 $headers = $elist["headers"];
 $mails_per_page = $MailBox->mails_per_page;
-
 
 if($start == 1 || $start == "") {
 	$start_message=$numEmails;
@@ -107,13 +97,6 @@ if (is_array($overview))
 		$cc_list = str_replace(">","",$cc);
 		
 		$cc_list = addslashes($cc_list);
-		
-		/*$js_array .= "webmail2[".$val->msgno."] = new Array();";
-		$js_array .= "webmail2[".$val->msgno."]['from'] = '".addslashes($from_list)."';";
-		$js_array .= "webmail2[".$val->msgno."]['to'] = '".addslashes($to_list)."';";
-		$js_array .= "webmail2[".$val->msgno."]['subject'] = '".addslashes($val->subject)."';";
-		$js_array .= "webmail2[".$val->msgno."]['date'] = '".addslashes($val->date)."';";
-		$js_array .= "webmail2[".$val->msgno."]['cc'] = '".$cc_list."';";*/
 	}
 }
 $search_fields = Array("SUBJECT","BODY","TO","CC","BCC","FROM");
@@ -129,7 +112,7 @@ if(($numEmails) <= 0)
 else {
 
 	if(isset($_REQUEST["search"]) && trim($_REQUEST["search_input"]) != '') {
-		$searchstring = $_REQUEST["search_type"].' "'.$_REQUEST["search_input"].'"';
+		$searchstring = vtlib_purify($_REQUEST["search_type"]).' "'.vtlib_purify($_REQUEST["search_input"]).'"';
 		//echo $searchstring."<br>";
 		$searchlist = Array();
 		$searchlist = imap_search($MailBox->mbox,$searchstring);

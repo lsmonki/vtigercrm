@@ -22,9 +22,7 @@
 
 include_once('config.php');
 require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
-require_once('data/CRMEntity.php');
 require_once('modules/Contacts/Contacts.php');
 require_once('modules/Calendar/Activity.php');
 require_once('modules/Documents/Documents.php');
@@ -115,7 +113,7 @@ class Potentials extends CRMEntity {
 		global $log;
                 $log->debug("Entering getSortOrder() method ...");	
 		if(isset($_REQUEST['sorder'])) 
-			$sorder = $_REQUEST['sorder'];
+			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
 		else
 			$sorder = (($_SESSION['POTENTIALS_SORT_ORDER'] != '')?($_SESSION['POTENTIALS_SORT_ORDER']):($this->default_sort_order));
 		$log->debug("Exiting getSortOrder() method ...");
@@ -131,7 +129,7 @@ class Potentials extends CRMEntity {
 		global $log;
                 $log->debug("Entering getOrderBy() method ...");
 		if (isset($_REQUEST['order_by'])) 
-			$order_by = $_REQUEST['order_by'];
+			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else
 			$order_by = (($_SESSION['POTENTIALS_ORDER_BY'] != '')?($_SESSION['POTENTIALS_ORDER_BY']):($this->default_order_by));
 		$log->debug("Exiting getOrderBy method ...");

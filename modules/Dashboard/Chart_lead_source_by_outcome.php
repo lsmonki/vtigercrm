@@ -23,7 +23,6 @@
 require_once('include/utils/utils.php');
 require_once('include/logging.php');
 require_once("modules/Potentials/Charts.php");
-require_once('include/ComboUtil.php');
 global $current_language, $tmp_dir, $currentModule, $action;
 $current_module_strings = return_module_language($current_language, 'Dashboard');
 require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
@@ -121,7 +120,7 @@ if (isset($_REQUEST['lsbo_edit']) && $_REQUEST['lsbo_edit'] == 'true') {
 <form action="index.php" method="post" >
 <input type="hidden" name="module" value="<?php echo $currentModule;?>">
 <input type="hidden" name="action" value="<?php echo $action;?>">
-<input type="hidden" name="display_view" value="<?php echo $_REQUEST['display_view']?>">
+<input type="hidden" name="display_view" value="<?php echo vtlib_purify($_REQUEST['display_view'])?>">
 <input type="hidden" name="lsbo_refresh" value="true">
 <table cellpadding="2" border="0"><tbody>
 <tr>
@@ -149,8 +148,8 @@ else {
 ?>
 <div align=right><FONT size='1'>
 <em><?php  echo $current_module_strings['LBL_CREATED_ON'].' '.$file_date; ?> 
-</em>[<a href="javascript:;" onClick="changeView('<?php echo $_REQUEST['display_view'];?>');"><?php echo $current_module_strings['LBL_REFRESH'];?></a>]
-[<a href="index.php?module=<?php echo $currentModule;?>&action=index&lsbo_edit=true&display_view=<?php echo $_REQUEST['display_view'];?>"><?php echo $current_module_strings['LBL_EDIT'];?></a>]
+</em>[<a href="javascript:;" onClick="changeView('<?php echo vtlib_purify($_REQUEST['display_view']);?>');"><?php echo $current_module_strings['LBL_REFRESH'];?></a>]
+[<a href="index.php?module=<?php echo $currentModule;?>&action=index&lsbo_edit=true&display_view=<?php echo vtlib_purify($_REQUEST['display_view']);?>"><?php echo $current_module_strings['LBL_EDIT'];?></a>]
 </FONT></div>
 <?php } 
 }

@@ -11,9 +11,7 @@
 
 include_once('config.php');
 require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
-require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 
 /** Class to populate the default required data during installation  
@@ -1262,8 +1260,7 @@ class DefaultDataPopulator extends CRMEntity {
 	//inserting actions for get_attachments 
 	$folderid = $this->db->getUniqueID("vtiger_attachmentsfolder");
 	$this->db->query("insert into vtiger_attachmentsfolder values(".$folderid.",'Default','This is a Default Folder',1,1)");	
-	
-			
+
 		//Inserting Inventory Notifications
 	$invoice_body = 'Dear {HANDLER},
 
@@ -2029,7 +2026,7 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	$this->db->query("insert into vtiger_reportfilters values(2,'Public')");
 	$this->db->query("insert into vtiger_reportfilters values(3,'Shared')");
 	
-		require_once('currencies.php');
+		require_once('modules/Utilities/Currencies.php');
 		foreach($currencies as $key=>$value){
 			$this->db->query("insert into vtiger_currencies values(".$this->db->getUniqueID("vtiger_currencies").",'$key','".$value[0]."','".$value[1]."')");
 		}
@@ -2344,8 +2341,7 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	
 			$semodule = $criteria['semodule'];
 	
-			require_once("modules/$semodule/$semodule.php");
-			$modfocus = new $semodule();
+			$modfocus = CRMEntity::getInstance($semodule);
 			$modfocus->setModuleSeqNumber('configure', $semodule, $criteria['prefix'], $criteria['startid']);
 		}
 	}

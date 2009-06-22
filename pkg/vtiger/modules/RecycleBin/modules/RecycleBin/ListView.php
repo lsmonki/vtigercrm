@@ -13,7 +13,6 @@ require_once('Smarty_setup.php');
 require_once('include/ListView/ListView.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
-require_once('include/DatabaseUtil.php');
 require_once('modules/RecycleBin/RecycleBinUtils.php');
 
 global $adb, $log, $list_max_entries_per_page;
@@ -58,7 +57,7 @@ if($noofrows > 0) {
 }
 
 if(isset($_REQUEST['selected_module']) && $_REQUEST['selected_module'] != '') {
-	$select_module = $_REQUEST['selected_module'];
+	$select_module = vtlib_purify($_REQUEST['selected_module']);
 	if (!in_array($select_module, $module_name)) {
 		show_error_msg();
 	}
@@ -82,18 +81,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 				
 }
 
-checkFileAccess("modules/$select_module/$select_module.php");
-require_once("modules/$select_module/$select_module.php");
-if($select_module == 'Calendar')
-{
-	$focus = new Activity();	
-}else if ($select_module == 'Rss') 
-{
-	$focus = new vtigerRSS();
-}else
-{
-	$focus = new $select_module();
-}
+$focus = CRMEntity::getInstance($select_module);
 
 if(count($module_name) > 0)
 {
@@ -115,8 +103,8 @@ if(count($module_name) > 0)
 	$listview_header_search=getSearchListHeaderValues($focus,$select_module,$url_string,$sorder,$order_by,"",$cur_mod_view);
 	$smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
-	if(isset($_REQUEST[start]) && $_REQUEST[start] != '')
-		$start = $_REQUEST[start];
+	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
+		$start = vtlib_purify($_REQUEST['start']);
 	else
 		$start = 1;
 

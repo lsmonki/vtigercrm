@@ -23,9 +23,7 @@
 
 include_once('config.php');
 require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
-require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
@@ -120,7 +118,7 @@ class PurchaseOrder extends CRMEntity {
 		//In Ajax edit, if the status changed to Received Shipment then we have to update the product stock
 		if($_REQUEST['action'] == 'PurchaseOrderAjax' && $this->update_prod_stock == 'true')
 		{
-			$inventory_res = $this->db->query("select productid, quantity from vtiger_inventoryproductrel where id=$this->id");
+			$inventory_res = $this->db->pquery("select productid, quantity from vtiger_inventoryproductrel where id=?",array($this->id));
 			$noofproducts = $this->db->num_rows($inventory_res);
 
 			//We have to update the stock for all the products in this PO
@@ -150,7 +148,7 @@ class PurchaseOrder extends CRMEntity {
 		global $log;
                 $log->debug("Entering getSortOrder() method ...");	
 		if(isset($_REQUEST['sorder'])) 
-			$sorder = $_REQUEST['sorder'];
+			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
 		else
 			$sorder = (($_SESSION['PURCHASEORDER_SORT_ORDER'] != '')?($_SESSION['PURCHASEORDER_SORT_ORDER']):($this->default_sort_order));
 		$log->debug("Exiting getSortOrder() method ...");
@@ -165,7 +163,7 @@ class PurchaseOrder extends CRMEntity {
 		global $log;
                 $log->debug("Entering getOrderBy() method ...");
 		if (isset($_REQUEST['order_by'])) 
-			$order_by = $_REQUEST['order_by'];
+			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else
 			$order_by = (($_SESSION['PURCHASEORDER_ORDER_BY'] != '')?($_SESSION['PURCHASEORDER_ORDER_BY']):($this->default_order_by));
 		$log->debug("Exiting getOrderBy method ...");

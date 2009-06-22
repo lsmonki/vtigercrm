@@ -28,7 +28,7 @@ require_once('include/database/PearDatabase.php');
 $focus = new HelpDesk();
 
 //added to fix 4600
-$search=$_REQUEST['search_url'];
+$search=vtlib_purify($_REQUEST['search_url']);
 
 setObjectValuesFromRequest($focus);
 global $adb,$mod_strings;
@@ -58,12 +58,12 @@ $adb->pquery("update vtiger_troubletickets set update_log=? where ticketid=?", a
 
 $return_id = $focus->id;
 
-if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
-if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
+$parenttab = getParentTab();
+if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = vtlib_purify($_REQUEST['return_module']);
 else $return_module = "HelpDesk";
-if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
+if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = vtlib_purify($_REQUEST['return_action']);
 else $return_action = "DetailView";
-if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
+if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = vtlib_purify($_REQUEST['return_id']);
 
 if($_REQUEST['mode'] == 'edit')
 	$reply = 'Re : ';
@@ -122,7 +122,7 @@ else
 $_REQUEST['return_id'] = $return_id;
 
 if($_REQUEST['return_module'] == 'Products' & $_REQUEST['product_id'] != '' &&  $focus->id != '')
-	$return_id = $_REQUEST['product_id'];
+	$return_id = vtlib_purify($_REQUEST['product_id']);
 
 //send mail to the assigned to user and the parent to whom this ticket is assigned
 require_once('modules/Emails/mail.php');
@@ -184,6 +184,6 @@ if ($mail_status != '') {
 
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
-if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
-header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&$mail_error_status&viewname=$return_viewname&start=".$_REQUEST['pagenumber'].$search);
+if($_REQUEST['return_viewname'] != '')$return_viewname=vtlib_purify($_REQUEST['return_viewname']);
+header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&$mail_error_status&viewname=$return_viewname&start=".vtlib_purify($_REQUEST['pagenumber']).$search);
 ?>

@@ -40,7 +40,7 @@ if($mail_status != 1) { //when mail send fails
 //Added to redirect the page to Emails/EditView if there is an error in mail sending
 if($errorheader1 == 1 || $errorheader2 == 1)
 {
-	$returnset = 'return_module='.$returnmodule.'&return_action='.$returnaction.'&return_id='.$_REQUEST['return_id'];
+	$returnset = 'return_module='.$returnmodule.'&return_action='.$returnaction.'&return_id='.vtlib_purify($_REQUEST['return_id']);
 	$returnmodule = 'Emails';
 	$returnaction = 'EditView';
 	if($_REQUEST['mode'] == 'edit')

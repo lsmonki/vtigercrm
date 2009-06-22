@@ -1,19 +1,17 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
+
 require_once('Smarty_setup.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
-require_once('include/ComboUtil.php');
 
 global $mod_strings,$app_strings,$log,$theme;
 $theme_path="themes/".$theme."/";
@@ -82,9 +80,9 @@ $smarty->assign("CFTEXTCOMBO",$cftextcombo);
 $smarty->assign("CFIMAGECOMBO",$cfimagecombo);
 
 if($_REQUEST['formodule'] !='')
-	$fld_module = $_REQUEST['formodule'];
+	$fld_module = vtlib_purify($_REQUEST['formodule']);
 elseif($_REQUEST['fld_module'] != ''){
-	$fld_module = $_REQUEST['fld_module'];
+	$fld_module = vtlib_purify($_REQUEST['fld_module']);
 }else
 	$fld_module = 'Accounts';
 
@@ -105,7 +103,7 @@ if($duplicate == 'LENGTH_ERROR'){
 	exit;
 }
 if($_REQUEST['mode'] !='')
-	$mode = $_REQUEST['mode'];
+	$mode = vtlib_purify($_REQUEST['mode']);
 	
 $smarty->assign("MODE", $mode);
 
@@ -159,14 +157,8 @@ function getFieldListEntries($module)
 	$result = $adb->pquery($dbQuery, array($tabid));
 	$row = $adb->fetch_array($result);
 	
-	if($module == 'Calendar' || $module == 'Events'){
-		require_once("modules/Calendar/Activity.php");
-		$focus = new Activity();
-	}
-	else{
-		require_once("modules/$module/$module.php");
-		$focus = new $module();
-	}
+	$focus = CRMEntity::getInstance($module);
+
 	$nonEditableUiTypes = array('4','70');
 	
 	$cflist=Array();
@@ -326,8 +318,8 @@ function getFieldListEntries($module)
 function getListLeadMapping($cfid)
 {
 	global $adb;
-	$sql="select * from vtiger_convertleadmapping where cfmid =".$cfid;
-	$result = $adb->query($sql);
+	$sql='select * from vtiger_convertleadmapping where cfmid = ?';
+	$result = $adb->pquery($sql, array($cfid));
 	$noofrows = $adb->num_rows($result);
 	for($i =0;$i <$noofrows;$i++)
 	{
@@ -429,8 +421,8 @@ function changeFieldOrder(){
 		}
 	
 		if($_REQUEST['what_to_do']=='down' || $_REQUEST['what_to_do']=='Right'){
-			$sql="select * from vtiger_field where fieldid='".$_REQUEST['fieldid']."' and vtiger_field.presence in (0,2)";
-			$result = $adb->query($sql);
+			$sql="select * from vtiger_field where fieldid=? and vtiger_field.presence in (0,2)";
+			$result = $adb->pquery($sql, array($_REQUEST['fieldid']));
 			$row= $adb->fetch_array($result);
 			$current_sequence=$row['sequence'];
 				if($_REQUEST['what_to_do']=='down'){
@@ -451,7 +443,7 @@ function changeFieldOrder(){
 			
 			$sql_up_next="update vtiger_field  set sequence=? where fieldid=?";
 			$result_up_next = $adb->pquery($sql_up_next, array($current_sequence,$next_id));
-			$smarty->assign("COLORID",$_REQUEST['fieldid']);
+			$smarty->assign("COLORID",vtlib_purify($_REQUEST['fieldid']));
 		}
 	
 		if($_REQUEST['what_to_do']=='up' || $_REQUEST['what_to_do']=='Left'){
@@ -478,7 +470,7 @@ function changeFieldOrder(){
 			
 			$sql_up_previous="update vtiger_field  set sequence=? where fieldid=?";
 			$result_up_previous = $adb->pquery($sql_up_previous, array($current_sequence,$previous_id));
-			$smarty->assign("COLORID",$_REQUEST['fieldid']);
+			$smarty->assign("COLORID",vtlib_purify($_REQUEST['fieldid']));
 		}
 	
 		if($_REQUEST['what_to_do']=='show'){
@@ -541,19 +533,13 @@ function updateFieldProperties(){
 	$oldmassedit = $adb->query_result($req_result,0,'masseditable');
 	$oldpresence = $adb->query_result($req_result,0,'presence');
 
-	if(isset($_REQUEST['fld_module'])  && $_REQUEST['fld_module']!= ''){
-		$fld_module = $_REQUEST['fld_module'];
+	if(!empty($_REQUEST['fld_module'])){
+		$fld_module = vtlib_purify($_REQUEST['fld_module']);
 	}else{
-	$fld_module = getTabModuleName($tabid);
+		$fld_module = getTabModuleName($tabid);
 	}
 	
-	if($fld_module == 'Calendar' || $fld_module == 'Events'){
-		require_once("modules/Calendar/Activity.php");
-		$focus = new Activity();
-	}else{
-		require_once("modules/$fld_module/$fld_module.php");
-		$focus = new $fld_module();
-	}
+	$focus = CRMEntity::getInstance($fld_module);
 	
 	$fieldtype =  explode("~",$typeofdata);
 	$mandatory_checked= $_REQUEST['ismandatory'];
@@ -660,20 +646,14 @@ function deleteCustomField(){
 	$query='delete from vtiger_def_org_field where fieldid=?';
 	$adb->pquery($query, array($id));
 	
-	if($fld_module == 'Calendar' || $fld_module == 'Events'){
-			require_once("modules/Calendar/Activity.php");
-			$focus = new Activity();
-		}else{
-			require_once("modules/$fld_module/$fld_module.php");
-			$focus = new $fld_module();
-	}
+	$focus = CRMEntity::getInstance($fld_module);
 			 
 	$deletecolumnname =$tablename .":". $columnname .":".$fieldname.":".$fld_module. "_" .str_replace(" ","_",$oldfieldlabel).":".$fieldtype[0];
 	$column_cvstdfilter = 	$tablename .":". $columnname .":".$fieldname.":".$fld_module. "_" .str_replace(" ","_",$oldfieldlabel);
 	$select_columnname = $tablename.":".$columnname .":".$fld_module. "_" . str_replace(" ","_",$oldfieldlabel).":".$fieldname.":".$fieldtype[0];
 	$reportsummary_column = $tablename.":".$columnname.":".str_replace(" ","_",$oldfieldlabel);		
 	
-	$dbquery = 'alter table '. mysql_real_escape_string($focus->customFieldTable[0]).' drop column '. mysql_real_escape_string($colName);
+	$dbquery = 'alter table '. $adb->sql_escape_string($focus->customFieldTable[0]).' drop column '. $adb->sql_escape_string($colName);
 	$adb->pquery($dbquery, array());
 	
 	//To remove customfield entry from vtiger_field table
@@ -705,7 +685,7 @@ function deleteCustomField(){
 	//HANDLE HERE - we have to remove the table for other picklist type values which are text area and multiselect combo box 
 	if($uitype == 15)
 	{
-		$deltablequery = 'drop table vtiger_'.mysql_real_escape_string($colName);
+		$deltablequery = 'drop table vtiger_'.$adb->sql_escape_string($colName);
 		$adb->pquery($deltablequery, array());
 	}	
 }
@@ -746,7 +726,6 @@ function addblock(){
 	    $row_seq=$adb->fetch_array($res_seq);
 		$block_sequence=$row_seq['sequence'];
 		$newblock_sequence=$block_sequence+1;
-		//$fieldselect=$_REQUEST[fieldselect];
 		
 		$sql_up="update vtiger_blocks set sequence=sequence+1 where tabid=? and sequence > ?";
 		$adb->pquery($sql_up, array($tabid,$block_sequence));
@@ -772,12 +751,12 @@ function addCustomField(){
 	
 global $current_user,$log,$adb;
 
-$fldmodule=$_REQUEST['fld_module'];
-$fldlabel=trim($_REQUEST['fldLabel']);
-$fldType= $_REQUEST['fieldType'];
-$parenttab=$_REQUEST['parenttab'];
-$mode=$_REQUEST['mode'];
-$blockid = $_REQUEST['blockid'];
+$fldmodule=vtlib_purify($_REQUEST['fld_module']);
+$fldlabel=vtlib_purify(trim($_REQUEST['fldLabel']));
+$fldType= vtlib_purify($_REQUEST['fieldType']);
+$parenttab=vtlib_purify($_REQUEST['parenttab']);
+$mode=vtlib_purify($_REQUEST['mode']);
+$blockid = vtlib_purify($_REQUEST['blockid']);
 
 $tabid = getTabid($fldmodule);
 if ($fldmodule == 'Calendar' && isset($_REQUEST['activity_type'])) {
@@ -807,9 +786,7 @@ else{
 	$custfld_fieldid = $max_fieldid;
 	//Assigning the vtiger_table Name
 	if($fldmodule != '') {
-		checkFileAccess("modules/$fldmodule/$fldmodule.php");
-		include_once("modules/$fldmodule/$fldmodule.php");
-		$focus = new $fldmodule();
+		$focus = CRMEntity::getInstance($fldmodule);
 		if (isset($focus->customFieldTable)) {
 			$tableName=$focus->customFieldTable[0];
 		} else {
@@ -913,7 +890,7 @@ else{
 				$adb->pquery($sql_def, array($tabid, $custfld_fieldid, 0, 1));
 
 			if($fldType == 'Picklist' || $fldType == 'MultiSelectCombo'){
-				$columnName = mysql_real_escape_string($columnName);
+				$columnName = $adb->sql_escape_string($columnName);
 				// Creating the PickList Table and Populating Values
 				if($_REQUEST['fieldid'] == ''){
 					$qur = "CREATE TABLE vtiger_".$columnName." (
@@ -990,7 +967,6 @@ function show_move_hiddenfields($submode){
 	$sequence = $adb->pquery('select max(sequence) as maxseq from vtiger_field where block = ?  and tabid = ?',array($_REQUEST['blockid'],$_REQUEST['tabid']));
 	$max = $adb->query_result($sequence,0,'maxseq');
 	$max_seq = $max + 1;
-	$log->debug("vikass".print_r($_REQUEST,true));
 	
 	if($submode == 'showhiddenfields'){
 		for($i=0; $i< count($sel_arr);$i++){
@@ -1030,10 +1006,8 @@ function changeRelatedListOrder(){
 	global $adb,$log;
 	$tabid = $_REQUEST['tabid'];
 	$what_todo = $_REQUEST['what_to_do'];
-	$log->debug("outside".print_r($_REQUEST,true));
-			if(!empty($_REQUEST['what_to_do'])){
+	if(!empty($_REQUEST['what_to_do'])){
 		if($_REQUEST['what_to_do'] == 'move_up'){
-			$log->debug("relatedlist".print_r($_REQUEST,true));
 			$currentsequence = $_REQUEST['sequence'];
 			
 			$previous_relation = $adb->pquery('select relation_id,sequence from vtiger_relatedlists where sequence < ? and tabid = ? order by sequence desc limit 0,1',array($currentsequence,$tabid));

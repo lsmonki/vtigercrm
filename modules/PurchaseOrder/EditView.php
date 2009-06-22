@@ -22,16 +22,12 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/PurchaseOrder/PurchaseOrder.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
-require_once('include/FormValidationUtil.php');
 
 global $app_strings,$mod_strings,$log,$theme,$currentModule;
 
-
-$focus = new PurchaseOrder();
+$focus = CRMEntity::getInstance($currentModule);
 $smarty = new vtigerCRM_Smarty();
 //added to fix the issue4600
 $searchurl = getBasic_Advance_SearchURL();
@@ -108,10 +104,6 @@ if(isset($_REQUEST['vendor_id']) && $_REQUEST['vendor_id']!='' && $_REQUEST['rec
 }
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-//retreiving the combo values array
-$comboFieldNames = Array('accounttype'=>'account_type_dom'
-                      ,'industry'=>'industry_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
 
 $disp_view = getView($focus->mode);
 $mode = $focus->mode;
@@ -167,9 +159,9 @@ elseif((isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '')) {
 	//this is to display the Product Details in first row when we create new PO from Product relatedlist
 	if($_REQUEST['return_module'] == 'Products')
 	{
-		$smarty->assign("PRODUCT_ID",$_REQUEST['product_id']);
+		$smarty->assign("PRODUCT_ID",vtlib_purify($_REQUEST['product_id']));
 		$smarty->assign("PRODUCT_NAME",getProductName($_REQUEST['product_id']));
-		$smarty->assign("UNIT_PRICE",$_REQUEST['product_id']);
+		$smarty->assign("UNIT_PRICE",vtlib_purify($_REQUEST['product_id']));
 		$smarty->assign("QTY_IN_STOCK",getPrdQtyInStck($_REQUEST['product_id']));
 		$smarty->assign("VAT_TAX",getProductTaxPercentage("VAT",$_REQUEST['product_id']));
 		$smarty->assign("SALES_TAX",getProductTaxPercentage("Sales",$_REQUEST['product_id']));
@@ -185,11 +177,11 @@ if(isset($cust_fld))
 
 		
 
-if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
 else $smarty->assign("RETURN_MODULE","PurchaseOrder");
-if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
-if(isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
-if (isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
+if(isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
+if (isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", vtlib_purify($_REQUEST['return_viewname']));
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("MODULE","PurchaseOrder");
@@ -226,7 +218,7 @@ $smarty->assign("SH_TAXES",$sh_tax_details);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
-$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
+$smarty->assign("DUPLICATE",vtlib_purify($_REQUEST['isDuplicate']));
 
 global $adb;
 // Module Sequence Numbering

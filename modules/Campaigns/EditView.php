@@ -1,22 +1,18 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
-require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('include/utils/utils.php');
-require_once('modules/Campaigns/Campaigns.php');
-require_once('include/FormValidationUtil.php');
+require_once('include/utils/utils.php');require_once('modules/Campaigns/Campaigns.php');
 
 global $app_strings,$mod_strings,$currentModule,$theme;
 
-$focus = new Campaigns();
+$focus = CRMEntity::getInstance($currentModule);
 $smarty = new vtigerCRM_Smarty();
 //added to fix the issue4600
 $searchurl = getBasic_Advance_SearchURL();
@@ -82,15 +78,15 @@ if($focus->mode == 'edit')
 }
 
 if(isset($_REQUEST['return_module'])) 
-$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+$smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
 if(isset($_REQUEST['return_action'])) 
-$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+$smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
 if(isset($_REQUEST['return_id'])) 
-$smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+$smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
 if(isset($_REQUEST['product_id'])) 
-$smarty->assign("PRODUCTID", $_REQUEST['product_id']);
+$smarty->assign("PRODUCTID", vtlib_purify($_REQUEST['product_id']));
 if (isset($_REQUEST['return_viewname'])) 
-$smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+$smarty->assign("RETURN_VIEWNAME", vtlib_purify($_REQUEST['return_viewname']));
 
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
@@ -106,7 +102,7 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
-$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
+$smarty->assign("DUPLICATE",vtlib_purify($_REQUEST['isDuplicate']));
 
 global $adb;
 // Module Sequence Numbering

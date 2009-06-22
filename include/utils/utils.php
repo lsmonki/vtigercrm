@@ -31,17 +31,18 @@
   * Contributor(s): ______________________________________..
   */
 
-  require_once('include/database/PearDatabase.php');
-  require_once('include/ComboUtil.php'); //new
-  require_once('include/utils/ListViewUtils.php');	
-  require_once('include/utils/EditViewUtils.php');
-  require_once('include/utils/DetailViewUtils.php');
-  require_once('include/utils/CommonUtils.php');
-  require_once('include/utils/InventoryUtils.php');
-  require_once('include/utils/SearchUtils.php');
-  require_once('include/FormValidationUtil.php');
-  require_once('include/DatabaseUtil.php');
-require_once("include/events/SqlResultIterator.inc");
+require_once('include/database/PearDatabase.php');
+require_once('include/ComboUtil.php'); //new
+require_once('include/utils/ListViewUtils.php');	
+require_once('include/utils/EditViewUtils.php');
+require_once('include/utils/DetailViewUtils.php');
+require_once('include/utils/CommonUtils.php');
+require_once('include/utils/InventoryUtils.php');
+require_once('include/utils/SearchUtils.php');
+require_once('include/FormValidationUtil.php');
+require_once('include/DatabaseUtil.php');
+require_once('include/events/SqlResultIterator.inc');
+require_once('data/CRMEntity.php');
  
 // Constants to be defined here
 
@@ -826,7 +827,6 @@ function get_themes() {
 				   	if(is_file("./themes/$file/config.php"))
 				   	{
 				   		require_once("./themes/$file/config.php");
-				   		$name = $theme_name;
 				   	}
 
 				   	if(is_file("./themes/$file/header.php"))
@@ -2915,6 +2915,7 @@ function escape_single_quotes($value) {
  * @return String formatted as per the SQL like clause requirement
  */
 function formatForSqlLike($str, $flag=0,$is_field=false) {
+	global $adb;
 	if (isset($str)) {
 		if($is_field==false){
 			$str = str_replace('%', '\%', $str);
@@ -2936,14 +2937,14 @@ function formatForSqlLike($str, $flag=0,$is_field=false) {
 			} 
 		}
 	}
-	return mysql_real_escape_string($str);
+	return $adb->sql_escape_string($str);
 }
 
 /**
  * Get Current Module (global variable or from request)
  */
 function getCurrentModule($perform_set=false) {
-	global $currentModule;
+	global $currentModule,$root_directory;
 	if(isset($currentModule)) return $currentModule;
 
 	// Do some security check and return the module information
@@ -3110,7 +3111,7 @@ function getMigrationCharsetFlag() {
 	return $db_migration_status;
 }
 
-/************ Function to convert a given time string to Minutes **************/
+/** Function to convert a given time string to Minutes */
 function ConvertToMinutes($time_string)
 {
 	$interval = split(' ', $time_string);
@@ -3129,131 +3130,88 @@ function ConvertToMinutes($time_string)
 
 //added to find duplicates
 /** To get the converted record values which have to be display in duplicates merging tpl*/
-function getRecordValues($id_array,$module)
-{
+function getRecordValues($id_array,$module) {
 	global $adb,$current_user;
 	global $app_strings;
 	$tabid=getTabid($module);	
-	$query="select fieldname,fieldlabel from vtiger_field where tabid=".$tabid." and fieldname  not in ('createdtime','modifiedtime') and vtiger_field.presence in (0,2) and uitype not in('4')";
-	$result=$adb->query($query);
+	$query="select fieldname,fieldlabel,uitype from vtiger_field where tabid=? and fieldname  not in ('createdtime','modifiedtime') and vtiger_field.presence in (0,2) and uitype not in('4')";
+	$result=$adb->pquery($query, array($tabid));
 	$no_rows=$adb->num_rows($result);
-
-	for($i=0;$i<$no_rows;$i++)
-		{
-			$fld_name=$adb->query_result($result,$i,"fieldname");
-			if(getFieldVisibilityPermission($module,$current_user->id,$fld_name) == '0')
-				$fld_array []= $fld_name;
 	
-		}
-	$js_arr = $fld_array;
 	$focus = new $module();
-	if(isset($id_array) && $id_array !='') 
-	{      
-		foreach($id_array as $value)
-			{
-				$focus->id=$value;
-				$focus->retrieve_entity_info($value,$module);
-				$field_values[]=$focus->column_fields;
-			
-			}
+	if(isset($id_array) && $id_array !='') {
+		foreach($id_array as $value) {
+			$focus->id=$value;
+			$focus->retrieve_entity_info($value,$module);
+			$field_values[]=$focus->column_fields;
+		}
 	}
-	$tabid=getTabid($module);	
-	$query="select fieldname,uitype,fieldlabel from vtiger_field where tabid=".$tabid." and fieldname not in ('createdtime','modifiedtime') and vtiger_field.presence in (0,2) and uitype not in('4')" ;
-
-	$result=$adb->query($query);
-	$no_rows=$adb->num_rows($result);
 	$labl_array=array();
 	$value_pair = array();
 	$c = 0;
-	for($i=0;$i<$no_rows;$i++)
-	{
+	for($i=0;$i<$no_rows;$i++) {
 		$fld_name=$adb->query_result($result,$i,"fieldname");
 		$fld_label=$adb->query_result($result,$i,"fieldlabel");
 		$ui_type=$adb->query_result($result,$i,"uitype");
 		
-		if(getFieldVisibilityPermission($module,$current_user->id,$fld_name) == '0')
-		{
+		if(getFieldVisibilityPermission($module,$current_user->id,$fld_name) == '0') {
+			$fld_array []= $fld_name;	
 			$record_values[$c][$fld_label] = Array();
 			$ui_value[]=$ui_type;
-			for($j=0;$j < count($field_values);$j++)
-			{
+			for($j=0;$j < count($field_values);$j++) {
 				
-				if($ui_type ==56)
-				{
+				if($ui_type ==56) {
 					if($field_values[$j][$fld_name] == 0)
 						$value_pair['disp_value']=$app_strings['no'];
 					else
-						$value_pair['disp_value']=$app_strings['yes'];
-					
-				}
-				elseif($ui_type == 51 || $ui_type == 50)
-				{
+						$value_pair['disp_value']=$app_strings['yes'];					
+				} elseif($ui_type == 51 || $ui_type == 50) {
 					$entity_id=$field_values[$j][$fld_name];
 					if($module !='Products')
 						$entity_name=getAccountName($entity_id);
 					else
-						$entity_name=getProductName($entity_id);
-					
+						$entity_name=getProductName($entity_id);					
 					$value_pair['disp_value']=$entity_name;	
-				}	
-				elseif($ui_type == 53)
-				{
+				} elseif($ui_type == 53) {
 					$owner_id=$field_values[$j][$fld_name];
 					$ownername=getOwnerName($owner_id);
 					$value_pair['disp_value']=$ownername;
-				}				
-				elseif($ui_type ==57)
-				{
+				} elseif($ui_type ==57) {
 					$contact_id= $field_values[$j][$fld_name];		
-					if($contact_id != '')
-						{
-							$contactname=getContactName($contact_id);
-						}
-						
+					if($contact_id != '') {
+						$contactname=getContactName($contact_id);
+					}						
 					$value_pair['disp_value']=$contactname;
-				}
-				elseif($ui_type == 75 || $ui_type ==81)
-				{
+				} elseif($ui_type == 75 || $ui_type ==81) {
 					$vendor_id=$field_values[$j][$fld_name];
-					if($vendor_id != '')
-						{
-							$vendor_name=getVendorName($vendor_id);
-						}	
+					if($vendor_id != '') {
+						$vendor_name=getVendorName($vendor_id);
+					}	
 					$value_pair['disp_value']=$vendor_name;
-				}	
-						
-				elseif($ui_type == 52)
-				{
+				} elseif($ui_type == 52) {
 					$user_id = $field_values[$j][$fld_name];
 					$user_name=getUserName($user_id);
 					$value_pair['disp_value']=$user_name;
-
-				}
-				elseif($ui_type ==68)
-				{
+				} elseif($ui_type ==68) {
 					$parent_id = $field_values[$j][$fld_name];
 					$value_pair['disp_value'] = getAccountName($parent_id);
 					if($value_pair['disp_value'] == '' || $value_pair['disp_value'] == NULL)
-						$value_pair['disp_value'] = getContactName($parent_id);
-					
-				}
-				elseif($ui_type ==59)
-				{
+						$value_pair['disp_value'] = getContactName($parent_id);					
+				} elseif($ui_type ==59) {
 					$product_name=getProductName($field_values[$j][$fld_name]);
 					if($product_name != '')
 						$value_pair['disp_value']=$product_name;
 					else $value_pair['disp_value']='';
-				}
-				elseif($ui_type==58)
-				{
+				} elseif($ui_type==58) {
 					$campaign_name=getCampaignName($field_values[$j][$fld_name]);
 					if($campaign_name != '')
 						$value_pair['disp_value']=$campaign_name;
 					else $value_pair['disp_value']='';
-				}elseif($ui_type == 10){
+				} elseif($ui_type == 10) {
 					$value_pair['disp_value'] = getRecordInfoFromID($field_values[$j][$fld_name]);
-				}else
+				} else {
 					$value_pair['disp_value']=$field_values[$j][$fld_name];
+				}
 				$value_pair['org_value'] = $field_values[$j][$fld_name];
 
 				array_push($record_values[$c][$fld_label],$value_pair);
@@ -3263,7 +3221,7 @@ function getRecordValues($id_array,$module)
 
 	}
 	$parent_array[0]=$record_values;
-	$parent_array[1]=$js_arr;
+	$parent_array[1]=$fld_array;
 	$parent_array[2]=$fld_array;
 	return $parent_array;
 }
@@ -3460,9 +3418,7 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 			$ret_arr = get_special_on_clause($field_values);
 			$select_clause = $ret_arr['sel_clause'];
 			$on_clause = $ret_arr['on_clause'];
-			checkFileAccess("modules/$module/$module.php");
-			require_once("modules/$module/$module.php");
-			$modObj = new $module();
+			$modObj = CRMEntity::getInstance($module);
 			if ($modObj != null && method_exists($modObj, 'getDuplicatesQuery')) {
 				$nquery = $modObj->getDuplicatesQuery($module,$table_cols,$field_values,$ui_type_arr,$select_clause);
 			}
@@ -3631,9 +3587,7 @@ function getDuplicateQuery($module,$field_values,$ui_type_arr)
 				ON ".get_on_clause($field_values,$ui_type_arr,$module) ."
                                 WHERE vtiger_crmentity.deleted=0  ORDER BY $table_cols,vtiger_vendor.vendorid ASC";
 		} else {
-			checkFileAccess("modules/$module/$module.php");
-			require_once("modules/$module/$module.php");
-			$modObj = new $module();
+			$modObj = CRMEntity::getInstance($module);
 			if ($modObj != null && method_exists($modObj, 'getDuplicatesQuery')) {
 				$nquery = $modObj->getDuplicatesQuery($module,$table_cols,$field_values,$ui_type_arr);
 			}
@@ -4305,8 +4259,8 @@ function addToCallHistory($userExtension, $callfrom, $callto, $status, $adb){
 	
 	if($status == 'outgoing'){
 		//call is from user to record
-		$sql = "select * from vtiger_asteriskextensions where asterisk_extension=$callfrom";
-		$result = $adb->query($sql);
+		$sql = "select * from vtiger_asteriskextensions where asterisk_extension=?";
+		$result = $adb->pquery($sql, array($callfrom));
 		if($adb->num_rows($result)>0){
 			$userid = $adb->query_result($result, 0, "userid");
 			$callerName = getUserFullName($userid);
@@ -4323,8 +4277,8 @@ function addToCallHistory($userExtension, $callfrom, $callto, $status, $adb){
 		}
 	}else{
 		//call is from record to user
-		$sql = "select * from vtiger_asteriskextensions where asterisk_extension=$callto";
-		$result = $adb->query($sql);
+		$sql = "select * from vtiger_asteriskextensions where asterisk_extension=?";
+		$result = $adb->pquery($sql,array($callto));
 		if($adb->num_rows($result)>0){
 			$userid = $adb->query_result($result, 0, "userid");
 			$receiver = getUserFullName($userid);
@@ -4372,8 +4326,8 @@ function getSettingsBlocks(){
  */
 function getSettingsFields(){
 	global $adb;
-	$sql = "select * from vtiger_settings_field where blockid!=".getSettingsBlockId('LBL_MODULE_MANAGER')." and active=0 order by blockid,sequence";
-	$result = $adb->query($sql);
+	$sql = "select * from vtiger_settings_field where blockid!=? and active=0 order by blockid,sequence";
+	$result = $adb->pquery($sql, array(getSettingsBlockId('LBL_MODULE_MANAGER')));
 	$count = $adb->num_rows($result);
 	$fields = array();
 	
@@ -4493,7 +4447,6 @@ function getFieldsResultForMerge($tabid) {
  * */
 function getRelationTables($module,$secmodule){
 	global $adb;
-	require_once("data/CRMEntity.php");
 	$primary_obj = CRMEntity::getInstance($module);
 	$secondary_obj = CRMEntity::getInstance($secmodule);
 	

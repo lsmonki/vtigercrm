@@ -1,29 +1,26 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 global $adb;
 global $log, $current_user;
 
-$cvid = (int) $_REQUEST["record"];
-$cvmodule = $_REQUEST["cvmodule"];
-$parenttab = $_REQUEST["parenttab"];
-$return_action = $_REQUEST["return_action"];
+$cvid = (int) vtlib_purify($_REQUEST["record"]);
+$cvmodule = vtlib_purify($_REQUEST["cvmodule"]);
+$parenttab = getParentTab();
+$return_action = vtlib_purify($_REQUEST["return_action"]);
 if($cvmodule != "") {
 	$cv_tabid = getTabid($cvmodule);
-	if(strtolower($default_charset) == 'utf-8')
-		$viewname = $_REQUEST["viewName"];
-	else
-		$viewname = htmlentities($_REQUEST["viewName"]);
+	$viewname = vtlib_purify($_REQUEST["viewName"]);
+	if(strtolower($default_charset) != 'utf-8')
+		$viewname = htmlentities($viewname);
 
 	//setStatus=0(Default);1(Private);2(Pending);3(Public).
 	//If status is Private ie. 1, only the user created the customview can see it

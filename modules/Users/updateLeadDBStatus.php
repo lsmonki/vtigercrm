@@ -1,30 +1,26 @@
 <?php
-
-/*********************************************************************************
- ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *
  ********************************************************************************/
 
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 $idlist= $_REQUEST['idlist'];
 $leadstatusval = $_REQUEST['leadval'];
-$viewid = $_REQUEST['viewname'];
-$return_module = $_REQUEST['return_module'];
-$return_action = $_REQUEST['return_action'];
+$viewid = vtlib_purify($_REQUEST['viewname']);
+$return_module = vtlib_purify($_REQUEST['return_module']);
+$return_action = vtlib_purify($_REQUEST['return_action']);
 global $rstart;
 //Added to fix 4600
 $url = getBasic_Advance_SearchURL();
 
-if(isset($_REQUEST['start']) && $_REQUEST['start']!='')
-{
-	$rstart="&start=".$_REQUEST['start'];
+if(isset($_REQUEST['start']) && $_REQUEST['start']!='') {
+	$rstart="&start=".vtlib_purify($_REQUEST['start']);
 }
 
 global $current_user;
@@ -85,30 +81,24 @@ elseif(isset($_REQUEST['leadval']) && $_REQUEST['leadval']!='')
 
 	}
 }
-if(count($ids_list) > 0)
-{
+if(count($ids_list) > 0) {
 	$ret_owner = getEntityName($return_module,$ids_list);
-        $errormsg = implode(',',$ret_owner);
-}else
-{
-        $errormsg = '';
+	$errormsg = implode(',',$ret_owner);
+} else {
+	$errormsg = '';
 }
-if($return_action == 'ActivityAjax')
-{
-	$view       = $_REQUEST['view'];
-	$day        = $_REQUEST['day'];
-	$month      = $_REQUEST['month'];
-	$year       = $_REQUEST['year'];
-	$type       = $_REQUEST['type'];
-	$viewOption = $_REQUEST['viewOption'];
-	$subtab     = $_REQUEST['subtab'];
+if($return_action == 'ActivityAjax') {
+	$view       = vtlib_purify($_REQUEST['view']);
+	$day        = vtlib_purify($_REQUEST['day']);
+	$month      = vtlib_purify($_REQUEST['month']);
+	$year       = vtlib_purify($_REQUEST['year']);
+	$type       = vtlib_purify($_REQUEST['type']);
+	$viewOption = vtlib_purify($_REQUEST['viewOption']);
+	$subtab     = vtlib_purify($_REQUEST['subtab']);
 	
 	header("Location: index.php?module=$return_module&action=".$return_action."&type=".$type.$rstart."&view=".$view."&day=".$day."&month=".$month."&year=".$year."&viewOption=".$viewOption."&subtab=".$subtab.$url);
-}
-else
-{
+} else {
 	header("Location: index.php?module=$return_module&action=".$return_module."Ajax&file=ListView&ajax=changestate".$rstart."&viewname=".$viewid."&errormsg=".$errormsg.$url);
 }
-				
 
 ?>

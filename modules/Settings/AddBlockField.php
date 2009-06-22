@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
  
 require_once('include/CustomFieldUtil.php');
@@ -18,12 +17,11 @@ global $mod_strings,$app_strings,$app_list_strings,$theme,$adb,$log;
 $theme_path="themes/".$theme."/";
 
 require_once($theme_path.'layout_utils.php');
-$log->debug("inaddfield".print_r($_REQUEST,true));
-$tabid=$_REQUEST['tabid'];
-$mode = $_REQUEST['mode'];
-$fieldid=$_REQUEST['fieldselect'];
+$tabid=vtlib_purify($_REQUEST['tabid']);
+$mode = vtlib_purify($_REQUEST['mode']);
+$fieldid=vtlib_purify($_REQUEST['fieldselect']);
 if(isset($_REQUEST['uitype']) && $_REQUEST['uitype'] != '')
-	$uitype=$_REQUEST['uitype'];
+	$uitype=vtlib_purify($_REQUEST['uitype']);
 else
 	$uitype=1;
 $readonly = '';
@@ -47,7 +45,7 @@ if($_REQUEST['mode']=='edit')
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("THEME", $theme);
-$smarty->assign("FLD_MODULE", $_REQUEST['fld_module']);
+$smarty->assign("FLD_MODULE", vtlib_purify($_REQUEST['fld_module']));
 
 $output = '';
 
@@ -58,12 +56,12 @@ $combo_output = '';
 $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script language="JavaScript" type="text/javascript" src="include/js/customview.js"></script>
 			<form action="index.php" method="post" name="addtodb" onsubmit="VtigerJS_DialogBox.block();">
 			<input type="hidden" name="module" value="Settings">
-			<input type="hidden" name="fld_module" value="'.$_REQUEST['fld_module'].'">
+			<input type="hidden" name="fld_module" value="'.vtlib_purify($_REQUEST['fld_module']).'">
 			<input type="hidden" name="parenttab" value="Settings">
 			<input type="hidden" name="action" value="AddBlockFieldToDB">
-			<input type="hidden" name="blockid" id="blockid" value="'.$_REQUEST['blockid'].'">
-			<input type="hidden" name="tabid" id="tabid" value="'.$_REQUEST['tabid'].'">
-			<input type="hidden" name="fieldselect" value="'.$_REQUEST['fieldselect'].'">
+			<input type="hidden" name="blockid" id="blockid" value="'.vtlib_purify($_REQUEST['blockid']).'">
+			<input type="hidden" name="tabid" id="tabid" value="'.vtlib_purify($_REQUEST['tabid']).'">
+			<input type="hidden" name="fieldselect" value="'.vtlib_purify($_REQUEST['fieldselect']).'">
 			<input type="hidden" name="column" value="'.$customfield_columnname.'">
 			<input type="hidden" name="mode" id="cfedit_mode" value="'.$mode.'">
 			<input type="hidden" name="cfcombo" id="selectedfieldtype" value="">
@@ -74,7 +72,7 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 			if($mode == 'edit')
 				$output .= '<td width="60%" align="left" class="layerPopupHeading">Edit Field</td>';
 			else
-				$output .= '<td width="95%" align="left" class="layerPopupHeading">'.getTranslatedString('LBL_MOVE_BLOCK_FIELD').$_REQUEST['blockname'].'</td>';
+				$output .= '<td width="95%" align="left" class="layerPopupHeading">'.getTranslatedString('LBL_MOVE_BLOCK_FIELD').vtlib_purify($_REQUEST['blockname']).'</td>';
 				
 			$output .= '<td width="5%" align="right"><a href="javascript:fninvsh(\'orgLay\');"><img src="'. vtiger_imageurl('close.gif', $theme) .'" border="0"  align="absmiddle" /></a></td>
 			</tr>';
@@ -85,60 +83,12 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 										<tr>';
 			if($mode != 'edit')
 		    {						
-			$output .= '<td><table>
+				$output .= '<td><table>
 					<tr><td>'.getTranslatedString('LBL_SELECT_FIELD_TO_MOVE').'</td></tr>
 					<tr><td>COMBO_OUTPUT_CHANGE</td></tr>
 					</table></td>';
 			}
-//			if($mode == 'edit')
-//			{
-//			$output .='<td width="50%">
-//					<table width="100%" border="0" cellpadding="5" cellspacing="0">
-//						<tr>
-//							<td class="dataLabel" nowrap="nowrap" align="right" width="30%"><b>'.$mod_strings['LBL_LABEL'].' </b></td>
-//							<td align="left" width="70%"><input name="fldLabel" id="fldLabel" value="'.$customfield_fieldlabel.'" type="text" class="txtBox"></td>
-//						</tr>';
-//					
-//						switch($uitype)
-//						{
-//							case 1:
-//								$output .= '<tr id="lengthdetails">
-//									<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_LENGTH'].'</b></td>
-//									<td align="left"><input type="text" name="fldLength" value="'.$fieldlength.'" '.$readonly.' class="txtBox"></td>
-//								</tr>';
-//								break;
-//							case 71:
-//							case 9:
-//							case 7:
-//								$output .= '<tr id="lengthdetails">
-//									<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_LENGTH'].'</b></td>
-//									<td align="left"><input type="text" name="fldLength" value="'.$fieldlength.'" '.$readonly.' class="txtBox"></td>
-//								</tr>';
-//								$output .= '<tr id="decimaldetails">
-//									<td class="dataLabel" nowrap="nowrap" align="right"><b>'.$mod_strings['LBL_DECIMAL_PLACES'].'</b></td>
-//									<td align="left"><input type="text" name="fldDecimal" value="'.$decimalvalue.'" '.$readonly.' class="txtBox"></td>
-//								</tr>';
-//								break;
-//							case 33:
-//							//case 15:
-//							//	$output .= '<tr id="picklist">
-//							//		<td class="dataLabel" nowrap="nowrap" align="right" valign="top"><b>'.$mod_strings['LBL_PICK_LIST_VALUES'].'</b></td>
-//							//	</tr>';
-//							//	break;
-//								
-//						}
-//					}else{		
-//			
-//						
-//			$output .='<td width="70%">
-//					<table width="100%" border="0" cellpadding="0" cellspacing="0">
-//						<tr>
-//							<td  align="left" width="100%"><b>'.getTranslatedString('LBL_ASSIGN_FIELD_DESCRIPTION').'</b></td></tr>';
-//					
-//					</table>
-//				</td>
-//				}
-				$output .= '</tr>
+			$output .= '</tr>
 			</table>
 		</td>
 	</tr>
@@ -146,10 +96,7 @@ $output .= '<div id="orgLay" style="display:block;" class="layerPopup"><script l
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerPopupTransport">
 			<tr>
 				<td align="center">';
-				//if($mode != 'edit')
-				$output .= '<input type="submit" name="save" value=" &nbsp; '.$app_strings['LBL_ASSIGN_BUTTON_LABEL'].' &nbsp; " class="crmButton small save" />';
-				//else
-				//$output .= '<input type="submit" name="save" value=" &nbsp; '.$app_strings['LBL_SAVE_BUTTON_LABEL'].'&nbsp; " class="crmButton small save" />';
+					$output .= '<input type="submit" name="save" value=" &nbsp; '.$app_strings['LBL_ASSIGN_BUTTON_LABEL'].' &nbsp; " class="crmButton small save" />';
 					$output .= '&nbsp;
 					<input type="button" name="cancel" value=" '.$app_strings['LBL_CANCEL_BUTTON_LABEL'].' " class="crmButton small cancel" onclick="fninvsh(\'orgLay\');" />
 				</td>
@@ -174,23 +121,14 @@ function InStrCount($String,$Find,$CaseSensitive = false) {
     }
     return $x;
    }
-
-//include('modules/'.$_REQUEST['fld_module'].'/language/'.$_SESSION['authenticated_user_language'].'.lang.php');
-	
-//$custom_flag=InStrCount($customfield_columnname,'cf_',true);
-
-//if($custom_flag == 0)
-//$output=str_replace('CHANGE_FIELDLABEL',$mod_strings[$customfield_fieldlabel],$output);	
-//else
-//$output=str_replace('CHANGE_FIELDLABEL',$customfield_fieldlabel,$output);	
  
-$sql="SELECT fieldid,fieldlabel,fieldname FROM vtiger_field WHERE tabid='".$_REQUEST[tabid]."' AND block NOT IN ('".$_REQUEST[blockid]."') AND block NOT IN (SELECT blockid from vtiger_blocks where blocklabel='LBL_RELATED_PRODUCTS') AND displaytype in (1,2,4) and vtiger_field.presence in (0,2) ORDER BY fieldlabel ASC"; // added by projjwal on 22-11-2007
-$res= $adb->pquery($sql,array());
+$sql="SELECT fieldid,fieldlabel,fieldname FROM vtiger_field WHERE tabid=? AND block != ? AND block NOT IN (SELECT blockid from vtiger_blocks where blocklabel='LBL_RELATED_PRODUCTS') AND displaytype in (1,2,4) and vtiger_field.presence in (0,2) ORDER BY fieldlabel ASC"; // added by projjwal on 22-11-2007
+$res= $adb->pquery($sql,array($_REQUEST['tabid'], $_REQUEST['blockid']));
 
 $combo_output='<select name="field_assignid[]" style="width:250px" size=10 multiple>';// added by projjwal on 22-11-2007
 while($row_field = $adb->fetch_array($res))
 {
-	$combo_output.='<option value="'.$row_field[fieldid].'">'.getTranslatedString($row_field[fieldlabel]).'</option>'; 
+	$combo_output.='<option value="'.$row_field['fieldid'].'">'.getTranslatedString($row_field['fieldlabel'],$_REQUEST['fld_module']).'</option>'; 
 }
 $combo_output.='</select>';
 

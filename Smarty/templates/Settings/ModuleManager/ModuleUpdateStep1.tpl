@@ -63,7 +63,7 @@ function modulemanager_update_validate(form) {
 								<input type="hidden" name="action" value="ModuleManager">
 								<input type="hidden" name="module_update" value="Step2">
 								<input type="hidden" name="parenttab" value="Settings">
-								<input type="hidden" name="target_modulename" value="{$smarty.request.src_module}">
+								<input type="hidden" name="target_modulename" value="{$smarty.request.src_module|@vtlib_purify}">
 								
 								<input type="submit" class="crmbutton small edit" value="{$MOD.LBL_UPGRADE}" onclick="return modulemanager_update_validate(this.form)">
 								<input type="submit" class="crmbutton small delete" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" 

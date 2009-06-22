@@ -1,16 +1,14 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-* 
  ********************************************************************************/
 
 require_once 'Smarty_setup.php';
-require_once 'include/database/PearDatabase.php';
 require_once 'include/utils/utils.php';
 require_once 'modules/Tooltip/TooltipUtils.php';
 
@@ -26,8 +24,8 @@ $smarty=new vtigerCRM_Smarty;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-$module_name = $_REQUEST['module_name'];
-$field_name = $_REQUEST['field_name'];
+$module_name = vtlib_purify($_REQUEST['module_name']);
+$field_name = vtlib_purify($_REQUEST['field_name']);
 
 $related_fields = getFieldList($module_name,$field_name);
 
@@ -40,7 +38,7 @@ $fieldid = $adb->query_result($result,0,"fieldid");
 
 $fieldlist[$module_name] = getRelatedFieldslist($fieldid, $related_fields);
 if($_REQUEST['module_name'] != ''){
-	$smarty->assign("DEF_MODULE",$_REQUEST['module_name']);
+	$smarty->assign("DEF_MODULE",vtlib_purify($_REQUEST['module_name']));
 }else{
 	$smarty->assign("DEF_MODULE",'Accounts');
 }

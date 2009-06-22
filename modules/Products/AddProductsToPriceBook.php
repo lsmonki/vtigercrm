@@ -1,27 +1,23 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
-require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 require_once('modules/Products/Products.php');
 require_once('include/utils/utils.php');
-require_once('include/utils/utils.php');
-require_once('include/ComboUtil.php');
 
-global $app_strings,$mod_strings,$current_language,$theme,$log,$current_user,$default_charset;
+global $app_strings,$mod_strings,$current_language,$theme,$log,$current_user,$default_charset,$adb;
 $current_module_strings = return_module_language($current_language, 'Products');
 
-$pricebook_id = $_REQUEST['pricebook_id'];
-$currency_id = $_REQUEST['currency_id'];
+$pricebook_id = vtlib_purify($_REQUEST['pricebook_id']);
+$currency_id = vtlib_purify($_REQUEST['currency_id']);
 if ($currency_id == null) $currency_id = fetchCurrency($current_user->id);
-$parenttab = htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset);
+$parenttab = getParentTab();
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -57,12 +53,13 @@ $smarty->assign("IMAGE_PATH",$image_path);
 
 $focus = new Products();
 
-if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+if (isset($_REQUEST['order_by'])) 
+	$order_by = $adb->sql_escape_string($_REQUEST['order_by']);
 
 $url_string = ''; // assigning http url string
 $sorder = 'ASC';  // Default sort order
 if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-$sorder = $_REQUEST['sorder'];
+	$sorder = $adb->sql_escape_string($_REQUEST['sorder']);
 
 
 //Retreive the list of Products 
@@ -188,7 +185,5 @@ $smarty->assign("LISTENTITY", $list_body);
 $smarty->assign("CATEGORY", $parenttab);
 
 $smarty->display("AddProductsToPriceBook.tpl");
-
-
 
 ?>

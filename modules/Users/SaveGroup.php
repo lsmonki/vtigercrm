@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
@@ -111,7 +110,7 @@ function constructGroupMemberArray($member_array)
 		$groupMemberArray=constructGroupMemberArray($member_array);
 		updateGroup($groupId,$groupName,$groupMemberArray,$description);
 
-		$loc = "Location: index.php?action=".$returnaction."&module=Settings&parenttab=Settings&groupId=".$groupId;
+		$loc = "Location: index.php?action=".vtlib_purify($returnaction)."&module=Settings&parenttab=Settings&groupId=".vtlib_purify($groupId);
 	}
 	elseif(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'create')
 	{
@@ -119,7 +118,7 @@ function constructGroupMemberArray($member_array)
 		$member_array = explode(';',$selected_col_string);
 		$groupMemberArray=constructGroupMemberArray($member_array);
 		$groupId=createGroup($groupName,$groupMemberArray,$description);
-		$loc = "Location: index.php?action=".$returnaction."&parenttab=Settings&module=Settings&groupId=".$groupId; 	 
+		$loc = "Location: index.php?action=".vtlib_purify($returnaction)."&parenttab=Settings&module=Settings&groupId=".vtlib_purify($groupId); 	 
 
 	}
 

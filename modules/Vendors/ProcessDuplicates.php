@@ -9,14 +9,12 @@
 *
  ********************************************************************************/
 require_once('Smarty_setup.php');
-require_once('include/database/PearDatabase.php');
 require_once('database/DatabaseConnection.php');
 require_once('modules/Users/Users.php');
 require_once('include/utils/utils.php');
 
-$module=$_REQUEST['module'];
-checkFileAccess("modules/$module/$module.php");
-require_once("modules/$module/$module.php");
+$module = vtlib_purify($_REQUEST['module']);
+$focus = CRMEntity::getInstance($module);
 
 global $mod_strings, $app_strings, $app_list_strings;
 global $current_language, $currentModule, $theme;
@@ -29,13 +27,12 @@ $mode = $_REQUEST['mergemode'];
 
 if($mode == 'mergesave') {
 
-	$return_module=$_REQUEST['return_module'];
-	$action=$_REQUEST['action'];
-	$return_action=$_REQUEST['return_action'];
-	$parenttab=$_REQUEST['parent'];
-	$merge_id=$_REQUEST['record'];
-	$focus = new $module();
-	$recordids=$_REQUEST['pass_rec'];
+	$return_module=vtlib_purify($_REQUEST['return_module']);
+	$action=vtlib_purify($_REQUEST['action']);
+	$return_action=vtlib_purify($_REQUEST['return_action']);
+	$parenttab=vtlib_purify($_REQUEST['parent']);
+	$merge_id=vtlib_purify($_REQUEST['record']);
+	$recordids=vtlib_purify($_REQUEST['pass_rec']);
 	
 	$result =  $adb->pquery("SELECT count(*) AS count FROM vtiger_crmentity WHERE crmid=? and deleted=0", array($merge_id));
 	$count = $adb->query_result($result,0,'count');
@@ -43,7 +40,6 @@ if($mode == 'mergesave') {
 	if($count > 0)
 	{	
 		// First, save the primary record
-		$focus = new $module();	
 		$focus->mode="edit";
 		setObjectValuesFromRequest($focus);
 		$focus->save($module);
@@ -75,8 +71,8 @@ if($mode == 'mergesave') {
 <?php
 } elseif ($mode == 'mergefields') {
 	
-	$idstring=$_REQUEST['passurl'];
-	$parent_tab=$_REQUEST['parenttab'];
+	$idstring=vtlib_purify($_REQUEST['passurl']);
+	$parent_tab=getParentTab();
 
 	$exploded_id=explode(",",$idstring,-1);
 	$record_count = count($exploded_id);

@@ -18,12 +18,9 @@ require_once("data/Tracker.php");
 require_once('modules/Accounts/Accounts.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
-require_once('include/database/PearDatabase.php');
-require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('include/database/Postgres8.php');
-require_once('include/DatabaseUtil.php');
 
 global $app_strings;
 global $list_max_entries_per_page;
@@ -60,7 +57,7 @@ if(!$_SESSION['lvs'][$currentModule])
 
 if($_REQUEST['errormsg'] != '')
 {
-        $errormsg = $_REQUEST['errormsg'];
+        $errormsg = vtlib_purify($_REQUEST['errormsg']);
         $smarty->assign("ERROR","The User does not have permission to Change/Delete ".$errormsg." ".$currentModule);
 }else
 {
@@ -339,8 +336,8 @@ $smarty->assign("AVALABLE_FIELDS", getMergeFields($currentModule,"available_fiel
 $smarty->assign("FIELDS_TO_MERGE", getMergeFields($currentModule,"fileds_to_merge"));
 
 //Added to select Multiple records in multiple pages
-$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
-$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
+$smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
 $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Accounts","index",$viewid);

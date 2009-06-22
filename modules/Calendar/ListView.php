@@ -28,7 +28,6 @@ require_once('include/ListView/ListView.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('modules/Calendar/CalendarCommon.php');
-require_once('include/database/PearDatabase.php');
 
 global $app_strings;
 global $list_max_entries_per_page;
@@ -37,7 +36,7 @@ $log = LoggerManager::getLogger('task_list');
 
 global $currentModule,$image_path,$theme,$adb;
 
-if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
+if (isset($_REQUEST['current_user_only'])) $current_user_only = vtlib_purify($_REQUEST['current_user_only']);
 
 $focus = new Activity();
 // Initialize sort by fields
@@ -57,7 +56,7 @@ if(!$_SESSION['lvs'][$currentModule])
 
 if($_REQUEST['errormsg'] != '')
 {
-        $errormsg = $_REQUEST['errormsg'];
+        $errormsg = vtlib_purify($_REQUEST['errormsg']);
         $smarty->assign("ERROR",$mod_strings["SHARED_EVENT_DEL_MSG"]);
 }else
 {
@@ -180,19 +179,15 @@ if (isset($_REQUEST['from_homepage'])) {
 
 $list_query .= ' group by vtiger_activity.activityid having vtiger_activity.activitytype != "Emails"';
 
-if(isset($order_by) && $order_by != '')
-{
-	if($order_by == 'smownerid')
-        {
-                $list_query .= ' ORDER BY user_name '.$sorder;
-        }
-        else
-        {
+if(isset($order_by) && $order_by != '') {
+	if($order_by == 'smownerid') {
+		$list_query .= ' ORDER BY user_name '.$sorder;
+	} else {
 		$tablename = getTableNameForField('Calendar',$order_by);
 		$tablename = (($tablename != '')?($tablename."."):'');
 		if($order_by == 'lastname')
-         		$list_query .= ' ORDER BY vtiger_contactdetails.lastname '.$sorder;
-	        else
+         	$list_query .= ' ORDER BY vtiger_contactdetails.lastname '.$sorder;
+		else
 			$list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder; 
 	}
 }
@@ -210,8 +205,8 @@ $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("NEW_EVENT",$app_strings['LNK_NEW_EVENT']);
 $smarty->assign("NEW_TASK",$app_strings['LNK_NEW_TASK']);
 
-//Retreiving the no of rows
-$count_result = $adb->query("select count(*) count,vtiger_activity.activitytype ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query))); 
+//Retreiving the no of rows - We need to rely on activitytype instead of activityid as we are using having clause on this column to eliminate activities of type Emails
+$count_result = $adb->query("select vtiger_activity.activityid, vtiger_activity.activitytype ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query))); 
 $noofrows = $adb->num_rows($count_result); 
 
 //Storing Listview session object
@@ -266,8 +261,8 @@ $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
 //Added to select Multiple records in multiple pages
-$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
-$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
+$smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
 $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
 $navigationOutput = getTableHeaderNavigation($navigation_array,$url_string,"Calendar","ListView",$viewid);

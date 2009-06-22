@@ -1,21 +1,23 @@
 <?PHP
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
- require_once('include/utils/utils.php');
+
+require_once('include/utils/utils.php');
  
 /* Function to get a list of modules that is supporting Customer Portal
  */
 function cp_getPortalModuleinfo(){
  	global $adb;
 	
-	$query = $adb->query("SELECT vtiger_customerportal_tabs.*,vtiger_tab.name from vtiger_customerportal_tabs INNER JOIN vtiger_tab ON vtiger_customerportal_tabs.tabid = vtiger_tab.tabid and vtiger_tab.presence = 0 ORDER BY vtiger_customerportal_tabs.sequence");
+	$query = $adb->query("SELECT vtiger_customerportal_tabs.*,vtiger_tab.name from vtiger_customerportal_tabs 
+							INNER JOIN vtiger_tab ON vtiger_customerportal_tabs.tabid = vtiger_tab.tabid and vtiger_tab.presence = 0 
+							ORDER BY vtiger_customerportal_tabs.sequence");
 	$rows = $adb->num_rows($query);
 	for($i = 0;$i < $rows; $i++){
 		$portalmodules[$i]['tabid']  = $adb->query_result($query,$i,'tabid');
@@ -33,25 +35,25 @@ function cp_changeTabOrder($tabid,$move) {
  	global $adb,$log;
  	$log->fatal("$tabid,$move");
  	if($move == 'Down'){
- 		$sequence = $adb->query("SELECT sequence FROM vtiger_customerportal_tabs WHERE tabid = $tabid");
+ 		$sequence = $adb->pquery("SELECT sequence FROM vtiger_customerportal_tabs WHERE tabid = ?", array($tabid));
  		$oldsequence = $adb->query_result($sequence,0,'sequence');
  		
- 		$nexttab = $adb->query("SELECT sequence,tabid FROM vtiger_customerportal_tabs WHERE sequence > $oldsequence ORDER BY SEQUENCE LIMIT 0,1"); 
+ 		$nexttab = $adb->pquery("SELECT sequence,tabid FROM vtiger_customerportal_tabs WHERE sequence > ? ORDER BY SEQUENCE LIMIT 0,1", array($oldsequence)); 
  		$newsequence = $adb->query_result($nexttab,0,'sequence');
  		$righttabid = $adb->query_result($nexttab,0,'tabid');
  		
- 		$adb->query("UPDATE vtiger_customerportal_tabs set sequence=$newsequence WHERE tabid = $tabid");
- 		$adb->query("UPDATE vtiger_customerportal_tabs set sequence=$oldsequence WHERE tabid = $righttabid");
+ 		$adb->pquery("UPDATE vtiger_customerportal_tabs set sequence=? WHERE tabid = ?", array($newsequence, $tabid));
+ 		$adb->pquery("UPDATE vtiger_customerportal_tabs set sequence=? WHERE tabid = ?", array($oldsequence, $righttabid));
  	}elseif ($move == 'Up') {
- 		$sequence = $adb->query("SELECT sequence FROM vtiger_customerportal_tabs WHERE tabid = $tabid");
+ 		$sequence = $adb-pquery("SELECT sequence FROM vtiger_customerportal_tabs WHERE tabid = ?", array($tabid));
  		$oldsequence = $adb->query_result($sequence,0,'sequence');
  		
- 		$nexttab = $adb->query("SELECT sequence,tabid FROM vtiger_customerportal_tabs WHERE sequence < $oldsequence ORDER BY SEQUENCE DESC LIMIT 0,1"); 
+ 		$nexttab = $adb->pquery("SELECT sequence,tabid FROM vtiger_customerportal_tabs WHERE sequence < ? ORDER BY SEQUENCE DESC LIMIT 0,1", array($oldsequence)); 
  		$newsequence = $adb->query_result($nexttab,0,'sequence');
  		$lefttabid = $adb->query_result($nexttab,0,'tabid');
  		
- 		$adb->query("UPDATE vtiger_customerportal_tabs SET sequence=$newsequence WHERE tabid = $tabid");
- 		$adb->query("UPDATE vtiger_customerportal_tabs SET sequence=$oldsequence WHERE tabid = $lefttabid");
+ 		$adb->pquery("UPDATE vtiger_customerportal_tabs SET sequence=? WHERE tabid = ?", array($newsequence, $tabid));
+ 		$adb->pquery("UPDATE vtiger_customerportal_tabs SET sequence=? WHERE tabid = ?", array($oldsequence, $lefttabid));
  	
  	}
  	
@@ -62,7 +64,9 @@ function cp_changeTabOrder($tabid,$move) {
  
 function cp_getContactsViewInfo() {
 	global $adb;
-	$relatedinfo = $adb->query("SELECT vtiger_customerportal_prefs.*,vtiger_tab.name FROM vtiger_customerportal_prefs INNER JOIN vtiger_tab ON vtiger_tab.tabid = vtiger_customerportal_prefs.tabid  WHERE prefkey = 'showrelatedinfo' AND vtiger_tab.presence = 0");
+	$relatedinfo = $adb->query("SELECT vtiger_customerportal_prefs.*,vtiger_tab.name FROM vtiger_customerportal_prefs 
+									INNER JOIN vtiger_tab ON vtiger_tab.tabid = vtiger_customerportal_prefs.tabid 
+									WHERE prefkey = 'showrelatedinfo' AND vtiger_tab.presence = 0");
 	$norows = $adb->num_rows($relatedinfo);
 	for($i = 0;$i < $norows;$i++) { 
 		$module_viewall[$i]['module'] = $adb->query_result($relatedinfo,$i,'name');
@@ -76,9 +80,9 @@ function cp_getContactsViewInfo() {
 function cp_changeModuleVisibility($tabid,$status) {
 	global $adb,$log;
 	if($status == 'module_disable'){
-		$updatevisibility = $adb->query("UPDATE vtiger_customerportal_tabs SET visible = 0 WHERE tabid = $tabid");
+		$updatevisibility = $adb->pquery("UPDATE vtiger_customerportal_tabs SET visible = 0 WHERE tabid = ?", array($tabid));
 	}else {
-		$updatevisibility = $adb->query("UPDATE vtiger_customerportal_tabs SET visible = 1 WHERE tabid = $tabid");
+		$updatevisibility = $adb->pquery("UPDATE vtiger_customerportal_tabs SET visible = 1 WHERE tabid = ?", array($tabid));
 	}
 }
 
@@ -92,15 +96,15 @@ function cp_saveAdvancedSettings($input) {
 		$view = $input['view_'.$modules];
 		$tabid = getTabid($modules);
 		if($view == 'showall'){
-			$adb->query("UPDATE vtiger_customerportal_prefs SET prefvalue = 1  WHERE prefkey = 'showrelatedinfo' and tabid = $tabid");
+			$adb->pquery("UPDATE vtiger_customerportal_prefs SET prefvalue = 1  WHERE prefkey = 'showrelatedinfo' and tabid = ?", array($tabid));
 		}else {
-			$adb->query("UPDATE vtiger_customerportal_prefs SET prefvalue = 0  WHERE prefkey = 'showrelatedinfo' and tabid = $tabid");
+			$adb->pquery("UPDATE vtiger_customerportal_prefs SET prefvalue = 0  WHERE prefkey = 'showrelatedinfo' and tabid = ?", array($tabid));
 		}
 	}
 	
 	//user update
 	$userid = $input['userid'];
-	$adb->query("UPDATE vtiger_customerportal_prefs SET prefvalue = $userid WHERE prefkey = 'userid' and tabid = 0");
+	$adb->pquery("UPDATE vtiger_customerportal_prefs SET prefvalue = ? WHERE prefkey = 'userid' and tabid = 0", array($userid));
 	
 }
 

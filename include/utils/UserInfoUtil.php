@@ -3848,8 +3848,7 @@ function getListViewSecurityParameter($module)
 		
 	else
 	{
-		require_once("modules/$module/$module.php");
-		$modObj = new $module();
+		$modObj = CRMEntity::getInstance($module);
 		$sec_query = $modObj->getListViewSecurityParameter($module);
 		
 	}

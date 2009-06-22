@@ -1,34 +1,21 @@
 <?php
-/*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the
- * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
- * Software distributed under the License is distributed on an  "AS IS"  basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
- * the specific language governing rights and limitations under the License.
- * The Original Code is:  SugarCRM Open Source
- * The Initial Developer of the Original Code is SugarCRM, Inc.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+/*+*******************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Contributor(s): ______________________________________..
- ********************************************************************************/
-/*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/EditView.php,v 1.13 2005/04/18 10:37:49 samk Exp $
- * Description: TODO:  To be written.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Documents/Documents.php');
 require_once('include/utils/utils.php');
 
 global $app_strings,$app_list_strings,$mod_strings,$theme,$currentModule;
 
-$module = $_REQUEST['module'];
-$focus = new Documents();
+$module = vtlib_purify($_REQUEST['module']);
+$focus = CRMEntity::getInstance($currentModule);
 $smarty = new vtigerCRM_Smarty();
 
 //added to fix the issue4600
@@ -72,7 +59,7 @@ if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
 }
 			
 if(isset($_REQUEST['parent_id']) && $focus->mode != 'edit') {
-	$smarty->assign("PARENTID",$_REQUEST['parent_id']);
+	$smarty->assign("PARENTID",vtlib_purify($_REQUEST['parent_id']));
 }
 
 $dbQuery="select filename from vtiger_notes where notesid = ?";
@@ -110,12 +97,6 @@ if (isset($_REQUEST['parent_type'])) {
 elseif (!isset($focus->parent_type)) {
 	$focus->parent_type = $app_list_strings['record_type_default_key'];
 }
-
-/*if (isset($_REQUEST['filename']) && $_REQUEST['isDuplicate'] != 'true') {
-        $focus->filename = $_REQUEST['filename'];
-}*/
-
-
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -159,20 +140,20 @@ else
 }
 
 if (isset($_REQUEST['return_module']))
-$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+$smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
 else
 $smarty->assign("RETURN_MODULE","Documents");
 if (isset($_REQUEST['return_action']))
-$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+$smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
 else
 $smarty->assign("RETURN_ACTION","index");
 if (isset($_REQUEST['return_id']))
-$smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+$smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
 if (isset($_REQUEST['email_id']))
-$smarty->assign("EMAILID", $_REQUEST['email_id']);
-if (isset($_REQUEST['ticket_id'])) $smarty->assign("TICKETID", $_REQUEST['ticket_id']);
+$smarty->assign("EMAILID", vtlib_purify($_REQUEST['email_id']));
+if (isset($_REQUEST['ticket_id'])) $smarty->assign("TICKETID", vtlib_purify($_REQUEST['ticket_id']));
 if (isset($_REQUEST['fileid']))
-$smarty->assign("FILEID", $_REQUEST['fileid']);
+$smarty->assign("FILEID", vtlib_purify($_REQUEST['fileid']));
 if (isset($_REQUEST['record']))
 {
          $smarty->assign("CANCELACTION", "DetailView");
@@ -182,7 +163,7 @@ else
          $smarty->assign("CANCELACTION", "index");
 }
 if (isset($_REQUEST['return_viewname']))
-$smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+$smarty->assign("RETURN_VIEWNAME", vtlib_purify($_REQUEST['return_viewname']));
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
@@ -217,7 +198,7 @@ $data = split_validationdataArray($validationData);
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
-$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
+$smarty->assign("DUPLICATE",vtlib_purify($_REQUEST['isDuplicate']));
  
 global $adb;
 // Module Sequence Numbering
@@ -238,7 +219,6 @@ if($focus->mode != 'edit' && $mod_seq_field != null) {
 }
 // END
  
-
 if($focus->mode == 'edit')
 	$smarty->display("salesEditView.tpl");
 else

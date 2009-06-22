@@ -37,8 +37,8 @@ function getTopAccounts($maxval,$calCnt)
 	global $current_user;
 	$current_module_strings = return_module_language($current_language, "Accounts");
 
-        require('user_privileges/user_privileges_'.$current_user->id.'.php');
-        require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+    require('user_privileges/user_privileges_'.$current_user->id.'.php');
+    require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 
 	$list_query = "select vtiger_account.accountid, vtiger_account.accountname, vtiger_account.tickersymbol, sum(vtiger_potential.amount) as amount from vtiger_potential inner join vtiger_crmentity on (vtiger_potential.potentialid=vtiger_crmentity.crmid) left join vtiger_account on (vtiger_potential.related_to=vtiger_account.accountid) left join vtiger_groups on (vtiger_groups.groupid = vtiger_crmentity.smownerid) where vtiger_crmentity.deleted=0 AND vtiger_crmentity.smownerid='".$current_user->id."' and vtiger_potential.sales_stage not in ('Closed Won', 'Closed Lost','".$app_strings['LBL_CLOSE_WON']."','".$app_strings['LBL_CLOSE_LOST']."')";
 	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[6] == 3)

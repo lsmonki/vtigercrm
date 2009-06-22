@@ -1,26 +1,23 @@
 <?php
-
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
 require_once('user_privileges/default_module_view.php');
 global $adb,$singlepane_view;	
 global $log;
-$idlist = $_POST['idlist'];
-$returnmodule=$_REQUEST['return_module'];
-$returnaction=$_REQUEST['return_action'];
-$pricebook_id=$_REQUEST['pricebook_id'];
-$productid=$_REQUEST['product_id'];
-$parenttab = $_REQUEST['parenttab'];
+$idlist = vtlib_purify($_POST['idlist']);
+$returnmodule=vtlib_purify($_REQUEST['return_module']);
+$returnaction=vtlib_purify($_REQUEST['return_action']);
+$pricebook_id=vtlib_purify($_REQUEST['pricebook_id']);
+$productid=vtlib_purify($_REQUEST['product_id']);
+$parenttab = getParentTab();
 if(isset($_REQUEST['pricebook_id']) && $_REQUEST['pricebook_id']!='')
 {
 	$currency_id = getPriceBookCurrency($pricebook_id);
@@ -62,4 +59,3 @@ elseif(isset($_REQUEST['product_id']) && $_REQUEST['product_id']!='')
 }
 
 ?>
-

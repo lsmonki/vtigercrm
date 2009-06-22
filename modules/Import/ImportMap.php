@@ -109,7 +109,7 @@ class ImportMap extends SugarBean
 
                 $returnid = $this->save();
 
-		$this->db->updateBlob($this->table_name,"content","name='". mysql_real_escape_string($name)."' and module='".$module."'",$content);
+		$this->db->updateBlob($this->table_name,"content","name='". $this->db->sql_escape_string($name)."' and module='".$module."'",$content);
 
                 return $result;
         }

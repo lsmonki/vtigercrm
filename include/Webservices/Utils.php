@@ -191,24 +191,9 @@ function vtws_getWebserviceEntities(){
 	return array('module'=>$moduleArray,'entity'=>$entityArray);
 }
 
-function vtws_includeModule($moduleName){
-	if($moduleName == "Events"){
-		$moduleName = "Calendar";
-	}
-	if($moduleName == "Calendar"){
-		require_once("modules/".$moduleName."/Activity.php");
-	}else{
-		require_once("modules/".$moduleName."/".$moduleName.".php");
-	}
-}
-
 function vtws_getModuleInstance($webserviceObject){
 	$moduleName = $webserviceObject->getEntityName();
-	vtws_includeModule($moduleName);
-	if($moduleName == "Calendar" || $moduleName == "Events"){
-		$moduleName = "Activity";
-	}
-	return new $moduleName();
+	return CRMEntity::getInstance($moduleName);
 }
 
 function vtws_isRecordOwnerUser($ownerId){

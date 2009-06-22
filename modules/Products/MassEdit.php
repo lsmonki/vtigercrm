@@ -6,17 +6,14 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
+
 global $mod_strings,$app_strings,$theme,$currentModule,$current_user;
 
 require_once('Smarty_setup.php');
 require_once('include/utils/utils.php');
 
-checkFileAccess("modules/$currentModule/$currentModule.php");
-require_once("modules/$currentModule/$currentModule.php");
-
-$focus = new $currentModule();
+$focus = CRMEntity::getInstance($currentModule);
 $focus->mode = '';
 $mode = 'mass_edit';
 $disp_view = getView($focus->mode);

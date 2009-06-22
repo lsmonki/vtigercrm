@@ -130,7 +130,7 @@
 									<input type="hidden" name="module_import_file" value="{$MODULEUPDATE_FILE}">
 									<input type="hidden" name="module_update_type" value="{$MODULEUPDATE_TYPE}">
 									<input type="hidden" name="module_update" value="Step3">
-									<input type="hidden" name="target_modulename" value="{$smarty.request.target_modulename}">
+									<input type="hidden" name="target_modulename" value="{$smarty.request.target_modulename|@vtlib_purify}">
 									<input type="hidden" name="module_import_cancel" value="false">
 
 									{if $MODULEUPDATE_NOT_EXISTS eq 'true' || $MODULEUPDATE_DIR_NOT_EXISTS eq 'true'}										

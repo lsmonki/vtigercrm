@@ -42,7 +42,7 @@ function vtiger_imageurl($imagename, $themename) {
  */
 function vtlib_getModuleNameById($tabid) {
 	global $adb;
-	$sqlresult = $adb->query("SELECT name FROM vtiger_tab WHERE tabid = $tabid");
+	$sqlresult = $adb->pquery("SELECT name FROM vtiger_tab WHERE tabid = ?",array($tabid));
 	if($adb->num_rows($sqlresult)) return $adb->query_result($sqlresult, 0, 'name');
 	return null;
 }
@@ -92,7 +92,7 @@ function vtlib_isModuleActive($module) {
 	}
 
 	if(!isset($__cache_module_activeinfo[$module])) {
-		$tabres = $adb->query("SELECT presence FROM vtiger_tab WHERE name='$module'");
+		$tabres = $adb->pquery("SELECT presence FROM vtiger_tab WHERE name=?", array($module));
 		$presence = $adb->query_result($tabres, 0, 'presence');
 		$__cache_module_activeinfo[$module] = $presence;
 	} else {
@@ -147,7 +147,7 @@ function vtlib_toggleModuleAccess($module, $enable_disable) {
 		$event_type = Vtiger_Module::EVENT_MODULE_DISABLED;
 	}
 
-	$adb->query("UPDATE vtiger_tab set presence = $enable_disable WHERE name = '$module'");
+	$adb->pquery("UPDATE vtiger_tab set presence = ? WHERE name = ?", array($enable_disable,$module));
 
 	$__cache_module_activeinfo[$module] = $enable_disable;
 
@@ -398,7 +398,7 @@ function vtlib_tosingular($text) {
 function vtlib_getPicklistValues_AccessibleToAll($field_columnname) {
 	global $adb;
 
-	$columnname =  mysql_real_escape_string($field_columnname);
+	$columnname =  $adb->sql_escape_string($field_columnname);
 	$tablename = "vtiger_$columnname";
 
 	// Gather all the roles (except H1 which is organization role)
@@ -444,7 +444,7 @@ function vtlib_getPicklistValues_AccessibleToAll($field_columnname) {
 function vtlib_getPicklistValues($field_columnname) {
 	global $adb;
 
-	$columnname =  mysql_real_escape_string($field_columnname);
+	$columnname =  $adb->sql_escape_string($field_columnname);
 	$tablename = "vtiger_$columnname";
 
 	$picklistres = $adb->query("SELECT $columnname as pickvalue FROM $tablename");

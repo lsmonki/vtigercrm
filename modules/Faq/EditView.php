@@ -21,18 +21,15 @@
  ********************************************************************************/
 
 require_once('Smarty_setup.php');
-require_once('modules/Faq/Faq.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
-require_once('include/FormValidationUtil.php');
 
 global $app_strings;
 global $mod_strings;
 global $current_user;
 global $currentModule;
 
-$focus = new Faq();
+$focus = CRMEntity::getInstance($currentModule);
 $smarty = new vtigerCRM_Smarty();
 //added to fix the issue4600
 $searchurl = getBasic_Advance_SearchURL();
@@ -86,11 +83,11 @@ if($focus->mode == 'edit')
 	$smarty->assign("MODE", $focus->mode);
 }		
 
-if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
 else $smarty->assign("RETURN_MODULE","Faq");
-if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
 else $smarty->assign("RETURN_ACTION","index");
-if(isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+if(isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
 
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
@@ -116,7 +113,7 @@ if($_REQUEST['record'] != '')
 	//Added to display the Faq comments information
 	$smarty->assign("COMMENT_BLOCK",$focus->getFAQComments($_REQUEST['record']));
 }
-$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
+$smarty->assign("DUPLICATE",vtlib_purify($_REQUEST['isDuplicate']));
 
 global $adb;
 // Module Sequence Numbering

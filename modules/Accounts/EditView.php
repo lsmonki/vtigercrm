@@ -22,16 +22,13 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Accounts/Accounts.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
-require_once('include/FormValidationUtil.php');
 
 global $app_strings,$mod_strings,$currentModule,$theme;
 $smarty=new vtigerCRM_Smarty;
 
-$focus = new Accounts();
+$focus = CRMEntity::getInstance($currentModule);
 
 //added to fix the issue4600
 $searchurl = getBasic_Advance_SearchURL();
@@ -61,18 +58,11 @@ else
 }
 
 $smarty->assign("OP_MODE",$disp_view);
- 
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-//retreiving the combo values array
-$comboFieldNames = Array('accounttype'=>'account_type_dom'
-                      ,'industry'=>'industry_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
-
 
 $log->info("Account detail view");
-
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
@@ -89,11 +79,11 @@ if($focus->mode == 'edit')
         $smarty->assign("MODE", $focus->mode);
 }
 
-if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
 else $smarty->assign("RETURN_MODULE","Accounts");
-if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
-if(isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
-if(isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
+if(isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
+if(isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", vtlib_purify($_REQUEST['return_viewname']));
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("THEME", $theme);
@@ -115,7 +105,7 @@ $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
-$smarty->assign("DUPLICATE",$_REQUEST['isDuplicate'] );
+$smarty->assign("DUPLICATE",vtlib_purify($_REQUEST['isDuplicate']));
  
 global $adb;
 // Module Sequence Numbering
@@ -142,4 +132,3 @@ else
 $smarty->display('CreateView.tpl');
 
 ?>
-

@@ -18,11 +18,9 @@ require_once("data/Tracker.php");
 require_once('modules/Potentials/Potentials.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
-require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('include/database/Postgres8.php');
-require_once('include/DatabaseUtil.php');
 
 
 global $app_strings,$list_max_entries_per_page,$mod_strings;
@@ -55,7 +53,7 @@ if(!$_SESSION['lvs'][$currentModule])
 
 if($_REQUEST['errormsg'] != '')
 {
-        $errormsg = $_REQUEST['errormsg'];
+        $errormsg = vtlib_purify($_REQUEST['errormsg']);
         $smarty->assign("ERROR","The User does not have permission to Change/Delete ".$errormsg." ".$currentModule);
 }else
 {
@@ -76,31 +74,6 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	$url_string .="&query=true".$ustring;
 	$log->info("Here is the where clause for the list view: $where");
 	$smarty->assign("SEARCH_URL",$url_string);
-				
-	//Added for Custom Field Search
-/*	$sql="select * from vtiger_field where vtiger_tablename='potentialscf' order by vtiger_fieldlabel";
-	$result=$adb->query($sql);
-	for($i=0;$i<$adb->num_rows($result);$i++)
-	{
-		$column[$i]=$adb->query_result($result,$i,'columnname');
-		$fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-		$uitype[$i]=$adb->query_result($result,$i,'uitype');
-		if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-
-		if(isset($customfield[$i]) && $customfield[$i] != '')
-		{
-			if($uitype[$i] == 56)
-				$str = " vtiger_potentialscf.".$column[$i]." = 1";
-			elseif($uitype[$i] == 15)//Added to handle the picklist customfield - after 4.2 patch2
-				$str = " vtiger_potentialscf.".$column[$i]." = '".$customfield[$i]."'";
-			else
-				$str = " vtiger_potentialscf.".$column[$i]." like '". formatForSqlLike($customfield[$i], 2) ."'";
-			array_push($where_clauses, $str);
-			$url_string .="&".$column[$i]."=".$customfield[$i];
-		}
-	}
-
-*/
 }
 
 //<<<<cutomview>>>>>>>
@@ -281,8 +254,8 @@ $smarty->assign("AVALABLE_FIELDS", getMergeFields($currentModule,"available_fiel
 $smarty->assign("FIELDS_TO_MERGE", getMergeFields($currentModule,"fileds_to_merge"));
 
 //Added to select Multiple records in multiple pages
-$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
-$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
+$smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
 $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Potentials","index",$viewid);

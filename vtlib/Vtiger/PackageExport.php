@@ -230,9 +230,7 @@ class Vtiger_PackageExport {
 		$this->openNode('tables');
 
 		if($moduleInstance->isentitytype) {
-			require_once("modules/$modulename/$modulename.php");
-
-			$focus = new $modulename();
+			$focus = CRMEntity::getInstance($modulename);
 
 			// Setup required module variables which is need for vtlib API's
 			vtlib_setup_modulevars($modulename, $focus);

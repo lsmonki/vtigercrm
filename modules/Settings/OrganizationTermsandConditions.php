@@ -1,14 +1,12 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-* ("License"); You may not use this file except in compliance with the License
-* The Original Code is:  vtiger CRM Open Sourcea
-* The Initial Developer of the Original Code is vtiger.
-* Portions created by vtiger are Copyright (C) vtiger.
-* All Rights Reserved.
-*
-********************************************************************************/
-
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
@@ -35,7 +33,7 @@ if(!isset($_REQUEST['inv_terms_mode']))
 if (isset($inventory_tandc))
         $smarty->assign("INV_TERMSANDCONDITIONS",$inventory_tandc);
 if(isset($_REQUEST['inv_terms_mode']) && $_REQUEST['inv_terms_mode'] != '')
-	$smarty->assign("INV_TERMS_MODE",$_REQUEST['inv_terms_mode']);
+	$smarty->assign("INV_TERMS_MODE",vtlib_purify($_REQUEST['inv_terms_mode']));
 else
 	$smarty->assign("INV_TERMS_MODE",'view');
 	

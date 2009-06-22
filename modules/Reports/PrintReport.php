@@ -15,7 +15,7 @@ require_once("modules/Reports/Reports.php");
 global $app_strings;
 global $mod_strings;
 $oPrint_smarty=new vtigerCRM_Smarty;
-$reportid = $_REQUEST["record"];
+$reportid = vtlib_purify($_REQUEST["record"]);
 $oReport = new Reports($reportid);
 $filtercolumn = $_REQUEST["stdDateFilterField"];
 $filter = $_REQUEST["stdDateFilter"];

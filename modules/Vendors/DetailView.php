@@ -1,20 +1,18 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
-require_once('include/database/PearDatabase.php');
+
 require_once('Smarty_setup.php');
-require_once('modules/Vendors/Vendors.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
-$focus = new Vendors();
+$focus = CRMEntity::getInstance($currentModule);
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) 
 {
@@ -56,7 +54,7 @@ $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$smarty->assign("ID", $_REQUEST['record']);
+$smarty->assign("ID", vtlib_purify($_REQUEST['record']));
 
 // Module Sequence Numbering
 $mod_seq_field = getModuleSequenceField($currentModule);
@@ -80,7 +78,7 @@ $data = split_validationdataArray($validationData);
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$data['fieldname']);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
-$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST['record']));
 
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 
@@ -112,7 +110,7 @@ if(isset($_SESSION['vendors_listquery'])){
 			
 			for($listi=0;$listi<count($ar_allist);$listi++)
 			{
-				if($ar_allist[$listi]==$_REQUEST[record])
+				if($ar_allist[$listi]==$_REQUEST['record'])
 				{
 					if($listi-1>=0)
 					{

@@ -355,7 +355,6 @@ if(isset($action) && isset($module))
 		ereg("^savewordtemplate",$action) ||
 		ereg("^mailmergedownloadfile",$action) || ereg("^Webmails",$module) && ereg("^get_img",$action) || ereg("^download",$action) || 
 		ereg("^getListOfRecords", $action) ||
-		ereg("^MoveBlockFieldToDB", $action) ||
 		ereg("^AddBlockFieldToDB", $action) ||
 		ereg("^AddBlockToDB", $action)  ||
 		ereg("^MassEditSave", $action)
@@ -436,9 +435,9 @@ $log->info("current module is $currentModule ");
 
 
 // for printing
-$module = (isset($_REQUEST['module'])) ? $_REQUEST['module'] : "";
-$action = (isset($_REQUEST['action'])) ? $_REQUEST['action'] : "";
-$record = (isset($_REQUEST['record'])) ? $_REQUEST['record'] : "";
+$module = (isset($_REQUEST['module'])) ? vtlib_purify($_REQUEST['module']) : "";
+$action = (isset($_REQUEST['action'])) ? vtlib_purify($_REQUEST['action']) : "";
+$record = (isset($_REQUEST['record'])) ? vtlib_purify($_REQUEST['record']) : "";
 $lang_crm = (isset($_SESSION['authenticated_user_language'])) ? $_SESSION['authenticated_user_language'] : "";
 $GLOBALS['request_string'] = "&module=$module&action=$action&record=$record&lang_crm=$lang_crm";
 
@@ -536,16 +535,11 @@ if($action == "DetailView")
 	//Getting the actual module
 	switch($currentModule)
 	{
-		case 'Calendar':
-			require_once("modules/$currentModule/Activity.php");
-			$focus = new Activity();
-			break;
 		case 'Webmails':
 			//No need to create a webmail object here
 			break;
 		default:
-			require_once("modules/$currentModule/$currentModule.php");
-			$focus = new $currentModule();
+			$focus = CRMEntity::getInstance($currentModule);
 			break;
 		}
 	
@@ -584,7 +578,7 @@ if(!$skipHeaders) {
 	{
 		if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
 		{
-			$category = $_REQUEST['category'];
+			$category = vtlib_purify($_REQUEST['category']);
 		}
 		else
 		{
@@ -634,7 +628,7 @@ if(!$skipSecurityCheck)
 	require_once('include/utils/UserInfoUtil.php');
 	if(ereg('Ajax',$action))
         {
-                $now_action=$_REQUEST['file'];
+                $now_action=vtlib_purify($_REQUEST['file']);
         }
         else
         {

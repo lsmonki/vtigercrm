@@ -1,13 +1,12 @@
 <?php
-/*********************************************************************************
- ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-  * ("License"); You may not use this file except in compliance with the License
-  * The Initial Developer of the Original Code is FOSS Labs.
-  * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
-  * Portions created by vtiger are Copyright (C) vtiger.
-  * All Rights Reserved.
-  *
-  ********************************************************************************/
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Initial Developer of the Original Code is FOSS Labs.
+ * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
 
 require_once('modules/Emails/Emails.php');
 require_once('modules/Webmails/Webmails.php');
@@ -28,8 +27,8 @@ $to_address = explode(";",$_REQUEST['to_list']);
 $cc_address = explode(";",$_REQUEST['cc_list']);
 $bcc_address = explode(";",$_REQUEST['bcc_list']);
 
-$start_message=$_REQUEST["start_message"];
-if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
+$start_message=vtlib_purify($_REQUEST["start_message"]);
+if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {$mailbox=vtlib_purify($_REQUEST["mailbox"]);} else {$mailbox="INBOX";}
 
 $MailBox = new MailBox($mailbox);
 $mail = $MailBox->mbox;
@@ -62,13 +61,8 @@ $focus->column_fields["saved_toid"] = implode(',',$all_to_ids);
 //store the sent date in 'yyyy-mm-dd' format
 $user_old_date_format = $current_user->date_format;
 $current_user->date_format = 'yyyy-mm-dd';
-				
-			
-
-//$tmpBody = preg_replace(array('/<br(.*?)>/i',"/&gt;/i","/&lt;/i","/&nbsp;/i","/&amp/i","/&copy;/i","/<style(.*?)>(.*?)<\/style>/i","/\{(.*?)\}/i","/BODY/i"),array("\r",">","<"," ","&","(c)","","",""),$msgData);
-//$focus->column_fields["description"]=strip_tags($tmpBody);
+		
 $focus->column_fields["description"]=$msgData;
-
 
 //to save the email details in vtiger_emaildetails vtiger_tables
 $fieldid = $adb->query_result($adb->pquery('select fieldid from vtiger_field where tablename="vtiger_contactdetails" and fieldname="email" and columnname="email" and vtiger_field.presence in (0,2)', array()),0,'fieldid');
@@ -155,8 +149,7 @@ function add_attachment_to_contact($cid,$email,$emailid) {
 					$document->column_fields['filelocationtype'] = 'I';
 					$document->column_fields['folderid']         = 1; // Default Folder 
 					$document->column_fields['assigned_user_id'] = $current_user->id;
-					$document->save('Documents');
-                	
+					$document->save('Documents');                	
                 	
 	                $sql1 = "insert into vtiger_senotesrel values(?,?)";
 	                $params1 = array($cid, $document->id);
@@ -169,10 +162,7 @@ function add_attachment_to_contact($cid,$email,$emailid) {
 	                $sql1 = "insert into vtiger_seattachmentsrel values(?,?)";
 	                $params1 = array($emailid, $current_id);
 	                $result = $adb->pquery($sql1, $params1); 
-	                
                 }
-                
-                
 
 		//we have to add attachmentsid_ as prefix for the filename
 		$move_filename = $upload_filepath.'/'.$current_id.'_'.$filename;
@@ -185,7 +175,6 @@ function add_attachment_to_contact($cid,$email,$emailid) {
 }
 //Display the sent date in logged in user date format
 $current_user->date_format = $user_old_date_format;
-
 	
 function view_part_detail($mail,$mailid,$part_no, &$transfer, &$msg_charset, &$charset)
 {
@@ -201,11 +190,9 @@ function view_part_detail($mail,$mailid,$part_no, &$transfer, &$msg_charset, &$c
 
 $_REQUEST['parent_id'] = $focus->column_fields['parent_id'];
 
-
-$return_id = $_REQUEST["mailid"];
+$return_id = vtlib_purify($_REQUEST["mailid"]);
 $return_module='Webmails';
 $return_action='ListView';
-
 
 if($_POST["ajax"] != "true")
 	header("Location: index.php?action=$return_action&module=$return_module&record=$return_id"); 

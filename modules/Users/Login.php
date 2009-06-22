@@ -35,15 +35,15 @@ include_once('vtlib/Vtiger/Language.php');
 if(isset($_SESSION["login_user_name"]))
 {
 	if (isset($_REQUEST['default_user_name']))
-		$login_user_name = $_REQUEST['default_user_name'];
+		$login_user_name = vtlib_purify($_REQUEST['default_user_name']);
 	else
-		$login_user_name = $_SESSION['login_user_name'];
+		$login_user_name = vtlib_purify($_SESSION['login_user_name']);
 }
 else
 {
 	if (isset($_REQUEST['default_user_name']))
 	{
-		$login_user_name = $_REQUEST['default_user_name'];
+		$login_user_name = vtlib_purify($_REQUEST['default_user_name']);
 	}
 	elseif (isset($_REQUEST['ck_login_id_vtiger'])) {
 		$login_user_name = get_assigned_user_name($_REQUEST['ck_login_id_vtiger']);
@@ -111,14 +111,14 @@ function set_focus() {
 	       		<td class="small z2" align="center">
 			<?php
 				if (isset($_REQUEST['ck_login_language_vtiger'])) {
-					$display_language = $_REQUEST['ck_login_language_vtiger'];
+					$display_language = vtlib_purify($_REQUEST['ck_login_language_vtiger']);
 				}
 				else {
 					$display_language = $default_language;
 				}
 
 				if (isset($_REQUEST['ck_login_theme_vtiger'])) {
-					$display_theme = $_REQUEST['ck_login_theme_vtiger'];
+					$display_theme = vtlib_purify($_REQUEST['ck_login_theme_vtiger']);
 				}
 				else {
 					$display_theme = $default_theme;

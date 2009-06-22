@@ -1,79 +1,62 @@
 <?php
-/*********************************************************************************
- *** The contents of this file are subject to the vtiger CRM Public License Version 1.0
- **  ("License"); You may not use this file except in compliance with the License
- ** The Original Code is:  vtiger CRM Open Source
- ** The Initial Developer of the Original Code is vtiger.
- ** Portions created by vtiger are Copyright (C) vtiger.
- ** All Rights Reserved.
- **
- *********************************************************************************/
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
 
 //For Search....
 $rb_column_array=array('accountid','contact_id','product_id','campaignid','quoteid','vendorid','potentialid','salesorderid','vendor_id','contactid');
 $rb_table_col_array=array('vtiger_account.accountname','vtiger_contactdetails.firstname,vtiger_contactdetails.lastname','vtiger_products.productname','vtiger_campaign.campaignname','vtiger_quotes.subject','vtiger_vendor.vendorname','vtiger_potential.potentialname','vtiger_salesorder.subject','vtiger_vendor.vendorname','vtiger_contactdetails.firstname,vtiger_contactdetails.lastname');
 
-function getValuesforRBColumns($column_name,$search_string)
-{
+function getValuesforRBColumns($column_name,$search_string) {
 	global $log,$adb;
 	$log->debug("Entering getValuesforRBColumns(".$column_name.",".$search_string.") method ...");
 	global $rb_column_array,$rb_table_col_array;
-	$sql = "select concat(tablename,':',fieldname) as tablename from vtiger_entityname where entityidfield='$column_name' or entityidcolumn='$column_name'";
-	$result = $adb->query($sql);
+	$sql = "select concat(tablename,':',fieldname) as tablename from vtiger_entityname where entityidfield=? or entityidcolumn=?";
+	$result = $adb->pquery($sql, array($column_name));
 	$tablename  = $adb->query_result($result,0,'tablename');
-	$num_rows = $adb->num_rows($adb->query($sql));
-	if($num_rows >= 1)
-	{
-
+	$num_rows = $adb->num_rows($result);
+	if($num_rows >= 1) {
 		$val = $tablename;
 		$explode_column=explode(",",$val);
 		$x=count($explode_column);
-		if($x >= 1 )
-		{
+		if($x >= 1 ) {
 			$main_tablename = explode(':',$explode_column[0]);
 			$where=" $explode_column[0] like '". formatForSqlLike($search_string) ."' or $main_tablename[0]$main_tablename[1] like '".formatForSqlLike($search_string) ."'";
-
 		}
 	
 	}
-       	$log->debug("Exiting getValuesforRBColumns method ...");
+	$log->debug("Exiting getValuesforRBColumns method ...");
 	return $where;
 }
-function RBSearch($module)
-{
+function RBSearch($module) {
 	global $log;
-        $log->debug("Entering RBSearch(".$module.") method ...");
+	$log->debug("Entering RBSearch(".$module.") method ...");
 	$url_string='';	
-	if(isset($_REQUEST['search_field']) && $_REQUEST['search_field'] !="")
-        {
-                $search_column=$_REQUEST['search_field'];
-        }
-        if(isset($_REQUEST['search_text']) && $_REQUEST['search_text']!="")
-        {
-                $search_string=addslashes(ltrim(rtrim($_REQUEST['search_text'])));
-        }
-        if(isset($_REQUEST['searchtype']) && $_REQUEST['searchtype']!="")
-        {
-
-
-                $search_type=$_REQUEST['searchtype'];
-
-                if($search_type == "BasicSearch")
-		{
+	if(isset($_REQUEST['search_field']) && $_REQUEST['search_field'] !="") {
+		$search_column=vtlib_purify($_REQUEST['search_field']);
+	}
+	if(isset($_REQUEST['search_text']) && $_REQUEST['search_text']!="") {
+		$search_string=$_REQUEST['search_text'];
+	}
+	if(isset($_REQUEST['searchtype']) && $_REQUEST['searchtype']!="") {
+		$search_type=vtlib_purify($_REQUEST['searchtype']);
+		if($search_type == "BasicSearch") {
 			$where=basicRBsearch($module,$search_column,$search_string);
-                }
-                else //Global Search
-                {
+		} else {
 
-                }
+		}
 
 		$url_string = "&search_field=".$search_column."&search_text=".$search_string."&searchtype=BasicSearch";
 		if(isset($_REQUEST['type']) && $_REQUEST['type'] != '')
-			$url_string .= "&type=".$_REQUEST['type'];
+			$url_string .= "&type=".vtlib_purify($_REQUEST['type']);
 		return $where."#@@#".$url_string;
 		$log->debug("Exiting RBSearch method ...");
-        }
-
+	}
 }
 
 function basicRBsearch($module,$search_field,$search_string)
@@ -98,8 +81,8 @@ function basicRBsearch($module,$search_field,$search_string)
 		//Check ends
 		
 		$tabid = getTabid($module);
-		$qry="select vtiger_field.columnname,tablename from vtiger_field where tabid=$tabid and (fieldname='".$search_field."' or columnname='".$search_field."') and vtiger_field.presence in (0,2)";
-		$result = $adb->query($qry);
+		$qry="select vtiger_field.columnname,tablename from vtiger_field where tabid=? and (fieldname=? or columnname=?) and vtiger_field.presence in (0,2)";
+		$result = $adb->pquery($qry, array($tabid,$search_field,$search_field));
 		$noofrows = $adb->num_rows($result);
 		if($noofrows!=0)
 		{
@@ -143,7 +126,6 @@ function basicRBsearch($module,$search_field,$search_string)
 				$where="$table_name.$column_name like '%".$search_string."%' or vtiger_activity.eventstatus like '".formatForSqlLike($search_string)."'";
 			}
 			$sql = "select concat(tablename,':',fieldname) as tablename from vtiger_entityname where entityidfield='$column_name' or entityidcolumn='$column_name'"; 
-			$result = $adb->query_result($adb->query($sql),0,'tablename');
 			$no_of_rows = $adb->num_rows($adb->query($sql));
 			if($no_of_rows >= 1)
 			{

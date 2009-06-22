@@ -112,8 +112,10 @@ class Homestuff{
 	function getHomePageFrame(){
 		global $adb;
 		global $current_user;
-		$querystuff ="select vtiger_homestuff.stuffid,stufftype,stufftitle,setype from vtiger_homestuff left join vtiger_homedefault on vtiger_homedefault.stuffid=vtiger_homestuff.stuffid where visible=0 and userid=".$current_user->id." order by stuffsequence desc";
-		$resultstuff=$adb->query($querystuff);
+		$querystuff ="select vtiger_homestuff.stuffid,stufftype,stufftitle,setype from vtiger_homestuff 
+						left join vtiger_homedefault on vtiger_homedefault.stuffid=vtiger_homestuff.stuffid
+						where visible=0 and userid=? order by stuffsequence desc";
+		$resultstuff=$adb->pquery($querystuff, array($current_user->id));
 		for($i=0;$i<$adb->num_rows($resultstuff);$i++){
 			$modulename = $adb->query_result($resultstuff,$i,'setype');
 			$stuffid = $adb->query_result($resultstuff,$i,'stuffid');
@@ -124,8 +126,8 @@ class Homestuff{
 				}
 			}elseif($stufftype == 'Module'){
 				//check for setype in vtiger_homemodule table and hide if module is de-activated
-				$sql = "select setype from vtiger_homemodule where stuffid=$stuffid";
-				$result_setype = $adb->query($sql);
+				$sql = "select setype from vtiger_homemodule where stuffid=?";
+				$result_setype = $adb->pquery($sql, array($stuffid));
 				if($adb->num_rows($result_setype)>0){
 					$module_name = $adb->query_result($result_setype, 0, "setype");
 				}
@@ -191,8 +193,8 @@ class Homestuff{
 	function getSelectedStuff($sid,$stuffType){
 		global $adb;
 		global $current_user;
-		$querystuff="select stufftitle from vtiger_homestuff where visible=0 and stuffid=".$sid;	
-		$resultstuff=$adb->query($querystuff);
+		$querystuff="select stufftitle from vtiger_homestuff where visible=0 and stuffid=?";	
+		$resultstuff=$adb->pquery($querystuff, array($sid));
 		$homeval=Array('Stuffid'=>$sid,'Stufftype'=>$stuffType,'Stufftitle'=>$adb->query_result($resultstuff,0,'stufftitle'));
 		return $homeval;
 	}
@@ -221,8 +223,10 @@ class Homestuff{
 	 */
 	private function getModuleFilters($sid){
 		global $adb,$current_user;
-		$querycvid="select vtiger_homemoduleflds.fieldname,vtiger_homemodule.* from vtiger_homemoduleflds left join vtiger_homemodule on vtiger_homemodule.stuffid=vtiger_homemoduleflds.stuffid where vtiger_homemoduleflds.stuffid=".$sid;
-		$resultcvid=$adb->query($querycvid);
+		$querycvid="select vtiger_homemoduleflds.fieldname,vtiger_homemodule.* from vtiger_homemoduleflds
+					left join vtiger_homemodule on vtiger_homemodule.stuffid=vtiger_homemoduleflds.stuffid
+					where vtiger_homemoduleflds.stuffid=?";
+		$resultcvid=$adb->pquery($querycvid, array($sid));
 		$modname=$adb->query_result($resultcvid,0,"modulename");
 		$cvid=$adb->query_result($resultcvid,0,"customviewid");
 		$maxval=$adb->query_result($resultcvid,0,"maxentries");
@@ -230,20 +234,15 @@ class Homestuff{
 		$cvid_check_query = $adb->pquery("SELECT * FROM vtiger_customview WHERE cvid = ?",array($cvid));
 		if(isPermitted($modname,'index') == "yes"){	
 			if($adb->num_rows($cvid_check_query)>0){
-				if($modname == 'Calendar'){
-					require_once("modules/Calendar/Activity.php");
-					$focus = new Activity();
-				}else{
-					require_once("modules/$modname/$modname.php");
-					$focus = new $modname();
-				}
+				$focus = CRMEntity::getInstance($modname);
+					
 				$oCustomView = new CustomView($modname);
 				$listquery = getListQuery($modname);
 				if(trim($listquery) == ''){
 					$listquery = $focus->getListQuery($modname);
 				}
 				$query = $oCustomView->getModifiedCvListQuery($cvid,$listquery,$modname);
-				$count_result = $adb->query(mkCountQuery( $query));
+				$count_result = $adb->query(mkCountQuery($query));
 				$noofrows = $adb->query_result($count_result,0,"count");
 				$navigation_array = getNavigationValues(1, $noofrows, $maxval);
 				
@@ -272,7 +271,7 @@ class Homestuff{
 						$fldlabel=str_replace("_"," ",$fldlabel);
 					}
 					$field_label = isset($app_strings[$fldlabel])?$app_strings[$fldlabel]:(isset($fieldmod_strings[$fldlabel])?$fieldmod_strings[$fldlabel]:$fldlabel);
-					$cv_presence = $adb->query("SELECT * from vtiger_cvcolumnlist WHERE cvid = $cvid and columnname LIKE '%".$fldname."%'");
+					$cv_presence = $adb->pquery("SELECT * from vtiger_cvcolumnlist WHERE cvid = ? and columnname LIKE '%".$fldname."%'", array($cvid));
 					if($is_admin == false){
 						$fld_permission = getFieldVisibilityPermission($modname,$current_user->id,$fldname);
 					}
@@ -308,8 +307,8 @@ class Homestuff{
 		if(isPermitted('Rss','index') == "yes"){
 			require_once('modules/Rss/Rss.php');
 			global $adb;
-			$qry="select * from vtiger_homerss where stuffid=".$rid;
-			$res=$adb->query($qry);
+			$qry="select * from vtiger_homerss where stuffid=?";
+			$res=$adb->pquery($qry, array($rid));
 			$url=$adb->query_result($res,0,"url");
 			$maxval=$adb->query_result($res,0,"maxentries");
 			$oRss = new vtigerRSS();
@@ -330,8 +329,8 @@ class Homestuff{
 	 */
 	function getDashDetails($did,$chart=''){
 		global $adb;
-		$qry="select * from vtiger_homedashbd where stuffid=".$did;
-		$result=$adb->query($qry);
+		$qry="select * from vtiger_homedashbd where stuffid=?";
+		$result=$adb->pquery($qry, array($did));
 		$type=$adb->query_result($result,0,"dashbdname");
 		$charttype=$adb->query_result($result,0,"dashbdtype");
 		$dash=Array('DashType'=>$type,'Chart'=>$charttype);
@@ -359,8 +358,8 @@ class Homestuff{
 	 */
 	private function getDefaultDetails($dfid,$calCnt){
 		global $adb;
-		$qry="select * from vtiger_homedefault where stuffid=".$dfid;
-		$result=$adb->query($qry);
+		$qry="select * from vtiger_homedefault where stuffid=?";
+		$result=$adb->pquery($qry, array($dfid));
 		$maxval=$adb->query_result($result,0,"maxentries");
 		$hometype=$adb->query_result($result,0,"hometype");
 		
@@ -438,8 +437,8 @@ class Homestuff{
  	function getNotebookContents($notebookid){
 		global $adb, $current_user;
 		
-		$sql = "select * from vtiger_notebook_contents where notebookid=$notebookid and userid=".$current_user->id;
-		$result = $adb->query($sql);
+		$sql = "select * from vtiger_notebook_contents where notebookid=? and userid=?";
+		$result = $adb->pquery($sql, array($notebookid,$current_user->id));
 		
 		$contents = "";
 		if($adb->num_rows($result)>0){
@@ -456,8 +455,8 @@ class Homestuff{
 	function getWidgetURL($widgetid){
 		global $adb, $current_user;
 		
-		$sql = "select * from vtiger_homewidget_url where widgetid=".$widgetid;
-		$result = $adb->query($sql);
+		$sql = "select * from vtiger_homewidget_url where widgetid=?";
+		$result = $adb->pquery($sql, array($widgetid));
 		
 		$url = "";
 		if($adb->num_rows($result)>0){

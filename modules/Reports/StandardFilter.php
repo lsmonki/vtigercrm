@@ -1,19 +1,17 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 require_once('modules/CustomView/CustomView.php');
 if(isset($_REQUEST["record"]) == false || $_REQUEST["record"]=='')
 {
         $oReport = new Reports();
-        $primarymodule = $_REQUEST["primarymodule"];
-        //$secondarymodule = $_REQUEST["secondarymodule"];
+        $primarymodule = vtlib_purify($_REQUEST["primarymodule"]);
 
 		$BLOCK1 = getPrimaryStdFilterHTML($primarymodule);
 		foreach($ogReport->related_modules[$primarymodule] as $key=>$value){
@@ -32,7 +30,7 @@ if(isset($_REQUEST["record"]) == false || $_REQUEST["record"]=='')
 	global $current_user;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
-    $reportid = $_REQUEST["record"];
+    $reportid = vtlib_purify($_REQUEST["record"]);
     $oReport = new Reports($reportid);
     $oReport->getSelectedStandardCriteria($reportid);
 	

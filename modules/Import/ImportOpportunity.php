@@ -29,12 +29,6 @@ require_once('modules/Emails/Emails.php');
 require_once('modules/Accounts/Accounts.php');
 require_once('include/ComboUtil.php');
 
-// Get _dom arrays from Database
-$comboFieldNames = Array('leadsource'=>'lead_source_dom'
-                      ,'opportunity_type'=>'opportunity_type_dom'
-                      ,'sales_stage'=>'sales_stage_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
-
 // Account is used to store vtiger_account information.
 class ImportOpportunity extends Potentials {
 	 var $db;
@@ -57,7 +51,6 @@ function assign_user()
 	{
 		$this->db->println("searching and assigning ".$ass_user);
 
-		//$result = $this->db->query("select id from vtiger_users where user_name = '".$ass_user."'");
 		$result = $this->db->pquery("select id from vtiger_users where id = ? union select groupid as id from vtiger_groups where groupid = ?", array($ass_user, $ass_user));
 		if($this->db->num_rows($result)!=1)
 		{

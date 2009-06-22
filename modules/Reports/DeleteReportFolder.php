@@ -14,7 +14,7 @@ require_once('include/database/PearDatabase.php');
 global $adb,$mod_strings;
 
 $local_log =& LoggerManager::getLogger('index');
-$rfid = $_REQUEST['record'];
+$rfid = vtlib_purify($_REQUEST['record']);
 if($rfid != "")
 {
 	$records_in_folder = $adb->pquery("SELECT * from vtiger_report WHERE folderid=?",array($rfid));

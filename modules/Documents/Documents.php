@@ -1,23 +1,11 @@
 <?php
-/*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the
- * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
- * Software distributed under the License is distributed on an  "AS IS"  basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
- * the specific language governing rights and limitations under the License.
- * The Original Code is:  SugarCRM Open Source
- * The Initial Developer of the Original Code is SugarCRM, Inc.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Contributor(s): ______________________________________..
- ********************************************************************************/
-/*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/Notes.php,v 1.15 2005/03/15 10:01:08 shaw Exp $
- * Description:  TODO: To be written.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 include_once('config.php');
@@ -183,7 +171,7 @@ class Documents extends CRMEntity {
 		{
 			if($files['name'] != '' && $files['size'] > 0)
 			{
-				$files['original_name'] = $_REQUEST[$fileindex.'_hidden'];
+				$files['original_name'] = vtlib_purify($_REQUEST[$fileindex.'_hidden']);
 				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
 			}
 		}
@@ -199,7 +187,7 @@ class Documents extends CRMEntity {
 		global $log;
 		$log->debug("Entering getSortOrder() method ...");
 		if(isset($_REQUEST['sorder']))
-			$sorder = $_REQUEST['sorder'];
+			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
 		else
 			$sorder = (($_SESSION['NOTES_SORT_ORDER'] != '')?($_SESSION['NOTES_SORT_ORDER']):($this->default_sort_order));
 		$log->debug("Exiting getSortOrder() method ...");
@@ -214,7 +202,7 @@ class Documents extends CRMEntity {
 		global $log;
 		$log->debug("Entering getOrderBy() method ...");
 		if (isset($_REQUEST['order_by']))
-			$order_by = $_REQUEST['order_by'];
+			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else
 			$order_by = (($_SESSION['NOTES_ORDER_BY'] != '')?($_SESSION['NOTES_ORDER_BY']):($this->default_order_by));
 		$log->debug("Exiting getOrderBy method ...");

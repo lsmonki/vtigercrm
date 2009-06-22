@@ -1,12 +1,11 @@
 <?php
-/********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+*******************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-* 
  ********************************************************************************/
 
 require_once('config.php');
@@ -16,9 +15,8 @@ global $adb;
 global $fileId;
 global $current_user;
 
-
-$fileid = $_REQUEST['fileid'];
-$folderid = $_REQUEST['folderid'];
+$fileid = vtlib_purify($_REQUEST['fileid']);
+$folderid = vtlib_purify($_REQUEST['folderid']);
 
 $returnmodule='Documents';
 $noteQuery = $adb->pquery("select crmid from vtiger_seattachmentsrel where attachmentsid = ?",array($fileid));
@@ -53,14 +51,7 @@ if($adb->num_rows($result) == 1)
 		$sql = "select filedownloadcount from vtiger_notes where notesid= ?";
 		$download_count = $adb->query_result($adb->pquery($sql,array($fileid)),0,'filedownloadcount') + 1;
 		$sql="update vtiger_notes set filedownloadcount= ? where notesid= ?";
-		$res=$adb->pquery($sql,array($download_count,$fileid));	
-		
-		/*$query="select max(downloadid) from vtiger_dldhistory";
-		$downloadid=$adb->query_result($adb->pquery($query,array()),0,'max(downloadid)')+1;
-		$usip=$_SERVER['REMOTE_ADDR'];
-		$date1=date('Y-m-d H:i:s');
-		$sqldldhis="insert into vtiger_dldhistory (downloadid,dldfileid,userid,ipaddress,dateTime) values(?,?,?,?,?)";
-		$res=$adb->pquery($sqldldhis,array($downloadid,$fileid,$current_user->id,$usip,$date1));*/
+		$res=$adb->pquery($sql,array($download_count,$fileid));
 	}
 
 	header("Content-type: $fileType");

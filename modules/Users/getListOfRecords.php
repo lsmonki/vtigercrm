@@ -1,15 +1,16 @@
 <?php
-/*********************************************************************************
-** File content added/modified by SAKTI on 4th Feb, 2008 
- * This file is responsible for updating response for contact/leads/accounts.
- * This file is used as AJAX backend file for campaigns module
-*
+/*+*******************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
  ********************************************************************************/
 session_start();
 require_once('include/CustomFieldUtil.php');
 require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
-
 
 global $mod_strings,$app_strings,$app_list_strings,$theme,$adb,$current_user;
 global $list_max_entries_per_page;
@@ -18,13 +19,11 @@ $theme_path="themes/".$theme."/";
 
 require_once($theme_path.'layout_utils.php');
 
-$iCurRecord = $_REQUEST['CurRecordId'];
-$sModule = $_REQUEST['CurModule'];
+$iCurRecord = vtlib_purify($_REQUEST['CurRecordId']);
+$sModule = vtlib_purify($_REQUEST['CurModule']);
 
-checkFileAccess("modules/$sModule/$sModule.php");
-require_once("modules/$sModule/$sModule.php");
-
-$foc_obj = new $sModule();
+require_once('data/CRMEntity.php');
+$foc_obj = CRMEntity::getInstance($sModule);
 
 $query = $adb->pquery("SELECT tablename,entityidfield, fieldname from vtiger_entityname WHERE modulename = ?",array($sModule));
 $table_name = $adb->query_result($query,0,'tablename');
@@ -123,7 +122,7 @@ if(isset($_SESSION['listEntyKeymod_'.$iCurRecord]))
 			if($ar_allist[$listi]==$iCurRecord)
 				$output .= '<tr><td style="text-align:left;font-weight:bold;">'.$field_value.'</td></tr>';
 			else
-				$output .= '<tr><td style="text-align:left;"><a href="index.php?module='.$sModule.'&action=DetailView&parenttab='.$_REQUEST['CurParentTab'].'&record='.$ar_allist[$listi].'">'.$field_value.'</a></td></tr>';
+				$output .= '<tr><td style="text-align:left;"><a href="index.php?module='.$sModule.'&action=DetailView&parenttab='.vtlib_purify($_REQUEST['CurParentTab']).'&record='.$ar_allist[$listi].'">'.$field_value.'</a></td></tr>';
 		}
 		$output .= '</table>';
 	}

@@ -23,8 +23,6 @@ function getTopSalesOrder($maxval,$calCnt)
 	require_once('modules/SalesOrder/SalesOrder.php');
 	require_once('include/logging.php');
 	require_once('include/ListView/ListView.php');
-	require_once('include/database/PearDatabase.php');
-	require_once('include/ComboUtil.php');
 	require_once('include/utils/utils.php');
 	require_once('modules/CustomView/CustomView.php');
 
@@ -69,13 +67,9 @@ function getTopSalesOrder($maxval,$calCnt)
 	    return $noofrows;
 
 	//Retreiving the start value from request
-	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-	{
-		$start = $_REQUEST['start'];
-	}
-	else
-	{
-
+	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '') {
+		$start = vtlib_purify($_REQUEST['start']);
+	} else {
 		$start = 1;
 	}
 

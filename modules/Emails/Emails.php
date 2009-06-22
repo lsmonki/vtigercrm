@@ -195,7 +195,7 @@ var $rel_serel_table = "vtiger_seactivityrel";
 		{
 			if($files['name'] != '' && $files['size'] > 0)
 			{
-				$files['original_name'] = $_REQUEST[$fileindex.'_hidden'];
+				$files['original_name'] = vtlib_purify($_REQUEST[$fileindex.'_hidden']);
 				$file_saved = $this->uploadAndSaveFile($id,$module,$files);
 			}
 		}
@@ -353,7 +353,7 @@ var $rel_serel_table = "vtiger_seactivityrel";
 		global $log;
 		$log->debug("Entering getSortOrder() method ...");
 		if(isset($_REQUEST['sorder'])) 
-			$sorder = $_REQUEST['sorder'];
+			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
 		else
 			$sorder = (($_SESSION['EMAILS_SORT_ORDER'] != '')?($_SESSION['EMAILS_SORT_ORDER']):($this->default_sort_order));
 
@@ -372,7 +372,7 @@ var $rel_serel_table = "vtiger_seactivityrel";
 		global $log;
 		$log->debug("Entering getOrderBy() method ...");
 		if (isset($_REQUEST['order_by'])) 
-			$order_by = $_REQUEST['order_by'];
+			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else
 			$order_by = (($_SESSION['EMAILS_ORDER_BY'] != '')?($_SESSION['EMAILS_ORDER_BY']):($this->default_order_by));
 

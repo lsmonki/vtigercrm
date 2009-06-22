@@ -12,16 +12,13 @@ require_once('user_privileges/default_module_view.php');
 
 global $mod_strings, $app_strings, $currentModule, $current_user, $theme, $singlepane_view;
 
-checkFileAccess("modules/$currentModule/$currentModule.php");
-require_once("modules/$currentModule/$currentModule.php");
+$focus = CRMEntity::getInstance($currentModule);
 
 $tool_buttons = Button_Check($currentModule);
-
-$focus = new $currentModule();
 $smarty = new vtigerCRM_Smarty();
 
 $record = $_REQUEST['record'];
-$isduplicate = $_REQUEST['isDuplicate'];
+$isduplicate = vtlib_purify($_REQUEST['isDuplicate']);
 $tabid = getTabid($currentModule);
 $category = getParentTab($currentModule);
 
@@ -128,7 +125,7 @@ $smarty->assign('BLOCKS', getBlocks($currentModule,'detail_view','',$focus->colu
 
 // Gather the custom link information to display
 include_once('vtlib/Vtiger/Link.php');
-$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>$_REQUEST['action']);
+$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>vtlib_purify($_REQUEST['action']));
 $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), Array('DETAILVIEWBASIC','DETAILVIEW'), $customlink_params));
 // END
 

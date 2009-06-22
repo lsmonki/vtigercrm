@@ -25,7 +25,7 @@ require_once("modules/Emails/mail.php");
  $date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
  $taskassignedto = getAssignedTo(9);
  $eventassignedto = getAssignedTo(16);
-$mysel= $_REQUEST['view'];
+$mysel= vtlib_purify($_REQUEST['view']);
 $calendar_arr = Array();
 $calendar_arr['IMAGE_PATH'] = $image_path;
 if(empty($mysel)){

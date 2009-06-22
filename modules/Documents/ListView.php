@@ -1,16 +1,11 @@
 <?php
-/*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the
- * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
- * Software distributed under the License is distributed on an  "AS IS"  basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
- * the specific language governing rights and limitations under the License.
- * The Original Code is:  SugarCRM Open Source
- * The Initial Developer of the Original Code is SugarCRM, Inc.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+/*+*******************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Contributor(s): ______________________________________.
  ********************************************************************************/
 
 require_once('Smarty_setup.php');
@@ -21,21 +16,14 @@ require_once('include/ListView/ListView.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('include/database/Postgres8.php');
-require_once('include/DatabaseUtil.php');
 
 global $app_strings,$mod_strings,$list_max_entries_per_page;
 
 $log = LoggerManager::getLogger('note_list');
 
 global $currentModule,$image_path,$theme;
-if($_REQUEST['parenttab'] != '')
-{
-	$category = $_REQUEST['parenttab'];
-}
-else
-{
-	$category = getParentTab();	
-}	
+$category = getParentTab();
+
 if(!$_SESSION['lvs'][$currentModule])
 {
 	unset($_SESSION['lvs']);
@@ -63,7 +51,7 @@ $other_text = Array();
 
 if($_REQUEST['errormsg'] != '')
 {
-        $errormsg = $_REQUEST['errormsg'];
+        $errormsg = vtlib_purify($_REQUEST['errormsg']);
         $smarty->assign("ERROR","The User does not have permission to delete ".$errormsg." ".$currentModule);
 }else
 {
@@ -183,8 +171,8 @@ $request_folderid = '';
    	
 if($_REQUEST['action'] == 'DocumentsAjax' && isset($_REQUEST['folderid']))
 {
-	$request_folderid = $_REQUEST['folderid'];
-	$start[$request_folderid] = $_REQUEST['start'];
+	$request_folderid = vtlib_purify($_REQUEST['folderid']);
+	$start[$request_folderid] = vtlib_purify($_REQUEST['start']);
 }
 $focus->del_create_def_folder($focus->query);
  
@@ -305,8 +293,8 @@ $smarty->assign("EMPTY_FOLDERS", $emptyfolders);
 $smarty->assign("ALL_FOLDERS", array_merge($folders, $emptyfolders));
 
 //Added to select Multiple records in multiple pages
-$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
-$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
+$smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
 
 $alphabetical = AlphabeticalSearch($currentModule,'index','notes_title','true','basic',"","","","",$viewid);
 $fieldnames = getAdvSearchfields($module);

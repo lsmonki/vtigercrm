@@ -37,7 +37,7 @@ global $app_list_strings;
 global $app_strings;
 global $current_user;
 $currentModule = "Import";
-$req_module=$_REQUEST['modulename'];
+$req_module=vtlib_purify($_REQUEST['modulename']);
 
 if (! isset( $_REQUEST['module']))
 {
@@ -61,9 +61,9 @@ if (! isset( $_REQUEST['return_action']))
 // Delete data file used for import 
 // http://trac.vtiger.com/cgi-bin/trac.cgi/ticket/5255 
 if(isset($_REQUEST['tmp_file'])) { 
-	$tmp_file = $_REQUEST['tmp_file']; 
+	$tmp_file = vtlib_purify($_REQUEST['tmp_file']); 
 } else if(isset($_SESSION['tmp_file'])) { 
-	$tmp_file = $_SESSION['tmp_file']; 
+	$tmp_file = vtlib_purify($_SESSION['tmp_file']); 
 } 
 if(isset($tmp_file) && file_exists($tmp_file)) unlink($tmp_file); 
 // End 
@@ -84,9 +84,9 @@ $smarty->assign("IMP", $import_mod_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 
-$smarty->assign("MODULE", $_REQUEST['modulename']);
-$smarty->assign("SINGLE_MOD", $_REQUEST['modulename']);
-$smarty->assign("CATEGORY", $_SESSION['import_parenttab']);
+$smarty->assign("MODULE", vtlib_purify($_REQUEST['modulename']));
+$smarty->assign("SINGLE_MOD", vtlib_purify($_REQUEST['modulename']));
+$smarty->assign("CATEGORY", vtlib_purify($_SESSION['import_parenttab']));
 //@session_unregister("import_parenttab");
 if($req_module != 'Accounts' || $req_module != 'Contacts' || $req_module != 'Products' || $req_module != 'Leads' || $req_module != 'HelpDesk' || $req_module != 'Potentials' || $req_module != 'Vendors' )
 {
@@ -120,7 +120,7 @@ if ( isset($_REQUEST['message']))
 	   <tr>
 		<td style="padding-left:140px;">
 			<?php 
-				echo $_REQUEST['message']; 
+				echo vtlib_purify($_REQUEST['message']); 
 			?>
 		 <br><br><br> 		 </td>
        </tr>
@@ -129,12 +129,12 @@ if ( isset($_REQUEST['message']))
 		 <table width="100%" border="0" cellpadding="5" cellspacing="0" >
            <tr>
              <td align="right" valign="top"><form enctype="multipart/form-data" name="Import" method="POST" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
-                 <input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
+                 <input type="hidden" name="module" value="<?php echo vtlib_purify($_REQUEST['modulename']); ?>">
                  <input type="hidden" name="action" id="import_action" value="Import">
                  <input type="hidden" name="step" value="1">
-                 <input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
-                 <input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
-                 <input type="hidden" name="return_action" value="<?php echo (($_REQUEST['return_action'] != '')?$_REQUEST['return_action']:'index'); ?>">
+                 <input type="hidden" name="return_id" value="<?php echo vtlib_purify($_REQUEST['return_id']); ?>">
+                 <input type="hidden" name="return_module" value="<?php echo vtlib_purify($_REQUEST['return_module']); ?>">
+                 <input type="hidden" name="return_action" value="<?php echo (($_REQUEST['return_action'] != '')?vtlib_purify($_REQUEST['return_action']):'index'); ?>">
                  <input type="hidden" name="parenttab" id="parenttab" value="<?php echo $parenttab; ?>">
                  <input title="<?php echo $mod_strings['LBL_FINISHED'] ?>" accessKey="" class="crmbutton small save" type="submit" name="button" value="  <?php echo $mod_strings['LBL_FINISHED'] ?>  "  onclick="this.form.action.value=this.form.return_action.value;this.form.return_module.value=this.form.return_module.value;return true;">
                  <input title="<?php echo $mod_strings['LBL_IMPORT_MORE'] ?>" accessKey="" class="crmbutton small save" type="submit" name="button" value="  <?php echo $mod_strings['LBL_IMPORT_MORE'] ?>  "  onclick="this.form.return_module.value=this.form.module.value; return true;">
@@ -150,12 +150,12 @@ if ( isset($_REQUEST['message']))
 		
 		<td align="left">
 		 <form name="Import" method="POST" action="index.php">
-                 <input type="hidden" name="module" value="<?php echo $_REQUEST['modulename']; ?>">
+                 <input type="hidden" name="module" value="<?php echo vtlib_purify($_REQUEST['modulename']); ?>">
                  <input type="hidden" name="action" value="Import">
                  <input type="hidden" name="step" value="undo">
-                 <input type="hidden" name="return_module" value="<?php echo $_REQUEST['return_module']; ?>">
-                 <input type="hidden" name="return_id" value="<?php echo $_REQUEST['return_id']; ?>">
-                 <input type="hidden" name="return_action" value="<?php echo $_REQUEST['return_action']; ?>">
+                 <input type="hidden" name="return_module" value="<?php echo vtlib_purify($_REQUEST['return_module']); ?>">
+                 <input type="hidden" name="return_id" value="<?php echo vtlib_purify($_REQUEST['return_id']); ?>">
+                 <input type="hidden" name="return_action" value="<?php echo vtlib_purify($_REQUEST['return_action']); ?>">
                  <input type="hidden" name="parenttab" value="<?php echo $parenttab; ?>">
                  <input title="<?php echo $mod_strings['LBL_UNDO_LAST_IMPORT']; ?>" accessKey="" class="crmbutton small cancel" type="submit" name="button" value="  <?php echo $mod_strings['LBL_UNDO_LAST_IMPORT'] ?>  ">
              </form></td>
@@ -169,8 +169,7 @@ if ( isset($_REQUEST['message']))
 if( $_REQUEST['dup_type'] == 'manual')
 {	
 	echo "<br>";
-	$return_module=$_REQUEST['modulename'];
-	//$delete_idstring=$_REQUEST['idlist'];
+	$return_module=vtlib_purify($_REQUEST['modulename']);
 	
 	$ret_arr=getDuplicateRecordsArr($req_module);
 	$fld_values=$ret_arr[0];
@@ -216,6 +215,7 @@ else
 
 	// vtlib customization: Hook provide to include custom modules
 	$module = $_REQUEST['modulename'];
+	checkFileAccess("modules/$module/$module.php");
 	require_once("modules/$module/$module.php");
 	$import_modules_array[$module] = $module;
 	// END
@@ -268,17 +268,14 @@ else
 			$smarty->assign("SHOW_MASS_SELECT",'false');
 	
 			//Retreiving the start value from request
-			if($module_name == $_REQUEST['nav_module'] && isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-			{
-				$start = $_REQUEST['start'];
-			}
-			else
-			{
+			if($module_name == $_REQUEST['nav_module'] && isset($_REQUEST['start']) && $_REQUEST['start'] != '') {
+				$start = vtlib_purify($_REQUEST['start']);
+			} else {
 				$start = 1;
 			}
 	
-			$info_message='&recordcount='.$_REQUEST['recordcount'].'&noofrows='.$_REQUEST['noofrows'].'&message='.$_REQUEST['message'].'&skipped_record_count='.$_REQUEST['skipped_record_count'];
-			$url_string = '&modulename='.$_REQUEST['modulename'].'&nav_module='.$module_name.$info_message;
+			$info_message='&recordcount='.vtlib_purify($_REQUEST['recordcount']).'&noofrows='.vtlib_purify($_REQUEST['noofrows']).'&message='.vtlib_purify($_REQUEST['message']).'&skipped_record_count='.vtlib_purify($_REQUEST['skipped_record_count']);
+			$url_string = '&modulename='.vtlib_purify($_REQUEST['modulename']).'&nav_module='.$module_name.$info_message;
 			$viewid = '';
 	
 			//Retreive the Navigation array

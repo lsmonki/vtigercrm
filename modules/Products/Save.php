@@ -38,27 +38,35 @@ $count=0;
 $saveimage = "true";
 $image_error = "false";
 //end of code to retain the pictures from db
+	
+if($_REQUEST['activity_mode'] != '') $activity_mode = vtlib_purify($_REQUEST['activity_mode']);
+if($_REQUEST['return_module'] != '') { 
+	$return_module = vtlib_purify($_REQUEST['return_module']);
+} else {
+	$return_module = $currentModule;
+}
+if($_REQUEST['return_action'] != '') {
+	$return_action = vtlib_purify($_REQUEST['return_action']);
+} else {
+	$return_action = 'DetailView';
+}
+if($_REQUEST['return_id'] != '') $return_id = vtlib_purify($_REQUEST['return_id']);
 
-if($image_error=="true") //If there is any error in the file upload then moving all the data to EditView.
-{
-	//re diverting the page and reassigning the same values as image error occurs	
-	if($_REQUEST['activity_mode'] != '')$activity_mode=$_REQUEST['activity_mode'];
-	if($_REQUEST['return_module'] != '')$return_module=$_REQUEST['return_module'];
-	if($_REQUEST['return_action'] != '')$return_action=$_REQUEST['return_action'];
-	if($_REQUEST['return_id'] != '')$return_id=$_REQUEST['return_id'];
+if(isset($_request['activity_mode']))
+	$return_action .= '&activity_mode='.$activity_mode;
 
-	 $log->debug("There is an error during the upload of product image.");
+if($image_error=="true") { //If there is any error in the file upload then moving all the data to EditView.
+
+	//re diverting the page and reassigning the same values as image error occurs
+	$log->debug("There is an error during the upload of product image.");
 	$field_values_passed.="";
-	foreach($focus->column_fields as $fieldname => $val)
-	{
-		if(isset($_REQUEST[$fieldname]))
-		{
-			 $log->debug("Assigning the previous values given for the product to respective vtiger_fields ");
+	foreach($focus->column_fields as $fieldname => $val) {
+		if(isset($_REQUEST[$fieldname])) {
+			$log->debug("Assigning the previous values given for the product to respective vtiger_fields ");
 			$field_values_passed.="&";
 			$value = $_REQUEST[$fieldname];
 			$focus->column_fields[$fieldname] = $value;
 			$field_values_passed.=$fieldname."=".$value;
-
 		}
 	}
 	$values_pass=$field_values_passed;
@@ -66,11 +74,6 @@ if($image_error=="true") //If there is any error in the file upload then moving 
 
 	$error_module = "Products";
 	$error_action = "EditView";
-
-	if(isset($_request['return_id']) && $_request['return_id'] != "")
-		$return_id = $_request['return_id'];
-	if(isset($_request['activity_mode']))
-		$return_action .= '&activity_mode='.$_request['activity_mode'];
 
 	if($mode=="edit")
 	{
@@ -98,24 +101,9 @@ if($_REQUEST['assigntype'] == 'U') {
 $focus->save($currentModule);
 $return_id = $focus->id;
 
-$search=$_REQUEST['search_url'];
+$search=vtlib_purify($_REQUEST['search_url']);
 
-if($_REQUEST['parenttab'] != '')     $parenttab = $_REQUEST['parenttab'];
-if($_REQUEST['return_module'] != '') {
-	$return_module = $_REQUEST['return_module'];
-} else {
-	$return_module = $currentModule;
-}
-
-if($_REQUEST['return_action'] != '') {
-	$return_action = $_REQUEST['return_action'];
-} else {
-	$return_action = "DetailView";
-}
-
-if($_REQUEST['return_id'] != '') {
-	$return_id = $_REQUEST['return_id'];
-}
+if($_REQUEST['return_id'] != '') $return_id = vtlib_purify($_REQUEST['return_id']);
 
 //Checking and Sending Mail from reorder level
 global $current_user;
@@ -141,9 +129,7 @@ if($qty_stk != '' && $reord != '') {
 		$mail_status = send_mail("Products",$to_address,$current_user->user_name,$current_user->email1,$subject,$body);
 	}
 }
-
-if(isset($_REQUEST['activity_mode'])) $return_action .= '&activity_mode='.$_REQUEST['activity_mode'];
-
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab&start=".$_REQUEST['pagenumber'].$search);
+$parenttab = getParentTab();
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&parenttab=$parenttab&start=".vtlib_purify($_REQUEST['pagenumber']).$search);
 
 ?>

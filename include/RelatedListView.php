@@ -169,7 +169,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	//Setting Listview session object while sorting/pagination
 	if(isset($_REQUEST['relmodule']) && $_REQUEST['relmodule']!='' && $_REQUEST['relmodule'] == $relatedmodule)
 	{
-		$relmodule = $_REQUEST['relmodule'];
+		$relmodule = vtlib_purify($_REQUEST['relmodule']);
 		if($_SESSION['rlvs'][$module][$relmodule])
 		{
 			setSessionVar($_SESSION['rlvs'][$module][$relmodule],$noofrows,$list_max_entries_per_page,$module,$relmodule);
@@ -199,7 +199,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	}
 	else
 	{
-		$id = $_REQUEST['record'];
+		$id = vtlib_purify($_REQUEST['record']);
 		$listview_header = getListViewHeader($focus,$relatedmodule,'',$sorder,$order_by,$id,'',$module);//"Accounts");
 		if ($noofrows > 15)
 		{
@@ -314,7 +314,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 				}
 				if($module == 'Documents')
 				{
-					$entries[] = '<a href="index.php?module='.$module.'&action=DetailView&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'&parenttab='.$_REQUEST["parenttab"].'">'.textlength_check($row['title']).'</a>';
+					$entries[] = '<a href="index.php?module='.$module.'&action=DetailView&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.vtlib_purify($_REQUEST["record"]).'&parenttab='.vtlib_purify($_REQUEST["parenttab"]).'">'.textlength_check($row['title']).'</a>';
 				}
 				elseif($module == 'uploads')
 				{
@@ -392,11 +392,11 @@ function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 				if($assignedTo != '' ){
 					$entries[] = $assignedTo;
 				}
-				$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&return_id='.$_REQUEST["record"].'&parenttab='.$_REQUEST["parenttab"];
+				$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action='.vtlib_purify($_REQUEST['action']).'&record='.$row["crmid"].'&return_id='.vtlib_purify($_REQUEST["record"]).'&parenttab='.vtlib_purify($_REQUEST["parenttab"]);
 	
 				if($module == 'Documents')
 				{
-					$edit_param = 'index.php?module='.$module.'&action='.$editaction.'&return_module='.$parentmodule.'&return_action='.$_REQUEST['action'].'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'&parenttab='.$_REQUEST["parenttab"];
+					$edit_param = 'index.php?module='.$module.'&action='.$editaction.'&return_module='.$parentmodule.'&return_action='.vtlib_purify($_REQUEST['action']).'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.vtlib_purify($_REQUEST["record"]).'&parenttab='.vtlib_purify($_REQUEST["parenttab"]);
 	
 					$entries[] .= '<a href="'.$edit_param.'">'.$app_strings['LNK_EDIT'].'</a> | <a href=\'javascript:confirmdelete("'.$del_param.'")\'>'.$app_strings['LNK_DELETE'].'</a>';
 				}
@@ -428,7 +428,7 @@ function getHistory($parentmodule,$query,$id)
 {
 	global $log;
 	$log->debug("Entering getHistory(".$parentmodule.",".$query.",".$id.") method ...");
-	$parentaction = $_REQUEST['action'];
+	$parentaction = vtlib_purify($_REQUEST['action']);
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
@@ -493,7 +493,7 @@ function getHistory($parentmodule,$query,$id)
 			$typeofactivity = $app_strings[$typeofactivity];
 			$entries[] = $typeofactivity;
 
-			$activity = '<a href="index.php?module=Calendar&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.$_REQUEST['record'].'&parenttab='.$_REQUEST['parenttab'].'">'.$row['subject'].'</a></td>';
+			$activity = '<a href="index.php?module=Calendar&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.vtlib_purify($_REQUEST['record']).'&parenttab='.vtlib_purify($_REQUEST['parenttab']).'">'.$row['subject'].'</a></td>';
 			$entries[] = $activity;
 	
 			$parentname = getRelatedTo('Calendar',$result,$i-1);
@@ -546,7 +546,7 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 	global $urlPrefix;
 
 	global $theme;
-	$pricebook_id = $_REQUEST['record'];
+	$pricebook_id = vtlib_purify($_REQUEST['record']);
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 

@@ -411,9 +411,10 @@ function insertIntoRecurringTable(& $recurObj)
 	 */
 	function getSortOrder()
 	{	
-		global $log;                                                                                                  $log->debug("Entering getSortOrder() method ...");
+		global $log;                                                                                                  
+		$log->debug("Entering getSortOrder() method ...");
 		if(isset($_REQUEST['sorder'])) 
-			$sorder = $_REQUEST['sorder'];
+			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
 		else
 			$sorder = (($_SESSION['ACTIVITIES_SORT_ORDER'] != '')?($_SESSION['ACTIVITIES_SORT_ORDER']):($this->default_sort_order));
 		$log->debug("Exiting getSortOrder method ...");
@@ -427,9 +428,9 @@ function insertIntoRecurringTable(& $recurObj)
 	function getOrderBy()
 	{
 		global $log;
-                 $log->debug("Entering getOrderBy() method ...");
+		$log->debug("Entering getOrderBy() method ...");
 		if (isset($_REQUEST['order_by'])) 
-			$order_by = $_REQUEST['order_by'];
+			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else
 			$order_by = (($_SESSION['ACTIVITIES_ORDER_BY'] != '')?($_SESSION['ACTIVITIES_ORDER_BY']):($this->default_order_by));
 		$log->debug("Exiting getOrderBy method ...");
@@ -516,12 +517,18 @@ function insertIntoRecurringTable(& $recurObj)
 	 * @param   string   $criteria     - query string
 	 * returns  activity records in array format($list) or null value
          */	 
-  	function get_full_list($criteria)
-  	{
-	 global $log;
-         $log->debug("Entering get_full_list(".$criteria.") method ...");
-    $query = "select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_activity.*, vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid from vtiger_activity inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid WHERE vtiger_crmentity.deleted=0 ".$criteria;
-    $result =& $this->db->query($query);
+  	function get_full_list($criteria) {
+	 	global $log;
+		$log->debug("Entering get_full_list(".$criteria.") method ...");
+	    $query = "select vtiger_crmentity.crmid,vtiger_crmentity.smownerid,vtiger_crmentity.setype, vtiger_activity.*, 
+	    		vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid 
+	    		from vtiger_activity 
+	    		inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid 
+	    		left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid 
+	    		left join vtiger_contactdetails on vtiger_contactdetails.contactid= vtiger_cntactivityrel.contactid 
+	    		left join vtiger_seactivityrel on vtiger_seactivityrel.activityid = vtiger_activity.activityid 
+	    		WHERE vtiger_crmentity.deleted=0 ".$criteria;
+    	$result =& $this->db->query($query);
         
     if($this->db->getRowCount($result) > 0){
 		

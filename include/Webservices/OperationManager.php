@@ -45,7 +45,7 @@
 			}
 			
 			$this->pearDB = $adb;
-			$this->operationName = $operation;
+			$this->operationName = $operationName;
 			$this->inParamProcess = array();
 			$this->inParamProcess["encoded"] = &$this->formatObjects[$this->format]["decode"];
 			$this->fillOperationDetails($operationName);

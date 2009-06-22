@@ -61,7 +61,7 @@ if(count($fldrids_lists) > 0)
 	$list_report_form->assign("FOLDE_IDS",implode(',',$fldrids_lists));
 $list_report_form->assign("REPT_MODULES",getReportsModuleList($repObj));
 $list_report_form->assign("REPT_FOLDERS",$repObj->sgetRptFldr());
-$list_report_form->assign("DEL_DENIED",$_REQUEST['del_denied']);
+$list_report_form->assign("DEL_DENIED",vtlib_purify($_REQUEST['del_denied']));
 
 if($_REQUEST['mode'] == 'ajax')
 	$list_report_form->display("ReportsCustomize.tpl");

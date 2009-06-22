@@ -1,13 +1,13 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
+
 require_once('Smarty_setup.php');
 global $mod_strings,$app_strings,$adb,$theme,$default_charset;
 
@@ -17,7 +17,7 @@ $smarty=new vtigerCRM_Smarty;
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 {
-	$tempid = $_REQUEST['record'];
+	$tempid = vtlib_purify($_REQUEST['record']);
     $currency = '';
 	
 	// Get all the currencies
@@ -83,7 +83,7 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("CURRENCIES", $currencies_not_listed);
-$smarty->assign("PARENTTAB",htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
+$smarty->assign("PARENTTAB",getParentTab());
 $smarty->assign("MASTER_CURRENCY",$currency_name);
 $smarty->assign("IMAGE_PATH",$image_path);
 

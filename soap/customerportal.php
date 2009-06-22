@@ -543,8 +543,6 @@ function save_faq_comment($input_array)
 	$adb->println("Entering customer portal function save_faq_comment");
 	$adb->println($input_array);
 
-	//foreach($input_array as $fieldname => $fieldvalue)$input_array[$fieldname] = mysql_real_escape_string($fieldvalue);
-
 	$id = $input_array['id'];
 	$sessionid = $input_array['sessionid'];
 	$faqid = (int) $input_array['faqid'];
@@ -713,7 +711,6 @@ function create_ticket($input_array)
 	global $adb,$log;
 	$adb->println("Inside customer portal function create_ticket");
 	$adb->println($input_array);
-	//foreach($input_array as $fieldname => $fieldvalue)$input_array[$fieldname] = mysql_real_escape_string($fieldvalue);
 
 	$id = $input_array['id'];
 	$sessionid = $input_array['sessionid'];
@@ -802,8 +799,6 @@ function update_ticket_comment($input_array)
 	global $adb,$mod_strings;
 	$adb->println("Inside customer portal function update_ticket_comment");
 	$adb->println($input_array);
-
-	//foreach($input_array as $fieldname => $fieldvalue)$input_array[$fieldname] = mysql_real_escape_string($fieldvalue);
 
 	$id = $input_array['id'];
 	$sessionid = $input_array['sessionid'];
@@ -899,8 +894,8 @@ function authenticate_user($username,$password,$version,$login = 'true')
   		 $list[0] = "NOT COMPATIBLE";
 	  	return $list;
   	}
-	$username = mysql_real_escape_string($username);
-	$password = mysql_real_escape_string($password);
+	$username = $adb->sql_escape_string($username);
+	$password = $adb->sql_escape_string($password);
 
 	$current_date = date("Y-m-d");
 	$sql = "select id, user_name, user_password,last_login_time, support_start_date, support_end_date from vtiger_portalinfo inner join vtiger_customerdetails on vtiger_portalinfo.id=vtiger_customerdetails.customerid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_portalinfo.id where vtiger_crmentity.deleted=0 and user_name=? and user_password = ? and isactive=1 and vtiger_customerdetails.portal=1 and vtiger_customerdetails.support_end_date >= ?";
@@ -1023,8 +1018,6 @@ function send_mail_for_password($mailid)
 	$log->debug("Entering customer portal function send_mail_for_password");
 	$adb->println("Inside the function send_mail_for_password($mailid).");
 
-	//$mailid = mysql_real_escape_string($input_array['email']);
-
 	$sql = "select * from vtiger_portalinfo  where user_name = ? ";
 	$res = $adb->pquery($sql, array($mailid));
 	$user_name = $adb->query_result($res,0,'user_name');
@@ -1136,7 +1129,7 @@ function get_picklists($input_array)
 
 	$id = $input_array['id'];
 	$sessionid = $input_array['sessionid'];
-	$picklist_name = mysql_real_escape_string($input_array['picklist_name']);
+	$picklist_name = $adb->sql_escape_string($input_array['picklist_name']);
 
 	if(!validateSession($id,$sessionid))
 		return null;

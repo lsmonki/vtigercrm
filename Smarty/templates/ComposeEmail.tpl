@@ -133,7 +133,7 @@
 		<table class="small" width="100% ">
 		
 	{if $smarty.request.attachment != ''}
-                <tr><td width="100%" colspan="2">{$smarty.request.attachment}<input type="hidden" value="{$smarty.request.attachment}" name="pdf_attachment"></td></tr>                                                                                                                                                                                      {else}   
+                <tr><td width="100%" colspan="2">{$smarty.request.attachment|@vtlib_purify}<input type="hidden" value="{$smarty.request.attachment|@vtlib_purify}" name="pdf_attachment"></td></tr>                                                                                                                                                                                      {else}   
 
 		{foreach item="attach_files" key="attach_id" from=$elements.3}	
 			<tr id="row_{$attach_id}"><td width="90%">{$attach_files}</td><td><img src="{'no.gif'|@vtiger_imageurl:$THEME}" onClick="delAttachments({$attach_id})" alt="{$APP.LBL_DELETE_BUTTON}" title="{$APP.LBL_DELETE_BUTTON}" style="cursor:pointer;"></td></tr>	

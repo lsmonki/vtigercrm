@@ -15,17 +15,16 @@ require_once('modules/CustomView/CustomView.php');
 require_once("config.php");
 require_once('modules/Reports/Reports.php');
 require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
 require_once("modules/Reports/ReportRun.php");
 require_once('include/utils/utils.php');
 require_once('Smarty_setup.php');
 
 global $adb,$mod_strings,$app_strings;
 
-$reportid = $_REQUEST["record"];
-$folderid = $_REQUEST["folderid"];
-$filtercolumn = $_REQUEST["stdDateFilterField"];
-$filter = $_REQUEST["stdDateFilter"];
+$reportid = vtlib_purify($_REQUEST["record"]);
+$folderid = vtlib_purify($_REQUEST["folderid"]);
+$filtercolumn = vtlib_purify($_REQUEST["stdDateFilterField"]);
+$filter = vtlib_purify($_REQUEST["stdDateFilter"]);
 // Added to fix the issue
 
 $sql = "select * from vtiger_report where reportid=?";

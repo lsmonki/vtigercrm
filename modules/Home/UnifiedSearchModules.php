@@ -11,7 +11,7 @@
 global $app_strings, $mod_strings, $current_language, $currentModule, $current_user, $theme, $adb;
 
 $selected_modules = array();
-if(isset($_SESSION['__UnifiedSearch_SelectedModules__'])) {
+if(!empty($_SESSION['__UnifiedSearch_SelectedModules__']) && is_array($_SESSION['__UnifiedSearch_SelectedModules__'])) {
 	$selected_modules = $_SESSION['__UnifiedSearch_SelectedModules__'];
 }
 

@@ -1,17 +1,14 @@
 <?php
-
-/***********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-* 
  ********************************************************************************/
 
 require_once('Smarty_setup.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('modules/Settings/savewordtemplate.php');
 
@@ -51,7 +48,7 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("UMOD", $mod_strings);
-$smarty->assign("PARENTTAB", htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
+$smarty->assign("PARENTTAB", getParentTab());
 $smarty->assign("MAX_FILE_SIZE", $upload_maxsize);
 
 $template = Array(
@@ -62,7 +59,6 @@ $template = Array(
 	   );
 
 $smarty->assign($template[$tempModule],"selected");
-
 
 $smarty->display('CreateWordTemplate.tpl');
 

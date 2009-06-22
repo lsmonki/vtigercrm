@@ -13,7 +13,6 @@ require_once('Smarty_setup.php');
 require_once('include/utils/utils.php');
 require_once('data/Tracker.php');
 require_once('include/utils/UserInfoUtil.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 
 global $app_strings;
@@ -34,7 +33,7 @@ $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("THEME", $theme);
 $smarty->assign("THEME_PATH", $theme_path);
 $smarty->assign("UMOD", $mod_strings);
-$smarty->assign("PARENTTAB", htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset));
+$smarty->assign("PARENTTAB", getParentTab());
 $smarty->assign("ALL_VARIABLES", $allOptions);
 
 $smarty->assign("MOD", $smod_strings);
@@ -43,8 +42,3 @@ $smarty->assign("MODULE", 'Settings');
 $smarty->display("CreateEmailTemplate.tpl");
 
 ?>
-
-
-
-
-

@@ -1,15 +1,12 @@
 <?php
-/*********************************************************************************
- ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-  * ("License"); You may not use this file except in compliance with the License
-  * The Initial Developer of the Original Code is FOSS Labs.
-  * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
-  * Portions created by vtiger are Copyright (C) vtiger.
-  * All Rights Reserved.
-  *
-  ********************************************************************************/
-
-
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Initial Developer of the Original Code is FOSS Labs.
+ * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
 include_once('config.php');
 require_once('include/logging.php');
 require_once('modules/Webmails/conf.php');
@@ -581,16 +578,6 @@ function GetCodeScoreAll($Data,$beg_charset) {
 	return $Mark_list;
 }
 
-
-
-
-
-
-
-
-
-
-
 /* lxnt:  patched to return charset names that iconv() understands*/
 function detect_charset($Data,$dbg_fl = 0) {
 	/* for many small pices of text -  list of sender/subject*/
@@ -672,16 +659,6 @@ function link_att(&$mail, $attach_tab, &$display_part_no,$ev)
 	return ($link);
 }
 
-
-
-
-
-
-
-
-
-
-
 // Convert mail data (from, to, ...) to HTML
 function convertMailData2Html($maildata, $cutafter = 0)
 				{
@@ -695,18 +672,11 @@ function convertMailData2Html($maildata, $cutafter = 0)
 					}
 				}
 
-// Convert a language string to HTML
- function convertLang2Html($langstring) {
-   global $charset;
-     return htmlentities($langstring, 2, $charset);
-					}
-
-
-
-
-
-
-
+	// Convert a language string to HTML
+	function convertLang2Html($langstring) {
+		global $charset;
+		return htmlentities($langstring, 2, $charset);
+	}
 
 	function load_mail($attach_tab)
 	{
@@ -885,14 +855,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 			'charset' => $body_charset
 		);
 		return ($content);
-
 	}
-
-
-
-
-
-
 
 	// get the body of a part of a message according to the
 	// string in $part

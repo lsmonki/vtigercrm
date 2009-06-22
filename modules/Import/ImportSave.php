@@ -1,14 +1,15 @@
 <?php
-/*********************************************************************************
- ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *
- ********************************************************************************/
+ *********************************************************************************/
 
+require_once('data/CRMEntity.php');
+	
 $count = 0;
 $skip_required_count = 0;
 
@@ -172,7 +173,7 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 				}
 			}
 		}
-		
+
 		if ( ! isset($focus->column_fields["assigned_user_id"]) || $focus->column_fields["assigned_user_id"]==='' || $focus->column_fields["assigned_user_id"]===NULL) {
 			$focus->column_fields["assigned_user_id"] = $my_userid;
 		}
@@ -222,6 +223,7 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 			}
 			
 			$focus->save($module);
+			//$focus->saveentity($module);
 			$return_id = $focus->id;
 
 			if(count($resCustFldArray)>0){
@@ -301,15 +303,14 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 
 	$_REQUEST['count'] = $ii;
 	if(isset($_REQUEST['module']))
-	$modulename = $_REQUEST['module'];
+	$modulename = vtlib_purify($_REQUEST['module']);
 
 	$end = $start+$recordcount;
 	$START = $start + $recordcount;
 	$RECORDCOUNT = $recordcount;
 	$dup_check_type = $_REQUEST['dup_type'];
 
-	if($end >= $totalnoofrows)
-	{
+	if($end >= $totalnoofrows) {
 		$module = 'Import';//$_REQUEST['module'];
 		$action = 'ImportSteplast';
 		//exit;
@@ -317,8 +318,7 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 		if($imported_records == $totalnoofrows) {
 			$skip_required_count = 0;
 		}
-		 if($dup_check_type == "auto")
-		 {
+		 if($dup_check_type == "auto") {
 			 $auto_dup_type = $_REQUEST['auto_type'];
 			 if($auto_dup_type == "ignore") {
 			 	$dup_info = $mod_strings['Duplicate_Records_Skipped_Info'].$dup_count;
@@ -330,28 +330,26 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 			 }
 		 }
 		 else
-		 $dup_info = "";
+		 	$dup_info = "";
 		 
 		 if($imported_records < 0) $imported_records = 0;
 	
 		 $message= urlencode("<b>".$mod_strings['LBL_SUCCESS']."</b>"."<br><br>" .$mod_strings['LBL_SUCCESS_1']."  $imported_records" ."<br><br>" .$mod_strings['LBL_SKIPPED_1']."  $skip_required_count <br><br>".$dup_info );
-	}
-	else
-	{
+	} else {
 		$module = 'Import';
 		$action = 'ImportStep3';
 	}
-	?>
+?>
 
 <script>
 setTimeout("b()",1000);
 function b()
 {
-	document.location.href="index.php?action=<?php echo $action?>&module=<?php echo $module?>&modulename=<?php echo $modulename?>&startval=<?php echo $end?>&recordcount=<?php echo $RECORDCOUNT?>&noofrows=<?php echo $totalnoofrows?>&message=<?php echo $message?>&skipped_record_count=<?php echo $skip_required_count?>&parenttab=<?php echo $_SESSION['import_parenttab']?>&dup_type=<?php echo $dup_check_type?>";
+	document.location.href="index.php?action=<?php echo $action?>&module=<?php echo $module?>&modulename=<?php echo $modulename?>&startval=<?php echo $end?>&recordcount=<?php echo $RECORDCOUNT?>&noofrows=<?php echo $totalnoofrows?>&message=<?php echo $message?>&skipped_record_count=<?php echo $skip_required_count?>&parenttab=<?php echo vtlib_purify($_SESSION['import_parenttab'])?>&dup_type=<?php echo $dup_check_type?>";
 }
 </script>
 
-	<?php
+<?php
 	$_SESSION['import_display_message'] = '<br>'.$start.' '.$mod_strings['to'].' '.$end.' '.$mod_strings['of'].' '.$totalnoofrows.' '.$mod_strings['are_imported_succesfully'];
 	//return $_SESSION['import_display_message'];
 }
@@ -453,8 +451,7 @@ function get_where_clause($module,$column_fields) {
 	$tblname_field_arr = explode(",",$field_values);
 	$uitype_arr = $field_values_array['fieldname_uitype'];
 
-	require_once("modules/$module/$module.php");
-	$focus = new $module;
+	$focus = CRMEntity::getInstance($module);
 
 	foreach($tblname_field_arr as $val) {
 		list($tbl,$col,$fld) = explode(".",$val);
@@ -573,4 +570,3 @@ function overwrite_duplicate_records($module,$focus)
 }
 
 ?>
-

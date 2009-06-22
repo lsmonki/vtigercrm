@@ -1,93 +1,74 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
+
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 global $current_user;
- $fldmodule=$_REQUEST['fld_module'];
- $blockid = $_REQUEST['blockid'];
- $fldlabel=trim($_REQUEST['fldLabel_'.$blockid]);
- $fldType= $_REQUEST['fieldType_'.$blockid];
- $parenttab=$_REQUEST['parenttab'];
- $mode=$_REQUEST['mode'];
+ 
+$fldmodule=vtlib_purify($_REQUEST['fld_module']);
+$blockid = vtlib_purify($_REQUEST['blockid']);
+$fldlabel=vtlib_purify(trim($_REQUEST['fldLabel_'.$blockid]));
+$fldType= vtlib_purify($_REQUEST['fieldType_'.$blockid]);
+
+$parenttab=getParentTab();
+$mode=vtlib_purify($_REQUEST['mode']);
 
 $tabid = getTabid($fldmodule);
 if ($fldmodule == 'Calendar' && isset($_REQUEST['activity_type'])) {
-	$activitytype = $_REQUEST['activity_type'];
+	$activitytype = vtlib_purify($_REQUEST['activity_type']);
 	if ($activitytype == 'E') $tabid = '16';
 	if ($activitytype == 'T') $tabid = '9';
 }
 
-if(get_magic_quotes_gpc() == 1)
-{
+if(get_magic_quotes_gpc() == 1) {
 	$fldlabel = stripslashes($fldlabel);
 }
 
-$log->fatal(print_r($_REQUEST,true));
 //checking if the user is trying to create a custom vtiger_field which already exists  
 $dup_check_tab_id = $tabid;
 if ($fldmodule == 'Calendar')
 	$dup_check_tab_id = array('9', '16');
 $checkquery="select * from vtiger_field where tabid in (". generateQuestionMarks($dup_check_tab_id) .") and fieldlabel=?";
 $params =  array($dup_check_tab_id, $fldlabel);
-if($mode == 'edit' && isset($_REQUEST['fieldid']) && $_REQUEST['fieldid'] != '')
-{
+if($mode == 'edit' && isset($_REQUEST['fieldid']) && $_REQUEST['fieldid'] != '') {
 	$checkquery .= " and fieldid !=?";
 	array_push($params, $_REQUEST['fieldid']);
 }
 $checkresult=$adb->pquery($checkquery,$params);
 
-if($adb->num_rows($checkresult) > 0)
-{
+if($adb->num_rows($checkresult) > 0) {
 	
-	if(isset($_REQUEST['fldLength_'.$blockid]))
-	{	
+	if(isset($_REQUEST['fldLength_'.$blockid])) 	{	
 		$fldlength=$_REQUEST['fldLength_'.$blockid];
-	}
-	else
-	{
+	} else {
 		 $fldlength='';
 	}
-	if(isset($_REQUEST['fldDecimal_'.$blockid]))
-	{
+	if(isset($_REQUEST['fldDecimal_'.$blockid])) {
 		$flddecimal=$_REQUEST['fldDecimal_'.$blockid];
-	}
-	else
-	{
+	} else {
 		$flddecimal='';
 	}
-	if(isset($_REQUEST['fldPickList_'.$blockid]))
-	{
+	if(isset($_REQUEST['fldPickList_'.$blockid])) {
 		$fldPickList=$_REQUEST['fldPickList_'.$blockid];
-	}
-	else
-	{
+	} else {
 		$fldPickList='';
 	}
 	
-	//header("Location:index.php?module=Settings&action=CustomFieldList&fld_module=".$fldmodule."&fldType=".$fldType."&fldlabel=".$fldlabel."&fldlength=".$fldlength."&flddecimal=".$flddecimal."&fldPickList=".$fldPickList."&parenttab=".$parenttab."&duplicate=yes");
-	//changed to fix the issue #4117
-		header("Location:index.php?module=Settings&action=CustomFieldList&fld_module=".$fldmodule."&fldType=".$fldType."&fldlabel=".$fldlabel."&parenttab=".$parenttab."&duplicate=yes");
+	header("Location:index.php?module=Settings&action=CustomFieldList&fld_module=".$fldmodule."&fldType=".$fldType."&fldlabel=".$fldlabel."&parenttab=".$parenttab."&duplicate=yes");
 
-
-}
-else
-{
-	if($_REQUEST['fieldid'] == '')
-	{
+} else {
+	if($_REQUEST['fieldid'] == '') {
 		$max_fieldid = $adb->getUniqueID("vtiger_field");
 		$columnName = 'cf_'.$max_fieldid;
 		$custfld_fieldid=$max_fieldid;
-	}
-	else
-	{
+	} else {
 		$max_fieldid = $_REQUEST['column'];
 		$columnName = $max_fieldid;
 		$custfld_fieldid= $_REQUEST['fieldid'];
@@ -95,30 +76,19 @@ else
 
 	//Assigning the vtiger_table Name
 	$tableName ='';
-	if($fldmodule == 'HelpDesk')
-	{
+	if($fldmodule == 'HelpDesk') {
 		$tableName='vtiger_ticketcf';
-	}
-	elseif($fldmodule == 'Products')
-	{
+	} elseif($fldmodule == 'Products') {
 		$tableName='vtiger_productcf';
-	}
-	elseif($fldmodule == 'Vendors')
-	{
+	} elseif($fldmodule == 'Vendors') {
 		$tableName='vtiger_vendorcf';
-	}
-	elseif($fldmodule == 'PriceBooks')
-	{
+	} elseif($fldmodule == 'PriceBooks') {
 		$tableName='vtiger_pricebookcf';
-	}
-	elseif($fldmodule == 'Calendar')
-	{
+	} elseif($fldmodule == 'Calendar') {
 		$tableName='vtiger_activitycf';
-	}
-	elseif($fldmodule != '') {
-		checkFileAccess("modules/$fldmodule/$fldmodule.php");
-		include_once("modules/$fldmodule/$fldmodule.php");
-		$focus = new $fldmodule();
+	} elseif($fldmodule != '') {
+		include_once('data/CRMEntity.php');
+		$focus = CRMEntity::getInstance($fldmodule);
 		if (isset($focus->customFieldTable)) {
 			$tableName=$focus->customFieldTable[0];
 		} else {
@@ -267,7 +237,7 @@ else
 
 			if($fldType == 'Picklist' || $fldType == 'MultiSelectCombo')
 			{
-				$columnName = mysql_real_escape_string($columnName);
+				$columnName = $adb->sql_escape_string($columnName);
 				// Creating the PickList Table and Populating Values
 				if($_REQUEST['fieldid'] == '')
 				{

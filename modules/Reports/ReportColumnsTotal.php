@@ -13,7 +13,6 @@ require_once('Smarty_setup.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Reports/Reports.php');
-require_once('include/database/PearDatabase.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -35,14 +34,14 @@ $report_column_tot->assign("IMAGE_PATH",$image_path);
 
 if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 {
-        $recordid = $_REQUEST["record"];
+        $recordid = vtlib_purify($_REQUEST["record"]);
         $oReport = new Reports($recordid);
 		$oRep = new Reports();
 		$secondarymodule = '';
 		$secondarymodules =Array();
 		
 		foreach($oRep->related_modules[$oReport->primodule] as $key=>$value){
-			if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= $_REQUEST["secondarymodule_".$value];
+			if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= vtlib_purify($_REQUEST["secondarymodule_".$value]);
 		}
 		$secondarymodule = implode(":",$secondarymodules);
 		
@@ -54,11 +53,11 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 		$report_column_tot->assign("RECORDID",$recordid);
 }else
 {
-        $primarymodule = $_REQUEST["primarymodule"];
+        $primarymodule = vtlib_purify($_REQUEST["primarymodule"]);
         $oReport = new Reports();
         $secondarymodule = Array();
 		foreach($ogReport->related_modules[$primarymodule] as $key=>$value){
-        	$secondarymodule[] = $_REQUEST["secondarymodule_".$value];
+        	$secondarymodule[] = vtlib_purify($_REQUEST["secondarymodule_".$value]);
         	
 		}
         $BLOCK1 = $oReport->sgetColumntoTotal($primarymodule,$secondarymodule);

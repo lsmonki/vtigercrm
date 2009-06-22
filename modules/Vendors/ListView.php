@@ -1,23 +1,21 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
-require_once('include/database/PearDatabase.php');
+
 require_once('include/database/Postgres8.php');
 require_once('Smarty_setup.php');
 require_once('modules/Vendors/Vendors.php');
 require_once('include/ListView/ListView.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
-require_once('include/DatabaseUtil.php');
 
-global $app_strings,$mod_strings,$list_max_entries_per_page,$currentModule,$theme;
+global $app_strings,$mod_strings,$list_max_entries_per_page,$currentModule,$theme,$adb;
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -49,7 +47,7 @@ if(!$_SESSION['lvs'][$currentModule])
 
 if($_REQUEST['errormsg'] != '')
 {
-        $errormsg = $_REQUEST['errormsg'];
+        $errormsg = vtlib_purify($_REQUEST['errormsg']);
         $smarty->assign("ERROR","The User does not have permission to delete ".$errormsg." ".$currentModule);
 }else
 {
@@ -59,12 +57,12 @@ if (!isset($where)) $where = "";
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 if($_REQUEST['order_by'] != '')
-	$order_by = $_REQUEST['order_by'];
+	$order_by = $adb->sql_escape_string($_REQUEST['order_by']);
 else
 	$order_by = (($_SESSION['VENDORS_ORDER_BY'] != '')?($_SESSION['VENDORS_ORDER_BY']):($focus->default_order_by));
 
 if($_REQUEST['sorder'] != '')
-	$sorder = $_REQUEST['sorder'];
+	$sorder = $adb->sql_escape_string($_REQUEST['sorder']);
 else
 	$sorder = (($_SESSION['VENDORS_SORT_ORDER'] != '')?($_SESSION['VENDORS_SORT_ORDER']):($focus->default_sort_order));
 
@@ -230,8 +228,8 @@ $smarty->assign("AVALABLE_FIELDS", getMergeFields($currentModule,"available_fiel
 $smarty->assign("FIELDS_TO_MERGE", getMergeFields($currentModule,"fileds_to_merge"));
 
 //Added to select Multiple records in multiple pages
-$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
-$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
+$smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
 $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
 $smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);

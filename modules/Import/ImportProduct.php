@@ -61,7 +61,6 @@ class ImportProduct extends Products {
 		{
 			$this->db->println("searching and assigning ".$ass_user);
 
-			//$result = $this->db->query("select id from vtiger_users where user_name = '".$ass_user."'");
 			$result = $this->db->pquery("select id from vtiger_users where id = ?", array($ass_user));
 			if($this->db->num_rows($result)!=1)
 			{

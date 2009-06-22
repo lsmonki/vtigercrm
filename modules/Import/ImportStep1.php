@@ -1,13 +1,12 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *
- ********************************************************************************/
+ *********************************************************************************/
 
 require_once('Smarty_setup.php');
 require_once('modules/Import/ImportLead.php');
@@ -16,7 +15,6 @@ require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportOpportunity.php');
 require_once('modules/Import/ImportProduct.php');
 require_once('modules/Import/ImportMap.php');
-//Pavani: Import this file to Support Imports for Trouble tickets and vendors
 require_once('modules/Import/ImportTicket.php');
 require_once('modules/Import/ImportVendors.php');
 require_once('include/utils/CommonUtils.php');
@@ -51,7 +49,7 @@ $import_object_array = Array(
 				"Potentials"=>"ImportOpportunity",
 				"Products"=>"ImportProduct",
 				"HelpDesk"=>"ImportTicket",
-                                "Vendors"=>"ImportVendors"
+				"Vendors"=>"ImportVendors"
 			    );
 
 if(isset($_REQUEST['module']) && $_REQUEST['module'] != '')
@@ -60,12 +58,12 @@ if(isset($_REQUEST['module']) && $_REQUEST['module'] != '')
 	// vtlib customization: Hook added to enable import for un-mapped modules
 	$module = $_REQUEST['module'];	
 	if($object_name == null) {
+		checkFileAccess("modules/$module/$module.php");
 		require_once("modules/$module/$module.php");
 		$object_name = $module;
 		$callInitImport = true;
 	}
 	// END
-
 	$focus = new $object_name();
 	// vtlib customization: Call the import initializer
 	if($callInitImport) $focus->initImport($module);
@@ -77,8 +75,8 @@ else
 	exit;
 }
 
-if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
-if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
+if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
 
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);

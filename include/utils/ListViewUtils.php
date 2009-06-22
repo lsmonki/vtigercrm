@@ -304,32 +304,32 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 	$tabid = getTabid($module);
 	if(isset($_REQUEST['task_relmod_id']))
 	{
-		$task_relmod_id=$_REQUEST['task_relmod_id'];
+		$task_relmod_id=vtlib_purify($_REQUEST['task_relmod_id']);
 		$pass_url .="&task_relmod_id=".$task_relmod_id;
 	}
 	if(isset($_REQUEST['relmod_id']))
 	{
-		$relmod_id=$_REQUEST['relmod_id'];
+		$relmod_id=vtlib_purify($_REQUEST['relmod_id']);
 		$pass_url .="&relmod_id=".$relmod_id;
 	}
 	if(isset($_REQUEST['task_parent_module']))
 	{
-		$task_parent_module=$_REQUEST['task_parent_module'];
+		$task_parent_module=vtlib_purify($_REQUEST['task_parent_module']);
 		$pass_url .="&task_parent_module=".$task_parent_module;
 	}
 	if(isset($_REQUEST['parent_module']))
 	{
-		$parent_module=$_REQUEST['parent_module'];
+		$parent_module=vtlib_purify($_REQUEST['parent_module']);
 		$pass_url .="&parent_module=".$parent_module;
 	}
 	if(isset($_REQUEST['fromPotential']) && (isset($_REQUEST['acc_id']) && $_REQUEST['acc_id']!= ''))
 	{
-		$pass_url .="&parent_module=Accounts&relmod_id=".$_REQUEST['acc_id'];
+		$pass_url .="&parent_module=Accounts&relmod_id=".vtlib_purify($_REQUEST['acc_id']);
 	}
 	
 	// vtlib Customization : For uitype 10 popup during paging
 	if($_REQUEST['form'] == 'vtlibPopupView') {
-		$pass_url .= '&form=vtlibPopupView&forfield='.$_REQUEST['forfield'].'&srcmodule='.$_REQUEST['srcmodule'].'&forrecord='.$_REQUEST['forrecord'];
+		$pass_url .= '&form=vtlibPopupView&forfield='.vtlib_purify($_REQUEST['forfield']).'&srcmodule='.vtlib_purify($_REQUEST['srcmodule']).'&forrecord='.vtlib_purify($_REQUEST['forrecord']);
 	}
 	// END
 	
@@ -1056,7 +1056,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			if(isPermitted($module,"EditView","") == 'yes'){
 				$edit_link = getListViewEditLink($module,$entity_id,$relatedlist,$varreturnset,$list_result,$list_result_count);	
 				if(isset($_REQUEST['start']) && $_REQUEST['start'] > 1 && $module != 'Emails')
-					$links_info .= "<a href=\"$edit_link&start=".$_REQUEST['start']."\">".$app_strings["LNK_EDIT"]."</a> ";
+					$links_info .= "<a href=\"$edit_link&start=".vtlib_purify($_REQUEST['start'])."\">".$app_strings["LNK_EDIT"]."</a> ";
 				else
 					$links_info .= "<a href=\"$edit_link\">".$app_strings["LNK_EDIT"]."</a> ";
 			}
@@ -1316,7 +1316,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 					$description=$adb->query_result($list_result,$list_result_count,'description');
 					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
 
-					$sub_products_link = '<a href="index.php?module=Products&action=Popup&html=Popup_picker&return_module='.$_REQUEST['return_module'].'&record_id='.$entity_id.'&form=HelpDeskEditView&select=enable&popuptype='.$focus->popup_type.'&curr_row='.$row_id.'&currencyid='.$_REQUEST['currencyid'].'" > Sub Products</a>';	
+					$sub_products_link = '<a href="index.php?module=Products&action=Popup&html=Popup_picker&return_module='.vtlib_purify($_REQUEST['return_module']).'&record_id='.vtlib_purify($entity_id).'&form=HelpDeskEditView&select=enable&popuptype='.$focus->popup_type.'&curr_row='.vtlib_purify($row_id).'&currencyid='.vtlib_purify($_REQUEST['currencyid']).'" > Sub Products</a>';	
 					
 					if(!isset($_REQUEST['record_id'])){
 						$sub_products_query = $adb->pquery("SELECT * from vtiger_seproductsrel WHERE productid=? AND setype='Products'",array($entity_id));
@@ -1868,7 +1868,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		$contactid=$_REQUEST['record'];
 		$emailid=$adb->query_result($list_result,$list_result_count,"activityid");
-		$result = $adb->query("select access_count from vtiger_email_track where crmid=$contactid and mailid=$emailid");
+		$result = $adb->pquery("SELECT access_count FROM vtiger_email_track WHERE crmid=? AND mailid=?", array($contactid,$emailid));
 		$value=$adb->query_result($result,0,"access_count");
 		if(!$value) {
 			$value = 0;
@@ -2093,15 +2093,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 					$temp_val = popup_from_html($temp_val);
 					$value = '<a href="javascript:window.close();" onclick=\'set_return_inventory_pb("'.$listprice.'", "'.$flname.'"); \'>'.$temp_val.'</a>';
-				}
-				elseif($popuptype == "inventory_mo")
-				{
-					$prod_id = $_REQUEST['productid'];
-					$flname =  $_REQUEST['fldname'];
-					$listprice=getListPrice($prod_id,$entity_id);	
-
-					$slashes_temp_val = popup_from_html($temp_val);
-					$value = '<a href="javascript:window.close();" onclick=\'set_return_product("'.$entity_id.'", "'.nl2br($slashes_temp_val).'"); \'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "specific_account_address")
 				{
@@ -2951,11 +2942,7 @@ function getListQuery($module,$where='')
 			break;
 	default:
 		// vtlib customization: Include the module file
-		if(file_exists("modules/$module/$module.php")) {
-			checkFileAccess("modules/$module/$module.php");
-			include_once("modules/$module/$module.php");
-		}
-		$focus = new $module();	
+		$focus = CRMEntity::getInstance($module);	
 		$query = $focus->getListQuery($module, $where);
 		// END
 	}
@@ -3181,7 +3168,7 @@ function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='
 
 	// vtlib Customization : For uitype 10 popup during paging
 	if($_REQUEST['form'] == 'vtlibPopupView') {
-		$returnvalue .= '&form=vtlibPopupView&forfield='.$_REQUEST['forfield'].'&srcmodule='.$_REQUEST['srcmodule'].'&forrecord='.$_REQUEST['forrecord'];
+		$returnvalue .= '&form=vtlibPopupView&forfield='.vtlib_purify($_REQUEST['forfield']).'&srcmodule='.vtlib_purify($_REQUEST['srcmodule']).'&forrecord='.vtlib_purify($_REQUEST['forrecord']);
 	}
 	// END
 
@@ -3469,15 +3456,11 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 		$output = '';
 	$tabname = getParentTab();
 
-	//echo '<pre>';print_r($_REQUEST);echo '</pre>';
-	/*    //commented due to usablity conflict -- Philip
-	$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'&allflag='.$navigation_array['allflag'].'" >'.$navigation_array['allflag'].'</a>&nbsp;';
-	 */
 	$url_string = '';
 
 	// vtlib Customization : For uitype 10 popup during paging
 	if($_REQUEST['form'] == 'vtlibPopupView') {
-		$url_string .= '&form=vtlibPopupView&forfield='.$_REQUEST['forfield'].'&srcmodule='.$_REQUEST['srcmodule'].'&forrecord='.$_REQUEST['forrecord'];
+		$url_string .= '&form=vtlibPopupView&forfield='.vtlib_purify($_REQUEST['forfield']).'&srcmodule='.vtlib_purify($_REQUEST['srcmodule']).'&forrecord='.vtlib_purify($_REQUEST['forrecord']);
 	}
 	// END
 	
@@ -3503,19 +3486,19 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 			'hour'=>$value[4],
 			'min'=>$value[5],
 		);	
-		$tab_type = ($_REQUEST['subtab'] == '')?'event':$_REQUEST['subtab'];
-		$url_string .= isset($_REQUEST['view'])?"&view=".$_REQUEST['view']:"&view=".$mysel;
-		$url_string .= isset($_REQUEST['subtab'])?"&subtab=".$_REQUEST['subtab']:'';
-		$url_string .= isset($_REQUEST['viewOption'])?"&viewOption=".$_REQUEST['viewOption']:'&viewOption=listview';
-		$url_string .= isset($_REQUEST['day'])?"&day=".$_REQUEST['day']:'&day='.$date_data['day'];
-		$url_string .= isset($_REQUEST['week'])?"&week=".$_REQUEST['week']:'';
-		$url_string .= isset($_REQUEST['month'])?"&month=".$_REQUEST['month']:'&month='.$date_data['month'];
-		$url_string .= isset($_REQUEST['year'])?"&year=".$_REQUEST['year']:"&year=".$date_data['year'];
-		$url_string .= isset($_REQUEST['n_type'])?"&n_type=".$_REQUEST['n_type']:'';
-		$url_string .= isset($_REQUEST['search_option'])?"&search_option=".$_REQUEST['search_option']:'';
+		$tab_type = ($_REQUEST['subtab'] == '')?'event':vtlib_purify($_REQUEST['subtab']);
+		$url_string .= isset($_REQUEST['view'])?"&view=".vtlib_purify($_REQUEST['view']):"&view=".$mysel;
+		$url_string .= isset($_REQUEST['subtab'])?"&subtab=".vtlib_purify($_REQUEST['subtab']):'';
+		$url_string .= isset($_REQUEST['viewOption'])?"&viewOption=".vtlib_purify($_REQUEST['viewOption']):'&viewOption=listview';
+		$url_string .= isset($_REQUEST['day'])?"&day=".vtlib_purify($_REQUEST['day']):'&day='.$date_data['day'];
+		$url_string .= isset($_REQUEST['week'])?"&week=".vtlib_purify($_REQUEST['week']):'';
+		$url_string .= isset($_REQUEST['month'])?"&month=".vtlib_purify($_REQUEST['month']):'&month='.$date_data['month'];
+		$url_string .= isset($_REQUEST['year'])?"&year=".vtlib_purify($_REQUEST['year']):"&year=".$date_data['year'];
+		$url_string .= isset($_REQUEST['n_type'])?"&n_type=".vtlib_purify($_REQUEST['n_type']):'';
+		$url_string .= isset($_REQUEST['search_option'])?"&search_option=".vtlib_purify($_REQUEST['search_option']):'';
 	}
 	if($module == 'Calendar' && $action_val != 'index') //added for the All link from the homepage -- ticket 5211
-		$url_string .= isset($_REQUEST['from_homepage'])?"&from_homepage=".$_REQUEST['from_homepage']:'';
+		$url_string .= isset($_REQUEST['from_homepage'])?"&from_homepage=".vtlib_purify($_REQUEST['from_homepage']):'';
 
 	if(($navigation_array['prev']) != 0)
 	{
@@ -4001,9 +3984,8 @@ function getRelCheckquery($currentmodule,$returnmodule,$recordid)
 		$query = "SELECT relcrmid AS relatedid FROM vtiger_crmentityrel WHERE  crmid = ? and module = ? and relmodule = ?
 					UNION SELECT crmid AS relatedid FROM vtiger_crmentityrel WHERE relcrmid = ? and relmodule = ? and module = ?";
 		array_push($params, $recordid, $returnmodule, $currentmodule, $recordid, $returnmodule, $currentmodule);
-		
-		require_once("modules/$returnmodule/$returnmodule.php");
-		$focus_obj = new $currentmodule();
+
+		$focus_obj = CRMEntity::getInstance($currentmodule);
 		$field = $focus_obj->table_index;
 		$table = $focus_obj->table_name;
 		$selectfield = 'relatedid';
@@ -4070,7 +4052,7 @@ function setSessionVar($lv_array,$noofrows,$max_ent,$module='',$related='')
 		}
 	}
 	if(isset($_REQUEST['viewname']) && $_REQUEST['viewname'] !='')
-		$lv_array['viewname']=$_REQUEST['viewname'];
+		$lv_array['viewname']=vtlib_purify($_REQUEST['viewname']);
 
 	if($related=='')
 		$_SESSION['lvs'][$_REQUEST['module']]=$lv_array;
@@ -4200,7 +4182,7 @@ function getListViewEditLink($module,$entity_id,$relatedlist,$returnset,$result,
 function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
 {
 	$tabname = getParentTab();
-	$current_module = $_REQUEST['module'];
+	$current_module = vtlib_purify($_REQUEST['module']);
 	$viewname = $_SESSION['lvs'][$current_module]['viewname'];
 
 	//Added to fix 4600
@@ -4234,10 +4216,10 @@ function getListViewDeleteLink($module,$entity_id,$relatedlist,$returnset)
 	$del_link .= "&parenttab=".$tabname."&return_viewname=".$viewname.$url;
 	
 	// vtlib customization: override default delete link for custom modules
-	$requestModule = $_REQUEST['module'];
-	$requestRecord = $_REQUEST['record'];
-	$requestAction = $_REQUEST['action'];
-	$parenttab = $_REQUEST['parenttab'];
+	$requestModule = vtlib_purify($_REQUEST['module']);
+	$requestRecord = vtlib_purify($_REQUEST['record']);
+	$requestAction = vtlib_purify($_REQUEST['action']);
+	$parenttab = vtlib_purify($_REQUEST['parenttab']);
 	$isCustomModule = vtlib_isCustomModule($requestModule);
 	if($isCustomModule && !in_array($requestAction, Array('index','ListView'))) {
 		$del_link = "index.php?module=$requestModule&action=updateRelations&parentid=$requestRecord";

@@ -103,7 +103,7 @@ class ServiceContracts extends CRMEntity {
 		global $currentModule;
 
 		$sortorder = $this->default_sort_order;
-		if($_REQUEST['sorder']) $sortorder = $_REQUEST['sorder'];
+		if($_REQUEST['sorder']) $sortorder = $this->db->sql_escape_string($_REQUEST['sorder']);
 		else if($_SESSION[$currentModule.'_Sort_Order']) 
 			$sortorder = $_SESSION[$currentModule.'_Sort_Order'];
 
@@ -111,8 +111,10 @@ class ServiceContracts extends CRMEntity {
 	}
 
 	function getOrderBy() {
+		global $currentModule;
+		
 		$orderby = $this->default_order_by;
-		if($_REQUEST['order_by']) $orderby = $_REQUEST['order_by'];
+		if($_REQUEST['order_by']) $orderby = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else if($_SESSION[$currentModule.'_Order_By'])
 			$orderby = $_SESSION[$currentModule.'_Order_By'];
 		return $orderby;
@@ -160,9 +162,7 @@ class ServiceContracts extends CRMEntity {
 			$fieldname = $this->db->query_result($linkedModulesQuery, $i, 'fieldname');
 			$columnname = $this->db->query_result($linkedModulesQuery, $i, 'columnname');
 			
-			checkFileAccess("modules/$related_module/$related_module.php");
-			require_once("modules/$related_module/$related_module.php");
-			$other = new $related_module();
+			$other = CRMEntity::getInstance($related_module);
 			vtlib_setup_modulevars($related_module, $other);
 			
 			$query .= " LEFT JOIN $other->table_name ON $other->table_name.$other->table_index = $this->table_name.$columnname";
@@ -254,9 +254,7 @@ class ServiceContracts extends CRMEntity {
 			$fieldname = $this->db->query_result($linkedModulesQuery, $i, 'fieldname');
 			$columnname = $this->db->query_result($linkedModulesQuery, $i, 'columnname');
 			
-			checkFileAccess("modules/$related_module/$related_module.php");
-			require_once("modules/$related_module/$related_module.php");
-			$other = new $related_module();
+			$other = CRMEntity::getInstance($related_module);
 			vtlib_setup_modulevars($related_module, $other);
 			
 			$query .= " LEFT JOIN $other->table_name ON $other->table_name.$other->table_index = $this->table_name.$columnname";

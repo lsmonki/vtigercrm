@@ -1,13 +1,12 @@
 <?php
-/*********************************************************************************
-* The contents of this file are subject to the vtiger CRM Public License Version 1.0
-* ("License"); You may not use this file except in compliance with the License
-* The Original Code is:  vtiger CRM Open Source
-* The Initial Developer of the Original Code is vtiger.
-* Portions created by vtiger are Copyright (C) vtiger.
-* All Rights Reserved.
-*
-********************************************************************************/
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ *********************************************************************************/
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/Documents/Documents.php');
@@ -24,14 +23,7 @@ if(isset($_REQUEST['act']) && $_REQUEST['act'] == 'updateDldCnt')
 	$sql = "select filedownloadcount from vtiger_notes where notesid= ?";
 	$download_count = $adb->query_result($adb->pquery($sql,array($file_id)),0,'filedownloadcount') + 1;
 	$sql="update vtiger_notes set filedownloadcount= ? where notesid= ?";
-	$res=$adb->pquery($sql,array($download_count,$file_id));	
-	
-	/*$query="select max(downloadid) from vtiger_dldhistory";
-	$downloadid=$adb->query_result($adb->query($query),0,'max(downloadid)')+1;
-	$usip=$_SERVER['REMOTE_ADDR'];
-	$date1=date('Y-m-d H:i:s');
-	$sqldldhis="insert into vtiger_dldhistory (downloadid,dldfileid,userid,ipaddress,dateTime) values(".$downloadid.",".$fileid.",".$current_user->id.",'".$usip."','".date('Y-m-d H:i:s')."')";
-	$res=$adb->pquery($sqldldhis,array($downloadid,$fileid,$current_user->id,$usip,$date1));*/
+	$res=$adb->pquery($sql,array($download_count,$file_id));
 }
 
 if(isset($_REQUEST['act']) && $_REQUEST['act'] == 'checkFileIntegrityDetailView')
@@ -78,6 +70,5 @@ if(isset($_REQUEST['act']) && $_REQUEST['act'] == 'checkFileIntegrityDetailView'
 		}
 		
 }
-
 
 ?>
