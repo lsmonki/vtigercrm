@@ -412,6 +412,10 @@ class PearDatabase{
 		if(empty($vals)) { return $ps; }
 		// TODO: Checks need to be added array out of bounds situations
 		for($index = 0; $index < count($vals); $index++) {
+            // Package import pushes data after XML parsing, so type-cast it
+            if(is_a($vals[$index], 'SimpleXMLElement')) {
+                $vals[$index] = (string) $vals[$index];
+            }
 			if(is_string($vals[$index])) {
 				if($vals[$index] == '') {
 					$vals[$index] = $this->database->Quote($vals[$index]);
