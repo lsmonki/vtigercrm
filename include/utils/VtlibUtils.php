@@ -551,7 +551,7 @@ function vtlib_purify($input, $ignore=false) {
 	    	$config->set('Core', 'Encoding', $default_charset);
 	    	$config->set('Cache', 'SerializerPath', "$root_directory/test/vtlib");
 	    		    	
-			$__htmlpurifier_instance = new HTMLPurifier();
+			$__htmlpurifier_instance = new HTMLPurifier($config);
 		}
 		if($__htmlpurifier_instance) {
 			$value = $__htmlpurifier_instance->purify($input);
