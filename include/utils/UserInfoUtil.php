@@ -57,15 +57,25 @@ function fetchUserProfileId($userid)
 {
 	global $log;
 	$log->debug("Entering fetchUserProfileId(".$userid.") method ...");
-	global $adb;
-	$sql = "select roleid from vtiger_user2role where userid=?";
-    $result = $adb->pquery($sql, array($userid));
-	$roleid=  $adb->query_result($result,0,"roleid");
-
-
-	$sql1 = "select profileid from vtiger_role2profile where roleid=?";
-    $result1 = $adb->pquery($sql1, array($roleid));
-	$profileid=  $adb->query_result($result1,0,"profileid");
+	
+	// Look up information in cache first
+	$profileid = VTCacheUtils::lookupUserProfileId($userid);
+	
+	if($profileid === false) {
+		global $adb;
+		
+		$query  = "SELECT profileid FROM vtiger_role2profile WHERE roleid=(SELECT roleid FROM vtiger_user2role WHERE userid=?)";
+		$result = $adb->pquery($query, array($userid));
+		
+		if($result && $adb->num_rows($result)) {
+			$profileid = $adb->query_result($result, 0, 'profileid');
+			// TODO: What if there are multiple profile to one role?
+		} 
+		
+		// Update information to cache for re-use
+		VTCacheUtils::updateUserProfileId($userid, $profileid);
+	}
+	
 	$log->debug("Exiting fetchUserProfileId method ...");
 	return $profileid;
 }
@@ -419,6 +429,9 @@ function createRole($roleName,$parentRoleId,$roleProfileArray)
         $nowParentRoleHr=$parentRoleHr.'::'.$roleId;
         $nowRoleDepth=$parentRoleDepth + 1;
 
+    // Invalidate any cached information
+    VTCacheUtils::clearRoleSubordinates($roleId);
+        
 	//Inserting vtiger_role into db
 	$query="insert into vtiger_role values(?,?,?,?)";
 	$qparams = array($roleId,$roleName,$nowParentRoleHr,$nowRoleDepth);
@@ -448,6 +461,10 @@ function updateRole($roleId,$roleName,$roleProfileArray)
 {
 	global $log;
 	$log->debug("Entering updateRole(".$roleId.",".$roleName.",".$roleProfileArray.") method ...");
+	
+	// Invalidate any cached information
+    VTCacheUtils::clearRoleSubordinates($roleId);
+    
 	global $adb;
 	$sql1 = "update vtiger_role set rolename=? where roleid=?";
     $adb->pquery($sql1, array($roleName, $roleId));
@@ -3421,22 +3438,31 @@ function getRoleSubordinates($roleId)
 {
 	global $log;
 	$log->debug("Entering getRoleSubordinates(".$roleId.") method ...");
-	global $adb;
-	$roleDetails=getRoleInformation($roleId);
-	$roleInfo=$roleDetails[$roleId];
-	$roleParentSeq=$roleInfo[1];
 	
-	$query="select * from vtiger_role where parentrole like ? order by parentrole asc";
-	$result=$adb->pquery($query, array($roleParentSeq."::%"));
-	$num_rows=$adb->num_rows($result);
-	$roleSubordinates=Array();
-	for($i=0;$i<$num_rows;$i++)
-	{
-		$roleid=$adb->query_result($result,$i,'roleid');
+	// Look at cache first for information
+	$roleSubordinates = VTCacheUtils::lookupRoleSubordinates($roleId);
+	
+	if($roleSubordinates === false) {
+		global $adb;
+		$roleDetails=getRoleInformation($roleId);
+		$roleInfo=$roleDetails[$roleId];
+		$roleParentSeq=$roleInfo[1];
+	
+		$query="select * from vtiger_role where parentrole like ? order by parentrole asc";
+		$result=$adb->pquery($query, array($roleParentSeq."::%"));
+		$num_rows=$adb->num_rows($result);
+		$roleSubordinates=Array();
+		for($i=0;$i<$num_rows;$i++)
+		{
+			$roleid=$adb->query_result($result,$i,'roleid');
                 
-		$roleSubordinates[]=$roleid;
+			$roleSubordinates[]=$roleid;
 		
+		}
+		// Update cache for re-use
+		VTCacheUtils::updateRoleSubordinates($roleId, $roleSubordinates);
 	}
+	
 	$log->debug("Exiting getRoleSubordinates method ...");
 	return $roleSubordinates;	
 
@@ -4142,9 +4168,10 @@ function getFieldVisibilityPermission($fld_module, $userid, $fieldname)
 
 	global $adb;
 	global $current_user;
-	//check if field is active
+
+	// Check if field is in-active
 	$fieldActive = isFieldActive($fld_module,$fieldname);
-	if($fieldActive == '1'){
+	if($fieldActive == false) {
 		return '1';
 	}
 	
@@ -4196,8 +4223,16 @@ function getColumnVisibilityPermission($userid,$columnname, $module)
 	global $adb,$log;
 	$log->debug("in function getcolumnvisibilitypermission $columnname -$userid");
 	$tabid = getTabid($module);
-	$res = $adb->pquery("select fieldname from vtiger_field where tabid=? and columnname=? and vtiger_field.presence in (0,2)", array($tabid, $columnname));
-	$fieldname = $adb->query_result($res, 0, 'fieldname');
+	
+	// Look at cache if information is available.
+	$cacheFieldInfo = VTCacheUtils::lookupFieldInfoByColumn($tabid, $columnname);
+	$fieldname = false;
+	if($cacheFieldInfo === false) {
+		$res = $adb->pquery("select fieldname from vtiger_field where tabid=? and columnname=? and vtiger_field.presence in (0,2)", array($tabid, $columnname));
+		$fieldname = $adb->query_result($res, 0, 'fieldname');
+	} else {
+		$fieldname = $cacheFieldInfo['fieldname'];
+	}
 	
 	return getFieldVisibilityPermission($module,$userid,$fieldname);
 }	
@@ -4364,15 +4399,8 @@ function deleteGroupReportRelations($groupId)
  *   		 $fieldname  -- Field Name  :: String Type	
  */				   
 function isFieldActive($modulename,$fieldname){
-	global $adb;
-	$tabid = getTabid($modulename);
-	$fieldQuery = "Select presence from vtiger_field where fieldname = ? and tabid = ?";
-	$fieldRes = $adb->pquery($fieldQuery,array($fieldname,$tabid));
-	if ($adb->num_rows($fieldRes) > 0) {
-		$presence = $adb->query_result($fieldRes,0,'presence');
-		if ($presence == 1)
-			return '1';
-	}
-	return '0';
+	$fieldid = getFieldid(getTabid($modulename), $fieldname, true);
+	return ($fieldid !== false);
 }
+
 ?>

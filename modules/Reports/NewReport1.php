@@ -42,12 +42,14 @@ if(isset($_REQUEST["record"]) && $_REQUEST["record"]!='')
 	
 	$secondarymodule = '';
 	$secondarymodules =Array();
-	foreach($oReport->related_modules[$primarymodule] as $key=>$value){
-		if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= $_REQUEST["secondarymodule_".$value];
-		$oReport->getSecModuleColumnsList($_REQUEST["secondarymodule_".$value]);
-		if(!isPermitted($_REQUEST["secondarymodule_".$value],'index')== "yes" && !isset($_REQUEST["secondarymodule_".$value]))
-		{
-			$permission = false;
+	if(!empty($oReport->related_modules[$primarymodule])) {
+		foreach($oReport->related_modules[$primarymodule] as $key=>$value){
+			if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= $_REQUEST["secondarymodule_".$value];
+			$oReport->getSecModuleColumnsList($_REQUEST["secondarymodule_".$value]);
+			if(!isPermitted($_REQUEST["secondarymodule_".$value],'index')== "yes" && !isset($_REQUEST["secondarymodule_".$value]))
+			{
+				$permission = false;
+			}
 		}
 	}
 	$secondarymodule = implode(":",$secondarymodules);
@@ -69,12 +71,14 @@ if(isset($_REQUEST["record"]) && $_REQUEST["record"]!='')
 	$primarymodule = vtlib_purify($_REQUEST["primarymodule"]);
 	$secondarymodule = '';
 	$secondarymodules =Array();
-	foreach($ogReport->related_modules[$primarymodule] as $key=>$value){
-		if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= $_REQUEST["secondarymodule_".$value];
-		$ogReport->getSecModuleColumnsList($_REQUEST["secondarymodule_".$value]);
-		if(!isPermitted($_REQUEST["secondarymodule_".$value],'index')== "yes" && !isset($_REQUEST["secondarymodule_".$value]))
-		{
-			$permission = false;
+	if(!empty($ogReport->related_modules[$primarymodule])) {
+		foreach($ogReport->related_modules[$primarymodule] as $key=>$value){
+			if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= $_REQUEST["secondarymodule_".$value];
+			$ogReport->getSecModuleColumnsList($_REQUEST["secondarymodule_".$value]);
+			if(!isPermitted($_REQUEST["secondarymodule_".$value],'index')== "yes" && !isset($_REQUEST["secondarymodule_".$value]))
+			{
+				$permission = false;
+			}
 		}
 	}
 	$secondarymodule = implode(":",$secondarymodules);

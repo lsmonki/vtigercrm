@@ -19,7 +19,15 @@
  
 require_once('config.php');
 
-define('LOG4PHP_DIR', 'log4php');
+// Performance Optimization: Configure the log folder
+@include_once('config.performance.php');
+global $PERFORMANCE_CONFIG;
+if(isset($PERFORMANCE_CONFIG) && isset($PERFORMANCE_CONFIG['LOG4PHP_DEBUG']) && $PERFORMANCE_CONFIG['LOG4PHP_DEBUG']) {
+	define('LOG4PHP_DIR', 'log4php.debug');
+} else {
+	define('LOG4PHP_DIR', 'log4php');
+}
+// END
 define('LOG4PHP_DEFAULT_INIT_OVERRIDE', true);
 
 require_once(LOG4PHP_DIR.'/LoggerManager.php');

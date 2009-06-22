@@ -26,7 +26,6 @@ require_once('modules/Documents/Documents.php');
 require_once('modules/Potentials/Potentials.php');
 require_once('modules/Users/Users.php');
 require_once('modules/Products/Products.php');
-//Pavani...adding HelpDesk and Vendors modules
 require_once('modules/HelpDesk/HelpDesk.php');
 require_once('modules/Vendors/Vendors.php');
 require_once('include/utils/UserInfoUtil.php');
@@ -44,11 +43,12 @@ $current_user = new Users();
 
 if(isset($_SESSION['authenticated_user_id']))
 {
-	$result = $current_user->retrieve_entity_info($_SESSION['authenticated_user_id'],"Users");
+	$result = $current_user->retrieveCurrentUserInfoFromFile($_SESSION['authenticated_user_id'],"Users");
 	if($result == null)
 	{
 		session_destroy();
 		header("Location: index.php?action=Login&module=Users");
+		exit;
 	}
 
 }
@@ -63,7 +63,7 @@ if ($allow_exports=='none' || ( $allow_exports=='admin' && ! is_admin($current_u
 {
 
 ?>
-	<script language='text/javascript'>
+	<script type='text/javascript'>
 		alert("<?php echo $app_strings['NOT_PERMITTED_TO_EXPORT']?>");
 		window.location="index.php?module=<?php echo vtlib_purify($_REQUEST['module']) ?>&action=index";
 	</script>
@@ -104,7 +104,7 @@ function export($type){
 		$focus = CRMEntity::getInstance($type);
     }
     $log = LoggerManager::getLogger('export_'.$type);
-    $db = new PearDatabase();
+    $db = PearDatabase::getInstance();
 
 	$oCustomView = new CustomView("$type");
 	$viewid = $oCustomView->getViewId("$type");
@@ -149,9 +149,7 @@ function export($type){
 		} elseif($type == 'Documents' && count($idstring) > 0) {
 			$query .= ' and vtiger_notes.notesid in ('. generateQuestionMarks($idstring) .')';
 			array_push($params, $idstring);
-		}
-		//Pavani..adding HelpDesk and Vendors modules
-		elseif($type == 'HelpDesk' && count($idstring) > 0) {
+		} elseif($type == 'HelpDesk' && count($idstring) > 0) {
 			$query .= ' and vtiger_troubletickets.ticketid in ('. generateQuestionMarks($idstring) .')';
 			array_push($params, $idstring);
 		} elseif($type == 'Vendors' && count($idstring) > 0) {
@@ -202,7 +200,9 @@ function export($type){
 	$header = implode("\",\"",array_values($translated_fields_array));
 	$header = "\"" .$header;
 	$header .= "\"\r\n";
-	$content .= $header;
+	
+	/** Output header information */
+	echo $header;
 
 	$column_list = implode(",",array_values($fields_array));
 
@@ -224,21 +224,22 @@ function export($type){
 		$line = implode("\",\"",$new_arr);
 		$line = "\"" .$line;
 		$line .= "\"\r\n";
-		$content .= $line;
+		
+		/** Output each row information */
+		echo $line;
 	}
 	$log->debug("Exiting export method ...");
-	return $content;
+	return true;
 }
 
-$content = export($_REQUEST['module']);
-
+/** Send the output header and invoke function for contents output */
 header("Content-Disposition:attachment;filename={$_REQUEST['module']}.csv");
 header("Content-Type:text/csv;charset=UTF-8");
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT" );
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT" );
 header("Cache-Control: post-check=0, pre-check=0", false );
-header("Content-Length: ".strlen($content));
-print $content;
+
+export(vtlib_purify($_REQUEST['module']));
 
 exit;
 

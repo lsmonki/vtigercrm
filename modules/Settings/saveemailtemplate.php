@@ -10,7 +10,7 @@
 require_once('include/utils/utils.php');
 
 global $log;
-$db = new PearDatabase();
+$db = PearDatabase::getInstance();
 $folderName = vtlib_purify($_REQUEST["foldername"]);
 $templateName = from_html($_REQUEST["templatename"]);
 $templateid = vtlib_purify($_REQUEST["templateid"]);

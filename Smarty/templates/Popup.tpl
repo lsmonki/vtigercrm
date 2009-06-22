@@ -46,6 +46,7 @@ function redirectWhenNoRelatedRecordsFound()
 {rdelim}
 </script>
 <link rel="stylesheet" type="text/css" href="{$THEME_PATH}style.css">
+<script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/Inventory.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/json.js"></script>
@@ -274,7 +275,7 @@ function getListViewEntries_js(module,url)
         var urlstring ="module="+module+"&action="+module+"Ajax&file=Popup&ajax=true&"+url;
     	urlstring +=gethiddenelements();
 	
-	{if !RECORD_ID}
+	{if !$RECORD_ID}
 		search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
 		search_txt_val=document.basicSearch.search_text.value;
 		if(search_txt_val != '')
@@ -290,6 +291,7 @@ function getListViewEntries_js(module,url)
 		urlstring += '&record_id='+record_id;
 
 	urlstring += (gsorder !='') ? gsorder : '';
+	$("status").style.display = "";
 	new Ajax.Request(
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -297,6 +299,7 @@ function getListViewEntries_js(module,url)
                                 postBody: urlstring,
                                 onComplete: function(response) {ldelim}
                                         $("ListViewContents").innerHTML= response.responseText;
+									$("status").style.display = "none";
 				{rdelim}
 			{rdelim}
 		);
@@ -310,7 +313,7 @@ function getListViewSorted_js(module,url)
 	if(record_id!='')
 		urlstring += '&record_id='+record_id;
 	urlstring += (gstart !='') ? gstart : '';
-
+	$("status").style.display = "";
 	new Ajax.Request(
                 'index.php',
                 {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
@@ -318,6 +321,7 @@ function getListViewSorted_js(module,url)
                                 postBody: urlstring,
                                 onComplete: function(response) {ldelim}
                                         $("ListViewContents").innerHTML= response.responseText;
+									$("status").style.display = "none";
 				{rdelim}
 			{rdelim}
 		);

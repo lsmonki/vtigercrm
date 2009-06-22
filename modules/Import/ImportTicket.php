@@ -120,7 +120,7 @@ class ImportTicket extends HelpDesk {
 	function ImportTicket() {
 		parent::HelpDesk();
 		$this->log = LoggerManager::getLogger('import_ticket');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->db->println("IMP ImportTicket");
 		$this->initImportableFields("HelpDesk");
 		$this->db->println($this->importable_fields);

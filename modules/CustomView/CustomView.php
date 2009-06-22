@@ -51,6 +51,10 @@ class CustomView extends CRMEntity{
 	
 	var $data_type;
 	
+	// Information as defined for this instance in the database table.
+	protected $_status = false;
+	protected $_userid = false;
+	
 	/** This function sets the currentuser id to the class variable smownerid,  
 	  * modulename to the class variable customviewmodule
 	  * @param $module -- The module Name:: Type String(optional)
@@ -870,6 +874,43 @@ class CustomView extends CRMEntity{
 		}
 		return $advfilterlist;
 	}
+	
+	
+	/**
+	 * Cache information to perform re-lookups
+	 *
+	 * @var String
+	 */
+	protected $_fieldby_tblcol_cache = array();
+	
+	/**
+	 * Function to check if field is present based on 
+	 *
+	 * @param String $columnname
+	 * @param String $tablename
+	 */
+	function isFieldPresent_ByColumnTable($columnname, $tablename) {
+		global $adb;
+		
+		if(!isset($this->_fieldby_tblcol_cache[$tablename])) {
+			$query   = 'SELECT columnname FROM vtiger_field WHERE tablename = ? and presence in (0,2)';
+
+			$result  = $adb->pquery($query,array($tablename));
+			$numrows = $adb->num_rows($result);
+			
+			if($numrows) {
+				$this->_fieldby_tblcol_cache[$tablename] = array();
+				for($index = 0; $index < $numrows; ++$index) {
+					$this->_fieldby_tblcol_cache[$tablename][] = $adb->query_result($result, $index, 'columnname');
+				}
+			}			
+		}
+		// If still the field was not found (might be disabled or deleted?)
+		if(!isset($this->_fieldby_tblcol_cache[$tablename])) {
+			return false;
+		}
+		return in_array($columnname, $this->_fieldby_tblcol_cache[$tablename]);		
+	}
 
 
 	/** to get the customview Columnlist Query for the given customview Id  
@@ -917,10 +958,8 @@ class CustomView extends CRMEntity{
 					$fieldinfo = explode('_',$list[3],2);
 					$fieldlabel = $fieldinfo[1];
 					$fieldlabel = str_replace("_"," ",$fieldlabel);
-					$query = 'select * from vtiger_field where columnname = ? and tablename = ? and presence in (0,2)';
-					$res = $adb->pquery($query,array($list[1],$list[0]));
-					$numrows = $adb->num_rows($res);
-					if($numrows > 0){
+					
+					if($this->isFieldPresent_ByColumnTable($list[1], $list[0])){
 						
 						$this->list_fields[$fieldlabel] = $tablefield;
 						$this->list_fields_name[$fieldlabel] = $list[2];
@@ -1819,7 +1858,31 @@ class CustomView extends CRMEntity{
 		$this->module_list[$module] = $block_info;
 		return $this->module_list;
 	}
-
+	
+	/**
+	 * Get the userid, status information of this custom view.
+	 *
+	 * @param Integer $viewid
+	 * @return Array 
+	 */
+	
+	function getStatusAndUserid($viewid) {
+		global $adb;
+		
+		if($this->_status === false || $this->_userid === false) {
+			$query = "SELECT status, userid FROM vtiger_customview WHERE cvid=?";
+			$result = $adb->pquery($query, array($viewid));
+			if($result && $adb->num_rows($result)) {
+				$this->_status = $adb->query_result($result, 0, 'status');
+				$this->_userid = $adb->query_result($result, 0, 'userid');
+			} else {
+				return false;
+			}
+		}
+		return array('status' => $this->_status, 'userid' => $this->_userid);
+		 
+	}
+	
 	//Function to check if the current user is able to see the customView	
 	function isPermittedCustomView($record_id, $action, $module)
 	{
@@ -1832,13 +1895,13 @@ class CustomView extends CRMEntity{
 		
 		if($record_id != '')
 		{
-			$sql="select * from vtiger_customview where cvid=?";
-			$res = $adb->pquery($sql, array($record_id));
-			$record_cnt=$adb->num_rows($res);
-			if($record_cnt > 0)
+			$status_userid_info = $this->getStatusAndUserid($record_id);
+			
+			if($status_userid_info)
 			{
-				$status=$adb->query_result($res, 0, 'status');
-				$userid=$adb->query_result($res, 0, 'userid');
+				$status = $status_userid_info['status'];
+				$userid = $status_userid_info['userid'];
+				
 				if($status == CV_STATUS_DEFAULT)
 				{
 					$log->debug("Entering when status=0");

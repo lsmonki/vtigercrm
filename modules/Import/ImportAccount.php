@@ -168,7 +168,7 @@ class ImportAccount extends Accounts {
 	function ImportAccount() {
 		parent::Accounts();
 		$this->log = LoggerManager::getLogger('import_account');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->db->println("IMP ImportAccount");
 		$this->initImportableFields("Accounts");
 		

@@ -60,7 +60,7 @@ class UsersLastImport extends SugarBean
 	 */	
 	function UsersLastImport() {
 		$this->log = LoggerManager::getLogger('UsersLastImport');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 	}
 
 	/**	function used to delete the old entries for this user 

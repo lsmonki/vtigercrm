@@ -10,7 +10,7 @@
 
 require_once('include/database/PearDatabase.php');
 global $adb;
-$db = new PearDatabase();
+$db = PearDatabase::getInstance();
 $currency_name = $_REQUEST['currency_name'];
 $currency_code= $_REQUEST['currency_code'];
 $currency_symbol= $_REQUEST['currency_symbol'];

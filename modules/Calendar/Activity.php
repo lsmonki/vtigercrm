@@ -42,6 +42,11 @@ class Activity extends CRMEntity {
 
 	// This is used to retrieve related vtiger_fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'contactname', 'contact_phone', 'contact_email', 'parent_name');
+	
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
+	var $customFieldTable = Array('vtiger_activitycf', 'activityid');
 
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
@@ -96,7 +101,7 @@ class Activity extends CRMEntity {
 
 	function Activity() {
 		$this->log = LoggerManager::getLogger('Calendar');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->column_fields = getColumnFields('Calendar');
 	}
 
@@ -429,10 +434,16 @@ function insertIntoRecurringTable(& $recurObj)
 	{
 		global $log;
 		$log->debug("Entering getOrderBy() method ...");
+	
+		$use_default_order_by = '';		
+		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
+			$use_default_order_by = $this->default_order_by;
+		}
+
 		if (isset($_REQUEST['order_by'])) 
 			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else
-			$order_by = (($_SESSION['ACTIVITIES_ORDER_BY'] != '')?($_SESSION['ACTIVITIES_ORDER_BY']):($this->default_order_by));
+			$order_by = (($_SESSION['ACTIVITIES_ORDER_BY'] != '')?($_SESSION['ACTIVITIES_ORDER_BY']):($use_default_order_by));
 		$log->debug("Exiting getOrderBy method ...");
 		return $order_by;
 	}	

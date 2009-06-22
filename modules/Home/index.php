@@ -39,16 +39,29 @@ $image_path=$theme_path."images/";
 $smarty = new vtigerCRM_Smarty;
 $homeObj=new Homestuff;
 
-$query="select name,tabid from vtiger_tab where tabid in (select distinct(tabid) from vtiger_field where tabid <> 29 and tabid <> 16 and tabid <>10) order by name";
-$result=$adb->query($query);
+// Performance Optimization
+$tabrows = vtlib_prefetchModuleActiveInfo();
+// END
 
-for($i=0;$i<$adb->num_rows($result);$i++){
-	$modName=$adb->query_result($result,$i,'name');
-	//Security check done by Don
-	if(isPermitted($modName,'DetailView') == 'yes' && vtlib_isModuleActive($modName)){
-		$modulenamearr[]=array($adb->query_result($result,$i,'tabid'),$modName);
-	}	
+//$query="select name,tabid from vtiger_tab where tabid in (select distinct(tabid) from vtiger_field where tabid <> 29 and tabid <> 16 and tabid <>10) order by name";
+
+// Performance Optimization: Re-written to ignore extension and inactive modules
+$modulenamearr = Array();
+foreach($tabrows as $resultrow) {
+	if($resultrow['isentitytype'] != '0') {
+		// Eliminate: Events, Emails
+		if($resultrow['tabid'] == '16' || $resultrow['tabid'] == '10') {
+			continue;
+		}
+		$modName=$resultrow['name'];
+		if(isPermitted($modName,'DetailView') == 'yes' && vtlib_isModuleActive($modName)){
+			$modulenamearr[$modName]=array($resultrow['tabid'],$modName);
+		}	
+	}
 }
+ksort($modulenamearr); // We avoided ORDER BY in Query (vtlib_prefetchModuleActiveInfo)!
+// END
+
 
 //Security Check done for RSS and Dashboards
 $allow_rss='no';

@@ -177,8 +177,6 @@ if (isset($_REQUEST['from_homepage'])) {
 		$list_query .= " AND (vtiger_activity.status is NULL OR vtiger_activity.status not in ('Completed','Deferred')) and (vtiger_activity.eventstatus is NULL OR  vtiger_activity.eventstatus not in ('Held','Not Held')) AND (due_date <= '$today' OR vtiger_recurringevents.recurringdate <= '$today')";
 }
 
-$list_query .= ' group by vtiger_activity.activityid having vtiger_activity.activitytype != "Emails"';
-
 if(isset($order_by) && $order_by != '') {
 	if($order_by == 'smownerid') {
 		$list_query .= ' ORDER BY user_name '.$sorder;
@@ -205,41 +203,31 @@ $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("NEW_EVENT",$app_strings['LNK_NEW_EVENT']);
 $smarty->assign("NEW_TASK",$app_strings['LNK_NEW_TASK']);
 
-//Retreiving the no of rows - We need to rely on activitytype instead of activityid as we are using having clause on this column to eliminate activities of type Emails
-$count_result = $adb->query("select vtiger_activity.activityid, vtiger_activity.activitytype ".substr($list_query, strpos($list_query,'FROM'),strlen($list_query))); 
-$noofrows = $adb->num_rows($count_result); 
+//Postgres 8 fixes
+if( $adb->dbType == "pgsql")
+	$list_query = fixPostgresQuery( $list_query, $log, 0);
 
-//Storing Listview session object
-if($_SESSION['lvs'][$currentModule])
-{
-	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
+if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true){
+	$count_result = $adb->query( mkCountQuery( $list_query));
+	$noofrows = $adb->query_result($count_result,0,"count");
+}else{
+	$noofrows = null;
 }
 
-//added for 4600
-                                                                                                                             
-if($noofrows <= $list_max_entries_per_page)
-        $_SESSION['lvs'][$currentModule]['start'] = 1;
-//ends
-$start = $_SESSION['lvs'][$currentModule]['start'];
+$queryMode = (isset($_REQUEST['query']) && $_REQUEST['query'] == 'true');
+$start = ListViewSession::getRequestCurrentPage($currentModule, $list_query, $viewid, $queryMode);
 
-//Retreive the Navigation array
-$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
+$navigation_array = VT_getSimpleNavigationValues($start,$list_max_entries_per_page,$noofrows);
 
-// Setting the record count string
-//modified by rdhital
-$start_rec = $navigation_array['start'];
-$end_rec = $navigation_array['end_val']; 
-//By raju Ends
+$limit_start_rec = ($start-1) * $list_max_entries_per_page;
 
-//limiting the query
-if ($start_rec ==0) 
-	$limit_start_rec = 0;
+if( $adb->dbType == "pgsql")
+	$list_result = $adb->pquery($list_query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
 else
-	$limit_start_rec = $start_rec -1;
-	
-$list_result = $adb->query($list_query. " limit ".$limit_start_rec.",".$list_max_entries_per_page);
+	$list_result = $adb->pquery($list_query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
-$record_string= $app_strings['LBL_SHOWING']." " .$start_rec." - ".$end_rec." " .$app_strings['LBL_LIST_OF'] ." ".$noofrows;
+$recordListRangeMsg = getRecordRangeMessage($list_result, $limit_start_rec);
+$smarty->assign('recordListRange',$recordListRangeMsg);
 
 //Retreive the List View Table Header
 if($viewid !='')
@@ -265,7 +253,7 @@ $smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
 $smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
 $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
-$navigationOutput = getTableHeaderNavigation($navigation_array,$url_string,"Calendar","ListView",$viewid);
+$navigationOutput = getTableHeaderSimpleNavigation($navigation_array,$url_string,"Calendar","ListView",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'ListView','subject','true','basic',"","","","",$viewid);
 $fieldnames = getAdvSearchfields($module);
 $criteria = getcriteria_options();
@@ -273,14 +261,13 @@ $smarty->assign("CRITERIA", $criteria);
 $smarty->assign("FIELDNAMES", $fieldnames);
 $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
-$smarty->assign("RECORD_COUNTS", $record_string);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$_SESSION['activity_listquery'] = $list_query;
+$_SESSION[$currentModule.'_listquery'] = $list_query;
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");

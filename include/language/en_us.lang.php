@@ -1250,6 +1250,8 @@ $app_strings = array (
 
 // For Mass Edit
 'LBL_SELECT_FIELDS_TO_UDPATE_WITH_NEW_VALUE'=>'Select fields to be updated and provide the new value.',
+
+'LBL_LOADING'=>'Loading...',
 );
 
 $app_list_strings = array (

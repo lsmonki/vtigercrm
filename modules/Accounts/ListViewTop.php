@@ -48,13 +48,19 @@ function getTopAccounts($maxval,$calCnt)
 
 	}
 	$list_query .= " group by vtiger_account.accountid, vtiger_account.accountname, vtiger_account.tickersymbol order by amount desc";
+
+	$list_query .= " LIMIT 0," . $adb->sql_escape_string($maxval);
+	
+	if($calCnt == 'calculateCnt') {
+		$list_result_rows = $adb->query(mkCountQuery($list_query));
+		return $adb->query_result($list_result_rows, 0, 'count');
+	}
+	
 	$list_result=$adb->query($list_query);
 	$open_accounts_list = array();
-	$noofrows = min($adb->num_rows($list_result),$maxval);
-	if($calCnt == 'calculateCnt')
-	      return $noofrows;
-
-	if (count($list_result)>0)
+	$noofrows = $adb->num_rows($list_result);
+	
+	if ($noofrows) {
 		for($i=0;$i<$noofrows;$i++) 
 		{
 			$open_accounts_list[] = Array('accountid' => $adb->query_result($list_result,$i,'accountid'),
@@ -63,7 +69,8 @@ function getTopAccounts($maxval,$calCnt)
 					'tickersymbol' => $adb->query_result($list_result,$i,'tickersymbol'),
 					);								 
 		}
-
+	}
+	
 	$title=array();
 	$title[]='myTopAccounts.gif';
 	$title[]=$current_module_strings['LBL_TOP_ACCOUNTS'];

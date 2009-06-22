@@ -64,7 +64,7 @@ class ImportVendors extends Vendors {
 	function ImportVendors() {
 		parent::Vendors();
 		$this->log = LoggerManager::getLogger('import_vendors');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->db->println("IMP ImportVendors");
 		$this->initImportableFields("Vendors");
 		$this->db->println($this->importable_fields);

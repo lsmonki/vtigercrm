@@ -144,19 +144,18 @@
 				<div id='{$folder.folderid}'>
 					<table class="reportsListTable" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">		
 						<tr>
-							<td class="mailSubHeader" width="40%">
+							<td class="mailSubHeader" width="30%">
 								<b>{$folder.foldername}</b>
 								&nbsp;&nbsp;
 								{if $folder.description neq ''}
-							 	<font class="copy">[<i>{$folder.description}</i>]</font>
-							 	{/if}                         
-		                 	</td>
-		                 	<td class="mailSubHeader" width="60%" align="left">
-		                     	{$folder.record_count}&nbsp;&nbsp;&nbsp;&nbsp;{$folder.navigation}
-							</td> <!-- $IS_ADMIN eq "on" -->
+								<font class="copy">[<i>{$folder.description}</i>]</font>
+								{/if}
+							</td>
+							<td class="mailSubHeader small" nowrap>{$folder.recordListRange}</td>
+							{$folder.record_count}&nbsp;&nbsp;&nbsp;&nbsp;{$folder.navigation}
 						</tr>
 						<tr>
-							<td colspan="3" >			
+							<td colspan="4" >
 								<div id="FileList_{$folder.folderid}">
 					 				<!-- File list table for a folder starts -->
 									<table border=0 cellspacing=1 cellpadding=3 width=100%>

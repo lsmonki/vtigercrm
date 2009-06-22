@@ -52,7 +52,7 @@ class Webmails extends CRMEntity {
 
  	function Webmails($mbox='',$mailid='') {
 
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->db->println("Entering Webmail($mbox,$mailid)");
 		$this->log = &LoggerManager::getLogger('WEBMAILS');
 		$this->mbox=$mbox;

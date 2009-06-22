@@ -39,6 +39,120 @@ function get_account_name($acc_id)
 	return $name;
 }
 
+
+/**
+ * Performance Optimization: Module Chart for Home Page Dashboard
+ */
+function module_Chart_HomePageDashboard($userinfo) {
+
+	global $adb, $app_strings;
+
+	$user_id = $userinfo->id;
+
+	$graph_details = Array();
+	$modrecords  = Array();
+
+	// List of modules which needs to be considered for chart
+	$module_list = Array('Accounts','Potentials','Contacts','Leads','Quotes','SalesOrder','PurchaseOrder','Invoice','HelpDesk','Calendar','Campaigns');
+	// List of special module to handle
+	$spl_modules = Array('Leads', 'HelpDesk', 'Potentials', 'Calendar');
+
+	// Leads module
+	$leadcountres = $adb->query("SELECT count(*) as count FROM vtiger_crmentity se INNER JOIN vtiger_leaddetails le on le.leadid = se.crmid
+		WHERE se.deleted = 0 AND se.smownerid = $user_id AND (le.converted = 0 OR le.converted IS NULL)");
+	$modrecords['Leads'] = $adb->query_result($leadcountres, 0, 'count');
+
+	// HelpDesk module
+	$helpdeskcountres = $adb->query("SELECT count(*) as count FROM vtiger_crmentity se INNER JOIN vtiger_troubletickets tt ON tt.ticketid = se.crmid
+		WHERE se.deleted = 0 AND se.smownerid = $user_id AND (tt.status != 'Closed' OR tt.status IS NULL)");
+	$modrecords['HelpDesk']=$adb->query_result($helpdeskcountres,0,'count');
+
+	// Potentials module
+	$potcountres = $adb->query("SELECT count(*) as count FROM vtiger_crmentity se INNER JOIN vtiger_potential pot ON pot.potentialid = se.crmid
+		WHERE se.deleted = 0 AND se.smownerid = $user_id AND (pot.sales_stage NOT IN ('".$app_strings['LBL_CLOSE_WON']."','".
+		$app_strings['LBL_CLOSE_LOST']."') OR pot.sales_stage IS NULL)");
+	$modrecords['Potentials']= $adb->query_result($potcountres,0,'count');
+
+	// Calendar moudule
+	$calcountres = $adb->query("SELECT count(*) as count FROM vtiger_crmentity se INNER JOIN vtiger_activity act ON act.activityid = se.crmid
+		WHERE se.deleted = 0 AND se.smownerid = $user_id AND ((act.status!='Completed' AND act.status!='Deferred') OR act.status IS NULL)
+		AND ((act.eventstatus!='Held' AND act.eventstatus!='Not Held') OR act.eventstatus IS NULL)");
+	$modrecords['Calendar']= $adb->query_result($calcountres,0,'count');
+
+	// Ignore the special module
+	$nor_modules = array_diff($module_list, $spl_modules);
+	// Prepare module string to use in SQL (check permission)
+	$inmodulestr = '';
+	foreach($nor_modules as $modulename) {
+		if(isPermitted("$modulename","index",'') == 'yes') {
+			if($inmodulestr != '') $inmodulestr .= ",'$modulename'";
+			else $inmodulestr = "'$modulename'";
+		}
+	}
+
+	// Get count for module that needs special conditions
+	$query = "SELECT setype, count(setype) setype_count FROM vtiger_crmentity se WHERE 
+		se.deleted = 0 AND se.smownerid=$user_id AND se.setype in ($inmodulestr) GROUP BY se.setype";
+	$queryres = $adb->query($query);
+	while($resrow = $adb->fetch_array($queryres)) {
+		$modrecords[$resrow['setype']] = $resrow['setype_count'];
+	}
+
+	// Get module custom filter info
+	$cvidres = $adb->query("SELECT cvid,entitytype FROM vtiger_customview WHERE viewname='All' AND entitytype in ('".
+		implode("','", array_keys($modrecords)). "')");
+
+	$cvidinfo = Array();
+	while($cvidrow = $adb->fetch_array($cvidres)) {
+		$cvidinfo[$cvidrow['entitytype']] = $cvidrow['cvid'];
+	}
+
+	$name_val = '';
+	$cnt_val = '';
+	$target_val = '';
+	$urlstring	= '';
+	$cnt_table  = '<table border="0" cellpadding="3" cellspacing="1"><tbody><tr><th>Status</th><th>Total</th></tr>';
+	$test_target_val='';
+
+	$total_records= 0;
+	foreach($module_list as $modulename) {
+		if(isset($modrecords[$modulename])) {
+			$modrec_count = $modrecords[$modulename];
+			if($modrec_count > 0) {
+				if($name_val != '') $name_val .= '::';
+				$name_val .= $modulename;
+				
+				if($cnt_val != '') $cnt_val .= '::';
+				$cnt_val .= $modrec_count;
+
+				$modviewid = $cvidinfo[$modulename];
+				if($target_val!= '') $target_val.= '::';
+				$target_val.= urlencode("index.php?module=$modulename&action=ListView&from_homepagedb=true&type=dbrd&query=true&owner=$userinfo->user_name&viewname=$modviewid");
+				if($test_target_val!='') $test_target_val.= 'K';
+				$test_target_val.=urlencode("index.php?module=$modulename&action=ListView&from_homepagedb=true&type=dbrd&query=true&owner=$userinfo->user_name&viewname=$modviewid");
+
+				$urlstring .= 'K';
+				$cnt_table .= "<tr><td>$modulename</td><td align='center'>$modrec_count</td></tr>";
+
+				$total_records += $modrec_count;
+			}
+		}
+	}
+	$cnt_table .= '</tbody></table>';
+
+	$graph_details[] = $name_val;
+	$graph_details[] = $cnt_val;
+	$graph_details[] = " $userinfo->user_name : $total_records ";
+	$graph_details[] = $target_val;
+	$graph_details[] = '';
+	$graph_details[] = $urlstring;
+	$graph_details[] = $cnt_table;
+	$graph_details[] = $test_target_val;
+
+	return $graph_details;
+}
+/** END **/
+
 /* Function returns the values to render the graph for a particular type 
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.

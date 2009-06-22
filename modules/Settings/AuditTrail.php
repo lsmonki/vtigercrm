@@ -40,7 +40,7 @@ class AuditTrail{
 	
 	function AuditTrail() {
 		$this->log = LoggerManager::getLogger('audit_trial');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 	}
 	
 	var $sortby_fields = Array('module', 'action', 'actiondate', 'recordid');	 

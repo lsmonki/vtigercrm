@@ -25,6 +25,8 @@ require_once('data/Tracker.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
+require_once 'modules/CustomView/CustomView.php';
+
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
@@ -131,45 +133,9 @@ $smarty->assign("CHECK", $check_button);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST['record']));
 
-if(isset($_SESSION['accounts_listquery'])){
-	$arrayTotlist = array();
-	$aNamesToList = array(); 
-	$forAllCRMIDlist_query=$_SESSION['accounts_listquery'];
-	$resultAllCRMIDlist_query=$adb->pquery($forAllCRMIDlist_query,array());
-	while($forAllCRMID = $adb->fetch_array($resultAllCRMIDlist_query))
-	{
-		$arrayTotlist[]=$forAllCRMID['crmid'];
-	}
-	$_SESSION['listEntyKeymod_'.$focus->id] = $module.":".implode(",",$arrayTotlist);
-	
-	if(isset($_SESSION['listEntyKeymod_'.$focus->id]))
-	{
-		$split_temp=explode(":",$_SESSION['listEntyKeymod_'.$focus->id]);
-		if($split_temp[0] == $module)
-		{	
-			$smarty->assign("SESMODULE",$split_temp[0]);
-			$ar_allist=explode(",",$split_temp[1]);
-			
-			for($listi=0;$listi<count($ar_allist);$listi++)
-			{
-				if($ar_allist[$listi]==$_REQUEST['record'])
-				{
-					if($listi-1>=0)
-					{
-						$privrecord=$ar_allist[$listi-1];
-						$smarty->assign("privrecord",$privrecord);
-					}else {unset($privrecord);}
-					if($listi+1<count($ar_allist))
-					{
-						$nextrecord=$ar_allist[$listi+1];
-						$smarty->assign("nextrecord",$nextrecord);
-					}else {unset($nextrecord);}
-					break;
-				}
-				
-			}
-		}
-	}
+if(PerformancePrefs::getBoolean('DETAILVIEW_RECORD_NAVIGATION', true) && isset($_SESSION[$currentModule.'_listquery'])){
+	$recordNavigationInfo = ListViewSession::getListViewNavigation($focus->id);
+	VT_detailViewNavigation($smarty,$recordNavigationInfo,$focus->id);
 }
 
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
@@ -192,6 +158,8 @@ $focus->markAsViewed($current_user->id);
 include_once('vtlib/Vtiger/Link.php');
 $customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>vtlib_purify($_REQUEST['action']));
 $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), Array('DETAILVIEWBASIC','DETAILVIEW'), $customlink_params));
+
+$smarty->assign('DETAILVIEW_AJAX_EDIT', PerformancePrefs::getBoolean('DETAILVIEW_AJAX_EDIT', true));
 	
 $smarty->display("DetailView.tpl");
 ?>

@@ -1464,7 +1464,7 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
  	    $list_query = fixPostgresQuery( $list_query, $log, 0);
  	}
 	$list_query = $adb->convert2Sql($list_query, $params);
-	$_SESSION['activity_listquery'] = $list_query;
+	$_SESSION['Calendar_listquery'] = $list_query;
 		
 	$result = $adb->pquery($query, $params);
 	$rows = $adb->num_rows($result);
@@ -1701,7 +1701,7 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 	}
 	
 	$list_query = $adb->convert2Sql($list_query, $params);
-	$_SESSION['activity_listquery'] = $list_query;
+	$_SESSION['Calendar_listquery'] = $list_query;
 
     $result = $adb->pquery($query, $params);
     $rows = $adb->num_rows($result);

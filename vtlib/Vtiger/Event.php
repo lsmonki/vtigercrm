@@ -25,6 +25,9 @@ class Vtiger_Event {
 	/** Condition for the event */
 	var $condition;
 
+	/** Internal caching */
+	static $is_supported = '';
+	
 	/**
 	 * Helper function to log messages
 	 * @param String Message to log
@@ -39,7 +42,10 @@ class Vtiger_Event {
 	 * Check if vtiger CRM support Events
 	 */
 	static function hasSupport() {
-		return Vtiger_Utils::checkTable('vtiger_eventhandlers');
+		if(self::$is_supported === '') {
+			self::$is_supported = Vtiger_Utils::checkTable('vtiger_eventhandlers');
+		}
+		return self::$is_supported;
 	}
 
 	/**

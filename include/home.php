@@ -410,7 +410,7 @@ class Homestuff{
 			}	
 		}elseif($hometype=="CVLVT"){
 			include_once("modules/CustomView/ListViewTop.php");
-			$home_values = getKeyMetrics();
+			$home_values = getKeyMetrics($maxval,$calCnt);
 		}elseif($hometype == 'UA' && vtlib_isModuleActive("Calendar")){
 			require_once "modules/Home/HomeUtils.php";
 			$home_values = homepage_getUpcomingActivities($maxval, $calCnt);

@@ -277,7 +277,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	function import_Module() {
 		$tabname = $this->_modulexml->name;
 		$tablabel= $this->_modulexml->label;
-		$parenttab=$this->_modulexml->parent;
+		$parenttab=(string)$this->_modulexml->parent;
 		$tabversion=$this->_modulexml->version;
 
 		$isextension= false;
@@ -294,7 +294,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		$moduleInstance->version = (!$tabversion)? 0 : $tabversion;
 		$moduleInstance->save();
 
-		if(!empty($parenttab) && $parenttab != '') {
+		if(!empty($parenttab)) {
 			$menuInstance = Vtiger_Menu::getInstance($parenttab);
 			$menuInstance->addModule($moduleInstance);
 		}
@@ -542,8 +542,8 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 		$event_condition = '';
 		if(!empty($eventnode->condition)) $event_condition = "$eventnode->condition";
 		Vtiger_Event::register($moduleInstance, 
-			$eventnode->eventname, $eventnode->classname, $eventnode->filename,
-			$event_condition
+			(string)$eventnode->eventname, (string)$eventnode->classname, 
+			(string)$eventnode->filename, (string)$event_condition
 		);
 	}
 

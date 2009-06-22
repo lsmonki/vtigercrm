@@ -116,17 +116,13 @@ if(isset($_SESSION['VTIGER_DB_VERSION']) && isset($_SESSION['authenticated_user_
         exit();
     }
 } else {
-    $exists = $adb->query("SHOW CREATE TABLE vtiger_version");
-    if($exists)
-    {
-        $result = $adb->query("SELECT * FROM vtiger_version");
-        $dbversion = $adb->query_result($result, 0, 'current_version');
-        if(version_compare($dbversion, $vtiger_current_version, '=')) {
-            $_SESSION['VTIGER_DB_VERSION']= $dbversion;
-        } else {
-            header("Location: install.php");
-            exit();
-        }   
+    $result = $adb->query("SELECT * FROM vtiger_version");
+    $dbversion = $adb->query_result($result, 0, 'current_version');
+    if(version_compare($dbversion, $vtiger_current_version, '=')) {
+    	$_SESSION['VTIGER_DB_VERSION']= $dbversion;
+    } else {
+    	header("Location: install.php");
+        exit();
     }
 }
 // END

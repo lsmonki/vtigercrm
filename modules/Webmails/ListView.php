@@ -225,12 +225,29 @@ $numEmails = $elist["count"];
 $headers = $elist["headers"];
 $mails_per_page = $MailBox->mails_per_page;
 
-
+// Calculate paging information ahead before retrieving overviews
 if($start == 1 || $start == "") {
 	$start_message=$numEmails;
+	if($numEmails > $mails_per_page) $end_message = $start_message - $mails_per_page;
+	else $end_message = $start_message - $numEmails;
 } else {
 	$start_message=($numEmails-(($start-1)*$mails_per_page));
+	$end_message = ($numEmails-(($start*2-1)*$mails_per_page));
 }
+
+// If in search mode, load overview of all the available emails
+if(isset($_REQUEST["search"])) {
+	// TODO: Navigating when search is used needs to be added
+	$MailBox->loadOverviewList(1, $numEmails);
+} else {
+	// For normal listview, fetch only required mail overview
+	$MailBox->loadOverviewList($start_message, $end_message);
+}
+
+// Fetch meta-info again after overview is loaded, for further process
+$elist = $MailBox->mailList;
+$headers = $elist["headers"];
+// END
 
 $c=$numEmails;
 
@@ -269,7 +286,7 @@ if (is_array($overview))
 	foreach ($overview as $val)
 	{
 		$mails[$val->msgno] = $val;
-		$hdr = @imap_headerinfo($MailBox->mbox, $val->msgno);	
+		//$hdr = @imap_headerinfo($MailBox->mbox, $val->msgno);	
 		//Added to get the UTF-8 string - 30-11-06 - Mickie
 		//we have to do this utf8 decode for the fields which may contains special characters -- Mickie - 02-02-07
 		$val->from = utf8_decode(utf8_encode(imap_utf8(addslashes($val->from))));
@@ -279,8 +296,9 @@ if (is_array($overview))
                 $to_list = str_replace(">","",$to);
                 $from = str_replace("<",":",$val->from);
                 $from_list = str_replace(">","",$from);
-                $cc = str_replace("<",":",$hdr->ccaddress);
-                $cc_list = str_replace(">","",$cc);
+                //$cc = str_replace("<",":",$hdr->ccaddress);
+                //$cc_list = str_replace(">","",$cc);
+                $cc_list = '';
 
 	?>
 

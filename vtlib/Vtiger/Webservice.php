@@ -30,7 +30,7 @@ class Vtiger_Webservice {
 	 * @param Vtiger_Module Instance of the module.
 	 */
 	static function initialize($moduleInstance) {
-		if(Vtiger_Version::check('5.1.0', '>=')) {
+		if(Vtiger_Version::check('5.0.4', '>')) {
 			if($moduleInstance->isentitytype) {
 				// TODO: Enable support when webservice API support is added.
 				if(function_exists('vtws_addDefaultModuleTypeEntity')) { 

@@ -1,21 +1,12 @@
 <?php
-/*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the
- * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
- * Software distributed under the License is distributed on an  "AS IS"  basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
- * the specific language governing rights and limitations under the License.
- * The Original Code is: SugarCRM Open Source
- * The Initial Developer of the Original Code is SugarCRM, Inc.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Contributor(s): ______________________________________.
- ********************************************************************************/
-/*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/0welcome.php,v 1.10 2004/08/26 11:44:30 saraj Exp $
- * Description:  Executes a step in the installation process.
- ********************************************************************************/
+ ************************************************************************************/
 
 //get php configuration settings.  requires elaborate parsing of phpinfo() output
 ob_start();
@@ -91,7 +82,7 @@ foreach($pieces as $val)
 
 					<tr class='level3'>
 						<td valign=top align=left class="small" style="padding-left:20px;height:250px;" colspan=2>
-			<p style='text-align:center;font-weight:bold;'>This configuration Wizard helps you install vtigerCRM 5.1.0.</p>
+			<p style='text-align:center;font-weight:bold;'>This configuration Wizard helps you install vtigerCRM 5.1.0 RC.</p>
 <p><br>
 vtiger CRM is a community-driven, fully open source, CRM software project. <br><br>
 The aim of the project is to provide the best and most open CRM solution with the lowest total cost of ownership to small and medium enterprises.<br><br> 

@@ -45,8 +45,7 @@ function getTopPurchaseOrder($maxval,$calCnt)
 			$viewid = "0";
 		}
 	}
-	$focus = new PurchaseOrder();
-
+	
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
@@ -59,13 +58,18 @@ function getTopPurchaseOrder($maxval,$calCnt)
 	$query .=" ORDER BY total DESC";
 
 	//<<<<<<<<customview>>>>>>>>>
-
-	$list_result = $adb->limitQuery($query,0,$maxval);
+	
+	$query .= " LIMIT " . $adb->sql_escape_string($maxval);
+	
+	if($calCnt == 'calculateCnt') {
+		$list_result_rows = $adb->query(mkCountQuery($query));
+		return $adb->query_result($list_result_rows, 0, 'count');
+	}
+	
+	$list_result = $adb->query($query);
 
 	//Retreiving the no of rows
 	$noofrows = $adb->num_rows($list_result);
-	if($calCnt == 'calculateCnt')
-	      return $noofrows;
 
 	//Retreiving the start value from request
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '') {
@@ -107,6 +111,7 @@ function getTopPurchaseOrder($maxval,$calCnt)
 		}
 	}
 
+	$focus = new PurchaseOrder();
 
 	//Retreive the List View Table Header
 	$title=array('myTopPurchaseOrders.gif',$current_module_strings['LBL_MY_TOP_PO'],'home_mytoppo');

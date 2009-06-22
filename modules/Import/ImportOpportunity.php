@@ -109,7 +109,7 @@ function assign_user()
 	function ImportOpportunity() {
 		parent::Potentials();
 		$this->log = LoggerManager::getLogger('import_opportunity');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 
 		$this->db->println("IMP ImportOpportunity");
 		$this->initImportableFields("Potentials");		

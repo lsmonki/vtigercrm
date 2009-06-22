@@ -15,12 +15,14 @@ var TOOLTIP = {
 	
 	_mouseOverTimeOut : 500,
 	
+	_relinguishStatusControl : false,
+	
 		show : function(node, module, fieldname, recordid) {
 		if(TOOLTIP._status[module][recordid][fieldname]) {
 			if(TOOLTIP._cache[module][fieldname][recordid]) {
 				var tooltipdata = TOOLTIP._cache[module][fieldname][recordid];
 				tooltip.tip(node,tooltipdata,recordid,fieldname);
-				$('status').style.display = 'none';
+				if(!this._relinguishStatusControl) $('status').style.display = 'none';
 			}
 		}
 	},
@@ -45,6 +47,9 @@ var TOOLTIP = {
 		var fieldname = evtparams['fieldname'];
 		var recordid  = evtparams['recordid'];
 		var node = evtparams['domnode'];
+		if ($('status').style.display == 'block') {
+			this._relinguishStatusControl = true;
+		}
 		if(evtparams['event'] == 'cell.onmouseover' ) {
 			TOOLTIP._setStatus(module, fieldname, recordid, true);
 			_VT__TOOLTIP__TIMER = setTimeout(function(){TOOLTIP._showForField(node, module, fieldname,recordid)},TOOLTIP._mouseOverTimeOut);
@@ -56,12 +61,12 @@ var TOOLTIP = {
 	},
 	
 	_showForField : function(node, module, fieldname, recordid) {	
-		$('status').style.display = 'block';
+		if(!this._relinguishStatusControl) $('status').style.display = 'block';
 		if(typeof(TOOLTIP._cache[module]) == 'undefined') {
 			TOOLTIP._cache[module] = {}
 		}
 		if(TOOLTIP._cache[module][fieldname] == false) {
-			$('status').style.display = 'none';
+			if(!this._relinguishStatusControl) $('status').style.display = 'none';
 			return;
 		}
 		
@@ -82,10 +87,10 @@ var TOOLTIP = {
 						if(data != false){
 							TOOLTIP._cache[module][fieldname][recordid] = data;
 							TOOLTIP.show(node, module, fieldname, recordid);
-							$('status').style.display = 'none';
+							if(!this._relinguishStatusControl) $('status').style.display = 'none';
 						}else{
 							TOOLTIP._cache[module][fieldname] = false;
-							$('status').style.display = 'none';
+							if(!this._relinguishStatusControl) $('status').style.display = 'none';
 						}
 					}
 				}

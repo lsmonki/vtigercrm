@@ -1,4 +1,12 @@
 <?php
+/*+*******************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ******************************************************************************/
 
 class WebserviceField{
 	private $fieldId;
@@ -254,22 +262,22 @@ class WebserviceField{
 	
 	private function getFieldTypeFromUIType(){
 		
+		// Cache all the information for futher re-use
+		if(empty(self::$fieldTypeMapping)) {
+			$result = $this->pearDB->pquery("select * from vtiger_ws_fieldtype", array());
+			while($resultrow = $this->pearDB->fetch_array($result)) {
+				self::$fieldTypeMapping[$resultrow['uitype']] = $resultrow;
+			}
+		}
+		
 		if(isset(WebserviceField::$fieldTypeMapping[$this->getUIType()])){
-			if(WebserviceField::$fieldTypeMapping[$this->getUIType()] === null){
+			if(WebserviceField::$fieldTypeMapping[$this->getUIType()] === false){
 				return null;
 			}
 			$row = WebserviceField::$fieldTypeMapping[$this->getUIType()];
 			return $row['fieldtype'];
-		}
-		$sql = "select * from vtiger_ws_fieldtype where uitype=?;";
-		$result = $this->pearDB->pquery($sql,array($this->getUIType()));
-		$rowCount = $this->pearDB->num_rows($result);
-		if($rowCount > 0){
-			$row = $this->pearDB->query_result_rowdata($result,0);
-			WebserviceField::$fieldTypeMapping[$this->getUIType()] = $row;
-			return $row['fieldtype'];
-		}else{
-			WebserviceField::$fieldTypeMapping[$this->getUIType()] = null;
+		} else {
+			WebserviceField::$fieldTypeMapping[$this->getUIType()] = false;
 			return null;
 		}
 	}

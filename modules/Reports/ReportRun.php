@@ -31,7 +31,13 @@ class ReportRun extends CRMEntity
 	var $reporttype;
 	var $reportname;
 	var $totallist;
-
+	
+	var $_groupinglist  = false;
+	var $_columnslist    = false;
+	var	$_stdfilterlist = false;
+	var	$_columnstotallist = false;
+	var	$_advfilterlist = false;
+		
 	var $convert_currency = array('Potentials_Amount', 'Accounts_Annual_Revenue', 'Leads_Annual_Revenue', 'Campaigns_Budget_Cost', 
 									'Campaigns_Actual_Cost', 'Campaigns_Expected_Revenue', 'Campaigns_Actual_ROI', 'Campaigns_Expected_ROI');
 	//var $add_currency_sym_in_headers = array('Amount', 'Unit_Price', 'Total', 'Sub_Total', 'S&H_Amount', 'Discount_Amount', 'Adjustment');
@@ -67,6 +73,11 @@ class ReportRun extends CRMEntity
 	 */
 	function getQueryColumnsList($reportid)
 	{
+		// Have we initialized information already?
+		if($this->_columnslist !== false) {
+			return $this->_columnslist;
+		}
+		
 		global $adb;
 		global $modules;
 		global $log,$current_user,$current_language;
@@ -192,6 +203,9 @@ class ReportRun extends CRMEntity
 				}
 			}
 		}
+		// Save the information
+		$this->_columnslist = $columnslist;
+		
 		$log->info("ReportRun :: Successfully returned getQueryColumnsList".$reportid);
 		return $columnslist;		
 	}
@@ -572,6 +586,11 @@ class ReportRun extends CRMEntity
 
 	function getAdvFilterList($reportid)
 	{
+		// Have we initialized information already?
+		if($this->_advfilterlist !== false) {
+			return $this->_advfilterlist;
+		}
+		
 		global $adb;
 		global $modules;
 		global $log;
@@ -698,6 +717,9 @@ class ReportRun extends CRMEntity
 			}
 
 		}
+		// Save the information
+		$this->_advfilterlist = $advfilterlist;
+		
 		$log->info("ReportRun :: Successfully returned getAdvFilterList".$reportid);
 		return $advfilterlist;
 	}	
@@ -711,6 +733,11 @@ class ReportRun extends CRMEntity
 	 */
 	function getStdFilterList($reportid)
 	{
+		// Have we initialized information already?
+		if($this->_stdfilterlist !== false) {
+			return $this->_stdfilterlist;
+		}
+		
 		global $adb;
 		global $modules;
 		global $log;
@@ -750,6 +777,9 @@ class ReportRun extends CRMEntity
 
 			}		
 		}
+		// Save the information
+		$this->_stdfilterlist = $stdfilterlist;
+		
 		$log->info("ReportRun :: Successfully returned getStdFilterList".$reportid);
 		return $stdfilterlist;
 	}
@@ -1101,6 +1131,11 @@ class ReportRun extends CRMEntity
 		global $modules;
 		global $log;
 
+		// Have we initialized information already?
+		if($this->_groupinglist !== false) {
+			return $this->_groupinglist;
+		}
+
 		$sreportsortsql = "select vtiger_reportsortcol.* from vtiger_report";
 		$sreportsortsql .= " inner join vtiger_reportsortcol on vtiger_report.reportid = vtiger_reportsortcol.reportid";
 		$sreportsortsql .= " where vtiger_report.reportid =? AND vtiger_reportsortcol.columnname IN (SELECT columnname from vtiger_selectcolumn WHERE queryid=?) order by vtiger_reportsortcol.sortcolid";
@@ -1138,6 +1173,9 @@ class ReportRun extends CRMEntity
 				}
 			}
 		}
+		// Save the information
+		$this->_groupinglist = $grouplist;
+		
 		$log->info("ReportRun :: Successfully returned getGroupingList".$reportid);
 		return $grouplist;
 	}
@@ -1593,7 +1631,8 @@ class ReportRun extends CRMEntity
 	 *		HTML strings for 
 	 */
 
-	function GenerateReport($outputformat,$filterlist)
+	// Performance Optimization: Added parameter directOutput to avoid building big-string!
+	function GenerateReport($outputformat,$filterlist, $directOutput=false)
 	{
 		global $adb,$current_user,$php_max_execution_time;
 		global $modules,$app_strings;
@@ -1607,14 +1646,41 @@ class ReportRun extends CRMEntity
 				$modules_selected[] = $sec_modules[$i];
 			}
 		}
+		
+		// Update Currency Field list
+		$currencyfieldres = $adb->pquery("SELECT tabid, fieldlabel from vtiger_field WHERE uitype in (71,72)", array());
+		if($currencyfieldres) {
+			foreach($currencyfieldres as $currencyfieldrow) {
+				$modprefixedlabel = getTabModuleName($currencyfieldrow['tabid']).' '.$currencyfieldrow['fieldlabel'];
+				$modprefixedlabel = str_replace(' ','_',$modprefixedlabel);				
+				if(!in_array($modprefixedlabel, $this->convert_currency)) {					
+					$this->convert_currency[] = $modprefixedlabel;
+				}
+			}
+		}
+		
+		
 		if($outputformat == "HTML")
 		{
 			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist);
 			$result = $adb->query($sSQL);
 			$error_msg = $adb->database->ErrorMsg();
 			if(!$result && $error_msg!=''){
+				// Performance Optimization: If direct output is requried
+				if($directOutput) {
+					echo getTranslatedString('LBL_REPORT_GENERATION_FAILED', $currentModule) . "<br>" . $error_msg;
+					$error_msg = false; 
+				}				
+				// END
 				return $error_msg;
 			}
+			
+			// Performance Optimization: If direct output is required
+			if($directOutput) {
+				echo '<table cellpadding="5" cellspacing="0" align="center" class="rptTable"><tr>';
+			}
+			// END
+			
 			if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
 				$picklistarray = $this->getAccessPickListValues();
 			if($result)
@@ -1659,7 +1725,20 @@ class ReportRun extends CRMEntity
 					else $headerLabel = $headerLabel_tmp;
 					/*STRING TRANSLATION ends */
 					$header .= "<td class='rptCellLabel'>".$headerLabel."</td>";
+					
+					// Performance Optimization: If direct output is required
+					if($directOutput) {
+						echo $header;
+						$header = '';
+					}
+					// END
 				}
+				
+				// Performance Optimization: If direct output is required
+				if($directOutput) {
+					echo '</tr><tr>';
+				}
+				// END
 
 				$noofrows = $adb->num_rows($result);
 				$custom_field_values = $adb->fetch_array($result);
@@ -1690,16 +1769,19 @@ class ReportRun extends CRMEntity
 					if($tnewvalue == "") $tnewvalue = "-";
 
 					$valtemplate .= "<tr>";
+					
+					// Performance Optimization
+					if($directOutput) {
+						echo $valtemplate;
+						$valtemplate = '';
+					}
+					// END
 
 					for ($i=0; $i<$y; $i++)
 					{
 						$fld = $adb->field_name($result, $i);
 						$fld_type = $column_definitions[$i]->type;
-						if($fld->table!='' && $fld->name!=''){
-							$uitype_result = $adb->pquery("SELECT uitype from vtiger_field WHERE tablename = ? AND fieldlabel=?",array($fld->table,$fld->name));
-							$uitype_value = $adb->query_result($uitype_result,0,"uitype");
-						}
-						if (in_array($fld->name, $this->convert_currency) || $uitype_value==71) {
+						if (in_array($fld->name, $this->convert_currency)) {
 								if($custom_field_values[$i]!='')
 									$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
 								else
@@ -1806,8 +1888,24 @@ class ReportRun extends CRMEntity
 								$valtemplate .= "<td class='rptGrpHead'>".$fieldvalue."</td>";
 							}
 						}
+						
+						// Performance Optimization: If direct output is required
+						if($directOutput) {
+							echo $valtemplate;
+							$valtemplate = '';
+						}
+						// END
 					}
+					
 					$valtemplate .= "</tr>";
+					
+					// Performance Optimization: If direct output is required
+					if($directOutput) {
+						echo $valtemplate;
+						$valtemplate = '';
+					}
+					// END
+					
 					$lastvalue = $newvalue;
 					$secondvalue = $snewvalue;
 					$thirdvalue = $tnewvalue;
@@ -1815,7 +1913,14 @@ class ReportRun extends CRMEntity
 					set_time_limit($php_max_execution_time);
 				}while($custom_field_values = $adb->fetch_array($result));
 
-				$sHTML ='<table cellpadding="5" cellspacing="0" align="center" class="rptTable">
+				// Performance Optimization
+				if($directOutput) {
+					echo "</tr></table>";
+					echo "<script type='text/javascript' id='__reportrun_directoutput_recordcount_script'>
+						if($('_reportrun_total')) $('_reportrun_total').innerHTML=$noofrows;</script>";
+				} else {
+
+					$sHTML ='<table cellpadding="5" cellspacing="0" align="center" class="rptTable">
 					<tr>'. 
 					$header
 					.'<!-- BEGIN values -->
@@ -1823,6 +1928,7 @@ class ReportRun extends CRMEntity
 					$valtemplate
 					.'</tr>
 					</table>';
+				}
 				//<<<<<<<<construct HTML>>>>>>>>>>>>
 				$return_data[] = $sHTML;
 				$return_data[] = $noofrows;
@@ -1955,6 +2061,14 @@ class ReportRun extends CRMEntity
 					$y=$adb->num_fields($result);
 					$custom_field_values = $adb->fetch_array($result);
 					$coltotalhtml .= "<table align='center' width='60%' cellpadding='3' cellspacing='0' border='0' class='rptTable'><tr><td class='rptCellLabel'>".$mod_strings[Totals]."</td><td class='rptCellLabel'>".$mod_strings[SUM]."</td><td class='rptCellLabel'>".$mod_strings[AVG]."</td><td class='rptCellLabel'>".$mod_strings[MIN]."</td><td class='rptCellLabel'>".$mod_strings[MAX]."</td></tr>";
+					
+					// Performation Optimization: If Direct output is desired
+					if($directOutput) {
+						echo $coltotalhtml;
+						$coltotalhtml = '';
+					}
+					// END
+					
 					foreach($this->totallist as $key=>$value)
 					{
 						$fieldlist = explode(":",$key);
@@ -2046,9 +2160,23 @@ class ReportRun extends CRMEntity
 						}
 
 						$coltotalhtml .= '<tr>';
+						
+						// Performation Optimization: If Direct output is desired
+						if($directOutput) {
+							echo $coltotalhtml;
+							$coltotalhtml = '';
+						}
+						// END
 					}
 
 					$coltotalhtml .= "</table>";
+					
+					// Performation Optimization: If Direct output is desired
+					if($directOutput) {
+						echo $coltotalhtml;
+						$coltotalhtml = '';
+					}
+					// END
 				}
 			}			
 			return $coltotalhtml;
@@ -2353,6 +2481,11 @@ class ReportRun extends CRMEntity
 	//<<<<<<<new>>>>>>>>>>
 	function getColumnsTotal($reportid)
 	{
+		// Have we initialized it already?
+		if($this->_columnstotallist !== false) {
+			return $this->_columnstotallist;
+		}
+		
 		global $adb;
 		global $modules;
 		global $log, $current_user;
@@ -2436,6 +2569,9 @@ class ReportRun extends CRMEntity
 				}
 			}
 		}
+		// Save the information 
+		$this->_columnstotallist = $stdfilterlist;
+		
 		$log->info("ReportRun :: Successfully returned getColumnsTotal".$reportid);
 		return $stdfilterlist;
 	}

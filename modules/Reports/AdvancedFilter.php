@@ -19,8 +19,10 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 	$secondarymodule = '';
 	$secondarymodules =Array();
 	
-	foreach($oRep->related_modules[$oReport->primodule] as $key=>$value){
-		if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= $_REQUEST["secondarymodule_".$value];
+	if(!empty($oRep->related_modules[$oReport->primodule])) {
+		foreach($oRep->related_modules[$oReport->primodule] as $key=>$value){
+			if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= $_REQUEST["secondarymodule_".$value];
+		}
 	}
 	$secondarymodule = implode(":",$secondarymodules);
 	
@@ -85,9 +87,11 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 	$primarymodule = $_REQUEST["primarymodule"];
 	$BLOCK1 = getPrimaryColumns_AdvFilterHTML($primarymodule);
 	$ogReport =  new Reports();
-	foreach($ogReport->related_modules[$primarymodule] as $key=>$value){
-		//$BLOCK1 .= getSecondaryColumnsHTML($_REQUEST["secondarymodule_".$value]);
-	$BLOCK1 .= getSecondaryColumns_AdvFilterHTML($_REQUEST["secondarymodule_".$value]);
+	if(!empty($ogReport->related_modules[$primarymodule])) {
+		foreach($ogReport->related_modules[$primarymodule] as $key=>$value){
+			//$BLOCK1 .= getSecondaryColumnsHTML($_REQUEST["secondarymodule_".$value]);
+			$BLOCK1 .= getSecondaryColumns_AdvFilterHTML($_REQUEST["secondarymodule_".$value]);
+		}
 	}
 	$rel_fields = getRelatedFieldColumns();
 	

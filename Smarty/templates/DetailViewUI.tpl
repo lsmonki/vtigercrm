@@ -99,7 +99,7 @@
 						{/foreach}               
 							<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');"><span id="dtlview_{$label}"><font color="{$fontval}">{if $APP.$keyval!=''}{$APP.$keyval}{elseif $MOD.$keyval!=''}{$MOD.$keyval}{else}{$keyval}{/if}</font></span>
                                               		<div id="editarea_{$label}" style="display:none;">
-                    							   <select id="txtbox_{$label}" name="{$keyfldname}">
+                    							   <select id="txtbox_{$label}" name="{$keyfldname}" class="small">
                     								{foreach item=arr from=$keyoptions}
 											{if $arr[0] eq $APP.LBL_NOT_ACCESSIBLE}
                     									<option value="{$arr[0]}" {$arr[2]}>{$arr[0]}</option>
@@ -134,7 +134,7 @@
 						</span>
 						<!--code given by Neil End-->
                                           <div id="editarea_{$label}" style="display:none;">
-                                          <select MULTIPLE id="txtbox_{$label}" name="{$keyfldname}" size="4" style="width:160px;">
+                                          <select MULTIPLE id="txtbox_{$label}" name="{$keyfldname}" size="4" style="width:160px;" class="small">
 				                                    {foreach item=arr from=$keyoptions}
 										<option value="{$arr[1]}" {$arr[2]}>{$arr[0]}</option>
 				                                    {/foreach}
@@ -149,7 +149,7 @@
 								{if $keyadmin eq 1 || $keyid eq '117'}
                							<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">{$keyval}</span>
 								<div id="editarea_{$label}" style="display:none;">
-                    							   <select id="txtbox_{$label}" name="{$keyfldname}">
+                    							   <select id="txtbox_{$label}" name="{$keyfldname}" class="small">
 									{foreach item=arr key=uivalueid from=$keyoptions}
 									{foreach key=sel_value item=value from=$arr}
 										<option value="{$uivalueid}" {$value}>{$sel_value|@getTranslatedCurrencyString}</option>	
@@ -243,7 +243,7 @@
 					     {elseif $keyid eq '52' || $keyid eq '77'} 
                                                                 <td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">&nbsp;<span id="dtlview_{$label}">{$keyval}</span>
                                                         <div id="editarea_{$label}" style="display:none;">
-                                                                           <select id="txtbox_{$label}" name="{$keyfldname}">
+                                                                           <select id="txtbox_{$label}" name="{$keyfldname}" class="small">
                                                                                 {foreach item=arr key=uid from=$keyoptions}
                                                                                         {foreach key=sel_value item=value from=$arr}
                                                                                                 <option value="{$uid}" {$value}>{if $APP.$sel_value}{$APP.$sel_value}{else}{$sel_value}{/if}</option>

@@ -65,7 +65,7 @@ class ImportMap extends SugarBean
 	function ImportMap() 
 	{
 		$this->log = LoggerManager::getLogger('file');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 	}
 
 	/**	function used to get the id, name, module and content as string

@@ -225,6 +225,10 @@ if ((date1.value != '') || (date2.value != ''))
                         postBody: 'action=ReportsAjax&file=SaveAndRun&mode=ajax&module=Reports&record='+id+'&stdDateFilterField='+stdDateFilterFieldvalue+'&stdDateFilter='+stdDateFiltervalue+'&startdate='+startdatevalue+'&enddate='+enddatevalue,
                         onComplete: function(response) {
 				getObj('Generate').innerHTML = response.responseText;
+				// Performance Optimization: To update record count of the report result 
+				var __reportrun_directoutput_recordcount_scriptnode = $('__reportrun_directoutput_recordcount_script');
+				if(__reportrun_directoutput_recordcount_scriptnode) { eval(__reportrun_directoutput_recordcount_scriptnode.innerHTML); }
+				// END
 				setTimeout("ReportInfor()",1);
                         }
                 }

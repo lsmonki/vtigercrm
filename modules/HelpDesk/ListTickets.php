@@ -24,24 +24,23 @@ function getMyTickets($maxval,$calCnt)
 	$theme_path="themes/".$theme."/";
 	$image_path="themes/images/";
 
-	$search_query="select vtiger_troubletickets.ticketid, parent_id, priority, vtiger_troubletickets.status, category, vtiger_troubletickets.title, vtiger_crmentity.description, update_log, version_id,
-	vtiger_crmentity.createdtime, vtiger_crmentity.modifiedtime, 
-	vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, 
-	vtiger_account.accountid, vtiger_account.accountname, 
-	vtiger_users.user_name from 
-	vtiger_troubletickets 
-	inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_troubletickets.ticketid 
-	inner join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid 
-	left join vtiger_contactdetails on vtiger_troubletickets.parent_id = vtiger_contactdetails.contactid 
-	left join vtiger_account on vtiger_account.accountid = vtiger_troubletickets.parent_id 
-	left join vtiger_seticketsrel on vtiger_seticketsrel.ticketid = vtiger_troubletickets.ticketid 
-	where vtiger_crmentity.smownerid = ? and vtiger_crmentity.deleted = 0 and vtiger_troubletickets.status <> 'Closed'  ORDER BY createdtime DESC";
+	$search_query  = "SELECT vtiger_troubletickets.*, vtiger_crmentity.*
+		FROM vtiger_troubletickets 
+		INNER JOIN vtiger_crmentity on vtiger_crmentity.crmid = vtiger_troubletickets.ticketid 
+		INNER JOIN vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
+		where vtiger_crmentity.smownerid = ? and vtiger_crmentity.deleted = 0 and vtiger_troubletickets.status <> 'Closed' ORDER BY createdtime DESC";
 
-	$resultcount = $adb->num_rows($adb->pquery($search_query, array($current_user->id)));
-	if($resultcount > 0)
+	$search_query .= " LIMIT 0," . $adb->sql_escape_string($maxval);
+	
+	
+	if($calCnt == 'calculateCnt') {
+		$list_result_rows = $adb->pquery(mkCountQuery($search_query), array($current_user->id));
+		return $adb->query_result($list_result_rows, 0, 'count');
+	}
+	
+	$tktresult = $adb->pquery($search_query, array($current_user->id));
+	if($adb->num_rows($tktresult))
 	{
-		$limit_query = $search_query . " limit 0,".$maxval;
-		$tktresult = $adb->pquery($limit_query, array($current_user->id));
 		$title=array();
 		$title[]='myTickets.gif';
 		$title[]=$current_module_strings['LBL_MY_TICKETS'];
@@ -96,6 +95,12 @@ function getParentLink($parent_id)
 	global $log;
 	$log->debug("Entering getParentLink(".$parent_id.") method ...");
 	global $adb;
+	
+	// Static caching
+	static $__cache_listtickets_parentlink = Array();
+	if(isset($__cache_listtickets_parentlink[$parent_id])) {
+		return $__cache_listtickets_parentlink[$parent_id];
+	}
 
 	$sql = "select setype from vtiger_crmentity where crmid=?";
 	$parent_module = $adb->query_result($adb->pquery($sql, array($parent_id)),0,'setype');
@@ -115,6 +120,9 @@ function getParentLink($parent_id)
 	        $parent_name = '<a href="index.php?action=DetailView&module='.$parent_module.'&record='.$parent_id.'">'.$parentname.'</a>';
 	}
 
+	// Add to cache
+	$__cache_listtickets_parentlink[$parent_id] = $parent_name;
+	
 	$log->debug("Exiting getParentLink method ...");
 	return $parent_name;
 }

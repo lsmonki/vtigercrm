@@ -38,7 +38,7 @@ class MailBox {
 		require_once('include/utils/encryption.php');
 		$oencrypt = new Encryption();
 	
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->db->println("Entering MailBox($mailbox)");
 
 		$this->mailbox = $mailbox;
@@ -81,12 +81,25 @@ class MailBox {
 
 		$this->db->println("Exiting MailBox($mailbox)");
 	}
+	
+	function loadOverviewList($start, $end) {
+		if($this->mbox) {
+			if($end == 0) $end = 1;
+			
+			$mailOverviews = @imap_fetch_overview($this->mbox, "$start:$end", 0);
+			$this->mailList['headers'] = Array();
+			$this->mailList['overview'] = $mailOverviews;
+		}
+	}
 
 	function fullMailList() {
-		$mailHeaders = @imap_headers($this->mbox);
+		/*$mailHeaders = @imap_headers($this->mbox);
 		$numEmails = sizeof($mailHeaders);
 		$mailOverviews = @imap_fetch_overview($this->mbox, "1:$numEmails", 0);
-		$out = array("headers"=>$mailHeaders,"overview"=>$mailOverviews,"count"=>$numEmails);
+		$out = array("headers"=>$mailHeaders,"overview"=>$mailOverviews,"count"=>$numEmails);& */
+		
+		$numEmails = @imap_num_msg($this->mbox);
+		$out = array("count" => $numEmails);
 		return $out;
 	}
 

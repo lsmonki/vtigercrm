@@ -65,9 +65,20 @@ if($numOfRows > 0)
 	{
 		$oReportRun = new ReportRun($reportid);
 		$filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
-		$sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
-		if(is_array($sshtml))$totalhtml = $oReportRun->GenerateReport("TOTALHTML",$filterlist);
+		
+		// Performance Optimization: Direct output of the report result
 		$list_report_form = new vtigerCRM_Smarty;
+				
+		//$sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
+		//if(is_array($sshtml))$totalhtml = $oReportRun->GenerateReport("TOTALHTML",$filterlist);
+		
+		$sshtml = array();
+		$totalhtml = '';
+		$list_report_form->assign("DIRECT_OUTPUT", true);
+		$list_report_form->assign_by_ref("__REPORT_RUN_INSTANCE", $oReportRun);
+		$list_report_form->assign_by_ref("__REPORT_RUN_FILTER_LIST", $filterlist);
+		// END		
+		
 		$ogReport->getSelectedStandardCriteria($reportid);
 		//commented to omit dashboards for vtiger_reports
 		//require_once('modules/Dashboard/ReportsCharts.php');

@@ -52,7 +52,7 @@ if($singlepane_view == 'true' && $_REQUEST['action'] == 'CallRelatedList') {
 	if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != ' ') {
 		$smarty->assign("OP_MODE",vtlib_purify($_REQUEST['mode']));
 	}
-	$parent_email = getEmailParentsList('Contacts',$_REQUEST['record']);
+	$parent_email = getEmailParentsList('Contacts',$_REQUEST['record'], $focus);
 	        $smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
 	
 	if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {

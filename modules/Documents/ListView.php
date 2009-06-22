@@ -222,45 +222,38 @@ if($foldercount > 0 )
 		}
 		//navigation start
 		$max_entries_per_page = $list_max_entries_per_page; 
-		//Storing Listview session object
-		if($_SESSION['lvs'][$currentModule])
-		{
-			setSessionVar($_SESSION['lvs'][$currentModule],$num_records,$max_entries_per_page);
-		}
-		
-		//added for 4600                                                                                                                            
-		if($num_records <= $max_entries_per_page)
-        	$_SESSION['lvs'][$currentModule]['start'] = 1;
-		//ends
-
-		//Retreive the Navigation array
-		$navigation_array = getNavigationValues($start[$folder_id], $num_records, $max_entries_per_page);
 		//Postgres 8 fixes
 		if( $adb->dbType == "pgsql")
-     		$query = fixPostgresQuery( $query, $log, 0);
+			$list_query = fixPostgresQuery( $query, $log, 0);	
 
-		// Setting the record count string
-		//modified by rdhital
+		if($folder_id == $request_folderid){
+			$start[$folder_id] = 1;
+			if(!empty($_REQUEST['start'])){
+				$start[$folder_id] = $_REQUEST['start'];
+				if($start[$folder_id] == 'last'){
+					if($num_records > 0){
+						$start[$folder_id] = ceil($num_records/$max_entries_per_page);
+					}
+				}
+				if(!is_numeric($start[$folder_id])){
+					$start[$folder_id] = 1;
+				}
+			}
+		}
 		
-		$start_rec = $navigation_array['start'];
-		$end_rec = $navigation_array['end_val']; 
+		$navigation_array = VT_getSimpleNavigationValues($start[$folder_id],$max_entries_per_page,$num_records);
+		if($folder_id == $request_folderid){
+			if(!is_array($_SESSION['lvs'][$currentModule]['start'])){
+				$_SESSION['lvs'][$currentModule]['start'] = array();
+			}
+			$_SESSION['lvs'][$currentModule]['start'][$folder_id] = $start[$folder_id];
+		}		
+		$limit_start_rec = ($start[$folder_id]-1) * $max_entries_per_page;
 		
-		$_SESSION['nav_start']=$start_rec;
-		$_SESSION['nav_end']=$end_rec;
-
-		//limiting the query
-		if ($start_rec ==0) 
-			$limit_start_rec = 0;
+		if( $adb->dbType == "pgsql")
+			$list_result = $adb->pquery($query. " OFFSET $limit_start_rec LIMIT $max_entries_per_page", array());
 		else
-			$limit_start_rec = $start_rec -1;
-	
- 		if( $adb->dbType == "pgsql")
-     		$list_result = $adb->pquery($query. " OFFSET $limit_start_rec LIMIT $max_entries_per_page",array());
- 		else
-     		$list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $max_entries_per_page",array());
-     	
-     	$record_string= $app_strings['LBL_SHOWING']." " .$start_rec." - ".$end_rec." " .$app_strings['LBL_LIST_OF'] ." ".$num_records;
-     		
+			$list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $max_entries_per_page", array());
 		//navigation end
 		
 		$folder_details=Array();
@@ -271,8 +264,8 @@ if($foldercount > 0 )
 		$folder_details['description']=$adb->query_result($result,$i,"description");
 		$folder_files = getListViewEntries($focus,"Documents",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 		$folder_details['entries']= $folder_files;
-		$folder_details['navigation'] = getTableHeaderNavigation($navigation_array, $url_string,"Documents",$folder_id,$viewid);
-		$folder_details['record_count']=$record_string;
+		$folder_details['navigation'] = getTableHeaderSimpleNavigation($navigation_array, $url_string,"Documents",$folder_id,$viewid);
+		$folder_details['recordListRange'] = getRecordRangeMessage($list_result, $limit_start_rec);
 		if ($displayFolder == true) {
 			$folders[$foldername] = $folder_details;
 		} else{
@@ -309,7 +302,7 @@ if($current_user->id == 1)
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$_SESSION['documents_listquery'] = $list_query;
+$_SESSION[$currentModule.'_listquery'] = $list_query;
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '' || $_REQUEST['mode'] == 'ajax')
 	$smarty->display("DocumentsListViewEntries.tpl");

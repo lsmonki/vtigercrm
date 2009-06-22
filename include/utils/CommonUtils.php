@@ -299,12 +299,25 @@ function fetchCurrency($id)
 {
 	global $log;
 	$log->debug("Entering fetchCurrency(".$id.") method ...");
+	
+	// Lookup the information in cache
+	$currencyinfo = VTCacheUtils::lookupUserCurrenyId($id);
+	
+	if($currencyinfo === false) {
         global $adb;
         $sql = "select currency_id from vtiger_users where id=?";
         $result = $adb->pquery($sql, array($id));
         $currencyid=  $adb->query_result($result,0,"currency_id");
+        
+        VTCacheUtils::updateUserCurrencyId($id, $currencyid);
+        
+        // Re-look at the cache for consistency
+        $currencyinfo = VTCacheUtils::lookupUserCurrenyId($id);
+	}
+	
+	$currencyid = $currencyinfo['currencyid'];
 	$log->debug("Exiting fetchCurrency method ...");
-        return $currencyid;
+	return $currencyid;
 }
 
 /** Function to get the Currency name from the vtiger_currency_info
@@ -316,11 +329,30 @@ function getCurrencyName($currencyid, $show_symbol=true)
 {
 	global $log;
 	$log->debug("Entering getCurrencyName(".$currencyid.") method ...");
-    global $adb;
-    $sql1 = "select * from vtiger_currency_info where id= ?";
-    $result = $adb->pquery($sql1, array($currencyid));
-    $currencyname = $adb->query_result($result,0,"currency_name");
-    $curr_symbol = $adb->query_result($result,0,"currency_symbol");
+	
+	// Look at cache first
+	$currencyinfo = VTCacheUtils::lookupCurrencyInfo($currencyid);
+	
+	if($currencyinfo === false) {
+    	global $adb;
+    	$sql1 = "select * from vtiger_currency_info where id= ?";
+    	$result = $adb->pquery($sql1, array($currencyid));
+
+    	$resultinfo = $adb->fetch_array($result);
+    
+    	// Update cache
+    	VTCacheUtils::updateCurrencyInfo($currencyid, 
+    		$resultinfo['currency_name'], $resultinfo['currency_code'],
+    		$resultinfo['currency_symbol'], $resultinfo['conversion_rate']  
+    	);
+    	
+    	// Re-look at the cache now
+    	$currencyinfo = VTCacheUtils::lookupCurrencyInfo($currencyid);
+	}
+	
+	$currencyname = $currencyinfo['name'];
+	$curr_symbol  = $currencyinfo['symbol'];
+    	
 	$log->debug("Exiting getCurrencyName method ...");
 	if($show_symbol) return getTranslatedCurrencyString($currencyname).' : '.$curr_symbol;
 	else return $currencyname;
@@ -356,25 +388,77 @@ function getTabid($module)
 {
 	global $log;
 	$log->debug("Entering getTabid(".$module.") method ...");
-
-	if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0)) 
-	{
-		include('tabdata.php');
-		$tabid= $tab_info_array[$module];
+	
+	// Lookup information in cache first	
+	$tabid = VTCacheUtils::lookupTabid($module);
+	if($tabid === false) {
+		
+		if(file_exists('tabdata.php') && (filesize('tabdata.php') != 0)) {
+			include('tabdata.php');
+			$tabid= $tab_info_array[$module];
+			
+			// Update information to cache for re-use
+			VTCacheUtils::updateTabidInfo($tabid, $module);
+			
+		} else {	
+	        $log->info("module  is ".$module);
+    	    global $adb;
+			$sql = "select tabid from vtiger_tab where name=?";
+			$result = $adb->pquery($sql, array($module));
+			$tabid=  $adb->query_result($result,0,"tabid");
+			
+			// Update information to cache for re-use
+			VTCacheUtils::updateTabidInfo($tabid, $module);
+		}
 	}
-	else
-	{	
-
-        $log->info("module  is ".$module);
-        global $adb;
-	$sql = "select tabid from vtiger_tab where name=?";
-	$result = $adb->pquery($sql, array($module));
-	$tabid=  $adb->query_result($result,0,"tabid");
-	}
+	
 	$log->debug("Exiting getTabid method ...");
 	return $tabid;
 
 }
+
+/**
+ * Function to get the fieldid
+ *
+ * @param Integer $tabid
+ * @param Boolean $onlyactive
+ */
+function getFieldid($tabid, $fieldname, $onlyactive = true) {
+	global $adb;
+	
+	// Look up information at cache first	
+	$fieldinfo = VTCacheUtils::lookupFieldInfo($tabid, $fieldname);
+	if($fieldinfo === false) {
+		$query  = "SELECT fieldid, fieldlabel, columnname, tablename, uitype, typeofdata, presence 
+			FROM vtiger_field WHERE tabid=? AND fieldname=?";
+		$result = $adb->pquery($query, array($tabid, $fieldname));
+		
+		if($adb->num_rows($result)) {
+			
+			$resultrow = $adb->fetch_array($result);
+			
+			// Update information to cache for re-use		
+			VTCacheUtils::updateFieldInfo(
+				$tabid, $fieldname,$resultrow['fieldid'],
+				$resultrow['fieldlabel'], $resultrow['columnname'], $resultrow['tablename'],
+				$resultrow['uitype'], $resultrow['typeofdata'], $resultrow['presence']);
+			
+			$fieldinfo = VTCacheUtils::lookupFieldInfo($tabid, $fieldname);
+		}
+	}
+	
+	// Get the field id based on required criteria
+	$fieldid = false;
+	
+	if($fieldinfo) {
+		$fieldid = $fieldinfo['fieldid'];
+		if($onlyactive && !in_array($fieldinfo['presence'], array('0', '2'))) {
+			$fieldid = false;
+		}
+	}
+	return $fieldid;
+}
+
 /**
  * Function to get the CustomViewName
  * Takes the input as $cvid - customviewid
@@ -445,7 +529,7 @@ function getSalesEntityType($crmid)
 	$log->debug("Entering getSalesEntityType(".$crmid.") method ...");
 	$log->info("in getSalesEntityType ".$crmid);
 	global $adb;
-	$sql = "select * from vtiger_crmentity where crmid=?";
+	$sql = "select setype from vtiger_crmentity where crmid=?";
         $result = $adb->pquery($sql, array($crmid));
 	$parent_module = $adb->query_result($result,0,"setype");
 	$log->debug("Exiting getSalesEntityType method ...");
@@ -993,12 +1077,15 @@ function getCurrencySymbolandCRate($id)
 {
 	global $log;
 	$log->debug("Entering getCurrencySymbolandCRate(".$id.") method ...");
-        
-    global $adb;
-    $sql1 = "select conversion_rate,currency_symbol from vtiger_currency_info where id=?";
-    $result = $adb->pquery($sql1, array($id));
-	$rate_symbol['rate'] = $adb->query_result($result,0,"conversion_rate");
-	$rate_symbol['symbol'] = $adb->query_result($result,0,"currency_symbol");
+
+	// To initialize the currency information in cache
+	getCurrencyName($id);
+	
+	$currencyinfo = VTCacheUtils::lookupCurrencyInfo($id);
+	
+	$rate_symbol['rate']  = $currencyinfo['rate'];
+	$rate_symbol['symbol']= $currencyinfo['symbol'];
+	
 	$log->debug("Exiting getCurrencySymbolandCRate method ...");
 	return $rate_symbol;
 }
@@ -3473,37 +3560,6 @@ function getOwnerName($id)
 	return $ownername;	
 }
 
-/*This is used to get the difference of available fields with the hidden fields
-** for the admin,used when Layout Editor hides a field and the field disappears 
-** from the listview header and the popup listheader and popup searchfields
-**/
-
-function filterInactiveFields($module,$fields){
-	global $adb,$mod_strings;
-	$tabid = getTabid($module);
-	
-	$hiddenArr = array();
-	$query= 'select * from vtiger_field where tabid = ? and presence not in (0,2)';
-	$res = $adb->pquery($query,array($tabid));
-	$num_rows = $adb->num_rows($res);
-	for($i=0;$i<$num_rows;$i++){
-		$fieldLabel = getTranslatedString($adb->query_result($res, $i, "fieldlabel"));
-		$tableName = $adb->query_result($res, $i, "tablename");
-		$fieldName = $adb->query_result($res, $i, "fieldname");
-		
-		$tableName = str_replace("vtiger_","",$tableName);
-		$hiddenArr[$fieldLabel] = array($tableName=>$fieldName);
-	}
-	foreach($hiddenArr as $key => $value){
-		foreach($fields as $skey => $svalue){
-			if($skey == $key){
-				$fields = array_diff_assoc($fields, $hiddenArr);
-			}
-		}
-	}
-	return $fields;
-}
-
 /**
  * This function is used to get the blockid of the settings block for a given label.
  * @param $label - settings label
@@ -3560,6 +3616,10 @@ function getEntityField($module){
 	$data = array("tablename"=>$tablename, "fieldname"=>$fieldsname);
 	return $data;
 }
+
+// vtiger cache utility
+require_once('include/utils/VTCacheUtils.php');
+
 // vtlib customization: Extended vtiger CRM utlitiy functions
 require_once('include/utils/VtlibUtils.php');
 // END

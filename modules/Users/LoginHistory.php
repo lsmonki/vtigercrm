@@ -51,7 +51,7 @@ class LoginHistory {
 	
 	function LoginHistory() {
 		$this->log = LoggerManager::getLogger('loginhistory');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 	}
 	
 	var $sortby_fields = Array('user_name', 'user_ip', 'login_time', 'logout_time', 'status');	 

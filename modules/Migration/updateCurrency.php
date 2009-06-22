@@ -9,7 +9,7 @@
  ********************************************************************************/
 
 require_once("include/database/PearDatabase.php");
-$conn = new PearDatabase();
+$conn = PearDatabase::getInstance();
 
 $ajax_val = $_REQUEST['ajax'];
 

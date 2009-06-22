@@ -107,7 +107,7 @@ class Services extends CRMEntity {
 	function __construct() {
 		global $log;
 		$this->column_fields = getColumnFields('Services');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->log = $log;
 	}
 
@@ -125,7 +125,12 @@ class Services extends CRMEntity {
 	function getOrderBy() {
 		global $currentModule;
 		
-		$orderby = $this->default_order_by;
+		$use_default_order_by = '';		
+		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
+			$use_default_order_by = $this->default_order_by;
+		}
+		
+		$orderby = $use_default_order_by;
 		if($_REQUEST['order_by']) $orderby = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else if($_SESSION[$currentModule.'_Order_By'])
 			$orderby = $_SESSION[$currentModule.'_Order_By'];
@@ -385,7 +390,7 @@ class Services extends CRMEntity {
 	 * Initialize this instance for importing.
 	 */
 	function initImport($module) {
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->initImportableFields($module);
 	}
 
@@ -858,11 +863,40 @@ class Services extends CRMEntity {
 		global $theme;
 		$pricebook_id = $_REQUEST['record'];
 		$theme_path="themes/".$theme."/";
-		$image_path=$theme_path."images/";
+		$image_path=$theme_path."images/";		
+
+		$noofrows = $adb->query_result($adb->query(mkCountQuery($query)),0,'count');
+		$module = 'PriceBooks';
+		$relatedmodule = 'Services';
+		if(!$_SESSION['rlvs'][$module][$relatedmodule])
+		{
+			$modObj = new ListViewSession();
+			$modObj->sortby = $focus->default_order_by;
+			$modObj->sorder = $focus->default_sort_order;
+			$_SESSION['rlvs'][$module][$relatedmodule] = get_object_vars($modObj);
+		}
+		if(isset($_REQUEST['relmodule']) && $_REQUEST['relmodule']!='' && $_REQUEST['relmodule'] == $relatedmodule) {
+			$relmodule = vtlib_purify($_REQUEST['relmodule']);
+			if($_SESSION['rlvs'][$module][$relmodule]) {
+				setSessionVar($_SESSION['rlvs'][$module][$relmodule],$noofrows,$list_max_entries_per_page,$module,$relmodule);
+			}
+		}
+		$start = $_SESSION['rlvs'][$module][$relatedmodule]['start'];
+		$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
+		
+		$start_rec = $navigation_array['start'];
+		$end_rec = $navigation_array['end_val'];
 	
-		//Retreive the list from Database
-		$list_result = $adb->query($query);
-		$num_rows = $adb->num_rows($list_result);
+		//limiting the query
+		if($start_rec == 0)
+			$limit_start_rec = 0;
+		else
+			$limit_start_rec = $start_rec -1;
+
+		if($adb->dbType == "pgsql")
+			$list_result = $adb->pquery($query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
+		else
+			$list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 	
 		$header=array();
 		$header[]=$current_module_strings['LBL_LIST_SERVICE_NAME'];
@@ -873,8 +907,8 @@ class Services extends CRMEntity {
 			$header[]=$app_strings['LBL_ACTION'];
 		
 		$currency_id = $focus->column_fields['currency_id'];
-		for($i=0; $i<$num_rows; $i++)
-		{
+		$numRows = $adb->num_rows($list_result);
+		for($i=0; $i<$numRows; $i++) {
 			$entity_id = $adb->query_result($list_result,$i,"crmid");
 			$unit_price = 	$adb->query_result($list_result,$i,"unit_price");
 			if($currency_id != null) {
@@ -903,9 +937,10 @@ class Services extends CRMEntity {
 				$entries[] = $action;
 			$entries_list[] = $entries;
 		}
-		if($num_rows>0)
-		{
-			$return_data = array('header'=>$header,'entries'=>$entries_list);
+		if($numRows>0) {		
+			$module_rel = "$module&relmodule=$relatedmodule&record=".$focus->id;		
+			$navigationOutput[] = getRelatedTableHeaderNavigation($navigation_array,'',$module_rel);
+			$return_data = array('header'=>$header,'entries'=>$entries_list,'navigation'=>$navigationOutput);
 	
 			$log->debug("Exiting getPriceBookRelatedServices method ...");
 			return $return_data; 

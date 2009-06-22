@@ -389,12 +389,15 @@ function alphabetic(module,url,dataid)
 
                                  {/foreach}
                     </td>
-				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
-		        	 <td nowrap >
-					<table border=0 cellspacing=0 cellpadding=0 class="small">
-					     <tr>{$NAVIGATION}</tr>
-					</table>
-                    </td>
+					<td class="small" nowrap>
+						{$recordListRange}
+					</td>
+					<!-- Page Navigation -->
+					<td nowrap width="30%" align="center">
+						<table border=0 cellspacing=0 cellpadding=0 class="small">
+							<tr>{$NAVIGATION}</tr>
+						</table>
+	                </td>
 				 <td width="100%" align="right">
 				   <table border=0 cellspacing=0 cellpadding=0 class="small">
 					<tr>
@@ -498,12 +501,15 @@ function alphabetic(module,url,dataid)
 
                                  {/foreach}
                     </td>
-				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
-				 <td nowrap >
-				    <table border=0 cellspacing=0 cellpadding=0 class="small">
-				         <tr>{$NAVIGATION}</tr>
-				     </table>
-				 </td>
+					<td class="small" nowrap>
+						{$recordListRange}
+					</td>
+					<!-- Page Navigation -->
+					<td nowrap width="30%" align="center">
+						<table border=0 cellspacing=0 cellpadding=0 class="small">
+							<tr>{$NAVIGATION}</tr>
+						</table>
+	                </td>
 				 <td align="right" width=100%>
 				   <table border=0 cellspacing=0 cellpadding=0 class="small">
 					<tr>

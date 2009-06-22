@@ -101,22 +101,7 @@ class Reports extends CRMEntity{
 	var $advft_value;
 	var $adv_rel_fields = Array();
 	
-	var $module_list = Array();/*
-				"Leads"=>Array("Information"=>13,"Address"=>15,"Description"=>16,"Custom Information"=>14),
-				"Contacts"=>Array("Information"=>4,"Portal Information"=>6,"Address"=>7,"Description"=>8,"Custom Information"=>5),
-				"Accounts"=>Array("Information"=>9,"Address"=>11,"Description"=>12,"Custom Information"=>10),
-				"Potentials"=>Array("Information"=>1,"Description"=>3,"Custom Information"=>2),
-				"Calendar"=>Array("Information"=>19,"Description"=>20),
- 		                "Campaigns"=>Array("Information"=>76,"Expectations"=>78,"Description"=>82,"Custom Information"=>77),
-				"Products"=>Array("Information"=>31,"Description"=>36,"Pricing Information"=>32,"Stock Information"=>33,"Custom Information"=>34),
-				"Documents"=>Array("Information"=>17,"Description"=>18),
-				"Emails"=>Array("Information"=>21,"Description"=>24),
-				"HelpDesk"=>Array("Information"=>'25,26',"Custom Information"=>27,"Description"=>28,"Solution"=>29),//patch2
-				"Quotes"=>Array("Information"=>51,"Address"=>53,"Description"=>56,"Terms and Conditions"=>55,"Custom Information"=>52),
-				"PurchaseOrder"=>Array("Information"=>57,"Address"=>59,"Description"=>62,"Terms and Conditions"=>61,"Custom Information"=>58),
-				"SalesOrder"=>Array("Information"=>63,"Address"=>65,"Description"=>68,"Terms and Conditions"=>67,"Custom Information"=>64),
-				"Invoice"=>Array("Information"=>69,"Address"=>71,"Description"=>74,"Terms and Conditions"=>73,"Custom Information"=>70)
-				);*/
+	var $module_list = Array();
 
 	/** Function to set primodule,secmodule,reporttype,reportname,reportdescription,folderid for given vtiger_reportid
 	 *  This function accepts the vtiger_reportid as argument
@@ -129,43 +114,66 @@ class Reports extends CRMEntity{
 		$this->initListOfModules();
 		if($reportid != "")
 		{
-			$ssql = "select vtiger_reportmodules.*,vtiger_report.* from vtiger_report inner join vtiger_reportmodules on vtiger_report.reportid = vtiger_reportmodules.reportmodulesid";
-			$ssql .= " where vtiger_report.reportid = ?";
-			$params = array($reportid);
+			// Lookup information in cache first			
+			$cachedInfo = VTCacheUtils::lookupReport_Info($current_user->id, $reportid);
+			$subordinate_users = VTCacheUtils::lookupReport_SubordinateUsers($reportid);
 			
-			require_once('include/utils/GetUserGroups.php');
-			require('user_privileges/user_privileges_'.$current_user->id.'.php');
-			$userGroups = new GetUserGroups();
-			$userGroups->getAllUserGroups($current_user->id);
-			$user_groups = $userGroups->user_groups;
-			if(!empty($user_groups) && $is_admin==false){
-				$user_group_query = " (shareid IN (".generateQuestionMarks($user_groups).") AND setype='groups') OR";
-				array_push($params, $user_groups);
-			}
+			if($cachedInfo === false) {
+				$ssql = "select vtiger_reportmodules.*,vtiger_report.* from vtiger_report inner join vtiger_reportmodules on vtiger_report.reportid = vtiger_reportmodules.reportmodulesid";
+				$ssql .= " where vtiger_report.reportid = ?";
+				$params = array($reportid);
+			
+				require_once('include/utils/GetUserGroups.php');
+				require('user_privileges/user_privileges_'.$current_user->id.'.php');
+				$userGroups = new GetUserGroups();
+				$userGroups->getAllUserGroups($current_user->id);
+				$user_groups = $userGroups->user_groups;
+				if(!empty($user_groups) && $is_admin==false){
+					$user_group_query = " (shareid IN (".generateQuestionMarks($user_groups).") AND setype='groups') OR";
+					array_push($params, $user_groups);
+				}
 
-			$non_admin_query = " vtiger_report.reportid IN (SELECT reportid from vtiger_reportsharing WHERE $user_group_query (shareid=? AND setype='users'))";
-			if($is_admin==false){
-				$ssql .= " and ( (".$non_admin_query.") or vtiger_report.sharingtype='Public' or vtiger_report.owner = ? or vtiger_report.owner in(select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%'))";			
-				array_push($params, $current_user->id);
-				array_push($params, $current_user->id);
-			}
+				$non_admin_query = " vtiger_report.reportid IN (SELECT reportid from vtiger_reportsharing WHERE $user_group_query (shareid=? AND setype='users'))";
+				if($is_admin==false){
+					$ssql .= " and ( (".$non_admin_query.") or vtiger_report.sharingtype='Public' or vtiger_report.owner = ? or vtiger_report.owner in(select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%'))";			
+					array_push($params, $current_user->id);
+					array_push($params, $current_user->id);
+				}
 					
-			$query = $adb->pquery("select userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%'",array());
-			$subordinate_users = Array();
-			for($i=0;$i<$adb->num_rows($query);$i++){
-				$subordinate_users[] = $adb->query_result($query,$i,'userid');
+				$query = $adb->pquery("select userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%'",array());
+				$subordinate_users = Array();
+				for($i=0;$i<$adb->num_rows($query);$i++){
+					$subordinate_users[] = $adb->query_result($query,$i,'userid');
+				}
+				
+				// Update subordinate user information for re-use
+				VTCacheUtils::updateReport_SubordinateUsers($reportid, $subordinate_users);
+				
+				$result = $adb->pquery($ssql, $params);
+				if($result && $adb->num_rows($result)) {
+					$reportmodulesrow = $adb->fetch_array($result);
+				
+					// Update information in cache now
+					VTCacheUtils::updateReport_Info(
+						$current_user->id, $reportid, $reportmodulesrow["primarymodule"],
+						$reportmodulesrow["secondarymodules"], $reportmodulesrow["reporttype"],
+						$reportmodulesrow["reportname"], $reportmodulesrow["description"],
+						$reportmodulesrow["folderid"], $reportmodulesrow["owner"]
+					);
+				}
+				
+				// Re-look at cache to maintain code-consistency below
+				$cachedInfo = VTCacheUtils::lookupReport_Info($current_user->id, $reportid);				
 			}
-			$result = $adb->pquery($ssql, $params);
-			$reportmodulesrow = $adb->fetch_array($result);
-			if($reportmodulesrow)
-			{
-				$this->primodule = $reportmodulesrow["primarymodule"];
-				$this->secmodule = $reportmodulesrow["secondarymodules"];
-				$this->reporttype = $reportmodulesrow["reporttype"];
-				$this->reportname = decode_html($reportmodulesrow["reportname"]);
-				$this->reportdescription = decode_html($reportmodulesrow["description"]);
-				$this->folderid = $reportmodulesrow["folderid"];
-				if($is_admin==true || in_array($reportmodulesrow["owner"],$subordinate_users) || $reportmodulesrow["owner"]==$current_user->id)
+			
+			if($cachedInfo) {
+				$this->primodule = $cachedInfo["primarymodule"];
+				$this->secmodule = $cachedInfo["secondarymodules"];
+				$this->reporttype = $cachedInfo["reporttype"];
+				$this->reportname = decode_html($cachedInfo["reportname"]);
+				$this->reportdescription = decode_html($cachedInfo["description"]);
+				$this->folderid = $cachedInfo["folderid"];
+				if($is_admin==true || in_array($cachedInfo["owner"],$subordinate_users) || $cachedInfo["owner"]==$current_user->id)
 					$this->is_editable = 'true';
 				else
 					$this->is_editable = 'false';
@@ -216,67 +224,108 @@ class Reports extends CRMEntity{
 			$this->module_list[$module][$blocklabel] = $blockid;
 		}
 	}
-
+	
 	// Initializes the module list for listing columns for report creation.
 	function initListOfModules() {
-		global $adb,$current_user,$old_related_modules;
+		global $adb, $current_user, $old_related_modules;
+		
 		$restricted_modules = array('Emails','Events','Webmails');
 		$restricted_blocks = array('LBL_IMAGE_INFORMATION','LBL_COMMENTS','LBL_COMMENT_INFORMATION');
-		$this->related_lists[$module]=Array();
-		$result = $adb->pquery("select name from vtiger_tab WHERE vtiger_tab.presence != 1 AND vtiger_tab.isentitytype=1 and vtiger_tab.name NOT IN(".generateQuestionMarks($restricted_modules).") order by vtiger_tab.tabsequence ", array($restricted_modules));
-		if($adb->num_rows($result)>0){
-			for($i=0;$i <$adb->num_rows($result);$i++){
-				$module = $adb->query_result($result,$i,'name');
-				require_once('include/utils/utils.php');
-				$tabid = getTabid($module); 
-				if ($module == 'Calendar') {
-					$tabid = array(9, 16);
+		
+		$this->module_id = array();
+		$this->module_list = array();
+		
+		// Prefetch module info to check active or not and also get list of tabs
+		$modulerows = vtlib_prefetchModuleActiveInfo(false);
+		
+		$cachedInfo = VTCacheUtils::lookupReport_ListofModuleInfos();
+		
+		if($cachedInfo !== false) {
+			$this->module_list = $cachedInfo['module_list'];
+			$this->related_modules = $cachedInfo['related_modules'];
+			
+		} else {
+			
+			if($modulerows) {
+				foreach($modulerows as $resultrow) {
+					if($resultrow['presence'] == '1') continue;      // skip disabled modules
+					if($resultrow['isentitytype'] != '1') continue;  // skip extension modules
+					if(in_array($resultrow['name'], $restricted_modules)) { // skip restricted modules
+						continue; 
+					}
+					$this->module_id[$resultrow['tabid']] = $resultrow['name'];
+					$this->module_list[$resultrow['name']] = array();
 				}
-				$sql = "SELECT blockid, blocklabel FROM vtiger_blocks WHERE tabid IN (". generateQuestionMarks($tabid) .")";
-				$res = $adb->pquery($sql, array($tabid));
-				$noOfRows = $adb->num_rows($res);
-				$this->module_list[$module]=Array();
-				if ($noOfRows > 0) { 
-					for($index = 0; $index < $noOfRows; ++$index) {
-						$blockid = $adb->query_result($res,$index,'blockid');
-						$blocklabel = $adb->query_result($res,$index,'blocklabel');
-						if((in_array($blocklabel,$restricted_blocks) || (isset($this->module_list[$module]) &&in_array($blockid, $this->module_list[$module])) || isset($this->module_list[$module][getTranslatedString($blocklabel,$module)]))&& $module !='Calendar') continue;
-						else{
-							$blockid_list[] = $blockid;
-							if($module == 'Calendar' && $blocklabel == 'LBL_CUSTOM_INFORMATION')
-								$this->module_list[$module][getTranslatedString($blocklabel,$module)][] = $blockid;
-							else
-								$this->module_list[$module][getTranslatedString($blocklabel,$module)] = $blockid;
+				
+				$moduleids = array_keys($this->module_id);
+				$reportblocks = 
+					$adb->pquery("SELECT blockid, blocklabel, tabid FROM vtiger_blocks WHERE tabid IN (" .generateQuestionMarks($moduleids) .")",
+						array($moduleids));
+						
+				if($adb->num_rows($reportblocks)) {
+					while($resultrow = $adb->fetch_array($reportblocks)) {
+						$blockid = $resultrow['blockid'];
+						$blocklabel = $resultrow['blocklabel'];
+						$module = $this->module_id[$resultrow['tabid']];
+						
+						if(in_array($blocklabel, $restricted_blocks) ||
+							in_array($blockid, $this->module_list[$module]) || 
+							isset($this->module_list[$module][getTranslatedString($blocklabel,$module)])
+						) {
+							continue;
+						}
+						
+						if($module == 'Calendar' && $blocklabel == 'LBL_CUSTOM_INFORMATION')
+							$this->module_list[$module][getTranslatedString($blocklabel,$module)][] = $blockid;
+						else
+							$this->module_list[$module][getTranslatedString($blocklabel,$module)] = $blockid;
+					}
+				}
+				
+				$relatedmodules = $adb->pquery(
+					"SELECT vtiger_tab.name, vtiger_relatedlists.tabid FROM vtiger_tab 
+					INNER JOIN vtiger_relatedlists on vtiger_tab.tabid=vtiger_relatedlists.related_tabid 
+					WHERE vtiger_tab.isentitytype=1 
+					AND vtiger_tab.name NOT IN(".generateQuestionMarks($restricted_modules).") 
+					AND vtiger_tab.presence=0 AND vtiger_relatedlists.label!='Activity History'",
+					array($restricted_modules)
+				);
+				if($adb->num_rows($relatedmodules)) {
+					while($resultrow = $adb->fetch_array($relatedmodules)) {
+						$module = $this->module_id[$resultrow['tabid']];
+						
+						if(!isset($this->related_modules[$module])) {
+							$this->related_modules[$module] = array();
+						}
+						
+						if($module != $resultrow['name']) {
+							$this->related_modules[$module][] = $resultrow['name'];
+						}
+						
+						// To achieve Backward Compatability with Report relations
+						if(isset($old_related_modules[$module])){						
+							
+							$rel_mod = array();
+							foreach($old_related_modules[$module] as $key=>$name){
+								if(vtlib_isModuleActive($name) && isPermitted($name,'index','')){
+									$rel_mod[] = $name;
+								}
+							}
+							if(!empty($rel_mod)){
+								$this->related_modules[$module] = array_merge($this->related_modules[$module],$rel_mod);	
+								$this->related_modules[$module] = array_unique($this->related_modules[$module]);
+							}
 						}
 					}
-				}
-				$rel_mod_query = $adb->pquery("SELECT vtiger_tab.name FROM vtiger_tab INNER JOIN vtiger_relatedlists on vtiger_tab.tabid=vtiger_relatedlists.related_tabid WHERE vtiger_relatedlists.tabid IN (". generateQuestionMarks($tabid) .") AND vtiger_tab.isentitytype=1 and vtiger_tab.name NOT IN(".generateQuestionMarks($restricted_modules).") AND vtiger_tab.presence=0 AND vtiger_relatedlists.label!='Activity History'",array($tabid,$restricted_modules));
-				$noOfRows = $adb->num_rows($rel_mod_query);
-				$this->related_modules[$module]=Array();
-				if($noOfRows > 0){
-					for($index = 0; $index < $noOfRows; $index++) {
-						$mod_name = $adb->query_result($rel_mod_query,$index,'name');
-						if($mod_name!=$module){
-							$this->related_modules[$module][] = $mod_name;
-						}
-					}
-				}
-				if(isset($old_related_modules[$module])){
-					$rel_mod = array();
-					foreach($old_related_modules[$module] as $key=>$name){
-						if(vtlib_isModuleActive($name) && isPermitted($name,'index','')){
-							$rel_mod[] = $name;
-						}
-					}
-					if(!empty($rel_mod)){
-						$this->related_modules[$module] = array_merge($this->related_modules[$module],$rel_mod);	
-						$this->related_modules[$module] = array_unique($this->related_modules[$module]);
-					}
-				}
+				} 
+				// Put the information in cache for re-use
+				VTCacheUtils::updateReport_ListofModuleInfos($this->module_list, $this->related_modules);
 			}
 		}
 	}
- 	
+	// END
+
+	
 	/** Function to get the Listview of Reports
 	 *  This function accepts no argument
 	 *  This generate the Reports view page and returns a string
@@ -293,6 +342,9 @@ class Reports extends CRMEntity{
 		$reportfldrow = $adb->fetch_array($result);
 		if($mode != '')
 		{
+			// Fetch detials of all reports of folder at once
+			$reportsInAllFolders = $this->sgetRptsforFldr(false);
+			
 			do
 			{
 				if($reportfldrow["state"] == $mode)
@@ -304,7 +356,7 @@ class Reports extends CRMEntity{
 					$details['description'] = $reportfldrow["description"]; 
 					$details['fname'] = popup_decode_html($details['name']);
 					$details['fdescription'] = popup_decode_html($reportfldrow["description"]);
-					$details['details'] = $this->sgetRptsforFldr($reportfldrow["folderid"]);
+					$details['details'] = $reportsInAllFolders[$reportfldrow["folderid"]];
 					$returndata[] = $details;
 				}
 			}while($reportfldrow = $adb->fetch_array($result));
@@ -343,10 +395,16 @@ class Reports extends CRMEntity{
 
 		require_once('include/utils/UserInfoUtil.php');
 
-		$sql = "select vtiger_report.*, vtiger_reportmodules.* from vtiger_report inner join vtiger_reportfolder on vtiger_reportfolder.folderid = vtiger_report.folderid";
-		$sql .= " inner join vtiger_reportmodules on vtiger_reportmodules.reportmodulesid = vtiger_report.reportid where vtiger_reportfolder.folderid=?";
+		$sql = "select vtiger_report.*, vtiger_reportmodules.*, vtiger_reportfolder.folderid from vtiger_report inner join vtiger_reportfolder on vtiger_reportfolder.folderid = vtiger_report.folderid";
+		$sql .= " inner join vtiger_reportmodules on vtiger_reportmodules.reportmodulesid = vtiger_report.reportid";
+
+		$params = array();
 		
-		$params = array($rpt_fldr_id);
+		// If information is required only for specific report folder?
+		if($rpt_fldr_id !== false) {
+			$sql .= " where vtiger_reportfolder.folderid=?";
+			$params[] = $rpt_fldr_id;
+		}
 		
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
 		require_once('include/utils/GetUserGroups.php');
@@ -391,8 +449,12 @@ class Reports extends CRMEntity{
 					$report_details['editable'] = 'false';
 				
 				if(isPermitted($report["primarymodule"],'index') == "yes")
-					$returndata []=$report_details; 
+					$returndata [$report["folderid"]][] = $report_details; 
 			}while($report = $adb->fetch_array($result));
+		}
+		
+		if($rpt_fldr_id !== false) {
+			$returndata = $returndata[$rpt_fldr_id];
 		}
 
 		$log->info("Reports :: ListView->Successfully returned vtiger_report details HTML");
@@ -1469,11 +1531,13 @@ function getReportRelatedModules($module,$focus)
 	global $mod_strings;
 	$optionhtml = Array();
 	if(vtlib_isModuleActive($module)){
-		foreach($focus->related_modules[$module] as $rel_modules)
-		{
-			if(isPermitted($rel_modules,'index') == "yes")
+		if(!empty($focus->related_modules[$module])) {
+			foreach($focus->related_modules[$module] as $rel_modules)
 			{
-				$optionhtml []= $rel_modules;		
+				if(isPermitted($rel_modules,'index') == "yes")
+				{
+					$optionhtml []= $rel_modules;		
+				}
 			}
 		}
 	}

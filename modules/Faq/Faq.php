@@ -83,7 +83,7 @@ class Faq extends CRMEntity {
 	function Faq() {
 		$this->log =LoggerManager::getLogger('faq');
 		$this->log->debug("Entering Faq() method ...");
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->column_fields = getColumnFields('Faq');
 		$this->log->debug("Exiting Faq method ...");
 	}

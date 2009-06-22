@@ -8,13 +8,13 @@
  * All Rights Reserved.
  *********************************************************************************/
 
-//5.0.4 to 5.1.0 database changes
+//5.0.4 to 5.1.0 RC database changes
 
 //we have to use the current object (stored in PatchApply.php) to execute the queries
 $adb = $_SESSION['adodb_current_object'];
 $conn = $_SESSION['adodb_current_object'];
 
-$migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Starts \n\n");
+$migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 RC -------- Starts \n\n");
 
 require_once('include/events/include.inc');
 $em = new VTEventsManager($adb);
@@ -2048,6 +2048,6 @@ ExecuteQuery("update vtiger_cvcolumnlist set columnname ='vtiger_emaildetails:to
 	$adb->pquery("INSERT INTO vtiger_settings_field (fieldid, blockid, name, iconpath, description, linkto, sequence) VALUES (?,?,?,?,?,?,?)",array($adb->getUniqueID('vtiger_settings_field'), $module_manager_id, 'LBL_WORKFLOW_LIST', 'settingsWorkflow.png', 'LBL_AVAILABLE_WORKLIST_LIST', 'index.php?module=com_vtiger_workflow&action=workflowlist', $maxseq));
 	
 
-$migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 -------- Ends \n\n");
+$migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 RC -------- Ends \n\n");
 
 ?>

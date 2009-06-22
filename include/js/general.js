@@ -3458,6 +3458,24 @@ function getDuplicateListViewEntries_js(module,url)
 	);
 }
 
+function getUnifiedSearchEntries_js(module,url){
+   var qryStr = document.getElementsByName('search_criteria')[0].value;
+   $("status").style.display="block";
+   var recordCount = document.getElementById(module+'RecordCount').value;
+   new Ajax.Request(
+           'index.php',
+           {queue: {position: 'end', scope: 'command'},
+                   method: 'post',
+                   postBody:"module="+module+"&action="+module+"Ajax&file=UnifiedSearch&ajax=true&"+url+
+                           '&query_string='+qryStr+'&search_onlyin='+encodeURIComponent('--USESELECTED--')+'&recordCount='+recordCount,
+                   onComplete: function(response) {
+                           $("status").style.display="none";
+                           $('global_list_'+module).innerHTML = response.responseText;
+                   }
+           }
+   );
+}
+
 /* End */
 
 //Added after 5.0.4 for Documents Module

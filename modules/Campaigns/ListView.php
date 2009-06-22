@@ -184,50 +184,32 @@ else
  	$list_query .= ' ORDER BY vtiger_campaign.campaignid DESC';	
 }
 
-//Constructing the list view
-//Retreiving the no of rows
-$count_result = $adb->query( mkCountQuery( $list_query));
-$noofrows = $adb->query_result($count_result,0,"count");
+//Postgres 8 fixes
+if( $adb->dbType == "pgsql")
+	$list_query = fixPostgresQuery( $list_query, $log, 0);
 
-//Storing Listview session object
-if($_SESSION['lvs'][$currentModule])
-{
-	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
+
+if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true){
+	$count_result = $adb->query( mkCountQuery( $list_query));
+	$noofrows = $adb->query_result($count_result,0,"count");
+}else{
+	$noofrows = null;
 }
 
-//added for 4600
-                                                                                                                             
-if($noofrows <= $list_max_entries_per_page)
-        $_SESSION['lvs'][$currentModule]['start'] = 1;
-//ends
+$queryMode = (isset($_REQUEST['query']) && $_REQUEST['query'] == 'true');
+$start = ListViewSession::getRequestCurrentPage($currentModule, $list_query, $viewid, $queryMode);
 
-$start = $_SESSION['lvs'][$currentModule]['start'];
+$navigation_array = VT_getSimpleNavigationValues($start,$list_max_entries_per_page,$noofrows);
 
-//Retreive the Navigation array
-$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
+$limit_start_rec = ($start-1) * $list_max_entries_per_page;
 
-// Setting the record count string
-//modified by rdhital
-$start_rec = $navigation_array['start'];
-$end_rec = $navigation_array['end_val']; 
-//By Raju Ends
-
-
- //Postgres 8 fixes
- if( $adb->dbType == "pgsql")
-     $list_query = fixPostgresQuery( $list_query, $log, 0);
-
-
-//limiting the query
-if ($start_rec ==0) 
-	$limit_start_rec = 0;
+if( $adb->dbType == "pgsql")
+	$list_result = $adb->pquery($list_query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
 else
-	$limit_start_rec = $start_rec -1;
+	$list_result = $adb->pquery($list_query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
- if( $adb->dbType == "pgsql")
-     $list_result = $adb->pquery($list_query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
- else
-     $list_result = $adb->pquery($list_query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
+$recordListRangeMsg = getRecordRangeMessage($list_result, $limit_start_rec);
+$smarty->assign('recordListRange',$recordListRangeMsg);
 
 //mass merge for word templates -- *Raj*17/11
 while($row = $adb->fetch_array($list_result))
@@ -238,8 +220,6 @@ if(isset($ids))
 {
 	$smarty->assign("ALLIDS", implode($ids,";"));
 }
-
-$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
 //Retreive the List View Table Header
 if($viewid !='')
@@ -260,7 +240,7 @@ $smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
 $smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
 $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Campaigns","index",$viewid);
+$navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string,"Campaigns","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','campaignname','true','basic',"","","","",$viewid);
 $fieldnames = getAdvSearchfields($module);
 $criteria = getcriteria_options();
@@ -269,12 +249,11 @@ $smarty->assign("FIELDNAMES", $fieldnames);
 $smarty->assign("ALPHABETICAL", $alphabetical);
 
 $smarty->assign("NAVIGATION", $navigationOutput);
-$smarty->assign("RECORD_COUNTS", $record_string);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$_SESSION['campaigns_listquery'] = $list_query;
+$_SESSION[$currentModule.'_listquery'] = $list_query;
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");

@@ -67,14 +67,24 @@ function getNewLeads($maxval,$calCnt)
 		$start_date = date("Y-m-d", strtotime("-1 week"));
 	}	
 
-	$list_query = 'select vtiger_leaddetails.*,vtiger_crmentity.createdtime,vtiger_crmentity.description from vtiger_leaddetails inner join vtiger_crmentity on vtiger_leaddetails.leadid = vtiger_crmentity.crmid where vtiger_crmentity.deleted =0 AND vtiger_leaddetails.converted =0 AND vtiger_leaddetails.leadstatus not in ("Lost Lead", "Junk Lead","'.$current_module_strings['Lost Lead'].'","'.$current_module_strings['Junk Lead'].'") AND vtiger_crmentity.createdtime >=? AND vtiger_crmentity.smownerid = ?'; 
+	$list_query = 'select vtiger_leaddetails.firstname, vtiger_leaddetails.lastname, vtiger_leaddetails.leadid, vtiger_leaddetails.company 
+		from vtiger_leaddetails inner join vtiger_crmentity on vtiger_leaddetails.leadid = vtiger_crmentity.crmid 
+		where vtiger_crmentity.deleted =0 AND vtiger_leaddetails.converted =0 AND 
+		vtiger_leaddetails.leadstatus not in ("Lost Lead", "Junk Lead","'.$current_module_strings['Lost Lead'].'","'.$current_module_strings['Junk Lead'].'") 
+		AND vtiger_crmentity.createdtime >=? AND vtiger_crmentity.smownerid = ?';
+	
+	$list_query .= " LIMIT 0," . $adb->sql_escape_string($maxval);
+	
+	if($calCnt == 'calculateCnt') {
+		$list_result_rows = $adb->pquery(mkCountQuery($list_query), array($start_date, $current_user->id));
+		return $adb->query_result($list_result_rows, 0, 'count');
+	}
+	
 	$list_result = $adb->pquery($list_query, array($start_date, $current_user->id));
 	$noofrows = $adb->num_rows($list_result);
-	if($calCnt == 'calculateCnt')
-	   return $noofrows;
-
+	
 	$open_lead_list =array();
-	if ($noofrows > 0)
+	if ($noofrows > 0) {
 		for($i=0;$i<$noofrows && $i<$maxval;$i++) 
 		{
 			$open_lead_list[] = Array('leadname' => $adb->query_result($list_result,$i,'firstname').' '.$adb->query_result($list_result,$i,'lastname'),
@@ -82,6 +92,7 @@ function getNewLeads($maxval,$calCnt)
 					'id' => $adb->query_result($list_result,$i,'leadid'),
 					);
 		}
+	}
 	
 	$title=array();
 	$title[]='Leads.gif';

@@ -53,7 +53,9 @@ foreach($roleInfo as $mvRoleId=>$mvRoleInfo)
 	$query="update vtiger_role set parentrole=?,depth=? where roleid=?";
 	//echo $query;
 	$adb->pquery($query, array($mvParString, $mvDepth, $mvRoleId));
-		
+
+	// Invalidate any cached information
+	VTCacheUtils::clearRoleSubordinates($roleId);
 }
 
 

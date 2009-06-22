@@ -175,33 +175,45 @@ function getNonEditablePicklistValues($fieldName, $lang, $adb){
  * @return array $val - the assigned picklist values in array format
  */
 function getAssignedPicklistValues($tableName, $roleid, $adb){
-	$var = array();
+	$arr = array();
+	
 	$sub = getSubordinateRoleAndUsers($roleid);
 	$subRoles = array($roleid);
 	$subRoles = array_merge($subRoles, array_keys($sub));
 	
-	$sql = 'SELECT * FROM vtiger_picklist WHERE name = ?';
+	$sql = "select picklistid from vtiger_picklist where name = ?";
 	$result = $adb->pquery($sql, array($tableName));
-	if($adb->num_rows($result)>0){
+	if($adb->num_rows($result)){
 		$picklistid = $adb->query_result($result, 0, "picklistid");
-	}
+		
 	
-	foreach($subRoles as $role){
-		$params[] = $role;
-	}
-	$sql = "select distinct picklistvalueid from vtiger_role2picklist where picklistid = ? and roleid in (".generateQuestionMarks($params).") order by sortid";
-	$result = $adb->pquery($sql, array($picklistid, $params));
-	$count = $adb->num_rows($result);
+		$roleids = array();
+		foreach($subRoles as $role){
+			$roleids[] = $role;
+		}
+		
+		$sql = "select distinct picklistvalueid from vtiger_role2picklist where picklistid = ? and roleid in (".generateQuestionMarks($roleids).") order by sortid";
+		$result = $adb->pquery($sql, array($picklistid, $roleids));
+		$count = $adb->num_rows($result);
 	
-	for($i=0;$i<$count;$i++){
-		$picklistvalueid = $adb->query_result($result, $i, "picklistvalueid");
-		$tableName = $adb->sql_escape_string($tableName);
-		$sql = "select * from vtiger_$tableName where picklist_valueid=?";
-		$res = $adb->pquery($sql, array($picklistvalueid));
-		if($adb->num_rows($res)>0){
-			$arr[] = $adb->query_result($res, 0, $tableName);
+		$picklistvalueids = array();
+		if($count) {
+			while($resultrow = $adb->fetch_array($result)) {
+				$picklistvalueids[] = $resultrow['picklistvalueid'];
+			}
+			$sql = "SELECT " . $adb->sql_escape_string($tableName) . " FROM " . $adb->sql_escape_string("vtiger_$tableName");		 
+			$sql .= " WHERE picklist_valueid in (". implode(',', $picklistvalueids) .")";
+
+			$resultvalues = $adb->query($sql);
+			if($resultvalues) {
+				while($resultrow = $adb->fetch_array($resultvalues)) {
+					$arr[] = $resultrow[$tableName];
+				}
+			}
 		}
 	}
+	// END
+	
 	return $arr;
 }
 ?>

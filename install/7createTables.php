@@ -1,21 +1,13 @@
 <?php
-/*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the
- * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
- * Software distributed under the License is distributed on an  "AS IS"  basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
- * the specific language governing rights and limitations under the License.
- * The Original Code is: SugarCRM Open Source
- * The Initial Developer of the Original Code is SugarCRM, Inc.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Contributor(s): ______________________________________.
- ********************************************************************************/
-/*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/5createTables.php,v 1.58 2005/04/19 16:57:08 ray Exp $
- * Description:  Executes a step in the installation process.
- ********************************************************************************/
+ ************************************************************************************/
+
 global $php_max_execution_time;
 set_time_limit($php_max_execution_time);
 
@@ -180,7 +172,7 @@ if(isset($application_unique_key) && !empty($application_unique_key)) {
 		<table border=0 cellspacing=0 cellpadding=5 align="center" width="80%" style="background-color:#E1E1FD;border:1px dashed #111111;">
 		<tr>
 			<td align=center class=small>
-			<b>vtigercrm-5.1.0 is all set to go!</b>
+			<b>vtigercrm-5.1.0 RC is all set to go!</b>
 			<hr noshade size=1>
 			<div style="width:100%;padding:10px; "align=left>
 			<ul>

@@ -28,7 +28,7 @@ function getComboArray($combofieldNames)
 		
 		$sql = "select $tableName from vtiger_$tableName";
 		$params = array();
-		if(!$is_admin)
+		if(!is_admin($current_user))
 		{
 			$subrole = getRoleSubordinates($roleid);
 			if(count($subrole)> 0)
@@ -40,7 +40,7 @@ function getComboArray($combofieldNames)
 			{
 				$roleids = $roleid;
 			}
-			$sql = "select $tableName from vtiger_$tableName  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tableName.picklist_valueid where roleid in(". generateQuestionMarks($roleids) .") order by sortid";
+			$sql = "select distinct $tableName from vtiger_$tableName  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_$tableName.picklist_valueid where roleid in(". generateQuestionMarks($roleids) .") order by sortid";
 			$params = array($roleids);
 		}
 		$result = $adb->pquery($sql, $params);	

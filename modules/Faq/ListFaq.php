@@ -57,14 +57,18 @@ function getMyFaq($maxval,$calCnt)
 	$query = getListQuery("Faq",$where);
 
 	//<<<<<<<<customview>>>>>>>>>
+	
+	$query .= " LIMIT 0," . $adb->sql_escape_string($maxval);
+	
+	if($calCnt == 'calculateCnt') {
+		$list_result_rows = $adb->query(mkCountQuery($query));
+		return $adb->query_result($list_result_rows, 0, 'count');
+	}
 
-	$list_result = $adb->limitQuery($query,0,$maxval);
+	$list_result = $adb->query($query);
 
 	//Retreiving the no of rows
 	$noofrows = $adb->num_rows($list_result);
-	if($calCnt == 'calculateCnt')
-	    return $noofrows;
-
 
 	//Retreiving the start value from request
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')

@@ -1,4 +1,12 @@
 <?php
+/*+*******************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ******************************************************************************/
 require_once("include/events/SqlResultIterator.inc");
 class VTEntityMethodManager{
 	
@@ -17,7 +25,7 @@ class VTEntityMethodManager{
 	
 	function executeMethod($entityData, $methodName){
 		$adb = $this->adb;
-		$moduleName = get_class($entityData->focus);
+		$moduleName = $entityData->getModuleName();
 		$result = $adb->pquery("select function_path, function_name from com_vtiger_workflowtasks_entitymethod where module_name=? and method_name=?", array($moduleName, $methodName));
 		if($adb->num_rows($result)!=0){
 			$data = $adb->raw_query_result_rowdata($result, 0);

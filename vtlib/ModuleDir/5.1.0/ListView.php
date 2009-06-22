@@ -120,7 +120,7 @@ if($where != '') {
 }
 
 // Sorting
-if($order_by) {
+if(!empty($order_by)) {
 	if($order_by == 'smownerid') $list_query .= ' ORDER BY user_name '.$sorder;
 	else {
 		$tablename = getTableNameForField($currentModule, $order_by);
@@ -129,41 +129,36 @@ if($order_by) {
 	}
 }
 
-$countQuery = $adb->query( mkCountQuery($list_query) );
-$recordCount= $adb->query_result($countQuery,0,'count');
+//Postgres 8 fixes
+if( $adb->dbType == "pgsql")
+	$list_query = fixPostgresQuery( $list_query, $log, 0);
 
-// Set paging start value.
-$start = 1;
-if(isset($_REQUEST['start'])) { $start = vtlib_purify($_REQUEST['start']); } 
-else { $start = $_SESSION['lvs'][$currentModule]['start']; }
-// Total records is less than a page now.
-if($recordCount <= $list_max_entries_per_page) $start = 1;
+if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true){
+	$count_result = $adb->query( mkCountQuery( $list_query));
+	$noofrows = $adb->query_result($count_result,0,"count");
+}else{
+	$noofrows = null;
+}
 
-// Save in session
-if(empty($start)) $start = 1; // Reset to proper state
-$_SESSION['lvs'][$currentModule]['start'] = $start;
+$queryMode = (isset($_REQUEST['query']) && $_REQUEST['query'] == 'true');
+$start = ListViewSession::getRequestCurrentPage($currentModule, $list_query, $viewid, $queryMode);
 
-$navigation_array = getNavigationValues($start, $recordCount, $list_max_entries_per_page);
+$navigation_array = VT_getSimpleNavigationValues($start,$list_max_entries_per_page,$noofrows);
 
-$start_rec = $navigation_array['start'];
-$end_rec = $navigation_array['end_val'];
-$_SESSION['nav_start']=$start_rec;
-$_SESSION['nav_end']=$end_rec;
+$limit_start_rec = ($start-1) * $list_max_entries_per_page;
 
-if ($start_rec ==0) $limit_start_rec = 0;
-else $limit_start_rec = $start_rec -1;
+if( $adb->dbType == "pgsql")
+	$list_result = $adb->pquery($list_query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
+else
+	$list_result = $adb->pquery($list_query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
-$list_result = $adb->query( $list_query . " LIMIT $limit_start_rec, $list_max_entries_per_page" );
+$recordListRangeMsg = getRecordRangeMessage($list_result, $limit_start_rec);
+$smarty->assign('recordListRange',$recordListRangeMsg);
 
-$record_string= $app_strings['LBL_SHOWING']." $start_rec  -  $end_rec " . $app_strings['LBL_LIST_OF'] ." ".$recordCount;
-
-$smarty->assign('RECORD_COUNTS', $record_string);
 $smarty->assign("CUSTOMVIEW_OPTION",$customview_html);
 
 // Navigation
-$start = $_SESSION['lvs'][$currentModule]['start'];
-$navigation_array = getNavigationValues($start, $recordCount, $list_max_entries_per_page);
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string, $currentModule, 'index', $viewid);
+$navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string, $currentModule, 'index', $viewid);
 $smarty->assign("NAVIGATION", $navigationOutput);
 
 $listview_header = getListViewHeader($focus,$currentModule,$url_string,$sorder,$order_by,'',$customView);

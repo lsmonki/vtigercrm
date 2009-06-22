@@ -302,17 +302,17 @@ else
 	//Avoiding Current Record to show up in the popups When editing.
 	if($currentModule == 'Accounts' && $_REQUEST['recordid']!=''){
 		$where_relquery .=" and vtiger_account.accountid!=".$adb->sql_escape_string($_REQUEST['recordid']);
-		$smarty->assign("RECORDID",$_REQUEST['recordid']);
+		$smarty->assign("RECORDID",vtlib_purify($_REQUEST['recordid']));
 	}
 	
 	if($currentModule == 'Contacts' && $_REQUEST['recordid']!=''){
 		$where_relquery .=" and vtiger_contactdetails.contactid!=".$adb->sql_escape_string($_REQUEST['recordid']);
-		$smarty->assign("RECORDID",$_REQUEST['recordid']);
+		$smarty->assign("RECORDID",vtlib_purify($_REQUEST['recordid']));
 	}
 	
 	if($currentModule == 'Users' && $_REQUEST['recordid']!=''){
 		$where_relquery .=" and vtiger_users.id!=".$adb->sql_escape_string($_REQUEST['recordid']);
-		$smarty->assign("RECORDID",$_REQUEST['recordid']);
+		$smarty->assign("RECORDID",vtlib_purify($_REQUEST['recordid']));
 	}
 	
 	$query = getListQuery($currentModule,$where_relquery);
@@ -358,11 +358,29 @@ if(method_exists($focus, 'getQueryByModuleField')) {
 }
 // END
 
-$count_result = $adb->query(mkCountQuery($query));
-$noofrows = $adb->query_result($count_result, 0, 'count');
+if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true){
+	$count_result = $adb->query( mkCountQuery( $query));
+	$noofrows = $adb->query_result($count_result,0,"count");
+}else{
+	$noofrows = null;
+}
+
 //Retreiving the start value from request
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '') {
 	$start = vtlib_purify($_REQUEST['start']);
+	if($start == 'last'){
+		$count_result = $adb->query( mkCountQuery($query));
+		$noofrows = $adb->query_result($count_result,0,"count");
+		if($noofrows > 0){
+			$start = ceil($noofrows/$list_max_entries_per_page);
+		}
+	}
+	if(!is_numeric($start)){
+		$start = 1;
+	}elseif($start < 1){
+		$start = 1;
+	}
+	$start = ceil($start);
 } else {
 	$start = 1;
 }
@@ -371,12 +389,7 @@ $query.=" LIMIT $limstart,$list_max_entries_per_page";
 $list_result = $adb->query($query);
 
 //Retreive the Navigation array
-$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
-// Setting the record count string
-$start_rec = $navigation_array['start'];
-$end_rec = $navigation_array['end_val']; 
-if($navigation_array['start'] != 0)
-	$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+$navigation_array = VT_getSimpleNavigationValues($start, $list_max_entries_per_page,$noofrows);
 
 //Retreive the List View Table Header
 $focus->initSortbyField($currentModule);
@@ -408,7 +421,7 @@ $smarty->assign("HEADERCOUNT",count($listview_header)+1);
 $listview_entries = getSearchListViewEntries($focus,"$currentModule",$list_result,$navigation_array,$form); 
 $smarty->assign("LISTENTITY", $listview_entries);
 
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,$currentModule,"Popup");
+$navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string,$currentModule,"Popup");
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("POPUPTYPE", $popuptype);

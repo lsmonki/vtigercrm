@@ -99,7 +99,7 @@ if(isPermitted("Contacts","Delete",$_REQUEST['record']) == 'yes')
 if(isPermitted("Emails","EditView",'') == 'yes')
 {
 	//Added to pass the parents list as hidden for Emails -- 09-11-2005
-	$parent_email = getEmailParentsList('Contacts',$_REQUEST['record']);
+	$parent_email = getEmailParentsList('Contacts',$_REQUEST['record'], $focus);
 	$smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
 	$smarty->assign("SENDMAILBUTTON","permitted");
 	$smarty->assign("EMAIL1",$focus->column_fields['email']);
@@ -164,44 +164,9 @@ $smarty->assign("CONTACT_PERMISSION",CheckFieldPermission('contact_id','Calendar
 $smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $smarty->assign("SinglePane_View", $singlepane_view);
 
-if(isset($_SESSION['contacts_listquery'])){
-	$arrayTotlist = array();
-	$aNamesToList = array(); 
-	$forAllCRMIDlist_query=$_SESSION['contacts_listquery'];
-	$resultAllCRMIDlist_query=$adb->pquery($forAllCRMIDlist_query,array());
-	while($forAllCRMID = $adb->fetch_array($resultAllCRMIDlist_query))
-	{
-		$arrayTotlist[]=$forAllCRMID['crmid'];
-	}
-	$_SESSION['listEntyKeymod_'.$focus->id] = $module.":".implode(",",$arrayTotlist);
-	if(isset($_SESSION['listEntyKeymod_'.$focus->id]))
-	{
-		$split_temp=explode(":",$_SESSION['listEntyKeymod_'.$focus->id]);
-		if($split_temp[0] == $module)
-		{	
-			$smarty->assign("SESMODULE",$split_temp[0]);
-			$ar_allist=explode(",",$split_temp[1]);
-			
-			for($listi=0;$listi<count($ar_allist);$listi++)
-			{
-				if($ar_allist[$listi]==$_REQUEST['record'])
-				{
-					if($listi-1>=0)
-					{
-						$privrecord=$ar_allist[$listi-1];
-						$smarty->assign("privrecord",$privrecord);
-					}else {unset($privrecord);}
-					if($listi+1<count($ar_allist))
-					{
-						$nextrecord=$ar_allist[$listi+1];
-						$smarty->assign("nextrecord",$nextrecord);
-					}else {unset($nextrecord);}
-					break;
-				}
-				
-			}
-		}
-	}
+if(PerformancePrefs::getBoolean('DETAILVIEW_RECORD_NAVIGATION', true) && isset($_SESSION[$currentModule.'_listquery'])){
+	$recordNavigationInfo = ListViewSession::getListViewNavigation($focus->id);
+	VT_detailViewNavigation($smarty,$recordNavigationInfo,$focus->id);
 }
 
 // Record Change Notification
@@ -211,6 +176,8 @@ $focus->markAsViewed($current_user->id);
 include_once('vtlib/Vtiger/Link.php');
 $customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>vtlib_purify($_REQUEST['action']));
 $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), Array('DETAILVIEWBASIC','DETAILVIEW'), $customlink_params));
+
+$smarty->assign('DETAILVIEW_AJAX_EDIT', PerformancePrefs::getBoolean('DETAILVIEW_AJAX_EDIT', true));
 
 $smarty->display("DetailView.tpl");
 ?>

@@ -46,16 +46,6 @@ class CRMEntity
 		return $focus;		
 	}
 
-	/**
-   	* This method implements a generic insert and update logic for any SugarBean
-   	* This method only works for subclasses that implement the same variable names.
-   	* This method uses the presence of an id vtiger_field that is not null to signify and update.
-   	* The id vtiger_field should not be set otherwise.
-   	* todo - Add support for vtiger_field type validation and encoding of parameters.
-   	* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-   	* All Rights Reserved.
-   	* Contributor(s): ______________________________________..
-   	*/	
 	function saveentity($module,$fileid='')
 	{
 		global $current_user, $adb;//$adb added by raju for mass mailing
@@ -397,7 +387,9 @@ class CRMEntity
 	  //Checkin whether an entry is already is present in the vtiger_table to update
 	  if($insertion_mode == 'edit')
 	  {
-		  $check_query = "select * from $table_name where ". $this->tab_name_index[$table_name] ."=?";
+	  	  $tablekey = $this->tab_name_index[$table_name];
+	  	  // Make selection on the primary key of the module table to check.
+		  $check_query = "select $tablekey from $table_name where $tablekey=?";
 		  $check_result=$adb->pquery($check_query, array($this->id));
 
 		  $num_rows = $adb->num_rows($check_result);
@@ -783,31 +775,54 @@ $log->info("in getOldFileName  ".$notesid);
     		die("<br><br><center>".$app_strings['LBL_RECORD_NOT_FOUND'].
 				". <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
 	}
-    $tabid = getTabid($module);
-    $sql1 =  "select * from vtiger_field where tabid=? and vtiger_field.presence in (0,2)"; 
-    $result1 = $adb->pquery($sql1, array($tabid));
-    $noofrows = $adb->num_rows($result1);
-    for($i=0; $i<$noofrows; $i++)
-    {
-      $fieldcolname = $adb->query_result($result1,$i,"columnname");
-      $tablename = $adb->query_result($result1,$i,"tablename");
-      $fieldname = $adb->query_result($result1,$i,"fieldname");
-
-      //when we don't have entry in the $tablename then we have to avoid retrieve, otherwise adodb error will occur(ex. when we don't have attachment for troubletickets, $result[vtiger_attachments] will not be set so here we should not retrieve)
-      if(isset($result[$tablename]))
-      {
-	      $fld_value = $adb->query_result($result[$tablename],0,$fieldcolname);
-      }
-      else
-      {
-	      $adb->println("There is no entry for this entity $record ($module) in the table $tablename");
-	      $fld_value = "";
-      }
-
-      $this->column_fields[$fieldname] = $fld_value;
-      
-				
-    }
+	
+	// Lookup in cache for information
+	$cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module);
+	
+	if($cachedModuleFields === false) {
+    	$tabid = getTabid($module);
+    	
+    	// Let us pick up all the fields first so that we can cache information
+    	$sql1 =  "SELECT fieldname, fieldid, fieldlabel, columnname, tablename, uitype, typeofdata, presence 
+    	FROM vtiger_field WHERE tabid=?";
+    	
+    	// NOTE: Need to skip in-active fields which we will be done later.    	
+		$result1 = $adb->pquery($sql1, array($tabid));
+        $noofrows = $adb->num_rows($result1);
+        
+        if($noofrows) {
+        	while($resultrow = $adb->fetch_array($result1)) {
+        		// Update information to cache for re-use
+        		VTCacheUtils::updateFieldInfo(
+        			$tabid, $resultrow['fieldname'], $resultrow['fieldid'], 
+        			$resultrow['fieldlabel'], $resultrow['columnname'], $resultrow['tablename'], 
+        			$resultrow['uitype'], $resultrow['typeofdata'], $resultrow['presence']        			
+        		);
+        	}
+        }
+        
+        // Get only active field information
+        $cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module);
+	}
+    
+	if($cachedModuleFields) {
+		foreach($cachedModuleFields as $fieldname=>$fieldinfo) {
+			$fieldcolname = $fieldinfo['columnname'];
+			$tablename    = $fieldinfo['tablename'];
+			$fieldname    = $fieldinfo['fieldname'];
+			
+	      	// To avoid ADODB execption pick the entries that are in $tablename 
+	      	// (ex. when we don't have attachment for troubletickets, $result[vtiger_attachments] 
+	      	// will not be set so here we should not retrieve)
+	      	if(isset($result[$tablename])) {
+		      $fld_value = $adb->query_result($result[$tablename],0,$fieldcolname);
+	      	} else {
+		      $adb->println("There is no entry for this entity $record ($module) in the table $tablename");
+		      $fld_value = "";
+	      	}
+	      	$this->column_fields[$fieldname] = $fld_value;
+	    }
+	}
 	if($module == 'Users')
 	{
 		for($i=0; $i<$noofrows; $i++)
@@ -837,6 +852,10 @@ $log->info("in getOldFileName  ".$notesid);
 		require_once("include/events/include.inc");
 		global $adb;
 		$em = new VTEventsManager($adb);
+		
+		// Initialize Event trigger cache
+		$em->initTriggerCache(); 
+		
 		$entityData  = VTEntityData::fromCRMEntity($this);
 		$em->triggerEvent("vtiger.entity.beforesave.modifiable", $entityData);
 		$em->triggerEvent("vtiger.entity.beforesave", $entityData);
@@ -1148,19 +1167,31 @@ $log->info("in getOldFileName  ".$notesid);
 		global $current_user, $adb;
 		require_once('include/utils/UserInfoUtil.php');
 		
-		//$colf = getColumnFields($module);
-		$colf = Array();
-		$tabid = getTabid($module);
 		$skip_uitypes = array('4'); // uitype 4 is for Mod numbers
-		$sql = "select * from vtiger_field where tabid=? and uitype not in (". generateQuestionMarks($skip_uitypes) .") and vtiger_field.presence in (0,2)"; 
-	        $result = $adb->pquery($sql, array($tabid, $skip_uitypes));
-	        $noofrows = $adb->num_rows($result);
-		for($i=0; $i<$noofrows; $i++)
-		{
-			$fieldname = $adb->query_result($result,$i,"fieldname");
-			$uitype = $adb->query_result($result,$i,"uitype");
-			$colf[$fieldname] = $uitype; 
+		
+		// Look at cache if the fields information is available.
+		$cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module);
+		
+		if($cachedModuleFields === false) {
+			getColumnFields($module); // This API will initialize the cache as well
+			
+			// We will succeed now due to above function call
+			$cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module);
 		}
+		
+		$colf = Array();
+		
+		if($cachedModuleFields) {
+			foreach($cachedModuleFields as $fieldinfo) {
+				// Skip non-supported fields
+				if(in_array($fieldinfo['uitype'], $skip_uitypes)) {
+					continue;
+				} else {
+					$colf[$fieldinfo['fieldname']] = $fieldinfo['uitype'];
+				}				
+			}
+		}
+		
 		foreach($colf as $key=>$value) {
 			if (getFieldVisibilityPermission($module, $current_user->id, $key) == '0')
 				$this->importable_fields[$key] = $value;
@@ -2077,5 +2108,57 @@ $log->info("in getOldFileName  ".$notesid);
 			return false;
 		}
     }	
+    
+	/**
+	 * To keep track of action of field filtering and avoiding doing more than once.
+	 *
+	 * @var Array
+	 */
+	protected $__inactive_fields_filtered = false;	
+
+	/**
+	 * Filter in-active fields based on type
+	 *
+	 * @param String $module
+	 */
+	function filterInactiveFields($module) {
+		if($this->__inactive_fields_filtered) {
+			return;
+		}
+
+		global $adb, $mod_strings;
+		
+		// Look for fields that has presence value NOT IN (0,2)		
+		$cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module, array('1'));
+		if($cachedModuleFields === false) {
+			// Initialize the fields calling suitable API
+			getColumnFields($module);
+			$cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module, array('1'));
+		}
+		
+		$hiddenFields = array();
+		
+		if($cachedModuleFields) {
+			foreach($cachedModuleFields as $fieldinfo) {
+				$fieldLabel= $fieldinfo['fieldlabel'];
+				// NOTE: We should not translate the label to enable field diff based on it down
+				$fieldName = $fieldinfo['fieldname'];
+				$tableName = str_replace("vtiger_","",$fieldinfo['tablename']);
+				$hiddenFields[$fieldLabel] = array($tableName=>$fieldName);
+			}
+		}
+		
+		if(isset($this->list_fields)) {
+			$this->list_fields   = array_diff_assoc($this->list_fields, $hiddenFields);
+		}
+		
+		if(isset($this->search_fields)) {
+			$this->search_fields = array_diff_assoc($this->search_fields, $hiddenFields);
+		}		
+
+		// To avoid re-initializing everytime.
+		$this->__inactive_fields_filtered = true;
+	}
+	/** END **/
 }
 ?>

@@ -1,29 +1,16 @@
 <?php
-/*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
- * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
- * Software distributed under the License is distributed on an  "AS IS"  basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
- * the specific language governing rights and limitations under the License.
- * The Original Code is:  SugarCRM Open Source
- * The Initial Developer of the Original Code is SugarCRM, Inc.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Contributor(s): ______________________________________.
- ********************************************************************************/
-/*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Home/UnifiedSearch.php,v 1.4 2005/02/21 07:02:49 jack Exp $
- * Description:  TODO: To be written.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
- ********************************************************************************/
+ *********************************************************************************/
 
 require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
 require_once('modules/CustomView/CustomView.php');
-
+require_once('include/utils/utils.php');
 require_once('Smarty_setup.php');
 global $mod_strings, $current_language;
 
@@ -32,6 +19,7 @@ require_once('modules/Home/language/'.$current_language.'.lang.php');
 $total_record_count = 0;
 
 $query_string = trim($_REQUEST['query_string']);
+$curModule = vtlib_purify($_REQUEST['module']);
 
 if(isset($query_string) && $query_string != ''){
 	// Was the search limited by user for specific modules?
@@ -58,152 +46,151 @@ if(isset($query_string) && $query_string != ''){
 	$search_val = $query_string;
 	$search_module = $_REQUEST['search_module'];
 
-	getSearchModulesComboList($search_module);
-
+	if($curModule=='Home') {
+		getSearchModulesComboList($search_module);
+	}
+	$i = 0;
+	$moduleRecordCount = array();
 	foreach($object_array as $module => $object_name){
-		$focus = CRMEntity::getInstance($module);
-		if(isPermitted($module,"index") == "yes"){
-			$smarty = new vtigerCRM_Smarty;
-
-			require_once("modules/$module/language/".$current_language.".lang.php");
-			global $mod_strings;
-			global $app_strings;
-
-			$smarty->assign("MOD", $mod_strings);
-			$smarty->assign("APP", $app_strings);
-			$smarty->assign("THEME", $theme);
-			$smarty->assign("IMAGE_PATH",$image_path);
-			$smarty->assign("MODULE",$module);
-			$smarty->assign("SEARCH_MODULE",vtlib_purify($_REQUEST['search_module']));
-			$smarty->assign("SINGLE_MOD",$module);
-
+		if ($curModule == 'Home' || ($curModule == $module && !empty($_REQUEST['ajax']))) {
+			$focus = CRMEntity::getInstance($module);
+			if(isPermitted($module,"index") == "yes"){
+				$smarty = new vtigerCRM_Smarty;
 	
-			$listquery = getListQuery($module);
-			$oCustomView = '';
-
-			$oCustomView = new CustomView($module);
-			//Instead of getting current customview id, use cvid of All so that all entities will be found
-			//$viewid = $oCustomView->getViewId($module);
-			$cv_res = $adb->pquery("select cvid from vtiger_customview where viewname='All' and entitytype=?", array($module));
-			$viewid = $adb->query_result($cv_res,0,'cvid');
-			
-			$listquery = $oCustomView->getModifiedCvListQuery($viewid,$listquery,$module);
-            if ($module == "Calendar"){
-                if (!isset($oCustomView->list_fields['Close'])){
-                	$oCustomView->list_fields['Close']=array ( 'activity' => 'status' );
-                }
-                if (!isset($oCustomView->list_fields_name['Close'])){
-                	$oCustomView->list_fields_name['Close']='status';
-                }
-            }
-
-			if($search_module != ''){//This is for Tag search
-				$where = getTagWhere($search_val,$current_user->id);
-				$search_msg =  $app_strings['LBL_TAG_SEARCH'];
-				$search_msg .=	"<b>".to_html($search_val)."</b>";
-			}else{			//This is for Global search
-				$where = getUnifiedWhere($listquery,$module,$search_val);
-				$search_msg = $app_strings['LBL_SEARCH_RESULTS_FOR'];
-				$search_msg .=	"<b>".to_html($search_val)."</b>";
-			}
-
-			if($where != ''){
-				$listquery .= ' and ('.$where.')';
-			}
-			
-			if($module == "Calendar"){
-				$listquery .= ' group by vtiger_activity.activityid having vtiger_activity.activitytype != "Emails"';
-			}
-				
-			$list_result = $adb->query($listquery);
-			$noofrows = $adb->num_rows($list_result);
-
-			if($noofrows >= 1){
-				$list_max_entries_per_page = $noofrows;
-			}
-			//Here we can change the max list entries per page per module
-			$navigation_array = getNavigationValues(1, $noofrows, $list_max_entries_per_page);
-
-			$listview_header = getListViewHeader($focus,$module,"","","","global",$oCustomView);
-			$listview_entries = getListViewEntries($focus,$module,$list_result,$navigation_array,"","","","",$oCustomView);
-
-			//Do not display the Header if there are no entires in listview_entries
-			if(count($listview_entries) > 0){
-				$display_header = 1;
-			}else{
-				$display_header = 0;
-			}
+				require_once("modules/$module/language/".$current_language.".lang.php");
+				global $mod_strings;
+				global $app_strings;
+	
+				$smarty->assign("MOD", $mod_strings);
+				$smarty->assign("APP", $app_strings);
+				$smarty->assign("THEME", $theme);
+				$smarty->assign("IMAGE_PATH",$image_path);
+				$smarty->assign("MODULE",$module);
+				$smarty->assign("SEARCH_MODULE",vtlib_purify($_REQUEST['search_module']));
+				$smarty->assign("SINGLE_MOD",$module);
+				$smarty->assign("SEARCH_STRING",$search_val);
 		
-			$smarty->assign("LISTHEADER", $listview_header);
-			$smarty->assign("LISTENTITY", $listview_entries);
-			$smarty->assign("DISPLAYHEADER", $display_header);
-			$smarty->assign("HEADERCOUNT", count($listview_header));
+				$listquery = getListQuery($module);
+				$oCustomView = '';
+	
+				$oCustomView = new CustomView($module);
+				//Instead of getting current customview id, use cvid of All so that all entities will be found
+				//$viewid = $oCustomView->getViewId($module);
+				$cv_res = $adb->pquery("select cvid from vtiger_customview where viewname='All' and entitytype=?", array($module));
+				$viewid = $adb->query_result($cv_res,0,'cvid');
+				$customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
+				
+				$listquery = $oCustomView->getModifiedCvListQuery($viewid,$listquery,$module);
+	            if ($module == "Calendar"){
+	                if (!isset($oCustomView->list_fields['Close'])){
+	                	$oCustomView->list_fields['Close']=array ( 'activity' => 'status' );
+	                }
+	                if (!isset($oCustomView->list_fields_name['Close'])){
+	                	$oCustomView->list_fields_name['Close']='status';
+	                }
+	            }
+	
+				if($search_module != ''){//This is for Tag search
+					$where = getTagWhere($search_val,$current_user->id);
+					$search_msg =  $app_strings['LBL_TAG_SEARCH'];
+					$search_msg .=	"<b>".to_html($search_val)."</b>";
+				}else{			//This is for Global search
+					$where = getUnifiedWhere($listquery,$module,$search_val);
+					$search_msg = $app_strings['LBL_SEARCH_RESULTS_FOR'];
+					$search_msg .=	"<b>".to_html($search_val)."</b>";
+				}
+	
+				if($where != ''){
+					$listquery .= ' and ('.$where.')';
+				}
+				
+				if(!(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')) {
+					$count_result = $adb->query($listquery);
+					$noofrows = $adb->num_rows($count_result);
+				} else {
+					$noofrows = vtlib_purify($_REQUEST['recordCount']);
+				}
+				$moduleRecordCount[$module]['count'] = $noofrows;
+				
+				global $list_max_entries_per_page;
+				if(!empty($_REQUEST['start'])){
+					$start = $_REQUEST['start'];
+					if($start == 'last'){
+						$count_result = $adb->query( mkCountQuery($listquery));
+						$noofrows = $adb->query_result($count_result,0,"count");
+						if($noofrows > 0){		
+							$start = ceil($noofrows/$list_max_entries_per_page);
+						}
+					}
+					if(!is_numeric($start)){
+						$start = 1;
+					} elseif($start < 0){
+						$start = 1;
+					}
+					$start = ceil($start);
+				}else{
+					$start = 1;
+				}
+				
+				$navigation_array = VT_getSimpleNavigationValues($start, $list_max_entries_per_page, $noofrows);
+				$limitStartRecord = ($navigation_array['start'] - 1) * $list_max_entries_per_page;
+				
+				if( $adb->dbType == "pgsql"){
+					$listquery = $listquery. " OFFSET $limitStartRecord LIMIT $list_max_entries_per_page";
+				}else{
+				    $listquery = $listquery. " LIMIT $limitStartRecord, $list_max_entries_per_page";
+				}
+				$list_result = $adb->query($listquery);
+				
+				$moduleRecordCount[$module]['recordListRangeMessage'] = getRecordRangeMessage($list_result, $limitStartRecord);
 
-			$total_record_count = $total_record_count + $noofrows;
-
-			$smarty->assign("SEARCH_CRITERIA","( $noofrows )".$search_msg);
-			$smarty->assign("MODULES_LIST", $object_array);
-
-			$smarty->display("GlobalListView.tpl");
-			unset($_SESSION['lvs'][$module]);
+				$info_message='&recordcount='.$_REQUEST['recordcount'].'&noofrows='.$_REQUEST['noofrows'].'&message='.$_REQUEST['message'].'&skipped_record_count='.$_REQUEST['skipped_record_count'];
+				$url_string = '&modulename='.$_REQUEST['modulename'].'&nav_module='.$module_name.$info_message;
+				$viewid = '';
+				
+				$navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string,$module,"UnifiedSearch",$viewid);
+				$listview_header = getListViewHeader($focus,$module,"","","","global",$oCustomView);
+				$listview_entries = getListViewEntries($focus,$module,$list_result,$navigation_array,"","","","",$oCustomView);
+	
+				//Do not display the Header if there are no entires in listview_entries
+				if(count($listview_entries) > 0){
+					$display_header = 1;
+				}else{
+					$display_header = 0;
+				}
+				$smarty->assign("NAVIGATION", $navigationOutput);
+				$smarty->assign("LISTHEADER", $listview_header);
+				$smarty->assign("LISTENTITY", $listview_entries);
+				$smarty->assign("DISPLAYHEADER", $display_header);
+				$smarty->assign("HEADERCOUNT", count($listview_header));
+				$smarty->assign("ModuleRecordCount", $moduleRecordCount);
+	
+				$total_record_count = $total_record_count + $noofrows;
+	
+				$smarty->assign("SEARCH_CRITERIA","( $noofrows )".$search_msg);
+				$smarty->assign("MODULES_LIST", $object_array);
+				$smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
+				
+				if(($i != 0 && empty($_REQUEST['ajax'])) || !(empty($_REQUEST['ajax'])))
+					$smarty->display("UnifiedSearchAjax.tpl");
+				else
+					$smarty->display('UnifiedSearchDisplay.tpl');
+				unset($_SESSION['lvs'][$module]);
+				$i++;
+			}
 		}
 	}
 	//Added to display the Total record count
+	if(empty($_REQUEST['ajax'])) {
 ?>
 	<script>
 document.getElementById("global_search_total_count").innerHTML = " <?php echo $app_strings['LBL_TOTAL_RECORDS_FOUND'] ?><b><?php echo $total_record_count; ?></b>";
 	</script>
 <?php
-
+	}
 }
 else {
 	echo "<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>".$mod_strings['ERR_ONE_CHAR']."</em>";
-}
-
-/**
- * Function to get the where condition for a module based on the field table entries
- * @param  string $listquery  -- ListView query for the module 
- * @param  string $module     -- module name
- * @param  string $search_val -- entered search string value
- * @return string $where      -- where condition for the module based on field table entries
- */
-function getUnifiedWhere($listquery,$module,$search_val){
-	global $adb, $current_user;
-	require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		
-	$search_val = $adb->sql_escape_string($search_val);
-	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0){
-		$query = "SELECT columnname, tablename FROM vtiger_field WHERE tabid = ? and vtiger_field.presence in (0,2)";
-		$qparams = array(getTabid($module));
-	}else{
-		$profileList = getCurrentUserProfileList();
-		$query = "SELECT columnname, tablename FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid = vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid = vtiger_field.fieldid WHERE vtiger_field.tabid = ? AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) . ") AND vtiger_def_org_field.visible = 0 and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
-		$qparams = array(getTabid($module), $profileList);
-	}
-	$result = $adb->pquery($query, $qparams);
-	$noofrows = $adb->num_rows($result);
-
-	$where = '';
-	for($i=0;$i<$noofrows;$i++){
-		$columnname = $adb->query_result($result,$i,'columnname');
-		$tablename = $adb->query_result($result,$i,'tablename');
-		
-		// Search / Lookup customization
-		if($module == 'Contacts' && $columnname == 'accountid') {
-			$columnname = "accountname";
-			$tablename = "vtiger_account";
-		}
-		// END
-
-		//Before form the where condition, check whether the table for the field has been added in the listview query
-		if(strstr($listquery,$tablename)){
-			if($where != ''){
-				$where .= " OR ";
-			}
-			$where .= $tablename.".".$columnname." LIKE '". formatForSqlLike($search_val) ."'";
-		}
-	}
-	return $where;
 }
 
 /**	

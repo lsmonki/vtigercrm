@@ -35,5 +35,9 @@
   `prefvalue` int(20) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
 </table>
+<table>
+<name>vtiger_customerportal_prefs</name>
+<sql><![CDATA[ALTER TABLE vtiger_customerportal_prefs ADD INDEX tabid_idx(tabid)]]></sql>
+</table>
 </tables>
 </module>

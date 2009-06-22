@@ -184,7 +184,7 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 	if($user_array == null)
 	{
 		require_once('include/database/PearDatabase.php');
-		$db = new PearDatabase();
+		$db = PearDatabase::getInstance();
 		$temp_result = Array();
 		// Including deleted vtiger_users for now.
 		if (empty($status)) {
@@ -249,7 +249,7 @@ function get_group_array($add_blank=true, $status="Active", $assigned_user="",$p
 	if($group_array == null)
 	{
 		require_once('include/database/PearDatabase.php');
-		$db = new PearDatabase();
+		$db = PearDatabase::getInstance();
 		$temp_result = Array();
 		// Including deleted vtiger_users for now.
 		$log->debug("Sharing is Public. All vtiger_users should be listed");
@@ -1024,7 +1024,7 @@ function to_html($string, $encode=true)
 	return $string;
 }
 
-/** Function to get the tabname for a given id
+/** Function to get the tablabel for a given id
   * @param $tabid -- tab id:: Type integer
     * @returns $string -- string:: Type string 
       *
@@ -1054,22 +1054,30 @@ function getTabModuleName($tabid)
 {
 	global $log;
 	$log->debug("Entering getTabModuleName(".$tabid.") method ...");
-	if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0))
-        {
-                include('tabdata.php');
-		$tabname = array_search($tabid,$tab_info_array);
-        }
-        else
-        {
-	global $log;
-        $log->info("tab id is ".$tabid);
-        global $adb;
-        $sql = "select name from vtiger_tab where tabid=?";
-        $result = $adb->pquery($sql, array($tabid));
-        $tabname=  $adb->query_result($result,0,"name");
+	
+	// Lookup information in cache first
+	$tabname = VTCacheUtils::lookupModulename($tabid);
+	if($tabname === false) {
+		if (file_exists('tabdata.php') && (filesize('tabdata.php') != 0)) {
+			include('tabdata.php');
+			$tabname = array_search($tabid,$tab_info_array);
+			
+			// Update information to cache for re-use
+			VTCacheUtils::updateTabidInfo($tabid, $tabname);
+			
+		} else {
+			$log->info("tab id is ".$tabid);
+	        global $adb;
+	        $sql = "select name from vtiger_tab where tabid=?";
+	        $result = $adb->pquery($sql, array($tabid));
+	        $tabname=  $adb->query_result($result,0,"name");
+	        
+	        // Update information to cache for re-use
+	        VTCacheUtils::updateTabidInfo($tabid, $tabname);
+		}
 	}
 	$log->debug("Exiting getTabModuleName method ...");
-        return $tabname;
+    return $tabname;
 }
 
 /** Function to get column fields for a given module
@@ -1082,21 +1090,47 @@ function getColumnFields($module)
 {
 	global $log;
 	$log->debug("Entering getColumnFields(".$module.") method ...");
-	$log->info("in getColumnFields ".$module);
-	global $adb;
-	$column_fld = Array();
-    $tabid = getTabid($module);
-	if ($module == 'Calendar') {
-    	$tabid = array('9','16');
-    }
-	$sql = "select * from vtiger_field where tabid in (" . generateQuestionMarks($tabid) . ") and vtiger_field.presence in (0,2)";
+	$log->debug("in getColumnFields ".$module);
+	
+	// Lookup in cache for information
+	$cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module);
+	
+	if($cachedModuleFields === false) {
+		global $adb;
+		$tabid = getTabid($module);
+		if ($module == 'Calendar') {
+    		$tabid = array('9','16');
+    	}
+    	
+    	// Let us pick up all the fields first so that we can cache information
+		$sql = "SELECT tabid, fieldname, fieldid, fieldlabel, columnname, tablename, uitype, typeofdata, presence 
+		FROM vtiger_field WHERE tabid in (" . generateQuestionMarks($tabid) . ")";
+		
         $result = $adb->pquery($sql, array($tabid));
         $noofrows = $adb->num_rows($result);
-	for($i=0; $i<$noofrows; $i++)
-	{
-		$fieldname = $adb->query_result($result,$i,"fieldname");
-		$column_fld[$fieldname] = ''; 
+        
+        if($noofrows) {
+        	while($resultrow = $adb->fetch_array($result)) {
+        		// Update information to cache for re-use
+        		VTCacheUtils::updateFieldInfo(
+        			$resultrow['tabid'], $resultrow['fieldname'], $resultrow['fieldid'], 
+        			$resultrow['fieldlabel'], $resultrow['columnname'], $resultrow['tablename'], 
+        			$resultrow['uitype'], $resultrow['typeofdata'], $resultrow['presence']        			
+        		);
+        	}
+        }
+
+        // For consistency get information from cache
+		$cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module);
 	}
+	
+	$column_fld = array();
+	if($cachedModuleFields) {
+		foreach($cachedModuleFields as $fieldinfo) {
+			$column_fld[$fieldinfo['fieldname']] = '';
+		}
+	}
+	
 	$log->debug("Exiting getColumnFields method ...");
 	return $column_fld;	
 }
@@ -1337,19 +1371,50 @@ function getProfile2FieldPermissionList($fld_module, $profileid)
 {
 	global $log;
 	$log->debug("Entering getProfile2FieldPermissionList(".$fld_module.",". $profileid.") method ...");
-        $log->info("in getProfile2FieldList ".$fld_module. ' vtiger_profile id is  '.$profileid);
-
-	global $adb;
-	$tabid = getTabid($fld_module);
+    $log->info("in getProfile2FieldList ".$fld_module. ' vtiger_profile id is  '.$profileid);
+    
+    // Cache information to re-use
+    static $_module_fieldpermission_cache = array();
+    
+    if(!isset($_module_fieldpermission_cache[$fld_module])) {
+    	$_module_fieldpermission_cache[$fld_module] = array();
+    }
+    
+    // Lookup cache first 
+    $return_data = VTCacheUtils::lookupProfile2FieldPermissionList($fld_module, $profileid); 
+    
+    if($return_data === false) {
+    
+    	$return_data = array();
+    	
+		global $adb;
+		$tabid = getTabid($fld_module);
 	
-	$query = "select vtiger_profile2field.visible,vtiger_field.* from vtiger_profile2field inner join vtiger_field on vtiger_field.fieldid=vtiger_profile2field.fieldid where vtiger_profile2field.profileid=? and vtiger_profile2field.tabid=? and vtiger_field.presence in (0,2)";
-	$qparams = array($profileid, $tabid);
-	$result = $adb->pquery($query, $qparams);
-	$return_data=array();
-    for($i=0; $i<$adb->num_rows($result); $i++)
-    {
-		$return_data[]=array($adb->query_result($result,$i,"fieldlabel"),$adb->query_result($result,$i,"visible"),$adb->query_result($result,$i,"uitype"),$adb->query_result($result,$i,"visible"),$adb->query_result($result,$i,"fieldid"),$adb->query_result($result,$i,"displaytype"),$adb->query_result($result,$i,"typeofdata"));
-	}	
+		$query = "SELECT vtiger_profile2field.visible, vtiger_field.fieldlabel, vtiger_field.uitype, 
+			vtiger_field.fieldid, vtiger_field.displaytype, vtiger_field.typeofdata 
+			FROM vtiger_profile2field INNER JOIN vtiger_field ON vtiger_field.fieldid=vtiger_profile2field.fieldid 
+			WHERE vtiger_profile2field.profileid=? and vtiger_profile2field.tabid=? and vtiger_field.presence in (0,2)";
+		
+		$qparams = array($profileid, $tabid);
+		$result = $adb->pquery($query, $qparams);
+		
+    	for($i=0; $i<$adb->num_rows($result); $i++) {
+			$return_data[]=array(
+				$adb->query_result($result,$i,"fieldlabel"),
+				$adb->query_result($result,$i,"visible"), // From vtiger_profile2field.visible
+				$adb->query_result($result,$i,"uitype"),
+				$adb->query_result($result,$i,"visible"),
+				$adb->query_result($result,$i,"fieldid"),
+				$adb->query_result($result,$i,"displaytype"),
+				$adb->query_result($result,$i,"typeofdata")
+			);
+		}
+		
+		// Update information to cache for re-use
+		VTCacheUtils::updateProfile2FieldPermissionList($fld_module, $profileid, $return_data);
+    }
+	
+	
 	$log->debug("Exiting getProfile2FieldPermissionList method ...");
 	return $return_data;
 }
@@ -2142,17 +2207,21 @@ function get_textdurationField($label,$name,$tid)
   */
 
 //Added to get the parents list as hidden for Emails -- 09-11-2005
-function getEmailParentsList($module,$id)
+function getEmailParentsList($module,$id,$focus = false)
 {
 	global $log;
 	$log->debug("Entering getEmailParentsList(".$module.",".$id.") method ...");
         global $adb;
-	if($module == 'Contacts')
-		$focus = new Contacts();
-	if($module == 'Leads')
-		$focus = new Leads();
-        
-	$focus->retrieve_entity_info($id,$module);
+    // If the information is not sent then read it    
+    if($focus === false) {
+		if($module == 'Contacts')
+			$focus = new Contacts();
+		if($module == 'Leads')
+			$focus = new Leads();
+	        
+		$focus->retrieve_entity_info($id,$module);
+    }
+    
         $fieldid = 0;
         $fieldname = 'email';
         if($focus->column_fields['email'] == '' && $focus->column_fields['yahooid'] != '')
@@ -3617,7 +3686,7 @@ function getDuplicateRecordsArr($module)
 	if($no_of_rows <= $list_max_entries_per_page)
 		$_SESSION['dup_nav_start'.$module] = 1;
 	else if(isset($_REQUEST["start"]) && $_REQUEST["start"] != "" && $_SESSION['dup_nav_start'.$module] != $_REQUEST["start"])
-		$_SESSION['dup_nav_start'.$module] = $_REQUEST["start"];
+		$_SESSION['dup_nav_start'.$module] = ListViewSession::getRequestStartPage();
 	$start = ($_SESSION['dup_nav_start'.$module] != "")?$_SESSION['dup_nav_start'.$module]:1;
 	$navigation_array = getNavigationValues($start, $no_of_rows, $list_max_entries_per_page);
 	$start_rec = $navigation_array['start'];
@@ -4376,15 +4445,36 @@ function getModuleSequenceField($module) {
 	$field = null;
 	
 	if (!empty($module)) {
-		//uitype 4 points to Module Numbering Field
-		$seqColRes = $adb->pquery("SELECT fieldname, fieldlabel, columnname FROM vtiger_field WHERE uitype=? AND tabid=? and vtiger_field.presence in (0,2)", array('4', getTabid($module)));
-		if($adb->num_rows($seqColRes) > 0) {
-			$fieldname = $adb->query_result($seqColRes,0,'fieldname');
-			$columnname = $adb->query_result($seqColRes,0,'columnname');
-			$fieldlabel = $adb->query_result($seqColRes,0,'fieldlabel');
-			$field['name'] = $fieldname;
-			$field['column'] = $columnname;
-			$field['label'] = $fieldlabel;
+		
+		// First look at the cached information
+		$cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module);
+		
+		if($cachedModuleFields === false) {
+			//uitype 4 points to Module Numbering Field
+			$seqColRes = $adb->pquery("SELECT fieldname, fieldlabel, columnname FROM vtiger_field WHERE uitype=? AND tabid=? and vtiger_field.presence in (0,2)", array('4', getTabid($module)));
+			if($adb->num_rows($seqColRes) > 0) {
+				$fieldname = $adb->query_result($seqColRes,0,'fieldname');
+				$columnname = $adb->query_result($seqColRes,0,'columnname');
+				$fieldlabel = $adb->query_result($seqColRes,0,'fieldlabel');
+				
+				$field = array();			
+				$field['name'] = $fieldname;
+				$field['column'] = $columnname;
+				$field['label'] = $fieldlabel;			
+			}
+		} else {
+			
+			foreach($cachedModuleFields as $fieldinfo) {
+				if($fieldinfo['uitype'] == '4') {
+					$field = array();
+			
+					$field['name'] = $fieldinfo['fieldname'];
+					$field['column'] = $fieldinfo['columnname'];
+					$field['label'] = $fieldinfo['fieldlabel'];
+					
+					break;
+				}
+			}
 		}
 	}
 	

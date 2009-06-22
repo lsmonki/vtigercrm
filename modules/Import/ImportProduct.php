@@ -90,7 +90,7 @@ class ImportProduct extends Products {
 	function ImportProduct() {
 		parent::Products();
 		$this->log = LoggerManager::getLogger('import_product');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->db->println("IMP ImportProduct");
 		$this->initImportableFields("Products");
 		$this->db->println($this->importable_fields);

@@ -30,7 +30,7 @@ class Asterisk {
 		$this->sock = $sock;
 		$this->address = $server;
 		$this->port = $port;
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->log = LoggerManager::getLogger('asterisk');
 		$this->queue = array();
     }

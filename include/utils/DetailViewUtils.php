@@ -1757,9 +1757,10 @@ function isPresentRelatedLists($module,$activity_mode='')
 	global $adb;
 	$retval='true';
 	$tab_id=getTabid($module);
-	$query= "select count(*) as count from vtiger_relatedlists where tabid=?";
+	// We need to check if there is atleast 1 relation, no need to use count(*)  
+	$query= "select relation_id from vtiger_relatedlists where tabid=? LIMIT 1";
 	$result=$adb->pquery($query, array($tab_id));
-	$count=$adb->query_result($result,0,'count');
+	$count=$adb->num_rows($result);
 	if($count < 1 || ($module =='Calendar' && $activity_mode=='task'))
 	{
 		$retval='false';	
@@ -1873,5 +1874,31 @@ function getDetailBlockInformation($module, $result,$col_fields,$tabid,$block_la
 
 
 }
+
+function VT_detailViewNavigation($smarty,$recordNavigationInfo,$currrentRecordId){
+	$pageNumber =0;
+	foreach ($recordNavigationInfo as $start=>$recordIdList){
+		$pageNumber++;
+		foreach ($recordIdList as $index=>$recordId) {
+			if($recordId === $currrentRecordId){
+				if($index ==0 ){
+					$smarty->assign('privrecordstart',$start-1);
+					$smarty->assign('privrecord',$recordNavigationInfo[$start-1][count($recordNavigationInfo[$start-1])-1]);
+				}else{
+					$smarty->assign('privrecordstart',$start);
+					$smarty->assign('privrecord',$recordIdList[$index-1]);
+				}
+				if($index == count($recordIdList)-1){
+					$smarty->assign('nextrecordstart',$start+1);
+					$smarty->assign('nextrecord',$recordNavigationInfo[$start+1][0]);
+				}else{
+					$smarty->assign('nextrecordstart',$start);
+					$smarty->assign('nextrecord',$recordIdList[$index+1]);
+				}
+			}
+		}
+	}
+}
+
 
 ?>

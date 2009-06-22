@@ -807,7 +807,7 @@ function retrieve_account_id($account_name,$user_id)
 		return null;
 	}
 
-	$db = new PearDatabase();
+	$db = PearDatabase::getInstance();
 	$query = "select vtiger_account.accountname accountname,vtiger_account.accountid accountid from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_account.accountname=?";
 	$result=  $db->pquery($query, array($account_name)) or die ("Not able to execute insert");
 

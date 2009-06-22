@@ -158,51 +158,32 @@ if(isset($order_by) && $order_by != '')
         }
 }
 
-
-//Retreiving the no of rows
-$count_result = $adb->query( mkCountQuery( $query));
-$noofrows = $adb->query_result($count_result,0,"count");
-
-//Storing Listview session object
-if($_SESSION['lvs'][$currentModule])
-{
-	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
-}
-//added for 4600
-                                                                                                                             
-if($noofrows <= $list_max_entries_per_page)
-        $_SESSION['lvs'][$currentModule]['start'] = 1;
-//ends
-
-$start = $_SESSION['lvs'][$currentModule]['start'];
-       
-//Retreive the Navigation array
-$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
-
- //Postgres 8 fixes
- if( $adb->dbType == "pgsql")
-     $query = fixPostgresQuery( $query, $log, 0);
- 
-
-// Setting the record count string
-//modified by rdhital
-$start_rec = $navigation_array['start'];
-$end_rec = $navigation_array['end_val']; 
-//By Raju Ends
-
-//limiting the query
-if ($start_rec ==0) 
-	$limit_start_rec = 0;
-else
-	$limit_start_rec = $start_rec -1;
-	
+//Postgres 8 fixes
 if( $adb->dbType == "pgsql")
-     $list_result = $adb->query($query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page");
+	$query = fixPostgresQuery( $query, $log, 0);
+
+
+if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true){
+	$count_result = $adb->query( mkCountQuery( $query));
+	$noofrows = $adb->query_result($count_result,0,"count");
+}else{
+	$noofrows = null;
+}
+
+$queryMode = (isset($_REQUEST['query']) && $_REQUEST['query'] == 'true');
+$start = ListViewSession::getRequestCurrentPage($currentModule, $query, $viewid, $queryMode);
+
+$navigation_array = VT_getSimpleNavigationValues($start,$list_max_entries_per_page,$noofrows);
+
+$limit_start_rec = ($start-1) * $list_max_entries_per_page;
+
+if( $adb->dbType == "pgsql")
+	$list_result = $adb->pquery($query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
 else
-     $list_result = $adb->query($query. " LIMIT $limit_start_rec, $list_max_entries_per_page");
+	$list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
-$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
-
+$recordListRangeMsg = getRecordRangeMessage($list_result, $limit_start_rec);
+$smarty->assign('recordListRange',$recordListRangeMsg);
 
 //Retreive the List View Table Header
 if($viewid !='')
@@ -223,7 +204,7 @@ $smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
 $smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
 $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Invoice","index",$viewid);
+$navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string,"Invoice","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','subject','true','basic',"","","","",$viewid);
 $fieldnames = getAdvSearchfields($module);
 $criteria = getcriteria_options();
@@ -234,7 +215,6 @@ $smarty->assign("VIEWID", $viewid);
 $smarty->assign("BUTTONS", $other_text);
 $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
-$smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
 $smarty->assign("VIEWID", $viewid);
 $smarty->assign("BUTTONS", $other_text);
@@ -242,7 +222,7 @@ $smarty->assign("BUTTONS", $other_text);
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
-$_SESSION['invoice_listquery'] = $query;
+$_SESSION[$currentModule.'_listquery'] = $query;
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");

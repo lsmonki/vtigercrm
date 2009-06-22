@@ -109,7 +109,7 @@ class Quotes extends CRMEntity {
 	 */
 	function Quotes() {
 		$this->log =LoggerManager::getLogger('quote');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->column_fields = getColumnFields('Quotes');
 	}
 
@@ -151,10 +151,16 @@ class Quotes extends CRMEntity {
 	{
 		global $log;
                 $log->debug("Entering getOrderBy() method ...");
+                
+		$use_default_order_by = '';		
+		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
+			$use_default_order_by = $this->default_order_by;
+		}
+		
 		if (isset($_REQUEST['order_by'])) 
 			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else
-			$order_by = (($_SESSION['QUOTES_ORDER_BY'] != '')?($_SESSION['QUOTES_ORDER_BY']):($this->default_order_by));
+			$order_by = (($_SESSION['QUOTES_ORDER_BY'] != '')?($_SESSION['QUOTES_ORDER_BY']):($use_default_order_by));
 		$log->debug("Exiting getOrderBy method ...");
 		return $order_by;
 	}	

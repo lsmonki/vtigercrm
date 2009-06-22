@@ -13,18 +13,46 @@ class VTModuleExpressionsManager{
 		$this->adb = $adb;
 	}
 
+	/** Caching logic **/
+	private static $cache = array();
+	static function addToCache($key, $value) {
+		 self::$cache[$key] = $value;
+	}
+	static function fromCache($key) {
+		if(isset(self::$cache[$key])) return self::$cache[$key];
+		return false;
+	}
+	static function clearCache() {
+		self::$cache = array();
+	}
+	/** END **/
+	
 	function retrieve($moduleName){
 		$adb = $this->adb;
-		$result = $adb->pquery('select * from vtiger_fieldformulas where modulename=?', array($moduleName));
-		if($adb->num_rows($result)==0){
-			return new VTModuleExpressions($moduleName, new VTExpressionEngine());
-		}else{
-			$ee = unserialize(decode_html($adb->query_result($result, 0, "expression_engine")));
-			$id = $adb->query_result($result, 0, "expressionid");
-			$me = new VTModuleExpressions($moduleName, $ee);
-			$me->id = $id;
-			return $me;
+		
+		// Look at cache if we have the information
+		$cachedinfo = self::fromCache($moduleName);
+		if($cachedinfo === false) {
+			
+			$result = $adb->pquery('select * from vtiger_fieldformulas where modulename=?', array($moduleName));
+			if($adb->num_rows($result)==0){
+				self::addToCache($moduleName, array() );
+			}else{
+				$ee = unserialize(decode_html($adb->query_result($result, 0, "expression_engine")));
+				$id = $adb->query_result($result, 0, "expressionid");
+				self::addToCache($moduleName, array('expressionid'=>$id, 'expression_engine'=>$ee));
+			}
+			// Retrieve information from cache for consistency
+			$cachedinfo = self::fromCache($moduleName);
 		}
+		
+		$me = new VTModuleExpressions($moduleName, new VTExpressionEngine());
+		if(!empty($cachedinfo)) {
+			$me = new VTModuleExpressions($moduleName, $cachedinfo['expression_engine']);
+			$me->id = $cachedinfo['expressionid'];
+		}
+		return $me;
+		
 	}
 
 	function save($moduleExpressions){
@@ -40,6 +68,8 @@ class VTModuleExpressionsManager{
 			serialize($moduleExpressions->expressionEngine)));
 			$moduleExpressions->id = $id;
 		}
+		// Invalidate cache information
+		self::clearCache();
 	}
 
 

@@ -68,17 +68,30 @@ function vtlib_getModuleNameForSharing() {
 $__cache_module_activeinfo = Array();
 
 /**
- * Fetch module active information at one shot
+ * Fetch module active information at one shot, but return all the information fetched.
  */
-function vtlib_prefetchModuleActiveInfo() {
-	global $adb, $__cache_module_activeinfo;
-	$tabres = $adb->query("SELECT * FROM vtiger_tab");
-	if($tabres) {
-		while($tabresrow = $adb->fetch_array($tabres)) {			
-			$__cache_module_activeinfo[$tabresrow['name']] = $tabresrow['presence'];
+function vtlib_prefetchModuleActiveInfo($force = true) {
+	global $__cache_module_activeinfo;
+	
+	// Look up if cache has information
+	$tabrows = VTCacheUtils::lookupAllTabsInfo();
+	
+	// Initialize from DB if cache information is not available or force flag is set
+	if($tabrows === false || $force) {
+		global $adb;
+		$tabres = $adb->query("SELECT * FROM vtiger_tab");
+		$tabrows = array();	
+		if($tabres) {
+			while($tabresrow = $adb->fetch_array($tabres)) {
+				$tabrows[] = $tabresrow;
+				$__cache_module_activeinfo[$tabresrow['name']] = $tabresrow['presence'];
+			}
+			// Update cache for further re-use
+			VTCacheUtils::updateAllTabsInfo($tabrows);
 		}
 	}
-	return $__cache_module_activeinfo;
+	
+	return $tabrows;
 }
 
 /**
@@ -157,7 +170,7 @@ function vtlib_toggleModuleAccess($module, $enable_disable) {
 	// UserPrivilege file needs to be regenerated if module state is changed from
 	// vtiger 5.1.0 onwards
 	global $vtiger_current_version;
-	if(version_compare($vtiger_current_version, '5.1.0', '>=')) {
+	if(version_compare($vtiger_current_version, '5.0.4', '>')) {
 		vtlib_RecreateUserPrivilegeFiles();
 	}
 

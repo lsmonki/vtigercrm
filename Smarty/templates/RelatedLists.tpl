@@ -12,6 +12,7 @@
 
 -->*}
 <script language="JavaScript" type="text/javascript" src="modules/PriceBooks/PriceBooks.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
 {literal}
 <script>
 function editProductListPrice(id,pbid,price)

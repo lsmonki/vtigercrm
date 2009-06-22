@@ -67,7 +67,7 @@ class PBXManager extends CRMEntity {
 	function PBXManager() {
 		global $log;
 		$this->column_fields = getColumnFields('PBXManager');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->log = $log;
 	}
 
@@ -84,7 +84,13 @@ class PBXManager extends CRMEntity {
 
 	function getOrderBy() {
 		global $currentModule;
-		$orderby = $this->default_order_by;
+		
+		$use_default_order_by = '';		
+		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
+			$use_default_order_by = $this->default_order_by;
+		}
+		
+		$orderby = $use_default_order_by;
 		if($_REQUEST['order_by']) $orderby = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else if($_SESSION[$currentModule.'_Order_By'])
 			$orderby = $_SESSION[$currentModule.'_Order_By'];
@@ -221,7 +227,7 @@ class PBXManager extends CRMEntity {
 	 * Initialize this instance for importing.
 	 */
 	function initImport($module) {
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->initImportableFields($module);
 	}
 

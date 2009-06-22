@@ -90,7 +90,7 @@ class ImportLead extends Leads {
 	function ImportLead() {
 		parent::Leads();
 		$this->log = LoggerManager::getLogger('import_lead');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->db->println("IMP ImportLead");
 		$this->initImportableFields("Leads");
 		$this->db->println($this->importable_fields);

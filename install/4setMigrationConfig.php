@@ -1,21 +1,12 @@
 <?php
-/*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the
- * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
- * Software distributed under the License is distributed on an  "AS IS"  basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
- * the specific language governing rights and limitations under the License.
- * The Original Code is: SugarCRM Open Source
- * The Initial Developer of the Original Code is SugarCRM, Inc.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- lpha2* Contributor(s): ______________________________________.
- ********************************************************************************/
-/*********************************************************************************
- * $Header: /advent/projects/wesat'vtiger_crm/sugarcrm/install/2setConfig.php,v 1.41 2005/04/29 06:44:13 samk Exp $
- * Description:  Executes a step in the installation process.
- ********************************************************************************/
+ ************************************************************************************/
 
 // TODO: deprecate connection.php file
 //require_once("connection.php");
@@ -83,7 +74,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	elseif (isset($dbconfig['db_name']) && $dbconfig['db_name']!='_DBC_NAME_')
 	$db_name = $dbconfig['db_name'];
 	else
-	$db_name = 'vtigercrm510';
+	$db_name = 'vtigercrm510rc';
 
 	if(isset($_REQUEST['root_directory'])) $root_directory = $_REQUEST['root_directory'];
 	else $root_directory = $current_dir;
@@ -105,7 +96,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 
 	}
 	else {
-		!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm510" : $db_name = $_REQUEST['db_name'];
+		!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm510rc" : $db_name = $_REQUEST['db_name'];
 		!isset($_REQUEST['root_directory']) ? $root_directory = $current_dir : $root_directory = stripslashes($_REQUEST['root_directory']);
 		!isset($_REQUEST['source_directory']) ? $source_directory = "" : $source_directory = stripslashes($_REQUEST['source_directory']);
 		!isset($_REQUEST['cache_dir']) ? $cache_dir = $cache_dir : $cache_dir = stripslashes($_REQUEST['cache_dir']);
@@ -129,6 +120,9 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 			$db_options['pgsql'] = 'Postgres';
 		}
 	include("modules/Migration/versions.php");
+	$version_sorted = $versions;
+	uasort($version_sorted,version_compare);
+	$version_sorted = array_reverse($version_sorted,true);
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -305,7 +299,7 @@ function migrate(){
 		'migrate.php',
 		{queue: {position: 'end', scope: 'command'},
 			method: 'post',
-			postBody: 'source_path='+source_path+'&db_name='+db_name+'&user_name='+user_name+'&user_pwd='+user_pwd+url,
+			postBody: 'migration_verify=true&source_path='+source_path+'&db_name='+db_name+'&user_name='+user_name+'&user_pwd='+user_pwd+url,
 			onComplete: function(response) {
 					VtigerJS_DialogBox.hideprogress();
 					
@@ -341,16 +335,8 @@ function migrate(){
 					}
 					else
 					{
-						str=trim(str);
-						
-						if(str=='') {
-							location.href ='install.php?source_directory='+source_path+'&root_directory='+root_directory+'&file=5MigrationComplete.php';
-						}else{
-							str=str.replace(/:: /gi,'\n\n');
-							placeAtCenter($('failedqueries'));
-							$('failedqueries').style.display = 'block';
-							$('queries').value = str;
-						}
+						document.installform.action="install.php";
+						document.installform.submit();
 						return true;
 					}
 			}
@@ -434,17 +420,17 @@ function getViewPortCenter(){
 	<tr valign="top">
 		<td class="small" bgcolor="#4572BE" align=center>
 			<!-- Master display -->
-			<table border=0 cellspacing=0 cellpadding=10 width=97%>
-			<tr>
-				<td width=80% valign=top class="cwContentDisplay" align=left>
-				<!-- Right side tabs -->
-				    <form action="javascript: void(0); " method="post" name="installform" id="form" name="setConfig" id="form">
-				    <input name="action" type="hidden" value='' />
-				    <table border=0 cellspacing=0 cellpadding=5 width=100%>
-				    <tr><td colspan=2 class=small align=left><img src="include/install/images/confWizSysConfig.gif" alt="System Configuration" title="System Configuration"><br>
-					  <hr noshade size=1></td></tr>
-				    <tr valign="top">
-		<td width="50%" align=left class="small" style="padding-left:5px">
+		<table border=0 cellspacing=0 cellpadding=10 width=97%>
+		<tr>
+			<td width=80% valign=top class="cwContentDisplay" align=left>
+			<!-- Right side tabs -->
+			    <form action="javascript: void(0); " method="post" name="installform" id="form" name="setConfig" id="form">
+			    <input name="action" type="hidden" value='' />
+			    <table border=0 cellspacing=0 cellpadding=5 width=100%>
+			    <tr><td colspan=2 class=small align=left><img src="include/install/images/confWizSysConfig.gif" alt="System Configuration" title="System Configuration"><br>
+				  <hr noshade size=1></td></tr>
+			    <tr valign="top">
+	<td width="50%" align=left class="small" style="padding-left:5px">
 		<table width="100%" cellpadding="4" align=center border="0" cellspacing="0" class="level3"><tbody>
 			<tr>
 				<td colspan=2><strong>Previous Installation Information</strong><hr size="1" noshade=""/></td>
@@ -477,7 +463,7 @@ function getViewPortCenter(){
 								echo "<option value=''>--SELECT--</option>";
 							}
 								
-							foreach($versions as $index=>$value){
+							foreach($version_sorted as $index=>$value){
 								if($value==$_SESSION['VTIGER_DB_VERSION'] && isset($_SESSION['VTIGER_DB_VERSION']))
 									echo "<option value='$index' selected>$value</option>";
 								else
@@ -560,37 +546,35 @@ function getViewPortCenter(){
 			<input name="selected_modules" type="hidden" id="selected_modules" value = '<?php echo $mod_for_ins; ?>' />
 			<input class="dataInput" type="hidden" name="root_directory" id="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" size="40" /> 
 		</table>
-		<div id="dbbackup" style="display:block">
-			<br>
-			<table width="100%" cellpadding="1"  cellspacing="0" border="0" align=center class='level3'><tbody>
-				<tr><td colspan=2><strong>Backup Database</strong> (Take backup of database before migration)<hr size="1" noshade=""/></td></tr>
-						<tr valign=top>
-			               <!-- td nowrap width=25%>Enable Database Backup</td -->
-			               <td align="left">
-						       <input name="check_dbbackup" type="checkbox" id="check_dbbackup" />
-						   </td><td class='small'>
-								We recommend you to backup the database manually <br>and disable this option if you experience timeout.
-						   </td>
-						</tr>
-			</table>
-		</div>
-		  <!-- User Verification -->
-		<!-- System Configuration -->
-		</td>
-		</tr>
+	<div id="dbbackup" style="display:block">
+		<br>
+		<table width="100%" cellpadding="1"  cellspacing="0" border="0" align=center class='level3'><tbody>
+			<tr><td colspan=2><strong>Backup Database</strong> (Take backup of database before migration)<hr size="1" noshade=""/></td></tr>
+					<tr valign=top>
+		               <!-- td nowrap width=25%>Enable Database Backup</td -->
+		               <td align="left">
+					       <input name="check_dbbackup" type="checkbox" id="check_dbbackup" />
+					   </td><td class='small'>
+							We recommend you to backup the database manually <br>and disable this option if you experience timeout.
+					   </td>
+					</tr>
 		</table>
-		<input type="hidden" name="file" value="5MigrationComplete.php">
-		</form>
-		<table width="100%" cellpadding="5"  cellspacing="1" border="0" align=center><tbody>
-		<tr>
-				<td align=left >
-					<input type="image" src="include/install/images/cwBtnBack.gif" alt="Back" border="0" title="Back" onClick="window.history.back();">
-				</td>
-				<td align="right">
-					<input type="image" src="include/install/images/cwBtnMigrate.gif" id="starttbn" alt="Copy files and Migrate" border="0" title="Next" onClick="if(verify_data(installform)==true){migrate();}">
-				</td>
-		</tr>
-		</table>
+	</div>
+	</td>
+	</tr>
+	</table>
+	<input type="hidden" name="file" value="5MigrationProcess.php">
+	<table width="100%" cellpadding="5"  cellspacing="1" border="0" align=center><tbody>
+	<tr>
+			<td align=left >
+				<input type="image" src="include/install/images/cwBtnBack.gif" alt="Back" border="0" title="Back" onClick="window.history.back();">
+			</td>
+			<td align="right">
+				<input type="image" src="include/install/images/cwBtnMigrate.gif" id="starttbn" alt="Copy files and Migrate" border="0" title="Next" onClick="if(verify_data(installform)==true){if(migrate()==true) { this.form.submit();}}">
+			</td>
+	</tr>
+	</tbody></table>
+	</form>
 	</td>
 		</tr>
 	</table>

@@ -95,9 +95,8 @@ class Accounts extends CRMEntity {
 	
 	function Accounts() {
 		$this->log =LoggerManager::getLogger('account');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->column_fields = getColumnFields('Accounts');
-		$this->initRequiredFields("Accounts");
 	}
 
 	/** Function to handle module specific operations when saving a entity 
@@ -131,10 +130,16 @@ class Accounts extends CRMEntity {
 	{
 		global $log;
                 $log->debug("Entering getOrderBy() method ...");
+                
+		$use_default_order_by = '';		
+		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
+			$use_default_order_by = $this->default_order_by;
+		}
+                
 		if (isset($_REQUEST['order_by'])) 
 			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else
-			$order_by = (($_SESSION['ACCOUNTS_ORDER_BY'] != '')?($_SESSION['ACCOUNTS_ORDER_BY']):($this->default_order_by));
+			$order_by = (($_SESSION['ACCOUNTS_ORDER_BY'] != '')?($_SESSION['ACCOUNTS_ORDER_BY']):($use_default_order_by));
 		$log->debug("Exiting getOrderBy method ...");
 		return $order_by;
 	}	

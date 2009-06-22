@@ -102,8 +102,9 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 		if($module == 'Users' && empty($field))
 			$field = Array("last_name","email1");
 	}
-	//this is used to get fields that are visible for admin --vikas
-	$focus->list_fields = filterInactiveFields($module,$focus->list_fields);
+	
+	// Remove fields which are made inactive
+	$focus->filterInactiveFields($module);
 	   
 	    //modified for vtiger_customview 27/5 - $app_strings change to $mod_strings
         foreach($focus->list_fields as $name=>$tableinfo)
@@ -1046,4 +1047,51 @@ function str_replace_once($needle, $replace, $haystack)
 	}
 	return substr_replace($haystack, $replace, $pos, strlen($needle));
 }
+
+/**
+ * Function to get the where condition for a module based on the field table entries
+ * @param  string $listquery  -- ListView query for the module 
+ * @param  string $module     -- module name
+ * @param  string $search_val -- entered search string value
+ * @return string $where      -- where condition for the module based on field table entries
+ */
+function getUnifiedWhere($listquery,$module,$search_val){
+	global $adb, $current_user;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		
+	$search_val = $adb->sql_escape_string($search_val);
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0){
+		$query = "SELECT columnname, tablename FROM vtiger_field WHERE tabid = ? and vtiger_field.presence in (0,2)";
+		$qparams = array(getTabid($module));
+	}else{
+		$profileList = getCurrentUserProfileList();
+		$query = "SELECT columnname, tablename FROM vtiger_field INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid = vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid = vtiger_field.fieldid WHERE vtiger_field.tabid = ? AND vtiger_profile2field.visible = 0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) . ") AND vtiger_def_org_field.visible = 0 and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid";
+		$qparams = array(getTabid($module), $profileList);
+	}
+	$result = $adb->pquery($query, $qparams);
+	$noofrows = $adb->num_rows($result);
+
+	$where = '';
+	for($i=0;$i<$noofrows;$i++){
+		$columnname = $adb->query_result($result,$i,'columnname');
+		$tablename = $adb->query_result($result,$i,'tablename');
+		
+		// Search / Lookup customization
+		if($module == 'Contacts' && $columnname == 'accountid') {
+			$columnname = "accountname";
+			$tablename = "vtiger_account";
+		}
+		// END
+
+		//Before form the where condition, check whether the table for the field has been added in the listview query
+		if(strstr($listquery,$tablename)){
+			if($where != ''){
+				$where .= " OR ";
+			}
+			$where .= $tablename.".".$columnname." LIKE '". formatForSqlLike($search_val) ."'";
+		}
+	}
+	return $where;
+}
+
 ?>

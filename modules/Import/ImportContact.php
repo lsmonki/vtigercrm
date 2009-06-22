@@ -292,7 +292,7 @@ class ImportContact extends Contacts {
 	function ImportContact() {
 		parent::Contacts();
 		$this->log = LoggerManager::getLogger('import_contact');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->db->println("IMP ImportContact");
 		$this->initImportableFields("Contacts");
 		$this->db->println($this->importable_fields);

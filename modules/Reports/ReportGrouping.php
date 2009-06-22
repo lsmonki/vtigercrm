@@ -37,8 +37,10 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 	$secondarymodule = '';
 	$secondarymodules =Array();
 	
-	foreach($oRep->related_modules[$oReport->primodule] as $key=>$value){
-		if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= vtlib_purify($_REQUEST["secondarymodule_".$value]);
+	if(!empty($oRep->related_modules[$oReport->primodule])) {
+		foreach($oRep->related_modules[$oReport->primodule] as $key=>$value){
+			if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= vtlib_purify($_REQUEST["secondarymodule_".$value]);
+		}
 	}
 	$secondarymodule = implode(":",$secondarymodules);
 	
@@ -64,8 +66,10 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 	$primarymodule = vtlib_purify($_REQUEST["primarymodule"]);
 	$BLOCK1 = getPrimaryColumns_GroupingHTML($primarymodule);
 	$ogReport =  new Reports();
-	foreach($ogReport->related_modules[$primarymodule] as $key=>$value){
-		$BLOCK1 .= getSecondaryColumns_GroupingHTML($_REQUEST["secondarymodule_".$value]);
+	if(!empty($ogReport->related_modules[$primarymodule])) {
+		foreach($ogReport->related_modules[$primarymodule] as $key=>$value){
+			$BLOCK1 .= getSecondaryColumns_GroupingHTML($_REQUEST["secondarymodule_".$value]);
+		}
 	}
 	$report_group->assign("BLOCK1",$BLOCK1);
 	$report_group->assign("BLOCK2",$BLOCK1);

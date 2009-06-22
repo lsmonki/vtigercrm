@@ -13,6 +13,9 @@ require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
 global $current_user,$user_id,$date_start,$end_date,$tmp_dir,$mod_strings,$app_strings;
 $type='recordsforuser';
+
+// Performance Optimization: Using new API to generate dashboard chart
+/*
 $module_arr = Array ('Accounts','Contacts','Leads','Potentials','Quotes','Invoice','PurchaseOrder', 'SalesOrder','Calendar','HelpDesk','Campaigns');
 foreach ($module_arr as $key => $mod_name){
 	if(isPermitted("$mod_name","index",'') == 'yes'){
@@ -36,7 +39,12 @@ $query=$homepagedb_query;
 $cache_file_name=abs(crc32($current_user->id))."_".$type."_".crc32($date_start.$end_date).".png";
     $html_imagename=$graph_by; //Html image name for the graph
 $graph_details=module_Chart($current_user->id,$date_start,$end_date,$query,$graph_by,$graph_title,$where,$module,$type);
-if($graph_details!=0){
+*/
+
+// Performance Optimization
+$graph_details = module_Chart_HomePageDashboard($current_user);
+	
+if (!empty($graph_details) && $graph_details[1] != 0) { // END
     $name_val=$graph_details[0];
     $cnt_val=$graph_details[1];
     $graph_title=$graph_details[2];

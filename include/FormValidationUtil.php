@@ -13,6 +13,30 @@
  * File containing methods to proceed with the ui validation for all the forms
  *
  */
+/**
+ * Get field validation information
+ */
+function getDBValidationData($tablearray, $tabid='') {
+	if($tabid != '') {		
+		global $adb, $mod_strings;
+		$fieldModuleName = getTabModuleName($tabid);
+		$fieldres = $adb->pquery(
+			"SELECT fieldlabel,fieldname,typeofdata FROM vtiger_field
+			WHERE displaytype IN (1,3) AND presence in (0,2) AND tabid=?", Array($tabid));
+		$fieldinfos = Array();
+		while($fieldrow = $adb->fetch_array($fieldres)) {
+			$fieldlabel = getTranslatedString($fieldrow['fieldlabel'], $fieldModuleName);	
+			$fieldname = $fieldrow['fieldname'];
+			$typeofdata= $fieldrow['typeofdata'];
+			$fieldinfos[$fieldname] = Array($fieldlabel => $typeofdata);
+		}
+		return $fieldinfos;
+	} else {
+		//  TODO: Call the old API defined below in the file?
+		return getDBValidationData_510($tablearray, $tabid);
+	}
+}
+ 
 /** Function to get the details for fieldlabels for a given table array
   * @param $tablearray -- tablearray:: Type string array (table names in array)
   * @param $tabid -- tabid:: Type integer 
@@ -21,7 +45,7 @@
  */
 
 
-function getDBValidationData($tablearray,$tabid='')
+function getDBValidationData_510($tablearray,$tabid='')
 {
   global $log;
   $log->debug("Entering getDBValidationData(".$tablearray.",".$tabid.") method ...");
@@ -65,7 +89,7 @@ function getDBValidationData($tablearray,$tabid='')
   }
   $result = $adb->pquery($sql, $params);
   $noofrows = $adb->num_rows($result);
-  $fieldModuleName = getTabModuleName($tabid);
+  $fieldModuleName = empty($tabid)? false : getTabModuleName($tabid);
   $fieldName_array = Array();
   for($i=0;$i<$noofrows;$i++)
   {

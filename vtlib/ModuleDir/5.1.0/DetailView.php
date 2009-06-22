@@ -67,45 +67,9 @@ $smarty->assign('VALIDATION_DATA_FIELDLABEL',$validationArray['fieldlabel']);
 $smarty->assign('EDIT_PERMISSION', isPermitted($currentModule, 'EditView', $record));
 $smarty->assign('CHECK', $tool_buttons);
 
-if(isset($_SESSION[$currentModule.'_listquery'])){
-	$arrayTotlist = array();
-	$aNamesToList = array(); 
-	$forAllCRMIDlist_query=$_SESSION[$currentModule.'_listquery'];
-	$resultAllCRMIDlist_query=$adb->pquery($forAllCRMIDlist_query,array());
-	while($forAllCRMID = $adb->fetch_array($resultAllCRMIDlist_query))
-	{
-		$arrayTotlist[]=$forAllCRMID['crmid'];
-	}
-	$_SESSION['listEntyKeymod_'.$focus->id] = $module.":".implode(",",$arrayTotlist);
-	
-	if(isset($_SESSION['listEntyKeymod_'.$focus->id]))
-	{
-		$split_temp=explode(":",$_SESSION['listEntyKeymod_'.$focus->id]);
-		if($split_temp[0] == $module)
-		{	
-			$smarty->assign("SESMODULE",$split_temp[0]);
-			$ar_allist=explode(",",$split_temp[1]);
-			
-			for($listi=0;$listi<count($ar_allist);$listi++)
-			{
-				if($ar_allist[$listi]==$_REQUEST[record])
-				{
-					if($listi-1>=0)
-					{
-						$privrecord=$ar_allist[$listi-1];
-						$smarty->assign("privrecord",$privrecord);
-					}else {unset($privrecord);}
-					if($listi+1<count($ar_allist))
-					{
-						$nextrecord=$ar_allist[$listi+1];
-						$smarty->assign("nextrecord",$nextrecord);
-					}else {unset($nextrecord);}
-					break;
-				}
-				
-			}
-		}
-	}
+if(PerformancePrefs::getBoolean('DETAILVIEW_RECORD_NAVIGATION', true) && isset($_SESSION[$currentModule.'_listquery'])){
+	$recordNavigationInfo = ListViewSession::getListViewNavigation($focus->id);
+	VT_detailViewNavigation($smarty,$recordNavigationInfo,$focus->id);
 }
 
 $smarty->assign('IS_REL_LIST', isPresentRelatedLists($currentModule));
@@ -132,6 +96,8 @@ $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModul
 // Record Change Notification
 $focus->markAsViewed($current_user->id);
 // END
+
+$smarty->assign('DETAILVIEW_AJAX_EDIT', PerformancePrefs::getBoolean('DETAILVIEW_AJAX_EDIT', true));
 
 $smarty->display('DetailView.tpl');
 

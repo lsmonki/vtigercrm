@@ -110,7 +110,7 @@ function getToolTipText($view,$fieldname,$module,$value){
 	$keys = array_keys($value[0]);
 	//getting the quickview list here
 	$fieldlabel = Array();
-	$fieldid = getFieldId($fieldname,$module);
+	$fieldid = getFieldid(getTabid($module), $fieldname);
 	$quickview = 'select fieldname,fieldlabel from vtiger_quickview inner join vtiger_field on vtiger_quickview.related_fieldid=vtiger_field.fieldid where vtiger_quickview.fieldid = ? and currentview= ? and vtiger_field.presence in (0,2) order by vtiger_quickview.sequence';
 	$result = $adb->pquery($quickview,array($fieldid,$view));
 	$count = $adb->num_rows($result);
@@ -255,15 +255,4 @@ function QuickViewFieldList($module){
 	}
 }
 
-function getFieldId($fieldname,$module){
-	global $adb;
-	$tabid = getTabid($module);
-	$query = "SELECT fieldid FROM vtiger_field WHERE fieldname = ? AND tabid = ?";
-	$res = $adb->pquery($query,array($fieldname,$tabid));
-	$rows = $adb->num_rows($res);
-	if($rows > 0){
-		return $adb->query_result($res,0,'fieldid');
-	}
-	return false;
-}
 ?>

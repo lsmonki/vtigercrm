@@ -113,7 +113,12 @@ class ServiceContracts extends CRMEntity {
 	function getOrderBy() {
 		global $currentModule;
 		
-		$orderby = $this->default_order_by;
+		$use_default_order_by = '';		
+		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
+			$use_default_order_by = $this->default_order_by;
+		}
+		
+		$orderby = $use_default_order_by;
 		if($_REQUEST['order_by']) $orderby = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else if($_SESSION[$currentModule.'_Order_By'])
 			$orderby = $_SESSION[$currentModule.'_Order_By'];
@@ -418,12 +423,12 @@ class ServiceContracts extends CRMEntity {
 			$adb->pquery('UPDATE vtiger_tab SET customized=0 WHERE name=?', array($moduleName));
 			
 		} else if($eventType == 'module.disabled') {
-			$adb->query("UPDATE vtiger_eventhandlers SET is_active=0 WHERE event_name IN ('vtiger.entity.beforesave','vtiger.entity.aftersave') " .
-					" AND handler_class='ServiceContractsHandler'");
+			$em = new VTEventsManager($adb);
+			$em->setHandlerInActive('ServiceContractsHandler');
 
 		} else if($eventType == 'module.enabled') {
-			$adb->query("UPDATE vtiger_eventhandlers SET is_active=1 WHERE event_name IN ('vtiger.entity.beforesave','vtiger.entity.aftersave') " .
-					" AND handler_class='ServiceContractsHandler'");
+			$em = new VTEventsManager($adb);
+			$em->setHandlerActive('ServiceContractsHandler');
 
 		} else if($eventType == 'module.preuninstall') {
 		// TODO Handle actions when this module is about to be deleted.

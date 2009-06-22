@@ -64,8 +64,10 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 			$focus->list_fields = $oCv->list_fields;
 		}
 	}
-	//this is done to remove the hidden fields from the popup for admin -- vikas
-	$focus->list_fields = filterInactiveFields($module,$focus->list_fields);
+
+	// Remove fields which are made inactive
+	$focus->filterInactiveFields($module);
+
 	//Added to reduce the no. of queries logging for non-admin user -- by Minnie-start
 	$field_list = array();
 	$j=0;
@@ -184,13 +186,6 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 				//Added on 14-12-2005 to avoid if and else check for every list vtiger_field for arrow image and change order
 				$change_sorder = array('ASC'=>'DESC','DESC'=>'ASC');
 				$arrow_gif = array('ASC'=>'arrow_down.gif','DESC'=>'arrow_up.gif');
-				$query = " select fieldlabel,tablename from vtiger_field where tabid= ? and vtiger_field.presence in (0,2)";
-				$res = $adb->pquery($query,array($tabid));
-				$no_rows = $adb->num_rows($res);
-				for($i=0;$i < $no_rows ; $i++){
-					$tablename = $adb->query_result($res,$i,'tablename');
-					$fieldlabel[$tablename] =$adb->query_result($res,$i,'fieldlabel');
-				}
 				foreach($focus->list_fields[$name] as $tab=>$col)
 				{
 					if(in_array($col,$focus->sortby_fields))
@@ -379,8 +374,8 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";		
 	
-	//this is done to remove the hidden fields from the popup for admin -- vikas
-	$focus->search_fields = filterInactiveFields($module,$focus->search_fields);
+
+	$focus->filterInactiveFields($module);
 	
 	foreach($focus->search_fields as $name=>$tableinfo)
 	{
@@ -568,8 +563,9 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	{
 		$focus->list_fields = $selectedfields;
 	}
-	//this is done to remove the hidden fields from the popup for admin -- vikas
-	$focus->list_fields = filterInactiveFields($module,$focus->list_fields);
+
+	// Remove fields which are made inactive
+	$focus->filterInactiveFields($module);
 	
 	//Added to reduce the no. of queries logging for non-admin user -- by minnie-start
 	$field_list = array();
@@ -1071,7 +1067,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			}
 		}
 		// Record Change Notification
-		if(method_exists($focus, 'isViewed')) {
+		if(method_exists($focus, 'isViewed') && PerformancePrefs::getBoolean('LISTVIEW_RECORD_CHANGE_INDICATOR', true)) {
 			if(!$focus->isViewed($entity_id)) {
 				$links_info .= " | <img src='" . vtiger_imageurl('important1.gif', $theme) . "' border=0>";
 			}
@@ -1538,7 +1534,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		if($_SESSION['internal_mailer'] == 1)
 		{	
 			//check added for email link in user detailview
-			$querystr="SELECT fieldid FROM vtiger_field WHERE tabid=? and fieldname=? and vtiger_field.presence in (0,2)";
 			if($module == 'Calendar') {
 				if(getActivityType($entity_id) == 'Task') {
 					$tabid = 9;
@@ -1548,9 +1543,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			} else {
 				$tabid = getTabid($module);
 			}
-			$queryres = $adb->pquery($querystr, array($tabid, $fieldname));
-			//Change this index 0 - to get the vtiger_fieldid based on email1 or email2
-			$fieldid = $adb->query_result($queryres,0,'fieldid');
+			$fieldid = getFieldid($tabid, $fieldname);
 			if(empty($popuptype)){
 				$value = '<a href="javascript:InternalMailer('.$entity_id.','.$fieldid.',\''.$fieldname.'\',\''.$module.'\',\'record_id\');">'.$temp_val.'</a>';
 			} else {
@@ -3309,9 +3302,10 @@ function getRelatedTo($module,$list_result,$rset)
 		if($module == 'HelpDesk')
 		{
 			$activity_id = $adb->query_result($list_result,$rset,"parent_id");
-			if($activity_id != '')
-				$evt_query = "SELECT * FROM vtiger_crmentity WHERE crmid=?";
+			if($activity_id != '') {
+				$evt_query = "SELECT crmid, setype FROM vtiger_crmentity WHERE crmid=?";
 				$params = array($activity_id);
+			}
 		}
 	}
 	//added by raju to change the related to in emails inot multiple if email is for more than one contact
@@ -3442,7 +3436,6 @@ function getRelatedTo($module,$list_result,$rset)
 *Returns an string value
 */
 
-
 function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='index',$viewid='')
 {
 	global $log,$app_strings;
@@ -3450,10 +3443,11 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	global $theme,$current_user;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	if($module != 'Documents')
-		$output = '<td align="right" style="padding="5px;">';
-	else
-		$output = '';
+	if($module == 'Documents') {
+		$output = '<td class="mailSubHeader" width="100%" align="center">';
+	} else {
+		$output = '<td align="right" style="padding: 5px;">';
+	}
 	$tabname = getParentTab();
 
 	$url_string = '';
@@ -3513,6 +3507,9 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 		{
 			$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start=1'.$url_string.'\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="' . vtiger_imageurl('start.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
 			$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['prev'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="' . vtiger_imageurl('previous.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+		}elseif($action_val == 'UnifiedSearch'){
+			$output .= '<a href="javascript:;" onClick="getUnifiedSearchEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start=1'.$url_string.'\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="' . vtiger_imageurl('start.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getUnifiedSearchEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['prev'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="' . vtiger_imageurl('previous.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
 		}
 		elseif($module == 'Documents')
 		{
@@ -3529,27 +3526,30 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 		$output .= '<img src="' . vtiger_imageurl('start_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
 		$output .= '<img src="' . vtiger_imageurl('previous_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
 	}
-	for ($i=$navigation_array['first'];$i<=$navigation_array['end'];$i++){
-		if ($navigation_array['current']==$i){
-			$output .='<b>'.$i.'</b>&nbsp;';
-		}
-		else{
-			if($module == 'Calendar' && $action_val == 'index')
-			{
-				//$output .= '<a href="index.php?module=Calendar&action=index&start='.$i.$url_string.'">'.$i.'</a>&nbsp;';
-				$output .= '<a href="javascript:;" onClick="cal_navigation(\''.$tab_type.'\',\''.$url_string.'\',\'&start='.$i.'\');" >'.$i.'</a>&nbsp;';
-			}
-			else if($action_val == "FindDuplicate")
-				$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'start='.$i.$url_string.'\');" >'.$i.'</a>&nbsp;';
-
-			elseif($module == 'Documents')
-			{
-				$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$i.$url_string.'&folderid='.$action_val.'\');" >'.$i.'</a>&nbsp;';
-			}
-			else
-				$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'start='.$i.$url_string.'\');" >'.$i.'</a>&nbsp;';
-		}
+	
+	if($module == 'Calendar' && $action_val == 'index'){  
+		$jsNavigate = "cal_navigation('$tab_type','$url_string','&start='+this.value);";  
+	}else if($action_val == "FindDuplicate"){  
+		$jsNavigate = "getDuplicateListViewEntries_js('$module','parenttab=$tabname&start='+this.value+'$url_string');";  
+	}elseif($action_val == 'UnifiedSearch'){
+		$jsNavigate = "getUnifiedSearchEntries_js('$module','parenttab=$tabname&start='+this.value+'$url_string');";
+	}elseif($module == 'Documents'){  
+		$jsNavigate = "getListViewEntries_js('$module','parenttab=$tabname&start='+this.value+'$url_string&folderid=$action_val');";
+	}else{
+		$jsNavigate = "getListViewEntries_js('$module','parenttab=$tabname&start='+this.value+'$url_string');";
 	}
+	if($module == 'Documents'){
+		$url = '&folderid='.$action_val;
+	}else{
+		$url = '';
+	}
+	$jsHandler = "return VT_disableFormSubmit(event);"; 
+	$output .= "<input class='small' name='pagenum' type='text' value='{$navigation_array['current']}'
+		style='width: 3em;margin-right: 0.7em;' onchange=\"$jsNavigate\"
+		onkeypress=\"$jsHandler\">";
+	$output .= "<span name='".$module."_listViewCountContainerName' class='small' style='white-space: nowrap;'>";  
+	$output .= $app_strings['LBL_LIST_OF'].' '.$navigation_array['verylast'].'</span>';
+	
 	if(($navigation_array['next']) !=0)
 	{
 		if($module == 'Calendar' && $action_val == 'index')
@@ -3563,6 +3563,9 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 		{
 			$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['next'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="' . vtiger_imageurl('next.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
 			$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['verylast'].$url_string.'\');" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="' . vtiger_imageurl('end.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+		}elseif($action_val == 'UnifiedSearch'){
+			$output .= '<a href="javascript:;" onClick="getUnifiedSearchEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['next'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="' . vtiger_imageurl('next.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getUnifiedSearchEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['verylast'].$url_string.'\');" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="themes/images/end.gif" border="0" align="absmiddle"></a>&nbsp;';
 		}
 		elseif($module == 'Documents')
 		{
@@ -3580,8 +3583,7 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 		$output .= '<img src="' . vtiger_imageurl('next_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
 		$output .= '<img src="' . vtiger_imageurl('end_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
 	}
-	if($module != 'Documents')
-		$output .= '</td>';
+	$output .= '</td>';
 	$log->debug("Exiting getTableHeaderNavigation method ...");
 	if($navigation_array['first']=='')
 	return;
@@ -4103,14 +4105,15 @@ function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module='',
 		$output .= '<img src="' . vtiger_imageurl('start_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
 		$output .= '<img src="' . vtiger_imageurl('previous_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
 	}
-	for ($i=$navigation_array['first'];$i<=$navigation_array['end'];$i++){
-		if ($navigation_array['current']==$i){
-			$output .='<b>'.$i.'</b>&nbsp;';
-		}
-		else{
-			$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$i.'&viewname='.$viewid.'" >'.$i.'</a>&nbsp;';
-		}
-	}
+	
+	$jsNavigate = "index.php?module=$module&action=$action_val$url_qry&start='+this.value+'&viewname=$viewid";
+	$jsHandler = "return VT_disableFormSubmit(event);"; 
+	$output .= "<input class='small' name='pagenum' type='text' value='{$navigation_array['current']}'
+		style='width: 3em;margin-right: 0.7em;' onchange=\"location.href='$jsNavigate'\"
+		onkeypress=\"$jsHandler\">";
+	$output .= "<span name='listViewCountContainerName' class='small' style='white-space: nowrap;'>";  
+	$output .= $app_strings['LBL_LIST_OF'].' '.$navigation_array['verylast'].'</span>';
+	
 	if(($navigation_array['next']) !=0)
 	{
 			$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['next'].'&viewname='.$viewid.'"><img src="' . vtiger_imageurl('next.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
@@ -4347,9 +4350,8 @@ function getMergeFields($module,$str){
 	
 	$num_rows=$adb->num_rows($result);
 	
-	$sql_profile="select profileid from vtiger_role2profile where roleid=(select roleid from vtiger_user2role where userid=?)";
-	$result_profile=$adb->pquery($sql_profile,array($current_user->id));
-	$permitted_list = getProfile2FieldPermissionList($module,$adb->query_result($result_profile,0,"profileid"));
+	$user_profileid = fetchUserProfileId($current_user->id);
+	$permitted_list = getProfile2FieldPermissionList($module, $user_profileid);
 	
 	$sql_def_org="select fieldid from vtiger_def_org_field where tabid=? and visible=0";
 	$result_def_org=$adb->pquery($sql_def_org,array($tabid));
@@ -4405,4 +4407,185 @@ function getFirstModule($module, $fieldname){
 	}
 	return $data;
 }
+
+function VT_getSimpleNavigationValues($start,$size,$total){  
+	$prev = $start -1;  
+	if($prev < 0){  
+		$prev = 0;  
+	}
+	if($total === null){
+		return array('start'=>$start,'first'=>$start,'current'=>$start,'end'=>$start,'end_val'=>$size,'allflag'=>'All',
+			'prev'=>$prev,'next'=>$start+1,'verylast'=>'last');
+	}
+	if(empty($total)){
+		$lastPage = 1;
+	}else{
+		$lastPage = ceil($total/$size);
+	}
+	
+	$next = $start+1;
+	if($next > $lastPage){
+		$next = 0;
+	}
+	return array('start'=>$start,'first'=>$start,'current'=>$start,'end'=>$start,'end_val'=>$size,'allflag'=>'All',
+		'prev'=>$prev,'next'=>$next,'verylast'=>$lastPage);
+}
+
+/**Function to get the simplified table headers for a listview
+*Param $navigation_arrray - navigation values in array 
+*Param $url_qry - url string 
+*Param $module - module name 
+*Param $action- action file name
+*Param $viewid - view id
+*Returns an string value
+*/
+
+function getTableHeaderSimpleNavigation($navigation_array, $url_qry,$module='',$action_val='index',$viewid=''){
+	global $log,$app_strings;
+	global $theme,$current_user;
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+	if($module == 'Documents') {
+		$output = '<td class="mailSubHeader" width="100%" align="center">';
+	} else {
+		$output = '<td align="right" style="padding: 5px;">';
+	}
+	$tabname = getParentTab();
+
+	$url_string = '';
+
+	// vtlib Customization : For uitype 10 popup during paging
+	if($_REQUEST['form'] == 'vtlibPopupView') {
+		$url_string .= '&form=vtlibPopupView&forfield='.vtlib_purify($_REQUEST['forfield']).'&srcmodule='.vtlib_purify($_REQUEST['srcmodule']).'&forrecord='.vtlib_purify($_REQUEST['forrecord']);
+	}
+	// END
+	
+	if($module == 'Calendar' && $action_val == 'index')
+	{
+		if($_REQUEST['view'] == ''){
+			if($current_user->activity_view == "This Year"){
+				$mysel = 'year';
+			}else if($current_user->activity_view == "This Month"){
+				$mysel = 'month';
+			}else if($current_user->activity_view == "This Week"){
+				$mysel = 'week';
+			}else{
+				$mysel = 'day';
+			}
+		}
+		$data_value=date('Y-m-d H:i:s');
+		preg_match('/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/',$data_value,$value);
+		$date_data = Array(
+			'day'=>$value[3],
+			'month'=>$value[2],
+			'year'=>$value[1],
+			'hour'=>$value[4],
+			'min'=>$value[5],
+		);	
+		$tab_type = ($_REQUEST['subtab'] == '')?'event':vtlib_purify($_REQUEST['subtab']);
+		$url_string .= isset($_REQUEST['view'])?"&view=".vtlib_purify($_REQUEST['view']):"&view=".$mysel;
+		$url_string .= isset($_REQUEST['subtab'])?"&subtab=".vtlib_purify($_REQUEST['subtab']):'';
+		$url_string .= isset($_REQUEST['viewOption'])?"&viewOption=".vtlib_purify($_REQUEST['viewOption']):'&viewOption=listview';
+		$url_string .= isset($_REQUEST['day'])?"&day=".vtlib_purify($_REQUEST['day']):'&day='.$date_data['day'];
+		$url_string .= isset($_REQUEST['week'])?"&week=".vtlib_purify($_REQUEST['week']):'';
+		$url_string .= isset($_REQUEST['month'])?"&month=".vtlib_purify($_REQUEST['month']):'&month='.$date_data['month'];
+		$url_string .= isset($_REQUEST['year'])?"&year=".vtlib_purify($_REQUEST['year']):"&year=".$date_data['year'];
+		$url_string .= isset($_REQUEST['n_type'])?"&n_type=".vtlib_purify($_REQUEST['n_type']):'';
+		$url_string .= isset($_REQUEST['search_option'])?"&search_option=".vtlib_purify($_REQUEST['search_option']):'';
+	}
+	if($module == 'Calendar' && $action_val != 'index') //added for the All link from the homepage -- ticket 5211
+		$url_string .= isset($_REQUEST['from_homepage'])?"&from_homepage=".vtlib_purify($_REQUEST['from_homepage']):'';
+
+	if(($navigation_array['prev']) != 0){
+		if($module == 'Calendar' && $action_val == 'index'){
+			$output .= '<a href="javascript:;" onClick="cal_navigation(\''.$tab_type.'\',\''.$url_string.'\',\'&start=1\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="' . vtiger_imageurl('start.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="cal_navigation(\''.$tab_type.'\',\''.$url_string.'\',\'&start='.$navigation_array['prev'].'\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="' . vtiger_imageurl('start.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+		}else if($action_val == "FindDuplicate"){
+			$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start=1'.$url_string.'\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="' . vtiger_imageurl('start.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['prev'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="' . vtiger_imageurl('previous.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+		}elseif($action_val == 'UnifiedSearch'){
+			$output .= '<a href="javascript:;" onClick="getUnifiedSearchEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start=1'.$url_string.'\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="' . vtiger_imageurl('start.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getUnifiedSearchEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['prev'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="' . vtiger_imageurl('previous.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+		}elseif($module == 'Documents'){
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start=1'.$url_string.'\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="' . vtiger_imageurl('start.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['prev'].$url_string.'&folderid='.$action_val.'\');" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="' . vtiger_imageurl('previous.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+		}else{
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start=1'.$url_string.'\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="' . vtiger_imageurl('start.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['prev'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="' . vtiger_imageurl('previous.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+		}
+	}else{
+		$output .= '<img src="' . vtiger_imageurl('start_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
+		$output .= '<img src="' . vtiger_imageurl('previous_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
+	}
+	if($module == 'Calendar' && $action_val == 'index'){  
+		$jsNavigate = "cal_navigation('$tab_type','$url_string','&start='+this.value+');";  
+	}else if($action_val == "FindDuplicate"){  
+		$jsNavigate = "getDuplicateListViewEntries_js('$module','parenttab=$tabname&start='+this.value+'$url_string');";  
+	}elseif($action_val == 'UnifiedSearch'){
+		$jsNavigate = "getUnifiedSearchEntries_js('$module','parenttab=$tabname&start='+this.value+'$url_string');";
+	}elseif($module == 'Documents'){
+		$jsNavigate = "getListViewEntries_js('$module','parenttab=$tabname&start='+this.value+'$url_string&folderid=$action_val');";
+	}else{
+		$jsNavigate = "getListViewEntries_js('$module','parenttab=$tabname&start='+this.value+'$url_string');";
+	}
+	if($module == 'Documents' && $action_val != 'UnifiedSearch'){
+		$url = '&folderid='.$action_val;
+	}else{
+		$url = '';
+	}
+	$jsHandler = "return VT_disableFormSubmit(event);"; 
+	$output .= "<input class='small' name='pagenum' type='text' value='{$navigation_array['current']}'
+		style='width: 3em;margin-right: 0.7em;' onchange=\"$jsNavigate\"
+		onkeypress=\"$jsHandler\">";
+	$output .= "<span name='".$module."_listViewCountContainerName' class='small' style='white-space: nowrap;'>";  
+	if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true){
+		$output .= $app_strings['LBL_LIST_OF'].' '.$navigation_array['verylast'];
+	}else{
+		$output .= "<img src='".vtiger_imageurl('windowRefresh.gif',$theme)."' alt='".$app_strings['LBL_HOME_COUNT']."'
+			onclick='getListViewCount(\"".$module."\",this,this.parentNode,\"".$url."\")'
+			align='absmiddle' name='".$module."_listViewCountRefreshIcon'/>
+			<img name='".$module."_listViewCountContainerBusy' src='".vtiger_imageurl('vtbusy.gif',$theme)."' style='display: none;'
+			align='absmiddle' alt='".$app_strings['LBL_LOADING']."'>";
+	}
+	$output .='</span>';
+	
+	if(($navigation_array['next']) !=0){
+		if($module == 'Calendar' && $action_val == 'index'){
+			$output .= '<a href="javascript:;" onClick="cal_navigation(\''.$tab_type.'\',\''.$url_string.'\',\'&start='.$navigation_array['next'].'\');" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="' . vtiger_imageurl('next.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="cal_navigation(\''.$tab_type.'\',\''.$url_string.'\',\'&start='.$navigation_array['verylast'].'\');" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="' . vtiger_imageurl('end.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+		}else if($action_val == "FindDuplicate"){
+			$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['next'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="' . vtiger_imageurl('next.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getDuplicateListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['verylast'].$url_string.'\');" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="' . vtiger_imageurl('end.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+		}elseif($action_val == 'UnifiedSearch'){
+			$output .= '<a href="javascript:;" onClick="getUnifiedSearchEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['next'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="' . vtiger_imageurl('next.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getUnifiedSearchEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['verylast'].$url_string.'\');" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="themes/images/end.gif" border="0" align="absmiddle"></a>&nbsp;';
+		}elseif($module == 'Documents'){
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['next'].$url_string.'&folderid='.$action_val.'\');" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="' . vtiger_imageurl('next.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['verylast'].$url_string.'&folderid='.$action_val.'\');" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="' . vtiger_imageurl('end.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+		}else{
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['next'].$url_string.'\');" alt="'.$app_strings['LNK_LIST_NEXT'].'" title="'.$app_strings['LNK_LIST_NEXT'].'"><img src="' . vtiger_imageurl('next.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="getListViewEntries_js(\''.$module.'\',\'parenttab='.$tabname.'&start='.$navigation_array['verylast'].$url_string.'\');" alt="'.$app_strings['LBL_LAST'].'" title="'.$app_strings['LBL_LAST'].'"><img src="' . vtiger_imageurl('end.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+		}
+	}else{
+		$output .= '<img src="' . vtiger_imageurl('next_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
+		$output .= '<img src="' . vtiger_imageurl('end_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
+	}
+	$output .= '</td>';
+	if($navigation_array['first']=='')
+		return;
+	else
+		return $output;
+}
+
+function getRecordRangeMessage($listResult, $limitStartRecord) {
+	global $adb, $app_strings;
+	$numRows = $adb->num_rows($listResult);
+	$recordListRangeMsg = '';
+	if ($numRows > 0) {
+		$recordListRangeMsg = $app_strings['LBL_SHOWING'].' '.$app_strings['LBL_RECORDS'].
+		' '.($limitStartRecord+1).' - '.($limitStartRecord+$numRows);
+	}
+	return $recordListRangeMsg;
+}
+
 ?>

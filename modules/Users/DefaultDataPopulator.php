@@ -21,7 +21,7 @@ class DefaultDataPopulator extends CRMEntity {
 		
 	function DefaultDataPopulator() {
 		$this->log = LoggerManager::getLogger('DefaultDataPopulator');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 	}
 
 	var $new_schema = true;
@@ -1925,8 +1925,8 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	$this->db->query("insert into vtiger_parenttabrel values (4,6,3)");
 	$this->db->query("insert into vtiger_parenttabrel values (4,4,4)");
 	$this->db->query("insert into vtiger_parenttabrel values (4,8,5)");
-	$this->db->query("insert into vtiger_parenttabrel values (5,1,1)");
-	$this->db->query("insert into vtiger_parenttabrel values (5,25,2)");
+	$this->db->query("insert into vtiger_parenttabrel values (5,1,2)");
+	$this->db->query("insert into vtiger_parenttabrel values (5,25,1)");
 	$this->db->query("insert into vtiger_parenttabrel values (6,14,1)");
 	$this->db->query("insert into vtiger_parenttabrel values (6,18,2)");
 	$this->db->query("insert into vtiger_parenttabrel values (6,19,3)");

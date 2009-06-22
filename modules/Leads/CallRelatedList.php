@@ -69,7 +69,7 @@ if($singlepane_view == 'true' && $_REQUEST['action'] == 'CallRelatedList' ) {
 	$smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
 	$smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 	$smarty->assign("CATEGORY",$category);
-	$parent_email = getEmailParentsList('Leads',$focus->id);
+	$parent_email = getEmailParentsList('Leads',$focus->id, $focus);
 	$smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
 	
 	// Module Sequence Numbering

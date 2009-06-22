@@ -52,15 +52,16 @@
 					{/if}
                 {/foreach}
                 </td>
-				<!-- Record Counts -->
-				<td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
+				<td class="small" nowrap>
+					{$recordListRange}
+				</td>
 				<!-- Page Navigation -->
-		        <td nowrap >
+				<td nowrap width="30%" align="center">
 					<table border=0 cellspacing=0 cellpadding=0 class="small">
-					     <tr>{$NAVIGATION}</tr>
+						<tr>{$NAVIGATION}</tr>
 					</table>
                 </td>
-				<td width=100% align="right">
+				<td width=40% align="right">
 				   <!-- Filters -->
 				   {if $HIDE_CUSTOM_LINKS neq '1'}
 					<table border=0 cellspacing=0 cellpadding=0 class="small">
@@ -231,13 +232,15 @@
 
                                  {/foreach}
                     </td>
-				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
-				 <td nowrap >
+				<td class="small" nowrap>
+					{$recordListRange}
+				</td>
+				<td nowrap width="30%" align="center">
 				    <table border=0 cellspacing=0 cellpadding=0 class="small">
 				         <tr>{$NAVIGATION}</tr>
 				     </table>
 				 </td>
-				 <td align="right" width=100%>
+				 <td align="right" width=40%>
 				   <table border=0 cellspacing=0 cellpadding=0 class="small">
 					<tr>
                                            {$WORDTEMPLATEOPTIONS}{$MERGEBUTTON}

@@ -13,7 +13,7 @@ require_once('config.php');
 require_once('include/utils/utils.php');
 global $current_user;
 global $adb;
-$db = new PearDatabase();
+$db = PearDatabase::getInstance();
 if (!empty($HTTP_SERVER_VARS['SERVER_SOFTWARE']) && strstr($HTTP_SERVER_VARS['SERVER_SOFTWARE'], 'Apache/2')){
 	header ('Cache-Control: no-cache, pre-check=0, post-check=0, max-age=0');
 }else{

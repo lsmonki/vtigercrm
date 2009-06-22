@@ -149,9 +149,8 @@
 		<index name="crmentity_modifiedby_idx">
 			<col>modifiedby</col>
 		</index>
-		<index name="crmentity_deleted_smownerid_idx">
+		<index name="crmentity_deleted_idx">
 			<col>deleted</col>
-			<col>smownerid</col>
 		</index>
 		<index name="crmentity_smownerid_deleted_idx">
 			<col>smownerid</col>
@@ -6918,6 +6917,10 @@
 		<index name="num_idx" type="C" size="50">
 			<unique />
 			<col>num_id</col>
+		</index>
+		<index name="semodule_active_idx">
+			<col>semodule</col>
+			<col>active</col>
 		</index>
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>

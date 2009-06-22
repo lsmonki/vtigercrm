@@ -54,11 +54,33 @@ if (!isset($_SERVER['REQUEST_METHOD'])) {
 	exit;
 }
 			
-if (isset($_POST['file'])) $the_file = $_POST['file'];
+if (isset($_REQUEST['file'])) $the_file = $_REQUEST['file'];
 else $the_file = "0welcome.php";
 
-if (isset($_REQUEST['file'])) $the_file = $_REQUEST['file'];
-
+installCheckFileAccess("install/".$the_file);
 include("install/".$the_file);
 
+/** Function to check the file access is made within web root directory. */
+function installCheckFileAccess($filepath) {
+	global $root_directory;
+	// Set the base directory to compare with
+	$use_root_directory = $root_directory;
+	if(empty($use_root_directory)) {
+		$use_root_directory = realpath(dirname(__FILE__).'/.');
+	}
+
+	$realfilepath = realpath($filepath);
+
+	/** Replace all \\ with \ first */
+	$realfilepath = str_replace('\\\\', '\\', $realfilepath);
+	$rootdirpath  = str_replace('\\\\', '\\', $use_root_directory);
+
+	/** Replace all \ with / now */
+	$realfilepath = str_replace('\\', '/', $realfilepath);
+	$rootdirpath  = str_replace('\\', '/', $rootdirpath);
+	
+	if(stripos($realfilepath, $rootdirpath) !== 0) {
+		die("Sorry! Attempt to access restricted file.");
+	}
+}
 ?>

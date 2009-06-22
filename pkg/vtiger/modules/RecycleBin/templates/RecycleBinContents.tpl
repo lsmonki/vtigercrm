@@ -27,12 +27,12 @@
           	</td>
 				<!-- Record Counts -->
 			<td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
-			<!-- Page Navigation -->
-		 	<td nowrap>
+			<!-- Page Navigation -->		 			 	
+			<td nowrap width="30%" align="center">
 				<table border=0 cellspacing=0 cellpadding=0 class="small">
-				<tr>{$NAVIGATION}</tr>
+					<tr>{$NAVIGATION}</tr>
 				</table>
-			</td>
+            </td>
 			<td width=100% align="right">
 				<b>{$MOD.LBL_SELECT_MODULE} : </b> 
 				<select id="select_module" onChange="changeModule(this);" class="small">
@@ -105,12 +105,12 @@
           	</td>
 			<!-- Record Counts -->
 			<td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
-			<!-- Page Navigation -->
-		 	<td nowrap >
+			<!-- Page Navigation -->		 	
+			<td nowrap width="30%" align="center">
 				<table border=0 cellspacing=0 cellpadding=0 class="small">
 					<tr>{$NAVIGATION}</tr>
 				</table>
-			</td>
+            </td>
 			<td width=100% align="right">&nbsp;</td>
 		</tr>
 	</table>

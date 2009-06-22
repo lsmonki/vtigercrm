@@ -187,50 +187,31 @@ else
 
 //Constructing the list view
 
-//Retreiving the no of rows
-$count_result = $adb->query( mkCountQuery( $list_query));
-$noofrows = $adb->query_result($count_result,0,"count");
+//Postgres 8 fixes
+if( $adb->dbType == "pgsql")
+	$list_query = fixPostgresQuery( $list_query, $log, 0);
 
-//Storing Listview session object
-if($_SESSION['lvs'][$currentModule])
-{
-	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
+if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true){
+	$count_result = $adb->query( mkCountQuery( $list_query));
+	$noofrows = $adb->query_result($count_result,0,"count");
+}else{
+	$noofrows = null;
 }
 
-//added for 4600
-                                                                                                                             
-if($noofrows <= $list_max_entries_per_page)
-        $_SESSION['lvs'][$currentModule]['start'] = 1;
-//ends
-$start = $_SESSION['lvs'][$currentModule]['start'];
+$queryMode = (isset($_REQUEST['query']) && $_REQUEST['query'] == 'true');
+$start = ListViewSession::getRequestCurrentPage($currentModule, $list_query, $viewid, $queryMode);
 
-//Retreive the Navigation array
-$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
- //Postgres 8 fixes
- if( $adb->dbType == "pgsql")
-     $list_query = fixPostgresQuery( $list_query, $log, 0);
+$navigation_array = VT_getSimpleNavigationValues($start,$list_max_entries_per_page,$noofrows);
 
+$limit_start_rec = ($start-1) * $list_max_entries_per_page;
 
-
-// Setting the record count string
-//modified by rdhital
-$start_rec = $navigation_array['start'];
-$end_rec = $navigation_array['end_val']; 
-//By Raju Ends
-
-//By Pavani
-$_SESSION['nav_start']=$start_rec;
-$_SESSION['nav_end']=$end_rec;
-//limiting the query
-if ($start_rec ==0) 
-	$limit_start_rec = 0;
-else
-	$limit_start_rec = $start_rec -1;
-	
 if( $adb->dbType == "pgsql")
-     $list_result = $adb->query($list_query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
+	$list_result = $adb->pquery($list_query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
 else
-     $list_result = $adb->query($list_query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
+	$list_result = $adb->pquery($list_query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
+
+$recordListRangeMsg = getRecordRangeMessage($list_result, $limit_start_rec);
+$smarty->assign('recordListRange',$recordListRangeMsg);
 
 //mass merge for word templates -- *Raj*17/11
 while($row = $adb->fetch_array($list_result))
@@ -270,8 +251,6 @@ if(isPermitted("HelpDesk","Merge") == 'yes')
 }
 //mass merge for word templates
 
-$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
-
 //Retreive the List View Table Header
 if($viewid !='')
 	$url_string .="&viewname=".$viewid;
@@ -294,7 +273,7 @@ $smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
 $smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
 $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"HelpDesk","index",$viewid);
+$navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string,"HelpDesk","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','ticket_title','true','basic',"","","","",$viewid);
 $fieldnames = getAdvSearchfields($currentModule);
 $criteria = getcriteria_options();
@@ -302,11 +281,12 @@ $smarty->assign("CRITERIA", $criteria);
 $smarty->assign("FIELDNAMES", $fieldnames);
 $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
-$smarty->assign("RECORD_COUNTS", $record_string);
 
 $check_button = Button_Check($currentModule);
 $smarty->assign("CHECK", $check_button);
-$_SESSION['helpdesk_listquery'] = $list_query;
+
+$_SESSION[$currentModule.'_listquery'] = $list_query;
+
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");
 else	

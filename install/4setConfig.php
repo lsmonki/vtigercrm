@@ -1,21 +1,12 @@
 <?php
-/*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the
- * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
- * Software distributed under the License is distributed on an  "AS IS"  basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
- * the specific language governing rights and limitations under the License.
- * The Original Code is: SugarCRM Open Source
- * The Initial Developer of the Original Code is SugarCRM, Inc.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- lpha2* Contributor(s): ______________________________________.
- ********************************************************************************/
-/*********************************************************************************
- * $Header: /advent/projects/wesat'vtiger_crm/sugarcrm/install/2setConfig.php,v 1.41 2005/04/29 06:44:13 samk Exp $
- * Description:  Executes a step in the installation process.
- ********************************************************************************/
+ ************************************************************************************/
 
 // TODO: deprecate connection.php file
 //require_once("connection.php");
@@ -108,7 +99,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	elseif (isset($dbconfig['db_name']) && $dbconfig['db_name']!='_DBC_NAME_')
 	$db_name = $dbconfig['db_name'];
 	else
-	$db_name = 'vtigercrm510VB2';
+	$db_name = 'vtigercrm510rc';
 
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 	if (isset($_REQUEST['host_name'])) $host_name = $_REQUEST['host_name'];
@@ -151,7 +142,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	}
 	else {
 		!isset($_REQUEST['db_hostname']) ? $db_hostname = $hostname: $db_hostname = $_REQUEST['db_hostname'];
-		!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm510" : $db_name = $_REQUEST['db_name'];
+		!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm510rc" : $db_name = $_REQUEST['db_name'];
 		!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 		!isset($_REQUEST['host_name']) ? $host_name= $hostname : $host_name= $_REQUEST['host_name'];
 		!isset($_REQUEST['site_URL']) ? $site_URL = $web_root : $site_URL = $_REQUEST['site_URL'];

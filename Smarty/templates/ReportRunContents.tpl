@@ -40,23 +40,43 @@
 		</span><br>
 		</td>
 		<td align="right" width="25%">
-		<span class="genHeaderGray">{$APP.LBL_TOTAL} : {$REPORTHTML.1}  {$APP.LBL_RECORDS}</span>
+		<span class="genHeaderGray">{$APP.LBL_TOTAL} : <span id='_reportrun_total'>{$REPORTHTML.1}</span>  {$APP.LBL_RECORDS}</span>
 		</td>
 		</tr>
 		<tr><td id="report_info" align="left" colspan="2">&nbsp;</td></tr>
 		<tr><td colspan="2">&nbsp;</td></tr>
 		<tr>
 		<td colspan="2">
-		{if $ERROR_MSG eq ''}
-		{$REPORTHTML.0}
+		{* Performance Optimization: Direct result output *}
+		{if $DIRECT_OUTPUT eq true}		
+			{if isset($__REPORT_RUN_INSTANCE)}
+				{php}
+					$__oReportRun = $this->_tpl_vars['__REPORT_RUN_INSTANCE'];
+					$__filterList = $this->_tpl_vars['__REPORT_RUN_FILTER_LIST'];
+					$__oReportRunReturnValue = $__oReportRun->GenerateReport("HTML", $__filterList, true);
+				{/php}
+			{/if}		
+		{elseif $ERROR_MSG eq ''}
+			{$REPORTHTML.0}
 		{else}
-		{$ERROR_MSG}
+			{$ERROR_MSG}
 		{/if}
+		{* END *}
 		</td>
 		</tr>
 		<tr><td colspan="2">&nbsp;</td></tr>
 		<tr><td colspan="2">&nbsp;</td></tr>
-		<tr><td colspan="2">{$REPORTTOTHTML}</td></tr>
+		<tr><td colspan="2">
+		{* Performance Optimization: Direct result output *}
+		{if $DIRECT_OUTPUT eq true}
+			{php}
+				if(is_array($__oReportRunReturnValue)) { $__oReportRun->GenerateReport("TOTALHTML", $__filterList, true); }
+			{/php}
+		{else}			
+			{$REPORTTOTHTML}
+		{/if}
+		{* END *}
+		</td></tr>
 		<tr><td colspan="2">&nbsp;</td></tr>
 		</tbody>
 	</table>

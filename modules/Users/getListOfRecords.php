@@ -11,6 +11,8 @@ session_start();
 require_once('include/CustomFieldUtil.php');
 require_once('Smarty_setup.php');
 require_once('include/database/PearDatabase.php');
+require_once 'include/utils/ListViewUtils.php';
+require_once('modules/CustomView/CustomView.php');
 
 global $mod_strings,$app_strings,$app_list_strings,$theme,$adb,$current_user;
 global $list_max_entries_per_page;
@@ -34,17 +36,36 @@ $fields_array = array($sModule=>$fieldname);
 $id_array = array($sModule=>$id_field);
 $tables_array = array($sModule=>$table_name);
 
-if(isset($_SESSION['listEntyKeymod_'.$iCurRecord]))
-{
-	$split_temp=explode(":",$_SESSION['listEntyKeymod_'.$iCurRecord]);
-	if($split_temp[0] == $sModule)
-	{	
-		$ar_allist=explode(",",$split_temp[1]);
-		$iMax = count($ar_allist);
+$permittedFieldNameList = array();
+foreach ($fieldname as $fieldName) {
+	$checkForFieldAccess = $fieldName;
+	// Handling case where fieldname in vtiger_entityname mismatches fieldname in vtiger_field
+	if($sModule == 'HelpDesk' && $checkForFieldAccess == 'title') {
+		$checkForFieldAccess = 'ticket_title';	
+	} else if($sModule == 'Documents' && $checkForFieldAccess == 'title') {
+		$checkForFieldAccess = 'notes_title';	
+	}
+	// END
+	if(getFieldVisibilityPermission($sModule,$current_user->id, $checkForFieldAccess) == '0'){
+		$permittedFieldNameList[] = $fieldName;
 	}
 }
-else
-	$iMax = 0;
+
+$cv = new CustomView();
+$viewId = $cv->getViewId($sModule);
+$recordNavigationInfo = Zend_Json::decode($_SESSION[$sModule.'_DetailView_Navigation'.$viewId]);
+$recordList = array();
+$recordIndex = null;
+$recordPageMapping = array();
+foreach ($recordNavigationInfo as $start=>$recordIdList){
+	foreach ($recordIdList as $index=>$recordId) {
+		$recordList[] = $recordId;
+		$recordPageMapping[$recordId] = $start;
+		if($recordId == $iCurRecord){
+			$recordIndex = count($recordList)-1;
+		}
+	}
+}
 
 $output = '<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 			<tr><td width="60%" align="left" style="font-size:12px;font-weight:bold;">Jump to '.$app_strings[$sModule].':</td>
@@ -55,79 +76,43 @@ $output = '<table width="100%" border="0" cellpadding="5" cellspacing="0" class=
 								<td class=small >
 									<table border=0 celspacing=0 cellpadding=0 width=100% align=center >
 										<tr><td>';
-										
-if($iMax > 13)
-	$output .= '<div style="height:270px;overflow-y:scroll;">';
-else
-	$output .= '<div style="height:250px;">';
-	
-$output .= '<table cellpadding="2">';				
-	
-if(isset($_SESSION['listEntyKeymod_'.$iCurRecord]))
-{
-	$split_temp=explode(":",$_SESSION['listEntyKeymod_'.$iCurRecord]);
-	
-	if($split_temp[0] == $sModule)
-	{	
-		$ar_allist=explode(",",$split_temp[1]);
+$output .= '<div style="height:270px;overflow-y:auto;">';
+$output .= '<table cellpadding="2">';
 
-		if(count($ar_allist) <= $list_max_entries_per_page){
-			$start = 0;
-			$end = count($ar_allist);
-		}
-		else{
-			for($i=0;$i<count($ar_allist);$i++){
-				if($ar_allist[$i]==$iCurRecord){
-					$mid = $list_max_entries_per_page/2; 
-					if($i > $mid){
-						$start = $i-$mid;
-						if(($i+$mid) <= count($ar_allist)){
-							$end = $i+$mid;
-							break;
-						}else{
-							$end = count($ar_allist);
-							break;
-						}
-					}
-					else
-					{
-						$start = 0;
-						$end = $i+$mid;
-					}
-				}
-			}
-		}
-		for($listi=$start;$listi<$end;$listi++)
-		{
-			$field_value = '';
-			$field_query = $adb->pquery("SELECT * from ".$tables_array[$sModule]." WHERE ".$id_array[$sModule]." = ".$ar_allist[$listi],array());
-			for($index = 0; $index<count($fieldname);$index++){				
-				$checkForFieldAccess = $fieldname[$index];
-				
-				// Handling case where fieldname in vtiger_entityname mismatches fieldname in vtiger_field 				
-				if($sModule == 'HelpDesk' && $checkForFieldAccess == 'title') {
-					$checkForFieldAccess = 'ticket_title';	
-				} else if($sModule == 'Documents' && $checkForFieldAccess == 'title') {
-					$checkForFieldAccess = 'notes_title';	
-				}
-				// END
-				
-				if(getFieldVisibilityPermission($sModule,$current_user->id, $checkForFieldAccess) == '0'){
-					$field_value .= " ".$adb->query_result($field_query,0,$fieldname[$index]);
-				}
-			}
-			if(strlen($field_value)>50)
-				$field_value=substr($field_value,0,50)."...";
+$displayRecordCount = 10;
+$count = count($recordList);
+$idListEndIndex = ($count < ($recordIndex+$displayRecordCount))? ($count+1) : ($recordIndex+$displayRecordCount+1);
+$idListStartIndex = $recordIndex-$displayRecordCount;
+if($idListStartIndex < 0){
+	$idListStartIndex = 0;
+}
+$idsArray = array_slice($recordList,$idListStartIndex,($idListEndIndex - $idListStartIndex));
 
-			if($ar_allist[$listi]==$iCurRecord)
-				$output .= '<tr><td style="text-align:left;font-weight:bold;">'.$field_value.'</td></tr>';
-			else
-				$output .= '<tr><td style="text-align:left;"><a href="index.php?module='.$sModule.'&action=DetailView&parenttab='.vtlib_purify($_REQUEST['CurParentTab']).'&record='.$ar_allist[$listi].'">'.$field_value.'</a></td></tr>';
-		}
-		$output .= '</table>';
+$selectColString = implode(',',$permittedFieldNameList).', '.$id_array[$sModule];
+$fieldQuery = "SELECT $selectColString from ".$tables_array[$sModule]." WHERE ".$id_array[$sModule]." IN (". generateQuestionMarks($idsArray) .")";
+$fieldResult = $adb->pquery($fieldQuery,$idsArray);
+$numOfRows = $adb->num_rows($fieldResult);
+$recordNameMapping = array();
+for($i=0; $i<$numOfRows; ++$i) {
+	$recordId = $adb->query_result($fieldResult,$i,$id_array[$sModule]);
+	$fieldValue = '';
+	foreach ($permittedFieldNameList as $fieldName) {
+		$fieldValue .= " ".$adb->query_result($fieldResult,$i,$fieldName);
+	}
+	$fieldValue = textlength_check($fieldValue);
+	$recordNameMapping[$recordId] = $fieldValue;
+}
+foreach ($idsArray as $id) {
+	if($id===$iCurRecord){
+		$output .= '<tr><td style="text-align:left;font-weight:bold;">'.$recordNameMapping[$id].'</td></tr>';
+	}else{
+		$output .= '<tr><td style="text-align:left;"><a href="index.php?module='.$sModule.
+			'&action=DetailView&parenttab='.vtlib_purify($_REQUEST['CurParentTab']).'&record='.$id.
+			'&start='.$recordPageMapping[$id].'">'.$recordNameMapping[$id].'</a></td></tr>';
 	}
 }
 
+$output .= '</table>';
 $output .= '</div></td></tr></table></td></tr></table>';
 	
 echo $output;

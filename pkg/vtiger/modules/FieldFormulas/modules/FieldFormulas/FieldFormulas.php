@@ -43,12 +43,12 @@ class FieldFormulas {
 			$adb->pquery('UPDATE vtiger_tab SET customized=0 WHERE name=?', array($moduleName));
 			
 		} else if($eventType == 'module.disabled') {
-			$adb->query("UPDATE vtiger_eventhandlers SET is_active=0 WHERE event_name='vtiger.entity.beforesave.modifiable' " .
-					" AND handler_class='VTFieldFormulasEventHandler'");
-
+			$em = new VTEventsManager($adb);
+			$em->setHandlerInActive('VTFieldFormulasEventHandler');
+			
 		} else if($eventType == 'module.enabled') {
-			$adb->query("UPDATE vtiger_eventhandlers SET is_active=1 WHERE event_name='vtiger.entity.beforesave.modifiable' " .
-					" AND handler_class='VTFieldFormulasEventHandler'");
+			$em = new VTEventsManager($adb);
+			$em->setHandlerActive('VTFieldFormulasEventHandler');
 
 		} else if($eventType == 'module.preuninstall') {
 		// TODO Handle actions when this module is about to be deleted.

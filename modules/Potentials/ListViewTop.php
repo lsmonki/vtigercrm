@@ -53,14 +53,21 @@ function getTopPotentials($maxval,$calCnt)
         $header[]=$current_module_strings['LBL_LIST_AMOUNT'].'('.$curr_symbol.')';
 	$list_query = getListQuery("Potentials",$where);
 	$list_query .=" ORDER BY amount DESC";
-	$list_result = $adb->limitQuery($list_query,0,$maxval);
+	
+	$list_query .=" LIMIT " . $adb->sql_escape_string($maxval);
+	
+	if($calCnt == 'calculateCnt') {
+		$list_result_rows = $adb->query(mkCountQuery($list_query));
+		return $adb->query_result($list_result_rows, 0, 'count');
+	}
+	
+	$list_result = $adb->query($list_query);	
+	
 	$open_potentials_list = array();
 	$noofrows = $adb->num_rows($list_result);
-	if($calCnt == 'calculateCnt')
-	    return $noofrows;
 
 	$entries=array();
-	if (count($list_result)>0)
+	if ($noofrows) {
 		for($i=0;$i<$noofrows;$i++) 
 		{
 			$open_potentials_list[] = Array('name' => $adb->query_result($list_result,$i,'potentialname'),
@@ -76,6 +83,7 @@ function getTopPotentials($maxval,$calCnt)
 			$value[]=convertFromDollar($adb->query_result($list_result,$i,'amount'),$rate);
 			$entries[$potentialid]=$value;
 		}
+	}
 	
 	$search_qry = "&query=true&Fields0=vtiger_crmentity.smownerid&Condition0=is&Srch_value0=".$current_user->column_fields['user_name']."&Fields1=vtiger_potential.sales_stage&Condition1=dcts&Srch_value1=closed&searchtype=advance&search_cnt=2&matchtype=all";
 			

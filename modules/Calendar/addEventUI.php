@@ -172,6 +172,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 	<script type="text/javascript" src="jscalendar/calendar.js"></script>
 	<script type="text/javascript" src="jscalendar/lang/calendar-<?php echo $app_strings['LBL_JSCALENDAR_LANG'] ?>.js"></script>
 	<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
+	<script type="text/javascript" src="include/js/ListView.js"></script>
 	<div class="calAddEvent layerPopup" style="display:none;width:550px;left:200px;" id="addEvent" align=center>
 	<form name="EditView" onSubmit="if(check_form()) { VtigerJS_DialogBox.block(); } else { return false; }" method="POST" action="index.php">
 	<input type="hidden" name="return_action" value="index">

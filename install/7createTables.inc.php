@@ -1,21 +1,12 @@
 <?php
-/*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the
- * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
- * Software distributed under the License is distributed on an  "AS IS"  basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
- * the specific language governing rights and limitations under the License.
- * The Original Code is: SugarCRM Open Source
- * The Initial Developer of the Original Code is SugarCRM, Inc.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- * Contributor(s): ______________________________________.
- ********************************************************************************/
-/*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/5createTables.php,v 1.58 2005/04/19 16:57:08 ray Exp $
- * Description:  Executes a step in the installation process.
- ********************************************************************************/
+ ************************************************************************************/
 
 $new_tables = 0;
 
@@ -42,7 +33,7 @@ if (is_file("config_override.php")) {
 	require_once("config_override.php");
 }
 
-$db = new PearDatabase();
+$db = PearDatabase::getInstance();
 
 $log =& LoggerManager::getLogger('INSTALL');
 
@@ -82,6 +73,9 @@ function create_default_users_access() {
         $adb->query("insert into vtiger_role values('H".$role3_id."','Vice President','H".$role1_id."::H".$role2_id."::H".$role3_id."',2)");
         $adb->query("insert into vtiger_role values('H".$role4_id."','Sales Manager','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."',3)");
         $adb->query("insert into vtiger_role values('H".$role5_id."','Sales Man','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."::H".$role5_id."',4)");
+        
+        // Invalidate any cached information
+    	VTCacheUtils::clearRoleSubordinates($roleId);
                 
         // create default admin user
     	$user = new Users();
@@ -969,7 +963,7 @@ $defaultWidgets = array(array('Top Accounts', 0, 'ALVT', 'Accounts'),
 						array('Key Metrics', 0,'CVLVT','NULL'),
 						array('Top Trouble Tickets', 0,'HLT','HelpDesk'),
 						array('Upcoming Activities', 0,'UA','Calendar'),
-						array('My Group Allocation', 0,'GRT','NULL'),
+						array('My Group Allocation', 1,'GRT','NULL'),
 						array('Top Sales Orders', 0,'OLTSO','SalesOrder'),
 						array('Top Invoices', 0,'ILTI','Invoice'),
 						array('My New Leads', 0,'MNL','Leads'),

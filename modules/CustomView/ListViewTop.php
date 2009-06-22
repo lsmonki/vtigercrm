@@ -46,7 +46,7 @@
 	*				  )
 	*
        */
-function getKeyMetrics()
+function getKeyMetrics($maxval,$calCnt)
 {
 	require_once("data/Tracker.php");
 	require_once('modules/CustomView/CustomView.php');
@@ -63,6 +63,12 @@ function getKeyMetrics()
 	$log = LoggerManager::getLogger('metrics');
 
 	$metriclists = getMetricList();
+	
+	// Determine if the KeyMetrics widget should appear or not?
+	if($calCnt == 'calculateCnt') {
+		return count($metriclists);
+	}
+	
 	$log->info("Metrics :: Successfully got MetricList to be displayed");
 	if(isset($metriclists))
 	{
