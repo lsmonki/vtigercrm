@@ -356,6 +356,10 @@
 							{/foreach}
 
 				{elseif $keyid eq 5}
+					{* Initialize the date format if not present *}
+					{if empty($dateFormat)}
+						{assign var="dateFormat" value=$APP.NTC_DATE_FORMAT|@parse_calendardate}
+					{/if}
 					<td width=25% class="dvtCellInfo" align="left" id="mouseArea_{$label}" onmouseover="hndMouseOver({$keyid},'{$label}');" onmouseout="fnhide('crmspanid');">
 						&nbsp;&nbsp;<span id="dtlview_{$label}">
 							{$keyval}
@@ -367,7 +371,7 @@
 							<a href="javascript:;" onclick="hndCancel('dtlview_{$label}','editarea_{$label}','{$label}')" class="link">{$APP.LBL_CANCEL_BUTTON_LABEL}</a>
 							<script type="text/javascript">
 								Calendar.setup ({ldelim}
-									inputField : "txtbox_{$label}", ifFormat : '%Y-%m-%d', showsTime : false, button : "jscal_trigger_{$keyfldname}", singleClick : true, step : 1
+									inputField : "txtbox_{$label}", ifFormat : '{$dateFormat}', showsTime : false, button : "jscal_trigger_{$keyfldname}", singleClick : true, step : 1
 								{rdelim})
 							</script>
 						</div>
