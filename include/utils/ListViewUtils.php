@@ -801,6 +801,14 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 									$activityid = $adb->query_result($list_result, $i-1, "tmp_activity_id");
 								}
 								$activitytype = $adb->query_result($list_result,$i-1,"activitytype");
+								// TODO - Picking activitytype when it is not present in the Custom View. 
+								// Going forward, this column should be added to the select list if not already present as a performance improvement.
+								if (empty($activitytype)) {
+									$activitytypeRes = $adb->pquery('SELECT activitytype FROM vtiger_activity WHERE activityid=?', array($activityid));
+									if ($adb->num_rows($activitytypeRes) > 0) {
+										$activitytype = $adb->query_result($activitytypeRes, 0, 'activitytype');
+									}
+								}
 								if ($activitytype != 'Task' && $activitytype != 'Emails') {
 									$eventstatus = $adb->query_result($list_result,$i-1,"eventstatus");
 									if(isset($eventstatus)) {
