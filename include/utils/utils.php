@@ -4722,4 +4722,18 @@ function getMailFields($tabid){
 	return $fields;
 }
 
+/**
+ * Function to check if a given record exists (not deleted)
+ * @param integer $recordId - record id
+ */
+function isRecordExists($recordId) {
+	global $adb;
+	$query = "SELECT crmid FROM vtiger_crmentity where crmid=? AND deleted=0";
+	$result = $adb->pquery($query, array($recordId));
+	if ($adb->num_rows($result)) {
+		return true;
+	}
+	return false;
+}
+
 ?>
