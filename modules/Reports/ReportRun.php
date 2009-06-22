@@ -265,20 +265,17 @@ class ReportRun extends CRMEntity
 		$tmp = split("_",$selectedfields[2]);
 		$module = $tmp[0];
 		
-		if($fieldname == "parent_id" && ($this->primarymodule == "HelpDesk"))// || $this->primarymodule == "Products" || $this->secondarymodule == "Products" || $this->primarymodule == "Calendar" || $this->secondarymodule == "Calendar"))
+		if($fieldname == "parent_id" && ($module == "HelpDesk" || $module == "Calendar"))
 		{
-			if($this->primarymodule == "HelpDesk" && $selectedfields[0] == "vtiger_crmentityRelHelpDesk")
+			if($module == "HelpDesk" && $selectedfields[0] == "vtiger_crmentityRelHelpDesk")
 			{
 				$querycolumn = "case vtiger_crmentityRelHelpDesk.setype when 'Accounts' then vtiger_accountRelHelpDesk.accountname when 'Contacts' then concat(vtiger_contactdetailsRelHelpDesk.lastname,' ',vtiger_contactdetailsRelHelpDesk.firstname) End"." '".$selectedfields[2]."', vtiger_crmentityRelHelpDesk.setype 'Entity_type'";
 				return $querycolumn;
 			}
-			if($this->primarymodule == "Calendar" || $this->secondarymodule == "Calendar")
-			{
+			if($module == "Calendar") {
 				$querycolumn = "case vtiger_crmentityRelCalendar.setype when 'Accounts' then vtiger_accountRelCalendar.accountname when 'Leads' then concat(vtiger_leaddetailsRelCalendar.lastname,' ',vtiger_leaddetailsRelCalendar.firstname) when 'Potentials' then vtiger_potentialRelCalendar.potentialname when 'Quotes' then vtiger_quotesRelCalendar.subject when 'PurchaseOrder' then vtiger_purchaseorderRelCalendar.subject when 'Invoice' then vtiger_invoiceRelCalendar.subject when 'SalesOrder' then vtiger_salesorderRelCalendar.subject when 'HelpDesk' then vtiger_troubleticketsRelCalendar.title when 'Campaigns' then vtiger_campaignRelCalendar.campaignname End"." '".$selectedfields[2]."', vtiger_crmentityRelCalendar.setype 'Entity_type'";
 			}
-			
-		}elseif($fieldname == "contact_id" && strpos($selectedfields[2],"Contact_Name"))
-		{
+		} elseif($fieldname == "contact_id" && strpos($selectedfields[2],"Contact_Name")) {
 			if(($this->primarymodule == 'PurchaseOrder' || $this->primarymodule == 'SalesOrder' || $this->primarymodule == 'Quotes' || $this->primarymodule == 'Invoice' || $this->primarymodule == 'Calendar') && $module==$this->primarymodule) {
 				if (getFieldVisibilityPermission("Contacts", $current_user->id, "firstname") == '0')
 					$querycolumn = " case when vtiger_crmentity.crmid!='' then concat(vtiger_contactdetails".$this->primarymodule.".lastname,' ',vtiger_contactdetails".$this->primarymodule.".firstname) else '-' end as ".$selectedfields[2];
