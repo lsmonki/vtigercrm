@@ -4736,4 +4736,25 @@ function isRecordExists($recordId) {
 	return false;
 }
 
+/** Function to set date values compatible to database (YY_MM_DD)
+  * @param $value -- value :: Type string
+  * @returns $insert_date -- insert_date :: Type string
+  */
+
+function getValidDBInsertDateValue($value)
+{
+	global $log;
+	$log->debug("Entering getDBInsertDateValue(".$value.") method ...");
+	global $current_user;
+	list($y,$m,$d) = split('-',$value);
+
+	if(strlen($y)<4){
+		$insert_date = getDBInsertDateValue($value);
+	} else {
+		$insert_date = $value;
+	}
+	$log->debug("Exiting getDBInsertDateValue method ...");
+	return $insert_date;
+}
+
 ?>
