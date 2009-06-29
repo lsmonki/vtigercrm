@@ -20,7 +20,6 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-//require_once('modules/Users/User.php');
 global $app_strings;
 global $mod_strings;
 global $currentModule;
@@ -29,7 +28,7 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 global $current_language,$default_charset;
 
-$category = getParentTab();
+$category = htmlspecialchars($_REQUEST['parenttab'],ENT_QUOTES,$default_charset);
 
 //Function added to convert line breaks to space in description during export
 function br2nl_int($str) {
@@ -43,11 +42,11 @@ else
   $exportWhere = stripslashes(htmlspecialchars_decode($_POST['exportwhere']));
 
 if (isset($_GET['step']))
-  $step = vtlib_purify($_GET['step']);
+  $step = $_GET['step'];
 else
-  $step = vtlib_purify($_POST['step']);
+  $step = $_POST['step'];
   
-$export_type = vtlib_purify($_POST['export_type']);
+$export_type = $_POST['export_type'];
 
 
 function getStdContactFlds(&$queryFields, $adb, $valueArray)
