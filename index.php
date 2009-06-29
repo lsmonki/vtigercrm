@@ -799,7 +799,7 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss') && $action 
 	// ActivityReminder Customization for callback
 	if(!$skipFooters) {
 	
-		if($current_user->id!=NULL && isPermitted('Calendar','index') == 'yes')
+		if($current_user->id!=NULL && isPermitted('Calendar','index') == 'yes' && vtlib_isModuleActive('Calendar'))
 			echo "<script type='text/javascript'>if(typeof(ActivityReminderCallback) != 'undefined') ActivityReminderCallback();</script>";
 	}
 	// End
