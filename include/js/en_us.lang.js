@@ -292,5 +292,6 @@
 				DashBoard: 'DashBoard',
 				RSS: 'RSS',
 				Default: 'Default',
-				Notebook: 'Notebook'
+				Notebook: 'Notebook',
+				SPECIAL_CHARS:'\\ / < > + \' " '
 			};

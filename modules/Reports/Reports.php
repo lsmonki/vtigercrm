@@ -253,7 +253,13 @@ class Reports extends CRMEntity{
 					if(in_array($resultrow['name'], $restricted_modules)) { // skip restricted modules
 						continue; 
 					}
-					$this->module_id[$resultrow['tabid']] = $resultrow['name'];
+					if($resultrow['name']!='Calendar'){
+						$this->module_id[$resultrow['tabid']] = $resultrow['name'];
+					} else {
+						$this->module_id[9] = $resultrow['name'];
+						$this->module_id[16] = $resultrow['name'];
+						
+					}
 					$this->module_list[$resultrow['name']] = array();
 				}
 				
@@ -261,7 +267,7 @@ class Reports extends CRMEntity{
 				$reportblocks = 
 					$adb->pquery("SELECT blockid, blocklabel, tabid FROM vtiger_blocks WHERE tabid IN (" .generateQuestionMarks($moduleids) .")",
 						array($moduleids));
-						
+				$prev_block_label = '';		
 				if($adb->num_rows($reportblocks)) {
 					while($resultrow = $adb->fetch_array($reportblocks)) {
 						$blockid = $resultrow['blockid'];
@@ -275,10 +281,15 @@ class Reports extends CRMEntity{
 							continue;
 						}
 						
-						if($module == 'Calendar' && $blocklabel == 'LBL_CUSTOM_INFORMATION')
-							$this->module_list[$module][getTranslatedString($blocklabel,$module)][] = $blockid;
-						else
-							$this->module_list[$module][getTranslatedString($blocklabel,$module)] = $blockid;
+						if(!empty($blocklabel)){
+							if($module == 'Calendar' && $blocklabel == 'LBL_CUSTOM_INFORMATION')
+								$this->module_list[$module][$blockid] = getTranslatedString($blocklabel,$module);
+							else
+								$this->module_list[$module][$blockid] = getTranslatedString($blocklabel,$module);
+							$prev_block_label = $blocklabel;
+						} else {
+							$this->module_list[$module][$blockid] = getTranslatedString($prev_block_label,$module);
+						}
 					}
 				}
 				
@@ -486,7 +497,11 @@ class Reports extends CRMEntity{
 		//$this->updateModuleList($module);
 		foreach($this->module_list[$module] as $key=>$value)
 		{
-			$ret_module_list[$module][$key] = $this->getColumnsListbyBlock($module,$value);
+			if(!empty($ret_module_list[$module][$value])){
+				$ret_module_list[$module][$value] = array_merge($ret_module_list[$module][$value],$this->getColumnsListbyBlock($module,$key));
+			} else {
+				$ret_module_list[$module][$value] = $this->getColumnsListbyBlock($module,$key);
+			}
 		}
 		$this->pri_module_columnslist = $ret_module_list;
 		return true;
@@ -509,7 +524,11 @@ class Reports extends CRMEntity{
 				if($this->module_list[$secmodule[$i]]){
 					foreach($this->module_list[$secmodule[$i]] as $key=>$value)
 					{
-						$ret_module_list[$secmodule[$i]][$key] = $this->getColumnsListbyBlock($secmodule[$i],$value);
+						if(!empty($ret_module_list[$secmodule[$i]][$value])){
+							$ret_module_list[$secmodule[$i]][$value] = array_merge($ret_module_list[$secmodule[$i]][$value],$this->getColumnsListbyBlock($secmodule[$i],$key));
+						} else {
+							$ret_module_list[$secmodule[$i]][$value] = $this->getColumnsListbyBlock($secmodule[$i],$key);
+						}
 					}
 					$this->sec_module_columnslist[$secmodule[$i]] = $ret_module_list[$secmodule[$i]];
 				}

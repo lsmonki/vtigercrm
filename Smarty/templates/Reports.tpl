@@ -176,14 +176,14 @@ function AddFolder()
                 return false;
                 {literal}
 	}
-	else if((getObj('folder_name').value).match(/['"\+]/) || (getObj('folder_desc').value).match(/['"\+]/))
-        {
-                alert(alert_arr.NO_QUOTES+alert_arr.NAME_DESC);
-                return false;
-        }	
+	else if((getObj('folder_name').value).match(/['"<>/\+]/) || (getObj('folder_desc').value).match(/['"<>/\+]/))
+    {
+            alert(alert_arr.SPECIAL_CHARS+' '+alert_arr.NOT_ALLOWED+alert_arr.NAME_DESC);
+            return false;
+    }	
 	/*else if((!CharValidation(getObj('folder_name').value,'namespace')) || (!CharValidation(getObj('folder_desc').value,'namespace')))
 	{
-			alert(alert_arr.NO_SPECIAL+alert_arr.NAME_DESC);
+			alert(alert_arr.NO_SPECIAL +alert_arr.NAME_DESC);
 			return false;
 	}*/
 	else

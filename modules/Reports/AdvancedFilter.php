@@ -112,42 +112,44 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 
 function getPrimaryColumns_AdvFilterHTML($module,$selected="")
 {
-        global $ogReport, $app_list_strings, $current_language;
+    global $ogReport, $app_list_strings, $current_language;
 	$mod_strings = return_module_language($current_language,$module);
-        foreach($ogReport->module_list[$module] as $key=>$value)
-        {
-	    	if(isset($ogReport->pri_module_columnslist[$module][$key]))
-	    	{
-			$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
-				foreach($ogReport->pri_module_columnslist[$module][$key] as $field=>$fieldlabel)
+	$block_listed = array();
+    foreach($ogReport->module_list[$module] as $key=>$value)
+    {
+    	if(isset($ogReport->pri_module_columnslist[$module][$value]) && !$block_listed[$value])
+    	{
+			$block_listed[$value] = true;
+			$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".getTranslatedString($value)."\" class=\"select\" style=\"border:none\">";
+			foreach($ogReport->pri_module_columnslist[$module][$value] as $field=>$fieldlabel)
+			{
+				if(isset($mod_strings[$fieldlabel]))
 				{
-					if(isset($mod_strings[$fieldlabel]))
+					//fix for ticket 5191
+					$selected = decode_html($selected);
+					$field = decode_html($field);
+					//fix ends
+					if($selected == $field)
 					{
-						//fix for ticket 5191
-						$selected = decode_html($selected);
-						$field = decode_html($field);
-						//fix ends
-						if($selected == $field)
-						{
-							$shtml .= "<option selected value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
-						}else
-						{
-							$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
-						}
+						$shtml .= "<option selected value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
 					}else
 					{
-						if($selected == $field)
-						{
-							$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
-						}else
-						{
-							$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
-						}
+						$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+					}
+				}else
+				{
+					if($selected == $field)
+					{
+						$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
+					}else
+					{
+						$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
 					}
 				}
-           }
-        }
-        return $shtml;
+			}
+       }
+    }
+    return $shtml;
 }
 
 
@@ -160,50 +162,52 @@ function getPrimaryColumns_AdvFilterHTML($module,$selected="")
 
 function getSecondaryColumns_AdvFilterHTML($module,$selected="")
 {
-        global $ogReport;
-		global $app_list_strings;
-        global $current_language;
+    global $ogReport;
+	global $app_list_strings;
+    global $current_language;
 
-        if($module != "")
-        {
-        	$secmodule = explode(":",$module);
-        	for($i=0;$i < count($secmodule) ;$i++)
-        	{
-                $mod_strings = return_module_language($current_language,$secmodule[$i]);
-                if(vtlib_isModuleActive($secmodule[$i])){
-					foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
-	                {
-						if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
-						{
-	                		  $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
-							  foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
-							  {
-								if(isset($mod_strings[$fieldlabel]))
+    if($module != "")
+    {
+    	$secmodule = explode(":",$module);
+    	for($i=0;$i < count($secmodule) ;$i++)
+    	{
+            $mod_strings = return_module_language($current_language,$secmodule[$i]);
+            if(vtlib_isModuleActive($secmodule[$i])){
+				$block_listed = array();
+				foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
+                {
+					if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$value]) && !$block_listed[$value])
+					{
+						$block_listed[$value] = true;
+                		  $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".getTranslatedString($value)."\" class=\"select\" style=\"border:none\">";
+						  foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$value] as $field=>$fieldlabel)
+						  {
+							if(isset($mod_strings[$fieldlabel]))
+							{
+								if($selected == $field)
 								{
-									if($selected == $field)
-									{
-										$shtml .= "<option selected value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
-									}else
-									{
-										$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
-									}
+									$shtml .= "<option selected value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
 								}else
 								{
-									if($selected == $field)
-									{
-										$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
-									}else
-									{
-										$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
-									}
+									$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
 								}
-							  }
-						}
-	                }
+							}else
+							{
+								if($selected == $field)
+								{
+									$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
+								}else
+								{
+									$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+								}
+							}
+						  }
+					}
                 }
-        	}
-        }
-        return $shtml;
+            }
+    	}
+    }
+    return $shtml;
 }
 
 function getRelatedColumns($selected=""){

@@ -82,17 +82,18 @@ function getPrimaryColumnsHTML($module)
 	global $current_language;
 	$id_added=false;
 	$mod_strings = return_module_language($current_language,$module);
+	$block_listed = array();
 	foreach($ogReport->module_list[$module] as $key=>$value)
 	{
-		if(isset($ogReport->pri_module_columnslist[$module][$key]))
+		if(isset($ogReport->pri_module_columnslist[$module][$value]) && !$block_listed[$value])
 		{
-			
-			$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
+			$block_listed[$value] = true;
+			$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".getTranslatedString($value)."\" class=\"select\" style=\"border:none\">";
 			if($id_added==false){
 				$shtml .= "<option value=\"vtiger_crmentity:crmid:".$module."_ID:crmid:I\">".getTranslatedString(getTranslatedString($module).' ID')."</option>";
 				$id_added=true;
 			}
-			foreach($ogReport->pri_module_columnslist[$module][$key] as $field=>$fieldlabel)
+			foreach($ogReport->pri_module_columnslist[$module][$value] as $field=>$fieldlabel)
 			{
 				if(isset($mod_strings[$fieldlabel]))
 				{
@@ -127,12 +128,14 @@ function getSecondaryColumnsHTML($module)
 		{
 			$mod_strings = return_module_language($current_language,$secmodule[$i]);
 			if(vtlib_isModuleActive($secmodule[$i])){
+				$block_listed = array();
 				foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
 				{
-					if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
+					if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$value]) && !$block_listed[$value])
 					{
-						$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".getTranslatedString($key)."\" class=\"select\" style=\"border:none\">";
-						foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
+						$block_listed[$value] = true;
+						$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".getTranslatedString($value)."\" class=\"select\" style=\"border:none\">";
+						foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$value] as $field=>$fieldlabel)
 						{
 							if(isset($mod_strings[$fieldlabel]))
 							{

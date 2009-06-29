@@ -88,7 +88,7 @@ if($numOfRows > 0)
 		$BLOCK1 = getPrimaryStdFilterHTML($ogReport->primodule,$ogReport->stdselectedcolumn);
 		$BLOCK1 .= getSecondaryStdFilterHTML($ogReport->secmodule,$ogReport->stdselectedcolumn);
 		// Check if selectedcolumn is found in the filters (Fix for ticket #4866)
-		$selectedcolumnvalue = '"'. $ogReport->stdselectedcolumn . '"';
+		$selectedcolumnvalue = '"'. decode_html($ogReport->stdselectedcolumn) . '"';
 		if (!$is_admin && isset($ogReport->stdselectedcolumn) && strpos($BLOCK1, $selectedcolumnvalue) === false) {
 			$BLOCK1 .= "<option selected value='Not Accessible'>".$app_strings['LBL_NOT_ACCESSIBLE']."</option>";
 		}

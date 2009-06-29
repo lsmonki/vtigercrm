@@ -15,7 +15,7 @@ global $log,$current_user;
 $reportid = vtlib_purify($_REQUEST["record"]);
 
 //<<<<<<<selectcolumn>>>>>>>>>
-$selectedcolumnstring = vtlib_purify($_REQUEST["selectedColumnsString"]);
+$selectedcolumnstring = $_REQUEST["selectedColumnsString"];
 //<<<<<<<selectcolumn>>>>>>>>>
 
 //<<<<<<<reportsortcol>>>>>>>>>

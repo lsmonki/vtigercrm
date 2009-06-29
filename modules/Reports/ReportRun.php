@@ -175,6 +175,10 @@ class ReportRun extends CRMEntity
 					{
 						$columnslist[$fieldcolname] = 'vtiger_productsCampaigns.productname AS "'.$header_label.'"';
 					}
+					elseif($selectedfields[0] == 'vtiger_products' && $selectedfields[1] == 'unit_price')//handled for product fields in Campaigns Module Reports
+					{
+					$columnslist[$fieldcolname] = 'concat('.$selectedfields[0].'.currency_id,"::",innerProduct.actual_unit_price) as "' . $header_label .'"';
+					}
 					elseif(in_array($selectedfields[2], $this->append_currency_symbol_to_value)) {
 						$columnslist[$fieldcolname] = 'concat('.$selectedfields[0].'.currency_id,"::",'.$selectedfields[0].'.'.$selectedfields[1].') as "' . $header_label .'"';
 					}
@@ -191,6 +195,10 @@ class ReportRun extends CRMEntity
 						}
 					}elseif($selectedfields[0] == 'vtiger_potential' && $selectedfields[1] == 'related_to'){
 						$columnslist[$fieldcolname] = "case when vtiger_accountPotentials.accountid is not NULL then vtiger_accountPotentials.accountname else concat(vtiger_contactdetailsPotentials.lastname, ' ', vtiger_contactdetailsPotentials.firstname) end as '$selectedfields[2]'";
+					}
+					elseif(stristr($selectedfields[1],'cf_')==true && stripos($selectedfields[1],'cf_')==0)
+					{
+						$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1].' AS "'.$adb->sql_escape_string(decode_html($header_label)).'"';
 					}
 					else
 					{
@@ -1159,12 +1167,15 @@ class ReportRun extends CRMEntity
 				$selectedfields = explode(":",$fieldcolname);
 				if($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
 					$selectedfields[0] = "vtiger_crmentity";	
-				$sqlvalue = $selectedfields[2]." ".$sortorder;//.".".$selectedfields[1]." ".$sortorder;
-				$grouplist[$fieldcolname] = $sqlvalue;
-				$fieldlabel = trim(str_replace($module," ",$selectedfields[2]));
-				$mod_arr=explode('_',$fieldlabel);
-				$mod = ($mod_arr[0] == '')?$module:$mod_arr[0];
-				if(CheckFieldPermission($fieldname,$mod) == 'true')
+				$sqlvalue = "'".$selectedfields[2]."' ".$sortorder;
+				if(stripos($selectedfields[1],'cf_')==0 && stristr($selectedfields[1],'cf_')==true){
+					$grouplist[$fieldcolname] = $adb->sql_escape_string(decode_html($sqlvalue));
+				} else {
+					$grouplist[$fieldcolname] = $sqlvalue;
+				}
+				$temp = split("_",$selectedfields[2],2);
+				$module = $temp[0];
+				if(CheckFieldPermission($fieldname,$module) == 'true')
 				{
 					$this->groupbylist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." ".$selectedfields[2];
 				}
@@ -1650,7 +1661,7 @@ class ReportRun extends CRMEntity
 			foreach($currencyfieldres as $currencyfieldrow) {
 				$modprefixedlabel = getTabModuleName($currencyfieldrow['tabid']).' '.$currencyfieldrow['fieldlabel'];
 				$modprefixedlabel = str_replace(' ','_',$modprefixedlabel);				
-				if(!in_array($modprefixedlabel, $this->convert_currency)) {					
+				if(!in_array($modprefixedlabel, $this->convert_currency) && !in_array($modprefixedlabel, $this->append_currency_symbol_to_value)) {					
 					$this->convert_currency[] = $modprefixedlabel;
 				}
 			}
