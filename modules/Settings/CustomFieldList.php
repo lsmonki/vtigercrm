@@ -65,7 +65,7 @@ $smarty->assign("MODULE",$fld_module);
 $smarty->assign("CFENTRIES",getCFListEntries($fld_module));
 if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 {
-	$error=getTranslatedString('ERR_CUSTOM_FIELD_WITH_NAME',$fld_module). vtlib_purify($_REQUEST["fldlabel"]) .getTranslatedString('ERR_ALREADY_EXISTS',$fld_module) . ' ' .getTranslatedString('ERR_SPECIFY_DIFFERENT_LABEL',$fld_module);
+	$error=getTranslatedString('ERR_CUSTOM_FIELD_WITH_NAME','Settings'). vtlib_purify($_REQUEST["fldlabel"]) .getTranslatedString('ERR_ALREADY_EXISTS','Settings') . ' ' .getTranslatedString('ERR_SPECIFY_DIFFERENT_LABEL','Settings');
 	$smarty->assign("DUPLICATE_ERROR", $error);
 }
 
