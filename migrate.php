@@ -196,18 +196,30 @@ class vtiger_MigrationVerify{
 									// Check if the database that we are going to use supports UTF-8
 									$db_utf8_support = check_db_utf8_support($conn);
 								}
-						 		$filecontents = file_get_contents($dumpfile); 		
-						 		$lines = split("\n", $filecontents);
-								foreach($lines as $line) {
-						 			$line = trim($line);
-						 			if(empty($line)) continue;
-						 			if(stripos($line, '--') === 0) {
-						 				// Ignore comments
-						 			} else {
+								$file_size = filesize($dumpfile);
+									//Will take effect only if PHP safe-mode is Off
+								if($file_size < 50*1024*1024){
+									ini_set('memory_limit',2*$file_size);
+								} else {
+									ini_set('memory_limit','100M');
+								}
+								$fileHandle = fopen($dumpfile,'r');
+								flush();
+								ob_flush();
+								while(!feof($fileHandle )){
+									$line = fgets($fileHandle);
+									$line = trim($line);
+									flush();
+									ob_flush();
+									if(empty($line)) continue;
+									if(stripos($line, '--') === 0) {
+										// Ignore comments
+									} else {
 										$db_conn->Execute($line);
-						 			}
-						 		}
+									}
+								}
 								$db_conn->Close();
+								fclose($fileHandle );
 				 			}
 						} else {
 							$db_conn = &NewADOConnection($db_type);
@@ -417,11 +429,6 @@ class vtiger_DatabaseMigration{
 				include($filename);//include the file which contains the corresponding db changes
 		
 				echo $start_tag.$temp[$patch_count]." ==> ".$temp[$patch_count+1]." Database changes -- Ends.".$end_tag;
-			}
-			if($dbtype == 'mysql') {
-				@include_once('modules/Migration/Performance/'.$temp[$patch_count+1].'_mysql.php');
-			} elseif($dbtype == 'postgres') {
-				@include_once('modules/Migration/Performance/'.$temp[$patch_count+1].'_postgres.php');		
 			}
 		}
 	

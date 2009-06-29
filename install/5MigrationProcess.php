@@ -108,7 +108,6 @@ if($_REQUEST['migration_start'] != 'true') {
 	    var auth_key = '<?php echo $_SESSION['authentication_key']; ?>';
 	    if(typeof('Event') != 'undefined') {
 	    	Event.observe(window, 'load', function() {
-	    		console.log(document.getElementById('triggermigration_iframe'));
 	    		document.getElementById('triggermigration_iframe').src = 'install.php?file=5MigrationProcess.php&migration_start=true&auth_key='+auth_key+'&skipcache=<?php echo microtime(true); ?>';
 	    	});
 	    }

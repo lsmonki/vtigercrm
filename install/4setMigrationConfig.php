@@ -425,7 +425,6 @@ function getViewPortCenter(){
 			<td width=80% valign=top class="cwContentDisplay" align=left>
 			<!-- Right side tabs -->
 			    <form action="javascript: void(0); " method="post" name="installform" id="form" name="setConfig" id="form">
-			    <input name="action" type="hidden" value='' />
 			    <table border=0 cellspacing=0 cellpadding=5 width=100%>
 			    <tr><td colspan=2 class=small align=left><img src="include/install/images/confWizSysConfig.gif" alt="System Configuration" title="System Configuration"><br>
 				  <hr noshade size=1></td></tr>

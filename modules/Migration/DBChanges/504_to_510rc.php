@@ -674,8 +674,8 @@ foreach($renameArray as $tablename) {
 
 /* Important database schema changes to support database porting */
 ExecuteQuery("alter table vtiger_attachments drop index attachments_description_type_attachmentsid_idx");
-ExecuteQuery("alter table vtiger_attachments modify column description LONGTEXT");
-ExecuteQuery("alter table vtiger_emaildetails modify column idlists LONGTEXT");
+ExecuteQuery("alter table vtiger_attachments modify column description TEXT");
+ExecuteQuery("alter table vtiger_emaildetails modify column idlists TEXT");
 
 /* Product Bundles Feature */
 ExecuteQuery("insert into vtiger_relatedlists values(".$adb->getUniqueID('vtiger_relatedlists').",".getTabid("Products").",".getTabid("Products").",'get_products',13,'Product Bundles',0,'add,select')");
@@ -1156,35 +1156,13 @@ $groupTables_array = array (
 							'Campaigns'=>array ('vtiger_campaigngrouprelation','campaignid'),
 							'Calendar'=>array ('vtiger_activitygrouprelation','activityid')
                             );
-for($i=0; $i<$num_rows; $i++) {
-	$setype = $adb->query_result($sql_result, $i, 'setype');
-	$crmid = $adb->query_result($sql_result, $i, 'crmid');
-	
-	if(array_key_exists($setype, $groupTables_array)) {
-		$groupid_sql = "select groupid from vtiger_groups where groupname in (select groupname from ".$groupTables_array[$setype][0]." where ".$groupTables_array[$setype][1]. " = ".$crmid.")";
-		$groupid_res = $adb->query($groupid_sql);
-		if($adb->num_rows($groupid_res)>0){
-			$groupid = $adb->query_result($groupid_res, 0, 'groupid');
-		}
-	}
-	else {
-		$sql1_res = $adb->query("select crmid as entityid from vtiger_seattachmentsrel where attachmentsid = ".$crmid);
-		if($adb->num_rows($sql1_res)>0){
-			$se_recordid = $adb->query_result($sql1_res, 0, 'entityid');
-		
-			$groupid_res = $adb->query("select smownerid from vtiger_crmentity where crmid = ".$se_recordid);
-			if($adb->num_rows($groupid_res)>0){
-				$groupid = $adb->query_result($groupid_res, 0, 'smownerid');
-			}
-		}
-	}
-	// Case when due to some data inconsistency, smownerid is set to 0 but there is not group relation for it stored
-	if(empty($groupid)) {
-		$groupid = 1;
-	}
-	ExecuteQuery("update vtiger_crmentity set smownerid = $groupid where crmid = $crmid");
+                            
+foreach($groupTables_array as $module=>$index){
+	$modulereltable = $index[0];
+	$modulerelindex = $index[1];
+	ExecuteQuery("update vtiger_crmentity INNER JOIN {$modulereltable} ON vtiger_crmentity.crmid = {$modulereltable}.{$modulerelindex} INNER JOIN vtiger_groups ON vtiger_groups.groupname = {$modulereltable}.groupname set smownerid = vtiger_groups.groupid");
+	ExecuteQuery("UPDATE vtiger_crmentity SET smownerid=1 WHERE smownerid=0 AND setype='{$module}'");
 }
-
 // user-group ends
 
 /* Product Comment was Missing in Inventory PDF's - Fixed this by eliminating column product_description from vtiger_products

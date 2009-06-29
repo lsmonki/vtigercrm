@@ -1034,14 +1034,6 @@ setFieldHelpInfo();
 installMandatoryModules();
 require_once('include/utils/installVtlibSelectedModules.php');
 
-// Run the performance scripts based on the database type and the vtiger version.
-require_once('modules/Migration/versions.php');
-if($adb->isMySQL()) {
-	@include_once('modules/Migration/Performance/'.$current_version.'_mysql.php');
-} elseif($adb->isPostgres()) {
-	@include_once('modules/Migration/Performance/'.$current_version.'_postgres.php');		
-}
-	
 // populate the db with seed data
 if ($db_populate) {
 	//eecho ("Populate seed data into $db_name");
