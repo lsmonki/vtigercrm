@@ -817,9 +817,9 @@ function picklist_check($module,$graph_by)
 			$temp_fieldname = 'ticketcategories';
 
 		if(count($roleids) > 1)
-			$pick_query = " in (select distinct $temp_fieldname from vtiger_".$temp_fieldname."  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_".$temp_fieldname.".picklist_valueid where roleid in (\"". implode($roleids,"\",\"") ."\") order by sortid asc ) ";
+			$pick_query = " in (select distinct $temp_fieldname from vtiger_".$temp_fieldname."  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_".$temp_fieldname.".picklist_valueid where roleid in (\"". implode($roleids,"\",\"") ."\")) ";
 		else
-			$pick_query = " in (select distinct $temp_fieldname from vtiger_".$temp_fieldname."  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_".$temp_fieldname.".picklist_valueid where roleid in ('$roleids') order by sortid asc ) ";
+			$pick_query = " in (select distinct $temp_fieldname from vtiger_".$temp_fieldname."  inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_".$temp_fieldname.".picklist_valueid where roleid in ('$roleids')) ";
 	}
 	return $pick_query;
 }
