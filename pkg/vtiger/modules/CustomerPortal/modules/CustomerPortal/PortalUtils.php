@@ -45,7 +45,7 @@ function cp_changeTabOrder($tabid,$move) {
  		$adb->pquery("UPDATE vtiger_customerportal_tabs set sequence=? WHERE tabid = ?", array($newsequence, $tabid));
  		$adb->pquery("UPDATE vtiger_customerportal_tabs set sequence=? WHERE tabid = ?", array($oldsequence, $righttabid));
  	}elseif ($move == 'Up') {
- 		$sequence = $adb-pquery("SELECT sequence FROM vtiger_customerportal_tabs WHERE tabid = ?", array($tabid));
+ 		$sequence = $adb->pquery("SELECT sequence FROM vtiger_customerportal_tabs WHERE tabid = ?", array($tabid));
  		$oldsequence = $adb->query_result($sequence,0,'sequence');
  		
  		$nexttab = $adb->pquery("SELECT sequence,tabid FROM vtiger_customerportal_tabs WHERE sequence < ? ORDER BY SEQUENCE DESC LIMIT 0,1", array($oldsequence)); 
