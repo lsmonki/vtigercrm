@@ -46,12 +46,14 @@ if(!empty($_REQUEST['return_id']) && !empty($_REQUEST['return_module'])) {
 	$invModule = $_REQUEST['return_module'];
 	$inventoryObj = CRMEntity::getInstance($invModule);
 	$inventoryObj->retrieve_entity_info($_REQUEST['return_id'], $invModule);
-	if(!empty($inventoryObj->column_fields['account_id'])) {
-		$focus->column_fields['sc_related_to_type'] = 'Accounts';
-		$focus->column_fields['sc_related_to'] = $inventoryObj->column_fields['account_id'];
-	} else if(!empty($inventoryObj->column_fields['contact_id'])) {
-		$focus->column_fields['sc_related_to_type'] = 'Contacts';
-		$focus->column_fields['sc_related_to'] = $inventoryObj->column_fields['contact_id'];		
+	if(empty($_REQUEST['sc_related_to'])) {
+		if(!empty($inventoryObj->column_fields['account_id'])) {
+			$focus->column_fields['sc_related_to_type'] = 'Accounts';
+			$focus->column_fields['sc_related_to'] = $inventoryObj->column_fields['account_id'];
+		} else if(!empty($inventoryObj->column_fields['contact_id'])) {
+			$focus->column_fields['sc_related_to_type'] = 'Contacts';
+			$focus->column_fields['sc_related_to'] = $inventoryObj->column_fields['contact_id'];		
+		}
 	}
 }
 
