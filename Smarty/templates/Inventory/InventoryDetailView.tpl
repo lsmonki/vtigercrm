@@ -268,8 +268,14 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 							<td class="dvtCellLabel" align=right width=25%><input type="hidden" id="hdtxt_IsAdmin" value={$keyadmin}></input>{$label}</td>
 						{/if}
 					{/if}  
-					{if $EDIT_PERMISSION eq 'yes'}
-						{include file="DetailViewUI.tpl"}
+					{if $EDIT_PERMISSION eq 'yes' && $display_type neq '2'}
+						{* Performance Optimization Control *}
+						{if !empty($DETAILVIEW_AJAX_EDIT) }
+							{include file="DetailViewUI.tpl"}
+						{else}
+							{include file="DetailViewFields.tpl"}
+						{/if}
+						{* END *}
 					{else}
 						{include file="DetailViewFields.tpl"}
 					{/if}
