@@ -192,23 +192,15 @@ function getAssignedPicklistValues($tableName, $roleid, $adb){
 			$roleids[] = $role;
 		}
 		
-		$sql = "select distinct picklistvalueid from vtiger_role2picklist where picklistid = ? and roleid in (".generateQuestionMarks($roleids).") order by sortid";
-		$result = $adb->pquery($sql, array($picklistid, $roleids));
+		$sql = "SELECT distinct ".$adb->sql_escape_string($tableName)." FROM ". $adb->sql_escape_string("vtiger_$tableName")
+				. " inner join vtiger_role2picklist on ".$adb->sql_escape_string("vtiger_$tableName").".picklist_valueid=vtiger_role2picklist.picklistvalueid"
+				. " and roleid in (".generateQuestionMarks($roleids).") order by sortid";
+		$result = $adb->pquery($sql, $roleids);
 		$count = $adb->num_rows($result);
-	
-		$picklistvalueids = array();
+		
 		if($count) {
 			while($resultrow = $adb->fetch_array($result)) {
-				$picklistvalueids[] = $resultrow['picklistvalueid'];
-			}
-			$sql = "SELECT " . $adb->sql_escape_string($tableName) . " FROM " . $adb->sql_escape_string("vtiger_$tableName");		 
-			$sql .= " WHERE picklist_valueid in (". implode(',', $picklistvalueids) .")";
-
-			$resultvalues = $adb->query($sql);
-			if($resultvalues) {
-				while($resultrow = $adb->fetch_array($resultvalues)) {
-					$arr[] = $resultrow[$tableName];
-				}
+				$arr[] = $resultrow[$tableName];
 			}
 		}
 	}
