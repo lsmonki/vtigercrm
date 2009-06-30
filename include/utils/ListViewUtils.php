@@ -4050,8 +4050,8 @@ function setSessionVar($lv_array,$noofrows,$max_ent,$module='',$related='')
 
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] !='')
 	{
-		$lv_array['start']=$_REQUEST['start'];
-		$start = $_REQUEST['start'];
+		$lv_array['start']=ListViewSession::getRequestStartPage();
+		$start = ListViewSession::getRequestStartPage();
 	}elseif($_SESSION['rlvs'][$module][$related]['start'] != '')
 	{
 		
