@@ -245,13 +245,5 @@
 <name><![CDATA[Merge]]></name>
 <status>enabled</status>
 </action>
-<action>
-<name><![CDATA[index]]></name>
-<status>enabled</status>
-</action>
-<action>
-<name><![CDATA[Popup]]></name>
-<status>enabled</status>
-</action>
 </actions>
 </module>

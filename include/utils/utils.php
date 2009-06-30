@@ -4163,11 +4163,11 @@ function getCallerName($from) {
 	global $adb;
 
 	//information found
-	$callerInfo = getCallerInfo(getStrippedNumber($from));
+	$callerInfo = getCallerInfo($from);
 
 	if($callerInfo != false){
-		$callerName = $callerInfo[name];
-		$module = $callerInfo[module];
+		$callerName = decode_html($callerInfo['name']);
+		$module = $callerInfo['module'];
 		$callerModule = " (<a href='index.php?module=$module&action=index'>$module</a>)";
 		$callerID = $callerInfo[id];
 		
@@ -4195,22 +4195,14 @@ function getCallerInfo($number){
 		return false;
 	}
 	$caller = "Unknown Number (Unknown)"; //declare caller as unknown in beginning
-	
-	$name['Contacts'] = array('name'=>"concat(firstname,' ',lastname)", 'table'=>'vtiger_contactdetails', 'field'=>"phone,mobile,fax", 'id'=>'contactid');
-	$name['Accounts'] = array('name'=>"accountname", 'table'=>"vtiger_account", 'field'=>"phone, otherphone, fax", 'id'=>'accountid');
-	$name['Leads'] = array('name'=>"concat(firstname,' ',lastname)", 'table'=>"vtiger_leaddetails inner join vtiger_leadaddress on vtiger_leaddetails.leadid = vtiger_leadaddress.leadaddressid", 'field'=>"phone,mobile,fax", 'id'=>'leadid'); 
-	
-	foreach ($name as $module => $info) {
-		$phones = explode(",",$info[field]);
-		
-		$sql = "select *,".$info[name]." as name from ".$info[table]." inner join vtiger_crmentity on ".$info['id']."=crmid where deleted=0";
-		$result = $adb->query($sql);
-		
-		$id = searchPhoneNumber($number, $phones, $result, 1);
-
-		if($id !== false){
-			$callerName = $adb->query_result($result, $id, "name");
-			$callerID = $adb->query_result($result,$id,$info['id']);
+	$name['Contacts'] = "select contactid as id,concat(firstname,' ',lastname) as name from vtiger_contactdetails inner join vtiger_crmentity on crmid=contactid where deleted=0 and (phone = ? or mobile = ? or fax = ?)";//array('name'=>"concat(firstname,' ',lastname)", 'table'=>'vtiger_contactdetails', 'field'=>"phone,mobile,fax", 'id'=>'contactid');
+	$name['Accounts'] = "select accountid as id, accountname as name from vtiger_account inner join vtiger_crmentity on crmid=accountid where deleted =0 and (phone = ? or otherphone = ? or fax = ?)";//array('name'=>"accountname", 'table'=>"vtiger_account", 'field'=>"phone, otherphone, fax", 'id'=>'accountid');
+	$name['Leads'] = "select leadid as id,concat(firstname,' ',lastname) as name from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid inner join vtiger_leadaddress on vtiger_leaddetails.leadid = vtiger_leadaddress.leadaddressid where vtiger_crmentity.deleted =0 and (vtiger_leadaddress.phone = ? or vtiger_leadaddress.mobile = ? or vtiger_leadaddress.fax = ?)";//array('name'=>"concat(firstname,' ',lastname)", 'table'=>"vtiger_leaddetails inner join vtiger_leadaddress on vtiger_leaddetails.leadid = vtiger_leadaddress.leadaddressid", 'field'=>"phone,mobile,fax", 'id'=>'leadid');
+	foreach ($name as $module => $query) {
+		$result = $adb->pquery($query,array($number,$number,$number));
+		if($adb->num_rows($result) > 0 ){
+			$callerName = $adb->query_result($result, 0, "name");
+			$callerID = $adb->query_result($result,0,'id');
 			$data = array("name"=>$callerName, "module"=>$module, "id"=>$callerID);
 			return $data;			
 		}
@@ -4359,7 +4351,7 @@ function addToCallHistory($userExtension, $callfrom, $callto, $status, $adb){
 		if(empty($callerName)){
 			$callerName = "Unknown";
 		}else{
-			$callerName = "<a href='index.php?module=".$callerName[module]."&action=DetailView&record=".$callerName[id]."'>".$callerName[name]."</a>";
+			$callerName = "<a href='index.php?module=".$callerName[module]."&action=DetailView&record=".$callerName[id]."'>".decode_html($callerName[name])."</a>";
 		}
 	}
 	

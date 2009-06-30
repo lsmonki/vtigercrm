@@ -58,7 +58,7 @@ function asteriskClient(){
 	//keep looping continuosly to check if there are any calls
 	while (true) {
 		//check for incoming calls and insert in the database
-		sleep(1);
+		sleep(2);
 		$incoming = handleIncomingCalls($asterisk, $adb, $version);
 	}
 	fclose($sock);
@@ -119,7 +119,7 @@ function handleIncomingCalls($asterisk, $adb, $version="1.4"){
 					$params = array($callerNumber, $callerName, $extension, $callerType,$flag,$timer);
 					$adb->pquery($sql, $params);
 					
-					addToCallHistory($extension, $callerNumber, $extension, "incoming", $adb);
+					addToCallHistory($extension, $callerType.":".$callerNumber, $extension, "incoming", $adb);
 					break;	//break the while loop
 				}
 			}

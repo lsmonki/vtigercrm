@@ -129,7 +129,6 @@ $smarty->assign("CUSTOMVIEW_OPTION",$customview_html);
 
 // Navigation
 $start = $_SESSION['lvs'][$currentModule]['start'];
-$navigation_array = getNavigationValues($start, $recordCount, $list_max_entries_per_page);
 $navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string, $currentModule, 'index', $viewid);
 $smarty->assign("NAVIGATION", $navigationOutput);
 
