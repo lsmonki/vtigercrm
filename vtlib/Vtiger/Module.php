@@ -52,7 +52,8 @@ class Vtiger_Module extends Vtiger_ModuleBasic {
 
 		Vtiger_Utils::CreateTable(
 			'vtiger_crmentityrel',
-			'(crmid INT NOT NULL, module VARCHAR(100) NOT NULL, relcrmid INT NOT NULL, relmodule VARCHAR(100) NOT NULL)'
+			'(crmid INT NOT NULL, module VARCHAR(100) NOT NULL, relcrmid INT NOT NULL, relmodule VARCHAR(100) NOT NULL)',
+			true
 		);
 
 		$relation_id = $this->__getRelatedListUniqueId();

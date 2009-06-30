@@ -244,11 +244,13 @@ class Vtiger_ModuleBasic {
 		if(!$this->customtable)$this->customtable = $this->basetable . "cf";
 		if(!$this->grouptable)$this->grouptable = $this->basetable."grouprel";
 
-		Vtiger_Utils::CreateTable($this->basetable,"($this->basetableid INT)");
+		Vtiger_Utils::CreateTable($this->basetable,"($this->basetableid INT)",true);
 		Vtiger_Utils::CreateTable($this->customtable,
-			"($this->basetableid INT PRIMARY KEY)");
-		Vtiger_Utils::CreateTable($this->grouptable,
-			"($this->basetableid INT PRIMARY KEY, groupname varchar(100))");
+			"($this->basetableid INT PRIMARY KEY)", true);
+		if(Vtiger_Version::check('5.0.4', '<=')) {
+			Vtiger_Utils::CreateTable($this->grouptable,
+				"($this->basetableid INT PRIMARY KEY, groupname varchar(100))",true);
+		}
 	}
 
 	/**

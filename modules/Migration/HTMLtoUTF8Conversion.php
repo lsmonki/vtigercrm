@@ -14,7 +14,6 @@ set_time_limit($php_max_execution_time);
 global $adb,$dbname;
 
 //echo '<div align = "center"><br><b>Started UTF8 Conversion</b><br></div>';
-@ob_flush();
 
 //echo '<table width="98%" border="1px" cellpadding="3" cellspacing="0" height="100%">';
 //This function will convert all the html values in the database into utf-8 values
@@ -41,8 +40,6 @@ while($row = $adb->fetch_array($tables_res))
 	//echo "<td>UNLOCKING TABLE</td>";
 	$adb->query($query);
 	
-	@ob_flush();
-	flush();
 	//echo "</tr>";
 }
 $query = " SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS  ";
@@ -121,8 +118,6 @@ function convert_html2utf8_db()
 		//			<td width="80%">Updating the values in the table <b>'.$tablename.'</b></td>';
 			$log->debug("Converting values in the table :".$tablename);
 			//Sending the current status to the browser
-			@ob_flush();
-			flush();
 			for($k=0; $k < $adb->num_rows($res1); $k++)
 			{
 				$whereStr = "";
@@ -151,8 +146,6 @@ function convert_html2utf8_db()
 		//			<td width="20%">Completed</td>
 		//			</tr>';
 			//Sending the current status to the browser
-			@ob_flush();
-			flush();
 		}
         }
 //	echo '</table>';

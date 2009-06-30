@@ -8,6 +8,10 @@
  * All Rights Reserved.
  ********************************************************************************/
 session_start();
+$auth_key = $_REQUEST['auth_key'];
+if($_SESSION['authentication_key'] != $auth_key) {
+	die("Not Authorized to perform this operation");
+}
 
 if($_REQUEST['migration_start'] != 'true') {
 ?>
@@ -18,6 +22,7 @@ if($_REQUEST['migration_start'] != 'true') {
 		<title>vtiger CRM 5 - Configuration Wizard - Migration</title>
 		<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>		
     	<script type="text/javascript" src="include/js/general.js"></script>
+		<link href="themes/softed/style.css" rel="stylesheet" type="text/css">
 		<link href="include/install/install.css" rel="stylesheet" type="text/css">
 	</head>
 	
@@ -73,7 +78,7 @@ if($_REQUEST['migration_start'] != 'true') {
 											<br>
 								<div id='Mig_Close' style='display:none;'>
 									<form action="install.php" method="post" name="form" id="form">
-									<input type="hidden" name="file" value="6MigrationComplete.php" />	
+									<input type="hidden" name="file" value="MigrationComplete.php" />	
 							        <input type="image" src="include/install/images/cwBtnNext.gif" value='Agree' alt="Agree" border="0" title="migrate" style="cursor:pointer;" onClick="window.document.form.submit();">
 							    	</form>
 							    </div>
@@ -105,17 +110,20 @@ if($_REQUEST['migration_start'] != 'true') {
 	    </table>
 	    
 	    <script type='text/javascript'>
-	    var auth_key = '<?php echo $_SESSION['authentication_key']; ?>';
+	    var auth_key = '<?php echo $auth_key; ?>';
 	    if(typeof('Event') != 'undefined') {
 	    	Event.observe(window, 'load', function() {
-	    		document.getElementById('triggermigration_iframe').src = 'install.php?file=5MigrationProcess.php&migration_start=true&auth_key='+auth_key+'&skipcache=<?php echo microtime(true); ?>';
+	    		VtigerJS_DialogBox.progress();
+	    		document.getElementById('triggermigration_iframe').src = 'install.php?file=MigrationProcess.php&migration_start=true&auth_key='+auth_key;
 	    	});
 	    }
-	    function Migration_Complete(){
+	    function Migration_Complete() {
 	    	$('Mig_Close').style.display = 'block';
 	    }
 	    </script>
 	    
+	    <!-- Prefetch image to display later for Screen blocker -->
+	    <img src="themes/softed/images/layerPopupBg.gif" style="display: none;"/>
 	</body>
 	</html>	
 <?php 
@@ -126,11 +134,12 @@ if($_REQUEST['migration_start'] != 'true') {
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>vtiger CRM 5 - Configuration Wizard - Migration</title>
-		<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>		
+		<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>	
+		<link href="themes/softed/style.css" rel="stylesheet" type="text/css">	
 		<link href="include/install/install.css" rel="stylesheet" type="text/css">
 	</head>';
 	
-	echo '<body>';
+	echo '<body onload="window.parent.VtigerJS_DialogBox.hideprogress();">';
 	
 	require_once dirname(__FILE__) . '/../migrate.php';
 	

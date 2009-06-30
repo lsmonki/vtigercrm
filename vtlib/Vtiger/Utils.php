@@ -125,15 +125,28 @@ class Vtiger_Utils {
 	/**
 	 * Create table (supressing failure)
 	 * @param String tablename to create
-	 * @param String table creation criteria like '(columnname columntype, ....)' <br>
+	 * @param String table creation criteria like '(columnname columntype, ....)' 
+	 * @param String Optional suffix to add during table creation
+	 * <br>
 	 * will be appended to CREATE TABLE $tablename SQL
 	 */
-	static function CreateTable($tablename, $criteria) {
+	static function CreateTable($tablename, $criteria, $suffixTableMeta=false) {
 		global $adb;
 
 		$org_dieOnError = $adb->dieOnError;
 		$adb->dieOnError = false;
-		$adb->query("CREATE TABLE " . $tablename . $criteria);
+		$sql = "CREATE TABLE " . $tablename . $criteria;
+		if($suffixTableMeta !== false) {
+			if($suffixTableMeta === true) {
+				if($adb->isMySQL()) {
+					$suffixTableMeta = ' ENGINE=InnoDB DEFAULT CHARSET=utf8';
+				} else {
+					// TODO Handle other database types.
+				}
+			}
+			$sql .= $suffixTableMeta;
+		}
+		$adb->query($sql);
 		$adb->dieOnError = $org_dieOnError;	
 	}
 

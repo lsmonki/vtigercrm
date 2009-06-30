@@ -77,7 +77,8 @@ class Vtiger_Link {
 				Vtiger_Utils::CreateTable(
 					'vtiger_links',
 					'(linkid INT NOT NULL PRIMARY KEY,
-					tabid INT, linktype VARCHAR(20), linklabel VARCHAR(30), linkurl VARCHAR(255), linkicon VARCHAR(100), sequence INT, status INT(1) NOT NULL DEFAULT 1)');
+					tabid INT, linktype VARCHAR(20), linklabel VARCHAR(30), linkurl VARCHAR(255), linkicon VARCHAR(100), sequence INT, status INT(1) NOT NULL DEFAULT 1)',
+					true);
 				Vtiger_Utils::ExecuteQuery(
 					'CREATE INDEX link_tabidtype_idx on vtiger_links(tabid,linktype)');
 			}

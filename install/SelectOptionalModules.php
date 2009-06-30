@@ -9,10 +9,6 @@
  ************************************************************************************/
 
 //get php configuration settings.  requires elaborate parsing of phpinfo() output
-?>
-<html>
-<?php
-
 
 ob_start();
 eval("phpinfo();");
@@ -28,13 +24,21 @@ $current_dir = pathinfo(dirname(__FILE__));
 $current_dir = $current_dir['dirname']."/";
 
 $package_dir = $current_dir."packages/5.1.0/optional/";
+require_once($current_dir."install/language/en_us.lang.php");
 $handle = opendir($package_dir);
-$opt_modules = array();
-while($opt_mod = readdir($handle)){
-	if($opt_mod[0]!="." && $opt_mod!=""){
-		$opt_modules[] = str_replace(".zip","",$opt_mod);
+$optionalModules = array();
+while($optionalModuleFileName = readdir($handle)){
+	$moduleNameParts = explode(".",$optionalModuleFileName);
+	if($moduleNameParts[count($moduleNameParts)-1] != 'zip'){
+		continue;
+	}
+	array_pop($moduleNameParts);
+	$moduleName = implode("",$moduleNameParts);	
+	if(isset($optionalModuleStrings[$moduleName.'_description'])) {
+		$optionalModules[$moduleName] = $optionalModuleStrings[$moduleName.'_description'];
 	}
 }
+$optionalModuleNames = array_keys($optionalModules);
 
 ob_start();
 phpinfo(INFO_GENERAL);
@@ -93,7 +97,7 @@ if(isset($_REQUEST['filename'])){
 					<tr><td colspan=2><hr noshade size=1></td></tr>
 				    <tr>
 				    	<td colspan=2>
-				    		<table cellpadding="0" cellspacing="1" align=right width="100%" class="level3">
+				    		<table cellpadding="0" cellspacing="1" align=center width="100%" class="level3">
 				    			<tr>
 				    			<td colspan=2 style="font-size:13;">
 				    				<strong>Select Optional Modules to Install :</strong>
@@ -106,11 +110,12 @@ if(isset($_REQUEST['filename'])){
 
 									<?php
 										
-										foreach($opt_modules as $index=>$value) {
+										foreach($optionalModules as $moduleName=>$description) {
 									?>
 											<tr class='level1'>
-				        						<td class='small' width= "5%" valign=top align="right"><input type="checkbox" id="<?php echo $value; ?>" name="<?php echo $value; ?>" value="<?php echo $value; ?>" checked onChange='ModuleSelected("<?php echo $value; ?>");'></td>
-												<td class='small' valign=top ><?php echo $value; ?> </td>
+				        						<td class='small' width= "5%" valign=top align="right"><input type="checkbox" id="<?php echo $moduleName; ?>" name="<?php echo $moduleName; ?>" value="<?php echo $moduleName; ?>" checked onChange='ModuleSelected("<?php echo $moduleName; ?>");'></td>
+												<td class='small' valign=top ><?php echo $moduleName; ?></td>
+												<td class='small' valign=top ><i><?php echo $description; ?></i></td>
 											</tr>
 									<?php
 										}
@@ -122,18 +127,19 @@ if(isset($_REQUEST['filename'])){
 					</table>
 				</td>
 			</tr>
-			<tr valign=top>
-				<td align=left >
-					<input type="image" src="include/install/images/cwBtnBack.gif" alt="Back" border="0" title="Back" onClick="window.history.back();">
-					
-					</td>
-				<td align=right>
-					<form action="install.php" method="post" name="form" id="form">
-					<input type="hidden" value="<?php echo implode(":",$opt_modules)?>" id='selected_modules' name='selected_modules' />  
-	                <?php echo '<input type="hidden" name="file" value="'.$file_name.'" />'; ?>
-					<input type="image" src="include/install/images/cwBtnNext.gif" alt="Next" border="0" title="Next" onClick="submit();">
+			<tr valign=top width="50%">				
+				<td align=left>
+					<form action="javascript:window.history.back();" name="form1" id="form1">
+						<input type="image" src="include/install/images/cwBtnBack.gif" alt="Back" border="0" title="Back" onClick="window.history.back();">
 					</form>
-				    </td>
+				</td>
+				<td align=right style="vertical-align: middle;">
+					<form action="install.php" method="post" name="form" id="form">
+						<input type="hidden" value="<?php echo implode(":",$optionalModuleNames)?>" id='selected_modules' name='selected_modules' />  
+		                <?php echo '<input type="hidden" name="file" value="'.$file_name.'" />'; ?>
+						<input type="image" src="include/install/images/cwBtnNext.gif" alt="Next" border="0" title="Next" onClick="submit();">
+					</form>
+				</td>
 			</tr>
 		</table>
 	</td>
@@ -163,7 +169,7 @@ if(isset($_REQUEST['filename'])){
     	</table>
     	
 <script language="javascript">
-var selected_modules = '<?php echo implode(":",$opt_modules)?>';
+var selected_modules = '<?php echo implode(":",$optionalModuleNames)?>';
 
 function ModuleSelected(module){
 	if(document.getElementById(module).checked == true){

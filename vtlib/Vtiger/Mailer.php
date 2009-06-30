@@ -140,11 +140,13 @@ class Vtiger_Mailer extends PHPMailer {
 					'(id INT NOT NULL PRIMARY KEY,
 					fromname VARCHAR(100), fromemail VARCHAR(100),
 					mailer VARCHAR(10), content_type VARCHAR(15), subject VARCHAR(999), body TEXT, relcrmid INT, 
-					failed INT(1) NOT NULL DEFAULT 0, failreason VARCHAR(255))');
+					failed INT(1) NOT NULL DEFAULT 0, failreason VARCHAR(255))',
+					true);
 			}
 			if(!Vtiger_Utils::CheckTable('vtiger_mailer_queueinfo')) {
 				Vtiger_Utils::CreateTable('vtiger_mailer_queueinfo',
-					'(id INTEGER, name VARCHAR(100), email VARCHAR(100), type VARCHAR(7))');
+					'(id INTEGER, name VARCHAR(100), email VARCHAR(100), type VARCHAR(7))',
+					true);
 			}
 			$this->_queueinitialized = true;
 		}

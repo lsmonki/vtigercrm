@@ -162,11 +162,11 @@ table
 }
 
 .level3{
-	-moz-border-radius-bottomleft:5px;
-	-moz-border-radius-bottomright:5px;
-	-moz-border-radius-topleft:5px;
-	-moz-border-radius-topright:5px;
-	background-color:#F6F6F6;
+	-moz-border-radius-bottomleft:.8em;
+	-moz-border-radius-bottomright:.8em;
+	-moz-border-radius-topleft:.8em;
+	-moz-border-radius-topright:.8em;
+	background-color:#E7E7E7;
 	border:1px solid #CCCCCC;
 	font-size:20px;
 	line-height:1.4em;
@@ -183,4 +183,102 @@ table
 	Filter: Alpha(opacity = 50);
 	-moz-opacity: 0.5;
 	opacity: 0.5; 
+}
+
+.contentDisplay{
+	-moz-border-radius-bottomleft:1em;
+	-moz-border-radius-bottomright:1em;
+	-moz-border-radius-topleft:1em;
+	-moz-border-radius-topright:1em;
+	background-color:#E1E1FD;
+	border:1px dashed #000000;
+	font-size: 12px;
+}
+
+.leftAbsPopup{
+	position: absolute;
+	right: 25%;
+	top: 10%;
+	background-color: #b7b7b7;
+	border: 2px solid #777;
+	width: 65em;
+}
+  
+.floatRightTiny{
+   width: 1em;
+   float: right;
+   font-size: 16px;
+   border: 1px solid black;
+   background-color: #b7b7b7;
+  }
+
+.floatRightTinyOn{
+   width: 1em;
+   float: right;
+   font-size: 16px;
+   border: 1px solid black;
+   background-color: #070707;
+}
+
+.floatRightTiny a{
+   text-decoration: none;
+   color: black;
+}
+
+.floatRightTinyOn a{
+	text-decoration: none;
+	color: white;
+}
+
+.leftAbsPopup textarea{
+	height:40em;
+	width: 54em;
+	border:1px solid #dadada;
+}
+
+.posLayPopup {
+	position: absolute;
+	background-color:#EEEEEE;
+	border:3px solid #b7b7b7;
+	width: 40em;
+	padding-left: 2em;
+	padding-bottom: 2em;
+}
+
+.cellBackground {
+	background-color: #E7E7E7;
+}
+
+.textCenter {
+	text-align: center;
+}
+
+.higherLineHeight {
+	line-height: 20px;
+}
+
+.mediumLineHeight {
+	line-height: 16px;
+}
+
+.paddingPoint5em {
+	padding: .5em;
+}
+
+.redColor {
+	color: red;
+}
+
+.smallFont {
+	font-size: small;
+}
+
+#unhealthyTablesList {
+	border : 1px solid black;
+}
+
+#unhealthyTablesList td {
+	border : 1px solid black;
+	border-left: 0px;
+	border-top: 0px;
 }

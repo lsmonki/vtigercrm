@@ -38,7 +38,6 @@ if (isset($_REQUEST['check_createdb'])) $check_createdb = $_REQUEST['check_creat
 if (isset($_REQUEST['root_user'])) $root_user = $_REQUEST['root_user'];
 if (isset($_REQUEST['root_password'])) $root_password = $_REQUEST['root_password'];
 if (isset($_REQUEST['create_utf8_db'])) $create_utf8_db = 'true';
-if(isset($_REQUEST['selected_modules'])) $mod_for_ins = $_REQUEST['selected_modules'];
 
 if(isset($currency_name)){
 	$currency_code = $currencies[$currency_name][0];
@@ -201,42 +200,28 @@ $log->info($php_info);
 
 	</tr>
 	</table>
-	<table border=0 cellspacing=0 cellpadding=10 width=80% align=center>
+	<table border=0 cellspacing=0 cellpadding=2 width=80% align=center>
 	<tr>
 		<td class="small" bgcolor="#4572BE" align=center>
 			<!-- Master display -->
 			<table border=0 cellspacing=0 cellpadding=0 width=97%>
 			<tr>
-				<!-- td width=20% valign=top>
-
-				<!-- Left side tabs --\>
-					<table border=0 cellspacing=0 cellpadding=10 width=100%>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Welcome</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Installation Check</div></td></tr>
-					<tr><td class="small cwSelectedTab" align=right><div align="left"><b>System Configuration</b></div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Confirm Settings</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Config File Creation</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Database Generation</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Finish</div></td></tr>
-					</table>
-					
-				</td -->
-				<td width=80% valign=top class="cwContentDisplay" align=left>
+				<td width=80% valign=top class="cwContentDisplay" align=center>
 				<table border=0 cellspacing=0 cellpadding=10 width=100%>
 				<tr><td class=small align=left colspan=2><img src="include/install/images/confWizConfirmSettings.gif" alt="Confirm Configuration Settings" title="Confirm Configuration Settings"><br>
 					  <hr noshade size=1></td></tr>
+				<?php if($error_msg) : ?>
 				<tr>
 					<td align=left class="small" colspan=2 width=50% style="padding-left:10px">
-					<?php if($error_msg) : ?>
-						<div style="background-color:#ff0000;color:#ffffff;padding:5px">
+					<div style="background-color:#ff0000;color:#ffffff;padding:5px">
 						<b><?php echo $error_msg ?></b>
 						</div>
 						<?php if($error_msg_info) : ?>
 							<p><?php echo $error_msg_info ?><p>
 						<?php endif; ?>
-					<?php endif; ?>
 					</td>
 				</tr>
+				<?php endif; ?>
 				<tr>
 					<td align=left class="small" width=50% style="padding-left:10px">
 					<table width="100%" cellpadding="0" border="0" align=center class="level3" cellspacing="1">
@@ -299,7 +284,7 @@ $log->info($php_info);
 					<tr>
 					<td align="left" valign="bottom">
 					<form action="install.php" method="post" name="form" id="form">
-						<input type="hidden" name="file" value="4setConfig.php">
+						<input type="hidden" name="file" value="SetInstallationConfig.php">
 						<input type="hidden" class="dataInput" name="db_type" value="<?php if (isset($db_type)) echo "$db_type"; ?>" />
 						<input type="hidden" class="dataInput" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" />
 						<input type="hidden" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" />
@@ -325,7 +310,6 @@ $log->info($php_info);
 						<input type="hidden" class="dataInput" name="root_password" value="<?php if (isset($root_password)) echo "$root_password"; ?>" />
 						<input type="hidden" class="dataInput" name="create_utf8_db" value="<?php if (isset($create_utf8_db)) echo "$create_utf8_db"; ?>" />
 						<input type="hidden" class="dataInput" name="vt_charset" value="<?php if (isset($vt_charset)) echo "$vt_charset"; ?>" />
-						<input type="hidden" name="selected_modules" id="selected_modules" value="<?php if (isset($mod_for_ins)) echo $mod_for_ins; else echo '';?>" />
 						<input type="image" name="Change" value="Change" title="Change" src="include/install/images/cwBtnChange.gif"/>
 					</form>
 					</td>
@@ -333,7 +317,7 @@ $log->info($php_info);
 					<?php if($next) : ?>
 					<td align="right" valign="bottom">
 					<form action="install.php" method="post" name="form" id="form">
-						<input type="hidden" name="file" value="6createConfigFile.php">
+						<input type="hidden" name="file" value="CreateConfigFile.php">
 							<table class=small>
 							<tr>
 								<td><input type="checkbox" class="dataInput" name="db_populate" value="1"></td>
@@ -367,7 +351,6 @@ $log->info($php_info);
 						<input type="hidden" class="dataInput" name="root_password" value="<?php if (isset($root_password)) echo "$root_password"; ?>" />
 						<input type="hidden" class="dataInput" name="create_utf8_db" value="<?php if (isset($create_utf8_db)) echo "$create_utf8_db"; ?>" />
 						<input type="hidden" class="dataInput" name="vt_charset" value="<?php if (isset($vt_charset)) echo "$vt_charset"; ?>" />
-						<input type="hidden" name="selected_modules" id="selected_modules" value="<?php if (isset($mod_for_ins)) echo $mod_for_ins; else echo '';?>" />
 						<input type="image" src="include/install/images/cwBtnNext.gif" name="next" title="Next" value="Create" onClick="window.location=('install.php')"/>
 					</form>
 					</td>

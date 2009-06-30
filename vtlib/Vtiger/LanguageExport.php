@@ -43,7 +43,8 @@ class Vtiger_LanguageExport extends Vtiger_Package {
 			Vtiger_Utils::CreateTable(
 				self::TABLENAME,
 				'(id INT NOT NULL PRIMARY KEY,
-				name VARCHAR(50), prefix VARCHAR(10), label VARCHAR(30), lastupdated DATETIME, sequence INT, isdefault INT(1), active INT(1))'
+				name VARCHAR(50), prefix VARCHAR(10), label VARCHAR(30), lastupdated DATETIME, sequence INT, isdefault INT(1), active INT(1))',
+				true
 			);
 			global $languages, $adb;
 			foreach($languages as $langkey=>$langlabel) {

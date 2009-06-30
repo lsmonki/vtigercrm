@@ -49,7 +49,8 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 				"($picklist_idcol INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 				$this->name VARCHAR(200) NOT NULL,
 				presence INT (1) NOT NULL DEFAULT 1,
-				picklist_valueid INT NOT NULL DEFAULT 0)");
+				picklist_valueid INT NOT NULL DEFAULT 0)", 
+				true);
 			$new_picklistid = $this->__getPicklistUniqueId();
 			$adb->pquery("INSERT INTO vtiger_picklist (picklistid,name) VALUES(?,?)",Array($new_picklistid, $this->name));
 			self::log("Creating table $picklist_table ... DONE");
@@ -93,7 +94,8 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 				"($picklist_idcol INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 				$this->name VARCHAR(200) NOT NULL,
 				sortorderid INT(11),
-				presence INT (11) NOT NULL DEFAULT 1)");
+				presence INT (11) NOT NULL DEFAULT 1)", 
+				true);
 			self::log("Creating table $picklist_table ... DONE");
 		}
 
@@ -120,7 +122,8 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 		// We need to create core table to capture the relation between the field and modules.
 		Vtiger_Utils::CreateTable(
 			'vtiger_fieldmodulerel',
-			'(fieldid INT NOT NULL, module VARCHAR(100) NOT NULL, relmodule VARCHAR(100) NOT NULL, status VARCHAR(10), sequence INT)'
+			'(fieldid INT NOT NULL, module VARCHAR(100) NOT NULL, relmodule VARCHAR(100) NOT NULL, status VARCHAR(10), sequence INT)',
+			true
 		);
 		// END
 

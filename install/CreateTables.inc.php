@@ -1033,7 +1033,7 @@ setFieldHelpInfo();
 // Install Vtlib Compliant Modules
 installMandatoryModules();
 require_once('include/utils/installVtlibSelectedModules.php');
-
+	
 // populate the db with seed data
 if ($db_populate) {
 	//eecho ("Populate seed data into $db_name");

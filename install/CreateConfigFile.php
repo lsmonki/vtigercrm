@@ -10,16 +10,11 @@
 
 include('vtigerversion.php');
 
-
 session_start();
 
-
-
 // vtiger CRM version number; do not edit!
-
 $vtiger_version = "5.1.0 RC";
 $release_date = "June 2009";
-
 
 if (isset($_REQUEST['db_hostname']))
 {
@@ -74,8 +69,6 @@ if (isset($_REQUEST['ftppassword'])) $ftppassword = $_REQUEST['ftppassword'];
 // If vtiger charset is set (based on database charset check from last page) use it
 if (isset($_REQUEST['vt_charset'])) $vt_charset = $_REQUEST['vt_charset'];
 else $vt_charset = 'UTF-8';
-
-if (isset($_REQUEST['selected_modules'])) $mod_for_ins = $_REQUEST['selected_modules'];
 
 // update default port
 if ($db_port == '')
@@ -137,27 +130,13 @@ $cache_dir = 'cache/';
 			<!-- Master display -->
 			<table border=0 cellspacing=0 cellpadding=0 width=97%>
 			<tr>
-				<!-- td width=20% valign=top>
-
-				<!-- Left side tabs --\>
-					<table border=0 cellspacing=0 cellpadding=10 width=100%>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Welcome</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Installation Check</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">System Configuration</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Confirm Settings</div></td></tr>
-					<tr><td class="small cwSelectedTab" id="configfile_tab" align=right><div align="left"><b>Config File Creation</b></div></td></tr>
-					<tr><td class="small cwUnSelectedTab" id="dbcreate_tab" align=right><div align="left">Database Generation</div></td></tr>
-					<tr><td class="small cwUnSelectedTab" align=right><div align="left">Finish</div></td></tr>
-					</table>
-					
-				</td -->
-				<td width=80% valign=top class="cwContentDisplay" align=left>
-				<table border=0 cellspacing=0 cellpadding=5 width=100%>
+				<td width=80% valign=top class="cwContentDisplay" align=center>
+				<table border=0 cellspacing=0 cellpadding=5 width=95%>
 				<tr><td class=small align=left><img id="title_img" src="include/install/images/confWizConfFile.gif" alt="Config File Creation" title="Config File Creation"><img id="title_img1" src="include/install/images/confWizDbGeneration.gif" style="display:none;" alt="Database Generation" title="Database Generation"><br>
 					  <hr noshade size=1></td></tr>
 				<tr>
 					<td align=left><br>
-					<table width="95%" cellpadding="0" border="0" align=center class="level3" cellspacing="1">
+					<table width="100%" cellpadding="0" border="0" align=center class="level3" cellspacing="1">
 					<tr><td>
 					<?php
 					if (isset($_REQUEST['root_directory']))
@@ -437,7 +416,7 @@ $cache_dir = 'cache/';
 				<td align=right style="height:60px;">
 				 <form action="install.php" method="post" name="form" id="form">
 				 <!--<form action="install.php" method="post" name="form" id="form"> -->
-				 <input type="hidden" name="file" value="7createTables.php">
+				 <input type="hidden" name="file" value="CreateTables.php">
 				 <input type="hidden" class="dataInput" name="db_hostname" value="<?php if (isset($db_hostname)) echo "$db_hostname"; ?>" />
 				 <input type="hidden" class="dataInput" name="db_username" value="<?php if (isset($db_username)) echo "$db_username"; ?>" />
 				 <input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
@@ -452,7 +431,6 @@ $cache_dir = 'cache/';
 				 <input type="hidden" class="dataInput" name="currency_name" value="<?php if (isset($currency_name)) echo "$currency_name"; ?>" />
 				 <input type="hidden" class="dataInput" name="currency_code" value="<?php if (isset($currency_code)) echo "$currency_code"; ?>" />
 				 <input type="hidden" class="dataInput" name="currency_symbol" value="<?php if (isset($currency_symbol)) echo "$currency_symbol"; ?>" />
-				 <input type="hidden" name="selected_modules" id="selected_modules" value="<?php if (isset($mod_for_ins)) echo $mod_for_ins; else echo '';?>" />
 				 <input  type="image" name="next" value="Next" id="next_btn" src="include/install/images/cwBtnNext.gif" onClick="createtablejs();window.location=('install.php');" />
 				 </form>
 					

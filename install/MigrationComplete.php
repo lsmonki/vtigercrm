@@ -104,7 +104,7 @@ if(!@rename("install/", $renamefile."install/"))
 	{
 		echo "<br><b><font color='red'>We strongly suggest you to rename the install directory.</font></b><br>";
 	}
-$_SESSION['VTIGER_DB_VERSION']='5.1.0';
+$_SESSION['VTIGER_DB_VERSION']='5.1.0 RC';
 }
 //populate Calendar data
 
@@ -113,7 +113,7 @@ $_SESSION['VTIGER_DB_VERSION']='5.1.0';
 		<table border=0 cellspacing=0 cellpadding=5 align="center" width="80%" style="background-color:#E1E1FD;border:1px dashed #111111;">
 		<tr>
 			<td align=center class=small>
-			<b>Migration Successfully finished. All new vtigercrm-5.1.0 is set to go!</b>
+			<b>Migration Successfully finished. All new vtigercrm-5.1.0-RC is set to go!</b>
 			<hr noshade size=1>
 			<div style="width:100%;padding:10px; "align=left>
 			<ul>

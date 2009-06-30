@@ -11,21 +11,6 @@
 //get php configuration settings.  requires elaborate parsing of phpinfo() output
 ?>
 <html>
-<?php
-
-if(isset($_REQUEST['install'])){
-	$form_name = 'installform';
-	$file_name = '4setConfig.php';
-	$source_file = 'licenceAgreement.html';
-}
-elseif(isset($_REQUEST['migrate'])){
-	$form_name = 'migrateform';
-	$file_name = '4setMigrationConfig.php';
-	$source_file = 'migrationInstructions.html';
-}
-
-
-?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -36,22 +21,21 @@ elseif(isset($_REQUEST['migrate'])){
 </head>
 
 <body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
-
 	<br>
 	<!-- Table for cfgwiz starts -->
 
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
-	<tr>
-		<td class="cwHeadBg" align=left><img src="include/install/images/configwizard.gif" alt="Configuration Wizard" hspace="20" title="Configuration Wizard"></td>
-		<td class="cwHeadBg1" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
-		<td class="cwHeadBg1" width=2%></td>
-	</tr>
+		<tr>
+			<td class="cwHeadBg" align=left><img src="include/install/images/configwizard.gif" alt="Configuration Wizard" hspace="20" title="Configuration Wizard"></td>
+			<td class="cwHeadBg1" align=right><img src="include/install/images/vtigercrm5.gif" alt="vtiger CRM 5" title="vtiger CRM 5"></td>
+			<td class="cwHeadBg1" width=2%></td>
+		</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
-	<tr>
-		<td background="include/install/images/topInnerShadow.gif" colspan=2 align=left><img height="10" src="include/install/images/topInnerShadow.gif" ></td>
-
-	</tr>
+		<tr>
+			<td background="include/install/images/topInnerShadow.gif" colspan=2 align=left><img height="10" src="include/install/images/topInnerShadow.gif" ></td>
+	
+		</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=10 width=80% align=center>
 		<tr>
@@ -59,8 +43,7 @@ elseif(isset($_REQUEST['migrate'])){
 				<!-- Master display -->
 				<table border=0 cellspacing=0 cellpadding=0 width=97%>
 					<tr>
-						<td width=80% valign=top class="cwContentDisplay" align=center colspan=2>
-						<br>
+						<td width=80% valign=top class="cwContentDisplay" align=center colspan=2><br>
 						</td>
 					</tr>
 					<tr>
@@ -69,7 +52,7 @@ elseif(isset($_REQUEST['migrate'])){
 						    <table cellspacing=0 cellpadding=10 width=90% align=center class='level3'>
 								<tr>
 									<td align=center>
-										<iframe class='licence' frameborder=0 src='<?php echo $source_file ?>' marginwidth=20 scrolling='auto'>
+										<iframe class='licence' frameborder=0 src='licenceAgreement.html' marginwidth=20 scrolling='auto'>
 										</iframe>
 									</td>
 								</tr>
@@ -81,17 +64,17 @@ elseif(isset($_REQUEST['migrate'])){
 						<!-- Right side tabs -->
 						    <table cellspacing=0 cellpadding=10 width=90% align=center class='cwContentDisplay'>
 								<tr>
-						<td align=left width=50% valign=top ><br>
-							<input type="image" src="include/install/images/cwBtnBack.gif" alt="Back" border="0" title="Back" onClick="window.history.back();">
-						</td>
-						<td width=50% valign=top align=right>
-										<br>
-							<form action="install.php" method="post" name="form" id="form">
-							<input type="hidden" name="filename" value="<?php echo $file_name?>" />	
-							<input type="hidden" name="file" value="2checkSystem.php" />	
-					        <input type="image" src="include/install/images/cwBtnNext.gif" value='Agree' alt="Agree" border="0" title="migrate" style="cursor:pointer;" onClick="window.document.form.submit();">
-							</form>
-						</td>
+									<td align=left width=50% valign=top ><br>
+										<input type="image" src="include/install/images/cwBtnBack.gif" alt="Back" border="0" title="Back" onClick="window.history.back();">
+									</td>
+									<td width=50% valign=top align=right>
+													<br>
+										<form action="install.php" method="post" name="form" id="form">
+										<input type="hidden" name="filename" value="SetInstallationConfig.php" />
+										<input type="hidden" name="file" value="CheckSystem.php" />	
+								        <input type="image" src="include/install/images/cwBtnNext.gif" value='Agree' alt="Agree" border="0" title="migrate" style="cursor:pointer;" onClick="window.document.form.submit();">
+										</form>
+									</td>
 								</tr>
 							</table>
 						</td>
@@ -101,21 +84,19 @@ elseif(isset($_REQUEST['migrate'])){
 		</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
-	<tr>
-
-		<td background="include/install/images/bottomGradient.gif"><img src="include/install/images/bottomGradient.gif"></td>
-	</tr>
+		<tr>
+			<td background="include/install/images/bottomGradient.gif"><img src="include/install/images/bottomGradient.gif"></td>
+		</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
-	<tr>
-		<td align=center><img src="include/install/images/bottomShadow.jpg"></td>
-	</tr>
+		<tr>
+			<td align=center><img src="include/install/images/bottomShadow.jpg"></td>
+		</tr>
 	</table>	
 	<table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
-
       	<tr>
         	<td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td>
       	</tr>
-    	</table>
+	</table>
 </body>
-</html>	
+</html>

@@ -159,7 +159,7 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 		!isset($_REQUEST['create_utf8_db'])? $create_utf8_db = "true" : $create_utf8_db = $_REQUEST['create_utf8_db'];
 		// determine database options
 
-		if(isset($_REQUEST['selected_modules'])) $mod_for_ins = $_REQUEST['selected_modules'];
+		$_SESSION['selectedOptionalModules'] = $_REQUEST['selected_modules'];
 
 		$db_options = array();
 		if(function_exists('mysql_connect')) {
@@ -340,13 +340,14 @@ function verify_data(form) {
 			<!-- Master display -->
 			<table border=0 cellspacing=0 cellpadding=0 width=97%>
 			<tr>
-					<td width=90% valign=top class="cwContentDisplay" align=left>
+					<td width=80% valign=top class="cwContentDisplay" align=center>
 				<!-- Right side tabs -->
-				    <form action="install.php" method="post" name="installform" id="form" name="setConfig" id="form">
-				    <table border=0 cellspacing=0 cellpadding=10 width=100%>
+				    <table border=0 cellspacing=0 cellpadding=2 width=95%>
 				    <tr><td class=small align=left colspan=2><img src="include/install/images/confWizSysConfig.gif" alt="System Configuration" title="System Configuration"><br>
 					  <hr noshade size=1></td></tr>
 				    <tr valign=top >
+				    <form action="install.php" method="post" name="installform" id="form" name="setConfig" id="form">				    
+					<input type="hidden" name="file" value="ConfirmConfig.php" />				    
 					<td align=left class="small" width=50% style="padding-left:10px">
 		
 			<table width="100%" cellpadding="0"  cellspacing="1" border="0" align=center class="level3"><tbody>
@@ -426,7 +427,6 @@ function verify_data(form) {
 			<tr>
 				<td nowrap width=20% >Currency Name<sup><font color=red>*</font></sup></td>
 				<td width=80% align="left">
-					<!-- input class="dataInput" type="text" name="currency_name" value="< ?php if (isset($currency_name)) echo "$currency_name"; ?>" -->
 					<select class="small" id='currency_name' name='currency_name''>
 						<?php
 							foreach($currencies as $index=>$value){
@@ -451,7 +451,6 @@ function verify_data(form) {
 				</td>
 			</tr>
 			<input type="hidden" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" size="40" />
-			<input name="selected_modules" type="hidden" id="selected_modules" value = '<?php echo $mod_for_ins; ?>' />
 			<input type="hidden" name="cache_dir" size='40' value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" size="40" />
 		</table>
 			<br>
@@ -480,18 +479,15 @@ function verify_data(form) {
 	
 		<!-- System Configuration -->
 		</td>
-		</tr>
-		</table>
-			<input type="hidden" name="file" value="5confirmConfig.php" />
 		</form>
-		<table width="100%" cellpadding="10" border="0" align=center cellspacing="1" >
+		</tr>
 		<tr>
-				<td align="left">
-					<input type="image" src="include/install/images/cwBtnBack.gif" id="back" alt="Back" border="0" title="Back" onClick="window.history.back();" />
-				</td>
-				<td align="right">
-					<input type="image" src="include/install/images/cwBtnNext.gif" id="starttbn" alt="Next" border="0" title="Next" onClick="return verify_data(window.document.installform);" />
-				</td>
+			<td align="left">
+				<input type="image" src="include/install/images/cwBtnBack.gif" id="back" alt="Back" border="0" title="Back" onClick="window.history.back();" />
+			</td>
+			<td align="right">
+				<input type="image" src="include/install/images/cwBtnNext.gif" id="starttbn" alt="Next" border="0" title="Next" onClick="return verify_data(window.document.installform);" />
+			</td>
 		</tr>
 		</table>
 	</td>

@@ -22,7 +22,6 @@ if (isset($_REQUEST['standarduser_password'])) $standarduser_password = $_REQUES
 if (isset($_REQUEST['currency_name'])) $currency_name	= $_REQUEST['currency_name'];
 if (isset($_REQUEST['currency_code'])) $currency_code	= $_REQUEST['currency_code'];
 if (isset($_REQUEST['currency_symbol'])) $currency_symbol	= $_REQUEST['currency_symbol'];
-if (isset($_REQUEST['selected_modules'])) $selected_modules = $_REQUEST['selected_modules'];
 
 ?>
 
@@ -99,7 +98,7 @@ function showhidediv()
 	// Output html instead of plain text for the web
 	$useHtmlEntities = true;
 
-	require_once('install/7createTables.inc.php');
+	require_once('install/CreateTables.inc.php');
 
 	
 //populating forums data
@@ -169,7 +168,7 @@ if(isset($application_unique_key) && !empty($application_unique_key)) {
 // END
 
 ?>
-		<table border=0 cellspacing=0 cellpadding=5 align="center" width="80%" style="background-color:#E1E1FD;border:1px dashed #111111;">
+		<table border=0 cellspacing=0 cellpadding=5 align="center" width="80%" class="contentDisplay">
 		<tr>
 			<td align=center class=small>
 			<b>vtigercrm-5.1.0 RC is all set to go!</b>

@@ -9,7 +9,7 @@
  *************************************************************************************/
 
 require_once('include/utils/utils.php');
-global $selected_modules;
+$selected_modules = $_SESSION['selectedOptionalModules'];
 
 installOptionalModules($selected_modules);
 
