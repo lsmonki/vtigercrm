@@ -1209,7 +1209,7 @@ class CustomView extends CRMEntity{
 
 		$adv_chk_value = $value;
 		$value = '(';
-		$sql = "select distinct(setype) from vtiger_crmentity where crmid in (select ". $adb->sql_escape_string($fieldname)." from ". $adb->sql_escape_string($tablename).")";
+		$sql = "select distinct(setype) from vtiger_crmentity c INNER JOIN ".$adb->sql_escape_string($tablename)." t ON t.".$adb->sql_escape_string($fieldname)." = c.crmid";
 		$res=$adb->pquery($sql, array());
 		for($s=0;$s<$adb->num_rows($res);$s++)
 		{
