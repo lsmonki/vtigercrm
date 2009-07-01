@@ -8,9 +8,11 @@
  * All Rights Reserved.
  ********************************************************************************/
 set_time_limit(0);
-
-if (isset($_REQUEST['root_directory'])) $root_directory = $_REQUEST['root_directory'];
-if (isset($_REQUEST['source_directory'])) $source_directory = $_REQUEST['source_directory'];
+session_start();
+$migrationInfo = $_SESSION['migration_info'];
+$root_directory = $migrationInfo['root_directory'];
+$source_directory = $migrationInfo['source_directory'];
+session_destroy();
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

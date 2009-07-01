@@ -54,20 +54,34 @@ class DBHealthCheck {
 	}
 	
 	function _mysql_getUnhealthyTables() {
-		$tablesResult = $this->db->_Execute("SHOW TABLE STATUS FROM $this->dbName " .
-					" WHERE name NOT LIKE '%_seq' AND engine != 'InnoDB'");
+		$tablesResult = $this->db->_Execute("SHOW TABLE STATUS FROM $this->dbName");
 		$noOfTables = $tablesResult->NumRows($tablesResult);
 		$unHealthyTables = array();
-		for($i=0; $i<$noOfTables; ++$i) {
+		$i=0;
+		for($j=0; $j<$noOfTables; ++$j) {
 			$tableInfo = $tablesResult->GetRowAssoc(0);
-			//print_r($tableInfo); die();
-			$unHealthyTables[$i]['name'] = $tableInfo['name'];
-			$unHealthyTables[$i]['engine'] = $tableInfo['engine'];
-			$unHealthyTables[$i]['autoincrementValue'] = $tableInfo['auto_increment'];
-			$tableCollation = $tableInfo['collation'];
-			$unHealthyTables[$i]['characterset'] = substr($tableCollation, 0, strpos($tableCollation,'_'));
-			$unHealthyTables[$i]['collation'] = $tableCollation;
-			$unHealthyTables[$i]['createOptions'] = $tableInfo['create_options'];
+			$isHealthy = false;
+			// If already InnoDB type, skip it.
+			if ($tableInfo['engine'] == 'InnoDB') {
+				$isHealthy = true;
+			}
+			// If table is a sequence table, then skip it.
+			$tableNameParts = explode("_",$tableInfo['name']);
+			$tableNamePartsCount = count($tableNameParts);
+			if ($tableNameParts[$tableNamePartsCount-1] == 'seq') {
+				$isHealthy = true;
+			}
+			
+			if(!$isHealthy) {
+				$unHealthyTables[$i]['name'] = $tableInfo['name'];
+				$unHealthyTables[$i]['engine'] = $tableInfo['engine'];
+				$unHealthyTables[$i]['autoincrementValue'] = $tableInfo['auto_increment'];
+				$tableCollation = $tableInfo['collation'];
+				$unHealthyTables[$i]['characterset'] = substr($tableCollation, 0, strpos($tableCollation,'_'));
+				$unHealthyTables[$i]['collation'] = $tableCollation;
+				$unHealthyTables[$i]['createOptions'] = $tableInfo['create_options'];
+				++$i;
+			}
 			$tablesResult->MoveNext();
 		}
 		return $unHealthyTables;
@@ -78,14 +92,11 @@ class DBHealthCheck {
 	}
 	
 	function _mysql_updateEngineTypeForAllTables() {
-		$tablesResult = $this->db->_Execute("SHOW TABLE STATUS FROM $this->dbName " .
-					" WHERE name NOT LIKE '%_seq' AND engine != 'InnoDB'");
-		$noOfTables = $tablesResult->NumRows($tablesResult);
+		$unHealthyTables = $this->_mysql_getUnhealthyTables();
+		$noOfTables = count($unHealthyTables);
 		for($i=0; $i<$noOfTables; ++$i) {
-			$tableRow = $tablesResult->GetRowAssoc(0);
-			$tableName = $tableRow['name'];
+			$tableName = $unHealthyTables[$i]['name'];
 			$this->db->_Execute("ALTER TABLE $tableName ENGINE=$this->recommendedEngineType");
-			$tablesResult->MoveNext();
 		}		
 	}
 }

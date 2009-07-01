@@ -28,6 +28,7 @@ require_once('include/utils/utils.php');
 require_once('modules/Users/DefaultDataPopulator.php');
 require_once('modules/Users/CreateUserPrivilegeFile.php');
 
+session_start();
 // load the config_override.php file to provide default user settings
 if (is_file("config_override.php")) {
 	require_once("config_override.php");

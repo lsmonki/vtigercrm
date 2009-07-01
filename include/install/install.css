@@ -237,9 +237,9 @@ table
 }
 
 .posLayPopup {
-	position: absolute;
-	background-color:#EEEEEE;
-	border:3px solid #b7b7b7;
+	border:2px solid #ddd;
+	background:#fffff5 url(../../themes/softed/images/layerPopupBg.gif) ;
+	position:absolute;
 	width: 40em;
 	padding-left: 2em;
 	padding-bottom: 2em;
@@ -281,4 +281,13 @@ table
 	border : 1px solid black;
 	border-left: 0px;
 	border-top: 0px;
+}
+
+#dbMirrorCopy {
+	font-size: 12px;
+}
+
+#dbMirrorCopy .floatRightTiny, #dbMirrorCopy .floatRightTinyOn {
+	background: none;
+	border: 0;
 }

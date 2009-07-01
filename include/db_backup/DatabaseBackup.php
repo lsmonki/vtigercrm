@@ -248,7 +248,7 @@ class DatabaseBackup {
 			$this->writeLine("--");
 			$this->writeLine("");
 			$this->writeLine("DROP TABLE IF EXISTS $tableName;");
-			$this->writeLine($sql);
+			$this->writeLine($sql.';');
 			$this->writeLine("");
 			$this->writeLine("--");
 			$this->writeLine("-- Dumping data for table $tableName");
@@ -262,7 +262,7 @@ class DatabaseBackup {
 			$result = $this->destCon->_Execute($sql,false);
 			$this->checkError($result,$sql);
 		}else{
-			$this->writeLine($sql);
+			$this->writeLine($sql.';');
 		}
 	}
 	

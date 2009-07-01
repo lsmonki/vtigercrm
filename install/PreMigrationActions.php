@@ -60,14 +60,13 @@ if($dbName == $newDbForCopy) {
 		function viewDBReport(){
 			var value = jQuery('#auth_key').attr('value');
 			var url = 'install.php?file=VerifyDBHealth.php&ajax=true&viewDBReport=true&auth_key='+value;
-			window.open(url,'DB Health Check', 'width=700px, height=500px, resizable=1,menubar=0, location=0, toolbar=0,scrollbars=1');			
+			window.open(url,'DBHealthCheck', 'width=700px, height=500px, resizable=1,menubar=0, location=0, toolbar=0,scrollbars=1');			
 		}
 		
 		function getDbDump(){
 			var value = jQuery('#auth_key').attr('value');
 			var url = 'install.php?file=MigrationDbBackup.php&mode=dump&auth_key='+value;
-			window.open(url,'Database Dump: it may take a long time depending on your database size',
-				'width=800px, height=600px, resizeable=1,menubar=0, location=0, toolbar=0,scrollbars=1');
+			window.open(url,'DatabaseDump', 'width=800px, height=600px, resizable=1,menubar=0, location=0, toolbar=0,scrollbars=1');
 		}
 		
 		function doDBCopy(){
@@ -168,7 +167,7 @@ if($dbName == $newDbForCopy) {
 												<td align=left width=50% valign=top>
 													<table cellpadding="5" cellspacing="1" align=right width="100%" border="0">
 														<tr>
-															<td width="48%" align="center">
+															<td width="48%" align="left">
 																<table width="100%" cellspacing="0" cellpadding="5" border="0">
 																	<tr>
 																		<td width="50" valign="top" rowspan="2">
@@ -188,7 +187,7 @@ if($dbName == $newDbForCopy) {
 																</table>
 															</td>
 															<td height="100%" width="2%" style="border-left:2px dotted #999999;"></td>
-															<td width="48%" align="center">
+															<td width="48%" align="left">
 																<table width="100%" cellspacing="0" cellpadding="5" border="0">
 																	<tr>
 																		<td width="50" valign="top" rowspan="2">
@@ -252,30 +251,30 @@ if($dbName == $newDbForCopy) {
 			<td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td>
 		</tr>
 	</table>
-<div id="dbMirrorCopy" class="posLayPopup" style="display: none;" align="center">
-	<div class="floatRightTiny" onmouseover="this.className= 'floatRightTinyOn';" onmouseout="this.className= 'floatRightTiny';"><a href="javascript: void(0);" onClick="fninvsh('dbMirrorCopy');">X</a></div>
-	<div align="center" class="paddingPoint5em">Copy you Existing database into new database to be used for migration</div>
-	<table cellpadding="5" cellspacing="2">
+<div id="dbMirrorCopy" class="posLayPopup" style="display: none;">
+	<div class="floatRightTiny" onmouseover="this.className= 'floatRightTinyOn';" onmouseout="this.className= 'floatRightTiny';"><a href="javascript: void(0);" onClick="fninvsh('dbMirrorCopy');"><img src="themes/images/close.gif" border=0></a></div>
+	<div class="paddingPoint5em"><b>Copy your Existing database into New Database to be used for migration</b></div>
+	<table cellpadding="5" cellspacing="2" width="100%" border="0">
 		<tbody>
-			<tr class="cellBackground">
-				<td>New Database Name:<sup><font class="redColor">*</font></sup></td>
-				<td><input type='text' class="small" name='newDatabaseName' id='newDatabaseName' value='<?php echo $newDbForCopy ?>'></td>								
+			<tr class="dvtCellLabel">
+				<td width="20%">New Database Name:<sup><font class="redColor">*</font></sup></td>
+				<td><input type='text' class="detailedViewTextBox" name='newDatabaseName' id='newDatabaseName' value='<?php echo $newDbForCopy ?>'></td>								
 			</tr>
-			<tr class="cellBackground">
-				<td>Root User Name:<sup><font class="redColor">*</font></sup></td>
-				<td><input type='text' class="small" name='rootUserName' id='rootUserName' value=''></td>
+			<tr class="dvtCellLabel">
+				<td width="20%">Root User Name:<sup><font class="redColor">*</font></sup></td>
+				<td><input type='text' class="detailedViewTextBox" name='rootUserName' id='rootUserName' value=''></td>
 			</tr>
-			<tr class="cellBackground">
-				<td>Root Password:</td>
-				<td><input type='password' class="small" name='rootPassword' id='rootPassword' value=''></td>
+			<tr class="dvtCellLabel">
+				<td width="20%">Root Password:</td>
+				<td><input type='password' class="detailedViewTextBox" name='rootPassword' id='rootPassword' value=''></td>
 			</tr>
-			<tr class="cellBackground">
-				<td colspan="2" align="center"><input type='button' class="small" name='copy' value='Copy' onclick='doDBCopy();'></td>
+			<tr class="dvtCellLabel">
+				<td colspan="2" align="center"><input type='button' class='crmbuttom small create' name='copy' value='Copy' onclick='doDBCopy();'></td>
 			</tr>
 		</tbody>
 	</table>
-	<div align='left'>
-		<code>NOTE: it may take a long time depending on your database size</code>
+	<div class="helpmessagebox">
+		NOTE: This process may take longer time based on your database size.
 	</div>
 </div>
 <div id='responsePopupContainer' class="posLayPopup" style="display: none;" align="center">

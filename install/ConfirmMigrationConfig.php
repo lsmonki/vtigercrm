@@ -77,7 +77,7 @@ $adminUserName = $migrationInfo['user_name'];
 				  					</td>
 				  				</tr>
 				  				<tr>
-									<td width="50%" align="left" style="padding-left: 10px;" class="small">
+									<td width="80%" align="left" style="padding-left: 10%;" class="small">
 										<table width="100%" cellspacing="1" cellpadding="0" border="0" align="center" class="level3">
 											<tr>
 												<td colspan="2"><strong>Database Configuration</strong><hr size="1" noshade=""/></td>
@@ -105,7 +105,9 @@ $adminUserName = $migrationInfo['user_name'];
 											</tr>
 										</table>
 									</td>
-									<td width="50%" align="left" style="padding-left: 10px;" class="small">
+								</tr>
+								<tr>
+									<td width="80%" align="left" style="padding-left: 10%;" class="small">
 										<table width="100%" cellspacing="1" cellpadding="0" border="0" align="center" class="level3">
 											<tr>
 												<td colspan="2"><strong>Source Configuration</strong><hr size="1" noshade=""/></td>

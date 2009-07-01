@@ -220,7 +220,6 @@ class vtiger_DatabaseMigration{
 		global $adb, $dbname;
 		$_SESSION['adodb_current_object'] = $adb;
 		
-		@apache_setenv('no-gzip', 1);
 		@ini_set('zlib.output_compression', 0);
 		@ini_set('output_buffering','off');
 		ob_implicit_flush(true);
@@ -255,8 +254,7 @@ class vtiger_DatabaseMigration{
 			$completed = true;
 		}
 		echo '</table><br><br>';
-		if($completed==true){			
-			session_destroy();
+		if($completed==true){
 			echo "<script type='text/javascript'>window.parent.Migration_Complete();</script>";
 		}
 		
