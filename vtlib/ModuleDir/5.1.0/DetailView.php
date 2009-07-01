@@ -57,8 +57,6 @@ if ($mod_seq_field != null) {
 $smarty->assign('MOD_SEQ_ID', $mod_seq_id);
 // END
 
-$smarty->assign('IS_REL_LIST',isPresentRelatedLists($currentModule));
-
 $validationArray = split_validationdataArray(getDBValidationData($focus->tab_name, $tabid));
 $smarty->assign('VALIDATION_DATA_FIELDNAME',$validationArray['fieldname']);
 $smarty->assign('VALIDATION_DATA_FIELDDATATYPE',$validationArray['datatype']);
