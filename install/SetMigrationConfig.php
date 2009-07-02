@@ -104,42 +104,38 @@ function verify_credentials(){
 			method: 'post',
 			postBody: 'migration_verify=true&source_path='+source_path+'&user_name='+user_name+'&user_pwd='+user_pwd+'&old_version='+old_version+'&new_dbname='+new_dbname+'&root_directory='+root_directory,
 			onComplete: function(response) {
-					VtigerJS_DialogBox.hideprogress();
-					
+					var validationFailed = true;
  					var str = response.responseText
  					str = trim(str);
  					if(str.indexOf('NO_CONFIG_FILE') > -1){
 						alert("The Source you have specified doesn't have a config file. \n Please provide a proper Source.");
-						return false;
 					}
 					else if(str.indexOf('NO_USER_PRIV_DIR') > -1){
 						alert("The Source specified doesn't have a user privileges directory. \n Please provide a proper Source.");
-						return false;
 					}
 					else if(str.indexOf('NO_SOURCE_DIR') > -1){
 						alert("The Source specified doesn't seem to be existing. \n Please provide a proper Source.");
-						return false;
 					}
 					else if(str.indexOf('NO_STORAGE_DIR') > -1){
 						alert("The Source specified doesn't have a Storage directory. \n Please provide a proper Source.");
-						return false;
 					}
 					else if(str.indexOf('NOT_VALID_USER') > -1){
 						alert("Not a valid user. Provide an Admin user login details");
-						return false;
 					}
 					else if(str.indexOf('ERR -') > -1){
 						alert(str);
-						return false;
 					}
 					else if(str.indexOf('FAILURE -') > -1){
 						alert(str);
-						return false;
 					}
 					else
 					{
+						validationFailed = false;
 						document.installform.submit();
 						return true;
+					}
+					if (validationFailed == true) {
+						VtigerJS_DialogBox.hideprogress();
 					}
 			}
 		}

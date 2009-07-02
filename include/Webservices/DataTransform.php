@@ -175,7 +175,8 @@
 						}
 					}
 					if($found !== true){
-						//$row[$field] = null;
+						//This is needed as for query operation of the related record is deleted.
+						$row[$field] = null;
 					}
 				//0 is the default for most of the reference fields, so handle the case and return null instead as its the 
 				//only valid value, which is not a reference Id.
