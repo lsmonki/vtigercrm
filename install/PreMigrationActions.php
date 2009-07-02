@@ -93,12 +93,12 @@ if($dbName == $newDbForCopy) {
 				var element = jQuery('#responsePopup');
 				if(status == 'success'){
 					if(data != 'true' && data != true){
-						element.attr('innerHTML', 'Database copy failed, please try to take a backup');
+						element.attr('innerHTML', '<span class="redColor">Failed</span> to create database copy, please do it manually.');
 					}else{
-						element.attr('innerHTML', 'Database copy was successfully created');
+						element.attr('innerHTML', 'Database copy was successfully created.<br />Click Next &#187; to proceed');
 					}
 				}else{
-					element.attr('innerHTML', 'Database copy failed, please try to take a backup');
+					element.attr('innerHTML', '<span class="redColor">Failed</span> to create database copy, please do it manually.');
 				}
 				jQuery('#dbMirrorCopy').hide();
 				VtigerJS_DialogBox.hideprogress();
@@ -177,11 +177,9 @@ if($dbName == $newDbForCopy) {
 																	</tr>
 																	<tr>
 																		<td valign="top" class="mediumLineHeight">
-																			This tool will let you take the backup of your old database before proceeding with the migration.<br/>
-																			If you have already taken backup, you can skip this process.<br/>
-																			<br />
-																			<span class="redColor  fontBold">Note:</span><br/>
-																			This process may take a long time depending on your database size.
+																			<b>Have not taken the database backup yet?</b><br>
+																			<b>&#171; Click</b> on the icon left now to start the dump and <b>Save</b> the copy of output.<br><br>
+																			<div class="helpmessagebox"><b>Note</b>:<br> This process may take longer time depending on the database size.</div>
 																		</td>
 																	</tr>
 																</table>
@@ -197,11 +195,12 @@ if($dbName == $newDbForCopy) {
 																	</tr>
 																	<tr>
 																		<td valign="top" class="mediumLineHeight">
-																			This tool will let you to copy your old database contents to a new database which can be used for migration. <br />
-																			<br />
-																			<span class="redColor  fontBold">Note:</span><br/>																			
-																			If the database specified already exists, it will be dropped and re-created.<br />
-																			But if the your old database name and the new database name are same, then the database will remain unaltered.
+																			<b>Are you migrating to new database?</b><br>
+																			<b>&#171; Click</b> on the icon left to proceed if you have not setup new database with earlier data.																			
+																			<br><br>
+																			<div class="helpmessagebox"><b>Recommended</b>:<br>
+																			Use tools like (mysql, phpMyAdmin) to setup new database with data.
+																			</div>
 																		</td>
 																	</tr>
 																</table>
@@ -257,29 +256,33 @@ if($dbName == $newDbForCopy) {
 	<table cellpadding="5" cellspacing="2" width="100%" border="0">
 		<tbody>
 			<tr class="dvtCellLabel">
-				<td width="20%">New Database Name:<sup><font class="redColor">*</font></sup></td>
-				<td><input type='text' class="detailedViewTextBox" name='newDatabaseName' id='newDatabaseName' value='<?php echo $newDbForCopy ?>'></td>								
+				<td width="25%" nowrap valign='top'>New Database Name:<sup><font class="redColor">*</font></sup></td>
+				<td>
+					<input type='text' class="detailedViewTextBox" name='newDatabaseName' id='newDatabaseName' value='<?php echo $newDbForCopy ?>'>
+					<br>If database exists it will be recreated.			
+				</td>								
 			</tr>
 			<tr class="dvtCellLabel">
-				<td width="20%">Root User Name:<sup><font class="redColor">*</font></sup></td>
-				<td><input type='text' class="detailedViewTextBox" name='rootUserName' id='rootUserName' value=''></td>
+				<td width="25%" nowrap valign='top'>Root User Name:<sup><font class="redColor">*</font></sup></td>
+				<td><input type='text' class="detailedViewTextBox" name='rootUserName' id='rootUserName' value=''>
+					<br>Should have privilege to CREATE DATABASE
+				</td>
 			</tr>
 			<tr class="dvtCellLabel">
-				<td width="20%">Root Password:</td>
+				<td width="25%">Root Password:</td>
 				<td><input type='password' class="detailedViewTextBox" name='rootPassword' id='rootPassword' value=''></td>
 			</tr>
 			<tr class="dvtCellLabel">
-				<td colspan="2" align="center"><input type='button' class='crmbuttom small create' name='copy' value='Copy' onclick='doDBCopy();'></td>
+				<td colspan="2" align="center"><input type='button' class='crmbuttom small create' name='copy' value='Copy Now' onclick='doDBCopy();'></td>
 			</tr>
 		</tbody>
 	</table>
-	<div class="helpmessagebox">
-		NOTE: This process may take longer time based on your database size.
-	</div>
+	<br>
+	<div class="helpmessagebox"><span class='redColor fontBold'>Note:</span> This process may take longer time based on your database size.</div>
 </div>
 <div id='responsePopupContainer' class="posLayPopup" style="display: none;" align="center">
-	<div class="floatRightTiny" onmouseover="this.className= 'floatRightTinyOn';" onmouseout="this.className= 'floatRightTiny';"><a href="javascript: void(0);" onClick="fninvsh('responsePopupContainer');">X</a></div>
-	<div id='responsePopup' style="margin-top: 1.1em;">&nbsp;</div>
+	<div class="floatRightTiny" onmouseover="this.className= 'floatRightTinyOn';" onmouseout="this.className= 'floatRightTiny';"><a href="javascript: void(0);" onClick="fninvsh('responsePopupContainer');"><img src="themes/images/close.gif" border=0></a></div>
+	<div id='responsePopup' style="margin-top: 1.1em;" class="fontBold">&nbsp;</div>
 </div>
 </body>
 </html>

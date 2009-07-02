@@ -72,7 +72,7 @@
 										<form action="install.php" method="post" name="form" id="form">
 										<input type="hidden" name="filename" value="SetInstallationConfig.php" />
 										<input type="hidden" name="file" value="CheckSystem.php" />	
-								        <input type="image" src="include/install/images/cwBtnNext.gif" value='Agree' alt="Agree" border="0" title="migrate" style="cursor:pointer;" onClick="window.document.form.submit();">
+								        <input type="image" src="include/install/images/cwBtnNext.gif" value='Agree' alt="Agree" border="0" title="Next" style="cursor:pointer;" onClick="window.document.form.submit();">
 										</form>
 									</td>
 								</tr>

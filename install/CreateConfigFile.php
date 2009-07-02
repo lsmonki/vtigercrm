@@ -431,7 +431,7 @@ $cache_dir = 'cache/';
 				 <input type="hidden" class="dataInput" name="currency_name" value="<?php if (isset($currency_name)) echo "$currency_name"; ?>" />
 				 <input type="hidden" class="dataInput" name="currency_code" value="<?php if (isset($currency_code)) echo "$currency_code"; ?>" />
 				 <input type="hidden" class="dataInput" name="currency_symbol" value="<?php if (isset($currency_symbol)) echo "$currency_symbol"; ?>" />
-				 <input  type="image" name="next" value="Next" id="next_btn" src="include/install/images/cwBtnNext.gif" onClick="createtablejs();window.location=('install.php');" />
+				 <input  type="image" title="Install" name="next" value="Next" id="next_btn" src="include/install/images/cwBtnNext.gif" onClick="createtablejs();window.location=('install.php');" />
 				 </form>
 					
 				</td>

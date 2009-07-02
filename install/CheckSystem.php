@@ -244,14 +244,14 @@ if (ini_get('short_open_tag') != '1' || stripos(ini_get('short_open_tag'), 'Off'
 								</tr>
 								<tr><td colspan=2><hr noshade size=1></td></tr>
 				    			<tr>
-				    				<td colspan=2>
+				    				<td colspan=2 align="left">
 				    					<table cellpadding="0" cellspacing="1" align=right width="100%" class="level3">
 				    						<tr>
 								    			<td width=50%  valign=top >
 													<table align=right width="100%" border="0">
 														<tr>
 															<td  valign=top align=left width=100%>
-																<table cellpadding="5" cellspacing="1" align=right width="100%" border="0" class="level1">
+																<table cellpadding="2" cellspacing="1" align=right width="100%" border="0" class="level1">
 																	<tr class='level1'>
 																		<td valign=top >PHP version >= 5.0</td>
 																		<td  valign=top><?php $php_version = phpversion(); 
@@ -309,7 +309,7 @@ if (ini_get('short_open_tag') != '1' || stripos(ini_get('short_open_tag'), 'Off'
 														?>
 														<tr><td align=left width=100%>
 							   	   							<!-- Recommended Settings -->
-															<table cellpadding="5" cellspacing="1"  width="100%" border="0" class="level1">
+															<table cellpadding="2" cellspacing="1"  width="100%" border="0" class="level1">
 										    					<tr>
 										    						<td valign=top ><strong>Directive</strong></td>
 										    						<td><strong>Recommended</strong></td>
@@ -336,7 +336,7 @@ if (ini_get('short_open_tag') != '1' || stripos(ini_get('short_open_tag'), 'Off'
 													</table>
 								    			</td>
 												<td align=left width=50% valign=top>
-													<table cellpadding="5" cellspacing="1" align=right width="100%" border="0" class="level1">
+													<table cellpadding="2" cellspacing="1" align=right width="100%" border="0" class="level1">
 														<?php
 														if (!empty ($failed_permissions)) {
 														?>

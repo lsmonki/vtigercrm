@@ -53,7 +53,6 @@ if(isset($_REQUEST['filename'])){
 }
 
 ?>
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -96,7 +95,7 @@ if(isset($_REQUEST['filename'])){
 					</tr>
 					<tr><td colspan=2><hr noshade size=1></td></tr>
 				    <tr>
-				    	<td colspan=2>
+				    	<td colspan=2 align="left">
 				    		<table cellpadding="0" cellspacing="1" align=center width="100%" class="level3">
 				    			<tr>
 				    			<td colspan=2 style="font-size:13;">

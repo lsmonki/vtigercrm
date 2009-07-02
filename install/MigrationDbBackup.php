@@ -13,7 +13,13 @@ if($_SESSION['authentication_key'] != $_REQUEST['auth_key']) {
 	die("Not Authorized to perform this operation");
 }
 if(!empty($_REQUEST['rootUserName'])) $_SESSION['migration_info']['root_username'] = $_REQUEST['rootUserName'];
-if(!empty($_REQUEST['rootPassword'])) $_SESSION['migration_info']['root_password'] = $_REQUEST['rootPassword'];
+
+if(!empty($_REQUEST['rootPassword'])) {
+	$_SESSION['migration_info']['root_password'] = $_REQUEST['rootPassword'];
+} else {
+	$_SESSION['migration_info']['root_password'] = '';
+}
+
 
 require_once 'include/db_backup/DatabaseBackup.php';
 $mode = $_REQUEST['mode'];

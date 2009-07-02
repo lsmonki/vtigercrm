@@ -139,7 +139,7 @@ $adminUserName = $migrationInfo['user_name'];
 										<form action="install.php" name="migrateform" id="migrateform" method="post">
 											<input type="hidden" name="auth_key" id="auth_key" value="<?php echo $_SESSION['authentication_key']; ?>" />
 											<input type="hidden" name="file" value="MigrationProcess.php" />
-											<input type="image" src="include/install/images/cwBtnNext.gif" alt="Next" border="0" title="Next" onClick="migrateform.submit();">
+											<input type="image" src="include/install/images/cwBtnNext.gif" alt="Next" border="0" title="Migrate" onClick="migrateform.submit();">
 										</form>
 									</td>
 								</tr>

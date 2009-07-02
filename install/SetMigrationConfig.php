@@ -7,7 +7,7 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ************************************************************************************/
-
+session_start();
 $current_dir = pathinfo(dirname(__FILE__));
 $current_dir = $current_dir['dirname']."/";
 
@@ -177,7 +177,7 @@ function verify_credentials(){
 				  				</td>
 				  			</tr>
 			    			<tr valign="top">
-								<td align=center class="small" style="padding-left:5px" width="60%">
+								<td align=left class="small" style="padding-left:5px" width="60%">
 							    	<form action="install.php" method="post" name="installform" id="form" name="setConfig">
 										<input type="hidden" name="file" value="PreMigrationActions.php" />
 										<table width="100%" cellpadding="4" align=center border="0" cellspacing="0" class="level3"><tbody>
@@ -226,7 +226,7 @@ function verify_credentials(){
 											</tr>
 											<tr>
 												<td width = 35% >Admin Username<sup><font color=red>*</font></sup></td>
-												<td align="left"><input class="small" type="text" name="user_name" id="user_name" value="<?php if (isset($user_name)) echo "$user_name"; ?>" size="50" /> </td>
+												<td align="left"><input class="small" type="text" name="user_name" id="user_name" value="<?php if (isset($user_name)) echo $user_name; else echo 'admin';?>" size="50" /> </td>
 											</tr>
 											<tr>
 												<td width = 35%>Admin Password<sup><font color=red></font></sup></td>
@@ -247,10 +247,13 @@ function verify_credentials(){
 													<span class="redColor fontBold">Important Note:</span>
 													<hr />												
 													<ul>
-														<li>Please make sure you take the dump of the database before migration.<br/></li>
-														<li>If you want the migration wizard to take backup or create duplicate database to migrate, You can do it in the next step of the wizard.<br/></li>
-														<li>If you manually create new database, please set the character set to be UTF-8.<br/>
-															<font class='fontBold'>eg:</font> CREATE DATABASE <newDatabaseName> DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+														<li>Make sure to take <b>backup (dump) of database</b> before proceeding further.</li>
+														<li><b>Migrate using new database</b>?<br>
+															<ol style='padding: 0; padding-left: 15px;'>
+															<li>Create the database first with UTF8 charset support.<br>
+															<font class='fontBold'>eg:</font> CREATE DATABASE <newDatabaseName> DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;</li>
+															<li><b>Copy the data (dump)</b> from earlier database into this new one.</li>
+															</ol>
 														</li>
 													</ul>
   												</div>
