@@ -20,7 +20,7 @@ class VTWorkflowUtils{
 	 */
 	function validIdentifier($identifier){
 		if(is_string($identifier)){
-			return pref_match("/^[a-zA-Z][a-zA-Z_0-9]+$/", $identifier);
+			return preg_match("/^[a-zA-Z][a-zA-Z_0-9]+$/", $identifier);
 		}else{
 			return false;
 		}
