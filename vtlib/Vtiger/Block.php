@@ -127,7 +127,7 @@ class Vtiger_Block {
 	 */
 	function delete($recursive=true) {
 		if($recursive) {
-			$fields = Vtiger_Fields::getAllForBlock($this);
+			$fields = Vtiger_Field::getAllForBlock($this);
 			foreach($fields as $fieldInstance) $fieldInstance->delete($recursive);
 		}
 		$this->__delete();
