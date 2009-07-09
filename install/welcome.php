@@ -83,7 +83,7 @@ foreach($pieces as $val)
 		
 								<tr class='level3'>
 									<td valign=top align=left class="small contentDisplay" style="padding-left:20px;height:250px;" colspan=2>
-										<p style='text-align:center;font-weight:bold;'>This configuration wizard helps you install vtigerCRM 5.1.0 RC.</p>
+										<p style='text-align:center;font-weight:bold;'>This configuration wizard helps you install vtigerCRM 5.1.0.</p>
 										<p><br>
 										vtiger CRM is a community-driven, fully open source, CRM software project. <br><br>
 										The aim of the project is to provide the best and most open CRM solution with the lowest total cost of ownership to small and medium enterprises.<br><br> 

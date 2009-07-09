@@ -106,7 +106,7 @@ if(!@rename("install/", $renamefile."install/"))
 	{
 		echo "<br><b><font color='red'>We strongly suggest you to rename the install directory.</font></b><br>";
 	}
-$_SESSION['VTIGER_DB_VERSION']='5.1.0 RC';
+$_SESSION['VTIGER_DB_VERSION']='5.1.0';
 }
 //populate Calendar data
 

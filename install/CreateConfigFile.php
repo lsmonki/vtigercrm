@@ -13,8 +13,8 @@ include('vtigerversion.php');
 session_start();
 
 // vtiger CRM version number; do not edit!
-$vtiger_version = "5.1.0 RC";
-$release_date = "June 2009";
+$vtiger_version = "5.1.0";
+$release_date = "July 2009";
 
 if (isset($_REQUEST['db_hostname']))
 {

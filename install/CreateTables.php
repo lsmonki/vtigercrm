@@ -171,7 +171,7 @@ if(isset($application_unique_key) && !empty($application_unique_key)) {
 		<table border=0 cellspacing=0 cellpadding=5 align="center" width="80%" class="contentDisplay">
 		<tr>
 			<td align=center class=small>
-			<b>vtigercrm-5.1.0 RC is all set to go!</b>
+			<b>vtigercrm-5.1.0 is all set to go!</b>
 			<hr noshade size=1>
 			<div style="width:100%;padding:10px; "align=left>
 			<ul>
