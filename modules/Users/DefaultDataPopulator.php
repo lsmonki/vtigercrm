@@ -1981,7 +1981,7 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 
 	//version file is included here because without including this file version cannot be get
 	include('vtigerversion.php');
-	$this->db->query("insert into vtiger_version values('','".$vtiger_current_version."','".$vtiger_current_version."')");
+	$this->db->query("insert into vtiger_version values(".$this->db->getUniqueID('vtiger_version').",'".$vtiger_current_version."','".$vtiger_current_version."')");
 
 	//Register default language English
 	require_once('vtlib/Vtiger/Language.php');

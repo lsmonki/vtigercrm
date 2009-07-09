@@ -250,7 +250,7 @@ class vtiger_DatabaseMigration{
 			$res = ExecuteQuery("UPDATE vtiger_version SET old_version='$versions[$source_version]',current_version='$vtiger_current_version'");
 			$completed = true;
 		} else {
-			ExecuteQuery("INSERT INTO vtiger_version (id, old_version, current_version) values ('', '$versions[$source_version]', '$vtiger_current_version');");
+			ExecuteQuery("INSERT INTO vtiger_version (id, old_version, current_version) values (".$adb->getUniqueID('vtiger_version').", '$versions[$source_version]', '$vtiger_current_version');");
 			$completed = true;
 		}
 		echo '</table><br><br>';
