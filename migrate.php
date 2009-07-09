@@ -273,7 +273,7 @@ class vtiger_DatabaseMigration{
 		$migrationInfo = $_SESSION['migration_info'];
 		$sourceDirectory = $migrationInfo['source_directory'];
 		$destinationDirectory = $migrationInfo['root_directory'];
-		if ($sourceDirectory != $destinationDirectory) {
+		if (realpath($sourceDirectory) != realpath($destinationDirectory)) {
 			vtiger_DatabaseMigration::copyRequiredFiles($sourceDirectory, $destinationDirectory);
 		}
 		return true;
