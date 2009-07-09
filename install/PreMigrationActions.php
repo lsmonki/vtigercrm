@@ -178,7 +178,7 @@ if($dbName == $newDbForCopy) {
 																	<tr>
 																		<td valign="top" class="mediumLineHeight">
 																			<b>Have not taken the database backup yet?</b><br>
-																			<b>&#171; Click</b> on the icon left now to start the dump and <b>Save</b> the copy of output.<br><br>
+																			<b>&#171; Click</b> on the left icon to start the dump and <b>Save</b> the copy of output.<br><br>
 																			<div class="helpmessagebox"><b>Note</b>:<br> This process may take longer time depending on the database size.</div>
 																		</td>
 																	</tr>
@@ -196,7 +196,7 @@ if($dbName == $newDbForCopy) {
 																	<tr>
 																		<td valign="top" class="mediumLineHeight">
 																			<b>Are you migrating to new database?</b><br>
-																			<b>&#171; Click</b> on the icon left to proceed if you have not setup new database with earlier data.																			
+																			<b>&#171; Click</b> on the left icon to proceed if you have not setup new database with earlier data.																			
 																			<br><br>
 																			<div class="helpmessagebox"><b>Recommended</b>:<br>
 																			Use tools like (mysql, phpMyAdmin) to setup new database with data.

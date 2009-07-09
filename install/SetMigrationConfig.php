@@ -229,7 +229,7 @@ function verify_credentials(){
 												<td align="left"><input class="small" type="password" name="password" id="password" value="" size="50" /> </td>
 											</tr>
 											<tr>
-												<td width = 35%>Database Name for Migraiton<sup><font color=red>*</font></sup></td>
+												<td width = 35%>Database Name for Migration<sup><font color=red>*</font></sup></td>
 												<td align="left"><input class="small" type="text" name="new_dbname" id="new_dbname" value="" size="50" /> </td>
 											</tr>
 										</table>

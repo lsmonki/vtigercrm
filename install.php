@@ -39,7 +39,7 @@ if (!isset($_SERVER['REQUEST_METHOD'])) {
 	exit;
 }
 			
-if (isset($_REQUEST['file'])) $the_file = $_REQUEST['file'];
+if (!empty($_REQUEST['file'])) $the_file = $_REQUEST['file'];
 else $the_file = "welcome.php";
 
 installCheckFileAccess("install/".$the_file);

@@ -68,7 +68,7 @@ if(isset($query_string) && $query_string != ''){
 				$smarty->assign("MODULE",$module);
 				$smarty->assign("SEARCH_MODULE",vtlib_purify($_REQUEST['search_module']));
 				$smarty->assign("SINGLE_MOD",$module);
-				$smarty->assign("SEARCH_STRING",$search_val);
+				$smarty->assign("SEARCH_STRING",vtlib_purify($search_val));
 		
 				$listquery = getListQuery($module);
 				$oCustomView = '';

@@ -305,8 +305,9 @@ class Users {
 	function authenticate_user($password){
 		$usr_name = $this->column_fields["user_name"];
 
-		$query = "SELECT * from $this->table_name where user_name='$usr_name' AND user_hash='$password'";
-		$result = $this->db->requireSingleResult($query, false);
+		$query = "SELECT * from $this->table_name where user_name=? AND user_hash=?";
+		$params = array($usr_name, $password);
+		$result = $this->db->requirePsSingleResult($query, $params, false);
 
 		if(empty($result)){
 			$this->log->fatal("SECURITY: failed login by $usr_name");
