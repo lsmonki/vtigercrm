@@ -1167,12 +1167,12 @@ class ReportRun extends CRMEntity
 				$selectedfields = explode(":",$fieldcolname);
 				if($selectedfields[0] == "vtiger_crmentity".$this->primarymodule)
 					$selectedfields[0] = "vtiger_crmentity";	
-				$sqlvalue = "'".$selectedfields[2]."' ".$sortorder;
 				if(stripos($selectedfields[1],'cf_')==0 && stristr($selectedfields[1],'cf_')==true){
-					$grouplist[$fieldcolname] = $adb->sql_escape_string(decode_html($sqlvalue));
+					$sqlvalue = "'".$adb->sql_escape_string(decode_html($selectedfields[2]))."' ".$sortorder;
 				} else {
-					$grouplist[$fieldcolname] = $sqlvalue;
+					$sqlvalue = "'".$selectedfields[2]."' ".$sortorder;
 				}
+				$grouplist[$fieldcolname] = $sqlvalue;
 				$temp = split("_",$selectedfields[2],2);
 				$module = $temp[0];
 				if(CheckFieldPermission($fieldname,$module) == 'true')

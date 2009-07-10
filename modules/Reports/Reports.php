@@ -497,8 +497,11 @@ class Reports extends CRMEntity{
 		//$this->updateModuleList($module);
 		foreach($this->module_list[$module] as $key=>$value)
 		{
+			$temp = $this->getColumnsListbyBlock($module,$key);
 			if(!empty($ret_module_list[$module][$value])){
-				$ret_module_list[$module][$value] = array_merge($ret_module_list[$module][$value],$this->getColumnsListbyBlock($module,$key));
+				if(!empty($temp)){
+					$ret_module_list[$module][$value] = array_merge($ret_module_list[$module][$value],$temp);
+				}
 			} else {
 				$ret_module_list[$module][$value] = $this->getColumnsListbyBlock($module,$key);
 			}
@@ -524,8 +527,11 @@ class Reports extends CRMEntity{
 				if($this->module_list[$secmodule[$i]]){
 					foreach($this->module_list[$secmodule[$i]] as $key=>$value)
 					{
+						$temp = $this->getColumnsListbyBlock($secmodule[$i],$key);
 						if(!empty($ret_module_list[$secmodule[$i]][$value])){
-							$ret_module_list[$secmodule[$i]][$value] = array_merge($ret_module_list[$secmodule[$i]][$value],$this->getColumnsListbyBlock($secmodule[$i],$key));
+							if(!empty($temp)){
+								$ret_module_list[$secmodule[$i]][$value] = array_merge($ret_module_list[$secmodule[$i]][$value],$temp);
+							}
 						} else {
 							$ret_module_list[$secmodule[$i]][$value] = $this->getColumnsListbyBlock($secmodule[$i],$key);
 						}
