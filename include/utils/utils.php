@@ -1124,6 +1124,12 @@ function getColumnFields($module)
 		$cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module);
 	}
 	
+	if($module == 'Calendar') {
+		$cachedEventsFields = VTCacheUtils::lookupFieldInfo_Module('Events');
+		if($cachedModuleFields == false) $cachedModuleFields = $cachedEventsFields;
+		else $cachedModuleFields = array_merge($cachedModuleFields, $cachedEventsFields);
+	}
+
 	$column_fld = array();
 	if($cachedModuleFields) {
 		foreach($cachedModuleFields as $fieldinfo) {

@@ -236,16 +236,17 @@ function getCalendarCustomFields($tabid,$mode='edit',$col_fields='') {
 	
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	
-	$custparams = array('vtiger_activitycf', $tabid);
+	$block = getBlockId($tabid,"LBL_CUSTOM_INFORMATION");
+	$custparams = array($block, $tabid);
 	
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
-		$custquery = "select * from vtiger_field where tablename=? AND vtiger_field.tabid=? ORDER BY fieldid";		
+		$custquery = "select * from vtiger_field where block=? AND vtiger_field.tabid=? ORDER BY fieldid";		
 	} else {
 		$profileList = getCurrentUserProfileList();
  		$custquery = "SELECT vtiger_field.* FROM vtiger_field" .
  				" INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid" .
  				" INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid" .
- 				" WHERE vtiger_field.tablename=? AND vtiger_field.tabid=? AND vtiger_profile2field.visible=0" .
+ 				" WHERE vtiger_field.block=? AND vtiger_field.tabid=? AND vtiger_profile2field.visible=0" .
  				" AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .")" .
  				" ORDER BY vtiger_field.fieldid";
  		array_push($custparams, $profileList);		
