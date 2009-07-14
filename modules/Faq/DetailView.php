@@ -101,6 +101,10 @@ if(PerformancePrefs::getBoolean('DETAILVIEW_RECORD_NAVIGATION', true) && isset($
 	$recordNavigationInfo = ListViewSession::getListViewNavigation($focus->id);
 	VT_detailViewNavigation($smarty,$recordNavigationInfo,$focus->id);
 }
+if($singlepane_view == 'true') {
+	$related_array = getRelatedLists($currentModule,$focus);
+	$smarty->assign("RELATEDLISTS", $related_array);
+}
 
 $smarty->assign("SinglePane_View", $singlepane_view);
 
