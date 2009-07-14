@@ -89,10 +89,12 @@ class Asterisk {
 		if(!strstr($from,"SIP")){
 			$from = "SIP/$from";
 		}
-		$arr = explode(":", $to);
-		if(is_array($arr)){
-			$typeCalled = $arr[0];
-			$to = trim($arr[1]);
+		if(strpos($to, ":")!==FALSE){
+			$arr = explode(":", $to);
+			if(is_array($arr)){
+				$typeCalled = $arr[0];
+				$to = trim($arr[1]);
+			}
 		}
 		
 		switch($typeCalled){
