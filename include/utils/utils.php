@@ -4738,9 +4738,7 @@ function isRecordExists($recordId) {
   * @param $value -- value :: Type string
   * @returns $insert_date -- insert_date :: Type string
   */
-
-function getValidDBInsertDateValue($value)
-{
+function getValidDBInsertDateValue($value) {
 	global $log;
 	$log->debug("Entering getDBInsertDateValue(".$value.") method ...");
 	global $current_user;
@@ -4755,4 +4753,16 @@ function getValidDBInsertDateValue($value)
 	return $insert_date;
 }
 
+/** Function to set the PHP memory limit to the specified value, if the memory limit set in the php.ini is less than the specified value
+ * @param $newvalue -- Required Memory Limit
+ */
+function _phpset_memorylimit_MB($newvalue) {
+    $current = @ini_get('memory_limit');
+    if(preg_match("/(.*)M/", $current, $matches)) {
+        // Check if current value is less then new value
+        if($matches[1] < $newvalue) {
+            @ini_set('memory_limit', "{$newvalue}M");
+        }
+    }
+}
 ?>

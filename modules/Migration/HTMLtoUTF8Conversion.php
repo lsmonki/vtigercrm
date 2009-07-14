@@ -8,7 +8,7 @@
  * All Rights Reserved.
 ********************************************************************************/
 
-ini_set("memory_limit","32M");
+_phpset_memorylimit_MB(32);
 global $php_max_execution_time;
 set_time_limit($php_max_execution_time);
 global $adb,$dbname;
