@@ -173,17 +173,7 @@ class CRMEntity
 			$file_name = $file_details['name'];
 		}
 
-		// Arbitrary File Upload Vulnerability fix - Philip
-		$binFile = preg_replace('/\s+/', '_', $file_name);//replace space with _ in filename
-		$ext_pos = strrpos($binFile, ".");
-
-		$ext = substr($binFile, $ext_pos + 1);
-
-		if (in_array(strtolower($ext), $upload_badext))
-		{
-			$binFile .= ".txt";
-		}
-		// Vulnerability fix ends
+		$binFile = sanitizeUploadFileName($file_name, $upload_badext);
 
 		$current_id = $adb->getUniqueID("vtiger_crmentity");
 

@@ -249,14 +249,7 @@ var $rel_serel_table = "vtiger_seactivityrel";
                 $mailbox=$_REQUEST["mailbox"];
 		$MailBox = new MailBox($mailbox);
 		$mail = $MailBox->mbox;
-		$binFile = preg_replace('/\s+/', '_', $file_details['name']);//replace space with _ in filename
-                $ext_pos = strrpos($binFile, ".");
-                $ext = substr($binFile, $ext_pos + 1);
-                if (in_array(strtolower($ext), $upload_badext))
-                {
-                    $binFile .= ".txt";
-                }
-		//$filename = basename($binFile);
+		$binFile = sanitizeUploadFileName($file_details['name'], $upload_badext);
 		$filename = ltrim(basename(" ".$binFile)); //allowed filename like UTF-8 characters 
 		$filetype= $file_details['type'];
 		$filesize = $file_details['size'];

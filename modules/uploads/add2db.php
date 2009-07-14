@@ -11,7 +11,7 @@
 require_once('include/utils/utils.php');
 require_once('include/logging.php');
 global $log;
-global $current_user;
+global $current_user, $upload_badext;
 $vtigerpath = $_SERVER['REQUEST_URI'];
 $vtigerpath = str_replace("/index.php?module=uploads&action=add2db", "", $vtigerpath);
 
@@ -23,20 +23,8 @@ $log->debug("DEBUG In add2db.php");
 	} else {
 		$file = $_FILES['filename']['name'];
 	}
-	// Arbitrary File Upload Vulnerability fix - Philip
-	$binFile = preg_replace('/\s+/', '_', $file);
-
-	$ext_pos = strrpos($binFile, ".");
-
-	$ext = substr($binFile, $ext_pos + 1);
-
-	if (in_array(strtolower($ext), $upload_badext))
-	{
-		$binFile .= ".txt";
-	}
-
+	$binFile = sanitizeUploadFileName($file, $upload_badext);
 	$_FILES["filename"]["name"] = $binFile;
-	// Vulnerability fix ends
 
 	//decide the file path where we should upload the file in the server
 	$upload_filepath = decideFilePath();

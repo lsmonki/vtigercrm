@@ -103,12 +103,7 @@ class Documents extends CRMEntity {
 								$filetype = $_FILES[$filename_fieldname]['type'];
 								$filesize = $_FILES[$filename_fieldname]['size'];
 								$filelocationtype = 'I';
-								$binFile = preg_replace('/\s+/', '_', $filename);//replace space with _ in filename
-								$ext_pos = strrpos($binFile, ".");
-								$ext = substr($binFile, $ext_pos + 1);
-								if (in_array(strtolower($ext), $upload_badext)) {
-									$binFile .= ".txt";
-								}
+								$binFile = sanitizeUploadFileName($filename, $upload_badext);
 								$filename = ltrim(basename(" ".$binFile)); //allowed filename like UTF-8 characters 
 							}
 						}

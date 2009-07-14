@@ -4765,4 +4765,32 @@ function _phpset_memorylimit_MB($newvalue) {
         }
     }
 }
+
+/** Function to sanitize the upload file name when the file name is detected to have bad extensions
+ * @param String -- $fileName - File name to be sanitized
+ * @return String - Sanitized file name
+ */
+function sanitizeUploadFileName($fileName, $badFileExtensions) {
+	
+	$fileName = preg_replace('/\s+/', '_', $fileName);//replace space with _ in filename
+	
+	$fileNameParts = explode(".", $fileName);
+	$countOfFileNameParts = count($fileNameParts);
+	$badExtensionFound = false;
+	
+	for ($i=0;$i<$countOfFileNameParts;++$i) {
+		$partOfFileName = $fileNameParts[$i];
+		if(in_array(strtolower($partOfFileName), $badFileExtensions)) {
+			$badExtensionFound = true;
+			$fileNameParts[$i] = $partOfFileName . 'file';
+		}
+	}
+	
+	$newFileName = implode(".", $fileNameParts);
+
+	if ($badExtensionFound) {
+		$newFileName .= ".txt";
+	}
+	return $newFileName;
+}
 ?>

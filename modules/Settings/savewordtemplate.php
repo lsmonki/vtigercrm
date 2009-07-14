@@ -9,6 +9,7 @@
  ********************************************************************************/
 
 require_once('include/utils/utils.php');
+global $upload_badext;
 
 $uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
 // Arbitrary File Upload Vulnerability fix - Philip
@@ -17,15 +18,7 @@ if(isset($_REQUEST['binFile_hidden'])) {
 } else {
 	$file = $_FILES['binFile']['name'];
 }
-$binFile =  preg_replace('/\s+/', '_', $file);
-    $ext_pos = strrpos($binFile, ".");
-
-        $ext = substr($binFile, $ext_pos + 1);
-
-        if (in_array(strtolower($ext), $upload_badext))
-        {
-                $binFile .= ".txt";
-        }
+$binFile = sanitizeUploadFileName($file, $upload_badext);
 $_FILES["binFile"]["name"] = $binFile;
 $strDescription = vtlib_purify($_REQUEST['txtDescription']);
 // Vulnerability fix ends

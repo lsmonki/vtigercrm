@@ -990,19 +990,8 @@ class Users {
 		if(!isset($ownerid) || $ownerid=='')
 			$ownerid = $current_user->id;
 
-	
-		// Arbitrary File Upload Vulnerability fix - Philip
 		$file = $file_details['name'];
-		$binFile = preg_replace('/\s+/', '_', $file);
-		$ext_pos = strrpos($binFile, ".");
-
-		$ext = substr($binFile, $ext_pos + 1);
-
-		if (in_array(strtolower($ext), $upload_badext))
-		{
-			$binFile .= ".txt";
-		}
-		// Vulnerability fix ends
+		$binFile = sanitizeUploadFileName($file, $upload_badext);
 
 		$filename = ltrim(basename(" ".$binFile)); //allowed filename like UTF-8 characters 
 		$filetype= $file_details['type'];
