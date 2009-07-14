@@ -138,7 +138,7 @@ function InventorySelectAllServices(mod,z,image_pth)
 				var taxstring = prod_array['taxstring'];
 				var desc = prod_array['desc'];
 				var row_id = prod_array['rowid'];
-				set_return_inventory(prod_id,prod_name,unit_price,taxstring,parseInt(row_id),desc,subprod_ids);
+				set_return_inventory(prod_id,prod_name,unit_price,taxstring,parseInt(row_id),desc);
 				y=1;
 			} else {
 				alert(alert_arr.SELECT);
