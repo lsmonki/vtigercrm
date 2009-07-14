@@ -30,6 +30,17 @@ ExecuteQuery("DELETE vtiger_cvadvfilter FROM vtiger_cvadvfilter INNER JOIN vtige
 $moduleInstance = Vtiger_Module::getInstance('PBXManager');
 $package->initUpdate($moduleInstance, 'packages/5.1.0/mandatory/PBXManager.zip', true);
 
+// Update ServiceContracts module files
+$moduleInstance = Vtiger_Module::getInstance('ServiceContracts');
+$package->initUpdate($moduleInstance, 'packages/5.1.0/mandatory/ServiceContracts.zip', true);
+
+// Update Services module files
+$moduleInstance = Vtiger_Module::getInstance('Services');
+$package->initUpdate($moduleInstance, 'packages/5.1.0/mandatory/Services.zip', true);
+
+// Install/Update Optional modules
+require_once('include/utils/installVtlibSelectedModules.php');
+
 $migrationlog->debug("\n\nDB Changes from 5.1.0 RC to 5.1.0 -------- Ends \n\n");
 
 ?>

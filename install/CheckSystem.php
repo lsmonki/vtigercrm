@@ -237,6 +237,7 @@ if (ini_get('short_open_tag') != '1' || stripos(ini_get('short_open_tag'), 'Off'
 				    				<td align=left><img src="include/install/images/confWizInstallCheck.gif" alt="Pre Installation Check" title="Pre Installation Check"><br></td>
 									<td align=right valign="middle">
 										<form action="install.php" method="post" name="form" id="form">
+							                <input type="hidden" name="filename" value="<?php echo $file_name?>" />
 											<input type="hidden" name="file" value="CheckSystem.php" />	
 									        <input type="image" src="include/install/images/checkagain_blue2.png" value='Refresh' alt="Refresh" border="0" title="Refresh" style="cursor:pointer;" onClick="submit();">
 										</form>

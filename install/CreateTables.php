@@ -95,13 +95,12 @@ function showhidediv()
 
 <?php
 
-	// Output html instead of plain text for the web
-	$useHtmlEntities = true;
+// Output html instead of plain text for the web
+$useHtmlEntities = true;
 
-	require_once('install/CreateTables.inc.php');
-
-	
-//populating forums data
+require_once('install/CreateTables.inc.php');
+session_start();
+session_destroy();
 
 //this is to rename the installation file and folder so that no one destroys the setup
 $renamefile = uniqid(rand(), true);

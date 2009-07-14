@@ -4578,12 +4578,12 @@ function DeleteEntity($module,$return_module,$focus,$record,$return_id) {
 	$log->debug("Exiting DeleteEntity method ...");
 }
 
-/* Function to install Vtlib Compliant 
+/* Function to install Vtlib Compliant modules
  * @param - $packagename - Name of the module
  * @param - $packagepath - Complete path to the zip file of the Module
  */
 function installVtlibModule($packagename, $packagepath, $customized=false) {
-	global $log, $adb;
+	global $log;
 	require_once('vtlib/Vtiger/Package.php');
 	require_once('vtlib/Vtiger/Module.php');
 	$Vtiger_Utils_Log = true;
@@ -4608,18 +4608,84 @@ function installVtlibModule($packagename, $packagepath, $customized=false) {
 	}	
 }
 
+/* Function to update Vtlib Compliant modules
+ * @param - $module - Name of the module
+ * @param - $packagepath - Complete path to the zip file of the Module
+ */
+function updateVtlibModule($module, $packagepath) {
+	global $log;
+	require_once('vtlib/Vtiger/Package.php');
+	require_once('vtlib/Vtiger/Module.php');
+	$Vtiger_Utils_Log = true;
+	$package = new Vtiger_Package();
+	
+	if($module == null) {
+		$log->fatal("Module name is invalid");
+	} else {
+		$moduleInstance = Vtiger_Module::getInstance($module);
+		if($moduleInstance) {
+			$log->debug("$module - Module instance found - Update starts here");
+			$package->update($moduleInstance, $packagepath);
+		} else {
+			$log->fatal("$module doesn't exists!");
+		}
+	}
+}
+
+/* Function to only initialize the update of Vtlib Compliant modules
+ * @param - $module - Name of the module
+ * @param - $packagepath - Complete path to the zip file of the Module
+ */
+function initUpdateVtlibModule($module, $packagepath) {
+	global $log;
+	require_once('vtlib/Vtiger/Package.php');
+	require_once('vtlib/Vtiger/Module.php');
+	$Vtiger_Utils_Log = true;
+	$package = new Vtiger_Package();
+	
+	if($module == null) {
+		$log->fatal("Module name is invalid");
+	} else {
+		$moduleInstance = Vtiger_Module::getInstance($module);
+		if($moduleInstance) {
+			$log->debug("$module - Module instance found - Init Update starts here");
+			$package->initUpdate($moduleInstance, $packagepath, true);
+		} else {
+			$log->fatal("$module doesn't exists!");
+		}
+	}
+}
+
 // Function to install Vtlib Compliant - Optional Modules
 function installOptionalModules($selected_modules){
-
+	global $log;
+	require_once('vtlib/Vtiger/Package.php');
+	require_once('vtlib/Vtiger/Module.php');
+	
 	$selected_modules = split(":",$selected_modules);
+	
 	if ($handle = opendir('packages/5.1.0/optional')) {	    
 	    
 	    while (false !== ($file = readdir($handle))) {
 	        $filename_arr = explode(".", $file);
 	        $packagename = $filename_arr[0];
-	        if (!empty($packagename) && in_array($packagename,$selected_modules)) {
+	        if (!empty($packagename)) {
 	        	$packagepath = "packages/5.1.0/optional/$file";
-	        	installVtlibModule($packagename, $packagepath);
+				$package = new Vtiger_Package();
+        		$module = $package->getModuleNameFromZip($packagepath);
+        		if($module != null) {
+        			$moduleInstance = Vtiger_Module::getInstance($module);
+		        	if(in_array($packagename,$selected_modules)) {
+		        		if($moduleInstance) {
+		        			initUpdateVtlibModule($module, $packagepath);
+		        		} else {
+		        			installVtlibModule($packagename, $packagepath);
+		        		}
+		        	} elseif ($moduleInstance) {
+		        		initUpdateVtlibModule($module, $packagepath);
+		        		vtlib_toggleModuleAccess((string)$module, false);
+		        	}
+	        	}
 	        }
 	    }
 	    closedir($handle);

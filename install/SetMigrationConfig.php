@@ -30,8 +30,10 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 	!isset($_REQUEST['root_directory']) ? $root_directory = $current_dir : $root_directory = stripslashes($_REQUEST['root_directory']);
 	!isset($_REQUEST['source_directory']) ? $source_directory = "" : $source_directory = stripslashes($_REQUEST['source_directory']);
 }
-		
-$_SESSION['selectedOptionalModules'] = $_REQUEST['selected_modules'];
+
+if(isset($_REQUEST['selected_modules'])) {
+	$_SESSION['selectedOptionalModules'] = $_REQUEST['selected_modules'] ;
+}
 
 include("modules/Migration/versions.php");
 $version_sorted = $versions;

@@ -159,7 +159,9 @@ if (is_file("config.php") && is_file("config.inc.php")) {
 		!isset($_REQUEST['create_utf8_db'])? $create_utf8_db = "true" : $create_utf8_db = $_REQUEST['create_utf8_db'];
 		// determine database options
 
-		$_SESSION['selectedOptionalModules'] = $_REQUEST['selected_modules'];
+		if(isset($_REQUEST['selected_modules'])) {
+			$_SESSION['selectedOptionalModules'] = $_REQUEST['selected_modules'] ;
+		}
 
 		$db_options = array();
 		if(function_exists('mysql_connect')) {
