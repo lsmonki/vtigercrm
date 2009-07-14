@@ -362,7 +362,8 @@ class Vtiger_Soap_CustomerPortal {
 */
 function get_ticket_comments($input_array)
 {
-	global $adb,$log;
+	require_once('modules/Users/Users.php');
+	global $adb,$log,$current_user;
 	$adb->println("Entering customer portal function get_ticket_comments");
 	$adb->println($input_array);
 
@@ -374,7 +375,8 @@ function get_ticket_comments($input_array)
 		return null;
 	
 	$userid = getPortalUserid();
-
+	$user = new Users();
+	$current_user = $user->retrieveCurrentUserInfoFromFile($userid);
 	if(getFieldVisibilityPermission('HelpDesk', $userid, 'comments') == '1'){
 		return null;
 	}
