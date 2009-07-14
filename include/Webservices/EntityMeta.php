@@ -109,7 +109,7 @@ abstract class EntityMeta{
 			foreach ($this->moduleFields as $fieldName=>$webserviceField) {
 				array_push($this->userAccessibleColumns,$webserviceField->getColumnName());
 			}
-			array_push($this->idColumn);
+			array_push($this->userAccessibleColumns,$this->idColumn);
 		}
 		return $this->userAccessibleColumns;
 	}
@@ -143,7 +143,7 @@ abstract class EntityMeta{
 	}
 	
 	public function getModuleFields(){
-		return $this->moduleFields; 
+		return $this->moduleFields;
 	}
 	
 	abstract function hasPermission($operation,$webserviceId);

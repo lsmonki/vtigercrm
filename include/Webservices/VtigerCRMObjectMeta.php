@@ -67,6 +67,7 @@ class VtigerCRMObjectMeta extends EntityMeta {
 			$this->hasReadAccess = false;
 			$this->hasWriteAccess = false;
 			$this->hasDeleteAccess = false;
+			return;
 		}
 		
 		require('user_privileges/user_privileges_'.$this->user->id.'.php');
