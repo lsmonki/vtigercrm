@@ -517,9 +517,7 @@ class CRMEntity
 				  else
 				  {
 					  //Added to avoid function call getDBInsertDateValue in ajax save
-					  if (isset($current_user->date_format) && $_REQUEST['ajxaction'] != 'DETAILVIEW') {
-					    	$fldvalue = getDBInsertDateValue($this->column_fields[$fieldname]);
-					  } elseif(isset($current_user->date_format) && $_REQUEST['ajxaction'] == 'DETAILVIEW') {
+					  if (isset($current_user->date_format)) {
 							$fldvalue = getValidDBInsertDateValue($this->column_fields[$fieldname]);
 					  } else {
 							$fldvalue = $this->column_fields[$fieldname];
