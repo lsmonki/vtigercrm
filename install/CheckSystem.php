@@ -306,7 +306,9 @@ if (ini_get('short_open_tag') != '1' || stripos(ini_get('short_open_tag'), 'Off'
 														<tr><td class="small" colspan=2><br></td></tr>
 														<tr><td class="small" colspan=2><strong>Recommended PHP Settings:</strong></td></tr>
 														<?php
+														$all_directive_recommended_value = true;
 														if (!empty ($directive_array)) {
+															$all_directive_recommended_value = false;
 														?>
 														<tr><td align=left width=100%>
 							   	   							<!-- Recommended Settings -->
@@ -407,6 +409,14 @@ if (!empty ($failed_permissions)) {
 	echo "alert('Provide Read/Write access to the files and directories listed to Proceed');";
 	echo "return false;";
 } else {
+	if (!$all_directive_recommended_value) { ?>
+		if(confirm('Some of the PHP directives are not set to recommended value. This might affect the some of the operations of Vtiger CRM. Are you sure you want to proceed?')) {
+		<?php echo "return true;"; ?>
+		} else {
+		<?php echo "return false;"; ?>
+		}
+	<?php
+	}
 	echo "return true;";
 }
 ?>
