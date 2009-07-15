@@ -53,20 +53,23 @@ foreach ($fieldname as $fieldName) {
 
 $cv = new CustomView();
 $viewId = $cv->getViewId($sModule);
-$recordNavigationInfo = Zend_Json::decode($_SESSION[$sModule.'_DetailView_Navigation'.$viewId]);
-$recordList = array();
-$recordIndex = null;
-$recordPageMapping = array();
-foreach ($recordNavigationInfo as $start=>$recordIdList){
-	foreach ($recordIdList as $index=>$recordId) {
-		$recordList[] = $recordId;
-		$recordPageMapping[$recordId] = $start;
-		if($recordId == $iCurRecord){
-			$recordIndex = count($recordList)-1;
+if(!empty($_SESSION[$sModule.'_DetailView_Navigation'.$viewId])){
+	$recordNavigationInfo = Zend_Json::decode($_SESSION[$sModule.'_DetailView_Navigation'.$viewId]);
+	$recordList = array();
+	$recordIndex = null;
+	$recordPageMapping = array();
+	foreach ($recordNavigationInfo as $start=>$recordIdList){
+		foreach ($recordIdList as $index=>$recordId) {
+			$recordList[] = $recordId;
+			$recordPageMapping[$recordId] = $start;
+			if($recordId == $iCurRecord){
+				$recordIndex = count($recordList)-1;
+			}
 		}
 	}
+}else{
+	$recordList = array();
 }
-
 $output = '<table width="100%" border="0" cellpadding="5" cellspacing="0" class="layerHeadingULine">
 			<tr><td width="60%" align="left" style="font-size:12px;font-weight:bold;">Jump to '.$app_strings[$sModule].':</td>
 			<td width="5%" align="right"><a href="javascript:fninvsh(\'lstRecordLayout\');"><img src="'. vtiger_imageurl('close.gif', $theme).'" border="0"  align="absmiddle" /></a></td>
@@ -79,39 +82,41 @@ $output = '<table width="100%" border="0" cellpadding="5" cellspacing="0" class=
 $output .= '<div style="height:270px;overflow-y:auto;">';
 $output .= '<table cellpadding="2">';
 
-$displayRecordCount = 10;
-$count = count($recordList);
-$idListEndIndex = ($count < ($recordIndex+$displayRecordCount))? ($count+1) : ($recordIndex+$displayRecordCount+1);
-$idListStartIndex = $recordIndex-$displayRecordCount;
-if($idListStartIndex < 0){
-	$idListStartIndex = 0;
-}
-$idsArray = array_slice($recordList,$idListStartIndex,($idListEndIndex - $idListStartIndex));
-
-$selectColString = implode(',',$permittedFieldNameList).', '.$id_array[$sModule];
-$fieldQuery = "SELECT $selectColString from ".$tables_array[$sModule]." WHERE ".$id_array[$sModule]." IN (". generateQuestionMarks($idsArray) .")";
-$fieldResult = $adb->pquery($fieldQuery,$idsArray);
-$numOfRows = $adb->num_rows($fieldResult);
-$recordNameMapping = array();
-for($i=0; $i<$numOfRows; ++$i) {
-	$recordId = $adb->query_result($fieldResult,$i,$id_array[$sModule]);
-	$fieldValue = '';
-	foreach ($permittedFieldNameList as $fieldName) {
-		$fieldValue .= " ".$adb->query_result($fieldResult,$i,$fieldName);
+if(count($recordList) > 0){
+	$displayRecordCount = 10;
+	$count = count($recordList);
+	$idListEndIndex = ($count < ($recordIndex+$displayRecordCount))? ($count+1) : ($recordIndex+$displayRecordCount+1);
+	$idListStartIndex = $recordIndex-$displayRecordCount;
+	if($idListStartIndex < 0){
+		$idListStartIndex = 0;
 	}
-	$fieldValue = textlength_check($fieldValue);
-	$recordNameMapping[$recordId] = $fieldValue;
-}
-foreach ($idsArray as $id) {
-	if($id===$iCurRecord){
-		$output .= '<tr><td style="text-align:left;font-weight:bold;">'.$recordNameMapping[$id].'</td></tr>';
-	}else{
-		$output .= '<tr><td style="text-align:left;"><a href="index.php?module='.$sModule.
-			'&action=DetailView&parenttab='.vtlib_purify($_REQUEST['CurParentTab']).'&record='.$id.
-			'&start='.$recordPageMapping[$id].'">'.$recordNameMapping[$id].'</a></td></tr>';
+	$idsArray = array_slice($recordList,$idListStartIndex,($idListEndIndex - $idListStartIndex));
+	
+	$selectColString = implode(',',$permittedFieldNameList).', '.$id_array[$sModule];
+	$fieldQuery = "SELECT $selectColString from ".$tables_array[$sModule]." WHERE ".$id_array[$sModule]." IN (". generateQuestionMarks($idsArray) .")";
+	
+	$fieldResult = $adb->pquery($fieldQuery,$idsArray);
+	$numOfRows = $adb->num_rows($fieldResult);
+	$recordNameMapping = array();
+	for($i=0; $i<$numOfRows; ++$i) {
+		$recordId = $adb->query_result($fieldResult,$i,$id_array[$sModule]);
+		$fieldValue = '';
+		foreach ($permittedFieldNameList as $fieldName) {
+			$fieldValue .= " ".$adb->query_result($fieldResult,$i,$fieldName);
+		}
+		$fieldValue = textlength_check($fieldValue);
+		$recordNameMapping[$recordId] = $fieldValue;
+	}
+	foreach ($idsArray as $id) {
+		if($id===$iCurRecord){
+			$output .= '<tr><td style="text-align:left;font-weight:bold;">'.$recordNameMapping[$id].'</td></tr>';
+		}else{
+			$output .= '<tr><td style="text-align:left;"><a href="index.php?module='.$sModule.
+				'&action=DetailView&parenttab='.vtlib_purify($_REQUEST['CurParentTab']).'&record='.$id.
+				'&start='.$recordPageMapping[$id].'">'.$recordNameMapping[$id].'</a></td></tr>';
+		}
 	}
 }
-
 $output .= '</table>';
 $output .= '</div></td></tr></table></td></tr></table>';
 	
