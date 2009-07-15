@@ -41,6 +41,32 @@ $package->initUpdate($moduleInstance, 'packages/5.1.0/mandatory/Services.zip', t
 // Install/Update Optional modules
 require_once('include/utils/installVtlibSelectedModules.php');
 
+// Fixed issue with Calendar duration calculation
+ExecuteQuery("ALTER TABLE vtiger_activity MODIFY duration_hours VARCHAR(200)");
+
+$result = $adb->query("SELECT activityid,date_start,due_date, time_start,time_end FROM vtiger_activity WHERE activitytype NOT IN ('Task','Emails')");
+$noofrows = $adb->num_rows($result);
+for($index=0;$index<$noofrows;$index++){
+ 	$activityid = $adb->query_result($result,$index,'activityid');
+	$date_start = $adb->query_result($result,$index,'date_start');
+	$time_start = $adb->query_result($result,$index,'time_start');
+	$due_date = $adb->query_result($result,$index,'due_date');
+	$time_end = $adb->query_result($result,$index,'time_end');
+	
+	$start_date = split("-",$date_start);
+	$end_date = split("-",$due_date);
+	$start_time = split(":",$time_start);
+	$end_time = split(":",$time_end);
+	
+	$start = mktime(intval($start_time[0]),intval($start_time[1]),0,intval($start_date[1]),intval($start_date[2]),intval($start_date[0]));
+	$end = mktime(intval($end_time[0]),intval($end_time[1]),0,intval($end_date[1]),intval($end_date[2]),intval($end_date[0]));
+	
+	$duration_in_minutes = floor(($end-$start)/(60));//get the difference between start time and end time in minutes
+	$hours = floor($duration_in_minutes/60);
+	$minutes = $duration_in_minutes%60;
+	$adb->pquery("UPDATE vtiger_activity SET duration_hours=?, duration_minutes=? WHERE activityid=?",array($hours, $minutes,$activityid));
+}
+
 $migrationlog->debug("\n\nDB Changes from 5.1.0 RC to 5.1.0 -------- Ends \n\n");
 
 ?>

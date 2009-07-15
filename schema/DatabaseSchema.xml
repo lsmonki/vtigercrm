@@ -936,7 +936,7 @@
 			<notnull />
 			<default value="0"/>
 		</field>
-		<field name="duration_hours" type="C" size="2" />
+		<field name="duration_hours" type="C" size="200" />
 		<field name="duration_minutes" type="C" size="200" />
 		<field name="status" type="C" size="200" />
 		<field name="eventstatus" type="C" size="200" />
