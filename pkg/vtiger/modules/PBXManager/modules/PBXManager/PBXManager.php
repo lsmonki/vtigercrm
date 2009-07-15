@@ -27,7 +27,7 @@ class PBXManager extends CRMEntity {
 	var $customFieldTable = Array();
 
 	// Mandatory for Saving, Include tables related to this module.
-	var $tab_name = Array('vtiger_crmentity', 'vtiger_pbxmanager', 'vtiger_pbxmanagergrouprel', 'vtiger_pbxmanagercf');
+	var $tab_name = Array('vtiger_crmentity', 'vtiger_pbxmanager');
 	// Mandatory for Saving, Include the table name and index column mapping here.
 	var $tab_name_index = Array(
 		'vtiger_crmentity' => 'crmid',
