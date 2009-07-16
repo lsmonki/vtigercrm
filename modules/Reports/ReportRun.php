@@ -47,6 +47,7 @@ class ReportRun extends CRMEntity
 						'SalesOrder_Total', 'SalesOrder_Sub_Total', 'SalesOrder_S&H_Amount', 'SalesOrder_Discount_Amount', 'SalesOrder_Adjustment', 
 						'PurchaseOrder_Total', 'PurchaseOrder_Sub_Total', 'PurchaseOrder_S&H_Amount', 'PurchaseOrder_Discount_Amount', 'PurchaseOrder_Adjustment'
 						);
+	var $ui10_fields = array();
 	
 	/** Function to set reportid,primarymodule,secondarymodule,reporttype,reportname, for given reportid
 	 *  This function accepts the $reportid as argument
@@ -193,10 +194,7 @@ class ReportRun extends CRMEntity
 						} elseif($selectedfields[1] == 'filesize'){
 							$columnslist[$fieldcolname] = "case ".$selectedfields[0].".".$selectedfields[1]." when '' then '-'else concat(".$selectedfields[0].".".$selectedfields[1]."/1024,'  ','KB') end as '$selectedfields[2]'";
 						}
-					}elseif($selectedfields[0] == 'vtiger_potential' && $selectedfields[1] == 'related_to'){
-						$columnslist[$fieldcolname] = "case when vtiger_accountPotentials.accountid is not NULL then vtiger_accountPotentials.accountname else concat(vtiger_contactdetailsPotentials.lastname, ' ', vtiger_contactdetailsPotentials.firstname) end as '$selectedfields[2]'";
-					}
-					elseif(stristr($selectedfields[1],'cf_')==true && stripos($selectedfields[1],'cf_')==0)
+					}elseif(stristr($selectedfields[1],'cf_')==true && stripos($selectedfields[1],'cf_')==0)
 					{
 						$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1].' AS "'.$adb->sql_escape_string(decode_html($header_label)).'"';
 					}
@@ -1656,13 +1654,19 @@ class ReportRun extends CRMEntity
 		}
 		
 		// Update Currency Field list
-		$currencyfieldres = $adb->pquery("SELECT tabid, fieldlabel from vtiger_field WHERE uitype in (71,72)", array());
+		$currencyfieldres = $adb->pquery("SELECT tabid, fieldlabel, uitype from vtiger_field WHERE uitype in (71,72,10)", array());
 		if($currencyfieldres) {
 			foreach($currencyfieldres as $currencyfieldrow) {
 				$modprefixedlabel = getTabModuleName($currencyfieldrow['tabid']).' '.$currencyfieldrow['fieldlabel'];
 				$modprefixedlabel = str_replace(' ','_',$modprefixedlabel);				
-				if(!in_array($modprefixedlabel, $this->convert_currency) && !in_array($modprefixedlabel, $this->append_currency_symbol_to_value)) {					
-					$this->convert_currency[] = $modprefixedlabel;
+				if($currencyfieldrow['uitype']!=10){
+					if(!in_array($modprefixedlabel, $this->convert_currency) && !in_array($modprefixedlabel, $this->append_currency_symbol_to_value)) {					
+						$this->convert_currency[] = $modprefixedlabel;
+					}
+				} else {
+					if(!in_array($modprefixedlabel, $this->ui10_fields)) {					
+						$this->ui10_fields[] = $modprefixedlabel;
+					}
 				}
 			}
 		}
@@ -1809,6 +1813,13 @@ class ReportRun extends CRMEntity
 									$fieldvalue = getCurrencyName($custom_field_values[$i]);
 								else
 									$fieldvalue =getTranslatedString($custom_field_values[$i]);
+							}elseif (in_array($fld->name,$this->ui10_fields) && !empty($custom_field_values[$i])) {
+								$type = getSalesEntityType($custom_field_values[$i]);
+								$tmp =getEntityName($type,$custom_field_values[$i]);
+								foreach($tmp as $key=>$val){
+									$fieldvalue = $val;
+									break;
+								}
 							}
 							else {
 								if($custom_field_values[$i]!='')
@@ -1975,8 +1986,14 @@ class ReportRun extends CRMEntity
 						}elseif ($fld->name == "PurchaseOrder_Currency" || $fld->name == "SalesOrder_Currency" 
 									|| $fld->name == "Invoice_Currency" || $fld->name == "Quotes_Currency") {
 							$fieldvalue = getCurrencyName($custom_field_values[$i]);
-						}
-						else {
+						}elseif (in_array($fld->name,$this->ui10_fields) && !empty($custom_field_values[$i])) {
+								$type = getSalesEntityType($custom_field_values[$i]);
+								$tmp =getEntityName($type,$custom_field_values[$i]);
+								foreach($tmp as $key=>$val){
+									$fieldvalue = $val;
+									break;
+								}
+						}else {
 							$fieldvalue = getTranslatedString($custom_field_values[$i]);
 						}
 						$append_cur = str_replace($fld->name,"",decode_html($this->getLstringforReportHeaders($fld->name)));
@@ -2282,8 +2299,14 @@ class ReportRun extends CRMEntity
 						}elseif ($fld->name == "PurchaseOrder_Currency" || $fld->name == "SalesOrder_Currency" 
 									|| $fld->name == "Invoice_Currency" || $fld->name == "Quotes_Currency") {
 							$fieldvalue = getCurrencyName($custom_field_values[$i]);
-						}
-						else {
+						}elseif (in_array($fld->name,$this->ui10_fields) && !empty($custom_field_values[$i])) {
+								$type = getSalesEntityType($custom_field_values[$i]);
+								$tmp =getEntityName($type,$custom_field_values[$i]);
+								foreach($tmp as $key=>$val){
+									$fieldvalue = $val;
+									break;
+								}
+						}else {
 							$fieldvalue = getTranslatedString($custom_field_values[$i]);
 						}
 					

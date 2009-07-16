@@ -593,11 +593,6 @@ class Reports extends CRMEntity{
 				$sql.=" group by vtiger_field.fieldid order by sequence";			
 		}
 		
-		if($module == 'HelpDesk' && $block == 25)
-        {
-        		$module_columnlist['vtiger_crmentity:crmid:HelpDesk_Ticket_ID:ticketid:I'] = 'Ticket ID';
-        }
-		
 		$result = $adb->pquery($sql, $params);
 		$noofrows = $adb->num_rows($result);
 		for($i=0; $i<$noofrows; $i++)
