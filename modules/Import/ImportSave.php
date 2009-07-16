@@ -444,7 +444,7 @@ function is_record_exist($module,$focus)
 }
 //function to get the where clause for the duplicate - select query
 function get_where_clause($module,$column_fields) {
-	global $current_user, $dup_ow_count;
+	global $current_user, $dup_ow_count, $adb;
 	$where_clause = "";
 	$field_values_array=getFieldValues($module);
 	$field_values=$field_values_array['fieldnames_list'];
@@ -465,7 +465,7 @@ function get_where_clause($module,$column_fields) {
 		if(is_uitype($uitype_arr[$fld],'_users_list_') && $field_value == '') {
 			$field_value = $current_user->id;
 		}
-		$where_clause .= " AND ifnull(". $col_name .",'') = ifnull('".$field_value."','') ";
+		$where_clause .= " AND ifnull(". $adb->sql_escape_string($col_name) .",'') = ifnull('". $adb->sql_escape_string($field_value) ."','') ";
 	}
 	return $where_clause;
 }
