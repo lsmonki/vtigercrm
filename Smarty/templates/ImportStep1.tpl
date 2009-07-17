@@ -125,7 +125,7 @@ function validateFile(form)
 						<td colspan="2" align="right" style="padding-right:40px;" class="reportCreateBottom">
 							<input title="{$MOD.LBL_NEXT}" accessKey="" class="crmButton small save" type="submit" name="button" value="  {$MOD.LBL_NEXT} &rsaquo; "  onclick="this.form.action.value='Import';this.form.step.value='2'; return validateFile(this.form);">
 						&nbsp;
- <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="" class="crmButton small cancel" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" onclick="gotourl('index.php?action=ListView&module={$MODULE}&parenttab={$CATEGORY}')">
+ <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="" class="crmButton small cancel" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" onclick="window.history.back()">
 
 						</td>
 				   </tr>

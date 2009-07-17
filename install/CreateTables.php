@@ -99,7 +99,6 @@ function showhidediv()
 $useHtmlEntities = true;
 
 require_once('install/CreateTables.inc.php');
-session_start();
 session_destroy();
 
 //this is to rename the installation file and folder so that no one destroys the setup

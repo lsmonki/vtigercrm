@@ -410,7 +410,7 @@ if (!empty ($failed_permissions)) {
 	echo "return false;";
 } else {
 	if (!$all_directive_recommended_value) { ?>
-		if(confirm('Some of the PHP directives are not set to recommended value. This might affect the some of the operations of Vtiger CRM. Are you sure you want to proceed?')) {
+		if(confirm('Few of the PHP Setting does not meeting recommended values. This might affect some of the features of vtiger CRM. Are you sure, you want to proceed?')) {
 		<?php echo "return true;"; ?>
 		} else {
 		<?php echo "return false;"; ?>
