@@ -151,7 +151,7 @@ class Vtiger_Field extends Vtiger_FieldBasic {
 		global $adb;
 		foreach($moduleNames as $relmodule) {
 			$adb->pquery('DELETE FROM vtiger_fieldmodulerel WHERE fieldid=? AND module=? AND relmodule = ?', 
-				Array($this->id, $this->module->name, $relmodule));
+				Array($this->id, $this->getModuleName(), $relmodule));
 			
 			Vtiger_Utils::Log("Unsetting $this->name relation with $relmodule ... DONE");
 		}
