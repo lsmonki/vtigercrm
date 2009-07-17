@@ -180,9 +180,10 @@ function export($type){
 		}
 	}
 	
-	if(isset($_SESSION['nav_start']) && $_SESSION['nav_start']!='' && $export_data == 'currentpage'){
-		$start_rec = $_SESSION['nav_start'];
-		$limit_start_rec = ($start_rec == 0) ? 0 : ($start_rec - 1);
+	if($export_data == 'currentpage'){
+		$current_page = ListViewSession::getCurrentPage($type,$viewid);
+		$limit_start_rec = ($current_page - 1) * $list_max_entries_per_page;
+		if ($limit_start_rec < 0) $limit_start_rec = 0;
 		$query .= ' LIMIT '.$limit_start_rec.','.$list_max_entries_per_page;
 	}
 	
