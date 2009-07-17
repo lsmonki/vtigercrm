@@ -222,7 +222,7 @@ class PearDatabase{
 	}
 	// END
 	
-    function isMySQL() { return $this->dbType=='mysql'; }
+    function isMySQL() { return (stripos($this->dbType ,'mysql') === 0);}
     function isOracle() { return $this->dbType=='oci8'; }
     function isPostgres() { return $this->dbType=='pgsql'; }
     
