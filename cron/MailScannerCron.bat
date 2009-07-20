@@ -14,4 +14,4 @@ set PHP_EXE="C:\Program Files\vtigercrm5\php\php.exe"
 
 cd /D %VTIGERCRM_ROOTDIR%
 
-%PHP_EXE% -f vtigercron.php service="MailScanner" app_key="YOUR_APP_KEY_HERE" scannername="DEFAULT"
+%PHP_EXE% -f vtigercron.php service="MailScanner" scannername="DEFAULT"

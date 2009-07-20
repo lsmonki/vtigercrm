@@ -2134,6 +2134,7 @@ function AjaxDuplicateValidate(module,fieldname,oform)
                                               {
 													  VtigerJS_DialogBox.unblock();
                                                       alert(str);
+                                                      return false;
                                               }
                                       }
                               }

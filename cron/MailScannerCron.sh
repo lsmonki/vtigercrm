@@ -7,11 +7,10 @@
 # All Rights Reserved.
 #
 # ********************************************************************************
-#wget "http://localhost:APACHEPORT/vtigercron.php?service=MailScanner&scannername=DEFAULT&app_key=YOUR_APP_KEY_HERE" -O /dev/null
 
-export VTIGERCRM_ROOTDIR=`pwd`/..
+export VTIGERCRM_ROOTDIR=`dirname "$0"`/..
 export USE_PHP=php
 
 cd $VTIGERCRM_ROOTDIR
 
-$USE_PHP -f vtigercron.sh service="MailScanner" app_key="YOUR_APP_KEY_HERE"
+$USE_PHP -f vtigercron.php service="MailScanner" scannername="DEFAULT"
