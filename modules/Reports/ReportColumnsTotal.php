@@ -46,9 +46,7 @@ if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 			}
 		}
 		$secondarymodule = implode(":",$secondarymodules);
-		
-		if($secondarymodule!='') 
-			$oReport->secmodule = $secondarymodule;
+		$oReport->secmodule = $secondarymodule;
 
   		$BLOCK1 = $oReport->sgetColumntoTotalSelected($oReport->primodule,$oReport->secmodule,$recordid);
 		$report_column_tot->assign("BLOCK1",$BLOCK1);
