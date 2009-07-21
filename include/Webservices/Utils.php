@@ -340,4 +340,89 @@ function vtws_preserveGlobal($name,$value){
 	return VTWS_PreserveGlobal::preserveGlobal($name,$value);
 }
 
+/**
+ * Takes the details of a webservices and exposes it over http.
+ * @param $name name of the webservice to be added with namespace.
+ * @param $handlerFilePath file to be include which provides the handler method for the given webservice.
+ * @param $handlerMethodName name of the function to the called when this webservice is invoked.
+ * @param $requestType type of request that this operation should be, if in doubt give it as GET,
+ * 	general rule of thumb is that, if the operation is adding/updating data on server then it must be POST
+ * 	otherwise it should be GET.
+ * @param $preLogin 0 if the operation need the user to authorised to access the webservice and
+ * 	1 if the operation is called before login operation hence the there will be no user authorisation happening
+ * 	for the operation.
+ * @return Integer operationId of successful or null upon failure.
+ */
+function vtws_addWebserviceOperation($name,$handlerFilePath,$handlerMethodName,$requestType,$preLogin = 0){
+	global $adb;
+	$createOperationQuery = "insert into vtiger_ws_operation(operationid,name,handler_path,handler_method,type,prelogin)
+		values (?,?,?,?,?,?);";
+	if(strtolower($requestType) != 'get' && strtolower($requestType) != 'post'){
+		return null;
+	}
+	$requestType = strtoupper($requestType);
+	if(empty($preLogin)){
+		$preLogin = 0;
+	}else{
+		$preLogin = 1;
+	}
+	$operationId = $adb->getUniqueID("vtiger_ws_operation");
+	$result = $adb->pquery($createOperationQuery,array($operationId,$name,$handlerFilePath,$handlerMethodName,
+		$requestType,$preLogin));
+	if($result !== false){
+		return $operationId;
+	}
+	return null;
+}
+
+/**
+ * Add a parameter to a webservice.
+ * @param $operationId Id of the operation for which a webservice needs to be added.
+ * @param $paramName name of the parameter used to pickup value from request(POST/GET) object.
+ * @param $paramType type of the parameter, it can either 'string','datetime' or 'encoded'
+ * 	encoded type is used for input which will be encoded in JSON or XML(NOT SUPPORTED).
+ * @param $sequence sequence of the parameter in the definition in the handler method.
+ * @return Boolean true if the parameter was added successfully, false otherwise
+ */
+function vtws_addWebserviceOperationParam($operationId,$paramName,$paramType,$sequence){
+	global $adb;
+	$supportedTypes = array('string','encoded','datetime','double','boolean');
+	if(!is_numeric($sequence)){
+		$sequence = 1;
+	}if($sequence <=1){
+		$sequence = 1;
+	}
+	if(!in_array(strtolower($paramType),$supportedTypes)){
+		return false;
+	}
+	$createOperationParamsQuery = "insert into vtiger_ws_operation_parameters(operationid,name,type,sequence)
+		values (?,?,?,?);";
+	$result = $adb->pquery($createOperationParamsQuery,array($operationId,$paramName,$paramType,$sequence));
+	return ($result !== false);
+}
+
+function vtws_getModuleHandlerFromName($name,$user){
+	global $adb, $log;
+	$webserviceObject = VtigerWebserviceObject::fromName($adb,$name);
+	$handlerPath = $webserviceObject->getHandlerPath();
+	$handlerClass = $webserviceObject->getHandlerClass();
+	
+	require_once $handlerPath;
+	
+	$handler = new $handlerClass($webserviceObject,$user,$adb,$log);
+	return $handler;
+}
+
+function vtws_getModuleHandlerFromId($id,$user){
+	global $adb, $log;
+	$webserviceObject = VtigerWebserviceObject::fromId($adb,$id);
+	$handlerPath = $webserviceObject->getHandlerPath();
+	$handlerClass = $webserviceObject->getHandlerClass();
+	
+	require_once $handlerPath;
+	
+	$handler = new $handlerClass($webserviceObject,$user,$adb,$log);
+	return $handler;
+}
+
 ?>
