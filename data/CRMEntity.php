@@ -1912,6 +1912,13 @@ $log->info("in getOldFileName  ".$notesid);
 		$tableindex = $secondary->table_index;
 		$modulecftable = $secondary->customFieldTable[0];
 		$modulecfindex = $secondary->customFieldTable[1];
+		
+		if(isset($modulecftable)){
+			$cfquery = "left join $modulecftable as $modulecftable on $modulecftable.$modulecfindex=$tablename.$tableindex";
+		} else {
+			$cfquery = '';
+		}
+				
 		$query = $this->getRelationQuery($module,$secmodule,"$tablename","$tableindex");
 		$query .=" 	left join vtiger_crmentity as vtiger_crmentity$secmodule on vtiger_crmentity$secmodule.crmid = $tablename.$tableindex AND vtiger_crmentity$secmodule.deleted=0   
 					$cfquery   
