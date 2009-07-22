@@ -17,13 +17,13 @@
  * Description:  TODO: To be written.
  ********************************************************************************/
 
-require_once('modules/Contacts/Contacts.php');
+global $currentModule;
+$focus = CRMEntity::getInstance($currentModule);
+
 global $mod_strings;
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('contact_delete');
-
-$focus = new Contacts();
 
 //Added to fix 4600
 $url = getBasic_Advance_SearchURL();
@@ -33,7 +33,7 @@ if(!isset($_REQUEST['record']))
 
 DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['record'],$_REQUEST['return_id']);
 
-if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
+$parenttab = getParentTab();
 
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&parenttab=$parenttab&activity_mode=".$_REQUEST['activity_mode']."&record=".$_REQUEST['return_id']."&relmodule=".$_REQUEST['module'].$url);
+header("Location: index.php?module=".vtlib_purify($_REQUEST['return_module'])."&action=".vtlib_purify($_REQUEST['return_action'])."&parenttab=$parenttab&activity_mode=".vtlib_purify($_REQUEST['activity_mode'])."&record=".vtlib_purify($_REQUEST['return_id'])."&relmodule=".vtlib_purify($_REQUEST['module']).$url);
 ?>

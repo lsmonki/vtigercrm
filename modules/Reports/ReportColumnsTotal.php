@@ -13,7 +13,6 @@ require_once('Smarty_setup.php');
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Reports/Reports.php');
-require_once('include/database/PearDatabase.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -33,18 +32,36 @@ $report_column_tot->assign("MOD", $mod_strings);
 $report_column_tot->assign("APP", $app_strings);
 $report_column_tot->assign("IMAGE_PATH",$image_path);
 
-if(isset($_REQUEST["record"]))
+if(isset($_REQUEST["record"]) && $_REQUEST['record']!='')
 {
-        $recordid = $_REQUEST["record"];
+        $recordid = vtlib_purify($_REQUEST["record"]);
         $oReport = new Reports($recordid);
-        $BLOCK1 = $oReport->sgetColumntoTotalSelected($oReport->primodule,$oReport->secmodule,$recordid);
+		$oRep = new Reports();
+		$secondarymodule = '';
+		$secondarymodules =Array();
+		
+		if(!empty($oRep->related_modules[$oReport->primodule])) {
+			foreach($oRep->related_modules[$oReport->primodule] as $key=>$value){
+				if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= vtlib_purify($_REQUEST["secondarymodule_".$value]);
+			}
+		}
+		$secondarymodule = implode(":",$secondarymodules);
+		$oReport->secmodule = $secondarymodule;
+
+  		$BLOCK1 = $oReport->sgetColumntoTotalSelected($oReport->primodule,$oReport->secmodule,$recordid);
 		$report_column_tot->assign("BLOCK1",$BLOCK1);
 		$report_column_tot->assign("RECORDID",$recordid);
 }else
 {
-        $primarymodule = $_REQUEST["primarymodule"];
-        $secondarymodule = $_REQUEST["secondarymodule"];
+        $primarymodule = vtlib_purify($_REQUEST["primarymodule"]);
         $oReport = new Reports();
+        $secondarymodule = Array();
+        if(!empty($ogReport->related_modules[$primarymodule])) {
+			foreach($ogReport->related_modules[$primarymodule] as $key=>$value){
+        		$secondarymodule[] = vtlib_purify($_REQUEST["secondarymodule_".$value]);
+        	
+			}
+        }
         $BLOCK1 = $oReport->sgetColumntoTotal($primarymodule,$secondarymodule);
 		$report_column_tot->assign("BLOCK1",$BLOCK1);
 }

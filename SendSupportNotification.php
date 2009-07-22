@@ -21,7 +21,6 @@
 
 require_once('include/utils/utils.php');
 require("modules/Emails/mail.php");
-require_once("include/database/PearDatabase.php");
 require_once('include/logging.php');
 require("config.php");
 

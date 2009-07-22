@@ -14,7 +14,7 @@
 <link rel="stylesheet" type="text/css" href="themes/{$THEME}/webmail.css">
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
    <tr>
-	<td valign=top align=right><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+	<td valign=top align=right><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
 	<td class="showPanelBg" valign="top" width="95%"  style="padding-left:20px; ">
 	<br>
 	<!-- module Select Table -->
@@ -29,19 +29,19 @@
 						<table width="100%" cellpadding="0" cellspacing="0" border="0">
 						   <tr>
 							<td width="10%">
-								<img src="themes/{$THEME}/images/check_mail.gif" align="absmiddle" />
+								<img src="{'check_mail.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />
 								&nbsp;<a href="javascript:;" class="webMnu" onclick="check_for_new_mail('{$MAILBOX}');" >{$MOD.LBL_CHK_MAIL}</a>
 							</td>
 							<td width="10%">
-								<img src="themes/{$THEME}/images/compose.gif" align="absmiddle" />
+								<img src="{'compose.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />
 								&nbsp;<a href="javascript:;" onclick="OpenComposer('','create');" class="webMnu">{$MOD.LBL_COMPOSE}</a>
 							</td>
 							<td width="20%" nowrap>
-								<img src="themes/{$THEME}/images/webmail_settings.gif" align="absmiddle" />
+								<img src="{'webmail_settings.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />
 								&nbsp;<a href="index.php?module=Users&action=AddMailAccount&record={$USERID}&return_module=Webmails&return_action=index" class="webMnu">{$MOD.LBL_SETTINGS}</a>
 							</td>
 							<td width="30%">
-								<!--<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
+								<!--<img src="themes/images/webmail_settings.gif" align="absmiddle" />
 								&nbsp;<a href="javascript:;" onclick="runEmailCommand('expunge','0');" class="webMnu">{$MOD.LBL_EXPUNGE_MAILBOX}</a>-->
 							</td>
 							<td>&nbsp;</td>
@@ -60,7 +60,7 @@
 							</tr>
 							<tr>
 							<td>
-								<img src="themes/{$THEME}/images/mymail.gif" align="absmiddle" />&nbsp;<span ><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">{$MOD.ADD_FOLDER}</span></span>
+								<img src="{'mymail.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;<span ><b class="txtGreen">{$MOD.LBL_MY_MAILS}</b>&nbsp;&nbsp;<span id="folderOpts" style="position:absolute;display:none">{$MOD.ADD_FOLDER}</span></span>
 								<div id="box_list">
 								<ul style="list-style-type:none;">
 
@@ -71,26 +71,26 @@
 							{/foreach}
 							</ul></div> <br />
 
-						<img src="themes/{$THEME}/images/sentmail.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
+						<img src="{'sentmail.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
 						<ul style="list-style-type:none;">
 							<li >
-								<img src="themes/{$THEME}/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="{'opened_folder.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView&parenttab=My Home Page&folderid=1&parenttab=My Home Page" class="small">{$MOD.LBL_ALLMAILS}</a>&nbsp;<b></b>
 							</li>
 							<li >
-								<img src="themes/{$THEME}/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="{'opened_folder.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView&folderid=2&parenttab=My Home Page" class="small">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;<b></b>
 							</li>
 							<li >
-								<img src="themes/{$THEME}/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="{'opened_folder.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView&folderid=3&parenttab=My Home Page" class="small">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;
 							</li>	
 							<li >
-								<img src="themes/{$THEME}/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="{'opened_folder.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView&folderid=4&parenttab=My Home Page" class="small">{$MOD.LBL_TO_LEADS}</a>&nbsp;
 							</li>
 							<li >
-								<img src="themes/{$THEME}/images/opened_folder.gif" align="absmiddle" />&nbsp;&nbsp;
+								<img src="{'opened_folder.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;&nbsp;
 								<a href="index.php?module=Emails&action=ListView&folderid=5&parenttab=My Home Page" class="small">{$MOD.LBL_TO_USERS}</a>&nbsp;
 							</li>
 						</ul><br />
@@ -112,9 +112,9 @@
 					 	 <tr>
 							<td width="79%" class="big mailSubHeader"><div id="nav"><span style="float:left">{$ACCOUNT} &gt; {$MAILBOX} {if $NUM_EMAILS neq 0}
 						 {if $NUM_EMAILS neq 1}
-							({$NUM_EMAILS} Messages)
+							({$NUM_EMAILS} {$MOD.LBL_MESSAGES})
 						 {else}
-							({$NUM_EMAILS} Message)
+							({$NUM_EMAILS} {$MOD.LBL_MESSAGE})
 						 {/if}
 					 {/if}
 						</span> <span style="float:right">{$NAVIGATION}</span></div></td>
@@ -148,7 +148,7 @@
 							<!--div added to show info while moving mails-->
 							<div id="show_msg" class="layerPopup" align="center" style="padding: 5px;font-weight:bold;width: 400px;display:none;z-index:10000"></div>
 							<!-- Table to display the mails list -	Starts -->
-							<form name="massdelete" method="post">
+							<form name="massdelete" method="post" onsubmit="VtigerJS_DialogBox.block();">
 							<table cellspacing="1" cellpadding="3" border="0" width="100%" id="message_table">
 							   <tr>
 								<th class='tableHeadBg'><input type="checkbox" name="select_all" value="checkbox"  onclick="toggleSelect(this.checked,'selected_id');"/></th>
@@ -194,7 +194,8 @@
 							<span id="reply_button"><input type="button" name="reply" value=" {$MOD.LBL_REPLY_TO_SENDER} " class="crmbutton small edit" /></span>&nbsp;
 							<span id="reply_button_all"><input type="button" name="reply" value=" {$MOD.LBL_REPLY_ALL} " class="crmbutton small edit" /></span>&nbsp;
 							<span id="forward_button"><input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="crmbutton small edit" /></span>&nbsp;
-							<span id="download_attach_button"><input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="crmbutton small save" /></span>
+							<span id="download_attach_button"><input type="button" name="download" value=" {$MOD.LBL_DOWNLOAD_ATTCH_BUTTON} " class="crmbutton small save" /></span>&nbsp;
+							<span id="print_email_button"><input type="button" name="print" value=" {$MOD.LBL_PRINT_EMAIL} "class="crmbutton small edit" /></span>
 						</td>
 						<td width="25%" align="right"><span id="delete_button"><input type="button" name="Button" value=" {$APP.LBL_DELETE_BUTTON} "  class="crmbutton small delete" /></span>&nbsp;</td>
 					   </tr>
@@ -232,7 +233,7 @@
 		</table>
 		<br />
 	</td>
-	<td valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+	<td valign=top><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </table>
 

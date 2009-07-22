@@ -64,6 +64,7 @@ foreach($defSharingPermissionData as $tab_id => $def_perr)
 $list_entries=array_chunk($entries,3);
 $smarty->assign("ORGINFO",$list_entries);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);

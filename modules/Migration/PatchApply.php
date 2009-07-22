@@ -9,10 +9,11 @@
  *
 ********************************************************************************/
 
-ini_set("memory_limit","32M");
-set_time_limit(-1);
+_phpset_memorylimit_MB(32);
+global $php_max_execution_time;
+set_time_limit($php_max_execution_time);
 
-global $current_user;
+global $current_user, $adb;
 if($current_user->is_admin != 'on')
 {
 	die("<br><br><center>".$app_strings['LBL_PERMISSION']." <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
@@ -89,6 +90,11 @@ for($patch_count=0;$patch_count<count($temp);$patch_count++)
 		//No file available or Migration not provided for this release
 		//echo '<br>No Migration / No File ==> '.$filename;
 	}
+	if($adb->isMySQL()) {
+		@include_once('modules/Migration/Performance/'.$temp[$patch_count+1].'_mysql.php');
+	} elseif($adb->isPostgres()) {
+		@include_once('modules/Migration/Performance/'.$temp[$patch_count+1].'_postgres.php');		
+	}
 }
 	
 	if(getMigrationCharsetFlag() == MIG_CHARSET_PHP_UTF8_DB_UTF8)
@@ -116,7 +122,7 @@ if(!isset($continue_42P2))//This variable is used in MigrationInfo.php to avoid 
 
 //HANDLE HERE - Mickie
 //Here we have to update the version in table. so that when we do migration next time we will get the version
-global $adb, $vtiger_current_version;
+global $vtiger_current_version;
 $res = $adb->pquery("select * from vtiger_version", array());
 if($adb->num_rows($res))
 {
@@ -134,65 +140,6 @@ if($currency_name != $mig_currency)
 	echo "<br><br><b><font color='red'>NOTE:<br><br>Please change the base currency name as '$mig_currency' in config.inc.php ie., change the variable currency name as $"."currency_name = '$mig_currency' in config.inc.php file.</b><br><br>";
 }
 
-//Added to check database charset and $default_charset are set to UTF8.
-//If both are not set to be UTF-8, Then we will show an alert message.
-/*
-function check_db_utf8_charset($conn) 
-{ 
-	$dbvarRS = &$conn->query("show variables like '%_database' "); 
-	$db_character_set = null; 
-	$db_collation_type = null; 
-	while(!$dbvarRS->EOF) { 
-		$arr = $dbvarRS->FetchRow(); 
-		$arr = array_change_key_case($arr); 
-		switch($arr['variable_name']) { 
-		case 'character_set_database' : $db_character_set = $arr['value']; break; 
-		case 'collation_database'     : $db_collation_type = $arr['value']; break; 
-		}
-		// If we have all the required information break the loop. 
-		if($db_character_set != null && $db_collation_type != null) break; 
-	} 
-	return (stristr($db_character_set, 'utf8') && stristr($db_collation_type, 'utf8')); 
-}
-
-/*	global $adb,$default_charset;
-	$db_status=check_db_utf8_charset($adb);
-	if(strtolower($default_charset) == 'utf-8')	$config_status=1;
-	else						$config_status=0;
-
-	if(!$db_status && !$config_status)
-	{
-		$msg='<br><font color="red"><b>Your database charset and $default_charset variable in config.inc.php are not set to UTF-8. Due to that you may not use UTF-8 characters in vtigerCRM. Please set the above to UTF-8</b></font>';
-	}
-	else if($db_status && !$config_status)
-	{
-		$msg='<br><font color="red"><b>Your database charset is set as UTF-8. But $default_charset variable in config.inc.php is not set to UTF-8. Due to that you may not use UTF-8 characters in vtigerCRM. Please set the $default_charset variable to UTF-8</b></font>';
-
-	}
-	else if(!$db_status && $config_status)
-	{
-		$msg='<br><font color="red"><b>Your $default_charset variable in config.inc.php is set as UTF-8. But your database charset is not set as UTF-8. Due to that you may not use UTF-8 characters in vtigerCRM. Please set your database charset to UTF-8</b></font>';
-
-	}
-	echo $msg;
-if(!$continue_42P2 && $db_change_conformation == true)
-{
-echo '<br><table border="1" cellpadding="3" cellspacing="0" height="100%" width="80%" align="center">
-		<tr>
-		<td colspan="2" align="center"><br>If you are migrating from 5.0.3 or earlier versions, which had partial unicode (UTF-8) support, the unicode characters got saved as HTML entities. <br>If you are going to use ISO charset in config file and in database, then you need not do conversion.<br> Click on "Convert Now" button to convert html entities into utf8 characters.<br><br> 
-					<form name="html_to_utf" method="post" action="index.php">
-					<input type="hidden" name="module" value="Migration">
-					<input type="hidden" name="action" value="HTMLtoUTF8Conversion">
-
-					<input type="submit" name="close" value=" &nbsp;Convert Now&nbsp; " class="crmbutton small save" />
-				</form><br>
-			</td>
-		</tr>
-	</table><br><br>';
-
-}
-//if($db_change_conformation == true)
-//{ */
 echo '<table width="95%"  border="0" align="center">
 	<tr bgcolor="#FFFFFF"><td colspan="2">&nbsp;</td></tr>
 		<tr>
@@ -205,7 +152,7 @@ echo '<table width="95%"  border="0" align="center">
 			</td>
 		</tr>
 	</table><br><br>';
-//}
+
 perform_post_migration_activities();
 
 //Function used to execute the query and display the success/failure of the query

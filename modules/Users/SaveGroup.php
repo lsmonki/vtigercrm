@@ -1,49 +1,45 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
-global $adb;
+global $adb, $mod_strings;
 
 $groupName = from_html(trim($_REQUEST['groupName']));
 $description = from_html($_REQUEST['description']);
 $mode = $_REQUEST['mode'];
 
-if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='')
-{
-        if($mode != 'edit')
-        {
-                $query = 'select groupname from vtiger_groups where groupname=?';
-				$params = array($groupName);
-        }
-        else
-        {
-                $groupid = $_REQUEST['groupid'];
-                $query = 'select groupname from vtiger_groups  where groupname=? and groupid !=?';
-				$params = array($groupName, $groupid);
-
-        }
-        $result = $adb->pquery($query, $params);
-        if($adb->num_rows($result) > 0)
-        {
-                echo 'A Group in the specified name "'.$groupName.'" already exists';
-                die;
-        }else
-        {
-                echo 'SUCESS';
-                die;
-        }
-
+if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check']!='') {
+	if($mode != 'edit') {
+		$query = 'select groupname from vtiger_groups where groupname=?';
+		$params = array($groupName);
+	} else {
+		$groupid = $_REQUEST['groupid'];
+		$query = 'select groupname from vtiger_groups  where groupname=? and groupid !=?';
+		$params = array($groupName, $groupid);
+	}
+	$result = $adb->pquery($query, $params);
+	
+	$user_query = "SELECT user_name FROM vtiger_users WHERE user_name =?";
+	$user_result = $adb->pquery($user_query, array($groupName));
+        
+	if($adb->num_rows($result) > 0) {
+		echo $mod_strings['LBL_GROUPNAME_EXIST'];
+		die;
+	} elseif($adb->num_rows($user_result) > 0) {
+		echo $mod_strings['LBL_USERNAME_EXIST'];
+		die;
+	} else {
+		echo 'SUCCESS';
+		die;
+	}
 }
-
-
 
 
 /** returns the group members in an formatted array  
@@ -114,7 +110,7 @@ function constructGroupMemberArray($member_array)
 		$groupMemberArray=constructGroupMemberArray($member_array);
 		updateGroup($groupId,$groupName,$groupMemberArray,$description);
 
-		$loc = "Location: index.php?action=".$returnaction."&module=Settings&parenttab=Settings&groupId=".$groupId;
+		$loc = "Location: index.php?action=".vtlib_purify($returnaction)."&module=Settings&parenttab=Settings&groupId=".vtlib_purify($groupId);
 	}
 	elseif(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'create')
 	{
@@ -122,7 +118,7 @@ function constructGroupMemberArray($member_array)
 		$member_array = explode(';',$selected_col_string);
 		$groupMemberArray=constructGroupMemberArray($member_array);
 		$groupId=createGroup($groupName,$groupMemberArray,$description);
-		$loc = "Location: index.php?action=".$returnaction."&parenttab=Settings&module=Settings&groupId=".$groupId; 	 
+		$loc = "Location: index.php?action=".vtlib_purify($returnaction)."&parenttab=Settings&module=Settings&groupId=".vtlib_purify($groupId); 	 
 
 	}
 

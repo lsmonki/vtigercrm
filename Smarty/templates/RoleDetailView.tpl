@@ -14,7 +14,7 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
         <br>
 
@@ -22,7 +22,7 @@
 			{include file='SetMenu.tpl'}
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-				<form id="form" name="roleView" action="index.php" method="post">
+				<form id="form" name="roleView" action="index.php" method="post" onsubmit="VtigerJS_DialogBox.block();">
 				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="action" value="createrole">
 				<input type="hidden" name="parenttab" value="Settings">
@@ -30,7 +30,7 @@
 				<input type="hidden" name="roleid" value="{$ROLEID}">
 				<input type="hidden" name="mode" value="edit">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-roles.gif" width="48" height="48" border=0 ></td>
+					<td width=50 rowspan=2 valign=top><img src="{'ico-roles.gif'|@vtiger_imageurl:$THEME}" width="48" height="48" border=0 ></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=listroles&parenttab=Settings">{$CMOD.LBL_ROLES}</a> &gt; {$CMOD.LBL_VIEWING} &quot;{$ROLE_NAME}&quot; </b></td>
 				</tr>
 				<tr>
@@ -119,7 +119,7 @@
 		
 	</div>
 </td>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </tbody>
 </table>

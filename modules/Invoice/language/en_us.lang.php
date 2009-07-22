@@ -154,7 +154,6 @@ $mod_strings = Array(
 'Potential Name'=>'Potential Name',
 'Customer No'=>'Customer No',
 'Sales Order'=>'Sales Order',
-'Notes'=>'Notes',
 'Pending'=>'Pending',
 'Account Name'=>'Account Name',
 'Terms & Conditions'=>'Terms & Conditions',
@@ -193,6 +192,10 @@ $mod_strings = Array(
 'Terms & Conditions'=>'Terms & Conditions',
 'No'=>'No',
 'Date'=>'Date',
+
+// Added affter 5.0.4 GA
+//Added for Documents module
+'Documents'=>'Documents',
 );
 
 ?>

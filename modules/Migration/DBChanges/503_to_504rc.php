@@ -1,14 +1,12 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *
-********************************************************************************/
-
+ *********************************************************************************/
 
 //5.0.3 to 5.0.4 database changes - added on 05-09-07
 //we have to use the current object (stored in PatchApply.php) to execute the queries
@@ -479,7 +477,7 @@ $adb->query("insert into vtiger_notificationscheduler(schedulednotificationid,sc
 
 
 //creating the new tables vtiger_picklist,vtiger_picklist_seq and vtiger_role2picklist
-$adb->query("CREATE TABLE `vtiger_picklist` (`picklistid` int(19) NOT NULL auto_increment,`name` varchar(200) NOT NULL,PRIMARY KEY (`picklistid`),UNIQUE KEY `picklist_name_idx` (`name`)) ENGINE=InnoDB");
+$adb->query("CREATE TABLE `vtiger_picklist` (`picklistid` int(11) NOT NULL auto_increment,`name` varchar(200) NOT NULL,PRIMARY KEY (`picklistid`),UNIQUE KEY `picklist_name_idx` (`name`)) ENGINE=InnoDB");
 
 $adb->query("CREATE TABLE `vtiger_role2picklist` (
 	`roleid` varchar(255) NOT NULL,
@@ -488,17 +486,15 @@ $adb->query("CREATE TABLE `vtiger_role2picklist` (
 	`sortid` int(11) default NULL,
 	PRIMARY KEY (`roleid`,`picklistvalueid`,`picklistid`),
 	KEY `role2picklist_roleid_picklistid_idx` (`roleid`,`picklistid`,`picklistvalueid`),
-	KEY `fk_2_vtiger_role2picklist` (`picklistid`))");
+	KEY `fk_2_vtiger_role2picklist` (`picklistid`)) type='InnoDB'");
 
-$adb->query("alter table vtiger_role2picklist add CONSTRAINT `fk_2_vtiger_role2picklist` FOREIGN KEY (`picklistid`) REFERENCES `vtiger_picklist` (`picklistid`) ON DELETE CASCADE");
+//$adb->query("alter table vtiger_role2picklist add CONSTRAINT `fk_1_vtiger_role2picklist` FOREIGN KEY (`roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE");
 
-$adb->query("alter table vtiger_role2picklist add CONSTRAINT `fk_1_vtiger_role2picklist` FOREIGN KEY (`roleid`) REFERENCES `vtiger_role` (`roleid`) ON DELETE CASCADE");
-
-$adb->query("alter table vtiger_role2picklist type='InnoDB'");
+$adb->query("alter table vtiger_role2picklist add CONSTRAINT `fk_3_vtiger_role2picklist` FOREIGN KEY (`picklistid`) REFERENCES `vtiger_picklist` (`picklistid`) ON DELETE CASCADE");
 
 
-$adb->query("CREATE TABLE `vtiger_picklistvalues_seq` (`id` int(11) NOT NULL)");
-$adb->query("insert into vtiger_picklistvalues_seq values(1)");
+//$adb->query("CREATE TABLE `vtiger_picklistvalues_seq` (`id` int(11) NOT NULL)");
+//$adb->query("insert into vtiger_picklistvalues_seq values(1)");
 //Alter picklist tables
 $picklist_arr = array('leadsource','accounttype','industry','leadstatus','rating','opportunity_type','salutationtype','sales_stage','ticketstatus','ticketpriorities','ticketseverities','ticketcategories','eventstatus','taskstatus','taskpriority','manufacturer','productcategory','faqcategories','usageunit','glacct','quotestage','carrier','faqstatus','invoicestatus','postatus','sostatus','campaigntype','campaignstatus','expectedresponse');
 
@@ -607,14 +603,6 @@ ExecuteQuery("update vtiger_field set uitype=255 where tabid in (7,4) and column
 
 //We need to remove the field team from quotes. To avoid data loss, we need to create a new custom field and to move the team field values into the newly created sutom field.	
 
-//Getting the biggest custom field name
-$query="select max(fieldname) as maxfieldname from vtiger_field where fieldname like 'cf_%'";
-$result = $adb->query($query);
-$max_cf_name=$adb->query_result($result,0,'maxfieldname');
-//Forming New custom field by incrementing the biggest custom field name
-$splitted=explode("_",$max_cf_name);
-$new_cf_name=$splitted[0]."_".($splitted[1]+1);
-
 //Getting block id for custom information
 $blockid = $adb->query_result($adb->query("select blockid from vtiger_blocks where tabid=20 and blocklabel = 'LBL_CUSTOM_INFORMATION'"),0,'blockid');
 
@@ -625,7 +613,9 @@ $seq = $adb->query_result($adb->query("select max(sequence) as seq from vtiger_f
 ExecuteQuery("delete from vtiger_field where tabid=20 and fieldname = 'team' and columnname='team'");
 //Creating new Custom field for quotes module and populating security entries.
 
+//Getting the biggest custom field name and id
 $newfieldid=$adb->getUniqueID("vtiger_field");
+$new_cf_name = 'cf_'.$newfieldid;
 $query="insert into vtiger_field values(20,".$newfieldid.",'".$new_cf_name."','vtiger_quotescf',2,1,'".$new_cf_name."','Team',0,0,0,100,".($seq+1).",".$blockid.",1,'V~O~LE~30',1,0,'BAS')";
 $result = $adb->query($query);
 
@@ -793,6 +783,5 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 ExecuteQuery("update vtiger_pricebook set active=0 where active is null");
 
 $migrationlog->debug("\n\nDB Changes from 5.0.3 to 5.0.4 RC-------- Ends \n\n");
-
 
 ?>

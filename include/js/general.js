@@ -43,55 +43,46 @@ function showSelect()
                 oselect_array[i].style.display = 'block';
         }
 }
+
 function getObj(n,d) {
 
-  var p,i,x; 
+	var p,i,x; 
 
-  if(!d)
-
-      d=document;
-
+	if(!d) {
+		d=document;
+	}
    
-   if(n != undefined)
-   {
-	   if((p=n.indexOf("?"))>0&&parent.frames.length) {
+	if(n != undefined) {
+		if((p=n.indexOf("?"))>0&&parent.frames.length) {
+			d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);
+		}
+	}
 
-		   d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);
+	if(d.getElementById) {
+		x=d.getElementById(n);
+		// IE7 was returning form element with name = n (if there was multiple instance)
+		// But not firefox, so we are making a double check
+		if(x && x.id != n) x = false;
+	}
 
-	   }
-   }
+	for(i=0;!x && i<d.forms.length;i++) {
+		x=d.forms[i][n];
+	} 
 
+	for(i=0; !x && d.layers && i<d.layers.length;i++) {
+		x=getObj(n,d.layers[i].document);
+	}   
 
+	if(!x && !(x=d[n]) && d.all) {
+		x=d.all[n];
+	}
 
-  if(!(x=d[n])&&d.all)
-
-      x=d.all[n];
-
- 
-
-  for(i=0;!x&&i<d.forms.length;i++)
-
-      x=d.forms[i][n];
-
- 
-
-  for(i=0;!x&&d.layers&&i<d.layers.length;i++)
-
-      x=getObj(n,d.layers[i].document);
-
- 
-
-  if(!x && d.getElementById)
-
-      x=d.getElementById(n);
-
-
-
-  return x;
-
-}
-
+	if(typeof x == 'string') {
+		x=null;
+	}
 	
+	return x;
+}
 
 function getOpenerObj(n) {
 
@@ -205,35 +196,39 @@ function delete_cookie( cookie_name )
 
 
 function emptyCheck(fldName,fldLabel, fldType) {
-	var currObj=getObj(fldName)
-	
-
+	var currObj = getObj(fldName);
 	if (fldType=="text") {
 		if (currObj.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) {
-
-       			alert(fldLabel+alert_arr.CANNOT_BE_EMPTY)
-
-			currObj.focus()
-
-                	return false
-
+			alert(fldLabel+alert_arr.CANNOT_BE_EMPTY)
+			try {
+				currObj.focus()	
+			} catch(error) {
+				// Fix for IE: If element or its wrapper around it is hidden, setting focus will fail
+				// So using the try { } catch(error) { }
+			}
+           	return false
 		}
-
-        	else
-            	
-		return true
-	} else {
-		if (trim(currObj.value) == '') {
-
-	                alert(fldLabel+alert_arr.CANNOT_BE_NONE)
-
-        	        return false
-
- 	       } else return true
-
+        else{
+			return true
+		}
+	} else if((fldType == "textarea")  
+		&& (typeof(FCKeditorAPI)!=='undefined' && FCKeditorAPI.GetInstance(fldName) !== 'undefined')) { 
+ 		var textObj = FCKeditorAPI.GetInstance(fldName); 
+ 		var textValue = textObj.EditorDocument.body.innerHTML; 
+ 		if (trim(textValue) == '' || trim(textValue) == '<br>') { 
+ 		   	alert(fldLabel+alert_arr.CANNOT_BE_NONE); 
+ 			return false; 
+ 			} else{ 
+ 		        	return true; 
+ 			} 
+ 	}	else{
+			if (trim(currObj.value) == '') {
+				alert(fldLabel+alert_arr.CANNOT_BE_NONE)
+        		return false
+      		} else 
+			return true
+		}
 	}
-
-}
 
 
 
@@ -279,10 +274,15 @@ function patternValidate(fldName,fldLabel,type) {
 		var re = /^\d{1,2}\:\d{1,2}$/
 	}
 	//Asha: Remove spaces on either side of a Email id before validating
-	if (type.toUpperCase()=="EMAIL") currObj.value = trim(currObj.value);	
+	if (type.toUpperCase()=="EMAIL" || type.toUpperCase() == "DATE") currObj.value = trim(currObj.value);	
 	if (!re.test(currObj.value)) {
-		alert(alert_arr.ENTER_VALID + fldLabel)
-		currObj.focus()
+		alert(alert_arr.ENTER_VALID + fldLabel  + " ("+type+")");
+		try {
+			currObj.focus()	
+		} catch(error) {
+			// Fix for IE: If element or its wrapper around it is hidden, setting focus will fail
+			// So using the try { } catch(error) { }
+		}
 		return false
 	}
 	else return true
@@ -363,19 +363,19 @@ function dateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 	
 	if (dd<1 || dd>31 || mm<1 || mm>12 || yyyy<1 || yyyy<1000) {
 		alert(alert_arr.ENTER_VALID+fldLabel)
-		getObj(dateFldName).focus()
+		try { getObj(dateFldName).focus() } catch(error) { }
 		return false
 	}
 	
 	if ((mm==2) && (dd>29)) {//checking of no. of days in february month
 		alert(alert_arr.ENTER_VALID+fldLabel)
-		getObj(dateFldName).focus()
+		try { getObj(dateFldName).focus() } catch(error) { }
 		return false
 	}
 	
 	if ((mm==2) && (dd>28) && ((yyyy%4)!=0)) {//leap year checking
 		alert(alert_arr.ENTER_VALID+fldLabel)
-		getObj(dateFldName).focus()
+		try { getObj(dateFldName).focus() } catch(error) { }
 		return false
 	}
 
@@ -386,7 +386,7 @@ function dateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 		case 9 : 
 		case 11 :	if (dd>30) {
 						alert(alert_arr.ENTER_VALID+fldLabel)
-						getObj(dateFldName).focus()
+						try { getObj(dateFldName).focus() } catch(error) { }
 						return false
 					}	
 	}
@@ -401,7 +401,7 @@ function dateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 	
 	if (hourval>23 || minval>59) {
 		alert(alert_arr.ENTER_VALID+fldLabel)
-		currObj.focus()
+		try { currObj.focus() } catch(error) { }
 		return false
 	}
 	
@@ -416,7 +416,7 @@ function dateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 	
 	if (type!="OTH") {
 		if (!compareDates(chkdate,fldLabel,currdate,"current date & time",type)) {
-			getObj(dateFldName).focus()
+			try { getObj(dateFldName).focus() } catch(error) { }
 			return false
 		} else return true;
 	} else return true;
@@ -463,7 +463,7 @@ function dateTimeComparison(dateFldName1,timeFldName1,fldLabel1,dateFldName2,tim
 	
 	if (type!="OTH") {
 		if (!compareDates(date1,fldLabel1,date2,fldLabel2,type)) {
-			getObj(dateFldName1).focus()
+			try { getObj(dateFldName1).focus() } catch(error) { }
 			return false
 		} else return true;
 	} else return true;
@@ -482,19 +482,19 @@ function dateValidate(fldName,fldLabel,type) {
 	
 	if (dd<1 || dd>31 || mm<1 || mm>12 || yyyy<1 || yyyy<1000) {
 		alert(alert_arr.ENTER_VALID+fldLabel)
-		getObj(fldName).focus()
+		try { getObj(fldName).focus() } catch(error) { }
 		return false
 	}
 	
 	if ((mm==2) && (dd>29)) {//checking of no. of days in february month
 		alert(alert_arr.ENTER_VALID+fldLabel)
-		getObj(fldName).focus()
+		try { getObj(fldName).focus() } catch(error) { }
 		return false
 	}
 	
 	if ((mm==2) && (dd>28) && ((yyyy%4)!=0)) {//leap year checking
 		alert(alert_arr.ENTER_VALID+fldLabel)
-		getObj(fldName).focus()
+		try { getObj(fldName).focus() } catch(error) { }
 		return false
 	}
 
@@ -505,7 +505,7 @@ function dateValidate(fldName,fldLabel,type) {
 		case 9 : 
 		case 11 :	if (dd>30) {
 						alert(alert_arr.ENTER_VALID+fldLabel)
-						getObj(fldName).focus()
+						try { getObj(fldName).focus() } catch(error) { }
 						return false
 					}	
 	}
@@ -519,7 +519,7 @@ function dateValidate(fldName,fldLabel,type) {
 	
 	if (type!="OTH") {
 		if (!compareDates(chkdate,fldLabel,currdate,"current date",type)) {
-			getObj(fldName).focus()
+			try { getObj(fldName).focus() } catch(error) { }
 			return false
 		} else return true;
 	} else return true;
@@ -553,7 +553,7 @@ function dateComparison(fldName1,fldLabel1,fldName2,fldLabel2,type) {
 	
 	if (type!="OTH") {
 		if (!compareDates(date1,fldLabel1,date2,fldLabel2,type)) {
-			getObj(fldName1).focus()
+			try { getObj(fldName1).focus() } catch(error) { }
 			return false
 		} else return true;
 	} else return true
@@ -570,7 +570,7 @@ function timeValidate(fldName,fldLabel,type) {
 	
 	if (hourval>23 || minval>59) {
 		alert(alert_arr.ENTER_VALID+fldLabel)
-		currObj.focus()
+		try { currObj.focus() } catch(error) { }
 		return false
 	}
 	
@@ -582,7 +582,7 @@ function timeValidate(fldName,fldLabel,type) {
 	
 	if (type!="OTH") {
 		if (!compareDates(chktime,fldLabel1,currtime,"current time",type)) {
-			getObj(fldName).focus()
+			try { getObj(fldName).focus() } catch(error) { }
 			return false
 		} else return true;
 	} else return true
@@ -635,7 +635,7 @@ function timeComparison(fldName1,fldLabel1,fldName2,fldLabel2,type) {
 	time2.setMinutes(min2)
 	if (type!="OTH") {	
 		if (!compareDates(time1,fldLabel1,time2,fldLabel2,type)) {
-			getObj(fldName1).focus()
+			try { getObj(fldName1).focus() } catch(error) { }
 			return false
 		} else return true;
 	} else return true;
@@ -671,7 +671,7 @@ function numValidate(fldName,fldLabel,format,neg) {
        }
               if (invalid==true) {
            alert(alert_arr.INVALID+fldLabel)
-           getObj(fldName).focus()
+           try { getObj(fldName).focus() } catch(error) { }
            return false
        } else return true
    } else {
@@ -679,15 +679,6 @@ function numValidate(fldName,fldLabel,format,neg) {
 	   var splitval=val.split(".")
 	   var arr_len = splitval.length;
            var len = 0;
-	   //added to fix the issue4242 
-	   /*if(fldName == 'unit_price') 
-	   { 
-	   	if(splitval[0] == '' && arr_len > 1)
-                 {
-                         splitval[0] = '0';
-                         val = splitval[0]+val;
-                }
-	   }*/	
 	   if(fldName == "probability" || fldName == "commissionrate")
            {
                    if(arr_len > 1)
@@ -695,7 +686,7 @@ function numValidate(fldName,fldLabel,format,neg) {
                    if(isNaN(val))
                    {
                         alert(alert_arr.INVALID+fldLabel)
-                        getObj(fldName).focus()
+                        try { getObj(fldName).focus() } catch(error) { }
                         return false
                    }
                    else if(splitval[0] > 100 || len > 3 || (splitval[0] >= 100 && splitval[1] > 0))
@@ -728,13 +719,13 @@ function numValidate(fldName,fldLabel,format,neg) {
 	if(dotcount>1)
 	{
        		alert(alert_arr.INVALID+fldLabel)
-		getObj(fldName).focus()
+		try { getObj(fldName).focus() } catch(error) { }
 		return false;
 	}
 
-      if (!re.test(val)) {
+	if (!re.test(val)) {
        alert(alert_arr.INVALID+fldLabel)
-       getObj(fldName).focus()
+       try { getObj(fldName).focus() } catch(error) { }
        return false
    } else return true
 }
@@ -745,7 +736,7 @@ function intValidate(fldName,fldLabel) {
 	if (isNaN(val) || (val.indexOf(".")!=-1 && fldName != 'potential_amount' && fldName != 'list_price')) 
 	{
 		alert(alert_arr.INVALID+fldLabel)
-		getObj(fldName).focus()
+		try { getObj(fldName).focus() } catch(error) { }
 		return false
 	} 
         else if((fldName != 'employees' || fldName != 'noofemployees') && (val < -2147483648 || val > 2147483647))
@@ -803,7 +794,7 @@ function numConstComp(fldName,fldLabel,type,constval) {
 	}
 	
 	if (ret==false) {
-		getObj(fldName).focus()
+		try { getObj(fldName).focus() } catch(error) { }
 		return false
 	} else return true;
 }
@@ -849,31 +840,86 @@ function validateFilename(form_ele) {
         return true;
 }
 
-function formValidate() {
-
-//Validation for Portal User
-if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
-{
-	//if existing portal value = 0, portal checkbox = checked, ( email field is not available OR  email is empty ) then we should not allow -- OR --
-	//if existing portal value = 1, portal checkbox = checked, ( email field is available     AND email is empty ) then we should not allow
-	if((getObj('existing_portal').value == 0 && getObj('portal').checked && (getObj('email') == null || trim(getObj('email').value) == '')) ||
-	    getObj('existing_portal').value == 1 && getObj('portal').checked && getObj('email') != null && trim(getObj('email').value) == '')
-	{
-		alert(alert_arr.PORTAL_PROVIDE_EMAILID);
-		return false;
-	}
+function formValidate(){
+	return doformValidation('');
 }
 
+function massEditFormValidate(){
+	return doformValidation('mass_edit');
+}
+
+function doformValidation(edit_type) {
+	//Validation for Portal User
+	if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
+	{
+		//if existing portal value = 0, portal checkbox = checked, ( email field is not available OR  email is empty ) then we should not allow -- OR --
+		//if existing portal value = 1, portal checkbox = checked, ( email field is available     AND email is empty ) then we should not allow
+		if(edit_type=='')
+		{
+			if((getObj('existing_portal').value == 0 && getObj('portal').checked && (getObj('email') == null || trim(getObj('email').value) == '')) ||
+			    getObj('existing_portal').value == 1 && getObj('portal').checked && getObj('email') != null && trim(getObj('email').value) == '')
+			{
+				alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+				return false;
+			}
+		}
+		else
+		{
+			if(getObj('portal') != null && getObj('portal').checked && getObj('portal_mass_edit_check').checked && (getObj('email') == null || trim(getObj('email').value) == '' || getObj('email_mass_edit_check').checked==false))
+			{
+				alert(alert_arr.PORTAL_PROVIDE_EMAILID);
+				return false;
+			}
+			if((getObj('email') != null && trim(getObj('email').value) == '' && getObj('email_mass_edit_check').checked) && !(getObj('portal').checked==false && getObj('portal_mass_edit_check').checked))
+			{
+				alert(alert_arr.EMAIL_CHECK_MSG);
+				return false;
+			}
+		}
+	}
+	if(gVTModule == 'SalesOrder') {
+		if(edit_type == 'mass_edit') {
+			if (getObj('enable_recurring_mass_edit_check') != null 
+				&& getObj('enable_recurring_mass_edit_check').checked
+				&& getObj('enable_recurring') != null) {
+					if(getObj('enable_recurring').checked && (getObj('recurring_frequency') == null 
+						|| trim(getObj('recurring_frequency').value) == '--None--' || getObj('recurring_frequency_mass_edit_check').checked==false)) {
+						alert(alert_arr.RECURRING_FREQUENCY_NOT_PROVIDED);
+						return false;
+					}
+					if(getObj('enable_recurring').checked == false && getObj('recurring_frequency_mass_edit_check').checked
+						&& getObj('recurring_frequency') != null && trim(getObj('recurring_frequency').value) !=  '--None--') {
+						alert(alert_arr.RECURRING_FREQNECY_NOT_ENABLED);
+						return false;
+					}	
+			}
+		} else if(getObj('enable_recurring') != null && getObj('enable_recurring').checked) {
+			if(getObj('recurring_frequency') == null || getObj('recurring_frequency').value == '--None--') {
+				alert(alert_arr.RECURRING_FREQUENCY_NOT_PROVIDED);
+				return false;
+			}
+			var start_period = getObj('start_period');
+			var end_period = getObj('end_period');
+			if (trim(start_period.value) == '' || trim(end_period.value) == '') {
+				alert(alert_arr.START_PERIOD_END_PERIOD_CANNOT_BE_EMPTY);
+        		return false;
+      		}
+		}
+	}
 	for (var i=0; i<fieldname.length; i++) {
+		if(edit_type == 'mass_edit') {
+			if(fieldname[i]!='salutationtype')	
+			var obj = getObj(fieldname[i]+"_mass_edit_check");
+			if(obj == null || obj.checked == false) continue;
+		}
 		if(getObj(fieldname[i]) != null)
 		{
 			var type=fielddatatype[i].split("~")
 				if (type[1]=="M") {
 					if (!emptyCheck(fieldname[i],fieldlabel[i],getObj(fieldname[i]).type))
-						return false
+						return false;
 				}
-
-			switch (type[0]) {
+				switch (type[0]) {
 				case "O"  : break;
 				case "V"  : break;
 				case "C"  : break;
@@ -902,12 +948,16 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 						if(typeof(type[2])=="undefined") var currdatechk="OTH"
 						else var currdatechk=type[2]
 
-							if (!dateValidate(fieldname[i],fieldlabel[i],currdatechk))
+						if (!dateValidate(fieldname[i],fieldlabel[i],currdatechk))
+							return false
+						if (type[3]) {
+							if(gVTModule == 'SalesOrder' && fieldname[i] == 'end_period' 
+								&& (getObj('enable_recurring') == null || getObj('enable_recurring').checked == false)) {
+								continue;
+							}							
+							if (!dateComparison(fieldname[i],fieldlabel[i],type[4],type[5],type[3]))
 								return false
-									if (type[3]) {
-										if (!dateComparison(fieldname[i],fieldlabel[i],type[4],type[5],type[3]))
-											return false
-									}
+						}
 					}	
 				break;
 				case "T"  :
@@ -986,7 +1036,7 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
 				var datevalue =getObj(datefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
                         	if (!dateValidate(fieldname[i],fieldlabel[i],currdatechk))
 				{
-		        	        getObj(datefield).focus()
+		        	        try { getObj(datefield).focus() } catch(error) { }
                         		return false
 				}
 				else
@@ -1001,7 +1051,7 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
         				datecheck.setDate(dd)
                 			if (!compareDates(datecheck,datelabel,now,"Current Date","L"))
 					{
-		                	        getObj(datefield).focus()
+		                	        try { getObj(datefield).focus() } catch(error) { }
                 			        return false
                 			}
 				}
@@ -1018,7 +1068,12 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
                         {
                                 var image_arr = new Array();
                                 image_arr = (getObj('imagename').value).split(".");
-                                var image_ext = image_arr[1].toLowerCase();
+								var image_arr_last_index = image_arr.length - 1;
+								if(image_arr_last_index < 0) {
+									alert(alert_arr.LBL_WRONG_IMAGE_TYPE);
+                                    return false;
+								}
+                                var image_ext = image_arr[image_arr_last_index].toLowerCase();
                                 if(image_ext ==  "jpeg" || image_ext ==  "png" || image_ext ==  "jpg" || image_ext ==  "pjpeg" || image_ext ==  "x-png" || image_ext ==  "gif")
                                 {
                                         return true;
@@ -1076,6 +1131,16 @@ if(gVTModule == 'Contacts' && gValidationCall != 'tabchange')
                chkdate.setHours(hourval)
 		if(!comparestartdate(chkdate)) return false;
 	 }//end
+	 
+	 // We need to enforce fileupload for internal type
+	 if(gVTModule == 'Documents') {
+	 	if(getObj('filelocationtype').value == 'I') {
+			if(getObj('filename_hidden').value == '') {
+				alert(alert_arr.LBL_PLEASE_SELECT_FILE_TO_UPLOAD);
+				return false;				
+			}
+		}
+	 }
 
 	return true
 }
@@ -1365,13 +1430,28 @@ function fnhide(divId)
 
 function fnLoadValues(obj1,obj2,SelTab,unSelTab,moduletype,module){
 	
-   var oform = document.forms['EditView'];
+   
+	var oform = document.forms['EditView'];
    oform.action.value='Save';	
    //global variable to check the validation calling function to avoid validating when tab change
-   gValidationCall = 'tabchange'; 	
-   if((moduletype == 'inventory' && validateInventory(module)) ||(moduletype == 'normal') && formValidate())	
-   if(formValidate())
-   {	
+   gValidationCall = 'tabchange'; 
+   	
+	/*var tabName1 = document.getElementById(obj1);
+	var tabName2 = document.getElementById(obj2);
+	var tagName1 = document.getElementById(SelTab);
+	var tagName2 = document.getElementById(unSelTab);
+	if(tabName1.className == "dvtUnSelectedCell")
+		tabName1.className = "dvtSelectedCell";
+	if(tabName2.className == "dvtSelectedCell")
+		tabName2.className = "dvtUnSelectedCell"; 
+		  
+	tagName1.style.display='block';
+	tagName2.style.display='none';*/
+	gValidationCall = 'tabchange'; 
+	
+  // if((moduletype == 'inventory' && validateInventory(module)) ||(moduletype == 'normal') && formValidate())	
+  // if(formValidate())
+  // {	
 	   var tabName1 = document.getElementById(obj1);
 
 	   var tabName2 = document.getElementById(obj2);
@@ -1390,7 +1470,8 @@ function fnLoadValues(obj1,obj2,SelTab,unSelTab,moduletype,module){
 	   tagName1.style.display='block';
 
 	   tagName2.style.display='none';
-   }
+  // }
+	
    gValidationCall = ''; 	
 }
 
@@ -1591,7 +1672,7 @@ function fnvsh(obj,Lay){
 }
 
 function fnvshobj(obj,Lay){
-    var tagName = document.getElementById(Lay);
+	var tagName = document.getElementById(Lay);
     var leftSide = findPosX(obj);
     var topSide = findPosY(obj);
     var maxW = tagName.style.width;
@@ -1791,8 +1872,22 @@ function OpenCompose(id,mode)
 			url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&record='+id+'&forward=true';
 			break;
 		case 'Invoice':
-                        url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+mode+'.pdf';
+            url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+mode+'_'+id+'.pdf';
 			break;
+		case 'PurchaseOrder':
+            url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+mode+'_'+id+'.pdf';
+			break;
+		case 'SalesOrder':
+            url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+mode+'_'+id+'.pdf';
+			break;
+		case 'Quote':
+            url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+mode+'_'+id+'.pdf';
+			break; 
+		case 'Documents':
+            url = 'index.php?module=Emails&action=EmailsAjax&file=EditView&attachment='+id+'';
+			break;
+		case 'print':
+			url = 'index.php?module=Emails&action=EmailsAjax&file=PrintEmail&record='+id+'&print=true'; 	 			
 	}
 	openPopUp('xComposeEmail',this,url,'createemailWin',820,689,'menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes');
 }
@@ -2015,13 +2110,16 @@ function getCalendarPopup(imageid,fieldid,dateformat)
 
 function AjaxDuplicateValidate(module,fieldname,oform)
 {
-      var fieldvalue = encodeURIComponent(getObj(fieldname).value);
+      var fieldvalue = encodeURIComponent(trim(getObj(fieldname).value));
+      var recordid = getObj('record').value;
 	if(fieldvalue == '')
 	{
 		alert(alert_arr.ACCOUNTNAME_CANNOT_EMPTY);
 		return false;	
 	}
-      var url = "module="+module+"&action="+module+"Ajax&file=Save&"+fieldname+"="+fieldvalue+"&dup_check=true"
+	VtigerJS_DialogBox.block();
+	
+      var url = "module="+module+"&action="+module+"Ajax&file=Save&"+fieldname+"="+fieldvalue+"&dup_check=true&record="+recordid;
       new Ajax.Request(
                             'index.php',
                               {queue: {position: 'end', scope: 'command'},
@@ -2034,7 +2132,9 @@ function AjaxDuplicateValidate(module,fieldname,oform)
                                                       oform.submit();
                                               }else
                                               {
+													  VtigerJS_DialogBox.unblock();
                                                       alert(str);
+                                                      return false;
                                               }
                                       }
                               }
@@ -2048,6 +2148,7 @@ check->to check select options enable or disable
 
 function selectContact(check,type,frmName)
 {
+	var record = document.getElementsByName("record")[0].value;
         if($("single_accountid"))
         {
 		var potential_id = '';
@@ -2071,28 +2172,29 @@ function selectContact(check,type,frmName)
         }
         else if(($("parentid")) && type != 'task')
         {
-		if(getObj("parent_type")){
-                	rel_parent_module = frmName.parent_type.value;
-			record_id = frmName.parent_id.value;
-        	        module = rel_parent_module.split("&");	
-			if(record_id != '' && module[0] == "Leads")
-			{
-				alert(alert_arr.CANT_SELECT_CONTACTS);
-			}
-			else
-			{
-				if(check == 'true')
-					search_string = "&return_module=Calendar&select=enable&popuptype=detailview&form_submit=false";
+			if(getObj("parent_type")){
+	                	rel_parent_module = frmName.parent_type.value;
+				record_id = frmName.parent_id.value;
+	        	        module = rel_parent_module.split("&");	
+				if(record_id != '' && module[0] == "Leads")
+				{
+					alert(alert_arr.CANT_SELECT_CONTACTS);
+				}
 				else
-					search_string="&popuptype=specific";
-				if(record_id != '')
-					window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&form=EditView"+search_string+"&relmod_id="+record_id+"&parent_module="+module[0],"test","width=640,height=602,resizable=0,scrollbars=0");
-				else
-					window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&form=EditView"+search_string,"test","width=640,height=602,resizable=0,scrollbars=0");
+				{
+					if(check == 'true')
+						search_string = "&return_module=Calendar&select=enable&popuptype=detailview&form_submit=false";
+					else
+						search_string="&popuptype=specific";
+					if(record_id != '')
+						window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&form=EditView"+search_string+"&relmod_id="+record_id+"&parent_module="+module[0],"test","width=640,height=602,resizable=0,scrollbars=0");
+					else
+						window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&form=EditView"+search_string,"test","width=640,height=602,resizable=0,scrollbars=0");
+					
+				}
+			}else{
+				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&return_module=Calendar&select=enable&popuptype=detailview&form=EditView&form_submit=false","test","width=640,height=602,resizable=0,scrollbars=0");
 			}
-		}else{
-			window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&return_module=Calendar&select=enable&popuptype=detailview&form=EditView&form_submit=false","test","width=640,height=602,resizable=0,scrollbars=0");
-		}
         }
 	else if(($("contact_name")) && type == 'task')
 	{
@@ -2125,32 +2227,54 @@ function selectContact(check,type,frmName)
 		else
 		{
 			if(task_recordid != '')
-				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker"+popuptype+"&form=EditView&task_relmod_id="+task_recordid+"&task_parent_module="+task_module[0],"test","width=640,height=602,resizable=0,scrollbars=0");
+				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker"+popuptype+"&form="+formName+"&task_relmod_id="+task_recordid+"&task_parent_module="+task_module[0],"test","width=640,height=602,resizable=0,scrollbars=0");
 			else	
-				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+				window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form="+formName,"test","width=640,height=602,resizable=0,scrollbars=0");
 		}
 
 	}
         else
         {
-                window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
+                window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&recordid="+record,"test","width=640,height=602,resizable=0,scrollbars=0");
         }
 }
 //to get Select Potential Popup
 function selectPotential()
 {
-	var record_id= document.EditView.account_id.value;
+	// To support both B2B and B2C model
+	var record_id = '';
+	var parent_module = '';
+	var acc_element = document.EditView.account_id;
+	var cnt_element = document.EditView.contact_id;
+	if (acc_element != null) {
+		record_id= acc_element.value;
+		parent_module = 'Accounts';
+	} else if (cnt_element != null) {
+		record_id= cnt_element.value;
+		parent_module = 'Contacts';
+	} 
 	if(record_id != '')
-		window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView&relmod_id="+record_id+"&parent_module=Accounts","test","width=640,height=602,resizable=0,scrollbars=0");
+		window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView&relmod_id="+record_id+"&parent_module="+parent_module,"test","width=640,height=602,resizable=0,scrollbars=0");
 	else
 		window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
 }
 //to select Quote Popup
 function selectQuote()
 {
-	var record_id= document.EditView.account_id.value;
-        if(record_id != '')
-		window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&relmod_id="+record_id+"&parent_module=Accounts","test","width=640,height=602,resizable=0,scrollbars=0");
+	// To support both B2B and B2C model
+	var record_id = '';
+	var parent_module = '';
+	var acc_element = document.EditView.account_id;
+	var cnt_element = document.EditView.contact_id;
+	if (acc_element != null) {
+		record_id= acc_element.value;
+		parent_module = 'Accounts';
+	} else if (cnt_element != null) {
+		record_id= cnt_element.value;
+		parent_module = 'Contacts';
+	} 
+	if(record_id != '')
+		window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&relmod_id="+record_id+"&parent_module="+parent_module,"test","width=640,height=602,resizable=0,scrollbars=0");
 
 	else
 		window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
@@ -2158,9 +2282,20 @@ function selectQuote()
 //to get select SalesOrder Popup
 function selectSalesOrder()
 {
-	var record_id= document.EditView.account_id.value;
-        if(record_id != '')
-		window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&relmod_id="+record_id+"&parent_module=Accounts","test","width=640,height=602,resizable=0,scrollbars=0");
+	// To support both B2B and B2C model
+	var record_id = '';
+	var parent_module = '';
+	var acc_element = document.EditView.account_id;
+	var cnt_element = document.EditView.contact_id;
+	if (acc_element != null) {
+		record_id= acc_element.value;
+		parent_module = 'Accounts';
+	} else if (cnt_element != null) {
+		record_id= cnt_element.value;
+		parent_module = 'Contacts';
+	} 
+	if(record_id != '')
+		window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView&relmod_id="+record_id+"&parent_module="+parent_module,"test","width=640,height=602,resizable=0,scrollbars=0");
 	else
 		window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=640,height=602,resizable=0,scrollbars=0");
 }
@@ -2301,7 +2436,12 @@ function upload_filter(fldName, filter)
 		if(valid_extn.indexOf(type[type.length-1]) == -1)
 		{
 			alert(alert_arr.PLS_SELECT_VALID_FILE+valid_extn)
-			currObj.focus();
+			try {
+				currObj.focus()	
+			} catch(error) {
+				// Fix for IE: If element or its wrapper around it is hidden, setting focus will fail
+				// So using the try { } catch(error) { }
+			}
 		 	return false;
 		}
 	}	
@@ -2452,33 +2592,24 @@ function get_converted_html(str)
 	return str;
 }
 //To select the select all check box(if all the items are selected) when the form loads.
-function default_togglestate()
+function default_togglestate(obj_id,elementId)
 {
 	var all_state=true;
-	if (typeof(getObj("selected_id").length)=="undefined") 
-	{
-		var state=getObj("selected_id").checked;
+	var groupElements = document.getElementsByName(obj_id);
+	for (var i=0;i<groupElements.length;i++) {
+		var state=groupElements[i].checked;
 		if (state == false)
 		{
 			all_state=false;
-		}
-
-
-	} 
-	else
-	{
-		for (var i=0;i<(getObj("selected_id").length);i++)
-		{
-			var state=getObj("selected_id")[i].checked;
-			if (state == false)
-			{
-				all_state=false;
-				break;
-			}
+			break;
 		}
 	}
-	getObj("selectall").checked=all_state;
-
+	if(typeof elementId=='undefined'){
+		elementId = 'selectall';
+	}
+	if(getObj(elementId)) {
+		getObj(elementId).checked=all_state;
+	}
 }
 
 //for select  multiple check box in multiple pages for Campaigns related list:
@@ -2536,41 +2667,30 @@ function rel_check_object(sel_id,module)
 
 //Function to select all the items in the current page for Campaigns related list:.
 function rel_toggleSelect(state,relCheckName,module) {
-        if (getObj(relCheckName)) {
-                if (typeof(getObj(relCheckName).length)=="undefined") {
-                        getObj(relCheckName).checked=state
-                } else
-                {
-                        for (var i=0;i<getObj(relCheckName).length;i++)
-                        {
-                                getObj(relCheckName)[i].checked=state
-                                        rel_check_object(getObj(relCheckName)[i],module)
-                        }
-                }
+	var obj = document.getElementsByName(relCheckName);
+	if (obj) {
+        for (var i=0;i<obj.length;i++) {
+            obj[i].checked=state;
+			rel_check_object(obj[i],module);
         }
+	}
 }
 //To select the select all check box(if all the items are selected) when the form loads for Campaigns related list:.
 function rel_default_togglestate(module)
 {
-	var all_state=true;
-	if(getObj(module+"_selected_id"))
-	{
-		if (typeof(getObj(module+"_selected_id").length)=="undefined")
-		{		     
-			var state=getObj(module+"_selected_id").checked;
-			if (state == false)
-				all_state=false;
-
+	var all_state=true;	
+	var groupElements = document.getElementsByName(module+"_selected_id");
+	if(typeof(groupElements) == 'undefined') return;
+	
+	for (var i=0;i<groupElements.length;i++) {
+		var state=groupElements[i].checked;
+		if (state == false)
+		{
+			all_state=false;
+			break;
 		}
-		else{
-
-			for (var i=0;i<(getObj(module+"_selected_id").length);i++)
-			{
-				var state=getObj(module+"_selected_id")[i].checked;
-				if (state == false)
-					all_state=false;
-			}
-		}
+	}
+	if(getObj(module+"_selectall")) {
 		getObj(module+"_selectall").checked=all_state;
 	}
 }
@@ -2581,34 +2701,1181 @@ function clear_checked_all(module)
 	if(cookie_val != null)
 		delete_cookie(module+"_all");
 	//Uncheck all the boxes in current page..
-	if (typeof(getObj(module+"_selected_id").length)=="undefined")
-		getObj(module+"_selected_id").checked=false;
-	else{
-
-		for (var i=0;i<getObj(module+"_selected_id").length;i++)
-		{
-			getObj(module+"_selected_id")[i].checked=false;
+	var obj = document.getElementsByName(module+"_selected_id");
+	if (obj) {
+		for (var i=0;i<obj.length;i++) {
+			obj[i].checked=false;
 		}
 	}
-	getObj(module+"_selectall").checked=false;
-
+	if(getObj(module+"_selectall")) {
+		getObj(module+"_selectall").checked=false;
+	}
 }
-
-function toggleSelect_ListView(state,relCheckName) {
-        if (getObj(relCheckName)) {
-                if (typeof(getObj(relCheckName).length)=="undefined") {
-                        getObj(relCheckName).checked=state;
-                        check_object(getObj(relCheckName))
-                } else {
-                        for (var i=0;i<getObj(relCheckName).length;i++)
-                        {
-                                getObj(relCheckName)[i].checked=state
-                                check_object(getObj(relCheckName)[i])
-                        }
-                }
+//groupParentElementId is added as there are multiple groups in Documents listview.
+function toggleSelect_ListView(state,relCheckName,groupParentElementId) {
+    var obj = document.getElementsByName(relCheckName);
+	if (obj) {
+        for (var i=0;i<obj.length;i++) {
+          	obj[i].checked=state;
+			if(typeof(check_object) == 'function') {
+				// This function is defined in ListView.js (check for existence)
+				check_object(obj[i],groupParentElementId);
+			}
         }
+    }
 }
 function gotourl(url)
 {
                 document.location.href=url;
+}
+
+// Function to display the element with id given by showid and hide the element with id given by hideid
+function toggleShowHide(showid, hideid)
+{
+	var show_ele = document.getElementById(showid);
+	var hide_ele = document.getElementById(hideid);
+	if(show_ele != null) 
+		show_ele.style.display = "inline";
+	if(hide_ele != null) 
+		hide_ele.style.display = "none";
+}
+
+// Refactored APIs from DisplayFiels.tpl
+function fnshowHide(currObj,txtObj) {
+	if(currObj.checked == true)
+		document.getElementById(txtObj).style.visibility = 'visible';
+	else
+		document.getElementById(txtObj).style.visibility = 'hidden';
+}
+	
+function fntaxValidation(txtObj) {
+	if (!numValidate(txtObj,"Tax","any"))
+		document.getElementById(txtObj).value = 0;
+}	
+	
+function fnpriceValidation(txtObj) {
+	if (!numValidate(txtObj,"Price","any"))
+		document.getElementById(txtObj).value = 0;
+}
+
+function delimage(id) {
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Contacts&action=ContactsAjax&file=DelImage&recordid='+id,
+			onComplete: function(response) {
+					if(response.responseText.indexOf("SUCCESS")>-1)
+						$("replaceimage").innerHTML=alert_arr.LBL_IMAGE_DELETED;
+					else
+						alert(alert_arr.ERROR_WHILE_EDITING);
+			}
+		}
+	);
+}
+
+// Function to enable/disable related elements based on whether the current object is checked or not
+function fnenableDisable(currObj,enableId) {
+	var disable_flag = true;
+	if(currObj.checked == true)
+		disable_flag = false;
+	
+	document.getElementById('curname'+enableId).disabled = disable_flag;
+	document.getElementById('cur_reset'+enableId).disabled = disable_flag;
+	document.getElementById('base_currency'+enableId).disabled = disable_flag;	
+}
+
+// Update current value with current value of base currency and the conversion rate
+function updateCurrencyValue(currObj,txtObj,base_curid,conv_rate) {
+	var unit_price = $(base_curid).value;
+	//if(currObj.checked == true)
+	//{
+		document.getElementById(txtObj).value = unit_price * conv_rate;
+	//}
+}
+
+// Synchronize between Unit price and Base currency value.
+function updateUnitPrice(from_cur_id, to_cur_id) {
+    var from_ele = document.getElementById(from_cur_id);
+    if (from_ele == null) return;
+    
+    var to_ele = document.getElementById(to_cur_id);
+    if (to_ele == null) return;
+
+    to_ele.value = from_ele.value;
+}
+
+// Update hidden base currency value, everytime the base currency value is changed in multi-currency UI
+function updateBaseCurrencyValue() {
+    var cur_list = document.getElementsByName('base_currency_input');
+    if (cur_list == null) return;
+    
+    var base_currency_ele = document.getElementById('base_currency');
+    if (base_currency_ele == null) return;
+    
+    for(var i=0; i<cur_list.length; i++) {
+		var cur_ele = cur_list[i];
+		if (cur_ele != null && cur_ele.checked == true)
+    		base_currency_ele.value = cur_ele.value;
+	}
+}	
+// END
+
+/******************************************************************************/
+/* Activity reminder Customization: Setup Callback */
+function ActivityReminderProgressIndicator(show) {
+	if(show) $("status").style.display = "inline";
+	else $("status").style.display = "none";
+}
+
+function ActivityReminderSetupCallback(cbmodule, cbrecord) { 
+	if(cbmodule && cbrecord) {
+
+		ActivityReminderProgressIndicator(true);
+		new Ajax.Request(
+    		'index.php',
+	        {queue: {position: 'end', scope: 'command'},
+        		method: 'post',
+                postBody:"module=Calendar&action=CalendarAjax&ajax=true&file=ActivityReminderSetupCallbackAjax&cbmodule="+ 
+					encodeURIComponent(cbmodule) + "&cbrecord=" + encodeURIComponent(cbrecord),
+                onComplete: function(response) {
+                $("ActivityReminder_callbacksetupdiv").innerHTML=response.responseText;
+				
+				ActivityReminderProgressIndicator(false);
+
+                }});
+	}
+}
+
+function ActivityReminderSetupCallbackSave(form) {
+	var cbmodule = form.cbmodule.value;   
+	var cbrecord = form.cbrecord.value;
+	var cbaction = form.cbaction.value;
+
+	var cbdate   = form.cbdate.value;
+	var cbtime   = form.cbhour.value + ":" + form.cbmin.value;
+
+	if(cbmodule && cbrecord) {
+		ActivityReminderProgressIndicator(true);
+
+		new Ajax.Request("index.php", 
+			{ queue:{position:"end", scope:"command"}, method:"post", 
+				postBody:"module=Calendar&action=CalendarAjax&ajax=true&file=ActivityReminderSetupCallbackAjax" + 
+				"&cbaction=" + encodeURIComponent(cbaction) +
+				"&cbmodule="+ encodeURIComponent(cbmodule) + 
+				"&cbrecord=" + encodeURIComponent(cbrecord) + 
+				"&cbdate=" + encodeURIComponent(cbdate) + 
+				"&cbtime=" + encodeURIComponent(cbtime),
+				onComplete:function (response) {ActivityReminderSetupCallbackSaveProcess(response.responseText);}}); 
+	}
+}
+function ActivityReminderSetupCallbackSaveProcess(message) {
+	ActivityReminderProgressIndicator(false);
+	$('ActivityReminder_callbacksetupdiv_lay').style.display='none';
+}
+
+function ActivityReminderPostponeCallback(cbmodule, cbrecord, cbreminderid) { 
+	if(cbmodule && cbrecord) {
+
+		ActivityReminderProgressIndicator(true);
+		new Ajax.Request("index.php", 
+			{ queue:{position:"end", scope:"command"}, method:"post", 
+				postBody:"module=Calendar&action=CalendarAjax&ajax=true&file=ActivityReminderSetupCallbackAjax&cbaction=POSTPONE&cbmodule="+ 
+				encodeURIComponent(cbmodule) + "&cbrecord=" + encodeURIComponent(cbrecord) + "&cbreminderid=" + encodeURIComponent(cbreminderid), 
+				onComplete:function (response) {ActivityReminderPostponeCallbackProcess(response.responseText);}}); 
+	}
+}
+function ActivityReminderPostponeCallbackProcess(message) {
+	ActivityReminderProgressIndicator(false);
+}
+function ActivityReminderRemovePopupDOM(id) {
+	if($(id)) $(id).remove();
+}
+/* END */
+
+/* ActivityReminder Customization: Pool Callback */
+var ActivityReminder_regcallback_timer;
+
+var ActivityReminder_callback_delay = 40 * 1000; // Milli Seconds
+var ActivityReminder_autohide = false; // If the popup should auto hide after callback_delay?
+
+var ActivityReminder_popup_maxheight = 75;
+
+var ActivityReminder_callback;
+var ActivityReminder_timer;
+var ActivityReminder_progressive_height = 2; // px
+var ActivityReminder_popup_onscreen = 2 * 1000; // Milli Seconds (should be less than ActivityReminder_callback_delay)
+
+var ActivityReminder_callback_win_uniqueids = new Object();
+
+function ActivityReminderCallback() { 
+	if(typeof(Ajax) == 'undefined') {
+		return;
+	}		
+	if(ActivityReminder_regcallback_timer) {
+		window.clearTimeout(ActivityReminder_regcallback_timer);
+		ActivityReminder_regcallback_timer = null;
+	}
+	new Ajax.Request("index.php", 
+			{ queue:{position:"end", scope:"command"}, method:"post", 
+			postBody:"module=Calendar&action=CalendarAjax&file=ActivityReminderCallbackAjax&ajax=true", 
+			onComplete:function (response) {ActivityReminderCallbackProcess(response.responseText);}}); 
+}
+function ActivityReminderCallbackProcess(message) {
+	ActivityReminder_callback = document.getElementById("ActivityRemindercallback");
+	if(ActivityReminder_callback == null) return;
+	ActivityReminder_callback.style.display = 'block';
+	
+	var winuniqueid = 'ActivityReminder_callback_win_' + (new Date()).getTime();
+	if(ActivityReminder_callback_win_uniqueids[winuniqueid]) {
+		winuniqueid += "-" + (new Date()).getTime();
+	}
+	ActivityReminder_callback_win_uniqueids[winuniqueid] = true;
+
+	var ActivityReminder_callback_win = document.createElement("span");
+	ActivityReminder_callback_win.id  = winuniqueid;
+	ActivityReminder_callback.appendChild(ActivityReminder_callback_win);
+	
+	ActivityReminder_callback_win.innerHTML = message; 
+	ActivityReminder_callback_win.style.height = "0px"; 
+	ActivityReminder_callback_win.style.display = ""; 
+	
+	var ActivityReminder_Newdelay_response_node = '_vtiger_activityreminder_callback_interval_';
+	if($(ActivityReminder_Newdelay_response_node)) {
+		var ActivityReminder_Newdelay_response_value = parseInt($(ActivityReminder_Newdelay_response_node).innerHTML);
+		if(ActivityReminder_Newdelay_response_value > 0) {		
+			ActivityReminder_callback_delay = ActivityReminder_Newdelay_response_value;
+		}
+		// We don't need the no any longer, it will be sent from server for next Popup
+		$(ActivityReminder_Newdelay_response_node).remove();		
+	}
+	if(message == '' || trim(message).indexOf('<script') == 0) {
+		// We got only new dealay value but no popup information, let us remove the callback win created
+		$(ActivityReminder_callback_win.id).remove();
+		ActivityReminder_callback_win = false;
+		message = '';
+	}
+			
+	if(message != "") ActivityReminderCallbackRollout(ActivityReminder_popup_maxheight, ActivityReminder_callback_win); 
+	else { ActivityReminderCallbackReset(0, ActivityReminder_callback_win); }
+}
+function ActivityReminderCallbackRollout(z, ActivityReminder_callback_win) {
+	ActivityReminder_callback_win = $(ActivityReminder_callback_win);
+
+	if (ActivityReminder_timer) { window.clearTimeout(ActivityReminder_timer); } 
+	if (ActivityReminder_callback_win && parseInt(ActivityReminder_callback_win.style.height) < z) { 
+		ActivityReminder_callback_win.style.height = parseInt(ActivityReminder_callback_win.style.height) + ActivityReminder_progressive_height + "px"; 
+		ActivityReminder_timer = setTimeout("ActivityReminderCallbackRollout(" + z + ",'" + ActivityReminder_callback_win.id + "')", 1);
+	} else { 
+		ActivityReminder_callback_win.style.height = z + "px"; 
+		if(ActivityReminder_autohide) ActivityReminder_timer = setTimeout("ActivityReminderCallbackRollin(1,'" + ActivityReminder_callback_win.id + "')", ActivityReminder_popup_onscreen);
+		else ActivityReminderRegisterCallback(ActivityReminder_callback_delay);
+	} 
+}
+function ActivityReminderCallbackRollin(z, ActivityReminder_callback_win) {
+	ActivityReminder_callback_win = $(ActivityReminder_callback_win);
+
+	if (ActivityReminder_timer) { window.clearTimeout(ActivityReminder_timer); } 
+	if (parseInt(ActivityReminder_callback_win.style.height) > z) { 
+		ActivityReminder_callback_win.style.height = parseInt(ActivityReminder_callback_win.style.height) - ActivityReminder_progressive_height + "px"; 
+		ActivityReminder_timer = setTimeout("ActivityReminderCallbackRollin(" + z + ",'" + ActivityReminder_callback_win.id + "')", 1); 
+	} else { 
+		ActivityReminderCallbackReset(z, ActivityReminder_callback_win);
+	} 
+}
+function ActivityReminderCallbackReset(z, ActivityReminder_callback_win) {
+	ActivityReminder_callback_win = $(ActivityReminder_callback_win);
+
+	if(ActivityReminder_callback_win) {
+		ActivityReminder_callback_win.style.height = z + "px"; 
+		ActivityReminder_callback_win.style.display = "none";
+	} 
+	if(ActivityReminder_timer) {
+		window.clearTimeout(ActivityReminder_timer);
+		ActivityReminder_timer = null;
+	}
+	ActivityReminderRegisterCallback(ActivityReminder_callback_delay);
+}
+function ActivityReminderRegisterCallback(timeout) {
+	if(timeout == null) timeout = 1;
+	if(ActivityReminder_regcallback_timer == null) {
+		ActivityReminder_regcallback_timer = setTimeout("ActivityReminderCallback()", timeout);
+	}
+}
+
+//added for finding duplicates
+function movefields() 
+{
+	availListObj=getObj("availlist")
+	selectedColumnsObj=getObj("selectedCol")
+	for (i=0;i<selectedColumnsObj.length;i++) 
+	{
+		
+		selectedColumnsObj.options[i].selected=false
+	}
+
+	movefieldsStep1();
+}
+
+function movefieldsStep1()
+{
+	
+	availListObj=getObj("availlist")
+	selectedColumnsObj=getObj("selectedCol")	
+	document.getElementById("selectedCol").style.width="164px";
+	var count=0;
+	for(i=0;i<availListObj.length;i++)
+	{
+			if (availListObj.options[i].selected==true) 
+			{
+				count++;
+			}
+
+	}
+	var total_fields=count+selectedColumnsObj.length;	
+	if (total_fields >4 )
+	{
+		alert(alert_arr.MAX_RECORDS)
+			return false
+	}		
+	if (availListObj.options.selectedIndex > -1)
+	{
+		for (i=0;i<availListObj.length;i++) 
+		{
+			if (availListObj.options[i].selected==true) 
+			{
+				var rowFound=false;
+				for (j=0;j<selectedColumnsObj.length;j++) 
+				{
+					selectedColumnsObj.options[j].value==availListObj.options[i].value;
+					if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
+					{
+						var rowFound=true;
+						var existingObj=selectedColumnsObj.options[j];
+						break;
+					}
+				}
+
+				if (rowFound!=true) 
+				{
+					var newColObj=document.createElement("OPTION")
+					newColObj.value=availListObj.options[i].value
+					if (browser_ie) newColObj.innerText=availListObj.options[i].innerText
+					else if (browser_nn4 || browser_nn6) newColObj.text=availListObj.options[i].text
+					selectedColumnsObj.appendChild(newColObj)
+					newColObj.selected=true
+				} 
+				else 
+				{
+					existingObj.selected=true
+				}
+				availListObj.options[i].selected=false
+				movefieldsStep1();
+			}
+		}
+	}
+}
+
+function selectedColClick(oSel)
+{
+	if (oSel.selectedIndex == -1 || oSel.options[oSel.selectedIndex].disabled == true)
+	{
+		alert(alert_arr.NOT_ALLOWED_TO_EDIT);
+		oSel.options[oSel.selectedIndex].selected = false;	
+	}
+}	
+
+function delFields() 
+{
+	selectedColumnsObj=getObj("selectedCol");
+	selected_tab = $("dupmod").value;
+	if (selectedColumnsObj.options.selectedIndex > -1)
+	{
+		for (i=0;i < selectedColumnsObj.options.length;i++) 
+		{
+			if(selectedColumnsObj.options[i].selected == true)
+			{
+				if(selected_tab == 4)
+				{
+					if(selectedColumnsObj.options[i].innerHTML == "Last Name")
+					{
+						alert(alert_arr.DEL_MANDATORY);
+						del = false;
+						return false;
+					}
+					else
+						del = true;
+
+				}
+				else if(selected_tab == 7)
+				{
+					if(selectedColumnsObj.options[i].innerHTML == "Last Name" || selectedColumnsObj.options[i].innerHTML == "Company")
+					{
+						alert(alert_arr.DEL_MANDATORY);
+						del = false;
+						return false;
+					}
+					else
+						del = true;
+				}
+				else if(selected_tab == 6)
+				{
+					if(selectedColumnsObj.options[i].innerHTML == "Account Name")
+					{
+						alert(alert_arr.DEL_MANDATORY);
+						del = false;
+						return false;
+					}
+					else
+						del = true;
+				}
+				else if(selected_tab == 14)
+				{
+					if(selectedColumnsObj.options[i].innerHTML == "Product Name")
+					{
+						alert(alert_arr.DEL_MANDATORY);
+						del = false;
+						return false;
+					}
+					else
+						del = true;
+				}
+				if(del == true)
+				{
+					selectedColumnsObj.remove(i);
+					delFields();
+				}
+			}
+		}
+	}
+}
+
+function moveFieldUp() 
+{
+	selectedColumnsObj=getObj("selectedCol")
+	var currpos=selectedColumnsObj.options.selectedIndex
+	var tempdisabled= false;
+	for (i=0;i<selectedColumnsObj.length;i++) 
+	{
+		if(i != currpos)
+			selectedColumnsObj.options[i].selected=false
+	}
+	if (currpos>0) 
+	{
+		var prevpos=selectedColumnsObj.options.selectedIndex-1
+
+		if (browser_ie) 
+		{
+			temp=selectedColumnsObj.options[prevpos].innerText
+			tempdisabled = selectedColumnsObj.options[prevpos].disabled;
+			selectedColumnsObj.options[prevpos].innerText=selectedColumnsObj.options[currpos].innerText
+			selectedColumnsObj.options[prevpos].disabled = false;
+			selectedColumnsObj.options[currpos].innerText=temp
+			selectedColumnsObj.options[currpos].disabled = tempdisabled;     
+		} 
+		else if (browser_nn4 || browser_nn6) 
+		{
+			temp=selectedColumnsObj.options[prevpos].text
+			tempdisabled = selectedColumnsObj.options[prevpos].disabled;
+			selectedColumnsObj.options[prevpos].text=selectedColumnsObj.options[currpos].text
+			selectedColumnsObj.options[prevpos].disabled = false;
+			selectedColumnsObj.options[currpos].text=temp
+			selectedColumnsObj.options[currpos].disabled = tempdisabled;
+		}
+		temp=selectedColumnsObj.options[prevpos].value
+		selectedColumnsObj.options[prevpos].value=selectedColumnsObj.options[currpos].value
+		selectedColumnsObj.options[currpos].value=temp
+		selectedColumnsObj.options[prevpos].selected=true
+		selectedColumnsObj.options[currpos].selected=false
+		}
+		
+}
+
+function moveFieldDown() 
+{
+	selectedColumnsObj=getObj("selectedCol")
+	var currpos=selectedColumnsObj.options.selectedIndex
+	var tempdisabled= false;
+	for (i=0;i<selectedColumnsObj.length;i++) 
+	{
+		if(i != currpos)
+			selectedColumnsObj.options[i].selected=false
+	}
+	if (currpos<selectedColumnsObj.options.length-1)	
+	{
+		var nextpos=selectedColumnsObj.options.selectedIndex+1
+
+		if (browser_ie) 
+		{	
+			temp=selectedColumnsObj.options[nextpos].innerText
+			tempdisabled = selectedColumnsObj.options[nextpos].disabled;
+			selectedColumnsObj.options[nextpos].innerText=selectedColumnsObj.options[currpos].innerText
+			selectedColumnsObj.options[nextpos].disabled = false;
+			selectedColumnsObj.options[nextpos];
+
+			selectedColumnsObj.options[currpos].innerText=temp
+			selectedColumnsObj.options[currpos].disabled = tempdisabled;
+		}
+		else if (browser_nn4 || browser_nn6) 
+		{
+			temp=selectedColumnsObj.options[nextpos].text
+			tempdisabled = selectedColumnsObj.options[nextpos].disabled;
+			selectedColumnsObj.options[nextpos].text=selectedColumnsObj.options[currpos].text
+			selectedColumnsObj.options[nextpos].disabled = false;
+			selectedColumnsObj.options[nextpos];
+			selectedColumnsObj.options[currpos].text=temp
+			selectedColumnsObj.options[currpos].disabled = tempdisabled;
+		}
+		temp=selectedColumnsObj.options[nextpos].value
+		selectedColumnsObj.options[nextpos].value=selectedColumnsObj.options[currpos].value
+		selectedColumnsObj.options[currpos].value=temp
+
+		selectedColumnsObj.options[nextpos].selected=true
+		selectedColumnsObj.options[currpos].selected=false
+	}
+}
+
+function lastImport(module,req_module)
+{
+	var module_name= module;
+	var parent_tab= document.getElementById('parenttab').value;
+	if(module == '')
+	{
+		return false;
+	}
+	else
+	
+		//alert("index.php?module="+module_name+"&action=lastImport&req_mod="+req_module+"&parenttab="+parent_tab);
+		window.open("index.php?module="+module_name+"&action=lastImport&req_mod="+req_module+"&parenttab="+parent_tab,"lastImport","width=750,height=602,menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes");
+}
+
+function merge_fields(selectedNames,module,parent_tab)
+{
+			
+		var select_options=document.getElementsByName(selectedNames);
+		var x= select_options.length;
+		var req_module=module;
+		var num_group=$("group_count").innerHTML;
+		var pass_url="";
+		var flag=0;
+		//var i=0;		
+		var xx = 0;
+		for(i = 0; i < x ; i++)
+		{
+			if(select_options[i].checked)
+			{
+				pass_url = pass_url+select_options[i].value +","
+				xx++
+			}
+		}
+		var tmp = 0
+		if ( xx != 0)
+		{
+			
+			if(xx > 3)
+			{
+				alert(alert_arr.MAX_THREE)
+					return false;
+			}
+			if(xx > 0)
+			{
+				for(j=0;j<num_group;j++)
+				{
+					flag = 0
+					var group_options=document.getElementsByName("group"+j);
+					for(i = 0; i < group_options.length ; i++)
+						{
+							if(group_options[i].checked)
+							{
+								flag++
+							}
+						}
+					if(flag > 0)
+					tmp++;
+				}
+				if (tmp > 1)
+				{
+				alert(alert_arr.SAME_GROUPS)
+				return false;
+				}
+				if(xx <2)
+				{
+					alert(alert_arr.ATLEAST_TWO)
+					return false;
+				}
+				
+			}			
+					
+			window.open("index.php?module="+req_module+"&action=ProcessDuplicates&mergemode=mergefields&passurl="+pass_url+"&parenttab="+parent_tab,"Merge","width=750,height=602,menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=yes");	
+		}
+		else
+		{
+			alert(alert_arr.ATLEAST_TWO);			
+			return false;
+		}		
+}
+
+function delete_fields(module)
+{
+	var select_options=document.getElementsByName('del');
+	var x=select_options.length;
+	var xx=0;
+	url_rec="";
+	
+	for(var i=0;i<x;i++)
+	{
+		if(select_options[i].checked)
+		{
+		url_rec=url_rec+select_options[i].value +","
+		xx++
+		}	
+	}			
+	if($("current_action"))
+		cur_action = $("current_action").innerHTML		
+	if (xx == 0)
+        {
+            alert(alert_arr.SELECT);
+            return false;
+        } 
+        var alert_str = alert_arr.DELETE + xx +alert_arr.RECORDS;
+	if(module=="Accounts")
+	alert_str = alert_arr.DELETE_ACCOUNT + xx +alert_arr.RECORDS;
+	if(confirm(alert_str))
+		{
+			$("status").style.display="inline";
+			new Ajax.Request(
+          	  	      'index.php',
+			      	{queue: {position: 'end', scope: 'command'},
+		                        method: 'post',
+                		        postBody:"module="+module+"&action="+module+"Ajax&file=FindDuplicateRecords&del_rec=true&ajax=true&return_module="+module+"&idlist="+url_rec+"&current_action="+cur_action+"&"+dup_start,
+		                        onComplete: function(response) {
+        	        	                $("status").style.display="none";
+                	        	        $("duplicate_ajax").innerHTML= response.responseText;
+						}
+              			 }
+       			);
+		}
+	else
+		return false;	
+}
+
+	
+function validate_merge(module)
+{
+	var check_var=false;
+	var check_lead1=false;
+	var check_lead2=false;	
+	
+	var select_parent=document.getElementsByName('record');
+	var len = select_parent.length;
+	for(var i=0;i<len;i++)
+	{
+		if(select_parent[i].checked)
+		{
+			var check_parentvar=true;
+		}
+	}
+	if (check_parentvar!=true)
+	{
+		alert(alert_arr.Select_one_record_as_parent_record);
+		return false;
+	}
+	return true;
+}		
+
+function select_All(fieldnames,cnt,module)
+{
+	var new_arr = Array();
+	new_arr = fieldnames.split(",");
+	var len=new_arr.length;
+	for(i=0;i<len;i++)
+	{
+		var fld_names=new_arr[i]
+		var value=document.getElementsByName(fld_names)
+		var fld_len=document.getElementsByName(fld_names).length;
+		for(j=0;j<fld_len;j++)
+		{
+			value[cnt].checked='true'
+			//	alert(value[j].checked)
+		}	
+				
+	}
+}
+
+function selectAllDel(state,checkedName)
+{
+		var selectedOptions=document.getElementsByName(checkedName);
+		var length=document.getElementsByName(checkedName).length;
+		if(typeof(length) == 'undefined')
+		{
+			return false;
+		}	
+		for(var i=0;i<length;i++)
+		{
+			selectedOptions[i].checked=state;
+		}	
+}
+
+function selectDel(ThisName,CheckAllName)
+	{
+		var ThisNameOptions=document.getElementsByName(ThisName);
+		var CheckAllNameOptions=document.getElementsByName(CheckAllName);
+		var len1=document.getElementsByName(ThisName).length;
+		var flag = true;
+		if (typeof(document.getElementsByName(ThisName).length)=="undefined")
+	       	{
+			flag=true;
+		}
+	       	else 
+		{
+			for (var j=0;j<len1;j++) 
+			{
+				if (ThisNameOptions[j].checked==false)
+		       		{
+					flag=false
+					break;
+				}
+			}
+		}
+		CheckAllNameOptions[0].checked=flag
+}
+
+// Added for page navigation in duplicate-listview
+var dup_start = "";
+function getDuplicateListViewEntries_js(module,url)
+{
+	dup_start = url;
+	$("status").style.display="block";
+	new Ajax.Request(
+			'index.php',
+			{queue: {position: 'end', scope: 'command'},
+				method: 'post',
+				postBody:"module="+module+"&action="+module+"Ajax&file=FindDuplicateRecords&ajax=true&"+dup_start,
+				onComplete: function(response) {
+					$("status").style.display="none";
+					$("duplicate_ajax").innerHTML = response.responseText;
+				}
+			}
+	);
+}
+
+function getUnifiedSearchEntries_js(module,url){
+   var qryStr = document.getElementsByName('search_criteria')[0].value;
+   $("status").style.display="block";
+   var recordCount = document.getElementById(module+'RecordCount').value;
+   new Ajax.Request(
+           'index.php',
+           {queue: {position: 'end', scope: 'command'},
+                   method: 'post',
+                   postBody:"module="+module+"&action="+module+"Ajax&file=UnifiedSearch&ajax=true&"+url+
+                           '&query_string='+qryStr+'&search_onlyin='+encodeURIComponent('--USESELECTED--')+'&recordCount='+recordCount,
+                   onComplete: function(response) {
+                           $("status").style.display="none";
+                           $('global_list_'+module).innerHTML = response.responseText;
+                   }
+           }
+   );
+}
+
+/* End */
+
+//Added after 5.0.4 for Documents Module
+function positionDivToCenter(targetDiv)
+{
+	//Gets the browser's viewport dimension
+	getViewPortDimension();
+	//Gets the Target DIV's width & height in pixels using parseInt function
+	divWidth =(parseInt(document.getElementById(targetDiv).style.width))/2;
+	divHeight=(parseInt(document.getElementById(targetDiv).style.height))/2;
+	//calculate horizontal and vertical locations relative to Viewport's dimensions
+	mx = parseInt(XX/2)-parseInt(divWidth);
+	my = parseInt(YY/3)-parseInt(divHeight);
+	//Prepare the DIV and show in the center of the screen.
+	document.getElementById(targetDiv).style.left=mx+"px";
+	document.getElementById(targetDiv).style.top=my+"px";
+}
+
+function getViewPortDimension()
+{
+	if(!document.all)
+	{
+	  	XX = self.innerWidth;
+		YY = self.innerHeight;
+	}
+	else if(document.all)
+	{
+		XX = document.documentElement.clientWidth;
+		YY = document.documentElement.clientHeight;  
+	}
+}
+
+function toggleTable(id) {
+
+    var listTableObj=getObj(id);
+    if(listTableObj.style.display=="none")
+    {
+		listTableObj.style.display="";
+    }
+    else 
+    {
+		listTableObj.style.display="none";
+    }
+    //set_cookie(id,listTableObj.style.display)
+}
+
+function FileAdd(obj,Lay,return_action){
+	fnvshobj(obj,Lay);	
+	window.frames['AddFile'].document.getElementById('divHeader').innerHTML="Add file";
+	window.frames['AddFile'].document.FileAdd.return_action.value=return_action;
+	positionDivToCenter(Lay);
+}
+
+function dldCntIncrease(fileid)
+{
+	new Ajax.Request(
+            'index.php',
+            {queue: {position: 'end', scope: 'command'},
+             method: 'post',
+             postBody: 'action=DocumentsAjax&mode=ajax&file=SaveFile&module=Documents&file_id='+fileid+"&act=updateDldCnt",
+             onComplete: function(response) {
+                }
+    		}
+  		);
+}
+//End Documents Module
+
+//asterisk integration :: starts
+
+/**
+ * this function accepts a node and puts it at the center of the screen
+ * @param object node - the dom object which you want to set in the center
+ */
+function placeAtCenter(node){
+	var centerPixel = getViewPortCenter();
+	node.style.position = "absolute";
+	var point = getDimension(node);
+
+	node.style.top = centerPixel.y - point.y/2 +"px";
+	node.style.right = centerPixel.x - point.x/2 + "px";
+}
+
+/**
+ * this function gets the dimension of a node
+ * @param node - the node whose dimension you want
+ * @return height and width in array format
+ */
+function getDimension(node){
+	var ht = node.offsetHeight;
+	var wdth = node.offsetWidth;
+	var nodeChildren = node.getElementsByTagName("*");
+	var noOfChildren = nodeChildren.length;
+	for(var index =0;index<noOfChildren;++index){
+		ht = Math.max(nodeChildren[index].offsetHeight, ht);
+		wdth = Math.max(nodeChildren[index].offsetWidth,wdth);
+	}
+	return {x: wdth,y: ht};
+}
+
+/**
+ * this function returns the center co-ordinates of the viewport as an array
+ */
+function getViewPortCenter(){
+	var height;
+	var width;
+
+	if(typeof window.pageXOffset != "undefined"){
+		height = window.innerHeight/2;
+		width = window.innerWidth/2;
+		height +=window.pageYOffset;
+		width +=window.pageXOffset;
+	}else if(document.documentElement && typeof document.documentElement.scrollTop != "undefined"){
+		height = document.documentElement.clientHeight/2;
+		width = document.documentElement.clientWidth/2;
+		height += document.documentElement.scrollTop;
+		width += document.documentElement.scrollLeft;
+	}else if(document.body && typeof document.body.clientWidth != "undefined"){
+		height = window.screen.availHeight/2;
+		width = window.screen.availWidth/2;
+		height += document.body.clientHeight;
+		width += document.body.clientWidth;
+	}
+	return {x: width,y: height};
+}
+
+/**
+ * this function accepts a number and displays a div stating that there is an outgoing call
+ * then it calls the number
+ * @param number - the number to be called
+ */
+function startCall(number, recordid){
+	div = document.getElementById('OutgoingCall').innerHTML;					
+	outgoingPopup = _defPopup();
+	outgoingPopup.content = div;
+	outgoingPopup.displayPopup(outgoingPopup.content);
+	
+	//var ASTERISK_DIV_TIMEOUT = 6000;
+	new Ajax.Request(
+		'index.php',
+		{	queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'action=PBXManagerAjax&mode=ajax&file=StartCall&ajax=true&module=PBXManager&number='+number+'&recordid='+recordid,
+			onComplete: function(response) {
+							if(response.responseText == ''){
+								//successfully called
+							}else{
+								alert(response.responseText);
+							}
+						}
+		}
+	);
+}
+//asterisk integration :: ends
+
+//added for tooltip manager
+function ToolTipManager(){
+	var state = false;
+	/**
+	 * this function creates the tooltip div and adds the information to it
+	 * @param string text - the text to be added to the tooltip
+	 */
+	function tip(node, text,id,fieldname){
+		state=true;
+		var divName = getDivId(id,fieldname);
+		var div = document.getElementById(divName)
+		if(!div){
+			div = document.createElement('div');
+			div.id = divName;
+			div.style.position = 'absolute';
+			if(typeof div.style.opacity == "string"){
+				div.style.opacity = 0.8;
+			}
+			div.className = "tooltipClass";
+		}
+		
+		div.innerHTML = text;
+		document.body.appendChild(div);
+		div.style.display = "block";
+		positionTooltip(node, divName);
+	}
+	
+	function getDivId(id,fieldname){
+		return '__VT_tooltip_'+id+'_'+fieldname;
+	}
+	
+	function exists(id,fieldname){
+		return (typeof document.getElementById(getDivId(id,fieldname)) != 'undefined' && 
+			document.getElementById(getDivId(id,fieldname)) != null);
+	}
+	
+	function show(node,id,fieldname){
+		var div = document.getElementById(getDivId(id,fieldname));
+		if(typeof div !='undefined' && div != null){
+			div.style.display = '';
+			positionTooltip(node, getDivId(id,fieldname));
+		}
+	}
+	
+	/**
+	 * this function removes the tooltip div
+	 */
+	function unTip(nodelay,id,fieldname){
+		state=false;
+		var divName = getDivId(id,fieldname);
+		var div = document.getElementById(divName);
+		if(typeof div != 'undefined' && div != null ){
+			if(typeof nodelay != 'undefined' && nodelay != null){
+				div.style.display = "none";
+			}else{
+				setTimeout(function(){	
+				if(!state){
+					div.style.display = "none";
+					}
+				}, 700);
+			}
+		}
+	}
+	
+	/**
+	 * this function is used to position the tooltip div
+	 * @param string obj - the id of the element where the div has to appear
+	 * @param object div - the div which contains the info
+	 */
+	function positionTooltip(obj,div){
+		var tooltip = document.getElementById(div);
+		var leftSide = findPosX(obj);
+		var topSide = findPosY(obj);
+		var dimensions = getDimension(tooltip);
+		var widthM = dimensions.x;
+		var getVal = eval(leftSide) + eval(widthM);
+		var tooltipDimensions = getDimension(obj);
+		var tooltipWidth = tooltipDimensions.x;
+		
+		if(getVal  > document.body.clientWidth ){
+			leftSide = eval(leftSide) - eval(widthM);
+			tooltip.style.left = leftSide + 'px';
+		}else{
+			leftSide = eval(leftSide) + (eval(tooltipWidth)/2);
+			tooltip.style.left = leftSide + 'px';
+		}
+		
+		var heightTooltip = dimensions.y;
+		var bottomSide = eval(topSide) + eval(heightTooltip);
+		if(bottomSide > document.body.clientHeight){
+			topSide = topSide - (bottomSide - document.body.clientHeight) - 10;
+			if(topSide < 0 ){
+				topSide = 10;
+			}
+		}else{
+			topSide = eval(topSide) - eval(heightTooltip)/2;
+			if(topSide<0){
+				topSide = 10;
+			}
+		}
+		tooltip.style.top= topSide + 'px';
+	}
+	
+	return {tip:tip, untip:unTip,'exists': exists,'show': show,'getDivId':getDivId};
+}
+if(!tooltip){
+	var tooltip = ToolTipManager();
+}
+//tooltip manager changes end
+
+function submitFormForActionWithConfirmation(formName, action, confirmationMsg) {
+	if (confirm(confirmationMsg)) {
+		return submitFormForAction(formName, action);
+	}
+	return false;
+}
+
+function submitFormForAction(formName, action) {
+	var form = document.forms[formName];
+	if (!form) return false;
+	form.action.value = action;
+	form.submit();
+	return true;
+}
+
+/** Javascript dialog box utility functions **/
+VtigerJS_DialogBox = {
+	_olayer : function(toggle) {
+		var olayerid = "__vtigerjs_dialogbox_olayer__";		
+		VtigerJS_DialogBox._removebyid(olayerid);
+		
+		if(typeof(toggle) == 'undefined' || !toggle) return;
+
+		var olayer = document.getElementById(olayerid);
+		if(!olayer) { 
+			olayer = document.createElement("div"); 
+			olayer.id = olayerid;
+			olayer.className = "small veil"; 
+			olayer.style.zIndex = (new Date()).getTime();
+			// In case zIndex goes to negative side!
+			if(olayer.style.zIndex < 0) olayer.style.zIndex *= -1; 
+			if (browser_ie) { 
+				olayer.style.height = document.body.offsetHeight + (document.body.scrollHeight - document.body.offsetHeight) + "px"; 
+			} else if (browser_nn4 || browser_nn6) { olayer.style.height = document.body.offsetHeight + "px"; } 
+			olayer.style.width = "100%";
+			document.body.appendChild(olayer);
+			
+			var closeimg = document.createElement("img");
+			closeimg.src = 'themes/images/close.gif';
+			closeimg.alt = 'X';
+			closeimg.style.right= '10px';
+			closeimg.style.top  = '5px';
+			closeimg.style.position = 'absolute';
+			closeimg.style.cursor = 'pointer';
+			closeimg.onclick = VtigerJS_DialogBox.unblock;
+			olayer.appendChild(closeimg);
+		} 
+		if(olayer) {
+			if(toggle) olayer.style.display = "block";
+			else olayer.style.display = "none";
+		}
+		return olayer;
+	},
+	_removebyid : function(id) {
+		if($(id)) $(id).remove();
+	},
+	unblock : function() {
+		VtigerJS_DialogBox._olayer(false);
+	},
+	block : function(opacity) {
+		if(typeof(opactiy)=='undefined') opacity = '0.3';
+		var olayernode = VtigerJS_DialogBox._olayer(true);
+		olayernode.style.opacity = opacity;
+	},
+	hideprogress : function() {
+		VtigerJS_DialogBox._olayer(false);
+		VtigerJS_DialogBox._removebyid('__vtigerjs_dialogbox_progress_id__');
+	},
+	progress : function(imgurl) {		
+		VtigerJS_DialogBox._olayer(true);
+		if(typeof(imgurl) == 'undefined') imgurl = 'themes/images/plsWaitAnimated.gif';		
+		
+		var prgbxid = "__vtigerjs_dialogbox_progress_id__";
+		var prgnode = document.getElementById(prgbxid);
+		if(!prgnode) {
+			prgnode = document.createElement("div");
+			prgnode.id = prgbxid;
+			prgnode.className = 'veil_new';
+			prgnode.style.position = 'absolute';
+			prgnode.style.width = '100%';
+			prgnode.style.top = '0';
+			prgnode.style.left = '0';
+			prgnode.style.display = 'block';
+			
+			document.body.appendChild(prgnode);	
+			
+			prgnode.innerHTML = 
+			'<table border="5" cellpadding="0" cellspacing="0" align="center" style="vertical-align:middle;width:100%;height:100%;">' +
+			'<tr><td class="big" align="center"><img src="'+ imgurl + '"></td></tr></table>';
+								
+		}
+		if(prgnode) prgnode.style.display = 'block';			
+	},
+	hideconfirm : function() {
+		VtigerJS_DialogBox._olayer(false);
+		VtigerJS_DialogBox._removebyid('__vtigerjs_dialogbox_alert_boxid__');
+	},
+	confirm : function(msg, onyescode) {
+		VtigerJS_DialogBox._olayer(true);
+		
+		var dlgbxid = "__vtigerjs_dialogbox_alert_boxid__";
+		var dlgbxnode = document.getElementById(dlgbxid);
+		if(!dlgbxnode) {
+			dlgbxnode = document.createElement("div");
+			dlgbxnode.style.display = 'none';
+			dlgbxnode.className = 'veil_new small';
+			dlgbxnode.id = dlgbxid;
+			dlgbxnode.innerHTML = 
+			'<table cellspacing="0" cellpadding="18" border="0" class="options small">' +
+			'<tbody>' +
+				'<tr>' +
+				'<td nowrap="" align="center" style="color: rgb(255, 255, 255); font-size: 15px;">' +
+				'<b>'+ msg + '</b></td>' +
+				'</tr>' +
+				'<tr>' +
+				'<td align="center">' +
+				'<input type="button" style="text-transform: capitalize;" onclick="$(\''+ dlgbxid + '\').hide();VtigerJS_DialogBox._olayer(false);VtigerJS_DialogBox._confirm_handler();" value="'+ alert_arr.YES + '"/>' +  
+				'<input type="button" style="text-transform: capitalize;" onclick="$(\''+ dlgbxid + '\').hide();VtigerJS_DialogBox._olayer(false)" value="' + alert_arr.NO + '"/>' +
+				'</td>'+
+				'</tr>' +
+			'</tbody>' +
+			'</table>';
+			document.body.appendChild(dlgbxnode);
+		}
+		if(typeof(onyescode) == 'undefined') onyescode = '';
+		dlgbxnode._onyescode = onyescode;
+		if(dlgbxnode) dlgbxnode.style.display = 'block';
+	},
+	_confirm_handler : function() {
+		var dlgbxid = "__vtigerjs_dialogbox_alert_boxid__";
+		var dlgbxnode = document.getElementById(dlgbxid);
+		if(dlgbxnode) {
+			if(typeof(dlgbxnode._onyescode) != 'undefined' && dlgbxnode._onyescode != '') {
+				eval(dlgbxnode._onyescode);
+			}
+		}
+	}	
 }

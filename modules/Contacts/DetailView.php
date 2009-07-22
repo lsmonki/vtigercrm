@@ -22,9 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Contacts/Contacts.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
@@ -33,7 +31,7 @@ global $mod_strings;
 global $app_strings;
 global $currentModule, $singlepane_view;
 
-$focus = new Contacts();
+$focus = CRMEntity::getInstance($currentModule);
 
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
         //Display the error message
@@ -82,6 +80,16 @@ $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->colu
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("SINGLE_MOD", 'Contact');
 
+// Module Sequence Numbering
+$mod_seq_field = getModuleSequenceField($currentModule);
+if ($mod_seq_field != null) {
+	$mod_seq_id = $focus->column_fields[$mod_seq_field['name']];
+} else {
+	$mod_seq_id = $focus->id;
+}
+$smarty->assign('MOD_SEQ_ID', $mod_seq_id);
+// END
+
 $smarty->assign("ID", $_REQUEST['record']);
 if(isPermitted("Contacts","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
@@ -91,7 +99,7 @@ if(isPermitted("Contacts","Delete",$_REQUEST['record']) == 'yes')
 if(isPermitted("Emails","EditView",'') == 'yes')
 {
 	//Added to pass the parents list as hidden for Emails -- 09-11-2005
-	$parent_email = getEmailParentsList('Contacts',$_REQUEST['record']);
+	$parent_email = getEmailParentsList('Contacts',$_REQUEST['record'], $focus);
 	$smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
 	$smarty->assign("SENDMAILBUTTON","permitted");
 	$smarty->assign("EMAIL1",$focus->column_fields['email']);
@@ -138,8 +146,9 @@ $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST['record']));
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
+$smarty->assign("USE_ASTERISK", get_use_asterisk($current_user->id));
 
 $sql = $adb->pquery('select accountid from vtiger_contactdetails where contactid=?', array($focus->id));
 $accountid = $adb->query_result($sql,0,'accountid');
@@ -155,6 +164,20 @@ $smarty->assign("CONTACT_PERMISSION",CheckFieldPermission('contact_id','Calendar
 $smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 $smarty->assign("SinglePane_View", $singlepane_view);
 
+if(PerformancePrefs::getBoolean('DETAILVIEW_RECORD_NAVIGATION', true) && isset($_SESSION[$currentModule.'_listquery'])){
+	$recordNavigationInfo = ListViewSession::getListViewNavigation($focus->id);
+	VT_detailViewNavigation($smarty,$recordNavigationInfo,$focus->id);
+}
+
+// Record Change Notification
+$focus->markAsViewed($current_user->id);
+// END
+
+include_once('vtlib/Vtiger/Link.php');
+$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>vtlib_purify($_REQUEST['action']));
+$smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), Array('DETAILVIEWBASIC','DETAILVIEW'), $customlink_params));
+
+$smarty->assign('DETAILVIEW_AJAX_EDIT', PerformancePrefs::getBoolean('DETAILVIEW_AJAX_EDIT', true));
+
 $smarty->display("DetailView.tpl");
 ?>
-

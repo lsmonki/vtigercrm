@@ -135,6 +135,10 @@ $mod_strings = Array(
 'Published'=>'Published',
 'Obsolete'=>'Obsolete',
 			
+// Module Sequence Numbering
+'Faq No' => 'Faq No',
+// END
+
 );
 
 ?>

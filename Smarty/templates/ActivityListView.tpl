@@ -1,15 +1,12 @@
 {*<!--
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
-
 -->*}
 
 {*<!-- module header -->*}
@@ -168,13 +165,14 @@ function callSearch(searchtype)
                 urlstring += 'search_cnt='+no_rows+'&';
                 urlstring += 'searchtype=advance&'
         {rdelim}
+    $("status").style.display="inline";
 	new Ajax.Request(
 		'index.php',
 		{ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
 			method: 'post',
 			postBody:urlstring +'query=true&file=ListView&module={$MODULE}&action={$MODULE}Ajax&ajax=true&search=true',
 			onComplete: function(response) {ldelim}
-				$("status").style.display="none";
+								$("status").style.display="none";
                                 result = response.responseText.split('&#&#&#');
                                 $("ListViewContents").innerHTML= result[2];
                                 if(result[1] != '')
@@ -220,7 +218,7 @@ function alphabetic(module,url,dataid)
                                         <table border=0 cellspacing=0 cellpadding=0 width=100%>
                                         <tr>
                                                 <td align=center>
-                                                <img src="{$IMAGE_PATH}searching.gif" alt="{$APP.LBL_SEARCHING}"  title="{$APP.LBL_SEARCHING}">
+                                                <img src="{'searching.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_SEARCHING}"  title="{$APP.LBL_SEARCHING}">
                                                 </td>
                                         </tr>
                                         </table>
@@ -236,7 +234,7 @@ function alphabetic(module,url,dataid)
 {*<!-- Contents -->*}
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
      <tr>
-        <td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign=top><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
 
 	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
 	 <!-- SIMPLE SEARCH -->
@@ -246,7 +244,7 @@ function alphabetic(module,url,dataid)
 	<tr>
 		<td class="searchUIName small" nowrap align="left">
 		<span class="moduleName">{$APP.LBL_SEARCH}</span><br><span class="small"><a href="#" onClick="fnhide('searchAcc');show('advSearch');updatefOptions(document.getElementById('Fields0'), 'Condition0');document.basicSearch.searchtype.value='advance';">{$APP.LBL_GO_TO} {$APP.LNK_ADVANCED_SEARCH}</a></span>
-		<!-- <img src="{$IMAGE_PATH}basicSearchLens.gif" align="absmiddle" alt="{$APP.LNK_BASIC_SEARCH}" title="{$APP.LNK_BASIC_SEARCH}" border=0>&nbsp;&nbsp;-->
+		<!-- <img src="{'basicSearchLens.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" alt="{$APP.LNK_BASIC_SEARCH}" title="{$APP.LNK_BASIC_SEARCH}" border=0>&nbsp;&nbsp;-->
 		</td>
 		<td class="small" nowrap align=right><b>{$APP.LBL_SEARCH_FOR}</b></td>
 		<td class="small"><input type="text"  class="txtBox" style="width:120px" name="search_text"></td>
@@ -384,38 +382,48 @@ function alphabetic(module,url,dataid)
                                         {elseif $button_check eq 'c_status'}
                                              <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
 					{elseif $button_check eq 'c_owner'}
-						{if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
+						{if $MODULE neq 'Documents' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
 						     <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
                                                 {/if}
                                         {/if}
 
                                  {/foreach}
                     </td>
-				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
-		        	 <td nowrap >
-					<table border=0 cellspacing=0 cellpadding=0 class="small">
-					     <tr>{$NAVIGATION}</tr>
-					</table>
-                    </td>
-				 <td width=100% align="right">
+					<td class="small" nowrap>
+						{$recordListRange}
+					</td>
+					<!-- Page Navigation -->
+					<td nowrap width="30%" align="center">
+						<table border=0 cellspacing=0 cellpadding=0 class="small">
+							<tr>{$NAVIGATION}</tr>
+						</table>
+	                </td>
+				 <td width="100%" align="right">
 				   <table border=0 cellspacing=0 cellpadding=0 class="small">
 					<tr>
 						<td>{$APP.LBL_VIEW}</td>
 						<td style="padding-left:5px;padding-right:5px">
-                                                    <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT></td>
-                                                    {if $ALL eq 'All'}
-							<td><a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
-							<span class="small">|</span>
-							<span class="small" disabled>{$APP.LNK_CV_EDIT}</span>
-							<span class="small">|</span>
-                                                        <span class="small" disabled>{$APP.LNK_CV_DELETE}</span></td>
+                            <SELECT NAME="viewname" id="viewname" class="small" onchange="showDefaultCustomView(this,'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_OPTION}</SELECT>
+                        </td>
+                        <td>
+                            {if $ALL eq 'All'}
+								<a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
+								<span class="small">|</span>
+								<span class="small" disabled>{$APP.LNK_CV_EDIT}</span>
+								<span class="small">|</span>
+                            	<span class="small" disabled>{$APP.LNK_CV_DELETE}</span></td>
 						    {else}
-							<td><a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
-							<span class="small">|</span>
-                                                        <a href="index.php?module={$MODULE}&action=CustomView&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_EDIT}</a>
-                                                        <span class="small">|</span>
-							<a href="javascript:confirmdelete('index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}')">{$APP.LNK_CV_DELETE}</a></td>
+								<a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
+								<span class="small">|</span>
+                                <a href="index.php?module={$MODULE}&action=CustomView&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_EDIT}</a>
+                                <span class="small">|</span>
+								<a href="javascript:confirmdelete('index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}')">{$APP.LNK_CV_DELETE}</a>
 						    {/if}
+							{if $CUSTOMVIEW_PERMISSION.ChangedStatus neq '' && $CUSTOMVIEW_PERMISSION.Label neq ''}
+								<span class="small">|</span>	
+							   		<a href="#" id="customstatus_id" onClick="ChangeCustomViewStatus({$VIEWID},{$CUSTOMVIEW_PERMISSION.Status},{$CUSTOMVIEW_PERMISSION.ChangedStatus},'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_PERMISSION.Label}</a>
+							{/if}
+						</td>
 					</tr>
 				   </table>
 				 </td>	
@@ -446,7 +454,7 @@ function alphabetic(module,url,dataid)
 							
 							<table border="0" cellpadding="5" cellspacing="0" width="98%">
 							<tr>
-								<td rowspan="2" width="25%"><img src="{$IMAGE_PATH}empty.jpg" height="60" width="61"></td>
+								<td rowspan="2" width="25%"><img src="{'empty.jpg'|@vtiger_imageurl:$THEME}" height="60" width="61"></td>
 								<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$APP.ACTIVITIES} {$APP.LBL_FOUND} !</span></td>
 							</tr>
 							<tr>
@@ -459,7 +467,7 @@ function alphabetic(module,url,dataid)
 							{else}
 							<table border="0" cellpadding="5" cellspacing="0" width="98%">
 							<tr>
-								<td rowspan="2" width="25%"><img src="{$IMAGE_PATH}empty.jpg" height="60" width="61"></td>
+								<td rowspan="2" width="25%"><img src="{'empty.jpg'|@vtiger_imageurl:$THEME}" height="60" width="61"></td>
 								<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$APP.ACTIVITIES} {$APP.LBL_FOUND} !</span></td>
 							</tr>
 							<tr>
@@ -486,19 +494,22 @@ function alphabetic(module,url,dataid)
                                         {elseif $button_check eq 'c_status'}
                                              <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
 					{elseif $button_check eq 'c_owner'}
-				                {if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
+				                {if $MODULE neq 'Documents' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
                                                      <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
                                                 {/if}
                                         {/if}
 
                                  {/foreach}
                     </td>
-				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
-				 <td nowrap >
-				    <table border=0 cellspacing=0 cellpadding=0 class="small">
-				         <tr>{$NAVIGATION}</tr>
-				     </table>
-				 </td>
+					<td class="small" nowrap>
+						{$recordListRange}
+					</td>
+					<!-- Page Navigation -->
+					<td nowrap width="30%" align="center">
+						<table border=0 cellspacing=0 cellpadding=0 class="small">
+							<tr>{$NAVIGATION}</tr>
+						</table>
+	                </td>
 				 <td align="right" width=100%>
 				   <table border=0 cellspacing=0 cellpadding=0 class="small">
 					<tr>
@@ -521,7 +532,7 @@ function alphabetic(module,url,dataid)
         </div>
 
      </td>
-        <td valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign=top><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </table>
 
@@ -586,7 +597,7 @@ function ajaxChangeStatus(statusname)
 	   if($("user_checkbox").checked)
 	   {
 		    fninvsh('changeowner');
-		    var url='&user_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
+		    var url='&owner_id='+document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value+'&owner_type=User';
 		    {/literal}
 		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+url+"&viewname="+viewid+"&idlist="+idstring;
 		    {literal}
@@ -594,7 +605,7 @@ function ajaxChangeStatus(statusname)
     else
     {
         fninvsh('changeowner');
-		    var url='&group_id='+document.getElementById('lead_group_owner').options[document.getElementById('lead_group_owner').options.selectedIndex].value;
+		    var url='&owner_id='+document.getElementById('lead_group_owner').options[document.getElementById('lead_group_owner').options.selectedIndex].value+'&owner_type=Group';
 	       {/literal}
 		        var urlstring ="module=Users&action=updateLeadDBStatus&return_module={$MODULE}"+url+"&viewname="+viewid+"&idlist="+idstring;
 		    {literal}

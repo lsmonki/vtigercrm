@@ -15,7 +15,7 @@
 <table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 <tr>
 	<td class="layerPopupHeading" align="left">{$NOTIFY_DETAILS.name}</td>
-	<td align="right" class="small"><a href="javascript:hide('editdiv');"><img src="{$IMAGE_PATH}close.gif" align="middle" border="0"></a></td>
+	<td align="right" class="small"><a href="javascript:hide('editdiv');"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" align="middle" border="0"></a></td>
 </tr>
 </table>
 <table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
@@ -78,7 +78,7 @@
 <table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 <tr>
 	<td class="layerPopupHeading" align="left">{$NOTIFY_DETAILS.name}</td>
-	<td align="right" class="small"><a href="javascript:hide('editdiv');"><img src="{$IMAGE_PATH}close.gif" align="middle" border="0"></a></td>
+	<td align="right" class="small"><a href="javascript:hide('editdiv');"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" align="middle" border="0"></a></td>
 </tr>
 </table>
 <table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 

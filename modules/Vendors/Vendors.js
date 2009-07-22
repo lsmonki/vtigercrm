@@ -7,6 +7,8 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
+document.write("<script type='text/javascript' src='include/js/Mail.js'></"+"script>");
+document.write("<script type='text/javascript' src='include/js/Merge.js'></"+"script>");
 
 function check4null(form)
 {

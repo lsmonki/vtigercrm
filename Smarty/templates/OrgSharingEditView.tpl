@@ -13,7 +13,7 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
         <br>
 
@@ -21,12 +21,12 @@
 			{include file="SetMenu.tpl"}
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-				<form action="index.php" method="post" name="def_org_share" id="form">
+				<form action="index.php" method="post" name="def_org_share" id="form" onsubmit="VtigerJS_DialogBox.block();">
 				<input type="hidden" name="module" value="Users">
 				<input type="hidden" name="action" value="SaveOrgSharing">
 				<input type="hidden" name="parenttab" value="Settings">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}shareaccess.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
+					<td width=50 rowspan=2 valign=top><img src="{'shareaccess.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_EDIT} {$MOD.LBL_SHARING_ACCESS} </b></td>
 					<td rowspan=2 class="small" align=right>&nbsp;</td>
 				</tr>
@@ -49,8 +49,12 @@
 	
 				<table cellspacing="0" cellpadding="5" class="listTable" width="100%">
 				{foreach item=elements from=$ORGINFO}	
+				{assign var="MODULELABEL" value=$elements.0}
+				{if $APP[$elements.0] neq ''}
+					{assign var="MODULELABEL" value=$APP[$elements.0]}
+				{/if}	
 				<tr>
-                    		    <td width="30%" class="colHeader small" nowrap>{$APP[$elements.0]}</td>
+                    		    <td width="30%" class="colHeader small" nowrap>{$MODULELABEL}</td>
 				    <td width="70%" class="listTable small">{$elements.2}</td>
 				<tr>
 				{/foreach}
@@ -77,7 +81,7 @@
 
 
 </td>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </tbody>
 </table>

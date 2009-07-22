@@ -82,6 +82,9 @@ $mod_strings = Array(
 'Average'=>'Average',
 'Poor'=>'Poor',
 			      
+//Module Sequence Numbering
+'Campaign No'=>'Campaign No',
+// END
 
 );
 

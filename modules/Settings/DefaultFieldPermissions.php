@@ -1,17 +1,13 @@
 <?php
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
-
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 
@@ -41,7 +37,7 @@ foreach($field_module as $fld_module=>$mod_name)
 }
 
 if($_REQUEST['fld_module'] != '')
-	$smarty->assign("DEF_MODULE",$_REQUEST['fld_module']);
+	$smarty->assign("DEF_MODULE",vtlib_purify($_REQUEST['fld_module']));
 else
 	$smarty->assign("DEF_MODULE",'Leads');
 
@@ -55,9 +51,9 @@ else
 function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 {
 	global $adb;
-	global $image_path;
+	global $image_path,$theme;
 	$standCustFld = Array();		
-	for($i=0; $i<$noofrows; $i++,$row++)
+	for($i=0; $i<$noofrows; $i++)
 	{
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
 		$fieldlabel = $adb->query_result($fieldListResult,$i,"fieldlabel");
@@ -69,13 +65,13 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 			$standCustFld []= $fieldlabel;
 			
 		
-		if($adb->query_result($fieldListResult,$i,"visible") == 0 || ($uitype == 111 && $fieldtype[1] == "M"))
+		if($adb->query_result($fieldListResult,$i,"visible") == 0 || ($uitype == 117 && $fieldtype[1] == "M"))
 		{
-			$visible = "<img src=".$image_path."/prvPrfSelectedTick.gif>";
+			$visible ="<img src='" . vtiger_imageurl('prvPrfSelectedTick.gif', $theme) . "'>";
 		}
 		else
 		{
-			$visible = "<img src=".$image_path."/no.gif>";
+			$visible = "<img src='" . vtiger_imageurl('no.gif', $theme) . "'>";
 		}	
 		$standCustFld []= $visible;
 	}
@@ -87,6 +83,7 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 $smarty->assign("FIELD_INFO",$field_module);
 $smarty->assign("FIELD_LISTS",$allfields);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);

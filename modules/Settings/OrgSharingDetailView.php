@@ -77,7 +77,19 @@ $custom_access['SalesOrder'] = getSharingRuleList('SalesOrder');
 //Invoice Sharing
 $custom_access['Invoice'] = getSharingRuleList('Invoice');
 
+//Document Sharing
+$custom_access['Documents'] = getSharingRuleList('Documents');
 
+// Look up for modules for which sharing access is enabled.
+// NOTE: Accounts and Contacts has been couple, so we need to elimiate Contacts also
+$othermodules = getSharingModuleList(Array('Contacts'));
+if(!empty($othermodules)) {
+	foreach($othermodules as $moduleresname) {
+		if(!isset($custom_access[$moduleresname])) {
+			$custom_access[$moduleresname] = getSharingRuleList($moduleresname);
+		}
+	}
+}
 
 $smarty->assign("MODSHARING", $custom_access);
 
@@ -141,7 +153,7 @@ function getSharingRuleList($module)
 		$access_permission = array_chunk($access_permission,4);
 	return $access_permission;
 }
-
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);

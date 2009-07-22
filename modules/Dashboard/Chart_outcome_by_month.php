@@ -143,15 +143,16 @@ if (isset($_REQUEST['obm_edit']) && $_REQUEST['obm_edit'] == 'true') {
 <form name="outcome_by_month" action="index.php" method="post" >
 <input type="hidden" name="module" value="<?php echo $currentModule;?>">
 <input type="hidden" name="action" value="<?php echo $action;?>">
+<input type="hidden" name="display_view" value="<?php echo vtlib_purify($_REQUEST['display_view'])?>">
 <input type="hidden" name="obm_refresh" value="true">
 <table cellpadding="2" border="0"><tbody>
 <tr>
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_DATE_START']?> <br><em><?php echo $app_strings['NTC_DATE_FORMAT']?></em></td>
-<td valign='top' ><input class="text" name="obm_date_start" size='12' maxlength='10' id='date_start'  value='<?php if (isset($_SESSION['obm_date_start'])) echo $_SESSION['obm_date_start']?>'>  <img src="themes/<?php echo $theme ?>/images/calendar.gif" id="date_start_trigger"> </td>
+<td valign='top' ><input class="text" name="obm_date_start" size='12' maxlength='10' id='date_start'  value='<?php if (isset($_SESSION['obm_date_start'])) echo $_SESSION['obm_date_start']?>'>  <img src="<?php echo vtiger_imageurl('calendar.gif', $theme) ?>" id="date_start_trigger"> </td>
 </tr><tr>
 <tr>
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_DATE_END'];?><br><em><?php echo $app_strings['NTC_DATE_FORMAT']?></em></td>
-<td valign='top' ><input class="text" name="obm_date_end" size='12' maxlength='10' id='date_end' value='<?php if (isset($_SESSION['obm_date_end'])) echo $_SESSION['obm_date_end']?>'>  <img src="themes/<?php echo $theme ?>/images/calendar.gif" id="date_end_trigger"> </td>
+<td valign='top' ><input class="text" name="obm_date_end" size='12' maxlength='10' id='date_end' value='<?php if (isset($_SESSION['obm_date_end'])) echo $_SESSION['obm_date_end']?>'>  <img src="<?php echo vtiger_imageurl('calendar.gif', $theme) ?>" id="date_end_trigger"> </td>
 </tr><tr>
 <td nowrap><?php echo $current_module_strings['LBL_USERS'];?></td>
 <?php if($is_admin==false && $profileGlobalPermission[2] == 1 && ($defaultOrgSharingPermission[getTabid('Potentials')] == 3 or $defaultOrgSharingPermission[getTabid('Potentials')] == 0)) { ?>
@@ -160,7 +161,7 @@ if (isset($_REQUEST['obm_edit']) && $_REQUEST['obm_edit'] == 'true') {
 	<td valign='top' ><select name="obm_ids[]" multiple size='3'><?php echo get_select_options_with_id(get_user_array(FALSE, "Active",$current_user->id),$_SESSION['obm_ids']); ?></select></td>
 <?php } ?>
 </tr><tr>
-<td align="right"><br /> <input class="button" onclick="return chk_form(outcome_by_month);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
+<td align="right"><br /> <input class="button" onclick="return verify_chart_data(outcome_by_month);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
 </tr></table>
 </form>
 <script type="text/javascript">
@@ -183,8 +184,8 @@ else {
 ?>
 <div align=right><FONT size='1'>
 <em><?php  echo $current_module_strings['LBL_CREATED_ON'].' '.$file_date; ?> 
-</em>[<a href="javascript:;" onClick="changeView('DashboardHome','NORMAL');"><?php echo $current_module_strings['LBL_REFRESH'];?></a>]
-[<a href="index.php?module=<?php echo $currentModule;?>&action=index&obm_edit=true"><?php echo $current_module_strings['LBL_EDIT'];?></a>]
+</em>[<a href="javascript:;" onClick="changeView('<?php echo vtlib_purify($_REQUEST['display_view']);?>');"><?php echo $current_module_strings['LBL_REFRESH'];?></a>]
+[<a href="index.php?module=<?php echo $currentModule;?>&action=index&obm_edit=true&display_view=<?php echo vtlib_purify($_REQUEST['display_view']);?>"><?php echo $current_module_strings['LBL_EDIT'];?></a>]
 </FONT></div>
 <?php } 
 }

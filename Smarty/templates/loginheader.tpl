@@ -16,9 +16,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD html 4.01 Transitional//EN">
 <html>
 <head>
-<link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">
+<link REL="SHORTCUT ICON" HREF="themes/images/vtigercrm_icon.ico">
 <meta http-equiv="Content-Type" content="text/html; charset={$LBL_CHARSET}">
 <title>{$APP.LBL_BROWSER_TITLE}</title>
 <style type="text/css">@import url("include/style.css");</style>
 </head>
-<body style="padding:0; margin:0;">
+<body onload=set_focus() style="padding:0; margin:0;">

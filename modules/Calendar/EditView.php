@@ -22,10 +22,7 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Calendar/Activity.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 require_once('modules/Calendar/calendarLayout.php'); 
@@ -34,14 +31,15 @@ include_once 'modules/Calendar/header.php';
 global $app_strings;
 global $mod_strings,$current_user;
 // Unimplemented until jscalendar language vtiger_files are fixed
-$focus = new Activity();
+
+$focus = CRMEntity::getInstance($currentModule);
 $smarty =  new vtigerCRM_Smarty();
 //added to fix the issue4600
 $searchurl = getBasic_Advance_SearchURL();
 $smarty->assign("SEARCH", $searchurl);
 //4600 ends
 
-$activity_mode = $_REQUEST['activity_mode'];
+$activity_mode = vtlib_purify($_REQUEST['activity_mode']);
 if($activity_mode == 'Task')
 {
 	$tab_type = 'Calendar';
@@ -146,6 +144,9 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = ''; 	
 }
+if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
+	setObjectValuesFromRequest($focus);
+}
 $userDetails=getOtherUserName($current_user->id);
 $to_email = getUserEmailId('id',$current_user->id);
 $smarty->assign("CURRENTUSERID",$current_user->id);
@@ -217,7 +218,7 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-$log->info("Activity detail view");
+$log->info("Activity edit view");
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
@@ -240,33 +241,33 @@ $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 if (isset($_REQUEST['return_module']))
-	$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+	$smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
 if (isset($_REQUEST['return_action']))
-	$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+	$smarty->assign("RETURN_ACTION",vtlib_purify( $_REQUEST['return_action']));
 if (isset($_REQUEST['return_id']))
-	$smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+	$smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
 if (isset($_REQUEST['ticket_id']))
 	$smarty->assign("TICKETID", $_REQUEST['ticket_id']);
 if (isset($_REQUEST['product_id']))
 	$smarty->assign("PRODUCTID", $_REQUEST['product_id']);
 if (isset($_REQUEST['return_viewname']))
-	$smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+	$smarty->assign("RETURN_VIEWNAME", vtlib_purify($_REQUEST['return_viewname']));
 if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
-	$smarty->assign("view",$_REQUEST['view']);
+	$smarty->assign("view",vtlib_purify($_REQUEST['view']));
 if(isset($_REQUEST['hour']) && $_REQUEST['hour']!='')
-	$smarty->assign("hour",$_REQUEST['hour']);
+	$smarty->assign("hour",vtlib_purify($_REQUEST['hour']));
 if(isset($_REQUEST['day']) && $_REQUEST['day']!='')
-	$smarty->assign("day",$_REQUEST['day']);
+	$smarty->assign("day",vtlib_purify($_REQUEST['day']));
 if(isset($_REQUEST['month']) && $_REQUEST['month']!='')
-	$smarty->assign("month",$_REQUEST['month']);
+	$smarty->assign("month",vtlib_purify($_REQUEST['month']));
 if(isset($_REQUEST['year']) && $_REQUEST['year']!='')
-	$smarty->assign("year",$_REQUEST['year']);
+	$smarty->assign("year",vtlib_purify($_REQUEST['year']));
 if(isset($_REQUEST['viewOption']) && $_REQUEST['viewOption']!='')
-	$smarty->assign("viewOption",$_REQUEST['viewOption']);
+	$smarty->assign("viewOption",vtlib_purify($_REQUEST['viewOption']));
 if(isset($_REQUEST['subtab']) && $_REQUEST['subtab']!='')
-	$smarty->assign("subtab",$_REQUEST['subtab']);
+	$smarty->assign("subtab",vtlib_purify($_REQUEST['subtab']));
 if(isset($_REQUEST['maintab']) && $_REQUEST['maintab']!='')
-	$smarty->assign("maintab",$_REQUEST['maintab']);
+	$smarty->assign("maintab",vtlib_purify($_REQUEST['maintab']));
 	
 	
 $smarty->assign("THEME", $theme);
@@ -280,7 +281,16 @@ $smarty->assign("ID", $focus->id);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
-$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
+$smarty->assign("DUPLICATE",vtlib_purify($_REQUEST['isDuplicate']));
+
+if ($activity_mode == 'Task') {
+	$custom_fields_data = getCalendarCustomFields(getTabid('Calendar'),'edit',$focus->column_fields);
+} else {
+	$custom_fields_data = getCalendarCustomFields(getTabid('Events'),'edit',$focus->column_fields);
+}
+$smarty->assign("CUSTOM_FIELDS_DATA", $custom_fields_data);
+
+$smarty->assign("REPEAT_LIMIT_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 $smarty->display("ActivityEditView.tpl");
 

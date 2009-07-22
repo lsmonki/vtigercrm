@@ -26,6 +26,7 @@
 		<form name="NewRep" method="POST" ENCTYPE="multipart/form-data" action="index.php" style="margin:0px" onSubmit="return changeSteps();">
 		<input type="hidden" name="module" value="Reports">
 		<input type="hidden" name="primarymodule" value="{$REP_MODULE}">
+		<input type="hidden" name="record" value="{$RECORDID}">
 		<input type="hidden" name="file" value="NewReport1">
 		<input type="hidden" name="action" value="ReportsAjax">
 
@@ -52,12 +53,13 @@
 									<tr><td class="settingsTabList" style="padding-left:10px;">5. {$MOD.LBL_SPECIFY_GROUPING}</td></tr>
 									<tr><td class="settingsTabList" style="padding-left:10px;">6. {$MOD.LBL_CALCULATIONS}</td></tr>
 									<tr><td class="settingsTabList" style="padding-left:10px;">7. {$MOD.LBL_FILTERS} </td></tr>
+									<tr><td class="settingsTabList" style="padding-left:10px;">8. {$MOD.LBL_SHARING} </td></tr>
 								</table>
 							</td>
 							<td width="75%" valign="top"  bgcolor=white >
 								<!-- STEP 1 -->
 								<div id="step1" style="display:block;">
-									<table width="100%" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF" class="small">
+									<table width="100%" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF" height="500" class="small">
 										<tr>
 											<td colspan="2">
 												<span class="genHeaderGray">{$MOD.LBL_REPORT_DETAILS}</span><br>
@@ -87,36 +89,56 @@
 											<td align="left" style="padding-left:5px;"><textarea name="reportdes" class="txtBox" rows="5">{$REPORTDESC}</textarea></td>
 										</tr>
 										<tr> 
-							 	                        <td colspan="2" height="285">&nbsp;</td> 
+							 	                        <td colspan="2" height="310">&nbsp;</td> 
 										</tr>
 										
 									</table>
 								</div>
 								<!-- STEP 2 -->
 								<div id="step2" style="display:none;">
-									<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" width="100%">
-										<tr>
+									<table class="small" bgcolor="#ffffff" border="0" cellpadding="5" cellspacing="0" height="500" width="100%">
+										<tr height='10%'>
 										<td colspan="2">
 											<span class="genHeaderGray">{$MOD.LBL_RELATIVE_MODULE}</span><br>
 											{$MOD.LBL_SELECT_RELATIVE_MODULE_FOR_REPORT}<hr>
 										</td>
 										</tr>
-										<tr>
-											<td style="padding-right: 5px;" align="right" nowrap width="25%"><b>{$MOD.LBL_NEW_REP0_HDR2}</b></td>
-											<td style="padding-left: 5px;" align="left" width="75%">
-												<select name="secondarymodule" class="txtBox">
-												<option value="">--None--</option>
-												{foreach item=relmod from=$RELATEDMODULES}
-												{if $SEC_MODULE eq $relmod}
-													<option selected value="{$relmod}">{$APP.$relmod}</option>
-												{else}
-													<option value="{$relmod}">{$APP.$relmod}</option>
-												{/if}
-												{/foreach}
-												</select>
-											</td>
+										<tr class='small' height='5%'><td colspan="2">{if $RESTRICTEDMODULES neq ''} <div class='dvtCellInfo' style='margin-left: 10px;'>{$MOD.LBL_NOT_ACTIVE}<font color="red"><b> {$RESTRICTEDMODULES} </b></font> </div>{/if}</td>
 										</tr>
-										<tr><td colspan="2" height="438">&nbsp;</td></tr> 
+										<tr valign=top  height="70%">
+											{if $RELATEDMODULES|@count > 0}
+												<td style="padding-right: 5px;" align="right" nowrap width="25%"><b>{$MOD.LBL_NEW_REP0_HDR2}</b></td>
+												<td style="padding-left: 5px; " align="left" width="75%">
+													<!--select name="secondarymodule" class="txtBox">
+													<option value="">--None--</option -->
+													<table class="small">
+													{foreach item=relmod from=$RELATEDMODULES}
+														{if $SEC_MODULE.$relmod eq 1}
+															<tr valign='top'><td><input type='checkbox' name="secondarymodule_{$relmod}" checked value="{$relmod}" />
+																{if $APP.$relmod neq ''}
+																	{$APP.$relmod}
+																{else}
+																	{$relmod}
+																{/if}
+															</td></tr>
+														{else}
+															<tr valign='top'><td><input type='checkbox' name="secondarymodule_{$relmod}" value="{$relmod}" />
+																{if $APP.$relmod neq ''}
+																	{$APP.$relmod}
+																{else}
+																	{$relmod}
+																{/if}
+															</td></tr>
+														{/if}
+													{/foreach}
+													</table>
+													<!--/select-->
+												</td>
+											{else}
+												<td style="padding-right: 5px;" align="left" nowrap width="25%"><b>{$MOD.NO_REL_MODULES}</b></td>
+											{/if}
+										</tr>
+										<tr><td colspan="2" height="350">&nbsp;</td></tr> 
 									</table>
 							</div>
 						</td>
@@ -152,6 +174,17 @@
 	hide('step1');
 	show('step2');
 	document.getElementById('back_rep').disabled = false;
+	getObj('step1label').className = 'settingsTabList'; 
+	getObj('step2label').className = 'settingsTabSelected';
+</script>
+{/literal}
+{/if}
+{if $BACK eq 'false'}
+{literal}
+<script>
+	hide('step1');
+	show('step2');
+	document.getElementById('back_rep').disabled = true;
 	getObj('step1label').className = 'settingsTabList'; 
 	getObj('step2label').className = 'settingsTabSelected';
 </script>

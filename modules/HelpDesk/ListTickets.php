@@ -12,7 +12,7 @@
 /**	Function to get the list of tickets for the currently loggedin user
 **/
  
-function getMyTickets()
+function getMyTickets($maxval,$calCnt)
 {
 	global $log;
 	$log->debug("Entering getMyTickets() method ...");
@@ -22,26 +22,25 @@ function getMyTickets()
 	global $adb;
 	$current_module_strings = return_module_language($current_language, 'HelpDesk');
 	$theme_path="themes/".$theme."/";
-	$image_path=$theme_path."images/";
+	$image_path="themes/images/";
 
-	$search_query="select vtiger_troubletickets.ticketid, parent_id, priority, vtiger_troubletickets.status, category, vtiger_troubletickets.title, vtiger_crmentity.description, update_log, version_id,
-	vtiger_crmentity.createdtime, vtiger_crmentity.modifiedtime, 
-	vtiger_contactdetails.firstname, vtiger_contactdetails.lastname, 
-	vtiger_account.accountid, vtiger_account.accountname, 
-	vtiger_users.user_name from 
-	vtiger_troubletickets 
-	inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_troubletickets.ticketid 
-	inner join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid 
-	left join vtiger_contactdetails on vtiger_troubletickets.parent_id = vtiger_contactdetails.contactid 
-	left join vtiger_account on vtiger_account.accountid = vtiger_troubletickets.parent_id 
-	left join vtiger_seticketsrel on vtiger_seticketsrel.ticketid = vtiger_troubletickets.ticketid 
-	where vtiger_crmentity.smownerid = ? and vtiger_crmentity.deleted = 0 and vtiger_troubletickets.status <> 'Closed'  ORDER BY createdtime DESC";
+	$search_query  = "SELECT vtiger_troubletickets.*, vtiger_crmentity.*
+		FROM vtiger_troubletickets 
+		INNER JOIN vtiger_crmentity on vtiger_crmentity.crmid = vtiger_troubletickets.ticketid 
+		INNER JOIN vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
+		where vtiger_crmentity.smownerid = ? and vtiger_crmentity.deleted = 0 and vtiger_troubletickets.status <> 'Closed' ORDER BY createdtime DESC";
 
-	$resultcount = $adb->num_rows($adb->pquery($search_query, array($current_user->id)));
-	if($resultcount > 0)
+	$search_query .= " LIMIT 0," . $adb->sql_escape_string($maxval);
+	
+	
+	if($calCnt == 'calculateCnt') {
+		$list_result_rows = $adb->pquery(mkCountQuery($search_query), array($current_user->id));
+		return $adb->query_result($list_result_rows, 0, 'count');
+	}
+	
+	$tktresult = $adb->pquery($search_query, array($current_user->id));
+	if($adb->num_rows($tktresult))
 	{
-		$limit_query = $search_query . " limit 0,5";
-		$tktresult = $adb->pquery($limit_query, array($current_user->id));
 		$title=array();
 		$title[]='myTickets.gif';
 		$title[]=$current_module_strings['LBL_MY_TICKETS'];
@@ -49,21 +48,20 @@ function getMyTickets()
 
 		$header=array();
 		$header[]=$current_module_strings['LBL_SUBJECT'];
-		$header[]=$current_module_strings['LBL_TICKET_ID'];
 		$header[]=$current_module_strings['Related To'];
-		$header[]=$current_module_strings['LBL_STATUS'];
-		$header[]=$current_module_strings['LBL_CREATED_DATE'];
-		$header[]=$current_module_strings['LBL_ASSIGNED_TO'];
 
 		$noofrows = $adb->num_rows($tktresult);
 		for ($i=0; $i<$adb->num_rows($tktresult); $i++)
 		{
 			$value=array();
 			$ticketid = $adb->query_result($tktresult,$i,"ticketid");
-			$tickettitle = $adb->query_result($tktresult,$i,"title");
-			$Top_Tickets = (strlen($tickettitle) > 20) ? (substr($tickettitle,0,20).'...') : $tickettitle;
-			$value[]= '<a href="index.php?action=DetailView&module=HelpDesk&record='.$ticketid.'">'.$Top_Tickets.'</a>';
-			$value[]=$ticketid;
+			$viewstatus = $adb->query_result($tktresult,$i,"viewstatus");
+			if($viewstatus == 'Unread')
+				$value[]= '<a style="color:red;" href="index.php?action=DetailView&module=HelpDesk&record='.substr($adb->query_result($tktresult,$i,"ticketid"),0,20).'">'.$adb->query_result($tktresult,$i,"title").'</a>';
+			elseif($viewstatus == 'Marked')
+				$value[]= '<a style="color:yellow;" href="index.php?action=DetailView&module=HelpDesk&record='.substr($adb->query_result($tktresult,$i,"ticketid"),0,20).'">'.$adb->query_result($tktresult,$i,"title").'</a>';
+			else
+				$value[]= '<a href="index.php?action=DetailView&module=HelpDesk&record='.substr($adb->query_result($tktresult,$i,"ticketid"),0,20).'">'.substr($adb->query_result($tktresult,$i,"title"),0,20).'</a>';
 
 			$parent_id = $adb->query_result($tktresult,$i,"parent_id");
 			$parent_name = '';
@@ -73,18 +71,17 @@ function getMyTickets()
 			}
 
 			$value[]=$parent_name;
-			$value[]=$adb->query_result($tktresult,$i,"status");
-			$value[]=getDisplayDate($adb->query_result($tktresult,$i,"createdtime"));
-			$value[]=$adb->query_result($tktresult,$i,"user_name");
 			$entries[$ticketid]=$value;
 		}
-		$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
+		
+		$search_qry = "&query=true&Fields0=vtiger_troubletickets.status&Condition0=isn&Srch_value0=closed&Fields1=vtiger_crmentity.smownerid&Condition1=is&Srch_value1=".$current_user->column_fields['user_name']."&searchtype=advance&search_cnt=2&matchtype=all";
+		
+		$values=Array('ModuleName'=>'HelpDesk','Title'=>$title,'Header'=>$header,'Entries'=>$entries,'search_qry'=>$search_qry);
 		if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )	
 		{
 			$log->debug("Exiting getMyTickets method ...");
 			return $values;
 		}
-		$log->debug("Exiting getMyTickets method ...");
 	}
 	$log->debug("Exiting getMyTickets method ...");
 }
@@ -98,6 +95,12 @@ function getParentLink($parent_id)
 	global $log;
 	$log->debug("Entering getParentLink(".$parent_id.") method ...");
 	global $adb;
+	
+	// Static caching
+	static $__cache_listtickets_parentlink = Array();
+	if(isset($__cache_listtickets_parentlink[$parent_id])) {
+		return $__cache_listtickets_parentlink[$parent_id];
+	}
 
 	$sql = "select setype from vtiger_crmentity where crmid=?";
 	$parent_module = $adb->query_result($adb->pquery($sql, array($parent_id)),0,'setype');
@@ -117,6 +120,9 @@ function getParentLink($parent_id)
 	        $parent_name = '<a href="index.php?action=DetailView&module='.$parent_module.'&record='.$parent_id.'">'.$parentname.'</a>';
 	}
 
+	// Add to cache
+	$__cache_listtickets_parentlink[$parent_id] = $parent_name;
+	
 	$log->debug("Exiting getParentLink method ...");
 	return $parent_name;
 }

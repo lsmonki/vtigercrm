@@ -23,9 +23,7 @@
 
 include_once('config.php');
 require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
-require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
@@ -35,14 +33,16 @@ class PurchaseOrder extends CRMEntity {
 	var $db;
 		
 	var $table_name = "vtiger_purchaseorder";
+	var $table_index= 'purchaseorderid';
 	var $tab_name = Array('vtiger_crmentity','vtiger_purchaseorder','vtiger_pobillads','vtiger_poshipads','vtiger_purchaseordercf');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_purchaseorder'=>'purchaseorderid','vtiger_pobillads'=>'pobilladdressid','vtiger_poshipads'=>'poshipaddressid','vtiger_purchaseordercf'=>'purchaseorderid');
-	
+	/**
+	 * Mandatory table for supporting custom fields.
+	 */
+	var $customFieldTable = Array('vtiger_purchaseordercf', 'purchaseorderid');
 	var $entity_table = "vtiger_crmentity";
 	
 	var $billadr_table = "vtiger_pobillads";
-
-	var $module_id = "purchaseorderid";
 
 	var $column_fields = Array();
 
@@ -53,32 +53,40 @@ class PurchaseOrder extends CRMEntity {
 
 	// This is the list of vtiger_fields that are in the lists.
 	var $list_fields = Array(
-				'Order No'=>Array('crmentity'=>'crmid'),
+				//  Module Sequence Numbering
+				//'Order No'=>Array('crmentity'=>'crmid'),
+				'Order No'=>Array('purchaseorder'=>'purchaseorder_no'),
+				// END
 				'Subject'=>Array('purchaseorder'=>'subject'),
 				'Vendor Name'=>Array('purchaseorder'=>'vendorid'), 
 				'Tracking Number'=>Array('purchaseorder'=> 'tracking_no'),
+				'Total'=>Array('purchaseorder'=>'total'),
 				'Assigned To'=>Array('crmentity'=>'smownerid')
 				);
 	
 	var $list_fields_name = Array(
-				        'Order No'=>'',
+				        'Order No'=>'purchaseorder_no',
 				        'Subject'=>'subject',
 				        'Vendor Name'=>'vendor_id',
 					'Tracking Number'=>'tracking_no',
+					'Total'=>'hdnGrandTotal',
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';
 
 	var $search_fields = Array(
-				'Order No'=>Array('crmentity'=>'crmid'),
+				'Order No'=>Array('purchaseorder'=>'purchaseorder_no'),
 				'Subject'=>Array('purchaseorder'=>'subject'), 
 				);
 	
 	var $search_fields_name = Array(
-				        'Order No'=>'',
+				        'Order No'=>'purchaseorder_no',
 				        'Subject'=>'subject',
 				      );
-
+	// Used when enabling/disabling the mandatory fields for the module.
+	// Refers to vtiger_field.fieldname values.
+	var $mandatory_fields = Array('subject', 'vendor_id','createdtime' ,'modifiedtime');
+	
 	// This is the list of vtiger_fields that are required.
 	var $required_fields =  array("accountname"=>1);
 
@@ -86,22 +94,22 @@ class PurchaseOrder extends CRMEntity {
 	var $default_order_by = 'subject';
 	var $default_sort_order = 'ASC';
 
-	var $groupTable = Array('vtiger_pogrouprelation','purchaseorderid');
-
+	//var $groupTable = Array('vtiger_pogrouprelation','purchaseorderid');
 	/** Constructor Function for Order class
 	 *  This function creates an instance of LoggerManager class using getLogger method
 	 *  creates an instance for PearDatabase class and get values for column_fields array of Order class.
 	 */
 	function PurchaseOrder() {
 		$this->log =LoggerManager::getLogger('PurchaseOrder');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->column_fields = getColumnFields('PurchaseOrder');
 	}
 
 	function save_module($module)
 	{
+		global $adb;
 		//in ajax save we should not call this function, because this will delete all the existing product values
-		if($_REQUEST['action'] != 'PurchaseOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW')
+		if($_REQUEST['action'] != 'PurchaseOrderAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW' && $_REQUEST['action'] != 'MassEditSave')
 		{
 			//Based on the total Number of rows we will save the product relationship with this entity
 			saveInventoryProductDetails(&$this, 'PurchaseOrder', $this->update_prod_stock);
@@ -110,7 +118,7 @@ class PurchaseOrder extends CRMEntity {
 		//In Ajax edit, if the status changed to Received Shipment then we have to update the product stock
 		if($_REQUEST['action'] == 'PurchaseOrderAjax' && $this->update_prod_stock == 'true')
 		{
-			$inventory_res = $this->db->query("select productid, quantity from vtiger_inventoryproductrel where id=$this->id");
+			$inventory_res = $this->db->pquery("select productid, quantity from vtiger_inventoryproductrel where id=?",array($this->id));
 			$noofproducts = $this->db->num_rows($inventory_res);
 
 			//We have to update the stock for all the products in this PO
@@ -123,6 +131,11 @@ class PurchaseOrder extends CRMEntity {
 				addToProductStock($productid,$quantity);
 			}
 		}
+		
+		// Update the currency id and the conversion rate for the purchase order
+		$update_query = "update vtiger_purchaseorder set currency_id=?, conversion_rate=? where purchaseorderid=?";
+		$update_params = array($this->column_fields['currency_id'], $this->column_fields['conversion_rate'], $this->id); 
+		$adb->pquery($update_query, $update_params);
 	}	
 
 
@@ -135,7 +148,7 @@ class PurchaseOrder extends CRMEntity {
 		global $log;
                 $log->debug("Entering getSortOrder() method ...");	
 		if(isset($_REQUEST['sorder'])) 
-			$sorder = $_REQUEST['sorder'];
+			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
 		else
 			$sorder = (($_SESSION['PURCHASEORDER_SORT_ORDER'] != '')?($_SESSION['PURCHASEORDER_SORT_ORDER']):($this->default_sort_order));
 		$log->debug("Exiting getSortOrder() method ...");
@@ -149,10 +162,16 @@ class PurchaseOrder extends CRMEntity {
 	{
 		global $log;
                 $log->debug("Entering getOrderBy() method ...");
+                
+		$use_default_order_by = '';		
+		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
+			$use_default_order_by = $this->default_order_by;
+		}
+		
 		if (isset($_REQUEST['order_by'])) 
-			$order_by = $_REQUEST['order_by'];
+			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else
-			$order_by = (($_SESSION['PURCHASEORDER_ORDER_BY'] != '')?($_SESSION['PURCHASEORDER_ORDER_BY']):($this->default_order_by));
+			$order_by = (($_SESSION['PURCHASEORDER_ORDER_BY'] != '')?($_SESSION['PURCHASEORDER_ORDER_BY']):($use_default_order_by));
 		$log->debug("Exiting getOrderBy method ...");
 		return $order_by;
 	}	
@@ -161,24 +180,46 @@ class PurchaseOrder extends CRMEntity {
 	 *  This function accepts the id as arguments and execute the MySQL query using the id
 	 *  and sends the query and the id as arguments to renderRelatedActivities() method 
 	 */
-	function get_activities($id)
-	{
-		global $log,$singlepane_view;
+	function get_activities($id, $cur_tab_id, $rel_tab_id, $actions=false) {
+		global $log, $singlepane_view,$currentModule,$current_user;
 		$log->debug("Entering get_activities(".$id.") method ...");
-		global $app_strings;
-		require_once('modules/Calendar/Activity.php');
-		$focus = new Activity();
+		$this_module = $currentModule;
 
-		$button = '';
-
+        $related_module = vtlib_getModuleNameById($rel_tab_id);
+		require_once("modules/$related_module/Activity.php");
+		$other = new Activity();
+        vtlib_setup_modulevars($related_module, $other);		
+		$singular_modname = vtlib_toSingular($related_module);
+		
+		$parenttab = getParentTab();
+		
 		if($singlepane_view == 'true')
-			$returnset = '&return_module=PurchaseOrder&return_action=DetailView&return_id='.$id;
+			$returnset = '&return_module='.$this_module.'&return_action=DetailView&return_id='.$id;
 		else
-			$returnset = '&return_module=PurchaseOrder&return_action=CallRelatedList&return_id='.$id;
+			$returnset = '&return_module='.$this_module.'&return_action=CallRelatedList&return_id='.$id;
+		
+		$button = '';
+				
+		$button .= '<input type="hidden" name="activity_mode">';
+		
+		if($actions) {
+			if(is_string($actions)) $actions = explode(',', strtoupper($actions));
+			if(in_array('ADD', $actions) && isPermitted($related_module,1, '') == 'yes') {
+				$button .= "<input title='".getTranslatedString('LBL_NEW'). " ". getTranslatedString('LBL_TODO', $related_module) ."' class='crmbutton small create'" .
+					" onclick='this.form.action.value=\"EditView\";this.form.module.value=\"$related_module\";this.form.return_module.value=\"$this_module\";this.form.activity_mode.value=\"Task\";' type='submit' name='button'" .
+					" value='". getTranslatedString('LBL_ADD_NEW'). " " . getTranslatedString('LBL_TODO', $related_module) ."'>&nbsp;";
+			}
+		}
 
-		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid,vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_crmentity.crmid left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname where vtiger_seactivityrel.crmid=".$id." and activitytype='Task' and vtiger_crmentity.deleted=0 and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Deferred') ";
-		$log->debug("Exiting get_activities method ...");
-		return GetRelatedList('PurchaseOrder','Calendar',$focus,$query,$button,$returnset);
+		$query = "SELECT case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name,vtiger_contactdetails.lastname, vtiger_contactdetails.firstname, vtiger_contactdetails.contactid,vtiger_activity.*,vtiger_seactivityrel.*,vtiger_crmentity.crmid, vtiger_crmentity.smownerid, vtiger_crmentity.modifiedtime from vtiger_activity inner join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid where vtiger_seactivityrel.crmid=".$id." and activitytype='Task' and vtiger_crmentity.deleted=0 and (vtiger_activity.status is not NULL && vtiger_activity.status != 'Completed') and (vtiger_activity.status is not NULL and vtiger_activity.status != 'Deferred') ";
+		
+		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset); 
+		
+		if($return_value == null) $return_value = Array();
+		$return_value['CUSTOM_BUTTON'] = $button;
+		
+		$log->debug("Exiting get_activities method ...");		
+		return $return_value;
 	}
 
 	/** Function to get the activities history associated with the Purchase Order
@@ -195,8 +236,7 @@ class PurchaseOrder extends CRMEntity {
 				inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_activity.activityid
 				left join vtiger_cntactivityrel on vtiger_cntactivityrel.activityid= vtiger_activity.activityid
 				left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_cntactivityrel.contactid
-				left join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid
-                                left join vtiger_groups on vtiger_groups.groupname=vtiger_activitygrouprelation.groupname
+                                left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
 				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
 			where vtiger_activity.activitytype='Task'
 				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred')
@@ -208,44 +248,6 @@ class PurchaseOrder extends CRMEntity {
 		return getHistory('PurchaseOrder',$query,$id);
 	}
 
-	/** Function to get the attachments associated with the Purchase Order
-	 *  This function accepts the id as arguments and execute the MySQL query using the id
-	 *  and sends the query and the id as arguments to renderRelatedAttachments() method.
-	 */
-	function get_attachments($id)
-	{
-		global $log;
-		$log->debug("Entering get_attachments(".$id.") method ...");
-
-		$query = "select vtiger_notes.title, 'Notes      '  ActivityType, vtiger_notes.filename,
-		vtiger_attachments.type FileType, crm2.modifiedtime lastmodified,
-		vtiger_seattachmentsrel.attachmentsid attachmentsid, vtiger_notes.notesid crmid,
-		vtiger_notes.notecontent description, vtiger_users.user_name
-		from vtiger_notes
-			inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
-			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_senotesrel.crmid
-			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_notes.notesid and crm2.deleted=0
-			left join vtiger_seattachmentsrel  on vtiger_seattachmentsrel.crmid =vtiger_notes.notesid
-			left join vtiger_attachments on vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid
-			inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
-		where vtiger_crmentity.crmid=".$id;
-		
-		$query .= ' union all ';
-
-		$query .= "select vtiger_attachments.subject  title ,'Attachments'  ActivityType,
-		vtiger_attachments.name  filename, vtiger_attachments.type  FileType, crm2.modifiedtime  lastmodified,
-		vtiger_attachments.attachmentsid  attachmentsid, vtiger_seattachmentsrel.attachmentsid crmid,
-		vtiger_attachments.description, vtiger_users.user_name
-		from vtiger_attachments
-			inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid= vtiger_attachments.attachmentsid
-			inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_seattachmentsrel.crmid
-			inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_attachments.attachmentsid
-			inner join vtiger_users on crm2.smcreatorid= vtiger_users.id
-		where vtiger_crmentity.crmid=".$id;
-
-		$log->debug("Exiting get_attachments method ...");
-		return getAttachmentsAndNotes('PurchaseOrder',$query,$id,$sid='purchaseorderid');
-	}
 
 	/**	Function used to get the Status history of the Purchase Order
 	 *	@param $id - purchaseorder id
@@ -260,7 +262,7 @@ class PurchaseOrder extends CRMEntity {
 		global $mod_strings;
 		global $app_strings;
 
-		$query = 'select vtiger_postatushistory.*, vtiger_purchaseorder.subject from vtiger_postatushistory inner join vtiger_purchaseorder on vtiger_purchaseorder.purchaseorderid = vtiger_postatushistory.purchaseorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid where vtiger_crmentity.deleted = 0 and vtiger_purchaseorder.purchaseorderid = ?';
+		$query = 'select vtiger_postatushistory.*, vtiger_purchaseorder.purchaseorder_no from vtiger_postatushistory inner join vtiger_purchaseorder on vtiger_purchaseorder.purchaseorderid = vtiger_postatushistory.purchaseorderid inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid where vtiger_crmentity.deleted = 0 and vtiger_purchaseorder.purchaseorderid = ?';
 		$result=$adb->pquery($query, array($id));
 		$noofrows = $adb->num_rows($result);
 
@@ -287,7 +289,10 @@ class PurchaseOrder extends CRMEntity {
 		{
 			$entries = Array();
 
-			$entries[] = $row['purchaseorderid'];
+			//Module Sequence Numbering
+			//$entries[] = $row['purchaseorderid'];
+			$entries[] = $row['purchaseorder_no'];
+			// END
 			$entries[] = $row['vendorname'];
 			$entries[] = $row['total'];
 			$entries[] = (in_array($row['postatus'], $postatus_array))? $row['postatus']: $error_msg;
@@ -302,7 +307,58 @@ class PurchaseOrder extends CRMEntity {
 
 		return $return_data;
 	}
+	/*
+	 * Function to get the secondary query part of a report 
+	 * @param - $module primary module name
+	 * @param - $secmodule secondary module name
+	 * returns the query string formed on fetching the related data for report for secondary module
+	 */
+	function generateReportsSecQuery($module,$secmodule){
+		$qry = " left join  on vtiger_purchaseorder. = "; 
+		$query = $this->getRelationQuery($module,$secmodule,"vtiger_purchaseorder","purchaseorderid");
+		$query .= " left join vtiger_crmentity as vtiger_crmentityPurchaseOrder on vtiger_crmentityPurchaseOrder.crmid=vtiger_purchaseorder.purchaseorderid and vtiger_crmentityPurchaseOrder.deleted=0
+			left join vtiger_purchaseordercf on vtiger_purchaseorder.purchaseorderid = vtiger_purchaseordercf.purchaseorderid  
+			left join vtiger_pobillads on vtiger_purchaseorder.purchaseorderid=vtiger_pobillads.pobilladdressid
+			left join vtiger_poshipads on vtiger_purchaseorder.purchaseorderid=vtiger_poshipads.poshipaddressid
+			left join vtiger_users as vtiger_usersPurchaseOrder on vtiger_usersPurchaseOrder.id = vtiger_crmentityPurchaseOrder.smownerid
+			left join vtiger_groups as vtiger_groupsPurchaseOrder on vtiger_groupsPurchaseOrder.groupid = vtiger_crmentityPurchaseOrder.smownerid
+			left join vtiger_vendor as vtiger_vendorRelPurchaseOrder on vtiger_vendorRelPurchaseOrder.vendorid = vtiger_purchaseorder.vendorid
+			left join vtiger_contactdetails as vtiger_contactdetailsPurchaseOrder on vtiger_contactdetailsPurchaseOrder.contactid = vtiger_purchaseorder.contactid ";
 
+		return $query;
+	}
+
+	/*
+	 * Function to get the relation tables for related modules 
+	 * @param - $secmodule secondary module name
+	 * returns the array with table names and fieldnames storing relations between module and this module
+	 */
+	function setRelationTables($secmodule){
+		$rel_tables = array (
+			"Calendar" =>array("vtiger_seactivityrel"=>array("crmid","activityid"),"vtiger_purchaseorder"=>"purchaseorderid"),
+			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_purchaseorder"=>"purchaseorderid"),
+			"Contacts" => array("vtiger_purchaseorder"=>array("purchaseorderid","contactid")),
+		);
+		return $rel_tables[$secmodule];
+	}
+	
+	// Function to unlink an entity with given Id from another entity
+	function unlinkRelationship($id, $return_module, $return_id) {
+		global $log;
+		if(empty($return_module) || empty($return_id)) return;
+		
+		if($return_module == 'Vendors') {
+			$sql_req ='UPDATE vtiger_crmentity SET deleted = 1 WHERE crmid= ?';
+			$this->db->pquery($sql_req, array($id));
+		} elseif($return_module == 'Contacts') {
+			$sql_req ='UPDATE vtiger_purchaseorder SET contactid=0 WHERE purchaseorderid = ?';
+			$this->db->pquery($sql_req, array($id));
+		} else {
+			$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
+			$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
+			$this->db->pquery($sql, $params);
+		}
+	}
 	
 }
 

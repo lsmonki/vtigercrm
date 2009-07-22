@@ -13,21 +13,21 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 <br>
 	<div align=center>
 			{include file="SetMenu.tpl"}
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-				<form action="index.php" method="post" name="tandc">
+				<form action="index.php" method="post" name="tandc" onsubmit="VtigerJS_DialogBox.block();">
 				<input type="hidden" name="server_type" value="proxy">
 				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="action" value="index">
 				<input type="hidden" name="proxy_server_mode">
 				<input type="hidden" name="parenttab" value="Settings">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}proxy.gif" alt="{$MOD.LBL_PROXY}" width="48" height="48" border=0 title="{$MOD.LBL_PROXY}"></td>
+					<td width=50 rowspan=2 valign=top><img src="{'proxy.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_PROXY}" width="48" height="48" border=0 title="{$MOD.LBL_PROXY}"></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_PROXY_SERVER_SETTINGS} </b></td>
 				</tr>
 				<tr>
@@ -64,7 +64,7 @@
                             <td width="20%" nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_SERVER_ADDRESS} </strong></td>
                             <td width="80%" class="small cellText">
 				{if $smarty.request.server neq ''}
-				<input type="text" class="detailedViewTextBox small" value="{$smarty.request.server}" name="server"></strong>
+				<input type="text" class="detailedViewTextBox small" value="{$smarty.request.server|@vtlib_purify}" name="server"></strong>
 				{else}
 				<input type="text" class="detailedViewTextBox small" value="{$PROXYSERVER}" name="server"></strong>
 				{/if}
@@ -74,7 +74,7 @@
                             <td width="20%" nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_PROXY_PORT} </strong></td>
                             <td width="80%" class="small cellText">
 				{if $smarty.request.port neq ''}
-                                <input type="text" class="detailedViewTextBox small" value="{$smarty.request.port}" name="port"></strong>
+                                <input type="text" class="detailedViewTextBox small" value="{$smarty.request.port|@vtlib_purify}" name="port"></strong>
 				{else}
                                 <input type="text" class="detailedViewTextBox small" value="{$PROXYPORT}" name="port"></strong>
 				{/if}
@@ -85,7 +85,7 @@
                             <td nowrap class="small cellLabel"><font color="red">*</font><strong>{$MOD.LBL_USERNAME}</strong></td>
                             <td class="small cellText">
 				{if $smarty.request.server_username neq ''}
-				<input type="text" class="detailedViewTextBox small" value="{$smarty.request.server_username}" name="server_username">
+				<input type="text" class="detailedViewTextBox small" value="{$smarty.request.server_username|@vtlib_purify}" name="server_username">
 				{else}
 				<input type="text" class="detailedViewTextBox small" value="{$PROXYUSER}" name="server_username">
 				{/if}
@@ -149,7 +149,7 @@
 		
 	</div>
 </td>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </tbody>
 </table>

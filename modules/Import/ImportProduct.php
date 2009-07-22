@@ -28,7 +28,7 @@ require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('modules/Contacts/Contacts.php');
 require_once('modules/Potentials/Potentials.php');
-require_once('modules/Notes/Notes.php');
+require_once('modules/Documents/Documents.php');
 require_once('modules/Emails/Emails.php');
 require_once('modules/Accounts/Accounts.php');
 require_once('modules/Products/Products.php');
@@ -43,6 +43,8 @@ class ImportProduct extends Products {
 	var $special_functions =  array(
 					"assign_user",
 					"map_vendor_name",
+					"map_member_of",
+					"modseq_number",
 				       );
 
 	var $importable_fields = Array();
@@ -59,7 +61,6 @@ class ImportProduct extends Products {
 		{
 			$this->db->println("searching and assigning ".$ass_user);
 
-			//$result = $this->db->query("select id from vtiger_users where user_name = '".$ass_user."'");
 			$result = $this->db->pquery("select id from vtiger_users where id = ?", array($ass_user));
 			if($this->db->num_rows($result)!=1)
 			{
@@ -87,12 +88,11 @@ class ImportProduct extends Products {
 	/** Constructor which will set the importable_fields as $this->importable_fields[$key]=1 in this object where key is the fieldname in the field table
 	 */
 	function ImportProduct() {
-		
+		parent::Products();
 		$this->log = LoggerManager::getLogger('import_product');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->db->println("IMP ImportProduct");
 		$this->initImportableFields("Products");
-		
 		$this->db->println($this->importable_fields);
 	}
 
@@ -125,6 +125,39 @@ class ImportProduct extends Products {
 		$adb->println("Exit map_vendor_name. Fetched Vendor for '".$vendor_name."' and the vendorid = $vendor_id");
         }
 
+	/** Function used to map with existing Member Of(Product) if the product is map with an member of during import
+    */
+	function map_member_of()
+	{
+		global $adb;
 
+		$product_name = $this->column_fields['product_id'];
+		$adb->println("Entering map_member_of product_id=".$product_name);
+
+		if ((! isset($product_name) || $product_name == '') )
+		{
+			$adb->println("Exit map_member_of. Product Name(Member Of) not set for this entity.");
+			return; 
+		}
+
+		$product_name = trim($product_name);
+
+		//Query to get the available Product which is not deleted
+		$query = "select productid from vtiger_products inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_products.productid WHERE vtiger_products.productname=? and vtiger_crmentity.deleted=0";
+		$product_id = $adb->query_result($adb->pquery($query, array($product_name)),0,'productid');
+
+		if($product_id == '' || !isset($product_id))
+			$product_id = 0;
+
+		$this->column_fields['product_id'] = $product_id;
+
+		$adb->println("Exit map_member_of. Fetched Account for '".$product_name."' and the account_id = $product_id");
+    }
+
+	//Module Sequence Numbering	
+	function modseq_number() {
+		$this->column_fields['product_no'] = '';
+	}
+	// END
 }
 ?>

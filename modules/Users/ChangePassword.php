@@ -69,7 +69,7 @@ function set_password(form) {
 }
 </script>
 
-<form name="ChangePassword">
+<form name="ChangePassword" onsubmit="VtigerJS_DialogBox.block();">
 <?php echo get_form_header($mod_strings['LBL_CHANGE_PASSWORD'], "", false); ?>
 
 <table width='100%' cellspacing='0' cellpadding='5' border='0' class="small">

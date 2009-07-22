@@ -69,11 +69,11 @@ function ShowFolders(folderid)
 		{include file='Buttons_List.tpl'}
 <script language="JavaScript" type="text/javascript" src="modules/Emails/Emails.js"></script>
 <link rel="stylesheet" type="text/css" href="themes/{$theme}/webmail.css">
-<div id="mailconfchk" class="small" style="position:absolute;display:none;left:350px;top:160px;height:27px;white-space:nowrap;z-index:10000007px;"><font color='red'><b>{$MOD.LBL_CONFIGURE_MAIL_SETTINGS}.<br> {$APP.LBL_PLEASE_CLICK} <a href="index.php?module=Users&action=AddMailAccount&record={$USERID}">{$APP.LBL_HERE}</a> {$APP.LBL_TO_CONFIGURE}</b></font></div>
+<div id="mailconfchk" class="small" style="position:absolute;display:none;left:350px;top:160px;height:27px;white-space:nowrap;z-index:10000007px;"><font color='red'><b>{$MOD.LBL_CONFIGURE_MAIL_SETTINGS}.<br> {$APP.LBL_PLEASE_CLICK} <a href="index.php?module=Users&action=AddMailAccount&record={$USERID}&return_module=Webmails&return_action=index">{$APP.LBL_HERE}</a> {$APP.LBL_TO_CONFIGURE}</b></font></div>
 <!-- Shadow starts here -->
 <table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 	<tr>
-		<td valign=top align=right><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+		<td valign=top align=right><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
 
 		<td class="showPanelBg" valign="top" width="95%" align=center >
 		<!-- Email Client starts here -->
@@ -82,7 +82,7 @@ function ShowFolders(folderid)
 				<tr>
 					<td class="mailClientBg" width="7">&nbsp;</td>
 					<td class="mailClientBg">
-					<form name="massdelete" method="POST">
+					<form name="massdelete" method="POST" onsubmit="VtigerJS_DialogBox.block();">
 						<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 							<!-- Compose, Settings and Name image -->
 							<tr>
@@ -94,11 +94,11 @@ function ShowFolders(folderid)
 										<table cellpadding="5" cellspacing="0" border="0">
 											<tr>
 												<td nowrap style="padding-left:20px;padding-right:20px" class=small>
-												<img src="themes/{$theme}/images/compose.gif" align="absmiddle" />
+												<img src="{'compose.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />
 							&nbsp;<a href="javascript:;" onClick="OpenCompose('','create');" >{$MOD.LBL_COMPOSE}</a>
 												</td>
 												<td nowrap style="padding-left:20px;padding-right:20px" class=small>
-												<img src="{$IMAGE_PATH}webmail_settings.gif" align="absmiddle" />
+												<img src="{'webmail_settings.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />
 							&nbsp;<a href="index.php?module=Users&action=AddMailAccount&record={$USERID}" >{$MOD.LBL_SETTINGS}</a>
 												</td>
 											</tr>
@@ -107,7 +107,7 @@ function ShowFolders(folderid)
 										<td align=right>
 											<table >
 											<tr>
-												<td class="componentName" align=right>{$MOD.LBL_VTIGER_EMAIL_CLIENT}<!-- <img src="{$IMAGE_PATH}titleMailClient.gif" align="right"/> --></td>
+												<td class="componentName" align=right>{$MOD.LBL_VTIGER_EMAIL_CLIENT}<!-- <img src="{'titleMailClient.gif'|@vtiger_imageurl:$THEME}" align="right"/> --></td>
 											</tr>
 											</table>
 									</td>
@@ -127,30 +127,30 @@ function ShowFolders(folderid)
 								<td rowspan="6" class="MatrixLayer1" valign="top" bgcolor="#FFFFFF" style="padding:5px; " align="left" >
 								<!-- Mailbox Tree -->
 								<!-- Inbox -->
-								<img src="themes/{$theme}/images/folder_.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_INBOX}</b>
+								<img src="{'folder_.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_INBOX}</b>
 								<ul style="list-style-type:none;margin-left:10px;margin-top:5px;padding:2px">
-									<li><img src="themes/{$theme}/images/folder.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="{'folder.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;&nbsp;
 										<a href="javascript:;" onClick="ShowFolders(6)" class="webMnu">{$MOD.LBL_QUAL_CONTACT}</a>&nbsp;<b></b>
 									</li>
-									<li><img src="themes/{$theme}/images/mymail.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="{'mymail.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="gotoWebmail();" class="webMnu">{$MOD.LBL_MY_MAILS}</a>&nbsp;<b></b>
 									</li>
 								</ul>
 								<!-- Sent mail -->
-								<img src="themes/{$theme}/images/sentmail.gif" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
+								<img src="{'sentmail.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;<b class="txtGreen">{$MOD.LBL_SENT_MAILS}</b>
 								<ul style="list-style-type:none;margin-left:10px;margin-top:5px;padding:2px">
-									<li><img src="themes/{$theme}/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="{'folder1.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(1)" class="webMnu">{$MOD.LBL_ALLMAILS}</a>&nbsp;<b></b>
-									<li><img src="themes/{$theme}/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="{'folder1.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(2)" class="webMnu">{$MOD.LBL_TO_CONTACTS}</a>&nbsp;<b></b>
 									</li>
-									<li><img src="themes/{$theme}/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="{'folder1.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(3)" class="webMnu">{$MOD.LBL_TO_ACCOUNTS}</a>&nbsp;<b></b>
 									</li>
-									<li><img src="themes/{$theme}/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="{'folder1.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(4)" class="webMnu">{$MOD.LBL_TO_LEADS}</a>&nbsp;
 									</li>
-									<li><img src="themes/{$theme}/images/folder1.gif" align="absmiddle" />&nbsp;&nbsp;
+									<li><img src="{'folder1.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" />&nbsp;&nbsp;
 									<a href="javascript:;" onClick="ShowFolders(5)" class="webMnu">{$MOD.LBL_TO_USERS}</a>&nbsp;
 									</li>
 								</ul>
@@ -206,13 +206,13 @@ function ShowFolders(folderid)
 					<td class="mailClientBg" width="7">&nbsp;</td>
 				</tr>
 				<!-- <tr>
-					<td width="7" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}bottom_left.jpg" align="bottom"  /></td>
+					<td width="7" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{'bottom_left.jpg'|@vtiger_imageurl:$THEME}" align="bottom"  /></td>
 					<td bgcolor="#ECECEC" height="8" style="font-size:1px;" ></td>
-					<td width="8" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{$IMAGE_PATH}bottom_right.jpg" align="bottom" /></td>
+					<td width="8" height="8" style="font-size:1px;font-family:Arial, Helvetica, sans-serif;"><img src="{'bottom_right.jpg'|@vtiger_imageurl:$THEME}" align="bottom" /></td>
 				</tr>-->
 			</table><br/>
 		</td>
-		<td valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+		<td valign=top><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
 		
 		
 	</tr>

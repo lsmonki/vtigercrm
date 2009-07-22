@@ -28,7 +28,7 @@ require_once('include/database/PearDatabase.php');
 $focus = new HelpDesk();
 
 //added to fix 4600
-$search=$_REQUEST['search_url'];
+$search=vtlib_purify($_REQUEST['search_url']);
 
 setObjectValuesFromRequest($focus);
 global $adb,$mod_strings;
@@ -40,7 +40,15 @@ if($mode == 'edit')
 	$usr_qry = $adb->pquery("select * from vtiger_crmentity where crmid=?", array($focus->id));
 	$old_user_id = $adb->query_result($usr_qry,0,"smownerid");
 }
-$fldvalue = $focus->constructUpdateLog($focus, $mode, $_REQUEST['assigned_group_name'], $_REQUEST['assigntype']);
+$grp_name = getGroupName($_REQUEST['assigned_group_id']);
+
+if($_REQUEST['assigntype'] == 'U')  {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_user_id'];
+} elseif($_REQUEST['assigntype'] == 'T'){
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
+}
+
+$fldvalue = $focus->constructUpdateLog($focus, $mode, $grp_name, $_REQUEST['assigntype']);
 $fldvalue = from_html($fldvalue,($mode == 'edit')?true:false);
 
 $focus->save("HelpDesk");
@@ -48,53 +56,22 @@ $focus->save("HelpDesk");
 //After save the record, we should update the log
 $adb->pquery("update vtiger_troubletickets set update_log=? where ticketid=?", array($fldvalue,$focus->id));
 
-//Added to retrieve the existing attachment of the ticket and save it for the new duplicated ticket
-if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST['old_id'] != '')
-{
-        $sql = "select vtiger_attachments.* from vtiger_attachments inner join vtiger_seattachmentsrel on vtiger_seattachmentsrel.attachmentsid=vtiger_attachments.attachmentsid where vtiger_seattachmentsrel.crmid= ?";
-        $result = $adb->pquery($sql, array($_REQUEST['old_id']));
-        if($adb->num_rows($result) != 0)
-	{
-                $attachmentid = $adb->query_result($result,0,'attachmentsid');
-		$filename = decode_html($adb->query_result($result,0,'name'));
-		$filetype = $adb->query_result($result,0,'type');
-		$filepath = $adb->query_result($result,0,'path');
-
-		$new_attachmentid = $adb->getUniqueID("vtiger_crmentity");
-		$date_var = date('YmdHis');
-
-		$upload_filepath = decideFilePath();
-
-		//Read the old file contents and write it as a new file with new attachment id
-		$handle = @fopen($upload_filepath.$new_attachmentid."_".$filename,'w');
-		fputs($handle, file_get_contents($filepath.$attachmentid."_".$filename));
-		fclose($handle);	
-
-		$adb->pquery("update vtiger_troubletickets set filename=? where ticketid=?", array($filename, $focus->id));	
-		$adb->pquery("insert into vtiger_crmentity (crmid,setype,createdtime) values(?,?,?)", array($new_attachmentid, 'HelpDesk Attachment', $date_var));
-		$adb->pquery("insert into vtiger_attachments (attachmentsid,name,description,type,path) values(?,?,?,?,?)", array($new_attachmentid, $filename, '', $filetype, $upload_filepath));
-
-		$adb->pquery("insert into vtiger_seattachmentsrel values(?,?)", array($focus->id, $new_attachmentid));
-	}
-}
-
-
 $return_id = $focus->id;
 
-if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
-if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
+$parenttab = getParentTab();
+if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = vtlib_purify($_REQUEST['return_module']);
 else $return_module = "HelpDesk";
-if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
+if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = vtlib_purify($_REQUEST['return_action']);
 else $return_action = "DetailView";
-if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
+if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = vtlib_purify($_REQUEST['return_id']);
 
 if($_REQUEST['mode'] == 'edit')
 	$reply = 'Re : ';
 else
 	$reply = '';
 
-$subject = '[ '.$mod_strings['LBL_TICKET_ID'].' : '.$focus->id.' ] '.$reply.$_REQUEST['ticket_title'];
-$bodysubject = $mod_strings['LBL_TICKET_ID'].' : '.$focus->id.'<br> '.$mod_strings['LBL_SUBJECT'].$_REQUEST['ticket_title'];
+$subject = $focus->column_fields['ticket_no'] . ' [ '.$mod_strings['LBL_TICKET_ID'].' : '.$focus->id.' ] '.$reply.$_REQUEST['ticket_title'];
+$bodysubject = $mod_strings['Ticket No'] .":<br>" . $focus->column_fields['ticket_no'] . "<br>" . $mod_strings['LBL_TICKET_ID'].' : '.$focus->id.'<br> '.$mod_strings['LBL_SUBJECT'].$_REQUEST['ticket_title'];
 
 $emailoptout = 0;
 
@@ -145,7 +122,7 @@ else
 $_REQUEST['return_id'] = $return_id;
 
 if($_REQUEST['return_module'] == 'Products' & $_REQUEST['product_id'] != '' &&  $focus->id != '')
-	$return_id = $_REQUEST['product_id'];
+	$return_id = vtlib_purify($_REQUEST['product_id']);
 
 //send mail to the assigned to user and the parent to whom this ticket is assigned
 require_once('modules/Emails/mail.php');
@@ -207,6 +184,6 @@ if ($mail_status != '') {
 
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
-if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
-header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&$mail_error_status&viewname=$return_viewname&start=".$_REQUEST['pagenumber'].$search);
+if($_REQUEST['return_viewname'] != '')$return_viewname=vtlib_purify($_REQUEST['return_viewname']);
+header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&$mail_error_status&viewname=$return_viewname&start=".vtlib_purify($_REQUEST['pagenumber']).$search);
 ?>

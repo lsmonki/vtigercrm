@@ -12,9 +12,13 @@
 
 -->*}
 {if $MODULE eq 'HelpDesk'}
-	<form name="QcEditView" onSubmit="return getFormValidate('qcform');" method="POST" action="index.php"  ENCTYPE="multipart/form-data">
+	{literal}
+	<form name="QcEditView" onSubmit="if(getFormValidate('qcform')) { VtigerJS_DialogBox.block(); return true;} else { return false; }" method="POST" action="index.php"  ENCTYPE="multipart/form-data">
+	{/literal}
 {else}
-	<form name="QcEditView" onSubmit="return getFormValidate('qcform');" method="POST" action="index.php">
+	{literal}
+	<form name="QcEditView" onSubmit="if(getFormValidate('qcform')) { VtigerJS_DialogBox.block(); return true;} else { return false; }" method="POST" action="index.php">
+	{/literal}
 {/if}
 
 {if $MODULE eq 'Calendar'}
@@ -25,4 +29,3 @@
 	<input type="hidden" name="record" value="">
 	<input type="hidden" name="action" value="Save">
 	<input type="hidden" name="module" value="{$MODULE}">
-	<input type="hidden" name="assigned_user_id" value="{$USERID}">

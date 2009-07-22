@@ -1,14 +1,12 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *
-********************************************************************************/
-
+ *********************************************************************************/
 
 //5.0.2 to 5.0.3 RC2 database changes - added on 05-01-07
 //we have to use the current object (stored in PatchApply.php) to execute the queries
@@ -18,7 +16,7 @@ $conn = $_SESSION['adodb_current_object'];
 $migrationlog->debug("\n\nDB Changes from 5.0.2 to 5.0.3 RC2 -------- Starts \n\n");
 
 $query_array = Array(
-			"alter table vtiger_entityname add column entityidcolumn varchar(150) NOT NULL",
+			"alter table vtiger_entityname add column entityidcolumn varchar(150)",
 
 			"update vtiger_entityname set entityidcolumn='leadid' where tabid=7",
 			"update vtiger_entityname set entityidcolumn='account_id' where tabid=6",
@@ -38,6 +36,7 @@ $query_array = Array(
 			"update vtiger_entityname set entityidcolumn='pricebookid' where tabid=19",
 			"update vtiger_entityname set entityidcolumn='campaignid' where tabid=26",
 			"update vtiger_entityname set entityidcolumn='id' where tabid=15",
+			"alter table vtiger_entityname MODIFY entityidcolumn varchar(150) NOT NULL",
 			
 			"update vtiger_field set fieldlabel='Part Number' where tabid=14 and fieldname='productcode'",
 
@@ -70,8 +69,6 @@ $query_array = Array(
 foreach($query_array as $query)
 {
 	ExecuteQuery($query);
-
-	/*if($adb->query($query))	$success[] = $query;	else	$failure[] = $query;*/
 }
 
 
@@ -106,11 +103,9 @@ ExecuteQuery("update  vtiger_seproductsrel,vtiger_crmentity set vtiger_seproduct
 
 ExecuteQuery("CREATE TABLE vtiger_version (id int(11) NOT NULL auto_increment, old_version varchar(30) default NULL, current_version varchar(30) default NULL, PRIMARY KEY  (id) ) ENGINE=InnoDB DEFAULT CHARSET=latin1");
 
+ExecuteQuery("delete from vtiger_selectcolumn WHERE columnname LIKE '%vtiger_crmentityRelProducts%'");
 //echo "<br><font color='red'>&nbsp; 5.0.2 ==> 5.0.3 Database changes has been done.</font><br>";
 
 $migrationlog->debug("\n\nDB Changes from 5.0.2 to 5.0.3 RC2 -------- Ends \n\n");
-
-
-
 
 ?>

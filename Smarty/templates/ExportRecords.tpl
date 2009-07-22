@@ -17,20 +17,20 @@
 
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 	<tr>
-   		<td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif" /></td>
+   		<td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}" /></td>
    		<td class="showPanelBg" valign="top" width="100%">
    			<table  cellpadding="0" cellspacing="0" width="100%" border=0>
     				<tr>
  					<td width="50%" valign=top>
-						<form  name="Export_Records"  method="POST">
+						<form  name="Export_Records"  method="POST" onsubmit="VtigerJS_DialogBox.block();">
 							<input type="hidden" name="module" value="{$MODULE}">
 							<input type="hidden" name="action" value="Export">
 							<input type="hidden" name="idstring" value="{$IDSTRING}">
 							<input type="hidden" name="id_cur_str" value="{$IDCURSTR}">
-
 							<table align="center" cellpadding="15" cellspacing="0" width="85%" class="mailClient importLeadUI small" border="0">
 								<tr>
-									<td colspan="2" valign="middle" align="left" class="mailClientBg  genHeaderSmall">{$APP.$MODULE} >> {$APP.LBL_EXPORT} </td>
+									<td colspan="2" valign="middle" align="left" class="mailClientBg  genHeaderSmall">{$MODULELABEL} >> {$APP.LBL_EXPORT} </td>
+									<br>
 								</tr>
 								<tr>
   									<td border="0" cellpadding="5" cellspacing="0" width="50%">
@@ -115,7 +115,7 @@
 								</tr>
 								<tr>
 									<td align="center" colspan="2" border=0 cellspacing=0 cellpadding=5 width=98% class="layerPopupTransport">	
-										<input type="button" name="{$APP.LBL_EXPORT}" value="{$APP.LBL_EXPORT} {$APP.$MODULE} " class="crmbutton small create" onclick="record_export('{$APP.$MODULE}','{$CATEGORY}',this.form,'{$smarty.request.idstring}')"/>&nbsp;&nbsp;
+										<input type="button" name="{$APP.LBL_EXPORT}" value="{$APP.LBL_EXPORT} {$MODULELABEL} " class="crmbutton small create" onclick="record_export('{$MODULELABEL}','{$CATEGORY}',this.form,'{$smarty.request.idstring}')"/>&nbsp;&nbsp;
                 								<input type="button" name="{$APP.LBL_CANCEL_BUTTON_LABEL}" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " class="crmbutton small cancel" onclick="window.history.back()" />
 									</td>
 								</tr>
@@ -125,7 +125,7 @@
 				</tr>
 			</table>
 		</td>
-		<td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif" /></td>
+		<td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}" /></td>
 	</tr>
 </table>
 

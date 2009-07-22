@@ -1,28 +1,27 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
-$pmodule=$_REQUEST['pmodule'];
-$entityid=$_REQUEST['entityid'];
+$pmodule=vtlib_purify($_REQUEST['pmodule']);
+$entityid=vtlib_purify($_REQUEST['entityid']);
 
 if ($pmodule=='Accounts')
 {
-	$querystr="select fieldid,fieldlabel,columnname,tablename from vtiger_field where tabid=6 and uitype=13;"; 
+	$querystr="select fieldid,fieldlabel,columnname,tablename from vtiger_field where tabid=6 and uitype='13' and vtiger_field.presence in (0,2)"; 
 }
 elseif ($pmodule=='Contacts')
 {
-	$querystr="select fieldid,fieldlabel,columnname from vtiger_field where tabid=4 and uitype=13;";
+	$querystr="select fieldid,fieldlabel,columnname from vtiger_field where tabid=4 and uitype='13' and vtiger_field.presence in (0,2)";
 }
 elseif ($pmodule=='Leads')
 {
-	$querystr="select fieldid,fieldlabel,columnname from vtiger_field where tabid=7 and uitype=13;";
+	$querystr="select fieldid,fieldlabel,columnname from vtiger_field where tabid=7 and uitype='13' and vtiger_field.presence in (0,2)";
 }
 $result=$adb->pquery($querystr, array());
 $numrows = $adb->num_rows($result);
@@ -88,7 +87,7 @@ function passemail()
 }
 </script>
 
-<form name="choosemails" method="post">
+<form name="choosemails" method="post" onsubmit="VtigerJS_DialogBox.block();">
 <h4>The following emails are available for the selected record. Please choose the ones you would like to use.</h4>
 <div align="center">
    <table cellpadding="0" cellspacing="0" border="0">

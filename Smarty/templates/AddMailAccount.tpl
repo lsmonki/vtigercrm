@@ -1,12 +1,11 @@
 {*<!--
-/*********************************************************************************
-  ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-   * ("License"); You may not use this file except in compliance with the License
-   * The Original Code is:  vtiger CRM Open Source
-   * The Initial Developer of the Original Code is vtiger.
-   * Portions created by vtiger are Copyright (C) vtiger.
-   * All Rights Reserved.
-  *
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
  ********************************************************************************/
 -->*}
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
@@ -14,20 +13,20 @@
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 
 <tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" valign="top" width="100%">
                 <div class="small" style="padding: 10px;">
                         <span class="lvtHeaderText">{$MOD.LBL_MY_MAIL_SERVER_DET}</span> <br>
                         <hr noshade="noshade" size="1"><br>
 
-  		<form action="index.php" method="post" name="EditView" id="form">
+  		<form action="index.php" method="post" name="EditView" id="form" onsubmit="VtigerJS_DialogBox.block();">
 			<input type="hidden" name="module" value="Users">
 		  	<input type="hidden" name="action">
   			<input type="hidden" name="server_type" value="email">
 			<input type="hidden" name="record" value="{$ID}">
 		        <input type="hidden" name="edit" value="{$EDIT}">
-			<input type="hidden" name="return_module" value="Settings">
-			<input type="hidden" name="return_action" value="index">
+			<input type="hidden" name="return_module" value="{$RETURN_MODULE}">
+			<input type="hidden" name="return_action" value="{$RETURN_ACTION}">
 			<input type="hidden" name="changepassword" value="">
 </tr>	
 		

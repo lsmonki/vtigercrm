@@ -1,17 +1,13 @@
 <?php
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
-
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 //Constructing the Role Array
 $roleDetails=getAllRoleDetails();
@@ -27,13 +23,12 @@ global $mod_strings;
 global $app_strings;
 global $theme;
 $theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
 global $adb;
 
-$mode = $_REQUEST['mode'];
+$mode = vtlib_purify($_REQUEST['mode']);
 if(isset($_REQUEST['shareid']) && $_REQUEST['shareid'] != '')
 {	
-	$shareid=$_REQUEST['shareid'];
+	$shareid=vtlib_purify($_REQUEST['shareid']);
 	$shareInfo=getSharingRuleInfo($shareid);
 	$tabid=$shareInfo[1];
 	$sharing_module=getTabModuleName($tabid);
@@ -41,7 +36,7 @@ if(isset($_REQUEST['shareid']) && $_REQUEST['shareid'] != '')
 }
 else
 {
-	$sharing_module=$_REQUEST['sharing_module'];
+	$sharing_module=vtlib_purify($_REQUEST['sharing_module']);
 	$tabid=getTabid($sharing_module);
 }
 
@@ -244,7 +239,7 @@ elseif($mode == 'edit')
 }
 
 	
-$output.='<div class="layerPopup" id="sharingRule"><form name="newGroupForm" action="index.php" method="post">
+$output.='<div class="layerPopup" id="sharingRule"><form name="newGroupForm" action="index.php" method="post" onsubmit="VtigerJS_DialogBox.block();">
 <input type="hidden" name="module" value="Settings">
 <input type="hidden" name="parenttab" value="Settings">	
 <input type="hidden" name="action" value="SaveSharingRule">
@@ -268,7 +263,7 @@ if($mode == 'edit')
     	$output .=$mod_strings[LBL_EDIT_CUSTOM_RULE].'</td>';
 else
 	$output .=$mod_strings[LBL_ADD_CUSTOM_RULE].'</td>';
-$output .= '<td align="right" class="small"><img src="'.$image_path.'close.gif" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="hide(\'sharingRule\')";></td>
+$output .= '<td align="right" class="small"><img src="'. vtiger_imageurl('close.gif', $theme).'" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="hide(\'sharingRule\')";></td>
 
 </tr>
 </table>

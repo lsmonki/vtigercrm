@@ -18,7 +18,7 @@
 
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%" class="small">
    <tr>
-	<td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif" /></td>
+	<td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}" /></td>
 	<td class="showPanelBg" valign="top" width="100%">
 
 		<table  cellpadding="0" cellspacing="0" width="100%" border=0>
@@ -90,6 +90,11 @@
 						<td colspan="2" align="right" style="padding-right:40px;" class="reportCreateBottom">
 							<input title="{$MOD.LBL_EXPORT_RESULTS_GO}" accessKey="" class="crmButton small save" type="submit" name="button" value="  {$MOD.LBL_EXPORT_RESULTS_GO} &rsaquo; ">
 						</td>
+						<!-- ADDED FOR 5.0.4 GA; STARTS-->
+						<td colspan="2" align="right" style="padding-right:40px;" class="reportCreateBottom">
+							<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
+						</td>
+						<!-- ADDED FOR 5.0.4 GA ; ENDS-->
 				   </tr>				</form>
 				 </table>
 				<br>
@@ -98,6 +103,6 @@
 		</table>
 
 	</td>
-	<td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif" /></td>
+	<td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}" /></td>
    </tr>
 </table>

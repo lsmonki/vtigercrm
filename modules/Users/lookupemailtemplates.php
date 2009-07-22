@@ -10,7 +10,6 @@
 *
  ********************************************************************************/
 
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 global $theme,$current_user;
@@ -24,7 +23,7 @@ $theme_path="themes/".$theme."/";
   <link type="text/css" rel="stylesheet" href="<?php echo $theme_path ?>/style.css"/>
 </head>
 <body>
-            <form action="index.php">
+            <form action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 	     <div class="lvtHeaderText"><?php echo $mod_strings['LBL_EMAIL_TEMPLATES']; ?></div>
 		<hr noshade="noshade" size="1">
 		

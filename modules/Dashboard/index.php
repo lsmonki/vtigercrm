@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Dashboard/index.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header: 
  * Description:  Main file for the Home module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -28,6 +28,7 @@ global $currentModule;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
+require_once($theme_path.'layout_utils.php');
 require_once('include/logging.php');
 
 $graph_array = Array(
@@ -85,8 +86,8 @@ if(isset($_REQUEST['type']) && $_REQUEST['type'] != '')
 			<td class=small>
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
-						<td style="padding-right:0px;padding-left:10px;"><img src="<?php echo $image_path;?>btnL3Add-Faded.gif" border=0></td>	
-					 <td style="padding-right:10px"><img src="<?php echo $image_path;?>btnL3Search-Faded.gif" border=0></td>
+					<td style="padding-right:0px;padding-left:10px;"><img src="<?php echo vtiger_imageurl('btnL3Add-Faded.gif', $theme) ?>" border=0></td>	
+					 <td style="padding-right:10px"><img src="<?php echo vtiger_imageurl('btnL3Search-Faded.gif', $theme) ?>" border=0></td>
 				</tr>
 				</table>
 	</td>
@@ -121,6 +122,7 @@ if($CHAT_DISPLAY == 'true') {
 } 
 ?> 
                     </td>	
+			        <td style="padding-right: 10px;"><img src="<?php echo $image_path;?>btnL3Tracker.gif" alt="<?php echo $app_strings['LBL_LAST_VIEWED']; ?>" title="<?php echo $app_strings['LBL_LAST_VIEWED']; ?>" onclick="fnvshobj(this,'tracker');" style="cursor:pointer;" border="0"></td>
 				</tr>
 				</table>
 	</td>
@@ -128,8 +130,8 @@ if($CHAT_DISPLAY == 'true') {
                <td class="small" align="left" width="5%">
 		<table border=0 cellspacing=0 cellpadding=5>
 			<tr>
-				<td style="padding-right:0px;padding-left:10px;"><img src="<?php echo $image_path;?>tbarImport-Faded.gif" border="0"></td>
-                <td style="padding-right:10px"><img src="<?php echo $image_path;?>tbarExport-Faded.gif" border="0"></td>
+				<td style="padding-right:0px;padding-left:10px;"><img src="<?php echo vtiger_imageurl('tbarImport-Faded.gif', $theme) ?>" border="0"></td>
+                <td style="padding-right:10px"><img src="<?php echo vtiger_imageurl('tbarExport-Faded.gif', $theme) ?>" border="0"></td>
 			</tr>
 		</table>	
 	</td>
@@ -154,7 +156,7 @@ if($CHAT_DISPLAY == 'true') {
 <a name="top"></a>
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
      <tr>
-        <td valign=top><img src="<?php echo $image_path;?>showPanelTopLeft.gif"></td>
+        <td valign=top><img src="<?php echo vtiger_imageurl('showPanelTopLeft.gif', $theme) ?>"></td>
 
 	<td class="showPanelBg" valign="top" width=100% style="padding:10px;">
 
@@ -201,9 +203,9 @@ if($CHAT_DISPLAY == 'true') {
 						</td>
 					</tr>
 					<tr>
-						<td class="dash_border" width="1%"><img src="<?php echo $image_path;?>dash_screw.gif" border="0" align="absmiddle"></td>
+						<td class="dash_border" width="1%"><img src="<?php echo vtiger_imageurl('dash_screw.gif', $theme) ?>" border="0" align="absmiddle"></td>
 						<td class="hdrNameBg small" style="height: 12px;" width="98%">&nbsp;</td>
-						<td class="dash_border" width="1%"><img src="<?php echo $image_path;?>dash_screw.gif" border="0" align="absmiddle"></td>
+						<td class="dash_border" width="1%"><img src="<?php echo vtiger_imageurl('dash_screw.gif', $theme) ?>" border="0" align="absmiddle"></td>
 
 					</tr>
 					<tr>
@@ -251,7 +253,7 @@ if($CHAT_DISPLAY == 'true') {
 										}
 									}else
 									{
-										require_once('modules/Dashboard/display_charts.php'); 
+										require_once('modules/Dashboard/loadDashBoard.php'); 
 									}
 								?>	
 								&nbsp;</td>
@@ -264,9 +266,9 @@ if($CHAT_DISPLAY == 'true') {
 					</tr>
 
 					<tr>
-						<td class="dash_border" width="1%"><img src="<?php echo $image_path;?>dash_screw.gif" border="0" align="absmiddle"></td>
+						<td class="dash_border" width="1%"><img src="<?php echo vtiger_imageurl('dash_screw.gif', $theme) ?>" border="0" align="absmiddle"></td>
 						<td class="dash_white" width="98%">&nbsp;</td>
-						<td class="dash_border" width="1%"><img src="<?php echo $image_path;?>dash_screw.gif" border="0" align="absmiddle"></td>
+						<td class="dash_border" width="1%"><img src="<?php echo vtiger_imageurl('dash_screw.gif', $theme) ?>" border="0" align="absmiddle"></td>
 					</tr>
 					<tr>
 						<td colspan="3" class="dash_bottom">
@@ -309,9 +311,9 @@ if($CHAT_DISPLAY == 'true') {
 						<td colspan="3">
 							<table width="100%" border="0" cellpadding="0" cellspacing="0">
 								<tr>
-									<td width="112"><img src="<?php echo $image_path;?>dash_btm_left.jpg" border="0" align="absmiddle"></td>
+									<td width="112"><img src="<?php echo vtiger_imageurl('dash_btm_left.jpg', $theme) ?>" border="0" align="absmiddle"></td>
 									<td width="100%" class="dash_btm">&nbsp;</td>
-									<td width="129"><img src="<?php echo $image_path;?>dash_btm_right.jpg" border="0" align="absmiddle"></td>
+									<td width="129"><img src="<?php echo vtiger_imageurl('dash_btm_right.jpg', $theme) ?>" border="0" align="absmiddle"></td>
 								</tr>
 							</table>
 						</td>
@@ -323,7 +325,7 @@ if($CHAT_DISPLAY == 'true') {
 	</tr>
 </table>
 </td>
-<td valign=top><img src="<?php echo $image_path;?>showPanelTopRight.gif"></td>
+<td valign=top><img src="<?php echo vtiger_imageurl('showPanelTopRight.gif', $theme) ?>"></td>
    </tr>
 </table>
 
@@ -331,6 +333,7 @@ if($CHAT_DISPLAY == 'true') {
 </html>
 
 
+<script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <script language="javascript" type="text/javascript" src="include/scriptaculous/scriptaculous.js"></script>
 <script>
 function loadDashBoard(oSelect)
@@ -342,7 +345,7 @@ function loadDashBoard(oSelect)
 	oCombo1.selectedIndex = oSelect.selectedIndex;
 	var type = oSelect.options[oSelect.selectedIndex].value; 
 	if(type != 'DashboardHome')
-		url = 'module=Dashboard&action=DashboardAjax&display_view='+gdash_display_type+'&file=display_charts&type='+type;
+		url = 'module=Dashboard&action=DashboardAjax&display_view='+gdash_display_type+'&file=loadDashBoard&type='+type;
 	else	
 		url = 'module=Dashboard&action=DashboardAjax&file=DashboardHome&display_view='+gdash_display_type;
 	new Ajax.Request(
@@ -354,7 +357,7 @@ function loadDashBoard(oSelect)
 			{
 				$("dashChart").innerHTML=response.responseText;
 				$("dashChart").style.display='none';
-				Effect.Appear("dashChart");
+				setTimeout('Effect.Appear("dashChart")', 500);
 				var dashst = document.getElementById('dash_script');
 				eval(dashst.innerHTML);
 				$("dashTitle_div").innerHTML = oCombo.options[oCombo.selectedIndex].text;

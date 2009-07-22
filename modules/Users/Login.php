@@ -29,19 +29,21 @@ $current_module_strings = return_module_language($current_language, 'Users');
 
  define("IN_LOGIN", true);
 
+include_once('vtlib/Vtiger/Language.php');
+
 // Retrieve username and password from the session if possible.
 if(isset($_SESSION["login_user_name"]))
 {
 	if (isset($_REQUEST['default_user_name']))
-		$login_user_name = $_REQUEST['default_user_name'];
+		$login_user_name = vtlib_purify($_REQUEST['default_user_name']);
 	else
-		$login_user_name = $_SESSION['login_user_name'];
+		$login_user_name = vtlib_purify($_SESSION['login_user_name']);
 }
 else
 {
 	if (isset($_REQUEST['default_user_name']))
 	{
-		$login_user_name = $_REQUEST['default_user_name'];
+		$login_user_name = vtlib_purify($_REQUEST['default_user_name']);
 	}
 	elseif (isset($_REQUEST['ck_login_id_vtiger'])) {
 		$login_user_name = get_assigned_user_name($_REQUEST['ck_login_id_vtiger']);
@@ -72,10 +74,10 @@ if(isset($_SESSION["login_error"]))
 }
 
 ?>
-<!--Added to display the footer in the login page by Dina--!>
+<!--Added to display the footer in the login page by Dina-->
 <style type="text/css">@import url("themes/<?php echo $theme; ?>/style.css");</style>
 <script type="text/javascript" language="JavaScript">
-<!-- Begin
+<!-- Begin -->
 function set_focus() {
 	if (document.DetailView.user_name.value != '') {
 		document.DetailView.user_password.focus();
@@ -83,7 +85,7 @@ function set_focus() {
 	}
 	else document.DetailView.user_name.focus();
 }
-//  End -->
+<!-- End -->
 </script>
 
 
@@ -109,14 +111,14 @@ function set_focus() {
 	       		<td class="small z2" align="center">
 			<?php
 				if (isset($_REQUEST['ck_login_language_vtiger'])) {
-					$display_language = $_REQUEST['ck_login_language_vtiger'];
+					$display_language = vtlib_purify($_REQUEST['ck_login_language_vtiger']);
 				}
 				else {
 					$display_language = $default_language;
 				}
 
 				if (isset($_REQUEST['ck_login_theme_vtiger'])) {
-					$display_theme = $_REQUEST['ck_login_theme_vtiger'];
+					$display_theme = vtlib_purify($_REQUEST['ck_login_theme_vtiger']);
 				}
 				else {
 					$display_theme = $default_theme;
@@ -155,7 +157,9 @@ function set_focus() {
 							<tr bgcolor="#f5f5f5">
 								<td class="small" align="right" width="30%"><?php echo $current_module_strings['LBL_LANGUAGE'] ?></td>
 								<td class="small" align="left" width="70%"><select class="small" name='login_language' style="width:70%" tabindex="4">
-									<?php echo get_select_options_with_id(get_languages(), $display_language) ?>
+									<!-- vtlib Customization -->
+									<? /* php echo get_select_options_with_id(get_languages(), $display_language) */ ?>
+									<?php echo get_select_options_with_id(Vtiger_Language::getAll(), $display_language) ?>
 								</select></td>		
 							</tr>
 							<?php

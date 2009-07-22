@@ -10,13 +10,15 @@
  ********************************************************************************/
 -->*}
 
+{if $WORLD_CLOCK_DISPLAY eq 'true'}
+
 <div id="wclock" style="z-index:10000001;" class="layerPopup">
 	<table class="mailClientBg" align="center" border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tr style="cursor:move;" >
 		<td style="text-align:left;" id="Handle"><b>{$APP.LBL_WORLD_CLOCK}</b></td>
 		<td align="right">
 			<a href="javascript:;">
-				<img src="{$IMAGEPATH}close.gif" border="0"  onClick="fninvsh('wclock')" hspace="5" align="absmiddle">
+				<img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0"  onClick="fninvsh('wclock')" hspace="5" align="absmiddle">
 			</a>
 		</td>
 	</tr>
@@ -28,7 +30,7 @@
 <div id="theCities" class="citystyle">
 <form action="" name="frmtimezone">
 <input name="PHPSESSID" value="162c0ab587f6c555aaaa30d681b61f7c" type="hidden">
-<select name="city" size="1" class="importBox small"   id="city" style="width:125px;"  onchange="lcl(this.selectedIndex,this.options[0].selected)">
+<select name="clockcity" size="1" class="importBox small"   id="clockcity" style="width:125px;"  onchange="lcl(this.selectedIndex,this.options[0].selected)">
 <option value="0" selected="selected">Local time</option>
 <option value="4.30">Afghanistan</option>
 <option value="1">Algeria</option>
@@ -163,3 +165,5 @@
 	var theRoot   = document.getElementById("wclock");
 	Drag.init(theHandle, theRoot);
 </script>
+
+{/if}

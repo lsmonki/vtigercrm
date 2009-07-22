@@ -1,17 +1,15 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
-
 require_once("include/database/PearDatabase.php");
-$conn = new PearDatabase();
+$conn = PearDatabase::getInstance();
 
 $ajax_val = $_REQUEST['ajax'];
 
@@ -20,8 +18,8 @@ if($ajax_val == 1)
 	$crate = $_REQUEST['crate'];
 	$conn->println('conversion rate = '.$crate);
 	
-	$query = "update vtiger_currency_info set conversion_rate='".$_REQUEST['crate']."' where id=1";
-	$result = $conn->query($query);
+	$query = "UPDATE vtiger_currency_info SET conversion_rate=? WHERE id=1";
+	$result = $conn->pquery($query, array($crate));
 
 	//array should be id || vtiger_fieldname => vtiger_tablename
 	$modules_array = Array(
@@ -77,6 +75,5 @@ if($ajax_val == 1)
 		}
 	}
 }
-
 
 ?>

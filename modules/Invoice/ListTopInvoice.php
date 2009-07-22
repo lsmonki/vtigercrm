@@ -1,5 +1,5 @@
 <?php
-/*********************************************************************************
+/*+********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
  * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
@@ -12,14 +12,12 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
  ********************************************************************************/
-function getTopInvoice()
+function getTopInvoice($maxval,$calCnt)
 {
 	require_once("data/Tracker.php");
 	require_once('modules/Invoice/Invoice.php');
 	require_once('include/logging.php');
 	require_once('include/ListView/ListView.php');
-	require_once('include/database/PearDatabase.php');
-	require_once('include/ComboUtil.php');
 	require_once('include/utils/utils.php');
 	require_once('modules/CustomView/CustomView.php');
 
@@ -42,8 +40,7 @@ function getTopInvoice()
 			$viewid = "0";
 		}
 	}
-	$focus = new Invoice();
-
+	
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
@@ -57,19 +54,22 @@ function getTopInvoice()
 	$query .= " ORDER BY total DESC";
 	//<<<<<<<<customview>>>>>>>>>
 
-	$list_result = $adb->limitQuery($query,0,5);
+	$query .= " LIMIT " . $adb->sql_escape_string($maxval);
+	
+	if($calCnt == 'calculateCnt') {
+		$list_result_rows = $adb->query(mkCountQuery($query));
+		return $adb->query_result($list_result_rows, 0, 'count');
+	}
+	
+	$list_result = $adb->query($query);
 
 	//Retreiving the no of rows
 	$noofrows = $adb->num_rows($list_result);
 
 	//Retreiving the start value from request
-	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-	{
-		$start = $_REQUEST['start'];
-	}
-	else
-	{
-
+	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '') {
+		$start = vtlib_purify($_REQUEST['start']);
+	} else {
 		$start = 1;
 	}
 
@@ -106,14 +106,23 @@ function getTopInvoice()
 		}
 	}
 
+	$focus = new Invoice();
 
 	$title=array('myTopInvoices.gif',$current_module_strings['LBL_MY_TOP_INVOICE'],'home_mytopinv');
 	//Retreive the List View Table Header
 	$listview_header = getListViewHeader($focus,"Invoice",$url_string,$sorder,$order_by,"HomePage",$oCustomView);
 
+	$header = Array($listview_header[1],$listview_header[2]);
 
 	$listview_entries = getListViewEntries($focus,"Invoice",$list_result,$navigation_array,"HomePage","","EditView","Delete",$oCustomView);
-	$values=Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries);
+	foreach($listview_entries as $crmid=>$valuearray)
+	{
+		$entries[$crmid] = Array($valuearray[1],$valuearray[2]);	
+	}
+	
+	$search_qry = "&query=true&Fields0=vtiger_invoice.invoicestatus&Condition0=isn&Srch_value0=Paid&Fields1=vtiger_crmentity.smownerid&Condition1=is&Srch_value1=".$current_user->column_fields['user_name']."&searchtype=advance&search_cnt=2&matchtype=all";
+
+	$values=Array('ModuleName'=>'Invoice','Title'=>$title,'Header'=>$header,'Entries'=>$entries,'search_qry'=>$search_qry);
 
 	if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )
 		return $values;

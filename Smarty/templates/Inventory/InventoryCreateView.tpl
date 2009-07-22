@@ -19,6 +19,7 @@
 <script type="text/javascript" src="jscalendar/lang/calendar-{$CALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <script type="text/javascript" src="include/js/Inventory.js"></script>
+<script type="text/javascript" src="modules/Services/Services.js"></script>
 
 <script type="text/javascript">
 
@@ -51,7 +52,7 @@ function sensex_info()
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
    <tr>
 	<td valign=top>
-		<img src="{$IMAGE_PATH}showPanelTopLeft.gif">
+		<img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}">
 	</td>
 
 	<td class="showPanelBg" valign=top width=100%>
@@ -60,12 +61,12 @@ function sensex_info()
 	     <div class="small" style="padding:20px">
 		
 		 {if $OP_MODE eq 'edit_view'}   
-			 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$APP.LBL_EDITING} {$MOD[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span> <br>
+			 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$APP.LBL_EDITING} {$SINGLE_MOD|@getTranslatedString:$MODULE} {$APP.LBL_INFORMATION}</span> <br>
 			{$UPDATEINFO}	 
 		 {/if}
 		 {if $OP_MODE eq 'create_view'}
 			{if $DUPLICATE neq 'true'}
-			<span class="lvtHeaderText">{$APP.LBL_CREATING} {$APP.LBL_NEW} {$MOD[$SINGLE_MOD]}</span> <br>
+			<span class="lvtHeaderText">{$APP.LBL_CREATING} {$APP.LBL_NEW} {$SINGLE_MOD|@getTranslatedString:$MODULE}</span> <br>
 			{else}
 			<span class="lvtHeaderText">{$APP.LBL_DUPLICATING} "{$NAME}" </span> <br>
 			{/if}
@@ -188,7 +189,7 @@ function sensex_info()
 		</table>
 	 </div>
 	</td>
-	<td align=right valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+	<td align=right valign=top><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </table>
 </form>
@@ -215,3 +216,14 @@ function sensex_info()
                                 DIRECT_PRICE_REDUCTION:'{$APP.LBL_DIRECT_PRICE_REDUCTION}'{rdelim};
 
 </script>
+
+<!-- vtlib customization: Help information assocaited with the fields -->
+{if $FIELDHELPINFO}
+<script type='text/javascript'>
+{literal}var fieldhelpinfo = {}; {/literal}
+{foreach item=FIELDHELPVAL key=FIELDHELPKEY from=$FIELDHELPINFO}
+	fieldhelpinfo["{$FIELDHELPKEY}"] = "{$FIELDHELPVAL}";
+{/foreach}
+</script>
+{/if}
+<!-- END -->

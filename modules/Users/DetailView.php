@@ -24,9 +24,7 @@ require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Users/Users.php');
 require_once('include/utils/utils.php');
-require_once('include/utils/CommonUtils.php');
 require_once('include/utils/UserInfoUtil.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/GetUserGroups.php');
 //to check audittrail if enable or not
 require_once('user_privileges/audit_trail.php');
@@ -118,7 +116,7 @@ $smarty->assign("CATEGORY", $category);
 if(isset($focus->imagename) && $focus->imagename!='')
 {
 	$imagestring="<div id='track1' style='margin: 4px 0pt 0pt 10px; width: 200px; background-image: url(themes/images/scaler_slider_track.gif); background-repeat: repeat-x; background-position: left center; height: 18px;'>
-	<div class='selected' id='handle1' style='width: 18px; height: 18px; position: relative; left: 145px;cursor:pointer;'><img src='themes/images/scaler_slider.gif'></div>
+	<div class='selected' id='handle1' style='width: 18px; height: 18px; position: relative; left: 145px;cursor:pointer;'><img src='" . vtiger_imageurl('scaler_slider.gif', $theme) . "'></div>
 	</div>
 <script language='JavaScript' type='text/javascript' src='include/js/slider.js'></script>
 
@@ -157,7 +155,7 @@ elseif (is_admin($current_user) || $_REQUEST['record'] == $current_user->id) {
 }
 if (is_admin($current_user)) 
 {
-	$buttons = "<input title='".$app_strings['LBL_DUPLICATE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DUPLICATE_BUTTON_KEY']."' class='crmButton small cancel' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value=true; this.form.return_id.value='".$_REQUEST['record']."';this.form.action.value='EditView'\" type='submit' name='Duplicate' value=' ".$app_strings['LBL_DUPLICATE_BUTTON_LABEL']."'   >";
+	$buttons = "<input title='".$app_strings['LBL_DUPLICATE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DUPLICATE_BUTTON_KEY']."' class='crmButton small cancel' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value=true; this.form.return_id.value='".vtlib_purify($_REQUEST['record'])."';this.form.action.value='EditView'\" type='submit' name='Duplicate' value=' ".$app_strings['LBL_DUPLICATE_BUTTON_LABEL']."'   >";
 	$smarty->assign('DUPLICATE_BUTTON',$buttons);
 	
 	//done so that only the admin user can see the customize tab button
@@ -192,7 +190,7 @@ $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$data['datatype']);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 $smarty->assign("MODULE", 'Users');
 $smarty->assign("CURRENT_USERID", $current_user->id);
-$smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
+$smarty->assign("HOMEORDER",$focus->getHomeStuffOrder($focus->id));
 //Added to provide User based Tagcloud
 $smarty->assign("TAGCLOUDVIEW",getTagCloudView($focus->id));
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
@@ -213,7 +211,7 @@ else
 			<table border="0" cellpadding="5" cellspacing="0" width="98%">
 			<tr>
 				<td rowspan="2" width="11%">
-				  	<img src="themes/bluelagoon/images/denied.gif">
+				  	<img src="'. vtiger_imageurl('denied.gif', $theme).'">
 				</td>
 				<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="70%">
 					<span class="genHeaderSmall">'.$app_strings["LBL_PERMISSION"].'
@@ -232,7 +230,5 @@ else
 	</table>';
 	echo $output;
 }
-
-
 
 ?>

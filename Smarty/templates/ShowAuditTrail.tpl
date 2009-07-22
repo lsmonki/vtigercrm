@@ -13,7 +13,7 @@
 <script language="javascript" type="text/javascript" src="include/scriptaculous/prototype.js"></script>
 <body class="small" marginwidth=0 marginheight=0 leftmargin=0 topmargin=0 bottommargin=0 rigthmargin=0>
 
-<form action="index.php" method="post" id="form">
+<form action="index.php" method="post" id="form" onsubmit="VtigerJS_DialogBox.block();">
 <input type='hidden' name='module' value='Settings'>
 <input type='hidden' id='userid' name='userid' value='{$USERID}'>
 

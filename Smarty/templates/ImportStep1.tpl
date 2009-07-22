@@ -39,14 +39,14 @@ function validateFile(form)
 
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%" class="small">
    <tr>
-	<td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif" /></td>
+	<td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"/></td>
 	<td class="showPanelBg" valign="top" width="100%">
 
 		<!-- Import UI Starts -->
 		<table  cellpadding="0" cellspacing="0" width="100%" border=0>
 		   <tr>
 			<td width="75%" valign=top>
-				<form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
+				<form enctype="multipart/form-data" name="Import" method="POST" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 				<input type="hidden" name="module" value="{$MODULE}">
 				<input type="hidden" name="step" value="1">
 				<input type="hidden" name="source" value="{$SOURCE}">
@@ -61,12 +61,16 @@ function validateFile(form)
 				<br />
 				<table align="center" cellpadding="5" cellspacing="0" width="80%" class="mailClient importLeadUI small" border="0">
 				   <tr>
-					<td colspan="2" height="50" valign="middle" align="left" class="mailClientBg  genHeaderSmall">{$MOD.LBL_MODULE_NAME} {$APP.$MODULE}</td>
+					<td colspan="2" height="50" valign="middle" align="left" class="mailClientBg  genHeaderSmall">{$MOD.LBL_MODULE_NAME} {$MODULELABEL}</td>
 				   </tr>
 				   <tr >
 					<td colspan="2" align="left" valign="top" style="padding-left:40px;">
 					<br>
-						<span class="genHeaderGray">{$MOD.LBL_STEP_1}</span>&nbsp; 
+						{if $MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Leads' || $MODULE eq 'Products' || $MODULE eq 'Potentials' || $MODULE eq 'HelpDesk' || $MODULE eq 'Vendors' }	
+							<span class="genHeaderGray">{$MOD.LBL_STEP_1_4}</span>&nbsp; 
+						{else}
+							<span class="genHeaderGray">{$MOD.LBL_STEP_1}</span>&nbsp;
+						{/if}
 						<span class="genHeaderSmall">{$MOD.LBL_STEP_1_TITLE}</span> 
 					</td>
 				   </tr>
@@ -79,9 +83,20 @@ function validateFile(form)
 				   <tr >
 					<td align="right" valign="top" width="25%" class=small><b>{$MOD.LBL_FILE_LOCATION} </b></td>
 					<td align="left" valign="top" width="75%">
-						<input type="file" name="userfile"  size="40"   class=small onchange="validateFilename(this);" />&nbsp;
-						<input type="hidden" name="userfile_hidden" value=""/>
-                		<input type="checkbox" name="has_header"{$HAS_HEADER_CHECKED} />&nbsp; {$MOD.LBL_HAS_HEADER}
+						<input type="file" name="userfile" size="65" class=small onchange="validateFilename(this);" />&nbsp;
+						<input type="hidden" name="userfile_hidden" value=""/><br />
+						<br /><b>{$MOD.LBL_HAS_HEADER}</b>&nbsp;<input type="checkbox" name="has_header"{$HAS_HEADER_CHECKED} />
+						&nbsp;&nbsp;&nbsp;&nbsp;<b>{$MOD.LBL_DELIMITER}</b>&nbsp;
+							<select name="delimiter" class="small" style="font-family:Times;">
+								<option value=",">,</option>
+								<option value=";">;</option>
+							</select>
+					  	&nbsp;&nbsp;&nbsp;&nbsp;<b>{$MOD.LBL_FORMAT}</b>&nbsp;
+							<select name="format" class="small">
+							<!-- value must be a known format for mb_convert_encoding() -->
+					  			<option value="ISO-8859-1">ISO-8859-1</option>
+					  			<option value="UTF-8">UTF-8</option>
+					  		</select>
 					</td>
 				   </tr>
 				   {*<tr >
@@ -110,19 +125,20 @@ function validateFile(form)
 						<td colspan="2" align="right" style="padding-right:40px;" class="reportCreateBottom">
 							<input title="{$MOD.LBL_NEXT}" accessKey="" class="crmButton small save" type="submit" name="button" value="  {$MOD.LBL_NEXT} &rsaquo; "  onclick="this.form.action.value='Import';this.form.step.value='2'; return validateFile(this.form);">
 						&nbsp;
- <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="" class="crmButton small cancel" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" onclick="gotourl('index.php?action=ListView&module={$MODULE}&parenttab={$CATEGORY}')">
+ <input title="{$APP.LBL_CANCEL_BUTTON_LABEL}" accessKey="" class="crmButton small cancel" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}" onclick="window.history.back()">
 
 						</td>
-				   </tr>				</form>
+				   </tr>
 				 </table>
 				<br>
+				</form>
 				<!-- IMPORT LEADS ENDS HERE -->
 			</td>
 		   </tr>
 		</table>
 
 	</td>
-	<td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif" /></td>
+	<td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}" /></td>
    </tr>
 </table>
 <br>

@@ -1,22 +1,21 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
- ********************************************************************************/
+ **********************************************************************************/
 
 global $theme,$current_user,$app_strings;
 $theme_path = "themes/".$theme."/";
 $image_path = $theme_path."images/";
 require_once("modules/Calendar/calendarLayout.php");
 require_once("modules/Calendar/Calendar.php");
-$mysel= $_REQUEST['view'];
-$subtab = $_REQUEST['subtab'];
-$viewBox = $_REQUEST['viewOption'];
+$mysel= vtlib_purify($_REQUEST['view']);
+$subtab = vtlib_purify($_REQUEST['subtab']);
+$viewBox = vtlib_purify($_REQUEST['viewOption']);
 if(empty($viewBox))
 {
 	$viewBox = 'listview';
@@ -91,4 +90,3 @@ if ($viewBox == 'hourview' && ($mysel == 'day' || $mysel == 'week' || $mysel == 
 $calendar_arr['view'] = $mysel;
 calendar_layout($calendar_arr,$viewBox,$subtab);
 ?>
-

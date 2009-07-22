@@ -133,12 +133,12 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 		else if(assign_type_G == true)
 		{
 			var txtBox= 'txtbox_G'+fieldLabel;
-			var group_name = encodeURIComponent($(txtBox).options[$(txtBox).selectedIndex].text); 
-			var groupurl = "&assigned_group_name="+group_name+"&assigntype=T"
+			var group_id = encodeURIComponent($(txtBox).options[$(txtBox).selectedIndex].text); 
+			var groupurl = "&assigned_group_id="+group_id+"&assigntype=T"
 		}
 
 	}
-	else if(uitype == 15 || uitype == 16 || uitype == 111)
+	else if(uitype == 15 || uitype == 16)
 	{	
 		var txtBox= "txtbox_"+ fieldLabel;
 		var not_access =document.getElementById(txtBox);
@@ -240,7 +240,6 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
                 }
 	}
 
-
 	var data = "file=DetailViewAjax&module=" + module + "&action=" + module + "Ajax&record=" + crmId+"&recordid=" + crmId ;
 	data = data + "&fldName=" + fieldName + "&fieldValue=" + escapeAll(tagValue) + "&ajxaction=DETAILVIEW"+groupurl;
 	new Ajax.Request(
@@ -249,25 +248,22 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
                         method: 'post',
                         postBody: data,
                         onComplete: function(response) {
-                  				if(response.responseText.indexOf(":#:FAILURE")>-1)
-                  				{
-                  					alert(alert_arr.ERROR_WHILE_EDITING);
-                  				}
-                  				else if(response.responseText.indexOf(":#:SUCCESS")>-1)
-						{
-							//For HD & FAQ - comments, we should empty the field value
-							if((module == "HelpDesk" || module == "Faq") && fieldName == "comments")
-							{
-								getObj(dtlView).innerHTML = "";
-								getObj("comments").value = "";
-								getObj("comments_div").innerHTML = response.responseText.replace(":#:SUCCESS","");
+							if(response.responseText.indexOf(":#:FAILURE")>-1) {
+	          					alert(alert_arr.ERROR_WHILE_EDITING);
+	          				}
+	          				else if(response.responseText.indexOf(":#:SUCCESS")>-1) {
+								//For HD & FAQ - comments, we should empty the field value
+								if((module == "HelpDesk" || module == "Faq") && fieldName == "comments") {
+									var comments = response.responseText.replace(":#:SUCCESS","");
+									if(getObj("comments_div") != null) getObj("comments_div").innerHTML = comments;
+									if(getObj(dtlView) != null) getObj(dtlView).innerHTML = "";
+									if(getObj("comments") != null) getObj("comments").value = "";
+								}
+	           					$("vtbusy_info").style.display="none";
 							}
-
-                  					$("vtbusy_info").style.display="none";
 						}
-                        }
                 }
-            );
+	);
 	tagValue = get_converted_html(tagValue);
 	if(uitype == '13' || uitype == '104')
 	{
@@ -292,6 +288,12 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 			var secEmail = getObj("sec_email");
 			if(secEmail)
                 	        secEmail.value = tagValue;
+		}
+	}else if(uitype == '11'){
+		if(typeof(use_asterisk) != 'undefined' && use_asterisk == true){
+			getObj(dtlView).innerHTML = "<a href=\"javascript:;\" onclick=\"startCall('"+tagValue+"')\">"+tagValue+"</a>";
+		}else{
+			getObj(dtlView).innerHTML = tagValue;
 		}
 	}else if(uitype == '17')
 	{
@@ -338,7 +340,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 			getObj(dtlView).innerHTML = alert_arr.NO;
 		}
 
-	}else if(uitype == 116)
+	}else if(uitype == 116 || uitype == 117)
 	{
 			getObj(dtlView).innerHTML = document.getElementById(txtBox).options[document.getElementById(txtBox).selectedIndex].text; 
 	}
@@ -401,7 +403,7 @@ function dtlViewAjaxSave(fieldLabel,module,uitype,tableName,fieldName,crmId)
 			getObj(dtlView).innerHTML = popObj.value;
 		}
 	}
-	else if(uitype == '111' || uitype == '15' || uitype == '16' )
+	else if(uitype == '15' || uitype == '16' )
         {
                         var notaccess =document.getElementById(txtBox);
                         tagValue = notaccess.options[notaccess.selectedIndex].text;
@@ -497,4 +499,23 @@ function setSelectValue(fieldLabel)
 	var oSelCombo = document.getElementById(selCombo);
 
 	oHdTxtBox.value = oSelCombo.options[oSelCombo.selectedIndex].text;
+}
+
+//Added to ajax edit the folder name in Documents Module
+function hndMouseClick(fieldLabel)
+{
+	var mouseArea="";
+	mouseArea="mouseArea_"+ fieldLabel;
+	if(itsonview)
+	{
+		return;
+	}
+	globaldtlviewspanid= "dtlview_"+ fieldLabel;//valuespanid;
+	globaleditareaspanid="editarea_"+ fieldLabel;//textareapanid;
+	globalfieldlabel = fieldLabel;
+	globaltxtboxid="txtbox_"+ fieldLabel;//textboxpanid;
+	$(globaltxtboxid).value = $(globaldtlviewspanid).innerHTML;
+	handleEdit();
+	$(globaltxtboxid).select();
+
 }

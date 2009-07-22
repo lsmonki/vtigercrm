@@ -336,7 +336,7 @@ function CheckNotePermission($username,$sessionid)
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
 
-	if(isPermitted("Notes","EditView") == "yes")
+	if(isPermitted("Documents","EditView") == "yes")
 	{
 		return "allowed";
 	}else
@@ -507,25 +507,25 @@ function create_note_from_webform($username,$sessionid,$subject,$desc)
 	$user_id=$seed_user->retrieve_user_id($username);
 	$current_user=$seed_user;
 	$current_user->retrieve_entity_info($user_id, 'Users');
-	$adb->println("Create New Note from Web Form - Starts");
-	require_once("modules/Notes/Notes.php");
+	$adb->println("Create New Document from Web Form - Starts");
+	require_once("modules/Documents/Documents.php");
 
-	$focus = new Notes();
-	if(isPermitted("Notes","EditView") == "yes")
+	$focus = new Documents();
+	if(isPermitted("Documents","EditView") == "yes")
 	{
 		$focus->column_fields['notes_title'] = $subject;
 		$focus->column_fields['notecontent'] = $desc;
 
-		$focus->save("Notes");
+		$focus->save("Documents");
 
-		$focus->retrieve_entity_info($focus->id,"Notes");
+		$focus->retrieve_entity_info($focus->id,"Documents");
 
-		$adb->println("Create New Note from Web Form - Ends");
+		$adb->println("Create New Document from Web Form - Ends");
 
 		if($focus->id != '')
-		return 'Note added successfully.';
+		return 'Document added successfully.';
 		else
-		return "Note creation failed. Try again";
+		return "Document creation failed. Try again";
 	}
 	else
 	{
@@ -838,7 +838,7 @@ function GetPicklistValues($username,$sessionid,$tablename)
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 	{
-		$query = "select " . mysql_real_escape_string($tablename) . " from vtiger_". mysql_real_escape_string($tablename);		
+		$query = "select " . $adb->sql_escape_string($tablename) . " from vtiger_". $adb->sql_escape_string($tablename);		
 			$result1 = $adb->query($query);
 		for($i=0;$i<$adb->num_rows($result1);$i++)
 		{
@@ -847,7 +847,7 @@ function GetPicklistValues($username,$sessionid,$tablename)
 	}
 	else if((isPermitted("HelpDesk","EditView") == "yes") && (CheckFieldPermission($tablename,'HelpDesk') == 'true'))
 	{
-		$query = "select " .mysql_real_escape_string($tablename) . " from vtiger_". mysql_real_escape_string($tablename) ." inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_". mysql_real_escape_string($tablename) .".picklist_valueid where roleid=? and picklistid in (select picklistid from vtiger_". mysql_real_escape_string($tablename)." ) order by sortid";	
+		$query = "select " .$adb->sql_escape_string($tablename) . " from vtiger_". $adb->sql_escape_string($tablename) ." inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_". $adb->sql_escape_string($tablename) .".picklist_valueid where roleid=? and picklistid in (select picklistid from vtiger_". $adb->sql_escape_string($tablename)." ) order by sortid";	
 		$result1 = $adb->pquery($query, array($roleid));
 		for($i=0;$i<$adb->num_rows($result1);$i++)
 		{
@@ -908,7 +908,10 @@ function getServerSessionId($id)
 
 	return $sessionid;
 }
-
+/* Begin the HTTP listener service and exit. */ 
+if (!isset($HTTP_RAW_POST_DATA)){
+	$HTTP_RAW_POST_DATA = file_get_contents('php://input');
+}
 $server->service($HTTP_RAW_POST_DATA); 
 exit(); 
 ?>

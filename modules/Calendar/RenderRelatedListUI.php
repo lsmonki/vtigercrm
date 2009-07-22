@@ -79,7 +79,7 @@ require_once('include/utils/UserInfoUtil.php');
 	  */
 	function status_availability($owner,$userid,$activity_id,$avail_date,$activity_start_time,$activity_end_time)	
 	{
-		global $adb,$image_path,$log;
+		global $adb,$image_path,$log,$theme;
 		$log->debug("Entering status_availability(".$owner,$userid.",".$activity_id.",".$avail_date.",".$activity_start_time.",".$activity_end_time.") method ...");
 		$avail_flag="false";
 		$avail_date=getDBInsertDateValue($avail_date);
@@ -150,11 +150,11 @@ require_once('include/utils/UserInfoUtil.php');
 		}	
 	 	if($avail_flag == "true")
                 {
-                        $availability=' <IMG SRC="'.$image_path.'/busy.gif">';
+                        $availability=' <IMG SRC="' . vtiger_imageurl('busy.gif', $theme). '">';
                 }
                 else
                 {
-                        $availability=' <IMG SRC="'.$image_path.'/free.gif">';
+                        $availability=' <IMG SRC="' . vtiger_imageurl('free.gif', $theme). '">';
                 }
 		$log->debug("Exiting status_availability method ...");
 		return $availability;

@@ -19,8 +19,18 @@
 <script type="text/javascript" src="jscalendar/lang/calendar-{$CALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 
+<!-- overriding the pre-defined #company to avoid clash with vtiger_field in the view -->
+{literal}
+<style type='text/css'>
+#company {
+	width: 90%;
+	height: auto;
+}
+</style>
+{/literal}
+
 <script type="text/javascript">
-var gVTModule = '{$smarty.request.module}';
+var gVTModule = '{$smarty.request.module|@vtlib_purify}';
 function sensex_info()
 {ldelim}
         var Ticker = $('tickersymbol').value;
@@ -49,21 +59,33 @@ function sensex_info()
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
    <tr>
 	<td valign=top>
-		<img src="{$IMAGE_PATH}showPanelTopLeft.gif">
+		<img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}">
 	</td>
 
 	<td class="showPanelBg" valign=top width=100%>
 	     {*<!-- PUBLIC CONTENTS STARTS-->*}
 	     <div class="small" style="padding:20px">
 		
+		{* vtlib customization: use translation only if present *}
+		{assign var="SINGLE_MOD_LABEL" value=$SINGLE_MOD}
+		{if $APP.$SINGLE_MOD} {assign var="SINGLE_MOD_LABEL" value=$APP.SINGLE_MOD} {/if}
+				
 		 {if $OP_MODE eq 'edit_view'}   
-			 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$APP.LBL_EDITING} {$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</span> <br>
+			 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$APP.LBL_EDITING} {$SINGLE_MOD_LABEL} {$APP.LBL_INFORMATION}</span> <br>
 			{$UPDATEINFO}	 
 		 {/if}
+
 		 {if $OP_MODE eq 'create_view'}
 			{if $DUPLICATE neq 'true'}
-			{assign var=create_new value="LBL_CREATING_NEW_"|cat:$MODULE}
-		        <span class="lvtHeaderText">{$APP[$create_new]}</span> <br>
+			{assign var=create_new value="LBL_CREATING_NEW_"|cat:$SINGLE_MOD}
+				{* vtlib customization: use translation only if present *}
+				{assign var="create_newlabel" value=$APP.$create_new}
+				{if $create_newlabel neq ''}
+					<span class="lvtHeaderText">{$create_newlabel}</span> <br>
+				{else}
+					<span class="lvtHeaderText">{$APP.LBL_CREATING} {$APP.LBL_NEW} {$SINGLE_MOD}</span> <br>
+				{/if}
+		        
 			{else}
 			<span class="lvtHeaderText">{$APP.LBL_DUPLICATING} "{$NAME}" </span> <br>
 			{/if}
@@ -112,7 +134,7 @@ function sensex_info()
 						   <tr>
 							<td style="padding:10px">
 							<!-- General details -->
-								<table border=0 cellspacing=0 cellpadding=0 width=100% class="small">
+								<table border=0 cellspacing=0 cellpadding=0 width="100%" class="small">
 								   <tr>
 									<td  colspan=4 style="padding:5px">
 									   <div align="center">
@@ -121,7 +143,7 @@ function sensex_info()
 										{else}
 											<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="crmbutton small save" onclick="this.form.action.value='Save';  return formValidate()" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
 										{/if}
-                                                                 		<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
+										<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
 									   </div>
 									</td>
 								   </tr>
@@ -253,18 +275,18 @@ function sensex_info()
 		</table>
 	     </div>
 	</td>
-	<td align=right valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+	<td align=right valign=top><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </table>
 </form>
 
-{if ($MODULE eq 'Emails' || 'Notes') and ($FCKEDITOR_DISPLAY eq 'true')}
+{if ($MODULE eq 'Emails' || 'Documents') and ($FCKEDITOR_DISPLAY eq 'true')}
        <script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
        <script type="text/javascript" defer="1">
 
        var oFCKeditor = null;
 
-       {if $MODULE eq 'Notes'}
+       {if $MODULE eq 'Documents'}
                oFCKeditor = new FCKeditor( "notecontent" ) ;
        {/if}
 
@@ -280,14 +302,18 @@ function sensex_info()
 </script>
 {/if}
 <script>
-
-
-
         var fieldname = new Array({$VALIDATION_DATA_FIELDNAME})
-
         var fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL})
-
         var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE})
-
-
 </script>
+
+<!-- vtlib customization: Help information assocaited with the fields -->
+{if $FIELDHELPINFO}
+<script type='text/javascript'>
+{literal}var fieldhelpinfo = {}; {/literal}
+{foreach item=FIELDHELPVAL key=FIELDHELPKEY from=$FIELDHELPINFO}
+	fieldhelpinfo["{$FIELDHELPKEY}"] = "{$FIELDHELPVAL}";
+{/foreach}
+</script>
+{/if}
+<!-- END -->

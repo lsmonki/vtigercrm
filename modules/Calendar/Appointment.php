@@ -67,18 +67,25 @@ class Appointment
 			OR (vtiger_activity.date_start < ? AND vtiger_activity.due_date > ?)
 			OR (vtiger_activity.due_date between ? AND ?))";
 		
-        	$q= "select vtiger_activity.*, vtiger_crmentity.*, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name FROM vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid left join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid left join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid WHERE vtiger_crmentity.deleted = 0 and vtiger_activity.activitytype in ('Call','Meeting') $and ";
+        	$q= "select vtiger_activity.*, vtiger_crmentity.*, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name FROM vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid left join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid WHERE vtiger_crmentity.deleted = 0 and vtiger_activity.activitytype not in ('Emails','Task') $and ";
+
+		// User Select Customization: Changes should made also in (calendayLaout getEventList) and one more BELOW
+		$query_filter_prefix = calendarview_getSelectedUserFilterQuerySuffix(); 
+		$q .= $query_filter_prefix; 
+		// END
 		$params = array($from_datetime->get_formatted_date(), $to_datetime->get_formatted_date(), $from_datetime->get_formatted_date(), $from_datetime->get_formatted_date(), $from_datetime->get_formatted_date(), $to_datetime->get_formatted_date());
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[16] == 3)
 		{
-			$sec_parameter=getListViewSecurityParameter('Calendar');
+			//Added for User Based Custom View for Calendar
+			$sec_parameter=getCalendarViewSecurityParameter();
 			$q .= $sec_parameter;
 		}
 									
         $q .= " AND vtiger_recurringevents.activityid is NULL ";
         $q .= " group by vtiger_activity.activityid ORDER by vtiger_activity.date_start,vtiger_activity.time_start";
+
 		$r = $adb->pquery($q, $params);
-        $n = $adb->getRowCount($r);
+		$n = $adb->getRowCount($r);
         $a = 0;
 		$list = Array();
 		
@@ -120,8 +127,13 @@ class Appointment
 			
         }
 		//Get Recurring events
-		$q = "SELECT vtiger_activity.*, vtiger_crmentity.*, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name , vtiger_recurringevents.recurringid, vtiger_recurringevents.recurringdate as date_start ,vtiger_recurringevents.recurringtype,vtiger_activitygrouprelation.groupname from vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid inner join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left outer join vtiger_activitygrouprelation on vtiger_activitygrouprelation.activityid=vtiger_activity.activityid left join vtiger_groups on vtiger_groups.groupname = vtiger_activitygrouprelation.groupname LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid ";
-        $q.=" where vtiger_crmentity.deleted = 0 and vtiger_activity.activitytype in ('Call','Meeting') AND (recurringdate between ? and ?) ";
+		$q = "SELECT vtiger_activity.*, vtiger_crmentity.*, case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end as user_name , vtiger_recurringevents.recurringid, vtiger_recurringevents.recurringdate as date_start ,vtiger_recurringevents.recurringtype,vtiger_groups.groupname from vtiger_activity inner join vtiger_crmentity on vtiger_activity.activityid = vtiger_crmentity.crmid inner join vtiger_recurringevents on vtiger_activity.activityid=vtiger_recurringevents.activityid left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid ";
+        $q.=" where vtiger_crmentity.deleted = 0 and vtiger_activity.activitytype not in ('Emails','Task') AND (recurringdate between ? and ?) ";
+		
+		// User Select Customization
+		$q .= $query_filter_prefix;
+		// END
+
 		$params = array($from_datetime->get_formatted_date(), $to_datetime->get_formatted_date());
 
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[16] == 3)

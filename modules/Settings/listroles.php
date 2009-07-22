@@ -113,32 +113,32 @@ function indent($hrarray,$roleout,$role_det)
 		if(sizeof($value) >0 && $roledepth != 0)
 		{	
 			$roleout.='<b style="font-weight:bold;margin:0;padding:0;cursor:pointer;">';
-			$roleout .= '<img src="'.$image_path.'/minus.gif" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" title="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" align="absmiddle" onClick="showhide(\''.$roleid_arr.'\',\'img_'.$roleid.'\')" style="cursor:pointer;">';
+			$roleout .= '<img src="' . vtiger_imageurl('minus.gif', $theme) . '" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" title="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" align="absmiddle" onClick="showhide(\''.$roleid_arr.'\',\'img_'.$roleid.'\')" style="cursor:pointer;">';
 		}
 		else if($roledepth != 0){
-			$roleout .= '<img src="'.$image_path.'/vtigerDevDocs.gif" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" title="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" align="absmiddle">';	
+			$roleout .= '<img src="' . vtiger_imageurl('vtigerDevDocs.gif', $theme) . '" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" title="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" align="absmiddle">';	
 		}
 		else{
-			$roleout .= '<img src="'.$image_path.'/menu_root.gif" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_ROOT'].'" title="'.$app_strings['LBL_ROOT'].'" align="absmiddle">';
+			$roleout .= '<img src="' . vtiger_imageurl('menu_root.gif', $theme) . '" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_ROOT'].'" title="'.$app_strings['LBL_ROOT'].'" align="absmiddle">';
 		}	
 		if($roledepth == 0 ){
 			$roleout .= '&nbsp;<b class="genHeaderGray">'.$rolename.'</b></td>';
-			$roleout .= '<td nowrap><div id="layer_'.$roleid.'" class="drag_Element"><a href="index.php?module=Settings&action=createrole&parenttab=Settings&parent='.$roleid.'"><img src="'.$image_path.'/Rolesadd.gif" align="absmiddle" border="0" alt="'.$mod_strings['LBL_ADD_ROLE'].'" title="'.$mod_strings['LBL_ADD_ROLE'].'"></a></div></td></tr></table>';
+			$roleout .= '<td nowrap><div id="layer_'.$roleid.'" class="drag_Element"><a href="index.php?module=Settings&action=createrole&parenttab=Settings&parent='.$roleid.'"><img src="' . vtiger_imageurl('Rolesadd.gif', $theme) . '" align="absmiddle" border="0" alt="'.$mod_strings['LBL_ADD_ROLE'].'" title="'.$mod_strings['LBL_ADD_ROLE'].'"></a></div></td></tr></table>';
 		}
 		else{
 			$roleout .= '&nbsp;<a href="javascript:put_child_ID(\'user_'.$roleid.'\');" class="x" id="user_'.$roleid.'">'.$rolename.'</a></td>';
 
 			$roleout.='<td nowrap><div id="layer_'.$roleid.'" class="drag_Element">
-													<a href="index.php?module=Settings&action=createrole&parenttab=Settings&parent='.$roleid.'"><img src="'.$image_path.'/Rolesadd.gif" align="absmiddle" border="0" alt="'.$mod_strings['LBL_ADD_ROLE'].'" title="'.$mod_strings['LBL_ADD_ROLE'].'"></a>
-													<a href="index.php?module=Settings&action=createrole&roleid='.$roleid.'&parenttab=Settings&mode=edit"><img src="'.$image_path.'/RolesEdit.gif" align="absmiddle" border="0" alt="'.$mod_strings['LBL_EDIT_ROLE'].'" title="'.$mod_strings['LBL_EDIT_ROLE'].'"></a>';
+													<a href="index.php?module=Settings&action=createrole&parenttab=Settings&parent='.$roleid.'"><img src="' . vtiger_imageurl('Rolesadd.gif', $theme) .'" align="absmiddle" border="0" alt="'.$mod_strings['LBL_ADD_ROLE'].'" title="'.$mod_strings['LBL_ADD_ROLE'].'"></a>
+													<a href="index.php?module=Settings&action=createrole&roleid='.$roleid.'&parenttab=Settings&mode=edit"><img src="' . vtiger_imageurl('RolesEdit.gif', $theme) . '" align="absmiddle" border="0" alt="'.$mod_strings['LBL_EDIT_ROLE'].'" title="'.$mod_strings['LBL_EDIT_ROLE'].'"></a>';
 
-			if($roleid != 'H1' && $roleid != 'H2' && $roleid != 'H3' && $roleid != 'H4' && $roleid != 'H5')
+			if($roleid != 'H1'  && $roleid != 'H2')
 			{
 							
-				$roleout .=	'<a href="index.php?module=Settings&action=RoleDeleteStep1&roleid='.$roleid.'&parenttab=Settings"><img src="'.$image_path.'/RolesDelete.gif" align="absmiddle" border="0" alt="'.$mod_strings['LBL_DELETE_ROLE'].'" title="'.$mod_strings['LBL_DELETE_ROLE'].'"></a>';
+				$roleout .=	'<a href="index.php?module=Settings&action=RoleDeleteStep1&roleid='.$roleid.'&parenttab=Settings"><img src="' . vtiger_imageurl('RolesDelete.gif', $theme) . '" align="absmiddle" border="0" alt="'.$mod_strings['LBL_DELETE_ROLE'].'" title="'.$mod_strings['LBL_DELETE_ROLE'].'"></a>';
 			}		
 													
-		        $roleout .='<a href="javascript:;" class="small" onClick="get_parent_ID(this,\'user_'.$roleid.'\')"><img src="'.$image_path.'/RolesMove.gif" align="absmiddle" border="0" alt="'.$mod_strings['LBL_MOVE_ROLE'].'" title="'.$mod_strings['LBL_MOVE_ROLE'].'"></a>
+		        $roleout .='<a href="javascript:;" class="small" onClick="get_parent_ID(this,\'user_'.$roleid.'\')"><img src="' . vtiger_imageurl('RolesMove.gif', $theme) . '" align="absmiddle" border="0" alt="'.$mod_strings['LBL_MOVE_ROLE'].'" title="'.$mod_strings['LBL_MOVE_ROLE'].'"></a>
 												</div></td></tr></table>';
 //			$roleout .=	'&nbsp;<a href="index.php?module=Users&action=createrole&parenttab=Settings&parent='.$roleid.'">Add</a> | <a href="index.php?module=Users&action=createrole&roleid='.$roleid.'&parenttab=Settings&mode=edit">Edit</a> | <a href="index.php?module=Users&action=RoleDeleteStep1&roleid='.$roleid.'&parenttab=Settings">Delete</a> | <a href="index.php?module=Users&action=RoleDetailView&parenttab=Settings&roleid='.$roleid.'">View</a>';		
 
@@ -156,7 +156,7 @@ function indent($hrarray,$roleout,$role_det)
 
 	return $roleout;
 }
-$smarty->assign("THEME",$theme_path);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));

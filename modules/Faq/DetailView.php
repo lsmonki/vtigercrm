@@ -21,16 +21,14 @@
  ********************************************************************************/
 
 require_once('Smarty_setup.php');
-require_once('modules/Faq/Faq.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 global $mod_strings;
 global $app_strings;
 global $currentModule;
 
-$focus = new Faq();
+$focus = CRMEntity::getInstance($currentModule);
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) 
 {
@@ -66,7 +64,17 @@ $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->colu
 $smarty->assign("SINGLE_MOD",$currentModule);
 $smarty->assign("MODULE",$currentModule);
 
-$smarty->assign("ID", $_REQUEST['record']);
+// Module Sequence Numbering
+$mod_seq_field = getModuleSequenceField($currentModule);
+if ($mod_seq_field != null) {
+	$mod_seq_id = $focus->column_fields[$mod_seq_field['name']];
+} else {
+	$mod_seq_id = $focus->id;
+}
+$smarty->assign('MOD_SEQ_ID', $mod_seq_id);
+// END
+
+$smarty->assign("ID", vtlib_purify($_REQUEST['record']));
 if(isPermitted("Faq","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
@@ -87,6 +95,23 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 
 //Added to display the Faq comments information
 $smarty->assign("COMMENT_BLOCK",$focus->getFAQComments($_REQUEST['record']));
-$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST['record']));
+
+if(PerformancePrefs::getBoolean('DETAILVIEW_RECORD_NAVIGATION', true) && isset($_SESSION[$currentModule.'_listquery'])){
+	$recordNavigationInfo = ListViewSession::getListViewNavigation($focus->id);
+	VT_detailViewNavigation($smarty,$recordNavigationInfo,$focus->id);
+}
+if($singlepane_view == 'true') {
+	$related_array = getRelatedLists($currentModule,$focus);
+	$smarty->assign("RELATEDLISTS", $related_array);
+}
+
+$smarty->assign("SinglePane_View", $singlepane_view);
+
+// Record Change Notification
+$focus->markAsViewed($current_user->id);
+// END
+
+$smarty->assign('DETAILVIEW_AJAX_EDIT', PerformancePrefs::getBoolean('DETAILVIEW_AJAX_EDIT', true));
 $smarty->display("DetailView.tpl");
 ?>

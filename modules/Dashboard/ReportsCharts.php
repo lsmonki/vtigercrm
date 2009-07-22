@@ -1,20 +1,16 @@
-
 <?php
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
- ********************************************************************************/
+ ************************************************************************************/
 
-	include("modules/Dashboard/Entity_charts.php");
-        include("modules/Dashboard/horizontal_bargraph.php");
-        //include("modules/Dashboard/vertical_bargraph.php");
-        include("modules/Dashboard/pie_graph.php");
+include("modules/Dashboard/Entity_charts.php");
+include("modules/Dashboard/horizontal_bargraph.php");
+include("modules/Dashboard/pie_graph.php");
 	
 global $tmp_dir;
 function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
@@ -195,3 +191,4 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 		return $return;
 	}
 }
+?>

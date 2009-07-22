@@ -49,18 +49,22 @@ global $mod_strings;
 global $mod_list_strings;
 global $app_strings;
 global $app_list_strings;
-global $current_user;
+global $current_user,$default_charset;
 global $import_file_name;
 global $upload_maxsize;
 
 global $import_dir;
 $focus = 0;
-$delimiter = ',';
 $max_lines = 3;
 
-$has_header = 0;
+$delimiter = ',';
+if (isset($_REQUEST['delimiter']))
+{
+	$delimiter = vtlib_purify($_REQUEST['delimiter']);
+}
 
-if ( isset($_REQUEST['has_header']))
+$has_header = 0;
+if (isset($_REQUEST['has_header']))
 {
 	$has_header = 1;
 }
@@ -89,6 +93,24 @@ $tmp_file_name = $import_dir. "IMPORT_".$current_user->id;
 
 move_uploaded_file($_FILES['userfile']['tmp_name'], $tmp_file_name);
 
+// Convert ISO-8859 file (as saved by MS Excel) into UTF-8 to preserve umlauts and accents
+if ($_REQUEST["format"] != "UTF-8")
+{
+	$fh = fopen($tmp_file_name,"r");
+	$content = fread($fh, filesize($tmp_file_name));
+	fclose($fh);
+
+	if (function_exists("mb_convert_encoding")) 
+	{
+		$content = mb_convert_encoding($content, 'UTF-8', $_REQUEST["format"]);
+	} else {
+		$content = iconv('UTF-8', $_REQUEST["format"], $content);		
+	}
+
+	$fh = fopen($tmp_file_name,"w");
+	fwrite($fh, $content);
+	fclose($fh);
+}
 
 // Now parse the file and look for errors
 $ret_value = 0;
@@ -124,13 +146,13 @@ $ret_field_count = $ret_value['field_count'];
 $smarty =  new vtigerCRM_Smarty;
 
 $smarty->assign("TMP_FILE", $tmp_file_name );
-$smarty->assign("SOURCE", $_REQUEST['source'] );
+$smarty->assign("SOURCE", vtlib_purify($_REQUEST['source']));
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 
-if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
-if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
+if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
 
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
@@ -146,13 +168,27 @@ $import_object_array = Array(
 				"Potentials"=>"ImportOpportunity",
 				"Products"=>"ImportProduct",
 				"HelpDesk"=>"ImportTicket",
-                                "Vendors"=>"ImportVendors"
+                "Vendors"=>"ImportVendors"
 			    );
 
 if(isset($_REQUEST['module']) && $_REQUEST['module'] != '')
 {
 	$object_name = $import_object_array[$_REQUEST['module']];
+	// vtlib customization: Hook added to enable import for un-mapped modules
+	$module = $_REQUEST['module'];	
+	if($object_name == null) {
+		checkFileAccess("modules/$module/$module.php");
+		require_once("modules/$module/$module.php");
+		$object_name = $module;
+		$callInitImport = true;		
+	}
+	// END
 	$focus = new $object_name();
+	// vtlib customization: Call the import initializer
+	if($callInitImport) $focus->initImport($module);
+	//initialized the required fields,used to check for mandatory fields while importing
+	$focus->initRequiredFields($module);
+	// END
 }
 else
 {
@@ -203,7 +239,7 @@ $field_map = $outlook_contacts_field_map;
 
 $mapping_file = new ImportMap();
 $saved_map_lists = $mapping_file->getSavedMappingsList($_REQUEST['return_module']);
-$map_list_combo = '<select name="source" id="saved_source" disabled onchange="getImportSavedMap(this)">';
+$map_list_combo = '<select class="small" name="source" id="saved_source" disabled onchange="getImportSavedMap(this)">';
 $map_list_combo .= '<OPTION value="-1" selected>--Select--</OPTION>';
 if(is_array($saved_map_lists))
 {
@@ -218,38 +254,27 @@ $map_list_combo .= "&nbsp;&nbsp;&nbsp;<span id='delete_mapping' style='visibilit
 $smarty->assign("SAVED_MAP_LISTS",$map_list_combo);
 
 
-if ( count($mapping_arr) > 0)
-{
+if ( count($mapping_arr) > 0){
 	$field_map = &$mapping_arr;
-}
-else if ($_REQUEST['source'] == 'other')
-{
-	if ($_REQUEST['module'] == 'Contacts')
-	{
+}else if ($_REQUEST['source'] == 'other'){
+	if ($_REQUEST['module'] == 'Contacts'){
 		$field_map = $outlook_contacts_field_map;
-	} 
-	else if ($_REQUEST['module'] == 'Accounts')
-	{
+	}else if ($_REQUEST['module'] == 'Accounts'){
 		$field_map = $outlook_accounts_field_map;
-	}
-	else if ($_REQUEST['module'] == 'Potentials')
-	{
+	}else if ($_REQUEST['module'] == 'Potentials'){
 		$field_map = $salesforce_opportunities_field_map;
 	}
 } 
 
-
 $add_one = 1;
 $start_at = 0;
 
-if($has_header)
-{
+if($has_header){
 	$add_one = 0;
 	$start_at = 1;
 } 
 
-for($row_count = $start_at; $row_count < count($rows); $row_count++ )
-{
+for($row_count = $start_at; $row_count < count($rows); $row_count++){
 	$smarty->assign("ROWCOUNT", $row_count + $add_one);
 }
 
@@ -259,93 +284,68 @@ $list_string_key .= "_import_fields";
 //Now we are getting the import fields from DB instead of hard coded array $mod_list_strings
 $translated_column_fields = getImportFieldsList($_REQUEST['module']);//$mod_list_strings[$list_string_key];
 
-// adding custom vtiger_fields translations
-//getCustomFieldTrans($_REQUEST['module'],&$translated_column_fields);
-
 $cnt=1;
-for($field_count = 0; $field_count < $ret_field_count; $field_count++)
-{
+for($field_count = 0; $field_count < $ret_field_count; $field_count++){
 
 	$smarty->assign("COLCOUNT", $field_count + 1);
 	$suggest = "";
 
-	/*
-	if ($has_header && isset( $field_map[$firstrow[$field_count]] ) )
-	{
-		$suggest = $field_map[$firstrow[$field_count]];	
-	}
-	else if (isset($field_map[$field_count]))
-	{
-		$suggest = $field_map[$field_count];	
-	}
-	*/
-
-	if($_REQUEST['module']=='Accounts')
-	{
+	if($_REQUEST['module']=='Accounts'){
 		$tablename='account';
 		$focus1=new Accounts();
 	}
-	if($_REQUEST['module']=='Contacts')
-	{
+	if($_REQUEST['module']=='Contacts'){
 		$tablename='contactdetails';
 		$focus1=new Contacts();
  	}
-	if($_REQUEST['module']=='Leads')
- 	{
+	if($_REQUEST['module']=='Leads'){
 		$tablename='leaddetails';
 		$focus1=new Leads();
 	}
-	if($_REQUEST['module']=='Potentials')
- 	{
+	if($_REQUEST['module']=='Potentials'){
 		$tablename='potential';
 		$focus1=new Potentials();
 	}
-	if($_REQUEST['module']=='Products')
- 	{
+	if($_REQUEST['module']=='Products'){
  		$tablename='products';
  		$focus1=new Products();
  	}
-	//Pavani: checking for HelpDesk and Vendors
-        if($_REQUEST['module']=='HelpDesk')
-        {
-                $tablename='troubletickets';
-                $focus1=new HelpDesk();
-        }
-	if($_REQUEST['module']=='Vendors')
-	{
+    if($_REQUEST['module']=='HelpDesk'){
+            $tablename='troubletickets';
+            $focus1=new HelpDesk();
+    }
+	if($_REQUEST['module']=='Vendors'){
 		$tablename='Vendors';
 		$focus1=new Vendors();
 	}
-	//end checking
+
+	// vtlib customization: Hook to provide generic import for other modules
+	if($_REQUEST['module']) {
+		$focus1 = CRMEntity::getInstance($_REQUEST['module']);
+		$tablename = $focus->table_name;
+	}
+	// END
+	
 	$smarty->assign("FIRSTROW",$firstrow);
 	$smarty->assign("SECONDROW",$secondrow);
 	$smarty->assign("THIRDROW",$thirdrow);
 	$smarty_array[$field_count + 1] = getFieldSelect(	$focus->importable_fields,
 							$field_count,
-							$focus1->required_fields,
+							$focus->required_fields,
 							$suggest,
 							$translated_column_fields,
 							$tablename
 						   );
 
 	$pos = 0;
-
-	foreach ( $rows as $row ) 
-	{
-		
-		if( isset($row[$field_count]) && $row[$field_count] != '')
-		{
+	foreach($rows as $row ){
+		if( isset($row[$field_count]) && $row[$field_count] != ''){
 			$smarty->assign("CELL",htmlspecialchars($row[$field_count]));
-//			$smarty->parse("main.table.row.cell");
-		} 
-		else
-		{
-//			$smarty->parse("main.table.row.cellempty");
 		}
-
 		$cnt++;
 	}
 }
+@session_unregister('import_delimiter');
 @session_unregister('import_has_header');
 @session_unregister('import_firstrow');
 @session_unregister('import_field_map');
@@ -353,6 +353,7 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 @session_unregister('import_module_field_count');
 @session_unregister('import_module_object_required_fields');
 @session_unregister('import_module_translated_column_fields');
+$_SESSION['import_delimiter'] = $delimiter;
 $_SESSION['import_has_header'] = $has_header;
 $_SESSION['import_firstrow'] = $firstrow;
 $_SESSION['import_field_map'] = $field_map;
@@ -361,31 +362,32 @@ $_SESSION['import_module_field_count'] = $field_count;
 $_SESSION['import_module_object_required_fields'] = $focus1->required_fields;
 $_SESSION['import_module_translated_column_fields'] = $translated_column_fields;
 
-
-//echo '<pre>Default array ==> '; print_r($smarty_array); echo '</pre>';
-
 $smarty->assign("SELECTFIELD",$smarty_array);
 $smarty->assign("ROW", $row);
 
 $module_key = "LBL_".strtoupper($_REQUEST['module'])."_NOTE_";
 
-for ($i = 1;isset($mod_strings[$module_key.$i]);$i++)
-{
+for ($i = 1;isset($mod_strings[$module_key.$i]);$i++){
 	$smarty->assign("NOTETEXT", $mod_strings[$module_key.$i]);
 }
 
-if($has_header)
-{
+if($has_header){
 	$smarty->assign("HAS_HEADER", 'on');
-} 
-else
-{
+}else{
 	$smarty->assign("HAS_HEADER", 'off');
 }
 
-$smarty->assign("MODULE", $_REQUEST['module']);
-$smarty->assign('CATEGORY' , $_REQUEST['parenttab']);
-@$_SESSION['import_parenttab'] = $_REQUEST['parenttab'];
+$smarty->assign("AVALABLE_FIELDS", getMergeFields($module,"available_fields"));
+$smarty->assign("FIELDS_TO_MERGE", getMergeFields($module,"fileds_to_merge"));
+if(isPermitted($module,'DuplicatesHandling','') == 'yes'){
+	$smarty->assign("DUPLICATESHANDLING", 'DuplicatesHandling');
+}
+
+$smarty->assign("MODULE", vtlib_purify($_REQUEST['module']));
+$smarty->assign("MODULELABEL", getTranslatedString($_REQUEST['module'],$_REQUEST['module']));
+$parenttab = getParentTab();
+$smarty->assign('CATEGORY' , $parenttab);
+$_SESSION['import_parenttab'] = $parenttab;
 $smarty->assign("JAVASCRIPT2", get_readonly_js() );
 
 $smarty->display('ImportStep2.tpl');
@@ -400,7 +402,6 @@ function validate_import_map()
 	var required_fields = new Array();
 	var required_fields_name = new Array();
 	var seq_string = '';
-
 	<?php 
 		foreach($focus->required_fields as $name => $index)
 		{

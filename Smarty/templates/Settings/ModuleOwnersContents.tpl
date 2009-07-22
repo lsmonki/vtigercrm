@@ -9,7 +9,7 @@
   *
  ********************************************************************************/
 -->*}
-<form name="support_owners" method="POST" action="index.php">
+<form name="support_owners" method="POST" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 	<input type="hidden" name="module" value="Settings">
 	<input type="hidden" name="parenttab" value="Settings">
 	<input type="hidden" name="action" value="SettingsAjax">

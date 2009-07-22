@@ -14,7 +14,6 @@ require_once('data/Tracker.php');
 require_once('modules/Users/LoginHistory.php');
 require_once('modules/Users/Users.php');
 require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 
@@ -49,6 +48,7 @@ $user_list = getUserslist(false);
 $smarty->assign("CMOD", $mod_strings);
 $smarty->assign("MOD", $current_module_strings);
 $smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("USERLIST", $user_list);
 $smarty->assign("CATEGORY",$category);

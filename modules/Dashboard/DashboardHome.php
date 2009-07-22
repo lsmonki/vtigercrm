@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Dashboard/index.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:
  * Description:  Main file for the Home module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -46,7 +46,7 @@ $image_path=$theme_path."images/";
 							<td class="dash_row_unsel"><a class="dash_href" href="#2">2</a></td>
 							<td class="dash_row_unsel"><a class="dash_href" href="#3">3</a></td>
 							<td class="dash_row_unsel"><a class="dash_href" href="#4">4</a></td>
-							<td class="dash_switch"><a href="#top"><img align="absmiddle" src="<?php echo $image_path;?>dash_scroll_up.jpg" border="0"></a></td>
+							<td class="dash_switch"><a href="#top"><img align="absmiddle" src="<?php echo vtiger_imageurl('dash_scroll_up.jpg', $theme) ?>" border="0"></a></td>
 						</tr>
 											</table>
 				</td>
@@ -80,7 +80,7 @@ $image_path=$theme_path."images/";
 							<td class="dash_row_sel">2</td>
 							<td class="dash_row_unsel"><a class="dash_href" href="#3">3</a></td>
 							<td class="dash_row_unsel"><a class="dash_href" href="#4">4</a></td>
-							<td class="dash_switch"><a href="#top"><img align="absmiddle" src="<?php echo $image_path;?>dash_scroll_up.jpg" border="0"></a></td>
+							<td class="dash_switch"><a href="#top"><img align="absmiddle" src="<?php echo vtiger_imageurl('dash_scroll_up.jpg', $theme) ?>" border="0"></a></td>
 						</tr>
 											</table>
 				</td>			
@@ -117,7 +117,7 @@ $image_path=$theme_path."images/";
 							<td class="dash_row_unsel"><a class="dash_href" href="#2">2</a></td>
 							<td class="dash_row_sel">3</td>
 							<td class="dash_row_unsel"><a class="dash_href" href="#4">4</a></td>
-							<td class="dash_switch"><a href="#top"><img align="absmiddle" src="<?php echo $image_path;?>dash_scroll_up.jpg" border="0"></a></td>
+							<td class="dash_switch"><a href="#top"><img align="absmiddle" src="<?php echo vtiger_imageurl('dash_scroll_up.jpg', $theme) ?>" border="0"></a></td>
 						</tr>
 											</table>
 				</td>			
@@ -152,7 +152,7 @@ $image_path=$theme_path."images/";
 							<td class="dash_row_unsel"><a class="dash_href" href="#2">2</a></td>
 							<td class="dash_row_unsel"><a class="dash_href" href="#3">3</a></td>
 							<td class="dash_row_sel">4</td>
-							<td class="dash_switch"><a href="#top"><img align="absmiddle" src="<?php echo $image_path;?>dash_scroll_up.jpg" border="0"></a></td>
+							<td class="dash_switch"><a href="#top"><img align="absmiddle" src="<?php echo vtiger_imageurl('dash_scroll_up.jpg', $theme) ?>" border="0"></a></td>
 						</tr>
 											</table>
 				</td>			

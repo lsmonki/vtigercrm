@@ -37,7 +37,7 @@ $mod_strings = Array(
 'LBL_LIST_PHONE'=>'Phone',
 'LBL_LIST_EMAIL_ADDRESS'=>'Email Address',
 'LBL_LIST_CONTACT_NAME'=>'Contact Name',
-'LBL_LIST_AMOUNT' => 'Total Opportunities',
+'LBL_LIST_AMOUNT' => 'Total Amount',
 
 //DON'T CONVERT THESE THEY ARE MAPPINGS
 'db_name' => 'LBL_LIST_ACCOUNT_NAME',
@@ -228,8 +228,14 @@ $mod_strings = Array(
 'LBL_MAILER_EXPORT_CHECKED' =>'Checked',
 'LBL_MAILER_EXPORT_NOTCHECKED' => 'Not Checked',
 
+// Added after 5.0.4 GA
 
+//Module Sequence Numbering
+'Account No'=>'Account No',
+// END
 
+// Account Hierarchy
+'LBL_SHOW_ACCOUNT_HIERARCHY' => 'Show Account Hierarchy', 
 
 );
 

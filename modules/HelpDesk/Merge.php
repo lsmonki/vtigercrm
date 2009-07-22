@@ -84,13 +84,13 @@ global $current_user;
 require('user_privileges/user_privileges_'.$current_user->id.'.php');
 if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0 || $module == "Users" || $module == "Emails")
 {
-	$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid where vtiger_field.tabid in (13,4,6) and vtiger_field.uitype <> 61 and block <> 75 and block <> 30 order by vtiger_field.tablename";
+	$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid where vtiger_field.tabid in (13,4,6) and vtiger_field.uitype <> 61 and block <> 75 and block <> 30 and vtiger_field.presence in (0,2) order by vtiger_field.tablename";
 	$params1 = array();
 }
 else
 {
 	$profileList = getCurrentUserProfileList();
-	$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid in (13,4,6) and vtiger_field.uitype <> 61 and block <> 75 and block <> 30 AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") GROUP BY vtiger_field.fieldid order by vtiger_field.tablename";
+	$query1="select vtiger_tab.name,vtiger_field.tablename,vtiger_field.columnname,vtiger_field.fieldlabel from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid INNER JOIN vtiger_profile2field ON vtiger_profile2field.fieldid=vtiger_field.fieldid INNER JOIN vtiger_def_org_field ON vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid in (13,4,6) and vtiger_field.uitype <> 61 and block <> 75 and block <> 30 AND vtiger_profile2field.visible=0 AND vtiger_def_org_field.visible=0 AND vtiger_profile2field.profileid IN (". generateQuestionMarks($profileList) .") and vtiger_field.presence in (0,2) GROUP BY vtiger_field.fieldid order by vtiger_field.tablename";
 	$params1 = array($profileList);
 	//Postgres 8 fixes
 	if( $adb->dbType == "pgsql")
@@ -193,10 +193,8 @@ if(count($querycolumns) > 0)
 			left join vtiger_contactdetails as contactdetailsRelHelpDesk on contactdetailsRelHelpDesk.contactid= crmentityRelHelpDesk.crmid
 			left join vtiger_products as productsRel on productsRel.productid = vtiger_troubletickets.product_id
 			left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id
-			LEFT JOIN vtiger_ticketgrouprelation
-				ON vtiger_troubletickets.ticketid = vtiger_ticketgrouprelation.ticketid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupname = vtiger_ticketgrouprelation.groupname
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			left join vtiger_account on vtiger_account.accountid = vtiger_troubletickets.parent_id               
 			left join vtiger_crmentity as crmentityAccounts on crmentityAccounts.crmid = vtiger_account.accountid 
 			left join vtiger_accountbillads on vtiger_accountbillads.accountaddressid = vtiger_account.accountid
@@ -204,10 +202,8 @@ if(count($querycolumns) > 0)
 			left join vtiger_accountscf on vtiger_accountbillads.accountaddressid = vtiger_accountscf.accountid 
 			left join vtiger_account as accountAccount on accountAccount.accountid = vtiger_troubletickets.parent_id
 			left join vtiger_users as usersAccounts on usersAccounts.id = crmentityAccounts.smownerid
-			LEFT JOIN vtiger_accountgrouprelation
-				ON vtiger_accountscf.accountid = vtiger_accountgrouprelation.accountid
 			LEFT JOIN vtiger_groups as groupsAccounts
-				ON groupsAccounts.groupname = vtiger_accountgrouprelation.groupname
+				ON groupsAccounts.groupid = vtiger_crmentity.smownerid
 			left join vtiger_contactdetails on vtiger_contactdetails.contactid = vtiger_troubletickets.parent_id               
 			left join vtiger_crmentity as crmentityContacts on crmentityContacts.crmid = vtiger_contactdetails.contactid 
 			left join vtiger_contactaddress on vtiger_contactdetails.contactid = vtiger_contactaddress.contactaddressid 
@@ -217,10 +213,8 @@ if(count($querycolumns) > 0)
 			left join vtiger_contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = vtiger_contactdetails.reportsto
 			left join vtiger_account as accountContacts on accountContacts.accountid = vtiger_contactdetails.accountid 
 			left join vtiger_users as usersContacts on usersContacts.id = crmentityContacts.smownerid
-			LEFT JOIN vtiger_contactgrouprelation
-				ON vtiger_contactscf.contactid = vtiger_contactgrouprelation.contactid
 			LEFT JOIN vtiger_groups as groupsContacts
-				ON groupsContacts.groupname = vtiger_contactgrouprelation.groupname
+				ON groupsContacts.groupid = vtiger_crmentity.smownerid
 			where vtiger_crmentity.deleted=0 and ((crmentityContacts.deleted=0 || crmentityContacts.deleted is null)||(crmentityAccounts.deleted=0 || crmentityAccounts.deleted is null)) 
 			and vtiger_troubletickets.ticketid in (". generateQuestionMarks($mass_merge) .")";
 

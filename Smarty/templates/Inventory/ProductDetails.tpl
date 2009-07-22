@@ -13,6 +13,7 @@
 -->*}
 
 <script type="text/javascript" src="include/js/Inventory.js"></script>
+<script type="text/javascript" src="modules/Services/Services.js"></script>
 <script>
 if(!e)
 	window.captureEvents(Event.MOUSEMOVE);
@@ -27,7 +28,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		var curr_productid = document.getElementById("hdnProductId"+curr_row).value;
 		if(curr_productid == '')
 		{ldelim}
-			alert("{$APP.PLEASE_SELECT_PRODUCT}");
+			alert("{$APP.PLEASE_SELECT_LINE_ITEM}");
 			return false;
 		{rdelim}
 
@@ -99,16 +100,30 @@ function displayCoords(currObj,obj,mode,curr_row)
 <table width="100%"  border="0" align="center" cellpadding="5" cellspacing="0" class="crmTable" id="proTab">
    <tr>
    	{if $MODULE neq 'PurchaseOrder'}
-			<td colspan="5" class="dvInnerHeader">
+			<td colspan="3" class="dvInnerHeader">
 	{else}
-			<td colspan="4" class="dvInnerHeader">
+			<td colspan="2" class="dvInnerHeader">
 	{/if}
-		<b>{$APP.LBL_PRODUCT_DETAILS}</b>
+		<b>{$APP.LBL_ITEM_DETAILS}</b>
 	</td>
-	<td class="dvInnerHeader" align="right">
-		<b>{$APP.LBL_TAX_MODE}</b>
+	
+	<td class="dvInnerHeader" align="center" colspan="2">
+		<input type="hidden" value="{$INV_CURRENCY_ID}" id="prev_selected_currency_id" />
+		<b>{$APP.LBL_CURRENCY}</b>&nbsp;&nbsp;
+		<select class="small" id="inventory_currency" name="inventory_currency" onchange="updatePrices();">
+		{foreach item=currency_details key=count from=$CURRENCIES_LIST}
+			{if $currency_details.curid eq $INV_CURRENCY_ID}
+				{assign var=currency_selected value="selected"}
+			{else}
+				{assign var=currency_selected value=""}
+			{/if}
+			<OPTION value="{$currency_details.curid}" {$currency_selected}>{$currency_details.currencylabel|@getTranslatedCurrencyString} ({$currency_details.currencysymbol})</OPTION>
+		{/foreach}
+		</select>
 	</td>
-	<td class="dvInnerHeader">
+	
+	<td class="dvInnerHeader" align="center" colspan="2">
+		<b>{$APP.LBL_TAX_MODE}</b>&nbsp;&nbsp;
 		<select id="taxtype" name="taxtype" onchange="decideTaxDiv(); calcTotal();">
 			<OPTION value="individual" selected>{$APP.LBL_INDIVIDUAL}</OPTION>
 			<OPTION value="group">{$APP.LBL_GROUP}</OPTION>
@@ -120,7 +135,7 @@ function displayCoords(currObj,obj,mode,curr_row)
    <!-- Header for the Product Details -->
    <tr valign="top">
 	<td width=5% valign="top" class="lvtCol" align="right"><b>{$APP.LBL_TOOLS}</b></td>
-	<td width=40% class="lvtCol"><font color='red'>*</font><b>{$APP.LBL_PRODUCT_NAME}</b></td>
+	<td width=40% class="lvtCol"><font color='red'>*</font><b>{$APP.LBL_ITEM_NAME}</b></td>
 	{if $MODULE neq 'PurchaseOrder'}
 		<td width=10% class="lvtCol"><b>{$APP.LBL_QTY_IN_STOCK}</b></td>
 	{/if}
@@ -152,15 +167,21 @@ function displayCoords(currObj,obj,mode,curr_row)
 		   <tr>
 			<td class="small">
 				<input type="text" id="productName1" name="productName1" class="small" style="width:70%" value="{$PRODUCT_NAME}" readonly />
-				<input type="hidden" id="hdnProductId1" name="hdnProductId1" value="{$PRODUCT_ID}">
-				<img src="{$IMAGE_PATH}search.gif" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}',1)" />
+				<input type="hidden" id="hdnProductId1" name="hdnProductId1" value="{$PRODUCT_ID}" />
+				<input type="hidden" id="lineItemType1" name="lineItemType1" value="Products" />
+				&nbsp;<img id="searchIcon1" title="Products" src="{'products.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}',1)" />
+			</td>
+		</tr>
+		<tr>
+			<td class="small">
+				<input type="hidden" value="" id="subproduct_ids1" name="subproduct_ids1" />
+				<span id="subprod_names1" name="subprod_names1" style="color:#C0C0C0;font-style:italic;"> </span>
 			</td>
 		   </tr>
-		   <tr>
+		   <tr valign="bottom">
 			<td class="small" id="setComment">
 				<textarea id="comment1" name="comment1" class=small style="width:70%;height:40px"></textarea>
-				<br>
-				[<a href="javascript:;" onclick="getObj('comment1').value=''";>{$APP.LBL_CLEAR_COMMENT}</a>]
+				<img src="{'clear_field.gif'|@vtiger_imageurl:$THEME}" onClick="{literal}${/literal}('comment1').value=''"; style="cursor:pointer;" />
 			</td>
 		   </tr>
 		</table>
@@ -186,7 +207,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		<table width="100%" cellpadding="0" cellspacing="0">
 		   <tr>
 			<td align="right">
-				<input id="listPrice1" name="listPrice1" value="{$UNIT_PRICE}" type="text" class="small " style="width:70px" onBlur="calcTotal();setDiscount(this,'1'); callTaxCalc(1);calcTotal();"/>&nbsp;<img src="{$IMAGE_PATH}pricebook.gif" onclick="priceBookPickList(this,1)">
+				<input id="listPrice1" name="listPrice1" value="{$UNIT_PRICE}" type="text" class="small " style="width:70px" onBlur="calcTotal();setDiscount(this,'1'); callTaxCalc(1);calcTotal();"/>&nbsp;<img src="{'pricebook.gif'|@vtiger_imageurl:$THEME}" onclick="priceBookPickList(this,1)">
 			</td>
 		   </tr>
 		   <tr>
@@ -197,7 +218,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 					   <tr>
 						<td id="discount_div_title1" nowrap align="left" ></td>
-						<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('discount_div1')" style="cursor:pointer;"></td>
+						<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('discount_div1')" style="cursor:pointer;"></td>
 					   </tr>
 					   <tr>
 						<td align="left" class="lineOnTop"><input type="radio" name="discount1" checked onclick="setDiscount(this,1); callTaxCalc(1);calcTotal();">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
@@ -275,6 +296,8 @@ function displayCoords(currObj,obj,mode,curr_row)
    <tr>
 	<td colspan="3">
 			<input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_PRODUCT}" onclick="fnAddProductRow('{$MODULE}','{$IMAGE_PATH}');" />
+			&nbsp;&nbsp;
+			<input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_SERVICE}" onclick="fnAddServiceRow('{$MODULE}','{$IMAGE_PATH}');" />
 	</td>
    </tr>
 
@@ -297,7 +320,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 			<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 			   <tr>
 				<td id="discount_div_title_final" nowrap align="left" ></td>
-				<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('discount_div_final')" style="cursor:pointer;"></td>
+				<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('discount_div_final')" style="cursor:pointer;"></td>
 			   </tr>
 			   <tr>
 				<td align="left" class="lineOnTop"><input type="radio" name="discount_final" checked onclick="setDiscount(this,'_final'); calcGroupTax();calcTotal();">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
@@ -329,7 +352,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 					   <tr>
 						<td id="group_tax_div_title" colspan="2" nowrap align="left" ></td>
-						<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('group_tax_div')" style="cursor:pointer;"></td>
+						<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('group_tax_div')" style="cursor:pointer;"></td>
 					   </tr>
 
 					{foreach item=tax_detail name=group_tax_loop key=loop_count from=$GROUP_TAXES}
@@ -378,7 +401,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 					   <tr>
 						<td id="sh_tax_div_title" colspan="2" nowrap align="left" ></td>
-						<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('shipping_handling_div')" style="cursor:pointer;"></td>
+						<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('shipping_handling_div')" style="cursor:pointer;"></td>
 					   </tr>
 
 					{foreach item=tax_detail name=sh_loop key=loop_count from=$SH_TAXES}

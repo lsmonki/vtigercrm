@@ -1,20 +1,16 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 require_once('include/utils/utils.php');
-require_once('include/database/PearDatabase.php');
-require_once('include/utils/CommonUtils.php');
 include("modules/Dashboard/horizontal_bargraph.php");
 include("modules/Dashboard/vertical_bargraph.php");
-include("modules/Dashboard/pie_graph.php");
-
+include_once("modules/Dashboard/pie_graph.php");
 //To get the vtiger_account names
 
 /* Function to get the Account name for a given vtiger_account id
@@ -43,6 +39,120 @@ function get_account_name($acc_id)
 	return $name;
 }
 
+
+/**
+ * Performance Optimization: Module Chart for Home Page Dashboard
+ */
+function module_Chart_HomePageDashboard($userinfo) {
+
+	global $adb, $app_strings;
+
+	$user_id = $userinfo->id;
+
+	$graph_details = Array();
+	$modrecords  = Array();
+
+	// List of modules which needs to be considered for chart
+	$module_list = Array('Accounts','Potentials','Contacts','Leads','Quotes','SalesOrder','PurchaseOrder','Invoice','HelpDesk','Calendar','Campaigns');
+	// List of special module to handle
+	$spl_modules = Array('Leads', 'HelpDesk', 'Potentials', 'Calendar');
+
+	// Leads module
+	$leadcountres = $adb->query("SELECT count(*) as count FROM vtiger_crmentity se INNER JOIN vtiger_leaddetails le on le.leadid = se.crmid
+		WHERE se.deleted = 0 AND se.smownerid = $user_id AND (le.converted = 0 OR le.converted IS NULL)");
+	$modrecords['Leads'] = $adb->query_result($leadcountres, 0, 'count');
+
+	// HelpDesk module
+	$helpdeskcountres = $adb->query("SELECT count(*) as count FROM vtiger_crmentity se INNER JOIN vtiger_troubletickets tt ON tt.ticketid = se.crmid
+		WHERE se.deleted = 0 AND se.smownerid = $user_id AND (tt.status != 'Closed' OR tt.status IS NULL)");
+	$modrecords['HelpDesk']=$adb->query_result($helpdeskcountres,0,'count');
+
+	// Potentials module
+	$potcountres = $adb->query("SELECT count(*) as count FROM vtiger_crmentity se INNER JOIN vtiger_potential pot ON pot.potentialid = se.crmid
+		WHERE se.deleted = 0 AND se.smownerid = $user_id AND (pot.sales_stage NOT IN ('".$app_strings['LBL_CLOSE_WON']."','".
+		$app_strings['LBL_CLOSE_LOST']."') OR pot.sales_stage IS NULL)");
+	$modrecords['Potentials']= $adb->query_result($potcountres,0,'count');
+
+	// Calendar moudule
+	$calcountres = $adb->query("SELECT count(*) as count FROM vtiger_crmentity se INNER JOIN vtiger_activity act ON act.activityid = se.crmid
+		WHERE se.deleted = 0 AND se.smownerid = $user_id AND ((act.status!='Completed' AND act.status!='Deferred') OR act.status IS NULL)
+		AND ((act.eventstatus!='Held' AND act.eventstatus!='Not Held') OR act.eventstatus IS NULL)");
+	$modrecords['Calendar']= $adb->query_result($calcountres,0,'count');
+
+	// Ignore the special module
+	$nor_modules = array_diff($module_list, $spl_modules);
+	// Prepare module string to use in SQL (check permission)
+	$inmodulestr = '';
+	foreach($nor_modules as $modulename) {
+		if(isPermitted("$modulename","index",'') == 'yes') {
+			if($inmodulestr != '') $inmodulestr .= ",'$modulename'";
+			else $inmodulestr = "'$modulename'";
+		}
+	}
+
+	// Get count for module that needs special conditions
+	$query = "SELECT setype, count(setype) setype_count FROM vtiger_crmentity se WHERE 
+		se.deleted = 0 AND se.smownerid=$user_id AND se.setype in ($inmodulestr) GROUP BY se.setype";
+	$queryres = $adb->query($query);
+	while($resrow = $adb->fetch_array($queryres)) {
+		$modrecords[$resrow['setype']] = $resrow['setype_count'];
+	}
+
+	// Get module custom filter info
+	$cvidres = $adb->query("SELECT cvid,entitytype FROM vtiger_customview WHERE viewname='All' AND entitytype in ('".
+		implode("','", array_keys($modrecords)). "')");
+
+	$cvidinfo = Array();
+	while($cvidrow = $adb->fetch_array($cvidres)) {
+		$cvidinfo[$cvidrow['entitytype']] = $cvidrow['cvid'];
+	}
+
+	$name_val = '';
+	$cnt_val = '';
+	$target_val = '';
+	$urlstring	= '';
+	$cnt_table  = '<table border="0" cellpadding="3" cellspacing="1"><tbody><tr><th>Status</th><th>Total</th></tr>';
+	$test_target_val='';
+
+	$total_records= 0;
+	foreach($module_list as $modulename) {
+		if(isset($modrecords[$modulename])) {
+			$modrec_count = $modrecords[$modulename];
+			if($modrec_count > 0) {
+				if($name_val != '') $name_val .= '::';
+				$name_val .= $modulename;
+				
+				if($cnt_val != '') $cnt_val .= '::';
+				$cnt_val .= $modrec_count;
+
+				$modviewid = $cvidinfo[$modulename];
+				if($target_val!= '') $target_val.= '::';
+				$target_val.= urlencode("index.php?module=$modulename&action=ListView&from_homepagedb=true&type=dbrd&query=true&owner=$userinfo->user_name&viewname=$modviewid");
+				if($test_target_val!='') $test_target_val.= 'K';
+				$test_target_val.=urlencode("index.php?module=$modulename&action=ListView&from_homepagedb=true&type=dbrd&query=true&owner=$userinfo->user_name&viewname=$modviewid");
+
+				$urlstring .= 'K';
+				$cnt_table .= "<tr><td>$modulename</td><td align='center'>$modrec_count</td></tr>";
+
+				$total_records += $modrec_count;
+			}
+		}
+	}
+	$cnt_table .= '</tbody></table>';
+
+	$graph_details[] = $name_val;
+	$graph_details[] = $cnt_val;
+	$graph_details[] = " $userinfo->user_name : $total_records ";
+	$graph_details[] = $target_val;
+	$graph_details[] = '';
+	$graph_details[] = $urlstring;
+	$graph_details[] = $cnt_table;
+	$graph_details[] = $test_target_val;
+
+	return $graph_details;
+}
+/** END **/
+
 /* Function returns the values to render the graph for a particular type 
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
@@ -56,8 +166,6 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 	global $adb,$current_user,$mod_strings, $default_charset;
 	global $days,$date_array,$period_type;
 
-	//$where= " and vtiger_crmentity.smownerid=".$user_id." and vtiger_crmentity.createdtime between '".$date_start."' and '".$end_date."'" ;
-	$query.=$where;
 	if($added_qry!="")
 		$query.=$added_qry;
 
@@ -315,7 +423,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 				}
 				if($graph_for =="contactid")
 				{
-					$query = "SELECT lastname, firstname FROM vtiger_contactdetails WHERE contactid=?";
+					$query = "SELECT contact_no, lastname, firstname FROM vtiger_contactdetails WHERE contactid=?";
 					$result = $adb->pquery($query, array($mod_name));
 					$name_val = $adb->query_result($result,0,"lastname");
 					if($name_val!="")
@@ -329,7 +437,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 						}
 
 						$mod_name=$name_val;
-						$search_str=$name_val;
+						$search_str=$adb->query_result($result, 0, "contact_no");
 					}	
 				}
 				//Passing name to graph
@@ -365,7 +473,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 						$esc_search_str = urlencode($search_str);
 						//$esc_search_str = htmlentities($search_str, ENT_QUOTES, $default_charset);
 						$link_val="index.php?module=".$module."&action=index&from_dashboard=true&search_text=".$esc_search_str."&search_field=".$graph_for."&searchtype=BasicSearch&query=true&type=entchar&viewname=".$cvid;
-					     }	
+					}	
 
 					if($graph_for == "account_id") $graph_for = "accountid";
 
@@ -462,7 +570,7 @@ function save_image_map($filename,$image_map)
 	return true;
 }
 
-function get_graph_by_type($graph_by,$graph_title,$module,$where,$query,$width=900,$height=500)
+function get_graph_by_type($graph_by,$graph_title,$module,$where,$query,$width=900,$height=900,$frompage='')
 {
 	global $user_id,$date_start,$end_date,$type,$mod_strings;
 	$time = time();
@@ -484,7 +592,7 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query,$width=9
 		
 		if(isset($_REQUEST['display_view']) && $_REQUEST['display_view'] == 'MATRIX')
 		{
-			$width = 450;
+			$width = 250;
 			$height = 250;
 		}else
 		{
@@ -496,8 +604,16 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query,$width=9
 		$left=140;
 		$bottom=120;
 		$title=$graph_title;
-
-		return get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring,$test_target_val,$date_start,$end_date);
+       if($frompage != '')
+		{
+			//echo $width.'------'.$height.'------'.$left.'------'.$right.'------'.$top.'------'.$bottom.'------'.$title.'------'.$test_target_val.'------'.$date_start.'------'.$end_date;
+			//die;
+			return get_graph_homepg($cache_file_name,$html_imagename,$cnt_val,$name_val,280,285,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring,$test_target_val,$date_start,$end_date);
+			
+		}else
+		{
+			return get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring,$test_target_val,$date_start,$end_date);
+		}
 	}
 	else
 	{
@@ -537,7 +653,7 @@ $sHTML .= "<tr>
 	   <td><a name='1'></a><table width=20%  border=0 cellspacing=12 cellpadding=0 align=left>
 	         <tr>
 	    	   <td rowspan=2 valign=top><span class=\"dash_count\">1</span></td>
-	           <td nowrap><span class=genHeaderSmall>".$graph_title."</span></td>
+	           <td nowrap><span class=genHeaderSmall>".$display_title."</span></td>
 		 </tr>
 		 <tr>
 		   <td nowrap><span class=big>".$mod_strings['LBL_HORZ_BAR_CHART']."</span> </td>
@@ -556,7 +672,7 @@ $sHTML .= "<tr>
 			<td class='small'>".$mod_strings['VIEWCHART']." :&nbsp;</td>
 			<td class='dash_row_sel'>1</td>
 			<td class='dash_row_unsel'><a class='dash_href' href='#2'>2</a></td>
-			<td class='dash_switch'><a href='#top'><img align='absmiddle' src='".$image_path."dash_scroll_up.jpg' border='0'></a></td>
+			<td class='dash_switch'><a href='#top'><img align='absmiddle' src='". vtiger_imageurl('dash_scroll_up.jpg', $theme)."' border='0'></a></td>
 		</tr>
 		</table>";
 	 }	
@@ -625,7 +741,7 @@ $sHTML .= "<tr>
 			<td class='small'>".$mod_strings['VIEWCHART']." :&nbsp;</td>
 			<td class='dash_row_unsel'><a class='dash_href' href='#1'>1</a></td>
 			<td class='dash_row_sel'>2</td>
-			<td class='dash_switch'><a href='#top'><img align='absmiddle' src='".$image_path."dash_scroll_up.jpg' border='0'></a></td>
+			<td class='dash_switch'><a href='#top'><img align='absmiddle' src='". vtiger_imageurl('dash_scroll_up.jpg', $theme)."' border='0'></a></td>
 		</tr>
 		</table>";
 	 }	
@@ -663,11 +779,11 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 	//Checks whether the cached image is present or not
 	if(file_exists($cache_file_name))
 	{
-		unlink($cache_file_name);
+		@unlink($cache_file_name);
 	}
 	if(file_exists($cache_file_name.'.map'))
 	{
-		unlink($cache_file_name.'.map');
+		@unlink($cache_file_name.'.map');
 	}
 	if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map'))
 	{
@@ -698,5 +814,24 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 		$return .= "<img src=$ccc ismap usemap=#$html_imagename border='0'>";
 		return $return;
 	}
+}
+function get_graph_homepg($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring,$test_target_val,$date_start,$end_date)
+{
+	global $tmp_dir;
+	global $graph_title, $mod_strings;
+	global $theme;
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+
+	$val=explode(":",$title);
+	$display_title=$val[0];
+	$type = $_REQUEST[Chart_Type];
+	if($type == 'horizontalbarchart')
+	   $sHTML .= render_graph($tmp_dir."hor_".$cache_file_name,$html_imagename."_hor",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"horizontal");
+	elseif($type == 'verticalbarchart')
+	   $sHTML .= render_graph($tmp_dir."vert_".$cache_file_name,$html_imagename."_vert",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"vertical");
+	elseif($type == 'piechart')
+	   $sHTML .= render_graph($tmp_dir."pie_".$cache_file_name,$html_imagename."_pie",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"pie");
+	 return $sHTML;
 }
 ?>

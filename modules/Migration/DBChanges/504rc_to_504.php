@@ -27,7 +27,7 @@ ExecuteQuery("update vtiger_users set crypt_type=''");
 
 //In 503 to 504rc release we have included the role based picklist migration but the sequence tables for corresponding picklists are not handled. Now we are handling the sequence tables
 //Popullating arry with picklist field names
-$picklist_arr = array('leadsource'=>'leadsourceid','accounttype'=>'accounttypeid','industry'=>'industryid','leadstatus'=>'leadstatusid','rating'=>'rating_id','opportunity_type'=>'opptypeid','salutationtype'=>'salutationid','sales_stage'=>'sales_stage_id','ticketstatus'=>'ticketstatus_id','ticketpriorities'=>'ticketpriorities_id','ticketseverities'=>'ticketseverities_id','ticketcategories'=>'ticketcategories_id','eventstatus'=>'eventstatusid','taskstatus'=>'taskstatusid','taskpriority'=>'taskpriorityid','manufacturer'=>'manufacturerid','productcategory'=>'productcategoryid','faqcategories'=>'faqcategories_id','usageunit'=>'usageunitid','glacct'=>'glacctid','quotestage'=>'quotestageid','carrier'=>'carrierid','faqstatus'=>'faqstatus_id','invoicestatus'=>'inovicestatusid','postatus'=>'postatusid','sostatus'=>'sostatusid','campaigntype'=>'campaigntypeid','campaignstatus'=>'campaignstatusid','expectedresponse'=>'expectedresponseid');
+$picklist_arr = array('leadsource'=>'leadsourceid','accounttype'=>'accounttypeid','industry'=>'industryid','leadstatus'=>'leadstatusid','rating'=>'rating_id','opportunity_type'=>'opptypeid','salutationtype'=>'salutationid','sales_stage'=>'sales_stage_id','ticketstatus'=>'ticketstatus_id','ticketpriorities'=>'ticketpriorities_id','ticketseverities'=>'ticketseverities_id','ticketcategories'=>'ticketcategories_id','eventstatus'=>'eventstatusid','taskstatus'=>'taskstatusid','taskpriority'=>'taskpriorityid','manufacturer'=>'manufacturerid','productcategory'=>'productcategoryid','faqcategories'=>'faqcategories_id','usageunit'=>'usageunitid','glacct'=>'glacctid','quotestage'=>'quotestageid','carrier'=>'carrierid','faqstatus'=>'faqstatus_id','invoicestatus'=>'invoicestatusid','postatus'=>'postatusid','sostatus'=>'sostatusid','campaigntype'=>'campaigntypeid','campaignstatus'=>'campaignstatusid','expectedresponse'=>'expectedresponseid');
 
 $custom_result = $adb->query("select fieldname from vtiger_field where (uitype=15 or uitype=33) and fieldname like '%cf_%'");
 $numrow = $adb->num_rows($custom_result);
@@ -40,7 +40,11 @@ for($i=0; $i < $numrow; $i++)
 foreach($picklist_arr as $picklistname => $picklistidname)
 {
 	$result = $adb->query("select max(".$picklistidname.") as id from vtiger_".$picklistname);
-	$max_count = $adb->query_result($result,0,'id');
+	$max_count = 1;
+	if ($adb->num_rows($result) > 0) {
+		$max_count = $adb->query_result($result,0,'id');
+		if ($max_count <= 0) $max_count = 1;
+	}
 	$adb->query("drop table if exists vtiger_".$picklistname."_seq");
 	$adb->query("create table vtiger_".$picklistname."_seq (id integer(11))");
 	$adb->query("insert into vtiger_".$picklistname."_seq (id) values(".$max_count.")");
@@ -336,7 +340,16 @@ ExecuteQuery("update vtiger_notificationscheduler set active=1 where scheduledno
 ExecuteQuery("alter table vtiger_users modify date_format varchar(200) default NULL");
 // Updated the sequence number of taskstatus for the ticket #5027
 ExecuteQuery("update vtiger_field set sequence = 8 where columnname = 'status' and tablename = 'vtiger_activity' and fieldname = 'taskstatus' and uitype = 111");
-$migrationlog->debug("\n\nDB Changes from 5.0.4rc to 5.0.4 -------- Ends \n\n");
 
+$arr=$adb->getColumnNames("vtiger_users");
+if(!in_array("internal_mailer", $arr))
+{
+	$adb->pquery("alter table vtiger_users add column internal_mailer int(3) NOT NULL default '1'", array());
+}
+
+global $dbname;
+include("modules/Migration/HTMLtoUTF8Conversion.php");
+
+$migrationlog->debug("\n\nDB Changes from 5.0.4rc to 5.0.4 -------- Ends \n\n");
 
 ?>

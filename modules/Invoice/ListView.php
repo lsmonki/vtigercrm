@@ -1,5 +1,5 @@
 <?php
-/*********************************************************************************
+/*+********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
  * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
@@ -18,12 +18,9 @@ require_once("data/Tracker.php");
 require_once('modules/Invoice/Invoice.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
-require_once('include/database/PearDatabase.php');
-require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 require_once('include/database/Postgres8.php');
-require_once('include/DatabaseUtil.php');
 
 global $app_strings,$list_max_entries_per_page,$currentModule,$theme;
 
@@ -34,6 +31,9 @@ if (!isset($where)) $where = "";
 $url_string = '';
 
 $focus = new Invoice();
+// Initialize sort by fields
+$focus->initSortbyField('Invoice');
+// END
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 
@@ -48,7 +48,7 @@ if(!$_SESSION['lvs'][$currentModule])
 
 if($_REQUEST['errormsg'] != '')
 {
-        $errormsg = $_REQUEST['errormsg'];
+        $errormsg = vtlib_purify($_REQUEST['errormsg']);
         $smarty->assign("ERROR","The User does not have permission to Change/Delete ".$errormsg." ".$currentModule);
 }else
 {
@@ -77,6 +77,17 @@ $oCustomView = new CustomView("Invoice");
 $viewid = $oCustomView->getViewId($currentModule);
 $customviewcombo_html = $oCustomView->getCustomViewCombo($viewid);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
+
+//Added to handle approving or denying status-public by the admin in CustomView
+$statusdetails = $oCustomView->isPermittedChangeStatus($viewnamedesc['status']);
+$smarty->assign("CUSTOMVIEW_PERMISSION",$statusdetails);
+
+//To check if a user is able to edit/delete a customview
+$edit_permit = $oCustomView->isPermittedCustomView($viewid,'EditView',$currentModule);
+$delete_permit = $oCustomView->isPermittedCustomView($viewid,'Delete',$currentModule);
+$smarty->assign("CV_EDIT_PERMIT",$edit_permit);
+$smarty->assign("CV_DELETE_PERMIT",$delete_permit);
+
 //<<<<<customview>>>>>
 $smarty->assign("CHANGE_OWNER",getUserslist());
 $smarty->assign("CHANGE_GROUP_OWNER",getGroupslist());
@@ -86,7 +97,8 @@ if(isPermitted('Invoice','Delete','') == 'yes')
 }
 if(isPermitted('Invoice','EditView','') == 'yes')
 {
-        $other_text['c_owner'] = $app_strings[LBL_CHANGE_OWNER];
+	$other_text['mass_edit'] = $app_strings[LBL_MASS_EDIT];
+	$other_text['c_owner'] = $app_strings[LBL_CHANGE_OWNER];
 }
 
 if($viewnamedesc['viewname'] == 'All')
@@ -98,6 +110,7 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",'Invoice');
@@ -145,50 +158,32 @@ if(isset($order_by) && $order_by != '')
         }
 }
 
-
-//Retreiving the no of rows
-$count_result = $adb->query( mkCountQuery( $query));
-$noofrows = $adb->query_result($count_result,0,"count");
-
-//Storing Listview session object
-if($_SESSION['lvs'][$currentModule])
-{
-	setSessionVar($_SESSION['lvs'][$currentModule],$noofrows,$list_max_entries_per_page);
-}
-//added for 4600
-                                                                                                                             
-if($noofrows <= $list_max_entries_per_page)
-        $_SESSION['lvs'][$currentModule]['start'] = 1;
-//ends
-
-$start = $_SESSION['lvs'][$currentModule]['start'];
-       
-//Retreive the Navigation array
-$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
-
- //Postgres 8 fixes
- if( $adb->dbType == "pgsql")
-     $query = fixPostgresQuery( $query, $log, 0);
- 
-
-// Setting the record count string
-//modified by rdhital
-$start_rec = $navigation_array['start'];
-$end_rec = $navigation_array['end_val']; 
-//By Raju Ends
-
-//limiting the query
-if ($start_rec ==0) 
-	$limit_start_rec = 0;
-else
-	$limit_start_rec = $start_rec -1;
-	
+//Postgres 8 fixes
 if( $adb->dbType == "pgsql")
-     $list_result = $adb->query($query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page");
-else
-     $list_result = $adb->query($query. " LIMIT $limit_start_rec, $list_max_entries_per_page");
+	$query = fixPostgresQuery( $query, $log, 0);
 
-$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+
+if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true){
+	$count_result = $adb->query( mkCountQuery( $query));
+	$noofrows = $adb->query_result($count_result,0,"count");
+}else{
+	$noofrows = null;
+}
+
+$queryMode = (isset($_REQUEST['query']) && $_REQUEST['query'] == 'true');
+$start = ListViewSession::getRequestCurrentPage($currentModule, $query, $viewid, $queryMode);
+
+$navigation_array = VT_getSimpleNavigationValues($start,$list_max_entries_per_page,$noofrows);
+
+$limit_start_rec = ($start-1) * $list_max_entries_per_page;
+
+if( $adb->dbType == "pgsql")
+	$list_result = $adb->pquery($query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
+else
+	$list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
+
+$recordListRangeMsg = getRecordRangeMessage($list_result, $limit_start_rec);
+$smarty->assign('recordListRange',$recordListRangeMsg);
 
 //Retreive the List View Table Header
 if($viewid !='')
@@ -203,12 +198,13 @@ $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 $listview_entries = getListViewEntries($focus,"Invoice",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
+
 //Added to select Multiple records in multiple pages
-$smarty->assign("SELECTEDIDS", $_REQUEST['selobjs']);
-$smarty->assign("ALLSELECTEDIDS", $_REQUEST['allselobjs']);
+$smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
+$smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
 $smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Invoice","index",$viewid);
+$navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string,"Invoice","index",$viewid);
 $alphabetical = AlphabeticalSearch($currentModule,'index','subject','true','basic',"","","","",$viewid);
 $fieldnames = getAdvSearchfields($module);
 $criteria = getcriteria_options();
@@ -219,13 +215,14 @@ $smarty->assign("VIEWID", $viewid);
 $smarty->assign("BUTTONS", $other_text);
 $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
-$smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
 $smarty->assign("VIEWID", $viewid);
 $smarty->assign("BUTTONS", $other_text);
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
+
+$_SESSION[$currentModule.'_listquery'] = $query;
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");

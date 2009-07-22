@@ -1,15 +1,12 @@
 <?php
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+*******************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
-
 
 require_once('include/utils/UserInfoUtil.php');
 require_once('Smarty_setup.php');
@@ -18,14 +15,10 @@ $smarty = new vtigerCRM_Smarty;
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
-
-
-
 global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-
 
 //Retreiving the hierarchy
 $hquery = "select * from vtiger_role order by parentrole asc";
@@ -116,14 +109,14 @@ function indent($hrarray,$roleout,$role_det,$mask_roleid='')
 		$roleout .=  '<li >';
 		if(sizeof($value) >0 && $roledepth != 0)
 		{	
-			$roleout .= '<img src="'.$image_path.'/minus.gif" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" title="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" align="absmiddle" onClick="showhide(\''.$roleid_arr.'\',\'img_'.$roleid.'\')" style="cursor:pointer;">';
+			$roleout .= '<img src="' . vtiger_imageurl('minus.gif', $theme) . '" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" title="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" align="absmiddle" onClick="showhide(\''.$roleid_arr.'\',\'img_'.$roleid.'\')" style="cursor:pointer;">';
 		}
 		else if($roledepth != 0){
-			$roleout .= '<img src="'.$image_path.'/vtigerDevDocs.gif" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" title="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" align="absmiddle">';	
+			$roleout .= '<img src="' . vtiger_imageurl('vtigerDevDocs.gif', $theme) . '" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" title="'.$app_strings['LBL_EXPAND_COLLAPSE'].'" align="absmiddle">';	
 		}
 		else
 		{
-			$roleout .= '<img src="'.$image_path.'/menu_root.gif" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_ROOT'].'" title="'.$app_strings['LBL_ROOT'].'" align="absmiddle">';
+			$roleout .= '<img src="' . vtiger_imageurl('menu_root.gif', $theme) .'" id="img_'.$roleid.'" border="0"  alt="'.$app_strings['LBL_ROOT'].'" title="'.$app_strings['LBL_ROOT'].'" align="absmiddle">';
 		}
 		if($roledepth == 0 || in_array($roleid,$mask_roleid))
 		{
@@ -138,9 +131,9 @@ function indent($hrarray,$roleout,$role_det,$mask_roleid='')
 			}
 			else
 			{
-				$picklist_module = $_REQUEST['picklistmodule'];
-				$picklist_fieldname = $_REQUEST['pick_fieldname'];
-				$picklist_uitype = $_REQUEST['pick_uitype'];
+				$picklist_module = vtlib_purify($_REQUEST['picklistmodule']);
+				$picklist_fieldname = vtlib_purify($_REQUEST['pick_fieldname']);
+				$picklist_uitype = vtlib_purify($_REQUEST['pick_uitype']);
 
 				$roleout .= '&nbsp;<a href="index.php?action=SettingsAjax&module=Settings&mode=edit&file=EditComboField&fld_module='.$picklist_module.'&fieldname='.$picklist_fieldname.'&parentroleid='.$roleid.'&uitype='.$picklist_uitype.'"  class="x" id="user_'.$roleid.'">'.$rolename.'</a>';
 			}
@@ -158,6 +151,7 @@ function indent($hrarray,$roleout,$role_det,$mask_roleid='')
 	return $roleout;
 }
 $smarty->assign("THEME",$theme_path);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);

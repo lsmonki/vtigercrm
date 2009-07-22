@@ -77,59 +77,9 @@ function updateStk($product_id,$qty,$mode,$ext_prod_arr,$module)
 	$qtyinstk= getPrdQtyInStck($product_id);
 	$log->debug("Prd Qty in Stock ".$qtyinstk);
 	
-	if($mode == 'edit')
-	{
-		if(array_key_exists($product_id,$ext_prod_arr))
-		{
-			$old_qty = $ext_prod_arr[$product_id];
-			if($old_qty > $qty)
-			{
-				$diff_qty = $old_qty - $qty;
-				$upd_qty = $qtyinstk+$diff_qty;
-				if($module == 'Invoice')
-				{
-					updateProductQty($product_id, $upd_qty);
-					sendPrdStckMail($product_id,$upd_qty,$prod_name,'','',$module);
-				}
-				else
-					sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module);
-			}
-			elseif($old_qty < $qty)
-			{
-				$diff_qty = $qty - $old_qty;
-				$upd_qty = $qtyinstk-$diff_qty;
-				if($module == 'Invoice')
-				{
-					updateProductQty($product_id, $upd_qty);
-					sendPrdStckMail($product_id,$upd_qty,$prod_name,'','',$module);
-				}
-				else
-					sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module);
-			}
-		}
-		else
-		{
-			$upd_qty = $qtyinstk-$qty;
-			if($module == 'Invoice')
-			{
-				updateProductQty($product_id, $upd_qty);
-				sendPrdStckMail($product_id,$upd_qty,$prod_name,'','',$module);
-			}
-			else
-				sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module);
-		}
-	}
-	else
-	{
-			$upd_qty = $qtyinstk-$qty;
-			if($module == 'Invoice')
-			{
-				updateProductQty($product_id, $upd_qty);
-				sendPrdStckMail($product_id,$upd_qty,$prod_name,'','',$module);
-			}
-			else
-				sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module);
-	}
+	$upd_qty = $qtyinstk-$qty;
+	sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module);
+	
 	$log->debug("Exiting updateStk method ...");
 }
 
@@ -302,8 +252,8 @@ function getProductTaxPercentage($type,$productid,$default='')
 			FROM vtiger_inventorytaxinfo
 			INNER JOIN vtiger_producttaxrel
 				ON vtiger_inventorytaxinfo.taxid = vtiger_producttaxrel.taxid
-			WHERE vtiger_producttaxrel.productid = $productid
-			AND vtiger_inventorytaxinfo.taxname = ?", array($type));
+			WHERE vtiger_producttaxrel.productid = ?
+			AND vtiger_inventorytaxinfo.taxname = ?", array($productid, $type));
 	$taxpercentage = $adb->query_result($res,0,'taxpercentage');
 
 	//This is to retrive the default configured value if the taxpercentage related to product is empty
@@ -335,7 +285,7 @@ function addInventoryHistory($module, $id, $relatedname, $total, $history_fldval
 				    );
 
 	$histid = $adb->getUniqueID($history_table_array[$module]);
- 	$modifiedtime = $adb->formatDate(date('YmdHis'), true);
+ 	$modifiedtime = $adb->formatDate(date('Y-m-d H:i:s'), true);
  	$query = "insert into $history_table_array[$module] values(?,?,?,?,?,?)";
 	$qparams = array($histid,$id,$relatedname,$total,$history_fldval,$modifiedtime);	
 	$adb->pquery($query, $qparams);
@@ -484,34 +434,82 @@ function getTaxDetailsForProduct($productid, $available='all')
  *	@param string $return_old_values - string which contains the string return_old_values or may be empty, if the string is return_old_values then before delete old values will be retrieved
  *	@return array $ext_prod_arr - if the second input parameter is 'return_old_values' then the array which contains the productid and quantity which will be retrieved before delete the product details will be returned otherwise return empty
  */
-function deleteInventoryProductDetails($objectid, $return_old_values='')
+function deleteInventoryProductDetails($focus)
 {
-	global $log, $adb;
-	$log->debug("Entering into function deleteInventoryProductDetails($objectid, $return_old_values='').");
+	global $log, $adb,$updateInventoryProductRel_update_product_array;
+	$log->debug("Entering into function deleteInventoryProductDetails(".$focus->id.").");
 	
-	$ext_prod_arr = Array();
-
-	if($return_old_values == 'return_old_values')
-	{
-		$query1  = "select * from vtiger_inventoryproductrel where id=?";
-        	$result1 = $adb->pquery($query1, array($objectid));
-        	$num_rows = $adb->num_rows($result1);
-        	for($i=0; $i<$num_rows;$i++)
-        	{
-        	        $pro_id = $adb->query_result($result1,$i,"productid");
-        	        $pro_qty = $adb->query_result($result1,$i,"quantity");
-        	        $ext_prod_arr[$pro_id] = $pro_qty;
-        	}
+	$product_info = $adb->pquery("SELECT productid, quantity, sequence_no, incrementondel from vtiger_inventoryproductrel WHERE id=?",array($focus->id));
+	$numrows = $adb->num_rows($product_info);
+	for($index = 0;$index <$numrows;$index++){
+		$productid = $adb->query_result($product_info,$index,'productid');
+		$sequence_no = $adb->query_result($product_info,$index,'sequence_no');
+		$qty = $adb->query_result($product_info,$index,'quantity');
+		$incrementondel = $adb->query_result($product_info,$index,'incrementondel');
+		
+		if($incrementondel){
+			$focus->update_product_array[$focus->id][$sequence_no][$productid]= $qty;
+			$sub_prod_query = $adb->pquery("SELECT productid from vtiger_inventorysubproductrel WHERE id=? AND sequence_no=?",array($focus->id,$sequence_no)); 
+			if($adb->num_rows($sub_prod_query)>0){
+				for($j=0;$j<$adb->num_rows($sub_prod_query);$j++){
+					$sub_prod_id = $adb->query_result($sub_prod_query,$j,"productid");
+					$focus->update_product_array[$focus->id][$sequence_no][$sub_prod_id]= $qty;
+				}
+			}
+			
+		}
 	}
+	$updateInventoryProductRel_update_product_array = $focus->update_product_array;
+    $adb->pquery("delete from vtiger_inventoryproductrel where id=?", array($focus->id));
+    $adb->pquery("delete from vtiger_inventorysubproductrel where id=?", array($focus->id));
+    $adb->pquery("delete from vtiger_inventoryshippingrel where id=?", array($focus->id));
+
+	$log->debug("Exit from function deleteInventoryProductDetails(".$focus->id.")");
+}
+
+function updateInventoryProductRel($entity)
+{
+	global $log, $adb,$updateInventoryProductRel_update_product_array;
+	$entity_id = vtws_getIdComponents($entity->getId());
+	$entity_id = $entity_id[1];
+	$update_product_array = $updateInventoryProductRel_update_product_array;
+	$log->debug("Entering into function updateInventoryProductRel(".$entity_id.").");
+
+	if(!empty($update_product_array)){
+		foreach($update_product_array as $id=>$seq){
+			foreach($seq as $seq=>$product_info)
+			{
+				foreach($product_info as $key=>$index){
+					$updqtyinstk= getPrdQtyInStck($key);
+					$upd_qty = $updqtyinstk+$index;
+					updateProductQty($key, $upd_qty);
+				}
+			}
+		}
+	}
+	$adb->pquery("UPDATE vtiger_inventoryproductrel SET incrementondel=1 WHERE id=?",array($entity_id));
 	
-        $query2 = "delete from vtiger_inventoryproductrel where id=?";
-        $adb->pquery($query2, array($objectid));
+	$product_info = $adb->pquery("SELECT productid,sequence_no, quantity from vtiger_inventoryproductrel WHERE id=?",array($entity_id));
+	$numrows = $adb->num_rows($product_info);
+	for($index = 0;$index <$numrows;$index++){
+		$productid = $adb->query_result($product_info,$index,'productid');
+		$qty = $adb->query_result($product_info,$index,'quantity');
+		$sequence_no = $adb->query_result($product_info,$index,'sequence_no');
+		$qtyinstk= getPrdQtyInStck($productid);
+		$upd_qty = $qtyinstk-$qty;
+		updateProductQty($productid, $upd_qty);
+		$sub_prod_query = $adb->pquery("SELECT productid from vtiger_inventorysubproductrel WHERE id=? AND sequence_no=?",array($entity_id,$sequence_no)); 
+		if($adb->num_rows($sub_prod_query)>0){
+			for($j=0;$j<$adb->num_rows($sub_prod_query);$j++){
+				$sub_prod_id = $adb->query_result($sub_prod_query,$j,"productid");
+				$sqtyinstk= getPrdQtyInStck($sub_prod_id);
+				$supd_qty = $sqtyinstk-$qty;
+				updateProductQty($sub_prod_id, $supd_qty);
+			}
+		}
+	}
 
-        $query3 = "delete from vtiger_inventoryshippingrel where id=?";
-        $adb->pquery($query3, array($objectid));
-
-	$log->debug("Exit from function deleteInventoryProductDetails($objectid, $return_old_values='').");
-	return $ext_prod_arr;
+	$log->debug("Exit from function updateInventoryProductRel(".$entity_id.")");
 }
 
 /**	Function used to save the Inventory product details for the passed entity
@@ -547,7 +545,8 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 		}
 
 		//we will retrieve the existing product details and store it in a array and then delete all the existing product details and save new values, retrieve the old value and update stock only for SO, Quotes and Invoice not for PO
-		$ext_prod_arr = deleteInventoryProductDetails($focus->id,$return_old_values);
+		//$ext_prod_arr = deleteInventoryProductDetails($focus->id,$return_old_values);
+		deleteInventoryProductDetails($focus);
 	}
 	else
 	{
@@ -563,17 +562,16 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 		if($_REQUEST["deleted".$i] == 1)
 			continue;
 
-	        $prod_id = $_REQUEST['hdnProductId'.$i];
+	    $prod_id = $_REQUEST['hdnProductId'.$i];
 		if(isset($_REQUEST['productDescription'.$i]))
 			$description = $_REQUEST['productDescription'.$i];
-		else{
-			$desc_duery = "select vtiger_products.product_description from vtiger_products where vtiger_products.productid=?";
+		/*else{
+			$desc_duery = "select vtiger_crmentity.description AS product_description from vtiger_crmentity where vtiger_crmentity.crmid=?";
 			$desc_res = $adb->pquery($desc_duery,array($prod_id));
 			$description = $adb->query_result($desc_res,0,"product_description");
-		}	
-	        $qty = $_REQUEST['qty'.$i];
-	        $listprice = $_REQUEST['listPrice'.$i];
-		$listprice = getConvertedPrice($listprice);//convert the listPrice into $
+		}	*/
+        $qty = $_REQUEST['qty'.$i];
+        $listprice = $_REQUEST['listPrice'.$i];
 		$comment = $_REQUEST['comment'.$i];
 
 		//we have to update the Product stock for PurchaseOrder if $update_prod_stock is true
@@ -595,8 +593,18 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 
 		$query ="insert into vtiger_inventoryproductrel(id, productid, sequence_no, quantity, listprice, comment, description) values(?,?,?,?,?,?,?)";
 		$qparams = array($focus->id,$prod_id,$prod_seq,$qty,$listprice,$comment,$description);
-		$prod_seq++;
 		$adb->pquery($query,$qparams);
+
+		$sub_prod_str = $_REQUEST['subproduct_ids'.$i];
+		if (!empty($sub_prod_str)) {
+			$sub_prod = split(":",$sub_prod_str);
+			for($j=0;$j<count($sub_prod);$j++){
+				$query ="insert into vtiger_inventorysubproductrel(id, sequence_no, productid) values(?,?,?)";
+				$qparams = array($focus->id,$prod_seq,$sub_prod[$j]);
+				$adb->pquery($query,$qparams);
+			}
+		}
+		$prod_seq++;
 
 		if($module != 'PurchaseOrder')
 		{
@@ -617,7 +625,7 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 		elseif($_REQUEST['discount_type'.$i] == 'amount')
 		{
 			$updatequery .= " discount_amount=?,";
-			$discount_amount = getConvertedPrice($_REQUEST['discount_amount'.$i]);//convert the amount to $
+			$discount_amount = $_REQUEST['discount_amount'.$i];
 			array_push($updateparams, $discount_amount);
 		}
 		if($_REQUEST['taxtype'] == 'group')
@@ -628,7 +636,7 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 				$tax_val = $all_available_taxes[$tax_count]['percentage'];
 				$request_tax_name = $tax_name."_group_percentage";
 				if(isset($_REQUEST[$request_tax_name]))
-                                        $tax_val =$_REQUEST[$request_tax_name];
+					$tax_val =$_REQUEST[$request_tax_name];
 				$updatequery .= " $tax_name = ?,";
 				array_push($updateparams,$tax_val);
 			}
@@ -660,7 +668,7 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 
 	$updatequery  = " update $focus->table_name set ";
 	$updateparams = array();
-	$subtotal = getConvertedPrice($_REQUEST['subtotal']);//get the subtotal to $
+	$subtotal = $_REQUEST['subtotal'];
 	$updatequery .= " subtotal=?,";
 	array_push($updateparams, $subtotal);
 
@@ -675,12 +683,12 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 	}
 	elseif($_REQUEST['discount_type_final'] == 'amount')
 	{
-		$discount_amount_final = getConvertedPrice($_REQUEST['discount_amount_final']);//convert final discount amount to $
+		$discount_amount_final = $_REQUEST['discount_amount_final'];
 		$updatequery .= " discount_amount=?,";
 		array_push($updateparams, $discount_amount_final);
 	}
 	
-	$shipping_handling_charge = getConvertedPrice($_REQUEST['shipping_handling_charge']);//convert the S&H amount to $
+	$shipping_handling_charge = $_REQUEST['shipping_handling_charge'];
 	$updatequery .= " s_h_amount=?,";
 	array_push($updateparams, $shipping_handling_charge);
 
@@ -690,18 +698,16 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 		$adjustmentType = $_REQUEST['adjustmentType'];
 
 	$adjustment = $_REQUEST['adjustment'];
-	$adjustment = getConvertedPrice($adjustment);//convert the adjustment to $
 	$updatequery .= " adjustment=?,";
 	array_push($updateparams, $adjustmentType.$adjustment);
 
-	$total = getConvertedPrice($_REQUEST['total']);//convert total to $
+	$total = $_REQUEST['total'];
 	$updatequery .= " total=?";
 	array_push($updateparams, $total);
 
-	$id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid');
+	//$id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid');
 	//Added where condition to which entity we want to update these values
-	//$updatequery .= " where ".$focus->$module_id."=$focus->id";
-	$updatequery .= " where ".$id_array[$module]."=?";
+	$updatequery .= " where ".$focus->table_index."=?";
 	array_push($updateparams, $focus->id);
 
 	$adb->pquery($updatequery,$updateparams);
@@ -754,6 +760,38 @@ function getInventoryTaxType($module, $id)
 	return $taxtype;
 }
 
+/**	function used to get the price type for the entity (PO, SO, Quotes or Invoice)
+ *	@param string $module - module name
+ *	@param int $id - id of the PO or SO or Quotes or Invoice
+ *	@return string $pricetype - pricetype for the given entity which will be unitprice or secondprice
+ */
+function getInventoryCurrencyInfo($module, $id)
+{
+	global $log, $adb;
+
+	$log->debug("Entering into function getInventoryCurrencyInfo($module, $id).");
+
+	$inv_table_array = Array('PurchaseOrder'=>'vtiger_purchaseorder','SalesOrder'=>'vtiger_salesorder','Quotes'=>'vtiger_quotes','Invoice'=>'vtiger_invoice');
+	$inv_id_array = Array('PurchaseOrder'=>'purchaseorderid','SalesOrder'=>'salesorderid','Quotes'=>'quoteid','Invoice'=>'invoiceid');
+	
+	$inventory_table = $inv_table_array[$module];
+	$inventory_id = $inv_id_array[$module];
+	$res = $adb->pquery("select currency_id, $inventory_table.conversion_rate as conv_rate, vtiger_currency_info.* from $inventory_table
+						inner join vtiger_currency_info on $inventory_table.currency_id = vtiger_currency_info.id
+						where $inventory_id=?", array($id));
+
+	$currency_info = array();
+	$currency_info['currency_id'] = $adb->query_result($res,0,'currency_id');
+	$currency_info['conversion_rate'] = $adb->query_result($res,0,'conv_rate');
+	$currency_info['currency_name'] = $adb->query_result($res,0,'currency_name');
+	$currency_info['currency_code'] = $adb->query_result($res,0,'currency_code');
+	$currency_info['currency_symbol'] = $adb->query_result($res,0,'currency_symbol');
+
+	$log->debug("Exit from function getInventoryCurrencyInfo($module, $id).");
+
+	return $currency_info;
+}
+
 /**	function used to get the taxvalue which is associated with a product for PO/SO/Quotes or Invoice
  *	@param int $id - id of PO/SO/Quotes or Invoice
  *	@param int $productid - product id
@@ -797,89 +835,261 @@ function getInventorySHTaxPercent($id, $taxname)
 	return $taxpercentage;
 }
 
-
-/**	function used to set invoice string and increment invoice id 
- *	@param string $mode - mode should be configure_invoiceno or increment_incoiceno
- *	@param string $req_str - invoice string which is part of the invoice number, this may be alphanumeric characters
- *	@param int $req_no - This should be a number which will written in file and will be used as a next invoice number
- *	@return void. The invoice string and number are stored in the  file CustomInvoiceNo.php so that concatenated string 		with number will be used as a next invoice number
+/**	Function used to get the list of all Currencies as a array
+ *  @param string available - if 'all' returns all the currencies, default value 'available' returns only the currencies which are available for use.
+ *	return array $currency_details - return details of all the currencies as a array
  */
-
-function setInventoryInvoiceNumber($mode, $req_str='', $req_no='')
-{
-        global $root_directory;
-        $filename = $root_directory.'user_privileges/CustomInvoiceNo.php';
-        $readhandle = fopen($filename, "r+");
-        $buffer = '';
-        $new_buffer = '';
-
-	//when we configure the invoice number in Settings this will be used
-	if ($mode == "configure_invoiceno" && $req_str != '' && $req_no != '')
-	{
-
- 	        while(!feof($readhandle))
-               	{
-                       	$buffer = fgets($readhandle, 5200);
-			list($starter, $tmp) = explode(" = ", $buffer);
-
-			if($starter == '$inv_str')
-			{
-				$new_buffer .= "\$inv_str = '".$req_str."';\n";
-			}
-			elseif($starter == '$inv_no')
-			{
-				$new_buffer .= "\$inv_no = '".$req_no."';\n";
-			}
-			else
-				$new_buffer .= $buffer;
-		}
+function getAllCurrencies($available='available') {
+	global $adb, $log;
+	$log->debug("Entering into function getAllCurrencies($available)");
+	
+	$sql = "select * from vtiger_currency_info";
+	if ($available != 'all') {
+		$sql .= " where currency_status='Active' and deleted=0";
 	}
-	else if ($mode == "increment_invoiceno")//when we save new invoice we will increment the invoice id and write
+	$res=$adb->pquery($sql, array());
+	$noofrows = $adb->num_rows($res);
+	
+	for($i=0;$i<$noofrows;$i++)
 	{
-		require_once('user_privileges/CustomInvoiceNo.php');
-		while(!feof($readhandle))
+		$currency_details[$i]['currencylabel'] = $adb->query_result($res,$i,'currency_name');
+		$currency_details[$i]['currencycode'] = $adb->query_result($res,$i,'currency_code');
+		$currency_details[$i]['currencysymbol'] = $adb->query_result($res,$i,'currency_symbol');
+		$currency_details[$i]['curid'] = $adb->query_result($res,$i,'id');
+		$currency_details[$i]['conversionrate'] = $adb->query_result($res,$i,'conversion_rate');
+		$currency_details[$i]['curname'] = 'curname' . $adb->query_result($res,$i,'id');			
+	}
+	
+	$log->debug("Entering into function getAllCurrencies($available)");
+	return $currency_details;
+	
+}
+
+/**	Function used to get all the price details for different currencies which are associated to the given product
+ *	@param int $productid - product id to which we want to get all the associated prices
+ *  @param decimal $unit_price - Unit price of the product
+ *  @param string $available - available or available_associated where as default is available, if available then the prices in the currencies which are available now will be returned, otherwise if the value is available_associated then prices of all the associated currencies will be retruned
+ *	@return array $price_details - price details as a array with productid, curid, curname
+ */
+function getPriceDetailsForProduct($productid, $unit_price, $available='available', $itemtype='Products')
+{
+	global $log, $adb;
+	$log->debug("Entering into function getPriceDetailsForProduct($productid)");
+	if($productid != '')
+	{
+		$product_currency_id = getProductBaseCurrency($productid, $itemtype);
+		$product_base_conv_rate = getBaseConversionRateForProduct($productid,'edit',$itemtype);
+		// Detail View
+		if ($available == 'available_associated') {
+			$query = "select vtiger_currency_info.*, vtiger_productcurrencyrel.converted_price, vtiger_productcurrencyrel.actual_price 
+					from vtiger_currency_info 
+					inner join vtiger_productcurrencyrel on vtiger_currency_info.id = vtiger_productcurrencyrel.currencyid
+					where vtiger_currency_info.currency_status = 'Active' and vtiger_currency_info.deleted=0 
+					and vtiger_productcurrencyrel.productid = ? and vtiger_currency_info.id != ?";
+			$params = array($productid, $product_currency_id);
+		} else { // Edit View
+			$query = "select vtiger_currency_info.*, vtiger_productcurrencyrel.converted_price, vtiger_productcurrencyrel.actual_price 
+					from vtiger_currency_info 
+					left join vtiger_productcurrencyrel 
+					on vtiger_currency_info.id = vtiger_productcurrencyrel.currencyid and vtiger_productcurrencyrel.productid = ?
+					where vtiger_currency_info.currency_status = 'Active' and vtiger_currency_info.deleted=0";
+			$params = array($productid);			
+		}
+
+		//Postgres 8 fixes
+ 		if( $adb->dbType == "pgsql")
+ 		    $query = fixPostgresQuery( $query, $log, 0);
+
+		$res = $adb->pquery($query, $params);
+		for($i=0;$i<$adb->num_rows($res);$i++)
 		{
-			$buffer = fgets($readhandle, 5200);
-			list($starter, $tmp) = explode(" = ", $buffer);
-
-			if($starter == '$inv_no')
-			{
-				//if number is 001, 002 like this (starting with zero) then when we increment 1, zeros will be striped out and result comes as 1,2, etc. So we have added 0 previously for the needed length ie., two zeros for 001, 002, etc.,
-				//If the value is less than 0, then we assign 0 to it(to avoid error).
-				$strip=strlen($inv_no)-strlen($inv_no+1);
-				if($strip<0)$strip=0;
-
-				$temp = str_repeat("0",$strip);
-				$new_buffer .= "\$inv_no = '".$temp.($inv_no+1)."';\n";
+			$price_details[$i]['productid'] = $productid;
+			$price_details[$i]['currencylabel'] = $adb->query_result($res,$i,'currency_name');
+			$price_details[$i]['currencycode'] = $adb->query_result($res,$i,'currency_code');
+			$price_details[$i]['currencysymbol'] = $adb->query_result($res,$i,'currency_symbol');
+			$currency_id = $adb->query_result($res,$i,'id');
+			$price_details[$i]['curid'] = $currency_id;
+			$price_details[$i]['curname'] = 'curname' . $adb->query_result($res,$i,'id');
+			$cur_value = $adb->query_result($res,$i,'actual_price');
+			
+			// Get the conversion rate for the given currency, get the conversion rate of the product currency to base currency. 
+			// Both together will be the actual conversion rate for the given currency.
+			$conversion_rate = $adb->query_result($res,$i,'conversion_rate');
+			$actual_conversion_rate = $product_base_conv_rate * $conversion_rate;
+			
+			if ($cur_value == null || $cur_value == '') {
+				$price_details[$i]['check_value'] = false;
+				if	($unit_price != null) {
+					$cur_value = convertFromMasterCurrency($unit_price, $actual_conversion_rate);
+				} else {
+					$cur_value = '0';
+				}
+			} else {
+				$price_details[$i]['check_value'] = true;
 			}
-			else
-				$new_buffer .= $buffer;
-
+			$price_details[$i]['curvalue'] = $cur_value;
+			$price_details[$i]['conversionrate'] = $actual_conversion_rate;		
+			
+			$is_basecurrency = false;
+			if ($currency_id == $product_currency_id) {
+				$is_basecurrency = true;
+			}
+			$price_details[$i]['is_basecurrency'] = $is_basecurrency;		
+		}
+	}
+	else
+	{
+		if($available == 'available') { // Create View
+			global $current_user;
+			
+			$user_currency_id = fetchCurrency($current_user->id);
+			
+			$query = "select vtiger_currency_info.* from vtiger_currency_info 
+					where vtiger_currency_info.currency_status = 'Active' and vtiger_currency_info.deleted=0";
+			$params = array();
+			
+			$res = $adb->pquery($query, $params);
+			for($i=0;$i<$adb->num_rows($res);$i++)
+			{
+				$price_details[$i]['currencylabel'] = $adb->query_result($res,$i,'currency_name');
+				$price_details[$i]['currencycode'] = $adb->query_result($res,$i,'currency_code');
+				$price_details[$i]['currencysymbol'] = $adb->query_result($res,$i,'currency_symbol');
+				$currency_id = $adb->query_result($res,$i,'id');
+				$price_details[$i]['curid'] = $currency_id;
+				$price_details[$i]['curname'] = 'curname' . $adb->query_result($res,$i,'id');
+				
+				// Get the conversion rate for the given currency, get the conversion rate of the product currency(logged in user's currency) to base currency. 
+				// Both together will be the actual conversion rate for the given currency.
+				$conversion_rate = $adb->query_result($res,$i,'conversion_rate');
+				$user_cursym_convrate = getCurrencySymbolandCRate($user_currency_id);
+				$product_base_conv_rate = 1 / $user_cursym_convrate['rate'];
+				$actual_conversion_rate = $product_base_conv_rate * $conversion_rate;
+				
+				$price_details[$i]['check_value'] = false;
+				$price_details[$i]['curvalue'] = '0';
+				$price_details[$i]['conversionrate'] = $actual_conversion_rate;		
+			
+				$is_basecurrency = false;
+				if ($currency_id == $user_currency_id) {
+					$is_basecurrency = true;
+				}
+				$price_details[$i]['is_basecurrency'] = $is_basecurrency;				
+			}
+		} else {
+			$log->debug("Product id is empty. we cannot retrieve the associated prices.");
 		}
 	}
 
-	//we have the contents in buffer. Going to write the contents in file
-	fclose($readhandle);
-	$handle = fopen($filename, "w");
-	fputs($handle, $new_buffer);
-	fclose($handle);
+	$log->debug("Exit from function getPriceDetailsForProduct($productid)");
+	return $price_details;
 }
 
-/**	Function used to check whether the provided invoicenumber is already available or not
- *	@param int $invoiceno - invoice number, which we are going to check for duplicate
- *	@return binary true or false. If invoice number is already available then return true else return false
+/**	Function used to get the base currency used for the given Product
+ *	@param int $productid - product id for which we want to get the id of the base currency
+ *  @return int $currencyid - id of the base currency for the given product
  */
-function CheckDuplicateInvoiceNumber($invoiceno)
-{
-	global $adb;
-	$result=$adb->pquery("select invoice_no  from vtiger_invoice where invoice_no = ?", array($invoiceno));
-	$num_rows = $adb->num_rows($result);
-
-	if($num_rows > 0)
-		return true;
-	else
-		return false;
+function getProductBaseCurrency($productid,$module='Products') {
+	global $adb, $log;
+	if ($module == 'Services') {
+		$sql = "select currency_id from vtiger_service where serviceid=?";		
+	} else {
+		$sql = "select currency_id from vtiger_products where productid=?";
+	}
+	$params = array($productid);	
+	$res = $adb->pquery($sql, $params);
+	$currencyid = $adb->query_result($res, 0, 'currency_id');	
+	return $currencyid;	
 }
 
+/**	Function used to get the conversion rate for the product base currency with respect to the CRM base currency
+ *	@param int $productid - product id for which we want to get the conversion rate of the base currency
+ *  @param string $mode - Mode in which the function is called
+ *  @return number $conversion_rate - conversion rate of the base currency for the given product based on the CRM base currency
+ */
+function getBaseConversionRateForProduct($productid, $mode='edit', $module='Products') {
+	global $adb, $log, $current_user;
+	
+	if ($mode == 'edit') {
+		if ($module == 'Services') {			
+			$sql = "select conversion_rate from vtiger_service inner join vtiger_currency_info 
+					on vtiger_service.currency_id = vtiger_currency_info.id where vtiger_service.serviceid=?";
+		} else {
+			$sql = "select conversion_rate from vtiger_products inner join vtiger_currency_info 
+					on vtiger_products.currency_id = vtiger_currency_info.id where vtiger_products.productid=?";
+		}
+		$params = array($productid);
+	} else {
+		$sql = "select conversion_rate from vtiger_currency_info where id=?";
+		$params = array(fetchCurrency($current_user->id));		
+	}
+	
+	$res = $adb->pquery($sql, $params);
+	$conv_rate = $adb->query_result($res, 0, 'conversion_rate');
+	
+	return 1 / $conv_rate;
+}
 
+/**	Function used to get the prices for the given list of products based in the specified currency
+ *	@param int $currencyid - currency id based on which the prices have to be provided
+ *	@param array $product_ids - List of product id's for which we want to get the price based on given currency
+ *  @return array $prices_list - List of prices for the given list of products based on the given currency in the form of 'product id' mapped to 'price value'
+ */
+function getPricesForProducts($currencyid, $product_ids, $module='Products') {
+	global $adb,$log,$current_user;
+	
+	$price_list = array();
+	if (count($product_ids) > 0) {
+		if ($module == 'Services') {
+			$query = "SELECT vtiger_currency_info.id, vtiger_currency_info.conversion_rate, " .
+					"vtiger_service.serviceid AS productid, vtiger_service.unit_price, " .
+					"vtiger_productcurrencyrel.actual_price " .
+					"FROM (vtiger_currency_info, vtiger_service) " .
+					"left join vtiger_productcurrencyrel on vtiger_service.serviceid = vtiger_productcurrencyrel.productid " .
+					"and vtiger_currency_info.id = vtiger_productcurrencyrel.currencyid " .
+					"where vtiger_service.serviceid in (". generateQuestionMarks($product_ids) .") and vtiger_currency_info.id = ?";
+		} else {
+			$query = "SELECT vtiger_currency_info.id, vtiger_currency_info.conversion_rate, " .
+					"vtiger_products.productid, vtiger_products.unit_price, " .
+					"vtiger_productcurrencyrel.actual_price " .
+					"FROM (vtiger_currency_info, vtiger_products) " .
+					"left join vtiger_productcurrencyrel on vtiger_products.productid = vtiger_productcurrencyrel.productid " .
+					"and vtiger_currency_info.id = vtiger_productcurrencyrel.currencyid " .
+					"where vtiger_products.productid in (". generateQuestionMarks($product_ids) .") and vtiger_currency_info.id = ?";			
+		}
+		$params = array($product_ids, $currencyid);
+		$result = $adb->pquery($query, $params);
+		
+		for($i=0;$i<$adb->num_rows($result);$i++)
+		{
+			$product_id = $adb->query_result($result, $i, 'productid');
+			if(getFieldVisibilityPermission($module,$current_user->id,'unit_price') == '0') {
+				$actual_price = $adb->query_result($result, $i, 'actual_price');
+				
+				if ($actual_price == null || $actual_price == '') {
+					$unit_price = $adb->query_result($result, $i, 'unit_price');
+					$product_conv_rate = $adb->query_result($result, $i, 'conversion_rate');
+					$product_base_conv_rate = getBaseConversionRateForProduct($product_id,'edit',$module);
+					$conversion_rate = $product_conv_rate * $product_base_conv_rate;
+					
+					$actual_price = $unit_price * $conversion_rate;
+				}
+				$price_list[$product_id] = $actual_price;
+			} else {
+				$price_list[$product_id] = '';
+			}
+		}
+	}
+	return $price_list;
+}
+
+/**	Function used to get the currency used for the given Price book
+ *	@param int $pricebook_id - pricebook id for which we want to get the id of the currency used
+ *  @return int $currencyid - id of the currency used for the given pricebook
+ */
+function getPriceBookCurrency($pricebook_id) {
+	global $adb;
+	$result = $adb->pquery("select currency_id from vtiger_pricebook where pricebookid=?", array($pricebook_id));
+	$currency_id = $adb->query_result($result,0,'currency_id');
+	return $currency_id;
+}
 ?>

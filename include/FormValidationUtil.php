@@ -13,6 +13,30 @@
  * File containing methods to proceed with the ui validation for all the forms
  *
  */
+/**
+ * Get field validation information
+ */
+function getDBValidationData($tablearray, $tabid='') {
+	if($tabid != '') {		
+		global $adb, $mod_strings;
+		$fieldModuleName = getTabModuleName($tabid);
+		$fieldres = $adb->pquery(
+			"SELECT fieldlabel,fieldname,typeofdata FROM vtiger_field
+			WHERE displaytype IN (1,3) AND presence in (0,2) AND tabid=?", Array($tabid));
+		$fieldinfos = Array();
+		while($fieldrow = $adb->fetch_array($fieldres)) {
+			$fieldlabel = getTranslatedString($fieldrow['fieldlabel'], $fieldModuleName);	
+			$fieldname = $fieldrow['fieldname'];
+			$typeofdata= $fieldrow['typeofdata'];
+			$fieldinfos[$fieldname] = Array($fieldlabel => $typeofdata);
+		}
+		return $fieldinfos;
+	} else {
+		//  TODO: Call the old API defined below in the file?
+		return getDBValidationData_510($tablearray, $tabid);
+	}
+}
+ 
 /** Function to get the details for fieldlabels for a given table array
   * @param $tablearray -- tablearray:: Type string array (table names in array)
   * @param $tabid -- tabid:: Type integer 
@@ -21,7 +45,7 @@
  */
 
 
-function getDBValidationData($tablearray,$tabid='')
+function getDBValidationData_510($tablearray,$tabid='')
 {
   global $log;
   $log->debug("Entering getDBValidationData(".$tablearray.",".$tabid.") method ...");
@@ -31,7 +55,7 @@ function getDBValidationData($tablearray,$tabid='')
   $numValues = count($tablearray);
   global $adb,$mod_strings;
 
-  if($tabid!='') $tab_con = ' and tabid='. mysql_real_escape_string($tabid);
+  if($tabid!='') $tab_con = ' and tabid='. $adb->sql_escape_string($tabid);
 	
   for($i=0;$i<$numValues;$i++)
   {
@@ -40,12 +64,12 @@ function getDBValidationData($tablearray,$tabid='')
   	{
 		if($numValues > 1 && $i != $numValues-1)
     	{
-			$sql .= "select fieldlabel,fieldname,typeofdata from vtiger_field where tablename=? and tabid=10 and displaytype <> 2 union ";
+			$sql .= "select fieldlabel,fieldname,typeofdata from vtiger_field where tablename=? and tabid=10 and vtiger_field.presence in (0,2) and displaytype <> 2 union ";
 			array_push($params, $tablearray[$i]);	
      	}
    		else
     	{
-   			$sql  .= "select fieldlabel,fieldname,typeofdata from vtiger_field where tablename=? and tabid=10 and displaytype <> 2 ";
+   			$sql  .= "select fieldlabel,fieldname,typeofdata from vtiger_field where tablename=? and tabid=10 and vtiger_field.presence in (0,2) and displaytype <> 2 ";
     		array_push($params, $tablearray[$i]);	
 		}
   	}
@@ -53,22 +77,24 @@ function getDBValidationData($tablearray,$tabid='')
   	{
     		if($numValues > 1 && $i != $numValues-1)
     		{
-      			$sql .= "select fieldlabel,fieldname,typeofdata from vtiger_field where tablename=? $tab_con and displaytype in (1,3) union ";
+      			$sql .= "select fieldlabel,fieldname,typeofdata from vtiger_field where tablename=? $tab_con and displaytype in (1,3) and vtiger_field.presence in (0,2) union ";
     			array_push($params, $tablearray[$i]);	
 			}
     		else
     		{
-      			$sql  .= "select fieldlabel,fieldname,typeofdata from vtiger_field where tablename=? $tab_con and displaytype in (1,3)";
+      			$sql  .= "select fieldlabel,fieldname,typeofdata from vtiger_field where tablename=? $tab_con and displaytype in (1,3) and vtiger_field.presence in (0,2)";
     			array_push($params, $tablearray[$i]);	
 			}
   	}
   }
   $result = $adb->pquery($sql, $params);
   $noofrows = $adb->num_rows($result);
+  $fieldModuleName = empty($tabid)? false : getTabModuleName($tabid);
   $fieldName_array = Array();
   for($i=0;$i<$noofrows;$i++)
   {
-    $fieldlabel = $mod_strings[$adb->query_result($result,$i,'fieldlabel')];
+	// Translate label with reference to module language string
+    $fieldlabel = getTranslatedString($adb->query_result($result,$i,'fieldlabel'), $fieldModuleName);
     $fieldname = $adb->query_result($result,$i,'fieldname');
     $typeofdata = $adb->query_result($result,$i,'typeofdata');
    //echo '<br> '.$fieldlabel.'....'.$fieldname.'....'.$typeofdata;

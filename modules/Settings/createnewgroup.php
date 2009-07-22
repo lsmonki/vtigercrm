@@ -1,17 +1,13 @@
 <?php
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
-
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 global $adb;
@@ -24,7 +20,7 @@ $parentGroupArray=Array();
 if(isset($_REQUEST['groupId']) && $_REQUEST['groupId'] != '')
 {	
 	$mode = 'edit';
-	$groupId=$_REQUEST['groupId'];
+	$groupId=vtlib_purify($_REQUEST['groupId']);
 	$groupInfo=getGroupInfo($groupId);
 	require_once('include/utils/GetParentGroups.php');
 	$parGroups = new GetParentGroups();
@@ -40,8 +36,8 @@ else
 	if(isset($_REQUEST['error']) && ($_REQUEST['error']=='true'))
 	{
 		$Err_msg = "<center><font color='red'><b>".$mod_strings['LBL_GROUP_NAME_ERROR']."</b></font></center>";
-		$groupInfo[] = $_REQUEST['groupname'];
-		$groupInfo[] = $_REQUEST['desc'];
+		$groupInfo[] = vtlib_purify($_REQUEST['groupname']);
+		$groupInfo[] = vtlib_purify($_REQUEST['desc']);
 	}
 }
 			
@@ -68,7 +64,7 @@ foreach($roleDetails as $roleId=>$roleInfo)
 
 		$roleName=$roleInfo[0];
 		$roleIdStr .= "'".$roleId."'";
-		$roleNameStr .= "'".escape_single_quotes(decode_html($roleName))."'"; 
+		$roleNameStr .= "'".addslashes(decode_html($roleName))."'"; 
 	}
 	
 	$i++;	
@@ -105,7 +101,7 @@ foreach($grpDetails as $grpId=>$grpName)
 		}
 
 		$grpIdStr .= "'".$grpId."'";
-		$grpNameStr .= "'".escape_single_quotes(decode_html($grpName))."'";
+		$grpNameStr .= "'".addslashes(decode_html($grpName))."'";
 	
 	$m++;
 	}	
@@ -148,28 +144,18 @@ $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
-
-//for javascript
 $smarty->assign("ROLEIDSTR",$roleIdStr);
 $smarty->assign("ROLENAMESTR",$roleNameStr);
 $smarty->assign("USERIDSTR",$userIdStr);
 $smarty->assign("USERNAMESTR",$userNameStr);
 $smarty->assign("GROUPIDSTR",$grpIdStr);
 $smarty->assign("GROUPNAMESTR",$grpNameStr);
-
-$smarty->assign("RETURN_ACTION",$_REQUEST['returnaction']);
+$smarty->assign("RETURN_ACTION",vtlib_purify($_REQUEST['returnaction']));
 $smarty->assign("GROUPID",$groupId);
 $smarty->assign("MODE",$mode);
-
-
-			
-//echo $Err_msg;
-
-$smarty->assign("GROUPNAME",$groupInfo[0]);
-				
-				
-$smarty->assign("DESCRIPTION",$groupInfo[1]);
-				
+$smarty->assign("GROUPNAME",$groupInfo[0]);		
+$smarty->assign("DESCRIPTION",$groupInfo[1]);				
 		
 $smarty->display("GroupEditView.tpl");
+
 ?>

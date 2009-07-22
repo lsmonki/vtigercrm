@@ -45,7 +45,7 @@ function checkDataConversion()
 </script>
 
 
-<form name="Migration" method="POST" action="index.php" enctype="multipart/form-data">
+<form name="Migration" method="POST" action="index.php" enctype="multipart/form-data" onsubmit="VtigerJS_DialogBox.block();">
 <input type="hidden" name="module" value="Migration">
 <input type="hidden" name="action" value="index">
 <input type="hidden" name="migration_option" value="">
@@ -72,7 +72,7 @@ function checkDataConversion()
 					<td class="mailClientBg" style="padding-left:10px;padding-top:10px;vertical-align:top;">
 						<table width="100%"  border="0" cellpadding="5" cellspacing="0" class="small">
 					   		<tr>
-								<td width="10%"><img src="{$IMAGE_PATH}migrate.gif" align="absmiddle"/></td>
+								<td width="10%"><img src="{'migrate.gif'|@vtiger_imageurl:$THEME}" align="absmiddle"/></td>
 								<td width="90%">
 									<span class="genHeaderBig">{$MOD.LBL_UPGRADE_VTIGER}</span><br />
 										({$MOD.LBL_UPGRADE_FROM_VTIGER_5X})
@@ -86,13 +86,13 @@ function checkDataConversion()
 									<table width="40%" cellpadding="0" cellspacing="5" style="border: 1px solid #777;">
 										<tr><th>vtigerCRM Charset</th><th>Database Charset</th></tr>
 										<tr><th>{$CONFIG_CHARSET}
-											{if $CONFIG_STATUS eq '1'} <img src="{$IMAGE_PATH}/yes.gif" /> 
-											{else} <img src="{$IMAGE_PATH}/no.gif" /> 
+											{if $CONFIG_STATUS eq '1'} <img src="themes/images/yes.gif" /> 
+											{else} <img src="themes/images/no.gif" /> 
 											{/if}
 											</th>
 											<th>{$DB_CHARSET}
-												{if $DB_STATUS eq '1'} <img src="{$IMAGE_PATH}/yes.gif" /> 
-												{else} <img src="{$IMAGE_PATH}/no.gif" /> 
+												{if $DB_STATUS eq '1'} <img src="themes/images/yes.gif" /> 
+												{else} <img src="themes/images/no.gif" /> 
 												{/if}
 											</th>
 										</tr>
@@ -102,8 +102,8 @@ function checkDataConversion()
 							<tr>
 	           					<td colspan="2" align="center">
 						            For UTF-8 Support:&nbsp;
-						            <img src="{$IMAGE_PATH}/no.gif" /> Not recommended setting &nbsp;
-						            <img src="{$IMAGE_PATH}/yes.gif" /> Meets recommended setting
+						            <img src="themes/images/no.gif" /> Not recommended setting &nbsp;
+						            <img src="themes/images/yes.gif" /> Meets recommended setting
 					           </td>
 					        </tr>
 						
@@ -175,7 +175,7 @@ function checkDataConversion()
 														create database new_db_name DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;<br />&nbsp;&nbsp;
 														To change the default character set for an existing database you can use<br />&nbsp;&nbsp;
 														alter database old_db_name DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;<br />&nbsp;&nbsp;
-														More Information about database UTF-8 support is <a href="http://www.vtiger.com/products/crm/help/5.0.4/vtiger_CRM_Database_UTF8Config.pdf" target="_new"><b>here</b></a>.<br />
+														More Information about database UTF-8 support is <a href="http://www.vtiger.com/products/crm/help/5.1.0/vtiger_CRM_Database_UTF8Config.pdf" target="_new"><b>here</b></a>.<br />
 											<li><a name='store_db_dump'></a> <b>How to store the data from database dump file to a new database?</b><br />
 												1. Edit the database dump file<br />&nbsp;&nbsp;
 														SET FOREIGN_KEY_CHECKS = 0; =&gt; add this line at the start of the dump file.<br />&nbsp;&nbsp;
@@ -203,13 +203,13 @@ function checkDataConversion()
 									<table width="40%" cellpadding="0" cellspacing="5" style="border: 1px solid #777;">
 										<tr><th>vtigerCRM Charset (config.inc.php)</th><th>Database Charset</th></tr>
 										<tr><th>{$CONFIG_CHARSET}
-											{if $CONFIG_STATUS eq '1'} <img src="{$IMAGE_PATH}/yes.gif" /> 
-											{else} <img src="{$IMAGE_PATH}/no.gif" /> 
+											{if $CONFIG_STATUS eq '1'} <img src="{'yes.gif'|@vtiger_imageurl:$THEME}" /> 
+											{else} <img src="{'no.gif'|@vtiger_imageurl:$THEME}" /> 
 											{/if}
 											</th>
 											<th>{$DB_CHARSET}
-												{if $DB_STATUS eq '1'} <img src="{$IMAGE_PATH}/yes.gif" /> 
-												{else} <img src="{$IMAGE_PATH}/no.gif" /> 
+												{if $DB_STATUS eq '1'} <img src="{'yes.gif'|@vtiger_imageurl:$THEME}" /> 
+												{else} <img src="{'no.gif'|@vtiger_imageurl:$THEME}" /> 
 												{/if}
 											</th>
 										</tr>
@@ -218,8 +218,8 @@ function checkDataConversion()
 							</tr>
 							<tr>
 	           					<td colspan="2" align="center">
-						            <img src="{$IMAGE_PATH}/no.gif" /> Not recommended setting for UTF-8 Support. &nbsp;
-						            <img src="{$IMAGE_PATH}/yes.gif" /> Meets recommended setting for UTF-8 Support.
+						            <img src="{'no.gif'|@vtiger_imageurl:$THEME}" /> Not recommended setting for UTF-8 Support. &nbsp;
+						            <img src="{'yes.gif'|@vtiger_imageurl:$THEME}" /> Meets recommended setting for UTF-8 Support.
 					           </td>
 					        </tr>
 						

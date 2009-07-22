@@ -1,22 +1,25 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 require_once('modules/CustomView/CustomView.php');
-if(isset($_REQUEST["record"]) == false)
+if(isset($_REQUEST["record"]) == false || $_REQUEST["record"]=='')
 {
         $oReport = new Reports();
-        $primarymodule = $_REQUEST["primarymodule"];
-        $secondarymodule = $_REQUEST["secondarymodule"];
+        $primarymodule = vtlib_purify($_REQUEST["primarymodule"]);
 
-	$BLOCK1 = getPrimaryStdFilterHTML($primarymodule);
-	$BLOCK1 .= getSecondaryStdFilterHTML($secondarymodule);
+		$BLOCK1 = getPrimaryStdFilterHTML($primarymodule);
+		if(!empty($ogReport->related_modules[$primarymodule])) {
+			foreach($ogReport->related_modules[$primarymodule] as $key=>$value){
+				$BLOCK1 .= getSecondaryStdFilterHTML($_REQUEST["secondarymodule_".$value]);
+			}
+		}
+
 		$report_std_filter->assign("BLOCK1_STD",$BLOCK1);
         $BLOCKJS = $oReport->getCriteriaJS();
 		$report_std_filter->assign("BLOCKJS_STD",$BLOCKJS);
@@ -29,9 +32,23 @@ if(isset($_REQUEST["record"]) == false)
 	global $current_user;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 
-        $reportid = $_REQUEST["record"];
-        $oReport = new Reports($reportid);
-        $oReport->getSelectedStandardCriteria($reportid);
+    $reportid = vtlib_purify($_REQUEST["record"]);
+    $oReport = new Reports($reportid);
+    $oReport->getSelectedStandardCriteria($reportid);
+	
+	$oRep = new Reports();
+	$secondarymodule = '';
+	$secondarymodules =Array();
+	
+	if(!empty($oRep->related_modules[$oReport->primodule])) {
+		foreach($oRep->related_modules[$oReport->primodule] as $key=>$value){
+			if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= $_REQUEST["secondarymodule_".$value];
+		}
+	}
+	$secondarymodule = implode(":",$secondarymodules);
+	
+	if($secondarymodule!='')
+		$oReport->secmodule = $secondarymodule;
 	
 	$BLOCK1 = getPrimaryStdFilterHTML($oReport->primodule,$oReport->stdselectedcolumn);
 	$BLOCK1 .= getSecondaryStdFilterHTML($oReport->secmodule,$oReport->stdselectedcolumn);
@@ -81,19 +98,19 @@ function getPrimaryStdFilterHTML($module,$selected="")
 			{
 				if($key == $selected)
 				{
-					$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$mod_strings[$value]."</option>";
+					$shtml .= "<option selected value=\"".$key."\">".getTranslatedString($module,$module)." - ".getTranslatedString($value,$secmodule[$i])."</option>";
 				}else
 				{
-					$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$mod_strings[$value]."</option>";
+					$shtml .= "<option value=\"".$key."\">".getTranslatedString($module,$module)." - ".getTranslatedString($value,$secmodule[$i])."</option>";
 				}
 			}else
 			{
 				if($key == $selected)
 				{
-					$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</option>";
+					$shtml .= "<option selected value=\"".$key."\">".getTranslatedString($module,$module)." - ".$value."</option>";
 				}else
 				{
-					$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</option>";
+					$shtml .= "<option value=\"".$key."\">".getTranslatedString($module,$module)." - ".$value."</option>";
 				}
 			}
 		}
@@ -128,19 +145,19 @@ function getSecondaryStdFilterHTML($module,$selected="")
                                         {
 						if($key == $selected)
 						{
-							$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$mod_strings[$value]."</option>";
+							$shtml .= "<option selected value=\"".$key."\">".getTranslatedString($secmodule[$i],$secmodule[$i])." - ".getTranslatedString($value,$secmodule[$i])."</option>";
 						}else
 						{
-							$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$mod_strings[$value]."</option>";
+							$shtml .= "<option value=\"".$key."\">".getTranslatedString($secmodule[$i],$secmodule[$i])." - ".getTranslatedString($value,$secmodule[$i])."</option>";
 						}
 					}else
 					{
 						if($key == $selected)
 						{
-							$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$value."</option>";
+							$shtml .= "<option selected value=\"".$key."\">".getTranslatedString($secmodule[$i],$secmodule[$i])." - ".$value."</option>";
 						}else
 						{
-							$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$value."</option>";
+							$shtml .= "<option value=\"".$key."\">".getTranslatedString($secmodule[$i],$secmodule[$i])." - ".$value."</option>";
 						}
 					}
                 		}

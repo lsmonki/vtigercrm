@@ -25,13 +25,13 @@ require_once('modules/Users/CreateUserPrivilegeFile.php');
 require_once('include/logging.php');
 require_once('user_privileges/audit_trail.php');
 
-global $mod_strings;
+global $mod_strings, $default_charset;
 
 $focus = new Users();
 
 // Add in defensive code here.
 $focus->column_fields["user_name"] = to_html($_REQUEST['user_name']);
-$user_password = $_REQUEST['user_password'];
+$user_password = vtlib_purify($_REQUEST['user_password']);
 
 $focus->load_user($user_password);
 
@@ -47,7 +47,7 @@ if($focus->is_authenticated())
 		else
 			$auditrecord = $record;	
 
-		$date_var = $adb->formatDate(date('YmdHis'), true);
+		$date_var = $adb->formatDate(date('Y-m-d H:i:s'), true);
  	    $query = "insert into vtiger_audit_trial values(?,?,?,?,?,?)";
 		$params = array($adb->getUniqueID('vtiger_audit_trial'), $focus->id, 'Users','Authenticate','',$date_var);				
 		$adb->pquery($query, $params);

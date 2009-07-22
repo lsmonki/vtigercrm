@@ -31,7 +31,7 @@ require_once('include/utils/UserInfoUtil.php');
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
-global $theme;
+global $theme,$default_charset;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
@@ -42,8 +42,9 @@ $smod_strings = return_module_language($current_language,'Settings');
 $smarty->assign("APP", $app_strings);
 $smarty->assign("MOD", $smod_strings);
 $smarty->assign("MODULE", 'Settings');
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
-$smarty->assign("PARENTTAB", $_REQUEST['parenttab']);
+$smarty->assign("PARENTTAB", getParentTab());
 
 $return_data=array();
 if ($temprow != null)

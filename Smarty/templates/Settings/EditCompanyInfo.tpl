@@ -14,10 +14,10 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 <br>
-	<form action="index.php?module=Settings&action=add2db" method="post" name="index" enctype="multipart/form-data">
+	<form action="index.php?module=Settings&action=add2db" method="post" name="index" enctype="multipart/form-data" onsubmit="VtigerJS_DialogBox.block();">
  	<input type="hidden" name="return_module" value="Settings">
  	<input type="hidden" name="parenttab" value="Settings">
     	<input type="hidden" name="return_action" value="OrganizationConfig">
@@ -26,7 +26,7 @@
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}company.gif" width="48" height="48" border=0 ></td>
+					<td width=50 rowspan=2 valign=top><img src="{'company.gif'|@vtiger_imageurl:$THEME}" width="48" height="48" border=0 ></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_EDIT} {$MOD.LBL_COMPANY_DETAILS} </b></td>
 				</tr>
 				<tr>
@@ -72,7 +72,7 @@
                              {$MOD.LBL_SELECT_LOGO} 
 				<INPUT TYPE="HIDDEN" NAME="MAX_FILE_SIZE" VALUE="800000">
 		                <INPUT TYPE="HIDDEN" NAME="PREV_FILE" VALUE="{$ORGANIZATIONLOGONAME}">	 
-                                <input type="file" name="binFile" class="small" value="{$ORGANIZATIONLOGONAME}" onclick="validateFilename(this);">[{$ORGANIZATIONLOGONAME}]
+                                <input type="file" name="binFile" class="small" value="{$ORGANIZATIONLOGONAME}" onchange="validateFilename(this);">[{$ORGANIZATIONLOGONAME}]
                                 <input type="hidden" name="binFile_hidden" value="{$ORGANIZATIONLOGONAME}" />
 			      </td>
                           </tr>
@@ -134,7 +134,7 @@
 	</div>
 	</form>		
 </td>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </tbody>
 </table>

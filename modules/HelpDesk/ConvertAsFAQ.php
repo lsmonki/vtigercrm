@@ -29,15 +29,6 @@ foreach($ticket_faq_mapping_fields as $ticket_column => $faq_column)
 	$focus->column_fields[$faq_column] = $adb->query_result($res,0,$ticket_column);
 }
 
-//In the request the groupname is coming as ID from the "DetailViewUI.tpl file". This group id is used in Ajax edit - detialview. But here the groupname is requried. so this check has been added to make the functionality works smooth while converting a ticket to faq.
-if($_REQUEST['assigntype'] == 'T' && isset($_REQUEST['assigned_group_name']) && $_REQUEST['assigned_group_name'] != '')
-{
-	$qry ="select groupname from vtiger_groups where groupid=".$_REQUEST['assigned_group_name'];
-	$grp_name = $adb->query_result($adb->query($qry),0,'groupname');
-	$_REQUEST['assigned_group_name'] = $grp_name;
-
-}
-
 $focus->save("Faq");
 
 if($focus->id != '')
@@ -72,6 +63,6 @@ if($focus->id != '')
 	$adb->pquery($sql1, array($answer, $focus->id));
 }
 
-header("Location:index.php?module=Faq&action=EditView&record=$focus->id&return_module=Faq&return_action=DetailView&return_id=$focus->id");
+header("Location:index.php?module=Faq&action=DetailView&record=$focus->id&return_module=Faq&return_action=DetailView&return_id=$focus->id");
 
 ?>

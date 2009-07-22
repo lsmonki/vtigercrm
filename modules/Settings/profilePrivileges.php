@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
 require_once('include/utils/UserInfoUtil.php');
@@ -19,28 +18,28 @@ global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-$profileId=$_REQUEST['profileid'];
+$profileId=vtlib_purify($_REQUEST['profileid']);
 $profileName='';
 $profileDescription='';
 
-$parentProfileId=$_REQUEST['parentprofile'];
+$parentProfileId=vtlib_purify($_REQUEST['parentprofile']);
 if($_REQUEST['mode'] =='create' && $_REQUEST['radiobutton'] != 'baseprofile')
 	$parentProfileId = '';
 
 
 $smarty = new vtigerCRM_Smarty;
 if(isset($_REQUEST['selected_tab']) && $_REQUEST['selected_tab']!='')
-	$smarty->assign("SELECTED_TAB", $_REQUEST['selected_tab']);
+	$smarty->assign("SELECTED_TAB", vtlib_purify($_REQUEST['selected_tab']));
 else
 	$smarty->assign("SELECTED_TAB", "global_privileges");
 
 if(isset($_REQUEST['selected_module']) && $_REQUEST['selected_module']!='')
-	$smarty->assign("SELECTED_MODULE", $_REQUEST['selected_module']);
+	$smarty->assign("SELECTED_MODULE", vtlib_purify($_REQUEST['selected_module']));
 else
 	$smarty->assign("SELECTED_MODULE", "field_Leads");
 
 $smarty->assign("PARENTPROFILEID", $parentProfileId);
-$smarty->assign("RADIOBUTTON", $_REQUEST['radiobutton']);
+$smarty->assign("RADIOBUTTON", vtlib_purify($_REQUEST['radiobutton']));
 
 $secondaryModule='';
 $mode='';
@@ -49,9 +48,10 @@ $output1 ='';
 $smarty->assign("PROFILEID", $profileId);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("CMOD", $mod_strings);
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != '')
-	$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+	$smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
 
 
 if(isset($_REQUEST['profile_name']) && $_REQUEST['profile_name'] != '' && $_REQUEST['mode'] == 'create')
@@ -70,7 +70,7 @@ else
 
 if(isset($_REQUEST['profile_description']) && $_REQUEST['profile_description'] != '' && $_REQUEST['mode'] == 'create')
 	
-	$profileDescription = $_REQUEST['profile_description'];
+	$profileDescription = vtlib_purify($_REQUEST['profile_description']);
 else
 {
 	if($profileId != null)
@@ -82,7 +82,7 @@ else
 $smarty->assign("PROFILE_DESCRIPTION", $profileDescription);
 
 if(isset($_REQUEST['mode']) && $_REQUEST['mode'] != '')
-	$smarty->assign("MODE",$_REQUEST['mode']);
+	$smarty->assign("MODE",vtlib_purify($_REQUEST['mode']));
 
 
 //Initially setting the secondary selected vtiger_tab
@@ -438,15 +438,15 @@ if($mode=='view')
 			$field=array();
 			if($fieldListResult[$module_name][$j][1] == 0)
 			{
-				$visible = "<img src=".$image_path."/prvPrfSelectedTick.gif>";
+				$visible = "<img src='".vtiger_imageurl('prvPrfSelectedTick.gif', $theme)."'>";
 			}
 			else
 			{
-				$visible = "<img src=".$image_path."/no.gif>";
+				$visible = "<img src='".vtiger_imageurl('no.gif', $theme)."'>";
 			}
 			if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
 			{
-				$visible = "<img src=".$image_path."/no.gif>";
+				$visible = "<img src='".vtiger_imageurl('no.gif', $theme)."'>";
 			}
 			if($language_strings[$fieldListResult[$module_name][$j][0]] != '')
 				$field[]=$language_strings[$fieldListResult[$module_name][$j][0]];
@@ -478,12 +478,6 @@ elseif($mode=='edit')
 			$mandatory = '';
 			$readonly = '';
 			$field=array();
-			
-			if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15) || ($uitype == 111 && $fieldtype[1] == "M"))
-			{
-				$mandatory = '<font color="red">*</font>';
-				$readonly = 'disabled';
-			}	
 			if($fieldListResult[$module_name][$j][3] == 0)
 			{
 				$visible = "checked";
@@ -491,6 +485,12 @@ elseif($mode=='edit')
 			else
 			{
 				$visible = "";
+			}
+			if($fieldtype[1] == "M")
+			{
+				$mandatory = '<font color="red">*</font>';
+				$readonly = 'disabled';
+				$visible = "checked";
 			}
 			if($disable_field_array[$fieldListResult[$module_name][$j][4]] == 1)
 			{
@@ -534,14 +534,14 @@ elseif($mode=='create')
 				$field=array();
 
 				
-				if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15) || ($uitype == 111 && $fieldtype[1] == "M"))
+				if($fieldtype[1] == "M")
 				{
 					$mandatory = '<font color="red">*</font>';
 					$readonly = 'disabled';
 				}	
 				if($fieldListResult[$module_name][$j][3] == 0)
 				{
-					$visible = "checked";
+					$visible = 'checked';
 				}
 				else
 				{
@@ -553,7 +553,6 @@ elseif($mode=='create')
 					$readonly = 'disabled';
 					$visible = "";
 				}
-				
 				if($language_strings[$fldLabel] != '')
 					$field[]=$mandatory.' '.$language_strings[$fldLabel];
 				else
@@ -586,7 +585,7 @@ elseif($mode=='create')
 				$field=array();
 
 				
-				if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || $uitype == 20 || ($fldLabel == "Activity Type" && $displaytype != 3 && $uitype == 15) || ($uitype == 111 && $fieldtype[1] == "M"))
+				if($fieldtype[1] == "M")
 				{
 					$mandatory = '<font color="red">*</font>';
 					$readonly = 'disabled';
@@ -636,11 +635,11 @@ function getGlobalDisplayValue($id,$actionid)
 	}
 	elseif($id == 0)
 	{
-		$value = '<img src="'.$image_path.'prvPrfSelectedTick.gif">';
+		$value = '<img src="' . vtiger_imageurl('prvPrfSelectedTick.gif', $theme) . '">';
 	}
 	elseif($id == 1)
 	{
-		$value = '<img src="'.$image_path.'no.gif">';
+		$value = '<img src="' . vtiger_imageurl('no.gif', $theme) . '">';
 	}
 	else
 	{
@@ -701,11 +700,11 @@ function getDisplayValue($id)
 	}
 	elseif($id == 0)
 	{
-		$value = '<img src="'.$image_path.'prvPrfSelectedTick.gif">';
+		$value = '<img src="' . vtiger_imageurl('prvPrfSelectedTick.gif', $theme) .'">';
 	}
 	elseif($id == 1)
 	{
-		$value = '<img src="'.$image_path.'no.gif">';
+		$value = '<img src="' . vtiger_imageurl('no.gif', $theme) .'">';
 	}
 	else
 	{

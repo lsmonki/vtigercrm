@@ -51,7 +51,7 @@ $list .= $app_strings['LBL_FILE'].'</b></td>';
 
 $list .= '</tr>';
 
-//$list .= '<tr><td COLSPAN="7" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
+//$list .= '<tr><td COLSPAN="7" class="blackLine"><IMG SRC="themes/images/blank.gif"></td></tr>';
 
 $i=1;
 while($row = $adb->fetch_array($result))

@@ -23,7 +23,6 @@
 require_once('include/utils/utils.php');
 require_once('include/logging.php');
 require_once("modules/Potentials/Charts.php");
-require_once('include/ComboUtil.php');
 global $app_list_strings, $current_language, $tmp_dir, $currentModule, $action;
 $current_module_strings = return_module_language($current_language, 'Dashboard');
 require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
@@ -177,17 +176,18 @@ if (isset($_REQUEST['pbss_edit']) && $_REQUEST['pbss_edit'] == 'true') {
 <input type="hidden" name="module" value="<?php echo $currentModule;?>">
 <input type="hidden" name="action" value="<?php echo $action;?>">
 <input type="hidden" name="pbss_refresh" value="true">
+<input type="hidden" name="display_view" value="<?php echo vtlib_purify($_REQUEST['display_view'])?>">
 <table cellpadding="2" border="0"><tbody>
 <tr>
 
 
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_DATE_START']?> <br><em><?php echo $app_strings['NTC_DATE_FORMAT']?></em></td>
 
-<td valign='top' ><input class="text" name="pbss_date_start" size='12' maxlength='10' id='date_start' value='<?php if (isset($_SESSION['pbss_date_start'])) echo $_SESSION['pbss_date_start']?>'>  <img src="themes/<?php echo $theme ?>/images/calendar.gif" id="date_start_trigger"> </td>
+<td valign='top' ><input class="text" name="pbss_date_start" size='12' maxlength='10' id='date_start' value='<?php if (isset($_SESSION['pbss_date_start'])) echo $_SESSION['pbss_date_start']?>'>  <img src="<?php echo vtiger_imageurl('calendar.gif', $theme) ?>" id="date_start_trigger"> </td>
 </tr><tr>
 <tr>
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_DATE_END'];?><br><em><?php echo $app_strings['NTC_DATE_FORMAT']?></em></td>
-<td valign='top' ><input class="text" name="pbss_date_end" size='12' maxlength='10' id='date_end' value='<?php if (isset($_SESSION['pbss_date_end'])) echo $_SESSION['pbss_date_end']?>'>  <img src="themes/<?php echo $theme ?>/images/calendar.gif" id="date_end_trigger"> </td>
+<td valign='top' ><input class="text" name="pbss_date_end" size='12' maxlength='10' id='date_end' value='<?php if (isset($_SESSION['pbss_date_end'])) echo $_SESSION['pbss_date_end']?>'>  <img src="<?php echo vtiger_imageurl('calendar.gif', $theme) ?>" id="date_end_trigger"> </td>
 </tr><tr>
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_SALES_STAGES'];?></td>
 <td valign='top' ><select name="pbss_sales_stages[]" multiple size='3'><?php echo get_select_options_with_id($comboFieldArray['sales_stage_dom'],$_SESSION['pbss_sales_stages']); ?></select></td>
@@ -199,7 +199,7 @@ if (isset($_REQUEST['pbss_edit']) && $_REQUEST['pbss_edit'] == 'true') {
 	<td valign='top'><select name="pbss_ids[]" multiple size='3'><?php echo get_select_options_with_id(get_user_array(FALSE,"Active",$current_user->id),$_SESSION['pbss_ids']); ?></select></td>	
 <?php } ?>		
 </tr><tr>
-<td align="right"><br /> <input class="button" onclick="return chk_form(pipeline_by_sales_stage);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
+<td align="right"><br /> <input class="button" onclick="return verify_chart_data(pipeline_by_sales_stage);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
 </tr></table>
 </form>
 <script type="text/javascript">
@@ -222,8 +222,8 @@ else {
 ?>
 <div align=right><FONT size='1'>
 <em><?php  echo $current_module_strings['LBL_CREATED_ON'].' '.$file_date; ?> 
-</em>[<a href="javascript:;" onClick="changeView('DashboardHome','NORMAL');"><?php echo $current_module_strings['LBL_REFRESH'];?></a>]
-[<a href="index.php?module=<?php echo $currentModule;?>&action=index&pbss_edit=true"><?php echo $current_module_strings['LBL_EDIT'];?></a>]
+</em>[<a href="javascript:;" onClick="changeView('<?php echo vtlib_purify($_REQUEST['display_view']);?>');"><?php echo $current_module_strings['LBL_REFRESH'];?></a>]
+[<a href="index.php?module=<?php echo $currentModule;?>&action=index&display_view=<?php echo vtlib_purify($_REQUEST['display_view']);?>&pbss_edit=true"><?php echo $current_module_strings['LBL_EDIT'];?></a>]
 </FONT></div>
 <?php }
 }

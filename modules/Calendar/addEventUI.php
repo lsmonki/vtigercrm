@@ -10,6 +10,7 @@
  ********************************************************************************/
 
 require_once('include/utils/CommonUtils.php');
+require_once('include/CustomFieldUtil.php');
 require_once('modules/Calendar/Activity.php');
 require_once('modules/Calendar/Calendar.php');
 require_once('modules/Calendar/CalendarCommon.php');
@@ -24,7 +25,7 @@ require_once("modules/Emails/mail.php");
  $date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
  $taskassignedto = getAssignedTo(9);
  $eventassignedto = getAssignedTo(16);
-$mysel= $_REQUEST['view'];
+$mysel= vtlib_purify($_REQUEST['view']);
 $calendar_arr = Array();
 $calendar_arr['IMAGE_PATH'] = $image_path;
 if(empty($mysel)){
@@ -142,13 +143,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 		$htmlStr .= '<span id="assign_user" style="'.$style_user.'">
 				<select name="assigned_user_id" class=small>';
 	}
-	foreach($userlist as $key_one=>$arr)
-	{
-		foreach($arr as $sel_value=>$value)
-		{
-			$htmlStr .= '<option value="'.$key_one.'" '.$value.'>'.$sel_value.'</option>';
-		}
-	}
+	$htmlStr .= getUserslist();
 	$htmlStr .= '</select>
 			</span>';
 	if($grouplist != '')
@@ -156,20 +151,14 @@ function getAssignedToHTML($assignedto,$toggletype)
 		if($toggletype == 'task')
 		{
 			$htmlStr .= '<span id="task_assign_team" style="'.$style_group.'">
-					<select name="task_assigned_group_name" class=small>';
+					<select name="task_assigned_group_id" class=small>';
 		}
 		else
 		{
 			$htmlStr .= '<span id="assign_team" style="'.$style_group.'">
-					<select name="assigned_group_name" class=small>';
+					<select name="assigned_group_id" class=small>';
 		}
-		foreach($grouplist as $key_one=>$arr)
-		{
-			foreach($arr as $sel_value=>$value)
-			{
-				$htmlStr .= '<option value="'.$sel_value.'" '.$value.'>'.$sel_value.'</option>';
-			}
-		}
+		$htmlStr .= getGroupslist();
 		$htmlStr .= '</select>
 				</span>';
 	}
@@ -183,8 +172,9 @@ function getAssignedToHTML($assignedto,$toggletype)
 	<script type="text/javascript" src="jscalendar/calendar.js"></script>
 	<script type="text/javascript" src="jscalendar/lang/calendar-<?php echo $app_strings['LBL_JSCALENDAR_LANG'] ?>.js"></script>
 	<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
+	<script type="text/javascript" src="include/js/ListView.js"></script>
 	<div class="calAddEvent layerPopup" style="display:none;width:550px;left:200px;" id="addEvent" align=center>
-	<form name="EditView" onSubmit="return check_form();" method="POST" action="index.php">
+	<form name="EditView" onSubmit="if(check_form()) { VtigerJS_DialogBox.block(); } else { return false; }" method="POST" action="index.php">
 	<input type="hidden" name="return_action" value="index">
 	<input type="hidden" name="return_module" value="Calendar">
 	<input type="hidden" name="module" value="Calendar">
@@ -212,7 +202,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
 		<tr style="cursor:move;">
 			<td class="layerPopupHeading" align = "left" id="moveEvent"><?php echo $mod_strings['LBL_ADD_EVENT']?></b></td>
-				<td align=right><a href="javascript:ghide('addEvent');"><img src="<?php echo $image_path ?>close.gif" border="0"  align="absmiddle" /></a></td>
+				<td align=right><a href="javascript:ghide('addEvent');"><img src="<?php echo  vtiger_imageurl('close.gif', $theme)  ?>" border="0"  align="absmiddle" /></a></td>
 		</tr>
 		</table>
 		
@@ -224,10 +214,9 @@ function getAssignedToHTML($assignedto,$toggletype)
 			<td nowrap  width=20% align="right"><b><?php echo $mod_strings['LBL_EVENTTYPE']?></b></td>
 			<td width=80% align="left">
 				<table>
-					<tr>
-					<td><input type="radio" name='activitytype' value='Call' style='vertical-align: middle;' checked onClick="calDuedatetime('call');"></td><td><?php echo $mod_strings['LBL_CALL']?></td>
-					<td><input type="radio" name='activitytype' value='Meeting' style='vertical-align: middle;' onClick="calDuedatetime('meeting');"></td><td><?php echo $mod_strings['LBL_MEET']?></td>
-					</tr>
+					<tr><td>
+							<?php echo getActFieldCombo('activitytype','vtiger_activitytype'); ?>
+					</td></tr>
 				</table>
 			</td>
 			</tr>
@@ -272,6 +261,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 							<br><?php }else{
 								?><input name="assigned_user_id" value="<?php echo $current_user->id ?>" type="hidden">
 							<?php } ?>
+
 								<?php if(getFieldVisibilityPermission('Events',$current_user->id,'sendnotification') == '0') { ?>
 							<input type="checkbox" name="sendnotification" >&nbsp;<?php echo $mod_strings['LBL_SENDNOTIFICATION'] ?>
 							<?php } ?>
@@ -346,6 +336,43 @@ function getAssignedToHTML($assignedto,$toggletype)
 				</table></td>
 			</tr>
 			</table>
+			<?php  
+				$custom_fields_data = getCalendarCustomFields(getTabid('Events'),'edit');
+				$smarty=new vtigerCRM_Smarty;
+				$smarty->assign("MODULE",'Calendar');
+				$smarty->assign("MOD",$mod_strings);
+				$smarty->assign("APP",$app_strings);
+				$theme_path="themes/".$theme."/";
+				$image_path=$theme_path."images/";
+				$smarty->assign("IMAGE_PATH", $image_path);
+				if (count($custom_fields_data) > 0){ ?>
+					<hr noshade size=1>
+					<table>
+					<tr>
+						<td colspan="2">
+							<b><?php echo $app_strings['LBL_CUSTOM_INFORMATION']?></b>
+						</td>
+					</tr>
+					<tr>
+						<?php 
+							echo "<tr>";
+							for($i=0; $i<count($custom_fields_data); $i++) {
+								$maindata = $custom_fields_data[$i];
+								$smarty->assign("maindata",$maindata);
+								$smarty->assign("THEME", $theme);
+								$smarty->display('EditViewUI.tpl');
+								if (($i+1)%2 == 0) {
+									echo "</tr><tr>";
+								}
+							}							
+							if ($i% 2 != 0) {
+								echo '<td width="20%"></td><td width="30%"></td>';
+							}
+							echo "</tr>";
+						?>
+					</tr>
+					</table>
+				<?php } ?>
 
 			<!-- Alarm, Repeat, Invite starts-->
 			<br>
@@ -507,7 +534,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 						<table border=0 cellspacing=0 cellpadding=0>
 						<tr>
 							<td width=20><input type="checkbox" name="recurringcheck" onClick="showhide('repeatOptions')"></td>
-							<td colspan=2><?php echo $mod_strings['LBL_ENABLE_REPEAT']?></td>
+							<td><?php echo $mod_strings['LBL_ENABLE_REPEAT']?></td>
 						</tr>
 						<tr>
 							<td colspan=2>
@@ -517,18 +544,26 @@ function getAssignedToHTML($assignedto,$toggletype)
 								<td>
 									<?php echo $mod_strings['LBL_REPEATEVENT']; ?>
 								</td>
-								<td><select name="repeat_frequency">
+								<td><select name="repeat_frequency" class="small">
 								<?php for($i=1;$i<=14;$i++) { ?>
 									<option value="<?php echo $i ?>"><?php echo $i ?></option>	
 								<?php } ?>	
 								</select></td>
 								<td>
-									<select name="recurringtype" onChange="rptoptDisp(this)">
+									<select name="recurringtype" onChange="rptoptDisp(this)" class="small">
 										<option value="Daily"><?php echo $mod_strings['LBL_DAYS']; ?></option>
 										<option value="Weekly"><?php echo $mod_strings['LBL_WEEKS']; ?></option>
 										<option value="Monthly"><?php echo $mod_strings['LBL_MONTHS']; ?></option>
 										<option value="Yearly"><?php echo $mod_strings['LBL_YEAR']; ?></option>
 									</select>
+									<!-- Limit for Repeating Event -->
+									<b><?php echo $mod_strings['LBL_UNTIL']; ?>:</b> <input type="text" name="calendar_repeat_limit_date" id="calendar_repeat_limit_date" class="textbox" style="width:90px" value="<?php echo getDisplayDate($calendar_arr['calendar']->date_time->get_formatted_date()) ?>" ></td><td align="left"><img border=0 src="<?php echo $image_path ?>btnL3Calendar.gif" alt="<?php echo $mod_strings['LBL_SET_DATE']?>" title="<?php echo $mod_strings['LBL_SET_DATE']?>" id="jscal_trigger_calendar_repeat_limit_date">
+									<script type="text/javascript">
+									Calendar.setup ({
+										inputField : "calendar_repeat_limit_date", ifFormat : "<?php  echo $date_format; ?>", showsTime : false, button : "jscal_trigger_calendar_repeat_limit_date", singleClick : true, step : 1
+									})
+									</script>
+									<!-- END -->	
 								</td>
 								</tr>
 								</table>
@@ -617,7 +652,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 								<div id="eventrelatedto" align="left">
 								<input type="text" readonly="readonly" class="calTxt small" value="" name="parent_name">&nbsp;
 							<input type="button" name="selectparent" class="crmButton small edit" value="<?php echo $mod_strings['LBL_SELECT']; ?>" onclick="return window.open('index.php?module='+document.EditView.parent_type.value+'&action=Popup','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
-							<input type='button' value='del' class="crmButton small edit" onclick="document.EditView.del_actparent_rel.value=document.EditView.parent_id.value;document.EditView.parent_id.value='';document.EditView.parent_name.value='';">
+							<input type='button' value='<?php echo $app_strings['LNK_DELETE']; ?>' class="crmButton small edit" onclick="document.EditView.del_actparent_rel.value=document.EditView.parent_id.value;document.EditView.parent_id.value='';document.EditView.parent_name.value='';">
 								</div>
 							</td>
 						</tr>
@@ -630,7 +665,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 								<select name="contactlist" size="5" style="height: 85px;width:150px;"  id="parentid" class="small" multiple>
 								</select>
 								<input type="button" onclick="selectContact('true','general',document.EditView);" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT_CONTACT'] ; ?>">
-								<input type='button' value='del' class="crmButton small edit" onclick='removeActContacts();'>
+								<input type='button' value='<?php echo $app_strings['LNK_DELETE']; ?>' class="crmButton small edit" onclick='removeActContacts();'>
 								
 							</td>
 						</tr>
@@ -692,13 +727,44 @@ function getAssignedToHTML($assignedto,$toggletype)
 <!-- Dropdown for Add Event -->
 <div id='addEventDropDown' style='width:160px' onmouseover='fnShowEvent()' onmouseout='fnRemoveEvent()'>
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
-	<tr><td><a href='' id="addcall" class='drop_down'><?php echo $mod_strings['LBL_ADDCALL']?></a></td></tr>
-	<tr><td><a href='' id="addmeeting" class='drop_down'><?php echo $mod_strings['LBL_ADDMEETING']?></a></td></tr>
+<?php
+	global $adb;
+	if($current_user->column_fields['is_admin']=='on')
+		$Res = $adb->pquery("select * from vtiger_activitytype",array());
+	else
+	{
+		$role_id=$current_user->roleid;
+		$subrole = getRoleSubordinates($role_id);
+		if(count($subrole)> 0)
+		{
+			$roleids = $subrole;
+			array_push($roleids, $role_id);
+		}
+		else
+		{	
+			$roleids = $role_id;
+		}
+
+		if (count($roleids) > 1) {
+			$Res=$adb->pquery("select distinct activitytype from  vtiger_activitytype inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_activitytype.picklist_valueid where roleid in (". generateQuestionMarks($roleids) .") and picklistid in (select picklistid from vtiger_activitytype) order by sortid asc",array($roleids));
+		} else {
+			$Res=$adb->pquery("select distinct activitytype from vtiger_activitytype inner join vtiger_role2picklist on vtiger_role2picklist.picklistvalueid = vtiger_activitytype.picklist_valueid where roleid = ? and picklistid in (select picklistid from vtiger_activitytype) order by sortid asc",array($role_id));
+		}
+	}
+	$eventlist='';
+	for($i=0; $i<$adb->num_rows($Res);$i++)
+	{
+		$eventlist = $adb->query_result($Res,$i,'activitytype');
+?>		
+	<tr><td><a href='' id="add<?php echo strtolower($eventlist);?>" class='drop_down'><?php echo getTranslatedString($eventlist,'Calendar')?></a></td></tr>
+<?php
+	}
+?>
 	<tr><td><a href='' id="addtodo" class='drop_down'><?php echo $mod_strings['LBL_ADDTODO']?></a></td></tr>
 </table>
 </div>
-<div class="calAddEvent layerPopup" style="display:none;width:550px;left:200px;" id="createTodo" align=center>
-<form name="createTodo" onSubmit="task_check_form();return formValidate();" method="POST" action="index.php">
+<div class="calAddEvent layerPopup" style="display:none;width:700px;left:200px;" id="createTodo" align=center>
+<form name="createTodo" onSubmit="task_check_form();if(formValidate()) { VtigerJS_DialogBox.block(); } else { return false; }" method="POST" action="index.php">
 <input type="hidden" name="return_action" value="index">
 <input type="hidden" name="return_module" value="Calendar">
   <input type="hidden" name="module" value="Calendar">
@@ -719,7 +785,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class="layerHeadingULine">
 		<tr style="cursor:move;">
                 	<td class="lvtHeaderText" id="moveTodo" align="left"><?php echo $mod_strings['LBL_ADD_TODO'] ?></b></td>
-			<td align=right><a href="javascript:ghide('createTodo');"><img src="<?php echo $image_path ?>close.gif" border="0"  align="absmiddle" /></a></td>
+			<td align=right><a href="javascript:ghide('createTodo');"><img src="<?php echo  vtiger_imageurl('close.gif', $theme)?>" border="0"  align="absmiddle" /></a></td>
 		</tr>
         </table>
 	<table border=0 cellspacing=0 cellpadding=5 width=95% bgcolor="#FFFFFF" >
@@ -810,6 +876,45 @@ function getAssignedToHTML($assignedto,$toggletype)
 		</td></tr>
 		<tr><td>&nbsp;</td></tr>
 	</table>
+	<?php  
+	$custom_fields_data = getCalendarCustomFields(getTabid('Calendar'),'edit');
+	$smarty=new vtigerCRM_Smarty;
+	$smarty->assign("MODULE",'Calendar');
+	$smarty->assign("MOD",$mod_strings);
+	$smarty->assign("APP",$app_strings);
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+	$smarty->assign("IMAGE_PATH", $image_path);
+	if (count($custom_fields_data) > 0){ ?>
+		<hr noshade size=1>
+		<table>
+		<tr>
+			<td colspan="2">
+				<b><?php echo $app_strings['LBL_CUSTOM_INFORMATION']?></b>
+			</td>
+		</tr>
+		<tr>
+			<?php 
+				echo "<tr>";
+				for($i=0; $i<count($custom_fields_data); $i++) {
+					$maindata = $custom_fields_data[$i];
+					$smarty->assign("maindata",$maindata);
+					$smarty->assign("THEME", $theme);
+					$smarty->display('EditViewUI.tpl');
+					if (($i+1)%2 == 0) {
+						echo "</tr><tr>";
+					}
+				}
+				if ($i% 2 != 0) {
+					echo '<td width="20%"></td><td width="30%"></td>';
+				}
+				echo "</tr>";
+			?>
+		</tr>
+		</table>
+		<br />
+	<?php } ?>
+				
 	<?php if((getFieldVisibilityPermission('Calendar',$current_user->id,'sendnotification') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'parent_id') == '0') || (getFieldVisibilityPermission('Calendar',$current_user->id,'contact_id') == '0')) { ?>
 	<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%" bgcolor="#FFFFFF">
 		<tr>
@@ -865,7 +970,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 					<div id="taskrelatedto" align="left">
 					<input name="task_parent_name" readonly type="text" class="calTxt small" value="">
 					<input type="button" name="selectparent" class="crmButton small edit" value="<?php echo $mod_strings['LBL_SELECT']; ?>" onclick="return window.open('index.php?module='+document.createTodo.task_parent_type.value+'&action=Popup&maintab=Calendar','test','width=640,height=602,resizable=0,scrollbars=0,top=150,left=200');">
-					<input type='button' value='del' class="crmButton small edit" onclick="document.createTodo.del_actparent_rel.value=document.createTodo.task_parent_id.value;document.createTodo.task_parent_id.value='';document.createTodo.task_parent_name.value='';">
+					<input type='button' value='<?php echo $app_strings['LNK_DELETE']; ?>' class="crmButton small edit" onclick="document.createTodo.del_actparent_rel.value=document.createTodo.task_parent_id.value;document.createTodo.task_parent_id.value='';document.createTodo.task_parent_name.value='';">
 					</div>
 				</td>
 			</tr>
@@ -877,7 +982,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 				<input name="task_contact_name" id="contact_name" readonly type="text" class="calTxt" value=""><input name="task_contact_id" id="contact_id" type="hidden" value="">&nbsp;
 				<input name="deletecntlist"  id="deletecntlist" type="hidden">
 				<input type="button" onclick="selectContact('false','task',document.createTodo);" class="crmButton small edit" name="selectcnt" value="<?php echo $mod_strings['LBL_SELECT']." ". $mod_strings['LBL_LIST_CONTACT'] ; ?>">
-				<input type='button' value='del' class="crmButton small edit" onclick='document.createTodo.deletecntlist.value=document.createTodo.task_contact_name.value;document.createTodo.task_contact_name.value="";document.createTodo.task_contact_id.value="";'>
+				<input type='button' value='<?php echo $app_strings['LNK_DELETE']; ?>' class="crmButton small edit" onclick='document.createTodo.deletecntlist.value=document.createTodo.task_contact_name.value;document.createTodo.task_contact_name.value="";document.createTodo.task_contact_id.value="";'>
 			</td>
 			  </tr>
 			<?php } ?>
@@ -919,7 +1024,7 @@ function getAssignedToHTML($assignedto,$toggletype)
 		<tr>
 		<td class="genHeaderSmall" align="left" style="border-bottom:1px solid #CCCCCC;" width="60%"><?php echo $app_strings['LBL_CHANGE_OWNER']; ?></td>
 			<td style="border-bottom: 1px solid rgb(204, 204, 204);">&nbsp;</td>
-			<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('act_changeowner')"><img src="<?php echo $image_path; ?>close.gif" align="absmiddle" border="0"></a></td>
+			<td align="right" style="border-bottom:1px solid #CCCCCC;" width="40%"><a href="javascript:fninvsh('act_changeowner')"><img src="<?php echo vtiger_imageurl('close.gif', $theme) ?>" align="absmiddle" border="0"></a></td>
 		</tr>
 		<tr>
 		        <td colspan="3">&nbsp;</td>

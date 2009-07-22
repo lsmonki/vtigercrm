@@ -62,7 +62,7 @@ $mod_strings = Array(
 
 'LBL_EMAIL_ADDRESS'=>'Email',
 
-'LBL_TRANSCURR'=>'Transfer User currency to',
+'LBL_TRANSCURR'=>'Transfer currency to',
 
 'LBL_CURRDEL'=>'Currency to be Deleted',
 
@@ -395,7 +395,7 @@ $mod_strings = Array(
 
 'LBL_PRODUCT_FIELD_ACCESS'=>'Product Field Access',
 
-'LBL_NOTE_FIELD_ACCESS'=>'Note Field Access',
+'LBL_NOTE_FIELD_ACCESS'=>'Document Field Access',
 
 'LBL_EMAIL_FIELD_ACCESS'=>'Email Field Access',
 
@@ -619,7 +619,7 @@ $mod_strings = Array(
 //After 4.2 GA
 'LBL_TEXT_AREA'=>'Text Area',
 //for Edit ordering the blocks
-'NOTESCUSTOMFIELDS'=>'Notes Custom Fields',
+'NOTESCUSTOMFIELDS'=>'Documents Custom Fields',
 
 //Added fields after 4.2 ptach 2
 'LBL_ASSIGN_MODULE_OWNERS'=>'Assign Module Owners',
@@ -712,11 +712,6 @@ $mod_strings = Array(
 'LBL_ENABLE_SINGLEPANE_VIEW'=>'Enable Singlepane View',
 
 'LBL_CLEAR_DATA'=>'Clear Data',
-'LBL_LENGTHALERT'=>'Sorry, you can cannot map fields with different character size. Kindly map the data with same or more character size.',
-'LBL_DECIMALALERT'=>'Sorry, you can cannot map fields with different decimal places. Kindly map the data with same or more decimal places.',
-'LBL_TYPEALERT_1'=>'Sorry, you cannot map the',
-'LBL_WITH'=>'with',
-'LBL_TYPEALERT_2'=>'data type. Kindly map the same data types.',
 'LBL_ENABLE'=>'Enable',
 'LBL_FAQ_FIELD_ACCESS'=>'Faq Field Access',
 'LBL_ADD_TAX_BUTTON'=>'Add Tax',
@@ -921,7 +916,7 @@ $mod_strings = Array(
 'LBL_ADD_ROLE'=>'Add Role',
 'LBL_EDIT_ROLE'=>'Edit Role',
 'LBL_MOVE_ROLE'=>'Move Role',
-'LBL_BACKUP_DESC'=>' The CRM system allows you to make a backup of the database to your FTP server. The CRM will take backup of all data whenever an admin user logs out. Make sure you have enough disk space available on your FTP server. The created backup file will be in the following format: "backup-date-time.sql".',
+'LBL_BACKUP_DESC'=>' The CRM system allows you to make a backup of the database to your FTP server. The CRM will take backup of all data whenever an admin user logs out. Make sure you have enough disk space available on your FTP server. The created backup file will be in the following format: "backup_date_time.sql".',
 
 // Added/Updated for vtiger CRM 5.0.4
 'LBL_SUPPORT_NOTICIATION'=>'Support End Notification before a week',
@@ -936,9 +931,274 @@ $mod_strings = Array(
 'ERR_ALREADY_EXISTS'=>' already exists.',
 'ERR_SPECIFY_DIFFERENT_LABEL'=>'Please specify a different Label',
 'LBL_TOOLS_TO_BE_SHOWN'=>'Tools to be shown',
-'LBL_PICKLIST_GLOBAL_DELETE'=>'Global Delete',
+'LBL_PICKLIST_GLOBAL_CHANGE'=>'Global Change',
 'LBL_PICKLIST_TRANSFER'=>'Transfering the values Of ',
 'LBL_REPLACE_VALUE_WITH'=>'Replace value with ',
 'LBL_EDIT_CUSTOM_RULE'=>'Edit Custom Privilege Rule',
+
+/*for global add/delete in picklist*/
+'DELETE_PICKLIST_VALUES'=>'Delete PickList Values',
+'EDIT_PICKLIST_VALUE'=>'Edit PickList Value',
+'ADD_PICKLIST_VALUES'=>'Add PickList Values',
+'LBL_PICKLIST_ADDINFO'=>'Type the new entries one-by-one below',
+'LBL_SELECT_ROLES'=> 'Select the Roles to which entries have to be added',
+'LBL_EXISTING_PICKLIST_VALUES'=>'Existing Picklist Values',
+'LBL_SELECT_PICKLIST'=>'Select picklist',
+
+// Added after 5.0.4 GA
+
+'LBL_GENERAL_FIELDS'=>'General Fields',
+
+'LBL_CANCEL_BUTTON'=>'Cancel',
+
+//Added fields for Inventory Number labels
+'LBL_CUSTOMIZE_INVENTORY_NUMBER'=>'Customize Inventory Sequence',
+'LBL_CUSTOMIZE_INVENTORY_NUMBER_DESCRIPTION'=>'Inventory Sequence Customization',
+'LBL_CUSTOM_QUOTE_NUMBER_VIEW'=>'Quote Number Customization',
+'LBL_CUSTOMQUOTE_STRING'=>'Custom Quote String',
+'LBL_CUSTOMQUOTE_NUMBER'=>'Custom Quote Number',
+'LBL_QUOTE_NUMBER_PREVIEW'=>'Preview',
+'LBL_QUOTE_NUMBER_BUTTON'=>'Update Quote Number',
+'LBL_CUSTOM_SO_NUMBER_VIEW'=>'SalesOrder Number Customization',
+'LBL_CUSTOMSO_STRING'=>'Custom SalesOrder String',
+'LBL_CUSTOMSO_NUMBER'=>'Custom SalesOrder Number',
+'LBL_SO_NUMBER_PREVIEW'=>'Preview',
+'LBL_SO_NUMBER_BUTTON'=>'Update SalesOrder Number',
+'LBL_CUSTOM_PO_NUMBER_VIEW'=>'PurchaseOrder Number Customization',
+'LBL_CUSTOMPO_STRING'=>'Custom PurchaseOrder String',
+'LBL_CUSTOMPO_NUMBER'=>'Custom PurchaseOrder Number',
+'LBL_PO_NUMBER_PREVIEW'=>'Preview',
+'LBL_PO_NUMBER_BUTTON'=>'Update PurchaseOrder Number',
+
+// Added after 5.0.4 GA
+
+// Added for Multi-Currency Support
+'LBL_TRANSFER_CURRENCY'=>'Transfer Currency',
+'LBL_CURRENT_CURRENCY'=>'Current Currency',
+
+//Added for new backup labels
+'LBL_LOCAL'=>'Local',
+'LBL_BACKUP'=>'Backup',
+'LBL_BACKUP_LOCATION'=>'Backup Location',
+
+'LBL_LAYOUT_EDITOR'=>'Layout Editor',
+'LBL_LAYOUT_EDITOR_DESCRIPTION'=>'Designing and Modifying the layout in each of the modules',
+'LBL_Show'=>'Show',
+'LBL_Hide'=>'Hide',
+
+// vtlib customization: Language Stings
+'VTLIB_LBL_MODULE_MANAGER'=>'Module Manager',
+'VTLIB_LBL_MODULE_MANAGER_DESCRIPTION'=>'Manage module behavior inside vtiger CRM',
+'VTLIB_LBL_MODULE_MANAGER_CUSTOMMOD'=>'Custom Modules',
+'VTLIB_LBL_MODULE_MANAGER_STANDARDMOD'=>'Standard Modules',
+'VTLIB_LBL_MODULE_MANAGER_NOMODULES'=>'No custom modules found! Create one or Import New ...',
+
+// vtmailscanner START
+'LBL_MAIL_SCANNER'=>'Mail Scanner',
+'LBL_MAIL_SCANNER_DESCRIPTION'=>'Configure mailbox for scanning',
+'LBL_SCAN_NOW'=>'Scan Now',
+'LBL_RULE'=>'Rule',
+'LBL_SETUP'=>'Setup',
+'LBL_CONFIGURE'=>'Configure',
+'LBL_MAILBOX' => 'Mailbox',
+'LBL_INFORMATION' => 'Information',
+'LBL_SCANNER' => 'Scanner',
+'LBL_SERVER'  => 'Server',
+'LBL_PROTOCOL'=> 'Protocol',
+'LBL_PASSWORD'=> 'Password',
+'LBL_TYPE' => 'Type',
+'LBL_SSL' => 'SSL',
+'LBL_METHOD'=> 'Method',
+'LBL_VAL_SSL_CERT'=>'Validate SSL Certificate',
+'LBL_DONOT_VAL_SSL_CERT'=>'Do Not Validate SSL Certificate',
+'LBL_STATUS'=>'Status',
+'LBL_ENABLE'=>'Enable',
+'LBL_DISABLE'=>'Disable',
+'LBL_CONNECT'=>'Connect',
+'LBL_URL_CAPS'=>'URL',
+'LBL_ENABLED'=>'Enabled',
+'LBL_DISABLED'=>'Disabled',
+'LBL_RULES'=>'Rules',
+'LBL_FOR'=>'For',
+
+'LBL_FROM'=>'From',
+'LBL_TO'=>'To',
+
+'LBL_ACTION'=>'Action',
+'LBL_CREATE'=>'Create',
+'LBL_TICKET'=>'Ticket',
+'LBL_ADD'=>'Add',
+
+'LBL_CONTACT'=>'Contact',
+'LBL_ACCOUNT'=>'Account',
+
+'LBL_FROM_CAPS'=>'FROM',
+'LBL_TO_CAPS'=>'TO',
+'LBL_TO_SMALL'=>'to',
+
+'LBL_CONTAINS'=>'Contains',
+'LBL_EQUALS'=>'Equals',
+
+'LBL_BEGINS'=>'Begins',
+
+'LBL_REGEX'=>'Regex',
+'LBL_ENDS'=>'Ends',
+'LBL_BODY'=>'Body',
+
+'LBL_NOT'=>'Not',
+
+'LBL_ALL' => 'All',
+'LBL_ANY'=>'Any',
+'LBL_CONDITION'=>'Condition',
+'LBL_ACTION'=>'Action',
+'LBL_MOVE'=>'Move',
+'LBL_UP'=>'Up',
+'LBL_DOWN'=>'Down',
+'LBL_PRIORITY'=>'Priority',
+'LBL_UPDATE'=>'Update',
+'LBL_SELECT'=>'Select',
+'LBL_FOLDERS'=>'Folders',
+'LBL_UNSELECT'=>'Unselect',
+'LBL_MATCH'=>'Match',
+'LBL_SCANNING'=>'Scanning',
+'LBL_LOOKFOR'=>'Look for',
+'LBL_UNREAD'=>'Unread',
+'LBL_READ'=>'Read',
+'LBL_AFTER_SCAN'=>'After scan',
+'LBL_MESSAGES_FROM_LASTSCAN'=>'Messages from lastscan',
+'LBL_MARK_MESSAGE_AS'=>'Mark message as',
+
+//Added for the workflow module
+'LBL_LIST_WORKFLOWS'=>'Workflows',
+'LBL_LIST_WORKFLOWS_DESCRIPTION' => 'Create and edit workflows for vtiger',
+'LBL_TASK_TITLE'=>'Task Title',
+'LBL_PARENT_WORKFLOW'=>'Parent Workflow',
+'MSG_EXECUTE_TASK_DELAY'=>'Execute the task after some delay',
+'LBL_AFTER'=>'After',
+'LBL_BEFORE'=>'Before',
+'LBL_TASK_OPERATIONS'=>'Task Operations',
+'LBL_CREATE_TASK'=>'Create Task',
+'LBL_CREATE_TASK_OF_TYPE'=>'Create a new task of type',
+'LBL_SUMMARY'=>'Summary',
+'LBL_WHEN_TO_RUN_WORKFLOW'=>'When to run the workflow',
+'LBL_ONLY_ON_FIRST_SAVE'=>'Only on the first save',
+'LBL_UNTIL_FIRST_TIME_CONDITION_TRUE'=>'Until the first time the condition is true',
+'LBL_EVERYTIME_RECORD_SAVED'=>'Every time the the record is saved',
+'LBL_CONDITIONS'=>'Conditions',
+'LBL_NEW_CONDITION_BUTTON_LABEL'=>'New Condition',
+'LBL_TASKS'=>'Tasks',
+'LBL_NEW_TASK_BUTTON_LABEL'=>'New Task',
+'LBL_TASK'=>'Task',
+// END
+//Added for vantage customization (Mandatory fields) -- Pavani
+'LBL_MANDATORY_FIELDS'=>'Mandatory Fields',
+'LBL_MANDATORY_FIELDS_DESCRIPTION'=>'Manage mandatory fields of all modules',
+// Module Sequence Numbering
+'LBL_CUSTOMIZE_MODENT_NUMBER'=>'Customize Record Numbering',
+'LBL_CUSTOMIZE_MODENT_NUMBER_DESCRIPTION'=>'Module Entity Number customization',
+// END
+
+//added for softphone integration
+'LBL_SOFTPHONE_SERVER_SETTINGS'=>'SoftPhone Server Settings',
+'LBL_SOFTPHONE_SERVER_SETTINGS_DESCRIPTION'=>'Configure your softphone here',
+'ASTERISK_SERVER_IP'=>'Asterisk server IP ',
+'ASTERISK_PORT'=>'Asterisk server port',
+'ASTERISK_USERNAME'=>'Asterisk username',
+'ASTERISK_PASSWORD'=>'Asterisk password',
+'ASTERISK_SERVER_IP_TITLE'=>'The URL of the asterisk server',
+'ASTERISK_PORT_TITLE'=>'The port where asterisk call manager API can connect to Asterisk (default 5038)',
+'ASTERISK_USERNAME_TITLE'=>'The asterisk username (generally the admin username)',
+'ASTERISK_PASSWORD_TITLE'=>'Password for the asterisk user',
+'LBL_CANCEL_BUTTON'=>'Cancel',
+'ASTERISK_VERSION' => 'Asterisk Version',
+'ASTERISK_VERSION_TITLE'=>'Select your Asterisk version here; leave it as 1.4 if not sure',
+'ASTERISK_CONFIGURATION'=>'Asterisk Configuration',
+//softphone integration ends
+'LBL_SELECT_FIELD_TO_MOVE' => 'Select Fields to move',
+'VTLIB_LBL_SELECT_PACKAGE_FILE'=>'Select the Package File',
+'VTLIB_LBL_FILE_LOCATION'=>'File location:',
+'VTLIB_LBL_PACKAGE_FILE_HELP'=>'vtiger module is packaged as a zip file.',
+'VTLIB_LBL_IMPORT_FAILURE'=>'Import Failure',
+'VTLIB_LBL_INVALID_FILE'=>'Invalid file',
+'VTLIB_LBL_INVALID_IMPORT_TRY_AGAIN'=>'provided for module import! Try Again.',
+'VTLIB_LBL_UNABLE_TO_UPLOAD'=>'Unable to upload',
+'VTLIB_LBL_UNABLE_TO_UPLOAD2'=>'the package on the server! Try Again.',
+'VTLIB_LBL_VERIFY_IMPORT_DETAILS'=>'Verify Import Details',
+'VTLIB_LBL_MODULE_NAME'=>'Module Name',
+'VTLIB_LBL_MODULE_DIR'=>'Module Directory',
+'VTLIB_LBL_REQ_VTIGER_VERSION'=>'Req. vtiger version',
+'VTLIB_LBL_LICENSE'=>'License',
+'VTLIB_LBL_LICENSE_ACCEPT_AGREEMENT'=>'I accept the license agreement.',
+'VTLIB_LBL_PROCEED_WITH_IMPORT'=>'Do you want to proceed with the import?',
+'VTLIB_LBL_IMPORTING_MODULE_START'=>'Importing Module ...',
+'VTLIB_LBL_WARNING'=>'Warning',
+'VTLIB_LBL_NOT_WRITEABLE'=>'not writeable',
+'VTLIB_LBL_PACKAGE_VERSION'=>'Version',
+
+'LBL_UPGRADE'=>'Upgrade',
+'VTLIB_LBL_UPDATE_FAILURE'=>'Upgrade Failure',
+'VTLIB_LBL_MODULENAME_MISMATCH'=>'Module name mistmach',
+'VTLIB_LBL_TRY_AGAIN'=>'Try Again',
+'VTLIB_LBL_VERIFY_UPDATE_DETAILS'=>'Verify Upgrade Details',
+'VTLIB_LBL_PROCEED_WITH_UPDATE'=>'Do you want to proceed with the upgrade?',
+'VTLIB_LBL_UPDAING_MODULE_START'=>'Updating module...',
+'VTLIB_LBL_EXISTS'=>'Exists',
+'VTLIB_LBL_NOT_PRESENT'=>'Not Present',
+'VTLIB_LBL_INST_VERSION'=>'Installed Version',
+'VTLIB_LBL_MATCHES_PACKAGE_VERSION'=>'matches Package Version',
+'VTLIB_LBL_CANNOT_UPGRADE'=>'Cannot updgrade!',
+// END
+
+//User group fixes
+'LBL_USERNAME_EXIST' => 'A User in the specified name Already Exists!',
+'LBL_GROUPNAME_EXIST' => 'A Group in the specified name Already Exists!',
+'LBL_ROLENAME_EXIST' => 'Role name already exists',
+
+//layout editor
+'LBL_MOVE_FIELDS' => 'Move Fields',
+'NO_HIDDEN_FIELDS' => 'No Hidden Fields',
+'LBL_RELATED_LIST' => 'Related List',
+'LBL_ADD_BLOCK' => 'Add Block',
+'HIDDEN_FIELDS' => 'Hidden Fields',
+'DOWN'=> 'Down',
+'UP'=> 'Up',
+'RIGHT' => 'Right',
+'LEFT' => 'Left',
+'LBL_EDIT_PROPERTIES' => 'Edit Properties',
+'LBL_MANDATORY_FIELD' => 'Mandatory Field',
+'LBL_ACTIVE' => 'Active',
+'LBL_QUICK_CREATE' => 'Quick Create',
+'LBL_MASS_EDIT' => 'Mass Edit',
+'LBL_BLOCK_NAME' => 'Block name',
+'AFTER' => 'After',
+'ADD_BLOCK' => 'Add Block',
+'ARRANGE_RELATEDLIST' => 'Arrange RelatedList',
+'CUSTOMFIELD_MAPPING' => 'CustomField Mapping',
+'LBL_MAPPED_FIELDS' => 'Mapped Fields',
+'LEADS_CUSTOM_FIELD_MAPPING_DESCRIPTION' => 'Map Your Leads Customfields with Accounts,Contacts and Potentials',
+'LEADS_CUSTOM_FIELD_MAPPING'=> 'Leads CustomField Mapping',
+'LBL_CALENDER_CUSTOMFIELDS' => 'Calendar Custom Fields',
+'LBL_CALENDER_CUSTOMFIELDS_DESCRIPTION' => 'You can Create Custom Fields for Calendar',
+'LBL_GO_BACK'=>'Go Back',
+
+//Added fix for: 5418
+'LBL_USE_PREFIX' => 'Use Prefix',
+'LBL_START_SEQ' => 'Start Sequence',
+'LBL_MODULE_NUMBERING' => 'Module Numbering',
+'LBL_FAILED' => 'Failed',
+'LBL_DONE' => 'Done',
+'LBL_IN_USE' => 'IN USE',
+'LBL_MODULE_NUMBERING_FIX_MISSING' => 'Update Missing Record Sequence Now',
+
+//Added for: 5473
+'LBL_SHARING_ACCESS_HELPNOTE' => 'After making modifications, press Recalculate button to apply the changes.',
+
+//for customer portal extension module
+'PORTAL_EXTENSION_DESCRIPTION'=>'Allows you to Configure Customer Portal Plugin',
+'LBL_CUSTOMER_PORTAL'=> 'Customer Portal',
+
+//FieldFormulas
+'LBL_FIELDFORMULAS' => 'Field Formulas',
+'LBL_FIELDFORMULAS_DESCRIPTION' => 'Add custom equations to custom fields',
 );
 ?>

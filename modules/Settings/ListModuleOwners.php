@@ -1,14 +1,12 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-* 
  ********************************************************************************/
-
 
 require_once('Smarty_setup.php');
 require_once('include/utils/utils.php');
@@ -17,7 +15,7 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-$module_array = getModuleNameList();
+$module_array = getModuleNameList1();
 if($_REQUEST['list_module_mode'] != '' && $_REQUEST['list_module_mode'] == 'save')
 {
 	foreach($module_array as $val)
@@ -66,9 +64,10 @@ if($_REQUEST['list_module_mode'] != 'edit')
 }
 $log->info("Settings Module Owners view");
 
-$smarty->assign("MODULE_MODE",$_REQUEST['list_module_mode']);
+$smarty->assign("MODULE_MODE",vtlib_purify($_REQUEST['list_module_mode']));
 $smarty->assign("USER_LIST", $user_list);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
@@ -95,11 +94,14 @@ function getModuleOwner($tabid)
 	/** Function to get the module List to which the owners can be assigned 
 	 *  It gets the module list and returns in an array 
 	 */
-function getModuleNameList()
+function getModuleNameList1()
 {
 	global $adb;
 
-	$sql = "select vtiger_moduleowners.*, vtiger_tab.name from vtiger_moduleowners inner join vtiger_tab on vtiger_moduleowners.tabid = vtiger_tab.tabid order by vtiger_tab.tabsequence";
+	// vtlib customization: Ignore disabled modules
+	//$sql = "select vtiger_moduleowners.*, vtiger_tab.name from vtiger_moduleowners inner join vtiger_tab on vtiger_moduleowners.tabid = vtiger_tab.tabid order by vtiger_tab.tabsequence";
+	$sql = "select vtiger_moduleowners.*, vtiger_tab.name from vtiger_moduleowners inner join vtiger_tab on vtiger_moduleowners.tabid = vtiger_tab.tabid WHERE vtiger_tab.presence != 1 order by vtiger_tab.tabsequence";
+	// END
 	$res = $adb->pquery($sql, array());
 	$mod_array = Array();
 	while($row = $adb->fetchByAssoc($res))

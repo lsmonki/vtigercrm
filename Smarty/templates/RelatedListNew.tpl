@@ -12,6 +12,7 @@
 
 -->*}
 <script language="JavaScript" type="text/javascript" src="modules/PriceBooks/PriceBooks.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
 {literal}
 <script>
 function editProductListPrice(id,pbid,price)
@@ -21,7 +22,7 @@ function editProductListPrice(id,pbid,price)
                 'index.php',
                 {queue: {position: 'end', scope: 'command'},
                         method: 'post',
-                        postBody: 'action=ProductsAjax&file=EditListPrice&return_action=DetailView&return_module=PriceBooks&module=Products&parenttab=Settings&record='+id+'&pricebook_id='+pbid+'&listprice='+price,
+                        postBody: 'action=ProductsAjax&file=EditListPrice&return_action=DetailView&return_module=PriceBooks&module=Products&record='+id+'&pricebook_id='+pbid+'&listprice='+price,
                         onComplete: function(response) {
                                         $("status").style.display="none";
                                         $("editlistprice").innerHTML= response.responseText;

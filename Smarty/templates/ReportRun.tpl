@@ -23,13 +23,13 @@
 
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-    <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+    <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
 	<td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 	
 	
 	
 <table class="small reportGenHdr mailClient mailClientBg" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
-	<form name="NewReport" action="index.php" method="POST">
+	<form name="NewReport" action="index.php" method="POST" onsubmit="VtigerJS_DialogBox.block();">
     <input type="hidden" name="booleanoperator" value="5"/>
     <input type="hidden" name="record" value="{$REPORTID}"/>
     <input type="hidden" name="reload" value=""/>    
@@ -51,8 +51,9 @@
 			{$REPORTNAME}
 		{/if}
 		</span>&nbsp;&nbsp;
-		
+		{if $IS_EDITABLE eq 'true'}
 		<input type="button" name="custReport" value="{$MOD.LBL_CUSTOMIZE_REPORT}" class="crmButton small edit" onClick="editReport('{$REPORTID}');">
+		{/if}
 		<br>
 		<a href="index.php?module=Reports&action=ListView" class="reportMnu" style="border-bottom: 0px solid rgb(0, 0, 0);">&lt;{$MOD.LBL_BACK_TO_REPORTS}</a>
 	</td>
@@ -109,7 +110,7 @@
 				<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
 					<td align=left><input name="startdate" id="jscal_field_date_start" type="text" size="10" class="importBox" style="width:70px;" value="{$STARTDATE}"></td>
-					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start"><font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
+					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}btnL3Calendar.gif" id="jscal_trigger_date_start"><font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
 						<script type="text/javascript">
 							Calendar.setup ({ldelim}
 							inputField : "jscal_field_date_start", ifFormat : "{$JS_DATEFORMAT}", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
@@ -125,7 +126,7 @@
 				<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
 					<td align=left><input name="enddate" id="jscal_field_date_end" type="text" size="10" class="importBox" style="width:70px;" value="{$ENDDATE}"></td>
-					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end"><font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
+					<td valign=absmiddle align=left><img src="{$IMAGE_PATH}btnL3Calendar.gif" id="jscal_trigger_date_end"><font size="1"><em old="(yyyy-mm-dd)">({$DATEFORMAT})</em></font>
 						<script type="text/javascript">
 							Calendar.setup ({ldelim}
 							inputField : "jscal_field_date_end", ifFormat : "{$JS_DATEFORMAT}", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1
@@ -152,7 +153,7 @@
 <br>
 
 </td>
-<td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+<td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
 </tr>
 </table>
 
@@ -224,6 +225,10 @@ if ((date1.value != '') || (date2.value != ''))
                         postBody: 'action=ReportsAjax&file=SaveAndRun&mode=ajax&module=Reports&record='+id+'&stdDateFilterField='+stdDateFilterFieldvalue+'&stdDateFilter='+stdDateFiltervalue+'&startdate='+startdatevalue+'&enddate='+enddatevalue,
                         onComplete: function(response) {
 				getObj('Generate').innerHTML = response.responseText;
+				// Performance Optimization: To update record count of the report result 
+				var __reportrun_directoutput_recordcount_scriptnode = $('__reportrun_directoutput_recordcount_script');
+				if(__reportrun_directoutput_recordcount_scriptnode) { eval(__reportrun_directoutput_recordcount_scriptnode.innerHTML); }
+				// END
 				setTimeout("ReportInfor()",1);
                         }
                 }

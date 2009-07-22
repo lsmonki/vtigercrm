@@ -91,10 +91,6 @@ $combo_strings = Array(
                 , 'Project Cancelled'=>'Project Cancelled'
                 , 'Shutdown'=>'Shutdown'
                 ),
-'licencekeystatus_dom' => Array(''=>''
-                , 'Sent'=>'Sent'
-                , 'Not Sent'=>'Not Sent'
-                ),
 'opportunity_type_dom' => Array(''=>''
                 , 'Existing Business'=>'Existing Business'
                 , 'New Business'=>'New Business'
@@ -245,7 +241,8 @@ $combo_strings = Array(
 			'Yearly'=>'Yearly'
 			),
 
-'invoicestatus_dom' => Array('Created'=>'Created',
+'invoicestatus_dom' => Array('AutoCreated'=>'AutoCreated',
+			'Created'=>'Created',
 			'Approved'=>'Approved',
 			'Sent'=>'Sent',
 			'Credit Invoice'=>'Credit Invoice',
@@ -307,7 +304,28 @@ $combo_strings = Array(
 'date_format_dom' => Array('dd-mm-yyyy'=>'dd-mm-yyyy',
 			      'mm-dd-yyyy'=>'mm-dd-yyyy',
                               'yyyy-mm-dd'=>'yyyy-mm-dd'
-			      ),		      
+			      ),
+'reminder_interval_dom' => Array('None'=>'None',
+								'1 Minute'=>'1 Minute',
+								'5 Minutes'=>'5 Minutes',
+								'15 Minutes'=>'15 Minutes',
+								'30 Minutes'=>'30 Minutes',
+								'45 Minutes'=>'45 Minutes',
+								'1 Hour'=>'1 Hour',
+								'1 Day'=>'1 Day'
+							),
+
+'recurring_frequency_dom' => Array('--None--'=>'--None--',
+								'Daily' => 'Daily',
+								'Weekly' => 'Weekly',
+								'Monthly' => 'Monthly',
+								'Quarterly' => 'Quarterly',
+								'Yearly' => 'Yearly'
+							),		
+'payment_duration_dom' => Array('Net 30 days'=>'Net 30 days',
+								'Net 45 days'=>'Net 45 days',
+								'Net 60 days'=>'Net 60 days'
+							),      
 		
 );
 

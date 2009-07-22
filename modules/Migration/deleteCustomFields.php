@@ -38,7 +38,7 @@ foreach($tables_array as $tablename => $columnname)
 		$fieldname = substr($col_value,strpos($col_value,':cf_')+1,6);
 
 		//Now check whether this field is available in field table
-		$sql1 = "select fieldid from vtiger_field where fieldname='".$fieldname."'";
+		$sql1 = "select fieldid from vtiger_field where fieldname='".$fieldname."' and vtiger_field.presence in (0,2)";
 		$result1 = $conn->query($sql1);
 		$noofrows1 = $conn->num_rows($result1);
 		$fieldid = $conn->query_result($result1,0,"fieldid");

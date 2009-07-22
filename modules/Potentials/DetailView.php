@@ -22,7 +22,6 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Potentials/Potentials.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
@@ -31,7 +30,7 @@ global $mod_strings;
 global $app_strings;
 global $currentModule, $singlepane_view;
 
-$focus = new Potentials();
+$focus = CRMEntity::getInstance($currentModule);
 $smarty = new vtigerCRM_Smarty;
 
 if(isset($_REQUEST['record'])  && $_REQUEST['record']!='') {
@@ -56,9 +55,18 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $focus->id);
-$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
-$smarty->assign("ACCOUNTID",$focus->column_fields['account_id']);
+// Module Sequence Numbering
+$mod_seq_field = getModuleSequenceField($currentModule);
+if ($mod_seq_field != null) {
+	$mod_seq_id = $focus->column_fields[$mod_seq_field['name']];
+} else {
+	$mod_seq_id = $focus->id;
+}
+$smarty->assign('MOD_SEQ_ID', $mod_seq_id);
+// END
+
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
@@ -91,7 +99,7 @@ $smarty->assign("CHECK", $check_button);
 
 $smarty->assign("CONVERTMODE",'potentoinvoice');
 $smarty->assign("MODULE","Potentials");
-$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST['record']));
 
 if($singlepane_view == 'true')
 {
@@ -104,6 +112,17 @@ $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 $smarty->assign("SinglePane_View", $singlepane_view);
 $smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
 $smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
+
+if(PerformancePrefs::getBoolean('DETAILVIEW_RECORD_NAVIGATION', true) && isset($_SESSION[$currentModule.'_listquery'])){
+	$recordNavigationInfo = ListViewSession::getListViewNavigation($focus->id);
+	VT_detailViewNavigation($smarty,$recordNavigationInfo,$focus->id);
+}
+
+// Record Change Notification
+$focus->markAsViewed($current_user->id);
+// END
+
+$smarty->assign('DETAILVIEW_AJAX_EDIT', PerformancePrefs::getBoolean('DETAILVIEW_AJAX_EDIT', true));
 
 $smarty->display("DetailView.tpl");
 ?>

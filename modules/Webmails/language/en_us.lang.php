@@ -166,5 +166,16 @@ $mod_strings = Array(
 'LBL_CONFIGURE_MAIL_SETTINGS'=>'Please configure your mail settings',
 'LBL_PLEASE'=>'Please',
 'LBL_HERE'=>'Here',
+
+// Added after 5.0.4 GA
+'LBL_FULL_EMAIL_VIEW'=>'Full Email View', 
+'LBL_MESSAGE'=>'Message', 
+'LBL_MESSAGES'=>'Messages',
+
+'LBL_NO_ATTACHMENTS'=>'No files to download', 
+'LBL_THERE_ARE'=>'There are ', 
+'LBL_ATTACHMENTS_TO_CHOOSE'=>' attachment(s) to choose from',
+'LBL_ATTACHMENTS'=>'Attachments', 
+
 );
 ?>

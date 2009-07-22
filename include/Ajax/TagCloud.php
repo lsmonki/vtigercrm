@@ -8,12 +8,12 @@
   * All Rights Reserved.
   *
   ********************************************************************************/
-$ajaxaction = $_REQUEST['ajxaction'];
+$ajaxaction = $_REQUEST["ajxaction"];
 global $current_user;
 global $default_charset;
 
-$crmid = $_REQUEST["recordid"];
-$module = $_REQUEST["module"];
+$crmid = vtlib_purify($_REQUEST["recordid"]);
+$module = vtlib_purify($_REQUEST["module"]);
 $userid = $current_user->id;
 if($ajaxaction == "SAVETAG")
 {
@@ -57,9 +57,7 @@ elseif($ajaxaction == 'GETTAGCLOUD')
 		global $adb;
 		$query="delete from vtiger_freetagged_objects where tag_id=? and object_id=?";
 		$result=$adb->pquery($query, array($tagid, $crmid));
-		/*$query="delete from vtiger_freetags where id=?";
-		$result=$adb->pquery($query, array($tagid));*/
-		echo 'SUCESS';
+		echo 'SUCCESS';
 	}else
 	{
 		 die("An invalid tagid to delete.");

@@ -13,7 +13,7 @@
 
 <script language="JavaScript" type="text/javascript" src="include/js/menu.js"></script>
 
-<form name="Migration" method="POST" action="index.php" enctype="multipart/form-data">
+<form name="Migration" method="POST" action="index.php" enctype="multipart/form-data" onsubmit="VtigerJS_DialogBox.block();">
 <input type="hidden" name="module" value="Migration">
 <input type="hidden" name="action" value="MigrationCheck">
 <input type="hidden" name="migration_option" value="">
@@ -37,7 +37,7 @@
 			<td class="mailClientBg" style="padding-left:10px;padding-top:10px;vertical-align:top;">
 				<table width="100%"  border="0" cellpadding="5" cellspacing="0" class="small">
 				   <tr>
-					<td width="10%"><img src="{$IMAGE_PATH}migrate.gif" align="absmiddle"/></td>
+					<td width="10%"><img src="{'migrate.gif'|@vtiger_imageurl:$THEME}" align="absmiddle"/></td>
 					<td width="90%">
 						<span class="genHeaderBig">{$MOD.LBL_UPGRADE_VTIGER}</span><br />
 						({$MOD.LBL_UPGRADE_FROM_VTIGER_423})

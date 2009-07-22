@@ -272,6 +272,14 @@ following values "Call","Meeting" or "Task".',
 'starts with'=>'Starts with',
 'ends with'=>'Ends with',
 //'Product Code'=>'Product Code',
- 
+
+// Added after 5.0.4 GA
+
+//Added for Role based Custom filters 
+'LBL_SET_AS_PUBLIC'=>'Set as Public ',
+'LBL_NEW'=>'New',
+'LBL_EDIT'=>'Edit',
+'LBL_STATUS_PUBLIC_APPROVE'=>'Approve',
+'LBL_STATUS_PUBLIC_DENY'=>'Deny'
 ); 
 ?>

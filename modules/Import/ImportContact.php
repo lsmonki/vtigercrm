@@ -23,10 +23,6 @@ require_once('modules/Import/UsersLastImport.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 
-// Get _dom arrays from Database
-$comboFieldNames = Array('salutationtype'=>'salutation_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
-
 // Contact is used to store customer information.
 class ImportContact extends Contacts {
 	// these are vtiger_fields that may be set on import
@@ -44,6 +40,7 @@ class ImportContact extends Contacts {
 						//"get_names_from_full_name"
 						"add_create_account",
 						"map_reports_to",
+						"modseq_number",
 						//,"add_salutation"
 						//,"add_lead_source"
 						//,"add_birthdate"
@@ -149,6 +146,12 @@ class ImportContact extends Contacts {
 
         }
 	*/
+
+	// Module Sequence Numbering	
+	function modseq_number() {
+		$this->column_fields['contact_no'] = '';
+	}
+	// END
 
 	/**	function used to create or map with existing account if the contact has mapped with an account during import
 	 */
@@ -287,13 +290,11 @@ class ImportContact extends Contacts {
 	/** Constructor which will set the importable_fields as $this->importable_fields[$key]=1 in this object where key is the fieldname in the field table
 	 */
 	function ImportContact() {
+		parent::Contacts();
 		$this->log = LoggerManager::getLogger('import_contact');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->db->println("IMP ImportContact");
 		$this->initImportableFields("Contacts");
-		//unset($this->importable_fields['account_id']);
-		//$this->importable_fields['account_name']=1;
-		
 		$this->db->println($this->importable_fields);
 	}
 

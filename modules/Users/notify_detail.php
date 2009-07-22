@@ -13,7 +13,7 @@ global $theme;
 global $app_strings;
 global $mod_strings;
 $theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
+$image_path="themes/images/";
 
 
 ?>
@@ -26,7 +26,7 @@ $image_path=$theme_path."images/";
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $app_strings['LBL_CHARSET']; ?>">
 </head>
 <body>
-<form method="post" action="index.php?module=Users&action=listnotificationschedulers" name="">
+<form method="post" action="index.php?module=Users&action=listnotificationschedulers" name="" onsubmit="VtigerJS_DialogBox.block();">
 	<TABLE WIDTH="100%" CELLPADDING=0 CELLSPACING=0 BORDER=0>
           <TR> 
 	    <TD ALIGN=LEFT CLASS="moduleTitle hline" NOWRAP><?php echo $mod_strings['LBL_NOTIFICATION_EMAIL_INFO']; ?>: 
@@ -46,7 +46,7 @@ $image_path=$theme_path."images/";
     </tr>
     <tr >
       <td nowrap class="dataLabel"><?php echo $mod_strings['LBL_ACTIVE']; ?>: </td>
-      <td> <img src="yes.gif" alt="<?php echo $mod_strings['LBL_INACTIVE']; ?>" title="<?php echo $mod_strings['LBL_INACTIVE']; ?>" width="13" height="12" align="absmiddle"> 
+      <td> <img src="<?php echo vtiger_imageurl('yes.gif', $theme) ?>" alt="<?php echo $mod_strings['LBL_INACTIVE']; ?>" title="<?php echo $mod_strings['LBL_INACTIVE']; ?>" width="13" height="12" align="absmiddle"> 
         [<a href=#>Deactivate</a>]</td>
     </tr>
     <tr >

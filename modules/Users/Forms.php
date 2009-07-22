@@ -23,6 +23,45 @@
  ********************************************************************************/
 
 /**
+ * this function checks if the asterisk server details are set in the database or not
+ * returns string "true" on success :: "false" on failure
+ */
+function checkAsteriskDetails(){
+	global $adb,$current_user;
+	$sql = "select * from vtiger_asterisk";
+	$result = $adb->query($sql);
+	
+	$count = $adb->num_rows($result);
+	
+	if($count > 0){
+		return "true";
+	}else{
+		return "false";
+	}
+}
+
+/**
+ * this function gets the asterisk extensions assigned in vtiger
+ */
+function getAsteriskExtensions(){
+	global $adb, $current_user;
+	
+	$sql = "select * from vtiger_asteriskextensions where userid != ".$current_user->id;
+	$result = $adb->pquery($sql, array());
+	$count = $adb->num_rows($result);
+	$data = array();
+	
+	for($i=0;$i<$count;$i++){
+		$user = $adb->query_result($result, $i, "userid");
+		$extension = $adb->query_result($result, $i, "asterisk_extension");
+		if(!empty($extension)){
+			$data[$user] = $extension;
+		}
+	}
+	return $data;
+}
+
+/**
  * Create javascript to validate the data entered into a record.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -46,6 +85,12 @@ $the_emailid = $app_strings['THE_EMAILID'];
 $email_field_is = $app_strings['EMAIL_FILED_IS'].$err_invalid_email_address;
 $other_email_field_is = $app_strings['OTHER_EMAIL_FILED_IS'].$err_invalid_email_address;
 $yahoo_email_field_is = $app_strings['YAHOO_EMAIL_FILED_IS'].$err_invalid_yahoo_email_address;
+$lbl_asterisk_details_not_set = $app_strings['LBL_ASTERISK_SET_ERROR'];
+
+//check asteriskdetails start
+$checkAsteriskDetails = checkAsteriskDetails();
+$extensions_list = implode(",",getAsteriskExtensions());
+//check asteriskdetails end
 
 $the_script  = <<<EOQ
 
@@ -57,9 +102,25 @@ function set_fieldfocus(errorMessage,oMiss_field){
 }
 
 function verify_data(form) {
-
+	var existing_extensions = new Array($extensions_list);
 	var isError = false;
 	var errorMessage = "";
+	
+	//check if asterisk server details are set or not
+	if(trim(form.asterisk_extension.value)!="" && "$checkAsteriskDetails" == "false"){
+		errorMessage = "$lbl_asterisk_details_not_set";
+		alert(errorMessage);
+		return false;
+	}
+
+	for(var i=0; i<existing_extensions.length; i++){
+		if(form.asterisk_extension.value == existing_extensions[i]){
+			alert("This extension has already been configured for another user. Please use another extension.");
+			return false;
+		}
+	}
+	//asterisk check ends
+	
 	if (trim(form.email1.value) == "") {
 		isError = true;
 		errorMessage += "\\n$lbl_user_email1";
@@ -139,6 +200,7 @@ function verify_data(form) {
 	}else
 	{
 	//	$('user_status').disabled = false;
+		VtigerJS_DialogBox.block();
 		form.submit();
 	}
 }

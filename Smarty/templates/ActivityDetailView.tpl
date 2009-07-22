@@ -30,6 +30,58 @@ function tagvalidate()
 		return false;
 	{rdelim}
 {rdelim}
+
+{literal}
+function setCoOrdinate(elemId)
+{
+	oBtnObj = document.getElementById(elemId);
+	var tagName = document.getElementById('lstRecordLayout');
+	leftpos  = 0;
+	toppos = 0;
+	aTag = oBtnObj;
+	do 
+	{					  
+	  leftpos  += aTag.offsetLeft;
+	  toppos += aTag.offsetTop;
+	} while(aTag = aTag.offsetParent);
+	
+	tagName.style.top= toppos + 20 + 'px';
+	tagName.style.left= leftpos - 276 + 'px';
+}
+
+function getListOfRecords(obj, sModule, iId,sParentTab)
+{
+		new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Users&action=getListOfRecords&ajax=true&CurModule='+sModule+'&CurRecordId='+iId+'&CurParentTab='+sParentTab,
+			onComplete: function(response) {
+				sResponse = response.responseText;
+				$("lstRecordLayout").innerHTML = sResponse;
+				Lay = 'lstRecordLayout';	
+				var tagName = document.getElementById(Lay);
+				var leftSide = findPosX(obj);
+				var topSide = findPosY(obj);
+				var maxW = tagName.style.width;
+				var widthM = maxW.substring(0,maxW.length-2);
+				var getVal = eval(leftSide) + eval(widthM);
+				if(getVal  > document.body.clientWidth ){
+					leftSide = eval(leftSide) - eval(widthM);
+					tagName.style.left = leftSide + 230 + 'px';
+				}
+				else
+					tagName.style.left= leftSide + 388 + 'px';
+				
+				setCoOrdinate(obj.id);
+				
+				tagName.style.display = 'block';
+				tagName.style.visibility = "visible";
+			}
+		}
+	);
+}
+{/literal}
 function DeleteTag(id,recordid)
 {ldelim}
         $("vtbusy_info").style.display="inline";
@@ -48,24 +100,55 @@ function DeleteTag(id,recordid)
 {rdelim}
 
 </script>
+
+<div id="lstRecordLayout" class="layerPopup" style="display:none;width:325px;height:300px;"></div> <!-- Code added by SAKTI on 17th Jun, 2008 -->
+
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
-<form action="index.php" method="post" name="DetailView" id="form">
 <tr><td>&nbsp;</td>
 	<td>
                 <table cellpadding="0" cellspacing="5" border="0">
-			{include file='DetailViewHidden.tpl'}
 		</table>	
 
 <!-- Contents -->
 <table  border="0" cellpadding="5" cellspacing="0" width="100%" >
 <tr>
-	<td class="lvtHeaderText" style="border-bottom:1px dotted #cccccc">
+	<td style="border-bottom:1px dotted #cccccc">
 	
-		<table align="center" border="0" cellpadding="0" cellspacing="0" width="95%">
-			<tr><td>		
-				 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$SINGLE_MOD} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span></td><td>&nbsp;
-			</td></tr>
-			 <tr height=20><td class=small>{$UPDATEINFO}</td></tr>
+		<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td align="left">		
+					<span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$SINGLE_MOD} {$APP.LBL_INFORMATION}</span>&nbsp;&nbsp;<span class="small">{$UPDATEINFO}</span>&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span>
+				</td>
+				<td align="right">		
+					{if $EDIT_DUPLICATE eq 'permitted'}
+					<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='DetailView'; DetailView.return_id.value='{$ID}';DetailView.module.value='{$MODULE}'; submitFormForAction('DetailView','EditView');" type="button" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
+					{/if}
+					
+					{if $EDIT_DUPLICATE eq 'permitted'}
+					<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='DetailView'; DetailView.isDuplicate.value='true';DetailView.module.value='{$MODULE}'; submitFormForAction('DetailView','EditView');" type="button" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
+                    {/if}
+                    
+                    {if $DELETE eq 'permitted'}
+					<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="DetailView.return_module.value='{$MODULE}'; {if $VIEWTYPE eq 'calendar'} DetailView.return_action.value='index'; {else} DetailView.return_action.value='ListView'; {/if}  submitFormForActionWithConfirmation('DetailView', 'Delete', '{$APP.NTC_DELETE_CONFIRMATION}');" type="button" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+					{/if}
+					
+					{if $privrecord neq ''}
+					<img align="absmiddle" title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="{'rec_prev.gif'|@vtiger_imageurl:$THEME}">&nbsp;
+					{else}
+					<img align="absmiddle" title="{$APP.LNK_LIST_PREVIOUS}" src="{'rec_prev_disabled.gif'|@vtiger_imageurl:$THEME}">
+					{/if}
+					
+					{if $privrecord neq '' || $nextrecord neq ''}
+					<img align="absmiddle" title="{$APP.LBL_JUMP_BTN}" accessKey="{$APP.LBL_JUMP_BTN}" onclick="var obj = this;var lhref = getListOfRecords(obj, '{$MODULE}',{$ID},'{$CATEGORY}');" name="jumpBtnIdTop" id="jumpBtnIdTop" src="{'rec_jump.gif'|@vtiger_imageurl:$THEME}">
+					{/if}
+					&nbsp;
+					{if $nextrecord neq ''}
+					<img align="absmiddle" title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="{'rec_next.gif'|@vtiger_imageurl:$THEME}">&nbsp;
+					{else}
+					<img align="absmiddle" title="{$APP.LNK_LIST_NEXT}" src="{'rec_next_disabled.gif'|@vtiger_imageurl:$THEME}">&nbsp;
+					{/if}
+				</td>
+			</tr>
 		 </table>
 	</td>
 </tr>
@@ -75,32 +158,17 @@ function DeleteTag(id,recordid)
 		<td valign=top align=left >
                            <table border=0 cellspacing=0 cellpadding=3 width=100%>
 				<tr>
-					<td align=left>
+					<td align=left>					
+					<form action="index.php" method="post" name="DetailView" id="form" onsubmit="VtigerJS_DialogBox.block();">
+					{include file='DetailViewHidden.tpl'}
 					<!-- content cache -->
 					
 					<table border=0 cellspacing=0 cellpadding=0 width=100%>
 			                  <tr>
 					     <td style="padding:3px">
 						     <!-- General details -->
-				                     <table border=0 cellspacing=0 cellpadding=0 width=100%>
-						     <tr nowrap>
-							<td  colspan=4 style="padding:5px">
-								{if $EDIT_DUPLICATE eq 'permitted'}
-                                                                <input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
-								{/if}
-							</td>
-							<td width=50% align=right>
-							{if $EDIT_DUPLICATE eq 'permitted'}
-                                                                <input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
-                                                        {/if}
-							{if $DELETE eq 'permitted'}
-                                                                <input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; {if $VIEWTYPE eq 'calendar'} this.form.return_action.value='index'; {else} this.form.return_action.value='ListView'; {/if}  this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
-                                                         {/if}
-
-							</td>
-						     </tr>
-						     </table>
 						     {foreach key=header item=detail from=$BLOCKS}
+							     {if $header neq $APP.LBL_CUSTOM_INFORMATION}
 						     <table border=0 cellspacing=0 cellpadding=5 width=100% class="small">
 						     	<tr>{strip}
 						     		<td colspan=4 class="tableHeading">
@@ -108,6 +176,7 @@ function DeleteTag(id,recordid)
 								</td>{/strip}
 					             	</tr>
 						     </table>
+							     {/if}
 						     {/foreach}
 						     {if $ACTIVITYDATA.activitytype neq 'Task'}	
 							 <!-- display of fields starts -->
@@ -116,12 +185,12 @@ function DeleteTag(id,recordid)
 								{if $LABEL.activitytype neq ''}
 								{assign var=type value=$ACTIVITYDATA.activitytype}
 								<td class="cellLabel" width="20%" align="right"><b>{$MOD.LBL_EVENTTYPE}</b></td>
-								<td class="cellInfo" width="30%"align="left">{$MOD.$type}</td>
+								<td class="cellInfo" width="30%"align="left">{$type}</td>
 								{/if}
 								{if $LABEL.visibility neq ''}
 								{assign var=vblty value=$ACTIVITYDATA.visibility}
 								<td class="cellLabel" width="20%" align="right"><b>{$LABEL.visibility}</b></td>
-                                                                <td class="cellInfo" width="30%" align="left" >{$MOD.$vblty}</td>
+                                                                <td class="cellInfo" width="30%" align="left" >{$vblty}</td>
 								{/if}
 							 </tr>
 							 <tr>
@@ -198,6 +267,31 @@ function DeleteTag(id,recordid)
                                                                 </table>
                                                         </td></tr>
                                                      </table>
+							{if $CUSTOM_FIELDS_DATA|@count > 0}
+	                             <table border=0 cellspacing=0 cellpadding=5 width=100% >
+	                             	<tr>{strip}
+							     		<td colspan=4 class="tableHeading">
+										<b>{$APP.LBL_CUSTOM_INFORMATION}</b>
+										</td>{/strip}
+						          	</tr>
+						          	<tr>
+						          		{foreach key=index item=custom_field from=$CUSTOM_FIELDS_DATA}
+						          		{assign var=keyid value=$custom_field.2}
+						          		{assign var=keyval value=$custom_field.1}
+						          		{assign var=keyfldname value=$custom_field.0}
+						          		{assign var=keyoptions value=$custom_field.options}
+						          		<td class="cellLabel" align="right" width="20%"><b>{$keyfldname}</b></td>
+						          		{include file="DetailViewFields.tpl"}
+						          		{if ($index+1)% 2 == 0}
+						          			</tr><tr>
+						          		{/if}
+							            {/foreach}
+							        {if ($index+1)% 2 != 0}
+							        	<td width="20%"></td><td width="30%"></td>
+							        {/if}
+						            </tr>
+	                             </table>   
+                             {/if}    
 						     <br>
 					             <table border=0 cellspacing=0 cellpadding=0 width=100% align=center>
                 					 <tr>
@@ -370,7 +464,34 @@ function DeleteTag(id,recordid)
                                                                 <td class="cellInfo" align=left  nowrap width=30%>{if $LABEL.modifiedtime neq ''}{$ACTIVITYDATA.modifiedtime}{/if}</td>
                                                         </tr>
                                                      </table>
+
+							{if $CUSTOM_FIELDS_DATA|@count > 0}
+	                             <table border=0 cellspacing=0 cellpadding=5 width=100% >
+	                             	<tr>{strip}
+							     		<td colspan=4 class="tableHeading">
+										<b>{$APP.LBL_CUSTOM_INFORMATION}</b>
+										</td>{/strip}
+						          	</tr>
+						          	<tr>
+						          		{foreach key=index item=custom_field from=$CUSTOM_FIELDS_DATA}
+						          		{assign var=keyid value=$custom_field.2}
+						          		{assign var=keyval value=$custom_field.1}
+						          		{assign var=keyfldname value=$custom_field.0}
+						          		{assign var=keyoptions value=$custom_field.options}
+						          		<td class="cellLabel" align="right" width="20%"><b>{$keyfldname}</b></td>
+						          		{include file="DetailViewFields.tpl"}
+											{if ($index+1)% 2 == 0}
+												</tr><tr>
+											{/if}
+							            {/foreach}
+							        {if ($index+1)% 2 != 0}
+							        	<td width="20%"></td><td width="30%"></td>
+							        {/if}
+						            </tr>
+	                             </table>   
+                             {/if}  
 						     <br>
+
 						     {if $LABEL.sendnotification neq '' || ($LABEL.parent_id neq '') || ($LABEL.contact_id neq '') } 
 						     <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
 							<tr>
@@ -435,33 +556,43 @@ function DeleteTag(id,recordid)
 					   </tr>
                 </table>
 		{/if}
-		<tr>
-			<td style="padding:10px">
-		           <table border=0 cellspacing=0 cellpadding=0 width=100%>
-				     {strip}<tr nowrap>
-							<td  colspan=4 style="padding:5px">
-								{if $EDIT_DUPLICATE eq 'permitted'}
-                                                                <input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
-								{/if}
-							</td>
-							<td align=right>
-								{if $EDIT_DUPLICATE eq 'permitted'}
-                                                                <input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
-								{if $DELETE eq 'permitted'}
-                                                                <input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
-                                                                {/if}
-
-							</td>
-					</tr>{/strip}
-			   </table>
-			</td>
-		</tr>
-		</form>
 	</table>
+	</form>
 	</td>
 	<td width=22% valign=top style="border-left:2px dashed #cccccc;padding:13px">
 						<!-- right side relevant info -->
+		{* vtlib customization: Custom links on the Detail view *}
+		{if $CUSTOM_LINKS}
+			<table width="100%" border="0" cellpadding="5" cellspacing="0">
+				<tr><td align="left" class="dvtUnSelectedCell dvtCellLabel">
+					<a href="javascript:;" onmouseover="fnvshobj(this,'vtlib_customLinksLay');" onclick="fnvshobj(this,'vtlib_customLinksLay');"><b>{$APP.LBL_MORE} {$APP.LBL_ACTIONS} &#187;</b></a>
+				</td></tr>
+			</table>
+			<br>
+			<div style="display: none; left: 193px; top: 106px;width:155px; position:absolute;" id="vtlib_customLinksLay" 
+				onmouseout="fninvsh('vtlib_customLinksLay')" onmouseover="fnvshNrm('vtlib_customLinksLay')">
+				<table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
+				<tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;"><b>{$APP.LBL_MORE} {$APP.LBL_ACTIONS} &#187;</b></td></tr>
+				<tr>
+					<td>
+						{foreach item=CUSTOMLINK from=$CUSTOM_LINKS}
+							{assign var="customlink_href" value=$CUSTOMLINK->linkurl}
+							{assign var="customlink_label" value=$CUSTOMLINK->linklabel}
+							{assign var="customlink_module" value=$CUSTOMLINK->module()}
+							{if $customlink_label eq ''}
+								{assign var="customlink_label" value=$customlink_href}
+							{else}
+								{* Pickup the translated label provided by the module *}
+								{assign var="customlink_label" value=$customlink_label|@getTranslatedString:$customlink_module}
+							{/if}
+							<a href="{$customlink_href}" class="drop_down">{$customlink_label}</a>
+						{/foreach}
+					</td>
+				</tr>
+			</table>
+			</div>
+		{/if}
+		{* END *}
 
 		{if $TAG_CLOUD_DISPLAY eq 'true'}
 		<!-- Tag cloud display -->
@@ -488,6 +619,37 @@ function DeleteTag(id,recordid)
 		
 		</div>
 		<!-- PUBLIC CONTENTS STOPS-->
+	</td>
+</tr>
+<tr>
+	<td align="right" style="border-top:1px dotted #cccccc">		
+		{if $EDIT_DUPLICATE eq 'permitted'}
+		<input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="crmbutton small edit" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='DetailView'; DetailView.return_id.value='{$ID}';DetailView.module.value='{$MODULE}'; submitFormForAction('DetailView','EditView');" type="button" name="Edit" value="&nbsp;{$APP.LBL_EDIT_BUTTON_LABEL}&nbsp;">&nbsp;
+		{/if}
+		
+		{if $EDIT_DUPLICATE eq 'permitted'}
+		<input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="crmbutton small create" onclick="DetailView.return_module.value='{$MODULE}'; DetailView.return_action.value='DetailView'; DetailView.isDuplicate.value='true';DetailView.module.value='{$MODULE}'; submitFormForAction('DetailView','EditView');" type="button" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
+        {/if}
+        
+        {if $DELETE eq 'permitted'}
+		<input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="crmbutton small delete" onclick="DetailView.return_module.value='{$MODULE}'; {if $VIEWTYPE eq 'calendar'} DetailView.return_action.value='index'; {else} DetailView.return_action.value='ListView'; {/if} submitFormForActionWithConfirmation('DetailView', 'Delete', '{$APP.NTC_DELETE_CONFIRMATION}');" type="button" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+		{/if}
+		
+		{if $privrecord neq ''}
+		<img align="absmiddle" title="{$APP.LNK_LIST_PREVIOUS}" accessKey="{$APP.LNK_LIST_PREVIOUS}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$privrecord}&parenttab={$CATEGORY}'" name="privrecord" value="{$APP.LNK_LIST_PREVIOUS}" src="{'rec_prev.gif'|@vtiger_imageurl:$THEME}">&nbsp;
+		{else}
+		<img align="absmiddle" title="{$APP.LNK_LIST_PREVIOUS}" src="{'rec_prev_disabled.gif'|@vtiger_imageurl:$THEME}">
+		{/if}
+		
+		{if $privrecord neq '' || $nextrecord neq ''}
+		<img align="absmiddle" title="{$APP.LBL_JUMP_BTN}" accessKey="{$APP.LBL_JUMP_BTN}" onclick="var obj = this;var lhref = getListOfRecords(obj, '{$MODULE}',{$ID},'{$CATEGORY}');" name="jumpBtnIdBottom" id="jumpBtnIdBottom" src="{'rec_jump.gif'|@vtiger_imageurl:$THEME}">
+		{/if}
+		&nbsp;
+		{if $nextrecord neq ''}
+		<img align="absmiddle" title="{$APP.LNK_LIST_NEXT}" accessKey="{$APP.LNK_LIST_NEXT}" onclick="location.href='index.php?module={$MODULE}&viewtype={$VIEWTYPE}&action=DetailView&record={$nextrecord}&parenttab={$CATEGORY}'" name="nextrecord" src="{'rec_next.gif'|@vtiger_imageurl:$THEME}">&nbsp;
+		{else}
+		<img align="absmiddle" title="{$APP.LNK_LIST_NEXT}" src="{'rec_next_disabled.gif'|@vtiger_imageurl:$THEME}">&nbsp;
+		{/if}
 	</td>
 </tr>
 </table>
@@ -530,7 +692,7 @@ getTagCloud();
         </td></tr></table>
         </div>
         </td>
-        <td valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign=top><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
         </tr>
         </table>
 

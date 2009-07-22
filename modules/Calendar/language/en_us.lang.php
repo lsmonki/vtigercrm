@@ -97,6 +97,7 @@ $mod_strings = Array(
 'LBL_SUBJECT'=>'Subject:',
 'LBL_APP_DESCRIPTION' => 'Description',
 'LBL_CONTACT'=>'Contact:',
+'LBL_CONTACT_LIST'=>'Contact List:',
 
 'LBL_APP_IGNORE_TIME2' => '(i.e. the appointment takes place<br />at no particular time on these day(s) )',
 
@@ -278,11 +279,11 @@ $mod_strings = Array(
 'LBL_SCHEDULE_CALL_BUTTON_TITLE'=>'Schedule Call [Alt+C]',
 'LBL_SCHEDULE_CALL_BUTTON_KEY'=>'C',
 'LBL_SCHEDULE_CALL_BUTTON_LABEL'=>'Schedule Call',
-'LBL_NEW_NOTE_BUTTON_TITLE'=>'New Note [Alt+T]',
+'LBL_NEW_NOTE_BUTTON_TITLE'=>'New Document [Alt+T]',
 'LBL_NEW_ATTACH_BUTTON_TITLE'=>'Attach File [Alt+F]',
 'LBL_NEW_NOTE_BUTTON_KEY'=>'T',
 'LBL_NEW_ATTACH_BUTTON_KEY'=>'F',
-'LBL_NEW_NOTE_BUTTON_LABEL'=>'New Note',
+'LBL_NEW_NOTE_BUTTON_LABEL'=>'New Document',
 'LBL_NEW_ATTACH_BUTTON_LABEL'=>'Attach File',
 'LBL_TRACK_EMAIL_BUTTON_TITLE'=>'Track Email [Alt+K]',
 'LBL_TRACK_EMAIL_BUTTON_KEY'=>'K',
@@ -334,7 +335,7 @@ $mod_strings = Array(
 'Location'=>'Location',
 'No Time'=>'No Time',
 //Added for Send Reminder 4.2 release
-'Send Reminder'=>'Send Reminder (mins)',
+'Send Reminder'=>'Send Reminder',
 'LBL_YES'=>'Yes',
 'LBL_NO'=>'No',
 'LBL_DAYS'=>'day(s)',
@@ -423,6 +424,18 @@ $mod_strings = Array(
 //added to fix ticket#4525
 'LBL_CREATED'=>'created',
 'LBL_UPDATED'=>'updated',
+
+//Added after 5.0.4 GA
+'LBL_BUSY' => 'Busy',
+
+//Custom Fields support for Calendar
+'LBL_CUSTOM_INFORMATION'=>'Custom Information',
+
+// Repeat Event support for Calendar
+'LBL_UNTIL' => 'Until',
+'LBL_SET_DATE'=>'Set Date',
+
+'LBL_MINE' =>'Mine',
 
 );
 

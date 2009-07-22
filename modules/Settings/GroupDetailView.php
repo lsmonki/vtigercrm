@@ -1,15 +1,12 @@
 <?php
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
-
 
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
@@ -18,10 +15,8 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
-
-$groupId=$_REQUEST['groupId'];
+$groupId=vtlib_purify($_REQUEST['groupId']);
 $groupInfoArr=getGroupInfo($groupId);
-
 
 $smarty = new vtigerCRM_Smarty;
 
@@ -154,6 +149,7 @@ function getStdOutput($groupInfoArr,$groupId, $mod_strings)
 }
 
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);

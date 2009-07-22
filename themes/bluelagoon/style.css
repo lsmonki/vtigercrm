@@ -10,6 +10,12 @@
 
 
 /* BLUE LAGOON  - COLOR THEME*/
+/*added to change color of disabled button*/
+input:disabled { 
+    background-color : #cccccc;
+    color: #666666; 
+}
+/*add ends*/
 
 .small {
 	font-family: Arial, Helvetica, sans-serif;
@@ -60,11 +66,11 @@
 }
 
 .hdrNameBg {
-	 background:#ffffff url(images/hdrNameBg.gif) repeat-x;
+	 background:#ffffff url(../images/hdrNameBg.gif) repeat-x;
 }
 
 .hdrTabBg {
-	background:#ffffff url(images/hdrTabBg.gif) bottom repeat-x ;
+	background:#ffffff url(../images/hdrTabBg.gif) bottom repeat-x ;
 	background-color:#fff;
 }  
 
@@ -103,6 +109,10 @@
 .tabSeperator {
 	background-color:#aae;
 	width:1px;
+}
+
+.tabSelected, .tabUnSelected {
+	padding: 7px 10px;
 }
 
 .level2text {
@@ -157,11 +167,11 @@
 }
 
 .sep1 {
-	background:#999999;
+	background:#FFFFFF;
 }
 
 .showPanelBg {
-	background:url(images/showPanelTopBg.gif) repeat-x;
+	background:url(../images/showPanelTopBg.gif) repeat-x;
 }
 
 a {
@@ -269,6 +279,16 @@ a:hover {
 	font-weight:bold;
 }
 
+.dvtSelectedCellBottom {
+	border-left:2px solid #00BFFF;
+	border-bottom:2px solid #00BFFF;
+	border-right:2px solid #00BFFF;
+	padding-left:20px;
+	padding-right:20px;
+	background-color:white;
+	font-weight:bold;
+}
+
 .dvtUnSelectedCell {
 	border-left:2px solid #00BFFF;
 	border-top:2px solid #00BFFF;
@@ -282,6 +302,10 @@ a:hover {
 
 .dvtTabCache {
 	border-bottom:2px solid #00BFFF;
+}
+
+.dvtTabCacheBottom {
+	border-top:2px solid #00BFFF;
 }
 
 .dvtContentSpace {
@@ -558,7 +582,7 @@ a.dash_href{
 }
 
 .dash_row_sel{
-	background-image:url(images/dash_sel_chart.jpg);
+	background-image:url(../images/dash_sel_chart.jpg);
 	background-repeat:no-repeat;
 	background-position:center;
 	width:26px;height:26px;
@@ -570,7 +594,7 @@ a.dash_href{
 }
 
 .dash_row_unsel{
-	background-image:url(images/dash_unsel_chart.jpg);
+	background-image:url(../images/dash_unsel_chart.jpg);
 	background-repeat:no-repeat;
 	background-position:center;
 	width:26px;height:26px;
@@ -595,9 +619,9 @@ a.dash_href{
 }
 
 .dash_btm{
-	background-image:url(images/dash_btm_center.jpg);
+	background-image:url(../images/dash_btm_center.jpg);
 	background-repeat:repeat-x;
-	position:top;
+	vertical-align:top;
 }
 
 /* clock */
@@ -715,27 +739,27 @@ a.dash_href{
 }
 
 .calcBackBtn {
-	background: url(images/calc_back_btn.gif) no-repeat;
+	background: url(../images/calc_back_btn.gif) no-repeat;
 	width:25px;
 }
 
 .calcBlackBtn {
-	background: url(images/calc_black_btn.gif) no-repeat;
+	background: url(../images/calc_black_btn.gif) no-repeat;
 	width:25px;
 }
 
 .calcGreyBtn {
-	background: url(images/calc_grey_btn.gif) no-repeat;
+	background: url(../images/calc_grey_btn.gif) no-repeat;
 	width:25px;
 }
 
 .calcCancBtn {
-	background: url(images/calc_canc_btn.gif) no-repeat;
+	background: url(../images/calc_canc_btn.gif) no-repeat;
 	width:25px;
 }
 
 .calcMemBtn {
-	background: url(images/calc_mem_btn.gif) no-repeat;
+	background: url(../images/calc_mem_btn.gif) no-repeat;
 	width:25px;
 }
 
@@ -757,7 +781,7 @@ a.dash_href{
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:12px;
 	color:#FFFFFF;
-	background-image:url(images/rssHeader.gif);
+	background-image:url(../images/rssHeader.gif);
 	background-position:top left;
 	background-repeat:repeat-x;
 	height:27px;
@@ -769,7 +793,7 @@ a.dash_href{
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:12px;
 	color:#FFFFFF;
-	background-image:url(images/rssdelete.gif);
+	background-image:url(../images/rssdelete.gif);
 	background-position:top left;
 	background-repeat:repeat-x;
 	height:27px;
@@ -819,7 +843,7 @@ a.dash_href{
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:12px;
 	color:#000000;
-	background-image:url(images/rssforward.gif);
+	background-image:url(../images/rssforward.gif);
 	background-position:top left;
 	background-repeat:repeat-x;
 	height:27px;
@@ -1120,13 +1144,15 @@ a.alpha:Hover{
 
 /* Home Page */
 .MatrixLayer{
-	border:2px solid #a5b5ee;
+	border:1px solid #a5b5ee;
 	background-color:#FFFFFF;
-	width:29%;
-	position:relative;
+	width:31%;
 	visibility:visible;
-	margin:9px;
-	height:280px;
+	margin:0.25%;
+	height:325px;
+	padding-top:0px;
+	padding-left:0px;
+	padding-right:0px;
 }
 
 .fontBold{
@@ -1286,6 +1312,10 @@ a.calMnu:Hover{
 	padding-top:3px;
 }
 
+.bgwhite{
+	background-color: #FFFFFF;
+}
+
 #mnuTab{
 	position:relative;
 	width:100%;
@@ -1318,7 +1348,7 @@ a.calMnu:Hover{
 	font-weight:bold;
 	padding-left:10px;
 	padding-right:10px;
-	background-image:url(images/cal_nav.gif);
+	background-image:url(../images/cal_nav.gif);
 	background-repeat:repeat-x;
 }
 
@@ -1656,7 +1686,7 @@ ul {
 
 .settingsSelectedUI {
 	padding:10px;
-	background:url(images/settingsSelUIBg.gif) repeat-x;
+	background:url(../images/settingsSelUIBg.gif) repeat-x;
 	background-color:#ffffff;
 }
 
@@ -1682,7 +1712,7 @@ ul {
 .colHeader{
 	background-color:#ddf;
 	border-left:1px solid #fff;
-	border-top:1px solid #fff;
+	border-top:1px solid #aaf;
 	border-right:1px solid #aaf;
 	border-bottom:1px solid #aaf;
 	font-weight:bold;
@@ -1854,7 +1884,7 @@ textarea {
 .emailSelected{
 	background-color:#eaeaea;
 	color:#000000;
-	font-size:bold;
+	font-weight:bold;
 }
 
 
@@ -1992,6 +2022,7 @@ a.customMnuSelected{
 	overflow-x:hidden;
 	overflow-y:hidden;
 	background-color:#eef;
+	margin-top: 0px; /* added */
 }
 
 a.drop_down{
@@ -2110,6 +2141,41 @@ a.drop_down:Hover{
 }
 
 /* Recalculate Disable Ends */
+
+.hide_tab{display:none;}
+
+.show_tab{display:inline-table;}
+
+.winmarkModulesdef{
+    background-image:url(../images/windowmarkModules.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
+}
+
+.winmarkModulesusr{
+    background-image:url(../images/windowmarkModulesusr.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
+}
+
+.winmarkRSS{
+    background-image:url(../images/windowmarkRSS.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
+}
+
+.winmarkDashboardusr{
+    background-image:url(../images/windowmarkDashboardusr.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
+}
+
+.winmarkDashboarddef{
+    background-image:url(../images/windowmarkDashboard.jpg);
+    background-position:top right;
+    background-repeat:no-repeat;
+}
+
 .mailSelected {
 	font-family:  Arial, Helvetica, sans-serif;
 	font-weight:bold;
@@ -2117,7 +2183,7 @@ a.drop_down:Hover{
 	padding-left:10px;
 	padding-right:10px;
 	padding-top:2px;
-	padding-bottom:2px;	
+	padding-bottom:2px;
 }
 
 .mailSelected_select {
@@ -2151,7 +2217,88 @@ a.drop_down:Hover{
         font-family:Arial, Helvetica, sans-serif;
         font-size:11px;
 }
+.repBox1{
+        width:200px;
+        border:1px solid #666666;
+        font-family:Arial, Helvetica, sans-serif;
+        font-size:11px;
+}
 .warning {
         color: #0000CD; /* Same as the background-color of .create Class */
 }
 
+.multiCurrencyEditUI{
+	border:3px solid #CCCCCC;
+	width:500px;
+	padding:5px;
+	position:absolute;
+	background-color:#FFFFFF;
+	display:none;
+}
+
+.multiCurrencyDetailUI{
+	border:3px solid #CCCCCC;
+	width:250px;
+	padding:5px;
+	position:absolute;
+	background-color:#FFFFFF;
+	display:none;
+}
+
+.tooltipClass{
+	padding: 5px;
+	border: 2px solid #b69559;
+	background-color: #e8e4ee;
+}
+
+.colData{
+	border-right:1px solid #aaf;
+}
+
+.thickborder{
+	border:3px solid #CCCCCC;
+}
+/*classes for home page*/
+.homePageButtons{
+	padding-top: 5px;
+}
+#addWidgetDropDown{
+	position:absolute;
+	display:none;
+	border:1px solid #ddd;
+	left:0px;
+	top:0px;
+	overflow:visible;
+	z-index:5000;
+}
+
+.widgetDropDownList{
+	list-style-type: none; margin-left: 0; padding-left: 0; padding-top: 0; padding-bottom: 0; margin-top:0; margin-bottom:0;margin-right:0;
+}
+
+.twoColumnWidget{
+	padding-left:1px;
+	padding-right:1px;
+}
+
+.scrollLink{
+	padding-top: 10px;
+	padding-bottom: 10px
+}
+
+.topMarginHomepage{
+	margin-left: 10px;
+	margin-top: 10px;
+}
+
+/*home page classes end here*/
+
+/* feedback or help message */
+.helpmessagebox {
+	background-color: #FFFABF; 
+	padding: 2px; 
+	margin: 0 0 2px 0; 
+	border: 1px solid yellow;
+}
+
+/* feedback or help message end here*/

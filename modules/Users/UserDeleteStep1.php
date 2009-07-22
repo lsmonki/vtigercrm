@@ -10,14 +10,11 @@
 *
  ********************************************************************************/
 
-
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 global $mod_strings, $app_strings;
 global $theme;
 $theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
 
 $delete_user_id = $_REQUEST['record'];
 $delete_user_name = getUserName($delete_user_id);
@@ -25,14 +22,14 @@ $delete_user_name = getUserName($delete_user_id);
 
 $output='';
 $output ='<div id="DeleteLay" class="layerPopup">
-<form name="newProfileForm" action="index.php">
+<form name="newProfileForm" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="DeleteUser">
 <input type="hidden" name="delete_user_id" value="'.$delete_user_id.'">	
 <table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 <tr>
 	<td class=layerPopupHeading " align="left">'.$mod_strings['LBL_DELETE'].' '.$mod_strings['LBL_USER'].'</td>
-	<td align="right" class="small"><img src="'.$image_path.'close.gif" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="document.getElementById(\'DeleteLay\').style.display=\'none\'";></td>
+	<td align="right" class="small"><img src="'. vtiger_imageurl('close.gif', $theme) .'" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="document.getElementById(\'DeleteLay\').style.display=\'none\'";></td>
 </tr>
 </table>
 <table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 

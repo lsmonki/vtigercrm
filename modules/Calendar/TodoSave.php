@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 require_once('modules/Calendar/Activity.php');
 require_once('modules/Calendar/CalendarCommon.php');
@@ -16,7 +15,7 @@ require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
 $focus = new Activity();
-$activity_mode = $_REQUEST['activity_mode'];
+$activity_mode = vtlib_purify($_REQUEST['activity_mode']);
 if($activity_mode == 'Task')
 {
         $tab_type = 'Calendar';
@@ -31,10 +30,21 @@ if(isset($_REQUEST['mode']))
 {
         $focus->mode = $_REQUEST['mode'];
 }
+foreach($focus->column_fields as $fieldname => $val)
+{
+	if(isset($_REQUEST[$fieldname]))
+	{
+		if(is_array($_REQUEST[$fieldname]))
+			$value = $_REQUEST[$fieldname];
+		else
+			$value = trim($_REQUEST[$fieldname]);
+		$focus->column_fields[$fieldname] = $value;
+	}
+}
  $focus->column_fields["subject"] = $_REQUEST["task_subject"];
  $focus->column_fields["time_start"] = $_REQUEST["task_time_start"];
  $focus->column_fields["assigned_user_id"] =  $_REQUEST["task_assigned_user_id"];
- $_REQUEST["assigned_group_name"]  = $_REQUEST['task_assigned_group_name'];
+ $_REQUEST["assigned_group_id"]  = $_REQUEST['task_assigned_group_id'];
  $_REQUEST['assigntype'] = $_REQUEST['task_assigntype'];
  $focus->column_fields["taskstatus"] =  $_REQUEST["taskstatus"];
  $focus->column_fields["date_start"] =  $_REQUEST["task_date_start"];
@@ -65,7 +75,7 @@ function getRequestedToData()
 	$mail_data['contact_name'] = $_REQUEST['task_contact_name'];
 	$mail_data['description'] = $_REQUEST['task_description'];
 	$mail_data['assingn_type'] = $_REQUEST['task_assigntype'];
-	$mail_data['group_name'] = $_REQUEST['task_assigned_group_name'];
+	$mail_data['group_name'] = getGroupName($_REQUEST['task_assigned_group_id']);
 	$mail_data['mode'] = $_REQUEST['task_mode'];
 	$value = getaddEventPopupTime($_REQUEST['task_time_start'],$_REQUEST['task_time_end'],'24');
 	$start_hour = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
@@ -74,6 +84,5 @@ function getRequestedToData()
 	return $mail_data;
 }
 
-
- header("Location: index.php?action=index&module=Calendar&view=".$_REQUEST['view']."&hour=".$_REQUEST['hour']."&day=".$_REQUEST['day']."&month=".$_REQUEST['month']."&year=".$_REQUEST['year']."&viewOption=".$_REQUEST['viewOption']."&subtab=todo&parenttab=".$_REQUEST['parenttab']);
+ header("Location: index.php?action=index&module=Calendar&view=".vtlib_purify($_REQUEST['view'])."&hour=".vtlib_purify($_REQUEST['hour'])."&day=".vtlib_purify($_REQUEST['day'])."&month=".vtlib_purify($_REQUEST['month'])."&year=".vtlib_purify($_REQUEST['year'])."&viewOption=".vtlib_purify($_REQUEST['viewOption'])."&subtab=todo&parenttab=".getParentTab());
 ?>

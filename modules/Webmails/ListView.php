@@ -1,39 +1,29 @@
 <?php
-/*********************************************************************************
- ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-  * ("License"); You may not use this file except in compliance with the License
-  * The Initial Developer of the Original Code is FOSS Labs.
-  * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
-  * Portions created by vtiger are Copyright (C) vtiger.
-  * All Rights Reserved.
-  *
-  ********************************************************************************/
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Initial Developer of the Original Code is FOSS Labs.
+ * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
 
-// figure out which page we are on and what mailbox we want to view
-//if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != ""){$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
-if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "")
-{
-	$mailbox=$_REQUEST["mailbox"];
-}
-else
-{
+if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {
+	$mailbox=vtlib_purify($_REQUEST["mailbox"]);
+} else {
 	$mailbox="INBOX";
 }
 
-if($_REQUEST["start"] && $_REQUEST["start"] != "")
-{
-	$start=$_REQUEST["start"];
-}
-else
-{
+if($_REQUEST["start"] && $_REQUEST["start"] != "") {
+	$start=vtlib_purify($_REQUEST["start"]);
+} else {
 	$start="1";
 }
-$show_hidden=$_REQUEST["show_hidden"];
+$show_hidden=vtlib_purify($_REQUEST["show_hidden"]);
 
 global $current_user;
 //checking the imap support in php
-if(!function_exists('imap_open'))
-{
+if(!function_exists('imap_open')) {
 	echo "<strong>".$mod_strings['LBL_ENABLE_IMAP_SUPPORT']."</strong>";
 	exit();
 }
@@ -235,12 +225,29 @@ $numEmails = $elist["count"];
 $headers = $elist["headers"];
 $mails_per_page = $MailBox->mails_per_page;
 
-
+// Calculate paging information ahead before retrieving overviews
 if($start == 1 || $start == "") {
 	$start_message=$numEmails;
+	if($numEmails > $mails_per_page) $end_message = $start_message - $mails_per_page;
+	else $end_message = $start_message - $numEmails;
 } else {
 	$start_message=($numEmails-(($start-1)*$mails_per_page));
+	$end_message = ($numEmails-(($start*2-1)*$mails_per_page));
 }
+
+// If in search mode, load overview of all the available emails
+if(isset($_REQUEST["search"])) {
+	// TODO: Navigating when search is used needs to be added
+	$MailBox->loadOverviewList(1, $numEmails);
+} else {
+	// For normal listview, fetch only required mail overview
+	$MailBox->loadOverviewList($start_message, $end_message);
+}
+
+// Fetch meta-info again after overview is loaded, for further process
+$elist = $MailBox->mailList;
+$headers = $elist["headers"];
+// END
 
 $c=$numEmails;
 
@@ -269,7 +276,7 @@ $overview=$elist["overview"];
 // these are mainly used in the preview window and could be ajaxified/
 // during the preview window load instead.
 var msgCount = "<?php echo $numEmails;?>";
-var start = "<?php echo $_REQUEST['start'];?>";
+var start = "<?php echo vtlib_purify($_REQUEST['start']);?>";
 var gselected_mail = '';
 var showQualify = "<?php echo $show_qualify;?>";
 <?php
@@ -279,7 +286,7 @@ if (is_array($overview))
 	foreach ($overview as $val)
 	{
 		$mails[$val->msgno] = $val;
-		$hdr = @imap_headerinfo($MailBox->mbox, $val->msgno);	
+		//$hdr = @imap_headerinfo($MailBox->mbox, $val->msgno);	
 		//Added to get the UTF-8 string - 30-11-06 - Mickie
 		//we have to do this utf8 decode for the fields which may contains special characters -- Mickie - 02-02-07
 		$val->from = utf8_decode(utf8_encode(imap_utf8(addslashes($val->from))));
@@ -289,8 +296,9 @@ if (is_array($overview))
                 $to_list = str_replace(">","",$to);
                 $from = str_replace("<",":",$val->from);
                 $from_list = str_replace(">","",$from);
-                $cc = str_replace("<",":",$hdr->ccaddress);
-                $cc_list = str_replace(">","",$cc);
+                //$cc = str_replace("<",":",$hdr->ccaddress);
+                //$cc_list = str_replace(">","",$cc);
+                $cc_list = '';
 
 	?>
 
@@ -300,7 +308,7 @@ if (is_array($overview))
 		webmail[<?php echo $val->msgno;?>]["subject"]="<?php echo addslashes($val->subject);?>";
 		webmail[<?php echo $val->msgno;?>]["date"]="<?php echo addslashes($val->date);?>";
 
-		webmail[<?php echo $val->msgno;?>]["cc"]="<?php echo $cc_list;?>";
+		webmail[<?php echo $val->msgno;?>]["cc"]="<?php echo addslashes($cc_list); ?>";
 
 	<?php
 	}
@@ -320,7 +328,7 @@ if(($numEmails) <= 0)
 else {
 
 	if(isset($_REQUEST["search"]) && trim($_REQUEST["search_input"]) != '') {
-		$searchstring = $_REQUEST["search_type"].' "'.$_REQUEST["search_input"].'"';
+		$searchstring = vtlib_purify($_REQUEST["search_type"]).' "'.vtlib_purify($_REQUEST["search_input"]).'"';
 		//echo $searchstring."<br>";
 		$searchlist = Array();
 		$searchlist = imap_search($MailBox->mbox,$searchstring);
@@ -403,7 +411,7 @@ if (is_array($list)) {
 			$_SESSION["mailboxes"][$tmpval] = $unread_msgs;
 			if($tmpval[0] != "."){
 				if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}
-				$folders .= '<li style="padding-left:0px;"><img src="themes/'.$theme.'/images/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+				$folders .= '<li style="padding-left:0px;"><img src="themes/images/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
 				if($unread_msgs > 0)
 					$folders .= '(<span id="'.$tmpval.'_unread">'.$unread_msgs.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
 				else
@@ -416,7 +424,7 @@ if (is_array($list)) {
 			if($tmpval[0] != ".") {
 				if($box->messages==0) {$num=$box->messages;} else {$num=($box->messages-1);}
 				$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
-				$folders .= '<li ><img src="themes/'.$theme.'/images/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+				$folders .= '<li ><img src="themes/images/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
 				if($box->unseen > 0)
 					$folders .= '(<span id="'.$tmpval.'_unread">'.$box->unseen.'</span>)</span></li>';
 				else
@@ -430,7 +438,7 @@ if (is_array($list)) {
 imap_close($MailBox->mbox);
 
 $smarty = new vtigerCRM_Smarty;
-$smarty->assign("SEARCH_VALUE",$_REQUEST['search_input']);
+$smarty->assign("SEARCH_VALUE",vtlib_purify($_REQUEST['search_input']));
 $smarty->assign("USERID", $current_user->id);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);

@@ -28,7 +28,7 @@ require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('modules/Contacts/Contacts.php');
 require_once('modules/Potentials/Potentials.php');
-require_once('modules/Notes/Notes.php');
+require_once('modules/Documents/Documents.php');
 require_once('modules/Emails/Emails.php');
 require_once('modules/Accounts/Accounts.php');
 require_once('include/ComboUtil.php');
@@ -39,7 +39,7 @@ class ImportLead extends Leads {
 	 var $db;
 
 	// This is the list of the functions to run when importing
-	var $special_functions =  array("assign_user");
+	var $special_functions =  array("assign_user", "modseq_number");
 
 	var $importable_fields = Array();
 
@@ -55,8 +55,7 @@ class ImportLead extends Leads {
 		{
 			$this->db->println("searching and assigning ".$ass_user);
 
-			//$result = $this->db->query("select id from vtiger_users where user_name = '".$ass_user."'");
-			$result = $this->db->pquery("select id from vtiger_users where id = ?", array($ass_user));
+			$result = $this->db->pquery("select id from vtiger_users where id = ? union select groupid as id from vtiger_groups where groupid = ?", array($ass_user, $ass_user));
 			if($this->db->num_rows($result)!=1)
 			{
 				$this->db->println("not exact records setting current userid");
@@ -80,15 +79,20 @@ class ImportLead extends Leads {
 		}
 	}
 
+	// Module Sequence Numbering	
+	function modseq_number() {
+		$this->column_fields['lead_no'] = '';
+	}
+	// END
+
 	/** Constructor which will set the importable_fields as $this->importable_fields[$key]=1 in this object where key is the fieldname in the field table
 	 */
 	function ImportLead() {
-		
+		parent::Leads();
 		$this->log = LoggerManager::getLogger('import_lead');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->db->println("IMP ImportLead");
 		$this->initImportableFields("Leads");
-		
 		$this->db->println($this->importable_fields);
 	}
 

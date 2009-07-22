@@ -29,13 +29,13 @@ require_once('user_privileges/enable_backup.php');
 
 global $adb, $enable_backup,$current_user;
 
-if($enable_backup == 'true' && is_admin($current_user) == true)
+if($enable_ftp_backup == 'true' && is_admin($current_user) == true)
 {
 	$ftpserver = '';
 	$ftpuser = '';
 	$ftppassword = '';
 	$query = "select * from vtiger_systems where server_type=?";
-	$result = $adb->pquery($query, array('backup'));
+	$result = $adb->pquery($query, array('ftp_backup'));
 	$num_rows = $adb->num_rows($result);
 	if($num_rows > 0)
 	{
@@ -47,13 +47,68 @@ if($enable_backup == 'true' && is_admin($current_user) == true)
 	//Taking the Backup of DB
 	$currenttime=date("Ymd_His");
 	if($ftpserver != '' && $ftpuser != '' && $ftppassword != '')
-	{	$backupFileName="backup_".$currenttime.".sql";
-	save_structure($backupFileName, $root_directory);
-	$source_file=$backupFileName;	
-	ftpBackupFile($source_file, $ftpserver, $ftpuser, $ftppassword);
-	if(file_exists($source_file)) unlink($source_file);	
+	{
+		$createZip = new createDirZip;
+		$fileName = '/backup_'.$currenttime.'.zip';
+
+		$createZip->addDirectory('user_privileges/');
+		$createZip->get_files_from_folder('user_privileges/', 'user_privileges/');        
+
+		$createZip->addDirectory('storage/');
+		$createZip->get_files_from_folder('storage/', 'storage/');        
+
+		$backup_DBFileName = "sqlbackup_".$currenttime.".sql";
+		$dbdump = new DatabaseDump(dbserver, dbuser, dbpass);
+		$dumpfile = 'backup/'.$backup_DBFileName;
+		$dbdump->save(dbname, $dumpfile) ;
+
+		$filedata = implode("", file('backup/'.$backup_DBFileName));	
+		$createZip->addFile($filedata,$backup_DBFileName);
+		
+		$fd = fopen ($fileName, 'wb');
+		$out = fwrite ($fd, $createZip->getZippedfile());
+		fclose ($fd);
+		
+		$source_file=$fileName;	
+		ftpBackupFile($source_file, $ftpserver, $ftpuser, $ftppassword);
+		if(file_exists($source_file)) unlink($source_file);	
 
 	}
+}
+if($enable_local_backup == 'true' && is_admin($current_user) == true)
+{
+		define("dbserver", $dbconfig['db_hostname']);
+		define("dbuser", $dbconfig['db_username']);
+		define("dbpass", $dbconfig['db_password']);
+		define("dbname", $dbconfig['db_name']);  
+
+		$path_query = $adb->pquery("SELECT * FROM vtiger_systems WHERE server_type = ?",array('local_backup'));
+        $path = $adb->query_result($path_query,0,'server_path');
+        $currenttime=date("Ymd_His");
+        
+		if(is_dir($path) && is_writable($path))
+		{        
+			$createZip = new createDirZip;
+			$fileName = $path.'/backup_'.$currenttime.'.zip';
+	
+			$createZip->addDirectory('user_privileges/');
+			$createZip->get_files_from_folder('user_privileges/', 'user_privileges/');        
+	
+			$createZip->addDirectory('storage/');
+			$createZip->get_files_from_folder('storage/', 'storage/');        
+	
+			$backup_DBFileName = "sqlbackup_".$currenttime.".sql";
+			$dbdump = new DatabaseDump(dbserver, dbuser, dbpass);
+			$dumpfile = 'backup/'.$backup_DBFileName;
+			$dbdump->save(dbname, $dumpfile) ;
+
+			$filedata = implode("", file('backup/'.$backup_DBFileName));	
+			$createZip->addFile($filedata,$backup_DBFileName);
+			
+			$fd = fopen ($fileName, 'wb');
+			$out = fwrite ($fd, $createZip->getZippedfile());
+			fclose ($fd);
+		}
 }
 // Recording Logout Info
 	$usip=$_SERVER['REMOTE_ADDR'];
@@ -64,46 +119,11 @@ if($enable_backup == 'true' && is_admin($current_user) == true)
 
 $local_log =& LoggerManager::getLogger('Logout');
 
-//Calendar Logout
-//include('modules/Calendar/logout.php');
-
 // clear out the autthenticating flag
 session_destroy();
 
 define("IN_LOGIN", true);
-	
-// define('IN_PHPBB', true);
-// include($phpbb_root_path . 'extension.inc');
-// include($phpbb_root_path . 'common.'.$phpEx);
 
-//
-// Set page ID for session management
-//
-//$userdata = session_pagestart($user_ip, PAGE_LOGIN);
-//init_userprefs($userdata);
-//
-// End session management
-//
-
-// session id check
-/*
-if (!empty($HTTP_POST_VARS['sid']) || !empty($HTTP_GET_VARS['sid']))
-{
-        $sid = (!empty($HTTP_POST_VARS['sid'])) ? $HTTP_POST_VARS['sid'] : $HTTP_GET_VARS['sid'];
-}
-else
-{
-        $sid = '';
-}
-if( $userdata['session_logged_in'] )
-	{
-		if( $userdata['session_logged_in'] )
-		{
-			session_end($userdata['session_id'], $userdata['user_id']);
-		}
-
-	}
-*/
 // go to the login screen.
 header("Location: index.php?action=Login&module=Users");
 ?>

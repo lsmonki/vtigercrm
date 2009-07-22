@@ -100,12 +100,13 @@ function addtopricebook()
 		}
 	}
 {/literal}
-document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&return_module=Products&return_action=DetailView&return_id={$RETURN_ID}&parenttab={$CATEGORY}"
+document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&return_module={$RETURN_MODULE}&return_action={$RETURN_ACTION}&return_id={$RETURN_ID}&parenttab={$CATEGORY}"
 {rdelim}
 
 
-function updateAllListPrice(unitprice)
+function updateAllListPrice()
 {ldelim}
+        var unitprice_array = new Array({$UNIT_PRICE_ARRAY});
         var fieldname_array = new Array({$FIELD_NAME_ARRAY});
         var unitprice,fieldname;
 	var id;
@@ -114,51 +115,52 @@ function updateAllListPrice(unitprice)
 
         for(j=0; j<fieldname_array.length; j++)
         {ldelim}
-		fieldinfo = fieldname_array[j].split("_");
-		id = fieldinfo[0];
-		checkid = "check_"+id;
+			fieldinfo = fieldname_array[j].split("_");
+			id = fieldinfo[0];
+			checkid = "check_"+id;
 
-                fieldname=fieldname_array[j];
-                updateListPrice(unitprice,fieldname,document.getElementById(checkid));
+			unitprice=unitprice_array[j];
+            fieldname=fieldname_array[j];
+            updateListPrice(unitprice,fieldname,document.getElementById(checkid));
         {rdelim}
 {rdelim}
 
 </script>
 <script language="javascript" src="modules/Products/Products.js"></script>
 <table width="95%" border="0" cellpadding="0" cellspacing="0">
-<tr><td colspan="3">&nbsp;</td></tr>
-<tr>
+	<tr><td colspan="3">&nbsp;</td></tr>
+	<tr>
 		<td>&nbsp;</td>
 		<td class="showPanelBg">
-{$PRICEBOOKLISTHEADER}
-<table border="0" cellpadding="0" cellspacing="0"  width="100%">
-  <tr height="20"> 
-    <td  class="listFormHeaderLinks">
-	 <table border="0" cellpadding="0" cellspacing="0" width="100%">
-		<tr>
-			<td>&nbsp;{$RECORD_COUNTS}</td>
-			   {$NAVIGATION}
-		</tr>
-	 </table>
-    </td>
-   </tr>
-   <tr>
-   			<td>
-					<table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="3" cellspacing="1" width="90%" align="center">
-							 {$LISTHEADER}
-							 {$LISTENTITY}
-					</table>
-			</td>
-   </tr>   
-   <tr><td>&nbsp;</td></tr>
-   </form>
-</table>
-
-</form>
-</table>
-</td>
-<td>&nbsp;</td>
-</tr>
+			{$PRICEBOOKLISTHEADER}
+			<table border="0" cellpadding="0" cellspacing="0"  width="100%">
+				<tr height="20"> 
+					<td  class="listFormHeaderLinks">
+				 		<table border="0" cellpadding="0" cellspacing="0" width="100%">
+							<tr>
+								<td>&nbsp;{$RECORD_COUNTS}</td>
+								{$NAVIGATION}
+							</tr>
+				 		</table>
+			   		</td>
+			   	</tr>
+			   	<tr>
+			   		<td>
+						<table style="background-color: rgb(204, 204, 204);" class="small" border="0" cellpadding="3" cellspacing="1" width="90%" align="center">
+							{$LISTHEADER}
+							{$LISTENTITY}
+						</table>
+					</td>
+			   	</tr>   
+			   	<tr><td>&nbsp;</td></tr>
+			   	</form>
+				</table>
+			
+				</form>
+			</table>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
 </table>
 
 

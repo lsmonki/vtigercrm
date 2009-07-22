@@ -1,38 +1,32 @@
 <?php
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
-
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 
 global $mod_strings;
 global $app_strings;
 global $theme,$default_charset;
 $theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
-$delete_prof_id = $_REQUEST['profileid'];
+$delete_prof_id = vtlib_purify($_REQUEST['profileid']);
 $delete_prof_name = getProfileName($delete_prof_id);
-
 
 $output='';
 $output ='<div id="DeleteLay" class="layerPopup">
-<form name="newProfileForm" action="index.php">
+<form name="newProfileForm" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="DeleteProfile">
 <input type="hidden" name="delete_prof_id" value="'.$delete_prof_id.'">	
 <table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 <tr>
 	<td class="layerPopupHeading" align="left">'.$mod_strings["LBL_DELETE_PROFILE"].'</td>
-	<td align="right" class="small"><img src="'.$image_path.'close.gif" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="document.getElementById(\'DeleteLay\').style.display=\'none\'";></td>
+	<td align="right" class="small"><img src="'. vtiger_imageurl('close.gif', $theme) .'" border=0 alt="'.$app_strings["LBL_CLOSE"].'" title="'.$app_strings["LBL_CLOSE"].'" style="cursor:pointer" onClick="document.getElementById(\'DeleteLay\').style.display=\'none\'";></td>
 </tr>
 </table>
 <table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 

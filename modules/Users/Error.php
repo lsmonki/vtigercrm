@@ -19,7 +19,7 @@
 global $app_strings;
 ?>
 <br><br>
-<font class='error'><?php if (isset($_REQUEST['error_string'])) echo $_REQUEST['error_string']; ?>
+<font class='error'><?php if (isset($_REQUEST['error_string'])) echo vtlib_purify($_REQUEST['error_string']); ?>
 <br><br>
 <?php echo $app_strings['NTC_CLICK_BACK']; ?>
 </font>

@@ -28,7 +28,7 @@ $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Potentials();
 //added to fix 4600
-$search=$_REQUEST['search_url'];
+$search=vtlib_purify($_REQUEST['search_url']);
 
 global $current_user;
 $currencyid=fetchCurrency($current_user->id);
@@ -44,24 +44,31 @@ if(isset($_REQUEST['amount']))
 	$focus->column_fields['amount'] = $value;
 }
 
+if($_REQUEST['assigntype'] == 'U')  {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_user_id'];
+} elseif($_REQUEST['assigntype'] == 'T') {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
+}
 $focus->save("Potentials");
 $pot_id = $return_id = $focus->id;
 
-if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
-if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
+$parenttab = getParentTab();
+if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = vtlib_purify($_REQUEST['return_module']);
 else $return_module = "Potentials";
-if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
+if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = vtlib_purify($_REQUEST['return_action']);
 else $return_action = "DetailView";
-if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
+if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = vtlib_purify($_REQUEST['return_id']);
 
 $local_log->debug("Saved record with id of ".$return_id);
 
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
-if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+if($_REQUEST['return_viewname'] != '')$return_viewname=vtlib_purify($_REQUEST['return_viewname']);
 
 //Added to send mail to the vtiger_potential-owner about the Potential
-$status = sendNotificationToOwner('Potentials',$focus);
+if($focus->mode == 'edit') { // For non-edit mode sending mail is handled during Save 
+	$status = sendNotificationToOwner('Potentials',$focus);
+}
 
-header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&pot_id=$pot_id&viewname=$return_viewname&start=".$_REQUEST['pagenumber'].$search);
+header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&pot_id=$pot_id&viewname=$return_viewname&start=".vtlib_purify($_REQUEST['pagenumber']).$search);
 ?>

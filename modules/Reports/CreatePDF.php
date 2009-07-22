@@ -290,9 +290,9 @@ function PutLink($URL,$txt)
 
 }//end of class
 */
-$reportid = $_REQUEST["record"];
+$reportid = vtlib_purify($_REQUEST["record"]);
 $oReport = new Reports($reportid);
-//Code given by C‚sar Rodr¡guez for Rwport Filter
+//Code given by Csar Rodrguez for Rwport Filter
 $filtercolumn = $_REQUEST["stdDateFilterField"];
 $filter = $_REQUEST["stdDateFilter"];
 $oReportRun = new ReportRun($reportid);
@@ -338,16 +338,15 @@ if(isset($arr_val))
 		if($skvalue[count($arr_val)-1] == 1)
 		{
 			$col_width[] = ($skvalue[count($arr_val)-1] * 100);
-		}
+		} else 
 		{
 			$col_width[] = ($skvalue[count($arr_val)-1] * 10) + 10 ;	
 		}
 	}
-
 	$count = 0;
 	foreach($arr_val[0] as $key=>$value)
 	{
-		$headerHTML .= '<td width="'.$col_width[$count].'" bgcolor="#DDDDDD">'.$oReportRun->getLstringforReportHeaders($key).'</td>';
+		$headerHTML .= '<td width="'.$col_width[$count].'" bgcolor="#DDDDDD"><b>'.$oReportRun->getLstringforReportHeaders($key).'</b></td>';
 		$count = $count + 1;
 	}
 	
@@ -365,7 +364,7 @@ if(isset($arr_val))
 
 }
 
-$html='<table border="1"><tr><b>'.$headerHTML.'</b></tr>'.$dataHTML.'</table>';
+$html='<table border="1"><tr>'.$headerHTML.'</tr>'.$dataHTML.'</table>';
 $columnlength = array_sum($col_width);
 if($columnlength > 14400)
 {
@@ -377,32 +376,32 @@ if($columnlength <= 420 )
 	
 }elseif($columnlength >= 421 && $columnlength <= 1120)
 {
-	$pdf = new TCPDF('L','mm','A4',true);
+	$pdf = new TCPDF('L','mm','A3',true);
 
 }elseif($columnlength >=1121 && $columnlength <= 1600)
 {
-	$pdf = new TCPDF('L','mm','A3',true);
+	$pdf = new TCPDF('L','mm','A2',true);
 
 }elseif($columnlength >=1601 && $columnlength <= 2200)
 {
-	$pdf = new TCPDF('L','mm','A2',true);
+	$pdf = new TCPDF('L','mm','A1',true);
 }
 elseif($columnlength >=2201 && $columnlength <= 3370)
 {
-	$pdf = new TCPDF('L','mm','A1',true);
+	$pdf = new TCPDF('L','mm','A0',true);
 }
 elseif($columnlength >=3371 && $columnlength <= 4690)
 {
-	$pdf = new TCPDF('L','mm','A0',true);
+	$pdf = new TCPDF('L','mm','2A0',true);
 }
 elseif($columnlength >=4691 && $columnlength <= 6490)
 {
-	$pdf = new TCPDF('L','mm','2A0',true);
+	$pdf = new TCPDF('L','mm','4A0',true);
 }
 else
 {
-	$columnhight = count($arr_val);
-        $format = $columnlength."-".$columnhight;
+	$columnhight = count($arr_val)*15;
+	$format = array($columnhight,$columnlength);
 	$pdf = new TCPDF('L','mm',$format,true);
 }
 $pdf->SetMargins(10, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);

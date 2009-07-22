@@ -22,7 +22,7 @@
 <!-- Shadow table -->
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tr>
-    <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+    <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
     <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
     <br>
     <div align=center>
@@ -32,7 +32,7 @@
 				<table width="100%"  border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td class="padTab" align="left">
-						<form name="DetailView" method="POST" action="index.php" ENCTYPE="multipart/form-data" id="form" style="margin:0px">
+						<form name="DetailView" method="POST" action="index.php" ENCTYPE="multipart/form-data" id="form" style="margin:0px" onsubmit="VtigerJS_DialogBox.block();">
 							<input type="hidden" name="module" value="Users" style="margin:0px">
 							<input type="hidden" name="record" id="userid" value="{$ID}" style="margin:0px">
 							<input type="hidden" name="isDuplicate" value=false style="margin:0px">
@@ -58,7 +58,7 @@
 									<!-- Heading and Icons -->
 									<table width="100%" cellpadding="5" cellspacing="0" border="0" class="settingsSelUITopLine">
 									<tr>
-										<td width=50 rowspan="2"><img src="{$IMAGE_PATH}ico-users.gif" align="absmiddle"></td>	
+										<td width=50 rowspan="2"><img src="{'ico-users.gif'|@vtiger_imageurl:$THEME}" align="absmiddle"></td>	
 										<td>
 											{if $CATEGORY eq 'Settings'}
 											<span class="heading2">
@@ -68,7 +68,7 @@
 											<b>{$APP.LBL_MY_PREFERENCES}</b>
 											</span>
 											{/if}
-											<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span>					
+											<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0"></span>					
 										</td>
 										
 									</tr>
@@ -88,7 +88,7 @@
 														{$DUPLICATE_BUTTON}
 												{/if}
 									{$EDIT_BUTTON}
-									{if $CATEGORY eq 'Settings' && $ID neq 1 && $ID neq 2 & $ID neq $CURRENT_USERID}
+									{if $CATEGORY eq 'Settings' && $ID neq 1 && $ID neq $CURRENT_USERID}
 									<input type="button" onclick="deleteUser({$ID});" class="crmButton small cancel" value="{$UMOD.LBL_DELETE}"></input>
 									{/if}
 								</td>
@@ -140,6 +140,7 @@
 									</tr>
 									{/foreach}
 									</table>
+									{assign var=list_numbering value=$smarty.foreach.blockforeach.iteration}
 									{/foreach}
 									
 									<br>
@@ -147,22 +148,22 @@
 									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 									<tr>
 										 <td class="big">	
-										<strong>5. {$UMOD.LBL_HOME_PAGE_COMP}</strong>
+										<strong>{$list_numbering+1}. {$UMOD.LBL_HOME_PAGE_COMP}</strong>
 										 </td>
-										 <td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="ShowHidefn('home_comp');"></td>	
+										 <td class="small" align="right"><img src="{'showDown.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="ShowHidefn('home_comp');"></td>	
 									</tr>
 									</table>
 									
 									<div style="float: none; display: none;" id="home_comp">	
 									<table border="0" cellpadding="5" cellspacing="0" width="100%">
 									{foreach item=homeitems key=values from=$HOMEORDER}
-										<tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.$values}</td>
+										<tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.$values|@getTranslatedString:'Home'}</td>
 											{if $homeitems neq ''}
 												<td class="dvtCellInfo" align="center" width="5%">
-												<img src="{$IMAGE_PATH}prvPrfSelectedTick.gif" alt="{$UMOD.LBL_SHOWN}" title="{$UMOD.LBL_SHOWN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_SHOWN}</td> 		
+												<img src="{'prvPrfSelectedTick.gif'|@vtiger_imageurl:$THEME}" alt="{$UMOD.LBL_SHOWN}" title="{$UMOD.LBL_SHOWN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_SHOWN}</td> 		
 												{else}	
 												<td class="dvtCellInfo" align="center" width="5%">
-												<img src="{$IMAGE_PATH}no.gif" alt="{$UMOD.LBL_HIDDEN}" title="{$UMOD.LBL_HIDDEN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_HIDDEN}</td> 		
+												<img src="{'no.gif'|@vtiger_imageurl:$THEME}" alt="{$UMOD.LBL_HIDDEN}" title="{$UMOD.LBL_HIDDEN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_HIDDEN}</td> 		
 											{/if}	
 										</tr>			
 									{/foreach}
@@ -174,9 +175,9 @@
 									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 									<tr>
 										<td class="big">
-										<strong>6. {$UMOD.LBL_TAGCLOUD_DISPLAY}</strong>
+										<strong>{$list_numbering+2}. {$UMOD.LBL_TAGCLOUD_DISPLAY}</strong>
 										</td>
-										<td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="ShowHidefn('tagcloud_disp');"></td>
+										<td class="small" align="right"><img src="{'showDown.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="ShowHidefn('tagcloud_disp');"></td>
 									</tr>
 									</table>
 									<div style="float: none; display: none;" id="tagcloud_disp">
@@ -184,10 +185,10 @@
 										<tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.LBL_TAG_CLOUD}</td>
 											{if $TAGCLOUDVIEW eq 'true'}
 												<td class="dvtCellInfo" align="center" width="5%">
-												<img src="{$IMAGE_PATH}prvPrfSelectedTick.gif" alt="{$UMOD.LBL_SHOWN}" title="{$UMOD.LBL_SHOWN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_SHOWN}</td>
+												<img src="{'prvPrfSelectedTick.gif'|@vtiger_imageurl:$THEME}" alt="{$UMOD.LBL_SHOWN}" title="{$UMOD.LBL_SHOWN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_SHOWN}</td>
                                                                                                 {else}
 												<td class="dvtCellInfo" align="center" width="5%">
-												<img src="{$IMAGE_PATH}no.gif" alt="{$UMOD.LBL_HIDDEN}" title="{$UMOD.LBL_HIDDEN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_HIDDEN}</td>
+												<img src="{'no.gif'|@vtiger_imageurl:$THEME}" alt="{$UMOD.LBL_HIDDEN}" title="{$UMOD.LBL_HIDDEN}" height="12" width="12"></td><td class="dvtCellInfo" align="left">{$UMOD.LBL_HIDDEN}</td>
 											{/if}
 										</tr>
                                                                         </table>                                                                                                                   </div>
@@ -196,11 +197,11 @@
 									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 									<tr>
 										<td class="big">	
-										<strong>7. {$UMOD.LBL_MY_GROUPS}</strong>
+										<strong>{$list_numbering+3}. {$UMOD.LBL_MY_GROUPS}</strong>
 										 </td>
 										 <td class="small" align="right">
 										{if $GROUP_COUNT > 0}
-										<img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="fetchGroups_js({$ID});">
+										<img src="{'showDown.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="fetchGroups_js({$ID});">
 										{else}
 											&nbsp;
 										{/if}
@@ -217,9 +218,9 @@
 									<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 										<tr>
 										 <td class="big">	
-										<strong>8. {$UMOD.LBL_LOGIN_HISTORY}</strong>
+										<strong>{$list_numbering+4}. {$UMOD.LBL_LOGIN_HISTORY}</strong>
 										 </td>
-										 <td class="small" align="right"><img src="{$IMAGE_PATH}showDown.gif" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="fetchlogin_js({$ID});"></td>	
+										 <td class="small" align="right"><img src="{'showDown.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onClick="fetchlogin_js({$ID});"></td>	
 										</tr>
 									</table>
 
@@ -258,7 +259,7 @@
 			</table>
 			
 			</td>
-			<td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>			
+			<td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>			
 			</tr>
 			</table>
 			
@@ -270,7 +271,7 @@
 <div id="tempdiv" style="display:block;position:absolute;left:350px;top:200px;"></div>
 <!-- added for validation -->
 <script language="javascript">
-  var gVTModule = '{$smarty.request.module}';
+  var gVTModule = '{$smarty.request.module|@vtlib_purify}';
   var fieldname = new Array({$VALIDATION_DATA_FIELDNAME});
   var fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL});
   var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE});

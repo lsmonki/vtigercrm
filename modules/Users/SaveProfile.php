@@ -1,25 +1,24 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 global $adb;
 $profilename = from_html(decode_html($_REQUEST['profile_name']));
 $description= from_html(decode_html($_REQUEST['profile_description']));
-$def_module = $_REQUEST['selected_module'];
-$def_tab = $_REQUEST['selected_tab'];
+$def_module = vtlib_purify($_REQUEST['selected_module']);
+$def_tab = vtlib_purify($_REQUEST['selected_tab']);
+$profile_id = $adb->getUniqueID("vtiger_profile");
 //Inserting values into Profile Table
-$sql1 = "insert into vtiger_profile values(?,?,?)";
-$adb->pquery($sql1, array('', $profilename, $description));
+$sql1 = "insert into vtiger_profile(profileid, profilename, description) values(?,?,?)";
+$adb->pquery($sql1, array($profile_id,$profilename, $description));
 
         //Retreiving the vtiger_profileid
         $sql2 = "select max(profileid) as current_id from vtiger_profile";
@@ -177,8 +176,10 @@ foreach($modArr as $fld_module => $fld_label)
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
 		$displaytype =  $adb->query_result($fieldListResult,$i,"displaytype");
 		$fieldname =  $adb->query_result($fieldListResult,$i,"fieldname");
-		if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || $uitype == 20 || ($displaytype != 3 && $fieldname == "activitytype" && $uitype == 15) ||  ($uitype == 111 && $fieldname == 'eventstatus'))
-		{
+		$typeofdata = $adb->query_result($fieldListResult,$i,"typeofdata");
+		$fieldtype = explode("~",$typeofdata);
+       	if($fieldtype[1] == 'M')
+   		{
 			$visible_value = 0;
 		}
 		//Updating the database
@@ -186,7 +187,7 @@ foreach($modArr as $fld_module => $fld_label)
         $adb->pquery($sql11, array($profileid, $tab_id, $fieldid, $visible_value,1));
 	}
 }
-	$loc = "Location: index.php?action=ListProfiles&module=Settings&mode=view&parenttab=Settings&profileid=".$profileid."&selected_tab=".$def_tab."&selected_module=".$def_module;
+	$loc = "Location: index.php?action=ListProfiles&module=Settings&mode=view&parenttab=Settings&profileid=".vtlib_purify($profileid)."&selected_tab=".vtlib_purify($def_tab)."&selected_module=".vtlib_purify($def_module);
 	header($loc);
 
 

@@ -146,7 +146,7 @@ $mod_strings = Array(
 'LBL_TASKS'=>'Tasks',
 'LBL_CASES'=>'Cases',
 'LBL_EMAILS'=>'Email',
-'LBL_NOTES'=>'Notes',
+'LBL_NOTES'=>'Documents',
 'LBL_MEETINGS'=>'Meetings',
 'LBL_CALLS'=>'Calls',
 'LBL_IMPORT_PERMISSIONS'=>'Import Permissions',
@@ -443,7 +443,7 @@ $mod_strings = Array(
 
 'LBL_PRODUCT_FIELD_ACCESS'=>'Product Field Access',
 
-'LBL_NOTE_FIELD_ACCESS'=>'Note Field Access',
+'LBL_NOTE_FIELD_ACCESS'=>'Document Field Access',
 
 'LBL_EMAIL_FIELD_ACCESS'=>'Email Field Access',
 
@@ -477,6 +477,8 @@ $mod_strings = Array(
 'HDB'=>'Home Page Dashboard',
 'OLTPO'=>'Top Purchase Orders',
 'LTFAQ'=>'My Recent FAQs',
+'UA'=>'Upcoming Activities',
+'PA'=>'Pending Activities',
 
 //Added for 5.0 alpha
 'LBL_GROUP_NAME_ERROR'=>'Group Name already exists!',
@@ -549,7 +551,7 @@ $mod_strings = Array(
 'Date Format'=>'Date Format',
 'Tag Cloud'=>'Tag Cloud',
 'Signature'=>'Signature',
-'Notes'=>'Notes',
+'Documents'=>'Notes',
 'Street Address'=>'Street Address',
 'City'=>'City',
 'State'=>'State',
@@ -656,7 +658,7 @@ $mod_strings = Array(
 
 'LBL_SSL' => 'SSL',
 //Added to fix the issue #4081
-'LBL_USERNAME_EXIST' => 'User Name Already Exists!',
+'LBL_USERNAME_EXIST' => 'A User with the specified name Already Exists!',
 'LBL_UNAUTHORIZED_ACCESS' => 'Unauthorized access to user administration',
 //Added to provide User based TagCloud
 'LBL_TAGCLOUD_DISPLAY'=>'Tag Cloud Display',
@@ -665,6 +667,16 @@ $mod_strings = Array(
 // Added for 5.0.4 to Support Email notication on User Creation
 'User Login Details'=>'User Login Details',
 'LBL_TO_LOGIN' => 'to Login',
+
+// Added after 5.0.4 GA
+
+'LBL_USER_ADV_OPTIONS'=>'User Advanced Options',
+'Reminder Interval'=>'Reminder Interval',
+'Webservice Access Key'=>'Access Key',
+
+//user-group fixes
+'LBL_GROUPNAME_EXIST' => 'A Group with the specified name Already Exists!',
+'LBL_PROFILENAME_EXIST' => 'A Profile with the specified name Already Exists!',
 );
 
 ?>

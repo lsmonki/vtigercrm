@@ -18,21 +18,21 @@
  * defined return URL.
  ********************************************************************************/
 
-require_once('modules/PurchaseOrder/PurchaseOrder.php');
+global $currentModule;
+$focus = CRMEntity::getInstance($currentModule);
+
 global $mod_strings;
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('order_delete');
 
-$focus = new PurchaseOrder();
-
-	//Added to fix 4600
-	$url = getBasic_Advance_SearchURL();
+//Added to fix 4600
+$url = getBasic_Advance_SearchURL();
 
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);
 
 DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['record'],$_REQUEST['return_id']);
 
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']."&relmodule=".$_REQUEST['module']."&parenttab=".$_REQUEST['parenttab'].$url);
+header("Location: index.php?module=".vtlib_purify($_REQUEST['return_module'])."&action=".vtlib_purify($_REQUEST['return_action'])."&record=".vtlib_purify($_REQUEST['return_id'])."&relmodule=".vtlib_purify($_REQUEST['module'])."&parenttab=".getParentTab().$url);
 ?>

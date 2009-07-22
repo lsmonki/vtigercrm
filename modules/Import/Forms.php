@@ -185,19 +185,13 @@ EOQ;
  */
 function getFieldSelect(&$column_fields,$colnum,&$required_fields,$suggest_field,$translated_fields,$module)
 {
-/*
-echo '<br> column vtiger_fields : ';print_r($column_fields);
-echo '<br> column  : '.$colnum;
-echo '<br> required vtiger_fields : ';print_r($required_fields);
-echo '<br> suggest vtiger_fields : '.$suggest_field;
-echo '<br> translated vtiger_fields : ';print_r($translated_fields);
-*/	global $mod_strings;
+	global $mod_strings;
 	global $app_strings;
 	global $outlook_contacts_field_map;
 	require_once('include/database/PearDatabase.php');
 	global $adb;
 
-	$output = "<select id=\"colnum" . $colnum ."\" name=\"colnum" . $colnum ."\">\n";
+	$output = "<select class=\"small\" id=\"colnum" . $colnum ."\" name=\"colnum" . $colnum ."\">\n";
 	$output .= "<option value=\"-1\">". $mod_strings['LBL_DONT_MAP'] . "</option>";
 
 	$count = 0;
@@ -210,54 +204,30 @@ echo '<br> translated vtiger_fields : ';print_r($translated_fields);
 
 	asort($translated_fields);
 
-
-	foreach ($translated_fields as $field=>$name)
-	{
-
-	 	if (! isset($column_fields[$field]))
-		{
+	foreach ($translated_fields as $field=>$name){
+	 	if (! isset($column_fields[$field])){
 			continue;
 		}
-//echo '<br> : '.$field;
 		$output .= "<option value=\"".$field;
 
-		if ( isset( $suggest_field) && 
-			$field == $suggest_field)
-		{
+		if ( isset( $suggest_field) && $field == $suggest_field){
 			$output .= "\" SELECTED>";
-		}
-		else 
-		{
+		}else{
 			$output .= "\">";
 		}
-		if ( isset( $required_fields[$field]))
-		{
+		
+		if ( isset( $required_fields[$field])){
 			$req_mark = " ". $app_strings['LBL_REQUIRED_SYMBOL'];
-		} 
-		else
-		{
+		}else{
 			$req_mark = "";
 		}
 
 		$output .=  $name . $req_mark."</option>\n";
-
 		$count ++;
 	}
-	/*if($module == 'Contacts')
-	{
-	$module ='contactdetails';
-	}	
-	$custquery = "select * from vtiger_field where vtiger_tablename='".$module."'";
-	$cust_result = $adb->query($custquery);
-	while($row = $adb->fetch_array($cust_result))
-	{
-			$output .= "<option value='".$row['columnname']."'>". $row['fieldlabel'] . "</option>\n";
-	}*/
 
 	$output .= "</select>\n";
-
 	return $output;
-
 }
 
 
@@ -267,17 +237,12 @@ function get_readonly_js ()
 <script type="text/javascript" language="Javascript">
 <!--  to hide script contents from old browsers
 
-function set_readonly(form) 
-{
-	
-	if (form.save_map.checked) 
-	{ 
+function set_readonly(form){
+	if (form.save_map.checked){
 		form.save_map.value='on'; 
 		form.save_map_as.readOnly=false;
 		form.save_map_as.focus();
-	}
-	else 
-	{
+	}else{
 		form.save_map.value='off'; 
 		form.save_map_as.value=""; 
 		form.save_map_as.readOnly=true; 

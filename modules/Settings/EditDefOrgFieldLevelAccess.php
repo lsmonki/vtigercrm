@@ -1,17 +1,13 @@
 <?php
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
-
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
 
@@ -35,7 +31,7 @@ foreach($field_module as $fld_module)
 	$allfields[$fld_module] = getStdOutput($fieldListResult, $noofrows, $language_strings,$profileid);
 }
 if($_REQUEST['fld_module'] != '')
-	$smarty->assign("DEF_MODULE",$_REQUEST['fld_module']);
+	$smarty->assign("DEF_MODULE",vtlib_purify($_REQUEST['fld_module']));
 else
 	$smarty->assign("DEF_MODULE",'Leads');
 
@@ -50,8 +46,10 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 {
 	global $adb;
 	$standCustFld = Array();
-	for($i=0; $i<$noofrows; $i++,$row++)
+	if(!isset($focus->mandatory_fields)) $focus->mandatory_fields = Array();
+	for($i=0; $i<$noofrows; $i++)
 	{
+		$fieldname = $adb->query_result($fieldListResult,$i,"fieldname");
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
 		$displaytype = $adb->query_result($fieldListResult,$i,"displaytype");
 		$fieldlabel = $adb->query_result($fieldListResult,$i,"fieldlabel");
@@ -59,7 +57,7 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 		$fieldtype = explode("~",$typeofdata);
                 $mandatory = '';
 		$readonly = '';
-                if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 20 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || ($displaytype != 3 && $fieldlabel == "Activity Type" && $uitype == 15) || ($uitype == 111 && $fieldtype[1] == "M"))
+                if($fieldtype[1] == 'M')
                 {
                         $mandatory = '<font color="red">*</font>';
 						$readonly = 'disabled';
@@ -74,12 +72,12 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 			if($fieldlabel == 'Activity Type')
 			{
 				$visible = "checked";
-                        	$readonly = 'disabled';
+                $readonly = 'disabled';
 			}
 			else
-			$visible = "checked";
+				$visible = "checked";
 		}
-		elseif($displaytype==3)
+		elseif($displaytype == 3)
 		{
 			$visible = "checked";
 			$readonly = 'disabled';
@@ -99,6 +97,7 @@ function getStdOutput($fieldListResult, $noofrows, $lang_strings,$profileid)
 $smarty->assign("FIELD_INFO",$field_module);
 $smarty->assign("FIELD_LISTS",$allfields);
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);

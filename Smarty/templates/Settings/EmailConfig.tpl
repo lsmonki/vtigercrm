@@ -14,14 +14,16 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 <br>
 	{if $EMAILCONFIG_MODE neq 'edit'}	
-	<form action="index.php" method="post" name="MailServer" id="form">
+	<form action="index.php" method="post" name="MailServer" id="form" onsubmit="VtigerJS_DialogBox.block();">
 	<input type="hidden" name="emailconfig_mode">
 	{else}
-	<form action="index.php" method="post" name="MailServer" id="form" onsubmit="return validate_mail_server(MailServer);">
+	{literal}
+	<form action="index.php" method="post" name="MailServer" id="form" onsubmit="if(validate_mail_server(MailServer)){ VtigerJS_DialogBox.block(); return true; } else { return false; }">
+	{/literal}
 	<input type="hidden" name="server_type" value="email">
 	{/if}
 	<input type="hidden" name="module" value="Settings">
@@ -36,7 +38,7 @@
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ogmailserver.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
+					<td width=50 rowspan=2 valign=top><img src="{'ogmailserver.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_MAIL_SERVER_SETTINGS} </b></td>
 				</tr>
 				<tr>
@@ -159,7 +161,7 @@
 	</form>
 	
 </td>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </tbody>
 </table>

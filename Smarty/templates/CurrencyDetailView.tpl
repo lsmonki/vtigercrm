@@ -14,20 +14,20 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 <br>
 	<div align=center>
 			{include file='SetMenu.tpl'}
 			<!-- DISPLAY -->
 			<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-			<form action="index.php" method="post" name="index" id="form">
+			<form action="index.php" method="post" name="index" id="form" onsubmit="VtigerJS_DialogBox.block();">
 			<input type="hidden" name="module" value="Settings">
 			<input type="hidden" name="parenttab" value="{$PARENTTAB}">
 			<input type="hidden" name="action" value="index">
 			<input type="hidden" name="record" value="{$ID}">
 			<tr>
-				<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}currency.gif" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
+				<td width=50 rowspan=2 valign=top><img src="{'currency.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_USERS}" width="48" height="48" border=0 title="{$MOD.LBL_USERS}"></td>
 				<td class="heading2" valign="bottom" ><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=CurrencyListView&parenttab=Settings">{$MOD.LBL_CURRENCY_SETTINGS}</a> > {$MOD.LBL_VIEWING} &quot;{$CURRENCY_NAME}&quot; </b></td>
 			</tr>
 			<tr>
@@ -42,9 +42,9 @@
 				
 					<table border=0 cellspacing=0 cellpadding=5 width=100% class="tableHeading">
 					<tr>
-						<td class="big"><strong>{$MOD.LBL_SETTINGS} {$APP.LBL_FOR} &quot;{$CURRENCY_NAME}&quot;  </strong></td>
+						<td class="big"><strong>{$MOD.LBL_SETTINGS} {$APP.LBL_FOR} &quot;{$CURRENCY_NAME|@getTranslatedCurrencyString}&quot;  </strong></td>
 						<td class="small" align=right>
-							<input type="submit" class="crmButton small edit" value="Edit" onclick="this.form.action.value='CurrencyEditView'; this.form.parentab.value='Settings'; this.form.record.value='{$ID}'">
+							<input type="submit" class="crmButton small edit" value="Edit" onclick="this.form.action.value='CurrencyEditView'; this.form.parenttab.value='Settings'; this.form.record.value='{$ID}'">
 						</td>
 					</tr>
 					</table>
@@ -55,7 +55,7 @@
 			<table width="100%"  border="0" cellspacing="0" cellpadding="5">
                           <tr>
                             <td width="20%" nowrap class="small cellLabel"><strong>{$MOD.LBL_CURRENCY_NAME}</strong></td>
-                            <td width="80%" class="small cellText"><strong>{$CURRENCY_NAME}</strong></td>
+                            <td width="80%" class="small cellText"><strong>{$CURRENCY_NAME|@getTranslatedCurrencyString}</strong></td>
                           </tr>
                           <tr valign="top">
                             <td nowrap class="small cellLabel"><strong>{$MOD.LBL_CURRENCY_CODE}</strong></td>
@@ -66,7 +66,7 @@
                             <td class="small cellText">{$CURRENCY_SYMBOL}</td>
                           </tr>
                           <tr valign="top">
-                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_CURRENCY_CRATE}</strong><br>({$MOD.LBL_BASE_CURRENCY}{$MASTER_CURRENCY})</td>
+                            <td nowrap class="small cellLabel"><strong>{$MOD.LBL_CURRENCY_CRATE}</strong><br>({$MOD.LBL_BASE_CURRENCY}{$MASTER_CURRENCY|@getTranslatedCurrencyString})</td>
 
                             <td class="small cellText">{$CONVERSION_RATE}</td>
                           </tr>
@@ -100,7 +100,7 @@
 		
 	</div>
 </td>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </tbody>
 </table>

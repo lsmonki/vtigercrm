@@ -42,8 +42,8 @@ class ImportMap extends SugarBean
 	var $is_published;
 
 	var $table_name = "vtiger_import_maps";
+	var $table_index= 'id';
 	var $object_name = "ImportMap";
-	var $module_id="id";
 	
 	var $tab_name_index = Array("import_maps"=>"id");
 	var $new_schema = true;
@@ -65,7 +65,7 @@ class ImportMap extends SugarBean
 	function ImportMap() 
 	{
 		$this->log = LoggerManager::getLogger('file');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 	}
 
 	/**	function used to get the id, name, module and content as string
@@ -109,7 +109,7 @@ class ImportMap extends SugarBean
 
                 $returnid = $this->save();
 
-		$this->db->updateBlob($this->table_name,"content","name='". mysql_real_escape_string($name)."' and module='".$module."'",$content);
+		$this->db->updateBlob($this->table_name,"content","name='". $this->db->sql_escape_string($name)."' and module='".$module."'",$content);
 
                 return $result;
         }

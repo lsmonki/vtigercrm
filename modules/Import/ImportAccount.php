@@ -24,7 +24,7 @@ require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('modules/Contacts/Contacts.php');
 require_once('modules/Potentials/Potentials.php');
-require_once('modules/Notes/Notes.php');
+require_once('modules/Documents/Documents.php');
 require_once('modules/Emails/Emails.php');
 require_once('modules/Accounts/Accounts.php');
 require_once('include/ComboUtil.php');
@@ -44,7 +44,7 @@ class ImportAccount extends Accounts {
 	
 	// This is the list of the functions to run when importing
 	var $special_functions =  array(
-						"map_member_of",
+						"map_member_of","modseq_number",
 						//"add_billing_address_streets"
 						//,"add_shipping_address_streets"
 						//,"fix_website"
@@ -166,9 +166,9 @@ class ImportAccount extends Accounts {
 		/** Constructor which will set the importable_fields as $this->importable_fields[$key]=1 in this object where key is the fieldname in the field table
 		 */
 	function ImportAccount() {
-		
+		parent::Accounts();
 		$this->log = LoggerManager::getLogger('import_account');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->db->println("IMP ImportAccount");
 		$this->initImportableFields("Accounts");
 		
@@ -203,6 +203,12 @@ class ImportAccount extends Accounts {
 
 		$adb->println("Exit map_member_of. Fetched Account for '".$account_name."' and the account_id = $account_id");
         }
+
+	// Module Sequence Numbering	
+	function modseq_number() {
+		$this->column_fields['account_no'] = '';	
+	}
+	// END
 
 }
 

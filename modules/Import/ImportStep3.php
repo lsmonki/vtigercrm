@@ -27,7 +27,6 @@ require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportOpportunity.php');
 require_once('modules/Import/ImportProduct.php');
 require_once('modules/Import/ImportMap.php');
-//Pavani: Import this file to Support Imports for Trouble tickets and vendors
 require_once('modules/Import/ImportTicket.php');
 require_once('modules/Import/ImportVendors.php');
 require_once('modules/Import/UsersLastImport.php');
@@ -36,26 +35,22 @@ require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/Import/ImportSave.php');
 
-set_time_limit(0);
+global $php_max_execution_time;
+set_time_limit($php_max_execution_time);
 ini_set("display_errors",'0');
 
 
-function p($str)
-{
+function p($str){
 	global $adb;
 	$adb->println("IMP :".$str);
 }
 
-function implode_assoc($inner_delim, $outer_delim, $array) 
-{
+function implode_assoc($inner_delim, $outer_delim, $array){
 	$output = array();
-
-	foreach( $array as $key => $item )
-	{
-               $output[] = $key . $inner_delim . $item;
+	foreach( $array as $key => $item ){
+		$output[] = $key . $inner_delim . $item;
 	}
-
-       return implode($outer_delim, $output);
+	return implode($outer_delim, $output);
 }
 
 global $mod_strings;
@@ -72,6 +67,7 @@ $image_path=$theme_path."images/";
 
 $log->info("Upload Step 3");
 
+include("include/saveMergeCriteria.php");
 
 $delimiter = ',';
 // file handle
@@ -85,15 +81,17 @@ $current_bean_type = "";
 $id_exists_count = 0;
 $broken_ids = 0;
 
+$delimiter = $_SESSION['import_delimiter'];
+
 $has_header = 0;
 
-if ( isset( $_REQUEST['has_header']) && $_REQUEST['has_header'] == 'on')
-{
+if(isset( $_REQUEST['has_header']) && $_REQUEST['has_header'] == 'on'){
 	$has_header = 1;
 }
-if($_REQUEST['modulename'] != '')
-	$_REQUEST['module'] = $_REQUEST['modulename'];
 
+if($_REQUEST['modulename'] != ''){
+	$_REQUEST['module'] = vtlib_purify($_REQUEST['modulename']);
+}
 
 $import_object_array = Array(
 				"Leads"=>"ImportLead",
@@ -102,19 +100,28 @@ $import_object_array = Array(
 				"Potentials"=>"ImportOpportunity",
 				"Products"=>"ImportProduct",
 				"HelpDesk"=>"ImportTicket",
-                                "Vendors"=>"ImportVendors"
+                "Vendors"=>"ImportVendors"
 			    );
 
-if(isset($_REQUEST['module']) && $_REQUEST['module'] != '')
-{
+if(isset($_REQUEST['module']) && $_REQUEST['module'] != ''){
 	$current_bean_type = $import_object_array[$_REQUEST['module']];
-}
-else
-{
+	// vtlib customization: Hook added to enable import for un-mapped modules
+	$module = $_REQUEST['module'];	
+	if($current_bean_type == null) {
+		checkFileAccess("modules/$module/$module.php");
+		require_once("modules/$module/$module.php");
+		$current_bean_type = $module;
+		$callInitImport = true;		
+	}
+	// END
+}else{
 	$current_bean_type = "ImportContact";
 }
 
 $focus = new $current_bean_type();
+// vtlib customization: Call the import initializer
+if($callInitImport) $focus->initImport($module);
+// END
 
 //Constructing the custom vtiger_field Array
 require_once('include/CustomFieldUtil.php');
@@ -127,42 +134,28 @@ $resCustFldArray = Array();
 
 p("Getting from request");
 // loop through all request variables
-foreach ($_REQUEST as $name=>$value)
-{
+foreach ($_REQUEST as $name=>$value){
 	p("name=".$name." value=".$value);
 	// only look for var names that start with "colnum"
-	if ( strncasecmp( $name, "colnum", 6) != 0 )
-	{	
+	if ( strncasecmp( $name, "colnum", 6) != 0 ){
 		continue;
 	}
-	if ($value == "-1")
-	{
-		
+	if ($value == "-1"){
 		continue;
 	}
 
-	// this value is a user defined vtiger_field name
 	$user_field = $value;
-
-	// pull out the column position for this vtiger_field name
 	$pos = substr($name,6);
 
-	// make sure we haven't seen this vtiger_field defined yet
-	if ( isset( $field_to_pos[$user_field]) )
-	{
+	if ( isset( $field_to_pos[$user_field]) ){
 		show_error_import($mod_strings['LBL_ERROR_MULTIPLE']);
-	        exit;
-
+		exit;
 	}
 
 	p("user_field=".$user_field." if=".$focus->importable_fields[$user_field]);
 	
-	// match up the "official" vtiger_field to the user 
-	// defined one, and map to columm position: 
-	if ( isset( $focus->importable_fields[$user_field] ) || isset( $custFldArray[$user_field] ))
-	{
+	if ( isset( $focus->importable_fields[$user_field] ) || isset( $custFldArray[$user_field] )){
 		p("user_field SET=".$user_field);
-		// now mark that we've seen this vtiger_field
 		$field_to_pos[$user_field] = $pos;
 		$col_pos_to_field[$pos] = $user_field;
 	}
@@ -173,23 +166,20 @@ $adb->println($field_to_pos);
 p("col_pos_to_field");
 $adb->println($col_pos_to_field);
 
-// Now parse the file and look for errors
 $max_lines = -1;
-
 $ret_value = 0;
 
-if ($_REQUEST['source'] == 'act')
-{
-        $ret_value = parse_import_act($_REQUEST['tmp_file'],$delimiter,$max_lines,$has_header);
-}
-else
-{
-	$ret_value = parse_import($_REQUEST['tmp_file'],$delimiter,$max_lines,$has_header);
-}
+if(isset($_REQUEST['tmp_file'])) { 
+	$_SESSION['tmp_file'] = vtlib_purify($_REQUEST['tmp_file']); 
+} else { 
+	$_REQUEST['tmp_file'] = vtlib_purify($_SESSION['tmp_file']); 
+} 
+// End 
 
-if (file_exists($_REQUEST['tmp_file']))
-{
-	unlink($_REQUEST['tmp_file']);
+if ($_REQUEST['source'] == 'act'){
+    $ret_value = parse_import_act($_REQUEST['tmp_file'],$delimiter,$max_lines,$has_header);
+}else{
+	$ret_value = parse_import($_REQUEST['tmp_file'],$delimiter,$max_lines,$has_header);
 }
 
 $datarows = $ret_value['rows'];
@@ -197,30 +187,26 @@ $datarows = $ret_value['rows'];
 $ret_field_count = $ret_value['field_count'];
 
 //we have to get all picklist entries and add with the corresponding picklist table
-if(isset($datarows) && is_array($datarows))
-{
-        //This file will be included only once at the first time. Will not be included when we redirect from ImportSave
-        include("modules/Import/picklist_addition.php");
+if(isset($datarows) && is_array($datarows)){
+	//This file will be included only once at the first time. Will not be included when we redirect from ImportSave
+	include("modules/Import/picklist_addition.php");
 }
 
 $saved_ids = array();
 
 $firstrow = 0;
 
-if (! isset($datarows))
-{
+if (! isset($datarows)){
 	$error = $mod_strings['LBL_FILE_ALREADY_BEEN_OR'];
 	$datarows = array();
 }
 
-if ($has_header == 1)
-{
+if ($has_header == 1){
 	$firstrow = array_shift($datarows);
 }
 
 //Mark the last imported records as deleted which are imported by the current user in vtiger_users_last_import vtiger_table
-if(!isset($_REQUEST['startval']))
-{
+if(!isset($_REQUEST['startval'])){
 	$seedUsersLastImport = new UsersLastImport();
 	$seedUsersLastImport->mark_deleted_by_user_id($current_user->id);
 }
@@ -231,37 +217,26 @@ $adb->println($datarows);
 
 $error = '';
 $focus = new $current_bean_type();
-
+$focus->initRequiredFields($module);
 
 // SAVE MAPPING IF REQUESTED
-if(isset($_REQUEST['save_map']) && $_REQUEST['save_map'] == 'on' && isset($_REQUEST['save_map_as']) && $_REQUEST['save_map_as'] != '')
-{
+if(isset($_REQUEST['save_map']) && $_REQUEST['save_map'] == 'on' && isset($_REQUEST['save_map_as']) && $_REQUEST['save_map_as'] != ''){
 	p("save map");
 	$serialized_mapping = '';
 
-	if( $has_header)
-	{
-		foreach($col_pos_to_field as $pos=>$field_name)
-		{
-			if ( isset($firstrow[$pos]) &&  isset( $field_name))
-			{
+	if( $has_header){
+		foreach($col_pos_to_field as $pos=>$field_name){
+			if ( isset($firstrow[$pos]) &&  isset( $field_name)){
 				$header_to_field[ $firstrow[$pos] ] = $field_name;
 			}
 		}
-
 		$serialized_mapping = implode_assoc("=","&",$header_to_field);
-	}
-	else
-	{
+	}else{
 		$serialized_mapping = implode_assoc("=","&",$col_pos_to_field);
 	}
 
 	$mapping_file_name = $_REQUEST['save_map_as'];
-
 	$mapping_file = new ImportMap();
-
-	//$query_arr = array('assigned_user_id'=>$current_user->id,'name'=>$mapping_file_name);
-	//$mapping_file->retrieve_by_string_fields($query_arr, false);
 
 	$result = $mapping_file->save_map( $current_user->id,
 					$mapping_file_name,
@@ -274,81 +249,69 @@ if(isset($_REQUEST['save_map']) && $_REQUEST['save_map'] == 'on' && isset($_REQU
 }
 //save map - ends
 
-
-
-
-if(isset($_SESSION['totalrows']) && $_SESSION['totalrows'] != '')
-{
+if(isset($_SESSION['totalrows']) && $_SESSION['totalrows'] != ''){
 	$xrows = $_SESSION['totalrows'];
-}
-else
-{
+}else{
 	$xrows = $datarows;
 }
-if(isset($_SESSION['return_field_count']))
-{
+if(isset($_SESSION['return_field_count'])){
 	$ret_field_count = $_SESSION['return_field_count'];
 }
-if(isset($_SESSION['column_position_to_field']))
-{
+if(isset($_SESSION['column_position_to_field'])){
 	$col_pos_to_field = $_SESSION['column_position_to_field'];
 }
-if($xrows != '')
-{
+if($xrows != ''){
 	$datarows = $xrows;
 }
-if($_REQUEST['skipped_record_count'] != '')
-	$skipped_record_count = $_REQUEST['skipped_record_count'];
-else
+if($_REQUEST['skipped_record_count'] != ''){
+	$skipped_record_count = vtlib_purify($_REQUEST['skipped_record_count']);
+}else{
 	$_REQUEST['skipped_record_count'] = 0;
+}
 
-if($_REQUEST['noofrows'] != '')
-	$totalnoofrows = $_REQUEST['noofrows'];
-else
+if($_REQUEST['noofrows'] != ''){
+	$totalnoofrows = vtlib_purify($_REQUEST['noofrows']);
+}else{
 	$totalnoofrows = count($datarows);
+}
 
 $loopcount = ($totalnoofrows/$RECORDCOUNT)+1;
 
-if($_REQUEST['startval'] != '')
-	$START = $_REQUEST['startval'];
-else
-	$START = $_SESSION['startval'];
-if($_REQUEST['recordcount'] != '')
-	$RECORDCOUNT = $_REQUEST['recordcount'];
-else
-	$RECORDCOUNT = $_SESSION['recordcount'];
+if($_REQUEST['startval'] != ''){
+	$START = vtlib_purify($_REQUEST['startval']);
+}else{
+	$START = vtlib_purify($_SESSION['startval']);
+}
 
-if(($START+$RECORDCOUNT) > $totalnoofrows)
-{
+if($_REQUEST['recordcount'] != ''){
+	$RECORDCOUNT = vtlib_purify($_REQUEST['recordcount']);
+}else{
+	$RECORDCOUNT = vtlib_purify($_SESSION['recordcount']);
+}
+
+if(($START+$RECORDCOUNT) > $totalnoofrows){
 	$RECORDCOUNT = $totalnoofrows - $START;
 }
 
-if($totalnoofrows > $RECORDCOUNT && $START < $totalnoofrows)
-{
+$focus->initImportableFields($module);
+if($totalnoofrows > $RECORDCOUNT && $START < $totalnoofrows){
 	$rows1 = Array();
-	for($j=$START;$j<$START+$RECORDCOUNT;$j++)
-	{
+	for($j=$START;$j<$START+$RECORDCOUNT;$j++){
 		$rows1[] = $datarows[$j];
 	}
 
-	$res = InsertImportRecords($datarows,$rows1,$focus,$ret_field_count,$col_pos_to_field,$START,$RECORDCOUNT,$_REQUEST['module'],$totalnoofrows,$skipped_record_count);
-
-	if($START != 0)
+	$res = InsertImportRecords($datarows,$rows1,$focus,$ret_field_count,$col_pos_to_field,$START,$RECORDCOUNT,vtlib_purify($_REQUEST['module']),$totalnoofrows,$skipped_record_count);
+	if($START != 0){
 		echo '<b>'.$res.'</b>';
-
-	$count = $_REQUEST['count'];
-}
-else
-{
-	if($START == 0)
-	{
-		$res = InsertImportRecords($datarows,$datarows,$focus,$ret_field_count,$col_pos_to_field,$START,$totalnoofrows,$_REQUEST['module'],$totalnoofrows,$skipped_record_count);
 	}
-//	exit;
+	
+	$count = vtlib_purify($_REQUEST['count']);
+}else{
+	if($START == 0){
+		$res = InsertImportRecords($datarows,$datarows,$focus,$ret_field_count,$col_pos_to_field,$START,$totalnoofrows,vtlib_purify($_REQUEST['module']),$totalnoofrows,$skipped_record_count);
+	}
 }
 
 //Display the imported records message
 echo "<div align='center' width='100%'><font color='green'><b>".$_SESSION['import_display_message']."</b></font></div>";
-
-
 ?>

@@ -23,6 +23,7 @@ $image_path=$theme_path."images/";
 $smarty = new vtigerCRM_Smarty;
 
 $smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGEPATH",$image_path);
 $smarty->assign("CALC",get_calc($image_path));
 $smarty->display("Calculator.tpl");

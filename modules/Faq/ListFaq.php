@@ -13,18 +13,15 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 
-
 /**	function used to get the top 5 recent FAQs from Listview query
  *	@return array $values - array with the title, header and entries like  Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries) where as listview_header and listview_entries are arrays of header and entity values which are returned from function getListViewHeader and getListViewEntries
  */
-function getMyFaq()
+function getMyFaq($maxval,$calCnt)
 {
 	require_once("data/Tracker.php");
 	require_once('modules/Faq/Faq.php');
 	require_once('include/logging.php');
 	require_once('include/ListView/ListView.php');
-	require_once('include/database/PearDatabase.php');
-	require_once('include/ComboUtil.php');
 	require_once('include/utils/utils.php');
 	require_once('modules/CustomView/CustomView.php');
 
@@ -60,8 +57,15 @@ function getMyFaq()
 	$query = getListQuery("Faq",$where);
 
 	//<<<<<<<<customview>>>>>>>>>
+	
+	$query .= " LIMIT 0," . $adb->sql_escape_string($maxval);
+	
+	if($calCnt == 'calculateCnt') {
+		$list_result_rows = $adb->query(mkCountQuery($query));
+		return $adb->query_result($list_result_rows, 0, 'count');
+	}
 
-	$list_result = $adb->limitQuery($query,0,5);
+	$list_result = $adb->query($query);
 
 	//Retreiving the no of rows
 	$noofrows = $adb->num_rows($list_result);
@@ -69,7 +73,7 @@ function getMyFaq()
 	//Retreiving the start value from request
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 	{
-		$start = $_REQUEST['start'];
+		$start = vtlib_purify($_REQUEST['start']);
 	}
 	else
 	{
@@ -114,12 +118,18 @@ function getMyFaq()
 	//Retreive the List View Table Header
 	$title=array('myFaqs.gif',$current_module_strings['LBL_MY_FAQ'],'home_myfaq');
 	$listview_header = getListViewHeader($focus,"Faq",$url_string,$sorder,$order_by,"HomePage",$oCustomView);
+	$header = Array($listview_header[1],$listview_header[3]);
 
 	$listview_entries = getListViewEntries($focus,"Faq",$list_result,$navigation_array,"HomePage","","EditView","Delete",$oCustomView);
-	$values=Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries);
+	foreach($listview_entries as $crmid=>$valuearray)
+	{
+		$entries[$crmid] = Array($valuearray[1],$valuearray[3]);	
+	}
+	
+	$search_qry = "&query=true&Fields0=vtiger_faq.status&Condition0=isn&Srch_value0=Obsolete&searchtype=advance&search_cnt=1&matchtype=any";
+	
+	$values=Array('ModuleName'=>'Faq','Title'=>$title,'Header'=>$header,'Entries'=>$entries,'search_qry'=>$search_qry);
 	if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )	
 		return $values;
 }
 ?>
-
-

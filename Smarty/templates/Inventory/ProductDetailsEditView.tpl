@@ -28,7 +28,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		var curr_productid = document.getElementById("hdnProductId"+curr_row).value;
 		if(curr_productid == '')
 		{ldelim}
-			alert("{$APP.PLEASE_SELECT_PRODUCT}");
+			alert("{$APP.PLEASE_SELECT_LINE_ITEM}");
 			return false;
 		{rdelim}
 		var curr_quantity = document.getElementById("qty"+curr_row).value;
@@ -95,24 +95,38 @@ function displayCoords(currObj,obj,mode,curr_row)
 <table width="100%"  border="0" align="center" cellpadding="5" cellspacing="0" class="crmTable" id="proTab">
    <tr>
    	{if $MODULE neq 'PurchaseOrder'}
-			<td colspan="5" class="dvInnerHeader">
+			<td colspan="3" class="dvInnerHeader">
 	{else}
-			<td colspan="4" class="dvInnerHeader">
+			<td colspan="2" class="dvInnerHeader">
 	{/if}
-		<b>{$APP.LBL_PRODUCT_DETAILS}</b>
+		<b>{$APP.LBL_ITEM_DETAILS}</b>
 	</td>
-	<td class="dvInnerHeader" align="right">
-		<b>{$APP.LBL_TAX_MODE}</b>
+	
+	<td class="dvInnerHeader" align="center" colspan="2">
+		<input type="hidden" value="{$INV_CURRENCY_ID}" id="prev_selected_currency_id" />
+		<b>{$APP.LBL_CURRENCY}</b>&nbsp;&nbsp;
+		<select class="small" id="inventory_currency" name="inventory_currency" onchange="updatePrices();">
+		{foreach item=currency_details key=count from=$CURRENCIES_LIST}
+			{if $currency_details.curid eq $INV_CURRENCY_ID}
+				{assign var=currency_selected value="selected"}
+			{else}
+				{assign var=currency_selected value=""}
+			{/if}
+			<OPTION value="{$currency_details.curid}" {$currency_selected}>{$currency_details.currencylabel|@getTranslatedCurrencyString} ({$currency_details.currencysymbol})</OPTION>
+		{/foreach}
+		</select>
 	</td>
+	
+	<td class="dvInnerHeader" align="center" colspan="2">
+		<b>{$APP.LBL_TAX_MODE}</b>&nbsp;&nbsp;
+		
+		{if $ASSOCIATEDPRODUCTS.1.final_details.taxtype eq 'group'}
+			{assign var="group_selected" value="selected"}
+		{else}
+			{assign var="individual_selected" value="selected"}
+		{/if}
 
-	{if $ASSOCIATEDPRODUCTS.1.final_details.taxtype eq 'group'}
-		{assign var="group_selected" value="selected"}
-	{else}
-		{assign var="individual_selected" value="selected"}
-	{/if}
-
-	<td class="dvInnerHeader">
-		<select id="taxtype" name="taxtype" onchange="decideTaxDiv(); calcTotal();">
+		<select class="small" id="taxtype" name="taxtype" onchange="decideTaxDiv(); calcTotal();">
 			<OPTION value="individual" {$individual_selected}>{$APP.LBL_INDIVIDUAL}</OPTION>
 			<OPTION value="group" {$group_selected}>{$APP.LBL_GROUP}</OPTION>
 		</select>
@@ -122,7 +136,7 @@ function displayCoords(currObj,obj,mode,curr_row)
    <!-- Header for the Product Details -->
    <tr valign="top">
 	<td width=5% valign="top" class="lvtCol" align="right"><b>{$APP.LBL_TOOLS}</b></td>
-	<td width=40% class="lvtCol"><font color='red'>*</font><b>{$APP.LBL_PRODUCT_NAME}</b></td>
+	<td width=40% class="lvtCol"><font color='red'>*</font><b>{$APP.LBL_ITEM_NAME}</b></td>
 	{if $MODULE neq 'PurchaseOrder'}
 		<td width=10% class="lvtCol"><b>{$APP.LBL_QTY_IN_STOCK}</b></td>
 	{/if}
@@ -132,7 +146,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 	<td width=13% valign="top" class="lvtCol" align="right"><b>{$APP.LBL_NET_PRICE}</b></td>
    </tr>
 
-   {foreach key=row_no item=data from=$ASSOCIATEDPRODUCTS}
+   {foreach key=row_no item=data from=$ASSOCIATEDPRODUCTS name=outer1}
 	{assign var="deleted" value="deleted"|cat:$row_no}
 	{assign var="hdnProductId" value="hdnProductId"|cat:$row_no}
 	{assign var="productName" value="productName"|cat:$row_no}
@@ -142,6 +156,10 @@ function displayCoords(currObj,obj,mode,curr_row)
 	{assign var="qty" value="qty"|cat:$row_no}
 	{assign var="listPrice" value="listPrice"|cat:$row_no}
 	{assign var="productTotal" value="productTotal"|cat:$row_no}
+	{assign var="subproduct_ids" value="subproduct_ids"|cat:$row_no}
+	{assign var="subprod_names" value="subprod_names"|cat:$row_no}
+	{assign var="entityIdentifier" value="entityType"|cat:$row_no}
+	{assign var="entityType" value=$data.$entityIdentifier}
 
 	{assign var="discount_type" value="discount_type"|cat:$row_no}
 	{assign var="discount_percent" value="discount_percent"|cat:$row_no}
@@ -163,29 +181,48 @@ function displayCoords(currObj,obj,mode,curr_row)
 	<!-- column 1 - delete link - starts -->
 	<td  class="crmTableRow small lineOnTop">
 		{if $row_no neq 1}
-			<img src="{$IMAGE_PATH}delete.gif" border="0" onclick="deleteRow('{$MODULE}',{$row_no})">
+			<img src="{'delete.gif'|@vtiger_imageurl:$THEME}" border="0" onclick="deleteRow('{$MODULE}',{$row_no},'{$IMAGE_PATH}')">
+		{/if}<br/><br/>
+		{if $row_no neq 1}
+			&nbsp;<a href="javascript:moveUpDown('UP','{$MODULE}',{$row_no})" title="Move Upward"><img src="{'up_layout.gif'|@vtiger_imageurl:$THEME}" border="0"></a>
+		{/if}
+		{if not $smarty.foreach.outer1.last}
+			&nbsp;<a href="javascript:moveUpDown('DOWN','{$MODULE}',{$row_no})" title="Move Downward"><img src="{'down_layout.gif'|@vtiger_imageurl:$THEME}" border="0" ></a>
 		{/if}
 		<input type="hidden" id="{$deleted}" name="{$deleted}" value="0">
 	</td>
 
 	<!-- column 2 - Product Name - starts -->
 	<td class="crmTableRow small lineOnTop">
+		<!-- Product Re-Ordering Feature Code Addition Starts -->
+		<input type="hidden" name="hidtax_row_no{$row_no}" id="hidtax_row_no{$row_no}" value="{$tax_row_no}"/>
+		<!-- Product Re-Ordering Feature Code Addition ends -->
 		<table width="100%"  border="0" cellspacing="0" cellpadding="1">
-		   <tr>
-			<td class="small" valign="top">
-				<input type="text" id="{$productName}" name="{$productName}" value="{$data.$productName}" class="small" readonly />
-				<input type="hidden" id="{$hdnProductId}" name="{$hdnProductId}" value="{$data.$hdnProductId}">
-				<input type="hidden" id="{$productDescription}" name="{$productDescription}" value="{$data.$productDescription}">
-				<img src="{$IMAGE_PATH}search.gif" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}','{$row_no}')" />
-			</td>
-		   </tr>
-		   <tr>
-			<td class="small" id="setComment">
-				<textarea id="{$comment}" name="{$comment}" class=small style="width:70%;height:40px">{$data.$comment}</textarea>
-				<br>
-				[<a href="javascript:;" onclick="getObj('{$comment}').value=''";>{$APP.LBL_CLEAR_COMMENT}</a>]
-			</td>
-		   </tr>
+			<tr>
+				<td class="small" valign="top">
+					<input type="text" id="{$productName}" name="{$productName}" value="{$data.$productName}" class="small" style="width: 70%;" readonly />
+					<input type="hidden" id="{$hdnProductId}" name="{$hdnProductId}" value="{$data.$hdnProductId}" />
+					<input type="hidden" id="lineItemType{$row_no}" name="lineItemType{$row_no}" value="{$entityType}" />
+					&nbsp;
+					{if $entityType eq 'Services'}
+						<img id="searchIcon{$row_no}" title="Services" src="{'services.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="servicePickList(this,'{$MODULE}','{$row_no}')" />
+					{else}
+						<img id="searchIcon{$row_no}" title="Products" src="{'products.gif'|@vtiger_imageurl:$THEME}" style="cursor: pointer;" align="absmiddle" onclick="productPickList(this,'{$MODULE}','{$row_no}')" />
+					{/if}
+				</td>
+			</tr>
+			<tr>
+				<td class="small">
+					<input type="hidden" value="{$data.$subproduct_ids}" id="{$subproduct_ids}" name="{$subproduct_ids}" />
+					<span id="{$subprod_names}" name="{$subprod_names}"  style="color:#C0C0C0;font-style:italic;">{$data.$subprod_names}</span>
+				</td>
+			</tr>
+			<tr>
+				<td class="small" id="setComment">
+					<textarea id="{$comment}" name="{$comment}" class=small style="width:70%;height:40px">{$data.$comment}</textarea>
+					<img src="{'clear_field.gif'|@vtiger_imageurl:$THEME}" onClick="{literal}${/literal}('{$comment}').value=''"; style="cursor:pointer;" />
+				</td>
+			</tr>
 		</table>
 	</td>
 	<!-- column 2 - Product Name - ends -->
@@ -199,7 +236,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 
 	<!-- column 4 - Quantity - starts -->
 	<td class="crmTableRow small lineOnTop" valign="top">
-		<input id="{$qty}" name="{$qty}" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="settotalnoofrows(); calcTotal(); loadTaxes_Ajax('{$row_no}');{if $MODULE eq 'Invoice'}stock_alert('{$row_no}');{/if}" onChange="setDiscount(this,'{$row_no}')" value="{$data.$qty}"/><br><span id="stock_alert{$row_no}"></span>
+		<input id="{$qty}" name="{$qty}" type="text" class="small " style="width:50px" onfocus="this.className='detailedViewTextBoxOn'" onBlur="settotalnoofrows(); calcTotal(); loadTaxes_Ajax('{$row_no}');{if $MODULE eq 'Invoice' && $entityType neq 'Services'} stock_alert('{$row_no}');{/if}" onChange="setDiscount(this,'{$row_no}')" value="{$data.$qty}"/><br><span id="stock_alert{$row_no}"></span>
 	</td>
 	<!-- column 4 - Quantity - ends -->
 
@@ -208,7 +245,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 		<table width="100%" cellpadding="0" cellspacing="0">
 		   <tr>
 			<td align="right">
-				<input id="{$listPrice}" name="{$listPrice}" value="{$data.$listPrice}" type="text" class="small " style="width:70px" onBlur="calcTotal(); setDiscount(this,'{$row_no}');callTaxCalc('{$row_no}');"/>&nbsp;<img src="{$IMAGE_PATH}pricebook.gif" onclick="priceBookPickList(this,'{$row_no}')">
+				<input id="{$listPrice}" name="{$listPrice}" value="{$data.$listPrice}" type="text" class="small " style="width:70px" onBlur="calcTotal(); setDiscount(this,'{$row_no}');callTaxCalc('{$row_no}');"/>&nbsp;<img src="{'pricebook.gif'|@vtiger_imageurl:$THEME}" onclick="priceBookPickList(this,'{$row_no}')">
 			</td>
 		   </tr>
 		   <tr>
@@ -219,7 +256,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 					   <tr>
 						<td id="discount_div_title{$row_no}" nowrap align="left" ></td>
-						<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('discount_div{$row_no}')" style="cursor:pointer;"></td>
+						<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('discount_div{$row_no}')" style="cursor:pointer;"></td>
 					   </tr>
 					   <tr>
 						<td align="left" class="lineOnTop"><input type="radio" name="discount{$row_no}" {$data.$checked_discount_zero} onclick="setDiscount(this,'{$row_no}'); callTaxCalc('{$row_no}');calcTotal();">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
@@ -251,7 +288,7 @@ function displayCoords(currObj,obj,mode,curr_row)
 					   <tr>
 						<td id="tax_div_title{$row_no}" nowrap align="left" ><b>Set Tax for : {$data.$totalAfterDiscount}</b></td>
 						<td>&nbsp;</td>
-						<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('tax_div{$row_no}')" style="cursor:pointer;"></td>
+						<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('tax_div{$row_no}')" style="cursor:pointer;"></td>
 					   </tr>
 
 					{foreach key=tax_row_no item=tax_data from=$data.taxes}
@@ -320,6 +357,7 @@ function displayCoords(currObj,obj,mode,curr_row)
    <tr>
 	<td colspan="3">
 			<input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_PRODUCT}" onclick="fnAddProductRow('{$MODULE}','{$IMAGE_PATH}');" />
+			<input type="button" name="Button" class="crmbutton small create" value="{$APP.LBL_ADD_SERVICE}" onclick="fnAddServiceRow('{$MODULE}','{$IMAGE_PATH}');" />
 	</td>
    </tr>
 
@@ -349,7 +387,7 @@ so we will get that array, parse that array and fill the details
 			<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 			   <tr>
 				<td id="discount_div_title_final" nowrap align="left" ></td>
-				<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('discount_div_final')" style="cursor:pointer;"></td>
+				<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('discount_div_final')" style="cursor:pointer;"></td>
 			   </tr>
 			   <tr>
 				<td align="left" class="lineOnTop"><input type="radio" name="discount_final" checked onclick="setDiscount(this,'_final'); calcGroupTax(); calcTotal();">&nbsp; {$APP.LBL_ZERO_DISCOUNT}</td>
@@ -383,7 +421,7 @@ so we will get that array, parse that array and fill the details
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 					   <tr>
 						<td id="group_tax_div_title" colspan="2" nowrap align="left" ></td>
-						<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('group_tax_div')" style="cursor:pointer;"></td>
+						<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('group_tax_div')" style="cursor:pointer;"></td>
 					   </tr>
 
 					{foreach item=tax_detail name=group_tax_loop key=loop_count from=$FINAL.taxes}
@@ -435,7 +473,7 @@ so we will get that array, parse that array and fill the details
 					<table width="100%" border="0" cellpadding="5" cellspacing="0" class="small">
 					   <tr>
 						<td id="sh_tax_div_title" colspan="2" nowrap align="left" ></td>
-						<td align="right"><img src="{$IMAGE_PATH}close.gif" border="0" onClick="fnHidePopDiv('shipping_handling_div')" style="cursor:pointer;"></td>
+						<td align="right"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0" onClick="fnHidePopDiv('shipping_handling_div')" style="cursor:pointer;"></td>
 					   </tr>
 
 					{foreach item=tax_detail name=sh_loop key=loop_count from=$FINAL.sh_taxes}
@@ -496,7 +534,10 @@ so we will get that array, parse that array and fill the details
 		{assign var="taxname" value=$tax_data.taxname|cat:"_percentage"|cat:$row_no}
 			<script>calcCurrentTax('{$taxname}',{$row_no},{$tax_row_no});</script>
 	{/foreach}
-		{if $MODULE eq 'Invoice'}       <script>stock_alert('{$row_no}');</script>{/if}
+	{assign var="entityIndentifier" value='entityType'|cat:$row_no}
+	{if $MODULE eq 'Invoice' && $data.$entityIndentifier neq 'Services'}
+		<script>stock_alert('{$row_no}');</script>
+	{/if}
 {/foreach}
 
 

@@ -47,9 +47,9 @@ function show_error_import($message)
 	$smarty->assign("APP", $app_strings);
 
 
-	if (isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+	if (isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
 
-	if (isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+	if (isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
 
 	$smarty->assign("THEME", $theme);
 
@@ -59,7 +59,7 @@ function show_error_import($message)
 	$smarty->assign("IMAGE_PATH", $image_path);
 	$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
-	$smarty->assign("MODULE", $_REQUEST['module']);
+	$smarty->assign("MODULE", vtlib_purify($_REQUEST['module']));
 	$smarty->assign("MESSAGE", $message);
 
 	$smarty->display('Importerror.tpl');

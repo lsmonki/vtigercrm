@@ -1,21 +1,18 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
-require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
-require_once('modules/HelpDesk/HelpDesk.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
 
-$focus = new HelpDesk();
+$focus = CRMEntity::getInstance($currentModule);
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) 
 {
@@ -54,7 +51,7 @@ $focus->id = $_REQUEST['record'];
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
 $smarty->assign("BLOCKS", getBlocks($currentModule,"detail_view",'',$focus->column_fields));
-$smarty->assign("TICKETID", $_REQUEST['record']);
+$smarty->assign("TICKETID", vtlib_purify($_REQUEST['record']));
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("SINGLE_MOD", 'HelpDesk');
@@ -71,10 +68,21 @@ if(isPermitted("HelpDesk","Delete",$_REQUEST['record']) == 'yes')
 //Added button for Convert the ticket to FAQ
 if(isPermitted("Faq","EditView",'') == 'yes')
 	$smarty->assign("CONVERTASFAQ","permitted");
-
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$smarty->assign("ID", $_REQUEST['record']);
+
+// Module Sequence Numbering
+$mod_seq_field = getModuleSequenceField($currentModule);
+if ($mod_seq_field != null) {
+	$mod_seq_id = $focus->column_fields[$mod_seq_field['name']];
+} else {
+	$mod_seq_id = $focus->id;
+}
+$smarty->assign('MOD_SEQ_ID', $mod_seq_id);
+// END
+
+$smarty->assign("ID", vtlib_purify($_REQUEST['record']));
 if(isPermitted("HelpDesk","Merge",'') == 'yes')
 {
 	global $current_user;
@@ -111,7 +119,7 @@ $smarty->assign("VALIDATION_DATA_FIELDLABEL",$data['fieldlabel']);
 $smarty->assign("COMMENT_BLOCK",$focus->getCommentInformation($_REQUEST['record']));
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST['record']));
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
 $smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
 $smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
@@ -121,9 +129,18 @@ if($singlepane_view == 'true')
 	$smarty->assign("RELATEDLISTS", $related_array);
 }
 
+if(PerformancePrefs::getBoolean('DETAILVIEW_RECORD_NAVIGATION', true) && isset($_SESSION[$currentModule.'_listquery'])){
+	$recordNavigationInfo = ListViewSession::getListViewNavigation($focus->id);
+	VT_detailViewNavigation($smarty,$recordNavigationInfo,$focus->id);
+}
 $smarty->assign("SinglePane_View", $singlepane_view);
 
-$smarty->display("DetailView.tpl");
+// Record Change Notification
+$focus->markAsViewed($current_user->id);
+// END
 
+$smarty->assign('DETAILVIEW_AJAX_EDIT', PerformancePrefs::getBoolean('DETAILVIEW_AJAX_EDIT', true));
+
+$smarty->display("DetailView.tpl");
 
 ?>

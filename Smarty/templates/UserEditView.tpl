@@ -33,6 +33,9 @@ function check_duplicate()
 {ldelim}
 	var user_name = window.document.EditView.user_name.value;
 	var status = CharValidation(user_name,'name');
+	
+	VtigerJS_DialogBox.block();
+	
         if(status)
 	{ldelim}
 	new Ajax.Request(
@@ -41,14 +44,16 @@ function check_duplicate()
                         method: 'post',
                         postBody: 'module=Users&action=UsersAjax&file=Save&ajax=true&dup_check=true&userName='+user_name,
                         onComplete: function(response) {ldelim}
-				if(response.responseText == 'SUCCESS')
-				{ldelim}
-				//	$('user_status').disabled = false;
-			                document.EditView.submit();
-				{rdelim}
-       				else
-			                alert(response.responseText);
-                        {rdelim}
+							if(response.responseText.indexOf('SUCCESS') > -1)
+							{ldelim}
+							//	$('user_status').disabled = false;
+						                document.EditView.submit();
+							{rdelim}
+			       				else {ldelim}
+			       						VtigerJS_DialogBox.unblock();
+						                alert(response.responseText);
+						        {rdelim}
+			            {rdelim}
                 {rdelim}
         );
 	{rdelim}
@@ -61,7 +66,7 @@ function check_duplicate()
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
         <br>
 
@@ -70,7 +75,7 @@ function check_duplicate()
 		{include file='SetMenu.tpl'}
 	{/if}
 
-		<form name="EditView" method="POST" action="index.php" ENCTYPE="multipart/form-data">
+		<form name="EditView" method="POST" action="index.php" ENCTYPE="multipart/form-data" onsubmit="VtigerJS_DialogBox.block();">
 		<input type="hidden" name="module" value="Users">
 		<input type="hidden" name="record" value="{$ID}">
 		<input type="hidden" name="mode" value="{$MODE}">
@@ -92,7 +97,7 @@ function check_duplicate()
 	<tr><td align="left">
 		<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
 		<tr>
-			<td rowspan="2"><img src="{$IMAGE_PATH}ico-users.gif" align="absmiddle"></td>
+			<td rowspan="2" width="50"><img src="{'ico-users.gif'|@vtiger_imageurl:$THEME}" align="absmiddle"></td>
 			<td>	
 				<span class="lvtHeaderText">
 				{if $PARENTTAB neq ''}	
@@ -162,19 +167,20 @@ function check_duplicate()
 						<!-- Handle the ui types display -->
 							{include file="DisplayFields.tpl"}
 						</table>
-					   	{/foreach}
+						{assign var=list_numbering value=$smarty.foreach.blockforeach.iteration}
+					   {/foreach}
 				<br>
 			    	<table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
 			    	<tr>
 				     <td class="big">	
-					<strong>5. {$UMOD.LBL_HOME_PAGE_COMP}</strong>
+					<strong>{$list_numbering+1}. {$UMOD.LBL_HOME_PAGE_COMP}</strong>
 				     </td>
 				     <td class="small" align="right">&nbsp;</td>	
 			        </tr>
 			    	</table>
 			    	<table border="0" cellpadding="5" cellspacing="0" width="100%">
 				{foreach item=homeitems key=values from=$HOMEORDER}
-					<tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.$values}</td>
+					<tr><td class="dvtCellLabel" align="right" width="30%">{$UMOD.$values|@getTranslatedString:'Home'}</td>
 					    {if $homeitems neq ''}
 					    	<td class="dvtCellInfo" align="center" width="5%">
 					   	<input name="{$values}" value="{$values}" checked type="radio"></td><td class="dvtCellInfo" align="left" width="20%">{$UMOD.LBL_SHOW}</td> 		
@@ -193,7 +199,7 @@ function check_duplicate()
                                 <table class="tableHeading" border="0" cellpadding="5" cellspacing="0" width="100%">
                                 <tr>
                                      <td class="big">
-                                        <strong>6. {$UMOD.LBL_TAGCLOUD_DISPLAY}</strong>
+                                        <strong>{$list_numbering+2}. {$UMOD.LBL_TAGCLOUD_DISPLAY}</strong>
                                      </td>
                                      <td class="small" align="right">&nbsp;</td>
                                 </tr>

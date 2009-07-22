@@ -22,24 +22,21 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Contacts/Contacts.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
-require_once('include/FormValidationUtil.php');
 
 global $log,$mod_strings,$app_strings,$theme,$currentModule,$current_user;
 
 //added for contact image
-$encode_val=$_REQUEST['encode_val'];
+$encode_val=vtlib_purify($_REQUEST['encode_val']);
 $decode_val=base64_decode($encode_val);
 
- $saveimage=isset($_REQUEST['saveimage'])?$_REQUEST['saveimage']:"false";
- $errormessage=isset($_REQUEST['error_msg'])?$_REQUEST['error_msg']:"false";
- $image_error=isset($_REQUEST['image_error'])?$_REQUEST['image_error']:"false";
+ $saveimage=isset($_REQUEST['saveimage'])?vtlib_purify($_REQUEST['saveimage']):"false";
+ $errormessage=isset($_REQUEST['error_msg'])?vtlib_purify($_REQUEST['error_msg']):"false";
+ $image_error=isset($_REQUEST['image_error'])?vtlib_purify($_REQUEST['image_error']):"false";
 //end
 
-$focus = new Contacts();
+$focus = CRMEntity::getInstance($currentModule);
 $smarty = new vtigerCRM_Smarty;
 
 //added to fix the issue4600
@@ -100,7 +97,9 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 	$focus->id = "";
 	$focus->mode = "";
 }
-
+if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
+	setObjectValuesFromRequest($focus);
+}
 $disp_view = getView($focus->mode);
 if($disp_view == 'edit_view')
 	$smarty->assign("BLOCKS",getBlocks($currentModule,$disp_view,$mode,$focus->column_fields));
@@ -123,14 +122,11 @@ if (isset($_REQUEST['account_id']) && is_null($focus->account_id)) {
 
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-//retreiving the combo values array
-$comboFieldNames = Array('leadsource'=>'lead_source_dom'
-                      ,'salutationtype'=>'salutation_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
 
 $log->info("Contact detail view");
 
 $smarty->assign("MOD", $mod_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("APP", $app_strings);
 $contact_name = $focus->lastname;
 if (getFieldVisibilityPermission($currentModule, $current_user->id,'firstname') == '0') {
@@ -152,22 +148,22 @@ if($focus->mode == 'edit')
 }
 
 if(isset($_REQUEST['activity_mode']) && $_REQUEST['activity_mode'] !='')
-        $smarty->assign("ACTIVITYMODE",$_REQUEST['activity_mode']);
+        $smarty->assign("ACTIVITYMODE",vtlib_purify($_REQUEST['activity_mode']));
 
 // Unimplemented until jscalendar language vtiger_files are fixed
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 if(isset($_REQUEST['campaignid']))
-$smarty->assign("campaignid",$_REQUEST['campaignid']);
+$smarty->assign("campaignid",vtlib_purify($_REQUEST['campaignid']));
 if (isset($_REQUEST['return_module']))
-$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+$smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
 if (isset($_REQUEST['return_action']))
-$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+$smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
 if (isset($_REQUEST['return_id']))
-$smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+$smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
 if (isset($_REQUEST['return_viewname']))
-$smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+$smarty->assign("RETURN_VIEWNAME", vtlib_purify($_REQUEST['return_viewname']));
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
@@ -214,12 +210,30 @@ if($errormessage!="")
 
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
-$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
+$smarty->assign("DUPLICATE",vtlib_purify($_REQUEST['isDuplicate']));
+
+global $adb;
+// Module Sequence Numbering
+$mod_seq_field = getModuleSequenceField($currentModule);
+if($focus->mode != 'edit' && $mod_seq_field != null) {
+		$autostr = getTranslatedString('MSG_AUTO_GEN_ON_SAVE');
+		$mod_seq_string = $adb->pquery("SELECT prefix, cur_id from vtiger_modentity_num where semodule = ? and active=1",array($currentModule));
+        $mod_seq_prefix = $adb->query_result($mod_seq_string,0,'prefix');
+        $mod_seq_no = $adb->query_result($mod_seq_string,0,'cur_id');
+        if($adb->num_rows($mod_seq_string) == 0 || $focus->checkModuleSeqNumber($focus->table_name, $mod_seq_field['column'], $mod_seq_prefix.$mod_seq_no))
+                echo '<br><font color="#FF0000"><b>'. getTranslatedString('LBL_DUPLICATE'). ' '. getTranslatedString($mod_seq_field['label'])
+                	.' - '. getTranslatedString('LBL_CLICK') .' <a href="index.php?module=Settings&action=CustomModEntityNo&parenttab=Settings&selmodule='.$currentModule.'">'.getTranslatedString('LBL_HERE').'</a> '
+                	. getTranslatedString('LBL_TO_CONFIGURE'). ' '. getTranslatedString($mod_seq_field['label']) .'</b></font>';
+        else
+                $smarty->assign("MOD_SEQ_ID",$autostr);
+} else {
+	$smarty->assign("MOD_SEQ_ID", $focus->column_fields[$mod_seq_field['name']]);
+}
+// END
 
 if($focus->mode == 'edit')
 $smarty->display("salesEditView.tpl");
 else
 $smarty->display('CreateView.tpl');
-
 
 ?>

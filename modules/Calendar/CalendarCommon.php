@@ -172,7 +172,7 @@ function getTimeCombo($format,$bimode,$hour='',$min='',$fmt='',$todocheck=false)
 	$combo = '';
 	$min = $min - ($min%5);
 	if($bimode == 'start' && !$todocheck)
-		$jsfn = 'onChange="changeEndtime_StartTime();"';
+		$jsfn = 'onChange="changeEndtime_StartTime(document.EditView.activitytype.value);"';
 	else
 		$jsfn = null;
 	if($format == 'am/pm')
@@ -366,9 +366,9 @@ function getActivityDetails($description,$user_id,$from='')
         $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_STATUS"].': '.$status;
         $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Priority"].': '.getTranslatedString($description['taskpriority']);
         $list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Related To"].': '.getTranslatedString($description['relatedto']);
-	if($description['activity_mode'] != 'Events')
+	if(!empty($description['contact_name']))
 	{
-        	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_CONTACT"].' '.$description['contact_name'];
+        	$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["LBL_CONTACT_LIST"].' '.$description['contact_name'];
 	}
 	else
 		$list .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$mod_strings["Location"].' : '.$description['location'];
@@ -422,9 +422,16 @@ function getEventNotification($mode,$subject,$desc)
 	}
 	if($desc['assingn_type'] == "T")
 	{
+		$groupid  = '';
 		$groupname=$desc['group_name'];
-		$resultqry=$adb->pquery("select groupid from vtiger_groups where groupname=?", array($groupname));
-		$groupid=$adb->query_result($resultqry,0,"groupid");
+		// getGroupName API was changed to return array of two elements!
+		if(is_array($groupname) && !empty($groupname)) {
+			$groupid = $groupname[1];
+			$groupname = $groupname[0];
+		} else {
+			$resultqry=$adb->pquery("select groupid from vtiger_groups where groupname=?", array($groupname));
+			$groupid=$adb->query_result($resultqry,0,"groupid");
+		}
 		require_once('include/utils/GetGroupUsers.php');
 		$getGroupObj=new GetGroupUsers();
 		$getGroupObj->getAllUsersInGroup($groupid);
@@ -480,18 +487,21 @@ function getActivityMailInfo($return_id,$status,$activity_type)
 	$end_time = $adb->query_result($ary_res,0,"time_end");
 	$location = $adb->query_result($ary_res,0,"location");
 
-	$usr_qry = "select smownerid from vtiger_crmentity where crmid=?";
-	$res = $adb->pquery($usr_qry, array($return_id));
-	$usr_id = $adb->query_result($res,0,"smownerid");
-	$assignType = "U";
-	if($usr_id == 0)
-	{
+	$owner_qry = "select smownerid from vtiger_crmentity where crmid=?";
+	$res = $adb->pquery($owner_qry, array($return_id));
+	$owner_id = $adb->query_result($res,0,"smownerid");
+	
+	$usr_res = $adb->pquery("select count(*) as count from vtiger_users where id=?",array($owner_id));
+	if($adb->query_result($usr_res, 0, 'count')>0) {
+		$assignType = "U";
+		$usr_id = $owner_id;
+	}
+	else {
 		$assignType = "T";
-		$group_qry = "select groupname from vtiger_activitygrouprelation where activityid=?";
-		$grp_res = $adb->pquery($group_qry, array($return_id));
+		$group_qry = "select groupname from vtiger_groups where groupid=?";
+		$grp_res = $adb->pquery($group_qry, array($owner_id));
 		$grp_name = $adb->query_result($grp_res,0,"groupname");
 	}
-
 
 	$desc_qry = "select description from vtiger_crmentity where crmid=?";
 	$des_res = $adb->pquery($desc_qry, array($return_id));
@@ -534,5 +544,74 @@ function getActivityMailInfo($return_id,$status,$activity_type)
 
 
 }
+
+// User Select Customization
+/**
+ * Function returns the id of the User selected by current user in the picklist of the ListView or Calendar view of Current User
+ * return String -  Id of the user that the current user has selected
+ */
+function calendarview_getSelectedUserId() {
+	global $current_user, $default_charset;
+	$only_for_user = htmlspecialchars(strip_tags($_REQUEST['onlyforuser']),ENT_QUOTES,$default_charset);
+	if($only_for_user == '') $only_for_user = $current_user->id;
+	return $only_for_user;
+}
+
+function calendarview_getSelectedUserFilterQuerySuffix() {	
+	global $current_user, $adb;
+	$only_for_user = calendarview_getSelectedUserId();
+	$qcondition = '';
+	if(!empty($only_for_user)) {
+		if($only_for_user != 'ALL') {
+			// For logged in user include the group records also.
+			if($only_for_user == $current_user->id) {
+				$user_group_ids = fetchUserGroupids($current_user->id);
+				// User does not belong to any group? Let us reset to non-existent group
+				if(!empty($user_group_ids)) $user_group_ids .= ',';
+				else $user_group_ids = '';
+				$user_group_ids .= $current_user->id;	
+				$qcondition = " AND vtiger_crmentity.smownerid IN (" . $user_group_ids .")";
+			} else {
+				$qcondition = " AND vtiger_crmentity.smownerid = "  . $adb->sql_escape_string($only_for_user);
+			}
+		} 
+	}
+	return $qcondition;
+}
+
+/**
+ * Function returns the data of the user selected by current user in the picklist of the ListView or Calendar view of Current User
+ * @param $useridInUse - The Id of the user that the Current User has selected in dropdown picklist in Calendar modules listview or Calendar View
+ * return string - The array of the events for the user that the current user has selected
+ */
+function calendarview_getUserSelectOptions($useridInUse) {
+	global $adb, $app_strings, $current_user, $mod_strings;
+	$users = $adb->query("SELECT id,user_name FROM vtiger_users WHERE status = 'Active' and deleted = 0");
+	$userscount = $adb->num_rows($users);
+
+	$userSelectdata = "<span style='padding-left: 10px; padding-right: 10px;'><b>" . $app_strings['LBL_LIST_OF'] . " : </b>";
+    $userSelectdata .="<select class='small' onchange='fnRedirect();' name='onlyforuser'>";
+    
+    // Providing All option for administrators only
+    if(is_admin($current_user)) {
+		$userSelectdata .= "<option value='ALL'>" . $app_strings['COMBO_ALL'] . "</option>";
+    } 
+    
+	$userSelectdata .= "<option value='$current_user->id'".(($current_user->id == $useridInUse)? "selected='true'":"").">".$mod_strings['LBL_MINE']."</option>";	
+	
+	for($index = 0; $index < $userscount; ++$index) {
+		$userid = $adb->query_result($users, $index, 'id');
+		if($userid == $current_user->id) {
+			continue; // We have already taken care of listing at first.
+		}		
+		$username = $adb->query_result($users, $index, 'user_name');
+		$userselect = '';
+		if($userid == $useridInUse) $userselect = "selected='true'";
+		$userSelectdata .= "<option value='$userid' $userselect>$username</option>";
+	}
+	$userSelectdata .= "</select></span>";
+	return $userSelectdata;
+}
+// END
 
 ?>

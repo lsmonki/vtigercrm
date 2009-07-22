@@ -347,6 +347,7 @@ class Chat
     //UTF-8 support added - ding
     $msg = utf8RawUrlDecode($msg);
     $msg = $this->msgParse($msg);
+    $msg = htmlentities($msg);
     if(strlen($msg) == 0) return;
 	
 	//$sql = "insert into vtiger_chat_msg set chat_from=?, chat_to=?, born=now(), msg=?";

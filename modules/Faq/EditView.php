@@ -21,18 +21,15 @@
  ********************************************************************************/
 
 require_once('Smarty_setup.php');
-require_once('modules/Faq/Faq.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
-require_once('include/FormValidationUtil.php');
 
 global $app_strings;
 global $mod_strings;
 global $current_user;
 global $currentModule;
 
-$focus = new Faq();
+$focus = CRMEntity::getInstance($currentModule);
 $smarty = new vtigerCRM_Smarty();
 //added to fix the issue4600
 $searchurl = getBasic_Advance_SearchURL();
@@ -50,6 +47,9 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 	$focus->id = "";
     	$focus->mode = ''; 	
 } 
+if(empty($_REQUEST['record']) && $focus->mode != 'edit'){
+	setObjectValuesFromRequest($focus);
+}
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -83,11 +83,11 @@ if($focus->mode == 'edit')
 	$smarty->assign("MODE", $focus->mode);
 }		
 
-if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
 else $smarty->assign("RETURN_MODULE","Faq");
-if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
 else $smarty->assign("RETURN_ACTION","index");
-if(isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+if(isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
 
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
@@ -113,7 +113,27 @@ if($_REQUEST['record'] != '')
 	//Added to display the Faq comments information
 	$smarty->assign("COMMENT_BLOCK",$focus->getFAQComments($_REQUEST['record']));
 }
-$smarty->assign("DUPLICATE", $_REQUEST['isDuplicate']);
+$smarty->assign("DUPLICATE",vtlib_purify($_REQUEST['isDuplicate']));
+
+global $adb;
+// Module Sequence Numbering
+$mod_seq_field = getModuleSequenceField($currentModule);
+if($focus->mode != 'edit' && $mod_seq_field != null) {
+		$autostr = getTranslatedString('MSG_AUTO_GEN_ON_SAVE');
+		$mod_seq_string = $adb->pquery("SELECT prefix, cur_id from vtiger_modentity_num where semodule = ? and active=1",array($currentModule));
+        $mod_seq_prefix = $adb->query_result($mod_seq_string,0,'prefix');
+        $mod_seq_no = $adb->query_result($mod_seq_string,0,'cur_id');
+        if($adb->num_rows($mod_seq_string) == 0 || $focus->checkModuleSeqNumber($focus->table_name, $mod_seq_field['column'], $mod_seq_prefix.$mod_seq_no))
+                echo '<br><font color="#FF0000"><b>'. getTranslatedString('LBL_DUPLICATE'). ' '. getTranslatedString($mod_seq_field['label'])
+                	.' - '. getTranslatedString('LBL_CLICK') .' <a href="index.php?module=Settings&action=CustomModEntityNo&parenttab=Settings&selmodule='.$currentModule.'">'.getTranslatedString('LBL_HERE').'</a> '
+                	. getTranslatedString('LBL_TO_CONFIGURE'). ' '. getTranslatedString($mod_seq_field['label']) .'</b></font>';
+        else
+                $smarty->assign("MOD_SEQ_ID",$autostr);
+} else {
+	$smarty->assign("MOD_SEQ_ID", $focus->column_fields[$mod_seq_field['name']]);
+}
+// END
+
 if($focus->mode == 'edit')
 	$smarty->display("salesEditView.tpl");
 else

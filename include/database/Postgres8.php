@@ -17,8 +17,8 @@
 function fixPostgresQuery($query,$log,$debug)
 {
     // First select the query fields from the remaining query
-    $queryFields = substr($query, strlen('select'), strpos($query,'FROM')-strlen('select'));
-    $queryRecord = substr($query, strpos($query,'FROM'), strlen($query));
+    $queryFields = substr($query, strlen('SELECT'), stripos($query,'FROM')-strlen('SELECT'));
+    $queryRecord = substr($query, stripos($query,'FROM'), strlen($query));
     $groupClause = "";
     $orderClause = "";
 
@@ -26,21 +26,21 @@ function fixPostgresQuery($query,$log,$debug)
 	$log->info( "fixPostgresQuery: ".$query);
 
     // If we already have an order or group cluase separate ist for later use
-    if( strpos($queryRecord,'GROUP') > 0)
+    if( stripos($queryRecord,'GROUP BY') > 0)
     {
-	$groupClause = substr($queryRecord, strpos($queryRecord,'GROUP')+strlen('GROUP BY'), strlen($queryRecord));
-	if( strpos($groupClause,'ORDER') > 0)
-	{
-	    $orderClause = substr($groupClause, strpos($groupClause,'ORDER'), strlen($groupClause));
-	    $groupClause = substr($groupClause, 0, strpos($groupClause,'ORDER'));
-	}
-	$queryRecord = substr($queryRecord, 0, strpos($queryRecord,'GROUP'));
+		$groupClause = substr($queryRecord, stripos($queryRecord,'GROUP BY')+strlen('GROUP BY'), strlen($queryRecord));
+		if( stripos($groupClause,'ORDER BY') > 0)
+		{
+		    $orderClause = substr($groupClause, stripos($groupClause,'ORDER BY'), strlen($groupClause));
+		    $groupClause = substr($groupClause, 0, stripos($groupClause,'ORDER BY'));
+		}
+		$queryRecord = substr($queryRecord, 0, stripos($queryRecord,'GROUP BY'));
     }
 
-    if( strpos($queryRecord,'ORDER') > 0)
+    if( stripos($queryRecord,'ORDER BY') > 0)
     {
-	$orderClause = substr($queryRecord, strpos($queryRecord,'ORDER'), strlen($queryRecord));
-	$queryRecord = substr($queryRecord, 0, strpos($queryRecord,'ORDER'));
+		$orderClause = substr($queryRecord, stripos($queryRecord,'ORDER BY'), strlen($queryRecord));
+		$queryRecord = substr($queryRecord, 0, stripos($queryRecord,'ORDER BY'));
     }
 
     // Construkt the privateGroupList from the filed list by separating combined
@@ -48,30 +48,28 @@ function fixPostgresQuery($query,$log,$debug)
     $privateGroupList = array();
     $token = strtok( $queryFields, ", ()	");
     while( $token !== false) {
-	if( strpos( $token, ".") !== false) {
-	    array_push( $privateGroupList, $token);
-	}
-	$token = strtok( ", ()	");
+		if( strpos( $token, ".") !== false) 
+	    	array_push( $privateGroupList, $token);
+		$token = strtok( ", ()	");
     }
     sort( $privateGroupList);
     $groupFields = "";
     $last = "";
     for( $i = 0; $i < count($privateGroupList); $i++) {
-	if( $last != $privateGroupList[$i]) {
-	    if( $groupFields == "")
-		$groupFields = $privateGroupList[$i];
-	    else
-		$groupFields .= ",".$privateGroupList[$i];
-	}
-	$last = $privateGroupList[$i];
+		if( $last != $privateGroupList[$i]) 
+	    	if( $groupFields == "")
+				$groupFields = $privateGroupList[$i];
+	    	else
+				$groupFields .= ",".$privateGroupList[$i];
+		$last = $privateGroupList[$i];
     }
 
     // Rebuild the query
-    $query = "SELECT ".$queryFields.$queryRecord." GROUP BY ";
+    $query = "SELECT ".$queryFields.$queryRecord;
     if( $groupClause != "" )
-	$groupClause = $groupClause.",".$groupFields;
-    else
-	$groupClause = $groupFields;
+		$groupClause =$groupClause.",".$groupFields;
+	else
+		$groupClause =$groupFields;
     $query .= expandStar($groupClause,$log)." ".$orderClause;
 
     if( $debug)
@@ -87,36 +85,37 @@ function expandStar($fieldlist,$log)
     $field = strtok( $fieldlist, ",");
     while( $field != "")
     {
-	//remove leading and trailing spaces
-	$field = trim( $field);
+		//remove leading and trailing spaces
+		$field = trim( $field);
 
-	//still spaces in the field indicate a complex structure
-	if( strpos( $field, " ") == 0)
-	{
+		//still spaces in the field indicate a complex structure
+		if( strpos( $field, " ") == 0)
+		{
 
-	    //locate table- and fieldname
-	    $pos = strpos( $field, ".");
-	    if( $pos > 0)
-	    {
-		$table = substr( $field, 0, $pos);
-		$subfield = substr( $field, $pos+1, strlen($field)-$pos);
+	 	   //locate table- and fieldname
+	  	  $pos = strpos( $field, ".");
+	  	  if( $pos > 0)
+	   	  {
+			$table = substr( $field, 0, $pos);
+			$subfield = substr( $field, $pos+1, strlen($field)-$pos);
 
-		//do we need to expand?
-		if( $subfield == "*") 
-		    $field = expandRecord($table,$log);
-	    }
+			//do we need to expand?
+			if( $subfield == "*") 
+		   	 $field = expandRecord($table,$log);
+	      }
 
-	    //add the propably expanded field to the querylist
-	    if( $expanded == "")
-		$expanded = $field;
-	    else
-		$expanded .= ",".$field;
-	}
+	   	  //add the propably expanded field to the querylist
+	   	  if( $expanded == "")
+			$expanded = $field;
+	      else
+			$expanded .= ",".$field;
+		}
 
-	//next field
-	$field = strtok(",");
+		//next field
+		$field = strtok(",");
     }
-
+	if($expanded!= '')
+		$expanded = " GROUP BY ". trim($expanded, ",");
     //return the expanded fieldlist
     return( $expanded);
 }
@@ -130,11 +129,12 @@ function expandRecord($table,$log)
 
     //vtiger_products table
     if( $table == "vtiger_products" )
-	$subfields = array ( "productid", "productname", "productcode", "productcategory", "manufacturer", "product_description", "qty_per_unit", "unit_price", "weight", "pack_size", "sales_start_date", "sales_end_date", "start_date", "expiry_date", "cost_factor", "commissionrate", "commissionmethod", "discontinued", "usageunit", "handler", "contactid", "currency", "reorderlevel", "website", "taxclass", "mfr_part_no", "vendor_part_no", "serialno", "qtyinstock", "productsheet", "qtyindemand", "glacct", "vendor_id", "imagename" );
+	$subfields = array ( "productid", "productname", "productcode", "productcategory", "manufacturer", "qty_per_unit", "unit_price", "weight", "pack_size", "sales_start_date", "sales_end_date", "start_date", "expiry_date", "cost_factor", "commissionrate", "commissionmethod", "discontinued", "usageunit", "handler", "currency", "reorderlevel", "website", "taxclass", "mfr_part_no", "vendor_part_no", "serialno", "qtyinstock", "productsheet", "qtyindemand", "glacct", "vendor_id", "imagename");
+	//$subfields = array ( "productid", "productname", "productcode", "productcategory", "manufacturer", "qty_per_unit", "unit_price", "weight", "pack_size", "sales_start_date", "sales_end_date", "start_date", "expiry_date", "cost_factor", "commissionrate", "commissionmethod", "discontinued", "usageunit", "handler", "contactid", "currency", "reorderlevel", "website", "taxclass", "mfr_part_no", "vendor_part_no", "serialno", "qtyinstock", "productsheet", "qtyindemand", "glacct", "vendor_id", "imagename" );
 
     //vtiger_activity table
     elseif( $table == "vtiger_activity") 
-	$subfields = array ( "activityid", "subject", "semodule", "activitytype", "date_start", "due_date", "time_start", "time_end", "sendnotification", "duration_hours", "duration_minutes", "status", "eventstatus", "priority", "location", "notime", "visibility" );
+	$subfields = array ( "activityid", "subject", "semodule", "activitytype", "date_start", "due_date", "time_start", "time_end", "sendnotification", "duration_hours", "duration_minutes", "status", "eventstatus", "priority", "location", "notime", "visibility", "recurringtype"  );
 
     //vtiger_notes table
     elseif( $table == "vtiger_notes")
@@ -152,11 +152,63 @@ function expandRecord($table,$log)
     elseif( $table == "vtiger_field")
 	$subfields = array ( "tabid", "fieldid", "columnname", "tablename", "generatedtype", "uitype", "fieldname", "fieldlabel", "readonly", "presence", "selected", "maximumlength", "sequence", "block", "displaytype", "typeofdata", "quickcreate", "quickcreatesequence", "info_type");
 
-    //vtiger_activity
-    elseif( $table == "vtiger_activity")
-	$subfields = array ( "activityid", "subject", "semodule", "activitytype", "date_start", "due_date", "time_start", "sendnotification", "duration_hours", "duration_minutes", "status", "eventstatus", "priority", "location", "notime", "visibility");
-
-    //fields of the requested array still undefined
+	//vtiger_producttaxrel
+    elseif( $table == "vtiger_producttaxrel")
+	$subfields = array ( "productid", "taxid", "taxpercentage");
+	
+	//vtiger_inventorytaxinfo
+	elseif( $table == "vtiger_inventorytaxinfo")
+	$subfields = array ( "taxid", "taxname", "taxlabel", "percentage", "deleted");
+	
+	//vtiger_role2picklist
+	elseif( $table == "vtiger_role2picklist")
+	$subfields = array ( "roleid", "picklistid", "sortid");
+	
+	//vtiger_contactdetails
+	elseif( $table == "vtiger_contactdetails")
+	$subfields = array( "lastname", "contactid", "accountid", "salutation", "firstname", "email", "phone", "mobile", "title", "department", "fax", "reportsto", "training", "usertype", "contacttype", "otheremail", "yahooid", "donotcall", "emailoptout", "imagename", "reference", "notify_owner");
+	
+	//vtiger_quotes
+	elseif( $table == "vtiger_quotes")
+	$subfields = array( "quoteid", "subject", "potentialid", "quotestage", "validtill", "contactid", "currency", "subtotal", "carrier", "shipping", "inventorymanager", "type", "adjustment", "total", "taxtype", "discount_percent", "discount_amount", "s_h_amount", "accountid", "terms_conditions");
+	
+	//vtiger_crmentity
+	elseif( $table == "vtiger_crmentity")
+	$subfields = array("crmid", "smcreatorid", "smownerid", "modifiedby", "setype", "description", "createdtime", "modifiedtime", "viewedtime", "status", "version", "presence", "deleted");
+	
+	//vtiger_salesorder
+	elseif( $table == "vtiger_salesorder")
+	$subfields = array("salesorderid", "subject", "potentialid", "customerno", "quoteid", "vendorterms", "contactid", "vendorid", "duedate", "carrier", "pending", "type", "adjustment", "salescommission", "exciseduty","total", "subtotal", "taxtype", "discount_percent", "discount_amount", "s_h_amount", "accountid", "terms_conditions", "purchaseorder", "sostatus");
+	
+	//vtiger_invoice
+	elseif( $table == "vtiger_invoice")
+	$subfields = array("invoiceid", "subject", "salesorderid","customerno","contactid", "notes", "invoicedate", "duedate", "invoiceterms", "type", "adjustment","salescommission","exciseduty", "subtotal","total", "taxtype","discount_percent", "discount_amount", "s_h_amount","shipping", "accountid", "terms_conditions","purchaseorder","invoicestatus","invoice_no");
+	
+	//vtiger_seactivityrel
+	elseif( $table == "vtiger_seactivityrel")
+	$subfields = array("crmid", "activityid");
+	
+	//vtiger_cntactivityrel
+	elseif( $table == "vtiger_cntactivityrel")
+	$subfields = array("contactid", "activityid");
+	
+	//vtiger_purchaseorder
+	elseif( $table == "vtiger_purchaseorder")
+	$subfields = array("purchaseorderid", "subject", "quoteid", "vendorid", "requisition_no", "tracking_no", "contactid", "duedate", "carrier", "type", "adjustment", "salescommission", "exciseduty", "total", "subtotal", "taxtype", "discount_percent","discount_amount", "s_h_amount", "terms_conditions", "postatus");
+	
+	//vtiger_leaddetails
+	elseif( $table == "vtiger_leaddetails")
+	$subfields = array("leadid", "email", "interest", "firstname", "salutation", "lastname", "company", "annualrevenue", "industry", "campaign", "rating", "leadstatus", "leadsource", "converted", "designation", "space", "comments", "priority", "demorequest", "partnercontact", "productversion", "product", "maildate", "nextstepdate", "fundingsituation", "purpose", "evaluationstatus", "transferdate", "revenuetype", "noofemployees", "yahooid", "assignleadchk" );
+	
+	//vtiger_campaignleadrel 
+	elseif( $table == "vtiger_campaignleadrel")
+	$subfields = array("campaignid", "leadid");
+	
+	//vtiger_pricebook
+	elseif( $table == "vtiger_pricebook")
+	$subfields = array("pricebookid", "bookname","active","description");
+	
+	//fields of the requested array still undefined
     else
 	$log->info("function expandRecord: please add structural information for table '".$table."'");
 

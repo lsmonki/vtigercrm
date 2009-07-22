@@ -14,8 +14,13 @@ document.write("<script type='text/javascript' src='include/js/Mail.js'></"+"scr
 document.write("<script type='text/javascript' src='include/js/Merge.js'></"+"script>");
 
 function set_return(product_id, product_name) {
+	if(document.getElementById('from_link').value != '') {
+        window.opener.document.QcEditView.parent_name.value = product_name;
+        window.opener.document.QcEditView.parent_id.value = product_id;
+	} else {
         window.opener.document.EditView.parent_name.value = product_name;
         window.opener.document.EditView.parent_id.value = product_id;
+	}
 }
 function set_return_specific(product_id, product_name) {
         
@@ -34,20 +39,51 @@ function set_return_specific(product_id, product_name) {
 }
 function add_data_to_relatedlist(entity_id,recordid) {
 
-        opener.document.location.href="index.php?module=Emails&action=updateRelations&destination_module=Accounts&entityid="+entity_id+"&parid="+recordid;
+        opener.document.location.href="index.php?module=Emails&action=updateRelations&destination_module=Accounts&entityid="+entity_id+"&parentid="+recordid;
 }
 function set_return_formname_specific(formname,product_id, product_name) {
         window.opener.document.EditView1.account_name.value = product_name;
         window.opener.document.EditView1.account_id.value = product_id;
 }
 function set_return_address(account_id, account_name, bill_street, ship_street, bill_city, ship_city, bill_state, ship_state, bill_code, ship_code, bill_country, ship_country,bill_pobox,ship_pobox) {
+	if(document.getElementById('from_link').value != '') {
+		window.opener.document.QcEditView.account_name.value = account_name;
+        window.opener.document.QcEditView.account_id.value = account_id;
+	} else {
         window.opener.document.EditView.account_name.value = account_name;
         window.opener.document.EditView.account_id.value = account_id;
+	}
 
 	//Ask the user to overwite the address or not - Modified on 06-01-2007
 	if(confirm(alert_arr.OVERWRITE_EXISTING_ACCOUNT1+account_name+alert_arr.OVERWRITE_EXISTING_ACCOUNT2))
 	{
 		//made changes to avoid js error -- ref : hidding fields causes js error(ticket#4017)
+		if(document.getElementById('from_link').value != '') {
+			if(typeof(window.opener.document.QcEditView.bill_street) != 'undefined')
+                    window.opener.document.QcEditView.bill_street.value = bill_street;
+            if(typeof(window.opener.document.QcEditView.ship_street) != 'undefined')
+                    window.opener.document.QcEditView.ship_street.value = ship_street;
+            if(typeof(window.opener.document.QcEditView.bill_city) != 'undefined')
+                    window.opener.document.QcEditView.bill_city.value = bill_city;
+            if(typeof(window.opener.document.QcEditView.ship_city) != 'undefined')
+                    window.opener.document.QcEditView.ship_city.value = ship_city;
+            if(typeof(window.opener.document.QcEditView.bill_state) != 'undefined')
+                    window.opener.document.QcEditView.bill_state.value = bill_state;
+            if(typeof(window.opener.document.QcEditView.ship_state) != 'undefined')
+                    window.opener.document.QcEditView.ship_state.value = ship_state;
+            if(typeof(window.opener.document.QcEditView.bill_code) != 'undefined')
+                    window.opener.document.QcEditView.bill_code.value = bill_code;
+            if(typeof(window.opener.document.QcEditView.ship_code) != 'undefined')
+                    window.opener.document.QcEditView.ship_code.value = ship_code;
+			if(typeof(window.opener.document.QcEditView.bill_country) != 'undefined')
+                    window.opener.document.QcEditView.bill_country.value = bill_country;
+            if(typeof(window.opener.document.QcEditView.ship_country) != 'undefined')
+                    window.opener.document.QcEditView.ship_country.value = ship_country;
+            if(typeof(window.opener.document.QcEditView.bill_pobox) != 'undefined')
+                    window.opener.document.QcEditView.bill_pobox.value = bill_pobox;
+            if(typeof(window.opener.document.QcEditView.ship_pobox) != 'undefined')
+                    window.opener.document.QcEditView.ship_pobox.value = ship_pobox;
+		} else {
                 if(typeof(window.opener.document.EditView.bill_street) != 'undefined')
                         window.opener.document.EditView.bill_street.value = bill_street;
                 if(typeof(window.opener.document.EditView.ship_street) != 'undefined')
@@ -72,11 +108,18 @@ function set_return_address(account_id, account_name, bill_street, ship_street, 
                         window.opener.document.EditView.bill_pobox.value = bill_pobox;
                 if(typeof(window.opener.document.EditView.ship_pobox) != 'undefined')
                         window.opener.document.EditView.ship_pobox.value = ship_pobox;
+		}
 		//end
 	}
 }
 //added to populate address
 function set_return_contact_address(account_id, account_name, bill_street, ship_street, bill_city, ship_city, bill_state, ship_state, bill_code, ship_code, bill_country, ship_country,bill_pobox,ship_pobox ) {
+	if(document.getElementById('from_link').value != '') {
+		if(typeof(window.opener.document.QcEditView.account_name) != 'undefined')
+                window.opener.document.QcEditView.account_name.value = account_name;
+        if(typeof(window.opener.document.QcEditView.account_id) != 'undefined')
+                window.opener.document.QcEditView.account_id.value = account_id;		
+	} else {
 	if(typeof(window.opener.document.EditView.account_name) != 'undefined')
                 window.opener.document.EditView.account_name.value = account_name;
         if(typeof(window.opener.document.EditView.account_id) != 'undefined')
@@ -105,6 +148,7 @@ function set_return_contact_address(account_id, account_name, bill_street, ship_
                 window.opener.document.EditView.mailingpobox.value = bill_pobox;
         if(typeof(window.opener.document.EditView.otherpobox) != 'undefined')
                 window.opener.document.EditView.otherpobox.value = ship_pobox;
+}
 }
 
 //added by rdhital/Raju for emails

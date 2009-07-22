@@ -33,30 +33,58 @@ $image_path=$theme_path."images/";
 $list_report_form = new vtigerCRM_Smarty;
 $list_report_form->assign("MOD", $mod_strings);
 $list_report_form->assign("APP", $app_strings);
-if(isset($_REQUEST["record"]))
+if(isset($_REQUEST["record"]) && $_REQUEST["record"]!='')
 {
-	$reportid = $_REQUEST["record"];
+	$reportid = vtlib_purify($_REQUEST["record"]);
 	$list_report_form->assign('REPORT_ID',$reportid);
 	$oReport = new Reports($reportid);
 	$primarymodule = $oReport->primodule;
-	$secondarymodule = $oReport->secmodule;
+	
+	$secondarymodule = '';
+	$secondarymodules =Array();
+	if(!empty($oReport->related_modules[$primarymodule])) {
+		foreach($oReport->related_modules[$primarymodule] as $key=>$value){
+			if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= $_REQUEST["secondarymodule_".$value];
+			$oReport->getSecModuleColumnsList($_REQUEST["secondarymodule_".$value]);
+			if(!isPermitted($_REQUEST["secondarymodule_".$value],'index')== "yes" && !isset($_REQUEST["secondarymodule_".$value]))
+			{
+				$permission = false;
+			}
+		}
+	}
+	$secondarymodule = implode(":",$secondarymodules);
+	$oReport->secmodule = $secondarymodule;
 	$reporttype = $oReport->reporttype;
 	$reportname  = $oReport->reportname;
 	$reportdescription  = $oReport->reportdescription;
 	$folderid  = $oReport->folderid;	
 	$ogReport = new Reports();
-        $ogReport->getPriModuleColumnsList($oReport->primodule);
-        $ogReport->getSecModuleColumnsList($oReport->secmodule);
+    $ogReport->getPriModuleColumnsList($oReport->primodule);
+    $ogReport->getSecModuleColumnsList($oReport->secmodule);
+	$list_report_form->assign('BACK_WALK','true');
 }else
 {
-	$primarymodule = $_REQUEST["primarymodule"];
-	$secondarymodule = $_REQUEST["secondarymodule"];
-	$reportname = $_REQUEST["reportname"];
-	$reportdescription = $_REQUEST["reportdes"];
-	$folderid = $_REQUEST["reportfolder"];
+	$reportname = vtlib_purify($_REQUEST["reportname"]);
+	$reportdescription = vtlib_purify($_REQUEST["reportdes"]);
+	$folderid = vtlib_purify($_REQUEST["reportfolder"]);
 	$ogReport = new Reports();
+	$primarymodule = vtlib_purify($_REQUEST["primarymodule"]);
+	$secondarymodule = '';
+	$secondarymodules =Array();
+	if(!empty($ogReport->related_modules[$primarymodule])) {
+		foreach($ogReport->related_modules[$primarymodule] as $key=>$value){
+			if(isset($_REQUEST["secondarymodule_".$value]))$secondarymodules []= $_REQUEST["secondarymodule_".$value];
+			$ogReport->getSecModuleColumnsList($_REQUEST["secondarymodule_".$value]);
+			if(!isPermitted($_REQUEST["secondarymodule_".$value],'index')== "yes" && !isset($_REQUEST["secondarymodule_".$value]))
+			{
+				$permission = false;
+			}
+		}
+	}
+	$secondarymodule = implode(":",$secondarymodules);
 	$ogReport->getPriModuleColumnsList($primarymodule);
-	$ogReport->getSecModuleColumnsList($secondarymodule);
+	
+	//$ogReport->getSecModuleColumnsList($secondarymodule);
 	$list_report_form->assign('BACK_WALK','true');
 }
 
@@ -72,7 +100,7 @@ $list_report_form->assign('REPORT_DESC',$reportdescription);
 $list_report_form->assign('FOLDERID',$folderid);
 $list_report_form->assign("IMAGE_PATH", $image_path);
 $list_report_form->assign("THEME_PATH", $theme_path);
-if(isPermitted($primarymodule,'index') == "yes" && (isPermitted($secondarymodule,'index')== "yes"))
+if(isPermitted($primarymodule,'index') == "yes" && $permission==false)
 {
 	$list_report_form->display("ReportsStep1.tpl");
 }
@@ -84,7 +112,7 @@ else
 
 		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 		<tbody><tr>
-		<td rowspan='2' width='11%'><img src='themes/$theme/images/denied.gif' ></td>
+		<td rowspan='2' width='11%'><img src='". vtiger_imageurl('denied.gif', $theme) ."' ></td>
 		<td style='border-bottom: 1px solid rgb(204, 204, 204);'  width='70%'><span class='genHeaderSmall'>".$mod_strings['LBL_NO_PERMISSION']." ".$primarymodule." ".$secondarymodule."</span></td>
 		</tr>
 		<tr>

@@ -12,33 +12,39 @@
 document.write("<script type='text/javascript' src='include/js/Mail.js'></"+"script>");
 document.write("<script type='text/javascript' src='include/js/Merge.js'></"+"script>");
 function verify_data(form) {
-	if(! form.createpotential.checked == true)
-	{
-        	if (form.potential_name.value == "")
-		{
-                	alert(alert_arr.OPPORTUNITYNAME_CANNOT_BE_EMPTY);
+	if(! form.createpotential.checked == true){
+        if (trim(form.potential_name.value) == ""){
+            alert(alert_arr.OPPORTUNITYNAME_CANNOT_BE_EMPTY);
 			return false;	
 		}
-		if (form.closedate.value == "")
-		{
-                	alert(alert_arr.CLOSEDATE_CANNOT_BE_EMPTY);
-			return false;	
+		
+		if(form.closingdate_mandatory != null && form.closingdate_mandatory.value == '*'){
+			if (form.closedate.value == ""){
+	        	alert(alert_arr.CLOSEDATE_CANNOT_BE_EMPTY);
+				return false;	
+			}
 		}
-		x = dateValidate('closedate','Potential Close Date','GECD');
+		if (form.closedate.value != "" ){
+			var x = dateValidate('closedate','Potential Close Date','DATE');
+			if(!x){
+				return false;
+			}
+		}
+			
+				
+		
+		if(form.amount_mandatory.value == '*'){
+			if (form.potential_amount.value == ""){
+	            alert(alert_arr.AMOUNT_CANNOT_BE_EMPTY);
+				return false;					
+			}
+		}	
 		intval= intValidate('potential_amount','Potential Amount');
-
-		if(!x)
-		{
+		if(!intval){
 			return false;
 		}
-		if(!intval)
-		{
-			return false;
-		}
-        }
-	else
-	{	
-
+	}
+	else{	
 		return true;
 	}
 	
@@ -67,13 +73,23 @@ function togglePotFields(form)
 
 
 function set_return(product_id, product_name) {
+	if(document.getElementById('from_link').value != '') {
+        window.opener.document.QcEditView.parent_name.value = product_name;
+        window.opener.document.QcEditView.parent_id.value = product_id;
+	} else {
         window.opener.document.EditView.parent_name.value = product_name;
         window.opener.document.EditView.parent_id.value = product_id;
 }
+}
 
 function set_return_todo(product_id, product_name) {
+	if(document.getElementById('from_link').value != '') {
+        window.opener.document.QcEditView.task_parent_name.value = product_name;
+        window.opener.document.QcEditView.task_parent_id.value = product_id;
+	} else {
         window.opener.document.createTodo.task_parent_name.value = product_name;
         window.opener.document.createTodo.task_parent_id.value = product_id;
+	}
 }
 
 function set_return_specific(product_id, product_name) {
@@ -85,7 +101,7 @@ function set_return_specific(product_id, product_name) {
 }
 function add_data_to_relatedlist(entity_id,recordid) {
 	
-	opener.document.location.href="index.php?module=Emails&action=updateRelations&destination_module=leads&entityid="+entity_id+"&parid="+recordid;
+	opener.document.location.href="index.php?module=Emails&action=updateRelations&destination_module=leads&entityid="+entity_id+"&parentid="+recordid;
 }
 //added by rdhital/Raju for emails
 function submitform(id){

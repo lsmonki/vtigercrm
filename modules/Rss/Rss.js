@@ -14,9 +14,9 @@ function star(id, starred)
 
     var elem = document.getElementById("star-"+id);
     if(elem.src.indexOf("onstar.gif") != -1) {
-        elem.src = "{IMAGEPATH}offstar.gif";
+        elem.src = "themes/images/offstar.gif";
     }else {
-        elem.src = "{IMAGEPATH}onstar.gif";
+        elem.src = "themes/images/onstar.gif";
     }
 }
 function getRequest() {

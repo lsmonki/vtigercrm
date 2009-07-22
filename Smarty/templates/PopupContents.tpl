@@ -13,14 +13,21 @@
 <form name="selectall" method="POST">
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="small">
 	<tr>
-	{if $SELECT eq 'enable'}
-		<td style="padding-left:10px;" align="left"><input class="crmbutton small save" type="button" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$APP[$MODULE]}" onclick="if(SelectAll('{$MODULE}','{$RETURN_MODULE}')) window.close();"/></td>
+	{if $SELECT eq 'enable' && ($POPUPTYPE neq 'inventory_prod' && $POPUPTYPE neq 'inventory_prod_po' && $POPUPTYPE neq 'inventory_service')}
+		<td style="padding-left:10px;" align="left"><input class="crmbutton small save" type="button" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$MODULE|@getTranslatedString:$MODULE}" onclick="if(SelectAll('{$MODULE}','{$RETURN_MODULE}')) window.close();"/></td>
+	{elseif $SELECT eq 'enable' && ($POPUPTYPE eq 'inventory_prod' || $POPUPTYPE eq 'inventory_prod_po')}
+		{if $RECORD_ID}
+			<td style="padding-left:10px;" align="left" width=10%><input class="crmbutton small save" type="button" value="{$APP.LBL_BACK}" onclick="window.history.back();"/></td>
+		{/if}
+		<td style="padding-left:10px;" align="left"><input class="crmbutton small save" type="button" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$MODULE|@getTranslatedString:$MODULE}" onclick="if(InventorySelectAll('{$RETURN_MODULE}',image_pth))window.close();"/></td>
+	{elseif $SELECT eq 'enable' && $POPUPTYPE eq 'inventory_service'}
+		<td style="padding-left:10px;" align="left"><input class="crmbutton small save" type="button" value="{$APP.LBL_SELECT_BUTTON_LABEL} {$MODULE|@getTranslatedString:$MODULE}" onclick="if(InventorySelectAllServices('{$RETURN_MODULE}',image_pth))window.close();"/></td>
 	{else}		
 		<td>&nbsp;</td>	
 	{/if}
 	<td style="padding-right:10px;" align="right">{$RECORD_COUNTS}</td></tr>
    	<tr>
-	    <td style="padding:10px;" colspan=2>
+	    <td style="padding:10px;" colspan=3>
 
        	<input name="module" type="hidden" value="{$RETURN_MODULE}">
 		<input name="action" type="hidden" value="{$RETURN_ACTION}">
@@ -39,6 +46,11 @@
 		    {foreach item=header from=$LISTHEADER}
 		        <td class="lvtCol">{$header}</td>
 		    {/foreach}
+			{if $SELECT eq 'enable' && ($POPUPTYPE eq 'inventory_prod' || $POPUPTYPE eq 'inventory_prod_po')}
+				{if !$RECORD_ID}
+					<td class="lvtCol">{$APP.LBL_ACTION}</td>
+				{/if}
+			{/if}
 		</tr>
 		{foreach key=entity_id item=entity from=$LISTENTITY}
 	        <tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'"  >
@@ -54,12 +66,12 @@
                         <div style="border: 3px solid rgb(153, 153, 153); background-color: rgb(255, 255, 255); width: 99%;position: relative; z-index: 10000000;">
                         <table border="0" cellpadding="5" cellspacing="0" width="98%">
                                 <tr>
-                                        <td rowspan="2" width="25%"><img src="{$IMAGE_PATH}empty.jpg" height="60" width="61%"></td>
+                                        <td rowspan="2" width="25%"><img src="{'empty.jpg'|@vtiger_imageurl:$THEME}" height="60" width="61%"></td>
                                         {if $recid_var_value neq '' && $mod_var_value neq '' && $RECORD_COUNTS eq 0 }
 					<script>redirectWhenNoRelatedRecordsFound();</script>
-                                        <td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$MODULE} {$APP.RELATED} !</td>
+                                        <td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$MODULE|@getTranslatedString:$MODULE} {$APP.RELATED} !</td>
                                         {else}
-                                        <td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$MODULE} {$APP.LBL_FOUND} !</td>
+                                        <td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">{$APP.LBL_NO} {$MODULE|@getTranslatedString:$MODULE} {$APP.LBL_FOUND} !</td>
                                         {/if}
                                 </tr>
                         </table>

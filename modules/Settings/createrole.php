@@ -1,19 +1,14 @@
 <?php
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
-
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
-
 
 global $adb;
 global $theme;
@@ -23,8 +18,8 @@ $smarty = new vtigerCRM_Smarty;
 $profDetails=getAllProfileInfo();
 if(isset($_REQUEST['roleid']) && $_REQUEST['roleid'] != '')
 {	
-	$roleid= $_REQUEST['roleid'];
-	$mode = $_REQUEST['mode'];
+	$roleid= vtlib_purify($_REQUEST['roleid']);
+	$mode = vtlib_purify($_REQUEST['mode']);
 	$roleInfo=getRoleInformation($roleid);
 	$thisRoleDet=$roleInfo[$roleid];
 	$rolename = $thisRoleDet[0]; 
@@ -36,15 +31,16 @@ if(isset($_REQUEST['roleid']) && $_REQUEST['roleid'] != '')
 elseif(isset($_REQUEST['parent']) && $_REQUEST['parent'] != '')
 {
 	$mode = 'create';
-	$parent=$_REQUEST['parent'];
+	$parent=vtlib_purify($_REQUEST['parent']);
 }
 $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
+$smarty->assign("THEME", $theme);
 
 $parentname=getRoleName($parent);
-$smarty->assign("RETURN_ACTION",$_REQUEST['returnaction']);            
+$smarty->assign("RETURN_ACTION",vtlib_purify($_REQUEST['returnaction']));            
 $smarty->assign("ROLEID",$roleid);            
 $smarty->assign("MODE",$mode);            
 $smarty->assign("PARENT",$parent);            

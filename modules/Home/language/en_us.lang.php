@@ -62,6 +62,63 @@ $mod_strings = Array(
 'TITLE_AJAX_CSS_POPUP_CHAT'=>'Ajax Css-Popup chat',
 'User List'=>'User List',
 
+// Added after 5.0.4 GA
+
+//ADDED for Home Page Customization
+'LBL_HOME_MODULE' => 'Module',
+'LBL_HOME_RSS' => 'RSS',
+'LBL_HOME_DASHBOARD' => 'Dashboard',
+'LBL_HOME_STUFFTITLE'=>'Window Title',
+'LBL_HOME_SHOW'=>'Show',
+'LBL_HOME_FILTERBY'=>'Filter By',
+'LBL_HOME_Fields'=>'Fields To Show <br>(select any two)',
+'LBL_HOME_PRESSCTRL'=>'(Press "Ctrl" <br> for multiple selection)',
+'LBL_HOME_RSSURL'=>'RSS URL',
+'LBL_HOME_DASHBOARD_NAME'=>'DashBoard Name', 
+'LBL_HOME_DASHBOARD_TYPE'=>'DashBoard Type',
+'LBL_HOME_HORIZONTAL_BARCHART'=>'Horizontal Bar Chart',
+'LBL_HOME_VERTICAL_BARCHART'=>'Vertical Bar Chart',
+'LBL_HOME_PIE_CHART'=>'Pie Chart',
+'LBL_HOME_ITEMS'=>'item(s)',
+'LBL_MORE'=>'More',
+'LBL_SCROLL'=>'Scroll',
+
+// vtiger CRM News
+'LBL_NEWS_NO'=>'No news',
+
+//added for home page changes
+'LBL_NOTEBOOK'=>'Notebook',
+'LBL_NOTEBOOK_TITLE'=>'Double-click to edit.',
+'LBL_NOTEBOOK_SAVE_TITLE'=>'Click anywhere else on the page to save.',
+
+'LBL_URL'=>'Website',
+'LBL_HOME_LAYOUT'=>'Change layout',
+'LBL_NUMBER_OF_COLUMNS'=>'Number of columns',
+'LBL_TWO_COLUMN'=>'Two Columns',
+'LBL_THREE_COLUMN'=>'Three Columns',
+'LBL_FOUR_COLUMN'=>'Four Columns',
+// END
+
+// Default home page widget's title
+'Top Accounts'=>'Top Accounts',
+'Top Potentials'=>'Top Potentials',
+'Top Quotes'=>'Top Quotes',
+'Top Trouble Tickets'=>'Top Trouble Tickets',
+'Top Invoices'=>'Top Invoices',
+'Top Sales Orders'=>'Top Sales Orders',
+'Top Purchase Orders'=>'Top Purchase Orders',
+'My New Leads'=>'My New Leads',
+'Key Metrics'=>'Key Metrics',
+'My Group Allocation'=>'My Group Allocation',
+'My Recent FAQs'=>'My Recent FAQs',
+'Upcoming Activities'=>'Upcoming Activities',
+'Pending Activities'=>'Pending Activities',
+'Home Page Dashboard'=>'Home Page Dashboard',
+'Tag Cloud'=>'Tag Cloud',
+
+'MSG_NO_FILTERS' => 'No Filters Available',
+'MSG_NO_FIELDS' => 'No Fields Available',
+
 );
 
 ?>

@@ -1,15 +1,12 @@
 <?php
-/*********************************************************************************
- ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-  * ("License"); You may not use this file except in compliance with the License
-  * The Initial Developer of the Original Code is FOSS Labs.
-  * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
-  * Portions created by vtiger are Copyright (C) vtiger.
-  * All Rights Reserved.
-  *
-  ********************************************************************************/
-
-
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Initial Developer of the Original Code is FOSS Labs.
+ * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
 include_once('config.php');
 require_once('include/logging.php');
 require_once('modules/Webmails/conf.php');
@@ -55,7 +52,7 @@ class Webmails extends CRMEntity {
 
  	function Webmails($mbox='',$mailid='') {
 
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->db->println("Entering Webmail($mbox,$mailid)");
 		$this->log = &LoggerManager::getLogger('WEBMAILS');
 		$this->mbox=$mbox;
@@ -83,6 +80,8 @@ class Webmails extends CRMEntity {
 
 		$this->has_attachments = $this->get_attachments();
 		$this->db->println("Exiting Webmail($mbox,$mailid)");
+
+		$this->relationship = $this->find_relationships(); // Added by Puneeth for 5231
         }
 
 	function delete() {
@@ -224,7 +223,7 @@ class Webmails extends CRMEntity {
 	if($numRows > 0)
 		return array('type'=>"Accounts",'id'=>$this->db->query_result($res,0,"accountid"),'name'=>$this->db->query_result($res,0,"accountname"));
 
-	return 0;
+	return array();
     }
 
     
@@ -341,7 +340,7 @@ class Webmails extends CRMEntity {
 
 					if (strtoupper($parts[$i]->disposition) == "ATTACHMENT")
 					{
-						$filedata = $this->mail_fetchpart($partstring);
+						$filedata = imap_fetchbody($this->mbox, $this->mailid, $partstring);
 						$attachment[] = array("filename" => $parts[$i]->dparameters[0]->value,"filedata"=>$filedata,"subtype"=>$parts[$i]->subtype,"filesize"=>$parts[$i]->bytes);
 					}
 				} 
@@ -579,16 +578,6 @@ function GetCodeScoreAll($Data,$beg_charset) {
 	return $Mark_list;
 }
 
-
-
-
-
-
-
-
-
-
-
 /* lxnt:  patched to return charset names that iconv() understands*/
 function detect_charset($Data,$dbg_fl = 0) {
 	/* for many small pices of text -  list of sender/subject*/
@@ -658,7 +647,7 @@ function link_att(&$mail, $attach_tab, &$display_part_no,$ev)
 			$att_name = $this->convertLang2Html($att_name);
 			if(!preg_match("/unknown/",$att_name)){	
 				$link .= ($ct+1).'. <a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">' . $att_name . '</a>&nbsp;&nbsp;' . $tmp['mime'] . '&nbsp;&nbsp;' . $tmp['size'] . '<br/>';
-				$this->anchor_arr[$ct] = ($ct+1).'. <a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">';
+				$this->anchor_arr[$ct] = '<a href="index.php?module=Webmails&action=download&part=' . $tmp['number'] . '&mailid='.$ev.'&transfer=' . $tmp['transfer'] . '&filename=' . base64_encode($att_name_dl) . '&mime=' . $mime . '">';
 				$this->att_details[$ct]['name'] = $att_name;
 				$this->att_details[$ct]['size'] = $tmp['size'];
 				$this->att_details[$ct]['type'] = $tmp['mime'];
@@ -669,16 +658,6 @@ function link_att(&$mail, $attach_tab, &$display_part_no,$ev)
 		}
 	return ($link);
 }
-
-
-
-
-
-
-
-
-
-
 
 // Convert mail data (from, to, ...) to HTML
 function convertMailData2Html($maildata, $cutafter = 0)
@@ -693,22 +672,16 @@ function convertMailData2Html($maildata, $cutafter = 0)
 					}
 				}
 
-// Convert a language string to HTML
- function convertLang2Html($langstring) {
-   global $charset;
-     return htmlentities($langstring, 2, $charset);
-					}
-
-
-
-
-
-
-
+	// Convert a language string to HTML
+	function convertLang2Html($langstring) {
+		global $charset;
+		return htmlentities($langstring, 2, $charset);
+	}
 
 	function load_mail($attach_tab)
 	{
 		// parse the message
+		global $default_charset;
 		$ref_contenu_message =  @imap_headerinfo($this->mbox, $this->mailid);
 		$struct_msg = @imap_fetchstructure($this->mbox, $this->mailid);
 		$mail = $this->mbox;
@@ -882,14 +855,7 @@ function convertMailData2Html($maildata, $cutafter = 0)
 			'charset' => $body_charset
 		);
 		return ($content);
-
 	}
-
-
-
-
-
-
 
 	// get the body of a part of a message according to the
 	// string in $part

@@ -1,19 +1,17 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-* 
  ********************************************************************************/
 
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('include/logging.php');
 global $log;
-global $current_user;
+global $current_user, $upload_badext;
 $vtigerpath = $_SERVER['REQUEST_URI'];
 $vtigerpath = str_replace("/index.php?module=uploads&action=add2db", "", $vtigerpath);
 
@@ -25,20 +23,8 @@ $log->debug("DEBUG In add2db.php");
 	} else {
 		$file = $_FILES['filename']['name'];
 	}
-	// Arbitrary File Upload Vulnerability fix - Philip
-	$binFile = preg_replace('/\s+/', '_', $file);
-
-	$ext_pos = strrpos($binFile, ".");
-
-	$ext = substr($binFile, $ext_pos + 1);
-
-	if (in_array($ext, $upload_badext))
-	{
-		$binFile .= ".txt";
-	}
-
+	$binFile = sanitizeUploadFileName($file, $upload_badext);
 	$_FILES["filename"]["name"] = $binFile;
-	// Vulnerability fix ends
 
 	//decide the file path where we should upload the file in the server
 	$upload_filepath = decideFilePath();
@@ -55,9 +41,9 @@ $log->debug("DEBUG In add2db.php");
 		{
 			$desc = $_REQUEST['txtDescription'];
 			$subject = $_REQUEST['uploadsubject'];
-			$date_var = $adb->formatDate(date('YmdHis'), true);	
+			$date_var = $adb->formatDate(date('Y-m-d H:i:s'), true);	
 			$current_date = getdate();
-			$current_date = $adb->formatDate(date('YmdHis'), true);	
+			$current_date = $adb->formatDate(date('Y-m-d H:i:s'), true);	
 			$query = "insert into vtiger_crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(?,?,?,?,?,?,?)";
 			$params = array($current_id, $current_user->id, $current_user->id, $_REQUEST['return_module'].' Attachment', $desc, $date_var, $current_date);	
 			$result = $adb->pquery($query, $params);
@@ -101,12 +87,6 @@ $log->debug("DEBUG In add2db.php");
 					$associated_account = '';
 				}
 			}
-			# DG 19 June 2006
-			# Strip out single quotes from filenames
-			// Prasad: 08 Dec 2007
-			// We should allow single quotes in filenames
-			
-			//$filename = preg_replace('/\'/', '', $filename);
 
 			$sql = "insert into vtiger_attachments(attachmentsid, name, description, type,path,subject) values(?,?,?,?,?,?)";
 			$params = array($current_id, $filename, $desc, $filetype, $upload_filepath, $subject);
@@ -117,7 +97,6 @@ $log->debug("DEBUG In add2db.php");
 			$params1 = array($crmid, $current_id);
 			$result = $adb->pquery($sql1, $params1);
 
-			# Added by DG 26 Oct 2005
 			# Attachments added to contacts are also added to their accounts
 			if ($associated_account)
 			{

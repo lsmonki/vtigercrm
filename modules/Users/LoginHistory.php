@@ -51,7 +51,7 @@ class LoginHistory {
 	
 	function LoginHistory() {
 		$this->log = LoggerManager::getLogger('loginhistory');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 	}
 	
 	var $sortby_fields = Array('user_name', 'user_ip', 'login_time', 'logout_time', 'status');	 
@@ -181,7 +181,7 @@ class LoginHistory {
   	function create_list_query(&$order_by, &$where)
   	{
 		// Determine if the vtiger_account name is present in the where clause.
-		global $current_user;
+		global $current_user, $adb;
 		$query = "SELECT user_name,user_ip, status,
 				".$this->db->getDBDateString("login_time")." AS login_time,
 				".$this->db->getDBDateString("logout_time")." AS logout_time
@@ -189,17 +189,17 @@ class LoginHistory {
 		if($where != "")
 		{
 			if(!is_admin($current_user))
-			$where .=" AND user_name = '". mysql_real_escape_string($current_user->user_name) ."'";
+			$where .=" AND user_name = '". $adb->sql_escape_string($current_user->user_name) ."'";
 			$query .= " WHERE ($where)";
 		}
 		else
 		{
 			if(!is_admin($current_user))
-			$query .= " WHERE user_name = '". mysql_real_escape_string($current_user->user_name) ."'";
+			$query .= " WHERE user_name = '". $adb->sql_escape_string($current_user->user_name) ."'";
 		}
 		
 		if(!empty($order_by))
-			$query .= " ORDER BY ". mysql_real_escape_string($order_by);
+			$query .= " ORDER BY ". $adb->sql_escape_string($order_by);
         
 		return $query;
 	}

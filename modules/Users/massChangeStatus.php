@@ -1,15 +1,11 @@
 <?php
-
-
-
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
 
@@ -58,7 +54,7 @@ function goBack1()
 if(isset($_REQUEST['change_status']) && $_REQUEST['change_status']=='true')
 {
    ?>
-<form name="setLeadStatus" method="post">
+<form name="setLeadStatus" method="post" onsubmit="VtigerJS_DialogBox.block();">
   <?php
 		echo get_module_title($mod_strings['LBL_MODULE_NAME'], "Leads : Change Status", true); 
 	?>
@@ -141,4 +137,3 @@ elseif(isset($_REQUEST['change_owner']) && $_REQUEST['change_owner']=='true')
 <?php
 }
 ?>
-<!-- header("Location: index.php?module=Leads&action=index");-->

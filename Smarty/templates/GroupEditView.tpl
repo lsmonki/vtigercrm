@@ -21,6 +21,7 @@ function dup_validation()
 		var reminstr = '&mode='+mode+'&groupName='+groupname+'&groupid='+groupid;
 	else
 		var reminstr = '&groupName='+groupname;
+	VtigerJS_DialogBox.block();
 	//var status = CharValidation(groupname,'namespace');
 	//if(status)
 	//{ldelim}
@@ -30,10 +31,12 @@ function dup_validation()
 			method: 'post',
 			postBody: 'module=Users&action=UsersAjax&file=SaveGroup&ajax=true&dup_check=true'+reminstr,
 			onComplete: function(response) {ldelim}
-				if(response.responseText.indexOf('SUCESS') >-1)
+				if(response.responseText.indexOf('SUCCESS') >-1)
 					document.newGroupForm.submit();
-				else
+				else {ldelim}
+					VtigerJS_DialogBox.unblock();
 					alert(response.responseText);
+				{rdelim}
 			{rdelim}
 		{rdelim}
 		);
@@ -160,7 +163,7 @@ function validate()
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
         <br>
 
@@ -168,7 +171,9 @@ function validate()
 		{include file='SetMenu.tpl'}
 		<!-- DISPLAY -->
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-		<form name="newGroupForm" action="index.php" method="post" onSubmit="return validate()">
+		{literal}
+		<form name="newGroupForm" action="index.php" method="post" onSubmit="if(validate()) { VtigerJS_DialogBox.block();} else { return false; }">
+		{/literal}
 		<input type="hidden" name="module" value="Users">
 		<input type="hidden" name="action" value="SaveGroup">
 		<input type="hidden" name="mode" value="{$MODE}">
@@ -176,7 +181,7 @@ function validate()
 		<input type="hidden" name="groupId" value="{$GROUPID}">
 		<input type="hidden" name="returnaction" value="{$RETURN_ACTION}">
 			<tr>
-				<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-groups.gif" alt="{$CMOD.LBL_GROUPS}" title="{$CMOD.LBL_GROUPS}" width="48" height="48" border=0 ></td>
+				<td width=50 rowspan=2 valign=top><img src="{'ico-groups.gif'|@vtiger_imageurl:$THEME}" alt="{$CMOD.LBL_GROUPS}" title="{$CMOD.LBL_GROUPS}" width="48" height="48" border=0 ></td>
 				{if $MODE eq 'edit'}
 				<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=listgroups&parenttab=Settings">{$CMOD.LBL_GROUPS}</a> &gt; {$MOD.LBL_EDIT} &quot;{$GROUPNAME}&quot; </b></td>
 				{else}	
@@ -297,7 +302,7 @@ function validate()
 	</div>
 
 	</td>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
 </tr>
 </table>
 <script language="JavaScript" type="text/JavaScript">    
@@ -310,48 +315,50 @@ selectedColumnsObj=getObj("selectedColumns")
 {rdelim}
 
 function addColumn() 
-{ldelim}
-for (i=0;i<selectedColumnsObj.length;i++) 
-{ldelim}
-selectedColumnsObj.options[i].selected=false
-{rdelim}
+        {ldelim}
+            for (i=0;i<selectedColumnsObj.length;i++) 
+            {ldelim}
+                selectedColumnsObj.options[i].selected=false
+            {rdelim}
 
-for (i=0;i<availListObj.length;i++) 
-{ldelim}
-if (availListObj.options[i].selected==true) 
-{ldelim}
-for (j=0;j<selectedColumnsObj.length;j++) 
-{ldelim}
-if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
-{ldelim}
-var rowFound=true
-var existingObj=selectedColumnsObj.options[j]
-break
-{rdelim}
-{rdelim}
+            for (i=0;i<availListObj.length;i++) 
+            {ldelim}
+                if (availListObj.options[i].selected==true) 
+                {ldelim}            	
+                	var rowFound=false;
+                	var existingObj=null;
+                    for (j=0;j<selectedColumnsObj.length;j++) 
+                    {ldelim}
+                        if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
+                        {ldelim}
+                            rowFound=true
+                            existingObj=selectedColumnsObj.options[j]
+                            break
+                        {rdelim}
+                    {rdelim}
 
-if (rowFound!=true) 
-{ldelim}
-var newColObj=document.createElement("OPTION")
-newColObj.value=availListObj.options[i].value
-if (browser_ie) newColObj.innerText=availListObj.options[i].innerText
-	else if (browser_nn4 || browser_nn6) newColObj.text=availListObj.options[i].text
-selectedColumnsObj.appendChild(newColObj)
-	availListObj.options[i].selected=false
-	newColObj.selected=true
-	rowFound=false
-{rdelim}
-else 
-{ldelim}
-existingObj.selected=true
-{rdelim}
-{rdelim}
-{rdelim}
-{rdelim}
+                    if (rowFound!=true) 
+                    {ldelim}
+                        var newColObj=document.createElement("OPTION")
+                        newColObj.value=availListObj.options[i].value
+                        if (browser_ie) newColObj.innerText=availListObj.options[i].innerText
+                        else if (browser_nn4 || browser_nn6) newColObj.text=availListObj.options[i].text
+                        selectedColumnsObj.appendChild(newColObj)
+                        availListObj.options[i].selected=false
+                        newColObj.selected=true
+                        rowFound=false
+                    {rdelim} 
+                    else 
+                    {ldelim}
+                        if(existingObj != null) existingObj.selected=true
+                    {rdelim}
+                {rdelim}
+            {rdelim}
+        {rdelim}
 
 function delColumn() 
 {ldelim}
-for (i=0;i<=selectedColumnsObj.options.length;i++) 
+for (i=selectedColumnsObj.options.length;i>0;i--) 
 {ldelim}
 	if (selectedColumnsObj.options.selectedIndex>=0)
 selectedColumnsObj.remove(selectedColumnsObj.options.selectedIndex)

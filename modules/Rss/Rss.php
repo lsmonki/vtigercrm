@@ -93,6 +93,40 @@ class vtigerRSS extends CRMEntity
 		}
 	}
 
+	/** Function to get the List of Rss feeds in the Customized Home page 
+	  * This Function accepts maximum entries as arguments and returns the listview contents on Success
+	  * returns "Sorry: It's not possible to reach RSS URL" if fails
+	 */
+	function getListViewHomeRSSHtml($maxentries)
+	{
+		$return_value=Array();
+		$return_more=Array();
+		if(isset($this->rss_object))
+		{
+			$y = 0;
+		
+			foreach($this->rss_object as $key=>$item)
+			{
+				$title =$item[title];
+				$link = $item[link];
+				
+				if($y == $maxentries)
+				{
+					$return_more=Array("Details"=>$return_value,"More"=>$this->rss_link);
+					return $return_more;
+				}
+				$y = $y + 1;
+		     		$return_value[]=Array($title,$link);
+			}
+			$return_more=Array("Details"=>$return_value,"More"=>$this->rss_link);
+			return $return_more;
+
+		}else
+		{
+			return $return_more;
+		}
+	}	
+
 	/** Function to save the Rss Feeds  
 	  * This Function accepts the RssURl,Starred Status as arguments and 
 	  * returns true on sucess 
@@ -125,7 +159,7 @@ class vtigerRSS extends CRMEntity
 	function getCRMRssFeeds()
 	{
 		global $adb;
-		global $image_path;
+		global $image_path,$theme;
 
 		$sSQL = "select * from vtiger_rss where rsstype=1";
 		$result = $adb->pquery($sSQL, array());
@@ -135,11 +169,11 @@ class vtigerRSS extends CRMEntity
 			if($allrssrow["starred"] == 1)
 			{
 				$shtml .= "<td width=\"15\">
-					<img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"></td>";
+					<img src=\"". vtiger_imageurl('onstar.gif', $theme) ."\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"></td>";
 			}else
 			{
 				$shtml .= "<td width=\"15\">
-					<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onClick=\"makedefaultRss($allrssrow[rssid])\"></td>";
+					<img src=\"". vtiger_imageurl('offstar.gif', $theme) ."\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onClick=\"makedefaultRss($allrssrow[rssid])\"></td>";
 			}
 			$shtml .= "<td class=\"rssTitle\"><a href=\"index.php?module=Rss&action=ListView&record=$allrssrow[rssid]
 				\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td>";
@@ -163,11 +197,11 @@ class vtigerRSS extends CRMEntity
 			if($allrssrow["starred"] == 1)
 			{
 				$shtml .= "<td width=\"15\">
-					<img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"></td>";
+					<img src=\"". vtiger_imageurl('onstar.gif', $theme) ."\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"></td>";
 			}else
 			{		
 				$shtml .= "<td width=\"15\">
-					<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onClick=\"makedefaultRss($allrssrow[rssid])\"></td>";
+					<img src=\"". vtiger_imageurl('offstar.gif', $theme) ."\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\" onClick=\"makedefaultRss($allrssrow[rssid])\"></td>";
 			}
 			$shtml .= "<td class=\"rssTitle\"><a href=\"index.php?module=Rss&action=ListView&record=$allrssrow[rssid]\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td><td>&nbsp;</td>";
 			$shtml .= "</tr>";
@@ -216,10 +250,10 @@ class vtigerRSS extends CRMEntity
 					<td class=\"rssPgTitle\">";
 				if($rssrow[starred] == 1)
 				{
-					$shtml .= "<img src=\"".$image_path."starred.gif\" align=\"absmiddle\">";
+					$shtml .= "<img src=\"". vtiger_imageurl('starred.gif', $theme) ."\" align=\"absmiddle\">";
 				}else
 				{
-					$shtml .= "<img src=\"".$image_path."unstarred.gif\" align=\"absmiddle\">";
+					$shtml .= "<img src=\"". vtiger_imageurl('unstarred.gif', $theme) ."\" align=\"absmiddle\">";
 				}		
 				$shtml .= "<a href=\"".$this->rss_object[link]."\">  ".$rssrow[rsstitle]."</a>
 					</td>
@@ -242,11 +276,11 @@ class vtigerRSS extends CRMEntity
 
 		$sSQL = "select * from vtiger_rss where starred=1";
 		$result = $adb->pquery($sSQL, array());
-		$shtml .= "<img src=\"".$image_path."rss.gif\" border=\"0\" align=\"absmiddle\" hspace=\"2\"><a href=\"#\" onclick='window.open(\"index.php?module=Rss&action=Popup\",\"new\",\"width=500,height=300,resizable=1,scrollbars=1\");'>Add New Rss</a>";
+		$shtml .= "<img src=\"". vtiger_imageurl('rss.gif', $theme) ."\" border=\"0\" align=\"absmiddle\" hspace=\"2\"><a href=\"#\" onclick='window.open(\"index.php?module=Rss&action=Popup\",\"new\",\"width=500,height=300,resizable=1,scrollbars=1\");'>Add New Rss</a>";
 
 		while($allrssrow = $adb->fetch_array($result))
 		{
-			$shtml .= "<img src=\"".$image_path."rss.gif\" border=\"0\" align=\"absmiddle\" hspace=\"2\">"; 
+			$shtml .= "<img src=\"". vtiger_imageurl('rss.gif', $theme) ."\" border=\"0\" align=\"absmiddle\" hspace=\"2\">"; 
 			$shtml .= "<a href=\"index.php?module=Rss&action=ListView&record=$allrssrow[rssid]\" class=\"rssFavLink\">				 ".substr($allrssrow['rsstitle'],0,10)."...</a></img>";
 		}
 		return $shtml;
@@ -372,7 +406,7 @@ class vtigerRSS extends CRMEntity
 	{
 
 		global $adb;
-		global $image_path;
+		global $image_path,$theme;
 
 		$sSQL = "select * from vtiger_rss";
 		$result = $adb->pquery($sSQL, array());
@@ -382,10 +416,10 @@ class vtigerRSS extends CRMEntity
 			$shtml .= "<td align='left' width=\"15\">";
 			if($allrssrow["starred"] == 1)
 			{
-				 	   $shtml .= "<img src=\"".$image_path."onstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\">";
+				 	   $shtml .= "<img src=\"". vtiger_imageurl('onstar.gif', $theme) ."\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\">";
 			}else
 			{
-				 	   $shtml .= "<img src=\"".$image_path."offstar.gif\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"  onClick=\"makedefaultRss($allrssrow[rssid])\">";
+				 	   $shtml .= "<img src=\"". vtiger_imageurl('offstar.gif', $theme) ."\" align=\"absmiddle\" onMouseOver=\"this.style.cursor='pointer'\" id=\"star-$allrssrow[rssid]\"  onClick=\"makedefaultRss($allrssrow[rssid])\">";
 			}
 					   $shtml .= "</td>";
 			$shtml .= "<td class=\"rssTitle\" width=\"10%\" nowrap><a href=\"javascript:GetRssFeedList('$allrssrow[rssid]')\" class=\"rssTitle\">".$allrssrow[rsstitle]."</a></td><td>&nbsp;</td>";
@@ -393,6 +427,14 @@ class vtigerRSS extends CRMEntity
 		}
 		return $shtml;
 
+	}
+
+	// Function to delete an entity with given Id
+	function trash($module, $id) {
+		global $log, $adb;
+		
+		$del_query = 'DELETE FROM vtiger_rss WHERE rssid=?';
+		$adb->pquery($del_query, array($id));
 	}
 
 }

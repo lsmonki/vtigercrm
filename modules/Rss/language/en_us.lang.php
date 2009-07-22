@@ -50,5 +50,10 @@ $mod_strings = Array(
 
 // Added/Updated for vtiger CRM 5.0.4
 'NOT_A_VALID'=>'Not a valid RSS Feed or Your Proxy Settings is not Proper',
+
+// Added after 5.0.4 GA
+'INVALID_RSS_URL' => 'Not a valid RSS URL',
+'UNABLE_TO_SAVE' => 'Unable to save the Url',
+
 );
 ?>

@@ -242,7 +242,7 @@ function track_email($user_name,$password,$contact_ids, $date_sent, $email_subje
 		$email->column_fields[activitytype] = 'Emails';
 		$email->plugin_save = true;
 		$email->save("Emails");
-		$query = "select fieldid from vtiger_field where fieldname = 'email' and tabid = 4";
+		$query = "select fieldid from vtiger_field where fieldname = 'email' and tabid = 4 and vtiger_field.presence in (0,2)";
 		$result = $adb->pquery($query, array());
 		$field_id = $adb->query_result($result,0,"fieldid");
 		$email->set_emails_contact_invitee_relationship($email->id,$contact_ids);
@@ -337,7 +337,7 @@ function retrieve_account_id($account_name,$user_id)
 		return null;
 	}
 
-	$db = new PearDatabase();
+	$db = PearDatabase::getInstance();
 	
 	$query = "select vtiger_account.accountname accountname,vtiger_account.accountid accountid from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_account.accountname=?";
 	$result=  $db->pquery($query, array($account_name)) or die ("Not able to execute insert");
@@ -386,11 +386,11 @@ function AddContact($user_name,$first_name, $last_name, $email_address ,$account
 		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
-	    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and block <> 5";
+	    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and block <> 5 and vtiger_field.presence in (0,2)";
 			$params1 = array();
 	  	} else {
 	    	$profileList = getCurrentUserProfileList();
-	    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+	    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
 			$params1 = array();
 			if (count($profileList) > 0) {
 				$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";
@@ -451,11 +451,11 @@ function AddLead($user_name, $first_name, $last_name, $email_address ,$account_n
 		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
-	    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=7 and block <> 14";
+	    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=7 and block <> 14 and vtiger_field.presence in (0,2)";
 			$params1 = array();
 	  	} else {
 	    	$profileList = getCurrentUserProfileList();
-	    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=7 and vtiger_field.block <> 14 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+	    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=7 and vtiger_field.block <> 14 and vtiger_field.displaytype in (1,2,4) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
 	  		$params1 = array();
 			if (count($profileList) > 0) {
 				$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";
@@ -505,11 +505,13 @@ function create_session($user_name, $password,$version)
   global $adb,$log;
   $return_access = 'FALSES';
   include('vtigerversion.php');
-  if($version != $vtiger_current_version)
-  {
-	  return "VERSION";
-  }
-  require_once('modules/Users/Users.php');
+ 
+	/* Make 5.0.4 plugins compatible with 5.1.0 */
+	if(version_compare($version,'5.0.4', '>=') === 1) {
+		return array("VERSION",'00');
+	}
+
+  	require_once('modules/Users/Users.php');
 	$objuser = new Users();
 	if($password != "" && $user_name != '')
 	{
@@ -652,6 +654,10 @@ function CheckLeadViewPerm($user_name)
 	{
 		return "denied";
 	}
+}
+/* Begin the HTTP listener service and exit. */ 
+if (!isset($HTTP_RAW_POST_DATA)){
+	$HTTP_RAW_POST_DATA = file_get_contents('php://input');
 }
 $server->service($HTTP_RAW_POST_DATA);
 exit();

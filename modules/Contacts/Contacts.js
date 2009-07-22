@@ -73,8 +73,13 @@ if(this.document.getElementById( id).style.display=='none'){
 }
 
 function set_return(product_id, product_name) {
+	if(document.getElementById('from_link').value != '') {
+        window.opener.document.QcEditView.parent_name.value = product_name;
+        window.opener.document.QcEditView.parent_id.value = product_id;
+	} else {
         window.opener.document.EditView.parent_name.value = product_name;
         window.opener.document.EditView.parent_id.value = product_id;
+	}
 }
 
 function add_data_to_relatedlist_incal(id,name)
@@ -201,4 +206,45 @@ function searchMapLocation(addressType)
         }
 	mapParameter = removeHTMLFormatting(mapParameter);
 	window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
+}
+
+function set_return_contact_address(contact_id,contact_name, mailingstreet, otherstreet, mailingcity, othercity, mailingstate, otherstate, mailingcode, othercode, mailingcountry, othercountry,mailingpobox,otherpobox,formName) {
+		if (formName == null || formName == '') formName = 'EditView';
+		else {
+			// In case formName is specified but does not exists then revert to EditView form
+			if(window.opener.document.forms[formName] == null) formName = 'EditView';
+		}
+		var form = window.opener.document.forms[formName];
+		form.contact_name.value = contact_name;
+        form.contact_id.value = contact_id;
+	if(typeof(form.bill_street) != 'undefined')
+	if(confirm(alert_arr.OVERWRITE_EXISTING_CONTACT1+contact_name+alert_arr.OVERWRITE_EXISTING_CONTACT2))
+	{
+		//made changes to avoid js error -- ref : hidding fields causes js error(ticket#4017)
+                if(typeof(form.bill_street) != 'undefined')
+                        form.bill_street.value = mailingstreet;
+                if(typeof(form.ship_street) != 'undefined')
+                        form.ship_street.value = otherstreet;
+                if(typeof(form.bill_city) != 'undefined')
+                        form.bill_city.value = mailingcity;
+                if(typeof(form.ship_city) != 'undefined')
+                        form.ship_city.value = othercity;
+                if(typeof(form.bill_state) != 'undefined')
+                        form.bill_state.value = mailingstate;
+                if(typeof(form.ship_state) != 'undefined')
+                        form.ship_state.value = otherstate;
+                if(typeof(form.bill_code) != 'undefined')
+                        form.bill_code.value = mailingcode;
+                if(typeof(form.ship_code) != 'undefined')
+                        form.ship_code.value = othercode;
+				if(typeof(form.bill_country) != 'undefined')
+                        form.bill_country.value = mailingcountry;
+                if(typeof(form.ship_country) != 'undefined')
+                        form.ship_country.value = othercountry;
+                if(typeof(form.bill_pobox) != 'undefined')
+                        form.bill_pobox.value = mailingpobox;
+                if(typeof(form.ship_pobox) != 'undefined')
+                        form.ship_pobox.value = otherpobox;
+		//end
+	}
 }

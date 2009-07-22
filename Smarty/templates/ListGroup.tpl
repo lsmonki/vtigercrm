@@ -14,7 +14,7 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
         <br>
 
@@ -22,13 +22,13 @@
 			{include file='SetMenu.tpl'}
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-				<form action="index.php" method="post" name="new" id="form">
+				<form action="index.php" method="post" name="new" id="form" onsubmit="VtigerJS_DialogBox.block();">
 				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="action" value="createnewgroup">
 				<input type="hidden" name="mode" value="create">
 				<input type="hidden" name="parenttab" value="Settings">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-groups.gif" alt="{$MOD.LBL_GROUPS}" width="48" height="48" border=0 title="{$MOD.LBL_GROUPS}"></td>
+					<td width=50 rowspan=2 valign=top><img src="{'ico-groups.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_GROUPS}" width="48" height="48" border=0 title="{$MOD.LBL_GROUPS}"></td>
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$CMOD.LBL_GROUPS}</b></td>
 				</tr>
 				<tr>
@@ -67,8 +67,8 @@
 					  <tr>
 						<td class="listTableRow small" valign=top>{$smarty.foreach.grouplist.iteration}</td>
 						<td class="listTableRow small" valign=top nowrap>
-							  	<a href="index.php?module=Settings&action=createnewgroup&returnaction=listgroups&parenttab=Settings&mode=edit&groupId={$groupvalues.groupid}"><img src="{$IMAGE_PATH}editfield.gif" alt="{$APP.LNK_EDIT}" title="{$APP.LNK_EDIT}" border="0" align="absmiddle"></a>&nbsp;|	
-								<a href="#" onClick="deletegroup(this,'{$groupvalues.groupid}')";><img src="{$IMAGE_PATH}delete.gif" alt="{$LNK_DELETE}" title="{$APP.LNK_DELETE}" border="0" align="absmiddle"></a>
+							  	<a href="index.php?module=Settings&action=createnewgroup&returnaction=listgroups&parenttab=Settings&mode=edit&groupId={$groupvalues.groupid}"><img src="{'editfield.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LNK_EDIT}" title="{$APP.LNK_EDIT}" border="0" align="absmiddle"></a>&nbsp;|	
+								<a href="#" onClick="deletegroup(this,'{$groupvalues.groupid}')";><img src="{'delete.gif'|@vtiger_imageurl:$THEME}" alt="{$LNK_DELETE}" title="{$APP.LNK_DELETE}" border="0" align="absmiddle"></a>
 						</td>
 						<td class="listTableRow small" valign=top><strong>
                               				<a href="index.php?module=Settings&action=GroupDetailView&parenttab=Settings&groupId={$groupvalues.groupid}">{$groupvalues.groupname}</a></strong>
@@ -98,7 +98,7 @@
 		
 	</div>
 </td>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </tbody>
 </table>

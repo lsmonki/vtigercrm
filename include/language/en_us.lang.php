@@ -42,7 +42,7 @@ $app_strings = array (
 'LBL_ALT_HOT_KEY' => 'Alt+',
 'LBL_SAVE_LABEL' => 'Save',
 'LBL_REPLACE_LABEL' => 'Replace',
-'LBL_APPLY_LABEL' => 'Apply',
+'LBL_APPLY_BUTTON_LABEL' => 'Apply',
 'LBL_SEND_MAIL_BUTTON' => 'Send Mail',
 'LBL_SAVE_BUTTON_TITLE' => 'Save [Alt+S]',
 'LBL_EDIT_BUTTON_TITLE' => 'Edit [Alt+E]',
@@ -156,7 +156,6 @@ $app_strings = array (
 'SINGLE_Home' => 'Home',
 'SINGLE_Invoice' => 'Invoice',
 'SINGLE_Potentials' => 'Potential',
-'SINGLE_Notes' => 'Note',
 'SINGLE_Products' => 'Product',
 'SINGLE_Vendors' => 'Vendor',
 'SINGLE_PriceBooks' => 'PriceBook',
@@ -268,7 +267,7 @@ $app_strings = array (
 'LBL_OPEN_ACTIVITIES' => 'Open Activities',
 'LBL_HISTORY' => 'History',
 'LBL_ACTIVITY_HISTORY' => 'Activity History',
-'LBL_ATTACHMENTS' => 'Attachments',
+'LBL_ATTACHMENTS' => 'File Name',
 'LBL_ATTACHMENT' => 'Attachment',
 'LBL_TIME' => 'Time',
 'LBL_ACTION' => 'Action',
@@ -292,7 +291,6 @@ $app_strings = array (
 'LBL_AMOUNT' => 'Amount',
 'LBL_CLOSE_DATE' => 'Close Date',
 'LBL_NEW_ATTACHMENT' => 'New Attachment',
-'LBL_NEW_NOTE' => 'New Note',
 'LBL_PRODUCT_TITLE' => 'Products',
 'LBL_NEW_PRODUCT' => 'New Product',
 'LBL_PRODUCT_NAME' => 'Product Name',
@@ -392,15 +390,13 @@ $app_strings = array (
 'Home' => 'Home',
 'Campaigns' => 'Campaigns',
 'PriceBooks' => 'Price Books',
-'Notes' => 'Notes',
 'Faq' => 'FAQ',
 'Dashboards' => 'Dashboard',
 'Reports' => 'Reports',
 'Vendors' => 'Vendors',
 'Rss' => 'RSS',
-'Portal' => 'My Sites',
+'Portal' => 'Our Sites',
 'Webmails' => 'Webmail',
-'Attachments' => 'Attachments',
 'Activity History' => 'Activity History',
 'Ticket History' => 'Ticket History',
 'Purchase Order' => 'Purchase Order',
@@ -438,7 +434,6 @@ $app_strings = array (
 'Quote' => 'Quote',
 'Ticket' => 'Ticket',
 'Campaign' => 'Campaign',
-'Note' => 'Note',
 'Dashboard' => 'Dashboards',
 'Report' => 'Report',
 'Vendor' => 'Vendor',
@@ -555,7 +550,6 @@ $app_strings = array (
 'LBL_PO_STATUS' => 'PurchaseOrder Status',
 'LBL_SO_STATUS' => 'SalesOrder Status',
 'LBL_INVOICE_STATUS' => 'Invoice Status',
-'LBL_NOTE' => 'Note',
 'LBL_MODULE' => 'Module',
 'Active' => 'Active',
 'Inactive' => 'Inactive',
@@ -610,6 +604,7 @@ $app_strings = array (
 'VTIGER' => 'vtiger',
 'LBL_DIRECT_AMOUNT_DISCOUNT' => 'Direct Amount Discount',
 'LBL_NO_DISCOUNT_FOR_THIS_PRODUCT' => 'No Discount for this Product',
+'LBL_NO_DISCOUNT_FOR_THIS_LINE_ITEM'=> 'No Discount for this line item',
 'LBL_TOTAL_TAX_AMOUNT' => 'Total Tax Amount',
 'LBL_FINAL_DISCOUNT_AMOUNT' => 'Final Discount Amount',
 'LBL_SHIPPING_AND_HANDLING_CHARGE' => 'Shipping & Handling Charge',
@@ -770,14 +765,12 @@ $app_strings = array (
 'ERROR' => 'Error',
 'FIELD_TYPE_NOT_SELECTED' => 'Field Type is not selected',
 'SPECIAL_CHARACTERS_NOT_ALLOWED' => 'Special characters are not allowed in Label field',
-'PICKLIST_CANNOT_BE_EMPTY' => 'Picklist value cannot be empty',
-'DUPLICATE_VALUES_FOUND' => 'Duplicate Values found',
 'DUPLICATE_MAPPING_ACCOUNTS' => 'Duplicate mapping for accounts!!',
 'DUPLICATE_MAPPING_CONTACTS' => 'Duplicate mapping for Contacts!!',
 'DUPLICATE_MAPPING_POTENTIAL' => 'Duplicate mapping for Potential!!',
 'ERROR_WHILE_EDITING' => 'Error while Editing',
 'PLEASE_ENTER_TAG' => 'Please enter a tag',
-'PLEASE_SELECT_PRODUCT' => 'Please select a Product',
+'PLEASE_SELECT_LINE_ITEM' => 'Please select a Line Item',
 'DUPLICATE_ENTRIES_FOUND' => "Duplicate entries found for the value \'",
 'ROLE_SHOULDHAVE_INFO' => 'Role should have at least one profile',
 'ENTER_VALID_CONVERSION_RATE' => 'Enter valid Conversion Rate',
@@ -894,7 +887,6 @@ $app_strings = array (
 'LBL_CREATING_NEW_Campaigns' => 'Creating New Campaign',
 'LBL_CREATING_NEW_Leads' => 'Creating New Lead',
 'LBL_CREATING_NEW_Accounts' => 'Creating New Account',
-'LBL_CREATING_NEW_Notes' => 'Creating New Note',
 'LBL_CREATING_NEW_Potentials' => 'Creating New Potential',
 'LBL_CREATING_NEW_Quotes' => 'Creating New Quote',
 'LBL_CREATING_NEW_SalesOrder' => 'Creating New Sales Order',
@@ -989,53 +981,6 @@ $app_strings = array (
 'as'=>'as',
 'ie'=>'ie.,',
 'add_at_end_of_file'=>'Please add the following lines at the end of the file config.inc.php',
-//Added to Fix i18N issue in Email Template
-'Account_Account_Name'=>'Account: Account Name',
-'Account_Account_Type'=>'Account: Account Type',
-'Account_Industry'=>'Account: Industry',
-'Account_Annual_Revenue'=>'Account: Annual Revenue',
-'Account_Phone'=>'Account: Phone',
-'Account_Email'=>'Account: Email',
-'Account_Rating'=>'Account: Rating',
-'Account_Website'=>'Account: Website',
-'Account_Fax'=>'Account: Fax',
-//For Contact
-'Contact_First_Name'=>'Contact: First Name',
-'Contact_Last_Name'=>'Contact: Last Name',
-'Contact_Salutation'=>'Contact: Salutation',
-'Contact_Title'=>'Contact: Title',
-'Contact_Email'=>'Contact: Email',
-'Contact_Department'=>'Contact: Department',
-'Contact_Office_Phone'=>'Contact: Office Phone',
-'Contact_Mobile'=>'Contact: Mobile',
-'Contact_Support_Start_Date'=>'Contact: Support Start Date',
-'Contact_Support_End_Date'=>'Contact: Support End Date',
-//For Leads
-'Lead_First_Name'=>'Lead: First Name',
-'Lead_Last_Name'=>'Lead: Last Name',
-'Lead_Lead_Source'=>'Lead: Lead Source',
-'Lead_Status'=>'Lead: Status',
-'Lead_Rating'=>'Lead: Rating',
-'Lead_Industry'=>'Lead: Industry',
-'Lead_Yahoo_ID'=>'Lead: Yahoo ID',
-'Lead_Email'=>'Lead: Email',
-'Lead_Annual_Revenue'=>'Lead: Annual Revenue',
-'Lead_Title'=>'Lead: Title',
-'Lead_Salutation'=>'Lead: Salutation',
-//For Users
-'User_First_Name'=>'User: First Name',
-'User_Last_Name'=>'User: Last Name',
-'User_Title'=>'User: Title',
-'User_Department'=>'User: Department',
-'User_HomePhone'=>'User: HomePhone',
-'User_Mobile'=>'User: Mobile',
-'User_Signature'=>'User: Signature',
-'User_Email'=>'User: Email',
-'User_Street'=>'User: Street',
-'User_City'=>'User: City',
-'User_State'=>'User: State',
-'User_Country'=>'User: Country',
-'User_PostalCode'=>'User: PostalCode',
 // Added for Error message on Send Email failure
 'LBL_MAIL_SEND_STATUS' => 'Mail Send Status:',
 'LBL_MAIL_NOT_SENT_TO_USER' => 'Mail Could not be sent to user',
@@ -1078,7 +1023,6 @@ $app_strings = array (
 //Added for Notification
 'Dear_Admin_tasks_not_been_completed' => 'Dear Admin,<br><br> Please note that there are certain tasks in the system which have not been completed even after 24hours of their existence<br>',
 'Task_sign'=>'Thank You<br>HelpDesk Team<br>',
-'DELETE_PICKLIST_VALUES'=>'Delete PickList Values',
 //Added for PDF notification
 'LBL_PDF'=>'PDF Cannot be generated as the width exceeds the maximum limit, Kindly ',
 //Added for pdf internalization in 5.0.4
@@ -1112,9 +1056,202 @@ $app_strings = array (
 'Product Code'=>'Product Code',
 'Qty'=>'Qty',
 'Price'=>'Price',
-'Discount'=>'Discount'
+'Discount'=>'Discount',
+'LBL_ADD_BUTTON' => 'Add',
 
+// Added after 5.0.4 GA
 
+//Added to Fix i18N issue in Email Template
+'LBL_GENERAL_FIELDS'=>'General Fields', 
+//For Users fields
+'HomePhone'=>'HomePhone',
+'Signature'=>'Signature',
+'Street'=>'Street',
+'State'=>'State',
+'Country'=>'Country',
+'PostalCode'=>'PostalCode',
+//For General fields
+'Current Date'=>'Current Date',
+'Current Time'=>'Current Time',
+
+//Added for Role based Custom filters
+'LBL_PUBLIC'=>'Public',
+'LBL_PENDING'=>'Pending',
+'LBL_OTHERS'=>'Others',
+
+//For Configuring/Using PurchaseOrder number
+'PO Number'=>'PO Number',
+'MSG_AUTO_GEN_ON_SAVE'=>'AUTO GEN ON SAVE',
+
+//For Duplicate merging feature
+'LBL_MERGE' => 'Merge',
+'LBL_MERGE_BUTTON_TITLE' => 'Merge',
+'LBL_SAVE_MERGE_BUTTON_TITLE' => 'Find Duplicates',
+'LBL_SELECT_MERGECRITERIA_HEADER' => 'Merging Criteria Selection',
+'LBL_SELECT_AS_PARENT' => '(select as primary record)',
+'LBL_SELECT_MERGECRITERIA_TEXT' => 'Select the match fields to find duplicate records',
+'LBL_MERGE_SHOULDHAVE_INFO' => 'Select at least one field for merge criteria',
+'LBL_FIND_DUPLICATES'=>'Find Duplicates',
+'LBL_NO_RECORD'=>'No Records',
+'LBL_NO_DUPLICATE' => 'No Duplicate Records',
+'LBL_LAST_IMPORTED' => 'Last Imported',
+'LBL_NOW_IMPORTED'=>'Imported Now',
+'LBL_EXISTING'=> 'Existing',
+'LBL_TABLE_CREATED'=>'Table Created Successfully',
+'LBL_AVAILABLE_FIELDS'=>'Available Fields',
+'LBL_SELECTED_FIELDS'=>' Fields to be matched on',
+'LBL_MERGE_SELECT'=>'SelectRecords (max: 3)',
+'DuplicatesHandling' => 'DuplicatesHandling',
+'LBL_DESC_FOR_MERGE_FIELDS' => 'The primary record will be retained after the merge. You can select the column to retain the values. The other record will be deleted but the related information will be merged.',
+'LBL_DUPLICATE_MERGING' => 'Duplicate Merging',
+'LBL_SELECT_TO_ENABLE_MERGING' => 'Select this option to enable and set duplicate merging criteria',
+
+// Local Backup Feature
+'LBL_BACKEDUPSUCCESSFULLY_TO_FILE' => 'Backed Up Successfully To File',//BACKUP
+'APP.LBL_NOW'=>'Now',//BACKUP
+'LBL_NOW'=>'Now',//BACKUP
+
+// Multi-Currency Customization
+'LBL_MORE_CURRENCIES'=>'more currencies',
+'LBL_BASE_CURRENCY'=>'Base Currency',
+'LBL_CURRENCY'=>'Currency',
+'LBL_PRICE'=>'Price',
+'LBL_CONVERSION_RATE'=>'Conversion rate',
+'LBL_RESET_PRICE'=>'Reset Price',
+'LBL_RESET'=>'Reset',
+'LBL_UNIT_PRICE_NOT_PERMITTED'=>'Access to Unit Price is Denied. So cannot select products.',
+
+// Documents module
+'SINGLE_Documents' => 'Document',
+'LBL_NEW_NOTE' => 'New Document',
+'Documents' => 'Documents',
+'Document' => 'Document',
+'LBL_NOTE' => 'Document',
+'LBL_CREATING_NEW_Documents' => 'Creating New Document',
+'LBL_PLATFORM_INDEPENDENT'=>'Platform Independent',
+'Attachments' => 'Documents', //added for list header label in related lists
+'LBL_HIDE'=>'Hide',
+
+// Layout Editor and Ease navigation between records in Detail view
+'LNK_LIST_NEXT' => 'Next',
+'LNK_LIST_PREVIOUS' => 'Previous',
+'LBL_JUMP_BTN'=> 'JUMP',
+
+'LBL_ASSIGN_BUTTON_LABEL'=>'Assign Fields',
+
+// Mass Edit Feature
+'LBL_MASS_EDIT'=>'Mass Edit',
+'LBL_MASSEDIT_FORM_HEADER'=>'Mass Edit - Records Fields',
+
+// Product Bundles
+'Product Bundles'=>'Product Bundles',
+
+// vtlib customization: Language strings
+'VTLIB_MOD_NOT_ACTIVE' => ' module is not active!',
+// END
+
+// vtiger News & Feedback
+'LBL_VTIGER_NEWS'=>'vtiger News',
+'LBL_FEEDBACK'=>'Feedback',
+// END
+
+//added for asterisk integration
+'CallHistory'=>'Call History',
+'PBXManager'=>'PBX Manager',
+'LBL_OUTGOING_CALL_MESSAGE'=>'Pick up the extensions receiver to dial the number',
+'LBL_OUTGOING_CALL'=>'Outgoing Call',
+'LBL_OPERATION_NOT_SUPPORTED'=>'This Operation is currently not supported',
+'LBL_ASTERISK_SET_ERROR'=>'Asterisk server details are not set. Set them first.',
+'LBL_CREATE_LEAD'=>'Create Lead',
+'LBL_CREATE_CONTACT'=>'Create Contact',
+'LBL_CREATE_ACCOUNT'=>'Create Account',
+'LBL_CREATE_TICKET'=>'Create Tickets',
+'LBL_INCOMING_CALL'=>'Incoming Call',
+'LBL_CALLER_INFORMATION'=>'Caller Information',
+'LBL_CALLER_NUMBER'=>'Number :',
+'LBL_CALLER_NAME'=>'Name :',
+'LBL_INFORMATION_VTIGER'=>'Information from Vtiger',
+
+//asterisk integration ends
+
+// Module Sequence Numbering
+'LBL_DUPLICATE' => 'Duplicate',
+'LBL_CLICK' => 'Click',
+'LBL_TO_CONFIGURE' => 'to Configure the',
+
+// For Privacy Policy
+'LNK_PRIVACY_POLICY'=>'Privacy Policy',
+'LBL_MOVE_BLOCK_FIELD' => 'Move Fields',
+ 
+//added for find duplicate
+'LBL_DUPLICATE_DATA_IN'=>'Duplicate ',
+'LBL_DELETE'=>'Delete',
+'LBL_MERGE_SELECT'=>'Merge Select',
+'LBL_MERGE_DATA_IN'=>'Merge Records In',
+'LBL_MERGE'=>'Merge',
+'LBL_ACTION'=>'Action',
+'LBL_FIELDLISTS'=> 'List Of Fields',
+'LBL_RECORD'=>'Record #',
+'LBL_DUP_PERMISSION' => 'You are not permitted to delete ',
+'recordid' => 'recordid',
+'Entity Type' => 'Entity Type',
+
+// gmailbookmarklet customization
+'LBL_GMAIL'=>'Gmail',
+'LBL_BOOKMARKLET'=>'Bookmarklet',
+// END
+
+//ADDED for REPORTS CUSTOMIZING
+'PRIVATE_FILTER'=>'Private',
+'SHARE_FILTER'=>'Share',
+'PUBLIC_FILTER'=>'Public',
+
+// Account Hierarchy
+'LBL_ACCOUNT_HIERARCHY' => 'Account Hierarchy', 
+
+//Prod Bundles
+'LBL_NO_SUB_PRODUCTS'=>'Not a Bundle',
+
+//Custom Fields support for Calendar
+'LBL_ACTIVITY_TYPE'=>'Activity Type',
+
+// Services model
+'LBL_ADD_SERVICE'=>'Add Service',
+'LBL_ITEM_DETAILS'=>'Item Details',
+'LBL_ITEM_NAME'=>'Item Name',
+'LBL_SETTINGS'=>'Settings',
+'LAYOUT_EDITOR'=>'Layout Editor',
+'CUSTOMFIELD_MAPPING'=>'CustomField Mapping',
+'ADD_PORTAL'=>'Add To Portal',
+'LBL_FILE_INTEGRITY_CHECK'=>'Check integrity of this file',
+
+//To handle plurals of module names
+'Todos' => 'Todos',
+
+// For Popup reminder
+'LBL_POSTPONE'=>'Postpone',
+
+// Unified Search extended support
+'LBL_SELECT_MODULES_FOR_SEARCH' => 'Select modules to search in',
+'LBL_SELECT_ALL' => 'Select All', 
+'LBL_UNSELECT_ALL' => 'UnSelect All',
+'LBL_FIELD_FOR_COMPARISION' => 'Field for Comparision',
+'LBL_DONE' => ' Done ',
+
+'LBL_NO_MODULES_TO_SELECT' => 'Operation Denied. No Modules to act on.',
+
+'CANNOT_CONVERT' => 'Cannot be Converted',
+
+// For note link on the detailview
+'LBL_ADD_NOTE'=>'Add Note',
+
+// For Layout Editor 
+'LBL_UNHIDE_FIELDS'=>'Unhide Fields',
+
+// For Mass Edit
+'LBL_SELECT_FIELDS_TO_UDPATE_WITH_NEW_VALUE'=>'Select fields to be updated and provide the new value.',
+
+'LBL_LOADING'=>'Loading...',
 );
 
 $app_list_strings = array (
@@ -1127,7 +1264,6 @@ $app_list_strings = array (
     'Accounts' => 'Accounts',
     'Potentials' => 'Potentials',
     'Campaigns' => 'Campaigns',
-    'Notes' => 'Notes',
     'Emails' => 'Emails',
     'Activities' => 'Activities',
     'Products' => 'Products',
@@ -1143,6 +1279,9 @@ $app_list_strings = array (
     'PriceBooks' => 'PriceBooks',
     'SalesOrder' => 'SalesOrder',
     'Portal' => 'My Sites',
+	
+	// Added after 5.0.4 GA
+    'Documents' => 'Documents',
   ),
   'opportunity_relationship_type_default_key' => 'Primary Decision Maker',
   'opportunity_relationship_type_dom' => 
@@ -1210,4 +1349,126 @@ $app_list_strings = array (
     'Opportunities' => 'Opportunity',
   ),
 
-); ?>
+); 
+
+// Translation for currency names
+$app_currency_strings = array(
+	'Albania, Leke' 		=> 'Albania, Leke',
+	'Argentina, Pesos' 		=> 'Argentina, Pesos',
+	'Aruba, Guilders' 		=> 'Aruba, Guilders',
+	'Australia, Dollars' 	=> 'Australia, Dollars',
+	'Azerbaijan, New Manats'=> 'Azerbaijan, New Manats',
+	'Bahamas, Dollars' 		=> 'Bahamas, Dollars',
+	'Bahrain, Dinar' 		=> 'Bahrain, Dinar',
+	'Barbados, Dollars' 	=> 'Barbados, Dollars',
+	'Belarus, Rubles' 		=> 'Belarus, Rubles',
+	'Belize, Dollars' 		=> 'Belize, Dollars',
+	'Bermuda, Dollars' 		=> 'Bermuda, Dollars',
+	'Bolivia, Bolivianos' 	=> 'Bolivia, Bolivianos',
+	'Convertible Marka'		=> 'Convertible Marka',
+	'Botswana, Pulas' 		=> 'Botswana, Pulas',
+	'Bulgaria, Leva' 		=> 'Bulgaria, Leva',
+	'Brazil, Reais' 		=> 'Brazil, Reais',
+	'Great Britain Pounds' 	=> 'Great Britain Pounds',
+	'Brunei Darussalam, Dollars' => 'Brunei Darussalam, Dollars',
+	'Canada, Dollars' 		=> 'Canada, Dollars',
+	'Cayman Islands, Dollars' => 'Cayman Islands, Dollars',
+	'Chile, Pesos' 			=> 'Chile, Pesos',
+	'Colombia, Pesos' 		=> 'Colombia, Pesos',
+	'Costa Rica, Colón' 	=> 'Costa Rica, Colón',
+	'Croatia, Kuna' 		=> 'Croatia, Kuna',
+	'Cuba, Pesos' 			=> 'Cuba, Pesos',
+	'Czech Republic, Koruny' => 'Czech Republic, Koruny',
+	'Denmark, Kroner' 		=> 'Denmark, Kroner',
+	'Dominican Republic, Pesos' => 'Dominican Republic, Pesos',
+	'East Caribbean, Dollars' => 'East Caribbean, Dollars',
+	'Egypt, Pounds' 		=> 'Egypt, Pounds',
+	'El Salvador, Colones' 	=> 'El Salvador, Colones',
+	'England, Pounds' 		=> 'England, Pounds',
+	'Estonia, Krooni' 		=> 'Estonia, Krooni',
+	'Euro' 					=> 'Euro',
+	'Falkland Islands, Pounds' => 'Falkland Islands, Pounds',
+	'Fiji, Dollars' => 'Fiji, Dollars',
+	'Ghana, Cedis' 	=> 'Ghana, Cedis',
+	'Gibraltar, Pounds' 	=> 'Gibraltar, Pounds',
+	'Guatemala, Quetzales' 	=> 'Guatemala, Quetzales',
+	'Guernsey, Pounds' 		=> 'Guernsey, Pounds',
+	'Guyana, Dollars' 		=> 'Guyana, Dollars',
+	'Honduras, Lempiras' 	=> 'Honduras, Lempiras',
+	'LvHong Kong, Dollars ' => 'LvHong Kong, Dollars ',
+	'Hungary, Forint' 		=> 'Hungary, Forint',
+	'Iceland, Krona' 		=> 'Iceland, Krona',
+	'India, Rupees' 		=> 'India, Rupees',
+	'Indonesia, Rupiahs' 	=> 'Indonesia, Rupiahs',
+	'Iran, Rials' 			=> 'Iran, Rials',
+	'Isle of Man, Pounds' 	=> 'Isle of Man, Pounds',
+	'Israel, New Shekels' 	=> 'Israel, New Shekels',
+	'Jamaica, Dollars' 		=> 'Jamaica, Dollars',
+	'Japan, Yen' 			=> 'Japan, Yen',
+	'Jersey, Pounds' 		=> 'Jersey, Pounds',
+	'Kazakhstan, Tenge' 	=> 'Kazakhstan, Tenge',
+	'Korea (North), Won' 	=> 'Korea (North), Won',
+	'Korea (South), Won' 	=> 'Korea (South), Won',
+	'Kyrgyzstan, Soms' 		=> 'Kyrgyzstan, Soms',
+	'Laos, Kips' 			=> 'Laos, Kips',
+	'Latvia, Lati' 			=> 'Latvia, Lati',
+	'Lebanon, Pounds' 		=> 'Lebanon, Pounds',
+	'Liberia, Dollars' 		=> 'Liberia, Dollars',
+	'Switzerland Francs' 	=> 'Switzerland Francs',
+	'Lithuania, Litai' 		=> 'Lithuania, Litai',
+	'Macedonia, Denars' 	=> 'Macedonia, Denars',
+	'Malaysia, Ringgits' 	=> 'Malaysia, Ringgits',
+	'Mauritius, Rupees' 	=> 'Mauritius, Rupees',
+	'Mexico, Pesos' 		=> 'Mexico, Pesos',
+	'Mongolia, Tugriks' 	=> 'Mongolia, Tugriks',
+	'Mozambique, Meticais' 	=> 'Mozambique, Meticais',
+	'Namibia, Dollars' 		=> 'Namibia, Dollars',
+	'Nepal, Rupees' 		=> 'Nepal, Rupees',
+	'Netherlands Antilles, Guilders' => 'Netherlands Antilles, Guilders',
+	'New Zealand, Dollars' 	=> 'New Zealand, Dollars',
+	'Nicaragua, Cordobas' 	=> 'Nicaragua, Cordobas',
+	'Nigeria, Nairas' 		=> 'Nigeria, Nairas',
+	'North Korea, Won' 		=> 'North Korea, Won',
+	'Norway, Krone' 		=> 'Norway, Krone',
+	'Oman, Rials' 			=> 'Oman, Rials',
+	'Pakistan, Rupees' 		=> 'Pakistan, Rupees',
+	'Panama, Balboa' 		=> 'Panama, Balboa',
+	'Paraguay, Guarani' 	=> 'Paraguay, Guarani',
+	'Peru, Nuevos Soles' 	=> 'Peru, Nuevos Soles',
+	'Philippines, Pesos' 	=> 'Philippines, Pesos',
+	'Poland, Zlotych' 		=> 'Poland, Zlotych',
+	'Romania, New Lei' 		=> 'Romania, New Lei',
+	'Russia, Rubles'		=> 'Russia, Rubles',
+	'Saint Helena, Pounds' => 'Saint Helena, Pounds',
+	'Saudi Arabia, Riyals' => 'Saudi Arabia, Riyals',
+	'Serbia, Dinars' 		=> 'Serbia, Dinars',
+	'Seychelles, Rupees' 	=> 'Seychelles, Rupees',
+	'Singapore, Dollars' 	=> 'Singapore, Dollars',
+	'Solomon Islands, Dollars' => 'Solomon Islands, Dollars',
+	'Somalia, Shillings' => 'Somalia, Shillings',
+	'South Africa, Rand' => 'South Africa, Rand',
+	'South Korea, Won' 	=> 'South Korea, Won',
+	'Sri Lanka, Rupees' => 'Sri Lanka, Rupees',
+	'Sweden, Kronor' 	=> 'Sweden, Kronor',
+	'Switzerland, Francs' => 'Switzerland, Francs',
+	'Suriname, Dollars' 	=> 'Suriname, Dollars',
+	'Syria, Pounds' 		=> 'Syria, Pounds',
+	'Taiwan, New Dollars' 	=> 'Taiwan, New Dollars',
+	'Thailand, Baht' 		=> 'Thailand, Baht',
+	'Trinidad and Tobago, Dollars' => 'Trinidad and Tobago, Dollars',
+	'Turkey, New Lira' 		=> 'Turkey, New Lira',
+	'Turkey, Liras' 		=> 'Turkey, Liras',
+	'Tuvalu, Dollars' 		=> 'Tuvalu, Dollars',
+	'Ukraine, Hryvnia' 		=> 'Ukraine, Hryvnia',
+	'United Kingdom, Pounds' => 'United Kingdom, Pounds',
+	'USA, Dollars' 			=> 'USA, Dollars',
+	'Uruguay, Pesos' 		=> 'Uruguay, Pesos',
+	'Uzbekistan, Sums' 		=> 'Uzbekistan, Sums',
+	'Venezuela, Bolivares Fuertes' => 'Venezuela, Bolivares Fuertes',
+	'Vietnam, Dong' 		=> 'Vietnam, Dong',
+	'Zimbabwe Dollars' 		=> 'Zimbabwe Dollars',
+	'China, Yuan Renminbi' 	=> 'China, Yuan Renminbi',
+	'Afghanistan, Afghanis' => 'Afghanistan, Afghanis',
+	'Cambodia, Riels' 		=> 'Cambodia, Riels',
+);
+?>

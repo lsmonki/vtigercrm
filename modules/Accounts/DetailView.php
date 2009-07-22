@@ -22,17 +22,17 @@
 
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Accounts/Accounts.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
+require_once 'modules/CustomView/CustomView.php';
+
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 global $log, $currentModule, $singlepane_view;
 
-$focus = new Accounts();
+$focus = CRMEntity::getInstance($currentModule);
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],"Accounts");
     $focus->id = $_REQUEST['record'];	
@@ -62,6 +62,16 @@ if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
 $smarty->assign("BLOCKS", getBlocks("Accounts","detail_view",'',$focus->column_fields));
 $smarty->assign("UPDATEINFO",updateInfo($focus->id));
+
+// Module Sequence Numbering
+$mod_seq_field = getModuleSequenceField($currentModule);
+if ($mod_seq_field != null) {
+	$mod_seq_id = $focus->column_fields[$mod_seq_field['name']];
+} else {
+	$mod_seq_id = $focus->id;
+}
+$smarty->assign('MOD_SEQ_ID', $mod_seq_id);
+// END
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("ID", $_REQUEST['record']);
@@ -121,8 +131,15 @@ $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST['record']));
+
+if(PerformancePrefs::getBoolean('DETAILVIEW_RECORD_NAVIGATION', true) && isset($_SESSION[$currentModule.'_listquery'])){
+	$recordNavigationInfo = ListViewSession::getListViewNavigation($focus->id);
+	VT_detailViewNavigation($smarty,$recordNavigationInfo,$focus->id);
+}
+
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
+$smarty->assign("USE_ASTERISK", get_use_asterisk($current_user->id));
 
 if($singlepane_view == 'true')
 {
@@ -134,5 +151,15 @@ $smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 
 $smarty->assign("SinglePane_View", $singlepane_view);
 
+// Record Change Notification
+$focus->markAsViewed($current_user->id);
+// END
+
+include_once('vtlib/Vtiger/Link.php');
+$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>vtlib_purify($_REQUEST['action']));
+$smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), Array('DETAILVIEWBASIC','DETAILVIEW'), $customlink_params));
+
+$smarty->assign('DETAILVIEW_AJAX_EDIT', PerformancePrefs::getBoolean('DETAILVIEW_AJAX_EDIT', true));
+	
 $smarty->display("DetailView.tpl");
 ?>

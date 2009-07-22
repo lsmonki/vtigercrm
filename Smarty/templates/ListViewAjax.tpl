@@ -16,9 +16,9 @@
 					<span style="float:left">{$ACCOUNT} &gt; {$MAILBOX}
 					{if $NUM_EMAILS neq 0}
                                                  {if $NUM_EMAILS neq 1}
-                                                        ({$NUM_EMAILS} Messages)
+                                                        ({$NUM_EMAILS} {$MOD.LBL_MESSAGES})
                                                  {else}
-                                                        ({$NUM_EMAILS} Message)
+                                                        ({$NUM_EMAILS} {$MOD.LBL_MESSAGE})
                                                  {/if}
                                          {/if}
 					</span> <span style="float:right">{$NAVIGATION}</span>	
@@ -35,7 +35,7 @@
                                         {$FOLDER_SELECT}
 				</div>
 			<div id="show_msg" class="layerPopup" align="center" style="padding: 5px;font-weight:bold;width: 400px;display:none;z-index:10000"></div>	
-                                <form name="massdelete" method="post">
+                                <form name="massdelete" method="post" onsubmit="VtigerJS_DialogBox.block();">
                                 <table cellspacing="1" cellpadding="3" border="0" width="100%" id="message_table">
                                    <tr>
                                 <th class="tableHeadBg"><input type="checkbox" name="select_all" value="checkbox"  onclick="toggleSelect(this.checked,'selected_id');"/></th>

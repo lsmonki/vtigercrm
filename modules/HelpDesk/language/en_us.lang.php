@@ -57,7 +57,7 @@ $mod_strings = Array(
 'LBL_CATEGORY'=>'Category',
 
 'LBL_ANSWER'=>'Answer',
-'LBL_COMMENTS'=>'Comments',
+'LBL_COMMENTS'=>'COMMENTS',
 
 'LBL_AUTHOR'=>'Author',
 'LBL_QUESTION'=>'Question',
@@ -211,6 +211,11 @@ $mod_strings = Array(
 'LBL_MAIL_SENT' => 'Mail has been sent to your mail id with the customer portal login details',
 'LBL_ALTBODY' => 'This is the body in plain text for non-HTML mail clients',
 
+// Added after 5.0.4 GA
+
+// Module Sequence Numbering
+'Ticket No' => 'Ticket No',
+// END
 );
 
 ?>

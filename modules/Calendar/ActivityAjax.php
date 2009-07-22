@@ -1,12 +1,11 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *
  ********************************************************************************/
 global $theme,$mod_strings,$current_language,$currentModule,$current_user,$app_strings;
 $theme_path = "themes/".$theme."/";
@@ -17,7 +16,7 @@ require_once("modules/Calendar/Calendar.php");
 require_once('include/logging.php');
 $cal_log =& LoggerManager::getLogger('calendar');
 $cal_log->debug("In CalendarAjax file");
-$mysel = $_REQUEST['view'];
+$mysel = vtlib_purify($_REQUEST['view']);
 if($_REQUEST['file'] == 'OpenListView')
 {
 	require_once('Smarty_setup.php');
@@ -85,7 +84,7 @@ if((isset($_REQUEST['type']) && $_REQUEST['type'] !='') || (isset($_REQUEST['n_t
 		$calendar_arr['calendar']->add_Activities($current_user);
         	calendar_layout($calendar_arr);
 	        $mod_strings = return_module_language($current_language,$temp_module);
-        	$currentModule = $_REQUEST['module'];
+        	$currentModule = vtlib_purify($_REQUEST['module']);
 	}
 	elseif($type == 'settings')
 	{
@@ -94,7 +93,7 @@ if((isset($_REQUEST['type']) && $_REQUEST['type'] !='') || (isset($_REQUEST['n_t
 	}
 	else
 	{
-		$subtab = $_REQUEST['subtab']; 
+		$subtab = vtlib_purify($_REQUEST['subtab']); 
 		if(empty($mysel))
 		{
 			$mysel = 'day';
@@ -135,7 +134,7 @@ if((isset($_REQUEST['type']) && $_REQUEST['type'] !='') || (isset($_REQUEST['n_t
 
 			if($type == 'change_status')
 			{
-				$return_id = $_REQUEST['record'];
+				$return_id = vtlib_purify($_REQUEST['record']);
 				if(isset($_REQUEST['status']))
 				{
 					$status = $_REQUEST['status'];
@@ -222,6 +221,7 @@ if((isset($_REQUEST['type']) && $_REQUEST['type'] !='') || (isset($_REQUEST['n_t
 		}
 		elseif($type == 'view')
 		{
+			checkFileAccess('modules/Calendar/'.$_REQUEST['file'].'.php');
 			require_once('modules/Calendar/'.$_REQUEST['file'].'.php');
 		}
 		else

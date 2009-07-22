@@ -16,14 +16,12 @@
 /**	function used to get the top 5 quotes from the ListView query
  *	@return array $values - array with the title, header and entries like  Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries) where as listview_header and listview_entries are arrays of header and entity values which are returned from function getListViewHeader and getListViewEntries
  */
-function getTopQuotes()
+function getTopQuotes($maxval,$calCnt)
 {
 	require_once("data/Tracker.php");
 	require_once('modules/Quotes/Quotes.php');
 	require_once('include/logging.php');
 	require_once('include/ListView/ListView.php');
-	require_once('include/database/PearDatabase.php');
-	require_once('include/ComboUtil.php');
 	require_once('include/utils/utils.php');
 	require_once('modules/CustomView/CustomView.php');
 	
@@ -32,10 +30,6 @@ function getTopQuotes()
 
 	global $list_max_entries_per_page,$adb,$theme,$mod_strings;
 	$log = LoggerManager::getLogger('quote_list');
-
-	// Get _dom arrays from Database
-	$comboFieldNames = Array('quotestage'=>'quotestage_dom');
-	$comboFieldArray = getComboArray($comboFieldNames);
 
 	$url_string = '';
 	$sorder = '';
@@ -51,8 +45,7 @@ function getTopQuotes()
 			$viewid = "0";
 		}
 	}
-	$focus = new Quotes();
-
+	
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
@@ -60,27 +53,30 @@ function getTopQuotes()
 	//<<<<<<<<<customview>>>>>>>>>
 	$date_var = date('Y-m-d');
 
-	$where = ' and vtiger_crmentity.smownerid='.$current_user->id.' and vtiger_quotes.quotestage not in("Rejected","Accepted","'.$current_module_strings['Rejected'].'","'.$current_module_strings['Accepted'].'") and  vtiger_quotes.validtill >= \''.$date_var.'\'';
+	$where = " and vtiger_crmentity.smownerid=".$current_user->id." and vtiger_quotes.quotestage not in('Rejected','Accepted','".$current_module_strings['Rejected']."','".$current_module_strings['Accepted']."') and  vtiger_quotes.validtill >= '".$date_var."'";
 	//$where = ' and vtiger_crmentity.smownerid='.$current_user->id.' and  vtiger_quotes.validtill >= \''.$date_var.'\'';
 	
 	
 	$query = getListQuery("Quotes",$where);
 	$query .=" ORDER BY total DESC";
 	//<<<<<<<<customview>>>>>>>>>
+	
+	$query .= " LIMIT " . $adb->sql_escape_string($maxval);
 
-	$list_result = $adb->limitQuery($query,0,5);
+	if($calCnt == 'calculateCnt') {
+		$list_result_rows = $adb->query(mkCountQuery($query));
+		return $adb->query_result($list_result_rows, 0, 'count');
+	}
+	
+	$list_result = $adb->query($query);
 
 	//Retreiving the no of rows
 	$noofrows = $adb->num_rows($list_result);
 
 	//Retreiving the start value from request
-	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-	{
-		$start = $_REQUEST['start'];
-	}
-	else
-	{
-
+	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '') {
+		$start = vtlib_purify($_REQUEST['start']);
+	} else {
 		$start = 1;
 	}
 
@@ -117,15 +113,23 @@ function getTopQuotes()
 		}
 	}
 
-
+	$focus = new Quotes();
+	
+	
 	$title=array('TopOpenQuotes.gif',$current_module_strings['LBL_MY_TOP_QUOTE'],'home_mytopquote');
 	//Retreive the List View Table Header
 	$listview_header = getListViewHeader($focus,"Quotes",$url_string,$sorder,$order_by,"HomePage",$oCustomView);
-
+	$header = Array($listview_header[1],$listview_header[3]);
 
 	$listview_entries = getListViewEntries($focus,"Quotes",$list_result,$navigation_array,"HomePage","","EditView","Delete",$oCustomView);
+	foreach($listview_entries as $crmid=>$valuearray)
+	{
+		$entries[$crmid] = Array($valuearray[1],$valuearray[3]);	
+	}
 
-	$values=Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries);
+	$search_qry = "&query=true&Fields0=vtiger_crmentity.smownerid&Condition0=is&Srch_value0=".$current_user->column_fields['user_name']."&Fields1=vtiger_quotes.validtill&Condition1=grteq&Srch_value1=".$date_var."&Fields2=vtiger_quotes.quotestage&Condition2=isn&Srch_value2=Rejected&Fields3=vtiger_quotes.quotestage&Condition3=isn&Srch_value3=Accepted&searchtype=advance&search_cnt=4&matchtype=all";
+	
+	$values=Array('ModuleName'=>'Quotes','Title'=>$title,'Header'=>$header,'Entries'=>$entries,'search_qry'=>$search_qry);
 
 	if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )
 		return $values;

@@ -10,7 +10,8 @@
  ********************************************************************************/
 
 ini_set("memory_limit","32M");
-set_time_limit(600);
+global $php_max_execution_time;
+set_time_limit($php_max_execution_time);
 
 //This file is used to modify the database from 4.2Patch2 to 5.0 Alpha release
 

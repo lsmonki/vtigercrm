@@ -172,7 +172,24 @@ $mod_strings = Array(
 'of'=>'of',
 'are_imported_succesfully'=>'are imported successfully',
 
+// Added after 5.0.4 GA
 
+//added for duplicate handling 
+'LBL_LAST_IMPORT'=>'Last Imported',
+'Select_Criteria_For_Duplicate' => 'Select Criteria For Duplicate Records Handling',
+'Manual_Merging' => 'Manual Merging',
+'Auto_Merging' => 'Auto Merging',
+'Ignore_Duplicate' => 'Ignore the duplicate import records',
+'Overwrite_Duplicate' => 'Overwrite the duplicate records',
+'Duplicate_Records_Skipped_Info' => 'No. of Records Skipped as they were duplicates : ',
+'Duplicate_Records_Overwrite_Info' => 'No. of Records Overwritten as they were duplicates : ',
+'LBL_STEP_4_4' => 'Step 4 of 4 : ',
+'LBL_STEP_3_4'=>'Step 3 of 4 :',
+'LBL_STEP_2_4'=>'Step 2 of 4 :',
+'LBL_STEP_1_4'=>'Step 1 of 4 : ',
+
+'LBL_DELIMITER' => 'Delimiter:',
+'LBL_FORMAT' => 'Format:',
 );
 
 /*$mod_list_strings = Array(
@@ -337,7 +354,6 @@ $mod_list_strings = Array(
 		"leadstatus"=>"Lead Status",
 		"annualrevenue"=>"Annual Revenue",
 		"rating"=>"Rating",
-		"licencekeystatus"=>"License Key",
 		"noofemployees"=>"No Of Employees",
 		"assigned_user_id"=>"Assigned To",
 		"yahooid"=>"Yahoo Id",		

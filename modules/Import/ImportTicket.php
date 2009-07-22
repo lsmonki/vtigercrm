@@ -1,14 +1,12 @@
 <?php
-//Pavani this file supports to import tickets
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- *
- ********************************************************************************/
+ *********************************************************************************/
       
 include_once('config.php');
 require_once('include/logging.php');
@@ -21,7 +19,7 @@ class ImportTicket extends HelpDesk {
 	 var $db;
 
 	// This is the list of the functions to run when importing
-	var $special_functions =  array("assign_user","add_product","empty_relatedto");
+	var $special_functions =  array("assign_user","add_product","empty_relatedto","modseq_number");
 
 	var $importable_fields = Array();
 
@@ -37,8 +35,7 @@ class ImportTicket extends HelpDesk {
 		{
 			$this->db->println("searching and assigning ".$ass_user);
 
-			//$result = $this->db->query("select id from vtiger_users where user_name = '".$ass_user."'");
-			$result = $this->db->query("select id from vtiger_users where id = '".$ass_user."'");
+			$result = $this->db->pquery("select id from vtiger_users where id = ? union select groupid as id from vtiger_groups where groupid = ?",array($ass_user, $ass_user));
 			if($this->db->num_rows($result)!=1)
 			{
 				$this->db->println("not exact records setting current userid");
@@ -90,23 +87,50 @@ class ImportTicket extends HelpDesk {
         }
 	function empty_relatedto()
 	{
-		$parent_id = $this->column_fields["parent_id"];
-		if($parent_id == '' || $parent_id != '')
+		global $adb;
+		$parent_name = $this->column_fields["parent_id"];
+		if($parent_name == '' || $parent_name == NULL)
                         $parent_id = 0;
-
-                $this->column_fields['parent_id'] = $parent_id;
+		else
+		{   //get the account
+			$relatedTo = explode(':',$parent_name);
+			$parent_module = $relatedTo[0]; $parent_module = trim($parent_module," ");
+			$parent_name = $relatedTo[3]; $parent_name = trim($parent_name," ");
+			$num_rows = 0;
+			if($parent_module == 'Contacts')
+			{
+				$query ="select crmid from vtiger_contactdetails, vtiger_crmentity WHERE concat(lastname,' ',firstname)=? and vtiger_crmentity.crmid =vtiger_contactdetails.contactid and vtiger_crmentity.deleted=0";
+				$result = $adb->pquery($query, array($parent_name));
+				$num_rows=$adb->num_rows($result);
+			}
+			else if($parent_module == 'Accounts')
+			{
+				$query = "select crmid from vtiger_account, vtiger_crmentity WHERE accountname=? and vtiger_crmentity.crmid =vtiger_account.accountid and vtiger_crmentity.deleted=0";
+				$result = $adb->pquery($query, array($parent_name));
+				$num_rows = $adb->num_rows($result);
+			}
+			else $num_rows=0;
+			if($num_rows == 0) $parent_id = 0;
+			else $parent_id = $adb->query_result($result,0,"crmid");
+		}
+		$this->column_fields['parent_id'] = $parent_id;        
 	}
 	/** Constructor which will set the importable_fields as $this->importable_fields[$key]=1 in this object where key is the fieldname in the field table
 	 */
 	function ImportTicket() {
-		
+		parent::HelpDesk();
 		$this->log = LoggerManager::getLogger('import_ticket');
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->db->println("IMP ImportTicket");
 		$this->initImportableFields("HelpDesk");
-		
 		$this->db->println($this->importable_fields);
 	}
 
+	// Module Sequence Numbering	
+	function modseq_number() {
+		$this->column_fields['ticket_no'] = '';
+	}
+	// END
+	
 }
 ?>

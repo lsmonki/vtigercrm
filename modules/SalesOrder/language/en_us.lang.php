@@ -192,6 +192,18 @@ $mod_strings = Array(
 'Discount Amount'=>'Discount Amount',
 'Terms & Conditions'=>'Terms & Conditions',
 'S&H Amount'=>'S&H Amount',
+
+//Added after 5.0.4 GA
+'SalesOrder No'=>'SalesOrder No',
+
+'Recurring Invoice Information' => 'Recurring Invoice Information',
+'Enable Recurring' => 'Enable Recurring',
+'Frequency' => 'Frequency',
+'Start Period' => 'Start Period',
+'End Period' => 'End Period',
+'Payment Duration' => 'Payment Duration',
+'Invoice Status' => 'Invoice Status',
+
 );
 
 ?>

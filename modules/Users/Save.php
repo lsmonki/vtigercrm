@@ -35,14 +35,18 @@ else
 
 if(isset($_REQUEST['dup_check']) && $_REQUEST['dup_check'] != '')
 {
-        $query = "SELECT user_name FROM vtiger_users WHERE user_name =?";
-        $result = $adb->pquery($query, array($user_name));
-        if($adb->num_rows($result) > 0)
-        {
+        $user_query = "SELECT user_name FROM vtiger_users WHERE user_name =?";
+        $user_result = $adb->pquery($user_query, array($user_name));
+        $group_query = "SELECT groupname FROM vtiger_groups WHERE groupname =?";
+        $group_result = $adb->pquery($group_query, array($user_name));
+        
+        if($adb->num_rows($user_result) > 0) {
 		echo $mod_strings['LBL_USERNAME_EXIST'];
 		die;
-	}else
-	{
+		} elseif($adb->num_rows($group_result) > 0) {
+			echo $mod_strings['LBL_GROUPNAME_EXIST'];
+			die;
+		} else {
 	        echo 'SUCCESS';
 	        die;
 	}
@@ -110,11 +114,19 @@ if(! $_REQUEST['changepassword'] == 'true')
 	if(isset($_SESSION['internal_mailer']) && $_SESSION['internal_mailer'] != $focus->column_fields['internal_mailer'])
 		$_SESSION['internal_mailer'] = $focus->column_fields['internal_mailer'];
 	setObjectValuesFromRequest($focus);
-
+	
+	// Added for Reminder Popup support
+	$query_prev_interval = $adb->pquery("SELECT reminder_interval from vtiger_users where id=?",array($focus->id));
+	$prev_reminder_interval = $adb->query_result($query_prev_interval,0,'reminder_interval');
+	
 	$focus->saveentity("Users");
 	//$focus->imagename = $image_upload_array['imagename'];
-	$focus->saveHomeOrder($focus->id);
+	$focus->saveHomeStuffOrder($focus->id);
 	SaveTagCloudView($focus->id);
+
+	// Added for Reminder Popup support
+	$focus->resetReminderInterval($prev_reminder_interval);
+
 	$return_id = $focus->id;
 
 if (isset($_POST['user_name']) && isset($_POST['new_password'])) {
@@ -159,13 +171,13 @@ createUserPrivilegesfile($focus->id);
 createUserSharingPrivilegesfile($focus->id);
 
 }
-if(isset($_POST['return_module']) && $_POST['return_module'] != "") $return_module = $_POST['return_module'];
+if(isset($_POST['return_module']) && $_POST['return_module'] != "") $return_module = vtlib_purify($_REQUEST['return_module']);
 else $return_module = "Users";
-if(isset($_POST['return_action']) && $_POST['return_action'] != "") $return_action = $_POST['return_action'];
+if(isset($_POST['return_action']) && $_POST['return_action'] != "") $return_action = vtlib_purify($_REQUEST['return_action']);
 else $return_action = "DetailView";
-if(isset($_POST['return_id']) && $_POST['return_id'] != "") $return_id = $_POST['return_id'];
-if(isset($_REQUEST['activity_mode']))   $activitymode = '&activity_mode='.$_REQUEST['activity_mode'];
-if(isset($_POST['parenttab'])) $parenttab = $_POST['parenttab'];
+if(isset($_POST['return_id']) && $_POST['return_id'] != "") $return_id = vtlib_purify($_REQUEST['return_id']);
+if(isset($_REQUEST['activity_mode']))   $activitymode = '&activity_mode='.vtlib_purify($_REQUEST['activity_mode']);
+if(isset($_POST['parenttab'])) $parenttab = getParentTab();
 
 $log->debug("Saved record with id of ".$return_id);
 
@@ -193,10 +205,10 @@ if($_REQUEST['mode'] == 'create') {
 		$error_str = getMailErrorString($mail_status_str);
 	}
 }
-$location = "Location: index.php?action=$return_action&module=$return_module&record=$return_id";
+$location = "Location: index.php?action=".vtlib_purify($return_action)."&module=".vtlib_purify($return_module)."&record=".vtlib_purify($return_id);
 
 if($_REQUEST['modechk'] != 'prefview') {
-	$location .= "&parenttab=$parenttab";
+	$location .= "&parenttab=".vtlib_purify($parenttab);
 }
 
 if ($error_str != '') {	

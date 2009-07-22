@@ -12,8 +12,8 @@
 {if $smarty.request.ajax neq ''}
 &#&#&#{$ERROR}&#&#&#
 {/if}
-
-<form name="massdelete" method="POST" id="massdelete">
+<script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
+<form name="massdelete" method="POST" id="massdelete" onsubmit="VtigerJS_DialogBox.block();">
      <input name='search_url' id="search_url" type='hidden' value='{$SEARCH_URL}'>
      <input name="idlist" id="idlist" type="hidden">
      <input name="change_owner" type="hidden">
@@ -34,34 +34,34 @@
 			    <tr>
 				<!-- Buttons -->
 				<td style="padding-right:20px" nowrap>
-                                 {foreach key=button_check item=button_label from=$BUTTONS}
-                                        {if $button_check eq 'del'}
-                                             <input class="crmbutton small delete" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
-                                        {elseif $button_check eq 's_mail'}
-                                             <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this);"/>
-					{elseif $button_check eq 's_cmail'}
-                                             <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
-                                        {elseif $button_check eq 'c_status'}
-                                             <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
-					{elseif $button_check eq 'mailer_exp'}
-                                             <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return mailer_export()"/>
-					{elseif $button_check eq 'c_owner'}
-						{if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
-						     <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
-                                                {/if}
-                                        {/if}
 
-                                 {/foreach}
+                 {foreach key=button_check item=button_label from=$BUTTONS}
+                    {if $button_check eq 'del'}
+                         <input class="crmbutton small delete" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
+                    {elseif $button_check eq 'mass_edit'}
+                         <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return mass_edit(this, 'massedit', '{$MODULE}', '{$CATEGORY}')"/>
+                    {elseif $button_check eq 's_mail'}
+                         <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this);"/>
+					{elseif $button_check eq 's_cmail'}
+                         <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
+                    {elseif $button_check eq 'mailer_exp'}
+                         <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return mailer_export()"/>
+                    {* Mass Edit handles Change Owner for other module except Calendar *}
+                    {elseif $button_check eq 'c_owner' && $MODULE eq 'Calendar'}
+                    	<input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
+					{/if}
+                {/foreach}
                 </td>
-				<!-- Record Counts -->
-				<td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
+				<td class="small" nowrap>
+					{$recordListRange}
+				</td>
 				<!-- Page Navigation -->
-		        <td nowrap >
+				<td nowrap width="30%" align="center">
 					<table border=0 cellspacing=0 cellpadding=0 class="small">
-					     <tr>{$NAVIGATION}</tr>
+						<tr>{$NAVIGATION}</tr>
 					</table>
                 </td>
-				<td width=100% align="right">
+				<td width=40% align="right">
 				   <!-- Filters -->
 				   {if $HIDE_CUSTOM_LINKS neq '1'}
 					<table border=0 cellspacing=0 cellpadding=0 class="small">
@@ -76,11 +76,25 @@
 							<span class="small">|</span>
 							<span class="small" disabled>{$APP.LNK_CV_DELETE}</span></td>
 						    {else}
-							<td><a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
-							<span class="small">|</span>
-                            <a href="index.php?module={$MODULE}&action=CustomView&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_EDIT}</a>
-                            <span class="small">|</span>
-							<a href="javascript:confirmdelete('index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}')">{$APP.LNK_CV_DELETE}</a></td>
+							<td>
+								<a href="index.php?module={$MODULE}&action=CustomView&parenttab={$CATEGORY}">{$APP.LNK_CV_CREATEVIEW}</a>
+								<span class="small">|</span>
+								{if $CV_EDIT_PERMIT neq 'yes'}
+									<span class="small" disabled>{$APP.LNK_CV_EDIT}</span>
+								{else}
+									<a href="index.php?module={$MODULE}&action=CustomView&record={$VIEWID}&parenttab={$CATEGORY}">{$APP.LNK_CV_EDIT}</a>
+								{/if}
+								<span class="small">|</span>
+								{if $CV_DELETE_PERMIT neq 'yes'}
+									<span class="small" disabled>{$APP.LNK_CV_DELETE}</span>
+								{else}
+									<a href="javascript:confirmdelete('index.php?module=CustomView&action=Delete&dmodule={$MODULE}&record={$VIEWID}&parenttab={$CATEGORY}')">{$APP.LNK_CV_DELETE}</a>
+								{/if}
+								{if $CUSTOMVIEW_PERMISSION.ChangedStatus neq '' && $CUSTOMVIEW_PERMISSION.Label neq ''}
+									<span class="small">|</span>	
+								   		<a href="#" id="customstatus_id" onClick="ChangeCustomViewStatus({$VIEWID},{$CUSTOMVIEW_PERMISSION.Status},{$CUSTOMVIEW_PERMISSION.ChangedStatus},'{$MODULE}','{$CATEGORY}')">{$CUSTOMVIEW_PERMISSION.Label}</a>
+								{/if}
+							</td>
 						    {/if}
 					</tr>
 					</table> 
@@ -105,8 +119,10 @@
 			{foreach item=entity key=entity_id from=$LISTENTITY}
 			<tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'" id="row_{$entity_id}">
 			<td width="2%"><input type="checkbox" NAME="selected_id" id="{$entity_id}" value= '{$entity_id}' onClick="check_object(this)"></td>
-			{foreach item=data from=$entity}	
-			<td>{$data}</td>
+			{foreach item=data from=$entity}
+			{* vtlib customization: Trigger events on listview cell *}	
+			<td onmouseover="vtlib_listview.trigger('cell.onmouseover', $(this))" onmouseout="vtlib_listview.trigger('cell.onmouseout', $(this))">{$data}</td>
+			{* END *}
 	        {/foreach}
 			</tr>
 			{foreachelse}
@@ -125,14 +141,15 @@
 							
 				<table border="0" cellpadding="5" cellspacing="0" width="98%">
 				<tr>
-					<td rowspan="2" width="25%"><img src="{$IMAGE_PATH}empty.jpg" height="60" width="61"></td>
+					<td rowspan="2" width="25%"><img src="{'empty.jpg'|@vtiger_imageurl:$THEME}" height="60" width="61"></td>
 					<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">
 					{if $MODULE_CREATE eq 'SalesOrder' || $MODULE_CREATE eq 'PurchaseOrder' || $MODULE_CREATE eq 'Invoice' || $MODULE_CREATE eq 'Quotes'}
 						{$APP.LBL_NO} {$APP.$MODULE_CREATE} {$APP.LBL_FOUND} !
 					{elseif $MODULE eq 'Calendar'}
 						{$APP.LBL_NO} {$APP.ACTIVITIES} {$APP.LBL_FOUND} !
 					{else}
-						{$APP.LBL_NO} {$APP.$MODULE_CREATE}s {$APP.LBL_FOUND} !
+						{* vtlib customization: Use translation string only if available *}
+						{$APP.LBL_NO} {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}{else}{$MODULE_CREATE}{/if} {$APP.LBL_FOUND} !
 					{/if}
 					</span></td>
 				</tr>
@@ -142,7 +159,8 @@
 					{if $MODULE_CREATE eq 'SalesOrder' || $MODULE_CREATE eq 'PurchaseOrder' || $MODULE_CREATE eq 'Invoice' || $MODULE_CREATE eq 'Quotes'}
 						 {$MOD.$MODULE_CREATE}
 					{else}
-						 {$APP.$MODULE_CREATE}
+						 {* vtlib customization: Use translation string only if available *}
+						 {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}{else}{$MODULE_CREATE}{/if}
 					{/if}
 
 					{$APP.LBL_NOW}. {$APP.LBL_CLICK_THE_LINK}:<br>
@@ -151,7 +169,8 @@
 					{if $MODULE_CREATE eq 'SalesOrder' || $MODULE_CREATE eq 'PurchaseOrder' || $MODULE_CREATE eq 'Invoice' || $MODULE_CREATE eq 'Quotes'}
 						 {$MOD.$MODULE_CREATE}
 					{else}
-						 {$APP.$MODULE_CREATE}
+						 {* vtlib customization: Use translation string only if available *}
+						 {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}{else}{$MODULE_CREATE}{/if}
 					{/if}
 					</a><br>
 					{else}
@@ -161,15 +180,16 @@
 					</td>
 				</tr>
 				</table> 
-					{else}
+			{else}
 				<table border="0" cellpadding="5" cellspacing="0" width="98%">
 				<tr>
-				<td rowspan="2" width="25%"><img src="{$IMAGE_PATH}denied.gif"></td>
+				<td rowspan="2" width="25%"><img src="{'denied.gif'|@vtiger_imageurl:$THEME}"></td>
 				<td style="border-bottom: 1px solid rgb(204, 204, 204);" nowrap="nowrap" width="75%"><span class="genHeaderSmall">
 				{if $MODULE_CREATE eq 'SalesOrder' || $MODULE_CREATE eq 'PurchaseOrder' || $MODULE_CREATE eq 'Invoice' || $MODULE_CREATE eq 'Quotes'}
 					{$APP.LBL_NO} {$APP.$MODULE_CREATE} {$APP.LBL_FOUND} !</span></td>
 				{else}
-					{$APP.LBL_NO} {$APP.$MODULE_CREATE}s {$APP.LBL_FOUND} !</span></td>
+					{* vtlib customization: Use translation string only if available *}
+					{$APP.LBL_NO} {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}{else}{$MODULE_CREATE}{/if} {$APP.LBL_FOUND} !</span></td>
 				{/if}
 				</tr>
 				<tr>
@@ -177,7 +197,8 @@
 				{if $MODULE_CREATE eq 'SalesOrder' || $MODULE_CREATE eq 'PurchaseOrder' || $MODULE_CREATE eq 'Invoice' || $MODULE_CREATE eq 'Quotes'}
 					 {$MOD.$MODULE_CREATE}
 				{else}
-					 {$APP.$MODULE_CREATE}
+					 {* vtlib customization: Use translation string only if available *}
+					 {if $APP.$MODULE_CREATE}{$APP.$MODULE_CREATE}{else}{$MODULE_CREATE}{/if}
 				{/if}
 				<br>
 				</td>
@@ -196,29 +217,30 @@
                                  {foreach key=button_check item=button_label from=$BUTTONS}
                                         {if $button_check eq 'del'}
                                             <input class="crmbutton small delete" type="button" value="{$button_label}" onclick="return massDelete('{$MODULE}')"/>
+					                    {elseif $button_check eq 'mass_edit'}
+					                         <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return mass_edit(this, 'massedit', '{$MODULE}')"/>
                                         {elseif $button_check eq 's_mail'}
                                              <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return eMail('{$MODULE}',this)"/>
                                         {elseif $button_check eq 's_cmail'}
                                              <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return massMail('{$MODULE}')"/>
-                                        {elseif $button_check eq 'c_status'}
-                                             <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changestatus')"/>
-					 {elseif $button_check eq 'mailer_exp'}
+                                        {elseif $button_check eq 'mailer_exp'}
                                              <input class="crmbutton small edit" type="submit" value="{$button_label}" onclick="return mailer_export()"/>
-					{elseif $button_check eq 'c_owner'}
-				                {if $MODULE neq 'Notes' && $MODULE neq 'Products' && $MODULE neq 'Faq' && $MODULE neq 'Vendors' && $MODULE neq 'PriceBooks'}
-                                                     <input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
-                                                {/if}
-                                        {/if}
+                                        {* Mass Edit handles Change Owner for other module except Calendar *}
+                                        {elseif $button_check eq 'c_owner' && $MODULE eq 'Calendar'}
+											<input class="crmbutton small edit" type="button" value="{$button_label}" onclick="return change(this,'changeowner')"/>
+										{/if}
 
                                  {/foreach}
                     </td>
-				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
-				 <td nowrap >
+				<td class="small" nowrap>
+					{$recordListRange}
+				</td>
+				<td nowrap width="30%" align="center">
 				    <table border=0 cellspacing=0 cellpadding=0 class="small">
 				         <tr>{$NAVIGATION}</tr>
 				     </table>
 				 </td>
-				 <td align="right" width=100%>
+				 <td align="right" width=40%>
 				   <table border=0 cellspacing=0 cellpadding=0 class="small">
 					<tr>
                                            {$WORDTEMPLATEOPTIONS}{$MERGEBUTTON}

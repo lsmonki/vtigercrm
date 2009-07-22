@@ -1,34 +1,25 @@
 <?php
-/*********************************************************************************
- ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-  * ("License"); You may not use this file except in compliance with the License
-  * The Initial Developer of the Original Code is FOSS Labs.
-  * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
-  * Portions created by vtiger are Copyright (C) vtiger.
-  * All Rights Reserved.
-  *
-  ********************************************************************************/
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Initial Developer of the Original Code is FOSS Labs.
+ * Portions created by FOSS Labs are Copyright (C) FOSS Labs.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
 
-// figure out which page we are on and what mailbox we want to view
-//if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != ""){$mailbox=$_REQUEST["mailbox"];} else {$mailbox="INBOX";}
-if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "")
-{
+if($_REQUEST["mailbox"] && $_REQUEST["mailbox"] != "") {
 	$mailbox=$_REQUEST["mailbox"];
-}
-else
-{
+} else {
 	$mailbox="INBOX";
 }
 
-if($_REQUEST["start"] && $_REQUEST["start"] != "")
-{
-	$start=$_REQUEST["start"];
-}
-else
-{
+if($_REQUEST["start"] && $_REQUEST["start"] != "") {
+	$start=vtlib_purify($_REQUEST["start"]);
+} else {
 	$start="1";
 }
-$show_hidden=$_REQUEST["show_hidden"];
+$show_hidden=vtlib_purify($_REQUEST["show_hidden"]);
 
 global $current_user;
 
@@ -65,12 +56,30 @@ $numEmails = $elist["count"];
 $headers = $elist["headers"];
 $mails_per_page = $MailBox->mails_per_page;
 
-
+// Calculate paging information ahead before retrieving overviews
 if($start == 1 || $start == "") {
 	$start_message=$numEmails;
+	if($numEmails > $mails_per_page) $end_message = $start_message - $mails_per_page;
+	else $end_message = $start_message - $numEmails;
 } else {
 	$start_message=($numEmails-(($start-1)*$mails_per_page));
+	$end_message = ($numEmails-(($start)*$mails_per_page));	
+	if($end_message < 0) $end_message = 0;
 }
+
+// If in search mode, load overview of all the available emails
+if(isset($_REQUEST["search"])) {
+	// TODO: Navigating when search is used needs to be added
+	$MailBox->loadOverviewList(1, $numEmails);
+} else {
+	// For normal listview, fetch only required mail overview
+	$MailBox->loadOverviewList($start_message, $end_message);
+}
+
+// Fetch meta-info again after overview is loaded, for further process
+$elist = $MailBox->mailList;
+$headers = $elist["headers"];
+// END
 
 $c=$numEmails;
 
@@ -105,6 +114,8 @@ if (is_array($overview))
 		$from_list = str_replace(">","",$from);
 		$cc = str_replace("<",":",$hdr->ccaddress);
 		$cc_list = str_replace(">","",$cc);
+		
+		$cc_list = addslashes($cc_list);
 		/*$js_array .= "webmail2[".$val->msgno."] = new Array();";
 		$js_array .= "webmail2[".$val->msgno."]['from'] = '".addslashes($from_list)."';";
 		$js_array .= "webmail2[".$val->msgno."]['to'] = '".addslashes($to_list)."';";
@@ -126,7 +137,7 @@ if(($numEmails) <= 0)
 else {
 
 	if(isset($_REQUEST["search"]) && trim($_REQUEST["search_input"]) != '') {
-		$searchstring = $_REQUEST["search_type"].' "'.$_REQUEST["search_input"].'"';
+		$searchstring = vtlib_purify($_REQUEST["search_type"]).' "'.vtlib_purify($_REQUEST["search_input"]).'"';
 		//echo $searchstring."<br>";
 		$searchlist = Array();
 		$searchlist = imap_search($MailBox->mbox,$searchstring);
@@ -208,7 +219,7 @@ if (is_array($list)) {
 			if($tmpval[0] != ".")
 			{
 				if($numEmails==0) {$num=$numEmails;} else {$num=($numEmails-1);}
-				$folders .= '<li style="padding-left:0px;"><img src="themes/'.$theme.'/images/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+				$folders .= '<li style="padding-left:0px;"><img src="themes/images/'.$img.'"align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
 				if($unread_msgs > 0)
 					$folders .= '(<span id="'.$tmpval.'_unread">'.$unread_msgs.'</span>)</span>&nbsp;&nbsp;<span id="remove_'.$tmpval.'" style="position:relative;display:none">Remove</span></li>';
 				else
@@ -222,7 +233,7 @@ if (is_array($list)) {
 			{
 				if($box->messages==0) {$num=$box->messages;} else {$num=($box->messages-1);}
 				$boxes .= '<option value="'.$tmpval.'">'.$tmpval;
-				$folders .= '<li ><img src="themes/'.$theme.'/images/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
+				$folders .= '<li ><img src="themes/images/'.$img.'" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:changeMbox(\''.$tmpval.'\');" class="small">'.$tmpval.'</a>&nbsp;<span id="'.$tmpval.'_count" style="font-weight:bold">';
 				if($box->unseen > 0)
 					$folders .= '(<span id="'.$tmpval.'_unread">'.$box->unseen.'</span>)</span></li>';
 				else
@@ -237,16 +248,10 @@ imap_close($MailBox->mbox);
 $smarty = new vtigerCRM_Smarty;
 //$smarty->assign("USERID", $current_user->id);
 $smarty->assign("MOD", $mod_strings);
-//$smarty->assign("APP", $app_strings);
-//$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("THEME", $theme);
 $smarty->assign("UNREAD_COUNT",$unread_msgs);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("LISTHEADER", $listview_header);
-//$smarty->assign("SEARCH_HTML", $search_html);
-//$smarty->assign("MODULE","Webmails");
-//$smarty->assign("SINGLE_MOD",'Webmails');
-//$smarty->assign("BUTTONS",$other_text);
-//$smarty->assign("CATEGORY","My Home Page");
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("FOLDER_SELECT", $boxes);
 $smarty->assign("NUM_EMAILS", $numEmails);
@@ -254,6 +259,5 @@ $smarty->assign("MAILBOX", $MailBox->mailbox);
 $smarty->assign("ACCOUNT", $MailBox->display_name);
 $smarty->assign("BOXLIST",$folders);
 $smarty->assign("MAIL_INFO",$js_array);
-//$smarty->assign("DEGRADED_SERVICE",$degraded_service);
-       $smarty->display("ListViewAjax.tpl");
+$smarty->display("ListViewAjax.tpl");
 ?>

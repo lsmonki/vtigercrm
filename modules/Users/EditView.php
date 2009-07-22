@@ -32,14 +32,14 @@ require_once('modules/Leads/ListViewTop.php');
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
-global $currentModule;
+global $currentModule,$default_charset;
 
 
 $smarty=new vtigerCRM_Smarty;
 $focus = new Users();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
-	$smarty->assign("ID",$_REQUEST['record']);
+	$smarty->assign("ID",vtlib_purify($_REQUEST['record']));
 	$mode='edit';
 	if (!is_admin($current_user) && $_REQUEST['record'] != $current_user->id) die ("Unauthorized access to user administration.");
     $focus->retrieve_entity_info($_REQUEST['record'],'Users');
@@ -74,23 +74,23 @@ $smarty->assign("MOD", $smod_strings);
 $smarty->assign("CURRENT_USERID", $current_user->id);
 $smarty->assign("APP", $app_strings);
 
-if (isset($_REQUEST['error_string'])) $smarty->assign("ERROR_STRING", "<font class='error'>Error: ".$_REQUEST['error_string']."</font>");
+if (isset($_REQUEST['error_string'])) $smarty->assign("ERROR_STRING", "<font class='error'>Error: ".vtlib_purify($_REQUEST['error_string'])."</font>");
 if (isset($_REQUEST['return_module']))
 {
-        $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
-        $RETURN_MODULE=$_REQUEST['return_module'];
+        $smarty->assign("RETURN_MODULE", vtlib_purify($_REQUEST['return_module']));
+        $RETURN_MODULE=vtlib_purify($_REQUEST['return_module']);
 }
 if (isset($_REQUEST['return_action']))
 {
-        $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
-        $RETURN_ACTION = $_REQUEST['return_action'];
+        $smarty->assign("RETURN_ACTION", vtlib_purify($_REQUEST['return_action']));
+        $RETURN_ACTION = vtlib_purify($_REQUEST['return_action']);
 }
 if ($_REQUEST['isDuplicate'] != 'true' && isset($_REQUEST['return_id']))
 {
-        $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
-        $RETURN_ID = $_REQUEST['return_id'];
+        $smarty->assign("RETURN_ID", vtlib_purify($_REQUEST['return_id']));
+        $RETURN_ID = vtlib_purify($_REQUEST['return_id']);
 }
-
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $focus->mode = $mode;
 $disp_view = getView($focus->mode);
@@ -111,12 +111,14 @@ if(isset($_REQUEST['record']) && $_REQUEST['isDuplicate'] != 'true')
 	$smarty->assign("USERNAME_READONLY", "readonly");
 }
 
-$smarty->assign("HOMEORDER",$focus->getHomeOrder($focus->id));
+$smarty->assign("HOMEORDER",$focus->getHomeStuffOrder($focus->id));
 //Added to provide User based Tagcloud
-$smarty->assign("TAGCLOUDVIEW",getTagCloudView($focus->id));
-$smarty->assign("DUPLICATE",$_REQUEST['isDuplicate']);
+if($mode == 'create') $smarty->assign("TAGCLOUDVIEW","true"); // While creating user select tag cloud by default 
+else $smarty->assign("TAGCLOUDVIEW",getTagCloudView($focus->id));
+
+$smarty->assign("DUPLICATE",vtlib_purify($_REQUEST['isDuplicate']));
 $smarty->assign("USER_MODE",$mode);
-$smarty->assign('PARENTTAB',$_REQUEST['parenttab']);
+$smarty->assign('PARENTTAB', getParentTab());
 
 $smarty->display('UserEditView.tpl');
 

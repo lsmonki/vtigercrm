@@ -30,20 +30,21 @@ global $focus_list;
 global $adb;
 
 $oRss = new vtigerRSS();
-if(isset($_REQUEST[folders]) && $_REQUEST[folders] == 'true')
+if(isset($_REQUEST['folders']) && $_REQUEST['folders'] == 'true')
 {
 	require_once("modules/".$currentModule."/Forms.php");
 	echo get_rssfeeds_form();
 	die;
 }
-if(isset($_REQUEST[record]))
+if(isset($_REQUEST['record']))
 {
-	$recordid = $_REQUEST[record];
+	$recordid = vtlib_purify($_REQUEST['record']);
 }
 
 $rss_form = new vtigerCRM_Smarty;
 $rss_form->assign("MOD", $mod_strings);
 $rss_form->assign("APP", $app_strings);
+$rss_form->assign("THEME",$theme);
 $rss_form->assign("IMAGE_PATH",$image_path);
 $rss_form->assign("MODULE", $currentModule);
 $rss_form->assign("CATEGORY", getParenttab());
@@ -53,7 +54,7 @@ $rss_form->assign("CATEGORY", getParenttab());
 //$url = 'http://forums/weblog_rss.php?w=202';
 if(isset($_REQUEST[record]))
 {
-    $recordid = $_REQUEST[record];
+    $recordid = vtlib_purify($_REQUEST['record']);
 	$url = $oRss->getRssUrlfromId($recordid);
 	if($oRss->setRSSUrl($url))
 	{

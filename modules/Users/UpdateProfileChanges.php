@@ -1,24 +1,22 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
-require_once('include/database/PearDatabase.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/utils.php');
-global $adb;
-$profileid = $_REQUEST['profileid'];
-$def_module = $_REQUEST['selected_module'];
-$def_tab = $_REQUEST['selected_tab'];
+global $adb,$log;
+$profileid = vtlib_purify($_REQUEST['profileid']);
+$def_module = vtlib_purify($_REQUEST['selected_module']);
+$def_tab = vtlib_purify($_REQUEST['selected_tab']);
 
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action']!= '')
-	$return_action =$_REQUEST['return_action'];
+	$return_action =vtlib_purify($_REQUEST['return_action']);
 else
 	$return_action = 'ListProfiles';
 
@@ -163,8 +161,10 @@ foreach($modArr as $fld_module => $fld_label)
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
 		$displaytype =  $adb->query_result($fieldListResult,$i,"displaytype");
 		$fieldname =  $adb->query_result($fieldListResult,$i,"fieldname");
-		if($uitype == 2 || $uitype == 3 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16 || $uitype == 53 || $uitype == 255 || $displaytype == 3 || $uitype == 20 || ($displaytype != 3 && $fieldname == "activitytype" && $uitype == 15) || ($uitype == 111 && $fieldname == 'eventstatus'))
-		{
+		$typeofdata = $adb->query_result($fieldListResult,$i,"typeofdata");
+		$fieldtype = explode("~",$typeofdata);
+		if($fieldtype[1] == 'M')
+   		{
 			$visible_value = 0;
 		}
 		//Updating the database

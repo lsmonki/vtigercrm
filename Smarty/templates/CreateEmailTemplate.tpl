@@ -35,81 +35,29 @@
     function init() 
     {
         var blankOption = new Option('--None--', '--None--');
-        var allOpts = new Object(0);
         var options = null;
-            
-	    options = new Object(10);
-            options[0] = blankOption;
-            
-{/literal}                
-                options[1] = new Option('{$APP.Account_Account_Name}', '$accounts-accountname$'); 
-                options[2] = new Option('{$APP.Account_Account_Type}', '$accounts-account_type$'); 
-                options[3] = new Option('{$APP.Account_Industry}', '$accounts-industry$'); 
-                options[4] = new Option('{$APP.Account_Annual_Revenue}', '$accounts-annualrevenue$'); 
-                options[5] = new Option('{$APP.Account_Phone}', '$accounts-phone$'); 
-                options[6] = new Option('{$APP.Account_Email}', '$accounts-email1$'); 
-                options[7] = new Option('{$APP.Account_Rating}', '$accounts-rating$'); 
-                options[8] = new Option('{$APP.Account_Website}', '$accounts-website$'); 
-                options[9] = new Option('{$APP.Account_Fax}', '$accounts-fax$'); 
-            
-	        allOpts[1] = options;
-        
-            options = new Object(11);
-            options[0] = blankOption;
-                
-                options[1] = new Option('{$APP.Contact_First_Name}', '$contacts-firstname$'); 
-                options[2] = new Option('{$APP.Contact_Last_Name}', '$contacts-lastname$'); 
-                options[3] = new Option('{$APP.Contact_Salutation}', '$contacts-salutation$'); 
-                options[4] = new Option('{$APP.Contact_Title}', '$contacts-title$'); 
-                options[5] = new Option('{$APP.Contact_Email}', '$contacts-email$'); 
-                options[6] = new Option('{$APP.Contact_Department}', '$contacts-department$'); 
-                options[7] = new Option('{$APP.Contact_Office_Phone}', '$contacts-phone$'); 
-                options[8] = new Option('{$APP.Contact_Mobile}', '$contacts-mobile$'); 
-                options[9] = new Option('{$APP.Contact_Support_Start_Date}', '$contacts-support_start_date$');
-		options[10] = new Option('{$APP.Contact_Support_End_Date}', '$contacts-support_end_date$');             
-            allOpts[2] = options;
-        
-            
-            options = new Object(12);
-            options[0] = blankOption;
-            
-                
-                options[1] = new Option('{$APP.Lead_First_Name}', '$leads-firstname$'); 
-                options[2] = new Option('{$APP.Lead_Last_Name}', '$leads-lastname$'); 
-                options[3] = new Option('{$APP.Lead_Lead_Source}', '$leads-leadsource$'); 
-                options[4] = new Option('{$APP.Lead_Status}', '$leads-leadstatus$'); 
-                options[5] = new Option('{$APP.Lead_Rating}', '$leads-rating$'); 
-                options[6] = new Option('{$APP.Lead_Industry}', '$leads-industry$'); 
-                options[7] = new Option('{$APP.Lead_Yahoo_ID}', '$leads-yahooid$'); 
-                options[8] = new Option('{$APP.Lead_Email}', '$leads-email$'); 
-                options[9] = new Option('{$APP.Lead_Annual_Revenue}', '$leads-annualrevenue$'); 
-                options[10] = new Option('{$APP.Lead_Title}', '$leads-designation$'); 
-                options[11] = new Option('{$APP.Lead_Salutation}', '$leads-salutation$'); 
-            
-	        allOpts[3] = options;
+{/literal}
 
-	        options = new Object(14);
-                options[0] = blankOption;
-            
-                 options[1] = new Option('{$APP.User_First_Name}', '$users-first_name$'); 
-                 options[2] = new Option('{$APP.User_Last_Name}', '$users-last_name$'); 
-		 options[3] = new Option('{$APP.User_Title}', '$users-title$'); 
-		 options[4] = new Option('{$APP.User_Department}', '$users-department$'); 
-		 options[5] = new Option('{$APP.User_HomePhone}', '$users-phone_home$'); 
-		 options[6] = new Option('{$APP.User_Mobile}', '$users-phone_mobile$'); 
-		 options[7] = new Option('{$APP.User_Signature}', '$users-signature$'); 
-		 options[8] = new Option('{$APP.User_Email}', '$users-email1$'); 
-		 options[9] = new Option('{$APP.User_Street}', '$users-address_street$'); 
-		options[10] = new Option('{$APP.User_City}', '$users-address_city$'); 
-		options[11] = new Option('{$APP.User_State}', '$users-address_state$'); 
-		options[12] = new Option('{$APP.User_Country}', '$users-address_country$'); 
-		options[13] = new Option('{$APP.User_PostalCode}', '$users-address_postalcode$'); 
-   {literal}         
-            	allOpts[4] = options;
-	    
-        setAllOptions(allOpts);
+		var allOpts = new Object({$ALL_VARIABLES|@count}+1);
+		{assign var="alloptioncount" value="0"}
+		{foreach key=index item=module from=$ALL_VARIABLES}
+	    	options = new Object({$module|@count}+1);
+	    	{assign var="optioncount" value="0"}
+            options[{$optioncount}] = blankOption;
+            {foreach key=header item=detail from=$module}
+             {assign var="optioncount" value=$optioncount+1}
+				options[{$optioncount}] = new Option('{$detail.0}', '{$detail.1}');
+			{/foreach}      
+			 {assign var="alloptioncount" value=$alloptioncount+1}     
+             allOpts[{$alloptioncount}] = options;
+	    {/foreach}
+        setAllOptions(allOpts);	    
     }
 	
+	
+
+	
+{literal}
 	function cancelForm(frm)
 	{
 		frm.action.value='detailviewemailtemplate';
@@ -122,7 +70,7 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 <br>
 	<div align=center>
@@ -130,14 +78,16 @@
 			{include file='SetMenu.tpl'}
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-				<form action="index.php" method="post" name="templatecreate" onsubmit="return check4null(templatecreate);">  
+				{literal}
+				<form action="index.php" method="post" name="templatecreate" onsubmit="if(check4null(templatecreate)) { VtigerJS_DialogBox.block(); } else { return false; }">
+				{/literal}
 				<input type="hidden" name="action">
 				<input type="hidden" name="mode" value="{$EMODE}">
 				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="templateid" value="{$TEMPLATEID}">
-				<input type="hidden" name="parenttab" value="PARENTTAB}">
+				<input type="hidden" name="parenttab" value="{$PARENTTAB}">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ViewTemplate.gif" alt="{$MOD.LBL_MODULE_NAME}" width="45" height="60" border=0 title="{$MOD.LBL_MODULE_NAME}"></td>
+					<td width=50 rowspan=2 valign=top><img src="{'ViewTemplate.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_MODULE_NAME}" width="45" height="60" border=0 title="{$MOD.LBL_MODULE_NAME}"></td>
 				{if $EMODE eq 'edit'}
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=listemailtemplates&parenttab=Settings">{$UMOD.LBL_EMAIL_TEMPLATES}</a> &gt; {$MOD.LBL_EDIT} &quot;{$TEMPLATENAME}&quot; </b></td>
 				{else}
@@ -252,6 +202,7 @@
                                         <OPTION VALUE="2">{$UMOD.LBL_CONTACT_FIELDS}
                                         <OPTION VALUE="3" >{$UMOD.LBL_LEAD_FIELDS}
                                         <OPTION VALUE="4" >{$UMOD.LBL_USER_FIELDS}
+                                        <OPTION VALUE="5" >{$UMOD.LBL_GENERAL_FIELDS}
                                         </select>
 				<td>
 			
@@ -309,7 +260,7 @@ x;color: #000000;border:1px solid #bababa;padding-left:5px;background-color:#fff
 	</div>
 
 </td>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </tbody>
 </table>

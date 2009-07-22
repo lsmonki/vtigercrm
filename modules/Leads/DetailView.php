@@ -14,8 +14,6 @@
  ********************************************************************************/
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
-require_once('modules/Leads/Leads.php');
-require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/UserInfoUtil.php');
@@ -24,8 +22,9 @@ require_once('user_privileges/default_module_view.php');
 global $mod_strings;
 global $app_strings;
 global $currentModule, $singlepane_view;
-    global $log;
-$focus = new Leads();
+global $log;
+
+$focus = CRMEntity::getInstance($currentModule);
 
 if(isset($_REQUEST['record']))
 {
@@ -56,6 +55,17 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $focus->id);
+
+// Module Sequence Numbering
+$mod_seq_field = getModuleSequenceField($currentModule);
+if ($mod_seq_field != null) {
+	$mod_seq_id = $focus->column_fields[$mod_seq_field['name']];
+} else {
+	$mod_seq_id = $focus->id;
+}
+$smarty->assign('MOD_SEQ_ID', $mod_seq_id);
+// END
+
 $smarty->assign("SINGLE_MOD", 'Lead');
 
 $lead_name = $focus->lastname;
@@ -77,8 +87,7 @@ $val = isPermitted("Leads","EditView",$_REQUEST['record']);
 if(isPermitted("Leads","EditView",$_REQUEST['record']) == 'yes')
 	$smarty->assign("EDIT_DUPLICATE","permitted");
 
-
-if(isPermitted("Leads","ConvertLead") =='yes' && isPermitted("Accounts","EditView") =='yes' && isPermitted("Contacts","EditView"))
+if(isPermitted("Leads","EditView",$_REQUEST['record']) == 'yes' && isPermitted("Leads","ConvertLead") =='yes' && (isPermitted("Accounts","EditView") =='yes' || isPermitted("Contacts","EditView") == 'yes') && (vtlib_isModuleActive('Contacts') || vtlib_isModuleActive('Accounts')))
 {
 	$smarty->assign("CONVERTLEAD","permitted");
 }
@@ -93,7 +102,7 @@ if(isPermitted("Leads","Delete",$_REQUEST['record']) == 'yes')
 if(isPermitted("Emails","EditView",'') == 'yes')
 {
 	//Added to pass the parents list as hidden for Emails -- 09-11-2005
-	$parent_email = getEmailParentsList('Leads',$_REQUEST['record']);
+	$parent_email = getEmailParentsList('Leads',$_REQUEST['record'], $focus);
         $smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
 	$smarty->assign("SENDMAILBUTTON","permitted");
 	$smarty->assign("EMAIL1",$focus->column_fields['email']);
@@ -136,11 +145,12 @@ $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
 $smarty->assign("MODULE", $currentModule);
-$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST[record]));
+$smarty->assign("EDIT_PERMISSION",isPermitted($currentModule,'EditView',$_REQUEST['record']));
 $smarty->assign("TODO_PERMISSION",CheckFieldPermission('parent_id','Calendar'));
 $smarty->assign("EVENT_PERMISSION",CheckFieldPermission('parent_id','Events'));
 
 $smarty->assign("IS_REL_LIST",isPresentRelatedLists($currentModule));
+$smarty->assign("USE_ASTERISK", get_use_asterisk($current_user->id));
 
 if($singlepane_view == 'true')
 {
@@ -148,6 +158,22 @@ if($singlepane_view == 'true')
 	$smarty->assign("RELATEDLISTS", $related_array);
 }
 $smarty->assign("SinglePane_View", $singlepane_view);
+
+if(PerformancePrefs::getBoolean('DETAILVIEW_RECORD_NAVIGATION', true) && isset($_SESSION[$currentModule.'_listquery'])){
+	$recordNavigationInfo = ListViewSession::getListViewNavigation($focus->id);
+	VT_detailViewNavigation($smarty,$recordNavigationInfo,$focus->id);
+}
+
+// Record Change Notification
+$focus->markAsViewed($current_user->id);
+// END
+
+include_once('vtlib/Vtiger/Link.php');
+$customlink_params = Array('MODULE'=>$currentModule, 'RECORD'=>$focus->id, 'ACTION'=>vtlib_purify($_REQUEST['action']));
+$smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), Array('DETAILVIEWBASIC','DETAILVIEW'), $customlink_params));
+
+$smarty->assign('DETAILVIEW_AJAX_EDIT', PerformancePrefs::getBoolean('DETAILVIEW_AJAX_EDIT', true));
+
 $smarty->display("DetailView.tpl");
 
 ?>

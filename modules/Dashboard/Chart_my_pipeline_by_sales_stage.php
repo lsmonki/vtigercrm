@@ -24,7 +24,6 @@ require_once('include/utils/utils.php');
 require_once('include/logging.php');
 require_once("modules/Potentials/Charts.php");
 require_once("modules/Dashboard/Forms.php");
-require_once('include/ComboUtil.php');
 global $app_list_strings, $current_language, $tmp_dir, $currentModule, $action, $current_user, $theme;
 $current_module_strings = return_module_language($current_language, 'Dashboard');
 
@@ -143,17 +142,17 @@ if (isset($_REQUEST['mypbss_edit']) && $_REQUEST['mypbss_edit'] == 'true') {
 <table cellpadding="2" border="0"><tbody>
 <tr>
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_DATE_START']?> <br><em><?php echo $app_strings['NTC_DATE_FORMAT']?></em></td>
-<td valign='top' ><input class="text" name="mypbss_date_start" size='12' maxlength='10' id='date_start' value='<?php if (isset($_SESSION['mypbss_date_start'])) echo $_SESSION['mypbss_date_start']?>'>  <img src="themes/<?php echo $theme ?>/images/calendar.gif" id="date_start_trigger"> </td>
+<td valign='top' ><input class="text" name="mypbss_date_start" size='12' maxlength='10' id='date_start' value='<?php if (isset($_SESSION['mypbss_date_start'])) echo $_SESSION['mypbss_date_start']?>'>  <img src="<?php echo vtiger_imageurl('calendar.gif', $theme) ?>" id="date_start_trigger"> </td>
 </tr><tr>
 <tr>
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_DATE_END'];?><br><em><?php echo $app_strings['NTC_DATE_FORMAT']?></em></td>
-<td valign='top' ><input class="text" name="mypbss_date_end" size='12' maxlength='10' id='date_end' value='<?php if (isset($_SESSION['mypbss_date_end'])) echo $_SESSION['mypbss_date_end']?>'>  <img src="themes/<?php echo $theme ?>/images/calendar.gif" id="date_end_trigger"> </td>
+<td valign='top' ><input class="text" name="mypbss_date_end" size='12' maxlength='10' id='date_end' value='<?php if (isset($_SESSION['mypbss_date_end'])) echo $_SESSION['mypbss_date_end']?>'>  <img src="<?php echo vtiger_imageurl('calendar.gif', $theme) ?>" id="date_end_trigger"> </td>
 </tr><tr>
 
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_SALES_STAGES'];?></td>
 <td valign='top' ><select name="mypbss_sales_stages[]" multiple size='5'><?php echo get_select_options_with_id($comboFieldArray['sales_stage_dom'],$_SESSION['mypbss_sales_stages']); ?></select></td>
 </tr><tr>
-<td align="right"><br /> <input class="button" onclick="return chk_form(my_pipeline);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
+<td align="right"><br /> <input class="button" onclick="return verify_chart_data(my_pipeline);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
 </tr></table>
 </form>
 <script type="text/javascript">

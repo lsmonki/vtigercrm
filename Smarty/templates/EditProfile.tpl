@@ -24,13 +24,13 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
         <br>
 	<div align=center>
 			{include file='SetMenu.tpl'}
 				<!-- DISPLAY -->
-				<form action="index.php" method="post" name="profileform" id="form">
+				<form action="index.php" method="post" name="profileform" id="form" onsubmit="VtigerJS_DialogBox.block();">
 				<input type="hidden" name="module" value="Users">		
 				<input type="hidden" name="parenttab" value="Settings">
 				<input type="hidden" name="action" value="{$ACTION}">		
@@ -44,7 +44,7 @@
 
 				<table class="settingsSelUITopLine" border="0" cellpadding="5" cellspacing="0" width="100%">
 				<tbody><tr>
-					<td rowspan="2" valign="top" width="50"><img src="{$IMAGE_PATH}ico-profile.gif" alt="{$MOD.LBL_PROFILES}" title="{$MOD.LBL_PROFILES}" border="0" height="48" width="48"></td>
+					<td rowspan="2" valign="top" width="50"><img src="{'ico-profile.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_PROFILES}" title="{$MOD.LBL_PROFILES}" border="0" height="48" width="48"></td>
 					<td class="heading2" valign="bottom"><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=ListProfiles&parenttab=Settings">{$CMOD.LBL_PROFILE_PRIVILEGES}</a> &gt; {$CMOD.LBL_VIEWING} &quot;{$PROFILE_NAME}&quot;</b></td>
 				</tr>
 				<tr>
@@ -60,9 +60,9 @@
                       <tbody><tr>
                         <td><table border="0" cellpadding="0" cellspacing="0" width="100%">
                             <tbody><tr class="small">
-                              <td><img src="{$IMAGE_PATH}prvPrfTopLeft.gif"></td>
+                              <td><img src="{'prvPrfTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
                               <td class="prvPrfTopBg" width="100%"></td>
-                              <td><img src="{$IMAGE_PATH}prvPrfTopRight.gif"></td>
+                              <td><img src="{'prvPrfTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
                             </tr>
                           </tbody></table>
                             <table class="prvPrfOutline" border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -77,7 +77,7 @@
                                               <td><!-- Module name heading -->
                                                   <table class="small" border="0" cellpadding="2" cellspacing="0">
                                                     <tbody><tr>
-                                                      <td valign="top"><img src="{$IMAGE_PATH}prvPrfHdrArrow.gif"> </td>
+                                                      <td valign="top"><img src="{'prvPrfHdrArrow.gif'|@vtiger_imageurl:$THEME}"> </td>
                                                       <td class="prvPrfBigText"><b> {if $MODE eq 'create'}{$CMOD.LBL_STEP_2_2} : {/if}{$CMOD.LBL_DEFINE_PRIV_FOR} &lt;{$PROFILE_NAME}&gt; </b><br>
                                                       <font class="small">{$CMOD.LBL_USE_OPTION_TO_SET_PRIV}</font> </td>
                                                       <td class="small" style="padding-left: 10px;" align="right"></td>
@@ -166,11 +166,15 @@
 				<!-- module loops-->
 			        {foreach key=tabid item=elements from=$TAB_PRIV}	
 			        <tr>
-                                        {assign var=modulename value=$TAB_PRIV[$tabid][0]}
+					{assign var=modulename value=$TAB_PRIV[$tabid][0]}
+					{assign var="MODULELABEL" value=$modulename}
+					{if $APP[$modulename] neq ''}
+						{assign var="MODULELABEL" value=$APP[$modulename]}
+					{/if}
 			          <td class="small cellLabel" width="3%"><div align="right">
 					{$TAB_PRIV[$tabid][1]}
 			          </div></td>
-			          <td class="small cellLabel" width="40%"><p>{$APP[$modulename]}</p></td>
+			          <td class="small cellLabel" width="40%"><p>{$MODULELABEL}</p></td>
 			          <td class="small cellText" width="15%">&nbsp;<div align="center">
 					{$STANDARD_PRIV[$tabid][1]}
 			          </div></td>
@@ -182,7 +186,7 @@
         			  </div></td>
 			          <td class="small cellText" width="22%">&nbsp;<div align="center">
 				{if $FIELD_PRIVILEGES[$tabid] neq NULL}
-				<img src="{$IMAGE_PATH}showDown.gif" id="img_{$tabid}" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onclick="fnToggleVIew('{$tabid}_view')" border="0" height="16" width="40" style="display:block;">
+				<img src="{'showDown.gif'|@vtiger_imageurl:$THEME}" id="img_{$tabid}" alt="{$APP.LBL_EXPAND_COLLAPSE}" title="{$APP.LBL_EXPAND_COLLAPSE}" onclick="fnToggleVIew('{$tabid}_view')" border="0" height="16" width="40" style="display:block;">
 				{/if}
 				</div></td>
 				  </tr>
@@ -285,9 +289,9 @@
       </tbody></table>
       <table class="small" border="0" cellpadding="0" cellspacing="0" width="100%">
            <tbody><tr>
-                <td><img src="{$IMAGE_PATH}prvPrfBottomLeft.gif"></td>
+                <td><img src="{'prvPrfBottomLeft.gif'|@vtiger_imageurl:$THEME}"></td>
                 <td class="prvPrfBottomBg" width="100%"></td>
-                <td><img src="{$IMAGE_PATH}prvPrfBottomRight.gif"></td>
+                <td><img src="{'prvPrfBottomRight.gif'|@vtiger_imageurl:$THEME}"></td>
                 </tr>
             </tbody>
       </table></td>
@@ -312,7 +316,7 @@
 	</div>
 
 	</td>
-	<td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+	<td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
 	</tr>
 </tbody>
 </table>
@@ -320,12 +324,11 @@
 {literal}
 var Imagid_array = new Array('img_2','img_4','img_6','img_7','img_8','img_9','img_10','img_13','img_14','img_18','img_19','img_20','img_21','img_22','img_23','img_26')
 function fnToggleVIew(obj){
-	var tagStyle = document.getElementById(obj).className;
-	if(tagStyle == 'hideTable' ){
-		document.getElementById(obj).className = 'showTable';
+	if($(obj).hasClassName('hideTable')) {
+		$(obj).removeClassName('hideTable');
+	} else {
+		$(obj).addClassName('hideTable');
 	}
-	else
-		document.getElementById(obj).className = 'hideTable';
 }
 function invokeview_all()
 {

@@ -15,17 +15,16 @@ require_once('modules/CustomView/CustomView.php');
 require_once("config.php");
 require_once('modules/Reports/Reports.php');
 require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
 require_once("modules/Reports/ReportRun.php");
 require_once('include/utils/utils.php');
 require_once('Smarty_setup.php');
 
 global $adb,$mod_strings,$app_strings;
 
-$reportid = $_REQUEST["record"];
-$folderid = $_REQUEST["folderid"];
-$filtercolumn = $_REQUEST["stdDateFilterField"];
-$filter = $_REQUEST["stdDateFilter"];
+$reportid = vtlib_purify($_REQUEST["record"]);
+$folderid = vtlib_purify($_REQUEST["folderid"]);
+$filtercolumn = vtlib_purify($_REQUEST["stdDateFilterField"]);
+$filter = vtlib_purify($_REQUEST["stdDateFilter"]);
 // Added to fix the issue
 
 $sql = "select * from vtiger_report where reportid=?";
@@ -44,14 +43,42 @@ if($numOfRows > 0)
 
 	$ogReport = new Reports($reportid);
 	$primarymodule = $ogReport->primodule;
-	$secondarymodule = $ogReport->secmodule;
-	$oReportRun = new ReportRun($reportid);
-	$filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
-	$sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
-	$totalhtml = $oReportRun->GenerateReport("TOTALHTML",$filterlist);
-	if(isPermitted($primarymodule,'index') == "yes" && (isPermitted($secondarymodule,'index')== "yes"))
+	$restrictedmodules = array();
+	if($ogReport->secmodule!='')
+		$rep_modules = split(":",$ogReport->secmodule);
+	else
+		$rep_modules = array();
+
+	array_push($rep_modules,$primarymodule);
+	$modules_permitted = true;
+	$modules_export_permitted = true;
+	foreach($rep_modules as $mod){
+		if(isPermitted($mod,'index')!= "yes" || vtlib_isModuleActive($mod)==false){
+			$modules_permitted = false;
+			$restrictedmodules[] = $mod;
+		}
+		if(isPermitted("$mod",'Export','')!='yes')
+			$modules_export_permitted = false;
+	}
+	
+	if(isPermitted($primarymodule,'index') == "yes" && $modules_permitted == true)
 	{
+		$oReportRun = new ReportRun($reportid);
+		$filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
+		
+		// Performance Optimization: Direct output of the report result
 		$list_report_form = new vtigerCRM_Smarty;
+				
+		//$sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
+		//if(is_array($sshtml))$totalhtml = $oReportRun->GenerateReport("TOTALHTML",$filterlist);
+		
+		$sshtml = array();
+		$totalhtml = '';
+		$list_report_form->assign("DIRECT_OUTPUT", true);
+		$list_report_form->assign_by_ref("__REPORT_RUN_INSTANCE", $oReportRun);
+		$list_report_form->assign_by_ref("__REPORT_RUN_FILTER_LIST", $filterlist);
+		// END		
+		
 		$ogReport->getSelectedStandardCriteria($reportid);
 		//commented to omit dashboards for vtiger_reports
 		//require_once('modules/Dashboard/ReportsCharts.php');
@@ -61,7 +88,7 @@ if($numOfRows > 0)
 		$BLOCK1 = getPrimaryStdFilterHTML($ogReport->primodule,$ogReport->stdselectedcolumn);
 		$BLOCK1 .= getSecondaryStdFilterHTML($ogReport->secmodule,$ogReport->stdselectedcolumn);
 		// Check if selectedcolumn is found in the filters (Fix for ticket #4866)
-		$selectedcolumnvalue = '"'. $ogReport->stdselectedcolumn . '"';
+		$selectedcolumnvalue = '"'. decode_html($ogReport->stdselectedcolumn) . '"';
 		if (!$is_admin && isset($ogReport->stdselectedcolumn) && strpos($BLOCK1, $selectedcolumnvalue) === false) {
 			$BLOCK1 .= "<option selected value='Not Accessible'>".$app_strings['LBL_NOT_ACCESSIBLE']."</option>";
 		}
@@ -84,16 +111,29 @@ if($numOfRows > 0)
 		$list_report_form->assign("APP", $app_strings);
 		$list_report_form->assign("IMAGE_PATH", $image_path);
 		$list_report_form->assign("REPORTID", $reportid);
-		$list_report_form->assign("REPORTNAME", $ogReport->reportname);
-		$list_report_form->assign("REPORTHTML", $sshtml);
+		$list_report_form->assign("IS_EDITABLE", $ogReport->is_editable);
+		
+		$list_report_form->assign("REPORTNAME", htmlspecialchars($ogReport->reportname,ENT_QUOTES,$default_charset));
+		if(is_array($sshtml))$list_report_form->assign("REPORTHTML", $sshtml);
+		else $list_report_form->assign("ERROR_MSG", getTranslatedString('LBL_REPORT_GENERATION_FAILED', $currentModule) . "<br>" . $sshtml);
 		$list_report_form->assign("REPORTTOTHTML", $totalhtml);
 		$list_report_form->assign("FOLDERID", $folderid);
 		$list_report_form->assign("DATEFORMAT",$current_user->date_format);
 		$list_report_form->assign("JS_DATEFORMAT",parse_calendardate($app_strings['NTC_DATE_FORMAT']));
-
+		if($modules_export_permitted==true){
+			$list_report_form->assign("EXPORT_PERMITTED","YES");
+		} else {
+			$list_report_form->assign("EXPORT_PERMITTED","NO");
+		}
+		$rep_in_fldr = $ogReport->sgetRptsforFldr($folderid);
+		for($i=0;$i<count($rep_in_fldr);$i++){
+			$rep_id = $rep_in_fldr[$i]['reportid'];
+			$rep_name = $rep_in_fldr[$i]['reportname'];
+			$reports_array[$rep_id]=$rep_name;
+		}
 		if($_REQUEST['mode'] != 'ajax')
 		{
-			$list_report_form->assign("REPINFOLDER", getReportsinFolder($folderid));
+			$list_report_form->assign("REPINFOLDER", $reports_array);
 			include('themes/'.$theme.'/header.php');
 			$list_report_form->display('ReportRun.tpl');
 		}
@@ -113,8 +153,8 @@ if($numOfRows > 0)
 
 		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 		<tbody><tr>
-		<td rowspan='2' width='11%'><img src='themes/$theme/images/denied.gif' ></td>
-		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>".$mod_strings['LBL_NO_PERMISSION']." ".$primarymodule." ".$secondarymodule."</span></td>
+		<td rowspan='2' width='11%'><img src='". vtiger_imageurl('denied.gif', $theme) ."' ></td>
+		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>".$mod_strings['LBL_NO_ACCESS']." : ".implode(",",$restrictedmodules)." </span></td>
 		</tr>
 		<tr>
 		<td class='small' align='right' nowrap='nowrap'>			   	
@@ -133,7 +173,7 @@ else
 
 		<table border='0' cellpadding='5' cellspacing='0' width='98%'>
 		<tbody><tr>
-		<td rowspan='2' width='11%'><img src='themes/$theme/images/denied.gif' ></td>
+		<td rowspan='2' width='11%'><img src='". vtiger_imageurl('denied.gif', $theme) ."' ></td>
 		<td style='border-bottom: 1px solid rgb(204, 204, 204);' nowrap='nowrap' width='70%'><span class='genHeaderSmall'>".$mod_strings['LBL_REPORT_DELETED']."</span></td>
 		</tr>
 		<tr>
@@ -167,19 +207,19 @@ function getPrimaryStdFilterHTML($module,$selected="")
 			{
 				if($key == $selected)
 				{
-					$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$mod_strings[$value]."</option>";
+					$shtml .= "<option selected value=\"".$key."\">".getTranslatedString($module,$module)." - ".$mod_strings[$value]."</option>";
 				}else
 				{
-					$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$mod_strings[$value]."</option>";
+					$shtml .= "<option value=\"".$key."\">".getTranslatedString($module,$module)." - ".$mod_strings[$value]."</option>";
 				}
 			}else
 			{
 				if($key == $selected)
 				{
-					$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</option>";
+					$shtml .= "<option selected value=\"".$key."\">".getTranslatedString($module,$module)." - ".$value."</option>";
 				}else
 				{
-					$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</option>";
+					$shtml .= "<option value=\"".$key."\">".getTranslatedString($module,$module)." - ".$value."</option>";
 				}
 			}
 		}
@@ -216,19 +256,19 @@ function getSecondaryStdFilterHTML($module,$selected="")
                                         {
 						if($key == $selected)
 						{
-							$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$mod_strings[$value]."</option>";
+							$shtml .= "<option selected value=\"".$key."\">".getTranslatedString($secmodule[$i],$secmodule[$i])." - ".$mod_strings[$value]."</option>";
 						}else
 						{
-							$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$mod_strings[$value]."</option>";
+							$shtml .= "<option value=\"".$key."\">".getTranslatedString($secmodule[$i],$secmodule[$i])." - ".$mod_strings[$value]."</option>";
 						}
 					}else
 					{
 						if($key == $selected)
 						{
-							$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$value."</option>";
+							$shtml .= "<option selected value=\"".$key."\">".getTranslatedString($secmodule[$i],$secmodule[$i])." - ".$value."</option>";
 						}else
 						{
-							$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$value."</option>";
+							$shtml .= "<option value=\"".$key."\">".getTranslatedString($secmodule[$i],$secmodule[$i])." - ".$value."</option>";
 						}
 					}
                 		}

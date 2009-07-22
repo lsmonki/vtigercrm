@@ -255,7 +255,7 @@ function setUserVariable($localVarName,$varName, $value){
 		global $log;
 		$log->debug("Entering getSessionVariable(".$localVarName.",".$varName.") method ...");
 		if(isset($_REQUEST[$this->getSessionVariableName($localVarName, $varName)])){
-			$this->setSessionVariable($localVarName,$varName,$_REQUEST[$this->getSessionVariableName($localVarName, $varName)]); 		
+			$this->setSessionVariable($localVarName,$varName,vtlib_purify($_REQUEST[$this->getSessionVariableName($localVarName, $varName)])); 		
 		}
 		 if(isset($_SESSION[$this->getSessionVariableName($localVarName, $varName)])){
 			$log->debug("Exiting getSessionVariable method ...");
@@ -264,10 +264,6 @@ function setUserVariable($localVarName,$varName, $value){
 		 $log->debug("Exiting getSessionVariable method ...");
 		 return "";
 }
-
-
-
-
 
 /**
 
@@ -288,7 +284,5 @@ function getSessionVariableName($localVarName,$varName){
 
 
 }
-
-
 
 ?>

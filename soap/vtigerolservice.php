@@ -326,48 +326,34 @@ function AddMessageToContact($username,$session,$contactid,$msgdtls)
 	
 	foreach($msgdtls as $msgdtl)
 	{
-    if(isset($msgdtl))
-    {    
-        $email = new Emails();
-        //$log->debug($msgdtls['contactid']);
-	$email_body = str_replace("'", "''", $msgdtl['body']);
-	$email_body = str_replace('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">'," ", $email_body);
-        $email_subject = str_replace("'", "''",$msgdtl['subject']);
-        $date_sent = getDisplayDate($msgdtl['datesent']);
-        
-        $email->column_fields[subject] = $email_subject;
-        $email->column_fields[assigned_user_id] = $user_id;
-        $email->column_fields[date_start] = $date_sent;
-        $email->column_fields[description]  = $email_body;
-        $email->column_fields[activitytype] = 'Emails'; 
-        $email->plugin_save = true; 
-        $email->save("Emails");
-	$query = "select fieldid from vtiger_field where fieldname = 'email' and tabid = 4";
-	$result = $adb->pquery($query, array());
-	$field_id = $adb->query_result($result,0,"fieldid");
-        $email->set_emails_contact_invitee_relationship($email->id,$contactid);
-        $email->set_emails_se_invitee_relationship($email->id,$contactid);
-	$email->set_emails_user_invitee_relationship($email->id,$user_id);
-        $sql = "select email from vtiger_contactdetails inner join vtiger_crmentity on vtiger_crmentity.crmid = vtiger_contactdetails.contactid where vtiger_crmentity.deleted =0 and vtiger_contactdetails.contactid=?";
-        $result = $adb->pquery($sql, array($contactid));
-        $camodulerow = $adb->fetch_array($result);
-        if(isset($camodulerow))
-        {
-            $emailid = $camodulerow["email"];
-
-	    //added to save < as $lt; and > as &gt; in the database so as to retrive the emailID
-	    $user_emailid = str_replace('<','&lt;',$user_emailid);
-	    $user_emailid = str_replace('>','&gt;',$user_emailid);
-			$query = 'insert into vtiger_emaildetails values (?,?,?,?,?,?,?,?)';
-            $params = array($email->id, $emailid, $user_emailid, "", "", "", $user_id.'@-1|'.$contactid.'@'.$field_id.'|', "OUTLOOK");
-			$adb->pquery($query, $params);
-        }
-        return $email->id;
-		}
-		else
-		{
-			return "";
-		}
+	    if(isset($msgdtl))
+	    {    
+	        $email = new Emails();
+	        //$log->debug($msgdtls['contactid']);
+			$email_body = str_replace("'", "''", $msgdtl['body']);
+			$email_body = str_replace('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">'," ", $email_body);
+	        $email_subject = str_replace("'", "''",$msgdtl['subject']);
+	        $date_sent = getDisplayDate($msgdtl['datesent']);
+	        
+	        $email->column_fields[subject] = $email_subject;
+	        $email->column_fields[assigned_user_id] = $user_id;
+	        $email->column_fields[date_start] = $date_sent;
+	        $email->column_fields[description]  = $email_body;
+	        $email->column_fields[activitytype] = 'Emails'; 
+	        $email->column_fields[email_flag] = 'SENT';
+	        $email->plugin_save = true; 
+	       	$email->save("Emails");
+			$query = "select fieldid from vtiger_field where fieldname = 'email' and tabid = 4 and vtiger_field.presence in (0,2)";
+			$result = $adb->pquery($query, array());
+			$field_id = $adb->query_result($result,0,"fieldid");
+	        $email->set_emails_contact_invitee_relationship($email->id,$contactid);
+	        $email->set_emails_se_invitee_relationship($email->id,$contactid);
+			$email->set_emails_user_invitee_relationship($email->id,$user_id);
+	        
+	        return $email->id;
+		}else{
+				return "";
+			}
 	}
 }
 
@@ -376,8 +362,9 @@ function LoginToVtiger($user_name,$password,$version)
   	global $log,$adb;
 	require_once('modules/Users/Users.php');
 	include('vtigerversion.php');
-	if($version != $vtiger_current_version)
-	{
+
+	/* Make 5.0.4 plugins compatible with 5.1.0 */
+	if(version_compare($version,'5.0.4', '>=') === 1) {
 		return array("VERSION",'00');
 	}
 	$return_access = array("FALSES",'00');
@@ -476,7 +463,7 @@ function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$us
 	require_once('modules/Users/Users.php');
 	require_once('include/utils/utils.php');
 	$filename = preg_replace('/\s+/', '_', $filename);//replace space with _ in filename
-	$date_var = date('YmdHis');
+	$date_var = date('Y-m-d H:i:s');
 
 	$seed_user = new Users();
 	$user_id = $seed_user->retrieve_user_id($username);
@@ -526,6 +513,10 @@ function GetContacts($username,$session)
 	$query = $seed_contact->get_contactsforol($username);
 	$result = $adb->query($query);
 
+	$outputcount = 0;
+	$outputxml = '';
+    /** we are directly returning XML */
+    $returnAsXML = true;
 	while($contact = $adb->fetch_array($result))
 	{
 		if($contact["birthdate"] == "0000-00-00")
@@ -555,44 +546,54 @@ function GetContacts($username,$session)
 				}
 			}
 		}
-
-		$output_list[] = Array(
-				"id" => $contact["id"],
-				"title" => decode_html($contact["salutation"]),
-				"firstname" => decode_html($contact["firstname"]),
-				"middlename" => decode_html(trim($middlename)),
-				"lastname" => decode_html(trim($contact["lastname"])),
-				"birthdate" => $contact["birthday"],
-				"emailaddress" => decode_html($contact["email"]),
-				"jobtitle" => decode_html($contact["title"]),
-				"department" => decode_html($contact["department"]),
-				"accountname" => decode_html($contact["accountname"]),  
-				"officephone" => decode_html($contact["phone"]),
-				"homephone" => decode_html($contact["homephone"]),
-				"otherphone" => decode_html($contact["otherphone"]), 
-				"fax" => decode_html($contact["fax"]),
-				"mobile" => decode_html($contact["mobile"]),
-				"asstname" => decode_html($contact["assistant"]),
-				"asstphone" => decode_html($contact["assistantphone"]),             
-				"reportsto" => decode_html($contact["reports_to_name"]),
-				"mailingstreet" => decode_html($contact["mailingstreet"]),
-				"mailingcity" => decode_html($contact["mailingcity"]),
-				"mailingstate" => decode_html($contact["mailingstate"]),
-				"mailingzip" => decode_html($contact["mailingzip"]),
-				"mailingcountry" => decode_html($contact["mailingcountry"]),              
-				"otherstreet" => decode_html($contact["otherstreet"]),
-				"othercity" => decode_html($contact["othercity"]),
-				"otherstate" => decode_html($contact["otherstate"]),
-				"otherzip" => decode_html($contact["otherzip"]),
-				"othercountry" => decode_html($contact["othercountry"]),
-				"description" => "",
-				"category" => "",        
-			  );
+	    $outputxml .= __GetContactSOAPNode($contact);
+	 	$outputcount++;
 	}
-
 	//to remove an erroneous compiler warning
 	$seed_contact = $seed_contact;
-	return $output_list;
+
+	global $server;
+	$server->methodreturnisliteralxml = true;
+	$output = "<return xsi:type='SOAP-ENC:Array' SOAP-ENC:arrayType='tns:contactdetail[$outputcount]'>$outputxml</return>";
+	return $output;
+	 
+}
+
+function __GetContactSOAPNode($contact) {
+	global $server;
+	$nodestring = "<item xsi:type='tns:contactdetail'>
+<id xsi:type='xsd:string'>"         . $contact[id] . "</id>
+<title xsi:type='xsd:string'>"      . $contact[saluation] . "</title>
+<firstname xsi:type='xsd:string'>"  . $contact[firstname] ."</firstname>
+<middlename xsi:type='xsd:string'>" . trim($contact[middlename]) . "</middlename>
+<lastname xsi:type='xsd:string'>"   . trim($contact[lastname])  ."</lastname>
+<birthdate xsi:nil='true' xsi:type='xsd:string'>" .$contact[birthdate]. "</birthdate>
+<emailaddress xsi:type='xsd:string'>" .trim($contact[email]) . "</emailaddress>
+<jobtitle xsi:type='xsd:string'>"     .$contact[title] ."</jobtitle>
+<department xsi:type='xsd:string'>"   .$contact[department] ."</department>
+<accountname xsi:type='xsd:string'>"  .$contact[accountname] ."</accountname>
+<officephone xsi:type='xsd:string'>"  .$contact[phone]."</officephone>
+<homephone xsi:type='xsd:string'>"    .$contact[homephone]."</homephone>
+<otherphone xsi:type='xsd:string'>"   .$contact[otherphone]."</otherphone>
+<fax xsi:type='xsd:string'>"          .$contact[fax]."</fax>
+<mobile xsi:type='xsd:string'>"       .$contact[mobile]."</mobile>
+<asstname xsi:type='xsd:stringi'>"    .$contact[assistant]."</asstname>
+<asstphone xsi:type='xsd:string'>"    .$contact[assistantphone]."</asstphone>
+<reportsto xsi:type='xsd:string'>"    .$contact[reports_to_name]."</reportsto>
+<mailingstreet xsi:type='xsd:string'>".$contact[mailingstreet]."</mailingstreet>
+<mailingcity xsi:type='xsd:string'>"  .$contact[mailingcity]."</mailingcity>
+<mailingstate xsi:type='xsd:string'>" .$contact[mailingstate]."</mailingstate>
+<mailingzip xsi:type='xsd:string'>"   .$contact[mailingzip]."</mailingzip>
+<mailingcountry xsi:type='xsd:string'>".$contact[mailingcountry]."</mailingcountry>
+<otherstreet xsi:type='xsd:string'>"   .$contact[otherstreet]."</otherstreet>
+<othercity xsi:type='xsd:string'>"     .$contact[othercity]."</othercity>
+<otherstate xsi:type='xsd:string'>"    .$contact[otherstate]."</otherstate>
+<otherzip xsi:type='xsd:string'>".$contact[otherzip]."</otherzip>
+<othercountry xsi:type='xsd:string'>".$contact[othercountry]."</othercountry>
+<description xsi:type='xsd:string'>".$contact[description]."</description>
+<category xsi:type='xsd:string'></category>
+</item>";
+	return $nodestring;
 }
 
 function AddContacts($username,$session,$cntdtls)
@@ -615,11 +616,11 @@ function AddContacts($username,$session,$cntdtls)
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
-    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and block <> 5";
+    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and vtiger_field.presence in (0,2)";
 		$params1 = array();
   	} else {
     	$profileList = getCurrentUserProfileList();
-    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
   		$params1 = array();
 		if (count($profileList) > 0) {
 			$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";
@@ -703,11 +704,11 @@ function UpdateContacts($username,$session,$cntdtls)
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
-    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and block <> 75 and block <> 6 and block <> 5";
+    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=4 and vtiger_field.presence in (0,2)";
   		$params1 = array();
 	} else {
     	$profileList = getCurrentUserProfileList();
-    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.block <> 75 and vtiger_field.block <> 6 and vtiger_field.block <> 5 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=4 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
   		$params1 = array();
 		if (count($profileList) > 0) {
 			$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";
@@ -766,7 +767,11 @@ function UpdateContacts($username,$session,$cntdtls)
 			$contact->column_fields[description]= in_array('description',$permitted_lists) ? $cntrow["description"] : "";
 			$contact->id = $cntrow["id"];
 			$contact->mode = "edit";
+			//saving date information in 'yyyy-mm-dd' format and displaying it in user's date format
+			$user_old_date_format = $current_user->date_format;
+			$current_user->date_format = 'yyyy-mm-dd';
 			$contact->save("Contacts");	
+			$current_user->date_format = $user_old_date_format;
 		}	
 	}	
 	$contact = $contact;
@@ -802,7 +807,7 @@ function retrieve_account_id($account_name,$user_id)
 		return null;
 	}
 
-	$db = new PearDatabase();
+	$db = PearDatabase::getInstance();
 	$query = "select vtiger_account.accountname accountname,vtiger_account.accountid accountid from vtiger_account inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_account.accountid where vtiger_crmentity.deleted=0 and vtiger_account.accountname=?";
 	$result=  $db->pquery($query, array($account_name)) or die ("Not able to execute insert");
 
@@ -921,11 +926,11 @@ function AddTasks($username,$session,$taskdtls)
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
-    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=9";
+    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=9 and vtiger_field.presence in (0,2)";
 		$params1 = array();
   	} else {
     	$profileList = getCurrentUserProfileList();
-    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
   		$params1 = array();
 		if (count($profileList) > 0) {
 			$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";
@@ -1009,11 +1014,11 @@ function UpdateTasks($username,$session,$taskdtls)
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
-    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=9";
+    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=9 and vtiger_field.presence in (0,2)";
   		$params1 = array();	
 	} else {
     	$profileList = getCurrentUserProfileList();
-    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=9 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
   		$params1 = array();
 		if (count($profileList) > 0) {
 			$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";
@@ -1180,11 +1185,11 @@ function AddClndr($username,$session,$clndrdtls)
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
-    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=16";
+    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=16 and vtiger_field.presence in (0,2)";
 		$params1 = array();
   	} else {
     	$profileList = getCurrentUserProfileList();
-    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=16 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=16 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
   		$params1 = array();
 		if (count($profileList) > 0) {
 			$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";
@@ -1255,11 +1260,11 @@ function UpdateClndr($username,$session,$clndrdtls)
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	
 	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0) {
-    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=16";
+    	$sql1 = "select fieldname,columnname from vtiger_field where tabid=16 and vtiger_field.presence in (0,2)";
 		$params1 = array();
   	} else {
     	$profileList = getCurrentUserProfileList();
-    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=16 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0";
+    	$sql1 = "select fieldname,columnname from vtiger_field inner join vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid where vtiger_field.tabid=16 and vtiger_field.displaytype in (1,2,4,3) and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
   		$params1 = array();
 		if (count($profileList) > 0) {
 			$sql1 .= " and vtiger_profile2field.profileid in (". generateQuestionMarks($profileList) .")";
@@ -1402,6 +1407,10 @@ function getServerSessionId($id)
 	$sessionid = $adb->query_result($adb->query($query),0,'sessionid');
 
 	return $sessionid;
+}
+/* Begin the HTTP listener service and exit. */ 
+if (!isset($HTTP_RAW_POST_DATA)){
+	$HTTP_RAW_POST_DATA = file_get_contents('php://input');
 }
 $server->service($HTTP_RAW_POST_DATA); 
 exit();

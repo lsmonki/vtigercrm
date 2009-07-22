@@ -15,8 +15,6 @@
 <table border="0" class="small cellLabel" cellpadding="0" cellspacing="1" width="100%">
 	{foreach name=iter item=row from=$Firstrow}
 	{assign var="counter" value=$smarty.foreach.iter.iteration}
-	{math assign="num" equation="x - y" x=$counter y=1}
-
 	<tr>
 		<td class="small" align="center" height="30">
 			{$SELECTFIELD[$counter]}

@@ -1,6 +1,6 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
@@ -15,11 +15,11 @@ global $adb;
 global $current_user;
 
 //set the return module and return action and set the return id based on return module and record
-$returnmodule = $_REQUEST['return_module'];
-$returnaction = $_REQUEST['return_action'];
+$returnmodule = vtlib_purify($_REQUEST['return_module']);
+$returnaction = vtlib_purify($_REQUEST['return_action']);
 if((($returnmodule != 'Emails') || ($returnmodule == 'Emails' && $_REQUEST['record'] == '')) && $_REQUEST['return_id'] != '')
 {
-	$returnid = $_REQUEST['return_id'];
+	$returnid = vtlib_purify($_REQUEST['return_id']);
 }
 else
 {
@@ -29,10 +29,10 @@ else
 
 $adb->println("\n\nMail Sending Process has been started.");
 //This function call is used to send mail to the assigned to user. In this mail CC and BCC addresses will be added.
-if($focus->column_fields["assigned_user_id"]==0 && $_REQUEST['assigned_group_name']!='')
+if($_REQUEST['assigntype' == 'T'] && $_REQUEST['assigned_group_id']!='')
 {
 	$grp_obj = new GetGroupUsers();
-	$grp_obj->getAllUsersInGroup(getGrpId($_REQUEST['assigned_group_name']));
+	$grp_obj->getAllUsersInGroup($_REQUEST['assigned_group_id']);
 	$users_list = constructList($grp_obj->group_users,'INTEGER');
 	if (count($users_list) > 0) {
 		$sql = "select first_name, last_name, email1, email2, yahoo_id from vtiger_users where id in (". generateQuestionMarks($users_list) .")";
@@ -131,7 +131,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 		for ($j=1;$j<$nemail;$j++)
 		{
 			$temp=$realid[$j];
-			$myquery='Select columnname from vtiger_field where fieldid=?';
+			$myquery='Select columnname from vtiger_field where fieldid = ? and vtiger_field.presence in (0,2)';
 			$fresult=$adb->pquery($myquery, array($temp));			
 			if ($pmodule=='Contacts')
 			{
@@ -157,6 +157,12 @@ for ($i=0;$i<(count($myids)-1);$i++)
                                 $myfocus = new Vendors();
                                 $myfocus->retrieve_entity_info($mycrmid,"Vendors");
                         }
+            else {
+            	// vtlib customization: Enabling mail send from other modules
+            	$myfocus = CRMEntity::getInstance($pmodule);
+            	$myfocus->retrieve_entity_info($mycrmid, $pmodule);
+            	// END
+            }
 			$fldname=$adb->query_result($fresult,0,"columnname");
 			$emailadd=br2nl($myfocus->column_fields[$fldname]);
 
@@ -166,6 +172,13 @@ for ($i=0;$i<(count($myids)-1);$i++)
 			if($emailadd != '')
 			{
 				$description = getMergedDescription($_REQUEST['description'],$mycrmid,$pmodule);
+				//Email Open Tracking
+				global $site_URL, $application_unique_key;
+				$emailid = $focus->id;
+				$track_URL = "$site_URL/modules/Emails/TrackAccess.php?record=$mycrmid&mailid=$emailid&app_key=$application_unique_key";
+				$description = "<img src='$track_URL' alt='' width='1' height='1'>$description";
+				// END
+
 				$pos = strpos($description, '$logo$');
 				if ($pos !== false)
 				{
@@ -193,7 +206,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 //Added to redirect the page to Emails/EditView if there is an error in mail sending
 if($errorheader1 == 1 || $errorheader2 == 1)
 {
-	$returnset = 'return_module='.$returnmodule.'&return_action='.$returnaction.'&return_id='.$_REQUEST['return_id'];
+	$returnset = 'return_module='.$returnmodule.'&return_action='.$returnaction.'&return_id='.vtlib_purify($_REQUEST['return_id']);
 	$returnmodule = 'Emails';
 	$returnaction = 'EditView';
 	//This condition is added to set the record(email) id when we click on send mail button after returning mail error
@@ -223,6 +236,4 @@ if(isset($_REQUEST['popupaction']) && $_REQUEST['popupaction'] != '')
 	//$inputs="<script>window.self.close();</script>";
 	echo $inputs;
 }
-//header("Location:index.php?module=$returnmodule&action=$returnaction&record=$returnid&$returnset&$mail_error_str");
-
 ?>

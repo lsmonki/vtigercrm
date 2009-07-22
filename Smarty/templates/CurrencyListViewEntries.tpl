@@ -25,7 +25,7 @@
 		<tr>
 			<td nowrap class="listTableRow small" valign="top">{$smarty.foreach.currlist.iteration}</td>
 			<td nowrap class="listTableRow small" valign="top">{$currencyvalues.tool}</td>
-			<td nowrap class="listTableRow small" valign="top"><b>{$currencyvalues.name}</b></td>
+			<td nowrap class="listTableRow small" valign="top"><b>{$currencyvalues.name|@getTranslatedCurrencyString}</b></td>
 			<td nowrap class="listTableRow small" valign="top">{$currencyvalues.code}</td>
 			<td nowrap class="listTableRow small" valign="top">{$currencyvalues.symbol}</td>
 			<td nowrap class="listTableRow small" valign="top">{$currencyvalues.crate}</td>

@@ -30,7 +30,7 @@ global $current_user;
 global $app_strings;
 global $mod_strings;
 
-global $list_max_entries_per_page;
+global $list_max_entries_per_page, $adb;
 
 $log = LoggerManager::getLogger('email_list');
 
@@ -42,17 +42,20 @@ global $theme;
 $url_string = ''; // assigning http url string
 
 $focus = new Emails();
+// Initialize sort by fields
+$focus->initSortbyField('Emails');
+// END
 $smarty = new vtigerCRM_Smarty;
 $other_text = Array();
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 if($_REQUEST['order_by'] != '')
-	$order_by = $_REQUEST['order_by'];
+	$order_by = $adb->sql_escape_string($_REQUEST['order_by']);
 else
 	$order_by = (($_SESSION['EMAILS_ORDER_BY'] != '')?($_SESSION['EMAILS_ORDER_BY']):($focus->default_order_by));
 
 if($_REQUEST['sorder'] != '')
-	$sorder = $_REQUEST['sorder'];
+	$sorder = $adb->sql_escape_string($_REQUEST['sorder']);
 else
 	$sorder = (($_SESSION['EMAILS_SORT_ORDER'] != '')?($_SESSION['EMAILS_SORT_ORDER']):($focus->default_sort_order));
 
@@ -90,9 +93,9 @@ if($email_title)$display_title = $email_title;
 //to get the search vtiger_field if exists
 if(isset($_REQUEST['search']) && $_REQUEST['search'] != '' && $_REQUEST['search_text'] != '')
 {
-	$url_string .= "&search=".$_REQUEST['search']."&search_field=".$_REQUEST['search_field']."&search_text=".$_REQUEST['search_text'];
+	$url_string .= "&search=".vtlib_purify($_REQUEST['search'])."&search_field=".vtlib_purify($_REQUEST['search_field'])."&search_text=".vtlib_purify($_REQUEST['search_text']);
 	if($_REQUEST['search_field'] != 'join')
-		$where = $_REQUEST['search_field']." like '". formatForSqlLike($_REQUEST['search_text']) ."'";	
+		$where = $adb->sql_escape_string($_REQUEST['search_field'])." like '". formatForSqlLike($_REQUEST['search_text']) ."'";	
 	else
 		$where = "(subject like '". formatForSqlLike($_REQUEST['search_text']) ."' OR vtiger_users.user_name like '". formatForSqlLike($_REQUEST['search_text']) ."')";	
 }
@@ -149,6 +152,7 @@ $smarty->assign("CUSTOMVIEW_OPTION",$customviewcombo_html);
 $smarty->assign("VIEWID", $viewid);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",'Email');
@@ -167,7 +171,7 @@ $navigation_array = getNavigationValues(1, $noofrows, $noofrows);
 if($viewid !='')
 	$url_string .="&viewname=".$viewid;
 if(isset($_REQUEST['folderid']) && $_REQUEST['folderid'] != '')
-	$url_string .= "&folderid=".$_REQUEST['folderid'];
+	$url_string .= "&folderid=".vtlib_purify($_REQUEST['folderid']);
 $listview_header = getListViewHeader($focus,"Emails",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
 

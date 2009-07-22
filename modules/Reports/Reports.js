@@ -376,14 +376,18 @@ function disableMove()
 
 function hideTabs()
 {
-	var objreportType = getObj('reportType');
-	if(objreportType[0].checked == true)
+	// Check the selected report type
+	var objreportType = document.forms.NewReport['reportType'];
+	if(objreportType[0].checked == true) objreportType = objreportType[0];
+	else if(objreportType[1].checked == true) objreportType = objreportType[1];
+	
+	if(objreportType.value == 'tabular')
 	{
-		divarray = new Array('step1','step2','step4','step5');
+		divarray = new Array('step1','step2','step4','step5','step6');
 	}
 	else
 	{
-		divarray = new Array('step1','step2','step3','step4','step5');
+		divarray = new Array('step1','step2','step3','step4','step5','step6');
 	}
 }
         
@@ -400,7 +404,7 @@ function saveAndRunReport()
 		alert(alert_arr.COLUMNS_CANNOT_BE_EMPTY);
 		return false;
 	}
-
+	formSelectedColumnString();
 	formSelectColumnString();
 	document.NewReport.submit();
 }       
@@ -505,33 +509,29 @@ function changeSteps1()
 		if(! dateComparison("startdate",'Start Date',"enddate",'End Date','LE'))	
 			return false;
 		}	
-		saveAndRunReport();
 
-	}else
-	{
-		for(i = 0; i < divarray.length ;i++)
-		{
-			if(getObj(divarray[i]).style.display != 'none')
-			{
-				if(i == 1 && selectedColumnsObj.options.length == 0)
-				{
+	} if (getObj('step6').style.display != 'none') {
+		saveAndRunReport();
+	} else {
+		for (i = 0; i < divarray.length; i++) {
+			if (getObj(divarray[i]).style.display != 'none') {
+				if (i == 1 && selectedColumnsObj.options.length == 0) {
 					alert(alert_arr.COLUMNS_CANNOT_BE_EMPTY);
 					return false;
-				}	
-				if(divarray[i] == 'step4')
-				{
-					document.getElementById("next").value = finish_text;	
+				}
+				if (divarray[i] == 'step5') {
+					document.getElementById("next").value = finish_text;
 				}
 				hide(divarray[i]);
-				show(divarray[i+1]);
-				tableid = divarray[i]+'label';
-				newtableid = divarray[i+1]+'label';
-				getObj(tableid).className = 'settingsTabList'; 
+				show(divarray[i + 1]);
+				tableid = divarray[i] + 'label';
+				newtableid = divarray[i + 1] + 'label';
+				getObj(tableid).className = 'settingsTabList';
 				getObj(newtableid).className = 'settingsTabSelected';
 				document.getElementById('back_rep').disabled = false;
 				break;
 			}
-
+			
 		}
 	}
 }
@@ -617,7 +617,7 @@ function changeStepsback()
 }
 function editReport(id)
 {
-	var arg = 'index.php?module=Reports&action=ReportsAjax&file=NewReport1&record='+id;
+	var arg = 'index.php?module=Reports&action=ReportsAjax&file=NewReport0&record='+id;
 	fnPopupWin(arg);
 }
 function CreateReport(module)
@@ -626,7 +626,7 @@ function CreateReport(module)
 	fnPopupWin(arg);
 }
 function fnPopupWin(winName){
-	window.open(winName, "ReportWindow","width=740px,height=625px,scrollbars=yes");
+	window.open(winName, "ReportWindow","width=790px,height=630px,scrollbars=yes");
 }
 function re_dateValidate(fldval,fldLabel,type) {
 	if(re_patternValidate(fldval,fldLabel,"DATE")==false)
@@ -722,4 +722,73 @@ function standardFilterDisplay()
 		getObj('jscal_trigger_date_start').style.visibility="visible";
 		getObj('jscal_trigger_date_end').style.visibility="visible";
 	}
+}
+
+
+function updateRelFieldOptions(sel, opSelName) {
+    var selObj = document.getElementById(opSelName);
+    var fieldtype = null ;
+
+    var currOption = selObj.options[selObj.selectedIndex];
+    var currField = sel.options[sel.selectedIndex];
+ 
+    if(currField.value != null && currField.value.length != 0)
+    {
+	fieldtype = trimfValues(currField.value);
+	ops = rel_fields[fieldtype];
+ 	
+	var off = 0;
+	if(ops != null)
+	{
+		var nMaxVal = selObj.length;
+		for(nLoop = 0; nLoop < nMaxVal; nLoop++)
+		{
+			selObj.remove(0);
+		}
+		selObj.options[0] = new Option ('None', '');
+		if (currField.value == '') {
+			selObj.options[0].selected = true;
+		}
+		off = 1;
+		for (var i = 0; i < ops.length; i++)
+		{
+			var field_array = ops[i].split("::");
+			var label = field_array[1];
+			var field = field_array[0];
+			if (label == null) continue;
+			var option = new Option (label, field);
+			selObj.options[i + off] = option;
+			if (currOption != null && currOption.value == option.value)
+			{
+				option.selected = true;
+			}
+		}
+	}
+    }else
+    {
+	var nMaxVal = selObj.length;
+	for(nLoop = 0; nLoop < nMaxVal; nLoop++)
+	{
+		selObj.remove(0);
+	}
+	selObj.options[0] = new Option ('None', '');
+	if (currField.value == '') {
+		selObj.options[0].selected = true;
+	}
+    }
+
+}
+
+function AddFieldToFilter(id, sel){
+	if(trim(document.getElementById("fval"+id).value)==''){
+		document.getElementById("fval"+id).value = document.getElementById("fval_"+id).value;
+	} else {
+		document.getElementById("fval"+id).value = document.getElementById("fval"+id).value+","+document.getElementById("fval_"+id).value;
+	}
+}
+function fnLoadRepValues(tab1,tab2,block1,block2){
+	document.getElementById(block1).style.display='block';
+	document.getElementById(block2).style.display='none';
+	document.getElementById(tab1).className='dvtSelectedCell';
+	document.getElementById(tab2).className='dvtUnSelectedCell';
 }

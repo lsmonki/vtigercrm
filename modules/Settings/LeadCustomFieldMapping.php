@@ -30,14 +30,14 @@ function getAccountCustomValues($leadid,$accountid)
 {
 	global $adb;
 	$accountcf=Array();
-	$sql="select fieldid,fieldlabel,uitype,typeofdata from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Accounts'";
+	$sql="select fieldid,fieldlabel,uitype,typeofdata from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Accounts' and vtiger_field.presence in (0,2)";
 	$result = $adb->pquery($sql, array());
 	$noofrows = $adb->num_rows($result);
 	
 	for($i=0;$i<$noofrows;$i++)
 	{
         	$account_field['fieldid']=$adb->query_result($result,$i,"fieldid");
-	        $account_field['fieldlabel']=$adb->query_result($result,$i,"fieldlabel");
+	        $account_field['fieldlabel']=getTranslatedString($adb->query_result($result,$i,"fieldlabel"),'Accounts');
 		$account_field['typeofdata']=$adb->query_result($result,$i,"typeofdata");
 		$account_field['fieldtype']=getCustomFieldTypeName($adb->query_result($result,$i,"uitype"));
 		if($account_field['fieldid']==$accountid)
@@ -60,13 +60,13 @@ function getContactCustomValues($leadid,$contactid)
 {	
 	global $adb;	
 	$contactcf=Array();
-	$sql="select fieldid,fieldlabel,uitype,typeofdata from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Contacts'";
+	$sql="select fieldid,fieldlabel,uitype,typeofdata from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Contacts'and vtiger_field.presence in (0,2)";
 	$result = $adb->pquery($sql, array());
 	$noofrows = $adb->num_rows($result);
 	for($i=0; $i<$noofrows; $i++)
 	{
 		$contact_field['fieldid']=$adb->query_result($result,$i,"fieldid");
-		$contact_field['fieldlabel']=$adb->query_result($result,$i,"fieldlabel");
+		$contact_field['fieldlabel']=getTranslatedString($adb->query_result($result,$i,"fieldlabel"),'Contacts');
 		$contact_field['typeofdata']=$adb->query_result($result,$i,"typeofdata");
 		$contact_field['fieldtype']=getCustomFieldTypeName($adb->query_result($result,$i,"uitype"));
 	
@@ -90,20 +90,20 @@ function getPotentialCustomValues($leadid,$potentialid)
 {
 	global $adb;	
 	$potentialcf=Array();
-	$sql="select fieldid,fieldlabel,uitype,typeofdata from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Potentials'";
+	$sql="select fieldid,fieldlabel,uitype,typeofdata from vtiger_field,vtiger_tab where vtiger_field.tabid=vtiger_tab.tabid and generatedtype=2 and vtiger_tab.name='Potentials' and vtiger_field.presence in (0,2)";
 	$result = $adb->pquery($sql, array());
 	$noofrows = $adb->num_rows($result);
 	for($i=0; $i<$noofrows; $i++)
 	{
 		$potential_field['fieldid']=$adb->query_result($result,$i,"fieldid");
-		$potential_field['fieldlabel']=$adb->query_result($result,$i,"fieldlabel");
+		$potential_field['fieldlabel']=getTranslatedString($adb->query_result($result,$i,"fieldlabel"),'Potentials');
 		$potential_field['typeofdata']=$adb->query_result($result,$i,"typeofdata");
 		$potential_field['fieldtype']=getCustomFieldTypeName($adb->query_result($result,$i,"uitype"));
 
 		if($potential_field['fieldid']==$potentialid)
 			 $potential_field['selected']="selected";
 		else
-                         $potential_field['selected'] = "";
+             $potential_field['selected'] = "";
 		$potential_cfelement[]=$potential_field;
 	}
 	$potentialcf[$leadid.'_potential']=$potential_cfelement;
@@ -119,7 +119,7 @@ function customFieldMappings()
 {
 	global $adb;
 
-	$convert_sql="select vtiger_convertleadmapping.*,uitype,fieldlabel,typeofdata from vtiger_convertleadmapping left join vtiger_field on vtiger_field.fieldid = vtiger_convertleadmapping.leadfid";
+	$convert_sql="select vtiger_convertleadmapping.*,uitype,fieldlabel,typeofdata from vtiger_convertleadmapping left join vtiger_field on vtiger_field.fieldid = vtiger_convertleadmapping.leadfid and vtiger_field.presence in (0,2)";
 	$convert_result = $adb->pquery($convert_sql, array());
 
 	$no_rows = $adb->num_rows($convert_result);
@@ -130,7 +130,7 @@ function customFieldMappings()
 		$contactid=$adb->query_result($convert_result,$j,"contactfid");
 		$potentialid=$adb->query_result($convert_result,$j,"potentialfid");
 		$lead_field['sno'] = $j+1;
-		$lead_field['leadid'] = $adb->query_result($convert_result,$j,"fieldlabel"); 
+		$lead_field['leadid'] = getTranslatedString($adb->query_result($convert_result,$j,"fieldlabel"),'Leads'); 
 		$lead_field['typeofdata']=$adb->query_result($convert_result,$j,"typeofdata");
 		$lead_field['fieldtype'] = getCustomFieldTypeName($adb->query_result($convert_result,$j,"uitype"));; 
 		$lead_field['account'] = getAccountCustomValues($leadid,$accountid);
@@ -140,11 +140,12 @@ function customFieldMappings()
 	}
 	return $leadcf;
 }
-
+$module = 'Leads';
 $smarty->assign("MOD",$mod_strings);
 $smarty->assign("APP",$app_strings);
+$smarty->assign("THEME", $theme);
 $smarty->assign("CUSTOMFIELDMAPPING",customFieldMappings());
-
+$smarty->assign("MODULE",$module);
 $smarty->display("CustomFieldMapping.tpl");
 
 ?>

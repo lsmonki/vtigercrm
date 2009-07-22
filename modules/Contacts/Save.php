@@ -30,7 +30,7 @@ $local_log =& LoggerManager::getLogger('index');
 global $log,$adb;
 $focus = new Contacts();
 //added to fix 4600
-$search=$_REQUEST['search_url'];
+$search=vtlib_purify($_REQUEST['search_url']);
 
 setObjectValuesFromRequest($focus);
 
@@ -47,15 +47,15 @@ $saveimage=$image_upload_array['saveimage'];
 
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
-if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+if($_REQUEST['return_viewname'] != '')$return_viewname=vtlib_purify($_REQUEST['return_viewname']);
 
 if($image_error=="true") //If there is any error in the file upload then moving all the data to EditView.
 {
         //re diverting the page and reassigning the same values as image error occurs
-        if($_REQUEST['activity_mode'] != '')$activity_mode=$_REQUEST['activity_mode'];
-        if($_REQUEST['return_module'] != '')$return_module=$_REQUEST['return_module'];
-        if($_REQUEST['return_action'] != '')$return_action=$_REQUEST['return_action'];
-        if($_REQUEST['return_id'] != '')$return_id=$_REQUEST['return_id'];
+        if($_REQUEST['activity_mode'] != '')$activity_mode=vtlib_purify($_REQUEST['activity_mode']);
+        if($_REQUEST['return_module'] != '')$return_module=vtlib_purify($_REQUEST['return_module']);
+        if($_REQUEST['return_action'] != '')$return_action=vtlib_purify($_REQUEST['return_action']);
+        if($_REQUEST['return_id'] != '')$return_id=vtlib_purify($_REQUEST['return_id']);
 
         $log->debug("There is an error during the upload of contact image.");
         $field_values_passed.="";
@@ -77,14 +77,10 @@ if($image_error=="true") //If there is any error in the file upload then moving 
         $error_module = "Contacts";
         $error_action = "EditView";
 
-	if(isset($_request['return_id']) && $_request['return_id'] != "")
-                $return_id = $_request['return_id'];
-        if(isset($_request['activity_mode']))
-                $return_action .= '&activity_mode='.$_request['activity_mode'];
+		$return_action .= '&activity_mode='.vtlib_purify($_request['activity_mode']);
 
-        if($mode=="edit")
-        {
-                $return_id=$_REQUEST['record'];
+        if($mode=="edit") {
+			$return_id=vtlib_purify($_REQUEST['record']);
         }
         header("location: index.php?action=$error_action&module=$error_module&record=$return_id&return_id=$return_id&return_action=$return_action&return_module=$return_module&activity_mode=$activity_mode&return_viewname=$return_viewname".$search."&saveimage=$saveimage&error_msg=$errormessage&image_error=$image_error&encode_val=$encode_field_values");
 }
@@ -98,7 +94,7 @@ if($saveimage=="true")
 if($_FILES['imagename']['name'] != '')
 {
 	if(isset($_REQUEST['imagename_hidden'])) {
-		$focus->column_fields['imagename'] = $_REQUEST['imagename_hidden'];
+		$focus->column_fields['imagename'] = vtlib_purify($_REQUEST['imagename_hidden']);
 	} else {
 		$focus->column_fields['imagename'] = $_FILES['imagename']['name'];
 	}
@@ -108,19 +104,25 @@ elseif($focus->id != '')
 	$result = $adb->pquery("select imagename from vtiger_contactdetails where contactid = ?", array($focus->id));
 	$focus->column_fields['imagename'] = $adb->query_result($result,0,'imagename');
 }
+
+if($_REQUEST['assigntype'] == 'U')  {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_user_id'];
+} elseif($_REQUEST['assigntype'] == 'T') {
+	$focus->column_fields['assigned_user_id'] = $_REQUEST['assigned_group_id'];
+}
 //Saving the contact
 if($image_error=="false")
 {
 	$focus->save("Contacts");
 	$return_id = $focus->id;
 
-	if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
+	if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = vtlib_purify($_REQUEST['return_module']);
 	else $return_module = "Contacts";
-	if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
+	if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = vtlib_purify($_REQUEST['return_action']);
 	else $return_action = "DetailView";
-	if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
+	if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = vtlib_purify($_REQUEST['return_id']);
 
-	if(isset($_REQUEST['activity_mode']) && $_REQUEST['activity_mode'] != '') $activitymode = $_REQUEST['activity_mode'];
+	if(isset($_REQUEST['activity_mode']) && $_REQUEST['activity_mode'] != '') $activitymode = vtlib_purify($_REQUEST['activity_mode']);
 
 	$local_log->debug("Saved record with id of ".$return_id);
 
@@ -207,16 +209,15 @@ if($image_error=="false")
 
 	//code added for returning back to the current view after edit from list view
 	if($_REQUEST['return_viewname'] == '') $return_viewname='0';
-	if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+	if($_REQUEST['return_viewname'] != '')$return_viewname=vtlib_purify($_REQUEST['return_viewname']);
 
-	if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] != "") $parenttab = $_REQUEST['parenttab'];
+	$parenttab = getParentTab();
 
 	//Send notification mail to the assigned to owner about the contact creation
 	if($focus->column_fields['notify_owner'] == 1 || $focus->column_fields['notify_owner'] == 'on')
 		$status = sendNotificationToOwner('Contacts',$focus);
 
-	header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&activity_mode=$activitymode&viewname=$return_viewname&start=".$_REQUEST['pagenumber']);
+	header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&activity_mode=$activitymode&viewname=$return_viewname&start=".vtlib_purify($_REQUEST['pagenumber']));
 }
-
 
 ?>

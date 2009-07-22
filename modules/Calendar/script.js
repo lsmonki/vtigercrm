@@ -96,19 +96,22 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
         smin = smin - (smin%5);
 	var y=document.getElementById(argg1).style;
 	
-		if(type == 'call' || type == 'meeting')
+		if(type != 'todo' && type!='')
 		{
-			if(type == 'call')
-	                        document.EditView.activitytype[0].checked = true;
-	                if(type == 'meeting')
-        	                document.EditView.activitytype[1].checked = true;
-                        smin = _2digit(smin);
+			for(var i=0;;i++){
+				if( document.EditView.activitytype[i].value == type){
+					document.EditView.activitytype[i].selected='yes';	
+					break;
+				}
+			}
+				
+			smin = _2digit(smin);
 			document.EditView.date_start.value = startdate;
 			document.EditView.starthr.value = starthr;
 			document.EditView.startmin.value = smin;
 			document.EditView.startfmt.value = startfmt;
 			document.EditView.viewOption.value = viewOption;
-                        document.EditView.subtab.value = subtab;
+            document.EditView.subtab.value = subtab;
 			calDuedatetime(type);
 		}
 		if(type == 'todo')
@@ -122,10 +125,10 @@ function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endm
 			document.createTodo.viewOption.value = viewOption;
                         document.createTodo.subtab.value = subtab;
 		}
-	if (y.display=="none")
-        {
-		y.display="block";
-	}
+		if (y.display=="none")
+	        {
+			y.display="block";
+		}
 }
 
 function rptoptDisp(Opt){
@@ -290,132 +293,118 @@ function check_form()
 		if(dateComparison('due_date','End date','date_start','Start date','GE'))
 		{
 			var dateval1=getObj('date_start').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
-        	        var dateval2=getObj('due_date').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
+        	var dateval2=getObj('due_date').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
 			var dateval3=getObj('followup_date').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
 
-	                var dateelements1=splitDateVal(dateval1)
-                	var dateelements2=splitDateVal(dateval2)
+            var dateelements1=splitDateVal(dateval1)
+        	var dateelements2=splitDateVal(dateval2)
 			var dateelements3=splitDateVal(dateval3)
 
-	                dd1=dateelements1[0]
-        	        mm1=dateelements1[1]
-                	yyyy1=dateelements1[2]
+            dd1=dateelements1[0]
+	        mm1=dateelements1[1]
+        	yyyy1=dateelements1[2]
 
-	                dd2=dateelements2[0]
-        	        mm2=dateelements2[1]
-                	yyyy2=dateelements2[2]
+            dd2=dateelements2[0]
+	        mm2=dateelements2[1]
+        	yyyy2=dateelements2[2]
 
 			dd3=dateelements3[0]
-                        mm3=dateelements3[1]
-                        yyyy3=dateelements3[2]
+            mm3=dateelements3[1]
+            yyyy3=dateelements3[2]
 
-	                var date1=new Date()
-        	        var date2=new Date()
+            var date1=new Date()
+	        var date2=new Date()
 			var date3=new Date()
 
-                	date1.setYear(yyyy1)
-	                date1.setMonth(mm1-1)
-        	        date1.setDate(dd1)
+        	date1.setYear(yyyy1)
+            date1.setMonth(mm1-1)
+	        date1.setDate(dd1)
+			date1.setHours(starthour)
+			date1.setMinutes(startmin)
 
-        	        date2.setYear(yyyy2)
-	                date2.setMonth(mm2-1)
-                	date2.setDate(dd2)
+	        date2.setYear(yyyy2)
+            date2.setMonth(mm2-1)
+        	date2.setDate(dd2)
+			date2.setHours(endhour)
+			date2.setMinutes(endmin)
 
 			date3.setYear(yyyy3)
-                        date3.setMonth(mm3-1)
-                        date3.setDate(dd3)
-
-                	if (date2<=date1)
-                	{
-                        	if((endhour*60+endmin) <= (starthour*60+startmin))
-          	        	{
-                	                alert(alert_arr.ENDTIME_GREATER_THAN_STARTTIME);
-                                	document.EditView.endhr.focus();
-     		                        return false;
-                	        }
-				durationinmin = (endhour*60+endmin) - (starthour*60+startmin);
-	                        if(durationinmin >= 60)
-        	                {
-                	                hour = durationinmin/60;
-                        	        minute = durationinmin%60;
-                        	}
-                        	else
-                        	{
-                                	hour = 0;
-                                	minute = durationinmin;
-                        	}
-				document.EditView.duration_hours.value = hour;
-	                        document.EditView.duration_minutes.value = minute;
-
-           		}
+            date3.setMonth(mm3-1)
+            date3.setDate(dd3)
+ 
+			diff_ms = Math.abs(date2.getTime()-date1.getTime())/(1000*60);
+			hour = Math.floor(diff_ms/(60));
+			minute = Math.floor(diff_ms % 60)
+			document.EditView.duration_hours.value = hour;
+            document.EditView.duration_minutes.value = minute;
 			
-                        event_starthour = _2digit(starthour);
-                        event_startmin = _2digit(startmin);
-                        event_endhour = _2digit(endhour);
-                        event_endmin = _2digit(endmin);
-                        document.EditView.time_start.value = event_starthour+':'+event_startmin;
-                        document.EditView.time_end.value = event_endhour+':'+event_endmin;
+            event_starthour = _2digit(starthour);
+            event_startmin = _2digit(startmin);
+            event_endhour = _2digit(endhour);
+            event_endmin = _2digit(endmin);
+            document.EditView.time_start.value = event_starthour+':'+event_startmin;
+            document.EditView.time_end.value = event_endhour+':'+event_endmin;
 			// Added for Aydin Kurt-Elli requirement START -by Minnie
-                        if (document.EditView.followup.checked == true && document.getElementById('date_table_thirdtd').style.display == 'block')
-                        {
-                                if(!dateValidate('followup_date','Followup Date','OTH'))
-                                {
-                                        return false;
-                                }
-                                if(followupformat != '')
-                                {
-                                        if(followupformat == 'pm')
-                                        {
-                                                if(followuphour == 12)
-                                                        followuphour = 12;
-                                                else
-                                                        followuphour = followuphour + 12;
-                                        }
-                                        else
-                                        {
-                                                if(followuphour == 12)
-                                                        followuphour = 0;
-                                                else
-                                                        followuphour = followuphour;
-                                        }
-                                }
-				
-				if ( compareDates(date3,'Followup Date',date2,'End Date','GE'))
-                                {
-                                        if (date3 <= date2)
-                                        {
-                                                if((followuphour*60+followupmin) <= (endhour*60+endmin))
-                                                {
-                                                        alert(alert_arr.FOLLOWUPTIME_GREATER_THAN_STARTTIME);
-                                                        document.EditView.followup_starthr.focus();
-                                                        return false;
-                                                }
-                                        }
-                                }
-                                else return false;
-                             //modified to set followup end date depends on the event or todo. If it is Event, the difference between followup start date and end date is 1hr. If it is todo then difference is 5mins.
-                                date3.setMinutes(followupmin);
-                                date3.setHours(followuphour);
-                                if(document.EditView.activitytype[0].checked == true)
-                                {
-                                        date3.setMinutes(parseInt(date3.getMinutes(),10)+5);
-                                }
-                                if(document.EditView.activitytype[1].checked == true)
-                                {
-                                        date3.setMinutes(parseInt(date3.getMinutes(),10)+60);
-                                }
-				var tempdate = getdispDate(date3);
+            if (document.EditView.followup.checked == true && document.getElementById('date_table_thirdtd').style.display == 'block')
+            {
+                    if(!dateValidate('followup_date','Followup Date','OTH'))
+                    {
+                            return false;
+                    }
+                    if(followupformat != '')
+                    {
+                            if(followupformat == 'pm')
+                            {
+                                    if(followuphour == 12)
+                                            followuphour = 12;
+                                    else
+                                            followuphour = followuphour + 12;
+                            }
+                            else
+                            {
+                                    if(followuphour == 12)
+                                            followuphour = 0;
+                                    else
+                                            followuphour = followuphour;
+                            }
+                    }
+	
+					if ( compareDates(date3,'Followup Date',date2,'End Date','GE'))
+                    {
+                            if (date3 <= date2)
+                            {
+                                    if((followuphour*60+followupmin) <= (endhour*60+endmin))
+                                    {
+                                            alert(alert_arr.FOLLOWUPTIME_GREATER_THAN_STARTTIME);
+                                            document.EditView.followup_starthr.focus();
+                                            return false;
+                                    }
+                            }
+                    }
+                    else return false;
+                 //modified to set followup end date depends on the event or todo. If it is Event, the difference between followup start date and end date is 1hr. If it is todo then difference is 5mins.
+                    date3.setMinutes(followupmin);
+                    date3.setHours(followuphour);
+                    if(document.EditView.activitytype[0].checked == true)
+                    {
+                            date3.setMinutes(parseInt(date3.getMinutes(),10)+5);
+                    }
+                    if(document.EditView.activitytype[1].checked == true)
+                    {
+                            date3.setMinutes(parseInt(date3.getMinutes(),10)+60);
+                    }
+					var tempdate = getdispDate(date3);
 
-				followuphour = _2digit(followuphour);
+					followuphour = _2digit(followuphour);
 			        followupmin = _2digit(followupmin);
-				followupendhour = _2digit(date3.getHours());
+					followupendhour = _2digit(date3.getHours());
 			        followupendmin = _2digit(date3.getMinutes());		
 			        document.EditView.followup_due_date.value = tempdate; 
-                                document.EditView.followup_time_start.value = followuphour+':'+followupmin;
-                                document.EditView.followup_time_end.value = followupendhour+':'+followupendmin;
-				//end
-                        }
-                        // Added for Aydin Kurt-Elli requirement END -by Minnie -->
+                    document.EditView.followup_time_start.value = followuphour+':'+followupmin;
+                    document.EditView.followup_time_end.value = followupendhour+':'+followupendmin;
+					//end
+            }
+            // Added for Aydin Kurt-Elli requirement END -by Minnie -->
 
 			//added to avoid db error while giving characters in the repeat "every n no of day in month" text box
                         if((getObj("recurringcheck")) && (document.EditView.recurringcheck.checked == true) && (document.EditView.recurringtype.value =="Monthly"))
@@ -634,30 +623,33 @@ function fnRedirect() {
 	if(OptionData == 'listview')
 	{
 		document.EventViewOption.action.value = "index";
+		VtigerJS_DialogBox.block();
 		window.document.EventViewOption.submit();
 	}
 	if(OptionData == 'hourview')
 	{
 		document.EventViewOption.action.value = "index";
+		VtigerJS_DialogBox.block();
 		window.document.EventViewOption.submit();
 	}
 }
 
-function fnAddEvent(obj,CurrObj,start_date,end_date,start_hr,start_min,start_fmt,end_hr,end_min,end_fmt,viewOption,subtab){
+function fnAddEvent(obj,CurrObj,start_date,end_date,start_hr,start_min,start_fmt,end_hr,end_min,end_fmt,viewOption,subtab,eventlist){
 	var tagName = document.getElementById(CurrObj);
 	var left_Side = findPosX(obj);
 	var top_Side = findPosY(obj);
 	tagName.style.left= left_Side  + 'px';
 	tagName.style.top= top_Side + 22+ 'px';
 	tagName.style.display = 'block';
-	document.getElementById("addcall").href="javascript:gshow('addEvent','call','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"','"+viewOption+"','"+subtab+"');fnRemoveEvent();";
-	document.getElementById("addmeeting").href="javascript:gshow('addEvent','meeting','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"','"+viewOption+"','"+subtab+"');fnRemoveEvent();";
+	eventlist = eventlist.split(";");
+	for(var i=0;i<(eventlist.length-1);i++){
+		document.getElementById("add"+eventlist[i].toLowerCase()).href="javascript:gshow('addEvent','"+eventlist[i]+"','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"','"+viewOption+"','"+subtab+"');fnRemoveEvent();";
+	}
 	document.getElementById("addtodo").href="javascript:gshow('createTodo','todo','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"','"+viewOption+"','"+subtab+"');fnRemoveEvent();";
-	
 }
 	
 function fnRemoveEvent(){
-	var tagName = document.getElementById('addEventDropDown').style.display= 'none';
+	var tagName = document.getElementById('addEventDropDown').style.display = 'none';
 }
 
 function fnShowEvent(){
@@ -710,17 +702,21 @@ function updateStatus(record,status,view,hour,day,month,year,type){
 					if(OptionData == 'listview')
 					{
 						result = response.responseText.split('####');
-                                                $("total_activities").innerHTML = result[1];
-                                                $("listView").innerHTML=result[0];
+                        $("total_activities").innerHTML = result[1];
+                        //$("listView").innerHTML=result[0];
+	                    document.EventViewOption.action.value = "index";
+						window.document.EventViewOption.submit();
 					}		
-                                	if(OptionData == 'hourview')
+                   	if(OptionData == 'hourview')
 					{
 						result = response.responseText.split('####');
-                                                $("total_activities").innerHTML = result[1];	
-                        			$("hrView").innerHTML=result[0];
+                        $("total_activities").innerHTML = result[1];
+                        //$("hrView").innerHTML=result[0];
+	                    document.EventViewOption.action.value = "index";
+						window.document.EventViewOption.submit();             
 					}
-                        	}
-                	}
+					
+               }}
 		);
 	}
 	if(type == 'todo')
@@ -856,9 +852,10 @@ function getcalAction(obj,Lay,id,view,hour,dateVal,type){
 function dispLayer(lay)
 {
 	var tagName = document.getElementById(lay);
-        tagName.style.visibility = 'visible';
-        tagName.style.display = 'block';
+	tagName.style.visibility = 'visible';
+	tagName.style.display = 'block';
 }
+
 //check whether user form selected or group form selected
 function checkgroup()
 {
@@ -888,12 +885,12 @@ function calendarChangeOwner()
 	if($("user_checkbox").checked)
 	{
 		var user_id = document.getElementById('lead_owner').options[document.getElementById('lead_owner').options.selectedIndex].value;
-		var url = 'module=Users&action=updateLeadDBStatus&return_module=Calendar&return_action=ActivityAjax&user_id='+user_id+'&idlist='+idlist+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=change_owner';
+		var url = 'module=Users&action=updateLeadDBStatus&return_module=Calendar&return_action=ActivityAjax&owner_id='+user_id+'&idlist='+idlist+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=change_owner&owner_type=User';
 	}
 	else
 	{
 		var group_id = document.getElementById('lead_group_owner').options[document.getElementById('lead_group_owner').options.selectedIndex].value;
-		var url = 'module=Users&action=updateLeadDBStatus&return_module=Calendar&return_action=ActivityAjax&group_id='+group_id+'&idlist='+idlist+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=change_owner';
+		var url = 'module=Users&action=updateLeadDBStatus&return_module=Calendar&return_action=ActivityAjax&owner_id='+group_id+'&idlist='+idlist+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=change_owner&owner_type=Group';
 	}
 		
 	if(subtab == 'event')
@@ -910,14 +907,18 @@ function calendarChangeOwner()
 					if(OptionData == 'listview')
 					{
 						result = response.responseText.split('####');
-                                                $("total_activities").innerHTML = result[1];
-                                                $("listView").innerHTML=result[0];
+                        $("total_activities").innerHTML = result[1];
+                        $("listView").innerHTML=result[0];
+						document.EventViewOption.action.value = "index";
+						window.document.EventViewOption.submit();
 					}
 					if(OptionData == 'hourview')
 					{
 						result = response.responseText.split('####');
-                                                $("total_activities").innerHTML = result[1];
-                                                $("hrView").innerHTML=result[0];
+                        $("total_activities").innerHTML = result[1];
+                        $("hrView").innerHTML=result[0];
+						document.EventViewOption.action.value = "index";
+						window.document.EventViewOption.submit();
 					}
                         	}
                 	}
@@ -936,11 +937,10 @@ function calendarChangeOwner()
 					result = response.responseText.split('####');
 					$("total_activities").innerHTML = result[1];
 					$("mnuTab2").innerHTML=result[0];
-                                }
+                               }
                         }
                 );
         }
-
 }
 
 function delActivity(id,view,hour,day,month,year,subtab)
@@ -949,24 +949,23 @@ function delActivity(id,view,hour,day,month,year,subtab)
 	{
 		var OptionData = $('view_Option').options[$('view_Option').selectedIndex].value;
          	new Ajax.Request(
-                	'index.php',
-                	{queue: {position: 'end', scope: 'command'},
-                        	method: 'post',
-                        	postBody: 'module=Users&action=massdelete&return_module=Calendar&return_action=ActivityAjax&idlist='+id+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=activity_delete&viewOption='+OptionData+'&subtab=event&ajax=true',
-                        	onComplete: function(response) {
-					if(OptionData == 'listview')
-		                        {
-                                                result = response.responseText.split('####');
-                                                $("total_activities").innerHTML = result[1];
-                                                $("listView").innerHTML=result[0];
-                                        }
-                                	if(OptionData == 'hourview')
-					{
-
-                                                result = response.responseText.split('####');
-                                                $("total_activities").innerHTML = result[1];
-                                                $("hrView").innerHTML=result[0];
-                                        }
+	                	'index.php',
+	                	{queue: {position: 'end', scope: 'command'},
+	                        	method: 'post',
+	                        	postBody: 'module=Users&action=massdelete&return_module=Calendar&return_action=ActivityAjax&idlist='+id+'&view='+view+'&hour='+hour+'&day='+day+'&month='+month+'&year='+year+'&type=activity_delete&viewOption='+OptionData+'&subtab=event&ajax=true',
+	                        	onComplete: function(response) {
+								if(OptionData == 'listview')
+								{
+									result = response.responseText.split('####');
+	                                $("total_activities").innerHTML = result[1];
+	                                $("listView").innerHTML=result[0];
+								}
+								if(OptionData == 'hourview')
+								{
+									result = response.responseText.split('####');
+									$("total_activities").innerHTML = result[1];
+									$("hrView").innerHTML=result[0];
+								}
                         	}
                 	}
 		);
@@ -982,11 +981,10 @@ function delActivity(id,view,hour,day,month,year,subtab)
 					result = response.responseText.split('####');
 					$("total_activities").innerHTML = result[1];
 					$("mnuTab2").innerHTML=result[0];
-                                }
+                               }
                         }
                 );
         }
-
 }
 
 
@@ -1187,18 +1185,12 @@ function getSelectedStatus()
 
 }
 
-function changeEndtime_StartTime()
+function changeEndtime_StartTime(type)
 {
-        var select_call = document.EditView.activitytype[0].checked;
-        var select_meeting = document.EditView.activitytype[1].checked;
-        if(select_call)
-                calDuedatetime('call');
-        else if(select_meeting)
-                calDuedatetime('meeting');
-        else
-                alert(alert_arr.EVENT_TYPE_NOT_SELECTED);
+	calDuedatetime(type);
+	return true;
 }
-
+ 
 function calDuedatetime(type)
 {
         var dateval1=getObj('date_start').value.replace(/^\s+/g, '').replace(/\s+$/g, '');
@@ -1215,7 +1207,7 @@ function calDuedatetime(type)
         var hour = parseInt(document.EditView.starthr.value,10);
         var min = parseInt(document.EditView.startmin.value,10);
         var fmt = document.EditView.startfmt.value;
-	if(type == 'meeting')
+	if(type != 'Call')
         {
                 if(fmt == 'pm')
                 {
@@ -1281,7 +1273,7 @@ function calDuedatetime(type)
                         document.EditView.followup_startmin.value = min;
                 }
         }
-	if(type == 'call')
+	if(type == 'Call')
         {
                 if(fmt == 'pm')
                 {

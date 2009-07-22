@@ -50,6 +50,19 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 	setCCAddress($mail,'cc',$cc);
 	setCCAddress($mail,'bcc',$bcc);
 
+	// vtmailscanner customization: If Support Reply to is defined use it.
+	global $HELPDESK_SUPPORT_EMAIL_REPLY_ID;
+	if($HELPDESK_SUPPORT_EMAIL_REPLY_ID && $HELPDESK_SUPPORT_EMAIL_ID != $HELPDESK_SUPPORT_EMAIL_REPLY_ID) {
+		$mail->AddReplyTo($HELPDESK_SUPPORT_EMAIL_REPLY_ID);
+	}
+	// END
+
+	// Fix: Return immediately if Outgoing server not configured
+    if(empty($mail->Host)) {
+		return 0;
+    }
+    // END
+    
 	$mail_status = MailSend($mail);
 
 	if($mail_status != 1)
@@ -76,7 +89,7 @@ function getUserEmailId($name,$val)
 	{
 		//$sql = "select email1, email2, yahoo_id from vtiger_users where ".$name." = '".$val."'";
 		//done to resolve the PHP5 specific behaviour
-		$sql = "select email1, email2, yahoo_id from vtiger_users where $name = ?";
+		$sql = "SELECT email1, email2, yahoo_id from vtiger_users WHERE status='Active' AND ". $adb->sql_escape_string($name)." = ?";
 		$res = $adb->pquery($sql, array($val));
 		$email = $adb->query_result($res,0,'email1');
 		if($email == '')

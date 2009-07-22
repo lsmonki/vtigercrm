@@ -129,8 +129,8 @@ $mod_strings = Array(
 'LBL_MEETING_TITLE'=>'Meetings',
 'LBL_NEW_EMAIL'=>'New Email',
 'LBL_EMAIL_TITLE'=>'Emails',
-'LBL_NEW_NOTE'=>'New Note',
-'LBL_NOTE_TITLE'=>'Notes',
+'LBL_NEW_NOTE'=>'New Document',
+'LBL_NOTE_TITLE'=>'Documents',
 
 // Added for 4GA
 'LBL_TOOL_FORM_TITLE'=>'Contact Tools',
@@ -178,7 +178,7 @@ $mod_strings = Array(
 // Added vtiger_fields for Add Business Card
 'LBL_NEW_CONTACT'=>'New Contact',
 'LBL_NEW_ACCOUNT'=>'New Account',
-'LBL_NOTE_SUBJECT'=>'Note Subject:',
+'LBL_NOTE_SUBJECT'=>'Document Subject:',
 'LBL_NOTE'=>'Note:',
 'LBL_WEBSITE'=>'Website:',
 'LBL_NEW_APPOINTMENT'=>'New Appointment',
@@ -236,8 +236,14 @@ $mod_strings = Array(
 'We suggest you to change your password after logging in first time'=>'We suggest you to change your password after logging in first time.',
 'Support Team'=>'Support Team',
 
-
 'TITLE_AJAX_CSS_POPUP_CHAT'=>'Ajax Css-Popup chat',
+
+// Added after 5.0.4 GA
+
+// Module Sequence Numbering
+'Contact Id' => 'Contact Id',
+// END
+
 );
 
 ?>

@@ -38,6 +38,7 @@ foreach($groupInfo as $groupId=>$groupInfo)
 $smarty->assign("LIST_HEADER",$list_header);
 $smarty->assign("LIST_ENTRIES",$return_data);
 $smarty->assign("PROFILES", $standCustFld);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);

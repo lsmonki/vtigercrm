@@ -208,6 +208,21 @@ $mod_strings = Array(
 
 // Added/Updated for vtiger CRM 5.0.4
 'LBL_REPORT_DELETED' => 'The report you are trying to view has been deleted.',
+
+//Added for Reports
+'LBL_SHARING'=>'Sharing',
+'SELECT_FILTER_TYPE'=>'Select Report Type',
+'LBL_USERS'=>'Users',
+'LBL_GROUPS'=>'Groups',
+'LBL_SELECT_FIELDS'=>'Select Fields',
+'LBL_MEMBERS'=>'Members',
+'LBL_RELATED_FIELDS'=>'Related Fields',
+'LBL_NO_ACCESS'=>' Access Denied for module(s) ',
+'LBL_NOT_ACTIVE'=>' Access Denied for module(s) ',
+'LBL_PERM_DENIED'=>' Permission Denied for Report(s): ',
+'LBL_FLDR_NOT_EMPTY'=>'Folder you are trying to delete is not Empty, Move or Delete the Reports in it.',
+'NO_REL_MODULES'=>'No Related Modules for the Selected Module',
+'LBL_REPORT_GENERATION_FAILED'=>'Report generation failed!',
 )
 
 ?>

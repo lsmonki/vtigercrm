@@ -192,7 +192,8 @@ $query_array2 = Array(
 			// Changes made to make discontinued column in vtiger_products '0' during deactivation.
 
 			"alter table vtiger_products modify discontinued int(1) NOT NULL default 0",
-
+			
+			"UPDATE vtiger_products SET discontinued=1 WHERE discontinued IS NULL",
 
 			//Ref : ticket#3278, 3309, 3461
 			"update vtiger_field set typeofdata='E~O' where fieldname in ('yahooid','yahoo_id')",

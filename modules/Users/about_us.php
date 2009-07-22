@@ -73,7 +73,7 @@ global $mod_strings;
 <body>
 <table border="0" cellpadding="0" cellspacing="0" width="500">
 		<tr>
-				<td colspan="3"><img src="<?php echo $image_path;?>aboutUS.jpg" width="500" height="301"></td>
+				<td colspan="3"><img src="<?php echo vtiger_imageurl('aboutUS.jpg', $theme) ?>" width="500" height="301"></td>
 		</tr>
 		<tr>
 				<td width="15%" style="border-left:2px solid #7F7F7F;">&nbsp;</td>
@@ -194,12 +194,13 @@ global $mod_strings;
 		</tr>
 		<tr><td colspan="3"  style="border-left:2px solid #7F7F7F;border-right:2px solid #7F7F7F">&nbsp;</td></tr>
 		<tr>
-		  <td colspan="3" background="<?php echo $image_path;?>about_btm.jpg" height="75">
+		  <td colspan="3" background="<?php echo vtiger_imageurl('about_btm.jpg', $theme) ?>" height="75">
 		  		<table width="100%" border="0" cellpadding="5" cellspacing="0">
 						<tr>
 							<td width="70%" align="left" class="small">
 							<span class="small" style="color:#999999;"><?php echo $mod_strings['LBL_VERSION'] ." ".$patch_string;?></span>&nbsp;|&nbsp;
 									<a href="javascript:;" onClick=" newpopup('http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt')"><?php echo $mod_strings['LBL_READ_LICENSE'];?></a>&nbsp;|&nbsp;
+									<a href="javascript:;" onClick=" newpopup('http://www.vtiger.com/products/crm/privacy_policy.html')"><?php echo $app_strings['LNK_PRIVACY_POLICY'];?></a>&nbsp;|&nbsp;
 									<a href="javascript:;" onClick=" newpopup('http://www.vtiger.com/index.php?option=com_content&task=view&id=26&Itemid=54')"><?php echo $mod_strings['LBL_CONTACT_US'];?></a>
 							</td>
 							<td align="right">

@@ -55,7 +55,7 @@ $record = (isset($_GET['record'])) ? $_GET['record'] : "";
 //Added activity mode for events or tasks for Back
 if($_GET['module'] == 'Activities')
 {
-        $activity_mode = '&activity_mode='.$_REQUEST['activity_mode'];
+        $activity_mode = '&activity_mode='.vtlib_purify($_REQUEST['activity_mode']);
 }
 $url = $site_URL . "/index.php?module={$_GET['module']}&action={$_GET['action']}&record=$record$activity_mode";
 $lang_crm = (empty($_GET['lang_crm'])) ? $default_language : $_GET['lang_crm'];

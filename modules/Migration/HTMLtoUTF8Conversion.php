@@ -8,63 +8,46 @@
  * All Rights Reserved.
 ********************************************************************************/
 
-ini_set("memory_limit","32M");
-set_time_limit(-1);
+_phpset_memorylimit_MB(32);
+global $php_max_execution_time;
+set_time_limit($php_max_execution_time);
+global $adb,$dbname;
 
-echo '<div align = "center"><br><b>Started UTF8 Conversion</b><br></div>';
-@ob_flush();
+//echo '<div align = "center"><br><b>Started UTF8 Conversion</b><br></div>';
 
-echo '<table width="98%" border="1px" cellpadding="3" cellspacing="0" height="100%">';
+//echo '<table width="98%" border="1px" cellpadding="3" cellspacing="0" height="100%">';
 //This function will convert all the html values in the database into utf-8 values
-echo '<tr width="100%"> <th colspan="3">Setting the character set as utf8 and collation as utf8_general_ci for all tables and Databases.</th></tr>';
-$query = " ALTER DATABASE ".$dbconfig['db_name']." DEFAULT CHARACTER SET utf8";
-echo "<tr><td colspan='3'>".$query."</td></tr>";
+//echo '<tr width="100%"> <th colspan="3">Setting the character set as utf8 and collation as utf8_general_ci for all tables and Databases.</th></tr>';
+$query = " ALTER DATABASE ".$dbname." DEFAULT CHARACTER SET utf8";
+//echo "<tr><td colspan='3'>".$query."</td></tr>";
 $adb->query($query);
 $query = "SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0";
-echo "<tr><td colspan='3'>".$query."</td></tr>";
+//echo "<tr><td colspan='3'>".$query."</td></tr>";
 $adb->query($query);
 $tables_res = $adb->query("show tables");
 while($row = $adb->fetch_array($tables_res))
 {
-	echo "<tr>";
+	//echo "<tr>";
 	$query =" LOCK TABLES `".$row[0]."` WRITE ";
-	echo "<td>LOCKING TABLE</td>";
+	//echo "<td>LOCKING TABLE</td>";
 	$adb->query($query);
 
 	$query =" ALTER TABLE ".$row[0]." CONVERT TO CHARACTER SET  utf8 ";
-	echo "<td>$query</td>";
+	//echo "<td>$query</td>";
 	$adb->query($query);
 	
 	$query =" UNLOCK TABLES ";
-	echo "<td>UNLOCKING TABLE</td>";
+	//echo "<td>UNLOCKING TABLE</td>";
 	$adb->query($query);
 	
-	@ob_flush();
-	flush();
-	echo "</tr>";
+	//echo "</tr>";
 }
 $query = " SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS  ";
-echo "<tr><td colspan='3'>".$query."</td></tr>";
+//echo "<tr><td colspan='3'>".$query."</td></tr>";
 $adb->query($query);
-echo '</table>';
+//echo '</table>';
 
 convert_html2utf8_db();
-
-//Displaying the close button at the end of the conversion.
-/*echo '<table width="95%"  border="0" align="center">
-	<tr bgcolor="#FFFFFF"><td colspan="2">&nbsp;</td></tr>
-	<tr>
-	<td colspan="2" align="center">
-	<form name="close_migration" method="post" action="index.php">
-	<input type="hidden" name="module" value="Settings">
-	<input type="hidden" name="action" value="index">
-	<input type="submit" name="close" value=" &nbsp;Close&nbsp; " class="crmbutton small cancel" />
-	</form>
-	</td>
-	</tr>
-	</table>';
-*/
-
 
 /**
 * Function to convert html values to its original character available in a database
@@ -82,8 +65,8 @@ function convert_html2utf8_db()
 	//Tables for which conversion to utf8 not required.
 	$skip_tables=Array('vtiger_sharedcalendar', 'vtiger_potcompetitorrel', 'vtiger_users2group', 'vtiger_group2grouprel', 'vtiger_group2role', 'vtiger_group2rs', 'vtiger_campaigncontrel', 'vtiger_campaignleadrel', 'vtiger_cntactivityrel', 'vtiger_crmentitynotesrel', 'vtiger_salesmanactivityrel', 'vtiger_vendorcontactrel', 'vtiger_salesmanticketrel', 'vtiger_seactivityrel', 'vtiger_seticketsrel', 'vtiger_senotesrel', 'vtiger_profile2globalpermissions', 'vtiger_profile2standardpermissions', 'vtiger_profile2field', 'vtiger_role2profile', 'vtiger_profile2utility', 'vtiger_activityproductrel', 'vtiger_pricebookproductrel', 'vtiger_activity_reminder', 'vtiger_actionmapping', 'vtiger_org_share_action2tab', 'vtiger_datashare_relatedmodule_permission', 'vtiger_tmp_read_user_sharing_per', 'vtiger_tmp_read_group_sharing_per', 'vtiger_tmp_write_user_sharing_per', 'vtiger_tmp_write_group_sharing_per', 'vtiger_tmp_read_user_rel_sharing_per', 'vtiger_tmp_read_group_rel_sharing_per', 'vtiger_tmp_write_user_rel_sharing_per', 'vtiger_tmp_write_group_rel_sharing_per', 'vtiger_role2picklist', 'vtiger_freetagged_objects', 'vtiger_tab', 'vtiger_blocks', 'vtiger_group2role', 'vtiger_group2rs');
 
-	echo '<table width="98%" border="1px" cellpadding="3" cellspacing="0" height="100%">';
-	echo '<tr width="100%"> <th colspan="3">Started converting data from HTML to UTF-8</th></tr>';
+	//echo '<table width="98%" border="1px" cellpadding="3" cellspacing="0" height="100%">';
+	//echo '<tr width="100%"> <th colspan="3">Started converting data from HTML to UTF-8</th></tr>';
 	
 	for($i=0;$i<count($alltables);$i++)
 	{
@@ -107,35 +90,7 @@ function convert_html2utf8_db()
 			}
 		}
 	}
-	//Array with tables in the database
-	//Eg : Array
-	//	(
-	//      	[vtiger_account] => Array(
-	//              	[key] => accountid,
-	//              	[columns] => Array(
-	//                      	[0] => accountname,
-	//                      	[1] => email,
-	//                      	[2] => website,
-	//                      	.
-	//                      	.
-	//                      	.
-	//              	)
-	//		)
-	//		[vtiger_leaddetails] => Array(
-	//			[key] => leadid,
-	//			[columns] => Array(
-	//				[0] => firstname,
-	//				[1] => lastname,
-	//				[2] => company,
-	//				.
-	//				.
-	//				.
-	//			)	
-	//      	)
-	//		.
-	//		.
-	//		.
-	//	)
+
 	$final_array=$values;
 	foreach($final_array as $tablename=>$value)
 	{
@@ -158,13 +113,11 @@ function convert_html2utf8_db()
 			$res1 = $adb->query($query);
 			$val = Array();
 			$id = Array();
-			echo '
-					<tr width="100%">
-					<td width="80%">Updating the values in the table <b>'.$tablename.'</b></td>';
+		//	echo '
+		//			<tr width="100%">
+		//			<td width="80%">Updating the values in the table <b>'.$tablename.'</b></td>';
 			$log->debug("Converting values in the table :".$tablename);
 			//Sending the current status to the browser
-			@ob_flush();
-			flush();
 			for($k=0; $k < $adb->num_rows($res1); $k++)
 			{
 				$whereStr = "";
@@ -189,18 +142,15 @@ function convert_html2utf8_db()
 				$params = array($val, $id);
 				$adb->pquery($updateQ, $params);
 			}
-			echo '
-					<td width="20%">Completed</td>
-					</tr>';
+		//	echo '
+		//			<td width="20%">Completed</td>
+		//			</tr>';
 			//Sending the current status to the browser
-			@ob_flush();
-			flush();
 		}
         }
-	echo '</table>';
-	echo '<div align = "center"><br><br><b> Conversion completed.</b></div>';
+//	echo '</table>';
+//	echo '<div align = "center"><br><br><b> Conversion completed.</b></div>';
 	$log->debug("HTML to UTF-8 Conversion has been completed");
 }
-
 
 ?>

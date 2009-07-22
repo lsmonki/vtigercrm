@@ -8,8 +8,8 @@
   *
  ********************************************************************************/
 
-function splitValues() {
-        var picklistObj=getObj("fldPickList")
+function splitValues(object) {
+        var picklistObj=object;
         var pickListContent=picklistObj.value
         var pickListAry=new Array()
         var i=0;
@@ -36,90 +36,86 @@ function splitValues() {
 }
 
 
-function validate() {
-	var nummaxlength = 255;
-        var fieldtype = document.getElementById('selectedfieldtype').value;
-	var mode = document.getElementById('cfedit_mode').value;
+function validate(blockid) {
+		var nummaxlength = 255;
+        var fieldtype = document.getElementById('selectedfieldtype_'+blockid).value;
+		var mode = document.getElementById('cfedit_mode').value;
         if(fieldtype == "" && mode != 'edit')
-	{
-		alert(alert_arr.FIELD_TYPE_NOT_SELECTED);
-		return false;
-	}
-	lengthLayer=getObj("lengthdetails")
-        decimalLayer=getObj("decimaldetails")
-        pickListLayer=getObj("picklist")
-        var str = getObj("fldLabel").value;
-        if (!emptyCheck("fldLabel","Label","text"))
+		{
+			alert(alert_arr.FIELD_TYPE_NOT_SELECTED);
+				return false;
+		}
+		lengthLayer=document.getElementById("lengthdetails_"+blockid)
+        decimalLayer=document.getElementById("decimaldetails_"+blockid)
+        var pickListLayer=document.getElementById("fldPickList_"+blockid);
+        var fldlbl = document.getElementById("fldLabel_"+blockid);
+        var str = fldlbl.value;
+		if (!emptyCheck("fldLabel_"+blockid,"Label","text"))
                 return false
-
-        //var re1=/^[a-z\d\_ ]+$/i
-        /*if (!re1.test(str))
-        {
-                alert(alert_arr.SPECIAL_CHARACTERS_NOT_ALLOWED)
-                return false;
-        }*/
-	//tested for special characters <,>,&,'," and :
-        var re2=/[&\<\>\:\'\"\,\_]/
+	     var re2=/[&\<\>\:\'\"\,\_]/
         if (re2.test(str))
         {
                 alert(alert_arr.SPECIAL_CHARACTERS+" & < > ' \" : , _ "+alert_arr.NOT_ALLOWED)
                 return false;
         }
-        if (lengthLayer != null && lengthLayer.style.visibility=="visible") {
-                if (!emptyCheck("fldLength","Length"))
+        var fieldlength = document.getElementById('fldLength_'+blockid);
+		if (lengthLayer != null && lengthLayer.style.visibility=="visible") {
+                if (!emptyCheck('fldLength_'+blockid,"Length"))
                         return false
 
-                if (!intValidate("fldLength","Length"))
+                if (!intValidate('fldLength_'+blockid,"Length"))
                         return false
 
-                if (!numConstComp("fldLength","Length","G",0))
+                if (!numConstComp('fldLength_'+blockid,"Length","G",0))
                         return false
 
         }
 
         if (decimalLayer != null && decimalLayer.style.visibility=="visible") {
-                if (getObj("fldDecimal").value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
-                        if (!intValidate("fldDecimal","Decimal"))
-                                return false
-                if (!numConstComp("fldDecimal","Decimal","GE",0))
+                if (document.getElementById("fldDecimal_"+blockid).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length>0)
+                        if (!intValidate("fldDecimal_"+blockid,"Decimal"))
+                               return false
+                if (!numConstComp("fldDecimal_"+blockid,"Decimal","GE",0))
                         return false
 
-                if (!numConstComp("fldDecimal","Decimal","LE",30))
+                if (!numConstComp("fldDecimal_"+blockid,"Decimal","LE",30))
                         return false
         }
-	var decimallength = '';
-	if (typeof(document.addtodb) != 'undefined' && typeof(document.addtodb.fldDecimal) != 'undefined')
-	      decimallength = document.addtodb.fldDecimal.value;
-        if(fieldValueArr[fieldtype] == 'Percent' || fieldValueArr[fieldtype] == 'Currency' || fieldValueArr[fieldtype] == 'Number')
+		var decimallength = '';
+		if (decimalLayer != null && decimalLayer.style.visibility=="visible" && document.getElementById('fldDecimal_'+blockid) != null)
+	      	decimallength = document.getElementById("fldDecimal_"+blockid).value;
+        
+		if(fieldValueArr[fieldtype] == 'Percent' || fieldValueArr[fieldtype] == 'Currency' || fieldValueArr[fieldtype] == 'Number')
         {
                 if(decimallength == '')
-                        decimallength = 0;
-                nummaxlength = 65 - (eval(decimallength) + 1);
+            		decimallength = 0;
+            	nummaxlength = 65 - (eval(decimallength) + 1);
         }
-        if (getObj("lengthdetails") != null && getObj("lengthdetails").style.visibility == "visible" && !numConstComp("fldLength","Length","LE",nummaxlength))
+		var lengthObj = document.getElementById("lengthdetails_"+blockid);
+        if ( lengthObj != null && lengthObj.style.visibility == "visible" && !numConstComp('fldLength_'+blockid,"Length","LE",nummaxlength))
                 return false
-var picklistObj=getObj("fldPickList")
-        if (pickListLayer != null && pickListLayer.style.visibility=="visible") {
-                if (emptyCheck("fldPickList","Picklist values"))        {
-                        var pickListAry=new Array()
-                        pickListAry=splitValues()
+		var picklistObj=document.getElementById("fldPickList_"+blockid)
+        if (pickListLayer != null && getObj("picklistdetails_"+blockid).style.visibility=="visible") {
+                var pickListAry=new Array();
+                pickListAry=splitValues(pickListLayer);
+				if (emptyCheck("fldPickList_"+blockid,"Picklist values"))        {
 
                         //Empty Check validation
                         for (i=0;i<pickListAry.length;i++) {
                                 if (pickListAry[i]=="") {
-                                        alert(alert_arr.PICKLIST_CANNOT_BE_EMPTY)
-                                        picklistObj.focus()
-                                        return false
+                          			alert(alert_arr.PICKLIST_CANNOT_BE_EMPTY);
+                          			picklistObj.focus();
+                          			return false
                                 }
                         }
 
                         //Duplicate Values' Validation
                         for (i=0;i<pickListAry.length;i++) {
-                                for (j=i+1;j<pickListAry.length;j++) {
-                                        if (pickListAry[i].toUpperCase()==pickListAry[j].toUpperCase()) {
-                                                alert(alert_arr.DUPLICATE_VALUES_FOUND)
-                                                picklistObj.focus()
-                                                return false
+                   			for (j=i+1;j<pickListAry.length;j++) {
+                 				if (trim(pickListAry[i].toUpperCase())== trim(pickListAry[j].toUpperCase())) {
+                  					alert(alert_arr.DUPLICATE_VALUES_FOUND)
+                 						picklistObj.focus();
+                        					return false
                                         }
                                 }
                         }
@@ -127,18 +123,19 @@ var picklistObj=getObj("fldPickList")
                         return true
                 } else return false
         }
+		return true;
 }
 var fieldValueArr=new Array('Text','Number','Percent','Currency','Date','Email','Phone','Picklist','URL','Checkbox','TextArea','MultiSelectCombo','Skype');
 var fieldTypeArr=new Array('text','number','percent','currency','date','email','phone','picklist','url','checkbox','textarea','multiselectcombo','skype');
 var currFieldIdx=0,totFieldType;
 var focusFieldType;
 
-function init() {
+/*function init() {
         lengthLayer=getObj("lengthdetails")
         decimalLayer=getObj("decimaldetails")
         pickListLayer=getObj("picklist")
         totFieldType=fieldTypeArr.length-1
-}
+}*/
 
 
 function setVisible() {
@@ -173,18 +170,18 @@ function setVisible() {
         }
 }
 
-function selFieldType(id,scrollLayer,bool) {
+function selFieldType(id,scrollLayer,bool,blockid) {
         currFieldIdx=id
         var type=fieldTypeArr[id]
-	var lengthLayer=getObj("lengthdetails");
-	var decimalLayer=getObj("decimaldetails");
-	var pickListLayer=getObj("picklist");
+	var lengthLayer=document.getElementById("lengthdetails_"+blockid);
+	var decimalLayer=document.getElementById("decimaldetails_"+blockid);
+	var pickListLayer=document.getElementById("picklistdetails_"+blockid);
         if (type=='text') {
                 lengthLayer.style.visibility="visible"
                 decimalLayer.style.visibility="hidden"
                 pickListLayer.style.visibility="hidden"
         } else if (type=='date' || type=='percent' || type=='email' || type=='phone' || type=='url' || type=='checkbox' || type=='textarea' || type=='skype') {
-                getObj("lengthdetails").style.visibility="hidden"
+               	document.getElementById("lengthdetails_"+blockid).style.visibility="hidden"
                 decimalLayer.style.visibility="hidden"
                 pickListLayer.style.visibility="hidden"
         } else if (type=='number' || type=='currency') {
@@ -196,9 +193,7 @@ function selFieldType(id,scrollLayer,bool) {
                 decimalLayer.style.visibility="hidden"
                 pickListLayer.style.visibility="visible"
         }
-
-
-        parent.getObj("fieldType").value = fieldValueArr[id];
+		document.getElementById("fieldType_"+blockid).value = fieldValueArr[id];
 }
 
 function srchFieldType(ev) {
@@ -331,6 +326,7 @@ function gotourl(url)
 
 function validateTypeforCFMapping(leadtype,leadtypeofdata,field_name,cf_form)
 {
+	var alertmessage = new Array(alert_arr.LBL_TYPEALERT_1,alert_arr.LBL_WITH,alert_arr.LBL_TYPEALERT_2,alert_arr.LBL_LENGTHALERT,alert_arr.LBL_DECIMALALERT);
 	var combo_val = cf_form.options[cf_form.selectedIndex].value;
 	if(combo_val != 'None')
 	{

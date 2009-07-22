@@ -121,13 +121,13 @@ $user_id = $current_user->id;
 $qcreate_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
 
 
-$qcreate_get_field="select * from vtiger_field where tabid=4 and quickcreate=0 order by quickcreatesequence";
+$qcreate_get_field="select * from vtiger_field where tabid=4 and quickcreate=0 and vtiger_field.presence in (0,2) order by quickcreatesequence";
 $qcreate_get_result=$adb->pquery($qcreate_get_field, array());
 $qcreate_get_noofrows=$adb->num_rows($qcreate_get_result);
 
 $fieldName_array = Array();//for validation
 
-$qcreate_form.='<form name="EditView" onSubmit="return formValidate()" method="POST" action="index.php">';
+$qcreate_form.='<form name="EditView" onSubmit="if(formValidate()){VtigerJS_DialogBox.block();} else {return false;}" method="POST" action="index.php">';
 $qcreate_form.='<input type="hidden" name="module" value="Contacts">';
 $qcreate_form.='<input type="hidden" name="record" value="">';
 $qcreate_form.='<input type="hidden" name="assigned_user_id" value="'.$user_id.'">';

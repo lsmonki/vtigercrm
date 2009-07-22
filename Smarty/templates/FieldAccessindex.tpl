@@ -25,7 +25,7 @@
 <a href="index.php?module=Users&action=ListFldProfiles&fld_module=Potentials">{$MOD.LBL_OPPORTUNITY_FIELD_ACCESS}</a></td></tr><tr><td>
 <a href="index.php?module=Users&action=ListFldProfiles&fld_module=HelpDesk">{$MOD.LBL_HELPDESK_FIELD_ACCESS}</a></td><td>
 <a href="index.php?module=Users&action=ListFldProfiles&fld_module=Products">{$MOD.LBL_PRODUCT_FIELD_ACCESS}</a></td></tr><tr><td>
-<a href="index.php?module=Users&action=ListFldProfiles&fld_module=Notes">{$MOD.LBL_NOTE_FIELD_ACCESS}</a></td><td>
+<a href="index.php?module=Users&action=ListFldProfiles&fld_module=Documents">{$MOD.LBL_NOTE_FIELD_ACCESS}</a></td><td>
 <a href="index.php?module=Users&action=ListFldProfiles&fld_module=Emails">{$MOD.LBL_EMAIL_FIELD_ACCESS}</a></td></tr><tr><td>
 <a href="index.php?module=Users&action=ListFldProfiles&fld_module=Calendar">{$MOD.LBL_TASK_FIELD_ACCESS}</a></td><td>
 <a href="index.php?module=Users&action=ListFldProfiles&fld_module=Events">{$MOD.LBL_EVENT_FIELD_ACCESS}</a></td></tr><tr><td>

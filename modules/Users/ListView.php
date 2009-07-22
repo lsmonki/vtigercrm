@@ -1,13 +1,12 @@
 <?php
-/*********************************************************************************
-  ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-   * ("License"); You may not use this file except in compliance with the License
-   * The Original Code is:  vtiger CRM Open Source
-   * The Initial Developer of the Original Code is vtiger.
-   * Portions created by vtiger are Copyright (C) vtiger.
-   * All Rights Reserved.
-  *
- ********************************************************************************/
+/*+********************************************************************************
+  * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+  * ("License"); You may not use this file except in compliance with the License
+  * The Original Code is:  vtiger CRM Open Source
+  * The Initial Developer of the Original Code is vtiger.
+  * Portions created by vtiger are Copyright (C) vtiger.
+  * All Rights Reserved.
+  ********************************************************************************/
 
 require_once('include/utils/utils.php');
 require_once('Smarty_setup.php');
@@ -21,7 +20,7 @@ if($current_user->is_admin != 'on')
 
 $log = LoggerManager::getLogger('user_list');
 
-global $mod_strings;
+global $mod_strings,$adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -37,36 +36,43 @@ if($_REQUEST['mail_error'] != '')
 {
     require_once("modules/Emails/mail.php");
     $error_msg = strip_tags(parseEmailErrorString($_REQUEST['mail_error']));
-	$error_msg = $app_strings['LBL_MAIL_NOT_SENT_TO_USER']. ' ' . $_REQUEST['user']. '. ' .$app_strings['LBL_PLS_CHECK_EMAIL_N_SERVER'];
+	$error_msg = $app_strings['LBL_MAIL_NOT_SENT_TO_USER']. ' ' . vtlib_purify($_REQUEST['user']). '. ' .$app_strings['LBL_PLS_CHECK_EMAIL_N_SERVER'];
 	$smarty->assign("ERROR_MSG",$mod_strings['LBL_MAIL_SEND_STATUS'].' <b><font class="warning">'.$error_msg.'</font></b>');
 }
 
 //Retreiving the start value from request
-if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-{
-	        $start = $_REQUEST['start'];
-}
-elseif($_SESSION['user_pagestart'] != '')
-{
-	        $start = $_SESSION['user_pagestart'];
-}
-else
+if(isset($_REQUEST['start']) && $_REQUEST['start'] != '') {
+	$start = vtlib_purify($_REQUEST['start']);
+} elseif($_SESSION['user_pagestart'] != '') {
+	$start = $_SESSION['user_pagestart'];
+} else
 	$start=1;
 
-$list_query = getListQuery("Users"); 
+$list_query = getListQuery("Users");
 
+	$userid = array(); 
+	$userid_Query = "SELECT id,user_name FROM vtiger_users WHERE user_name IN ('admin')";
+	$users = $adb->pquery($userid_Query,array());
+	$norows = $adb->num_rows($users);
+	if($norows  > 0){
+		for($i=0;$i<$norows ;$i++){
+			$id = $adb->query_result($users,$i,'id');
+			$userid[$id] = $adb->query_result($users,$i,'user_name');
+		}
+	}
+	$smarty->assign("USERNODELETE",$userid);
 $_SESSION['user_pagestart'] = $start;
 if($_REQUEST['sorder'] !='')
-	$sorder = $_REQUEST['sorder'];
+	$sorder = $adb->sql_escape_string($_REQUEST['sorder']);
 elseif($_SESSION['user_sorder'] != '')
-	$sorder = $_SESSION['user_sorder'];
+	$sorder = $adb->sql_escape_string($_SESSION['user_sorder']);
 else
 	$sorder = 'ASC';
 $_SESSION['user_sorder'] = $sorder;
 if($_REQUEST['order_by'] != '')
-	$order_by = $_REQUEST['order_by'];
+	$order_by = $adb->sql_escape_string($_REQUEST['order_by']);
 elseif($_SESSION['user_orderby'] != '')
-	$order_by = $_SESSION['user_orderby'];
+	$order_by = $adb->sql_escape_string($_SESSION['user_orderby']);
 else
 	$order_by = 'last_name';
 $_SESSION['user_orderby'] = $orderby;
@@ -80,6 +86,7 @@ $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("CMOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CURRENT_USERID", $current_user->id);
+$smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("LIST_HEADER",getListViewHeader($focus,"Users",$url_string,$sorder,$order_by,"",""));

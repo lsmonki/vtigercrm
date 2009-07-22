@@ -12,7 +12,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-<style type="text/css">@import url("{$THEME}style.css");</style>
+<style type="text/css">@import url("themes/{$THEME}/style.css");</style>
 <style type="text/css">
 	a.x {ldelim}
 		color:black;
@@ -86,12 +86,12 @@ function showhide(argg,imgId)
         	if (x.display=="none")
         	{ldelim}
             		x.display="block";
-					document.all[imgId].src = "{$IMAGE_PATH}minus.gif";
+					document.all[imgId].src = "themes/images/minus.gif";
         	{rdelim}
         	else
 			{ldelim}
             			x.display="none";
-						document.all[imgId].src = "{$IMAGE_PATH}plus.gif";
+						document.all[imgId].src = "themes/images/plus.gif";
             {rdelim}
 	{rdelim}
 {rdelim}

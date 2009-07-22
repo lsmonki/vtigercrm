@@ -16,7 +16,7 @@
 			<td class="mailClientBg small" id="calc_Handle"><b>{$APP.LBL_CALCULATOR}</b></td>
 			<td align="right"class="mailClientBg small">
 			<a href="javascript:;">
-			<img src="{$IMAGEPATH}close.gif" border="0"  onClick="fninvsh('calc')" hspace="5" align="absmiddle">
+			<img src="{'close.gif'|@vtiger_imageurl:$THEME}" border="0"  onClick="fninvsh('calc')" hspace="5" align="absmiddle">
 			</a>
 			</td>
 		</tr>

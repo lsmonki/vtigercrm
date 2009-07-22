@@ -46,7 +46,7 @@
 	*				  )
 	*
        */
-function getKeyMetrics()
+function getKeyMetrics($maxval,$calCnt)
 {
 	require_once("data/Tracker.php");
 	require_once('modules/CustomView/CustomView.php');
@@ -63,6 +63,12 @@ function getKeyMetrics()
 	$log = LoggerManager::getLogger('metrics');
 
 	$metriclists = getMetricList();
+	
+	// Determine if the KeyMetrics widget should appear or not?
+	if($calCnt == 'calculateCnt') {
+		return count($metriclists);
+	}
+	
 	$log->info("Metrics :: Successfully got MetricList to be displayed");
 	if(isset($metriclists))
 	{
@@ -73,7 +79,7 @@ function getKeyMetrics()
 				$listquery .= " AND vtiger_activity.activitytype != 'Emails' ";
 			$oCustomView = new CustomView($metriclist['module']);
 			$metricsql = $oCustomView->getMetricsCvListQuery($metriclist['id'],$listquery,$metriclist['module']);
-			if($metriclist['module'] == "Calendar")
+			if($metriclist['module'] == "Calendar" and !$adb->isPostgres())
 				$metricsql.=" group by vtiger_activity.activityid ";
 				
 			$metricresult = $adb->query($metricsql);
@@ -99,6 +105,7 @@ function getKeyMetrics()
 	$title[]='home_metrics';
 	$header=Array();
 	$header[]=$app_strings['LBL_HOME_METRICS'];
+	$header[]=$app_strings['LBL_MODULE'];
 	$header[]=$app_strings['LBL_HOME_COUNT'];
 	$entries=Array();
 	if(isset($metriclists))
@@ -107,15 +114,9 @@ function getKeyMetrics()
 		foreach($metriclists as $metriclist)
 		{
 			$value=array();
-			$metric_fields = array(
-					'ID' => $metriclist['id'],
-					'NAME' => $metriclist['name'],
-					'COUNT' => $metriclist['count'],
-					'MODULE' => $metriclist['module']
-					);
-
 			$CVname = (strlen($metriclist['name']) > 20) ? (substr($metriclist['name'],0,20).'...') : $metriclist['name'];
-			$value[]='<a href="index.php?action=ListView&module='.$metriclist['module'].'&viewname='.$metriclist['id'].'">'.$CVname.'</a>';
+			$value[]='<a href="index.php?action=ListView&module='.$metriclist['module'].'&viewname='.$metriclist['id'].'">'.$CVname . '</a> <font style="color:#6E6E6E;">('. $metriclist['user'] .')</font>';
+			$value[]='<a href="index.php?action=ListView&module='.$metriclist['module'].'&viewname='.$metriclist['id'].'">'.getTranslatedString($metriclist['module']). '</a>';
 			$value[]='<a href="index.php?action=ListView&module='.$metriclist['module'].'&viewname='.$metriclist['id'].'">'.$metriclist['count'].'</a>';
 			$entries[$metriclist['id']]=$value;
 		}
@@ -137,20 +138,33 @@ function getKeyMetrics()
 	 */
 function getMetricList()
 {
-	global $adb;
+	global $adb, $current_user;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	
 	$ssql = "select vtiger_customview.* from vtiger_customview inner join vtiger_tab on vtiger_tab.name = vtiger_customview.entitytype";
-	$ssql .= " where vtiger_customview.setmetrics = 1 order by vtiger_customview.entitytype";
-	$result = $adb->pquery($ssql, array());
+	$ssql .= " where vtiger_customview.setmetrics = 1 ";
+	$sparams = array();
+	
+	if($is_admin == false){
+	      $ssql .= " and (vtiger_customview.status=0 or vtiger_customview.userid = ? or vtiger_customview.status =3 or vtiger_customview.userid in(select vtiger_user2role.userid from vtiger_user2role inner join vtiger_users on vtiger_users.id=vtiger_user2role.userid inner join vtiger_role on vtiger_role.roleid=vtiger_user2role.roleid where vtiger_role.parentrole like '".$current_user_parent_role_seq."::%'))";
+	      array_push($sparams, $current_user->id);
+	}
+	$ssql .= " order by vtiger_customview.entitytype";
+	$result = $adb->pquery($ssql, $sparams);
 	while($cvrow=$adb->fetch_array($result))
 	{
 		$metricslist = Array();
-
-		$metricslist['id'] = $cvrow['cvid'];
-		$metricslist['name'] = $cvrow['viewname'];
-		$metricslist['module'] = $cvrow['entitytype'];
-		$metricslist['count'] = '';
-		if(isPermitted($cvrow['entitytype'],"index") == "yes")
-			$metriclists[] = $metricslist;
+		
+		if(vtlib_isModuleActive($cvrow['entitytype'])){
+			$metricslist['id'] = $cvrow['cvid'];
+			$metricslist['name'] = $cvrow['viewname'];
+			$metricslist['module'] = $cvrow['entitytype'];
+			$metricslist['user'] = getUserName($cvrow['userid']);
+			$metricslist['count'] = '';
+			if(isPermitted($cvrow['entitytype'],"index") == "yes"){
+				$metriclists[] = $metricslist;
+			}
+		}
 	}
 
 	return $metriclists;

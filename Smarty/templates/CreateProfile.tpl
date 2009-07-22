@@ -15,12 +15,14 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 	<br>
 	<div align=center>
-				{include file='SetMenu.tpl'}
-				<form action="index.php" method="post" name="profileform" id="form" onSubmit="return rolevalidate();">
+				{include file='SetMenu.tpl'}				
+				{literal}
+				<form action="index.php" method="post" name="profileform" id="form" onSubmit="if(rolevalidate()) { VtigerJS_DialogBox.block();return true;}else{return false;}">
+				{/literal}
                                 <input type="hidden" name="module" value="Settings">
                                 <input type="hidden" name="mode" value="{$MODE}">
                                 <input type="hidden" name="action" value="profilePrivileges">
@@ -31,7 +33,7 @@
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-profile.gif" alt="{$MOD.LBL_PROFILES}" width="48" height="48" border=0 title="{$MOD.LBL_PROFILES}"></td>
+					<td width=50 rowspan=2 valign=top><img src="{'ico-profile.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_PROFILES}" width="48" height="48" border=0 title="{$MOD.LBL_PROFILES}"></td>
 					<td class=heading2 valign=bottom><b> <a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=ListProfiles&parenttab=Settings">{$CMOD.LBL_PROFILE_PRIVILEGES}</a></b></td>
 				</tr>
 				<tr>
@@ -48,9 +50,9 @@
                 			     <td>
 						<table border="0" cellpadding="0" cellspacing="0" width="100%">
 			                        <tbody><tr class="small">
-		                              <td><img src="{$IMAGE_PATH}prvPrfTopLeft.gif"></td>
+		                              <td><img src="{'prvPrfTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
                			               <td class="prvPrfTopBg" width="100%"></td>
-		                              <td><img src="{$IMAGE_PATH}prvPrfTopRight.gif"></td>
+		                              <td><img src="{'prvPrfTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
 
                 	            </tr>
                           </tbody></table>
@@ -60,7 +62,7 @@
                                               <td><!-- Module name heading -->
                                                   <table class="small" border="0" cellpadding="2" cellspacing="0">
                                                     <tbody><tr>
-                                                      <td valign="top"><img src="{$IMAGE_PATH}prvPrfHdrArrow.gif"> </td>
+                                                      <td valign="top"><img src="{'prvPrfHdrArrow.gif'|@vtiger_imageurl:$THEME}"> </td>
                                                       <td class="prvPrfBigText"><b> {$CMOD.LBL_STEP_1_2} : {$CMOD.LBL_WELCOME_PROFILE_CREATE} </b><br>
                                                           <font class="small"> {$CMOD.LBL_SELECT_CHOICE_NEW_PROFILE} </font> </td>
 
@@ -125,7 +127,7 @@
 					<tr><td colspan="2" style="border-bottom:1px dashed #CCCCCC;" height="75">&nbsp;</td></tr>
 					<tr>
 						<td colspan="2" align="right">
-						<input type="button" value=" {$APP.LNK_LIST_NEXT} &rsaquo; " title="{$APP.LNK_LIST_NEXT}" name="Next" class="crmButton small" onClick="return rolevalidate();"/>&nbsp;&nbsp;
+						<input type="button" value=" {$APP.LNK_LIST_NEXT} &rsaquo; " title="{$APP.LNK_LIST_NEXT}" name="Next" class="crmButton small create" onClick="return rolevalidate();"/>&nbsp;&nbsp;
 						<input type="button" value=" {$APP.LBL_CANCEL_BUTTON_LABEL} " title="{$APP.LBL_CANCEL_BUTTON_TITLE}" name="Cancel" onClick="window.history.back();" class="crmButton small cancel"/>
 						</td>
 					</tr>
@@ -134,9 +136,9 @@
                                 </td></tr>  	  
                             	<table class="small" border="0" cellpadding="0" cellspacing="0" width="100%">
                               	<tbody><tr>
-                                <td><img src="{$IMAGE_PATH}prvPrfBottomLeft.gif"></td>
+                                <td><img src="{'prvPrfBottomLeft.gif'|@vtiger_imageurl:$THEME}"></td>
                                 <td class="prvPrfBottomBg" width="100%"></td>
-                                <td><img src="{$IMAGE_PATH}prvPrfBottomRight.gif"></td>
+                                <td><img src="{'prvPrfBottomRight.gif'|@vtiger_imageurl:$THEME}"></td>
                               </tr>
                           </tbody></table></td>
                       </tr>
@@ -167,7 +169,7 @@
 
 				</div>
 				</td>
-				<td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+				<td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
 				</form>
    </tr>
 </tbody>
@@ -177,7 +179,7 @@ var profile_err_msg='{$MOD.LBL_ENTER_PROFILE}';
 function rolevalidate()
 {ldelim}
     var profilename = document.getElementById('pobox').value;
-    profilename = profilename.replace(/ /gi,'',profilename);
+    profilename = trim(profilename);
     if(profilename != '')
 	dup_validation(profilename);
     else
@@ -201,7 +203,7 @@ function dup_validation(profilename)
 			method: 'post',
 			postBody: 'module=Users&action=UsersAjax&file=CreateProfile&ajax=true&dup_check=true&profile_name='+profilename,
 			onComplete: function(response) {ldelim}
-					if(response.responseText == 'SUCESS')
+					if(response.responseText.indexOf('SUCCESS') > -1)
 						document.profileform.submit();
 					else
 						alert(response.responseText);

@@ -30,11 +30,12 @@
 
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
-require_once('data/CRMEntity.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once('modules/Calendar/Activity.php');
 require_once('modules/Contacts/Contacts.php');
 require_once('data/Tracker.php');
+require_once 'include/utils/CommonUtils.php';
+require_once 'include/Webservices/Utils.php';
 
 // User is used to store customer information.
  /** Main class for the user module
@@ -49,11 +50,9 @@ class Users {
 	var $error_string;
 	var $is_admin;
 	var $deleted;
-	var $homeorder;
 
-
-	var $tab_name = Array('vtiger_users','vtiger_attachments','vtiger_user2role');	
-	var $tab_name_index = Array('vtiger_users'=>'id','vtiger_attachments'=>'attachmentsid','vtiger_user2role'=>'userid');
+	var $tab_name = Array('vtiger_users','vtiger_attachments','vtiger_user2role','vtiger_asteriskextensions');	
+	var $tab_name_index = Array('vtiger_users'=>'id','vtiger_attachments'=>'attachmentsid','vtiger_user2role'=>'userid','vtiger_asteriskextensions'=>'userid');
 	var $column_fields = Array('user_name'=>'','is_admin' =>'','user_password'=>'','confirm_password'=>'',
 	'first_name' =>'',
 	'last_name' =>'',
@@ -84,14 +83,18 @@ class Users {
 	'date_format' =>'',
 	'signature' =>'',
 	'description' =>'',
+	'reminder_interval' =>'',
 	'internal_mailer'=>'',
 	'address_street' =>'',
 	'address_city' =>'',
 	'address_state' =>'',
 	'address_postalcode' =>'',
 	'address_country' =>'',
+	'asterisk_extension'=>'',
+	'use_asterisk'=>'',
 );
 	var $table_name = "vtiger_users";
+	var $table_index= 'id';
 
 	// This is the list of fields that are in the lists.
 	var $list_link_field= 'last_name';
@@ -112,8 +115,7 @@ class Users {
 
 	var $object_name = "User";
 	var $user_preferences;
-	var $defhomeview;
-	var $homeorder_array = array('HDB','ALVT','PLVT','QLTQ','CVLVT','HLT','OLV','GRT','OLTSO','ILTI','MNL','OLTPO','LTFAQ');
+	var $homeorder_array = array('HDB','ALVT','PLVT','QLTQ','CVLVT','HLT','OLV','GRT','OLTSO','ILTI','MNL','OLTPO','LTFAQ', 'UA', 'PA');
 
 	var $encodeFields = Array("first_name", "last_name", "description");
 
@@ -144,6 +146,9 @@ class Users {
 		'Phone'=>'phone_work'	
 	);
 
+	//Default Fields for Email Templates -- Pavani
+	var $emailTemplate_defaultFields = array('first_name','last_name','title','department','phone_home','phone_mobile','signature','email1','address_street','address_city','address_state','address_country','address_postalcode');
+	
 	// This is the list of fields that are in the lists.
 	var $default_order_by = "user_name";
 	var $default_sort_order = 'ASC';
@@ -161,9 +166,8 @@ class Users {
 	function Users() {
 		$this->log = LoggerManager::getLogger('user');
 		$this->log->debug("Entering Users() method ...");
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->log->debug("Exiting Users() method ...");
-
 	}
 
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
@@ -176,7 +180,7 @@ class Users {
 		global $log; 
 		$log->debug("Entering getSortOrder() method ...");
 		if(isset($_REQUEST['sorder'])) 
-			$sorder = $_REQUEST['sorder'];
+			$sorder = $this->db->sql_escape_string($_REQUEST['sorder']);
 		else
 			$sorder = (($_SESSION['USERS_SORT_ORDER'] != '')?($_SESSION['USERS_SORT_ORDER']):($this->default_sort_order));
 		$log->debug("Exiting getSortOrder method ...");
@@ -191,10 +195,16 @@ class Users {
 	{
 		global $log;
                  $log->debug("Entering getOrderBy() method ...");
+		
+        $use_default_order_by = '';		
+		if(PerformancePrefs::getBoolean('LISTVIEW_DEFAULT_SORTING', true)) {
+			$use_default_order_by = $this->default_order_by;
+		}
+		
 		if (isset($_REQUEST['order_by'])) 
-			$order_by = $_REQUEST['order_by'];
+			$order_by = $this->db->sql_escape_string($_REQUEST['order_by']);
 		else
-			$order_by = (($_SESSION['USERS_ORDER_BY'] != '')?($_SESSION['USERS_ORDER_BY']):($this->default_order_by));
+			$order_by = (($_SESSION['USERS_ORDER_BY'] != '')?($_SESSION['USERS_ORDER_BY']):($use_default_order_by));
 		$log->debug("Exiting getOrderBy method ...");
 		return $order_by;
 	}	
@@ -295,8 +305,9 @@ class Users {
 	function authenticate_user($password){
 		$usr_name = $this->column_fields["user_name"];
 
-		$query = "SELECT * from $this->table_name where user_name='$usr_name' AND user_hash='$password'";
-		$result = $this->db->requireSingleResult($query, false);
+		$query = "SELECT * from $this->table_name where user_name=? AND user_hash=?";
+		$params = array($usr_name, $password);
+		$result = $this->db->requirePsSingleResult($query, $params, false);
 
 		if(empty($result)){
 			$this->log->fatal("SECURITY: failed login by $usr_name");
@@ -704,10 +715,23 @@ class Users {
 		}
 		require_once('modules/Users/CreateUserPrivilegeFile.php');
 		createUserPrivilegesfile($this->id);
+		if($insertion_mode != 'edit'){
+			$this->createAccessKey();
+		}
 		$this->db->completeTransaction();
 		$this->db->println("TRANS saveentity ends");
 	}
-
+	
+	function createAccessKey(){
+		global $adb,$log;
+		
+		$log->info("Entering Into function createAccessKey()");
+		$updateQuery = "update vtiger_users set accesskey=? where id=?";
+		$insertResult = $adb->pquery($updateQuery,array(vtws_generateRandomAccessKey(16),$this->id));
+		$log->info("Exiting function createAccessKey()");
+		
+	}
+	
 	/** Function to insert values in the specifed table for the specified module
   	  * @param $table_name -- table name:: Type varchar
   	  * @param $module -- module:: Type varchar
@@ -718,7 +742,6 @@ class Users {
 		$log->info("function insertIntoEntityTable ".$module.' vtiger_table name ' .$table_name);
 		global $adb;
 		$insertion_mode = $this->mode;
-		
 		//Checkin whether an entry is already is present in the vtiger_table to update
 		if($insertion_mode == 'edit')
 		{
@@ -741,7 +764,7 @@ class Users {
 			$update = '';
 			$update_params = array();
 			$tabid= getTabid($module);	
-			$sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3)"; 
+			$sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3) and vtiger_field.presence in (0,2)"; 
 			$params = array($tabid, $table_name);
 		}
 		else
@@ -754,7 +777,7 @@ class Users {
 			}
 			$qparams = array($this->id);
 			$tabid= getTabid($module);	
-			$sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3,4)"; 
+			$sql = "select * from vtiger_field where tabid=? and tablename=? and displaytype in (1,3,4) and vtiger_field.presence in (0,2)"; 
 			$params = array($tabid, $table_name);
 
 			$crypt_type = $this->DEFAULT_PASSWORD_CRYPT_TYPE;
@@ -767,6 +790,11 @@ class Users {
 			$fieldname=$this->db->query_result($result,$i,"fieldname");
 			$columname=$this->db->query_result($result,$i,"columnname");
 			$uitype=$this->db->query_result($result,$i,"uitype");
+		 	$typeofdata=$adb->query_result($result,$i,"typeofdata");
+		  
+		 	$typeofdata_array = explode("~",$typeofdata);
+		  	$datatype = $typeofdata_array[0];
+		  
 			if(isset($this->column_fields[$fieldname]))
 			{
 				if($uitype == 56)
@@ -818,7 +846,7 @@ class Users {
 				$fldvalue = '';
 			}
 			if($fldvalue=='') {
-				$fldvalue = $this->get_column_value($columname, $fldvalue, $fieldname, $uitype);
+				$fldvalue = $this->get_column_value($columname, $fldvalue, $fieldname, $uitype, $datatype);
 				//$fldvalue =null;
 			}
 			if($insertion_mode == 'edit')
@@ -838,7 +866,6 @@ class Users {
 				$column .= ", ".$columname;
 				array_push($qparams, $fldvalue);
 			}
-
 		}
 
 		if($insertion_mode == 'edit')
@@ -857,7 +884,6 @@ class Users {
 			$sql1 = "insert into $table_name ($column) values(". generateQuestionMarks($qparams) .")";
 			$this->db->pquery($sql1, $qparams); 
 		}
-
 	}
 
 
@@ -875,7 +901,7 @@ class Users {
 		{
 			if($files['name'] != '' && $files['size'] > 0)
 			{
-				$files['original_name'] = $_REQUEST[$fileindex.'_hidden'];
+				$files['original_name'] = vtlib_purify($_REQUEST[$fileindex.'_hidden']);
 				$this->uploadAndSaveFile($id,$module,$files);
 			}
 		}
@@ -904,7 +930,7 @@ class Users {
 			$result[$table_name] = $adb->pquery("select * from ".$table_name." where ".$index."=?", array($record));
 		}
 		$tabid = getTabid($module);
-		$sql1 =  "select * from vtiger_field where tabid=?";
+		$sql1 =  "select * from vtiger_field where tabid=? and vtiger_field.presence in (0,2)";
 		$result1 = $adb->pquery($sql1, array($tabid));
 		$noofrows = $adb->num_rows($result1);
 		for($i=0; $i<$noofrows; $i++)
@@ -921,7 +947,7 @@ class Users {
 		$this->column_fields["record_id"] = $record;
 		$this->column_fields["record_module"] = $module;
 
-		$currency_query = "select * from vtiger_currency_info where id=? and currency_status='Active'";
+		$currency_query = "select * from vtiger_currency_info where id=? and currency_status='Active' and deleted=0";
 		$currency_result = $adb->pquery($currency_query, array($this->column_fields["currency_id"]));
 		if($adb->num_rows($currency_result) == 0)
 		{
@@ -957,26 +983,15 @@ class Users {
 		global $current_user;
 		global $upload_badext;
 
-		$date_var = date('YmdHis');
+		$date_var = date('Y-m-d H:i:s');
 
 		//to get the owner id
 		$ownerid = $this->column_fields['assigned_user_id'];
 		if(!isset($ownerid) || $ownerid=='')
 			$ownerid = $current_user->id;
 
-	
-		// Arbitrary File Upload Vulnerability fix - Philip
 		$file = $file_details['name'];
-		$binFile = preg_replace('/\s+/', '_', $file);
-		$ext_pos = strrpos($binFile, ".");
-
-		$ext = substr($binFile, $ext_pos + 1);
-
-		if (in_array($ext, $upload_badext))
-		{
-			$binFile .= ".txt";
-		}
-		// Vulnerability fix ends
+		$binFile = sanitizeUploadFileName($file, $upload_badext);
 
 		$filename = ltrim(basename(" ".$binFile)); //allowed filename like UTF-8 characters 
 		$filetype= $file_details['type'];
@@ -1042,64 +1057,211 @@ class Users {
 	}
 
 
-	/** gives the order in which the modules have to be displayed in the home page for the specified user id  
-  	  * @param $id -- user id:: Type integer
-  	  * @returns the home page order in $return_array
- 	 */	
-	function getHomeOrder($id="")	
-	{
-		global $log;
+	/** 
+	 * gives the order in which the modules have to be displayed in the home page for the specified user id  
+  	 * @param $id -- user id:: Type integer
+  	 * @returns the customized home page order in $return_array
+ 	 */
+	function getHomeStuffOrder($id){
 		global $adb;
-		$log->debug("Entering in function getHomeOrder($id)");
-		if($id == '')
-		{
-			for($i = 0;$i < count($this->homeorder_array);$i++)
-                        {
+		$this->homeorder_array = array('UA', 'PA', 'ALVT','HDB','PLVT','QLTQ','CVLVT','HLT','GRT','OLTSO','ILTI','MNL','OLTPO','LTFAQ');
+		$return_array = Array();
+		$homeorder=Array();
+		if($id != ''){
+			$qry=" select distinct(vtiger_homedefault.hometype) from vtiger_homedefault inner join vtiger_homestuff  on vtiger_homestuff.stuffid=vtiger_homedefault.stuffid where vtiger_homestuff.visible=0 and vtiger_homestuff.userid=?";
+			$res=$adb->pquery($qry, array($id));
+			for($q=0;$q<$adb->num_rows($res);$q++){
+				$homeorder[]=$adb->query_result($res,$q,"hometype");
+			}
+			for($i = 0;$i < count($this->homeorder_array);$i++){
+				if(in_array($this->homeorder_array[$i],$homeorder)){
+					$return_array[$this->homeorder_array[$i]] = $this->homeorder_array[$i];
+				}else{
+					$return_array[$this->homeorder_array[$i]] = '';	
+				}
+			}
+		}else{
+			for($i = 0;$i < count($this->homeorder_array);$i++){
 				$return_array[$this->homeorder_array[$i]] = $this->homeorder_array[$i];
 			}
-		}else
-		{
-			$query = "select homeorder from vtiger_users where id=?";
-			$homeorder = $adb->query_result($adb->pquery($query, array($id)),0,'homeorder');
-			for($i = 0;$i < count($this->homeorder_array);$i++)
-			{
-				if(!stristr($homeorder,$this->homeorder_array[$i]))
-				{
-					$return_array[$this->homeorder_array[$i]] = '';
-				}else
-				{
-					$return_array[$this->homeorder_array[$i]] = $this->homeorder_array[$i];
-				}
-					
-			}
-
 		}
-
-		$log->debug("Exiting from function getHomeOrder($id)");
 		return $return_array;
 	}
 
+	function getDefaultHomeModuleVisibility($home_string,$inVal)
+	{
+		$homeModComptVisibility=1;
+		if($inVal == 'postinstall')
+		{
+			if($_REQUEST[$home_string] != '')
+			{
+				$homeModComptVisibility=0;
+			}
+		}
+		else 
+			$homeModComptVisibility=0;		
+		return $homeModComptVisibility;
+		
+	}	
+	
+	function insertUserdetails($inVal)
+	{
+		global $adb;
+		$uid=$this->id;
+		$s1=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('ALVT',$inVal);
+		$sql="insert into vtiger_homestuff values(?,?,?,?,?,?)";
+		$res=$adb->pquery($sql, array($s1,1,'Default',$uid,$visibility,'Top Accounts'));
+
+		$s2=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('HDB',$inVal);
+		$sql="insert into vtiger_homestuff values(?,?,?,?,?,?)";
+		$res=$adb->pquery($sql, array($s2,2,'Default',$uid,$visibility,'Home Page Dashboard'));
+
+		$s3=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('PLVT',$inVal);
+		$sql="insert into vtiger_homestuff values(?,?,?,?,?,?)";
+		$res=$adb->pquery($sql, array($s3,3,'Default',$uid,$visibility,'Top Potentials'));
+
+		$s4=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('QLTQ',$inVal);
+		$sql="insert into vtiger_homestuff values(?,?,?,?,?,?)";
+		$res=$adb->pquery($sql, array($s4,4,'Default',$uid,$visibility,'Top Quotes'));
+
+		$s5=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('CVLVT',$inVal);
+		$sql="insert into vtiger_homestuff values(?,?,?,?,?,?)";
+		$res=$adb->pquery($sql, array($s5,5,'Default',$uid,$visibility,'Key Metrics'));
+
+		$s6=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('HLT',$inVal);
+		$sql="insert into vtiger_homestuff values(?,?,?,?,?,?)";
+		$res=$adb->pquery($sql, array($s6,6,'Default',$uid,$visibility,'Top Trouble Tickets'));
+		
+		$s7=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('UA',$inVal);
+		$sql="insert into vtiger_homestuff values(?,?,?,?,?,?)";
+		$res=$adb->pquery($sql, array($s7,7,'Default',$uid,$visibility,'Upcoming Activities'));
+
+		$s8=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('GRT',$inVal);
+		$sql="insert into vtiger_homestuff values(?,?,?,?,?,?)";
+		$res=$adb->pquery($sql, array($s8,8,'Default',$uid,$visibility,'My Group Allocation'));
+
+		$s9=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('OLTSO',$inVal);
+		$sql="insert into vtiger_homestuff values(?,?,?,?,?,?)";
+		$res=$adb->pquery($sql, array($s9,9,'Default',$uid,$visibility,'Top Sales Orders'));
+
+		$s10=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('ILTI',$inVal);
+		$sql="insert into vtiger_homestuff values(?,?,?,?,?,?)";
+		$res=$adb->pquery($sql, array($s10,10,'Default',$uid,$visibility,'Top Invoices'));
+
+		$s11=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('MNL',$inVal);
+		$sql="insert into vtiger_homestuff values(?,?,?,?,?,?)";
+		$res=$adb->pquery($sql, array($s11,11,'Default',$uid,$visibility,'My New Leads'));
+
+		$s12=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('OLTPO',$inVal);
+		$sql="insert into vtiger_homestuff values(?,?,?,?,?,?)";
+		$res=$adb->pquery($sql, array($s12,12,'Default',$uid,$visibility,'Top Purchase Orders'));
+		
+		$s13=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('PA',$inVal);
+		$sql="insert into vtiger_homestuff values(?,?,?,?,?,?)";
+		$res=$adb->pquery($sql, array($s13,13,'Default',$uid,$visibility,'Pending Activities'));;
+
+		$s14=$adb->getUniqueID("vtiger_homestuff");
+		$visibility=$this->getDefaultHomeModuleVisibility('LTFAQ',$inVal);
+		$sql="insert into vtiger_homestuff values(?,?,?,?,?,?)";
+		$res=$adb->pquery($sql, array($s14,14,'Default',$uid,$visibility,'My Recent FAQs'));
+		
+		// Non-Default Home Page widget (no entry is requried in vtiger_homedefault below)
+		$tc = $adb->getUniqueID("vtiger_homestuff");
+		$visibility=0;
+		$sql="insert into vtiger_homestuff values($tc, 15, 'Tag Cloud', $uid, $visibility, 'Tag Cloud')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s1.",'ALVT',5,'Accounts')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s2.",'HDB',5,'Dashboard')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s3.",'PLVT',5,'Potentials')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s4.",'QLTQ',5,'Quotes')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s5.",'CVLVT',5,'NULL')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s6.",'HLT',5,'HelpDesk')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s7.",'UA',5,'Calendar')";
+		$adb->pquery($sql,array());
+	
+		$sql="insert into vtiger_homedefault values(".$s8.",'GRT',5,'NULL')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s9.",'OLTSO',5,'SalesOrder')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s10.",'ILTI',5,'Invoice')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s11.",'MNL',5,'Leads')";
+		$adb->query($sql);
+
+		$sql="insert into vtiger_homedefault values(".$s12.",'OLTPO',5,'PurchaseOrder')";
+		$adb->query($sql);
+		
+		$sql="insert into vtiger_homedefault values(".$s13.",'PA',5,'Calendar')";
+		$adb->pquery($sql,array());
+
+		$sql="insert into vtiger_homedefault values(".$s14.",'LTFAQ',5,'Faq')";
+		$adb->query($sql);	
+	
+	}
 
 	/** function to save the order in which the modules have to be displayed in the home page for the specified user id  
   	  * @param $id -- user id:: Type integer
  	 */	
-	function saveHomeOrder($id)
-	{
-		if($id == '')
-			return null;
-		global $log,$adb;
-                $log->debug("Entering in function saveHomeOrder($id)");
-		for($i = 0;$i < count($this->homeorder_array);$i++)
-                {
-			if($_REQUEST[$this->homeorder_array[$i]] != '')
-				$save_array[] = $this->homeorder_array[$i];
-		}
-		if(count($save_array))
-			$homeorder = implode(',',$save_array);	
-		$query = "update vtiger_users set homeorder =? where id=?";
-		$adb->pquery($query, array($homeorder, $id));
-                $log->debug("Exiting from function saveHomeOrder($id)");
-	}
+	 function saveHomeStuffOrder($id)
+	 {
+		 global $log,$adb;
+		 $log->debug("Entering in function saveHomeOrder($id)");
+
+		 if($this->mode == 'edit')
+		 {
+			 for($i = 0;$i < count($this->homeorder_array);$i++)
+			 {
+				 if($_REQUEST[$this->homeorder_array[$i]] != '')
+				 {
+					 $save_array[] = $this->homeorder_array[$i];
+					 $qry=" update vtiger_homestuff,vtiger_homedefault set vtiger_homestuff.visible=0 where vtiger_homestuff.stuffid=vtiger_homedefault.stuffid and vtiger_homestuff.userid=".$id." and vtiger_homedefault.hometype='".$this->homeorder_array[$i]."'";//To show the default Homestuff on the the Home Page
+					 $result=$adb->query($qry);
+				 }
+				 else
+				 {
+					 $qry="update vtiger_homestuff,vtiger_homedefault set vtiger_homestuff.visible=1 where vtiger_homestuff.stuffid=vtiger_homedefault.stuffid and vtiger_homestuff.userid=".$id." and vtiger_homedefault.hometype='".$this->homeorder_array[$i]."'";//To hide the default Homestuff on the the Home Page
+					 $result=$adb->query($qry);
+				 }
+			 }
+			 if($save_array !="")
+			 	$homeorder = implode(',',$save_array);	
+		 }
+		 else
+		 {
+			$this->insertUserdetails('postinstall');
+
+		 }	
+		 $log->debug("Exiting from function saveHomeOrder($id)");
+ 	}
 
 	/**
 	 * Track the viewing of a detail record.  This leverages get_summary_text() which is object specific
@@ -1122,12 +1284,36 @@ class Users {
 	* @param $input_value -- Input value for the column taken from the User
 	* @return Column value of the field.
 	*/
-	function get_column_value($columname, $fldvalue, $fieldname, $uitype) {
+	function get_column_value($columname, $fldvalue, $fieldname, $uitype, $datatype) {
 		if (is_uitype($uitype, "_date_") && $fldvalue == '') {
 			return null;
 		}
+		if ($datatype == 'I' || $datatype == 'N' || $datatype == 'NN'){
+			return 0;
+		}
 		return $fldvalue;
 	}
+	
+	/**
+	* Function to reset the Reminder Interval setup and update the time for next reminder interval 
+	* @param $prev_reminder_interval -- Last Reminder Interval on which the reminder popup's were triggered.
+	*/
+	function resetReminderInterval($prev_reminder_interval)
+	{
+		global $adb;
+		if($prev_reminder_interval != $this->column_fields['reminder_interval'] ){
+			$set_reminder_next = date('Y-m-d H:i');
+			// NOTE date_entered has CURRENT_TIMESTAMP constraint, so we need to reset when updating the table
+			$adb->pquery("UPDATE vtiger_users SET reminder_next_time=?, date_entered=? WHERE id=?",array($set_reminder_next, $this->column_fields['date_entered'], $this->id));
+		}
+	}
 
+	function initSortByField($module) {
+		// Right now, we do not have any fields to be handled for Sorting in Users module. This is just a place holder as it is called from Popup.php 
+	}
+	
+	function filterInactiveFields($module) {
+		// TODO Nothing do right now
+	}
 }
 ?>

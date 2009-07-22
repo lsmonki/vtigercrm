@@ -29,7 +29,7 @@ function dup_validation()
                                 method: 'post',
                                 postBody: 'module=Settings&action=SettingsAjax&file=SaveRole&ajax=true&dup_check=true'+urlstring,
                                 onComplete: function(response) {ldelim}
-					if(response.responseText == 'SUCESS')
+					if(response.responseText.indexOf('SUCCESS') > -1)
 						document.newRoleForm.submit();
 					else
 						alert(response.responseText);
@@ -59,7 +59,7 @@ function validate()
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
         <br>
 
@@ -67,7 +67,9 @@ function validate()
 			{include file='SetMenu.tpl'}
 				<!-- DISPLAY -->
 				<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-				<form name="newRoleForm" action="index.php" method="post" onSubmit="return validate()">
+				{literal}
+				<form name="newRoleForm" action="index.php" method="post" onSubmit="if(validate()) { VtigerJS_DialogBox.block();} else { return false;} ">
+				{/literal}
 				<input type="hidden" name="module" value="Settings">
 				<input type="hidden" name="action" value="SaveRole">
 				<input type="hidden" name="parenttab" value="Settings">
@@ -76,7 +78,7 @@ function validate()
 				<input type="hidden" name="mode" value="{$MODE}">
 				<input type="hidden" name="parent" value="{$PARENT}">
 				<tr>
-					<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}ico-roles.gif" alt="{$CMOD.LBL_ROLES}" width="48" height="48" border=0 title="{$CMOD.LBL_ROLES}"></td>
+					<td width=50 rowspan=2 valign=top><img src="{'ico-roles.gif'|@vtiger_imageurl:$THEME}" alt="{$CMOD.LBL_ROLES}" width="48" height="48" border=0 title="{$CMOD.LBL_ROLES}"></td>
 					{if $MODE eq 'edit'}
 					<td class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > <a href="index.php?module=Settings&action=listroles&parenttab=Settings">{$CMOD.LBL_ROLES}</a> &gt; {$MOD.LBL_EDIT} &quot;{$ROLENAME}&quot; </b></td>
 					{else}	
@@ -194,7 +196,7 @@ function validate()
 	</div>
 
 </td>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </tbody>
 </table>
@@ -252,7 +254,7 @@ function validate()
 
         function delColumn() 
         {ldelim}
-            for (i<=selectedColumnsObj.options.length;i>0;i--) 
+            for (i=selectedColumnsObj.options.length;i>0;i--) 
             {ldelim}
                 if (selectedColumnsObj.options.selectedIndex>=0)
                 selectedColumnsObj.remove(selectedColumnsObj.options.selectedIndex)

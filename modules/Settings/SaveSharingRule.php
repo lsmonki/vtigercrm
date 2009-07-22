@@ -1,17 +1,15 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+/*+********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
 global $adb;
-
 
 $sharing_module=$_REQUEST['sharing_module'];
 $tabid=getTabid($sharing_module);
@@ -26,8 +24,6 @@ $to_entity_id=$sharedto[1];
 $module_sharing_access=$_REQUEST['share_memberType'];
 
 $mode=$_REQUEST['mode'];
-
-
 
 $relatedShareModuleArr=getRelatedSharingModules($tabid);
 if($mode == 'create')
@@ -55,8 +51,6 @@ elseif($mode == 'edit')
 		updateRelatedModuleSharingPermission($shareId,$tabid,$reltabid,$relSharePermission);	
 	}	
 }
-
-
 
 $loc = "Location: index.php?action=OrgSharingDetailView&module=Settings&parenttab=Settings";
 header($loc);

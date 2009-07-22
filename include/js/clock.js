@@ -74,12 +74,12 @@ dsp2.left=xpos-55+"px";
 dsp3.top=y+55+"px";
 dsp3.left=xpos-60+"px";
 
-dsp5.backgroundImage="url(themes/" + theme + "/images/clock_bg.gif)"
+dsp5.backgroundImage="url(themes/images/clock_bg.gif)"
 dsp5.backgroundRepeat="no-repeat"
 dsp5.backgroundPosition="4px 38px"
 
 function lcl(currIndex,localState){
-	zone=document.frmtimezone.city.options[currIndex].value;
+	zone=document.frmtimezone.clockcity.options[currIndex].value;
 	isItLocal=localState;
 	plusMinus=(zone.charAt(0) == "-")?true:false;
 	oddMinutes=(zone.indexOf(".") != -1)?true:false;
@@ -208,5 +208,5 @@ if (get_cookie("timezone")==null || get_cookie("timezone")==false || get_cookie(
 	lcl(0,true)
 } else {
 	lcl(get_cookie("timezone"),false)
-	document.frmtimezone.city.options[get_cookie("timezone")].selected=true
+	document.frmtimezone.clockcity.options[get_cookie("timezone")].selected=true
 }

@@ -18,12 +18,14 @@
  * defined return URL.
  ********************************************************************************/
 
+global $adb;
 
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);
 
-DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],'',$_REQUEST['record'],'');
-
+$del_query = "DELETE FROM vtiger_rss WHERE rssid=?";
+$adb->pquery($del_query, array($_REQUEST['record']));
+		
  //code added for returning back to the current view after delete from list view
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=RssAjax&file=ListView&directmode=ajax");
+header("Location: index.php?module=".vtlib_purify($_REQUEST['return_module'])."&action=RssAjax&file=ListView&directmode=ajax");
 ?>

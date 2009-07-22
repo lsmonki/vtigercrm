@@ -9,17 +9,31 @@
  ********************************************************************************/
 function searchshowhide(argg,argg2)
 {
-    var x=document.getElementById(argg).style
-    var y=document.getElementById(argg2).style
-    if (x.display=="none" && y.display=="none")
+	var ele_x = document.getElementById(argg);
+	var ele_y = document.getElementById(argg2);
+	var x, y;
+    if (ele_x != null) x = ele_x.style;
+    if (ele_y != null) y = ele_y.style;
+    if (x != null && x.display=="none" && (y == null || y.display=="none"))
     {
         x.display="block"
    
     }
     else {
-	    y.display="none"
-            x.display="none"
-          }
+	    if (y != null) y.display="none";
+        if (x != null) x.display="none";
+    }
+}
+
+function searchhide(argg,argg2)
+{
+	var ele_x = document.getElementById(argg);
+	var ele_y = document.getElementById(argg2);
+	var x, y;
+    if (ele_x != null) x = ele_x.style;
+    if (ele_y != null) y = ele_y.style;
+	if (y != null) y.display="none";
+    if (x != null) x.display="none";
 }
 
  function moveMe(arg1) {

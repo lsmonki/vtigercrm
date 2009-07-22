@@ -17,12 +17,11 @@
  * Description:  TODO: To be written.
  ********************************************************************************/
 
-require_once('modules/Calendar/Activity.php');
+global $currentModule;
+$focus = CRMEntity::getInstance($currentModule);
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('task_delete');
-
-$focus = new Activity();
 
 //Added to fix 4600
 $url = getBasic_Advance_SearchURL();
@@ -32,6 +31,6 @@ if(!isset($_REQUEST['record']))
 
 DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['record'],$_REQUEST['return_id']);
 
-if($_REQUEST['parenttab'] != '')$parenttab=$_REQUEST['parenttab'];
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']."&parenttab=".$parenttab."&relmodule=".$_REQUEST['module'].$url);
+$parenttab=getParentTab();
+header("Location: index.php?module=".vtlib_purify($_REQUEST['return_module'])."&action=".vtlib_purify($_REQUEST['return_action'])."&record=".vtlib_purify($_REQUEST['return_id'])."&parenttab=".$parenttab."&relmodule=".vtlib_purify($_REQUEST['module']).$url);
 ?>

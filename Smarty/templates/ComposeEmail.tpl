@@ -27,7 +27,9 @@
 <script type="text/javascript" src="modules/Products/multifile.js"></script>
 </head>
 <body marginheight="0" marginwidth="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
-<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php" onSubmit="return email_validate(this.form,'');">
+{literal}
+<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php" onSubmit="if(email_validate(this.form,'')) { VtigerJS_DialogBox.block();} else { return false; }">
+{/literal}
 <input type="hidden" name="send_mail" >
 <input type="hidden" name="contact_id" value="{$CONTACT_ID}">
 <input type="hidden" name="user_id" value="{$USER_ID}">
@@ -58,11 +60,11 @@
 	{foreach item=elements from=$row}
 	{if $elements.2.0 eq 'parent_id'}
    <tr>
-	<td class="mailSubHeader" align="right"><b>{$MOD.LBL_TO}</b></td>
+	<td class="mailSubHeader" align="right"><font color="red">*</font><b>{$MOD.LBL_TO}</b></td>
 	<td class="cellText" style="padding: 5px;">
  		<input name="{$elements.2.0}" id="{$elements.2.0}" type="hidden" value="{$IDLISTS}">
 		<input type="hidden" name="saved_toid" value="{$TO_MAIL}">
-		<input id="parent_name" name="parent_name" readonly class="txtBox" type="text" value="{$TO_MAIL}" style="width:99%">&nbsp;
+		<input id="parent_name" name="parent_name" readonly class="txtBox" type="text" value="{$TO_MAIL}" style="width: 550px;">&nbsp;
 	</td>
 	<td class="cellText" style="padding: 5px;" align="left" nowrap>
 		<select name="parent_type">
@@ -77,24 +79,31 @@
 		</select>
 		&nbsp;
 		<span  class="mailClientCSSButton">
-		<img src="{$IMAGE_PATH}select.gif" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=set_return_emails","test","width=640,height=602,resizable=0,scrollbars=0,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;
-		</span><span class="mailClientCSSButton" ><img src="{$IMAGE_PATH}clear_field.gif" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="$('parent_id').value=''; $('hidden_toid').value='';$('parent_name').value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
+		<img src="{'select.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_SELECT}" title="{$APP.LBL_SELECT}" LANGUAGE=javascript onclick='return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=set_return_emails","test","width=640,height=602,resizable=0,scrollbars=0,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;
+		</span><span class="mailClientCSSButton" ><img src="{'clear_field.gif'|@vtiger_imageurl:$THEME}" alt="{$APP.LBL_CLEAR}" title="{$APP.LBL_CLEAR}" LANGUAGE=javascript onClick="$('parent_id').value=''; $('hidden_toid').value='';$('parent_name').value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>
 		</span>
 	</td>
    </tr>
-   <tr>
-	<td class="mailSubHeader" style="padding: 5px;" align="right">{$MOD.LBL_CC}</td>
+	<tr>
+	{if 'ccmail'|@emails_checkFieldVisiblityPermission eq '0'}   
+   	<td class="mailSubHeader" style="padding: 5px;" align="right">{$MOD.LBL_CC}</td>
 	<td class="cellText" style="padding: 5px;">
 		<input name="ccmail" id ="cc_name" class="txtBox" type="text" value="{$CC_MAIL}" style="width:99%">&nbsp;
-	</td>	
-	<td valign="top" class="cellLabel" rowspan="4"><div id="attach_cont" class="addEventInnerBox" style="overflow:auto;height:110px;width:100%;position:relative;left:0px;top:0px;"></div>
-   </tr>
-   <tr>
+	</td>
+	{else}
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	{/if}
+   <td valign="top" class="cellLabel" rowspan="4"><div id="attach_cont" class="addEventInnerBox" style="overflow:auto;height:100px;width:100%;position:relative;left:0px;top:0px;"></div>
+   	</tr>
+   {if 'bccmail'|@emails_checkFieldVisiblityPermission eq '0'}   
+   	<tr>
 	<td class="mailSubHeader" style="padding: 5px;" align="right">{$MOD.LBL_BCC}</td>
 	<td class="cellText" style="padding: 5px;">
 		<input name="bccmail" id="bcc_name" class="txtBox" type="text" value="{$BCC_MAIL}" style="width:99%">&nbsp;
 	</td>
-   </tr>
+   	</tr>
+   	{/if}
 	{elseif $elements.2.0 eq 'subject'}
    <tr>
 	<td class="mailSubHeader" style="padding: 5px;" align="right" nowrap><font color="red">*</font>{$elements.1.0}  :</td>
@@ -111,7 +120,7 @@
 	<td class="cellText" style="padding: 5px;">
 		<!--<input name="{$elements.2.0}"  type="file" class="small txtBox" value="" size="78"/>-->
 		<input name="del_file_list" type="hidden" value="">
-					<div id="files_list" style="border: 1px solid grey; width: 500px; padding: 5px; background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: x-small">Files Maximum 6
+					<div id="files_list" style="border: 1px solid grey; width: 500px; padding: 5px; background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: x-small">{$APP.Files_Maximum_6}
 						<input id="my_file_element" type="file" name="{$elements.2.0}" tabindex="7" onchange="validateFilename(this);">
 						<input type="hidden" name="{$elements.2.0}_hidden" value="" />
 																	</div>
@@ -124,18 +133,18 @@
 		<table class="small" width="100% ">
 		
 	{if $smarty.request.attachment != ''}
-                <tr><td width="100%" colspan="2">{$smarty.request.attachment}<input type="hidden" value="{$smarty.request.attachment}" name="pdf_attachment"></td></tr>                                                                                                                                                                                      {else}   
+                <tr><td width="100%" colspan="2">{$smarty.request.attachment|@vtlib_purify}<input type="hidden" value="{$smarty.request.attachment|@vtlib_purify}" name="pdf_attachment"></td></tr>                                                                                                                                                                                      {else}   
 
 		{foreach item="attach_files" key="attach_id" from=$elements.3}	
-			<tr id="row_{$attach_id}"><td width="90%">{$attach_files}</td><td><img src="{$IMAGE_PATH}no.gif" onClick="delAttachments({$attach_id})" alt="{$APP.LBL_DELETE_BUTTON}" title="{$APP.LBL_DELETE_BUTTON}" style="cursor:pointer;"></td></tr>	
+			<tr id="row_{$attach_id}"><td width="90%">{$attach_files}</td><td><img src="{'no.gif'|@vtiger_imageurl:$THEME}" onClick="delAttachments({$attach_id})" alt="{$APP.LBL_DELETE_BUTTON}" title="{$APP.LBL_DELETE_BUTTON}" style="cursor:pointer;"></td></tr>	
 		{/foreach}
 		<input type='hidden' name='att_id_list' value='{$ATT_ID_LIST}' />
 	{/if}
 
 		{if $WEBMAIL eq 'true'}
 		{foreach item="attach_files" from=$webmail_attachments}
-                        <tr ><td width="90%">{$attach_files}</td></tr>
-                {/foreach}	
+                <tr ><td width="90%">{$attach_files}</td></tr>
+        {/foreach}	
 		{/if}
 		</table>	
 		</div>	
@@ -194,49 +203,55 @@ function email_validate(oform,mode)
 	if(oform.parent_name.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{
 		//alert('No recipients were specified');
-				alert(no_rcpts_err_msg);
+		alert(no_rcpts_err_msg);
 		return false;
 	}
-	if(document.EditView.ccmail.value.length >= 1)
-	{
-		var str = document.EditView.ccmail.value;
-                arr = new Array();
-                arr = str.split(",");
-                var tmp;
-
-                for(var i=0; i<=arr.length-1; i++)
-                {
-                        tmp = arr[i];
-                        if(tmp.match('<') && tmp.match('>')) {
-                                if(!findAngleBracket(arr[i])) {
-                                        alert(cc_err_msg+": "+arr[i]);
-                                        return false;
-                                }
-                        }
-			//Changes made to fix tickets #4633, # 5111 to accomodate all possible email formats
-			else if(trim(arr[i]) != "" && !/^[a-zA-Z0-9]+([\_\-\.]*[a-zA-Z0-9]+[\_\-]?)*@[a-zA-Z0-9]+([\_\-]?[a-zA-Z0-9]+)*\.+([\_\-]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/.test(trim(arr[i])))
-                        {
-                                alert(cc_err_msg+": "+arr[i]);
-                                return false;
-                        }
-                }
-
-	}
+	//Changes made to fix tickets #4633, # 5111 to accomodate all possible email formats
+	var email_regex = /^[a-zA-Z0-9]+([\_\-\.]*[a-zA-Z0-9]+[\_\-]?)*@[a-zA-Z0-9]+([\_\-]?[a-zA-Z0-9]+)*\.+([\_\-]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)*$/;
 	
-	if(document.EditView.bccmail.value.length >= 1)
-	{
-		var str = document.EditView.bccmail.value;
-		arr = new Array();
-		arr = str.split(",");
-		for(var i=0; i<=arr.length-1; i++)
-		{
-			if(trim(arr[i]) != "" && !/^[a-zA-Z0-9]+([_\.\-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([_\-]?[a-zA-Z0-9]+)*\.[a-zA-Z0-9]+(\.?[a-zA-Z0-9]+)*$/.test(trim(arr[i])))
-			{
-				alert(bcc_err_msg+": "+arr[i]);
-				return false;	
+	if(document.EditView.ccmail != null){
+		if(document.EditView.ccmail.value.length >= 1){
+			var str = document.EditView.ccmail.value;
+            arr = new Array();
+            arr = str.split(",");
+            var tmp;
+	    	for(var i=0; i<=arr.length-1; i++){
+	            tmp = arr[i];
+	            if(tmp.match('<') && tmp.match('>')) {
+                    if(!findAngleBracket(arr[i])) {
+                        alert(cc_err_msg+": "+arr[i]);
+                        return false;
+                    }
+            	}
+				else if(trim(arr[i]) != "" && !(email_regex.test(trim(arr[i]))))
+	            {
+	                    alert(cc_err_msg+": "+arr[i]);
+	                    return false;
+	            }
 			}
-		}	
-	}
+		}
+	}	
+	if(document.EditView.bccmail != null){
+		if(document.EditView.bccmail.value.length >= 1){
+			var str = document.EditView.bccmail.value;
+			arr = new Array();
+			arr = str.split(",");
+			var tmp;
+			for(var i=0; i<=arr.length-1; i++){
+				tmp = arr[i];
+				if(tmp.match('<') && tmp.match('>')) {
+                    if(!findAngleBracket(arr[i])) {
+                        alert(bcc_err_msg+": "+arr[i]);
+                        return false;
+                    }
+            	} 
+            	else if(trim(arr[i]) != "" && !(email_regex.test(trim(arr[i])))){
+					alert(bcc_err_msg+": "+arr[i]);
+					return false;	
+				}
+			}	
+		}
+	}	
 	if(oform.subject.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
 	{
 		if(email_sub = prompt('You did not specify a subject from this email. If you would like to provide one, please type it now','(no-Subject)'))
@@ -268,14 +283,14 @@ function findAngleBracket(mailadd)
         var lt = 0;
         var ret = '';
         for(i=0;i<strlen;i++){
-                if(mailadd[i] == '<' && gt == 0){
+                if(mailadd.charAt(i) == '<' && gt == 0){
                         lt = 1;
                 }
-                if(mailadd[i] == '>' && lt == 1){
+                if(mailadd.charAt(i) == '>' && lt == 1){
                         gt = 1;
                 }
-                if(mailadd[i] != '<' && lt == 1 && gt == 0)
-                        ret = ret + mailadd[i];
+                if(mailadd.charAt(i) != '<' && lt == 1 && gt == 0)
+                        ret = ret + mailadd.charAt(i);
 
         }
         if(/^[a-z0-9]([a-z0-9_\-\.]*)@([a-z0-9_\-\.]*)(\.[a-z]{2,3}(\.[a-z]{2}){0,2})$/.test(ret)){
@@ -294,7 +309,7 @@ function server_check()
                 	method: 'post',
                         postBody:"module=Emails&action=EmailsAjax&file=Save&ajax=true&server_check=true",
 			onComplete: function(response) {
-			if(response.responseText == 'SUCESS')
+			if(response.responseText.indexOf('SUCCESS') > -1)
 			{
 				oform.send_mail.value='true';
 				oform.action.value='Save';

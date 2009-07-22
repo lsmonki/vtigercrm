@@ -7,7 +7,7 @@
    * All Rights Reserved.
   *
  ********************************************************************************/
-function load_webmail(mid) {
+function load_webmail(mid,hasAttachment) {
         var node = $("row_"+mid);
 	preview_id = mid;
 	if(typeof($('fnt_subject_'+mid)) != "undefined" && $('fnt_subject_'+mid).color=="green")
@@ -67,25 +67,32 @@ function load_webmail(mid) {
 	}
 	
         $("delete_button").removeChild($("delete_button").firstChild);
-        $("delete_button").appendChild(Builder.node('input',{type: 'button', name: 'Button', value: 'Delete', className: 'buttonok', onclick: 'runEmailCommand(\'delete_msg\','+mid+')'}));
+        $("delete_button").appendChild(Builder.node('input',{type: 'button', name: 'Button', value: alert_arr.LBL_DELETE_EMAIL, className: 'buttonok', onclick: 'runEmailCommand(\'delete_msg\','+mid+')'}));
 
         $("reply_button_all").removeChild($("reply_button_all").firstChild);
-        $("reply_button_all").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: ' Reply To All ', className: 'buttonok', onclick: 'OpenComposer('+mid+',\'replyall\')'}));
+        $("reply_button_all").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: alert_arr.LBL_REPLY_TO_ALL, className: 'buttonok', onclick: 'OpenComposer('+mid+',\'replyall\')'}));
 
         $("reply_button").removeChild($("reply_button").firstChild);
-        $("reply_button").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: ' Reply To Sender ', className: 'buttonok', onclick: 'OpenComposer('+mid+',\'reply\')'}));
+        $("reply_button").appendChild(Builder.node('input',{type: 'button', name: 'reply', value: alert_arr.LBL_REPLY_TO_SENDER, className: 'buttonok', onclick: 'OpenComposer('+mid+',\'reply\')'}));
 
         $("forward_button").removeChild($("forward_button").firstChild);
-        $("forward_button").appendChild(Builder.node('input',{type: 'button', name: 'forward', value: ' Forward ', className: 'buttonok', onclick: 'OpenComposer('+mid+',\'forward\')'}));
+        $("forward_button").appendChild(Builder.node('input',{type: 'button', name: 'forward', value: alert_arr.LBL_FORWARD_EMAIL, className: 'buttonok', onclick: 'OpenComposer('+mid+',\'forward\')'}));
 
         $("qualify_button").removeChild($("qualify_button").firstChild);
 	if(showQualify == 'yes')
-        	$("qualify_button").appendChild(Builder.node('input',{type: 'button', name: 'Qualify2', value: ' Qualify ', className: 'buttonok', onclick: 'showRelationships('+mid+')'}));
+        	$("qualify_button").appendChild(Builder.node('input',{type: 'button', name: 'Qualify2', value: alert_arr.LBL_QUALIFY_EMAIL, className: 'buttonok', onclick: 'showRelationships('+mid+')'}));
 	else
 		$("qualify_button").appendChild(Builder.node('input',{type: 'hidden',name: 'hide'}));
-        $("download_attach_button").removeChild($("download_attach_button").firstChild);
-        $("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: ' Download Attachments ', className: 'buttonok', onclick: 'displayAttachments('+mid+')'}));
-
+		
+	$("download_attach_button").removeChild($("download_attach_button").firstChild);
+	if(hasAttachment == 'yes'){
+		$("download_attach_button").appendChild(Builder.node('input',{type: 'button', name: 'download', value: alert_arr.LBL_DOWNLOAD_ATTACHMENTS, className: 'buttonok', onclick: 'displayAttachments('+mid+')'}));
+	}else{
+		$("download_attach_button").appendChild(Builder.node('input',{type: 'hidden', name: 'download', value: alert_arr.LBL_DOWNLOAD_ATTACHMENTS, className: 'buttonok', onclick: 'displayAttachments('+mid+')'}));
+	}
+		
+		$("print_email_button").removeChild($("print_email_button").firstChild);
+		$("print_email_button").appendChild(Builder.node('input',{type: 'button', name: 'print', value: alert_arr.LBL_PRINT_EMAIL,className: 'buttonok', onclick: 'OpenComposer('+mid+',\'print\')'}));
         //$("full_view").removeChild($("full_view").firstChild);
       //  $("full_view").appendChild(Builder.node('a',{href: 'javascript:;', onclick: 'OpenComposer('+mid+',\'full_view\')'},'Full Email View'));
 	makeSelected(node.id)
@@ -119,6 +126,9 @@ function OpenComposer(id,mode)
                 case 'full_view':
                         url = 'index.php?module=Webmails&action=DetailView&record='+id+'&mailid='+id+'&mailbox='+mailbox;
                         break;
+				case 'print':
+						url = 'index.php?module=Emails&action=EmailsAjax&file=PrintEmail&record='+id+'&mailbox='+mailbox+'&print=true';
+						break;
                 }
         openPopUp('xComposeEmail',this,url,'createemailWin',830,662,'menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes');
 }

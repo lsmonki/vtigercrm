@@ -14,7 +14,7 @@
 <br>
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="98%">
 <tbody><tr>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+        <td valign="top"><img src="{'showPanelTopLeft.gif'|@vtiger_imageurl:$THEME}"></td>
         <td class="showPanelBg" style="padding: 10px;" valign="top" width="100%">
 	<br>
 	<div align=center>
@@ -22,7 +22,7 @@
 	{include file='SetMenu.tpl'}
 		<!-- DISPLAY -->
 		<table border=0 cellspacing=0 cellpadding=5 width=100% class="settingsSelUITopLine">
-		<form action="index.php" method="post" name="new" id="form">
+		<form action="index.php" method="post" name="new" id="form" onsubmit="VtigerJS_DialogBox.block();">
 		<input type="hidden" name="module" value="Settings">
 		<input type="hidden" name="parenttab" value="Settings">
 		<input type="hidden" name="fld_module" id="fld_module" value="{$DEF_MODULE}">
@@ -32,7 +32,7 @@
 			<input type="hidden" name="action" value="EditDefOrgFieldLevelAccess">
 		{/if}	
 		<tr>
-			<td width=50 rowspan=2 valign=top><img src="{$IMAGE_PATH}orgshar.gif" alt="{$MOD.LBL_MODULE_NAME}" width="48" height="48" border=0 title="{$MOD.LBL_MODULE_NAME}"></td>
+			<td width=50 rowspan=2 valign=top><img src="{'orgshar.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_MODULE_NAME}" width="48" height="48" border=0 title="{$MOD.LBL_MODULE_NAME}"></td>
 			<td colspan=2 class=heading2 valign=bottom><b><a href="index.php?module=Settings&action=index&parenttab=Settings">{$MOD.LBL_SETTINGS}</a> > {$MOD.LBL_FIELDS_ACCESS} </b></td>
 			<td rowspan=2 class="small" align=right>&nbsp;</td>
 		</tr>
@@ -59,10 +59,14 @@
         		<td  style="padding-left:5px;" class="big">{$CMOD.LBL_SELECT_SCREEN}&nbsp; 
 			<select name="Screen" class="detailedViewTextBox" style="width:30%;"  onChange="changemodules(this)">
 			{foreach item=module from=$FIELD_INFO}
+				{assign var="MODULELABEL" value=$module}
+				{if $APP.$module neq ''}
+					{assign var="MODULELABEL" value=$APP.$module}
+				{/if}
 				{if $module == $DEF_MODULE}
-					<option selected value='{$module}'>{$APP.$module}</option>
+					<option selected value='{$module}'>{$MODULELABEL}</option>
 				{else}		
-					<option value='{$module}' >{$APP.$module}</option>
+					<option value='{$module}' >{$MODULELABEL}</option>
 				{/if}
 			{/foreach}
 			</select>
@@ -71,6 +75,10 @@
                 </tr>
 		</table>
 		{foreach key=module item=info name=allmodules from=$FIELD_LISTS}
+		{assign var="MODULELABEL" value=$module}
+		{if $APP.$module neq ''}
+			{assign var="MODULELABEL" value=$APP.$module}
+		{/if}
 		{if $module eq $DEF_MODULE}
 			<div id="{$module}_fields" style="display:block">	
 		{else}
@@ -79,7 +87,7 @@
 	 	<table cellspacing=0 cellpadding=5 width=100% class="listTable small">
        		<tr>
 			<td colspan="2" class="listRow" valign="top" nowrap>
-			<b>{$CMOD.LBL_FIELDS_AVLBL} {$APP.$module}</b>
+			<b>{$CMOD.LBL_FIELDS_AVLBL} {$MODULELABEL}</b>
 			</td>
 		</tr>
 		<tr>
@@ -117,7 +125,7 @@
 </table>
 </div>
 </td>
-        <td valign="top"><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
+        <td valign="top"><img src="{'showPanelTopRight.gif'|@vtiger_imageurl:$THEME}"></td>
    </tr>
 </tbody>
 </table>

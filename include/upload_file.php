@@ -83,7 +83,7 @@ class UploadFile
 		global $root_directory;
 		global $upload_dir;
 		global $upload_maxsize;
-                global $upload_badext;
+		global $upload_badext;
 
 
 		if (!is_uploaded_file($_FILES[$this->field_name]['tmp_name']) )
@@ -102,7 +102,8 @@ class UploadFile
 			die ("ERROR: cannot write to directory: $root_directory/$upload_dir for uploads");
 		}
 
-		$this->stored_file_name = $this->create_stored_filename();
+		require_once('include/utils/utils.php');
+		$this->stored_file_name = sanitizeUploadFileName($_FILES[$this->field_name]['name'], $upload_badext);
 		$log->debug("Exiting confirm_upload method ...");
 		return true;
 	}
@@ -116,28 +117,6 @@ class UploadFile
 		$log->debug("Entering get_stored_file_name() method ...");
 		$log->debug("Exiting get_stored_file_name method ...");
 		return $this->stored_file_name;
-	}
-
-	/** Function to generate a filename for storing
-	  */
-
-	function create_stored_filename()
-	{
-		global $log;
-		$log->debug("Entering create_stored_filename() method ...");
-		global $upload_badext;
-                $stored_file_name = $_FILES[$this->field_name]['name'];
-
-                $ext_pos = strrpos($stored_file_name, ".");
-
-		$ext = substr($stored_file_name, $ext_pos + 1);
-
-                if (in_array($ext, $upload_badext)) 
-		{
-                        $stored_file_name .= ".txt";
-                }
-		$log->debug("Exiting create_stored_filename method ...");
-		return $stored_file_name;
 	}
 
 	/** Function is to move a file and store it in given location

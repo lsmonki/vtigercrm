@@ -14,8 +14,6 @@ require_once("data/Tracker.php");
 require_once('include/logging.php');
 require_once('include/utils/utils.php');
 require_once('modules/Reports/Reports.php');
-require_once('include/database/PearDatabase.php');
-
 
 global $app_strings;
 global $app_list_strings;
@@ -39,7 +37,6 @@ $report_std_filter->assign("JS_DATEFORMAT",parse_calendardate($app_strings['NTC_
 
 include("modules/Reports/StandardFilter.php");
 include("modules/Reports/AdvancedFilter.php");
-
 
 $report_std_filter->display('ReportFilters.tpl');
 ?>

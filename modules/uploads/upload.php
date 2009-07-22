@@ -1,14 +1,12 @@
-<!--*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+<?php
+/*+**********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-* 
- ********************************************************************************/
--->
-<?php
+ ************************************************************************************/
 global $theme;
 $theme_path="themes/".$theme."/";
 ?>
@@ -73,11 +71,11 @@ $theme_path="themes/".$theme."/";
         </script>
 </head>
 <BODY marginheight="0" marginwidth="0" leftmargin="0" rightmargin="0" bottommargin="0" topmargin="0">
-<FORM METHOD="post" action="index.php?module=uploads&action=add2db&return_module=<?php echo $_REQUEST['return_module']?>" enctype="multipart/form-data" style="margin:0px;">
+<FORM METHOD="post" onsubmit="VtigerJS_DialogBox.block();" action="index.php?module=uploads&action=add2db&return_module=<?php echo vtlib_purify($_REQUEST['return_module'])?>" enctype="multipart/form-data" style="margin:0px;">
 <?php
-	$ret_module = ($_REQUEST['return_module'] != "")?$_REQUEST['return_module']:$_SESSION['return_mod'];
-	$ret_action = ($_REQUEST['return_action'] != "")?$_REQUEST['return_action']:$_SESSION['return_act'];
-	$ret_id = ($_REQUEST['return_id'] != "")?$_REQUEST['return_id']:$_SESSION['returnid'];
+	$ret_module = ($_REQUEST['return_module'] != "")?vtlib_purify($_REQUEST['return_module']):$_SESSION['return_mod'];
+	$ret_action = ($_REQUEST['return_action'] != "")?vtlib_purify($_REQUEST['return_action']):$_SESSION['return_act'];
+	$ret_id = ($_REQUEST['return_id'] != "")?vtlib_purify($_REQUEST['return_id']):$_SESSION['returnid'];
 
 	$_SESSION['return_act'] = $ret_action;	
 	$_SESSION['return_mod'] = $ret_module;	

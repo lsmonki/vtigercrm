@@ -28,13 +28,13 @@
 	<td>
 		<table border=0 cellspacing=0 cellpadding=0>
 			<tr>
-				<td style="padding-right:5px"><a href="javascript:;" onclick="gcurrepfolderid=0;fnvshobj(this,'reportLay');"><img src="{$IMAGE_PATH}reportsCreate.gif" alt="{$MOD.LBL_CREATE_REPORT}..." title="{$MOD.LBL_CREATE_REPORT}..." border=0></a></td>
+				<td style="padding-right:5px"><a href="javascript:;" onclick="gcurrepfolderid=0;fnvshobj(this,'reportLay');"><img src="{'reportsCreate.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_CREATE_REPORT}..." title="{$MOD.LBL_CREATE_REPORT}..." border=0></a></td>
                         <td>&nbsp;</td>
-            <td style="padding-right:5px"><a href="javascript:;" onclick="createrepFolder(this,'orgLay');"><img src="{$IMAGE_PATH}reportsFolderCreate.gif" alt="{$MOD.Create_New_Folder}..." title="{$MOD.Create_New_Folder}..." border=0></a></td>
+            <td style="padding-right:5px"><a href="javascript:;" onclick="createrepFolder(this,'orgLay');"><img src="{'reportsFolderCreate.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.Create_New_Folder}..." title="{$MOD.Create_New_Folder}..." border=0></a></td>
                         <td>&nbsp;</td>
-            <td style="padding-right:5px"><a href="javascript:;" onclick="fnvshobj(this,'folderLay');"><img src="{$IMAGE_PATH}reportsMove.gif" alt="{$MOD.Move_Reports}..." title="{$MOD.Move_Reports}..." border=0></a></td>
+            <td style="padding-right:5px"><a href="javascript:;" onclick="fnvshobj(this,'folderLay');"><img src="{'reportsMove.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.Move_Reports}..." title="{$MOD.Move_Reports}..." border=0></a></td>
                         <td>&nbsp;</td>
-            <td style="padding-right:5px"><a href="javascript:;" onClick="massDeleteReport();"><img src="{$IMAGE_PATH}reportsDelete.gif" alt="{$MOD.LBL_DELETE_FOLDER}..." title="{$MOD.Delete_Report}..." border=0></a></td>
+            <td style="padding-right:5px"><a href="javascript:;" onClick="massDeleteReport();"><img src="{'reportsDelete.gif'|@vtiger_imageurl:$THEME}" alt="{$MOD.LBL_DELETE_FOLDER}..." title="{$MOD.Delete_Report}..." border=0></a></td>
 			</tr>
 		</table>
 	</td>
@@ -73,7 +73,7 @@
 	<table border=0 cellspacing=0 cellpadding=5 width=100% class=layerHeadingULine>
 	<tr>
 		<td class="genHeaderSmall" nowrap align="left" width="30%" id="editfolder_info">{$MOD.LBL_ADD_NEW_GROUP}</td>
-		<td align="right"><a href="javascript:;" onClick="closeEditReport();"><img src="{$IMAGE_PATH}close.gif" align="absmiddle" border="0"></a></td>
+		<td align="right"><a href="javascript:;" onClick="closeEditReport();"><img src="{'close.gif'|@vtiger_imageurl:$THEME}" align="absmiddle" border="0"></a></td>
 	</tr>
 	</table>
 	<table border=0 cellspacing=0 cellpadding=5 width=95% align=center> 
@@ -145,8 +145,11 @@ function DeleteFolder(id)
         	                method: 'post',
                 	        postBody: 'action=ReportsAjax&mode=ajax&file=DeleteReportFolder&module=Reports&record='+id,
                         	onComplete: function(response) {
-					var item = response.responseText;
-				        getObj('customizedrep').innerHTML = item;
+							var item = trim(response.responseText);
+							if(item.charAt(0)=='<')
+						        getObj('customizedrep').innerHTML = item;
+						    else
+						    	alert(item);
                         	}
                 	}
         	);
@@ -173,14 +176,14 @@ function AddFolder()
                 return false;
                 {literal}
 	}
-	else if((getObj('folder_name').value).match(/['"\+]/) || (getObj('folder_desc').value).match(/['"\+]/))
-        {
-                alert(alert_arr.NO_QUOTES+alert_arr.NAME_DESC);
-                return false;
-        }	
+	else if((getObj('folder_name').value).match(/['"<>/\+]/) || (getObj('folder_desc').value).match(/['"<>/\+]/))
+    {
+            alert(alert_arr.SPECIAL_CHARS+' '+alert_arr.NOT_ALLOWED+alert_arr.NAME_DESC);
+            return false;
+    }	
 	/*else if((!CharValidation(getObj('folder_name').value,'namespace')) || (!CharValidation(getObj('folder_desc').value,'namespace')))
 	{
-			alert(alert_arr.NO_SPECIAL+alert_arr.NAME_DESC);
+			alert(alert_arr.NO_SPECIAL +alert_arr.NAME_DESC);
 			return false;
 	}*/
 	else
@@ -314,7 +317,7 @@ function massDeleteReport()
                                 postBody: 'action=ReportsAjax&mode=ajax&file=Delete&module=Reports&idlist='+idstring,
                                 onComplete: function(response) {
                                         var item = response.responseText;
-                                        getObj('customizedrep').innerHTML = item;
+                                        	getObj('customizedrep').innerHTML = item;
                                 }
                         }
                 );

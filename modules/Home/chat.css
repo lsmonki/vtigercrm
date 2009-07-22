@@ -161,7 +161,7 @@ div.csmsg{
 }
 
 a.chat{
-  background-image:url(imgs/user_icon.gif);
+  background-image:url(themes/images/user_icon.gif);
   background-position:center left;
   background-repeat:no-repeat;
   color:#000000;

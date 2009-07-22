@@ -13,7 +13,7 @@
 -->*}
 
 {if $MODULE eq 'Emails'}	
-	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
+	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
         <input type="hidden" name="form">
         <input type="hidden" name="send_mail">
         <input type="hidden" name="contact_id" value="{$CONTACT_ID}">
@@ -23,7 +23,7 @@
 
 {elseif $MODULE eq 'Contacts'}
 	{$ERROR_MESSAGE}
-        <form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
+        <form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
 	<input type="hidden" name="opportunity_id" value="{$OPPORTUNITY_ID}">
 	<input type="hidden" name="contact_role">
@@ -32,55 +32,59 @@
 	<input type="hidden" name="campaignid" value="{$campaignid}">
 
 {elseif $MODULE eq 'Potentials'}
-	<form name="EditView" method="POST" action="index.php">
+	<form name="EditView" method="POST" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 	<input type="hidden" name="contact_id" value="{$CONTACT_ID}">
 
 {elseif $MODULE eq 'Campaigns'}
-        <form name="EditView" method="POST" action="index.php">
+        <form name="EditView" method="POST" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 
 {elseif $MODULE eq 'Calendar'}
-	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
+	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}" onsubmit="VtigerJS_DialogBox.block();">
 	<input type="hidden" name="product_id" value="{$PRODUCTID}">
 
 {elseif $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice' || $MODULE eq 'Quotes'}
-	<form name="EditView" method="POST" action="index.php" onSubmit="settotalnoofrows();calcTotal();">
+	<!-- (id="frmEditView") content added to form tag and new hidden field added,  -->
+	<form id="frmEditView" name="EditView" method="POST" action="index.php" onSubmit="settotalnoofrows();calcTotal();VtigerJS_DialogBox.block();">
+	<input type="hidden" name="hidImagePath" id="hidImagePath" value="{$IMAGE_PATH}"/>
+	<!-- End of code added -->
+
 	{if $MODULE eq 'Invoice' || $MODULE eq 'PurchaseOrder' ||  $MODULE eq 'SalesOrder'}
        		 <input type="hidden" name="convertmode">
 	{/if}
 
 {elseif $MODULE eq 'HelpDesk'}
-	<form name="EditView" method="POST" action="index.php" ENCTYPE="multipart/form-data">
+	<form name="EditView" method="POST" action="index.php" ENCTYPE="multipart/form-data" onsubmit="VtigerJS_DialogBox.block();">
 	<input type="hidden" name="old_smownerid" value="{$OLDSMOWNERID}">
-        <input type="hidden" name="old_id" value="{$OLD_ID}">
+	<input type="hidden" name="old_id" value="{$OLD_ID}">
 
 {elseif $MODULE eq 'Leads'}
-        <form name="EditView" method="POST" action="index.php">
+        <form name="EditView" method="POST" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
         <input type="hidden" name="campaignid" value="{$campaignid}">
 
 {elseif $MODULE eq 'Accounts' || $MODULE eq 'Faq' || $MODULE eq 'PriceBooks' || $MODULE eq 'Vendors'}
-	<form name="EditView" method="POST" action="index.php">
+	<form name="EditView" method="POST" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 
-{elseif $MODULE eq 'Notes'}
-	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
+{elseif $MODULE eq 'Documents'}
+	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 	<input type="hidden" name="max_file_size" value="{$MAX_FILE_SIZE}">
-	<input type="hidden" name="filename" value="{$FILENAME}">
 	<input type="hidden" name="form">
 	<input type="hidden" name="email_id" value="{$EMAILID}">
 	<input type="hidden" name="ticket_id" value="{$TICKETID}">
 	<input type="hidden" name="fileid" value="{$FILEID}">
 	<input type="hidden" name="old_id" value="{$OLD_ID}">
+	<input type="hidden" name="parentid" value="{$PARENTID}">
 
 {elseif $MODULE eq 'Products'}
 	{$ERROR_MESSAGE}
-	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
+	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
 	<INPUT TYPE="HIDDEN" NAME="MAX_FILE_SIZE" VALUE="800000">
 {else}
 	{$ERROR_MESSAGE}
-	<form name="EditView" method="POST" action="index.php">
+	<form name="EditView" method="POST" action="index.php" onsubmit="VtigerJS_DialogBox.block();">
 {/if}
 
-<input type="hidden" name="pagenumber" value="{$smarty.request.start}">
+<input type="hidden" name="pagenumber" value="{$smarty.request.start|@vtlib_purify}">
 <input type="hidden" name="module" value="{$MODULE}">
 <input type="hidden" name="record" value="{$ID}">
 <input type="hidden" name="mode" value="{$MODE}">

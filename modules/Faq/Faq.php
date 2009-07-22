@@ -23,9 +23,7 @@
 
 include_once('config.php');
 require_once('include/logging.php');
-require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
-require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
 
 	global $empty_string;
@@ -34,6 +32,7 @@ class Faq extends CRMEntity {
 	var $log;
 	var $db;
 	var $table_name = "vtiger_faq";
+	var $table_index= 'id';
 	var $tab_name = Array('vtiger_crmentity','vtiger_faq');
 	var $tab_name_index = Array('vtiger_crmentity'=>'crmid','vtiger_faq'=>'id','vtiger_faqcomments'=>'faqid');
 				
@@ -58,8 +57,8 @@ class Faq extends CRMEntity {
 				        'Question'=>'question',
 				        'Category'=>'faqcategories',
 				        'Product Name'=>'product_id',
-					'Created Time'=>'createdtime',
-					'Modified Time'=>'modifiedtime' 
+						'Created Time'=>'createdtime',
+						'Modified Time'=>'modifiedtime' 
 				      );
 	var $list_link_field= 'question';
 
@@ -77,12 +76,14 @@ class Faq extends CRMEntity {
 	var $default_order_by = 'id';
 	var $default_sort_order = 'DESC';
 
+	var $mandatory_fields = Array('question','faq_answer','createdtime' ,'modifiedtime');
+	
 	/**	Constructor which will set the column_fields in this object
 	 */
 	function Faq() {
 		$this->log =LoggerManager::getLogger('faq');
 		$this->log->debug("Entering Faq() method ...");
-		$this->db = new PearDatabase();
+		$this->db = PearDatabase::getInstance();
 		$this->column_fields = getColumnFields('Faq');
 		$this->log->debug("Exiting Faq method ...");
 	}
@@ -105,7 +106,7 @@ class Faq extends CRMEntity {
 		$log->info("in insertIntoFAQCommentTable  ".$table_name."    module is  ".$module);
         	global $adb;
 
-        	$current_time = $adb->formatDate(date('YmdHis'), true);
+        	$current_time = $adb->formatDate(date('Y-m-d H:i:s'), true);
 
 		if($this->column_fields['comments'] != '')
 			$comment = $this->column_fields['comments'];
@@ -165,5 +166,35 @@ class Faq extends CRMEntity {
 		return $list;
 	}
 
+	/*
+	 * Function to get the primary query part of a report 
+	 * @param - $module Primary module name
+	 * returns the query string formed on fetching the related data for report for primary module
+	 */
+	function generateReportsQuery($module){
+	 			$moduletable = $this->table_name;
+	 			$moduleindex = $this->table_index;
+	 			
+	 			$query = "from $moduletable
+					inner join vtiger_crmentity on vtiger_crmentity.crmid=$moduletable.$moduleindex
+					left join vtiger_products as vtiger_products$module on vtiger_products$module.productid = vtiger_faq.product_id 
+					left join vtiger_groups as vtiger_groups$module on vtiger_groups$module.groupid = vtiger_crmentity.smownerid 
+					left join vtiger_users as vtiger_users$module on vtiger_users$module.id = vtiger_crmentity.smownerid 
+					left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid 
+					left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid";
+	            return $query;
+	}
+
+	/*
+	 * Function to get the relation tables for related modules 
+	 * @param - $secmodule secondary module name
+	 * returns the array with table names and fieldnames storing relations between module and this module
+	 */
+	function setRelationTables($secmodule){
+		$rel_tables = array (
+			"Documents" => array("vtiger_senotesrel"=>array("crmid","notesid"),"vtiger_faq"=>"id"),
+		);
+		return $rel_tables[$secmodule];
+	}
 }
 ?>

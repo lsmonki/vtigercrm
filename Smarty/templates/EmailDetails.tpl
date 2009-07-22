@@ -9,6 +9,8 @@
   *
  ********************************************************************************/
 -->*}
+<script language="JavaScript" type="text/javascript" src="modules/Webmails/Webmails.js"></script>
+
 <table width="100%" border="0" cellpadding="0" cellspacing="0" valign="top">
 <tr>
     <td class="hdrNameBg">
@@ -19,7 +21,8 @@
 			  	<input type="button" name="forward" value=" {$MOD.LBL_FORWARD_BUTTON} " class="crmbutton small edit" onClick=OpenCompose('{$ID}','forward')>&nbsp;
 				{if $EMAIL_FLAG neq 'WEBMAIL'}
 			  	<input type="button" name="Send" value=" {$MOD.LBL_SEND} " class="crmbutton small save" onClick=OpenCompose('{$ID}','edit')>&nbsp;	
-	<input type="button" name="Reply" value=" {$MOD.LBL_REPLY_BUTTON} " class="crmbutton small edit" onClick=ReplyCompose('{$ID}','reply')>&nbsp;
+				<input type="button" name="Reply" value=" {$MOD.LBL_REPLY_BUTTON} " class="crmbutton small edit" onClick=ReplyCompose('{$ID}','reply')>&nbsp;
+				<input type="button" title="{$MOD.LBL_PRINT_EMAIL}" name="{$MOD.LBL_PRINT_EMAIL}" value="{$MOD.LBL_PRINT_EMAIL}" class="crmbutton small edit" onClick=OpenCompose('{$ID}','print')> 
 				{else}
 			  	<input type="button" name="Send" value=" {$MOD.LBL_REPLY_BUTTON} " class="crmbutton small edit" onClick=OpenCompose('{$ID}','edit')>&nbsp;
 				{/if}
@@ -48,8 +51,12 @@
 	{if $EMAIL_FLAG neq 'WEBMAIL'}
 	<tr><td width="20%" align="right" valign="top"><b>{$MOD.LBL_FROM}</b></td><td width="2%" align="left">&nbsp;</td><td align="left">{$FROM_MAIL}&nbsp;</td></tr>
 	<tr><td width="20%" align="right" valign="top"><b>{$MOD.LBL_TO}</b></td><td width="2%" align="left">&nbsp;</td><td align="left">{$TO_MAIL}&nbsp;</td></tr>
-	<tr><td align="right" valign="top">{$MOD.LBL_CC}</td><td align="left">&nbsp;</td><td align="left">{$CC_MAIL}&nbsp;</td></tr>
-	<tr><td align="right" valign="top">{$MOD.LBL_BCC}</td><td align="left">&nbsp;</td><td align="left">{$BCC_MAIL}&nbsp;</td></tr>
+		{if 'ccmail'|@emails_checkFieldVisiblityPermission eq '0'}
+		<tr><td align="right" valign="top">{$MOD.LBL_CC}</td><td align="left">&nbsp;</td><td align="left">{$CC_MAIL}&nbsp;</td></tr>
+		{/if}
+		{if 'bccmail'|@emails_checkFieldVisiblityPermission eq '0'}
+		<tr><td align="right" valign="top">{$MOD.LBL_BCC}</td><td align="left">&nbsp;</td><td align="left">{$BCC_MAIL}&nbsp;</td></tr>
+		{/if}
 	{else}
 	<tr><td width="20%" align="right" valign="top"><b>{$MOD.LBL_FROM}</b></td><td width="2%" align="left">&nbsp;</td><td align="left">{$TO_MAIL}&nbsp;</td></tr>
 	{/if}
