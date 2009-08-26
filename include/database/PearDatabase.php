@@ -1137,6 +1137,15 @@ class PearDatabase{
 		}		
 		return $last_insert_id;
 	}
+	
+	// Function to escape the special characters in database name based on database type.
+	function escapeDbName($dbName='') {
+		if ($dbName == '')  $dbName = $this->dbName;
+		if($this->isMySql()) {
+			$dbName = "`{$dbName}`";
+		}
+		return $dbName;
+	}
 } /* End of class */
 
 if(empty($adb)) {

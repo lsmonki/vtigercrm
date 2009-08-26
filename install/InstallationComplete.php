@@ -1,19 +1,13 @@
 <?php
-/*+*******************************************************************************
+/*+**********************************************************************************
  * The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
  * The Original Code is:  vtiger CRM Open Source
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
- ********************************************************************************/
-session_start();
-$migrationInfo = $_SESSION['migration_info'];
-$root_directory = $migrationInfo['root_directory'];
-$source_directory = $migrationInfo['source_directory'];
-session_destroy();
+ ************************************************************************************/	
 ?>
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -21,6 +15,15 @@ session_destroy();
 	<title><?php echo $installationStrings['LBL_VTIGER_CRM_5']. ' - ' . $installationStrings['LBL_CONFIG_WIZARD']. ' - ' . $installationStrings['LBL_FINISH']?></title>
 	<link href="include/install/install.css" rel="stylesheet" type="text/css">
 	<link href="themes/softed/style.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript">
+	function showhidediv() {
+		var div_style = document.getElementById("htaccess_div").style.display;
+		if(div_style == "inline")
+			document.getElementById("htaccess_div").style.display = "none";
+		else
+			document.getElementById("htaccess_div").style.display = "inline";		
+	}
+	</script>
 </head>
 
 <body class="small cwPageBg" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
@@ -63,13 +66,25 @@ $renamefile = $renameResult['renamefile'];
 $ins_file_renamed = $renameResult['install_file_renamed'];
 $ins_dir_renamed = $renameResult['install_directory_renamed'];
 
-$_SESSION['VTIGER_DB_VERSION']= $vtiger_current_version;
+// Status tracking
+$statimage = '';
+@include_once('config.inc.php');
+global $disable_stats_tracking;
+if(isset($application_unique_key) && !empty($application_unique_key)) {
+	if(isset($disable_stats_tracking) && !empty($disable_stats_tracking)) {
+		$statimage = "";
+	} else {
+		$statimage = "<img src='http://stats.vtiger.com/stats.php?uid=$application_unique_key&v=$vtiger_current_version&type=I' 
+		alt='|' title='' border=0 width='1px' height='1px'>";
+	}
+}
+
 ?>
 	<table border=0 cellspacing=0 cellpadding=5 align="center" width="80%" class="contentDisplay">
 		<tr>
 			<td align=center class=small>
-				<b><?php echo $installationStrings['LBL_MIGRATION_FINISHED']; ?>. vtigercrm-<?php echo $vtiger_current_version. ' ' .$installationStrings['LBL_ALL_SET_TO_GO']; ?></b>
-				<hr noshade size=1>			
+				<b>vtigercrm-<?php echo $vtiger_current_version. ' ' .$installationStrings['LBL_ALL_SET_TO_GO']; ?></b>
+				<hr noshade size=1>
 				<div style="width:100%;padding:10px;" align=left>
 					<ul>
 						<?php if($ins_file_renamed==true){ ?>
@@ -91,8 +106,6 @@ $_SESSION['VTIGER_DB_VERSION']= $vtiger_current_version;
 					</ul>
 					<br>
 					<ul>
-						<li><?php echo $installationStrings['LBL_OLD_VERSION_IS_AT'] . $source_directory;?>.
-						<li><?php echo $installationStrings['LBL_CURRENT_SOURCE_PATH_IS'] . $root_directory;?>.
 						<li><?php echo $installationStrings['LBL_LOGIN_USING_ADMIN']; ?>.</li>
 						<li><?php echo $installationStrings['LBL_SET_OUTGOING_EMAIL_SERVER']; ?></li>						
 						<li><?php echo $installationStrings['LBL_RENAME_HTACCESS_FILE']; ?>. <a href="javascript:void(0);" onclick="showhidediv();"><?php echo $installationStrings['LBL_MORE_INFORMATION']; ?></a>
@@ -113,7 +126,7 @@ $_SESSION['VTIGER_DB_VERSION']= $vtiger_current_version;
 			</td>
 		</tr>
 	</table>
-	<br>		
+	<br>	
 	<table border=0 cellspacing=0 cellpadding=10 width=100%>
 		<tr>
 			<td colspan=2 align="center">
@@ -123,11 +136,11 @@ $_SESSION['VTIGER_DB_VERSION']= $vtiger_current_version;
 				</form>
 			</td>
 		</tr>
-	</table>
+	</table>		
 </td>
 </tr>
 </table>
-		
+
 </td>
 </tr>
 </table>
@@ -147,7 +160,7 @@ $_SESSION['VTIGER_DB_VERSION']= $vtiger_current_version;
 </table>
 <table border=0 cellspacing=0 cellpadding=0 width=80% align=center>
 	<tr>
-		<td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td>
+		<td class=small align=center> <a href="http://www.vtiger.com" target="_blank">www.vtiger.com</a></td> | <?php echo $statimage ?>
 	</tr>
 </table>
 </body>

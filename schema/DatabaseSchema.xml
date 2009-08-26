@@ -1048,6 +1048,8 @@
 		<field name="module_name" type="C" size="25" />
 		<field name="item_id" type="C" size="36" />
 		<field name="item_summary" type="C" size="255" />
+
+		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
 	<table name="vtiger_competitor">
@@ -7179,6 +7181,19 @@
 		<field name="currency_symbol" type="C" size="11" />
 
 		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="vtiger_tab_info">
+		<field name="tabid" type="I" size="19" />
+		<field name="prefname" type="C" size="256" />
+		<field name="prefvalue" type="C" size="256" />
+
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_tab_info" alter="true">
+		<constraint>ADD CONSTRAINT fk_1_vtiger_tab_info FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE ON UPDATE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
 	</table>
 	
 </schema>

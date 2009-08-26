@@ -1988,9 +1988,6 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	$vtlanguage = new Vtiger_Language();
 	$vtlanguage->register('en_us','US English','English',true,true,true);
 	
-	$this->insertUser2mergefields(0);
-	$this->insertUser2mergefields(1);
-	$this->db->query("update vtiger_user2mergefields set visible=1 where fieldid in(1,38,40,65,104,106,111,152,156,255)");
 	$this->initWebservices();
 
 	/**
@@ -2026,38 +2023,11 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 	$this->db->query("insert into vtiger_reportfilters values(2,'Public')");
 	$this->db->query("insert into vtiger_reportfilters values(3,'Shared')");
 	
-		require_once('modules/Utilities/Currencies.php');
+		require('modules/Utilities/Currencies.php');
 		foreach($currencies as $key=>$value){
 			$this->db->query("insert into vtiger_currencies values(".$this->db->getUniqueID("vtiger_currencies").",'$key','".$value[0]."','".$value[1]."')");
 		}
 	
-	}
-	
-	//Added to insert the records in vtiger_user_mergefields
-	function insertUser2mergefields($userid){
-		global $log, $adb;
-		$log->debug("Entering insertUser2mergefields(".$userid.") method ...");
-	        $log->info("in insertUser2mergefields ".$userid);
-	
-		//$this->db->database->SetFetchMode(ADODB_FETCH_ASSOC); 
-		$tab_res = $adb->query("SELECT distinct tabid FROM vtiger_tab");
-		$noOfTabs = $adb->num_rows($tab_res);
-		for($i=0;$i<$noOfTabs;$i++) {
-			$tab_id = $this->db->query_result($tab_res,$i,'tabid');
-	        $fld_result = getFieldsResultForMerge($tab_id);
-	        if ($fld_result != null) {
-	    		$num_rows = $this->db->num_rows($fld_result);
-			    for($j=0; $j<$num_rows; $j++) {
-					$field_id = $this->db->query_result($fld_result,$j,'fieldid');
-					$data_type = explode("~",$this->db->query_result($fld_result,$j,'typeofdata')); 
-					if($data_type[1] == 'M') { 
-						$visible = 1;
-						$this->db->query("insert into vtiger_user2mergefields values ($userid, $tab_id, $field_id, $visible)"); 
-					} 				
-				}
-	        }
-		}
-		$log->debug("Exiting insertUser2mergefields method ...");
 	}
 	
 	function initWebservices(){

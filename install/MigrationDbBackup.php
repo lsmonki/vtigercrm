@@ -10,7 +10,7 @@
  *********************************************************************************/
 session_start();
 if($_SESSION['authentication_key'] != $_REQUEST['auth_key']) {
-	die("Not Authorized to perform this operation");
+	die($installationStrings['ERR_NOT_AUTHORIZED_TO_PERFORM_THE_OPERATION']);
 }
 if(!empty($_REQUEST['rootUserName'])) $_SESSION['migration_info']['root_username'] = $_REQUEST['rootUserName'];
 
@@ -53,7 +53,9 @@ if(strtolower($mode) == 'dump'){
 			$backup->backup();
 			$_SESSION['migration_info']['new_dbname'] = $targetName;
 			if ($createDB && $backup->isUTF8SupportEnabled()) {
-				$_SESSION['migration_info']['db_utf8_support'] = true;
+				$_SESSION['config_file_info']['vt_charset'] = "UTF-8";
+			} else {
+				$_SESSION['config_file_info']['vt_charset'] = "ISO-8859-1";
 			}
 			echo 'true';
 			return;

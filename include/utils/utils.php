@@ -1026,9 +1026,8 @@ function to_html($string, $encode=true)
 
 /** Function to get the tablabel for a given id
   * @param $tabid -- tab id:: Type integer
-    * @returns $string -- string:: Type string 
-      *
-       */
+  * @returns $string -- string:: Type string 
+*/
 
 function getTabname($tabid)
 {
@@ -4666,42 +4665,6 @@ function initUpdateVtlibModule($module, $packagepath) {
 	}
 }
 
-// Function to install Vtlib Compliant - Optional Modules
-function installOptionalModules($selected_modules){
-	global $log;
-	require_once('vtlib/Vtiger/Package.php');
-	require_once('vtlib/Vtiger/Module.php');
-	
-	$selected_modules = split(":",$selected_modules);
-	
-	if ($handle = opendir('packages/5.1.0/optional')) {	    
-	    
-	    while (false !== ($file = readdir($handle))) {
-	        $filename_arr = explode(".", $file);
-	        $packagename = $filename_arr[0];
-	        if (!empty($packagename)) {
-	        	$packagepath = "packages/5.1.0/optional/$file";
-				$package = new Vtiger_Package();
-        		$module = $package->getModuleNameFromZip($packagepath);
-        		if($module != null) {
-        			$moduleInstance = Vtiger_Module::getInstance($module);
-		        	if(in_array($packagename,$selected_modules)) {
-		        		if($moduleInstance) {
-		        			initUpdateVtlibModule($module, $packagepath);
-		        		} else {
-		        			installVtlibModule($packagename, $packagepath);
-		        		}
-		        	} elseif ($moduleInstance) {
-		        		initUpdateVtlibModule($module, $packagepath);
-		        		vtlib_toggleModuleAccess((string)$module, false);
-		        	}
-	        	}
-	        }
-	    }
-	    closedir($handle);
-	}
-}
-
 /**
  * this function checks if a given column exists in a given table or not
  * @param string $columnName - the columnname
@@ -4868,5 +4831,21 @@ function sanitizeUploadFileName($fileName, $badFileExtensions) {
 		$newFileName .= ".txt";
 	}
 	return $newFileName;
+}
+
+/** Function to get the tab meta information for a given id
+  * @param $tabId -- tab id :: Type integer
+  * @returns $tabInfo -- array of preference name to preference value :: Type array 
+  */
+function getTabInfo($tabId) {
+	global $adb;
+	
+	$tabInfoResult = $adb->pquery('SELECT prefname, prefvalue FROM vtiger_tab_info WHERE tabid=?', array($tabId));
+	$tabInfo = array();
+	for($i=0; $i<$adb->num_rows($tabInfoResult); ++$i) {
+		$prefName = $adb->query_result($tabInfoResult, $i, 'prefname');
+		$prefValue = $adb->query_result($tabInfoResult, $i, 'prefvalue');
+		$tabInfo[$prefName] = $prefValue;
+	}
 }
 ?>

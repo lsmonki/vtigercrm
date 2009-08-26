@@ -45,7 +45,7 @@ global $city_array;
 global $city_array_count;
 global $campaign_name_array,$campaign_type_array,$campaign_status_array;
 global $adb;
- $db = PearDatabase::getInstance();
+$adb = PearDatabase::getInstance();
 
 function add_digits($quantity, &$string, $min = 0, $max = 9)
 {
@@ -92,12 +92,8 @@ $purchaseorder_ids = Array();
 $invoice_ids = Array();
 $email_ids = Array();
 
-// Determine the assigned user for all demo data.  This is the default user if set, or admin
+// Assigned user for all demo data.
 $assigned_user_name = "admin";
-if(isset($default_user_name) && $default_user_name != '' && isset($create_default_user) && $create_default_user)
-{
-	$assigned_user_name = $default_user_name;
-}
 
 // Look up the user id for the assigned user
 $seed_user = new Users();
@@ -260,7 +256,7 @@ for($i=0; $i<10; $i++)
 	$opportunity_key = array_rand($opportunity_ids);
 	
 	$query = "insert into vtiger_contpotentialrel ( contactid, potentialid ) values (?,?)";
-	$db->pquery($query, array($contact->id, $opportunity_ids[$opportunity_key]));
+	$adb->pquery($query, array($contact->id, $opportunity_ids[$opportunity_key]));
 }
 
 $company_count=0;

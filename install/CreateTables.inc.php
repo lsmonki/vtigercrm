@@ -20,32 +20,19 @@ require_once('modules/Calendar/Activity.php');
 require_once('modules/Documents/Documents.php');
 require_once('modules/Emails/Emails.php');
 require_once('modules/Users/Users.php');
-require_once('modules/Import/ImportMap.php');
-require_once('modules/Import/UsersLastImport.php');
 require_once('modules/Users/LoginHistory.php');
 require_once('data/Tracker.php');
 require_once('include/utils/utils.php');
 require_once('modules/Users/DefaultDataPopulator.php');
 require_once('modules/Users/CreateUserPrivilegeFile.php');
 
-session_start();
 // load the config_override.php file to provide default user settings
 if (is_file("config_override.php")) {
 	require_once("config_override.php");
 }
 
-$db = PearDatabase::getInstance();
-
+$adb = PearDatabase::getInstance();
 $log =& LoggerManager::getLogger('INSTALL');
-
-function eecho($msg = FALSE) {
-	if ($useHtmlEntities) {
-		echo htmlentities(nl2br($msg));
-	}
-	else {
-		echo $msg;
-	}
-}
 
 function create_default_users_access() {
       	global $log, $adb;
@@ -53,10 +40,6 @@ function create_default_users_access() {
         global $admin_password;
 		global $standarduser_email;
 		global $standarduser_password;
-        global $create_default_user;
-        global $default_user_name;
-        global $default_password;
-        global $default_user_is_admin;
 
         $role1_id = $adb->getUniqueID("vtiger_role");
 		$role2_id = $adb->getUniqueID("vtiger_role");
@@ -76,7 +59,7 @@ function create_default_users_access() {
         $adb->query("insert into vtiger_role values('H".$role5_id."','Sales Man','H".$role1_id."::H".$role2_id."::H".$role3_id."::H".$role4_id."::H".$role5_id."',4)");
         
         // Invalidate any cached information
-    	VTCacheUtils::clearRoleSubordinates($roleId);
+    	VTCacheUtils::clearRoleSubordinates();
                 
         // create default admin user
     	$user = new Users();
@@ -849,12 +832,8 @@ function create_default_users_access() {
 	
 }
 
-//$startTime = microtime();
 $modules = array("DefaultDataPopulator");
-$focus=0;				
-// tables creation
-//eecho("Creating Core tables: ");
-//$adb->setDebug(true);
+$focus=0;
 $success = $adb->createTables("schema/DatabaseSchema.xml");
 
 //Postgres8 fix - create sequences. 
@@ -933,10 +912,8 @@ if($success==0)
 	die("Error: Tables not created.  Table creation failed.\n");
 elseif ($success==1)
 	die("Error: Tables partially created.  Table creation failed.\n");
-	//eecho("Tables Successfully created.\n");
 
-foreach ($modules as $module ) 
-{
+foreach ($modules as $module ) {
 	$focus = new $module();
 	$focus->create_tables();
 }
@@ -1008,13 +985,13 @@ require_once('modules/CustomView/PopulateCustomView.php');
 
 // ensure required sequences are created (adodb creates them as needed, but if
 // creation occurs within a transaction we get problems
-$db->getUniqueID("vtiger_crmentity");
-$db->getUniqueID("vtiger_seactivityrel");
-$db->getUniqueID("vtiger_freetags");
+$adb->getUniqueID("vtiger_crmentity");
+$adb->getUniqueID("vtiger_seactivityrel");
+$adb->getUniqueID("vtiger_freetags");
 
 //Master currency population
 //Insert into vtiger_currency vtiger_table
-$db->pquery("insert into vtiger_currency_info values(?,?,?,?,?,?,?,?)", array($db->getUniqueID("vtiger_currency_info"),$currency_name,$currency_code,$currency_symbol,1,'Active','-11','0'));
+$adb->pquery("insert into vtiger_currency_info values(?,?,?,?,?,?,?,?)", array($adb->getUniqueID("vtiger_currency_info"),$currency_name,$currency_code,$currency_symbol,1,'Active','-11','0'));
 
 // Register All the Events
 registerEvents($adb);
@@ -1030,16 +1007,6 @@ populateLinks();
 
 // Set Help Information for Fields
 setFieldHelpInfo();
-
-// Install Vtlib Compliant Modules
-installMandatoryModules();
-require_once('include/utils/installVtlibSelectedModules.php');
-	
-// populate the db with seed data
-if ($db_populate) {
-	//eecho ("Populate seed data into $db_name");
-	include("install/populateSeedData.php");
-}
 
 // Register all the events here
 function registerEvents($adb) {
@@ -1111,23 +1078,6 @@ function populateLinks() {
 		'index.php?module=Documents&action=EditView&return_module=$MODULE$&return_action=DetailView&return_id=$RECORD$&parent_id=$RECORD$',
 		'themes/images/bookMark.gif'
 	);
-}
-
-// Function to call installation of mandatory modules
-function installMandatoryModules(){	
-
-	if ($handle = opendir('packages/5.1.0/mandatory')) {	    
-	    
-	    while (false !== ($file = readdir($handle))) {
-	        $filename_arr = explode(".", $file);
-	        $packagename = $filename_arr[0];
-	        if (!empty($packagename)) {
-	        	$packagepath = "packages/5.1.0/mandatory/$file";
-	        	installVtlibModule($packagename, $packagepath);
-	        }
-	    }
-	    closedir($handle);
-	}
 }
 	
 function setFieldHelpInfo() {

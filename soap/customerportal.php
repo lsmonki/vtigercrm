@@ -932,7 +932,7 @@ function authenticate_user($username,$password,$version,$login = 'true')
 	global $adb,$log;
 	$adb->println("Inside customer portal function authenticate_user($username, $password, $login).");
 	include('vtigerversion.php');
-	if(version_compare($version,$vtiger_current_version,'==') == 0){
+	if(version_compare($version,'5.1.0','>=') == 0){
 		$list[0] = "NOT COMPATIBLE";
   		return $list;
 	}

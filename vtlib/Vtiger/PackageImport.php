@@ -185,7 +185,7 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	function getModuleNameFromZip($zipfile) {
 		if(!$this->checkZip($zipfile)) return null;
 
-		return $this->_modulexml->name;
+		return (string)$this->_modulexml->name;
 	}
 
 	/**
@@ -249,6 +249,14 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 	}
 
 	/**
+	 * Get dependent Maximum version
+	 * @access private
+	 */
+	function getDependentMaxVtigerVersion() {
+		return $this->_modulexml->dependencies->vtiger_max_version;
+	}
+
+	/**
 	 * Get package version
 	 * @access private
 	 */
@@ -286,12 +294,17 @@ class Vtiger_PackageImport extends Vtiger_PackageExport {
 			if($type == 'extension' || $type == 'language')
 				$isextension = true;
 		}
+		
+		$vtigerMinVersion = $this->_modulexml->dependencies->vtiger_version;
+		$vtigerMaxVersion = $this->_modulexml->dependencies->vtiger_max_version;
 
 		$moduleInstance = new Vtiger_Module();
 		$moduleInstance->name = $tabname;
 		$moduleInstance->label= $tablabel;
 		$moduleInstance->isentitytype = ($isextension != true);
 		$moduleInstance->version = (!$tabversion)? 0 : $tabversion;
+		$moduleInstance->minversion = (!$vtigerMinVersion)? false : $vtigerMinVersion;
+		$moduleInstance->maxversion = (!$vtigerMaxVersion)?  false : $vtigerMaxVersion;
 		$moduleInstance->save();
 
 		if(!empty($parenttab)) {

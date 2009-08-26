@@ -21,8 +21,9 @@ $versions = Array(
 			"504rc"=>"5.0.4 RC",
 			"504"=>"5.0.4",
 			"510rc"=>"5.1.0 RC",
+			"510"=>"5.1.0",
 		 );
 
-$current_version = '510';
+$current_version = '520';
 
 ?>
