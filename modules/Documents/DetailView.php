@@ -85,7 +85,7 @@ foreach($allblocks as $blocks)
 {
 	foreach($blocks as $block_entries)
 	{
-		if($block_entries['File Name']['value'] != '' || isset($block_entries['File Name']['value']))
+		if(!empty($block_entries[getTranslatedString('File Name',$currentModule)]['value']))
 			$flag = 1;
 	}
 }
