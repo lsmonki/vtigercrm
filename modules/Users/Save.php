@@ -67,6 +67,13 @@ else
 }    
 
 
+if($_REQUEST['deleteImage'] == 'true') {
+	$focus->id = $_REQUEST['recordid'];
+	$focus->deleteImage();
+	echo "SUCCESS";
+	exit;
+}
+
 if($_REQUEST['changepassword'] == 'true')
 {
 	$focus->retrieve_entity_info($_REQUEST['record'],'Users');

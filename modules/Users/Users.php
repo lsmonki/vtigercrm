@@ -1315,5 +1315,25 @@ class Users {
 	function filterInactiveFields($module) {
 		// TODO Nothing do right now
 	}
+	
+	function deleteImage() {
+		$sql1 = 'SELECT attachmentsid FROM vtiger_salesmanattachmentsrel WHERE smid = ?';
+		$res1 = $this->db->pquery($sql1, array($this->id));
+		if ($this->db->num_rows($res1) > 0) {
+			$attachmentId = $this->db->query_result($res1, 0, 'attachmentsid');
+			
+			$sql2 = "DELETE FROM vtiger_crmentity WHERE crmid=? AND setype='Users Attachments'";
+			$this->db->pquery($sql2, array($attachmentId));
+			
+			$sql3 = 'DELETE FROM vtiger_salesmanattachmentsrel WHERE smid=? AND attachmentsid=?';
+			$this->db->pquery($sql3, array($this->id, $attachmentId));			
+			
+			$sql2 = "UPDATE vtiger_users SET imagename='' WHERE id=?";
+			$this->db->pquery($sql2, array($this->id));
+			
+			$sql4 = 'DELETE FROM vtiger_attachments WHERE attachmentsid=?';
+			$this->db->pquery($sql4, array($attachmentId));			
+		}
+	}
 }
 ?>

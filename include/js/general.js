@@ -2774,6 +2774,22 @@ function delimage(id) {
 	);
 }
 
+function delUserImage(id) {
+	new Ajax.Request(
+		'index.php',
+		{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: 'module=Users&action=UsersAjax&file=Save&deleteImage=true&recordid='+id,
+			onComplete: function(response) {
+					if(response.responseText.indexOf("SUCCESS")>-1)
+						$("replaceimage").innerHTML=alert_arr.LBL_IMAGE_DELETED;
+					else
+						alert(alert_arr.ERROR_WHILE_EDITING);
+			}
+		}
+	);
+}
+
 // Function to enable/disable related elements based on whether the current object is checked or not
 function fnenableDisable(currObj,enableId) {
 	var disable_flag = true;
