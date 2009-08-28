@@ -75,11 +75,11 @@ function AddressSync(Addform,id)
 			{if $OP_MODE eq 'edit_view'} 
 				{assign var="USE_ID_VALUE" value=$MOD_SEQ_ID}
 		  		{if $USE_ID_VALUE eq ''} {assign var="USE_ID_VALUE" value=$ID} {/if}			
-				<span class="lvtHeaderText"><font color="purple">[ {$USE_ID_VALUE} ] </font>{$NAME} - {$APP.LBL_EDITING} {$SINGLE_MOD_LABEL} {$APP.LBL_INFORMATION}</span> <br>
+				<span class="lvtHeaderText"><font color="purple">[ {$USE_ID_VALUE} ] </font>{$NAME} - {$APP.LBL_EDITING} {$SINGLE_MOD|@getTranslatedString:$MODULE} {$APP.LBL_INFORMATION}</span> <br>
 				{$UPDATEINFO}	 
 			{/if}
 			{if $OP_MODE eq 'create_view'}
-				<span class="lvtHeaderText">{$APP.LBL_CREATING} {$SINGLE_MOD_LABEL}</span> <br>
+				<span class="lvtHeaderText">{$APP.LBL_CREATING} {$SINGLE_MOD|@getTranslatedString:$MODULE}</span> <br>
 			{/if}
 
 			<hr noshade size=1>
@@ -94,7 +94,7 @@ function AddressSync(Addform,id)
 					<table border=0 cellspacing=0 cellpadding=3 width=100% class="small">
 					   <tr>
 						<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-						<td class="dvtSelectedCell" align=center nowrap>{$APP[$SINGLE_MOD]} {$APP.LBL_INFORMATION}</td>
+						<td class="dvtSelectedCell" align=center nowrap> {$SINGLE_MOD|@getTranslatedString:$MODULE} {$APP.LBL_INFORMATION}</td>
 						<td class="dvtTabCache" style="width:10px">&nbsp;</td>
 						<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 					   </tr>

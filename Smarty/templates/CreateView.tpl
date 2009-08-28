@@ -71,7 +71,7 @@ function sensex_info()
 		{if $APP.$SINGLE_MOD} {assign var="SINGLE_MOD_LABEL" value=$APP.SINGLE_MOD} {/if}
 				
 		 {if $OP_MODE eq 'edit_view'}   
-			 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$APP.LBL_EDITING} {$SINGLE_MOD_LABEL} {$APP.LBL_INFORMATION}</span> <br>
+			 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$APP.LBL_EDITING} {$SINGLE_MOD|@getTranslatedString:$MODULE} {$APP.LBL_INFORMATION}</span> <br>
 			{$UPDATEINFO}	 
 		 {/if}
 
@@ -83,7 +83,7 @@ function sensex_info()
 				{if $create_newlabel neq ''}
 					<span class="lvtHeaderText">{$create_newlabel}</span> <br>
 				{else}
-					<span class="lvtHeaderText">{$APP.LBL_CREATING} {$APP.LBL_NEW} {$SINGLE_MOD}</span> <br>
+					<span class="lvtHeaderText">{$APP.LBL_CREATING} {$APP.LBL_NEW} {$SINGLE_MOD|@getTranslatedString:$MODULE}</span> <br>
 				{/if}
 		        
 			{else}
