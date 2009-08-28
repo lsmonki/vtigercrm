@@ -686,6 +686,29 @@ class Reports extends CRMEntity{
                         if($module != 'HelpDesk' || $fieldname !='filename')
 				$module_columnlist[$optionvalue] = $fieldlabel;
 		}
+		$blockname = getBlockName($block);
+		if($blockname == 'LBL_RELATED_PRODUCTS' && ($module=='PurchaseOrder' || $module=='SalesOrder' || $module=='Quotes' || $module=='Invoice')){
+			$fieldtablename = 'vtiger_inventoryproductrel';
+			$fields = array('productid'=>getTranslatedString('Product Name',$module),
+							'serviceid'=>getTranslatedString('Service Name',$module),
+							'listprice'=>getTranslatedString('List Price',$module),
+							'discount'=>getTranslatedString('Discount',$module),
+							'quantity'=>getTranslatedString('Quantity',$module),
+							'comment'=>getTranslatedString('Comments',$module),
+			);
+			$fields_datatype = array('productid'=>'V',
+							'serviceid'=>'V',
+							'listprice'=>'I',
+							'discount'=>'I',
+							'quantity'=>'I',
+							'comment'=>'V',
+			);
+			foreach($fields as $fieldcolname=>$label){
+				$fieldtypeofdata = $fields_datatype[$fieldcolname];
+				$optionvalue =  $fieldtablename.":".$fieldcolname.":".$module."_".$label.":".$fieldcolname.":".$fieldtypeofdata;
+				$module_columnlist[$optionvalue] = $label;
+			}
+		}
 		$log->info("Reports :: FieldColumns->Successfully returned ColumnslistbyBlock".$module.$block);
 		return $module_columnlist;
 	}
@@ -1411,21 +1434,21 @@ function getEscapedColumns($selectedfields)
 				$ssql.= " and vtiger_field.fieldname not in ('parent_id','product_id')";
 				break;
 			case 14://Products
-				$ssql.= " and vtiger_field.fieldname not in ('vendor_id','product_id')";
+				$ssql.= " and vtiger_field.fieldname not in ('vendor_id','product_id','handler')";
 				break;
 			case 20://Quotes
-				$ssql.= " and vtiger_field.fieldname not in ('potential_id','assigned_user_id1','account_id')";
+				$ssql.= " and vtiger_field.fieldname not in ('potential_id','assigned_user_id1','account_id','currency_id')";
 				break;
 			case 21://Purchase Order
-				$ssql.= " and vtiger_field.fieldname not in ('contact_id','vendor_id')";
+				$ssql.= " and vtiger_field.fieldname not in ('contact_id','vendor_id','currency_id')";
 				break;
 			case 22://SalesOrder
-				$ssql.= " and vtiger_field.fieldname not in ('potential_id','account_id','contact_id','quote_id')";
+				$ssql.= " and vtiger_field.fieldname not in ('potential_id','account_id','contact_id','quote_id','currency_id')";
 				break;
 			case 23://Invoice
-				$ssql.= " and vtiger_field.fieldname not in ('salesorder_id','contact_id','account_id')";
+				$ssql.= " and vtiger_field.fieldname not in ('salesorder_id','contact_id','account_id','currency_id')";
 				break;
-			case 26://Campaings
+			case 26://Campaigns
 				$ssql.= " and vtiger_field.fieldname not in ('product_id')";
 				break;
 

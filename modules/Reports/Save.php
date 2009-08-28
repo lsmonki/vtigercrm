@@ -27,13 +27,13 @@ $sort_by3 = vtlib_purify($_REQUEST["Group3"]);
 $sort_order3 = vtlib_purify($_REQUEST["Sort3"]);
 //<<<<<<<reportsortcol>>>>>>>>>
 $selectedcolumns = explode(";",$selectedcolumnstring);
-if(!in_array($sort_by1,$selectedcolumns)){
+if(!in_array($sort_by1,$selectedcolumns) && $sort_by1!='none'){
 	$selectedcolumns[] = $sort_by1;
 }
-if(!in_array($sort_by2,$selectedcolumns)){
+if(!in_array($sort_by2,$selectedcolumns) && $sort_by2!='none'){
 	$selectedcolumns[] = $sort_by2;
 }
-if(!in_array($sort_by3,$selectedcolumns)){
+if(!in_array($sort_by3,$selectedcolumns) && $sort_by3!='none'){
 	$selectedcolumns[] = $sort_by3;
 }
 //<<<<<<<reportmodules>>>>>>>>>

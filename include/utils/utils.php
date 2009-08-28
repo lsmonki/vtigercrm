@@ -4848,4 +4848,20 @@ function getTabInfo($tabId) {
 		$tabInfo[$prefName] = $prefValue;
 	}
 }
+
+/** Function to return block name
+ * @param Integer -- $blockid 
+ * @return String - Block Name
+ */
+function getBlockName($blockid) {
+	global $adb;
+	if(!empty($blockid)){
+		$block_res = $adb->pquery('SELECT blocklabel FROM vtiger_blocks WHERE blockid = ?',array($blockid));
+		if($adb->num_rows($block_res)){
+			$blockname = $adb->query_result($block_res,0,'blocklabel');
+			return $blockname;
+		}
+	}
+	return '';
+}
 ?>
