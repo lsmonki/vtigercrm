@@ -73,11 +73,13 @@ class Accounts extends CRMEntity {
 	var $search_fields = Array(
 			'Account Name'=>Array('vtiger_account'=>'accountname'),
 			'Billing City'=>Array('vtiger_accountbillads'=>'bill_city'), 
+			'Assigned To'=>Array('vtiger_crmentity'=>'smownerid'),
 			);
 
 	var $search_fields_name = Array(
 			'Account Name'=>'accountname',
 			'Billing City'=>'bill_city',
+			'Assigned To'=>'assigned_user_id',
 			);
 	// This is the list of vtiger_fields that are required
 	var $required_fields =  array();

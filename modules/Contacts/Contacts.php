@@ -110,12 +110,14 @@ class Contacts extends CRMEntity {
 	'Name' => Array('contactdetails'=>'lastname'),
 	'Title' => Array('contactdetails'=>'title'),
 	'Account Name'=>Array('contactdetails'=>'account_id'),
+	'Assigned To'=>Array('crmentity'=>'smownerid'),
 		);
 	
 	var $search_fields_name = Array(
 	'Name' => 'lastname',
 	'Title' => 'title',
 	'Account Name'=>'account_id',
+	'Assigned To'=>'assigned_user_id'
 	);
 
 	// This is the list of vtiger_fields that are required

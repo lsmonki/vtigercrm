@@ -1438,6 +1438,13 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	else if($uitype == 53)
 	{
 		$value = textlength_check($adb->query_result($list_result,$list_result_count,'user_name'));
+		// When Assigned To field is used in Popup window
+		if($value == '' ) {
+			$user_id = $adb->query_result($list_result,$list_result_count,'smownerid');
+			if ($user_id != null && $user_id != '') {
+				$value = getOwnerName($user_id);
+			}
+		}
 	}
 	elseif($uitype == 52) 
 	{        
