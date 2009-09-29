@@ -353,7 +353,8 @@ if(isset($action) && isset($module))
 		ereg("^getListOfRecords", $action) ||
 		ereg("^AddBlockFieldToDB", $action) ||
 		ereg("^AddBlockToDB", $action)  ||
-		ereg("^MassEditSave", $action)
+		ereg("^MassEditSave", $action) ||
+		ereg("^iCalExport",$action)
 		)
 	{
 		$skipHeaders=true;
@@ -376,10 +377,25 @@ if(isset($action) && isset($module))
 			ereg("^lastImport", $action ) ||
 			ereg("^massdelete", $action ) ||
 			ereg("^getListOfRecords", $action) ||
-			ereg("^MassEditSave", $action))
+			ereg("^MassEditSave", $action) ||
+			ereg("^iCalExport",$action)
+			)
 			$skipFooters=true;
 		//skip footers for all these invocations as they are mostly popups
-		if(ereg("^downloadfile", $action) || ereg("^fieldtypes",$action) || ereg("^mailmergedownloadfile",$action)|| ereg("^get_img",$action) || ereg("^MergeFieldLeads", $action) || ereg("^MergeFieldContacts", $action ) || ereg("^MergeFieldAccounts", $action ) || ereg("^MergeFieldProducts", $action ) || ereg("^MergeFieldHelpDesk", $action ) || ereg("^MergeFieldPotentials", $action ) || ereg("^MergeFieldVendors", $action ) || ereg("^dlAttachments", $action ))
+		if(ereg("^downloadfile", $action) 
+		|| ereg("^fieldtypes",$action) 
+		|| ereg("^mailmergedownloadfile",$action)
+		|| ereg("^get_img",$action) 
+		|| ereg("^MergeFieldLeads", $action) 
+		|| ereg("^MergeFieldContacts", $action ) 
+		|| ereg("^MergeFieldAccounts", $action ) 
+		|| ereg("^MergeFieldProducts", $action ) 
+		|| ereg("^MergeFieldHelpDesk", $action ) 
+		|| ereg("^MergeFieldPotentials", $action ) 
+		|| ereg("^MergeFieldVendors", $action ) 
+		|| ereg("^dlAttachments", $action )
+		|| ereg("^iCalExport", $action)
+		)
 		{
 			$viewAttachment = true;
 		}
