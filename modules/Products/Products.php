@@ -65,7 +65,8 @@ class Products extends CRMEntity {
 
 	// Placeholder for sort fields - All the fields will be initialized for Sorting through initSortFields
 	var $sortby_fields = Array();
-
+	var $def_basicsearch_col = 'productname';
+	
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'productname';
 	var $default_sort_order = 'ASC';
