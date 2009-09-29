@@ -309,6 +309,7 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 	$START = $start + $recordcount;
 	$RECORDCOUNT = $recordcount;
 	$dup_check_type = $_REQUEST['dup_type'];
+	$auto_dup_type = $_REQUEST['auto_type'];
 
 	if($end >= $totalnoofrows) {
 		$module = 'Import';//$_REQUEST['module'];
@@ -319,7 +320,6 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 			$skip_required_count = 0;
 		}
 		 if($dup_check_type == "auto") {
-			 $auto_dup_type = $_REQUEST['auto_type'];
 			 if($auto_dup_type == "ignore") {
 			 	$dup_info = $mod_strings['Duplicate_Records_Skipped_Info'].$dup_count;
 			 	$imported_records -= $dup_count;
@@ -345,7 +345,7 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 setTimeout("b()",1000);
 function b()
 {
-	document.location.href="index.php?action=<?php echo $action?>&module=<?php echo $module?>&modulename=<?php echo $modulename?>&startval=<?php echo $end?>&recordcount=<?php echo $RECORDCOUNT?>&noofrows=<?php echo $totalnoofrows?>&message=<?php echo $message?>&skipped_record_count=<?php echo $skip_required_count?>&parenttab=<?php echo vtlib_purify($_SESSION['import_parenttab'])?>&dup_type=<?php echo $dup_check_type?>";
+	document.location.href="index.php?action=<?php echo $action?>&module=<?php echo $module?>&modulename=<?php echo $modulename?>&startval=<?php echo $end?>&recordcount=<?php echo $RECORDCOUNT?>&noofrows=<?php echo $totalnoofrows?>&message=<?php echo $message?>&skipped_record_count=<?php echo $skip_required_count?>&parenttab=<?php echo vtlib_purify($_SESSION['import_parenttab'])?>&dup_type=<?php echo $dup_check_type?>&auto_type=<?php echo $auto_dup_type?>";
 }
 </script>
 
