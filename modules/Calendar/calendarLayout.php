@@ -1105,7 +1105,7 @@ function getdayEventLayer(& $cal,$slice,$rows)
 			$color = $act[$i]->color;
 			$image = vtiger_imageurl($act[$i]->image_name, $theme);
 			if($act[$i]->recurring)
-				$recurring = '<img src="'.$image.''.$act[$i]->recurring.'" align="middle" border="0"></img>';
+				$recurring = '<img src="'.vtiger_imageurl($act[$i]->recurring, $theme).'" align="middle" border="0"></img>';
 			else
 				$recurring = '&nbsp;';
 			$height = $rowspan * 75;
@@ -1207,7 +1207,7 @@ function getweekEventLayer(& $cal,$slice)
 			$image =  vtiger_imageurl($act[$i]->image_name, $theme);
 			$idShared = "normal"; if($act[$i]->shared) $idShared = "shared";
 			if($act[$i]->recurring)
-				$recurring = '<img src="'.$image.''.$act[$i]->recurring.'" align="middle" border="0"></img>';
+				$recurring = '<img src="'.vtiger_imageurl($act[$i]->recurring, $theme).'" align="middle" border="0"></img>';
 			else
 				$recurring = '&nbsp;';
                         $color = $act[$i]->color;
