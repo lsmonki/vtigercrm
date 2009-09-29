@@ -66,11 +66,11 @@ require_once('VTWorkflowUtils.php');
 						break;
 					}
 					case VTWorkflowManager::$ONCE:{
+						$entity_id = vtws_getIdComponents($entityData->getId());
+						$entity_id = $entity_id[1];
 						$result = $adb->pquery("SELECT * FROM com_vtiger_workflow_activatedonce 
-							WHERE entity_id=? and workflow_id=?", array($entityData->getId(), $workflow->id));
+							WHERE entity_id=? and workflow_id=?", array($entity_id, $workflow->id));
 						if($adb->num_rows($result)===0){
-							$adb->pquery("INSERT INTO com_vtiger_workflow_activatedonce (entity_id, workflow_id)
-								VALUES (?,?)", array($entityData->getId(), $workflow->id));
 							$doEvaluate = true;
 						}else{
 							$doEvaluate = false;
@@ -87,6 +87,13 @@ require_once('VTWorkflowUtils.php');
 					
 				}
 				if($doEvaluate && $workflow->evaluate($entityCache, $entityData->getId())){
+					if(VTWorkflowManager::$ONCE == $workflow->executionCondition) {
+						$entity_id = vtws_getIdComponents($entityData->getId());
+						$entity_id = $entity_id[1];						
+						$adb->pquery("INSERT INTO com_vtiger_workflow_activatedonce (entity_id, workflow_id)
+							VALUES (?,?)", array($entity_id, $workflow->id));
+					}
+					
 					$tasks = $tm->getTasksForWorkflow($workflow->id);
 					foreach($tasks as $task){
 						if($task->active) {
