@@ -36,7 +36,7 @@ $focus->initSortbyField($currentModule);
 $sorder = $focus->getSortOrder();
 $order_by = $focus->getOrderBy();
 
-$_SESSION[$currentModule."_Order_by"] = $order_by;
+$_SESSION[$currentModule."_Order_By"] = $order_by;
 $_SESSION[$currentModule."_Sort_Order"]=$sorder;
 
 $smarty = new vtigerCRM_Smarty();
