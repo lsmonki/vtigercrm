@@ -297,8 +297,9 @@ $smarty->assign("FIELDNAMES", $fieldnames);
 $smarty->assign("ALPHABETICAL", $alphabetical);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
-if($current_user->id == 1)
-	$smarty->assign("IS_ADMIN","on");
+
+$smarty->assign("IS_ADMIN",$current_user->is_admin); 
+
 $check_button = Button_Check($module);
 $smarty->assign("CHECK", $check_button);
 
