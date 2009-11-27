@@ -491,7 +491,7 @@ class Contacts extends CRMEntity {
 				left join vtiger_seactivityrel on vtiger_seactivityrel.activityid=vtiger_activity.activityid
                 left join vtiger_groups on vtiger_groups.groupid=vtiger_crmentity.smownerid
 				left join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid
-				where (vtiger_activity.activitytype = 'Meeting' or vtiger_activity.activitytype='Call' or vtiger_activity.activitytype='Task')
+				where (vtiger_activity.activitytype != 'Emails')
 				and (vtiger_activity.status = 'Completed' or vtiger_activity.status = 'Deferred' or (vtiger_activity.eventstatus = 'Held' and vtiger_activity.eventstatus != ''))
 				and vtiger_cntactivityrel.contactid=".$id."
                                 and vtiger_crmentity.deleted = 0";

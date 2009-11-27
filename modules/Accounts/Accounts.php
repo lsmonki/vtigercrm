@@ -373,9 +373,7 @@ class Accounts extends CRMEntity {
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id=vtiger_crmentity.smownerid
-			WHERE (vtiger_activity.activitytype = 'Meeting'
-				OR vtiger_activity.activitytype = 'Call'
-				OR vtiger_activity.activitytype = 'Task')
+			WHERE (vtiger_activity.activitytype != 'Emails')
 			AND (vtiger_activity.status = 'Completed'
 				OR vtiger_activity.status = 'Deferred'
 				OR (vtiger_activity.eventstatus = 'Held'
