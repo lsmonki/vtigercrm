@@ -594,6 +594,8 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 		$query ="insert into vtiger_inventoryproductrel(id, productid, sequence_no, quantity, listprice, comment, description) values(?,?,?,?,?,?,?)";
 		$qparams = array($focus->id,$prod_id,$prod_seq,$qty,$listprice,$comment,$description);
 		$adb->pquery($query,$qparams);
+		
+		$lineitem_id = $adb->getLastInsertID();
 
 		$sub_prod_str = $_REQUEST['subproduct_ids'.$i];
 		if (!empty($sub_prod_str)) {
@@ -640,8 +642,8 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 				$updatequery .= " $tax_name = ?,";
 				array_push($updateparams,$tax_val);
 			}
-				$updatequery = trim($updatequery,',')." where id=? and productid=?";
-				array_push($updateparams,$focus->id,$prod_id);
+				$updatequery = trim($updatequery,',')." where id=? and productid=? and lineitem_id = ?";
+				array_push($updateparams,$focus->id,$prod_id, $lineitem_id);
 		}
 		else
 		{
@@ -654,8 +656,8 @@ function saveInventoryProductDetails($focus, $module, $update_prod_stock='false'
 				$updatequery .= " $tax_name = ?,";
 				array_push($updateparams, $_REQUEST[$request_tax_name]);
 			}
-				$updatequery = trim($updatequery,',')." where id=? and productid=?";
-				array_push($updateparams, $focus->id,$prod_id);
+				$updatequery = trim($updatequery,',')." where id=? and productid=? and lineitem_id = ?";
+				array_push($updateparams, $focus->id,$prod_id, $lineitem_id);
 		}
 		// jens 2006/08/19 - protect against empy update queries
  		if( !preg_match( '/set\s+where/i', $updatequery)) {
