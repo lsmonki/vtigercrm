@@ -26,7 +26,7 @@ require_once('include/logging.php');
 require_once('data/SugarBean.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
-require_once('modules/Emails/mail.php');
+
 // Account is used to store vtiger_account information.
 class Invoice extends CRMEntity {
 	var $log;
@@ -122,10 +122,10 @@ class Invoice extends CRMEntity {
 
 		//in ajax save we should not call this function, because this will delete all the existing product values
 		if(isset($this->_recurring_mode) && $this->_recurring_mode == 'recurringinvoice_from_so' && isset($this->_salesorderid) && $this->_salesorderid!='') {
+			// We are getting called from the RecurringInvoice cron service!
 			$this->createRecurringInvoiceFromSO();
-		}
-		
-		else if(isset($_REQUEST)) {
+			
+		} else if(isset($_REQUEST)) {
 			if($_REQUEST['action'] != 'InvoiceAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW' && $_REQUEST['action'] != 'MassEditSave')
 			{
 				//Based on the total Number of rows we will save the product relationship with this entity
@@ -136,6 +136,7 @@ class Invoice extends CRMEntity {
 		
 		// Update the currency id and the conversion rate for the invoice
 		$update_query = "update vtiger_invoice set currency_id=?, conversion_rate=? where invoiceid=?";
+		
 		$update_params = array($this->column_fields['currency_id'], $this->column_fields['conversion_rate'], $this->id); 
 		$this->db->pquery($update_query, $update_params);
 	}

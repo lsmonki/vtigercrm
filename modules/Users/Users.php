@@ -150,7 +150,7 @@ class Users {
 	var $emailTemplate_defaultFields = array('first_name','last_name','title','department','phone_home','phone_mobile','signature','email1','address_street','address_city','address_state','address_country','address_postalcode');
 	
 	// This is the list of fields that are in the lists.
-	var $default_order_by = "depth";
+	var $default_order_by = "user_name";
 	var $default_sort_order = 'ASC';
 
 	var $record_id;

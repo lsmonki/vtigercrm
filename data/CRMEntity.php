@@ -965,9 +965,10 @@ $log->info("in getOldFileName  ".$notesid);
 	 * Contributor(s): ______________________________________..
 	*/
 	function mark_deleted($id) {
+		global $current_user;
 		$date_var = date('Y-m-d H:i:s');
-		$query = "UPDATE vtiger_crmentity set deleted=1,modifiedtime=? where crmid=?";
-		$this->db->pquery($query, array($this->db->formatDate($date_var, true),$id), true,"Error marking record deleted: ");
+		$query = "UPDATE vtiger_crmentity set deleted=1,modifiedtime=?,modifiedby=? where crmid=?";
+		$this->db->pquery($query, array($this->db->formatDate($date_var, true),$current_user->id,$id), true,"Error marking record deleted: ");
 	}
 
 	function retrieve_by_string_fields($fields_array, $encode=true) 
@@ -1287,7 +1288,9 @@ $log->info("in getOldFileName  ".$notesid);
 		$this->db->println("TRANS restore starts $module");
 		$this->db->startTransaction();		
 	
-		$this->db->pquery('UPDATE vtiger_crmentity SET deleted=0 WHERE crmid = ?', array($id));
+		$date_var = date('Y-m-d H:i:s'); 
+		$query = 'UPDATE vtiger_crmentity SET deleted=0,modifiedtime=?,modifiedby=? WHERE crmid = ?'; 
+		$this->db->pquery($query, array($this->db->formatDate($date_var, true),$current_user->id,$id),true,"Error restoring records :" ); 
 		//Restore related entities/records
 		$this->restoreRelatedRecords($module,$id);
 		
