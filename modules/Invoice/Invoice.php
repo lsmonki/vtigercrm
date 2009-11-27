@@ -26,7 +26,7 @@ require_once('include/logging.php');
 require_once('data/SugarBean.php');
 require_once('include/utils/utils.php');
 require_once('user_privileges/default_module_view.php');
-
+require_once('modules/Emails/mail.php');
 // Account is used to store vtiger_account information.
 class Invoice extends CRMEntity {
 	var $log;
