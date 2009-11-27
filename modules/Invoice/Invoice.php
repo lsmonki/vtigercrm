@@ -121,7 +121,11 @@ class Invoice extends CRMEntity {
 		}
 
 		//in ajax save we should not call this function, because this will delete all the existing product values
-		if(isset($_REQUEST)) {
+		if(isset($this->_recurring_mode) && $this->_recurring_mode == 'recurringinvoice_from_so' && isset($this->_salesorderid) && $this->_salesorderid!='') {
+			$this->createRecurringInvoiceFromSO();
+		}
+		
+		else if(isset($_REQUEST)) {
 			if($_REQUEST['action'] != 'InvoiceAjax' && $_REQUEST['ajxaction'] != 'DETAILVIEW' && $_REQUEST['action'] != 'MassEditSave')
 			{
 				//Based on the total Number of rows we will save the product relationship with this entity
@@ -129,10 +133,7 @@ class Invoice extends CRMEntity {
 			}
 		}
 		
-		if(isset($this->_recurring_mode) && $this->_recurring_mode == 'recurringinvoice_from_so' && isset($this->_salesorderid) && $this->_salesorderid!='') {
-			$this->createRecurringInvoiceFromSO();
-		}
-
+		
 		// Update the currency id and the conversion rate for the invoice
 		$update_query = "update vtiger_invoice set currency_id=?, conversion_rate=? where invoiceid=?";
 		$update_params = array($this->column_fields['currency_id'], $this->column_fields['conversion_rate'], $this->id); 
