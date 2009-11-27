@@ -24,7 +24,7 @@ $viewid = $customView->getViewId($currentModule);
 $customview_html = $customView->getCustomViewCombo($viewid);
 $viewinfo = $customView->getCustomViewByCvid($viewid);
 
-if($viewid != "0"&& $viewid != 0){
+if($viewid != "0" && $viewid != 0){
 	$listquery = getListQuery($currentModule);
 	$list_query= $customView->getModifiedCvListQuery($viewid, $listquery, $currentModule);
 }else{

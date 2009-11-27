@@ -211,11 +211,11 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 							else
 								$name = "<a href='index.php?module=".$relatedmodule."&action=CallRelatedList&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."&parenttab=".$tabname."' class='listFormHeaderLinks'>".$lbl_name."".$arrow."</a>";
 						elseif($module == 'Users' && $name == 'User Name')
-							$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"parenttab=".$tabname."&order_by=".$col."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".getTranslatedString('LBL_LIST_USER_NAME_ROLE',$module)."".$arrow."</a>";
+							$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"parenttab=".$tabname."&order_by=".$col."&start=1&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".getTranslatedString('LBL_LIST_USER_NAME_ROLE',$module)."".$arrow."</a>";
 						elseif($relatedlist == "global")
 						        $name = $lbl_name;
 						else
-							$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"parenttab=".$tabname."&order_by=".$col."&start=".$_SESSION["lvs"][$module]["start"]."&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".$lbl_name."".$arrow."</a>";
+							$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"parenttab=".$tabname."&order_by=".$col."&start=1&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".$lbl_name."".$arrow."</a>";
 						$arrow = '';
 					}
 					else
@@ -2946,7 +2946,12 @@ function getListQuery($module,$where='')
 		}
 			break;
 	Case "Users":
-		$query = "select id,user_name,roleid,first_name,last_name,email1,phone_mobile,phone_work,is_admin,status from vtiger_users inner join vtiger_user2role on vtiger_user2role.userid=vtiger_users.id where deleted=0 ".$where ;
+		$query = "SELECT id,user_name,first_name,last_name,email1,phone_mobile,phone_work,is_admin,status,
+					vtiger_user2role.roleid as roleid,vtiger_role.depth as depth
+				 	FROM vtiger_users 
+				 	INNER JOIN vtiger_user2role ON vtiger_users.id = vtiger_user2role.userid 
+				 	INNER JOIN vtiger_role ON vtiger_user2role.roleid = vtiger_role.roleid 
+					WHERE deleted=0 ".$where ;
 			break;
 	default:
 		// vtlib customization: Include the module file
