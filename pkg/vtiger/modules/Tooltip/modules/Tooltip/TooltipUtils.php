@@ -122,7 +122,7 @@ function getToolTipText($view,$fieldname,$module,$value){
 		
 		if(in_array($fieldname, $keys)){
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
-			$label = getTranslatedString($fieldlabel);
+			$label = getTranslatedString($fieldlabel,$module);
 			$fieldvalue = $value[0][$fieldname];
 			if(strlen($fieldvalue)>35){
 				$fieldvalue = substr($fieldvalue,0,35).'...';
