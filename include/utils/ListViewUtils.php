@@ -4540,10 +4540,10 @@ function getTableHeaderSimpleNavigation($navigation_array, $url_qry,$module='',$
 		$output .= '<img src="' . vtiger_imageurl('start_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
 		$output .= '<img src="' . vtiger_imageurl('previous_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
 	}
-	if($module == 'Calendar' && $action_val == 'index'){  
-		$jsNavigate = "cal_navigation('$tab_type','$url_string','&start='+this.value+');";  
-	}else if($action_val == "FindDuplicate"){  
-		$jsNavigate = "getDuplicateListViewEntries_js('$module','parenttab=$tabname&start='+this.value+'$url_string');";  
+	if($module == 'Calendar' && $action_val == 'index'){
+		$jsNavigate = "cal_navigation('$tab_type','$url_string','&start='+this.value);";
+	}else if($action_val == "FindDuplicate"){
+		$jsNavigate = "getDuplicateListViewEntries_js('$module','parenttab=$tabname&start='+this.value+'$url_string');";
 	}elseif($action_val == 'UnifiedSearch'){
 		$jsNavigate = "getUnifiedSearchEntries_js('$module','parenttab=$tabname&start='+this.value+'$url_string');";
 	}elseif($module == 'Documents'){
