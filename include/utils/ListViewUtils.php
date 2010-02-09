@@ -1448,7 +1448,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 52) 
 	{        
-		$value = getUserName($adb->query_result($list_result,$list_result_count,'handler')); 
+		$value = getUserName($adb->query_result($list_result,$list_result_count,$colname)); 
 	}
 	elseif($uitype == 51)//Accounts - Member Of
 	{

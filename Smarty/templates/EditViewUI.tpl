@@ -201,7 +201,7 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 				{/if}
 				
 				<span id="assign_user" style="{$style_user}">
-					<select name="assigned_user_id" class="small">
+					<select name="{$fldname}" class="small">
 						{foreach key=key_one item=arr from=$fldvalue}
 							{foreach key=sel_value item=value from=$arr}
 								<option value="{$key_one}" {$value}>{$sel_value}</option>
@@ -228,9 +228,9 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
 				{if $uitype eq 52}
-					<select name="assigned_user_id" class="small">
+					<select name="{$fldname}" tabindex="{$vt_tab}" class="small">
 				{elseif $uitype eq 77}
-					<select name="assigned_user_id1" tabindex="{$vt_tab}" class="small">
+					<select name="{$fldname}" tabindex="{$vt_tab}" class="small">
 				{else}
 					<select name="{$fldname}" tabindex="{$vt_tab}" class="small">
 				{/if}
