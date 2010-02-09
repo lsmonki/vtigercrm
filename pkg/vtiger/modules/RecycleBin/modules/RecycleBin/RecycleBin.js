@@ -135,6 +135,11 @@ function getListViewEntries_js(module,url)
 	$("status").show();
 	var selected_module = $("select_module").value;
 	var urlstring = "&selected_module=" + selected_module;
+	<!-- Ticket 6330 -->
+	if($('search_url').value!='')
+        	urlstring = $('search_url').value+"&selected_module="+selected_module;
+	
+	
 	new Ajax.Request(
 		'index.php',
 		{ queue: { position: 'end', scope: 'command' },
