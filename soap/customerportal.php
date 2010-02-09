@@ -917,6 +917,9 @@ function close_current_ticket($input_array)
 	$focus->retrieve_entity_info($focus->id,'HelpDesk');
 	$focus->mode = 'edit';
 	$focus->column_fields['ticketstatus'] ='Closed';
+	// Blank out the comments information to avoid un-necessary duplication
+	$focus->column_fields['comments'] = '';
+	// END	
 	$focus->save("HelpDesk");
 	return "closed";
 }
