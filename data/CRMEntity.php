@@ -78,8 +78,15 @@ class CRMEntity
 		$this->db->completeTransaction();
 		$this->db->println("TRANS saveentity ends");
 	
-		// vtlib customization: Hook provide to enable generic module relation.
-		if($_REQUEST['return_action'] == 'CallRelatedList') {
+		// vtlib customization: Hook provide to enable generic module relation.		
+
+		// Ticket 6386 fix
+		global $singlepane_view;
+
+		if($_REQUEST['return_action'] == 'CallRelatedList' || 
+			(isset($singlepane_view) && $singlepane_view == true && 
+				$_REQUEST['return_action'] == 'DetailView' && 
+					!empty($_REQUEST['return_module']))){
 			$for_module = vtlib_purify($_REQUEST['return_module']);
 			$for_crmid  = vtlib_purify($_REQUEST['return_id']);
 	
@@ -1711,11 +1718,9 @@ $log->info("in getOldFileName  ".$notesid);
 		$query .= " INNER JOIN vtiger_crmentityrel ON (vtiger_crmentityrel.relcrmid = vtiger_crmentity.crmid OR vtiger_crmentityrel.crmid = vtiger_crmentity.crmid)";
 		$query .= " LEFT  JOIN $this->table_name   ON $this->table_name.$this->table_index = $other->table_name.$other->table_index";
 		$query .= $more_relation;
-		$query .= " LEFT  JOIN vtiger_users        ON vtiger_users.id = vtiger_crmentity.smownerid";
-		$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
-
+		$query .= " LEFT  JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid";
+		$query .= " LEFT  JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
 		$query .= " WHERE vtiger_crmentity.deleted = 0 AND (vtiger_crmentityrel.crmid = $id OR vtiger_crmentityrel.relcrmid = $id)";
-
 		$return_value = GetRelatedList($currentModule, $related_module, $other, $query, $button, $returnset);	
 
 		if($return_value == null) $return_value = Array();
