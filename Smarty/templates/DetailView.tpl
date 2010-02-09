@@ -407,7 +407,7 @@ function sendfile_email()
 {/if}
                      	                      </td>
 					   </tr>
-		<tr>                                                                                                               <td style="padding:10px">
+		<tr>                                                                                                               <td style="padding:5px">
 			{/foreach}
                     {*-- End of Blocks--*}			   
 			</td>
