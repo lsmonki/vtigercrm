@@ -3571,8 +3571,17 @@ function placeAtCenter(node){
 	node.style.position = "absolute";
 	var point = getDimension(node);
 
-	node.style.top = centerPixel.y - point.y/2 +"px";
-	node.style.right = centerPixel.x - point.x/2 + "px";
+	
+	var topvalue = (centerPixel.y - point.y/2) ;	
+	var rightvalue = (centerPixel.x - point.x/2);
+	
+	//to ensure that values will not be negative
+	if(topvalue<0) topvalue = 0;
+	if(rightvalue < 0) rightvalue = 0;
+	
+	node.style.top = topvalue + "px";
+	node.style.right =rightvalue + "px";	
+	
 }
 
 /**
