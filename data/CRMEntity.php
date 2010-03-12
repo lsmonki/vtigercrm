@@ -517,18 +517,11 @@ class CRMEntity
 			  }
 			  elseif($uitype == 5 || $uitype == 6 || $uitype ==23)
 			  {
-				  if($_REQUEST['action'] == 'Import')
-				  {
-					  $fldvalue = $this->column_fields[$fieldname];
-				  }
-				  else
-				  {
-					  //Added to avoid function call getDBInsertDateValue in ajax save
-					  if (isset($current_user->date_format)) {
-							$fldvalue = getValidDBInsertDateValue($this->column_fields[$fieldname]);
-					  } else {
-							$fldvalue = $this->column_fields[$fieldname];
-					  }
+				  //Added to avoid function call getDBInsertDateValue in ajax save
+				  if (isset($current_user->date_format)) {
+						$fldvalue = getValidDBInsertDateValue($this->column_fields[$fieldname]);
+				  } else {
+						$fldvalue = $this->column_fields[$fieldname];
 				  }
 			  }
 			  elseif($uitype == 7)

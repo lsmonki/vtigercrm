@@ -4780,6 +4780,15 @@ function isRecordExists($recordId) {
 function getValidDBInsertDateValue($value) {
 	global $log;
 	$log->debug("Entering getDBInsertDateValue(".$value.") method ...");
+        $delim = array('/','.');
+        foreach ($delim as $delimiter){
+            $x = strpos($value, $delimiter);
+	        if($x === false) continue;
+            else{
+                $value=str_replace($delimiter, '-', $value);
+                break;
+            }
+        }
 	global $current_user;
 	list($y,$m,$d) = split('-',$value);
 
