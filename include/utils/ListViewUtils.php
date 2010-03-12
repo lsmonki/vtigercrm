@@ -1536,6 +1536,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$value = textlength_check($value);
 		}
 	}
+	elseif ($uitype == 16)
+	{
+		$value = getTranslatedString($temp_val,$currentModule);
+	}
 	elseif($uitype == 71 || $uitype == 72)
 	{
 		if($temp_val != '')

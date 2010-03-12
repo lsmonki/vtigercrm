@@ -15,6 +15,7 @@
 <script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
 {literal}
 <script>
+
 function editProductListPrice(id,pbid,price)
 {
         $("status").style.display="inline";
@@ -43,47 +44,12 @@ function gotoUpdateListPrice(id,pbid,proid)
                                 postBody: 'module=Products&action=ProductsAjax&file=UpdateListPrice&ajax=true&return_action=CallRelatedList&return_module=PriceBooks&record='+id+'&pricebook_id='+pbid+'&product_id='+proid+'&list_price='+listprice,
                                 onComplete: function(response) {
                                         $("status").style.display="none";
-					$("RLContents").update(response.responseText);
+										$("RLContents").update(response.responseText);
                                 }
                         }
                 );
 }
 {/literal}
-
-function loadCvList(type,id)
-{ldelim}
-	if(type == 'Leads' && $("lead_cv_list").value != 'None') 
-	{ldelim}
-		$("status").style.display="inline"; 
-		new Ajax.Request(
-            'index.php',
-            {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
-                    method: 'post',
-                    postBody: 'module=Campaigns&action=CampaignsAjax&file=LoadList&ajax=true&return_action=DetailView&return_id='+id+'&list_type='+type+'&cvid='+$("lead_cv_list").value,
-                    onComplete: function(response) {ldelim}
-                            $("status").style.display="none";
-                            $("RLContents").update(response.responseText);
-                    {rdelim}
-            {rdelim}
-		);
-	{rdelim}
-
-     if(type == 'Contacts' && $("cont_cv_list").value != 'None') 
-	{ldelim}
-		$("status").style.display="inline";
-        new Ajax.Request(
-	        'index.php',
-	        {ldelim}queue: {ldelim}position: 'end', scope: 'command'{rdelim},
-	                method: 'post',
-	                postBody: 'module=Campaigns&action=CampaignsAjax&file=LoadList&ajax=true&return_action=DetailView&return_id='+id+'&list_type='+type+'&cvid='+$("cont_cv_list").value,
-	                onComplete: function(response) {ldelim}
-	                        $("status").style.display="none";
-	                        $("RLContents").update(response.responseText);
-	                {rdelim}
-	        {rdelim}
-		);
-	{rdelim}
-{rdelim}
 </script>
 	{include file='Buttons_List1.tpl'}
 <!-- Contents -->
@@ -97,6 +63,8 @@ function loadCvList(type,id)
  	        {* Module Record numbering, used MOD_SEQ_ID instead of ID *}	
 			 <span class="lvtHeaderText"><font color="purple">[ {$MOD_SEQ_ID} ] </font>{$NAME} -  {$SINGLE_MOD} {$APP.LBL_MORE} {$APP.LBL_INFORMATION}</span> <br>
 			 {$UPDATEINFO}
+			 </span>&nbsp;&nbsp;<span id="vtbusy_info" style="display:none;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span><span id="vtbusy_info" style="visibility:hidden;" valign="bottom"><img src="{$IMAGE_PATH}vtbusy.gif" border="0"></span>
+
 			 <hr noshade size=1>
 			 <br> 
 		

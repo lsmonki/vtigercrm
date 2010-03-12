@@ -14,7 +14,7 @@
 		<td align="left">
 			{$RELATEDLISTDATA.navigation.0}
 			{if $MODULE eq 'Campaigns' && ($RELATED_MODULE eq 'Contacts' || $RELATED_MODULE eq 
-				'Leads') && $RELATEDLISTDATA.entries|@count > 0}
+				'Leads' || $RELATED_MODULE eq 'Accounts') && $RELATEDLISTDATA.entries|@count > 0}
 				<br>{$APP.LBL_SELECT_BUTTON_LABEL}: <a href="javascript:void(0);"
 					onclick="clear_checked_all('{$RELATED_MODULE}');">{$APP.LBL_NONE_NO_LINE}</a>
 			{/if}
@@ -39,7 +39,7 @@
 
 <table border=0 cellspacing=1 cellpadding=3 width=100% style="background-color:#eaeaea;" class="small">
 	<tr style="height:25px" bgcolor=white>
-        {if $MODULE eq 'Campaigns' && ($RELATED_MODULE eq 'Contacts' || $RELATED_MODULE eq 'Leads')
+        {if $MODULE eq 'Campaigns' && ($RELATED_MODULE eq 'Contacts' || $RELATED_MODULE eq 'Leads' || $RELATED_MODULE eq 'Accounts')
 			&& $RELATEDLISTDATA.entries|@count > 0}
 		<td class="lvtCol">
 			<input name ="{$RELATED_MODULE}_selectall" onclick="rel_toggleSelect(this.checked,'{$RELATED_MODULE}_selected_id','{$RELATED_MODULE}');"  type="checkbox">
@@ -51,7 +51,7 @@
 	</tr>
 	{foreach key=_RECORD_ID item=_RECORD from=$RELATEDLISTDATA.entries}
 		<tr bgcolor=white>
-        	{if $MODULE eq 'Campaigns' && ($RELATED_MODULE eq 'Contacts' || $RELATED_MODULE eq 'Leads')}
+        	{if $MODULE eq 'Campaigns' && ($RELATED_MODULE eq 'Contacts' || $RELATED_MODULE eq 'Leads' || $RELATED_MODULE eq 'Accounts')}
 			<td><input name="{$RELATED_MODULE}_selected_id" id="{$_RECORD_ID}" value="{$_RECORD_ID}" onclick="rel_check_object(this,'{$RELATED_MODULE}');" type="checkbox"  {$check_status.checked.$header}></td>
         	{/if}
 			{foreach key=index item=_RECORD_DATA from=$_RECORD}

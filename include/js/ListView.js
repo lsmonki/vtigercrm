@@ -505,3 +505,53 @@ function VT_disableFormSubmit(evt) {
 	}
 	return true;
 }
+var statusPopupTimer = null;
+function closeStatusPopup(elementid)
+{
+	statusPopupTimer = setTimeout("document.getElementById('" + elementid + "').style.display = 'none';", 50);
+}
+
+function updateCampaignRelationStatus(relatedmodule, campaignid, crmid, campaignrelstatusid, campaignrelstatus)
+{
+	$("vtbusy_info").style.display="inline";
+	document.getElementById('campaignstatus_popup_' + crmid).style.display = 'none';
+	var data = "action=updateRelationsAjax&module=Campaigns&relatedmodule=" + relatedmodule + "&campaignid=" + campaignid + "&crmid=" + crmid + "&campaignrelstatusid=" + campaignrelstatusid;
+	new Ajax.Request(
+		'index.php',
+			{queue: {position: 'end', scope: 'command'},
+			method: 'post',
+			postBody: data,
+			onComplete: function(response) {
+				if(response.responseText.indexOf(":#:FAILURE")>-1)
+				{
+					alert(alert_arr.ERROR_WHILE_EDITING);
+				}
+				else if(response.responseText.indexOf(":#:SUCCESS")>-1)
+				{
+					document.getElementById('campaignstatus_' + crmid).innerHTML = campaignrelstatus;
+					$("vtbusy_info").style.display="none";
+				}
+			}
+		}
+	);
+}
+
+function loadCvList(type,id) {
+	var element = type+"_cv_list";
+	var value = document.getElementById(element).value;        
+
+	if(value != '') {
+		$("status").style.display="inline";
+		new Ajax.Request(
+			'index.php',
+			{queue: {position: 'end', scope: 'command'},
+				method: 'post',
+				postBody: 'module=Campaigns&action=CampaignsAjax&file=LoadList&ajax=true&return_action=DetailView&return_id='+id+'&list_type='+type+'&cvid='+value,
+				onComplete: function(response) {
+					$("status").style.display="none";
+					$("RLContents").update(response.responseText);
+				}
+			}
+		);
+	}
+}
