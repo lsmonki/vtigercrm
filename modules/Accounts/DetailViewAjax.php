@@ -10,7 +10,7 @@
 
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
-global $adb;
+global $adb,$mod_strings;
 
 $local_log =& LoggerManager::getLogger('AccountsAjax');
 global $currentModule;
@@ -27,6 +27,21 @@ if($ajaxaction == "DETAILVIEW")
 	 {
 	     $acntObj->retrieve_entity_info($crmid,"Accounts");
 	     $acntObj->column_fields[$fieldname] = $fieldvalue;
+	     if($fieldname=='accountname'){
+	     	$value = $fieldvalue;
+			$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname =? and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
+			$params = array($value);
+			if(isset($crmid) && $crmid !='') {
+				$query .= " and vtiger_account.accountid != ?";
+				array_push($params, $crmid);
+			}
+			$result = $adb->pquery($query, $params);
+		    if($adb->num_rows($result) > 0)
+			{
+				echo ":#:ERR".$mod_strings['LBL_ACCOUNT_EXIST'];
+				return false;
+			}
+	     }
 	     if($fieldname == 'annual_revenue')//annual revenue converted to dollar value while saving
 	     {
 		     $acntObj->column_fields[$fieldname] = getConvertedPrice($fieldvalue);
