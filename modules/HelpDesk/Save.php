@@ -109,6 +109,7 @@ if($isactive == 1)
 else
 {
 	$data['sub']=$_REQUEST['ticket_title'];
+	$data['ticketno']=$focus->column_fields['ticket_no'];
 	$data['parent_name']=$parentname;
 	$data['status']=$focus->column_fields['ticketstatus'];
 	$data['category']=$focus->column_fields['ticketcategories'];

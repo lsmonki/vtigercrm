@@ -2951,6 +2951,7 @@ function getTicketDetails($id,$whole_date)
 	
 	 $desc = $mod_strings['Ticket ID'] .' : '.$id.'<br> Ticket Title : '. $temp .' '.$whole_date['sub'];
 	 $desc .= "<br><br>".$mod_strings['Hi']." ". $whole_date['parent_name'].",<br><br>".$mod_strings['LBL_PORTAL_BODY_MAILINFO']." ".$reply." ".$mod_strings['LBL_DETAIL']."<br>";
+	 $desc .= "<br>".$mod_strings['Ticket No']." : ".$whole_date['ticketno'];
 	 $desc .= "<br>".$mod_strings['Status']." : ".$whole_date['status'];
 	 $desc .= "<br>".$mod_strings['Category']." : ".$whole_date['category'];
 	 $desc .= "<br>".$mod_strings['Severity']." : ".$whole_date['severity'];
