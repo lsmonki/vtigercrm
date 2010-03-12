@@ -43,7 +43,7 @@ function gotoUpdateListPrice(id,pbid,proid)
                                 postBody: 'module=Products&action=ProductsAjax&file=UpdateListPrice&ajax=true&return_action=CallRelatedList&return_module=PriceBooks&record='+id+'&pricebook_id='+pbid+'&product_id='+proid+'&list_price='+listprice,
                                 onComplete: function(response) {
                                         $("status").style.display="none";
-                                        $("RLContents").innerHTML= response.responseText;
+										$("RLContents").update(response.responseText);
                                 }
                         }
                 );
@@ -62,7 +62,7 @@ function loadCvList(type,id)
                     postBody: 'module=Campaigns&action=CampaignsAjax&file=LoadList&ajax=true&return_action=DetailView&return_id='+id+'&list_type='+type+'&cvid='+$("lead_cv_list").value,
                     onComplete: function(response) {ldelim}
                             $("status").style.display="none";
-                            $("RLContents").innerHTML= response.responseText;
+                            $("RLContents").update(response.responseText);
                     {rdelim}
             {rdelim}
 		);
@@ -78,7 +78,7 @@ function loadCvList(type,id)
 	                postBody: 'module=Campaigns&action=CampaignsAjax&file=LoadList&ajax=true&return_action=DetailView&return_id='+id+'&list_type='+type+'&cvid='+$("cont_cv_list").value,
 	                onComplete: function(response) {ldelim}
 	                        $("status").style.display="none";
-	                        $("RLContents").innerHTML= response.responseText;
+	                        $("RLContents").update(response.responseText);
 	                {rdelim}
 	        {rdelim}
 		);

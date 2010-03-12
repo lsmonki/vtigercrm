@@ -205,12 +205,29 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 						{
 							$lbl_name .=' ('.$app_strings['LBL_IN'].' '.$user_info['currency_symbol'].')';
 						}
-						if($relatedlist !='' && $relatedlist != 'global')
-							if($singlepane_view == 'true')	
-								$name = "<a href='index.php?module=".$relatedmodule."&action=DetailView&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."&parenttab=".$tabname."' class='listFormHeaderLinks'>".$lbl_name."".$arrow."</a>";
-							else
-								$name = "<a href='index.php?module=".$relatedmodule."&action=CallRelatedList&relmodule=".$module."&order_by=".$col."&record=".$relatedlist."&sorder=".$temp_sorder."&parenttab=".$tabname."' class='listFormHeaderLinks'>".$lbl_name."".$arrow."</a>";
-						elseif($module == 'Users' && $name == 'User Name')
+						if($relatedlist !='' && $relatedlist != 'global'){
+							$relationURL = '';
+							if(!empty($_REQUEST['relation_id'])){
+								$relationURL = '&relation_id='.vtlib_purify(
+										$_REQUEST['relation_id']);
+							}
+							$actionsURL = '';
+							if(!empty($_REQUEST['actions'])){
+								$actionsURL = '&actions='.vtlib_purify($_REQUEST['actions']);
+							}
+							if(empty($_REQUEST['header'])){
+								$moduleLabel = getTranslatedString($module,$module);
+							}else{
+								$moduleLabel = $_REQUEST['header'];
+							}
+							$moduleLabel = str_replace(' ','',$moduleLabel);
+							$name = "<a href='javascript:void(0);' onClick='loadRelatedListBlock".
+							"(\"module=$relatedmodule&action=".$relatedmodule."Ajax&".
+							"file=DetailViewAjax&ajxaction=LOADRELATEDLIST&header=".$moduleLabel.
+							"&order_by=$col&record=$relatedlist&sorder=$temp_sorder$relationURL".
+							"$actionsURL\",\"tbl_".$relatedmodule."_$moduleLabel\",".
+							"\"$relatedmodule"."_$moduleLabel\");' class='listFormHeaderLinks'>".$lbl_name."".$arrow."</a>";
+						} elseif($module == 'Users' && $name == 'User Name')
 							$name = "<a href='javascript:;' onClick='getListViewEntries_js(\"".$module."\",\"parenttab=".$tabname."&order_by=".$col."&start=1&sorder=".$temp_sorder."".$sort_qry."\");' class='listFormHeaderLinks'>".getTranslatedString('LBL_LIST_USER_NAME_ROLE',$module)."".$arrow."</a>";
 						elseif($relatedlist == "global")
 						        $name = $lbl_name;
@@ -4100,49 +4117,61 @@ function setSessionVar($lv_array,$noofrows,$max_ent,$module='',$related='')
 *Returns an string value
 */
 
-//Temp function to be be deleted
-function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='',$viewid='')
-{
-	global $log, $singlepane_view,$app_strings;
+function getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module,$related_module,
+		$recordid) {
+	global $log, $app_strings, $adb;
 	$log->debug("Entering getTableHeaderNavigation(".$navigation_array.",". $url_qry.",".$module.",".$action_val.",".$viewid.") method ...");
 	global $theme;
-	$theme_path="themes/".$theme."/";
-	$image_path=$theme_path."images/";
+	$relatedTabId = getTabid($related_module);
 	$tabid = getTabid($module);
-	$tabname = getParentTab();
-	$url_qry .= '&parenttab='.$tabname;
-	$output = '<td align="right" style="padding="5px;">';
-	if($singlepane_view == 'true')
-		$action_val = 'DetailView';
-	else
-		$action_val = 'CallRelatedList';
-	if(($navigation_array['prev']) != 0)
-	{
-		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="' . vtiger_imageurl('start.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['prev'].'&viewname='.$viewid.'"><img src="' . vtiger_imageurl('previous.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+	
+	$relatedListResult = $adb->pquery('SELECT * FROM vtiger_relatedlists WHERE tabid=? AND
+		related_tabid=?', array($tabid,$relatedTabId));
+	if(empty($relatedListResult)) return;
+	$relatedListRow = $adb->fetch_row($relatedListResult);
+	$header = $relatedListRow['label'];
+	$actions = $relatedListRow['actions'];
+	$functionName = $relatedListRow['name'];
 
-	}
-	else
-	{
+	$urldata = "module=$module&action={$module}Ajax&file=DetailViewAjax&record={$recordid}&".
+	"ajxaction=LOADRELATEDLIST&header={$header}&relation_id={$relatedListRow['relation_id']}".
+	"&actions={$actions}&{$url_qry}";
+
+	$formattedHeader = str_replace(' ','',$header);
+	$target = 'tbl_'.$module.'_'.$formattedHeader;
+	$imagesuffix = $module.'_'.$formattedHeader;
+
+	$output = '<td align="right" style="padding="5px;">';
+	if(($navigation_array['prev']) != 0) {
+		$output .= '<a href="javascript:;" onClick="loadRelatedListBlock(\''. $urldata.'&start=1\',\''. $target.'\',\''. $imagesuffix.'\');" alt="'.$app_strings['LBL_FIRST'].'" title="'.$app_strings['LBL_FIRST'].'"><img src="' . vtiger_imageurl('start.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="javascript:;" onClick="loadRelatedListBlock(\''. $urldata.'&start='.$navigation_array['prev'].'\',\''. $target.'\',\''. $imagesuffix.'\');" alt="'.$app_strings['LNK_LIST_PREVIOUS'].'"title="'.$app_strings['LNK_LIST_PREVIOUS'].'"><img src="' . vtiger_imageurl('previous.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+	} else {
 		$output .= '<img src="' . vtiger_imageurl('start_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
 		$output .= '<img src="' . vtiger_imageurl('previous_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
 	}
 	
-	$jsNavigate = "index.php?module=$module&action=$action_val$url_qry&start='+this.value+'&viewname=$viewid";
-	$jsHandler = "return VT_disableFormSubmit(event);"; 
+	$jsHandler = "return VT_disableFormSubmit(event);";
 	$output .= "<input class='small' name='pagenum' type='text' value='{$navigation_array['current']}'
-		style='width: 3em;margin-right: 0.7em;' onchange=\"location.href='$jsNavigate'\"
+		style='width: 3em;margin-right: 0.7em;' onchange=\"loadRelatedListBlock('{$urldata}&start='+this.value+'','{$target}','{$imagesuffix}');\"
 		onkeypress=\"$jsHandler\">";
-	$output .= "<span name='listViewCountContainerName' class='small' style='white-space: nowrap;'>";  
-	$output .= $app_strings['LBL_LIST_OF'].' '.$navigation_array['verylast'].'</span>';
-	
-	if(($navigation_array['next']) !=0)
-	{
-			$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['next'].'&viewname='.$viewid.'"><img src="' . vtiger_imageurl('next.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
-			$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['verylast'].'&viewname='.$viewid.'"><img src="' . vtiger_imageurl('end.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+	$output .= "<span name='listViewCountContainerName' class='small' style='white-space: nowrap;'>";
+	$computeCount = $_REQUEST['withCount'];
+	if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true
+			|| ((boolean) $computeCount) == true){
+		$output .= $app_strings['LBL_LIST_OF'].' '.$navigation_array['verylast'];
+	}else{
+		$output .= "<img src='".vtiger_imageurl('windowRefresh.gif',$theme)."' alt='".$app_strings['LBL_HOME_COUNT']."'
+			onclick=\"loadRelatedListBlock('{$urldata}&withCount=true&start={$navigation_array['current']}','{$target}','{$imagesuffix}');\"
+			align='absmiddle' name='".$module."_listViewCountRefreshIcon'/>
+			<img name='".$module."_listViewCountContainerBusy' src='".vtiger_imageurl('vtbusy.gif',$theme)."' style='display: none;'
+			align='absmiddle' alt='".$app_strings['LBL_LOADING']."'>";
 	}
-	else
-	{
+	$output .= '</span>';
+
+	if(($navigation_array['next']) !=0) {
+			$output .= '<a href="javascript:;" onClick="loadRelatedListBlock(\''. $urldata.'&start='.$navigation_array['next'].'\',\''. $target.'\',\''. $imagesuffix.'\');"><img src="' . vtiger_imageurl('next.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+			$output .= '<a href="javascript:;" onClick="loadRelatedListBlock(\''. $urldata.'&start='.$navigation_array['verylast'].'\',\''. $target.'\',\''. $imagesuffix.'\');"><img src="' . vtiger_imageurl('end.gif', $theme) . '" border="0" align="absmiddle"></a>&nbsp;';
+	} else {
 		$output .= '<img src="' . vtiger_imageurl('next_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
 		$output .= '<img src="' . vtiger_imageurl('end_disabled.gif', $theme) . '" border="0" align="absmiddle">&nbsp;';
 	}
@@ -4602,13 +4631,16 @@ function getTableHeaderSimpleNavigation($navigation_array, $url_qry,$module='',$
 		return $output;
 }
 
-function getRecordRangeMessage($listResult, $limitStartRecord) {
+function getRecordRangeMessage($listResult, $limitStartRecord,$totalRows='') {
 	global $adb, $app_strings;
 	$numRows = $adb->num_rows($listResult);
 	$recordListRangeMsg = '';
 	if ($numRows > 0) {
 		$recordListRangeMsg = $app_strings['LBL_SHOWING'].' '.$app_strings['LBL_RECORDS'].
 		' '.($limitStartRecord+1).' - '.($limitStartRecord+$numRows);
+		if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true){
+			$recordListRangeMsg .= ' '.$app_strings['LBL_LIST_OF']." $totalRows";
+		}
 	}
 	return $recordListRangeMsg;
 }

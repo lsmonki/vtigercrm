@@ -205,8 +205,8 @@ function change(obj,divid)
 }
 function getviewId()
 {
-	if(typeof(document.getElementById("viewname")) != 'undefined')
-	{
+	if(document.getElementById("viewname") != null && 
+		typeof(document.getElementById("viewname")) != 'undefined') {
 		var oViewname = document.getElementById("viewname");
 		var viewid = oViewname.options[oViewname.selectedIndex].value;
 	}
@@ -315,7 +315,7 @@ function getListViewEntries_js(module,url)
         var all_selected=document.getElementById('allselectedboxes').value;
 
         $("status").style.display="inline";
-        if($('search_url').value!='')
+		if(typeof $('search_url') != 'undefined' && $('search_url').value!='')
                 urlstring = $('search_url').value;
         else
                 urlstring = '';

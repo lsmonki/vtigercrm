@@ -112,5 +112,7 @@ if($ajaxaction == "DETAILVIEW")
 	}else{
 		echo ":#:FAILURE";
 	}
+} elseif($ajaxaction == "LOADRELATEDLIST" || $ajaxaction == "DISABLEMODULE"){
+	require_once 'include/ListView/RelatedListViewContents.php';
 }
 ?>

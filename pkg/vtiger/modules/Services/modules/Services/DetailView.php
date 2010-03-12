@@ -90,6 +90,14 @@ $smarty->assign('SinglePane_View', $singlepane_view);
 if($singlepane_view == 'true') {
 	$related_array = getRelatedLists($currentModule,$focus);
 	$smarty->assign("RELATEDLISTS", $related_array);
+		
+	require_once('include/ListView/RelatedListViewSession.php');
+	if(!empty($_REQUEST['selected_header']) && !empty($_REQUEST['relation_id'])) {
+		RelatedListViewSession::addRelatedModuleToSession(vtlib_purify($_REQUEST['relation_id']),
+				vtlib_purify($_REQUEST['selected_header']));
+	}
+	$open_related_modules = RelatedListViewSession::getRelatedModulesFromSession();
+	$smarty->assign("SELECTEDHEADERS", $open_related_modules);
 }
 
 if(isPermitted($currentModule, 'EditView', $record) == 'yes')

@@ -865,7 +865,13 @@ class Services extends CRMEntity {
 		$theme_path="themes/".$theme."/";
 		$image_path=$theme_path."images/";		
 
-		$noofrows = $adb->query_result($adb->query(mkCountQuery($query)),0,'count');
+		$computeCount = $_REQUEST['withCount'];
+		if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true ||
+				((boolean) $computeCount) == true){
+			$noofrows = $adb->query_result($adb->query(mkCountQuery($query)),0,'count');
+		}else{
+			$noofrows = null;
+		}
 		$module = 'PriceBooks';
 		$relatedmodule = 'Services';
 		if(!$_SESSION['rlvs'][$module][$relatedmodule])
@@ -881,22 +887,19 @@ class Services extends CRMEntity {
 				setSessionVar($_SESSION['rlvs'][$module][$relmodule],$noofrows,$list_max_entries_per_page,$module,$relmodule);
 			}
 		}
-		$start = $_SESSION['rlvs'][$module][$relatedmodule]['start'];
-		$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
-		
-		$start_rec = $navigation_array['start'];
-		$end_rec = $navigation_array['end_val'];
-	
-		//limiting the query
-		if($start_rec == 0)
-			$limit_start_rec = 0;
-		else
-			$limit_start_rec = $start_rec -1;
+		global $relationId;
+		$start = RelatedListViewSession::getRequestCurrentPage($relationId, $query);
+		$navigation_array =  VT_getSimpleNavigationValues($start, $list_max_entries_per_page,
+				$noofrows);
 
-		if($adb->dbType == "pgsql")
-			$list_result = $adb->pquery($query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
+		$limit_start_rec = ($start-1) * $list_max_entries_per_page;
+
+		if( $adb->dbType == "pgsql")
+			$list_result = $adb->pquery($query.
+					" OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
 		else
-			$list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
+			$list_result = $adb->pquery($query.
+					" LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 	
 		$header=array();
 		$header[]=$current_module_strings['LBL_LIST_SERVICE_NAME'];
@@ -937,14 +940,12 @@ class Services extends CRMEntity {
 				$entries[] = $action;
 			$entries_list[] = $entries;
 		}
-		if($numRows>0) {		
-			$module_rel = "$module&relmodule=$relatedmodule&record=".$focus->id;		
-			$navigationOutput[] = getRelatedTableHeaderNavigation($navigation_array,'',$module_rel);
-			$return_data = array('header'=>$header,'entries'=>$entries_list,'navigation'=>$navigationOutput);
-	
-			$log->debug("Exiting getPriceBookRelatedServices method ...");
-			return $return_data; 
-		}
+		$navigationOutput[] =  getRecordRangeMessage($list_result, $limit_start_rec,$noofrows);
+		$navigationOutput[] = getRelatedTableHeaderNavigation($navigation_array, '',$module,$relatedmodule,$focus->id);
+		$return_data = array('header'=>$header,'entries'=>$entries_list,'navigation'=>$navigationOutput);
+
+		$log->debug("Exiting getPriceBookRelatedServices method ...");
+		return $return_data;
 	}
 
 	/**

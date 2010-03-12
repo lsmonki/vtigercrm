@@ -13,6 +13,7 @@
 require_once('include/utils/UserInfoUtil.php');
 require_once("include/utils/utils.php");
 require_once("include/ListView/ListViewSession.php");
+require_once("include/ListView/RelatedListViewSession.php");
 require_once("include/DatabaseUtil.php");
 
 /** Function to get related list entries in detailed array format
@@ -96,7 +97,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	{
 		$query .= ' and '.$where;
 	}
-	
+
 	if(!$_SESSION['rlvs'][$module][$relatedmodule])
 	{
 		$modObj = new ListViewSession();
@@ -104,31 +105,27 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		$modObj->sorder = $focus->default_sort_order;
 		$_SESSION['rlvs'][$module][$relatedmodule] = get_object_vars($modObj);
 	}
-	if(isset($_REQUEST['relmodule']) && ($_REQUEST['relmodule'] == $relatedmodule))
-	{	
+	
+	if(!empty($_REQUEST['order_by'])) {
 		if(method_exists($focus,getSortOrder))
 		$sorder = $focus->getSortOrder();
 		if(method_exists($focus,getOrderBy))
 		$order_by = $focus->getOrderBy();
 
-		if(isset($order_by) && $order_by != '')
-		{
+		if(isset($order_by) && $order_by != '') {
 			$_SESSION['rlvs'][$module][$relatedmodule]['sorder'] = $sorder;
 			$_SESSION['rlvs'][$module][$relatedmodule]['sortby'] = $order_by;
 		}
 
-	}
-	elseif($_SESSION['rlvs'][$module][$relatedmodule])
-	{
+	} elseif($_SESSION['rlvs'][$module][$relatedmodule]) {
 		$sorder = $_SESSION['rlvs'][$module][$relatedmodule]['sorder'];
 		$order_by = $_SESSION['rlvs'][$module][$relatedmodule]['sortby'];
-	}
-	else
-	{
+	} else {
 		$order_by = $focus->default_order_by;
 		$sorder = $focus->default_sort_order;
 	}
-		//Added by Don for AssignedTo ordering issue in Related Lists
+
+	//Added by Don for AssignedTo ordering issue in Related Lists
 	$query_order_by = $order_by;
 	if($order_by == 'smownerid') {
 		$query_order_by = "case when (vtiger_users.user_name not like '') then vtiger_users.user_name else vtiger_groups.groupname end ";
@@ -148,24 +145,27 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	$_SESSION[$mod_listquery] = $query;
 	
 	$url_qry .="&order_by=".$order_by."&sorder=".$sorder;
-	
-	//Retreiving the no of rows
-	if($relatedmodule == "Calendar")//for calendar related list, count will increase when we have multiple contacts relationship for single activity
-	{
-		//$count_query = "select count(*) as count, vtiger_activity.activitytype ".substr($query, stripos($query,'from'),strlen($query));
-		$count_query = mkCountQuery($query);
-		$count_result = $adb->query($count_query);
-		$noofrows =$adb->query_result($count_result,0,"count");
-	}
-	else
-	{
-		$count_query = mkCountQuery($query);
-		$count_result = $adb->query($count_query);
-		
-		if($adb->num_rows($count_result) > 0)
+	$computeCount = $_REQUEST['withCount'];
+	if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true ||
+			(boolean) $computeCount == true){
+		//Retreiving the no of rows
+		if($relatedmodule == "Calendar") {
+			//for calendar related list, count will increase when we have multiple contacts
+			//relationship for single activity
+			$count_query = mkCountQuery($query);
+			$count_result = $adb->query($count_query);
 			$noofrows =$adb->query_result($count_result,0,"count");
-		else
-			$noofrows = $adb->num_rows($count_result);
+		} else {
+			$count_query = mkCountQuery($query);
+			$count_result = $adb->query($count_query);
+
+			if($adb->num_rows($count_result) > 0)
+				$noofrows =$adb->query_result($count_result,0,"count");
+			else
+				$noofrows = $adb->num_rows($count_result);
+		}
+	}else{
+		$noofrows = null;
 	}
 
 	//Setting Listview session object while sorting/pagination
@@ -177,64 +177,49 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 			setSessionVar($_SESSION['rlvs'][$module][$relmodule],$noofrows,$list_max_entries_per_page,$module,$relmodule);
 		}
 	}
-	$start = $_SESSION['rlvs'][$module][$relatedmodule]['start'];
-	$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
+	global $relationId;
+	$start = RelatedListViewSession::getRequestCurrentPage($relationId, $query);
+	$navigation_array =  VT_getSimpleNavigationValues($start, $list_max_entries_per_page,
+			$noofrows);
 	
-	$start_rec = $navigation_array['start'];
-	$end_rec = $navigation_array['end_val'];
+	$limit_start_rec = ($start-1) * $list_max_entries_per_page;
 
-	//limiting the query
-	if($start_rec == 0)
-		$limit_start_rec = 0;
+	if( $adb->dbType == "pgsql")
+		$list_result = $adb->pquery($query.
+				" OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
 	else
-		$limit_start_rec = $start_rec -1;
-
-	if($adb->dbType == "pgsql")
-		$list_result = $adb->pquery($query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
-	else
-		$list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
+		$list_result = $adb->pquery($query.
+				" LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
 	//Retreive the List View Table Header
-	if($noofrows == 0)
-	{
-		$smarty->assign('NOENTRIES',$app_strings['LBL_NONE_SCHEDULED']);
+	$id = vtlib_purify($_REQUEST['record']);
+	$listview_header = getListViewHeader($focus,$relatedmodule,'',$sorder,$order_by,$id,'',$module);//"Accounts");
+	if ($noofrows > 15) {
+		$smarty->assign('SCROLLSTART','<div style="overflow:auto;height:315px;width:100%;">');
+		$smarty->assign('SCROLLSTOP','</div>');
 	}
-	else
-	{
-		$id = vtlib_purify($_REQUEST['record']);
-		$listview_header = getListViewHeader($focus,$relatedmodule,'',$sorder,$order_by,$id,'',$module);//"Accounts");
-		if ($noofrows > 15)
-		{
-			$smarty->assign('SCROLLSTART','<div style="overflow:auto;height:315px;width:100%;">');
-			$smarty->assign('SCROLLSTOP','</div>');
-		}
-		$smarty->assign("LISTHEADER", $listview_header);
-															
-		if($module == 'PriceBook' && $relatedmodule == 'Products')
-		{
-			$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,$edit_val,$del_val);
-		}
-		if($module == 'Products' && $relatedmodule == 'PriceBook')
-		{
-			$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'EditListPrice','DeletePriceBookProductRel');
-		}
-		elseif($relatedmodule == 'SalesOrder')
-		{
-			$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'SalesOrderEditView','DeleteSalesOrder');
-		}else
-		{
-			$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset);
-		}
+	$smarty->assign("LISTHEADER", $listview_header);
 
-		$navigationOutput = Array();
-		$navigationOutput[] = $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
-		$module_rel = $module.'&relmodule='.$relatedmodule.'&record='.$id;
-		$navigationOutput[] = getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module_rel);
-		$related_entries = array('header'=>$listview_header,'entries'=>$listview_entries,'navigation'=>$navigationOutput);
-
-		$log->debug("Exiting GetRelatedList method ...");
-		return $related_entries;
+	if($module == 'PriceBook' && $relatedmodule == 'Products') {
+		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,$edit_val,$del_val);
 	}
+	if($module == 'Products' && $relatedmodule == 'PriceBook') {
+		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'EditListPrice','DeletePriceBookProductRel');
+	} elseif($relatedmodule == 'SalesOrder') {
+		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'SalesOrderEditView','DeleteSalesOrder');
+	}else {
+		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset);
+	}
+
+	$navigationOutput = Array();
+	$navigationOutput[] =  getRecordRangeMessage($list_result, $limit_start_rec,$noofrows);
+	if(empty($id) && !empty($_REQUEST['record'])) $id = vtlib_purify($_REQUEST['record']);
+	$navigationOutput[] = getRelatedTableHeaderNavigation($navigation_array, $url_qry,$module,$relatedmodule,$id);
+
+	$related_entries = array('header'=>$listview_header,'entries'=>$listview_entries,'navigation'=>$navigationOutput);
+
+	$log->debug("Exiting GetRelatedList method ...");
+	return $related_entries;
 }
 
 /** Function to get related list entries in detailed array format
@@ -552,7 +537,14 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
-	$noofrows = $adb->query_result($adb->query(mkCountQuery($query)),0,'count');
+	$computeCount = $_REQUEST['withCount'];
+	if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true ||
+			((boolean) $computeCount) == true){
+		$noofrows = $adb->query_result($adb->query(mkCountQuery($query)),0,'count');
+	}else{
+		$noofrows = null;
+	}
+	
 	$module = 'PriceBooks';
 	$relatedmodule = 'Products';
 	if(!$_SESSION['rlvs'][$module][$relatedmodule])
@@ -562,28 +554,27 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 		$modObj->sorder = $focus->default_sort_order;
 		$_SESSION['rlvs'][$module][$relatedmodule] = get_object_vars($modObj);
 	}
+
+	
 	if(isset($_REQUEST['relmodule']) && $_REQUEST['relmodule']!='' && $_REQUEST['relmodule'] == $relatedmodule) {
 		$relmodule = vtlib_purify($_REQUEST['relmodule']);
 		if($_SESSION['rlvs'][$module][$relmodule]) {
 			setSessionVar($_SESSION['rlvs'][$module][$relmodule],$noofrows,$list_max_entries_per_page,$module,$relmodule);
 		}
 	}
-	$start = $_SESSION['rlvs'][$module][$relatedmodule]['start'];
-	$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
-	
-	$start_rec = $navigation_array['start'];
-	$end_rec = $navigation_array['end_val'];
+	global $relationId;
+	$start = RelatedListViewSession::getRequestCurrentPage($relationId, $query);
+	$navigation_array =  VT_getSimpleNavigationValues($start, $list_max_entries_per_page,
+			$noofrows);
 
-	//limiting the query
-	if($start_rec == 0)
-		$limit_start_rec = 0;
-	else
-		$limit_start_rec = $start_rec -1;
+	$limit_start_rec = ($start-1) * $list_max_entries_per_page;
 
-	if($adb->dbType == "pgsql")
-		$list_result = $adb->pquery($query. " OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
+	if( $adb->dbType == "pgsql")
+		$list_result = $adb->pquery($query.
+				" OFFSET $limit_start_rec LIMIT $list_max_entries_per_page", array());
 	else
-		$list_result = $adb->pquery($query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
+		$list_result = $adb->pquery($query.
+				" LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
 	$header=array();
 	$header[]=$mod_strings['LBL_LIST_PRODUCT_NAME'];
@@ -628,14 +619,13 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 			$entries[] = $action;
 		$entries_list[] = $entries;
 	}
-	if($numRows>0) {		
-		$module_rel = "$module&relmodule=$relatedmodule&record=".$focus->id;		
-		$navigationOutput[] = getRelatedTableHeaderNavigation($navigation_array,'',$module_rel);
-		$return_data = array('header'=>$header,'entries'=>$entries_list,'navigation'=>$navigationOutput);
+	$navigationOutput[] =  getRecordRangeMessage($list_result, $limit_start_rec,$noofrows);
+	$navigationOutput[] = getRelatedTableHeaderNavigation($navigation_array, '',$module,
+			$relatedmodule,$focus->id);
+	$return_data = array('header'=>$header,'entries'=>$entries_list,'navigation'=>$navigationOutput);
 
-		$log->debug("Exiting getPriceBookRelatedProducts method ...");
-		return $return_data; 
-	}
+	$log->debug("Exiting getPriceBookRelatedProducts method ...");
+	return $return_data;
 }
 
 function CheckFieldPermission($fieldname,$module)

@@ -36,7 +36,7 @@ $focus->initSortbyField($currentModule);
 $sorder = $focus->getSortOrder();
 $order_by = $focus->getOrderBy();
 
-$_SESSION[$currentModule."_Order_by"] = $order_by;
+$_SESSION[$currentModule."_Order_By"] = $order_by;
 $_SESSION[$currentModule."_Sort_Order"]=$sorder;
 
 $smarty = new vtigerCRM_Smarty();
@@ -152,7 +152,7 @@ if( $adb->dbType == "pgsql")
 else
 	$list_result = $adb->pquery($list_query. " LIMIT $limit_start_rec, $list_max_entries_per_page", array());
 
-$recordListRangeMsg = getRecordRangeMessage($list_result, $limit_start_rec);
+$recordListRangeMsg = getRecordRangeMessage($list_result, $limit_start_rec,$noofrows);
 $smarty->assign('recordListRange',$recordListRangeMsg);
 
 $smarty->assign("CUSTOMVIEW_OPTION",$customview_html);
@@ -181,6 +181,12 @@ $smarty->assign("AVALABLE_FIELDS", getMergeFields($currentModule,"available_fiel
 $smarty->assign("FIELDS_TO_MERGE", getMergeFields($currentModule,"fileds_to_merge"));
 
 $_SESSION[$currentModule.'_listquery'] = $list_query;
+
+// Gather the custom link information to display
+include_once('vtlib/Vtiger/Link.php');
+$customlink_params = Array('MODULE'=>$currentModule, 'ACTION'=>vtlib_purify($_REQUEST['action']), 'CATEGORY'=> $category);
+$smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModule), Array('LISTVIEWBASIC','LISTVIEW'), $customlink_params));
+// END
 
 if(isset($_REQUEST['ajax']) && $_REQUEST['ajax'] != '')
 	$smarty->display("ListViewEntries.tpl");

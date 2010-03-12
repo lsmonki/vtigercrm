@@ -33,6 +33,7 @@ while($row=$adb->fetch_array($rs)) {
 	$adb->pquery("INSERT INTO ".$reltable." VALUES(?,?)", array($_REQUEST["return_id"], $row["crmid"]));
 }
 
-header("Location: index.php?module=Campaigns&action=CampaignsAjax&file=CallRelatedList&ajax=true&record=".vtlib_purify($_REQUEST['return_id']));
+header("Location: index.php?module=Campaigns&action=CampaignsAjax&file=CallRelatedList&ajax=true&".
+		"record=".vtlib_purify($_REQUEST['return_id']));
 
 ?>

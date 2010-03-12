@@ -265,7 +265,8 @@ if($foldercount > 0 )
 		$folder_files = getListViewEntries($focus,"Documents",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 		$folder_details['entries']= $folder_files;
 		$folder_details['navigation'] = getTableHeaderSimpleNavigation($navigation_array, $url_string,"Documents",$folder_id,$viewid);
-		$folder_details['recordListRange'] = getRecordRangeMessage($list_result, $limit_start_rec);
+		$folder_details['recordListRange'] = getRecordRangeMessage($list_result, $limit_start_rec,
+				$num_records);
 		if ($displayFolder == true) {
 			$folders[$foldername] = $folder_details;
 		} else{

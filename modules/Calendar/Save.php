@@ -297,10 +297,14 @@ if($_REQUEST['return_viewname'] != '')
 
 $parenttab=getParentTab();
 
-if($_REQUEST['start'] !='')
+if(!empty($_REQUEST['start'])) {
 	$page='&start='.vtlib_purify($_REQUEST['start']);
+}
+if(!empty($_REQUEST['pagenumber'])){
+	$page = "&start=".vtlib_purify($_REQUEST['pagenumber']);
+}
 if($_REQUEST['maintab'] == 'Calendar')
 	header("Location: index.php?action=".$return_action."&module=".$return_module."&view=".$view."&hour=".$hour."&day=".$day."&month=".$month."&year=".$year."&record=".$return_id."&viewOption=".$viewOption."&subtab=".$subtab."&parenttab=$parenttab");
 else
-	header("Location: index.php?action=$return_action&module=$return_module$view$hour$day$month$year&record=$return_id$activemode&viewname=$return_viewname$page&parenttab=$parenttab&start=".vtlib_purify($_REQUEST['pagenumber']).$search);
+	header("Location: index.php?action=$return_action&module=$return_module$view$hour$day$month$year&record=$return_id$activemode&viewname=$return_viewname$page&parenttab=$parenttab$search");
 ?>

@@ -154,8 +154,18 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 								
 								<td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD|@getTranslatedString:$MODULE} {$APP.LBL_INFORMATION}</td>	
 								<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-								{if $SinglePane_View eq 'false'}
-								<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">{$APP.LBL_MORE} {$APP.LBL_INFORMATION}</a></td>
+								{if $SinglePane_View eq 'false' && $IS_REL_LIST neq false}
+									<td class="dvtUnSelectedCell" onmouseout="fnHideDrop('More_Information_Modules_List');" onmouseover="fnDropDown(this,'More_Information_Modules_List');" align="center" nowrap>
+										<a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">{$APP.LBL_MORE} {$APP.LBL_INFORMATION}</a>
+										<div onmouseover="fnShowDrop('More_Information_Modules_List')" onmouseout="fnHideDrop('More_Information_Modules_List')"
+													 id="More_Information_Modules_List" class="drop_mnu" style="left: 502px; top: 76px; display: none;">
+											<table border="0" cellpadding="0" cellspacing="0" width="100%">
+											{foreach key=_RELATION_ID item=_RELATED_MODULE from=$IS_REL_LIST}
+												<tr><td><a class="drop_down" href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}&selected_header={$_RELATED_MODULE}&relation_id={$_RELATION_ID}">{$_RELATED_MODULE|@getTranslatedString:$MODULE}</a></td></tr>
+											{/foreach}
+											</table>
+										</div>
+									</td>
 								{/if}
 								<td class="dvtTabCache" align="right" style="width:100%">
 									{if $EDIT_DUPLICATE eq 'permitted'}

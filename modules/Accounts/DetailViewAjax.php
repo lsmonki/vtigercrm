@@ -14,7 +14,7 @@ global $adb,$mod_strings;
 
 $local_log =& LoggerManager::getLogger('AccountsAjax');
 global $currentModule;
-$acntObj = CRMEntity::getInstance($currentModule);
+$modObj = CRMEntity::getInstance($currentModule);
 
 $ajaxaction = $_REQUEST["ajxaction"];
 if($ajaxaction == "DETAILVIEW")
@@ -25,8 +25,23 @@ if($ajaxaction == "DETAILVIEW")
      $fieldvalue = utf8RawUrlDecode($_REQUEST["fieldValue"]); 
      if($crmid != "")
 	 {
-	     $acntObj->retrieve_entity_info($crmid,"Accounts");
-	     $acntObj->column_fields[$fieldname] = $fieldvalue;
+	     $modObj->retrieve_entity_info($crmid,"Accounts");
+	     $modObj->column_fields[$fieldname] = $fieldvalue;
+	     if($fieldname=='accountname'){
+	     	$value = $fieldvalue;
+			$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname =? and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
+			$params = array($value);
+			if(isset($crmid) && $crmid !='') {
+				$query .= " and vtiger_account.accountid != ?";
+				array_push($params, $crmid);
+			}
+			$result = $adb->pquery($query, $params);
+		    if($adb->num_rows($result) > 0)
+			{
+				echo ":#:ERR".$mod_strings['LBL_ACCOUNT_EXIST'];
+				return false;
+			}
+	     }
 	     if($fieldname=='accountname'){
 	     	$value = $fieldvalue;
 			$query = "SELECT accountname FROM vtiger_account,vtiger_crmentity WHERE accountname =? and vtiger_account.accountid = vtiger_crmentity.crmid and vtiger_crmentity.deleted != 1";
@@ -44,16 +59,16 @@ if($ajaxaction == "DETAILVIEW")
 	     }
 	     if($fieldname == 'annual_revenue')//annual revenue converted to dollar value while saving
 	     {
-		     $acntObj->column_fields[$fieldname] = getConvertedPrice($fieldvalue);
+		     $modObj->column_fields[$fieldname] = getConvertedPrice($fieldvalue);
 	     }	     
-	     $acntObj->id = $crmid;
-  	     $acntObj->mode = "edit";
-       	     $acntObj->save("Accounts");
-	     if($acntObj->column_fields['notify_owner'] == 1 )
+	     $modObj->id = $crmid;
+  	     $modObj->mode = "edit";
+       	     $modObj->save("Accounts");
+	     if($modObj->column_fields['notify_owner'] == 1 )
 	     {
-		   sendNotificationToOwner('Accounts',&$acntObj);
+		   sendNotificationToOwner('Accounts',&$modObj);
 	     }
-             if($acntObj->id != "")
+             if($modObj->id != "")
 	     {
 			echo ":#:SUCCESS";
 	     }else
@@ -64,5 +79,8 @@ if($ajaxaction == "DETAILVIEW")
 	{
          echo ":#:FAILURE";
     }
+}elseif($ajaxaction == "LOADRELATEDLIST" || $ajaxaction == "DISABLEMODULE"){
+	require_once 'include/ListView/RelatedListViewContents.php';
 }
+
 ?>
