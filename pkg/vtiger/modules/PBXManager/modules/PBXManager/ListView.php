@@ -21,6 +21,7 @@ $category = getParentTab();
 $url_string = '';
 
 $tool_buttons = array("index"=>"yes",);
+$tool_buttons["moduleSettings"] = isModuleSettingPermitted($currentModule);
 $list_buttons = Array();
 if(isPermitted($currentModule,'Delete','') == 'yes') $list_buttons['del'] = $app_strings[LBL_MASS_DELETE];
 
