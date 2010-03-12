@@ -14,6 +14,7 @@ $optionalModuleStrings = array(
 	'RecycleBin_description'=>'Module to manage deleted records, provides ability to restore or remove it completely',
 	'Tooltip_description'=>'Configure tooltip to be shown for a field, which can be combination of other fields',
 	'Webforms_description'=>'Server side support to allow building client webforms to capture the information easily',
+	'SMSNotifier_description'=>'Sends sms messages to Accounts, contacts and Leads',
 );
 
 $installationStrings = array(

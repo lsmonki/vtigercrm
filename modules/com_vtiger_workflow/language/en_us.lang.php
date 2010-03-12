@@ -12,6 +12,7 @@ $mod_strings = array(
 'VTEntityMethodTask' => 'Invoke Custom Function',
 'VTCreateTodoTask' => 'Create Todo',
 'VTCreateEventTask' => 'Create Event',
+'VTSMSTask' => 'SMS Task',
 'LBL_EDIT_TASK'=>'Edit Task',
 'LBL_EDIT_TASK_TITLE'=>'Edit an existing task or create a new one',
 'LBL_EDIT_WORKFLOW'=>'Edit Workflow',
