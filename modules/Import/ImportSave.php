@@ -97,11 +97,6 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 				{
 					$focus->column_fields[$field]=$pick_orginal_val;
 				}
-				elseif (substr(trim($field), 0, 3) == "CF_")
-				{
-					p("setting custfld".$field."=".$row[$field_count]);
-					$resCustFldArray[$field] = $row[$field_count];
-				}
 				//MWC
 				elseif ( $field == "assignedto" || $field == "assigned_user_id" )
 				{
@@ -221,74 +216,9 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 			if($process_fields == 'false'){
 				$focus->process_special_fields();
 			}
-			
 			$focus->save($module);
 			//$focus->saveentity($module);
 			$return_id = $focus->id;
-
-			if(count($resCustFldArray)>0){
-				if($_REQUEST['module'] == 'Contacts'){
-					$_REQUEST['module']='contactdetails';
-				}
-				$dbquery="select * from vtiger_field where vtiger_tablename=? and vtiger_field.presence in (0,2)";
-				$custresult = $adb->pquery($dbquery, array($_REQUEST['module']));
-				if($adb->num_rows($custresult) != 0)
-				{
-					if (! isset( $_REQUEST['module'] ) || $_REQUEST['module'] == 'Contacts')
-					{
-						$columns = 'contactid';
-						$custTabName = 'contactscf';
-					}
-					else if ( $_REQUEST['module'] == 'Accounts')
-					{
-						$columns = 'accountid';
-						$custTabName = 'accountscf';
-					}
-					else if ( $_REQUEST['module'] == 'Potentials')
-					{
-						$columns = 'potentialid';
-						$custTabName = 'potentialscf';
-					}
-					else if ( $_REQUEST['module'] == 'Leads')
-					{
-						$columns = 'leadidid';
-						$custTabName = 'leadscf';
-					}
-					else if ( $_REQUEST['module'] == 'Products')
-					{
-						$columns = 'productid';
-						$custTabName = 'productcf';
-					}
-					else if ( $_REQUEST['module'] == 'Helpdesk')
-					{
-						$columns = 'ticketid';
-						$custTabName = 'ticketcf';
-					}
-					else if ( $_REQUEST['module'] == 'Vendors')
-					{
-						$columns = 'vendorid';
-						$custTabName = 'vendorcf';
-					}
-					$noofrows = $adb->num_rows($custresult);
-					$params = array($focus->id);
-
-					for($j=0; $j<$noofrows; $j++)
-					{
-						$colName=$adb->query_result($custresult,$j,"columnname");
-						if(array_key_exists($colName, $resCustFldArray))
-						{
-							$value_colName = $resCustFldArray[$colName];
-
-							$columns .= ', '.$colName;
-							array_push($params, $value_colName);
-						}
-					}
-
-					$insert_custfld_query = 'insert into '.$custTabName.' ('.$columns.') values('. generateQuestionMarks($params) .')';
-					$adb->pquery($insert_custfld_query, $params);
-
-				}
-			}
 
 			$last_import = new UsersLastImport();
 			$last_import->assigned_user_id = $current_user->id;

@@ -3283,7 +3283,9 @@ function getRecordValues($id_array,$module) {
 					else $value_pair['disp_value']='';
 				} elseif($ui_type == 10) {
 					$value_pair['disp_value'] = getRecordInfoFromID($field_values[$j][$fld_name]);
-				} else {
+				}elseif($ui_type == 5 || $ui_type == 6 || $ui_type == 23){
+					$value_pair['disp_value'] = getDisplayDate($field_values[$j][$fld_name]);
+				}else {
 					$value_pair['disp_value']=$field_values[$j][$fld_name];
 				}
 				$value_pair['org_value'] = $field_values[$j][$fld_name];
@@ -3848,6 +3850,9 @@ function getDuplicateRecordsArr($module)
 			if($ui_type[$fld_arr[$k]] == 10){
 				$result[$col_arr[$k]] = getRecordInfoFromID($result[$col_arr[$k]]);
 			}
+			if($ui_type[$fld_arr[$k]] == 5 || $ui_type[$fld_arr[$k]] == 6 || $ui_type[$fld_arr[$k]] == 23){
+				$result[$col_arr[$k]]  = getDisplayDate($result[$col_arr[$k]]);
+			} 
 			
 			$fld_values[$grp][$ii][$fld_labl_arr[$k]] = $result[$col_arr[$k]];
 			

@@ -149,7 +149,7 @@ class ReportRun extends CRMEntity
 					}
 					elseif($selectedfields[0] == 'vtiger_activity' && $selectedfields[1] == 'date_start')
 					{
-						$columnslist[$fieldcolname] = "concat(vtiger_activity.date_start,'  ',vtiger_activity.time_start) as Calendar_Start_Date_and_Time";
+                                            $columnslist[$fieldcolname] = "cast(concat(vtiger_activity.date_start,'  ',vtiger_activity.time_start) as DATETIME) as Calendar_Start_Date_and_Time";
 					}
 					elseif(stristr($selectedfields[0],"vtiger_users") && ($selectedfields[1] == 'user_name') && $module_field != 'Products_Handler' && $module_field!='Services_Owner')
 					{
@@ -2023,6 +2023,7 @@ class ReportRun extends CRMEntity
 					for ($i=0; $i<$y; $i++)
 					{
 						$fld = $adb->field_name($result, $i);
+                                                $fld_type = $column_definitions[$i]->type;
 						if (in_array($fld->name, $this->convert_currency)) {
 							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
 						} elseif(in_array($fld->name, $this->append_currency_symbol_to_value)) {
@@ -2336,6 +2337,7 @@ class ReportRun extends CRMEntity
 					for ($i=0; $i<$y; $i++)
 					{
 						$fld = $adb->field_name($result, $i);
+						$fld_type = $column_definitions[$i]->type;
 						if (in_array($fld->name, $this->convert_currency)) {
 							$fieldvalue = convertFromMasterCurrency($custom_field_values[$i],$current_user->conv_rate);
 						} elseif(in_array($fld->name, $this->append_currency_symbol_to_value)) {
