@@ -182,7 +182,7 @@ if( $_REQUEST['dup_type'] == 'manual')
 	$smarty->assign("FIELD_NAMES",$fld_name);
 	$smarty->assign("CATEGORY",$parenttab);
 	$smarty->assign("ALL_VALUES",$fld_values);
-	$smarty->assign("MOD", return_module_language($current_language,'Contacts'));
+	$smarty->assign("MOD", return_module_language($current_language,$req_module));
 	$smarty->assign("IMAGE_PATH",$image_path);
 	$smarty->assign("APP", $app_strings);
 	$smarty->assign("CMOD", $mod_strings);
