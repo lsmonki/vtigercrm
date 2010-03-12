@@ -130,7 +130,11 @@ function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty,$module)
 
 		$subject = $adb->query_result($result,0,'notificationsubject');
 		$body = $adb->query_result($result,0,'notificationbody');
-
+		$status = $adb->query_result($result,0,'status');
+		
+		if($status == 0 || $status == '')
+				return false;
+	
 		$subject = str_replace('{PRODUCTNAME}',$prod_name,$subject);
 		$body = str_replace('{HANDLER}',$handler_name,$body);	
 		$body = str_replace('{PRODUCTNAME}',$prod_name,$body);	
