@@ -342,6 +342,7 @@ $mod_strings = Array(
 'LBL_USERNAME'=>'User Name',
 'LBL_PASWRD'=>'Password',
 'LBL_REQUIRES_AUTHENT'=>'Requires Authentication?',
+'LBL_FROM_EMAIL_FIELD'=>'From Email',
 
 //Fields for Settings
 

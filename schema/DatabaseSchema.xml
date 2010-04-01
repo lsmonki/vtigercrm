@@ -2056,6 +2056,7 @@
 		<field name="server_type" type="C" size="20" />
 		<field name="smtp_auth" type="C" size="5" />
 		<field name="server_path" type="C" size="256" />
+		<field name="from_email_field" type="C" size="50" />
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
 
