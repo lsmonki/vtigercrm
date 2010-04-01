@@ -63,10 +63,14 @@ Vtiger_Utils::AddColumn('vtiger_inventorynotification', 'status','VARCHAR(30)');
         $params = array('LBL_EMAIL_INFORMATION','vtiger_emaildetails');
         $adb->pquery($sql,$params);
 	//END
-//update vtiger_systems to add a email field to be used as the from email address
-	$sql = "ALTER TABLE vtiger_systems ADD from_email_field varchar(50);";
-	ExecuteQuery($sql);
-//END
+	//update vtiger_systems to add a email field to be used as the from email address
+		$sql = "ALTER TABLE vtiger_systems ADD from_email_field varchar(50);";
+		ExecuteQuery($sql);
+	//END
+
+	// to disable unit_price from the massedit wizndow for products
+	ExecuteQuery("update vtiger_field set masseditable=0 where tablename='vtiger_products' and columnname='unit_price'");
+	//END
 $migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Ends \n\n");
 
 
