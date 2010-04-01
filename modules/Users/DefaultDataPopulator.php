@@ -2168,6 +2168,21 @@ $body='<table width="700" cellspacing="0" cellpadding="0" border="0" align="cent
 				'params'=>array(),
 				"prelogin"=>1,
 				"type"=>"POST"
+			),
+			'convertlead'=>array(
+				"include"=>array(
+					"include/Webservices/ConvertLead.php"
+				),
+				"handler"=>"vtws_convertlead",
+				"prelogin"=>0,
+				"type"=>"POST",
+				'params'=>array(
+					'leadId'=>'String',
+					'assignedTo'=>'String',
+					'accountName'=>'String',
+					'avoidPotential'=>'Boolean',
+					'potential'=>'Encoded'
+				)
 			)
 		);
 		$createOperationQuery = "insert into vtiger_ws_operation(operationid,name,handler_path,handler_method,type,prelogin) 

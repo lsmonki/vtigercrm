@@ -71,6 +71,42 @@ Vtiger_Utils::AddColumn('vtiger_inventorynotification', 'status','VARCHAR(30)');
 	// to disable unit_price from the massedit wizndow for products
 	ExecuteQuery("update vtiger_field set masseditable=0 where tablename='vtiger_products' and columnname='unit_price'");
 	//END
+function VT520_webserviceMigrate(){
+	require_once 'include/Webservices/Utils.php';
+	$customWebserviceDetails = array(
+		"name"=>"convertlead",
+		"include"=>"include/Webservices/ConvertLead.php",
+		"handler"=>"vtws_convertlead",
+		"prelogin"=>0,
+		"type"=>"POST"
+	);
+
+	$customWebserviceParams = array(
+		array("name"=>'leadId',"type"=>'String' ),
+		array("name"=>'assignedTo','type'=>'String'),
+		array("name"=>'accountName','type'=>'String'),
+		array("name"=>'avoidPotential','type'=>'Boolean'),
+		array("name"=>'potential','type'=>'Encoded')
+	);
+	echo 'INITIALIZING WEBSERVICE...';
+	$operationId = vtws_addWebserviceOperation($customWebserviceDetails['name'],$customWebserviceDetails['include'],
+		$customWebserviceDetails['handler'],$customWebserviceDetails['type']);
+	if($operationId === null && $operationId > 0){
+		echo 'FAILED TO SETUP '.$customWebserviceDetails['name'].' WEBSERVICE';
+		die;
+	}
+	$sequence = 1;
+	foreach ($customWebserviceParams as $param) {
+		$status = vtws_addWebserviceOperationParam($operationId,$param['name'],$param['type'],$sequence++);
+		if($status === false){
+			echo 'FAILED TO SETUP '.$customWebserviceDetails['name'].' WEBSERVICE HALFWAY THOURGH';
+			die;
+		}
+	}
+}
+
+VT520_webserviceMigrate();
+
 $migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Ends \n\n");
 
 

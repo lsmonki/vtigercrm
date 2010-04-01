@@ -425,4 +425,208 @@ function vtws_getModuleHandlerFromId($id,$user){
 	return $handler;
 }
 
+function vtws_getConvertLeadFieldMapping(){
+	global $adb;
+	$sql = "select * from vtiger_convertleadmapping";
+	$result = $adb->pquery($sql,array());
+	if($result === false){
+		return null;
+	}
+	$mapping = array();
+	$rowCount = $adb->num_rows($result);
+	for($i=0;$i<$rowCount;++$i){
+		$row = $adb->query_result_rowdata($result,$i);
+		$mapping[$row['leadfid']] = array('Accounts'=>$row['accountfid'],
+			'Potentials'=>$row['potentialfid'],'Contacts'=>$row['contactfid']);
+	}
+	return $mapping;
+}
+
+/**	Function used to get the lead related Notes and Attachments with other entities Account, Contact and Potential
+ *	@param integer $id - leadid
+ *	@param integer $accountid -  related entity id (accountid)
+ */
+function vtws_getRelatedNotesAttachments($id,$relatedId) {
+	global $adb,$log;
+
+	$sql = "select * from vtiger_senotesrel where crmid=?";
+	$result = $adb->pquery($sql, array($id));
+	if($result === false){
+		return false;
+	}
+	$rowCount = $adb->num_rows($result);
+
+	$sql="insert into vtiger_senotesrel(crmid,notesid) values (?,?)";
+	for($i=0; $i<$rowCount;++$i ) {
+		$noteId=$adb->query_result($result,$i,"notesid");
+		$resultNew = $adb->pquery($sql, array($relatedId, $noteId));
+		if($resultNew === false){
+			return false;
+		}
+	}
+
+	$sql = "select * from vtiger_seattachmentsrel where crmid=?";
+	$result = $adb->pquery($sql, array($id));
+	if($result === false){
+		return false;
+	}
+	$rowCount = $adb->num_rows($result);
+
+	$sql = "insert into vtiger_seattachmentsrel(crmid,attachmentsid) values (?,?)";
+	for($i=0;$i<$rowCount;++$i) {
+		$attachmentId=$adb->query_result($result,$i,"attachmentsid");
+		$resultNew = $adb->pquery($sql, array($relatedId, $attachmentId));
+		if($resultNew === false){
+			return false;
+		}
+	}
+	return true;
+}
+
+/**	Function used to save the lead related products with other entities Account, Contact and Potential
+ *	$leadid - leadid
+ *	$relatedid - related entity id (accountid/contactid/potentialid)
+ *	$setype - related module(Accounts/Contacts/Potentials)
+ */
+function vtws_saveLeadRelatedProducts($leadId, $relatedId, $setype) {
+	global $adb;
+
+	$result = $adb->pquery("select * from vtiger_seproductsrel where crmid=?", array($leadId));
+	if($result === false){
+		return false;
+	}
+	$rowCount = $adb->num_rows($result);
+	for($i = 0; $i < $rowCount; ++$i) {
+		$productId = $adb->query_result($result,$i,'productid');
+		$resultNew = $adb->pquery("insert into vtiger_seproductsrel values(?,?,?)", array($relatedId, $productId, $setype));
+		if($resultNew === false){
+			return false;
+		}
+	}
+	return true;
+}
+
+/**	Function used to save the lead related services with other entities Account, Contact and Potential
+ *	$leadid - leadid
+ *	$relatedid - related entity id (accountid/contactid/potentialid)
+ *	$setype - related module(Accounts/Contacts/Potentials)
+ */
+function vtws_saveLeadRelations($leadId, $relatedId, $setype) {
+	global $adb;
+
+	$result = $adb->pquery("select * from vtiger_crmentityrel where crmid=?", array($leadId));
+	if($result === false){
+		return false;
+	}
+	$rowCount = $adb->num_rows($result);
+	for($i = 0; $i < $rowCount; ++$i) {
+		$recordId = $adb->query_result($result,$i,'relcrmid');
+		$recordModule = $adb->query_result($result,$i,'relmodule');
+		$adb->pquery("insert into vtiger_crmentityrel values(?,?,?,?)",
+		array($relatedId, $setype, $recordId, $recordModule));
+		if($resultNew === false){
+			return false;
+		}
+	}
+	$result = $adb->pquery("select * from vtiger_crmentityrel where relcrmid=?", array($leadId));
+	if($result === false){
+		return false;
+	}
+	$rowCount = $adb->num_rows($result);
+	for($i = 0; $i < $rowCount; ++$i) {
+		$recordId = $adb->query_result($result,$i,'crmid');
+		$recordModule = $adb->query_result($result,$i,'module');
+		$adb->pquery("insert into vtiger_crmentityrel values(?,?,?,?)",
+		array($relatedId, $setype, $recordId, $recordModule));
+		if($resultNew === false){
+			return false;
+		}
+	}
+
+	return true;
+}
+
+function vtws_getFieldfromFieldId($fieldId, $fieldObjectList){
+	foreach ($fieldObjectList as $field) {
+		if($fieldId == $field->getFieldId()){
+			return $field;
+		}
+	}
+	return null;
+}
+
+/**	Function used to get the lead related activities with other entities Account and Contact
+ *	@param integer $accountid - related entity id
+ *	@param integer $contact_id -  related entity id
+ */
+function vtws_getRelatedActivities($leadId,$accountId,$contactId) {
+	global $adb;
+	$sql = "select * from vtiger_seactivityrel where crmid=?";
+	$result = $adb->pquery($sql, array($leadId));
+	if($result === false){
+		return false;
+	}
+	$rowCount = $adb->num_rows($result);
+	for($i=0;$i<$rowCount;++$i) {
+		$activityId=$adb->query_result($result,$i,"activityid");
+
+		$sql ="select setype from vtiger_crmentity where crmid=?";
+		$resultNew = $adb->pquery($sql, array($activityId));
+		if($resultNew === false){
+			return false;
+		}
+		$type=$adb->query_result($resultNew,0,"setype");
+
+		$sql="delete from vtiger_seactivityrel where crmid=?";
+		$resultNew = $adb->pquery($sql, array($leadId));
+		if($resultNew === false){
+			return false;
+		}
+		if($type != "Emails") {
+			$sql = "insert into vtiger_seactivityrel(crmid,activityid) values (?,?)";
+			$resultNew = $adb->pquery($sql, array($accountId, $activityId));
+			if($resultNew === false){
+				return false;
+			}
+			$sql="insert into vtiger_cntactivityrel(contactid,activityid) values (?,?)";
+			$resultNew = $adb->pquery($sql, array($contactId, $activityId));
+			if($resultNew === false){
+				return false;
+			}
+		} else {
+			$sql = "insert into vtiger_seactivityrel(crmid,activityid) values (?,?)";
+			$resultNew = $adb->pquery($sql, array($contactId, $activityId));
+			if($resultNew === false){
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+/**
+ * Function used to save the lead related Campaigns with Contact
+ * @param $leadid - leadid
+ * @param $relatedid - related entity id (contactid)
+ * @return Boolean true on success, false otherwise.
+ */
+function vtws_saveLeadRelatedCampaigns($leadId, $relatedId) {
+	global $adb;
+	
+	$result = $adb->pquery("select * from vtiger_campaignleadrel where leadid=?", array($leadid));
+	if($resultNew === false){
+		return false;
+	}
+	$rowCount = $adb->num_rows($result);
+	for($i = 0; $i < $rowCount; ++$i) {
+		$campaignId = $adb->query_result($result,$i,'campaignid');
+		$resultNew = $adb->pquery("insert into vtiger_campaigncontrel (campaignid, contactid) values(?,?)",
+			array($campaignId, $relatedId));
+		if($resultNew === false){
+			return false;
+		}
+	}
+	return true;
+}
+
 ?>
