@@ -406,6 +406,23 @@ function overwrite_duplicate_records($module,$focus)
 	global $dup_ow_count;
 	global $process_fields;
 
+	//Fix for 6187 : overwriting records during duplicate merge to handle uitype 10
+	//handle uitype 10
+	foreach($focus->importable_fields as $fieldname=>$uitype){
+		$uitype = $focus->importable_fields[$fieldname];
+		if($uitype == 10){
+			//added to handle security permissions for related modules :: for e.g. Accounts/Contacts in Potentials
+			if(method_exists($focus, "add_related_to")){
+				if(!$focus->add_related_to($module, $fieldname)){
+					if(array_key_exists($fieldname, $focus->required_fields)){
+						$do_save = 0;
+						$skip_required_count++;
+						continue 2;
+					}
+				}
+			}
+		}
+	}
 	$where_clause = "";
 	$where = get_where_clause($module,$focus->column_fields);
 	$sec_parameter = getSecParameterforMerge($module);
