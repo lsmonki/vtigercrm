@@ -107,6 +107,24 @@ if($focus->mode == 'edit' && $_REQUEST['address_change'] == 'yes')
 //Changing account address - Ends
 
 $focus->save("Accounts");
+if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] == "Campaigns")
+{
+	if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "")
+	{
+		$campAccStatusResult = $adb->pquery("select campaignrelstatusid from vtiger_campaignaccountrel where campaignid=? AND accountid=?",array($_REQUEST['return_id'], $focus->id));
+		$accountStatus = $adb->query_result($campAccStatusResult,0,'campaignrelstatusid');
+		$sql = "delete from vtiger_campaignaccountrel where accountid = ?";
+		$adb->pquery($sql, array($focus->id));
+		if(isset($accountStatus) && $accountStatus!=''){
+			$sql = "insert into vtiger_campaignaccountrel values (?,?,?)";
+			$adb->pquery($sql, array($_REQUEST['return_id'], $focus->id,$accountStatus));
+		}
+		else{
+			$sql = "insert into vtiger_campaignaccountrel values (?,?,1)";
+			$adb->pquery($sql, array($_REQUEST['return_id'], $focus->id));		
+		}
+	}
+}
 $return_id = $focus->id;
 
 $parenttab = getParentTab();

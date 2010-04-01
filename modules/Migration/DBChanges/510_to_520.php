@@ -17,12 +17,78 @@ $adb = $_SESSION['adodb_current_object'];
 $conn = $_SESSION['adodb_current_object'];
 
 $migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Starts \n\n");
+function migration520_populateFieldForSecurity($tabid,$fieldid)
+{
+	global $adb;
 
+	$check_deforg_res = $adb->pquery("SELECT 1 FROM vtiger_def_org_field WHERE tabid=? AND fieldid = ? LIMIT 1", array($tabid, $fieldid));
+	if($check_deforg_res && $adb->num_rows($check_deforg_res)) {
+		// Entry already exists, no need to act
+	} else {
+		$adb->pquery("INSERT INTO vtiger_def_org_field (tabid, fieldid, visible, readonly) VALUES(?,?,?,?)",
+			array($tabid, $fieldid, 0, 1));
+	}
+			
+	$profileresult = $adb->pquery("SELECT * FROM vtiger_profile", array());
+	$countprofiles = $adb->num_rows($profileresult);
+	for ($i=0;$i<$countprofiles;$i++)
+	{
+    	$profileid = $adb->query_result($profileresult,$i,'profileid');
+    	$checkres  = $adb->pquery("SELECT 1 FROM vtiger_profile2field WHERE profileid=? AND tabid=? AND fieldid=?", array($profileid, $tabid, $fieldid));
+    	if($checkres && $adb->num_rows($checkres)) {
+    		// Entry already exists, do nothing
+    	} else {
+    		$adb->pquery("INSERT INTO vtiger_profile2field (profileid, tabid, fieldid, visible, readonly) VALUES(?,?,?,?,?)",
+				array($profileid, $tabid, $fieldid, 0, 1));
+    	}		
+	}	
+}
 ExecuteQuery("CREATE TABLE IF NOT EXISTS vtiger_tab_info (tabid INT, prefname VARCHAR(256), prefvalue VARCHAR(256), FOREIGN KEY fk_1_vtiger_tab_info(tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE ON UPDATE CASCADE)  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 $documents_tab_id=getTabid('Documents'); 
 ExecuteQuery("update vtiger_field set quickcreate=3 where tabid = $documents_tab_id and columnname = 'filelocationtype'"); 
+/* For Campaigns enhancement */
+$accounts_tab_id = getTabid('Accounts');
+$campaigns_tab_id = getTabid('Campaigns');
+$contacts_tab_id = getTabid('Contacts');
+$leads_tab_id = getTabid('Leads');
 
+
+$campignrelstatus_contacts_fieldid  = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("INSERT INTO vtiger_field(tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable, helpinfo) VALUES ($contacts_tab_id,".$campignrelstatus_contacts_fieldid.", 'campaignrelstatus', 'vtiger_campaignrelstatus', 1, '16', 'campaignrelstatus', 'Status', 1, 0, 0, 100, 1, NULL, 1, 'V~O', 1, NULL, 'BAS', 0, NULL)");
+migration520_populateFieldForSecurity($contacts_tab_id, $campignrelstatus_contacts_fieldid);
+
+$campignrelstatus_accounts_fieldid = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("INSERT INTO vtiger_field(tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable, helpinfo) VALUES ($accounts_tab_id,".$campignrelstatus_accounts_fieldid.", 'campaignrelstatus', 'vtiger_campaignrelstatus', 1, '16', 'campaignrelstatus', 'Status', 1, 0, 0, 100, 1, NULL, 1, 'V~O', 1, NULL, 'BAS', 0, NULL)");
+migration520_populateFieldForSecurity($accounts_tab_id, $campignrelstatus_accounts_fieldid);
+
+$campignrelstatus_leads_fieldid     = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("INSERT INTO vtiger_field(tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable, helpinfo) VALUES ($leads_tab_id,".$campignrelstatus_leads_fieldid.", 'campaignrelstatus', 'vtiger_campaignrelstatus', 1, '16', 'campaignrelstatus', 'Status', 1, 0, 0, 100, 1, NULL, 1, 'V~O', 1, NULL, 'BAS', 0, NULL)");
+migration520_populateFieldForSecurity($leads_tab_id, $campignrelstatus_leads_fieldid);
+
+$campignrelstatus_campaigns_fieldid = $adb->getUniqueID('vtiger_field');
+ExecuteQuery("INSERT INTO vtiger_field(tabid, fieldid, columnname, tablename, generatedtype, uitype, fieldname, fieldlabel, readonly, presence, selected, maximumlength, sequence, block, displaytype, typeofdata, quickcreate, quickcreatesequence, info_type, masseditable, helpinfo) VALUES ($campaigns_tab_id,".$campignrelstatus_campaigns_fieldid.", 'campaignrelstatus', 'vtiger_campaignrelstatus', 1, '16', 'campaignrelstatus', 'Status', 1, 0, 0, 100, 1, NULL, 1, 'V~O', 1, NULL, 'BAS', 0, NULL)");
+migration520_populateFieldForSecurity($campaigns_tab_id, $campignrelstatus_campaigns_fieldid);
+
+ExecuteQuery("CREATE TABLE vtiger_campaignrelstatus (
+	campaignrelstatusid INTEGER, campaignrelstatus VARCHAR(200), sortorderid INT, presence INT) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+
+ExecuteQuery("INSERT INTO vtiger_campaignrelstatus VALUES (".$adb->getUniqueID('vtiger_campaignrelstatus').", '--None--',1,1)");
+ExecuteQuery("INSERT INTO vtiger_campaignrelstatus VALUES (".$adb->getUniqueID('vtiger_campaignrelstatus').", 'Contacted - Successful',2,1)");
+ExecuteQuery("INSERT INTO vtiger_campaignrelstatus VALUES (".$adb->getUniqueID('vtiger_campaignrelstatus').", 'Contected - Unsuccessful',3,1)");
+ExecuteQuery("INSERT INTO vtiger_campaignrelstatus VALUES (".$adb->getUniqueID('vtiger_campaignrelstatus').", 'Contacted - Never Contact Again',4,1)");
+
+ExecuteQuery("CREATE TABLE vtiger_campaignaccountrel (
+	campaignid INTEGER UNSIGNED NOT NULL,
+	accountid INTEGER UNSIGNED NOT NULL,
+	campaignrelstatusid INTEGER UNSIGNED DEFAULT 1) ENGINE = InnoDB DEFAULT CHARSET=utf8;");
+ExecuteQuery("ALTER TABLE vtiger_campaignaccountrel ADD PRIMARY KEY (campaignid, accountid)");
+
+ExecuteQuery("ALTER TABLE vtiger_campaigncontrel ADD COLUMN campaignrelstatusid INTEGER UNSIGNED NOT NULL DEFAULT 1");
+ExecuteQuery("ALTER TABLE vtiger_campaignleadrel ADD COLUMN campaignrelstatusid INTEGER UNSIGNED NOT NULL DEFAULT 1");
+
+ExecuteQuery("INSERT INTO vtiger_relatedlists VALUES (".$adb->getUniqueID('vtiger_relatedlists').", $accounts_tab_id, $campaigns_tab_id, 'get_campaigns', 13, 'Campaigns', 0, 'select')");
+ExecuteQuery("INSERT INTO vtiger_relatedlists VALUES (".$adb->getUniqueID('vtiger_relatedlists').", $campaigns_tab_id, $accounts_tab_id, 'get_accounts', 5, 'Accounts', 0, 'add,select')");
 
 Vtiger_Utils::AddColumn('vtiger_inventorynotification', 'status','VARCHAR(30)');
 

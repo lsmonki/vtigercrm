@@ -540,6 +540,8 @@ function loadCvList(type,id) {
 	var element = type+"_cv_list";
 	var value = document.getElementById(element).value;        
 
+	var filter = $(element)[$(element).selectedIndex].value	;
+	if(filter=='None')return false;
 	if(value != '') {
 		$("status").style.display="inline";
 		new Ajax.Request(

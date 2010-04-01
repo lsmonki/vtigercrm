@@ -1512,6 +1512,11 @@
 			<notnull />
 			<default value="0"/>
 		</field>
+		<field name="campaignrelstatusid" type="I" size="19">
+			<key />
+			<notnull />
+			<default value="0"/>
+		</field>
 
 		<index name="campaigncontrel_contractid_idx">
 			<col>contactid</col>
@@ -1537,7 +1542,10 @@
 			<notnull />
 			<default value="0" />
 		</field>
-
+		<field name="campaignrelstatusid" type="I" size="19">
+			<key />
+			<default value="0" />
+		</field>
 		<index name="campaignleadrel_leadid_campaignid_idx">
 			<col>leadid</col>
 			<col>campaignid</col>
@@ -3470,7 +3478,6 @@
 		<field name="notificationbody" type="X" />
 		<field name="label" type="C" size="50" />
 		<field name="type" type="C" size="10" />
-		
 		<index name="notificationscheduler_schedulednotificationname_idx">
 			<col>schedulednotificationname</col>
 			<unique />
@@ -7198,5 +7205,22 @@
 		<constraint>ADD CONSTRAINT fk_1_vtiger_tab_info FOREIGN KEY (tabid) REFERENCES vtiger_tab(tabid) ON DELETE CASCADE ON UPDATE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 	</table>
+	
+	<table name="vtiger_campaignrelstatus">
+		<field name="campaignrelstatusid" type="I" size="19" />
+		<field name="campaignrelstatus" type="C" size="256" />
+		<field name="sortorderid" type="I" size="19" />
+		<field name="presence" type="I" size="19" />
+
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+	
+	<table name="vtiger_campaignaccountrel">
+		<field name="campaignid" type="I" size="19" />
+		<field name="accountid" type="I" size="19" />
+		<field name="campaignrelstatusid" type="I" size="19" />
+
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>	
 	
 </schema>
