@@ -1650,7 +1650,11 @@ function getAssociatedProducts($module,$focus,$seid='')
 			$product_Detail[$i]['productName'.$i]= htmlspecialchars($product_Detail[$i]['productName'.$i]);
 		$product_Detail[$i]['hdnProductcode'.$i] = $hdnProductcode;
 		$product_Detail[$i]['productDescription'.$i]= from_html($productdescription);
-		$product_Detail[$i]['comment'.$i]= $comment;
+		if($module == 'Potentials' || $module == 'Products' || $module == 'Services') {
+			$product_Detail[$i]['comment'.$i]= $productdescription;
+		}else {
+            $product_Detail[$i]['comment'.$i]= $comment;
+		}
 
 		if($module != 'PurchaseOrder' && $focus->object_name != 'Order')
 		{
