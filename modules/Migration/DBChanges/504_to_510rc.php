@@ -1963,7 +1963,6 @@ ExecuteQuery("update vtiger_cvcolumnlist set columnname ='vtiger_emaildetails:to
 		$maxseq=1;
 	}
 	$adb->pquery("INSERT INTO vtiger_settings_field (fieldid, blockid, name, iconpath, description, linkto, sequence) VALUES (?,?,?,?,?,?,?)",array($adb->getUniqueID('vtiger_settings_field'), $module_manager_id, 'LBL_WORKFLOW_LIST', 'settingsWorkflow.png', 'LBL_AVAILABLE_WORKLIST_LIST', 'index.php?module=com_vtiger_workflow&action=workflowlist', $maxseq));
-	
 
 $migrationlog->debug("\n\nDB Changes from 5.0.4 to 5.1.0 RC -------- Ends \n\n");
 
