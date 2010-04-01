@@ -4383,11 +4383,15 @@ function popup_decode_html($str)
 //function added to check the text length in the listview.
 function textlength_check($field_val)
 {
-	global $listview_max_textlength;
+	global $listview_max_textlength, $default_charset;
 	if($listview_max_textlength) {
 		$temp_val = preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val);
-        if(strlen($field_val) > $listview_max_textlength)
-        {
+		if(function_exists('mb_strlen')){
+			if(mb_strlen($default_charset) > $listview_max_textlength) {
+				$temp_val = mb_substr(preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val),0,
+						$listview_max_textlength,$default_charset).'...';
+			}
+		}elseif(strlen($field_val) > $listview_max_textlength) {
 			$temp_val = substr(preg_replace("/(<\/?)(\w+)([^>]*>)/i","",$field_val),0,$listview_max_textlength).'...';
         }
 	} else {
