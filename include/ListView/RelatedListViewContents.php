@@ -27,6 +27,28 @@ if($ajaxaction == "LOADRELATEDLIST") {
 
 		$relatedListData = $modObj->$function_name($recordid, getTabid($currentModule),
 				$relationInfo['relatedTabId'], $actions);
+		// vtlib customization: Related module could be disabled, check it
+		if(is_array($relatedListData)) {
+			if( ($relatedModule == "Contacts" || $relatedModule == "Leads" ||
+					$relatedModule == "Accounts") && $currentModule == 'Campaigns') {
+				//TODO for 5.3 this should be COOKIE not REQUEST, change here else where
+				// this logic is used for listview checkbox selection propogation.
+				$checkedRecordIdString = $_REQUEST[$relatedModule.'_all'];
+				$checkedRecordIdString = rtrim($checkedRecordIdString);
+				$checkedRecordIdList = explode(';', $checkedRecordIdString);
+				$relatedListData["checked"]=array();
+				if (isset($relatedListData['entries'])) {
+					foreach($relatedListData['entries'] as $key=>$val) {
+						if(in_array($key,$checkedRecordIdList)) {
+							$relatedListData["checked"][$key] = 'checked';
+						} else {
+							$relatedListData["checked"][$key] = '';
+						}
+					}
+				}
+			}
+		}
+		// END
 		require_once('include/ListView/RelatedListViewSession.php');
 		RelatedListViewSession::addRelatedModuleToSession($relationId,$header);
 

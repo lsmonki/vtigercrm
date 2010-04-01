@@ -52,7 +52,7 @@
 	{foreach key=_RECORD_ID item=_RECORD from=$RELATEDLISTDATA.entries}
 		<tr bgcolor=white>
         	{if $MODULE eq 'Campaigns' && ($RELATED_MODULE eq 'Contacts' || $RELATED_MODULE eq 'Leads' || $RELATED_MODULE eq 'Accounts')}
-			<td><input name="{$RELATED_MODULE}_selected_id" id="{$_RECORD_ID}" value="{$_RECORD_ID}" onclick="rel_check_object(this,'{$RELATED_MODULE}');" type="checkbox"  {$check_status.checked.$header}></td>
+			<td><input name="{$RELATED_MODULE}_selected_id" id="{$_RECORD_ID}" value="{$_RECORD_ID}" onclick="rel_check_object(this,'{$RELATED_MODULE}');" type="checkbox"  {$RELATEDLISTDATA.checked.$_RECORD_ID}></td>
         	{/if}
 			{foreach key=index item=_RECORD_DATA from=$_RECORD}
 				 {* vtlib customization: Trigger events on listview cell *}
