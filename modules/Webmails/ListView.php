@@ -235,6 +235,20 @@ if($start == 1 || $start == "") {
 	$end_message = ($numEmails-(($start*2-1)*$mails_per_page));
 }
 
+// Calculate emails per page
+if($start == 1 || $start == ""){
+	$start_count = $start;
+	$end_count = $mails_per_page;  
+	
+} else {
+	$start_count =(($start-1)*$mails_per_page) + 1;
+	$end_count = ($start*$mails_per_page);
+	if($end_count > $numEmails){
+		$count =  $end_count - $numEmails;
+		$end_count = $end_count - $count;
+	}
+}
+
 // If in search mode, load overview of all the available emails
 if(isset($_REQUEST["search"])) {
 	// TODO: Navigating when search is used needs to be added
@@ -251,11 +265,16 @@ $headers = $elist["headers"];
 
 $c=$numEmails;
 
+$showing = getTranslatedString('LBL_LIST_COUNT', $module);
+if($numEmails != 0){
+		$navigationOutput ="$showing $start_count-$end_count ";
+	}
+
 if(!isset($_REQUEST["search"])) {
 	$numPages = ceil($numEmails/$MailBox->mails_per_page);
 	if($numPages > 1) {
-		if($start != 1){
-			 $navigationOutput = "<a href='javascript:;' onClick=\"cal_navigation('".$mailbox."',1);\" ><img src='modules/Webmails/images/start.gif' border='0'></a>&nbsp;&nbsp;";
+		if($start != 1){ 
+			 $navigationOutput .= "<a href='javascript:;' onClick=\"cal_navigation('".$mailbox."',1);\" ><img src='modules/Webmails/images/start.gif' border='0'></a>&nbsp;&nbsp;";
                         $navigationOutput .= "<a href='javascript:;' onClick=\"cal_navigation('".$mailbox."',".($start-1).");\" ><img src='modules/Webmails/images/previous.gif' border='0'></a> &nbsp;";
 		}
 		if($start <= ($numPages-1)){
@@ -349,6 +368,9 @@ else {
 			$i++;
 			$start_message--;
 		}
+		$start_count = $start;
+		$end_count = $search_count;
+		$navigationOutput ="$showing $start_count-$end_count ";
 	}else
 	{
 		$i=1;
@@ -436,7 +458,6 @@ if (is_array($list)) {
 }
 
 imap_close($MailBox->mbox);
-
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("SEARCH_VALUE",vtlib_purify($_REQUEST['search_input']));
 $smarty->assign("USERID", $current_user->id);

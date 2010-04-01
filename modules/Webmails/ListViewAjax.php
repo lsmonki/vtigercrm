@@ -67,6 +67,23 @@ if($start == 1 || $start == "") {
 	if($end_message < 0) $end_message = 0;
 }
 
+// Calculate emails per page
+if($start == 1 || $start == ""){
+	$start_count = $start;
+$end_count = ($start*$mails_per_page);
+	if($end_count > $numEmails){
+		$count =  $end_count - $numEmails;
+		$end_count = $end_count - $count;
+	}
+} else {
+	$start_count =(($start-1)*$mails_per_page) + 1;
+	$end_count = ($start*$mails_per_page);
+	if($end_count > $numEmails){
+		$count =  $end_count - $numEmails;
+		$end_count = $end_count - $count;
+	}
+}
+
 // If in search mode, load overview of all the available emails
 if(isset($_REQUEST["search"])) {
 	// TODO: Navigating when search is used needs to be added
@@ -83,6 +100,11 @@ $headers = $elist["headers"];
 
 $c=$numEmails;
 
+$showing = getTranslatedString('LBL_LIST_COUNT', $module);
+if($numEmails != 0){
+	$navigationOutput ="$showing $start_count-$end_count ";	
+}
+
 if(!isset($_REQUEST["search"])) {
 	$numPages = ceil($numEmails/$MailBox->mails_per_page);
 	if($numPages > 1) {
@@ -92,7 +114,7 @@ if(!isset($_REQUEST["search"])) {
 		}
 		if($start <= ($numPages-1)){
 			$navigationOutput .= "<a href='javascript:;' onClick=\"cal_navigation('".$mailbox."',".($start+1).");\" ><img src='modules/Webmails/images/next.gif' border='0'></a>&nbsp;&nbsp;";
-        	        $navigationOutput .= "<a href='javascript:;' onClick=\"cal_navigation('".$mailbox."',".$numPages.");\"><img src='modules/Webmails/images/end.gif' border='0'></a> &nbsp;";
+        	$navigationOutput .= "<a href='javascript:;' onClick=\"cal_navigation('".$mailbox."',".$numPages.");\"><img src='modules/Webmails/images/end.gif' border='0'></a> &nbsp;";
 		}
 	}
 }
