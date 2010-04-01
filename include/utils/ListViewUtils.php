@@ -2022,14 +2022,15 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 					$slashes_temp_val = popup_from_html($field_val);
                     $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
-					$description=decode_html_force($adb->query_result($list_result,$list_result_count,'description'));
-					$slashes_desc = addslashes(htmlspecialchars($description,ENT_QUOTES,$default_charset));
+					$description = popup_from_html($adb->query_result($list_result,$list_result_count,'description'));
+					$slashes_temp_desc = decode_html(nl2br(htmlspecialchars($description,ENT_QUOTES,$default_charset)));
+					$slashes_desc = stripslashes($slashes_temp_desc);
 					
 					$slashes_desc = str_replace(array("\r","\n"),array('\r','\n'), $slashes_desc);
 					$tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(decode_html(nl2br($slashes_temp_val)))."","unitprice" => "$unitprice", "qtyinstk"=>"$qty_stock","taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"$slashes_desc","subprod_ids"=>"$sub_det");
 					require_once('include/Zend/Json.php');
 					$prod_arr = Zend_Json::encode($tmp_arr);
-					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory("'.$entity_id.'", "'.decode_html(nl2br($slashes_temp_val)).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$sub_det.'");\' vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
+					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory("'.$entity_id.'", "'.decode_html(nl2br($slashes_temp_val)).'", "'.$unitprice.'", "'.$qty_stock.'","'.$tax_str.'","'.$row_id.'","'.$slashes_temp_desc.'","'.$sub_det.'");\' vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_prod_po")
 				{
@@ -2067,18 +2068,18 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					}
 					
 					$sub_det = $sub_products."::".str_replace(":","<br>",$sub_prod);
-
+                    
 					$slashes_temp_val = popup_from_html($field_val);
-					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
-					$description=$adb->query_result($list_result,$list_result_count,'description');
-					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
-					
-					$slashes_desc = str_replace(array("\r","\n"),array('\r','\n'), $slashes_desc);
-					$tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(decode_html(nl2br($slashes_temp_val)))."","unitprice" => "$unitprice", "taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"$slashes_desc","subprod_ids"=>"$sub_det");
+                    $slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
+                    $description = popup_from_html($adb->query_result($list_result,$list_result_count,'description'));
+                    $slashes_temp_desc = decode_html(nl2br(htmlspecialchars($description,ENT_QUOTES,$default_charset)));
+                    $slashes_desc = stripslashes($slashes_temp_desc);
+                                        
+                    $slashes_desc = str_replace(array("\r","\n"),array('\r','\n'), $slashes_desc);
+                    $tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(decode_html(nl2br($slashes_temp_val)))."","unitprice" => "$unitprice", "qtyinstk"=>"$qty_stock","taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"$slashes_desc","subprod_ids"=>"$sub_det");
 					require_once('include/Zend/Json.php');
 					$prod_arr = Zend_Json::encode($tmp_arr);
-
-					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory_po("'.$entity_id.'", "'.decode_html(nl2br($slashes_temp_val)).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'","'.$sub_det.'"); \'  vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
+					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory_po("'.$entity_id.'", "'.decode_html(nl2br($slashes_temp_val)).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_temp_desc.'","'.$sub_det.'"); \'  vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_service")
 				{
@@ -2105,15 +2106,16 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 					$slashes_temp_val = popup_from_html($field_val);
 					$slashes_temp_val = htmlspecialchars($slashes_temp_val,ENT_QUOTES,$default_charset);
-					$description=decode_html_force($adb->query_result($list_result,$list_result_count,'description'));
-					$slashes_desc = htmlspecialchars($description,ENT_QUOTES,$default_charset);
+					$description = popup_from_html($adb->query_result($list_result,$list_result_count,'description'));
+					$slashes_temp_desc = decode_html(nl2br(htmlspecialchars($description,ENT_QUOTES,$default_charset)));
+					$slashes_desc = stripslashes($slashes_temp_desc);
 					
 					$slashes_desc = str_replace(array("\r","\n"),array('\r','\n'), $slashes_desc);
 					$tmp_arr = array("entityid"=>$entity_id,"prodname"=>"".stripslashes(decode_html(nl2br($slashes_temp_val)))."","unitprice" => "$unitprice","taxstring"=>"$tax_str","rowid"=>"$row_id","desc"=>"$slashes_desc");
 					require_once('include/Zend/Json.php');
 					$prod_arr = Zend_Json::encode($tmp_arr);
 
-					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory("'.$entity_id.'", "'.decode_html(nl2br($slashes_temp_val)).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_desc.'");\'  vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
+					$value = '<a href="javascript:window.close();" id=\'popup_product_'.$entity_id.'\' onclick=\'set_return_inventory("'.$entity_id.'", "'.decode_html(nl2br($slashes_temp_val)).'", "'.$unitprice.'", "'.$tax_str.'","'.$row_id.'","'.$slashes_temp_desc.'");\'  vt_prod_arr=\''.$prod_arr.'\' >'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_pb")
 				{
