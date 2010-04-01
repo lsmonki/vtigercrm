@@ -1147,7 +1147,7 @@ $mod_strings = Array(
 'VTLIB_LBL_NOT_PRESENT'=>'Not Present',
 'VTLIB_LBL_INST_VERSION'=>'Installed Version',
 'VTLIB_LBL_MATCHES_PACKAGE_VERSION'=>'matches Package Version',
-'VTLIB_LBL_CANNOT_UPGRADE'=>'Cannot updgrade!',
+'VTLIB_LBL_CANNOT_UPGRADE'=>'Cannot upgrade!',
 // END
 
 //User group fixes
