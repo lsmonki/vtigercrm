@@ -209,5 +209,6 @@ $installationStrings = array(
 	'LBL_MIGRATION_FINISHED' => 'Migration Successfully finished',
 	'LBL_OLD_VERSION_IS_AT' => 'Your older version is available at : ',
 	'LBL_CURRENT_SOURCE_PATH_IS' => 'Your current source path is : ',
+	'LBL_DATABASE_EXTENSION' =>'Database Extension',
 );
 ?>

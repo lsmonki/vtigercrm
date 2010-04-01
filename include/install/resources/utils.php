@@ -1020,6 +1020,16 @@ class Common_Install_Wizard_Utils {
 		
 		return $directiveValues;
 	}
+	// Fix for ticket 6605 : detect mysql extension during installation
+	static function check_mysql_extension() {
+		if(function_exists('mysql_connect')) {
+			$mysql_extension = true;
+		}
+		else {
+			$mysql_extension = false;
+		}
+		return $mysql_extension;
+	}
 	
 	static function isMySQL($dbType) { 
 		return (stripos($dbType ,'mysql') === 0);

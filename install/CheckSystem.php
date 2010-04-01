@@ -50,7 +50,7 @@ $failed_permissions = Common_Install_Wizard_Utils::getFailedPermissionsFiles();
 $gd_info_alternate = Common_Install_Wizard_Utils::$gdInfoAlternate;
 $directive_recommended = Common_Install_Wizard_Utils::$recommendedDirectives;
 $directive_array = Common_Install_Wizard_Utils::getCurrentDirectiveValue();
-
+$check_mysql_extension = Common_Install_Wizard_Utils::check_mysql_extension();
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -153,6 +153,18 @@ $directive_array = Common_Install_Wizard_Utils::getCurrentDirectiveValue();
 																			} else {
 																				echo "<strong><font size=-1 color=\"#FF0000\">{$installationStrings['LBL_NO']}</font>";
 																				}
+																			}
+																		?>
+																		</td>
+																	</tr>
+																	<tr class="level1">
+																		<td valign=top><?php echo $installationStrings['LBL_DATABASE_EXTENSION'];?></td>
+																		<td valign=top><?php
+																			if($check_mysql_extension == false) {
+																				echo "<strong><font size=-1 color=\"#FF0000\">{$installationStrings['LBL_NO']}</strong></font>";
+																			}
+																			else {
+																				echo "<strong><font color=\"#46882B\">{$installationStrings['LBL_YES']}</strong></font>";
 																			}
 																		?>
 																		</td>
