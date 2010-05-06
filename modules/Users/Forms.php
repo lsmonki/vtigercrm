@@ -45,9 +45,15 @@ function checkAsteriskDetails(){
  */
 function getAsteriskExtensions(){
 	global $adb, $current_user;
-	
-	$sql = "select * from vtiger_asteriskextensions where userid != ".$current_user->id;
-	$result = $adb->pquery($sql, array());
+	if(!empty($_REQUEST['record'])){
+		$userId = $_REQUEST['record'];
+	}else{
+		$userId = $current_user->id;
+	}
+	$sql = "select * from vtiger_asteriskextensions INNER JOIN vtiger_users on vtiger_users.id".
+	"=vtiger_asteriskextensions.userid and vtiger_users.deleted=0 and status='Active' where ".
+	"userid != ?";
+	$result = $adb->pquery($sql, array($userId));
 	$count = $adb->num_rows($result);
 	$data = array();
 	
@@ -89,7 +95,8 @@ $lbl_asterisk_details_not_set = $app_strings['LBL_ASTERISK_SET_ERROR'];
 
 //check asteriskdetails start
 $checkAsteriskDetails = checkAsteriskDetails();
-$extensions_list = implode(",",getAsteriskExtensions());
+// Fix : 6362
+$extensions_list = "'".implode("','",getAsteriskExtensions())."'";
 //check asteriskdetails end
 
 $the_script  = <<<EOQ
@@ -112,7 +119,6 @@ function verify_data(form) {
 		alert(errorMessage);
 		return false;
 	}
-
 	for(var i=0; i<existing_extensions.length; i++){
 		if(form.asterisk_extension.value == existing_extensions[i]){
 			alert("This extension has already been configured for another user. Please use another extension.");
