@@ -47,7 +47,7 @@ if (isset ($_REQUEST['record']) && $_REQUEST['record'] != '') {
 		$quote_focus->id = $quoteid;
 		$quote_focus->retrieve_entity_info($quoteid, "Quotes");
 		$focus = getConvertQuoteToSoObject($focus, $quote_focus, $quoteid);
-		$focus->id = $quoteid;
+
 
 		// Reset the value w.r.t Quote Selected
 		$currencyid = $quote_focus->column_fields['currency_id'];
