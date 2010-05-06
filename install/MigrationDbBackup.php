@@ -22,6 +22,9 @@ if(!empty($_REQUEST['rootPassword'])) {
 
 
 require_once 'include/db_backup/DatabaseBackup.php';
+require_once 'include/db_backup/Targets/Response.php';
+require_once 'include/db_backup/Targets/Database.php';
+require_once 'include/db_backup/Source/MysqlSource.php';
 $mode = $_REQUEST['mode'];
 
 $source_directory = $_SESSION['migration_info']['source_directory'];
@@ -33,24 +36,28 @@ if(empty($createDB)){
 	$createDB = true;
 }
 
-$backup = new DatabaseBackup($dbconfig['db_type'],$createDB);
 $hostName = $dbconfig['db_server'].$dbconfig['db_port'];
 $username = $dbconfig['db_username'];
 $password = $dbconfig['db_password'];
 $dbName = $dbconfig['db_name'];
-$backup->setSourceConfig(new DatabaseConfig($hostName,$username,$password,$dbName));
+$sourceConfig = new DatabaseConfig($hostName,$username,$password,$dbName);
+$source = new MysqlSource($sourceConfig);
 if(strtolower($mode) == 'dump'){
 	header('Content-type: text/plain; charset=UTF-8');
-	$backup->enableDownloadMode();
-	$backup->backup();
+	$responseDest = new Response($sourceConfig, true);
+	$dbBackup = new DatabaseBackup($source, $responseDest);
+	$dbBackup->backup();
 }else{
 	$targetName = $_REQUEST['newDatabaseName'];
 	try{
 		if(!empty($targetName) && $dbName != $targetName){
 			$rootUserName = $_SESSION['migration_info']['root_username'];
 			$rootPassword = $_SESSION['migration_info']['root_password'];
-			$backup->setDestinationConfig(new DatabaseConfig($hostName,$username,$password,$targetName,$rootUserName,$rootPassword));
-			$backup->backup();
+			$destConfig = new DatabaseConfig($hostName,$username,$password,$targetName, 'mysql', 
+					$rootUserName,$rootPassword);
+			$databaseDest = new Database($destConfig, $createDB, true);
+			$dbBackup = new DatabaseBackup($source, $databaseDest);
+			$dbBackup->backup();
 			$_SESSION['migration_info']['new_dbname'] = $targetName;
 			if ($createDB && $backup->isUTF8SupportEnabled()) {
 				$_SESSION['config_file_info']['vt_charset'] = "UTF-8";

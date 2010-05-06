@@ -55,4 +55,8 @@ if($service == 'com_vtiger_workflow'){
 	include_once('cron/modules/com_vtiger_workflow/com_vtiger_workflow.service');
 }
 
+if($service == 'VtigerBackup'){
+	include_once('cron/modules/VtigerBackup/VtigerBackup.service');
+}
+
 ?>
