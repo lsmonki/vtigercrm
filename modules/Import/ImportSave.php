@@ -225,7 +225,6 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 			$last_import->bean_type = $_REQUEST['module'];
 			$last_import->bean_id = $focus->id;
 			$last_import->save();
-			array_push($saved_ids,$focus->id);
 			$count++;
 		}
 		$ii++;
@@ -264,7 +263,7 @@ function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_fi
 		 
 		 if($imported_records < 0) $imported_records = 0;
 	
-		 $message= urlencode("<b>".$mod_strings['LBL_SUCCESS']."</b>"."<br><br>" .$mod_strings['LBL_SUCCESS_1']."  $imported_records" ."<br><br>" .$mod_strings['LBL_SKIPPED_1']."  $skip_required_count <br><br>".$dup_info );
+		 $message= urlencode("<b>".$mod_strings['LBL_SUCCESS']."</b>"."<br><br>" .$mod_strings['LBL_SUCCESS_1']."  $imported_records " .$mod_strings['of'].' '.$totalnoofrows."<br><br>" .$mod_strings['LBL_SKIPPED_1']."  $skip_required_count <br><br>".$dup_info );
 	} else {
 		$module = 'Import';
 		$action = 'ImportStep3';
@@ -514,6 +513,36 @@ function overwrite_duplicate_records($module,$focus)
 	}
 	else
 		return false;
+}
+
+//picklist function is added to avoid duplicate picklist entries
+function getPicklist($field,$value)
+{
+        global $table_picklist,$converted_table_picklist_values;
+
+        //for the first run these will be defined and for the subsequent redirections
+        //pick up from session.
+        if(is_array($table_picklist)){
+                $_SESSION['import_table_picklist'] = $table_picklist;
+        }else{
+                $table_picklist = $_SESSION['import_table_picklist'];
+        }
+        if(is_array($converted_table_picklist_values)){
+                $_SESSION['import_converted_picklist_values'] = $converted_table_picklist_values;
+        }else{
+                $converted_table_picklist_values = $_SESSION['import_converted_picklist_values'];
+        }
+
+        $orginal_val = $table_picklist[$field];
+        $converted_val = $converted_table_picklist_values[$field];
+        $temp_val = strtolower($value);
+                if(is_array($converted_val) && in_array($temp_val,$converted_val)) {
+                $existkey = array_search($temp_val,$converted_val);
+                $correct_val=$orginal_val[$existkey];
+                return $correct_val;
+        }
+        return null;
+
 }
 
 ?>

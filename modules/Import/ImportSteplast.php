@@ -297,9 +297,10 @@ else
 			$smarty->assign("LISTENTITY", $listview_entries);
 			
 			$smarty->display("ListViewEntries.tpl");
-			echo "<BR>";
 		}
 	}
 }
 
+unset($_SESSION['import_table_picklist']);
+unset($_SESSION['import_converted_picklist_values+95']);
 ?>
