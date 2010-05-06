@@ -7221,6 +7221,34 @@
 		<field name="campaignrelstatusid" type="I" size="19" />
 
 		<opt platform="mysql">Type=InnoDB</opt>
-	</table>	
+	</table>
+
+	<table name="vtiger_customerportal_tabs">
+		<field name="tabid" type="I" size="19">
+			<notnull />
+			<key />
+		</field>
+		<field name="visible" type="I" size="1">
+			<default value="1" />
+		</field>
+		<field name="sequence" type="I" size="1">
+			<default value="NULL" />
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
+
+	<table name="vtiger_customerportal_prefs">
+                <field name="tabid" type="I" size="19">
+                        <notnull />
+                        <key />
+                </field>
+                <field name="prefkey" type="C" size="100">
+                        <default value="NULL" />
+                </field>
+                <field name="prefvalue" type="I" size="20">
+                        <default value="NULL" />
+                </field>
+                <opt platform="mysql">Type=InnoDB</opt>
+        </table>	
 	
 </schema>

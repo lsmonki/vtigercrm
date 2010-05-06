@@ -373,6 +373,12 @@ class CustomView extends CRMEntity{
                                 $optionvalue = "vtiger_contactdetails:lastname:lastname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
 			else if($fieldname == 'product_id' && ($module != 'Products' && $module != 'HelpDesk' && $module !="Faq"))//Campaign records sort by Product Name.
 				$optionvalue = "vtiger_products:productname:productname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
+			else if($fieldname == 'account' && $fieldtablename == 'vtiger_assets')
+				$optionvalue = "vtiger_assets:account:account:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
+			else if($fieldname == 'product' && $fieldtablename == 'vtiger_assets')
+				$optionvalue = "vtiger_assets:product:product:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
+			else if($fieldname == 'invoiceid' && $fieldtablename == 'vtiger_assets')
+				$optionvalue = "vtiger_assets:invoiceid:invoiceid:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
 			else
 				$optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1.":".$fieldtypeofdata;
 			//added to escape attachments fields in customview as we have multiple attachments
@@ -1067,6 +1073,17 @@ class CustomView extends CRMEntity{
 							}
 							elseif($this->customviewmodule == "Documents" && $columns[1]=='folderid'){
 								$advfiltersql[] = "vtiger_attachmentsfolder.foldername".$this->getAdvComparator($advfltrow["comparator"],trim($advfltrow["value"]),$datatype);
+							}
+							elseif($this->customviewmodule == "Assets"){
+								if($columns[1]=='account' ){
+									$advfiltersql[] = "vtiger_account.accountname".$this->getAdvComparator($advfltrow["comparator"],trim($advfltrow["value"]),$datatype);
+								}
+								if($columns[1]=='product'){
+									$advfiltersql[] = "vtiger_products.productname".$this->getAdvComparator($advfltrow["comparator"],trim($advfltrow["value"]),$datatype);
+								}
+								if($columns[1]=='invoiceid'){
+									$advfiltersql[] = "vtiger_invoice.subject".$this->getAdvComparator($advfltrow["comparator"],trim($advfltrow["value"]),$datatype);
+								}
 							}
 							else
 							{

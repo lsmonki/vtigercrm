@@ -1614,11 +1614,25 @@ function get_list_values($id,$module,$sessionid,$only_mine='true')
 		 inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_contactdetails.contactid
 		 where vtiger_crmentity.deleted = 0 and contactid IN (".generateQuestionMarks($entity_ids_list).")";	
 		$params = array($entity_ids_list);
+	}else if ($module == 'Assets') {
+		$accountRes = $adb->pquery("SELECT accountid FROM vtiger_contactdetails
+						INNER JOIN vtiger_crmentity ON vtiger_contactdetails.contactid = vtiger_crmentity.crmid
+						WHERE contactid = ? AND deleted = 0", array($id));
+		$accountRow = $adb->num_rows($accountRes);
+		if($accountRow) {
+		$accountid = $adb->query_result($accountRes, 0, 'accountid');
+		$query = "select vtiger_assets.*, vtiger_assets.account as entityid , vtiger_crmentity.smownerid from vtiger_assets
+						inner join vtiger_crmentity on vtiger_assets.assetsid = vtiger_crmentity.crmid
+						left join vtiger_account on vtiger_account.accountid = vtiger_assets.account
+						left join vtiger_products on vtiger_products.productid = vtiger_assets.product
+						where vtiger_crmentity.deleted = 0 and account = ?";
+		$params = array($accountid);
+		$fields_list['Related To'] = 'entityid';
+		}
 	}
 	$res = $adb->pquery($query,$params);
 	$noofdata = $adb->num_rows($res);
-	
-	
+
 	$columnVisibilityByFieldnameInfo = array();
 	if($noofdata) {
 		foreach($fields_list as $fieldlabel =>$fieldname ) {
@@ -1723,7 +1737,7 @@ function get_list_values($id,$module,$sessionid,$only_mine='true')
 					$fieldvalue ='<a href="index.php?module=Contacts&action=index&id='.$fieldid.'">'.$fieldvalue.'</a>';
 				}
 			}
-			if($fieldname == 'entityid' || $fieldname == 'contactid' || $fieldname == 'accountid' || $fieldname == 'potentialid' ) {
+			if($fieldname == 'entityid' || $fieldname == 'contactid' || $fieldname == 'accountid' || $fieldname == 'potentialid' || $fieldname == 'account' ) {
 				$crmid = $fieldvalue;
 				$modulename = getSalesEntityType($crmid);
 				if ($crmid != '' && $modulename != '') {
@@ -1738,6 +1752,17 @@ function get_list_values($id,$module,$sessionid,$only_mine='true')
 				} else {
 					$fieldvalue = '';
 				}
+			}
+			if($module == 'Assets' && $fieldname == 'assetname') {
+					$assetname = $fieldvalue;
+					$assetid = $adb->query_result($res, $j, 'assetsid');
+					$fieldvalue = '<a href="index.php?module=Assets&action=index&id='.$assetid.'">'.$assetname.'</a>';
+			}
+			if($fieldname == 'product' && $module == 'Assets'){
+				$crmid= $adb->query_result($res,$j,'product');
+				$fres = $adb->pquery('select vtiger_products.productname from vtiger_products where productid=?',array($crmid));
+				$productname = $adb->query_result($fres,0,'productname');
+				$fieldvalue = '<a href="index.php?module=Products&action=index&id='.$crmid.'">'.$productname.'</a>';
 			}
 			if($fieldname == 'smownerid'){
 				$fieldvalue = getOwnerName($fieldvalue);
@@ -2236,12 +2261,20 @@ function get_details($id,$module,$customerid,$sessionid)
 		LEFT JOIN vtiger_users 
 			ON vtiger_users.id = vtiger_products.handler " .
 		"WHERE vtiger_products.productid = (". generateQuestionMarks($id) .") AND vtiger_crmentity.deleted = 0";
+	} else if($module == 'Assets') {
+		$query = "SELECT vtiger_assets.*, vtiger_assetscf.*, vtiger_crmentity.*
+		FROM vtiger_assets
+		INNER JOIN vtiger_crmentity
+		ON vtiger_assets.assetsid = vtiger_crmentity.crmid
+		INNER JOIN vtiger_assetscf
+		ON vtiger_assets.assetsid = vtiger_assets.assetsid
+		WHERE vtiger_crmentity.deleted = 0 AND vtiger_assets.assetsid = (". generateQuestionMarks($id) .")";
 	}
 	$params = array($id);
 	
 	$fieldquery = "SELECT fieldname,columnname,fieldlabel,blocklabel,uitype FROM vtiger_field 
-	INNER JOIN  vtiger_blocks on vtiger_blocks.blockid=vtiger_field.block WHERE vtiger_field.tabid = ? AND displaytype in (1,2,4) 
-	ORDER BY vtiger_field.block,vtiger_field.sequence";
+		INNER JOIN  vtiger_blocks on vtiger_blocks.blockid=vtiger_field.block WHERE vtiger_field.tabid = ? AND displaytype in (1,2,4)
+		ORDER BY vtiger_field.block,vtiger_field.sequence";
 	
 	$fieldres = $adb->pquery($fieldquery,array(getTabid($module)));
 	$nooffields = $adb->num_rows($fieldres);
@@ -2350,6 +2383,26 @@ function get_details($id,$module,$customerid,$sessionid)
 		if($module == 'Products'){
 			if($fieldname == 'vendor_id'){
 				$fieldvalue = get_vendor_name($fieldvalue);
+			}
+		}
+		if($module == 'Assets' ){
+			if($fieldname == 'account'){
+				$accountid = $adb->query_result($res,0,'account');
+				$accountres = $adb->pquery("select vtiger_account.accountname from vtiger_account where accountid=?",array($accountid));
+				$accountname = $adb->query_result($accountres,0,'accountname');
+				$fieldvalue = $accountname;
+			}
+			if($fieldname == 'product'){
+				$productid = $adb->query_result($res,0,'product');
+				$productres = $adb->pquery("select vtiger_products.productname from vtiger_products where productid=?",array($productid));
+				$productname = $adb->query_result($productres,0,'productname');
+				$fieldvalue = $productname;
+			}
+			if($fieldname == 'invoiceid'){
+				$invoiceid = $adb->query_result($res,0,'invoiceid');
+				$invoiceres = $adb->pquery("select vtiger_invoice.subject from vtiger_invoice where invoiceid=?",array($invoiceid));
+				$invoicename = $adb->query_result($invoiceres,0,'subject');
+				$fieldvalue = $invoicename;
 			}
 		}
 		if($fieldname == 'assigned_user_id' || $fieldname == 'assigned_user_id1'){
@@ -2581,6 +2634,23 @@ function check_permission($customerid, $module, $entityid) {
 		$res = $adb->pquery($query,array($customerid,$entityid));
 		if ($adb->num_rows($res) > 0) {
 			return true;
+		}
+		break;
+
+		case 'Assets' : $query = "SELECT vtiger_assets.assetname FROM vtiger_assets
+						INNER JOIN vtiger_crmentity ON  vtiger_assets.assetsid = vtiger_crmentity.crmid
+						WHERE vtiger_crmentity.deleted = 0 and vtiger_assets.account = ? ";
+		$accountid = '';
+		$accountRes = $adb->pquery("SELECT accountid FROM vtiger_contactdetails
+						INNER JOIN vtiger_crmentity ON vtiger_contactdetails.contactid = vtiger_crmentity.crmid
+						WHERE contactid = ? AND deleted = 0", array($customerid));
+		$accountRow = $adb->num_rows($accountRes);
+		if($accountRow) {
+				$accountid = $adb->query_result($accountRes, 0, 'accountid');
+		}
+		$res = $adb->pquery($query,array($accountid));
+		if ($adb->num_rows($res) > 0) {
+				return true;
 		}
 		break;
 
