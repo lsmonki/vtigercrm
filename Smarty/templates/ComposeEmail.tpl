@@ -69,12 +69,12 @@
 	<td class="cellText" style="padding: 5px;" align="left" nowrap>
 		<select name="parent_type">
 			{foreach key=labelval item=selectval from=$elements.1.0}
-				{if $select_module eq $APP[$labelval]}
-					{assign var=selectval value="selected"}
+				{if $selectval eq selected}
+					{assign var=selectmodule value="selected"}
 				{else}
-					{assign var=selectval value=""}
+					{assign var=selectmodule value=""}
 				{/if}
-				<option value="{$labelval}" {$selectval}>{$APP[$labelval]}</option>
+				<option value="{$labelval}" {$selectmodule}>{$APP[$labelval]}</option>
 			{/foreach}
 		</select>
 		&nbsp;
