@@ -1377,6 +1377,8 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 		WHERE vtiger_crmentity.deleted = 0
 			AND (vtiger_activity.activitytype not in ('Emails','Task')) $and ";
 
+        $list_query = $query." AND vtiger_crmentity.smownerid = "  . $current_user->id;
+
 	// User Select Customization: Changes should made also in (Appointment::readAppointment)
 	$query_filter_prefix = calendarview_getSelectedUserFilterQuerySuffix();
 	$query .= $query_filter_prefix;
@@ -1445,7 +1447,13 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
 
 	$start_rec = ($start-1) * $list_max_entries_per_page;
 	$end_rec = $navigation_array['end_val'];
-	if($start_rec < 0)
+        //print_r($navigation_array);die();
+        //echo $end_rec.'val';
+	
+        $list_query = $adb->convert2Sql($query, $params);
+	$_SESSION['Calendar_listquery'] = $list_query;
+        
+        if($start_rec < 0)
 		$start_rec = 0;
 	$query .= $group_cond." limit $start_rec,$list_max_entries_per_page";
 
@@ -1453,9 +1461,8 @@ function getEventList(& $calendar,$start_date,$end_date,$info='')
  	    $query = fixPostgresQuery($query, $log, 0);
  	}
 
-	$list_query = $adb->convert2Sql($query, $params);
-	$_SESSION['Calendar_listquery'] = $list_query;
-		
+	
+        
 	$result = $adb->pquery($query, $params);
 	$rows = $adb->num_rows($result);
 	$c = 0;
@@ -1600,14 +1607,9 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 					ON vtiger_users.id = vtiger_crmentity.smownerid
                 WHERE vtiger_crmentity.deleted = 0
 					AND vtiger_activity.activitytype = 'Task'
-					AND (vtiger_activity.date_start BETWEEN ? AND ?)"; 
-	//Fix : 6600 => Unable to assign todo to a group   
- 	// Show up the records assigned to a group to which logged-in user is a member. 
- 	$query_filter_prefix = calendarview_getSelectedUserFilterQuerySuffix(); 
- 	$query .= $query_filter_prefix; 
- 	$count_query .= $query_filter_prefix; 
- 	// END 
-	
+					AND (vtiger_activity.date_start BETWEEN ? AND ?)";
+
+      $list_query = $query." AND vtiger_crmentity.smownerid = "  . $current_user->id;
 	// User Select Customization
 	/*$only_for_user = calendarview_getSelectedUserId();
 	if($only_for_user != 'ALL') {
@@ -1675,6 +1677,10 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 
 	$start_rec = ($start-1) * $list_max_entries_per_page;
 	$end_rec = $navigation_array['end_val'];
+        
+        $list_query = $adb->convert2Sql($query, $params);
+	$_SESSION['Calendar_listquery'] = $list_query;
+
 	if($start_rec < 0)
 		$start_rec = 0;
 
@@ -1684,8 +1690,6 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 	if( $adb->dbType == "pgsql"){
  	    $query = fixPostgresQuery( $query, $log, 0);
 	}
-	$list_query = $adb->convert2Sql($query, $params);
-	$_SESSION['Calendar_listquery'] = $list_query;
 
     $result = $adb->pquery($query, $params);
     $rows = $adb->num_rows($result);
@@ -2088,7 +2092,7 @@ function constructTodoListView($todo_list,$cal,$subtab,$navigation_array='')
 			{
 				$list_view .="<tr><td>&nbsp;</td>";
 			}
-			$list_view .="<td align='center' width='60%'><span>".getTodoInfo($cal,'listcnt')."</span>&nbsp;</td>
+			$list_view .="<td align='center' width='60%'><span  id='total_activities'>".getTodoInfo($cal,'listcnt')."</span>&nbsp;</td>
 				<td align='right' width='28%'>&nbsp;</td>
 			</tr>
 		</table>
