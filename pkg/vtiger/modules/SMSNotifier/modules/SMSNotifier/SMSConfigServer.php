@@ -20,7 +20,7 @@ $smarty->assign("MOD", return_module_language($current_language,'Settings'));
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("CMOD", $mod_strings);
-
+$smarty->assign("MODULE_LBL",$currentModule);
 // Operation to be restricted for non-admin users.
 if(!is_admin($current_user)) {	
 	$smarty->display(vtlib_getModuleTemplate('Vtiger','OperationNotPermitted.tpl'));	

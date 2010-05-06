@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <module>
-<exporttime>2010-03-02 12:23:30</exporttime>
+<exporttime>2010-04-14 15:45:36</exporttime>
 <name>SMSNotifier</name>
 <label>SMSNotifier</label>
 <parent>Tools</parent>
@@ -68,8 +68,8 @@
 <sequence>2</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~M</typeofdata>
-<quickcreate>0</quickcreate>
-<quickcreatesequence>1</quickcreatesequence>
+<quickcreate>1</quickcreate>
+<quickcreatesequence>NULL</quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -88,8 +88,8 @@
 <sequence>5</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>T~O</typeofdata>
-<quickcreate>0</quickcreate>
-<quickcreatesequence>2</quickcreatesequence>
+<quickcreate>1</quickcreate>
+<quickcreatesequence>NULL</quickcreatesequence>
 <displaytype>2</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -108,8 +108,8 @@
 <sequence>6</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>T~O</typeofdata>
-<quickcreate>0</quickcreate>
-<quickcreatesequence>3</quickcreatesequence>
+<quickcreate>1</quickcreate>
+<quickcreatesequence>NULL</quickcreatesequence>
 <displaytype>2</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -128,8 +128,8 @@
 <sequence>1</sequence>
 <maximumlength>100</maximumlength>
 <typeofdata>V~M</typeofdata>
-<quickcreate>0</quickcreate>
-<quickcreatesequence>4</quickcreatesequence>
+<quickcreate>1</quickcreate>
+<quickcreatesequence>NULL</quickcreatesequence>
 <displaytype>1</displaytype>
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
@@ -179,6 +179,9 @@
 <label>Accounts</label>
 <sequence>1</sequence>
 <presence>0</presence>
+<actions>
+<action> </action>
+</actions>
 <relatedmodule>Accounts</relatedmodule>
 </relatedlist>
 <relatedlist>
@@ -186,6 +189,9 @@
 <label>Contacts</label>
 <sequence>2</sequence>
 <presence>0</presence>
+<actions>
+<action> </action>
+</actions>
 <relatedmodule>Contacts</relatedmodule>
 </relatedlist>
 <relatedlist>
@@ -193,6 +199,9 @@
 <label>Leads</label>
 <sequence>3</sequence>
 <presence>0</presence>
+<actions>
+<action> </action>
+</actions>
 <relatedmodule>Leads</relatedmodule>
 </relatedlist>
 </relatedlists>
