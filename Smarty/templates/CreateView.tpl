@@ -280,20 +280,21 @@ function sensex_info()
 </table>
 </form>
 
-{if ($MODULE eq 'Emails' || 'Documents') and ($FCKEDITOR_DISPLAY eq 'true')}
-       <script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
-       <script type="text/javascript" defer="1">
-
-       var oFCKeditor = null;
-
-       {if $MODULE eq 'Documents'}
-               oFCKeditor = new FCKeditor( "notecontent" ) ;
-       {/if}
-
-       oFCKeditor.BasePath   = "include/fckeditor/" ;
-       oFCKeditor.ReplaceTextarea() ;
-
-       </script>
+{if ($MODULE eq 'Emails' || 'Documents') and ($USE_RTE eq 'true')}
+<script type="text/javascript" src="include/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" defer="1">
+	var textAreaName = null;
+	{if $MODULE eq 'Documents'}
+		textAreaName = "notecontent";
+	{else}
+		textAreaName = 'description';
+	{/if}
+	CKEDITOR.replace( textAreaName,	{ldelim}
+		extraPlugins : 'uicolor',
+		uiColor: '#dfdff1'
+	{rdelim} ) ;
+	var oCKeditor = CKEDITOR.instances[textAreaName];
+</script>
 {/if}
 {if $MODULE eq 'Accounts'}
 <script>

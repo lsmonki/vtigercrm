@@ -23,7 +23,7 @@
 <script src="include/scriptaculous/scriptaculous.js" type="text/javascript"></script>
 <script src="include/js/general.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/{php} echo $_SESSION['authenticated_user_language'];{/php}.lang.js?{php} echo $_SESSION['vtiger_version'];{/php}"></script>
-<script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
+<script type="text/javascript" src="include/ckeditor/ckeditor.js"></script>
 <script type="text/javascript" src="modules/Products/multifile.js"></script>
 </head>
 <body marginheight="0" marginwidth="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
@@ -343,9 +343,11 @@ function delAttachments(id)
 {/literal}
 </script>
 <script type="text/javascript" defer="1">
-var oFCKeditor = null;
-oFCKeditor = new FCKeditor( "description" ,"100%","370") ;
-oFCKeditor.BasePath   = "include/fckeditor/" ;
-oFCKeditor.ReplaceTextarea();
+	var textAreaName = 'description';
+	CKEDITOR.replace( textAreaName,	{ldelim}
+		extraPlugins : 'uicolor',
+		uiColor: '#dfdff1'
+	{rdelim} ) ;
+	var oCKeditor = CKEDITOR.instances[textAreaName];
 </script>
 </html>

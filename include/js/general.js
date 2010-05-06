@@ -212,9 +212,9 @@ function emptyCheck(fldName,fldLabel, fldType) {
 			return true
 		}
 	} else if((fldType == "textarea")  
-		&& (typeof(FCKeditorAPI)!=='undefined' && FCKeditorAPI.GetInstance(fldName) !== 'undefined')) { 
- 		var textObj = FCKeditorAPI.GetInstance(fldName); 
- 		var textValue = textObj.EditorDocument.body.innerHTML; 
+		&& (typeof(CKEDITOR)!=='undefined' && CKEDITOR.intances[fldName] !== 'undefined')) {
+ 		var textObj = CKEDITOR.intances[fldName];
+ 		var textValue = textObj.getData();
  		if (trim(textValue) == '' || trim(textValue) == '<br>') { 
  		   	alert(fldLabel+alert_arr.CANNOT_BE_NONE); 
  			return false; 

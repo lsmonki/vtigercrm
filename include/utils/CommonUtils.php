@@ -3628,4 +3628,11 @@ require_once('include/utils/VtlibUtils.php');
 function vt_suppressHTMLTags($string){
 	return preg_replace(array('/</', '/>/', '/"/'), array('&lt;', '&gt;', '&quot;'), $string);
 }
+
+function vt_hasRTE() {
+	global $FCKEDITOR_DISPLAY, $USE_RTE;
+	return ((!empty($FCKEDITOR_DISPLAY) && $FCKEDITOR_DISPLAY == 'true') ||
+			(!empty($USE_RTE) && $USE_RTE == 'true'));
+}
+
 ?>
