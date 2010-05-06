@@ -173,6 +173,9 @@ function VT520_webserviceMigrate(){
 
 VT520_webserviceMigrate();
 
+$update_InvProductRel = "ALTER vtiger_inventoryproductrel MODIFY discount_amount decimal(25,3)";
+ExecuteQuery($update_InvProductRel);
+
 $migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Ends \n\n");
 
 
