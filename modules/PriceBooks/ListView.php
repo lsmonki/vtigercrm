@@ -101,13 +101,12 @@ if($viewnamedesc['viewname'] == 'All')
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
-if($viewid != "0")
-{
-	$listquery = getListQuery("PriceBooks");
-	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"PriceBooks");
-}else
-{
-	$list_query = getListQuery("PriceBooks");
+global $current_user;
+if ($viewid != "0") {
+	$queryGenerator = new QueryGenerator($currentModule, $current_user);
+	$list_query = $queryGenerator->getCustomViewQueryById($viewid);
+} else {
+	$list_query = $queryGenerator->getDefaultCustomViewQuery();
 }
 //<<<<<<<<customview>>>>>>>>>
 
@@ -153,14 +152,16 @@ $recordListRangeMsg = getRecordRangeMessage($list_result, $limit_start_rec,$noof
 $smarty->assign('recordListRange',$recordListRangeMsg);
 
 //Retreive the List View Table Header
-
-$listview_header = getListViewHeader($focus,"PriceBooks",$url_string,$sorder,$order_by,"",$oCustomView);
+$controller = new ListViewController($adb, $current_user, $queryGenerator);
+$listview_header = $controller->getListViewHeader($focus,$currentModule,$url_string,$sorder,
+		$order_by);
 $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_header_search = getSearchListHeaderValues($focus,"PriceBooks",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
-$listview_entries = getListViewEntries($focus,"PriceBooks",$list_result,$navigation_array,'','&return_module=PriceBooks&return_action=index','EditView','Delete',$oCustomView);
+$listview_entries = $controller->getListViewEntries($focus,$currentModule,$list_result,
+		$navigation_array);
 $smarty->assign("LISTENTITY", $listview_entries);
 
 //Added to select Multiple records in multiple pages

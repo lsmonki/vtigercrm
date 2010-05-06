@@ -493,18 +493,9 @@ var $rel_serel_table = "vtiger_seactivityrel";
 			LEFT JOIN vtiger_seattachmentsrel 
 				ON vtiger_activity.activityid=vtiger_seattachmentsrel.crmid 
 			LEFT JOIN vtiger_attachments 
-				ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid 
-			WHERE vtiger_activity.activitytype='Emails' AND vtiger_crmentity.deleted=0 ";
-
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		//we should add security check when the user has Private Access
-
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
-		{
-			$sec_parameter=getListViewSecurityParameter("Emails");
-			$query .= $sec_parameter;	
-		}
+				ON vtiger_seattachmentsrel.attachmentsid = vtiger_attachments.attachmentsid";
+		$query .= getNonAdminAccessControlQuery('Emails',$current_user);
+		$query .= "WHERE vtiger_activity.activitytype='Emails' AND vtiger_crmentity.deleted=0 ";
 
 		$log->debug("Exiting create_export_query method ...");
                 return $query;
@@ -556,6 +547,10 @@ var $rel_serel_table = "vtiger_seactivityrel";
 		$sql = 'DELETE FROM vtiger_crmentityrel WHERE (crmid=? AND relmodule=? AND relcrmid=?) OR (relcrmid=? AND module=? AND crmid=?)';
 		$params = array($id, $return_module, $return_id, $id, $return_module, $return_id);
 		$this->db->pquery($sql, $params);
+	}
+	
+	public function getNonAdminAccessControlQuery($module, $user,$scope='') {
+		return " and vtiger_crmentity$scope.smownerid=$user->id ";
 	}
 }
 /** Function to get the emailids for the given ids form the request parameters 

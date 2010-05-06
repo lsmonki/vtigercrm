@@ -10,11 +10,11 @@
 
 require_once 'include/Webservices/VtigerCRMActorMeta.php';
 class VtigerActorOperation extends WebserviceEntityOperation {
-	private $entityTableName;
-	private $moduleFields;
-	private $isEntity = false;
+	protected $entityTableName;
+	protected $moduleFields;
+	protected $isEntity = false;
 	
-	public function VtigerActorOperation($webserviceObject,$user,$adb,$log){
+	public function  __construct($webserviceObject,$user,$adb,$log){
 		parent::__construct($webserviceObject,$user,$adb,$log);
 		$this->entityTableName = $this->getActorTables();
 		if($this->entityTableName === null){
@@ -24,7 +24,7 @@ class VtigerActorOperation extends WebserviceEntityOperation {
 		$this->moduleFields = null;
 	}
 	
-	private function getActorTables(){
+	protected function getActorTables(){
 		static $actorTables = array();
 		
 		if(isset($actorTables[$this->webserviceObject->getEntityName()])){
@@ -46,15 +46,26 @@ class VtigerActorOperation extends WebserviceEntityOperation {
 	public function getMeta(){
 		return $this->meta;
 	}
-	
+
+	protected function getNextId($elementType,$element){
+		if(strcasecmp($elementType,'Groups') === 0){
+			$tableName="vtiger_users";
+		}else{
+			$tableName = $this->entityTableName;
+
+		}
+		$meta = $this->getMeta();
+		$sql = "update $tableName"."_seq set id=(select max(".$meta->getIdColumn().")
+			from $tableName)";
+		$this->pearDB->pquery($sql,array());
+		$id = $this->pearDB->getUniqueId($tableName);
+		return $id;
+	}
+
 	public function create($elementType,$element){
 		$element = DataTransform::sanitizeForInsert($element,$this->meta);
-		if(strcasecmp($elementType,'Groups') === 0){
-			$id=$this->pearDB->getUniqueId("vtiger_users");
-		}else{
-			$id = $this->pearDB->getUniqueId($this->entityTableName); 
-		}
-		
+
+		$id = $this->getNextId($elementType,$element);
 		$element = $this->restrictFields($element);
 		$element[$this->meta->getObectIndexColumn()] = $id;
 		
@@ -70,12 +81,14 @@ class VtigerActorOperation extends WebserviceEntityOperation {
 		return $this->retrieve(vtws_getId($this->meta->getEntityId(),$id));
 	}
 	
-	private function restrictFields($element){
+	protected function restrictFields($element){
 		$fields = $this->getModuleFields();
 		$newElement = array();
 		foreach ($fields as $field) {
 			if(isset($element[$field['name']])){
 				$newElement[$field['name']] = $element[$field['name']];
+			}else if($field['name'] != 'id'){
+				$newElement[$field['name']] = '';
 			}
 		}
 		return $newElement;
@@ -190,6 +203,37 @@ class VtigerActorOperation extends WebserviceEntityOperation {
 		}
 		return $describeArray;
 	}
-	
+	public function query($q){
+
+		$parser = new Parser($this->user, $q);
+		$error = $parser->parse();
+
+		if($error){
+			return $parser->getError();
+		}
+
+		$mysql_query = $parser->getSql();
+		$meta = $parser->getObjectMetaData();
+		$this->pearDB->startTransaction();
+		$result = $this->pearDB->pquery($mysql_query, array());
+		$error = $this->pearDB->hasFailedTransaction();
+		$this->pearDB->completeTransaction();
+
+		if($error){
+			throw new WebServiceException(WebServiceErrorCode::$DATABASEQUERYERROR,"Database error while performing required operation");
+		}
+
+		$noofrows = $this->pearDB->num_rows($result);
+		$output = array();
+		for($i=0; $i<$noofrows; $i++){
+			$row = $this->pearDB->fetchByAssoc($result,$i);
+			if(!$meta->hasPermission(EntityMeta::$RETRIEVE,$row["crmid"])){
+				continue;
+			}
+			$output[] = DataTransform::sanitizeDataWithColumn($row,$meta);
+		}
+
+		return $output;
+	}
 }
 ?>

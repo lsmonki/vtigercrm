@@ -59,7 +59,7 @@ if(strtolower($mode) == 'dump'){
 			$dbBackup = new DatabaseBackup($source, $databaseDest);
 			$dbBackup->backup();
 			$_SESSION['migration_info']['new_dbname'] = $targetName;
-			if ($createDB && $backup->isUTF8SupportEnabled()) {
+			if ($createDB && $databaseDest->isUTF8SupportEnabled()) {
 				$_SESSION['config_file_info']['vt_charset'] = "UTF-8";
 			} else {
 				$_SESSION['config_file_info']['vt_charset'] = "ISO-8859-1";

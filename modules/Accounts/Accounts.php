@@ -744,34 +744,7 @@ class Accounts extends CRMEntity {
 				ON vtiger_users.id=vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-			WHERE  vtiger_crmentity.deleted = 0 and ( vtiger_troubletickets.parent_id=".$id." or " ;
-
-		$query .= " vtiger_troubletickets.parent_id in(SELECT vtiger_contactdetails.contactid
-			FROM vtiger_contactdetails
-			INNER JOIN vtiger_crmentity
-				ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
-			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-			LEFT JOIN vtiger_users
-				ON vtiger_crmentity.smownerid = vtiger_users.id
-			WHERE vtiger_crmentity.deleted = 0
-			AND vtiger_contactdetails.accountid = ".$id;
-
-			
-		//Appending the security parameter
-		global $current_user;
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		$tab_id=getTabid('Contacts');
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter('Contacts');
-			$query .= ' '.$sec_parameter;
-
-		}
-
-		$query .= ") )";
-					
+			WHERE  vtiger_crmentity.deleted = 0 and vtiger_troubletickets.parent_id=$id" ;
 		$return_value = GetRelatedList($this_module, $related_module, $other, $query, $button, $returnset); 
 		
 		if($return_value == null) $return_value = Array();
@@ -870,22 +843,13 @@ class Accounts extends CRMEntity {
 					ON vtiger_account2.accountid = vtiger_account.parentid
 				";//vtiger_account2 is added to get the Member of account
 
-
+		$query .= $this->getNonAdminAccessControlQuery('Accounts',$current_user);
 		$where_auto = " vtiger_crmentity.deleted = 0 ";
 
 		if($where != "")
 			$query .= " WHERE ($where) AND ".$where_auto;
 		else
 			$query .= " WHERE ".$where_auto;
-
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		//we should add security check when the user has Private Access
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[6] == 3)
-		{
-			//Added security check to get the permitted records only
-			$query = $query." ".getListViewSecurityParameter("Accounts");
-		}
 
 		$log->debug("Exiting create_export_query method ...");
 		return $query;

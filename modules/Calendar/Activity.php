@@ -25,6 +25,7 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/Calendar/RenderRelatedListUI.php');
 require_once('data/CRMEntity.php');
+require_once('modules/Calendar/CalendarCommon.php');
 
 // Task is used to store customer information.
 class Activity extends CRMEntity {
@@ -948,5 +949,50 @@ function insertIntoRecurringTable(& $recurObj)
 		return $query;
 	}
 	
+	public function getNonAdminAccessControlQuery($module, $user,$scope='') {
+		require('user_privileges/user_privileges_'.$user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$user->id.'.php');
+		$query = ' ';
+		$tabId = getTabid($module);
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2]
+				== 1 && $defaultOrgSharingPermission[$tabId] == 3) {
+			$tableName = 'vt_tmp_u'.$user->id.'_t'.$tabId;
+			$sharingRuleInfoVariable = $module.'_share_read_permission';
+			$sharingRuleInfo = $$sharingRuleInfoVariable;
+			$sharedTabId = null;
+			$this->setupTemporaryTable($tableName, $sharedTabId, $user,
+					$current_user_parent_role_seq, $current_user_groups);
+			$query = " INNER JOIN $tableName $tableName$scope ON ($tableName$scope.id = ".
+					"vtiger_crmentity$scope.smownerid and $tableName$scope.shared=0) ";
+			$sharedIds = getSharedCalendarId($user->id);
+			if(!empty($sharedIds)){
+				$query .= "or ($tableName$scope.id = vtiger_crmentity$scope.smownerid AND ".
+					"$tableName$scope.shared=1 and vtiger_activity$scope.visibility = 'Public') ";
+			}
+		}
+		return $query;
+	}
+
+	protected function setupTemporaryTable($tableName, $tabId, $user, $parentRole, $userGroups) {
+		$module = null;
+		if (!empty($tabId)) {
+			$module = getTabname($tabId);
+		}
+		$query = $this->getNonAdminAccessQuery($module, $user, $parentRole, $userGroups);
+		$query = "create temporary table IF NOT EXISTS $tableName(id int(11) primary key, shared ".
+			"int(1) default 0) ignore ".$query;
+		$db = PearDatabase::getInstance();
+		$result = $db->pquery($query, array());
+		if(is_object($result)) {
+			$query = "create temporary table IF NOT EXISTS $tableName(id int(11) primary key, shared ".
+			"int(1) default 0) replace select 1, userid as id from vtiger_sharedcalendar where ".
+			"sharedid = $user->id";
+			$result = $db->pquery($query, array());
+			if(is_object($result)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
 ?>

@@ -199,6 +199,11 @@ function vtws_getWebserviceEntities(){
 	return array('module'=>$moduleArray,'entity'=>$entityArray);
 }
 
+/**
+ *
+ * @param VtigerWebserviceObject $webserviceObject
+ * @return CRMEntity
+ */
 function vtws_getModuleInstance($webserviceObject){
 	$moduleName = $webserviceObject->getEntityName();
 	return CRMEntity::getInstance($moduleName);
@@ -401,6 +406,14 @@ function vtws_addWebserviceOperationParam($operationId,$paramName,$paramType,$se
 	return ($result !== false);
 }
 
+/**
+ *
+ * @global PearDatabase $adb
+ * @global <type> $log
+ * @param <type> $name
+ * @param <type> $user
+ * @return WebserviceEntityOperation
+ */
 function vtws_getModuleHandlerFromName($name,$user){
 	global $adb, $log;
 	$webserviceObject = VtigerWebserviceObject::fromName($adb,$name);
@@ -423,6 +436,61 @@ function vtws_getModuleHandlerFromId($id,$user){
 	
 	$handler = new $handlerClass($webserviceObject,$user,$adb,$log);
 	return $handler;
+}
+
+function vtws_getActorEntityName ($name, $idList) {
+	$db = PearDatabase::getInstance();
+	if (!is_array($idList) && count($idList) == 0) {
+		return array();
+	}
+	$entity = VtigerWebserviceObject::fromName($db, $name);
+	return vtws_getActorEntityNameById($entity->getEntityId(), $idList);
+}
+
+function vtws_getActorEntityNameById ($entityId, $idList) {
+	$db = PearDatabase::getInstance();
+	if (!is_array($idList) && count($idList) == 0) {
+		return array();
+	}
+	$nameList = array();
+	$webserviceObject = VtigerWebserviceObject::fromId($db, $entityId);
+	$query = "select * from vtiger_ws_entity_name where entity_id = ?";
+	$result = $db->pquery($query, array($entityId));
+	if (is_object($result)) {
+		$rowCount = $db->num_rows($result);
+		if ($rowCount > 0) {
+			$nameFields = $db->query_result($result,0,'name_fields');
+			$tableName = $db->query_result($result,0,'table_name');
+			$indexField = $db->query_result($result,0,'index_field');
+			if (!(strpos($nameFields,',') === false)) {
+				$fieldList = explode(',',$nameFields);
+				$nameFields = "concat(";
+				$nameFields = $nameFields.implode(",' ',",$fieldList);
+				$nameFields = $nameFields.")";
+			}
+
+			$query1 = "select $nameFields as entityname, $indexField from $tableName where ".
+				"$indexField in (".generateQuestionMarks($idList).")";
+			$params1 = array($idList);
+			$result = $db->pquery($query1, $params1);
+			if (is_object($result)) {
+				$rowCount = $db->num_rows($result);
+				for ($i = 0; $i < $rowCount; $i++) {
+					$id = $db->query_result($result,$i, $indexField);
+					$nameList[$id] = $db->query_result($result,$i,'entityname');
+				}
+				return $nameList;
+			}
+		}
+	}
+	return array();
+}
+
+function vtws_isRoleBasedPicklist($name) {
+	$db = PearDatabase::getInstance();
+	$sql = "select picklistid from vtiger_picklist where name = ?";
+	$result = $db->pquery($sql, array($tableName));
+	return ($db->num_rows($result) > 0);
 }
 
 function vtws_getConvertLeadFieldMapping(){
@@ -628,5 +696,6 @@ function vtws_saveLeadRelatedCampaigns($leadId, $relatedId) {
 	}
 	return true;
 }
+
 
 ?>

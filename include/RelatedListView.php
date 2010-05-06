@@ -76,18 +76,15 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
  		$focus->initSortByField($relatedmodule);
  	}
 	//Retreive the list from Database
-	//Appending the security parameter
-	if($relatedmodule != 'Products' && $relatedmodule != 'Faq' && $relatedmodule != 'PriceBook' && $relatedmodule != 'Vendors') //Security fix by Don
-	{
+	//Appending the security parameter Security fix by Don
+	if($relatedmodule != 'Products' && $relatedmodule != 'Faq' && $relatedmodule != 'PriceBook'
+			&& $relatedmodule != 'Vendors') {
 		global $current_user;
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-        require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		$tab_id=getTabid($relatedmodule);
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3){
-    		$sec_parameter=getListViewSecurityParameter($relatedmodule);
-        	$query .= ' '.$sec_parameter;
-    	}
-	}		
+		$secQuery = getNonAdminAccessControlQuery($relatedmodule, $current_user);
+		if(strlen($secQuery) > 1) {
+			$query = appendFromClauseToQuery($query, $secQuery);
+		}
+	}
 	if($relatedmodule == 'Leads') {
 		$query .= " AND vtiger_leaddetails.converted = 0";
 	}

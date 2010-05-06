@@ -13,6 +13,11 @@ abstract class WebserviceEntityOperation{
 	protected $log;
 	protected $webserviceObject;
 	protected $meta;
+	/**
+	 *
+	 * @var PearDatabase
+	 */
+	protected $pearDB;
 	
 	protected function WebserviceEntityOperation($webserviceObject,$user,$adb,$log){
 		$this->user = $user;

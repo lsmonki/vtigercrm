@@ -112,8 +112,14 @@ if($viewid ==0)
 	exit;
 }
 
-$listquery = getListQuery($currentModule);
-$list_query= $customView->getModifiedCvListQuery($viewid, $listquery, $currentModule);
+global $current_user;
+if ($viewid != "0") {
+	$queryGenerator = new QueryGenerator($currentModule, $current_user);
+	//TODO move header generation to controller.
+	$list_query = $queryGenerator->getCustomViewQueryById($viewid);
+} else {
+	$list_query = $queryGenerator->getDefaultCustomViewQuery();
+}
 
 if($where != '') {
 	$list_query = "$list_query AND $where";
@@ -160,8 +166,11 @@ $smarty->assign("CUSTOMVIEW_OPTION",$customview_html);
 $navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string, $currentModule, 'index', $viewid);
 $smarty->assign("NAVIGATION", $navigationOutput);
 
-$listview_header = getListViewHeader($focus,$currentModule,$url_string,$sorder,$order_by,'',$customView);
-$listview_entries = getListViewEntries($focus,$currentModule,$list_result,$navigation_array,'','','EditView','Delete',$customView);
+$controller = new ListViewController($adb, $current_user, $queryGenerator);
+$listview_header = $controller->getListViewHeader($focus,$currentModule,$url_string,$sorder,
+		$order_by);
+$listview_entries = $controller->getListViewEntries($focus,$currentModule,$list_result,
+		$navigation_array);
 $listview_header_search = getSearchListHeaderValues($focus,$currentModule,$url_string,$sorder,$order_by,'',$customView);
 
 $smarty->assign('LISTHEADER', $listview_header);

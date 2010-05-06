@@ -1604,10 +1604,10 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 				LEFT JOIN vtiger_groups
 					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_users
-					ON vtiger_users.id = vtiger_crmentity.smownerid
-                WHERE vtiger_crmentity.deleted = 0
-					AND vtiger_activity.activitytype = 'Task'
-					AND (vtiger_activity.date_start BETWEEN ? AND ?)";
+					ON vtiger_users.id = vtiger_crmentity.smownerid";
+	$query .= getNonAdminAccessControlQuery('Calendar',$current_user);
+	$query .= "WHERE vtiger_crmentity.deleted = 0 AND vtiger_activity.activitytype = 'Task'".
+					" AND (vtiger_activity.date_start BETWEEN ? AND ?)";
 
       $list_query = $query." AND vtiger_crmentity.smownerid = "  . $current_user->id;
 	// User Select Customization
@@ -1653,11 +1653,6 @@ function getTodoList(& $calendar,$start_date,$end_date,$info='')
 			return Array('totaltodo'=>$total,'pendingtodo'=>$pending_rows);
         }
 	
-	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[9] == 3)
-	{
-		$sec_parameter=getListViewSecurityParameter('Calendar');
-		$query .= $sec_parameter;
-	}
 	$group_cond = '';
    	$group_cond .= " ORDER BY vtiger_activity.date_start,vtiger_activity.time_start ASC";
 	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')

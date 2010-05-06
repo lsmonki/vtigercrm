@@ -108,13 +108,12 @@ if($viewnamedesc['viewname'] == 'All')
 }
 
 //<<<<<<<<<customview>>>>>>>>>
-if($viewid != "0")
-{
-	$listquery = getListQuery("SalesOrder");
-	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"SalesOrder");
-}else
-{
-	$list_query = getListQuery("SalesOrder");
+global $current_user;
+if ($viewid != "0") {
+	$queryGenerator = new QueryGenerator($currentModule, $current_user);
+	$list_query = $queryGenerator->getCustomViewQueryById($viewid);
+} else {
+	$list_query = $queryGenerator->getDefaultCustomViewQuery();
 }
 //<<<<<<<<customview>>>>>>>>>
 
@@ -171,13 +170,16 @@ $smarty->assign('recordListRange',$recordListRangeMsg);
 if($viewid !='')
 $url_string .="&viewname=".$viewid;
 
-$listview_header = getListViewHeader($focus,"SalesOrder",$url_string,$sorder,$order_by,"",$oCustomView);
+$controller = new ListViewController($adb, $current_user, $queryGenerator);
+$listview_header = $controller->getListViewHeader($focus,$currentModule,$url_string,$sorder,
+		$order_by);
 $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_header_search=getSearchListHeaderValues($focus,"SalesOrder",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
-$listview_entries = getListViewEntries($focus,"SalesOrder",$list_result,$navigation_array,'','&return_module=SalesOrder&return_action=index','EditView','Delete',$oCustomView);
+$listview_entries = $controller->getListViewEntries($focus,$currentModule,$list_result,
+		$navigation_array);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 

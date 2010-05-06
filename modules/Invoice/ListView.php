@@ -122,13 +122,12 @@ $smarty->assign("CATEGORY",$category);
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
-if($viewid != "0")
-{
-	$listquery = getListQuery("Invoice");
-	$query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Invoice");
-}else
-{
-	$query = getListQuery("Invoice");
+global $current_user;
+if ($viewid != "0") {
+	$queryGenerator = new QueryGenerator($currentModule, $current_user);
+	$query = $queryGenerator->getCustomViewQueryById($viewid);
+} else {
+	$query = $queryGenerator->getDefaultCustomViewQuery();
 }
 //<<<<<<<<customview>>>>>>>>>
 
@@ -189,13 +188,16 @@ $smarty->assign('recordListRange',$recordListRangeMsg);
 if($viewid !='')
 $url_string .="&viewname=".$viewid;
 
-$listview_header = getListViewHeader($focus,"Invoice",$url_string,$sorder,$order_by,"",$oCustomView);
+$controller = new ListViewController($adb, $current_user, $queryGenerator);
+$listview_header = $controller->getListViewHeader($focus,$currentModule,$url_string,$sorder,
+		$order_by);
 $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_header_search = getSearchListHeaderValues($focus,"Invoice",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
-$listview_entries = getListViewEntries($focus,"Invoice",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
+$listview_entries = $controller->getListViewEntries($focus,$currentModule,$list_result,
+		$navigation_array);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 

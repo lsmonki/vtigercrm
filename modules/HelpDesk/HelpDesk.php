@@ -548,23 +548,13 @@ class HelpDesk extends CRMEntity {
 				LEFT JOIN vtiger_products
 					ON vtiger_products.productid=vtiger_troubletickets.product_id";
 				//end
-				$where_auto="   vtiger_crmentity.deleted = 0 ";
+			$query .= getNonAdminAccessControlQuery('HelpDesk',$current_user);
+			$where_auto=" vtiger_crmentity.deleted = 0 ";
 
-			$where_auto="   vtiger_crmentity.deleted = 0 ";
-				
-				if($where != "")
-					$query .= "  WHERE ($where) AND ".$where_auto;
-				else
-					$query .= "  WHERE ".$where_auto;
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-                require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-                //we should add security check when the user has Private Access
-                if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[13] == 3)
-                {
-                        //Added security check to get the permitted records only
-                        $query = $query." ".getListViewSecurityParameter("HelpDesk");
-                }
-
+			if($where != "")
+				$query .= "  WHERE ($where) AND ".$where_auto;
+			else
+				$query .= "  WHERE ".$where_auto;
 
                 $log->debug("Exiting create_export_query method ...");
                 return $query;

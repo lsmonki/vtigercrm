@@ -166,23 +166,13 @@ class Potentials extends CRMEntity {
 			$where_auto = ' AND vtiger_crmentity.deleted=0';
 		}
 
+		$query .= $this->getNonAdminAccessControlQuery('Potentials',$current_user);
 		if($where != "")
 			$query .= " where $where ".$where_auto;
 		else
 			$query .= " where ".$where_auto;
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-                {
-                                $sec_parameter=getListViewSecurityParameter("Potentials");
-                                $query .= $sec_parameter;
-
-                }
-
 		if($order_by != "")
 			$query .= " ORDER BY $order_by";
-		else
-			$query .= " ORDER BY vtiger_potential.potentialname ";
-
-
 
 		$log->debug("Exiting create_list_query method ...");
 		return $query;
@@ -216,21 +206,13 @@ class Potentials extends CRMEntity {
 				LEFT JOIN vtiger_campaign
 					ON vtiger_campaign.campaignid = vtiger_potential.campaignid";
 
+		$query .= $this->getNonAdminAccessControlQuery('Potentials',$current_user);
 		$where_auto = "  vtiger_crmentity.deleted = 0 ";
 
                 if($where != "")
                    $query .= "  WHERE ($where) AND ".$where_auto;
                 else
                    $query .= "  WHERE ".$where_auto;
-
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		//we should add security check when the user has Private Access
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[2] == 3)
-		{
-			//Added security check to get the permitted records only
-			$query = $query." ".getListViewSecurityParameter("Potentials");
-		}
 
 		$log->debug("Exiting create_export_query method ...");
 		return $query;

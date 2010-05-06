@@ -20,10 +20,6 @@ $PERFORMANCE_CONFIG = Array(
 	// This avoids executing the SET NAMES SQL for each query!
 	'DB_DEFAULT_CHARSET_UTF8' => true,
 
-	// To avoid overshooting max_connections configured for database server
-	// it is preferable to have this parameter set to false
-	'ALLOW_MULTI_DB_CONNECTION_PER_REQUEST' => false,
-
 	// Compute record change indication for each record shown on listview
 	'LISTVIEW_RECORD_CHANGE_INDICATOR' => true,
 

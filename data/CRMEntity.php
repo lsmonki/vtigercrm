@@ -2175,5 +2175,143 @@ $log->info("in getOldFileName  ".$notesid);
 		$this->__inactive_fields_filtered = true;
 	}
 	/** END **/
+	
+	/**
+	 *
+	 * @param String $tableName
+	 * @return String
+	 */
+	public function getJoinClause($tableName) {
+		if(strripos($tableName, 'rel') === (strlen($tableName) - 3)) {
+			return 'LEFT JOIN';
+		} else {
+			return 'INNER JOIN';
+		}
+	}
+	
+	/**
+	 *
+	 * @param <type> $module
+	 * @param <type> $user
+	 * @param <type> $parentRole
+	 * @param <type> $userGroups
+	 */
+	function getNonAdminAccessQuery($module,$user,$parentRole,$userGroups){
+		$query = $this->getNonAdminUserAccessQuery($user, $parentRole, $userGroups);
+		if(!empty($module)) {
+			$moduleAccessQuery = $this->getNonAdminModuleAccessQuery($module, $user);
+			if(!empty($moduleAccessQuery)) {
+				$query .= " UNION $moduleAccessQuery";
+			}
+		}
+		return $query;
+	}
+
+	/**
+	 *
+	 * @param <type> $user
+	 * @param <type> $parentRole
+	 * @param <type> $userGroups
+	 */
+	function getNonAdminUserAccessQuery($user,$parentRole,$userGroups){
+		$query = "(SELECT $user->id as id) UNION (SELECT vtiger_user2role.userid AS userid FROM ".
+		"vtiger_user2role INNER JOIN vtiger_users ON vtiger_users.id=vtiger_user2role.userid ".
+		"INNER JOIN vtiger_role ON vtiger_role.roleid=vtiger_user2role.roleid WHERE ".
+		"vtiger_role.parentrole like '$parentRole::%')";
+		if(count($userGroups) > 0 ) {
+			$query .= " UNION (SELECT groupid FROM vtiger_groups where".
+				" groupid in (".implode(",", $userGroups)."))";
+		}
+		return $query;
+	}
+
+	/**
+	 *
+	 * @param <type> $module
+	 * @param <type> $user
+	 */
+	function getNonAdminModuleAccessQuery($module,$user){
+		require('user_privileges/sharing_privileges_'.$user->id.'.php');
+		$tabId = getTabid($module);
+		$sharingRuleInfoVariable = $module.'_share_read_permission';
+		$sharingRuleInfo = $$sharingRuleInfoVariable;
+		$sharedTabId = null;
+		$query = '';
+		if(!empty($sharingRuleInfo) && (count($sharingRuleInfo['ROLE']) > 0 ||
+				count($sharingRuleInfo['GROUP']) > 0)) {
+			$query = " (SELECT shareduserid FROM vtiger_tmp_read_user_sharing_per ".
+			"WHERE userid=$user->id AND tabid=$tabId) UNION (SELECT ".
+			"vtiger_tmp_read_group_sharing_per.sharedgroupid FROM ".
+			"vtiger_tmp_read_group_sharing_per WHERE userid=$user->id AND tabid=$tabId)";
+		}
+		return $query;
+	}
+
+	/**
+	 *
+	 * @param <type> $module
+	 * @param <type> $user
+	 * @param <type> $parentRole
+	 * @param <type> $userGroups
+	 */
+	protected function setupTemporaryTable($tableName,$tabId, $user,$parentRole,$userGroups) {
+		$module = null;
+		if (!empty($tabId)) {
+			$module = getTabModuleName($tabId);
+		}
+		$query = $this->getNonAdminAccessQuery($module, $user, $parentRole, $userGroups);
+		$query = "create temporary table IF NOT EXISTS $tableName(id int(11) primary key) ignore ".
+			$query;
+		$db = PearDatabase::getInstance();
+		$result = $db->pquery($query, array());
+		if(is_object($result)) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 *
+	 * @param String $module - module name for which query needs to be generated.
+	 * @param Users $user - user for which query needs to be generated.
+	 * @return String Access control Query for the user.
+	 */
+	function getNonAdminAccessControlQuery($module,$user,$scope=''){
+		require('user_privileges/user_privileges_'.$user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$user->id.'.php');
+		$query = ' ';
+		$tabId = getTabid($module);
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2]
+				== 1 && $defaultOrgSharingPermission[$tabId] == 3) {
+			$tableName = 'vt_tmp_u'.$user->id;
+			$sharingRuleInfoVariable = $module.'_share_read_permission';
+			$sharingRuleInfo = $$sharingRuleInfoVariable;
+			$sharedTabId = null;
+			if(!empty($sharingRuleInfo) && (count($sharingRuleInfo['ROLE']) > 0 ||
+					count($sharingRuleInfo['GROUP']) > 0)) {
+				$tableName = $tableName.'_t'.$tabId;
+				$sharedTabId = $tabId;
+			}elseif($module == 'Calendar' || !empty($scope)) {
+				$tableName .= '_t'.$tabId;
+			}
+			$this->setupTemporaryTable($tableName, $sharedTabId, $user,
+					$current_user_parent_role_seq, $current_user_groups);
+			$query = " INNER JOIN $tableName $tableName$scope ON $tableName$scope.id = ".
+					"vtiger_crmentity$scope.smownerid ";
+		}
+		return $query;
+	}
+
+	public function listQueryNonAdminChange( $query, $scope='' ) {
+		//make the module base table as left hand side table for the joins,
+		//as mysql query optimizer puts crmentity on the left side and considerably slow down
+		$query = preg_replace('/\s+/', ' ', $query);
+		if(strripos($query, ' WHERE ') !== false) {
+			vtlib_setup_modulevars($module, $this);
+			$query = str_ireplace(' where ', " WHERE $this->table_name.$this->table_index > 0  AND ",
+					$query);
+		}
+		return $query;
+	}
 }
 ?>

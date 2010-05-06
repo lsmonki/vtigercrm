@@ -8,6 +8,10 @@
  * All Rights Reserved.
  *********************************************************************************/
 
+require_once 'include/Webservices/Utils.php';
+require_once 'modules/Users/Users.php';
+require_once 'include/utils/utils.php';
+
 //5.1.0 to 5.2.0 database changes
 
 //we have to use the current object (stored in PatchApply.php) to execute the queries
@@ -303,6 +307,106 @@ function populateDefaultWorkflows($adb) {
 	$tm->saveTask($task);
 	$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
 }
+
+function VT520_migrateCustomview($sql,$forModule, $user, $handler) {
+	$db = PearDatabase::getInstance();
+	$params = array();
+	$result = $db->pquery($sql, $params);
+	$it = new SqlResultIterator($db, $result);
+
+	$moduleMetaInfo = array();
+
+	foreach ($it as $row) {
+		$module = $row->entitytype;
+		$current_module = $module;
+		if($forModule == 'Accounts') {
+			$fieldname = 'account_id';
+		}elseif($forModule == 'Contacts') {
+			$fieldname = 'contact_id';
+		}elseif($forModule == 'Products') {
+			$fieldname = 'product_id';
+		} elseif ($forModule == 'SalesOrder') {
+			$fieldname = 'quote_id';
+		}
+
+		if(empty($moduleMetaInfo[$module])) {
+			$moduleMetaInfo[$module] = new VtigerCRMObjectMeta(VtigerWebserviceObject::fromName($db,
+					$module), $user);
+		}
+		$meta = $moduleMetaInfo[$module];
+
+		$moduleFields = $meta->getModuleFields();
+		$field = $moduleFields[$fieldname];
+		$columnname = $field->getTableName().':'.$field->getColumnName().':'.$field->getFieldName().
+				':'.$module.'_'.str_replace(' ','_',$field->getFieldLabelKey()).':V';
+		$handler($columnname, $row);
+	}
+}
+
+function VT520_updateCVColumnList($columnname, $row) {
+	$db = PearDatabase::getInstance();
+	$sql = 'update vtiger_cvcolumnlist set columnname=? where cvid=? and columnindex=?';
+	$params = array($columnname, $row->cvid,$row->columnindex);
+	$db->pquery($sql, $params);
+}
+
+function VT520_updateADVColumnList($columnname, $row) {
+	$db = PearDatabase::getInstance();
+	$sql = 'update vtiger_cvadvfilter set columnname=? where cvid=? and columnindex=?';
+	$params = array($columnname, $row->cvid,$row->columnindex);
+	$db->pquery($sql, $params);
+}
+
+function VT520_queryGeneratorMigration() {
+	$db = PearDatabase::getInstance();
+	$sql = "select id from vtiger_users where is_admin='On' and status='Active' limit 1";
+	$result = $db->pquery($sql, array());
+	$adminId = 1;
+	$it = new SqlResultIterator($db, $result);
+	foreach ($it as $row) {
+		$adminId = $row->id;
+	}
+	$user = new Users();
+	$current_user = $user->retrieveCurrentUserInfoFromFile($adminId);
+	$user = $current_user;
+	$sql = "select vtiger_customview.cvid,columnindex,entitytype from vtiger_customview inner join ".
+		"vtiger_cvcolumnlist on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid where entitytype !=".
+		"'Accounts' and columnname like 'vtiger_account:accountname:accountname%';";
+	VT520_migrateCustomview($sql,'Accounts', $user, VT520_updateCVColumnList);
+	$sql = "select vtiger_customview.cvid,columnindex,entitytype from vtiger_customview inner join ".
+		"vtiger_cvcolumnlist on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid where entitytype !=".
+		"'Contacts' and columnname like 'vtiger_contactdetails:lastname:lastname:%';";
+	VT520_migrateCustomview($sql,'Contacts', $user, VT520_updateCVColumnList);
+	$sql = "select vtiger_customview.cvid,columnindex,entitytype from vtiger_customview inner join ".
+		"vtiger_cvcolumnlist on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid where entitytype not in ".
+		"('Products','HelpDesk','Faq') and columnname like 'vtiger_products:productname:productname%';";
+	VT520_migrateCustomview($sql,'Products', $user, VT520_updateCVColumnList);
+
+	$sql = "select vtiger_customview.cvid,columnindex,entitytype from vtiger_customview inner join ".
+		"vtiger_cvcolumnlist on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid where entitytype not in ".
+		"('Products','HelpDesk','Faq') and columnname like 'vtiger_quotes:quoteid:quote_id%';";
+	VT520_migrateCustomview($sql,'SalesOrder', $user, VT520_updateCVColumnList);
+
+
+	$sql = "select vtiger_customview.cvid,columnindex,entitytype from vtiger_customview inner join ".
+		"vtiger_cvadvfilter on vtiger_customview.cvid=vtiger_cvadvfilter.cvid where entitytype !=".
+		"'Accounts' and columnname like 'vtiger_account:accountname:accountname%';";
+	VT520_migrateCustomview($sql,'Accounts', $user, VT520_updateADVColumnList);
+	$sql = "select vtiger_customview.cvid,columnindex,entitytype from vtiger_customview inner join ".
+		"vtiger_cvadvfilter on vtiger_customview.cvid=vtiger_cvadvfilter.cvid where entitytype !=".
+		"'Contacts' and columnname like 'vtiger_contactdetails:lastname:lastname:%';";
+	VT520_migrateCustomview($sql,'Contacts', $user, VT520_updateADVColumnList);
+	$sql = "select vtiger_customview.cvid,columnindex,entitytype from vtiger_customview inner join ".
+		"vtiger_cvadvfilter on vtiger_customview.cvid=vtiger_cvadvfilter.cvid where entitytype not in ".
+		"('Products','HelpDesk','Faq') and columnname like 'vtiger_products:productname:productname%';";
+	VT520_migrateCustomview($sql,'Products', $user, VT520_updateADVColumnList);
+	$sql = "select vtiger_customview.cvid,columnindex,entitytype from vtiger_customview inner join ".
+		"vtiger_cvcolumnlist on vtiger_customview.cvid=vtiger_cvcolumnlist.cvid where entitytype not in ".
+		"('Products','HelpDesk','Faq') and columnname like 'vtiger_quotes:quoteid:quote_id%';";
+	VT520_migrateCustomview($sql,'SalesOrder', $user, VT520_updateADVColumnList);
+}
+
+VT520_queryGeneratorMigration();
 
 $migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Ends \n\n");
 

@@ -109,6 +109,8 @@ class ListViewSession {
 			}
 			
 			$list_query = $_SESSION[$currentModule.'_listquery'];
+			$instance = CRMEntity::getInstance($currentModule);
+			$instance->getNonAdminAccessControlQuery($currentModule, $current_user);
 			if($currentModule=='Documents' && !empty($folderId)){
 				$list_query = preg_replace("/[\n\r\s]+/"," ",$list_query);
 				$findOrderByPosition = stripos($list_query,' ORDER BY ');

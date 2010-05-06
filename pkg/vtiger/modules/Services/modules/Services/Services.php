@@ -291,9 +291,9 @@ class Services extends CRMEntity {
 		}
 		$query .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid";
 		$query .= " LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
-
-		$query .= "	WHERE vtiger_crmentity.deleted = 0 ".$where;
-		$query .= $this->getListViewSecurityParameter($module);
+		global $current_user;
+		$query .= $this->getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ".$where;
 		return $query;
 	}
 
@@ -366,22 +366,14 @@ class Services extends CRMEntity {
 		}
 
 		$query .= " LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
-		$query .= " LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid = vtiger_users.id and vtiger_users.status='Active'";
-
+		$query .= " LEFT JOIN vtiger_users ON vtiger_crmentity.smownerid = vtiger_users.id and ".
+		"vtiger_users.status='Active'";
+		$query .= $this->getNonAdminAccessControlQuery($thismodule,$current_user);
 		$where_auto = " vtiger_crmentity.deleted=0";
 
 		if($where != '') $query .= " WHERE ($where) AND $where_auto";
 		else $query .= " WHERE $where_auto";
 
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-
-		// Security Check for Field Access
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[7] == 3)
-		{
-			//Added security check to get the permitted records only
-			$query = $query." ".getListViewSecurityParameter($thismodule);
-		}
 		return $query;
 	}
 
@@ -476,9 +468,7 @@ class Services extends CRMEntity {
 			$from_clause .= " INNER JOIN ".$this->customFieldTable[0]." ON ".$this->customFieldTable[0].'.'.$this->customFieldTable[1] .
 				      " = $this->table_name.$this->table_index"; 
 		}
-		$from_clause .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
-						LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
-		
+		$from_clause .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.handler
 		$where_clause = "	WHERE vtiger_crmentity.deleted = 0";
 		$where_clause .= $this->getListViewSecurityParameter($module);
 					

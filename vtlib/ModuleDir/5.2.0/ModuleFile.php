@@ -169,11 +169,13 @@ class ModuleClass extends CRMEntity {
 			$other = CRMEntity::getInstance($related_module);
 			vtlib_setup_modulevars($related_module, $other);
 			
-			$query .= " LEFT JOIN $other->table_name ON $other->table_name.$other->table_index = $this->table_name.$columnname";
+			$query .= " LEFT JOIN $other->table_name ON $other->table_name.$other->table_index = ".
+					"$this->table_name.$columnname";
 		}
 
+		global $current_user;
+		$query .= $this->getNonAdminAccessControlQuery($module,$current_user);
 		$query .= "	WHERE vtiger_crmentity.deleted = 0 ".$where;
-		$query .= $this->getListViewSecurityParameter($module);
 		return $query;
 	}
 
@@ -264,20 +266,12 @@ class ModuleClass extends CRMEntity {
 			$query .= " LEFT JOIN $other->table_name ON $other->table_name.$other->table_index = $this->table_name.$columnname";
 		}
 
+		$query .= $this->getNonAdminAccessControlQuery($thismodule,$current_user);
 		$where_auto = " vtiger_crmentity.deleted=0";
 
 		if($where != '') $query .= " WHERE ($where) AND $where_auto";
 		else $query .= " WHERE $where_auto";
 
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-
-		// Security Check for Field Access
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[7] == 3)
-		{
-			//Added security check to get the permitted records only
-			$query = $query." ".getListViewSecurityParameter($thismodule);
-		}
 		return $query;
 	}
 
@@ -372,10 +366,11 @@ class ModuleClass extends CRMEntity {
 				      " = $this->table_name.$this->table_index"; 
 		}
 		$from_clause .= " LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid
-						LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
-		
+				LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+
+		global $current_user;
+		$from_clause .= getNonAdminAccessControlQuery($module,$current_user);
 		$where_clause = "	WHERE vtiger_crmentity.deleted = 0";
-		$where_clause .= $this->getListViewSecurityParameter($module);
 					
 		if (isset($select_cols) && trim($select_cols) != '') {
 			$sub_query = "SELECT $select_cols FROM  $this->table_name AS t " .

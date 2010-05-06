@@ -958,6 +958,7 @@ class Contacts extends CRMEntity {
                         	        ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 				LEFT JOIN vtiger_contactdetails vtiger_contactdetails2
 					ON vtiger_contactdetails2.contactid = vtiger_contactdetails.reportsto";
+		$query .= getNonAdminAccessControlQuery('Contacts',$current_user);
 		$where_auto = " vtiger_crmentity.deleted = 0 ";
 
                 if($where != "")
@@ -965,18 +966,7 @@ class Contacts extends CRMEntity {
                 else
                    $query .= "  WHERE ".$where_auto;
 		
-
-
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-		//we should add security check when the user has Private Access
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[4] == 3)
-		{
-			//Added security check to get the permitted records only
-			$query = $query." ".getListViewSecurityParameter("Contacts");
-		}
-
-                $log->info("Export Query Constructed Successfully");
+		$log->info("Export Query Constructed Successfully");
 		$log->debug("Exiting create_export_query method ...");
 		return $query;
         }
@@ -1045,20 +1035,19 @@ function get_searchbyemailid($username,$emailaddress)
 						inner join vtiger_users on vtiger_users.id=vtiger_crmentity.smownerid  
 						left join vtiger_account on vtiger_account.accountid=vtiger_contactdetails.accountid 
 						left join vtiger_contactaddress on vtiger_contactaddress.contactaddressid=vtiger_contactdetails.contactid
-			      LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-			      where vtiger_crmentity.deleted=0";
-			      if(trim($emailaddress) != '')
-			      	        $query .= " and ((vtiger_contactdetails.email like '". formatForSqlLike($emailaddress) ."') or vtiger_contactdetails.lastname REGEXP REPLACE('".$emailaddress."',' ','|') or vtiger_contactdetails.firstname REGEXP REPLACE('".$emailaddress."',' ','|'))  and vtiger_contactdetails.email != ''";
-			      else
-			      		$query .= " and (vtiger_contactdetails.email like '". formatForSqlLike($emailaddress) ."' and vtiger_contactdetails.email != '')";
-
-  $tab_id = getTabid("Contacts");
-  if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-	{
-				$sec_parameter=getListViewSecurityParameter("Contacts");
-				$query .= $sec_parameter;
-
+			      LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+	$query .= getNonAdminAccessControlQuery('Contacts',$current_user);
+	$query .= "where vtiger_crmentity.deleted=0";
+	if(trim($emailaddress) != '') {
+		$query .= " and ((vtiger_contactdetails.email like '". formatForSqlLike($emailaddress) .
+		"') or vtiger_contactdetails.lastname REGEXP REPLACE('".$emailaddress.
+		"',' ','|') or vtiger_contactdetails.firstname REGEXP REPLACE('".$emailaddress.
+		"',' ','|'))  and vtiger_contactdetails.email != ''";
+	} else {
+		$query .= " and (vtiger_contactdetails.email like '". formatForSqlLike($emailaddress) .
+		"' and vtiger_contactdetails.email != '')";
 	}
+
 	$log->debug("Exiting get_searchbyemailid method ...");
 	return $this->plugin_process_list_query($query);
 }

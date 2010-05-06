@@ -638,14 +638,15 @@ if(!$skipSecurityCheck)
 
 
 	require_once('include/utils/UserInfoUtil.php');
-	if(ereg('Ajax',$action))
-        {
-                $now_action=vtlib_purify($_REQUEST['file']);
-        }
-        else
-        {
-                $now_action=$action;
-        }
+	if(ereg('Ajax',$action)) {
+		if($_REQUEST['ajxaction'] == 'LOADRELATEDLIST'){
+			$now_action = 'DetailView';
+		} else {
+			$now_action=vtlib_purify($_REQUEST['file']);
+		}
+	} else {
+		$now_action=$action;
+	}
         
 
         if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')

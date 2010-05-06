@@ -111,13 +111,12 @@ $smarty->assign("CATEGORY",$category);
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
-if($viewid != 0)
-{
-	$listquery = getListQuery("Documents");
-	$query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Documents");
-}else
-{
-	$query = getListQuery("Documents");
+global $current_user;
+if ($viewid != "0") {
+	$queryGenerator = new QueryGenerator($currentModule, $current_user);
+	$query = $queryGenerator->getCustomViewQueryById($viewid);
+} else {
+	$query = $queryGenerator->getDefaultCustomViewQuery();
 }
 //<<<<<<<<customview>>>>>>>>>
 
@@ -159,7 +158,9 @@ if($viewid ==0)
 if($viewid !='')
 $url_string .="&viewname=".$viewid;
 
-$listview_header = getListViewHeader($focus,"Documents",$url_string,$sorder,$order_by,"",$oCustomView);
+$controller = new ListViewController($adb, $current_user, $queryGenerator);
+$listview_header = $controller->getListViewHeader($focus,$currentModule,$url_string,$sorder,
+		$order_by);
 $smarty->assign("LISTHEADER", $listview_header);
 $listview_header_search = getSearchListHeaderValues($focus,"Documents",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
@@ -262,7 +263,8 @@ if($foldercount > 0 )
 		$folder_details['foldername']=$adb->query_result($result,$i,"foldername");
 		$foldername = $folder_details['foldername'];
 		$folder_details['description']=$adb->query_result($result,$i,"description");
-		$folder_files = getListViewEntries($focus,"Documents",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
+		$folder_files = $controller->getListViewEntries($focus,$currentModule,$list_result,
+			$navigation_array);
 		$folder_details['entries']= $folder_files;
 		$folder_details['navigation'] = getTableHeaderSimpleNavigation($navigation_array, $url_string,"Documents",$folder_id,$viewid);
 		$folder_details['recordListRange'] = getRecordRangeMessage($list_result, $limit_start_rec,

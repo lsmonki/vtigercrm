@@ -22,6 +22,8 @@
 
   require_once('include/utils/utils.php'); //new
   require_once('include/utils/RecurringType.php');
+  require_once 'include/QueryGenerator/QueryGenerator.php';
+  require_once 'include/ListView/ListViewController.php';
 
 /**
  * Check if user id belongs to a system admin.
@@ -2389,14 +2391,16 @@ function getEntityName($module, $ids_list)
 		 	return array();
 		 }
 		 
-		 $query1 = "select $fieldsname as entityname from $tablename where $entityidfield in (". generateQuestionMarks($ids_list) .")"; 
-		 $params1 = array($ids_list);		 
+		 $query1 = "select $fieldsname as entityname,$entityidfield from $tablename where ".
+			"$entityidfield in (". generateQuestionMarks($ids_list) .")";
+		 $params1 = array($ids_list);
 		 $result = $adb->pquery($query1, $params1);
 		 $numrows = $adb->num_rows($result);
 	  	 $account_name = array();
+		 $entity_info = array();
 		 for ($i = 0; $i < $numrows; $i++)
 		 {
-			$entity_id = $ids_list[$i];
+			$entity_id = $adb->query_result($result,$i,$entityidfield);
 			$entity_info[$entity_id] = $adb->query_result($result,$i,'entityname');
 		 }
 		 return $entity_info;
@@ -3547,18 +3551,37 @@ function getOwnerName($id)
 	$log->debug("Entering getOwnerName(".$id.") method ...");
 	$log->info("in getOwnerName ".$id);
 
-	if($id != '') {
-		$sql = "select user_name from vtiger_users where id=?";
-		$result = $adb->pquery($sql, array($id));
-		$ownername = $adb->query_result($result,0,"user_name");
+	$ownerList = getOwnerNameList(array($id));
+	return $ownerList[$id];
+}
+
+/** Function to get owner name either user or group */
+function getOwnerNameList($idList) {
+	global $log;
+
+	if(!is_array($idList) || count($idList) == 0) {
+		return array();
 	}
-	if($ownername == '') {
-		$sql = "select groupname from vtiger_groups where groupid=?";
-		$result = $adb->pquery($sql, array($id));
-		$ownername = $adb->query_result($result,0,"groupname");
+
+	$nameList = array();
+	$db = PearDatabase::getInstance();
+	$sql = "select user_name,id from vtiger_users where id in (".generateQuestionMarks($idList).")";
+	$result = $db->pquery($sql, $idList);
+	$it = new SqlResultIterator($db, $result);
+	foreach ($it as $row) {
+		$nameList[$row->id] = $row->user_name;
 	}
-	$log->debug("Exiting getOwnerName method ...");
-	return $ownername;	
+	$groupIdList = array_diff($idList, array_keys($nameList));
+	if(count($groupIdList) > 0) {
+		$sql = "select groupname,groupid from vtiger_groups where groupid in (".
+				generateQuestionMarks($groupIdList).")";
+		$result = $db->pquery($sql, $groupIdList);
+		$it = new SqlResultIterator($db, $result);
+		foreach ($it as $row) {
+			$nameList[$row->groupid] = $row->groupname;
+		}
+	}
+	return $nameList;
 }
 
 /**

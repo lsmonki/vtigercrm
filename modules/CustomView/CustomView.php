@@ -480,7 +480,7 @@ class CustomView extends CRMEntity{
 		{
 			$sql = "select * from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid ";
 			$sql.= " where vtiger_field.tabid=? and vtiger_field.block in (". generateQuestionMarks($blockids) .")
-                        and (vtiger_field.uitype in (5,6,23) or vtiger_field.displaytype=2) ";
+                        and vtiger_field.uitype in (5,6,23,70)";
 			$sql.= " and vtiger_field.presence in (0,2) order by vtiger_field.sequence";
 			$params = array($tabid, $blockids);
 		}
@@ -488,7 +488,7 @@ class CustomView extends CRMEntity{
 		{
 			$profileList = getCurrentUserProfileList();
 			$sql = "select * from vtiger_field inner join vtiger_tab on vtiger_tab.tabid = vtiger_field.tabid inner join  vtiger_profile2field on vtiger_profile2field.fieldid=vtiger_field.fieldid inner join vtiger_def_org_field on vtiger_def_org_field.fieldid=vtiger_field.fieldid ";
-			$sql.= " where vtiger_field.tabid=? and vtiger_field.block in (". generateQuestionMarks($blockids) .") and (vtiger_field.uitype in (5,6,23) or vtiger_field.displaytype=2)";
+			$sql.= " where vtiger_field.tabid=? and vtiger_field.block in (". generateQuestionMarks($blockids) .") and vtiger_field.uitype in (5,6,23,70)";
 			$sql.= " and vtiger_profile2field.visible=0 and vtiger_def_org_field.visible=0 and vtiger_field.presence in (0,2)";
 			
 			$params = array($tabid, $blockids);

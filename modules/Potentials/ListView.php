@@ -112,13 +112,12 @@ if($viewnamedesc['viewname'] == 'All')
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
-if($viewid != "0")
-{
-	$listquery = getListQuery("Potentials");
-	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Potentials");
-}else
-{
-	$list_query = getListQuery("Potentials");
+global $current_user;
+if ($viewid != "0") {
+	$queryGenerator = new QueryGenerator($currentModule, $current_user);
+	$list_query = $queryGenerator->getCustomViewQueryById($viewid);
+} else {
+	$list_query = $queryGenerator->getDefaultCustomViewQuery();
 }
 //<<<<<<<<customview>>>>>>>>>
 if(isset($where) && $where != '')
@@ -219,14 +218,17 @@ $smarty->assign('recordListRange',$recordListRangeMsg);
 if($viewid !='')
 $url_string .="&viewname=".$viewid;
 
-$listview_header = getListViewHeader($focus,"Potentials",$url_string,$sorder,$order_by,"",$oCustomView);
+$controller = new ListViewController($adb, $current_user, $queryGenerator);
+$listview_header = $controller->getListViewHeader($focus,$currentModule,$url_string,$sorder,
+		$order_by);
 $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_header_search=getSearchListHeaderValues($focus,"Potentials",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
 
-$listview_entries = getListViewEntries($focus,"Potentials",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
+$listview_entries = $controller->getListViewEntries($focus,$currentModule,$list_result,
+		$navigation_array);
 $smarty->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTENTITY", $listview_entries);
 

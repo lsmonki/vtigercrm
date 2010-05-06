@@ -1301,6 +1301,7 @@ class ReportRun extends CRMEntity
 			foreach($secondarymodule as $key=>$value) {
 					$foc = CRMEntity::getInstance($value);
 					$query .= $foc->generateReportsSecQuery($module,$value);
+					$query .= getNonAdminAccessControlQuery($value,$current_user,$value);
 			}
 		}
 		$log->info("ReportRun :: Successfully returned getRelatedModulesQuery".$secmodule);
@@ -1329,7 +1330,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_users as vtiger_usersLeads on vtiger_usersLeads.id = vtiger_crmentity.smownerid
 				left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
 				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
-				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
+				".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+						getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
 				where vtiger_crmentity.deleted=0 and vtiger_leaddetails.converted=0";
 		}
 		else if($module == "Accounts")
@@ -1344,7 +1346,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_users as vtiger_usersAccounts on vtiger_usersAccounts.id = vtiger_crmentity.smownerid
 				left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
 				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
-				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
+				".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+						getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
 				where vtiger_crmentity.deleted=0 ";
 		}
 
@@ -1362,7 +1365,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_users as vtiger_usersContacts on vtiger_usersContacts.id = vtiger_crmentity.smownerid
 				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
 				left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
-				".$this->getRelatedModulesQuery($module,$this->secondarymodule)." 
+				".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+						getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
 				where vtiger_crmentity.deleted=0";
 		}
 
@@ -1378,7 +1382,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_users as vtiger_usersPotentials on vtiger_usersPotentials.id = vtiger_crmentity.smownerid  
 				left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
 				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid  
-				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
+				".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+						getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
 				where vtiger_crmentity.deleted=0 ";
 		}
 
@@ -1400,7 +1405,8 @@ class ReportRun extends CRMEntity
 						LEFT JOIN vtiger_productcurrencyrel ON vtiger_products.productid = vtiger_productcurrencyrel.productid
 						AND vtiger_productcurrencyrel.currencyid = ". $current_user->currency_id . "
 				) AS innerProduct ON innerProduct.productid = vtiger_products.productid
-				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
+				".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+						getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
 				where vtiger_crmentity.deleted=0";
 		}
 
@@ -1418,7 +1424,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_users as vtiger_usersHelpDesk on vtiger_crmentity.smownerid=vtiger_usersHelpDesk.id 
 				left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
 				left join vtiger_users on vtiger_crmentity.smownerid=vtiger_users.id 
-				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
+				".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+						getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
 				where vtiger_crmentity.deleted=0 ";
 		}
 
@@ -1446,7 +1453,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_salesorder as vtiger_salesorderRelCalendar on vtiger_salesorderRelCalendar.salesorderid = vtiger_crmentityRelCalendar.crmid
 				left join vtiger_troubletickets as vtiger_troubleticketsRelCalendar on vtiger_troubleticketsRelCalendar.ticketid = vtiger_crmentityRelCalendar.crmid
 				left join vtiger_campaign as vtiger_campaignRelCalendar on vtiger_campaignRelCalendar.campaignid = vtiger_crmentityRelCalendar.crmid
-				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
+				".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+						getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
 				WHERE vtiger_crmentity.deleted=0 and (vtiger_activity.activitytype != 'Emails')";
 		}
 
@@ -1468,7 +1476,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_potential as vtiger_potentialRelQuotes on vtiger_potentialRelQuotes.potentialid = vtiger_quotes.potentialid
 				left join vtiger_contactdetails as vtiger_contactdetailsQuotes on vtiger_contactdetailsQuotes.contactid = vtiger_quotes.contactid
 				left join vtiger_account as vtiger_accountQuotes on vtiger_accountQuotes.accountid = vtiger_quotes.accountid
-				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
+				".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+						getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
 				where vtiger_crmentity.deleted=0";
 		}
 
@@ -1488,7 +1497,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid 
 				left join vtiger_vendor as vtiger_vendorRelPurchaseOrder on vtiger_vendorRelPurchaseOrder.vendorid = vtiger_purchaseorder.vendorid 
 				left join vtiger_contactdetails as vtiger_contactdetailsPurchaseOrder on vtiger_contactdetailsPurchaseOrder.contactid = vtiger_purchaseorder.contactid 
-				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
+				".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+						getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
 				where vtiger_crmentity.deleted=0";
 		}
 
@@ -1509,7 +1519,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
 				left join vtiger_account as vtiger_accountInvoice on vtiger_accountInvoice.accountid = vtiger_invoice.accountid
 				left join vtiger_contactdetails as vtiger_contactdetailsInvoice on vtiger_contactdetailsInvoice.contactid = vtiger_invoice.contactid
-				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
+				".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+						getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
 				where vtiger_crmentity.deleted=0";
 		}
 		else if($module == "SalesOrder")
@@ -1530,7 +1541,8 @@ class ReportRun extends CRMEntity
 				left join vtiger_users as vtiger_usersSalesOrder on vtiger_usersSalesOrder.id = vtiger_crmentity.smownerid 
 				left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
 				left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid 
-				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
+				".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+						getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
 				where vtiger_crmentity.deleted=0";
 
 
@@ -1545,7 +1557,8 @@ class ReportRun extends CRMEntity
 		                left join vtiger_users as vtiger_usersCampaigns on vtiger_usersCampaigns.id = vtiger_crmentity.smownerid
 				left join vtiger_groups on vtiger_groups.groupid = vtiger_crmentity.smownerid
 		                left join vtiger_users on vtiger_users.id = vtiger_crmentity.smownerid
-                                ".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
+                                ".$this->getRelatedModulesQuery($module,$this->secondarymodule).
+						getNonAdminAccessControlQuery($this->primarymodule,$current_user)."
 				where vtiger_crmentity.deleted=0";
 		}
 		
@@ -1554,7 +1567,8 @@ class ReportRun extends CRMEntity
 	 				$focus = CRMEntity::getInstance($module);
 					$query = $focus->generateReportsQuery($module)
 								.$this->getRelatedModulesQuery($module,$this->secondarymodule)
-								." WHERE vtiger_crmentity.deleted=0";
+								.getNonAdminAccessControlQuery($this->primarymodule,$current_user).
+							" WHERE vtiger_crmentity.deleted=0";
 	 			}
 			}
 		$log->info("ReportRun :: Successfully returned getReportsQuery".$module);
@@ -1582,8 +1596,6 @@ class ReportRun extends CRMEntity
 
 		$this->totallist = $columnstotallist;
 		global $current_user;
-		require('user_privileges/user_privileges_'.$current_user->id.'.php');
-		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 		$tab_id = getTabid($this->primarymodule);
 		//Fix for ticket #4915.
 		$selectlist = $columnlist;
@@ -1649,24 +1661,14 @@ class ReportRun extends CRMEntity
 			
 			$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
 		}
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($this->primarymodule);
-			$reportquery .= " ".$sec_parameter;
-		}
+		$reportquery = listQueryNonAdminChange($reportquery, $this->primarymodule);
 		
 		$sec_modules = split(":",$this->secondarymodule);
-		foreach($sec_modules as $i=>$key){
-			$table_id = getTabid($key);
-			if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$table_id] == 3)
-			{
-				$sec_parameter=getSecListViewSecurityParameter($key);
-				$reportquery .= " ".$sec_parameter;
+		foreach($sec_modules as $i=>$key) {
+			if(!empty($key)) {
+				$reportquery = listQueryNonAdminChange($reportquery, $key,$key);
 			}
 		}
-		
-		//if($tab_id == 9 || $tab_id == 16)
-        	//$reportquery.=" group by vtiger_activity.activityid ";
 
 		if(trim($groupsquery) != "" && empty($type))
 		{
@@ -1674,9 +1676,9 @@ class ReportRun extends CRMEntity
 		}
 		
 		// Prasad: No columns selected so limit the number of rows directly.
-                if($allColumnsRestricted) {
-                        $reportquery .= " limit 0";
-                }
+		if($allColumnsRestricted) {
+			$reportquery .= " limit 0";
+		}
 
 		$log->info("ReportRun :: Successfully returned sGetSQLforReport".$reportid);
 		return $reportquery;

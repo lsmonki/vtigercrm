@@ -149,13 +149,12 @@ if($viewnamedesc['viewname'] == 'All')
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
-if($viewid != "0")
-{
-	$listquery = getListQuery("Contacts");
-	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Contacts");
-}else
-{
-	$list_query = getListQuery("Contacts");
+global $current_user;
+if ($viewid != "0") {
+	$queryGenerator = new QueryGenerator($currentModule, $current_user);
+	$list_query = $queryGenerator->getCustomViewQueryById($viewid);
+} else {
+	$list_query = $queryGenerator->getDefaultCustomViewQuery();
 }
 //<<<<<<<<customview>>>>>>>>>
 
@@ -252,8 +251,7 @@ if(isPermitted("Contacts","Merge") == 'yes')
 	}
 	else
 	{ 
-		global $current_user;
-                require("user_privileges/user_privileges_".$current_user->id.".php");
+		require("user_privileges/user_privileges_".$current_user->id.".php");
 		if($is_admin == true)
 		{
 			$smarty->assign("MERGEBUTTON","<td><a href=index.php?module=Settings&action=upload&tempModule=".$currentModule."&parenttab=Settings>". $app_strings['LBL_CREATE_MERGE_TEMPLATE']."</td>");
@@ -266,13 +264,16 @@ if(isPermitted("Contacts","Merge") == 'yes')
 if(!empty($viewid))
 $url_string .="&viewname=".$viewid;
 
-$listview_header = getListViewHeader($focus,"Contacts",$url_string,$sorder,$order_by,"",$oCustomView);
+$controller = new ListViewController($adb, $current_user, $queryGenerator);
+$listview_header = $controller->getListViewHeader($focus,$currentModule,$url_string,$sorder,
+		$order_by);
 $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_header_search=getSearchListHeaderValues($focus,"Contacts",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
-$listview_entries = getListViewEntries($focus,"Contacts",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
+$listview_entries = $controller->getListViewEntries($focus,$currentModule,$list_result,
+		$navigation_array);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
