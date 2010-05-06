@@ -109,40 +109,6 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 		}
 	);
 }
-
-function loadDetailViewBlock(urldata, target, indicator) {
-
-	if(typeof(target) == 'undefined') {
-		target = false;
-	} else {
-		target = $(target);
-	}
-	if(typeof(indicator) == 'undefined') {
-		indicator = false;
-	} else {
-		indicator = $(indicator);
-	}
-	
-	if(indicator) {
-		indicator.show();
-	}
-	
-	new Ajax.Request('index.php',
-	{	
-		queue: {position: 'end', scope: 'command'},
-        method: 'post',
-        postBody:urldata,
-        onComplete: function(response) {
-        	if(target) {
-        		target.innerHTML = response.responseText;
-        		if(indicator) {
-					indicator.hide();
-				}
-        	}
-        }
-	});	
-	return false; // To stop event propogation
-}
 {/literal}
 function tagvalidate()
 {ldelim}
@@ -299,7 +265,7 @@ function sendfile_email()
 										
 					
 				<table border=0 cellspacing=0 cellpadding=0 width=100%>
-                <tr>
+                <tr valign=top>
 					<td style="padding:5px">
 					<!-- Command Buttons -->
 				  	<table border=0 cellspacing=0 cellpadding=0 width=100%>
@@ -417,9 +383,26 @@ function sendfile_email()
 {/if}
                      	                      </td>
 					   </tr>
-		<tr>                                                                                                               <td style="padding:5px">
+		<tr><td style="padding:5px">
 			{/foreach}
-                    {*-- End of Blocks--*}			   
+                    {*-- End of Blocks--*}
+                    
+            {* vtlib Customization: Embed DetailViewWidget block:// type if any *}
+			{if $CUSTOM_LINKS && !empty($CUSTOM_LINKS.DETAILVIEWWIDGET)}
+			{foreach item=CUSTOM_LINK_DETAILVIEWWIDGET from=$CUSTOM_LINKS.DETAILVIEWWIDGET}
+				{if preg_match("/^block:\/\/.*/", $CUSTOM_LINK_DETAILVIEWWIDGET->linkurl)}
+				<tr>
+					<td style="padding:5px;" >
+					{php}
+						echo vtlib_process_widget($this->_tpl_vars['CUSTOM_LINK_DETAILVIEWWIDGET'], $this->_tpl_vars);
+					{/php}
+					</td>
+				</tr>
+				{/if}
+			{/foreach}
+			{/if}
+			{* END *}
+						   
 			</td>
                 </tr>
 		<!-- Inventory - Product Details informations -->
@@ -668,31 +651,36 @@ function sendfile_email()
 				</form>
 				{/if}
 				
-				{foreach key=CUSTOMLINK_NO item=CUSTOMLINK from=$CUSTOM_LINKS.DETAILVIEWBLOCK}
-					<br />
+				{if !empty($CUSTOM_LINKS.DETAILVIEWWIDGET)}
+				{foreach key=CUSTOMLINK_NO item=CUSTOMLINK from=$CUSTOM_LINKS.DETAILVIEWWIDGET}
 					{assign var="customlink_href" value=$CUSTOMLINK->linkurl}
 					{assign var="customlink_label" value=$CUSTOMLINK->linklabel}
-					{if $customlink_label eq ''}
-						{assign var="customlink_label" value=$customlink_href}
-					{else}
-						{* Pickup the translated label provided by the module *}
-						{assign var="customlink_label" value=$customlink_label|@getTranslatedString:$CUSTOMLINK->module()}
+					{* Ignore block:// type custom links which are handled earlier *}
+					{if !preg_match("/^block:\/\/.*/", $customlink_href)}
+						{if $customlink_label eq ''}
+							{assign var="customlink_label" value=$customlink_href}
+						{else}
+							{* Pickup the translated label provided by the module *}
+							{assign var="customlink_label" value=$customlink_label|@getTranslatedString:$CUSTOMLINK->module()}
+						{/if}
+						<br />
+						<table border=0 cellspacing=0 cellpadding=0 width=100% class="rightMailMerge">
+			  				<tr>
+								<td class="rightMailMergeHeader">
+									<b>{$customlink_label}</b>
+									<img id="detailview_block_{$CUSTOMLINK_NO}_indicator" style="display:none;" src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle" />
+								</td>
+			  				</tr>
+			  				<tr style="height:25px">
+								<td class="rightMailMergeContent"><div id="detailview_block_{$CUSTOMLINK_NO}"></div></td>
+			  				</tr>
+			  				<script type="text/javascript">
+			  					vtlib_loadDetailViewWidget("{$customlink_href}", "detailview_block_{$CUSTOMLINK_NO}", "detailview_block_{$CUSTOMLINK_NO}_indicator");
+			  				</script>
+						</table>
 					{/if}
-					<table border=0 cellspacing=0 cellpadding=0 width=100% class="rightMailMerge">
-		  				<tr>
-							<td class="rightMailMergeHeader">
-								<b>{$customlink_label}</b>
-								<img id="detailview_block_{$CUSTOMLINK_NO}_indicator" style="display:none;" src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle" />
-							</td>
-		  				</tr>
-		  				<tr style="height:25px">
-							<td class="rightMailMergeContent"><div id="detailview_block_{$CUSTOMLINK_NO}"></div></td>
-		  				</tr>
-		  				<script type="text/javascript">
-		  					loadDetailViewBlock("{$customlink_href}", "detailview_block_{$CUSTOMLINK_NO}", "detailview_block_{$CUSTOMLINK_NO}_indicator");
-		  				</script>
-					</table>
 				{/foreach}
+				{/if}
 			</td>
 		</tr>
 		</table>

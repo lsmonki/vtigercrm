@@ -58,7 +58,7 @@
 			{foreach item=option from=$fldlabel.options}
 				<option value="{$option}" 
 				{if $fldlabel.selected == $option}selected{/if}>
-				{if $APP.$option neq ''}{$APP.$option}{else}{$option}{/if}
+				{$option|@getTranslatedString:$option}
 				</option> 
 			{/foreach}
 			</select>

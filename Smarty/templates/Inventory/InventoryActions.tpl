@@ -178,10 +178,7 @@
 {* vtlib customization: Custom links on the Detail view *}
 {if $CUSTOM_LINKS}
 	<br>
-	{if isset($CUSTOM_LINKS.DETAILVIEW)}
-		{assign var="CUSTOM_LINKS" value=$CUSTOM_LINKS.DETAILVIEW}
-	{/if}
-	{if !empty($CUSTOM_LINKS)}					
+	{if !empty($CUSTOM_LINKS.DETAILVIEW)}					
 		<table width="100%" border="0" cellpadding="5" cellspacing="0">
 			<tr><td align="left" class="dvtUnSelectedCell dvtCellLabel">
 				<a href="javascript:;" onmouseover="fnvshobj(this,'vtlib_customLinksLay');" onclick="fnvshobj(this,'vtlib_customLinksLay');"><b>{$APP.LBL_MORE} {$APP.LBL_ACTIONS} &#187;</b></a>
@@ -194,7 +191,7 @@
 			<tr><td style="border-bottom: 1px solid rgb(204, 204, 204); padding: 5px;"><b>{$APP.LBL_MORE} {$APP.LBL_ACTIONS} &#187;</b></td></tr>
 			<tr>
 				<td>
-					{foreach item=CUSTOMLINK from=$CUSTOM_LINKS}
+					{foreach item=CUSTOMLINK from=$CUSTOM_LINKS.DETAILVIEW}
 						{assign var="customlink_href" value=$CUSTOMLINK->linkurl}
 						{assign var="customlink_label" value=$CUSTOMLINK->linklabel}
 						{if $customlink_label eq ''}
@@ -209,8 +206,40 @@
 			</tr>
 			</table>
 		</div>
-		{/if}
 	{/if}
+	
+	{if !empty($CUSTOM_LINKS.DETAILVIEWWIDGET)}
+	{foreach key=CUSTOMLINK_NO item=CUSTOMLINK from=$CUSTOM_LINKS.DETAILVIEWWIDGET}
+		{assign var="customlink_href" value=$CUSTOMLINK->linkurl}
+		{assign var="customlink_label" value=$CUSTOMLINK->linklabel}
+		{* Ignore block:// type custom links which are handled earlier *}
+		{if !preg_match("/^block:\/\/.*/", $customlink_href)}
+			{if $customlink_label eq ''}
+				{assign var="customlink_label" value=$customlink_href}
+			{else}
+				{* Pickup the translated label provided by the module *}
+				{assign var="customlink_label" value=$customlink_label|@getTranslatedString:$CUSTOMLINK->module()}
+			{/if}
+			<br/>
+			<table border=0 cellspacing=0 cellpadding=0 width=100% class="rightMailMerge">
+  				<tr>
+					<td class="rightMailMergeHeader">
+						<b>{$customlink_label}</b>
+						<img id="detailview_block_{$CUSTOMLINK_NO}_indicator" style="display:none;" src="{'vtbusy.gif'|@vtiger_imageurl:$THEME}" border="0" align="absmiddle" />
+					</td>
+  				</tr>
+  				<tr style="height:25px">
+					<td class="rightMailMergeContent"><div id="detailview_block_{$CUSTOMLINK_NO}"></div></td>
+  				</tr>
+  				<script type="text/javascript">
+  					vtlib_loadDetailViewWidget("{$customlink_href}", "detailview_block_{$CUSTOMLINK_NO}", "detailview_block_{$CUSTOMLINK_NO}_indicator");
+  				</script>
+			</table>
+		{/if}
+	{/foreach}
+	{/if}
+	
+{/if}
 {* END *}
 <!-- Action links END -->
 

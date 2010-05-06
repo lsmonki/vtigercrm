@@ -199,7 +199,7 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 				   <tr>
 					<td valign=top align=left >
 						<table border=0 cellspacing=0 cellpadding=3 width=100% class="dvtContentSpace" style="border-bottom:0px;">
-						   <tr>
+						   <tr valign=top>
 
 							<td align=left style="padding:10px;">
 							<!-- content cache -->
@@ -299,6 +299,18 @@ function getListOfRecords(obj, sModule, iId,sParentTab)
 {*-- End of Blocks--*} 
 <!-- Entity information(blocks) display - ends -->
 
+{* vtlib Customization: Embed DetailViewWidget block:// type if any *}
+{if $CUSTOM_LINKS && !empty($CUSTOM_LINKS.DETAILVIEWWIDGET)}
+{foreach item=CUSTOM_LINK_DETAILVIEWWIDGET from=$CUSTOM_LINKS.DETAILVIEWWIDGET}
+	{if preg_match("/^block:\/\/.*/", $CUSTOM_LINK_DETAILVIEWWIDGET->linkurl)}
+		<br>
+		{php}
+			echo vtlib_process_widget($this->_tpl_vars['CUSTOM_LINK_DETAILVIEWWIDGET'], $this->_tpl_vars);
+		{/php}
+	{/if}
+{/foreach}
+{/if}
+{* END *}
 									<br>
 
 										<!-- Product Details informations -->
