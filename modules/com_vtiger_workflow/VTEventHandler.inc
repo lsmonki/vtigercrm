@@ -32,9 +32,6 @@ require_once('VTWorkflowUtils.php');
 	* VTEventHandler 
 	*/
 	class VTWorkflowEventHandler extends VTEventHandler{
-		
-		
-		
 		/**
 		 * Push tasks to the task queue if the conditions are true
 		 * @param $entityData A VTEntityData object representing the entity.
@@ -70,7 +67,15 @@ require_once('VTWorkflowUtils.php');
 						$entity_id = $entity_id[1];
 						$result = $adb->pquery("SELECT * FROM com_vtiger_workflow_activatedonce 
 							WHERE entity_id=? and workflow_id=?", array($entity_id, $workflow->id));
-						if($adb->num_rows($result)===0){
+						
+						//Changes
+						$result2=$adb->pquery("SELECT * FROM com_vtiger_workflowtasks 
+										INNER JOIN com_vtiger_workflowtask_queue
+										ON com_vtiger_workflowtasks.task_id= com_vtiger_workflowtask_queue.task_id
+										WHERE workflow_id=? AND entity_id=?",
+										array($workflow->id,$entity_id));
+						
+						if($adb->num_rows($result)===0 && $adb->num_rows($result2)===0){
 							$doEvaluate = true;
 						}else{
 							$doEvaluate = false;
@@ -80,6 +85,10 @@ require_once('VTWorkflowUtils.php');
 					case VTWorkflowManager::$ON_EVERY_SAVE:{
 						$doEvaluate = true;
 						break;
+					}
+					case VTWorkflowManager::$ON_MODIFY:{
+						$doEvaluate = !($isNew);
+					    break;
 					}
 					default:{
 						throw new Exception("Should never come here! Execution Condition:".$workflow->executionCondition);
@@ -106,7 +115,7 @@ require_once('VTWorkflowUtils.php');
 							if($task->executeImmediately==true){
 								$task->doTask($entityData);
 							}else{
-								$taskQueue->queueTask($task->id, $entityData->getId(), $delay);
+								$taskQueue->queueTask($task->id,$entityData->getId(), $delay);
 							}
 						}
 					}

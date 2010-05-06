@@ -1285,7 +1285,6 @@ class Accounts extends CRMEntity {
 			$this->db->pquery($sql, $params);
 		}
 	}
-
 }
 
 ?>

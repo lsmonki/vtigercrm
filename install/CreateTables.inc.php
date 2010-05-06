@@ -1018,6 +1018,9 @@ function registerEvents($adb) {
 	
 	// Workflow manager
 	$em->registerHandler('vtiger.entity.aftersave', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler');
+	
+	//Registering events for On modify
+	$em->registerHandler('vtiger.entity.afterrestore', 'modules/com_vtiger_workflow/VTEventHandler.inc', 'VTWorkflowEventHandler');
 }
 
 // Register all the entity methods here
@@ -1049,6 +1052,112 @@ function populateDefaultWorkflows($adb) {
 	$task->active=true;
 	$task->methodName = "UpdateInventory";
 	$tm->saveTask($task);
+	
+	
+	// Creating Workflow for Accounts when Notifyowner is true
+	
+	$vtaWorkFlow = new VTWorkflowManager($adb);
+	$accWorkFlow = $vtaWorkFlow->newWorkFlow("Accounts");
+	$accWorkFlow->test = '[{"fieldname":"notify_owner","operation":"is","value":"true:boolean"}]';
+	$accWorkFlow->description = "Send Email to user when Notifyowner is True";
+	$accWorkFlow->executionCondition=2;	
+	$vtaWorkFlow->save($accWorkFlow);
+	$id1=$accWorkFlow->id;
+	
+	$tm = new VTTaskManager($adb);
+	$task = $tm->createTask('VTEmailTask',$accWorkFlow->id);
+	$task->active=true;
+	$task->methodName = "NotifyOwner";
+	$task->recepient = "\$(assigned_user_id : (Users) email1)";
+	$task->subject = "Regarding Account Creation";
+	$task->content = "An Account has been assigned to you on vtigerCRM<br>Details of account are :<br><br>".
+			"AccountId:".'<b>$account_no</b><br>'."AccountName:".'<b>$accountname</b><br>'."Rating:".'<b>$rating</b><br>'.
+			"Industry:".'<b>$industry</b><br>'."AccountType:".'<b>$accounttype</b><br>'.
+			"Description:".'<b>$description</b><br><br><br>'."Thank You<br>Admin";
+	$task->summary="An account has been created ";
+	$tm->saveTask($task);
+	$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
+	
+	// Creating Workflow for Contacts when Notifyowner is true
+	
+	$vtcWorkFlow = new VTWorkflowManager($adb);
+	$conWorkFlow = 	$vtcWorkFlow->newWorkFlow("Contacts");
+	$conWorkFlow->summary="A contact has been created ";
+	$conWorkFlow->executionCondition=2;
+	$conWorkFlow->test = '[{"fieldname":"notify_owner","operation":"is","value":"true:boolean"}]';
+	$conWorkFlow->description = "Send Email to user when Notifyowner is True";
+	
+	$vtcWorkFlow->save($conWorkFlow);
+	$id1=$conWorkFlow->id;
+	$tm = new VTTaskManager($adb);
+	$task = $tm->createTask('VTEmailTask',$conWorkFlow->id);
+	$task->active=true;
+	$task->methodName = "NotifyOwner";
+	$task->recepient = "\$(assigned_user_id : (Users) email1)";
+	$task->subject = "Regarding Contact Creation";
+	$task->content = "An Contact has been assigned to you on vtigerCRM<br>Details of Contact are :<br><br>".
+			"Contact Id:".'<b>$contact_no</b><br>'."LastName:".'<b>$lastname</b><br>'."FirstName:".'<b>$firstname</b><br>'.
+			"Lead Source:".'<b>$leadsource</b><br>'.
+			"Department:".'<b>$department</b><br>'.
+			"Description:".'<b>$description</b><br><br><br>'."Thank You<br>Admin";
+	$task->summary="An contact has been created ";
+	$tm->saveTask($task);
+	$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
+	
+	
+	// Creating Workflow for Contacts when PortalUser is true
+	
+	$vtcWorkFlow = new VTWorkflowManager($adb);
+	$conpuWorkFlow = $vtcWorkFlow->newWorkFlow("Contacts");
+	$conpuWorkFlow->test = '[{"fieldname":"portal","operation":"is","value":"true:boolean"}]';
+	$conpuWorkFlow->description = "Send Email to user when Portal User is True";
+	$conpuWorkFlow->executionCondition=2;
+	$vtcWorkFlow->save($conpuWorkFlow);
+	$id1=$conpuWorkFlow->id;
+	
+	$tm = new VTTaskManager($adb);
+	$task = $tm->createTask('VTEmailTask',$conpuWorkFlow->id);
+	
+	$task->active=true;
+	$task->methodName = "NotifyOwner";
+	$task->recepient = "\$(assigned_user_id : (Users) email1)";
+	$task->subject = "Regarding Contact Assignment";
+	$task->content = "An Contact has been assigned to you on vtigerCRM<br>Details of Contact are :<br><br>".
+			"Contact Id:".'<b>$contact_no</b><br>'."LastName:".'<b>$lastname</b><br>'."FirstName:".'<b>$firstname</b><br>'.
+			"Lead Source:".'<b>$leadsource</b><br>'.
+			"Department:".'<b>$department</b><br>'.
+			"Description:".'<b>$description</b><br><br><br>'."And <b>CustomerPortal Login Details</b> is sent to the " .
+			"EmailID :-".'$email<br>'."<br>Thank You<br>Admin";
+		
+	$task->summary="An contact has been created ";
+	$tm->saveTask($task);
+	$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
+
+	// Creating Workflow for Potentials
+
+	$vtcWorkFlow = new VTWorkflowManager($adb);
+	$potentialWorkFlow = $vtcWorkFlow->newWorkFlow("Potentials");
+	$potentialWorkFlow->description = "Send Email to users on Potential creation";
+	$potentialWorkFlow->executionCondition=1;
+	$vtcWorkFlow->save($potentialWorkFlow);
+	$id1=$potentialWorkFlow->id;
+
+	$tm = new VTTaskManager($adb);
+	$task = $tm->createTask('VTEmailTask',$potentialWorkFlow->id);
+
+	$task->active=true;
+	$task->recepient = "\$(assigned_user_id : (Users) email1)";
+	$task->subject = "Regarding Potential Assignment";
+	$task->content = "An Potential has been assigned to you on vtigerCRM<br>Details of Potential are :<br><br>".
+			"Potential No:".'<b>$potential_no</b><br>'."Potential Name:".'<b>$potentialname</b><br>'.
+			"Amount:".'<b>$amount</b><br>'.
+			"Expected Close Date:".'<b>$closingdate</b><br>'.
+			"Type:".'<b>$opportunity_type</b><br><br><br>'.
+			"Description :".'$description<br>'."<br>Thank You<br>Admin";
+
+	$task->summary="An Potential has been created ";
+	$tm->saveTask($task);
+	$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
 }
 
 // Function to populate Links

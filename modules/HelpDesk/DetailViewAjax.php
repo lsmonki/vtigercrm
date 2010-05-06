@@ -85,14 +85,16 @@ if($ajaxaction == "DETAILVIEW")
 					$email_body = getTicketDetails($modObj->id,$data);
 				}
 			}
-			if($user_emailid != ''){
-				$mail_status = send_mail('HelpDesk',$user_emailid,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
-			}
-			if($emailoptout == 0){
-				//send mail to parent
-				if(!empty($parent_id)){
-					$parent_email = getParentMailId($parent_module,$parent_id);
-					$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+			if(PerformancePrefs::getBoolean('NOTIFY_OWNER_EMAILS', true) === true){
+				if($user_emailid != ''){
+					$mail_status = send_mail('HelpDesk',$user_emailid,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+				}
+				if($emailoptout == 0){
+					//send mail to parent
+					if(!empty($parent_id)){
+						$parent_email = getParentMailId($parent_module,$parent_id);
+						$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+					}
 				}
 			}
 		}

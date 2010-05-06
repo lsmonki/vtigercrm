@@ -142,8 +142,6 @@
 			require_once("tasks/".$taskType.".inc");
 		}
 		
-		
-		
 	}
 	
 	abstract class VTTask{

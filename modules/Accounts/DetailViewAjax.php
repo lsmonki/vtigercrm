@@ -63,12 +63,9 @@ if($ajaxaction == "DETAILVIEW")
 	     }	     
 	     $modObj->id = $crmid;
   	     $modObj->mode = "edit";
-       	     $modObj->save("Accounts");
-	     if($modObj->column_fields['notify_owner'] == 1 )
-	     {
-		   sendNotificationToOwner('Accounts',&$modObj);
-	     }
-             if($modObj->id != "")
+       	 $modObj->save("Accounts");
+
+		 if($modObj->id != "")
 	     {
 			echo ":#:SUCCESS";
 	     }else

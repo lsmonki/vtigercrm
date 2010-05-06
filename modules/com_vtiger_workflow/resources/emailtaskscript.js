@@ -213,9 +213,9 @@ function VTEmailTask($){
 					$('#task-fieldnames-busyicon').hide();
 					$('#task-fieldnames').show();
 					$('#task-fieldnames').change(function(){
-						var textarea = $('#save_content').get(0);
-						var value = '$'+$(this).attr('value');
-						insertAtCursor(textarea, value);
+					var textarea = CKEDITOR.instances.save_content;
+					var value = '$'+jQuery(this).attr('value');
+					textarea.insertHtml(value);
 					});
 
 					fillSelectBox('task-emailfields', modules, moduleName,
@@ -226,6 +226,23 @@ function VTEmailTask($){
 						var input = $($('#save_recepient').get());
 						var value = '$'+$(this).attr('value');
 						input.attr("value", input.attr("value")+','+value);
+					});
+					
+					//time_changes
+					$('#task_timefields').change(function(){
+						var textarea = CKEDITOR.instances.save_content;
+						var value = '$'+$(this).attr('value');
+						textarea.insertHtml(value);
+					});
+				
+					//changes
+					fillSelectBox('task-group_usersnames', modules, moduleName);
+					$('#task-fieldnames-busyicon').hide();
+					$('#task-group_usersnames').show();
+					$('#task-group_usersnames').change(function(){
+						var textarea = $('#save_receipent').get(0);
+						var value = '$'+$(this).attr('value');
+						insertAtCursor(textarea, value);
 					});
 				}));
 				

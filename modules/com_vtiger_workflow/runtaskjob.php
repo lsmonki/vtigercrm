@@ -54,5 +54,6 @@ require_once('VTWorkflowUtils.php');
 			$task->doTask($entity);
 		}
 	}
+	queueScheduledTasks();
 	vtRunTaskJob($adb);
 ?>

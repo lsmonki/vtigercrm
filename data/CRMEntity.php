@@ -72,8 +72,11 @@ class CRMEntity
 		$this->save_module($module);
 	
 		$assigntype=vtlib_purify($_REQUEST['assigntype']);
-		if($module != "Calendar")
-	          $this->whomToSendMail($module,$this ->mode,$assigntype);
+		if(PerformancePrefs::getBoolean('NOTIFY_OWNER_EMAILS', true) === true){
+			if($module != "Calendar" && $module != "Accounts" && $module != "Contacts"){
+				$this->whomToSendMail($module,$this ->mode,$assigntype);
+			}
+		}
 		
 		$this->db->completeTransaction();
 		$this->db->println("TRANS saveentity ends");
@@ -754,8 +757,9 @@ $log->info("in getOldFileName  ".$notesid);
     foreach($this->tab_name_index as $table_name=>$index)
     {
 	    $result[$table_name] = $adb->pquery("select * from $table_name where $index=?", array($record));
-	    if($adb->query_result($result["vtiger_crmentity"],0,"deleted") == 1)
-	    die("<br><br><center>".$app_strings['LBL_RECORD_DELETE']." <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
+	    if($adb->query_result($result["vtiger_crmentity"],0,"deleted") == 1) {
+			die("<br><br><center>".$app_strings['LBL_RECORD_DELETE']." <a href='javascript:window.history.back()'>".$app_strings['LBL_GO_BACK'].".</a></center>");
+		}
     }
 
     /* Prasad: Fix for ticket #4595 */
@@ -1036,7 +1040,7 @@ $log->info("in getOldFileName  ".$notesid);
         function constructCustomQueryAddendum($tablename,$module)
         {
                 global $adb;
-		$tabid=getTabid($module);		
+				$tabid=getTabid($module);		
                 $sql1 = "select columnname,fieldlabel from vtiger_field where generatedtype=2 and tabid=? and vtiger_field.presence in (0,2)"; 
                 $result = $adb->pquery($sql1, array($tabid));
                 $numRows = $adb->num_rows($result);
@@ -1293,6 +1297,19 @@ $log->info("in getOldFileName  ".$notesid);
 		$this->db->pquery($query, array($this->db->formatDate($date_var, true),$current_user->id,$id),true,"Error restoring records :" ); 
 		//Restore related entities/records
 		$this->restoreRelatedRecords($module,$id);
+		
+		//Event triggering code
+		require_once("include/events/include.inc");
+		global $adb;
+		$em = new VTEventsManager($adb);
+		
+		// Initialize Event trigger cache
+		$em->initTriggerCache(); 
+		
+		$entityData  = VTEntityData::fromCRMEntity($this);
+		//Event triggering code
+		$em->triggerEvent("vtiger.entity.afterrestore", $entityData);
+		//Event triggering code ends
 		
 		$this->db->completeTransaction();
 	    $this->db->println("TRANS restore ends");

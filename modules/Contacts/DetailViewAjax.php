@@ -30,10 +30,6 @@ if($ajaxaction == "DETAILVIEW")
 		 $modObj->id = $crmid;
 		 $modObj->mode = "edit";
 		 $modObj->save("Contacts");
-		 if($modObj->column_fields['notify_owner'] == 1 )
-		 {
-			 sendNotificationToOwner('Contacts',&$modObj);
-		 }
 		 $email_res = $adb->pquery("select email from vtiger_contactdetails where contactid=?", array($modObj->id));
 		 $email = $adb->query_result($email_res,0,'email');
 
@@ -94,9 +90,6 @@ if($ajaxaction == "DETAILVIEW")
 			$data_array['email'] = $email;
 			$data_array['portal_url'] = "<a href=".$PORTAL_URL."/login.php>".$mod_strings['Please Login Here']."</a>";
 			$contents = getmail_contents_portalUser($data_array,$password);
-			if($insert == true || $update == true)
-				send_mail('Contacts',$modObj->column_fields['email'],$current_user->user_name,'',$mod_strings['Customer Portal Login Details'],$contents);
-
 		 if($modObj->id != "")
 		 {
 			 echo ":#:SUCCESS";

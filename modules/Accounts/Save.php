@@ -140,10 +140,6 @@ $local_log->debug("Saved record with id of ".$return_id);
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=vtlib_purify($_REQUEST['return_viewname']);
 
-//Send notification mail to the assigned to owner about the vtiger_account creation
-if($focus->column_fields['notify_owner'] == 1 || $focus->column_fields['notify_owner'] == 'on')
-	$status = sendNotificationToOwner('Accounts',$focus);
-
 header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&viewname=$return_viewname&start=".vtlib_purify($_REQUEST['pagenumber']).$search);
 /** Function to save Accounts custom field info into database
 * @param integer $entity_id - accountid

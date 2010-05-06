@@ -173,8 +173,136 @@ function VT520_webserviceMigrate(){
 
 VT520_webserviceMigrate();
 
-$update_InvProductRel = "ALTER vtiger_inventoryproductrel MODIFY discount_amount decimal(25,3)";
+$update_InvProductRel = "ALTER TABLE vtiger_inventoryproductrel MODIFY discount_amount decimal(25,3)";
 ExecuteQuery($update_InvProductRel);
+// Registering events for ON MODIFY in Workflows
+$handlerId = $adb->getUniqueId('vtiger_eventhandlers');
+$modifyevent ='vtiger.entity.afterrestore';
+$eventPath = 'modules/com_vtiger_workflow/VTEventHandler.inc';
+$handlerClass = 'VTWorkflowEventHandler';
+$modifyevent = $adb->pquery("insert into vtiger_eventhandlers(eventhandler_id, event_name, handler_path, handler_class,cond,is_active)
+		values (?,?,?,?,?,1)",array($handlerId,$modifyevent,$eventPath,$handlerClass,''));
+
+// Populate Default Workflows
+populateDefaultWorkflows($adb);
+
+function populateDefaultWorkflows($adb) {
+	require_once("modules/com_vtiger_workflow/include.inc");
+	require_once("modules/com_vtiger_workflow/tasks/VTEntityMethodTask.inc");
+	require_once("modules/com_vtiger_workflow/VTEntityMethodManager.inc");
+
+	//added column defaultworkflow
+	//For default workflows it sets column defaultworkflow=true
+	
+	$column_name="defaultworkflow";
+	$adb->pquery("alter table com_vtiger_workflows add column $column_name int(1)",array());
+
+	// Creating Workflow for Accounts when Notifyowner is true
+
+	$vtaWorkFlow = new VTWorkflowManager($adb);
+	$accWorkFlow = $vtaWorkFlow->newWorkFlow("Accounts");
+	$accWorkFlow->test = '[{"fieldname":"notify_owner","operation":"is","value":"true:boolean"}]';
+	$accWorkFlow->description = "Send Email to user when Notifyowner is True";
+	$accWorkFlow->executionCondition=2;
+	$vtaWorkFlow->save($accWorkFlow);
+	$id1=$accWorkFlow->id;
+
+	$tm = new VTTaskManager($adb);
+	$task = $tm->createTask('VTEmailTask',$accWorkFlow->id);
+	$task->active=true;
+	$task->methodName = "NotifyOwner";
+	$task->recepient = "\$(assigned_user_id : (Users) email1)";
+	$task->subject = "Regarding Account Creation";
+	$task->content = "An Account has been assigned to you on vtigerCRM<br>Details of account are :<br><br>".
+			"AccountId:".'<b>$account_no</b><br>'."AccountName:".'<b>$accountname</b><br>'."Rating:".'<b>$rating</b><br>'.
+			"Industry:".'<b>$industry</b><br>'."AccountType:".'<b>$accounttype</b><br>'.
+			"Description:".'<b>$description</b><br><br><br>'."Thank You<br>Admin";
+	$task->summary="An account has been created ";
+	$tm->saveTask($task);
+	$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
+
+
+	// Creating Workflow for Contacts when Notifyowner is true
+
+	$vtcWorkFlow = new VTWorkflowManager($adb);
+	$conWorkFlow = 	$vtcWorkFlow->newWorkFlow("Contacts");
+	$conWorkFlow->summary="Test accounut";
+	$conWorkFlow->executionCondition=2;
+	$conWorkFlow->test = '[{"fieldname":"notify_owner","operation":"is","value":"true:boolean"}]';
+	$conWorkFlow->description = "Send Email to user when Notifyowner is True";
+
+	$vtcWorkFlow->save($conWorkFlow);
+	$id1=$conWorkFlow->id;
+	$tm = new VTTaskManager($adb);
+	$task = $tm->createTask('VTEmailTask',$conWorkFlow->id);
+	$task->active=true;
+	$task->methodName = "NotifyOwner";
+	$task->recepient = "\$(assigned_user_id : (Users) email1)";
+	$task->subject = "Regarding Contact Creation";
+	$task->content = "An Contact has been assigned to you on vtigerCRM<br>Details of Contact are :<br><br>".
+			"Contact Id:".'<b>$contact_no</b><br>'."LastName:".'<b>$lastname</b><br>'."FirstName:".'<b>$firstname</b><br>'.
+			"Lead Source:".'<b>$leadsource</b><br>'.
+			"Department:".'<b>$department</b><br>'.
+			"Description:".'<b>$description</b><br><br><br>'."Thank You<br>Admin";
+	$task->summary="An contact has been created ";
+	$tm->saveTask($task);
+	$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
+
+
+	// Creating Workflow for Contacts when PortalUser is true
+
+	$vtcWorkFlow = new VTWorkflowManager($adb);
+	$conpuWorkFlow = $vtcWorkFlow->newWorkFlow("Contacts");
+	$conpuWorkFlow->test = '[{"fieldname":"portal","operation":"is","value":"true:boolean"}]';
+	$conpuWorkFlow->description = "Send Email to user when Portal User is True";
+	$conpuWorkFlow->executionCondition=2;
+	$vtcWorkFlow->save($conpuWorkFlow);
+	$id1=$conpuWorkFlow->id;
+
+	$tm = new VTTaskManager($adb);
+	$task = $tm->createTask('VTEmailTask',$conpuWorkFlow->id);
+
+	$task->active=true;
+	$task->methodName = "NotifyOwner";
+	$task->recepient = "\$(assigned_user_id : (Users) email1)";
+	$task->subject = "Regarding Contact Assignment";
+	$task->content = "An Contact has been assigned to you on vtigerCRM<br>Details of Contact are :<br><br>".
+			"Contact Id:".'<b>$contact_no</b><br>'."LastName:".'<b>$lastname</b><br>'."FirstName:".'<b>$firstname</b><br>'.
+			"Lead Source:".'<b>$leadsource</b><br>'.
+			"Department:".'<b>$department</b><br>'.
+			"Description:".'<b>$description</b><br><br><br>'."And <b>CustomerPortal Login Details</b> is sent to the " .
+			"EmailID :-".'$email<br>'."<br>Thank You<br>Admin";
+
+	$task->summary="An contact has been created ";
+	$tm->saveTask($task);
+	$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
+
+	// Creating Workflow for Potentials
+
+	$vtcWorkFlow = new VTWorkflowManager($adb);
+	$potentialWorkFlow = $vtcWorkFlow->newWorkFlow("Potentials");
+	$potentialWorkFlow->description = "Send Email to user on Potential creation";
+	$potentialWorkFlow->executionCondition=1;
+	$vtcWorkFlow->save($potentialWorkFlow);
+	$id1=$potentialWorkFlow->id;
+
+	$tm = new VTTaskManager($adb);
+	$task = $tm->createTask('VTEmailTask',$potentialWorkFlow->id);
+
+	$task->active=true;
+	$task->recepient = "\$(assigned_user_id : (Users) email1)";
+	$task->subject = "Regarding Potential Assignment";
+	$task->content = "An Potential has been assigned to you on vtigerCRM<br>Details of Potential are :<br><br>".
+			"Potential No:".'<b>$potential_no</b><br>'."Potential Name:".'<b>$potentialname</b><br>'.
+			"Amount:".'<b>$amount</b><br>'.
+			"Expected Close Date:".'<b>$closingdate</b><br>'.
+			"Type:".'<b>$opportunity_type</b><br><br><br>'.
+			"Description :".'$description<br>'."<br>Thank You<br>Admin";
+
+	$task->summary="An Potential has been created ";
+	$tm->saveTask($task);
+	$adb->pquery("update com_vtiger_workflows set defaultworkflow=? where workflow_id=?",array(1,$id1));
+}
 
 $migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Ends \n\n");
 

@@ -36,5 +36,8 @@ $PERFORMANCE_CONFIG = Array(
 
 	// Control DetailView Record Navigation
 	'DETAILVIEW_RECORD_NAVIGATION' => true,
+
+	// To control the Email Notifications being sent to the Owner
+	'NOTIFY_OWNER_EMAILS' => true,		//By default it is set to true, if it is set to false, then notifications will not be sent
 );
 ?>

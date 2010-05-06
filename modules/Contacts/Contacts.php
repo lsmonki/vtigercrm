@@ -1376,21 +1376,6 @@ function get_contactsforol($user_name)
 	}
 	
 //End
-	function whomToSendMail($module,$insertion_mode,$assigntype){
-		global $adb;
-		if($this->column_fields['notify_owner']=='on'){
-			if($assigntype=='U')
-			{
-				sendNotificationToOwner($module,$this);
-			}
-			elseif($assigntype=='T')
-			{
-				$groupid=vtlib_purify($_REQUEST['assigned_group_id']);
-				sendNotificationToGroups($groupid,$this->id,$module);
-			}
-		}   	
-	}
-
 }
 
 ?>

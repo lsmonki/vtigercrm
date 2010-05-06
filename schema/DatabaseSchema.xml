@@ -6765,7 +6765,8 @@
 		<field name="execution_condition" type="I">
 			<notnull />
 		</field>
-		
+		<field name="defaultworkflow" type="I" size="1">
+		</field>
 		<index name="com_vtiger_workflows_idx">
 			<unique />
 			<col>workflow_id</col>

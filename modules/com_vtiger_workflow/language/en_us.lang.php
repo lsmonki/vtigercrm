@@ -36,6 +36,8 @@ $mod_strings = array(
 'LBL_SELECT_OPTION_DOTDOTDOT'=>'Select Option...',
 'LBL_WORKFLOW_NOTE_CRON_CONFIG'=>'NOTE: You should have Workflow cron script configured.',
 'LBL_NO_TEMPLATES'=>'No Templates',
+'LBL_SELECT'=>'Select',
+'LBL_MESSAGE'=>'Message',
 );
 
 
