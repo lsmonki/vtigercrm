@@ -431,7 +431,7 @@ function BasicSearch($module,$search_field,$search_string){
 							if ($stridx !== 0) 
 							{
 								$search_string = $mod_key;
-								if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0' && ($tab_col == "vtiger_activity.status" || $tab_col == "vtiger_activity.eventstatus"))
+								if(getFieldVisibilityPermission("Calendar", $current_user->id,'taskstatus') == '0' && ($column_name == "status" || $column_name == "eventstatus"))
 								{
 										$where="(vtiger_activity.status like '". formatForSqlLike($search_string) ."' or vtiger_activity.eventstatus like '". formatForSqlLike($search_string) ."')";
 								}
