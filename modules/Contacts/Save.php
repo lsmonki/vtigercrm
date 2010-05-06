@@ -219,10 +219,7 @@ if($image_error=="false")
 	if($_REQUEST['return_viewname'] != '')$return_viewname=vtlib_purify($_REQUEST['return_viewname']);
 
 	$parenttab = getParentTab();
-
-	//Send notification mail to the assigned to owner about the contact creation
-	if($focus->column_fields['notify_owner'] == 1 || $focus->column_fields['notify_owner'] == 'on')
-		$status = sendNotificationToOwner('Contacts',$focus);
+	
 
 	header("Location: index.php?action=$return_action&module=$return_module&parenttab=$parenttab&record=$return_id&activity_mode=$activitymode&viewname=$return_viewname&start=".vtlib_purify($_REQUEST['pagenumber']));
 }

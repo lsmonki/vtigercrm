@@ -2218,7 +2218,7 @@ function sendNotificationToOwner($module,$focus)
 
 		$description .= '<br><br>'.$app_strings['MSG_THANK_YOU'].',<br>'.$current_user->user_name.'.<br>';
 		$status = send_mail($module,$ownermailid,$current_user->user_name,'',$subject,$description);
-
+		
 		$log->debug("Exiting sendNotificationToOwner method ...");
 		return $status;
 	}
