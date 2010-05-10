@@ -156,7 +156,7 @@ class Users {
 	var $record_id;
 	var $new_schema = true;
 
-	var $DEFAULT_PASSWORD_CRYPT_TYPE = 'MD5';
+	var $DEFAULT_PASSWORD_CRYPT_TYPE = 'BLOWFISH'; //'MD5';
 
 	/** constructor function for the main user class
             instantiates the Logger class and PearDatabase Class	
@@ -468,7 +468,7 @@ class Users {
 	function get_user_crypt_type() {
 		
 		$crypt_res = null;
-		$crypt_type = '';
+		$crypt_type = $this->DEFAULT_PASSWORD_CRYPT_TYPE;
 
 		// For backward compatability, we need to make sure to handle this case.
 		global $adb;
@@ -488,7 +488,7 @@ class Users {
 			$crypt_type = $this->DEFAULT_PASSWORD_CRYPT_TYPE;
 		}
 
-		if($crypt_res) {
+		if($crypt_res && $this->db->num_rows($crypt_res)) {
 			$crypt_row = $this->db->fetchByAssoc($crypt_res);
 			$crypt_type = $crypt_row['crypt_type'];
 		}
@@ -880,7 +880,14 @@ class Users {
 
 		}
 		else
-		{	
+		{
+			// Set the crypt_type being used, to override the DB default constraint as it is not in vtiger_field
+			if($table_name == 'vtiger_users' && strpos('crypt_type', $column) === false) {
+				$column .= ', crypt_type';
+				$qparams[]= $crypt_type;
+			}
+			// END
+
 			$sql1 = "insert into $table_name ($column) values(". generateQuestionMarks($qparams) .")";
 			$this->db->pquery($sql1, $qparams); 
 		}

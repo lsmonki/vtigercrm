@@ -40,7 +40,7 @@ require_once('include/Zend/Json.php');
 function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='',$relatedmodule='',$skipActions=false)
 {
 	global $log, $singlepane_view;
-	$log->debug("Entering getListViewHeader(". $module.",".$sort_qry.",".$sorder.",".$order_by.",".$relatedlist.",".get_class($oCv).") method ...");
+	$log->debug("Entering getListViewHeader(". $module.",".$sort_qry.",".$sorder.",".$order_by.",".$relatedlist.",".(is_object($oCv)? get_class($oCv) : $oCv).") method ...");
 	global $adb;
 	global $theme;
 	global $app_strings;
@@ -555,7 +555,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 {
 	global $log;
 	global $mod_strings;
-	$log->debug("Entering getListViewEntries(".get_class($focus).",". $module.",".$list_result.",".$navigation_array.",".$relatedlist.",".$returnset.",".$edit_action.",".$del_action.",".get_class($oCv).") method ...");
+	$log->debug("Entering getListViewEntries(".get_class($focus).",". $module.",".$list_result.",".$navigation_array.",".$relatedlist.",".$returnset.",".$edit_action.",".$del_action.",".(is_object($oCv)? get_class($oCv) : $oCv).") method ...");
 	$tabname = getParentTab();
 	global $adb,$current_user;
 	global $app_strings;
@@ -2470,14 +2470,9 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_users
 				ON vtiger_crmentity.smownerid = vtiger_users.id
 			LEFT JOIN vtiger_products 
-				ON vtiger_products.productid = vtiger_troubletickets.product_id 
-			WHERE vtiger_crmentity.deleted = 0 ".$where;
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-				$sec_parameter=getListViewSecurityParameter($module);
-				$query .= $sec_parameter;
-
-		}
+				ON vtiger_products.productid = vtiger_troubletickets.product_id";
+		$query .= ' '.getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 
 	Case "Accounts":
@@ -2501,38 +2496,9 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_account vtiger_account2
-				ON vtiger_account.parentid = vtiger_account2.accountid
-			WHERE vtiger_crmentity.deleted = 0 ".$where;
-
-	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-                {
-                    $query .= " AND (vtiger_crmentity.smownerid IN (".$current_user->id.")
-		   		 OR vtiger_crmentity.smownerid IN (
-					 SELECT vtiger_user2role.userid
-					 FROM vtiger_user2role
-					 INNER JOIN vtiger_users
-						 ON vtiger_users.id = vtiger_user2role.userid
-					 INNER JOIN vtiger_role
-						 ON vtiger_role.roleid = vtiger_user2role.roleid
-					 WHERE vtiger_role.parentrole LIKE '".$current_user_parent_role_seq."::%')
-					 OR vtiger_crmentity.smownerid IN (
-						 SELECT shareduserid
-						 FROM vtiger_tmp_read_user_sharing_per
-						 WHERE userid=".$current_user->id."
-						 AND tabid=".$tab_id.")
-					 OR (";
-
-                        if(sizeof($current_user_groups) > 0)
-                        {
-                              $query .= " vtiger_groups.groupid IN (". implode(",", getCurrentUserGroupList()) .")
-					OR ";
-                        }
-                         $query .= " vtiger_groups.groupid IN (
-				 	SELECT vtiger_tmp_read_group_sharing_per.sharedgroupid
-					FROM vtiger_tmp_read_group_sharing_per
-					WHERE userid=".$current_user->id."
-					AND tabid=".$tab_id."))) ";
-                }
+				ON vtiger_account.parentid = vtiger_account2.accountid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 
 	Case "Potentials":
@@ -2558,15 +2524,9 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
-				ON vtiger_users.id = vtiger_crmentity.smownerid
-			WHERE vtiger_crmentity.deleted = 0 ".$where; 
-
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;
-		}
-
+				ON vtiger_users.id = vtiger_crmentity.smownerid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 
 	Case "Leads":
@@ -2587,15 +2547,10 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
-				ON vtiger_users.id = vtiger_crmentity.smownerid
-			WHERE vtiger_crmentity.deleted = 0
-			AND vtiger_leaddetails.converted = 0 ".$where;
-		
-               if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-                {
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;
-                }				
+				ON vtiger_users.id = vtiger_crmentity.smownerid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 AND vtiger_leaddetails.converted = 0 ".
+			$where;
 			break;
 	Case "Products":
 		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.description, vtiger_products.*, vtiger_productcf.*
@@ -2623,13 +2578,9 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_attachmentsfolder 
-				ON vtiger_notes.folderid = vtiger_attachmentsfolder.folderid 
-			WHERE vtiger_crmentity.deleted = 0 ".$where;
-	        if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-            {
-				$sec_parameter=getListViewSecurityParameter($module);
-				$query .= $sec_parameter;
-            }		
+				ON vtiger_notes.folderid = vtiger_attachmentsfolder.folderid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "Contacts":
 		//Query modified to sort by assigned to
@@ -2656,15 +2607,13 @@ function getListQuery($module,$where='')
 				ON vtiger_contactdetails.reportsto = vtiger_contactdetails2.contactid
 			LEFT JOIN vtiger_customerdetails
 				ON vtiger_customerdetails.customerid = vtiger_contactdetails.contactid";
-		if((isset($_REQUEST["from_dashboard"]) && $_REQUEST["from_dashboard"] == true) && (isset($_REQUEST["type"]) && $_REQUEST["type"] =="dbrd"))
-                        $query .= " INNER JOIN vtiger_campaigncontrel on vtiger_campaigncontrel.contactid = vtiger_contactdetails.contactid";
-                $query .= " WHERE vtiger_crmentity.deleted = 0 ".$where;
-
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;
+		if((isset($_REQUEST["from_dashboard"]) && $_REQUEST["from_dashboard"] == true) &&
+				(isset($_REQUEST["type"]) && $_REQUEST["type"] =="dbrd")) {
+			$query .= " INNER JOIN vtiger_campaigncontrel on vtiger_campaigncontrel.contactid = ".
+			"vtiger_contactdetails.contactid";
 		}
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "Calendar":
 		
@@ -2712,20 +2661,15 @@ function getListQuery($module,$where='')
 		ON vtiger_campaign.campaignid = vtiger_seactivityrel.crmid";
 
 		//added to fix #5135
-		if(isset($_REQUEST['from_homepage']) && ($_REQUEST['from_homepage'] == "upcoming_activities" || $_REQUEST['from_homepage'] == "pending_activities"))
-		{
+		if(isset($_REQUEST['from_homepage']) && ($_REQUEST['from_homepage'] == 
+				"upcoming_activities" || $_REQUEST['from_homepage'] == "pending_activities")) {
 			$query.=" LEFT OUTER JOIN vtiger_recurringevents
 			             ON vtiger_recurringevents.activityid=vtiger_activity.activityid";
 		}
 		//end
 
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
 		$query.=" WHERE vtiger_crmentity.deleted = 0 AND activitytype != 'Emails' ".$where;
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;		
-
-		}
 			break;
 	Case "Emails":
 		$query = "SELECT DISTINCT vtiger_crmentity.crmid, vtiger_crmentity.smownerid,
@@ -2751,13 +2695,9 @@ function getListQuery($module,$where='')
 				ON vtiger_salesmanactivityrel.activityid = vtiger_activity.activityid
 			LEFT JOIN vtiger_emaildetails
 				ON vtiger_emaildetails.emailid = vtiger_activity.activityid
-			WHERE vtiger_activity.activitytype = 'Emails'
-			AND vtiger_crmentity.deleted = 0 ".$where;
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;	
-		}
+			WHERE vtiger_activity.activitytype = 'Emails'";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "AND vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "Faq":
 		$query = "SELECT vtiger_crmentity.crmid, vtiger_crmentity.createdtime, vtiger_crmentity.modifiedtime,
@@ -2766,13 +2706,9 @@ function getListQuery($module,$where='')
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_faq.id
 			LEFT JOIN vtiger_products
-				ON vtiger_faq.product_id = vtiger_products.productid
-			WHERE vtiger_crmentity.deleted = 0 ".$where;
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;	
-		}
+				ON vtiger_faq.product_id = vtiger_products.productid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 
 	Case "Vendors":
@@ -2826,13 +2762,9 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users as vtiger_usersQuotes
-			        ON vtiger_usersQuotes.id = vtiger_quotes.inventorymanager
-			WHERE vtiger_crmentity.deleted = 0 ".$where;
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;	
-		}
+			        ON vtiger_usersQuotes.id = vtiger_quotes.inventorymanager";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "PurchaseOrder":
 		//Query modified to sort by assigned to
@@ -2860,13 +2792,9 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
-				ON vtiger_users.id = vtiger_crmentity.smownerid
-			WHERE vtiger_crmentity.deleted = 0 ".$where;
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;	
-		}
+				ON vtiger_users.id = vtiger_crmentity.smownerid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "SalesOrder":
 		//Query modified to sort by assigned to
@@ -2901,13 +2829,9 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
-				ON vtiger_users.id = vtiger_crmentity.smownerid
-			WHERE vtiger_crmentity.deleted = 0 ".$where;
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;	
-		}
+				ON vtiger_users.id = vtiger_crmentity.smownerid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "Invoice":
 		//Query modified to sort by assigned to
@@ -2939,13 +2863,9 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_groups
 				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_users
-				ON vtiger_users.id = vtiger_crmentity.smownerid
-			WHERE vtiger_crmentity.deleted = 0 ".$where;
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;	
-		}
+				ON vtiger_users.id = vtiger_crmentity.smownerid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "Campaigns":
 		//Query modified to sort by assigned to
@@ -2962,13 +2882,9 @@ function getListQuery($module,$where='')
 			LEFT JOIN vtiger_users
 				ON vtiger_users.id = vtiger_crmentity.smownerid
 			LEFT JOIN vtiger_products
-				ON vtiger_products.productid = vtiger_campaign.product_id
-			WHERE vtiger_crmentity.deleted = 0 ".$where;
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;	
-		}
+				ON vtiger_products.productid = vtiger_campaign.product_id";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ".$where;
 			break;
 	Case "Users":
 		$query = "SELECT id,user_name,first_name,last_name,email1,phone_mobile,phone_work,is_admin,status,
@@ -2985,6 +2901,9 @@ function getListQuery($module,$where='')
 		// END
 	}
 
+	if($module != 'Users') {
+		$query = listQueryNonAdminChange($query, $module);
+	}
 	$log->debug("Exiting getListQuery method ...");
 	return $query;
 }
@@ -3003,63 +2922,37 @@ function getReadEntityIds($module)
 	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	$tab_id = getTabid($module);
 
-	if($module == "Leads")
-	{
+	if($module == "Leads") {
 		$query = "SELECT vtiger_crmentity.crmid
 			FROM vtiger_leaddetails
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_leaddetails.leadid
 			LEFT JOIN vtiger_groups
-                 ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-			WHERE vtiger_crmentity.deleted = 0
+                 ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0
 			AND vtiger_leaddetails.converted = 0 ";
-        if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-        {
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;
-		}
-	}
-	if($module == "Accounts")
-	{
+	}elseif($module == "Accounts") {
 		//Query modified to sort by assigned to
 		$query = "SELECT vtiger_crmentity.crmid
 			FROM vtiger_account
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_account.accountid
 			LEFT JOIN vtiger_groups
-                ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-			WHERE vtiger_crmentity.deleted = 0 ";
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-                {
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;
-		}
-                    	
-		
-	}
-
-	if ($module == "Potentials")
-	{
+                ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ";
+	}elseif ($module == "Potentials") {
 		//Query modified to sort by assigned to
 		$query = "SELECT vtiger_crmentity.crmid
 			FROM vtiger_potential
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_potential.potentialid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-			WHERE vtiger_crmentity.deleted = 0 "; 
-
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;
-		}
-
-
-	}
-
-	if($module == "Contacts")
-        {
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ";
+	}elseif($module == "Contacts") {
 		//Query modified to sort by assigned to
 
 		$query="SELECT vtiger_crmentity.crmid
@@ -3067,17 +2960,10 @@ function getReadEntityIds($module)
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_contactdetails.contactid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-			WHERE vtiger_crmentity.deleted = 0 ";
-
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;
-		}
-        }
-	if($module == "Products")
-	{
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ";
+	}elseif($module == "Products") {
 		$query = "SELECT DISTINCT vtiger_crmentity.crmid
 			FROM vtiger_products
 			INNER JOIN vtiger_crmentity
@@ -3090,84 +2976,53 @@ function getReadEntityIds($module)
 				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Accounts').")
 				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Potentials').")
 				OR vtiger_seproductsrel.crmid IN (".getReadEntityIds('Contacts').")) ";
-	}
-
-	if($module == "PurchaseOrder")
-        {
+	}elseif($module == "PurchaseOrder") {
 		//Query modified to sort by assigned to
                 $query = "SELECT vtiger_crmentity.crmid
 			FROM vtiger_purchaseorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_purchaseorder.purchaseorderid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-			WHERE vtiger_crmentity.deleted = 0 ";
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;	
-		}
-        }
-        if($module == "SalesOrder")
-        {
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ";
+	}elseif($module == "SalesOrder") {
 		//Query modified to sort by assigned to
                 $query = "SELECT vtiger_crmentity.crmid
 			FROM vtiger_salesorder
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_salesorder.salesorderid
 			LEFT JOIN vtiger_groups
-                ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-			WHERE vtiger_crmentity.deleted = 0 ".$where;
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;	
-		}
-        }
-	if($module == "Invoice")
-	{
+                ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ";
+    }elseif($module == "Invoice") {
 		$query = "SELECT vtiger_crmentity.crmid
 			FROM vtiger_invoice
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_invoice.invoiceid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-			WHERE vtiger_crmentity.deleted = 0 ".$where;
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;	
-		}
-	}
-	if($module == "Quotes")
-	{
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ";
+	}elseif($module == "Quotes") {
 		$query = "SELECT vtiger_crmentity.crmid
 		        FROM vtiger_quotes
 			INNER JOIN vtiger_crmentity
 			        ON vtiger_crmentity.crmid = vtiger_quotes.quoteid
 			LEFT JOIN vtiger_groups
-			        ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-			WHERE vtiger_crmentity.deleted = 0 ".$where;
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;
-		}
-	}
-	if($module == "HelpDesk")
-	{
+			        ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ";
+	}elseif($module == "HelpDesk") {
 		$query = "SELECT vtiger_crmentity.crmid
 			FROM vtiger_troubletickets
 			INNER JOIN vtiger_crmentity
 				ON vtiger_crmentity.crmid = vtiger_troubletickets.ticketid
 			LEFT JOIN vtiger_groups
-				ON vtiger_groups.groupid = vtiger_crmentity.smownerid
-			WHERE vtiger_crmentity.deleted = 0 ".$where;
-		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-		{
-			$sec_parameter=getListViewSecurityParameter($module);
-			$query .= $sec_parameter;	
-		}
+				ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
+		$query .= getNonAdminAccessControlQuery($module,$current_user);
+		$query .= "WHERE vtiger_crmentity.deleted = 0 ";
 	}
 
 	$log->debug("Exiting getReadEntityIds method ...");
@@ -3311,7 +3166,6 @@ function getRelatedToEntity($module,$list_result,$rset)
 function getRelatedTo($module,$list_result,$rset)
 {
 	global $adb,$log,$app_strings;
-	$log->debug("Entering getRelatedTo(".$module.",".$list_result.",".$rset.") method ...");
 	$tabname = getParentTab();
 	if($module == "Documents")
     {
@@ -4653,6 +4507,11 @@ function getRecordRangeMessage($listResult, $limitStartRecord,$totalRows='') {
 		}
 	}
 	return $recordListRangeMsg;
+}
+
+function listQueryNonAdminChange($query, $module, $scope='') {
+	$instance = CRMEntity::getInstance($module);
+	return $instance->listQueryNonAdminChange($query, $scope);
 }
 
 ?>

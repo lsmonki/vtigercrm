@@ -14,6 +14,7 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once('include/utils/utils.php');
+require_once 'include/Webservices/Utils.php';
 
 global $adv_filter_options;
 
@@ -54,6 +55,8 @@ class CustomView extends CRMEntity{
 	// Information as defined for this instance in the database table.
 	protected $_status = false;
 	protected $_userid = false;
+	protected $meta;
+	protected $moduleMetaInfo;
 	
 	/** This function sets the currentuser id to the class variable smownerid,  
 	  * modulename to the class variable customviewmodule
@@ -67,8 +70,26 @@ class CustomView extends CRMEntity{
 		$this->escapemodule[] =	$module."_";
 		$this->escapemodule[] = "_";
 		$this->smownerid = $current_user->id;
+		$this->moduleMetaInfo = array();
+		if($module != "") {
+			$this->meta = $this->getMeta($module, $current_user);
+		}
 	}
 
+	/**
+	 *
+	 * @param String:ModuleName $module
+	 * @return EntityMeta
+	 */
+	public function getMeta($module, $user) {
+		$db = PearDatabase::getInstance();
+		if (empty($this->moduleMetaInfo[$module])) {
+			$handler = vtws_getModuleHandlerFromName($module, $user);
+			$meta = $handler->getMeta();
+			$this->moduleMetaInfo[$module] = $meta;
+		}
+		return $this->moduleMetaInfo[$module];
+	}
 
 	/** To get the customViewId of the specified module 
 	  * @param $module -- The module Name:: Type String
@@ -279,12 +300,14 @@ class CustomView extends CRMEntity{
 		global $adb,$mod_strings,$app_strings;
 		$block_ids = explode(",", $block);
 		$tabid = getTabid($module);
+		global $current_user;
+	    require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		if (empty($this->meta)) {
+			$this->meta = $this->getMeta($module, $current_user);
+		}
 		if($tabid == 9)
 			$tabid ="9,16";
-		global $current_user;
-	        require('user_privileges/user_privileges_'.$current_user->id.'.php');
-
-			$display_type = " vtiger_field.displaytype in (1,2,3)";
+		$display_type = " vtiger_field.displaytype in (1,2,3)";
 
 		if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] == 0)
 		{
@@ -344,6 +367,7 @@ class CustomView extends CRMEntity{
 		if($module == 'Quotes' && $block == 51)
                         $module_columnlist['vtiger_crmentity:crmid::Quotes_Quote_No:I'] = $app_strings['Quote No'];
 
+		$moduleFieldList = $this->meta->getModuleFields();
 		for($i=0; $i<$noofrows; $i++)
 		{
 			$fieldtablename = $adb->query_result($result,$i,"tablename");
@@ -353,8 +377,15 @@ class CustomView extends CRMEntity{
 			$fieldtype = explode("~",$fieldtype);
 			$fieldtypeofdata = $fieldtype[0];
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
-			//Here we Changing the displaytype of the field. So that its criteria will be displayed Correctly in Custom view Advance Filter.	
-			$fieldtypeofdata=ChangeTypeOfData_Filter($fieldtablename,$fieldcolname,$fieldtypeofdata);
+			$field = $moduleFieldList[$fieldname];
+			if($field->getFieldDataType() == 'reference') {
+				$fieldtypeofdata = 'V';
+			} else {
+				//Here we Changing the displaytype of the field. So that its criteria will be
+				//displayed Correctly in Custom view Advance Filter.
+				$fieldtypeofdata=ChangeTypeOfData_Filter($fieldtablename,$fieldcolname,
+						$fieldtypeofdata);
+			}
 			if($fieldlabel == "Related To")
 			{
 				$fieldlabel = "Related to";
@@ -367,20 +398,8 @@ class CustomView extends CRMEntity{
 
 			}
 			$fieldlabel1 = str_replace(" ","_",$fieldlabel);
-			if($fieldname == 'account_id' && $fieldtablename != 'vtiger_account')//Potential,Contacts,Invoice,SalesOrder & Quotes  records   sort by Account Name . But for account member of we have to avoid this
-				$optionvalue = "vtiger_account:accountname:accountname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
-			else if($fieldname == 'contact_id' && $module != "Contacts")//Calendar,Documents,PurchaseOrder,SalesOrder,Quotes,and Invoice records sort by Contact Name
-                                $optionvalue = "vtiger_contactdetails:lastname:lastname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
-			else if($fieldname == 'product_id' && ($module != 'Products' && $module != 'HelpDesk' && $module !="Faq"))//Campaign records sort by Product Name.
-				$optionvalue = "vtiger_products:productname:productname:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
-			else if($fieldname == 'account' && $fieldtablename == 'vtiger_assets')
-				$optionvalue = "vtiger_assets:account:account:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
-			else if($fieldname == 'product' && $fieldtablename == 'vtiger_assets')
-				$optionvalue = "vtiger_assets:product:product:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
-			else if($fieldname == 'invoiceid' && $fieldtablename == 'vtiger_assets')
-				$optionvalue = "vtiger_assets:invoiceid:invoiceid:".$module."_".$fieldlabel1.":".$fieldtypeofdata;
-			else
-				$optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1.":".$fieldtypeofdata;
+			$optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".
+				$fieldlabel1.":".$fieldtypeofdata;
 			//added to escape attachments fields in customview as we have multiple attachments
 			$fieldlabel = getTranslatedString($fieldlabel); //added to support i18n issue
 			if($module != 'HelpDesk' || $fieldname !='filename')

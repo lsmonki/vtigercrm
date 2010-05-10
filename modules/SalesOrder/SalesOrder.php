@@ -406,6 +406,12 @@ class SalesOrder extends CRMEntity {
 		}
 	}
 	
+	public function getJoinClause($tableName) {
+		if ($tableName == 'vtiger_invoice_recurring_info') {
+			return 'LEFT JOIN';
+		}
+		return parent::getJoinClause($tableName);
+	}
 }
 
 ?>

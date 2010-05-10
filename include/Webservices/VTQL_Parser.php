@@ -1,4 +1,13 @@
 <?php
+/*+***********************************************************************************
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ *************************************************************************************/
+
 /* Driver template for the PHP_VTQL_ParserrGenerator parser generator. (PHP port of LEMON)
 */
 
@@ -174,7 +183,7 @@ function buildSelectStmt($sqlDump){
 	$fieldcol = $meta->getFieldColumnMapping();
 	$columnTable = $meta->getColumnTableMapping();
 	$this->query = 'SELECT ';
-	if(strcmp($sqlDump['column_list'],'*')===0){
+	if(is_string($this->out['column_list']) && strcmp($sqlDump['column_list'],'*')===0){
 		$i=0;
 		foreach($fieldcol as $field=>$col){
 			if($i===0){
@@ -184,7 +193,7 @@ function buildSelectStmt($sqlDump){
 				$this->query = $this->query.','.$columnTable[$col].'.'.$col;
 			}
 		}
-	}else if(strcmp($sqlDump['column_list'],'count(*)')===0){
+	}else if(is_string($this->out['column_list']) && strcmp($sqlDump['column_list'],'count(*)')===0){
 		$this->query = $this->query." COUNT(*)";
 	}else{
 		$i=0;
@@ -1185,7 +1194,7 @@ $this->out['column_list'] = 'count(*)';
 #line 1191 "e:\workspace\nonadmin\pkg\vtiger\extensions\Webservices\VTQL_parser.php"
 #line 30 "e:\workspace\nonadmin\pkg\vtiger\extensions\Webservices\VTQL_parser.y"
     function yy_r7(){
-if($this->out["column_list"] !=="*" && strcmp($this->out["column_list"],"count(*)") !==0){
+if(is_array($this->out["column_list"])){
 if(!in_array("id",$this->out["column_list"])){
 	$this->out["column_list"][] = "id";
 } 
@@ -1330,9 +1339,9 @@ $this->out['meta'] = $objectMeta;
 $meta = $this->out['meta'];
 $fieldcol = $meta->getFieldColumnMapping();
 $columns = array();
-if(strcmp($this->out['column_list'],'*')===0){
+if(is_string($this->out['column_list']) && strcmp($this->out['column_list'],'*')===0){
 $columns = array_values($fieldcol);
-}else if( strcmp($this->out['column_list'],'count(*)')!==0){
+}else if(is_string($this->out['column_list']) && strcmp($this->out['column_list'],'count(*)')!==0){
 foreach($this->out['column_list'] as $ind=>$field){
 $columns[] = $fieldcol[$field];
 }
