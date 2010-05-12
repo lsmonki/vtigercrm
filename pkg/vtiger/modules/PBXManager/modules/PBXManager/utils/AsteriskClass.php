@@ -99,7 +99,7 @@ class Asterisk {
 		
 		switch($typeCalled){
 			case "SIP":
-				$context = "local-extensions";
+				$context = "default";
 				break;
 			case "PSTN":
 				$context = "from-inside";//"outbound-dialing";

@@ -2176,6 +2176,64 @@ $log->info("in getOldFileName  ".$notesid);
 	}
 	/** END **/
 	
+	function buildSearchQueryForFieldTypes($uitypes, $value) {
+		global $adb;
+
+		if(!is_array($uitypes)) $uitypes = array($uitypes);
+		$module = get_class($this);
+		
+		$cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module);
+		if($cachedModuleFields === false) {
+			getColumnFields($module); // This API will initialize the cache as well
+			// We will succeed now due to above function call
+			$cachedModuleFields = VTCacheUtils::lookupFieldInfo_Module($module);
+		}
+
+		$lookuptables = array();
+		$lookupcolumns = array();
+		foreach($cachedModuleFields as $fieldinfo) {
+			if (in_array($fieldinfo['uitype'], $uitypes)) {
+				$lookuptables[] = $fieldinfo['tablename'];
+				$lookupcolumns[] = $fieldinfo['columnname'];
+			}
+		}
+
+		$entityfields = getEntityField($module);
+		$querycolumnnames = implode(',', $lookupcolumns);
+		$entitycolumnnames = $entityfields['fieldname'];
+		$query = "select crmid as id, $querycolumnnames, $entitycolumnnames as name ";
+		$query .= " FROM $this->table_name ";
+		$query .=" INNER JOIN vtiger_crmentity ON $this->table_name.$this->table_index = vtiger_crmentity.crmid AND deleted = 0 ";
+
+		//remove the base table
+		$LookupTable = array_unique($lookuptables);
+		$indexes = array_keys($LookupTable, $this->table_name);
+		if(!empty($indexes)) {
+			foreach($indexes as $index) {
+				unset($LookupTable[$index]);
+			}
+		}
+		foreach($LookupTable as $tablename) {
+			$query .= " INNER JOIN $tablename
+						on $this->table_name.$this->table_index = $tablename.".$this->tab_name_index[$tablename];
+		}
+		if(!empty($lookupcolumns)) {
+			$query .=" WHERE ";
+			$i=0;
+			$columnCount = count($lookupcolumns);
+			foreach($lookupcolumns as $columnname) {
+				if(!empty($columnname)) {
+					if($i == 0 || $i == ($columnCount))
+						$query .= sprintf("%s = '%s'", $columnname, $value);
+					else
+						$query .= sprintf(" OR %s = '%s'", $columnname, $value);
+					$i++;
+				}
+			}
+		}
+		return $query;
+	}
+	
 	/**
 	 *
 	 * @param String $tableName

@@ -168,7 +168,7 @@
 <rules>
 <rule>
 <columnindex>0</columnindex>
-<comparator>EQUALS</comparator>
+<comparator>CONTAINS</comparator>
 <value>Missed</value>
 </rule>
 </rules>
@@ -198,7 +198,7 @@
 <rules>
 <rule>
 <columnindex>0</columnindex>
-<comparator>EQUALS</comparator>
+<comparator>CONTAINS</comparator>
 <value>outgoing</value>
 </rule>
 </rules>
@@ -228,8 +228,8 @@
 <rules>
 <rule>
 <columnindex>0</columnindex>
-<comparator>EQUALS</comparator>
-<value>incoming</value>
+<comparator>CONTAINS</comparator>
+<value>received</value>
 </rule>
 </rules>
 </field>

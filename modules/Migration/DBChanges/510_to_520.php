@@ -408,6 +408,21 @@ function VT520_queryGeneratorMigration() {
 
 VT520_queryGeneratorMigration();
 
+
+ExecuteQuery("ALTER table vtiger_asteriskincomingcalls ADD COLUMN refuid varchar(255)");
+ExecuteQuery("
+	CREATE TABLE vtiger_asteriskincomingevents (
+  	uid varchar(255) NOT NULL,
+  	channel varchar(100)  default NULL,
+	from_number bigint(20) default NULL,
+  	from_name varchar(100) default NULL,
+  	to_number bigint(20) default NULL,
+  	callertype varchar(100) default NULL,
+  	timer int(20) default NULL,
+	flag varchar(3) default NULL,
+  	pbxrecordid int(19) default NULL,
+	relcrmid int(19) default NULL,
+  	PRIMARY KEY  (uid))");
 $migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Ends \n\n");
 
 

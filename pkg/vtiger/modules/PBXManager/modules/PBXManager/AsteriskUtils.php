@@ -154,7 +154,7 @@ function getChannel($asterisk){
  */
 function getUserFromExtension($extension, $adb){
 	$userid = false;
-	$sql = "select * from vtiger_asteriskextensions where asterisk_extension=?";
+	$sql = "select userid from vtiger_asteriskextensions where asterisk_extension=?";
 	$result = $adb->pquery($sql, array($extension));
 	if($adb->num_rows($result) > 0){
 		$userid = $adb->query_result($result, 0, "userid");
@@ -173,8 +173,13 @@ function getUserFromExtension($extension, $adb){
  * @return string $status - on success - string success
  * 							on failure - string failure
  */
-function asterisk_addToActivityHistory($callerName, $callerNumber, $callerType, $adb, $current_user){
-	global $log;
+function asterisk_addToActivityHistory($callerName, $callerNumber, $callerType, $adb, $userid, $relcrmid, $callerInfo=false){
+	global $log, $current_user;
+	
+	// Reset date format for a while
+	$old_userdate_format = $current_user->date_format;	
+	$current_user->date_format = 'yyyy-mm-dd';
+	
 	require_once 'modules/Calendar/Activity.php';
 	$focus = new Activity();
 	$focus->column_fields['subject'] = "Incoming call from $callerName ($callerNumber)";
@@ -184,60 +189,31 @@ function asterisk_addToActivityHistory($callerName, $callerNumber, $callerType, 
 	$focus->column_fields['time_start'] = date('H:i');
 	$focus->column_fields['time_end'] = date('H:i');
 	$focus->column_fields['eventstatus'] = "Held";
-	$focus->column_fields['assigned_user_id'] = $current_user->id;
+	$focus->column_fields['assigned_user_id'] = $userid;
 	$focus->save('Calendar');
 	$focus->setActivityReminder('off');
 	
-//	$callerInfo = getCallerInfo("$callerType:".$callerNumber);
-//	if($callerInfo == false){
-		$callerInfo = getCallerInfo(getStrippedNumber($callerNumber));
-	//}
+	// Restore dateformat
+	$current_user->date_format = $old_userdate_format;
+	
+	if(empty($relcrmid)) {
+		if(empty($callerInfo)) {
+			$callerInfo = getCallerInfo($callerNumber);
+		}
+	} else {
+		$callerInfo = array();
+		$callerInfo['module'] = getSalesEntityType($relcrmid);
+		$callerInfo['id'] = $relcrmid;
+	}
+	
 	if($callerInfo != false){
 		$tablename = array('Contacts'=>'vtiger_cntactivityrel', 'Accounts'=>'vtiger_seactivityrel', 'Leads'=>'vtiger_seactivityrel');
 		$sql = "insert into ".$tablename[$callerInfo['module']]." values (?,?)";
-		$params = array($callerInfo[id], $focus->id);
+		$params = array($callerInfo['id'], $focus->id);
 		$adb->pquery($sql, $params);
-		$status = "success";
-	}else{
-		$status = "failure";
 	}
 	
-	return $status;
+	return $focus->id;
 }
-/* Function to add an outgoing call to the History
- * Params Object $current_user  - the current user
- * 		string $extension - the users extension number
- * 		int $record - the activity will be attached to this record 
- * 		object $adb - the peardatabase object
- */
-function addOutgoingcallHistory($current_user,$extension, $record ,$adb){
-	global $log;
-	require_once 'modules/Calendar/Activity.php';
-	$focus = new Activity();
-	$focus->column_fields['subject'] = "Outgoing call from $current_user->user_name ($extension)";
-	$focus->column_fields['activitytype'] = "Call";
-	$focus->column_fields['date_start'] = date('Y-m-d');
-	$focus->column_fields['due_date'] = date('Y-m-d');
-	$focus->column_fields['time_start'] = date('H:i');
-	$focus->column_fields['time_end'] = date('H:i');
-	$focus->column_fields['eventstatus'] = "Held";
-	$focus->column_fields['assigned_user_id'] = $current_user->id;
-	$focus->save('Calendar');
-	$focus->setActivityReminder('off');
-	$setype = $adb->pquery("SELECT setype FROM vtiger_crmentity WHERE crmid = ?",array($record));
-	$rows = $adb->num_rows($setype);
-	
-	if($rows > 0){
-		$module = $adb->query_result($setype,0,'setype');
-		$tablename = array('Contacts'=>'vtiger_cntactivityrel', 'Accounts'=>'vtiger_seactivityrel', 'Leads'=>'vtiger_seactivityrel');
-		$sql = "insert into ".$tablename[$module]." values (?,?)";
-		$params = array($record, $focus->id);
-		$adb->pquery($sql, $params);
-		$status = "success";
-	}else{
-		$status = "failure";
-	}
-	
-	return $status;
-}
+
 ?>

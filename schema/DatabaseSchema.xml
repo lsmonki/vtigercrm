@@ -6892,8 +6892,34 @@
 		</field>
 		<field name="timer" type="I" size="19">
 		</field>
+		<field name="refuid" type="C" size="255">
+		</field>	
 		<opt platform="mysql">Type=InnoDB</opt>
 	</table>
+
+	<table name="vtiger_asteriskincomingevents">
+		<field name="uid" type="C" size="255">
+			<key />
+		</field>	
+		<field name="channel" type="C" size="100">
+		</field>
+		<field name="from_number" type="I8" size="20">
+		</field>
+		<field name="from_name" type="C" size="100">
+		</field>
+		<field name="to_number" type="I8" size="20">
+		</field>
+		<field name="callertype" type="C" size="100">
+		</field>
+		<field name="timer" type="I" size="20">
+		</field>
+		<field name="flag" type="C" size="3">
+		</field>
+		<field name="pbxrecordid" type="I" size="19">
+		</field>
+        <field name="relcrmid" type="I" size="19">
+		</field>
+	</table>	
 
 	<table name="vtiger_asteriskoutgoingcalls">
 		<field name="userid" type="I" size="11">

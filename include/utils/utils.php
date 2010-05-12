@@ -4179,13 +4179,14 @@ function getCallerName($from) {
 		$callerName = decode_html($callerInfo['name']);
 		$module = $callerInfo['module'];
 		$callerModule = " (<a href='index.php?module=$module&action=index'>$module</a>)";
-		$callerID = $callerInfo[id];
-		
-		$caller = "<a href='index.php?module=$module&action=DetailView&record=$callerID'>$callerName</a>$callerModule";
+		$callerID = $callerInfo['id'];
+	
+		$caller =$caller."<a href='index.php?module=$module&action=DetailView&record=$callerID'>$callerName</a>$callerModule";
+			
 	}else{
 		$caller = $caller."<br>
 						<a target='_blank' href='index.php?module=Leads&action=EditView&phone=$from'>".getTranslatedString('LBL_CREATE_LEAD')."</a><br>
-						<a target='_blank' href='index.php?module=Contacts&action=EditView&phone=$from'>".getTranslatedString('LBL_CREATE_CONTACT')."</a><br>
+						<a target='_blank' href='index.php?module=Contacts&phone=$from'>".getTranslatedString('LBL_CREATE_CONTACT')."</a><br>
 						<a target='_blank' href='index.php?module=Accounts&action=EditView&phone=$from'>".getTranslatedString('LBL_CREATE_ACCOUNT')."</a><br>
 						<a target='_blank' href='index.php?module=HelpDesk&action=EditView'>".getTranslatedString('LBL_CREATE_TICKET')."</a>";
 	}
@@ -4205,11 +4206,15 @@ function getCallerInfo($number){
 		return false;
 	}
 	$caller = "Unknown Number (Unknown)"; //declare caller as unknown in beginning
-	$name['Contacts'] = "select contactid as id,concat(firstname,' ',lastname) as name from vtiger_contactdetails inner join vtiger_crmentity on crmid=contactid where deleted=0 and (phone = ? or mobile = ? or fax = ?)";//array('name'=>"concat(firstname,' ',lastname)", 'table'=>'vtiger_contactdetails', 'field'=>"phone,mobile,fax", 'id'=>'contactid');
-	$name['Accounts'] = "select accountid as id, accountname as name from vtiger_account inner join vtiger_crmentity on crmid=accountid where deleted =0 and (phone = ? or otherphone = ? or fax = ?)";//array('name'=>"accountname", 'table'=>"vtiger_account", 'field'=>"phone, otherphone, fax", 'id'=>'accountid');
-	$name['Leads'] = "select leadid as id,concat(firstname,' ',lastname) as name from vtiger_leaddetails inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_leaddetails.leadid inner join vtiger_leadaddress on vtiger_leaddetails.leadid = vtiger_leadaddress.leadaddressid where vtiger_crmentity.deleted =0 and (vtiger_leadaddress.phone = ? or vtiger_leadaddress.mobile = ? or vtiger_leadaddress.fax = ?)";//array('name'=>"concat(firstname,' ',lastname)", 'table'=>"vtiger_leaddetails inner join vtiger_leadaddress on vtiger_leaddetails.leadid = vtiger_leadaddress.leadaddressid", 'field'=>"phone,mobile,fax", 'id'=>'leadid');
-	foreach ($name as $module => $query) {
-		$result = $adb->pquery($query,array($number,$number,$number));
+
+	$params = array();
+	$name = array('Contacts', 'Accounts', 'Leads');
+	foreach ($name as $module) {
+		$focus = CRMEntity::getInstance($module);
+		$query = $focus->buildSearchQueryForFieldTypes(11, $number);
+		if(empty($query)) return;
+		
+		$result = $adb->pquery($query, array());
 		if($adb->num_rows($result) > 0 ){
 			$callerName = $adb->query_result($result, 0, "name");
 			$callerID = $adb->query_result($result,0,'id');
@@ -4309,11 +4314,14 @@ function get_use_asterisk($id){
  * @param string $status - the status of the call (outgoing/incoming/missed)
  * @param object $adb - the peardatabase object
  */
-function addToCallHistory($userExtension, $callfrom, $callto, $status, $adb){
-	$sql = "select * from vtiger_asteriskextensions where asterisk_extension=".$userExtension;
-	$result = $adb->pquery($sql,array());
+function addToCallHistory($userExtension, $callfrom, $callto, $status, $adb, $useCallerInfo){
+	$sql = "select * from vtiger_asteriskextensions where asterisk_extension=?";
+	$result = $adb->pquery($sql,array($userExtension));
 	$userID = $adb->query_result($result, 0, "userid");
-	
+	if(empty($userID)) {
+		// we have observed call to extension not configured in Vtiger will returns NULL
+		return;
+	}
 	$crmID = $adb->getUniqueID('vtiger_crmentity');
 	$timeOfCall = date('Y-m-d H:i:s');
 	
@@ -4337,14 +4345,11 @@ function addToCallHistory($userExtension, $callfrom, $callto, $status, $adb){
 			$callerName = getUserFullName($userid);
 		}
 		
-		$receiver = getCallerInfo($callto);
-		if($receiver == false){
-			$receiver = getCallerInfo(getStrippedNumber($callto));
-		}
+		$receiver = $useCallerInfo;
 		if(empty($receiver)){
 			$receiver = "Unknown";
 		}else{
-			$receiver = "<a href='index.php?module=".$receiver[module]."&action=DetailView&record=".$receiver[id]."'>".$receiver[name]."</a>";
+			$receiver = "<a href='index.php?module=".$receiver['module']."&action=DetailView&record=".$receiver['id']."'>".$receiver['name']."</a>";
 		}
 	}else{
 		//call is from record to user
@@ -4354,20 +4359,18 @@ function addToCallHistory($userExtension, $callfrom, $callto, $status, $adb){
 			$userid = $adb->query_result($result, 0, "userid");
 			$receiver = getUserFullName($userid);
 		}
-		$callerName = getCallerInfo($callfrom);
-		if($callerName == false){
-			$callerName = getCallerInfo(getStrippedNumber($callfrom));
-		}
+		$callerName = $useCallerInfo;
 		if(empty($callerName)){
-			$callerName = "Unknown";
+			$callerName = "Unknown $callfrom";
 		}else{
-			$callerName = "<a href='index.php?module=".$callerName[module]."&action=DetailView&record=".$callerName[id]."'>".decode_html($callerName[name])."</a>";
+			$callerName = "<a href='index.php?module=".$callerName['module']."&action=DetailView&record=".$callerName['id']."'>".decode_html($callerName['name'])."</a>";
 		}
 	}
 	
 	$sql = "insert into vtiger_pbxmanager (pbxmanagerid,callfrom,callto,timeofcall,status)values (?,?,?,?,?)";
 	$params = array($crmID, $callerName, $receiver, $timeOfCall, $status);
 	$adb->pquery($sql, $params);
+	return $crmID;
 }
 //functions for asterisk integration end
 
