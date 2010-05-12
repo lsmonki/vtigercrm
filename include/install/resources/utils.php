@@ -1153,9 +1153,6 @@ class Common_Install_Wizard_Utils {
 			        		} else {
 			        			installVtlibModule($packagename, $packagepath);
 			        		}
-			        	} elseif ($moduleInstance) {
-			        		Migration_Utils::copyModuleFiles($module, $source_directory, $destination_directory); // Copy files from old installation as we not updating the module
-			        		vtlib_toggleModuleAccess((string)$module, false);
 			        	}
 		        	}
 		        }

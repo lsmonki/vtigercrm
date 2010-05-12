@@ -38,7 +38,11 @@ require_once('include/install/resources/utils.php');
 require_once('vtigerversion.php');	
 global $installationStrings, $vtiger_current_version;
 	
-if (!empty($_REQUEST['file'])) $the_file = $_REQUEST['file'];
+@include_once('config.db.php');
+global $dbconfig, $vtconfig;
+if(empty($_REQUEST['file']) && is_array($vtconfig) && $vtconfig['quickbuild'] == 'true') {
+	$the_file = 'BuildInstallation.php';
+} elseif (!empty($_REQUEST['file'])) $the_file = $_REQUEST['file'];
 else $the_file = "welcome.php";
 
 Common_Install_Wizard_Utils::checkFileAccess("install/".$the_file);
