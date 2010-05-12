@@ -99,42 +99,7 @@ function create_default_users_access() {
         $user->save("Users");
         $admin_user_id = $user->id;
 
-		//Creating the Standard User
-    	$user = new Users();
-        $user->column_fields["last_name"] = 'StandardUser';
-        $user->column_fields["user_name"] = 'standarduser';
-        $user->column_fields["is_admin"] = 'off';
-        $user->column_fields["status"] = 'Active'; 
-        $user->column_fields["user_password"] = $standarduser_password; 
-        $user->column_fields["tz"] = 'Europe/Berlin';
-        $user->column_fields["holidays"] = 'de,en_uk,fr,it,us,';
-        $user->column_fields["workdays"] = '0,1,2,3,4,5,6,';
-        $user->column_fields["weekstart"] = '1';
-        $user->column_fields["namedays"] = '';
-        $user->column_fields["reminder_interval"] = '1 Minute';
-        $user->column_fields["reminder_next_time"] = date('Y-m-d H:i');
-        $user->column_fields["currency_id"] = 1;
-		$user->column_fields["date_format"] = 'yyyy-mm-dd';
-		$user->column_fields["hour_format"] = '24';
-		$user->column_fields["start_hour"] = '08:00';
-		$user->column_fields["end_hour"] = '23:00';
-		$user->column_fields["imagename"] = '';
-		$user->column_fields["internal_mailer"] = '1';
-        $user->column_fields["activity_view"] = 'This Week';	
-		$user->column_fields["lead_view"] = 'Today';
-		$std_email ="standarduser@vtigeruser.com";
-        $user->column_fields["email1"] = $standarduser_email;
-		//to get the role id for standard_user	
-		$role_query = "SELECT roleid FROM vtiger_role WHERE rolename='Vice President'";
-		$adb->database->SetFetchMode(ADODB_FETCH_ASSOC);
-		$role_result = $adb->query($role_query);
-		$role_id = $adb->query_result($role_result,0,"roleid");
-		$user->column_fields["roleid"] = $role_id;
-
-	    $user->save('Users');
-		$std_user_id = $user->id;
-
-	    //Inserting into vtiger_groups table
+		//Inserting into vtiger_groups table
 		$group1_id = $adb->getUniqueID("vtiger_users");
 		$group2_id = $adb->getUniqueID("vtiger_users");
 		$group3_id = $adb->getUniqueID("vtiger_users");
@@ -160,11 +125,6 @@ function create_default_users_access() {
 		// Setting user group relation for admin user
 	 	$adb->pquery("insert into vtiger_users2group values (?,?)", array($group2_id, $admin_user_id));
 	
-		// Setting user group relation for standard user
-	 	$adb->pquery("insert into vtiger_users2group values (?,?)", array($group1_id, $std_user_id));
-	 	$adb->pquery("insert into vtiger_users2group values (?,?)", array($group2_id, $std_user_id));
-	 	$adb->pquery("insert into vtiger_users2group values (?,?)", array($group3_id, $std_user_id));	
-		
 		//New Security Start
 		//Inserting into vtiger_profile vtiger_table
 		$adb->query("insert into vtiger_profile values ('".$profile1_id."','Administrator','Admin Profile')");	
@@ -819,10 +779,6 @@ function create_default_users_access() {
 		createUserPrivilegesfile($admin_user_id);
 		createUserSharingPrivilegesfile($admin_user_id);
 		
-		//Creating the flat vtiger_files for standard user
-		createUserPrivilegesfile($std_user_id);
-		createUserSharingPrivilegesfile($std_user_id);
-
 		//Insert into vtiger_profile2field
 		insertProfile2field($profile1_id);
         insertProfile2field($profile2_id);	
