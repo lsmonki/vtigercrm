@@ -293,5 +293,9 @@
 				RSS: 'RSS',
 				Default: 'Default',
 				Notebook: 'Notebook',
-				SPECIAL_CHARS:'\\ / < > + \' " '
+				SPECIAL_CHARS:'\\ / < > + \' " ',
+				
+				BETWEEN: 'between',
+				BEFORE: 'before',
+				AFTER: 'after'
 			};

@@ -423,6 +423,42 @@ ExecuteQuery("
   	pbxrecordid int(19) default NULL,
 	relcrmid int(19) default NULL,
   	PRIMARY KEY  (uid))");
+// Alter vtiger_relcriteria table to store groupid and column_condition
+$adb->query("ALTER TABLE vtiger_relcriteria ADD COLUMN groupid INT DEFAULT 1");
+$adb->query("ALTER TABLE vtiger_relcriteria ADD COLUMN column_condition VARCHAR(256) DEFAULT 'and'");
+
+// Create table to store Reports Advanced Filters Condition Grouping information
+$adb->query("CREATE TABLE IF NOT EXISTS vtiger_relcriteria_grouping 
+		(groupid INT NOT NULL, queryid INT, group_condition VARCHAR(256), condition_expression TEXT, PRIMARY KEY(groupid, queryid))");
+		
+// Migration queries to migrate existing data to the required state (Storing Condition Expression in the newly created table for existing Reports)
+$maxReportIdResult = $adb->query("SELECT max(reportid) as max_reportid FROM vtiger_report");
+if($adb->num_rows($maxReportIdResult) > 0) {
+	$maxReportId = $adb->query_result($maxReportIdResult, 0, 'max_reportid');
+	if(!empty($maxReportId) && $maxReportId > 0) {
+		for($i=1; $i<=$maxReportId; ++$i) {
+			$reportId = $i;
+			$adb->pquery("DELETE FROM vtiger_relcriteria WHERE queryid=? AND (columnname IS NULL OR trim(columnname) = '')", array($reportId)); // Remove all unwanted condition columns added (where column name is empty)
+			$relcriteriaResult = $adb->pquery("SELECT * FROM vtiger_relcriteria WHERE queryid=?", array($reportId)); // Pick all the conditions of a Report
+			$noOfConditions = $adb->num_rows($relcriteriaResult);
+			if($noOfConditions > 0) {
+				$columnIndexArray = array();
+				for($j=0;$j<$noOfConditions; $j++) {
+					$columnIndex = $adb->query_result($relcriteriaResult, $j, 'columnindex');
+					$columnIndexArray[] = $columnIndex;
+				}
+				$conditionExpression = implode(' and ', $columnIndexArray);
+				$adb->pquery('INSERT INTO vtiger_relcriteria_grouping VALUES(?,?,?,?)', 
+							array(1, $reportId, '', $conditionExpression));
+
+				$maxColumnIndexQuery = $adb->pquery('SELECT max(columnindex) AS maxColumnIndex FROM vtiger_relcriteria WHERE queryid=?', array($reportId));
+				$maxColumnIndex = $adb->query_result($maxColumnIndexQuery,0,'maxColumnIndex');
+				$adb->pquery("UPDATE vtiger_relcriteria SET column_condition='' WHERE columnindex=? AND queryid=?", array($maxColumnIndex,$reportId));
+			}		
+		}
+	}
+}
+
 $migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Ends \n\n");
 
 

@@ -4257,6 +4257,12 @@
 		<field name="value" type="C" size="200">
 			<default value="" />
 		</field>
+		<field name="groupid" type="I" size="11">
+			<default value="1" />
+		</field>
+		<field name="column_condition" type="C" size="256">
+			<default value="and" />
+		</field>
 
 		<index name="relcriteria_queryid_idx">
 			<col>queryid</col>
@@ -7277,5 +7283,20 @@
                 </field>
                 <opt platform="mysql">Type=InnoDB</opt>
         </table>	
+	
+	<table name="vtiger_relcriteria_grouping">
+		<field name="groupid" type="I" size="11">
+			<key />
+			<notnull />
+		</field>
+		<field name="queryid" type="I" size="19">
+			<key />
+		</field>
+		<field name="group_condition" type="C" size="256">
+		</field>
+		<field name="condition_expression" type="X">
+		</field>
+		<opt platform="mysql">Type=InnoDB</opt>
+	</table>
 	
 </schema>

@@ -32,7 +32,10 @@ $adv_filter_options = array("e"=>"equals",
 			    "l"=>"less than",
 			    "g"=>"greater than",
 			    "m"=>"less or equal",
-			    "h"=>"greater or equal"
+			    "h"=>"greater or equal",
+			    "bw"=>"between",
+			    "a"=>"after",
+			    "b"=>"before",
 			   );
 
 //$report_modules = Array('Faq','Rss','Portal','Recyclebin','Emails','Reports','Dashboard','Home','Activities'
@@ -96,9 +99,7 @@ class Reports extends CRMEntity{
 	var $pri_module_columnslist;
 	var $sec_module_columnslist;
 
-	var $advft_column;
-	var $advft_option;
-	var $advft_value;
+	var $advft_criteria;
 	var $adv_rel_fields = Array();
 	
 	var $module_list = Array();
@@ -1259,38 +1260,57 @@ function getEscapedColumns($selectedfields)
 		global $adb;
 		global $modules;
 		global $log;
-		$ssql = 'select vtiger_relcriteria.* from vtiger_report inner join vtiger_relcriteria on vtiger_relcriteria.queryid = vtiger_report.queryid left join vtiger_selectquery on vtiger_relcriteria.queryid = vtiger_selectquery.queryid';
-		$ssql.= " where vtiger_report.reportid = ? order by vtiger_relcriteria.columnindex";
-
-		$result = $adb->pquery($ssql, array($reportid));
-
-		while($relcriteriarow = $adb->fetch_array($result))
-		{
-			$this->advft_column[] = $relcriteriarow["columnname"];
-			$this->advft_option[] = $relcriteriarow["comparator"];
-			$advfilterval = $relcriteriarow["value"];
-			$col = explode(":",$relcriteriarow["columnname"]);
-			$temp_val = explode(",",$relcriteriarow["value"]);
-			if($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || ($col[4] == 'DT')) 
-			{
+		
+		$advft_criteria = array();
+		
+		$sql = 'SELECT * FROM vtiger_relcriteria_grouping WHERE queryid = ? ORDER BY groupid';
+		$groupsresult = $adb->pquery($sql, array($reportid));
+		
+		$i = 1;
+		$j = 0;
+		while($relcriteriagroup = $adb->fetch_array($groupsresult)) {
+			$groupId = $relcriteriagroup["groupid"];
+			$groupCondition = $relcriteriagroup["group_condition"];
+			
+			$ssql = 'select vtiger_relcriteria.* from vtiger_report 
+						inner join vtiger_relcriteria on vtiger_relcriteria.queryid = vtiger_report.queryid
+						left join vtiger_relcriteria_grouping on vtiger_relcriteria.queryid = vtiger_relcriteria_grouping.queryid 
+								and vtiger_relcriteria.groupid = vtiger_relcriteria_grouping.groupid';
+			$ssql.= " where vtiger_report.reportid = ? AND vtiger_relcriteria.groupid = ? order by vtiger_relcriteria.columnindex";
+	
+			$result = $adb->pquery($ssql, array($reportid, $groupId));
+			$noOfColumns = $adb->num_rows($result);
+			if($noOfColumns <= 0) continue;
+			
+			while($relcriteriarow = $adb->fetch_array($result)) {
+				$columnIndex = $relcriteriarow["columnindex"];
+				$criteria = array();
+				$criteria['columnname'] = html_entity_decode($relcriteriarow["columnname"]);
+				$criteria['comparator'] = $relcriteriarow["comparator"];
+				$advfilterval = $relcriteriarow["value"];
+				$col = explode(":",$relcriteriarow["columnname"]);
+				$temp_val = explode(",",$relcriteriarow["value"]);
+				if($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || ($col[4] == 'DT')) {
 					$val = Array();
-					for($x=0;$x<count($temp_val);$x++)
-					{
+					for($x=0;$x<count($temp_val);$x++) {
 						list($temp_date,$temp_time) = explode(" ",$temp_val[$x]);
 						$temp_date = getDisplayDate(trim($temp_date));
 						if(trim($temp_time) != '')
 							$temp_date .= ' '.$temp_time;
 						$val[$x]=$temp_date;
-						if($x == 0)
-							$advfilterval = $val[$x];
-						else
-							$advfilterval = ','.$val[$x];
 					}
-
+					$advfilterval = implode(",",$val);
+				}
+				$criteria['value'] = $advfilterval;
+				$criteria['column_condition'] = $relcriteriarow["column_condition"];
+				
+				$advft_criteria[$i]['columns'][$j] = $criteria;
+				$advft_criteria[$i]['condition'] = $groupCondition;
+				$j++;
 			}
-
-			$this->advft_value[] = $advfilterval;
+			$i++;
 		}
+		$this->advft_criteria = $advft_criteria;
 		$log->info("Reports :: Successfully returned getAdvancedFilterList");
 		return true;
 	}

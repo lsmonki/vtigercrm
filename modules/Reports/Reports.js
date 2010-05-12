@@ -10,10 +10,10 @@
 var typeofdata = new Array();
 typeofdata['V'] = ['e','n','s','ew','c','k'];
 typeofdata['N'] = ['e','n','l','g','m','h'];
-typeofdata['T'] = ['e','n','l','g','m','h'];
+typeofdata['T'] = ['e','n','l','g','m','h','bw','b','a'];
 typeofdata['I'] = ['e','n','l','g','m','h'];
 typeofdata['C'] = ['e','n'];
-typeofdata['D'] = ['e','n','l','g','m','h'];
+typeofdata['D'] = ['e','n','l','g','m','h','bw','b','a'];
 typeofdata['NN'] = ['e','n','l','g','m','h'];
 typeofdata['E'] = ['e','n','s','ew','c','k'];
 
@@ -28,6 +28,9 @@ fLabels['l'] = alert_arr.LESS_THAN;
 fLabels['g'] = alert_arr.GREATER_THAN;
 fLabels['m'] = alert_arr.LESS_OR_EQUALS;
 fLabels['h'] = alert_arr.GREATER_OR_EQUALS;
+fLabels['bw'] = alert_arr.BETWEEN;
+fLabels['b'] = alert_arr.BEFORE;
+fLabels['a'] = alert_arr.AFTER;
 var noneLabel;
 var gcurrepfolderid=0;
 function trimfValues(value)
@@ -415,86 +418,119 @@ function changeSteps1()
 	{
 		var escapedOptions = new Array('account_id','contactid','contact_id','product_id','parent_id','campaignid','potential_id','assigned_user_id1','quote_id','accountname','salesorder_id','vendor_id','time_start','time_end','lastname');
 		
-		for(var i=1;i < 6 ; i++)
-		{
-			var option_name="fcol"+i;
-			var option_value=getObj(option_name).value;
-			var option_object=getObj(option_name);
-			var comp_name="fop"+i;
-			var comp_value=getObj(comp_name).value;
-			var data_name="fval"+i;
-			var data_value=trim(getObj(data_name).value);
-			var collabel='';
-			count=option_object.selectedIndex;	
-                        collabel=option_object.options[count].text
-			if(trim(option_value) != '')
-			{
-				if (!emptyCheck(comp_name,collabel+" Option","text"))
-					return false
+		var conditionColumns = document.getElementsByName("conditionColumn");
+		var criteriaConditions = [];
+		for(var i=0;i < conditionColumns.length ; i++) {
+			
+			var columnRowId = conditionColumns[i].getAttribute("id");
+			var columnRowInfo = columnRowId.split("_");
+			var columnGroupId = columnRowInfo[1];
+			var columnIndex = columnRowInfo[2];
+			
+			var columnId = "fcol"+columnIndex;
+			var columnObject = getObj(columnId);
+			var selectedColumn = trim(columnObject.value);
+			var selectedColumnIndex = columnObject.selectedIndex;	
+			var selectedColumnLabel = columnObject.options[selectedColumnIndex].text;
+			
+			var comparatorId = "fop"+columnIndex;
+			var comparatorObject = getObj(comparatorId);
+			var comparatorValue = trim(comparatorObject.value);
+			
+			var valueId = "fval"+columnIndex;
+			var valueObject = getObj(valueId);
+			var specifiedValue = trim(valueObject.value);
+			
+			var extValueId = "fval_ext"+columnIndex;
+			var extValueObject = getObj(extValueId);
+			if(extValueObject) {
+				extendedValue = trim(extValueObject.value);
 			}
-			else if(trim(data_value) != '')
-			{
-				if (!emptyCheck(option_name," Column ","text"))
-					return false
-				if (!emptyCheck(comp_name,collabel+" Option","text"))
-					return false
+			
+			var glueConditionId = "fcon"+columnIndex;
+			var glueConditionObject = getObj(glueConditionId);
+			var glueCondition = '';
+			if(glueConditionObject) {
+				glueCondition = trim(glueConditionObject.value);
 			}
 
-			if(trim(data_value) != '' && option_value != '' && comp_value != '')
-			{
-				var col=option_value.split(":");
-				if(escapedOptions.indexOf(col[3]) == -1)
-				{
-					if(col[4] == 'T')
-					{        
-						var datime = data_value.split(" ");
-						if(!re_dateValidate(datime[0],collabel+" (Current User Date Time Format)","OTH"))
-							return false
-						if(datime.length > 1)	
-						if(!re_patternValidate(datime[1],collabel+" (Time)","TIMESECONDS"))
-							return false
-					}	
-					else if(col[4] == 'D')
-					{        
-						if(!dateValidate(data_name,collabel+" (Current User Date Format)","OTH"))
-							return false
-					}else if(col[4] == 'I')
-					{
-						if(!intValidate(data_name,collabel+" (Integer Criteria)"+i))           
-							return false
-					}else if(col[4] == 'N')
-					{  
-						if (!numValidate(data_name,collabel+" (Number) ","any",true))
-							return false
-					}else if(col[4] == 'E')
-					{
-						if (!patternValidate(data_name,collabel+" (Email Id)","EMAIL"))
+			if (!emptyCheck(columnId," Column ","text"))
+				return false;
+			if (!emptyCheck(comparatorId,selectedColumnLabel+" Option","text"))
+				return false;
+
+			var col = selectedColumn.split(":");
+			if(escapedOptions.indexOf(col[3]) == -1) {
+				if(col[4] == 'T') {   
+					var datime = specifiedValue.split(" ");
+					if(!re_dateValidate(datime[0],selectedColumnLabel+" (Current User Date Time Format)","OTH"))
+						return false
+					if(datime.length > 1)	
+					if(!re_patternValidate(datime[1],selectedColumnLabel+" (Time)","TIMESECONDS"))
+						return false
+				}	
+				else if(col[4] == 'D')
+				{        
+					if(!dateValidate(valueId,selectedColumnLabel+" (Current User Date Format)","OTH"))
+						return false
+					if(extValueObject) {
+						if(!dateValidate(extValueId,selectedColumnLabel+" (Current User Date Format)","OTH"))
 							return false
 					}
+				}else if(col[4] == 'I')
+				{
+					if(!intValidate(valueId,selectedColumnLabel+" (Integer Criteria)"+i))           
+						return false
+				}else if(col[4] == 'N')
+				{  
+					if (!numValidate(valueId,selectedColumnLabel+" (Number) ","any",true))
+						return false
+				}else if(col[4] == 'E')
+				{
+					if (!patternValidate(valueId,selectedColumnLabel+" (Email Id)","EMAIL"))
+						return false
 				}
 			}
-		}	
+			
+			//Added to handle yes or no for checkbox fields in reports advance filters. 
+			if(col[4] == "C") {
+				if(specifiedValue == "1")
+					specifiedValue = getObj(valueId).value = 'yes';
+				else if(specifiedValue =="0")
+					specifiedValue = getObj(valueId).value = 'no';
+			}
+			if (extValueObject && extendedValue != null && extendedValue != '') specifiedValue = specifiedValue +','+ extendedValue;
+			
+			criteriaConditions[columnIndex] = {	"groupid":columnGroupId, 
+												"columnname":selectedColumn,
+												"comparator":comparatorValue,
+												"value":specifiedValue,
+												"columncondition":glueCondition
+											};
+		}
+		
+		$('advft_criteria').value = JSON.stringify(criteriaConditions);
+		
+		var conditionGroups = document.getElementsByName("conditionGroup");
+		var criteriaGroups = [];
+		for(var i=0;i < conditionGroups.length ; i++) {
+			var groupTableId = conditionGroups[i].getAttribute("id");
+			var groupTableInfo = groupTableId.split("_");
+			var groupIndex = groupTableInfo[1];
+			
+			var groupConditionId = "gpcon"+groupIndex;
+			var groupConditionObject = getObj(groupConditionId);
+			var groupCondition = '';
+			if(groupConditionObject) {
+				groupCondition = trim(groupConditionObject.value);
+			}
+			criteriaGroups[groupIndex] = {"groupcondition":groupCondition};
+			
+		}
+		$('advft_criteria_groups').value = JSON.stringify(criteriaGroups);
+		
 		var date1=getObj("startdate")
 		var date2=getObj("enddate")
-
-		//Added to handle yes or no for checkbox fields in reports advance filters. 
-		for(var i=1;i<=5;i++)
-	        {
-	                value=trim(getObj("fval"+i).value);
-        	        option=getObj("fcol"+i).value;
-                	if(option !="" && value !="")
-			{
-				arr=option.split(":");
-                        	if(arr[4] == "C")
-                        	{
-					if(value == "1")
-						getObj("fval"+i).value='yes';
-					else if(value =="0")
-						getObj("fval"+i).value='no';
-				}
-			}
-		}
-
 
 		//# validation added for date field validation in final step of report creation
 		if ((date1.value != '') || (date2.value != ''))
@@ -508,7 +544,7 @@ function changeSteps1()
 
 		if(! dateComparison("startdate",'Start Date',"enddate",'End Date','LE'))	
 			return false;
-		}	
+		}
 
 	} if (getObj('step6').style.display != 'none') {
 		saveAndRunReport();
