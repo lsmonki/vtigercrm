@@ -432,32 +432,45 @@ $adb->query("CREATE TABLE IF NOT EXISTS vtiger_relcriteria_grouping
 		(groupid INT NOT NULL, queryid INT, group_condition VARCHAR(256), condition_expression TEXT, PRIMARY KEY(groupid, queryid))");
 		
 // Migration queries to migrate existing data to the required state (Storing Condition Expression in the newly created table for existing Reports)
+// Remove all unwanted condition columns added (where column name is empty)
+$adb->pquery("DELETE FROM vtiger_relcriteria WHERE (columnname IS NULL OR trim(columnname) = '')",
+		array());
 $maxReportIdResult = $adb->query("SELECT max(reportid) as max_reportid FROM vtiger_report");
 if($adb->num_rows($maxReportIdResult) > 0) {
 	$maxReportId = $adb->query_result($maxReportIdResult, 0, 'max_reportid');
 	if(!empty($maxReportId) && $maxReportId > 0) {
 		for($i=1; $i<=$maxReportId; ++$i) {
 			$reportId = $i;
-			$adb->pquery("DELETE FROM vtiger_relcriteria WHERE queryid=? AND (columnname IS NULL OR trim(columnname) = '')", array($reportId)); // Remove all unwanted condition columns added (where column name is empty)
 			$relcriteriaResult = $adb->pquery("SELECT * FROM vtiger_relcriteria WHERE queryid=?", array($reportId)); // Pick all the conditions of a Report
 			$noOfConditions = $adb->num_rows($relcriteriaResult);
 			if($noOfConditions > 0) {
 				$columnIndexArray = array();
+				$maxColumnIndex = 0;
 				for($j=0;$j<$noOfConditions; $j++) {
 					$columnIndex = $adb->query_result($relcriteriaResult, $j, 'columnindex');
+					if($max < $columnIndex) {
+						$maxColumnIndex = $columnIndex;
+					}
 					$columnIndexArray[] = $columnIndex;
 				}
 				$conditionExpression = implode(' and ', $columnIndexArray);
 				$adb->pquery('INSERT INTO vtiger_relcriteria_grouping VALUES(?,?,?,?)', 
 							array(1, $reportId, '', $conditionExpression));
 
-				$maxColumnIndexQuery = $adb->pquery('SELECT max(columnindex) AS maxColumnIndex FROM vtiger_relcriteria WHERE queryid=?', array($reportId));
-				$maxColumnIndex = $adb->query_result($maxColumnIndexQuery,0,'maxColumnIndex');
 				$adb->pquery("UPDATE vtiger_relcriteria SET column_condition='' WHERE columnindex=? AND queryid=?", array($maxColumnIndex,$reportId));
 			}		
 		}
 	}
 }
+
+ExecuteQuery("CREATE TABLE IF NOT EXISTS `vtiger_customerportal_tabs` ( `tabid` int(19) NOT NULL, `visible` int(1) 
+	default '1', `sequence` int(1) default NULL, PRIMARY KEY  (`tabid`)) ENGINE=InnoDB 
+	DEFAULT CHARSET=utf8");
+
+ExecuteQuery("CREATE TABLE `vtiger_customerportal_prefs` ( `tabid` int(11) NOT NULL, `prefkey` 
+	varchar(100) default NULL, `prefvalue` int(20) default NULL, INDEX tabid_idx(tabid) 
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
 
 $migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Ends \n\n");
 

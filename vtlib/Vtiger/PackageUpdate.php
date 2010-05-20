@@ -320,6 +320,7 @@ class Vtiger_PackageUpdate extends Vtiger_PackageImport {
 	 */
 	function update_RelatedLists($modulenode, $moduleInstance) {
 		if(empty($modulenode->relatedlists) || empty($modulenode->relatedlists->relatedlist)) return;
+		$moduleInstance->deleteRelatedLists();
 		foreach($modulenode->relatedlists->relatedlist as $relatedlistnode) {
 			$relModuleInstance = $this->import_Relatedlist($modulenode, $moduleInstance, $relatedlistnode);
 		}
