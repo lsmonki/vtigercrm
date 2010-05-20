@@ -38,7 +38,7 @@ if(SMSNotifier::checkServer()) {
 	if($phoneTypeFieldsResult && $adb->num_rows($phoneTypeFieldsResult)) {
 		while($resultrow = $adb->fetch_array($phoneTypeFieldsResult)) {
 			$checkFieldPermission = getFieldVisibilityPermission( $sourcemodule, $current_user->id, $resultrow['fieldname'] );
-			if($checkFieldPermission === '0') {
+			if($checkFieldPermission == '0') {
 				$fieldlabel = getTranslatedString( $resultrow['fieldlabel'], $sourcemodule );
 				$capturedFieldNames[] = $resultrow['fieldname'];
 				$capturedFieldInfo[$resultrow['fieldid']] = array($fieldlabel => $resultrow['fieldname']);
@@ -53,10 +53,6 @@ if(SMSNotifier::checkServer()) {
 	if(count($idlist) === 1) {
 		$focusInstance = CRMEntity::getInstance($sourcemodule);
 		$focusInstance->retrieve_entity_info($idlist[0], $sourcemodule);
-		// Eliminate the values in the record that is not accessible for non-admin
-		if(!is_admin($current_user)) {
-			$focusInstance->apply_field_security();
-		}
 		foreach($capturedFieldNames as $fieldname) {
 			if(isset($focusInstance->column_fields[$fieldname])) {
 				$capturedFieldValues[$fieldname] = $focusInstance->column_fields[$fieldname];

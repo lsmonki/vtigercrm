@@ -30,9 +30,6 @@ $recordids = array();
 foreach($idlist as $recordid) {
 	$focusInstance = CRMEntity::getInstance($sourcemodule);
 	$focusInstance->retrieve_entity_info($recordid, $sourcemodule);
-	if(!is_admin($current_user)) {
-		$focusInstance->apply_field_security();
-	}
 	$numberSelected = false;
 	foreach($phonefieldlist as $fieldname) {
 		if(!empty($focusInstance->column_fields[$fieldname])) {

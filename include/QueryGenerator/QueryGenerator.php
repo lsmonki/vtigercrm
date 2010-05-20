@@ -195,8 +195,9 @@ class QueryGenerator {
 		$columns = array();
 		$moduleFields = $this->meta->getModuleFields();
 		$accessibleFieldList = array_keys($moduleFields);
-		foreach ($this->fields as $field) {
+		foreach ($this->fields as $index => $field) {
 			if (!in_array($field, $accessibleFieldList) && $field != 'id') {
+				unset($this->fields[$index]);
 				continue;
 			}
 			$sql = $this->getSQLColumn($field);

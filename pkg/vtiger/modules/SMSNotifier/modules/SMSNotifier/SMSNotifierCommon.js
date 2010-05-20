@@ -104,6 +104,9 @@ if(typeof(SMSNotifierCommon) == 'undefined') {
 		displayComposeWizard : function(form, sourcenode) {
 			
 			var form_phonetype_inputs = form.phonetype;
+			if(typeof form_phonetype_inputs.length == 'undefined') {
+				form_phonetype_inputs = [form.phonetype];
+			}
 			
 			// Variables to submit for next wizard
 			var phonefields = '';

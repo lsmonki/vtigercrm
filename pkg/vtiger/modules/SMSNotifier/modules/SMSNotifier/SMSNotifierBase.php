@@ -409,6 +409,10 @@ class SMSNotifierBase extends CRMEntity {
 	 */
 	function vtlib_handler($modulename, $event_type) {
 		
+		//adds sharing accsess 
+        $SMSNotifierModule  = Vtiger_Module::getInstance('SMSNotifier'); 
+        Vtiger_Access::setDefaultSharing($SMSNotifierModule);
+ 
 		$registerLinks = false;
 		$unregisterLinks = false;
 		
