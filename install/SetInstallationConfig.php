@@ -45,8 +45,6 @@ session_start();
 !isset($_SESSION['installation_info']['db_populate']) ? $db_populate = "true" : $db_populate = $_SESSION['installation_info']['db_populate'];
 !isset($_SESSION['installation_info']['admin_email']) ? $admin_email = "" : $admin_email = $_SESSION['installation_info']['admin_email'];
 !isset($_SESSION['installation_info']['admin_password']) ? $admin_password = "admin" : $admin_password = $_SESSION['installation_info']['admin_password'];
-!isset($_SESSION['installation_info']['standarduser_email']) ? $stand_email = "" : $stand_email = $_SESSION['installation_info']['standarduser_email'];
-!isset($_SESSION['installation_info']['standarduser_password']) ? $stand_password = "standarduser" : $stand_password = $_SESSION['installation_info']['standarduser_password'];
 
 $db_options = Installation_Utils::getDbOptions();
 ?>
@@ -130,16 +128,6 @@ function verify_data(form) {
 		errorMessage += "\n admin <?php echo $installationStrings['LBL_EMAIL']; ?>";
 		form.admin_email.focus();
 	}
-	if (trim(form.standarduser_password.value) =='') {
-    	isError = true;
-        errorMessage += "\n standarduser <?php echo $installationStrings['LBL_PASSWORD']; ?>";
-        form.standarduser_password.focus();
-    }
-    if (trim(form.standarduser_email.value) =='') {
-        isError = true;
-        errorMessage += "\n standarduser <?php echo $installationStrings['LBL_EMAIL']; ?>";
-        form.standarduser_email.focus();
-    }
 	if (trim(form.currency_name.value) =='') {
         isError = true;
         errorMessage += "\n <?php echo $installationStrings['LBL_CURRENCY_NAME']; ?>";
@@ -163,11 +151,6 @@ function verify_data(form) {
 		form.admin_email.focus();
 		return false;
 	}
-	if (trim(form.standarduser_email.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.standarduser_email.value)) {
-        alert("<?php echo $installationStrings['ERR_STANDARDUSER_EMAIL_INVALID']; ?> - \'"+form.standarduser_email.value+"\'");
-        form.standarduser_email.focus();
-        return false;
-    }
 
 	var SiteUrl = form.site_URL.value;
     if(SiteUrl.indexOf("localhost") > -1 && SiteUrl.indexOf("localhost") < 10) {
@@ -288,7 +271,7 @@ function verify_data(form) {
 		              					</table>
 										<br>
 									</td>			
-									<td align=left class="small" width=50% style="padding-left:20px">
+									<td align=left class="small" width=50% style="padding-left:2em;">
 				  						<!-- Web site configuration -->
 										<table width="100%" cellpadding="0" border="0" cellspacing="1" align=center class="level3"><tbody>
 			            					<tr>
@@ -325,22 +308,19 @@ function verify_data(form) {
 										<!-- Admin Configuration -->
 										<table width="100%" cellpadding="0" border="0" align=center class="level3" cellspacing="1" >
 											<tr>
-												<td colspan=3><strong><?php echo $installationStrings['LBL_USER_CONFIGURATION']; ?></strong><hr noshade size=1></td>
+												<td colspan=2><strong><?php echo $installationStrings['LBL_USER_CONFIGURATION']; ?></strong><hr noshade size=1></td>
 											</tr>
 											<tr>
-												<td nowrap width=20% ><?php echo $installationStrings['LBL_USERNAME']; ?></td>
-												<td width=40% align="left">admin</td>
-												<td width=40% align="left">standarduser</td>
+												<td nowrap width=35% ><?php echo $installationStrings['LBL_USERNAME']; ?></td>
+												<td width=55% align="left">admin</td>
 											</tr>
 											<tr>
 												<td nowrap><?php echo $installationStrings['LBL_PASSWORD']; ?> <sup><font color=red>*</font></sup></td>
-												<td align="left"><input class="small" size=15 type="password" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin"; ?>"></td>
-												<td align="left"><input class="small" size=15 type="password" name="standarduser_password" value="<?php if (isset($stand_password)) echo "$stand_password"; else echo "standarduser"; ?>"></td>
+												<td align="left"><input class="small" size=25 type="password" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin"; ?>"></td>
 											</tr>
 											<tr>
 												<td nowrap><?php echo $installationStrings['LBL_EMAIL']; ?> <sup><font color=red>*</font></sup></td>
-												<td align="left"><input class="small" size=15 type="text" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>"></td>
-												<td align="left"><input class="small" size=15 type="text" name="standarduser_email" value="<?php if (isset($stand_email)) echo "$stand_email"; ?>"></td>
+												<td align="left"><input class="small" size=25 type="text" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>"></td>
 											</tr>
 										</table>		
 										<!-- System Configuration -->										

@@ -26,7 +26,6 @@ require_once('include/utils/utils.php');
 require_once('modules/Users/DefaultDataPopulator.php');
 require_once('modules/Users/CreateUserPrivilegeFile.php');
 
-@session_start();
 // load the config_override.php file to provide default user settings
 if (is_file("config_override.php")) {
 	require_once("config_override.php");
@@ -39,8 +38,6 @@ function create_default_users_access() {
       	global $log, $adb;
         global $admin_email;
         global $admin_password;
-		global $standarduser_email;
-		global $standarduser_password;
 
         $role1_id = $adb->getUniqueID("vtiger_role");
 		$role2_id = $adb->getUniqueID("vtiger_role");

@@ -30,8 +30,6 @@ if (isset($_REQUEST['root_user'])) $_SESSION['installation_info']['root_user'] =
 if (isset($_REQUEST['root_password'])) $_SESSION['installation_info']['root_password'] = $root_password = $_REQUEST['root_password'];
 if (isset($_REQUEST['admin_email'])) $_SESSION['installation_info']['admin_email']= $admin_email = $_REQUEST['admin_email'];
 if (isset($_REQUEST['admin_password'])) $_SESSION['installation_info']['admin_password'] = $admin_password = $_REQUEST['admin_password'];
-if (isset($_REQUEST['standarduser_email'])) $_SESSION['installation_info']['standarduser_email']= $standarduser_email = $_REQUEST['standarduser_email'];
-if (isset($_REQUEST['standarduser_password'])) $_SESSION['installation_info']['standarduser_password'] = $standarduser_password = $_REQUEST['standarduser_password'];
 
 if (isset($_REQUEST['create_utf8_db'])) 
 	$_SESSION['installation_info']['create_utf8_db'] = $create_utf8_db = 'true';
@@ -163,12 +161,10 @@ if($next == true) {
 											<tr>
 												<td width="40%"><?php echo $installationStrings['LBL_USERNAME']; ?></td>
 												<td align="left" width="30%"> <i>admin</i></td>
-												<td align="left" width="30%"> <i>standarduser</i></td>
 											</tr>
 											<tr>
 												<td width="40%"><?php echo $installationStrings['LBL_EMAIL']; ?></td>
 												<td align="left" width="30%"> <i><?php if (isset($admin_email)) echo $admin_email; ?></i></td>
-												<td align="left" width="30%"> <i><?php if (isset($standarduser_email)) echo $standarduser_email; ?></i></td>
 											</tr>
 										</table>
 										<br>

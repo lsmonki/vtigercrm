@@ -106,6 +106,7 @@ if(isset($application_unique_key) && !empty($application_unique_key)) {
 					</ul>
 					<br>
 					<ul>
+						<li><?php echo $installationStrings['LBL_DOCUMENTATION_LINK']; ?>.</li>
 						<li><?php echo $installationStrings['LBL_LOGIN_USING_ADMIN']; ?>.</li>
 						<li><?php echo $installationStrings['LBL_SET_OUTGOING_EMAIL_SERVER']; ?></li>						
 						<li><?php echo $installationStrings['LBL_RENAME_HTACCESS_FILE']; ?>. <a href="javascript:void(0);" onclick="showhidediv();"><?php echo $installationStrings['LBL_MORE_INFORMATION']; ?></a>
