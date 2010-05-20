@@ -472,6 +472,21 @@ ExecuteQuery("CREATE TABLE `vtiger_customerportal_prefs` ( `tabid` int(11) NOT N
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8");
 
 
+$blockres = $adb->pquery($blockquery,array('LBL_EMAIL_INFORMATION'));
+$blockid = $adb->query_result($blockres,0,'blockid');
+$fieldsqueryuitype8 = 'update vtiger_field set block=? where tabid=? and uitype=8';
+$adb->pquery($fieldsqueryuitype8,array($blockid,$email_Tabid));
+
+$fieldsqueryuitype12 = 'update vtiger_field set block=? where tabid=? and uitype=12';
+$adb->pquery($fieldsqueryuitype12,array($blockid,$email_Tabid));
+
+$fieldsqueryuitype1 = 'update vtiger_field set block=? where tabid=? and uitype=1';
+$adb->pquery($fieldsqueryuitype1,array($blockid,$email_Tabid));
+
+$fieldsqueryuitype16 = 'update vtiger_field set block=? where tabid=? and uitype=16';
+$adb->pquery($fieldsqueryuitype16,array($blockid,$email_Tabid));
+
+
 $migrationlog->debug("\n\nDB Changes from 5.1.0 to 5.2.0 -------- Ends \n\n");
 
 

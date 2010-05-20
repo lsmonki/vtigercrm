@@ -110,7 +110,7 @@ class ListViewController {
 	function getListViewEntries($focus, $module,$result,$navigationInfo,$skipActions=false) {
 
 		require('user_privileges/user_privileges_'.$this->user->id.'.php');
-		global $listview_max_textlength, $theme;
+		global $listview_max_textlength, $theme,$default_charset;
 		$fields = $this->queryGenerator->getFields();
 		$whereFields = $this->queryGenerator->getWhereFields();
 		$meta = $this->queryGenerator->getMeta($this->queryGenerator->getModule());
@@ -371,7 +371,7 @@ class ListViewController {
 					} else {
 						$parentModule = $this->typeList[$value];
 					}
-					if(!empty($this->nameList[$fieldName])) {
+					if(!empty($value) && !empty($this->nameList[$fieldName])) {
 						$parentMeta = $this->queryGenerator->getMeta($parentModule);
 						$value = textlength_check($this->nameList[$fieldName][$value]);
 						if ($parentMeta->isModuleEntity()) {

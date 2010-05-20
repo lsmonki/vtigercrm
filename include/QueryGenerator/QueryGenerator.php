@@ -261,6 +261,25 @@ class QueryGenerator {
 			$baseTable = $field->getTableName();
 			$tableIndexList = $this->meta->getEntityTableIndexList();
 			$baseTableIndex = $tableIndexList[$baseTable];
+			if($field->getFieldDataType() == 'reference') {
+				$moduleList = $this->referenceFieldInfoList[$fieldName];
+				$tableJoinMapping[$field->getTableName()] = 'INNER JOIN';
+				foreach($moduleList as $module) {
+					if($module == 'Users') {
+						$tableJoinCondition[$fieldName]['vtiger_users'] = $field->getTableName().
+								".".$field->getColumnName()." = vtiger_users.id";
+						$tableJoinCondition[$fieldName]['vtiger_groups'] = $field->getTableName().
+								".".$field->getColumnName()." = vtiger_groups.groupid";
+						$tableJoinMapping['vtiger_users'] = 'LEFT JOIN';
+						$tableJoinMapping['vtiger_groups'] = 'LEFT JOIN';
+					}
+				}
+			} elseif($field->getFieldDataType() == 'owner') {
+				$tableList['vtiger_users'] = 'vtiger_users';
+				$tableList['vtiger_groups'] = 'vtiger_groups';
+				$tableJoinMapping['vtiger_users'] = 'LEFT JOIN';
+				$tableJoinMapping['vtiger_groups'] = 'LEFT JOIN';
+			}
 			$tableList[$field->getTableName()] = $field->getTableName();
 				$tableJoinMapping[$field->getTableName()] =
 						$this->meta->getJoinClause($field->getTableName());

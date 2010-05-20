@@ -89,6 +89,7 @@ if(count($module_name) > 0)
 	$viewid = $cur_mod_view->getViewId($select_module);	
 	
 	global $current_user;
+	$queryGenerator = new QueryGenerator($select_module, $current_user);
 	$list_query = $queryGenerator->getDefaultCustomViewQuery();
 	$list_query = preg_replace("/vtiger_crmentity.deleted\s*=\s*0/i", 'vtiger_crmentity.deleted = 1', $list_query);
 	//Search criteria added to the list Query

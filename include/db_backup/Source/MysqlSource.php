@@ -91,8 +91,12 @@ class MysqlSource extends BackupSource {
 		switch($stage) {
 			case $this->startBackupStage: $this->initTableList();
 				return array(null);
-			case $this->tableCreateStage: $index = array_search($this->currentTable,
-					$this->tableNameList);
+			case $this->tableCreateStage: if(empty($this->currentTable)) {
+					$index = -1;
+				} else {
+					$index = array_search($this->currentTable,
+						$this->tableNameList);
+				}
 				$this->setCurrentTable($this->tableNameList[$index+1]);
 				$stmt = $this->getTableCreateStatement($this->currentTable);
 					return array($this->currentTable,$stmt);
@@ -126,6 +130,8 @@ class MysqlSource extends BackupSource {
 		if(empty($this->result)) {
 			$sql = "select * from $tableName";
 			$this->result = $this->connection->_Execute($sql,false);
+			$this->checkError($result,$sql.' '.$this->connection->ErrorMsg().' '.
+				$this->connection->ErrorNo());
 			$this->start = 0;
 		}
 		$rowCount = $this->result->RecordCount();

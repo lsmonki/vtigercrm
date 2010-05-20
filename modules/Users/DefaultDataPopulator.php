@@ -976,7 +976,9 @@ class DefaultDataPopulator extends CRMEntity {
 		
 		//Emails field added here
 		$email_Tabid = getTabid('Emails');
-		$blockid = $this->db->getUniqueID('vtiger_blocks');
+		$blockquery = "select blockid from vtiger_blocks where blocklabel = ?";
+		$blockres = $this->db->pquery($blockquery,array('LBL_EMAIL_INFORMATION'));
+		$blockid = $this->db->query_result($blockres,0,'blockid');
 		$this->db->query("INSERT INTO vtiger_field values($email_Tabid,".$this->db->getUniqueID("vtiger_field").",'from_email','vtiger_emaildetails',1,12,'from_email','From',1,2,0,100,1,$blockid,3,'V~M',3,NULL,'BAS',0)");
 		$this->db->query("INSERT INTO vtiger_field values($email_Tabid,".$this->db->getUniqueID("vtiger_field").",'to_email','vtiger_emaildetails',1,8,'saved_toid','To',1,2,0,100,2,$blockid,1,'V~M',3,NULL,'BAS',0)");
 		$this->db->query("INSERT INTO vtiger_field values($email_Tabid,".$this->db->getUniqueID("vtiger_field").",'cc_email','vtiger_emaildetails',1,8,'ccmail','CC',1,2,0,1000,3,$blockid,1,'V~O',3,NULL,'BAS',0)");		

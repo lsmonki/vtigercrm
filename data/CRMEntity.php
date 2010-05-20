@@ -1304,8 +1304,9 @@ $log->info("in getOldFileName  ".$notesid);
 		$em = new VTEventsManager($adb);
 		
 		// Initialize Event trigger cache
-		$em->initTriggerCache(); 
-		
+		$em->initTriggerCache();
+
+		$this->id = $id;
 		$entityData  = VTEntityData::fromCRMEntity($this);
 		//Event triggering code
 		$em->triggerEvent("vtiger.entity.afterrestore", $entityData);

@@ -218,30 +218,10 @@ function get_usersid($table_name,$column_name,$search_string)
 {
 
 	global $log;
-        $log->debug("Entering get_usersid(".$table_name.",".$column_name.",".$search_string.") method ...");
+	$log->debug("Entering get_usersid(".$table_name.",".$column_name.",".$search_string.") method ...");
 	global $adb;
-	$user_qry="select distinct(vtiger_users.id)from vtiger_users inner join vtiger_crmentity on vtiger_crmentity.smownerid=vtiger_users.id where vtiger_users.user_name like '" . formatForSqlLike($search_string) . "'";
-	$user_result=$adb->pquery($user_qry, array());
-	$noofuser_rows=$adb->num_rows($user_result);
-	$x=$noofuser_rows-1;
-	if($noofuser_rows!=0)
-	{
-		$where="(";
-		for($i=0;$i<$noofuser_rows;$i++)
-		{
-			$user_id=$adb->query_result($user_result,$i,'id');
-			$where .= "$table_name.$column_name =".$user_id;
-			if($i != $x)
-			{
-				$where .= " or ";
-			}
-		}
-		$where.=" or vtiger_groups.groupname like '". formatForSqlLike($search_string) ."')";
-	}
-	else
-	{
-		$where=" vtiger_groups.groupname like '". formatForSqlLike($search_string) ."' ";
-	}	
+	$where.="(vtiger_users.user_name like '". formatForSqlLike($search_string) .
+			"' or vtiger_groups.groupname like '". formatForSqlLike($search_string) ."')";
 	$log->debug("Exiting get_usersid method ...");
 	return $where;	
 }
