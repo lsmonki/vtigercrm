@@ -185,6 +185,10 @@ $smarty->assign("CRITERIA", $criteria);
 $smarty->assign("AVALABLE_FIELDS", getMergeFields($currentModule,"available_fields"));
 $smarty->assign("FIELDS_TO_MERGE", getMergeFields($currentModule,"fileds_to_merge"));
 
+//Added to select Multiple records in multiple pages
+$smarty->assign("SELECTEDIDS", vtlib_purify($_REQUEST['selobjs']));
+$smarty->assign("ALLSELECTEDIDS", vtlib_purify($_REQUEST['allselobjs']));
+$smarty->assign("CURRENT_PAGE_BOXES", implode(array_keys($listview_entries),";"));
 $_SESSION[$currentModule.'_listquery'] = $list_query;
 
 // Gather the custom link information to display
