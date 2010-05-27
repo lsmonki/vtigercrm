@@ -29,7 +29,7 @@ if($record != '') {
 if($isduplicate == 'true') $focus->id = '';
 
 // Identify this module as custom module.
-$smarty->assign('CUSTOM_MODULE', true);
+$smarty->assign('CUSTOM_MODULE', false);
 
 $smarty->assign('APP', $app_strings);
 $smarty->assign('MOD', $mod_strings);
@@ -86,10 +86,8 @@ if($singlepane_view == 'true') {
 	$smarty->assign("SELECTEDHEADERS", $open_related_modules);
 }
 
-if(isPermitted($currentModule, 'EditView', $record) == 'yes')
-	$smarty->assign('EDIT_DUPLICATE', 'permitted');
-if(isPermitted($currentModule, 'Delete', $record) == 'yes')
-	$smarty->assign('DELETE', 'permitted');
+$smarty->assign('EDIT_DUPLICATE', 'notpermitted');
+$smarty->assign('DELETE', 'notpermitted');
 
 $smarty->assign('BLOCKS', getBlocks($currentModule,'detail_view','',$focus->column_fields));
 
@@ -103,7 +101,7 @@ $smarty->assign('CUSTOM_LINKS', Vtiger_Link::getAllByType(getTabid($currentModul
 $focus->markAsViewed($current_user->id);
 // END
 
-$smarty->assign('DETAILVIEW_AJAX_EDIT', PerformancePrefs::getBoolean('DETAILVIEW_AJAX_EDIT', true));
+$smarty->assign('DETAILVIEW_AJAX_EDIT', PerformancePrefs::getBoolean('DETAILVIEW_AJAX_EDIT', false));
 
 $smarty->display('DetailView.tpl');
 

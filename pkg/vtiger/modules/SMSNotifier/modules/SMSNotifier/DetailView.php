@@ -29,7 +29,7 @@ if($record != '') {
 if($isduplicate == 'true') $focus->id = '';
 
 // Identify this module as custom module.
-$smarty->assign('CUSTOM_MODULE', true);
+$smarty->assign('CUSTOM_MODULE', false);
 
 $smarty->assign('APP', $app_strings);
 $smarty->assign('MOD', $mod_strings);

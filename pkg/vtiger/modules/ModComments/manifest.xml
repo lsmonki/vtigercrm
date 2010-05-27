@@ -15,7 +15,8 @@
 <sql><![CDATA[CREATE TABLE `vtiger_modcomments` (
   `modcommentsid` int(11) DEFAULT NULL,
   `commentcontent` text,
-  `related_to` varchar(100) DEFAULT NULL
+  `related_to` varchar(100) NOT NULL,
+  `parent_comments` varchar(100) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8]]></sql>
 </table>
 <table>
@@ -131,7 +132,7 @@
 <selected>0</selected>
 <sequence>2</sequence>
 <maximumlength>100</maximumlength>
-<typeofdata>V~O</typeofdata>
+<typeofdata>V~M</typeofdata>
 <quickcreate>2</quickcreate>
 <quickcreatesequence>5</quickcreatesequence>
 <displaytype>1</displaytype>
@@ -139,7 +140,6 @@
 <helpinfo><![CDATA[]]></helpinfo>
 <masseditable>2</masseditable>
 <relatedmodules>
-<relatedmodule>ModComments</relatedmodule>
 <relatedmodule>Leads</relatedmodule>
 <relatedmodule>Contacts</relatedmodule>
 <relatedmodule>Accounts</relatedmodule>
@@ -164,6 +164,29 @@
 <info_type>BAS</info_type>
 <helpinfo><![CDATA[]]></helpinfo>
 <masseditable>1</masseditable>
+</field>
+<field>
+<fieldname>parent_comments</fieldname>
+<uitype>10</uitype>
+<columnname>parent_comments</columnname>
+<tablename>vtiger_modcomments</tablename>
+<generatedtype>1</generatedtype>
+<fieldlabel>Related To Comments</fieldlabel>
+<readonly>1</readonly>
+<presence>2</presence>
+<selected>0</selected>
+<sequence>7</sequence>
+<maximumlength>100</maximumlength>
+<typeofdata>V~O</typeofdata>
+<quickcreate>1</quickcreate>
+<quickcreatesequence></quickcreatesequence>
+<displaytype>1</displaytype>
+<info_type>BAS</info_type>
+<helpinfo><![CDATA[]]></helpinfo>
+<masseditable>1</masseditable>
+<relatedmodules>
+<relatedmodule>ModComments</relatedmodule>
+</relatedmodules>
 </field>
 </fields>
 </block>

@@ -24,19 +24,6 @@ $url_string = '';
 $tool_buttons = Button_Check($currentModule);
 $list_buttons = Array();
 
-if(isPermitted($currentModule,'Delete','') == 'yes') $list_buttons['del'] = $app_strings[LBL_MASS_DELETE];
-if(isPermitted($currentModule,'EditView','') == 'yes') {
-	$list_buttons['mass_edit'] = $app_strings[LBL_MASS_EDIT];
-	// Mass Edit could be used to change the owner as well!
-	//$list_buttons['c_owner'] = $app_strings[LBL_CHANGE_OWNER];	
-}
-
-// Forcefully disable some standard actions for all users
-unset($list_buttons['mass_edit']);
-unset($list_buttons['del']);
-$ENABLE_CUSTOM_MODULE_ACTIONS = false;
-// END
-
 $focus = new $currentModule();
 $focus->initSortbyField($currentModule);
 $sorder = $focus->getSortOrder();
@@ -48,7 +35,7 @@ $_SESSION[$currentModule."_Sort_Order"]=$sorder;
 $smarty = new vtigerCRM_Smarty();
 
 // Identify this module as custom module.
-$smarty->assign('CUSTOM_MODULE', $ENABLE_CUSTOM_MODULE_ACTIONS);
+$smarty->assign('CUSTOM_MODULE', false);
 
 $smarty->assign('MOD', $mod_strings);
 $smarty->assign('APP', $app_strings);
@@ -118,8 +105,13 @@ if($viewid ==0)
 	exit;
 }
 
-$listquery = getListQuery($currentModule);
-$list_query= $customView->getModifiedCvListQuery($viewid, $listquery, $currentModule);
+global $current_user;
+if ($viewid != "0") {
+	$queryGenerator = new QueryGenerator($currentModule, $current_user);
+	$list_query = $queryGenerator->getCustomViewQueryById($viewid);
+} else {
+	$list_query = $queryGenerator->getDefaultCustomViewQuery();
+}
 
 if($where != '') {
 	$list_query = "$list_query AND $where";
@@ -127,11 +119,19 @@ if($where != '') {
 
 // Sorting
 if(!empty($order_by)) {
-	if($order_by == 'smownerid') $list_query .= ' ORDER BY user_name '.$sorder;
-	else {
-		$tablename = getTableNameForField($currentModule, $order_by);
-		$tablename = ($tablename != '')? ($tablename . '.') : '';
-		$list_query .= ' ORDER BY ' . $tablename . $order_by . ' ' . $sorder;
+	$meta = $queryGenerator->getMeta($currentModule);
+	$moduleFields = $meta->getModuleFields();
+	$found = false;
+	foreach ($moduleFields as $field) {
+		if($field->getColumnName() == $order_by) {
+			$found = true;
+			break;
+		}
+	}
+	if($found === false) {
+		$list_query .= " ORDER BY $order_by $sorder";
+	} else {
+		$list_query .= " ORDER BY ".$field->getTableName().".$order_by $sorder";
 	}
 }
 
@@ -167,9 +167,12 @@ $smarty->assign("CUSTOMVIEW_OPTION",$customview_html);
 $navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string, $currentModule, 'index', $viewid);
 $smarty->assign("NAVIGATION", $navigationOutput);
 
-$listview_header = getListViewHeader($focus,$currentModule,$url_string,$sorder,$order_by,'',$customView);
-$listview_entries = getListViewEntries($focus,$currentModule,$list_result,$navigation_array,'','','EditView','Delete',$customView);
-$listview_header_search = getSearchListHeaderValues($focus,$currentModule,$url_string,$sorder,$order_by,'',$customView);
+$controller = new ListViewController($adb, $current_user, $queryGenerator);
+$listview_header = $controller->getListViewHeader($focus,$currentModule,$url_string,$sorder,
+		$order_by,true);
+$listview_entries = $controller->getListViewEntries($focus,$currentModule,$list_result,
+		$navigation_array,true);
+$listview_header_search = getSearchListHeaderValues($focus,$currentModule,$url_string,$sorder,$order_by,'',$customView);;
 
 $smarty->assign('LISTHEADER', $listview_header);
 $smarty->assign('LISTENTITY', $listview_entries);

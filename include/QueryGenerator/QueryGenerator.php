@@ -374,7 +374,13 @@ class QueryGenerator {
 
 		foreach ($tableJoinCondition as $fieldName=>$conditionInfo) {
 			foreach ($conditionInfo as $tableName=>$condition) {
-				$sql .= " $tableJoinMapping[$tableName] $tableName ON $condition";
+				if(!empty($tableList[$tableName])) {
+					$tableNameAlias = $tableName.'2';
+					$condition = str_replace($tableName, $tableNameAlias, $condition);
+				} else {
+					$tableNameAlias = $tableName;
+				}
+				$sql .= " $tableJoinMapping[$tableName] $tableName $tableNameAlias ON $condition";
 			}
 		}
 		$sql .= $this->meta->getEntityAccessControlQuery();
