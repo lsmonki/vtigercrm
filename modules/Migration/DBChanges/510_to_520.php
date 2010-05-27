@@ -467,11 +467,13 @@ ExecuteQuery("CREATE TABLE IF NOT EXISTS `vtiger_customerportal_tabs` ( `tabid` 
 	default '1', `sequence` int(1) default NULL, PRIMARY KEY  (`tabid`)) ENGINE=InnoDB 
 	DEFAULT CHARSET=utf8");
 
-ExecuteQuery("CREATE TABLE `vtiger_customerportal_prefs` ( `tabid` int(11) NOT NULL, `prefkey` 
+ExecuteQuery("CREATE TABLE IF NOT EXISTS `vtiger_customerportal_prefs` ( `tabid` int(11) NOT NULL, `prefkey` 
 	varchar(100) default NULL, `prefvalue` int(20) default NULL, INDEX tabid_idx(tabid) 
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8");
 
 
+//Adding Block to email fields 
+$blockquery = "select blockid from vtiger_blocks where blocklabel = ?"; 
 $blockres = $adb->pquery($blockquery,array('LBL_EMAIL_INFORMATION'));
 $blockid = $adb->query_result($blockres,0,'blockid');
 $fieldsqueryuitype8 = 'update vtiger_field set block=? where tabid=? and uitype=8';
