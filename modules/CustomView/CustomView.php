@@ -99,7 +99,7 @@ class CustomView extends CRMEntity{
 	{
 		global $adb,$current_user;
 		$now_action = vtlib_purify($_REQUEST['action']);
-		if(isset($_REQUEST['viewname']) == false) {
+		if(empty($_REQUEST['viewname'])) {
 			if (isset($_SESSION['lvs'][$module]["viewname"]) && $_SESSION['lvs'][$module]["viewname"]!='') {
 				$viewid = $_SESSION['lvs'][$module]["viewname"];
 			}
