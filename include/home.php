@@ -278,7 +278,7 @@ class Homestuff{
 					if($fld_permission == 0 && $adb->num_rows($cv_presence)){ 
 						$field_query = $adb->pquery("SELECT fieldlabel FROM vtiger_field WHERE fieldname = ? AND tablename = ? and vtiger_field.presence in (0,2)", array($fldname,$tabname));
 						$field_label = $adb->query_result($field_query,0,'fieldlabel');
-						$header[] = $field_label;
+						$header[] = getTranslatedString($field_label,$modname);
 					}
 					$fieldcolumns[$fldlabel] = Array($tabname=>$colname);
 				}

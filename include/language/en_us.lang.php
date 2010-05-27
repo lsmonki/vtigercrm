@@ -1252,6 +1252,14 @@ $app_strings = array (
 'LBL_SELECT_FIELDS_TO_UDPATE_WITH_NEW_VALUE'=>'Select fields to be updated and provide the new value.',
 
 'LBL_LOADING'=>'Loading...',
+
+//Added for Sub Products
+'Parent Product' => 'Parent Product',
+
+//Added for Service Contracts
+'Service Contracts' => 'Service Contracts',
+'ServiceContracts' => 'ServiceContracts',
+'Services' => 'Services',
 );
 
 $app_list_strings = array (

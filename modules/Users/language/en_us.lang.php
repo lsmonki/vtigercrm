@@ -679,6 +679,11 @@ $mod_strings = Array(
 //user-group fixes
 'LBL_GROUPNAME_EXIST' => 'A Group with the specified name Already Exists!',
 'LBL_PROFILENAME_EXIST' => 'A Profile with the specified name Already Exists!',
+
+//Fixed For Asterisk Configration
+'Asterisk Configuration' => 'Asterisk Configuration',
+'Asterisk Extension' => 'Asterisk Extension',
+' Receive Incoming Calls' => 'Receive Incoming Calls',
 );
 
 ?>
